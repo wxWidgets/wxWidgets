@@ -66,6 +66,11 @@ extern int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
 extern void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
 extern void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
 
+extern Window wxGetWindowParent(Window window);
+
+// For convenience
+inline Display* wxGlobalDisplay() { return (Display*) wxGetDisplay(); }
+
 #define wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01
 #define wxFORE_COLORS 0x02

@@ -1,100 +1,214 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        timer.cpp
+// Name:        x11/timer.cpp
 // Purpose:     wxTimer implementation
-// Author:      Julian Smart
-// Modified by:
-// Created:     17/09/98
-// RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Author:      Vaclav Slavik
+// Id:          $Id$
+// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
 
 #ifdef __GNUG__
 #pragma implementation "timer.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/timer.h"
-#include "wx/app.h"
-#include "wx/list.h"
 
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
+#if wxUSE_TIMER
 
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
-
+#include "wx/log.h"
+#include "wx/module.h"
 #include "wx/x11/private.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+// ----------------------------------------------------------------------------
+// helper structures and wxTimerScheduler
+// ----------------------------------------------------------------------------
 
-static wxList wxTimerList(wxKEY_INTEGER);
-
-void wxTimerCallback (wxTimer * timer)
+class wxTimerDesc
 {
-  // Check to see if it's still on
-  if (!wxTimerList.Find((long)timer))
-    return;
+public:
+    wxTimerDesc(wxTimer *t) : 
+        timer(t), running(FALSE), next(NULL), prev(NULL), 
+        shotTime(0), deleteFlag(NULL) {}
 
-  if (timer->m_id == 0)
-    return;			// Avoid to process spurious timer events
+    wxTimer         *timer;
+    bool             running;
+    wxTimerDesc     *next, *prev;
+    unsigned long    shotTime;  
+    volatile bool   *deleteFlag; // see comment in ~wxTimer
+};
 
-  // TODO
-#if 0
-  if (!timer->m_oneShot)
-    timer->m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
-                                  timer->m_milli,
-                                  (XtTimerCallbackProc) wxTimerCallback,
-                                  (XtPointer) timer);
-  else
-#endif
-      timer->m_id = 0;
+class wxTimerScheduler
+{
+public:
+    wxTimerScheduler() : m_timers(NULL) {}
 
-  timer->Notify();
+    void QueueTimer(wxTimerDesc *desc, unsigned long when = 0);
+    void RemoveTimer(wxTimerDesc *desc);
+    void NotifyTimers();
+   
+private:
+    wxTimerDesc *m_timers;
+};
+
+void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, unsigned long when)
+{
+    if ( desc->running )
+        return; // already scheduled
+        
+    if ( when == 0 )
+        when = wxGetLocalTimeMillis() + desc->timer->GetInterval();
+    desc->shotTime = when;
+    desc->running = TRUE;
+
+    wxLogTrace("mgl_timer", "queued timer %p at tick %i", 
+               desc->timer, when);
+
+    if ( m_timers )
+    {
+        wxTimerDesc *d = m_timers;
+        while ( d->next && d->next->shotTime < when ) d = d->next;
+        desc->next = d->next;
+        desc->prev = d;
+        if ( d->next )
+            d->next->prev = desc;
+        d->next = desc;
+    }
+    else
+    {
+        m_timers = desc;
+        desc->prev = desc->next = NULL;
+    }
 }
+
+void wxTimerScheduler::RemoveTimer(wxTimerDesc *desc)
+{
+    desc->running = FALSE;
+    if ( desc == m_timers )
+        m_timers = desc->next;
+    if ( desc->prev )
+        desc->prev->next = desc->next;
+    if ( desc->next )
+        desc->next->prev = desc->prev;
+    desc->prev = desc->next = NULL;
+}
+
+void wxTimerScheduler::NotifyTimers()
+{
+    if ( m_timers )
+    {
+        bool oneShot;
+        volatile bool timerDeleted;
+        unsigned long now = wxGetLocalTimeMillis();
+        wxTimerDesc *desc;
+
+        while ( m_timers && m_timers->shotTime <= now )
+        {
+            desc = m_timers;
+            oneShot = desc->timer->IsOneShot();
+            RemoveTimer(desc);
+
+            timerDeleted = FALSE;
+            desc->deleteFlag = &timerDeleted;
+            desc->timer->Notify();
+            
+            if ( !timerDeleted )
+            {
+                wxLogTrace("mgl_timer", "notified timer %p sheduled for %i", 
+                           desc->timer, desc->shotTime);
+
+                desc->deleteFlag = NULL;
+                if ( !oneShot )
+                    QueueTimer(desc, now + desc->timer->GetInterval());
+            }
+        }
+    }
+}
+
+
+
+// ----------------------------------------------------------------------------
+// wxTimer
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
+
+wxTimerScheduler *gs_scheduler = NULL;
 
 void wxTimer::Init()
 {
-    m_id = 0;
-    m_milli = 1000;
+    if ( !gs_scheduler )
+        gs_scheduler = new wxTimerScheduler;
+    m_desc = new wxTimerDesc(this);
 }
 
 wxTimer::~wxTimer()
 {
-    wxTimer::Stop();
-    wxTimerList.DeleteObject(this);
+    wxLogTrace("mgl_timer", "destroying timer %p...", this);
+    if ( IsRunning() )
+        Stop();
+
+    // NB: this is a hack: wxTimerScheduler must have some way of knowing
+    //     that wxTimer object was deleted under its hands -- this may 
+    //     happen if somebody is really nasty and deletes the timer
+    //     from wxTimer::Notify()
+    if ( m_desc->deleteFlag != NULL )
+        *m_desc->deleteFlag = TRUE;
+
+    delete m_desc;
+    wxLogTrace("mgl_timer", "    ...done destroying timer %p...", this);
 }
 
-bool wxTimer::Start(int milliseconds, bool mode)
+bool wxTimer::IsRunning() const
 {
-    Stop();
+    return m_desc->running;
+}
 
-    (void)wxTimerBase::Start(milliseconds, mode);
+bool wxTimer::Start(int millisecs, bool oneShot)
+{
+    wxLogTrace("mgl_timer", "started timer %p: %i ms, oneshot=%i", 
+               this, millisecs, oneShot);
 
-    if (!wxTimerList.Find((long)this))
-        wxTimerList.Append((long)this, this);
-    // TODO
-#if 0
-    m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
-                            m_milli,
-                            (XtTimerCallbackProc) wxTimerCallback,
-                            (XtPointer) this);
-#endif
+    if ( !wxTimerBase::Start(millisecs, oneShot) )
+        return FALSE;
+    
+    gs_scheduler->QueueTimer(m_desc);
     return TRUE;
 }
 
 void wxTimer::Stop()
 {
-    if (m_id > 0)
-    {
-    // TODO
-#if 0
-        XtRemoveTimeOut (m_id);
-#endif
-        m_id = 0;
-    }
-    m_milli = 0 ;
+    if ( !m_desc->running ) return;
+    
+    gs_scheduler->RemoveTimer(m_desc);
+}
+
+/*static*/ void wxTimer::NotifyTimers()
+{
+    if ( gs_scheduler )
+        gs_scheduler->NotifyTimers();
 }
 
 
+
+// A module to deallocate memory properly:
+class wxTimerModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxTimerModule)
+public:
+    wxTimerModule() {}
+    bool OnInit() { return TRUE; }
+    void OnExit() { delete gs_scheduler; gs_scheduler = NULL; }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxTimerModule, wxModule)
+
+
+#endif //wxUSE_TIMER

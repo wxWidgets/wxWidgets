@@ -28,6 +28,7 @@
 #if wxUSE_THREADS
 #include "wx/thread.h"
 #endif
+#include "wx/timer.h"
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
 
@@ -162,6 +163,7 @@ int wxEventLoop::Run()
         // anything else to do
         while ( ! Pending() )
         {
+            wxTimer::NotifyTimers(); // TODO: is this the correct place for it?
             if (!m_impl->SendIdleEvent())
             {
 #if 0 // wxUSE_THREADS

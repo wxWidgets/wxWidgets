@@ -21,8 +21,6 @@
 #include "wx/brush.h"
 #include "wx/cursor.h"
 #include "wx/icon.h"
-#include "wx/palette.h"
-#include "wx/dc.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/log.h"
@@ -72,8 +70,6 @@ END_EVENT_TABLE()
 typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
 
 XErrorHandlerFunc gs_pfnXErrorHandler = 0;
-
-static Window XGetParent(Window window);
 
 static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 {
@@ -298,7 +294,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     // TODO: may need to translate coordinates from actualWindow
     // to window, if the receiving window != wxWindow window
     while (window && !(win = wxGetWindowFromTable(window)))
-        window = XGetParent(window);
+        window = wxGetParentWindow(window);
 
     // TODO: shouldn't all the ProcessEvents below
     // be win->GetEventHandler()->ProcessEvent?
@@ -306,6 +302,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     {
         case KeyPress:
         {
+            if (win && !win->IsEnabled())
+                return;
+
             if (CheckForAccelerator(_event))
             {
                 // Do nothing! We intercepted and processed the event as an
@@ -321,10 +320,10 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         
                     // We didn't process wxEVT_KEY_DOWN, so send
                     // wxEVT_CHAR
-                    if (!win->ProcessEvent( keyEvent ))
+                    if (!win->GetEventHandler()->ProcessEvent( keyEvent ))
                     {
                         keyEvent.SetEventType(wxEVT_CHAR);
-                        win->ProcessEvent( keyEvent );
+                        win->GetEventHandler()->ProcessEvent( keyEvent );
                     }
 
                     // We intercepted and processed the key down event
@@ -335,18 +334,38 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         }
         case KeyRelease:
         {
+            if (win && !win->IsEnabled())
+                return;
+
             if (win)
             {
                 wxKeyEvent keyEvent(wxEVT_KEY_UP);
                 wxTranslateKeyEvent(keyEvent, win, window, event);
         
-                win->ProcessEvent( keyEvent );
+                win->GetEventHandler()->ProcessEvent( keyEvent );
             }
             return;
         }
         case PropertyNotify:
         {
             HandlePropertyChange(_event);
+            return;
+        }
+        case ClientMessage:
+        {           
+            Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", True);;
+            Atom wm_protocols = XInternAtom(wxGlobalDisplay(), "WM_PROTOCOLS", True);;
+
+            if (event->xclient.message_type == wm_protocols)
+            {
+                if (event->xclient.data.l[0] == wm_delete_window)
+                {
+                    if (win)
+                    {
+                        win->Close(FALSE);
+                    }
+                }
+            }
             return;
         }
         case ResizeRequest:
@@ -372,7 +391,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 wxSizeEvent sizeEvent(sz, win->GetId());
                 sizeEvent.SetEventObject(win);
 
-                win->ProcessEvent( sizeEvent );
+                win->GetEventHandler()->ProcessEvent( sizeEvent );
             }
 
             return;
@@ -399,11 +418,14 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         case ButtonRelease:
         case MotionNotify:
         {
+            if (win && !win->IsEnabled())
+                return;
+
             if (win)
             {
                 wxMouseEvent wxevent;
                 wxTranslateMouseEvent(wxevent, win, window, event);
-                win->ProcessEvent( wxevent );
+                win->GetEventHandler()->ProcessEvent( wxevent );
             }
             return;
         }
@@ -413,7 +435,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 {
                     wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
-                    win->ProcessEvent(focusEvent);
+                    win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
                 break;
             }
@@ -423,8 +445,14 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 {
                     wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
-                    win->ProcessEvent(focusEvent);
+                    win->GetEventHandler()->ProcessEvent(focusEvent);
                 }
+                break;
+            }
+        case DestroyNotify:
+            {
+                // Do we want to process this (for top-level windows)?
+                // But we want to be able to veto closes, anyway
                 break;
             }
         default:
@@ -622,7 +650,7 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
     return (WXColormap) c;
 }
 
-static Window XGetParent(Window window)
+Window wxGetWindowParent(Window window)
 {
     Window parent, root = 0;
     unsigned int noChildren = 0;
@@ -646,7 +674,7 @@ bool wxApp::CheckForAccelerator(WXEvent* event)
 
         // Find the first wxWindow that corresponds to this event window
         while (window && !(win = wxGetWindowFromTable(window)))
-            window = XGetParent(window);
+            window = wxGetWindowParent(window);
 
         if (!window || !win)
             return FALSE;

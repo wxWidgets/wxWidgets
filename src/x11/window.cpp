@@ -99,6 +99,7 @@ void wxWindowX11::Init()
     InitBase();
 
     // X11-specific
+    // TODO: prune those that are no longer needed
     m_needsRefresh = TRUE;
     m_mainWidget = (WXWindow) 0;
 
@@ -133,6 +134,8 @@ void wxWindowX11::Init()
     m_lastTS = 0;
     m_lastButton = 0;
     m_canAddEventHandler = FALSE;
+
+    m_borderSize = 0;
 }
 
 // real construction (Init() must have been called before!)
@@ -146,25 +149,68 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
-    parent->AddChild(this);
+    if (parent)
+        parent->AddChild(this);
 
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_foregroundColour = *wxBLACK;
 
+    // TODO: How to create more interesting borders?
+    // Will presumably have to create multiple windows.
     if (style & wxSIMPLE_BORDER)
     {
+        m_borderSize = 1;
     } else if (style & wxSUNKEN_BORDER)
     {
+        m_borderSize = 1;
     } else if (style & wxRAISED_BORDER)
     {
+        m_borderSize = 1;
     }
 
-    // TODO: create XWindow
+    int w = size.GetWidth();
+    int h = size.GetHeight();
+    int x = size.GetX();
+    int y = size.GetY();
+    int h = size.GetHeight();
+    if (w == -1) w = 10;
+    if (h == -1) h = 10;
+    if (x == -1) x = 0;
+    if (y == -1) y = 0;
 
-#if 0
-    wxAddWindowToTable((Window) m_drawingArea, this);
-    wxAddWindowToTable((Window) m_scrolledWindow, this);
-#endif
+    int innerWidth = w - 2*m_borderSize;
+    int innerHeight = h - 2*m_borderSize;
+
+    int screen = DefaultScreen(wxGlobalDisplay());
+
+    Window parentWindow;
+    if (parent)
+        parentWindow = (Window) parent->GetClientWindow();
+    else
+        parentWindow = RootWindow(wxGlobalDisplay(), screen);
+
+    Widget window = XCreateSimpleWindow(wxGlobalDisplay(), 
+        x, y, innerWidth, innerHeight, borderWidth,
+        m_backgroundColour.AllocColour(wxGlobalDisplay()),
+        m_foregroundColour.AllocColour(wxGlobalDisplay()));
+
+    // Select event types wanted
+    XSelectInput(wxGlobalDisplay(), window,
+        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+        PropertyChangeMask);
+
+    m_mainWindow = (WXWindow) window;
+
+    wxAddWindowToTable(window, (wxWindow*) this);
+
+    // If a subwindow, show.
+    if (parent && !parent->IsKindOf(CLASSINFO(wxTopLevelWindowX11)) && parent->IsShown())
+    {
+        m_isShown = TRUE;
+        XMapWindow(wxGlobalDisplay(), window);
+    }
 
     // Without this, the cursor may not be restored properly (e.g. in splitter
     // sample).
@@ -256,8 +302,10 @@ wxWindowX11::~wxWindowX11()
     // Destroy the window
     if (GetMainWindow())
     {
-        // TODO
-        // XtDestroyWidget((Widget) GetMainWidget());
+        XSelectInput(wxGlobalDisplay(), (Window) GetMainWindow(),
+            NoEventMask);
+        wxDeleteWindowFromTable((Window) GetMainWindow());
+        XDestroyWindow((Window) GetMainWindow());
         SetMainWindow((WXWindow) NULL);
     }
 }
@@ -400,63 +448,47 @@ void wxWindowX11::DestroyScrollbar(wxOrientation orientation)
 
 void wxWindowX11::SetFocus()
 {
-    // TODO
-#if 0
-    Widget wMain = (Widget) GetMainWidget();
-    XmProcessTraversal(wMain, XmTRAVERSE_CURRENT);
-    XmProcessTraversal((Widget) GetMainWidget(), XmTRAVERSE_CURRENT);
-#endif
+    Window wMain = (Window) GetMainWidget();
+    if (wMain)
+    {
+        XSetInputFocus(wxGlobalDisplay(), wMain, RevertToParent, CurrentTime);
+        
+        XWMHints wmhints;
+        wmhints.flags = InputHint;
+        wmhints.input = True;
+        XSetWMHints(wxGlobalDisplay(), wMain, &wmhints)
+    }
 }
 
 // Get the window with the focus
 wxWindow *wxWindowBase::FindFocus()
 {
-    // TODO
-    return NULL;
-#if 0
+    Window wFocus = (Window) 0;
+    int revert = 0;
 
-    // TODO Problems:
-    // (1) Can there be multiple focussed widgets in an application?
-    // In which case we need to find the top-level window that's
-    // currently active.
-    // (2) The widget with the focus may not be in the widget table
-    // depending on which widgets I put in the table
-    wxWindow *winFocus = (wxWindow *)NULL;
-    for ( wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
-          node;
-          node = node->GetNext() )
+    XGetInputFocus(wxGlobalDisplay(), & wFocus, & revert);
+    if (wFocus)
     {
-        wxWindow *win = node->GetData();
-
-        Widget w = XmGetFocusWidget ((Widget) win->GetTopWidget());
-
-        if (w != (Widget) NULL)
+        wxWindow *win = NULL;
+        do
         {
-            winFocus = wxGetWindowFromTable(w);
-            if ( winFocus )
-                break;
-        }
+            win = wxGetWindowFromTable(wFocus);
+            wFocus = wxGetWindowParent(wFocus);
+        } while (wFocus && !win);
+
+        return win;
     }
 
-    return winFocus;
-#endif
+    return NULL;
 }
 
+// Enabling/disabling handled by event loop, and not sending events
+// if disabled.
 bool wxWindowX11::Enable(bool enable)
 {
     if ( !wxWindowBase::Enable(enable) )
         return FALSE;
-
-    // TODO
-#if 0
-    Widget wMain = (Widget)GetMainWidget();
-    if ( wMain )
-    {
-        XtSetSensitive(wMain, enable);
-        XmUpdateDisplay(wMain);
-    }
-#endif
-
+   
     return TRUE;
 }
 
@@ -468,9 +500,13 @@ bool wxWindowX11::Show(bool show)
     Window xwin = (Window) GetXWindow();
     Display *xdisp = (Display*) GetXDisplay();
     if (show)
+    {
         XMapWindow(xdisp, xwin);
+    }
     else
+    {
         XUnmapWindow(xdisp, xwin);
+    }
 
     return TRUE;
 }
@@ -480,7 +516,7 @@ void wxWindowX11::Raise()
 {
     Window window = (Window) GetTopWindow();
     if (window)
-        XRaiseWindow((Display*) wxGetDisplay(), window);
+        XRaiseWindow(wxGlobalDisplay(), window);
 }
 
 // Lower the window to the bottom of the Z order
@@ -488,25 +524,7 @@ void wxWindowX11::Lower()
 {
     Window window = (Window) GetTopWindow();
     if (window)
-        XLowerWindow((Display*) wxGetDisplay(), window);
-}
-
-void wxWindowX11::SetTitle(const wxString& title)
-{
-    // TODO
-//    XtVaSetValues((Widget)GetMainWidget(), XmNtitle, title.c_str(), NULL);
-}
-
-wxString wxWindowX11::GetTitle() const
-{
-    // TODO
-    return wxEmptyString;
-#if 0
-    char *title;
-    XtVaGetValues((Widget)GetMainWidget(), XmNtitle, &title, NULL);
-
-    return wxString(title);
-#endif
+        XLowerWindow(wxGlobalDisplay(), window);
 }
 
 void wxWindowX11::DoCaptureMouse()
@@ -515,14 +533,23 @@ void wxWindowX11::DoCaptureMouse()
     if ( m_winCaptured )
         return;
 
-    // TODO
-#if 0
-    Widget wMain = (Widget)GetMainWidget();
-    if ( wMain )
-        XtAddGrab(wMain, TRUE, FALSE);
-#endif
+    // TODO: should we also call XGrabButton, XGrabKeyboard?
+    if (GetMainWindow())
+    {
+        int res = XGrabPointer(wxGlobalDisplay(), (Window) GetMainWindow(),
+            FALSE,
+            ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask,
+            GrabModeAsync,
+	        GrabModeAsync,
+            None,
+            None, /* cursor */ // TODO: This may need to be set to the cursor of this window
+            CurrentTime);
 
-    m_winCaptured = TRUE;
+        if (res == GrabSuccess)
+        {
+            m_winCaptured = TRUE;
+        }
+    }
 }
 
 void wxWindowX11::DoReleaseMouse()
@@ -531,12 +558,11 @@ void wxWindowX11::DoReleaseMouse()
     if ( !m_winCaptured )
         return;
 
-    // TODO
-#if 0
     Widget wMain = (Widget)GetMainWidget();
+
+    // TODO: should we also call XUngrabButton, XUngrabKeyboard?
     if ( wMain )
-        XtRemoveGrab(wMain);
-#endif
+        XUngrabPointer(wxGlobalDisplay(), wMain);
 
     m_winCaptured = FALSE;
 }
@@ -582,7 +608,7 @@ void wxWindowX11::WarpPointer (int x, int y)
 {
     Window wClient = (Window) GetClientWindow();
 
-    XWarpPointer((Display*) wxGetDisplay(), None, wClient, 0, 0, 0, 0, x, y);
+    XWarpPointer(wxGlobalDisplay(), None, wClient, 0, 0, 0, 0, x, y);
 }
 
 // ---------------------------------------------------------------------------
@@ -761,7 +787,7 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     dc.SetLogicalFunction (wxCOPY);
     
     Window window = (Window) GetMainWindow();
-    Display* display = (Display*) wxGetDisplay();
+    Display* display = wxGlobalDisplay();
     
     XCopyArea(display, window, window, (GC) dc.GetGC(),
         x1, y1, w1, h1, x2, y2);
@@ -936,50 +962,50 @@ bool wxWindowX11::PreResize()
 // Get total size
 void wxWindowX11::DoGetSize(int *x, int *y) const
 {
-    // TODO
-#if 0
-    if (m_drawingArea)
+    Window window = (Window) GetTopWindow();
+    if (window)
     {
-        CanvasGetSize(x, y);
-        return;
+        XWindowAttributes attr;
+        Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
+        wxASSERT(status);
+        
+        if (status)
+        {
+            *x = attr.width + 2*m_borderSize;
+            *y = attr.height + 2*m_borderSize;
+        }
     }
-
-    Widget widget = (Widget) GetTopWidget();
-    Dimension xx, yy;
-    XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
-    if(x) *x = xx; if(y) *y = yy;
-#endif
 }
 
 void wxWindowX11::DoGetPosition(int *x, int *y) const
 {
-    // TODO
-#if 0
-    if (m_drawingArea)
+    Window window = (Window) GetTopWindow();
+    if (window)
     {
-        CanvasGetPosition(x, y);
-        return;
+        XWindowAttributes attr;
+        Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
+        wxASSERT(status);
+        
+        if (status)
+        {
+            *x = attr.x;
+            *y = attr.y;
+            
+            // We may be faking the client origin. So a window that's really at (0, 30)
+            // may appear (to wxWin apps) to be at (0, 0).
+            if (GetParent())
+            {
+                wxPoint pt(GetParent()->GetClientAreaOrigin());
+                *x -= pt.x;
+                *y -= pt.y;
+            }
+        }
     }
-    Widget widget = (Widget) GetTopWidget();
-    Position xx, yy;
-    XtVaGetValues(widget, XmNx, &xx, XmNy, &yy, NULL);
-
-    // We may be faking the client origin. So a window that's really at (0, 30)
-    // may appear (to wxWin apps) to be at (0, 0).
-    if (GetParent())
-    {
-        wxPoint pt(GetParent()->GetClientAreaOrigin());
-        xx -= pt.x;
-        yy -= pt.y;
-    }
-
-    if(x) *x = xx; if(y) *y = yy;
-#endif
 }
 
 void wxWindowX11::DoScreenToClient(int *x, int *y) const
 {
-    Display *display = (Display*) wxGetDisplay();
+    Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window thisWindow = (Window) GetClientWindow();
 
@@ -991,7 +1017,7 @@ void wxWindowX11::DoScreenToClient(int *x, int *y) const
 
 void wxWindowX11::DoClientToScreen(int *x, int *y) const
 {
-    Display *display = (Display*) wxGetDisplay();
+    Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window thisWindow = (Window) GetClientWindow();
 
@@ -1005,96 +1031,76 @@ void wxWindowX11::DoClientToScreen(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowX11::DoGetClientSize(int *x, int *y) const
 {
-    // TODO
-#if 0
-    Widget widget = (Widget) GetClientWidget();
-    Dimension xx, yy;
-    XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
-    if(x) *x = xx; if(y) *y = yy;
-#endif
+    Window window = (Window) GetClientWindow();
+
+    if (window)
+    {
+        XWindowAttributes attr;
+        Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
+        wxASSERT(status);
+        
+        if (status)
+        {
+            *x = attr.width ;
+            *y = attr.height ;
+        }
+    }
 }
 
 void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
-#if 0
-    // A bit of optimization to help sort out the flickers.
-    int oldX, oldY, oldW, oldH;
-    GetSize(& oldW, & oldH);
-    GetPosition(& oldX, & oldY);
+    if (!GetMainWindow())
+        return;
 
-    if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    XWindowChanges windowChanges;
+    int valueMask = 0;
+
+    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-        if ( x == -1 )
-            x = oldX;
-        if ( y == -1 )
-            y = oldY;
+        windowChanges.x = x;
+        valueMask |= CWX;
     }
-
-    if ( width == -1 )
-        width = oldW;
-    if ( height == -1 )
-        height = oldH;
-
-    bool nothingChanged = (x == oldX) && (y == oldY) &&
-                          (width == oldW) && (height == oldH);
-
-    if (!wxNoOptimize::CanOptimize())
+    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-        nothingChanged = FALSE;
+        windowChanges.y = y;
+        valueMask |= CWY;
     }
-
-    if ( !nothingChanged )
+    if (width != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-        if (m_drawingArea)
-        {
-            CanvasSetSize(x, y, width, height, sizeFlags);
-            return;
-        }
-
-        Widget widget = (Widget) GetTopWidget();
-        if (!widget)
-            return;
-
-        bool managed = XtIsManaged( widget );
-        if (managed)
-            XtUnmanageChild(widget);
-
-        int xx = x;
-        int yy = y;
-        AdjustForParentClientOrigin(xx, yy, sizeFlags);
-
-        DoMoveWindow(xx, yy, width, height);
-
-        if (managed)
-            XtManageChild(widget);
-
+        windowChanges.width = width - m_borderSize*2;
+        valueMask |= CWWidth;
     }
-#endif
+    if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+        windowChanges.height = height - m_borderSize*2;
+        valueMask |= CWHeight;
+    }
+    AdjustForParentClientOrigin(valueMask.x, valueMask.y, sizeFlags);
+
+    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
+        valueMask, & windowChanges);
 }
 
 void wxWindowX11::DoSetClientSize(int width, int height)
 {
-    // TODO
-#if 0
-    if (m_drawingArea)
-    {
-        CanvasSetClientSize(width, height);
+    if (!GetMainWindow())
         return;
+
+    XWindowChanges windowChanges;
+    int valueMask = 0;
+
+    if (width != -1)
+    {
+        windowChanges.width = width ;
+        valueMask |= CWWidth;
     }
-
-    Widget widget = (Widget) GetTopWidget();
-
-    if (width > -1)
-        XtVaSetValues(widget, XmNwidth, width, NULL);
-    if (height > -1)
-        XtVaSetValues(widget, XmNheight, height, NULL);
-
-    wxSizeEvent sizeEvent(wxSize(width, height), GetId());
-    sizeEvent.SetEventObject(this);
-
-    GetEventHandler()->ProcessEvent(sizeEvent);
-#endif
+    if (height != -1)
+    {
+        windowChanges.height = height ;
+        valueMask |= CWHeight;
+    }
+    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
+        valueMask, & windowChanges);
 }
 
 // For implementation purposes - sometimes decorations make the client area
@@ -1117,48 +1123,39 @@ void wxWindowX11::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 
 void wxWindowX11::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, int incH)
 {
-    // TODO
-#if 0
     m_minWidth = minW;
     m_minHeight = minH;
     m_maxWidth = maxW;
     m_maxHeight = maxH;
 
-    wxFrame *frame = wxDynamicCast(this, wxFrame);
-    if ( !frame )
+    XSizeHints sizeHints;
+    sizeHints.flags = 0;
+    
+    if (minW > -1 && minH > -1)
     {
-        // TODO what about dialogs?
-        return;
+        sizeHints.flags |= PMinSize;
+        sizeHints.min_width = minW;
+        sizeHints.min_height = minH;
+    }
+    if (maxW > -1 && maxH > -1)
+    {
+        sizeHints.flags |= PMaxSize;
+        sizeHints.max_width = maxW;
+        sizeHints.max_height = maxH;
+    }
+    if (incW > -1 && incH > -1)
+    {
+        sizeHints.flags |= PResizeInc;
+        sizeHints.width_inc = incW;
+        sizeHints.height_inc = incH;
     }
 
-    Widget widget = (Widget) frame->GetShellWidget();
-
-    if (minW > -1)
-        XtVaSetValues(widget, XmNminWidth, minW, NULL);
-    if (minH > -1)
-        XtVaSetValues(widget, XmNminHeight, minH, NULL);
-    if (maxW > -1)
-        XtVaSetValues(widget, XmNmaxWidth, maxW, NULL);
-    if (maxH > -1)
-        XtVaSetValues(widget, XmNmaxHeight, maxH, NULL);
-    if (incW > -1)
-        XtVaSetValues(widget, XmNwidthInc, incW, NULL);
-    if (incH > -1)
-        XtVaSetValues(widget, XmNheightInc, incH, NULL);
-#endif
+    XSetWMNormalHints(wxGlobalDisplay(), (Window) GetMainWindow(), & sizeHints)
 }
 
 void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
 {
-    // TODO
-#if 0
-    XtVaSetValues((Widget)GetTopWidget(),
-                  XmNx, x,
-                  XmNy, y,
-                  XmNwidth, width,
-                  XmNheight, height,
-                  NULL);
-#endif
+    DoSetSize(x, y, width, height);
 }
 
 // ---------------------------------------------------------------------------
@@ -1238,7 +1235,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
 void wxWindowX11::Refresh(bool eraseBack, const wxRect *rect)
 {
     m_needsRefresh = TRUE;
-    Display *display = (Display*) wxGetDisplay();
+    Display *display = wxGlobalDisplay();
     Window thisWindow = (Window) GetMainWindow();
 
     XExposeEvent dummyEvent;
@@ -1451,72 +1448,6 @@ void wxDeleteWindowFromTable(Window w)
 // add/remove window from the table
 // ----------------------------------------------------------------------------
 
-// Add to hash table, add event handler
-bool wxWindowX11::AttachWindow (wxWindow* WXUNUSED(parent), WXWindow mainWidget,
-                             int x, int y, int width, int height)
-{
-    wxAddWindowToTable((Window ) mainWidget, (wxWindow*) this);
-
-    // TODO
-#if 0
-    if (CanAddEventHandler())
-    {
-        XtAddEventHandler((Widget) mainWidget,
-            ButtonPressMask | ButtonReleaseMask | PointerMotionMask, // | KeyPressMask,
-            False,
-            wxPanelItemEventHandler,
-            (XtPointer) this);
-    }
-
-    if (!formWidget)
-    {
-        XtTranslations ptr;
-        XtOverrideTranslations ((Widget) mainWidget,
-            ptr = XtParseTranslationTable ("<Configure>: resize()"));
-        XtFree ((char *) ptr);
-    }
-
-    // Some widgets have a parent form widget, e.g. wxRadioBox
-    if (formWidget)
-    {
-        if (!wxAddWindowToTable((Widget) formWidget, this))
-            return FALSE;
-
-        XtTranslations ptr;
-        XtOverrideTranslations ((Widget) formWidget,
-            ptr = XtParseTranslationTable ("<Configure>: resize()"));
-        XtFree ((char *) ptr);
-    }
-#endif
-    if (x == -1)
-        x = 0;
-    if (y == -1)
-        y = 0;
-
-    SetSize (x, y, width, height);
-
-    return TRUE;
-}
-
-// Remove event handler, remove from hash table
-bool wxWindowX11::DetachWindow(WXWindow widget)
-{
-    // TODO
-#if 0
-    if (CanAddEventHandler())
-    {
-        XtRemoveEventHandler((Widget) widget,
-            ButtonPressMask | ButtonReleaseMask | PointerMotionMask, // | KeyPressMask,
-            False,
-            wxPanelItemEventHandler,
-            (XtPointer)this);
-    }
-#endif
-
-    wxDeleteWindowFromTable((Window) widget);
-    return TRUE;
-}
-
 // ----------------------------------------------------------------------------
 // X11-specific accessors
 // ----------------------------------------------------------------------------
@@ -1632,213 +1563,6 @@ static void wxScrollBarCallback(Widget scrollbar,
 }
 #endif
 
-
-// ----------------------------------------------------------------------------
-// CanvaseXXXSize() functions
-// ----------------------------------------------------------------------------
-
-// SetSize, but as per old wxCanvas (with drawing widget etc.)
-void wxWindowX11::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
-{
-    // TODO
-#if 0
-    // A bit of optimization to help sort out the flickers.
-    int oldX, oldY, oldW, oldH;
-    GetSize(& oldW, & oldH);
-    GetPosition(& oldX, & oldY);
-
-    bool useOldPos = FALSE;
-    bool useOldSize = FALSE;
-
-    if ((x == -1) && (x == -1) && ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0))
-        useOldPos = TRUE;
-    else if (x == oldX && y == oldY)
-        useOldPos = TRUE;
-
-    if ((w == -1) && (h == -1))
-        useOldSize = TRUE;
-    else if (w == oldW && h == oldH)
-        useOldSize = TRUE;
-
-    if (!wxNoOptimize::CanOptimize())
-    {
-        useOldSize = FALSE; useOldPos = FALSE;
-    }
-
-    if (useOldPos && useOldSize)
-        return;
-
-    Widget drawingArea = (Widget) m_drawingArea;
-    bool managed = XtIsManaged(m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
-
-    if (managed)
-        XtUnmanageChild (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
-    XtVaSetValues(drawingArea, XmNresizePolicy, XmRESIZE_ANY, NULL);
-
-    int xx = x; int yy = y;
-    AdjustForParentClientOrigin(xx, yy, sizeFlags);
-
-    if (!useOldPos)
-    {
-        if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        {
-            XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
-                XmNx, xx, NULL);
-        }
-
-        if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        {
-            XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
-                XmNy, yy, NULL);
-        }
-    }
-
-    if (!useOldSize)
-    {
-
-        if (w > -1)
-        {
-            if (m_borderWidget)
-            {
-                XtVaSetValues ((Widget) m_borderWidget, XmNwidth, w, NULL);
-                short thick, margin;
-                XtVaGetValues ((Widget) m_borderWidget,
-                    XmNshadowThickness, &thick,
-                    XmNmarginWidth, &margin,
-                    NULL);
-                w -= 2 * (thick + margin);
-            }
-
-            XtVaSetValues ((Widget) m_scrolledWindow, XmNwidth, w, NULL);
-
-            Dimension spacing;
-            Widget sbar;
-            XtVaGetValues ((Widget) m_scrolledWindow,
-                XmNspacing, &spacing,
-                XmNverticalScrollBar, &sbar,
-                NULL);
-            Dimension wsbar;
-            if (sbar)
-                XtVaGetValues (sbar, XmNwidth, &wsbar, NULL);
-            else
-                wsbar = 0;
-
-            w -= (spacing + wsbar);
-
-#if 0
-            XtVaSetValues(drawingArea, XmNwidth, w, NULL);
-#endif // 0
-        }
-        if (h > -1)
-        {
-            if (m_borderWidget)
-            {
-                XtVaSetValues ((Widget) m_borderWidget, XmNheight, h, NULL);
-                short thick, margin;
-                XtVaGetValues ((Widget) m_borderWidget,
-                    XmNshadowThickness, &thick,
-                    XmNmarginHeight, &margin,
-                    NULL);
-                h -= 2 * (thick + margin);
-            }
-
-            XtVaSetValues ((Widget) m_scrolledWindow, XmNheight, h, NULL);
-
-            Dimension spacing;
-            Widget sbar;
-            XtVaGetValues ((Widget) m_scrolledWindow,
-                XmNspacing, &spacing,
-                XmNhorizontalScrollBar, &sbar,
-                NULL);
-            Dimension wsbar;
-            if (sbar)
-                XtVaGetValues (sbar, XmNheight, &wsbar, NULL);
-            else
-                wsbar = 0;
-
-            h -= (spacing + wsbar);
-
-#if 0
-            XtVaSetValues(drawingArea, XmNheight, h, NULL);
-#endif // 0
-        }
-    }
-
-    if (managed)
-        XtManageChild (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
-    XtVaSetValues(drawingArea, XmNresizePolicy, XmRESIZE_NONE, NULL);
-#endif
-    // 0
-}
-
-void wxWindowX11::CanvasSetClientSize (int w, int h)
-{
-// TODO
-#if 0
-    Widget drawingArea = (Widget) m_drawingArea;
-
-    XtVaSetValues(drawingArea, XmNresizePolicy, XmRESIZE_ANY, NULL);
-
-    if (w > -1)
-        XtVaSetValues(drawingArea, XmNwidth, w, NULL);
-    if (h > -1)
-        XtVaSetValues(drawingArea, XmNheight, h, NULL);
-
-    XtVaSetValues(drawingArea, XmNresizePolicy, XmRESIZE_NONE, NULL);
-#endif // 0
-}
-
-void wxWindowX11::CanvasGetClientSize (int *w, int *h) const
-{
-// TODO
-#if 0
-    // Must return the same thing that was set via SetClientSize
-    Dimension xx, yy;
-    XtVaGetValues ((Widget) m_drawingArea, XmNwidth, &xx, XmNheight, &yy, NULL);
-    *w = xx;
-    *h = yy;
-#endif
-}
-
-void wxWindowX11::CanvasGetSize (int *w, int *h) const
-{
-// TODO
-#if 0
-    Dimension xx, yy;
-    if ((Widget) m_borderWidget)
-        XtVaGetValues ((Widget) m_borderWidget, XmNwidth, &xx, XmNheight, &yy, NULL);
-    else if ((Widget) m_scrolledWindow)
-        XtVaGetValues ((Widget) m_scrolledWindow, XmNwidth, &xx, XmNheight, &yy, NULL);
-    else
-        XtVaGetValues ((Widget) m_drawingArea, XmNwidth, &xx, XmNheight, &yy, NULL);
-
-    *w = xx;
-    *h = yy;
-#endif
-}
-
-void wxWindowX11::CanvasGetPosition (int *x, int *y) const
-{
-// TODO
-#if 0
-    Position xx, yy;
-    XtVaGetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow, XmNx, &xx, XmNy, &yy, NULL);
-
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
-    if (GetParent())
-    {
-        wxPoint pt(GetParent()->GetClientAreaOrigin());
-        xx -= pt.x;
-        yy -= pt.y;
-    }
-
-    *x = xx;
-    *y = yy;
-#endif
-}
-
 // ----------------------------------------------------------------------------
 // TranslateXXXEvent() functions
 // ----------------------------------------------------------------------------
@@ -1898,7 +1622,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
 
                 // check for a double click
                 // TODO: where can we get this value from?
-                //long dclickTime = XtGetMultiClickTime((Display*) wxGetDisplay());
+                //long dclickTime = XtGetMultiClickTime(wxGlobalDisplay());
                 long dclickTime = 200;
                 long ts = wxevent.GetTimestamp();
 
@@ -2227,7 +1951,7 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 // Get the current mouse position.
 wxPoint wxGetMousePosition()
 {
-    Display *display = (Display*) wxGetDisplay();
+    Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));
     Window rootReturn, childReturn;
     int rootX, rootY, winX, winY;

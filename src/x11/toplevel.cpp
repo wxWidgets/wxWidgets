@@ -38,6 +38,14 @@
 #endif //WX_PRECOMP
 
 #include "wx/x11/private.h"
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
+
+// Set the window manager decorations according to the
+// given wxWindows style
+static bool SetWMDecorations(Widget w, long style);
+static bool MWMIsRunning(Window w);
+
 
 // ----------------------------------------------------------------------------
 // globals
@@ -98,9 +106,13 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     m_windowId = id == -1 ? NewControlId() : id;
 
     wxTopLevelWindows.Append(this);
+   
+    Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", False);
 
-    if ( parent )
-        parent->AddChild(this);
+    XSetWMProtocols(wxGlobalDisplay(), (Window) GetMainWindow(), &wm_delete_window, 1);
+    SetWMDecorations((Window) GetMainWindow(), style);
+
+    SetTitle(title);
 
     if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
     {
@@ -141,9 +153,7 @@ bool wxTopLevelWindowX11::Show(bool show)
     if ( !wxWindowBase::Show(show) )
         return FALSE;
 
-    // TODO
-
-    return TRUE;
+    return wxWindowX11::Show(show);
 }
 
 // ----------------------------------------------------------------------------
@@ -163,18 +173,27 @@ bool wxTopLevelWindowX11::IsMaximized() const
 
 void wxTopLevelWindowX11::Iconize(bool iconize)
 {
-    // TODO
+    if (!m_iconized && GetMainWindow())
+    {
+        if (XIconifyWindow(wxGlobalDisplay(),
+            (Window) GetMainWindow(), DefaultScreen(wxGlobalDisplay())) != 0)
+            m_iconized = TRUE;
+    }
 }
 
 bool wxTopLevelWindowX11::IsIconized() const
 {
-    // TODO
     return m_iconized;
 }
 
 void wxTopLevelWindowX11::Restore()
 {
-    // TODO
+    // This is the way to deiconify the window, according to the X FAQ
+    if (m_iconized && GetMainWindow())
+    {
+        XMapWindow(wxGlobalDisplay(), (Window) GetMainWindow());
+        m_iconized = FALSE;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -216,5 +235,157 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
     // this sets m_icon
     wxTopLevelWindowBase::SetIcon(icon);
 
-    // TODO
+    if (icon.Ok() && GetMainWindow())
+    {
+        XWMHints *wmHints = XAllocWMHints();
+        wmHints.icon_pixmap = (Pixmap) icon.GetPixmap();
+
+        wmHints.flags = IconPixmapHint;
+
+        if (icon.GetMask())
+        {
+            wmHints.flags |= IconMaskHint;
+            wmHints.icon_mask = (Pixmap) icon.GetMask()->GetPixmap();
+        }
+
+        XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(),
+            wmHints);
+        XFree(wmHints);
+    }
 }
+
+void wxTopLevelWindowX11::SetTitle(const wxString& title)
+{
+    m_title = title;
+    if (GetMainWindow())
+    {
+        XStoreName(wxGlobalDisplay(), (Window) GetMainWindow(),
+            (const char*) title);
+        XSetIconName(wxGlobalDisplay(), (Window) GetMainWindow(),
+            (const char*) title);
+#if 0
+        XTextProperty textProperty;
+        textProperty.value = (unsigned char*) title;
+        textProperty.encoding = XA_STRING;
+        textProperty.format = 8;
+        textProperty.nitems = 1;
+
+        XSetTextProperty(wxGlobalDisplay(), (Window) GetMainWindow(),
+            & textProperty, WM_NAME);
+#endif
+    }
+}
+
+wxString wxTopLevelWindowX11::GetTitle() const
+{
+    return m_title;
+}
+
+#ifndef MWM_DECOR_BORDER
+/* bit definitions for MwmHints.flags */
+#define MWM_HINTS_FUNCTIONS (1L << 0)
+#define MWM_HINTS_DECORATIONS (1L << 1)
+#define MWM_HINTS_INPUT_MODE (1L << 2)
+#define MWM_HINTS_STATUS (1L << 3)
+
+#define MWM_DECOR_ALL           (1L << 0)
+#define MWM_DECOR_BORDER        (1L << 1)
+#define MWM_DECOR_RESIZEH       (1L << 2)
+#define MWM_DECOR_TITLE         (1L << 3)
+#define MWM_DECOR_MENU          (1L << 4)
+#define MWM_DECOR_MINIMIZE      (1L << 5)
+#define MWM_DECOR_MAXIMIZE      (1L << 6)
+#endif
+
+struct MwmHints {
+    long flags;
+    long functions;
+    long decorations;
+    long input_mode;
+};
+
+#define PROP_MOTIF_WM_HINTS_ELEMENTS 5
+
+// Set the window manager decorations according to the
+// given wxWindows style
+static bool SetWMDecorations(Widget w, long style)
+{
+    if (!MWMIsRunning(w))
+        return FALSE;
+
+    Atom mwm_wm_hints = XInternAtom(wxGlobalDisplay(),"_MOTIF_WM_HINTS", False);
+    MwmHints hints;
+    hints.flags = 0;
+    hints.decorations = 0;
+
+    if (style & wxRESIZE_BORDER)
+    {
+        hints.flags |= MWM_HINTS_DECORATIONS;
+        hints.decorations |= MWM_DECOR_RESIZEH;
+    }
+
+    if (style & wxSYSTEM_MENU)
+    {
+        hints.flags |= MWM_HINTS_DECORATIONS;
+        hints.decorations |= MWM_DECOR_MENU;
+    }
+
+    if ((style & wxCAPTION) ||
+        (style & wxTINY_CAPTION_HORIZ) ||
+        (style & wxTINY_CAPTION_VERT))
+    {
+        hints.flags |= MWM_HINTS_DECORATIONS;
+        hints.decorations |= MWM_DECOR_TITLE;
+    }
+
+    if (style & wxTHICK_FRAME)
+    {
+        hints.flags |= MWM_HINTS_DECORATIONS;
+        hints.decorations |= MWM_DECOR_BORDER;
+    }
+
+    if (style & wxTHICK_FRAME)
+    {
+        hints.flags |= MWM_HINTS_DECORATIONS;
+        hints.decorations |= MWM_DECOR_BORDER;
+    }
+
+    if (style & wxMINIMIZE_BOX)
+    {
+        hints.flags |= MWM_HINTS_DECORATIONS;
+        hints.decorations |= MWM_DECOR_MINIMIZE;
+    }
+
+    if (style & wxMAXIMIZE_BOX)
+    {
+        hints.flags |= MWM_HINTS_DECORATIONS;
+        hints.decorations |= MWM_DECOR_MAXIMIZE;
+    }
+
+    XChangeProperty(wxGlobalDisplay(),
+		    w,
+		    mwm_wm_hints, mem_wm_hints,
+		    32, PropModeReplace,
+		    (unsigned char *) &hints, PROP_MOTIF_WM_HINTS_ELEMENTS);
+
+    return TRUE;
+}
+
+static bool MWMIsRunning(Window w)
+{
+    Atom motifWmInfo = XInternAtom(dpy, "_MOTIF_WM_INFO", False);
+
+    unsigned long length, bytesafter;
+    unsigned char value[20];
+    int ret, type, format;
+
+    type = format = length = 0;
+    value = 0;
+
+    ret = XGetWindowProperty(wxGlobalDisplay(), w, motifWmInfo,
+	    0L, 2, False, motifWmInfo, 
+	    &type, &format, &length, &bytesafter, &value);
+
+    return (ret == Success);
+}
+    

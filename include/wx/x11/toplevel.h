@@ -62,6 +62,9 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
+    virtual void SetTitle( const wxString& title);
+    virtual wxString GetTitle() const;
+    
     // implementation from now on
     // --------------------------
 
@@ -92,6 +95,7 @@ protected:
     wxRect                m_fsOldSize;
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
+    wxString              m_title;
 };
 
 // list of all frames and modeless dialogs

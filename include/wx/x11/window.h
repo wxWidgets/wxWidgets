@@ -50,10 +50,6 @@ public:
         long style = 0,
         const wxString& name = wxPanelNameStr);
     
-    // implement base class pure virtuals
-    virtual void SetTitle( const wxString& title);
-    virtual wxString GetTitle() const;
-    
     virtual void Raise();
     virtual void Lower();
     
@@ -185,15 +181,6 @@ protected:
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     
-    // Motif-specific
-    
-    // CanvasXXXSiize functions
-    void CanvasGetSize(int* width, int* height) const; // If have drawing area
-    void CanvasGetClientSize(int *width, int *height) const;
-    void CanvasGetPosition(int *x, int *y) const; // If have drawing area
-    void CanvasSetClientSize(int width, int size);
-    void CanvasSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-    
     void SetMainWindow(WXWindow w) { m_mainWidget = w; }
     
     bool CanAddEventHandler() const { return m_canAddEventHandler; }
@@ -217,11 +204,6 @@ public:
     virtual void ChangeForegroundColour();
     
 protected:
-    // Adds the widget to the hash table and adds event handlers.
-    bool AttachWindow(wxWindow* parent, WXWindow mainWidget,
-        int x, int y, int width, int height);
-    bool DetachWindow(WXWindow widget);
-    
     // How to implement accelerators. If we find a key event, translate to
     // wxWindows wxKeyEvent form. Find a widget for the window. Now find a
     // wxWindow for the widget. If there isn't one, go up the widget hierarchy
@@ -294,6 +276,9 @@ protected:
     // by system
     int                   m_scrollPosX;
     int                   m_scrollPosY;
+
+    // Window border size
+    int                   m_borderSize;
     
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
