@@ -693,7 +693,7 @@ class MySplashScreen(wxSplashScreen):
 
     def OnClose(self, evt):
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
-        frame.Show(True)
+        frame.Show()
         evt.Skip()  # Make sure the default handler runs too...
 
 
