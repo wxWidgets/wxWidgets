@@ -270,6 +270,11 @@ wx.Image.
 
 Added wx.Rect.IsEmpty
 
+wxGTK:
+    - Corrected wx.ListBox selection handling
+    - Corrected default button size handling for different themes
+    - Corrected splitter sash size and look for different themes
+    - Fixed keyboard input for dead-keys
 
 
 
