@@ -1630,6 +1630,11 @@ void wxThreadModule::OnExit()
 {
     if ( gs_critsectGui )
     {
+        if ( !wxGuiOwnedByMainThread() )
+        {
+            gs_critsectGui->Enter();
+            gs_bGuiOwnedByMainThread = true;
+        }
         gs_critsectGui->Leave();
         delete gs_critsectGui;
         gs_critsectGui = NULL;
