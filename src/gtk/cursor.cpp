@@ -140,9 +140,13 @@ GdkCursor *wxCursor::GetCursor() const
 extern wxCursor *g_globalCursor;
 
 static wxCursor *gs_savedCursor = NULL;
+static int       gs_busyCount = 0;
 
 void wxEndBusyCursor()
 {
+    if ( --gs_busyCount > 0 )
+        return;
+
     wxCHECK_RET( gs_savedCursor && gs_savedCursor->Ok(),
                  "calling wxEndBusyCursor() without wxBeginBusyCursor()?" );
 
@@ -153,6 +157,9 @@ void wxEndBusyCursor()
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 {
+    if ( gs_busyCount++ > 0 )
+        return;
+
     wxASSERT_MSG( !gs_savedCursor,
                   "forgot to call wxEndBusyCursor, will leak memory" );
 
@@ -166,7 +173,7 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 
 bool wxIsBusy()
 {
-    return gs_savedCursor != NULL;
+    return gs_busyCount > 0;
 }
 
 void wxSetCursor( const wxCursor& cursor )
