@@ -161,6 +161,9 @@
                                   // Use JPEG bitmap code
 #define wxUSE_SERIAL        0
                                   // Use serialization (requires utils/serialize)
+#define wxUSE_DYNLIB_CLASS  0
+                                  // Compile in wxLibrary class for run-time
+                                  // DLL loading and function calling
 #define wxUSE_TOOLTIPS      1
                                   // Define to use wxToolTip class and
                                   // wxWindow::SetToolTip() method
@@ -179,6 +182,9 @@
  * MS Windows/Windows NT
  *
  */
+
+#define wxUSE_OLE           1
+                                // drag-and-drop, clipboard, OLE Automation
 
 #if defined(__WIN95__)
 #define wxUSE_CTL3D                      0
