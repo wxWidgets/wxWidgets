@@ -330,6 +330,8 @@ DEBUG_CONFIGURE=0
 if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_UNIVERSAL=no
 
+  DEFAULT_wxUSE_NANOX=no
+
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
@@ -501,6 +503,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ICO_CUR=no
 else
   DEFAULT_wxUSE_UNIVERSAL=no
+
+  DEFAULT_wxUSE_NANOX=no
 
   DEFAULT_wxUSE_THREADS=yes
 
@@ -713,6 +717,7 @@ AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Mana
 AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_MGL="$withval" CACHE_MGL=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" CACHE_X11=1 TOOLKIT_GIVEN=1])
+WX_ARG_ENABLE(nanox    ,   [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
 AC_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available (EXPERIMENTAL)],wxUSE_GTK2=1,wxUSE_GTK2=0)
 
@@ -1849,6 +1854,16 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
+        if test "$wxUSE_NANOX" = 1; then
+            AC_MSG_CHECKING(for MicroWindows/NanoX distribution)
+            if test "x$MICROWIN" = x ; then
+                AC_MSG_RESULT(not found)
+                AC_MSG_ERROR([Cannot find MicroWindows library. Make sure MICROWIN is set.])
+            else
+                AC_MSG_RESULT($MICROWIN)
+            fi
+        fi
+
         xpm_link=
         AC_MSG_CHECKING(for Xpm library)
         WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
@@ -1880,11 +1895,18 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             )
         fi
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11"
+        if test "$wxUSE_NANOX" = 1; then
+            TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox $TOOLKIT_INCLUDE"
+            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__ -D__NANOX__"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $MICROWIN/src/lib/libnano-X.a $MICROWIN/src/lib/libmwengine.a $MICROWIN/src/lib/libmwfonts.a $MICROWIN/src/lib/libmwdrivers.a $MICROWIN/src/lib/libmwobjects.a"
+        else
+            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11"
+        fi
+
         TOOLKIT_VPATH="\${top_srcdir}/src/x11 \${top_srcdir}/src/univ \${top_srcdir}/src/univ/themes"
         TOOLKIT=X11
         GUIDIST=X11_DIST
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
     fi
 
     if test "$wxUSE_WINE" = 1; then
