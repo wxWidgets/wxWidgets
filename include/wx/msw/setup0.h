@@ -228,16 +228,16 @@
                                 // wxWindow::SetToolTip() method
 #define wxUSE_SOCKETS       1
                                 // Set to 1 to use socket classes
-#define wxUSE_HTML          0
+#define wxUSE_HTML          1
                                 // Set to 1 to use wxHTML sub-library
-#define wxUSE_FS_ZIP        0
-#define wxUSE_FS_INET       0   // Set to 1 to enable virtual file systems
+#define wxUSE_FS_ZIP        1
+#define wxUSE_FS_INET       1   // Set to 1 to enable virtual file systems
 
-#define wxUSE_BUSYINFO      0
+#define wxUSE_BUSYINFO      1
                                 // wxBusyInfo displays window with message
                                 // when app is busy. Works in same way as
                                 // wxBusyCursor
-#define wxUSE_ZIPSTREAM     0
+#define wxUSE_ZIPSTREAM     1
                                 // input stream for reading from zip archives
 
 /*
