@@ -324,6 +324,19 @@ void wxControlRenderer::DrawBorder()
 {
     int flags = m_window->GetStateFlags();
 
+    // if the scrollbars are outside the border, we must adjust the rect to
+    // exclude them
+    if ( !m_renderer->AreScrollbarsInsideBorder() )
+    {
+        wxScrollBar *scrollbar = m_window->GetScrollbar(wxVERTICAL);
+        if ( scrollbar )
+            m_rect.width -= scrollbar->GetSize().x;
+
+        scrollbar = m_window->GetScrollbar(wxHORIZONTAL);
+        if ( scrollbar )
+            m_rect.height -= scrollbar->GetSize().y;
+    }
+
     // draw outline
     m_renderer->DrawBorder(m_dc, m_window->GetBorder(),
                            m_rect, flags, &m_rect);

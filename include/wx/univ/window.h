@@ -118,6 +118,12 @@ public:
     // operations
     virtual void SetCurrent(bool doit = TRUE);
 
+    // get the scrollbar (may be NULL) for the given orientation
+    wxScrollBar *GetScrollbar(int orient) const
+    {
+        return orient & wxVERTICAL ? m_scrollbarVert : m_scrollbarHorz;
+    }
+
     // methods used by wxColourScheme to choose the colours for this window
     // --------------------------------------------------------------------
 
@@ -184,12 +190,6 @@ protected:
 
     // adjust the size of the window to take into account its borders
     wxSize AdjustSize(const wxSize& size) const;
-
-    // get the scrollbar (may be NULL) for the given orientation
-    wxScrollBar *GetScrollbar(int orient) const
-    {
-        return orient & wxVERTICAL ? m_scrollbarVert : m_scrollbarHorz;
-    }
 
     // put the scrollbars along the edges of the window
     void PositionScrollbars();

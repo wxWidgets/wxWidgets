@@ -621,7 +621,7 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
     {
         case wxBORDER_SUNKEN:
             DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-            DrawAntiShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+            DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
             break;
 
         case wxBORDER_STATIC:
