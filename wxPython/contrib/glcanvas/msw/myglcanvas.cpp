@@ -525,19 +525,6 @@ void wxGLCanvas::SwapBuffers()
 
 void wxGLCanvas::OnSize(wxSizeEvent& event)
 {
-  int width, height;
-  GetClientSize(& width, & height);
-
-  if (m_glContext)
-  {
-    m_glContext->SetCurrent();
-
-    glViewport(0, 0, (GLint)width, (GLint)height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum( -1.0, 1.0, -1.0, 1.0, 5.0, 15.0 );
-    glMatrixMode(GL_MODELVIEW);
-  }
 }
 
 void wxGLCanvas::SetCurrent()
