@@ -44,6 +44,17 @@ $(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
 <<
 
 
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+
+
 
 
 DOCSOURCES=$(LOCALDOCDIR)\manual.tex $(LOCALDOCDIR)\classes.tex
