@@ -2331,21 +2331,31 @@ void wxListMainWindow::RealizeChanges( void )
     }
 }
 
-long wxListMainWindow::GetNextItem( long item, int WXUNUSED(geometry), int state )
+long wxListMainWindow::GetNextItem( long item,
+                                    int WXUNUSED(geometry),
+                                    int state )
 {
-    long ret = 0;
-    if (item > 0) ret = item;
-    if(ret >= GetItemCount()) return -1;
+    long ret = item;
+    wxCHECK_MSG( ret < GetItemCount(), -1, _T("invalid listctrl index") );
+
+    // notice that we start with the next item (or the first one if item == -1)
+    // and this is intentional to allow writing a simple loop to iterate over
+    // all selected items
     wxNode *node = m_lines.Nth( (size_t)++ret );
     while (node)
     {
         wxListLineData *line = (wxListLineData*)node->Data();
-        if ((state & wxLIST_STATE_FOCUSED) && (line == m_current)) return ret;
-        if ((state & wxLIST_STATE_SELECTED) && (line->IsHilighted())) return ret;
-        if (!state) return ret;
+        if ((state & wxLIST_STATE_FOCUSED) && (line == m_current))
+            return ret;
+        if ((state & wxLIST_STATE_SELECTED) && (line->IsHilighted()))
+            return ret;
+        if (!state)
+            return ret;
         ret++;
+
         node = node->Next();
     }
+
     return -1;
 }
 
