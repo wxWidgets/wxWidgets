@@ -56,7 +56,12 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "glcanvasc"
 
 #include "export.h"
+#ifdef __WXMSW__
 #include "myglcanvas.h"
+#else
+#include <wx/glcanvas.h>
+#endif
+
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -498,84 +503,6 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxGLCanvas_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
-static PyObject *_wrap_wxGLCanvas_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxGLCanvas * _arg0;
-    wxWindow * _arg1;
-    wxWindowID  _arg2;
-    wxPoint * _arg3;
-    wxSize * _arg4;
-    long  _arg5;
-    wxString * _arg6;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    wxPoint  temp;
-    PyObject * _obj3 = 0;
-    wxSize  temp0;
-    PyObject * _obj4 = 0;
-    PyObject * _obj6 = 0;
-    char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiOOlO:wxGLCanvas_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGLCanvas_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGLCanvas_Create. Expected _wxGLCanvas_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGLCanvas_Create. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    _arg3 = &temp;
-    if (! wxPoint_helper(_obj3, &_arg3))
-        return NULL;
-}
-{
-    _arg4 = &temp0;
-    if (! wxSize_helper(_obj4, &_arg4))
-        return NULL;
-}
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj6) && !PyUnicode_Check(_obj6)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj6, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg6 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj6)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg6 = new wxString(PyString_AS_STRING(_obj6), PyString_GET_SIZE(_obj6));
-#endif
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxGLCanvas_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj6)
-        delete _arg6;
-}
-    return _resultobj;
-}
-
 #define wxGLCanvas_SetCurrent(_swigobj)  (_swigobj->SetCurrent())
 static PyObject *_wrap_wxGLCanvas_SetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -846,7 +773,6 @@ static PyMethodDef glcanvascMethods[] = {
 	 { "wxGLCanvas_SwapBuffers", (PyCFunction) _wrap_wxGLCanvas_SwapBuffers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGLCanvas_SetColour", (PyCFunction) _wrap_wxGLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGLCanvas_SetCurrent", (PyCFunction) _wrap_wxGLCanvas_SetCurrent, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGLCanvas_Create", (PyCFunction) _wrap_wxGLCanvas_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGLCanvasWithContext", (PyCFunction) _wrap_new_wxGLCanvasWithContext, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGLCanvas", (PyCFunction) _wrap_new_wxGLCanvas, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGLContext_GetWindow", (PyCFunction) _wrap_wxGLContext_GetWindow, METH_VARARGS | METH_KEYWORDS },

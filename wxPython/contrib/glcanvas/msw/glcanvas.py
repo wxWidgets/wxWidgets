@@ -74,9 +74,6 @@ class wxGLCanvasPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Create(self, *_args, **_kwargs):
-        val = apply(glcanvasc.wxGLCanvas_Create,(self,) + _args, _kwargs)
-        return val
     def SetCurrent(self, *_args, **_kwargs):
         val = apply(glcanvasc.wxGLCanvas_SetCurrent,(self,) + _args, _kwargs)
         return val
