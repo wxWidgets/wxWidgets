@@ -20,12 +20,16 @@
 #include "wx/wx.h"
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
+#include "wx/wx.h"
+#include "wx/dialog.h"
+#include "wx/checklst.h"
 #include "pe_basic.h"
 #include "pe_adv.h"
 #include "xmlhelpr.h"
 #include "editor.h"
 #include "preview.h"
 #include "wx/colordlg.h"
+#include "wx/config.h"
 
 
 
@@ -41,8 +45,17 @@ wxWindow* PropEditCtrlFont::CreateEditCtrl()
 wxTreeItemId PropEditCtrlFont::CreateTreeEntry(wxTreeItemId parent, const PropertyInfo& pinfo)
 {
     wxTreeItemId ti = PropEditCtrlTxt::CreateTreeEntry(parent, pinfo);
+    m_PropFrame->AddSingleProp(PropertyInfo(_T("integer"), pinfo.Name + _T("/size"), wxEmptyString), &ti);
+    m_PropFrame->AddSingleProp(PropertyInfo(_T("text"), pinfo.Name + _T("/face"), wxEmptyString), &ti);
+    m_PropFrame->AddSingleProp(PropertyInfo(_T("choice"), pinfo.Name + _T("/style"), _T("normal,italic,slant")), &ti);
+    m_PropFrame->AddSingleProp(PropertyInfo(_T("choice"), pinfo.Name + _T("/weight"), _T("normal,light,bold")), &ti);
+    m_PropFrame->AddSingleProp(PropertyInfo(_T("choice"), pinfo.Name + _T("/family"), _T("default,decorative,roman,script,swiss,modern")), &ti);
+    m_PropFrame->AddSingleProp(PropertyInfo(_T("bool"), pinfo.Name + _T("/underlined"), wxEmptyString), &ti);
+    m_PropFrame->AddSingleProp(PropertyInfo(_T("text"), pinfo.Name + _T("/encoding"), wxEmptyString), &ti);
     return ti;
 }
+
+
 
 
 
@@ -54,8 +67,7 @@ END_EVENT_TABLE()
 wxWindow* PropEditCtrlChoice::CreateEditCtrl()
 {
     m_Choice = new wxChoice(this, -1);
-    m_Choice->Append(_T("false"));
-    m_Choice->Append(_T("true"));
+    
     return m_Choice;
 }
 
@@ -63,19 +75,31 @@ wxWindow* PropEditCtrlChoice::CreateEditCtrl()
         
 void PropEditCtrlChoice::ReadValue()
 {
+    wxStringTokenizer tkn(m_PropInfo->MoreInfo, _T(","));
+    m_Choice->Clear();
+    while (tkn.HasMoreTokens())
+        m_Choice->Append(tkn.GetNextToken());
+
+    wxString sel =  XmlReadValue(GetNode(), m_PropInfo->Name);
+    if (!!sel) m_Choice->SetStringSelection(sel);
 }
 
 
 
 void PropEditCtrlChoice::WriteValue()
 {
+    XmlWriteValue(GetNode(), m_PropInfo->Name,
+                  m_Choice->GetStringSelection());
 }
 
 
 
 void PropEditCtrlChoice::OnChoice(wxCommandEvent& event)
 {
+    if (CanSave()) WriteValue();
 }
+
+
 
 
 
@@ -97,6 +121,75 @@ void PropEditCtrlColor::OnDetails()
         m_TextCtrl->SetValue(txt);
         WriteValue();
     }
+}
+
+
+
+
+
+
+
+
+
+
+void PropEditCtrlFlags::OnDetails()
+{
+    wxString t,txt = m_TextCtrl->GetValue();
+    wxArrayString arr;
+    size_t i;
+    int j;
+    
+    wxStringTokenizer tkn(m_PropInfo->MoreInfo, _T(","));
+    while (tkn.HasMoreTokens())
+        arr.Add(tkn.GetNextToken());
+
+    wxConfigBase *cfg = wxConfigBase::Get();
+    
+    wxDialog dlg(m_PropFrame, -1, _("Flags"), 
+            wxPoint(cfg->Read(_T("flagsdlg_x"), -1), cfg->Read(_T("flagsdlg_y"), -1)),
+            wxSize(cfg->Read(_T("flagsdlg_w"), 300), cfg->Read(_T("flagsdlg_h"), 300)),
+            wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+    wxSizer *sz = new wxBoxSizer(wxVERTICAL);
+    wxCheckListBox *lbox = new wxCheckListBox(&dlg, -1);
+    sz->Add(lbox, 1, wxEXPAND | wxALL, 10);
+    wxSizer *sz2 = new wxBoxSizer(wxHORIZONTAL);
+    wxButton *btnok = new wxButton(&dlg, wxID_OK, _("OK"));
+    btnok->SetDefault();
+    sz2->Add(btnok);
+    sz2->Add(new wxButton(&dlg, wxID_CANCEL, _("Cancel")), 0, wxLEFT, 10);
+    sz->Add(sz2, 0, wxALIGN_RIGHT | wxRIGHT | wxBOTTOM, 10);
+
+    dlg.SetSizer(sz);
+    dlg.SetAutoLayout(TRUE);
+    
+    for (i = 0; i < arr.GetCount(); i++)
+        lbox->Append(arr[i]);
+  
+    tkn.SetString(txt, _T("| "));
+    while (tkn.HasMoreTokens())
+    {
+        t = tkn.GetNextToken();
+        j = arr.Index(t);
+        if (j != wxNOT_FOUND) lbox->Check(j);
+    }
+            
+    
+    if (dlg.ShowModal() != wxID_OK) return;
+    
+    txt.Empty();
+    
+    for (i = 0; i < arr.GetCount(); i++)
+        if (lbox->IsChecked(i))
+            txt << arr[i] << _T('|');
+    if (!txt.IsEmpty()) txt.RemoveLast();
+
+    m_TextCtrl->SetValue(txt);
+    WriteValue();
+
+    cfg->Write(_T("flagsdlg_x"), (long)dlg.GetPosition().x);
+    cfg->Write(_T("flagsdlg_y"), (long)dlg.GetPosition().y);
+    cfg->Write(_T("flagsdlg_w"), (long)dlg.GetSize().x);
+    cfg->Write(_T("flagsdlg_h"), (long)dlg.GetSize().y);
 }
 
 

@@ -49,6 +49,9 @@ void PropEditCtrl::OnButtonClear(wxCommandEvent& event)
 
 void PropEditCtrl::BeginEdit(const wxRect& rect, wxTreeItemId ti)
 {
+    m_PropInfo = &(((PETreeData*)m_TreeCtrl->GetItemData(ti))->PropInfo);
+    m_TreeItem = ti;
+
     m_CanSave = FALSE;
     if (!m_Created)
     {
@@ -67,9 +70,6 @@ void PropEditCtrl::BeginEdit(const wxRect& rect, wxTreeItemId ti)
     }
 
     m_TheCtrl->SetFocus();
-
-    m_PropInfo = &(((PETreeData*)m_TreeCtrl->GetItemData(ti))->PropInfo);
-    m_TreeItem = ti;
 
     SetSize(rect.x, rect.y, rect.width, rect.height);
     Show(TRUE);

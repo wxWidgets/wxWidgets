@@ -32,7 +32,7 @@ class PropertiesFrame : public wxFrame
         
         void ClearProps();
         void AddProps(PropertyInfoArray& plist);
-        void AddSingleProp(const PropertyInfo& pinfo);
+        void AddSingleProp(const PropertyInfo& pinfo, wxTreeItemId *root = NULL);
       
         static PropertiesFrame *Get();
            

@@ -64,5 +64,18 @@ class PropEditCtrlColor : public PropEditCtrlTxt
 
 
 
+class PropEditCtrlFlags : public PropEditCtrlTxt
+{
+    public:
+        PropEditCtrlFlags(PropertiesFrame *propFrame)
+            : PropEditCtrlTxt(propFrame) {}
+
+        virtual bool HasDetails() { return TRUE; }
+        virtual void OnDetails();
+};
+
+
+
+
 
 #endif

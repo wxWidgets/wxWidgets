@@ -55,19 +55,36 @@ wxXmlNode *XmlFindNode(wxXmlNode *parent, const wxString& path)
 
 
 
+wxXmlNode *XmlCreateNode(wxXmlNode *parent, const wxString& name)
+{
+    wxXmlNode *n;
+    wxString nm;
+
+    wxStringTokenizer tkn(name, _T("/"));
+    n = parent;
+    while (tkn.HasMoreTokens())
+    {
+        parent = n;
+        nm = tkn.GetNextToken();
+        n = XmlFindNodeSimple(parent, nm);
+        if (n) continue;
+        
+        // n == NULL:
+        n = new wxXmlNode(wxXML_ELEMENT_NODE, nm);
+        parent->AddChild(n);        
+    }
+    n->AddChild(new wxXmlNode(wxXML_TEXT_NODE, wxEmptyString));
+    
+    return n;
+}
+
+
+
 void XmlWriteValue(wxXmlNode *parent, const wxString& name, const wxString& value)
 {
     wxXmlNode *n = XmlFindNode(parent, name);
-    if (n == NULL) 
-    {
-        wxString pname = name.BeforeLast(_T('/'));
-        if (pname.IsEmpty()) pname = name;
-        wxXmlNode *p = XmlFindNode(parent, pname);
-        if (p == NULL) p = parent;
-        n = new wxXmlNode(wxXML_ELEMENT_NODE, name.AfterLast(_T('/')));
-        p->AddChild(n);
-        n->AddChild(new wxXmlNode(wxXML_TEXT_NODE, wxEmptyString));
-    }
+    if (n == NULL)
+        n = XmlCreateNode(parent, name);
     
     n = n->GetChildren();
     

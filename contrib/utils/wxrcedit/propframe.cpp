@@ -48,7 +48,7 @@ class PropsTree: public wxRemotelyScrolledTreeCtrl
             // Reset the device origin since it may have been set
             dc.SetDeviceOrigin(0, 0);
 
-	        wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+	        wxPen pen(wxColour(_T("BLACK")), 1, wxSOLID);
 	        dc.SetPen(pen);
             
 	        dc.SetBrush(* wxTRANSPARENT_BRUSH);
@@ -221,7 +221,7 @@ PropertiesFrame::PropertiesFrame()
     m_EditCtrls.Put(_T("coord"), new PropEditCtrlCoord(this));
     m_EditCtrls.Put(_T("color"), new PropEditCtrlColor(this));
     m_EditCtrls.Put(_T("dimension"), new PropEditCtrlDim(this));
-    m_EditCtrls.Put(_T("flags"), new PropEditCtrlTxt(this));
+    m_EditCtrls.Put(_T("flags"), new PropEditCtrlFlags(this));
     m_EditCtrls.Put(_T("integer"), new PropEditCtrlInt(this));
     m_EditCtrls.Put(_T("not_implemented"), new PropEditCtrlNull(this));
     m_EditCtrls.Put(_T("text"), new PropEditCtrlTxt(this));
@@ -280,10 +280,12 @@ void PropertiesFrame::AddProps(PropertyInfoArray& plist)
 
 
 
-void PropertiesFrame::AddSingleProp(const PropertyInfo& pinfo)
+void PropertiesFrame::AddSingleProp(const PropertyInfo& pinfo, wxTreeItemId *root)
 {
     PropEditCtrl *pec = (PropEditCtrl*)m_EditCtrls.Get(pinfo.Type);
-    wxTreeItemId tid = m_tree->GetRootItem();
+    wxTreeItemId tid;
+    if (root != NULL) tid = *root;
+    else tid = m_tree->GetRootItem();
     
     if (pec == NULL)
         wxLogError(_("Unknown property type '%s'!"), pinfo.Type.c_str());
