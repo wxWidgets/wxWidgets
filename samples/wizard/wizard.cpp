@@ -104,7 +104,7 @@ public:
         m_bitmap = wxBITMAP(wiztest2);
 
         m_checkbox = new wxCheckBox(this, wxID_ANY, _T("&Check me"));
-        
+
         wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
         mainSizer->Add(
             new wxStaticText(this, wxID_ANY,
@@ -170,7 +170,7 @@ public:
                                  WXSIZEOF(choices), choices,
                                  1, wxRA_SPECIFY_COLS);
         m_radio->SetSelection(Both);
-        
+
         wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
         mainSizer->Add(
             m_radio,
@@ -178,7 +178,7 @@ public:
             wxALL,
             5 // Border
         );
-        
+
         SetSizer(mainSizer);
         mainSizer->Fit(this);
     }
@@ -230,7 +230,7 @@ public:
     {
         m_prev = prev;
         m_next = next;
-        
+
         wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
 
         mainSizer->Add(
@@ -255,9 +255,9 @@ public:
         unsigned int ui;
         for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
             astrChoices[ui] = aszChoices[ui];
-        m_checklistbox = new wxCheckListBox(this, wxID_ANY, wxDefaultPosition, wxSize(100,100), 
+        m_checklistbox = new wxCheckListBox(this, wxID_ANY, wxDefaultPosition, wxSize(100,100),
             WXSIZEOF(aszChoices), astrChoices);
-			
+
         mainSizer->Add(
             m_checklistbox,
             0, // No vertical stretching
@@ -265,7 +265,7 @@ public:
             5 // Border width
         );
 
-        
+
         SetSizer(mainSizer);
         mainSizer->Fit(this);
     }
@@ -379,7 +379,8 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 
     // a wizard page may be either an object of predefined class
     wxWizardPageSimple *page1 = new wxWizardPageSimple(wizard);
-    wxStaticText *text = new wxStaticText(page1, wxID_ANY,
+
+    /* wxStaticText *text = */ new wxStaticText(page1, wxID_ANY,
              _T("This wizard doesn't help you\nto do anything at all.\n")
              _T("\n")
              _T("The next pages will present you\nwith more useless controls."),
@@ -402,7 +403,7 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 
     // allow the wizard to size itself around the pages
     wizard->GetPageAreaSizer()->Add(page1);
-    
+
     if ( wizard->RunWizard(page1) )
     {
         wxMessageBox(_T("The wizard successfully completed"), _T("That's all"),
