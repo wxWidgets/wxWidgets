@@ -1294,6 +1294,9 @@
 /* Define this if you have _vsnwprintf */
 #undef HAVE__VSNWPRINTF
 
+/* Define if fseeko and ftello are available.  */
+#undef HAVE_FSEEKO
+
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
 

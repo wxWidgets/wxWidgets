@@ -250,14 +250,7 @@ size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
 
 wxFileOffset wxFFileInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
-#ifdef __VMS
-#pragma message disable intsignchange
-#endif
-    wxASSERT_MSG( pos >= LONG_MIN && pos <= LONG_MAX, _T("no huge wxFFile support") );
-    return ( m_file->Seek((long)pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
-#ifdef __VMS
-#pragma message enable intsignchange
-#endif
+    return m_file->Seek(pos, mode) ? m_file->Tell() : wxInvalidOffset;
 }
 
 wxFileOffset wxFFileInputStream::OnSysTell() const
@@ -331,14 +324,7 @@ wxFileOffset wxFFileOutputStream::OnSysTell() const
 
 wxFileOffset wxFFileOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 {
-#ifdef __VMS
-#pragma message disable intsignchange
-#endif
-    wxASSERT_MSG( pos >= LONG_MIN && pos <= LONG_MAX, _T("no huge wxFFile support") );
-    return ( m_file->Seek((long)pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
-#ifdef __VMS
-#pragma message enable intsignchange
-#endif
+    return m_file->Seek(pos, mode) ? m_file->Tell() : wxInvalidOffset;
 }
 
 void wxFFileOutputStream::Sync()

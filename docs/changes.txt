@@ -8,6 +8,7 @@ wxWidgets 2.5 Change Log - For more verbose changes, see the manual
 All:
 
 - new classes for reading and writing ZIP files (M.J.Wetherell)
+- large files support for wxFFile (M.J.Wetherell)
 - classes in the manual are now cross-referenced (Zbigniew Zagórski)
 - Norwegian (Bokmål) translation added (Hans F. Nordhaug)
 - wxDynamicLibrary::HasSymbol() added
@@ -90,7 +91,7 @@ wxUniv:
 
 All:
 
-- support for huge (>2 Gb) files (Tim Kosse)
+- support for large (>2 Gb) files in wxFile (Tim Kosse)
 - number of fixes to wxPluginManager (Rick Brice, Hans Van Leemputten)
 - fixed memory leak in wxURL when using a proxy (Steven Van Ingelgem)
 - fixed bug in wxDateTime::Set(jdn) when DST was in effect

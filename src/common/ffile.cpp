@@ -42,6 +42,18 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// seek and tell with large file support if available
+// ----------------------------------------------------------------------------
+
+#ifdef HAVE_FSEEKO
+#   define wxFseek fseeko
+#   define wxFtell ftello
+#else
+#   define wxFseek fseek
+#   define wxFtell ftell
+#endif
+
+// ----------------------------------------------------------------------------
 // opening the file
 // ----------------------------------------------------------------------------
 
@@ -170,7 +182,7 @@ bool wxFFile::Flush()
 // seeking
 // ----------------------------------------------------------------------------
 
-bool wxFFile::Seek(long ofs, wxSeekMode mode)
+bool wxFFile::Seek(wxFileOffset ofs, wxSeekMode mode)
 {
     wxCHECK_MSG( IsOpened(), false, wxT("can't seek on closed file") );
 
@@ -194,7 +206,16 @@ bool wxFFile::Seek(long ofs, wxSeekMode mode)
             break;
     }
 
-    if ( fseek(m_fp, ofs, origin) != 0 )
+#ifndef HAVE_FSEEKO 
+    if ((long)ofs != ofs)
+    {
+        wxLogError(_("Seek error on file '%s' (large files not supported by stdio)"), m_name.c_str());
+
+        return false;
+    }
+#endif
+
+    if ( wxFseek(m_fp, ofs, origin) != 0 )
     {
         wxLogSysError(_("Seek error on file '%s'"), m_name.c_str());
 
@@ -204,34 +225,34 @@ bool wxFFile::Seek(long ofs, wxSeekMode mode)
     return true;
 }
 
-size_t wxFFile::Tell() const
+wxFileOffset wxFFile::Tell() const
 {
-    wxCHECK_MSG( IsOpened(), (size_t)-1,
+    wxCHECK_MSG( IsOpened(), wxInvalidOffset,
                  _T("wxFFile::Tell(): file is closed!") );
 
-    long rc = ftell(m_fp);
-    if ( rc == -1 )
+    wxFileOffset rc = wxFtell(m_fp);
+    if ( rc == wxInvalidOffset )
     {
         wxLogSysError(_("Can't find current position in file '%s'"),
                       m_name.c_str());
     }
 
-    return (size_t)rc;
+    return rc;
 }
 
-size_t wxFFile::Length() const
+wxFileOffset wxFFile::Length() const
 {
-    wxCHECK_MSG( IsOpened(), (size_t)-1,
+    wxCHECK_MSG( IsOpened(), wxInvalidOffset,
                  _T("wxFFile::Length(): file is closed!") );
 
     wxFFile& self = *(wxFFile *)this;   // const_cast
 
-    size_t posOld = Tell();
-    if ( posOld != (size_t)-1 )
+    wxFileOffset posOld = Tell();
+    if ( posOld != wxInvalidOffset )
     {
         if ( self.SeekEnd() )
         {
-            size_t len = Tell();
+            wxFileOffset len = Tell();
 
             (void)self.Seek(posOld);
 
@@ -239,7 +260,7 @@ size_t wxFFile::Length() const
         }
     }
 
-    return (size_t)-1;
+    return wxInvalidOffset; 
 }
 
 #endif // wxUSE_FFILE

@@ -78,13 +78,13 @@ public:
 
   // file pointer operations (return ofsInvalid on failure)
     // move ptr ofs bytes related to start/current pos/end of file
-  bool Seek(long ofs, wxSeekMode mode = wxFromStart);
+  bool Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
     // move ptr to ofs bytes before the end
-  bool SeekEnd(long ofs = 0) { return Seek(ofs, wxFromEnd); }
+  bool SeekEnd(wxFileOffset ofs = 0) { return Seek(ofs, wxFromEnd); }
     // get current position in the file
-  size_t Tell() const;
+  wxFileOffset Tell() const;
     // get current file length
-  size_t Length() const;
+  wxFileOffset Length() const;
 
   // simple accessors: note that Eof() and Error() may only be called if
   // IsOpened()!

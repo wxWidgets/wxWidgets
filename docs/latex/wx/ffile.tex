@@ -155,7 +155,7 @@ be used for an opened file.
 
 \membersection{wxFFile::Length}\label{wxffilelength}
 
-\constfunc{size\_t}{Length}{\void}
+\constfunc{wxFileOffset}{Length}{\void}
 
 Returns the length of the file.
 
@@ -175,7 +175,7 @@ Opens the file, returning \true if successful.
 
 \membersection{wxFFile::Read}\label{wxffileread}
 
-\func{size\_t}{Read}{\param{void*}{ buffer}, \param{off\_t}{ count}}
+\func{size\_t}{Read}{\param{void*}{ buffer}, \param{size\_t}{ count}}
 
 Reads the specified number of bytes into a buffer, returning the actual number read.
 
@@ -192,7 +192,7 @@ The number of bytes read.
 
 \membersection{wxFFile::Seek}\label{wxffileseek}
 
-\func{bool}{Seek}{\param{long }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}
+\func{bool}{Seek}{\param{wxFileOffset }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}
 
 Seeks to the specified position and returns \true on success.
 
@@ -205,7 +205,7 @@ Seeks to the specified position and returns \true on success.
 
 \membersection{wxFFile::SeekEnd}\label{wxffileseekend}
 
-\func{bool}{SeekEnd}{\param{long }{ofs = 0}}
+\func{bool}{SeekEnd}{\param{wxFileOffset }{ofs = 0}}
 
 Moves the file pointer to the specified number of bytes before the end of the file
 and returns \true on success.
@@ -217,7 +217,7 @@ and returns \true on success.
 
 \membersection{wxFFile::Tell}\label{wxffiletell}
 
-\constfunc{size\_t}{Tell}{\void}
+\constfunc{wxFileOffset}{Tell}{\void}
 
 Returns the current position.
 
