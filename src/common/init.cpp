@@ -181,6 +181,7 @@ static void ConvertArgsToUnicode(int argc, char **argv)
         gs_initData.argv[i] = wxStrdup(wxConvLocal.cMB2WX(argv[i]));
     }
 
+    gs_initData.argc = argc;
     gs_initData.argv[argc] = NULL;
 }
 
@@ -195,6 +196,7 @@ static void FreeConvertedArgs()
 
         delete [] gs_initData.argv;
         gs_initData.argv = NULL;
+        gs_initData.argc = 0;
     }
 }
 
