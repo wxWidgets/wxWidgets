@@ -175,6 +175,8 @@ def runTest(frame, nb, log):
         print "GetStyledText(98, 104): ", repr(ed.GetStyledText(98, 104)), len(ed.GetStyledText(98, 104))
         print
         print "GetCurLine(): ", repr(ed.GetCurLine())
+        ed.GotoPos(5)
+        print "GetCurLine(): ", repr(ed.GetCurLine())
         print
         print "GetLine(1): ", repr(ed.GetLine(1))
         print

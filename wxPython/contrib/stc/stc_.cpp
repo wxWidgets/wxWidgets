@@ -988,7 +988,7 @@ static PyObject *_wrap_wxStyledTextCtrl_GetCurLine(PyObject *self, PyObject *arg
     PyObject * _resultobj;
     wxString * _result;
     wxStyledTextCtrl * _arg0;
-    int * _arg1 = (int *) NULL;
+    int * _arg1;
     int  temp;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -7532,8 +7532,8 @@ static PyObject *_wrap_wxStyledTextCtrl_GetModEventMask(PyObject *self, PyObject
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_SetFocus(_swigobj,_swigarg0)  (_swigobj->SetFocus(_swigarg0))
-static PyObject *_wrap_wxStyledTextCtrl_SetFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_SetSTCFocus(_swigobj,_swigarg0)  (_swigobj->SetSTCFocus(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetSTCFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextCtrl * _arg0;
     bool  _arg1;
@@ -7542,19 +7542,19 @@ static PyObject *_wrap_wxStyledTextCtrl_SetFocus(PyObject *self, PyObject *args,
     char *_kwnames[] = { "self","focus", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetFocus",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_SetSTCFocus",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetFocus. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSTCFocus. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
     _arg1 = (bool ) tempbool1;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextCtrl_SetFocus(_arg0,_arg1);
+        wxStyledTextCtrl_SetSTCFocus(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7562,8 +7562,8 @@ static PyObject *_wrap_wxStyledTextCtrl_SetFocus(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_GetFocus(_swigobj)  (_swigobj->GetFocus())
-static PyObject *_wrap_wxStyledTextCtrl_GetFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextCtrl_GetSTCFocus(_swigobj)  (_swigobj->GetSTCFocus())
+static PyObject *_wrap_wxStyledTextCtrl_GetSTCFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxStyledTextCtrl * _arg0;
@@ -7571,18 +7571,18 @@ static PyObject *_wrap_wxStyledTextCtrl_GetFocus(PyObject *self, PyObject *args,
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetFocus",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_GetSTCFocus",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetFocus. Expected _wxStyledTextCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_GetSTCFocus. Expected _wxStyledTextCtrl_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxStyledTextCtrl_GetFocus(_arg0);
+        _result = (bool )wxStyledTextCtrl_GetSTCFocus(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -9869,8 +9869,8 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextCtrl_SetMouseDownCaptures", (PyCFunction) _wrap_wxStyledTextCtrl_SetMouseDownCaptures, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetStatus", (PyCFunction) _wrap_wxStyledTextCtrl_GetStatus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetStatus", (PyCFunction) _wrap_wxStyledTextCtrl_SetStatus, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_GetFocus", (PyCFunction) _wrap_wxStyledTextCtrl_GetFocus, METH_VARARGS | METH_KEYWORDS },
-	 { "wxStyledTextCtrl_SetFocus", (PyCFunction) _wrap_wxStyledTextCtrl_SetFocus, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_GetSTCFocus", (PyCFunction) _wrap_wxStyledTextCtrl_GetSTCFocus, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSTCFocus", (PyCFunction) _wrap_wxStyledTextCtrl_SetSTCFocus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetModEventMask", (PyCFunction) _wrap_wxStyledTextCtrl_GetModEventMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_ReleaseDocument", (PyCFunction) _wrap_wxStyledTextCtrl_ReleaseDocument, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_AddRefDocument", (PyCFunction) _wrap_wxStyledTextCtrl_AddRefDocument, METH_VARARGS | METH_KEYWORDS },
@@ -10150,12 +10150,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxChar","_char",0},
     { "_wxCommandEvent","_wxStyledTextEvent",SwigwxStyledTextEventTowxCommandEvent},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},

@@ -19,27 +19,28 @@ def getAutoCompleteList(command='', locals=None, includeMagic=1, \
     root = getRoot(command, terminator='.')
     try:
         object = eval(root, locals)
-        attributes = getAttributeNames(object)
-        if includeMagic:
-            try: attributes += object._getAttributeNames()
-            except: pass
-        if not includeSingle:
-            attributes = filter(lambda item: item[0]!='_' or item[1]=='_', attributes)
-        if not includeDouble:
-            attributes = filter(lambda item: item[:2]!='__', attributes)
+        attributes = getAttributeNames(object, includeMagic, \
+                                       includeSingle, includeDouble)
         return attributes
     except:
         return []
     
-def getAttributeNames(object):
+def getAttributeNames(object, includeMagic=1, includeSingle=1, includeDouble=1):
     """Return list of unique attributes, including inherited, for an object."""
     attributes = []
     dict = {}
-    # Remove duplicates from the attribute list.
+    if includeMagic:
+        try: attributes += object._getAttributeNames()
+        except: pass
+    # Get all attribute names, removing duplicates from the attribute list.
     for item in getAllAttributeNames(object):
         dict[item] = None
     attributes += dict.keys()
     attributes.sort()
+    if not includeSingle:
+        attributes = filter(lambda item: item[0]!='_' or item[1]=='_', attributes)
+    if not includeDouble:
+        attributes = filter(lambda item: item[:2]!='__', attributes)
     return attributes
 
 def getAllAttributeNames(object):
@@ -137,7 +138,9 @@ def getRoot(command, terminator=None):
         pieces = command.split(terminator)
         if len(pieces) > 1:
             command = terminator.join(pieces[:-1])
-    if command in ("''", '""', '""""""', '[]', '()', '{}'):
+    if len(command) == 0:
+        root = ''
+    elif command in ("''", '""', '""""""', '[]', '()', '{}'):
         # Let empty type delimiter pairs go through.
         root = command
     else:

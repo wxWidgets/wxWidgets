@@ -24,6 +24,7 @@ import images
 _treeList = [
     ('New since last release', ['ContextHelp',
                                 'PyCrust',
+                                'PyCrustWithFilling',
                                 'VirtualListCtrl',
                                 'wxListCtrl',
                                 'TablePrint',

@@ -1,5 +1,4 @@
-"""PyCrust Interpreter executes Python commands.
-"""
+"""PyCrust Interpreter executes Python commands."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -8,15 +7,16 @@ __version__ = "$Revision$"[11:-2]
 
 import os
 import sys
-
 from code import InteractiveInterpreter
 import introspect
 
 
 class Interpreter(InteractiveInterpreter):
     """PyCrust Interpreter based on code.InteractiveInterpreter."""
+    
     revision = __version__
-    def __init__(self, locals=None, rawin=None,
+    
+    def __init__(self, locals=None, rawin=None, \
                  stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr):
         """Create an interactive interpreter object."""
         InteractiveInterpreter.__init__(self, locals=locals)
@@ -28,8 +28,8 @@ class Interpreter(InteractiveInterpreter):
             __builtin__.raw_input = rawin
             del __builtin__
         copyright = 'Type "copyright", "credits" or "license" for more information.'
-        self.introText = 'Python %s on %s\n%s' % \
-                         (sys.version, sys.platform, copyright)
+        self.introText = 'Python %s on %s%s%s' % \
+                         (sys.version, sys.platform, os.linesep, copyright)
         try:
             sys.ps1
         except AttributeError:
@@ -80,4 +80,16 @@ class Interpreter(InteractiveInterpreter):
         
         The call tip information will be based on the locals namespace."""
         return introspect.getCallTip(command, self.locals, *args, **kwds)
+
+
+class InterpreterAlaCarte(Interpreter):
+    """PyCrustAlaCarte Demo Interpreter."""
+    
+    def __init__(self, locals, rawin, stdin, stdout, stderr, \
+                 ps1='main prompt', ps2='continuation prompt'):
+        """Create an interactive interpreter object."""
+        Interpreter.__init__(self, locals=locals, rawin=rawin, \
+                             stdin=stdin, stdout=stdout, stderr=stderr)
+        sys.ps1 = ps1
+        sys.ps2 = ps2
 

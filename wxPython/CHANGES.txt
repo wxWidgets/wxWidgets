@@ -9,7 +9,8 @@ EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
 wxContextMenuEvent, wxContextHelp, wxContextHelpButton, wxTipWindow,
 and a demo to show them in action.
 
-Deprecated PyShell and PyShellWindow, added a snapshot of PyCrust.
+Deprecated PyShell and PyShellWindow, added a snapshot of PyCrust (see
+http://sourceforge.net/projects/pycrust/. )
 
 Added the new virtual list capabilities to wxListCtrl.
 
@@ -38,6 +39,8 @@ using wxColumnSorterMixin.
 Added wxGenBitmapTextButton, TablePrint, etc. contribs from Lorne White.
 
 Added wxNativeFontInfo and wxFontMapper.
+
+
 
 
 2.3.1

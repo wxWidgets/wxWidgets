@@ -822,11 +822,11 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def GetModEventMask(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetModEventMask,(self,) + _args, _kwargs)
         return val
-    def SetFocus(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetFocus,(self,) + _args, _kwargs)
+    def SetSTCFocus(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetSTCFocus,(self,) + _args, _kwargs)
         return val
-    def GetFocus(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetFocus,(self,) + _args, _kwargs)
+    def GetSTCFocus(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetSTCFocus,(self,) + _args, _kwargs)
         return val
     def SetStatus(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetStatus,(self,) + _args, _kwargs)

@@ -1,7 +1,7 @@
-"""PyCrust Shell is the gui text control in which a user interacts and types
-in commands to be sent to the interpreter. This particular shell is based on
-wxPython's wxStyledTextCtrl.
-"""
+"""The PyCrust Shell is an interactive text control in which a user types in
+commands to be sent to the interpreter. This particular shell is based on
+wxPython's wxStyledTextCtrl. The latest files are always available at the
+SourceForge project page at http://sourceforge.net/projects/pycrust/."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -10,12 +10,11 @@ __version__ = "$Revision$"[11:-2]
 
 from wxPython.wx import *
 from wxPython.stc import *
-
 import keyword
 import os
 import sys
-
 from version import VERSION
+
 
 if wxPlatform == '__WXMSW__':
     faces = { 'times'  : 'Times New Roman',
@@ -32,79 +31,85 @@ else:  # GTK
               'mono'   : 'Courier',
               'helv'   : 'Helvetica',
               'other'  : 'new century schoolbook',
-              'size'   : 9,
-              'lnsize' : 8,
+              'size'   : 12,
+              'lnsize' : 10,
               'backcol': '#FFFFFF',
             }
 
 
 class Shell(wxStyledTextCtrl):
     """PyCrust Shell based on wxStyledTextCtrl."""
+    
     name = 'PyCrust Shell'
     revision = __version__
-    def __init__(self, parent, id, introText='', locals=None, interp=None):
-        """Create a PyCrust Shell object."""
-        wxStyledTextCtrl.__init__(self, parent, id, style=wxCLIP_CHILDREN)
-        self.introText = introText
+    
+    def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
+                 size=wxDefaultSize, style=wxCLIP_CHILDREN, introText='', \
+                 locals=None, InterpClass=None, *args, **kwds):
+        """Create a PyCrust Shell instance."""
+        wxStyledTextCtrl.__init__(self, parent, id, pos, size, style)
+        # Import a default interpreter class if one isn't provided.
+        if InterpClass == None:
+            from interpreter import Interpreter
+        else:
+            Interpreter = InterpClass
+        # Create default locals so we have something interesting.
+        shellLocals = {'__name__': 'PyShell', 
+                       '__doc__': 'PyShell, The PyCrust Python Shell.',
+                       '__version__': VERSION,
+                      }
+        # Add the dictionary that was passed in.
+        if locals:
+            shellLocals.update(locals)
+        from pseudo import PseudoFileIn, PseudoFileOut, PseudoFileErr
+        self.interp = Interpreter(locals=shellLocals, \
+                                  rawin=self.readRaw, \
+                                  stdin=PseudoFileIn(self.readIn), \
+                                  stdout=PseudoFileOut(self.writeOut), \
+                                  stderr=PseudoFileErr(self.writeErr), \
+                                  *args, **kwds)
         # Keep track of the most recent prompt starting and ending positions.
         self.promptPos = [0, 0]
         # Keep track of multi-line commands.
         self.more = 0
+        # Create the command history.  Commands are added into the front of
+        # the list (ie. at index 0) as they are entered.  self.historyPos is
+        # the current position in the history; it gets incremented as you
+        # retrieve the previous command, decremented as you retrieve the next,
+        # and reset when you hit Enter. self.historyPos == -1 means you're on
+        # the current command, not in the history. self.tempCommand is
+        # storage space for whatever was on the last line when you first hit
+        # "Retrieve-Previous", so that the final "Retrieve-Next" will restore
+        # whatever was originally there.  self.lastCommandRecalled remembers
+        # the index of the last command to be recalled from the history, so
+        # you can repeat a group of commands by going up-up-up-enter to find
+        # the first one in the group then down-enter-down-enter to recall each
+        # subsequent command.  Also useful for multiline commands, in lieu of
+        # a proper implementation of those.
+        self.history = []
+        self.historyPos = -1
+        self.tempCommand = ''
+        self.lastCommandRecalled = -1
         # Assign handlers for keyboard events.
         EVT_KEY_DOWN(self, self.OnKeyDown)
         EVT_CHAR(self, self.OnChar)
-        # Create a default interpreter if one isn't provided.
-        if interp == None:
-            from interpreter import Interpreter
-            from pseudo import PseudoFileIn, PseudoFileOut, PseudoFileErr
-            self.stdin = PseudoFileIn(self.readIn)
-            self.stdout = PseudoFileOut(self.writeOut)
-            self.stderr = PseudoFileErr(self.writeErr)
-            # Override the default locals so we have something interesting.
-            self.locals = {'__name__': 'PyCrust', 
-                           '__doc__': 'PyCrust, The Python Shell.',
-                           '__version__': VERSION,
-                          }
-            # Add the dictionary that was passed in.
-            if locals:
-                self.locals.update(locals)
-            self.interp = Interpreter(locals=self.locals, 
-                                      rawin=self.readRaw,
-                                      stdin=self.stdin, 
-                                      stdout=self.stdout, 
-                                      stderr=self.stderr)
-        else:
-            self.interp = interp
-
         # Configure various defaults and user preferences.
         self.config()
-
-        try:
-            self.showIntro(self.introText)
-        except:
-            pass
-
-        try:
-            self.setBuiltinKeywords()
-        except:
-            pass
-        
-        try:
-            self.setLocalShell()
-        except:
-            pass
-        
+        # Display the introductory banner information.
+        try: self.showIntro(introText)
+        except: pass
+        # Assign some pseudo keywords to the interpreter's namespace.
+        try: self.setBuiltinKeywords()
+        except: pass
+        # Add 'shell' to the interpreter's local namespace.
+        try: self.setLocalShell()
+        except: pass
         # Do this last so the user has complete control over their
         # environment. They can override anything they want.
-        try:
-            self.execStartupScript(self.interp.startupScript)
-        except:
-            pass
+        try: self.execStartupScript(self.interp.startupScript)
+        except: pass
             
     def destroy(self):
-        del self.stdin
-        del self.stdout
-        del self.stderr
         del self.interp
         
     def config(self):
@@ -133,7 +138,7 @@ class Shell(wxStyledTextCtrl):
     def showIntro(self, text=''):
         """Display introductory text in the shell."""
         if text:
-            if text[-1] != '\n': text += '\n'
+            if not text.endswith(os.linesep): text += os.linesep
             self.write(text)
         try:
             self.write(self.interp.introText)
@@ -148,10 +153,15 @@ class Shell(wxStyledTextCtrl):
         In this case what we want is to call our self.quit() method.
         The user can type "close", "exit" or "quit" without the final parens.
         """
+## POB: This is having some weird side-effects so I'm taking it out.
+##        import __builtin__
+##        from pseudo import PseudoKeyword
+##        __builtin__.close = __builtin__.exit = __builtin__.quit = \
+##            PseudoKeyword(self.quit)
         import __builtin__
         from pseudo import PseudoKeyword
         __builtin__.close = __builtin__.exit = __builtin__.quit = \
-            PseudoKeyword(self.quit)
+            'Click on the close button to leave the application.'
 
     def quit(self):
         """Quit the application."""
@@ -211,14 +221,86 @@ class Shell(wxStyledTextCtrl):
         """Key down event handler.
         
         The main goal here is to not allow modifications to previous 
-        lines of text.
-        """
+        lines of text."""
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
         stoppos = self.promptPos[1]
         # If the auto-complete window is up let it do its thing.
         if self.AutoCompActive():
             event.Skip()
+        # Control+UpArrow steps up through the history.
+        elif key == WXK_UP and event.ControlDown() \
+        and self.historyPos < len(self.history) - 1:
+            # Move to the end of the buffer.
+            endpos = self.GetTextLength()
+            self.SetCurrentPos(endpos)
+            # The first Control+Up stores the current command;
+            # Control+Down brings it back.
+            if self.historyPos == -1:
+                self.tempCommand = self.getCommand()
+            # Now replace the current line with the next one from the history.
+            self.historyPos = self.historyPos + 1
+            self.SetSelection(stoppos, endpos)
+            self.ReplaceSelection(self.history[self.historyPos])
+        # Control+DownArrow steps down through the history.
+        elif key == WXK_DOWN and event.ControlDown():
+            # Move to the end of the buffer.
+            endpos = self.GetTextLength()
+            self.SetCurrentPos(endpos)
+            # Are we at the bottom end of the history?
+            if self.historyPos == -1:
+                # Do we have a lastCommandRecalled stored?
+                if self.lastCommandRecalled >= 0:
+                    # Replace the current line with the command after the
+                    # last-recalled command (you'd think there should be a +1
+                    # here but there isn't because the history was shuffled up
+                    # by 1 after the previous command was recalled).
+                    self.SetSelection(stoppos, endpos)
+                    self.ReplaceSelection(self.history[self.lastCommandRecalled])
+                    # We've now warped into middle of the history.
+                    self.historyPos = self.lastCommandRecalled
+                    self.lastCommandRecalled = -1
+            else:
+                # Fetch either the previous line from the history, or the saved
+                # command if we're back at the start.
+                self.historyPos = self.historyPos - 1
+                if self.historyPos == -1:
+                    newText = self.tempCommand
+                else:
+                    newText = self.history[self.historyPos]
+                # Replace the current line with the new text.
+                self.SetSelection(stoppos, endpos)
+                self.ReplaceSelection(newText)
+        # F8 on the last line does a search up the history for the text in
+        # front of the cursor.
+        elif key == WXK_F8 and self.GetCurrentLine() == self.GetLineCount()-1:
+            tempCommand = self.getCommand()
+            # The first F8 saves the current command, just like Control+Up.
+            if self.historyPos == -1:
+                self.tempCommand = tempCommand
+            # The text up to the cursor is what we search for.
+            searchText = tempCommand
+            numCharsAfterCursor = self.GetTextLength() - self.GetCurrentPos()
+            if numCharsAfterCursor > 0:
+                searchText = searchText[:-numCharsAfterCursor]
+            # Search upwards from the current history position and loop back
+            # to the beginning if we don't find anything.
+            for i in range(self.historyPos+1, len(self.history)) + \
+                     range(self.historyPos):
+                command = self.history[i]
+                if command[:len(searchText)] == searchText:
+                    # Replace the current line with the one we've found.
+                    endpos = self.GetTextLength()
+                    self.SetSelection(stoppos, endpos)
+                    self.ReplaceSelection(command)
+                    # Put the cursor back at the end of the search text.
+                    pos = self.GetTextLength() - len(command) + len(searchText)
+                    self.SetCurrentPos(pos)
+                    self.SetAnchor(pos)
+                    # We've now warped into middle of the history.
+                    self.historyPos = i
+                    self.lastCommandRecalled = -1
+                    break
         # Return is used to submit a command to the interpreter.
         elif key == WXK_RETURN:
             if self.CallTipActive: self.CallTipCancel()
@@ -252,8 +334,7 @@ class Shell(wxStyledTextCtrl):
         """Keypress event handler.
         
         The main goal here is to not allow modifications to previous 
-        lines of text.
-        """
+        lines of text."""
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
         stoppos = self.promptPos[1]
@@ -296,14 +377,24 @@ class Shell(wxStyledTextCtrl):
         # Grab information about the current line.
         thepos = self.GetCurrentPos()
         theline = self.GetCurrentLine()
-        thetext = self.GetCurLine()[0]
-        command = self.getCommand(thetext)
+        command = self.getCommand()
         # Go to the very bottom of the text.
         endpos = self.GetTextLength()
         self.SetCurrentPos(endpos)
         endline = self.GetCurrentLine()
         # If they hit RETURN on the last line, execute the command.
         if theline == endline:
+            # Store the last-recalled command; see the main comment for
+            # self.lastCommandRecalled.
+            if command != '':
+                self.lastCommandRecalled = self.historyPos
+            # Reset the history position.
+            self.historyPos = -1
+            # Insert this command into the history, unless it's a blank line
+            # or the same as the last command.
+            if command != '' \
+            and (len(self.history) == 0 or command != self.history[0]):
+                self.history.insert(0, command)
             self.push(command)
         # Otherwise, replace the last line with the new line.
         else:
@@ -319,15 +410,19 @@ class Shell(wxStyledTextCtrl):
                 self.SetCurrentPos(thepos)
                 self.SetAnchor(thepos)
 
-    def getCommand(self, text):
+    def getCommand(self, text=None):
         """Extract a command from text which may include a shell prompt.
         
-        The command may not necessarily be valid Python syntax.
-        """
-        
+        The command may not necessarily be valid Python syntax."""
+        if not text:
+            text = self.GetCurLine()[0]
+## This is a hack due to a bug in the wxPython 2.3.2 beta. The following
+## two lines of code should go away once the bug has been fixed and the
+## line above should be restored.
+##            self.write(' ')
+##            text = self.GetCurLine()[0][:-1]
         # XXX Need to extract real prompts here. Need to keep track of the
-        # prompt every time a command is issued. Do this in the interpreter
-        # with a line number, prompt, command dictionary. For the history, perhaps.
+        # prompt every time a command is issued.
         ps1 = str(sys.ps1)
         ps1size = len(ps1)
         ps2 = str(sys.ps2)
@@ -344,7 +439,7 @@ class Shell(wxStyledTextCtrl):
     
     def push(self, command):
         """Send command to the interpreter for execution."""
-        self.write('\n')
+        self.write(os.linesep)
         self.more = self.interp.push(command)
         self.prompt()
         # Keep the undo feature from undoing previous responses. The only
@@ -353,22 +448,30 @@ class Shell(wxStyledTextCtrl):
         self.EmptyUndoBuffer()
 
     def write(self, text):
-        """Display text in the shell."""
+        """Display text in the shell.
+
+        Replace line endings with OS-specific endings."""
+        lines = text.split('\r\n')
+        for l in range(len(lines)):
+            chunks = lines[l].split('\r')
+            for c in range(len(chunks)):
+                chunks[c] = os.linesep.join(chunks[c].split('\n'))
+            lines[l] = os.linesep.join(chunks)
+        text = os.linesep.join(lines)
         self.AddText(text)
         self.EnsureCaretVisible()
         #self.ScrollToColumn(0)
-    
+
     def prompt(self):
         """Display appropriate prompt for the context, either ps1 or ps2.
         
-        If this is a continuation line, autoindent as necessary.
-        """
+        If this is a continuation line, autoindent as necessary."""
         if self.more:
             prompt = str(sys.ps2)
         else:
             prompt = str(sys.ps1)
         pos = self.GetCurLine()[1]
-        if pos > 0: self.write('\n')
+        if pos > 0: self.write(os.linesep)
         self.promptPos[0] = self.GetCurrentPos()
         self.write(prompt)
         self.promptPos[1] = self.GetCurrentPos()
@@ -377,7 +480,7 @@ class Shell(wxStyledTextCtrl):
             self.write('\t')  # Temporary hack indentation.
         self.EnsureCaretVisible()
         self.ScrollToColumn(0)
-    
+
     def readIn(self):
         """Replacement for stdin."""
         prompt = 'Please enter your response:'
@@ -386,7 +489,7 @@ class Shell(wxStyledTextCtrl):
         try:
             if dialog.ShowModal() == wxID_OK:
                 text = dialog.GetValue()
-                self.write(text + '\n')
+                self.write(text + os.linesep)
                 return text
         finally:
             dialog.Destroy()
@@ -475,4 +578,206 @@ class Shell(wxStyledTextCtrl):
     def CanCopy(self):
         """Return true if text is selected and can be copied."""
         return self.GetSelectionStart() != self.GetSelectionEnd()
+
+
+wxID_SELECTALL = NewId()  # This *should* be defined by wxPython.
+ID_AUTOCOMP = NewId()
+ID_AUTOCOMP_SHOW = NewId()
+ID_AUTOCOMP_INCLUDE_MAGIC = NewId()
+ID_AUTOCOMP_INCLUDE_SINGLE = NewId()
+ID_AUTOCOMP_INCLUDE_DOUBLE = NewId()
+ID_CALLTIPS = NewId()
+ID_CALLTIPS_SHOW = NewId()
+
+
+class ShellFrame(wxFrame):
+    """Frame containing the PyCrust shell component."""
+    
+    name = 'PyCrust Shell Frame'
+    revision = __version__
+    
+    def __init__(self, parent=None, id=-1, title='PyShell', \
+                 pos=wxDefaultPosition, size=wxDefaultSize, \
+                 style=wxDEFAULT_FRAME_STYLE, locals=None, \
+                 InterpClass=None, *args, **kwds):
+        """Create a PyCrust ShellFrame instance."""
+        wxFrame.__init__(self, parent, id, title, pos, size, style)
+        intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
+        self.CreateStatusBar()
+        self.SetStatusText(intro)
+        if wxPlatform == '__WXMSW__':
+            icon = wxIcon('PyCrust.ico', wxBITMAP_TYPE_ICO)
+            self.SetIcon(icon)
+        self.createMenus()
+        self.shell = Shell(parent=self, id=-1, introText=intro, \
+                           locals=locals, InterpClass=InterpClass, \
+                           *args, **kwds)
+        # Override the shell so that status messages go to the status bar.
+        self.shell.setStatusText = self.SetStatusText
+
+    def createMenus(self):
+        m = self.fileMenu = wxMenu()
+        m.AppendSeparator()
+        m.Append(wxID_EXIT, 'E&xit', 'Exit PyCrust')
+
+        m = self.editMenu = wxMenu()
+        m.Append(wxID_UNDO, '&Undo \tCtrl+Z', 'Undo the last action')
+        m.Append(wxID_REDO, '&Redo \tCtrl+Y', 'Redo the last undone action')
+        m.AppendSeparator()
+        m.Append(wxID_CUT, 'Cu&t \tCtrl+X', 'Cut the selection')
+        m.Append(wxID_COPY, '&Copy \tCtrl+C', 'Copy the selection')
+        m.Append(wxID_PASTE, '&Paste \tCtrl+V', 'Paste')
+        m.AppendSeparator()
+        m.Append(wxID_CLEAR, 'Cle&ar \tDel', 'Delete the selection')
+        m.Append(wxID_SELECTALL, 'Select A&ll \tCtrl+A', 'Select all text')
+
+        m = self.autocompMenu = wxMenu()
+        m.Append(ID_AUTOCOMP_SHOW, 'Show Auto Completion', \
+                 'Show auto completion during dot syntax', \
+                 checkable=1)
+        m.Append(ID_AUTOCOMP_INCLUDE_MAGIC, 'Include Magic Attributes', \
+                 'Include attributes visible to __getattr__ and __setattr__', \
+                 checkable=1)
+        m.Append(ID_AUTOCOMP_INCLUDE_SINGLE, 'Include Single Underscores', \
+                 'Include attibutes prefixed by a single underscore', \
+                 checkable=1)
+        m.Append(ID_AUTOCOMP_INCLUDE_DOUBLE, 'Include Double Underscores', \
+                 'Include attibutes prefixed by a double underscore', \
+                 checkable=1)
+
+        m = self.calltipsMenu = wxMenu()
+        m.Append(ID_CALLTIPS_SHOW, 'Show Call Tips', \
+                 'Show call tips with argument specifications', checkable=1)
+
+        m = self.optionsMenu = wxMenu()
+        m.AppendMenu(ID_AUTOCOMP, '&Auto Completion', self.autocompMenu, \
+                     'Auto Completion Options')
+        m.AppendMenu(ID_CALLTIPS, '&Call Tips', self.calltipsMenu, \
+                     'Call Tip Options')
+
+        m = self.helpMenu = wxMenu()
+        m.AppendSeparator()
+        m.Append(wxID_ABOUT, '&About...', 'About PyCrust')
+
+        b = self.menuBar = wxMenuBar()
+        b.Append(self.fileMenu, '&File')
+        b.Append(self.editMenu, '&Edit')
+        b.Append(self.optionsMenu, '&Options')
+        b.Append(self.helpMenu, '&Help')
+        self.SetMenuBar(b)
+
+        EVT_MENU(self, wxID_EXIT, self.OnExit)
+        EVT_MENU(self, wxID_UNDO, self.OnUndo)
+        EVT_MENU(self, wxID_REDO, self.OnRedo)
+        EVT_MENU(self, wxID_CUT, self.OnCut)
+        EVT_MENU(self, wxID_COPY, self.OnCopy)
+        EVT_MENU(self, wxID_PASTE, self.OnPaste)
+        EVT_MENU(self, wxID_CLEAR, self.OnClear)
+        EVT_MENU(self, wxID_SELECTALL, self.OnSelectAll)
+        EVT_MENU(self, wxID_ABOUT, self.OnAbout)
+        EVT_MENU(self, ID_AUTOCOMP_SHOW, \
+                 self.OnAutoCompleteShow)
+        EVT_MENU(self, ID_AUTOCOMP_INCLUDE_MAGIC, \
+                 self.OnAutoCompleteIncludeMagic)
+        EVT_MENU(self, ID_AUTOCOMP_INCLUDE_SINGLE, \
+                 self.OnAutoCompleteIncludeSingle)
+        EVT_MENU(self, ID_AUTOCOMP_INCLUDE_DOUBLE, \
+                 self.OnAutoCompleteIncludeDouble)
+        EVT_MENU(self, ID_CALLTIPS_SHOW, \
+                 self.OnCallTipsShow)
+
+        EVT_UPDATE_UI(self, wxID_UNDO, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, wxID_REDO, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, wxID_CUT, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, wxID_COPY, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, wxID_PASTE, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, wxID_CLEAR, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, ID_AUTOCOMP_SHOW, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, ID_AUTOCOMP_INCLUDE_MAGIC, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, ID_AUTOCOMP_INCLUDE_SINGLE, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, ID_AUTOCOMP_INCLUDE_DOUBLE, self.OnUpdateMenu)
+        EVT_UPDATE_UI(self, ID_CALLTIPS_SHOW, self.OnUpdateMenu)
+
+    def OnExit(self, event):
+        self.Close(true)
+
+    def OnUndo(self, event):
+        self.shell.Undo()
+
+    def OnRedo(self, event):
+        self.shell.Redo()
+
+    def OnCut(self, event):
+        self.shell.Cut()
+
+    def OnCopy(self, event):
+        self.shell.Copy()
+
+    def OnPaste(self, event):
+        self.shell.Paste()
+
+    def OnClear(self, event):
+        self.shell.Clear()
+
+    def OnSelectAll(self, event):
+        self.shell.SelectAll()
+
+    def OnAbout(self, event):
+        """Display an About PyCrust window."""
+        import sys
+        title = 'About PyCrust'
+        text = 'PyCrust %s\n\n' % VERSION + \
+               'Yet another Python shell, only flakier.\n\n' + \
+               'Half-baked by Patrick K. O\'Brien,\n' + \
+               'the other half is still in the oven.\n\n' + \
+               'Shell Revision: %s\n' % self.shell.revision + \
+               'Interpreter Revision: %s\n\n' % self.shell.interp.revision + \
+               'Python Version: %s\n' % sys.version.split()[0] + \
+               'wxPython Version: %s\n' % wx.__version__ + \
+               'Platform: %s\n' % sys.platform
+        dialog = wxMessageDialog(self, text, title, wxOK | wxICON_INFORMATION)
+        dialog.ShowModal()
+        dialog.Destroy()
+
+    def OnAutoCompleteShow(self, event):
+        self.shell.autoComplete = event.IsChecked()
+
+    def OnAutoCompleteIncludeMagic(self, event):
+        self.shell.autoCompleteIncludeMagic = event.IsChecked()
+
+    def OnAutoCompleteIncludeSingle(self, event):
+        self.shell.autoCompleteIncludeSingle = event.IsChecked()
+
+    def OnAutoCompleteIncludeDouble(self, event):
+        self.shell.autoCompleteIncludeDouble = event.IsChecked()
+
+    def OnCallTipsShow(self, event):
+        self.shell.autoCallTip = event.IsChecked()
+
+    def OnUpdateMenu(self, event):
+        """Update menu items based on current status."""
+        id = event.GetId()
+        if id == wxID_UNDO:
+            event.Enable(self.shell.CanUndo())
+        elif id == wxID_REDO:
+            event.Enable(self.shell.CanRedo())
+        elif id == wxID_CUT:
+            event.Enable(self.shell.CanCut())
+        elif id == wxID_COPY:
+            event.Enable(self.shell.CanCopy())
+        elif id == wxID_PASTE:
+            event.Enable(self.shell.CanPaste())
+        elif id == wxID_CLEAR:
+            event.Enable(self.shell.CanCut())
+        elif id == ID_AUTOCOMP_SHOW:
+            event.Check(self.shell.autoComplete)
+        elif id == ID_AUTOCOMP_INCLUDE_MAGIC:
+            event.Check(self.shell.autoCompleteIncludeMagic)
+        elif id == ID_AUTOCOMP_INCLUDE_SINGLE:
+            event.Check(self.shell.autoCompleteIncludeSingle)
+        elif id == ID_AUTOCOMP_INCLUDE_DOUBLE:
+            event.Check(self.shell.autoCompleteIncludeDouble)
+        elif id == ID_CALLTIPS_SHOW:
+            event.Check(self.shell.autoCallTip)
+            
 
