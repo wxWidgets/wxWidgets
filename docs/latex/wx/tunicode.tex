@@ -182,7 +182,7 @@ compile your program in ANSI mode you can still define {\tt wxUSE\_WCHAR\_T}
 to get some limited support for {\tt wchar\_t} type.
 
 This will allow your program to perform conversions between Unicode strings and
-ANSI ones (\helpref{wxEncodingConverter}{wxencodingconverter} depends on this
-partially) and construct wxString objects from Unicode strings (presumably read
+ANSI ones (using \helpref{wxMBConv classes}{mbconvclasses}) 
+and construct wxString objects from Unicode strings (presumably read
 from some external file or elsewhere).
 
