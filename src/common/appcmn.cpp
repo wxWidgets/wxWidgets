@@ -42,7 +42,10 @@
 #include "wx/confbase.h"
 #include "wx/tokenzr.h"
 #include "wx/utils.h"
-#include "wx/artprov.h"
+
+#if wxUSE_GUI
+    #include "wx/artprov.h"
+#endif // wxUSE_GUI
 
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
