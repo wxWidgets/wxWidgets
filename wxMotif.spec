@@ -3,17 +3,17 @@
 
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.3.1
+%define ver 2.3.2
 %define ver2 2.3
 %define rel 1
 
 Summary: The Motif/Lesstif port of the wxWindows library
-Name: wxMotif
+Name: wxMOTIF
 Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: wxMotif-%{ver}.tgz
+Source: wxMOTIF-%{ver}.tar.bz2
 URL: http://www.wxwindows.org
 Packager: Robert Fendt <rfendt@myokay.net>
 BuildRoot: /tmp/wxmotif_root
@@ -45,7 +45,7 @@ Requires: wxMotif
 OpenGl add-on library for wxMotif, the Motif/Lesstif port of the wxWindows library.
 
 %prep
-%setup -n wxMotif
+%setup
 ./configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl --with-motif
 
 %build
@@ -55,6 +55,7 @@ else
   export MAKE="make"
 fi
 $MAKE
+(cd locale ; make allmo)
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -69,21 +70,46 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 /sbin/ldconfig
 
+%post gl
+/sbin/ldconfig
+
+%postun gl
+/sbin/ldconfig
+
+%post devel
+# Install wx-config if there isn't any
+if test ! -f %{_bindir}/wx-config ; then
+    ln -sf wxmotif-%{ver2}-config %{_bindir}/wx-config
+fi
+
+%preun devel
+# Remove wx-config if it points to this package
+if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
+  SUM1=`md5sum %{_bindir}/wxmotif-%{ver2}-config | cut -c 0-32`
+  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
+  if test "x$SUM1" = "x$SUM2" ; then
+    rm -f %{_bindir}/wx-config
+  fi
+fi
+
+
 %files
-%defattr (644, root, root, 755)
-%doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
-%dir %{pref}/share/wx
-%{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_motif-%{ver2}.*
+%defattr (-,root,root)
+%doc COPYING.LIB *.txt
+%dir %{_datadir}/wx
+%{_datadir}/wx/*
+%{_datadir}/locale/*/*/*.mo
+%{_libdir}/libwx_motif-%{ver2}*.so.*
 
 %files devel
-%defattr (644, root, root, 755)
-%dir %{pref}/include/wx
-%{pref}/include/wx/*
-%dir %{pref}/lib/wx
-%{pref}/lib/wx/*
-%attr(755, -, -) %{pref}/bin/wxmotif-%{ver2}-config
-%attr(755, -, -) %{pref}/bin/wx-config
+%defattr (-,root,root)
+%{_libdir}/libwx_motif-%{ver2}*.so
+%dir %{_includedir}/wx
+%{_includedir}/wx/*
+%dir %{_libdir}/wx
+%{_libdir}/wx/*
+%{_bindir}/wxmotif-%{ver2}-config
 
 %files gl
-%attr(755, -, -) %{pref}/lib/libwx_motif_gl*
+%defattr(-,root,root)
+%{_libdir}/libwx_motif_gl*
