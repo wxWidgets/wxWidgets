@@ -281,6 +281,10 @@
 /*
  * Use this control
  */
+#define wxUSE_SPINCTRL 0
+/*
+ * Use this control
+ */
 #define wxUSE_SPLITTER 0
 /*
  * Use this control

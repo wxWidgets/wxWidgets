@@ -1790,6 +1790,10 @@ typedef struct _GdkWindow       GdkPixmap;
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkRegion       GdkRegion;
 typedef struct _GdkDragContext  GdkDragContext;
+#ifdef HAVE_XIM
+typedef struct _GdkIC           GdkIC;
+typedef struct _GdkICAttr       GdkICAttr;
+#endif
 
 /* Stand-ins for GTK types */
 typedef struct _GtkWidget         GtkWidget;

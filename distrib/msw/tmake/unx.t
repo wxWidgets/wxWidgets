@@ -914,6 +914,7 @@ SAMPLES_DIST:
 	mkdir $(DISTDIR)/samples/forty
 	cp $(SAMPDIR)/forty/Makefile.in $(DISTDIR)/samples/forty
 	cp $(SAMPDIR)/forty/makefile.unx $(DISTDIR)/samples/forty
+	cp $(SAMPDIR)/forty/*.h $(DISTDIR)/samples/forty
 	cp $(SAMPDIR)/forty/*.cpp $(DISTDIR)/samples/forty
 	cp $(SAMPDIR)/forty/*.xpm $(DISTDIR)/samples/forty
 	cp $(SAMPDIR)/forty/*.xbm $(DISTDIR)/samples/forty

@@ -167,6 +167,12 @@ public:
     GtkWidget           *m_widget;
     GtkWidget           *m_wxwindow;
 
+#if HAVE_XIM
+    /* XIM support for wxWindows */
+    GdkIC               *m_ic;
+    GdkICAttr           *m_icattr;
+#endif
+    
     /* scrolling stuff */
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
     float                m_oldHorizontalPos;
