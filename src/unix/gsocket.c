@@ -34,7 +34,7 @@
 #endif
 
 #include <signal.h>
-#include <features.h>
+//#include <features.h>
 
 #include <wx/setup.h>
 #include <wx/gsocket.h>

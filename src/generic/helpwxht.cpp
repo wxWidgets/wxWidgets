@@ -27,6 +27,7 @@
 #   include "wx/list.h"
 #   include "wx/intl.h"
 #   include "wx/layout.h"
+#   include "wx/combobox.h"
 #endif
 
 #include "wx/helpbase.h"

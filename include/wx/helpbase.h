@@ -50,6 +50,22 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   virtual bool DisplaySection(int sectionNo) = 0;
   virtual bool DisplayBlock(long blockNo) = 0;
   virtual bool KeywordSearch(const wxString& k) = 0;
+  /// Allows one to override the default settings for the help frame.
+  virtual void SetFrameParameters(const wxString &title,
+                                   const wxSize &size,
+                                   const wxPoint &pos = wxDefaultPosition,
+                                   bool newFrameEachTime = FALSE)
+      {
+         // does nothing by default
+      }
+   /// Obtains the latest settings used by the help frame and the help 
+   /// frame.
+   virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
+                                   wxPoint *pos = NULL,
+                                   bool *newFrameEachTime = NULL)
+      {
+         return (wxFrame*) NULL;// does nothing by default
+      }
 
   virtual bool Quit(void) = 0;
   virtual void OnQuit(void) {};

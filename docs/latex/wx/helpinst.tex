@@ -23,6 +23,7 @@ There are currently the following help controller classes defined:
 \item wxWinHelpController, for controlling Windows Help.
 \item wxExtHelpController, for controlling external browsers under Unix.
 The default browser is Netscape Navigator.
+\item wxHelpControllerHtml, using wxHTML to display help
 \item wxXLPHelpController, for controlling wxHelp (from wxWindows 1).
 \end{itemize}
 
@@ -37,6 +38,7 @@ wxHelpControllerBase\\
 <wx/helpbase.h> (wxHelpControllerBase class)\\
 <wx/helpwin.h> (Windows Help controller)\\
 <wx/generic/helpext.h> (external HTML browser controller)
+<wx/generic/helpwxht.h> (wxHTML based help controller)
 <wx/generic/helpxlp.h> (wxHelp controller)
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -95,7 +97,7 @@ If the help viewer is not running, runs it and displays the given section.
 
 {\it WinHelp:} {\it sectionNo} is a context id.
 
-{\it External HTML help:} wxExtHelpController implements {\it sectionNo} as an id in a map file, which is of the form:
+{\it External HTML help/wxHTML based help:} wxExtHelpController and wxHelpControllerHtml implement {\it sectionNo} as an id in a map file, which is of the form:
 
 \begin{verbatim}
 0  wx.html             ; Index
@@ -135,6 +137,31 @@ has opened another file.
 \func{virtual void}{SetViewer}{\param{const wxString\& }{viewer}, \param{long}{ flags}}
 
 Sets detailed viewer information. So far this is only relevant to wxExtHelpController.
+
+\membersection{wxHelpController::SetFrameParameters}\label{wxhelpcontrollersetframeparameters}
+\func{virtual void}{SetFrameParameters}
+{\param{const wxString \& }{title},
+ \param{const wxSize \& }{size}, \param{const wxPoint \& }{pos = wxDefaultPosition},
+ \param{bool }{newFrameEachTime = FALSE}}
+
+For the wxHelpControllerHtml, this allows the application to set the
+default frame title, size and position for the frame. If the title
+contains \%s, this will be replaced with the page title. If the
+parammeter newFrameEachTime is set, the controller will open a new
+help frame each time it is called. For all other help controllers this 
+function has no effect.
+
+\membersection{wxHelpController::GetFrameParameters}\label{wxhelpcontrollergetframeparameters}
+\func{virtual wxFrame *}{GetFrameParameters}
+{\param{const wxSize * }{size = NULL}, \param{const wxPoint * }{pos = NULL},
+ \param{bool *}{newFrameEachTime = NULL}}
+This reads the current settings for the help frame in the case of the
+wxHelpControllerHtml, setting the frame size, position and
+the newFrameEachTime parameters to the last values used. It also
+returns the pointer to the last opened help frame. This can be used
+for example, to automatically close the help frame on program
+shutdown. For all other help controllers, this function does nothing
+and just returns NULL.
 
 \wxheading{Parameters}
 
