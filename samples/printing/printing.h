@@ -40,12 +40,10 @@ class MyFrame: public wxFrame
     void OnSize(wxSizeEvent& event);
     void OnPrint(wxCommandEvent& event);
     void OnPrintPreview(wxCommandEvent& event);
-    void OnPrintSetup(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
 #if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
     void OnPrintPS(wxCommandEvent& event);
     void OnPrintPreviewPS(wxCommandEvent& event);
-    void OnPrintSetupPS(wxCommandEvent& event);
     void OnPageSetupPS(wxCommandEvent& event);
 #endif
 
@@ -82,12 +80,10 @@ class MyPrintout: public wxPrintout
 
 #define WXPRINT_QUIT            100
 #define WXPRINT_PRINT           101
-#define WXPRINT_PRINT_SETUP     102
 #define WXPRINT_PAGE_SETUP      103
 #define WXPRINT_PREVIEW         104
 
 #define WXPRINT_PRINT_PS        105
-#define WXPRINT_PRINT_SETUP_PS  106
 #define WXPRINT_PAGE_SETUP_PS   107
 #define WXPRINT_PREVIEW_PS      108
 

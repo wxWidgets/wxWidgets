@@ -308,6 +308,8 @@ wxDC* wxWindowsPrinter::PrintDialog(wxWindow *parent)
 
 bool wxWindowsPrinter::Setup(wxWindow *parent)
 {
+#if 0
+    // We no longer expose that dialog
     wxPrintDialog dialog(parent, & m_printDialogData);
     dialog.GetPrintDialogData().SetSetupDialog(true);
 
@@ -319,6 +321,9 @@ bool wxWindowsPrinter::Setup(wxWindow *parent)
     }
 
     return (ret == wxID_OK);
+#else
+    return wxID_CANCEL;
+#endif
 }
 
 /*

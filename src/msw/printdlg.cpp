@@ -690,8 +690,10 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
         pd->Flags |= PD_PAGENUMS;
     if ( data.GetEnableHelp() )
         pd->Flags |= PD_SHOWHELP;
+#if WXWIN_COMPATIBILITY_2_4
     if ( data.GetSetupDialog() )
         pd->Flags |= PD_PRINTSETUP;
+#endif
     
     return true;
 }
@@ -747,8 +749,9 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     data.EnableSelection( ((pd->Flags & PD_NOSELECTION) != PD_NOSELECTION) );
     data.EnablePageNumbers( ((pd->Flags & PD_NOPAGENUMS) != PD_NOPAGENUMS) );
     data.EnableHelp( ((pd->Flags & PD_SHOWHELP) == PD_SHOWHELP) );
+#if WXWIN_COMPATIBILITY_2_4
     data.SetSetupDialog( ((pd->Flags & PD_PRINTSETUP) == PD_PRINTSETUP) );
-    
+#endif    
     return true;
 }
 
@@ -761,57 +764,220 @@ IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
 wxPageSetupDialog::wxPageSetupDialog()
 {
     m_dialogParent = NULL;
+    m_pageDlg = NULL;
 }
 
-wxPageSetupDialog::wxPageSetupDialog(wxWindow *p, wxPageSetupData *data)
+wxPageSetupDialog::wxPageSetupDialog(wxWindow *p, wxPageSetupDialogData *data)
 {
     Create(p, data);
 }
 
-bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupData *data)
+bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupDialogData *data)
 {
     m_dialogParent = p;
+    m_pageDlg = NULL;
 
     if (data)
         m_pageSetupData = (*data);
 
-#if defined(__WIN95__)
-    m_pageSetupData.SetOwnerWindow(p);
-#endif
     return true;
 }
 
 wxPageSetupDialog::~wxPageSetupDialog()
 {
+    PAGESETUPDLG *pd = (PAGESETUPDLG *)m_pageDlg;
+    if ( pd && pd->hDevMode )
+        GlobalFree(pd->hDevMode);
+    if ( pd && pd->hDevNames )
+        GlobalFree(pd->hDevNames);
+    if ( pd )
+        delete pd;
 }
 
 int wxPageSetupDialog::ShowModal()
 {
-#ifdef __WIN95__
-    m_pageSetupData.ConvertToNative();
-    PAGESETUPDLG *p = (PAGESETUPDLG *)m_pageSetupData.GetNativeData();
+    ConvertToNative( m_pageSetupData );
+    
+    PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageDlg;
     if (m_dialogParent)
-        p->hwndOwner = (HWND) m_dialogParent->GetHWND();
+        pd->hwndOwner = (HWND) m_dialogParent->GetHWND();
     else if (wxTheApp->GetTopWindow())
-        p->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
+        pd->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
     else
-        p->hwndOwner = 0;
-    BOOL retVal = PageSetupDlg( p ) ;
-    p->hwndOwner = 0;
+        pd->hwndOwner = 0;
+    BOOL retVal = PageSetupDlg( pd ) ;
+    pd->hwndOwner = 0;
     if (retVal)
     {
-        m_pageSetupData.ConvertFromNative();
+        ConvertFromNative( m_pageSetupData );
         return wxID_OK;
     }
     else
         return wxID_CANCEL;
-#else
-    wxGenericPageSetupDialog *genericPageSetupDialog = new wxGenericPageSetupDialog(GetParent(), & m_pageSetupData);
-    int ret = genericPageSetupDialog->ShowModal();
-    m_pageSetupData = genericPageSetupDialog->GetPageSetupData();
-    genericPageSetupDialog->Close(true);
-    return ret;
-#endif
+}
+
+bool wxPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
+{
+    wxWindowsPrintNativeData *native_data =
+        (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
+    data.GetPrintData().ConvertToNative();
+
+    PAGESETUPDLG *pd = (PAGESETUPDLG*) m_pageDlg;
+
+    // Shouldn't have been defined anywhere
+    if (pd)
+        return false;
+        
+    pd = new PAGESETUPDLG;
+    pd->hDevMode = NULL;
+    pd->hDevNames = NULL;
+    m_pageDlg = (void *)pd;
+
+    // Pass the devmode data (created in m_printData.ConvertToNative)
+    // to the PRINTDLG structure, since it'll
+    // be needed when PrintDlg is called.
+
+    if (pd->hDevMode)
+    {
+        GlobalFree(pd->hDevMode);
+        pd->hDevMode = NULL;
+    }
+    pd->hDevMode = (HGLOBAL) native_data->GetDevMode();
+    native_data->SetDevMode( (void*) NULL );
+
+    // Shouldn't assert; we should be able to test Ok-ness at a higher level
+    //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+
+    // Pass the devnames data (created in m_printData.ConvertToNative)
+    // to the PRINTDLG structure, since it'll
+    // be needed when PrintDlg is called.
+
+    if (pd->hDevNames)
+    {
+        GlobalFree(pd->hDevNames);
+        pd->hDevNames = NULL;
+    }
+    pd->hDevNames = (HGLOBAL) native_data->GetDevNames();
+    native_data->SetDevNames((void*) NULL);
+
+//        pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
+
+    pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
+
+    if ( data.GetDefaultMinMargins() )
+        pd->Flags |= PSD_DEFAULTMINMARGINS;
+    if ( !data.GetEnableMargins() )
+        pd->Flags |= PSD_DISABLEMARGINS;
+    if ( !data.GetEnableOrientation() )
+        pd->Flags |= PSD_DISABLEORIENTATION;
+    if ( !data.GetEnablePaper() )
+        pd->Flags |= PSD_DISABLEPAPER;
+    if ( !data.GetEnablePrinter() )
+        pd->Flags |= PSD_DISABLEPRINTER;
+    if ( data.GetDefaultInfo() )
+        pd->Flags |= PSD_RETURNDEFAULT;
+    if ( data.GetEnableHelp() )
+        pd->Flags |= PSD_SHOWHELP;
+
+    // We want the units to be in hundredths of a millimetre
+    pd->Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
+
+    pd->lStructSize = sizeof( PAGESETUPDLG );
+    pd->hwndOwner=(HWND)NULL;
+//    pd->hDevNames=(HWND)NULL;
+    pd->hInstance=(HINSTANCE)NULL;
+    //   PAGESETUPDLG is in hundreds of a mm
+    pd->ptPaperSize.x = data.GetPaperSize().x * 100;
+    pd->ptPaperSize.y = data.GetPaperSize().y * 100;
+
+    pd->rtMinMargin.left = data.GetMinMarginTopLeft().x * 100;
+    pd->rtMinMargin.top = data.GetMinMarginTopLeft().y * 100;
+    pd->rtMinMargin.right = data.GetMinMarginBottomRight().x * 100;
+    pd->rtMinMargin.bottom = data.GetMinMarginBottomRight().y * 100;
+
+    pd->rtMargin.left = data.GetMarginTopLeft().x * 100;
+    pd->rtMargin.top = data.GetMarginTopLeft().y * 100;
+    pd->rtMargin.right = data.GetMarginBottomRight().x * 100;
+    pd->rtMargin.bottom = data.GetMarginBottomRight().y * 100;
+
+    pd->lCustData = 0;
+    pd->lpfnPageSetupHook = NULL;
+    pd->lpfnPagePaintHook = NULL;
+    pd->hPageSetupTemplate = NULL;
+    pd->lpPageSetupTemplateName = NULL;
+
+/*
+    if ( pd->hDevMode )
+    {
+        DEVMODE *devMode = (DEVMODE*) GlobalLock(pd->hDevMode);
+        memset(devMode, 0, sizeof(DEVMODE));
+        devMode->dmSize = sizeof(DEVMODE);
+        devMode->dmOrientation = m_orientation;
+        devMode->dmFields = DM_ORIENTATION;
+        GlobalUnlock(pd->hDevMode);
+    }
+*/
+    return true;
+}
+
+bool wxPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
+{
+    PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageDlg;
+    if ( !pd )
+        return false;
+
+    wxWindowsPrintNativeData *native_data =
+        (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
+        
+    // Pass the devmode data back to the wxPrintData structure where it really belongs.
+    if (pd->hDevMode)
+    {
+        if (native_data->GetDevMode())
+        {
+            // Make sure we don't leak memory
+            GlobalFree((HGLOBAL) native_data->GetDevMode());
+        }
+        native_data->SetDevMode( (void*) pd->hDevMode );
+        pd->hDevMode = NULL;
+    }
+    
+    // Isn't this superfluous? It's called again below.
+    // data.GetPrintData().ConvertFromNative();
+
+    // Pass the devnames data back to the wxPrintData structure where it really belongs.
+    if (pd->hDevNames)
+    {
+        if (native_data->GetDevNames())
+        {
+            // Make sure we don't leak memory
+            GlobalFree((HGLOBAL) native_data->GetDevNames());
+        }
+        native_data->SetDevNames((void*) pd->hDevNames);
+        pd->hDevNames = NULL;
+    }
+
+    data.GetPrintData().ConvertFromNative();
+
+    pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
+
+    data.SetDefaultMinMargins( ((pd->Flags & PSD_DEFAULTMINMARGINS) == PSD_DEFAULTMINMARGINS) );
+    data.EnableMargins( ((pd->Flags & PSD_DISABLEMARGINS) != PSD_DISABLEMARGINS) );
+    data.EnableOrientation( ((pd->Flags & PSD_DISABLEORIENTATION) != PSD_DISABLEORIENTATION) );
+    data.EnablePaper( ((pd->Flags & PSD_DISABLEPAPER) != PSD_DISABLEPAPER) );
+    data.EnablePrinter( ((pd->Flags & PSD_DISABLEPRINTER) != PSD_DISABLEPRINTER) );
+    data.SetDefaultInfo( ((pd->Flags & PSD_RETURNDEFAULT) == PSD_RETURNDEFAULT) );
+    data.EnableHelp( ((pd->Flags & PSD_SHOWHELP) == PSD_SHOWHELP) );
+
+    //   PAGESETUPDLG is in hundreds of a mm
+    data.SetPaperSize( wxSize(pd->ptPaperSize.x / 100, pd->ptPaperSize.y / 100) );
+
+    data.SetMinMarginTopLeft( wxPoint(pd->rtMinMargin.left / 100, pd->rtMinMargin.top / 100) );
+    data.SetMinMarginBottomRight( wxPoint(pd->rtMinMargin.right / 100, pd->rtMinMargin.bottom / 100) );
+
+    data.SetMarginTopLeft( wxPoint(pd->rtMargin.left / 100, pd->rtMargin.top / 100) );
+    data.SetMarginBottomRight( wxPoint(pd->rtMargin.right / 100, pd->rtMargin.bottom / 100) );
+    
+    return true;
 }
 
 #endif

@@ -331,7 +331,6 @@ public:
     void OnFileSave(wxCommandEvent& event);
     void OnFileSaveAs(wxCommandEvent& event);
     void OnPrint(wxCommandEvent& event);
-    void OnPrintSetup(wxCommandEvent& event);
     void OnPreview(wxCommandEvent& event);
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
@@ -347,7 +346,6 @@ public:
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
     void OnUpdatePrint(wxUpdateUIEvent& event);
-    void OnUpdatePrintSetup(wxUpdateUIEvent& event);
     void OnUpdatePreview(wxUpdateUIEvent& event);
 
     // Extend event processing to search the view's event table

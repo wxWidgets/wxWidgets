@@ -275,8 +275,9 @@ public:
     bool GetSelection() const { return m_printSelection; };
     bool GetCollate() const { return m_printCollate; };
     bool GetPrintToFile() const { return m_printToFile; };
+#if WXWIN_COMPATIBILITY_2_4
     bool GetSetupDialog() const { return m_printSetupDialog; };
-
+#endif
     void SetFromPage(int v) { m_printFromPage = v; };
     void SetToPage(int v) { m_printToPage = v; };
     void SetMinPage(int v) { m_printMinPage = v; };
@@ -286,8 +287,9 @@ public:
     void SetSelection(bool flag) { m_printSelection = flag; };
     void SetCollate(bool flag) { m_printCollate = flag; };
     void SetPrintToFile(bool flag) { m_printToFile = flag; };
+#if WXWIN_COMPATIBILITY_2_4
     void SetSetupDialog(bool flag) { m_printSetupDialog = flag; };
-
+#endif
     void EnablePrintToFile(bool flag) { m_printEnablePrintToFile = flag; };
     void EnableSelection(bool flag) { m_printEnableSelection = flag; };
     void EnablePageNumbers(bool flag) { m_printEnablePageNumbers = flag; };
@@ -326,7 +328,9 @@ private:
     bool            m_printEnablePageNumbers;
     bool            m_printEnableHelp;
     bool            m_printEnablePrintToFile;
+#if WXWIN_COMPATIBILITY_2_4
     bool            m_printSetupDialog;
+#endif
     wxPrintData     m_printData;
 
 private:
@@ -388,13 +392,7 @@ public:
     void EnablePrinter(bool flag) { m_enablePrinter = flag; };
     void EnableHelp(bool flag) { m_enableHelp = flag; };
 
-#if defined(__WIN95__)
-    // Convert to/from the PAGESETUPDLG structure
-    void ConvertToNative();
-    void ConvertFromNative();
-    void SetOwnerWindow(wxWindow* win);
-    void* GetNativeData() const { return m_pageSetupData; }
-#elif defined(__WXMAC__)
+#if defined(__WXMAC__)
     void ConvertToNative();
     void ConvertFromNative();
 #endif
@@ -411,10 +409,6 @@ public:
 
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
-
-#if defined(__WIN95__)
-    void*           m_pageSetupData;
-#endif
 
 private:
     wxSize          m_paperSize; // The dimensions selected by the user (on return, same as in wxPrintData?)
