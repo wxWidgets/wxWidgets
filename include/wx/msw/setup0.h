@@ -71,9 +71,27 @@
 
 #define wxUSE_RADIOBUTTON   1
                                     // Define 1 to use radio button control
+#define wxUSE_RADIOBTN   1
+                                    // Unfortunately someone introduced this one, too
 
 #define wxUSE_SCROLLBAR   1
                                     // Define 1 to compile contributed wxScrollBar class
+
+#define wxUSE_CHECKBOX 1
+                                    // Define 1 to compile checkbox
+
+#define wxUSE_LISTBOX 1
+                                    // Define 1 to compile listbox
+
+#define wxUSE_SPINBTN 1
+                                    // Define 1 to compile spin button
+
+#define wxUSE_CHECKLISTBOX 1
+                                    // Define 1 to compile check listbox
+
+#define wxUSE_CHOICE 1
+                                    // Define 1 to compile choice
+
 #define wxUSE_CARET       1
                                     // Define 1 to use wxCaret class
 #define wxUSE_XPM_IN_MSW  1
