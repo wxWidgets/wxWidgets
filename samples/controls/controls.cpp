@@ -161,8 +161,17 @@ public:
 
     void OnIdle( wxIdleEvent& event );
     void OnSize( wxSizeEvent& event );
+    void OnMove( wxMoveEvent& event );
 
 private:
+    void UpdateStatusBar(const wxPoint& pos, const wxSize& size)
+    {
+        wxString msg;
+        msg.Printf(_("pos=(%d, %d), size=%dx%d"),
+                   pos.x, pos.y, size.x, size.y);
+        SetStatusText(msg, 1);
+    }
+
     wxPanel *m_panel;
 
     DECLARE_EVENT_TABLE()
@@ -1100,6 +1109,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MINIMAL_ENABLE_ALL, MyFrame::OnEnableAll)
 
     EVT_SIZE(MyFrame::OnSize)
+    EVT_MOVE(MyFrame::OnMove)
+
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -1168,11 +1179,16 @@ void MyFrame::OnEnableAll(wxCommandEvent& WXUNUSED(event))
     m_panel->Enable(s_enable);
 }
 
+void MyFrame::OnMove( wxMoveEvent& event )
+{
+    UpdateStatusBar(event.GetPosition(), GetSize());
+
+    event.Skip();
+}
+
 void MyFrame::OnSize( wxSizeEvent& event )
 {
-    wxString msg;
-    msg.Printf( _("%dx%d"), event.GetSize().x, event.GetSize().y);
-    SetStatusText(msg, 1);
+    UpdateStatusBar(GetPosition(), event.GetSize());
 
     event.Skip();
 }
