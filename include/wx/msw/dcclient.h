@@ -6,59 +6,77 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DCCLIENT_H_
 #define _WX_DCCLIENT_H_
 
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma interface "dcclient.h"
+    #pragma interface "dcclient.h"
 #endif
 
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxWindowDC: public wxDC
+// ----------------------------------------------------------------------------
+// array types
+// ----------------------------------------------------------------------------
+
+// this one if used by wxPaintDC only
+struct WXDLLEXPORT wxPaintDCInfo;
+WX_DECLARE_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
+
+// ----------------------------------------------------------------------------
+// DC classes
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxWindowDC : public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
 
- public:
-  wxWindowDC(void);
+public:
+    wxWindowDC();
 
-  // Create a DC corresponding to a canvas
-  wxWindowDC(wxWindow *win);
+    // Create a DC corresponding to the whole window
+    wxWindowDC(wxWindow *win);
 
-  ~wxWindowDC(void);
+    virtual ~wxWindowDC();
 };
 
-class WXDLLEXPORT wxClientDC: public wxWindowDC
+class WXDLLEXPORT wxClientDC : public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
 
- public:
-  wxClientDC(void);
+public:
+    wxClientDC();
 
-  // Create a DC corresponding to a canvas
-  wxClientDC(wxWindow *win);
+    // Create a DC corresponding to the client area of the window
+    wxClientDC(wxWindow *win);
 
-  ~wxClientDC(void);
+    virtual ~wxClientDC();
 };
 
-class WXDLLEXPORT wxPaintDC: public wxWindowDC
+class WXDLLEXPORT wxPaintDC : public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 
- public:
-  wxPaintDC(void);
+public:
+    wxPaintDC();
 
-  // Create a DC corresponding to a canvas
-  wxPaintDC(wxWindow *win);
+    // Create a DC corresponding for painting the window in OnPaint()
+    wxPaintDC(wxWindow *win);
 
-  ~wxPaintDC(void);
+    virtual ~wxPaintDC();
 
- protected:
-    static WXHDC ms_PaintHDC;
-    static size_t  ms_PaintCount;
+protected:
+    static wxArrayDCInfo ms_cache;
+
+    // find the entry for this DC in the cache (keyed by the window)
+    wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
 };
 
 #endif

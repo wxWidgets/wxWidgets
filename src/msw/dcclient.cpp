@@ -37,6 +37,28 @@
 #include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
+// array/list types
+// ----------------------------------------------------------------------------
+
+struct WXDLLEXPORT wxPaintDCInfo
+{
+    wxPaintDCInfo(wxWindow *win, wxDC *dc)
+    {
+        hwnd = win->GetHWND();
+        hdc = dc->GetHDC();
+        count = 1;
+    }
+
+    WXHWND    hwnd;       // window for this DC
+    WXHDC     hdc;        // the DC handle
+    size_t    count;      // usage count
+};
+
+#include "wx/arrimpl.cpp"
+
+WX_DEFINE_OBJARRAY(wxArrayDCInfo);
+
+// ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
 
@@ -127,59 +149,94 @@ wxClientDC::~wxClientDC()
 // wxPaintDC
 // ----------------------------------------------------------------------------
 
-// TODO (VZ) I have still some doubts about this hack and I still think that we
-//           should store pairs of (hwnd, hdc) and not just the DC - what if
-//           BeginPaint() was called on other window? It seems to work like
-//           this, but to be sure about it we'd need to store hwnd too...
+// VZ: initial implementation (by JACS) only remembered the last wxPaintDC
+//     created and tried to reuse - this was supposed to take care of a
+//     situation when a derived class OnPaint() calls base class OnPaint()
+//     because in this case ::BeginPaint() shouldn't be called second time.
+//
+//     I'm not sure how useful this is, however we must remember the HWND
+//     associated with the last HDC as well - otherwise we may (and will!) try
+//     to reuse the HDC for another HWND which is a nice recipe for disaster.
+//
+//     So we store a list of windows for which we already have the DC and not
+//     just one single hDC. This seems to work, but I'm really not sure about
+//     the usefullness of the whole idea - IMHO it's much better to not call
+//     base class OnPaint() at all, or, if we realyl want to allow it, add a
+//     "wxPaintDC *" parameter to wxPaintEvent which should be used if it's
+//     !NULL instead of creating a new DC.
 
-WXHDC  wxPaintDC::ms_PaintHDC = 0;
-size_t wxPaintDC::ms_PaintCount = 0; // count of ms_PaintHDC usage
+wxArrayDCInfo wxPaintDC::ms_cache;
 
 wxPaintDC::wxPaintDC()
 {
-  m_canvas = NULL;
+    m_canvas = NULL;
+    m_hDC = 0;
 }
 
 wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
-  wxCHECK_RET( canvas, "NULL canvas in wxPaintDC ctor" );
-  
+    wxCHECK_RET( canvas, "NULL canvas in wxPaintDC ctor" );
+
 #ifdef __WXDEBUG__
-  wxCHECK_RET( g_isPainting, _T("wxPaintDC may be created only in EVT_PAINT handler!") );
-#endif
+    if ( !g_isPainting )
+    {
+        wxFAIL_MSG( _T("wxPaintDC may be created only in EVT_PAINT handler!") );
 
-  m_canvas = canvas;
+        return;
+    }
+#endif // __WXDEBUG__
 
-  // Don't call Begin/EndPaint if it's already been called: for example, if
-  // calling a base class OnPaint.
-  if ( ms_PaintCount > 0 ) {
-    // it means that we've already called BeginPaint and so we must just
-    // reuse the same HDC (BeginPaint shouldn't be called more than once)
-    wxASSERT( ms_PaintHDC );
+    m_canvas = canvas;
 
-    m_hDC = ms_PaintHDC;
-    ms_PaintCount++;
-  }
-  else {
-    ms_PaintHDC =
-    m_hDC = (WXHDC)::BeginPaint((HWND)m_canvas->GetHWND(), &g_paintStruct);
-    ms_PaintCount = 1;
-    m_hDCCount++;
-  }
+    // do we have a DC for this window in the cache?
+    wxPaintDCInfo *info = FindInCache();
+    if ( info )
+    {
+        m_hDC = info->hdc;
+        info->count++;
+    }
+    else // not in cache, create a new one
+    {
+        m_hDC = (WXHDC)::BeginPaint(GetWinHwnd(m_canvas), &g_paintStruct);
+        ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
+    }
 
-  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+    SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxPaintDC::~wxPaintDC()
 {
-  if ( m_hDC ) {
-    if ( !--ms_PaintCount ) {
-      ::EndPaint((HWND)m_canvas->GetHWND(), &g_paintStruct);
-      m_hDCCount--;
-      m_hDC = (WXHDC) NULL;
-      ms_PaintHDC = (WXHDC) NULL;
+    if ( m_hDC )
+    {
+        size_t index;
+        wxPaintDCInfo *info = FindInCache(&index);
+
+        wxCHECK_RET( info, _T("existing DC should have a cache entry") );
+
+        if ( !--info->count )
+        {
+            ::EndPaint(GetWinHwnd(m_canvas), &g_paintStruct);
+
+            ms_cache.Remove(index);
+        }
+        //else: cached DC entry is still in use
     }
-    //else: ms_PaintHDC still in use
-  }
 }
 
+wxPaintDCInfo *wxPaintDC::FindInCache(size_t *index) const
+{
+    wxPaintDCInfo *info = NULL;
+    size_t nCache = ms_cache.GetCount();
+    for ( size_t n = 0; n < nCache; n++ )
+    {
+        info = &ms_cache[n];
+        if ( info->hwnd == m_canvas->GetHWND() )
+        {
+            if ( index )
+                *index = n;
+            break;
+        }
+    }
+
+    return info;
+}

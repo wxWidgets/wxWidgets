@@ -105,6 +105,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
     m_pParentMenu = pParentMenu;
     m_pSubMenu    = pSubMenu;
     m_bEnabled    = TRUE;
+    m_bChecked    = FALSE;
     m_idItem      = id;
 }
 

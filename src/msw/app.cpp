@@ -234,8 +234,12 @@ bool wxApp::Initialize()
     LOGBRUSH lb;
     lb.lbStyle = BS_PATTERN;
     lb.lbHatch = (int)LoadBitmap( wxhInstance, "wxDISABLE_BUTTON_BITMAP" );
-    wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
-    ::DeleteObject( (HGDIOBJ)lb.lbHatch );
+    if ( lb.lbHatch )
+    {
+        wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
+        ::DeleteObject( (HGDIOBJ)lb.lbHatch );
+    }
+    //else: wxWindows resources are probably not linked in
 
 #if wxUSE_PENWINDOWS
     wxRegisterPenWin();

@@ -639,7 +639,6 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
         HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
         ::SelectObject( memdc, hbitmap );
         ::BitBlt( cdc, x, y, bmp.GetWidth(), bmp.GetHeight(), memdc, 0, 0, SRCCOPY);
-        ::SelectObject( memdc, 0 );
         ::DeleteDC( memdc );
     }
     else
