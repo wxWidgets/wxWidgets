@@ -166,6 +166,14 @@ public:
     unsigned char GetAlpha(int x, int y);
     bool HasAlpha();
 
+    DocDeclStr(
+        void , InitAlpha(),
+        "Initializes the image alpha channel data. It is an error to call it if
+the image already has alpha data. If it doesn't, alpha data will be by
+default initialized to all pixels being fully opaque. But if the image
+has a a mask colour, all mask pixels will be completely transparent.", "");
+    
+    
     // find first colour that is not used in the image and has higher
     // RGB values than <startR,startG,startB>
     DocDeclAStr(
@@ -422,11 +430,13 @@ const wxImage    wxNullImage;
 
 //---------------------------------------------------------------------------
 
-
+MAKE_CONST_WXSTRING(IMAGE_OPTION_FILENAME);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_BMP_FORMAT);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_CUR_HOTSPOT_X);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_CUR_HOTSPOT_Y);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTION);
+MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTIONX);
+MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTIONY);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTIONUNIT);
 
 enum
@@ -436,6 +446,12 @@ enum
 };
 
 
+MAKE_CONST_WXSTRING(IMAGE_OPTION_BITSPERSAMPLE);
+MAKE_CONST_WXSTRING(IMAGE_OPTION_SAMPLESPERPIXEL); 
+MAKE_CONST_WXSTRING(IMAGE_OPTION_COMPRESSION);
+MAKE_CONST_WXSTRING(IMAGE_OPTION_IMAGEDESCRIPTOR);
+
+                    
 enum
 {
     wxBMP_24BPP        = 24, // default, do not need to set
