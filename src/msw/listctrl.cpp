@@ -2066,6 +2066,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
 #ifdef NM_CUSTOMDRAW
+            case NM_CUSTOMDRAW:
                 *result = OnCustomDraw(lParam);
 
                 return TRUE;
