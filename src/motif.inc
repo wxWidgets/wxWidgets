@@ -160,7 +160,8 @@ LIB_CPP_SRC=\
  generic/textdlgg.cpp \
  generic/treectrl.cpp \
 \
- unix/utilsunx.cpp
+ unix/utilsunx.cpp \
+ generic/progdlgg.cpp
   
 LIB_C_SRC=\
 \

@@ -1,0 +1,75 @@
+\section{\class{wxProgressDialog}}\label{wxprogressdialog}
+
+This class represents a dialog that shows a short message and a
+progress bar. Optionally, it can display an ABORT button.
+
+\wxheading{Derived from}
+
+\helpref{wxFrame}{wxframe}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/progdlg.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxProgressDialog::wxProgressDialog}\label{wxprogressdialogconstr}
+
+\func{}{wxProgressDialog}
+{\param{const wxString\& }{title},
+  \param{const wxString\& }{message},\rtfsp
+  \param{int }{maximum = 100},
+  \param{wxWindow * }{parent = NULL},\rtfsp
+  \param{bool }{disableParentOnly = FALSE},\rtfsp
+  \param{bool }{abortButton = FALSE}
+  }
+
+Constructor. Creates the dialog, displays it and disables user input
+for other windows, or, if disableParentOnly = TRUE, for its parent
+window only.
+
+\wxheading{Parameters}
+
+\docparam{title}{Dialog title to show in titlebar.}
+
+\docparam{message}{Message displayed above the progress bar.}
+
+\docparam{maximum}{Maximum value for the progress bar.}
+
+\docparam{parent}{Parent window.}
+
+\docparam{message}{Message to show on the dialog.}
+
+\docparam{disableParentOnly}{By default, the dialog disables user
+  input for all other top level windows. If this parameter is TRUE, it 
+  will only disable the window passes as parent.}
+
+\docparam{abortButton}{If TRUE, will display an ABORT button.}
+
+\membersection{wxProgressDialog::\destruct{wxProgressDialog}}
+
+\func{}{\destruct{wxMessageDialog}}{\void}
+Destructor.
+Deletes the dialog and enables all top level windows.
+
+\membersection{wxProgressDialog::Update}\label{wxprogressdialogupdate}
+
+\func{bool}{Update}{
+  \param{int }{value = -1},\rtfsp
+  \param{const char * }{newmsg = NULL},  }
+
+Updates the dialog, setting the progress bar to the new value and, if
+given exchanges the message above it. Returns TRUE if the ABORT button 
+has \emph{not} been pressed.
+
+
+\membersection{wxProgressDialog::Resume}\label{wxprogressdialogresume}
+
+\func{void}{Resume}{\void}
+Can be used to continue with the dialog, after the user had chosen
+ABORT.
+
+

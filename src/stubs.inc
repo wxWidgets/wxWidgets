@@ -151,8 +151,8 @@ LIB_CPP_SRC=\
  generic/statusbr.cpp \
  generic/tabg.cpp \
  generic/textdlgg.cpp \
- generic/treectrl.cpp
- 
+ generic/treectrl.cpp \
+ generic/progdlgg.cpp 
  
 LIB_C_SRC=\
  common/extended.c \
