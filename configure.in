@@ -2751,6 +2751,15 @@ AC_PROG_MAKE_SET
 
 AC_CONFIG_HEADER(setup.h:setup.h.in)
 
+dnl Duh! glcanvas/$(TOOLKIT_DIR) doesn't work for msw because some
+dnl genius called it "win"
+if test "${TOOLKIT_DIR}" = "msw" ; then
+  GL_TOOLKIT_DIR="win"
+else
+  GL_TOOLKIT_DIR="${TOOLKIT_DIR}"
+fi
+dnl It's needed in glcanvas/Makefile.in so we even have to subst this hack!
+AC_SUBST(GL_TOOLKIT_DIR)
 
 dnl create each of the files in the space separated list from the file.in
 dnl (the original file name may be overriden by appending another name after a
@@ -2807,7 +2816,7 @@ AC_OUTPUT([
 	    utils/wxMMedia2/lib/Makefile
 	    utils/wxMMedia2/sample/Makefile
 	    utils/glcanvas/Makefile
-	    utils/glcanvas/${TOOLKIT_DIR}/Makefile
+	    utils/glcanvas/${GL_TOOLKIT_DIR}/Makefile
           ],
           [
             chmod +x wx-config
