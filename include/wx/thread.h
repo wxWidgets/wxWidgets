@@ -298,13 +298,13 @@ public:
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
     // thread
-    void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
+    extern void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
 
     // returns TRUE if the main thread has GUI lock
-    bool WXDLLEXPORT wxGuiOwnedByMainThread();
+    extern bool WXDLLEXPORT wxGuiOwnedByMainThread();
 
     // wakes up the main thread if it's sleeping inside ::GetMessage()
-    void WXDLLEXPORT wxWakeUpMainThread();
+    extern void WXDLLEXPORT wxWakeUpMainThread();
 #else // !MSW
     // implement wxCriticalSection using mutexes
     inline wxCriticalSection::wxCriticalSection() { }
