@@ -711,6 +711,17 @@ bool wxLocale::Init(int language, int flags)
         return FALSE;
     }
 #elif defined(__WIN32__)
+
+    #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
+        // NB: setlocale() from msvcrt.dll (used by VC++ and Mingw)
+        //     can't set locale to language that can only be written using
+        //     Unicode.  Therefore wxSetlocale call failed, but we don't want
+        //     to report it as an error -- so that at least message catalogs
+        //     can be used. Watch for code marked with
+        //     #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS bellow.
+        #define SETLOCALE_FAILS_ON_UNICODE_LANGS
+    #endif
+    
     wxMB2WXbuf retloc = wxT("C");
     if (language != wxLANGUAGE_DEFAULT)
     {
@@ -721,42 +732,58 @@ bool wxLocale::Init(int language, int flags)
         }
         else
         {
+            int codepage = -1;
             wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
                                      SORT_DEFAULT);
-            if (SetThreadLocale(lcid))
+            SetThreadLocale(lcid);
+            // NB: we must translate LCID to CRT's setlocale string ourselves,
+            //     because SetThreadLocale does not modify change the
+            //     interpretation of setlocale(LC_ALL, "") call:
+            wxChar buffer[256];
+            buffer[0] = wxT('\0');
+            GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
+            locale << buffer;
+            if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
+                locale << wxT("_") << buffer;
+            if (GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE, buffer, 256) > 0)
             {
-                retloc = wxSetlocale(LC_ALL, wxEmptyString);
+                codepage = wxAtoi(buffer);
+                if (codepage != 0)
+                    locale << wxT(".") << buffer;
+            }
+            if (locale.IsEmpty())
+            {
+                wxLogLastError(wxT("SetThreadLocale"));
+                wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
+                return FALSE;
             }
             else
             {
-                // Windows9X doesn't support SetThreadLocale, so we must
-                // translate LCID to CRT's setlocale string ourselves
-                locale.Empty();
-                if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
+                retloc = wxSetlocale(LC_ALL, locale);
+#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
+                if (codepage == 0 && (const wxChar*)retloc == NULL)
                 {
-                    wxChar buffer[256];
-                    buffer[0] = wxT('\0');
-                    GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
-                    locale << buffer;
-                    if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
-                        locale << wxT("_") << buffer;
+                    retloc = wxT("C");
                 }
-                if (locale.IsEmpty())
-                {
-                    wxLogLastError(wxT("SetThreadLocale"));
-                    wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-                    return FALSE;
-                }
-                else
-                {
-                    retloc = wxSetlocale(LC_ALL, locale);
-                }
+#endif
             }
         }
     }
     else
     {
         retloc = wxSetlocale(LC_ALL, wxEmptyString);
+#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
+        if ((const wxChar*)retloc == NULL)
+        {
+            wxChar buffer[16];
+            if (GetLocaleInfo(LOCALE_USER_DEFAULT,
+                              LOCALE_IDEFAULTANSICODEPAGE, buffer, 16) > 0 &&
+                 wxStrcmp(buffer, wxT("0")) == 0)
+            {
+                retloc = wxT("C");
+            }
+        }
+#endif
     }
 
     if ( !retloc )

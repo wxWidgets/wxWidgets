@@ -119,9 +119,12 @@ bool MyApp::OnInit()
         wxLANGUAGE_FRENCH,
         wxLANGUAGE_GERMAN,
         wxLANGUAGE_RUSSIAN,
+#if wxUSE_UNICODE
         wxLANGUAGE_JAPANESE,
+        wxLANGUAGE_GEORGIAN,
+#endif
         wxLANGUAGE_ENGLISH,
-        wxLANGUAGE_ENGLISH_US,
+        wxLANGUAGE_ENGLISH_US
     };
 
     if ( lng == -1 )
@@ -134,7 +137,10 @@ bool MyApp::OnInit()
             _T("French"),
             _T("German"),
             _T("Russian"),
-            _T("Japanese"),         // this will only work in Unicode build
+#if wxUSE_UNICODE
+            _T("Japanese"),
+            _T("Georgian (no translation)"),
+#endif
             _T("English"),
             _T("English (U.S.)")
         };
