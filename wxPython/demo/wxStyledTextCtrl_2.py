@@ -52,7 +52,8 @@ class PythonSTC(wxStyledTextCtrl):
         self.SetMargins(0,0)
 
         self.SetViewWhiteSpace(False)
-        ##self.SetBufferedDraw(False)
+        #self.SetBufferedDraw(False)
+        #self.SetViewEOL(True)
 
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
