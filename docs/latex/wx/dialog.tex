@@ -1,11 +1,11 @@
 \section{\class{wxDialog}}\label{wxdialog}
 
-A dialog box is a window with a title bar and sometimes a system menu, which can be moved around
-the screen. It can contain controls and other windows.
+A dialog box is a window with a title bar and sometimes a system menu, which
+can be moved around the screen. It can contain controls and other windows and
+is usually used to allow the user to make some choice or to answer a question.
 
 \wxheading{Derived from}
 
-\helpref{wxPanel}{wxpanel}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
@@ -16,25 +16,54 @@ the screen. It can contain controls and other windows.
 
 \wxheading{Remarks}
 
-There are two kinds of dialog - {\it modal} and {\it modeless}. A modal dialog
-blocks program flow and user input on other windows until it is dismissed, whereas a modeless dialog behaves more
-like a frame in that program flow continues, and input on other windows is still possible.
-You specify the type of dialog with the {\bf wxDIALOG\_MODAL} and {\bf wxDIALOG\_MODELESS} window
-styles.
+There are two kinds of dialog -- {\it modal}\ and {\it modeless}. A modal dialog
+blocks program flow and user input on other windows until it is dismissed,
+whereas a modeless dialog behaves more like a frame in that program flow
+continues, and input on other windows is still possible. To show a modal dialog
+you should use \helpref{ShowModal}{wxdialogshowmodal} method while to show
+dialog modelessly you simply use \helpref{Show}{wxdialogshow}, just as with the
+frames.
 
-A dialog may be loaded from a wxWindows resource file (extension {\tt wxr}), which may itself
-be created by Dialog Editor. For details,
-see \helpref{The wxWindows resource system}{resourceformats}, \helpref{wxWindows resource functions}{resourcefuncs} and
-the resource sample.
+Note that the modal dialogs are one of the very few examples of
+wxWindow-derived objects which may be created on the stack and not on the heap.
+In other words, although this code snippet
+\begin{verbatim}
+    void AskUser()
+    {
+        MyAskDialog *dlg = new MyAskDialog(...);
+        if ( dlg->ShowModal() == wxID_OK )
+            ...
+        //else: dialog was cancelled or some another button pressed
 
-An application can define an \helpref{wxCloseEvent}{wxcloseevent} handler for the
-dialog to respond to system close events.
+        dlg->Destroy();
+    }
+\end{verbatim}
+works, you can also achieve the same result by using a simpler code fragment
+below:
+\begin{verbatim}
+    void AskUser()
+    {
+        MyAskDialog dlg(...);
+        if ( dlg.ShowModal() == wxID_OK )
+            ...
+
+        // no need to call Destroy() here
+    }
+\end{verbatim}
+
+A dialog may be loaded from a wxWindows resource file (extension {\tt wxr}),
+which may itself be created by Dialog Editor. For details, see 
+\helpref{The wxWindows resource system}{resourceformats}, 
+\helpref{wxWindows resource functions}{resourcefuncs} 
+and the resource sample.
+
+An application can define an \helpref{wxCloseEvent}{wxcloseevent} handler for
+the dialog to respond to system close events.
 
 \wxheading{Window styles}
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxDIALOG\_MODAL}}{Specifies that the dialog box will be modal.}
 \twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the dialog box.}
 \twocolitem{\windowstyle{wxDEFAULT\_DIALOG\_STYLE}}{Equivalent to a combination of wxCAPTION, wxSYSTEM\_MENU and wxTHICK\_FRAME}
 \twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Display a resizeable frame around the window.}
@@ -50,7 +79,7 @@ style to prevent this from happening and create a really orphan dialog (note
 that this is not recommended for modal dialogs).}
 \twocolitem{\windowstyle{wxDIALOG\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
 caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
-a wxEVT\_HELP event if the user clicked on an application window. {\it Note} that this is an extended
+a wxEVT\_HELP event if the user clicked on an application window. {\it Note}\ that this is an extended
 style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).}
 \end{twocollist}
 
