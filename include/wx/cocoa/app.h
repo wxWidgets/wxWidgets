@@ -34,6 +34,7 @@ public:
     inline void CocoaRequestIdle() { m_isIdle = true; }
 protected:
     WX_NSApplication m_cocoaApp;
+    WX_NSThread m_cocoaMainThread;
     void CocoaInstallIdleHandler();
     bool m_isIdle;
 

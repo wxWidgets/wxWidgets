@@ -41,6 +41,7 @@
 #import <Foundation/NSRunLoop.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSAutoreleasePool.h>
+#import <Foundation/NSThread.h>
 
 // ----------------------------------------------------------------------------
 // globals
@@ -133,6 +134,7 @@ END_EVENT_TABLE()
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     wxAutoNSAutoreleasePool pool;
+    m_cocoaMainThread = [NSThread currentThread];
     // Mac OS X passes a process serial number command line argument when
     // the application is launched from the Finder. This argument must be
     // removed from the command line arguments before being handled by the
@@ -181,6 +183,12 @@ wxApp::wxApp()
 
 void wxApp::CocoaInstallIdleHandler()
 {
+    // If we're not the main thread, don't install the idle handler
+    if(m_cocoaMainThread != [NSThread currentThread])
+    {
+        wxLogDebug("Attempt to install idle handler from secondary thread");
+        return;
+    }
     // If we're supposed to be stopping, don't add more idle events
     if(![m_cocoaApp isRunning])
         return;
