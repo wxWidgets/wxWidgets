@@ -56,7 +56,7 @@
 #if defined(__BORLANDC__) && !defined(__WIN32__)
 #include <alloc.h>
 #else
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
 #include <malloc.h>
 #endif
 #define farmalloc malloc
@@ -335,7 +335,7 @@ void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cx; // button font dimensions
   int cy;
 
-  wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
 
   int control_width, control_height, control_x, control_y;
 
@@ -535,9 +535,16 @@ bool wxTextCtrl::LoadFile(const wxString& file)
       // positions as signed shorts. Now load in one chunk...
       // Note use of 'farmalloc' as in Borland 3.1 'size_t' is 16-bits...
 
+#ifdef __SALFORDC__
+      struct _stat stat_buf;
+      if (stat((char*) (const char*) file, &stat_buf) < 0)
+        return FALSE;
+#else
       struct stat stat_buf;
       if (stat(file, &stat_buf) < 0)
         return FALSE;
+#endif
+
 //      char *tmp_buffer = (char*)farmalloc(stat_buf.st_size+1);
       // This may need to be a bigger buffer than the file size suggests,
       // if it's a UNIX file. Give it an extra 1000 just in case.

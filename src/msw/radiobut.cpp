@@ -115,7 +115,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
   if (label != "")
   {
     int label_width, label_height;
-    GetTextExtent(label, &label_width, &label_height, NULL, NULL, & GetFont());
+    GetTextExtent(label, &label_width, &label_height, NULL, NULL, & this->GetFont());
     if (width < 0)
       width = (int)(label_width + RADIO_SIZE);
     if (height<0)

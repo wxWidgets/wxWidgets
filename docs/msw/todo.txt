@@ -8,14 +8,12 @@ HIGH PRIORITY
 Add further controls and properties to Dialog Editor.
 
 Update manual.
-    wxTempFile
     wxMsgCatalog etc.
     wxRegKey
     wxStatusBar95 and wxFrame status bar functions
     wxListBox changes (for ownerdraw functionality)
     wxThread            DONE (except for topic overview)
     wxString            PARTLY DONE
-    Drag and drop (change API if required, e.g. const).
     wxBaseArray, other arrays
     (wxOwnerDrawn)
     Document the include file for each class

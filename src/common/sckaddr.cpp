@@ -26,7 +26,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#ifndef __MWERKS__
+
+#if !defined(__MWERKS__) && !defined(__SALFORDC__)
 #include <memory.h>
 #endif
 
@@ -114,14 +115,14 @@ const wxSockAddress& wxIPV4address::operator =(const wxSockAddress& addr)
 
 bool wxIPV4address::Hostname(const wxString& name)
 {
-  struct hostent *hostent;
+  struct hostent *theHostent;
   struct in_addr *addr;
   
   if (name.IsNull())
     return FALSE;
   
   if (!name.IsNumber()) {
-    if ((hostent = gethostbyname(name.GetData())) == 0) {
+    if ((theHostent = gethostbyname(name.GetData())) == 0) {
       return FALSE;
     }
   } else {
@@ -136,7 +137,7 @@ bool wxIPV4address::Hostname(const wxString& name)
     return TRUE;
   }
 
-  addr = (struct in_addr *) *(hostent->h_addr_list);
+  addr = (struct in_addr *) *(theHostent->h_addr_list);
 
   m_addr->sin_addr.s_addr = addr[0].s_addr;
   return TRUE;
@@ -150,22 +151,22 @@ bool wxIPV4address::Hostname(unsigned long addr)
 
 bool wxIPV4address::Service(const wxString& name)
 {
-  struct servent *servent;
+  struct servent *theServent;
   
   if (name.IsNull())
     return FALSE;
   
   if (!name.IsNumber()) {
-    if ((servent = getservbyname(name, "tcp")) == 0)
+    if ((theServent = getservbyname(name, "tcp")) == 0)
       return FALSE;
   } else {
-    if ((servent = getservbyport(atoi(name), "tcp")) == 0) {
+    if ((theServent = getservbyport(atoi(name), "tcp")) == 0) {
       m_addr->sin_port = htons(atoi(name));
       return TRUE;
     }
   }
   
-  m_addr->sin_port = servent->s_port;
+  m_addr->sin_port = theServent->s_port;
   return TRUE;
 }
 
@@ -254,7 +255,7 @@ const wxSockAddress& wxIPV6address::operator =(const wxSockAddress& addr)
 
 bool wxIPV6address::Hostname(const wxString& name)
 {
-  struct hostent *hostent;
+  struct hostent *theHostent;
   struct in_addr *addr;
   
   if (name.IsNull())
@@ -262,14 +263,14 @@ bool wxIPV6address::Hostname(const wxString& name)
   
   if (!name.IsNumber()) {
     hostent = gethostbyname2((char*) name, AF_INET6);
-    if (!hostent)
+    if (!theHostent)
       return FALSE;
   } else {
     // Don't how to do
     return FALSE;
   }
 
-  addr = (struct in6_addr *) *(hostent->h_addr_list);
+  addr = (struct in6_addr *) *(theHostent->h_addr_list);
 
   m_addr->sin6_addr.s6_addr = addr[0].s6_addr;
   return TRUE;
@@ -283,22 +284,22 @@ bool wxIPV6address::Hostname(unsigned char addr[16])
 
 bool wxIPV6address::Service(const char *name)
 {
-  struct servent *servent;
+  struct servent *theServent;
   
   if (!name || !strlen(name))
     return FALSE;
   
   if (!isdigit(*name)) {
-    if ((servent = getservbyname((char*) name, "tcp")) == 0)
+    if ((theServent = getservbyname((char*) name, "tcp")) == 0)
       return FALSE;
   } else {
-    if ((servent = getservbyport(atoi(name), "tcp")) == 0) {
+    if ((theServent = getservbyport(atoi(name), "tcp")) == 0) {
       m_addr->sin_port = htons(atoi(name));
       return TRUE;
     }
   }
   
-  m_addr->sin_port = servent->s_port;
+  m_addr->sin_port = theServent->s_port;
   return TRUE;
 }
 

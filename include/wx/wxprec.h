@@ -27,7 +27,7 @@
 
 // Comment this out if you don't mind slower compilation of the wxWindows
 // library
-#ifndef __WXMAC__
+#if !defined(__WXMAC__) && !defined(__SALFORDC__)
 #include <windows.h>
 #endif
 

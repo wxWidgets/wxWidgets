@@ -335,10 +335,16 @@ gaugemsw.obj:     $(MSWDIR)\gaugemsw.cpp
 gdiobj.obj:     $(MSWDIR)\gdiobj.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
+helpwin.obj:     $(MSWDIR)\helpwin.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 icon.obj:     $(MSWDIR)\icon.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 imaglist.obj:     $(MSWDIR)\imaglist.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+iniconf.obj:     $(MSWDIR)\iniconf.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 joystick.obj:     $(MSWDIR)\joystick.cpp

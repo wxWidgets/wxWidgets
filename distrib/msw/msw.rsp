@@ -16,7 +16,8 @@ src/makewat.env
 src/makeprog.wat
 src/makesc.env
 src/makeg95.env
-src/makem95.env
+src/makesl.env
+src/makeprog.sl
 src/ntwxwin.mak
 src/makefile.bcc
 src/makefile.dos

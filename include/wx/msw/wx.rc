@@ -77,6 +77,21 @@ END
 // Standard wxWindows Cursors
 //
 
+#ifdef __SALFORDC__
+WXCURSOR_HAND           CURSOR  DISCARDABLE     WXINCDIR"wx/msw/hand.cur"
+WXCURSOR_BULLSEYE       CURSOR  DISCARDABLE     WXINCDIR"wx/msw/bullseye.cur"
+WXCURSOR_PENCIL         CURSOR  DISCARDABLE     WXINCDIR"wx/msw/pencil.cur"
+WXCURSOR_MAGNIFIER      CURSOR  DISCARDABLE     WXINCDIR"wx/msw/magnif1.cur"
+WXCURSOR_NO_ENTRY       CURSOR  DISCARDABLE     WXINCDIR"wx/msw/noentry.cur"
+WXCURSOR_SIZING         CURSOR  DISCARDABLE     WXINCDIR"wx/msw/size.cur"
+WXCURSOR_ROLLER         CURSOR  DISCARDABLE     WXINCDIR"wx/msw/roller.cur"
+WXCURSOR_WATCH          CURSOR  DISCARDABLE     WXINCDIR"wx/msw/watch1.cur"
+WXCURSOR_PBRUSH         CURSOR  DISCARDABLE     WXINCDIR"wx/msw/pbrush.cur"
+WXCURSOR_PLEFT          CURSOR  DISCARDABLE     WXINCDIR"wx/msw/pntleft.cur"
+WXCURSOR_PRIGHT         CURSOR  DISCARDABLE     WXINCDIR"wx/msw/pntright.cur"
+WXCURSOR_QARROW         CURSOR  DISCARDABLE     WXINCDIR"wx/msw/query.cur"
+WXCURSOR_BLANK          CURSOR  DISCARDABLE     WXINCDIR"wx/msw/blank.cur"
+#else
 WXCURSOR_HAND           CURSOR  DISCARDABLE     "wx/msw/hand.cur"
 WXCURSOR_BULLSEYE       CURSOR  DISCARDABLE     "wx/msw/bullseye.cur"
 WXCURSOR_PENCIL         CURSOR  DISCARDABLE     "wx/msw/pencil.cur"
@@ -90,6 +105,7 @@ WXCURSOR_PLEFT          CURSOR  DISCARDABLE     "wx/msw/pntleft.cur"
 WXCURSOR_PRIGHT         CURSOR  DISCARDABLE     "wx/msw/pntright.cur"
 WXCURSOR_QARROW         CURSOR  DISCARDABLE     "wx/msw/query.cur"
 WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -105,6 +121,9 @@ WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
 // Bitmaps
 //
 
+#ifdef __SALFORDC__
+wxDISABLE_BUTTON_BITMAP         BITMAP  WXINCDIR"wx/msw/disable.bmp"
+#else
 wxDISABLE_BUTTON_BITMAP         BITMAP  "wx/msw/disable.bmp"
-
+#endif
 

@@ -655,7 +655,7 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
 
 
 /* get the includes we need */
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
 #include <malloc.h>
 #endif
 #include <stdio.h>

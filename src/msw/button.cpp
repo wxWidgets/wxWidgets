@@ -118,7 +118,8 @@ void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cyf;
   char buf[300];
   GetWindowText((HWND) GetHWND(), buf, 300);
-  GetTextExtent(buf, &current_width, &cyf,NULL,NULL,& GetFont());
+  GetTextExtent(buf, &current_width, &cyf,NULL,NULL,
+    & this->GetFont());
 
   // If we're prepared to use the existing width, then...
   if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
@@ -127,7 +128,7 @@ void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
   {
     int cx;
     int cy;
-    wxGetCharSize(GetHWND(), &cx, &cy,& GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
     actualWidth = (int)(current_width + 3*cx) ;
   }
   

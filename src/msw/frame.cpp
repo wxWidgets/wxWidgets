@@ -648,7 +648,7 @@ bool wxFrame::MSWOnPaint(void)
       HDC cdc = BeginPaint((HWND) GetHWND(), &ps);
       
       // Erase background before painting or we get white background
-      this->MSWDefWindowProc(WM_ICONERASEBKGND,(WORD)ps.hdc,0L);
+      this->MSWDefWindowProc(WM_ICONERASEBKGND,(WORD)(LONG) ps.hdc,0L);
       
       if (the_icon)
       {
@@ -894,9 +894,14 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
       wxMenuBar *menuBar = GetMenuBar();
       if (menuBar)
       {
-        wxString helpString(menuBar->GetHelpString(event.GetMenuId()));
+// #ifndef __SALFORDC__
+        int menuId = event.GetMenuId();
+        wxString helpString;
+        // This causes a spurious access violation with Salford C++
+        helpString = menuBar->GetHelpString(menuId);
         if (helpString != "")
-          SetStatusText(helpString);
+            SetStatusText(helpString);
+// #endif
       }
     }
   }

@@ -29,6 +29,9 @@
 #include "wx/dcclient.h"
 #endif
 
+#include "wx/log.h"
+#include "wx/intl.h"
+
 #include "wx/msw/imaglist.h"
 #include "wx/msw/private.h"
 

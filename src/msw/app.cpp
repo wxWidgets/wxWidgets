@@ -59,9 +59,10 @@
 // if you don't do the same for the Ole calls further down.
 // Also, OLE is used not just for drag and drop (it's used by automatn.cpp).
 // #if wxUSE_DRAG_AND_DROP
-#if !defined(__GNUWIN32__) && !defined(__SC__)
+#if !defined(__GNUWIN32__) && !defined(__SC__) && !defined(__SALFORDC__)
 #include <ole2.h>
 #endif
+
 // #endif
 
 #include <string.h>
@@ -207,7 +208,7 @@ bool wxApp::Initialize()
     }
 */
 
-#if !defined(__GNUWIN32__) && !defined(__SC__)
+#if !defined(__GNUWIN32__) && !defined(__SC__) && !defined(__SALFORDC__)
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
       wxFatalError(_("Cannot initialize OLE"));
@@ -524,7 +525,7 @@ void wxApp::CleanUp()
   if ( wxDisableButtonBrush )
     ::DeleteObject( wxDisableButtonBrush ) ;
 
-#if !defined(__GNUWIN32__) && !defined(__SC__)
+#if !defined(__GNUWIN32__) && !defined(__SC__) && !defined(__SALFORDC__)
   ::OleUninitialize();
 #endif
 

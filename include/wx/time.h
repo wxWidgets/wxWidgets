@@ -55,8 +55,11 @@ public:
     wxTime(const wxDate&, hourTy h =0, minuteTy m =0, secondTy s=0, bool dst =FALSE);
 
     // Convert to string
+#ifndef __SALFORDC__
     operator char *   (void);
     operator wxDate() const;
+#endif
+
     bool operator<(const wxTime& t) const     { return sec < t.sec; }
     bool operator<=(const wxTime& t) const    { return sec <= t.sec; }
     bool operator>(const wxTime& t) const     { return sec > t.sec; }

@@ -26,13 +26,14 @@
 
 #if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
 
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
 #include "malloc.h"
 #endif
 
-#ifndef __MWERKS__
+#if !defined(__MWERKS__) && !defined(__SALFORDC__)
 #include <memory.h>
 #endif
+
 #include <stdlib.h>
 
 #include "wx/tbarmsw.h"

@@ -34,7 +34,9 @@
 #if defined(__WIN95__)
 
 #include "wx/log.h"
+#include "wx/dynarray.h"
 #include "wx/imaglist.h"
+#include "wx/msw/treectrl.h"
 
 #include "wx/msw/private.h"
 
@@ -57,8 +59,6 @@
 #ifdef GetClassInfo
 #undef GetClassInfo
 #endif
-
-#include "wx/msw/treectrl.h"
 
 // Bug in headers, sometimes
 #ifndef TVIS_FOCUSED

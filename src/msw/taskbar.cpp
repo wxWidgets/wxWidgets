@@ -39,6 +39,10 @@
 #include <wx/msw/gnuwin32/extra.h>
 #endif
 
+#ifdef __SALFORDC__
+#include <shellapi.h>
+#endif
+
 LRESULT APIENTRY _EXPORT wxTaskBarIconWindowProc( HWND hWnd, unsigned msg,
 				     UINT wParam, LONG lParam );
 

@@ -125,7 +125,7 @@ wxWindow *wxWindow::FindItem(int id) const
         if (childWin->IsKindOf(CLASSINFO(wxControl)))
         {
             wxControl *item = (wxControl *)childWin;
-            if (item->m_windowId == id)
+            if (item->GetId() == id)
                 return item;
             else
             {
@@ -3102,10 +3102,14 @@ bool wxWindow::MSWOnEraseBkgnd (WXHDC pDC)
 
 void wxWindow::OnEraseBackground(wxEraseEvent& event)
 {
+    if (!GetHWND())
+        return;
+
     RECT rect;
     ::GetClientRect((HWND) GetHWND(), &rect);
 
-    HBRUSH hBrush = ::CreateSolidBrush(PALETTERGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
+    COLORREF ref = PALETTERGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue()) ;
+    HBRUSH hBrush = ::CreateSolidBrush(ref);
     int mode = ::SetMapMode((HDC) event.GetDC()->GetHDC(), MM_TEXT);
 
     //  ::GetClipBox((HDC) event.GetDC()->GetHDC(), &rect);

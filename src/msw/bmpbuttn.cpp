@@ -253,9 +253,17 @@ void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, 
     if ( with_marg )
         ::PatBlt( (HDC) dc, left + m_marginX, top + m_marginY,
             right - 2 * m_marginX, bottom - 2 * m_marginY,
-                0xfa0089ul ) ;
-    else    ::PatBlt( (HDC) dc, left, top, right, bottom, 0xfa0089ul ) ;
-
+#ifdef __SALFORDC__
+                0xfa0089L ) ;
+#else
+                0xfa0089UL ) ;
+#endif
+    else    ::PatBlt( (HDC) dc, left, top, right, bottom,
+#ifdef __SALFORDC__
+       0xfa0089L ) ;
+#else
+       0xfa0089UL ) ;
+#endif
     ::SelectObject( (HDC) dc, old ) ;
 }
 

@@ -33,6 +33,14 @@
 
 #include <windows.h>
 
+#ifdef GetClassInfo
+#undef GetClassInfo
+#endif
+
+#ifdef GetClassName
+#undef GetClassName
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================

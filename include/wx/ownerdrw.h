@@ -16,8 +16,6 @@
 #pragma interface "ownerdrw.h"
 #endif
 
-typedef   wxColour      wxColor;
-
 // No, don't do this: BC++ 5 complains that size_t already been defined.
 // typedef   unsigned int  size_t;
 #include <stddef.h>
@@ -126,7 +124,7 @@ private:
             m_bOwnerDrawn;  // true if something is non standard
 
   wxFont    m_font;         // font to use for drawing
-  wxColor   m_colText,      // color ----"---"---"----
+  wxColour   m_colText,      // color ----"---"---"----
             m_colBack;      // background color
   wxBitmap  m_bmpChecked,   // bitmap to put near the item
             m_bmpUnchecked; // (checked is used also for 'uncheckable' items)

@@ -211,7 +211,15 @@ protected:
   friend class wxSocketServer;
   friend class wxSocketHandler;
 
+#ifdef __SALFORDC__
+public:
+#endif
+
   wxSocketBase(wxSockFlags flags, wxSockType type);
+
+#ifdef __SALFORDC__
+protected:
+#endif
   
   bool _Wait(long seconds, long microseconds, int type);
   

@@ -133,7 +133,7 @@
     typedef unsigned char bool;
 #endif
 
-#if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__)) || defined(__SC__)
+#if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__)) || defined(__SC__) || defined(__SALFORDC__)
     #define byte unsigned char
 #endif
 

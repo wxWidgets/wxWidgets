@@ -31,7 +31,7 @@
 
 #include <windows.h>
 
-#ifndef __WIN32__
+#if !defined(__WIN32__) || defined(__SALFORDC__)
 #include <commdlg.h>
 #endif
 

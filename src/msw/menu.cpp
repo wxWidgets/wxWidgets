@@ -486,8 +486,10 @@ void wxMenu::SetHelpString(int itemId, const wxString& helpString)
 wxString wxMenu::GetHelpString (int itemId) const
 {
   wxMenuItem *item = FindItemForId (itemId);
-  wxString str("");
-  return (item == NULL) ? str : item->GetHelp();
+  if (item)
+    return item->GetHelp();
+  else
+    return wxEmptyString;
 }
 
 void wxMenu::ProcessCommand(wxCommandEvent & event)

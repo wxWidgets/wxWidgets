@@ -41,6 +41,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef __SALFORDC__
+#include <clib.h>
+#endif
+
 #if wxUSE_WCSRTOMBS
   #include <wchar.h>    // for wcsrtombs(), see comments where it's used
 #endif // GNU
@@ -871,7 +875,7 @@ wxString& wxString::Trim(bool bFromRight)
         psz++;
 
       // fix up data and length
-      int nDataLength = GetStringData()->nDataLength - (psz - m_pchData);
+      int nDataLength = GetStringData()->nDataLength - (psz - (const char*) m_pchData);
       memmove(m_pchData, psz, (nDataLength + 1)*sizeof(char));
       GetStringData()->nDataLength = nDataLength;
     }
@@ -919,7 +923,7 @@ int wxString::Find(char ch, bool bFromEnd) const
 {
   const char *psz = bFromEnd ? strrchr(m_pchData, ch) : strchr(m_pchData, ch);
 
-  return (psz == NULL) ? wxNOT_FOUND : psz - m_pchData;
+  return (psz == NULL) ? wxNOT_FOUND : psz - (const char*) m_pchData;
 }
 
 // find a sub-string (like strstr)
@@ -927,7 +931,7 @@ int wxString::Find(const char *pszSub) const
 {
   const char *psz = strstr(m_pchData, pszSub);
 
-  return (psz == NULL) ? wxNOT_FOUND : psz - m_pchData;
+  return (psz == NULL) ? wxNOT_FOUND : psz - (const char*) m_pchData;
 }
 
 // ---------------------------------------------------------------------------

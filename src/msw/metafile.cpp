@@ -72,7 +72,7 @@ wxMetafile::wxMetafile(const wxString& file)
 
     M_METAFILEDATA->m_windowsMappingMode = MM_ANISOTROPIC;
     M_METAFILEDATA->m_metafile = 0;
-    if (!file.IsNull() && file == "")
+    if (!file.IsNull() && (file.Cmp("") == 0))
         M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
 }
 

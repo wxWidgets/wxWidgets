@@ -154,7 +154,7 @@ const wxString& wxIniConfig::GetPath() const
   // always return abs path
   s_str = wxCONFIG_PATH_SEPARATOR;
 
-  if ( m_strGroup == (const char*) PATH_SEP_REPLACE ) {
+  if ( m_strGroup == wxString(PATH_SEP_REPLACE) ) {
     // we're at the root level, nothing to do
   }
   else {

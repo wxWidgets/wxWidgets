@@ -42,6 +42,10 @@
 #define wxDLG_POINT(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixel(wxPoint(x, y)) : wxPoint(x, y))
 #define wxDLG_SIZE(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixel(wxSize(x, y)) : wxSize(x, y))
 
+#ifdef FindResource
+#undef FindResource
+#endif
+
 /*
  * Internal format for control/panel item
  */

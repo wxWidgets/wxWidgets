@@ -136,6 +136,25 @@ Some functionality is missing using this compiler (see makefile).
 Add -D__WIN95__ if your SC++ has Windows 95 support, and ignore
 Step (2). 16-bit compilation is left as an excercise for the user!
 
+Salford C++ compilation
+-----------------------
+
+1. Make sure your WXWIN variable is set, and uses the FAT (short
+   name) form.
+2. Edit SALFORDDIR and RESOURCEDIR in src/makesl.env as per
+   notes.
+3. Change directory to wx\src\msw. Type 'mk32 -f makefile.sl all' to
+   make the wxWindows core library.
+4. Change directory to wx\samples\minimal and type 'mk32 -f makefile.sl'
+   to make this sample.
+
+Unfortunately, Salford C++ seems to have problems with its code generation for
+operations on objects, as seen in wxFrame::OnMenuHighlight
+(minimal sample) or wxWindow::SetValidator (mdi sample). Also the
+the debugging version of the library is 90MB, with samples coming in
+at 40MB :-) However, wxWindows at least makes a good test suite for
+improving the compiler.
+
 Gnu-Win32 b19/b20/Mingw32 compilation
 -------------------------------------
 

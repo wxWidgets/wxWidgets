@@ -41,7 +41,8 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef __MWERKS__
+
+#if !defined(__MWERKS__) && !defined(__SALFORDC__)
 #include <memory.h>
 #endif
 

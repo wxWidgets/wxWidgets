@@ -26,7 +26,7 @@
 
 #if defined(__WIN95__)
 
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
 #include "malloc.h"
 #endif
 

@@ -370,7 +370,7 @@ void wxSlider95::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cy;
   int cyf;
 
-  wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
 
   if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
   {
@@ -379,12 +379,12 @@ void wxSlider95::SetSize(int x, int y, int width, int height, int sizeFlags)
     int min_len = 0;
 
     GetWindowText((HWND) m_staticMin, buf, 300);
-    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & GetFont());
+    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
 
     int max_len = 0;
 
     GetWindowText((HWND) m_staticMax, buf, 300);
-    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & GetFont());
+    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
     if (m_staticValue)
     {
       int new_width = (int)(wxMax(min_len, max_len));
@@ -440,11 +440,11 @@ void wxSlider95::SetSize(int x, int y, int width, int height, int sizeFlags)
 	{
     int min_len;
     GetWindowText((HWND) m_staticMin, buf, 300);
-    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & GetFont());
+    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
 
     int max_len;
     GetWindowText((HWND) m_staticMax, buf, 300);
-    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & GetFont());
+    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
 
     if (m_staticValue)
     {

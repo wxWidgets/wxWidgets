@@ -498,7 +498,7 @@ void wxListBox::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cx; // button font dimensions
   int cy;
 
-  wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
 
   float control_width, control_height, control_x, control_y;
 

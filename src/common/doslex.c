@@ -21,7 +21,19 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
+
+#ifdef __SALFORDC__
+#include <io.h>
+#include <clib.h>
+#else
 #include <osfcn.h>
+#endif
+
+#ifdef __cplusplus
+static int yyinput()
+#else
+static int input()
+#endif
 
 /* use prototypes in function declarations */
 #define YY_USE_PROTOS
@@ -520,7 +532,7 @@ do_action:	/* this label is used only to access EOF actions */
 
 case 1:
 # line 60 "lexer.l"
-{yylval.s = strdup(yytext); Return(INTEGER);}
+{yylval.s = strdup((const char*) yytext); Return(INTEGER);}
 	YY_BREAK
 case 2:
 # line 62 "lexer.l"
@@ -528,18 +540,18 @@ Return(EXP);
 	YY_BREAK
 case 3:
 # line 64 "lexer.l"
-{yylval.s = strdup(yytext); Return(WORD);}
+{yylval.s = strdup((const char*) yytext); Return(WORD);}
 	YY_BREAK
 case 4:
 # line 66 "lexer.l"
-{int len = strlen(yytext);
+{int len = strlen((const char*) yytext);
                                    yytext[len-1] = 0;
-                                   yylval.s = strdup(yytext+1); 
+                                   yylval.s = strdup((const char*) (yytext+1));
                                    Return(WORD);}
 	YY_BREAK
 case 5:
 # line 71 "lexer.l"
-{yylval.s = strdup(yytext); Return(STRING);}
+{yylval.s = strdup((const char*) yytext); Return(STRING);}
 	YY_BREAK
 case 6:
 # line 73 "lexer.l"
@@ -1180,7 +1192,7 @@ void LexFromString(char *buffer)
 {
   lex_read_from_string = 1;
   lex_buffer = buffer;
-  lex_buffer_length = strlen(buffer);
+  lex_buffer_length = strlen((const char*) buffer);
   lex_string_ptr = 0;
   /* Don't know why this is necessary, but otherwise
    * lex only works _once_!

@@ -330,8 +330,8 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
       break;
 
     case wxLOG_Info:
-      if ( GetVerbose() )
     case wxLOG_Message:
+      if ( GetVerbose() )
         DoLogString(str + szString);
       // fall through
 
@@ -481,8 +481,8 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
 {
   switch ( level ) {
     case wxLOG_Info:
-      if ( GetVerbose() )
     case wxLOG_Message:
+      if ( GetVerbose() )
         if ( !m_bErrors ) {
           m_aMessages.Add(szString);
           m_bHasMessages = TRUE;

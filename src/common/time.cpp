@@ -104,7 +104,11 @@ wxTime::wxTime()
 	 wxTimeInitialized = TRUE;
   }
   sec = wxGetCurrentTime();
+#ifdef __SALFORDC__
+  sec += (unsigned long) 2177452800;     /* seconds from 1/1/01 to 1/1/70 */
+#else
   sec += 2177452800UL;     /* seconds from 1/1/01 to 1/1/70 */
+#endif
 }
 
 wxTime::wxTime(hourTy h, minuteTy m, secondTy s, bool dst)
@@ -152,6 +156,7 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
   sec += TIME_ZONE;                               // adjust to GMT
 }
 
+#ifndef __SALFORDC__
 wxTime::operator wxDate() const
 /*
 		  Convert a wxTime to a local wxDate
@@ -164,6 +169,7 @@ wxTime::operator wxDate() const
         date += daycount;
         return date;
 }
+#endif
 
 bool wxTime::IsBetween(const wxTime& a, const wxTime& b) const
 {
@@ -315,10 +321,12 @@ wxTime wxTime::Min(const wxTime& t) const
 		  return t;
 }
 
+#ifndef __SALFORDC__
 wxTime::operator char *(void)
 {
   return FormatTime();
 }
+#endif
 
 void wxTime::SetFormat(const wxTime::tFormat lFormat,
 							  const wxTime::tPrecision lPrecision) {

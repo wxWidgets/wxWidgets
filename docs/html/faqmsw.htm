@@ -1,0 +1,99 @@
+<HTML>
+
+<HEAD>
+<TITLE>wxWindows 2 for Windows FAQ</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000 LINK=#FF0000 VLINK=#000000>
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<table width=100% border=4 cellpadding=5 cellspacing=0>
+<tr>
+<td bgcolor="#660000">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+wxWindows 2 for Windows FAQ
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+See also <a href="faq.htm">top-level FAQ page</a>.
+<hr>
+
+<h3>Is Windows 3.1 supported?</h3>
+
+Yes! Unlike Microsoft, we have not forgotten users of 16-bit Windows. Most features
+work under Windows 3.1, including wxTreeCtrl and wxListCtrl using the generic implementation.
+However, don't expect Windows 95-specific classes to work, such as wxTaskBar. The wxRegConfig
+class doesn't work either because the Windows 3.1 registry is very simplistic. Check out the 16-bit
+makefiles to see what other files have been left out.
+<P>
+16-bit compilation is supported under Visual C++ 1.5, and Borland BC++ 4 to 5.
+<P>
+
+<h3>What compilers are supported?</h3>
+
+Please see the wxWindows 2 for Windows install.txt file for up-to-date information, but
+currently the following are known to work:<P>
+
+<ul>
+<li>Visual C++ 1.5, 4.0, 5.0, 6.0
+<li>Borland C++ 4.5, 5.0
+<li>Borland C++Builder 1.0, 3.0
+<li>Watcom C++ 10.6 (WIN32)
+<li>Cygwin b20
+<li>Mingw32
+<li>MetroWerks CodeWarrior 4
+</ul>
+<P>
+
+There is a linking problem with Symantec C++ which I hope someone can help solve.
+<P>
+
+<h3>Which is the best compiler to use with wxWindows 2?</h3>
+
+It's partly a matter of taste, but I (JACS) prefer Visual C++ since the debugger is very
+good, it's very stable, the documentation is extensive, and it generates small executables.
+Since project files are plain text, it's easy for me to generate appropriate project files
+for wxWindows samples.<P>
+
+Borland C++ is fine - and very fast - but it's hard (impossible?) to use the debugger without using project files, and
+the debugger is nowhere near up to VC++'s quality. The IDE isn't great.<P>
+
+C++Builder's power isn't really used with wxWindows since it needs integration with its
+own class library (VCL). For wxWindows, I've only used it with makefiles, in which case
+it's almost identical to BC++ 5.0 (the same makefiles can be used).<P>
+
+You can't beat Cygwin's price (free), and you can debug adequately using gdb. However, it's
+quite slow to compile since it does not use precompiled headers.<P>
+
+CodeWarrior is cross-platform - you can debug and generate Windows executables from a Mac, but not
+the other way around I think - but the IDE is, to my mind, a bit primitive.<P>
+
+Watcom C++ is a little slow and the debugger is not really up to today's standards.<P>
+
+<h3>Is Unicode supported?</h3>
+
+No, although there are other internationalisation features.<P>
+
+However, the issues surrounding Unicode support have been looked into so we know
+what we need to do, and have some header files ready to use containing appropriate
+type definitions. Just about every file in wxWindows will need changes, due to the
+pervasive nature of characters and character arrays. Unicode support is needed
+for the port to Windows CE (see below).<P>
+
+<h3>What about Windows CE?</h3>
+
+This is under consideration, though we need to get wxWindows Unicode-aware first.
+There are other interesting issues, such as how to combine the menubar and toolbar APIs
+as Windows CE requires.<P>
+
+
+</font>
+
+</BODY>
+
+</HTML>

@@ -30,7 +30,6 @@
 #ifdef __WIN95__
 
 #include "wx/log.h"
-
 #include "wx/generic/statusbr.h"
 #include "wx/msw/statbr95.h"
 
@@ -39,6 +38,14 @@
 
 #if !defined(__GNUWIN32__)
 #include  <commctrl.h>
+#endif
+
+#ifdef GetClassInfo
+#undef GetClassInfo
+#endif
+
+#ifdef GetClassName
+#undef GetClassName
 #endif
 
 #if     wxUSE_NATIVE_STATUSBAR

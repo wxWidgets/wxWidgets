@@ -322,15 +322,15 @@ private:
 
 // declare a list type named 'name' and containing elements of type 'T *'
 // (as a by product of macro expansion you also get wx##name##Node
-// wxNode-dervied type)
+// wxNode-derived type)
 //
 // implementation details:
-//  1. we define _WX_LIST_ITEM_TYPE_##name typedef to save in it the item type
+//  1. We define _WX_LIST_ITEM_TYPE_##name typedef to save in it the item type
 //     for the list of given type - this allows us to pass only the list name
 //     to WX_DEFINE_LIST() even if it needs both the name and the type
 //
-//  2. We redefine all not type-safe wxList functions withtype-safe versions
-//     which don't take any place (everything is inline), but bring compile
+//  2. We redefine all non-type-safe wxList functions with type-safe versions
+//     which don't take any space (everything is inline), but bring compile
 //     time error checking.
 
 #define WX_DECLARE_LIST_2(T, name, nodetype)                                \

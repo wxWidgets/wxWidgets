@@ -338,7 +338,7 @@ wxBitmapHandler *wxBitmap::FindHandler(const wxString& name)
   while ( node )
   {
     wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-    if ( handler->GetName() == name )
+    if ( (handler->GetName().Cmp(name) == 0) )
       return handler;
     node = node->Next();
   }
@@ -351,8 +351,8 @@ wxBitmapHandler *wxBitmap::FindHandler(const wxString& extension, long bitmapTyp
   while ( node )
   {
     wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-    if ( handler->GetExtension() == extension &&
-          (bitmapType == -1 || handler->GetType() == bitmapType) )
+    if ( (handler->GetExtension().Cmp(extension) == 0) &&
+          (bitmapType == -1 || (handler->GetType() == bitmapType)) )
       return handler;
     node = node->Next();
   }

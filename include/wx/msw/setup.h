@@ -257,6 +257,15 @@
 
 #undef wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS 0
+
+#undef wxUSE_THREADS
+#define wxUSE_THREADS 0
+
+#undef wxUSE_DBWIN32
+#define wxUSE_DBWIN32 0
+
+#undef wxUSE_OWNER_DRAWN
+#define wxUSE_OWNER_DRAWN 0
 #endif
 
 // Minimal setup e.g. for compiling small utilities

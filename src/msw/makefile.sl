@@ -5,75 +5,19 @@
 #
 # Makefile : Builds wxWindows library for Salford C++, WIN32
 
-# include $(WXDIR)\src\makesl.env
-
-FINAL=0
-SALFORDDIR=i:\salfordc
-
-.SUFFIXES:
-.SUFFIXES: .exe .obj .c .cc .cpp .res .rc .def .lib
-
-#WXDIR = d:\wx2\wxwind~1
-WXDIR = $(WXWIN)
-WXINC = $(WXDIR)\include
-
-# Suffixes
-OBJSUFF=obj
-SRCSUFF=cpp
-
-DEBUGFLAGS     = /DEFINE __WXDEBUG__
-
-RC = src
-
-CCC         = scc
-CC         =  scc
-MODEL       =
-# If you use win95, assumptions will be made about Win95 icon format etc.
-# so nt_win is probably better for simultaneous Win32s/Win95/NT operation.
-LINKOPTION  = nt_win # win95
-BINDCOMMAND = wrc
-WATLIBDIR   = $(WATCOMDIR)\lib386\nt
-MINDATA     =
-MAXDATA     =
-STACK       =
-# EXTRALIBS   = $(WXDIR)\lib\zlib.lib $(WXDIR)\lib\png.lib $(WXDIR)\lib\xpm.lib &
-#      $(WATLIBDIR)\odbc32.lib $(WATLIBDIR)\comctl32.lib $(WATLIBDIR)\comdlg32.lib &
-#      $(WATLIBDIR)\ole32.lib $(WATLIBDIR)\oleaut32.lib $(WATLIBDIR)\uuid.lib
-IFLAGS      = /INCLUDE $(WXINC) /INCLUDE $(SALFORDDIR)\include
-#RESFLAGS1   = -r -bt=nt /i$(WXDIR)\include
-#RESFLAGS2   = -R $(name) /i$(WXDIR)\include
-
-OPTFLAGS=
-
-# /d1 for line numbers only: anything else produces an enormous wx32.lib
-CPPFLAGS    = /WINDOWS /ERROR_NUMBERS /DELETE_OBJ_ON_ERROR /DEFINE WIN32 /DEFINE __WIN32__ /DEFINE __WIN95__ /DEFINE __WINDOWS__ /DEFINE __WXMSW__ /DEFINE __SALFORDC__ $(OPTFLAGS) $(DEBUGFLAGS) $(EXTRACPPFLAGS)
-
-#.cpp.obj:
-#    echo Compiling!
-#    $(CCC) $(CPPFLAGS) $(IFLAGS) $@ $*.cpp
-
-#.c.obj: # $< # .AUTODEPEND
-#    $(CC) $(CPPFLAGS) $(IFLAGS) $@ $*.cpp
-
-
-
-WXLIB = $(WXDIR)\lib
+include ..\makesl.env
 
 LIBTARGET   = $(WXLIB)\wx.lib
-DUMMY=dummydll
-# ODBCLIB     = ..\..\contrib\odbc\odbc32.lib
-
-EXTRATARGETS = xpm png zlib
-EXTRATARGETSCLEAN = clean_xpm clean_png clean_zlib
+EXTRATARGETS = # xpm png zlib
+EXTRATARGETSCLEAN = # clean_xpm clean_png clean_zlib
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
 XPMDIR=$(WXDIR)\src\xpm
 OLEDIR=ole
 MSWDIR=$(WXDIR)\src\msw
 
-DOCDIR = $(WXDIR)\docs
-
 GENERICOBJS= choicdgg.obj \
+  dirdlgg.obj \
   gridg.obj \
   laywin.obj \
   panelg.obj \
@@ -116,7 +60,6 @@ COMMONOBJS = cmndata.obj \
   layout.obj \
   log.obj \
   memory.obj \
-  mimetype.obj \
   module.obj \
   object.obj \
   prntbase.obj \
@@ -156,6 +99,7 @@ COMMONOBJS = cmndata.obj \
   wincmn.obj
 
 # Can't compile these yet under Salford C++
+#  mimetype.obj \
 #  odbc.obj \
 #  db.obj \
 #  dbtable.obj \
@@ -187,7 +131,6 @@ MSWOBJS = \
   dialog.obj \
   dib.obj \
   dibutils.obj \
-  dirdlg.obj \
   filedlg.obj \
   font.obj \
   fontdlg.obj \
@@ -242,10 +185,12 @@ MSWOBJS = \
   utils.obj \
   utilsexc.obj \
   wave.obj \
-  window.obj \
-  xpmhand.obj
+  window.obj
 
+# No OLE functions for wxDirDialog: use generic one instead
+#  dirdlg.obj \
 #  pnghand.obj \
+#  xpmhand.obj \
 
 OLEOBJS = \
   droptgt.obj \
@@ -256,23 +201,18 @@ OLEOBJS = \
   automtn.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(OLEOBJS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) # $(OLEOBJS)
 
 all:        $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS)
 
 $(LIBTARGET) : $(OBJECTS)
-    %create tmp.lnk
-    @%append tmp.lnk archive $(LIBTARGET)
-    @for %i in ( $(OBJECTS) ) do @%append tmp.lnk addobj %i
-    @%append file
-    slink @tmp.lnk
+    slink $$salford.lnk
 
 clean:   $(EXTRATARGETSCLEAN)
     -erase *.obj
     -erase $(LIBTARGET)
     -erase *.pch
     -erase *.err
-    -erase *.lnk
 
 cleanall:   clean
 
@@ -383,11 +323,17 @@ gaugemsw.obj:     $(MSWDIR)\gaugemsw.cpp
 gdiobj.obj:     $(MSWDIR)\gdiobj.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\gdiobj.cpp /BINARY gdiobj.obj
 
+helpwin.obj:     $(MSWDIR)\helpwin.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\helpwin.cpp /BINARY helpwin.obj
+
 icon.obj:     $(MSWDIR)\icon.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\icon.cpp /BINARY icon.obj
 
 imaglist.obj:     $(MSWDIR)\imaglist.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\imaglist.cpp /BINARY imaglist.obj
+
+iniconf.obj:     $(MSWDIR)\iniconf.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\iniconf.cpp /BINARY iniconf.obj
 
 joystick.obj:     $(MSWDIR)\joystick.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\joystick.cpp /BINARY joystick.obj
@@ -417,7 +363,7 @@ minifram.obj:     $(MSWDIR)\minifram.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\minifram.cpp /BINARY minifram.obj
 
 msgdlg.obj:     $(MSWDIR)\msgdlg.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\msgdlg.cpp /BINARY mdgdlg.obj
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\msgdlg.cpp /BINARY msgdlg.obj
 
 nativdlg.obj:     $(MSWDIR)\nativdlg.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\nativdlg.cpp /BINARY nativdlg.obj
@@ -471,7 +417,7 @@ slidrmsw.obj:     $(MSWDIR)\slidrmsw.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\slidrmsw.cpp /BINARY slidrmsw.obj
 
 slider95.obj:     $(MSWDIR)\slider95.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\slider95.cpp /BINARY slider.obj
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\slider95.cpp /BINARY slider95.obj
 
 spinbutt.obj:     $(MSWDIR)\spinbutt.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\spinbutt.cpp /BINARY spinbutt.obj
@@ -683,7 +629,7 @@ sckipc.obj:     $(COMMDIR)\sckipc.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\sckipc.cpp /BINARY sckipc.obj
 
 sckstrm.obj:     $(COMMDIR)\sckstrm.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\sckstrm.cpp /BINARY sockstrm.obj
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\sckstrm.cpp /BINARY sckstrm.obj
 
 url.obj:     $(COMMDIR)\url.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\url.cpp /BINARY url.obj
@@ -701,7 +647,7 @@ matrix.obj:     $(COMMDIR)\matrix.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\matrix.cpp /BINARY matrix.obj
 
 time.obj:     $(COMMDIR)\time.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\time.cpp /BINARY timer.obj
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\time.cpp /BINARY time.obj
 
 stream.obj:     $(COMMDIR)\stream.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\stream.cpp /BINARY stream.obj
@@ -742,6 +688,9 @@ choicdgg.obj:     $(GENDIR)\choicdgg.cpp
 
 colrdlgg.obj:     $(GENDIR)\colrdgg.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\colrdgg.cpp /BINARY colordgg.obj
+
+dirdlgg.obj:     $(GENDIR)\dirdlgg.cpp
+  $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\dirdlgg.cpp /BINARY dirdlgg.obj
 
 fontdlgg.obj:     $(GENDIR)\fontdlgg.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(GENDIR)\fontdlgg.cpp /BINARY fontdlgg.obj
@@ -911,9 +860,7 @@ zutil.obj: zutil.c zutil.h zlib.h zconf.h
 
 
 y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-  $(CC) $(CPPFLAGS) $(IFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
-
-#  *$(CC) $(CPPFLAGS) $(IFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS $(COMMDIR)\y_tab.c
+  $(CC) /ANSI_C $(CPPFLAGS) $(IFLAGS) /DEFINE USE_DEFINE $(COMMDIR)\y_tab.c /BINARY y_tab.obj
 
 $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
         copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
@@ -921,32 +868,32 @@ $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
 $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
-xpm:   .SYMBOLIC
+xpm:   
     cd $(WXDIR)\src\xpm
     wmake -f makefile.wat all
     cd $(WXDIR)\src\msw
 
-clean_xpm:   .SYMBOLIC
+clean_xpm:   
     cd $(WXDIR)\src\xpm
     wmake -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
-png:   .SYMBOLIC
+png:   
     cd $(WXDIR)\src\png
     wmake -f makefile.wat all
     cd $(WXDIR)\src\msw
 
-clean_png:   .SYMBOLIC
+clean_png:   
     cd $(WXDIR)\src\png
     wmake -f makefile.wat clean
     cd $(WXDIR)\src\msw
 
-zlib:   .SYMBOLIC
+zlib:   
     cd $(WXDIR)\src\zlib
     wmake -f makefile.wat all
     cd $(WXDIR)\src\msw
 
-clean_zlib:   .SYMBOLIC
+clean_zlib:   
     cd $(WXDIR)\src\zlib
     wmake -f makefile.wat clean
     cd $(WXDIR)\src\msw

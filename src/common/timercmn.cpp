@@ -33,6 +33,7 @@
 #endif
 
 #include <time.h>
+
 #ifndef __WXMAC__
 #include <sys/types.h>
 #endif
@@ -42,7 +43,8 @@
 #endif
 
 #if defined(__linux__) || defined(__SVR4__) || defined(__SYSV__) || defined(__SGI__) || \
-    defined(__ALPHA__) || defined(__GNUWIN32__) || defined(__FreeBSD__) || defined(__NetBSD__)
+    defined(__ALPHA__) || defined(__GNUWIN32__) || defined(__FreeBSD__) || defined(__NetBSD__) || \
+    defined(__SALFORDC__)
 #include <sys/time.h>
 #endif
 
@@ -147,11 +149,15 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *dstObserved = tp->tm_isdst;
 #else
 
-#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__)) && !defined(__GNUWIN32__) && !defined(__MWERKS__))
-#ifdef __BORLANDC__
+#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__))\
+   && !defined(__GNUWIN32__) && !defined(__MWERKS__) )
+#if defined(__BORLANDC__)
   /* Borland uses underscores */
   *timeZone = _timezone;
   *dstObserved = _daylight;
+#elif defined(__SALFORDC__)
+  *timeZone = _timezone;
+  *dstObserved = daylight;
 #else
   *timeZone = timezone;
   *dstObserved = daylight;

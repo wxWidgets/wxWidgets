@@ -205,7 +205,7 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
 
   int cx; // button font dimensions
   int cy;
-  wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
 
   int control_width, control_height;
 
@@ -233,7 +233,7 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
       for (i = 0; i < m_noStrings; i++)
       {
         wxString str(GetString(i));
-        GetTextExtent(str, &len, &ht, NULL, NULL, & GetFont());
+        GetTextExtent(str, &len, &ht, NULL, NULL, & this->GetFont());
         if ( len > longest)
             longest = len;
       }

@@ -88,7 +88,7 @@ wxString wxHTTP::GetHeader(const wxString& header)
 {
   wxNode *node = m_headers.Find(header);
   if (!node)
-    return (char *)NULL;
+    return wxEmptyString;
 
   return *((wxString *)node->Data());
 }

@@ -24,7 +24,7 @@
 #include "test.h"
 
 // If 1, use a dialog. Otherwise use a frame.
-#define USE_TABBED_DIALOG 0
+#define USE_TABBED_DIALOG 1
 
 MyDialog* dialog = (MyDialog *) NULL;
 MyFrame*  frame = (MyFrame *) NULL;

@@ -33,7 +33,7 @@
 
 #include <ctype.h>
 
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
 #include <direct.h>
 #ifndef __MWERKS__
 #include <dos.h>

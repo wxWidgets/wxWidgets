@@ -159,10 +159,12 @@ void wxDate::operator = (const wxString& dat)
 // Conversion operations
 //////////////////////////////////////////////////////////////
 
+#ifndef __SALFORDC__
 wxDate::operator wxString( void )
 {
   return FormatDate();
 }
+#endif
 
 //////////////////////////////////////////////////////////////
 // Date Arithmetic

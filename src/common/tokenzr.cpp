@@ -93,7 +93,7 @@ wxString wxStringTokenizer::NextToken()
   pos = FindDelims(m_string, m_delims);
   if (pos == -1) {
     r_string = m_string;
-    m_string = (char *)NULL;
+    m_string = wxEmptyString;
     
     return r_string;
   }

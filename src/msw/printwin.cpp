@@ -172,7 +172,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
   wxWindow *win = CreateAbortWindow(parent, printout);
   wxYield();
 
-#if defined(__BORLANDC__) || defined(__GNUWIN32__) || !defined(__WIN32__)
+#if defined(__BORLANDC__) || defined(__GNUWIN32__) || defined(__SALFORDC__) || !defined(__WIN32__)
   ::SetAbortProc((HDC) dc->GetHDC(), (FARPROC) m_lpAbortProc);
 #else
   ::SetAbortProc((HDC) dc->GetHDC(), (int (_stdcall *)

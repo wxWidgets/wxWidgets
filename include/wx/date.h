@@ -52,7 +52,10 @@ class WXDLLEXPORT wxDate: public wxObject
   wxDate (const wxString& dat);
   wxDate (const wxDate &dt);
 
+#ifndef __SALFORDC__
   operator wxString  (void);
+#endif
+
   void operator =   (const wxDate& date);
   void operator =   (const wxString& date);
 

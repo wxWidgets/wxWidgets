@@ -169,6 +169,7 @@ public:
   void SetMask(wxMask *mask) ;
 
   inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
+
   inline bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
   inline bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
 
@@ -208,5 +209,6 @@ public:
   wxBitmap GetBitmapForDC(wxDC& dc) const;
 
 };
+
 #endif
   // _WX_BITMAP_H_

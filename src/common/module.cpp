@@ -24,7 +24,14 @@
 #include "wx/hash.h"
 #include "wx/listimpl.cpp"
 
+#ifdef __SALFORDC__
+void wxwxModuleListNode::DeleteData()
+{
+    delete (_WX_LIST_ITEM_TYPE_wxModuleList *)GetData();
+}
+#else
 WX_DEFINE_LIST(wxModuleList);
+#endif
 
 IMPLEMENT_CLASS(wxModule, wxObject)
 

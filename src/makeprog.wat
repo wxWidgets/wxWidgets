@@ -32,7 +32,7 @@ clean:   .SYMBOLIC
     -erase *.err
     -erase *.pch
     -erase *.lib
-    -erase *.lnk
+    -erase $(LNK)
     -erase *.res
     -erase *.exe
     -erase *.lbc

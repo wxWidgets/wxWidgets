@@ -69,7 +69,7 @@ public:
   virtual bool Abort() = 0;
   virtual wxInputStream *GetInputStream(const wxString& path) = 0;
   virtual wxProtocolError GetError() = 0;
-  virtual wxString GetContentType() { return (char *)NULL; }
+  virtual wxString GetContentType() { return wxEmptyString; }
   virtual void SetUser(const wxString& WXUNUSED(user)) {}
   virtual void SetPassword(const wxString& WXUNUSED(passwd) ) {}
 };

@@ -409,7 +409,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
   int current_width, cyf;
 
   int cx1,cy1 ;
-  wxGetCharSize(m_hWnd, &cx1, &cy1, & GetFont());
+  wxGetCharSize(m_hWnd, &cx1, &cy1, & this->GetFont());
   // Attempt to have a look coherent with other platforms:
   // We compute the biggest toggle dim, then we align all
   // items according this value.
@@ -425,7 +425,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     {
       // It's a labelled toggle
       GetWindowText((HWND) m_radioButtons[i], buf, 300);
-      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
+      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & this->GetFont());
       eachWidth = (int)(current_width + RADIO_SIZE);
       eachHeight = (int)((3*cyf)/2);
     }
@@ -505,7 +505,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     {
       // It's a labeled item
       GetWindowText((HWND) m_radioButtons[i], buf, 300);
-      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
+      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & this->GetFont());
 
       // How do we find out radio button bitmap size!!
       // By adjusting them carefully, manually :-)

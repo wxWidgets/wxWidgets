@@ -808,7 +808,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxProperty, wxObject)
 
 wxProperty::wxProperty(void)
 {
-  m_propertyRole = (char *)NULL;
+  m_propertyRole = wxEmptyString;
   m_propertyValidator = NULL;
   m_propertyWindow = NULL;
   m_enabled = TRUE;

@@ -131,10 +131,10 @@ void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cy;
   int cyf;
 
-  wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
 
   GetTextExtent(wxGetWindowText(m_hWnd), &current_width, &cyf,
-                NULL,NULL, & GetFont());
+                NULL,NULL, & this->GetFont());
   if ( w1 < 0 )
    w1 = current_width + 3*cx;
   if ( h1 < 0 )

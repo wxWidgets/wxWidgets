@@ -56,6 +56,10 @@
 #include <sys/stat.h>
 #endif
 
+#ifdef __SALFORDC__
+#include <clib.h>
+#endif
+
 // Pattern matching code.
 // Yes, this path is deliberate (for Borland compilation)
 #ifdef wx_mac /* MATTHEW: [5] Mac doesn't like paths with "/" */
