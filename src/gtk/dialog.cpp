@@ -71,7 +71,7 @@ bool wxDialog::Create( wxWindow *parent,
                        const wxPoint &pos, const wxSize &size,
                        long style, const wxString &name )
 {
-    SetExtraStyle(GetExtraStyle() | wxTLW_EX_DIALOG);
+    SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
 
     return wxTopLevelWindow::Create(parent, id, title, pos, size, style, name);
 }

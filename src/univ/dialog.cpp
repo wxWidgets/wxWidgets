@@ -46,7 +46,7 @@ bool wxDialog::Create(wxWindow *parent,
                       const wxPoint &pos, const wxSize &size,
                       long style, const wxString &name)
 {
-    SetExtraStyle(GetExtraStyle() | wxTLW_EX_DIALOG);
+    SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
 
     // all dialogs should have tab traversal enabled
     style |= wxTAB_TRAVERSAL;

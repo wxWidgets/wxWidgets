@@ -31,7 +31,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
 class WXDLLEXPORT wxTopLevelWindowBase;
 
 // Dialogs are created in a special way
-#define wxTLW_EX_DIALOG             0x00000008
+#define wxTOPLEVEL_EX_DIALOG        0x00000008
 
 // Styles for ShowFullScreen
 // (note that wxTopLevelWindow only handles wxFULLSCREEN_NOBORDER and
