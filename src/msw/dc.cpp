@@ -2186,10 +2186,10 @@ wxDCCacheEntry::~wxDCCacheEntry()
 wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
 {
     int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
-    wxNode* node = sm_bitmapCache.First();
+    wxNode* node = sm_bitmapCache.GetFirst();
     while (node)
     {
-        wxDCCacheEntry* entry = (wxDCCacheEntry*) node->Data();
+        wxDCCacheEntry* entry = (wxDCCacheEntry*) node->GetData();
 
         if (entry->m_depth == depth)
         {
@@ -2207,7 +2207,7 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
             return entry;
         }
 
-        node = node->Next();
+        node = node->GetNext();
     }
     WXHBITMAP hBitmap = (WXHBITMAP) ::CreateCompatibleBitmap((HDC) dc, w, h);
     if ( !hBitmap)
@@ -2222,10 +2222,10 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
 wxDCCacheEntry* wxDC::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
 {
     int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
-    wxNode* node = sm_dcCache.First();
+    wxNode* node = sm_dcCache.GetFirst();
     while (node)
     {
-        wxDCCacheEntry* entry = (wxDCCacheEntry*) node->Data();
+        wxDCCacheEntry* entry = (wxDCCacheEntry*) node->GetData();
 
         // Don't return the same one as we already have
         if (!notThis || (notThis != entry))
@@ -2236,7 +2236,7 @@ wxDCCacheEntry* wxDC::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
             }
         }
 
-        node = node->Next();
+        node = node->GetNext();
     }
     WXHDC hDC = (WXHDC) ::CreateCompatibleDC((HDC) dc);
     if ( !hDC)

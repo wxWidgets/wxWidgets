@@ -196,12 +196,12 @@ wxExpr::wxExpr(wxList *the_list)
 
   wxExpr *listExpr = new wxExpr(wxExprList);
 
-  wxNode *node = the_list->First();
+  wxNode *node = the_list->GetFirst();
   while (node)
   {
-    wxExpr *expr = (wxExpr *)node->Data();
+    wxExpr *expr = (wxExpr *)node->GetData();
     listExpr->Append(expr);
-    node = node->Next();
+    node = node->GetNext();
   }
   Append(listExpr);
 
@@ -605,13 +605,13 @@ void wxExpr::AddAttributeValueStringList(const wxString& attribute, wxList *stri
 
   // First make a list of wxExpr strings
   wxExpr *listExpr = new wxExpr(wxExprList);
-  wxNode *node = string_list->First();
+  wxNode *node = string_list->GetFirst();
   while (node)
   {
     wxChar *string = (wxChar*)node->GetData();
     wxExpr *expr = new wxExpr(wxExprString, wxString(string));
     listExpr->Append(expr);
-    node = node->Next();
+    node = node->GetNext();
   }
 
   // Now make an (=, Att, Value) triple
@@ -907,7 +907,7 @@ wxExprDatabase::~wxExprDatabase(void)
 
 void wxExprDatabase::BeginFind(void)          // Initialise a search
 {
-  position = First();
+  position = GetFirst();
 }
 
 wxExpr *wxExprDatabase::FindClause(long id)  // Find a term based on an integer id attribute
@@ -916,7 +916,7 @@ wxExpr *wxExprDatabase::FindClause(long id)  // Find a term based on an integer 
   wxExpr *found = NULL;
   while (position && !found)
   {
-    wxExpr *term = (wxExpr *)position->Data();
+    wxExpr *term = (wxExpr *)position->GetData();
     
     if (term->Type() == wxExprList)
     {
@@ -924,7 +924,7 @@ wxExpr *wxExprDatabase::FindClause(long id)  // Find a term based on an integer 
       if (value->Type() == wxExprInteger && value->IntegerValue() == id)
         found = term;
     }
-    position = position->Next();
+    position = position->GetNext();
   }
   return found;
 }
@@ -935,7 +935,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, const wxString& val)
   wxExpr *found = NULL;
   while (position && !found)
   {
-    wxExpr *term = (wxExpr *)position->Data();
+    wxExpr *term = (wxExpr *)position->GetData();
     
     if (term->Type() == wxExprList)
     {
@@ -944,7 +944,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, const wxString& val)
           (value->Type() == wxExprString && value->StringValue() == val))
         found = term;
     }
-    position = position->Next();
+    position = position->GetNext();
   }
   return found;
 }
@@ -954,7 +954,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, long val)
   wxExpr *found = NULL;
   while (position && !found)
   {
-    wxExpr *term = (wxExpr *)position->Data();
+    wxExpr *term = (wxExpr *)position->GetData();
     
     if (term->Type() == wxExprList)
     {
@@ -962,7 +962,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, long val)
       if ((value->Type() == wxExprInteger) && (value->IntegerValue() == val))
         found = term;
     }
-    position = position->Next();
+    position = position->GetNext();
   }
   return found;
 }
@@ -972,7 +972,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, double val)
   wxExpr *found = NULL;
   while (position && !found)
   {
-    wxExpr *term = (wxExpr *)position->Data();
+    wxExpr *term = (wxExpr *)position->GetData();
     
     if (term->Type() == wxExprList)
     {
@@ -980,7 +980,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, double val)
       if ((value->Type() == wxExprReal) && (value->RealValue() == val))
         found = term;
     }
-    position = position->Next();
+    position = position->GetNext();
   }
   return found;
 }
@@ -990,14 +990,14 @@ wxExpr *wxExprDatabase::FindClauseByFunctor(const wxString& functor)
   wxExpr *found = NULL;
   while (position && !found)
   {
-    wxExpr *term = (wxExpr *)position->Data();
+    wxExpr *term = (wxExpr *)position->GetData();
     
     if (term->Type() == wxExprList)
     {
       if (term->Functor() == functor)
         found = term;
     }
-    position = position->Next();
+    position = position->GetNext();
   }
   return found;
 }
@@ -1048,13 +1048,13 @@ wxExpr *wxExprDatabase::HashFind(const wxString& functor, const wxString& value)
 void wxExprDatabase::ClearDatabase(void)
 {
   noErrors = 0;
-  wxNode *node = First();
+  wxNode *node = GetFirst();
   while (node)
   {
-    wxExpr *expr = (wxExpr *)node->Data();
+    wxExpr *expr = (wxExpr *)node->GetData();
     delete expr;
     delete node;
-    node = First();
+    node = GetFirst();
   }
 
   if (hash_table)
@@ -1110,12 +1110,12 @@ bool wxExprDatabase::Write(const wxString& fileName)
 bool wxExprDatabase::Write(FILE *stream)
 {
   noErrors = 0;
-  wxNode *node = First();
+  wxNode *node = GetFirst();
   while (node)
   {
-    wxExpr *expr = (wxExpr *)node->Data();
+    wxExpr *expr = (wxExpr *)node->GetData();
     expr->WriteClause(stream);
-    node = node->Next();
+    node = node->GetNext();
   }
   return (noErrors == 0);
 }
