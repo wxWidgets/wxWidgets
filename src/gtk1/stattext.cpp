@@ -4,12 +4,12 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
 #ifdef __GNUG__
-#pragma implementation "stattext.h"
+    #pragma implementation "stattext.h"
 #endif
 
 #include "wx/stattext.h"
@@ -23,27 +23,39 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText,wxControl)
 
-wxStaticText::wxStaticText(void)
+wxStaticText::wxStaticText()
 {
 }
 
-wxStaticText::wxStaticText( wxWindow *parent, wxWindowID id, const wxString &label, 
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+wxStaticText::wxStaticText(wxWindow *parent,
+                           wxWindowID id,
+                           const wxString &label,
+                           const wxPoint &pos,
+                           const wxSize &size,
+                           long style,
+                           const wxString &name)
 {
   Create( parent, id, label, pos, size, style, name );
 }
 
-bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &label, 
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+bool wxStaticText::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxString &label,
+                          const wxPoint &pos,
+                          const wxSize &size,
+                          long style,
+                          const wxString &name )
 {
     m_needParent = TRUE;
-  
+
     wxSize newSize = size;
-  
+
     PreCreation( parent, id, pos, size, style, name );
-  
+
+    // notice that we call the base class version which will just remove the
+    // '&' characters from the string, but not set the label's text to it
+    // because the label is not yet created and because SetLabel() has a side
+    // effect of changing the control size which might not be desirable
     wxControl::SetLabel(label);
     m_widget = gtk_label_new( m_label );
 
@@ -58,24 +70,24 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
 
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
-    
+
     if (newSize.x == -1) newSize.x = req.width;
     if (newSize.y == -1) newSize.y = req.height;
-	
+
     SetSize( newSize.x, newSize.y );
-  
+
     m_parent->AddChild( this );
 
     (m_parent->m_insertCallback)( m_parent, this );
-  
+
     PostCreation();
-  
+
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
     SetFont( parent->GetFont() );
 
     Show( TRUE );
-    
+
     return TRUE;
 }
 
@@ -83,8 +95,8 @@ wxString wxStaticText::GetLabel(void) const
 {
     char *str = (char *) NULL;
     gtk_label_get( GTK_LABEL(m_widget), &str );
-    wxString tmp( str );
-    return tmp;
+
+    return wxString(str);
 }
 
 void wxStaticText::SetLabel( const wxString &label )
@@ -92,11 +104,20 @@ void wxStaticText::SetLabel( const wxString &label )
     wxControl::SetLabel(label);
 
     gtk_label_set( GTK_LABEL(m_widget), m_label );
-} 
+
+    // adjust the label size to the new label
+
+    // TODO there should be a way to prevent SetLabel() from doing it (an
+    //      additional parameter?)
+    GtkRequisition req;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
+
+    SetSize( req.width, req.height );
+}
 
 void wxStaticText::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
-  
+
