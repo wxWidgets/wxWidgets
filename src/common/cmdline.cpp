@@ -41,6 +41,7 @@
 
 #include "wx/datetime.h"
 #include "wx/cmdline.h"
+#include "wx/app.h"
 
 // ----------------------------------------------------------------------------
 // private functions
