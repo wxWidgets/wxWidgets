@@ -189,6 +189,17 @@ public :
     virtual void ShowPosition( long WXUNUSED(pos) ) ;
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
+
+#ifndef __WXMAC_OSX__
+    virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;
+    virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) = 0 ;
+    virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) = 0 ;
+    virtual void            MacControlUserPaneIdleProc() = 0 ;
+    virtual wxInt16         MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers) = 0 ;
+    virtual void            MacControlUserPaneActivateProc(bool activating) = 0 ;
+    virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) = 0 ;
+    virtual void            MacControlUserPaneBackgroundProc(void* info) = 0 ;
+#endif
 } ;
 
 // common parts for implementations based on MLTE
@@ -287,7 +298,7 @@ protected :
 
 #endif
 
-// implementation available under classic
+// 'classic' MLTE implementation
 
 class STPTextPaneVars ;
 
@@ -301,6 +312,16 @@ public :
     ~wxMacMLTEClassicControl() ;
     virtual void VisibilityChanged(bool shown) ;
     virtual bool NeedsFocusRect() const;
+
+    virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
+    virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
+    virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) ;
+    virtual void            MacControlUserPaneIdleProc() ;
+    virtual wxInt16         MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers) ;
+    virtual void            MacControlUserPaneActivateProc(bool activating) ;
+    virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
+    virtual void            MacControlUserPaneBackgroundProc(void* info) ;
+
 protected :
     OSStatus                 DoCreate();
 public :
@@ -372,7 +393,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         style |= wxTE_PROCESS_ENTER ;
     }
 
-#if TARGET_API_MAC_OSX
+#ifdef __WXMAC_OSX__
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     if ( UMAGetSystemVersion() >= 0x1030 )
     {
@@ -968,43 +989,49 @@ bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
     return true ;
 }
 #if !TARGET_API_MAC_OSX
+
 // user pane implementation
 
 void wxTextCtrl::MacControlUserPaneDrawProc(wxInt16 part)
 {
+    GetPeer()->MacControlUserPaneDrawProc( part ) ;
 }
 
 wxInt16 wxTextCtrl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y)
 {
-    return kControlNoPart ;
+    return GetPeer()->MacControlUserPaneHitTestProc( x , y ) ;
 }
 
 wxInt16 wxTextCtrl::MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc)
 {
-    return kControlNoPart ;
+    return GetPeer()->MacControlUserPaneTrackingProc( x , y , actionProc ) ;
 }
 
 void wxTextCtrl::MacControlUserPaneIdleProc()
 {
+    GetPeer()->MacControlUserPaneIdleProc( ) ;
 }
 
 wxInt16 wxTextCtrl::MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers)
 {
-    return kControlNoPart ;
+    return GetPeer()->MacControlUserPaneKeyDownProc( keyCode , charCode , modifiers ) ;
 }
 
 void wxTextCtrl::MacControlUserPaneActivateProc(bool activating)
 {
+    GetPeer()->MacControlUserPaneActivateProc( activating ) ;
 }
 
 wxInt16 wxTextCtrl::MacControlUserPaneFocusProc(wxInt16 action)
 {
-    return kControlNoPart ;
+    return GetPeer()->MacControlUserPaneFocusProc( action ) ;
 }
 
 void wxTextCtrl::MacControlUserPaneBackgroundProc(void* info)
 {
+    GetPeer()->MacControlUserPaneBackgroundProc( info ) ;
 }
+
 #endif
 // ----------------------------------------------------------------------------
 // implementation base class
@@ -2024,7 +2051,8 @@ OSStatus MLTESetObjectVisibility( STPTextPaneVars *varsp, Boolean vis , long wxS
 }
 
 // make sure we don't miss changes as carbon events are not available for these under classic
-static void TPUpdateVisibility(ControlRef theControl) {
+static void TPUpdateVisibility(ControlRef theControl) 
+{
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
     if ( textctrl == NULL )
         return ;
@@ -2082,29 +2110,29 @@ static void TPRedrawFocusOutline(STPTextPaneVars *varsp) {
 static void TPFocusPaneText(STPTextPaneVars *varsp, Boolean setFocus) {
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(varsp->fUserPaneRec);
 
-    if (varsp->fInFocus != setFocus && textctrl->MacIsReallyShown()) {
+    if (varsp->fInFocus != setFocus /*&& textctrl->MacIsReallyShown() */ ) {
         varsp->fInFocus = setFocus;
         TXNFocus( varsp->fTXNRec, varsp->fInFocus);
     }
 }
 
 // draw the control
-static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart) {
+void wxMacMLTEClassicControl::MacControlUserPaneDrawProc(wxInt16 thePart) 
+{
     /* set up our globals */
 
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( textctrl == NULL )
         return ;
-    TPUpdateVisibility( theControl ) ;
+    TPUpdateVisibility( m_controlRef ) ;
 
-    STPTextPaneVars *varsp = (STPTextPaneVars *) ((wxMacMLTEClassicControl*)textctrl->GetPeer())->m_macTXNvars ;
     if ( textctrl->MacIsReallyShown() )
     {
         wxMacWindowClipper clipper( textctrl ) ;
-        TXNDraw(varsp->fTXNRec, NULL);
-        if ( !varsp->fNoBorders )
-            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-        TPRedrawFocusOutline( varsp ) ;
+        TXNDraw(m_txn, NULL);
+        if ( !m_macTXNvars->fNoBorders )
+            DrawThemeEditTextFrame(&m_macTXNvars->fRTextOutline, m_macTXNvars->fIsActive ? kThemeStateActive: kThemeStateInactive);
+        TPRedrawFocusOutline( m_macTXNvars ) ;
     }
 }
 
@@ -2113,18 +2141,21 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
 like to determine what part of the control the mouse resides over.
 We also call this routine from our tracking proc to determine how
 to handle mouse clicks. */
-static pascal ControlPartCode TPPaneHitTestProc(ControlRef theControl, Point where) {
+wxInt16 wxMacMLTEClassicControl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) 
+{
+    Point where = { y , x } ;
     ControlPartCode result;
     /* set up our locals and lock down our globals*/
     result = 0;
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( textctrl == NULL )
         return 0 ;
-    TPUpdateVisibility( theControl ) ;
-    STPTextPaneVars *varsp = (STPTextPaneVars *) ((wxMacMLTEClassicControl*)textctrl->GetPeer())->m_macTXNvars ;
+        
+    TPUpdateVisibility( m_controlRef ) ;
+
     if (textctrl->MacIsReallyShown() )
     {
-        if (PtInRect(where, &varsp->fRBounds))
+        if (PtInRect(where, &m_macTXNvars->fRBounds))
             result = kmUPTextPart;
         else
         {
@@ -2136,7 +2167,7 @@ static pascal ControlPartCode TPPaneHitTestProc(ControlRef theControl, Point whe
                 where.h += x ;
                 where.v += y ;
             }
-            if (PtInRect(where, &varsp->fRBounds))
+            if (PtInRect(where, &m_macTXNvars->fRBounds))
                 result = kmUPTextPart;
             else
                 result = 0;
@@ -2145,31 +2176,29 @@ static pascal ControlPartCode TPPaneHitTestProc(ControlRef theControl, Point whe
     return result;
 }
 
-
-
-
-
 /* TPPaneTrackingProc is called when the mouse is being held down
 over our control.  This routine handles clicks in the text area
 and in the scroll bar. */
-static pascal ControlPartCode TPPaneTrackingProc(ControlRef theControl, Point startPt, ControlActionUPP actionProc) {
 
+wxInt16 wxMacMLTEClassicControl::MacControlUserPaneTrackingProc( wxInt16 x, wxInt16 y, void* actionProc ) 
+{
+    Point startPt = { y ,x } ;
     ControlPartCode partCodeResult;
     /* make sure we have some variables... */
     partCodeResult = 0;
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( textctrl == NULL )
         return 0;
-    TPUpdateVisibility( theControl ) ;
-    STPTextPaneVars *varsp = (STPTextPaneVars *) ((wxMacMLTEClassicControl*)textctrl->GetPeer())->m_macTXNvars ;
+    TPUpdateVisibility( m_controlRef ) ;
+
     if (textctrl->MacIsReallyShown() )
     {
         /* we don't do any of these functions unless we're in focus */
-        if ( ! varsp->fInFocus) {
+        if ( ! m_macTXNvars->fInFocus) {
             WindowPtr owner;
-            owner = GetControlOwner(theControl);
+            owner = GetControlOwner(m_controlRef);
             ClearKeyboardFocus(owner);
-            SetKeyboardFocus(owner, theControl, kUserClickedToFocusPart);
+            SetKeyboardFocus(owner, m_controlRef, kUserClickedToFocusPart);
         }
         /* find the location for the click */
         // for compositing, we must convert these into toplevel window coordinates, because hittesting expects them
@@ -2181,7 +2210,7 @@ static pascal ControlPartCode TPPaneTrackingProc(ControlRef theControl, Point st
             startPt.v += y ;
         }
 
-        switch (TPPaneHitTestProc(theControl, startPt))
+        switch (MacControlUserPaneHitTestProc( startPt.h , startPt.v ))
         {
             /* handle clicks in the text part */
             case kmUPTextPart:
@@ -2190,7 +2219,7 @@ static pascal ControlPartCode TPPaneTrackingProc(ControlRef theControl, Point st
 
                 EventRecord rec ;
                 ConvertEventRefToEventRecord( (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) ;
-                TXNClick( varsp->fTXNRec, &rec );
+                TXNClick( m_txn, &rec );
 
             }
                 break;
@@ -2203,40 +2232,47 @@ static pascal ControlPartCode TPPaneTrackingProc(ControlRef theControl, Point st
 
 /* TPPaneIdleProc is our user pane idle routine.  When our text field
 is active and in focus, we use this routine to set the cursor. */
-static pascal void TPPaneIdleProc(ControlRef theControl) {
+void wxMacMLTEClassicControl::MacControlUserPaneIdleProc() 
+{
     /* set up locals */
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( textctrl == NULL )
         return ;
-    TPUpdateVisibility( theControl ) ;
-    STPTextPaneVars *varsp = (STPTextPaneVars *) ((wxMacMLTEClassicControl*)textctrl->GetPeer())->m_macTXNvars ;
-    if (textctrl->MacIsReallyShown()) {
+    TPUpdateVisibility( m_controlRef ) ;
+
+    if (textctrl->MacIsReallyShown()) 
+    {
         /* if we're not active, then we have nothing to say about the cursor */
-        if (varsp->fIsActive) {
+        if (m_macTXNvars->fIsActive) 
+        {
             Rect bounds;
             Point mousep;
 
             wxMacWindowClipper clipper( textctrl ) ;
             GetMouse(&mousep);
             /* there's a 'focus thing' and an 'unfocused thing' */
-            if (varsp->fInFocus) {
+            if (m_macTXNvars->fInFocus) 
+            {
                 /* flash the cursor */
-                SetPort(varsp->fDrawingEnvironment);
-                TXNIdle(varsp->fTXNRec);
+                SetPort(m_macTXNvars->fDrawingEnvironment);
+                TXNIdle(m_macTXNvars->fTXNRec);
                 /* set the cursor */
-                if (PtInRect(mousep, &varsp->fRTextArea)) {
+                if (PtInRect(mousep, &m_macTXNvars->fRTextArea)) 
+                {
                     RgnHandle theRgn;
-                    RectRgn((theRgn = NewRgn()), &varsp->fRTextArea);
-                    TXNAdjustCursor(varsp->fTXNRec, theRgn);
+                    RectRgn((theRgn = NewRgn()), &m_macTXNvars->fRTextArea);
+                    TXNAdjustCursor(m_macTXNvars->fTXNRec, theRgn);
                     DisposeRgn(theRgn);
                 }
                 else
                 {
                     // SetThemeCursor(kThemeArrowCursor);
                 }
-            } else {
+            } 
+            else 
+            {
                 /* if it's in our bounds, set the cursor */
-                UMAGetControlBoundsInWindowCoords(theControl, &bounds);
+                UMAGetControlBoundsInWindowCoords(m_controlRef, &bounds);
                 if (PtInRect(mousep, &bounds))
                 {
                     //    SetThemeCursor(kThemeArrowCursor);
@@ -2250,16 +2286,14 @@ static pascal void TPPaneIdleProc(ControlRef theControl) {
 /* TPPaneKeyDownProc is called whenever a keydown event is directed
 at our control.  Here, we direct the keydown event to the text
 edit record and redraw the scroll bar and text field as appropriate. */
-static pascal ControlPartCode TPPaneKeyDownProc(ControlRef theControl,
-                                                SInt16 keyCode, SInt16 charCode, SInt16 modifiers) {
-
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
+wxInt16 wxMacMLTEClassicControl::MacControlUserPaneKeyDownProc (wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers) 
+{
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( textctrl == NULL )
         return 0;
-    TPUpdateVisibility( theControl ) ;
+    TPUpdateVisibility( m_controlRef ) ;
 
-    STPTextPaneVars *varsp = (STPTextPaneVars *) ((wxMacMLTEClassicControl*)textctrl->GetPeer())->m_macTXNvars ;
-    if (varsp->fInFocus)
+    if (m_macTXNvars->fInFocus)
     {
         /* turn autoscrolling on and send the key event to text edit */
         wxMacWindowClipper clipper( textctrl ) ;
@@ -2268,7 +2302,7 @@ static pascal ControlPartCode TPPaneKeyDownProc(ControlRef theControl,
         ev.what = keyDown ;
         ev.modifiers = modifiers ;
         ev.message = (( keyCode << 8 ) & keyCodeMask ) + ( charCode & charCodeMask ) ;
-        TXNKeyDown( varsp->fTXNRec, &ev);
+        TXNKeyDown( m_txn , &ev);
     }
     return kControlEntireControl;
 }
@@ -2277,25 +2311,25 @@ static pascal ControlPartCode TPPaneKeyDownProc(ControlRef theControl,
 /* TPPaneActivateProc is called when the window containing
 the user pane control receives activate events. Here, we redraw
 the control and it's text as necessary for the activation state. */
-static pascal void TPPaneActivateProc(ControlRef theControl, Boolean activating) {
+
+void wxMacMLTEClassicControl::MacControlUserPaneActivateProc( bool activating) 
+{
     /* set up locals */
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
 
     if ( textctrl == NULL )
         return ;
-    TPUpdateVisibility( theControl ) ;
+    TPUpdateVisibility( m_controlRef ) ;
 
-    STPTextPaneVars *varsp = (STPTextPaneVars *) ((wxMacMLTEClassicControl*)textctrl->GetPeer())->m_macTXNvars ;
-
-    varsp->fIsActive = activating;
+    m_macTXNvars->fIsActive = activating;
     wxMacWindowClipper clipper( textctrl ) ;
-    TPActivatePaneText(varsp, varsp->fIsActive && varsp->fInFocus);
+    TPActivatePaneText(m_macTXNvars, m_macTXNvars->fIsActive && m_macTXNvars->fInFocus);
     /* redraw the frame */
     if ( textctrl->MacIsReallyShown() )
     {
-        if ( !varsp->fNoBorders )
-            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-        TPRedrawFocusOutline( varsp ) ;
+        if ( !m_macTXNvars->fNoBorders )
+            DrawThemeEditTextFrame(&m_macTXNvars->fRTextOutline, m_macTXNvars->fIsActive ? kThemeStateActive: kThemeStateInactive);
+        TPRedrawFocusOutline( m_macTXNvars ) ;
     }
 }
 
@@ -2304,15 +2338,16 @@ static pascal void TPPaneActivateProc(ControlRef theControl, Boolean activating)
 from our control.  Herein, switch the focus appropriately
 according to the parameters and redraw the control as
 necessary.  */
-static pascal ControlPartCode TPPaneFocusProc(ControlRef theControl, ControlFocusPart action) {
+wxInt16 wxMacMLTEClassicControl::MacControlUserPaneFocusProc(wxInt16 action) 
+{
     ControlPartCode focusResult;
 
     focusResult = kControlFocusNoPart;
-    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(theControl);
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(m_controlRef);
     if ( textctrl == NULL )
         return 0;
-    TPUpdateVisibility( theControl ) ;
-    STPTextPaneVars *varsp = (STPTextPaneVars *) ((wxMacMLTEClassicControl*)textctrl->GetPeer())->m_macTXNvars ;
+    TPUpdateVisibility( m_controlRef ) ;
+
     /* if kControlFocusPrevPart and kControlFocusNextPart are received when the user is
         tabbing forwards (or shift tabbing backwards) through the items in the dialog,
         and kControlFocusNextPart will be received.  When the user clicks in our field
@@ -2331,33 +2366,38 @@ static pascal ControlPartCode TPPaneFocusProc(ControlRef theControl, ControlFocu
         kUserClickedToFocusPart - is a constant defined for this example.  You should
         define your own value for handling click-to-focus type events. */
     /* calculate the next highlight state */
-    switch (action) {
+    switch (action) 
+    {
         default:
         case kControlFocusNoPart:
-            TPFocusPaneText(varsp, false);
+            TPFocusPaneText(m_macTXNvars, false);
             focusResult = kControlFocusNoPart;
             break;
         case kUserClickedToFocusPart:
-            TPFocusPaneText(varsp, true);
+            TPFocusPaneText(m_macTXNvars, true);
             focusResult = 1;
             break;
         case kControlFocusPrevPart:
         case kControlFocusNextPart:
-            TPFocusPaneText(varsp, ( ! varsp->fInFocus));
-            focusResult = varsp->fInFocus ? 1 : kControlFocusNoPart;
+            TPFocusPaneText(m_macTXNvars, ( ! m_macTXNvars->fInFocus));
+            focusResult = m_macTXNvars->fInFocus ? 1 : kControlFocusNoPart;
             break;
     }
-    TPActivatePaneText(varsp, varsp->fIsActive && varsp->fInFocus);
+    TPActivatePaneText(m_macTXNvars, m_macTXNvars->fIsActive && m_macTXNvars->fInFocus);
     /* redraw the text fram and focus rectangle to indicate the
         new focus state */
     if ( textctrl->MacIsReallyShown() )
     {
         wxMacWindowClipper c( textctrl ) ;
-        if ( !varsp->fNoBorders )
-            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-        TPRedrawFocusOutline( varsp ) ;
+        if ( !m_macTXNvars->fNoBorders )
+            DrawThemeEditTextFrame(&m_macTXNvars->fRTextOutline, m_macTXNvars->fIsActive ? kThemeStateActive: kThemeStateInactive);
+        TPRedrawFocusOutline( m_macTXNvars ) ;
     }
     return focusResult;
+}
+
+void wxMacMLTEClassicControl::MacControlUserPaneBackgroundProc( void *info )
+{
 }
 
 wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxWindow *wxPeer,
@@ -2421,6 +2461,81 @@ bool wxMacMLTEClassicControl::NeedsFocusRect() const
     return true;
 }
 
+#ifdef __WXMAC_OSX__
+
+static pascal void wxMacControlUserPaneDrawProc(ControlRef control, SInt16 part)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        win->MacControlUserPaneDrawProc(part) ;
+}
+
+static pascal ControlPartCode wxMacControlUserPaneHitTestProc(ControlRef control, Point where)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        return win->MacControlUserPaneHitTestProc(where.h , where.v) ;
+    else
+        return kControlNoPart ;
+}
+
+static pascal ControlPartCode wxMacControlUserPaneTrackingProc(ControlRef control, Point startPt, ControlActionUPP actionProc)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        return win->MacControlUserPaneTrackingProc( startPt.h , startPt.v , (void*) actionProc) ;
+    else
+        return kControlNoPart ;
+}
+
+static pascal void wxMacControlUserPaneIdleProc(ControlRef control)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        win->MacControlUserPaneIdleProc() ;
+}
+
+static pascal ControlPartCode wxMacControlUserPaneKeyDownProc(ControlRef control, SInt16 keyCode, SInt16 charCode, SInt16 modifiers)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        return win->MacControlUserPaneKeyDownProc(keyCode,charCode,modifiers) ;
+    else
+        return kControlNoPart ;
+}
+
+static pascal void wxMacControlUserPaneActivateProc(ControlRef control, Boolean activating)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        win->MacControlUserPaneActivateProc(activating) ;
+}
+
+static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, ControlFocusPart action)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        return win->MacControlUserPaneFocusProc(action) ;
+    else
+        return kControlNoPart ;
+}
+
+static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, ControlBackgroundPtr info)
+{
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    if ( win )
+        win->MacControlUserPaneBackgroundProc(info) ;
+}
+#endif
+
 OSStatus wxMacMLTEClassicControl::DoCreate()
 {
     Rect bounds;
@@ -2429,13 +2544,15 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     OSStatus err = noErr ;
 
     /* set up our globals */
-    if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(TPPaneDrawProc);
-    if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(TPPaneHitTestProc);
-    if (gTPTrackProc == NULL) gTPTrackProc = NewControlUserPaneTrackingUPP(TPPaneTrackingProc);
-    if (gTPIdleProc == NULL) gTPIdleProc = NewControlUserPaneIdleUPP(TPPaneIdleProc);
-    if (gTPKeyProc == NULL) gTPKeyProc = NewControlUserPaneKeyDownUPP(TPPaneKeyDownProc);
-    if (gTPActivateProc == NULL) gTPActivateProc = NewControlUserPaneActivateUPP(TPPaneActivateProc);
-    if (gTPFocusProc == NULL) gTPFocusProc = NewControlUserPaneFocusUPP(TPPaneFocusProc);
+#ifdef __WXMAC_OSX__
+    if (gTPDrawProc == NULL) gTPDrawProc = NewControlUserPaneDrawUPP(wxMacControlUserPaneDrawProc);
+    if (gTPHitProc == NULL) gTPHitProc = NewControlUserPaneHitTestUPP(wxMacControlUserPaneHitTestProc);
+    if (gTPTrackProc == NULL) gTPTrackProc = NewControlUserPaneTrackingUPP(wxMacControlUserPaneTrackingProc);
+    if (gTPIdleProc == NULL) gTPIdleProc = NewControlUserPaneIdleUPP(wxMacControlUserPaneIdleProc);
+    if (gTPKeyProc == NULL) gTPKeyProc = NewControlUserPaneKeyDownUPP(wxMacControlUserPaneKeyDownProc);
+    if (gTPActivateProc == NULL) gTPActivateProc = NewControlUserPaneActivateUPP(wxMacControlUserPaneActivateProc);
+    if (gTPFocusProc == NULL) gTPFocusProc = NewControlUserPaneFocusUPP(wxMacControlUserPaneFocusProc);
+#endif
 
     /* allocate our private storage */
     m_macTXNvars = (STPTextPaneVars *) malloc(sizeof(STPTextPaneVars));
@@ -2454,6 +2571,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 
     m_macTXNvars->fDrawingEnvironment = (GrafPtr)  GetWindowPort(theWindow);
 
+#ifdef __WXMAC_OSX__
     /* set up the user pane procedures */
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneDrawProcTag, sizeof(gTPDrawProc), &gTPDrawProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneHitTestProcTag, sizeof(gTPHitProc), &gTPHitProc);
@@ -2462,7 +2580,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneKeyDownProcTag, sizeof(gTPKeyProc), &gTPKeyProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneActivateProcTag, sizeof(gTPActivateProc), &gTPActivateProc);
     SetControlData(m_controlRef, kControlEntireControl, kControlUserPaneFocusProcTag, sizeof(gTPFocusProc), &gTPFocusProc);
-
+#endif
     /* calculate the rectangles used by the control */
     UMAGetControlBoundsInWindowCoords(m_controlRef, &bounds);
     m_macTXNvars->fRTextOutlineRegion = NewRgn() ;
@@ -2484,7 +2602,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     m_txn = m_macTXNvars->fTXNRec ;
 
     /* perform final activations and setup for our text field.  Here,
-        we assume that the window is going to be the 'active' window. */
+    we assume that the window is going to be the 'active' window. */
     TPActivatePaneText(m_macTXNvars, m_macTXNvars->fIsActive && m_macTXNvars->fInFocus);
     /* all done */
     return err;
