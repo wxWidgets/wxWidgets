@@ -28,7 +28,9 @@
 #include "scorefil.h"
 #include "scoredg.h"
 
-#define USE_GRID_FOR_SCORE 0
+// adjust USE_GRID_FOR_SCORE with O or 1 to your preferences
+// by default it takes wxGrid component for score display if available in target port
+#define USE_GRID_FOR_SCORE     wxUSE_GRID
 
 #if USE_GRID_FOR_SCORE
 #include "wx/grid.h"
@@ -177,14 +179,21 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     list->EnableDragRowSize(false);
     list->EnableDragColSize(false);
     list->EnableDragGridSize(false);
+    list->ClearSelection();
+    list->EnableEditing(false);
+    sz.x = wxDefaultCoord;
 #else
     ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile, wxDefaultPosition, sz);
 #endif
 
+    list->SetBestFittingSize(sz);
+
     // locate and resize with sizers
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
     topsizer->Add( list, 1, wxALL|wxGROW, 10 );
-    topsizer->Add( new wxButton(this, wxID_OK, _("OK")), 0, wxALIGN_CENTER_HORIZONTAL|wxALL , 10 );
+    wxButton *button = new wxButton(this, wxID_OK, _("OK"));
+    topsizer->Add( button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL , 10 );
+    button->SetFocus();
 
     SetSizer( topsizer );
 
@@ -200,7 +209,7 @@ ScoreDialog::~ScoreDialog()
 
 void ScoreDialog::Display()
 {
-    Show(true);
+    ShowModal();
 }
 
 void ScoreDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
