@@ -12,40 +12,42 @@
 // Define a new application
 class MyApp: public wxApp
 {
-  public:
-    bool OnInit();
-    int OnExit();
+public:
+    virtual bool OnInit();
+    virtual int OnExit();
 };
 
 // Define a new frame
 class MyFrame: public wxFrame
 {
-  public:
-    wxPanel *panel;
+public:
+    MyFrame(wxFrame *frame, const wxString& title);
 
-    MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
-    void OnCloseWindow(wxCloseEvent& event);
     void OnExit(wxCommandEvent& event);
     void OnExecute(wxCommandEvent& event);
     void OnPoke(wxCommandEvent& event);
     void OnRequest(wxCommandEvent& event);
-DECLARE_EVENT_TABLE()
+
+private:
+    wxPanel *panel;
+
+    DECLARE_EVENT_TABLE()
 };
 
 class MyConnection: public wxConnection
 {
- public:
-  MyConnection();
-  ~MyConnection();
-  bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format);
-  bool OnDisconnect();
+public:
+    MyConnection();
+    ~MyConnection();
+
+    bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format);
+    bool OnDisconnect();
 };
 
 class MyClient: public wxClient
 {
- public:
-  MyClient();
-  wxConnectionBase *OnMakeConnection();
+public:
+    wxConnectionBase *OnMakeConnection();
 };
 
 #define CLIENT_QUIT     wxID_EXIT

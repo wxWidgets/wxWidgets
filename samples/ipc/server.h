@@ -10,41 +10,47 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Define a new application
-class MyApp: public wxApp
+class MyServer;
+class MyApp : public wxApp
 {
-  public:
-    bool OnInit();
+public:
+    virtual bool OnInit();
+    virtual int OnExit();
+
+private:
+    MyServer *m_server;
 };
 
 DECLARE_APP(MyApp)
 
 // Define a new frame
-class MyFrame: public wxFrame
+class MyFrame : public wxFrame
 {
-  public:
+public:
+    MyFrame(wxFrame *frame, const wxString& title);
+
+    void OnListBoxClick(wxCommandEvent& event);
+
+private:
     wxPanel *panel;
 
-    MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
-
-    void OnCloseWindow(wxCloseEvent& event);
-    void OnExit(wxCommandEvent& event);
-    void OnListBoxClick(wxCommandEvent& event);
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 class IPCDialogBox;
-class MyConnection: public wxConnection
+class MyConnection : public wxConnection
 {
- public:
-  IPCDialogBox *dialog;
+public:
+    MyConnection(char *buf, int size);
+    ~MyConnection();
 
-  MyConnection(char *buf, int size);
-  ~MyConnection();
+    bool OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format);
+    char *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
+    bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format);
+    bool OnStartAdvise(const wxString& topic, const wxString& item);
 
-  bool OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format);
-  char *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
-  bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format);
-  bool OnStartAdvise(const wxString& topic, const wxString& item);
+private:
+    IPCDialogBox *dialog;
 };
 
 class MyServer: public wxServer
@@ -56,13 +62,18 @@ public:
 class IPCDialogBox: public wxDialog
 {
 public:
-    MyConnection *connection;
-    IPCDialogBox(wxFrame *parent, const wxString& title,
-                         const wxPoint& pos, const wxSize& size, MyConnection *the_connection);
+    IPCDialogBox(wxWindow *parent,
+                 const wxString& title,
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 MyConnection *the_connection);
 
     void OnQuit(wxCommandEvent& event);
 
-DECLARE_EVENT_TABLE()
+private:
+    MyConnection *m_connection;
+
+    DECLARE_EVENT_TABLE()
 };
 
 #define SERVER_QUIT         wxID_EXIT
