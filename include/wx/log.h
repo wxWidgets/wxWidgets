@@ -240,6 +240,8 @@ private:
 // log everything to a "FILE *", stderr by default
 class WXDLLEXPORT wxLogStderr : public wxLog
 {
+    DECLARE_NO_COPY_CLASS(wxLogStderr)
+        
 public:
     // redirect log output to a FILE
     wxLogStderr(FILE *fp = (FILE *) NULL);
@@ -293,8 +295,8 @@ protected:
 class WXDLLEXPORT wxLogNull
 {
 public:
-    wxLogNull() { m_flagOld = wxLog::EnableLogging(FALSE); }
-    ~wxLogNull() { (void)wxLog::EnableLogging(m_flagOld);   }
+    wxLogNull() : m_flagOld(wxLog::EnableLogging(FALSE)) { }
+    ~wxLogNull() { (void)wxLog::EnableLogging(m_flagOld); }
 
 private:
     bool m_flagOld; // the previous value of the wxLog::ms_doLog

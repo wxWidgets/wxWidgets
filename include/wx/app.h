@@ -92,6 +92,8 @@ private:
 
 class WXDLLEXPORT wxAppBase : public wxEvtHandler
 {
+    DECLARE_NO_COPY_CLASS(wxAppBase)
+        
 public:
     wxAppBase();
     virtual ~wxAppBase();

@@ -117,8 +117,9 @@ class WXDLLEXPORT wxMutexLocker
 {
 public:
     // lock the mutex in the ctor
-    wxMutexLocker(wxMutex& mutex) : m_mutex(mutex)
-        { m_isOk = m_mutex.Lock() == wxMUTEX_NO_ERROR; }
+    wxMutexLocker(wxMutex& mutex)
+        : m_isOk(FALSE), m_mutex(mutex)
+        { m_isOk = ( m_mutex.Lock() == wxMUTEX_NO_ERROR ); }
 
     // returns TRUE if mutex was successfully locked in ctor
     bool IsOk() const
@@ -220,6 +221,8 @@ private:
 
 class WXDLLEXPORT wxCondition
 {
+    DECLARE_NO_COPY_CLASS(wxCondition)
+        
 public:
     // constructor and destructor
 
@@ -275,6 +278,8 @@ private:
 class WXDLLEXPORT wxSemaphoreInternal;
 class WXDLLEXPORT wxSemaphore
 {
+    DECLARE_NO_COPY_CLASS(wxSemaphore)
+        
 public:
     // specifying a maxcount of 0 actually makes wxSemaphore behave as if there
     // is no upper limit, if maxcount is 1 the semaphore behaves as a mutex
@@ -548,7 +553,7 @@ public:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLEXPORT wxIsWaitingForThread();
 #elif defined(__WXMAC__)
-   extern void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
+    extern void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
 
     // returns TRUE if the main thread has GUI lock
     extern bool WXDLLEXPORT wxGuiOwnedByMainThread();
@@ -561,7 +566,7 @@ public:
     extern bool WXDLLEXPORT wxIsWaitingForThread();
 
     // implement wxCriticalSection using mutexes
-    inline wxCriticalSection::wxCriticalSection() { }
+    inline wxCriticalSection::wxCriticalSection() : m_mutex() { }
     inline wxCriticalSection::~wxCriticalSection() { }
 
     inline void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }

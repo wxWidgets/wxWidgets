@@ -37,6 +37,8 @@ class WXDLLEXPORT wxWindowBase;
 
 class WXDLLEXPORT wxControlContainer
 {
+    DECLARE_NO_COPY_CLASS(wxControlContainer)
+        
 public:
     // ctors and such
     wxControlContainer(wxWindow *winParent = NULL);

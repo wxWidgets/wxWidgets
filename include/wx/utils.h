@@ -375,6 +375,8 @@ WXDLLEXPORT void wxFlushEvents();
 // ctor and enables them back in its dtor
 class WXDLLEXPORT wxWindowDisabler
 {
+    DECLARE_NO_COPY_CLASS(wxWindowDisabler)
+        
 public:
     wxWindowDisabler(wxWindow *winToSkip = (wxWindow *)NULL);
     ~wxWindowDisabler();

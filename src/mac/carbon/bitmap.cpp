@@ -59,7 +59,7 @@ void wxMacDestroyColorTable( CTabHandle colors )
 void wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue )
 {
     (**newColors).ctTable[index].value = index;
-    (**newColors).ctTable[index].rgb.red = red ;// someRedValue;
+    (**newColors).ctTable[index].rgb.red = red ; // someRedValue;
     (**newColors).ctTable[index].rgb.green = green ; // someGreenValue;
     (**newColors).ctTable[index].rgb.blue = blue ; // someBlueValue;
 }
@@ -341,13 +341,13 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 }
 
 wxBitmapRefData::wxBitmapRefData()
+    : m_width(0)
+    , m_height(0)
+    , m_depth(0)
+    , m_ok(FALSE)
+    , m_numColors(0)
+    , m_quality(0)
 {
-    m_ok = FALSE;
-    m_width = 0;
-    m_height = 0;
-    m_depth = 0;
-    m_quality = 0;
-    m_numColors = 0;
     m_bitmapMask = NULL;
     m_hBitmap = NULL ;
     m_hPict = NULL ;
@@ -355,7 +355,7 @@ wxBitmapRefData::wxBitmapRefData()
     m_bitmapType = kMacBitmapTypeUnknownType ;
 }
 
-// TODO move this do a public function of Bitmap Ref
+// TODO move this to a public function of Bitmap Ref
 static void DisposeBitmapRefData(wxBitmapRefData *data)
 {
     switch (data->m_bitmapType)
@@ -699,8 +699,6 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
     SetGWorld( (GWorldPtr) GetHBITMAP() , NULL ) ;
     
     // Render image
-    RGBColor colorRGB ;
-
     register unsigned char* data = image.GetData();
     char* destinationBase = GetPixBaseAddr( pixMap );
     register unsigned char* destination = (unsigned char*) destinationBase ;
@@ -1050,30 +1048,30 @@ WXHMETAFILE wxBitmap::GetPict() const
  */
 
 wxMask::wxMask()
+    : m_maskBitmap(NULL)
 {
-    m_maskBitmap = 0;
 }
 
 // Construct a mask from a bitmap and a colour indicating
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
+    : m_maskBitmap(NULL)
 {
-    m_maskBitmap = 0;
     Create(bitmap, colour);
 }
 
 // Construct a mask from a bitmap and a palette index indicating
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
+    : m_maskBitmap(NULL)
 {
-    m_maskBitmap = 0;
     Create(bitmap, paletteIndex);
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask(const wxBitmap& bitmap)
+    : m_maskBitmap(NULL)
 {
-    m_maskBitmap = 0;
     Create(bitmap);
 }
 
@@ -1121,8 +1119,8 @@ bool wxMask::Create(const wxBitmap& bitmap)
 // the transparent area
 bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 {
-// TODO
-    wxCHECK_MSG( 0, false, wxT("Not implemented"));
+    // TODO
+    wxCHECK_MSG( 0, false, wxT("wxMask::Create not yet implemented"));
     return FALSE;
 }
 
@@ -1204,6 +1202,10 @@ bool wxMask::PointMasked(int x, int y)
 /*
  * wxBitmapHandler
  */
+
+wxBitmapHandler::~wxBitmapHandler()
+{
+}
 
 bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, long type, int width, int height, int depth)
 {

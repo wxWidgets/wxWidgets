@@ -31,7 +31,8 @@ class WXDLLEXPORT wxImage;
 // transparently.
 class WXDLLEXPORT wxMask: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxMask)
+    DECLARE_DYNAMIC_CLASS(wxMask)
+    DECLARE_NO_COPY_CLASS(wxMask)
 
 public:
   wxMask();
@@ -65,6 +66,8 @@ enum { kMacBitmapTypeUnknownType , kMacBitmapTypeGrafWorld, kMacBitmapTypePict ,
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
+    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
+        
     friend class WXDLLEXPORT wxBitmap;
     friend class WXDLLEXPORT wxIcon;
     friend class WXDLLEXPORT wxCursor;
@@ -81,10 +84,10 @@ public:
   wxPalette     m_bitmapPalette;
   int           m_quality;
 
-	int			m_bitmapType ;
-	WXHMETAFILE	m_hPict ;
-	WXHBITMAP   m_hBitmap;
-	WXHICON     m_hIcon ;
+  int	        m_bitmapType ;
+  WXHMETAFILE	m_hPict ;
+  WXHBITMAP     m_hBitmap;
+  WXHICON       m_hIcon ;
   wxMask *      m_bitmapMask; // Optional mask
 };
 
@@ -94,22 +97,21 @@ class WXDLLEXPORT wxBitmapHandler: public wxBitmapHandlerBase
 {
   DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 public:
-  wxBitmapHandler() { m_name = ""; m_extension = ""; m_type = 0; };
-#ifdef __DARWIN__
-  virtual ~wxBitmapHandler() { }
-#endif
+  wxBitmapHandler() : m_name(), m_extension(), m_type(0) { }
+  virtual ~wxBitmapHandler();
 
   virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
       int desiredWidth, int desiredHeight);
   virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
 
-  inline void SetName(const wxString& name) { m_name = name; }
-  inline void SetExtension(const wxString& ext) { m_extension = ext; }
-  inline void SetType(long type) { m_type = type; }
-  inline wxString GetName() const { return m_name; }
-  inline wxString GetExtension() const { return m_extension; }
-  inline long GetType() const { return m_type; }
+  void SetName(const wxString& name) { m_name = name; }
+  void SetExtension(const wxString& ext) { m_extension = ext; }
+  void SetType(long type) { m_type = type; }
+  wxString GetName() const { return m_name; }
+  wxString GetExtension() const { return m_extension; }
+  long GetType() const { return m_type; }
+
 protected:
   wxString  m_name;
   wxString  m_extension;
@@ -128,7 +130,8 @@ public:
   wxBitmap(); // Platform-specific
 
   // Copy constructors
-  inline wxBitmap(const wxBitmap& bitmap)
+  wxBitmap(const wxBitmap& bitmap)
+      : wxBitmapBase()
   { Ref(bitmap); }
 
   // Initialize with raw data.

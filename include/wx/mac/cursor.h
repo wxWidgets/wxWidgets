@@ -20,6 +20,8 @@
 
 class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
 {
+    DECLARE_NO_COPY_CLASS(wxCursorRefData)
+        
     friend class WXDLLEXPORT wxBitmap;
     friend class WXDLLEXPORT wxCursor;
 public:
@@ -27,7 +29,7 @@ public:
     ~wxCursorRefData();
 
 protected:
-  WXHCURSOR m_hCursor;
+    WXHCURSOR m_hCursor;
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -42,7 +44,9 @@ public:
   wxCursor();
 
   // Copy constructors
-  inline wxCursor(const wxCursor& cursor) { Ref(cursor); }
+  wxCursor(const wxCursor& cursor)
+      : wxBitmap()
+  { Ref(cursor); }
 
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);

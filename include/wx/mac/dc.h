@@ -50,7 +50,8 @@ class wxMacPortStateHelper ;
 
 class WXDLLEXPORT wxDC: public wxDCBase
 {
-  DECLARE_DYNAMIC_CLASS(wxDC)
+    DECLARE_DYNAMIC_CLASS(wxDC)
+    DECLARE_NO_COPY_CLASS(wxDC)
 
   public:
 

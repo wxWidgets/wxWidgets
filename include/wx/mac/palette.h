@@ -23,13 +23,15 @@ class WXDLLEXPORT wxPalette;
 
 class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 {
+    DECLARE_NO_COPY_CLASS(wxPaletteRefData)
+    
     friend class WXDLLEXPORT wxPalette;
 public:
     wxPaletteRefData();
     ~wxPaletteRefData();
 protected:
- 		wxColour* m_palette;
- 		wxInt32		m_count ;
+    wxColour* m_palette;
+    wxInt32   m_count ;
 };
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
@@ -40,7 +42,9 @@ class WXDLLEXPORT wxPalette: public wxGDIObject
 
 public:
   wxPalette();
-  inline wxPalette(const wxPalette& palette) { Ref(palette); }
+  wxPalette(const wxPalette& palette)
+      : wxGDIObject()
+  { Ref(palette); }
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   ~wxPalette();
