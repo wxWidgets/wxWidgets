@@ -49,8 +49,6 @@
 #define WXGRID_MIN_ROW_HEIGHT                 15
 #define WXGRID_MIN_COL_WIDTH                  15
 #define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
-#define WXGRID_DEFAULT_TOPEDIT_WIDTH          300
-#define WXGRID_DEFAULT_TOPEDIT_HEIGHT         60
 
 
 class WXDLLEXPORT wxGrid;
@@ -398,7 +396,6 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     int m_numCols;
 
     wxGridCellCoords m_currentCellCoords;
-    bool             m_currentCellHighlighted;
 
     wxGridCellCoords m_selectedTopLeft;
     wxGridCellCoords m_selectedBottomRight;
@@ -462,8 +459,6 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     int        m_editCtrlType;  // for current cell
     wxWindow*  m_cellEditCtrl;
     bool       m_cellEditCtrlEnabled;
-    wxWindow*  m_topEditCtrl;
-    bool       m_topEditCtrlEnabled;
     
 
     void Create();
@@ -553,7 +548,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawCellBackground( wxDC& dc, const wxGridCellCoords& );
     void DrawCellValue( wxDC& dc, const wxGridCellCoords& );
-    
+
     void DrawRowLabels( wxDC& dc );
     void DrawRowLabel( wxDC& dc, int row );
     void DrawColLabels( wxDC& dc );
@@ -591,16 +586,13 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     bool IsEditable() { return m_editable; }
     void EnableEditing( bool edit );
 
+#if 0  // at the moment the cell edit control is always active    
     void     EnableCellEditControl( bool enable );
+#endif
 
     bool     IsCellEditControlEnabled()
              { return (m_cellEditCtrl && m_cellEditCtrlEnabled); }
 
-    void     EnableTopEditControl( bool enable );
-
-    bool     IsTopEditControlEnabled()
-             { return (m_topEditCtrl && m_topEditCtrlEnabled); }
-    
     void ShowCellEditControl();
     void HideCellEditControl();
     void SetEditControlValue( const wxString& s = wxEmptyString );
@@ -691,7 +683,6 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     wxColour GetCellBackgroundColour( int row, int col );
     wxColour GetDefaultCellTextColour();
     wxColour GetCellTextColour( int row, int col );
-    wxColour GetCellHighlightColour();
     wxFont   GetDefaultCellFont();
     wxFont   GetCellFont( int row, int col );
     void     GetDefaultCellAlignment( int *horiz, int *vert );
@@ -705,7 +696,6 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
     void     SetDefaultCellTextColour( const wxColour& );
     void     SetCellTextColour( int row, int col, const wxColour& );
-    void     SetCellHighlightColour( const wxColour& );
     void     SetDefaultCellFont( const wxFont& );
     void     SetCellFont( int row, int col, const wxFont& );
     void     SetDefaultCellAlignment( int horiz, int vert );
@@ -919,7 +909,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     bool GetEditable() { return IsEditable(); }
     void SetEditable( bool edit = TRUE ) { EnableEditing( edit ); }
     bool GetEditInPlace() { return IsCellEditControlEnabled(); }
-    void SetEditInPlace(bool edit = TRUE) { EnableCellEditControl( edit ); }
+    void SetEditInPlace(bool edit = TRUE) { }
 
     void SetCellAlignment( int align, int row, int col)
     { SetCellAlignment(row, col, align, wxCENTER); }

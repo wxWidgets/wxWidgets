@@ -941,10 +941,6 @@ void wxGrid::Create()
     m_colLabelWin    = (wxGridColLabelWindow *) NULL;
     m_cornerLabelWin = (wxGridCornerLabelWindow *) NULL;
     m_cellEditCtrl   = (wxWindow *) NULL;    
-
-    // TODO: do we need this or should the top edit control be an add-on ?
-    //
-    m_topEditCtrl    = (wxWindow *) NULL;
 }
 
 
@@ -998,8 +994,14 @@ void wxGrid::Init()
     m_colLabelVertAlign  = wxTOP;
 
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
-    m_defaultRowHeight = m_gridWin->GetCharHeight() + 8;
-    
+    m_defaultRowHeight = m_gridWin->GetCharHeight();
+
+#if defined (__WXMOTIF__)  // see also text ctrl sizing in ShowCellEditControl()
+    m_defaultRowHeight += 8;
+#else
+    m_defaultRowHeight += 4;
+#endif
+
     m_rowHeights.Alloc( m_numRows );
     m_rowBottoms.Alloc( m_numRows );
     int rowBottom = 0;
@@ -1036,7 +1038,6 @@ void wxGrid::Init()
     m_colResizeCursor = wxCursor( wxCURSOR_SIZEWE );
 
     m_currentCellCoords = wxGridNoCellCoords;
-    m_currentCellHighlighted = FALSE;
 
     m_selectedTopLeft = wxGridNoCellCoords;
     m_selectedBottomRight = wxGridNoCellCoords;
@@ -1063,10 +1064,6 @@ void wxGrid::Init()
     m_cellEditCtrl->Show( FALSE );
     m_cellEditCtrlEnabled = TRUE;
     m_editCtrlType = wxGRID_TEXTCTRL;
-    
-    // TODO: do we need this or should the top edit control be an add-on ?
-    //    
-    m_topEditCtrlEnabled = FALSE;    
 }
 
 
@@ -1970,7 +1967,7 @@ void wxGrid::ClearGrid()
     {
         m_table->Clear();
         SetEditControlValue();
-        if ( !GetBatchCount() ) Refresh();
+        if ( !GetBatchCount() ) m_gridWin->Refresh();
     }
 }
 
@@ -2444,7 +2441,6 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
-        // HideCurrentCellHighlight( dc );
         HideCellEditControl();
         SaveEditControlValue();
     }
@@ -2453,7 +2449,6 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     SetEditControlValue();
     ShowCellEditControl();
-    // ShowCurrentCellHighlight( dc );
 
     if ( IsSelection() )
     {
@@ -2909,13 +2904,18 @@ void wxGrid::EnableEditing( bool edit )
     if ( edit != m_editable )
     {
         m_editable = edit;
-        if ( !m_editable ) HideCellEditControl();
-        m_cellEditCtrlEnabled = m_editable;
-        if ( m_editable ) ShowCellEditControl();
+
+        // TODO: extend this for other edit control types
+        //
+        if ( m_editCtrlType == wxGRID_TEXTCTRL )
+        {
+            ((wxTextCtrl *)m_cellEditCtrl)->SetEditable( m_editable );
+        }
     }
 }
 
 
+#if 0  // disabled for the moment - the cell control is always active
 void wxGrid::EnableCellEditControl( bool enable )
 {
     if ( m_cellEditCtrl &&
@@ -2927,26 +2927,15 @@ void wxGrid::EnableCellEditControl( bool enable )
         {
             SetEditControlValue();
             ShowCellEditControl();
-            // ShowCurrentCellHighlight( dc );
         }
         else
         {
-            // HideCurrentCellHighlight( dc );
             HideCellEditControl();
             SaveEditControlValue();
         }
     }
 }
-
-
-// TODO: not implemented at the moment
-// Do we want it ?
-//
-void wxGrid::EnableTopEditControl( bool enable )
-{
-    // TODO: do we want this here or should the top edit
-    // control be an add-on class ?
-}
+#endif
 
 
 void wxGrid::ShowCellEditControl()
@@ -2971,9 +2960,21 @@ void wxGrid::ShowCellEditControl()
         
             int cw, ch;
             m_gridWin->GetClientSize( &cw, &ch );
-        
-            rect.SetLeft( wxMax(0, left) );
-            rect.SetTop( wxMax(0, top) );
+
+            // Make the edit control large enough to allow for internal margins
+            // TODO: remove this if the text ctrl sizing is improved esp. for unix
+            //
+#if defined (__WXMOTIF__)            
+            rect.SetLeft( wxMax(0, left-4) );
+            rect.SetTop( wxMax(0, top-4) );
+            rect.SetRight( rect.GetRight() + 8 );
+            rect.SetBottom( rect.GetBottom() + 8 );
+#else
+            rect.SetLeft( wxMax(0, left-2) );
+            rect.SetTop( wxMax(0, top-2) );
+            rect.SetRight( rect.GetRight() + 4 );
+            rect.SetBottom( rect.GetBottom() + 4 );            
+#endif
             
             m_cellEditCtrl->SetSize( rect );
             m_cellEditCtrl->Show( TRUE );
@@ -3025,34 +3026,6 @@ void wxGrid::SetEditControlValue( const wxString& value )
         else
             s = value;
 
-        // TODO: no top edit control implemented at the moment...
-        // Do we want it in this class ?
-        //
-        if ( IsTopEditControlEnabled() )
-        {
-            switch ( m_editCtrlType )
-            {
-                case wxGRID_TEXTCTRL:
-                    ((wxGridTextCtrl *)m_topEditCtrl)->SetStartValue(s);
-                    break;
-
-                case wxGRID_CHECKBOX:
-                    // TODO: implement this
-                    //
-                    break;
-
-                case wxGRID_CHOICE:
-                    // TODO: implement this
-                    //
-                    break;
-
-                case wxGRID_COMBOBOX:
-                    // TODO: implement this
-                    //
-                    break;
-            }
-        }
-
         if ( IsCellEditControlEnabled() )
         {
             switch ( m_editCtrlType )
@@ -3090,10 +3063,6 @@ void wxGrid::SaveEditControlValue()
         if ( IsCellEditControlEnabled() )
         {
             ctrl = m_cellEditCtrl;
-        }
-        else if ( IsTopEditControlEnabled() )
-        {
-            ctrl = m_topEditCtrl;
         }
         else
         {
@@ -3952,14 +3921,6 @@ wxColour wxGrid::GetCellTextColour( int WXUNUSED(row), int WXUNUSED(col) )
 }
 
 
-wxColour wxGrid::GetCellHighlightColour()
-{
-    // TODO: replace this temp test code
-    //
-    return wxColour( 0, 0, 0 );
-}
-
-
 wxFont wxGrid::GetDefaultCellFont()
 {
     return m_defaultCellFont;
@@ -4099,12 +4060,6 @@ void wxGrid::SetDefaultCellTextColour( const wxColour& )
 }
 
 void wxGrid::SetCellTextColour( int WXUNUSED(row), int WXUNUSED(col), const wxColour& )
-{
-    // TODO: everything !!!
-    //
-}
-
-void wxGrid::SetCellHighlightColour( const wxColour& )
 {
     // TODO: everything !!!
     //
