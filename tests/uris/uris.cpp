@@ -50,7 +50,9 @@ private:
         CPPUNIT_TEST( Comparison );
 #if TEST_URL
         CPPUNIT_TEST( URLCompat );
+#if wxUSE_PROTOCOL_HTTP
         CPPUNIT_TEST( URLProxy  );
+#endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -318,10 +320,12 @@ void URITestCase::URLCompat()
     CPPUNIT_ASSERT( test.GetPath() == wxT("%22myf%22ile.txt") );
 }
 
+#if wxUSE_PROTOCOL_HTTP
 void URITestCase::URLProxy()
 {
     wxURL url(wxT("http://www.asite.com/index.html"));
     url.SetProxy(wxT("pserv:3122"));
 }
+#endif // wxUSE_PROTOCOL_HTTP
 #endif
 

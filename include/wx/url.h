@@ -64,10 +64,10 @@ public:
 
     wxInputStream *GetInputStream();
 
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
     static void SetDefaultProxy(const wxString& url_proxy);
     void SetProxy(const wxString& url_proxy);
-#endif // wxUSE_SOCKETS
+#endif // wxUSE_PROTOCOL_HTTP
 
 #if WXWIN_COMPATIBILITY_2_4
     //Use the proper wxURI accessors instead
