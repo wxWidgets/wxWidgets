@@ -1632,7 +1632,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 {
                     eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
                     LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
+                    wxConvertFromMSWListItem(NULL, event.m_item, info->item);
                     if ( info->item.pszText == NULL || info->item.iItem == -1 )
                         return FALSE;
 
