@@ -936,6 +936,7 @@ if BUILD_XRC:
                                 '%s/xh_sizer.cpp' % XMLLOC,
                                 '%s/xh_slidr.cpp' % XMLLOC,
                                 '%s/xh_spin.cpp' % XMLLOC,
+                                '%s/xh_split.cpp' % XMLLOC,
                                 '%s/xh_stbmp.cpp' % XMLLOC,
                                 '%s/xh_stbox.cpp' % XMLLOC,
 
