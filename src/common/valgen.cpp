@@ -165,7 +165,7 @@ bool wxGenericValidator::TransferToWindow(void)
 	}
     } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WIN16__)
+#if wxUSE_SPINCTRL && !defined(__WIN16__) && !defined(__WXMOTIF__)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinCtrl)) )
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
@@ -384,7 +384,7 @@ bool wxGenericValidator::TransferFromWindow(void)
     }
   } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WIN16__)
+#if wxUSE_SPINCTRL && !defined(__WIN16__) && !defined(__WXMOTIF__)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinCtrl)) )
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
