@@ -272,15 +272,15 @@ public:
     void UpdateUI(wxEvtHandler* source = (wxEvtHandler*)NULL);
 
     // get the menu bar this menu is attached to (may be NULL, always NULL for
-    // popup menus)
-    wxMenuBar *GetMenuBar() const { return m_menuBar; }
+    // popup menus).  Traverse up the menu hierarchy to find it.
+    wxMenuBar *GetMenuBar() const;
 
     // called when the menu is attached/detached to/from a menu bar
     virtual void Attach(wxMenuBarBase *menubar);
     virtual void Detach();
 
     // is the menu attached to a menu bar (or is it a popup one)?
-    bool IsAttached() const { return m_menuBar != NULL; }
+    bool IsAttached() const { return GetMenuBar() != NULL; }
 
     // set/get the parent of this menu
     void SetParent(wxMenu *parent) { m_menuParent = parent; }

@@ -310,11 +310,6 @@ void wxMenuBase::AddSubMenu(wxMenu *submenu)
 {
     wxCHECK_RET( submenu, _T("can't add a NULL submenu") );
 
-    if ( m_menuBar )
-    {
-        submenu->Attach(m_menuBar);
-    }
-
     submenu->SetParent((wxMenu *)this);
 }
 
@@ -628,6 +623,13 @@ bool wxMenuBase::SendEvent(int id, int checked)
 // ----------------------------------------------------------------------------
 // wxMenu attaching/detaching to/from menu bar
 // ----------------------------------------------------------------------------
+
+wxMenuBar* wxMenuBase::GetMenuBar() const
+{
+    if(GetParent())
+        return GetParent()->GetMenuBar();
+    return m_menuBar;
+}
 
 void wxMenuBase::Attach(wxMenuBarBase *menubar)
 {
