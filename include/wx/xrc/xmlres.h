@@ -291,13 +291,8 @@ private:
 //    wxXmlResource::Get()->LoadDialog(&dlg, mainFrame, "my_dialog");
 //    XRCCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(wxT("default value"));
 
-#ifdef __WXDEBUG__
 #define XRCCTRL(window, id, type) \
-    (wxDynamicCast((window).FindWindow(XRCID(id)), type))
-#else
-#define XRCCTRL(window, id, type) \
-    ((type*)((window).FindWindow(XRCID(id))))
-#endif
+    (wxStaticCast((window).FindWindow(XRCID(id)), type))
 
 // wxXmlResourceHandler is an abstract base class for resource handlers
 // capable of creating a control from an XML node.
