@@ -383,7 +383,7 @@ void wxRemotelyScrolledTreeCtrl::CalcTreeSize(const wxTreeItemId& id, wxRect& re
 
     wxTreeItemIdValue cookie;
     wxTreeItemId childId = GetFirstChild(id, cookie);
-    while (childId != 0)
+    while (childId)
     {
         CalcTreeSize(childId, rect);
         childId = GetNextChild(childId, cookie);
