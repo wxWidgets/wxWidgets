@@ -79,23 +79,6 @@
 #endif
 
 // -----------------------------------------------------------------------------
-// global vars
-// -----------------------------------------------------------------------------
-
-class HelpGenApp: public wxApp
-{
-public:
-    HelpGenApp() {};
-
-    // don't let wxWin parse our cmd line, we do it ourselves
-    virtual bool OnInit() { return TRUE; }
-
-    virtual int OnRun();
-};
-
-// IMPLEMENT_APP(HelpGenApp);
-
-// -----------------------------------------------------------------------------
 // private functions
 // -----------------------------------------------------------------------------
 
@@ -581,8 +564,16 @@ static void usage()
     exit(1);
 }
 
-int HelpGenApp::OnRun()
+int main(int argc, char **argv)
 {
+    wxInitializer initializer;
+    if ( !initializer )
+    {
+        fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
+
+        return -1;
+    }
+
     enum
     {
         Mode_None,
@@ -786,21 +777,6 @@ int HelpGenApp::OnRun()
     }
 
     return 0;
-}
-
-int main(int argc, char **argv)
-{
-    wxInitializer initializer;
-    if ( !initializer )
-    {
-        fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
-
-        return -1;
-    }
-	HelpGenApp app;
-	app.argc = argc;
-	app.argv = argv;
-	return app.OnRun();
 }
 
 // -----------------------------------------------------------------------------
@@ -2153,7 +2129,7 @@ static void TeXUnfilter(wxString* str)
 
     // undo TeXFilter
     static wxRegEx reNonSpecialSpecials("\\\\([#$%&_{}])"),
-                   reAccents("\\\\verb|([~^])|");
+                   reAccents("\\\\verb\\|([~^])\\|");
 
     reNonSpecialSpecials.ReplaceAll(str, "\\1");
     reAccents.ReplaceAll(str, "\\1");
@@ -2203,6 +2179,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.23  2003/06/13 17:05:43  VZ
+   quote '|' inside regexes (fixes dump mode); fixed crash due to strange HelpGenApp code
+
    Revision 1.22  2002/01/21 21:18:50  JS
    Now adds 'include file' heading
 
