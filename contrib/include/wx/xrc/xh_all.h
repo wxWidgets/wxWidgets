@@ -19,6 +19,7 @@
 #include "wx/xrc/xh_dlg.h"
 #include "wx/xrc/xh_bttn.h"
 #include "wx/xrc/xh_chckb.h"
+#include "wx/xrc/xh_tglbtn.h"
 #include "wx/xrc/xh_gauge.h"
 #include "wx/xrc/xh_html.h"
 #include "wx/xrc/xh_spin.h"

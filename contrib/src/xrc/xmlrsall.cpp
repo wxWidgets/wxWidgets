@@ -102,4 +102,7 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_STATUSBAR
     AddHandler(new wxStatusBarXmlHandler);
 #endif
+#if wxUSE_TOGGLEBTN
+    AddHandler(new wxToggleButtonXmlHandler);
+#endif
 }

@@ -3,7 +3,8 @@
 #                   Copyright (C) 1999 SciTech Software
 #                           All rights reserved.
 #
-# Descripton:   Generic makefile for the SciTech wxApplet library
+# Description:   Generic makefile for the SciTech wxApplet library
+# Licence: wxWindows license
 #
 #############################################################################
 

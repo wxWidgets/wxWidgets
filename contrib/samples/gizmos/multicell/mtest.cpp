@@ -4,7 +4,9 @@
  * Author:	Alex Andruschak
  * Created:	2000
  * Updated:	
- * Copyright:
+ * Copyright: 
+ * Licence: wxWindows license
+
  */
 
 static const char sccsid[] = "%W% %G%";

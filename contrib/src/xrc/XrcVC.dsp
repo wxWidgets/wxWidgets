@@ -174,6 +174,10 @@ SOURCE=.\xh_chckb.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_tglbtn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_chckl.cpp
 # End Source File
 # Begin Source File

@@ -36,6 +36,7 @@ OBJECTS=&
     $(OUTPUTDIR)\xh_text.obj &
     $(OUTPUTDIR)\xh_listb.obj&
     $(OUTPUTDIR)\xh_toolb.obj &
+    $(OUTPUTDIR)\xh_tglbtn.obj &
     $(OUTPUTDIR)\xh_stlin.obj &
     $(OUTPUTDIR)\xh_bmp.obj &
     $(OUTPUTDIR)\xh_bmpbt.obj &

@@ -48,7 +48,7 @@ EXTRATARGETS=$(D)
 
 OBJECTS=$(EXPAT_OBJS) \
         $(D)\xml.obj $(D)\xmlres.obj \
-        $(D)\xmlrsall.obj $(D)\xh_bttn.obj $(D)\xh_chckb.obj $(D)\xh_chckl.obj \
+        $(D)\xmlrsall.obj $(D)\xh_bttn.obj $(D)\xh_chckb.obj $(D)\xh_tglbtn.obj $(D)\xh_chckl.obj \
 		$(D)\xh_choic.obj $(D)\xh_combo.obj $(D)\xh_dlg.obj \
         $(D)\xh_frame.obj $(D)\xh_gauge.obj $(D)\xh_html.obj $(D)\xh_menu.obj \
 		$(D)\xh_notbk.obj $(D)\xh_panel.obj $(D)\xh_radbt.obj \

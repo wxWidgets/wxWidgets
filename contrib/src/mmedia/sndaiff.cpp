@@ -4,6 +4,7 @@
 // Date: 08/11/1999
 // Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999
 // CVSID: $Id$
+// Licence: wxWindows licence
 // --------------------------------------------------------------------------
 #ifdef __GNUG__
 #pragma implementation "sndaiff.cpp"

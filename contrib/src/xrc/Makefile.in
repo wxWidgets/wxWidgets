@@ -19,7 +19,7 @@ HEADER_SUBDIR=xrc
 EXPAT_DEFS=-I$(expat_dir)/xmlparse -I$(expat_dir)/xmltok
 EXPAT_OBJECTS=xmltok.o xmlrole.o xmlparse.o
 
-HEADERS=xh_all.h xh_bttn.h xh_chckb.h xh_chckl.h xh_choic.h xh_combo.h \
+HEADERS=xh_all.h xh_bttn.h xh_chckb.h xh_tglbtn.h xh_chckl.h xh_choic.h xh_combo.h \
         xh_dlg.h xh_gauge.h xh_html.h xh_menu.h xh_notbk.h xh_panel.h \
         xh_radbt.h xh_radbx.h xh_sizer.h xh_slidr.h xh_spin.h xh_stbmp.h \
         xh_sttxt.h xh_text.h xh_listb.h xml.h xmlres.h xh_toolb.h \
@@ -29,7 +29,7 @@ HEADERS=xh_all.h xh_bttn.h xh_chckb.h xh_chckl.h xh_choic.h xh_combo.h \
 
 OBJECTS=$(EXPAT_OBJECTS) \
         xml.o xmlres.o xmlrsall.o \
-        xh_bttn.o xh_chckb.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o \
+        xh_bttn.o xh_chckb.o xh_tglbtn.o xh_chckl.o xh_choic.o xh_combo.o xh_dlg.o \
         xh_gauge.o xh_html.o xh_menu.o xh_notbk.o xh_panel.o xh_radbt.o \
         xh_radbx.o xh_sizer.o xh_slidr.o xh_spin.o xh_stbmp.o xh_sttxt.o \
         xh_text.o xh_listb.o xh_toolb.o xh_stlin.o xh_bmp.o xh_unkwn.o \
