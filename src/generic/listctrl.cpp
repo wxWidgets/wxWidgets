@@ -2254,7 +2254,7 @@ void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
     // calc the spacing from the icon size
     int width = 0,
         height = 0;
-    if ( imageList && imageList->GetImageCount() )
+    if ((imageList) && (imageList->GetImageCount()) )
     {
         imageList->GetSize(0, width, height);
     }
@@ -3602,18 +3602,10 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 
 bool wxListCtrl::SetBackgroundColour( const wxColour &colour )
 {
-    if ( !wxWindow::SetBackgroundColour( colour ) )
-        return FALSE;
-
     if (m_mainWin)
     {
         m_mainWin->SetBackgroundColour( colour );
         m_mainWin->m_dirty = TRUE;
-    }
-
-    if (m_headerWin)
-    {
-//        m_headerWin->SetBackgroundColour( colour );
     }
 
     return TRUE;
