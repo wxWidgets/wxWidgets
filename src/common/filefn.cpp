@@ -196,25 +196,6 @@ const off_t wxInvalidOffset = (off_t)-1;
 // implementation
 // ============================================================================
 
-#if defined(__WXMAC__) && !defined(__DARWIN__) && !wxUSE_UNICODE
-
-WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )
-{
-    return stat( wxMacStringToCString( file_name ), buf );
-}
-
-WXDLLEXPORT int wxAccess( const wxChar *pathname, int mode )
-{
-    return access( wxMacStringToCString( pathname ), mode );
-}
-
-WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
-{
-    return open( wxMacStringToCString( pathname ), flags, mode );
-}
-
-#endif
-
 #ifdef wxNEED_WX_UNISTD_H
 
 WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )
@@ -991,7 +972,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
         (*myPath)[length-1] = 0 ;
 
     // create path string for return value
-    wxString result = wxMacMakeStringFromCString( *myPath ) ;
+    wxString result( *myPath , wxConvLocal) ;
 
     // free allocated handle
     ::HUnlock( myPath ) ;
@@ -1037,7 +1018,7 @@ void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
 #if wxUSE_UNICODE
 WXDLLEXPORT void wxMacFilename2FSSpec( const wxChar *path , FSSpec *spec ) 
 {
-    return wxMacFilename2FSSpec( wxMacStringToCString( wxString( path ) ) , spec ) ;
+    return wxMacFilename2FSSpec( wxConvFile.cWC2MB(path) , spec ) ;
 }
 #endif
 

@@ -600,7 +600,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #endif
 
 #endif
-    wxMacSetupConverters() ;
 
     s_macCursorRgn = ::NewRgn() ;
 
@@ -702,7 +701,6 @@ void wxApp::CleanUp()
     //   __wxterminate in Mach-O shared libraries
     wxStAppResource::CloseSharedLibraryResource();
 #endif
-    wxMacCleanupConverters() ;
 
     UMACleanupToolbox() ;
     if (s_macCursorRgn) {

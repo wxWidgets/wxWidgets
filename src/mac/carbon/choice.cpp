@@ -272,8 +272,7 @@ wxSize wxChoice::DoGetBestSize() const
                 &baseline );
             wLine = bounds.h ;
         #else
-            wxCharBuffer text = wxMacStringToCString( str ) ;
-            wLine = ::TextWidth( text , 0 , strlen(text) ) ;
+            wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
         #endif
             lbWidth = wxMax(lbWidth, wLine);
         }

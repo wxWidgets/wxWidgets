@@ -137,7 +137,7 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 			}
 #else
             {	
-            	wxCharBuffer text = wxMacStringToCString( linetext ) ;
+            	wxCharBuffer text = linetext.mb_str( wxConvLocal) ;
                 MoveTo(drawRect->left + 4 , drawRect->top + 10 );
                 DrawText(text, 0 , strlen(text) );
             }
@@ -633,8 +633,7 @@ wxSize wxListBox::DoGetBestSize() const
                 &baseline );
             wLine = bounds.h ;
         #else
-            wxCharBuffer text = wxMacStringToCString( str ) ;
-            wLine = ::TextWidth( text , 0 , strlen(text) ) ;
+            wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
         #endif
             lbWidth = wxMax(lbWidth, wLine);
         }

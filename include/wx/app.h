@@ -291,12 +291,6 @@ public:
     int      argc;
     wxChar **argv;
 
-#ifdef __WXMAC__
-    // This is needed in the wxAppConsole class because it is refereced from
-    // the wxBase library
-    static bool           s_macDefaultEncodingIsPC ;
-#endif
-
 protected:
     // the function which creates the traits object when GetTraits() needs it
     // for the first time

@@ -136,18 +136,14 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
         return NULL ;
     }
 
-    if ( dataFormat.GetType() == wxDF_TEXT && wxApp::s_macDefaultEncodingIsPC )
+    if ( dataFormat.GetType() == wxDF_TEXT )
     {
-        wxString st = wxMacMakeStringFromCString( (char*) data ) ;
-#if wxUSE_UNICODE
-        wxCharBuffer buf = st.ToAscii() ;
-#else
-        const char* buf = st ;
-#endif
-        char* newdata = new char[strlen(buf)+1] ;
-        memcpy( newdata , buf , strlen(buf)+1 ) ;
-        delete[] ((char*) data ) ;
-        data = newdata ;
+        char * buf = (char*) data ;
+        while( (buf=strchr(buf,0x0a)) != NULL )
+        {
+            *buf = 13 ;
+            buf++ ;
+        }
     }
 
     return data;
@@ -252,8 +248,7 @@ bool wxClipboard::AddData( wxDataObject *data )
            case wxDF_OEMTEXT:
            {
                wxTextDataObject* textDataObject = (wxTextDataObject*) data;
-               wxString str(textDataObject->GetText());
-               wxCharBuffer buf = wxMacStringToCString( str ) ;
+               wxCharBuffer buf = textDataObject->GetText().mb_str() ;
                err = UMAPutScrap( strlen(buf) , kScrapFlavorTypeText , (void*) buf.data()  ) ;
            }
            break ;

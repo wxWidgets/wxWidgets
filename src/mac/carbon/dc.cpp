@@ -55,6 +55,8 @@ const double RAD2DEG  = 180.0 / M_PI;
 const short kEmulatedMode = -1 ;
 const short kUnsupportedMode = -2 ;
 
+extern TECObjectRef s_TECNativeCToUnicode ;
+
 // set to 0 if problems arise
 #define wxMAC_EXPERIMENTAL_DC 1
 
@@ -1353,24 +1355,9 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) (const wxChar*) str , 0 , str.Length() , str.Length() , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 #else
-    TECObjectRef ec;
-    status = TECCreateConverter(&ec,
-                                wxApp::s_macDefaultEncodingIsPC
-                                    ? (int)kTextEncodingWindowsLatin1
-                                    : (int)kTextEncodingMacRoman,
-                                kTextEncodingUnicodeDefault);
-        
-    wxASSERT_MSG( status == noErr , wxT("couldn't start converter") ) ;
-    ByteCount byteOutLen ;
-    ByteCount byteInLen = str.Length() ;
-    ByteCount byteBufferLen = byteInLen *2 ;
-    char* buf = new char[byteBufferLen] ;
-    status = TECConvertText(ec, (ConstTextPtr)str.c_str() , byteInLen, &byteInLen,
-        (TextPtr)buf, byteBufferLen, &byteOutLen);
-    wxASSERT_MSG( status == noErr , wxT("couldn't convert text") ) ;
-    status = TECDisposeConverter(ec);
-    wxASSERT_MSG( status == noErr , wxT("couldn't dispose converter") ) ;
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) buf , 0 , byteOutLen / 2 , byteOutLen / 2 , 1 ,
+    wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    int wlen = wxWcslen( wchar.data() ) ;
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) wchar.data() , 0 , wlen , wlen , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 #endif
     wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
@@ -1418,10 +1405,6 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
     ::ATSUDisposeTextLayout(atsuLayout);
-#if wxUSE_UNICODE
-#else
-    delete[] buf ;
-#endif
 }
 
 void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
@@ -1501,7 +1484,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                 else
 #endif
                 {
-                    wxCharBuffer text = wxMacStringToCString(linetext) ; 
+                    wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
                     ::DrawText( text , 0 , strlen(text) ) ;
                     line++ ;
                     ::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
@@ -1543,7 +1526,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
         else
 #endif
         {
-            wxCharBuffer text = wxMacStringToCString(linetext) ; 
+            wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
             ::DrawText( text , 0 , strlen(text) ) ;
          }
     }
@@ -1583,21 +1566,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
     if ( externalLeading )
         *externalLeading = YDEV2LOGREL( fi.leading ) ;
     int length = strtext.Length() ;
-    /*
-    const char *text = NULL ;
-    wxString macText ;
-    if ( wxApp::s_macDefaultEncodingIsPC )
-    {
-        macText = wxMacMakeMacStringFromPC( string ) ;
-        text = macText ;
-        length = macText.Length() ;
-    } 
-    else
-    {
-        text = string ;
-        length = string.Length() ;
-    }
-    */
+
     int laststop = 0 ;
     int i = 0 ;
     int curwidth = 0 ;
@@ -1628,7 +1597,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
                 else
 #endif
                 {
-                    wxCharBuffer text = wxMacStringToCString(linetext) ; 
+                    wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
                     curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
                 }
                 if ( curwidth > *width )
@@ -1656,7 +1625,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         else
 #endif
         {
-            wxCharBuffer text = wxMacStringToCString(linetext) ; 
+            wxCharBuffer text = linetext.mb_str(wxConvLocal) ;  
             curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
         }
         if ( curwidth > *width )

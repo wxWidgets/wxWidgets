@@ -206,7 +206,7 @@ bool wxDropTarget::GetData()
                         if( theType == 'TEXT' )
                         {
                             theData[dataSize]=0 ; 
-                            wxString convert = wxMacMakeStringFromCString( theData ) ;    
+                            wxString convert( theData , wxConvLocal ) ;    
                             m_dataObject->SetData( format, convert.Length() * sizeof(wxChar), (const wxChar*) convert );
                         }
                         else if ( theType == kDragFlavorTypeHFS )
@@ -302,7 +302,7 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
             dataSize-- ;
             dataPtr[ dataSize ] = 0 ;
             wxString st( (wxChar*) dataPtr ) ;
-            wxCharBuffer buf = wxMacStringToCString( st ) ;
+            wxCharBuffer buf = st.mb_str( wxConvLocal) ;
             AddDragItemFlavor(theDrag, theItem, type , buf.data(), strlen(buf), 0);
         }
         else if (type == kDragFlavorTypeHFS )

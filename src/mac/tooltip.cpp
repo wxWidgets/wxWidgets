@@ -262,7 +262,7 @@ void wxMacToolTip::Draw()
         int width = 0 ;
         int thiswidth = 0 ;
         int laststop = 0 ;
-        wxCharBuffer text = wxMacStringToCString( m_label ) ;
+        wxCharBuffer text = m_label.mb_str( wxConvLocal)  ;
 
         while( i < length )
         {

@@ -161,11 +161,6 @@ void wxMacCleanupConverters() ;
 void wxMacStringToPascal( const wxString&from , StringPtr to ) ;
 wxString wxMacMakeStringFromPascal( ConstStringPtr from ) ;
 
-wxCharBuffer wxMacStringToCString( const wxString &from ) ;
-wxWCharBuffer wxMacStringToWString( const wxString &from ) ;
-wxString wxMacMakeStringFromCString( const char * from , int len ) ;
-wxString wxMacMakeStringFromCString( const char * from ) ;
-
 #if TARGET_CARBON
 
 class wxMacCFStringHolder                                                             
@@ -227,81 +222,7 @@ private:
     bool m_release ;                                                        
 } ;
 
-//  CFStringRef wxMacStringToCFString( const wxString &str ) ;
-//  wxString wxMacMakeStringFromCFString( CFStringRef cf ) ;
 #endif
-
-#if 0
-
-void wxMacConvertToPC( const char *from , char *to , int len ) ;
-void wxMacConvertFromPC( const char *from , char *to , int len ) ;
-void wxMacConvertToPC( const char *from , char *to , int len ) ;
-
-wxString wxMacMakeMacStringFromPC( const wxChar * p ) ;
-
-wxString wxMacMakePCStringFromMac( const wxChar * p ) ;
-
-
-// converts this c string into a wxString with optional mac 2 pc encoding
-wxString wxMacMakeStringFromMacString( const wxChar* from , bool mac2pcEncoding ) ;
-
-// converts this c string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline wxString wxMacMakeStringFromMacString( const wxChar* from  ) 
-  { return wxMacMakeStringFromMacString( from , wxApp::s_macDefaultEncodingIsPC ) ; }
-
-#if wxUSE_UNICODE
-
-wxString wxMacMakeMacStringFromPC( const char * p ) ;
-
-wxString wxMacMakePCStringFromMac( const char * p ) ;
-
-// converts this c string into a wxString with optional mac 2 pc encoding
-wxString wxMacMakeStringFromMacString( const char* from , bool mac2pcEncoding ) ;
-
-// converts this c string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline wxString wxMacMakeStringFromMacString( const char* from  ) 
-  { return wxMacMakeStringFromMacString( from , wxApp::s_macDefaultEncodingIsPC ) ; }
-
-#endif
-
-// converts this c string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline wxString wxMacMakeStringFromMacString( const wxString& from  ) 
-  { return wxApp::s_macDefaultEncodingIsPC ? 
-      wxMacMakeStringFromMacString( from.c_str() , true ) : from ; }
-
-// 
-// Pascal Strings
-//
-
-// converts this string into a pascal with optional pc 2 mac encoding
-void wxMacStringToPascal( const wxChar * from , StringPtr to , bool pc2macEncoding ) ;
-
-// converts this string into a pascal with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline void wxMacStringToPascal( const wxChar * from , StringPtr to ) 
-  { wxMacStringToPascal( from , to , wxApp::s_macDefaultEncodingIsPC ) ; }
-
-// converts this string into a pascal with optional mac 2 pc encoding
-wxString wxMacMakeStringFromPascal( ConstStringPtr from , bool mac2pcEncoding ) ;
-
-// converts this pascal string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline wxString wxMacMakeStringFromPascal( ConstStringPtr from  ) 
-  { return wxMacMakeStringFromPascal( from , wxApp::s_macDefaultEncodingIsPC ) ; }
-
-// 
-// CFStringRefs (Carbon only)
-//
-
-#if TARGET_CARBON
-// converts this string into a carbon foundation string with optional pc 2 mac encoding
-CFStringRef wxMacStringToCFString( const wxString &str , bool pc2macEncoding ) ;
-
-// converts this string into a carbon foundation string with optional pc 2 mac encoding
-inline CFStringRef wxMacStringToCFString( const wxString &str ) 
-  { return wxMacStringToCFString( str , wxApp::s_macDefaultEncodingIsPC ) ; }
-
-#endif //TARGET_CARBON
-
-#endif // 0
 
 #endif
     // _WX_PRIVATE_H_

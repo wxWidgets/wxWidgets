@@ -93,10 +93,6 @@ wxAppConsole *wxAppConsole::ms_appInstance = NULL;
 
 wxAppInitializerFunction wxAppConsole::ms_appInitFn = NULL;
 
-#ifdef __WXMAC__
-bool wxAppConsole::s_macDefaultEncodingIsPC = true ;
-#endif
-
 // ============================================================================
 // wxAppConsole implementation
 // ============================================================================
