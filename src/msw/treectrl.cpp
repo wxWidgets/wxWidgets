@@ -36,10 +36,11 @@
 
 // Mingw32 is a bit mental even though this is done in winundef
 #ifdef GetFirstChild
-#undef GetFirstChild
+    #undef GetFirstChild
 #endif
+
 #ifdef GetNextSibling
-#undef GetNextSibling
+    #undef GetNextSibling
 #endif
 
 #if defined(__WIN95__)
@@ -85,9 +86,6 @@ struct wxTreeViewItem : public TV_ITEM
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
 #endif
-
-// hide the ugly cast (of course, the macro is _quite_ ugly too...)
-#define wxhWnd    ((HWND)m_hWnd)
 
 // ----------------------------------------------------------------------------
 // variables
@@ -195,7 +193,7 @@ wxTreeCtrl::~wxTreeCtrl()
 
 bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
 {
-    if ( !TreeView_GetItem(wxhWnd, tvItem) )
+    if ( !TreeView_GetItem(GetHwnd(), tvItem) )
     {
         wxLogLastError("TreeView_GetItem");
 
@@ -207,7 +205,7 @@ bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
 
 void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
 {
-    if ( TreeView_SetItem(wxhWnd, tvItem) == -1 )
+    if ( TreeView_SetItem(GetHwnd(), tvItem) == -1 )
     {
         wxLogLastError("TreeView_SetItem");
     }
@@ -215,17 +213,17 @@ void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
 
 size_t wxTreeCtrl::GetCount() const
 {
-    return (size_t)TreeView_GetCount(wxhWnd);
+    return (size_t)TreeView_GetCount(GetHwnd());
 }
 
 unsigned int wxTreeCtrl::GetIndent() const
 {
-    return TreeView_GetIndent(wxhWnd);
+    return TreeView_GetIndent(GetHwnd());
 }
 
 void wxTreeCtrl::SetIndent(unsigned int indent)
 {
-    TreeView_SetIndent(wxhWnd, indent);
+    TreeView_SetIndent(GetHwnd(), indent);
 }
 
 wxImageList *wxTreeCtrl::GetImageList() const
@@ -241,7 +239,7 @@ wxImageList *wxTreeCtrl::GetStateImageList() const
 void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 {
     // no error return
-    TreeView_SetImageList(wxhWnd,
+    TreeView_SetImageList(GetHwnd(),
                           imageList ? imageList->GetHIMAGELIST() : 0,
                           which);
 }
@@ -385,7 +383,7 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
     // Bug in Gnu-Win32 headers, so don't use the macro TreeView_GetItemRect
     RECT rect;
-    return SendMessage(wxhWnd, TVM_GETITEMRECT, FALSE, (LPARAM)&rect) != 0;
+    return SendMessage(GetHwnd(), TVM_GETITEMRECT, FALSE, (LPARAM)&rect) != 0;
 
 }
 
@@ -430,24 +428,24 @@ bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetRootItem() const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetRoot(wxhWnd));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetRoot(GetHwnd()));
 }
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(wxhWnd));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(GetHwnd()));
 }
 
 wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetParent(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetParent(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
                                        long& _cookie) const
 {
     // remember the last child returned in 'cookie'
-    _cookie = (long)TreeView_GetChild(wxhWnd, (HTREEITEM) (WXHTREEITEM)item);
+    _cookie = (long)TreeView_GetChild(GetHwnd(), (HTREEITEM) (WXHTREEITEM)item);
 
     return wxTreeItemId((WXHTREEITEM)_cookie);
 }
@@ -455,7 +453,7 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
                                       long& _cookie) const
 {
-    wxTreeItemId l = wxTreeItemId((WXHTREEITEM)TreeView_GetNextSibling(wxhWnd,
+    wxTreeItemId l = wxTreeItemId((WXHTREEITEM)TreeView_GetNextSibling(GetHwnd(),
                                    (HTREEITEM)(WXHTREEITEM)_cookie));
     _cookie = (long)l;
 
@@ -480,17 +478,17 @@ wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevSibling(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 {
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetFirstVisible(wxhWnd));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetFirstVisible(GetHwnd()));
 }
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
@@ -498,7 +496,7 @@ wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxASSERT_MSG( IsVisible(item), _T("The item you call GetNextVisible() "
                                       "for must be visible itself!"));
 
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextVisible(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
@@ -506,7 +504,7 @@ wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
     wxASSERT_MSG( IsVisible(item), _T("The item you call GetPrevVisible() "
                                       "for must be visible itself!"));
 
-    return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item));
 }
 
 // ----------------------------------------------------------------------------
@@ -562,7 +560,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     tvIns.item.mask = mask;
 
-    HTREEITEM id = (HTREEITEM) TreeView_InsertItem(wxhWnd, &tvIns);
+    HTREEITEM id = (HTREEITEM) TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
     {
         wxLogLastError("TreeView_InsertItem");
@@ -624,7 +622,7 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
-    if ( !TreeView_DeleteItem(wxhWnd, (HTREEITEM)(WXHTREEITEM)item) )
+    if ( !TreeView_DeleteItem(GetHwnd(), (HTREEITEM)(WXHTREEITEM)item) )
     {
         wxLogLastError("TreeView_DeleteItem");
     }
@@ -647,7 +645,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
     size_t nCount = children.Count();
     for ( size_t n = 0; n < nCount; n++ )
     {
-        if ( !TreeView_DeleteItem(wxhWnd, (HTREEITEM)children[n]) )
+        if ( !TreeView_DeleteItem(GetHwnd(), (HTREEITEM)children[n]) )
         {
             wxLogLastError("TreeView_DeleteItem");
         }
@@ -656,7 +654,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
-    if ( !TreeView_DeleteAllItems(wxhWnd) )
+    if ( !TreeView_DeleteAllItems(GetHwnd()) )
     {
         wxLogLastError("TreeView_DeleteAllItems");
     }
@@ -671,8 +669,18 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
                   _T("Unknown flag in wxTreeCtrl::DoExpand") );
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
-    // emulate them
-    if ( TreeView_Expand(wxhWnd, (HTREEITEM) (WXHTREEITEM) item, flag) != 0 )
+    // emulate them. This behaviour has changed slightly with comctl32.dll
+    // v 4.70 - now it does send them but only the first time. To maintain
+    // compatible behaviour and also in order to not have surprises with the
+    // future versions, don't rely on this and still do everything ourselves.
+    // To avoid that the messages be sent twice when the item is expanded for
+    // the first time we must clear TVIS_EXPANDEDONCE style manually.
+
+    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_EXPANDEDONCE);
+    tvItem.state = 0;
+    DoSetItem(&tvItem);
+
+    if ( TreeView_Expand(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item, flag) != 0 )
     {
         wxTreeEvent event(wxEVT_NULL, m_windowId);
         event.m_item = item;
@@ -681,18 +689,14 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
 
         event.SetEventObject(this);
 
-        // @@@ return values of {EXPAND|COLLAPS}ING event handler is discarded
+        // FIXME return value of {EXPAND|COLLAPS}ING event handler is discarded
         event.SetEventType(g_events[isExpanded][TRUE]);
         GetEventHandler()->ProcessEvent(event);
 
         event.SetEventType(g_events[isExpanded][FALSE]);
         GetEventHandler()->ProcessEvent(event);
     }
-    else
-    {
-        // I wonder if it really ever happens...
-        wxLogDebug(_T("TreeView_Expand: change didn't took place."));
-    }
+    //else: change didn't took place, so do nothing at all
 }
 
 void wxTreeCtrl::Expand(const wxTreeItemId& item)
@@ -727,21 +731,39 @@ void wxTreeCtrl::Unselect()
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
 {
-    if ( !TreeView_SelectItem(wxhWnd, (HTREEITEM) (WXHTREEITEM) item) )
+    // inspite of the docs (MSDN Jan 99 edition), we don't seem to receive
+    // the notification from the control (i.e. TVN_SELCHANG{ED|ING}), so
+    // send them ourselves
+
+    wxTreeEvent event(wxEVT_NULL, m_windowId);
+    event.m_item = item;
+    event.SetEventObject(this);
+
+    event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGING);
+    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
     {
-        wxLogLastError("TreeView_SelectItem");
+        if ( !TreeView_SelectItem(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item) )
+        {
+            wxLogLastError("TreeView_SelectItem");
+        }
+        else
+        {
+            event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+            (void)GetEventHandler()->ProcessEvent(event);
+        }
     }
+    //else: program vetoed the change
 }
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
     // no error return
-    TreeView_EnsureVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item);
+    TreeView_EnsureVisible(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item);
 }
 
 void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 {
-    if ( !TreeView_SelectSetFirstVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item) )
+    if ( !TreeView_SelectSetFirstVisible(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item) )
     {
         wxLogLastError("TreeView_SelectSetFirstVisible");
     }
@@ -768,7 +790,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 {
     wxASSERT( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)) );
 
-    HWND hWnd = (HWND) TreeView_EditLabel(wxhWnd, (HTREEITEM) (WXHTREEITEM) item);
+    HWND hWnd = (HWND) TreeView_EditLabel(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item);
 
     wxCHECK_MSG( hWnd, NULL, _T("Can't edit tree ctrl label") );
 
@@ -784,7 +806,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 // End label editing, optionally cancelling the edit
 void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges)
 {
-    TreeView_EndEditLabelNow(wxhWnd, discardChanges);
+    TreeView_EndEditLabelNow(GetHwnd(), discardChanges);
 
     DeleteTextCtrl();
 }
@@ -795,7 +817,7 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     hitTestInfo.pt.x = (int)point.x;
     hitTestInfo.pt.y = (int)point.y;
 
-    TreeView_HitTest(wxhWnd, &hitTestInfo);
+    TreeView_HitTest(GetHwnd(), &hitTestInfo);
 
     flags = 0;
 
@@ -825,7 +847,7 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                                  bool textOnly) const
 {
     RECT rc;
-    if ( TreeView_GetItemRect(wxhWnd, (HTREEITEM)(WXHTREEITEM)item,
+    if ( TreeView_GetItemRect(GetHwnd(), (HTREEITEM)(WXHTREEITEM)item,
                               &rc, textOnly) )
     {
         rect = wxRect(wxPoint(rc.left, rc.top), wxPoint(rc.right, rc.bottom));
@@ -866,7 +888,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     // directly if we're not in derived class (much more efficient!)
     if ( GetClassInfo() == CLASSINFO(wxTreeCtrl) )
     {
-        TreeView_SortChildren(wxhWnd, (HTREEITEM)(WXHTREEITEM)item, 0);
+        TreeView_SortChildren(GetHwnd(), (HTREEITEM)(WXHTREEITEM)item, 0);
     }
     else
     {
@@ -874,7 +896,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
         tvSort.hParent = (HTREEITEM)(WXHTREEITEM)item;
         tvSort.lpfnCompare = (PFNTVCOMPARE)TreeView_CompareCallback;
         tvSort.lParam = (LPARAM)this;
-        TreeView_SortChildrenCB(wxhWnd, &tvSort, 0 /* reserved */);
+        TreeView_SortChildrenCB(GetHwnd(), &tvSort, 0 /* reserved */);
     }
 }
 

@@ -46,6 +46,8 @@ public:
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr)
     {
+        Init();
+
         Create(parent, id, pos, size, style, name);
     }
 
