@@ -39,6 +39,7 @@ public:
         RGNRECT                     vRgnData;
         PRECTL                      pRect = NULL;
 
+        vRgnData.ulDirection = RECTDIR_LFRT_TOPBOT;
         if (::GpiQueryRegionRects( rData.m_hPS      // Pres space
                                   ,rData.m_hRegion  // Handle of region to query
                                   ,NULL             // Return all RECTs
@@ -554,6 +555,7 @@ void wxRegion::SetPS(
     RGNRECT                     vRgnData;
     PRECTL                      pRect = NULL;
 
+    vRgnData.ulDirection = RECTDIR_LFRT_TOPBOT;
     if (::GpiQueryRegionRects( ((wxRegionRefData*)m_refData)->m_hPS
                               ,((wxRegionRefData*)m_refData)->m_hRegion
                               ,NULL
@@ -644,6 +646,7 @@ void wxRegionIterator::Reset(
         RGNRECT                     vRgnData;
         PRECTL                      pRect;
 
+        vRgnData.ulDirection = RECTDIR_LFRT_TOPBOT;
         if (::GpiQueryRegionRects( ((wxRegionRefData*)rRegion.m_refData)->m_hPS     // Pres space
                                   ,((wxRegionRefData*)rRegion.m_refData)->m_hRegion // Handle of region to query
                                   ,NULL                                             // Return all RECTs
@@ -663,10 +666,12 @@ void wxRegionIterator::Reset(
                                       ,pRect                                            // Will contain the actual RECTS
                                      ))
             {
+#if 0
                 M_REGION = ::GpiCreateRegion( ((wxRegionRefData*)rRegion.m_refData)->m_hPS
                                              ,vRgnData.crcReturned
                                              ,pRect
                                             );
+#endif
                 for( LONG i = 0; i < m_lNumRects; i++)
                 {
                     m_pRects[i].x      = pRect[i].xLeft;
@@ -674,7 +679,9 @@ void wxRegionIterator::Reset(
                     m_pRects[i].y      = pRect[i].yBottom;
                     m_pRects[i].height = pRect[i].yTop - pRect[i].yBottom;
                 }
+#if 0
                 ((wxRegionRefData*)m_refData)->m_hPS = ((wxRegionRefData*)rRegion.m_refData)->m_hPS;
+#endif
             }
         }
     }
