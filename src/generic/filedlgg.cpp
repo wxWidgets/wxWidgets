@@ -67,17 +67,16 @@
     #include <direct.h>
 #endif
 
-# include <time.h>
+#include <time.h>
 #include <unistd.h>
 
 //-----------------------------------------------------------------------------
 //  wxFileData
 //-----------------------------------------------------------------------------
 
-class wxFileData : public wxObject
+class wxFileData
 {
 public:
-    wxFileData() { }
     wxFileData( const wxString &name, const wxString &fname );
     wxString GetName() const;
     wxString GetFullName() const;
@@ -103,8 +102,6 @@ private:
     bool     m_isDir;
     bool     m_isLink;
     bool     m_isExe;
-
-    DECLARE_DYNAMIC_CLASS(wxFileData);
 };
 
 //-----------------------------------------------------------------------------
@@ -124,6 +121,8 @@ public:
                 long style = wxLC_LIST,
                 const wxValidator &validator = wxDefaultValidator,
                 const wxString &name = wxT("filelist") );
+    virtual ~wxFileCtrl();
+
     void ChangeToListMode();
     void ChangeToReportMode();
     void ChangeToIconMode();
@@ -138,9 +137,8 @@ public:
     void SetWild( const wxString &wild );
     void GetDir( wxString &dir );
     void OnListDeleteItem( wxListEvent &event );
-    void OnListDeleteAllItems( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
-    
+
     // Associate commonly used UI controls with wxFileCtrl so that they can be
     // disabled when they cannot be used (e.g. can't go to parent directory
     // if wxFileCtrl already is in the root dir):
@@ -148,10 +146,13 @@ public:
     void SetNewDirControl(wxWindow *ctrl) { m_newDirControl = ctrl; }
 
 private:
+    void FreeItemData(const wxListItem& item);
+    void FreeAllItemsData();
+
     wxString      m_dirName;
     bool          m_showHidden;
     wxString      m_wild;
-    
+
     wxWindow     *m_goToParentControl;
     wxWindow     *m_newDirControl;
 
@@ -199,7 +200,7 @@ wxFileIconsTable::wxFileIconsTable() :
     // FI_FOLDER:
     m_ImageList.Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_CMN_DIALOG));
     // FI_UNKNOWN:
-    m_ImageList.Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_CMN_DIALOG)); 
+    m_ImageList.Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_CMN_DIALOG));
     // FI_EXECUTABLE:
     if (GetIconID(wxEmptyString, _T("application/x-executable")) == FI_UNKNOWN)
     {
@@ -391,13 +392,11 @@ extern bool wxIsDriveAvailable(const wxString& dirName);
 //  wxFileData
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileData,wxObject);
-
 wxFileData::wxFileData( const wxString &name, const wxString &fname )
 {
     m_name = name;
     m_fileName = fname;
-    
+
 #if defined(__DOS__) || defined(__WINDOWS__)
     // VS: In case the file is root directory of a volume (e.g. "C:"),
     //     we don't want it stat()ed, since the drive may not be in:
@@ -584,7 +583,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileCtrl,wxListCtrl);
 
 BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
     EVT_LIST_DELETE_ITEM(-1, wxFileCtrl::OnListDeleteItem)
-    EVT_LIST_DELETE_ALL_ITEMS(-1, wxFileCtrl::OnListDeleteAllItems)
     EVT_LIST_END_LABEL_EDIT(-1, wxFileCtrl::OnListEndLabelEdit)
 END_EVENT_TABLE()
 
@@ -602,11 +600,11 @@ wxFileCtrl::wxFileCtrl()
 wxFileCtrl::wxFileCtrl(wxWindow *win, wxWindowID id,
                        const wxString &dirName, const wxString &wild,
                        const wxPoint &pos, const wxSize &size,
-                       long style, const wxValidator &validator, 
+                       long style, const wxValidator &validator,
                        const wxString &name)
         : wxListCtrl(win, id, pos, size, style, validator, name)
 {
-    if (! g_IconsTable) 
+    if (! g_IconsTable)
         g_IconsTable = new wxFileIconsTable;
     wxImageList *imageList = g_IconsTable->GetImageList();
 
@@ -658,7 +656,7 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
         const int noEntries = 4;
 #endif
         ret = InsertItem( item );
-        for (int i = 1; i < noEntries; i++) 
+        for (int i = 1; i < noEntries; i++)
             SetItem( item.m_itemId, i, fd->GetEntry( i) );
     }
     else if (my_style & wxLC_LIST)
@@ -671,7 +669,7 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
 void wxFileCtrl::UpdateFiles()
 {
     wxBusyCursor bcur; // this may take a while...
-    
+
     long my_style = GetWindowStyleFlag();
     int name_col_width = 0;
     if (my_style & wxLC_REPORT)
@@ -680,7 +678,9 @@ void wxFileCtrl::UpdateFiles()
             name_col_width = GetColumnWidth( 0 );
     }
 
+    FreeAllItemsData();
     ClearAll();
+
     if (my_style & wxLC_REPORT)
     {
         if (name_col_width < 140) name_col_width = 140;
@@ -699,7 +699,7 @@ void wxFileCtrl::UpdateFiles()
 
 #if defined(__DOS__) || defined(__WINDOWS__)
     if ( IsTopMostDir(m_dirName) )
-    {   
+    {
         // Pseudo-directory with all available drives listed...
         for (int drive = 1; drive <= 26; drive++)
         {
@@ -740,7 +740,7 @@ void wxFileCtrl::UpdateFiles()
         {
             wxString dirPrefix(dirname + wxFILE_SEP_PATH);
             int hiddenFlag = m_showHidden ? wxDIR_HIDDEN : 0;
-            
+
             bool cont;
             wxString f;
 
@@ -754,12 +754,12 @@ void wxFileCtrl::UpdateFiles()
                 cont = dir.GetNext(&f);
             }
 
-            // Tokenize the wildcard string, so we can handle more than 1 
+            // Tokenize the wildcard string, so we can handle more than 1
             // search pattern in a wildcard.
             wxStringTokenizer tokenWild(m_wild, wxT(";"));
             while ( tokenWild.HasMoreTokens() )
             {
-                cont = dir.GetFirst(&f, tokenWild.GetNextToken(), 
+                cont = dir.GetFirst(&f, tokenWild.GetNextToken(),
                                         wxDIR_FILES | hiddenFlag);
                 while (cont)
                 {
@@ -780,7 +780,7 @@ void wxFileCtrl::UpdateFiles()
        SetColumnWidth(2, wxLIST_AUTOSIZE);
        SetColumnWidth(3, wxLIST_AUTOSIZE);
     }
-    
+
     // Finally, enable/disable context-dependent controls:
     if ( m_goToParentControl )
         m_goToParentControl->Enable(!IsTopMostDir(m_dirName));
@@ -852,7 +852,7 @@ void wxFileCtrl::GoToParentDir()
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
 #ifdef __UNIX__
-        if (m_dirName.IsEmpty()) 
+        if (m_dirName.IsEmpty())
             m_dirName = wxT("/");
 #endif
         UpdateFiles();
@@ -884,13 +884,18 @@ void wxFileCtrl::GetDir( wxString &dir )
     dir = m_dirName;
 }
 
-void wxFileCtrl::OnListDeleteItem( wxListEvent &event )
+void wxFileCtrl::FreeItemData(const wxListItem& item)
 {
-    wxFileData *fd = (wxFileData*)event.m_item.m_data;
+    wxFileData *fd = (wxFileData*)item.m_data;
     delete fd;
 }
 
-void wxFileCtrl::OnListDeleteAllItems( wxListEvent &WXUNUSED(event) )
+void wxFileCtrl::OnListDeleteItem( wxListEvent &event )
+{
+    FreeItemData(event.m_item);
+}
+
+void wxFileCtrl::FreeAllItemsData()
 {
     wxListItem item;
     item.m_mask = wxLIST_MASK_DATA;
@@ -899,10 +904,7 @@ void wxFileCtrl::OnListDeleteAllItems( wxListEvent &WXUNUSED(event) )
     while ( item.m_itemId != -1 )
     {
         GetItem( item );
-        wxFileData *fd = (wxFileData*)item.m_data;
-        delete fd;
-        item.m_data = 0;
-        SetItem( item );
+        FreeItemData(item);
         item.m_itemId = GetNextItem( item.m_itemId, wxLIST_NEXT_ALL );
     }
 }
@@ -948,6 +950,11 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
         dialog.ShowModal();
         event.Veto();
     }
+}
+
+wxFileCtrl::~wxFileCtrl()
+{
+    FreeAllItemsData();
 }
 
 //-----------------------------------------------------------------------------
@@ -997,9 +1004,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     if (wxConfig::Get(FALSE))
     {
-        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ViewStyle"), 
+        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ViewStyle"),
                               &s_lastViewStyle);
-        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ShowHidden"), 
+        wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ShowHidden"),
                               &s_lastShowHidden);
     }
 
@@ -1015,7 +1022,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     {
         m_dir = wxGetCwd();
     }
-    
+
     size_t len = m_dir.Len();
     if ((len > 1) && (m_dir[len-1] == wxFILE_SEP_PATH))
         m_dir.Remove( len-1, 1 );
@@ -1059,7 +1066,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     wxBitmapButton *but;
 
-    but = new wxBitmapButton(this, ID_LIST_MODE, 
+    but = new wxBitmapButton(this, ID_LIST_MODE,
                              wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("View files as a list view") );
@@ -1075,7 +1082,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     buttonsizer->Add( 30, 5, 1 );
 
-    wxWindow *butDirUp = 
+    wxWindow *butDirUp =
         new wxBitmapButton(this, ID_UP_DIR,
                            wxArtProvider::GetBitmap(wxART_GO_DIR_UP, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
@@ -1094,7 +1101,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     buttonsizer->Add( 20, 20 );
 #endif //!__DOS__
 
-    wxWindow *butNewDir = 
+    wxWindow *butNewDir =
         new wxBitmapButton(this, ID_NEW_DIR,
                            wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
 #if wxUSE_TOOLTIPS
@@ -1134,7 +1141,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_choice = new wxChoice( this, ID_CHOICE );
     choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
     mainsizer->Add( choicesizer, 0, wxEXPAND );
-    
+
     wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
     m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
     textsizer->Add( m_text, 1, wxCENTER | wxALL, 5 );
@@ -1143,7 +1150,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
     m_check->SetValue( s_lastShowHidden );
     textsizer->Add( m_check, 0, wxCENTER|wxALL, 5 );
-    
+
     buttonsizer = new wxBoxSizer( wxHORIZONTAL );
     buttonsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxALL, 5 );
     buttonsizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 5 );
@@ -1403,7 +1410,7 @@ void wxFileDialog::OnHome( wxCommandEvent &WXUNUSED(event) )
     wxString dir;
     m_list->GetDir( dir );
     m_static->SetLabel( dir );
-    
+
     m_text->SetFocus();
 }
 
@@ -1442,7 +1449,7 @@ void wxFileDialog::GetPaths( wxArrayString& paths ) const
     wxString dir;
     m_list->GetDir( dir );
 #ifdef __UNIX__
-    if (dir != wxT("/")) 
+    if (dir != wxT("/"))
 #endif
         dir += wxFILE_SEP_PATH;
 
