@@ -126,7 +126,7 @@ public:
     {
         Load(libname, flags);
     }
-    ~wxPluginManager() { Unload(); }
+    ~wxPluginManager() { if ( IsLoaded() ) Unload(); }
 
     bool   Load(const wxString &libname, int flags = wxDL_DEFAULT);
     void   Unload();
