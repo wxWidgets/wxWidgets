@@ -619,6 +619,13 @@ int wxDialog::ShowModal()
 void wxDialog::EndModal(int retCode)
 {
     SetReturnCode(retCode);
+
+    HWND hwndParent = GetParent() ? (HWND) GetParent()->GetHWND() : (HWND)NULL;
+    if ( hwndParent )
+    {
+        ::BringWindowToTop(hwndParent);
+    }
+
     Show(FALSE);
 }
 
