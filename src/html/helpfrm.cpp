@@ -304,6 +304,11 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     if (style & wxHF_CONTENTS)
     {
         wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_INDEXPAGE);
+        
+        long treeStyle = wxSUNKEN_BORDER | wxTR_HAS_BUTTONS;
+        #ifndef __WXMSW__ // FIXME - temporary, till MSW supports wxTR_HIDE_ROOT
+        treeStyle |= wxTR_HIDE_ROOT;
+        #endif
 
         if (style & wxHF_BOOKMARKS)
         {
@@ -347,9 +352,8 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
             wxLayoutConstraints *b4 = new wxLayoutConstraints;
             m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
-                                           wxDefaultPosition, wxDefaultSize, 
-                                           wxSUNKEN_BORDER | 
-                                           wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT);
+                                           wxDefaultPosition, wxDefaultSize,
+                                           treeStyle);
             m_ContentsBox->AssignImageList(ContentsImageList);
 
             b4->top.Below (m_Bookmarks, 10);
@@ -368,7 +372,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         {
             m_ContentsBox = new wxTreeCtrl(m_NavigPan, wxID_HTML_TREECTRL,
                                            wxDefaultPosition, wxDefaultSize,
-                                           wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
+                                           treeStyle);
             m_ContentsBox->AssignImageList(ContentsImageList);
             m_NavigPan->AddPage(m_ContentsBox, _("Contents"));
         }
