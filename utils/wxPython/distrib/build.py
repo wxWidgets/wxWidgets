@@ -242,6 +242,8 @@ class BuildConfig:
         self.WXUSINGDLL = '1'
         self.OTHERDEP = ''
         self.WXPSRCDIR = '$(WXDIR)/utils/wxPython/src'
+        self.SWIGDEPS = ''
+        self.OTHERDEPS = ''
 
 
         if sys.platform == 'win32':
@@ -351,14 +353,26 @@ class BuildConfig:
         # now build the text for the dependencies
         depends = ""
         for name in self.SWIGFILES:
-            text = '$(GENCODEDIR)/%s.cpp $(GENCODEDIR)/%s.py : %s.i\n' \
+            rootname = os.path.splitext(name)[0]
+            text = '$(GENCODEDIR)/%s.cpp $(GENCODEDIR)/%s.py : %s.i %s\n' \
                    '$(TARGETDIR)\\%s.py : $(GENCODEDIR)\\%s.py\n' % \
-                   tuple([os.path.splitext(name)[0]] * 5)
+                   (rootname, rootname, rootname, self.SWIGDEPS, rootname, rootname)
             depends = depends + text
+            if self.OTHERDEPS:
+                text = '%s%s : %s\n' % \
+                       (os.path.splitext(name)[0], self.OBJEXT, self.OTHERDEPS)
+                depends = depends + text
         for name in self.PYFILES:
             text = '$(TARGETDIR)\\%s.py : %s.py\n' % \
                    tuple([os.path.splitext(name)[0]] * 2)
             depends = depends + text
+        if self.OTHERDEPS:
+            for name in self.SOURCES:
+                name = os.path.basename(name)
+                text = '%s%s : %s\n' % \
+                       (os.path.splitext(name)[0], self.OBJEXT, self.OTHERDEPS)
+                depends = depends + text
+
         self.DEPENDS = swapslash(depends)
 
 
