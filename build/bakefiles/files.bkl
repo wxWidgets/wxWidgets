@@ -185,12 +185,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set -->
 
 <!-- Base files used only by OS X builds (not CarbonLib or Classic)  -->
-<set var="BASE_MAC_OSX_SRC" hints="files">
+<set var="BASE_MACOSX_WXMAC_SRC" hints="files">
+    $(BASE_MAC_SRC)
     src/unix/baseunix.cpp
     src/unix/dlunix.cpp
     src/unix/stdpaths.cpp
 </set>
-<set var="BASE_MAC_OSX_HDR" hints="files">
+<set var="BASE_MACOSX_WXMAC_HDR" hints="files">
+    $(BASE_MAC_HDR)
     wx/unix/stdpaths.h
 </set>
 
@@ -2709,7 +2711,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Nested if would be nicer, but this works -->
     <!-- These are the files for PLATFORM_MACOSX -->
     <set var="BASE_MACOSX_SRC" hints="files">
-        <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC) $(BASE_MAC_OSX_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(BASE_MACOSX_WXMAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(BASE_MACOSX_NOTWXMAC_SRC)</if>
@@ -2742,7 +2744,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="BASE_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
-        <if cond="TOOLKIT=='MAC'">$(BASE_MAC_HDR) $(BASE_MAC_OSX_HDR)</if>
+        <if cond="TOOLKIT=='MAC'">$(BASE_MACOSX_WXMAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(BASE_UNIX_HDR)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
     </set>
