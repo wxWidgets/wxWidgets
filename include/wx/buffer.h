@@ -9,8 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// these classes are for private use only for now, they're not documented
-
 #ifndef _WX_BUFFER_H
 #define _WX_BUFFER_H
 

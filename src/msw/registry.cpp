@@ -55,6 +55,7 @@
 
 // some registry functions don't like signed chars
 typedef unsigned char *RegString;
+typedef BYTE* RegBinary;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -491,14 +492,19 @@ bool wxRegKey::CopyValue(const wxChar *szValue,
                        keyDst.SetValue(szValueNew, dwVal);
             }
 
+#ifdef  __WIN32__
+        case Type_Binary:
+	    {
+	        wxMemoryBuffer buf;
+		return QueryValue(szValue,buf) &&
+			keyDst.SetValue(szValueNew,buf);
+	    }
         // these types are unsupported because I am not sure about how
         // exactly they should be copied and because they shouldn't
         // occur among the application keys (supposedly created with
         // this class)
-#ifdef  __WIN32__
         case Type_None:
         case Type_Expand_String:
-        case Type_Binary:
         case Type_Dword_big_endian:
         case Type_Link:
         case Type_Multi_String:
@@ -601,6 +607,9 @@ bool wxRegKey::Copy(wxRegKey& keyDst)
 
         if ( ok )
             bCont = GetNextKey(strKey, lIndex);
+	else
+	    wxLogError(_("Failed to copy the registry subkey '%s' to '%s'."), GetFullName(&key), keyName.mb_str());
+	    
     }
 
     // copy all values
@@ -823,6 +832,61 @@ bool wxRegKey::QueryValue(const wxChar *szValue, long *plValue) const
   else
     return FALSE;
 }
+
+bool wxRegKey::SetValue(const wxChar *szValue,const wxMemoryBuffer& buffer)
+{
+#ifdef __TWIN32__
+  wxFAIL_MSG("RegSetValueEx not implemented by TWIN32");
+  return FALSE;
+#else
+  if ( CONST_CAST Open() ) {
+    m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_BINARY,
+                                  (RegBinary)buffer.GetData(),buffer.GetDataLen());
+    if ( m_dwLastError == ERROR_SUCCESS )
+      return TRUE;
+  }
+
+  wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
+                GetFullName(this, szValue));
+  return FALSE;
+#endif
+}
+
+bool wxRegKey::QueryValue(const wxChar *szValue, wxMemoryBuffer& buffer) const
+{
+  if ( CONST_CAST Open() ) {
+    // first get the type and size of the data
+    DWORD dwType, dwSize;
+    m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
+                                      &dwType, NULL, &dwSize);
+    
+    if ( m_dwLastError == ERROR_SUCCESS ) {
+        if ( dwSize ) {
+            const RegBinary pBuf = (RegBinary)buffer.GetWriteBuf(dwSize);
+            m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
+                                            WXSTRINGCAST szValue,
+                                            RESERVED,
+                                            &dwType,
+                                            pBuf,
+                                            &dwSize);
+            buffer.UngetWriteBuf(dwSize);
+	} else {
+	    buffer.SetDataLen(0);
+        }
+    }
+
+    
+    if ( m_dwLastError != ERROR_SUCCESS ) {
+      wxLogSysError(m_dwLastError, _("Can't read value of key '%s'"),
+                    GetName().c_str());
+      return FALSE;
+    }
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
 
 #endif  //Win32
 

@@ -197,6 +197,10 @@ public:
   bool  SetValue(const wxChar *szValue, long lValue);
     // return the numeric value
   bool  QueryValue(const wxChar *szValue, long *plValue) const;
+    // set the binary value
+  bool  SetValue(const wxChar *szValue, const wxMemoryBuffer& buf);
+    // return the binary value
+  bool  QueryValue(const wxChar *szValue, wxMemoryBuffer& buf) const;
 #endif  //Win32
 
   // query existence of a key/value
