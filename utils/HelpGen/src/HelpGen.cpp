@@ -10,7 +10,15 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-   TODO (+ means fixed)
+   BUGS
+
+    1. wx/string.h confuses C++ parser terribly
+    2. C++ parser doesn't know about virtual functions, nor static ones
+    3. param checking is not done for vararg functions
+    4. type comparison is dumb: it doesn't know that "char *" is the same
+       that "char []" nor that "const char *" is the same as "char const *"
+
+   TODO (+ means fixed), see also the change log at the end of the file.
 
    (i) small fixes in the current version
 
@@ -19,11 +27,16 @@
     3. Document global variables
     4. Document #defines
    +5. Program options
+    6. Include file name/line number in the "diff" messages?
+   +7. Support for vararg functions
 
    (ii) plans for version 2
     1. Use wxTextFile for direct file access to avoid one scan method problems
-    2. Use command line parsrer class for the options
+    2. Use command line parser class for the options
 
+   (iii) plans for version 3
+    1. Merging with existing files
+    2. GUI
 */
 
 // =============================================================================
@@ -53,6 +66,13 @@
 #include <time.h>
 
 // -----------------------------------------------------------------------------
+// global vars
+// -----------------------------------------------------------------------------
+
+// just a copy of argv
+static char **g_argv = NULL;
+
+// -----------------------------------------------------------------------------
 // private functions
 // -----------------------------------------------------------------------------
 
@@ -62,8 +82,9 @@ static wxString MakeLabel(const char *classname, const char *funcname = NULL);
 // return the whole \helpref{arg}{arg_label} string
 static wxString MakeHelpref(const char *argument);
 
-// quotes special TeX characters in place
+// [un]quote special TeX characters (in place)
 static void TeXFilter(wxString* str);
+static void TeXUnfilter(wxString* str); // also trims spaces
 
 // get all comments associated with this context
 static wxString GetAllComments(const spContext& ctx);
@@ -99,6 +120,7 @@ private:
     wxTeXFile& operator=(const wxTeXFile&);
 };
 
+// visitor implementation which writes all collected data to a .tex file
 class HelpGenVisitor : public spVisitor
 {
 public:
@@ -161,6 +183,192 @@ private:
     HelpGenVisitor& operator=(const HelpGenVisitor&);
 };
 
+// documentation manager - a class which parses TeX files and remembers the
+// functions documented in them and can later compare them with all functions
+// found under ctxTop by C++ parser
+class DocManager
+{
+public:
+    DocManager() : m_ignore(CompareIgnoreListEntries) { }
+    ~DocManager();
+
+    // load file with class names and function names to ignore during diff
+    bool LoadIgnoreFile(const wxString& filename);
+
+    // returns FALSE on failure
+    bool ParseTeXFile(const wxString& filename);
+
+    // returns FALSE if there were any differences
+    bool DumpDifferences(spContext *ctxTop) const;
+
+protected:
+    // parsing TeX files
+    // -----------------
+
+    // returns the length of 'match' if the string 'str' starts with it or 0
+    // otherwise
+    static size_t TryMatch(const char *str, const char *match);
+
+    // skip spaces: returns pointer to first non space character (also
+    // updates the value of m_line)
+    const char *SkipSpaces(const char *p)
+    {
+        while ( isspace(*p) ) {
+            if ( *p++ == '\n' )
+                m_line++;
+        }
+
+        return p;
+    }
+
+    // skips characters until the next 'c' in '*pp' unless it ends before in
+    // which case FALSE is returned and pp points to '\0', otherwise TRUE is
+    // returned and pp points to 'c'
+    bool SkipUntil(const char **pp, char c);
+
+    // the same as SkipUntil() but only spaces are skipped: on first non space
+    // character different from 'c' the function stops and returns FALSE
+    bool SkipSpaceUntil(const char **pp, char c);
+
+    // extract the string between {} and modify '*pp' to point at the
+    // character immediately after the closing '}'. The returned string is empty
+    // on error.
+    wxString ExtractStringBetweenBraces(const char **pp);
+
+    // the current file and line while we're in ParseTeXFile (for error
+    // messages)
+    wxString m_filename;
+    size_t   m_line;
+
+    // functions and classes to ignore during diff
+    // -------------------------------------------
+    struct IgnoreListEntry
+    {
+        IgnoreListEntry(const wxString& classname,
+                        const wxString& funcname)
+            : m_classname(classname), m_funcname(funcname)
+        {
+        }
+
+        wxString m_classname;
+        wxString m_funcname;    // if empty, ignore class entirely
+    };
+
+    static int CompareIgnoreListEntries(IgnoreListEntry *first,
+                                        IgnoreListEntry *second);
+
+    // for efficiency, let's sort it
+    WX_DEFINE_SORTED_ARRAY(IgnoreListEntry *, ArrayNamesToIgnore);
+
+    ArrayNamesToIgnore m_ignore;
+
+    // return TRUE if we ignore this function
+    bool IgnoreMethod(const wxString& classname,
+                      const wxString& funcname) const
+    {
+        IgnoreListEntry ignore(classname, funcname);
+
+        return m_ignore.Index(&ignore) != wxNOT_FOUND;
+    }
+
+    // return TRUE if we ignore this class entirely
+    bool IgnoreClass(const wxString& classname) const
+    {
+        return IgnoreMethod(classname, "");
+    }
+
+    // information about all functions documented in the TeX file(s)
+    // -------------------------------------------------------------
+
+    // info about a type: for now stored as text string, but must be parsed
+    // further later (to know that "char *" == "char []" - TODO)
+    class TypeInfo
+    {
+    public:
+        TypeInfo(const wxString& type) : m_type(type) { }
+
+        bool operator==(const wxString& type) const { return m_type == type; }
+        bool operator!=(const wxString& type) const { return m_type != type; }
+
+        const wxString& GetName() const { return m_type; }
+
+    private:
+        wxString m_type;
+    };
+
+    // info abotu a function parameter
+    class ParamInfo
+    {
+    public:
+        ParamInfo(const wxString& type,
+                  const wxString& name,
+                  const wxString& value)
+            : m_type(type), m_name(name), m_value(value)
+        {
+        }
+
+        const TypeInfo& GetType() const { return m_type; }
+        const wxString& GetName() const { return m_name; }
+        const wxString& GetDefValue() const { return m_value; }
+
+    private:
+        TypeInfo m_type;      // type of parameter
+        wxString m_name;      // name
+        wxString m_value;     // default value
+    };
+
+    WX_DEFINE_ARRAY(ParamInfo *, ArrayParamInfo);
+
+    // info about a function
+    struct MethodInfo
+    {
+    public:
+        enum MethodFlags
+        {
+            Const   = 0x0001,
+            Virtual = 0x0002,
+            Pure    = 0x0004,
+            Static  = 0x0008,
+            Vararg  = 0x0010
+        };
+
+        MethodInfo(const wxString& type,
+                   const wxString& name,
+                   const ArrayParamInfo& params)
+            : m_typeRet(type), m_name(name), m_params(params)
+        {
+            m_flags = 0;
+        }
+
+        void SetFlag(MethodFlags flag) { m_flags |= flag; }
+
+        const TypeInfo& GetType() const { return m_typeRet; }
+        const wxString& GetName() const { return m_name; }
+        const ParamInfo& GetParam(size_t n) const { return *(m_params[n]); }
+        size_t GetParamCount() const { return m_params.GetCount(); }
+
+        bool HasFlag(MethodFlags flag) const { return (m_flags & flag) != 0; }
+
+        ~MethodInfo() { WX_CLEAR_ARRAY(m_params); }
+
+    private:
+        TypeInfo m_typeRet;     // return type
+        wxString m_name;
+        int      m_flags;       // bit mask of the value from the enum above
+
+        ArrayParamInfo m_params;
+    };
+
+    WX_DEFINE_ARRAY(MethodInfo *, ArrayMethodInfo);
+    WX_DEFINE_ARRAY(ArrayMethodInfo *, ArrayMethodInfos);
+
+    // first array contains the names of all classes we found, the second has a
+    // pointer to the array of methods of the given class at the same index as
+    // the class name appears in m_classes
+    wxArrayString    m_classes;
+    ArrayMethodInfos m_methods;
+};
+
 // -----------------------------------------------------------------------------
 // private functions
 // -----------------------------------------------------------------------------
@@ -172,86 +380,207 @@ private:
 // this function never returns
 static void usage()
 {
-    wxLogError("usage: HelpGen [-q|-v] [-o outdir] <header files...>\n");
+    wxString prog = g_argv[0];
+    wxString basename = prog.BeforeLast('/');
+#ifdef __WXMSW__
+    if ( !basename )
+        basename = prog.BeforeLast('\\');
+#endif
+    if ( !basename )
+        basename = prog;
+
+    wxLogError(
+"usage: %s [global options] <mode> [mode options] <files...>\n"
+"\n"
+"   where global options are:\n"
+"       -q          be quiet\n"
+"       -v          be verbose\n"
+"       -H          give this usage message\n"
+"       -V          print the version info\n"
+"\n"
+"   where mode is one of: dump, diff\n"
+"\n"
+"   dump means generate .tex files for TeX2RTF converter from specified\n"
+"   headers files, mode options are:\n"
+"       -o outdir   directory for generated files\n"
+"\n"
+"   diff means compare the set of methods documented .tex file with the\n"
+"   methods declared in the header:\n"
+"           %s diff <file.h> <files.tex...>.\n"
+"   options are:\n"
+"       -i file     file with classes/function to ignore during diff\n"
+"\n", basename.c_str(), basename.c_str());
 
     exit(1);
 }
 
 int main(int argc, char **argv)
 {
+    enum
+    {
+        Mode_None,
+        Mode_Dump,
+        Mode_Diff
+    } mode = Mode_None;
+
+    g_argv = argv;
+
     if ( argc < 2 ) {
         usage();
     }
 
-    wxString directoryOut;
+    wxArrayString filesH, filesTeX;
+    wxString directoryOut, ignoreFile;
 
-    int first;
-    for ( first = 1; (first < argc) && argv[first][0] == '-'; first++ ) {
+    for ( int current = 1; current < argc ; current++ ) {
         // all options have one letter
-        if ( argv[first][2] == '\0' ) {
-            switch ( argv[first][1] ) {
-                case 'v':
-                    // be verbose
-                    wxLog::GetActiveTarget()->SetVerbose();
-                    continue;
+        if ( argv[current][0] == '-' ) {
+            if ( argv[current][2] == '\0' ) {
+                switch ( argv[current][1] ) {
+                    case 'v':
+                        // be verbose
+                        wxLog::GetActiveTarget()->SetVerbose();
+                        continue;
 
-                case 'q':
-                    // be quiet
-                    wxLog::GetActiveTarget()->SetVerbose(false);
-                    continue;
+                    case 'q':
+                        // be quiet
+                        wxLog::GetActiveTarget()->SetVerbose(FALSE);
+                        continue;
 
-                case 'o':
-                    first++;
-                    if ( first >= argc ) {
-                        wxLogError("-o option requires an argument.");
+                    case 'H':
+                        // help requested
+                        usage();
 
-                        break;
-                    }
+                    case 'i':
+                        if ( mode != Mode_Diff ) {
+                            wxLogError("-i is only valid with diff.");
 
-                    directoryOut = argv[first];
-                    if ( !!directoryOut ) {
-                        // terminate with a '/' if it doesn't have it
-                        switch ( directoryOut.Last() ) {
-                            case '/':
-#ifdef __WXMSW__
-                            case '\\':
-#endif
-                                break;
-
-                            default:
-                                directoryOut += '/';
+                            break;
                         }
-                    }
-                    //else: it's empty, do nothing
 
-                    continue;
+                        current++;
+                        if ( current >= argc ) {
+                            wxLogError("-i option requires an argument.");
 
-                default:
-                    break;
+                            break;
+                        }
+
+                        ignoreFile = argv[current];
+                        continue;
+
+                    case 'o':
+                        if ( mode != Mode_Dump ) {
+                            wxLogError("-o is only valid with dump.");
+
+                            break;
+                        }
+
+                        current++;
+                        if ( current >= argc ) {
+                            wxLogError("-o option requires an argument.");
+
+                            break;
+                        }
+
+                        directoryOut = argv[current];
+                        if ( !!directoryOut ) {
+                            // terminate with a '/' if it doesn't have it
+                            switch ( directoryOut.Last() ) {
+                                case '/':
+#ifdef __WXMSW__
+                                case '\\':
+#endif
+                                    break;
+
+                                default:
+                                    directoryOut += '/';
+                            }
+                        }
+                        //else: it's empty, do nothing
+
+                        continue;
+
+                    default:
+                        break;
+                }
+            }
+
+            // only get here after a break from switch or from else branch of if
+            wxLogError("unknown option '%s'", argv[current]);
+
+            usage();
+        }
+        else {
+            if ( mode == Mode_None ) {
+                if ( strcmp(argv[current], "diff") == 0 )
+                    mode = Mode_Diff;
+                else if ( strcmp(argv[current], "dump") == 0 )
+                    mode = Mode_Dump;
+                else {
+                    wxLogError("unknown mode '%s'.");
+
+                    usage();
+                }
+            }
+            else {
+                if ( mode == Mode_Dump || filesH.IsEmpty() ) {
+                    filesH.Add(argv[current]);
+                }
+                else {
+                    // 2nd files and further are TeX files in diff mode
+                    wxASSERT( mode == Mode_Diff );
+
+                    filesTeX.Add(argv[current]);
+                }
             }
         }
-
-        // only get here after a break from switch or from else branch of if
-        wxLogError("unknown option '%s'", argv[first]);
-
-        usage();
     }
 
     // create a parser object and a visitor derivation
     CJSourceParser parser;
     HelpGenVisitor visitor(directoryOut);
+    spContext *ctxTop = NULL;
 
-    // parse all files
-    for ( int i = first; i < argc; i++ ) {
-        spContext *ctxTop = parser.ParseFile(argv[i]);
+    // parse all header files
+    size_t nFiles = filesH.GetCount();
+    for ( size_t n = 0; n < nFiles; n++ ) {
+        wxString header = filesH[n];
+        ctxTop = parser.ParseFile(header);
         if ( !ctxTop ) {
-            wxLogWarning("File '%s' couldn't be processed.", argv[i]);
+            wxLogWarning("Header file '%s' couldn't be processed.",
+                         header.c_str());
         }
-        else {
-            ((spFile *)ctxTop)->mFileName = argv[i];
+        else if ( mode == Mode_Dump ) {
+            ((spFile *)ctxTop)->mFileName = header;
             visitor.VisitAll(*ctxTop);
             visitor.EndVisit();
         }
+    }
+
+    // parse all TeX files
+    if ( mode == Mode_Diff ) {
+        if ( !ctxTop ) {
+            wxLogError("Can't complete diff.");
+
+            // failure
+            return 1;
+        }
+
+        DocManager docman;
+
+        size_t nFiles = filesTeX.GetCount();
+        for ( size_t n = 0; n < nFiles; n++ ) {
+            wxString file = filesTeX[n];
+            if ( !docman.ParseTeXFile(file) ) {
+                wxLogWarning("TeX file '%s' couldn't be processed.",
+                             file.c_str());
+            }
+        }
+
+        if ( !!ignoreFile )
+            docman.LoadIgnoreFile(ignoreFile);
+
+        docman.DumpDifferences(ctxTop);
     }
 
     return 0;
@@ -266,7 +595,7 @@ void HelpGenVisitor::Reset()
     m_inClass =
     m_inFunction =
     m_inTypesSection =
-    m_inMethodSection = false;
+    m_inMethodSection = FALSE;
 
     m_textStoredTypedefs =
     m_textStoredEnums =
@@ -289,7 +618,7 @@ void HelpGenVisitor::InsertEnumDocs()
 void HelpGenVisitor::InsertDataStructuresHeader()
 {
     if ( !m_inTypesSection ) {
-        m_inTypesSection = true;
+        m_inTypesSection = TRUE;
 
         m_file.WriteTeX("\\wxheading{Data structures}\n\n");
     }
@@ -298,7 +627,7 @@ void HelpGenVisitor::InsertDataStructuresHeader()
 void HelpGenVisitor::InsertMethodsHeader()
 {
     if ( !m_inMethodSection ) {
-        m_inMethodSection = true;
+        m_inMethodSection = TRUE;
 
         m_file.WriteTeX( "\\latexignore{\\rtfignore{\\wxheading{Members}}}\n\n");
     }
@@ -307,7 +636,7 @@ void HelpGenVisitor::InsertMethodsHeader()
 void HelpGenVisitor::CloseFunction()
 {
     if ( m_inFunction ) {
-        m_inFunction = false;
+        m_inFunction = FALSE;
 
         wxString totalText;
         if ( m_isFirstParam ) {
@@ -328,14 +657,14 @@ void HelpGenVisitor::EndVisit()
 {
     CloseFunction();
 
-    wxLogInfo("%s: finished parsing the current file.",
-              GetCurrentTime("%H:%M:%S"));
+    wxLogVerbose("%s: finished generating for the current file.",
+                 GetCurrentTime("%H:%M:%S"));
 }
 
 void HelpGenVisitor::VisitFile( spFile& file )
 {
-    wxLogInfo("%s: started to parse classes from file '%s'...",
-              GetCurrentTime("%H:%M:%S"), file.mFileName.c_str());
+    wxLogVerbose("%s: started generating docs for classes from file '%s'...",
+                 GetCurrentTime("%H:%M:%S"), file.mFileName.c_str());
 }
 
 void HelpGenVisitor::VisitClass( spClass& cl )
@@ -355,6 +684,15 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     filename.MakeLower();
     filename += ".tex";
 
+    if ( wxFile::Exists(filename) ) {
+        wxLogError("Won't overwrite existing file '%s' - please use '-o'.",
+                   filename.c_str());
+
+        m_inClass = FALSE;
+
+        return;
+    }
+
     m_inClass = m_file.Open(filename, wxFile::write);
     if ( !m_inClass ) {
         wxLogError("Can't generate documentation for the class '%s'.",
@@ -364,7 +702,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     }
 
     m_inMethodSection =
-    m_inTypesSection = false;
+    m_inTypesSection = FALSE;
 
     wxLogInfo("Created new file '%s' for class '%s'.",
               filename.c_str(), name.c_str());
@@ -467,7 +805,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
         derived << "No base class";
     }
     else {
-        bool first = true;
+        bool first = TRUE;
         for ( StrListT::const_iterator i = baseClasses.begin();
               i != baseClasses.end();
               i++ ) {
@@ -476,7 +814,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
                 derived << "\\\\\n";
             }
             else {
-                first = false;
+                first = FALSE;
             }
 
             wxString baseclass = *i;
@@ -609,7 +947,7 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
 
     // save state info
     m_inFunction =
-    m_isFirstParam = true;
+    m_isFirstParam = TRUE;
 
     m_textStoredFunctionComment = GetAllComments(op);
 
@@ -646,7 +984,7 @@ void HelpGenVisitor::VisitParameter( spParameter& param )
 
     wxString totalText;
     if ( m_isFirstParam ) {
-        m_isFirstParam = false;
+        m_isFirstParam = FALSE;
     }
     else {
         totalText << ", ";
@@ -661,6 +999,708 @@ void HelpGenVisitor::VisitParameter( spParameter& param )
     totalText << '}';
 
     m_file.WriteTeX(totalText);
+}
+
+// ---------------------------------------------------------------------------
+// DocManager
+// ---------------------------------------------------------------------------
+
+size_t DocManager::TryMatch(const char *str, const char *match)
+{
+    size_t lenMatch = 0;
+    while ( str[lenMatch] == match[lenMatch] ) {
+        lenMatch++;
+
+        if ( match[lenMatch] == '\0' )
+            return lenMatch;
+    }
+
+    return 0;
+}
+
+bool DocManager::SkipUntil(const char **pp, char c)
+{
+    const char *p = *pp;
+    while ( *p != c ) {
+        if ( *p == '\0' )
+            break;
+
+        if ( *p == '\n' )
+            m_line++;
+
+        p++;
+    }
+
+    *pp = p;
+
+    return *p == c;
+}
+
+bool DocManager::SkipSpaceUntil(const char **pp, char c)
+{
+    const char *p = *pp;
+    while ( *p != c ) {
+        if ( !isspace(*p) || *p == '\0' )
+            break;
+
+        if ( *p == '\n' )
+            m_line++;
+
+        p++;
+    }
+
+    *pp = p;
+
+    return *p == c;
+}
+
+wxString DocManager::ExtractStringBetweenBraces(const char **pp)
+{
+    wxString result;
+
+    if ( !SkipSpaceUntil(pp, '{') ) {
+        wxLogWarning("file %s(%d): '{' expected after '\\param'",
+                     m_filename.c_str(), m_line);
+
+    }
+    else {
+        const char *startParam = ++*pp; // skip '{'
+
+        if ( !SkipUntil(pp, '}') ) {
+            wxLogWarning("file %s(%d): '}' expected after '\\param'",
+                         m_filename.c_str(), m_line);
+        }
+        else {
+            result = wxString(startParam, (*pp)++ - startParam);
+        }
+    }
+
+    return result;
+}
+
+bool DocManager::ParseTeXFile(const wxString& filename)
+{
+    m_filename = filename;
+
+    wxFile file(m_filename, wxFile::read);
+    if ( !file.IsOpened() )
+        return FALSE;
+
+    off_t len = file.Length();
+    if ( len == wxInvalidOffset )
+        return FALSE;
+
+    char *buf = new char[len + 1];
+    buf[len] = '\0';
+
+    if ( file.Read(buf, len) == wxInvalidOffset ) {
+        delete [] buf;
+
+        return FALSE;
+    }
+
+    // reinit everything
+    m_line = 1;
+
+    wxLogVerbose("%s: starting to parse doc file '%s'.",
+                 GetCurrentTime("%H:%M:%S"), m_filename.c_str());
+
+    // the name of the class from the last "\membersection" command: we assume
+    // that the following "\func" or "\constfunc" always documents a method of
+    // this class (and it should always be like that in wxWindows documentation)
+    wxString classname;
+
+    for ( const char *current = buf; current - buf < len; current++ ) {
+        // FIXME parsing is awfully inefficient
+
+        if ( *current == '%' ) {
+            // comment, skip until the end of line
+            current++;
+            SkipUntil(&current, '\n');
+
+            continue;
+        }
+
+        // all the command we're interested in start with '\\'
+        while ( *current != '\\' && *current != '\0' ) {
+            if ( *current++ == '\n' )
+                m_line++;
+        }
+
+        if ( *current == '\0' ) {
+            // no more TeX commands left
+            break;
+        }
+
+        current++; // skip '\\'
+
+        enum
+        {
+            Nothing,
+            Func,
+            ConstFunc,
+            MemberSect
+        } foundCommand = Nothing;
+
+        size_t lenMatch = TryMatch(current, "func");
+        if ( lenMatch ) {
+            foundCommand = Func;
+        }
+        else {
+            lenMatch = TryMatch(current, "constfunc");
+            if ( lenMatch )
+                foundCommand = ConstFunc;
+            else {
+                lenMatch = TryMatch(current, "membersection");
+
+                if ( lenMatch )
+                    foundCommand = MemberSect;
+            }
+        }
+
+        if ( foundCommand == Nothing )
+            continue;
+
+        current += lenMatch;
+
+        if ( !SkipSpaceUntil(&current, '{') ) {
+            wxLogWarning("file %s(%d): '{' expected after \\func, "
+                         "\\constfunc or \\membersection.",
+                         m_filename.c_str(), m_line);
+
+            continue;
+        }
+
+        current++;
+
+        if ( foundCommand == MemberSect ) {
+            // what follows has the form <classname>::<funcname>
+            const char *startClass = current;
+            if ( !SkipUntil(&current, ':') || *(current + 1) != ':' ) {
+                wxLogWarning("file %s(%d): '::' expected after "
+                             "\\membersection.", m_filename.c_str(), m_line);
+            }
+            else {
+                classname = wxString(startClass, current - startClass);
+                TeXUnfilter(&classname);
+            }
+
+            continue;
+        }
+
+        // extract the return type
+        const char *startRetType = current;
+
+        if ( !SkipUntil(&current, '}') ) {
+            wxLogWarning("file %s(%d): '}' expected after return type",
+                         m_filename.c_str(), m_line);
+
+            continue;
+        }
+
+        wxString returnType = wxString(startRetType, current - startRetType);
+        TeXUnfilter(&returnType);
+
+        current++;
+        if ( !SkipSpaceUntil(&current, '{') ) { 
+            wxLogWarning("file %s(%d): '{' expected after return type",
+                         m_filename.c_str(), m_line);
+
+            continue;
+        }
+
+        current++;
+        const char *funcEnd = current;
+        if ( !SkipUntil(&funcEnd, '}') ) {
+            wxLogWarning("file %s(%d): '}' expected after function name",
+                         m_filename.c_str(), m_line);
+
+            continue;
+        }
+
+        wxString funcName = wxString(current, funcEnd - current);
+        current = funcEnd + 1;
+
+        // trim spaces from both sides
+        funcName.Trim(FALSE);
+        funcName.Trim(TRUE);
+
+        // special cases: '$...$' may be used for LaTeX inline math, remove the
+        // '$'s
+        if ( funcName.Find('$') != wxNOT_FOUND ) {
+            wxString name;
+            for ( const char *p = funcName.c_str(); *p != '\0'; p++ ) {
+                if ( *p != '$' && !isspace(*p) )
+                    name += *p;
+            }
+
+            funcName = name;
+        }
+
+        // \destruct{foo} is really ~foo
+        if ( funcName[0u] == '\\' ) {
+            size_t len = strlen("\\destruct{");
+            if ( funcName(0, len) != "\\destruct{" ) {
+                wxLogWarning("file %s(%d): \\destruct expected",
+                             m_filename.c_str(), m_line);
+
+                continue;
+            }
+
+            funcName.erase(0, len);
+            funcName.Prepend('~');
+
+            if ( !SkipSpaceUntil(&current, '}') ) {
+                wxLogWarning("file %s(%d): '}' expected after destructor",
+                             m_filename.c_str(), m_line);
+
+                continue;
+            }
+
+            funcEnd++;  // there is an extra '}' to count
+        }
+
+        TeXUnfilter(&funcName);
+
+        // extract params
+        current = funcEnd + 1; // skip '}'
+        if ( !SkipSpaceUntil(&current, '{') ||
+             (current++, !SkipSpaceUntil(&current, '\\')) ) {
+            wxLogWarning("file %s(%d): '\\param' or '\\void' expected",
+                         m_filename.c_str(), m_line);
+
+            continue;
+        }
+
+        wxArrayString paramNames, paramTypes, paramValues;
+
+        bool isVararg = FALSE;
+
+        current++; // skip '\\'
+        lenMatch = TryMatch(current, "void");
+        if ( !lenMatch ) {
+            lenMatch = TryMatch(current, "param");
+            while ( lenMatch ) {
+                current += lenMatch;
+
+                // now come {paramtype}{paramname}
+                wxString paramType = ExtractStringBetweenBraces(&current);
+                if ( !!paramType ) {
+                    wxString paramText = ExtractStringBetweenBraces(&current);
+                    if ( !!paramText ) {
+                        // the param declaration may contain default value
+                        wxString paramName = paramText.BeforeFirst('='),
+                                 paramValue = paramText.AfterFirst('=');
+
+                        // sanitize all strings
+                        TeXUnfilter(&paramValue);
+                        TeXUnfilter(&paramName);
+                        TeXUnfilter(&paramType);
+
+                        paramValues.Add(paramValue);
+                        paramNames.Add(paramName);
+                        paramTypes.Add(paramType);
+                    }
+                }
+                else {
+                    // vararg function?
+                    wxString paramText = ExtractStringBetweenBraces(&current);
+                    if ( paramText == "..." ) {
+                        isVararg = TRUE;
+                    }
+                    else {
+                        wxLogWarning("Parameters of '%s::%s' are in "
+                                     "incorrect form.",
+                                     classname.c_str(), funcName.c_str());
+                    }
+                }
+
+                // what's next?
+                current = SkipSpaces(current);
+                if ( *current == ',' || *current == '}' ) {
+                    current = SkipSpaces(++current);
+
+                    lenMatch = TryMatch(current, "\\param");
+                }
+                else {
+                    wxLogWarning("file %s(%d): ',' or '}' expected after "
+                                 "'\\param'", m_filename.c_str(), m_line);
+
+                    continue;
+                }
+            }
+
+            // if we got here there was no '\\void', so must have some params
+            if ( paramNames.IsEmpty() ) {
+                wxLogWarning("file %s(%d): '\\param' or '\\void' expected",
+                        m_filename.c_str(), m_line);
+
+                continue;
+            }
+        }
+
+        // verbose diagnostic output
+        wxString paramsAll;
+        size_t param, paramCount = paramNames.GetCount();
+        for ( param = 0; param < paramCount; param++ ) {
+            if ( param != 0 ) {
+                paramsAll << ", ";
+            }
+
+            paramsAll << paramTypes[param] << ' ' << paramNames[param];
+        }
+
+        wxLogVerbose("file %s(%d): found '%s %s::%s(%s)%s'",
+                     m_filename.c_str(), m_line,
+                     returnType.c_str(),
+                     classname.c_str(),
+                     funcName.c_str(),
+                     paramsAll.c_str(),
+                     foundCommand == ConstFunc ? " const" : "");
+
+        // store the info about the just found function
+        ArrayMethodInfo *methods;
+        int index = m_classes.Index(classname);
+        if ( index == wxNOT_FOUND ) {
+            m_classes.Add(classname);
+
+            methods = new ArrayMethodInfo;
+            m_methods.Add(methods);
+        }
+        else {
+            methods = m_methods[(size_t)index];
+        }
+
+        ArrayParamInfo params;
+        for ( param = 0; param < paramCount; param++ ) {
+            params.Add(new ParamInfo(paramTypes[param],
+                                     paramNames[param],
+                                     paramValues[param]));
+        }
+
+        MethodInfo *method = new MethodInfo(returnType, funcName, params);
+        if ( foundCommand == ConstFunc )
+            method->SetFlag(MethodInfo::Const);
+        if ( isVararg )
+            method->SetFlag(MethodInfo::Vararg);
+
+        methods->Add(method);
+    }
+
+    delete [] buf;
+
+    wxLogVerbose("%s: finished parsing doc file '%s'.\n",
+                 GetCurrentTime("%H:%M:%S"), m_filename.c_str());
+
+    return TRUE;
+}
+
+bool DocManager::DumpDifferences(spContext *ctxTop) const
+{
+    typedef MMemberListT::const_iterator MemberIndex;
+
+    bool foundDiff = FALSE;
+
+    // flag telling us whether the given class was found at all in the header
+    size_t nClass, countClassesInDocs = m_classes.GetCount();
+    bool *classExists = new bool[countClassesInDocs];
+    for ( nClass = 0; nClass < countClassesInDocs; nClass++ ) {
+        classExists[nClass] = FALSE;
+    }
+
+    // ctxTop is normally an spFile
+    wxASSERT( ctxTop->GetContextType() == SP_CTX_FILE );
+
+    const MMemberListT& classes = ctxTop->GetMembers();
+    for ( MemberIndex i = classes.begin(); i != classes.end(); i++ ) {
+        spContext *ctx = *i;
+        if ( ctx->GetContextType() != SP_CTX_CLASS ) {
+            // TODO process also global functions, macros, ...
+            continue;
+        }
+
+        spClass *ctxClass = (spClass *)ctx;
+        const wxString& nameClass = ctxClass->mName;
+        int index = m_classes.Index(nameClass);
+        if ( index == wxNOT_FOUND ) {
+            if ( !IgnoreClass(nameClass) ) {
+                foundDiff = TRUE;
+
+                wxLogError("Class '%s' is not documented at all.",
+                           nameClass.c_str());
+            }
+
+            // it makes no sense to check for its functions
+            continue;
+        }
+        else {
+            classExists[index] = TRUE;
+        }
+
+        // array of method descriptions for this class
+        const ArrayMethodInfo& methods = *(m_methods[index]);
+        size_t nMethod, countMethods = methods.GetCount();
+
+        // flags telling if we already processed given function
+        bool *methodExists = new bool[countMethods];
+        for ( nMethod = 0; nMethod < countMethods; nMethod++ ) {
+            methodExists[nMethod] = FALSE;
+        }
+
+        wxArrayString aOverloadedMethods;
+
+        const MMemberListT& functions = ctxClass->GetMembers();
+        for ( MemberIndex j = functions.begin(); j != functions.end(); j++ ) {
+            ctx = *j;
+            if ( ctx->GetContextType() != SP_CTX_OPERATION )
+                continue;
+
+            spOperation *ctxMethod = (spOperation *)ctx;
+            const wxString& nameMethod = ctxMethod->mName;
+
+            // find all functions with the same name
+            wxArrayInt aMethodsWithSameName;
+            for ( nMethod = 0; nMethod < countMethods; nMethod++ ) {
+                if ( methods[nMethod]->GetName() == nameMethod )
+                    aMethodsWithSameName.Add(nMethod);
+            }
+
+            if ( aMethodsWithSameName.IsEmpty() && ctxMethod->IsPublic() ) {
+                if ( !IgnoreMethod(nameClass, nameMethod) ) {
+                    foundDiff = TRUE;
+
+                    wxLogError("'%s::%s' is not documented.",
+                               nameClass.c_str(),
+                               nameMethod.c_str());
+                }
+
+                // don't check params
+                continue;
+            }
+            else if ( aMethodsWithSameName.GetCount() == 1 ) {
+                index = (size_t)aMethodsWithSameName[0u];
+                methodExists[index] = TRUE;
+
+                if ( IgnoreMethod(nameClass, nameMethod) )
+                    continue;
+
+                if ( !ctxMethod->IsPublic() ) {
+                    wxLogWarning("'%s::%s' is documented but not public.",
+                                 nameClass.c_str(),
+                                 nameMethod.c_str());
+                }
+
+                // check that the flags match
+                const MethodInfo& method = *(methods[index]);
+
+                bool isVirtual = ctxMethod->mIsVirtual;
+                if ( isVirtual != method.HasFlag(MethodInfo::Virtual) ) {
+                    wxLogWarning("'%s::%s' is incorrectly documented as %s"
+                                 "virtual.",
+                                 nameClass.c_str(),
+                                 nameMethod.c_str(),
+                                 isVirtual ? "not " : "");
+                }
+
+                bool isConst = ctxMethod->mIsConstant;
+                if ( isConst != method.HasFlag(MethodInfo::Const) ) {
+                    wxLogWarning("'%s::%s' is incorrectly documented as %s"
+                                 "constant.",
+                                 nameClass.c_str(),
+                                 nameMethod.c_str(),
+                                 isConst ? "not " : "");
+                }
+
+                // check that the params match
+                const MMemberListT& params = ctxMethod->GetMembers();
+
+                if ( params.size() != method.GetParamCount() ) {
+                    wxLogError("Incorrect number of parameters for '%s::%s' "
+                               "in the docs: should be %d instead of %d.",
+                               nameClass.c_str(),
+                               nameMethod.c_str(),
+                               params.size(), method.GetParamCount());
+                }
+                else {
+                    size_t nParam = 0;
+                    for ( MemberIndex k = params.begin();
+                          k != params.end();
+                          k++, nParam++ ) {
+                        ctx = *k;
+
+                        // what else can a function have?
+                        wxASSERT( ctx->GetContextType() == SP_CTX_PARAMETER );
+
+                        spParameter *ctxParam = (spParameter *)ctx;
+                        const ParamInfo& param = method.GetParam(nParam);
+                        if ( param.GetName() != ctxParam->mName ) {
+                            foundDiff = TRUE;
+
+                            wxLogError("Parameter #%d of '%s::%s' should be "
+                                       "'%s' and not '%s'.",
+                                       nParam + 1,
+                                       nameClass.c_str(),
+                                       nameMethod.c_str(),
+                                       ctxParam->mName.c_str(),
+                                       param.GetName().c_str());
+
+                            continue;
+                        }
+
+                        if ( param.GetType() != ctxParam->mType ) {
+                            foundDiff = TRUE;
+
+                            wxLogError("Type of parameter '%s' of '%s::%s' "
+                                       "should be '%s' and not '%s'.",
+                                       ctxParam->mName.c_str(),
+                                       nameClass.c_str(),
+                                       nameMethod.c_str(),
+                                       ctxParam->mType.c_str(),
+                                       param.GetType().GetName().c_str());
+
+                            continue;
+                        }
+
+                        if ( param.GetDefValue() != ctxParam->mInitVal ) {
+                            wxLogWarning("Default value of parameter '%s' of "
+                                         "'%s::%s' should be '%s' and not "
+                                         "'%s'.",
+                                         ctxParam->mName.c_str(),
+                                         nameClass.c_str(),
+                                         nameMethod.c_str(),
+                                         ctxParam->mInitVal.c_str(),
+                                         param.GetDefValue().c_str());
+                        }
+                    }
+                }
+            }
+            else {
+                // TODO add real support for overloaded methods
+
+                if ( IgnoreMethod(nameClass, nameMethod) )
+                    continue;
+
+                if ( aOverloadedMethods.Index(nameMethod) == wxNOT_FOUND ) {
+                    // mark all methods with this name as existing
+                    for ( nMethod = 0; nMethod < countMethods; nMethod++ ) {
+                        if ( methods[nMethod]->GetName() == nameMethod )
+                            methodExists[nMethod] = TRUE;
+                    }
+
+                    aOverloadedMethods.Add(nameMethod);
+
+                    wxLogVerbose("'%s::%s' is overloaded and I'm too "
+                                 "stupid to find the right match - skipping "
+                                 "the param and flags checks.",
+                                 nameClass.c_str(),
+                                 nameMethod.c_str());
+                }
+                //else: warning already given
+            }
+        }
+
+        for ( nMethod = 0; nMethod < countMethods; nMethod++ ) {
+            if ( !methodExists[nMethod] ) {
+                const wxString& nameMethod = methods[nMethod]->GetName();
+                if ( !IgnoreMethod(nameClass, nameMethod) ) {
+                    foundDiff = TRUE;
+
+                    wxLogError("'%s::%s' is documented but doesn't exist.",
+                               nameClass.c_str(),
+                               nameMethod.c_str());
+                }
+            }
+        }
+
+        delete [] methodExists;
+    }
+
+    // check that all classes we found in the docs really exist
+    for ( nClass = 0; nClass < countClassesInDocs; nClass++ ) {
+        if ( !classExists[nClass] ) {
+            foundDiff = TRUE;
+
+            wxLogError("Class '%s' is documented but doesn't exist.",
+                       m_classes[nClass].c_str());
+        }
+    }
+
+    delete [] classExists;
+
+    return !foundDiff;
+}
+
+DocManager::~DocManager()
+{
+    WX_CLEAR_ARRAY(m_methods);
+    WX_CLEAR_ARRAY(m_ignore);
+}
+
+int DocManager::CompareIgnoreListEntries(IgnoreListEntry *first,
+                                         IgnoreListEntry *second)
+{
+    // first compare the classes
+    int rc = first->m_classname.Cmp(second->m_classname);
+    if ( rc == 0 )
+        rc = first->m_funcname.Cmp(second->m_funcname);
+
+    return rc;
+}
+
+bool DocManager::LoadIgnoreFile(const wxString& filename)
+{
+    wxFile file(filename, wxFile::read);
+    if ( !file.IsOpened() )
+        return FALSE;
+
+    off_t len = file.Length();
+    if ( len == wxInvalidOffset )
+        return FALSE;
+
+    char *buf = new char[len + 1];
+    buf[len] = '\0';
+
+    if ( file.Read(buf, len) == wxInvalidOffset ) {
+        delete [] buf;
+
+        return FALSE;
+    }
+
+    wxString line;
+    for ( const char *current = buf; ; current++ ) {
+#ifdef __WXMSW__
+        // skip DOS line separator
+        if ( *current == '\r' )
+            current++;
+#endif // wxMSW
+
+        if ( *current == '\n' || *current == '\0' ) {
+            if ( line[0u] != '#' ) {
+                if ( line.Find(':') != wxNOT_FOUND ) {
+                    wxString classname = line.BeforeFirst(':'),
+                             funcname = line.AfterLast(':');
+                    m_ignore.Add(new IgnoreListEntry(classname, funcname));
+                }
+                else {
+                    // entire class
+                    m_ignore.Add(new IgnoreListEntry(line, ""));
+                }
+            }
+            //else: comment
+
+            if ( *current == '\0' )
+                break;
+
+            line.Empty();
+        }
+        else {
+            line += *current;
+        }
+    }
+
+    delete [] buf;
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
@@ -709,6 +1749,16 @@ static wxString MakeHelpref(const char *argument)
     return helpref;
 }
 
+static void TeXUnfilter(wxString* str)
+{
+    // FIXME may be done much more quickly
+    str->Trim(TRUE);
+    str->Trim(FALSE);
+
+    str->Replace("\\&", "&");
+    str->Replace("\\_", "_");
+}
+
 static void TeXFilter(wxString* str)
 {
     // FIXME may be done much more quickly
@@ -750,5 +1800,14 @@ static const char *GetCurrentTime(const char *timeFormat)
 
     return s_timeBuffer;
 }
+
+/*
+   $Log$
+   Revision 1.6  1999/02/20 23:00:26  VZ
+   1. new 'diff' mode which seems to work
+   2. output files are not overwritten in 'dmup' mode
+   3. fixes for better handling of const functions and operators
+
+*/
 
 /* vi: set tw=80 et ts=4 sw=4: */
