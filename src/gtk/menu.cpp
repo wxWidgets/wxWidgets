@@ -872,6 +872,12 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 #endif // GTK 1.2/1.0
 
         gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), mitem->GetSubMenu()->m_menu );
+
+        // if adding a submenu to a menu already existing in the menu bar, we
+        // must set invoking window to allow processing events from this
+        // submenu
+        if ( m_invokingWindow )
+            wxMenubarSetInvokingWindow(mitem->GetSubMenu(), m_invokingWindow);
     }
     else // a normal item
     {
