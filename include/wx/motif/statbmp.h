@@ -48,7 +48,7 @@ public:
     
     virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
     {
-        return FALSE;
+        return false;
     }
     
     wxBitmap GetBitmap() const { return m_messageBitmap; }

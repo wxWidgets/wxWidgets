@@ -67,7 +67,7 @@ public:
     
     WXWidget CreateMenu(wxMenuBar *menuBar, WXWidget parent, wxMenu *topMenu,
         const wxString& title = wxEmptyString,
-        bool isPulldown = FALSE);
+        bool isPulldown = false);
     
     // For popups, need to destroy, then recreate menu for a different (or
     // possibly same) window, since the parent may change.
@@ -81,7 +81,7 @@ public:
     void SetBackgroundColour(const wxColour& colour);
     void SetForegroundColour(const wxColour& colour);
     void SetFont(const wxFont& colour);
-    void ChangeFont(bool keepOriginalSize = FALSE);
+    void ChangeFont(bool keepOriginalSize = false);
     
     WXWidget GetHandle() const { return m_menuWidget; }
     
@@ -158,7 +158,7 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour);
     virtual bool SetForegroundColour(const wxColour& colour);
     virtual bool SetFont(const wxFont& colour);
-    void ChangeFont(bool keepOriginalSize = FALSE);
+    void ChangeFont(bool keepOriginalSize = false);
     
 public:
     // common part of all ctors

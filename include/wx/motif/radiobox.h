@@ -84,10 +84,10 @@ public:
 
     void SetString(int item, const wxString& label) ;
     wxString GetString(int item) const;
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
     void Enable(int item, bool enable);
     void Show(int item, bool show) ;
-    virtual bool Show(bool show = TRUE) ;
+    virtual bool Show(bool show = true) ;
 
     virtual wxString GetStringSelection() const;
     virtual bool SetStringSelection(const wxString& s);
@@ -101,7 +101,7 @@ public:
     void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
     // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
     const wxWidgetArray& GetRadioButtons() const { return m_radioButtons; }

@@ -89,7 +89,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 {
     if( !wxControl::CreateControl( parent, id, pos, size, style,
                                    validator, name ) )
-        return FALSE;
+        return false;
 
     m_noItems = n;
     m_backgroundColour = * wxWHITE;
@@ -158,7 +158,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
@@ -277,7 +277,7 @@ void wxListBox::DoSetItems(const wxArrayString& items, void** clientData)
 
     if ( clientData )
         for (i = 0; i < items.GetCount(); ++i)
-            m_clientDataDict.Set(i, (wxClientData*)clientData[i], FALSE);
+            m_clientDataDict.Set(i, (wxClientData*)clientData[i], false);
 
     XmListAddItems (listBox, text, items.GetCount(), 0);
     for (i = 0; i < items.GetCount(); i++)
@@ -339,7 +339,7 @@ void wxListBox::Clear()
 
 void wxListBox::SetSelection(int N, bool select)
 {
-    m_inSetValue = TRUE;
+    m_inSetValue = true;
     if (select)
     {
 #if 0
@@ -358,9 +358,9 @@ void wxListBox::SetSelection(int N, bool select)
             int i;
             for (i = 0; i < n; i++)
                 XmListSelectPos ((Widget) m_mainWidget,
-                                 selections[i] + 1, FALSE);
+                                 selections[i] + 1, False);
 
-            XmListSelectPos ((Widget) m_mainWidget, N + 1, FALSE);
+            XmListSelectPos ((Widget) m_mainWidget, N + 1, False);
 
             XtVaSetValues ((Widget) m_mainWidget,
                            XmNselectionPolicy, XmEXTENDED_SELECT,
@@ -368,13 +368,13 @@ void wxListBox::SetSelection(int N, bool select)
         }
         else
 #endif // 0
-            XmListSelectPos ((Widget) m_mainWidget, N + 1, FALSE);
+            XmListSelectPos ((Widget) m_mainWidget, N + 1, False);
 
     }
     else
         XmListDeselectPos ((Widget) m_mainWidget, N + 1);
 
-    m_inSetValue = FALSE;
+    m_inSetValue = false;
 }
 
 bool wxListBox::IsSelected(int N) const
@@ -383,20 +383,20 @@ bool wxListBox::IsSelected(int N) const
     wxArrayInt theSelections;
     int count = GetSelections (theSelections);
     if (count == 0)
-        return FALSE;
+        return false;
     else
     {
         int j;
         for (j = 0; j < count; j++)
             if (theSelections[j] == N)
-                return TRUE;
+                return true;
     }
-    return FALSE;
+    return false;
 }
 
 void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
 {
-    m_clientDataDict.Set(n, clientData, FALSE);
+    m_clientDataDict.Set(n, clientData, false);
 }
 
 wxClientData* wxListBox::DoGetItemClientObject(int n) const
@@ -411,7 +411,7 @@ void *wxListBox::DoGetItemClientData(int N) const
 
 void wxListBox::DoSetItemClientData(int N, void *Client_data)
 {
-    m_clientDataDict.Set(N, (wxClientData*)Client_data, FALSE);
+    m_clientDataDict.Set(N, (wxClientData*)Client_data, false);
 }
 
 // Return number of selections and an array of selected integers
@@ -578,7 +578,7 @@ void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
     else if ( item->HasClientUntypedData() )
         event.SetClientData( item->GetClientData(n) );
     event.SetInt(n);
-    event.SetExtraLong(TRUE);
+    event.SetExtraLong(true);
     event.SetEventObject(item);
     event.SetString( item->GetString( n ) );
 
@@ -635,8 +635,8 @@ void wxListBox::ChangeBackgroundColour()
     * function to change them (by default, taken from wxSystemSettings)
     */
     wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
-    wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, true);
+    wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, true);
 
     XtVaSetValues (hsb,
         XmNtroughColor, backgroundColour.AllocColour(XtDisplay(hsb)),
@@ -646,7 +646,7 @@ void wxListBox::ChangeBackgroundColour()
         NULL);
 
     // MBN: why change parent's background? It looks really ugly.
-    // wxDoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
+    // wxDoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, true);
 }
 
 void wxListBox::ChangeForegroundColour()

@@ -138,17 +138,17 @@ void wxDataFormat::SetId( const wxChar *id )
     m_type = wxDF_PRIVATE;
     wxString tmp( id );
     m_format = XInternAtom( wxGlobalDisplay(),
-                            tmp.mbc_str(), FALSE );
+                            tmp.mbc_str(), False );
 }
 
 void wxDataFormat::PrepareFormats()
 {
     if (!g_textAtom)
-        g_textAtom = XInternAtom( wxGlobalDisplay(), "STRING", FALSE );
+        g_textAtom = XInternAtom( wxGlobalDisplay(), "STRING", False );
     if (!g_bitmapAtom)
-        g_bitmapAtom = XInternAtom( wxGlobalDisplay(), "PIXMAP", FALSE );
+        g_bitmapAtom = XInternAtom( wxGlobalDisplay(), "PIXMAP", False );
     if (!g_fileAtom)
-        g_fileAtom = XInternAtom( wxGlobalDisplay(), "file:ALL", FALSE );
+        g_fileAtom = XInternAtom( wxGlobalDisplay(), "file:ALL", False );
 }
 
 // ----------------------------------------------------------------------------

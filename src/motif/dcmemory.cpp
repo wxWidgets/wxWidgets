@@ -134,7 +134,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     }
     else
     {
-        m_ok = FALSE;
+        m_ok = false;
         m_pixmap = (WXPixmap) 0;
     };
 };

@@ -95,7 +95,7 @@ wxColour wxColour::CreateByName(const wxString& name)
         col.m_red = xcol.red & 0xff;
         col.m_green = xcol.green & 0xff;
         col.m_blue = xcol.blue & 0xff;
-        col.m_isInit = TRUE;
+        col.m_isInit = true;
         col.m_pixel = -1;
     }
 

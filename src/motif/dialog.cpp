@@ -84,7 +84,7 @@ END_EVENT_TABLE()
 
 wxDialog::wxDialog()
 {
-    m_modalShowing = FALSE;
+    m_modalShowing = false;
     m_eventLoop = NULL;
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 }
@@ -100,9 +100,9 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
     if( !wxTopLevelWindow::Create( parent, id, title, pos, size, style,
                                    name ) )
-        return FALSE;
+        return false;
 
-    m_modalShowing = FALSE;
+    m_modalShowing = false;
     m_eventLoop = NULL;
 
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
@@ -114,7 +114,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     SetTitle( title );
 
     m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     // Can't remember what this was about... but I think it's necessary.
     if (wxUSE_INVISIBLE_RESIZE)
@@ -136,19 +136,19 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // is managed, so we manage without mapping to the screen.
     // To show, we map the shell (actually it's parent).
     if (!wxUSE_INVISIBLE_RESIZE)
-        XtVaSetValues(shell, XmNmappedWhenManaged, FALSE, NULL);
+        XtVaSetValues(shell, XmNmappedWhenManaged, False, NULL);
 
     if (!wxUSE_INVISIBLE_RESIZE)
     {
         XtManageChild(dialogShell);
         SetSize(pos.x, pos.y, size.x, size.y);
     }
-    XtAddEventHandler(dialogShell,ExposureMask,FALSE,
+    XtAddEventHandler(dialogShell,ExposureMask,False,
         wxUniversalRepaintProc, (XtPointer) this);
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 bool wxDialog::DoCreate( wxWindow* parent, wxWindowID id,
@@ -192,7 +192,7 @@ bool wxDialog::DoCreate( wxWindow* parent, wxWindowID id,
 
     wxAddWindowToTable( (Widget)m_mainWidget, this );
 
-    return TRUE;
+    return true;
 }
 
 void wxDialog::SetModal(bool flag)
@@ -216,17 +216,17 @@ void wxDialog::SetModal(bool flag)
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 
     delete m_eventLoop;
 
     if (m_mainWidget)
     {
-        XtRemoveEventHandler((Widget) m_mainWidget, ExposureMask, FALSE,
+        XtRemoveEventHandler((Widget) m_mainWidget, ExposureMask, False,
                              wxUniversalRepaintProc, (XtPointer) this);
     }
 
-    m_modalShowing = FALSE;
+    m_modalShowing = false;
     if (!wxUSE_INVISIBLE_RESIZE && m_mainWidget)
     {
         XtUnmapWidget((Widget) m_mainWidget);
@@ -315,10 +315,10 @@ bool wxDialog::Show( bool show )
             XtUnmanageChild((Widget)m_mainWidget) ;
 
         XFlush(XtDisplay((Widget)m_mainWidget));
-        XSync(XtDisplay((Widget)m_mainWidget), FALSE);
+        XSync(XtDisplay((Widget)m_mainWidget), False);
     }
 
-    return TRUE;
+    return true;
 }
 
 // Shows a dialog modally, returning a return code
@@ -326,7 +326,7 @@ int wxDialog::ShowModal()
 {
     m_windowStyle |= wxDIALOG_MODAL;
 
-    Show(TRUE);
+    Show(true);
 
     // after the event loop ran, the widget might already have been destroyed
     WXDisplay* display = (WXDisplay*)XtDisplay( (Widget)m_mainWidget );
@@ -335,8 +335,8 @@ int wxDialog::ShowModal()
         return 0;
     m_eventLoop = new wxEventLoop;
 
-    m_modalShowing = TRUE;
-    XtAddGrab((Widget) m_mainWidget, TRUE, FALSE);
+    m_modalShowing = true;
+    XtAddGrab((Widget) m_mainWidget, True, False);
 
     m_eventLoop->Run();
 
@@ -361,9 +361,9 @@ void wxDialog::EndModal(int retCode)
     // Strangely, we don't seem to need this now.
     //    XtRemoveGrab((Widget) m_mainWidget);
 
-    Show(FALSE);
+    Show(false);
 
-    m_modalShowing = FALSE;
+    m_modalShowing = false;
     m_eventLoop->Exit();
 }
 
@@ -377,7 +377,7 @@ void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         else
         {
             SetReturnCode(wxID_OK);
-            this->Show(FALSE);
+            this->Show(false);
         }
     }
 }
@@ -396,7 +396,7 @@ void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
     else
     {
         SetReturnCode(wxID_CANCEL);
-        this->Show(FALSE);
+        this->Show(false);
     }
 }
 
@@ -435,7 +435,7 @@ bool wxDialog::Destroy()
 {
     if (!wxPendingDelete.Member(this))
         wxPendingDelete.Append(this);
-    return TRUE;
+    return true;
 }
 
 void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))

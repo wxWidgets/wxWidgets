@@ -392,7 +392,7 @@ void wxTextCtrl::SetSelection(long from, long to)
 
 void wxTextCtrl::WriteText(const wxString& text)
 {
-    long textPosition = GetInsertionPoint() + strlen (text);
+    long textPosition = GetInsertionPoint() + text.length();
     XmTextInsert ((Widget) m_mainWidget, GetInsertionPoint(),
                   wxConstCast(text.c_str(), char));
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);

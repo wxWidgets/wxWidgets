@@ -54,7 +54,7 @@
 // DoSetSizeIntr and DoMoveWindowIntr
 // PROBLEM:
 // under Motif composite controls (such as wxCalendarCtrl or generic wxSpinCtrl
-// did nott work and/or segfaulted because
+// did not work and/or segfaulted because
 // 1) wxWindow::Create calls SetSize,
 //    which results in a call to DoSetSize much earlier than in the other ports
 // 2) if wxWindow::Create is called (wxControl::Create calls it)
@@ -172,7 +172,7 @@ bool wxWindow::MapOrUnmap(WXWidget widget, bool domap)
 {
     Widget w = (Widget)widget;
     if ( !w )
-        return FALSE;
+        return false;
 
     //   Rationale: a lot of common operations (including but not
     // limited to moving, resizing and appending items to a listbox)
@@ -194,7 +194,7 @@ bool wxWindow::MapOrUnmap(WXWidget widget, bool domap)
         // XtUnmapWidget(w);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -204,12 +204,12 @@ bool wxWindow::MapOrUnmap(WXWidget widget, bool domap)
 void wxWindow::Init()
 {
     // Motif-specific
-    m_needsRefresh = TRUE;
+    m_needsRefresh = true;
     m_mainWidget = (WXWidget) 0;
 
-    m_winCaptured = FALSE;
+    m_winCaptured = false;
 
-    m_isShown = TRUE;
+    m_isShown = true;
     
     m_hScrollBar =
     m_vScrollBar =
@@ -238,7 +238,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, "can't create wxWindow without parent" );
+    wxCHECK_MSG( parent, false, "can't create wxWindow without parent" );
 
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
@@ -341,8 +341,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     // Scrolled widget needs to have its colour changed or we get a little blue
     // square where the scrollbars abutt
     wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    wxDoChangeBackgroundColour(m_scrolledWindow, backgroundColour, TRUE);
-    wxDoChangeBackgroundColour(m_drawingArea, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour(m_scrolledWindow, backgroundColour, true);
+    wxDoChangeBackgroundColour(m_drawingArea, backgroundColour, true);
 
     XmScrolledWindowSetAreas(
                              (Widget)m_scrolledWindow,
@@ -353,8 +353,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     // sample).
     SetCursor(*wxSTANDARD_CURSOR);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    DoSetSizeIntr(pos.x, pos.y, size.x,size.y, wxSIZE_AUTO, TRUE);
-    return TRUE;
+    DoSetSizeIntr(pos.x, pos.y, size.x,size.y, wxSIZE_AUTO, true);
+    return true;
 }
 
 // Destructor
@@ -363,7 +363,7 @@ wxWindow::~wxWindow()
     if (g_captureWindow == this)
         g_captureWindow = NULL;
     
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
     
     // Motif-specific actions first
     WXWidget wMain = GetMainWidget();
@@ -493,7 +493,7 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
         m_hScrollBar = DoCreateScrollBar( m_scrolledWindow, wxHORIZONTAL,
                                           (void (*)())wxScrollBarCallback );
 
-        wxDoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
+        wxDoChangeBackgroundColour(m_hScrollBar, backgroundColour, true);
 
         XtRealizeWidget( (Widget)m_hScrollBar );
 
@@ -508,7 +508,7 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
         m_vScrollBar = DoCreateScrollBar( m_scrolledWindow, wxVERTICAL,
                                           (void (*)())wxScrollBarCallback );
 
-        wxDoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
+        wxDoChangeBackgroundColour(m_vScrollBar, backgroundColour, true);
 
         XtRealizeWidget((Widget)m_vScrollBar);
 
@@ -595,7 +595,7 @@ wxWindow *wxWindowBase::DoFindFocus()
 bool wxWindow::Enable(bool enable)
 {
     if ( !wxWindowBase::Enable(enable) )
-        return FALSE;
+        return false;
 
     Widget wMain = (Widget)GetMainWidget();
     if ( wMain )
@@ -604,13 +604,13 @@ bool wxWindow::Enable(bool enable)
         XmUpdateDisplay(wMain);
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindow::Show(bool show)
 {
     if ( !wxWindowBase::Show(show) )
-        return FALSE;
+        return false;
 
     if (m_borderWidget || m_scrolledWindow)
     {
@@ -623,7 +623,7 @@ bool wxWindow::Show(bool show)
             MapOrUnmap(GetMainWidget(), show);
     }
 
-    return TRUE;
+    return true;
 }
 
 // Raise the window to the top of the Z order
@@ -663,9 +663,9 @@ void wxWindow::DoCaptureMouse()
 
     Widget wMain = (Widget)GetMainWidget();
     if ( wMain )
-        XtAddGrab(wMain, TRUE, FALSE);
+        XtAddGrab(wMain, True, False);
 
-    m_winCaptured = TRUE;
+    m_winCaptured = true;
 }
 
 void wxWindow::DoReleaseMouse()
@@ -678,7 +678,7 @@ void wxWindow::DoReleaseMouse()
     if ( wMain )
         XtRemoveGrab(wMain);
 
-    m_winCaptured = FALSE;
+    m_winCaptured = false;
 }
 
 bool wxWindow::SetFont(const wxFont& font)
@@ -686,12 +686,12 @@ bool wxWindow::SetFont(const wxFont& font)
     if ( !wxWindowBase::SetFont(font) )
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
     ChangeFont();
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindow::SetCursor(const wxCursor& cursor)
@@ -699,7 +699,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
     if ( !wxWindowBase::SetCursor(cursor) )
     {
         // no change
-        return FALSE;
+        return false;
     }
 
     //    wxASSERT_MSG( m_cursor.Ok(),
@@ -717,7 +717,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
     Window win = XtWindow(w);
     XDefineCursor((Display*) dpy, win, (Cursor) x_cursor);
 
-    return TRUE;
+    return true;
 }
 
 // Coordinates relative to the window
@@ -899,7 +899,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     XCopyArea(display, window, window, (GC) dc.GetGC(),
               x1, y1, w1, h1, x2, y2);
 
-    dc.SetAutoSetting(TRUE);
+    dc.SetAutoSetting(true);
     wxBrush brush(GetBackgroundColour(), wxSOLID);
     dc.SetBrush(brush); // FIXME: needed?
 
@@ -1091,11 +1091,11 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     */
 
     if (menu->GetParent() && (menu->GetId() != -1))
-        return FALSE;
+        return false;
 
     if (menu->GetMainWidget())
     {
-        menu->DestroyMenu(TRUE);
+        menu->DestroyMenu(true);
     }
 
     menu->SetId(1); /* Mark as popped-up */
@@ -1158,7 +1158,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
         wxDoEventLoopIteration( evtLoop );
     }
 
-    return TRUE;
+    return true;
 }
 
 #endif
@@ -1169,7 +1169,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 
 bool wxWindow::PreResize()
 {
-    return TRUE;
+    return true;
 }
 
 // Get total size
@@ -1250,7 +1250,7 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
 
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    DoSetSizeIntr(x, y, width, height, sizeFlags, FALSE);
+    DoSetSizeIntr(x, y, width, height, sizeFlags, false);
 }
 
 void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
@@ -1542,7 +1542,7 @@ void wxWindow::AddUpdateRect(int x, int y, int w, int h)
 
 void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
-    m_needsRefresh = TRUE;
+    m_needsRefresh = true;
     Display *display = XtDisplay((Widget) GetMainWidget());
     Window thisWindow = XtWindow((Widget) GetMainWidget());
 
@@ -1654,7 +1654,7 @@ void wxWindow::DoPaint()
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
 
-        m_needsRefresh = FALSE;
+        m_needsRefresh = false;
     }
 }
 
@@ -1697,7 +1697,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 {
 #if wxUSE_ACCEL
     if (!m_acceleratorTable.Ok())
-        return FALSE;
+        return false;
 
     int count = m_acceleratorTable.GetCount();
     wxAcceleratorEntry* entries = m_acceleratorTable.GetEntries();
@@ -1717,7 +1717,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
                 parent = parent->GetParent();
 
             if (!parent)
-                return FALSE;
+                return false;
 
             wxFrame* frame = wxDynamicCast(parent, wxFrame);
             if ( frame )
@@ -1732,7 +1732,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
                         wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, entry->GetCommand());
                         commandEvent.SetEventObject(frame);
 
-                        // If ProcessEvent returns TRUE (it was handled), then
+                        // If ProcessEvent returns true (it was handled), then
                         // the calling code will skip the event handling.
                         return frame->GetEventHandler()->ProcessEvent(commandEvent);
                     }
@@ -1745,7 +1745,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 
             // No such child
             if (!child)
-                return FALSE;
+                return false;
 
             // Now we process those kinds of windows that we can.
             // For now, only buttons.
@@ -1756,13 +1756,13 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
                 return child->GetEventHandler()->ProcessEvent(commandEvent);
             }
 
-            return FALSE;
+            return false;
         } // matches event
     }// for
 #endif
 
     // We didn't match the key event against an accelerator.
-    return FALSE;
+    return false;
 }
 
 // ============================================================================
@@ -1780,7 +1780,7 @@ bool wxAddWindowToTable(Widget w, wxWindow *win)
     {
         wxLogDebug("Widget table clash: new widget is %ld, %s",
                    (long)w, win->GetClassInfo()->GetClassName());
-        return FALSE;
+        return false;
     }
 
     wxWidgetHashTable->Put((long) w, win);
@@ -1788,7 +1788,7 @@ bool wxAddWindowToTable(Widget w, wxWindow *win)
     wxLogTrace("widget", "Widget 0x%p <-> window %p (%s)",
                (WXWidget)w, win, win->GetClassInfo()->GetClassName());
 
-    return TRUE;
+    return true;
 }
 
 wxWindow *wxGetWindowFromTable(Widget w)
@@ -1831,7 +1831,7 @@ bool wxWindow::AttachWidget (wxWindow* WXUNUSED(parent), WXWidget mainWidget,
     if (formWidget)
     {
         if (!wxAddWindowToTable((Widget) formWidget, this))
-            return FALSE;
+            return false;
 
         XtTranslations ptr;
         XtOverrideTranslations ((Widget) formWidget,
@@ -1859,7 +1859,7 @@ bool wxWindow::DetachWidget(WXWidget widget)
                           (XtPointer)this);
 
     wxDeleteWindowFromTable((Widget) widget);
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -2112,9 +2112,9 @@ static void wxPanelItemEventHandler(Widget    wid,
     }
 
     // TODO: probably the key to allowing default behaviour to happen. Say we
-    // set a m_doDefault flag to FALSE at the start of this function. Then in
+    // set a m_doDefault flag to false at the start of this function. Then in
     // e.g. wxWindow::OnMouseEvent we can call Default() which sets this flag to
-    // TRUE, indicating that default processing can happen. Thus, behaviour can
+    // true, indicating that default processing can happen. Thus, behaviour can
     // appear to be overridden just by adding an event handler and not calling
     // wxWindow::OnWhatever. ALSO, maybe we can use this instead of the current
     // way of handling drawing area events, to simplify things.
@@ -2324,11 +2324,11 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
                     eventType = wxEVT_RIGHT_UP;
                 }
                 else
-                    return FALSE;
+                    return false;
             }
             else
             {
-                return FALSE;
+                return false;
             }
 
             wxevent.SetEventType(eventType);
@@ -2371,10 +2371,10 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
             wxevent.SetId(win->GetId());
             wxevent.SetEventObject(win);
 
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
@@ -2396,13 +2396,13 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
                 id = toupper(id);
 
             if (xevent->xkey.state & ShiftMask)
-                wxevent.m_shiftDown = TRUE;
+                wxevent.m_shiftDown = true;
             if (xevent->xkey.state & ControlMask)
-                wxevent.m_controlDown = TRUE;
+                wxevent.m_controlDown = true;
             if (xevent->xkey.state & Mod3Mask)
-                wxevent.m_altDown = TRUE;
+                wxevent.m_altDown = true;
             if (xevent->xkey.state & Mod1Mask)
-                wxevent.m_metaDown = TRUE;
+                wxevent.m_metaDown = true;
             wxevent.SetEventObject(win);
             wxevent.m_keyCode = id;
             wxevent.SetTimestamp(xevent->xkey.time);
@@ -2411,15 +2411,15 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
             wxevent.m_y = xevent->xbutton.y;
 
             if (id > -1)
-                return TRUE;
+                return true;
             else
-                return FALSE;
+                return false;
             break;
         }
     default:
         break;
     }
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -2507,21 +2507,21 @@ void wxWindow::ChangeForegroundColour()
 bool wxWindow::SetBackgroundColour(const wxColour& col)
 {
     if ( !wxWindowBase::SetBackgroundColour(col) )
-        return FALSE;
+        return false;
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindow::SetForegroundColour(const wxColour& col)
 {
     if ( !wxWindowBase::SetForegroundColour(col) )
-        return FALSE;
+        return false;
 
     ChangeForegroundColour();
 
-    return TRUE;
+    return true;
 }
 
 void wxWindow::ChangeFont(bool keepOriginalSize)

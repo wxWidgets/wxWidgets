@@ -81,7 +81,7 @@ bool wxTimer::Start(int milliseconds, bool mode)
                             m_milli,
                             (XtTimerCallbackProc) wxTimerCallback,
                             (XtPointer) this);
-    return TRUE;
+    return true;
 }
 
 void wxTimer::Stop()

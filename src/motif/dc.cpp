@@ -28,14 +28,14 @@
 
 wxDC::wxDC()
 {
-    m_ok = FALSE;
+    m_ok = false;
 
     m_mm_to_pix_x = 1.0;
     m_mm_to_pix_y = 1.0;
 
     m_backgroundMode = wxTRANSPARENT;
 
-    m_isInteractive = FALSE;
+    m_isInteractive = false;
 }
 
 void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
@@ -43,7 +43,7 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
     wxCHECK_RET( Ok(), "invalid dc" );
     wxCHECK_RET( icon.Ok(), "invalid icon" );
 
-    DoDrawBitmap(icon, x, y, TRUE);
+    DoDrawBitmap(icon, x, y, true);
 }
 
 void wxDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask )
@@ -72,7 +72,7 @@ void wxDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useM
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-    m_clipping = TRUE;
+    m_clipping = true;
     m_clipX1 = x;
     m_clipY1 = y;
     m_clipX2 = x + width;
@@ -128,8 +128,8 @@ void wxDC::SetMapMode( int mode )
     }
     if (mode != wxMM_TEXT)
     {
-        m_needComputeScaleX = TRUE;
-        m_needComputeScaleY = TRUE;
+        m_needComputeScaleX = true;
+        m_needComputeScaleY = true;
     }
 }
 

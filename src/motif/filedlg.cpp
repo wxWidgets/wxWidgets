@@ -60,21 +60,21 @@ IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
 
 wxString wxFileDialog::m_fileSelectorAnswer = "";
-bool wxFileDialog::m_fileSelectorReturned = FALSE;
+bool wxFileDialog::m_fileSelectorReturned = false;
 
 static void wxFileSelClose(Widget WXUNUSED(w),
                            void* WXUNUSED(client_data),
                            XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     wxFileDialog::m_fileSelectorAnswer = "";
-    wxFileDialog::m_fileSelectorReturned = TRUE;
+    wxFileDialog::m_fileSelectorReturned = true;
 }
 
 void wxFileSelCancel( Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data),
                      XmFileSelectionBoxCallbackStruct *WXUNUSED(cbs) )
 {
     wxFileDialog::m_fileSelectorAnswer = "";
-    wxFileDialog::m_fileSelectorReturned = TRUE;
+    wxFileDialog::m_fileSelectorReturned = true;
 }
 
 void wxFileSelOk(Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), XmFileSelectionBoxCallbackStruct *cbs)
@@ -82,13 +82,13 @@ void wxFileSelOk(Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), XmFileSel
     char *filename = NULL;
     if (!XmStringGetLtoR(cbs->value, XmSTRING_DEFAULT_CHARSET, &filename)) {
         wxFileDialog::m_fileSelectorAnswer = "";
-        wxFileDialog::m_fileSelectorReturned = TRUE;
+        wxFileDialog::m_fileSelectorReturned = true;
     } else {
         if (filename) {
             wxFileDialog::m_fileSelectorAnswer = filename;
             XtFree(filename);
         }
-        wxFileDialog::m_fileSelectorReturned = TRUE;
+        wxFileDialog::m_fileSelectorReturned = true;
     }
 }
 
@@ -129,7 +129,7 @@ static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
     // Change colour of the scrolled areas of the listboxes
     Widget listParent = XtParent (widget);
 #if 0
-    wxDoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, true);
 #endif
 
     Widget hsb = (Widget) 0;
@@ -143,8 +143,8 @@ static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
     * function to change them (by default, taken from wxSystemSettings)
     */
     wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
-    wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+    wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, true);
+    wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, true);
 
     if (hsb)
       XtVaSetValues (hsb,
@@ -278,11 +278,11 @@ int wxFileDialog::ShowModal()
     XtManageChild(fileSel);
 
     m_fileSelectorAnswer = "";
-    m_fileSelectorReturned = FALSE;
+    m_fileSelectorReturned = false;
 
     wxEndBusyCursor();
 
-    XtAddGrab(XtParent(fileSel), TRUE, FALSE);
+    XtAddGrab(XtParent(fileSel), True, False);
     XtAppContext context = (XtAppContext) wxTheApp->GetAppContext();
     XEvent event;
     while (!m_fileSelectorReturned)

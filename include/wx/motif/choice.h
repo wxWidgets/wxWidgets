@@ -100,7 +100,7 @@ public:
     void SetFocus();
     
     // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
     WXWidget GetTopWidget() const { return m_formWidget; }

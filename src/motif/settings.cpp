@@ -165,7 +165,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
     {
         case wxSYS_SYSTEM_FIXED_FONT:
         {
-            return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, FALSE);
+            return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, false);
             break;
         }
         case wxSYS_DEVICE_DEFAULT_FONT:
@@ -173,7 +173,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEFAULT_GUI_FONT:
         default:
         {
-            return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, FALSE);
+            return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, false);
             break;
         }
     }
@@ -246,9 +246,9 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
     {
         case wxSYS_CAN_ICONIZE_FRAME:
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return TRUE;
+            return true;
 
         default:
-            return FALSE;
+            return false;
     }
 }

@@ -44,7 +44,7 @@ public:
     
     virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
     {
-        return FALSE;
+        return false;
     }
 
     virtual WXWidget GetLabelWidget() const { return m_labelWidget; }

@@ -111,7 +111,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 void wxFrame::Init()
 {
-    m_iconized = FALSE;
+    m_iconized = false;
 
     //// Motif-specific
     m_frameShell = (WXWidget) NULL;
@@ -130,7 +130,7 @@ bool wxFrame::Create(wxWindow *parent,
 {
     if( !wxTopLevelWindow::Create( parent, id, title, pos, size, style,
                                    name ) )
-        return FALSE;
+        return false;
 
     m_backgroundColour = 
         wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
@@ -170,7 +170,7 @@ bool wxFrame::Create(wxWindow *parent,
                "Created frame (0x%p) with work area 0x%p and client "
                "area 0x%p", m_mainWidget, m_workArea, m_clientArea);
 
-    XtAddEventHandler((Widget) m_clientArea, ExposureMask,FALSE,
+    XtAddEventHandler((Widget) m_clientArea, ExposureMask,False,
         wxUniversalRepaintProc, (XtPointer) this);
 
     if (x > -1)
@@ -182,7 +182,7 @@ bool wxFrame::Create(wxWindow *parent,
     if (height > -1)
         XtVaSetValues((Widget) m_frameShell, XmNheight, height, NULL);
 
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     ChangeBackgroundColour();
 
@@ -193,7 +193,7 @@ bool wxFrame::Create(wxWindow *parent,
 
     GetEventHandler()->ProcessEvent(sizeEvent);
 
-    return TRUE;
+    return true;
 }
 
 bool wxFrame::DoCreate( wxWindow* parent, wxWindowID id,
@@ -214,7 +214,7 @@ bool wxFrame::DoCreate( wxWindow* parent, wxWindowID id,
         XmNallowShellResize, True,
         XmNdeleteResponse, XmDO_NOTHING,
         XmNmappedWhenManaged, False,
-        XmNiconic, (style & wxICONIZE) ? TRUE : FALSE,
+        XmNiconic, (style & wxICONIZE) ? True : False,
         NULL);
 
     m_frameShell = (WXWidget)frameShell;
@@ -262,21 +262,21 @@ bool wxFrame::DoCreate( wxWindow* parent, wxWindowID id,
 
     wxModelessWindows.Append( this );
 
-    return TRUE;
+    return true;
 }
 
 wxFrame::~wxFrame()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 
     if (m_clientArea)
     {
-      XtRemoveEventHandler((Widget) m_clientArea, ExposureMask, FALSE,
+      XtRemoveEventHandler((Widget) m_clientArea, ExposureMask, False,
           wxUniversalRepaintProc, (XtPointer) this);
     }
 
     if (GetMainWidget())
-        Show(FALSE);
+        Show(false);
 
     if (m_frameMenuBar)
     {
@@ -645,7 +645,7 @@ bool wxFrame::PreResize()
     PositionStatusBar();
 #endif // wxUSE_STATUSBAR
 
-    return TRUE;
+    return true;
 }
 
 WXWidget wxFrame::GetClientWidget() const

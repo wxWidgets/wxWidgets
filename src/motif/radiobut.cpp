@@ -89,7 +89,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     ChangeBackgroundColour();
 
-    //copied from mac/radiobut.cpp (from here till "return TRUE;")
+    //copied from mac/radiobut.cpp (from here till "return true;")
     m_cycle = this ;
   
     if (HasFlag(wxRB_GROUP))
@@ -113,7 +113,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
         }
         AddInCycle( chief ) ;
     }
-    return TRUE;
+    return true;
 }
 
 void wxRadioButton::SetValue(bool value)
@@ -121,9 +121,9 @@ void wxRadioButton::SetValue(bool value)
     if (GetValue() == value)
         return;
 
-    m_inSetValue = TRUE;
-    XmToggleButtonSetState ((Widget) m_mainWidget, (Boolean) value, FALSE);
-    m_inSetValue = FALSE;
+    m_inSetValue = true;
+    XmToggleButtonSetState ((Widget) m_mainWidget, (Boolean) value, False);
+    m_inSetValue = false;
 
     ClearSelections();
 }
@@ -164,19 +164,19 @@ void wxRadioButtonCallback (Widget w, XtPointer clientData,
 
     //based on mac/radiobut.cpp
     wxRadioButton* old = item->ClearSelections();
-    item->SetValue(TRUE);
+    item->SetValue(true);
 
     if ( old )
     {
         wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED,
                              old->GetId() );
         event.SetEventObject(old);
-        event.SetInt( FALSE );
+        event.SetInt( false );
         old->ProcessCommand(event);
     }
     wxCommandEvent event2(wxEVT_COMMAND_RADIOBUTTON_SELECTED, item->GetId() );
     event2.SetEventObject(item);
-    event2.SetInt( TRUE );
+    event2.SetInt( true );
     item->ProcessCommand(event2);
 }
 
@@ -213,7 +213,7 @@ wxRadioButton* wxRadioButton::ClearSelections()
             if ( cycle->GetValue() )
             {
                 old = cycle;
-                cycle->SetValue(FALSE);
+                cycle->SetValue(false);
             }
             cycle = cycle->NextInCycle();
         }

@@ -38,7 +38,7 @@ public:
     }
 
     bool Create(wxWindow *parent, wxWindowID id,
-        const wxString& title, // bool modal = FALSE, // TODO make this a window style?
+        const wxString& title,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE,
@@ -48,7 +48,7 @@ public:
 
     virtual bool Destroy();
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
     void SetTitle(const wxString& title);
 
@@ -61,7 +61,7 @@ public:
     virtual void EndModal(int retCode);
 
     // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
     inline WXWidget GetTopWidget() const { return m_mainWidget; }

@@ -146,7 +146,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                        (XtPointer) this);
     }
 
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     SetSelection (0);
  
@@ -158,7 +158,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -214,16 +214,16 @@ void wxRadioBox::SetSelection(int n)
 
     m_selectedButton = n;
 
-    m_inSetValue = TRUE;
+    m_inSetValue = true;
 
-    XmToggleButtonSetState ((Widget) m_radioButtons[n], TRUE, FALSE);
+    XmToggleButtonSetState ((Widget) m_radioButtons[n], True, False);
 
     int i;
     for (i = 0; i < m_noItems; i++)
         if (i != n)
-            XmToggleButtonSetState ((Widget) m_radioButtons[i], FALSE, FALSE);
+            XmToggleButtonSetState ((Widget) m_radioButtons[i], False, False);
 
-    m_inSetValue = FALSE;
+    m_inSetValue = false;
 }
 
 // Get single selection, for single choice list items
@@ -277,13 +277,13 @@ void wxRadioBox::Enable(int n, bool enable)
 bool wxRadioBox::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
-        return FALSE;
+        return false;
 
     int i;
     for (i = 0; i < m_noItems; i++)
         XtSetSensitive ((Widget) m_radioButtons[i], (Boolean) enable);
 
-    return TRUE;
+    return true;
 }
 
 bool wxRadioBox::Show(bool show)
@@ -337,10 +337,10 @@ bool wxRadioBox::SetStringSelection (const wxString& s)
     if (sel > -1)
     {
         SetSelection (sel);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 void wxRadioBox::Command (wxCommandEvent & event)
@@ -378,7 +378,7 @@ void wxRadioBox::ChangeBackgroundColour()
     {
         WXWidget radioButton = m_radioButtons[i];
 
-        wxDoChangeBackgroundColour(radioButton, m_backgroundColour, TRUE);
+        wxDoChangeBackgroundColour(radioButton, m_backgroundColour, true);
 
         XtVaSetValues ((Widget) radioButton,
           XmNselectColor, selectPixel,

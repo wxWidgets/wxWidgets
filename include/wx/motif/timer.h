@@ -26,7 +26,7 @@ public:
     { Init(); }
     ~wxTimer();
     
-    virtual bool Start(int milliseconds = -1, bool oneShot = FALSE);
+    virtual bool Start(int milliseconds = -1, bool oneShot = false);
     virtual void Stop();
     
     virtual bool IsRunning() const { return m_id != 0; }

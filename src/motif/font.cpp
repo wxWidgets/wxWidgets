@@ -76,7 +76,7 @@ public:
                   int family = wxDEFAULT,
                   int style = wxDEFAULT,
                   int weight = wxDEFAULT,
-                  bool underlined = FALSE,
+                  bool underlined = false,
                   const wxString& faceName = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
@@ -230,7 +230,7 @@ bool wxFont::Create(int pointSize,
 
     RealizeResource();
 
-    return TRUE;
+    return true;
 }
 
 bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
@@ -238,7 +238,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
     if( !fontname )
     {
         *this = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT);
-        return TRUE;
+        return true;
     }
 
     m_refData = new wxFontRefData();
@@ -331,9 +331,9 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
         }
         //else: unknown encoding - may be give a warning here?
         else
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 wxFont::~wxFont()
@@ -476,7 +476,7 @@ int wxFont::GetWeight() const
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     return M_FONTDATA->m_underlined;
 }

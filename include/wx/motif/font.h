@@ -30,7 +30,7 @@ public:
         int family,
         int style,
         int weight,
-        bool underlined = FALSE,
+        bool underlined = false,
         const wxString& face = wxEmptyString,
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
@@ -45,7 +45,7 @@ public:
         int family,
         int style,
         int weight,
-        bool underlined = FALSE,
+        bool underlined = false,
         const wxString& face = wxEmptyString,
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
@@ -113,7 +113,7 @@ protected:
     void Init();
 
     // VZ: IMHO, we don't need it at all...
-    bool RealizeResource() { return TRUE; }
+    bool RealizeResource() { return true; }
     void Unshare();
 
 private:

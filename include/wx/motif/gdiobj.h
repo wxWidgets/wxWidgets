@@ -31,7 +31,7 @@ class WXDLLEXPORT wxGDIObject: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxGDIObject)
 public:
-    inline wxGDIObject() { m_visible = FALSE; };
+    inline wxGDIObject() { m_visible = false; };
     inline ~wxGDIObject() {};
     
     inline bool IsNull() const { return (m_refData == 0); }

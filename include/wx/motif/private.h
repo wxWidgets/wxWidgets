@@ -94,7 +94,7 @@ extern void wxDoChangeForegroundColour(WXWidget widget,
                                        wxColour& foregroundColour);
 extern void wxDoChangeBackgroundColour(WXWidget widget,
                                        wxColour& backgroundColour,
-                                       bool changeArmColour = FALSE);
+                                       bool changeArmColour = false);
 extern void wxDoChangeFont(WXWidget widget, wxFont& font);
 
 #define wxNO_COLORS   0x00

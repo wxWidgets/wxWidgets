@@ -44,9 +44,9 @@ public:
     virtual bool ShowFullScreen( bool show, long style = wxFULLSCREEN_ALL );
     virtual bool IsFullScreen() const;
 
-    virtual void Maximize(bool maximize = TRUE);
+    virtual void Maximize(bool maximize = true);
     virtual void Restore();
-    virtual void Iconize(bool iconize = TRUE);
+    virtual void Iconize(bool iconize = true);
     virtual bool IsMaximized() const;
     virtual bool IsIconized() const;
 
@@ -79,7 +79,7 @@ private:
                            long style,
                            const wxString& name )
     {
-        return FALSE;
+        return false;
     }
 
     virtual void DoDestroy() { }

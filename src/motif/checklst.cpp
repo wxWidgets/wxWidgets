@@ -58,7 +58,7 @@ static void CopyStringsAddingPrefix(const wxArrayString& orig,
     copy.Clear();
 
     for(size_t i = 0; i < orig.GetCount(); ++i )
-        copy.Add( Prefix(FALSE) + orig[i] );
+        copy.Add( Prefix(false) + orig[i] );
 }
 
 // def ctor: use Create() to really create the control
@@ -147,7 +147,7 @@ void wxCheckListBox::DoToggleItem( int n, int x )
         else if( HasClientUntypedData() )
             event.SetClientData( GetClientData(n) );
         event.SetInt(n);
-        event.SetExtraLong(TRUE);
+        event.SetExtraLong(true);
         event.SetEventObject(this);
         event.SetString( GetString( n ) );
 
@@ -157,13 +157,13 @@ void wxCheckListBox::DoToggleItem( int n, int x )
 
 int wxCheckListBox::DoAppend(const wxString& item)
 {
-    return wxListBox::DoAppend( Prefix(FALSE) + item );
+    return wxListBox::DoAppend( Prefix(false) + item );
 }
 
 int wxCheckListBox::FindString(const wxString& s) const
 {
-    int n1 = wxListBox::FindString(Prefix(FALSE) + s);
-    int n2 = wxListBox::FindString(Prefix(TRUE) + s);
+    int n1 = wxListBox::FindString(Prefix(false) + s);
+    int n2 = wxListBox::FindString(Prefix(true) + s);
     int min = wxMin(n1, n2), max = wxMax(n1, n2);
 
     // why this works:

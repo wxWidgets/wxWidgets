@@ -61,7 +61,7 @@ public:
     
     // items may be checked
     bool IsChecked(size_t uiIndex) const;
-    void Check(size_t uiIndex, bool bCheck = TRUE);
+    void Check(size_t uiIndex, bool bCheck = true);
 
     // override base class functions
     virtual int DoAppend(const wxString& item);

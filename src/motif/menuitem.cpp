@@ -233,7 +233,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMen
     }
     else if (m_subMenu)
     {
-        m_buttonWidget = m_subMenu->CreateMenu (menuBar, menu, topMenu, m_text, TRUE);
+        m_buttonWidget = m_subMenu->CreateMenu (menuBar, menu, topMenu, m_text, true);
         m_subMenu->SetButtonWidget(m_buttonWidget);
         XtAddCallback ((Widget) m_buttonWidget,
             XmNcascadingCallback,
@@ -334,7 +334,7 @@ void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
 
         if (item->IsCheckable())
         {
-            Boolean isChecked = FALSE;
+            Boolean isChecked = false;
             XtVaGetValues ((Widget) item->GetButtonWidget(),
                            XmNset, & isChecked,
                            NULL);

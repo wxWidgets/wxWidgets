@@ -48,12 +48,12 @@ public:
 
     virtual void SetThumbPosition(int viewStart);
     virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
-        bool refresh = TRUE);
+        bool refresh = true);
     
     void Command(wxCommandEvent& event);
     
     // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     
 protected:

@@ -38,8 +38,8 @@ public:
     
     // accessors (some more are inherited from wxOwnerDrawn or are below)
     virtual void SetText(const wxString& label);
-    virtual void Enable(bool enable = TRUE);
-    virtual void Check(bool check = TRUE);
+    virtual void Enable(bool enable = true);
+    virtual void Check(bool check = true);
     // included SetBitmap and GetBitmap as copied from the GTK include file
     // I'm not sure if this works but it silences the linker in the
     // menu sample.

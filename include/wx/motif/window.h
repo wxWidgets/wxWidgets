@@ -57,14 +57,14 @@ public:
     virtual void Raise();
     virtual void Lower();
     
-    virtual bool Show( bool show = TRUE );
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Show( bool show = true );
+    virtual bool Enable( bool enable = true );
     
     virtual void SetFocus();
     
     virtual void WarpPointer(int x, int y);
     
-    virtual void Refresh( bool eraseBackground = TRUE,
+    virtual void Refresh( bool eraseBackground = true,
         const wxRect *rect = (const wxRect *) NULL );
     
     virtual bool SetBackgroundColour( const wxColour &colour );
@@ -83,8 +83,8 @@ public:
         const;
     
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-        int range, bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+        int range, bool refresh = true );
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true );
     virtual int GetScrollPos( int orient ) const;
     virtual int GetScrollThumb( int orient ) const;
     virtual int GetScrollRange( int orient ) const;
@@ -196,7 +196,7 @@ public:
     
     // Change properties
     // Change to the current font (often overridden)
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);             
+    virtual void ChangeFont(bool keepOriginalSize = true);
     
     // Change background and foreground colour using current background colour
     // setting (Motif generates foreground based on background)
@@ -214,9 +214,9 @@ protected:
     // wxWidgets wxKeyEvent form. Find a widget for the window. Now find a
     // wxWindow for the widget. If there isn't one, go up the widget hierarchy
     // trying to find one. Once one is found, call ProcessAccelerator for the
-    // window. If it returns TRUE (processed the event), skip the X event,
+    // window. If it returns true (processed the event), skip the X event,
     // otherwise carry on up the wxWidgets window hierarchy calling
-    // ProcessAccelerator. If all return FALSE, process the X event as normal.
+    // ProcessAccelerator. If all return false, process the X event as normal.
     // Eventually we can implement OnCharHook the same way, but concentrate on
     // accelerators for now. ProcessAccelerator must look at the current
     // accelerator table, and try to find what menu id or window (beneath it)
@@ -230,7 +230,7 @@ protected:
     void UnmanageAndDestroy(WXWidget widget);
     
     // map or unmap an X widget (passing NULL is ok),
-    // returns TRUE if widget was mapped/unmapped
+    // returns true if widget was mapped/unmapped
     bool MapOrUnmap(WXWidget widget, bool map);
     
     // scrolling stuff

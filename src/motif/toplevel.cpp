@@ -88,7 +88,7 @@ void wxTopLevelWindowMotif::PreDestroy()
         XtRemoveEventHandler( (Widget)GetClientWidget(),
                               ButtonPressMask | ButtonReleaseMask |
                               PointerMotionMask | KeyPressMask,
-                              FALSE,
+                              False,
                               wxTLWEventHandler,
                               (XtPointer)this );
     }
@@ -101,7 +101,7 @@ wxTopLevelWindowMotif::~wxTopLevelWindowMotif()
 
 void wxTopLevelWindowMotif::Init()
 {
-    m_isShown = FALSE;
+    m_isShown = false;
 }
 
 bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
@@ -123,7 +123,7 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
 
     bool retval = DoCreate( parent, id, title, pos, size, style, name );
 
-    if( !retval ) return FALSE;
+    if( !retval ) return false;
 
     // Intercept CLOSE messages from the window manager
     Widget shell = (Widget)GetShellWidget();
@@ -180,14 +180,14 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
         // no-decorations case.
         if( ( m_windowStyle & wxCAPTION ) != wxCAPTION )
             XtVaSetValues( shell,
-                           XmNoverrideRedirect, TRUE,
+                           XmNoverrideRedirect, True,
                            NULL );
     }
 
     XtAddEventHandler( (Widget)GetClientWidget(),
                        ButtonPressMask | ButtonReleaseMask | 
                        PointerMotionMask | KeyPressMask,
-                       FALSE,
+                       False,
                        wxTLWEventHandler,
                        (XtPointer)this );
 
@@ -276,13 +276,13 @@ bool wxTopLevelWindowMotif::ShowFullScreen( bool show,
                                             long style )
 {
     // TODO, see wxGTK
-    return FALSE;
+    return false;
 }
 
 bool wxTopLevelWindowMotif::IsFullScreen() const
 {
     // TODO, see wxGTK
-    return FALSE;
+    return false;
 }
 
 void wxTopLevelWindowMotif::Restore()
@@ -291,7 +291,7 @@ void wxTopLevelWindowMotif::Restore()
 
     if( shell )
         XtVaSetValues( shell,
-                       XmNiconic, FALSE,
+                       XmNiconic, False,
                        NULL );
 }
 
@@ -301,7 +301,7 @@ void wxTopLevelWindowMotif::Iconize( bool iconize )
     if( !shell ) return;
 
     if( !iconize )
-        Show( TRUE );
+        Show( true );
 
     XtVaSetValues( shell,
                    XmNiconic, (Boolean)iconize,
@@ -313,7 +313,7 @@ bool wxTopLevelWindowMotif::IsIconized() const
     Widget shell = GetShell( this );
 
     if( !shell )
-        return FALSE;
+        return false;
 
     Boolean iconic;
     XtVaGetValues( shell,
@@ -325,7 +325,7 @@ bool wxTopLevelWindowMotif::IsIconized() const
 
 void wxTopLevelWindowMotif::Maximize( bool maximize )
 {
-    Show( TRUE );
+    Show( true );
 
     if( maximize )
         Restore();
@@ -333,7 +333,7 @@ void wxTopLevelWindowMotif::Maximize( bool maximize )
 
 bool wxTopLevelWindowMotif::IsMaximized() const
 {
-    return FALSE;
+    return false;
 }
 
 void wxTopLevelWindowMotif::DoSetSizeHints( int minW, int minH,
@@ -399,7 +399,7 @@ void wxTLWEventHandler( Widget wid,
         else
         {
             // An attempt to implement OnCharHook by calling OnCharHook first;
-            // if this returns TRUE, set continueToDispatch to False
+            // if this returns true, set continueToDispatch to False
             // (don't continue processing).
             // Otherwise set it to True and call OnChar.
             wxKeyEvent keyEvent( wxEVT_CHAR );

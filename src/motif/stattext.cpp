@@ -71,7 +71,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     ChangeBackgroundColour ();
 
-    return TRUE;
+    return true;
 }
 
 void wxStaticText::SetLabel(const wxString& label)

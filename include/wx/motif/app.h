@@ -57,7 +57,7 @@ public:
 
     virtual void Exit();
 
-    virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool Yield(bool onlyIfNeeded = false);
     virtual void WakeUpIdle(); // implemented in motif/evtloop.cpp
     
     virtual bool OnInitGui();

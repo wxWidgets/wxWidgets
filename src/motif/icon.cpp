@@ -66,5 +66,5 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
         return handler->LoadFile(this, filename, type,
                                  desiredWidth, desiredHeight);
     else
-        return FALSE;
+        return false;
 }

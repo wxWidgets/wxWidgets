@@ -64,7 +64,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 {
     if( !wxControl::CreateControl( parent, id, pos, size, style, validator,
                                    name ) )
-        return FALSE;
+        return false;
 
     wxString label1(wxStripMenuCodes(label));
     wxXmString text( label1 );
@@ -85,13 +85,13 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                    XmNvalueChangedCallback, (XtCallbackProc)wxCheckBoxCallback,
                    (XtPointer)this );
 
-    XmToggleButtonSetState ((Widget) m_mainWidget, FALSE, TRUE);
+    XmToggleButtonSetState ((Widget) m_mainWidget, False, True);
 
     AttachWidget( parent, m_mainWidget, (WXWidget)NULL,
                   pos.x, pos.y, size.x, size.y );
 
     ChangeBackgroundColour();
-    return TRUE;
+    return true;
 }
 
 void wxCheckBox::SetValue(bool val)

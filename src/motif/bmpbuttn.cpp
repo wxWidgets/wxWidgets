@@ -87,7 +87,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
 
     m_mainWidget = (WXWidget) buttonWidget;
 
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     ChangeBackgroundColour ();
 
@@ -104,7 +104,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, best.x, best.y);
 
-    return TRUE;
+    return true;
 }
 
 wxBitmapButton::~wxBitmapButton()
@@ -250,7 +250,7 @@ void wxBitmapButton::DoSetBitmap()
 
 void wxBitmapButton::ChangeBackgroundColour()
 {
-    wxDoChangeBackgroundColour(m_mainWidget, m_backgroundColour, TRUE);
+    wxDoChangeBackgroundColour(m_mainWidget, m_backgroundColour, true);
 
     // Must reset the bitmaps since the colours have changed.
     DoSetBitmap();

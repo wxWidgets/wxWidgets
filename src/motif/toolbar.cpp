@@ -205,7 +205,7 @@ bool wxToolBar::Create(wxWindow *parent,
 {
     if( !wxControl::CreateControl( parent, id, pos, size, style,
                                    wxDefaultValidator, name ) )
-        return FALSE;
+        return false;
 
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
@@ -232,7 +232,7 @@ bool wxToolBar::Create(wxWindow *parent,
 
     m_mainWidget = (WXWidget) toolbar;
 
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     wxPoint rPos = pos;
     wxSize  rSize = size;
@@ -247,7 +247,7 @@ bool wxToolBar::Create(wxWindow *parent,
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 wxToolBar::~wxToolBar()
@@ -261,7 +261,7 @@ bool wxToolBar::Realize()
     if ( m_tools.GetCount() == 0 )
     {
         // nothing to do
-        return TRUE;
+        return true;
     }
 
     bool isVertical = GetWindowStyle() & wxTB_VERTICAL;
@@ -364,7 +364,7 @@ bool wxToolBar::Realize()
                 if( !tool->GetButtonWidget() )
                 {
                     wxDoChangeBackgroundColour((WXWidget) button,
-                                               m_backgroundColour, TRUE);
+                                               m_backgroundColour, true);
 
                     tool->SetWidget(button);
                 }
@@ -483,7 +483,7 @@ bool wxToolBar::Realize()
              isVertical ? buttonWidth + 2 * marginX : -1,
              isVertical ? -1 : buttonHeight +  2*marginY );
 
-    return TRUE;
+    return true;
 }
 
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
@@ -498,7 +498,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 {
     tool->Attach(this);
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
@@ -586,7 +586,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
@@ -723,7 +723,7 @@ static void wxToolButtonPopupCallback(Widget w,
         wxToolBarTimer::help_popup = (Widget) 0;
 
         // One shot
-        wxTheToolBarTimer->Start(delayMilli, TRUE);
+        wxTheToolBarTimer->Start(delayMilli, true);
 
     }
     /************************************************************/

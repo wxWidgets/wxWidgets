@@ -324,7 +324,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
                 event.SetClientObject( item->GetClientObject(cbs->index - 1) );
             else if ( item->HasClientUntypedData() )
                 event.SetClientData( item->GetClientData(cbs->index - 1) );
-            event.SetExtraLong(TRUE);
+            event.SetExtraLong(true);
             event.SetEventObject(item);
             item->ProcessCommand (event);
             break;
@@ -334,7 +334,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
             wxCommandEvent event (wxEVT_COMMAND_TEXT_UPDATED, item->GetId());
             event.SetInt(-1);
             event.SetString( item->GetValue() );
-            event.SetExtraLong(TRUE);
+            event.SetExtraLong(true);
             event.SetEventObject(item);
             item->ProcessCommand (event);
             break;

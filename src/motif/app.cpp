@@ -188,7 +188,7 @@ static char *fallbackResources[] = {
 bool wxApp::OnInitGui()
 {
     if( !wxAppBase::OnInitGui() )
-        return FALSE;
+        return false;
 
     XtToolkitInitialize() ;
     wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext();
@@ -228,7 +228,7 @@ bool wxApp::OnInitGui()
 
     wxAddIdleCallback();
 
-    return TRUE;
+    return true;
 }
 
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
@@ -360,7 +360,7 @@ void wxApp::SetTopLevelRealizedWidget(WXDisplay* display, WXWidget widget)
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    static bool s_inYield = FALSE;
+    static bool s_inYield = false;
 
     if ( s_inYield )
     {
@@ -369,17 +369,17 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxFAIL_MSG( wxT("wxYield called recursively" ) );
         }
 
-        return FALSE;
+        return false;
     }
 
-    s_inYield = TRUE;
+    s_inYield = true;
 
     while (wxTheApp && wxTheApp->Pending())
         wxTheApp->Dispatch();
 
-    s_inYield = FALSE;
+    s_inYield = false;
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------

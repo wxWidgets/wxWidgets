@@ -142,14 +142,14 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     if( size.x != -1 ) best.x = size.x;
     if( size.y != -1 ) best.y = size.y;
 
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y,
                   best.x, best.y);
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 wxSize wxGauge::DoGetBestSize() const
@@ -560,7 +560,7 @@ XmGaugeClassRec xmGaugeClassRec = {
             sizeof(XmGaugeRec),	/* widget_size		*/
             NULL,			/* class_initialize		*/
             NULL,			/* class_part_initialize	*/
-            FALSE,			/* class_inited		*/
+            False,			/* class_inited		*/
             Initialize,		/* initialize		*/
             NULL,			/* initialize_hook		*/
             XtInheritRealize,	/* realize			*/
@@ -569,10 +569,10 @@ XmGaugeClassRec xmGaugeClassRec = {
             resources,		/* resources		*/
             XtNumber(resources),	/* num_resources		*/
             NULLQUARK,		/* xrm_class		*/
-            TRUE,			/* compress_motion		*/
-            TRUE,			/* compress_exposure	*/
-            TRUE,			/* compress_enterleave	*/
-            FALSE,			/* visible_interest		*/
+            True,			/* compress_motion		*/
+            True,			/* compress_exposure	*/
+            True,			/* compress_enterleave	*/
+            False,			/* visible_interest		*/
             Destroy,		/* destroy			*/
             NULL,			/* resize			*/
             ExposeProc,		/* expose			*/

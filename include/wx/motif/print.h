@@ -30,7 +30,7 @@ public:
     wxPrinter(wxPrintData *data = NULL);
     ~wxPrinter();
     
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE);
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true);
     virtual bool PrintDialog(wxWindow *parent);
     virtual bool Setup(wxWindow *parent);
 };

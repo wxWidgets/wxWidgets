@@ -63,7 +63,7 @@ wxScreenDC::wxScreenDC()
         &gcvalues);
     
     m_backgroundPixel = (int) gcvalues.background;
-    m_ok = TRUE;
+    m_ok = true;
 }
 
 wxScreenDC::~wxScreenDC()
@@ -88,7 +88,7 @@ bool wxScreenDC::StartDrawingOnTop(wxWindow* window)
 bool wxScreenDC::StartDrawingOnTop(wxRect* rect)
 {
     if (sm_overlayWindow)
-        return FALSE;
+        return false;
     
     Display *dpy = (Display*) wxGetDisplay();
     Pixmap screenPixmap = RootWindow(dpy, DefaultScreen(dpy));
@@ -118,10 +118,10 @@ bool wxScreenDC::StartDrawingOnTop(wxRect* rect)
     if (sm_overlayWindow)
     {
         XMapWindow(dpy, (Window) sm_overlayWindow);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool wxScreenDC::EndDrawingOnTop()
@@ -130,8 +130,8 @@ bool wxScreenDC::EndDrawingOnTop()
     {
         XDestroyWindow((Display*) wxGetDisplay(), (Window) sm_overlayWindow);
         sm_overlayWindow = 0;
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }

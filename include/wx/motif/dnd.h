@@ -153,7 +153,7 @@ public:
     void SetData( wxDataObject &data  );
     wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
     
-    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; };
+    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return true; };
     
     // implementation
 #if 0

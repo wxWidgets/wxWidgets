@@ -161,15 +161,15 @@ public:
     // MDI operations
     virtual void Maximize();
     virtual void Maximize(bool WXUNUSED(maximize)) { };
-    inline void Minimize() { Iconize(TRUE); };
+    inline void Minimize() { Iconize(true); };
     virtual void Iconize(bool iconize);
     virtual void Restore();
     virtual void Activate();
     virtual bool IsIconized() const ;
     
-    virtual bool IsTopLevel() const { return FALSE; }
+    virtual bool IsTopLevel() const { return false; }
     
-    // Is the frame maximized? Returns TRUE for
+    // Is the frame maximized? Returns true for
     // wxMDIChildFrame due to the tabbed implementation.
     virtual bool IsMaximized(void) const ;
     

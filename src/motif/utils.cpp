@@ -89,7 +89,7 @@ void wxFlushEvents(WXDisplay* wxdisplay)
     Display *display = (Display*)wxdisplay;
     wxEventLoop evtLoop;
 
-    XSync (display, FALSE);
+    XSync (display, False);
 
     while (evtLoop.Pending())
     {
@@ -197,7 +197,7 @@ static char * GetIniFile (char *dest, const char *filename)
     return dest;
 }
 
-static char *GetResourcePath(char *buf, const char *name, bool create = FALSE)
+static char *GetResourcePath(char *buf, const char *name, bool create = false)
 {
     if (create && wxFileExists (name) ) {
         strcpy(buf, name);
@@ -240,7 +240,7 @@ wxFlushResources (void)
     {
         const char *file = node->GetKeyString();
         // If file doesn't exist, create it first.
-        (void)GetResourcePath(nameBuffer, file, TRUE);
+        (void)GetResourcePath(nameBuffer, file, true);
 
         XrmDatabase database = (XrmDatabase) node->Data ();
         XrmPutFileDatabase (database, nameBuffer);
@@ -356,7 +356,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
         strncpy (*value, xvalue.addr, (int) xvalue.size);
         return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
@@ -369,7 +369,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, float *value,
         delete[] s;
         return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
@@ -382,7 +382,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, long *value, 
         delete[] s;
         return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
@@ -394,10 +394,10 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
         // Handle True, False here
         // True, Yes, Enables, Set or  Activated
         if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
-            *value = TRUE;
+            *value = true;
         // False, No, Disabled, Reset, Cleared, Deactivated
         else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
-            *value = FALSE;
+            *value = false;
         // Handle as Integer
         else
             *value = (int) strtol (s, NULL, 10);
@@ -405,7 +405,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
         return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 void wxXMergeDatabases (wxApp * theApp, Display * display)
@@ -492,7 +492,7 @@ wxSetDefaultResources (const Widget w, const char **resourceSpec, const char *na
     {
 #if (XlibSpecificationRelease>=5)
         XrmDatabase db = XtDatabase (dpy);
-        XrmCombineDatabase (rdb, &db, FALSE);
+        XrmCombineDatabase (rdb, &db, False);
 #else
         XrmMergeDatabases (dpy->db, &rdb);
         dpy->db = rdb;
@@ -620,7 +620,7 @@ bool wxSetDisplay(const wxString& display_name)
             return true;
         }
         else
-            return FALSE;
+            return false;
     }
 }
 

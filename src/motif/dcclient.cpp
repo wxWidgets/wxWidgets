@@ -410,7 +410,7 @@ void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord
 
     if (m_brush.Ok() && m_brush.GetStyle () != wxTRANSPARENT)
     {
-        m_autoSetting = TRUE;    // must be reset
+        m_autoSetting = true;    // must be reset
 
         SetBrush (m_brush);
         XFillArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wd, hd, start, end);
@@ -898,7 +898,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 source->LogicalToDeviceXRel(width),
                 source->LogicalToDeviceYRel(height),
                 XLOG2DEV_2 (xdest), YLOG2DEV_2 (ydest),
-                TRUE, &cache);
+                true, &cache);
 
             if ( useMask && source->IsKindOf(CLASSINFO(wxMemoryDC)) )
             {
@@ -917,7 +917,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 source->LogicalToDeviceXRel(width),
                 source->LogicalToDeviceYRel(height),
                 XLOG2DEV (xdest), YLOG2DEV (ydest),
-                FALSE, &cache);
+                False, &cache);
 
             if ( useMask )
             {
@@ -2261,7 +2261,7 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
     destcm = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) dest_display);
 
     cache_pos = 0;
-    all_cache = FALSE;
+    all_cache = False;
 
     for (i = 0; i < w; i++)
         for (j = 0; j < h; j++) {
@@ -2289,7 +2289,7 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
 
                         if (++cache_pos >= CACHE_SIZE) {
                             cache_pos = 0;
-                            all_cache = TRUE;
+                            all_cache = true;
                         }
 
 install:

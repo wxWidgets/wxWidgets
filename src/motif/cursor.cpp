@@ -496,7 +496,7 @@ void wxEndBusyCursor()
     }
 }
 
-// TRUE if we're between the above two calls
+// true if we're between the above two calls
 bool wxIsBusy()
 {
     return (wxBusyCursorCount > 0);

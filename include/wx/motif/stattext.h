@@ -46,7 +46,7 @@ public:
     // operations
     virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
     {
-        return FALSE;
+        return false;
     }
     
     virtual void SetLabel(const wxString& label);

@@ -93,8 +93,8 @@ protected:
     // note that this function will call colour.SetPixel,
     // and will do one of curCol = colour, curCol = wxWHITE, curCol = wxBLACK
     // roundToWhite has an effect for monochrome display only
-    // if roundToWhite == TRUE then the colour will be set to white unless
-    // it is RGB 0x000000;if roundToWhite == FALSE the colour wull be set to
+    // if roundToWhite == true then the colour will be set to white unless
+    // it is RGB 0x000000;if roundToWhite == true the colour wull be set to
     // black unless it id RGB 0xffffff
     int CalculatePixel(wxColour& colour, wxColour& curCol,
                        bool roundToWhite) const;
@@ -129,7 +129,7 @@ protected:
     
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
     
     virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,

@@ -51,14 +51,14 @@ wxDropTarget::~wxDropTarget()
 bool wxTextDropTarget::OnDrop( long x, long y, const void *data, size_t WXUNUSED(size) )
 {
   OnDropText( x, y, (const char*)data );
-  return TRUE;
+  return true;
 }
 
 bool wxTextDropTarget::OnDropText( long x, long y, const char *psz )
 {
   wxLogDebug( "Got dropped text: %s.", psz );
   wxLogDebug( "At x: %d, y: %d.", (int)x, (int)y );
-  return TRUE;
+  return true;
 }
 
 size_t wxTextDropTarget::GetFormatCount() const
@@ -84,7 +84,7 @@ bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * 
   {
     wxLogDebug( aszFiles[i] );
   }
-  return TRUE;
+  return true;
 }
 
 bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
@@ -95,7 +95,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
   for (i = 0; i < size; i++)
     if (text[i] == 0) number++;
 
-  if (number == 0) return TRUE;    
+  if (number == 0) return true;    
     
   char **files = new char*[number];
   
@@ -143,7 +143,7 @@ wxDropSource::wxDropSource( wxWindow *win )
 wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
 {
 #if 0
-  g_blockEventsOnDrag = TRUE;
+  g_blockEventsOnDrag = true;
   
   m_window = win;
   m_widget = win->m_widget;
@@ -182,7 +182,7 @@ wxDragResult wxDropSource::DoDragDrop( int WXUNUSED(flags) )
   
   UnregisterWindow();
   
-  g_blockEventsOnDrag = FALSE;
+  g_blockEventsOnDrag = false;
   
   return m_retValue;
 #endif
