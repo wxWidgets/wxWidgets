@@ -13,6 +13,14 @@ wxMSW:
 OTHER CHANGES
 -------------
 
+2.2.6
+-----
+
+wxMSW:
+
+- wxChoice sizing bug introduced in 2.2.5 fixed (oops) and calculating of
+  the size of initially empty wxChoice controls fixed as well
+
 2.2.5
 -----
 

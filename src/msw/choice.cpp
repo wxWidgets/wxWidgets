@@ -106,6 +106,20 @@ int wxChoice::DoAppend(const wxString& item)
         wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
     }
 
+    // if we were created empty, the choice is too small to show any items, so
+    // resize it - but as we do it once only, give it some reasonable size
+    if ( GetCount() == 1 )
+    {
+        wxSize size = GetSize();
+        int cx, cy;
+        wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+
+        size.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+
+        // don't call our SetSize() as it ignores the height parameter
+        wxControl::DoSetSize(-1, -1, size.x, size.y, wxSIZE_USE_EXISTING);
+    }
+
     return n;
 }
 
@@ -287,9 +301,13 @@ wxSize wxChoice::DoGetBestSize() const
 
     wChoice += 5*cx;
 
-    // Choice drop-down list depends on number of items (limited to 10)
-    size_t nStrings = nItems == 0 ? 10 : wxMin(10, nItems) + 1;
-    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*nStrings;
+    if ( nItems > 10 )
+    {
+        // don't make the control too big
+        nItems = 10;
+    }
+
+    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(nItems + 1);
 
     return wxSize(wChoice, hChoice);
 }
