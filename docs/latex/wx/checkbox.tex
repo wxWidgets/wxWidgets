@@ -93,7 +93,15 @@ Gets the state of the checkbox.
 
 \wxheading{Return value}
 
-Returns TRUE if it is checked, FALSE otherwise.
+Returns {\tt TRUE} if it is checked, {\tt FALSE} otherwise.
+
+\membersection{wxCheckBox::IsChecked}\label{wxcheckboxischecked}
+
+\constfunc{bool}{IsChecked}{\void}
+
+This is just a maybe more readable synonym for 
+\helpref{GetValue}{wxcheckboxgetvalue}: just as the latter, it returns 
+{\tt TRUE} if the checkbox is checked and {\tt FALSE} otherwise.
 
 \membersection{wxCheckBox::SetValue}\label{wxcheckboxsetvalue}
 
@@ -104,6 +112,6 @@ wxEVT\_COMMAND\_CHECKBOX\_CLICKED event to get emitted.
 
 \wxheading{Parameters}
 
-\docparam{state}{If TRUE, the check is on, otherwise it is off.}
+\docparam{state}{If {\tt TRUE|, the check is on, otherwise it is off.}
 
 
