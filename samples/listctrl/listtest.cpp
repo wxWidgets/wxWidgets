@@ -579,8 +579,11 @@ void MyListCtrl::OnColClick(wxListEvent& event)
 
 void MyListCtrl::OnBeginDrag(wxListEvent& event)
 {
-    wxLogMessage( wxT("OnBeginDrag at %d,%d."),
-                  event.m_pointDrag.x, event.m_pointDrag.y );
+    const wxPoint& pt = event.m_pointDrag;
+
+    int flags;
+    wxLogMessage( wxT("OnBeginDrag at (%d, %d), item %ld."),
+                  pt.x, pt.y, HitTest(pt, flags) );
 }
 
 void MyListCtrl::OnBeginRDrag(wxListEvent& event)
