@@ -240,7 +240,7 @@ void wxMenuItem::SetText(const wxString& text)
 #endif  //owner drawn
         {
             flagsOld |= MF_STRING;
-            data = (char*) text.c_str();
+            data = (wxChar*) text.c_str();
         }
 
         if ( ::ModifyMenu(hMenu, id,

@@ -2164,7 +2164,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
     if ( oldWin && (oldWin != win) )
     {
         wxString str(win->GetClassInfo()->GetClassName());
-        wxLogError("Bug! Found existing HWND %X for new window of class %s", (int) hWnd, (const char*) str);
+        wxLogError(wxT("Bug! Found existing HWND %X for new window of class %s"), (int) hWnd, (const wxChar*) str);
     }
     else if (!oldWin)
     {
@@ -2336,7 +2336,7 @@ bool wxWindow::MSWCreate(int id,
         HWND hWnd = (HWND) node->GetKeyInteger();
         if (hWnd != (HWND) m_hWnd)
         {
-            wxLogError("A second HWND association is being added for the same window!");
+            wxLogError(wxT("A second HWND association is being added for the same window!"));
         }
     }
 #endif

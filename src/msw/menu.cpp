@@ -219,7 +219,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         // menu is just a normal string (passed in data parameter)
         flags |= MF_STRING;
 
-        pData = (char*)pItem->GetText().c_str();
+        pData = (wxChar*)pItem->GetText().c_str();
     }
 
     BOOL ok;
