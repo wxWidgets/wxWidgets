@@ -126,6 +126,7 @@ WXARCHIVE=@DISTDIR@-$(VER_SUFFIX).tar.gz
 WXGLARCHIVE=@DISTDIR@-gl-$(VER_SUFFIX).tar.gz
 WXSAMPLES=wx$(TOOLKIT)-samples-$(VER_SUFFIX).tar.gz
 WXDEMOS=wx$(TOOLKIT)-demos-$(VER_SUFFIX).tar.gz
+WXARCHIVE_ZIP=wxMSW-$(VER_SUFFIX).zip
 
 WXARCHIVE_BZIP=@DISTDIR@-$(VER_SUFFIX).tar.bz2
 WXGLARCHIVE_BZIP=@DISTDIR@-gl-$(VER_SUFFIX).tar.bz2
@@ -728,13 +729,36 @@ MSW_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
-
 	mkdir $(DISTDIR)/src/msw/ole
 	cp $(MSWDIR)/files.lst $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
+
+MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
+	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
+	mkdir $(DISTDIR)/include/wx/msw
+	mkdir $(DISTDIR)/include/wx/msw/ctl3d
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	mkdir $(DISTDIR)/include/wx/msw/ole
+	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/ctl3d/*.h $(DISTDIR)/include/wx/msw/ctl3d
+	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
+	mkdir $(DISTDIR)/src/msw
+	mkdir $(DISTDIR)/src/msw/ole
+	cp $(MSWDIR)/files.lst $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
+	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
+	cp $(SRCDIR)/*.* $(DISTDIR)/src
+	cp $(MSWDIR)/?ake*.* $(DISTDIR)/src/msw
 
 UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/univ
@@ -1420,6 +1444,18 @@ bzip-dist: @GUIDIST@
 	tar ch wxDemos | bzip2 -f9 > ../../$(WXDEMOS_BZIP); \
 	mv wxDemos demos; \
 	fi
+
+# RR: Copy text and binary data separatly
+win-dist: MSW_ZIP_TEXT_DIST
+	@echo "*** Creating wxWindows ZIP distribution in $(DISTDIR)..."
+	@cd _dist_dir && mv $(DISTDIRNAME) wxMSW
+	@cd _dist_dir && zip -r -l  ../$(WXARCHIVE_ZIP) *
+	cp $(INCDIR)/wx/msw/*.cur _dist_dir/wxMSW/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.ico _dist_dir/wxMSW/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.bmp _dist_dir/wxMSW/include/wx/msw
+	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.cur
+	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.ico
+	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.bmp
 
 debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	mkdir $(DISTDIR)/debian
