@@ -30,7 +30,7 @@ typedef enum {
 
 class wxOutputStream;
 class wxInputStream: public wxObject {
-  DECLARE_ABSTRACT_CLASS(wxInputStream);
+  DECLARE_ABSTRACT_CLASS(wxInputStream)
  public:
   wxInputStream();
   virtual ~wxInputStream();
@@ -46,7 +46,7 @@ class wxInputStream: public wxObject {
 };
 
 class wxOutputStream: public wxObject {
-  DECLARE_ABSTRACT_CLASS(wxOutputStream);
+  DECLARE_ABSTRACT_CLASS(wxOutputStream)
  public:
   wxOutputStream();
   virtual ~wxOutputStream();

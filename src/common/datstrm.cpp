@@ -26,6 +26,11 @@
 
 #include "wx/datstrm.h"
 
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_CLASS(wxDataInputStream, wxFilterInputStream)
+IMPLEMENT_CLASS(wxDataOutputStream, wxFilterOutputStream)
+#endif
+
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
   : wxFilterInputStream(s)
 {

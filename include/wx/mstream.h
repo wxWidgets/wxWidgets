@@ -14,6 +14,7 @@
 #include <wx/stream.h>
 
 class wxMemoryStreamBase: public wxStream {
+  DECLARE_CLASS(wxMemoryStreamBase)
  public:
   wxMemoryStreamBase(char *data, size_t length, int iolimit);
   virtual ~wxMemoryStreamBase();
@@ -49,6 +50,7 @@ class wxMemoryStreamBase: public wxStream {
 
 
 class wxMemoryInputStream: public wxMemoryStreamBase {
+  DECLARE_CLASS(wxMemoryInputStream)
  public:
   wxMemoryInputStream(char *data, size_t length)
      : wxMemoryStreamBase(data, length, 1)
@@ -56,6 +58,7 @@ class wxMemoryInputStream: public wxMemoryStreamBase {
 };
 
 class wxMemoryOutputStream: public wxMemoryStreamBase {
+  DECLARE_DYNAMIC_CLASS(wxMemoryOutputStream)
  public:
   wxMemoryOutputStream(char *data = NULL, size_t length = 0)
      : wxMemoryStreamBase(data, length, 2)
@@ -63,6 +66,7 @@ class wxMemoryOutputStream: public wxMemoryStreamBase {
 };
 
 class wxMemoryStream: public wxMemoryStreamBase {
+  DECLARE_DYNAMIC_CLASS(wxMemoryStream)
  public:
   wxMemoryStream(char *data = NULL, size_t length = 0)
      : wxMemoryStreamBase(data, length, 0)

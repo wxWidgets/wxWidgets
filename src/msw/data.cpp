@@ -359,6 +359,28 @@ IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxList)
 #include "wx/process.h"
 IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
 
+#include "wx/stream.h"
+#include "wx/fstream.h"
+#include "wx/mstream.h"
+#include "wx/datstrm.h"
+IMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxOutputStream, wxObject)
+IMPLEMENT_ABSTRACT_CLASS2(wxStream, wxInputStream, wxOutputStream)
+IMPLEMENT_CLASS(wxFilterInputStream, wxInputStream)
+IMPLEMENT_CLASS(wxFilterOutputStream, wxOutputStream)
+
+IMPLEMENT_CLASS(wxFileStreamBase, wxStream)
+IMPLEMENT_CLASS(wxFileInputStream, wxFileStreamBase)
+IMPLEMENT_CLASS(wxFileOutputStream, wxFileStreamBase)
+
+IMPLEMENT_CLASS(wxMemoryStreamBase, wxStream)
+IMPLEMENT_CLASS(wxMemoryInputStream, wxMemoryStreamBase)
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryOutputStream, wxMemoryStreamBase)
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryStream, wxMemoryStreamBase)
+
+IMPLEMENT_CLASS(wxDataInputStream, wxFilterInputStream)
+IMPLEMENT_CLASS(wxDataOutputStream, wxFilterInputStream)
+
 #if USE_TIMEDATE
 #include "wx/date.h"
 IMPLEMENT_DYNAMIC_CLASS(wxDate, wxObject)
