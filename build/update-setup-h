@@ -76,6 +76,7 @@ if [ ! -f wxwin.m4 ]; then
 fi
 
 update_single_setup_h include/wx/msw/setup0.h
+update_single_setup_h include/wx/msw/wince/setup.h
 update_single_setup_h include/wx/mac/setup0.h
 update_single_setup_h setup.h.in
 
