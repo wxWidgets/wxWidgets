@@ -1451,7 +1451,7 @@ void wxWindowBase::GetPositionConstraint(int *x, int *y) const
 
 #endif // wxUSE_CONSTRAINTS
 
-void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
+void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags) const
 {
     // don't do it for the dialogs/frames - they float independently of their
     // parent
