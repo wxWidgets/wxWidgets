@@ -39,7 +39,9 @@ extern "C" {
   #include <X11/Xlib.h>
   #include <X11/Xlibint.h>
   #include <X11/extensions/Xinerama.h>
+#ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
   #include <X11/extensions/xf86vmode.h>
+#endif
 }
 
 class wxDisplayUnixPriv
@@ -149,6 +151,9 @@ wxString wxDisplay::GetName() const
 {
   return wxEmptyString;
 }
+
+
+#ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
 
 //
 //  See (http://www.xfree86.org/4.2.0/XF86VidModeDeleteModeLine.3.html) for more
@@ -275,5 +280,27 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     */
 }
 
-#endif /* wxUSE_DISPLAY */
 
+#else // !HAVE_X11_EXTENSIONS_XF86VMODE_H
+
+wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
+{
+    // Not implemented
+    return wxArrayVideoModes();
+}
+
+wxVideoMode wxDisplay::GetCurrentMode() const
+{
+    // Not implemented
+    return wxVideoMode();
+}
+
+bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+{
+    // Not implemented
+    return false;
+}
+
+#endif // !HAVE_X11_EXTENSIONS_XF86VMODE_H
+
+#endif /* wxUSE_DISPLAY */

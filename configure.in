@@ -2968,6 +2968,25 @@ if test "$wxUSE_DISPLAY" = "yes"; then
             fi
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
             AC_MSG_RESULT([yes])
+
+            AC_MSG_CHECKING([for Xxf86vm extension])
+            WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
+            if test "$ac_find_libraries" != "" ; then
+                AC_MSG_RESULT([yes])
+                AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
+                                 [
+                                  GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
+                                 ],
+                                 [], 
+                                 [
+                                      #if HAVE_X11_XLIB_H
+                                        #include <X11/Xlib.h>
+                                      #endif
+                                 ])
+            else
+                AC_MSG_RESULT([no])
+            fi
+        
         else
             AC_MSG_RESULT([no])
             AC_MSG_WARN("*** Xinerama not found; disabling wxDisplay")

@@ -26576,6 +26576,96 @@ for ac_dir in $SEARCH_LIB /usr/lib;
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+
+            echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
+echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6
+
+ac_find_libraries=
+for ac_dir in $SEARCH_LIB /usr/lib;
+  do
+    for ac_extension in a so sl dylib; do
+      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+            if test "$ac_find_libraries" != "" ; then
+                echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+for ac_header in X11/extensions/xf86vmode.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
+if eval "test \"\${$as_ac_Header+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                      #if HAVE_X11_XLIB_H
+                                        #include <X11/Xlib.h>
+                                      #endif
+
+
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval "$as_ac_Header=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+eval "$as_ac_Header=no"
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+                                  GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
+
+fi
+
+done
+
+            else
+                echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+            fi
+
         else
             echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
