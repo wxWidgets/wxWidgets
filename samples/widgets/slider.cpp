@@ -44,6 +44,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
+#if wxUSE_SLIDER
 #include "icons/slider.xpm"
 
 // ----------------------------------------------------------------------------
@@ -602,3 +603,5 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
                  event.GetPosition());
 }
 
+#endif
+    // wxUSE_SLIDER
