@@ -152,6 +152,7 @@ public:
     void DrawCurrent();
     void AdjustDC(wxDC& dc);
 
+    void OnEraseBackground( wxEraseEvent& event );
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
@@ -1075,9 +1076,10 @@ void wxTreeListTextCtrl::OnKillFocus( wxFocusEvent &event )
 IMPLEMENT_DYNAMIC_CLASS(wxTreeListHeaderWindow,wxWindow);
 
 BEGIN_EVENT_TABLE(wxTreeListHeaderWindow,wxWindow)
-    EVT_PAINT         (wxTreeListHeaderWindow::OnPaint)
-    EVT_MOUSE_EVENTS  (wxTreeListHeaderWindow::OnMouse)
-    EVT_SET_FOCUS     (wxTreeListHeaderWindow::OnSetFocus)
+    EVT_ERASE_BACKGROUND  (wxTreeListHeaderWindow::OnEraseBackground)
+    EVT_PAINT             (wxTreeListHeaderWindow::OnPaint)
+    EVT_MOUSE_EVENTS      (wxTreeListHeaderWindow::OnMouse)
+    EVT_SET_FOCUS         (wxTreeListHeaderWindow::OnSetFocus)
 END_EVENT_TABLE()
 
 void wxTreeListHeaderWindow::Init()
@@ -1190,26 +1192,35 @@ void wxTreeListHeaderWindow::AdjustDC(wxDC& dc)
     dc.SetDeviceOrigin( -x * xpix, 0 );
 }
 
+
+void wxTreeListHeaderWindow::OnEraseBackground( wxEraseEvent& event )
+{
+}
+
 void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
 #ifdef __WXGTK__
-    wxClientDC dc( this );
+    wxClientDC real_dc( this );
 #else
-    wxPaintDC dc( this );
+    wxPaintDC real_dc( this );
 #endif
 
-    PrepareDC( dc );
-    AdjustDC( dc );
-
-    dc.BeginDrawing();
-
-    dc.SetFont( GetFont() );
+    AdjustDC( real_dc );
 
     // width and height of the entire header window
     int w, h;
     GetClientSize( &w, &h );
     m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
 
+    // Setup double buffering to eliminate the flicker
+    wxMemoryDC dc;
+    wxBitmap   buffer(w, h);
+    dc.SelectObject(buffer);
+    dc.SetBackground(wxBrush(GetBackgroundColour()));
+    dc.Clear();
+    
+    dc.BeginDrawing();
+    dc.SetFont( GetFont() );
     dc.SetBackgroundMode(wxTRANSPARENT);
 
     // do *not* use the listctrl colour for headers - one day we will have a
@@ -1298,8 +1309,10 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             m_parent->IsEnabled() ? 0 : wxCONTROL_DISABLED);
     }
 
-
+    // Finish up by drawing the buffer to the real dc
     dc.EndDrawing();
+    dc.SelectObject(wxNullBitmap);
+    real_dc.DrawBitmap(buffer, 0, 0, false);
 }
 
 void wxTreeListHeaderWindow::DrawCurrent()
@@ -4645,7 +4658,10 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
     int w, h;
     GetClientSize(&w, &h);
     if (m_header_win)
+    {
         m_header_win->SetSize(0, 0, w, m_headerHeight);
+        m_header_win->Refresh(false);
+    }
     if (m_main_win)
         m_main_win->SetSize(0, m_headerHeight + 1, w, h - m_headerHeight - 1);
 }
