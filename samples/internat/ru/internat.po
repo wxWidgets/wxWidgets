@@ -14,68 +14,68 @@ msgstr ""
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:128
 msgid "International wxWindows App"
-msgstr "│И│н│т│е│р│н│а│ц│и│о│н│а│л│ь│н│о│е │п│р│и│л│о│ж│е│н│и│е wxWindows"
+msgstr "Интернациональное приложение wxWindows"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:136
 msgid "&About..."
-msgstr "&│О │п│р│о│г│р│а│м│м│е..."
+msgstr "&О программе..."
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:138
 msgid "E&xit"
-msgstr "&│В│ы│й│т│и"
+msgstr "&Выйти"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:141
 msgid "&Open bogus file"
-msgstr "&│О│т│к│р│ы│т│ь │ф│а│й│л"
+msgstr "&Открыть файл"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:142
 msgid "&Play a game"
-msgstr "&│П│о│и│г│р│а│т│ь │в │и│г│р│у"
+msgstr "&Поиграть в игру"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:145
 msgid "&File"
-msgstr "&│Ф│а│й│л"
+msgstr "&Файл"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:146
 msgid "&Test"
-msgstr "&│Т│е│с│т"
+msgstr "&Тест"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:169
 msgid ""
 "I18n sample\n"
-"▐║│╘ 1998, 1999 Vadim Zeitlin and Julian Smart"
+"▐║╘ 1998, 1999 Vadim Zeitlin and Julian Smart"
 msgstr ""
-"│П│р│и│м│е│р i18n\n"
-"▐║│╘ 1998, 1999 │В│а│д│и│м │З│е│й│т│л│и│н │и │Д│ж│у│л│и│а│н │С│м│а│р│т"
+"Пример i18n\n"
+"▐║╘ 1998, 1999 Вадим Зейтлин и Джулиан Смарт"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:171
 msgid "About Internat"
-msgstr "│П│р│о Internat"
+msgstr "Про Internat"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:176
 msgid "Enter your number:"
-msgstr "│В│в│е│д│и │с│в│о│е │ч│и│с│л│о:"
+msgstr "Введи свое число:"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:177
 msgid "Try to guess my number!"
-msgstr "│П│о│п│р│о│б│у│й │у│г│а│д│а│т│ь │м│о│е │ч│и│с│л│о!"
+msgstr "Попробуй угадать мое число!"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:185
 msgid "You've probably entered an invalid number."
-msgstr "│Н│а│в│е│р│н│о │т│ы │в│в│е│л │н│е│д│о│п│у│с│т│и│м│о│е │ч│и│с│л│о."
+msgstr "Наверно ты ввел недопустимое число."
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:193
 msgid "Congratulations! you've won. Here is the magic phrase:"
-msgstr "│П│о│з│д│р│а│в│л│я│ю! │В│ы │в│ы│и│г│р│а│л│и. │А │в│о│т │м│а│г│и│ч│е│с│к│а│я │ф│р│а│з│а: "
+msgstr "Поздравляю! Вы выиграли. А вот магическая фраза: "
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:194
 #, c-format
 msgid "cannot create fifo `%s'"
-msgstr "│н│е │м│о│г│у │с│о│з│д│а│т│ь fifo `%s'"
+msgstr "не могу создать fifo `%s'"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:197
 msgid "Result"
-msgstr "│Р│е│з│у│л│ь│т│а│т"
+msgstr "Результат"
 
 #~ msgid "Bad luck! try again..."
-#~ msgstr "│Н│е │в│е│з│е│т! │П│о│п│р│о│б│у│й │с│н│о│в│а..."
+#~ msgstr "Не везет! Попробуй снова..."
