@@ -9,4 +9,11 @@
         <default-filename>wxWindows.dsp</default-filename>
     </format>
     
+    <format id="rpmspec">
+        <description>
+            wxBase headers list in wx{GTK,Motif,X11}.spec
+        </description>
+        <default-filename>wxWindows.dsp</default-filename>
+    </format>
+    
 </bakefile-manifest>

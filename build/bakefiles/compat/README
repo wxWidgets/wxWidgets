@@ -1,3 +1,0 @@
-
-This is Bakefile backend that generates wx2.4-compatible VC++ project file
-(src/wxWindows.dsp).

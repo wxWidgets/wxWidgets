@@ -1,10 +1,13 @@
 <?xml version="1.0" ?>
 <!-- $Id$ -->
 
-<makefile>
+<!--
+Contains rule definitions that Bakefile requires in every format, implemented
+as empty stubs. This is used by our private formats that don't generate real
+makefiles, e.g. wx24dsp or rpmspec ones.
+-->
 
-    <include file="win32.bkl"/>
-    <set var="COMPILER">vc</set>
+<makefile>
 
     <define-rule name="__fake">
         <define-tag name="sources"/>
@@ -50,14 +53,5 @@
     <define-rule name="action" extends="__fake"/>
     <define-rule name="phony" extends="__fake"/>
     <define-rule name="subproject" extends="__fake"/>
-
-    <set var="ALL_SOURCES" eval="0">
-        $(MONOLIB_SRC) src/msw/dummy.cpp $(OPENGL_SRC)
-    </set>
-    
-    <output file="$(OUTPUT_FILE)" writer="wx24dsp.empy"/>
-    <set var="FORMAT_OUTPUT_VARIABLES">
-        ALL_SOURCES,ALL_HEADERS
-    </set>   
     
 </makefile>
