@@ -37,6 +37,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition);
 
     virtual void GetPaths(wxArrayString& paths) const { paths = m_paths; }
+    virtual void GetFilenames(wxArrayString& files) const { files = m_fileNames ; }
 
     virtual int ShowModal();
     
