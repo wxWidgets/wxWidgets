@@ -622,7 +622,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
 {
     // mark the origin
     dc.DrawCircle(0, 0, 10);
-#if !(defined __WXGTK__) && !(defined __WXMOTIF__)
+#if !(defined __WXGTK__) && !(defined __WXMOTIF__) && !(defined __WXMGL__)
     // not implemented in wxGTK or wxMOTIF :-(
     dc.FloodFill(0, 0, wxColour(255, 0, 0));
 #endif //
