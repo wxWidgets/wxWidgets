@@ -17,7 +17,8 @@
     </set>
 
     <exe id="tex2rtf" template="wx_util_console"
-                      template_append="wx_append_base">
+                      template_append="wx_append_base"
+                      cond="FORMAT!='msevc4prj'">
         <define>NO_GUI</define>
         <sources>$(TEX2RTF_SRC)</sources>
         <wx-lib>base</wx-lib>
