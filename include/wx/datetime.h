@@ -1301,7 +1301,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDateTime, wxDateTimeArray, WXDLLIMPEXP_BASE)
 class WXDLLIMPEXP_BASE wxDateTimeHolidayAuthority;
 WX_DEFINE_USER_EXPORTED_ARRAY(wxDateTimeHolidayAuthority *,
                               wxHolidayAuthoritiesArray,
-                              WXDLLIMPEXP_BASE);
+                              class WXDLLIMPEXP_BASE);
 
 class wxDateTimeHolidaysModule;
 class WXDLLIMPEXP_BASE wxDateTimeHolidayAuthority
