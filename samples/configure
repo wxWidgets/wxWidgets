@@ -707,7 +707,7 @@ trap 'rm -fr `echo "
             sockets/Makefile
             splitter/Makefile
             statbar/Makefile
-	    taskbar/Makefile
+            taskbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile
@@ -861,7 +861,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             sockets/Makefile
             splitter/Makefile
             statbar/Makefile
-	    taskbar/Makefile
+            taskbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile

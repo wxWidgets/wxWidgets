@@ -77,7 +77,7 @@ AC_OUTPUT([
             sockets/Makefile
             splitter/Makefile
             statbar/Makefile
-	    taskbar/Makefile
+            taskbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile
