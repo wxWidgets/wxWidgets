@@ -26,7 +26,6 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/dc.h"
-    #include "wx/msgdlg.h"
 #endif
 
 #if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
@@ -546,8 +545,7 @@ void wxHtmlEasyPrinting::PageSetup()
 {
     if (!m_PrintData->Ok())
     {
-        wxMessageBox(_("Sorry, there was a problem: you may need to set a default printer."),
-            _("Page Setup Problem"), wxICON_INFORMATION|wxOK, m_Frame);
+        wxLogError(_("There was a problem during page setup: you may need to set a default printer."));
         return;
     }
 
