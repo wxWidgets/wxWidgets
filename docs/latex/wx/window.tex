@@ -3,13 +3,13 @@
 wxWindow is the base class for all windows. Any children of the window will be deleted
 automatically by the destructor before the window itself is deleted.
 
-Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
-help text. These must not be called by a user program and are documented only for illustration.
-On several platforms, only a few of these handlers are actually written (they are not always
-needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
-the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
-platform can implement its native behaviour or just ignore the event if nothing needs to be
-done.
+%Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
+%help text. These must not be called by a user program and are documented only for illustration.
+%On several platforms, only a few of these handlers are actually written (they are not always
+%needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
+%the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
+%platform can implement its native behaviour or just ignore the event if nothing needs to be
+%done.
 
 \wxheading{Derived from}
 

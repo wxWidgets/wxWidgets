@@ -32,6 +32,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#redhat">Warning about GTK libraries supplied with RedHat</a></li>
 <li><a href="#bincompat">What range of Intel Linux platforms will a given application binary be usable on?</a></li>
 <li><a href="#static">Can I statically link the GTK+ library?</a></li>
+<li><a href="#charinframe">Why does my simple program using <tt>EVT_CHAR</tt> doesn't work?</a></li>
 </ul>
 
 <hr>
@@ -96,6 +97,17 @@ the image libraries and std C++ lib)."
 
 No, this is not possible. It leads to crashes in GTK+.
 <P>
+
+<h3><a name="#charinframe">Why does my simple program using
+<tt>EVT_CHAR</tt> doesn't work?</a></h3>
+
+In wxGTK, the frames never get focus and so can never receive <tt>CHAR</tt>
+nor <tt>KEY</tt> events so an <tt>EVT_CHAR</tt> handler for a frame will be
+never called. To receive these events, you should create a <tt>wxPanel</tt>
+inside the frame and register the key event handlers for the panel, not the
+frame.
+
+<p>
 
 </font>
 

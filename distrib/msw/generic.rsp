@@ -13,6 +13,7 @@ mkinstalldirs
 modules
 template.mak
 wx-config.in
+version-script.in
 setup.h_vms
 
 distrib/msw/*.rsp
