@@ -1680,7 +1680,7 @@ if test "$wxUSE_WINE" = 1; then
         AC_MSG_ERROR(no)
     fi
 
-    GUI_TK_LINK="-lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses -lm"
+    GUI_TK_LINK="-lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     WXWINE=1
     TOOLKIT=MSW
@@ -1862,7 +1862,7 @@ if test "$wxUSE_MOTIF" = 1; then
         )
     fi
 
-    GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11 -lm"
+    GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
 
@@ -3552,7 +3552,10 @@ dnl ---------------------------------------------------------------------------
 GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $TOOLKIT_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
-EXTRA_LIBS="$LIBS $ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
+dnl
+dnl note that we always link with -lm - extended.c uses floor() and is always
+dnl linked in
+EXTRA_LIBS="-lm $LIBS $ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRA_LIBS="$EXTRA_LIBS $GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK"
 fi
