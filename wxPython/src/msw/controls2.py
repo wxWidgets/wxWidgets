@@ -637,7 +637,7 @@ class wxListCtrlPtr(wxControlPtr):
     def __repr__(self):
         return "<C wxListCtrl instance at %s>" % (self.this,)
     
-    def GetItem(self, *_args, **_kwargs):
+    def GetColumn(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetColumn,(self,) + _args, _kwargs)
         if val is not None: val.thisown = 1
         return val
@@ -645,7 +645,7 @@ class wxListCtrlPtr(wxControlPtr):
     
     def GetItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
-        val.thisown = 1
+        if val is not None: val.thisown = 1
         return val
     
     

@@ -449,9 +449,9 @@ public:
             else
                 return NULL;
         }
-    }  // The OOR typemaps don't know what to do with the %new, so fix it up.
+    } // The OOR typemaps don't know what to do with the %new, so fix it up.
     %pragma(python) addtoclass = "
-    def GetItem(self, *_args, **_kwargs):
+    def GetColumn(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetColumn,(self,) + _args, _kwargs)
         if val is not None: val.thisown = 1
         return val
@@ -492,7 +492,7 @@ public:
     %pragma(python) addtoclass = "
     def GetItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
-        val.thisown = 1
+        if val is not None: val.thisown = 1
         return val
     "
 
