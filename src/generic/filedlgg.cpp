@@ -140,7 +140,7 @@ int wxCALLBACK wxFileDataTimeCompare( long data1, long data2, long data)
 #endif
 
 #if defined(__DOS__) || defined(__WINDOWS__) || defined (__OS2__)
-#define IsTopMostDir(dir)   (dir.IsEmpty())
+#define IsTopMostDir(dir)   (dir.empty())
 #endif
 
 #if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
@@ -507,20 +507,20 @@ void wxFileCtrl::UpdateFiles()
 
 #if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__) || defined(__OS2__)
     if ( IsTopMostDir(m_dirName) )
-        {
+    {
         wxArrayString names, paths;
         wxArrayInt icons;
         size_t n, count = wxGetAvailableDrives(paths, names, icons);
 
         for (n=0; n<count; n++)
-            {
+        {
             wxFileData *fd = new wxFileData(paths[n], names[n], wxFileData::is_drive, icons[n]);
             if (Add(fd, item) != -1)
                 item.m_itemId++;
             else
                 delete fd;
-            }
         }
+    }
     else
 #endif // defined(__DOS__) || defined(__WINDOWS__)
     {
@@ -529,7 +529,7 @@ void wxFileCtrl::UpdateFiles()
         {
             wxString p(wxPathOnly(m_dirName));
 #if defined(__UNIX__) && !defined(__OS2__)
-            if (p.IsEmpty()) p = wxT("/");
+            if (p.empty()) p = wxT("/");
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
             if (Add(fd, item) != -1)
@@ -660,18 +660,18 @@ void wxFileCtrl::GoToParentDir()
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
 #if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
-        if (!m_dirName.IsEmpty())
+        if (!m_dirName.empty())
         {
             if (m_dirName.Last() == wxT('.'))
                 m_dirName = wxEmptyString;
         }
 #elif defined(__UNIX__)
-        if (m_dirName.IsEmpty())
+        if (m_dirName.empty())
             m_dirName = wxT("/");
 #endif
         UpdateFiles();
         long id = FindItem( 0, fname );
-        if (id != -1)
+        if (id != wxNOT_FOUND)
         {
             SetItemState( id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
             EnsureVisible( id );
@@ -735,7 +735,7 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
     wxFileData *fd = (wxFileData*)event.m_item.m_data;
     wxASSERT( fd );
 
-    if ((event.GetLabel().IsEmpty()) ||
+    if ((event.GetLabel().empty()) ||
         (event.GetLabel() == _(".")) ||
         (event.GetLabel() == _("..")) ||
         (event.GetLabel().First( wxFILE_SEP_PATH ) != wxNOT_FOUND))
@@ -881,18 +881,18 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                     :wxFileDialogBase(parent, message, defaultDir, defaultFile, wildCard, style, pos)
 {
     m_bypassGenericImpl = bypassGenericImpl;
-    
+
     if (!m_bypassGenericImpl)
         Create( parent, message, defaultDir, defaultFile, wildCard, style, pos );
 }
 
 bool wxGenericFileDialog::Create( wxWindow *parent,
-                           const wxString& message,
-                           const wxString& defaultDir,
-                           const wxString& defaultFile,
-                           const wxString& wildCard,
-                           long style,
-                           const wxPoint& pos )
+                                  const wxString& message,
+                                  const wxString& WXUNUSED(defaultDir),
+                                  const wxString& defaultFile,
+                                  const wxString& wildCard,
+                                  long WXUNUSED(style),
+                                  const wxPoint& pos )
 {
     if (!wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ))
@@ -1049,7 +1049,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     Centre( wxBOTH );
 
     m_text->SetFocus();
-    
+
     return true;
 }
 
@@ -1200,7 +1200,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
 {
     wxString filename( fn );
     wxString dir = m_list->GetDir();
-    if (filename.IsEmpty()) return;
+    if (filename.empty()) return;
     if (filename == wxT(".")) return;
 
     // "some/place/" means they want to chdir not try to load "place"

@@ -278,13 +278,13 @@ void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
         _T("About wxWidgets printing demo"), wxOK|wxCENTRE);
 }
 
-void MyFrame::OnAngleUp(wxCommandEvent& event)
+void MyFrame::OnAngleUp(wxCommandEvent& WXUNUSED(event))
 {
     m_angle += 5;
     canvas->Refresh();
 }
 
-void MyFrame::OnAngleDown(wxCommandEvent& event)
+void MyFrame::OnAngleDown(wxCommandEvent& WXUNUSED(event))
 {
     m_angle -= 5;
     canvas->Refresh();
@@ -310,7 +310,7 @@ void MyFrame::Draw(wxDC& dc)
     dc.SetPen(*wxRED_PEN);
 
     dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
-    
+
 #if wxUSE_UNICODE
     char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
@@ -333,7 +333,7 @@ void MyFrame::Draw(wxDC& dc)
     wxIcon my_icon = wxICON(mondrian) ;
 
     dc.DrawIcon( my_icon, 100, 100);
-    
+
     if (m_bitmap.Ok())
         dc.DrawBitmap( m_bitmap, 10, 10 );
 }
