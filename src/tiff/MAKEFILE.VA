@@ -179,9 +179,9 @@ $(WXDIR)\lib\os2tiff.dll: $(OBJECTS)
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(OBJECTS)
-    $(WXDIR)\lib\os2tiff.def
+    $(WXDIR)\src\os2\os2tiff.def
 <<
-    implib $(WXDIR)\lib\os2tiffd.lib $(WXDIR)\lib\os2tiff.def
+    implib $(WXDIR)\lib\os2tiffd.lib $(WXDIR)\src\os2\os2tiff.def
 
 !endif
 

@@ -120,9 +120,9 @@ $(WXDIR)\lib\os2zlib.dll: $(OBJECTS)
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(OBJECTS)
-    $(WXDIR)\lib\os2zlib.def
+    $(WXDIR)\src\os2\os2zlib.def
 <<
-    implib $(WXDIR)\lib\os2zlibd.lib $(WXDIR)\lib\os2zlib.def
+    implib $(WXDIR)\lib\os2zlibd.lib $(WXDIR)\src\os2\os2zlib.def
 
 !endif
 

@@ -1020,9 +1020,9 @@ $(WXDIR)\lib\wx23.dll: $(OBJECTS)
     $(LIBS)
     $(DUMMYOBJ)
     $(OBJECTS)
-    $(WXDIR)\lib\wx23.def
+    $(WXDIR)\src\os2\wx23.def
 <<
-    implib $(WXDIR)\lib\wx23.lib $(WXDIR)\lib\wx23.def
+    implib $(WXDIR)\src\os2\wx23.lib $(WXDIR)\src\os2\wx23.def
 
 !endif
 

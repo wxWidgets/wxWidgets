@@ -320,9 +320,9 @@ $(WXDIR)\lib\os2jpeg.dll: $(OBJECTS)
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(OBJECTS)
-    $(WXDIR)\lib\os2jpeg.def
+    $(WXDIR)\src\os2\os2jpeg.def
 <<
-    implib $(WXDIR)\lib\os2jpegd.lib $(WXDIR)\lib\os2jpeg.def
+    implib $(WXDIR)\lib\os2jpegd.lib $(WXDIR)\src\os2\os2jpeg.def
 
 !endif
 

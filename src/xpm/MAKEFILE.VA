@@ -149,9 +149,9 @@ $(WXDIR)\lib\os2xpm.dll: $(OBJECTS)
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(OBJECTS)
-    $(WXDIR)\lib\os2xpm.def
+    $(WXDIR)\src\os2\os2xpm.def
 <<
-    implib $(WXDIR)\lib\os2xpmd.lib $(WXDIR)\lib\os2xpm.def
+    implib $(WXDIR)\lib\os2xpmd.lib $(WXDIR)\src\os2\os2xpm.def
 
 !endif
 

@@ -123,9 +123,9 @@ $(WXDIR)\lib\os2png.dll: $(OBJECTS)
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(OBJECTS)
-    $(WXDIR)\lib\os2png.def
+    $(WXDIR)\src\os2\os2png.def
 <<
-    implib $(WXDIR)\lib\os2pngd.lib $(WXDIR)\lib\os2png.def
+    implib $(WXDIR)\lib\os2pngd.lib $(WXDIR)\src\os2\os2png.def
 
 !endif
 
