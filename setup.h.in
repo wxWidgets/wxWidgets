@@ -569,6 +569,8 @@
  */
 #define wxUSE_TEXTFILE 0
 
+#define wxUSE_EXCEPTIONS 0
+
 /*
  * Use log classes and logging functions
  */

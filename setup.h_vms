@@ -582,6 +582,9 @@
  * Use wxTextFile class
  */
 #define wxUSE_TEXTFILE 1
+
+#define wxUSE_EXCEPTIONS 0
+
 /*
  * Use log classes and logging functions
  */

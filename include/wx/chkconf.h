@@ -50,6 +50,14 @@
 #   endif
 #endif /* !defined(wxUSE_DYNLIB_CLASS) */
 
+#ifndef wxUSE_EXCEPTIONS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_EXCEPTIONS must be defined."
+#   else
+#       define wxUSE_EXCEPTIONS 0
+#   endif
+#endif /* !defined(wxUSE_EXCEPTIONS) */
+
 #ifndef wxUSE_FILESYSTEM
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_FILESYSTEM must be defined."

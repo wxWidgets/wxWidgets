@@ -181,6 +181,19 @@
 // global features
 // ----------------------------------------------------------------------------
 
+// Compile library in exception-safe mode? If set to 1, the library will try to
+// behave correctly in presence of exceptions (even though it still will not
+// use the exceptions itself) and notify the user code about any unhandled
+// exceptions. If set to 0, propagation of the exceptions through the library
+// code will lead to undefined behaviour -- but the code itself will be
+// slightly smaller and faster.
+//
+// Default is 1
+//
+// Recommended setting: depends on whether you intend to use C++ exceptions
+//                      in your own code (1 if you do, 0 if you don't)
+#define wxUSE_EXCEPTIONS    1
+
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
 // Default is 0

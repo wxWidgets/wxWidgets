@@ -305,7 +305,7 @@ case "${host}" in
     dnl This strange code is necessary to deal with handling of
     dnl backslashes by ksh and pdksh's sh variant.
     ac_save_IFS="$IFS"
-    IFS="\\"
+    IFS='\\'
     ac_TEMP_PATH=
     for ac_dir in $PATH; do
       IFS=$ac_save_IFS
@@ -379,6 +379,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DMALLOC=no
   DEFAULT_wxUSE_APPLE_IEEE=no
 
+  DEFAULT_wxUSE_EXCEPTIONS=no
   DEFAULT_wxUSE_LOG=yes
   DEFAULT_wxUSE_LOGWINDOW=no
   DEFAULT_wxUSE_LOGGUI=no
@@ -557,6 +558,7 @@ else
   DEFAULT_wxUSE_DMALLOC=no
   DEFAULT_wxUSE_APPLE_IEEE=yes
 
+  DEFAULT_wxUSE_EXCEPTIONS=yes
   DEFAULT_wxUSE_LOG=yes
   DEFAULT_wxUSE_LOGWINDOW=yes
   DEFAULT_wxUSE_LOGGUI=yes
@@ -826,44 +828,43 @@ WX_ARG_ENABLE(ftp,           [  --enable-ftp            use wxFTP (requires wxPr
 WX_ARG_ENABLE(http,          [  --enable-http           use wxHTTP (requires wxProtocol], wxUSE_PROTOCOL_HTTP)
 WX_ARG_ENABLE(fileproto,     [  --enable-fileproto      use wxFileProto class (requires wxProtocol], wxUSE_PROTOCOL_FILE)
 WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
-WX_ARG_ENABLE(ole,           [  --enable-ole            use OLE classes], wxUSE_OLE)
+WX_ARG_ENABLE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
 WX_ARG_ENABLE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
+dnl please keep the settings below in alphabetical order
+WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
+WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
 WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
 WX_ARG_ENABLE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
-WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
-WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
-WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
-WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE_WAVE)
-WX_ARG_ENABLE(fraction,      [  --enable-fraction       use wxFraction class], wxUSE_FRACTION)
 WX_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
 WX_ARG_ENABLE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibrary class], wxUSE_DYNAMIC_LOADER)
-WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
-WX_ARG_ENABLE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
-WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
-WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
-WX_ARG_ENABLE(file,          [  --enable-file           use wxFile classes], wxUSE_FILE)
-WX_ARG_ENABLE(ffile,         [  --enable-ffile          use wxFFile classes], wxUSE_FFILE)
-WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
-WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
-WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
-WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
-WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (win32 only)], wxUSE_UNICODE_MSLU)
-WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
-WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
+WX_ARG_ENABLE(exceptions,    [  --enable-exceptions     build exception-safe library], wxUSE_EXCEPTIONS)
+WX_ARG_ENABLE(ffile,         [  --enable-ffile          use wxFFile class], wxUSE_FFILE)
+WX_ARG_ENABLE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
 WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
+WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         use virtual ZIP filesystems], wxUSE_FS_ZIP)
-WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], wxUSE_ZIPSTREAM)
-
-WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals and pass them to wxApp::OnFatalException], wxUSE_ON_FATAL_EXCEPTION)
-WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
-
+WX_ARG_ENABLE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
+WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxUSE_LOG)
+WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_ENABLE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
+WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
+WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
+WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
+WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
+WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_ENABLE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
+WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
+WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
+WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
+WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
+WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE_WAVE)
+WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
+WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], wxUSE_ZIPSTREAM)
 
 WX_ARG_ENABLE(url,           [  --enable-url            use wxURL class], wxUSE_URL)
 WX_ARG_ENABLE(protocol,      [  --enable-protocol       use wxProtocol class], wxUSE_PROTOCOL)
@@ -5301,19 +5302,26 @@ dnl ---------------------------------------------------------------------------
 dnl misc options
 dnl ---------------------------------------------------------------------------
 
-dnl if test "$wxUSE_TREELAYOUT" = "yes"; then
-dnl     AC_DEFINE(wxUSE_TREELAYOUT)
-dnl     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treelay"
-dnl fi
+dnl please keep the settings below in alphabetical order
+if test "$wxUSE_ACCESSIBILITY" = "yes"; then
+    AC_DEFINE(wxUSE_ACCESSIBILITY)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+fi
 
 if test "$wxUSE_DRAGIMAGE" = "yes"; then
     AC_DEFINE(wxUSE_DRAGIMAGE)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dragimag"
 fi
 
-if test "$wxUSE_ACCESSIBILITY" = "yes"; then
-    AC_DEFINE(wxUSE_ACCESSIBILITY)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+if test "$wxUSE_EXCEPTIONS" = "yes"; then
+    AC_DEFINE(wxUSE_EXCEPTIONS)
+fi
+
+USE_HTML=0
+if test "$wxUSE_HTML" = "yes"; then
+    AC_DEFINE(wxUSE_HTML)
+    USE_HTML=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then
@@ -5329,26 +5337,19 @@ if test "$wxUSE_MIMETYPE" = "yes"; then
     AC_DEFINE(wxUSE_MIMETYPE)
 fi
 
-if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
-    AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
-if test "$TOOLKIT" = "MSW" -o "$TOOLKIT" = "GTK" -o "$TOOLKIT" = "X11" -o \
-        "$TOOLKIT" = "MOTIF"; then
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
-fi
-
-fi
-
 if test "$wxUSE_MINIFRAME" = "yes"; then
     AC_DEFINE(wxUSE_MINIFRAME)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
-USE_HTML=0
-if test "$wxUSE_HTML" = "yes"; then
-    AC_DEFINE(wxUSE_HTML)
-    USE_HTML=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
+if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
+    AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
+    if test "$TOOLKIT" = "MSW" -o "$TOOLKIT" = "GTK" -o "$TOOLKIT" = "X11" -o \
+        "$TOOLKIT" = "MOTIF"; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
+    fi
 fi
+
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
     AC_DEFINE(wxUSE_VALIDATORS)
@@ -5359,41 +5360,45 @@ if test "$wxUSE_PALETTE" = "yes" ; then
   AC_DEFINE(wxUSE_PALETTE)
 fi
 
-if test "$wxUSE_IMAGE" = "yes" ; then
-  AC_DEFINE(wxUSE_IMAGE)
-fi
-
-if test "$wxUSE_GIF" = "yes" ; then
-  AC_DEFINE(wxUSE_GIF)
-fi
-
-if test "$wxUSE_PCX" = "yes" ; then
-  AC_DEFINE(wxUSE_PCX)
-fi
-
-if test "$wxUSE_IFF" = "yes" ; then
-  AC_DEFINE(wxUSE_IFF)
-fi
-
-if test "$wxUSE_PNM" = "yes" ; then
-  AC_DEFINE(wxUSE_PNM)
-fi
-
-if test "$wxUSE_XPM" = "yes" ; then
-  AC_DEFINE(wxUSE_XPM)
-fi
-
-if test "$wxUSE_ICO_CUR" = "yes" ; then
-  AC_DEFINE(wxUSE_ICO_CUR)
-fi
-
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_MSLU" = "yes" ; then
   dnl Must be done this late because -lunicows must be before all the other libs
   LIBS=" -lunicows $LIBS"
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl common dialog
+dnl wxImage options
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_IMAGE" = "yes" ; then
+    AC_DEFINE(wxUSE_IMAGE)
+
+    if test "$wxUSE_GIF" = "yes" ; then
+      AC_DEFINE(wxUSE_GIF)
+    fi
+
+    if test "$wxUSE_PCX" = "yes" ; then
+      AC_DEFINE(wxUSE_PCX)
+    fi
+
+    if test "$wxUSE_IFF" = "yes" ; then
+      AC_DEFINE(wxUSE_IFF)
+    fi
+
+    if test "$wxUSE_PNM" = "yes" ; then
+      AC_DEFINE(wxUSE_PNM)
+    fi
+
+    if test "$wxUSE_XPM" = "yes" ; then
+      AC_DEFINE(wxUSE_XPM)
+    fi
+
+    if test "$wxUSE_ICO_CUR" = "yes" ; then
+      AC_DEFINE(wxUSE_ICO_CUR)
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl common dialogs
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_CHOICEDLG" = "yes"; then
