@@ -43,25 +43,33 @@ public:
         m_capStyle = data.m_capStyle;
         m_colour = data.m_colour;
         m_countDashes = data.m_countDashes;
-/*
-        if (data.m_dash)  TODO
-            m_dash = new
-*/
         m_dash = data.m_dash;
     }
 
     bool operator == (const wxPenRefData& data) const
     {
-        // It is impossible to tell if the dashes have changed
-        // so the only thing to do is assume they have
-        if (m_countDashes != 0 || data.m_countDashes != 0)
-            return false;
+        if ( m_countDashes != data.m_countDashes )
+            return FALSE;
 
-        return (m_style == data.m_style &&
-                m_width == data.m_width &&
-                m_joinStyle == data.m_joinStyle &&
-                m_capStyle == data.m_capStyle &&
-                m_colour == data.m_colour);
+        if ( m_dash )
+        {
+            if ( !data.m_dash ||
+                 memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxGTKDash)) )
+            {
+                return FALSE;
+            }
+        }
+        else if ( data.m_dash )
+        {
+            return FALSE;
+        }
+
+
+        return m_style == data.m_style &&
+               m_width == data.m_width &&
+               m_joinStyle == data.m_joinStyle &&
+               m_capStyle == data.m_capStyle &&
+               m_colour == data.m_colour;
     }
             
     int        m_width;
@@ -123,7 +131,7 @@ void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
     AllocExclusive();
     
     M_PENDATA->m_countDashes = number_of_dashes;
-    M_PENDATA->m_dash = (wxGTKDash *)dash; /* TODO */
+    M_PENDATA->m_dash = (wxGTKDash *)dash;
 }
 
 void wxPen::SetColour( int red, int green, int blue )
