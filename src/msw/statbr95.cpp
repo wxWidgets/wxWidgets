@@ -45,7 +45,6 @@
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxWindow);
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxStatusBar95)
 
 // ----------------------------------------------------------------------------
 // macros
@@ -127,7 +126,6 @@ bool wxStatusBar95::Create(wxWindow *parent,
 
 wxStatusBar95::~wxStatusBar95()
 {
-    delete [] m_statusWidths;
 }
 
 void wxStatusBar95::CopyFieldsWidth(const int widths[])

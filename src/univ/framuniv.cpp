@@ -77,7 +77,7 @@ void wxFrame::OnSize(wxSizeEvent& event)
 }
 
 void wxFrame::SendSizeEvent()
-{    
+{
     wxSizeEvent event(GetSize(), GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -117,9 +117,8 @@ void wxFrame::PositionStatusBar()
 {
     if ( m_frameStatusBar )
     {
-        wxCoord heightBar = m_frameStatusBar->GetSize().y;
-        m_frameStatusBar->SetSize(0, GetClientSize().y,
-                                  GetClientSize().x, heightBar);
+        wxSize size = GetClientSize();
+        m_frameStatusBar->SetSize(0, size.y, size.x, -1);
     }
 }
 

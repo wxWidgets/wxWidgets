@@ -26,23 +26,9 @@
 class WXDLLEXPORT wxMenuInfo;
 WX_DECLARE_OBJARRAY(wxMenuInfo, wxMenuInfoArray);
 
-class wxPopupMenuWindow;
-
+class WXDLLEXPORT wxMenuGeometryInfo;
+class WXDLLEXPORT wxPopupMenuWindow;
 class WXDLLEXPORT wxRenderer;
-
-// ----------------------------------------------------------------------------
-// wxMenu helper classes, used in implementation only
-// ----------------------------------------------------------------------------
-
-// used by wxRenderer
-class WXDLLEXPORT wxMenuGeometryInfo
-{
-public:
-    // get the total size of the menu
-    virtual wxSize GetSize() const = 0;
-
-    virtual ~wxMenuGeometryInfo();
-};
 
 // ----------------------------------------------------------------------------
 // wxMenu

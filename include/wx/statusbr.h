@@ -12,6 +12,10 @@
 #ifndef _WX_STATUSBR_H_BASE_
 #define _WX_STATUSBR_H_BASE_
 
+#ifdef __GNUG__
+    #pragma interface "statbar.h"
+#endif
+
 #include "wx/window.h"
 
 #if wxUSE_STATUSBAR
@@ -23,19 +27,37 @@
 class WXDLLEXPORT wxStatusBarBase : public wxWindow
 {
 public:
-    wxStatusBarBase() { m_statusWidths = NULL; }
+    wxStatusBarBase();
 
-    // get/set the number of fields
-    virtual void SetFieldsCount(int number = 1,
-                                const int *widths = (const int *) NULL) = 0;
+    virtual ~wxStatusBarBase();
+
+    // field count
+    // -----------
+
+    // set the number of fields and call SetStatusWidths(widths) if widths are
+    // given
+    virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
     int GetFieldsCount() const { return m_nFields; }
 
-    // get/set the text of the given field
+    // field text
+    // ----------
+
     virtual void SetStatusText(const wxString& text, int number = 0) = 0;
     virtual wxString GetStatusText(int number = 0) const = 0;
 
-    // set status line widths (n should be the same as field count)
-    virtual void SetStatusWidths(int n, const int widths[]) = 0;
+    // fields widths
+    // -------------
+
+    // set status field widths as absolute numbers: positive widths mean that
+    // the field has the specified absolute width, negative widths are
+    // interpreted as the sizer options, i.e. the extra space (total space
+    // minus the sum of fixed width fields) is divided between the fields with
+    // negative width according to the abs value of the width (field with width
+    // -2 grows twice as much as one with width -1 &c)
+    virtual void SetStatusWidths(int n, const int widths[]);
+
+    // geometry
+    // --------
 
     // Get the position and size of the field's internal bounding rectangle
     virtual bool GetFieldRect(int i, wxRect& rect) const = 0;
@@ -51,54 +73,54 @@ public:
     virtual bool AcceptsFocus() const { return FALSE; }
 
 protected:
-    int     m_nFields;      // the current number of fields
-    int    *m_statusWidths; // the width (if !NULL) of the fields
+    // set the widths array to NULL
+    void InitWidths();
+
+    // free the status widths arrays
+    void FreeWidths();
+
+    // reset the widths
+    void ReinitWidths() { FreeWidths(); InitWidths(); }
+
+    // calculate the real field widths for the given total available size
+    wxArrayInt CalculateAbsWidths(wxCoord widthTotal) const;
+
+    // the current number of fields
+    int        m_nFields;
+
+    // the widths of the fields in pixels if !NULL, all fields have the same
+    // width otherwise
+    int       *m_statusWidths;
 };
 
-#if defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
-    #include "wx/msw/statbr95.h"
+// ----------------------------------------------------------------------------
+// include the actual wxStatusBar class declaration
+// ----------------------------------------------------------------------------
 
-    typedef wxStatusBar95 wxStatusBarReal;
+#if defined(__WXUNIVERSAL__)
+    #define wxStatusBarUniv wxStatusBar
+    #define sm_classwxStatusBarUniv sm_classwxStatusBar
+
+    #include "wx/univ/statusbr.h"
+#elif defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
+    #define wxStatusBar95 wxStatusBar
+    #define sm_classwxStatusBar95 sm_classwxStatusBar
+
+    #include "wx/msw/statbr95.h"
 #elif defined(__WXMAC__)
+    #define wxStatusBarMac wxStatusBar
+    #define sm_classwxStatusBarMac sm_classwxStatusBar
+
     #include "wx/generic/statusbr.h"
     #include "wx/mac/statusbr.h"
-
-    typedef wxStatusBarMac wxStatusBarReal;
 #else
+    #define wxStatusBarGeneric wxStatusBar
+    #define sm_classwxStatusBarGeneric sm_classwxStatusBar
+
     #include "wx/generic/statusbr.h"
-
-    typedef wxStatusBarGeneric wxStatusBarReal;
 #endif
 
-// we can't just typedef wxStatusBar to be one of 95/Generic because we should
-// be able to forward declare it (done in several places) and because wxWin
-// RTTI wouldn't work then
-class WXDLLEXPORT wxStatusBar : public wxStatusBarReal
-{
-public:
-    wxStatusBar() { }
-    wxStatusBar(wxWindow *parent,
-                wxWindowID id,
-                const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
-                const wxSize& WXUNUSED(size) = wxDefaultSize,
-                long style = wxST_SIZEGRIP,
-                const wxString& name = wxPanelNameStr)
-    {
-        Create(parent, id, style, name);
-    }
-    wxStatusBar(wxWindow *parent,
-                wxWindowID id,
-                long style,
-                const wxString& name = wxPanelNameStr)
-    {
-        Create(parent, id, style, name);
-    }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxStatusBar)
-};
-
-#endif
+#endif // wxUSE_STATUSBAR
 
 #endif
     // _WX_STATUSBR_H_BASE_

@@ -10,24 +10,24 @@
 #  BaseOnly	/src/common but only needed for the wxBase compilation
 #  Generic	/src/generic
 #  Common	/src/common
-#  MSW		/src/msw
-#  Mac		/src/mac for Mac OS X with Apple Developer Tools
+#  MSW	/src/msw
+#  Mac	/src/mac for Mac OS X with Apple Developer Tools
 #  Motif	/src/motif
-#  Univ		/src/univ or src/univ/themes
-#  Unix		/src/unix
-#  GTK		/src/gtk
-#  MGL		/src/mgl
-#  OS2		/src/os2
-#  HTML		/src/html
+#  Univ	/src/univ or src/univ/themes
+#  Unix	/src/unix
+#  GTK	/src/gtk
+#  MGL	/src/mgl
+#  OS2	/src/os2
+#  HTML	/src/html
 #
 # 'H' suffix means these are headers, not .cpp files
 #
-#  WXH		/include/wx
-#  GTKH		/include/wx/gtk
-#  MacH		/include/wx/mac
+#  WXH	/include/wx
+#  GTKH	/include/wx/gtk
+#  MacH	/include/wx/mac
 #  MotifH	/include/wx/motif
-#  MSWH		/include/wx/msw
-#  OS2H		/include/wx/os2
+#  MSWH	/include/wx/msw
+#  OS2H	/include/wx/os2
 #  GenericH	/include/wx/generic
 #  HtmlH	/include/wx/html
 #  ProtoH	/include/wx/protocol
@@ -36,27 +36,28 @@
 #
 # 'R' suffix means these are resource files
 #
-#  MacR		/src/mac
+#  MacR	/src/mac
 #
 # The third column may be empty or contain some additional info about this
 # file (only compile it in 16bit mode, don't compile it with this or that
 # compiler, &c)
 #
 # Known flags:
-#  Base		makes part of the base library too
+#  Base	makes part of the base library too
 #  NotWin32	not used under Win32, but used under Win16
 #  Win32Only	only can be compiled under Win32
 #  Generic	generic code which might be used instead of native one
-#  OLE		OLE file (needs Win32 and a decent compiler)
+#  OLE	OLE file (needs Win32 and a decent compiler)
 #  Socket	Socket file (currently doesn't compile under Win16)
 #  NotMSW	Not required for the MSW port
 #  NotMac	Not required for the MAC port under Mac OS X
 #  NotMGL	Not required for the MGL port
 #  NotGTK	Not required for the GTK port
-#  NotX		Not required for the Motif port
+#  NotX	Not required for the Motif port
 #  NotOS2	Not required for the os2Pm port
+#  NotUniv	Not required for the wxUniversal
 #  LowLevel	Low level GUI toolkit file, used by wxUniversal as well
-#  Theme        implements a wxUniv theme
+#  Theme	implements a wxUniv theme
 ###############################################################################
 
 # File name 	Type	Flags
@@ -207,6 +208,7 @@ sckstrm.cpp	Common	Socket,Base
 serbase.cpp	Common	Base
 sizer.cpp	Common
 socket.cpp	Common	Socket,Base
+statbar.cpp	Common
 strconv.cpp	Common	Base
 stream.cpp	Common	Base
 string.cpp	Common	Base
@@ -383,6 +385,7 @@ statbmp.cpp	Univ
 statbox.cpp	Univ
 statline.cpp	Univ
 stattext.cpp	Univ
+statusbr.cpp	Univ
 textctrl.cpp	Univ
 theme.cpp	Univ
 gtk.cpp	Univ	Theme
@@ -1410,6 +1413,7 @@ statbmp.h	UnivH
 statbox.h	UnivH
 statline.h	UnivH
 stattext.h	UnivH
+statusbr.h	UnivH
 textctrl.h	UnivH
 theme.h	UnivH
 window.h	UnivH

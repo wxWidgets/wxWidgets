@@ -2156,6 +2156,16 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex)
   m_nCount++;
 }
 
+// expand the array
+void wxArrayString::SetCount(size_t count)
+{
+    Alloc(count);
+
+    wxString s;
+    while ( m_nCount < count )
+        m_pItems[m_nCount++] = (wxChar *)s.c_str();
+}
+
 // removes item from array (by index)
 void wxArrayString::Remove(size_t nIndex)
 {

@@ -98,7 +98,7 @@
 #define wxUSE_STATLINE     1
 #define wxUSE_STATTEXT     1
 #define wxUSE_STATBMP      1
-#define wxUSE_STATUSBAR    0
+#define wxUSE_STATUSBAR    1
 #define wxUSE_TEXTCTRL     1
 #define wxUSE_TOOLTIPS     0
 #define wxUSE_TREECTRL     0
@@ -121,7 +121,7 @@
 #define wxUSE_FILEDLG 0
 #define wxUSE_COLOURDLG 0
 #define wxUSE_CHOICEDLG 0
-#define wxUSE_NUMBERDLG 0
+#define wxUSE_NUMBERDLG 1
 #define wxUSE_STARTUP_TIPS 0
 #define wxUSE_MSGDLG       1
 #define wxUSE_SPLITTER     1
@@ -252,7 +252,7 @@
 #define wxUSE_STATLINE     1
 #define wxUSE_STATTEXT     1
 #define wxUSE_STATBMP      1
-#define wxUSE_STATUSBAR    0
+#define wxUSE_STATUSBAR    1
 #define wxUSE_TEXTCTRL     1
 #define wxUSE_TOOLTIPS     0
 #define wxUSE_TREECTRL     0
@@ -275,7 +275,7 @@
 #define wxUSE_COLOURDLG 0
 #define wxUSE_TEXTDLG 0
 #define wxUSE_CHOICEDLG 0
-#define wxUSE_NUMBERDLG 0
+#define wxUSE_NUMBERDLG 1
 #define wxUSE_STARTUP_TIPS 0
 #define wxUSE_MSGDLG       1
 #define wxUSE_SPLITTER     1

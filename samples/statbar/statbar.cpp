@@ -341,16 +341,20 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
     // SetFieldsCount() with the same number of fields should be ok
     if ( nFields != -1 )
     {
-        // we set the widths only for 2 of them, otherwise let all the fields
-        // have equal width (the default behaviour)
-        const int *widths = NULL;
-        if ( nFields == 2 )
-        {
-            static const int widthsFor2Fields[2] = { 200, -1 };
-            widths = widthsFor2Fields;
-        }
+        static const int widthsFor2Fields[] = { 200, -1 };
+        static const int widthsFor3Fields[] = { -1, -2, -1 };
+        static const int widthsFor4Fields[] = { 100, -1, 100, -2, 100 };
 
-        sb->SetFieldsCount(nFields, widths);
+        static const int *widths[] =
+        {
+            NULL,               // 1 field: default
+            widthsFor2Fields,   // 2 fields: 1 fixed, 1 var
+            widthsFor3Fields,   // 3 fields: 3 var
+            widthsFor4Fields,   // 4 fields: 3 fixed, 2 vars
+            NULL                // 5 fields: default (all have same width)
+        };
+
+        sb->SetFieldsCount(nFields, widths[nFields - 1]);
 
         wxLogStatus(this,
                     wxString::Format(wxT("Status bar now has %ld fields"),
@@ -447,7 +451,9 @@ MyStatusBar::MyStatusBar(wxWindow *parent)
 #ifdef USE_STATIC_BITMAP
     m_statbmp = new wxStaticBitmap(this, -1, wxIcon(green_xpm));
 #else
-    m_statbmp = new wxBitmapButton(this, -1, CreateBitmapForButton());
+    m_statbmp = new wxBitmapButton(this, -1, CreateBitmapForButton(),
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxBU_EXACTFIT);
 #endif
 
     m_timer.Start(1000);
@@ -497,11 +503,7 @@ void MyStatusBar::OnSize(wxSizeEvent& event)
     m_checkbox->SetSize(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4);
 
     GetFieldRect(Field_Bitmap, rect);
-#ifdef USE_BUTTON_FOR_BITMAP
-    wxSize size(BITMAP_SIZE_X, BITMAP_SIZE_Y);
-#else
     wxSize size = m_statbmp->GetSize();
-#endif
 
     m_statbmp->Move(rect.x + (rect.width - size.x) / 2,
                     rect.y + (rect.height - size.y) / 2);

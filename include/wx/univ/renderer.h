@@ -44,6 +44,16 @@ class WXDLLEXPORT wxGauge;
 #include "wx/gdicmn.h"
 #include "wx/scrolbar.h"            // for wxScrollBar::Element
 
+// helper class used by wxMenu-related functions
+class WXDLLEXPORT wxMenuGeometryInfo
+{
+public:
+    // get the total size of the menu
+    virtual wxSize GetSize() const = 0;
+
+    virtual ~wxMenuGeometryInfo();
+};
+
 // ----------------------------------------------------------------------------
 // wxRenderer: abstract renderers interface
 // ----------------------------------------------------------------------------
@@ -220,7 +230,6 @@ public:
                                  int step = 1,
                                  int flags = 0) = 0;
 
-#if wxUSE_MENUS
     // draw a menu bar item
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
@@ -244,7 +253,14 @@ public:
     virtual void DrawMenuSeparator(wxDC& dc,
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo) = 0;
-#endif
+
+    // draw a status bar field: wxCONTROL_ISDEFAULT bit in the flags is
+    // interpreted specially and means "draw the status bar grip" here
+    virtual void DrawStatusField(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxString& label,
+                                 int flags = 0) = 0;
+
     // draw complete frame/dialog titlebar
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,
@@ -253,7 +269,7 @@ public:
                                    int flags,
                                    int specialButton = 0,
                                    int specialButtonFlags = 0) = 0;
-                                   
+
     // draw frame borders
     virtual void DrawFrameBorder(wxDC& dc,
                                  const wxRect& rect,
@@ -373,7 +389,6 @@ public:
     // get the size of one progress bar step (in horz and vertical directions)
     virtual wxSize GetProgressBarStep() const = 0;
 
-#if wxUSE_MENUS
     // get the size of rectangle to use in the menubar for the given text rect
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const = 0;
 
@@ -384,19 +399,25 @@ public:
     // the returned pointer must be deleted by the caller
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const = 0;
-#endif
+
+    // get the borders around the status bar fields (x and y fields of the
+    // return value) and also, optionally, the border between the fields
+    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const = 0;
 
     // get client area rectangle of top level window (i.e. subtract
     // decorations from given rectangle)
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const = 0;
+
     // get size of whole top level window, given size of its client area size
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const = 0;
+
     // get titlebar icon size
     virtual wxSize GetFrameIconSize() const = 0;
+
     // returns one of wxHT_TOPLEVEL_XXX constants
     virtual int HitTestFrame(const wxRect& rect,
                              const wxPoint& pt,
-                             int flags) const = 0;
+                             int flags = 0) const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -599,7 +620,6 @@ public:
                                  int flags = 0)
         { m_renderer->DrawSliderTicks(dc, rect, sizeThumb, orient,
                                       start, end, start, flags); }
-#if wxUSE_MENUS
 
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
@@ -621,7 +641,13 @@ public:
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo)
         { m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
-#endif
+
+    virtual void DrawStatusField(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxString& label,
+                                 int flags = 0)
+        { m_renderer->DrawStatusField(dc, rect, label, flags); }
+
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,
                                    const wxString& title,
@@ -629,7 +655,7 @@ public:
                                    int flags,
                                    int specialButton = 0,
                                    int specialButtonFlag = 0)
-        { m_renderer->DrawFrameTitleBar(dc, rect, title, icon, flags, 
+        { m_renderer->DrawFrameTitleBar(dc, rect, title, icon, flags,
                                         specialButton, specialButtonFlag); }
     virtual void DrawFrameBorder(wxDC& dc,
                                  const wxRect& rect,
@@ -717,13 +743,13 @@ public:
         { return m_renderer->GetSliderThumbSize(rect, orient); }
     virtual wxSize GetProgressBarStep() const
         { return m_renderer->GetProgressBarStep(); }
-#if wxUSE_MENUS
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const
         { return m_renderer->GetMenuBarItemSize(sizeText); }
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const
         { return m_renderer->GetMenuGeometry(win, menu); }
-#endif
+    virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const
+        { return m_renderer->GetStatusBarBorders(borderBetweenFields); }
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const
         { return m_renderer->GetFrameClientArea(rect, flags); }
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const

@@ -35,7 +35,7 @@ enum
     wxTOPLEVEL_BUTTON_MAXIMIZE = 0x02000000,
     wxTOPLEVEL_BUTTON_ICONIZE =  0x04000000,
     wxTOPLEVEL_BUTTON_RESTORE  = 0x08000000,
-    wxTOPLEVEL_BUTTON_HELP     = 0x10000000,    
+    wxTOPLEVEL_BUTTON_HELP     = 0x10000000,
 };
 
 // frame hit test return values:
@@ -115,14 +115,15 @@ public:
 
     // implementation from now on
     // --------------------------
-    
+
     // tests for frame's part at given point
     long HitTest(const wxPoint& pt) const;
 
-protected:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
+
+protected:
     // handle titlebar button click event
     virtual void ClickTitleBarButton(long button);
 
@@ -133,7 +134,7 @@ protected:
 
     // common part of all ctors
     void Init();
-    
+
     void RefreshTitleBar();
     void OnNcPaint(wxPaintEvent& event);
 

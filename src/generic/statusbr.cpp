@@ -36,10 +36,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
 
-#if !defined(__WIN32__) || !wxUSE_NATIVE_STATUSBAR
-    IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxStatusBarGeneric)
-#endif // Win32 && wxUSE_NATIVE_STATUSBAR
-
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
@@ -64,8 +60,6 @@ wxStatusBarGeneric::~wxStatusBarGeneric()
         SetFont(wxNullFont);
 #   endif // MSW
 
-    if ( m_statusWidths )
-        delete[] m_statusWidths;
     if ( m_statusStrings )
         delete[] m_statusStrings;
 }
@@ -93,6 +87,17 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
   SetFont(m_defaultStatusBarFont);
 
+  // Set the height according to the font and the border size
+  wxClientDC dc(this);
+  dc.SetFont(GetFont());
+
+  wxCoord y;
+  dc.GetTextExtent(_T("X"), NULL, &y );
+
+  int height = (int)( (11*y)/10 + 2*GetBorderY());
+
+  SetSize(-1, -1, -1, height);
+
   return success;
 }
 
@@ -104,12 +109,6 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 
         delete[] m_statusStrings;
         m_statusStrings = new wxString[number];
-
-#if 0 // VZ: what is this for?
-        int i;
-        for (i = 0; i < number; i++)
-            m_statusStrings[i] = "";
-#endif
     }
 
     SetStatusWidths(number, widths);

@@ -1035,6 +1035,8 @@ public:
   size_t Add(const wxString& str);
     // add new element at given position
   void Insert(const wxString& str, size_t uiIndex);
+    // expand the array to have count elements
+  void SetCount(size_t count);
     // remove first item matching this value
   void Remove(const wxChar *sz);
     // remove item by index

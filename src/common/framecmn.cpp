@@ -244,17 +244,6 @@ wxStatusBar *wxFrameBase::OnCreateStatusBar(int number,
 {
     wxStatusBar *statusBar = new wxStatusBar(this, id, style, name);
 
-    // Set the height according to the font and the border size
-    wxClientDC dc(statusBar);
-    dc.SetFont(statusBar->GetFont());
-
-    wxCoord y;
-    dc.GetTextExtent( "X", NULL, &y );
-
-    int height = (int)( (11*y)/10 + 2*statusBar->GetBorderY());
-
-    statusBar->SetSize( -1, -1, -1, height );
-
     statusBar->SetFieldsCount(number);
 
     return statusBar;

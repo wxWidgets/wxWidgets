@@ -2562,7 +2562,10 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 #endif // __WIN32__
 
-#ifdef __WXUNIVERSAL__
+            // unfortunately this doesn't really work as then window which
+            // doesn't accept focus doesn't get any mouse events neither which
+            // means it can't get any input at all
+#if 0 //def __WXUNIVERSAL__
         case WM_NCHITTEST:
             // we shouldn't allow the windows which don't want to get focus to
             // get it

@@ -365,13 +365,13 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
         ClickTitleBarButton(numArg);
         return TRUE;
     }
-    
+
     else if ( action == wxACTION_TOPLEVEL_MOVE )
     {
         InteractiveMove(wxINTERACTIVE_MOVE);
         return TRUE;
     }
-    
+
     else if ( action == wxACTION_TOPLEVEL_RESIZE )
     {
         int flags = wxINTERACTIVE_RESIZE;
@@ -386,7 +386,7 @@ bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
         InteractiveMove(flags);
         return TRUE;
     }
-    
+
     else
         return FALSE;
 }
@@ -486,25 +486,25 @@ bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     }
     else if ( consumer->GetInputWindow()->GetWindowStyle() & wxRESIZE_BORDER )
     {
-        wxTopLevelWindow *win = wxStaticCast(consumer->GetInputWindow(), 
+        wxTopLevelWindow *win = wxStaticCast(consumer->GetInputWindow(),
                                              wxTopLevelWindow);
         long hit = win->HitTest(event.GetPosition());
-        
+
         if ( hit != m_winHitTest )
         {
             m_winHitTest = hit;
-            
+
             if ( m_borderCursorOn )
             {
                 m_borderCursorOn = FALSE;
                 win->SetCursor(m_origCursor);
             }
-            
+
             if ( hit & wxHT_TOPLEVEL_ANY_BORDER )
             {
                 m_borderCursorOn = TRUE;
                 wxCursor cur;
-            
+
                 switch (hit)
                 {
                     case wxHT_TOPLEVEL_BORDER_N:

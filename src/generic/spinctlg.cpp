@@ -69,13 +69,13 @@ protected:
 
         event.Skip();
     }
-    
+
     bool ProcessEvent(wxEvent &event)
     {
         // Hand button down events to wxSpinCtrl. Doesn't work.
         if (event.GetEventType() == wxEVT_LEFT_DOWN && m_spin->ProcessEvent( event ))
             return TRUE;
-            
+
         return wxTextCtrl::ProcessEvent( event );
     }
 
@@ -101,7 +101,7 @@ public:
     {
         m_spin = spin;
 
-        SetWindowStyle(style);
+        SetWindowStyle(style | wxSP_VERTICAL);
     }
 
 protected:
@@ -153,6 +153,17 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                             wxDefaultValidator, name) )
     {
         return FALSE;
+    }
+
+    // the string value overrides the numeric one (for backwards compatibility
+    // reasons and also because it is simpler to satisfy the string value which
+    // comes much sooner in the list of arguments and leave the initial
+    // parameter unspecified)
+    if ( !value.empty() )
+    {
+        long l;
+        if ( value.ToLong(&l) )
+            initial = l;
     }
 
     SetBackgroundColour(*wxRED);
