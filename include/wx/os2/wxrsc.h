@@ -44,5 +44,5 @@
 #define ID_CAPTIONDIALOG             128
 #define ID_NOCAPTIONDIALOG           129
 
-#define ID_WINDDOW_MENU              130
+#define ID_WINDOW_MENU               130
 

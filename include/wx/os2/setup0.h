@@ -329,7 +329,8 @@
 #define wxUSE_PROGRESSDLG 1
 
 // wxDirDlg class for getting a directory name from user
-#define wxUSE_DIRDLG 1
+#define wxUSE_DIRDLG  1
+#define wxUSE_DIRDLGG 1
 
 #define wxUSE_OWNER_DRAWN             1
                                     // Owner-drawn menus and listboxes

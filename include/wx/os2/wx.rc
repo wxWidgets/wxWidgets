@@ -26,19 +26,19 @@ END
 //////////////////////////////////////////////////////////////////////////////
 */
 
-POINTER    WINCURSOR_HAND           LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\hand.ptr"
-POINTER    WINCURSOR_BULLSEYE       LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\bullseye.ptr"
-POINTER    WINCURSOR_PENCIL         LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\pencil.ptr"
-POINTER    WINCURSOR_MAGNIFIER      LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\magnit1.ptr"
-POINTER    WINCURSOR_NO_ENTRY       LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\noentry.ptr"
-POINTER    WINCURSOR_SIZING         LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\size.ptr"
-POINTER    WINCURSOR_ROLLER         LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\roller.ptr"
-POINTER    WINCURSOR_WATCH          LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\watch.ptr"
-POINTER    WINCURSOR_PBRUSH         LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\pbrush.ptr"
-POINTER    WINCURSOR_PLEFT          LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\pntleft.ptr"
-POINTER    WINCURSOR_PRIGHT         LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\pntright.ptr"
-POINTER    WINCURSOR_QARROW         LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\query.ptr"
-POINTER    WINCURSOR_BLANK          LOADONCALL    "\\prj\\win\\code\\z00\\resource\\os2\\blank.ptr"
+POINTER    WXCURSOR_HAND           LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\hand.ptr"
+POINTER    WXCURSOR_BULLSEYE       LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\bullseye.ptr"
+POINTER    WXCURSOR_PENCIL         LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\pencil.ptr"
+POINTER    WXCURSOR_MAGNIFIER      LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\magnit1.ptr"
+POINTER    WXCURSOR_NO_ENTRY       LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\noentry.ptr"
+POINTER    WXCURSOR_SIZING         LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\size.ptr"
+POINTER    WXCURSOR_ROLLER         LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\roller.ptr"
+POINTER    WXCURSOR_WATCH          LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\watch.ptr"
+POINTER    WXCURSOR_PBRUSH         LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\pbrush.ptr"
+POINTER    WXCURSOR_PLEFT          LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\pntleft.ptr"
+POINTER    WXCURSOR_PRIGHT         LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\pntright.ptr"
+POINTER    WXCURSOR_QARROW         LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\query.ptr"
+POINTER    WXCURSOR_BLANK          LOADONCALL    "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\blank.ptr"
 
 /*
 //////////////////////////////////////////////////////////////////////////////
@@ -46,39 +46,39 @@ POINTER    WINCURSOR_BLANK          LOADONCALL    "\\prj\\win\\code\\z00\\resour
 //////////////////////////////////////////////////////////////////////////////
 */
 /* Standard icons */
-ICON       kICON_TIP                    PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\tip.ico"
+ICON       wxICON_TIP                    PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\tip.ico"
 
-ICON       kICON_SMALL_CLOSED_FOLDER    PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\folder1.ico"
-ICON       kICON_SMALL_OPEN_FOLDER      PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\folder2.ico"
-ICON       kICON_SMALL_FILE             PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\file.ico"
-ICON       kICON_SMALL_COMPUTER         PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\computer.ico"
-ICON       kICON_SMALL_DRIVE            PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\drive.ico"
-ICON       kICON_SMALL_CDROM            PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\cdrom.ico"
-ICON       kICON_SMALL_FLOPPY           PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\floppy.ico"
-ICON       kICON_SMALL_REMOVEABLE       PRELOAD "\\prj\\win\\code\\z00\\resource\\os2\\removble.ico"
+ICON       wxICON_SMALL_CLOSED_FOLDER    PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\folder1.ico"
+ICON       wxICON_SMALL_OPEN_FOLDER      PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\folder2.ico"
+ICON       wxICON_SMALL_FILE             PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\file.ico"
+ICON       wxICON_SMALL_COMPUTER         PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\computer.ico"
+ICON       wxICON_SMALL_DRIVE            PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\drive.ico"
+ICON       wxICON_SMALL_CDROM            PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\cdrom.ico"
+ICON       wxICON_SMALL_FLOPPY           PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\floppy.ico"
+ICON       wxICON_SMALL_REMOVEABLE       PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\removble.ico"
 
 /*
 //////////////////////////////////////////////////////////////////////////////
 // Bitmaps
 //////////////////////////////////////////////////////////////////////////////
 */
-BITMAP     kDISABLE_BUTTON_BITMAP   LOADONCALL  "\\prj\\win\\code\\z00\\resource\\os2\\disable.bmp"
+BITMAP     wxDISABLE_BUTTON_BITMAP   LOADONCALL   "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\disable.bmp"
 
 /*
 // For src/generic/proplist.cpp
 */
-BITMAP     kTICK_BITMAP              LOADONCALL  "\\prj\\win\\code\\z00\\resource\\os2\\tick.bmp"
-BITMAP     kCROSS_BITMAP             LOADONCALL  "\\prj\\win\\code\\z00\\resource\\os2\\cross.bmp"
+BITMAP     wxTICK_BITMAP              LOADONCALL  "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\tick.bmp"
+BITMAP     wxCROSS_BITMAP             LOADONCALL  "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\cross.bmp"
 
 /*
 // For kContextHelpButton
 */
-BITMAP     kCSQUERY_BITMAP           LOADONCALL  "\\prj\\win\\code\\z00\\resource\\os2\\csquery.bmp"
+BITMAP     wxCSQUERY_BITMAP           LOADONCALL  "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\csquery.bmp"
 
 /*
 // For obtaining the RGB values of standard colours
 */
-BITMAP     kBITMAP_STD_COLOURS       LOADONCALL  "\\prj\\win\\code\\z00\\resource\\os2\\colours.bmp"
+BITMAP     wxBITMAP_STD_COLOURS       LOADONCALL  "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\colours.bmp"
 
-RCINCLUDE "\DEV\WX2\WXWINDOWS\INCLUDE\WX\OS2\WX.DLG"
+RCINCLUDE \Dev\Wx2\WxWindows\INCLUDE\WX\OS2\WX.DLG
 

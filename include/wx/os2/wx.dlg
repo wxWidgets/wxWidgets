@@ -1,4 +1,4 @@
-DLGINCLUDE  1   \\dev\\wx2\\wxwindows\\include\\wx\\os2\\wxrsc.h
+DLGINCLUDE  1   \dev\wx2\wxwindows\include\wx\os2\wxrsc.h
 
 DLGTEMPLATE ID_RESIZEABLEDIALOG   PRELOAD MOVEABLE DISCARDABLE
 BEGIN
