@@ -865,7 +865,7 @@ protected:
     wxString             m_windowName;
     bool                 m_themeEnabled;
 
-#ifdef wxUSE_PALETTE
+#if wxUSE_PALETTE
     wxPalette            m_palette;
     bool                 m_hasCustomPalette;
 #endif // wxUSE_PALETTE
