@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "spinbutbase.h"
+    #pragma implementation "spinbutt.h"
     #pragma implementation "univspinbutt.h"
 #endif
 
