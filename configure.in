@@ -705,6 +705,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MSGDLG=no
   DEFAULT_wxUSE_NUMBERDLG=no
   DEFAULT_wxUSE_TEXTDLG=no
+  DEFAULT_wxUSE_SPLASH=no
   DEFAULT_wxUSE_STARTUP_TIPS=no
   DEFAULT_wxUSE_PROGRESSDLG=no
   DEFAULT_wxUSE_WIZARDDLG=no
@@ -863,6 +864,7 @@ else
   DEFAULT_wxUSE_MSGDLG=yes
   DEFAULT_wxUSE_NUMBERDLG=yes
   DEFAULT_wxUSE_TEXTDLG=yes
+  DEFAULT_wxUSE_SPLASH=yes
   DEFAULT_wxUSE_STARTUP_TIPS=yes
   DEFAULT_wxUSE_PROGRESSDLG=yes
   DEFAULT_wxUSE_WIZARDDLG=yes
@@ -1253,6 +1255,7 @@ WX_ARG_ENABLE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_F
 WX_ARG_ENABLE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
 WX_ARG_ENABLE(msgdlg,      [  --enable-msgdlg         use wxMessageDialog], wxUSE_MSGDLG)
 WX_ARG_ENABLE(numberdlg,   [  --enable-numberdlg      use wxNumberEntryDialog], wxUSE_NUMBERDLG)
+WX_ARG_ENABLE(splash,      [  --enable-splash         use wxSplashScreen], wxUSE_SPLASH)
 WX_ARG_ENABLE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_TEXTDLG)
 WX_ARG_ENABLE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
 WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
@@ -4442,6 +4445,10 @@ if test "$wxUSE_PROGRESSDLG" = "yes"; then
     else
         AC_DEFINE(wxUSE_PROGRESSDLG)
     fi
+fi
+
+if test "$wxUSE_SPLASH" = "yes"; then
+    AC_DEFINE(wxUSE_SPLASH)
 fi
 
 if test "$wxUSE_STARTUP_TIPS" = "yes"; then
