@@ -397,6 +397,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_CHOICE_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
     (void)new wxButton( panel, ID_CHOICE_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
+
+    wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
+    wxSize sizeIcon = wxSize(icon.GetWidth(), icon.GetHeight());
+
+    wxStaticBitmap *bitmap = new wxStaticBitmap( panel, -1, icon, wxPoint(50, 60), sizeIcon);
+
+    // this doesn't work under wxGTK
+    bitmap = new wxStaticBitmap( panel, -1, wxNullBitmap, wxPoint(10, 60), sizeIcon);
+    bitmap->SetBitmap(icon);
+
     m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
 
     panel = new wxPanel(m_notebook);
