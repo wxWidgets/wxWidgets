@@ -169,6 +169,12 @@ wxPrinterDC::wxPrinterDC(WXHDC theDC)
 
 wxPrinterDC::~wxPrinterDC()
 {
+    if ( m_hDC )
+    {
+        ::DeleteDC(GetHdc());
+
+        m_hDC = NULL;
+    }
 }
 
 // ----------------------------------------------------------------------------
