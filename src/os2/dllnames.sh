@@ -11,7 +11,7 @@ case $dllFile in
     dllFile=`echo $dllFile | sed 's/base_\(...\)/b\1/'`
     ;;
 *wx_based_*)
-    dllFile=`echo $dllFile | sed 's/base_\(...\)/d\1/'`
+    dllFile=`echo $dllFile | sed 's/based_\(...\)/d\1/'`
     ;;
 *wx_based-*)
     dllFile=`echo $dllFile | sed 's/based/basd/'`
