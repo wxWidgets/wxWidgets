@@ -26,7 +26,7 @@
   class WXDLLEXPORT wxOwnerDrawn;
 
   // define the array of list box items
-  #include  <wx/dynarray.h>
+  #include  "wx/dynarray.h"
 
   WX_DEFINE_EXPORTED_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
 #endif // wxUSE_OWNER_DRAWN
