@@ -248,7 +248,7 @@ wxBrush::~wxBrush()
 
 wxBrush& wxBrush::operator=(const wxBrush& brush)
 {
-    if ( *this != brush )
+    if ( this != &brush )
     {
         Ref(brush);
     }
