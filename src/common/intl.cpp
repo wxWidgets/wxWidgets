@@ -2095,7 +2095,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxLocaleModule, wxModule)
 #define LNG(wxlang, canonical, winlang, winsublang, desc) \
     info.Language = wxlang;                               \
     info.CanonicalName = wxT(canonical);                  \
-    info.Description = desc;                              \
+    info.Description = wxT(desc);                         \
     SETWINLANG(info, winlang, winsublang)                 \
     AddLanguage(info);
 

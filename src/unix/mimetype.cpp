@@ -364,7 +364,7 @@ bool wxMimeTypesManagerImpl::CheckGnomeDirsExist ()
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
     wxString sTmp = gnomedir;
-    sTmp = sTmp + "/.gnome";
+    sTmp = sTmp + wxT("/.gnome");
     if (! wxDir::Exists ( sTmp ) )
     {
         if (!wxMkdir ( sTmp ))
@@ -373,7 +373,7 @@ bool wxMimeTypesManagerImpl::CheckGnomeDirsExist ()
             return FALSE;
         }
     }
-    sTmp = sTmp + "/mime-info";
+    sTmp = sTmp + wxT("/mime-info");
     if (! wxDir::Exists ( sTmp ) )
     {
         if (!wxMkdir ( sTmp ))
@@ -393,11 +393,15 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
 
-    wxMimeTextFile outfile ( gnomedir + "/.gnome/mime-info/user.keys");
+    wxMimeTextFile outfile ( gnomedir + wxT("/.gnome/mime-info/user.keys"));
     // if this fails probably Gnome is not installed ??
     // create it anyway as a private mime store
 
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    if (! outfile.Open ( wxConvUTF8) )
+#else
     if (! outfile.Open () )
+#endif
     {
         if (delete_index) return FALSE;
         if (!CheckGnomeDirsExist() ) return FALSE;
@@ -462,13 +466,13 @@ bool wxMimeTypesManagerImpl::WriteGnomeKeyFile(int index, bool delete_index)
             }
             //sOld should also contain the icon
             if ( !m_aIcons[index].empty() )
-                sOld.AddOrReplaceVerb ( wxT( "icon-filename"), m_aIcons[index] );
+                sOld.AddOrReplaceVerb ( wxT("icon-filename"), m_aIcons[index] );
 
             for (i=0; i < sOld.GetCount(); i++)
             {
                 sTmp = sOld.GetVerbCmd(i);
                 sTmp.Replace( wxT("%s"), wxT("%f") );
-                sTmp = wxT ( "\t") + sTmp;
+                sTmp = wxT("\t") + sTmp;
                 nIndex ++;
                 outfile.InsertLine ( sTmp, nIndex );
             }
@@ -484,7 +488,7 @@ bool wxMimeTypesManagerImpl::WriteGnomeMimeFile(int index, bool delete_index)
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
 
-    wxMimeTextFile outfile ( gnomedir + "/.gnome/mime-info/user.mime");
+    wxMimeTextFile outfile ( gnomedir + wxT("/.gnome/mime-info/user.mime"));
     // if this fails probably Gnome is not installed ??
     // create it anyway as a private mime store
     if (! outfile.Open () )
@@ -498,7 +502,7 @@ bool wxMimeTypesManagerImpl::WriteGnomeMimeFile(int index, bool delete_index)
     if ( nIndex == wxNOT_FOUND )
     {
         outfile.AddLine ( strType );
-        outfile.AddLine ( wxT( "\text:") + m_aExtensions.Item(index) );
+        outfile.AddLine ( wxT("\text:") + m_aExtensions.Item(index) );
     }
     else
     {
@@ -510,13 +514,13 @@ bool wxMimeTypesManagerImpl::WriteGnomeMimeFile(int index, bool delete_index)
         else
         {// check for next line being the right one to replace ??
             wxString sOld = outfile.GetLine(nIndex+1);
-            if (sOld.Contains(wxT("\text: ")))
+            if (sOld.Contains( wxT("\text: ")))
             {
-                outfile.GetLine(nIndex+1) = wxT( "\text: ") + m_aExtensions.Item(index);
+                outfile.GetLine(nIndex+1) = wxT("\text: ") + m_aExtensions.Item(index);
             }
             else
             {
-                outfile.InsertLine(wxT( "\text: ") + m_aExtensions.Item(index), nIndex + 1 );
+                outfile.InsertLine( wxT("\text: ") + m_aExtensions.Item(index), nIndex + 1 );
             }
         }
     }
@@ -528,7 +532,11 @@ bool wxMimeTypesManagerImpl::WriteGnomeMimeFile(int index, bool delete_index)
 void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename)
 {
     wxTextFile textfile(filename);
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    if ( !textfile.Open( wxConvUTF8) )
+#else
     if ( !textfile.Open() )
+#endif
         return;
     wxLogTrace(TRACE_MIME, wxT("--- Opened Gnome file %s  ---"),
             filename.c_str());
@@ -615,7 +623,11 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename)
 void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& filename)
 {
     wxTextFile textfile(filename);
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    if ( !textfile.Open( wxConvUTF8) )
+#else
     if ( !textfile.Open() )
+#endif
         return;
     wxLogTrace(TRACE_MIME, wxT("--- Opened Gnome file %s  ---"),
                  filename.c_str());
@@ -630,7 +642,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& file
         if ( nLine < nLineCount )
         {
             pc = textfile[nLine].c_str();
-            if ( *pc == _T('#') )
+            if ( *pc == wxT('#') )
             {
                 // skip comments
                 continue;
@@ -665,13 +677,13 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& file
         }
 
         // what do we have here?
-        if ( *pc == _T('\t') )
+        if ( *pc == wxT('\t') )
         {
             // this is a field=value ling
             pc++; // skip leading TAB
 
             static const int lenField = 4; // strlen("ext:")
-            if ( wxStrncmp(pc, _T("ext:"), lenField) == 0 )
+            if ( wxStrncmp(pc, wxT("ext:"), lenField) == 0 )
             {
                 // skip ' ' which follows and take everything left until the end
                 // of line
@@ -690,7 +702,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& file
 
             curMimeType.Empty();
 
-            while ( *pc != _T(':') && *pc != _T('\0') )
+            while ( *pc != wxT(':') && *pc != wxT('\0') )
             {
                 curMimeType += *pc++;
             }
@@ -705,7 +717,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeFilesFromDir(const wxString& dirbase)
                   _T("base directory shouldn't end with a slash") );
 
     wxString dirname = dirbase;
-    dirname << _T("/mime-info");
+    dirname << wxT("/mime-info");
 
     if ( !wxDir::Exists(dirname) )
         return;
@@ -715,7 +727,7 @@ void wxMimeTypesManagerImpl::LoadGnomeMimeFilesFromDir(const wxString& dirbase)
         return;
 
     // we will concatenate it with filename to get the full path below
-    dirname += _T('/');
+    dirname += wxT('/');
 
     wxString filename;
     bool cont = dir.GetFirst(&filename, _T("*.mime"), wxDIR_FILES);
@@ -742,12 +754,12 @@ void wxMimeTypesManagerImpl::GetGnomeMimeInfo(const wxString& sExtraDir)
 {
 
     wxArrayString dirs;
-    dirs.Add(_T("/usr/share"));
-    dirs.Add(_T("/usr/local/share"));
+    dirs.Add(wxT("/usr/share"));
+    dirs.Add(wxT("/usr/local/share"));
 
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
-    gnomedir += _T("/.gnome");
+    gnomedir += wxT("/.gnome");
     dirs.Add( gnomedir );
     if (!sExtraDir.empty()) dirs.Add( sExtraDir );
 
@@ -2032,7 +2044,11 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                strFileName.c_str());
 
     wxTextFile file(strFileName);
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    if ( !file.Open( wxConvUTF8) )
+#else
     if ( !file.Open() )
+#endif
         return FALSE;
 
     // the information we extract
@@ -2040,7 +2056,8 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 
     size_t nLineCount = file.GetLineCount();
     const wxChar *pc = NULL;
-    for ( size_t nLine = 0; nLine < nLineCount; nLine++ ) {
+    for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
+    {
         if ( pc == NULL ) {
             // now we're at the start of the line
             pc = file[nLine].c_str();
@@ -2306,7 +2323,11 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                strFileName.c_str());
 
     wxTextFile file(strFileName);
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+    if ( !file.Open( wxConvUTF8) )
+#else
     if ( !file.Open() )
+#endif
         return FALSE;
 
     // indices of MIME types (in m_aTypes) we already found in this file

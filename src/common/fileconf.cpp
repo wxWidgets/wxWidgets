@@ -371,7 +371,7 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 void wxFileConfig::Init()
 {
     m_pCurrentGroup =
-    m_pRootGroup    = new wxFileConfigGroup(NULL, "", this);
+    m_pRootGroup    = new wxFileConfigGroup(NULL, wxT(""), this);
 
     m_linesHead =
     m_linesTail = NULL;
