@@ -1734,7 +1734,7 @@ if ( !dir.empty() )
 
 \func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = ""},\\
  \param{const wxString\& }{default\_filename = ""}, \param{const wxString\& }{default\_extension = ""},\\
- \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = ""},\\
+ \param{const wxString\& }{wildcard = "*.*"}, \param{int }{flags = 0}, \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 Pops up a file selector box. In Windows, this is the common file selector
@@ -2119,7 +2119,7 @@ message will be split into separate lines, to cater for large messages.
  \param{bool }{showAtStartup = true}}
 
 This function shows a "startup tip" to the user. The return value is the
-state of the ``Show tips at startup'' checkbox.
+state of the `Show tips at startup' checkbox.
 
 \docparam{parent}{The parent window for the modal dialog}
 
@@ -4043,8 +4043,8 @@ either change the line in which either of them appears on or use the
 \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2} macro.
 
 Also note that Microsoft Visual C++ has a bug which results in compiler errors
-if you use this macro with ``Program Database For Edit And Continue''
-(\texttt{/ZI}) option, so you shouldn't use it (``Program Database''
+if you use this macro with `Program Database For Edit And Continue'
+(\texttt{/ZI}) option, so you shouldn't use it (`Program Database'
 (\texttt{/Zi}) is ok though) for the code making use of this macro.
 
 \wxheading{See also}
