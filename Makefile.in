@@ -150,15 +150,17 @@ INTLDIR  = $(WXDIR)/locale
 
 ########################## Archive name ###############################
 
-WXARCHIVE = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
-WXGLARCHIVE = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
-WXSAMPLES = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
-WXDEMOS = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+# append a version suffix x.y.z to all file names
+VER_SUFFIX=$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
+WXARCHIVE = @DISTDIR@-$(VER_SUFFIX).tar.gz
+WXGLARCHIVE = @DISTDIR@-gl-$(VER_SUFFIX).tar.gz
+WXSAMPLES = wx$(TOOLKIT)-samples-$(VER_SUFFIX).tar.gz
+WXDEMOS = wx$(TOOLKIT)-demos-$(VER_SUFFIX).tar.gz
 
-WXARCHIVE_BZIP = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
-WXGLARCHIVE_BZIP = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
-WXSAMPLES_BZIP = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
-WXDEMOS_BZIP = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+WXARCHIVE_BZIP = @DISTDIR@-$(VER_SUFFIX).tar.bz2
+WXGLARCHIVE_BZIP = @DISTDIR@-gl-$(VER_SUFFIX).tar.bz2
+WXSAMPLES_BZIP = wx$(TOOLKIT)-samples-$(VER_SUFFIX).tar.bz2
+WXDEMOS_BZIP = wx$(TOOLKIT)-demos-$(VER_SUFFIX).tar.bz2
 
 DISTDIR = ./_dist_dir/@DISTDIR@
 
@@ -1277,15 +1279,18 @@ distclean:
 dist: @GUIDIST@
 	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
-	cd _dist_dir; tar ch @DISTDIR@ | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
+	@cd _dist_dir; \
+	mv @DISTDIR@ @DISTDIR@-$(VER_SUFFIX); \
+	tar ch @DISTDIR@-$(VER_SUFFIX) | gzip -f9 > ../$(WXARCHIVE); \
+	mv @DISTDIR@-$(VER_SUFFIX) @DISTDIR@
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
-	mv samples wxSamples; \
-	tar ch wxSamples | gzip -f9 > ../../$(WXSAMPLES); \
-	mv wxSamples samples; \
-	mv demos wxDemos; \
-	tar ch wxDemos | gzip -f9 > ../../$(WXDEMOS); \
-	mv wxDemos demos; \
+	mv samples wxSamples-$(VER_SUFFIX); \
+	tar ch wxSamples-$(VER_SUFFIX) | gzip -f9 > ../../$(WXSAMPLES); \
+	mv wxSamples-$(VER_SUFFIX) samples; \
+	mv demos wxDemos-$(VER_SUFFIX); \
+	tar ch wxDemos-$(VER_SUFFIX) | gzip -f9 > ../../$(WXDEMOS); \
+	mv wxDemos-$(VER_SUFFIX) demos; \
 	fi
 
 bzip-dist: @GUIDIST@

@@ -1,4 +1,3 @@
-# Note that this is NOT a relocatable package
 %define pref /usr
 %define ver 2.3.0
 %define rel 0
@@ -9,14 +8,21 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: wxGTK-%{ver}.tgz
+Source: wxGTK-%{ver}.tar.gz
 URL: http://wxwindows.org
-Packager: Robert Roebling <robert@roebling.de>
+Packager: Vadim Zeitlin <vadim@wxwindows.org>
+Prefix: %{pref}
+BuildRoot: /var/tmp/%{name}-root
 
 # all packages providing an implementation of wxWindows library (regardless of
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
 # possible to require wxwin instead of requiring "wxgtk or wxmotif or wxqt..."
 Provides: wxwin
+
+# in addition, we should provide libwx_gtk as automatic generator only notices
+# libwx_gtk-%{ver}-%{rel}
+Provides: libwx_gtk.so
+Provides: libwx_gtk-2.2.so
 
 %description
 wxWindows is a free C++ library for cross-platform GUI development.
@@ -40,7 +46,7 @@ Requires: wxGTK
 OpenGl add-on library for wxGTK, the GTK+ 1.2 port of the wxWindows library.
 
 %prep
-%setup -n wxGTK
+%setup -n wxGTK-%{ver}
 ./configure --prefix=%{pref} --enable-burnt_name --with-odbc --with-opengl
 
 %build
@@ -52,7 +58,8 @@ fi
 $MAKE
 
 %install
-make install
+rm -rf $RPM_BUILD_ROOT
+make prefix=$RPM_BUILD_ROOT%{pref} install
 
 %post
 /sbin/ldconfig
