@@ -2431,7 +2431,8 @@ void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
                 else
                 {
                     // ...or remove the attribute
-                    m_attrs[n].attr->DecRef();
+                    // No need to DecRef the attribute itself since this is
+                    // done be wxGridCellWithAttr's destructor!
                     m_attrs.RemoveAt(n);
                     n--; count--;
                 }
@@ -2465,7 +2466,8 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
                 else
                 {
                     // ...or remove the attribute
-                    m_attrs[n].attr->DecRef();
+                    // No need to DecRef the attribute itself since this is
+                    // done be wxGridCellWithAttr's destructor!
                     m_attrs.RemoveAt(n);
                     n--; count--;
                 }
