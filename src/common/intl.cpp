@@ -44,6 +44,7 @@
 #include "wx/debug.h"
 #include "wx/utils.h"
 #include "wx/dynarray.h"
+#include "wx/module.h"
 #ifdef __WIN32__
 #include "wx/msw/private.h"
 #endif
@@ -535,16 +536,32 @@ void wxMsgCatalog::ConvertEncoding()
     if ( enc == wxFONTENCODING_SYSTEM )
         return; // unknown encoding
 
-    wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
-    if (a[0] == enc)
-        return; // no conversion needed, locale uses native encoding
+    wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
+#ifdef __UNIX__
+    wxString langFull;
+    if (wxGetEnv(wxT("LC_ALL"), &langFull) ||
+        wxGetEnv(wxT("LC_CTYPE"), &langFull) ||
+        wxGetEnv(wxT("LANG"), &langFull))
+    {
+        wxString lcharset = langFull.AfterFirst(wxT('.')).BeforeFirst(wxT('@'));
+        if (!lcharset.IsEmpty())
+            targetEnc = wxTheFontMapper->CharsetToEncoding(lcharset, FALSE);
+    }
+#endif
 
-    if (a.GetCount() == 0)
-        return; // we don't know common equiv. under this platform
+    if (targetEnc == wxFONTENCODING_SYSTEM)
+    {
+        wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
+        if (a[0] == enc)
+            return; // no conversion needed, locale uses native encoding
+        if (a.GetCount() == 0)
+            return; // we don't know common equiv. under this platform
+        targetEnc = a[0];
+    }
 
     wxEncodingConverter converter;
+    converter.Init(enc, targetEnc);
 
-    converter.Init(enc, a[0]);
     for (size_t i = 0; i < m_numStrings; i++)
         converter.Convert((char*)StringAtOfs(m_pTransTable, i));
 #endif // wxUSE_GUI
@@ -559,11 +576,28 @@ void wxMsgCatalog::ConvertEncoding()
 WX_DECLARE_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray);
 WX_DEFINE_OBJARRAY(wxLanguageInfoArray);
 
+wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
+
+/*static*/ void wxLocale::CreateLanguagesDB()
+{
+    if (ms_languagesDB == NULL)
+    {
+        ms_languagesDB = new wxLanguageInfoArray;
+        InitLanguagesDB();
+    }
+}
+
+/*static*/ void wxLocale::DestroyLanguagesDB()
+{
+    delete ms_languagesDB;
+    ms_languagesDB = NULL;
+}
+
+
 wxLocale::wxLocale()
 {
   m_pszOldLocale = NULL;
   m_pMsgCat = NULL;
-  m_languagesDB = NULL;
   m_language = wxLANGUAGE_UNKNOWN;
 }
 
@@ -614,11 +648,7 @@ bool wxLocale::Init(int language, int flags)
     wxLanguageInfo *info = NULL;
     int lang = language;
 
-    if (m_languagesDB == NULL)
-    {
-        m_languagesDB = new wxLanguageInfoArray;
-        InitLanguagesDB();
-    }
+    CreateLanguagesDB();
 
     if (lang == wxLANGUAGE_DEFAULT)
     {
@@ -634,11 +664,11 @@ bool wxLocale::Init(int language, int flags)
 
     if (lang != wxLANGUAGE_DEFAULT)
     {
-        for (size_t i = 0; i < m_languagesDB->GetCount(); i++)
+        for (size_t i = 0; i < ms_languagesDB->GetCount(); i++)
         {
-            if (m_languagesDB->Item(i).Language == lang)
+            if (ms_languagesDB->Item(i).Language == lang)
             {
-                info = &m_languagesDB->Item(i);
+                info = &ms_languagesDB->Item(i);
                 break;
             }
         }
@@ -759,14 +789,13 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     //else: already have it
 }
 
-int wxLocale::GetSystemLanguage() const
+/*static*/ int wxLocale::GetSystemLanguage()
 {
-    wxCHECK_MSG( m_languagesDB != NULL, wxLANGUAGE_UNKNOWN,
-                 _T("Languages DB not initialized, call wxLocale::Init!") );
+    CreateLanguagesDB();
 
     // init i to avoid compiler warning
     size_t i = 0,
-           count = m_languagesDB->GetCount();
+           count = ms_languagesDB->GetCount();
 
 #if defined(__UNIX__)
     // first get the string identifying the language from the environment
@@ -775,14 +804,14 @@ int wxLocale::GetSystemLanguage() const
         !wxGetEnv(wxT("LC_MESSAGES"), &langFull) &&
         !wxGetEnv(wxT("LANG"), &langFull))
     {
-        // no language specified
-        return wxLANGUAGE_UNKNOWN;
+        // no language specified, threat it as English
+        return wxLANGUAGE_ENGLISH;
     }
 
     if ( langFull == _T("C") )
     {
         // default C locale
-        return wxLANGUAGE_DEFAULT;
+        return wxLANGUAGE_ENGLISH;
     }
 
     // the language string has the following form
@@ -835,7 +864,7 @@ int wxLocale::GetSystemLanguage() const
         // 1. Try to find the language either as is:
         for ( i = 0; i < count; i++ )
         {
-            if ( m_languagesDB->Item(i).CanonicalName == langFull )
+            if ( ms_languagesDB->Item(i).CanonicalName == langFull )
             {
                 break;
             }
@@ -846,7 +875,7 @@ int wxLocale::GetSystemLanguage() const
         {
             for ( i = 0; i < count; i++ )
             {
-                if ( m_languagesDB->Item(i).CanonicalName == lang )
+                if ( ms_languagesDB->Item(i).CanonicalName == lang )
                 {
                     break;
                 }
@@ -858,7 +887,7 @@ int wxLocale::GetSystemLanguage() const
         {
             for ( i = 0; i < count; i++ )
             {
-                if ( ExtractLang(m_languagesDB->Item(i).CanonicalName)
+                if ( ExtractLang(ms_languagesDB->Item(i).CanonicalName)
                         == langFull )
                 {
                     break;
@@ -871,7 +900,7 @@ int wxLocale::GetSystemLanguage() const
         // try to find the name in verbose description
         for ( i = 0; i < count; i++ )
         {
-            if (m_languagesDB->Item(i).Description.CmpNoCase(langFull) == 0)
+            if (ms_languagesDB->Item(i).Description.CmpNoCase(langFull) == 0)
             {
                 break;
             }
@@ -886,8 +915,8 @@ int wxLocale::GetSystemLanguage() const
 
         for ( i = 0; i < count; i++ )
         {
-            if (m_languagesDB->Item(i).WinLang == lang &&
-                m_languagesDB->Item(i).WinSublang == sublang)
+            if (ms_languagesDB->Item(i).WinLang == lang &&
+                ms_languagesDB->Item(i).WinSublang == sublang)
             {
                 break;
             }
@@ -899,17 +928,17 @@ int wxLocale::GetSystemLanguage() const
     if ( i < count )
     {
         // we did find a matching entry, use it
-        return m_languagesDB->Item(i).Language;
+        return ms_languagesDB->Item(i).Language;
     }
 
     // no info about this language in the database
     return wxLANGUAGE_UNKNOWN;
 }
 
-void wxLocale::AddLanguage(const wxLanguageInfo& info)
+/*static*/ void wxLocale::AddLanguage(const wxLanguageInfo& info)
 {
-    wxASSERT_MSG(m_languagesDB != NULL, "Languages DB not initialized, call wxLocale::Init!");
-    m_languagesDB->Add(info);
+    CreateLanguagesDB();
+    ms_languagesDB->Add(info);
 }
 
 wxString wxLocale::GetSysName() const
@@ -927,8 +956,6 @@ wxLocale::~wxLocale()
         m_pMsgCat = m_pMsgCat->m_pNext;
         delete pTmpCat;
     }
-
-    delete m_languagesDB;
 
     // restore old locale
     wxSetLocale(m_pOldLocale);
@@ -1057,10 +1084,32 @@ wxLocale *wxSetLocale(wxLocale *pLocale)
   return pOld;
 }
 
+
+
+// ----------------------------------------------------------------------------
+// wxLocale module (for lazy destruction of languagesDB)
+// ----------------------------------------------------------------------------
+
+class wxLocaleModule: public wxModule
+{
+    DECLARE_DYNAMIC_CLASS(wxLocaleModule)
+    public:
+        wxLocaleModule() {}
+        bool OnInit() { return TRUE; }
+        void OnExit() { wxLocale::DestroyLanguagesDB(); }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxLocaleModule, wxModule)
+
+
+
 // ----------------------------------------------------------------------------
 // default languages table & initialization
 // ----------------------------------------------------------------------------
 
+
+
+// --- --- --- generated code begins here --- --- ---
 
 // This table is generated by misc/languages/genlang.py
 // When making changes, please put them into misc/languages/langtabl.txt
@@ -1567,7 +1616,7 @@ void wxLocale::InitLanguagesDB()
    wxLanguageInfo info;
    wxStringTokenizer tkn;
 
-   LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , "Abkhazian")
+      LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , "Abkhazian")
    LNG(wxLANGUAGE_AFAR,                       "aa"   , 0              , 0                                 , "Afar")
    LNG(wxLANGUAGE_AFRIKAANS,                  "af_ZA", LANG_AFRIKAANS , SUBLANG_DEFAULT                   , "Afrikaans")
    LNG(wxLANGUAGE_ALBANIAN,                   "sq_AL", LANG_ALBANIAN  , SUBLANG_DEFAULT                   , "Albanian")
@@ -1795,9 +1844,12 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_YORUBA,                     "yo"   , 0              , 0                                 , "Yoruba")
    LNG(wxLANGUAGE_ZHUANG,                     "za"   , 0              , 0                                 , "Zhuang")
    LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , "Zulu")
-
+   
 };
 #undef LNG
+
+// --- --- --- generated code ends here --- --- ---
+
 
 
 #endif // wxUSE_INTL
