@@ -8217,7 +8217,7 @@ SOURCE=..\..\include\wx\dcscreen.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\include\wx\debugrpt.h
+SOURCE=..\..\include\wx\debugrpt.h
 # End Source File
 # Begin Source File
 

@@ -505,7 +505,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="QA_HDR" hints="files">
-    include/wx/debugrpt.h
+    wx/debugrpt.h
 </set>
 
 <!-- ====================================================================== -->

@@ -1915,10 +1915,6 @@ InputPath=..\include\wx\msw\setup.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\include\include\wx\debugrpt.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\accel.h
 # End Source File
 # Begin Source File
@@ -2152,6 +2148,10 @@ SOURCE=..\include\wx\dde.h
 # Begin Source File
 
 SOURCE=..\include\wx\debug.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\debugrpt.h
 # End Source File
 # Begin Source File
 

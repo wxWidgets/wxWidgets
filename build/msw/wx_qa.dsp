@@ -712,7 +712,7 @@ InputPath=..\include\wx\msw\setup.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\include\wx\debugrpt.h
+SOURCE=..\..\include\wx\debugrpt.h
 # End Source File
 # End Group
 # End Target
