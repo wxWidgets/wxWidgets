@@ -29,7 +29,7 @@
 
 #define wxGRID_VALUE_DBAUTO     _T("dbauto")
 
-WX_DECLARE_EXPORTED_OBJARRAY(GenericKey,keyarray);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(GenericKey,keyarray,WXDLLIMPEXP_DBGRID);
 
 static const int wxUSE_QUERY = -1;
 
