@@ -85,11 +85,6 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     WXDWORD exStyle = 0;
     WXDWORD wstyle = MSWGetStyle(style, & exStyle) ;
 
-/*    
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-      wstyle |= WS_CLIPSIBLINGS;
-*/
-
     // Now create scrollbar
     DWORD _direction = (style & wxHORIZONTAL) ?
                         SBS_HORZ: SBS_VERT;

@@ -121,7 +121,9 @@ wxMSW:
 - Windows XP manifest is now included in wx.rc; it is no longer neccessary
   to ship .exe.manifest file with applications to support XP themes
 - wxLocale::Init no longer reports error if trying to set Unicode-only locale
-  or if user's default locale is Unicode-only 
+  or if user's default locale is Unicode-only
+- Improved border handling so it no longer shows a thin and
+  sunken border under XP
 
 wxMotif:
 

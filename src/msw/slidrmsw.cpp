@@ -50,6 +50,9 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        style |= wxBORDER_NONE;
+
   SetName(name);
 #if wxUSE_VALIDATORS
   SetValidator(validator);
@@ -77,10 +80,9 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
   int height = size.y;
 
   // non-Win95 implementation
-  
+
   long msStyle = SS_CENTER;
 
- // WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
   WXDWORD exStyle = 0;
   msStyle |= MSWGetStyle(GetWindowStyle(), & exStyle) ;
 

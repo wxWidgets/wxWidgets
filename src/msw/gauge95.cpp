@@ -104,11 +104,6 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   WXDWORD exStyle = 0;
   long msFlags = MSWGetStyle(style, & exStyle) ;
 
-/*
-  if ( m_windowStyle & wxCLIP_SIBLINGS )
-    msFlags |= WS_CLIPSIBLINGS;
-*/
-
   if (m_windowStyle & wxGA_VERTICAL)
     msFlags |= PBS_VERTICAL;
 
