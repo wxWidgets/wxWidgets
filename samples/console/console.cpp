@@ -2486,6 +2486,8 @@ static void TestDbOpen()
     int wxSprintf( wxChar *str, const wxChar *format, ... );
 #endif
 
+#include "wx/longlong.h"
+
 #include <float.h>
 
 static void rfg1 (void);
@@ -2587,8 +2589,8 @@ fp_test (void)
 static void TestPrintf()
 {
   static wxChar shortstr[] = _T("Hi, Z.");
-  static wxChar longstr[] = "Good morning, Doctor Chandra.  This is Hal.  \
-I am ready for my first lesson today.";
+  static wxChar longstr[] = _T("Good morning, Doctor Chandra.  This is Hal.  \
+I am ready for my first lesson today.");
   int result = 0;
 
   fmtchk(_T("%.4x"));
@@ -2707,19 +2709,21 @@ I am ready for my first lesson today.";
     wxPuts (result != 0 ? _T("Test failed!") : _T("Test ok."));
   }
 
+#ifdef wxLongLong_t
   {
-    wxChar buf[200];
+      wxChar buf[200];
 
-    wxSprintf (buf, _T("%07Lo"), 040000000000ll);
-    wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
+      wxSprintf (buf, _T("%07Lo"), (wxLongLong_t)040000000000);
+      wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
 
-    if (wxStrcmp (buf, _T("40000000000")) != 0)
+      if (wxStrcmp (buf, _T("40000000000")) != 0)
       {
-        result = 1;
-        wxPuts (_T("\tFAILED"));
+          result = 1;
+          wxPuts (_T("\tFAILED"));
       }
-    wxPuts ("");
+      wxPuts (_T(""));
   }
+#endif // wxLongLong_t
 
   wxPrintf (_T("printf (\"%%hhu\", %u) = %hhu\n"), UCHAR_MAX + 2, UCHAR_MAX + 2);
   wxPrintf (_T("printf (\"%%hu\", %u) = %hu\n"), USHRT_MAX + 2, USHRT_MAX + 2);
