@@ -372,13 +372,13 @@ bool wxTextCtrl::SaveFile( const wxString &file )
       }
 
       if (fwrite (text, sizeof (char), len, fp) != (size_t) len)
-    {
-      // Did not write whole file
-    }
+      {
+          // Did not write whole file
+      }
 
       // Make sure newline terminates the file
       if (text[len - 1] != '\n')
-    fputc ('\n', fp);
+          fputc ('\n', fp);
 
       fclose (fp);
 
@@ -431,29 +431,41 @@ void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
 
 long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 {
-  if (!(m_windowStyle & wxTE_MULTILINE))
-    return 0;
-  gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-  char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
-  if(!text)
-    return 0;
-  if( pos >= len)
-    return pos=len-1;
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        wxString text = GetValue();
 
-  *x=1;   // Col 1
-  *y=1;   // Line 1
-  for (int i = 0; i < pos; i++ )
-    {
-      if (text[i] == '\n')
-    {
-      (*y)++;
-      *x=1;
+        if( pos >= text.Len()  )
+            return FALSE;
+
+        *x=1;   // Col 1
+        *y=1;   // Line 1
+        for ( const char *p = text.c_str(); *p; p++ )
+        {
+            if (*p == '\n')
+            {
+                (*y)++;
+                *x=1;
+            }
+            else
+                (*x)++;
+        }
     }
-      else
-    (*x)++;
+    else // single line control
+    {
+        if ( pos < GTK_ENTRY(m_text)->text_length )
+        {
+            *y = 1;
+            *x = pos;
+        }
+        else
+        {
+            // index out of bounds
+            return FALSE;
+        }
     }
-  g_free( text );
-  return 1;
+
+    return TRUE;
 }
 
 long wxTextCtrl::XYToPosition(long x, long y ) const
@@ -485,21 +497,21 @@ int wxTextCtrl::GetNumberOfLines() const
         {
             int currentLine = 0;
             for (int i = 0; i < len; i++ )
-        {
+            {
                 if (text[i] == '\n')
-                  currentLine++;
-        }
+                    currentLine++;
+            }
             g_free( text );
             return currentLine;
         }
         else
-    {
+        {
             return 0;
-    }
+        }
     }
     else
     {
-       return 1;
+        return 1;
     }
 }
 
