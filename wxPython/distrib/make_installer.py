@@ -155,7 +155,7 @@ Source: "scripts\pywxrc";                   DestDir: "{code:GetPythonDir}\Script
 Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Flags: sharedfile;  Components: core
 
 
-Source: "docs\README.txt";                  DestDir: "{app}\%(PKGDIR)s\docs";  Flags: isreadme; Components: core
+Source: "distrib\README.win32.txt";         DestDir: "{app}\%(PKGDIR)s\docs";  Flags: isreadme; Components: core
 Source: "licence\*.txt";                    DestDir: "{app}\%(PKGDIR)s\docs\licence"; Components: core
 
 
