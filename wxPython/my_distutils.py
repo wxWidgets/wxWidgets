@@ -444,6 +444,9 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
     from distutils.dep_util import newer
     from distutils.spawn import spawn
 
+    if not os.path.exists(os.path.join(dir, gendir)):
+        os.mkdir(os.path.join(dir, gendir))
+
     sources = []
 
     for file in files:

@@ -70,7 +70,9 @@
 
 #define INCL_BASE
 #include <os2.h>
+#ifndef __EMX__
 #include <direct.h>
+#endif
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -685,7 +687,7 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
     }
 
     // don't rename the individual sections
-    if (m_treeCtrl->GetParent( event.GetItem() ) == m_rootId)
+    if (m_treeCtrl->GetItemParent( event.GetItem() ) == m_rootId)
     {
         event.Veto();
         return;

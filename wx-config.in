@@ -4,11 +4,13 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 exec_prefix_set=no
 CC="@CC@"
+GCC="@GCC@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
 cross_compiling=@cross_compiling@
 target=@host_alias@
 static_flag=@STATIC_FLAG@
+inplace_flag=no
 
 usage()
 {
@@ -17,12 +19,18 @@ Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--static]
                  [--libs] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
+                 [--inplace]
 
 wx-config returns configuration information about the installed
 version of wxWindows. It may be used to query its version and
 installation directories and also retrieve the C and C++ compilers
 and linker which were used for its building and the corresponding
 flags.
+
+The --inplace flag allows wx-config to be used from the wxWindows
+build directory and output flags to use the uninstalled version of
+the headers and libs in the build directory.  (Currently configure
+must be invoked via a full path name for this to work correctly.)
 EOF
 
     exit $1
@@ -30,16 +38,36 @@ EOF
 
 cppflags()
 {
+    # we should never specify -I/usr/include on the compiler command line: this
+    # is at best useless and at worst breaks compilation on the systems where
+    # the system headers are non-ANSI because gcc works around this by storing
+    # the ANSI-fied versions of them in its private directory which is searched
+    # after all the directories on the cmd line.
+    #
+    # the situation is a bit more complicated with -I/usr/local/include: again,
+    # it shouldn't be specified with gcc which looks there by default anyhow
+    # and gives warnings (at least 3.1 does) if it is specified explicitly --
+    # but this -I switch *is* needed for the other compilers
+    #
+    # note that we assume that if we use GNU cc we also use GNU c++ and vice
+    # versa, i.e. this won't work (either for --cflags or --cxxflags) if GNU C
+    # compiler and non-GNU C++ compiler are used or vice versa -- we'll fix
+    # this when/if anybody complains about it
     if test "@includedir@" != "/usr/include" \
             -a "@includedir@" != "/usr/include/c++" \
-            -a "@includedir@" != "/usr/local/include" \
+            -a \( "${GCC}" != "yes" \
+                  -o "@includedir@" != "/usr/local/include" \) \
             -a \( "${cross_compiling}" != "yes" \
                   -o "@includedir@" != "/usr/${target}/include" \) ;
     then
-        includes=-I@includedir@
+        includes=" -I@includedir@"
     fi
 
-    includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@ $includes"
+    if test $inplace_flag = yes ; then
+	includes="-I$inplace_builddir/lib/wx/include/@TOOLCHAIN_NAME@ -I$inplace_include"
+    else
+	includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@$includes"
+    fi
 
     if test $static_flag = yes ; then
         echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@ @WX_LARGEFILE_FLAGS@
@@ -104,6 +132,10 @@ while test $# -gt 0; do
           libs="-L@libdir@"
       fi
 
+      if test $inplace_flag = yes ; then
+	  libs="-L$inplace_builddir/lib"
+      fi
+
       if test $static_flag = yes ; then
           echo "$libs @LDFLAGS@ @WXCONFIG_RPATH@ @libdir@/@WXCONFIG_LIBS_STATIC@ @LIBS@ @DMALLOC_LIBS@"
       else
@@ -117,7 +149,10 @@ while test $# -gt 0; do
       else
           gllibs="@WXCONFIG_LIBS_GL@"
       fi
-      echo @LDFLAGS_GL@ "$gllibs"
+      if test $inplace_flag = yes ; then
+	  libdir="-L$inplace_builddir/lib"
+      fi
+      echo @LDFLAGS_GL@ $libdir $gllibs
       ;;
     --cc)
       echo $CC
@@ -127,6 +162,11 @@ while test $# -gt 0; do
       ;;
     --ld)
       echo $LD
+      ;;
+    --inplace)
+      inplace_flag=yes
+      inplace_builddir=`dirname $0`
+      inplace_include=@top_srcdir@/include
       ;;
     *)
       usage 1 1>&2

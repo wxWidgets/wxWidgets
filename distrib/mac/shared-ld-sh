@@ -21,7 +21,7 @@ while test $# -gt 0; do
         verbose=1
         ;;
 
-       -o|-compatibility_version|-current_version|-framework|-undefined)
+       -o|-compatibility_version|-current_version|-framework|-undefined|-install_name)
         # collect these options and values
         args="$args $1 $2"
         shift

@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.3pre8"
+VERSION          = "2.4.0"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -28,6 +28,8 @@ on.
 """
 
 
+# Config values below this point can be reset on the setup.py command line.
+
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
@@ -39,10 +41,15 @@ BUILD_DLLWIDGET = 1# Build a module that enables unknown wx widgets
                    # Internet Explorer wrapper (experimental)
 BUILD_IEWIN = (os.name == 'nt')
 
+BUILD_CANVAS = 0   # Build a canvas module using the one in wx/contrib (experimental)
+BUILD_ART2D = 0    # Build a canvas module using code from the wxArt2D project (experimental)
+
+
 CORE_ONLY = 0      # if true, don't build any of the above
 
 GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
-                   # for the ugly details
+                   # for the ugly details  (TODO: This can be removed as I don't
+                   # build the RPMs that way anymore.)
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
@@ -66,13 +73,21 @@ UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
 
 NO_SCRIPTS = 0     # Don't install the tool scripts
 
+WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
+                   # it to pass an alternate version of wx-config or alternate
+                   # flags, eg. as required by the .deb in-tree build.  By
+                   # default a wx-config command will be assembled based on
+                   # version, port, etc. and it will be looked for on the
+                   # default $PATH.
 
-WX_CONFIG = "wx-config"    # Usually you shouldn't need to touch this,
-                           # but you can set it to pass an alternate
-                           # version of wx-config or alternate flags,
-                           # eg. as required by the .deb in-tree build.
+WXPORT = 'gtk'     # On Linux/Unix there are several ports of wxWindows available.
+                   # Setting this value lets you select which will be used for
+                   # the wxPython build.  Possibilites are 'gtk', 'gtk2' and
+                   # 'x11'.  Curently only gtk and gtk2 works.
 
-BUILD_BASE = "build"
+BUILD_BASE = "build"       # Directory to use for temporary build files.
+
+
 
 # Some MSW build settings
 
@@ -87,7 +102,7 @@ HYBRID = 1         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '233'   # Version part of wxWindows DLL name
+WXDLLVER = '240'   # Version part of wxWindows DLL name
 
 
 #----------------------------------------------------------------------
@@ -134,6 +149,15 @@ if bcpp_compiling:
     WXDLLVER="" # no dll ver path avaible
 
 
+# change the PORT default for wxMac
+if sys.platform[:6] == "darwin":
+    WXPORT = 'mac'
+
+# and do the same for wxMSW, just for consistency
+if os.name == 'nt':
+    WXPORT = 'msw'
+
+
 #----------------------------------------------------------------------
 # Check for build flags on the command line
 #----------------------------------------------------------------------
@@ -152,7 +176,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
                 sys.argv[x] = ''
 
 # String options
-for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE']:
+for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT']:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], option) == 0:
             pos = string.find(sys.argv[x], '=') + 1
@@ -163,6 +187,40 @@ for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE']:
 sys.argv = filter(None, sys.argv)
 
 
+#----------------------------------------------------------------------
+
+def Verify_WX_CONFIG():
+    """ Called below for the builds that need wx-config,
+        if WX_CONFIG is not set then tries to select the specific
+        wx*-config script based on build options.  If not found
+        then it defaults to 'wx-config'.
+    """
+    # if WX_CONFIG hasn't been set to an explicit value then construct one.
+    global WX_CONFIG
+    if WX_CONFIG is None:
+        if debug:             # TODO: Fix this.  wxPython's --debug shouldn't be tied to wxWindows...
+            df = 'd'
+        else:
+            df = ''
+        if UNICODE:
+            uf = 'u'
+        else:
+            uf = ''
+        ver2 = VERSION[:3]
+        WX_CONFIG = 'wx%s%s%s-%s-config' % (WXPORT, uf, df, ver2)
+
+        searchpath = os.environ["PATH"]
+        for p in string.split(searchpath, ':'):
+            fp = os.path.join(p, WX_CONFIG)
+            if os.path.exists(fp) and os.access(fp, os.X_OK):
+                # success
+                print "Found wx-config: " + fp
+                WX_CONFIG = fp
+                break
+        else:
+            print "WX_CONFIG not specified and %s not found on $PATH " \
+                  "defaulting to \"wx-config\"" % WX_CONFIG
+            WX_CONFIG = 'wx-config'
 
 #----------------------------------------------------------------------
 # sanity checks
@@ -176,15 +234,15 @@ if CORE_ONLY:
     BUILD_DLLWIDGET = 0
     BUILD_IEWIN = 0
 
+if debug:
+    FINAL  = 0
+    HYBRID = 0
 
-if UNICODE and os.name != 'nt':
-    print "UNICODE is currently only supported on Win32"
-    sys.exit()
+if FINAL:
+    HYBRID = 0
 
-
-if UNICODE:
-    BUILD_BASE = BUILD_BASE + '.unicode'
-    VERSION = VERSION + 'u'
+if UNICODE and WXPORT not in ['msw', 'gtk2']:
+    raise SystemExit, "UNICODE mode not surrently supported on this WXPORT: "+WXPORT
 
 
 #----------------------------------------------------------------------
@@ -202,13 +260,6 @@ if os.name == 'nt':
         WXDIR = '..'  # assumes in CVS tree
     WXPLAT = '__WXMSW__'
     GENDIR = 'msw'
-
-    if debug:
-        FINAL  = 0
-        HYBRID = 0
-
-    if HYBRID:
-        FINAL = 0
 
     includes = ['src',
                 opj(WXDIR, 'lib', 'mswdll' + libFlag()),
@@ -291,10 +342,9 @@ if os.name == 'nt':
 
 
 
-
+#----------------------------------------------------------------------
 elif os.name == 'posix' and sys.platform[:6] == "darwin":
     # Flags and such for a Darwin (Max OS X) build of Python
-
     WXDIR = '..'              # assumes IN_CVS_TREE
     WXPLAT = '__WXMAC__'
     GENDIR = 'mac'
@@ -305,7 +355,9 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
                ('WXP_USE_THREAD', '1'),
                ]
     libdirs = []
-    libs = []
+    libs = ['stdc++']
+
+    Verify_WX_CONFIG()
 
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
     cflags = string.split(cflags)
@@ -319,14 +371,30 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     lflags = string.split(lflags)
 
     NO_SCRIPTS = 1
+    BUILD_DLLWIDGET = 0
 
 
+#----------------------------------------------------------------------
 elif os.name == 'posix':
-    # Set flags for Unix type platforms
-
+    # Set flags for other Unix type platforms
     WXDIR = '..'              # assumes IN_CVS_TREE
-    WXPLAT = '__WXGTK__'      # and assumes GTK...
-    GENDIR = 'gtk'            # Need to allow for Motif eventually too
+    GENDIR = WXPORT
+
+    if WXPORT == 'gtk':
+        WXPLAT = '__WXGTK__'
+        portcfg = os.popen('gtk-config --cflags', 'r').read()[:-1]
+    elif WXPORT == 'gtk2':
+        WXPLAT = '__WXGTK__'
+        GENDIR = 'gtk' # no code differences so use the same generated sources
+        portcfg = os.popen('pkg-config gtk+-2.0 --cflags', 'r').read()[:-1]
+        BUILD_BASE = BUILD_BASE + '-' + WXPORT
+        print "got here..."
+    elif WXPORT == 'x11':
+        WXPLAT = '__WXX11__'
+        portcfg = ''
+        BUILD_BASE = BUILD_BASE + '-' + WXPORT
+    else:
+        raise SystemExit, "Unknown WXPORT value: " + WXPORT
 
     includes = ['src']
     defines = [('SWIG_GLOBAL', None),
@@ -336,8 +404,10 @@ elif os.name == 'posix':
     libdirs = []
     libs = []
 
-    cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + \
-             os.popen('gtk-config --cflags', 'r').read()[:-1]
+    Verify_WX_CONFIG()
+
+    cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + portcfg
+
     cflags = string.split(cflags)
     if UNDEF_NDEBUG:
         cflags.append('-UNDEBUG')
@@ -348,16 +418,34 @@ elif os.name == 'posix':
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
 
+    # Some distros (e.g. Mandrake) put libGLU in /usr/X11R6/lib, but
+    # wx-config doesn't output that for some reason.  For now, just
+    # add it unconditionally but we should really check if the lib is
+    # really found there or wx-config should be fixed.
+    libdirs.append("/usr/X11R6/lib")
 
+
+#----------------------------------------------------------------------
 else:
     raise 'Sorry Charlie...'
+
+
+#----------------------------------------------------------------------
+# post platform setup checks and tweaks
+#----------------------------------------------------------------------
+
+if UNICODE:
+    BUILD_BASE = BUILD_BASE + '.unicode'
+    VERSION = VERSION + 'u'
 
 
 #----------------------------------------------------------------------
 # Check if the version file needs updated
 #----------------------------------------------------------------------
 
-#if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
+# Always do it since the version string can change based on the UNICODE flag
+
+##if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
 open('src/__version__.py', 'w').write("ver = '%s'\n" % VERSION)
 
 
@@ -786,6 +874,7 @@ if not GL_ONLY and BUILD_XRC:
                                 '%s/xh_radbt.cpp' % XMLLOC,
                                 '%s/xh_radbx.cpp' % XMLLOC,
                                 '%s/xh_scrol.cpp' % XMLLOC,
+                                '%s/xh_scwin.cpp' % XMLLOC,
 
                                 '%s/xh_sizer.cpp' % XMLLOC,
                                 '%s/xh_slidr.cpp' % XMLLOC,
@@ -899,6 +988,119 @@ if not GL_ONLY and BUILD_DLLWIDGET:
 
 
 #----------------------------------------------------------------------
+# Define the CANVAS extension module
+#----------------------------------------------------------------------
+
+if not GL_ONLY and BUILD_CANVAS:
+    msg('Preparing CANVAS...')
+    location = 'contrib/canvas'
+    CANVASLOC = opj(location, 'contrib/src/canvas')
+    CANVASINC = opj(location, 'contrib/include')
+
+    swig_files = ['canvas.i']
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps)
+
+    if IN_CVS_TREE:
+        # make sure local copy of contrib files are up to date
+        contrib_copy_tree(opj(CTRB_INC, 'canvas'), opj(CANVASINC, 'wx/canvas'))
+        contrib_copy_tree(opj(CTRB_SRC, 'canvas'), CANVASLOC)
+
+    ext = Extension('canvasc', ['%s/bbox.cpp' % CANVASLOC,
+                                '%s/liner.cpp' % CANVASLOC,
+                                '%s/polygon.cpp' % CANVASLOC,
+                                '%s/canvas.cpp' % CANVASLOC,
+                                ] + swig_sources,
+
+                    include_dirs = [CANVASINC] + includes,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+#----------------------------------------------------------------------
+# Define the ART2D extension module
+#----------------------------------------------------------------------
+
+if not GL_ONLY and BUILD_ART2D:
+    msg('Preparing ART2D...')
+    location = 'contrib/art2d'
+    ART2DLOC = opj(location, 'modules/canvas/src')
+    ART2DINC = opj(location, 'modules/canvas/include')
+    EXPATLOC = opj(location, 'modules/expat')
+    EXPATINC = opj(location, 'modules/expat/include')
+
+    swig_files = ['art2d.i',
+                  'art2d_misc.i',
+                  'art2d_base.i',
+                  'art2d_canvas.i',
+                  ]
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps)
+
+    if IN_CVS_TREE:
+        # Don't copy data in this case as the code snapshots are
+        # taken manually
+        pass
+
+    ext = Extension('art2dc', [ opj(ART2DLOC, 'afmatrix.cpp'),
+                                opj(ART2DLOC, 'bbox.cpp'),
+                                opj(ART2DLOC, 'cancom.cpp'),
+                                opj(ART2DLOC, 'candoc.cpp'),
+                                opj(ART2DLOC, 'canglob.cpp'),
+                                opj(ART2DLOC, 'canobj3d.cpp'),
+                                opj(ART2DLOC, 'canobj.cpp'),
+                                opj(ART2DLOC, 'canprim.cpp'),
+                                opj(ART2DLOC, 'canprop.cpp'),
+                                opj(ART2DLOC, 'canvas.cpp'),
+                                opj(ART2DLOC, 'docviewref.cpp'),
+                                opj(ART2DLOC, 'drawer.cpp'),
+                                opj(ART2DLOC, 'eval.cpp'),
+                                opj(ART2DLOC, 'graph.cpp'),
+                                opj(ART2DLOC, 'layerinf.cpp'),
+                                opj(ART2DLOC, 'liner.cpp'),
+                                opj(ART2DLOC, 'meta.cpp'),
+                                opj(ART2DLOC, 'objlist.cpp'),
+                                opj(ART2DLOC, 'polygon.cpp'),
+                                opj(ART2DLOC, 'recur.cpp'),
+                                opj(ART2DLOC, 'rendimg.cpp'),
+                                opj(ART2DLOC, 'tools.cpp'),
+                                opj(ART2DLOC, 'vpath.cpp'),
+                                opj(ART2DLOC, 'xmlpars.cpp'),
+
+                                opj(EXPATLOC, 'xmlparse/xmlparse.c'),
+                                opj(EXPATLOC, 'xmltok/xmlrole.c'),
+                                opj(EXPATLOC, 'xmltok/xmltok.c'),
+
+                                ] + swig_sources,
+
+                    include_dirs = [ ART2DINC,
+                                     EXPATINC,
+                                     opj(EXPATLOC, 'xmltok'),
+                                     opj(EXPATLOC, 'xmlparse'),
+                                     ] + includes,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+#----------------------------------------------------------------------
 # Tools and scripts
 #----------------------------------------------------------------------
 
@@ -914,7 +1116,8 @@ if not GL_ONLY and BUILD_DLLWIDGET:
 if NO_SCRIPTS:
     SCRIPTS = None
 else:
-    SCRIPTS = [opj('scripts/img2png'),
+    SCRIPTS = [opj('scripts/helpviewer'),
+               opj('scripts/img2png'),
                opj('scripts/img2xpm'),
                opj('scripts/img2py'),
                opj('scripts/xrced'),

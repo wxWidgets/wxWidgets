@@ -235,7 +235,7 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
             {
     			wxTheApp->m_macCurrentEvent = &rec ;
                 wxWindow* focus = wxWindow::FindFocus() ;
-                if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
+                if ( (focus != NULL) && !UMAMenuEvent(&rec) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
                 {
                     // was handled internally
                     result = noErr ;
@@ -322,7 +322,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         }
         else
         {
+#if TARGET_CARBON
             wclass = kPlainWindowClass ;
+#else
+            wclass = kFloatingWindowClass ;
+#endif
         }
     }
     else if ( HasFlag( wxCAPTION ) )
@@ -345,7 +349,11 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         }
         else
         {
+#if TARGET_CARBON
             wclass = kPlainWindowClass ;
+#else
+            wclass = kModalWindowClass ;
+#endif
         }
     }
     
@@ -604,8 +612,8 @@ bool wxTopLevelWindowMac::Show(bool show)
         return FALSE;
 
     if (show)
-    {
-      ::ShowWindow( (WindowRef)m_macWindow ) ;
+    { 
+      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
       ::SelectWindow( (WindowRef)m_macWindow ) ;
       // no need to generate events here, they will get them triggered by macos
       // actually they should be , but apparently they are not
@@ -616,7 +624,7 @@ bool wxTopLevelWindowMac::Show(bool show)
     }
     else
     {
-      ::HideWindow( (WindowRef)m_macWindow ) ;
+      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
     }
 
     if ( !show )
@@ -675,9 +683,13 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
         
         if ( doResize )
             ::SizeWindow((WindowRef)m_macWindow, m_width, m_height  , true); 
+            
+        // the OS takes care of invalidating and erasing the new area so we only have to
+        // take care of refreshing for full repaints
+
+        if ( doResize && !HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
+            Refresh() ;
         
-        // the OS takes care of invalidating and erasing the new area
-        // we have erased the old one   
         
         if ( IsKindOf( CLASSINFO( wxFrame ) ) )
         {

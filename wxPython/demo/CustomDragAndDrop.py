@@ -124,7 +124,8 @@ class DoodleDropTarget(wxPyDropTarget):
         self.dv = window
 
         # specify the type of data we will accept
-        self.data = wxCustomDataObject(wxCustomDataFormat("DoodleLines"))
+        self.df = wxCustomDataFormat("DoodleLines")
+        self.data = wxCustomDataObject(self.df)
         self.SetDataObject(self.data)
 
 
@@ -326,21 +327,20 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------
 
 
+overview = """<html><body>
+This demo shows Drag and Drop using a custom data type and a custom
+data object.  A type called "DoodleLines" is created and a Python
+Pickle of a list is actually transfered in the drag and drop
+opperation.
 
+A second data object is also created containing a bitmap of the image
+and is made available to any drop target that accepts bitmaps, such as
+MS Word.
 
-
-
-
-
-
-
-
-
-overview = """\
-This demo shows Drag and Drop using a custom data type and a custom data object.  A type called "DoodleLines" is created and a Python Pickle of a list is actually transfered in the drag and drop opperation.
-
-A second data object is also created containing a bitmap of the image and is made available to any drop target that accepts bitmaps, such as MS Word.
-
-The two data objects are combined in a wxDataObjectComposite and the rest is handled by the framework.
+The two data objects are combined in a wxDataObjectComposite and the
+rest is handled by the framework.
+</body></html>
 """
+
+
 

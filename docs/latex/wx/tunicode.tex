@@ -160,7 +160,7 @@ Although everything works fine inside the program, things can get nasty when
 it tries to communicate with the outside world which, sadly, often expects
 ANSI strings (a notable exception is the entire Win32 API which accepts either
 Unicode or ANSI strings and which thus makes it unnecessary to ever perform
-any conversions in the program).
+any conversions in the program). GTK 2.0 only accepts UTF-8 strings.
 
 To get a ANSI string from a wxString, you may use the 
 mb\_str() function which always returns an ANSI
@@ -175,7 +175,8 @@ the Unicode string.
 \subsection{Unicode-related compilation settings}
 
 You should define {\tt wxUSE\_UNICODE} to $1$ to compile your program in
-Unicode mode. Note that it currently only works in Win32 and that some parts of
+Unicode mode. Note that it currently only works in Win32 and GTK 2.0 and
+that some parts of
 wxWindows are not Unicode-compliant yet (ODBC classes, for example). If you
 compile your program in ANSI mode you can still define {\tt wxUSE\_WCHAR\_T} 
 to get some limited support for {\tt wchar\_t} type.

@@ -118,6 +118,10 @@ class wxFontPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def wxFontFromNativeInfoString(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_wxFontFromNativeInfoString,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
+        return val
     def __del__(self,fontsc=fontsc):
         if self.thisown == 1 :
             fontsc.delete_wxFont(self)
@@ -193,6 +197,12 @@ class wxFontPtr(wxObjectPtr):
         return val
     def GetWeightString(self, *_args, **_kwargs):
         val = apply(fontsc.wxFont_GetWeightString,(self,) + _args, _kwargs)
+        return val
+    def SetNoAntiAliasing(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_SetNoAntiAliasing,(self,) + _args, _kwargs)
+        return val
+    def GetNoAntiAliasing(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_GetNoAntiAliasing,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxFont instance at %s>" % (self.this,)
@@ -483,6 +493,10 @@ wxFONTENCODING_CP1257 = fontsc.wxFONTENCODING_CP1257
 wxFONTENCODING_CP12_MAX = fontsc.wxFONTENCODING_CP12_MAX
 wxFONTENCODING_UTF7 = fontsc.wxFONTENCODING_UTF7
 wxFONTENCODING_UTF8 = fontsc.wxFONTENCODING_UTF8
+wxFONTENCODING_GB2312 = fontsc.wxFONTENCODING_GB2312
+wxFONTENCODING_BIG5 = fontsc.wxFONTENCODING_BIG5
+wxFONTENCODING_SHIFT_JIS = fontsc.wxFONTENCODING_SHIFT_JIS
+wxFONTENCODING_EUC_JP = fontsc.wxFONTENCODING_EUC_JP
 wxFONTENCODING_UNICODE = fontsc.wxFONTENCODING_UNICODE
 wxFONTENCODING_MAX = fontsc.wxFONTENCODING_MAX
 wxLANGUAGE_DEFAULT = fontsc.wxLANGUAGE_DEFAULT

@@ -589,19 +589,26 @@ $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
         cd $(THISDIR)
 
+# This target does two sets of HTML: one using a style sheet, for
+# the purposes of the CHM file, and one without.
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
         -mkdir $(DOCDIR)\html\wx
         copy *.gif $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
+        -mkdir $(DOCDIR)\mshtml
+        -mkdir $(DOCDIR)\mshtml\wx
+        copy *.gif $(DOCDIR)\mshtml\wx
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\mshtml\wx\wx.htm -twice -html -macros $(DOCDIR)\latex\wx\tex2rtf_css.ini
         -erase $(DOCDIR)\html\wx\*.con
         -erase $(DOCDIR)\html\wx\*.ref
         -erase $(DOCDIR)\latex\wx\*.con
         -erase $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
 
-$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
-	cd $(DOCDIR)\html\wx
+$(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.hhp
+	cd $(DOCDIR)\mshtml\wx
+    copy $(DOCDIR)\latex\wx\wx.css .
 	-hhc wx.hhp
     -mkdir ..\..\htmlhelp
     -erase $(DOCDIR)\htmlhelp\wx.chm

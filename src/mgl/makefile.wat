@@ -303,7 +303,6 @@ HTMLOBJS = helpctrl.obj &
 	m_layout.obj &
 	m_links.obj &
 	m_list.obj &
-	m_meta.obj &
 	m_pre.obj &
 	m_style.obj &
 	m_tables.obj &
@@ -1138,9 +1137,6 @@ m_links.obj:     $(HTMLDIR)\m_links.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 m_list.obj:     $(HTMLDIR)\m_list.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-m_meta.obj:     $(HTMLDIR)\m_meta.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 m_pre.obj:     $(HTMLDIR)\m_pre.cpp

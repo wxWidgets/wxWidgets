@@ -859,7 +859,7 @@ static PyObject *_wrap_wxNotebook_GetPageText(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2541,8 +2541,7 @@ static PyObject *_wrap_wxTaskBarIcon_SetIcon(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTaskBarIcon_SetIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -3494,8 +3493,7 @@ static PyObject *_wrap_new_wxPyControl(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxPyControl. Expected _wxValidator_p.");
         return NULL;
         }

@@ -129,8 +129,12 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
         flags = ILC_COLOR32;
 
     bool mask = (image.GetMask() != 0);
-    if ( mask )
-        flags |= ILC_MASK;
+
+    // Curiously, even if the image doesn't have a mask,
+    // we still have to use ILC_MASK or the image won't show
+    // up when dragged.
+//    if ( mask )
+    flags |= ILC_MASK;
 
     m_hImageList = (WXHIMAGELIST) ImageList_Create(image.GetWidth(), image.GetHeight(), flags, 1, 1);
 

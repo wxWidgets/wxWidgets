@@ -5,14 +5,16 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython.wx import *
-from wxPython.stc import *
+from wxPython import wx
+from wxPython import stc
 from version import VERSION
 import inspect
 import introspect
 import keyword
 import sys
 import types
+
+True, False = 1, 0
 
 COMMONTYPES = [getattr(types, t) for t in dir(types) \
                if not t.startswith('_') \
@@ -23,40 +25,40 @@ except AttributeError:
     pass
 
 
-class FillingTree(wxTreeCtrl):
+class FillingTree(wx.wxTreeCtrl):
     """PyCrust FillingTree based on wxTreeCtrl."""
     
     name = 'PyCrust Filling Tree'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
-                 size=wxDefaultSize, style=wxTR_HAS_BUTTONS, \
+    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition, 
+                 size=wx.wxDefaultSize, style=wx.wxTR_HAS_BUTTONS, 
                  rootObject=None, rootLabel=None, rootIsNamespace=0):
         """Create a PyCrust FillingTree instance."""
-        wxTreeCtrl.__init__(self, parent, id, pos, size)
+        wx.wxTreeCtrl.__init__(self, parent, id, pos, size)
         self.rootIsNamespace = rootIsNamespace
         if not rootObject:
             import __main__
             rootObject = __main__
             self.rootIsNamespace = 1
         if not rootLabel: rootLabel = 'Ingredients'
-        rootData = wxTreeItemData(rootObject)
+        rootData = wx.wxTreeItemData(rootObject)
         self.root = self.AddRoot(rootLabel, -1, -1, rootData)
         self.SetItemHasChildren(self.root, self.hasChildren(self.root))
-        EVT_TREE_ITEM_EXPANDING(self, self.GetId(), self.OnItemExpanding)
-        EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
-        EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
+        wx.EVT_TREE_ITEM_EXPANDING(self, self.GetId(), self.OnItemExpanding)
+        wx.EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
+        wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
 
     def hasChildren(self, o):
         """Return true if object has children."""
         if self.getChildren(o):
-            return true
+            return True
         else:
-            return false
+            return False
 
     def getChildren(self, o):
         """Return a dictionary with the attributes or contents of object."""
-        busy = wxBusyCursor()
+        busy = wx.wxBusyCursor()
         otype = type(o)
         if (otype is types.DictType) \
         or str(otype)[17:23] == 'BTrees' and hasattr(o, 'keys'):
@@ -78,7 +80,7 @@ class FillingTree(wxTreeCtrl):
         return d
 
     def OnItemExpanding(self, event):
-        busy = wxBusyCursor()
+        busy = wx.wxBusyCursor()
         selection = event.GetItem()
         if self.IsExpanded(selection):
             return
@@ -100,23 +102,27 @@ class FillingTree(wxTreeCtrl):
             and (selection != self.root \
                  or (selection == self.root and not self.rootIsNamespace)):
                 itemtext = repr(item)
-            child = self.AppendItem(selection, itemtext, -1, -1, \
-                                    wxTreeItemData(children[item]))
+            child = self.AppendItem(selection, itemtext, -1, -1, 
+                                    wx.wxTreeItemData(children[item]))
             self.SetItemHasChildren(child, self.hasChildren(children[item]))
 
     def OnItemCollapsed(self, event):
         """Remove all children from the item."""
-        busy = wxBusyCursor()
+        busy = wx.wxBusyCursor()
         item = event.GetItem()
         self.DeleteChildren(item)
 
     def OnSelChanged(self, event):
-        busy = wxBusyCursor()
+        busy = wx.wxBusyCursor()
+        self.setText('')
         item = event.GetItem()
         if item == self.root:
-            self.setText('')
+            del busy
             return
         o = self.GetPyData(item)
+        if o is None: # Windows bug fix.
+            del busy
+            return
         otype = type(o)
         text = ''
         text += self.getFullName(item)
@@ -128,25 +134,24 @@ class FillingTree(wxTreeCtrl):
         if otype is types.StringType or otype is types.UnicodeType:
             value = repr(o)
         text += '\n\nValue: ' + value
+        try:
+            text += '\n\nDocstring:\n\n"""\n' + inspect.getdoc(o).strip() + '\n"""'
+        except:
+            pass
         if otype is types.InstanceType:
             try:
                 text += '\n\nClass Definition:\n\n' + \
                         inspect.getsource(o.__class__)
             except:
-                try:
-                    text += '\n\n"""' + inspect.getdoc(o).strip() + '"""'
-                except:
-                    pass
+                pass
         else:
             try:
                 text += '\n\nSource Code:\n\n' + \
                         inspect.getsource(o)
             except:
-                try:
-                    text += '\n\n"""' + inspect.getdoc(o).strip() + '"""'
-                except:
-                    pass
+                pass
         self.setText(text)
+        del busy
 
     def getFullName(self, item, partial=''):
         """Return a syntactically proper name for item."""
@@ -189,7 +194,7 @@ class FillingTree(wxTreeCtrl):
         print text
 
 
-if wxPlatform == '__WXMSW__':
+if wx.wxPlatform == '__WXMSW__':
     faces = { 'times'  : 'Times New Roman',
               'mono'   : 'Courier New',
               'helv'   : 'Lucida Console',
@@ -201,8 +206,8 @@ if wxPlatform == '__WXMSW__':
             }
     # Versions of wxPython prior to 2.3.2 had a sizing bug on Win platform.
     # The font was 2 points too large. So we need to reduce the font size.
-    if ((wxMAJOR_VERSION, wxMINOR_VERSION) == (2, 3) and wxRELEASE_NUMBER < 2) \
-    or (wxMAJOR_VERSION <= 2 and wxMINOR_VERSION <= 2):
+    if ((wx.wxMAJOR_VERSION, wx.wxMINOR_VERSION) == (2, 3) and wx.wxRELEASE_NUMBER < 2) \
+    or (wx.wxMAJOR_VERSION <= 2 and wx.wxMINOR_VERSION <= 2):
         faces['size'] -= 2
         faces['lnsize'] -= 2
 else:  # GTK
@@ -216,16 +221,16 @@ else:  # GTK
             }
 
 
-class FillingText(wxStyledTextCtrl):
+class FillingText(stc.wxStyledTextCtrl):
     """PyCrust FillingText based on wxStyledTextCtrl."""
     
     name = 'PyCrust Filling Text'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
-                 size=wxDefaultSize, style=wxCLIP_CHILDREN):
+    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition, 
+                 size=wx.wxDefaultSize, style=wx.wxCLIP_CHILDREN):
         """Create a PyCrust FillingText instance."""
-        wxStyledTextCtrl.__init__(self, parent, id, pos, size, style)
+        stc.wxStyledTextCtrl.__init__(self, parent, id, pos, size, style)
         # Configure various defaults and user preferences.
         self.config()
 
@@ -233,7 +238,7 @@ class FillingText(wxStyledTextCtrl):
         """Configure shell based on user preferences."""
         self.SetMarginWidth(1, 0)
         
-        self.SetLexer(wxSTC_LEX_PYTHON)
+        self.SetLexer(stc.wxSTC_LEX_PYTHON)
         self.SetKeyWords(0, ' '.join(keyword.kwlist))
 
         self.setStyles(faces)
@@ -250,51 +255,51 @@ class FillingText(wxStyledTextCtrl):
         """Configure font size, typeface and color for lexer."""
         
         # Default style
-        self.StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d" % faces)
+        self.StyleSetSpec(stc.wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d" % faces)
 
         self.StyleClearAll()
 
         # Built in styles
-        self.StyleSetSpec(wxSTC_STYLE_LINENUMBER, "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % faces)
-        self.StyleSetSpec(wxSTC_STYLE_CONTROLCHAR, "face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT, "fore:#0000FF,back:#FFFF88")
-        self.StyleSetSpec(wxSTC_STYLE_BRACEBAD, "fore:#FF0000,back:#FFFF88")
+        self.StyleSetSpec(stc.wxSTC_STYLE_LINENUMBER, "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % faces)
+        self.StyleSetSpec(stc.wxSTC_STYLE_CONTROLCHAR, "face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_STYLE_BRACELIGHT, "fore:#0000FF,back:#FFFF88")
+        self.StyleSetSpec(stc.wxSTC_STYLE_BRACEBAD, "fore:#FF0000,back:#FFFF88")
 
         # Python styles
-        self.StyleSetSpec(wxSTC_P_DEFAULT, "face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_NUMBER, "")
-        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,face:%(mono)s" % faces)
-        self.StyleSetSpec(wxSTC_P_WORD, "fore:#00007F,bold")
-        self.StyleSetSpec(wxSTC_P_TRIPLE, "fore:#7F0000")
-        self.StyleSetSpec(wxSTC_P_TRIPLEDOUBLE, "fore:#000033,back:#FFFFE8")
-        self.StyleSetSpec(wxSTC_P_CLASSNAME, "fore:#0000FF,bold")
-        self.StyleSetSpec(wxSTC_P_DEFNAME, "fore:#007F7F,bold")
-        self.StyleSetSpec(wxSTC_P_OPERATOR, "")
-        self.StyleSetSpec(wxSTC_P_IDENTIFIER, "")
-        self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
-        self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_DEFAULT, "face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_NUMBER, "")
+        self.StyleSetSpec(stc.wxSTC_P_STRING, "fore:#7F007F,face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_CHARACTER, "fore:#7F007F,face:%(mono)s" % faces)
+        self.StyleSetSpec(stc.wxSTC_P_WORD, "fore:#00007F,bold")
+        self.StyleSetSpec(stc.wxSTC_P_TRIPLE, "fore:#7F0000")
+        self.StyleSetSpec(stc.wxSTC_P_TRIPLEDOUBLE, "fore:#000033,back:#FFFFE8")
+        self.StyleSetSpec(stc.wxSTC_P_CLASSNAME, "fore:#0000FF,bold")
+        self.StyleSetSpec(stc.wxSTC_P_DEFNAME, "fore:#007F7F,bold")
+        self.StyleSetSpec(stc.wxSTC_P_OPERATOR, "")
+        self.StyleSetSpec(stc.wxSTC_P_IDENTIFIER, "")
+        self.StyleSetSpec(stc.wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
+        self.StyleSetSpec(stc.wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
 
     def SetText(self, *args, **kwds):
         self.SetReadOnly(0)
-        wxStyledTextCtrl.SetText(self, *args, **kwds)
+        stc.wxStyledTextCtrl.SetText(self, *args, **kwds)
         self.SetReadOnly(1)
 
 
-class Filling(wxSplitterWindow):
+class Filling(wx.wxSplitterWindow):
     """PyCrust Filling based on wxSplitterWindow."""
     
     name = 'PyCrust Filling'
     revision = __revision__
     
-    def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
-                 size=wxDefaultSize, style=wxSP_3D, name='Filling Window', \
+    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition, 
+                 size=wx.wxDefaultSize, style=wx.wxSP_3D, name='Filling Window', 
                  rootObject=None, rootLabel=None, rootIsNamespace=0):
         """Create a PyCrust Filling instance."""
-        wxSplitterWindow.__init__(self, parent, id, pos, size, style, name)
-        self.fillingTree = FillingTree(parent=self, rootObject=rootObject, \
-                                       rootLabel=rootLabel, \
+        wx.wxSplitterWindow.__init__(self, parent, id, pos, size, style, name)
+        self.fillingTree = FillingTree(parent=self, rootObject=rootObject, 
+                                       rootLabel=rootLabel, 
                                        rootIsNamespace=rootIsNamespace)
         self.fillingText = FillingText(parent=self)
         self.SplitVertically(self.fillingTree, self.fillingText, 200)
@@ -305,41 +310,39 @@ class Filling(wxSplitterWindow):
         self.fillingTree.SelectItem(self.fillingTree.root)
 
 
-class FillingFrame(wxFrame):
+class FillingFrame(wx.wxFrame):
     """Frame containing the PyCrust filling, or namespace tree component."""
     
     name = 'PyCrust Filling Frame'
     revision = __revision__
     
-    def __init__(self, parent=None, id=-1, title='PyFilling', \
-                 pos=wxDefaultPosition, size=wxDefaultSize, \
-                 style=wxDEFAULT_FRAME_STYLE, rootObject=None, \
+    def __init__(self, parent=None, id=-1, title='PyFilling', 
+                 pos=wx.wxDefaultPosition, size=wx.wxDefaultSize, 
+                 style=wx.wxDEFAULT_FRAME_STYLE, rootObject=None, 
                  rootLabel=None, rootIsNamespace=0):
         """Create a PyCrust FillingFrame instance."""
-        wxFrame.__init__(self, parent, id, title, pos, size, style)
+        wx.wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyFilling - The Tastiest Namespace Inspector'
         self.CreateStatusBar()
         self.SetStatusText(intro)
-        if wxPlatform == '__WXMSW__':
-            import os
-            filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
-            icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
-            self.SetIcon(icon)
-        self.filling = Filling(parent=self, rootObject=rootObject, \
-                               rootLabel=rootLabel, \
+        import images
+        self.SetIcon(images.getPyCrustIcon())
+        self.filling = Filling(parent=self, rootObject=rootObject, 
+                               rootLabel=rootLabel, 
                                rootIsNamespace=rootIsNamespace)
         # Override the filling so that status messages go to the status bar.
         self.filling.fillingTree.setStatusText = self.SetStatusText
 
 
-class App(wxApp):
+class App(wx.wxApp):
     """PyFilling standalone application."""
     
     def OnInit(self):
+        wx.wxInitAllImageHandlers()
         self.fillingFrame = FillingFrame()
-        self.fillingFrame.Show(true)
+        self.fillingFrame.Show(True)
         self.SetTopWindow(self.fillingFrame)
-        return true
+        return True
 
 
   

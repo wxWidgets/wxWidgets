@@ -30,7 +30,9 @@ class TestTreeCtrlPanel(wxPanel):
         tID = NewId()
 
         self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS# | wxTR_MULTIPLE
+                               wxTR_HAS_BUTTONS
+                               | wxTR_EDIT_LABELS
+                               #| wxTR_MULTIPLE
                                #| wxTR_HIDE_ROOT
                                , self.log)
 
@@ -105,7 +107,19 @@ class TestTreeCtrlPanel(wxPanel):
         if self.tree.GetItemText(event.GetItem()) == "The Root Item":
             wxBell()
             self.log.WriteText("You can't edit this one...\n")
+
+            # Lets just see what's visible of its children
+            cookie = 0
+            root = event.GetItem()
+            (child, cookie) = self.tree.GetFirstChild(root, cookie)
+            while child.IsOk():
+                self.log.WriteText("Child [%s] visible = %d" %
+                                   (self.tree.GetItemText(child),
+                                    self.tree.IsVisible(child)))
+                (child, cookie) = self.tree.GetNextChild(root, cookie)
+
             event.Veto()
+
 
     def OnEndEdit(self, event):
         self.log.WriteText("OnEndEdit\n")

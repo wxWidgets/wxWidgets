@@ -88,7 +88,7 @@ void wxFileTypeImpl::Init(const wxString& strFileType, const wxString& ext)
 
     m_strFileType = strFileType;
     if ( !strFileType ) {
-        m_strFileType = m_ext.AfterFirst('.') + "_auto_file";
+        m_strFileType = m_ext.AfterFirst('.') + _T("_auto_file");
     }
 }
 
@@ -236,6 +236,9 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
                     QueryValue(_T(""), ddeServer);
                 wxRegKey(wxRegKey::HKCR, strKey + _T("\\Topic")).
                     QueryValue(_T(""), ddeTopic);
+
+                if (ddeTopic.IsEmpty())
+                    ddeTopic = wxT("System");
 
                 // HACK: we use a special feature of wxExecute which exists
                 //       just because we need it here: it will establish DDE

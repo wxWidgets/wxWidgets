@@ -29,6 +29,10 @@
 
 #include "wx/gizmos/dynamicsash.h"
 
+
+const wxChar* wxDynamicSashWindowNameStr = wxT("dynamicSashWindow");
+
+
 /*
     wxDynamicSashWindow works by internally storing a tree of Implementation
     objects (wxDynamicSsahWindowImpl) and Leaf objects

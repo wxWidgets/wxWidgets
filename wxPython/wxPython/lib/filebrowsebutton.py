@@ -99,7 +99,7 @@ class FileBrowseButton(wxPanel):
         box.Add( self.textControl, 1, wxLEFT|wxCENTER, 5)
 
         self.browseButton = self.createBrowseButton()
-        box.Add( self.browseButton, 0, wxCENTER)
+        box.Add( self.browseButton, 0, wxLEFT|wxCENTER, 5)
 
         # add a border around the whole thing and resize the panel to fit
         outsidebox = wxBoxSizer(wxVERTICAL)

@@ -1,6 +1,7 @@
 *.pyc
 .DS_Store
 .emacs.desktop
+.setup.sh
 b.bat
 hangman_dict.txt
 mimetypes_wdr

@@ -59,8 +59,8 @@ del /sxzy %BASE%\include\wx\x11\nanox\X11\CVS
 
 rem *** bundle it all up
 cd _distrib_zip
-tar cvf ..\dist\wxPythonWIN32-devel-%1.tar wxPython-%1
-gzip -9 ..\dist\wxPythonWIN32-devel-%1.tar
+tar cvf ../dist/wxPythonWIN32-devel-%1.tar wxPython-%1
+gzip -9 ../dist/wxPythonWIN32-devel-%1.tar
 
 rem *** cleanup
 cd ..
