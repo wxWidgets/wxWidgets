@@ -583,7 +583,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
         if ( ok )
         {
             // ok, we've created everything correctly
-            ft = m_impl->CreateFileType(filetype, extWithDot);
+            ft = CreateFileType(filetype, extWithDot);
         }
         else
         {
