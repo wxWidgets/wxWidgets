@@ -1206,10 +1206,11 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
 {
     ::SendMessage(GetWinHwnd(win), WM_MDISETMENU,
 #ifdef __WIN32__
-                  (WPARAM)hmenuFrame, (LPARAM)hmenuWindow);
+                  (WPARAM)hmenuFrame, (LPARAM)hmenuWindow
 #else
-                  0, MAKELPARAM(hmenuFrame, hmenuWindow));
+                  0, MAKELPARAM(hmenuFrame, hmenuWindow)
 #endif
+                 );
 
     // update menu bar of the parent window
     wxWindow *parent = win->GetParent();
@@ -1238,18 +1239,18 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
             continue;
         }
 
-        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(wxT("Help")) )
+        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Help")) )
         {
             success = TRUE;
             ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
-                         (UINT)subMenu, wxT("&Window"));
+                         (UINT)subMenu, _("&Window"));
             break;
         }
     }
 
     if ( !success )
     {
-        ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, wxT("&Window"));
+        ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _("&Window"));
     }
     }
 
@@ -1273,7 +1274,7 @@ static void RemoveWindowMenu(wxWindow *win, WXHMENU menu)
             continue;
         }
 
-        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(wxT("Window")) )
+        if ( wxStripMenuCodes(wxString(buf)).IsSameAs(_("Window")) )
         {
             success = TRUE;
             ::RemoveMenu(hmenu, i, MF_BYPOSITION);
