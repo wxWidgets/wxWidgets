@@ -220,6 +220,8 @@ public:
 
     wxPoint GetPosition();
     wxSize GetSize();
+    void SetPosition( const wxPoint &p );
+    void SetSize( const wxSize &s );
 
     int  GetLeft();
     int  GetTop();

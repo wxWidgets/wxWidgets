@@ -28,11 +28,9 @@ rem **** copy the docs into the tree
 md wxPython-%1\docs
 md wxPython-%1\docs\wx
 md wxPython-%1\docs\ogl
-copy %WXWIN%\docs\html\wx\*.gif wxPython-%1\docs\wx
-copy %WXWIN%\docs\html\wx\*.htm wxPython-%1\docs\wx
+copy %WXWIN%\docs\html\wx\*.* wxPython-%1\docs\wx
 copy wxPython-%1\docs\wx\wx.htm wxPython-%1\docs\wx\index.htm
-copy %WXWIN%\docs\html\ogl\*.gif wxPython-%1\docs\ogl
-copy %WXWIN%\docs\html\ogl\*.htm wxPython-%1\docs\ogl
+copy %WXWIN%\docs\html\ogl\*.* wxPython-%1\docs\ogl
 copy wxPython-%1\docs\ogl\ogl.htm wxPython-%1\docs\ogl\index.htm
 
 rem **** zip up the docs

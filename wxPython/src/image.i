@@ -191,6 +191,7 @@ public:
             dataPtr = (unsigned char*) malloc(len);
             memcpy(dataPtr, PyString_AsString(data), len);
             self->SetData(dataPtr);
+            // wxImage takes ownership of dataPtr...
         }
     }
 

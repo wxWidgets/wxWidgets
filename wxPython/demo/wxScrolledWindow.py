@@ -39,6 +39,7 @@ class MyCanvas(wxScrolledWindow):
         EVT_LEFT_UP(self,   self.OnLeftButtonEvent)
         EVT_MOTION(self,    self.OnLeftButtonEvent)
         EVT_PAINT(self, self.OnPaint)
+        ##EVT_MOUSEWHEEL(self, self.OnWheel)
 
 
     def getWidth(self):
@@ -109,7 +110,8 @@ class MyCanvas(wxScrolledWindow):
         for style in [wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, wxUSER_DASH]:
             pen = wxPen("DARK ORCHID", 1, style)
             if style == wxUSER_DASH:
-                pen.SetDashes([1, 2, 3, 4, 5, 6, 7, 8])
+                pen.SetCap(wxCAP_BUTT)
+                pen.SetDashes([1,2])
                 pen.SetColour("RED")
             dc.SetPen(pen)
             dc.DrawLine(300, y, 400, y)
@@ -188,6 +190,7 @@ class MyCanvas(wxScrolledWindow):
 ##         delta = evt.GetWheelDelta()
 ##         rot = evt.GetWheelRotation()
 ##         linesPer = evt.GetLinesPerAction()
+##         print delta, rot, linesPer
 ##         ws = self.wheelScroll
 ##         ws = ws + rot
 ##         lines = ws / delta
