@@ -445,19 +445,19 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     // TODO: Can all of this code go in the conditional wxSL_LABELS block?
     
     int minWidth;
-	minWidth = m_minWidth;
+    minWidth = m_minWidth;
 	
-	if (GetWindowStyle() & wxSL_LABELS)
+    if (GetWindowStyle() & wxSL_LABELS)
     {
-		// make sure we don't allow the entire control to be resized accidently
-		if (width == GetSize().x)
-			m_minWidth = -1;
-	}
+        // make sure we don't allow the entire control to be resized accidently
+        if (width == GetSize().x)
+            m_minWidth = -1;
+    }
 	//If the control has labels, we still need to call this again because
     //the labels alter the control's w and h values.
     wxControl::DoSetSize( x, y , w , h ,sizeFlags ) ;
 
-	m_minWidth = minWidth;
+    m_minWidth = minWidth;
 }
 
 void wxSlider::DoMoveWindow(int x, int y, int width, int height)
