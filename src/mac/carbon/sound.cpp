@@ -2,10 +2,10 @@
 // Name:        sound.cpp
 // Purpose:     wxSound class implementation: optional
 // Author:      Ryan Norton
-// Modified by:
+// Modified by: Stefan Csomor
 // Created:     1998-01-01
 // RCS-ID:      $Id$
-// Copyright:   (c) Ryan Norton, Stefan Csomor
+// Copyright:   (c) Ryan Norton
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -377,6 +377,17 @@ bool wxSound::DoPlay(unsigned flags) const
                 return false;
 
             OSErr err = noErr ;
+//NB:  RN: Stefan - I think the 10.3 path functions are broken if kQTNativeDefaultPathStyle is
+//going to trigger a warning every time it is used - where its _supposed to be used_!!
+//(kQTNativePathStyle is negative but the function argument is unsigned!)
+//../src/mac/carbon/sound.cpp: In member function `virtual bool 
+//   wxSound::DoPlay(unsigned int) const':
+//../src/mac/carbon/sound.cpp:387: warning: passing negative value `
+//   kQTNativeDefaultPathStyle' for argument passing 2 of `OSErr 
+//   QTNewDataReferenceFromFullPathCFString(const __CFString*, long unsigned int, 
+//   long unsigned int, char***, OSType*)'
+//../src/mac/carbon/sound.cpp:387: warning: argument of negative value `
+//   kQTNativeDefaultPathStyle' to `long unsigned int'
 #if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2 )
             if ( UMAGetSystemVersion() >= 0x1030 )
             {
@@ -384,11 +395,17 @@ bool wxSound::DoPlay(unsigned flags) const
                 OSType dataRefType;            
                 
                 err = QTNewDataReferenceFromFullPathCFString(wxMacCFStringHolder(m_sndname,wxLocale::GetSystemEncoding()),
-                    kQTNativeDefaultPathStyle, 0, &dataRef, &dataRefType);
+                    //FIXME: Why does this have to be casted?
+                    (unsigned int)kQTNativeDefaultPathStyle, 
+                    //FIXME: End
+                    0, &dataRef, &dataRefType);
 
-                if (NULL != dataRef) 
+                wxASSERT(err == noErr);
+                
+                if (NULL != dataRef || err != noErr) 
                 {
                     err = NewMovieFromDataRef( &movie, newMovieDontAskUnresolvedDataRefs , NULL, dataRef, dataRefType );
+                    wxASSERT(err == noErr);
                     DisposeHandle(dataRef);
                 }
             }
