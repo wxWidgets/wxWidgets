@@ -51,8 +51,9 @@ FIXME: this template has (at least) the following bugs:
     </set>
     
     <!-- The directory where wxWidgets is installed: -->
+    <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
     <option name="WX_DIR" category="path">
-        <default-value>$(DOLLAR)($(ENV_VAR)WXWIN)</default-value>
+        <default-value>$(WX_DIR_DEFAULT)</default-value>
         <description>
             The directory where wxWidgets library is installed
         </description>
@@ -61,10 +62,11 @@ FIXME: this template has (at least) the following bugs:
     <!--    This is a standard option that determines               -->
     <!--    whether the user wants to build this library as         -->
     <!--    a dll or as a static library.                           -->
+    <set var="WX_SHARED_DEFAULT" overwrite="0">0</set>
     <option name="WX_SHARED">
         <values>0,1</values>
         <values-description>,DLL</values-description>
-        <default-value>0</default-value>
+        <default-value>$(WX_SHARED_DEFAULT)</default-value>
         <description>
             Use DLL build of wx library to use?
         </description>
@@ -72,26 +74,29 @@ FIXME: this template has (at least) the following bugs:
 
     <!-- Configuration for building the bakefile with               -->
     <!-- unicode strings or not (unicode or ansi).                  -->
+    <set var="WX_UNICODE_DEFAULT" overwrite="0">0</set>
     <option name="WX_UNICODE">
         <values>0,1</values>
         <values-description>,Unicode</values-description>
-        <default-value>0</default-value>        
+        <default-value>$(WX_UNICODE_DEFAULT)</default-value>        
         <description>
             Compile Unicode build of wxWidgets?
         </description>
     </option>
 
+    <set var="WX_DEBUG_DEFAULT" overwrite="0">1</set>
     <option name="WX_DEBUG">
         <values>0,1</values>
         <values-description>,Debug</values-description>
-        <default-value>1</default-value>
+        <default-value>$(WX_DEBUG_DEFAULT)</default-value>
         <description>
             Use debug build of wxWidgets (define __WXDEBUG__)?
         </description>
     </option>
 
+    <set var="WX_VERSION_DEFAULT" overwrite="0">25</set>
     <option name="WX_VERSION">
-        <default-value>25</default-value>
+        <default-value>$(WX_VERSION_DEFAULT)</default-value>
         <description>
             Version of the wx library to build against.
         </description>
