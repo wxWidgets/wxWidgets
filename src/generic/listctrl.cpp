@@ -2154,6 +2154,7 @@ void wxListMainWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
   We don't even allow the wxScrolledWindow::AdjustScrollbars() call
 
 */
+    m_dirty = TRUE;
 }
 
 void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
