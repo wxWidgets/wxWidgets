@@ -328,6 +328,8 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     wxMenu* helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, _("&About..."));
+    // Ensures we don't get an empty help menu
+    helpMenu->Append(wxID_HELP_CONTENTS, _("&About..."));
 
     menuBar->Append(fileMenu,_("&File"));
     menuBar->Append(helpMenu,_("&Help"));
@@ -1768,6 +1770,7 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
 #ifdef __WXMAC__
     EVT_MENU(wxID_CLOSE, wxHtmlHelpFrame::OnClose)
     EVT_MENU(wxID_ABOUT, wxHtmlHelpFrame::OnAbout)
+    EVT_MENU(wxID_HELP_CONTENTS, wxHtmlHelpFrame::OnAbout)
 #endif
 
 END_EVENT_TABLE()
