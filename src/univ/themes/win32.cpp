@@ -4204,8 +4204,11 @@ wxWin32StatusBarInputHandler(wxInputHandler *handler)
 bool wxWin32StatusBarInputHandler::IsOnGrip(wxWindow *statbar,
                                             const wxPoint& pt) const
 {
+    wxTopLevelWindow *parentTLW = wxDynamicCast(statbar->GetParent(), wxTopLevelWindow);
+
     if ( statbar->HasFlag(wxST_SIZEGRIP) &&
-            statbar->GetParent()->HasFlag(wxRESIZE_BORDER) )
+            statbar->GetParent()->HasFlag(wxRESIZE_BORDER) &&
+            parentTLW && !parentTLW->IsMaximized() )
     {
         wxSize sizeSbar = statbar->GetSize();
 

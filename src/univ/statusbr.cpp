@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/statusbr.h"
+#include "wx/toplevel.h"
 
 #include "wx/univ/renderer.h"
 
@@ -122,12 +123,15 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
 
         if ( IsExposed(rect) )
         {
+            wxTopLevelWindow *parentTLW = wxDynamicCast(GetParent(), wxTopLevelWindow);
+            
             // the size grip may be drawn only on the last field and only if we
             // have the corresponding style and even then only if we really can
             // resize this frame
             if ( n == m_nFields - 1 &&
                  HasFlag(wxST_SIZEGRIP) &&
-                 GetParent()->HasFlag(wxRESIZE_BORDER) )
+                 GetParent()->HasFlag(wxRESIZE_BORDER) &&
+                 parentTLW && !parentTLW->IsMaximized() )
             {
                 // NB: we use wxCONTROL_ISDEFAULT for this because it doesn't
                 //     have any meaning for the status bar otherwise anyhow
