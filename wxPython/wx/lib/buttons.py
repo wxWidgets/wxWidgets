@@ -202,7 +202,9 @@ class GenButton(wx.PyControl):
         wx.PyControl.SetForegroundColour(self, colour)
         self.InitColours()
 
-
+    def SetDefault(self):
+        self.GetParent().SetDefaultItem(self)
+        
     def _GetLabelSize(self):
         """ used internally """
         w, h = self.GetTextExtent(self.GetLabel())
