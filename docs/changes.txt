@@ -228,6 +228,10 @@ wxUniv:
 
 - fixed refresh problem when message box is shown
 
+wxMac:
+
+- implement wxExecute with proper callback on Mac OS X
+
 2.4.0
 -----
 

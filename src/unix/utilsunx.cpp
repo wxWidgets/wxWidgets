@@ -534,7 +534,7 @@ long wxExecute(wxChar **argv,
     wxChar **mb_argv = argv;
 #endif // Unicode/ANSI
 
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__DARWIN__)
     // create pipes
     wxPipe pipeEndProcDetect;
     if ( !pipeEndProcDetect.Create() )
@@ -545,7 +545,7 @@ long wxExecute(wxChar **argv,
 
         return ERROR_RETURN_CODE;
     }
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && !defined(__DARWIN__)
 
     // pipes for inter process communication
     wxPipe pipeIn,      // stdin
@@ -596,9 +596,9 @@ long wxExecute(wxChar **argv,
                 if ( fd == pipeIn[wxPipe::Read]
                         || fd == pipeOut[wxPipe::Write]
                         || fd == pipeErr[wxPipe::Write]
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__DARWIN__)
                         || fd == pipeEndProcDetect[wxPipe::Write]
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && !defined(__DARWIN__)
                    )
                 {
                     // don't close this one, we still need it
@@ -620,12 +620,12 @@ long wxExecute(wxChar **argv,
         }
 #endif // !__VMS
 
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__DARWIN__)
         // reading side can be safely closed but we should keep the write one
         // opened
         pipeEndProcDetect.Detach(wxPipe::Write);
         pipeEndProcDetect.Close();
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && !defined(__DARWIN__)
 
         // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )
@@ -699,14 +699,9 @@ long wxExecute(wxChar **argv,
 #if wxUSE_GUI && !defined(__WXMICROWIN__)
         wxEndProcessData *data = new wxEndProcessData;
 
-        data->tag = wxAddProcessCallback
-                    (
-                        data,
-                        pipeEndProcDetect.Detach(wxPipe::Read)
-                    );
-
-        pipeEndProcDetect.Close();
-
+        // wxAddProcessCallback is now (with DARWIN) allowed to call the
+        // callback function directly if the process terminates before
+        // the callback can be added to the run loop. Set up the data.
         if ( flags & wxEXEC_SYNC )
         {
             // we may have process for capturing the program output, but it's
@@ -715,7 +710,31 @@ long wxExecute(wxChar **argv,
 
             // sync execution: indicate it by negating the pid
             data->pid = -pid;
+        }
+        else
+        {
+            // async execution, nothing special to do - caller will be
+            // notified about the process termination if process != NULL, data
+            // will be deleted in GTK_EndProcessDetector
+            data->process  = process;
+            data->pid      = pid;
+        }
 
+
+#if defined(__DARWIN__)
+        data->tag = wxAddProcessCallbackForPid(data,pid);
+#else
+        data->tag = wxAddProcessCallback
+                    (
+                        data,
+                        pipeEndProcDetect.Detach(wxPipe::Read)
+                    );
+
+        pipeEndProcDetect.Close();
+#endif // defined(__DARWIN__)
+
+        if ( flags & wxEXEC_SYNC )
+        {
             wxBusyCursor bc;
             wxWindowDisabler wd;
 
@@ -741,12 +760,6 @@ long wxExecute(wxChar **argv,
         }
         else // async execution
         {
-            // async execution, nothing special to do - caller will be
-            // notified about the process termination if process != NULL, data
-            // will be deleted in GTK_EndProcessDetector
-            data->process  = process;
-            data->pid      = pid;
-
             return pid;
         }
 #else // !wxUSE_GUI
