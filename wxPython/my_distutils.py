@@ -185,7 +185,7 @@ class MyBCPPCompiler(BCPPCompiler):
                     # This needs to be compiled to a .res file -- do it now.
                     try:
                         self.spawn (["brcc32"] + pp_opts + ["-fo"] +
-				[obj] + [src]) ### RPD changed this lines only
+                                    [obj] + [src]) ### RPD changed this lines only
                     except DistutilsExecError, msg:
                         raise CompileError, msg
                     continue # the 'for' loop
@@ -222,7 +222,7 @@ class MyBCPPCompiler(BCPPCompiler):
     # with cw32mti library as in wxWindows DLL make file
     # Othervise we obtain Windows "Core dump" ;-).
     #
-    #		Evgeny A Cherkashin <eugeneai@icc.ru>
+    #           Evgeny A Cherkashin <eugeneai@icc.ru>
     #
     ####################################################################
 
@@ -335,7 +335,7 @@ class MyBCPPCompiler(BCPPCompiler):
 
             # some default libraries
             ld_args.append ('import32')
-            ld_args.append ('cw32mti')	### mt->mti (as in wx2)
+            ld_args.append ('cw32mti')  ### mt->mti (as in wx2)
 
             # def file for export symbols
             ld_args.extend([',',def_file])

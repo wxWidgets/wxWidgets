@@ -101,7 +101,7 @@ class PrintBase:
 
         cnt = 0
         for word in split:
-            bword = " " + word	# blank + word
+            bword = " " + word  # blank + word
             length = len(bword)
 
             w, h = self.DC.GetTextExtent(text + bword)

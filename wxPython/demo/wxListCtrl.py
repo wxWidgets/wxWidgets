@@ -203,6 +203,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
 
     def OnItemSelected(self, event):
+        print event.GetItem().GetTextColour()
         self.currentItem = event.m_itemIndex
         self.log.WriteText("OnItemSelected: %s, %s, %s, %s\n" %
                            (self.currentItem,

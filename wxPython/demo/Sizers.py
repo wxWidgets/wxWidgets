@@ -555,12 +555,12 @@ if __name__ == '__main__':
         def __init__(self):
             wxFrame.__init__(self, None, -1, "Testing...")
 
-	    self.CreateStatusBar()
-	    mainmenu = wxMenuBar()
-	    menu = wxMenu()
-	    menu.Append(200, 'E&xit', 'Get the heck outta here!')
-	    mainmenu.Append(menu, "&File")
-	    self.SetMenuBar(mainmenu)
+            self.CreateStatusBar()
+            mainmenu = wxMenuBar()
+            menu = wxMenu()
+            menu.Append(200, 'E&xit', 'Get the heck outta here!')
+            mainmenu.Append(menu, "&File")
+            self.SetMenuBar(mainmenu)
             EVT_MENU(self, 200, self.OnExit)
             self.panel = TestSelectionPanel(self, self)
             self.SetSize(wxSize(400, 380))

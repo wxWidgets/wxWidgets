@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------
 # Name:         CreateBatchFiles.py
-# Purpose:	Run by the InnoSetup installer to create a DOS batch
+# Purpose:      Run by the InnoSetup installer to create a DOS batch
 #               file for each of the wxPython tool scripts.
 #
 # Author:       Robin Dunn

@@ -175,7 +175,7 @@ class PythonSTC(wxStyledTextCtrl):
     def OnUpdateUI(self, evt):
         # check for matching braces
         braceAtCaret = -1
-	braceOpposite = -1
+        braceOpposite = -1
         charBefore = None
         caretPos = self.GetCurrentPos()
         if caretPos > 0:
@@ -260,7 +260,7 @@ class PythonSTC(wxStyledTextCtrl):
 
     def Expand(self, line, doExpand, force=false, visLevels=0, level=-1):
         lastChild = self.GetLastChild(line, level)
-	line = line + 1
+        line = line + 1
         while line <= lastChild:
             if force:
                 if visLevels > 0:

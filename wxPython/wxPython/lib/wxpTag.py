@@ -241,27 +241,27 @@ def _my_import(name):
 def _param2dict(param):
     i = 0; j = 0; s = len(param); d = {}
     while 1:
-	while i<s and param[i] == " " : i = i+1
-	if i>=s: break
-	j = i
-	while j<s and param[j] != "=": j=j+1
-	if j+1>=s:
-	    break
-	word = param[i:j]
-	i=j+1
-	if (param[i] == '"'):
-	    j=i+1
-	    while j<s and param[j] != '"' : j=j+1
-	    if j == s: break
-	    val = param[i+1:j]
-	elif (param[i] != " "):
-	    j=i+1
-	    while j<s and param[j] != " " : j=j+1
-	    val = param[i:j]
-	else:
-	    val = ""
-	i=j+1
-	d[word] = val
+        while i<s and param[i] == " " : i = i+1
+        if i>=s: break
+        j = i
+        while j<s and param[j] != "=": j=j+1
+        if j+1>=s:
+            break
+        word = param[i:j]
+        i=j+1
+        if (param[i] == '"'):
+            j=i+1
+            while j<s and param[j] != '"' : j=j+1
+            if j == s: break
+            val = param[i+1:j]
+        elif (param[i] != " "):
+            j=i+1
+            while j<s and param[j] != " " : j=j+1
+            val = param[i:j]
+        else:
+            val = ""
+        i=j+1
+        d[word] = val
     return d
 
 #----------------------------------------------------------------------
