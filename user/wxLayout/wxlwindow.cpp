@@ -127,23 +127,11 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    if(findPos.y < 0) findPos.y = 0;
 
    m_ClickPosition = wxPoint(event.GetX(), event.GetY());
-#ifdef WXLAYOUT_DEBUG
-//   wxLogDebug("wxLayoutWindow::OnMouse: (%d, %d) -> (%d, %d)",
-//              event.GetX(), event.GetY(), findPos.x, findPos.y);
-#endif
 
    wxPoint cursorPos;
    bool found;
    wxLayoutObject *obj = m_llist->FindObjectScreen(dc, findPos,
                                                    &cursorPos, &found);
-
-#ifdef WXLAYOUT_DEBUG
-//   if(obj)
-//      wxLogDebug("wxLayoutWindow::OnMouse: Found object of type %d.",
-//                 obj->GetType());
-//   else
-//      wxLogDebug("wxLayoutWindow::OnMouse: Found no object.");
-#endif
 
    //has the mouse only been moved?
    if(eventId == WXLOWIN_MENU_MOUSEMOVE)
@@ -455,6 +443,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
          ny = cc.y - y1/2; if(ny < 0) ny = 0;
          Scroll(nx/dx,ny/dy); // new view start
          x0 = nx; y0 = ny;
+         m_ScrollToCursor = false; // avoid recursion
+         Refresh(FALSE);  /// Re-entering this function!
       }
    }
    
@@ -475,9 +465,13 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    // Device origins on the memDC are suspect, we translate manually
    // with the translate parameter of Draw().
    m_memDC->SetDeviceOrigin(0,0);
-   m_memDC->SetBrush(wxBrush(m_llist->GetDefaults()->GetBGColour(), wxSOLID));                                  
-   m_memDC->SetPen(wxPen(m_llist->GetDefaults()->GetBGColour(),0,wxTRANSPARENT));                               
+   m_memDC->SetBrush(wxBrush(m_llist->GetDefaults()->GetBGColour(),wxSOLID));
+   m_memDC->SetPen(wxPen(m_llist->GetDefaults()->GetBGColour(),
+                         0,wxTRANSPARENT));                               
    m_memDC->SetLogicalFunction(wxCOPY);
+
+   /* Either fill the background with the background bitmap, or clear
+      it. */
    if(m_BGbitmap)
    {
       CoordType
@@ -491,6 +485,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    }
    else
    {
+      // clear the background: (must not be done if we use the update rectangle!)
       m_memDC->SetBackgroundMode(wxSOLID);
       m_memDC->DrawRectangle(0,0,x1, y1);
    }
@@ -502,13 +497,17 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    
    wxPoint offset(-x0+WXLO_XOFFSET,-y0+WXLO_YOFFSET);
    m_llist->Draw(*m_memDC,offset, y0, y0+y1);
+   // We start calculating a new update rect before drawing the
+   // cursor, so that the cursor coordinates get included in the next
+   // update rectangle:
+   m_llist->InvalidateUpdateRect(); 
+   if(IsEditable()) //we draw the cursor
+      m_llist->DrawCursor(*m_memDC,m_HaveFocus,offset);
 
 // Now copy everything to the screen:
 #if 0
-   //FIXME:
-   //   1. the update region as calculated by the list is wrong
-   //   2. we get wrong values here
-   //   3. how about the offset? 
+   // This somehow doesn't work, but even the following bit with the
+   // whole rect at once is still a bit broken I think.
    wxRegionIterator ri ( GetUpdateRegion() );
    if(ri)
       while(ri)
@@ -530,18 +529,12 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 //      y1 += WXLO_YOFFSET; //FIXME might not be needed
       dc.Blit(x0,y0,x1,y1,m_memDC,0,0,wxCOPY,FALSE);
    }
-   //FIXME: we need to make sure we blit draw the cursor!
-   // How about drawing it directly to the screen?
-   if(IsEditable())
-      //m_llist->DrawCursor(*m_memDC,m_HaveFocus,offset);
-      m_llist->DrawCursor(dc,m_HaveFocus, wxPoint(WXLO_XOFFSET,WXLO_YOFFSET)); //direct to screen
 
    ResetDirty();
    m_ScrollToCursor = false;
-   m_llist->InvalidateUpdateRect();
 }
 
-// change the range and position of scroll bars
+// change the range and position of scrollbars
 void
 wxLayoutWindow::ResizeScrollbars(bool exact)
 {
@@ -579,8 +572,8 @@ wxLayoutWindow::Paste(void)
       wxTheClipboard->Close();
    }
 #if 0
-   /* Unfortunately, this little hack doesn't work. So I'll go back to 
-      pure X11. */
+   /* My attempt to get the primary selection, but it does not
+      work. :-( */
    if(text.Length() == 0)
    {
       wxTextCtrl tmp_tctrl(this,-1);

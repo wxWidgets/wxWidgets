@@ -1513,11 +1513,19 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
    dc.SetLogicalFunction(wxXOR);
    dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));
    if(active)
-      dc.DrawRectangle(coords.x, coords.y, m_CursorSize.x,
-                       m_CursorSize.y);
+   {
+      dc.DrawRectangle(coords.x, coords.y,
+                       m_CursorSize.x, m_CursorSize.y);
+      SetUpdateRect(coords.x, coords.y);
+      SetUpdateRect(coords.x+m_CursorSize.x, coords.y+m_CursorSize.y);
+   }
    else
+   {
       dc.DrawLine(coords.x, coords.y+m_CursorSize.y-1,
                   coords.x+m_CursorSize.x, coords.y+m_CursorSize.y-1);
+      SetUpdateRect(coords.x, coords.y+m_CursorSize.y-1);
+      SetUpdateRect(coords.x+m_CursorSize.x, coords.y+m_CursorSize.y-1);
+   }
    dc.SetLogicalFunction(wxCOPY);
    //dc.SetBrush(wxNullBrush);
 }

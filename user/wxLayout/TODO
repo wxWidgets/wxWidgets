@@ -20,7 +20,10 @@ TODO
 - selections should get highlighted, add COPY
 - searching for text
 - moving cursor in non-edit mode
-
+- cursor screen positioning ignores font sizes once again :-(
+   --> UpdateCursorScreenPos() cannot work as it ignores previous font formatting commands.
+       Either draw cursor when drawing text, or wait for new wxLayoutObjectCmd to be fully
+       implemented.
 
 RECENTLY FIXED (?)
   - fix(simplify) cursor size calculation
