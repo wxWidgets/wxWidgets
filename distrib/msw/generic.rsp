@@ -684,6 +684,18 @@ samples/ipc/*.ico
 samples/ipc/*.txt
 samples/ipc/*.pro
 
+samples/keyboard/*.cpp
+samples/keyboard/*.h
+samples/keyboard/*.def
+samples/keyboard/*.rc
+samples/keyboard/*.txt
+samples/keyboard/makefile*
+samples/keyboard/*.xbm
+samples/keyboard/*.xpm
+samples/keyboard/*.ico
+samples/keyboard/*.bmp
+samples/keyboard/*.pro
+
 samples/layout/*.cpp
 samples/layout/*.h
 samples/layout/*.def

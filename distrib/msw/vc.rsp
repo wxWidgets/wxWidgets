@@ -111,6 +111,9 @@ samples/image/image.dsw
 samples/internat/internat.dsp
 samples/internat/internat.dsw
 
+samples/keyboard/keyboard.dsp
+samples/keyboard/keyboard.dsw
+
 samples/ipc/client.dsp
 samples/ipc/client.dsw
 samples/ipc/server.dsp

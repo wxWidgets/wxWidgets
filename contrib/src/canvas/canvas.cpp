@@ -1428,7 +1428,7 @@ void wxCanvasImage::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, in
         if (cworld->GetRotation())
             tmp = tmp.Rotate(-cworld->GetRotation()/180.0 * pi, centr, TRUE, NULL );
             
-        bmp = tmp.ConvertToBitmap();
+        bmp = wxBitmap(tmp);
         
         // create cached bitmap
         m_cBitmap = bmp;
@@ -1658,7 +1658,7 @@ void wxCanvasText::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, int
     wxRect sub_rect( clip_x, clip_y, clip_width, clip_height );
     wxBitmap sub_bitmap( bitmap->GetSubBitmap( sub_rect ) );
 
-    wxImage image( sub_bitmap );
+    wxImage image( sub_bitmap.ConvertToImage() );
 
     // local coordinates
     int start_x = clip_x - tmparea.x;
@@ -1695,7 +1695,7 @@ void wxCanvasText::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, int
             }
         }
 
-   sub_bitmap = image.ConvertToBitmap();
+   sub_bitmap = wxBitmap(image);
 
    wxDC *dc = m_admin->GetActive()->GetDC();
    dc->DrawBitmap( sub_bitmap, clip_x, clip_y );

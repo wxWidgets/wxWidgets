@@ -116,7 +116,7 @@ bool wxAnimationPlayer::Build()
                 if (GetTransparentColour(transparentColour))
                     image->SetMaskColour(transparentColour.Red(), transparentColour.Green(), transparentColour.Blue());
 
-                bitmap = new wxBitmap(image->ConvertToBitmap());
+                bitmap = new wxBitmap(* image);
                 delete image;
                 if (bitmap)
                     m_frames.Append(bitmap);
