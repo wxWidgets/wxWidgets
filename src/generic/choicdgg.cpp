@@ -100,9 +100,9 @@ wxChar *wxGetSingleChoiceData( const wxString& message, const wxString& caption,
                    int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre),
                    int WXUNUSED(width), int WXUNUSED(height) )
 {
-    wxSingleChoiceDialog dialog(parent, message, caption, n, choices, client_data);
+    wxSingleChoiceDialog dialog(parent, message, caption, n, choices, (char **)client_data);
     if ( dialog.ShowModal() == wxID_OK )
-        return dialog.GetSelectionClientData();
+        return (wxChar *)dialog.GetSelectionClientData();
     else
         return NULL;
 }
@@ -186,7 +186,7 @@ wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
                                            const wxString& message,
                                            const wxString& caption,
                                            const wxStringList& choices,
-                                           wxChar **clientData,
+                                           char **clientData,
                                            long style,
                                            const wxPoint& pos)
                     : wxDialog(parent, -1, caption, pos, wxDefaultSize,
