@@ -243,7 +243,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     GetPosition(&m_Cfg.x, &m_Cfg.y);
 
-    SetIcon(wxArtProvider::GetIcon(wxART_FRAME_ICON, wxART_HELP_BROWSER));
+    SetIcon(wxArtProvider::GetIcon(wxART_HELP, wxART_HELP_BROWSER));
 
     int notebook_page = 0;
 
