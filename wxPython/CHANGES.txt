@@ -2,8 +2,8 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.4.0
-------
+2.4.0.1
+-------
 No major new features since 2.3.4.2, mostly bug fixes and minor
 enhancements.
 
