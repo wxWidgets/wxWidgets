@@ -1414,7 +1414,8 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     short movieResFile;
     FSSpec sfFile;
 
-    if (NativePathNameToFSSpec ((char*) fileName.mb_str(), &sfFile, 0) != noErr)
+    if (NativePathNameToFSSpec ((char*) (const char*) fileName.mb_str(), 
+                                &sfFile, 0) != noErr)
         return false;
     
     if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)

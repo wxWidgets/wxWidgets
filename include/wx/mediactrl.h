@@ -178,12 +178,14 @@ public:
 
     virtual ~wxMediaBackend();
 
-    virtual bool CreateControl(wxControl* ctrl, wxWindow* parent, 
-                               wxWindowID id, 
-                               const wxPoint& pos, const wxSize& size,
-                               long style, 
-                               const wxValidator& validator,
-                               const wxString& name)
+    virtual bool CreateControl(wxControl* WXUNUSED(ctrl), 
+                               wxWindow* WXUNUSED(parent), 
+                               wxWindowID WXUNUSED(id), 
+                               const wxPoint& WXUNUSED(pos), 
+                               const wxSize& WXUNUSED(size),
+                               long WXUNUSED(style), 
+                               const wxValidator& WXUNUSED(validator),
+                               const wxString& WXUNUSED(name))
     {   return false;                   }
 
     virtual bool Play() 
