@@ -147,7 +147,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - Identical functionality of wxFileDialog::ParseWildcard,
   wxGenericDirCtrl::ParseFilter, Motif and MSW parsing native dialogs
   is now accessible in ::wxParseCommonDialogsFilter
-- wxNotebookSizer and wxBookCtrlSizer are now deprecated -- the are no longer
+- wxNotebookSizer and wxBookCtrlSizer are now deprecated -- they are no longer
   needed, you can treat wxNotebook as any other control and put it directly
   into the sizer that was wxNotebookSizer's parent sizer in old code.
 - wxFile methods now return wxFileOffset which may be a 64 bit integer type,
