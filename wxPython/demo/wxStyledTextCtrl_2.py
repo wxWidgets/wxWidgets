@@ -141,15 +141,14 @@ class PythonSTC(wxStyledTextCtrl):
                 kw.append("aaaaa")
                 kw.append("__init__")
                 kw.append("zzaaaaa")
-                kw.append("zZaaaaa")
+                kw.append("zzbaaaa")
                 kw.append("this_is_a_longer_value")
                 kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
 
-                #kw.sort()
+                kw.sort()  # Python sorts are case sensitive
+                self.AutoCompSetIgnoreCase(false)  # so this needs to match
 
-                self.AutoCompSetIgnoreCase(true)
                 self.AutoCompShow(0, string.join(kw))
-                #self.AutoCompSelect('br')
         else:
             event.Skip()
 
