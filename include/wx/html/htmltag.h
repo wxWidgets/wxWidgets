@@ -60,13 +60,26 @@ class WXDLLEXPORT wxHtmlTag : public wxObject
 {
     DECLARE_CLASS(wxHtmlTag)
 
-public:
+protected:
     // constructs wxHtmlTag object based on HTML tag.
     // The tag begins (with '<' character) at position pos in source
     // end_pos is position where parsing ends (usually end of document)
-    wxHtmlTag(const wxString& source, int pos, int end_pos,
+    wxHtmlTag(wxHtmlTag *parent,
+              const wxString& source, int pos, int end_pos,
               wxHtmlTagsCache *cache,
-              wxHtmlEntitiesParser *entParser = NULL);
+              wxHtmlEntitiesParser *entParser);
+    friend class wxHtmlParser;
+public:
+    ~wxHtmlTag();
+
+    wxHtmlTag *GetParent() const {return m_Parent;}
+    wxHtmlTag *GetFirstSibling() const;
+    wxHtmlTag *GetLastSibling() const;
+    wxHtmlTag *GetChildren() const { return m_FirstChild; }
+    wxHtmlTag *GetPreviousSibling() const { return m_Prev; }
+    wxHtmlTag *GetNextSibling() const {return m_Next; }
+    // Return next tag, as if tree had been flattened
+    wxHtmlTag *GetNextTag() const;
 
     // Returns tag's name in uppercase.
     inline wxString GetName() const {return m_Name;}
@@ -99,12 +112,13 @@ public:
     // Returns string containing all params.
     wxString GetAllParams() const;
 
+#if WXWIN_COMPATIBILITY_2_2
     // return TRUE if this is ending tag (</something>) or FALSE
     // if it isn't (<something>)
-    inline bool IsEnding() const {return m_Ending;}
+    inline bool IsEnding() const {return FALSE;}
+#endif
 
-    // return TRUE if this is ending tag (</something>) or FALSE
-    // if it isn't (<something>)
+    // return TRUE if this there is matching ending tag
     inline bool HasEnding() const {return m_End1 >= 0;}
 
     // returns beginning position of _internal_ block of text
@@ -121,8 +135,13 @@ public:
 private:
     wxString m_Name;
     int m_Begin, m_End1, m_End2;
-    bool m_Ending;
     wxArrayString m_ParamNames, m_ParamValues;
+
+    // DOM tree relations:
+    wxHtmlTag *m_Next;
+    wxHtmlTag *m_Prev;
+    wxHtmlTag *m_FirstChild, *m_LastChild;
+    wxHtmlTag *m_Parent;
 };
 
 

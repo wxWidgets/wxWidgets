@@ -123,11 +123,13 @@ public:
     virtual wxFont* CreateCurrentFont();
 
 protected:
-    virtual void AddText(const char *txt);
+    virtual void AddText(const wxChar* txt);
 
 private:
     bool m_tmpLastWasSpace;
-        // temporary variable used by AddText
+    wxChar *m_tmpStrBuf;
+    size_t  m_tmpStrBufSize;
+        // temporary variables used by AddText
     wxWindow *m_Window;
             // window we're parsing for
     double m_PixelScale;

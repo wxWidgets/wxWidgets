@@ -26,6 +26,9 @@ class WXDLLEXPORT wxHtmlParser;
 class WXDLLEXPORT wxHtmlTagHandler;
 class WXDLLEXPORT wxHtmlEntitiesParser;
 
+class wxHtmlTextPieces;
+class wxHtmlParserState;
+
 // This class handles generic parsing of HTML document : it scans
 // the document and divide it into blocks of tags (where one block
 // consists of starting and ending tag and of text between these
@@ -59,7 +62,10 @@ public:
     // Parses the m_Source from begin_pos to end_pos-1.
     // (in noparams version it parses whole m_Source)
     void DoParsing(int begin_pos, int end_pos);
-    inline void DoParsing() {DoParsing(0, m_Source.Length());};
+    void DoParsing();
+
+    // Returns pointer to the tag at parser's current position
+    wxHtmlTag *GetCurrentTag() const { return m_CurTag; }
 
     // Returns product of parsing
     // Returned value is result of parsing of the part. The type of this result
@@ -88,14 +94,30 @@ public:
 
     wxString* GetSource() {return &m_Source;}
     void SetSource(const wxString& src);
+    
+    // Sets HTML source and remebers current parser's state so that it can
+    // later be restored. This is useful for on-line modifications of 
+    // HTML source (for example, <pre> handler replaces spaces with &nbsp;
+    // and newlines with <br>)
+    virtual void SetSourceAndSaveState(const wxString& src);
+    // Restores parser's state from stack or returns FALSE if the stack is
+    // empty
+    virtual bool RestoreState();
 
 protected:
+    // DOM structure
+    void CreateDOMTree();
+    void DestroyDOMTree();
+    void CreateDOMSubTree(wxHtmlTag *cur,
+                          int begin_pos, int end_pos, 
+                          wxHtmlTagsCache *cache);
+
     // Adds text to the output.
     // This is called from Parse() and must be overriden in derived classes.
     // txt is not guaranteed to be only one word. It is largest continuous part of text
     // (= not broken by tags)
     // NOTE : using char* because of speed improvements
-    virtual void AddText(const char* txt) = 0;
+    virtual void AddText(const wxChar* txt) = 0;
 
     // Adds tag and proceeds it. Parse() may (and usually is) called from this method.
     // This is called from Parse() and may be overriden.
@@ -108,13 +130,16 @@ protected:
     wxHtmlEntitiesParser *GetEntitiesParser() const { return m_entitiesParser; }
 
 protected:
-    // source being parsed
+    // DOM tree:
+    wxHtmlTag *m_CurTag;
+    wxHtmlTag *m_Tags;
+    wxHtmlTextPieces *m_TextPieces;
+    size_t m_CurTextPiece;
+
     wxString m_Source;
-
-    // tags cache, used during parsing.
-    wxHtmlTagsCache *m_Cache;
-    wxHashTable m_HandlersHash;
-
+    
+    wxHtmlParserState *m_SavedStates;
+    
     // handlers that handle particular tags. The table is accessed by
     // key = tag's name.
     // This attribute MUST be filled by derived class otherwise it would
@@ -125,6 +150,7 @@ protected:
     // m_HandlersList is list of all handlers and it is guaranteed to contain
     //      only one reference to each handler instance.
     wxList m_HandlersList;
+    wxHashTable m_HandlersHash;
 
     // class for opening files (file system)
     wxFileSystem *m_FS;
