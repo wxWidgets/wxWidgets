@@ -852,6 +852,12 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
                 // ok, process ready to accept DDE requests
                 ok = wxExecuteDDE(ddeServer, ddeTopic, ddeCommand);
         }
+
+        if ( !ok )
+        {
+            wxLogDebug(_T("Failed to send DDE request to the process \"%s\"."),
+                       cmd.c_str());
+        }
     }
 #endif // wxUSE_IPC
 
