@@ -987,11 +987,12 @@ wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
 // ----------------------------------------------------------------------------
 
 #ifdef __MWERKS__
+#if __MSL__ < 0x7000
 char *strdup(const char *s)
 {
         return strcpy( (char*) malloc( strlen( s ) + 1 ) , s ) ;
 }
-
+#endif
 int isascii( int c )
 {
         return ( c >= 0 && c < 128 ) ;
