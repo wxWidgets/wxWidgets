@@ -418,8 +418,12 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 
     wxCoord xx = XLOG2DEVMAC(x);
     wxCoord yy = YLOG2DEVMAC(y);
+    wxCoord w = icon.GetWidth();
+    wxCoord h = icon.GetHeight();
+    wxCoord ww = XLOG2DEVREL(w);
+    wxCoord hh = YLOG2DEVREL(h);
 
-    Rect r = { yy , xx, yy + 32  , xx + 32 } ;
+    Rect r = { yy , xx, yy + hh  , xx + ww } ;
     PlotIconRef( &r , kAlignNone , kTransformNone , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) ) ;
 }
 
