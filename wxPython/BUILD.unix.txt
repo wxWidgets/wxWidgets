@@ -13,9 +13,16 @@ few bits of background information on tools.
 
 I use a tool called SWIG (http://www.swig.org) to help generate the
 C++ sources used in the wxPython extension module.  However you don't
-need to have SWIG unless you want to modify the *.i files.  If you do
-you'll want to have version 1.1-883 of SWIG and you'll need to apply
-the patches and updates in wxPython/SWIG and rebuild it.  Then you'll
+need to have SWIG unless you want to modify the *.i files.  I've made
+several modifications to SWIG specific to wxPython's needs and so the
+modified sources are included in the wx CVS at .../wxPython/wxSWIG.
+If you need to modify the *.i files for wxPython then change to this
+directory and run:
+
+      configure
+      make
+
+(Do not run "make install" as wxswig is run in-place.)  You'll then
 need to change a flag in the setup.py script as described below so the
 wxPython build process will use SWIG if needed.
 
@@ -23,15 +30,6 @@ I use the new Python Distutils tool to build wxPython.  It is included
 with Python 2.0, but if you want to use Python 1.5.2 or 1.6 then
 you'll need to download and install Distutils 1.0 from
 http://www.python.org/sigs/distutils-sig/
-
-I usually use RedHat Linux when working on the wxGTK version of
-wxPython, but I occasionally build and test on Solaris and I hope to
-be able to add some other platforms soon.  The compiler I use is
-whatever comes with the current version of RedHat I am using.  I find
-that there are less portability problems with the RPMs if I don't try
-using the latest and greatest compilers all the time.  On the other
-platforms I usually stick with as recent a version of GCC that I can
-find pre-built for that platform.
 
 Okay, now on the the fun stuff...
 
@@ -78,15 +76,14 @@ C. If all else fails, you can get the source code for glib and gtk+ at
 -------------------------------
 
 A. You can find the sources and RPMs for wxGTK at
-   ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/, or
-   just follow the download links from http://wxwindows.org/.  You can
-   also check out a current snapshot of the sources from the CVS
-   server.  (Some information about annonymous CVS access is at
-   http://wxwindows.org/cvs.htm.)  The advantage of using CVS is that
-   you can easily update as soon as the developers check in new
-   sources or fixes.  The advantage of using a released version is
-   that it usually has had more testing done.  You can decide which
-   method is best for you.
+   http://wxwindows.org/, just follow the download links from the
+   nevigation panel.  You can also check out a current snapshot of the
+   sources from the CVS server.  (Some information about annonymous
+   CVS access is at http://wxwindows.org/cvs.htm.)  The advantage of
+   using CVS is that you can easily update as soon as the developers
+   check in new sources or fixes.  The advantage of using a released
+   version is that it usually has had more thorough testing done.  You
+   can decide which method is best for you.
 
 B. You'll usually want to use a version of wxGTK that has the same
    version number as the wxPython sources you are using.  (Another

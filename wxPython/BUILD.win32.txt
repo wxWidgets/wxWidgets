@@ -18,11 +18,16 @@ few bits of background information on tools.
 
 I use a tool called SWIG (http://www.swig.org) to help generate the
 C++ sources used in the wxPython extension module.  However you don't
-need to have SWIG unless you want to modify the *.i files.  If you do
-you'll want to have version 1.1-883 of SWIG and you'll need to apply
-the patches and updates in wxPython/SWIG and rebuild it.  Then you'll
-need to change a flag in the setup.py script as described below so the
-wxPython build process will use SWIG if needed.
+need to have SWIG unless you want to modify the *.i files.  I've made
+several modifications to SWIG specific to wxPython's needs and so the
+modified sources are included in the wx CVS at .../wxPython/wxSWIG.
+If you need to modify the *.i files for wxPython then change to this
+directory and run:
+
+      nmake -f makefile.vc
+
+Then you'll need to change a flag in the setup.py script as described
+below so the wxPython build process will use SWIG if needed.
 
 I use the new Python Distutils tool to build wxPython.  It is included
 with Python 2.0, but if you want to use Python 1.5.2 or 1.6 then
@@ -46,12 +51,12 @@ And now on to the fun stuff...
 A. There are a few possible ways to get sources for wxWindows.  You
    can download a released version from http://wxwindows.org/ or you
    can get current development sources from the CVS server.  (Some
-   information about annonymous CVS access is at
-   http://wxwindows.org/cvs.htm.)  The advantage of using CVS is that
-   you can easily update as soon as the developers check in new
+   information about annonymous CVS access is at the
+   http://wxwindows.org/cvs.htm site.)  The advantage of using CVS is
+   that you can easily update as soon as the developers check in new
    sources or fixes.  The advantage of using a released version is
-   that it usually has had more testing done.  You can decide which
-   method is best for you.
+   that it usually has had more thorough testing done.  You can decide
+   which method is best for you.
 
 B. You'll usually want to use wxWindows sources that have the same
    version number as the wxPython sources you are using.  (Another
@@ -76,14 +81,14 @@ D. Change to the wx2\include\wx\msw directory and copy setup0.h to
    the default setup0.h in my setup.h, but you can experiment with
    other settings if you like:
 
-         wxDIALOG_UNIT_COMPATIBILITY   0
-         wxUSE_GLOBAL_MEMORY_OPERATORS 0
-         wxUSE_DEBUG_NEW_ALWAYS        0
-         wxUSE_CMDLINE_PARSER          0
-         wxUSE_DIALUP_MANAGER          0
-         wxUSE_DYNAMIC_LOADER          0
-         wxUSE_TREELAYOUT              0
-         wxUSE_POSTSCRIPT              1
+	 WXWIN_COMPATIBILITY_2_2	0
+         wxDIALOG_UNIT_COMPATIBILITY	0
+	 wxUSE_MEMORY_TRACING		1
+         wxUSE_CMDLINE_PARSER		0
+	 wxUSE_FSVOLUME			0
+         wxUSE_DIALUP_MANAGER		0
+         wxUSE_TREELAYOUT		0
+         wxUSE_POSTSCRIPT		1
 
 
     ** NEW **
@@ -106,14 +111,13 @@ A. Although MSVC project files are provided I always use the makefiles
 B. There are three different types of wxWindows DLLs that can be
    produced by the VC makefile simply by providing a flag on the nmake
    command-line, I call the three types DEBUG, FINAL, and HYBRID.
-   (The last one is brand new, you'll need my version of the 2.2.2
-   sources to get the HYBRID capability.)  Here are some more details:
+   Here are some more details:
 
       DEBUG Specified with "FINAL=0" and produces a DLL named
-            wx[version]d.dll.  This DLL is compiled with full
-            debugging information and with the __WXDEBUG__ set which
-            enables some debugging-only code in wxWindows such as
-            assertions and failure log messages.  The /MDd flag is
+            wxmsw[version]d.dll.  This DLL is compiled with full
+            debugging information and with the __WXDEBUG__ macro set,
+            which enables some debugging-only code in wxWindows such
+            as assertions and failure log messages.  The /MDd flag is
             used which means that it is linked with the debugging
             version of the C runtime library and also that you must
             use the debugging version of Python, (python_d.exe and
@@ -124,7 +128,7 @@ B. There are three different types of wxWindows DLLs that can be
             wxPython extension and the wxWindows DLL.
 
       FINAL Specified with "FINAL=1" and produces a DLL named
-            wx[version].dll.  This DLL is compiled with optimizations
+            wxmsw[version].dll.  This DLL is compiled with optimizations
             turned on and without debugging information and without
             __WXDEBUG__.  The /MD flag is used which means that you
             can use this version with the standard python.exe.  This
@@ -132,7 +136,7 @@ B. There are three different types of wxWindows DLLs that can be
             for win32.
 
      HYBRID Specified with "FINAL=hybrid" and produces a DLL named
-            wx[version]h.dll.  This DLL is almost the same as the
+            wxmsw[version]h.dll.  This DLL is almost the same as the
             DEBUG version except the /MD flag is used which means that
             you can use the standard python.exe but you still get the
             debugging info and the __WXDEBUG__ code enabled.  With the
@@ -157,7 +161,10 @@ C. Change to the wx2\src\msw directory and type the following command,
    DLL and some library files in \wx2\lib.
 
 D. You'll either need to add \wx2\lib to the PATH or copy the DLL file
-   to a directory already on the PATH so the DLL can be found at runtime.
+   to a directory already on the PATH so the DLL can be found at
+   runtime.  Another option is to copy the DLL to the directory that
+   the wxPython pacakge is installed to, for example,
+   c:\Python22\lib\site-packages\wxPython.
 
 E. You can test your build by changing to one of the directories under
    \wx2\samples or \wx2\demos and typing (using the right FINAL flag):
@@ -185,7 +192,7 @@ A. You have the same options (and same advantages/disadvantages) for
 -----------------------------
 
 A. As mentioned previouslly, wxPython is built with the standard
-   Python Distutils tool.  If you are using Python 2.0c1 or later you
+   Python Distutils tool.  If you are using Python 2.0 or later you
    are all set, otherwise you need to download and install Distutils
    1.0 from http://www.python.org/sigs/distutils-sig/.
 
