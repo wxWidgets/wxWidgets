@@ -142,26 +142,11 @@ enum wxSeekMode
     wxFileOffset wxSeek(int fd, wxFileOffset offset, int origin);
     #define wxLSeek wxSeek
     wxFileOffset wxTell(int fd);
-
-    #if wxUSE_UNICODE
-        #if wxUSE_UNICODE_MSLU
-            #define   wxMkDir      wxMSLU__wmkdir
-            #define   wxRmDir      wxMSLU__wrmdir
-            #define   wxStat       wxMSLU__wstat
-        #else
-            #define   wxMkDir      _wmkdir
-            #define   wxRmDir      _wrmdir
-            #define   wxStat       _wstat
-        #endif
-    #else // !wxUSE_UNICODE
-        #define   wxMkDir      _mkdir
-        #ifdef __WATCOMC__
-            #define   wxRmDir      rmdir
-        #else
-            #define   wxRmDir      _rmdir
-        #endif
-        #define   wxStat       _stat
-    #endif
+    
+    // always Unicode under WinCE
+    #define   wxMkDir      _wmkdir
+    #define   wxRmDir      _wrmdir
+    #define   wxStat       _wstat
     #define   wxStructStat struct _stat
 
 // Microsoft compiler loves underscores, feed them to it
