@@ -920,22 +920,35 @@ int WXDLLEXPORT wxStrnicmp(const wxChar *s1, const wxChar *s2, size_t n)
 #ifndef wxStrtok
 WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr)
 {
-  if (!psz) psz = *save_ptr;
-  psz += wxStrspn(psz, delim);
-  if (!*psz) {
-    *save_ptr = (wxChar *)NULL;
-    return (wxChar *)NULL;
-  }
-  wxChar *ret = psz;
-  psz = wxStrpbrk(psz, delim);
-  if (!psz) *save_ptr = (wxChar*)NULL;
-  else {
-    *psz = wxT('\0');
-    *save_ptr = psz + 1;
-  }
-  return ret;
+    if (!psz)
+    {
+        psz = *save_ptr;
+        if ( !psz )
+            return NULL;
+    }
+
+    psz += wxStrspn(psz, delim);
+    if (!*psz)
+    {
+        *save_ptr = (wxChar *)NULL;
+        return (wxChar *)NULL;
+    }
+
+    wxChar *ret = psz;
+    psz = wxStrpbrk(psz, delim);
+    if (!psz)
+    {
+        *save_ptr = (wxChar*)NULL;
+    }
+    else
+    {
+        *psz = wxT('\0');
+        *save_ptr = psz + 1;
+    }
+
+    return ret;
 }
-#endif
+#endif // wxStrtok
 
 #ifndef wxSetlocale
 WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale)
