@@ -38,6 +38,9 @@
    interfere with the state of wxIsBusy() -- RL
 
 */
+
+#if wxUSE_GUI
+
 class wxBusyCursorSuspender
 {
 public:
@@ -56,5 +59,7 @@ public:
         }
     }
 };
+#endif
+
 #endif
     // _WX_CURSOR_H_BASE_
