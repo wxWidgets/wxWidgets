@@ -16,5 +16,11 @@
 
     <!-- wxWindows variant where everything is in one library: -->
     <include file="monolithic.bkl"/>
+    
+
+    <!-- Samples target (not dependency of 'all'): -->
+    <subproject id="samples">
+        <dir>samples</dir>
+    </subproject>
 
 </makefile>
