@@ -14,10 +14,7 @@ import images
 
 # Constants
 
-# Return code from wxGetOsVersion
-wxGTK = 9
-
-if wxGetOsVersion()[0] == wxGTK:
+if wxPlatform == '__WXGTK__':
     labelFont = wxFont(12, wxDEFAULT, wxNORMAL, wxBOLD)
     modernFont = wxFont(12, wxMODERN, wxNORMAL, wxNORMAL)
 else:
@@ -428,7 +425,7 @@ class XML_Tree(wxTreeCtrl):
         self.SetBackgroundColour(wxColour(224, 248, 224))
         EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         # One works on Linux, another on Windows
-        if wxGetOsVersion()[0] == wxGTK:
+        if wxPlatform == '__WXGTK__':
             EVT_TREE_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
         else:
             EVT_LEFT_DCLICK(self, self.OnDClick)
@@ -440,20 +437,20 @@ class XML_Tree(wxTreeCtrl):
         self.dom = None
         # Create image list
         il = wxImageList(16, 16, true)
-        self.rootImage = il.AddIcon(wxIconFromXPMData(images.getTreeRootData()))
-        xxxObject.image = il.AddIcon(wxIconFromXPMData(images.getTreeDefaultData()))
-        xxxPanel.image = il.AddIcon(wxIconFromXPMData(images.getTreePanelData()))
-        xxxDialog.image = il.AddIcon(wxIconFromXPMData(images.getTreeDialogData()))
-        xxxFrame.image = il.AddIcon(wxIconFromXPMData(images.getTreeFrameData()))
-        xxxMenuBar.image = il.AddIcon(wxIconFromXPMData(images.getTreeMenuBarData()))
-        xxxToolBar.image = il.AddIcon(wxIconFromXPMData(images.getTreeToolBarData()))
-        xxxMenu.image = il.AddIcon(wxIconFromXPMData(images.getTreeMenuData()))
-        xxxSizer.imageH = il.AddIcon(wxIconFromXPMData(images.getTreeSizerHData()))
-        xxxSizer.imageV = il.AddIcon(wxIconFromXPMData(images.getTreeSizerVData()))
-        xxxStaticBoxSizer.imageH = il.AddIcon(wxIconFromXPMData(images.getTreeStaticBoxSizerHData()))
-        xxxStaticBoxSizer.imageV = il.AddIcon(wxIconFromXPMData(images.getTreeStaticBoxSizerVData()))
-        xxxGridSizer.image = il.AddIcon(wxIconFromXPMData(images.getTreeSizerGridData()))
-        xxxFlexGridSizer.image = il.AddIcon(wxIconFromXPMData(images.getTreeSizerFlexGridData()))
+        self.rootImage = il.AddIcon(images.getTreeRootIcon())
+        xxxObject.image = il.AddIcon(images.getTreeDefaultIcon())
+        xxxPanel.image = il.AddIcon(images.getTreePanelIcon())
+        xxxDialog.image = il.AddIcon(images.getTreeDialogIcon())
+        xxxFrame.image = il.AddIcon(images.getTreeFrameIcon())
+        xxxMenuBar.image = il.AddIcon(images.getTreeMenuBarIcon())
+        xxxToolBar.image = il.AddIcon(images.getTreeToolBarIcon())
+        xxxMenu.image = il.AddIcon(images.getTreeMenuIcon())
+        xxxSizer.imageH = il.AddIcon(images.getTreeSizerHIcon())
+        xxxSizer.imageV = il.AddIcon(images.getTreeSizerVIcon())
+        xxxStaticBoxSizer.imageH = il.AddIcon(images.getTreeStaticBoxSizerHIcon())
+        xxxStaticBoxSizer.imageV = il.AddIcon(images.getTreeStaticBoxSizerVIcon())
+        xxxGridSizer.image = il.AddIcon(images.getTreeSizerGridIcon())
+        xxxFlexGridSizer.image = il.AddIcon(images.getTreeSizerFlexGridIcon())
         self.il = il
         self.SetImageList(il)
 
@@ -1013,9 +1010,7 @@ class Frame(wxFrame):
         frame = self
         wxFrame.__init__(self, None, -1, '', pos, size)
         self.CreateStatusBar()
-        icon = wxEmptyIcon()
-        icon.CopyFromBitmap(images.getIconBitmap())
-        self.SetIcon(icon)
+        self.SetIcon(images.getIconIcon())
 
         # Idle flag
         self.inIdle = false
@@ -1091,7 +1086,7 @@ class Frame(wxFrame):
                          'Refresh', 'Refresh view')
         tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', true)
-        if wxGetOsVersion()[0] == wxGTK:
+        if wxPlatform == '__WXGTK__':
             tb.AddSeparator()   # otherwise auto-refresh sticks in status line
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
         tb.Realize()
