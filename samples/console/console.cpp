@@ -334,7 +334,7 @@ static void TestDirEnum()
     TestDirEnumHelper(dir, wxDIR_DEFAULT | wxDIR_DOTDOT);
 
     wxPuts(_T("Enumerating object files in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_DEFAULT, "*.o*");
+    TestDirEnumHelper(dir, wxDIR_DEFAULT, _T("*.o*"));
 
     wxPuts(_T("Enumerating directories in current directory:"));
     TestDirEnumHelper(dir, wxDIR_DIRS);
@@ -360,7 +360,7 @@ static void TestDirEnum()
     TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
 
     wxPuts(_T("Enumerating files in non existing directory:"));
-    wxDir dirNo("nosuchdir");
+    wxDir dirNo(_T("nosuchdir"));
     TestDirEnumHelper(dirNo);
 }
 
@@ -565,14 +565,14 @@ static void TestExecute()
 
     wxPrintf(_T("Testing wxShell: "));
     fflush(stdout);
-    if ( wxShell(SHELL_COMMAND) )
+    if ( wxShell(_T(SHELL_COMMAND)) )
         wxPuts(_T("Ok."));
     else
         wxPuts(_T("ERROR."));
 
     wxPrintf(_T("Testing wxExecute: "));
     fflush(stdout);
-    if ( wxExecute(COMMAND, true /* sync */) == 0 )
+    if ( wxExecute(_T(COMMAND), true /* sync */) == 0 )
         wxPuts(_T("Ok."));
     else
         wxPuts(_T("ERROR."));
@@ -588,7 +588,7 @@ static void TestExecute()
 
     wxPrintf(_T("Testing wxExecute with redirection:\n"));
     wxArrayString output;
-    if ( wxExecute(REDIRECT_COMMAND, output) != 0 )
+    if ( wxExecute(_T(REDIRECT_COMMAND), output) != 0 )
     {
         wxPuts(_T("ERROR."));
     }
@@ -702,8 +702,8 @@ static void TestFileCopy()
     }
     else
     {
-        wxFFile f1(filename1, "rb"),
-                f2(filename2, "rb");
+        wxFFile f1(filename1, _T("rb")),
+                f2(filename2, _T("rb"));
 
         if ( !f1.IsOpened() || !f2.IsOpened() )
         {
@@ -1012,11 +1012,11 @@ static void TestFileNameMakeRelative()
         switch ( fni.format )
         {
             case wxPATH_UNIX:
-                base = "/usr/bin/";
+                base = _T("/usr/bin/");
                 break;
 
             case wxPATH_DOS:
-                base = "c:\\";
+                base = _T("c:\\");
                 break;
 
             case wxPATH_MAC:
@@ -1026,7 +1026,7 @@ static void TestFileNameMakeRelative()
 
             case wxPATH_NATIVE: // make gcc happy
             default:
-                wxFAIL_MSG( "unexpected path format" );
+                wxFAIL_MSG( _T("unexpected path format") );
         }
 
         wxPrintf(_T("'%s' relative to '%s': "),
@@ -2260,7 +2260,7 @@ static void TestLongLongConversion()
 #if wxUSE_LONGLONG_NATIVE
         wxLongLongNative b(a.GetHi(), a.GetLo());
 
-        wxASSERT_MSG( a == b, "conversions failure" );
+        wxASSERT_MSG( a == b, _T("conversions failure") );
 #else
         wxPuts(_T("Can't do it without native long long type, test skipped."));
 
@@ -2294,7 +2294,7 @@ static void TestMultiplication()
         wxLongLongNative aa(a.GetHi(), a.GetLo());
         wxLongLongNative bb(b.GetHi(), b.GetLo());
 
-        wxASSERT_MSG( a*b == aa*bb, "multiplication failure" );
+        wxASSERT_MSG( a*b == aa*bb, _T("multiplication failure") );
 #else // !wxUSE_LONGLONG_NATIVE
         wxPuts(_T("Can't do it without native long long type, test skipped."));
 
@@ -2341,7 +2341,7 @@ static void TestDivision()
         wxLongLongNative m(ll.GetHi(), ll.GetLo());
 
         wxLongLongNative p = m / l, s = m % l;
-        wxASSERT_MSG( q == p && r == s, "division failure" );
+        wxASSERT_MSG( q == p && r == s, _T("division failure") );
 #else // !wxUSE_LONGLONG_NATIVE
         // verify the result
         wxASSERT_MSG( ll == q*l + r, "division failure" );
@@ -2374,7 +2374,7 @@ static void TestAddition()
 #if wxUSE_LONGLONG_NATIVE
         wxASSERT_MSG( c == wxLongLongNative(a.GetHi(), a.GetLo()) +
                            wxLongLongNative(b.GetHi(), b.GetLo()),
-                      "addition failure" );
+                      _T("addition failure") );
 #else // !wxUSE_LONGLONG_NATIVE
         wxASSERT_MSG( c - b == a, "addition failure" );
 #endif // wxUSE_LONGLONG_NATIVE
@@ -3022,7 +3022,10 @@ I am ready for my first lesson today.");
       wxChar buf[200];
 
       wxSprintf(buf, _T("%07") wxLongLongFmtSpec _T("o"), wxLL(040000000000));
+      #if 0
+        // for some reason below line fails under Borland
       wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
+      #endif
 
       if (wxStrcmp (buf, _T("40000000000")) != 0)
       {
@@ -3228,26 +3231,26 @@ static void TestRegistryAssociation()
 
     wxRegKey key;
 
-    key.SetName("HKEY_CLASSES_ROOT\\.ddf" );
+    key.SetName(_T("HKEY_CLASSES_ROOT\\.ddf") );
     key.Create();
-    key = "ddxf_auto_file" ;
-    key.SetName("HKEY_CLASSES_ROOT\\.flo" );
+    key = _T("ddxf_auto_file") ;
+    key.SetName(_T("HKEY_CLASSES_ROOT\\.flo") );
     key.Create();
-    key = "ddxf_auto_file" ;
-    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon");
+    key = _T("ddxf_auto_file") ;
+    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
     key.Create();
-    key = "program,0" ;
-    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command");
+    key = _T("program,0") ;
+    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
     key.Create();
-    key = "program \"%1\"" ;
+    key = _T("program \"%1\"") ;
 
-    key.SetName("HKEY_CLASSES_ROOT\\.ddf" );
+    key.SetName(_T("HKEY_CLASSES_ROOT\\.ddf") );
     key.DeleteSelf();
-    key.SetName("HKEY_CLASSES_ROOT\\.flo" );
+    key.SetName(_T("HKEY_CLASSES_ROOT\\.flo") );
     key.DeleteSelf();
-    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon");
+    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
     key.DeleteSelf();
-    key.SetName("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command");
+    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
     key.DeleteSelf();
 }
 
@@ -3645,7 +3648,7 @@ static void TestFtpMisc()
 {
     wxPuts(_T("*** Testing miscellaneous wxFTP functions ***"));
 
-    if ( ftp.SendCommand("STAT") != '2' )
+    if ( ftp.SendCommand(_T("STAT")) != '2' )
     {
         wxPuts(_T("ERROR: STAT failed"));
     }
@@ -3654,7 +3657,7 @@ static void TestFtpMisc()
         wxPrintf(_T("STAT returned:\n\n%s\n"), ftp.GetLastResult().c_str());
     }
 
-    if ( ftp.SendCommand("HELP SITE") != '2' )
+    if ( ftp.SendCommand(_T("HELP SITE")) != '2' )
     {
         wxPuts(_T("ERROR: HELP SITE failed"));
     }
@@ -3683,14 +3686,14 @@ static void TestFtpInteractive()
         // special handling of LIST and NLST as they require data connection
         wxString start(buf, 4);
         start.MakeUpper();
-        if ( start == "LIST" || start == "NLST" )
+        if ( start == _T("LIST") || start == _T("NLST") )
         {
             wxString wildcard;
             if ( wxStrlen(buf) > 4 )
                 wildcard = buf + 5;
 
             wxArrayString files;
-            if ( !ftp.GetList(files, wildcard, start == "LIST") )
+            if ( !ftp.GetList(files, wildcard, start == _T("LIST")) )
             {
                 wxPrintf(_T("ERROR: failed to get %s of files\n"), start.c_str());
             }
@@ -3738,7 +3741,7 @@ static void TestFtpUpload()
     }
 
     // send a command to check the remote file
-    if ( ftp.SendCommand(wxString("STAT ") + file1) != '2' )
+    if ( ftp.SendCommand(wxString(_T("STAT ")) + file1) != '2' )
     {
         wxPrintf(_T("ERROR: STAT %s failed\n"), file1);
     }
@@ -6115,12 +6118,12 @@ static void TestArrayOfObjects()
 
     {
         ArrayBars bars;
-        Bar bar("second bar (two copies!)");
+        Bar bar(_T("second bar (two copies!)"));
 
         wxPrintf(_T("Initially: %u objects in the array, %u objects total.\n"),
                bars.GetCount(), Bar::GetNumber());
 
-        bars.Add(new Bar("first bar"));
+        bars.Add(new Bar(_T("first bar")));
         bars.Add(bar,2);
 
         wxPrintf(_T("Now: %u objects in the array, %u objects total.\n"),
@@ -6925,7 +6928,9 @@ int main(int argc, char **argv)
     wxChar **wargv = new wxChar *[argc + 1];
 
     {
-        for ( int n = 0; n < argc; n++ )
+        int n;
+
+        for (n = 0; n < argc; n++ )
         {
             wxMB2WXbuf warg = wxConvertMB2WX(argv[n]);
             wargv[n] = wxStrdup(warg);
@@ -7033,11 +7038,11 @@ int main(int argc, char **argv)
 #endif
 
         wxPuts(_T("*** After sorting a1"));
-        a1.Sort(wxStringCompareAscending);
+        a1.Sort(false);
         PrintArray(_T("a1"), a1);
 
         wxPuts(_T("*** After sorting a1 in reverse order"));
-        a1.Sort(wxStringCompareDescending);
+        a1.Sort(true);
         PrintArray(_T("a1"), a1);
 
 #if !wxUSE_STL
