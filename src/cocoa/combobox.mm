@@ -31,6 +31,21 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID winid,
             const wxString& value,
             const wxPoint& pos,
             const wxSize& size,
+            const wxArrayString& choices,
+            long style,
+            const wxValidator& validator,
+            const wxString& name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, winid, value, pos, size, chs.GetCount(),
+                  chs.GetStrings(), style, validator, name);
+}
+
+bool wxComboBox::Create(wxWindow *parent, wxWindowID winid,
+            const wxString& value,
+            const wxPoint& pos,
+            const wxSize& size,
             int n, const wxString choices[],
             long style,
             const wxValidator& validator,

@@ -231,6 +231,15 @@ public:
         (void)Create(parent, id, value, pos, size, n, choices,
                      style, validator, name);
     }
+    wxComboBox(wxWindow *parent,
+               wxWindowID id,
+               const wxString& value,
+               const wxPoint& pos,
+               const wxSize& size,
+               const wxArrayString& choices,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxComboBoxNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -242,7 +251,15 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
-
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& value,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxComboBoxNameStr);
 
     virtual ~wxComboBox();
 

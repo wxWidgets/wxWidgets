@@ -118,6 +118,7 @@ public:
     wxMenuBar() { Init(); }
     wxMenuBar(long WXUNUSED(style)) { Init(); }
     wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
+    wxMenuBar(int n, wxMenu *menus[], const wxArrayString& titles);
     virtual ~wxMenuBar();
     
     // implement base class (pure) virtuals

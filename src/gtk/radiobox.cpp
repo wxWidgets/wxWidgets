@@ -168,6 +168,19 @@ void wxRadioBox::Init()
     m_lostFocus = FALSE;
 }
 
+bool wxRadioBox::Create( wxWindow *parent, wxWindowID id,
+                         const wxString& title,
+                         const wxPoint &pos, const wxSize &size,
+                         const wxArrayString& choices, int majorDim,
+                         long style, const wxValidator& validator,
+                         const wxString &name )
+{
+    wxCArrayString chs(choices);
+
+    return Create( parent, id, title, pos, size, chs.GetCount(),
+                   chs.GetStrings(), majorDim, style, validator, name );
+}
+
 bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
                          const wxPoint &pos, const wxSize &size,
                          int n, const wxString choices[], int majorDim,

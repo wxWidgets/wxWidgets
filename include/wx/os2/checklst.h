@@ -38,6 +38,15 @@ public:
                    ,const wxValidator& rValidator = wxDefaultValidator
                    ,const wxString&    rsName = wxListBoxNameStr
                   );
+    wxCheckListBox( wxWindow*            pParent
+                   ,wxWindowID           vId
+                   ,const wxPoint&       rPos
+                   ,const wxSize&        vSize
+                   ,const wxArrayString& asChoices
+                   ,long                 lStyle = 0
+                   ,const wxValidator&   rValidator = wxDefaultValidator
+                   ,const wxString&      rsName = wxListBoxNameStr
+                  );
 
     //
     // Override base class virtuals

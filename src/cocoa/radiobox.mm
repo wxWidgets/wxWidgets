@@ -13,6 +13,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/radiobox.h"
+    #include "wx/arrstr.h"
 #endif //WX_PRECOMP
 
 #import <AppKit/NSView.h>
@@ -21,6 +22,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxRadioBox,NSTextField,NSControl,NSView)
+
+bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
+            const wxString& title,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            int majorDim,
+            long style, const wxValidator& validator,
+            const wxString& name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, winid, title, pos, size, chs.GetCount(),
+                  chs.GetStrings(), majorDim, style, validator, name);
+}
 
 bool wxRadioBox::Create(wxWindow *parent, wxWindowID winid,
             const wxString& title,

@@ -352,6 +352,22 @@ bool wxRadioBox::Create(wxWindow *parent,
     return TRUE;
 }
 
+bool wxRadioBox::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxString& title,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        const wxArrayString& choices,
+                        int majorDim,
+                        long style,
+                        const wxValidator& val,
+                        const wxString& name)
+{
+    wxCArrayString chs(choices);
+    return Create(parent, id, title, pos, size, chs.GetCount(),
+                  chs.GetStrings(), majorDim, style, val, name);
+}
+
 wxRadioBox::~wxRadioBox()
 {
     m_isBeingDeleted = TRUE;

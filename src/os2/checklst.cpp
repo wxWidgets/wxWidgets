@@ -291,6 +291,31 @@ wxCheckListBox::wxCheckListBox (
           );
 } // end of wxCheckListBox::wxCheckListBox
 
+wxCheckListBox::wxCheckListBox (
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, const wxArrayString&              asChoices
+, long                              lStyle
+, const wxValidator&                rVal
+, const wxString&                   rsName
+)
+              : wxListBox()
+{
+    wxCArrayString chs(asChoices);
+    Create( pParent
+           ,vId
+           ,rPos
+           ,rSize
+           ,chs.GetCount()
+           ,chs.GetStrings()
+           ,lStyle | wxLB_OWNERDRAW
+           ,rVal
+           ,rsName
+          );
+} // end of wxCheckListBox::wxCheckListBox
+
 void wxCheckListBox::Delete(
   int                               N
 )

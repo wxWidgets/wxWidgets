@@ -345,6 +345,15 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
     Create(parent, id, pos, size, nStrings, choices, style, val, name);
 }
 
+wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
+                               const wxPoint& pos, const wxSize& size,
+                               const wxArrayString& choices,
+                               long style, const wxValidator& val,
+                               const wxString& name)
+{
+    Create(parent, id, pos, size, choices, style, val, name);
+}
+
 bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
                             const wxPoint& pos, const wxSize& size,
                             int n, const wxString choices[],
@@ -352,6 +361,16 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator, const wxString& name)
 {
     return wxListBox::Create(parent, id, pos, size, n, choices,
+                             style | wxLB_OWNERDRAW, validator, name);
+}
+
+bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
+                            const wxPoint& pos, const wxSize& size,
+                            const wxArrayString& choices,
+                            long style,
+                            const wxValidator& validator, const wxString& name)
+{
+    return wxListBox::Create(parent, id, pos, size, choices,
                              style | wxLB_OWNERDRAW, validator, name);
 }
 

@@ -34,6 +34,7 @@
     #include "wx/radiobox.h"
     #include "wx/radiobut.h"
     #include "wx/validate.h"
+    #include "wx/arrstr.h"
 #endif
 
 #include "wx/tooltip.h"
@@ -99,6 +100,37 @@ void wxRadioBox::Init()
 {
     m_selection = -1;
     m_majorDim = 0;
+}
+
+wxRadioBox::wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
+                       const wxPoint& pos, const wxSize& size,
+                       const wxArrayString& choices,
+                       int majorDim, long style,
+                       const wxValidator& val, const wxString& name)
+{
+    wxCArrayString chs(choices);
+
+    Init();
+
+    (void)Create(parent, id, title, pos, size, chs.GetCount(), 
+                 chs.GetStrings(), majorDim, style, val, name);
+}
+
+bool wxRadioBox::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxString& title,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        const wxArrayString& choices,
+                        int majorDim,
+                        long style,
+                        const wxValidator& val,
+                        const wxString& name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, id, title, pos, size, chs.GetCount(), 
+                  chs.GetStrings(), majorDim, style, val, name);
 }
 
 bool wxRadioBox::Create(wxWindow *parent,

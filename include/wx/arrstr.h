@@ -92,10 +92,8 @@ public:
 
   // constructors and destructor
     // default ctor
-  wxArrayString()
-      : m_nSize(0), m_nCount(0), m_pItems(NULL), m_autoSort(FALSE)
-      { Init(FALSE); }
-    // if autoSort is TRUE, the array is always sorted (in alphabetical order)
+  wxArrayString() { Init(false); }
+    // if autoSort is true, the array is always sorted (in alphabetical order)
     //
     // NB: the reason for using int and not bool is that like this we can avoid
     //     using this ctor for implicit conversions from "const char *" (which
@@ -103,9 +101,7 @@ public:
     //
     //     of course, using explicit would be even better - if all compilers
     //     supported it...
-  wxArrayString(int autoSort)
-      : m_nSize(0), m_nCount(0), m_pItems(NULL), m_autoSort(FALSE)
-      { Init(autoSort != 0); }
+  wxArrayString(int autoSort) { Init(autoSort != 0); }
     // copy ctor
   wxArrayString(const wxArrayString& array);
     // assignment operator
@@ -155,14 +151,16 @@ public:
     // take one in their ctor.  You must delete[] it yourself
     // once you are done with it.  Will return NULL if the
     // ArrayString was empty.
+#if WXWIN_COMPATIBILITY_2_4
   wxString* GetStringArray() const;
+#endif
 
   // item management
     // Search the element in the array, starting from the beginning if
-    // bFromEnd is FALSE or from end otherwise. If bCase, comparison is case
+    // bFromEnd is false or from end otherwise. If bCase, comparison is case
     // sensitive (default). Returns index of the first item matched or
     // wxNOT_FOUND
-  int  Index (const wxChar *sz, bool bCase = TRUE, bool bFromEnd = FALSE) const;
+  int  Index (const wxChar *sz, bool bCase = true, bool bFromEnd = false) const;
     // add new element at the end (if the array is not sorted), return its
     // index
   size_t Add(const wxString& str, size_t nInsert = 1);
@@ -180,8 +178,8 @@ public:
 
   // sorting
     // sort array elements in alphabetical order (or reversed alphabetical
-    // order if reverseOrder parameter is TRUE)
-  void Sort(bool reverseOrder = FALSE);
+    // order if reverseOrder parameter is true)
+  void Sort(bool reverseOrder = false);
     // sort array elements using specified comparaison function
   void Sort(CompareFunction compareFunction);
   void Sort(CompareFunction2 compareFunction);
@@ -257,6 +255,9 @@ public:
     bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }
   };
 
+  wxArrayString(const_iterator first, const_iterator last)
+    { Init(false); assign(first, last); }
+  wxArrayString(size_type n, const_reference v) { Init(false); assign(n, v); }
   void assign(const_iterator first, const_iterator last);
   void assign(size_type n, const_reference v)
     { clear(); Add(v, n); }
@@ -309,18 +310,43 @@ private:
 
   wxChar  **m_pItems; // pointer to data
 
-  bool    m_autoSort; // if TRUE, keep the array always sorted
+  bool    m_autoSort; // if true, keep the array always sorted
 };
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxArrayString
 {
 public:
-  wxSortedArrayString() : wxArrayString(TRUE)
+  wxSortedArrayString() : wxArrayString(true)
     { }
-  wxSortedArrayString(const wxArrayString& array) : wxArrayString(TRUE)
+  wxSortedArrayString(const wxArrayString& array) : wxArrayString(true)
     { Copy(array); }
 };
 
 #endif // !wxUSE_STL
+
+// this class provides a temporary wxString* from a
+// wxArrayString
+class WXDLLIMPEXP_BASE wxCArrayString
+{
+public:
+    wxCArrayString( const wxArrayString& array )
+        : m_array( array ), m_strings( NULL )
+    { }
+    ~wxCArrayString() { delete[] m_strings; }
+
+    size_t GetCount() const { return m_array.GetCount(); }
+    wxString* GetStrings()
+    {
+        if( m_strings ) return m_strings;
+        size_t count = m_array.GetCount();
+        m_strings = new wxString[count];
+        for( size_t i = 0; i < count; ++i )
+            m_strings[i] = m_array[i];
+        return m_strings;
+    }
+private:
+    const wxArrayString& m_array;
+    wxString* m_strings;
+};
 
 #endif

@@ -23,6 +23,7 @@
 #include "wx/dynarray.h"
 #include "wx/log.h"
 #include "wx/utils.h"
+#include "wx/arrstr.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -155,6 +156,19 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     ChangeBackgroundColour();
 
     return TRUE;
+}
+
+bool wxListBox::Create(wxWindow *parent, wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       const wxArrayString& choices,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    wxCArrayString chs(choices);
+    return Create(parent, id, pos, size, chs.GetCount(), chs.GetStrings(),
+                  style, validator, name);
 }
 
 wxListBox::~wxListBox()

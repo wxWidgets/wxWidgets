@@ -51,7 +51,8 @@ versions, please update your code to not use them.
 - wxTheFontMapper: use wxFontMapper::Get() instead
 - wxStringHashTable: use wxHashMap instead
 - wxHashTableLong: use wxHashMap instead
-- wxArrayString::GetStringArray: no replacement
+- wxArrayString::GetStringArray: use wxCArrayString or alternative wxWindows
+                                 methods taking wxArrayString
 - wxArrayString::Remove(index, count): use RemoveAt instead
 - wxTreeItemId conversion to long is deprecated and shouldn't be used
 - [MSW only] wxWindow::GetUseCtl3D(), GetTransparentBackground() and
@@ -91,6 +92,9 @@ All:
   wxSize (Wlodzimierz Skiba)
 - intermediate wxIPaddress class added to prepare for
   wxIPV6address (Ray Gilbert)
+- added overloaded constructors and Create() methods taking wxArrayString
+  for wxChoice, wxComboBox, wxListBox, wxRadioBox, wxCheckListBox,
+  wxSingleChoiceDialog, wxMultipleChoiceDialog
 
 All (GUI):
 

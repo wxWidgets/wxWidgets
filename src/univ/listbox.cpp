@@ -80,6 +80,35 @@ void wxListBox::Init()
     m_showScrollbarY = FALSE;
 }
 
+wxListBox::wxListBox(wxWindow *parent,
+                     wxWindowID id,
+                     const wxPoint &pos,
+                     const wxSize &size,
+                     const wxArrayString& choices,
+                     long style,
+                     const wxValidator& validator,
+                     const wxString &name)
+{
+    Init();
+
+    Create(parent, id, pos, size, choices, style, validator, name);
+}
+
+bool wxListBox::Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint &pos,
+                       const wxSize &size,
+                       const wxArrayString& choices,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString &name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, id, pos, size, chs.GetCount(), chs.GetStrings(),
+                  style, validator, name);
+}
+
 bool wxListBox::Create(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint &pos,

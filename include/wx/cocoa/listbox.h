@@ -39,11 +39,28 @@ public:
     {
         Create(parent, winid,  pos, size, n, choices, style, validator, name);
     }
+    wxListBox(wxWindow *parent, wxWindowID winid,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxListBoxNameStr)
+    {
+        Create(parent, winid,  pos, size, choices, style, validator, name);
+    }
 
     bool Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxListBoxNameStr);
+    bool Create(wxWindow *parent, wxWindowID winid,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr);

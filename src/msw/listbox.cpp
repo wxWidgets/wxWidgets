@@ -251,6 +251,20 @@ bool wxListBox::Create(wxWindow *parent,
     return TRUE;
 }
 
+bool wxListBox::Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       const wxArrayString& choices,
+                       long style,
+                       const wxValidator& wxVALIDATOR_PARAM(validator),
+                       const wxString& name)
+{
+    wxCArrayString chs(choices);
+    return Create(parent, id, pos, size, chs.GetCount(), chs.GetStrings(),
+                  style, validator, name);
+}
+
 wxListBox::~wxListBox()
 {
     Free();

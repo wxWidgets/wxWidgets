@@ -46,12 +46,34 @@ public:
                majorDim, style, val, name);
     }
 
+    wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
+               const wxPoint& pos,
+               const wxSize& size,
+               const wxArrayString& choices,
+               int majorDim = 0, long style = wxRA_HORIZONTAL,
+               const wxValidator& val = wxDefaultValidator,
+               const wxString& name = wxRadioBoxNameStr)
+    {
+        Init();
+
+        Create(parent, id, title, pos, size, choices,
+               majorDim, style, val, name);
+    }
+
     ~wxRadioBox();
 
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int n = 0, const wxString choices[] = NULL,
+                int majorDim = 0, long style = wxRA_HORIZONTAL,
+                const wxValidator& val = wxDefaultValidator,
+                const wxString& name = wxRadioBoxNameStr);
+
+    bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
                 int majorDim = 0, long style = wxRA_HORIZONTAL,
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);

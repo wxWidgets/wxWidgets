@@ -15,6 +15,8 @@
 //#include "wx/cocoa/NSPopUpButton.h"
 #include "wx/cocoa/NSMenu.h"
 
+class WXDLLIMPEXP_BASE wxSortedArrayString;
+
 // ========================================================================
 // wxChoice
 // ========================================================================
@@ -39,11 +41,29 @@ public:
         Init();
         Create(parent, winid,  pos, size, n, choices, style, validator, name);
     }
+    wxChoice(wxWindow *parent, wxWindowID winid,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr)
+    {
+        Init();
+        Create(parent, winid,  pos, size, choices, style, validator, name);
+    }
 
     bool Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr);
+    bool Create(wxWindow *parent, wxWindowID winid,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr);

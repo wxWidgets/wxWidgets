@@ -14,6 +14,7 @@
 #if wxUSE_COMBOBOX
 
 #include "wx/combobox.h"
+#include "wx/arrstr.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -120,6 +121,20 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     ChangeBackgroundColour();
 
     return true;
+}
+
+bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
+                        const wxString& value,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        const wxArrayString& choices,
+                        long style,
+                        const wxValidator& validator,
+                        const wxString& name)
+{
+    wxCArrayString chs(choices);
+    return Create(parent, id, value, pos, size, chs.GetCount(), 
+                  chs.GetStrings(), style, validator, name);
 }
 
 void wxComboBox::AdjustDropDownListSize()

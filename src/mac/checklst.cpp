@@ -22,6 +22,7 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/checklst.h"
+#include "wx/arrstr.h"
 
 #include "wx/mac/uma.h"
 #include "Appearance.h"
@@ -170,6 +171,21 @@ static ListDefUPP macCheckListDefUPP = NULL ;
 
 void wxCheckListBox::Init()
 {
+}
+
+bool wxCheckListBox::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxPoint &pos,
+                            const wxSize &size,
+                            const wxArrayString& choices,
+                            long style,
+                            const wxValidator& validator,
+                            const wxString &name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, id, pos, size, chs.GetCount(), chs.GetStrings(),
+                  style, validator, name);
 }
 
 bool wxCheckListBox::Create(wxWindow *parent,

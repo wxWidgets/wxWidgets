@@ -38,12 +38,32 @@ public:
     {
         Create(parent, winid, title, pos, size, n, choices, majorDim, style, validator, name);
     }
+    wxRadioBox(wxWindow *parent, wxWindowID winid,
+            const wxString& title,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            int majorDim = 0,
+            long style = 0, const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxRadioBoxNameStr)
+    {
+        Create(parent, winid, title, pos, size, choices, majorDim, style, validator, name);
+    }
 
     bool Create(wxWindow *parent, wxWindowID winid,
             const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             int n = 0, const wxString choices[] = NULL,
+            int majorDim = 0,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxRadioBoxNameStr);
+    bool Create(wxWindow *parent, wxWindowID winid,
+            const wxString& title,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
             int majorDim = 0,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,

@@ -18,7 +18,8 @@
 
 #include "wx/control.h"
 
-  #include  "wx/dynarray.h"
+#include  "wx/dynarray.h"
+#include  "wx/arrstr.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxChoiceNameStr;
 
@@ -46,11 +47,28 @@ public:
   {
     Create(parent, id, pos, size, n, choices, style, validator, name);
   }
+  wxChoice(wxWindow *parent, wxWindowID id,
+           const wxPoint& pos,
+           const wxSize& size,
+           const wxArrayString& choices,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxChoiceNameStr)
+  {
+    Create(parent, id, pos, size, choices, style, validator, name);
+  }
 
   bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            int n = 0, const wxString choices[] = NULL,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxChoiceNameStr);
+  bool Create(wxWindow *parent, wxWindowID id,
+           const wxPoint& pos,
+           const wxSize& size,
+           const wxArrayString& choices,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxChoiceNameStr);

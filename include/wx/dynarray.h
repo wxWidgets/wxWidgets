@@ -442,6 +442,9 @@ public:                                                               \
     bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }    \
   };                                                                  \
                                                                       \
+  name(size_type n, const_reference v) { assign(n, v); }              \
+  name(const_iterator first, const_iterator last)                     \
+    { assign(first, last); }                                          \
   void assign(const_iterator first, const_iterator last)              \
     { base::assign((bconst_iterator)first, (bconst_iterator)last); }  \
   void assign(size_type n, const_reference v)                         \

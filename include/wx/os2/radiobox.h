@@ -47,6 +47,31 @@ public:
               );
     }
 
+    inline wxRadioBox( wxWindow*            pParent
+                      ,wxWindowID           vId
+                      ,const wxString&      rsTitle
+                      ,const wxPoint&       rPos
+                      ,const wxSize&        rSize
+                      ,const wxArrayString& asChoices
+                      ,int                  nMajorDim = 0
+                      ,long                 lStyle = wxRA_HORIZONTAL
+                      ,const wxValidator&   rVal = wxDefaultValidator
+                      ,const wxString&      rsName = wxRadioBoxNameStr
+                     )
+    {
+        Create( pParent
+               ,vId
+               ,rsTitle
+               ,rPos
+               ,rSize
+               ,asChoices
+               ,nMajorDim
+               ,lStyle
+               ,rVal
+               ,rsName
+              );
+    }
+
     ~wxRadioBox();
 
     bool Create( wxWindow*          pParent
@@ -60,6 +85,18 @@ public:
                 ,long               lStyle = wxRA_HORIZONTAL
                 ,const wxValidator& rVal = wxDefaultValidator
                 ,const wxString&    rsName = wxRadioBoxNameStr
+               );
+
+    bool Create( wxWindow*            pParent
+                ,wxWindowID           vId
+                ,const wxString&      rsTitle
+                ,const wxPoint&       rPos
+                ,const wxSize&        rSize
+                ,const wxArrayString& asChoices
+                ,int                  nMajorDim = 0
+                ,long                 lStyle = wxRA_HORIZONTAL
+                ,const wxValidator&   rVal = wxDefaultValidator
+                ,const wxString&      rsName = wxRadioBoxNameStr
                );
 
     void             Command(wxCommandEvent& rEvent);

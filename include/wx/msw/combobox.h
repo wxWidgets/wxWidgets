@@ -40,6 +40,17 @@ public:
     {
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
     }
+    wxComboBox(wxWindow *parent, wxWindowID id,
+            const wxString& value,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxComboBoxNameStr)
+    {
+        Create(parent, id, value, pos, size, choices, style, validator, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -48,6 +59,15 @@ public:
                 const wxSize& size = wxDefaultSize,
                 int n = 0,
                 const wxString choices[] = NULL,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxComboBoxNameStr);
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& value,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);

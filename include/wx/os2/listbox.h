@@ -58,6 +58,25 @@ public:
                ,rsName
               );
     }
+    wxListBox( wxWindow*            pParent
+              ,wxWindowID           vId
+              ,const wxPoint&       rPos
+              ,const wxSize&        rSize
+              ,const wxArrayString& asChoices
+              ,long                 lStyle = 0
+              ,const wxValidator&   rValidator = wxDefaultValidator
+              ,const wxString&      rsName = wxListBoxNameStr)
+    {
+        Create( pParent
+               ,vId
+               ,rPos
+               ,rSize
+               ,asChoices
+               ,lStyle
+               ,rValidator
+               ,rsName
+              );
+    }
 
     bool Create( wxWindow*          pParent
                 ,wxWindowID         vId
@@ -68,6 +87,15 @@ public:
                 ,long               lStyle = 0
                 ,const wxValidator& rValidator = wxDefaultValidator
                 ,const wxString&    rsName = wxListBoxNameStr
+               );
+    bool Create( wxWindow*            pParent
+                ,wxWindowID           vId
+                ,const wxPoint&       rPos
+                ,const wxSize&        rSize
+                ,const wxArrayString& asChoices
+                ,long                 lStyle = 0
+                ,const wxValidator&   rValidator = wxDefaultValidator
+                ,const wxString&      rsName = wxListBoxNameStr
                );
 
     virtual ~wxListBox();

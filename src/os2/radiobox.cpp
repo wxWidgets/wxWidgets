@@ -259,6 +259,25 @@ bool wxRadioBox::Create(
 , const wxString&                   rsTitle
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
+, const wxArrayString&              asChoices
+, int                               nMajorDim
+, long                              lStyle
+, const wxValidator&                rVal
+, const wxString&                   rsName
+)
+{
+    wxCArrayString(asChoices);
+
+    return Create(pParent, vId, rsTitle, rPos, rSize, chs.GetCount(),
+                  chs.GetStrings(), nMajorDim, lStyle, rVal, rsName);
+}
+
+bool wxRadioBox::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxString&                   rsTitle
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
 , int                               nNum
 , const wxString                    asChoices[]
 , int                               nMajorDim

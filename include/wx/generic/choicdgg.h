@@ -51,11 +51,29 @@ public:
         (void)Create(parent, message, caption, n, choices,
                      styleDlg, pos, styleLbox);
     }
+    wxAnyChoiceDialog(wxWindow *parent,
+                      const wxString& message,
+                      const wxString& caption,
+                      const wxArrayString& choices,
+                      long styleDlg = wxCHOICEDLG_STYLE,
+                      const wxPoint& pos = wxDefaultPosition,
+                      long styleLbox = wxLB_ALWAYS_SB)
+    {
+        (void)Create(parent, message, caption, choices,
+                     styleDlg, pos, styleLbox);
+    }
 
     bool Create(wxWindow *parent,
                 const wxString& message,
                 const wxString& caption,
                 int n, const wxString *choices,
+                long styleDlg = wxCHOICEDLG_STYLE,
+                const wxPoint& pos = wxDefaultPosition,
+                long styleLbox = wxLB_ALWAYS_SB);
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& caption,
+                const wxArrayString& choices,
                 long styleDlg = wxCHOICEDLG_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 long styleLbox = wxLB_ALWAYS_SB);
@@ -86,12 +104,26 @@ public:
                          char **clientData = (char **)NULL,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
+    wxSingleChoiceDialog(wxWindow *parent,
+                         const wxString& message,
+                         const wxString& caption,
+                         const wxArrayString& choices,
+                         char **clientData = (char **)NULL,
+                         long style = wxCHOICEDLG_STYLE,
+                         const wxPoint& pos = wxDefaultPosition);
 
     bool Create(wxWindow *parent,
                 const wxString& message,
                 const wxString& caption,
                 int n,
                 const wxString *choices,
+                char **clientData = (char **)NULL,
+                long style = wxCHOICEDLG_STYLE,
+                const wxPoint& pos = wxDefaultPosition);
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& caption,
+                const wxArrayString& choices,
                 char **clientData = (char **)NULL,
                 long style = wxCHOICEDLG_STYLE,
                 const wxPoint& pos = wxDefaultPosition);
@@ -135,12 +167,27 @@ public:
     {
         (void)Create(parent, message, caption, n, choices, style, pos);
     }
+    wxMultiChoiceDialog(wxWindow *parent,
+                        const wxString& message,
+                        const wxString& caption,
+                        const wxArrayString& choices,
+                        long style = wxCHOICEDLG_STYLE,
+                        const wxPoint& pos = wxDefaultPosition)
+    {
+        (void)Create(parent, message, caption, choices, style, pos);
+    }
 
     bool Create(wxWindow *parent,
                 const wxString& message,
                 const wxString& caption,
                 int n,
                 const wxString *choices,
+                long style = wxCHOICEDLG_STYLE,
+                const wxPoint& pos = wxDefaultPosition);
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& caption,
+                const wxArrayString& choices,
                 long style = wxCHOICEDLG_STYLE,
                 const wxPoint& pos = wxDefaultPosition);
 

@@ -19,6 +19,7 @@
 #if wxUSE_COMBOBOX
 
 #include "wx/settings.h"
+#include "wx/arrstr.h"
 #include "wx/intl.h"
 
 #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
@@ -101,6 +102,19 @@ BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_SIZE(wxComboBox::OnSize)
     EVT_CHAR(wxComboBox::OnChar)
 END_EVENT_TABLE()
+
+bool wxComboBox::Create( wxWindow *parent, wxWindowID id,
+                         const wxString& value,
+                         const wxPoint& pos, const wxSize& size,
+                         const wxArrayString& choices,
+                         long style, const wxValidator& validator,
+                         const wxString& name )
+{
+    wxCArrayString chs(choices);
+
+    return Create( parent, id, value, pos, size, chs.GetCount(),
+                   chs.GetStrings(), style, validator, name );
+}
 
 bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                          const wxPoint& pos, const wxSize& size,

@@ -33,6 +33,20 @@ WX_IMPLEMENT_COCOA_OWNER(wxListBox,NSTableView,NSControl,NSView)
 bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos,
             const wxSize& size,
+            const wxArrayString& choices,
+            long style,
+            const wxValidator& validator,
+            const wxString& name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, winid, pos, size, chs.GetCount(), chs.GetStrings(),
+                  style, validator, name);
+}
+
+bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
+            const wxPoint& pos,
+            const wxSize& size,
             int n, const wxString choices[],
             long style,
             const wxValidator& validator,

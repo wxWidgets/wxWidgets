@@ -19,6 +19,7 @@
 //-------------------------------------------------------------------------------------
 
 #include "wx/defs.h"
+#include "wx/arrstr.h"
 
 #include "wx/radiobox.h"
 #include "wx/radiobut.h"
@@ -92,6 +93,18 @@ wxRadioBox::~wxRadioBox()
 //         ¥ Create
 //-------------------------------------------------------------------------------------
 // Create the radiobox for two-step construction
+
+bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
+                        const wxPoint& pos, const wxSize& size,
+                        const wxArrayString& choices,
+                        int majorDim, long style,
+                        const wxValidator& val, const wxString& name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, id, label, pos, size, chs.GetCount(),
+                  chs.GetStrings(), majorDim, style, val, name);
+}
 
 bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                         const wxPoint& pos, const wxSize& size,

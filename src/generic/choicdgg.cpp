@@ -285,6 +285,19 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     return TRUE;
 }
 
+bool wxAnyChoiceDialog::Create(wxWindow *parent,
+                               const wxString& message,
+                               const wxString& caption,
+                               const wxArrayString& choices,
+                               long styleDlg,
+                               const wxPoint& pos,
+                               long styleLbox)
+{
+    wxCArrayString chs(choices);
+    return Create(parent, message, caption, chs.GetCount(), chs.GetStrings(),
+                  styleDlg, pos, styleLbox);
+}
+
 // ----------------------------------------------------------------------------
 // wxSingleChoiceDialog
 // ----------------------------------------------------------------------------
@@ -306,6 +319,17 @@ wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
                                            const wxPoint& WXUNUSED(pos))
 {
     Create(parent, message, caption, n, choices, clientData, style);
+}
+
+wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
+                                           const wxString& message,
+                                           const wxString& caption,
+                                           const wxArrayString& choices,
+                                           char **clientData,
+                                           long style,
+                                           const wxPoint& WXUNUSED(pos))
+{
+    Create(parent, message, caption, choices, clientData, style);
 }
 
 bool wxSingleChoiceDialog::Create( wxWindow *parent,
@@ -331,6 +355,19 @@ bool wxSingleChoiceDialog::Create( wxWindow *parent,
     }
 
     return TRUE;
+}
+
+bool wxSingleChoiceDialog::Create( wxWindow *parent,
+                                   const wxString& message,
+                                   const wxString& caption,
+                                   const wxArrayString& choices,
+                                   char **clientData,
+                                   long style,
+                                   const wxPoint& pos )
+{
+    wxCArrayString chs(choices);
+    return Create( parent, message, caption, chs.GetCount(), chs.GetStrings(),
+                   clientData, style, pos );
 }
 
 // Set the selection
@@ -381,6 +418,18 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
         return FALSE;
 
     return TRUE;
+}
+
+bool wxMultiChoiceDialog::Create( wxWindow *parent,
+                                  const wxString& message,
+                                  const wxString& caption,
+                                  const wxArrayString& choices,
+                                  long style,
+                                  const wxPoint& pos )
+{
+    wxCArrayString chs(choices);
+    return Create( parent, message, caption, chs.GetCount(),
+                   chs.GetStrings(), style, pos );
 }
 
 void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)

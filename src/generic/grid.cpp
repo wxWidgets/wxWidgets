@@ -1398,19 +1398,10 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
                                     wxWindowID id,
                                     wxEvtHandler* evtHandler)
 {
-    size_t count = m_choices.GetCount();
-    wxString *choices = new wxString[count];
-    for ( size_t n = 0; n < count; n++ )
-    {
-        choices[n] = m_choices[n];
-    }
-
     m_control = new wxComboBox(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,
-                               count, choices,
+                               m_choices,
                                m_allowOthers ? 0 : wxCB_READONLY);
-
-    delete [] choices;
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 }

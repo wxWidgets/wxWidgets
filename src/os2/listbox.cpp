@@ -90,6 +90,23 @@ bool wxListBox::Create(
 , wxWindowID                        vId
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
+, const wxArrayString&              asChoices
+, long                              lStyle
+, const wxValidator&                rValidator
+, const wxString&                   rsName
+)
+{
+    wxCArrayString chs(asChoices);
+
+    return Create(pParent, vId, rPos, rSize, chs.GetCount(), chs.GetStrings(),
+                  lStyle, rValidator, rsName);
+}
+
+bool wxListBox::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
 , int                               n
 , const wxString                    asChoices[]
 , long                              lStyle

@@ -14,6 +14,7 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/choice.h"
+    #include "wx/arrstr.h"
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/string.h"
@@ -31,6 +32,20 @@ END_EVENT_TABLE()
 void wxChoice::Init()
 {
     m_sortedStrings = NULL;
+}
+
+bool wxChoice::Create(wxWindow *parent, wxWindowID winid,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            long style,
+            const wxValidator& validator,
+            const wxString& name)
+{
+    wxCArrayString chs(choices);
+
+    return Create(parent, winid, pos, size, chs.GetCount(), chs.GetStrings(),
+                  style, validator, name);
 }
 
 bool wxChoice::Create(wxWindow *parent, wxWindowID winid,
