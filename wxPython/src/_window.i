@@ -1357,6 +1357,33 @@ foreground colour is dependent on the window class; it may be the text
 colour or other colour, or it may not be used at all.", "");
     
 
+    // Set/get the background style.
+    // Pass one of wxBG_STYLE_SYSTEM, wxBG_STYLE_COLOUR, wxBG_STYLE_CUSTOM
+    DocDeclStr(
+        virtual bool , SetBackgroundStyle(wxBackgroundStyle style),
+        "Returns the background style of the window. The background style
+indicates how the background of the window is drawn.
+
+    ======================  ========================================
+    wx.BG_STYLE_SYSTEM      The background colour or pattern should
+                            be determined by the system
+    wx.BG_STYLE_COLOUR      The background should be a solid colour
+    wx.BG_STYLE_CUSTOM      The background will be implemented by the
+                            application.
+    ======================  ========================================
+
+On GTK+, use of wx.BG_STYLE_CUSTOM allows the flicker-free drawing of
+a custom background, such as a tiled bitmap. Currently the style has
+no effect on other platforms.
+
+:see: `GetBackgroundStyle`, `SetBackgroundColour`", "");
+    
+    DocDeclStr(
+        virtual wxBackgroundStyle , GetBackgroundStyle() const,
+        "Returns the background style of the window.
+
+:see: `SetBackgroundStyle`", "");
+    
 
     
     DocDeclStr(
