@@ -80,19 +80,6 @@ protected:
 private:
     size_t                          m_nItemHeight;  // height of checklistbox items (the same for all)
 
-    //
-    // Virtual function hiding suppression, do not use
-    //
-    virtual wxControl* CreateItem( const wxItemResource*  pChildResource
-                                  ,const wxItemResource*  pParentResource
-                                  ,const wxResourceTable* pTable = (const wxResourceTable *) NULL
-                                 )
-    {
-        return(wxWindowBase::CreateItem( pChildResource
-                                        ,pParentResource
-                                        ,pTable
-                                       ));
-    }
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
     DECLARE_EVENT_TABLE()
 }; // end of CLASS wxCheckListBoxItem

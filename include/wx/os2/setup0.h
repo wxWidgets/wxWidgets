@@ -143,7 +143,7 @@
 #define wxUSE_RESOURCE_LOADING_IN_OS2     1
                                     // Use dynamic icon/cursor loading/saving code
                                     // under OS2.
-#define wxUSE_WX_RESOURCES        1
+#define wxUSE_WX_RESOURCES        0
                                   // Use .wxr resource mechanism (requires PrologIO library)
 
 // support for startup tips (wxShowTip &c)

@@ -145,21 +145,6 @@ protected:
 #endif
 
 private:
-#if wxUSE_WX_RESOURCES
-#  if wxUSE_OWNER_DRAWN
-    virtual wxControl*    CreateItem( const wxItemResource*  pChildResource
-                                     ,const wxItemResource*  pParentResource
-                                     ,const wxResourceTable* pTable = (const wxResourceTable *) NULL
-                                    )
-    {
-        return(wxWindowBase::CreateItem( pChildResource
-                                        ,pParentResource
-                                        ,pTable
-                                       )
-              );
-    }
-#  endif
-#endif
     DECLARE_DYNAMIC_CLASS(wxListBox)
 }; // end of wxListBox
 

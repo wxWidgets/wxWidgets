@@ -145,7 +145,7 @@ int wxFileDataTimeCompare( long data1, long data2, long data)
 #define IsTopMostDir(dir)   (dir.IsEmpty())
 #endif
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
 // defined in src/generic/dirctrlg.cpp
 extern bool wxIsDriveAvailable(const wxString& dirName);
 #endif
@@ -872,7 +872,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         m_filterExtension = wxEmptyString;
 
     // layout
-    
+
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );

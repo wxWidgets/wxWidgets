@@ -134,7 +134,6 @@ GENERICOBJS= \
   ..\generic\$D\textdlgg.obj \
   ..\generic\$D\tipdlg.obj \
   ..\generic\$D\tipwin.obj \
-  ..\generic\$D\treelay.obj \
   ..\generic\$D\wizard.obj
 
 #  ..\generic\$D\gridg.obj \
@@ -179,7 +178,6 @@ GENLIBOBJS= \
   textdlgg.obj \
   tipdlg.obj \
   tipwin.obj \
-  treelay.obj \
   wizard.obj
 
 # These are generic things that don't need to be compiled on PM,
@@ -188,6 +186,7 @@ NONESSENTIALOBJS= \
   ..\generic\$D\msgdlgg.obj
 
 COMMONOBJS = \
+  ..\common\$D\accesscmn.obj \
   ..\common\$D\artprov.obj \
   ..\common\$D\artstd.obj \
   ..\common\$D\appcmn.obj \
@@ -202,14 +201,9 @@ COMMONOBJS = \
   ..\common\$D\cshelp.obj \
   ..\common\$D\ctrlcmn.obj \
   ..\common\$D\ctrlsub.obj \
+  ..\common\$D\datacmn.obj \
   ..\common\$D\datetime.obj \
   ..\common\$D\datstrm.obj \
-!if "$(WXMAKINGDLL)" != "1"
-# don't have an ODBC database
-  ..\common\$D\db.obj \
-  ..\common\$D\dbgrid.obj \
-  ..\common\$D\dbtable.obj \
-!endif
   ..\common\$D\dcbase.obj \
   ..\common\$D\dircmn.obj \
   ..\common\$D\dlgcmn.obj \
@@ -217,6 +211,7 @@ COMMONOBJS = \
   ..\common\$D\dobjcmn.obj \
   ..\common\$D\docmdi.obj \
   ..\common\$D\docview.obj \
+  ..\common\$D\dpycmn.obj \
   ..\common\$D\dseldlg.obj \
   ..\common\$D\dynarray.obj \
   ..\common\$D\dynlib.obj \
@@ -276,10 +271,6 @@ COMMONOBJS = \
   ..\common\$D\mstream.obj \
   ..\common\$D\nbkbase.obj \
   ..\common\$D\object.obj \
-!if "$(WXMAKINGDLL)" != "1"
-# don't have an ODBC database
-  ..\common\$D\odbc.obj \
-!endif
   ..\common\$D\paper.obj \
   ..\common\$D\popupcmn.obj \
   ..\common\$D\prntbase.obj \
@@ -288,7 +279,7 @@ COMMONOBJS = \
   ..\common\$D\quantize.obj \
   ..\common\$D\radiocmn.obj \
   ..\common\$D\regex.obj \
-  ..\common\$D\resource.obj \
+  ..\common\$D\rgncmn.obj \
   ..\common\$D\sckaddr.obj \
   ..\common\$D\sckfile.obj \
   ..\common\$D\sckipc.obj \
@@ -316,17 +307,15 @@ COMMONOBJS = \
   ..\common\$D\valgen.obj \
   ..\common\$D\validate.obj \
   ..\common\$D\valtext.obj \
-  ..\common\$D\variant.obj \
   ..\common\$D\wfstream.obj \
   ..\common\$D\wincmn.obj \
   ..\common\$D\wxchar.obj \
-  ..\common\$D\wxexpr.obj \
   ..\common\$D\xpmdecod.obj \
-  ..\common\$D\y_tab.obj \
   ..\common\$D\zipstrm.obj \
   ..\common\$D\zstream.obj
 
 COMLIBOBJS1 = \
+  accesscmn.obj \
   artprov.obj \
   artstd.obj \
   appcmn.obj \
@@ -341,11 +330,9 @@ COMLIBOBJS1 = \
   cshelp.obj \
   ctrlcmn.obj \
   ctrlsub.obj \
+  datacmn.obj \
   datetime.obj \
   datstrm.obj \
-  db.obj \
-  dbgrid.obj \
-  dbtable.obj \
   dcbase.obj \
   dircmn.obj \
   dndcmn.obj \
@@ -354,6 +341,7 @@ COMLIBOBJS1 = \
   docmdi.obj \
   docview.obj \
   dseldlg.obj \
+  dpycmn.obj \
   dynarray.obj \
   dynlib.obj \
   dynload.obj \
@@ -369,7 +357,7 @@ COMLIBOBJS1 = \
   filename.obj \
   filesys.obj \
   fontcmn.obj \
-  fontmap.obj
+  fontmap.obj \
 
 COMLIBOBJS2 = \
   framecmn.obj \
@@ -416,7 +404,6 @@ COMLIBOBJS2 = \
   object.obj
 
 COMLIBOBJS3 = \
-  odbc.obj \
   paper.obj \
   popupcmn.obj \
   prntbase.obj \
@@ -425,7 +412,7 @@ COMLIBOBJS3 = \
   quantize.obj \
   radiocmn.obj \
   regex.obj \
-  resource.obj \
+  rgncmn.obj \
   sckaddr.obj \
   sckfile.obj \
   sckipc.obj \
@@ -453,15 +440,12 @@ COMLIBOBJS3 = \
   valgen.obj \
   validate.obj \
   valtext.obj \
-  variant.obj \
   wfstream.obj \
   wincmn.obj \
   wxchar.obj \
-  wxexpr.obj \
   xpmdecod.obj
 
 COMLIBOBJS4 = \
-  y_tab.obj \
   zipstrm.obj \
   zstream.obj
 
@@ -533,7 +517,6 @@ OS2OBJS = \
   ..\os2\$D\statline.obj \
   ..\os2\$D\stattext.obj \
   ..\os2\$D\tabctrl.obj \
-  ..\os2\$D\taskbar.obj \
   ..\os2\$D\textctrl.obj \
   ..\os2\$D\thread.obj \
   ..\os2\$D\timer.obj \
@@ -616,7 +599,6 @@ OS2LIBOBJS2 = \
   stattext.obj \
   statline.obj \
   tabctrl.obj \
-  taskbar.obj \
   textctrl.obj \
   thread.obj \
   timer.obj \
@@ -699,6 +681,7 @@ $D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\w
         icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /Tp dummydll.cpp
 
 $(COMLIBOBJS1):
+  copy ..\common\$D\accesscmn.obj
   copy ..\common\$D\artprov.obj
   copy ..\common\$D\artstd.obj
   copy ..\common\$D\appcmn.obj
@@ -713,11 +696,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\cshelp.obj
   copy ..\common\$D\ctrlcmn.obj
   copy ..\common\$D\ctrlsub.obj
+  copy ..\common\$D\datacmn.obj
   copy ..\common\$D\datetime.obj
   copy ..\common\$D\datstrm.obj
-  copy ..\common\$D\db.obj
-  copy ..\common\$D\dbgrid.obj
-  copy ..\common\$D\dbtable.obj
   copy ..\common\$D\dcbase.obj
   copy ..\common\$D\dlgcmn.obj
   copy ..\common\$D\dircmn.obj
@@ -725,6 +706,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\dobjcmn.obj
   copy ..\common\$D\docmdi.obj
   copy ..\common\$D\docview.obj
+  copy ..\common\$D\dpycmn.obj
   copy ..\common\$D\dseldlg.obj
   copy ..\common\$D\dynarray.obj
   copy ..\common\$D\dynlib.obj
@@ -788,7 +770,6 @@ $(COMLIBOBJS2):
   copy ..\common\$D\object.obj
 
 $(COMLIBOBJS3):
-  copy ..\common\$D\odbc.obj
   copy ..\common\$D\paper.obj
   copy ..\common\$D\popupcmn.obj
   copy ..\common\$D\prntbase.obj
@@ -797,7 +778,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\quantize.obj
   copy ..\common\$D\radiocmn.obj
   copy ..\common\$D\regex.obj
-  copy ..\common\$D\resource.obj
+  copy ..\common\$D\rgncmn.obj
   copy ..\common\$D\sckaddr.obj
   copy ..\common\$D\sckfile.obj
   copy ..\common\$D\sckipc.obj
@@ -825,15 +806,12 @@ $(COMLIBOBJS3):
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
   copy ..\common\$D\valtext.obj
-  copy ..\common\$D\variant.obj
   copy ..\common\$D\wfstream.obj
   copy ..\common\$D\wincmn.obj
   copy ..\common\$D\wxchar.obj
-  copy ..\common\$D\wxexpr.obj
   copy ..\common\$D\xpmdecod.obj
 
 $(COMLIBOBJS4):
-  copy ..\common\$D\y_tab.obj
   copy ..\common\$D\zipstrm.obj
   copy ..\common\$D\zstream.obj
 
@@ -876,7 +854,6 @@ $(GENLIBOBJS):
   copy ..\generic\$D\textdlgg.obj
   copy ..\generic\$D\tipdlg.obj
   copy ..\generic\$D\tipwin.obj
-  copy ..\generic\$D\treelay.obj
   copy ..\generic\$D\wizard.obj
 
 $(HTMLLIBOBJS):
@@ -971,7 +948,6 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\statline.obj
   copy ..\os2\$D\stattext.obj
   copy ..\os2\$D\tabctrl.obj
-  copy ..\os2\$D\taskbar.obj
   copy ..\os2\$D\textctrl.obj
   copy ..\os2\$D\thread.obj
   copy ..\os2\$D\timer.obj
@@ -1130,17 +1106,6 @@ $(WXDIR)\lib\wx25.dll: $(OBJECTS)
 $(CPPFLAGS2) /Fo$@ $(COMMDIR)\extended.c
 <<
 
-..\common\$D\y_tab.obj:     ..\common\y_tab.c ..\common\lex_yy.c
-        icc @<<
-$(CPPFLAGS2) /DUSE_DEFINE /DYY_USE_PROTOS /Fo$@  ..\common\y_tab.c
-<<
-
-..\common\y_tab.c:     ..\common\dosyacc.c
-        copy "..\common"\dosyacc.c "..\common"\y_tab.c
-
-..\common\lex_yy.c:    ..\common\doslex.c
-    copy "..\common"\doslex.c "..\common"\lex_yy.c
-
 $(OBJECTS): $(WXDIR)/include/wx/setup.h
 
 ..\common\$D\unzip.obj:     ..\common\unzip.c
@@ -1202,8 +1167,6 @@ clean:  $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_tiff
 !if "$(WXMAKINGDLL)" == "1"
         erase /N ..\..\lib\wx25.lib
 !endif
-        erase /N $(COMMDIR)\y_tab.c
-        erase /N $(COMMDIR)\lex_yy.c
 
 cleanall: clean
 

@@ -79,7 +79,7 @@
 #endif
 #include <stdlib.h>
 #include <ctype.h>
-
+extern bool wxIsDriveAvailable(const wxString& dirName);
 #endif // __WXPM__
 
 #if defined(__WXMAC__)
@@ -530,7 +530,7 @@ void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, in
     wxDirItemData *dir_item = new wxDirItemData(path,name,TRUE);
 
     wxTreeItemId id = m_treeCtrl->AppendItem( m_rootId, name, imageId, -1, dir_item);
-            
+
     m_treeCtrl->SetItemHasChildren(id);
 }
 
@@ -540,7 +540,7 @@ void wxGenericDirCtrl::SetupSections()
     wxArrayInt icons;
 
     size_t n, count = wxGetAvailableDrives(paths, names, icons);
-      
+
     for (n = 0; n < count; n++)
     {
         AddSection(paths[n], names[n], icons[n]);

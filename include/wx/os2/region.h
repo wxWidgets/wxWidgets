@@ -170,6 +170,22 @@ public:
     wxRegionContain Contains( wxCoord lX
                              ,wxCoord lY
                             ) const;
+
+    //
+    // Convert the region to a B&W bitmap with the black pixels being inside
+    // the region.
+    //
+    wxBitmap        ConvertToBitmap(void) const;
+
+    // Use the non-transparent pixels of a wxBitmap for the region to combine
+    // with this region.  If the bitmap has a mask then it will be used,
+    // otherwise the colour to be treated as transparent may be specified,
+    // along with an optional tolerance value.
+    bool            Union( const wxBitmap& rBmp
+                          ,const wxColour& rTransColour = wxNullColour
+                          ,int   nTolerance = 0
+                         );
+
     //
     // Does the region contain the point pt?
     //
