@@ -36,29 +36,38 @@ static wxString LINKAGEMODE HtmlizeWhitespaces(const wxString& str)
 {
     wxString out;
     size_t len = str.Len();
+    size_t linepos = 0;
     for (size_t i = 0; i < len; i++)
     {
         switch (str[i])
         {
             case wxT('<'):
                 while (i < len && str[i] != wxT('>'))
+                {
                     out << str[i++];
+                    linepos++;
+                }
                 out << wxT('>');
+                linepos++;
                 break;
             case wxT(' '):
                 out << wxT("&nbsp;");
+                linepos++;
                 break;
             case wxT('\n'):
                 out << wxT("<br>");
+                linepos = 0;
                 break;
             case wxT('\t'):
                 {
-                    for (size_t j = 8 - i%8; j > 0; j--)
+                    for (size_t j = 8 - linepos % 8; j > 0; j--)
                         out << wxT("&nbsp;");
+                    linepos += 8 - linepos % 8;
                 }
                 break;
             default:
                 out << str[i];
+                linepos++;
                 break;
         }
     }
