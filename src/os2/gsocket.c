@@ -42,7 +42,9 @@
 #include <sys\socket.h>
 #include <sys\ioctl.h>
 #include <sys\select.h>
-#ifndef __EMX__
+#ifdef __EMX__
+#define soclose(a) close(a)
+#else
 #define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
 int _System bsdselect(int,
                       struct fd_set *,
