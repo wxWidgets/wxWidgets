@@ -407,7 +407,31 @@ size_t wxChoice::GtkAppendHelper(GtkWidget *menu, const wxString& item)
 wxSize wxChoice::DoGetBestSize() const
 {
     wxSize ret( wxControl::DoGetBestSize() );
-    if (ret.x < 80) ret.x = 80;
+
+    // we know better our horizontal extent: it depends on the longest string
+    // we have
+    ret.x = 0;
+    if ( m_widget )
+    {
+        GdkFont *font = m_font.GetInternalFont();
+
+        wxCoord width;
+        size_t count = GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            width = (wxCoord)gdk_string_width(font, GetString(n).mbc_str());
+            if ( width > ret.x )
+                ret.x = width;
+        }
+
+        // for the choice "=" button
+        ret.x += 20;
+    }
+
+    // but not less than the minimal width
+    if ( ret.x < 80 )
+        ret.x = 80;
+
     ret.y = 16 + gdk_char_height( m_widget->style->font, 'H' );
     return ret;
 }
