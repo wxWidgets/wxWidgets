@@ -407,7 +407,8 @@ int wxFileDialog::ShowModal()
         dialogCreateOptions.optionFlags |= kNavDontAddTranslateItems;
 
         // The extension is important
-        dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
+        if (numFilters < 2)
+            dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
 
         err = ::NavCreatePutFileDialog(&dialogCreateOptions,
                                        // Suppresses the 'Default' (top) menu item
