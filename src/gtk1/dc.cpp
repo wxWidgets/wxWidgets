@@ -364,10 +364,13 @@ void wxDC::ComputeScaleAndOrigin(void)
     // the pen has changed
       // Using this code, wxDC will ignore the new settings
       // so it's complete non-sense, Robert Roebling TODO!!
+        // It even gives an Assert, Robert Roebling
+/*	
     wxPen* pen = GetPen();
     wxPen tempPen;
     m_pen = tempPen;
     SetPen(pen);
+*/
   }
 }
 

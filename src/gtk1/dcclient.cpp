@@ -117,7 +117,7 @@ wxPaintDC::wxPaintDC( wxWindow *window )
     SetUpDC();
     
     wxRegion update = window->GetUpdateRegion();
-    if (update == wxNullRegion) return;
+    if (update.Empty()) return;
     
     gdk_gc_set_clip_region( m_penGC, update.GetRegion() );
     gdk_gc_set_clip_region( m_brushGC, update.GetRegion() );
