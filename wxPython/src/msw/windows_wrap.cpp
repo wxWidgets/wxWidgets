@@ -11038,31 +11038,6 @@ static PyObject *_wrap_ColourDialog_GetColourData(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_ColourDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxColourDialog *arg1 = (wxColourDialog *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ColourDialog_ShowModal",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxColourDialog,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->ShowModal();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_PyObj_FromInt((int)result);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject * ColourDialog_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -11343,31 +11318,6 @@ static PyObject *_wrap_DirDialog_SetPath(PyObject *self, PyObject *args, PyObjec
         if (temp2)
         delete arg2;
     }
-    return NULL;
-}
-
-
-static PyObject *_wrap_DirDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxDirDialog *arg1 = (wxDirDialog *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DirDialog_ShowModal",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDirDialog,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->ShowModal();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_PyObj_FromInt((int)result);
-    return resultobj;
-    fail:
     return NULL;
 }
 
@@ -23086,7 +23036,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ColourData_swigregister", ColourData_swigregister, METH_VARARGS },
 	 { (char *)"new_ColourDialog", (PyCFunction) _wrap_new_ColourDialog, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ColourDialog_GetColourData", (PyCFunction) _wrap_ColourDialog_GetColourData, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"ColourDialog_ShowModal", (PyCFunction) _wrap_ColourDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ColourDialog_swigregister", ColourDialog_swigregister, METH_VARARGS },
 	 { (char *)"new_DirDialog", (PyCFunction) _wrap_new_DirDialog, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DirDialog_GetPath", (PyCFunction) _wrap_DirDialog_GetPath, METH_VARARGS | METH_KEYWORDS },
@@ -23094,7 +23043,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DirDialog_GetStyle", (PyCFunction) _wrap_DirDialog_GetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DirDialog_SetMessage", (PyCFunction) _wrap_DirDialog_SetMessage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DirDialog_SetPath", (PyCFunction) _wrap_DirDialog_SetPath, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"DirDialog_ShowModal", (PyCFunction) _wrap_DirDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DirDialog_swigregister", DirDialog_swigregister, METH_VARARGS },
 	 { (char *)"new_FileDialog", (PyCFunction) _wrap_new_FileDialog, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FileDialog_SetMessage", (PyCFunction) _wrap_FileDialog_SetMessage, METH_VARARGS | METH_KEYWORDS },

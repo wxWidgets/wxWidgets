@@ -4590,6 +4590,18 @@ _misc.FileDropTarget_swigregister(FileDropTargetPtr)
 #---------------------------------------------------------------------------
 
 class Clipboard(core.Object):
+    """
+    wx.Clipboard represents the system clipboard and provides methods to copy data
+    to or paste data from it.  Normally, you should only use wx.TheClipboard which
+    is a reference to a global wx.Clipboard instance.
+
+    Call wx.TheClipboard.Open to get ownership of the clipboard. If this operation
+    returns True, you now own the clipboard. Call wx.TheClipboard.SetData to put
+    data on the clipboard, or wx.TheClipboard.GetData to retrieve data from the
+    clipboard.  Call wx.TheClipboard.Close to close the clipboard and relinquish
+    ownership. You should keep the clipboard open only momentarily.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClipboard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4605,43 +4617,97 @@ class Clipboard(core.Object):
         except: pass
 
     def Open(*args, **kwargs):
-        """Open() -> bool"""
+        """
+        Open() -> bool
+
+        Call this function to open the clipboard before calling SetData
+        and GetData.  Call Close when you have finished with the clipboard.
+        You should keep the clipboard open for only a very short time.
+        Returns true on success. 
+        """
         return _misc.Clipboard_Open(*args, **kwargs)
 
     def Close(*args, **kwargs):
-        """Close()"""
+        """
+        Close()
+
+        Closes the clipboard.
+        """
         return _misc.Clipboard_Close(*args, **kwargs)
 
     def IsOpened(*args, **kwargs):
-        """IsOpened() -> bool"""
+        """
+        IsOpened() -> bool
+
+        Query whether the clipboard is opened
+        """
         return _misc.Clipboard_IsOpened(*args, **kwargs)
 
     def AddData(*args, **kwargs):
-        """AddData(DataObject data) -> bool"""
+        """
+        AddData(DataObject data) -> bool
+
+        Call this function to add the data object to the clipboard. You
+        may call this function repeatedly after having cleared the clipboard.
+        After this function has been called, the clipboard owns the data, so
+        do not delete the data explicitly.
+        """
         return _misc.Clipboard_AddData(*args, **kwargs)
 
     def SetData(*args, **kwargs):
-        """SetData(DataObject data) -> bool"""
+        """
+        SetData(DataObject data) -> bool
+
+        Set the clipboard data, this is the same as Clear followed by AddData.
+        """
         return _misc.Clipboard_SetData(*args, **kwargs)
 
     def IsSupported(*args, **kwargs):
-        """IsSupported(DataFormat format) -> bool"""
+        """
+        IsSupported(DataFormat format) -> bool
+
+        Returns True if the given format is available in the data object(s) on
+        the clipboard.
+        """
         return _misc.Clipboard_IsSupported(*args, **kwargs)
 
     def GetData(*args, **kwargs):
-        """GetData(DataObject data) -> bool"""
+        """
+        GetData(DataObject data) -> bool
+
+        Call this function to fill data with data on the clipboard, if available
+        in the required format. Returns true on success.
+        """
         return _misc.Clipboard_GetData(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear()"""
+        """
+        Clear()
+
+        Clears data from the clipboard object and also  the system's clipboard
+        if possible.
+        """
         return _misc.Clipboard_Clear(*args, **kwargs)
 
     def Flush(*args, **kwargs):
-        """Flush() -> bool"""
+        """
+        Flush() -> bool
+
+        Flushes the clipboard: this means that the data which is currently on
+        clipboard will stay available even after the application exits (possibly
+        eating memory), otherwise the clipboard will be emptied on exit.
+        Returns False if the operation is unsuccesful for any reason.
+        """
         return _misc.Clipboard_Flush(*args, **kwargs)
 
     def UsePrimarySelection(*args, **kwargs):
-        """UsePrimarySelection(bool primary=False)"""
+        """
+        UsePrimarySelection(bool primary=True)
+
+        On platforms supporting it (the X11 based platforms), selects the so
+        called PRIMARY SELECTION as the clipboard as opposed to the normal
+        clipboard, if primary is True.
+        """
         return _misc.Clipboard_UsePrimarySelection(*args, **kwargs)
 
 
@@ -4653,10 +4719,19 @@ class ClipboardPtr(Clipboard):
 _misc.Clipboard_swigregister(ClipboardPtr)
 
 class ClipboardLocker(object):
+    """
+    A helpful class for opening the clipboard and automatically closing it when
+    the locker is destroyed.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClipboardLocker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Clipboard clipboard=None) -> ClipboardLocker"""
+        """
+        __init__(Clipboard clipboard=None) -> ClipboardLocker
+
+        A helpful class for opening the clipboard and automatically closing it when
+        the locker is destroyed.
+        """
         newobj = _misc.new_ClipboardLocker(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4668,7 +4743,12 @@ class ClipboardLocker(object):
         except: pass
 
     def __nonzero__(*args, **kwargs):
-        """__nonzero__() -> bool"""
+        """
+        __nonzero__() -> bool
+
+        A ClipboardLocker instance evaluates to True if the clipboard was
+        successfully opened.
+        """
         return _misc.ClipboardLocker___nonzero__(*args, **kwargs)
 
 

@@ -26578,7 +26578,7 @@ static PyObject *_wrap_Clipboard_Flush(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_Clipboard_UsePrimarySelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxClipboard *arg1 = (wxClipboard *) 0 ;
-    bool arg2 = (bool) False ;
+    bool arg2 = (bool) True ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {

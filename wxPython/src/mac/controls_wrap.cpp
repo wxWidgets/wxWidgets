@@ -2468,63 +2468,6 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Choice_GetColumns(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxChoice *arg1 = (wxChoice *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Choice_GetColumns",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxChoice,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->GetColumns();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_PyObj_FromInt((int)result);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Choice_SetColumns(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxChoice *arg1 = (wxChoice *) 0 ;
-    int arg2 = (int) (int)1 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "n", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Choice_SetColumns",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxChoice,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (obj1) {
-        {
-            arg2 = (int const) SWIG_PyObj_AsInt(obj1);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetColumns(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_Choice_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxChoice *arg1 = (wxChoice *) 0 ;
@@ -2605,7 +2548,7 @@ static PyObject *_wrap_Choice_SetString(PyObject *self, PyObject *args, PyObject
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "n",(char *) "s", NULL 
+        (char *) "self",(char *) "n",(char *) "string", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Choice_SetString",kwnames,&obj0,&obj1,&obj2)) goto fail;
@@ -29184,8 +29127,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Choice", (PyCFunction) _wrap_new_Choice, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreChoice", (PyCFunction) _wrap_new_PreChoice, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Choice_Create", (PyCFunction) _wrap_Choice_Create, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Choice_GetColumns", (PyCFunction) _wrap_Choice_GetColumns, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Choice_SetColumns", (PyCFunction) _wrap_Choice_SetColumns, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Choice_SetSelection", (PyCFunction) _wrap_Choice_SetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Choice_SetStringSelection", (PyCFunction) _wrap_Choice_SetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Choice_SetString", (PyCFunction) _wrap_Choice_SetString, METH_VARARGS | METH_KEYWORDS },

@@ -2909,7 +2909,7 @@ class BufferedDC(MemoryDC):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        val._dc = args[0] # save a ref so the other dc will not be deleted before self
+        self._dc = args[0] # save a ref so the other dc will not be deleted before self
 
     def UnMask(*args, **kwargs):
         """UnMask()"""

@@ -1600,10 +1600,15 @@ EVT_TASKBAR_RIGHT_DCLICK = wx.PyEventBinder ( wxEVT_TASKBAR_RIGHT_DCLICK )
 #---------------------------------------------------------------------------
 
 class ColourData(core.Object):
+    """This class holds a variety of information related to colour dialogs."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> ColourData"""
+        """
+        __init__() -> ColourData
+
+        Constructor, sets default values.
+        """
         newobj = _windows.new_ColourData(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1615,27 +1620,57 @@ class ColourData(core.Object):
         except: pass
 
     def GetChooseFull(*args, **kwargs):
-        """GetChooseFull() -> bool"""
+        """
+        GetChooseFull() -> bool
+
+        Under Windows, determines whether the Windows colour dialog will display
+        the full dialog with custom colour selection controls. Has no meaning
+        under other platforms.  The default value is true.
+        """
         return _windows.ColourData_GetChooseFull(*args, **kwargs)
 
     def GetColour(*args, **kwargs):
-        """GetColour() -> Colour"""
+        """
+        GetColour() -> Colour
+
+        Gets the colour (pre)selected by the dialog.
+        """
         return _windows.ColourData_GetColour(*args, **kwargs)
 
     def GetCustomColour(*args, **kwargs):
-        """GetCustomColour(int i) -> Colour"""
+        """
+        GetCustomColour(int i) -> Colour
+
+        Gets the i'th custom colour associated with the colour dialog. i should
+        be an integer between 0 and 15. The default custom colours are all white.
+        """
         return _windows.ColourData_GetCustomColour(*args, **kwargs)
 
     def SetChooseFull(*args, **kwargs):
-        """SetChooseFull(int flag)"""
+        """
+        SetChooseFull(int flag)
+
+        Under Windows, tells the Windows colour dialog to display the full dialog
+        with custom colour selection controls. Under other platforms, has no effect.
+        The default value is true.
+        """
         return _windows.ColourData_SetChooseFull(*args, **kwargs)
 
     def SetColour(*args, **kwargs):
-        """SetColour(Colour colour)"""
+        """
+        SetColour(Colour colour)
+
+        Sets the default colour for the colour dialog.  The default colour is black.
+        """
         return _windows.ColourData_SetColour(*args, **kwargs)
 
     def SetCustomColour(*args, **kwargs):
-        """SetCustomColour(int i, Colour colour)"""
+        """
+        SetCustomColour(int i, Colour colour)
+
+        Sets the i'th custom colour for the colour dialog. i should be an integer
+        between 0 and 15. The default custom colours are all white.
+        """
         return _windows.ColourData_SetCustomColour(*args, **kwargs)
 
 
@@ -1653,10 +1688,16 @@ GetTextFromUserPromptStr = cvar.GetTextFromUserPromptStr
 MessageBoxCaptionStr = cvar.MessageBoxCaptionStr
 
 class ColourDialog(Dialog):
+    """This class represents the colour chooser dialog."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, ColourData data=None) -> ColourDialog"""
+        """
+        __init__(Window parent, ColourData data=None) -> ColourDialog
+
+        Constructor. Pass a parent window, and optionally a ColourData, which
+        will be copied to the colour dialog's internal ColourData instance.
+        """
         newobj = _windows.new_ColourDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1664,12 +1705,12 @@ class ColourDialog(Dialog):
         self._setOORInfo(self)
 
     def GetColourData(*args, **kwargs):
-        """GetColourData() -> ColourData"""
-        return _windows.ColourDialog_GetColourData(*args, **kwargs)
+        """
+        GetColourData() -> ColourData
 
-    def ShowModal(*args, **kwargs):
-        """ShowModal() -> int"""
-        return _windows.ColourDialog_ShowModal(*args, **kwargs)
+        Returns a reference to the ColourData used by the dialog.
+        """
+        return _windows.ColourDialog_GetColourData(*args, **kwargs)
 
 
 class ColourDialogPtr(ColourDialog):
@@ -1680,6 +1721,7 @@ class ColourDialogPtr(ColourDialog):
 _windows.ColourDialog_swigregister(ColourDialogPtr)
 
 class DirDialog(Dialog):
+    """This class represents the directory chooser dialog."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDirDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1688,6 +1730,8 @@ class DirDialog(Dialog):
             String defaultPath=EmptyString, long style=0, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             String name=DirDialogNameStr) -> DirDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
         """
         newobj = _windows.new_DirDialog(*args, **kwargs)
         self.this = newobj.this
@@ -1696,28 +1740,44 @@ class DirDialog(Dialog):
         self._setOORInfo(self)
 
     def GetPath(*args, **kwargs):
-        """GetPath() -> String"""
+        """
+        GetPath() -> String
+
+        Returns the default or user-selected path.
+        """
         return _windows.DirDialog_GetPath(*args, **kwargs)
 
     def GetMessage(*args, **kwargs):
-        """GetMessage() -> String"""
+        """
+        GetMessage() -> String
+
+        Returns the message that will be displayed on the dialog.
+        """
         return _windows.DirDialog_GetMessage(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> long"""
+        """
+        GetStyle() -> long
+
+        Returns the dialog style.
+        """
         return _windows.DirDialog_GetStyle(*args, **kwargs)
 
     def SetMessage(*args, **kwargs):
-        """SetMessage(String message)"""
+        """
+        SetMessage(String message)
+
+        Sets the message that will be displayed on the dialog.
+        """
         return _windows.DirDialog_SetMessage(*args, **kwargs)
 
     def SetPath(*args, **kwargs):
-        """SetPath(String path)"""
-        return _windows.DirDialog_SetPath(*args, **kwargs)
+        """
+        SetPath(String path)
 
-    def ShowModal(*args, **kwargs):
-        """ShowModal() -> int"""
-        return _windows.DirDialog_ShowModal(*args, **kwargs)
+        Sets the default path.
+        """
+        return _windows.DirDialog_SetPath(*args, **kwargs)
 
 
 class DirDialogPtr(DirDialog):
@@ -1728,6 +1788,7 @@ class DirDialogPtr(DirDialog):
 _windows.DirDialog_swigregister(DirDialogPtr)
 
 class FileDialog(Dialog):
+    """This class represents the file chooser dialog."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1736,6 +1797,8 @@ class FileDialog(Dialog):
             String defaultDir=EmptyString, String defaultFile=EmptyString, 
             String wildcard=FileSelectorDefaultWildcardStr, 
             long style=0, Point pos=DefaultPosition) -> FileDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
         """
         newobj = _windows.new_FileDialog(*args, **kwargs)
         self.this = newobj.this
@@ -1744,67 +1807,140 @@ class FileDialog(Dialog):
         self._setOORInfo(self)
 
     def SetMessage(*args, **kwargs):
-        """SetMessage(String message)"""
+        """
+        SetMessage(String message)
+
+        Sets the message that will be displayed on the dialog.
+        """
         return _windows.FileDialog_SetMessage(*args, **kwargs)
 
     def SetPath(*args, **kwargs):
-        """SetPath(String path)"""
+        """
+        SetPath(String path)
+
+        Sets the path (the combined directory and filename that will
+        be returned when the dialog is dismissed).
+        """
         return _windows.FileDialog_SetPath(*args, **kwargs)
 
     def SetDirectory(*args, **kwargs):
-        """SetDirectory(String dir)"""
+        """
+        SetDirectory(String dir)
+
+        Sets the default directory.
+        """
         return _windows.FileDialog_SetDirectory(*args, **kwargs)
 
     def SetFilename(*args, **kwargs):
-        """SetFilename(String name)"""
+        """
+        SetFilename(String name)
+
+        Sets the default filename.
+        """
         return _windows.FileDialog_SetFilename(*args, **kwargs)
 
     def SetWildcard(*args, **kwargs):
-        """SetWildcard(String wildCard)"""
+        """
+        SetWildcard(String wildCard)
+
+        Sets the wildcard, which can contain multiple file types, for example:
+            "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+        """
         return _windows.FileDialog_SetWildcard(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(long style)"""
+        """
+        SetStyle(long style)
+
+        Sets the dialog style.
+        """
         return _windows.FileDialog_SetStyle(*args, **kwargs)
 
     def SetFilterIndex(*args, **kwargs):
-        """SetFilterIndex(int filterIndex)"""
+        """
+        SetFilterIndex(int filterIndex)
+
+        Sets the default filter index, starting from zero.
+        """
         return _windows.FileDialog_SetFilterIndex(*args, **kwargs)
 
     def GetMessage(*args, **kwargs):
-        """GetMessage() -> String"""
+        """
+        GetMessage() -> String
+
+        Returns the message that will be displayed on the dialog.
+        """
         return _windows.FileDialog_GetMessage(*args, **kwargs)
 
     def GetPath(*args, **kwargs):
-        """GetPath() -> String"""
+        """
+        GetPath() -> String
+
+        Returns the full path (directory and filename) of the selected file.
+        """
         return _windows.FileDialog_GetPath(*args, **kwargs)
 
     def GetDirectory(*args, **kwargs):
-        """GetDirectory() -> String"""
+        """
+        GetDirectory() -> String
+
+        Returns the default directory.
+        """
         return _windows.FileDialog_GetDirectory(*args, **kwargs)
 
     def GetFilename(*args, **kwargs):
-        """GetFilename() -> String"""
+        """
+        GetFilename() -> String
+
+        Returns the default filename.
+        """
         return _windows.FileDialog_GetFilename(*args, **kwargs)
 
     def GetWildcard(*args, **kwargs):
-        """GetWildcard() -> String"""
+        """
+        GetWildcard() -> String
+
+        Returns the file dialog wildcard.
+        """
         return _windows.FileDialog_GetWildcard(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> long"""
+        """
+        GetStyle() -> long
+
+        Returns the dialog style.
+        """
         return _windows.FileDialog_GetStyle(*args, **kwargs)
 
     def GetFilterIndex(*args, **kwargs):
-        """GetFilterIndex() -> int"""
+        """
+        GetFilterIndex() -> int
+
+        Returns the index into the list of filters supplied, optionally, in
+        the wildcard parameter. Before the dialog is shown, this is the index
+        which will be used when the dialog is first displayed. After the dialog
+        is shown, this is the index selected by the user.
+        """
         return _windows.FileDialog_GetFilterIndex(*args, **kwargs)
 
     def GetFilenames(*args, **kwargs):
-        """GetFilenames() -> PyObject"""
+        """
+        GetFilenames() -> PyObject
+
+        Returns a list of filenames chosen in the dialog.  This function should
+        only be used with the dialogs which have wx.MULTIPLE style, use
+        GetFilename for the others.
+        """
         return _windows.FileDialog_GetFilenames(*args, **kwargs)
 
     def GetPaths(*args, **kwargs):
-        """GetPaths() -> PyObject"""
+        """
+        GetPaths() -> PyObject
+
+        Fills the array paths with the full paths of the files chosen. This
+        function should only be used with the dialogs which have wx.MULTIPLE style,
+        use GetPath for the others.
+        """
         return _windows.FileDialog_GetPaths(*args, **kwargs)
 
 

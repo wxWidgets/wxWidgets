@@ -222,6 +222,12 @@ CHK_UNCHECKED = _controls.CHK_UNCHECKED
 CHK_CHECKED = _controls.CHK_CHECKED
 CHK_UNDETERMINED = _controls.CHK_UNDETERMINED
 class CheckBox(core.Control):
+    """
+    A checkbox is a labelled box which by default is either on (checkmark is
+    visible) or off (no checkmark). Optionally (When the wxCHK_3STATE style flag
+    is set) it can have a third state, called the mixed or undetermined
+    state. Often this is used as a "Does Not Apply" state.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCheckBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -229,6 +235,8 @@ class CheckBox(core.Control):
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
             Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> CheckBox
+
+        Creates and shows a CheckBox control
         """
         newobj = _controls.new_CheckBox(*args, **kwargs)
         self.this = newobj.this
@@ -241,35 +249,73 @@ class CheckBox(core.Control):
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
             Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> bool
+
+        Actually create the GUI CheckBox for 2-phase creation.
         """
         return _controls.CheckBox_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> bool"""
+        """
+        GetValue() -> bool
+
+        Gets the state of a 2-state CheckBox.  Returns True if it is checked,
+        False otherwise.
+        """
         return _controls.CheckBox_GetValue(*args, **kwargs)
 
     def IsChecked(*args, **kwargs):
-        """IsChecked() -> bool"""
+        """
+        IsChecked() -> bool
+
+        Similar to GetValue, but raises an exception if it is not a 2-state CheckBox.
+        """
         return _controls.CheckBox_IsChecked(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
-        """SetValue(bool state)"""
+        """
+        SetValue(bool state)
+
+        Set the state of a 2-state CheckBox.  Pass True for checked,
+        False for unchecked.
+        """
         return _controls.CheckBox_SetValue(*args, **kwargs)
 
     def Get3StateValue(*args, **kwargs):
-        """Get3StateValue() -> int"""
+        """
+        Get3StateValue() -> int
+
+        Returns wx.CHK_UNCHECKED when the CheckBox is unchecked, wx.CHK_CHECKED when
+        it is checked and wx.CHK_UNDETERMINED when it's in the undetermined state.
+        Raises an exceptiion when the function is used with a 2-state CheckBox.
+        """
         return _controls.CheckBox_Get3StateValue(*args, **kwargs)
 
     def Set3StateValue(*args, **kwargs):
-        """Set3StateValue(int state)"""
+        """
+        Set3StateValue(int state)
+
+        Sets the CheckBox to the given state.  The state parameter can be
+        one of the following: wx.CHK_UNCHECKED (Check is off), wx.CHK_CHECKED
+        (Check is on) or wx.CHK_UNDETERMINED (Check is mixed). Raises an
+        exception  when the CheckBox is a 2-state checkbox and setting the state
+        to wx.CHK_UNDETERMINED.
+        """
         return _controls.CheckBox_Set3StateValue(*args, **kwargs)
 
     def Is3State(*args, **kwargs):
-        """Is3State() -> bool"""
+        """
+        Is3State() -> bool
+
+        Returns whether or not the CheckBox is a 3-state CheckBox.
+        """
         return _controls.CheckBox_Is3State(*args, **kwargs)
 
     def Is3rdStateAllowedForUser(*args, **kwargs):
-        """Is3rdStateAllowedForUser() -> bool"""
+        """
+        Is3rdStateAllowedForUser() -> bool
+
+        Returns whether or not the user can set the CheckBox to the third state.
+        """
         return _controls.CheckBox_Is3rdStateAllowedForUser(*args, **kwargs)
 
 
@@ -282,7 +328,11 @@ _controls.CheckBox_swigregister(CheckBoxPtr)
 CheckBoxNameStr = cvar.CheckBoxNameStr
 
 def PreCheckBox(*args, **kwargs):
-    """PreCheckBox() -> CheckBox"""
+    """
+    PreCheckBox() -> CheckBox
+
+    Precreate a CheckBox for 2-phase creation.
+    """
     val = _controls.new_PreCheckBox(*args, **kwargs)
     val.thisown = 1
     return val
@@ -290,14 +340,19 @@ def PreCheckBox(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Choice(core.ControlWithItems):
+    """
+    A Choice control is used to select one of a list of strings. Unlike a ListBox,
+    only the selection is visible until the user pulls down the menu of choices.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoice instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
-            long style=0, Validator validator=DefaultValidator, 
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
+            List choices=[], long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> Choice
+
+        Create and show a Choice control
         """
         newobj = _controls.new_Choice(*args, **kwargs)
         self.this = newobj.this
@@ -307,33 +362,39 @@ class Choice(core.ControlWithItems):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
-            long style=0, Validator validator=DefaultValidator, 
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
+            List choices=[], long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
+
+        Actually create the GUI Choice control for 2-phase creation
         """
         return _controls.Choice_Create(*args, **kwargs)
 
-    def GetColumns(*args, **kwargs):
-        """GetColumns() -> int"""
-        return _controls.Choice_GetColumns(*args, **kwargs)
-
-    def SetColumns(*args, **kwargs):
-        """SetColumns(int n=1)"""
-        return _controls.Choice_SetColumns(*args, **kwargs)
-
     def SetSelection(*args, **kwargs):
-        """SetSelection(int n)"""
+        """
+        SetSelection(int n)
+
+        Select the n'th item (zero based) in the list.
+        """
         return _controls.Choice_SetSelection(*args, **kwargs)
 
     def SetStringSelection(*args, **kwargs):
-        """SetStringSelection(String string)"""
+        """
+        SetStringSelection(String string)
+
+        Select the item with the specifed string
+        """
         return _controls.Choice_SetStringSelection(*args, **kwargs)
 
     def SetString(*args, **kwargs):
-        """SetString(int n, String s)"""
+        """
+        SetString(int n, String string)
+
+        Set the label for the n'th item (zero based) in the list.
+        """
         return _controls.Choice_SetString(*args, **kwargs)
 
+    Select = SetSelection 
 
 class ChoicePtr(Choice):
     def __init__(self, this):
@@ -344,7 +405,11 @@ _controls.Choice_swigregister(ChoicePtr)
 ChoiceNameStr = cvar.ChoiceNameStr
 
 def PreChoice(*args, **kwargs):
-    """PreChoice() -> Choice"""
+    """
+    PreChoice() -> Choice
+
+    Precreate a Choice control for 2-phase creation.
+    """
     val = _controls.new_PreChoice(*args, **kwargs)
     val.thisown = 1
     return val
