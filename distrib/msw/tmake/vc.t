@@ -438,7 +438,6 @@ clean: $(PERIPH_CLEAN_TARGET)
         -rmdir ..\common\$(D)
         -rmdir ..\html\$(D)
 
-cleanall: clean
 
 # Making documents
 docs:   allhlp allhtml allpdfrtf
