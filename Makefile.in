@@ -154,17 +154,18 @@ INTLDIR  = $(WXDIR)/locale
 
 # append a version suffix x.y.z to all file names
 VER_SUFFIX=$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)$(EXTRA_VER)
-WXARCHIVE = @DISTDIR@-$(VER_SUFFIX).tar.gz
-WXGLARCHIVE = @DISTDIR@-gl-$(VER_SUFFIX).tar.gz
-WXSAMPLES = wx$(TOOLKIT)-samples-$(VER_SUFFIX).tar.gz
-WXDEMOS = wx$(TOOLKIT)-demos-$(VER_SUFFIX).tar.gz
+WXARCHIVE=@DISTDIR@-$(VER_SUFFIX).tar.gz
+WXGLARCHIVE=@DISTDIR@-gl-$(VER_SUFFIX).tar.gz
+WXSAMPLES=wx$(TOOLKIT)-samples-$(VER_SUFFIX).tar.gz
+WXDEMOS=wx$(TOOLKIT)-demos-$(VER_SUFFIX).tar.gz
 
-WXARCHIVE_BZIP = @DISTDIR@-$(VER_SUFFIX).tar.bz2
-WXGLARCHIVE_BZIP = @DISTDIR@-gl-$(VER_SUFFIX).tar.bz2
-WXSAMPLES_BZIP = wx$(TOOLKIT)-samples-$(VER_SUFFIX).tar.bz2
-WXDEMOS_BZIP = wx$(TOOLKIT)-demos-$(VER_SUFFIX).tar.bz2
+WXARCHIVE_BZIP=@DISTDIR@-$(VER_SUFFIX).tar.bz2
+WXGLARCHIVE_BZIP=@DISTDIR@-gl-$(VER_SUFFIX).tar.bz2
+WXSAMPLES_BZIP=wx$(TOOLKIT)-samples-$(VER_SUFFIX).tar.bz2
+WXDEMOS_BZIP=wx$(TOOLKIT)-demos-$(VER_SUFFIX).tar.bz2
 
-DISTDIR = ./_dist_dir/@DISTDIR@
+DISTDIRNAME=@DISTDIR@-$(VER_SUFFIX)
+DISTDIR=./_dist_dir/$(DISTDIRNAME)
 
 
 ############################## Files ##################################
@@ -872,6 +873,16 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/dynamic/*.cpp $(DISTDIR)/samples/dynamic
 	cp $(SAMPDIR)/dynamic/*.xpm $(DISTDIR)/samples/dynamic
 
+	mkdir $(DISTDIR)/samples/erase
+	cp $(SAMPDIR)/erase/Makefile.in $(DISTDIR)/samples/erase
+	cp $(SAMPDIR)/erase/makefile.unx $(DISTDIR)/samples/erase
+	cp $(SAMPDIR)/erase/*.cpp $(DISTDIR)/samples/erase
+
+	mkdir $(DISTDIR)/samples/event
+	cp $(SAMPDIR)/event/Makefile.in $(DISTDIR)/samples/event
+	cp $(SAMPDIR)/event/makefile.unx $(DISTDIR)/samples/event
+	cp $(SAMPDIR)/event/*.cpp $(DISTDIR)/samples/event
+
 	mkdir $(DISTDIR)/samples/exec
 	cp $(SAMPDIR)/exec/Makefile.in $(DISTDIR)/samples/exec
 	cp $(SAMPDIR)/exec/makefile.unx $(DISTDIR)/samples/exec
@@ -1300,10 +1311,7 @@ distclean:
 #     the files twice
 dist-only:
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
-	@cd _dist_dir; \
-	mv @DISTDIR@ @DISTDIR@-$(VER_SUFFIX); \
-	tar ch @DISTDIR@-$(VER_SUFFIX) | gzip -f9 > ../$(WXARCHIVE); \
-	mv @DISTDIR@-$(VER_SUFFIX) @DISTDIR@
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
 	mv samples wxSamples-$(VER_SUFFIX); \
@@ -1317,12 +1325,9 @@ dist-only:
 	fi
 
 dist: @GUIDIST@
-	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
+	cp $(WXDIR)/src/files.lst $(DISTDIR)/src
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
-	@cd _dist_dir; \
-	mv @DISTDIR@ @DISTDIR@-$(VER_SUFFIX); \
-	tar ch @DISTDIR@-$(VER_SUFFIX) | gzip -f9 > ../$(WXARCHIVE); \
-	mv @DISTDIR@-$(VER_SUFFIX) @DISTDIR@
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
 	mv samples wxSamples-$(VER_SUFFIX); \
@@ -1337,7 +1342,7 @@ dist: @GUIDIST@
 
 bzip-dist-only:
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
-	@cd _dist_dir; tar ch @DISTDIR@ | bzip2 -f9 > $(WXARCHIVE_BZIP); mv $(WXARCHIVE_BZIP) ..
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
 	mv samples wxSamples-${VER_SUFFIX}; \
@@ -1349,10 +1354,11 @@ bzip-dist-only:
 	tar ch wxDemos-${VER_SUFFIX} | bzip2 -f9 > ../../$(WXDEMOS_BZIP); \
 	mv wxDemos-${VER_SUFFIX} demos; \
 	fi
+
 bzip-dist: @GUIDIST@
 	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
-	cd _dist_dir; tar ch @DISTDIR@ | bzip2 -f9 > $(WXARCHIVE_BZIP); mv $(WXARCHIVE_BZIP) ..
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP)
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
 	mv samples wxSamples; \
