@@ -2619,6 +2619,9 @@ static void TestInteractive()
     puts("\n*** done ***");
 }
 
+// for sqrt() below
+#include <math.h>
+
 static void TestTimeMS()
 {
     puts("*** testing millisecond-resolution support in wxDateTime ***");
