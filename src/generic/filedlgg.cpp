@@ -1059,6 +1059,18 @@ int wxGenericFileDialog::ShowModal()
     return wxDialog::ShowModal();
 }
 
+bool wxGenericFileDialog::Show( bool show )
+{
+    if (show)
+    {
+        m_list->GoToDir(m_dir);
+        UpdateControls();
+        m_text->SetValue(m_fileName);
+    }
+
+    return wxDialog::Show( show );
+}
+
 void wxGenericFileDialog::DoSetFilterIndex(int filterindex)
 {
     wxString *str = (wxString*) m_choice->GetClientData( filterindex );

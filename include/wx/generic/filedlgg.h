@@ -68,6 +68,7 @@ public:
     // -------------------------------
 
     virtual int ShowModal();
+    virtual bool Show( bool show = true );
 
     void OnSelected( wxListEvent &event );
     void OnActivated( wxListEvent &event );
