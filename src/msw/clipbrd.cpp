@@ -549,19 +549,21 @@ wxClipboard::~wxClipboard()
 void wxClipboard::Clear()
 {
 #if wxUSE_OLE_CLIPBOARD
-    if ( FAILED(OleSetClipboard(NULL)) )
+    HRESULT hr = OleSetClipboard(NULL);
+    if ( FAILED(hr) )
     {
-        wxLogLastError(wxT("OleSetClipboard(NULL)"));
+        wxLogApiError(wxT("OleSetClipboard(NULL)"), hr);
     }
-#endif
+#endif // wxUSE_OLE_CLIPBOARD
 }
 
 bool wxClipboard::Flush()
 {
 #if wxUSE_OLE_CLIPBOARD
-    if ( FAILED(OleFlushClipboard()) )
+    HRESULT hr = OleFlushClipboard();
+    if ( FAILED(hr) )
     {
-        wxLogLastError(wxT("OleFlushClipboard"));
+        wxLogApiError(wxT("OleFlushClipboard"), hr);
 
         return false;
     }
