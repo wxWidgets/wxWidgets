@@ -134,6 +134,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   {
     wxLogNull nolog;
     m_keyGlobalRoot.Open();
+    m_keyGlobal.Open();
   }
 }
 
