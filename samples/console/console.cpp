@@ -36,6 +36,7 @@
 // what to test (in alphabetic order)?
 
 //#define TEST_ARRAYS
+#define TEST_CHARSET
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
@@ -54,7 +55,7 @@
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_PATHLIST
-#define TEST_REGCONF
+//#define TEST_REGCONF
 //#define TEST_REGISTRY
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
@@ -65,12 +66,6 @@
 //#define TEST_WCHAR
 //#define TEST_ZIP
 //#define TEST_ZLIB
-
-
-#ifdef TEST_DATETIME
-#include <math.h>
-#endif
-
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -120,6 +115,46 @@ static wxString MakePrintable(const wxChar *s)
 }
 
 #endif // MakePrintable() is used
+
+// ----------------------------------------------------------------------------
+// wxFontMapper::CharsetToEncoding
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_CHARSET
+
+#include <wx/fontmap.h>
+
+static void TestCharset()
+{
+    static const wxChar *charsets[] =
+    {
+        // some vali charsets
+        _T("us-ascii    "),
+        _T("iso8859-1   "),
+        _T("iso-8859-12 "),
+        _T("koi8-r      "),
+        _T("utf-7       "),
+        _T("cp1250      "),
+        _T("windows-1252"),
+
+        // and now some bogus ones
+        _T("            "),
+        _T("cp1249      "),
+        _T("iso--8859-1 "),
+        _T("iso-8859-19 "),
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(charsets); n++ )
+    {
+        wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(charsets[n]);
+        wxPrintf(_T("Charset: %s\tEncoding: %s (%s)\n"),
+                 charsets[n],
+                 wxTheFontMapper->GetEncodingName(enc).c_str(),
+                 wxTheFontMapper->GetEncodingDescription(enc).c_str());
+    }
+}
+
+#endif // TEST_CHARSET
 
 // ----------------------------------------------------------------------------
 // wxCmdLineParser
@@ -2725,6 +2760,8 @@ static void TestZlibStreamRead()
 
 #ifdef TEST_DATETIME
 
+#include <math.h>
+
 #include <wx/date.h>
 
 #include <wx/datetime.h>
@@ -4453,10 +4490,9 @@ int main(int argc, char **argv)
         fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
     }
 
-#ifdef TEST_USLEEP
-    puts("Sleeping for 3 seconds... z-z-z-z-z...");
-    wxUsleep(3000);
-#endif // TEST_USLEEP
+#ifdef TEST_CHARSET
+    TestCharset();
+#endif // TEST_CHARSET
 
 #ifdef TEST_CMDLINE
     static const wxCmdLineEntryDesc cmdLineDesc[] =
@@ -4768,6 +4804,11 @@ int main(int argc, char **argv)
     if ( 0 )
         TestDateTimeInteractive();
 #endif // TEST_DATETIME
+
+#ifdef TEST_USLEEP
+    puts("Sleeping for 3 seconds... z-z-z-z-z...");
+    wxUsleep(3000);
+#endif // TEST_USLEEP
 
 #ifdef TEST_VCARD
     if ( 0 )

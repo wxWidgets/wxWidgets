@@ -42,7 +42,6 @@
 #endif
 
 #if wxUSE_GUI
-    #include "wx/fontutil.h"
     #include "wx/msgdlg.h"
     #include "wx/fontdlg.h"
     #include "wx/choicdlg.h"
@@ -145,15 +144,15 @@ static const wxChar* gs_encodingNames[] =
     wxT( "iso8859-14" ),
     wxT( "iso8859-15" ),
     wxT( "koi8-r" ),
-    wxT( "windows1250" ),
-    wxT( "windows1251" ),
-    wxT( "windows1252" ),
-    wxT( "windows1253" ),
-    wxT( "windows1254" ),
-    wxT( "windows1255" ),
-    wxT( "windows1256" ),
-    wxT( "windows1257" ),
-    wxT( "windows437" ),
+    wxT( "windows-1250" ),
+    wxT( "windows-1251" ),
+    wxT( "windows-1252" ),
+    wxT( "windows-1253" ),
+    wxT( "windows-1254" ),
+    wxT( "windows-1255" ),
+    wxT( "windows-1256" ),
+    wxT( "windows-1257" ),
+    wxT( "windows-437" ),
     wxT( "utf7" ),
     wxT( "utf8" ),
 };
@@ -319,6 +318,11 @@ void wxFontMapper::RestorePath(const wxString& pathOld)
 /* static */
 wxString wxFontMapper::GetEncodingDescription(wxFontEncoding encoding)
 {
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
+        return _("Default encoding");
+    }
+
     size_t count = WXSIZEOF(gs_encodingDescs);
 
     wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
@@ -341,6 +345,11 @@ wxString wxFontMapper::GetEncodingDescription(wxFontEncoding encoding)
 /* static */
 wxString wxFontMapper::GetEncodingName(wxFontEncoding encoding)
 {
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
+        return _("default");
+    }
+
     size_t count = WXSIZEOF(gs_encodingNames);
 
     wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
@@ -405,11 +414,15 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         RestorePath(pathOld);
     }
-#endif // wxUSE_CONFIG
+#endif
 
-    // if didn't find it there, try to reckognise it ourselves
+    // if didn't find it there, try to recognize it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
     {
+        // trim any spaces
+        cs.Trim(TRUE);
+        cs.Trim(FALSE);
+
         // discard the optional quotes
         if ( !!cs )
         {
@@ -422,13 +435,26 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         cs.MakeUpper();
 
         if ( !cs || cs == wxT("US-ASCII") )
+        {
             encoding = wxFONTENCODING_DEFAULT;
+        }
         else if ( cs == wxT("UTF-7") )
+        {
             encoding = wxFONTENCODING_UTF7;
+        }
         else if ( cs == wxT("UTF-8") )
+        {
             encoding = wxFONTENCODING_UTF8;
-        else if ( cs == wxT("KOI8-R") || cs == wxT("KOI8-U") )
+        }
+        else if ( cs == wxT("KOI8-R") ||
+                  cs == wxT("KOI8-U") ||
+                  cs == wxT("KOI8-RU") )
+        {
+            // although koi8-ru is not strictly speaking the same as koi8-r,
+            // they are similar enough to make mapping it to koi8 better than
+            // not reckognizing it at all
             encoding = wxFONTENCODING_KOI8;
+        }
         else if ( cs.Left(3) == wxT("ISO") )
         {
             // the dash is optional (or, to be exact, it is not, but
@@ -449,20 +475,41 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                 }
             }
         }
-        else if ( cs.Left(8) == wxT("WINDOWS-") )
+        else // check for Windows charsets
         {
-            int value;
-            if ( wxSscanf(cs.c_str() + 8, wxT("%u"), &value) == 1 )
+            size_t len;
+            if ( cs.Left(7) == wxT("WINDOWS") )
             {
-                if ( value >= 1250 )
+                len = 7;
+            }
+            else if ( cs.Left(2) == wxT("CP") )
+            {
+                len = 2;
+            }
+            else // not a Windows encoding
+            {
+                len = 0;
+            }
+
+            if ( len )
+            {
+                const wxChar *p = cs.c_str() + len;
+                if ( *p == wxT('-') )
+                    p++;
+
+                int value;
+                if ( wxSscanf(p, wxT("%u"), &value) == 1 )
                 {
-                    value -= 1250;
-                    if ( value < wxFONTENCODING_CP12_MAX -
-                                 wxFONTENCODING_CP1250 )
+                    if ( value >= 1250 )
                     {
-                        // a valid Windows code page
-                        value += wxFONTENCODING_CP1250;
-                        encoding = (wxFontEncoding)value;
+                        value -= 1250;
+                        if ( value < wxFONTENCODING_CP12_MAX -
+                                     wxFONTENCODING_CP1250 )
+                        {
+                            // a valid Windows code page
+                            value += wxFONTENCODING_CP1250;
+                            encoding = (wxFontEncoding)value;
+                        }
                     }
                 }
             }
@@ -696,10 +743,10 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 wxFont font = retData.GetChosenFont();
 
                 *info = retData.EncodingInfo();
-                info->encoding = retData.GetEncoding();
+                info -> encoding = retData.GetEncoding();
 
 #if wxUSE_CONFIG
-                // remember this in the config
+            // remember this in the config
                 if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
                 {
                     GetConfig()->Write(configEntry, info->ToString());
@@ -747,7 +794,7 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
 {
     wxNativeEncodingInfo info;
 
-    if ( wxGetNativeFontEncoding(encoding, &info) )
+    if (wxGetNativeFontEncoding(encoding, &info))
     {
         info.facename = facename;
         return wxTestFontEncoding(info);
