@@ -962,6 +962,9 @@ public:
         m_scanCode = evt.m_scanCode;
         m_rawCode = evt.m_rawCode;
         m_rawFlags = evt.m_rawFlags;
+#if wxUSE_UNICODE
+        m_uniChar = evt.m_uniChar;
+#endif
 
         return *this;
     }
