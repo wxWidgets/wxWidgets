@@ -379,6 +379,8 @@ public:
     void SetSize(const wxSize& size);
     void Show(int show = TRUE);
     void Hide();
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.IsOk()"
 };
 
 %inline %{
@@ -1050,6 +1052,8 @@ public:
 
     bool SetCapture(wxWindow* win, int pollingFreq = 0);
     bool ReleaseCapture();
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.IsOk()"
 };
 
 //----------------------------------------------------------------------
@@ -1083,11 +1087,13 @@ public:
 class wxWave : public wxObject
 {
 public:
-  wxWave(const wxString& fileName, bool isResource = FALSE);
-  ~wxWave();
+    wxWave(const wxString& fileName, bool isResource = FALSE);
+    ~wxWave();
 
-  bool  IsOk() const;
-  bool  Play(bool async = TRUE, bool looped = FALSE) const;
+    bool  IsOk() const;
+    bool  Play(bool async = TRUE, bool looped = FALSE) const;
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.IsOk()"
 };
 
 %new wxWave* wxWaveData(const wxString& data);

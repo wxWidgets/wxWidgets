@@ -107,6 +107,7 @@ public:
     void SetPrinterTranslation(long x, long y);
     void SetPrintMode(wxPrintMode printMode);
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 //----------------------------------------------------------------------
@@ -181,6 +182,8 @@ public:
     void SetPaperId(wxPaperSize id);
     void SetPaperSize(const wxSize& size);
     void SetPrintData(const wxPrintData& printData);
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -231,6 +234,8 @@ public:
     void SetPrintToFile(bool flag);
     void SetSetupDialog(bool flag);
     void SetToPage(int page);
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -386,6 +391,8 @@ public:
     void SetFrame(wxFrame *frame);
     void SetPrintout(wxPyPrintout *printout);
     void SetZoom(int percent);
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 //----------------------------------------------------------------------

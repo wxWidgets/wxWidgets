@@ -730,8 +730,6 @@ public:
     %name(RemoveItem) wxMenuItem *Remove(wxMenuItem *item);
 
 
-
-
     %addmethods {
         void Destroy() { delete self; }
     }

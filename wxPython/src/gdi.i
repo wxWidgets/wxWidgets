@@ -101,6 +101,7 @@ public:
     void SetQuality(int q);
 #endif
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -229,6 +230,7 @@ public:
 #endif
     void CopyFromBitmap(const wxBitmap& bmp);
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -318,6 +320,7 @@ public:
     void SetDepth(int d);
     void SetSize(const wxSize& size);
 #endif
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 %name(wxStockCursor) %new wxCursor* wxPyStockCursor(int id);
@@ -473,6 +476,8 @@ public:
     wxBitmap* GetStipple();
     void SetStipple(wxBitmap& stipple);
 #endif
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -546,6 +551,8 @@ public:
     void SetColour(wxColour &colour);
     void SetStipple(wxBitmap& bitmap);
     void SetStyle(int style);
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -704,6 +711,8 @@ public:
         void GetBoundingBox(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
         // See below for implementation
     }
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 
 #ifdef __WXMSW__
     long GetHDC();
@@ -959,6 +968,7 @@ public:
 
     const wxString& GetFileName() const { return m_filename; }
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 // bool wxMakeMetaFilePlaceable(const wxString& filename,
@@ -985,6 +995,8 @@ public:
     int GetPixel(byte red, byte green, byte blue);
     bool GetRGB(int pixel, byte* OUTPUT, byte* OUTPUT, byte* OUTPUT);
     bool Ok();
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 //---------------------------------------------------------------------------
