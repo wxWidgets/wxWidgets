@@ -60,8 +60,8 @@ IMPLEMENT_DYNAMIC_CLASS    (MyApp, wxApp)
 BEGIN_EVENT_TABLE(MyApp, wxApp)
 #if wxUSE_TIMEDATE
     EVT_MENU(TYPES_DATE,      MyApp::DoDateDemo)
-#endif // wxUSE_TIMEDATE
     EVT_MENU(TYPES_TIME,      MyApp::DoTimeDemo)
+#endif // wxUSE_TIMEDATE
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
     EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
 #if wxUSE_UNICODE
@@ -234,7 +234,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     file_output.SeekO( 0 );
     wxDataOutputStream data_output( buf_output );
 
-    wxInt16 i16 = (short)0xFFFF;
+    wxInt16 i16 = (unsigned short)0xFFFF;
     tmp.Printf( _T("Signed int16: %d\n"), (int)i16 );
     textCtrl.WriteText( tmp );
     data_output.Write16( i16 );
@@ -851,6 +851,8 @@ void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( text );
 }
 
+#if wxUSE_TIMEDATE
+
 void MyApp::DoTimeDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
@@ -860,8 +862,6 @@ void MyApp::DoTimeDemo(wxCommandEvent& WXUNUSED(event))
     wxTime now;
     textCtrl << "It is now " << (wxString) now << "\n";
 }
-
-#if wxUSE_TIMEDATE
 
 void MyApp::DoDateDemo(wxCommandEvent& WXUNUSED(event))
 {
