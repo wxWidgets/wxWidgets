@@ -1397,36 +1397,35 @@ THREADS_LINK=""
 UNIX_THREAD=""
 
 if test "$wxUSE_THREADS" = "1"; then
-     dnl For glibc 2 users who have the old libc 5 too
+    dnl find if POSIX threads are available
 
-     AC_CHECK_LIB(pthread-0.7, pthread_create, [
-       UNIX_THREAD="unix/threadpsx.cpp"
-       THREADS_LINK="pthread-0.7"
-     ],[
-       AC_CHECK_HEADER(sys/prctl.h, [
-          UNIX_THREAD="gtk/threadsgi.cpp"
-     ])
-
-     dnl pthread_create is always available in pthread but it seems not to be
-     dnl the case for pthread_setcanceltype.
-
-     AC_CHECK_LIB(pthread, pthread_setcanceltype, [
-       UNIX_THREAD="unix/threadpsx.cpp"
-       THREADS_LINK="pthread"
-     ])
+    dnl For glibc 2 users who have the old libc 5 too check pthread-0.7 first
+    AC_CHECK_LIB(pthread-0.7, pthread_create, [
+        UNIX_THREAD="unix/threadpsx.cpp"
+        THREADS_LINK="pthread-0.7"
+    ],[
+        dnl standard lib name is pthread
+        AC_CHECK_LIB(pthread, pthread_create, [
+            UNIX_THREAD="unix/threadpsx.cpp"
+            THREADS_LINK="pthread"
+        ], [
+            dnl thread functions are in libc_r under FreeBSD
+            AC_CHECK_LIB(c_r, pthread_create, [
+                UNIX_THREAD="unix/threadpsx.cpp"
+                THREADS_LINK="c_r"
+            ], [
+                dnl VZ: SGI threads are not supported currently
+                AC_CHECK_HEADER(sys/prctl.h, [
+                    UNIX_THREAD="gtk/threadsgi.cpp"
+                ])
+            ])
+        ])
     ])
 
-    if test "x$THREADS_LINK" = "x"; then
-        dnl thread functions are in libc_r under FreeBSD
-        AC_CHECK_LIB(c_r, pthread_create,
-                    [
-                        UNIX_THREAD="unix/threadpsx.cpp"
-                        THREADS_LINK="c_r"
-                    ])
-    fi
-
     if test "$THREADS_LINK" != ""; then
-      AC_DEFINE(wxUSE_THREADS)
+        AC_DEFINE(wxUSE_THREADS)
+    else
+        AC_MSG_WARN(No thread support on this system)
     fi
 fi
 
