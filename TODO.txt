@@ -32,6 +32,7 @@ More controls with bitmaps
 Speed up bitmap saving
 wxBitmapHandler
 Fix printing of bitmaps
+wxRadioBox layout and setsize
 TrueType support (just kidding)
 
 wxTreeCtrl not yet finshed

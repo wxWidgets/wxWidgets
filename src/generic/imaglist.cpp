@@ -25,28 +25,28 @@ wxImageList::wxImageList( int width, int height, bool WXUNUSED(mask), int WXUNUS
   m_width = width;
   m_height = height;
   Create();
-};
+}
 
 wxImageList::~wxImageList()
 {
-};
+}
 
 int wxImageList::GetImageCount() const
 {
   return m_images.Number();
-};
+}
 
 bool wxImageList::Create()
 {
   m_images.DeleteContents( TRUE );
   return TRUE;
-};
+}
 
 int wxImageList::Add( const wxBitmap &bitmap )
 {
   m_images.Append( new wxBitmap(bitmap) );
   return m_images.Number();
-};
+}
 
 wxBitmap *wxImageList::GetBitmap(int index) {
   wxNode *node = m_images.Nth(index);
@@ -71,23 +71,23 @@ bool wxImageList::Replace( int index, const wxBitmap &bitmap )
     wxNode *next = node->Next();
     m_images.DeleteNode( node );
     m_images.Insert( next, new wxBitmap(bitmap) );
-  };
+  }
   
   return TRUE;
-};
+}
 
 bool wxImageList::Remove( int index )
 {
   wxNode *node = m_images.Nth( index );
   if (node) m_images.DeleteNode( node );
   return (node != NULL);
-};
+}
 
 bool wxImageList::RemoveAll()
 {
   m_images.Clear();
   return TRUE;
-};
+}
 
 bool wxImageList::GetSize( int index, int &width, int &height ) const
 {
@@ -113,10 +113,10 @@ bool wxImageList::GetSize( int index, int &width, int &height ) const
     width = 0;
     height = 0;
     return FALSE;
-  };
+  }
 
 #endif  
-};
+}
 
 bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
                         int flags, bool WXUNUSED(solidBackground) )
@@ -134,7 +134,7 @@ bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
       (m_height != bm->GetHeight()))
   {
     bm->Resize( m_width, m_height );
-  };
+  }
   
 #endif  
   
@@ -142,6 +142,6 @@ bool wxImageList::Draw( int index, wxDC &dc, int x, int y,
   dc.DrawIcon( *icon, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );
 
   return TRUE;
-};
+}
 
 

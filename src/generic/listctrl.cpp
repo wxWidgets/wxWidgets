@@ -29,7 +29,7 @@ wxListItemData::wxListItemData(void)
   m_width = 0;
   m_height = 0;
   m_colour = wxBLACK;
-};
+}
 
 wxListItemData::wxListItemData( const wxListItem &info )
 {
@@ -37,7 +37,7 @@ wxListItemData::wxListItemData( const wxListItem &info )
   m_data = 0;
   m_colour = info.m_colour;
   SetItem( info );
-};
+}
 
 void wxListItemData::SetItem( const wxListItem &info )
 {
@@ -49,96 +49,96 @@ void wxListItemData::SetItem( const wxListItem &info )
   m_ypos = 0;
   m_width = info.m_width;
   m_height = 0;
-};
+}
 
 void wxListItemData::SetText( const wxString &s )
 {
   m_text = s;
-};
+}
 
 void wxListItemData::SetImage( int image )
 {
   m_image = image;
-};
+}
 
 void wxListItemData::SetData( long data )
 {
   m_data = data;
-};
+}
 
 void wxListItemData::SetPosition( int x, int y )
 {
   m_xpos = x;
   m_ypos = y;
-};
+}
 
 void wxListItemData::SetSize( int const width, int height )
 {
   m_width = width;
   m_height = height;
-};
+}
 
 void wxListItemData::SetColour( wxColour *col )
 {
   m_colour = col;
-};
+}
 
 bool wxListItemData::HasImage(void) const
 {
   return (m_image >= 0);
-};
+}
 
 bool wxListItemData::HasText(void) const
 {
   return (!m_text.IsNull());
-};
+}
 
 bool wxListItemData::IsHit( int x, int y ) const
 {
   return ((x >= m_xpos) && (x <= m_xpos+m_width) && (y >= m_ypos) && (y <= m_ypos+m_height));
-};
+}
 
 void wxListItemData::GetText( wxString &s )
 {
   s = m_text;
-};
+}
 
 int wxListItemData::GetX( void ) const
 {
   return m_xpos;
-};
+}
 
 int wxListItemData::GetY( void ) const
 {
   return m_ypos;
-};
+}
 
 int wxListItemData::GetWidth(void) const
 {
   return m_width;
-};
+}
 
 int wxListItemData::GetHeight(void) const
 {
   return m_height;
-};
+}
 
 int wxListItemData::GetImage(void) const
 {
   return m_image;
-};
+}
 
 void wxListItemData::GetItem( wxListItem &info )
 {
   info.m_text = m_text;
   info.m_image = m_image;
   info.m_data = m_data;
-};
+}
 
 wxColour *wxListItemData::GetColour(void)
 {
   return m_colour;
-};
+}
 
 //-----------------------------------------------------------------------------
 //  wxListHeaderData
@@ -155,7 +155,7 @@ wxListHeaderData::wxListHeaderData(void)
   m_xpos = 0;
   m_ypos = 0;
   m_height = 0;
-};
+}
 
 wxListHeaderData::wxListHeaderData( const wxListItem &item )
 {
@@ -163,7 +163,7 @@ wxListHeaderData::wxListHeaderData( const wxListItem &item )
   m_xpos = 0;
   m_ypos = 0;
   m_height = 0;
-};
+}
 
 void wxListHeaderData::SetItem( const wxListItem &item )
 {
@@ -174,45 +174,45 @@ void wxListHeaderData::SetItem( const wxListItem &item )
   m_width = item.m_width;
   if (m_width < 0) m_width = 80;
   if (m_width < 6) m_width = 6;
-};
+}
 
 void wxListHeaderData::SetPosition( int x, int y )
 {
   m_xpos = x;
   m_ypos = y;
-};
+}
 
 void wxListHeaderData::SetHeight( int h )
 {
   m_height = h;
-};
+}
 
 void wxListHeaderData::SetWidth( int w )
 {
   m_width = w;
   if (m_width < 0) m_width = 80;
   if (m_width < 6) m_width = 6;
-};
+}
 
 void wxListHeaderData::SetFormat( int format )
 {
   m_format = format;
-};
+}
 
 bool wxListHeaderData::HasImage(void) const
 {
   return (m_image != 0);
-};
+}
 
 bool wxListHeaderData::HasText(void) const
 {
   return (m_text.Length() > 0);
-};
+}
 
 bool wxListHeaderData::IsHit( int x, int y ) const
 {
   return ((x >= m_xpos) && (x <= m_xpos+m_width) && (y >= m_ypos) && (y <= m_ypos+m_height));
-};
+}
 
 void wxListHeaderData::GetItem( wxListItem &item )
 {
@@ -221,27 +221,27 @@ void wxListHeaderData::GetItem( wxListItem &item )
   item.m_image = m_image;
   item.m_format = m_format;
   item.m_width = m_width;
-};
+}
 
 void wxListHeaderData::GetText( wxString &s )
 {
   s =  m_text;
-};
+}
 
 int wxListHeaderData::GetImage(void) const
 {
   return m_image;
-};
+}
 
 int wxListHeaderData::GetWidth(void) const
 {
   return m_width;
-};
+}
 
 int wxListHeaderData::GetFormat(void) const
 {
   return m_format;
-};
+}
 
 //-----------------------------------------------------------------------------
 //  wxListLineData
@@ -257,7 +257,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner, int mode, wxBrush *hili
   m_hilightBrush = hilightBrush;
   m_items.DeleteContents( TRUE );
   m_spacing = 0;
-};
+}
 
 void wxListLineData::CalculateSize( wxPaintDC *dc, int spacing )
 {
@@ -277,9 +277,9 @@ void wxListLineData::CalculateSize( wxPaintDC *dc, int spacing )
         long lw,lh;
         dc->GetTextExtent( s, &lw, &lh );
         if (lw > m_spacing) m_bound_all.width = lw;
-      };
+      }
       break;
-    };
+    }
     case wxLC_LIST:
     {
       wxNode *node = m_items.First();
@@ -292,9 +292,9 @@ void wxListLineData::CalculateSize( wxPaintDC *dc, int spacing )
         dc->GetTextExtent( s, &lw, &lh );
         m_bound_all.width = lw;
         m_bound_all.height = lh;
-      };
+      }
       break;
-    };
+    }
     case wxLC_REPORT:
     {
       m_bound_all.width = 0;
@@ -312,11 +312,11 @@ void wxListLineData::CalculateSize( wxPaintDC *dc, int spacing )
         m_bound_all.width += lw;
         m_bound_all.height = lh;
         node = node->Next();
-      };
+      }
       break;
-    };
-  };
-};
+    }
+  }
+}
 
 void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width )
 {
@@ -350,8 +350,8 @@ void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width 
             m_bound_hilight.y -= 3;
             m_bound_hilight.width += 7;
             m_bound_hilight.height += 7;
-          };
-        };
+          }
+        }
         if (item->HasText())
         {
           wxString s;
@@ -366,17 +366,17 @@ void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width 
           m_bound_label.width = lw;
           m_bound_label.height = lh;
           AssignRect( m_bound_hilight, m_bound_label );
-        };
-      };
+        }
+      }
       break;
-    };
+    }
     case wxLC_LIST:
     {
       AssignRect( m_bound_label, m_bound_all );
       AssignRect( m_bound_hilight, m_bound_all );
       AssignRect( m_bound_icon, 0, 0, 0, 0 );
       break;
-    };
+    }
     case wxLC_REPORT:
     {
       long lw,lh;
@@ -389,9 +389,9 @@ void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width 
       m_bound_hilight.width = window_width-10;
       m_bound_label.width = window_width-10;
       break;
-    };
-  };
-};
+    }
+  }
+}
 
 void wxListLineData::SetColumnPosition( int index, int x )
 {
@@ -401,14 +401,14 @@ void wxListLineData::SetColumnPosition( int index, int x )
   {
     wxListItemData *item = (wxListItemData*)node->Data();
     item->SetPosition( x, m_bound_all.y );
-  };  
-};
+  }  
+}
 
 void wxListLineData::GetSize( int &width, int &height )
 {
   width = m_bound_all.width;
   height = m_bound_all.height;
-};
+}
 
 void wxListLineData::GetExtent( int &x, int &y, int &width, int &height )
 {
@@ -416,7 +416,7 @@ void wxListLineData::GetExtent( int &x, int &y, int &width, int &height )
   y = m_bound_all.y;
   width = m_bound_all.width;
   height = m_bound_all.height;
-};
+}
 
 void wxListLineData::GetLabelExtent( int &x, int &y, int &width, int &height )
 {
@@ -424,12 +424,12 @@ void wxListLineData::GetLabelExtent( int &x, int &y, int &width, int &height )
   y = m_bound_label.y;
   width = m_bound_label.width;
   height = m_bound_label.height;
-};
+}
 
 void wxListLineData::GetRect( wxRectangle &rect )
 {
   AssignRect( rect, m_bound_all );
-};
+}
 
 long wxListLineData::IsHit( int x, int y )
 {
@@ -440,16 +440,16 @@ long wxListLineData::IsHit( int x, int y )
     if (item->HasImage() && IsInRect( x, y, m_bound_icon )) return wxLIST_HITTEST_ONITEMICON;
     if (item->HasText() && IsInRect( x, y, m_bound_label )) return wxLIST_HITTEST_ONITEMLABEL;
 //    if (!(item->HasImage() || item->HasText())) return 0;
-  };
+  }
   // if there is no icon or text = empty
   if (IsInRect( x, y, m_bound_all )) return wxLIST_HITTEST_ONITEMICON;
   return 0;
-};
+}
 
 void wxListLineData::InitItems( int num )
 {
   for (int i = 0; i < num; i++) m_items.Append( new wxListItemData() );
-};
+}
 
 void wxListLineData::SetItem( int index, const wxListItem &info )
 {
@@ -458,8 +458,8 @@ void wxListLineData::SetItem( int index, const wxListItem &info )
   {
     wxListItemData *item = (wxListItemData*)node->Data();
     item->SetItem( info );
-  };
-};
+  }
+}
 
 void wxListLineData::GetItem( int const index, wxListItem &info )
 {
@@ -469,8 +469,8 @@ void wxListLineData::GetItem( int const index, wxListItem &info )
   {
     wxListItemData *item = (wxListItemData*)node->Data();
     item->GetItem( info );
-  };
-};
+  }
+}
 
 void wxListLineData::GetText( int index, wxString &s )
 {
@@ -481,8 +481,8 @@ void wxListLineData::GetText( int index, wxString &s )
   {
     wxListItemData *item = (wxListItemData*)node->Data();
     item->GetText( s );
-  };
-};
+  }
+}
 
 void wxListLineData::SetText( int index, const wxString s )
 {
@@ -492,8 +492,8 @@ void wxListLineData::SetText( int index, const wxString s )
   {
     wxListItemData *item = (wxListItemData*)node->Data();
     item->SetText( s );
-  };
-};
+  }
+}
 
 int wxListLineData::GetImage( int index )
 {
@@ -503,9 +503,9 @@ int wxListLineData::GetImage( int index )
   {
     wxListItemData *item = (wxListItemData*)node->Data();
     return item->GetImage();
-  };
+  }
   return -1;
-};
+}
 
 void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
 {
@@ -526,10 +526,10 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
     {
       dc->SetBrush( wxWHITE_BRUSH );
       dc->SetPen( wxTRANSPARENT_PEN );
-    };
+    }
     dc->DrawRectangle( m_bound_hilight.x-2, m_bound_hilight.y-2,
                        m_bound_hilight.width+4, m_bound_hilight.height+4 );
-  };
+  }
   if (m_mode == wxLC_REPORT)
   {
     wxString s;
@@ -546,7 +546,7 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
       dc->DrawText( s, info->GetX()+2, info->GetY() );
       dc->DestroyClippingRegion();
       node = node->Next();
-    };
+    }
   }
   else
   {
@@ -557,7 +557,7 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
       if (item->HasImage())
       {
         m_owner->DrawImage( item->GetImage(), dc, m_bound_icon.x, m_bound_icon.y );
-      };
+      }
       if (item->HasText())
       {
         wxString s;
@@ -567,10 +567,10 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
 	else
           dc->SetTextForeground( item->GetColour() );
         dc->DrawText( s, m_bound_label.x, m_bound_label.y );
-      };
-    };
-  };
-};
+      }
+    }
+  }
+}
 
 void wxListLineData::Hilight( bool on )
 {
@@ -580,7 +580,7 @@ void wxListLineData::Hilight( bool on )
   else
     m_owner->DeselectLine( this );
   m_hilighted = on;
-};
+}
 
 void wxListLineData::ReverseHilight( void )
 {
@@ -589,7 +589,7 @@ void wxListLineData::ReverseHilight( void )
     m_owner->SelectLine( this );
   else
     m_owner->DeselectLine( this );
-};
+}
 
 void wxListLineData::DrawRubberBand( wxPaintDC *dc, bool on )
 {
@@ -599,23 +599,23 @@ void wxListLineData::DrawRubberBand( wxPaintDC *dc, bool on )
     dc->SetBrush( wxTRANSPARENT_BRUSH );
     dc->DrawRectangle( m_bound_hilight.x-2, m_bound_hilight.y-2,
                        m_bound_hilight.width+4, m_bound_hilight.height+4 );
-  };
-};
+  }
+}
 
 void wxListLineData::Draw( wxPaintDC *dc )
 {
   DoDraw( dc, m_hilighted, m_hilighted );
-};
+}
 
 bool wxListLineData::IsInRect( int x, int y, const wxRectangle &rect )
 {
   return ((x >= rect.x) && (x <= rect.x+rect.width) && (y >= rect.y) && (y <= rect.y+rect.height));
-};
+}
 
 bool wxListLineData::IsHilighted( void )
 {
   return m_hilighted;
-};
+}
 
 void wxListLineData::AssignRect( wxRectangle &dest, int x, int y, int width, int height )
 {
@@ -623,7 +623,7 @@ void wxListLineData::AssignRect( wxRectangle &dest, int x, int y, int width, int
   dest.y = y;
   dest.width = width;
   dest.height = height;
-};
+}
 
 void wxListLineData::AssignRect( wxRectangle &dest, const wxRectangle &source )
 {
@@ -631,7 +631,7 @@ void wxListLineData::AssignRect( wxRectangle &dest, const wxRectangle &source )
   dest.y = source.y;
   dest.width = source.width;
   dest.height = source.height;
-};
+}
 
 //-----------------------------------------------------------------------------
 //  wxListHeaderWindow
@@ -650,7 +650,7 @@ wxListHeaderWindow::wxListHeaderWindow( void )
   m_owner = (wxListMainWindow *) NULL;
   m_currentCursor = (wxCursor *) NULL;
   m_resizeCursor = (wxCursor *) NULL;
-};
+}
 
 wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner, 
       const wxPoint &pos, const wxSize &size,
@@ -661,7 +661,7 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMain
 //  m_currentCursor = wxSTANDARD_CURSOR;
   m_currentCursor = (wxCursor *) NULL;
   m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
-};
+}
 
 void wxListHeaderWindow::DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h )
 {
@@ -682,7 +682,7 @@ void wxListHeaderWindow::DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h )
 //  dc->DrawRectangle( x, y+1, w-m_corner, 1 );   // top (inner)
   dc->DrawRectangle( x, y, 1, h );              // left (outer)
 //  dc->DrawRectangle( x+1, y, 1, h-1 );          // left (inner)
-};
+}
 
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
@@ -718,9 +718,9 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DestroyClippingRegion();
     x += item.m_width;
     if (x > w+5) break;
-  }; 
+  } 
   dc.EndDrawing();
-};
+}
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
@@ -737,7 +737,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     {
       xpos += m_owner->GetColumnWidth( j );
       if ((abs(x-xpos) < 2) && (y < 14)) { hit = TRUE; break; }
-    };
+    }
     if (hit)
     {
       if (m_currentCursor == wxSTANDARD_CURSOR) SetCursor( m_resizeCursor );
@@ -747,14 +747,14 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     {
       if (m_currentCursor != wxSTANDARD_CURSOR) SetCursor( wxSTANDARD_CURSOR );
       m_currentCursor = wxSTANDARD_CURSOR;
-    };
-  };
-};
+    }
+  }
+}
 
 void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
   m_owner->SetFocus();
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxListRenameTimer (internal)
@@ -763,12 +763,12 @@ void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 wxListRenameTimer::wxListRenameTimer( wxListMainWindow *owner ) 
 { 
   m_owner = owner; 
-};
+}
 
 void wxListRenameTimer::Notify() 
 { 
   m_owner->OnRenameTimer();
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxListTextCtrl (internal)
@@ -857,11 +857,10 @@ wxListMainWindow::wxListMainWindow( void )
   m_hasFocus = FALSE;
   m_usedKeys = TRUE;
   m_lastOnSame = FALSE;
-//  m_renameTimer = new wxListRenameTimer( this );
-  m_renameTimer = (wxTimer *) NULL;
+  m_renameTimer = new wxListRenameTimer( this );
   m_isCreated = FALSE;
   m_dragCount = 0;
-};
+}
 
 wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos, const wxSize &size,
@@ -896,7 +895,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
   {
     m_xScroll = 15;
     m_yScroll = 0;
-  };
+  }
   SetScrollbars( m_xScroll, m_yScroll, 0, 0, 0, 0 );
   
   m_usedKeys = TRUE;
@@ -907,7 +906,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
 //  m_text->Show( FALSE );
 
   SetBackgroundColour( *wxWHITE );
-};
+}
 
 wxListMainWindow::~wxListMainWindow( void )
 {
@@ -916,7 +915,7 @@ wxListMainWindow::~wxListMainWindow( void )
 //  if (m_myFont) delete m_myFont;
   delete m_renameTimer;
 //  delete m_text;
-};
+}
 
 void wxListMainWindow::RefreshLine( wxListLineData *line )
 {
@@ -935,8 +934,8 @@ void wxListMainWindow::RefreshLine( wxListLineData *line )
       dc.LogicalToDeviceXRel(w+6), 
       dc.LogicalToDeviceXRel(h+6) );
     Refresh( TRUE, &rect );
-  };
-};
+  }
+}
 
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
@@ -956,11 +955,11 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxListLineData *line = (wxListLineData*)node->Data();
     line->Draw( &dc );
     node = node->Next();
-  };
+  }
   if (m_current) m_current->DrawRubberBand( &dc, m_hasFocus );
 
   dc.EndDrawing();
-};
+}
 
 void wxListMainWindow::HilightAll( bool on )
 {
@@ -972,10 +971,10 @@ void wxListMainWindow::HilightAll( bool on )
     {
       line->Hilight( on );
       RefreshLine( line );
-    };
+    }
     node = node->Next();
-  };
-};
+  }
+}
 
 void wxListMainWindow::ActivateLine( wxListLineData *line )
 {
@@ -987,7 +986,7 @@ void wxListMainWindow::ActivateLine( wxListLineData *line )
   le.m_col = 0;
   line->GetItem( 0, le.m_item );
   OnListNotify( le );
-};
+}
 
 void wxListMainWindow::SendNotify( wxListLineData *line, wxEventType command )
 {
@@ -999,37 +998,37 @@ void wxListMainWindow::SendNotify( wxListLineData *line, wxEventType command )
   le.m_col = 0;
   line->GetItem( 0, le.m_item );
   OnListNotify( le );
-};
+}
 
 void wxListMainWindow::FocusLine( wxListLineData *WXUNUSED(line) )
 {
 //  SendNotify( line, wxEVT_COMMAND_LIST_ITEM_FOCUSSED );
-};
+}
 
 void wxListMainWindow::UnfocusLine( wxListLineData *WXUNUSED(line) )
 {
 //  SendNotify( line, wxEVT_COMMAND_LIST_ITEM_UNFOCUSSED );
-};
+}
 
 void wxListMainWindow::SelectLine( wxListLineData *line )
 {
   SendNotify( line, wxEVT_COMMAND_LIST_ITEM_SELECTED );
-};
+}
 
 void wxListMainWindow::DeselectLine( wxListLineData *line )
 {
   SendNotify( line, wxEVT_COMMAND_LIST_ITEM_DESELECTED );
-};
+}
 
 void wxListMainWindow::DeleteLine( wxListLineData *line )
 {
   SendNotify( line, wxEVT_COMMAND_LIST_DELETE_ITEM );
-};
+}
 
 void wxListMainWindow::StartLabelEdit( wxListLineData *line )
 {
   SendNotify( line, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT );
-};
+}
 
 void wxListMainWindow::RenameLine( wxListLineData *line, const wxString &newName )
 {
@@ -1043,7 +1042,7 @@ void wxListMainWindow::RenameLine( wxListLineData *line, const wxString &newName
   line->GetItem( 0, le.m_item );
   le.m_item.m_text = newName;
   OnListNotify( le );
-};
+}
 
 void wxListMainWindow::OnRenameTimer()
 {
@@ -1077,14 +1076,14 @@ void wxListMainWindow::OnRenameTimer()
     m_dirty = TRUE;
     s = res;
     RenameLine( m_current, s );
-  };
+  }
   */
-};
+}
 
 void wxListMainWindow::OnRenameAccept()
 {
   RenameLine( m_current, m_renameRes );
-};
+}
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
@@ -1108,7 +1107,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     if (hitResult) break;
     line = (wxListLineData *) NULL;
     node = node->Next();
-  };
+  }
   
   if (!event.Dragging())
     m_dragCount = 0;
@@ -1124,7 +1123,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     le.m_itemIndex = 0;
     le.m_col = 0;
     OnListNotify( le );
-  };
+  }
   
   if (!line) return;
   
@@ -1135,20 +1134,21 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     m_renameTimer->Stop();
     ActivateLine( line );
     return;
-  };
+  }
   
   if (event.LeftUp() && m_lastOnSame)
   {
     m_usedKeys = FALSE;
     if ((line == m_current) &&
-        (hitResult == wxLIST_HITTEST_ONITEMLABEL) /* && 
-	(m_mode & wxLC_ICON) */  )
+        (hitResult == wxLIST_HITTEST_ONITEMLABEL) && 
+//	(m_mode & wxLC_ICON) && 
+	(m_mode & wxLC_EDIT_LABELS)  )
     {
       m_renameTimer->Start( 100, TRUE );
-    };
+    }
     m_lastOnSame = FALSE;
     return;
-  };
+  }
   
   if (event.LeftDown())
   {
@@ -1180,7 +1180,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 	  numOfCurrent++;
 	  if (test_line == oldCurrent) break;
           node = node->Next();
-        };
+        }
         int numOfLine = -1;
         node = m_lines.First();
         while (node)
@@ -1189,7 +1189,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 	  numOfLine++;
 	  if (test_line == line) break;
           node = node->Next();
-        };
+        }
 	
 	if (numOfLine < numOfCurrent) 
 	  { int i = numOfLine; numOfLine = numOfCurrent; numOfCurrent = i; }
@@ -1215,12 +1215,12 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
       RefreshLine( oldCurrent );
       UnfocusLine( oldCurrent );
       FocusLine( m_current );
-    };
+    }
     m_lastOnSame = (m_current == oldCurrent);
     return;
-  };
+  }
   
-};
+}
 
 void wxListMainWindow::MoveToFocus( void )
 {
@@ -1249,9 +1249,9 @@ void wxListMainWindow::MoveToFocus( void )
     if ((x > x_s) && (x+w < x_s+w_p)) return;
     if (x-x_s < 5) SetScrollPos( wxHORIZONTAL, (x-5)/m_xScroll );
     if (x+w > x_s+w_p)  SetScrollPos( wxHORIZONTAL, (x+w-w_p+5)/m_xScroll );
-  };
+  }
 */
-};
+}
 
 void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
 {
@@ -1264,7 +1264,7 @@ void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
   RefreshLine( oldCurrent );
   FocusLine( m_current );
   UnfocusLine( oldCurrent );
-};
+}
 
 void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
@@ -1276,7 +1276,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     else
       TravNext( &event );
     return;
-  };
+  }
 */
   if (!m_current) return;
   switch (event.KeyCode())
@@ -1286,25 +1286,25 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
       wxNode *node = m_lines.Member( m_current )->Previous();
       if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
       break;
-    };
+    }
     case WXK_DOWN:
     {
       wxNode *node = m_lines.Member( m_current )->Next();
       if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
       break;
-    };
+    }
     case WXK_END:
     {
       wxNode *node = m_lines.Last();
       OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
       break;
-    };
+    }
     case WXK_HOME:
     {
       wxNode *node = m_lines.First();
       OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
       break;
-    };
+    }
     case WXK_PRIOR:
     {
       int steps = 0;
@@ -1313,14 +1313,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
       {
         int pos = 0; 
         wxNode *node = m_lines.First();
-        for (;;) { if (m_current == (wxListLineData*)node->Data()) break; pos++; node = node->Next(); };
+        for (;;) { if (m_current == (wxListLineData*)node->Data()) break; pos++; node = node->Next(); }
         steps = pos % m_visibleLines;
-      };
+      }
       wxNode *node = m_lines.Member( m_current );
       for (int i = 0; i < steps; i++) if (node->Previous()) node = node->Previous();
       if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
       break;
-    };
+    }
     case WXK_NEXT:
     {
       int steps = 0;
@@ -1328,14 +1328,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
       else
       {
         int pos = 0; wxNode *node = m_lines.First();
-        for (;;) { if (m_current == (wxListLineData*)node->Data()) break; pos++; node = node->Next(); };
+        for (;;) { if (m_current == (wxListLineData*)node->Data()) break; pos++; node = node->Next(); }
         steps = m_visibleLines-(pos % m_visibleLines)-1;
-      };
+      }
       wxNode *node = m_lines.Member( m_current );
       for (int i = 0; i < steps; i++) if (node->Next()) node = node->Next();
       if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
       break;
-    };
+    }
     case WXK_LEFT:
     {
       if (!(m_mode & wxLC_REPORT))
@@ -1343,9 +1343,9 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         wxNode *node = m_lines.Member( m_current );
         for (int i = 0; i <m_visibleLines; i++) if (node->Previous()) node = node->Previous();
         if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
-      };
+      }
       break;
-    };
+    }
     case WXK_RIGHT:
     {
       if (!(m_mode & wxLC_REPORT))
@@ -1353,14 +1353,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         wxNode *node = m_lines.Member( m_current );
         for (int i = 0; i <m_visibleLines; i++) if (node->Next()) node = node->Next();
         if (node) OnArrowChar( (wxListLineData*)node->Data(), event.ShiftDown() );
-      };
+      }
       break;
-    };
+    }
     case WXK_SPACE:
     {
       m_current->ReverseHilight();
       RefreshLine( m_current );
-    };
+    }
     break;
     case WXK_INSERT:
     {
@@ -1375,23 +1375,23 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 	RefreshLine( m_current );
         UnfocusLine( oldCurrent );
         FocusLine( m_current );
-      };
-    };
+      }
+    }
     break;
     case WXK_RETURN:
     case WXK_EXECUTE:
     {
       ActivateLine( m_current );
-    };
+    }
     break;
     default:
     {
       event.Skip();
       return;
-    };
-  };
+    }
+  }
   m_usedKeys = TRUE;
-};
+}
 
 void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
@@ -1403,13 +1403,13 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
   wxFocusEvent event( wxEVT_SET_FOCUS, m_parent->GetId() );
   event.SetEventObject( m_parent );
   m_parent->ProcessEvent( event );
-};
+}
 
 void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
   m_hasFocus = FALSE;
   RefreshLine( m_current );
-};
+}
 
 void wxListMainWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
@@ -1421,12 +1421,12 @@ void wxListMainWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
   Refresh();
   event.Skip();
 */
-};
+}
 
 wxFont *wxListMainWindow::GetMyFont( void )
 {
   return m_myFont;
-};
+}
 
 void wxListMainWindow::DrawImage( int index, wxPaintDC *dc, int x, int y )
 {
@@ -1434,12 +1434,12 @@ void wxListMainWindow::DrawImage( int index, wxPaintDC *dc, int x, int y )
   {
     m_normal_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
     return;
-  };
+  }
   if ((m_mode & wxLC_SMALL_ICON) && (m_small_image_list))
   {
     m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
-  };
-};
+  }
+}
 
 void wxListMainWindow::GetImageSize( int index, int &width, int &height )
 {
@@ -1447,15 +1447,15 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height )
   {
     m_normal_image_list->GetSize( index, width, height );
     return;
-  };
+  }
   if ((m_mode & wxLC_SMALL_ICON) && (m_small_image_list))
   {
     m_small_image_list->GetSize( index, width, height );
     return;
-  };
+  }
   width = 0;
   height = 0;
-};
+}
 
 int wxListMainWindow::GetTextLength( wxString &s )
 {
@@ -1464,7 +1464,7 @@ int wxListMainWindow::GetTextLength( wxString &s )
   long lh = 0;
   dc.GetTextExtent( s, &lw, &lh );
   return lw + 6;
-};
+}
 
 int wxListMainWindow::GetIndexOfLine( const wxListLineData *line )
 {
@@ -1475,16 +1475,16 @@ int wxListMainWindow::GetIndexOfLine( const wxListLineData *line )
     if (line == (wxListLineData*)node->Data()) return i;
     i++;
     node = node->Next();
-  };
+  }
   return -1;
-};
+}
 
 void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
 {
   m_dirty = TRUE;
   if (which == wxIMAGE_LIST_NORMAL) m_normal_image_list = imageList;
   if (which == wxIMAGE_LIST_SMALL) m_small_image_list = imageList;
-};
+}
 
 void wxListMainWindow::SetItemSpacing( int spacing, bool isSmall )
 {
@@ -1496,13 +1496,13 @@ void wxListMainWindow::SetItemSpacing( int spacing, bool isSmall )
   else
   {
     m_normal_spacing = spacing;
-  };
-};
+  }
+}
 
 int wxListMainWindow::GetItemSpacing( bool isSmall )
 {
   if (isSmall) return m_small_spacing; else return m_normal_spacing;
-};
+}
 
 void wxListMainWindow::SetColumn( int col, wxListItem &item )
 {
@@ -1513,8 +1513,8 @@ void wxListMainWindow::SetColumn( int col, wxListItem &item )
     if (item.m_width == wxLIST_AUTOSIZE_USEHEADER) item.m_width = GetTextLength( item.m_text )+7;
     wxListHeaderData *column = (wxListHeaderData*)node->Data();
     column->SetItem( item );
-  };
-};
+  }
+}
 
 void wxListMainWindow::SetColumnWidth( int col, int width )
 {
@@ -1524,8 +1524,8 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
   {
     wxListHeaderData *column = (wxListHeaderData*)node->Data();
     column->SetWidth( width );
-  };
-};
+  }
+}
 
 void wxListMainWindow::GetColumn( int col, wxListItem &item )
 {
@@ -1542,8 +1542,8 @@ void wxListMainWindow::GetColumn( int col, wxListItem &item )
     item.m_text = "";
     item.m_image = 0;
     item.m_data = 0;
-  };
-};
+  }
+}
 
 int wxListMainWindow::GetColumnWidth( int col ) 
 {
@@ -1555,17 +1555,17 @@ int wxListMainWindow::GetColumnWidth( int col )
   }
   else
     return 0;
-};
+}
 
 int wxListMainWindow::GetColumnCount( void )
 {
   return m_columns.Number();
-};
+}
 
 int wxListMainWindow::GetCountPerPage( void )
 {
   return m_visibleLines;
-};
+}
 
 void wxListMainWindow::SetItem( wxListItem &item )
 {
@@ -1576,13 +1576,15 @@ void wxListMainWindow::SetItem( wxListItem &item )
     wxListLineData *line = (wxListLineData*)node->Data();
     if (m_mode & wxLC_REPORT) item.m_width = GetColumnWidth( item.m_col )-3;
     line->SetItem( item.m_col, item );
-  };
-};
+  }
+}
 
 void wxListMainWindow::SetItemState( long item, long state, long stateMask )
 {
   // m_dirty = TRUE; no recalcs needed
+  
   wxListLineData *oldCurrent = m_current;
+  
   if (stateMask & wxLIST_STATE_FOCUSED) 
   {
     wxNode *node = m_lines.Nth( item );
@@ -1594,20 +1596,33 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
       FocusLine( m_current );
       RefreshLine( m_current );
       RefreshLine( oldCurrent );
-    };
-  };
+    }
+  }
+  
   if (stateMask & wxLIST_STATE_SELECTED)
   {
+    bool on = state & wxLIST_STATE_SELECTED;
+    if (!on && (m_mode & wxLC_SINGLE_SEL)) return; 
+    
     wxNode *node = m_lines.Nth( item );
     if (node) 
     {
       wxListLineData *line = (wxListLineData*)node->Data();
+      if (m_mode & wxLC_SINGLE_SEL)
+      {
+        UnfocusLine( m_current );
+	m_current = line;
+        FocusLine( m_current );
+        oldCurrent->Hilight( FALSE );
+        RefreshLine( m_current );
+        RefreshLine( oldCurrent );
+      }
       bool on = state & wxLIST_STATE_SELECTED;
       line->Hilight( on );
       RefreshLine( line );
-    };
-  };
-};
+    }
+  }
+}
 
 int wxListMainWindow::GetItemState( long item, long stateMask )
 {
@@ -1619,8 +1634,8 @@ int wxListMainWindow::GetItemState( long item, long stateMask )
     {
       wxListLineData *line = (wxListLineData*)node->Data();
       if (line == m_current) ret |= wxLIST_STATE_FOCUSED;
-    };
-  };
+    }
+  }
   if (stateMask & wxLIST_STATE_SELECTED)
   {
     wxNode *node = m_lines.Nth( item );
@@ -1628,10 +1643,10 @@ int wxListMainWindow::GetItemState( long item, long stateMask )
     {
       wxListLineData *line = (wxListLineData*)node->Data();
       if (line->IsHilighted()) ret |= wxLIST_STATE_FOCUSED;
-    };
-  };
+    }
+  }
   return ret;
-};
+}
 
 void wxListMainWindow::GetItem( wxListItem &item )
 {
@@ -1647,13 +1662,13 @@ void wxListMainWindow::GetItem( wxListItem &item )
     item.m_text = "";
     item.m_image = 0;
     item.m_data = 0;
-  };
-};
+  }
+}
 
 int wxListMainWindow::GetItemCount( void )
 {
   return m_lines.Number();
-};
+}
 
 void wxListMainWindow::GetItemRect( long index, wxRectangle &rect )
 {
@@ -1669,8 +1684,8 @@ void wxListMainWindow::GetItemRect( long index, wxRectangle &rect )
     rect.y = 0;
     rect.width = 0;
     rect.height = 0;
-  };
-};
+  }
+}
 
 bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
 {
@@ -1687,9 +1702,9 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
   {
     pos.x = 0;
     pos.y = 0;
-  };
+  }
   return TRUE;
-};
+}
 
 int wxListMainWindow::GetSelectedItemCount( void )
 {
@@ -1700,9 +1715,9 @@ int wxListMainWindow::GetSelectedItemCount( void )
     wxListLineData *line = (wxListLineData*)node->Data();
     if (line->IsHilighted()) ret++;
     node = node->Next();
-  };
+  }
   return 0;
-};
+}
 
 void wxListMainWindow::SetMode( long mode )
 {
@@ -1720,13 +1735,13 @@ void wxListMainWindow::SetMode( long mode )
   {
     m_xScroll = 15;
     m_yScroll = 0;
-  };
-};
+  }
+}
 
 long wxListMainWindow::GetMode( void ) const
 {
   return m_mode;
-};
+}
 
 void wxListMainWindow::CalculatePositions( void )
 {
@@ -1742,7 +1757,7 @@ void wxListMainWindow::CalculatePositions( void )
     wxListLineData *line = (wxListLineData*)node->Data();
     line->CalculateSize( &dc, iconSpacing );
     node = node->Next();
-  };
+  }
 
   int lineWidth = 0;
   int lineHeight = 0;
@@ -1760,7 +1775,7 @@ void wxListMainWindow::CalculatePositions( void )
   {
     // just in case
     lineSpacing = 6 + (int)dc.GetCharHeight();  
-  };
+  }
   
   int clientWidth = 0;
   int clientHeight = 0;
@@ -1782,10 +1797,10 @@ void wxListMainWindow::CalculatePositions( void )
       {
         line->SetColumnPosition( i, col_x );
         col_x += GetColumnWidth( i );
-      };
+      }
       y += lineSpacing;
       node = node->Next();
-    };
+    }
   }
   else
   {
@@ -1814,21 +1829,21 @@ void wxListMainWindow::CalculatePositions( void )
           x += maxWidth+13;
           entireWidth += maxWidth+13;
           maxWidth = 0;
-        };
+        }
         node = node->Next();
 	if (!node) entireWidth += maxWidth;
 	if ((tries == 0) && (entireWidth > clientWidth))
 	{
 	  clientHeight -= 14; // scrollbar height
 	  break;
-	};
+	}
 	if (!node) tries = 1;
-      };
-    };
+      }
+    }
     SetScrollbars( m_xScroll, m_yScroll, (entireWidth+15) / m_xScroll, 0, 0, 0, TRUE );
-  };
+  }
   m_visibleLines = (clientHeight-4) / (lineSpacing);
-};
+}
 
 void wxListMainWindow::RealizeChanges( void )
 {
@@ -1836,13 +1851,13 @@ void wxListMainWindow::RealizeChanges( void )
   {
     wxNode *node = m_lines.First();
     if (node) m_current = (wxListLineData*)node->Data();
-  };
+  }
   if (m_current)
   { 
     FocusLine( m_current );
     if (m_mode & wxLC_SINGLE_SEL) m_current->Hilight( TRUE );
-  };
-};
+  }
+}
 
 long wxListMainWindow::GetNextItem( long item, int WXUNUSED(geometry), int state )
 {
@@ -1857,9 +1872,9 @@ long wxListMainWindow::GetNextItem( long item, int WXUNUSED(geometry), int state
     if (!state) return ret;
     ret++;
     node = node->Next();
-  };
+  }
   return -1;
-};
+}
 
 void wxListMainWindow::DeleteItem( long index )
 {
@@ -1871,15 +1886,15 @@ void wxListMainWindow::DeleteItem( long index )
     if (m_current == line) m_current = (wxListLineData *) NULL;
     DeleteLine( line );
     m_lines.DeleteNode( node );
-  };
-};
+  }
+}
 
 void wxListMainWindow::DeleteColumn( int col )
 {
   m_dirty = TRUE;
   wxNode *node = m_columns.Nth( col );
   if (node) m_columns.DeleteNode( node );
-};
+}
 
 void wxListMainWindow::DeleteAllItems( void )
 {
@@ -1891,9 +1906,9 @@ void wxListMainWindow::DeleteAllItems( void )
     wxListLineData *line = (wxListLineData*)node->Data();
     DeleteLine( line );
     node = node->Next();
-  };
+  }
   m_lines.Clear();
-};
+}
 
 void wxListMainWindow::DeleteEverything( void )
 {
@@ -1905,11 +1920,11 @@ void wxListMainWindow::DeleteEverything( void )
     wxListLineData *line = (wxListLineData*)node->Data();
     DeleteLine( line );
     node = node->Next();
-  };
+  }
   m_lines.Clear();
   m_current = (wxListLineData *) NULL;
   m_columns.Clear();
-};
+}
 
 void wxListMainWindow::EnsureVisible( long index )
 {
@@ -1920,7 +1935,7 @@ void wxListMainWindow::EnsureVisible( long index )
   if (node) m_current = (wxListLineData*)node->Data();
   if (m_current) MoveToFocus();
   m_current = oldCurrent;
-};
+}
 
 long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(partial) )
 {
@@ -1936,9 +1951,9 @@ long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(p
     if (s == tmp) return pos;
     node = node->Next();
     pos++;
-  };
+  }
   return -1;
-};
+}
 
 long wxListMainWindow::FindItem(long start, long data)
 {
@@ -1953,9 +1968,9 @@ long wxListMainWindow::FindItem(long start, long data)
     if (item.m_data == data) return pos;
     node = node->Next();
     pos++;
-  };
+  }
   return -1;
-};
+}
 
 long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
@@ -1969,12 +1984,12 @@ long wxListMainWindow::HitTest( int x, int y, int &flags )
     {
       flags = ret;
       return count;
-    };
+    }
     node = node->Next();
     count++;
-  };
+  }
   return -1;
-};
+}
 
 void wxListMainWindow::InsertItem( wxListItem &item )
 {
@@ -1998,7 +2013,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     m_lines.Insert( node, line );
   else
     m_lines.Append( line );
-};
+}
 
 void wxListMainWindow::InsertColumn( long col, wxListItem &item )
 {
@@ -2012,8 +2027,8 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
       m_columns.Insert( node, column );
     else
       m_columns.Append( column );
-  };
-};
+  }
+}
 
 wxListCtrlCompare list_ctrl_compare_func_2;
 long              list_ctrl_compare_data;
@@ -2028,20 +2043,20 @@ int list_ctrl_compare_func_1( const void *arg1, const void *arg2 )
   line2->GetItem( 0, item );
   long data2 = item.m_data;
   return list_ctrl_compare_func_2( data1, data2, list_ctrl_compare_data );
-};
+}
 
 void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 {
   list_ctrl_compare_func_2 = fn;
   list_ctrl_compare_data = data;
   m_lines.Sort( list_ctrl_compare_func_1 );
-};
+}
 
 bool wxListMainWindow::OnListNotify( wxListEvent &event )
 {
   if (m_parent) m_parent->ProcessEvent( event );
   return FALSE;
-};
+}
 
 // -------------------------------------------------------------------------------------
 // wxListItem
@@ -2076,7 +2091,7 @@ wxListEvent::wxListEvent( wxEventType commandType, int id ):
   m_itemIndex = 0;
   m_col = 0;
   m_cancelled = FALSE;
-};
+}
 
 // -------------------------------------------------------------------------------------
 // wxListCtrl
@@ -2102,7 +2117,7 @@ wxListCtrl::wxListCtrl( wxWindow *parent, wxWindowID id,
 
 {
   Create( parent, id, pos, size, style, name );
-};
+}
 
 wxListCtrl::~wxListCtrl(void)
 {
@@ -2133,14 +2148,14 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
     m_headerWin = (wxListHeaderWindow *) NULL;
   
   return ret;
-};
+}
 
 void wxListCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
   // handled in OnIdle
   
   if (m_mainWin) m_mainWin->m_dirty = TRUE;
-};
+}
 
 void wxListCtrl::SetSingleStyle( long style, bool add )
 {
@@ -2151,7 +2166,7 @@ void wxListCtrl::SetSingleStyle( long style, bool add )
     if (style & wxLC_MASK_TYPE)	flag = flag & ~wxLC_MASK_TYPE;
     if (style & wxLC_MASK_ALIGN) flag = flag & ~wxLC_MASK_ALIGN;
     if (style & wxLC_MASK_SORT) flag = flag & ~wxLC_MASK_SORT;
-  };
+  }
 
   if (add)
   {
@@ -2160,10 +2175,10 @@ void wxListCtrl::SetSingleStyle( long style, bool add )
   else
   {
     if (flag & style) flag -= style;
-  };
+  }
   
   SetWindowStyleFlag( flag );
-};
+}
 
 void wxListCtrl::SetWindowStyleFlag( long flag )
 {
@@ -2188,8 +2203,8 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
       {
 //        m_headerWin->SetSize( 0, 0, width, 23 );
         m_headerWin->Show( TRUE );
-      };
-    };
+      }
+    }
   }
   else
   {
@@ -2197,57 +2212,57 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
     {
 //      m_mainWin->SetSize( 0, 0, width, height );
       m_headerWin->Show( FALSE );
-    };
-  };   
+    }
+  }   
   
   wxWindow::SetWindowStyleFlag( flag );
-};
+}
 
 bool wxListCtrl::GetColumn(int col, wxListItem &item) 
 {
   m_mainWin->GetColumn( col, item );
   return TRUE;
-};
+}
 
 bool wxListCtrl::SetColumn( int col, wxListItem& item )
 {
   m_mainWin->SetColumn( col, item );
   return TRUE;
-};
+}
 
 int wxListCtrl::GetColumnWidth( int col ) 
 {
   return m_mainWin->GetColumnWidth( col );
-};
+}
 
 bool wxListCtrl::SetColumnWidth( int col, int width )
 {
   m_mainWin->SetColumnWidth( col, width );
   return TRUE;
-};
+}
 
 int wxListCtrl::GetCountPerPage(void) 
 {
   return m_mainWin->GetCountPerPage();  // different from Windows ?
-};
+}
 
 /*
 wxText& wxListCtrl::GetEditControl(void) const
 {
-};
+}
 */
 
 bool wxListCtrl::GetItem( wxListItem &info ) 
 {
   m_mainWin->GetItem( info );
   return TRUE;
-};
+}
 
 bool wxListCtrl::SetItem( wxListItem &info )
 {
   m_mainWin->SetItem( info );
   return TRUE;
-};
+}
 
 long wxListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
 {
@@ -2264,18 +2279,18 @@ long wxListCtrl::SetItem( long index, int col, const wxString& label, int imageI
 ;
   m_mainWin->SetItem(info);
   return TRUE;
-};
+}
 
 int wxListCtrl::GetItemState( long item, long stateMask )
 {
   return m_mainWin->GetItemState( item, stateMask );  
-};
+}
 
 bool wxListCtrl::SetItemState( long item, long state, long stateMask )
 {
   m_mainWin->SetItemState( item, state, stateMask );
   return TRUE;
-};
+}
 
 bool wxListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
 {
@@ -2285,7 +2300,7 @@ bool wxListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
   info.m_itemId = item;
   m_mainWin->SetItem( info );
   return TRUE;
-};
+}
 
 wxString wxListCtrl::GetItemText( long item ) 
 {
@@ -2293,7 +2308,7 @@ wxString wxListCtrl::GetItemText( long item )
   info.m_itemId = item;
   m_mainWin->GetItem( info );
   return info.m_text;
-};
+}
 
 void wxListCtrl::SetItemText( long item, const wxString &str )
 {
@@ -2302,7 +2317,7 @@ void wxListCtrl::SetItemText( long item, const wxString &str )
   info.m_itemId = item;
   info.m_text = str;
   m_mainWin->SetItem( info );
-};
+}
 
 long wxListCtrl::GetItemData( long item )
 {
@@ -2310,7 +2325,7 @@ long wxListCtrl::GetItemData( long item )
   info.m_itemId = item;
   m_mainWin->GetItem( info );
   return info.m_data;
-};
+}
 
 bool wxListCtrl::SetItemData( long item, long data )
 {
@@ -2320,64 +2335,64 @@ bool wxListCtrl::SetItemData( long item, long data )
   info.m_data = data;
   m_mainWin->SetItem( info );
   return TRUE;
-};
+}
 
 bool wxListCtrl::GetItemRect( long item, wxRectangle &rect,  int WXUNUSED(code) )
 {
   m_mainWin->GetItemRect( item, rect );
   return TRUE;
-};
+}
 
 bool wxListCtrl::GetItemPosition( long item, wxPoint& pos )
 {
   m_mainWin->GetItemPosition( item, pos );
   return TRUE;
-};
+}
 
 bool wxListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(pos) )
 {
   return 0;
-};
+}
 
 int wxListCtrl::GetItemCount(void) 
 {
   return m_mainWin->GetItemCount();
-};
+}
 
 void wxListCtrl::SetItemSpacing( int spacing, bool isSmall )
 {
   m_mainWin->SetItemSpacing( spacing, isSmall );
-};
+}
 
 int wxListCtrl::GetItemSpacing( bool isSmall )
 {
   return m_mainWin->GetItemSpacing( isSmall );
-};
+}
 
 int wxListCtrl::GetSelectedItemCount(void) 
 {
   return m_mainWin->GetSelectedItemCount();
-};
+}
 
 /*
 wxColour wxListCtrl::GetTextColour(void) const
 {
-};
+}
 
 void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
 {
-};
+}
 */
 
 long wxListCtrl::GetTopItem(void)
 {
   return 0;
-};
+}
 
 long wxListCtrl::GetNextItem( long item, int geom, int state ) const
 {
   return m_mainWin->GetNextItem( item, geom, state );
-};
+}
 
 wxImageList *wxListCtrl::GetImageList(int which)
 {
@@ -2392,76 +2407,76 @@ wxImageList *wxListCtrl::GetImageList(int which)
   else if (which == wxIMAGE_LIST_STATE)
   {
     return m_imageListState;
-  };
+  }
   return (wxImageList *) NULL;
-};
+}
 
 void wxListCtrl::SetImageList( wxImageList *imageList, int which )
 {
   m_mainWin->SetImageList( imageList, which );
-};
+}
 
 bool wxListCtrl::Arrange( int WXUNUSED(flag) )
 {
   return 0;
-};
+}
 
 bool wxListCtrl::DeleteItem( long item )
 {
   m_mainWin->DeleteItem( item );
   return TRUE;
-};
+}
 
 bool wxListCtrl::DeleteAllItems(void)
 {
   m_mainWin->DeleteAllItems();
   return TRUE;
-};
+}
 
 bool wxListCtrl::DeleteColumn( int col )
 {
   m_mainWin->DeleteColumn( col );
   return TRUE;
-};
+}
 
 /*
 wxText& wxListCtrl::Edit( long WXUNUSED(item ) )
 {
-};
+}
 */
 
 bool wxListCtrl::EnsureVisible( long item )
 {
   m_mainWin->EnsureVisible( item );
   return TRUE;
-};
+}
 
 long wxListCtrl::FindItem( long start, const wxString& str,  bool partial )
 {
   return m_mainWin->FindItem( start, str, partial );
-};
+}
 
 long wxListCtrl::FindItem( long start, long data )
 {
   return m_mainWin->FindItem( start, data );
-};
+}
 
 long wxListCtrl::FindItem( long WXUNUSED(start), const wxPoint& WXUNUSED(pt), 
                            int WXUNUSED(direction))
 {
   return 0;
-};
+}
 
 long wxListCtrl::HitTest( const wxPoint &point, int &flags )
 {
   return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
-};
+}
 
 long wxListCtrl::InsertItem( wxListItem& info )
 {
   m_mainWin->InsertItem( info );
   return 0;
-};
+}
 
 long wxListCtrl::InsertItem( long index, const wxString &label )
 {
@@ -2470,7 +2485,7 @@ long wxListCtrl::InsertItem( long index, const wxString &label )
   info.m_mask = wxLIST_MASK_TEXT;
   info.m_itemId = index;
   return InsertItem( info );
-};
+}
 
 long wxListCtrl::InsertItem( long index, int imageIndex )
 {
@@ -2479,7 +2494,7 @@ long wxListCtrl::InsertItem( long index, int imageIndex )
   info.m_image = imageIndex;
   info.m_itemId = index;
   return InsertItem( info );
-};
+}
 
 long wxListCtrl::InsertItem( long index, const wxString &label, int imageIndex )
 {
@@ -2489,13 +2504,13 @@ long wxListCtrl::InsertItem( long index, const wxString &label, int imageIndex )
   info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE;
   info.m_itemId = index;
   return InsertItem( info );
-};
+}
 
 long wxListCtrl::InsertColumn( long col, wxListItem &item )
 {
   m_mainWin->InsertColumn( col, item );
   return 0;
-};
+}
 
 long wxListCtrl::InsertColumn( long col, const wxString &heading,
                                int format, int width )
@@ -2512,12 +2527,12 @@ long wxListCtrl::InsertColumn( long col, const wxString &heading,
   item.m_format = format;
 
   return InsertColumn( col, item );
-};
+}
 
 bool wxListCtrl::ScrollList( int WXUNUSED(dx), int WXUNUSED(dy) )
 {
   return 0;
-};
+}
 
 // Sort items.
 // fn is a function which takes 3 long arguments: item1, item2, data.
@@ -2533,7 +2548,7 @@ bool wxListCtrl::SortItems( wxListCtrlCompare fn, long data )
 {
   m_mainWin->SortItems( fn, data );
   return TRUE;
-};
+}
 
 void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 {
@@ -2566,12 +2581,12 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
     m_mainWin->GetSize( &w, &h );
     if ((x != 0) || (y != 24) || (w != cw) || (h != ch))
       m_mainWin->SetSize( 0, 0, cw, ch );
-  };
+  }
   
   m_mainWin->CalculatePositions();
   m_mainWin->RealizeChanges();
   m_mainWin->m_dirty = FALSE;
   m_mainWin->Refresh();
-};
+}
 
 

@@ -22,7 +22,7 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxCheckBox
+// "clicked"
 //-----------------------------------------------------------------------------
 
 static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckBox *cb )
@@ -36,6 +36,8 @@ static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckB
   cb->GetEventHandler()->ProcessEvent(event);
 }
 
+//-----------------------------------------------------------------------------
+// wxCheckBox
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox,wxControl)

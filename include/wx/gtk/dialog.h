@@ -74,12 +74,10 @@ class wxDialog: public wxWindow
     virtual bool Show( bool show );
     virtual int ShowModal(void);
     virtual void EndModal(int retCode);
-    virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+    virtual bool IsModal(void) const;
     void SetModal( bool modal );
     virtual void InitDialog(void);
     virtual void Centre( int direction = wxHORIZONTAL );
-    
-    virtual void SetSizeHints( int minW, int minH, int maxW, int maxH, int incW = -1 );
     
     virtual void SetIcon( const wxIcon &icon );
     virtual void Iconize( bool WXUNUSED(iconize)) { }

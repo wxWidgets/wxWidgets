@@ -22,7 +22,8 @@
 extern wxList wxPendingDelete;
 
 //-----------------------------------------------------------------------------
-// delete
+// "delete_event"
+//-----------------------------------------------------------------------------
 
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
 { 
@@ -207,7 +208,7 @@ void wxDialog::Centre( int direction )
 
 bool wxDialog::Show( bool show )
 {
-  if (!show && IsModal() && m_modalShowing)
+  if (!show && IsModal())
   {
     EndModal( wxID_CANCEL );
   }
@@ -219,19 +220,25 @@ bool wxDialog::Show( bool show )
   return TRUE;
 }
 
-void wxDialog::SetModal(bool flag)
+bool wxDialog::IsModal(void) const
 {
+  return m_modalShowing;
+}
+
+void wxDialog::SetModal( bool WXUNUSED(flag) )
+{
+/*
   if (flag)
     m_windowStyle |= wxDIALOG_MODAL;
   else
     if (m_windowStyle & wxDIALOG_MODAL) m_windowStyle -= wxDIALOG_MODAL;
+*/
+  wxFAIL_MSG( "wxDialog:SetModal obsolete now" );
 }
 
 int wxDialog::ShowModal(void)
 {
-  SetModal(TRUE);
-
-  if (m_modalShowing)
+  if (IsModal())
   {
     wxFAIL_MSG( "wxDialog:ShowModal called twice" );
     return GetReturnCode();
@@ -252,7 +259,7 @@ void wxDialog::EndModal( int retCode )
 {
   SetReturnCode( retCode );
   
-  if (!m_modalShowing)
+  if (!IsModal())
   {
      wxFAIL_MSG( "wxDialog:EndModal called twice" );
      return;
@@ -268,12 +275,6 @@ void wxDialog::EndModal( int retCode )
 void wxDialog::InitDialog(void)
 {
   wxWindow::InitDialog();
-}
-
-void wxDialog::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(incW) )
-{
-  gdk_window_set_hints( m_widget->window, -1, -1, 
-	                minW, minH, maxW, maxH, GDK_HINT_MIN_SIZE | GDK_HINT_MIN_SIZE );
 }
 
 void wxDialog::SetIcon( const wxIcon &icon )

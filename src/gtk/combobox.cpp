@@ -22,11 +22,8 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxComboBox
+// "select"
 //-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// clicked
 
 static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
@@ -66,6 +63,8 @@ static gint gtk_combo_size_callback( GtkCombo *widget, GtkAllocation* alloc, wxC
 }
 */
 
+//-----------------------------------------------------------------------------
+// wxComboBox
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)

@@ -27,10 +27,8 @@ class wxBitmapButton;
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxBitmapButton
+// "clicked"
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxControl)
 
 static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
@@ -43,6 +41,10 @@ static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitma
 }
 
 //-----------------------------------------------------------------------------
+// wxBitmapButton
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxControl)
 
 wxBitmapButton::wxBitmapButton(void)
 {

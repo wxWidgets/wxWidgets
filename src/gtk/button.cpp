@@ -27,10 +27,8 @@ class wxButton;
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxButton
+// "clicked"
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
 
 static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *button )
 {
@@ -43,6 +41,10 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
 }
 
 //-----------------------------------------------------------------------------
+// wxButton
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
 
 wxButton::wxButton(void)
 {

@@ -22,7 +22,7 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxChoice
+// "activate"
 //-----------------------------------------------------------------------------
 
 static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
@@ -38,6 +38,8 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
   choice->GetEventHandler()->ProcessEvent(event);
 }
 
+//-----------------------------------------------------------------------------
+// wxChoice
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoice,wxControl)
