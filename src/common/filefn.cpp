@@ -80,6 +80,10 @@
 
 #define _MAXPATHLEN 500
 
+#if !USE_SHARED_LIBRARY
+    IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
+#endif
+   
 extern char *wxBuffer;
 
 void wxPathList::Add (const wxString& path)
