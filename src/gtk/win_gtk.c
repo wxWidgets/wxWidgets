@@ -186,6 +186,9 @@ gtk_pizza_init (GtkPizza *pizza)
     pizza->height = 20;
 
     pizza->bin_window = NULL;
+    
+    pizza->xoffset = 0;
+    pizza->yoffset = 0;
 
     pizza->configure_serial = 0;
     pizza->scroll_x = 0;

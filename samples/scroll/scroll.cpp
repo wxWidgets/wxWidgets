@@ -61,6 +61,8 @@ public:
 
     void OnAbout( wxCommandEvent &event );
     void OnQuit( wxCommandEvent &event );
+    void OnDeleteAll( wxCommandEvent &event );
+    void OnInsertNew( wxCommandEvent &event );
 
     MyCanvas         *m_canvas;
     wxTextCtrl       *m_log;
@@ -265,10 +267,14 @@ void MyCanvas::OnScroll( wxScrollWinEvent &event )
 
 const int ID_QUIT  = 108;
 const int ID_ABOUT = 109;
+const int ID_DELETE_ALL = 110;
+const int ID_INSERT_NEW = 111;
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
+  EVT_MENU    (ID_DELETE_ALL, MyFrame::OnDeleteAll)
+  EVT_MENU    (ID_INSERT_NEW,  MyFrame::OnInsertNew)
   EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
 END_EVENT_TABLE()
@@ -278,6 +284,8 @@ MyFrame::MyFrame()
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
+    file_menu->Append( ID_DELETE_ALL, "Delete all");
+    file_menu->Append( ID_INSERT_NEW, "Insert new");
     file_menu->Append( ID_ABOUT, "&About..");
     file_menu->Append( ID_QUIT, "E&xit\tAlt-X");
 
@@ -304,6 +312,16 @@ MyFrame::MyFrame()
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
+}
+
+void MyFrame::OnDeleteAll( wxCommandEvent &WXUNUSED(event) )
+{
+    m_canvas->DestroyChildren();
+}
+
+void MyFrame::OnInsertNew( wxCommandEvent &WXUNUSED(event) )
+{
+    (void)new wxButton( m_canvas, -1, "Hello", wxPoint(100,100) );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )

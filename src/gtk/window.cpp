@@ -3444,6 +3444,60 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
+    
+    if ((dx == 0) && (dy == 0)) return;
 
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
+    
+/*    
+    if (m_children.GetCount() > 0)
+    {
+        gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
+    }
+    else
+    {
+        GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
+    
+        pizza->xoffset -= dx;
+        pizza->yoffset -= dy;
+        
+        GdkGC *m_scrollGC = gdk_gc_new( pizza->bin_window );
+        gdk_gc_set_exposures( m_scrollGC, TRUE );
+
+        int cw = 0;
+        int ch = 0;
+        GetClientSize( &cw, &ch );
+        int w = cw - abs(dx);
+        int h = ch - abs(dy);
+
+        if ((h < 0) || (w < 0))
+        {
+            Refresh();
+        } 
+        else
+        {
+            int s_x = 0;
+            int s_y = 0;
+            if (dx < 0) s_x = -dx;
+            if (dy < 0) s_y = -dy;
+            int d_x = 0;
+            int d_y = 0;
+            if (dx > 0) d_x = dx;
+            if (dy > 0) d_y = dy;
+
+            gdk_window_copy_area( pizza->bin_window, m_scrollGC, d_x, d_y,
+                pizza->bin_window, s_x, s_y, w, h );
+
+            wxRect rect;
+            if (dx < 0) rect.x = cw+dx; else rect.x = 0;
+            if (dy < 0) rect.y = ch+dy; else rect.y = 0;
+            if (dy != 0) rect.width = cw; else rect.width = abs(dx);
+            if (dx != 0) rect.height = ch; else rect.height = abs(dy);
+
+            Refresh( TRUE, &rect );
+        }
+        
+        gdk_gc_unref( m_scrollGC );
+    }
+*/
 }

@@ -4955,6 +4955,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
 
     int top, bottom, left, right;
 
+#ifndef __WXGTK__
     if (reg.IsEmpty())
     {
       int cw, ch;
@@ -4972,6 +4973,12 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
       CalcUnscrolledPosition( x, y, &left, &top );
       CalcUnscrolledPosition( x + w, y + h, &right, &bottom );
     }
+#else
+      int cw, ch;
+      m_gridWin->GetClientSize(&cw, &ch);
+      CalcUnscrolledPosition( 0, 0, &left, &top );
+      CalcUnscrolledPosition( cw, ch, &right, &bottom );
+#endif
 
     // avoid drawing grid lines past the last row and col
     //
