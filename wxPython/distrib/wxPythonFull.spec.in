@@ -232,7 +232,7 @@ install -m 644 wx/tools/XRCed/XRCed_32.png $RPM_BUILD_ROOT%{_datadir}/icons/hico
 install -m 644 wx/tools/XRCed/XRCed_32.png $RPM_BUILD_ROOT%{_datadir}/pixmaps/XRCed.png
 
 # install Mandrake menu
-mkdir -p $RPM_BUILD_ROOT/%{_libdir}/menu
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/menu
 cat > $RPM_BUILD_ROOT%{_libdir}/menu/%{name} <<EOF
 ?package(%{name}): \\
 	command="%{_bindir}/pyshell" \\
@@ -300,7 +300,7 @@ if [ "$1" = "0" -a -x /usr/bin/update-menus ]; then /usr/bin/update-menus || tru
 %doc docs/preamble.txt docs/licence.txt docs/lgpl.txt docs/readme.txt docs/changes.txt
 %doc wxPython/docs/*
 %{_bindir}/*
-%{_libdir}/python%{pyver}/site-packages/*
+%{pref}/lib*/python%{pyver}/site-packages/*
 %dir %{wxpref}
 %dir %{wxpref}/lib
 %{wxpref}/lib/libwx*
