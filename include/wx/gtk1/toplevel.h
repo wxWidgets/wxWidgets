@@ -85,7 +85,7 @@ public:
     bool          m_insertInClientArea;  /* not from within OnCreateXXX */
 
     bool          m_fsIsShowing;         /* full screen */
-    long          m_fsSaveStyle;
+    long          m_fsSaveGdkFunc, m_fsSaveGdkDecor;
     long          m_fsSaveFlag;
     wxRect        m_fsSaveFrame;
     

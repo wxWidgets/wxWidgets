@@ -304,10 +304,13 @@ static void wxInsertChildInTopLevelWindow( wxTopLevelWindowGTK* parent, wxWindow
     else
     {
         /* these are inside the client area */
+        int x = child->m_x, y = child->m_y;
+        child->AdjustForParentClientOrigin(x, y, 0);
+
         gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
                          GTK_WIDGET(child->m_widget),
-                         child->m_x,
-                         child->m_y,
+                         x,
+                         y,
                          child->m_width,
                          child->m_height );
     }
@@ -524,7 +527,8 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 
     if (show)
     {
-        m_fsSaveStyle = m_windowStyle;
+        m_fsSaveGdkFunc = m_gdkFunc;
+        m_fsSaveGdkDecor = m_gdkDecor;
         m_fsSaveFlag = style;
         GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
         GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
@@ -532,7 +536,8 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         gtk_widget_hide( m_widget );
         gtk_widget_unrealize( m_widget );
 
-        m_windowStyle = wxSIMPLE_BORDER;
+        m_gdkDecor = (long) GDK_DECOR_BORDER;
+        m_gdkFunc = (long) GDK_FUNC_MOVE;
 
         int x;
         int y;
@@ -547,7 +552,8 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         gtk_widget_hide( m_widget );
         gtk_widget_unrealize( m_widget );
 
-        m_windowStyle = m_fsSaveStyle;
+        m_gdkFunc = m_fsSaveGdkFunc;
+        m_gdkDecor = m_fsSaveGdkDecor;
 
         SetSize( m_fsSaveFrame.x, m_fsSaveFrame.y, m_fsSaveFrame.width, m_fsSaveFrame.height );
 
