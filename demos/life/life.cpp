@@ -543,12 +543,10 @@ void LifeCanvas::DrawChanged()
 
     if (m_cellsize == 1)
     {
-        // drawn using DrawPoint
         dc.SetPen(*wxBLACK_PEN);
     }
     else
     {
-        // drawn using DrawRectangle
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(*wxBLACK_BRUSH);
     }
@@ -666,6 +664,14 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
     }
     else if ((m_mi != i) || (m_mj != j))
     {
+        bool alive = (m_status == MOUSE_DRAWING);
+
+        // prepare DC and pen + brush to optimize drawing
+        wxClientDC dc(this);
+        dc.SetPen(alive? *wxBLACK_PEN : *wxWHITE_PEN);
+        dc.SetBrush(alive? *wxBLACK_BRUSH : *wxWHITE_BRUSH);
+        dc.BeginDrawing();
+
         // draw a line of cells using Bresenham's algorithm
         wxInt32 d, ii, jj, di, ai, si, dj, aj, sj;
         di = i - m_mi;
@@ -685,8 +691,8 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
                
             while (ii != i)
             {
-                m_life->SetCell(ii, jj, m_status == MOUSE_DRAWING);
-                DrawCell(ii, jj, m_status == MOUSE_DRAWING);
+                m_life->SetCell(ii, jj, alive);
+                DrawCell(ii, jj, dc);
                 if (d >= 0)
                 {
                     jj += sj;
@@ -703,8 +709,8 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
 
             while (jj != j)
             {
-                m_life->SetCell(ii, jj, m_status == MOUSE_DRAWING);
-                DrawCell(ii, jj, m_status == MOUSE_DRAWING);
+                m_life->SetCell(ii, jj, alive);
+                DrawCell(ii, jj, dc);
                 if (d >= 0)
                 {
                     ii += si;
@@ -716,10 +722,12 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
         }
 
         // last cell
-        m_life->SetCell(ii, jj, m_status == MOUSE_DRAWING);
-        DrawCell(ii, jj, m_status == MOUSE_DRAWING);
+        m_life->SetCell(ii, jj, alive);
+        DrawCell(ii, jj, dc);
         m_mi = ii;
         m_mj = jj;
+
+        dc.EndDrawing();
     }
 
     GET_FRAME()->UpdateInfoText();
