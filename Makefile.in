@@ -2738,6 +2738,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_settings.o \
 	monodll_slider.o \
 	monodll_spinbutt.o \
+	monodll_spinctrl.o \
 	monodll_statbmp.o \
 	monodll_statbox.o \
 	monodll_statbrma.o \
@@ -3593,6 +3594,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_settings.o \
 	monolib_slider.o \
 	monolib_spinbutt.o \
+	monolib_spinctrl.o \
 	monolib_statbmp.o \
 	monolib_statbox.o \
 	monolib_statbrma.o \
@@ -4620,6 +4622,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_settings.o \
 	coredll_slider.o \
 	coredll_spinbutt.o \
+	coredll_spinctrl.o \
 	coredll_statbmp.o \
 	coredll_statbox.o \
 	coredll_statbrma.o \
@@ -5344,6 +5347,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_settings.o \
 	corelib_slider.o \
 	corelib_spinbutt.o \
+	corelib_spinctrl.o \
 	corelib_statbmp.o \
 	corelib_statbox.o \
 	corelib_statbrma.o \
@@ -10058,6 +10062,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_spinctrl.o: $(srcdir)/src/msw/spinctrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_spinctrl.o: $(srcdir)/src/mac/carbon/spinctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_spinctrl.o: $(srcdir)/src/os2/spinctrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -12982,6 +12989,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_spinctrl.o: $(srcdir)/src/msw/spinctrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_spinctrl.o: $(srcdir)/src/mac/carbon/spinctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_spinctrl.o: $(srcdir)/src/os2/spinctrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -16178,6 +16188,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_spinctrl.o: $(srcdir)/src/msw/spinctrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_spinctrl.o: $(srcdir)/src/mac/carbon/spinctrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_spinctrl.o: $(srcdir)/src/os2/spinctrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -18595,6 +18608,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_spinctrl.o: $(srcdir)/src/msw/spinctrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_spinctrl.o: $(srcdir)/src/mac/carbon/spinctrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_spinctrl.o: $(srcdir)/src/os2/spinctrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<

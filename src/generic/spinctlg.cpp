@@ -28,8 +28,10 @@
     #pragma hdrstop
 #endif
 
-#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__)) || \
-    defined(__WXMAC__) || defined(__WXUNIVERSAL__)
+// There are port-specific versions for MSW, GTK, OS/2 and Mac, so exclude the
+// contents of this file in those cases
+#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__) || \
+    defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -45,11 +47,7 @@
 // ----------------------------------------------------------------------------
 
 // the margin between the text control and the spin
-#ifdef __WXMAC__
-static const wxCoord MARGIN = 4;
-#else
 static const wxCoord MARGIN = 2;
-#endif
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrlText: text control used by spin control
@@ -189,15 +187,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
-#ifdef __WXMAC__
-    wxSize csize = size ;
-    if ( size.y == -1 ) {
-      csize.y = m_text->GetSize().y;
-    }
-    SetBestSize(csize);
-#else
     SetBestSize(size);
-#endif
     
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
@@ -208,9 +198,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // we don't even need to show this window itself - and not doing it avoids
     // that it overwrites the text control
     wxControl::Show(FALSE);
-#ifndef __WXMAC__
     m_isShown = TRUE;
-#endif
     return TRUE;
 }
 

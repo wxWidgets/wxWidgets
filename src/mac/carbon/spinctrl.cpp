@@ -8,23 +8,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "spinctlg.h"
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#pragma implementation "spinctrl.h"
 #endif
 
 #include "wx/defs.h"
-
-#ifndef WX_PRECOMP
-    #include "wx/textctrl.h"
-#endif //WX_PRECOMP
 
 #if wxUSE_SPINCTRL
 
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
+#include "wx/textctrl.h"
 
-
-#include "wx/spinctrl.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -44,6 +39,9 @@ public:
         : wxTextCtrl(spin , -1, value)
     {
         m_spin = spin;
+        
+        // remove the default minsize, the spinctrl will have one instead
+        SetSizeHints(-1,-1);
     }
 
 protected:
@@ -88,14 +86,21 @@ public:
         : wxSpinButton(spin )
     {
         m_spin = spin;
-
         SetWindowStyle(style | wxSP_VERTICAL);
+
+        // TODO: The spin button gets truncated a little bit due to size
+        // differences so change it's default size a bit.  SMALL still gets a
+        // bit truncated, but MINI seems to be too small...  Readdress this
+        // when the textctrl issues are all sorted out.
+        SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+
+        // remove the default minsize, the spinctrl will have one instead
+        SetSizeHints(-1,-1);
     }
 
 protected:
     void OnSpinButton(wxSpinEvent& eventSpin)
     {
-#if defined(__WXMAC__) || defined(__WXMOTIF__)
       m_spin->SetTextValue(eventSpin.GetPosition());
 
       wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
@@ -103,10 +108,6 @@ protected:
       event.SetInt(eventSpin.GetPosition());
 
       m_spin->GetEventHandler()->ProcessEvent(event);
-#else
-        m_spin->SetTextValue(eventSpin.GetPosition());
-        eventSpin.Skip();
-#endif
     }
 
 private:
@@ -173,7 +174,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( size.y == -1 ) {
       csize.y = m_text->GetSize().y ;
     }
-    DoSetSize(pos.x , pos.y , csize.x, csize.y);
+    SetBestSize(csize);
 
     return TRUE;
 }
@@ -210,7 +211,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(0, 0, wText, height);
-    m_btn->SetSize(0 + wText + MARGIN, 0, -1, -1);
+    m_btn->SetSize(0 + wText + MARGIN, 0, -1, height);
 }
 
 // ----------------------------------------------------------------------------

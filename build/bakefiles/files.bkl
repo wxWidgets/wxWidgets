@@ -1624,6 +1624,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/settings.cpp
     src/mac/carbon/slider.cpp
     src/mac/carbon/spinbutt.cpp
+    src/mac/carbon/spinctrl.cpp
     src/mac/carbon/statbmp.cpp
     src/mac/carbon/statbox.cpp
     src/mac/carbon/statbrma.cpp
