@@ -6,7 +6,7 @@
 // Created:     8/17/99
 // Copyright:   (c) Robert Roebling
 // RCS-ID:      $Id$
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FILEDLGG_H_
@@ -62,19 +62,19 @@ private:
     bool     m_isExe;
 
 public:
-    wxFileData() {}
+    wxFileData() { }
     wxFileData( const wxString &name, const wxString &fname );
     wxString GetName() const;
     wxString GetFullName() const;
     wxString GetHint() const;
-    wxString GetEntry( const int num );
+    wxString GetEntry( int num );
     bool IsDir();
     bool IsLink();
     bool IsExe();
     long GetSize();
     void MakeItem( wxListItem &item );
     void SetNewName( const wxString &name, const wxString &fname );
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxFileData);
 };
@@ -92,11 +92,15 @@ private:
 
 public:
     wxFileCtrl();
-    wxFileCtrl( wxWindow *win, const wxWindowID id, 
-      const wxString &dirName, const wxString &wild,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      const long style = wxLC_LIST, const wxValidator &validator = wxDefaultValidator,
-      const wxString &name = _T("filelist") );
+    wxFileCtrl( wxWindow *win,
+                wxWindowID id,
+                const wxString &dirName,
+                const wxString &wild,
+                const wxPoint &pos = wxDefaultPosition,
+                const wxSize &size = wxDefaultSize,
+                long style = wxLC_LIST,
+                const wxValidator &validator = wxDefaultValidator,
+                const wxString &name = _T("filelist") );
     void ChangeToListMode();
     void ChangeToReportMode();
     void ChangeToIconMode();
@@ -113,7 +117,7 @@ public:
     void OnListDeleteItem( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
 
-private:    
+private:
     DECLARE_DYNAMIC_CLASS(wxFileCtrl);
     DECLARE_EVENT_TABLE()
 };
@@ -151,7 +155,7 @@ public:
     wxString GetWildcard() const { return m_wildCard; }
     long GetStyle() const { return m_dialogStyle; }
     int GetFilterIndex() const { return m_filterIndex ; }
-    
+
     void OnSelected( wxListEvent &event );
     void OnActivated( wxListEvent &event );
     void OnList( wxCommandEvent &event );
@@ -162,8 +166,8 @@ public:
     void OnNew( wxCommandEvent &event );
     void OnChoice( wxCommandEvent &event );
     void OnTextEnter( wxCommandEvent &event );
-    
-protected:    
+
+protected:
     wxString       m_message;
     long           m_dialogStyle;
     wxString       m_dir;
@@ -176,17 +180,20 @@ protected:
     wxFileCtrl    *m_list;
     wxCheckBox    *m_check;
     wxStaticText  *m_static;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
 };
 
-#define wxOPEN 1
-#define wxSAVE 2
-#define wxOVERWRITE_PROMPT 4
-#define wxHIDE_READONLY 8
-#define wxFILE_MUST_EXIST 16
+enum
+{
+    wxOPEN  = 1,
+    wxSAVE = 2,
+    wxOVERWRITE_PROMPT = 4,
+    wxHIDE_READONLY = 8,
+    wxFILE_MUST_EXIST = 16
+}
 
 // File selector - backward compatibility
 WXDLLEXPORT wxString
