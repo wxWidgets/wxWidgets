@@ -29,9 +29,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_LISTCTRL
-
-#ifdef __WIN95__
+#if wxUSE_LISTCTRL && defined(__WIN95__)
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -426,12 +424,6 @@ long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
     if ( style & wxLC_AUTOARRANGE )
         wstyle |= LVS_AUTOARRANGE;
 
-    // Apparently, no such style (documentation wrong?)
-    /*
-       if ( style & wxLC_BUTTON )
-       wstyle |= LVS_BUTTON;
-     */
-
     if ( style & wxLC_NO_SORT_HEADER )
         wstyle |= LVS_NOSORTHEADER;
 
@@ -456,6 +448,11 @@ long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
         if ( oldStyle & LVS_SORTASCENDING )
             oldStyle -= LVS_SORTASCENDING;
         wstyle |= LVS_SORTDESCENDING;
+    }
+
+    if ( style & wxLC_VIRTUAL )
+    {
+        wstyle |= LVS_OWNERDATA;
     }
 
     return wstyle;
@@ -1191,6 +1188,8 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags)
 // -1 otherwise.
 long wxListCtrl::InsertItem(wxListItem& info)
 {
+    wxASSERT_MSG( !IsVirtual(), _T("can't be used with virtual controls") );
+
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
@@ -1454,24 +1453,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-        case LVN_GETDISPINFO:
-                // this provokes stack overflow: indeed, wxConvertFromMSWListItem()
-                // sends us WM_NOTIFY! As it doesn't do anything for now, just leave
-                // it out.
-#if 0
-            {
-                // TODO: some text buffering here, I think
-                // TODO: API for getting Windows to retrieve values
-                // on demand.
-                eventType = wxEVT_COMMAND_LIST_GET_INFO;
-                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
-                break;
-            }
-#endif // 0
-                return FALSE;
-
-
         case LVN_INSERTITEM:
             eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
             event.m_itemIndex = nmLV->iItem;
@@ -1687,6 +1668,34 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 //            break; // can never be reached
 #endif // _WIN32_IE >= 0x300
 
+        case LVN_GETDISPINFO:
+            if ( IsVirtual() )
+            {
+                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
+
+                LV_ITEM& lvi = info->item;
+                long item = lvi.iItem;
+
+                if ( lvi.mask & LVIF_TEXT )
+                {
+                    wxString text = OnGetItemText(item, lvi.iSubItem);
+                    wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
+                }
+
+                if ( lvi.mask & LVIF_IMAGE )
+                {
+                    lvi.iImage = OnGetItemImage(item);
+                }
+
+                // a little dose of healthy paranoia: as we never use
+                // LVM_SETCALLBACKMASK we're not supposed to get these ones
+                wxASSERT_MSG( !(lvi.mask & LVIF_STATE),
+                              _T("we don't support state callbacks yet!") );
+
+                return TRUE;
+            }
+            // fall through
+
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
@@ -1713,20 +1722,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             return TRUE;
 
-        case LVN_GETDISPINFO:
-            {
-                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                if ( info->item.mask & LVIF_TEXT )
-                {
-                    if ( !event.m_item.m_text.IsNull() )
-                    {
-                        info->item.pszText = AddPool(event.m_item.m_text);
-                        info->item.cchTextMax = wxStrlen(info->item.pszText) + 1;
-                    }
-                }
-                //    wxConvertToMSWListItem(this, event.m_item, info->item);
-                break;
-            }
         case LVN_ENDLABELEDIT:
             {
                 *result = event.IsAllowed();
@@ -1737,19 +1732,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     *result = !event.IsAllowed();
 
     return TRUE;
-}
-
-wxChar *wxListCtrl::AddPool(const wxString& str)
-{
-    // Remove the first element if 3 strings exist
-    if ( m_stringPool.Number() == 3 )
-    {
-        wxNode *node = m_stringPool.First();
-        delete[] (char *)node->Data();
-        delete node;
-    }
-    wxNode *node = m_stringPool.Add(WXSTRINGCAST str);
-    return (wxChar *)node->Data();
 }
 
 // Necessary for drawing hrules and vrules, if specified
@@ -1814,6 +1796,37 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 dc.DrawLine(x, firstItemRect.GetY() - 2, x, itemRect.GetBottom());
             }
         }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// virtual list controls
+// ----------------------------------------------------------------------------
+
+wxString wxListCtrl::OnGetItemText(long item, long col) const
+{
+    // this is a pure virtual function, in fact - which is not really pure
+    // because the controls which are not virtual don't need to implement it
+    wxFAIL_MSG( _T("not supposed to be called") );
+
+    return wxEmptyString;
+}
+
+int wxListCtrl::OnGetItemImage(long item) const
+{
+    // same as above
+    wxFAIL_MSG( _T("not supposed to be called") );
+
+    return -1;
+}
+
+void wxListCtrl::SetItemCount(long count)
+{
+    wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
+
+    if ( !::SendMessage(GetHwnd(), LVM_SETITEMCOUNT, (WPARAM)count, 0) )
+    {
+        wxLogLastError(_T("ListView_SetItemCount"));
     }
 }
 
@@ -2021,7 +2034,5 @@ wxListEvent::wxListEvent(wxEventType commandType, int id)
     m_col = 0;
     m_cancelled = FALSE;
 }
-
-#endif // __WIN95__
 
 #endif // wxUSE_LISTCTRL

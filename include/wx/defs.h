@@ -1221,36 +1221,6 @@ enum wxBorder
 #define wxTR_ROW_LINES       0x0400
 
 /*
- * wxListCtrl flags
- */
-#define wxLC_VRULES          0x0001
-#define wxLC_HRULES          0x0002
-#define wxLC_ICON            0x0004
-#define wxLC_SMALL_ICON      0x0008
-#define wxLC_LIST            0x0010
-#define wxLC_REPORT          0x0020
-#define wxLC_ALIGN_TOP       0x0040
-#define wxLC_ALIGN_LEFT      0x0080
-#define wxLC_AUTOARRANGE     0x0100
-#define wxLC_USER_TEXT       0x0200
-#define wxLC_EDIT_LABELS     0x0400
-#define wxLC_NO_HEADER       0x0800
-#define wxLC_NO_SORT_HEADER  0x1000
-#define wxLC_SINGLE_SEL      0x2000
-#define wxLC_SORT_ASCENDING  0x4000
-#define wxLC_SORT_DESCENDING 0x8000
-
-#define wxLC_MASK_TYPE       (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
-#define wxLC_MASK_ALIGN      (wxLC_ALIGN_TOP | wxLC_ALIGN_LEFT)
-#define wxLC_MASK_SORT       (wxLC_SORT_ASCENDING | wxLC_SORT_DESCENDING)
-
-// Omitted because (a) too much detail (b) not enough style flags
-// #define wxLC_NO_SCROLL
-// #define wxLC_NO_LABEL_WRAP
-// #define wxLC_OWNERDRAW_FIXED
-// #define wxLC_SHOW_SEL_ALWAYS
-
-/*
  * wxSpinButton flags.
  * Note that a wxSpinCtrl is sometimes defined as
  * a wxTextCtrl, and so the flags must be different

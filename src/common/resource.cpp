@@ -53,6 +53,8 @@
 #include "wx/intl.h"
 #endif
 
+#include "wx/listctrl.h"
+
 #if wxUSE_RADIOBTN
 #include "wx/radiobut.h"
 #endif

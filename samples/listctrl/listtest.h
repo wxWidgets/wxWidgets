@@ -44,6 +44,9 @@ public:
 private:
     void LogEvent(const wxListEvent& event, const wxChar *eventName);
 
+    virtual wxString OnGetItemText(long item, long column) const;
+    virtual int OnGetItemImage(long item) const;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -58,6 +61,8 @@ public:
     ~MyFrame();
 
 public:
+    void OnSize(wxSizeEvent& event);
+
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnListView(wxCommandEvent& event);
@@ -66,6 +71,8 @@ public:
     void OnIconTextView(wxCommandEvent& event);
     void OnSmallIconView(wxCommandEvent& event);
     void OnSmallIconTextView(wxCommandEvent& event);
+    void OnVirtualView(wxCommandEvent& event);
+
     void OnToggleFirstSel(wxCommandEvent& event);
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
@@ -76,10 +83,8 @@ public:
     void OnSetBgColour(wxCommandEvent& event);
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
-    void OnUpdateShowColInfo(wxUpdateUIEvent& event);
 
-    void BusyOn(wxCommandEvent& event);
-    void BusyOff(wxCommandEvent& event);
+    void OnUpdateShowColInfo(wxUpdateUIEvent& event);
 
     wxImageList *m_imageListNormal;
     wxImageList *m_imageListSmall;
@@ -91,22 +96,22 @@ private:
 };
 
 
-// ID for the menu quit command
+// IDs for the menu commands
 enum
 {
-    LIST_QUIT                   = 1,
-    LIST_LIST_VIEW              = 2,
-    LIST_ICON_VIEW              = 3,
-    LIST_ICON_TEXT_VIEW         = 4,
-    LIST_SMALL_ICON_VIEW        = 5,
-    LIST_SMALL_ICON_TEXT_VIEW   = 6,
-    LIST_REPORT_VIEW            = 7,
-    LIST_DESELECT_ALL           = 8,
-    LIST_SELECT_ALL             = 9,
-    LIST_ABOUT                  = 102,
-    BUSY_ON                     = 10,
-    BUSY_OFF                    = 11,
-    LIST_DELETE_ALL             = 12,
+    LIST_QUIT,
+    LIST_LIST_VIEW,
+    LIST_ICON_VIEW,
+    LIST_ICON_TEXT_VIEW,
+    LIST_SMALL_ICON_VIEW,
+    LIST_SMALL_ICON_TEXT_VIEW,
+    LIST_VIRTUAL_VIEW,
+
+    LIST_REPORT_VIEW,
+    LIST_DESELECT_ALL,
+    LIST_SELECT_ALL,
+    LIST_ABOUT,
+    LIST_DELETE_ALL,
     LIST_DELETE,
     LIST_SORT,
     LIST_SET_FG_COL,
