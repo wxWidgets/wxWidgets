@@ -486,10 +486,12 @@ public:
 
 #if wxUSE_STD_IOSTREAM
         // input/output
-    friend wxSTD ostream& operator<<(wxSTD ostream&, const wxULongLongNative&);
+    friend WXDLLIMPEXP_BASE
+    wxSTD ostream& operator<<(wxSTD ostream&, const wxULongLongNative&);
 #endif
 
-    friend wxString& operator<<(wxString&, const wxULongLongNative&);
+    friend WXDLLIMPEXP_BASE
+    wxString& operator<<(wxString&, const wxULongLongNative&);
 
 private:
     unsigned wxLongLong_t  m_ll;
