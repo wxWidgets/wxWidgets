@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hashmap.cpp
+// Name:        hashmap.h
 // Purpose:     wxHashMap class
 // Author:      Mattia Barbon
 // Modified by:
@@ -16,7 +16,7 @@
 #pragma interface "hashmap.h"
 #endif
 
-#include <wx/string.h>
+#include "wx/string.h"
 
 // private
 struct WXDLLEXPORT _wxHashTable_NodeBase
