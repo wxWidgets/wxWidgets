@@ -1,3 +1,13 @@
+wxwindows2.2 (2.2.6.1) unstable; urgency=low
+
+  * fix rules so it really doesn't build -indep for ports
+    and fixed ambiguous oveload bug in mmedia contrib.
+    This time it will build on alpha for sure.  Really. :)
+    Closes: #92288
+  * added extra -dev package deps.  Closes: #91364
+
+ -- Ron <ron@aeon.otsys.com>  Sat,  7 Apr 2001 06:49:58 -0700
+
 wxwindows2.2 (2.2.6) unstable; urgency=low
 
   * changed i18n package back to building during arch phase

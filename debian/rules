@@ -140,8 +140,11 @@ control-files-stamp: debian/control debian/wxwin-doc.doc-base
 	touch $@
 
 build_arch: control-files-stamp $(build_arch_stamps)
+build_all: control-files-stamp $(build_stamps)
 
-build: control-files-stamp $(build_stamps)
+# do nothing until we know which binary target is called
+build:
+
 
 build-wxbase-shared-stamp:
 	dh_testdir
@@ -312,7 +315,7 @@ clean: debian/control
 
 install_arch: build_arch $(install_all_arch)
 
-install: build $(install_all)
+install: build_all $(install_all)
 
 install-wxbase-lib: DH_OPTIONS=-p$(package_wxbase_lib)
 install-wxbase-lib: build-wxbase-shared-stamp
@@ -458,7 +461,7 @@ binary-common:
 # Build architecture-independent files here.
 # Note that you currently can't build the indep packages without first
 # building the arch specific package files needed to create them.
-binary-indep: build install
+binary-indep: build_all install
 	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
 # Build just the architecture-dependent files here.
@@ -506,7 +509,7 @@ binary-doc: control-files-stamp install-doc
 	$(MAKE) -f debian/rules DH_OPTIONS=-p$(package_doc) binary-common
 
 
-.PHONY: build build_arch clean binary-indep binary-arch binary binary-common \
+.PHONY: build build_all build_arch clean binary-indep binary-arch binary binary-common \
         binary-gtk binary-gtk-dev binary-gtk-dbg binary-wxbase binary-wxbase-dev \
 	binary-wxbase-dbg binary-doc install install_arch install-wxbase-lib \
         install-wxbase-dev install-wxbase-dbg install-gtk-lib install-gtk-dev \
