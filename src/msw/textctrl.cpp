@@ -942,43 +942,13 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 long wxTextCtrl::MSWGetDlgCode()
 {
   long lRc = DLGC_WANTCHARS | DLGC_WANTARROWS;
-  if ( m_windowStyle & wxPROCESS_ENTER ) {
+  if ( m_windowStyle & wxPROCESS_ENTER )
     lRc |= DLGC_WANTMESSAGE;
-  }
+  else if ( m_windowStyle & wxTE_MULTILINE )
+    lRc |= DLGC_WANTMESSAGE;
 
   return lRc;
 }
-
-/*
-long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    switch (nMsg)
-    {
-      case WM_GETDLGCODE:
-      {
-        if (GetWindowStyleFlag() & wxPROCESS_ENTER)
-          return DLGC_WANTALLKEYS;
-        break;
-      }
-      case WM_CHAR: // Always an ASCII character
-      {
-        if (wParam == VK_RETURN)
-        {
-          wxCommandEvent event(wxEVENT_TYPE_TEXT_ENTER_COMMAND);
-          event.commandString = ((wxTextCtrl *)item)->GetValue();
-          event.eventObject = item;
-          item->ProcessCommand(event);
-          return FALSE;
-        }
-        break;
-      }
-    default:
-        break;
-    }
-
-  return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
-}
-*/
 
 void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
 {
