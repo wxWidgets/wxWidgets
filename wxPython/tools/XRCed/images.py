@@ -238,6 +238,22 @@ def getTreeMenuBarImage():
     return wxImageFromBitmap(getTreeMenuBarBitmap())
 
 #----------------------------------------------------------------------
+def getTreeToolBarData():
+    return cPickle.loads(zlib.decompress(
+'x\xda\xd3\xc8)0\xe4\nV74S\x00"\x0b\x05Cu\xae\xc4`\xf5\x08\x85d\x05\xa7\x9c\
+\xc4\xe4l0\xcf\x1f\xc8S\xb64\xb04\xb14\x00\xf3\x1d@|7\x0b7g\x03\x08_\x19\xc4\
+70\x80\xf3\x15\x80|\xbf\xfc\xbcT0G\x0f\xa6\xd8\xcd\x02\xcc\xd7\x86\xf0\r\x0c\
+\xa0\x8a\xf3A|\x17\x03\x17\x13\x17\x98fT@\rA=T\x10\x01\x11\xccG\x06\xfe0Am\
+\xed\x88|\x07\x87\x88|e\xe5\x08\x02\x82\x11\x11\x11p\xec\x8f\xc7L\x7fT\x00\
+\x11\x8c@\x034\xf2\xbb\x1e\x00\x1c\x05j\x12' ))
+
+def getTreeToolBarBitmap():
+    return wxBitmapFromXPMData(getTreeToolBarData())
+
+def getTreeToolBarImage():
+    return wxImageFromBitmap(getTreeToolBarBitmap())
+
+#----------------------------------------------------------------------
 def getTreeMenuData():
     return cPickle.loads(zlib.decompress(
 'x\xda\xd3\xc8)0\xe4\nV74S\x00"S\x05Cu\xae\xc4`\xf5\x08\x85d\x05\xa7\x9c\xc4\

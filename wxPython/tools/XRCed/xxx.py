@@ -11,6 +11,72 @@ import wxPython.lib.wxpTag
 
 from params import *
 
+# Parameter value class
+class xxxParam:
+    # Standard use: for text nodes
+    def __init__(self, node):
+        self.node = node
+        if not node.hasChildNodes():
+            # If does not have child nodes, create empty text node
+            text = tree.dom.createTextNode('')
+            node.appendChild(text)
+        else:
+            text = node.childNodes[0] # first child must be text node
+            assert text.nodeType == minidom.Node.TEXT_NODE
+        self.textNode = text
+    # Value returns string
+    def value(self):
+        return str(self.textNode.data)
+    def update(self, value):
+        self.textNode.data = value
+    def remove(self):
+        self.node.parentNode.removeChild(self.node)
+        self.node.unlink()
+
+# Content parameter
+class xxxParamContent:
+    def __init__(self, node):
+        self.node = node
+        data, l = [], []                # data is needed to quicker value retrieval
+        nodes = node.childNodes[:]      # make a copy of the child list
+        for n in nodes:
+            if n.nodeType == minidom.Node.ELEMENT_NODE:
+                assert n.tagName == 'item', 'bad content content'
+                if not n.hasChildNodes():
+                    # If does not have child nodes, create empty text node
+                    text = tree.dom.createTextNode('')
+                    node.appendChild(text)
+                else:
+                    # !!! normalize?
+                    text = n.childNodes[0] # first child must be text node
+                    assert text.nodeType == minidom.Node.TEXT_NODE
+                l.append(text)
+                data.append(text.data)
+            else:                       # remove other
+                node.removeChild(n)
+                n.unlink()
+        self.l, self.data = l, data
+    def value(self):
+        return self.data
+    def update(self, value):
+        # If number if items is not the same, recreate children
+        if len(value) != len(self.l):   # remove first if number of items has changed
+            for n in self.node.childNodes:
+                self.node.removeChild(n)
+            l = []
+            for str in value:
+                itemElem = tree.dom.createElement('item')
+                itemText = tree.dom.createTextNode(str)
+                itemElem.appendChild(itemText)
+                self.node.appendChild(itemElem)
+                l.append(itemText)
+        else:
+            for i in range(len(value)):
+                self.l[i].data = value[i]
+        self.data = value
+
+################################################################################
+
 # Classes to interface DOM objects
 class xxxObject:
     # Default behavior
@@ -20,6 +86,8 @@ class xxxObject:
     isSizer = hasChild = false
     # Style parameters (all optional)
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'tooltip']
+    # Special parameters
+    specials = []
     # Required paremeters: none by default
     required = []
     # Default parameters with default values
@@ -44,44 +112,20 @@ class xxxObject:
         nodes = element.childNodes[:]
         for node in nodes:
             if node.nodeType == minidom.Node.ELEMENT_NODE:
-                if node.tagName == 'object':
+                tag = node.tagName
+                if tag == 'object':
                     continue            # do nothing for object children here
-                if not node.tagName in self.allParams and not node.tagName in self.styles:
+                if not tag in self.allParams and not tag in self.styles:
                     print 'WARNING: unknown parameter for %s: %s' % \
-                          (self.className, node.tagName)
-                    continue
-                if node.tagName == 'content': # has items
-                    # Param value is a list of text nodes
-                    l = []
-                    nodes = node.childNodes[:]
-                    for n in nodes:
-                        if n.nodeType == minidom.Node.ELEMENT_NODE:
-                            assert n.tagName == 'item', 'bad content content'
-                            if not n.hasChildNodes():
-                                # If does not have child nodes, create empty text node
-                                text = tree.dom.createTextNode('')
-                                node.appendChild(text)
-                            else:
-                                # !!! normalize?
-                                text = n.childNodes[0] # first child must be text node
-                                assert text.nodeType == minidom.Node.TEXT_NODE
-                            l.append(text)
-                        else:
-                            node.removeChild(n)
-                            n.unlink()
-                    self.params[node.tagName] = l
-                elif node.tagName == 'font': # has children
-                    # we read and write all font parameters at once
-                    self.params[node.tagName] = xxxFont(self, node)
+                          (self.className, tag)
+                elif tag in self.specials:
+                    self.special(tag, node)
+                elif tag == 'content':
+                    self.params[tag] = xxxParamContent(node)
+                elif tag == 'font': # has children
+                    self.params[tag] = xxxParamFont(self, node)
                 else:                   # simple parameter
-                    if not node.hasChildNodes():
-                        # If does not have child nodes, create empty text node
-                        text = tree.dom.createTextNode('')
-                        node.appendChild(text)
-                    else:
-                        text = node.childNodes[0] # first child must be text node
-                        assert text.nodeType == minidom.Node.TEXT_NODE
-                    self.params[node.tagName] = text
+                    self.params[tag] = xxxParam(node)
             else:
                 # Remove all other nodes
                 element.removeChild(node)
@@ -95,10 +139,8 @@ class xxxObject:
         if self.hasName:
             html += """\
 <td><wxp module="xxx" class="ParamText" width=150>
-<param name="id" value="%d">
 <param name="name" value="data_name">
-<param name="value" value='("%s")'>
-</wxp></td>""" % (-1, self.name)
+</wxp></td>"""
         html += '</table><p>'
         html += '<table cellspacing=0 cellpadding=0>\n'
         # Add required parameters
@@ -115,17 +157,6 @@ class xxxObject:
 <param name="label" value=("")>
 </wxp></td><td width=100>%s: </td>
 """ % (paramIDs[param], prefix + 'check_' + param, param)
-            # Add value part
-            if self.params.has_key(param):
-                if param == 'content':
-                    l = []
-                    for text in self.params[param]:
-                        l.append(str(text.data)) # convert from unicode
-                    value = str(l)
-                else:
-                    value = "('" + self.params[param].data + "')"
-            else:
-                value = "('')"
             # Get parameter type
             try:
                 # Local or overriden type
@@ -141,9 +172,8 @@ class xxxObject:
 <td><wxp module="xxx" class="%s">
 <param name="id" value="%d">
 <param name="name" value="%s">
-<param name="value" value="%s">
 </wxp></td>
-""" % (typeClass, -1, prefix + 'data_' + param, value)
+""" % (typeClass, -1, prefix + 'data_' + param)
         html += '</table>\n'
         return html
     # Returns real tree object
@@ -162,20 +192,27 @@ class xxxObject:
 
 ################################################################################
 
-class xxxFont(xxxObject):
+class xxxParamFont(xxxParam):
     allParams = ['size', 'style', 'weight', 'family', 'underlined',
                  'face', 'encoding']
     def __init__(self, parent, element):
         xxxObject.__init__(self, parent, element)
         self.parentNode = element       # required to behave similar to DOM node
-        self.data = self.value()
-    def updateXML(self, value):
+        v = []
+        for p in self.allParams:
+            try:
+                v.append(str(self.params[p].data))
+            except KeyError:
+                v.append('')
+        self.data = v
+    def update(self, value):
         # `value' is a list of strings corresponding to all parameters
         elem = self.element
         for node in elem.childNodes:
             elem.removeChild(node)
         i = 0
         self.params.clear()
+        v = []
         for param in self.allParams:
             if value[i]:
                 fontElem = tree.dom.createElement(param)
@@ -183,17 +220,9 @@ class xxxFont(xxxObject):
                 self.params[param] = textNode
                 fontElem.appendChild(textNode)
                 elem.appendChild(fontElem)
+            v.append(value[i])
             i += 1
-        # Update data
-        self.data = self.value()
-    def value(self):
-        v = []
-        for p in self.allParams:
-            try:
-                v.append(str(self.params[p].data))
-            except KeyError:
-                v.append('')
-        return v
+        self.data = v
 
 ################################################################################
 
@@ -207,13 +236,17 @@ class xxxPanel(xxxContainer):
     allParams = ['pos', 'size', 'style']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
+    winStyles = ['wxNO_3D', 'wxTAB_TRAVERSAL', 'wxCLIP_CHILDREN']
     exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxDialog(xxxContainer):
     allParams = ['title', 'pos', 'size', 'style']
     required = ['title']
-    winStyles = ['wxDIALOG_MODAL', 'wxCAPTION', 'wxDEFAULT_DIALOG_STYLE',
-              'wxRESIZE_BORDER', 'wxSYSTEM_MENU',  'wxTHICK_FRAME', 'wxSTAY_ON_TOP']
+    winStyles = ['wxDEFAULT_DIALOG_STYLE', 'wxSTAY_ON_TOP',
+                 'wxDIALOG_MODAL', 'wxDIALOG_MODELESS',
+                 'wxCAPTION', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER', 'wxRESIZE_BOX',
+                 'wxTHICK_FRAME', 
+                 'wxNO_3D', 'wxTAB_TRAVERSAL', 'wxCLIP_CHILDREN']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
     exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
@@ -222,13 +255,40 @@ class xxxFrame(xxxContainer):
     allParams = ['title', 'centered', 'pos', 'size', 'style']
     paramDict = {'centered': ParamBool}
     required = ['title']
-    winStyles = ['wxDEFAULT_FRAME_STYLE', 'wxICONIZE', 'wxCAPTION', 'wxMINIMIZE',
-              'wxICONIZE', 'wxMINIMIZE_BOX', 'wxMAXIMIZE', 'wxMAXIMIZE_BOX',
-              'wxSTAY_ON_TOP', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER',
-              'wxFRAME_FLOAT_ON_PARENT', 'wxFRAME_TOOL_WINDOW']
+    winStyles = ['wxDEFAULT_FRAME_STYLE', 'wxDEFAULT_DIALOG_STYLE',
+                 'wxSTAY_ON_TOP', 
+                 'wxCAPTION', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER',
+                 'wxRESIZE_BOX', 'wxMINIMIZE_BOX', 'wxMAXIMIZE_BOX',
+                 'wxFRAME_FLOAT_ON_PARENT', 'wxFRAME_TOOL_WINDOW',
+                 'wxNO_3D', 'wxTAB_TRAVERSAL', 'wxCLIP_CHILDREN']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
     exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
+
+class xxxTool(xxxObject):
+    allParams = ['bitmap', 'bitmap2', 'toggle', 'tooltip', 'longhelp']
+    paramDict = {'bitmap2': ParamFile}
+    hasStyle = false
+
+class xxxToolBar(xxxContainer):
+    allParams = ['bitmapsize', 'margins', 'packing', 'separation', 
+                 'pos', 'size', 'style']
+    hasStyle = false
+    paramDict = {'bitmapsize': ParamPosSize, 'margins': ParamPosSize,
+                 'packing': ParamInt, 'separation': ParamInt,
+                 'style': ParamNonGenericStyle}
+    winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL']
+
+################################################################################
+# Bitmap, Icon
+
+class xxxBitmap(xxxObject):
+    allParams = ['bitmap']
+    required = ['bitmap']
+
+class xxxIcon(xxxObject):
+    allParams = ['icon']
+    required = ['icon']
 
 ################################################################################
 # Controls
@@ -242,14 +302,19 @@ class xxxStaticLine(xxxObject):
     allParams = ['pos', 'size', 'style']
     winStyles = ['wxLI_HORIZONTAL', 'wxLI_VERTICAL']
 
+class xxxStaticBitmap(xxxObject):
+    allParams = ['bitmap', 'pos', 'size', 'style']
+    required = ['bitmap']
+
 class xxxTextCtrl(xxxObject):
     allParams = ['value', 'pos', 'size', 'style']
     winStyles = ['wxTE_PROCESS_ENTER', 'wxTE_PROCESS_TAB', 'wxTE_MULTILINE',
-              'wxTE_PASSWORD', 'wxTE_READONLY']
+              'wxTE_PASSWORD', 'wxTE_READONLY', 'wxHSCROLL']
 
 class xxxChoice(xxxObject):
     allParams = ['content', 'selection', 'pos', 'size', 'style']
     required = ['content']
+    winStyles = ['wxCB_SORT']
 
 class xxxSlider(xxxObject):
     allParams = ['value', 'min', 'max', 'pos', 'size', 'style',
@@ -260,7 +325,8 @@ class xxxSlider(xxxObject):
                  'tick': ParamInt, 'selmin': ParamInt, 'selmax': ParamInt}
     required = ['value', 'min', 'max']
     winStyles = ['wxSL_HORIZONTAL', 'wxSL_VERTICAL', 'wxSL_AUTOTICKS', 'wxSL_LABELS',
-              'wxSL_LEFT', 'wxSL_RIGHT', 'wxSL_TOP', 'wxSL_SELRANGE']
+                 'wxSL_LEFT', 'wxSL_RIGHT', 'wxSL_TOP', 'wxSL_BOTTOM',
+                 'wxSL_BOTH', 'wxSL_SELRANGE']
 
 class xxxGauge(xxxObject):
     allParams = ['range', 'pos', 'size', 'style', 'value', 'shadow', 'bezel']
@@ -315,7 +381,8 @@ class xxxBitmapButton(xxxObject):
     allParams = ['bitmap', 'selected', 'focus', 'disabled', 'default',
                  'pos', 'size', 'style']
     required = ['bitmap']
-    winStyles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM']
+    winStyles = ['wxBU_AUTODRAW', 'wxBU_LEFT', 'wxBU_TOP',
+                 'wxBU_RIGHT', 'wxBU_BOTTOM']
 
 class xxxRadioButton(xxxObject):
     allParams = ['label', 'value', 'pos', 'size', 'style']
@@ -347,8 +414,7 @@ class xxxCheckBox(xxxObject):
 class xxxComboBox(xxxObject):
     allParams = ['content', 'selection', 'value', 'pos', 'size', 'style']
     required = ['content']
-    winStyles = ['wxCB_SIMPLE', 'wxCB_DROPDOWN', 'wxCB_READONLY', 'wxCB_DROPDOWN',
-              'wxCB_SORT']
+    winStyles = ['wxCB_SIMPLE', 'wxCB_SORT', 'wxCB_READONLY', 'wxCB_DROPDOWN']
 
 class xxxListBox(xxxObject):
     allParams = ['content', 'selection', 'pos', 'size', 'style']
@@ -370,7 +436,7 @@ class xxxBoxSizer(xxxSizer):
     default = {'orient': 'wxVERTICAL'}
     # Tree icon depends on orientation
     def treeImage(self):
-        if self.params['orient'].data == 'wxHORIZONTAL': return self.imageH
+        if self.params['orient'].value() == 'wxHORIZONTAL': return self.imageH
         else: return self.imageV
 
 class xxxStaticBoxSizer(xxxBoxSizer):
@@ -383,8 +449,40 @@ class xxxGridSizer(xxxSizer):
     required = ['cols']
     default = {'cols': '2', 'rows': '2'}
 
+# For repeated parameters
+class xxxParamMulti:
+    def __init__(self):
+        self.l, self.data = [], []
+    def append(self, param):
+        self.l.append(param)
+        self.data.append(param.value())
+    def value(self):
+        return self.data
+    def remove(self):
+        for param in self.l:
+            param.remove()
+        self.l, self.data = [], []
+
 class xxxFlexGridSizer(xxxGridSizer):
-    pass
+    specials = ['growablecols', 'growablerows']
+    allParams = ['cols', 'rows', 'vgap', 'hgap'] + specials
+    paramDict = {'growablecols':ParamContent, 'growablerows':ParamContent}
+    # Special processing for growable* parameters
+    # (they are represented by several nodes)
+    def special(self, tag, node):
+        if tag not in self.params.keys():
+            self.params[tag] = xxxParamMulti()
+        self.params[tag].append(xxxParam(node))
+    def setSpecial(self, param, value):
+        # Straightforward implementation: remove, add again
+        self.params[param].remove()
+        del self.params[param]
+        for str in value:
+            node = tree.dom.createElement(param)
+            text = tree.dom.createTextNode(str)
+            node.appendChild(text)
+            self.element.appendChild(node)
+            self.special(param, node)
 
 # Container with only one child.
 # Not shown in tree.
@@ -449,6 +547,8 @@ class xxxMenuBar(xxxContainer):
 class xxxMenu(xxxContainer):
     allParams = ['label']
     default = {'label': ''}
+    paramDict = {'style': ParamNonGenericStyle}    # no generic styles
+    winStyles = ['wxMENU_TEAROFF']
 
 class xxxMenuItem(xxxObject):
     allParams = ['checkable', 'label', 'accel', 'help']
@@ -464,13 +564,19 @@ xxxDict = {
     'wxPanel': xxxPanel,
     'wxDialog': xxxDialog,
     'wxFrame': xxxFrame,
+    'tool': xxxTool,
+    'wxToolBar': xxxToolBar,
     
+    'wxBitmap': xxxBitmap,
+    'wxIcon': xxxIcon,
+
     'wxButton': xxxButton,
     'wxBitmapButton': xxxBitmapButton,
     'wxRadioButton': xxxRadioButton,
     'wxSpinButton': xxxSpinButton,
 
     'wxStaticBox': xxxStaticBox,
+    'wxStaticBitmap': xxxStaticBitmap,
     'wxRadioBox': xxxRadioBox,
     'wxComboBox': xxxComboBox,
     'wxCheckBox': xxxCheckBox,
@@ -523,7 +629,13 @@ def IsObject(node):
 
 # Make XXX object from some DOM object, selecting correct class
 def MakeXXXFromDOM(parent, element):
-    return xxxDict[element.getAttribute('class')](parent, element)
+    try:
+        return xxxDict[element.getAttribute('class')](parent, element)
+    except KeyError:
+        # Verify that it's not recursive exception
+        if element.getAttribute('class') not in xxxDict.keys():
+            print 'ERROR: unknown class:', element.getAttribute('class')
+        raise
 
 # Make empty DOM element
 def MakeEmptyDOM(className): 

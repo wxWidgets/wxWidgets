@@ -1,3 +1,15 @@
+0.0.6
+-----
+
+Toolbar, bitmap, icon support (no display yet).
+
+Changed parameter objects, added support for multiple parameters (like 
+`growablecols').
+
+Fixed double-clicking problem with tree control on Windows.
+
+Some performance improovements.
+
 0.0.5
 -----
 
