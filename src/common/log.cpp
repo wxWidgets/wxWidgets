@@ -199,7 +199,10 @@ void wxLogFatalError(const wxChar *szFormat, ...)
     va_list argptr;
     va_start(argptr, szFormat);
     wxVLogFatalError(szFormat, argptr);
-    va_end(argptr);
+
+    // some compilers warn about unreachable code and it shouldn't matter
+    // for the others anyhow...
+    //va_end(argptr);
 }
 
 // same as info, but only if 'verbose' mode is on
