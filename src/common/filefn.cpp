@@ -289,8 +289,12 @@ wxIsAbsolutePath (const wxString& filename)
 #ifdef __WXMAC__
   if (filename != wxT(""))
   {
+//  This seems wrong to me, RR. FIXME.
+    
     if( filename.Find(':') != wxNOT_FOUND && filename[0] != ':' )
       return TRUE ;
+      
+//    if (filename[0] == ':')  return TRUE ;
   }
   return FALSE ;
 #else
