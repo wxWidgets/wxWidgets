@@ -635,8 +635,7 @@ void wxSocketBase::RestoreState()
 //
 // XXX: Should it honour the wxSOCKET_BLOCK flag ?
 //
-bool wxSocketBase::_Wait(long seconds,
-                         long milliseconds,
+bool wxSocketBase::_Wait(long seconds, long milliseconds,
                          wxSocketEventFlags flags)
 {
   GSocketEventFlags result;
@@ -684,11 +683,6 @@ bool wxSocketBase::_Wait(long seconds,
   {
     result = GSocket_Select(m_socket, flags | GSOCK_LOST_FLAG);
 
-    // The order in which we check events is important; in particular,
-    // GSOCKET_LOST events should be checked last (there might be still
-    // data to read in the incoming queue even after the peer has closed
-    // the connection).
-
     // Incoming connection (server) or connection established (client)
     if (result & GSOCK_CONNECTION_FLAG)
     {
@@ -698,7 +692,6 @@ bool wxSocketBase::_Wait(long seconds,
       return TRUE;
     }
 
-    // Input and output
     if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
     {
       timer.Stop();
@@ -709,8 +702,7 @@ bool wxSocketBase::_Wait(long seconds,
     if (result & GSOCK_LOST_FLAG)
     {
       timer.Stop();
-      Close();
-      return TRUE;
+      return TRUE;  // XXX: should be FALSE if !(flags & GSOCK_LOST_FLAG) !
     }
 
     // Wait more?
@@ -833,42 +825,29 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 
   // dbg("Entering OnRequest (evt %d)\n", req_evt);
 
-  switch (req_evt)
+  // This duplicates some code in _Wait(), but this doesn't
+  // hurt. It has to be here because we don't know whether
+  // WaitXXX will be used, and it has to be in _Wait as well
+  // because the event might be a bit delayed.
+  //
+  if (req_evt == wxSOCKET_CONNECTION)
   {
-    // This duplicates some code in _Wait(), but this doesn't hurt.
-    // It has to be here because we don't know whether the Wait()
-    // functions will be used, and it has to be in _Wait as well
-    // because the event might be a bit delayed.
-    //
-    // The order in which we check events is important; in particular,
-    // GSOCKET_LOST events should be checked last (there might be still
-    // data to read in the incoming queue even after the peer has
-    // closed the connection).
-
-    case wxSOCKET_CONNECTION :
-      m_establishing = FALSE;
-      m_connected = TRUE;
-      break;
-
+    m_establishing = FALSE;
+    m_connected = TRUE;
+  }
+  else if (req_evt == wxSOCKET_INPUT)
+  {
     // If we are in the middle of a R/W operation, do not
     // propagate events to users. Also, filter 'late' events
     // which are no longer valid.
     //
-    case wxSOCKET_INPUT:
-      if (m_reading || !GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
-        return;
-      else
-        break;
-
-    case wxSOCKET_OUTPUT:
-      if (m_writing || !GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
-        return;
-      else
-        break;
-
-    case wxSOCKET_LOST:
-      Close();
-      break;
+    if (m_reading || !GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
+      return;
+  }
+  else if (req_evt == wxSOCKET_OUTPUT)
+  {
+    if (m_writing || !GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
+      return;
   }
 
   if (((m_neededreq & flag) == flag) && m_notify_state)
@@ -1078,7 +1057,6 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   if (IsConnected())
     Close();
 
-  // This should never happen.
   if (m_socket)
     GSocket_destroy(m_socket);
 
