@@ -31,7 +31,7 @@ public:
 
     wxProtocolError GetError() { return m_error; }
 
-    virtual bool Abort() { return TRUE; }
+    virtual bool Abort() { return true; }
 
     wxInputStream *GetInputStream(const wxString& WXUNUSED(path))
     {

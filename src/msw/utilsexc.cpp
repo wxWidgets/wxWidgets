@@ -124,7 +124,7 @@ public:
     DWORD      dwProcessId;   // pid of the process
     wxProcess *handler;
     DWORD      dwExitCode;    // the exit code of the process
-    bool       state;         // set to FALSE when the process finishes
+    bool       state;         // set to false when the process finishes
 };
 
 class wxExecuteModule : public wxModule
@@ -160,10 +160,10 @@ public:
     wxPipeInputStream(HANDLE hInput);
     virtual ~wxPipeInputStream();
 
-    // returns TRUE if the pipe is still opened
+    // returns true if the pipe is still opened
     bool IsOpened() const { return m_hInput != INVALID_HANDLE_VALUE; }
 
-    // returns TRUE if there is any data to be read from the pipe
+    // returns true if there is any data to be read from the pipe
     virtual bool CanRead() const;
 
 protected:
@@ -211,7 +211,7 @@ public:
     // default ctor doesn't do anything
     wxPipe() { m_handles[Read] = m_handles[Write] = INVALID_HANDLE_VALUE; }
 
-    // create the pipe, return TRUE if ok, FALSE on error
+    // create the pipe, return true if ok, false on error
     bool Create()
     {
         // default secutiry attributes
@@ -225,13 +225,13 @@ public:
         {
             wxLogSysError(_("Failed to create an anonymous pipe"));
 
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
-    // return TRUE if we were created successfully
+    // return true if we were created successfully
     bool IsOk() const { return m_handles[Read] != INVALID_HANDLE_VALUE; }
 
     // return the descriptor for one of the pipe ends
@@ -362,7 +362,7 @@ wxPipeInputStream::~wxPipeInputStream()
 bool wxPipeInputStream::CanRead() const
 {
     if ( !IsOpened() )
-        return FALSE;
+        return false;
 
     DWORD nAvailable;
 
@@ -497,7 +497,7 @@ static bool wxExecuteDDE(const wxString& ddeServer,
                                                    ddeTopic);
     if ( !conn )
     {
-        ok = FALSE;
+        ok = false;
     }
     else // connected to DDE server
     {
@@ -529,7 +529,7 @@ static bool wxExecuteDDE(const wxString& ddeServer,
 
 long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 {
-    wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
+    wxCHECK_MSG( !cmd.IsEmpty(), 0, wxT("empty command in wxExecute") );
 
 #if wxUSE_THREADS
     // for many reasons, the code below breaks down if it's called from another
@@ -862,7 +862,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
             case WAIT_TIMEOUT:
                 wxLogDebug(_T("Timeout too small in WaitForInputIdle"));
 
-                ok = FALSE;
+                ok = false;
                 break;
 
             case 0:

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        include/wx/msw/uxtheme.h
 // Purpose:     wxUxThemeEngine class: support for XP themes
-// Author:      
+// Author:
 // Modified by:
 // Created:     2003
 // RCS-ID:      $Id$
@@ -58,17 +58,17 @@ typedef struct _WXUOSVERSIONINFOEXA {
 
 typedef void* WXHTHEME;
 typedef long WXUHRESULT;
-typedef WXHTHEME (__stdcall *PFNWXUOPENTHEMEDATA)(WXHWND, const wchar_t *); 
+typedef WXHTHEME (__stdcall *PFNWXUOPENTHEMEDATA)(WXHWND, const wchar_t *);
 typedef WXUHRESULT (__stdcall *PFNWXUCLOSETHEMEDATA)(WXHTHEME);
-typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEBACKGROUND)(WXHTHEME, WXHDC, 
+typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMEBACKGROUND)(WXHTHEME, WXHDC,
     int, int, const RECT *, const RECT *);
 #define WXU_DTT_GRAYED 0x1
-typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMETEXT)(WXHTHEME, WXHDC, int, 
-    int, const wchar_t *, int, DWORD, 
+typedef WXUHRESULT (__stdcall *PFNWXUDRAWTHEMETEXT)(WXHTHEME, WXHDC, int,
+    int, const wchar_t *, int, DWORD,
     DWORD, const RECT *);
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDCONTENTRECT)(WXHTHEME, WXHDC, 
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDCONTENTRECT)(WXHTHEME, WXHDC,
     int, int, const RECT *, RECT *);
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDEXTENT)(WXHTHEME, WXHDC, int, int, 
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDEXTENT)(WXHTHEME, WXHDC, int, int,
     const RECT *, RECT *);
 
 enum WXUTHEMESIZE
@@ -108,9 +108,9 @@ typedef struct tagWXUTEXTMETRIC
     unsigned char tmCharSet;
 } WXUTEXTMETRIC;
 
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEPARTSIZE)(WXHTHEME, WXHDC, int, int, const RECT *, 
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEPARTSIZE)(WXHTHEME, WXHDC, int, int, const RECT *,
     enum WXUTHEMESIZE, WXUSIZE *);
-typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMETEXTEXTENT)(WXHTHEME, WXHDC, int, int, const wchar_t *, 
+typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMETEXTEXTENT)(WXHTHEME, WXHDC, int, int, const wchar_t *,
     int, WXDWORD, const RECT *, RECT *);
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMETEXTMETRICS)(WXHTHEME, WXHDC,
     int, int, WXUTEXTMETRIC*);
@@ -188,7 +188,7 @@ typedef struct _WXUINTLIST
     int iValues[WXU_MAX_INTLIST_COUNT];
 } WXUINTLIST, *PWXUINTLIST;
 typedef WXUHRESULT (__stdcall *PFNWXUGETTHEMEINTLIST)(WXHTHEME, int,
-	int, int, WXUINTLIST*);
+    int, int, WXUINTLIST*);
 
 enum WXUPROPERTYORIGIN
 {
@@ -228,7 +228,7 @@ typedef BOOL (__stdcall *PFNWXUISTHEMEDIALOGTEXTUREENABLED)(WXHWND);
 
 typedef WXDWORD (__stdcall *PFNWXUGETTHEMEAPPPROPERTIES)();
 typedef void (__stdcall *PFNWXUSETTHEMEAPPPROPERTIES)(WXDWORD);
-typedef WXUHRESULT (__stdcall *PFNWXUGETCURRENTTHEMENAME)(wchar_t *, int, 
+typedef WXUHRESULT (__stdcall *PFNWXUGETCURRENTTHEMENAME)(wchar_t *, int,
     wchar_t *, int, wchar_t *, int);
 
 #define WXU_SZ_THDOCPROP_DISPLAYNAME                L"DisplayName"
@@ -329,7 +329,7 @@ private:
     // uxtheme.dll
     wxDynamicLibrary m_dllUxTheme;
 
-    
+
     // the one and only theme engine, initially NULL
     static wxUxThemeEngine *ms_themeEngine;
 
@@ -363,7 +363,7 @@ public:
     {
         wxUxThemeEngine *engine = wxUxThemeEngine::Get();
 
-        m_hTheme = 
+        m_hTheme =
             engine ? (WXHTHEME)engine->OpenThemeData(win->GetHWND(), classes)
                    : NULL;
     }

@@ -1737,7 +1737,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     menu->SetInvokingWindow(this);
     menu->UpdateUI();
 
-    if ( x == -1 && y == -1 )
+    if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
         wxPoint mouse = ScreenToClient(wxGetMousePosition());
         x = mouse.x; y = mouse.y;
@@ -4014,7 +4014,7 @@ extern wxCOLORMAP *wxGetStdColourMap()
 bool wxWindowMSW::HandlePaint()
 {
 //    if (GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
-//        return FALSE;
+//        return false;
 
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )

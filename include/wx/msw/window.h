@@ -75,8 +75,8 @@ public:
     virtual void Raise();
     virtual void Lower();
 
-    virtual bool Show( bool show = TRUE );
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Show( bool show = true );
+    virtual bool Enable( bool enable = true );
 
     virtual void SetFocus();
     virtual void SetFocusFromKbd();
@@ -85,7 +85,7 @@ public:
 
     virtual void WarpPointer(int x, int y);
 
-    virtual void Refresh( bool eraseBackground = TRUE,
+    virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
     virtual void Update();
     virtual void Freeze();
@@ -109,8 +109,8 @@ public:
 #endif // wxUSE_MENUS_NATIVE
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-                               int range, bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+                               int range, bool refresh = true );
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true );
     virtual int GetScrollPos( int orient ) const;
     virtual int GetScrollThumb( int orient ) const;
     virtual int GetScrollRange( int orient ) const;
@@ -130,7 +130,7 @@ public:
 #if WXWIN_COMPATIBILITY_2_4
     wxDEPRECATED( bool GetUseCtl3D() const );
     wxDEPRECATED( bool GetTransparentBackground() const );
-    wxDEPRECATED( void SetTransparent(bool t = TRUE) );
+    wxDEPRECATED( void SetTransparent(bool t = true) );
 #endif // WXWIN_COMPATIBILITY_2_4
 
 #ifndef __WXUNIVERSAL__
@@ -179,16 +179,16 @@ public:
     WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
     void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
 
-    // return TRUE if the window is of a standard (i.e. not wxWidgets') class
+    // return true if the window is of a standard (i.e. not wxWidgets') class
     //
     // to understand why does it work, look at SubclassWin() code and comments
     bool IsOfStandardClass() const { return m_oldWndProc != NULL; }
 
     wxWindow *FindItem(long id) const;
-    wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
+    wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
-    // MSW only: TRUE if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
+    // MSW only: true if this control is part of the main control
+    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
 
     // translate wxWidgets style flags for this control into the Windows style
     // and optional extended style for the corresponding native control
@@ -207,7 +207,7 @@ public:
     // translate wxWidgets coords into Windows ones suitable to be passed to
     // ::CreateWindow()
     //
-    // returns TRUE if non default coords are returned, FALSE otherwise
+    // returns true if non default coords are returned, false otherwise
     bool MSWGetCreateWindowCoords(const wxPoint& pos,
                                   const wxSize& size,
                                   int& x, int& y,
@@ -219,7 +219,7 @@ public:
     // creates the window of specified Windows class with given style, extended
     // style, title and geometry (default values
     //
-    // returns TRUE if the window has been created, FALSE if creation failed
+    // returns true if the window has been created, false if creation failed
     bool MSWCreate(const wxChar *wclass,
                    const wxChar *title = NULL,
                    const wxPoint& pos = wxDefaultPosition,
@@ -259,7 +259,7 @@ public:
 
     // ------------------------------------------------------------------------
     // internal handlers for MSW messages: all handlers return a boolean value:
-    // TRUE means that the handler processed the event and FALSE that it didn't
+    // true means that the handler processed the event and false that it didn't
     // ------------------------------------------------------------------------
 
     // there are several cases where we have virtual functions for Windows
@@ -327,7 +327,7 @@ public:
     bool HandleMouseMove(int x, int y, WXUINT flags);
     bool HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam);
 
-    bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = FALSE);
+    bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = false);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
 #if wxUSE_ACCEL
@@ -349,14 +349,14 @@ public:
 
     // message processing helpers
 
-    // return FALSE if the message shouldn't be translated/preprocessed but
+    // return false if the message shouldn't be translated/preprocessed but
     // dispatched normally
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
 
-    // return TRUE if the message was preprocessed and shouldn't be dispatched
+    // return true if the message was preprocessed and shouldn't be dispatched
     virtual bool MSWProcessMessage(WXMSG* pMsg);
 
-    // return TRUE if the message was translated and shouldn't be dispatched
+    // return true if the message was translated and shouldn't be dispatched
     virtual bool MSWTranslateMessage(WXMSG* pMsg);
 
     // called when the window is about to be destroyed

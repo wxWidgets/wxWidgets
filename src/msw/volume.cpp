@@ -180,28 +180,28 @@ static unsigned GetBasicFlags(const wxChar* filename)
 // Purpose: Add a file to the list if it meets the filter requirement.
 // Notes: - See GetBasicFlags for remarks about the Mounted flag.
 //=============================================================================
-static bool FilteredAdd(wxArrayString& list, const wxChar* filename, 
+static bool FilteredAdd(wxArrayString& list, const wxChar* filename,
                         unsigned flagsSet, unsigned flagsUnset)
 {
-    bool accept = TRUE;
+    bool accept = true;
     unsigned flags = GetBasicFlags(filename);
 
     if (flagsSet & wxFS_VOL_MOUNTED && !(flags & wxFS_VOL_MOUNTED))
-        accept = FALSE;
+        accept = false;
     else if (flagsUnset & wxFS_VOL_MOUNTED && (flags & wxFS_VOL_MOUNTED))
-        accept = FALSE;
+        accept = false;
     else if (flagsSet & wxFS_VOL_REMOVABLE && !(flags & wxFS_VOL_REMOVABLE))
-        accept = FALSE;
+        accept = false;
     else if (flagsUnset & wxFS_VOL_REMOVABLE && (flags & wxFS_VOL_REMOVABLE))
-        accept = FALSE;
+        accept = false;
     else if (flagsSet & wxFS_VOL_READONLY && !(flags & wxFS_VOL_READONLY))
-        accept = FALSE;
+        accept = false;
     else if (flagsUnset & wxFS_VOL_READONLY && (flags & wxFS_VOL_READONLY))
-        accept = FALSE;
+        accept = false;
     else if (flagsSet & wxFS_VOL_REMOTE && !(flags & wxFS_VOL_REMOTE))
-        accept = FALSE;
+        accept = false;
     else if (flagsUnset & wxFS_VOL_REMOTE && (flags & wxFS_VOL_REMOTE))
-        accept = FALSE;
+        accept = false;
 
     // Add to the list if passed the filter.
     if (accept)
@@ -217,7 +217,7 @@ static bool FilteredAdd(wxArrayString& list, const wxChar* filename,
 //          all items while determining which are connected and not.  So this
 //          function will find either all items or connected items.
 //=============================================================================
-static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc, 
+static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
                             unsigned flagsSet, unsigned flagsUnset)
 {
     HANDLE hEnum;
@@ -303,19 +303,19 @@ static int CompareFcn(const wxString& first, const wxString& second)
 //          way manually.
 //        - The resulting list is sorted alphabetically.
 //=============================================================================
-static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc, 
+static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
                             unsigned flagsSet, unsigned flagsUnset)
 {
     // NN query depends on dynamically loaded library.
     if (!s_pWNetOpenEnum || !s_pWNetEnumResource || !s_pWNetCloseEnum)
     {
         wxLogError(_("Failed to load mpr.dll."));
-        return FALSE;
+        return false;
     }
 
     // Don't waste time doing the work if the flags conflict.
     if (flagsSet & wxFS_VOL_MOUNTED && flagsUnset & wxFS_VOL_MOUNTED)
-        return FALSE;
+        return false;
 
     //----------------------------------------------
     // Generate the list according to the flags set.
@@ -344,7 +344,7 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
             wxString all(list[iList]);
             wxString mount(mounted[iMounted]);
 
-            while (compare = 
+            while (compare =
                      wxStricmp(list[iList].c_str(), mounted[iMounted].c_str()),
                    compare > 0 && iList >= 0)
             {
@@ -367,7 +367,7 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
         }
     }
 
-    return TRUE;
+    return true;
 } // BuildRemoteList
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -381,7 +381,7 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
 //=============================================================================
 wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
 {
-    InterlockedExchange(&s_cancelSearch, FALSE);     // reset
+    ::InterlockedExchange(&s_cancelSearch, FALSE);     // reset
 
     if (!s_mprLib.IsLoaded() && s_mprLib.Load(_T("mpr.dll")))
     {
@@ -450,7 +450,7 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
 //=============================================================================
 void wxFSVolumeBase::CancelSearch()
 {
-    InterlockedExchange(&s_cancelSearch, TRUE);
+    ::InterlockedExchange(&s_cancelSearch, TRUE);
 } // CancelSearch
 
 //=============================================================================
@@ -459,7 +459,7 @@ void wxFSVolumeBase::CancelSearch()
 //=============================================================================
 wxFSVolumeBase::wxFSVolumeBase()
 {
-    m_isOk = FALSE;
+    m_isOk = false;
 } // wxVolume
 
 //=============================================================================
@@ -478,7 +478,7 @@ wxFSVolumeBase::wxFSVolumeBase(const wxString& name)
 bool wxFSVolumeBase::Create(const wxString& name)
 {
     // assume fail.
-    m_isOk = FALSE;
+    m_isOk = false;
 
     // supplied.
     m_volName = name;
@@ -494,12 +494,12 @@ bool wxFSVolumeBase::Create(const wxString& name)
     m_dispName = fi.szDisplayName;
 
     // all tests passed.
-    return m_isOk = TRUE;
+    return m_isOk = true;
 } // Create
 
 //=============================================================================
 // Function: IsOk
-// Purpose: returns TRUE if the volume is legal.
+// Purpose: returns true if the volume is legal.
 // Notes: For fixed disks, it must exist.  For removable disks, it must also
 //        be present.  For Network Shares, it must also be logged in, etc.
 //=============================================================================
@@ -588,7 +588,7 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
         case wxFS_VOL_ICO_SEL_LARGE:
             flags |= SHGFI_SHELLICONSIZE | SHGFI_OPENICON;
             break;
-            
+
         case wxFS_VOL_ICO_MAX:
             wxFAIL_MSG(_T("wxFS_VOL_ICO_MAX is not valid icon type"));
             break;

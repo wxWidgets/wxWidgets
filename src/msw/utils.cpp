@@ -129,7 +129,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
         return false;
     }
 
-    return TRUE;
+    return true;
 #else
     wxChar *sysname;
     const wxChar *default_host = wxT("noname");
@@ -139,7 +139,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
     } else
         wxStrncpy(buf, sysname, maxSize - 1);
     buf[maxSize] = wxT('\0');
-    return *buf ? TRUE : FALSE;
+    return *buf ? true : false;
 #endif
 }
 
@@ -218,7 +218,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
             {
                 wxStrncpy(buf, host, maxSize);
 
-                return TRUE;
+                return true;
             }
         }
     }
@@ -241,11 +241,11 @@ bool wxGetUserId(wxChar *buf, int maxSize)
         if ( res == 0 )
         {
             // not found
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 #else   // __WXMICROWIN__
     wxChar *user;
     const wxChar *default_id = wxT("anonymous");
@@ -263,7 +263,7 @@ bool wxGetUserId(wxChar *buf, int maxSize)
         wxStrncpy(buf, user, maxSize - 1);
     }
 
-    return *buf ? TRUE : FALSE;
+    return *buf ? true : false;
 #endif
 }
 
@@ -332,12 +332,12 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     WideCharToMultiByte( CP_ACP, 0, ui2->usri2_full_name, -1,
             buf, maxSize, NULL, NULL );
 
-    return TRUE;
+    return true;
 
 error:
     wxLogError(wxT("Couldn't look up full user name."));
 
-    return FALSE;
+    return false;
 #else  // !USE_NET_API
     // Could use NIS, MS-Mail or other site specific programs
     // Use wxWidgets configuration data
@@ -353,7 +353,7 @@ error:
     }
 #endif // Win32/16
 
-    return TRUE;
+    return true;
 }
 
 const wxChar* wxGetHomeDir(wxString *pstr)
@@ -507,7 +507,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
         {
             wxLogLastError(_T("GetDiskFreeSpaceEx"));
 
-            return FALSE;
+            return false;
         }
 
         // ULARGE_INTEGER is a union of a 64 bit value and a struct containing
@@ -550,7 +550,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
         {
             wxLogLastError(_T("GetDiskFreeSpace"));
 
-            return FALSE;
+            return false;
         }
 
         wxLongLong lBytesPerCluster = lSectorsPerCluster;
@@ -569,7 +569,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
         }
     }
 
-    return TRUE;
+    return true;
 #endif
     // __WXWINCE__
 }
@@ -581,14 +581,14 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 bool wxGetEnv(const wxString& var, wxString *value)
 {
 #ifdef __WXWINCE__
-    return FALSE;
+    return false;
 #else // Win32
     // first get the size of the buffer
     DWORD dwRet = ::GetEnvironmentVariable(var, NULL, 0);
     if ( !dwRet )
     {
         // this means that there is no such variable
-        return FALSE;
+        return false;
     }
 
     if ( value )
@@ -597,7 +597,7 @@ bool wxGetEnv(const wxString& var, wxString *value)
                                        dwRet);
     }
 
-    return TRUE;
+    return true;
 #endif // WinCE/32
 }
 
@@ -610,12 +610,12 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
     {
         wxLogLastError(_T("SetEnvironmentVariable"));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 #else // no way to set env vars
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -683,7 +683,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
         return -1;
     }
 
-    bool ok = TRUE;
+    bool ok = true;
     switch ( sig )
     {
         case wxSIGKILL:
@@ -699,7 +699,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
                     *krc = wxKILL_ERROR;
                 }
 
-                ok = FALSE;
+                ok = false;
             }
             break;
 
@@ -736,7 +736,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
                     {
                         wxLogLastError(_T("EnumWindows"));
 
-                        ok = FALSE;
+                        ok = false;
                     }
                 }
                 else // no windows for this PID
@@ -746,7 +746,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
                         *krc = wxKILL_ERROR;
                     }
 
-                    ok = FALSE;
+                    ok = false;
                 }
             }
     }
@@ -845,9 +845,9 @@ bool wxShell(const wxString& command)
 bool wxShutdown(wxShutdownFlags wFlags)
 {
 #ifdef __WXWINCE__
-    return FALSE;
+    return false;
 #elif defined(__WIN32__)
-    bool bOK = TRUE;
+    bool bOK = true;
 
     if ( wxGetOsVersion(NULL, NULL) == wxWINDOWS_NT ) // if is NT or 2K
     {
@@ -891,7 +891,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
 
             default:
                 wxFAIL_MSG( _T("unknown wxShutdown() flag") );
-                return FALSE;
+                return false;
         }
 
         bOK = ::ExitWindowsEx(flags, 0) != 0;
@@ -1148,7 +1148,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
     if ( !name )
         return -1;
 
-    wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(name, FALSE);
+    wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(name, false);
     if ( enc == wxFONTENCODING_SYSTEM )
         return -1;
 
