@@ -64,6 +64,9 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
     
     if ( win )
     {
+#if 0
+    	// this clipping area was set to the parent window's drawing area, lead to problems
+    	// with MacOSX controls drawing outside their wx' rectangle
         RgnHandle insidergn = NewRgn() ;
         int x = 0 , y = 0;
         wxWindow *parent = win->GetParent() ;
@@ -77,6 +80,13 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         OffsetRgn( m_newClip , x , y ) ;
         SetClip( m_newClip ) ;
     	DisposeRgn( insidergn ) ;
+#endif
+        RgnHandle insidergn = NewRgn() ;
+        int x = 0 , y = 0;
+        win->MacWindowToRootWindow( &x,&y ) ;
+        CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion().GetWXHRGN() , m_newClip ) ;
+        OffsetRgn( m_newClip , x , y ) ;
+        SetClip( m_newClip ) ;
 	}
 }
 wxMacWindowClipper::~wxMacWindowClipper() 
@@ -1369,6 +1379,21 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
             	{
     	            Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
                     CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+		            if ( m_backgroundMode != wxTRANSPARENT )
+		            {
+			            Point bounds={0,0} ;
+			            Rect background = frame ;
+			            SInt16 baseline ;
+			    		::GetThemeTextDimensions( mString,
+			    							kThemeCurrentPortFont,
+			    							kThemeStateActive,
+			    							false,
+			    							&bounds,
+			    							&baseline );
+			    		background.right = background.left + bounds.h ;
+			    		background.bottom = background.top + bounds.v ;
+			    		::EraseRect( &background ) ;
+		            }
             		::DrawThemeTextBox( mString,
             							kThemeCurrentPortFont,
             							kThemeStateActive,
@@ -1395,6 +1420,21 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     	{
     	    Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
             CFStringRef mString = CFStringCreateWithCString( NULL , text + laststop , kCFStringEncodingMacRoman ) ;
+            if ( m_backgroundMode != wxTRANSPARENT )
+            {
+	            Point bounds={0,0} ;
+	            Rect background = frame ;
+	            SInt16 baseline ;
+	    		::GetThemeTextDimensions( mString,
+	    							kThemeCurrentPortFont,
+	    							kThemeStateActive,
+	    							false,
+	    							&bounds,
+	    							&baseline );
+	    		background.right = background.left + bounds.h ;
+	    		background.bottom = background.top + bounds.v ;
+	    		::EraseRect( &background ) ;
+            }
     		::DrawThemeTextBox( mString,
     							kThemeCurrentPortFont,
     							kThemeStateActive,

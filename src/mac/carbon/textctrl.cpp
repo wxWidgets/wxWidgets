@@ -768,46 +768,53 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 wxString wxTextCtrl::GetValue() const
 {
-    Size actualsize;
-    
+    Size actualSize = 0;
+    wxString result ;
+    OSStatus err ;
     if ( !m_macUsesTXN )
     {
-        ::GetControlData( (ControlHandle) m_macControl, 0,
-            ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag, 
-            32767 , wxBuffer , &actualsize ) ;
+    	err = ::GetControlDataSize((ControlHandle) m_macControl, 0,
+            ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag, &actualSize ) ;
+       
+       	if ( err )
+       		return wxEmptyString ;
+       	
+       	if ( actualSize > 0 )
+       	{
+	        wxChar *ptr = result.GetWriteBuf(actualSize) ;
+	        
+	        ::GetControlData( (ControlHandle) m_macControl, 0,
+	            ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag, 
+	            actualSize , ptr , &actualSize ) ;
+	        ptr[actualSize] = 0 ;
+	        result.UngetWriteBuf(actualSize) ;
+        }
+        
     }
     else
     {
         Handle theText ;
-        OSStatus err = TXNGetDataEncoded( ((TXNObject) m_macTXN), kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
+        err = TXNGetDataEncoded( ((TXNObject) m_macTXN), kTXNStartOffset, kTXNEndOffset, &theText , kTXNTextData );
         // all done
         if ( err )
         {
-            actualsize = 0 ;
+            actualSize = 0 ;
         }
         else
         {
-            actualsize = GetHandleSize( theText ) ;
-            if (actualsize != 0)
-              strncpy( wxBuffer , *theText , actualsize ) ;
-            DisposeHandle( theText ) ;
+            actualSize = GetHandleSize( theText ) ;
+	       	if ( actualSize > 0 )
+	       	{
+	        	wxChar *ptr = result.GetWriteBuf(actualSize) ;
+	            strncpy( ptr , *theText , actualSize ) ;
+	            ptr[actualSize] = 0 ;
+	            result.UngetWriteBuf( actualSize ) ;
+	        }
+	        DisposeHandle( theText ) ;
         }
     }
     
-    wxBuffer[actualsize] = 0 ;
-    
-    wxString value;
-
-    if( wxApp::s_macDefaultEncodingIsPC )
-    {
-        value = wxMacMakePCStringFromMac( wxBuffer ) ;
-        value.Replace( "\r", "\n" );
-    }
-    else
-        value = wxBuffer;
-        
-    
-    return value;
+    return wxMacMakeStringFromMacString( result ) ;
 }
 
 void wxTextCtrl::GetSelection(long* from, long* to) const
@@ -830,7 +837,7 @@ void wxTextCtrl::SetValue(const wxString& st)
     if( wxApp::s_macDefaultEncodingIsPC )
     {
         value = wxMacMakeMacStringFromPC( st ) ;
-        value.Replace( "\n", "\r" );
+        // value.Replace( "\n", "\r" ); TODO this should be handled by the conversion
     }
     else
         value = st;
@@ -1206,7 +1213,7 @@ void wxTextCtrl::WriteText(const wxString& text)
     if( wxApp::s_macDefaultEncodingIsPC )
     {
         value = wxMacMakeMacStringFromPC( text ) ;
-        value.Replace( "\n", "\r" );
+        // value.Replace( "\n", "\r" ); // TODO this should be handled by the conversion
     }
     else
         value = text ;
@@ -1543,9 +1550,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
          key == WXK_DELETE || 
          key == WXK_BACK)
     {
-        long t1 = 0xDEADBEEF ;
         wxCommandEvent event1(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-        long t2 = 0xDEADBEEF ;
         event1.SetString( GetValue() ) ;
         event1.SetEventObject( this );
         wxPostEvent(GetEventHandler(),event1);
