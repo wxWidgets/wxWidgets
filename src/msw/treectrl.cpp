@@ -2219,6 +2219,16 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     WXLRESULT rc = 0;
     bool isMultiple = (GetWindowStyle() & wxTR_MULTIPLE) != 0;
 
+    if (nMsg == WM_CONTEXTMENU)
+    {
+        wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
+        event.m_item = GetSelection();
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+        
+        return rc;
+    }
+
     if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
     {
         // we only process mouse messages here and these parameters have the
