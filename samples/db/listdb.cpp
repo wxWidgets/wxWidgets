@@ -411,8 +411,10 @@ void ClookUpDlg::OnClose(wxCloseEvent& event)
     if (lookup2)
         delete lookup2;
 
+     SetReturnCode(1);
+
     while (wxIsBusy()) wxEndBusyCursor();
-   event.Skip();
+    event.Skip();
 
 //    return TRUE;
 
