@@ -683,7 +683,6 @@ wxApp::wxApp()
     argc = 0;
     argv = NULL;
     m_nPrintMode = wxPRINT_WINDOWS;
-    m_exitOnFrameDelete = TRUE;
     m_bAuto3D = TRUE;
     m_hMq = 0;
     m_maxSocketHandles = 0;
@@ -859,13 +858,13 @@ bool wxApp::ProcessIdle()
 
 void wxApp::ExitMainLoop()
 {
-    m_bKeepGoing = FALSE;
-}
+    ::WinPostMsg(NULL, WM_QUIT, 0, 0);
+} // end of wxApp::ExitMainLoop
 
 bool wxApp::Pending()
 {
     return (::WinPeekMsg(vHabmain, (PQMSG)&svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) != 0);
-}
+} // end of wxApp::Pending
 
 void wxApp::Dispatch()
 {

@@ -592,20 +592,50 @@ bool wxTopLevelWindowOS2::Create(
 
 wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
 {
-    wxTopLevelWindows.DeleteObject(this);
+    if (this == m_spHiddenParent)
+    {
+        //
+        // Stop [infinite] recursion which would otherwise happen when we do
+        // "delete ms_hiddenParent" below -- and we're not interested in doing
+        // anything of the rest below for that window because the rest of
+        // wxWindows doesn't even know about it
+        //
+        return;
+    }
 
     if (wxModelessWindows.Find(this))
         wxModelessWindows.DeleteObject(this);
 
     //
-    // If this is the last top-level window, exit.
+    // After destroying an owned window, Windows activates the next top level
+    // window in Z order but it may be different from our owner (to reproduce
+    // this simply Alt-TAB to another application and back before closing the
+    // owned frame) whereas we always want to yield activation to our parent
     //
-    if (wxTheApp && (wxTopLevelWindows.Number() == 0))
+    if (HasFlag(wxFRAME_FLOAT_ON_PARENT))
     {
-        wxTheApp->SetTopWindow(NULL);
-        if ( wxTheApp->GetExitOnFrameDelete() )
+        wxWindow*                   pParent = GetParent();
+
+        if (pParent)
         {
-            ::WinPostMsg(NULL, WM_QUIT, 0, 0);
+            ::WinSetWindowPos( GetHwndOf(pParent)
+                              ,HWND_TOP
+                              ,0, 0, 0, 0
+                              ,SWP_ZORDER
+                             );
+        }
+    }
+
+    //
+    // If this is the last top-level window, we're going to exit and we should
+    // delete ms_hiddenParent now to avoid leaking it
+    //
+    if (IsLastBeforeExit())
+    {
+        if (m_spHiddenParent)
+        {
+            delete m_spHiddenParent;
+            m_spHiddenParent = NULL;
         }
     }
 } // end of wxTopLevelWindowOS2::~wxTopLevelWindowOS2

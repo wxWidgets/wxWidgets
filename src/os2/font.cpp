@@ -348,14 +348,19 @@ void wxFontRefData::Init(
     m_bNativeFontInfoOk = TRUE;
     m_vNativeFontInfo = rInfo;
 
-    if (m_hPS == NULLHANDLE)
+    if (hPS == NULLHANDLE)
     {
         m_hPS = ::WinGetPS(HWND_DESKTOP);
         m_bInternalPS = TRUE;
     }
     else
         m_hPS = (HPS)hPS;
-}
+
+    m_nFontId     = 0;
+    m_bTemporary  = FALSE;
+    m_pFM         = (PFONTMETRICS)NULL;
+    m_nNumFonts   = 0;
+} // end of wxFontRefData::Init
 
 wxFontRefData::~wxFontRefData()
 {
@@ -449,11 +454,11 @@ bool wxFontRefData::Alloc(
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System Monospaced") == 0)
         m_nFamily = wxTELETYPE;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System VIO") == 0)
-        m_nFamily = wxTELETYPE;
+        m_nFamily = wxDEFAULT;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System Proportional") == 0)
         m_nFamily = wxMODERN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Arial") == 0)
-        m_nFamily = wxMODERN;
+        m_nFamily = wxSWISS;
     else
         m_nFamily = wxSWISS;
 
@@ -608,11 +613,11 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
     else if (strcmp(fm.szFamilyname, "System Monospaced") == 0)
         nFamily = wxTELETYPE;
     else if (strcmp(fm.szFamilyname, "System VIO") == 0)
-        nFamily = wxTELETYPE;
+        nFamily = wxDEFAULT;
     else if (strcmp(fm.szFamilyname, "System Proportional") == 0)
         nFamily = wxMODERN;
     else if (strcmp(fm.szFamilyname, "Arial") == 0)
-        nFamily = wxMODERN;
+        nFamily = wxSWISS;
     else
         nFamily = wxSWISS;
     return (wxFontFamily)nFamily;
@@ -714,7 +719,7 @@ void wxNativeFontInfo::SetFamily(
             break;
 
         case wxMODERN:
-            sFacename = wxT("Arial") ;
+            sFacename = wxT("Courier New") ;
             break;
 
         case wxSWISS:
@@ -723,7 +728,7 @@ void wxNativeFontInfo::SetFamily(
 
         case wxDEFAULT:
         default:
-            sFacename = wxT("System Proportional") ;
+            sFacename = wxT("System VIO") ;
     }
 
     if (!wxStrlen(fa.szFacename) )

@@ -81,14 +81,16 @@ int wxFontDialog::ShowModal()
         // Debugging
         //
         wxFont                      vChosenFont(vInfo);
+
         int                         nFamily;
-        int                         nPointSize;
+        int                         nPointSize = vFontDlg.lEmHeight;
         int                         nStyle;
         int                         nWeight;
         bool                        bUnderlined;
         wxString                    sFaceName;
         wxNativeFontInfo*           pInfo;
 
+        vChosenFont.SetPointSize(nPointSize);
         nFamily = vChosenFont.GetFamily();
         nPointSize = vChosenFont.GetPointSize();
         nStyle = vChosenFont.GetStyle();

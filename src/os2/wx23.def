@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -68,6 +68,8 @@ EXPORTS
       OnCmdLineHelp__9wxAppBaseFR15wxCmdLineParser
       ;wxTrap()
       wxTrap__Fv
+      ;wxAppBase::OnRun()
+      OnRun__9wxAppBaseFv
       ;wxAppBase::OnExit()
       OnExit__9wxAppBaseFv
       ;wxAssertIsEqual(int,int)
@@ -257,12 +259,12 @@ EXPORTS
       sm_classwxFontData__10wxFontData
       ;wxPageSetupDialogData::SetPaperSize(wxPaperSize)
       SetPaperSize__21wxPageSetupDialogDataF11wxPaperSize
-      ;wxFontData::~wxFontData()
-      __dt__10wxFontDataFv
       ;wxConstructorForwxColourData()
       wxConstructorForwxColourData__Fv
       ;wxColourData::~wxColourData()
       __dt__12wxColourDataFv
+      ;wxFontData::~wxFontData()
+      __dt__10wxFontDataFv
       ;wxPrintData::wxPrintData(const wxPrintData&)
       __ct__11wxPrintDataFRC11wxPrintData
       ;wxPrintDialogData::sm_classwxPrintDialogData
@@ -1605,14 +1607,20 @@ EXPORTS
       ;wxEncodingConverter::wxEncodingConverter()
       __ct__19wxEncodingConverterFv
       CompareCharsetItems
+      ;wxEncodingConverter::Convert(const char*,wchar_t*)
+      Convert__19wxEncodingConverterFPCcPw
       ;wxEncodingConverter::Init(wxFontEncoding,wxFontEncoding,int)
       Init__19wxEncodingConverterF14wxFontEncodingT1i
+      ;wxEncodingConverter::Convert(const wchar_t*,char*)
+      Convert__19wxEncodingConverterFPCwPc
       ;wxEncodingConverter::Convert(const wxString&)
       Convert__19wxEncodingConverterFRC8wxString
       ;wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding,int)
       GetPlatformEquivalents__19wxEncodingConverterF14wxFontEncodingi
       ;wxEncodingConverter::Convert(const char*,char*)
       Convert__19wxEncodingConverterFPCcPc
+      ;wxEncodingConverter::Convert(const wchar_t*,wchar_t*)
+      Convert__19wxEncodingConverterFPCwPw
   ;From object file:  ..\common\event.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSetCursorEvent::sm_classwxSetCursorEvent
@@ -3470,14 +3478,14 @@ EXPORTS
       sm_classwxLocaleModule__14wxLocaleModule
       ;wxLanguageInfoArray::RemoveAt(unsigned int,unsigned int)
       RemoveAt__19wxLanguageInfoArrayFUiT1
-      ;wxLocale::GetSystemEncoding()
-      GetSystemEncoding__8wxLocaleFv
+      ;wxLocale::CreateLanguagesDB()
+      CreateLanguagesDB__8wxLocaleFv
       ;wxLocale::~wxLocale()
       __dt__8wxLocaleFv
       ;wxLocale::GetSystemLanguage()
       GetSystemLanguage__8wxLocaleFv
-      ;wxLocale::CreateLanguagesDB()
-      CreateLanguagesDB__8wxLocaleFv
+      ;wxLocale::GetSystemEncoding()
+      GetSystemEncoding__8wxLocaleFv
       ;wxLanguageInfoArray::Index(const wxLanguageInfo&,unsigned long) const
       Index__19wxLanguageInfoArrayCFRC14wxLanguageInfoUl
       ;wxLanguageInfoArray::wxLanguageInfoArray(const wxLanguageInfoArray&)
@@ -4431,6 +4439,8 @@ EXPORTS
       FindClass__11wxClassInfoFPCc
       ;wxObject::sm_classwxObject
       sm_classwxObject__8wxObject
+      ;wxClassInfo::~wxClassInfo()
+      __dt__11wxClassInfoFv
       ;wxClassInfo::InitializeClasses()
       InitializeClasses__11wxClassInfoFv
   ;From object file:  ..\common\odbc.cpp
@@ -4581,10 +4591,12 @@ EXPORTS
       SetZoom__18wxPrintPreviewBaseFi
       ;wxPrintout::GetPageInfo(int*,int*,int*,int*)
       GetPageInfo__10wxPrintoutFPiN31
-      ;wxPrinterBase::~wxPrinterBase()
-      __dt__13wxPrinterBaseFv
+      ;wxPreviewControlBar::OnFirst()
+      OnFirst__19wxPreviewControlBarFv
       ;wxPreviewControlBar::sm_eventTable
       sm_eventTable__19wxPreviewControlBar
+      ;wxPrinterBase::~wxPrinterBase()
+      __dt__13wxPrinterBaseFv
       ;wxPreviewFrame::CreateCanvas()
       CreateCanvas__14wxPreviewFrameFv
       ;wxPreviewControlBar::CreateButtons()
@@ -4615,6 +4627,8 @@ EXPORTS
       OnBeginDocument__10wxPrintoutFiT1
       ;wxPrintPreviewBase::Init(wxPrintout*,wxPrintout*)
       Init__18wxPrintPreviewBaseFP10wxPrintoutT1
+      ;wxPreviewControlBar::OnGoto()
+      OnGoto__19wxPreviewControlBarFv
       ;wxPrintout::~wxPrintout()
       __dt__10wxPrintoutFv
       ;wxPrintout::OnEndDocument()
@@ -4672,6 +4686,8 @@ EXPORTS
       __dt__14wxPreviewFrameFv
       ;wxPreviewControlBar::OnPrevious()
       OnPrevious__19wxPreviewControlBarFv
+      ;wxPreviewControlBar::OnLast()
+      OnLast__19wxPreviewControlBarFv
       ;wxPreviewControlBar::GetEventTable() const
       GetEventTable__19wxPreviewControlBarCFv
       ;wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase*,wxFrame*,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
@@ -5404,13 +5420,53 @@ EXPORTS
       __vft18wxwxListStringNode10wxNodeBase
   ;From object file:  ..\common\strconv.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxCSConv::wxCSConv(const wxCSConv&)
+      __ct__8wxCSConvFRC8wxCSConv
+      __vft8wxCSConv8wxMBConv
+      __vft12wxMBConvUTF78wxMBConv
+      ;wxMBConv::cMB2WC(const char*) const
+      cMB2WC__8wxMBConvCFPCc
+      ;wxCSConv::SetName(const char*)
+      SetName__8wxCSConvFPCc
+      ;wxMBConvUTF7::MB2WC(wchar_t*,const char*,unsigned int) const
+      MB2WC__12wxMBConvUTF7CFPwPCcUi
       ;wxStrConvModule::sm_classwxStrConvModule
       sm_classwxStrConvModule__15wxStrConvModule
+      ;wxMBConvUTF8::WC2MB(char*,const wchar_t*,unsigned int) const
+      WC2MB__12wxMBConvUTF8CFPcPCwUi
+      ;wxMBConvUTF8::MB2WC(wchar_t*,const char*,unsigned int) const
+      MB2WC__12wxMBConvUTF8CFPwPCcUi
+      __vft12wxMBConvUTF88wxMBConv
       wxConvCurrent
-      wxConvFile
+      ;wxMBConv::WC2MB(char*,const wchar_t*,unsigned int) const
+      WC2MB__8wxMBConvCFPcPCwUi
+      ;wxCSConv::Clear()
+      Clear__8wxCSConvFv
+      ;wxCSConv::~wxCSConv()
+      __dt__8wxCSConvFv
+      ;wxCSConv::operator=(const wxCSConv&)
+      __as__8wxCSConvFRC8wxCSConv
+      wxConvUTF7
+      wxConvLocal
+      wxConvUTF8
+      ;wxMBConvUTF7::WC2MB(char*,const wchar_t*,unsigned int) const
+      WC2MB__12wxMBConvUTF7CFPcPCwUi
+      ;wxCSConv::WC2MB(char*,const wchar_t*,unsigned int) const
+      WC2MB__8wxCSConvCFPcPCwUi
+      ;wxCSConv::MB2WC(wchar_t*,const char*,unsigned int) const
+      MB2WC__8wxCSConvCFPwPCcUi
+      ;wxCSConv::LoadNow()
+      LoadNow__8wxCSConvFv
+      ;wxCSConv::wxCSConv(const char*)
+      __ct__8wxCSConvFPCc
       wxConvLibc
+      ;wxMBConv::MB2WC(wchar_t*,const char*,unsigned int) const
+      MB2WC__8wxMBConvCFPwPCcUi
       ;wxConstructorForwxStrConvModule()
       wxConstructorForwxStrConvModule__Fv
+      __vft8wxMBConv
+      ;wxMBConv::cWC2MB(const wchar_t*) const
+      cWC2MB__8wxMBConvCFPCw
   ;From object file:  ..\common\stream.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxStreamBuffer::SetBufferIO(void*,unsigned int,unsigned long)
@@ -5616,6 +5672,8 @@ EXPORTS
       find_first_of__8wxStringCFPCcUi
       ;operator+(const wxString&,const wxString&)
       __pl__FRC8wxStringT1
+      ;wxString::wxString(const wchar_t*,wxMBConv&,unsigned int)
+      __ct__8wxStringFPCwR8wxMBConvUi
       ;wxString::wxString(const void*,const void*)
       __ct__8wxStringFPCvT1
       ;wxArrayString::Sort(int(*)(const wxString&,const wxString&))
@@ -5688,8 +5746,6 @@ EXPORTS
       AfterLast__8wxStringCFc
       ;wxString::find(char,unsigned int) const
       find__8wxStringCFcUi
-      ;wxVsnprintf(char*,unsigned int,const char*,char*)
-      wxVsnprintf__FPcUiPCcT1
       ;wxString::rfind(const wxString&,unsigned int) const
       rfind__8wxStringCFRC8wxStringUi
       ;wxString::replace(unsigned int,unsigned int,const char*,unsigned int)
@@ -5731,6 +5787,8 @@ EXPORTS
       __pl__FRC8wxStringPCc
       ;wxArrayString::operator==(const wxArrayString&) const
       __eq__13wxArrayStringCFRC13wxArrayString
+      ;wxString::operator=(const wchar_t*)
+      __as__8wxStringFPCw
       ;wxString::StartsWith(const char*,wxString*) const
       StartsWith__8wxStringCFPCcP8wxString
       ;wxArrayString::Remove(const char*)
@@ -5769,8 +5827,6 @@ EXPORTS
       ToDouble__8wxStringCFPd
       ;wxString::wxString(char,unsigned int)
       __ct__8wxStringFcUi
-      ;wxSnprintf(char*,unsigned int,const char*,...)
-      wxSnprintf__FPcUiPCce
       ;wxString::ToULong(unsigned long*,int) const
       ToULong__8wxStringCFPUli
       ;wxString::Right(unsigned int) const
@@ -6067,6 +6123,8 @@ EXPORTS
       __dt__20wxTopLevelWindowBaseFv
       ;wxTopLevelWindowBase::OnCloseWindow(wxCloseEvent&)
       OnCloseWindow__20wxTopLevelWindowBaseFR12wxCloseEvent
+      ;wxTopLevelWindowBase::IsLastBeforeExit() const
+      IsLastBeforeExit__20wxTopLevelWindowBaseCFv
       ;wxTopLevelWindowBase::DoScreenToClient(int*,int*) const
       DoScreenToClient__20wxTopLevelWindowBaseCFPiT1
       ;wxTopLevelWindowBase::Destroy()
@@ -7140,10 +7198,17 @@ EXPORTS
       wxGetTopLevelParent__FP8wxWindow
   ;From object file:  ..\common\wxchar.cpp
     ;PUBDEFs (Symbols available from object file):
+      wcslen
+      ;wxMB2WC(wchar_t*,const char*,unsigned int)
+      wxMB2WC__FPwPCcUi
+      ;wxVsnprintf(char*,unsigned int,const char*,char*)
+      wxVsnprintf__FPcUiPCcT1
+      ;wxWC2MB(char*,const wchar_t*,unsigned int)
+      wxWC2MB__FPcPCwUi
+      ;wxSnprintf(char*,unsigned int,const char*,...)
+      wxSnprintf__FPcUiPCce
       ;wxOKlibc()
       wxOKlibc__Fv
-      ;wcslen(const wchar_t*)
-      wcslen__FPCw
   ;From object file:  ..\common\wxexpr.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxExpr::GetAttributeValue(const wxString&,long&) const

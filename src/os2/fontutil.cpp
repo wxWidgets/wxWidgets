@@ -288,7 +288,7 @@ void wxFillLogFont(
     // Determine the number of fonts.
     //
     if((lNumFonts = ::GpiQueryFonts( *phPS
-                                    ,QF_PUBLIC
+                                    ,QF_PUBLIC | QF_PRIVATE
                                     ,NULL
                                     ,&lTemp
                                     ,(LONG) sizeof(FONTMETRICS)
@@ -335,7 +335,8 @@ void wxFillLogFont(
     pFattrs->lMatch = 0;
 
     pFaceName->usSize = sizeof(FACENAMEDESC);
-    pFaceName->usWidthClass = FWIDTH_NORMAL;
+    pFaceName->usWeightClass = FWEIGHT_DONT_CARE;
+    pFaceName->usWidthClass = FWIDTH_DONT_CARE;
     pFaceName->usReserved = 0;
     pFaceName->flOptions = 0;
 
@@ -465,7 +466,7 @@ void wxOS2SelectMatchingFontByName(
             break;
 
         case wxMODERN:
-            sFaceName = wxT("Arial") ;
+            sFaceName = wxT("Courier New") ;
             break;
 
         case wxSWISS:
@@ -474,7 +475,7 @@ void wxOS2SelectMatchingFontByName(
 
         case wxDEFAULT:
         default:
-            sFaceName = wxT("System Proportional") ;
+            sFaceName = wxT("System VIO") ;
     }
 
     switch (pFont->GetWeight())
@@ -532,7 +533,7 @@ void wxOS2SelectMatchingFontByName(
         int                         nEmHeight = 0;
         int                         nXHeight = 0;
 
-        anDiff[0] = wxGpiStrcmp(pFM[i].szFamilyname, zFontFaceName);
+        anDiff[0] = wxGpiStrcmp(pFM[i].szFacename, zFontFaceName);
         anDiff[1] = abs(pFM[i].lEmHeight - nPointSize);
         anDiff[2] = abs(pFM[i].usWeightClass -  usWeightClass);
         anDiff[3] = abs((pFM[i].fsSelection & 0x2f) -  fsSelection);
@@ -600,16 +601,20 @@ void wxOS2SelectMatchingFontByName(
     //
     // Fill in the FATTRS with the best match from FONTMETRICS
     //
-    pFattrs->usRecordLength = sizeof(FATTRS);            // sets size of structure
-    pFattrs->fsSelection    = pFM[nIndex].fsSelection; // uses default selection
-    pFattrs->lMatch         = pFM[nIndex].lMatch;      // force match
-    pFattrs->idRegistry     = pFM[nIndex].idRegistry;  // uses default registry
-    pFattrs->usCodePage     = pFM[nIndex].usCodePage;  // code-page
-    pFattrs->lMaxBaselineExt = 0;   // OUTLINE fonts need this set to 0 as they use other attributes to match
-    pFattrs->lAveCharWidth   = 0;   // OUTLINE fonts need this set to 0 as they use other attributes to match
-    pFattrs->fsType    = 0;// pfm->fsType;              /* uses default type       */
-    pFattrs->fsFontUse = 0;
-
+    pFattrs->usRecordLength  = sizeof(FATTRS);              // Sets size of structure
+    pFattrs->fsSelection     = pFM[nIndex].fsSelection;     // Uses default selection
+    pFattrs->lMatch          = pFM[nIndex].lMatch;          // Force match
+    pFattrs->idRegistry      = pFM[nIndex].idRegistry;      // Uses default registry
+    pFattrs->usCodePage      = pFM[nIndex].usCodePage;      // Code-page
+    pFattrs->fsType          = 0;          // Uses default type
+    pFattrs->lMaxBaselineExt = 0;
+    pFattrs->lAveCharWidth   = 0;
+    pFattrs->fsFontUse       = FATTR_FONTUSE_OUTLINE |      // only outline fonts allowed
+                               FATTR_FONTUSE_TRANSFORMABLE; // may be transformed
+#if 0
+    pFattrs->lMaxBaselineExt = pFM[nIndex].lMaxBaselineExt;
+    pFattrs->lAveCharWidth   = pFM[nIndex].lAveCharWidth;
+#endif
     wxStrcpy(pFattrs->szFacename, pFM[nIndex].szFacename);
     // Debug
     strcpy(zFontFaceName, pFM[nIndex].szFacename);

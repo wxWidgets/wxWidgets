@@ -198,7 +198,7 @@ bool wxShell(
     return (rc != 0);
 }
 
-// Shutdown or reboot the PC 
+// Shutdown or reboot the PC
 bool wxShutdown(wxShutdownFlags wFlags)
 {
     // TODO
@@ -1232,7 +1232,7 @@ void wxOS2SetFont(
         return;
 
     //
-    // The fonts available for Presentation Params are just three
+    // The fonts available for Presentation Params are just a few
     // outline fonts, the rest are available to the GPI, so we must
     // map the families to one of these three
     //
@@ -1243,25 +1243,25 @@ void wxOS2SetFont(
             break;
 
         case wxDECORATIVE:
+            strcpy(zFacename, "WarpSans");
+            break;
+
         case wxROMAN:
-            strcpy(zFacename,"Tms Rmn");
+            strcpy(zFacename,"Times New Roman");
             break;
 
         case wxTELETYPE:
-            strcpy(zFacename, "Courier");
+            strcpy(zFacename, "Courier New");
             break;
 
         case wxMODERN:
-            strcpy(zFacename, "System VIO");
-            break;
-
-        case wxSWISS:
-            strcpy(zFacename, "Helv");
+            strcpy(zFacename, "Courier New");
             break;
 
         case wxDEFAULT:
         default:
-            strcpy(zFacename, "System VIO");
+        case wxSWISS:
+            strcpy(zFacename, "Helvetica");
             break;
     }
 

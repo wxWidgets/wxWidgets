@@ -442,19 +442,15 @@ bool wxWindowOS2::Create(
     // Generic OS/2 Windows have no Control Data but other classes
     // that call OS2Create may have some.
     //
-    bool                            bRetVal = OS2Create( (PSZ)wxCanvasClassName
-                                                        ,rName.c_str()
-                                                        ,ulCreateFlags
-                                                        ,rPos
-                                                        ,rSize
-                                                        ,NULL         // Control Data
-                                                        ,dwExStyle
-                                                        ,TRUE         // Child
-                                                       );
-
-    if (bRetVal)
-        ::WinSubclassWindow(m_hWnd, (PFNWP)wxWndProc);
-    return(bRetVal);
+    return(OS2Create( (PSZ)wxCanvasClassName
+                     ,rName.c_str()
+                     ,ulCreateFlags
+                     ,rPos
+                     ,rSize
+                     ,NULL         // Control Data
+                     ,dwExStyle
+                     ,TRUE         // Child
+                    ));
 } // end of wxWindowOS2::Create
 
 // ---------------------------------------------------------------------------
@@ -3311,7 +3307,7 @@ bool wxWindowOS2::HandleSetFocus(
 } // end of wxWindowOS2::HandleSetFocus
 
 bool wxWindowOS2::HandleKillFocus(
-  WXHWND                            WXUNUSED(hWnd)
+  WXHWND                            hWnd
 )
 {
 #if wxUSE_CARET
@@ -3324,11 +3320,38 @@ bool wxWindowOS2::HandleKillFocus(
     }
 #endif // wxUSE_CARET
 
+#if wxUSE_TEXTCTRL
+    // 
+    // If it's a wxTextCtrl don't send the event as it will be done
+    // after the control gets to process it.
+    //
+    wxTextCtrl*                     pCtrl = wxDynamicCastThis(wxTextCtrl);
+
+    if (pCtrl)
+    {
+        return FALSE;
+    }
+#endif
+
+    // 
+    // Don't send the event when in the process of being deleted.  This can
+    // only cause problems if the event handler tries to access the object.
+    //
+    if ( m_isBeingDeleted )
+    {
+        return FALSE;
+    }
+
     wxFocusEvent                    vEvent( wxEVT_KILL_FOCUS
                                            ,m_windowId
                                           );
 
     vEvent.SetEventObject(this);
+
+    // 
+    // wxFindWinFromHandle() may return NULL, it is ok
+    //
+    vEvent.SetWindow(wxFindWinFromHandle(hWnd));
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::HandleKillFocus
 
@@ -4101,7 +4124,9 @@ bool wxWindowOS2::HandleChar(
     if (isASCII)
     {
         //
-        // If 1 -> 26, translate to CTRL plus a letter.
+        // If 1 -> 26, translate to either special keycode or just set
+        // ctrlDown.  IOW, Ctrl-C should result in keycode == 3 and
+        // ControlDown() == TRUE.
         //
         vId = (int)wParam;
         if ((vId > 0) && (vId < 27))
@@ -4122,7 +4147,7 @@ bool wxWindowOS2::HandleChar(
 
                 default:
                     bCtrlDown = TRUE;
-                    vId = vId + 'a' - 1;
+                    break;
             }
         }
     }
