@@ -43,9 +43,13 @@ class WXDLLEXPORT wxSplashScreenWindow;
 class WXDLLEXPORT wxSplashScreen: public wxFrame
 {
 public:
-    // for RTTI macros obly
+    // for RTTI macros only
     wxSplashScreen() {};
-    wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxSIMPLE_BORDER|wxFRAME_FLOAT_ON_PARENT);
+    wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds,
+                   wxWindow* parent, wxWindowID id,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP);
     ~wxSplashScreen();
 
     void OnCloseWindow(wxCloseEvent& event);

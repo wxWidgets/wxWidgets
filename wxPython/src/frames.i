@@ -283,7 +283,7 @@ public:
                    wxWindow* parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT);
+                   long style = wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 

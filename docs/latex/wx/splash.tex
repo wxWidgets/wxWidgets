@@ -17,7 +17,7 @@ Example usage:
   }
   wxYield();
 \end{verbatim}
- 
+
 \wxheading{Derived from}
 
 \helpref{wxFrame}{wxframe}\\
@@ -33,7 +33,7 @@ Example usage:
 
 \membersection{wxSplashScreen::wxSplashScreen}\label{wxsplashscreenwxsplashscreen}
 
-\func{}{wxSplashScreen}{\param{const wxBitmap\& }{bitmap}, \param{long }{splashStyle}, \param{int }{milliseconds}, \param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxSIMPLE\_BORDER}}
+\func{}{wxSplashScreen}{\param{const wxBitmap\& }{bitmap}, \param{long }{splashStyle}, \param{int }{milliseconds}, \param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxSIMPLE\_BORDER|wxFRAME\_NO\_TASKBAR|wxSTAY\_ON\_TOP}}
 
 Construct the splash screen passing a bitmap, a style, a timeout, a window id, optional position
 and size, and a window style.
