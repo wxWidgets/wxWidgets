@@ -599,7 +599,7 @@ PyObject *wxPyPolygonShape_GetPoints(wxPyPolygonShape *self){
             wxObject*   wxObj;
             wxNode*     node = list->GetFirst();
 
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             while (node) {
                 wxObj = node->GetData();
@@ -607,7 +607,7 @@ PyObject *wxPyPolygonShape_GetPoints(wxPyPolygonShape *self){
                 PyList_Append(pyList, pyObj);
                 node = node->GetNext();
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return pyList;
         }
 PyObject *wxPyPolygonShape_GetOriginalPoints(wxPyPolygonShape *self){
@@ -617,7 +617,7 @@ PyObject *wxPyPolygonShape_GetOriginalPoints(wxPyPolygonShape *self){
             wxObject*   wxObj;
             wxNode*     node = list->GetFirst();
 
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             while (node) {
                 wxObj = node->GetData();
@@ -625,7 +625,7 @@ PyObject *wxPyPolygonShape_GetOriginalPoints(wxPyPolygonShape *self){
                 PyList_Append(pyList, pyObj);
                 node = node->GetNext();
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return pyList;
         }
 
@@ -656,17 +656,17 @@ PyObject *wxDiagram_GetShapeList(wxDiagram *self){
 // work for any class for the VERY generic cases, but beyond that the helper
 // needs to know more about the type.
 wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className) {
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     int count = PyList_Size(pyList);
     wxList* list = new wxList;
     if (! list) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate wxList object");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     for (int x=0; x<count; x++) {
@@ -677,29 +677,29 @@ wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className) {
             wxString errmsg;
             errmsg.Printf(wxT("Type error, expected list of %s objects"), className);
             PyErr_SetString(PyExc_TypeError, errmsg.mb_str());
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return NULL;
         }
         list->Append(wxo);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return list;
 }
 
 //---------------------------------------------------------------------------
 
 wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (!PyList_Check(pyList)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     int count = PyList_Size(pyList);
     wxList* list = new wxList;
     if (! list) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate wxList object");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return NULL;
     }
     for (int x=0; x<count; x++) {
@@ -718,13 +718,13 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
             wxRealPoint* wxo = NULL;
             if (wxPyConvertSwigPtr(pyo, (void **)&wxo, wxT("wxRealPoint"))) {
                 PyErr_SetString(PyExc_TypeError, "Type error, expected list of wxRealPoint objects or 2-tuples");
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return NULL;
             }
             list->Append((wxObject*) new wxRealPoint(*wxo));
         }
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return list;
 }
 
@@ -761,7 +761,7 @@ PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
     wxObject*   wxObj;
     wxNode*     node = list->GetFirst();
 
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();
@@ -769,7 +769,7 @@ PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
         PyList_Append(pyList, pyObj);
         node = node->GetNext();
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return pyList;
 }
 
@@ -2664,7 +2664,9 @@ static PyObject *_wrap_PyShapeEvtHandler_base_OnMovePre(PyObject *, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -3567,7 +3569,9 @@ static PyObject *_wrap_PyShape_GetPerimeterPoint(PyObject *, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         PyObject *o = PyFloat_FromDouble((double) (*arg6));
         resultobj = t_output_helper(resultobj,o);
@@ -4026,7 +4030,9 @@ static PyObject *_wrap_PyShape_GetDrawHandles(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4240,7 +4246,9 @@ static PyObject *_wrap_PyShape_Recompute(PyObject *, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4365,7 +4373,9 @@ static PyObject *_wrap_PyShape_IsHighlighted(PyObject *, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4391,7 +4401,9 @@ static PyObject *_wrap_PyShape_Selected(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4417,7 +4429,9 @@ static PyObject *_wrap_PyShape_AncestorSelected(PyObject *, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4613,7 +4627,9 @@ static PyObject *_wrap_PyShape_GetFixedWidth(PyObject *, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4639,7 +4655,9 @@ static PyObject *_wrap_PyShape_GetFixedHeight(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4694,7 +4712,9 @@ static PyObject *_wrap_PyShape_GetSpaceAttachments(PyObject *, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4795,7 +4815,9 @@ static PyObject *_wrap_PyShape_HitTest(PyObject *, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         PyObject *o = PyInt_FromLong((long) (*arg4));
         resultobj = t_output_helper(resultobj,o);
@@ -4858,7 +4880,9 @@ static PyObject *_wrap_PyShape_GetCentreResize(PyObject *, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4913,7 +4937,9 @@ static PyObject *_wrap_PyShape_GetMaintainAspectRatio(PyObject *, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4994,7 +5020,9 @@ static PyObject *_wrap_PyShape_GetDisableLabel(PyObject *, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5247,7 +5275,9 @@ static PyObject *_wrap_PyShape_IsShown(PyObject *, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5642,7 +5672,9 @@ static PyObject *_wrap_PyShape_Constrain(PyObject *, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6641,7 +6673,9 @@ static PyObject *_wrap_PyShape_GetAttachmentPosition(PyObject *, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         PyObject *o = PyFloat_FromDouble((double) (*arg3));
         resultobj = t_output_helper(resultobj,o);
@@ -6705,7 +6739,9 @@ static PyObject *_wrap_PyShape_AttachmentIsValid(PyObject *, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6785,7 +6821,9 @@ static PyObject *_wrap_PyShape_GetAttachmentPositionEdge(PyObject *, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         PyObject *o = PyFloat_FromDouble((double) (*arg3));
         resultobj = t_output_helper(resultobj,o);
@@ -6893,7 +6931,9 @@ static PyObject *_wrap_PyShape_AttachmentSortTest(PyObject *, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7032,7 +7072,9 @@ static PyObject *_wrap_PyShape_MoveLineToNewAttachment(PyObject *, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7152,7 +7194,9 @@ static PyObject *_wrap_PyShape_GetBranchingAttachmentInfo(PyObject *, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7200,7 +7244,9 @@ static PyObject *_wrap_PyShape_GetBranchingAttachmentPoint(PyObject *, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7536,7 +7582,9 @@ static PyObject *_wrap_PyShape_Draggable(PyObject *, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7566,7 +7614,9 @@ static PyObject *_wrap_PyShape_HasDescendant(PyObject *, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -8413,7 +8463,9 @@ static PyObject *_wrap_PyShape_base_OnMovePre(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9457,7 +9509,9 @@ static PyObject *_wrap_PseudoMetaFile_LoadFromMetaFile(PyObject *, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -9590,7 +9644,9 @@ static PyObject *_wrap_PseudoMetaFile_GetRotateable(PyObject *, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9844,7 +9900,9 @@ static PyObject *_wrap_PseudoMetaFile_IsValid(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11174,7 +11232,9 @@ static PyObject *_wrap_PyRectangleShape_base_OnMovePre(PyObject *, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -12502,7 +12562,9 @@ static PyObject *_wrap_PyControlPoint_base_OnMovePre(PyObject *, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -13904,7 +13966,9 @@ static PyObject *_wrap_PyBitmapShape_base_OnMovePre(PyObject *, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15245,7 +15309,9 @@ static PyObject *_wrap_PyDrawnShape_LoadFromMetaFile(PyObject *, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -16153,7 +16219,9 @@ static PyObject *_wrap_PyDrawnShape_base_OnMovePre(PyObject *, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -16930,7 +16998,9 @@ static PyObject *_wrap_OGLConstraint_Evaluate(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -16997,7 +17067,9 @@ static PyObject *_wrap_OGLConstraint_Equals(PyObject *, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -17258,7 +17330,9 @@ static PyObject *_wrap_PyCompositeShape_ContainsDivision(PyObject *, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -17447,7 +17521,9 @@ static PyObject *_wrap_PyCompositeShape_Recompute(PyObject *, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -17970,7 +18046,9 @@ static PyObject *_wrap_PyCompositeShape_base_OnMovePre(PyObject *, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19295,7 +19373,9 @@ static PyObject *_wrap_PyDividedShape_base_OnMovePre(PyObject *, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21359,7 +21439,9 @@ static PyObject *_wrap_PyDivisionShape_base_OnMovePre(PyObject *, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -22609,7 +22691,9 @@ static PyObject *_wrap_PyEllipseShape_base_OnMovePre(PyObject *, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -23853,7 +23937,9 @@ static PyObject *_wrap_PyCircleShape_base_OnMovePre(PyObject *, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25320,7 +25406,9 @@ static PyObject *_wrap_PyLineShape_ClearArrow(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -25435,7 +25523,9 @@ static PyObject *_wrap_PyLineShape_DeleteArrowHeadId(PyObject *, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25473,7 +25563,9 @@ static PyObject *_wrap_PyLineShape_DeleteArrowHead(PyObject *, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp3)
         delete arg3;
@@ -25507,7 +25599,9 @@ static PyObject *_wrap_PyLineShape_DeleteLineControlPoint(PyObject *, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26191,7 +26285,9 @@ static PyObject *_wrap_PyLineShape_IsEnd(PyObject *, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26217,7 +26313,9 @@ static PyObject *_wrap_PyLineShape_IsSpline(PyObject *, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26672,7 +26770,9 @@ static PyObject *_wrap_PyLineShape_GetAlignmentOrientation(PyObject *, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27223,7 +27323,9 @@ static PyObject *_wrap_PyLineShape_base_OnMovePre(PyObject *, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -28764,7 +28866,9 @@ static PyObject *_wrap_PyPolygonShape_base_OnMovePre(PyObject *, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -30039,7 +30143,9 @@ static PyObject *_wrap_PyTextShape_base_OnMovePre(PyObject *, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -31113,7 +31219,9 @@ static PyObject *_wrap_Diagram_GetQuickEditMode(PyObject *, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -31139,7 +31247,9 @@ static PyObject *_wrap_Diagram_GetSnapToGrid(PyObject *, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -31823,7 +31933,9 @@ static PyObject *_wrap_PyShapeCanvas_GetQuickEditMode(PyObject *, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;

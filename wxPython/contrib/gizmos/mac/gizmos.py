@@ -606,6 +606,8 @@ class TreeListCtrl(core.Control):
         """SetItemPyData(TreeItemId item, PyObject obj)"""
         return _gizmos.TreeListCtrl_SetItemPyData(*args, **kwargs)
 
+    GetPyData = GetItemPyData 
+    SetPyData = SetItemPyData 
     def SetItemHasChildren(*args, **kwargs):
         """SetItemHasChildren(TreeItemId item, bool has=True)"""
         return _gizmos.TreeListCtrl_SetItemHasChildren(*args, **kwargs)
