@@ -1540,7 +1540,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                                 btn = panel->GetDefaultItem();
                             }
 
-                            if ( btn )
+                            if ( btn && btn->IsEnabled() )
                             {
                                 // if we do have a default button, do press it
                                 btn->MSWCommand(BN_CLICKED, 0 /* unused */);
