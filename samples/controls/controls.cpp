@@ -315,6 +315,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
   button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
+  m_checkbox->SetValue(FALSE);
   m_notebook->AddPage(panel, "wxList", FALSE, Image_List);
 
   panel = new wxPanel(m_notebook);
@@ -517,6 +518,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
   {
     case ID_LISTBOX_ENABLE:
     {
+      m_text->WriteText("Checkbox clicked.\n");
       m_listbox->Enable( event.GetInt() == 0 );
       break;
     }

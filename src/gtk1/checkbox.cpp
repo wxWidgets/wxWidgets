@@ -97,6 +97,11 @@ void wxCheckBox::SetValue( bool state )
 {
     wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
     
+    if ( state == GetValue() )
+        return;
+
+    // for compatibility with wxMSW don't send notification when the check box
+    // state is changed programmatically
     m_blockFirstEvent = TRUE;
 
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), state );
