@@ -1697,7 +1697,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
 
     const wxWX2MBbuf strbuf = string.mb_str();
 
-#if !USE_AFM_FOR_POSTSCRIPT
+#if !wxUSE_AFM_FOR_POSTSCRIPT
     /* Provide a VERY rough estimate (avoid using it).
      * Produces accurate results for mono-spaced font
      * such as Courier (aka wxMODERN) */
@@ -1758,6 +1758,9 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
     static int lastWeight= INT_MIN;
     static int lastDescender = INT_MIN;
     static int lastWidths[256]; /* widths of the characters */
+    
+    static float UnderlinePosition = 0.0;
+    static float UnderlineThickness = 0.0;
 
     /* get actual parameters */
     const int Family = fontToUse->GetFamily();
@@ -1791,7 +1794,8 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
                     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO";
                     else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo";
                     else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO";
-                    else if name = "TimesRo";  /* no typo */
+//                    else if name = "TimesRo";  /* no typo */
+                    else name = "TimesRo";  /* VS maybe no typo, but it did not compile */
                 }
                 break;
             default:
@@ -1810,7 +1814,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
 	
 	if (!m_printData.GetFontMetricPath().IsEmpty())
 	{
-	    strcpy( afmName, m_printData.GetFontMetricPath().fn_str() )
+	    strcpy( afmName, m_printData.GetFontMetricPath().fn_str() );
 	}
 
         /* 2. open and process the file
@@ -1951,8 +1955,9 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
     }
 
     /* JC: calculate UnderlineThickness/UnderlinePosition */
-    m_underlinePosition = m_underlinePosition * fontToUse->GetPointSize() / 1000.0f;
-    m_underlineThickness = m_underlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
+//    m_underlinePosition = m_underlinePosition * fontToUse->GetPointSize() / 1000.0f;
+//    m_underlineThickness = m_underlineThickness * fontToUse->GetPointSize() / 1000.0f * m_scaleFactor;
+//   VS: can't do this - we're in const method. m_underline* seems to be never used!
 
     /* 3. now the font metrics are read in, calc size this
        /  is done by adding the widths of the characters in the
