@@ -99,8 +99,8 @@ protected:
 class WXDLLEXPORT wxSpinEvent : public wxNotifyEvent
 {
 public:
-    wxSpinEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
-           : wxNotifyEvent(commandType, id)
+    wxSpinEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
+           : wxNotifyEvent(commandType, winid)
     {
     }
 
@@ -115,12 +115,12 @@ private:
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
 
 // macros for handling spin events
-#define EVT_SPIN_UP(id, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func, NULL ),
-#define EVT_SPIN_DOWN(id, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func, NULL ),
-#define EVT_SPIN(id, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func, NULL ),
+#define EVT_SPIN_UP(winid, func) \
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEUP, winid, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func, NULL ),
+#define EVT_SPIN_DOWN(winid, func) \
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEDOWN, winid, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func, NULL ),
+#define EVT_SPIN(winid, func) \
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBTRACK, winid, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func, NULL ),
 
 #endif // wxUSE_SPINBTN
 
