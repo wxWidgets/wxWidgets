@@ -76,7 +76,7 @@ implementation returns a new wxLogGui class.
 
 \membersection{wxApp::Dispatch}\label{wxappdispatch}
 
-\func{void}{Dispatch}{\void}
+\func{virtual void}{Dispatch}{\void}
 
 Dispatches the next event in the windowing system event queue.
 
@@ -189,7 +189,7 @@ Returns the application's vendor name.
 
 \membersection{wxApp::ExitMainLoop}\label{wxappexitmainloop}
 
-\func{void}{ExitMainLoop}{\void}
+\func{virtual void}{ExitMainLoop}{\void}
 
 Call this to explicitly exit the main message (event) loop.
 You should normally exit the main loop (and the application) by deleting
@@ -198,7 +198,7 @@ the top window.
 
 \membersection{wxApp::MainLoop}\label{wxappmainloop}
 
-\func{int}{MainLoop}{\void}
+\func{virtual int}{MainLoop}{\void}
 
 Called by wxWidgets on creation of the application. Override this if you wish
 to provide your own (environment-dependent) main loop.
@@ -539,7 +539,7 @@ BOOL CTheApp::PreTranslateMessage(MSG *msg)
 
 \membersection{wxApp::Pending}\label{wxapppending}
 
-\func{bool}{Pending}{\void}
+\func{virtual bool}{Pending}{\void}
 
 Returns true if unprocessed events are in the window system event queue.
 
