@@ -87,16 +87,15 @@
 
   /* Need to undef new if including crtdbg.h */
   #ifdef new
-  #undef new
+    #undef new
   #endif
 
   #include <crtdbg.h>
 
   #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-  #define new new(__FILE__,__LINE__)
+    #define new new(__FILE__,__LINE__)
   #endif
-
-#endif
+#endif // wxUSE_VC_CRTDBG
 
 extern char *wxBuffer;
 extern char *wxOsVersion;
@@ -563,6 +562,11 @@ void wxApp::CleanUp()
 
 #if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
 
+// temporarily disable this warning
+#ifdef _MSC_VER
+    #pragma warning(disable: 4715) // not all control paths return a value
+#endif // Visual C++
+
 //// Main wxWindows entry point
 int wxEntry(WXHINSTANCE hInstance,
             WXHINSTANCE WXUNUSED(hPrevInstance),
@@ -570,8 +574,16 @@ int wxEntry(WXHINSTANCE hInstance,
             int nCmdShow,
             bool enterLoop)
 {
-#if !defined(__WXDEBUG__) && !defined(__BORLANDC__) && !defined(__WATCOMC__) // take everything into a try-except block in release build
-  try {
+  // take everything into a try-except block in release build
+  // FIXME other compilers must support Win32 SEH (structured exception
+  //       handling) too, just find the appropriate keyword in their docs!
+  //       Please note that it's _not_ the same as C++ exceptions!
+#if !defined(__WXDEBUG__) && defined(_MSC_VER)
+    #define CATCH_PROGRAM_EXCEPTIONS
+
+  __try {
+#else
+    #undef  CATCH_PROGRAM_EXCEPTIONS
 #endif
 
   wxhInstance = (HINSTANCE) hInstance;
@@ -640,19 +652,26 @@ int wxEntry(WXHINSTANCE hInstance,
   wxApp::CleanUp();
 
   return retValue;
-#if !defined(__WXDEBUG__) && !defined(__BORLANDC__) && !defined(__WATCOMC__) // catch exceptions only in release build
+
+#ifdef CATCH_PROGRAM_EXCEPTIONS
   }
-  except ( EXCEPTION_EXECUTE_HANDLER ) {
+  __except ( EXCEPTION_EXECUTE_HANDLER ) {
     /*
     if ( wxTheApp )
       wxTheApp->OnFatalException();
     */
 
     ::ExitProcess(3); // the same exit code as abort()
-    return 0;
+
+    // NOTREACHED
   }
-#endif //debug
+#endif // CATCH_PROGRAM_EXCEPTIONS
 }
+
+// restore warning state
+#ifdef _MSC_VER
+    #pragma warning(default: 4715) // not all control paths return a value
+#endif // Visual C++
 
 #else /*  _WINDLL  */
 
