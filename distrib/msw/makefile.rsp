@@ -42,7 +42,6 @@ samples/mdi/Makefile.in
 samples/minifram/Makefile.in
 samples/minimal/Makefile.in
 samples/notebook/Makefile.in
-samples/plot/Makefile.in
 samples/printing/Makefile.in
 samples/proplist/Makefile.in
 samples/propsize/Makefile.in

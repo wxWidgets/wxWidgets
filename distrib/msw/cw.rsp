@@ -1,4 +1,4 @@
-src/make_cw.mcp
+src/*.mcp
 src/common/cwy_tab.c
 src/common/cwlex_yy.c
 include/wx_cw.pch
@@ -6,104 +6,104 @@ include/wx_cw.pch++
 include/wx_cw_d.pch
 include/wx_cw_d.pch++
 
-samples/bombs/make_cw.mcp
+samples/bombs/*.mcp
 
-samples/checklst/make_cw.mcp
+samples/checklst/*.mcp
 
-samples/config/make_cw.mcp
+samples/config/*.mcp
 
-samples/controls/make_cw.mcp
+samples/controls/*.mcp
 
-samples/db/make_cw.mcp
+samples/db/*.mcp
 
-samples/dialogs/make_cw.mcp
+samples/dialogs/*.mcp
 
-samples/dnd/make_cw.mcp
+samples/dnd/*.mcp
 
-samples/docview/make_cw.mcp
+samples/docview/*.mcp
 
-samples/docvwmdi/make_cw.mcp
+samples/docvwmdi/*.mcp
 
-samples/dynamic/make_cw.mcp
+samples/dynamic/*.mcp
 
-samples/forty/make_cw.mcp
+samples/forty/*.mcp
 
-samples/fractal/make_cw.mcp
+samples/fractal/*.mcp
 
-samples/grid/make_cw.mcp
+samples/grid/*.mcp
 
-samples/help/make_cw.mcp
+samples/help/*.mcp
 
-samples/image/make_cw.mcp
+samples/image/*.mcp
 
-samples/internat/make_cw.mcp
+samples/internat/*.mcp
 
-samples/joytest/make_cw.mcp
+samples/joytest/*.mcp
 
-samples/layout/make_cw.mcp
+samples/layout/*.mcp
 
-samples/listctrl/make_cw.mcp
+samples/listctrl/*.mcp
 
-samples/mdi/make_cw.mcp
+samples/mdi/*.mcp
 
-samples/memcheck/make_cw.mcp
+samples/memcheck/*.mcp
 
-samples/mfc/make_cw.mcp
+samples/mfc/*.mcp
 
-samples/minimal/make_cw.mcp
+samples/minimal/*.mcp
 
-samples/minifram/make_cw.mcp
+samples/minifram/*.mcp
 
-samples/nativdlg/make_cw.mcp
+samples/nativdlg/*.mcp
 
-samples/notebook/make_cw.mcp
+samples/notebook/*.mcp
 
-samples/ownerdrw/make_cw.mcp
+samples/ownerdrw/*.mcp
 
-samples/png/make_cw.mcp
+samples/png/*.mcp
 
-samples/printing/make_cw.mcp
+samples/printing/*.mcp
 
-samples/proplist/make_cw.mcp
+samples/proplist/*.mcp
 
-samples/Regtest/make_cw.mcp
+samples/Regtest/*.mcp
 
-samples/resource/make_cw.mcp
+samples/resource/*.mcp
 
-samples/sashtest/make_cw.mcp
+samples/sashtest/*.mcp
 
-samples/splitter/make_cw.mcp
+samples/splitter/*.mcp
 
-samples/tab/make_cw.mcp
+samples/tab/*.mcp
 
-samples/taskbar/make_cw.mcp
+samples/taskbar/*.mcp
 
-samples/thread/make_cw.mcp
+samples/thread/*.mcp
 
-samples/toolbar/make_cw.mcp
+samples/toolbar/*.mcp
 
-samples/treectrl/make_cw.mcp
+samples/treectrl/*.mcp
 
-samples/typetest/make_cw.mcp
+samples/typetest/*.mcp
 
-samples/validate/make_cw.mcp
+samples/validate/*.mcp
 
-samples/wxsocket/make_cw.mcp
+samples/wxsocket/*.mcp
 
-samples/wxpoem/make_cw.mcp
+samples/wxpoem/*.mcp
 
-utils/wxprop/src/make_cw.mcp
+utils/wxprop/src/*.mcp
 utils/wxprop/src/make_sample.mcp
 
-utils/dialoged/src/make_cw.mcp
+utils/dialoged/src/*.mcp
 
-utils/glcanvas/win/make_cw.mcp
-utils/glcanvas/samples/cube/make_cw.mcp
-utils/glcanvas/samples/isosurf/make_cw.mcp
+utils/glcanvas/win/*.mcp
+utils/glcanvas/samples/cube/*.mcp
+utils/glcanvas/samples/isosurf/*.mcp
 
-utils/ogl/src/make_cw.mcp
-utils/ogl/samples/ogledit/make_cw.mcp
+utils/ogl/src/*.mcp
+utils/ogl/samples/ogledit/*.mcp
 
-utils/wxtree/src/make_cw.mcp
-utils/wxtree/src/make_cw.mcp
+utils/wxtree/src/*.mcp
+utils/wxtree/src/*.mcp
 
