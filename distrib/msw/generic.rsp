@@ -1452,9 +1452,9 @@ tests/archive/*.h
 tests/arrays/*.cpp
 tests/datetime/*.cpp
 tests/fileconf/*.cpp
+tests/filekind/*.cpp
 tests/filename/*.cpp
 tests/filesys/*.cpp
-tests/filetype/*.cpp
 tests/fontmap/*.cpp
 tests/formatconverter/*.cpp
 tests/geometry/*.cpp

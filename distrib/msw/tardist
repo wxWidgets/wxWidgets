@@ -37,7 +37,6 @@ doinit()
 
   rm -f $WXDEST/wx*-${WXVER}*.tar.gz
   # Copy setup files
-  cp $WXSRC/include/wx/os2/SETUP0.H $WXSRC/include/wx/os2/setup.h
   cp $WXSRC/include/wx/msw/setup0.h $WXSRC/include/wx/msw/setup.h
   cp $WXSRC/include/wx/univ/setup0.h $WXSRC/include/wx/univ/setup.h
 
@@ -233,7 +232,7 @@ echo Tarring wxAll...
 
 ### wxAll: all distributions in one giant archive
 cd $WXSRC
-cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/wince.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/cw.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/cocoa.rsp $WXSRC/distrib/msw/os2.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/mgl.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/utilmake.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/mmedia.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp $WXSRC/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
+cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/wince.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/cw.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/cocoa.rsp $WXSRC/distrib/msw/os2.rsp $WXSRC/distrib/msw/palmos.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/mgl.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/utilmake.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/mmedia.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp $WXSRC/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
 expandlines /tmp/wxall_in.txt /tmp/wxall.txt
 $TAR cf $WXDEST/wxAll-${WXVER}.tar -T /tmp/wxall.txt
 
@@ -293,6 +292,7 @@ cp $WXSRC/docs/mac/readme.txt README-MAC.txt
 cp $WXSRC/docs/mac/install.txt INSTALL-MAC.txt
 cp $WXSRC/docs/mgl/readme.txt README-MGL.txt
 cp $WXSRC/docs/mgl/install.txt INSTALL-MGL.txt
+cp $WXSRC/docs/palmos/readme.txt README-PALMOS.txt
 #cp $WXSRC/docs/os2/readme.txt README-OS2.txt
 cp $WXSRC/docs/os2/install.txt INSTALL-OS2.txt
 
