@@ -45,7 +45,7 @@
 #include "tex2rtf.h"
 #include "rtfutils.h"
 
-#if (defined(__WXGTK__) || defined(__WXMOTIF__)) && !defined(NO_GUI)
+#if (defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)) && !defined(NO_GUI)
 #include "tex2rtf.xpm"
 #endif
 
@@ -591,7 +591,9 @@ void ShowOptions(void)
     OnInform(buf);
     OnInform("Usage: tex2rtf [input] [output] [switches]\n");
     OnInform("where valid switches are");
+#ifndef NO_GUI
     OnInform("    -interactive");
+#endif
     OnInform("    -bufsize <size in K>");
     OnInform("    -charset <pc | pca | ansi | mac> (default ansi)");
     OnInform("    -twice");
