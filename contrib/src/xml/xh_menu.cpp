@@ -38,7 +38,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
         wxMenu *menu = new wxMenu(GetStyle());
         wxString title = GetText(wxT("label"));
         wxString help = GetText(wxT("help"));
-    
+        
         bool oldins = m_insideMenu;
         m_insideMenu = TRUE;
         CreateChildren(menu, TRUE/*only this handler*/);
@@ -69,8 +69,13 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
         {
             int id = GetID();
             bool checkable = GetBool(wxT("checkable"));
+            wxString label = GetText(wxT("label"));
+            wxString accel = GetText(wxT("accel"));
+            wxString fullLabel = label;
+            if (!accel.IsEmpty())
+                fullLabel << wxT("\t") << accel;
 
-            wxMenuItem *mitem = new wxMenuItem(p_menu, id, GetText(wxT("label")),
+            wxMenuItem *mitem = new wxMenuItem(p_menu, id, fullLabel,
                                                GetText(wxT("help")), checkable);
                                                
 #if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)

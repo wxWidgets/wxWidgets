@@ -2,6 +2,7 @@ node wxMenuItem
 type normal
 icon 0
 var label of text
+var accel of text
 var help of text
 var checkable of bool
 var checked of bool
