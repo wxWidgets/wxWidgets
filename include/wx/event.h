@@ -89,6 +89,7 @@ typedef int wxEventType;
 #define DECLARE_EVENT_TYPE(name, value) \
     extern const wxEventType WXDLLEXPORT name;
 #define DECLARE_LOCAL_EVENT_TYPE(name, value) extern const wxEventType name;
+#define DECLARE_EXPORTED_LOCAL_EVENT_TYPE(usergoo, name, value) extern const wxEventType usergoo name;
 #define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 #define DEFINE_LOCAL_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 
