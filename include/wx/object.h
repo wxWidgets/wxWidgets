@@ -501,7 +501,7 @@ protected:
 
 class WXDLLEXPORT wxObjectRefData
 {
-    friend class wxObject;
+    friend class WXDLLEXPORT wxObject;
 
 public:
     wxObjectRefData() : m_count(1) { }

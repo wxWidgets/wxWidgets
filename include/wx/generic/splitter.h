@@ -71,7 +71,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D,
-                     const wxString& name = "splitter")
+                     const wxString& name = wxT("splitter"))
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -83,7 +83,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D,
-                     const wxString& name = "splitter");
+                     const wxString& name = wxT("splitter"));
 
     // Gets the only or left/top pane
     wxWindow *GetWindow1() const { return m_windowOne; }

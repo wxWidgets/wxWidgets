@@ -58,51 +58,51 @@ void OGLInitializeConstraintTypes()
     wxOGLConstraintTypes = new wxList(wxKEY_INTEGER);
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_VERTICALLY,
-        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_VERTICALLY, "Centre vertically", "centred vertically w.r.t."));
+        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_VERTICALLY, wxT("Centre vertically"), wxT("centred vertically w.r.t.")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_HORIZONTALLY,
-        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_HORIZONTALLY, "Centre horizontally", "centred horizontally w.r.t."));
+        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_HORIZONTALLY, wxT("Centre horizontally"), wxT("centred horizontally w.r.t.")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_CENTRED_BOTH,
-        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_BOTH, "Centre", "centred w.r.t."));
+        new wxOGLConstraintType(gyCONSTRAINT_CENTRED_BOTH, wxT("Centre"), wxT("centred w.r.t.")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_LEFT_OF,
-        new wxOGLConstraintType(gyCONSTRAINT_LEFT_OF, "Left of", "left of"));
+        new wxOGLConstraintType(gyCONSTRAINT_LEFT_OF, wxT("Left of"), wxT("left of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_RIGHT_OF,
-        new wxOGLConstraintType(gyCONSTRAINT_RIGHT_OF, "Right of", "right of"));
+        new wxOGLConstraintType(gyCONSTRAINT_RIGHT_OF, wxT("Right of"), wxT("right of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_ABOVE,
-        new wxOGLConstraintType(gyCONSTRAINT_ABOVE, "Above", "above"));
+        new wxOGLConstraintType(gyCONSTRAINT_ABOVE, wxT("Above"), wxT("above")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_BELOW,
-        new wxOGLConstraintType(gyCONSTRAINT_BELOW, "Below", "below"));
+        new wxOGLConstraintType(gyCONSTRAINT_BELOW, wxT("Below"), wxT("below")));
 
     // Alignment
     wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_TOP,
-        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_TOP, "Top-aligned", "aligned to the top of"));
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_TOP, wxT("Top-aligned"), wxT("aligned to the top of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_BOTTOM,
-        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_BOTTOM, "Bottom-aligned", "aligned to the bottom of"));
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_BOTTOM, wxT("Bottom-aligned"), wxT("aligned to the bottom of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_LEFT,
-        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_LEFT, "Left-aligned", "aligned to the left of"));
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_LEFT, wxT("Left-aligned"), wxT("aligned to the left of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_ALIGNED_RIGHT,
-        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_RIGHT, "Right-aligned", "aligned to the right of"));
+        new wxOGLConstraintType(gyCONSTRAINT_ALIGNED_RIGHT, wxT("Right-aligned"), wxT("aligned to the right of")));
 
     // Mid-alignment
     wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_TOP,
-        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_TOP, "Top-midaligned", "centred on the top of"));
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_TOP, wxT("Top-midaligned"), wxT("centred on the top of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_BOTTOM,
-        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_BOTTOM, "Bottom-midaligned", "centred on the bottom of"));
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_BOTTOM, wxT("Bottom-midaligned"), wxT("centred on the bottom of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_LEFT,
-        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_LEFT, "Left-midaligned", "centred on the left of"));
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_LEFT, wxT("Left-midaligned"), wxT("centred on the left of")));
 
     wxOGLConstraintTypes->Append(gyCONSTRAINT_MIDALIGNED_RIGHT,
-        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_RIGHT, "Right-midaligned", "centred on the right of"));
+        new wxOGLConstraintType(gyCONSTRAINT_MIDALIGNED_RIGHT, wxT("Right-midaligned"), wxT("centred on the right of")));
 }
 
 void OGLCleanUpConstraintTypes()
@@ -137,7 +137,7 @@ wxOGLConstraint::wxOGLConstraint(int type, wxShape *constraining, wxList& constr
   m_constrainingObject = constraining;
 
   m_constraintId = 0;
-  m_constraintName = "noname";
+  m_constraintName = wxT("noname");
 
   wxNode *node = constrained.First();
   while (node)

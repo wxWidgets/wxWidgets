@@ -1,15 +1,13 @@
-#
-# Makefile for WATCOM
-#
-# Created by Julian Smart, January 1999
 # 
-#
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = arttest
-OBJECTS = $(PROGRAM).obj artbrows.obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+THISDIR = $(%WXWIN)\samples\artprov 
+# 
+PROGRAM = artprov 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

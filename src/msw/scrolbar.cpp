@@ -122,9 +122,40 @@ wxScrollBar::~wxScrollBar(void)
 bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
                               WXWORD pos, WXHWND control)
 {
-    int position = ::GetScrollPos((HWND) control, SB_CTL);
-    int minPos, maxPos;
-    ::GetScrollRange((HWND) control, SB_CTL, &minPos, &maxPos);
+    // current and max positions
+    int position,
+        maxPos, trackPos = pos;
+
+#ifdef __WIN32__
+    // when we're dragging the scrollbar we can't use pos parameter because it
+    // is limited to 16 bits
+    if ( wParam == SB_THUMBPOSITION || wParam == SB_THUMBTRACK )
+    {
+        SCROLLINFO scrollInfo;
+        wxZeroMemory(scrollInfo);
+        scrollInfo.cbSize = sizeof(SCROLLINFO);
+
+        // also get the range if we call GetScrollInfo() anyhow -- this is less
+        // expensive than call it once here and then call GetScrollRange()
+        // below
+        scrollInfo.fMask = SIF_RANGE | SIF_POS | SIF_TRACKPOS;
+
+        if ( !::GetScrollInfo(GetHwnd(), SB_CTL, &scrollInfo) )
+        {
+            wxLogLastError(_T("GetScrollInfo"));
+        }
+
+        trackPos = scrollInfo.nTrackPos;
+        position = scrollInfo.nPos;
+        maxPos = scrollInfo.nMax;
+    }
+    else
+#endif // Win32
+    {
+        position = ::GetScrollPos((HWND) control, SB_CTL);
+        int minPos;
+        ::GetScrollRange((HWND) control, SB_CTL, &minPos, &maxPos);
+    }
 
 #if defined(__WIN95__)
     // A page size greater than one has the effect of reducing the effective
@@ -170,12 +201,12 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             break;
 
         case SB_THUMBPOSITION:
-            nScrollInc = pos - position;
+            nScrollInc = trackPos - position;
             scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
             break;
 
         case SB_THUMBTRACK:
-            nScrollInc = pos - position;
+            nScrollInc = trackPos - position;
             scrollEvent = wxEVT_SCROLL_THUMBTRACK;
             break;
 
@@ -217,16 +248,16 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
 void wxScrollBar::SetThumbPosition(int viewStart)
 {
 #if defined(__WIN95__)
-  SCROLLINFO info;
-  info.cbSize = sizeof(SCROLLINFO);
-  info.nPage = 0;
-  info.nMin = 0;
-  info.nPos = viewStart;
-  info.fMask = SIF_POS ;
+    SCROLLINFO info;
+    info.cbSize = sizeof(SCROLLINFO);
+    info.nPage = 0;
+    info.nMin = 0;
+    info.nPos = viewStart;
+    info.fMask = SIF_POS ;
 
-  ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, TRUE);
+    ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, TRUE);
 #else
-  ::SetScrollPos((HWND) GetHWND(), SB_CTL, viewStart, TRUE);
+    ::SetScrollPos((HWND) GetHWND(), SB_CTL, viewStart, TRUE);
 #endif
 }
 

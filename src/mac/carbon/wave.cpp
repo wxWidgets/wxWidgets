@@ -17,6 +17,8 @@
 #include "wx/string.h"
 #include "wx/wave.h"
 
+#if wxUSE_WAVE
+
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
 #ifndef __DARWIN__
@@ -57,7 +59,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 		ret = true;
 	else
 	{ /*
-		if (sndChan) 
+		if (sndChan)
 		{																	// we're playing
 			FSClose(SndRefNum);
 			SndRefNum = 0;
@@ -66,7 +68,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 			sndChan = 0;
 			KillTimer(0,timerID);
 		}
-		
+
 		if (!lpSnd)
 			return true;
 
@@ -81,14 +83,14 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
 		sndChan->qLength = 128;
 
-		if (noErr != SndNewChannel (&sndChan, sampledSynth, initMono | initNoInterp, 0)) 
+		if (noErr != SndNewChannel (&sndChan, sampledSynth, initMono | initNoInterp, 0))
 		{
 			free(sndChan);
 			sndChan = 0;
 			return false;
 		}
 
-		if (!(SndRefNum = MacOpenSndFile ((char *)lpSnd))) 
+		if (!(SndRefNum = MacOpenSndFile ((char *)lpSnd)))
 		{
 			SndDisposeChannel(sndChan, TRUE);
 			free(sndChan);
@@ -102,7 +104,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 		if (fdwSound & SND_ASYNC)
 			async = true;
 
-		if (SndStartFilePlay(sndChan, SndRefNum, 0, 81920, 0, 0, 0, async) != noErr) 
+		if (SndStartFilePlay(sndChan, SndRefNum, 0, 81920, 0, 0, 0, async) != noErr)
 		{
 			FSClose (SndRefNum);
 			SndRefNum = 0;
@@ -112,11 +114,11 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 			return false;
 		}
 
-		if (async) 
+		if (async)
 		{  // haven't finish yet
 			timerID = SetTimer(0, 0, 250, TimerCallBack);
-		} 
-		else 
+		}
+		else
 		{
 			FSClose (SndRefNum);
 			SndRefNum = 0;
@@ -125,7 +127,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 			sndChan = 0;
 		}*/
 	}
-	
+
 	return ret;
 }
 
@@ -135,8 +137,8 @@ bool wxWave::Play(bool async, bool looped) const
 {
 	char lpSnd[32];
 	bool ret = false;
-	
-	if (m_isResource) 
+
+	if (m_isResource)
 	{
 #if TARGET_CARBON
 	  c2pstrcpy((unsigned char *)lpSnd, m_sndname);
@@ -145,13 +147,13 @@ bool wxWave::Play(bool async, bool looped) const
 	  c2pstr((char *) lpSnd);
 #endif
 	  SndListHandle hSnd;
-	  
+
 	  hSnd = (SndListHandle) GetNamedResource('snd ',(const unsigned char *) lpSnd);
 
 	  if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, async) == noErr))
 	    ret = true;
-	} 
-	
+	}
+
 	return ret;
 }
 
@@ -159,7 +161,7 @@ bool wxWave::Play(bool async, bool looped) const
 bool wxWave::FreeData()
 {
 	bool ret = false;
-	
+
 	if (m_isResource)
 	{
 		m_sndname.Empty();
@@ -167,9 +169,9 @@ bool wxWave::FreeData()
 	}
 	else
 	{
-		//TODO, 
+		//TODO,
 	}
-	
+
 	return ret;
 }
 
@@ -188,7 +190,7 @@ bool wxWave::FreeData()
 	// first, get the volume reference number for the file.  Start by
 	// making a Pstring with just the volume name
 	strcpy ((char *) name, path);
-	if (c = strchr ((char *) name, ':')) 
+	if (c = strchr ((char *) name, ':'))
 	{
 		c++;
 		*c = '\0';
@@ -220,7 +222,7 @@ bool wxWave::FreeData()
 
 void TimerCallBack(HWND hwnd,UINT uMsg,UINT idEvent,DWORD dwTime)
 {
-	if(!sndChan) 
+	if(!sndChan)
 	{
 		KillTimer(0,timerID);
 		return;
@@ -243,3 +245,4 @@ void TimerCallBack(HWND hwnd,UINT uMsg,UINT idEvent,DWORD dwTime)
 }*/
 
 
+#endif

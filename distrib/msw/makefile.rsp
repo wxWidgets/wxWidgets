@@ -121,6 +121,7 @@ contrib/samples/gizmos/splittree/Makefile.in
 contrib/samples/gizmos/editlbox/Makefile.in
 contrib/samples/gizmos/dynsash/Makefile.in
 contrib/samples/gizmos/dynsash_switch/Makefile.in
+contrib/samples/gizmos/led/Makefile.in
 contrib/samples/ogl/Makefile.in
 contrib/samples/ogl/ogledit/Makefile.in
 contrib/samples/ogl/studio/Makefile.in

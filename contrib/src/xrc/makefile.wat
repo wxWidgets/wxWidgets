@@ -2,12 +2,16 @@
 
 WXDIR = ..\..\..
 
-EXTRACPPFLAGS=/Id:\libxml\libxml2-2.1.1
+#XMLDIR=
+!error modify makefile.wat to include the path to the XML library
+
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include;-I$(XMLDIR)\libxml2-2.1.1
 
 !include $(WXDIR)\src\makewat.env
 
-WXXMLLIB = $(WXDIR)\lib\wxxrc.lib
+WXXMLLIB = $(WXDIR)\lib\wxxrc_w.lib
 THISDIR = $(WXDIR)\contrib\src\xrc
+OUTPUTDIR = $(THISDIR)\
 
 NAME = wxxrc
 LNK = $(name).lnk
@@ -18,14 +22,19 @@ OBJECTS=xml.obj xmlres.obj xmlrsall.obj &
         xh_radbx.obj xh_sizer.obj xh_slidr.obj xh_spin.obj xh_stbmp.obj xh_sttxt.obj &
         xh_text.obj xh_listb.obj xh_toolb.obj xh_stlin.obj xh_bmp.obj &
         xh_bmpbt.obj xh_cald.obj xh_listc.obj xh_scrol.obj xh_stbox.obj &
-        xh_tree.obj xh_unkwn.obj xh_frame.obj
+        xh_tree.obj xh_unkwn.obj xh_frame.obj xh_scwin.obj xh_split.obj
 
 
-all: $(WXXMLLIB)
+all: $(WXXMLLIB) .SYMBOLIC
 
 $(WXXMLLIB): $(OBJECTS)
 	*wlib /b /c /n /P=256 $(WXXMLLIB) $(OBJECTS)
 
 clean:   .SYMBOLIC
-    -erase *.obj *.bak *.err *.pch $(WXXMLLIB) *.lbc
+    -erase *.obj 
+    -erase *.bak 
+    -erase *.err 
+    -erase *.pch
+    -erase $(WXXMLLIB) 
+    -erase *.lbc
 

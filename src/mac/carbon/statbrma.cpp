@@ -94,53 +94,42 @@ void wxStatusBarMac::SetStatusText(const wxString& text, int number)
     m_statusStrings[number] = text;
     wxRect rect;
     GetFieldRect(number, rect);
+    rect.y=0;
+    rect.height = m_height ;
     Refresh( TRUE , &rect ) ;
-    /*
-    // TODO make clear work again also when using themes
-    wxClientDC dc(this);
-    dc.SetBackground( wxBrush(GetBackgroundColour(), wxSOLID) );
-    dc.SetClippingRegion( rect.x+1, rect.y+1, rect.width-1, rect.height-1 );
-    dc.Clear();
-    dc.DestroyClippingRegion();
-    DrawFieldText( dc, number );
-    */
-
 }
 
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   	wxPaintDC dc(this);
-  	
-  if ( IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
-  {
-  	wxPen black( wxBLACK , 1 , wxSOLID ) ;
-	wxPen white( wxWHITE , 1 , wxSOLID ) ;
-	
-    dc.SetPen(black);
-    dc.DrawLine(0, 0 ,
-           m_width , 0);
-   	dc.SetPen(white);
-    dc.DrawLine(0, 1 ,
-           m_width , 1);
-  }
-  else
-  {
-    dc.SetPen(wxPen(wxColour(0x80,0x80,0x80),1,wxSOLID));
-    dc.DrawLine(0, 0 ,
-           m_width , 0);
-  }
+  	dc.Clear() ;
 
-  int i;
-  if ( GetFont().Ok() )
-    dc.SetFont(GetFont());
-  dc.SetBackgroundMode(wxTRANSPARENT);
+	if ( IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
+	{
+		wxPen black( wxBLACK , 1 , wxSOLID ) ;
+		wxPen white( wxWHITE , 1 , wxSOLID ) ;
 
-  for ( i = 0; i < m_nFields; i ++ )
-    DrawField(dc, i);
+		dc.SetPen(black);
+		dc.DrawLine(0, 0 ,
+		       m_width , 0);
+		dc.SetPen(white);
+		dc.DrawLine(0, 1 ,
+		       m_width , 1);
+	}
+	else
+	{
+		dc.SetPen(wxPen(wxColour(0x80,0x80,0x80),1,wxSOLID));
+		dc.DrawLine(0, 0 ,
+		       m_width , 0);
+	}
 
-#   ifdef __WXMSW__
-        dc.SetFont(wxNullFont);
-#   endif // MSW
+	int i;
+	if ( GetFont().Ok() )
+		dc.SetFont(GetFont());
+	dc.SetBackgroundMode(wxTRANSPARENT);
+
+	for ( i = 0; i < m_nFields; i ++ )
+		DrawField(dc, i);
 }
 
 void wxStatusBarMac::MacSuperEnabled( bool enabled ) 

@@ -90,10 +90,8 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SCROLL                  (wxStyledTextCtrl::OnScroll)
     EVT_SIZE                    (wxStyledTextCtrl::OnSize)
     EVT_LEFT_DOWN               (wxStyledTextCtrl::OnMouseLeftDown)
-#if defined(__WXMSW__) || defined(__WXMAC__)
     // Let Scintilla see the double click as a second click
     EVT_LEFT_DCLICK             (wxStyledTextCtrl::OnMouseLeftDown)
-#endif
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
 #if defined(__WXGTK__) || defined(__WXMAC__)
@@ -102,6 +100,7 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_CONTEXT_MENU            (wxStyledTextCtrl::OnContextMenu)
 #endif
     EVT_MOUSEWHEEL              (wxStyledTextCtrl::OnMouseWheel)
+    EVT_MIDDLE_UP               (wxStyledTextCtrl::OnMouseMiddleUp)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
     EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
@@ -1478,7 +1477,7 @@ void wxStyledTextCtrl::HomeDisplay() {
     SendMsg(2345, 0, 0);
 }
 
-// Move caret to first position on display line extending selection to 
+// Move caret to first position on display line extending selection to
 // new caret position.
 void wxStyledTextCtrl::HomeDisplayExtend() {
     SendMsg(2346, 0, 0);
@@ -1489,7 +1488,7 @@ void wxStyledTextCtrl::LineEndDisplay() {
     SendMsg(2347, 0, 0);
 }
 
-// Move caret to last position on display line extending selection to new 
+// Move caret to last position on display line extending selection to new
 // caret position.
 void wxStyledTextCtrl::LineEndDisplayExtend() {
     SendMsg(2348, 0, 0);
@@ -1959,18 +1958,18 @@ void wxStyledTextCtrl::OnSize(wxSizeEvent& evt) {
 void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
     SetFocus();
     wxPoint pt = evt.GetPosition();
-    m_swx->DoButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
+    m_swx->DoLeftButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
 }
 
 void wxStyledTextCtrl::OnMouseMove(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
-    m_swx->DoButtonMove(Point(pt.x, pt.y));
+    m_swx->DoLeftButtonMove(Point(pt.x, pt.y));
 }
 
 void wxStyledTextCtrl::OnMouseLeftUp(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
-    m_swx->DoButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
+    m_swx->DoLeftButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ControlDown());
 }
 
@@ -1980,6 +1979,11 @@ void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
     m_swx->DoContextMenu(Point(pt.x, pt.y));
 }
 
+
+void wxStyledTextCtrl::OnMouseMiddleUp(wxMouseEvent& evt) {
+    wxPoint pt = evt.GetPosition();
+    m_swx->DoMiddleButtonUp(Point(pt.x, pt.y));
+}
 
 void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
     wxPoint pt = evt.GetPosition();
@@ -1998,8 +2002,6 @@ void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
 
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
-    int key = evt.GetKeyCode();
-
     // On (some?) non-US keyboards the AltGr key is required to enter some
     // common characters.  It comes to us as both Alt and Ctrl down so we need
     // to let the char through in that case, otherwise if only ctrl or only
@@ -2008,10 +2010,13 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     bool alt  = evt.AltDown();
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
+    int key = evt.GetKeyCode();
+
 //     printf("OnChar key:%d  consumed:%d  ctrl:%d  alt:%d  skip:%d\n",
 //            key, m_lastKeyDownConsumed, ctrl, alt, skip);
 
-    if (key <= WXK_START && /*key >= 32 &&*/ !m_lastKeyDownConsumed && !skip) {
+    if ( (key <= WXK_START || key > WXK_NUMPAD_DIVIDE) &&
+         !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
         return;
     }
@@ -2076,6 +2081,20 @@ void wxStyledTextCtrl::NotifyChange() {
     GetEventHandler()->ProcessEvent(evt);
 }
 
+
+static void SetEventText(wxStyledTextEvent& evt, const char* text,
+                         size_t length) {
+    if(!text) return;
+
+    // The unicode conversion MUST have a null byte to terminate the
+    // string so move it into a buffer first and give it one.
+    wxMemoryBuffer buf(length+1);
+    buf.AppendData((void*)text, length);
+    buf.AppendByte(0);
+    evt.SetText(stc2wx(buf));
+}
+
+
 void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     SCNotification& scn = *_scn;
     wxStyledTextEvent evt(0, GetId());
@@ -2121,14 +2140,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_MODIFIED:
         evt.SetEventType(wxEVT_STC_MODIFIED);
         evt.SetModificationType(scn.modificationType);
-        if (scn.text) {
-            // The unicode conversion MUST have a null byte to terminate the
-            // string so move it into a buffer first and give it one.
-            wxMemoryBuffer buf(scn.length+1);
-            buf.AppendData((void*)scn.text, scn.length);
-            buf.AppendByte(0);
-            evt.SetText(stc2wx(buf));
-        }
+        SetEventText(evt, scn.text, scn.length);
         evt.SetLength(scn.length);
         evt.SetLinesAdded(scn.linesAdded);
         evt.SetLine(scn.line);
@@ -2160,12 +2172,12 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_USERLISTSELECTION:
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
-        evt.SetText(scn.text);
+        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     case SCN_URIDROPPED:
         evt.SetEventType(wxEVT_STC_URIDROPPED);
-        evt.SetText(scn.text);
+        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     case SCN_DWELLSTART:

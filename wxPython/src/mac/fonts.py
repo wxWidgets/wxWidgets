@@ -80,9 +80,12 @@ class wxFontMapperPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,fontsc=fontsc):
-        if self.thisown == 1 :
-            fontsc.delete_wxFontMapper(self)
+    def __del__(self, delfunc=fontsc.delete_wxFontMapper):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetAltForEncoding(self, *_args, **_kwargs):
         val = apply(fontsc.wxFontMapper_GetAltForEncoding,(self,) + _args, _kwargs)
         return val
@@ -118,9 +121,16 @@ class wxFontPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,fontsc=fontsc):
-        if self.thisown == 1 :
-            fontsc.delete_wxFont(self)
+    def wxFontFromNativeInfoString(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_wxFontFromNativeInfoString,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) ; val.thisown = 1
+        return val
+    def __del__(self, delfunc=fontsc.delete_wxFont):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def Ok(self, *_args, **_kwargs):
         val = apply(fontsc.wxFont_Ok,(self,) + _args, _kwargs)
         return val
@@ -194,6 +204,12 @@ class wxFontPtr(wxObjectPtr):
     def GetWeightString(self, *_args, **_kwargs):
         val = apply(fontsc.wxFont_GetWeightString,(self,) + _args, _kwargs)
         return val
+    def SetNoAntiAliasing(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_SetNoAntiAliasing,(self,) + _args, _kwargs)
+        return val
+    def GetNoAntiAliasing(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_GetNoAntiAliasing,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFont instance at %s>" % (self.this,)
 class wxFont(wxFontPtr):
@@ -239,9 +255,12 @@ class wxFontEnumeratorPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,fontsc=fontsc):
-        if self.thisown == 1 :
-            fontsc.delete_wxFontEnumerator(self)
+    def __del__(self, delfunc=fontsc.delete_wxFontEnumerator):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(fontsc.wxFontEnumerator__setCallbackInfo,(self,) + _args, _kwargs)
         return val
@@ -304,12 +323,18 @@ class wxLocalePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Init(self, *_args, **_kwargs):
-        val = apply(fontsc.wxLocale_Init,(self,) + _args, _kwargs)
+    def __del__(self, delfunc=fontsc.delete_wxLocale):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
+    def Init1(self, *_args, **_kwargs):
+        val = apply(fontsc.wxLocale_Init1,(self,) + _args, _kwargs)
         return val
-    def __del__(self,fontsc=fontsc):
-        if self.thisown == 1 :
-            fontsc.delete_wxLocale(self)
+    def Init2(self, *_args, **_kwargs):
+        val = apply(fontsc.wxLocale_Init2,(self,) + _args, _kwargs)
+        return val
     def IsOk(self, *_args, **_kwargs):
         val = apply(fontsc.wxLocale_IsOk,(self,) + _args, _kwargs)
         return val
@@ -339,6 +364,14 @@ class wxLocalePtr :
         return val
     def __repr__(self):
         return "<C wxLocale instance at %s>" % (self.this,)
+    
+    def Init(self, *_args, **_kwargs):
+        if type(_args[0]) in [type(''), type(u'')]:
+            val = apply(self.Init1, _args, _kwargs)
+        else:
+            val = apply(self.Init2, _args, _kwargs)
+        return val
+    
 class wxLocale(wxLocalePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(fontsc.new_wxLocale,_args,_kwargs)
@@ -351,9 +384,12 @@ class wxEncodingConverterPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,fontsc=fontsc):
-        if self.thisown == 1 :
-            fontsc.delete_wxEncodingConverter(self)
+    def __del__(self, delfunc=fontsc.delete_wxEncodingConverter):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def Init(self, *_args, **_kwargs):
         val = apply(fontsc.wxEncodingConverter_Init,(self,) + _args, _kwargs)
         return val
@@ -483,6 +519,10 @@ wxFONTENCODING_CP1257 = fontsc.wxFONTENCODING_CP1257
 wxFONTENCODING_CP12_MAX = fontsc.wxFONTENCODING_CP12_MAX
 wxFONTENCODING_UTF7 = fontsc.wxFONTENCODING_UTF7
 wxFONTENCODING_UTF8 = fontsc.wxFONTENCODING_UTF8
+wxFONTENCODING_GB2312 = fontsc.wxFONTENCODING_GB2312
+wxFONTENCODING_BIG5 = fontsc.wxFONTENCODING_BIG5
+wxFONTENCODING_SHIFT_JIS = fontsc.wxFONTENCODING_SHIFT_JIS
+wxFONTENCODING_EUC_JP = fontsc.wxFONTENCODING_EUC_JP
 wxFONTENCODING_UNICODE = fontsc.wxFONTENCODING_UNICODE
 wxFONTENCODING_MAX = fontsc.wxFONTENCODING_MAX
 wxLANGUAGE_DEFAULT = fontsc.wxLANGUAGE_DEFAULT

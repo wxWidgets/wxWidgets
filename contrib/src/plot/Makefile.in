@@ -4,11 +4,11 @@ top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 libsrc_dir = contrib/src/plot
 
-TARGET_LIBNAME=libwx_plot
+TARGET_LIBNAME=lib@WX_LIBRARY_BASENAME@_plot-@WX_RELEASE@
 
-LIBVERSION_CURRENT=1
-LIBVERSION_REVISION=0
-LIBVERSION_AGE=0
+LIBVERSION_CURRENT=@WX_CURRENT@
+LIBVERSION_REVISION=@WX_REVISION@
+LIBVERSION_AGE=@WX_AGE@
 
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=plot

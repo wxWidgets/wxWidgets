@@ -1130,14 +1130,14 @@ fun void DeleteBackNotLine=2344(,)
 # Move caret to first position on display line.
 fun void HomeDisplay=2345(,)
 
-# Move caret to first position on display line extending selection to 
+# Move caret to first position on display line extending selection to
 # new caret position.
 fun void HomeDisplayExtend=2346(,)
 
 # Move caret to last position on display line.
 fun void LineEndDisplay=2347(,)
 
-# Move caret to last position on display line extending selection to new 
+# Move caret to last position on display line extending selection to new
 # caret position.
 fun void LineEndDisplayExtend=2348(,)
 

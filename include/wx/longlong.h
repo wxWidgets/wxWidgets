@@ -50,29 +50,39 @@
 // long", then check for specific compilers
 #if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
     #define wxLongLong_t long
+    #define wxLongLongSuffix l
+    #define wxLongLongFmtSpec _T("l")
     #define wxLongLongIsLong
 #elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
     #define wxLongLong_t __int64
+    #define wxLongLongSuffix i64
+    #define wxLongLongFmtSpec _T("I64")
 #elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
-#elif defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8
+    #define wxLongLongSuffix i64
+    #define wxLongLongFmtSpec _T("I64")
+#elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
+        defined(__MINGW32__) || \
+        defined(__CYGWIN__) || \
+        defined(__WXMICROWIN__) || \
+        (defined(__DJGPP__) && __DJGPP__ >= 2)
     #define wxLongLong_t long long
-#elif defined(__MINGW32__) || defined(__CYGWIN__) || defined(__WXMICROWIN__)
-    #define wxLongLong_t long long
+    #define wxLongLongSuffix ll
+    #define wxLongLongFmtSpec _T("ll")
 #elif defined(__MWERKS__)
     #if __option(longlong)
         #define wxLongLong_t long long
+        #define wxLongLongSuffix ll
+        #define wxLongLongFmtSpec _T("ll")
     #else
         #error "The 64 bit integer support in CodeWarrior has been disabled."
         #error "See the documentation on the 'longlong' pragma."
     #endif
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
-        #define wxLongLong_t long long
-#elif defined(__DJGPP__) && __DJGPP__ >= 2
     #define wxLongLong_t long long
 #else // no native long long type
     // both warning and pragma warning are not portable, but at least an
-    // unknown pragma should never be an error - except that, actually, some
+    // unknown pragma should never be an error -- except that, actually, some
     // broken compilers don't like it, so we have to disable it in this case
     // <sigh>
 #if !(defined(__WATCOMC__) || defined(__VISAGECPP__))
@@ -84,6 +94,11 @@
 
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler
+
+// this macro allows to definea 64 bit constant in a portable way
+#define wxMakeLongLong(x, s) x ## s
+#define wxMakeLongLong2(x, s) wxMakeLongLong(x, s)
+#define wxLL(x) wxMakeLongLong2(x, wxLongLongSuffix)
 
 // the user may predefine wxUSE_LONGLONG_NATIVE and/or wxUSE_LONGLONG_NATIVE
 // to disable automatic testing (useful for the test program which defines

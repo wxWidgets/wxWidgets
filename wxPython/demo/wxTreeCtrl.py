@@ -1,6 +1,6 @@
 
 from wxPython.wx import *
-
+import images
 import string
 
 #---------------------------------------------------------------------------
@@ -27,46 +27,51 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_SIZE(self, self.OnSize)
 
         self.log = log
-        tID = NewId()
+        tID = wxNewId()
 
         self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS# | wxTR_MULTIPLE
+                               wxTR_HAS_BUTTONS
+                               | wxTR_EDIT_LABELS
+                               #| wxTR_MULTIPLE
                                #| wxTR_HIDE_ROOT
                                , self.log)
 
+        isz = (16,16)
+        il = wxImageList(isz[0], isz[1])
+        fldridx     = il.Add(wxArtProvider_GetBitmap(wxART_FOLDER,      wxART_OTHER, isz))
+        fldropenidx = il.Add(wxArtProvider_GetBitmap(wxART_FILE_OPEN,   wxART_OTHER, isz))
+        fileidx     = il.Add(wxArtProvider_GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, isz))
+        smileidx    = il.Add(images.getSmilesBitmap())
 
-        ##import images
-        ##il = wxImageList(16, 16)
-        ##idx1 = il.Add(images.getSmilesBitmap())
-        ##idx2 = il.Add(images.getOpenBitmap())
-        ##idx3 = il.Add(images.getNewBitmap())
-        ##idx4 = il.Add(images.getCopyBitmap())
-        ##idx5 = il.Add(images.getPasteBitmap())
-
-        ##self.tree.SetImageList(il)
-        ##self.il = il
+        self.tree.SetImageList(il)
+        self.il = il
 
         # NOTE:  For some reason tree items have to have a data object in
         #        order to be sorted.  Since our compare just uses the labels
-        #        we don't need any real data, so we'll just use None.
+        #        we don't need any real data, so we'll just use None below for
+        #        the item data.
 
         self.root = self.tree.AddRoot("The Root Item")
         self.tree.SetPyData(self.root, None)
-        ##self.tree.SetItemImage(self.root, idx1)
+        self.tree.SetItemImage(self.root, fldridx, wxTreeItemIcon_Normal)
+        self.tree.SetItemImage(self.root, fldropenidx, wxTreeItemIcon_Expanded)
+
 
         for x in range(15):
             child = self.tree.AppendItem(self.root, "Item %d" % x)
             self.tree.SetPyData(child, None)
-            ##self.tree.SetItemImage(child, idx2, wxTreeItemIcon_Expanded)
-            ##self.tree.SetItemSelectedImage(child, idx3)
+            self.tree.SetItemImage(child, fldridx, wxTreeItemIcon_Normal)
+            self.tree.SetItemImage(child, fldropenidx, wxTreeItemIcon_Expanded)
             for y in range(5):
                 last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
                 self.tree.SetPyData(last, None)
-                ##self.tree.SetItemImage(last, idx4)
-                ##self.tree.SetItemSelectedImage(last, idx5)
+                self.tree.SetItemImage(last, fldridx, wxTreeItemIcon_Normal)
+                self.tree.SetItemImage(last, fldropenidx, wxTreeItemIcon_Expanded)
                 for z in range(5):
                     item = self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
                     self.tree.SetPyData(item, None)
+                    self.tree.SetItemImage(item, fileidx, wxTreeItemIcon_Normal)
+                    self.tree.SetItemImage(item, smileidx, wxTreeItemIcon_Selected)
 
         self.tree.Expand(self.root)
         EVT_TREE_ITEM_EXPANDED  (self, tID, self.OnItemExpanded)
@@ -105,7 +110,19 @@ class TestTreeCtrlPanel(wxPanel):
         if self.tree.GetItemText(event.GetItem()) == "The Root Item":
             wxBell()
             self.log.WriteText("You can't edit this one...\n")
+
+            # Lets just see what's visible of its children
+            cookie = 0
+            root = event.GetItem()
+            (child, cookie) = self.tree.GetFirstChild(root, cookie)
+            while child.IsOk():
+                self.log.WriteText("Child [%s] visible = %d" %
+                                   (self.tree.GetItemText(child),
+                                    self.tree.IsVisible(child)))
+                (child, cookie) = self.tree.GetNextChild(root, cookie)
+
             event.Veto()
+
 
     def OnEndEdit(self, event):
         self.log.WriteText("OnEndEdit\n")
@@ -144,7 +161,7 @@ class TestTreeCtrlPanel(wxPanel):
         self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
         if wxPlatform == '__WXMSW__':
             self.log.WriteText("BoundingRect: %s\n" %
-                               self.tree.GetBoundingRect(self.item, true))
+                               self.tree.GetBoundingRect(self.item, True))
         #items = self.tree.GetSelections()
         #print map(self.tree.GetItemText, items)
         event.Skip()

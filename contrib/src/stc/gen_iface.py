@@ -36,7 +36,13 @@ valPrefixes = [('SCI_', ''),
 ]
 
 # Message function values that should have a CMD_ constant as well
-cmdValues = [ (2300, 2350), 2011, 2013, (2176, 2180) ]
+cmdValues = [ (2300, 2349),
+              2011,
+              2013,
+              (2176, 2180),
+              (2390, 2393),
+              (2395, 2396),
+            ]
 
 
 # Map some generic typenames to wx types, using return value syntax
@@ -420,6 +426,54 @@ methodOverrideMap = {
                        0),
 
 
+    'GetDocPointer' : (0,
+                       'void* %s();',
+                       '''void* %s() {
+                           return (void*)SendMsg(%s);''',
+                       0),
+
+    'SetDocPointer' : (0,
+                       'void %s(void* docPointer);',
+                       '''void %s(void* docPointer) {
+                           SendMsg(%s, 0, (long)docPointer);''',
+                       0),
+
+    'CreateDocument' : (0,
+                       'void* %s();',
+                       '''void* %s() {
+                           return (void*)SendMsg(%s);''',
+                        0),
+
+    'AddRefDocument' : (0,
+                       'void %s(void* docPointer);',
+                       '''void %s(void* docPointer) {
+                           SendMsg(%s, 0, (long)docPointer);''',
+                        0),
+
+    'ReleaseDocument' : (0,
+                       'void %s(void* docPointer);',
+                       '''void %s(void* docPointer) {
+                           SendMsg(%s, 0, (long)docPointer);''',
+                         0),
+    'SetCodePage' : (0,
+                     0,
+                     '''void %s(int codePage) {
+#if wxUSE_UNICODE
+    wxASSERT_MSG(codePage == wxSTC_CP_UTF8,
+                 wxT("Only wxSTC_CP_UTF8 may be used when wxUSE_UNICODE is on."));
+#else
+    wxASSERT_MSG(codePage != wxSTC_CP_UTF8,
+                 wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
+#endif
+                 SendMsg(%s, codePage);''',
+                         ("Set the code page used to interpret the bytes of the document as characters.",) ),
+
+
+    'GrabFocus' : (None, 0, 0, 0),
+    'SetFocus'  : ('SetSTCFocus', 0, 0, 0),
+    'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
+
+
 
     # Remove all methods that are key commands since they can be
     # executed with CmdKeyExecute
@@ -470,53 +524,6 @@ methodOverrideMap = {
     'DeleteBackNotLine' : (None, 0, 0, 0),
 
 
-    'GetDocPointer' : (0,
-                       'void* %s();',
-                       '''void* %s() {
-                           return (void*)SendMsg(%s);''',
-                       0),
-
-    'SetDocPointer' : (0,
-                       'void %s(void* docPointer);',
-                       '''void %s(void* docPointer) {
-                           SendMsg(%s, 0, (long)docPointer);''',
-                       0),
-
-    'CreateDocument' : (0,
-                       'void* %s();',
-                       '''void* %s() {
-                           return (void*)SendMsg(%s);''',
-                        0),
-
-    'AddRefDocument' : (0,
-                       'void %s(void* docPointer);',
-                       '''void %s(void* docPointer) {
-                           SendMsg(%s, 0, (long)docPointer);''',
-                        0),
-
-    'ReleaseDocument' : (0,
-                       'void %s(void* docPointer);',
-                       '''void %s(void* docPointer) {
-                           SendMsg(%s, 0, (long)docPointer);''',
-                         0),
-    'SetCodePage' : (0,
-                     0,
-                     '''void %s(int codePage) {
-#if wxUSE_UNICODE
-    wxASSERT_MSG(codePage == wxSTC_CP_UTF8,
-                 wxT("Only wxSTC_CP_UTF8 may be used when wxUSE_UNICODE is on."));
-#else
-    wxASSERT_MSG(codePage != wxSTC_CP_UTF8,
-                 wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
-#endif
-                 SendMsg(%s, codePage);''',
-                         ("Set the code page used to interpret the bytes of the document as characters.",) ),
-
-
-    'GrabFocus' : (None, 0, 0, 0),
-    'SetFocus'  : ('SetSTCFocus', 0, 0, 0),
-    'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
-
 
 
     '' : ('', 0, 0, 0),
@@ -529,6 +536,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, h_dest, cpp_dest):
     curDocStrings = []
     values = []
     methods = []
+    cmds = []
 
     # parse iface file
     fi = FileInput(iface)
@@ -547,7 +555,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, h_dest, cpp_dest):
             curDocStrings = []
 
         elif op == 'fun ' or op == 'set ' or op == 'get ':
-            parseFun(line[4:], methods, curDocStrings, values)
+            parseFun(line[4:], methods, curDocStrings, cmds)
             curDocStrings = []
 
         elif op == 'cat ':
@@ -570,6 +578,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, h_dest, cpp_dest):
     # process templates
     data = {}
     data['VALUES'] = processVals(values)
+    data['CMDS']   = processVals(cmds)
     defs, imps = processMethods(methods)
     data['METHOD_DEFS'] = defs
     data['METHOD_IMPS'] = imps
@@ -747,10 +756,10 @@ def parseFun(line, methods, docs, values):
     param1 = parseParam(param1)
     param2 = parseParam(param2)
 
-    # Special case.  For the key command functionss we want a value defined too
+    # Special case.  For the key command functions we want a value defined too
     num = string.atoi(number)
     for v in cmdValues:
-        if (type(v) == type(()) and v[0] <= num < v[1]) or v == num:
+        if (type(v) == type(()) and v[0] <= num <= v[1]) or v == num:
             parseVal('CMD_%s=%s' % (string.upper(name), number), values, docs)
 
     #if retType == 'void' and not param1 and not param2:

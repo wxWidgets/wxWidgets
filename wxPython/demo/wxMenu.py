@@ -30,11 +30,11 @@ check the source for this sample to see how to implement them.
 
         # 1st menu from left
         menu1 = wxMenu()
-        menu1.Append(101, "Mercury", "This the text in the Statusbar")
-        menu1.Append(102, "Venus", "")
-        menu1.Append(103, "Earth", "You may select Earth too")
+        menu1.Append(101, "&Mercury", "This the text in the Statusbar")
+        menu1.Append(102, "&Venus", "")
+        menu1.Append(103, "&Earth", "You may select Earth too")
         menu1.AppendSeparator()
-        menu1.Append(104, "Close", "Close this frame")
+        menu1.Append(104, "&Close", "Close this frame")
         # Add menu to the menu bar
         menuBar.Append(menu1, "&Planets")
 
@@ -151,7 +151,7 @@ check the source for this sample to see how to implement them.
 def runTest(frame, nb, log):
     win = MyFrame(frame, -1, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 #-------------------------------------------------------------------

@@ -13,7 +13,6 @@
 from wxPython.wx import *
 
 from CDate import *
-import string, time
 
 
 CalDays = [6, 0, 1, 2, 3, 4, 5]
@@ -44,7 +43,7 @@ class CalDraw:
         self.DefParms()
 
     def DefParms(self):
-        self.num_auto = TRUE       # auto scale of the cal number day size
+        self.num_auto = True       # auto scale of the cal number day size
         self.num_size = 12          # default size of calendar if no auto size
         self.max_num_size = 12     # maximum size for calendar number
 
@@ -53,7 +52,7 @@ class CalDraw:
         self.num_indent_horz = 0     # points indent from position, used to offset if not centered
         self.num_indent_vert = 0
 
-        self.week_auto = TRUE       # auto scale of week font text
+        self.week_auto = True       # auto scale of week font text
         self.week_size = 10
         self.max_week_size = 12
 
@@ -71,13 +70,13 @@ class CalDraw:
         self.font = wxSWISS
         self.bold = wxNORMAL
 
-        self.hide_title = FALSE
-        self.hide_grid = FALSE
-        self.outer_border = TRUE
+        self.hide_title = False
+        self.hide_grid = False
+        self.outer_border = True
 
         self.title_offset = 0
         self.cal_week_scale = 0.7
-        self.show_weekend = FALSE
+        self.show_weekend = False
         self.cal_type = "NORMAL"
 
     def SetWeekColor(self, font_color, week_color):     # set font and background color for week title
@@ -123,7 +122,7 @@ class CalDraw:
         self.InitScale()
 
         self.DrawBorder()
-        if self.hide_title is FALSE:
+        if self.hide_title is False:
             self.DrawMonth()
 
         self.Center()
@@ -131,7 +130,7 @@ class CalDraw:
         self.DrawGrid()
         self.GetRect()
 
-        if self.show_weekend is TRUE:       # highlight weekend dates
+        if self.show_weekend is True:       # highlight weekend dates
             self.SetWeekEnd()
 
         self.AddSelect(sel_lst)     # overrides the weekend highlight
@@ -154,7 +153,7 @@ class CalDraw:
         self.DC.SetBrush(brush)
         self.DC.SetPen(wxPen(wxNamedColour(self.border_color), 1))
 
-        if self.outer_border is TRUE:
+        if self.outer_border is True:
             rect = wxRect(self.cx_st, self.cy_st, self.sizew, self.sizeh)  # full display window area
             self.DC.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
 
@@ -245,7 +244,7 @@ class CalDraw:
         rect_w = self.gridx[7]-self.gridx[0]
 
         f = wxFont(10, self.font, wxNORMAL, self.bold)      # initial font setting
-        if self.week_auto == TRUE:
+        if self.week_auto == True:
             test_size = self.max_week_size      # max size
             test_day = ' Sun '
             while test_size > 2:
@@ -289,7 +288,7 @@ class CalDraw:
 
     def DrawNum(self):      # draw the day numbers
         f = wxFont(10, self.font, wxNORMAL, self.bold)      # initial font setting
-        if self.num_auto == TRUE:
+        if self.num_auto == True:
             test_size = self.max_num_size      # max size
             test_day = ' 99 '
             while test_size > 2:
@@ -362,7 +361,7 @@ class CalDraw:
             brush = wxBrush(wxNamedColour(sel_color), wxSOLID)
             self.DC.SetBrush(brush)
 
-            if self.hide_grid is FALSE:
+            if self.hide_grid is False:
                 self.DC.SetPen(wxPen(wxNamedColour(self.grid_color), 0))
             else:
                 self.DC.SetPen(wxPen(wxNamedColour(self.back_color), 0))
@@ -384,7 +383,7 @@ class CalDraw:
 
         y2 = y1 + self.cheight
         for i in range(8):
-            if self.hide_grid is FALSE:
+            if self.hide_grid is False:
                 self.DC.DrawLine(x1, y1, x1, y2)
             self.gridx.append(x1)
             x1 = x1 + self.dl_w
@@ -394,7 +393,7 @@ class CalDraw:
 
         x2 = x1 + self.cwidth
         for i in range(8):
-            if self.hide_grid is FALSE:
+            if self.hide_grid is False:
                 self.DC.DrawLine(x1, y1, x2, y1)
             self.gridy.append(y1)
             if i == 0:
@@ -429,10 +428,10 @@ class wxCalendar(wxWindow):
 
         self.grid_color = 'BLACK'
         self.back_color = 'WHITE'
-        self.hide_grid = FALSE
+        self.hide_grid = False
         self.sel_color = 'RED'
-        self.hide_title = FALSE
-        self.show_weekend = FALSE
+        self.hide_title = False
+        self.show_weekend = False
         self.cal_type = "NORMAL"
 
         self.week_color = 'LIGHT GREY'
@@ -460,10 +459,10 @@ class wxCalendar(wxWindow):
 # control some of the main calendar attributes
 
     def HideTitle(self):
-        self.hide_title = TRUE
+        self.hide_title = True
 
     def HideGrid(self):
-        self.hide_grid = TRUE
+        self.hide_grid = True
 
 # determine the calendar rectangle click area and draw a selection
 
@@ -606,13 +605,13 @@ class wxCalendar(wxWindow):
         self.select_list.append(list_val)
 
     def ShowWeekEnd(self):
-        self.show_weekend = TRUE    # highlight weekend
+        self.show_weekend = True    # highlight weekend
 
     def SetBusType(self):
         self.cal_type = "BUS"
 
     def OnSize(self, evt):
-        self.Refresh(false)
+        self.Refresh(False)
         evt.Skip()
 
     def OnPaint(self, event):
@@ -685,7 +684,7 @@ class wxCalendar(wxWindow):
     def SelectDay(self, key):
         sel_size = 1
         self.DrawRect(self.sel_key, self.back_color, sel_size)     # clear large selection
-        if self.hide_grid is FALSE:
+        if self.hide_grid is False:
             self.DrawRect(self.sel_key, self.grid_color)
 
         self.DrawRect(key, self.sel_color, sel_size)

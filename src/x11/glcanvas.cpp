@@ -238,8 +238,8 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     // Check for the presence of the GLX extension
     if(!glXQueryExtension(display, NULL, NULL)) {
-	wxDebugMsg("wxGLCanvas: GLX extension is missing\n");
-	return false;
+	wxLogDebug("wxGLCanvas: GLX extension is missing\n");
+	return FALSE;
     }
 
     if(attribList) {
@@ -287,7 +287,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
       attribList = (int*) data;
       // Get an appropriate visual
       vi = glXChooseVisual(display, DefaultScreen(display), attribList);
-      if(!vi) return false;
+      if(!vi) return FALSE;
       
       // Here we should make sure that vi is the same visual as the
       // one used by the xwindow drawable in wxCanvas.  However,
@@ -298,9 +298,9 @@ bool wxGLCanvas::Create( wxWindow *parent,
 	XGetWindowAttributes(display, (Window) GetClientAreaWindow(), &xwa);
 	vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
 	vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
-	if(!vi) return false;
+	if(!vi) return FALSE;
 	glXGetConfig(display, vi, GLX_USE_GL, &val);
-	if(!val) return false;
+	if(!val) return FALSE;
 	// Basically, this is it.  It should be possible to use vi
 	// in glXCreateContext() below.  But this fails with Mesa.
 	// I notified the Mesa author about it; there may be a fix.
@@ -327,7 +327,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 	a_list[n] = None;
 	// XFree(vi);
 	vi = glXChooseVisual(display, DefaultScreen(display), a_list);
-	if(!vi) return false;
+	if(!vi) return FALSE;
 #endif /* OLD_MESA */
     }
 
@@ -348,7 +348,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 #endif
     SetCurrent();
 
-    return true;
+    return TRUE;
 }
 
 wxGLCanvas::~wxGLCanvas(void)

@@ -78,8 +78,7 @@
 // Mediates between a physical panel and the property sheet
 class WXDLLEXPORT wxPropertyListView: public wxPropertyView
 {
- DECLARE_DYNAMIC_CLASS(wxPropertyListView)
- public:
+public:
   wxPropertyListView(wxPanel *propPanel = NULL, long flags = wxPROP_BUTTON_DEFAULT);
   ~wxPropertyListView(void);
 
@@ -186,10 +185,12 @@ public:
   wxButton*         m_windowCancelButton;
   wxButton*         m_windowHelpButton;
 
-DECLARE_EVENT_TABLE()
 private:
-  virtual void ShowView(wxPropertySheet *propertySheet, wxWindow *window)
-  { wxPropertyView::ShowView(propertySheet, window); };
+    DECLARE_DYNAMIC_CLASS(wxPropertyListView)
+    DECLARE_EVENT_TABLE()
+    
+    virtual void ShowView(wxPropertySheet *propertySheet, wxWindow *window)
+        { wxPropertyView::ShowView(propertySheet, window); };
 };
 
 class WXDLLEXPORT wxPropertyTextEdit: public wxTextCtrl
@@ -202,13 +203,14 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = 0,
-                       const wxString& name = _T("text"));
+                       const wxString& name = wxT("text"));
 
     void OnSetFocus();
     void OnKillFocus();
 
     wxPropertyListView* m_view;
 
+private:
     DECLARE_CLASS(wxPropertyTextEdit)
 };
 
@@ -220,11 +222,9 @@ public:
 
 class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxPropertyListValidator)
- protected:
- public:
+public:
    wxPropertyListValidator(long flags = wxPROP_ALLOW_TEXT_EDITING): wxPropertyValidator(flags) { }
-   ~wxPropertyListValidator(void) {}
+   ~wxPropertyListValidator() {}
 
    // Called when the property is selected or deselected: typically displays the value
    // in the edit control (having chosen a suitable control to display: (non)editable text or listbox)
@@ -274,6 +274,9 @@ class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
    virtual bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
    virtual bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+   
+private:
+    DECLARE_DYNAMIC_CLASS(wxPropertyListValidator)
 };
 
 /*
@@ -289,7 +292,7 @@ public:
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          long style = wxDEFAULT_DIALOG_STYLE,
-                         const wxString& name = _T("dialogBox"));
+                         const wxString& name = wxT("dialogBox"));
 
     void OnCloseWindow(wxCloseEvent& event);
     void OnDefaultAction(wxControl *item);
@@ -301,6 +304,7 @@ public:
 private:
     wxPropertyListView*   m_view;
 
+private:
     DECLARE_CLASS(wxPropertyListDialog)
     DECLARE_EVENT_TABLE()
 };
@@ -317,7 +321,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = 0,
-                        const wxString& name = _T("panel"))
+                        const wxString& name = wxT("panel"))
         : wxPanel(parent, -1, pos, size, style, name)
         {
             m_view = v;
@@ -337,6 +341,7 @@ public:
 private:
     wxPropertyListView*   m_view;
 
+private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxPropertyListPanel)
 };
@@ -372,6 +377,7 @@ private:
     wxPropertyListView*       m_view;
     wxPropertyListPanel*      m_propertyPanel;
 
+private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxPropertyListFrame)
 };
@@ -382,41 +388,40 @@ private:
 
 class WXDLLEXPORT wxRealListValidator: public wxPropertyListValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxRealListValidator)
- public:
-   // 0.0, 0.0 means no range
-   wxRealListValidator(float min = 0.0, float max = 0.0, long flags = wxPROP_ALLOW_TEXT_EDITING):wxPropertyListValidator(flags)
-   {
-     m_realMin = min; m_realMax = max;
-   }
-   ~wxRealListValidator(void) {}
+public:
+    // 0.0, 0.0 means no range
+    wxRealListValidator(float min = 0.0, float max = 0.0, long flags = wxPROP_ALLOW_TEXT_EDITING):wxPropertyListValidator(flags)
+        { m_realMin = min; m_realMax = max; }
+    ~wxRealListValidator() {}
 
-   bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost.
-   // Return FALSE if value didn't check out; signal to restore old value.
-   bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost.
+    // Return FALSE if value didn't check out; signal to restore old value.
+    bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost or view wants to update
-   // the property list.
-   // Does the transfer from the property editing area to the property itself
-   bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost or view wants to update
+    // the property list.
+    // Does the transfer from the property editing area to the property itself
+    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
- protected:
-  float     m_realMin;
-  float     m_realMax;
+protected:
+    float     m_realMin;
+    float     m_realMax;
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxRealListValidator)
 };
 
 class WXDLLEXPORT wxIntegerListValidator: public wxPropertyListValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxIntegerListValidator)
- public:
+public:
    // 0, 0 means no range
    wxIntegerListValidator(long min = 0, long max = 0, long flags = wxPROP_ALLOW_TEXT_EDITING):wxPropertyListValidator(flags)
    {
      m_integerMin = min; m_integerMax = max;
    }
-   ~wxIntegerListValidator(void) {}
+   ~wxIntegerListValidator() {}
 
    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
@@ -429,156 +434,158 @@ class WXDLLEXPORT wxIntegerListValidator: public wxPropertyListValidator
    // Does the transfer from the property editing area to the property itself
    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
- protected:
-  long m_integerMin;
-  long m_integerMax;
+protected:
+    long m_integerMin;
+    long m_integerMax;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxIntegerListValidator)
 };
 
 class WXDLLEXPORT wxBoolListValidator: public wxPropertyListValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxBoolListValidator)
- protected:
- public:
-   wxBoolListValidator(long flags = 0):wxPropertyListValidator(flags)
-   {
-   }
-   ~wxBoolListValidator(void) {}
+public:
+    wxBoolListValidator(long flags = 0):wxPropertyListValidator(flags) {}
+    ~wxBoolListValidator() {}
 
-   bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnPrepareDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnClearDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnPrepareDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnClearDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost.
-   // Return FALSE if value didn't check out; signal to restore old value.
-   bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost.
+    // Return FALSE if value didn't check out; signal to restore old value.
+    bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost or view wants to update
-   // the property list.
-   // Does the transfer from the property editing area to the property itself
-   bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost or view wants to update
+    // the property list.
+    // Does the transfer from the property editing area to the property itself
+    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when the property is double clicked. Extra functionality can be provided,
-   // cycling through possible values.
-   virtual bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when the property is double clicked. Extra functionality can be provided,
+    // cycling through possible values.
+    virtual bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+   
+private:
+    DECLARE_DYNAMIC_CLASS(wxBoolListValidator)
 };
 
 class WXDLLEXPORT wxStringListValidator: public wxPropertyListValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxStringListValidator)
- public:
+public:
    wxStringListValidator(wxStringList *list = NULL, long flags = 0);
 
-   ~wxStringListValidator(void)
-   {
-     if (m_strings)
-       delete m_strings;
-   }
+    ~wxStringListValidator()
+    {
+        if (m_strings)
+            delete m_strings;
+    }
 
-   bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnPrepareDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnClearDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnPrepareDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnClearDetailControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost.
-   // Return FALSE if value didn't check out; signal to restore old value.
-   bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost.
+    // Return FALSE if value didn't check out; signal to restore old value.
+    bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost or view wants to update
-   // the property list.
-   // Does the transfer from the property editing area to the property itself
-   bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost or view wants to update
+    // the property list.
+    // Does the transfer from the property editing area to the property itself
+    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when the property is double clicked. Extra functionality can be provided,
-   // cycling through possible values.
-   bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when the property is double clicked. Extra functionality can be provided,
+    // cycling through possible values.
+    bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
- protected:
-  wxStringList*     m_strings;
+protected:
+    wxStringList*     m_strings;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxStringListValidator)
 };
 
 class WXDLLEXPORT wxFilenameListValidator: public wxPropertyListValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxFilenameListValidator)
- public:
-   wxFilenameListValidator(wxString message = "Select a file", wxString wildcard = wxALL_FILES_PATTERN, long flags = 0);
+public:
+    wxFilenameListValidator(wxString message = wxT("Select a file"), wxString wildcard = wxALL_FILES_PATTERN, long flags = 0);
+    ~wxFilenameListValidator();
 
-   ~wxFilenameListValidator(void);
+    // Called when TICK is pressed or focus is lost.
+    // Return FALSE if value didn't check out; signal to restore old value.
+    bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost.
-   // Return FALSE if value didn't check out; signal to restore old value.
-   bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost or view wants to update
+    // the property list.
+    // Does the transferance from the property editing area to the property itself
+    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost or view wants to update
-   // the property list.
-   // Does the transferance from the property editing area to the property itself
-   bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when the edit (...) button is pressed.
+    void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when the edit (...) button is pressed.
-   void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+protected:
+    wxString  m_filenameWildCard;
+    wxString  m_filenameMessage;
 
- protected:
-  wxString  m_filenameWildCard;
-  wxString  m_filenameMessage;
-
+private:
+    DECLARE_DYNAMIC_CLASS(wxFilenameListValidator)
 };
 
 class WXDLLEXPORT wxColourListValidator: public wxPropertyListValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxColourListValidator)
- protected:
- public:
-   wxColourListValidator(long flags = 0);
+public:
+    wxColourListValidator(long flags = 0);
+    ~wxColourListValidator();
 
-   ~wxColourListValidator(void);
+    bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-
-   // Called when the edit (...) button is pressed.
-   void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when the edit (...) button is pressed.
+    void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+   
+private:
+    DECLARE_DYNAMIC_CLASS(wxColourListValidator)
 };
 
 class WXDLLEXPORT wxListOfStringsListValidator: public wxPropertyListValidator
 {
-  DECLARE_DYNAMIC_CLASS(wxListOfStringsListValidator)
- protected:
- public:
-   wxListOfStringsListValidator(long flags = 0);
+public:
+    wxListOfStringsListValidator(long flags = 0);
+    ~wxListOfStringsListValidator() {}
 
-   ~wxListOfStringsListValidator(void)
-   {
-   }
+    bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost.
+    // Return FALSE if value didn't check out; signal to restore old value.
+    bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost.
-   // Return FALSE if value didn't check out; signal to restore old value.
-   bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when TICK is pressed or focus is lost or view wants to update
+    // the property list.
+    // Does the transfer from the property editing area to the property itself
+    bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when TICK is pressed or focus is lost or view wants to update
-   // the property list.
-   // Does the transfer from the property editing area to the property itself
-   bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
-   bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when the property is double clicked.
+    bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
-   // Called when the property is double clicked.
-   bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    bool EditStringList(wxWindow *parent, wxStringList *stringList, const wxChar *title = wxT("String List Editor"));
 
-   bool EditStringList(wxWindow *parent, wxStringList *stringList, const wxChar *title = wxT("String List Editor"));
-
-   // Called when the edit (...) button is pressed.
-   void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+    // Called when the edit (...) button is pressed.
+    void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+   
+private:
+    DECLARE_DYNAMIC_CLASS(wxListOfStringsListValidator)
 };
 
 #endif

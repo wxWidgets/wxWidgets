@@ -249,9 +249,12 @@ class wxTaskBarIconPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,windows2c=windows2c):
-        if self.thisown == 1 :
-            windows2c.delete_wxTaskBarIcon(self)
+    def __del__(self, delfunc=windows2c.delete_wxTaskBarIcon):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetIcon(self, *_args, **_kwargs):
         val = apply(windows2c.wxTaskBarIcon_SetIcon,(self,) + _args, _kwargs)
         return val

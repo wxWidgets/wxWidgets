@@ -158,6 +158,11 @@ wxDataObject::wxDataObject()
 {
 }
 
+wxDataObject::~wxDataObject()
+{
+    // dtor is empty but needed for Darwin and AIX -- otherwise it doesn't link
+}
+
 bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
 {
     size_t nFormatCount = GetFormatCount(dir);

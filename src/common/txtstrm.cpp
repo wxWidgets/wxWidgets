@@ -38,10 +38,17 @@
 // wxTextInputStream
 // ----------------------------------------------------------------------------
 
+#if wxUSE_UNICODE
+wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep, wxMBConv& conv)
+  : m_input(s), m_separators(sep), m_conv(conv)
+{
+}
+#else
 wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep)
   : m_input(s), m_separators(sep)
 {
 }
+#endif
 
 wxTextInputStream::~wxTextInputStream()
 {
@@ -234,12 +241,23 @@ wxString wxTextInputStream::ReadString()
 
 wxString wxTextInputStream::ReadLine()
 {
-    wxChar c;
     wxString line;
 
     while ( !m_input.Eof() )
     {
-        c = m_input.GetC();
+#if wxUSE_UNICODE
+        // FIXME: this is only works for single byte encodings
+        // How-to read a single char in an unkown encoding???
+        char buf[10];
+        buf[0] = m_input.GetC();
+        buf[1] = 0;
+        
+        wxChar wbuf[2];
+        m_conv.MB2WC( wbuf, buf, 2 );
+        wxChar c = wbuf[0];
+#else
+        char c = m_input.GetC();
+#endif
         
         if ( !m_input )
             break;
@@ -343,8 +361,15 @@ wxTextInputStream& wxTextInputStream::operator>>(float& f)
     return *this;
 }
 
+
+
+#if wxUSE_UNICODE
+wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode, wxMBConv& conv)
+  : m_output(s), m_conv(conv)
+#else
 wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
   : m_output(s)
+#endif
 {
     m_mode = mode;
     if (m_mode == wxEOL_NATIVE)
@@ -445,8 +470,13 @@ void wxTextOutputStream::WriteString(const wxString& string)
         out << c;
    }
 
-    // NB: we don't need to write the trailing NUL here
-    m_output.Write(out.c_str(), out.length() * sizeof(wxChar));
+    // We must not write the trailing NULL here
+#if wxUSE_UNICODE
+    wxCharBuffer buffer = m_conv.cWC2MB( out );
+    m_output.Write( (const char*) buffer, strlen( (const char*) buffer ) );
+#else
+    m_output.Write(out.c_str(), out.length() );
+#endif
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(const wxChar *string)
@@ -463,12 +493,8 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
 
 wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 {
-    // these strange manipulations are needed in Unicode mode
-    char buf[2];
-    buf[0] = c;
-    buf[1] = 0;
-
-    WriteString( wxString(buf) );
+    WriteString( wxString::FromAscii(c) );
+    
     return *this;
 }
 

@@ -98,6 +98,9 @@ protected:
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
     virtual wxSize DoGetBestClientSize() const;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // get the bounding rect for the given tool

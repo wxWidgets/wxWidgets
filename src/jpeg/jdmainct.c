@@ -141,6 +141,12 @@ typedef my_main_controller * my_main_ptr;
 #define CTX_POSTPONED_ROW	2	/* feeding postponed row group */
 
 
+#if defined(__VISAGECPP__)
+/* Visual Age fixups for multiple declarations */
+#  define start_pass_main   start_pass_main2 /* already in jcmaint.c */
+#  define process_data_simple_main process_data_simple_main2 /* already in jcmaint.c */
+#endif
+
 /* Forward declarations */
 METHODDEF(void) process_data_simple_main
 	JPP((j_decompress_ptr cinfo, JSAMPARRAY output_buf,
@@ -512,3 +518,12 @@ jinit_d_main_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
 			 (JDIMENSION) (rgroup * ngroups));
   }
 }
+
+#if defined(__VISAGECPP__)
+#  ifdef start_pass_main2
+#   undef start_pass_main2
+#  endif
+#  ifdef process_data_simple_main2
+#   undef process_data_simple_main2
+#  endif
+#endif

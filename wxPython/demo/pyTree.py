@@ -78,7 +78,7 @@ class pyTree(wx.wxTreeCtrl):
         wx.wxTreeCtrl.__init__(self, parent, id)
         self.root = self.AddRoot(str(root), -1, -1, wx.wxTreeItemData(root))
         if dir(root):
-            self.SetItemHasChildren(self.root, wx.TRUE)
+            self.SetItemHasChildren(self.root, wx.True)
         wx.EVT_TREE_ITEM_EXPANDING(self, self.GetId(), self.OnItemExpanding)
         wx.EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
         wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
@@ -121,7 +121,7 @@ class pyTree(wx.wxTreeCtrl):
             new_item = self.AppendItem( item, key, -1, -1,
                                         wx.wxTreeItemData(new_obj) )
             if dir(new_obj):
-                self.SetItemHasChildren(new_item, wx.TRUE)
+                self.SetItemHasChildren(new_item, wx.True)
 
     def OnItemCollapsed(self, event):
         """
@@ -205,9 +205,9 @@ if __name__ == '__main__':
         def OnInit(self):
             """OnInit. Boring, boring, boring!"""
             frame = MyFrame()
-            frame.Show(wx.TRUE)
+            frame.Show(wx.True)
             self.SetTopWindow(frame)
-            return wx.TRUE
+            return wx.True
 
     app = MyApp(0)
     app.MainLoop()

@@ -88,18 +88,6 @@ class wxDiagramPtr(wxObjectPtr):
     def InsertShape(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxDiagram_InsertShape,(self,) + _args, _kwargs)
         return val
-    def LoadFile(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_LoadFile,(self,) + _args, _kwargs)
-        return val
-    def ReadContainerGeometry(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_ReadContainerGeometry,(self,) + _args, _kwargs)
-        return val
-    def ReadLines(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_ReadLines,(self,) + _args, _kwargs)
-        return val
-    def ReadNodes(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_ReadNodes,(self,) + _args, _kwargs)
-        return val
     def RecentreAll(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxDiagram_RecentreAll,(self,) + _args, _kwargs)
         return val
@@ -111,9 +99,6 @@ class wxDiagramPtr(wxObjectPtr):
         return val
     def RemoveShape(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxDiagram_RemoveShape,(self,) + _args, _kwargs)
-        return val
-    def SaveFile(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_SaveFile,(self,) + _args, _kwargs)
         return val
     def SetCanvas(self, *_args, **_kwargs):
         val = apply(oglcanvasc.wxDiagram_SetCanvas,(self,) + _args, _kwargs)

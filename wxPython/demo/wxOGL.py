@@ -45,6 +45,52 @@ class RoundedRectangleShape(wxRectangleShape):
 
 #----------------------------------------------------------------------
 
+class DividedShape(wxDividedShape):
+    def __init__(self, width, height, canvas):
+        wxDividedShape.__init__(self, width, height)
+
+        region1 = wxShapeRegion()
+        region1.SetText('wxDividedShape')
+        region1.SetProportions(0.0, 0.2)
+        region1.SetFormatMode(FORMAT_CENTRE_HORIZ)
+        self.AddRegion(region1)
+
+        region2 = wxShapeRegion()
+        region2.SetText('This is Region number two.')
+        region2.SetProportions(0.0, 0.3)
+        region2.SetFormatMode(FORMAT_CENTRE_HORIZ|FORMAT_CENTRE_VERT)
+        self.AddRegion(region2)
+
+        region3 = wxShapeRegion()
+        region3.SetText('Region 3\nwith embedded\nline breaks')
+        region3.SetProportions(0.0, 0.5)
+        region3.SetFormatMode(FORMAT_NONE)
+        self.AddRegion(region3)
+
+        self.SetRegionSizes()
+        self.ReformatRegions(canvas)
+
+
+    def ReformatRegions(self, canvas=None):
+        rnum = 0
+        if canvas is None:
+            canvas = self.GetCanvas()
+        dc = wxClientDC(canvas)  # used for measuring
+        for region in self.GetRegions():
+            text = region.GetText()
+            self.FormatText(dc, text, rnum)
+            rnum += 1
+
+
+    def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
+        self.base_OnSizingEndDragLeft(pt, x, y, keys, attch)
+        self.SetRegionSizes()
+        self.ReformatRegions()
+        self.GetCanvas().Refresh()
+
+
+#----------------------------------------------------------------------
+
 class MyEvtHandler(wxShapeEvtHandler):
     def __init__(self, log, frame):
         wxShapeEvtHandler.__init__(self)
@@ -66,10 +112,10 @@ class MyEvtHandler(wxShapeEvtHandler):
         canvas.PrepareDC(dc)
 
         if shape.Selected():
-            shape.Select(false, dc)
+            shape.Select(False, dc)
             canvas.Redraw(dc)
         else:
-            redraw = false
+            redraw = False
             shapeList = canvas.GetDiagram().GetShapeList()
             toUnselect = []
             for s in shapeList:
@@ -79,11 +125,11 @@ class MyEvtHandler(wxShapeEvtHandler):
                     # shapes too!) and bad things will happen...
                     toUnselect.append(s)
 
-            shape.Select(true, dc)
+            shape.Select(True, dc)
 
             if toUnselect:
                 for s in toUnselect:
-                    s.Select(false, dc)
+                    s.Select(False, dc)
                 canvas.Redraw(dc)
 
         self.UpdateStatusBar(shape)
@@ -97,14 +143,14 @@ class MyEvtHandler(wxShapeEvtHandler):
         self.UpdateStatusBar(shape)
 
 
-    def OnSize(self, x, y):
-        self.base_OnSize(x, y)
+    def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
+        self.base_OnSizingEndDragLeft(pt, x, y, keys, attch)
         self.UpdateStatusBar(self.GetShape())
 
 
-#    def OnMovePost(self, dc, x, y, oldX, oldY, display):
-#        self.base_OnMovePost(dc, x, y, oldX, oldY, display)
-#        self.UpdateStatusBar(self.GetShape())
+    def OnMovePost(self, dc, x, y, oldX, oldY, display):
+        self.base_OnMovePost(dc, x, y, oldX, oldY, display)
+        self.UpdateStatusBar(self.GetShape())
 
 
     def OnRightClick(self, *dontcare):
@@ -130,12 +176,14 @@ class TestWindow(wxShapeCanvas):
         self.shapes = []
         self.save_gdi = []
 
-        rRectBrush = wxBrush(wxNamedColour("MEDIUM TURQUOISE"), wxSOLID)
+        rRectBrush = wxBrush("MEDIUM TURQUOISE", wxSOLID)
+        dsBrush = wxBrush("WHEAT", wxSOLID)
 
         self.MyAddShape(wxCircleShape(80), 100, 100, wxPen(wxBLUE, 3), wxGREEN_BRUSH, "Circle")
         self.MyAddShape(wxRectangleShape(85, 50), 305, 60, wxBLACK_PEN, wxLIGHT_GREY_BRUSH, "Rectangle")
+        ds = self.MyAddShape(DividedShape(140, 150, self), 495, 145, wxBLACK_PEN, dsBrush, '')
         self.MyAddShape(DiamondShape(90, 90), 345, 235, wxPen(wxBLUE, 3, wxDOT), wxRED_BRUSH, "Polygon")
-        self.MyAddShape(RoundedRectangleShape(95,70), 140, 255, wxPen(wxRED, 1), rRectBrush, "Rounded Rect")
+        self.MyAddShape(RoundedRectangleShape(95,70), 140, 255, wxPen(wxRED, 2), rRectBrush, "Rounded Rect")
 
         bmp = images.getTest2Bitmap()
         mask = wxMaskColour(bmp, wxBLUE)
@@ -161,16 +209,16 @@ class TestWindow(wxShapeCanvas):
             line.MakeLineControlPoints(2)
             fromShape.AddLine(line, toShape)
             self.diagram.AddShape(line)
-            line.Show(true)
+            line.Show(True)
 
             # for some reason, the shapes have to be moved for the line to show up...
             fromShape.Move(dc, fromShape.GetX(), fromShape.GetY())
 
-            EVT_WINDOW_DESTROY(self, self.OnDestroy)
+        EVT_WINDOW_DESTROY(self, self.OnDestroy)
 
 
     def MyAddShape(self, shape, x, y, pen, brush, text):
-        shape.SetDraggable(true, true)
+        shape.SetDraggable(True, True)
         shape.SetCanvas(self)
         shape.SetX(x)
         shape.SetY(y)
@@ -179,7 +227,7 @@ class TestWindow(wxShapeCanvas):
         if text:   shape.AddText(text)
         #shape.SetShadowMode(SHADOW_RIGHT)
         self.diagram.AddShape(shape)
-        shape.Show(true)
+        shape.Show(True)
 
         evthandler = MyEvtHandler(self.log, self.frame)
         evthandler.SetShape(shape)
@@ -187,7 +235,7 @@ class TestWindow(wxShapeCanvas):
         shape.SetEventHandler(evthandler)
 
         self.shapes.append(shape)
-
+        return shape
 
 
     def OnDestroy(self, evt):
@@ -235,4 +283,10 @@ manipulation of simple and complex graphic images on a canvas.
 
 """
 
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

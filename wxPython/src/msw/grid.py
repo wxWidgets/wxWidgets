@@ -255,6 +255,12 @@ class wxGridCellEditorPtr :
     def SetControl(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_SetControl,(self,) + _args, _kwargs)
         return val
+    def GetCellAttr(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_GetCellAttr,(self,) + _args, _kwargs)
+        return val
+    def SetCellAttr(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_SetCellAttr,(self,) + _args, _kwargs)
+        return val
     def SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_SetParameters,(self,) + _args, _kwargs)
         return val
@@ -865,9 +871,12 @@ class wxGridTableMessagePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gridc=gridc):
-        if self.thisown == 1 :
-            gridc.delete_wxGridTableMessage(self)
+    def __del__(self, delfunc=gridc.delete_wxGridTableMessage):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetTableObject(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableMessage_SetTableObject,(self,) + _args, _kwargs)
         return val
@@ -906,9 +915,12 @@ class wxGridCellCoordsPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gridc=gridc):
-        if self.thisown == 1 :
-            gridc.delete_wxGridCellCoords(self)
+    def __del__(self, delfunc=gridc.delete_wxGridCellCoords):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def GetRow(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellCoords_GetRow,(self,) + _args, _kwargs)
         return val
@@ -932,8 +944,16 @@ class wxGridCellCoordsPtr :
         return val
     def __repr__(self):
         return "<C wxGridCellCoords instance at %s>" % (self.this,)
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
+    
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.SetRow(val)
+        elif index == 1: self.SetCol(val)
+        else: raise IndexError
+    
 class wxGridCellCoords(wxGridCellCoordsPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellCoords,_args,_kwargs)
@@ -1432,6 +1452,30 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def IsInSelection(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsInSelection,(self,) + _args, _kwargs)
+        return val
+    def GetSelectedCells(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetSelectedCells,(self,) + _args, _kwargs)
+        return val
+    def GetSelectionBlockTopLeft(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetSelectionBlockTopLeft,(self,) + _args, _kwargs)
+        return val
+    def GetSelectionBlockBottomRight(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetSelectionBlockBottomRight,(self,) + _args, _kwargs)
+        return val
+    def GetSelectedRows(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetSelectedRows,(self,) + _args, _kwargs)
+        return val
+    def GetSelectedCols(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_GetSelectedCols,(self,) + _args, _kwargs)
+        return val
+    def DeselectRow(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_DeselectRow,(self,) + _args, _kwargs)
+        return val
+    def DeselectCol(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_DeselectCol,(self,) + _args, _kwargs)
+        return val
+    def DeselectCell(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_DeselectCell,(self,) + _args, _kwargs)
         return val
     def BlockToDeviceRect(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_BlockToDeviceRect,(self,) + _args, _kwargs)

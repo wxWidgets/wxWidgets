@@ -21,19 +21,22 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/utils.h"
+    #include "wx/log.h"
+
+    #include "wx/dcscreen.h"
+
     #include "wx/window.h"
     #include "wx/dialog.h"
     #include "wx/frame.h"
+
+    #include "wx/settings.h"
 #endif
 
-#include <stdlib.h>
-
-#include "wx/string.h"
 #include "wx/splitter.h"
-#include "wx/dcscreen.h"
-#include "wx/settings.h"
-#include "wx/log.h"
-#include "wx/utils.h"
+
+#include <stdlib.h>
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING)
@@ -107,8 +110,8 @@ void wxSplitterWindow::Init()
     m_oldY = 0;
     m_firstX = 0;
     m_firstY = 0;
-    m_sashSize = 7;
-    m_borderSize = 2;
+    m_sashSize = 3;
+    m_borderSize = 0;
     m_sashPosition = m_requestedSashPosition = 0;
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
@@ -120,9 +123,6 @@ void wxSplitterWindow::Init()
     m_faceBrush = (wxBrush *) NULL;
     m_facePen = (wxPen *) NULL;
     m_hilightPen = (wxPen *) NULL;
-
-    m_borderSize = 0;
-    m_sashSize = 3;
 
     InitColours();
 
@@ -169,7 +169,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         y = (int)event.GetY();
 
     // reset the cursor
-#if defined( __WXMOTIF__ ) || defined( __WXMAC__ )
+#if defined( __WXMOTIF__ ) || defined( __WXGTK__ ) || defined( __WXMAC__ )
     SetCursor(* wxSTANDARD_CURSOR);
 #elif defined(__WXMSW__)
     SetCursor(wxCursor());
@@ -213,6 +213,12 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // We can stop dragging now and see what we've got.
         m_dragMode = wxSPLIT_DRAG_NONE;
         ReleaseMouse();
+
+        // exit if unsplit after doubleclick
+        if ( !IsSplit() )
+        {
+            return;
+        }
 
         // Erase old tracker
         if ( !isLive )
@@ -537,7 +543,7 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
                 dc.DrawLine(m_sashPosition+1, h-m_borderSize-1, m_sashPosition+m_sashSize-1, h-m_borderSize-1);
             }
         }
-        else
+        else // wxSPLIT_HORIZONTAL
         {
             dc.SetPen(*m_facePen);
             if (HasFlag( wxSP_SASH_AQUA ))
@@ -577,12 +583,12 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             }
         }
     }
-    else
+    else // !wxSP_3DSASH
     {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(*m_faceBrush);
         if ( m_splitMode == wxSPLIT_VERTICAL )
         {
-            dc.SetPen(*wxBLACK_PEN);
-            dc.SetBrush(*wxBLACK_BRUSH);
             int h1 = h-1;
             int y1 = 0;
             if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
@@ -593,10 +599,8 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             }
             dc.DrawRectangle(m_sashPosition, y1, m_sashSize, h1);
         }
-        else
+        else // wxSPLIT_HORIZONTAL
         {
-            dc.SetPen(*wxBLACK_PEN);
-            dc.SetBrush(*wxBLACK_BRUSH);
             int w1 = w-1;
             int x1 = 0;
             if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
@@ -607,7 +611,6 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             }
             dc.DrawRectangle(x1, m_sashPosition, w1, m_sashSize);
         }
-
     }
 
     dc.SetPen(wxNullPen);
@@ -754,7 +757,8 @@ void wxSplitterWindow::SizeWindows()
             DoSetSashPosition(newSashPosition);
         }
 
-        if ( newSashPosition == m_sashPosition )
+        if ( newSashPosition <= m_sashPosition
+            && newSashPosition >= m_sashPosition - GetBorderSize() )
         {
             // don't update it any more
             m_requestedSashPosition = INT_MAX;
@@ -805,7 +809,7 @@ void wxSplitterWindow::SizeWindows()
 // Set pane for unsplit window
 void wxSplitterWindow::Initialize(wxWindow *window)
 {
-    wxASSERT_MSG( window->GetParent() == this,
+    wxASSERT_MSG( window && window->GetParent() == this,
                   _T("windows in the splitter should have it as parent!") );
 
     m_windowOne = window;
@@ -823,7 +827,10 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
     if ( IsSplit() )
         return FALSE;
 
-    wxASSERT_MSG( window1->GetParent() == this && window2->GetParent() == this,
+    wxCHECK_MSG( window1 && window2, FALSE,
+                 _T("can not split with NULL window(s)") );
+
+    wxCHECK_MSG( window1->GetParent() == this && window2->GetParent() == this, FALSE,
                   _T("windows in the splitter should have it as parent!") );
 
     m_splitMode = mode;

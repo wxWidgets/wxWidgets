@@ -24,6 +24,30 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 
+#ifndef SWIG
+/*
+ * If we're using wx in Dynamic Library format do we
+ * want wxStyledTextCtrl to be in DLL form as well?
+ */
+#if defined(WXUSINGDLL) && \
+    (defined(WXMAKING_STC_DLL) || defined(WXUSING_STC_DLL))
+
+#if defined(WXMAKING_STC_DLL)
+    // When building the DLL WXSTC_DECLSPEC exports classes
+#   define WXSTC_DECLSPEC            WXEXPORT
+#elif defined(WXUSING_STC_DLL)
+    // When using the DLL WXSTC_DECLSPEC imports classes
+#   define WXSTC_DECLSPEC            WXIMPORT
+#endif // defined(WXBUILD_STC_DLL)
+
+#else
+// When building the static library nullify the effect of WXSTC_DECLSPEC
+#define WXSTC_DECLSPEC
+#endif // WXUSINGDLL && (WXMAKING_STC_DLL || WXUSING_STC_DLL)
+
+#endif // SWIG
+
+
 //----------------------------------------------------------------------
 
 // Should a wxPopupWindow be used for the call tips and autocomplete windows?
@@ -38,6 +62,12 @@
 
 %(VALUES)s
 
+
+//-----------------------------------------
+// Commands that can be bound to keystrokes
+%(CMDS)s
+
+
 // END of generated section
 //----------------------------------------------------------------------
 
@@ -45,8 +75,11 @@ class  ScintillaWX;                      // forward declare
 class  WordList;
 struct SCNotification;
 
-
-extern const wxChar* wxSTCNameStr;
+#ifndef SWIG
+extern WXSTC_DECLSPEC const wxChar* wxSTCNameStr;
+class WXSTC_DECLSPEC wxStyledTextCtrl;
+class WXSTC_DECLSPEC wxStyledTextEvent;
+#endif
 
 //----------------------------------------------------------------------
 
@@ -175,6 +208,7 @@ private:
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseRightUp(wxMouseEvent& evt);
+    void OnMouseMiddleUp(wxMouseEvent& evt);
     void OnContextMenu(wxContextMenuEvent& evt);
     void OnMouseWheel(wxMouseEvent& evt);
     void OnChar(wxKeyEvent& evt);
@@ -210,7 +244,7 @@ private:
 
 //----------------------------------------------------------------------
 
-// SWIG can't handle "#if" type of conditionals, onlu "#ifdef"
+// SWIG can't handle "#if" type of conditionals, only "#ifdef"
 #ifdef SWIG
 #define STC_USE_DND 1
 #else

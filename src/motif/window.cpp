@@ -404,7 +404,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 wxWindow::~wxWindow()
 {
     if (g_captureWindow == this)
-	g_captureWindow = NULL;
+        g_captureWindow = NULL;
     
     m_isBeingDeleted = TRUE;
     
@@ -437,7 +437,7 @@ wxWindow::~wxWindow()
         if (w)
         {
             XtDestroyWidget(w);
-	    m_drawingArea = (WXWidget) 0;
+            m_drawingArea = (WXWidget) 0;
         }
 
         // Only if we're _really_ a canvas (not a dialog box/panel)
@@ -449,18 +449,18 @@ wxWindow::~wxWindow()
         if (m_hScrollBar)
         {
             wxDeleteWindowFromTable((Widget) m_hScrollBar);
-	    XtUnmanageChild((Widget) m_hScrollBar);
+            XtUnmanageChild((Widget) m_hScrollBar);
         }
         if (m_vScrollBar)
         {
             wxDeleteWindowFromTable((Widget) m_vScrollBar);
-	    XtUnmanageChild((Widget) m_vScrollBar);
+            XtUnmanageChild((Widget) m_vScrollBar);
         }
 
         if (m_hScrollBar)
-	    XtDestroyWidget((Widget) m_hScrollBar);
+            XtDestroyWidget((Widget) m_hScrollBar);
         if (m_vScrollBar)
-	    XtDestroyWidget((Widget) m_vScrollBar);
+            XtDestroyWidget((Widget) m_vScrollBar);
 
         UnmanageAndDestroy(m_scrolledWindow);
 
@@ -958,12 +958,12 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     while (cnode)
     {
         wxWindow *child = (wxWindow*) cnode->Data();
-	int sx = 0;
-	int sy = 0;
-	child->GetSize( &sx, &sy );
+        int sx = 0;
+        int sy = 0;
+        child->GetSize( &sx, &sy );
         wxPoint pos( child->GetPosition() );
-	child->SetSize( pos.x + dx, pos.y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
-	cnode = cnode->Next();
+        child->SetSize( pos.x + dx, pos.y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
+        cnode = cnode->Next();
     }
 
     int x1 = (dx >= 0) ? x : x - dx;
@@ -1207,15 +1207,15 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     XmMenuPosition (menuWidget, &event);
     XtManageChild (menuWidget);
 
-	XEvent x_event;
-	// The ID of a pop-up menu is 1 when active, and is set to 0 by the
+    XEvent x_event;
+    // The ID of a pop-up menu is 1 when active, and is set to 0 by the
     // idle-time destroy routine.
-	// Waiting until this ID changes causes this function to block until
+    // Waiting until this ID changes causes this function to block until
     // the menu has been dismissed and the widgets cleaned up.
     // In other words, once this routine returns, it is safe to delete
     // the menu object.
     // Ian Brown <ian.brown@printsoft.de>
-	while (menu->GetId() == 1)
+    while (menu->GetId() == 1)
     {
         XtAppNextEvent( (XtAppContext) wxTheApp->GetAppContext(), &x_event);
 
@@ -1732,7 +1732,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
         if (entry->MatchesEvent(event))
         {
             // Bingo, we have a match. Now find a control that matches the
-	    // entry command id.
+            // entry command id.
 
             // Need to go up to the top of the window hierarchy, since it might
             // be e.g. a menu item
@@ -2201,33 +2201,8 @@ static void wxCanvasInputEvent(Widget drawingArea,
       }
     case KeyPress:
         {
-            KeySym keySym;
-            static char buf[100];
-#if 0
-            XComposeStatus compose;
-            (void) XLookupString ((XKeyEvent *) & local_event, buf, 20, &keySym, &compose);
-#endif // 0
-
-            (void) XLookupString ((XKeyEvent *) & local_event, buf, 20, &keySym, NULL);
-            int id = wxCharCodeXToWX (keySym);
-
-            wxEventType eventType = wxEVT_CHAR;
-
-            wxKeyEvent event (eventType);
-
-            if (local_event.xkey.state & ShiftMask)
-                event.m_shiftDown = TRUE;
-            if (local_event.xkey.state & ControlMask)
-                event.m_controlDown = TRUE;
-            if (local_event.xkey.state & Mod3Mask)
-                event.m_altDown = TRUE;
-            if (local_event.xkey.state & Mod1Mask)
-                event.m_metaDown = TRUE;
-            event.SetEventObject(canvas);
-            event.m_keyCode = id;
-            event.SetTimestamp(local_event.xkey.time);
-
-            if (id > -1)
+            wxKeyEvent event (wxEVT_CHAR);
+            if (wxTranslateKeyEvent (event, canvas, (Widget) 0, &local_event))
             {
                 // Implement wxFrame::OnCharHook by checking ancestor.
                 wxWindow *parent = canvas->GetParent();
@@ -2256,26 +2231,8 @@ static void wxCanvasInputEvent(Widget drawingArea,
         }
     case KeyRelease:
         {
-            static char buf[100];
-            KeySym keySym;
-            (void) XLookupString ((XKeyEvent *) & local_event, buf, 20, &keySym, NULL);
-            int id = wxCharCodeXToWX (keySym);
-
             wxKeyEvent event (wxEVT_KEY_UP);
-
-            if (local_event.xkey.state & ShiftMask)
-                event.m_shiftDown = TRUE;
-            if (local_event.xkey.state & ControlMask)
-                event.m_controlDown = TRUE;
-            if (local_event.xkey.state & Mod3Mask)
-                event.m_altDown = TRUE;
-            if (local_event.xkey.state & Mod1Mask)
-                event.m_metaDown = TRUE;
-            event.SetEventObject(canvas);
-            event.m_keyCode = id;
-            event.SetTimestamp(local_event.xkey.time);
-
-            if (id > -1)
+            if (wxTranslateKeyEvent (event, canvas, (Widget) 0, &local_event))
             {
                 canvas->GetEventHandler()->ProcessEvent (event);
             }
@@ -2828,6 +2785,10 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget WXUNUSED(wid
 #endif // 0
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
+            // id may be WXK_xxx code - these are outside ASCII range, so we
+            // can't just use toupper() on id
+            if (id >= 'a' && id <= 'z')
+                id = toupper(id);
 
             if (xevent->xkey.state & ShiftMask)
                 wxevent.m_shiftDown = TRUE;
@@ -3075,8 +3036,8 @@ wxPoint wxGetMousePosition()
     unsigned int maskReturn;
 
     XQueryPointer (display,
-		   rootWindow,
-		   &rootReturn,
+                   rootWindow,
+                   &rootReturn,
                    &childReturn,
                    &rootX, &rootY, &winX, &winY, &maskReturn);
     return wxPoint(rootX, rootY);

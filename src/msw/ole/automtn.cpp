@@ -183,6 +183,8 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 	if (FAILED(hr)) 
 	{
 //		ShowException(szMember, hr, NULL, 0);
+        delete[] argNames;
+        delete[] dispIds;
 		return FALSE;
 	}
 
@@ -201,7 +203,12 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 	{
 		// Again, reverse args
 		if (!ConvertVariantToOle(INVOKEARG((noArgs-1) - i), oleArgs[i]))
-			return FALSE; // TODO: clean up memory at this point
+        {
+	        delete[] argNames;
+	        delete[] dispIds;
+            delete[] oleArgs;
+			return FALSE;
+        }
 	}
 
 	dispparams.rgdispidNamedArgs = dispIds + 1;
@@ -833,12 +840,15 @@ static BSTR ConvertStringToOle(const wxString& str)
 
 static wxString ConvertStringFromOle(BSTR bStr)
 {
+#if wxUSE_UNICODE
+    wxString str(bStr);
+#else
 	int len = SysStringLen(bStr) + 1;
 	char    *buf = new char[len];
 	(void)wcstombs( buf, bStr, len);
-
-	wxString str(buf);
+	wxString str(buf); 
 	delete[] buf;
+#endif
 	return str;
 }
 

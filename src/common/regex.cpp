@@ -132,7 +132,7 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
 
         (void)regerror(errorcode, &m_RegEx, (char *)buf.data(), len);
 
-        msg = buf.data();
+        msg = wxString(buf.data(), wxConvLibc);
 #else // !Unicode
         (void)regerror(errorcode, &m_RegEx, msg.GetWriteBuf(len), len);
 

@@ -37,7 +37,7 @@ class TestPanel(wxPanel):
         sz.AddGrowableCol(1)
         sz.AddGrowableCol(2)
         self.SetSizer(sz)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
 
 #----------------------------------------------------------------------

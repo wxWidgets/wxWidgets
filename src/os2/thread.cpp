@@ -9,6 +9,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
+    #pragma implementation "thread.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -30,8 +34,9 @@
 #define INCL_DOSPROCESS
 #define INCL_ERRORS
 #include <os2.h>
+#ifndef __EMX__
 #include <bseerr.h>
-
+#endif
 // the possible states of the thread ("=>" shows all possible transitions from
 // this state)
 enum wxThreadState

@@ -338,6 +338,7 @@ public:
     %pragma(python) addtomethod = "wxPreCheckBox:val._setOORInfo(val)"
 
     bool GetValue();
+    bool IsChecked();
     void SetValue(const bool state);
 };
 

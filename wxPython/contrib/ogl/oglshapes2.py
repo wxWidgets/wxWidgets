@@ -257,9 +257,12 @@ class wxArrowHeadPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,oglshapes2c=oglshapes2c):
-        if self.thisown == 1 :
-            oglshapes2c.delete_wxArrowHead(self)
+    def __del__(self, delfunc=oglshapes2c.delete_wxArrowHead):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def _GetType(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxArrowHead__GetType,(self,) + _args, _kwargs)
         return val
@@ -393,7 +396,7 @@ class wxPyLineShapePtr(wxPyShapePtr):
         return val
     def GetNextControlPoint(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_GetNextControlPoint,(self,) + _args, _kwargs)
-        if val: val = wxPointPtr(val) 
+        if val: val = wxRealPointPtr(val) 
         return val
     def GetTo(self, *_args, **_kwargs):
         val = apply(oglshapes2c.wxPyLineShape_GetTo,(self,) + _args, _kwargs)

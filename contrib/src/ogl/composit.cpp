@@ -33,10 +33,11 @@
 #include <wx/ogl/misc.h>
 #include <wx/ogl/canvas.h>
 
+#if wxUSE_PROLOGIO
 // Sometimes, objects need to access the whole database to
 // construct themselves.
 wxExprDatabase *GlobalwxExprDatabase = NULL;
-
+#endif
 
 /*
  * Division control point
@@ -598,7 +599,7 @@ bool wxCompositeShape::Constrain()
   return changed;
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxCompositeShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);
@@ -826,10 +827,10 @@ wxDivisionShape::wxDivisionShape()
   m_handleSide = DIVISION_SIDE_NONE;
   m_leftSidePen = wxBLACK_PEN;
   m_topSidePen = wxBLACK_PEN;
-  m_leftSideColour = "BLACK";
-  m_topSideColour = "BLACK";
-  m_leftSideStyle = "Solid";
-  m_topSideStyle = "Solid";
+  m_leftSideColour = wxT("BLACK");
+  m_topSideColour = wxT("BLACK");
+  m_leftSideStyle = wxT("Solid");
+  m_topSideStyle = wxT("Solid");
   ClearRegions();
 }
 
@@ -984,7 +985,7 @@ void wxDivisionShape::Copy(wxShape& copy)
   // Division geometry copying is handled at the wxCompositeShape level.
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxDivisionShape::WriteAttributes(wxExpr *clause)
 {
   wxCompositeShape::WriteAttributes(clause);
@@ -1573,11 +1574,11 @@ bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
 class OGLPopupDivisionMenu : public wxMenu {
 public:
     OGLPopupDivisionMenu() : wxMenu() {
-        Append(DIVISION_MENU_SPLIT_HORIZONTALLY, "Split horizontally");
-        Append(DIVISION_MENU_SPLIT_VERTICALLY, "Split vertically");
+        Append(DIVISION_MENU_SPLIT_HORIZONTALLY, wxT("Split horizontally"));
+        Append(DIVISION_MENU_SPLIT_VERTICALLY, wxT("Split vertically"));
         AppendSeparator();
-        Append(DIVISION_MENU_EDIT_LEFT_EDGE, "Edit left edge");
-        Append(DIVISION_MENU_EDIT_TOP_EDGE, "Edit top edge");
+        Append(DIVISION_MENU_EDIT_LEFT_EDGE, wxT("Edit left edge"));
+        Append(DIVISION_MENU_EDIT_TOP_EDGE, wxT("Edit top edge"));
     }
 
     void OnMenu(wxCommandEvent& event);
@@ -1625,7 +1626,7 @@ void OGLPopupDivisionMenu::OnMenu(wxCommandEvent& event)
 
 void wxDivisionShape::EditEdge(int side)
 {
-  wxMessageBox("EditEdge() not implemented", "OGL", wxOK);
+  wxMessageBox(wxT("EditEdge() not implemented"), wxT("OGL"), wxOK);
 
 #if 0
   wxBeginBusyCursor();

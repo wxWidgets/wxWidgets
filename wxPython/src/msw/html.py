@@ -135,6 +135,9 @@ class wxHtmlParserPtr(wxObjectPtr):
     def DoParsing(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_DoParsing,(self,) + _args, _kwargs)
         return val
+    def StopParsing(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlParser_StopParsing,(self,) + _args, _kwargs)
+        return val
     def AddTagHandler(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_AddTagHandler,(self,) + _args, _kwargs)
         return val
@@ -450,6 +453,10 @@ class wxHtmlContainerCellPtr(wxHtmlCellPtr):
     def SetBackgroundColour(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlContainerCell_SetBackgroundColour,(self,) + _args, _kwargs)
         return val
+    def GetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
     def SetBorder(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlContainerCell_SetBorder,(self,) + _args, _kwargs)
         return val
@@ -505,6 +512,24 @@ class wxHtmlWidgetCell(wxHtmlWidgetCellPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlWidgetCell,_args,_kwargs)
         self.thisown = 1
+
+
+
+
+class wxHtmlFilterPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlFilter__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxHtmlFilter instance at %s>" % (self.this,)
+class wxHtmlFilter(wxHtmlFilterPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlFilter,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxHtmlFilter)
 
 
 
@@ -624,9 +649,12 @@ class wxHtmlDCRendererPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,htmlc=htmlc):
-        if self.thisown == 1 :
-            htmlc.delete_wxHtmlDCRenderer(self)
+    def __del__(self, delfunc=htmlc.delete_wxHtmlDCRenderer):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetDC(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlDCRenderer_SetDC,(self,) + _args, _kwargs)
         return val
@@ -685,9 +713,12 @@ class wxHtmlEasyPrintingPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,htmlc=htmlc):
-        if self.thisown == 1 :
-            htmlc.delete_wxHtmlEasyPrinting(self)
+    def __del__(self, delfunc=htmlc.delete_wxHtmlEasyPrinting):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def PreviewFile(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlEasyPrinting_PreviewFile,(self,) + _args, _kwargs)
         return val
@@ -789,4 +820,5 @@ wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
 wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfoPtr
+wx.wxHtmlFilterPtr          = wxHtmlFilterPtr
 

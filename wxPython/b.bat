@@ -8,7 +8,7 @@ set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
 
 
 rem  Use non-default python?
-iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" .or. "%1" == "22" then
+iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" .or. "%1" == "22" .or. "%1" == "23" then
 	set VER=%1
 	set PYTHON=%TOOLS%\python%1%\python.exe
 	shift
@@ -71,29 +71,26 @@ elseiff "%1" == "a" then
 	shift
 	set CMD=echo Finished!
 
-	call b.bat 15 c
-	call b.bat 15 f
-	cd demo
-	p15 encode_bitmaps.py
-	cd -
-	call b.bat 15 r
-	call b.bat 15 c
-	call b.bat 15 h
-	call b.bat 15 r
-
-	call b.bat 21 c
-	call b.bat 21 f
-	call b.bat 21 r
-	call b.bat 21 c
+	call b.bat 21 d
 	call b.bat 21 h
 	call b.bat 21 r
+	call b.bat 21 d UNICODE=1
+	call b.bat 21 h UNICODE=1
+	call b.bat 21 r UNICODE=1
 
-	call b.bat 22 c
-	call b.bat 22 f
-	call b.bat 22 r
-	call b.bat 22 c
+	call b.bat 22 d
 	call b.bat 22 h
 	call b.bat 22 r
+	call b.bat 22 d UNICODE=1
+	call b.bat 22 h UNICODE=1
+	call b.bat 22 r UNICODE=1
+
+	call b.bat 23 d
+	call b.bat 23 h
+	call b.bat 23 r
+	call b.bat 23 d UNICODE=1
+	call b.bat 23 h UNICODE=1
+	call b.bat 23 r UNICODE=1
 
 
 rem "b" --> both debug and hybrid builds

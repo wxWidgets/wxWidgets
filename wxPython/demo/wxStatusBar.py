@@ -10,7 +10,7 @@ class CustomStatusBar(wxStatusBar):
         wxStatusBar.__init__(self, parent, -1)
         self.SetFieldsCount(3)
         self.log = log
-        self.sizeChanged = false
+        self.sizeChanged = False
         EVT_SIZE(self, self.OnSize)
         EVT_IDLE(self, self.OnIdle)
 
@@ -18,7 +18,7 @@ class CustomStatusBar(wxStatusBar):
 
         self.cb = wxCheckBox(self, 1001, "toggle clock")
         EVT_CHECKBOX(self, 1001, self.OnToggleClock)
-        self.cb.SetValue(true)
+        self.cb.SetValue(True)
 
         # set the initial position of the checkbox
         self.Reposition()
@@ -52,7 +52,7 @@ class CustomStatusBar(wxStatusBar):
         # Set a flag so the idle time handler will also do the repositioning.
         # It is done this way to get around a buglet where GetFieldRect is not
         # accurate during the EVT_SIZE resulting from a frame maximize.
-        self.sizeChanged = true
+        self.sizeChanged = True
 
 
     def OnIdle(self, evt):
@@ -65,7 +65,7 @@ class CustomStatusBar(wxStatusBar):
         rect = self.GetFieldRect(1)
         self.cb.SetPosition(wxPoint(rect.x+2, rect.y+2))
         self.cb.SetSize(wxSize(rect.width-4, rect.height-4))
-        self.sizeChanged = false
+        self.sizeChanged = False
 
 
 
@@ -91,7 +91,7 @@ class TestCustomStatusBar(wxFrame):
 def runTest(frame, nb, log):
     win = TestCustomStatusBar(frame, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 #---------------------------------------------------------------------------
 

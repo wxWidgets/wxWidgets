@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 1997-2002 wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,10 +13,9 @@
 #define _WX_REGION_H_
 
 #ifdef __GNUG__
-#pragma interface "region.h"
+    #pragma interface "region.h"
 #endif
 
-#include "wx/list.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
@@ -93,11 +92,11 @@ public:
 
     // Outer bounds of region
     void GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const;
-    wxRect GetBox(void) const ;
+    wxRect GetBox() const ;
 
     // Is region empty?
-    bool Empty(void) const;
-    inline bool IsEmpty(void) const { return Empty(); }
+    bool Empty() const;
+    inline bool IsEmpty() const { return Empty(); }
 
     // Tests
     // Does the region contain the point (x,y)?
@@ -129,31 +128,39 @@ protected:
 class WXDLLEXPORT wxRegionIterator : public wxObject
 {
 public:
-    wxRegionIterator(void);
+    wxRegionIterator() { Init(); }
     wxRegionIterator(const wxRegion& region);
-    ~wxRegionIterator(void);
+    wxRegionIterator(const wxRegionIterator& ri) { Init(); *this = ri; }
 
-    void Reset(void) { m_current = 0; }
+    wxRegionIterator& operator=(const wxRegionIterator& ri);
+
+    virtual ~wxRegionIterator();
+
+    void Reset() { m_current = 0; }
     void Reset(const wxRegion& region);
 
+    bool HaveRects() const { return (m_current < m_numRects); }
+
 #ifndef __SALFORDC__
-    operator bool (void) const { return (m_current < m_numRects); }
+    operator bool () const { return HaveRects(); }
 #endif
 
-    bool HaveRects(void) const { return (m_current < m_numRects); }
+    wxRegionIterator& operator++();
+    wxRegionIterator operator++(int);
 
-    void operator ++ (void);
-    void operator ++ (int);
+    wxCoord GetX() const;
+    wxCoord GetY() const;
+    wxCoord GetW() const;
+    wxCoord GetWidth() const { return GetW(); }
+    wxCoord GetH() const;
+    wxCoord GetHeight() const { return GetH(); }
 
-    wxCoord GetX(void) const;
-    wxCoord GetY(void) const;
-    wxCoord GetW(void) const;
-    wxCoord GetWidth(void) const { return GetW(); }
-    wxCoord GetH(void) const;
-    wxCoord GetHeight(void) const { return GetH(); }
-    wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
+    wxRect GetRect() const { return wxRect(GetX(), GetY(), GetW(), GetH()); }
 
 private:
+    // common part of all ctors
+    void Init();
+
     long     m_current;
     long     m_numRects;
     wxRegion m_region;

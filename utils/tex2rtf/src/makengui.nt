@@ -11,7 +11,7 @@
 # of Tex2RTF, so I set off to give it a try...  I found out it would crash
 # when submitted to a certain LaTeX file I created.  I wanted to find out why,
 # so I went on and worked on compiling on my PC:  Windows NT 4.0 beta, Visual
-# C++ 4.1a.  Since all I was interested on was the convertion utility, I tried
+# C++ 4.1a.  Since all I was interested on was the conversion utility, I tried
 # to make it work without a GUI.  It didn't compile immediately, but after a
 # few small changes it now works like a charm.  Unfortunately it doesn't crash
 # anymore, so I can't tell why it used to...  Anyway, I wanted to contribute

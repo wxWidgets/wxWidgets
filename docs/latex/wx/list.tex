@@ -68,9 +68,11 @@ future versions completely. The use of the latter is especially discouraged as
 it is not only unsafe but is also much less efficient than 
 \helpref{wxArrayString}{wxarraystring} class.
 
-In the documentation of the list classes below, you should replace wxNode with
-wxListName::Node and wxObject with the list element type (i.e. the first
-parameter of WX\_DECLARE\_LIST) for the template lists.
+In the documentation of the list classes below, the template notations are
+used even though these classes are not really templates at all -- but it helps
+to think about them as if they were. You should replace wxNode<T> with
+wxListName::Node and T itself with the list element type (i.e. the first
+parameter of WX\_DECLARE\_LIST).
 
 \wxheading{Derived from}
 
@@ -138,9 +140,9 @@ members for getting to the next or previous node.
 
 \func{}{wxList}{\param{unsigned int}{ key\_type}}
 
-\func{}{wxList}{\param{int}{ n}, \param{wxObject *}{objects[]}}
+\func{}{wxList}{\param{int}{ n}, \param{T *}{objects[]}}
 
-\func{}{wxList}{\param{wxObject *}{object}, ...}
+\func{}{wxList}{\param{T *}{object}, ...}
 
 Constructors. {\it key\_type} is one of wxKEY\_NONE, wxKEY\_INTEGER, or wxKEY\_STRING,
 and indicates what sort of keying is required (if any).
@@ -159,15 +161,16 @@ client data held in the nodes.
 
 \membersection{wxList::Append}\label{wxlistappend}
 
-\func{wxNode *}{Append}{\param{wxObject *}{object}}
+\func{wxNode<T> *}{Append}{\param{T *}{object}}
 
-\func{wxNode *}{Append}{\param{long}{ key}, \param{wxObject *}{object}}
+\func{wxNode<T> *}{Append}{\param{long}{ key}, \param{T *}{object}}
 
-\func{wxNode *}{Append}{\param{const wxString\& }{key}, \param{wxObject *}{object}}
+\func{wxNode<T> *}{Append}{\param{const wxString\& }{key}, \param{T *}{object}}
 
-Appends a new {\bf wxNode} to the end of the list and puts a pointer to the
-\rtfsp{\it object} in the node.  The last two forms store a key with the object for
-later retrieval using the key. The new node is returned in each case.
+Appends a new \helpref{wxNode}{wxnode} to the end of the list and puts a
+pointer to the \rtfsp{\it object} in the node.  The last two forms store a key
+with the object for later retrieval using the key. The new node is returned in
+each case.
 
 The key string is copied and stored by the list implementation.
 
@@ -187,22 +190,26 @@ a node whenever the node is destroyed. The default is {\tt FALSE}.
 
 \membersection{wxList::DeleteNode}\label{wxlistdeletenode}
 
-\func{bool}{DeleteNode}{\param{wxNode *}{node}}
+\func{bool}{DeleteNode}{\param{wxNode<T> *}{node}}
 
 Deletes the given node from the list, returning {\tt TRUE} if successful.
 
 \membersection{wxList::DeleteObject}\label{wxlistdeleteobject}
 
-\func{bool}{DeleteObject}{\param{wxObject *}{object}}
+\func{bool}{DeleteObject}{\param{T *}{object}}
 
 Finds the given client {\it object} and deletes the appropriate node from the list, returning
 {\tt TRUE} if successful. The application must delete the actual object separately.
 
 \membersection{wxList::Find}\label{wxlistfind}
 
-\func{wxNode *}{Find}{\param{long}{ key}}
+\func{wxNode<T> *}{Find}{\param{T *}{ object}}
 
-\func{wxNode *}{Find}{\param{const wxString\& }{key}}
+Returns the node whose client date is {\it object} or NULL if none found.
+
+\func{wxNode<T> *}{Find}{\param{long}{ key}}
+
+\func{wxNode<T> *}{Find}{\param{const wxString\& }{key}}
 
 Returns the node whose stored key matches {\it key}. Use on a keyed list only.
 
@@ -214,37 +221,37 @@ Returns the number of elements in the list.
 
 \membersection{wxList::GetFirst}\label{wxlistgetfirst}
 
-\func{wxNode *}{GetFirst}{\void}
+\func{wxNode<T> *}{GetFirst}{\void}
 
 Returns the first node in the list (NULL if the list is empty).
 
 \membersection{wxList::GetLast}\label{wxlistgetlast}
 
-\func{wxNode *}{GetLast}{\void}
+\func{wxNode<T> *}{GetLast}{\void}
 
 Returns the last node in the list (NULL if the list is empty).
 
 \membersection{wxList::IndexOf}\label{wxlistindexof}
 
-\func{int}{IndexOf}{\param{wxObject*}{ obj }}
+\func{int}{IndexOf}{\param{T*}{ obj }}
 
 Returns the index of {\it obj} within the list or wxNOT\_FOUND if {\it obj} 
 is not found in the list.
 
 \membersection{wxList::Insert}\label{wxlistinsert}
 
-\func{wxNode *}{Insert}{\param{wxObject *}{object}}
+\func{wxNode<T> *}{Insert}{\param{T *}{object}}
 
 Insert object at front of list.
 
-\func{wxNode *}{Insert}{\param{size\_t }{position}, \param{wxObject *}{object}}
+\func{wxNode<T> *}{Insert}{\param{size\_t }{position}, \param{T *}{object}}
 
 Insert object before {\it position}, i.e. the index of the new item in the
 list will be equal to {\it position}. {\it position} should be less than or
 equal to \helpref{GetCount}{wxlistgetcount}; if it is equal to it, this is the
 same as calling \helpref{Append}{wxlistappend}.
 
-\func{wxNode *}{Insert}{\param{wxNode *}{node}, \param{wxObject *}{object}}
+\func{wxNode<T> *}{Insert}{\param{wxNode<T> *}{node}, \param{T *}{object}}
 
 Inserts the object before the given {\it node}.
 
@@ -257,13 +264,13 @@ Returns {\tt TRUE} if the list is empty, {\tt FALSE} otherwise.
 % Use different label name to avoid clashing with wxListItem label
 \membersection{wxList::Item}\label{wxlistitemfunc}
 
-\constfunc{wxNode *}{Item}{\param{size\_t }{index}}
+\constfunc{wxNode<T> *}{Item}{\param{size\_t }{index}}
 
 Returns the node at given position in the list.
 
 \membersection{wxList::Member}\label{wxlistmember}
 
-\func{wxNode *}{Member}{\param{wxObject *}{object}}
+\func{wxNode<T> *}{Member}{\param{T *}{object}}
 
 {\bf NB:} This function is deprecated, use \helpref{Find}{wxlistfind} instead.
 
@@ -271,7 +278,7 @@ Returns the node associated with {\it object} if it is in the list, NULL otherwi
 
 \membersection{wxList::Nth}\label{wxlistnth}
 
-\func{wxNode *}{Nth}{\param{int}{ n}}
+\func{wxNode<T> *}{Nth}{\param{int}{ n}}
 
 {\bf NB:} This function is deprecated, use \helpref{Item}{wxlistitemfunc} instead.
 

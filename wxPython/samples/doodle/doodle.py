@@ -74,7 +74,7 @@ class DoodleWindow(wxWindow):
         dc.SetBackground(wxBrush(self.GetBackgroundColour()))
         dc.Clear()
         self.DrawLines(dc)
-        self.reInitBuffer = false
+        self.reInitBuffer = False
 
 
     def SetColour(self, colour):
@@ -125,14 +125,14 @@ class DoodleWindow(wxWindow):
     def OnCheckMenuColours(self, event):
         text = self.menuColours[event.GetId()]
         if text == self.colour:
-            event.Check(true)
+            event.Check(True)
         else:
-            event.Check(false)
+            event.Check(False)
     def OnCheckMenuThickness(self, event):
         if event.GetId() == self.thickness:
-            event.Check(true)
+            event.Check(True)
         else:
-            event.Check(false)
+            event.Check(False)
 
 
     def OnLeftDown(self, event):
@@ -180,7 +180,7 @@ class DoodleWindow(wxWindow):
         Called when the window is resized.  We set a flag so the idle
         handler will resize the buffer.
         """
-        self.reInitBuffer = true
+        self.reInitBuffer = True
 
 
     def OnIdle(self, event):
@@ -192,7 +192,7 @@ class DoodleWindow(wxWindow):
         """
         if self.reInitBuffer:
             self.InitBuffer()
-            self.Refresh(FALSE)
+            self.Refresh(False)
 
 
     def OnPaint(self, event):
@@ -251,6 +251,6 @@ class DoodleFrame(wxFrame):
 if __name__ == '__main__':
     app = wxPySimpleApp()
     frame = DoodleFrame(None)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 

@@ -22,7 +22,8 @@ class TestPanel(wxPanel):
         lb.SetSelection(0)
         self.lb = lb
 
-        btn = wxButton(self, -1, "Test SetString", (180, 50))
+        pos = lb.GetPosition().x + lb.GetSize().width + 25
+        btn = wxButton(self, -1, "Test SetString", (pos, 50))
         EVT_BUTTON(self, btn.GetId(), self.OnTestButton)
 
         EVT_RIGHT_UP(self, self.OnDoPopup)
@@ -44,7 +45,7 @@ class TestPanel(wxPanel):
         item = wxMenuItem(menu, wxNewId(), "If supported, this is bold")
         df = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
         nf = wxFont(df.GetPointSize(), df.GetFamily(), df.GetStyle(), wxBOLD,
-                    false, df.GetFaceName())
+                    False, df.GetFaceName())
         item.SetFont(nf)
         menu.AppendItem(item)
 

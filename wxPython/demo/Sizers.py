@@ -479,16 +479,16 @@ class TestFrame(wxFrame):
         self.SetStatusText("Resize this frame to see how the sizers respond...")
         self.sizer.Fit(self)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(self.sizer)
         EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
-        self.MakeModal(false)
+        self.MakeModal(False)
         self.Destroy()
 
     def OnButton(self, event):
-        self.Close(true)
+        self.Close(True)
 
 #----------------------------------------------------------------------
 
@@ -531,8 +531,8 @@ class TestSelectionPanel(wxPanel):
         if func:
             win = TestFrame(self, title, func)
             win.CentreOnParent(wxBOTH)
-            win.Show(true)
-            win.MakeModal(true)
+            win.Show(True)
+            win.MakeModal(True)
 
 #----------------------------------------------------------------------
 
@@ -555,12 +555,12 @@ if __name__ == '__main__':
         def __init__(self):
             wxFrame.__init__(self, None, -1, "Testing...")
 
-	    self.CreateStatusBar()
-	    mainmenu = wxMenuBar()
-	    menu = wxMenu()
-	    menu.Append(200, 'E&xit', 'Get the heck outta here!')
-	    mainmenu.Append(menu, "&File")
-	    self.SetMenuBar(mainmenu)
+            self.CreateStatusBar()
+            mainmenu = wxMenuBar()
+            menu = wxMenu()
+            menu.Append(200, 'E&xit', 'Get the heck outta here!')
+            mainmenu.Append(menu, "&File")
+            self.SetMenuBar(mainmenu)
             EVT_MENU(self, 200, self.OnExit)
             self.panel = TestSelectionPanel(self, self)
             self.SetSize(wxSize(400, 380))
@@ -570,15 +570,15 @@ if __name__ == '__main__':
             self.Destroy()
 
         def OnExit(self, event):
-            self.Close(true)
+            self.Close(True)
 
 
     class TestApp(wxApp):
         def OnInit(self):
             frame = MainFrame()
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
     app = TestApp(0)
     app.MainLoop()

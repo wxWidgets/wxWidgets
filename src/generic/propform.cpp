@@ -518,9 +518,9 @@ bool wxIntegerFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVi
 
     if (val < m_integerMin || val > m_integerMax)
     {
-        char buf[200];
-        sprintf(buf, "Value must be an integer between %ld and %ld!", m_integerMin, m_integerMax);
-        wxMessageBox(buf, "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+        wxChar buf[200];
+        wxSprintf(buf, wxT("Value must be an integer between %ld and %ld!"), m_integerMin, m_integerMax);
+        wxMessageBox(buf, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
         return FALSE;
     }
     return TRUE;
@@ -645,10 +645,10 @@ bool wxStringFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVie
         wxTextCtrl *text = (wxTextCtrl *)m_propertyWindow;
         if (!m_strings->Member(text->GetValue()))
         {
-            wxString s("Value ");
-            s += text->GetValue();
-            s += " is not valid.";
-            wxMessageBox(s, "Property value error", wxOK | wxICON_EXCLAMATION, parentWindow);
+            wxString str( wxT("Value ") );
+            str += text->GetValue();
+            str += wxT(" is not valid.");
+            wxMessageBox(str, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
             return FALSE;
         }
     }
@@ -719,7 +719,7 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
             wxNode *node = m_strings->First();
             while (node)
             {
-                char *s = (char *)node->Data();
+                wxChar *s = (wxChar *)node->Data();
                 lbox->Append(s);
                 node = node->Next();
             }
@@ -736,7 +736,6 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxChoice)))
     {
         wxChoice *choice = (wxChoice *)m_propertyWindow;
-#ifndef __XVIEW__
         if (choice->GetCount() == 0 && m_strings)
         {
             // Try to initialize the choice item from 'strings'
@@ -744,12 +743,11 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
             wxNode *node = m_strings->First();
             while (node)
             {
-                char *s = (char *)node->Data();
+                wxChar *s = (wxChar *)node->Data();
                 choice->Append(s);
                 node = node->Next();
             }
         }
-#endif
         choice->SetStringSelection(property->GetValue().StringValue());
     }
     else

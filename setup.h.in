@@ -83,6 +83,7 @@
 #undef __FREEBSD__
 #undef __DARWIN__
 #undef __NETBSD__
+#undef __OPENBSD__
 #undef __VMS__
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
@@ -880,6 +881,9 @@
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #undef SOCKLEN_T
 
+/* The type of statvfs(2) argument */
+#undef WX_STATFS_T
+
 /* The signal handler prototype */
 #undef wxTYPE_SA_HANDLER
 
@@ -889,6 +893,9 @@
 
 /* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #undef WX_GMTOFF_IN_TM
+
+/* Define if you have poll(2) function */
+#undef HAVE_POLL
 
 /* Define if you have pw_gecos field in struct passwd */
 #undef HAVE_PW_GECOS

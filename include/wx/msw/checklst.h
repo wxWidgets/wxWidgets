@@ -64,7 +64,7 @@ public:
 protected:
   // we create our items ourselves and they have non-standard size,
   // so we need to override these functions
-  virtual wxOwnerDrawn *CreateItem(size_t n);
+  virtual wxOwnerDrawn *CreateLboxItem(size_t n);
   virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
 
   // this can't be called DoHitTest() because wxWindow already has this method

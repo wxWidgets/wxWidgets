@@ -104,11 +104,8 @@ int wxPrintDialog::ShowModal()
 	::UMAPrClose(NULL) ;
 #else
   #if PM_USE_SESSION_APIS
-    PMPrintSession macPrintSession = kPMNoReference;
     Boolean        accepted;
     
-    err = ::UMAPrOpen(&macPrintSession) ;
-    if ( err == noErr )
     {
         m_printDialogData.ConvertToNative() ;
         
@@ -123,13 +120,13 @@ int wxPrintDialog::ShowModal()
             if ((err == noErr) &&
                 (m_printDialogData.GetPrintData().m_macPageFormat != kPMNoPageFormat))
             {
-                err = PMSessionDefaultPageFormat((PMPrintSession)macPrintSession,
+                err = PMSessionDefaultPageFormat((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
                                                  (PMPageFormat)m_printDialogData.GetPrintData().m_macPageFormat);
             }
         }
         else
         {
-            err = PMSessionValidatePageFormat((PMPrintSession)macPrintSession,
+            err = PMSessionValidatePageFormat((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
                                               (PMPageFormat)m_printDialogData.GetPrintData().m_macPageFormat,
                                               kPMDontWantBoolean);
         }
@@ -145,13 +142,13 @@ int wxPrintDialog::ShowModal()
             if ((err == noErr) &&
                 (m_printDialogData.GetPrintData().m_macPrintSettings != kPMNoPrintSettings))
             {
-                err = PMSessionDefaultPrintSettings((PMPrintSession)macPrintSession,
+                err = PMSessionDefaultPrintSettings((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
                                                     (PMPrintSettings)m_printDialogData.GetPrintData().m_macPrintSettings);
             }
         }
         else
         {
-            err = PMSessionValidatePrintSettings((PMPrintSession)macPrintSession,
+            err = PMSessionValidatePrintSettings((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
                                                  (PMPrintSettings)m_printDialogData.GetPrintData().m_macPrintSettings,
                                                  kPMDontWantBoolean);
         }
@@ -165,7 +162,7 @@ int wxPrintDialog::ShowModal()
         //  Display the Print dialog.
         if (err == noErr)
         {
-            err = PMSessionPrintDialog((PMPrintSession)macPrintSession,
+            err = PMSessionPrintDialog((PMPrintSession)m_printDialogData.GetPrintData().m_macPrintSession,
                                        (PMPrintSettings)m_printDialogData.GetPrintData().m_macPrintSettings,
                                        (PMPageFormat)m_printDialogData.GetPrintData().m_macPageFormat,
                                        &accepted);
@@ -186,7 +183,6 @@ int wxPrintDialog::ShowModal()
         wxMessageDialog dialog( NULL , message  , "", wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
-    ::UMAPrClose(&macPrintSession) ;
   #else
     #pragma warning "TODO: Printing for carbon without session apis"
   #endif
@@ -256,11 +252,8 @@ int wxPageSetupDialog::ShowModal()
 	::UMAPrClose(NULL) ;
 #else
   #if PM_USE_SESSION_APIS
-    PMPrintSession macPrintSession = kPMNoReference;
     Boolean        accepted;
     
-    err = ::UMAPrOpen(&macPrintSession) ;
-    if ( err == noErr )
     {
         m_pageSetupData.ConvertToNative() ;
         
@@ -275,13 +268,13 @@ int wxPageSetupDialog::ShowModal()
             if ((err == noErr) &&
                 (m_pageSetupData.GetPrintData().m_macPageFormat != kPMNoPageFormat))
             {
-                err = PMSessionDefaultPageFormat((PMPrintSession)macPrintSession,
+                err = PMSessionDefaultPageFormat((PMPrintSession)m_pageSetupData.GetPrintData().m_macPrintSession,
                                                  (PMPageFormat)m_pageSetupData.GetPrintData().m_macPageFormat);
             }
         }
         else
         {
-            err = PMSessionValidatePageFormat((PMPrintSession)macPrintSession,
+            err = PMSessionValidatePageFormat((PMPrintSession)m_pageSetupData.GetPrintData().m_macPrintSession,
                                               (PMPageFormat)m_pageSetupData.GetPrintData().m_macPageFormat,
                                               kPMDontWantBoolean);
         }
@@ -289,7 +282,7 @@ int wxPageSetupDialog::ShowModal()
         //  Display the Page Setup dialog.
         if (err == noErr)
         {
-            err = PMSessionPageSetupDialog((PMPrintSession)macPrintSession,
+            err = PMSessionPageSetupDialog((PMPrintSession)m_pageSetupData.GetPrintData().m_macPrintSession,
                                            (PMPageFormat)m_pageSetupData.GetPrintData().m_macPageFormat,
                                            &accepted);
             if ((err == noErr) && !accepted)
@@ -312,7 +305,6 @@ int wxPageSetupDialog::ShowModal()
         wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
         dialog.ShowModal();
     }
-    ::UMAPrClose(&macPrintSession) ;
   #else
     #pragma warning "TODO: Printing for carbon without session apis"
   #endif

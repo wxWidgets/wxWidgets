@@ -1,26 +1,45 @@
+Installing and compiling wxMac
+============================================================
+
+On MacOS X, you can download Apple's free developer tools (gcc
+and associated headers and libraries, such as the Carbon API).
+You can then use configure in a similar way to compiling
+wxWindows on Linux, (or on Windows using MinGW or Cygwin). See
+'Apple Developers Tools' below for more details on using
+configure.
+
+To target on MacOS 8 or 9, you need to buy Metrowerks
+CodeWarrior. You can then compile Mac Classic or MacOS X
+applications on Mac OS X, or compile Mac Classic or MacOS X
+applications on Mac Classic. However you can only run and debug
+each type of application on the target operating system.
+
 Installing latest headers (and Carbon Support)
 ----------------------------------------------
 
-NOTE : these steps are not necessary for Pro 6, only for Pro 5.3
+NOTE: these steps are not necessary for CW Pro 6 and above,
+only for CW Pro 5.3.
 
-the latest build for carbon support lead to a few changes you will have to
+The latest build for carbon support leads to a few changes you will have to
 follow, in order to successfully compile the code (also necessary if you don't
-want to build the carbon targets)
+want to build the carbon targets).
 
-1. you need CodeWarrior Pro 5.3 , i.e. 5.0 with all the upgrades
-2. you have to download the 3.4.0 (or greater) universal interfaces from 
-	ftp://ftp.apple.com/developer/Development_Kits/UniversalHeaders3.4.1.img.bin
-3. put the Interfaces and Libraries Folder into the MacOS Support folder and replace older versions
-4. remove from the MacOS Support folder the separate OpenTransport folder
+1. You need CodeWarrior Pro 5.3 , i.e. 5.0 with all the upgrades.
+2. You have to download the 3.4.0 (or greater) universal interfaces from 
+	ftp://ftp.apple.com/developer/Development_Kits/UniversalHeaders3.4.1.img.bin.
+3. put the Interfaces and Libraries Folder into the MacOS Support folder and
+   replace older versions.
+4. remove from the MacOS Support folder the separate OpenTransport folder.
 5. open the file MacOS Support:MacHeaders:MacHeaders.c and add the line
 		#include <ControlDefinitions.h>
 	after the 
 		#include <Controls.h>
-6. rebuild all MacHeaders from the MacHeaders.mcp project in the same folder
+6. rebuild all MacHeaders from the MacHeaders.mcp project in the same folder.
 
-if you want to build the carbon targets, you will also need the latest
+If you want to build the carbon targets, you will also need the latest
 carbonized version of MSL from Metrowerks, at the time of writing, this meant
-applying the changes from the folders
+applying the changes from the folders:
+
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized MSL and
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes 
 (consult the file CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbon & MacOSX README)
@@ -43,8 +62,9 @@ libraries and headers from http://developer.apple.com/opengl/index.html
 If you want OpenGL support with CodeWarrior, set wxUSE_OPENGL to 1 in
 include/wx/setup.h
 
-If you don't want OpenGl support, remove the file "glcanvas.cpp" from the
-project before compilation and leave the setting at 0
+If you don't want OpenGl support, set wxUSE_OPENGL to 0 (the
+default) and remove the file OpenGLLibraryStub from the project
+before compilation.
 
 If you want OpenGL support with the Apple Developer Tools under Mac OS X, add
 --with-opengl to the arguments of configure when configuring wxMac.
@@ -56,15 +76,21 @@ The project files are stored as xml text files and converted to binary
 CodeWarrior projects in the distribution (see AppleScript Files below):
   - *M5.xml -> *M5.mcp for CodeWarrior 5.3
   - *M6.xml -> *M6.mcp for CodeWarrior 6
-  - *M7.xml -> *M7.mcp for CodeWarrior 7
+  - *M7.xml -> *M7.mcp for CodeWarrior 7 and above.
 
 In order to build the library (and then the samples) you need to make the
-following projects (for 5.3)
-:src:wxxindowsM5.mcp
+following projects (for CW 5.3, similar process for CW 7):
+
+:src:wxwindowsM5.mcp
 :src:png:pngM5.mcp
 :src:tiff:tiffM5.mcp
 :src:jpeg:jpegM5.mcp
 :src:zlib:zlibM5.mcp
+
+Note that if using CW 8 and above, when compiling the samples
+you may need to edit the target settings, click on Language
+Settings, C/++ Language and remove the forward slash at the
+start of /wx/wx_cw_d.h (or similar filename).
 
 AppleScript Files
 -----------------
@@ -125,3 +151,4 @@ Missing PLStringFuncsLib
 ------------------------
 
 You will have to build All Targets for MacOS Support:Libraries:Sources:PLStringFuncs:Glue:PLStringFuncsGlue.mcp
+

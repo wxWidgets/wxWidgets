@@ -2,6 +2,7 @@
 from wxPython.wx import *
 from wxPython.grid import *
 
+import string
 #---------------------------------------------------------------------------
 class MyCellEditor(wxPyGridCellEditor):
     """
@@ -86,16 +87,16 @@ class MyCellEditor(wxPyGridCellEditor):
 
     def EndEdit(self, row, col, grid):
         """
-        Complete the editing of the current cell. Returns true if the value
+        Complete the editing of the current cell. Returns True if the value
         has changed.  If necessary, the control may be destroyed.
         *Must Override*
         """
         self.log.write("MyCellEditor: EndEdit (%d,%d)\n" % (row, col))
-        changed = false
+        changed = False
 
         val = self._tc.GetValue()
         if val != self.startValue:
-            changed = true
+            changed = True
             grid.GetTable().SetValue(row, col, val) # update the table
 
         self.startValue = ''
@@ -115,7 +116,7 @@ class MyCellEditor(wxPyGridCellEditor):
 
     def IsAcceptedKey(self, evt):
         """
-        Return TRUE to allow the given key to start editing: the base class
+        Return True to allow the given key to start editing: the base class
         version only checks that the event has no modifiers.  F2 is special
         and will always start the editor.
         """
@@ -143,12 +144,13 @@ class MyCellEditor(wxPyGridCellEditor):
         elif key < 256 and key >= 0 and chr(key) in string.printable:
             ch = chr(key)
             if not evt.ShiftDown():
-                ch = string.lower(ch)
+                ch = ch.lower()
 
         if ch is not None:
             # For this example, replace the text.  Normally we would append it.
             #self._tc.AppendText(ch)
             self._tc.SetValue(ch)
+            self._tc.SetInsertionPointEnd()
         else:
             evt.Skip()
 
@@ -226,7 +228,7 @@ if __name__ == '__main__':
     import sys
     app = wxPySimpleApp()
     frame = TestFrame(None, sys.stdout)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

@@ -150,7 +150,12 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
         else if (m_class == wxT("wxStaticBoxSizer"))
         {
             sizer = new wxStaticBoxSizer(
-                         new wxStaticBox(m_parentAsWindow, -1, GetText(wxT("label"))),
+                         new wxStaticBox(m_parentAsWindow,
+                                         GetID(),
+                                         GetText(wxT("label")),
+                                         wxDefaultPosition, wxDefaultSize,
+                                         0/*style*/,
+                                         GetName()),
                          GetStyle(wxT("orient"), wxHORIZONTAL));
         }
         

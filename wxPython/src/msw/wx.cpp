@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -666,6 +665,7 @@ static wxPyCoreAPI API = {
     wxRealPoint_helper,
     wxRect_helper,
     wxColour_helper,
+    wxPoint2DDouble_helper,
 
     wxPyCBH_setCallbackInfo,
     wxPyCBH_findCallback,
@@ -909,7 +909,6 @@ static PyObject *_wrap_wxGetApp(PyObject *self, PyObject *args, PyObject *kwargs
     PyObject * _resultobj;
     wxPyApp * _result;
     char *_kwnames[] = {  NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetApp",_kwnames)) 
@@ -920,13 +919,7 @@ static PyObject *_wrap_wxGetApp(PyObject *self, PyObject *args, PyObject *kwargs
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyApp_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -1022,6 +1015,44 @@ static PyObject *_wrap_delete_wxPyApp(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+#define wxPyApp__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyApp__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyApp * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyApp__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp__setCallbackInfo. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxPyApp_GetAppName(_swigobj)  (_swigobj->GetAppName())
 static PyObject *_wrap_wxPyApp_GetAppName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1048,7 +1079,7 @@ static PyObject *_wrap_wxPyApp_GetAppName(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1113,7 +1144,7 @@ static PyObject *_wrap_wxPyApp_GetClassName(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1234,7 +1265,7 @@ static PyObject *_wrap_wxPyApp_GetVendorName(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1446,9 +1477,9 @@ static PyObject *_wrap_wxPyApp_Yield(PyObject *self, PyObject *args, PyObject *k
     PyObject * _resultobj;
     bool  _result;
     wxPyApp * _arg0;
-    bool  _arg1 = (bool ) (0);
+    bool  _arg1 = (bool ) FALSE;
     PyObject * _argo0 = 0;
-    int tempbool1 = (int) (0);
+    int tempbool1 = (int) FALSE;
     char *_kwnames[] = { "self","onlyIfNeeded", NULL };
 
     self = self;
@@ -1748,7 +1779,323 @@ static PyObject *_wrap_wxPyApp_SetUseBestVisual(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxPyApp_GetAssertMode(_swigobj)  (_swigobj->GetAssertMode())
+static PyObject *_wrap_wxPyApp_GetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPyApp * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyApp_GetAssertMode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_GetAssertMode. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPyApp_GetAssertMode(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyApp_SetAssertMode(_swigobj,_swigarg0)  (_swigobj->SetAssertMode(_swigarg0))
+static PyObject *_wrap_wxPyApp_SetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyApp * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","mode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyApp_SetAssertMode",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_SetAssertMode. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp_SetAssertMode(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacDefaultEncodingIsPC",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyApp::GetMacDefaultEncodingIsPC();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacSupportPCMenuShortcuts",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyApp::GetMacSupportPCMenuShortcuts();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacAboutMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacAboutMenuItemId",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxPyApp::GetMacAboutMenuItemId();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacPreferencesMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacPreferencesMenuItemId",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxPyApp::GetMacPreferencesMenuItemId();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacExitMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacExitMenuItemId",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxPyApp::GetMacExitMenuItemId();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_GetMacHelpMenuTitleName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPyApp_GetMacHelpMenuTitleName",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxPyApp::GetMacHelpMenuTitleName());
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacDefaultEncodingIsPC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _arg0;
+    int tempbool0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxPyApp_SetMacDefaultEncodingIsPC",_kwnames,&tempbool0)) 
+        return NULL;
+    _arg0 = (bool ) tempbool0;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacDefaultEncodingIsPC(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacSupportPCMenuShortcuts(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _arg0;
+    int tempbool0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxPyApp_SetMacSupportPCMenuShortcuts",_kwnames,&tempbool0)) 
+        return NULL;
+    _arg0 = (bool ) tempbool0;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacSupportPCMenuShortcuts(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacAboutMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _arg0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxPyApp_SetMacAboutMenuItemId",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacAboutMenuItemId(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacPreferencesMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _arg0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxPyApp_SetMacPreferencesMenuItemId",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacPreferencesMenuItemId(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacExitMenuItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _arg0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxPyApp_SetMacExitMenuItemId",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacExitMenuItemId(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPyApp_SetMacHelpMenuTitleName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "val", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyApp_SetMacHelpMenuTitleName",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp::SetMacHelpMenuTitleName(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 static PyMethodDef wxcMethods[] = {
+	 { "wxPyApp_SetMacHelpMenuTitleName", (PyCFunction) _wrap_wxPyApp_SetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacExitMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacPreferencesMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacAboutMenuItemId", (PyCFunction) _wrap_wxPyApp_SetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_wxPyApp_SetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetMacDefaultEncodingIsPC", (PyCFunction) _wrap_wxPyApp_SetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacHelpMenuTitleName", (PyCFunction) _wrap_wxPyApp_GetMacHelpMenuTitleName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacExitMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacExitMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacPreferencesMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacAboutMenuItemId", (PyCFunction) _wrap_wxPyApp_GetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_wxPyApp_GetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetMacDefaultEncodingIsPC", (PyCFunction) _wrap_wxPyApp_GetMacDefaultEncodingIsPC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_SetAssertMode", (PyCFunction) _wrap_wxPyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetAssertMode", (PyCFunction) _wrap_wxPyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetUseBestVisual", (PyCFunction) _wrap_wxPyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetVendorName", (PyCFunction) _wrap_wxPyApp_SetVendorName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetTopWindow", (PyCFunction) _wrap_wxPyApp_SetTopWindow, METH_VARARGS | METH_KEYWORDS },
@@ -1772,6 +2119,7 @@ static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_GetClassName", (PyCFunction) _wrap_wxPyApp_GetClassName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetAuto3D", (PyCFunction) _wrap_wxPyApp_GetAuto3D, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetAppName", (PyCFunction) _wrap_wxPyApp_GetAppName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp__setCallbackInfo", (PyCFunction) _wrap_wxPyApp__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPyApp", (PyCFunction) _wrap_delete_wxPyApp, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyApp", (PyCFunction) _wrap_new_wxPyApp, METH_VARARGS | METH_KEYWORDS },
 	 { "wxApp_CleanUp", (PyCFunction) _wrap_wxApp_CleanUp, METH_VARARGS | METH_KEYWORDS },
@@ -2023,6 +2371,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxRA_SPECIFY_ROWS", PyInt_FromLong((long) wxRA_SPECIFY_ROWS));
 	 PyDict_SetItemString(d,"wxRA_SPECIFY_COLS", PyInt_FromLong((long) wxRA_SPECIFY_COLS));
 	 PyDict_SetItemString(d,"wxRB_GROUP", PyInt_FromLong((long) wxRB_GROUP));
+	 PyDict_SetItemString(d,"wxRB_SINGLE", PyInt_FromLong((long) wxRB_SINGLE));
 	 PyDict_SetItemString(d,"wxGA_PROGRESSBAR", PyInt_FromLong((long) wxGA_PROGRESSBAR));
 	 PyDict_SetItemString(d,"wxGA_HORIZONTAL", PyInt_FromLong((long) wxGA_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxGA_VERTICAL", PyInt_FromLong((long) wxGA_VERTICAL));
@@ -2544,10 +2893,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxHT_WINDOW_HORZ_SCROLLBAR", PyInt_FromLong((long) wxHT_WINDOW_HORZ_SCROLLBAR));
 	 PyDict_SetItemString(d,"wxHT_WINDOW_CORNER", PyInt_FromLong((long) wxHT_WINDOW_CORNER));
 	 PyDict_SetItemString(d,"wxHT_MAX", PyInt_FromLong((long) wxHT_MAX));
-	 PyDict_SetItemString(d,"FALSE", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"false", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"TRUE", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"true", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxEVT_NULL", PyInt_FromLong((long) wxEVT_NULL));
 	 PyDict_SetItemString(d,"wxEVT_FIRST", PyInt_FromLong((long) wxEVT_FIRST));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_BUTTON_CLICKED", PyInt_FromLong((long) wxEVT_COMMAND_BUTTON_CLICKED));
@@ -2672,6 +3017,10 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultPosition",_wrap_wxDefaultPosition_get, _wrap_wxDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultSize",_wrap_wxDefaultSize_get, _wrap_wxDefaultSize_set);
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_SUPPRESS", PyInt_FromLong((long) wxPYAPP_ASSERT_SUPPRESS));
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_EXCEPTION", PyInt_FromLong((long) wxPYAPP_ASSERT_EXCEPTION));
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_DIALOG", PyInt_FromLong((long) wxPYAPP_ASSERT_DIALOG));
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_LOG", PyInt_FromLong((long) wxPYAPP_ASSERT_LOG));
 
     // Make our API structure a CObject so other modules can import it
     // from this module.
@@ -2680,7 +3029,7 @@ SWIGEXPORT(void) initwxc() {
     Py_XDECREF(v);
 
 
-    __wxPreStart();     // initialize the GUI toolkit, if needed.
+    __wxPreStart(d);     // initialize the GUI toolkit, if needed.
 
 
         // Since these modules are all linked together, initialize them now
@@ -2715,7 +3064,7 @@ SWIGEXPORT(void) initwxc() {
     PyDict_SetItemString(d,"wxVERSION_NUMBER", PyInt_FromLong((long)wxVERSION_NUMBER ));
 #if wxUSE_UNICODE
     wxString tempStr(wxVERSION_STRING);
-    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromUnicode(tempStr.c_str(), tempStr.Len()));
+    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromWideChar(tempStr.c_str(), tempStr.Len()));
 #else
     PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString(wxVERSION_STRING));
 #endif

@@ -25,6 +25,7 @@
 
 #include "wx/defs.h"
 
+#include "wx/log.h"
 #include "wx/dialog.h"
 #include "wx/control.h"
 #include "wx/app.h"
@@ -446,15 +447,16 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     else
     {
         m_gdkDecor = (long) GDK_DECOR_BORDER;
-        m_gdkFunc = (long) GDK_FUNC_MOVE;
+        m_gdkFunc = (long) GDK_FUNC_MOVE | GDK_FUNC_CLOSE;
 
         // All this is for Motif Window Manager "hints" and is supposed to be
         // recognized by other WMs as well.
         if ((style & wxCAPTION) != 0)
+        {
             m_gdkDecor |= GDK_DECOR_TITLE;
+        }
         if ((style & wxSYSTEM_MENU) != 0)
         {
-            m_gdkFunc |= GDK_FUNC_CLOSE;
             m_gdkDecor |= GDK_DECOR_MENU;
         }
         if ((style & wxMINIMIZE_BOX) != 0)
@@ -835,6 +837,11 @@ void wxTopLevelWindowGTK::OnInternalIdle()
         if ( g_delayedFocus &&
              wxGetTopLevelParent((wxWindow*)g_delayedFocus) == this )
         {
+            wxLogTrace(_T("focus"),
+                       _T("Setting focus from wxTLW::OnIdle() to %s(%s)"),
+                       g_delayedFocus->GetClassInfo()->GetClassName(),
+                       g_delayedFocus->GetLabel().c_str());
+
             g_delayedFocus->SetFocus();
             g_delayedFocus = NULL;
         }

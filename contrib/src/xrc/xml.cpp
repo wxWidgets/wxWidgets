@@ -10,7 +10,6 @@
 
 #ifdef __GNUG__
 #pragma implementation "xml.h"
-#pragma implementation "xmlio.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -274,6 +273,14 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
 //  wxXmlDocument
 //-----------------------------------------------------------------------------
 
+wxXmlDocument::wxXmlDocument()
+    : m_version(wxT("1.0")), m_fileEncoding(wxT("utf-8")), m_root(NULL)
+{
+#if !wxUSE_UNICODE
+    m_encoding = wxT("UTF-8");
+#endif
+}
+
 wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
                           : wxObject(), m_root(NULL)
 {
@@ -353,9 +360,9 @@ inline static wxString CharToString(wxMBConv *conv,
         wchar_t *buf = new wchar_t[nLen+1];
         wxConvUTF8.MB2WC(buf, s, nLen);
         buf[nLen] = 0;
-        wxString s(buf, *conv, len);
+        wxString str(buf, *conv, len);
         delete[] buf;
-        return s;
+        return str;
     }
     else
         return wxString(s, len);
@@ -465,26 +472,29 @@ static void DefaultHnd(void *userData, const char *s, int len)
 }
 
 static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
-                               const XML_Char *name, XML_Encoding *info)
+                              const XML_Char *name, XML_Encoding *info)
 {
     // We must build conversion table for expat. The easiest way to do so
     // is to let wxCSConv convert as string containing all characters to
     // wide character representation:
     wxCSConv conv(wxString(name, wxConvLibc));
-    char mbBuf[255];
-    wchar_t wcBuf[255];
+    char mbBuf[2];
+    wchar_t wcBuf[10];
     size_t i;
 
-    for (i = 0; i < 255; i++)
-        mbBuf[i] = (char) (i+1);
-    mbBuf[255] = 0;
-    conv.MB2WC(wcBuf, mbBuf, 255);
-    wcBuf[255] = 0;
-
+    mbBuf[1] = 0;
     info->map[0] = 0;
     for (i = 0; i < 255; i++)
-        info->map[i+1] = (int)wcBuf[i];
-
+    {
+        mbBuf[0] = (char)(i+1);
+        if (conv.MB2WC(wcBuf, mbBuf, 2) == (size_t)-1)
+        {
+            // invalid/undefined byte in the encoding:
+            info->map[i+1] = -1;
+        }
+        info->map[i+1] = (int)wcBuf[0];
+    }
+    
     info->data = NULL;
     info->convert = NULL;
     info->release = NULL;

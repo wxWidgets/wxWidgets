@@ -104,7 +104,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
           : wxMenuItemBase(parentMenu, id, text, help,
                            isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
 #if wxUSE_OWNER_DRAWN
-            , wxOwnerDrawn(text, isCheckable)
+           , wxOwnerDrawn(text, isCheckable)
 #endif // owner drawn
 {
     Init();
@@ -300,6 +300,10 @@ void wxMenuItem::SetText(const wxString& text)
 
     wxMenuItemBase::SetText(text);
     OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );
+#if wxUSE_OWNER_DRAWN
+    // tell the owner drawing code to to show the accel string as well
+    SetAccelString(text.AfterFirst(_T('\t')));
+#endif
 
     HMENU hMenu = GetHMenuOf(m_parentMenu);
     wxCHECK_RET( hMenu, wxT("menuitem without menu") );

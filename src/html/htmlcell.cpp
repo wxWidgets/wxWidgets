@@ -17,7 +17,7 @@
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -255,8 +255,8 @@ void wxHtmlContainerCell::Layout(int w)
        m_Width = 0;
        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->Layout(0);
-            // this does two things: it recursively calls this code on all child
-            // contrainers and resets children's position to (0,0)
+            // this does two things: it recursively calls this code on all
+            // child contrainers and resets children's position to (0,0)
        return;
     }
 
@@ -408,9 +408,8 @@ void wxHtmlContainerCell::Layout(int w)
 void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
     // container visible, draw it:
-    if ((y + m_PosY < view_y2) && (y + m_PosY + m_Height > view_y1))
+    if ((y + m_PosY <= view_y2) && (y + m_PosY + m_Height > view_y1))
     {
-
         if (m_UseBkColour)
         {
             wxBrush myb = wxBrush(m_BkColour, wxSOLID);
@@ -430,10 +429,10 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 
             dc.SetPen(mypen1);
             dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width - 1, y + m_PosY);
+            dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width, y + m_PosY);
             dc.SetPen(mypen2);
             dc.DrawLine(x + m_PosX + m_Width - 1, y + m_PosY, x + m_PosX +  m_Width - 1, y + m_PosY + m_Height - 1);
-            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - 1, y + m_PosY + m_Height - 1);
+            dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width, y + m_PosY + m_Height - 1);
         }
 
         if (m_Cells)
@@ -462,6 +461,15 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->DrawInvisible(dc, x + m_PosX, y + m_PosY);
     }
+}
+
+
+wxColour wxHtmlContainerCell::GetBackgroundColour()
+{
+    if (m_UseBkColour)
+        return m_BkColour;
+    else
+        return wxNullColour;
 }
 
 

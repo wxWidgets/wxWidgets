@@ -1,3 +1,11 @@
+#if defined(__WIN32__) || defined(__GNUWIN32__)
+/* all Win32 compilers can handle C++ comments, and C++ comments
+   is the only C++ in setup.h */
+#include "wx/setup.h"
+#endif
+
+#if !defined(wxUSE_PROLOGIO) || wxUSE_PROLOGIO
+
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 #endif
@@ -526,3 +534,5 @@ yyabort:
 yyaccept:
     return (0);
 }
+
+#endif /* wxUSE_PROLOGIO */

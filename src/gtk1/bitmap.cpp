@@ -344,7 +344,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     m_refData = new wxBitmapRefData();
 
     // ------
-    // convertion to mono bitmap:
+    // conversion to mono bitmap:
     // ------
     if (depth == 1)
     {
@@ -440,7 +440,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     }
 
     // ------
-    // convertion to colour bitmap:
+    // conversion to colour bitmap:
     // ------
     else
     {

@@ -156,7 +156,8 @@ inline bool wxDateTime::SetToLastWeekDay(WeekDay weekday,
     return SetToWeekDay(weekday, -1, month, year);
 }
 
-inline wxDateTime wxDateTime::GetWeekDayInSameWeek(WeekDay weekday) const
+inline wxDateTime wxDateTime::GetWeekDayInSameWeek(WeekDay weekday,
+                                                   WeekFlags flags) const
 {
     MODIFY_AND_RETURN( SetToWeekDayInSameWeek(weekday) );
 }
@@ -191,11 +192,12 @@ inline wxDateTime wxDateTime::GetLastWeekDay(WeekDay weekday,
 }
 
 inline wxDateTime wxDateTime::GetWeek(wxDateTime_t numWeek,
-                                      WeekDay weekday) const
+                                      WeekDay weekday,
+                                      WeekFlags flags) const
 {
     wxDateTime dt(*this);
 
-    return dt.SetToTheWeek(numWeek, weekday) ? dt : wxInvalidDateTime;
+    return dt.SetToTheWeek(numWeek, weekday, flags) ? dt : wxInvalidDateTime;
 }
 
 inline wxDateTime wxDateTime::GetLastMonthDay(Month month, int year) const

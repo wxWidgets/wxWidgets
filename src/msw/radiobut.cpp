@@ -66,9 +66,22 @@ bool wxRadioButton::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    long msStyle = HasFlag(wxRB_GROUP) ? WS_GROUP : 0;
+    long msStyle = WS_TABSTOP;
+    if ( HasFlag(wxRB_GROUP) )
+        msStyle |= WS_GROUP;
 
-    msStyle |= BS_AUTORADIOBUTTON;
+    /*
+       wxRB_SINGLE is a temporary workaround for the following problem: if you
+       have 2 radiobuttons in the same group but which are not consecutive in
+       the dialog, Windows can enter an infinite loop! The simplest way to
+       reproduce it is to create radio button, then a panel and then another
+       radio button: then checking the last button hangs the app.
+
+       Ideally, we'd detect (and avoid) such situation automatically but for
+       now, as I don't know how to do it, just allow the user to create
+       BS_RADIOBUTTON buttons for such situations.
+     */
+    msStyle |= HasFlag(wxRB_SINGLE) ? BS_RADIOBUTTON : BS_AUTORADIOBUTTON;
 
     if ( HasFlag(wxCLIP_SIBLINGS) )
         msStyle |= WS_CLIPSIBLINGS;
@@ -93,8 +106,58 @@ bool wxRadioButton::Create(wxWindow *parent,
 void wxRadioButton::SetValue(bool value)
 {
     // BST_CHECKED is defined as 1, BST_UNCHECKED as 0, so we can just pass
-    // value as is (we don't sue BST_XXX here as they're not defined for Win16)
+    // value as is (we don't use BST_XXX here as they're not defined for Win16)
     (void)::SendMessage(GetHwnd(), BM_SETCHECK, (WPARAM)value, 0L);
+
+    // if we set the value of one radio button we also must clear all the other
+    // buttons in the same group: Windows doesn't do it automatically
+    if ( value )
+    {
+        const wxWindowList& siblings = GetParent()->GetChildren();
+        wxWindowList::Node *nodeThis = siblings.Find(this);
+        wxCHECK_RET( nodeThis, _T("radio button not a child of its parent?") );
+
+        // turn off all radio buttons before this one
+        for ( wxWindowList::Node *nodeBefore = nodeThis->GetPrevious();
+              nodeBefore;
+              nodeBefore = nodeBefore->GetPrevious() )
+        {
+            wxRadioButton *btn = wxDynamicCast(nodeBefore->GetData(),
+                                               wxRadioButton);
+            if ( !btn )
+            {
+                // the radio buttons in a group must be consecutive, so there
+                // are no more of them
+                break;
+            }
+
+            btn->SetValue(FALSE);
+
+            if ( btn->HasFlag(wxRB_GROUP) )
+            {
+                // even if there are other radio buttons before this one,
+                // they're not in the same group with us
+                break;
+            }
+        }
+
+        // ... and all after this one
+        for ( wxWindowList::Node *nodeAfter = nodeThis->GetNext();
+              nodeAfter;
+              nodeAfter = nodeAfter->GetNext() )
+        {
+            wxRadioButton *btn = wxDynamicCast(nodeAfter->GetData(),
+                                               wxRadioButton);
+
+            if ( !btn || btn->HasFlag(wxRB_GROUP) )
+            {
+                // no more buttons or the first button of the next group
+                break;
+            }
+
+            btn->SetValue(FALSE);
+        }
+    }
 }
 
 bool wxRadioButton::GetValue() const
@@ -123,7 +186,7 @@ void wxRadioButton::SetFocus()
     // generates BN_CLICKED which leads to showing another dialog and so on
     // without end!
     //
-    // to aviod this, we drop the pseudo BN_CLICKED events generated when the
+    // to avoid this, we drop the pseudo BN_CLICKED events generated when the
     // button gains focus
     m_focusJustSet = TRUE;
 
@@ -142,9 +205,20 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     }
     else // a real clicked event
     {
+        bool isChecked = GetValue();
+
+        if ( HasFlag(wxRB_SINGLE) )
+        {
+            // when we use a "manual" radio button, we have to check the button
+            // ourselves -- but it's reset to unchecked state by the user code
+            // (presumably when another button is pressed)
+            if ( !isChecked )
+                SetValue(TRUE);
+        }
+
         wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
         event.SetEventObject( this );
-        event.SetInt( GetValue() );
+        event.SetInt(isChecked);
 
         ProcessCommand(event);
     }
@@ -200,7 +274,7 @@ long wxRadioButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         return ret;
     }
-    return wxControl::MSWWindowProc(nMsg, wParam, lParam);    
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 #endif // wxUSE_RADIOBTN

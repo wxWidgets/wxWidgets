@@ -186,7 +186,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Calendar wxWindows sample",
+    MyFrame *frame = new MyFrame(_T("Calendar wxWindows sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     frame->Show(TRUE);
@@ -208,41 +208,41 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Calendar_File_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(Calendar_File_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
     menuFile->AppendSeparator();
-    menuFile->Append(Calendar_File_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Calendar_File_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenu *menuCal = new wxMenu;
     menuCal->Append(Calendar_Cal_Monday,
-                    "Monday &first weekday\tCtrl-F",
-                    "Toggle between Mon and Sun as the first week day",
+                    _T("Monday &first weekday\tCtrl-F"),
+                    _T("Toggle between Mon and Sun as the first week day"),
                     TRUE);
-    menuCal->Append(Calendar_Cal_Holidays, "Show &holidays\tCtrl-H",
-                    "Toggle highlighting the holidays",
+    menuCal->Append(Calendar_Cal_Holidays, _T("Show &holidays\tCtrl-H"),
+                    _T("Toggle highlighting the holidays"),
                     TRUE);
-    menuCal->Append(Calendar_Cal_Special, "Highlight &special dates\tCtrl-S",
-                    "Test custom highlighting",
+    menuCal->Append(Calendar_Cal_Special, _T("Highlight &special dates\tCtrl-S"),
+                    _T("Test custom highlighting"),
                     TRUE);
     menuCal->Append(Calendar_Cal_SurroundWeeks,
-                    "Show s&urrounding weeks\tCtrl-W",
-                    "Show the neighbouring weeks in the prev/next month",
+                    _T("Show s&urrounding weeks\tCtrl-W"),
+                    _T("Show the neighbouring weeks in the prev/next month"),
                     TRUE);
     menuCal->AppendSeparator();
     menuCal->Append(Calendar_Cal_SeqMonth,
-                    "To&ggle month selector style\tCtrl-G",
-                    "Use another style for the calendar controls",
+                    _T("To&ggle month selector style\tCtrl-G"),
+                    _T("Use another style for the calendar controls"),
                     TRUE);
-    menuCal->Append(Calendar_Cal_Month, "&Month can be changed\tCtrl-M",
-                    "Allow changing the month in the calendar",
+    menuCal->Append(Calendar_Cal_Month, _T("&Month can be changed\tCtrl-M"),
+                    _T("Allow changing the month in the calendar"),
                     TRUE);
-    menuCal->Append(Calendar_Cal_Year, "&Year can be changed\tCtrl-Y",
-                    "Allow changing the year in the calendar",
+    menuCal->Append(Calendar_Cal_Year, _T("&Year can be changed\tCtrl-Y"),
+                    _T("Allow changing the year in the calendar"),
                     TRUE);
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuCal, "&Calendar");
+    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(menuCal, _T("&Calendar"));
 
     menuBar->Check(Calendar_Cal_Monday, TRUE);
     menuBar->Check(Calendar_Cal_Holidays, TRUE);
@@ -257,7 +257,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText("Welcome to wxWindows!");
+    SetStatusText(_T("Welcome to wxWindows!"));
 #endif // wxUSE_STATUSBAR
 }
 

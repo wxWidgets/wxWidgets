@@ -43,12 +43,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
-                   const wxString& name = wxCalendarNameStr)
-    {
-        Init();
-
-        (void)Create(parent, id, date, pos, size, style, name);
-    }
+                   const wxString& name = wxCalendarNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

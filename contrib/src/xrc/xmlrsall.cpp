@@ -94,4 +94,5 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxGenericDirCtrlXmlHandler);
 #endif
     AddHandler(new wxFrameXmlHandler);
+    AddHandler(new wxScrolledWindowXmlHandler);
 }

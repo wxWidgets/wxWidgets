@@ -203,6 +203,8 @@ public:
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 
+    wxGrid* GetOwner() { return m_owner; }
+
 private:
     wxGrid                   *m_owner;
     wxGridRowLabelWindow     *m_rowLabelWin;
@@ -424,6 +426,7 @@ static inline int GetScrollY(int y)
 wxGridCellEditor::wxGridCellEditor()
 {
     m_control = NULL;
+    m_attr = NULL;
 }
 
 
@@ -445,6 +448,9 @@ void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
 {
     // erase the background because we might not fill the cell
     wxClientDC dc(m_control->GetParent());
+    wxGridWindow* gridWindow = wxDynamicCast(m_control->GetParent(), wxGridWindow);
+    if (gridWindow)
+        gridWindow->GetOwner()->PrepareDC(dc);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
     dc.DrawRectangle(rectCell);
@@ -1193,7 +1199,31 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
     size.y -= 2;
 #endif
 
-    m_control->Move(r.x + r.width/2 - size.x/2, r.y + r.height/2 - size.y/2);
+    int hAlign = wxALIGN_CENTRE;
+    int vAlign = wxALIGN_CENTRE;
+    if (GetCellAttr())
+        GetCellAttr()->GetAlignment(& hAlign, & vAlign);
+
+    int x = 0, y = 0;
+    if (hAlign == wxALIGN_LEFT)
+    {
+        x = r.x + 2;
+#ifdef __WXMSW__
+        x += 2;
+#endif
+        y = r.y + r.height/2 - size.y/2;
+    }
+    else if (hAlign == wxALIGN_RIGHT)
+    {
+        x = r.x + r.width - size.x - 2;
+        y = r.y + r.height/2 - size.y/2;
+    }
+    else if (hAlign == wxALIGN_CENTRE)
+    {
+        x = r.x + r.width/2 - size.x/2;
+        y = r.y + r.height/2 - size.y/2;
+    }
+    m_control->Move(x, y);
 }
 
 void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
@@ -1353,15 +1383,15 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     m_startValue = grid->GetTable()->GetValue(row, col);
 
-    Combo()->SetValue(m_startValue);
-    size_t count = m_choices.GetCount();
-    for (size_t i=0; i<count; i++)
+    if (m_allowOthers)
+        Combo()->SetValue(m_startValue);
+    else
     {
-        if (m_startValue == m_choices[i])
-        {
-            Combo()->SetSelection(i);
-            break;
-        }
+        // find the right position, or default to the first if not found
+        int pos = Combo()->FindString(m_startValue);
+        if (pos == -1)
+            pos = 0;
+        Combo()->SetSelection(pos);
     }
     Combo()->SetInsertionPointEnd();
     Combo()->SetFocus();
@@ -1377,7 +1407,10 @@ bool wxGridCellChoiceEditor::EndEdit(int row, int col,
         grid->GetTable()->SetValue(row, col, value);
 
     m_startValue = wxEmptyString;
-    Combo()->SetValue(m_startValue);
+    if (m_allowOthers)
+        Combo()->SetValue(m_startValue);
+    else
+        Combo()->SetSelection(0);
 
     return changed;
 }
@@ -1482,13 +1515,21 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 {
     dc.SetBackgroundMode( wxSOLID );
 
-    if ( isSelected )
+    // grey out fields if the grid is disabled
+    if( grid.IsEnabled() )
     {
-        dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
+      if ( isSelected )
+      {
+          dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
+      }
+      else
+      {
+          dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
+      }
     }
     else
     {
-        dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
+      dc.SetBrush(wxBrush(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE), wxSOLID));
     }
 
     dc.SetPen( *wxTRANSPARENT_PEN );
@@ -1577,15 +1618,15 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
             int i, c_cols, c_rows;
             for (i = col+cell_cols; i < cols; i++)
             {
-	        bool is_empty = TRUE;
+                bool is_empty = TRUE;
                 for (int j=row; j<row+cell_rows; j++)
                 {
                     // check w/ anchor cell for multicell block
-                    grid.GetCellSize(row, i, &c_rows, &c_cols);
+                    grid.GetCellSize(j, i, &c_rows, &c_cols);
                     if (c_rows > 0) c_rows = 0;
-                    if (grid.GetTable()->IsEmptyCell(row+c_rows, i))
+                    if (!grid.GetTable()->IsEmptyCell(j+c_rows, i))
                     {
-		        is_empty = FALSE;
+                        is_empty = FALSE;
                        break;
                     }
                 }
@@ -1597,20 +1638,20 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                     break;
                 }
                 if (rect.width >= best_width) break;
-	    }
+            }
             overflowCols = i - col - cell_cols + 1;
-	    if (overflowCols >= cols) overflowCols = cols - 1;
+            if (overflowCols >= cols) overflowCols = cols - 1;
         }
 
         if (overflowCols > 0) // redraw overflow cells w/ proper hilight
         {
             hAlign = wxALIGN_LEFT; // if oveflowed then it's left aligned
-            wxRect clip = rect; 
+            wxRect clip = rect;
             clip.x += rectCell.width;
             // draw each overflow cell individually
             int col_end = col+cell_cols+overflowCols;
             if (col_end >= grid.GetNumberCols())
-	        col_end = grid.GetNumberCols() - 1;
+                col_end = grid.GetNumberCols() - 1;
             for (int i = col+cell_cols; i <= col_end; i++)
             {
                 clip.width = grid.GetColSize(i) - 1;
@@ -1618,15 +1659,15 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                 dc.SetClippingRegion(clip);
 
                 SetTextColoursAndFont(grid, attr, dc,
-				      grid.IsInSelection(row,i));
+                        grid.IsInSelection(row,i));
 
                 grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
-                                       rect, hAlign, vAlign);
+                        rect, hAlign, vAlign);
                 clip.x += grid.GetColSize(i) - 1;
             }
 
             rect = rectCell;
-	    rect.Inflate(-1);
+            rect.Inflate(-1);
             rect.width++;
             dc.DestroyClippingRegion();
         }
@@ -1735,9 +1776,9 @@ wxString wxGridCellFloatRenderer::GetString(wxGrid& grid, int row, int col)
             {
                 if ( m_precision == -1 )
                 {
-                // default width/precision
-                m_format = _T("%f");
-            }
+                    // default width/precision
+                    m_format = _T("%f");
+                }
                 else
                 {
                     m_format.Printf(_T("%%.%df"), m_precision);
@@ -1894,11 +1935,31 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     }
 
     // draw a border around checkmark
+    int vAlign, hAlign;
+    attr.GetAlignment(& hAlign, &vAlign);
+
     wxRect rectBorder;
-    rectBorder.x = rect.x + rect.width/2 - size.x/2;
-    rectBorder.y = rect.y + rect.height/2 - size.y/2;
-    rectBorder.width = size.x;
-    rectBorder.height = size.y;
+    if (hAlign == wxALIGN_CENTRE)
+    {
+        rectBorder.x = rect.x + rect.width/2 - size.x/2;
+        rectBorder.y = rect.y + rect.height/2 - size.y/2;
+        rectBorder.width = size.x;
+        rectBorder.height = size.y;
+    }
+    else if (hAlign == wxALIGN_LEFT)
+    {
+        rectBorder.x = rect.x + 2;
+        rectBorder.y = rect.y + rect.height/2 - size.y/2;
+        rectBorder.width = size.x;
+        rectBorder.height = size.y;
+    }
+    else if (hAlign == wxALIGN_RIGHT)
+    {
+        rectBorder.x = rect.x + rect.width - size.x - 2;
+        rectBorder.y = rect.y + rect.height/2 - size.y/2;
+        rectBorder.width = size.x;
+        rectBorder.height = size.y;
+    }
 
     bool value;
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
@@ -3832,11 +3893,13 @@ void wxGrid::Init()
 
     // init attr cache
     m_attrCache.row = -1;
+    m_attrCache.col = -1;
+    m_attrCache.attr = NULL;
 
     // TODO: something better than this ?
     //
     m_labelFont = this->GetFont();
-    m_labelFont.SetWeight( m_labelFont.GetWeight() + 2 );
+    m_labelFont.SetWeight( wxBOLD );
 
     m_rowLabelHorizAlign = wxALIGN_LEFT;
     m_rowLabelVertAlign  = wxALIGN_CENTRE;
@@ -3909,7 +3972,7 @@ void wxGrid::InitRowHeights()
     m_rowBottoms.Alloc( m_numRows );
 
     int rowBottom = 0;
-    
+
     m_rowHeights.Add( m_defaultRowHeight, m_numRows );
 
     for ( int i = 0;  i < m_numRows;  i++ )
@@ -3985,6 +4048,26 @@ void wxGrid::CalcDimensions()
     int w = m_numCols > 0 ? GetColRight(m_numCols - 1) + m_extraWidth + 1 : 0;
     int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) + m_extraHeight + 1 : 0;
 
+    // take into account editor if shown
+    if( IsCellEditControlShown() )
+    {
+      int w2, h2;
+      int r = m_currentCellCoords.GetRow();
+      int c = m_currentCellCoords.GetCol();
+      int x = GetColLeft(c);
+      int y = GetRowTop(r);
+
+      // how big is the editor
+      wxGridCellAttr* attr = GetCellAttr(r, c);
+      wxGridCellEditor* editor = attr->GetEditor(this, r, c);
+      editor->GetControl()->GetSize(&w2, &h2);
+      w2 += x;
+      h2 += y;
+      if( w2 > w ) w = w2;
+      if( h2 > h ) h = h2;
+      editor->DecRef();
+      attr->DecRef();
+    }
     // preserve (more or less) the previous position
     int x, y;
     GetViewStart( &x, &y );
@@ -5898,7 +5981,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
         else
         {
             m_cornerLabelWin->Refresh(eraseb, NULL);
-            m_colLabelWin->Refresh(eraseb, NULL);     
+            m_colLabelWin->Refresh(eraseb, NULL);
             m_rowLabelWin->Refresh(eraseb, NULL);
             m_gridWin->Refresh(eraseb, NULL);
         }
@@ -6106,15 +6189,15 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     if ( (event.KeyCode() == WXK_F2 && !event.HasModifiers())
                          || editor->IsAcceptedKey(event) )
                     {
+                        // ensure cell is visble
+                        MakeCellVisible(row, col);
                         EnableCellEditControl();
 
-                        // the editor could be not shown for a variety of
-                        // reasons (i.e. blocked by the app or whatever), so
-                        // check if it really was created
-                        if ( m_cellEditCtrlEnabled )
-                        {
-                            editor->StartingKey(event);
-                        }
+                        // a problem can arise if the cell is not completely
+                        // visible (even after calling MakeCellVisible the
+                        // control is not created and calling StartingKey will
+                        // crash the app
+                        if( editor->IsCreated() && m_cellEditCtrlEnabled ) editor->StartingKey(event);
                     }
                     else
                     {
@@ -6258,7 +6341,7 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
         wxRect rect;
         rect = BlockToDeviceRect( wxGridCellCoords ( topRow, leftCol ),
                                   wxGridCellCoords ( bottomRow, rightCol ) );
-        m_gridWin->Refresh( FALSE, &rect );     
+        m_gridWin->Refresh( FALSE, &rect );
     }
     // Now handle changing an existing selection area.
     else if ( m_selectingTopLeft != updateTopLeft ||
@@ -7262,8 +7345,6 @@ void wxGrid::ShowCellEditControl()
                 GetEventHandler()->ProcessEvent(evt);
             }
 
-            editor->Show( TRUE, attr );
-
             // resize editor to overflow into righthand cells if allowed
             int maxWidth = rect.width;
             wxString value = GetCellValue(row, col);
@@ -7271,38 +7352,45 @@ void wxGrid::ShowCellEditControl()
             {
                 int y;
                 GetTextExtent(value, &maxWidth, &y,
-			      NULL, NULL, &attr->GetFont());
+                        NULL, NULL, &attr->GetFont());
                 if (maxWidth < rect.width) maxWidth = rect.width;
             }
             int client_right = m_gridWin->GetClientSize().GetWidth();
             if (rect.x+maxWidth > client_right)
-	        maxWidth = client_right - rect.x;
+                maxWidth = client_right - rect.x;
 
-	    if ((maxWidth > rect.width) && (col < m_numCols) && m_table)
-	    {
+            if ((maxWidth > rect.width) && (col < m_numCols) && m_table)
+            {
                 GetCellSize( row, col, &cell_rows, &cell_cols );
-		// may have changed earlier
-		for (int i = col+cell_cols; i < m_numCols; i++)
-		{
+                // may have changed earlier
+                for (int i = col+cell_cols; i < m_numCols; i++)
+                {
                     int c_rows, c_cols;
                     GetCellSize( row, i, &c_rows, &c_cols );
-		    // looks weird going over a multicell
-		    if (m_table->IsEmptyCell(row,i) &&
-			(rect.width < maxWidth) && (c_rows == 1))
-		        rect.width += GetColWidth(i);
-		    else
-		      break;
-		}
+                    // looks weird going over a multicell
+                    if (m_table->IsEmptyCell(row,i) &&
+                            (rect.width < maxWidth) && (c_rows == 1))
+                        rect.width += GetColWidth(i);
+                    else
+                        break;
+                }
                 if (rect.GetRight() > client_right)
-		    rect.SetRight(client_right-1);
+                    rect.SetRight(client_right-1);
             }
+            editor->SetCellAttr(attr);
             editor->SetSize( rect );
+            editor->Show( TRUE, attr );
+
+            // recalc dimensions in case we need to
+            // expand the scrolled window to account for editor
+            CalcDimensions();
 
             editor->BeginEdit(row, col, this);
+            editor->SetCellAttr(NULL);
 
             editor->DecRef();
             attr->DecRef();
-         }
+        }
     }
 }
 
@@ -8635,13 +8723,16 @@ void wxGrid::ClearAttrCache()
 
 void wxGrid::CacheAttr(int row, int col, wxGridCellAttr *attr) const
 {
-    wxGrid *self = (wxGrid *)this;  // const_cast
+    if ( attr != NULL )
+    {
+        wxGrid *self = (wxGrid *)this;  // const_cast
 
-    self->ClearAttrCache();
-    self->m_attrCache.row = row;
-    self->m_attrCache.col = col;
-    self->m_attrCache.attr = attr;
-    wxSafeIncRef(attr);
+        self->ClearAttrCache();
+        self->m_attrCache.row = row;
+        self->m_attrCache.col = col;
+        self->m_attrCache.attr = attr;
+        wxSafeIncRef(attr);
+    }
 }
 
 bool wxGrid::LookupAttr(int row, int col, wxGridCellAttr **attr) const
@@ -9282,13 +9373,17 @@ void wxGrid::AutoSize()
 
     // round up the size to a multiple of scroll step - this ensures that we
     // won't get the scrollbars if we're sized exactly to this width
-    wxSize sizeFit(GetScrollX(size.x) * GRID_SCROLL_LINE_X,
-                   GetScrollY(size.y) * GRID_SCROLL_LINE_Y);
+    // CalcDimension adds m_extraWidth + 1 etc. to calculate the necessary
+    // scrollbar steps
+    wxSize sizeFit(GetScrollX(size.x + m_extraWidth + 1) * GRID_SCROLL_LINE_X,
+                   GetScrollY(size.y + m_extraHeight + 1) * GRID_SCROLL_LINE_Y);
 
-    // distribute the extra space between teh columns/rows to avoid having
+    // distribute the extra space between the columns/rows to avoid having
     // extra white space
-    wxCoord diff = sizeFit.x - size.x;
-    if ( diff )
+
+    // Remove the extra m_extraWidth + 1 added above
+    wxCoord diff = sizeFit.x - size.x + (m_extraWidth + 1);
+    if ( diff && m_numCols )
     {
         // try to resize the columns uniformly
         wxCoord diffPerCol = diff / m_numCols;
@@ -9312,8 +9407,8 @@ void wxGrid::AutoSize()
     }
 
     // same for rows
-    diff = sizeFit.y - size.y;
-    if ( diff )
+    diff = sizeFit.y - size.y - (m_extraHeight + 1);
+    if ( diff && m_numRows )
     {
         // try to resize the columns uniformly
         wxCoord diffPerRow = diff / m_numRows;

@@ -125,6 +125,29 @@ it to always show it. It doesn't do anything under other platforms.}
 See also \helpref{window styles overview}{windowstyles} and
 \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}.
 
+\wxheading{wxTextCtrl text format}
+
+The multiline text controls always store the text as a sequence of lines
+separated by {\tt $\backslash$n} characters, i.e. in the Unix text format even
+on non-Unix platforms. This allows the user code to ignore the differences
+between the platforms but at a price: the indices in the control such as those
+returned by \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoint} or 
+\helpref{GetSelection}{wxtextctrlgetselection} can {\bf not} be used as
+indices into the string returned by \helpref{GetValue}{wxtextctrlgetvalue} as
+they're going to be slightly off for platforms using 
+{\tt $\backslash$r$\backslash$n} as separator (as Windows does), for example.
+
+Instead, if you need to obtain a substring between the $2$ indices obtained
+from the control with the help of the functions mentioned above, you should
+use \helpref{GetRange}{wxtextctrlgetrange}. And the indices themselves can
+only be passed to other methods, for example 
+\helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint} or 
+\helpref{SetSelection}{wxtextctrlsetselection}.
+
+To summarize: never use the indices returned by (multiline) wxTextCtrl as
+indices into the string it contains, but only as arguments to be passed back
+to the other wxTextCtrl methods.
+
 \wxheading{wxTextCtrl styles}
 
 Multi-line text controls support the styles, i.e. provide a possibility to set
@@ -554,8 +577,9 @@ returned string is empty.
 \constfunc{wxString}{GetValue}{\void}
 
 Gets the contents of the control. Notice that for a multiline text control,
-the lines will be separated by (Unix-style) $\backslash$n characters, even under
-Windows where they are separated by a $\backslash$r$\backslash$n sequence in the native control.
+the lines will be separated by (Unix-style) $\backslash$n characters, even
+under Windows where they are separated by a $\backslash$r$\backslash$n
+sequence in the native control.
 
 \membersection{wxTextCtrl::IsEditable}\label{wxtextctrliseditable}
 

@@ -143,7 +143,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     wxCharBuffer buffer(length);
 
     char *xpm_buffer = (char *)buffer.data();
-    if ( stream.Read(xpm_buffer, length).LastError() == wxSTREAM_READ_ERROR )
+    if ( stream.Read(xpm_buffer, length).GetLastError() == wxSTREAM_READ_ERROR )
         return wxNullImage;
     xpm_buffer[length] = '\0';
 
@@ -657,7 +657,7 @@ struct wxXPMColourMapData
 {
     unsigned char R,G,B;
 };
-WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap)
+WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap);
 
 wxImage wxXPMDecoder::ReadData(const char **xpm_data)
 {

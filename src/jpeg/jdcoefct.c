@@ -104,12 +104,15 @@ start_iMCU_row (j_decompress_ptr cinfo)
  */
 
 METHODDEF(void)
+#if defined(__VISAGECPP__)
+start_input_pass2 (j_decompress_ptr cinfo)
+#else
 start_input_pass (j_decompress_ptr cinfo)
+#endif
 {
   cinfo->input_iMCU_row = 0;
   start_iMCU_row(cinfo);
 }
-
 
 /*
  * Initialize for an output processing pass.
@@ -681,7 +684,12 @@ jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				SIZEOF(my_coef_controller));
   cinfo->coef = (struct jpeg_d_coef_controller *) coef;
+#if defined(__VISAGECPP__)
+  coef->pub.start_input_pass2 = start_input_pass2;
+#else
   coef->pub.start_input_pass = start_input_pass;
+#endif
+
   coef->pub.start_output_pass = start_output_pass;
 #ifdef BLOCK_SMOOTHING_SUPPORTED
   coef->coef_bits_latch = NULL;
@@ -734,3 +742,4 @@ jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
     coef->pub.coef_arrays = NULL; /* flag for no virtual arrays */
   }
 }
+

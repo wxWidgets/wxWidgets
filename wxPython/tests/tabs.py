@@ -1,5 +1,4 @@
 from wxPython.wx import *
-import string, sys
 
 class Test:
      def __init__(self):

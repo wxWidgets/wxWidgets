@@ -3,7 +3,7 @@ Build a GUI Tree (wxWindows) from an XML file
 using pyExpat
 """
 
-import sys,string
+import sys
 from xml.parsers import pyexpat
 
 from wxPython.wx import *
@@ -59,7 +59,7 @@ def EndElement( name ):
 
 def CharacterData ( data ):
         global NodeStack
-        if string.strip(data):
+        if data.strip():
                 app.tree.AppendItem(NodeStack[-1],data)
 
 

@@ -18,7 +18,7 @@ class TestPanel(wxPanel):
         box.Add(20, 30)
         box.Add(b1, 0, wxALIGN_CENTER|wxALL, 15)
         box.Add(b2, 0, wxALIGN_CENTER|wxALL, 15)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(box)
 
 

@@ -105,7 +105,6 @@
     #include <unix.h>
 #endif
 
-#include "wx/setup.h"
 #include "wx/log.h"
 
 // No, Cygwin doesn't appear to have fnmatch.h after all.
@@ -124,7 +123,7 @@
         #ifdef __CYGWIN__
             #include <sys/cygwin.h>
         #endif
-        #include <wchar.h>
+
         #ifndef __TWIN32__
             #include <sys/unistd.h>
         #endif
@@ -283,7 +282,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
   wxStrcpy(buf, wxFileFunctionsBuffer);
 
   wxChar *filename = (wxChar*) NULL; /* shut up buggy egcs warning */
-  filename = IsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (wxChar *)buf;
+  filename = wxIsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (wxChar *)buf;
 
   for (wxNode * node = First (); node; node = node->Next ())
     {
@@ -294,7 +293,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
         wxStrcat (wxFileFunctionsBuffer, wxT("/"));
       wxStrcat (wxFileFunctionsBuffer, filename);
 #ifdef __WINDOWS__
-      Unix2DosFilename (wxFileFunctionsBuffer);
+      wxUnix2DosFilename (wxFileFunctionsBuffer);
 #endif
       if (wxFileExists (wxFileFunctionsBuffer))
       {
@@ -411,7 +410,7 @@ wxChar *wxRealPath (wxChar *path)
 {
 #ifdef __WXMSW__
   static const wxChar SEP = wxT('\\');
-  Unix2DosFilename(path);
+  wxUnix2DosFilename(path);
 #else
   static const wxChar SEP = wxT('/');
 #endif
@@ -464,7 +463,7 @@ wxChar *wxCopyAbsolutePath(const wxString& filename)
   if (filename == wxT(""))
     return (wxChar *) NULL;
 
-  if (! IsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename))) {
+  if (! wxIsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename))) {
     wxChar  buf[_MAXPATHLEN];
     buf[0] = wxT('\0');
     wxGetWorkingDirectory(buf, WXSIZEOF(buf));
@@ -667,7 +666,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 
   wxStrcpy (dest, WXSTRINGCAST filename);
 #ifdef __WXMSW__
-  Unix2DosFilename(dest);
+  wxUnix2DosFilename(dest);
 #endif
 
   // Handle environment
@@ -1070,7 +1069,7 @@ bool
 wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& file3)
 {
   wxString outfile;
-  if ( !wxGetTempFileName("cat", outfile) )
+  if ( !wxGetTempFileName( wxT("cat"), outfile) )
       return FALSE;
 
   FILE *fp1 = (FILE *) NULL;
@@ -1626,7 +1625,7 @@ bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFi
             strFile += wxFILE_SEP_PATH;
         strFile += pszFile;
 
-        if ( FileExists(strFile) ) {
+        if ( wxFileExists(strFile) ) {
             *pStr = strFile;
             break;
         }
@@ -1667,10 +1666,12 @@ time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 
 bool wxIsWild( const wxString& pattern )
 {
-  wxString tmp = pattern;
-  wxChar *pat = WXSTRINGCAST(tmp);
-    while (*pat) {
-        switch (*pat++) {
+    wxString tmp = pattern;
+    wxChar *pat = WXSTRINGCAST(tmp);
+    while (*pat) 
+    {
+        switch (*pat++) 
+        {
         case wxT('?'): case wxT('*'): case wxT('['): case wxT('{'):
             return TRUE;
         case wxT('\\'):
@@ -1679,160 +1680,135 @@ bool wxIsWild( const wxString& pattern )
         }
     }
     return FALSE;
-};
+}
+
+/*
+* Written By Douglas A. Lewis <dalewis@cs.Buffalo.EDU>
+*
+* The match procedure is public domain code (from ircII's reg.c)
+*/
 
 bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
-
-#ifdef HAVE_FNMATCH
 {
-// this probably won't work well for multibyte chars in Unicode mode?
-   if(dot_special)
-      return fnmatch(pat.fn_str(), text.fn_str(), FNM_PERIOD) == 0;
-   else
-      return fnmatch(pat.fn_str(), text.fn_str(), 0) == 0;
-}
-#else // !HAVE_FNMATCH
-
-// #pragma error Broken implementation of wxMatchWild() -- needs fixing!
-
-   /*
-    * WARNING: this code is broken!
-    */
-{
-  wxString tmp1 = pat;
-  wxChar *pattern = WXSTRINGCAST(tmp1);
-  wxString tmp2 = text;
-  wxChar *str = WXSTRINGCAST(tmp2);
-    wxChar c;
-    wxChar *cp;
-    bool done = FALSE, ret_code, ok;
-    // Below is for vi fans
-    const wxChar OB = wxT('{'), CB = wxT('}');
-
-    // dot_special means '.' only matches '.'
-    if (dot_special && *str == wxT('.') && *pattern != *str)
-        return FALSE;
-
-    while ((*pattern != wxT('\0')) && (!done)
-    && (((*str==wxT('\0'))&&((*pattern==OB)||(*pattern==wxT('*'))))||(*str!=wxT('\0')))) {
-        switch (*pattern) {
-        case wxT('\\'):
-            pattern++;
-            if (*pattern != wxT('\0'))
-                pattern++;
-            break;
-        case wxT('*'):
-            pattern++;
-            ret_code = FALSE;
-            while ((*str!=wxT('\0'))
-            && ((ret_code=wxMatchWild(pattern, str++, FALSE)) == 0))
-                /*loop*/;
-            if (ret_code) {
-                while (*str != wxT('\0'))
-                    str++;
-                while (*pattern != wxT('\0'))
-                    pattern++;
-            }
-            break;
-        case wxT('['):
-            pattern++;
-          repeat:
-            if ((*pattern == wxT('\0')) || (*pattern == wxT(']'))) {
-                done = TRUE;
-                break;
-            }
-            if (*pattern == wxT('\\')) {
-                pattern++;
-                if (*pattern == wxT('\0')) {
-                    done = TRUE;
-                    break;
-                }
-            }
-            if (*(pattern + 1) == wxT('-')) {
-                c = *pattern;
-                pattern += 2;
-                if (*pattern == wxT(']')) {
-                    done = TRUE;
-                    break;
-                }
-                if (*pattern == wxT('\\')) {
-                    pattern++;
-                    if (*pattern == wxT('\0')) {
-                        done = TRUE;
-                        break;
-                    }
-                }
-                if ((*str < c) || (*str > *pattern)) {
-                    pattern++;
-                    goto repeat;
-                }
-            } else if (*pattern != *str) {
-                pattern++;
-                goto repeat;
-            }
-            pattern++;
-            while ((*pattern != wxT(']')) && (*pattern != wxT('\0'))) {
-                if ((*pattern == wxT('\\')) && (*(pattern + 1) != wxT('\0')))
-                    pattern++;
-                pattern++;
-            }
-            if (*pattern != wxT('\0')) {
-                pattern++, str++;
-            }
-            break;
-        case wxT('?'):
-            pattern++;
-            str++;
-            break;
-        case OB:
-            pattern++;
-            while ((*pattern != CB) && (*pattern != wxT('\0'))) {
-                cp = str;
-                ok = TRUE;
-                while (ok && (*cp != wxT('\0')) && (*pattern != wxT('\0'))
-                &&  (*pattern != wxT(',')) && (*pattern != CB)) {
-                    if (*pattern == wxT('\\'))
-                        pattern++;
-                    ok = (*pattern++ == *cp++);
-                }
-                if (*pattern == wxT('\0')) {
-                    ok = FALSE;
-                    done = TRUE;
-                    break;
-                } else if (ok) {
-                    str = cp;
-                    while ((*pattern != CB) && (*pattern != wxT('\0'))) {
-                        if (*++pattern == wxT('\\')) {
-                            if (*++pattern == CB)
-                                pattern++;
-                        }
-                    }
-                } else {
-                    while (*pattern!=CB && *pattern!=wxT(',') && *pattern!=wxT('\0')) {
-                        if (*++pattern == wxT('\\')) {
-                            if (*++pattern == CB || *pattern == wxT(','))
-                                pattern++;
-                        }
-                    }
-                }
-                if (*pattern != wxT('\0'))
-                    pattern++;
-            }
-            break;
-        default:
-            if (*str == *pattern) {
-                str++, pattern++;
-            } else {
-                done = TRUE;
-            }
+        if (text.empty())
+        {
+                /* Match if both are empty. */
+                return pat.empty();
         }
-    }
-    while (*pattern == wxT('*'))
-        pattern++;
-    return ((*str == wxT('\0')) && (*pattern == wxT('\0')));
-};
+        
+        const wxChar *m = pat.c_str(),
+        *n = text.c_str(),
+        *ma = NULL,
+        *na = NULL,
+        *mp = NULL,
+        *np = NULL;
+        int just = 0,
+        pcount = 0,
+        acount = 0,
+        count = 0;
 
-#endif // HAVE_FNMATCH/!HAVE_FNMATCH
+        if (dot_special && (*n == wxT('.')))
+        {
+                /* Never match so that hidden Unix files 
+                 * are never found. */
+                return FALSE;
+        }
+
+        for (;;)
+        {
+                if (*m == wxT('*'))
+                {
+                        ma = ++m;
+                        na = n;
+                        just = 1;
+                        mp = NULL;
+                        acount = count;
+                }
+                else if (*m == wxT('?'))
+                {
+                        m++;
+                        if (!*n++)
+                        return FALSE;
+                }
+                else
+                {
+                        if (*m == wxT('\\'))
+                        {
+                                m++;
+                                /* Quoting "nothing" is a bad thing */
+                                if (!*m)
+                                return FALSE;
+                        }
+                        if (!*m)
+                        {
+                                /*
+                                * If we are out of both strings or we just
+                                * saw a wildcard, then we can say we have a
+                                * match
+                                */
+                                if (!*n)
+                                return TRUE;
+                                if (just)
+                                return TRUE;
+                                just = 0;
+                                goto not_matched;
+                        }
+                        /*
+                        * We could check for *n == NULL at this point, but
+                        * since it's more common to have a character there,
+                        * check to see if they match first (m and n) and
+                        * then if they don't match, THEN we can check for
+                        * the NULL of n
+                        */
+                        just = 0;
+                        if (*m == *n)
+                        {
+                                m++;
+                                if (*n == wxT(' '))
+                                mp = NULL;
+                                count++;
+                                n++;
+                        }
+                        else
+                        {
+
+                                not_matched:
+
+                                /*
+                                * If there are no more characters in the
+                                * string, but we still need to find another
+                                * character (*m != NULL), then it will be
+                                * impossible to match it
+                                */
+                                if (!*n)
+                                return FALSE;
+                                if (mp)
+                                {
+                                        m = mp;
+                                        if (*np == wxT(' '))
+                                        {
+                                                mp = NULL;
+                                                goto check_percent;
+                                        }
+                                        n = ++np;
+                                        count = pcount;
+                                }
+                                else
+                                check_percent:
+
+                                if (ma)
+                                {
+                                        m = ma;
+                                        n = ++na;
+                                        count = acount;
+                                }
+                                else
+                                return FALSE;
+                        }
+                }
+        }
+}
+
 
 #ifdef __VISUALC__
     #pragma warning(default:4706)   // assignment within conditional expression

@@ -54,6 +54,9 @@ public:
     const wxCharBuffer cWC2WX(const wchar_t *psz) const { return cWC2MB(psz); }
     const wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
 #endif // Unicode/ANSI
+
+    // virtual dtor for any base class
+    virtual ~wxMBConv();
 };
 
 WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc;
@@ -115,7 +118,7 @@ public:
     virtual ~wxCSConv();
 
     wxCSConv& operator=(const wxCSConv& conv);
-    
+
     void LoadNow();
 
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
@@ -135,6 +138,7 @@ private:
 
 #define wxConvFile wxConvLocal
 WXDLLEXPORT_DATA(extern wxCSConv) wxConvLocal;
+WXDLLEXPORT_DATA(extern wxCSConv) wxConvISO8859_1;
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 
 // ----------------------------------------------------------------------------
@@ -170,7 +174,7 @@ public:
     const char* cWX2MB(const char *psz) const { return psz; }
 };
 
-WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile, wxConvLocal;
+WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile, wxConvLocal, wxConvISO8859_1;
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 
 #define wxFNCONV(name) name

@@ -40,7 +40,7 @@ bool AppClass::OnInit()
   level=IDM_EASY;
 
   BombsFrame = 
-    new BombsFrameClass(NULL, "wxBombs", wxPoint(155, 165), wxSize(300, 300), wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION);
+    new BombsFrameClass(NULL, _T("wxBombs"), wxPoint(155, 165), wxSize(300, 300), wxMINIMIZE_BOX | wxSYSTEM_MENU | wxCAPTION);
 
   int xmax=BombsFrame->BombsCanvas->field_width*BombsFrame->BombsCanvas->x_cell*X_UNIT;
   int ymax=BombsFrame->BombsCanvas->field_height*BombsFrame->BombsCanvas->y_cell*Y_UNIT;
@@ -72,17 +72,17 @@ BombsFrameClass::BombsFrameClass(wxFrame *parent, const wxString& title, const w
   // Create a menu bar for the frame
   wxMenuBar *menuBar1 = new wxMenuBar;
   wxMenu *menu1 = new wxMenu;
-  menu1->Append(IDM_EXIT, "E&xit"); // , "Quit the program");
+  menu1->Append(IDM_EXIT, _T("E&xit")); // , "Quit the program");
   menu1->AppendSeparator();
-  menu1->Append(IDM_ABOUT, "&About..."); // , "Infos on wxBombs");
-  menuBar1->Append(menu1, "&File");
+  menu1->Append(IDM_ABOUT, _T("&About...")); // , "Infos on wxBombs");
+  menuBar1->Append(menu1, _T("&File"));
   wxMenu *menu2 = new wxMenu;
-  menu2->Append(IDM_RESTART, "&Restart"); // , "Clear the play field");
+  menu2->Append(IDM_RESTART, _T("&Restart")); // , "Clear the play field");
   menu2->AppendSeparator();
-  menu2->Append(IDM_EASY, "&Easy", wxEmptyString, TRUE); // "10x10 play field", TRUE);
-  menu2->Append(IDM_MEDIUM, "&Medium", wxEmptyString, TRUE); // "15x15 play field", TRUE);
-  menu2->Append(IDM_DIFFICULT, "&Difficult", wxEmptyString, TRUE); // "25x20 play field", TRUE);
-  menuBar1->Append(menu2, "&Game");
+  menu2->Append(IDM_EASY, _T("&Easy"), wxEmptyString, TRUE); // "10x10 play field", TRUE);
+  menu2->Append(IDM_MEDIUM, _T("&Medium"), wxEmptyString, TRUE); // "15x15 play field", TRUE);
+  menu2->Append(IDM_DIFFICULT, _T("&Difficult"), wxEmptyString, TRUE); // "25x20 play field", TRUE);
+  menuBar1->Append(menu2, _T("&Game"));
   SetMenuBar(menuBar1);
   menuBar=menuBar1;
   menuBar->Check(wxGetApp().level, TRUE);
@@ -124,7 +124,7 @@ void BombsFrameClass::OnRestart(wxCommandEvent& event)
 
 void BombsFrameClass::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox("wxBombs (c) 1996 by P. Foggia\n<foggia@amalfi.dis.unina.it>", "About wxBombs");
+    wxMessageBox(_T("wxBombs (c) 1996 by P. Foggia\n<foggia@amalfi.dis.unina.it>"), _T("About wxBombs"));
 }
 
 void BombsFrameClass::OnEasy(wxCommandEvent& event)
@@ -162,7 +162,7 @@ BombsCanvasClass::BombsCanvasClass(wxFrame *parent, const wxPoint& pos, const wx
   dc.SetFont(font);
 
   long chw, chh;
-  char buf[]="M";
+  wxChar buf[]=_T("M");
 
   dc.GetTextExtent(buf, &chw, &chh);
   dc.SetFont(wxNullFont);

@@ -120,11 +120,11 @@ class KeySink(wxWindow):
                           #| wxSUNKEN_BORDER
                           )
         self.SetBackgroundColour(wxBLUE)
-        self.haveFocus = false
-        self.callSkip = false
-        self.logKeyDn = true
-        self.logKeyUp = true
-        self.logChar = true
+        self.haveFocus = False
+        self.callSkip = False
+        self.logKeyDn = True
+        self.logKeyUp = True
+        self.logChar = True
 
         EVT_PAINT(self, self.OnPaint)
         EVT_SET_FOCUS(self, self.OnSetFocus)
@@ -164,11 +164,11 @@ class KeySink(wxWindow):
 
 
     def OnSetFocus(self, evt):
-        self.haveFocus = true
+        self.haveFocus = True
         self.Refresh()
 
     def OnKillFocus(self, evt):
-        self.haveFocus = false
+        self.haveFocus = False
         self.Refresh()
 
     def OnMouse(self, evt):
@@ -277,15 +277,15 @@ class TestPanel(wxPanel):
 
         cb2 = wxCheckBox(self, -1, "EVT_KEY_UP")
         EVT_CHECKBOX(self, cb2.GetId(), self.OnKeyUpCB)
-        cb2.SetValue(true)
+        cb2.SetValue(True)
 
         cb3 = wxCheckBox(self, -1, "EVT_KEY_DOWN")
         EVT_CHECKBOX(self, cb3.GetId(), self.OnKeyDnCB)
-        cb3.SetValue(true)
+        cb3.SetValue(True)
 
         cb4 = wxCheckBox(self, -1, "EVT_CHAR")
         EVT_CHECKBOX(self, cb4.GetId(), self.OnCharCB)
-        cb4.SetValue(true)
+        cb4.SetValue(True)
 
         buttons = wxBoxSizer(wxHORIZONTAL)
         buttons.Add(btn, 0, wxALL, 4)

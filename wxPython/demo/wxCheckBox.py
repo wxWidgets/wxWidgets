@@ -14,7 +14,7 @@ class TestCheckBox(wxPanel):
         cID = NewId()
         cb1 = wxCheckBox(self, cID,   "  Apples", wxPoint(65, 40), wxSize(150, 20), wxNO_BORDER)
         cb2 = wxCheckBox(self, cID+1, "  Oranges", wxPoint(65, 60), wxSize(150, 20), wxNO_BORDER)
-        cb2.SetValue(true)
+        cb2.SetValue(True)
         cb3 = wxCheckBox(self, cID+2, "  Pears", wxPoint(65, 80), wxSize(150, 20), wxNO_BORDER)
 
         EVT_CHECKBOX(self, cID,   self.EvtCheckBox)

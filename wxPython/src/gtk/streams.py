@@ -1,7 +1,6 @@
 # This file was created automatically by SWIG.
 import streamsc
 import wx
-import string
 class wxInputStreamPtr :
     def __init__(self,this):
         self.this = this
@@ -29,6 +28,30 @@ class wxInputStreamPtr :
         return val
     def tell(self, *_args, **_kwargs):
         val = apply(streamsc.wxInputStream_tell,(self,) + _args, _kwargs)
+        return val
+    def Peek(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_Peek,(self,) + _args, _kwargs)
+        return val
+    def GetC(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_GetC,(self,) + _args, _kwargs)
+        return val
+    def LastRead(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_LastRead,(self,) + _args, _kwargs)
+        return val
+    def CanRead(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_CanRead,(self,) + _args, _kwargs)
+        return val
+    def Eof(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_Eof,(self,) + _args, _kwargs)
+        return val
+    def Ungetch(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_Ungetch,(self,) + _args, _kwargs)
+        return val
+    def SeekI(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_SeekI,(self,) + _args, _kwargs)
+        return val
+    def TellI(self, *_args, **_kwargs):
+        val = apply(streamsc.wxInputStream_TellI,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxInputStream instance at %s>" % (self.this,)
@@ -64,3 +87,6 @@ class wxOutputStream(wxOutputStreamPtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxFromStart = streamsc.wxFromStart
+wxFromCurrent = streamsc.wxFromCurrent
+wxFromEnd = streamsc.wxFromEnd

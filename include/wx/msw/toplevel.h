@@ -119,10 +119,6 @@ protected:
     // the last focused child: we restore focus to it on activation
     wxWindow             *m_winLastFocused;
 
-    // the hidden parent window for the frames which shouldn't appear in the
-    // taskbar
-    static wxWindow *ms_hiddenParent;
-
     DECLARE_EVENT_TABLE()
 };
 

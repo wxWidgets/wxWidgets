@@ -104,7 +104,7 @@ class MyCellEditor(wxPyGridCellEditor):
         elif key < 256 and key >= 0 and chr(key) in string.printable:
             ch = chr(key)
             if not evt.ShiftDown():
-                ch = string.lower(ch)
+                ch = ch.lower()
 
         if ch is not None:
             # Replace the text.  Other option would be to append it.

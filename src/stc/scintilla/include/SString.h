@@ -369,7 +369,11 @@ public:
  */
 inline char *StringDup(
 	const char *s,			///< The string to duplicate
-	SString::lenpos_t len=SString::measure_length)	///< The length of memory to allocate. Optional.
+        /* gcc 2.96 doesn't seem to like this syntax: gives
+           'non-local function uses anonymous type'
+           SString::lenpos_t len=SString::measure_length)	///< The length of memory to allocate. Optional.
+        */
+        SString::lenpos_t len=0xffffffffU)	///< The length of memory to allocate. Optional.
 {
 	return SString::StringAllocate(s, len);
 }

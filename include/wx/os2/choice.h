@@ -28,9 +28,7 @@ public:
                     ,int                n = 0
                     ,const wxString     asChoices[] = NULL
                     ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                     ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                     ,const wxString&    rsName = wxChoiceNameStr
                    )
     {
@@ -41,9 +39,7 @@ public:
                ,n
                ,asChoices
                ,lStyle
-#if wxUSE_VALIDATORS
                ,rValidator
-#endif
                ,rsName
               );
     }
@@ -55,9 +51,7 @@ public:
                 ,int                n = 0
                 ,const wxString     asChoices[] = NULL
                 ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxChoiceNameStr
                );
 

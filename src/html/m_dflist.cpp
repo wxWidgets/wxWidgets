@@ -17,7 +17,7 @@
 #include "wx/defs.h"
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -34,7 +34,7 @@ FORCE_LINK_ME(m_dflist)
 
 
 
-TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD")
+TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD" )
 
     TAG_HANDLER_PROC(tag)
     {

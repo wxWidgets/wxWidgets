@@ -30,7 +30,6 @@
 %import controls.i
 
 %pragma(python) code = "import wx"
-%pragma(python) code = "import string"
 
 //---------------------------------------------------------------------------
 
@@ -57,6 +56,7 @@ public:
     bool IsWindow();
     bool IsSizer();
     bool IsSpacer();
+    bool IsShown();
 
     wxWindow *GetWindow();
     void SetWindow( wxWindow *window );
@@ -70,6 +70,7 @@ public:
     void SetOption( int option );
     void SetFlag( int flag );
     void SetBorder( int border );
+    void Show(bool show);
 
     // wxObject* GetUserData();
     %addmethods {
@@ -173,34 +174,42 @@ public:
     def Add(self, *args, **kw):
         if type(args[0]) == type(1):
             apply(self.AddSpacer, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.AddSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.AddWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Insert(self, *args, **kw):
         if type(args[1]) == type(1):
             apply(self.InsertSpacer, args, kw)
-        elif string.find(args[1].this, 'Sizer') != -1:
+        elif isinstance(args[1], wxSizerPtr):
             apply(self.InsertSizer, args, kw)
-        else:
+        elif isinstance(args[1], wxWindowPtr):
             apply(self.InsertWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Prepend(self, *args, **kw):
         if type(args[0]) == type(1):
             apply(self.PrependSpacer, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.PrependSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.PrependWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.RemovePos, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
-            apply(self.RemoveSizer, args, kw)
+            return apply(self.RemovePos, args, kw)
+        elif isinstance(args[0], wxSizerPtr):
+            return apply(self.RemoveSizer, args, kw)
+        elif isinstance(args[0], wxWindowPtr):
+            return apply(self.RemoveWindow, args, kw)
         else:
-            apply(self.RemoveWindow, args, kw)
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def AddMany(self, widgets):
         for childinfo in widgets:
@@ -221,10 +230,12 @@ public:
     def SetItemMinSize(self, *args):
         if type(args[0]) == type(1):
             apply(self.SetItemMinSizePos, args)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.SetItemMinSizeSizer, args)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.SetItemMinSizeWindow, args)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
      "
 
     wxSize GetSize();
@@ -262,6 +273,46 @@ public:
             return wxPy_ConvertList(&list, "wxSizerItem");
         }
     }
+
+
+    // Manage whether individual windows or sub-sizers are considered
+    // in the layout calculations or not.
+    %name(ShowWindow)void Show( wxWindow *window, bool show = TRUE );
+    %name(HideWindow)void Hide( wxWindow *window );
+    %name(ShowSizer)void Show( wxSizer *sizer, bool show = TRUE );
+    %name(HideSizer)void Hide( wxSizer *sizer );
+    %name(IsShownWindow)bool IsShown( wxWindow *window );
+    %name(IsShownSizer)bool IsShown( wxSizer *sizer );
+
+    %pragma(python) addtoclass = "
+    def Show(self, *args):
+        if isinstance(args[0], wxSizerPtr):
+            apply(self.ShowSizer, args)
+        elif isinstance(args[0], wxWindowPtr):
+            apply(self.ShowWindow, args)
+        else:
+            raise TypeError, 'Expected wxSizer or wxWindow parameter'
+
+    def Hide(self, *args):
+        if isinstance(args[0], wxSizerPtr):
+            apply(self.HideSizer, args)
+        elif isinstance(args[0], wxWindowPtr):
+            apply(self.HideWindow, args)
+        else:
+            raise TypeError, 'Expected wxSizer or wxWindow parameter'
+
+    def IsShown(self, *args):
+        if isinstance(args[0], wxSizerPtr):
+            return apply(self.IsShownSizer, args)
+        elif isinstance(args[0], wxWindowPtr):
+            return apply(self.IsShownWindow, args)
+        else:
+            raise TypeError, 'Expected wxSizer or wxWindow parameter'
+"
+
+    // Recursively call wxWindow::Show () on all sizer items.
+    void ShowItems (bool show);
+
 };
 
 
@@ -303,6 +354,7 @@ public:
     wxBoxSizer(int orient = wxHORIZONTAL);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     int GetOrientation();
+    void SetOrientation(int orient);
     void RecalcSizes();
     wxSize CalcMin();
 };

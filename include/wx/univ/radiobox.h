@@ -84,6 +84,10 @@ public:
     virtual wxString GetLabel() const;
     virtual void SetLabel(const wxString& label);
 
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip( wxToolTip *tip );
+#endif // wxUSE_TOOLTIPS
+
     // wxUniversal-only methods
 
     // another Append() version

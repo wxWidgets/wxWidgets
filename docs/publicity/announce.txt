@@ -1,33 +1,53 @@
-Announcing wxWindows 2.3.3: a cross-platform GUI toolkit
+Announcing wxWindows 2.4.0: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-September 15th, 2002 -- the wxWindows team is pleased to
-announce the release of a development snapshot of the mature
-cross-platform C++ application framework.
+January 7th, 2003 -- the wxWindows team is pleased to announce
+an official 2.4.0 release of the mature cross-platform C++
+application framework.
 
 The following platforms are supported:
 
 - Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
-- Unix with GTK+ 1.x and 2.0
-- Unix with X11
-- Unix with Motif/Lesstif
+- Linux/Unix with GTK+ 1.x and 2.0
+- Linux/Unix with X11
+- Linux/Unix with Motif/Lesstif
 - VMS with GTK+ 1.x
 - MacOS 8.6, 9.x and 10.x
-- OS/2 (alpha)
+- OS/2 (alpha release)
+
+A non-GUI subset of wxWindows called wxBase is also supported
+on most of these platforms.
 
 To get wxWindows, go to the Download page at:
 
   http://www.wxwindows.org
 
-This is likely to be the last development snapshot in the
-2.3.x series, before the release of the stable 2.4.x series.
+This is the first official release to support the many
+enhancements to wxWindows since the 2.2.x series.
+Improvements have been made to many areas, including:
+
+- better support for Windows XP
+- a much fuller Mac port
+- additional platforms (OS/2 and bare X11)
+- further type-safe container classes
+- improved build system
+- Unicode support for GTK+ and WIN32
+- improved wxBase support
+- wxArtProvider class allows tailoring of standard
+  wxWindows images
+- translations for more languages
+- mousewheel support
+- support for more ODBC databases
+- numerous bug fixes
 
 *** About wxWindows
 
-wxWindows is a comprehensive open-source, multi-platform C++
-GUI framework, that can be used to build commercial and free
-software. It's used by many organisations all over the world,
-including the company that invented the GUI.
+wxWindows is a comprehensive open-source, multi-platform C++ GUI
+framework, that can be used to build commercial and free
+software. First released in 1992, it's increasingly used by
+organisations and individuals all over the world due to its
+winning combination of sophistication, wide platform coverage,
+ease of use, unrestrictive licence and vibrant user community.
 
 For most ports, wxWindows adopts the native look and feel of
 each platform since it uses the native widget sets. There is also
@@ -44,9 +64,9 @@ handlers for eading and writing many image types, resizeable panels
 and dialogs on all platforms, document/view, OpenGL support,
 HTML-based and context-sensitive help, wizards, drag and drop,
 a grid class, ODBC support, threads, sockets, container classes,
-and much more. An 1800-page reference manual is provided in HTML,
-MS HTML Help, WinHelp, wxWindows Help and PDF, and there are over
-70 samples and demos.
+a styled text control, and much more. An 1800-page reference manual
+is provided in HTML, MS HTML Help, WinHelp, wxWindows Help and PDF
+formats, and there are over 70 samples and demos.
 
 If you're an MFC user, you'll find many wxWindows concepts
 reassuringly familiar, while often clearer and more consistent.

@@ -54,7 +54,7 @@ class MyFrame(wxFrame):
 
 
     def OnCloseWindow(self, event):
-        app.keepGoing = false
+        app.keepGoing = False
         self.Destroy()
 
     def OnIdle(self, event):
@@ -104,12 +104,12 @@ class MyApp(wxApp):
 
     def OnInit(self):
         frame = MyFrame(None, -1, "This is a test")
-        frame.Show(true)
+        frame.Show(True)
         self.SetTopWindow(frame)
 
-        self.keepGoing = true
+        self.keepGoing = True
 
-        return true
+        return True
 
 
 app = MyApp(0)

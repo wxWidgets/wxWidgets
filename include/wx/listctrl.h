@@ -44,7 +44,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_REPORT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = "listctrl" )
+                const wxString &name = wxT("listctrl") )
     {
         Create(parent, id, pos, size, style, validator, name);
     }

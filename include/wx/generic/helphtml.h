@@ -86,7 +86,7 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
        @file Name of help directory.
        @return true on success
    */
-   virtual bool LoadFile(const wxString& file = "");
+   virtual bool LoadFile(const wxString& file = wxT(""));
 
    /** Display list of all help entries.
        @return true on success

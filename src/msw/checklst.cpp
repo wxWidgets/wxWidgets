@@ -73,7 +73,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 class wxCheckListBoxItem : public wxOwnerDrawn
 {
-friend class wxCheckListBox;
+friend class WXDLLEXPORT wxCheckListBox;
 public:
   // ctor
   wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
@@ -93,7 +93,7 @@ private:
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
-                  : wxOwnerDrawn("", TRUE)   // checkable
+                  : wxOwnerDrawn(wxEmptyString, TRUE)   // checkable
 {
   m_bChecked = FALSE;
   m_pParent  = pParent;
@@ -298,7 +298,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     return wxListBox::Create(parent, id, pos, size, n, choices,
                              style | wxLB_OWNERDRAW, validator, name);
 }
-                            
+
 
 
 void wxCheckListBox::Delete(int N)
@@ -329,7 +329,7 @@ bool wxCheckListBox::SetFont( const wxFont &font )
 // --------------------
 
 // create a check list box item
-wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
+wxOwnerDrawn *wxCheckListBox::CreateLboxItem(size_t nIndex)
 {
   wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
   return pItem;
@@ -408,15 +408,19 @@ void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
     if ( oper != None )
     {
         wxArrayInt selections;
-        int count;
+        int count = 0;
         if ( HasMultipleSelection() )
         {
             count = GetSelections(selections);
         }
         else
         {
-            count = 1;
-            selections.Add(GetSelection());
+            int sel = GetSelection();
+            if (sel != -1)
+            {
+                count = 1;
+                selections.Add(sel);
+            }
         }
 
         for ( int i = 0; i < count; i++ )

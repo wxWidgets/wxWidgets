@@ -21,30 +21,31 @@
 #include "wx/string.h"
 #include "wx/window.h"
 #include "wx/dynarray.h"
+#include "wx/fl/fldefs.h"
 
 #define WXCONTROLBAR_VERSION      1.3
 
 // forward declarations
 
-class  wxFrameLayout;
+class  WXFL_DECLSPEC wxFrameLayout;
 
-class  cbDockPane;
-class  cbUpdatesManagerBase;
-class  cbBarDimHandlerBase;
-class  cbPluginBase;
-class  cbPluginEvent;
-class  cbPaneDrawPlugin;
+class  WXFL_DECLSPEC cbDockPane;
+class  WXFL_DECLSPEC cbUpdatesManagerBase;
+class  WXFL_DECLSPEC cbBarDimHandlerBase;
+class  WXFL_DECLSPEC cbPluginBase;
+class  WXFL_DECLSPEC cbPluginEvent;
+class  WXFL_DECLSPEC cbPaneDrawPlugin;
 
-class cbBarInfo;
-class cbRowInfo;
-class cbDimInfo;
-class cbCommonPaneProperties;
+class WXFL_DECLSPEC cbBarInfo;
+class WXFL_DECLSPEC cbRowInfo;
+class WXFL_DECLSPEC cbDimInfo;
+class WXFL_DECLSPEC cbCommonPaneProperties;
 
 typedef cbBarInfo* BarInfoPtrT;
 typedef cbRowInfo* RowInfoPtrT;
 
-WX_DEFINE_ARRAY( BarInfoPtrT, BarArrayT );
-WX_DEFINE_ARRAY( RowInfoPtrT, RowArrayT );
+WXFL_DEFINE_ARRAY( BarInfoPtrT, BarArrayT );
+WXFL_DEFINE_ARRAY( RowInfoPtrT, RowArrayT );
 
 // control bar states
 
@@ -97,7 +98,7 @@ Helper class, used for spying for unhandled mouse events on control bars
 and forwarding them to the frame layout.
 */
 
-class cbBarSpy : public wxEvtHandler
+class WXFL_DECLSPEC cbBarSpy : public wxEvtHandler
 {
 public:
     DECLARE_DYNAMIC_CLASS( cbBarSpy )
@@ -129,7 +130,7 @@ which can be docked along the top, bottom, right, or left side of the
 parent frame.
 */
 
-class wxFrameLayout : public wxEvtHandler
+class WXFL_DECLSPEC wxFrameLayout : public wxEvtHandler
 {
 public:
         // Default constructor, used only for serialization.
@@ -647,7 +648,7 @@ used by any particular updates-manager to store
 auxiliary information to be used by its updating algorithm.
 */
 
-class cbUpdateMgrData : public wxObject
+class WXFL_DECLSPEC cbUpdateMgrData : public wxObject
 {
     DECLARE_DYNAMIC_CLASS( cbUpdateMgrData )
 public:
@@ -687,7 +688,7 @@ to adjust the values in cbDimInfo::mSizes accordingly.
 Specific handlers can be hooked up to specific types of bar.
 */
 
-class cbBarDimHandlerBase : public wxObject
+class WXFL_DECLSPEC cbBarDimHandlerBase : public wxObject
 {
     DECLARE_ABSTRACT_CLASS( cbBarDimHandlerBase )
 
@@ -725,7 +726,7 @@ Helper class used internally by the wxFrameLayout class.
 Holds and manages information about bar dimensions.
 */
 
-class cbDimInfo : public wxObject
+class WXFL_DECLSPEC cbDimInfo : public wxObject
 {
     DECLARE_DYNAMIC_CLASS( cbDimInfo )
 public:
@@ -824,7 +825,7 @@ public:
 };
 
 // FIXME: this array definition compiles but probably doesn't do what was intended (GD)
-WX_DEFINE_ARRAY_LONG(float, cbArrayFloat);
+WXFL_DEFINE_ARRAY_LONG(float, cbArrayFloat);
 
 /*
 Helper class used internally by the wxFrameLayout class.

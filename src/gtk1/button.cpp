@@ -188,6 +188,15 @@ bool wxButton::Enable( bool enable )
     return TRUE;
 }
 
+bool wxButton::IsOwnGtkWindow( GdkWindow *window )
+{
+#ifdef __WXGTK20__
+    return GTK_BUTTON(m_widget)->event_window;
+#else
+    return (window == m_widget->window);
+#endif
+}
+
 void wxButton::ApplyWidgetStyle()
 {
     SetWidgetStyle();

@@ -113,9 +113,16 @@ static wxString wxReplaceUnderscore( const wxString& title )
 
     /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
     wxString str;
-    for ( pc = title; *pc != wxT('\0'); pc++ )
+    pc = title;
+    while (*pc != wxT('\0'))
     {
-        if (*pc == wxT('&'))
+        if ((*pc == wxT('&')) && (*(pc+1) == wxT('&')))
+        {
+            // "&" is doubled to indicate "&" instead of accelerator
+            ++pc;
+            str << wxT('&');
+        }
+        else if (*pc == wxT('&'))
         {
 #if GTK_CHECK_VERSION(1, 2, 0)
             str << wxT('_');
@@ -138,7 +145,7 @@ static wxString wxReplaceUnderscore( const wxString& title )
 #endif
         else
         {
-#if __WXGTK12__
+#ifdef __WXGTK12__
             if ( *pc == wxT('_') )
             {
                 // underscores must be doubled to prevent them from being
@@ -149,8 +156,27 @@ static wxString wxReplaceUnderscore( const wxString& title )
 
             str << *pc;
         }
+        ++pc;
     }
     return str;
+}
+
+//-----------------------------------------------------------------------------
+// activate message from GTK
+//-----------------------------------------------------------------------------
+
+static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
+{
+    if (g_isIdle) wxapp_install_idle_handler();
+
+    wxMenuEvent event( wxEVT_MENU_OPEN, -1 );
+    event.SetEventObject( menu );
+
+    if (menu->GetEventHandler()->ProcessEvent(event))
+        return;
+
+    wxWindow *win = menu->GetInvokingWindow();
+    if (win) win->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -384,10 +410,27 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
 
 #endif
 
+    gtk_signal_connect( GTK_OBJECT(menu->m_owner), "activate",
+                        GTK_SIGNAL_FUNC(gtk_menu_open_callback),
+                        (gpointer)menu );
+
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
-    // adding menu later on.
+    // addings menu later on.
     if (m_invokingWindow)
+    {
         wxMenubarSetInvokingWindow( menu, m_invokingWindow );
+
+            // OPTIMISE ME:  we should probably cache this, or pass it
+            //               directly, but for now this is a minimal
+            //               change to validate the new dynamic sizing.
+            //               see (and refactor :) similar code in Remove
+            //               below.
+
+        wxFrame	*frame = wxDynamicCast( m_invokingWindow, wxFrame );
+
+        if( frame )
+            frame->UpdateMenuBarSize();
+    }
 
     return TRUE;
 }
@@ -427,6 +470,36 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     return menuOld;
 }
 
+static wxMenu *CopyMenu (wxMenu *menu)
+{
+    wxMenu *menucopy = new wxMenu ();
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *item = node->GetData();
+        int itemid = item->GetId();
+        wxString text = item->GetText();
+        text.Replace(wxT("_"), wxT("&"));
+        wxMenu *submenu = item->GetSubMenu();
+        if (!submenu)
+        {
+            wxMenuItem* itemcopy = new wxMenuItem(menucopy,
+                                        itemid, text,
+                                        menu->GetHelpString(itemid));
+            itemcopy->SetBitmap(item->GetBitmap());
+            itemcopy->SetCheckable(item->IsCheckable());
+            menucopy->Append(itemcopy);
+        }
+        else
+          menucopy->Append (itemid, text, CopyMenu(submenu),
+                            menu->GetHelpString(itemid));
+    
+        node = node->GetNext();
+    }
+  
+    return menucopy;
+}
+
 wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
@@ -440,17 +513,31 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     printf( "menu shell entries before %d\n", (int)g_list_length( menu_shell->children ) );
 */
 
+    wxMenu *menucopy = CopyMenu( menu );
+
     // unparent calls unref() and that would delete the widget so we raise
     // the ref count to 2 artificially before invoking unparent.
     gtk_widget_ref( menu->m_menu );
     gtk_widget_unparent( menu->m_menu );
 
     gtk_widget_destroy( menu->m_owner );
+    delete menu;
 
+    menu = menucopy;
 /*
     printf( "factory entries after %d\n", (int)g_slist_length(m_factory->items) );
     printf( "menu shell entries after %d\n", (int)g_list_length( menu_shell->children ) );
 */
+
+    if (m_invokingWindow)
+    {
+            // OPTIMISE ME:  see comment in GtkAppend
+
+	wxFrame	*frame = wxDynamicCast( m_invokingWindow, wxFrame );
+
+	if( frame )
+            frame->UpdateMenuBarSize();
+    }
 
     return menu;
 }
@@ -554,12 +641,14 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
     wxString text( menu->GetTitle() );
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_') || *pc == wxT('&') )
+        if ( *pc == wxT('_') )
         {
-            // '_' is the escape character for GTK+ and '&' is the one for
-            // wxWindows - skip both of them
+            // '_' is the escape character for GTK+
             continue;
         }
+
+        // don't remove ampersands '&' since if we have them in the menu title
+        // it means that they were doubled to indicate "&" instead of accelerator
 
         label += *pc;
     }
@@ -748,23 +837,33 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_')  )
+        if ( *pc == wxT('_') )
         {
-            // wxGTK escapes "xxx_xxx" to "xxx__xxx"
+            // GTK 1.2 escapes "xxx_xxx" to "xxx__xxx"
             pc++;
             label += *pc;
             continue;
         }
 
-        if ( *pc == wxT('&') )
+#if GTK_CHECK_VERSION(2, 0, 0)
+        if ( *pc == wxT('\\')  )
         {
-            // wxMSW escapes &
+            // GTK 2.0 escapes "xxx/xxx" to "xxx\/xxx"
+            pc++;
+            label += *pc;
             continue;
         }
+#endif
 
+        if ( (*pc == wxT('&')) && (*(pc+1) != wxT('&')) )
+        {
+            // wxMSW escapes "&"
+            // "&" is doubled to indicate "&" instead of accelerator
+            continue;
+        }
+        
         label += *pc;
     }
-
     return label;
 }
 
@@ -784,42 +883,54 @@ void wxMenuItem::SetText( const wxString& str )
     {
         GtkLabel *label;
         if (m_labelWidget)
-          label = (GtkLabel*) m_labelWidget;
+            label = (GtkLabel*) m_labelWidget;
         else
-          label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
+            label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
 
-        /* set new text */
+#if GTK_CHECK_VERSION(2, 0, 0)
+        // We have to imitate item_factory_unescape_label here
+        wxString tmp;
+        for (size_t n = 0; n < m_text.Len(); n++)
+        {
+            if (m_text[n] != wxT('\\'))
+                tmp += m_text[n];
+        }
+        
+        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV(tmp) );
+#else
+        // set new text
         gtk_label_set( label, wxGTK_CONV( m_text ) );
 
-        /* reparse key accel */
-        (void)gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( m_text ) );
+        // reparse key accel
+        (void)gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV(m_text) );
         gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
+#endif
     }
 }
 
 // it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::DoSetText( const wxString& str )
 {
-    /* '\t' is the deliminator indicating a hot key */
+    // '\t' is the deliminator indicating a hot key
     m_text.Empty();
     const wxChar *pc = str;
-    for (; (*pc != wxT('\0')) && (*pc != wxT('\t')); pc++ )
+    while ( (*pc != wxT('\0')) && (*pc != wxT('\t')) )
     {
-#if GTK_CHECK_VERSION(1, 2, 0)
-        if (*pc == wxT('&'))
+        if ((*pc == wxT('&')) && (*(pc+1) == wxT('&')))
+        {
+            // "&" is doubled to indicate "&" instead of accelerator
+            ++pc;
+            m_text << wxT('&');
+        }
+        else if (*pc == wxT('&'))
         {
             m_text << wxT('_');
         }
+#if GTK_CHECK_VERSION(2, 0, 0)
         else if ( *pc == wxT('_') )    // escape underscores
         {
-            m_text << wxT("__");
+            m_text << wxT("__"); 
         }
-#else // GTK+ < 1.2.0
-        if (*pc == wxT('&'))
-        {
-        }
-#endif
-#if GTK_CHECK_VERSION(2, 0, 0)
         else if (*pc == wxT('/'))      // we have to escape slashes
         {
             m_text << wxT("\\/");
@@ -828,16 +939,22 @@ void wxMenuItem::DoSetText( const wxString& str )
         {
             m_text << wxT("\\\\");
         }
-#elif GTK_CHECK_VERSION(1, 2, 0)
+#else
+        else if ( *pc == wxT('_') )    // escape underscores
+        {
+            m_text << wxT("__");
+        }
         else if (*pc == wxT('/'))      /* we have to filter out slashes ... */
         {
             m_text << wxT('\\');  /* ... and replace them with back slashes */
         }
 #endif
-        else
+        else {
             m_text << *pc;
+        }
+        ++pc;
     }
-
+    
     m_hotKey = wxT("");
 
     if(*pc == wxT('\t'))
@@ -913,11 +1030,18 @@ wxString wxMenuItem::GetFactoryPath() const
 
     for ( const wxChar *pc = m_text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_') || *pc == wxT('&') )
+        if ( *pc == wxT('_') )
         {
-            // remove '_' and '&' unconditionally
+#ifdef __WXGTK20__
+            pc++;
+#else
+            // remove '_' unconditionally
             continue;
+#endif
         }
+
+        // don't remove ampersands '&' since if we have them in the menu item title
+        // it means that they were doubled to indicate "&" instead of accelerator
 
         path += *pc;
     }
@@ -1042,7 +1166,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
         if (accel_key != GDK_VoidSymbol)
-            {
+        {
             gtk_widget_add_accelerator (menuItem,
                                         "activate_item",
                                         gtk_menu_ensure_uline_accel_group (GTK_MENU (m_menu)),
@@ -1060,6 +1184,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
+                            
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
         gtk_widget_show( menuItem );
 
@@ -1097,7 +1222,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                 {
                     // start of a new radio group
                     item_type = "<RadioItem>";
-                    m_pathLastRadio = bufPath + 1;
+                    wxString tmp( wxGTK_CONV_BACK( bufPath ) );
+                    tmp.Remove(0,1);
+                    m_pathLastRadio = tmp;
                 }
                 else // continue the radio group
                 {
@@ -1143,10 +1270,15 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         wxString path( mitem->GetFactoryPath() );
         menuItem = gtk_item_factory_get_widget( m_factory, wxGTK_CONV( path ) );
+        
+        if (!menuItem)
+            wxLogError( wxT("Wrong menu path: %s\n"), path.c_str() );
     }
 
     if ( !mitem->IsSeparator() )
     {
+        wxASSERT_MSG( menuItem, wxT("invalid menuitem") );
+    
         gtk_signal_connect( GTK_OBJECT(menuItem), "select",
                             GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
                             (gpointer)this );
@@ -1283,6 +1415,33 @@ static wxString GetHotKey( const wxMenuItem& item )
             case WXK_DELETE:
                 hotkey << wxT("Delete" );
                 break;
+            case WXK_UP:
+                hotkey << wxT("Up" );
+                break;
+            case WXK_DOWN:
+                hotkey << wxT("Down" );
+                break;
+            case WXK_PAGEUP:
+                hotkey << wxT("Prior" );
+                break;
+            case WXK_PAGEDOWN:
+                hotkey << wxT("Next" );
+                break;
+            case WXK_LEFT:
+                hotkey << wxT("Left" );
+                break;
+            case WXK_RIGHT:
+                hotkey << wxT("Right" );
+                break;
+            case WXK_HOME:
+                hotkey << wxT("Home" );
+                break;
+            case WXK_END:
+                hotkey << wxT("End" );
+                break;
+            case WXK_RETURN:
+                hotkey << wxT("Return" );
+                break;
 
                 // if there are any other keys wxGetAccelFromString() may
                 // return, we should process them here
@@ -1290,7 +1449,7 @@ static wxString GetHotKey( const wxMenuItem& item )
             default:
                 if ( code < 127 )
                 {
-                    gchar *name = gdk_keyval_name((guint)code);
+                    wxString name = wxGTK_CONV_BACK( gdk_keyval_name((guint)code) );
                     if ( name )
                     {
                         hotkey << name;

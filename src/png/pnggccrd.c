@@ -6,7 +6,7 @@
  *     and http://www.intel.com/drg/pentiumII/appnotes/923/923.htm
  *     for Intel's performance analysis of the MMX vs. non-MMX code.
  *
- * libpng version 1.2.4 - July 8, 2002
+ * libpng version 1.2.5rc3 - September 18, 2002
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1998-2002 Glenn Randers-Pehrson
  * Copyright (c) 1998, Intel Corporation
@@ -5075,7 +5075,9 @@ png_read_filter_row(png_structp png_ptr, png_row_infop row_info, png_bytep
 
    if (_mmx_supported == 2) {
        /* this should have happened in png_init_mmx_flags() already */
+#if !defined(PNG_1_0_X)
        png_warning(png_ptr, "asm_flags may not have been initialized");
+#endif
        png_mmx_support();
    }
 #endif /* PNG_ASSEMBLER_CODE_SUPPORTED */
@@ -5345,13 +5347,13 @@ png_mmx_support(void)
         "pushl %%ecx          \n\t"  // save original Eflag to stack
         "popfl                \n\t"  // restore original Eflag
         "xorl %%ecx, %%eax    \n\t"  // compare new Eflag with original Eflag
-        "jz .NOT_SUPPORTED    \n\t"  // if same, CPUID instr. is not supported
+        "jz 0f                \n\t"  // if same, CPUID instr. is not supported
 
         "xorl %%eax, %%eax    \n\t"  // set eax to zero
 //      ".byte  0x0f, 0xa2    \n\t"  // CPUID instruction (two-byte opcode)
         "cpuid                \n\t"  // get the CPU identification info
         "cmpl $1, %%eax       \n\t"  // make sure eax return non-zero value
-        "jl .NOT_SUPPORTED    \n\t"  // if eax is zero, MMX is not supported
+        "jl 0f                \n\t"  // if eax is zero, MMX is not supported
 
         "xorl %%eax, %%eax    \n\t"  // set eax to zero and...
         "incl %%eax           \n\t"  // ...increment eax to 1.  This pair is
@@ -5359,14 +5361,14 @@ png_mmx_support(void)
         "cpuid                \n\t"  // get the CPU identification info again
         "andl $0x800000, %%edx \n\t" // mask out all bits but MMX bit (23)
         "cmpl $0, %%edx       \n\t"  // 0 = MMX not supported
-        "jz .NOT_SUPPORTED    \n\t"  // non-zero = yes, MMX IS supported
+        "jz 0f                \n\t"  // non-zero = yes, MMX IS supported
 
         "movl $1, %%eax       \n\t"  // set return value to 1
-        "jmp  .RETURN         \n\t"  // DONE:  have MMX support
+        "jmp  1f              \n\t"  // DONE:  have MMX support
 
-    ".NOT_SUPPORTED:          \n\t"  // target label for jump instructions
+    "0:                       \n\t"  // .NOT_SUPPORTED: target label for jump instructions
         "movl $0, %%eax       \n\t"  // set return value to 0
-    ".RETURN:          \n\t"  // target label for jump instructions
+    "1:                       \n\t"  // .RETURN: target label for jump instructions
         "movl %%eax, _mmx_supported \n\t" // save in global static variable, too
         "popl %%edx           \n\t"  // restore edx
         "popl %%ecx           \n\t"  // restore ecx

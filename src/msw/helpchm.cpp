@@ -42,10 +42,10 @@
 
 #ifndef UNICODE
     typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCSTR, UINT, DWORD );
-    #define HTMLHELP_NAME "HtmlHelpA"
+    #define HTMLHELP_NAME wxT("HtmlHelpA")
 #else // ANSI
     typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, DWORD );
-    #define HTMLHELP_NAME "HtmlHelpW"
+    #define HTMLHELP_NAME wxT("HtmlHelpW")
 #endif
 
 // dll symbol handle

@@ -8,7 +8,7 @@ class TestLayoutf(wxPanel):
     def __init__(self, parent):
         wxPanel.__init__(self, parent, -1)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_BUTTON(self, 100, self.OnButton)
 
         self.panelA = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)

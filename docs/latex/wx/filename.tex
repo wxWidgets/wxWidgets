@@ -89,7 +89,7 @@ on the file name format and the only portable way to answer to this question is
 to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
 filename is absolute you may use \helpref{Normalize}{wxfilenamenormalize}. There
 is also an inverse function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} 
-which undoes what \helpref{Normalize(wxPATH\_NORM\_DOTS}{wxfilenamenormalize} 
+which undoes what \helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} 
 does.
 
 Other functions returning information about the file format provided by this
@@ -598,7 +598,7 @@ Deletes the specified directory from the file system.
 
 \membersection{wxFileName::SameAs}\label{wxfilenamesameas}
 
-\func{bool}{SameAs}{\param{const wxFileName\& }{filepath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\constfunc{bool}{SameAs}{\param{const wxFileName\& }{filepath}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Compares the filename using the rules of this platform.
 
@@ -674,9 +674,19 @@ Assigns the new value to this filename object.
 
 \membersection{wxFileName::operator==}\label{wxfilenameoperatorequal}
 
-\func{bool operator}{operator==}{\param{const wxFileName\& }{filename}}
+\constfunc{bool operator}{operator==}{\param{const wxFileName\& }{filename}}
 
-\func{bool operator}{operator==}{\param{const wxString\& }{filename}}
+\constfunc{bool operator}{operator==}{\param{const wxString\& }{filename}}
 
-Returns {\tt TRUE} if the filenames are equal for the native file format.
+Returns {\tt TRUE} if the filenames are equal. The string {\it filenames} is
+interpreted as a path in the native filename format.
+
+\membersection{wxFileName::operator!=}\label{wxfilenameoperatornotequal}
+
+\constfunc{bool operator}{operator!=}{\param{const wxFileName\& }{filename}}
+
+\constfunc{bool operator}{operator!=}{\param{const wxString\& }{filename}}
+
+Returns {\tt TRUE} if the filenames are different. The string {\it filenames}
+is interpreted as a path in the native filename format.
 

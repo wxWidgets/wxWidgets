@@ -30,12 +30,12 @@ class TestPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         outsideSizer = wxBoxSizer(wxVERTICAL)
 
         msg = "Drag-And-Drop of URLs"
         text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
-        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, false))
+        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, False))
         text.SetLabel(msg)
         w,h = text.GetTextExtent(msg)
         text.SetSize(wxSize(w,h+1))
@@ -44,7 +44,7 @@ class TestPanel(wxPanel):
         outsideSizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
         outsideSizer.Add(20,20)
 
-        self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false))
+        self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
 
         inSizer = wxFlexGridSizer(2, 2, 5, 5)
         inSizer.AddGrowableCol(0)

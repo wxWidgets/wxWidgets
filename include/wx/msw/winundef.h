@@ -58,6 +58,21 @@
     }
 #endif
 
+// FindText
+
+#ifdef FindText
+    #undef FindText
+
+    inline HWND APIENTRY FindText(LPFINDREPLACE lpfindreplace)
+    {
+        #ifdef UNICODE
+            return FindTextW(lpfindreplace);
+        #else
+            return FindTextA(lpfindreplace);
+        #endif // !UNICODE
+    }
+#endif
+
 // GetCharWidth
 
 #ifdef GetCharWidth

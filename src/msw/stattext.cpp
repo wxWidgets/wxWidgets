@@ -170,16 +170,4 @@ bool wxStaticText::SetFont(const wxFont& font)
     return ret;
 }
 
-long wxStaticText::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    // Ensure that static items get messages. Some controls don't like this
-    // message to be intercepted (e.g. RichEdit), hence the tests.
-    // Messes up display with Windows XP, apparently, so have to
-    // do explicit hit-testing in wxWindowMSW.
-#if 0
-    if (nMsg == WM_NCHITTEST)
-        return (long)HTCLIENT;
-#endif
-    return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
-}
 #endif // wxUSE_STATTEXT

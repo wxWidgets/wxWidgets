@@ -79,7 +79,7 @@ wxFrame(frame, -1, title, pos, size, wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCRO
 		// add first row
 		sizer->Add(
 				  new wxButton( this, -1, "B1 - 0,0, horizontal resizable" ),
-				  0, 0, 0, new wxMultiCellItemHandle(0,0,1,1, wxDefaultSize, wxHORIZENTAL_RESIZABLE, wxSize(2,2)));
+				  0, 0, 0, new wxMultiCellItemHandle(0,0,1,1, wxDefaultSize, wxHORIZONTAL_RESIZABLE, wxSize(2,2)));
 		sizer->Add(
 				  new wxButton( this, -1, "B2 - 0,1, vertical resizable" ),
 				  0, 0, 0, new wxMultiCellItemHandle(0,1,1,1, wxDefaultSize, wxVERTICAL_RESIZABLE, wxSize(2, 2)));

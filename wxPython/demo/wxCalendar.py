@@ -75,7 +75,7 @@ class TestPanel(wxPanel):
 
 # set attributes of calendar
 
-        self.calend.hide_title = TRUE
+        self.calend.hide_title = True
         self.calend.HideGrid()
         self.calend.SetWeekColor('WHITE', 'BLACK')
 
@@ -91,7 +91,7 @@ class TestPanel(wxPanel):
 
         mID = NewId()
         self.scroll = wxScrollBar(self, mID, wxPoint(100, 240), wxSize(200, 20), wxSB_HORIZONTAL)
-        self.scroll.SetScrollbar(start_month-1, 1, 12, 1, TRUE)
+        self.scroll.SetScrollbar(start_month-1, 1, 12, 1, True)
         EVT_COMMAND_SCROLL(self, mID, self.Scroll)
 
 # spin control for year selection
@@ -147,8 +147,8 @@ class TestPanel(wxPanel):
 
     def TestFrame(self, event):
         frame = CalendFrame(self, -1, "Test Calendar", self.log)
-        frame.Show(true)
-        return true
+        frame.Show(True)
+        return True
 
 # calendar print preview
 
@@ -171,7 +171,7 @@ class TestPanel(wxPanel):
         name = event.GetString()
         self.log.WriteText('EvtComboBox: %s\n' % name)
         monthval = self.date.FindString(name)
-        self.scroll.SetScrollbar(monthval, 1, 12, 1, TRUE)
+        self.scroll.SetScrollbar(monthval, 1, 12, 1, True)
 
         self.calend.SetMonth(monthval+1)
         self.ResetDisplay()
@@ -366,8 +366,8 @@ class PrintCalend:
         self.sel_lst = []        # highlighted selected days
 
         self.size = None
-        self.hide_title = FALSE
-        self.hide_grid = FALSE
+        self.hide_title = False
+        self.hide_grid = False
         self.set_day = None
 
     def SetParms(self):
@@ -416,7 +416,7 @@ class PrintCalend:
         frame.Initialize()
         frame.SetPosition(self.frame.GetPosition())
         frame.SetSize(self.frame.GetSize())
-        frame.Show(true)
+        frame.Show(True)
 
     def Print(self):
         pdd = wxPrintDialogData()
@@ -438,7 +438,7 @@ class PrintCalend:
 
         if self.preview is None:
             cal.SetPSize(size[0]/self.pagew, size[1]/self.pageh)
-            cal.SetPreview(FALSE)
+            cal.SetPreview(False)
 
         else:
             if self.preview == 1:
@@ -454,7 +454,7 @@ class PrintCalend:
         cal.grid_color = self.grid_color
         cal.high_color = self.high_color
         cal.back_color = self.back_color
-        cal.outer_border = FALSE
+        cal.outer_border = False
         cal.font = self.font
         cal.bold = self.bold
 
@@ -534,9 +534,9 @@ class SetPrintout(wxPrintout):
 
     def HasPage(self, page):
         if page <= self.end_pg:
-            return true
+            return True
         else:
-            return false
+            return False
 
     def GetPageInfo(self):
         self.end_pg = self.canvas.GetTotalPages()
@@ -594,14 +594,14 @@ class SetPrintout(wxPrintout):
         self.canvas.SetPageSize(self.psizew, self.psizeh)
 
         self.canvas.DoDrawing(dc)
-        return true
+        return True
 
 class MyApp(wxApp):
     def OnInit(self):
         frame = CalendFrame(None, -1, "Test Calendar")
-        frame.Show(true)
+        frame.Show(True)
         self.SetTopWindow(frame)
-        return true
+        return True
 
 #---------------------------------------------------------------------------
 

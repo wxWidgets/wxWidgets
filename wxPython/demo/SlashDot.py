@@ -170,22 +170,22 @@ class AppStatusBar(wxStatusBar):
 # This is a simple timer class to start a function after a short delay;
 class QuickTimer(wxTimer):
     def __init__(self, func, wait=100):
-	wxTimer.__init__(self)
-	self.callback = func
-	self.Start(wait); # wait .1 second (.001 second doesn't work. why?)
+        wxTimer.__init__(self)
+        self.callback = func
+        self.Start(wait); # wait .1 second (.001 second doesn't work. why?)
     def Notify(self):
-	self.Stop();
-	apply(self.callback, ());
+        self.Stop();
+        apply(self.callback, ());
 
 class AppFrame(wxFrame):
     def __init__(self, parent, id, title):
         wxFrame.__init__(self, parent, id, title, wxPyDefaultPosition,
                          wxSize(650, 250))
 
-	# if the window manager closes the window:
-	EVT_CLOSE(self, self.OnCloseWindow);
+        # if the window manager closes the window:
+        EVT_CLOSE(self, self.OnCloseWindow);
 
-	# Now Create the menu bar and items
+        # Now Create the menu bar and items
         self.mainmenu = wxMenuBar()
 
         menu = wxMenu()
@@ -201,52 +201,52 @@ class AppFrame(wxFrame):
         EVT_MENU(self, 212, self.OnViewArticle)
         self.mainmenu.Append(menu, '&View')
         menu = wxMenu()
-        menu.Append(220, '&Internal', 'Use internal text browser',TRUE)
-        menu.Check(220, true)
+        menu.Append(220, '&Internal', 'Use internal text browser',True)
+        menu.Check(220, True)
         self.UseInternal = 1;
         EVT_MENU(self, 220, self.OnBrowserInternal)
         menu.Append(222, '&Settings...', 'External browser Settings')
         EVT_MENU(self, 222, self.OnBrowserSettings)
         self.mainmenu.Append(menu, '&Browser')
-	menu = wxMenu()
-	menu.Append(230, '&About', 'Some documentation');
-	EVT_MENU(self, 230, self.OnAbout)
-	self.mainmenu.Append(menu, '&Help')
+        menu = wxMenu()
+        menu.Append(230, '&About', 'Some documentation');
+        EVT_MENU(self, 230, self.OnAbout)
+        self.mainmenu.Append(menu, '&Help')
 
         self.SetMenuBar(self.mainmenu)
 
-	if wxPlatform == '__WXGTK__':
-	    # I like lynx. Also Netscape 4.5 doesn't react to my cmdline opts
-	    self.BrowserSettings = "xterm -e lynx %s &"
-	elif wxPlatform == '__WXMSW__':
-	    # netscape 4.x likes to hang out here...
-	    self.BrowserSettings = '\\progra~1\\Netscape\\Communicator\\Program\\netscape.exe %s'
-	else:
-	    # a wild guess...
-	    self.BrowserSettings = 'netscape %s'
+        if wxPlatform == '__WXGTK__':
+            # I like lynx. Also Netscape 4.5 doesn't react to my cmdline opts
+            self.BrowserSettings = "xterm -e lynx %s &"
+        elif wxPlatform == '__WXMSW__':
+            # netscape 4.x likes to hang out here...
+            self.BrowserSettings = '\\progra~1\\Netscape\\Communicator\\Program\\netscape.exe %s'
+        else:
+            # a wild guess...
+            self.BrowserSettings = 'netscape %s'
 
-	# A status bar to tell people what's happening
-	self.sb = AppStatusBar(self)
+        # A status bar to tell people what's happening
+        self.sb = AppStatusBar(self)
         self.SetStatusBar(self.sb)
 
         self.list = wxListCtrl(self, 1100, style=wxLC_REPORT)
-	self.list.InsertColumn(0, 'Subject')
-	self.list.InsertColumn(1, 'Date')
-	self.list.InsertColumn(2, 'Posted by')
-	self.list.InsertColumn(3, 'Comments')
+        self.list.InsertColumn(0, 'Subject')
+        self.list.InsertColumn(1, 'Date')
+        self.list.InsertColumn(2, 'Posted by')
+        self.list.InsertColumn(3, 'Comments')
         self.list.SetColumnWidth(0, 300)
         self.list.SetColumnWidth(1, 150)
         self.list.SetColumnWidth(2, 100)
         self.list.SetColumnWidth(3, 100)
 
         EVT_LIST_ITEM_SELECTED(self, 1100, self.OnItemSelected)
-	EVT_LEFT_DCLICK(self.list, self.OnLeftDClick)
+        EVT_LEFT_DCLICK(self.list, self.OnLeftDClick)
 
-	self.logprint("Connecting to slashdot... Please wait.")
-	# wxYield doesn't yet work here. That's why we use a timer
-	# to make sure that we see some GUI stuff before the slashdot
-	# file is transfered.
-	self.timer = QuickTimer(self.DoRefresh, 1000)
+        self.logprint("Connecting to slashdot... Please wait.")
+        # wxYield doesn't yet work here. That's why we use a timer
+        # to make sure that we see some GUI stuff before the slashdot
+        # file is transfered.
+        self.timer = QuickTimer(self.DoRefresh, 1000)
 
     def logprint(self, x):
         self.sb.logprint(x)
@@ -268,44 +268,44 @@ class AppFrame(wxFrame):
             self.list.SetStringItem(i, 3, article[6])
             self.url.append(article[1])
             i = i + 1
-	self.logprint("File retrieved OK.")
+        self.logprint("File retrieved OK.")
 
     def OnViewRefresh(self, event):
-	self.logprint("Connecting to slashdot... Please wait.");
-	wxYield()
-	self.DoRefresh()
+        self.logprint("Connecting to slashdot... Please wait.");
+        wxYield()
+        self.DoRefresh()
 
     def DoViewIndex(self):
         if self.UseInternal:
             self.view = HTMLTextView(self, -1, 'slashdot.org',
                                      'http://slashdot.org')
-            self.view.Show(true)
+            self.view.Show(True)
         else:
             self.logprint(self.BrowserSettings % ('http://slashdot.org'))
             #os.system(self.BrowserSettings % ('http://slashdot.org'))
             wxExecute(self.BrowserSettings % ('http://slashdot.org'))
-	self.logprint("OK")
+        self.logprint("OK")
 
     def OnViewIndex(self, event):
-	self.logprint("Starting browser... Please wait.")
-	wxYield()
-	self.DoViewIndex()
+        self.logprint("Starting browser... Please wait.")
+        wxYield()
+        self.DoViewIndex()
 
     def DoViewArticle(self):
         if self.current<0: return
         url = self.url[self.current]
         if self.UseInternal:
             self.view = HTMLTextView(self, -1, url, url)
-            self.view.Show(true)
+            self.view.Show(True)
         else:
             self.logprint(self.BrowserSettings % (url))
             os.system(self.BrowserSettings % (url))
-	self.logprint("OK")
+        self.logprint("OK")
 
     def OnViewArticle(self, event):
-	self.logprint("Starting browser... Please wait.")
-	wxYield()
-	self.DoViewArticle()
+        self.logprint("Starting browser... Please wait.")
+        wxYield()
+        self.DoViewArticle()
 
     def OnBrowserInternal(self, event):
         if self.mainmenu.Checked(220):
@@ -319,28 +319,28 @@ class AppFrame(wxFrame):
             self.BrowserSettings = dlg.GetValue()
 
     def OnAbout(self, event):
-	dlg = wxMessageDialog(self, __doc__, "wxSlash", wxOK | wxICON_INFORMATION)
-	dlg.ShowModal()
+        dlg = wxMessageDialog(self, __doc__, "wxSlash", wxOK | wxICON_INFORMATION)
+        dlg.ShowModal()
 
     def OnItemSelected(self, event):
         self.current = event.m_itemIndex
         self.logprint("URL: %s" % (self.url[self.current]))
 
     def OnLeftDClick(self, event):
-	(x,y) = event.Position();
-	# Actually, we should convert x,y to logical coords using
-	# a dc, but only for a wxScrolledWindow widget.
-	# Now wxGTK derives wxListCtrl from wxScrolledWindow,
-	# and wxMSW from wxControl... So that doesn't work.
-	#dc = wxClientDC(self.list)
-	##self.list.PrepareDC(dc)
-	#x = dc.DeviceToLogicalX( event.GetX() )
-	#y = dc.DeviceToLogicalY( event.GetY() )
-	id = self.list.HitTest(wxPoint(x,y))
-	#print "Double click at %d %d" % (x,y), id
-	# Okay, we got a double click. Let's assume it's the current selection
-	wxYield()
-	self.OnViewArticle(event)
+        (x,y) = event.Position();
+        # Actually, we should convert x,y to logical coords using
+        # a dc, but only for a wxScrolledWindow widget.
+        # Now wxGTK derives wxListCtrl from wxScrolledWindow,
+        # and wxMSW from wxControl... So that doesn't work.
+        #dc = wxClientDC(self.list)
+        ##self.list.PrepareDC(dc)
+        #x = dc.DeviceToLogicalX( event.GetX() )
+        #y = dc.DeviceToLogicalY( event.GetY() )
+        id = self.list.HitTest(wxPoint(x,y))
+        #print "Double click at %d %d" % (x,y), id
+        # Okay, we got a double click. Let's assume it's the current selection
+        wxYield()
+        self.OnViewArticle(event)
 
     def OnCloseWindow(self, event):
         self.Destroy()
@@ -353,9 +353,9 @@ if __name__ == '__main__':
     class MyApp(wxApp):
         def OnInit(self):
             frame = AppFrame(None, -1, "Slashdot Breaking News")
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
     app = MyApp(0)
     app.MainLoop()
@@ -368,7 +368,7 @@ if __name__ == '__main__':
 def runTest(frame, nb, log):
     win = AppFrame(None, -1, "Slashdot Breaking News")
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 overview = __doc__

@@ -56,9 +56,12 @@ class wxXmlResourcePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,xrcc=xrcc):
-        if self.thisown == 1 :
-            xrcc.delete_wxXmlResource(self)
+    def __del__(self, delfunc=xrcc.delete_wxXmlResource):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def Load(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_Load,(self,) + _args, _kwargs)
         return val
@@ -135,6 +138,9 @@ class wxXmlResourcePtr(wxObjectPtr):
     def GetFlags(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_GetFlags,(self,) + _args, _kwargs)
         return val
+    def SetFlags(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlResource_SetFlags,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxXmlResource instance at %s>" % (self.this,)
 class wxXmlResource(wxXmlResourcePtr):
@@ -150,6 +156,24 @@ def wxEmptyXmlResource(*_args,**_kwargs):
     val.thisown = 1
     val.InitAllHandlers()
     return val
+
+
+class wxXmlSubclassFactoryPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlSubclassFactory__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxXmlSubclassFactory instance at %s>" % (self.this,)
+class wxXmlSubclassFactory(wxXmlSubclassFactoryPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(xrcc.new_wxXmlSubclassFactory,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxXmlSubclassFactory)
+
+
 
 
 class wxXmlPropertyPtr :
@@ -189,9 +213,12 @@ class wxXmlNodePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,xrcc=xrcc):
-        if self.thisown == 1 :
-            xrcc.delete_wxXmlNode(self)
+    def __del__(self, delfunc=xrcc.delete_wxXmlNode):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def AddChild(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlNode_AddChild,(self,) + _args, _kwargs)
         return val
@@ -281,9 +308,12 @@ class wxXmlDocumentPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,xrcc=xrcc):
-        if self.thisown == 1 :
-            xrcc.delete_wxXmlDocument(self)
+    def __del__(self, delfunc=xrcc.delete_wxXmlDocument):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def Load(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlDocument_Load,(self,) + _args, _kwargs)
         return val
@@ -320,6 +350,9 @@ class wxXmlDocumentPtr(wxObjectPtr):
         return val
     def GetEncoding(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlDocument_GetEncoding,(self,) + _args, _kwargs)
+        return val
+    def SetEncoding(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlDocument_SetEncoding,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxXmlDocument instance at %s>" % (self.this,)
@@ -474,6 +507,8 @@ class wxXmlResourceHandler(wxXmlResourceHandlerPtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
+wxXmlResource_AddSubclassFactory = xrcc.wxXmlResource_AddSubclassFactory
+
 wxXmlResource_GetXRCID = xrcc.wxXmlResource_GetXRCID
 
 def wxXmlResource_Get(*_args, **_kwargs):
@@ -515,3 +550,35 @@ wxXML_HTML_DOCUMENT_NODE = xrcc.wxXML_HTML_DOCUMENT_NODE
 wxTheXmlResource = wxXmlResource_Get()
 
 wx.wxXmlNodePtr = wxXmlNodePtr
+
+
+
+
+#----------------------------------------------------------------------
+#  Create a factory for handling the subclass property of the object tag.
+
+
+def _my_import(name):
+    mod = __import__(name)
+    components = name.split('.')
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    return mod
+
+
+class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
+    def __init__(self):
+        wxXmlSubclassFactory.__init__(self)
+
+    def Create(self, className):
+        assert className.find('.') != -1, "Module name must be specified!"
+        mname = className[:className.rfind('.')]
+        cname = className[className.rfind('.')+1:]
+        module = _my_import(mname)
+        klass = getattr(module, cname)
+        inst = klass()
+        return inst
+
+
+wxXmlResource_AddSubclassFactory(wxXmlSubclassFactory_Python())
+

@@ -330,6 +330,7 @@ bool wxNotebook::InsertPage(int nPage,
         bSelect = TRUE;
 
         Relayout();
+        Refresh();
     }
     else // not the first tab
     {
@@ -518,9 +519,19 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
         wxSize sizeSpinBtn = m_spinbtn->GetSize();
 
         if ( IsVertical() )
+        {
             rectTabs.height -= sizeSpinBtn.y;
+
+            // Allow for erasing the line under selected tab
+            rectTabs.width += 2;
+        }
         else
+        {
             rectTabs.width -= sizeSpinBtn.x;
+
+            // Allow for erasing the line under selected tab
+            rectTabs.height += 2;
+        }
 
         dc.SetClippingRegion(rectTabs);
     }
@@ -566,6 +577,8 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
     {
         DoDrawTab(dc, rectSel, m_sel);
     }
+
+    dc.DestroyClippingRegion();
 }
 
 // ----------------------------------------------------------------------------

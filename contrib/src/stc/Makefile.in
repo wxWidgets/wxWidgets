@@ -9,13 +9,13 @@ top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 
 scintilla_dir = $(top_srcdir)/contrib/src/stc/scintilla
-libsrc_dir = contrib/src/stc@PATH_IFS@$(scintilla_dir)/src
+libsrc_dir = contrib/src/stc/scintilla/src:$(top_srcdir)/contrib/src/stc
 
-TARGET_LIBNAME=libstc
+TARGET_LIBNAME=lib@WX_LIBRARY_BASENAME@_stc-@WX_RELEASE@
 
-LIBVERSION_CURRENT=1
-LIBVERSION_REVISION=0
-LIBVERSION_AGE=0
+LIBVERSION_CURRENT=@WX_CURRENT@
+LIBVERSION_REVISION=@WX_REVISION@
+LIBVERSION_AGE=@WX_AGE@
 
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=stc

@@ -16,7 +16,7 @@ class MyCanvas(wxScrolledWindow):
         self.maxHeight = 1000
         self.x = self.y = 0
         self.curLine = []
-        self.drawing = false
+        self.drawing = False
 
         self.SetBackgroundColour("WHITE")
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
@@ -88,7 +88,7 @@ class MyCanvas(wxScrolledWindow):
         dc.SetPen(wxGREEN_PEN)
         dc.DrawSpline(lst+[(100,100)])
 
-        dc.DrawBitmap(self.bmp, 200, 20, true)
+        dc.DrawBitmap(self.bmp, 200, 20, True)
         dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
         dc.DrawText("a bitmap", 200, 85)
 
@@ -149,10 +149,11 @@ class MyCanvas(wxScrolledWindow):
 
     def OnLeftButtonEvent(self, event):
         if event.LeftDown():
+            self.SetFocus()
             self.SetXY(event)
             self.curLine = []
             self.CaptureMouse()
-            self.drawing = true
+            self.drawing = True
 
         elif event.Dragging() and self.drawing:
             if BUFFERED:
@@ -178,7 +179,7 @@ class MyCanvas(wxScrolledWindow):
             self.lines.append(self.curLine)
             self.curLine = []
             self.ReleaseMouse()
-            self.drawing = false
+            self.drawing = False
 
 
 ## This is an example of what to do for the EVT_MOUSEWHEEL event,

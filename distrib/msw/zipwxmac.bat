@@ -7,7 +7,7 @@ set webfiles=c:\wx2dev\wxWebSite
 set stuffit="c:\Program Files\Aladdin Systems\StuffIt 7.5\StuffIt.exe"
 
 Rem Set this to the required version
-set version=2.3.3
+set version=2.3.4
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -47,10 +47,10 @@ zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 erase /Y %src%\include\wx\setup.h
 
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxMac-%version% erase /sxyz %dest%\wxMac-%version%
 
-mkdir %dest%\wxWindows-%version%
-cd %dest%\wxWindows-%version%
+mkdir %dest%\wxMac-%version%
+cd %dest%\wxMac-%version%
 unzip32 ..\wxMac-%version%.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /SXY docs\html\dialoged docs\html\tex2rtf
@@ -58,7 +58,9 @@ erase /SXY docs\html\dialoged docs\html\tex2rtf
 cd %dest%
 
 erase wxMac-%version%.zip
-zip32 -r wxMac-%version%.zip wxWindows-%version%/*
+zip32 -r wxMac-%version%.zip wxMac-%version%/*
+
+erase /sxyz %dest%\wxMac-%version%
 
 Rem echo Making StuffIt archive...
 Rem set stuffitcmd=%stuffit% -stuff -create wxMac-%version%.sit wxWindows-%version%\*

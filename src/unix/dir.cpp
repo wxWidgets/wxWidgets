@@ -172,13 +172,9 @@ bool wxDirData::Read(wxString *filename)
         }
         else
         {
-#if wxUSE_UNICODE
-            matches = TRUE;  // FIXME
-#else
             // test against the pattern
             matches = wxMatchWild(m_filespec, de_d_name,
                                   !(m_flags & wxDIR_HIDDEN));
-#endif
         }
     }
 

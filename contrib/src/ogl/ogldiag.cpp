@@ -30,17 +30,6 @@
 #undef new
 #endif
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#include <fstream.h>
-#else
-#include <iostream>
-#include <fstream>
-#ifdef _MSC_VER
-//using namespace std;
-#endif
-#endif
-
 #include <ctype.h>
 #include <math.h>
 #include <stdlib.h>
@@ -225,7 +214,7 @@ void wxDiagram::RecentreAll(wxDC& dc)
 }
 
 // Input/output
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 bool wxDiagram::SaveFile(const wxString& filename)
 {
   wxBeginBusyCursor();
