@@ -564,7 +564,8 @@ public:
     wxGridCellAttr()
     {
         Init();
-        SetAlignment(0, 0);
+        // MB: args used to be 0,0 here but wxALIGN_LEFT is 0
+        SetAlignment(-1, -1);
     }
 
     // VZ: considering the number of members wxGridCellAttr has now, this ctor
@@ -610,7 +611,7 @@ public:
     bool HasTextColour() const { return m_colText.Ok(); }
     bool HasBackgroundColour() const { return m_colBack.Ok(); }
     bool HasFont() const { return m_font.Ok(); }
-    bool HasAlignment() const { return m_hAlign || m_vAlign; }
+    bool HasAlignment() const { return (m_hAlign != -1 || m_vAlign != -1); }
     bool HasRenderer() const { return m_renderer != NULL; }
     bool HasEditor() const { return m_editor != NULL; }
 
