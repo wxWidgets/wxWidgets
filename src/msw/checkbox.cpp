@@ -272,5 +272,5 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
 
 void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
 {
-    wxFAIL_MSG("not implemented");
+    wxFAIL_MSG(_T("not implemented"));
 }
