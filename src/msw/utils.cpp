@@ -437,7 +437,7 @@ bool wxDirExists(const wxString& dir)
 {
 #if defined(__WIN32__)
     DWORD attribs = GetFileAttributes(dir);
-    return ((attribs != -1) && (attribs & FILE_ATTRIBUTE_DIRECTORY));
+    return ((attribs != (DWORD)-1) && (attribs & FILE_ATTRIBUTE_DIRECTORY));
 #else // Win16
     #ifdef __BORLANDC__
         struct ffblk fileInfo;
