@@ -42,7 +42,7 @@ public:
 
     wxIcon(const wxIconLocation& loc)
     {
-        LoadFile(loc.GetFileName());
+        LoadFile(loc.GetFileName(), wxBITMAP_TYPE_ANY);
     }
 
     ~wxIcon();

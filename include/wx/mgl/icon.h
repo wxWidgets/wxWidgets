@@ -44,7 +44,7 @@ public:
            wxBitmap(filename, (wxBitmapType)type) {}
 
     wxIcon(const wxIconLocation& loc)
-        : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_ICO)
+        : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_ANY)
     {
     }
 

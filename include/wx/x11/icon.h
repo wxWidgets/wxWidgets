@@ -39,7 +39,7 @@ public:
     wxIcon( char **bits, int width=-1, int height=-1 );
 
     wxIcon(const wxIconLocation& loc)
-        : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_XPM)
+        : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_ANY)
     {
     }
 
