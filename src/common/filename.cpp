@@ -146,7 +146,7 @@ public:
         m_hFile = ::CreateFile
                     (
                      filename,                      // name
-                     mode == Read ? GENERIC_READ    // access mask 
+                     mode == Read ? GENERIC_READ    // access mask
                                   : GENERIC_WRITE,
                      0,                             // no sharing
                      NULL,                          // no secutity attr
@@ -415,7 +415,7 @@ void wxFileName::Assign(const wxString& fullpathOrig,
                   _T("the path shouldn't contain file name nor extension") );
 
 #else // !__WXDEBUG__
-    SplitPath(fullname, NULL /* no path */, &name, &ext, format); 
+    SplitPath(fullname, NULL /* no path */, &name, &ext, format);
     SplitPath(fullpath, &volume, &path, NULL, NULL, format);
 #endif // __WXDEBUG__/!__WXDEBUG__
 
@@ -751,10 +751,10 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
         filename.AssignDir(dir);
 
         wxString currPath;
-        if ( filename.HasVolume())  
-        { 
+        if ( filename.HasVolume())
+        {
             currPath << wxGetVolumeString(filename.GetVolume(), wxPATH_NATIVE);
-        } 
+        }
 
         wxArrayString dirs = filename.GetDirs();
         size_t count = dirs.GetCount();
@@ -991,7 +991,7 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
         if ( m_dirs.IsEmpty() && IsDir() )
         {
             m_dirs.Add(_T('.'));
-        }   
+        }
     }
 
     m_relative = TRUE;
@@ -1156,8 +1156,15 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
     }
     else if ( format == wxPATH_UNIX )
     {
-        if (!m_relative)
-            fullpath += wxFILE_SEP_PATH_UNIX;
+        if ( !m_relative )
+        {
+            // normally the absolute file names starts with a slash with one
+            // exception: file names like "~/foo.bar" don't have it
+            if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
+            {
+                fullpath += wxFILE_SEP_PATH_UNIX;
+            }
+        }
     }
 
     // then concatenate all the path components using the path separator
@@ -1174,9 +1181,15 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
             switch (format)
             {
                 case wxPATH_MAC:
-                    if (m_dirs[i] == wxT("."))
-                        break;
-                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
+                    if ( m_dirs[i] == wxT(".") )
+                    {
+                        // skip appending ':', this shouldn't be done in this
+                        // case as "::" is interpreted as ".." under Unix
+                        continue;
+                    }
+
+                    // convert back from ".." to nothing
+                    if ( m_dirs[i] != wxT("..") )
                          fullpath += m_dirs[i];
                     break;
 
@@ -1191,7 +1204,8 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
 
                 case wxPATH_VMS:
                     // TODO: What to do with ".." under VMS
-                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
+                    // convert back from ".." to nothing
+                    if ( m_dirs[i] != wxT("..") )
                         fullpath += m_dirs[i];
                     break;
             }
@@ -1698,18 +1712,18 @@ static void MacEnsureDefaultExtensionsLoaded()
     MacDefaultExtensionRecord defaults[] =
     {
       { "txt" , 'TEXT' , 'ttxt' } ,
-      
+
     } ;
     // we could load the pc exchange prefs here too
-    
+
     for ( int i = 0 ; i < WXSIZEOF( defaults ) ; ++i )
     {
       gMacDefaultExtensions.Add( defaults[i] ) ;
-    } 
+    }
     gMacDefaultExtensionsInited = true ;
   }
 }
-bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator ) 
+bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
 {
   FInfo fndrInfo ;
   FSSpec spec ;
@@ -1723,7 +1737,7 @@ bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
   return true ;
 }
 
-bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) 
+bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator )
 {
   FInfo fndrInfo ;
   FSSpec spec ;
@@ -1747,7 +1761,7 @@ bool wxFileName::MacSetDefaultTypeAndCreator()
     return false;
 }
 
-bool wxFileName::MacFindDefaultTypeAndCreator( const wxString& ext , wxUint32 *type , wxUint32 *creator ) 
+bool wxFileName::MacFindDefaultTypeAndCreator( const wxString& ext , wxUint32 *type , wxUint32 *creator )
 {
   MacEnsureDefaultExtensionsLoaded() ;
   wxString extl = ext.Lower() ;
