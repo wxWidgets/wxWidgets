@@ -8,6 +8,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - no initialization/cleanup can be done in wxApp/~wxApp because they are
   now called much earlier/later than before; please move any exiting code
   from there to wxApp::OnInit()/OnExit()
+- also, OnExit() is not called if OnInit() fails
 - wxTheApp can't be assigned to any longer, use wxApp::SetInstance() instead
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
 
