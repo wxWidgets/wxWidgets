@@ -54,6 +54,8 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
+    wxString GetLabel() const;
+    void SetLabel(const wxString& label);
 };
 
 #endif // __WX_COCOA_BUTTON_H__

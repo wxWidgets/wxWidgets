@@ -66,6 +66,16 @@ void wxButton::Cocoa_wxNSButtonAction(void)
     Command(event);
 }
 
+wxString wxButton::GetLabel() const
+{
+    return wxString([[GetNSButton() title] lossyCString]);
+}
+
+void wxButton::SetLabel(const wxString& label)
+{
+    [GetNSButton() setTitle:wxNSStringWithWxString(label)];
+}
+
 wxSize wxButtonBase::GetDefaultSize()
 {
     // FIXME: stub
