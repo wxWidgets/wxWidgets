@@ -52,6 +52,7 @@ public:
                     const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxListBoxNameStr )
   {
+      m_hasCheckBoxes = FALSE;
       Create(parent, id, pos, size, n, choices, style, validator, name);
   }
   ~wxListBox();
@@ -101,8 +102,9 @@ public:
   void ApplyWidgetStyle();
     
   GtkList   *m_list;
-  wxList   m_clientDataList;
-  wxList   m_clientObjectList;
+  wxList     m_clientDataList;
+  wxList     m_clientObjectList;
+  bool       m_hasCheckBoxes;
 };
 
 #endif // __GTKLISTBOXH__

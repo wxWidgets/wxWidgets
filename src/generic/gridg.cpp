@@ -88,6 +88,8 @@ wxGenericGrid::wxGenericGrid(void)
   m_editable = TRUE;
 #if defined(__WIN95__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+#elseif defined(__WXGTK__)
+  m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
 #else
   m_scrollWidth = 16;
 #endif
@@ -143,6 +145,8 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_currentRectVisible = FALSE;
   m_editable = TRUE;
 #if defined(__WIN95__)
+  m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+#elseif defined(__WXGTK__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
 #else
   m_scrollWidth = 16;
@@ -1025,8 +1029,13 @@ void wxGenericGrid::AdjustScrollbars(void)
     int nCols = GetCols();
     m_hScrollBar->SetScrollbar(m_hScrollBar->GetThumbPosition(), wxMax(noHorizSteps, 1), (noHorizSteps == 0) ? 1 : nCols, wxMax(noHorizSteps, 1));
 
-    m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth -2,
+/*
+    m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth -2,   // why -2 ? Robert.
       cw - vertScrollBarWidth - m_leftOfSheet, m_scrollWidth);
+*/
+    m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth,
+      cw - vertScrollBarWidth - m_leftOfSheet, m_scrollWidth);
+
   }
 
   if (m_vScrollBar)
@@ -1053,7 +1062,7 @@ void wxGenericGrid::OnSize(wxSizeEvent& WXUNUSED(event) )
   {
     m_editingPanel->SetSize(0, 0, cw, m_editControlPosition.height + m_editControlPosition.y + 2);
     GetTextItem()->SetSize(m_editControlPosition.x, m_editControlPosition.y,
-      cw - m_editControlPosition.x, m_editControlPosition.height);
+      cw - 2*m_editControlPosition.x, m_editControlPosition.height);
   }
 }
 

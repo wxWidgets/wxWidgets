@@ -15,7 +15,8 @@
 #include "wx/dynarray.h"
 #include "wx/listbox.h"
 #include "wx/utils.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
+#include "wx/checklst.h"
 
 //-------------------------------------------------------------------------
 // conditional compilation
@@ -32,6 +33,30 @@
 //-----------------------------------------------------------------------------
 
 extern bool   g_blockEventsOnDrag;
+extern bool   g_blockEventsOnScroll;
+
+//-----------------------------------------------------------------------------
+// "button_press_event"
+//-----------------------------------------------------------------------------
+
+static gint 
+gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxListBox *listbox )
+{
+    if (g_blockEventsOnDrag) return FALSE;
+    if (g_blockEventsOnScroll) return FALSE;
+
+    if (!listbox->HasVMT()) return FALSE;
+
+    if (gdk_event->x > 15) return FALSE;
+    
+    int sel = listbox->GetIndex( widget );
+    
+    wxCheckListBox *clb = (wxCheckListBox *)listbox;
+    
+    clb->Check( sel, !clb->IsChecked(sel) );
+    
+    return FALSE;
+}
 
 //-----------------------------------------------------------------------------
 // "select" and "deselect"
@@ -74,6 +99,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
 wxListBox::wxListBox()
 {
     m_list = (GtkList *) NULL;
+    m_hasCheckBoxes = FALSE;
 }
 
 bool wxListBox::Create( wxWindow *parent, wxWindowID id,
@@ -120,7 +146,17 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         m_clientObjectList.Append( (wxObject*) NULL );
   
         GtkWidget *list_item;
-        list_item = gtk_list_item_new_with_label( choices[i] );
+	
+	if (m_hasCheckBoxes)
+	{
+            wxString str = "[-] ";
+	    str += choices[i];
+            list_item = gtk_list_item_new_with_label( str );
+	}
+	else
+	{
+            list_item = gtk_list_item_new_with_label( choices[i] );
+	}
 
         gtk_container_add( GTK_CONTAINER(m_list), list_item );
 
@@ -131,6 +167,14 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
             gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
               GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
+	if (m_hasCheckBoxes)
+	{
+            gtk_signal_connect( GTK_OBJECT(list_item), 
+	                        "button_press_event",
+                                (GtkSignalFunc)gtk_listbox_button_press_callback, 
+				(gpointer) this );
+	}
+	
         ConnectWidget( list_item );	
 	
         gtk_widget_show( list_item );
@@ -154,14 +198,25 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-  Clear();
+    Clear();
 }
 
 void wxListBox::AppendCommon( const wxString &item )
 {
     wxCHECK_RET( m_list != NULL, "invalid listbox" );
   
-    GtkWidget *list_item = gtk_list_item_new_with_label( item );
+    GtkWidget *list_item;
+    
+    if (m_hasCheckBoxes)
+    {
+        wxString str = "[-] ";
+	str += item;
+        list_item = gtk_list_item_new_with_label( str );
+    }
+    else
+    {
+        list_item = gtk_list_item_new_with_label( item );
+    }
 
     gtk_signal_connect( GTK_OBJECT(list_item), "select",
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
@@ -174,6 +229,14 @@ void wxListBox::AppendCommon( const wxString &item )
 
     if (m_widgetStyle) ApplyWidgetStyle();
   
+    if (m_hasCheckBoxes)
+    {
+            gtk_signal_connect( GTK_OBJECT(list_item), 
+	                        "button_press_event",
+                                (GtkSignalFunc)gtk_listbox_button_press_callback, 
+				(gpointer) this );
+    }
+	
     gtk_widget_show( list_item );
 
     ConnectWidget( list_item );
@@ -274,11 +337,7 @@ void wxListBox::Delete( int n )
 
     GList *child = g_list_nth( m_list->children, n );
 
-    if (!child)
-    {
-      wxFAIL_MSG("wrong listbox index");
-      return;
-    }
+    wxCHECK_RET( child, "wrong listbox index" );
 
     GList *list = g_list_append( NULL, child->data );
     gtk_list_remove_items( m_list, list );
@@ -316,7 +375,12 @@ int wxListBox::FindString( const wxString &item ) const
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        if (item == label->label) return count;
+	
+	wxString str = label->label;
+	if (m_hasCheckBoxes) str.Remove( 0, 4 );
+	
+        if (str == item) return count;
+	
         count++;
         child = child->next;
     }
@@ -380,7 +444,11 @@ wxString wxListBox::GetString( int n ) const
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        return label->label;
+	
+	wxString str = label->label;
+	if (m_hasCheckBoxes) str.Remove( 0, 4 );
+	
+        return str;
     }
     wxFAIL_MSG("wrong listbox index");
     return "";
@@ -394,9 +462,14 @@ wxString wxListBox::GetStringSelection() const
     if (selection)
     {
         GtkBin *bin = GTK_BIN( selection->data );
-        wxString tmp = GTK_LABEL( bin->child )->label;
-        return tmp;
+        GtkLabel *label = GTK_LABEL( bin->child );
+	
+	wxString str = label->label;
+	if (m_hasCheckBoxes) str.Remove( 0, 4 );
+	
+        return str;
     }
+    
     wxFAIL_MSG("no listbox selection available");
     return "";
 }
@@ -463,7 +536,12 @@ void wxListBox::SetString( int n, const wxString &string )
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        gtk_label_set( label, string );
+	
+	wxString str;
+	if (m_hasCheckBoxes) str += "[-] ";
+	str += string;
+	
+        gtk_label_set( label, str );
     }
     else
     {
@@ -560,8 +638,12 @@ void wxListBox::ApplyWidgetStyle()
     GList *child = m_list->children;
     while (child)
     {
-        gtk_widget_set_style( GTK_BIN(child->data)->child, m_widgetStyle );
         gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
+	
+        GtkBin *bin = GTK_BIN( child->data );
+        GtkWidget *label = GTK_WIDGET( bin->child );
+        gtk_widget_set_style( label, m_widgetStyle );
+	
         child = child->next;
     }
 }

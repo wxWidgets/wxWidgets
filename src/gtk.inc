@@ -73,6 +73,7 @@ LIB_CPP_SRC=\
  gtk/brush.cpp \
  gtk/button.cpp \
  gtk/checkbox.cpp \
+ gtk/checklst.cpp \
  gtk/choice.cpp \
  gtk/clipbrd.cpp \
  gtk/colour.cpp \
