@@ -48,6 +48,7 @@
 #endif
 
 #include "wx/event.h"
+#include "wx/module.h"
 
 #if wxUSE_GUI
     #include "wx/validate.h"
@@ -119,6 +120,24 @@ wxEventHashTable wxEvtHandler::sm_eventHashTable(wxEvtHandler::sm_eventTable);
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
     { DECLARE_EVENT_TABLE_ENTRY(wxEVT_NULL, 0, 0, (wxObjectEventFunction)NULL, NULL) };
 
+    
+#ifdef __WXDEBUG__
+// Clear up event hash table contents or we can get problems
+// when C++ is cleaning up the static object
+class wxEventTableEntryModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxEventTableEntryModule)
+public:
+    wxEventTableEntryModule() {}
+    bool OnInit() { return true; }
+    void OnExit()
+    {
+        wxEventHashTable::ClearAll();
+    }
+};
+IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
+#endif
+    
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
@@ -717,16 +736,35 @@ wxChildFocusEvent::wxChildFocusEvent(wxWindow *win)
 // wxEventHashTable
 // ----------------------------------------------------------------------------
 
-static const int EVENT_TYPE_TABLE_INIT_SIZE = 31; // Not to big not to small...
+static const int EVENT_TYPE_TABLE_INIT_SIZE = 31; // Not too big not too small...
+
+wxEventHashTable* wxEventHashTable::sm_first = NULL;
 
 wxEventHashTable::wxEventHashTable(const wxEventTable &table)
                 : m_table(table),
                   m_rebuildHash(true)
 {
     AllocEventTypeTable(EVENT_TYPE_TABLE_INIT_SIZE);
+    
+    m_next = sm_first;
+    if (m_next)
+        m_next->m_previous = this;
+    sm_first = this;
 }
 
 wxEventHashTable::~wxEventHashTable()
+{
+    if (m_next)
+        m_next->m_previous = m_previous;
+    if (m_previous)
+        m_previous->m_next = m_next;
+    if (sm_first == this)
+        sm_first = m_next;
+    
+    Clear();
+}
+
+void wxEventHashTable::Clear()
 {
     size_t i;
     for(i = 0; i < m_size; i++)
@@ -738,7 +776,24 @@ wxEventHashTable::~wxEventHashTable()
         }
     }
 
-    delete[] m_eventTypeTable;
+    // Necessary in order to not invoke the
+    // overloaded delete operator when statics are cleaned up
+    if (m_eventTypeTable)
+        delete[] m_eventTypeTable;
+
+    m_eventTypeTable = NULL;
+    m_size = 0;
+}
+
+// Clear all tables
+void wxEventHashTable::ClearAll()
+{
+    wxEventHashTable* table = sm_first;
+    while (table)
+    {
+        table->Clear();
+        table = table->m_next;
+    }
 }
 
 bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
@@ -748,6 +803,9 @@ bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
         InitHashTable();
         m_rebuildHash = false;
     }
+    
+    if (!m_eventTypeTable)
+        return FALSE;
 
     // Find all entries for the given event type.
     wxEventType eventType = event.GetEventType();
@@ -806,6 +864,10 @@ void wxEventHashTable::InitHashTable()
 
 void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
 {
+    // This might happen 'accidentally' as the app is exiting
+    if (!m_eventTypeTable)
+        return;
+    
     EventTypeTablePointer *peTTnode = &m_eventTypeTable[entry.m_eventType % m_size];
     EventTypeTablePointer  eTTnode = *peTTnode;
 
@@ -873,6 +935,7 @@ void wxEventHashTable::GrowEventTypeTable()
 
     delete[] oldEventTypeTable;
 }
+
 
 // ----------------------------------------------------------------------------
 // wxEvtHandler

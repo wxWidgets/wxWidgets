@@ -2118,6 +2118,12 @@ public:
     // and call self->ProcessEvent() if a match was found.
     bool HandleEvent(wxEvent &event, wxEvtHandler *self);
 
+    // Clear table
+    void Clear();
+
+    // Clear all tables
+    static void ClearAll();
+
 protected:
     // Init the hash table with the entries of the static event table.
     void InitHashTable();
@@ -2135,6 +2141,10 @@ protected:
 
     size_t                 m_size;
     EventTypeTablePointer *m_eventTypeTable;
+
+    static wxEventHashTable* sm_first;
+    wxEventHashTable* m_previous;
+    wxEventHashTable* m_next;
 
     DECLARE_NO_COPY_CLASS(wxEventHashTable)
 };
@@ -2166,7 +2176,6 @@ public:
     // process all pending events
     void ProcessPendingEvents();
 
-    // add a
 #if wxUSE_THREADS
     bool ProcessThreadEvent(wxEvent& event);
 #endif
@@ -2222,6 +2231,9 @@ public:
 #if wxUSE_THREADS
     void ClearEventLocker();
 #endif // wxUSE_THREADS
+
+    // Avoid problems at exit by cleaning up static hash table gracefully
+    void ClearEventHashTable() { GetEventHashTable().Clear(); }
 
 private:
     static const wxEventTableEntry sm_eventTableEntries[];
