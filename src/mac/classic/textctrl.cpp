@@ -1651,8 +1651,14 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         case WXK_TAB:
             if ( !(m_windowStyle & wxTE_PROCESS_TAB))
             {
-                if (Navigate(!event.ShiftDown(), event.ControlDown()))
-                    return;
+                Navigate(!event.ShiftDown(), event.ControlDown());
+                return;
+            }
+            else
+            {
+                // This is necessary (don't know why) or the tab will not
+                // be inserted.
+                WriteText(wxT("\t"));
             }
             break;
     }
