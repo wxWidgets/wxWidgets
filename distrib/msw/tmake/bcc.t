@@ -28,8 +28,11 @@
         #! needs extra files (sql*.h) so not compiled by default.
         next if $file =~ /^odbc\./;
 
+        $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXCOMMONOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $obj = "\$(MSWDIR)\\" . $file . " ";
+        $project{"WXCOMMONOBJS"} .= $obj;
+        $project{"WXCOBJS"} .= $obj if $isCFile;
     }
 
     #! special hack for Borland in 16 bits needs this file
@@ -172,8 +175,9 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
+        $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
         s/MSWDIR/COMMDIR/;
-        s/obj/\$(SRCSUFF)/;
+        s/obj/$suffix/;
         $text .= $_ . "\n\n";
     }
 #$}

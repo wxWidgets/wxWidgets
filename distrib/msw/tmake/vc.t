@@ -102,6 +102,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
 
+{..\common}.c{..\common\$D}.obj:
+	cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tc $<
+<<
+
 {..\msw}.cpp{..\msw\$D}.obj:
 	cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $<

@@ -9,8 +9,6 @@
 #${
     open(FILELIST, "filelist.txt") or die "Can't open filelist file: $!\n";
 
-    my %wxfiles;
-
     line: while ( defined($_ = <FILELIST>) ) {
         chomp;
 

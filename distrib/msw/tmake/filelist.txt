@@ -185,7 +185,7 @@ metafile.cpp	M
 minifram.cpp	M
 msgdlg.cpp	M
 nativdlg.cpp	M
-notebook.cpp	M
+notebook.cpp	M	32
 oleutils.cpp	M	O
 ownerdrw.cpp	M
 palette.cpp	M

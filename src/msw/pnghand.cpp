@@ -74,7 +74,7 @@ ima_png_error(png_struct *png_ptr, char *message)
 // static wxGifReaderIter* iter;
 wxPalette *wxCopyPalette(const wxPalette *cmap);
 
-wxPNGReader::wxPNGReader(void)
+wxPNGReader::wxPNGReader()
 {
   filetype = 0;
   RawImage = NULL;      //  Image data
@@ -265,7 +265,7 @@ void wxPNGReader::NullData()
   Palette = NULL;
 }
 
-wxBitmap* wxPNGReader::GetBitmap(void)
+wxBitmap* wxPNGReader::GetBitmap()
 {
     wxBitmap *bitmap = new wxBitmap;
     if ( InstantiateBitmap(bitmap) )
@@ -354,7 +354,7 @@ wxPalette *wxCopyPalette(const wxPalette *cmap)
   return newCmap;
 }
 
-wxMask *wxPNGReader::CreateMask(void)
+wxMask *wxPNGReader::CreateMask()
 {
     HBITMAP hBitmap = ::CreateBitmap(GetWidth(), GetHeight(), 1, 1, NULL);
 
@@ -385,141 +385,147 @@ wxMask *wxPNGReader::CreateMask(void)
 
 bool wxPNGReader::ReadFile(wxChar * ImageFileName)
 {
-  int number_passes;
+    int number_passes;
 
-  if (ImageFileName)
-   wxStrcpy(filename, ImageFileName);
+    if (ImageFileName)
+        wxStrcpy(filename, ImageFileName);
 
-  FILE *fp;
-  png_struct *png_ptr;
-   png_info *info_ptr;
-  wxPNGReaderIter iter(this);
+    FILE *fp;
+    png_struct *png_ptr;
+    png_info *info_ptr;
 
-  /* open the file */
-  fp = fopen(wxConvFile.cWX2MB(filename), "rb");
-  if (!fp)
-    return FALSE;
+    /* open the file */
+    fp = fopen(wxConvFile.cWX2MB(filename), "rb");
+    if (!fp)
+        return FALSE;
 
-  /* allocate the necessary structures */
-  png_ptr = new (png_struct);
-  if (!png_ptr)
-  {
-    fclose(fp);
-    return FALSE;
-  }
-
-  info_ptr = new (png_info);
-  if (!info_ptr)
-  {
-    fclose(fp);
-    delete(png_ptr);
-    return FALSE;
-  }
-  /* set error handling */
-  if (setjmp(png_ptr->jmpbuf))
-  {
-    png_read_destroy(png_ptr, info_ptr, (png_info *)0);
-    fclose(fp);
-    delete(png_ptr);
-    delete(info_ptr);
-
-    /* If we get here, we had a problem reading the file */
-    return FALSE;
-  }
-        //png_set_error(ima_png_error, NULL);
-
-  /* initialize the structures, info first for error handling */
-  png_info_init(info_ptr);
-  png_read_init(png_ptr);
-
-  /* set up the input control */
-  png_init_io(png_ptr, fp);
-
-  /* read the file information */
-  png_read_info(png_ptr, info_ptr);
-
-  /* allocate the memory to hold the image using the fields
-    of png_info. */
-  png_color_16 my_background={ 0, 31, 127, 255, 0 };
-
-  if (info_ptr->valid & PNG_INFO_bKGD)
+    /* allocate the necessary structures */
+    png_ptr = new (png_struct);
+    if (!png_ptr)
     {
-    png_set_background(png_ptr, &(info_ptr->background),
-      PNG_BACKGROUND_GAMMA_FILE, 1, 1.0);
+        fclose(fp);
+        return FALSE;
+    }
+
+    info_ptr = new (png_info);
+    if (!info_ptr)
+    {
+        fclose(fp);
+        delete(png_ptr);
+        return FALSE;
+    }
+    /* set error handling */
+    if (setjmp(png_ptr->jmpbuf))
+    {
+        png_read_destroy(png_ptr, info_ptr, (png_info *)0);
+        fclose(fp);
+        delete(png_ptr);
+        delete(info_ptr);
+
+        /* If we get here, we had a problem reading the file */
+        return FALSE;
+    }
+    //png_set_error(ima_png_error, NULL);
+
+    /* initialize the structures, info first for error handling */
+    png_info_init(info_ptr);
+    png_read_init(png_ptr);
+
+    /* set up the input control */
+    png_init_io(png_ptr, fp);
+
+    /* read the file information */
+    png_read_info(png_ptr, info_ptr);
+
+    /* allocate the memory to hold the image using the fields
+       of png_info. */
+    png_color_16 my_background={ 0, 31, 127, 255, 0 };
+
+    if (info_ptr->valid & PNG_INFO_bKGD)
+    {
+        png_set_background(png_ptr, &(info_ptr->background),
+                PNG_BACKGROUND_GAMMA_FILE, 1, 1.0);
         if ( info_ptr->num_palette > 0 )
             bgindex = info_ptr->background.index;
     }
-  else   {
-    png_set_background(png_ptr, &my_background,
-      PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0);
+    else   {
+        png_set_background(png_ptr, &my_background,
+                PNG_BACKGROUND_GAMMA_SCREEN, 0, 1.0);
 
         // Added by JACS: guesswork!
         if ( info_ptr->num_trans != 0 )
             bgindex = info_ptr->num_trans - 1 ;
-   }
+    }
 
-  /* tell libpng to strip 16 bit depth files down to 8 bits */
-  if (info_ptr->bit_depth == 16)
-    png_set_strip_16(png_ptr);
+    /* tell libpng to strip 16 bit depth files down to 8 bits */
+    if (info_ptr->bit_depth == 16)
+        png_set_strip_16(png_ptr);
 
-  int pixel_depth=(info_ptr->pixel_depth<24) ? info_ptr->pixel_depth: 24;
-  Create(info_ptr->width, info_ptr->height, pixel_depth,
-    info_ptr->color_type);
+    int pixel_depth=(info_ptr->pixel_depth<24) ? info_ptr->pixel_depth: 24;
+    Create(info_ptr->width, info_ptr->height, pixel_depth,
+            info_ptr->color_type);
 
-  if (info_ptr->num_palette>0)
+    if (info_ptr->num_palette>0)
     {
-      SetPalette((int)info_ptr->num_palette, (rgb_color_struct*)info_ptr->palette);
+        SetPalette((int)info_ptr->num_palette, (rgb_color_struct*)info_ptr->palette);
     }
 
-  int row_stride = info_ptr->width * ((pixel_depth+7)>>3);
- //  printf("P = %d D = %d RS= %d ", info_ptr->num_palette, info_ptr->pixel_depth,row_stride);
-//  printf("CT = %d TRS = %d BD= %d ", info_ptr->color_type, info_ptr->valid & PNG_INFO_tRNS,info_ptr->bit_depth);
+    int row_stride = info_ptr->width * ((pixel_depth+7)>>3);
+    //  printf("P = %d D = %d RS= %d ", info_ptr->num_palette, info_ptr->pixel_depth,row_stride);
+    //  printf("CT = %d TRS = %d BD= %d ", info_ptr->color_type, info_ptr->valid & PNG_INFO_tRNS,info_ptr->bit_depth);
 
-  byte *row_pointers = new byte[row_stride];
+    byte *row_pointers = new byte[row_stride];
 
-  /* turn on interlace handling */
-  if (info_ptr->interlace_type)
-    number_passes = png_set_interlace_handling(png_ptr);
-  else
-    number_passes = 1;
-//  printf("NP = %d ", number_passes);
-
-  for (int pass=0; pass< number_passes; pass++) {
-  iter.upset();
-  int y=0;
-  do  {
-//    (unsigned char *)iter.GetRow();
-    if (info_ptr->interlace_type)  {
-     if (pass>0)
-      iter.GetRow(row_pointers, row_stride);
-     png_read_row(png_ptr, row_pointers, NULL);
-    }
+    /* turn on interlace handling */
+    if (info_ptr->interlace_type)
+        number_passes = png_set_interlace_handling(png_ptr);
     else
-     png_read_row(png_ptr, row_pointers, NULL);
+        number_passes = 1;
+    //  printf("NP = %d ", number_passes);
 
-    iter.SetRow(row_pointers, row_stride);
-    y++;
-  } while(iter.PrevRow());
-//  printf("Y=%d ",y);
-  }
-  delete[] row_pointers;
+    // don't use the object to prevent warnings from VC++ about "unportable
+    // interaction between setjmp and C++ object destruction" (this is a correct
+    // warning, of course!)
+    wxPNGReaderIter *iter = new wxPNGReaderIter(this);
+    for (int pass=0; pass< number_passes; pass++)
+    {
+        iter->upset();
+        int y=0;
+        do  {
+            //(unsigned char *)iter.GetRow();
+            if (info_ptr->interlace_type)  {
+                if (pass>0)
+                    iter->GetRow(row_pointers, row_stride);
+                png_read_row(png_ptr, row_pointers, NULL);
+            }
+            else
+                png_read_row(png_ptr, row_pointers, NULL);
 
-  /* read the rest of the file, getting any additional chunks
-    in info_ptr */
-  png_read_end(png_ptr, info_ptr);
+            iter->SetRow(row_pointers, row_stride);
+            y++;
+        } while(iter->PrevRow());
+        //  printf("Y=%d ",y);
+    }
 
-  /* clean up after the read, and free any memory allocated */
-  png_read_destroy(png_ptr, info_ptr, (png_info *)0);
+    delete iter;
+    delete[] row_pointers;
 
-  /* free the structures */
-  delete(png_ptr);
-  delete(info_ptr);
+    /* read the rest of the file, getting any additional chunks
+       in info_ptr */
+    png_read_end(png_ptr, info_ptr);
 
-  /* close the file */
-  fclose(fp);
+    /* clean up after the read, and free any memory allocated */
+    png_read_destroy(png_ptr, info_ptr, (png_info *)0);
 
-  /* that's it */
-  return TRUE;
+    /* free the structures */
+    delete(png_ptr);
+    delete(info_ptr);
+
+    /* close the file */
+    fclose(fp);
+
+    /* that's it */
+    return TRUE;
 }
 
 

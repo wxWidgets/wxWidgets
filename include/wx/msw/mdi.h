@@ -143,7 +143,7 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     // MDI operations
-    virtual void Maximize();
+    virtual void Maximize(bool maximize = TRUE);
     virtual void Restore();
     virtual void Activate();
 

@@ -729,25 +729,35 @@ void wxMDIChildFrame::InternalSetMenuBar()
 // MDI operations
 // ---------------------------------------------------------------------------
 
-void wxMDIChildFrame::Maximize()
+void wxMDIChildFrame::Maximize(bool maximize)
 {
     wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
     if ( parent && parent->GetClientWindow() )
-        ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIMAXIMIZE, (WPARAM) GetHwnd(), 0);
+    {
+        ::SendMessage(GetWinHwnd(parent->GetClientWindow()),
+                      maximize ? WM_MDIMAXIMIZE : WM_MDIRESTORE,
+                      (WPARAM)GetHwnd(), 0);
+    }
 }
 
 void wxMDIChildFrame::Restore()
 {
     wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
     if ( parent && parent->GetClientWindow() )
-        ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIRESTORE, (WPARAM) GetHwnd(), 0);
+    {
+        ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIRESTORE,
+                      (WPARAM) GetHwnd(), 0);
+    }
 }
 
 void wxMDIChildFrame::Activate()
 {
     wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
     if ( parent && parent->GetClientWindow() )
-        ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIACTIVATE, (WPARAM) GetHwnd(), 0);
+    {
+        ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIACTIVATE,
+                      (WPARAM) GetHwnd(), 0);
+    }
 }
 
 // ---------------------------------------------------------------------------

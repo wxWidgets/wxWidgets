@@ -105,7 +105,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
 
-    EVT_BUTTON(-1, MyFrame::OnTest)
+    EVT_MENU(Minimal_Test, MyFrame::OnTest)
 
     EVT_PAINT(MyFrame::OnPaint)
 END_EVENT_TABLE()
@@ -159,6 +159,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFile = new wxMenu(wxMENU_TEAROFF);
 
     menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(Minimal_Test, "&Test...\tCtrl-T", "Test");
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
 
@@ -202,8 +203,52 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
 }
 
+struct Foo
+{
+    Foo(int n_) { n = n_; }
+
+    int n;
+};
+
+WX_DECLARE_LIST(Foo, FooList);
+
+#include <wx/listimpl.cpp>
+
+WX_DEFINE_LIST(FooList);
+
+int FooSort(const Foo **item1, const Foo **item2)
+{
+    return (*item2)->n - (*item1)->n;
+}
+
+void ShowList(const FooList& list)
+{
+    wxString msg, str;
+    msg = "The list elements: (";
+    for ( FooList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+    {
+        if ( !!str )
+            msg += ", ";
+        str.Printf("%d", node->GetData()->n);
+        msg += str;
+    }
+
+    msg += ')';
+
+    wxMessageBox(msg, "List contents", wxOK | wxICON_INFORMATION);
+}
+
 void MyFrame::OnTest(wxCommandEvent& event)
 {
+    FooList list;
+    list.Append(new Foo(12));
+    list.Append(new Foo(3));
+    list.Append(new Foo(1));
+    list.Append(new Foo(7));
+    list.Append(new Foo(4));
+    ShowList(list);
+    list.Sort(FooSort);
+    ShowList(list);
 }
 
 void MyFrame::OnPaint(wxPaintEvent& event)
