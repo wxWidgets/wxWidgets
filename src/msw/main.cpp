@@ -46,7 +46,9 @@
 #ifdef __WXWINCE__
     // there is no ExitProcess() under CE but exiting the main thread has the
     // same effect
+#ifndef ExitProcess
     #define ExitProcess ExitThread
+#endif
 #endif
 
 #ifdef __BORLANDC__
