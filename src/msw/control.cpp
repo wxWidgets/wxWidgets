@@ -66,7 +66,7 @@ END_EVENT_TABLE()
 
 wxControl::~wxControl()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 }
 
 // ----------------------------------------------------------------------------
@@ -82,13 +82,13 @@ bool wxControl::Create(wxWindow *parent,
                        const wxString& name)
 {
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
-        return FALSE;
+        return false;
 
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif
 
-    return TRUE;
+    return true;
 }
 
 bool wxControl::MSWCreateControl(const wxChar *classname,
@@ -126,10 +126,10 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     }
 
     // choose the position for the control
-    int x = pos.x == -1 ? 0 : pos.x,
-        y = pos.y == -1 ? 0 : pos.y,
-        w = size.x == -1 ? 0 : size.x,
-        h = size.y == -1 ? 0 : size.y;
+    int x = pos.x == wxDefaultCoord ? 0 : pos.x,
+        y = pos.y == wxDefaultCoord ? 0 : pos.y,
+        w = size.x == wxDefaultCoord ? 0 : size.x,
+        h = size.y == wxDefaultCoord ? 0 : size.y;
 
     // ... and adjust it to account for a possible parent frames toolbar
     AdjustForParentClientOrigin(x, y);
@@ -152,14 +152,14 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         wxLogDebug(wxT("Failed to create a control of class '%s'"), classname);
         wxFAIL_MSG(_T("something is very wrong, CreateWindowEx failed"));
 
-        return FALSE;
+        return false;
     }
 
 #if wxUSE_CTL3D
     if ( want3D )
     {
         Ctl3dSubclassCtl(GetHwnd());
-        m_useCtl3D = TRUE;
+        m_useCtl3D = true;
     }
 #endif // wxUSE_CTL3D
 
@@ -174,7 +174,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // set the size now if no initial size specified
     SetInitialBestSize(size);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -234,6 +234,25 @@ wxControl::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(varian
     attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
     return attrs;
+}
+
+// This is a helper for all wxControls derived from UPDOWN native control.
+// In wxMSW it was only wxSpinCtrl derived from wxSpinButton but in
+// Smartphones this happens also for native wxTextCtrl, wxChoice and others.
+wxSize wxControl::GetBestSpinerSize(bool is_vertical)
+{
+    if (is_vertical)
+    {
+        // vertical control
+        return wxSize(GetSystemMetrics(SM_CXVSCROLL),
+                      2*GetSystemMetrics(SM_CYVSCROLL));
+    }
+    else
+    {
+        // horizontal control
+        return wxSize(2*GetSystemMetrics(SM_CXHSCROLL),
+                      GetSystemMetrics(SM_CYHSCROLL));
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -360,7 +379,7 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED
 //
 // Call this repeatedly for several wnds to find the overall size
 // of the widget.
-// Call it initially with -1 for all values in rect.
+// Call it initially with wxDefaultCoord for all values in rect.
 // Keep calling for other widgets, and rect will be modified
 // to calculate largest bounding rectangle.
 void wxFindMaxSize(WXHWND wnd, RECT *rect)

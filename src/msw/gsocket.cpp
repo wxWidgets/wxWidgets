@@ -112,13 +112,13 @@ void GSocketGUIFunctionsTableNull::OnExit()
 {}
 bool GSocketGUIFunctionsTableNull::CanUseEventLoop()
 {   return false; }
-bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *socket)
+bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *WXUNUSED(socket))
 {   return true; }
-void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *socket)
+void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *WXUNUSED(socket))
 {}
-void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *WXUNUSED(socket))
 {}
-void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *WXUNUSED(socket))
 {}
 /* Global initialisers */
 
