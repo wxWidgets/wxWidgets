@@ -233,7 +233,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #ifndef TEST_TEXT_ONLY
                      wxSize(700, 700)
 #else
-                     wxSize(240, 150)
+                     wxSize(240, 200)
 #endif
                     )
 {
@@ -383,8 +383,13 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
 #else // TEST_TEXT_ONLY
-    new wxTextCtrl(this, -1, _T("Hello, Universe!"),
-                   wxPoint(10, 40), wxSize(200, -1));
+    wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello, Universe!"),
+                                      wxPoint(10, 40));
+    text->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT,
+                         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+    wxSize sizeText = text->GetBestSize();
+    sizeText.x = 200;
+    text->SetSize(sizeText);
 #endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
 }
 

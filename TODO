@@ -4,7 +4,7 @@ TODO
 
 wxTextCtrl
 
-o   DoDraw should iterat over update region instead of using bounding box
+*   display corrupted when typing text in quickly
 
 All
 
@@ -31,6 +31,7 @@ DONE
 All
 
 +   text ctrl horz scrolling
++   DoDraw should iterat over update region instead of using bounding box
 
 MSW
 

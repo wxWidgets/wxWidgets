@@ -492,7 +492,10 @@ void wxListBox::OnIdle(wxIdleEvent& event)
         }
         else
         {
-            wxRect rect = GetClientRect();
+            wxSize size = GetClientSize();
+            wxRect rect;
+            rect.width = size.x;
+            rect.height = size.y;
             rect.y += m_updateFrom*GetLineHeight();
             rect.height = m_updateCount*GetLineHeight();
             CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);

@@ -302,6 +302,7 @@ public:
     void SetTop(int top) { y = top; }
     void SetBottom(int bottom) { height = bottom - y + 1; }
 
+    // operations with rect
     void Inflate(wxCoord dx, wxCoord dy)
     {
         x -= dx;
@@ -312,12 +313,17 @@ public:
 
     void Inflate(wxCoord d) { Inflate(d, d); }
 
+    void Offset(wxCoord dx, wxCoord dy) { x += dx; y += dy; }
+    void Offset(const wxPoint& pt) { Offset(pt.x, pt.y); }
+
+    wxRect operator+(const wxRect& rect) const;
+    wxRect& operator+=(const wxRect& rect);
+
+    // tests
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
     bool Inside(int cx, int cy) const;
-    wxRect operator+(const wxRect& rect) const;
-    wxRect& operator+=(const wxRect& rect);
 
 public:
     int x, y, width, height;

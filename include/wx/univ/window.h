@@ -98,7 +98,7 @@ public:
     virtual int GetScrollThumb(int orient) const;
     virtual int GetScrollRange(int orient) const;
     virtual void ScrollWindow(int dx, int dy,
-                               const wxRect* rect = (wxRect *) NULL);
+                              const wxRect* rect = (wxRect *) NULL);
 
     // take into account the borders here
     virtual wxPoint GetClientAreaOrigin() const;
@@ -150,8 +150,18 @@ public:
     // querying the current theme
     wxRenderer *GetRenderer() const { return m_renderer; }
 
+    // scrolling helper: like ScrollWindow() except that it doesn't refresh the
+    // uncovered window areas but returns the rectangle to update (don't call
+    // this with both dx and dy non zero)
+    wxRect ScrollNoRefresh(int dx, int dy, const wxRect *rect = NULL);
+
     // overridden base class methods
     // -----------------------------
+
+    // the rect coordinates are, for us, in client coords, but if no rect is
+    // specified, the entire window is refreshed
+    virtual void Refresh(bool eraseBackground = TRUE,
+                         const wxRect *rect = (const wxRect *) NULL);
 
     // remember that the font/colour was changed
     virtual bool SetBackgroundColour(const wxColour& colour);

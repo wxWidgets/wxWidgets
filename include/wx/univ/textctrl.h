@@ -169,6 +169,7 @@ public:
     // caret stuff
     virtual void ShowCaret(bool show = TRUE);
     void HideCaret() { ShowCaret(FALSE); }
+    void CreateCaret(); // for the current font size
     wxCoord GetCaretPosition() const; // in pixels
 
     // helpers for cursor movement
@@ -176,7 +177,8 @@ public:
     long GetWordEnd() const;
 
     // selection helpers
-    bool HasSelection() const { return m_selStart != -1; }
+    bool HasSelection() const
+        { return m_selStart != -1 && m_selEnd > m_selStart; }
     void ClearSelection();
     void RemoveSelection();
     wxString GetSelectionText() const;
@@ -225,6 +227,9 @@ public:
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
 
+    // override this to recreate the caret here
+    virtual bool SetFont(const wxFont &font);
+
 protected:
     // draw the text
     void DrawTextLine(wxDC& dc, const wxRect& rect,
@@ -251,8 +256,16 @@ protected:
     // get the extent (width) of the text
     wxCoord GetTextWidth(const wxString& text) const;
 
-    // refresh the text in the given range (in text coords) of this line
-    void RefreshLine(long line, long from, long to);
+    // refresh the text in the given range (in logical coords) of this line, if
+    // width is 0, refresh to the end of line
+    void RefreshPixelRange(long line, wxCoord start, wxCoord width);
+
+    // refresh the text in the given range (in text coords) in this line
+    void RefreshLineRange(long line, long start, long count);
+
+    // refresh the text in the given range which can span multiple lines
+    // (this method accepts arguments in any order)
+    void RefreshTextRange(long start, long end);
 
     // get the text to show: either the text itself or the text replaced with
     // starts for wxTE_PASSWORD control
@@ -276,6 +289,9 @@ protected:
 private:
     // the value (may be only part of it for the multiline controls)
     wxString m_value;
+
+    // the initially specified control size
+    wxSize m_sizeInitial;
 
     // current position
     long m_curPos,

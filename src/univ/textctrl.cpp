@@ -53,6 +53,20 @@
 // turn extra wxTextCtrl-specific debugging on/off
 #define WXDEBUG_TEXT
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static inline void OrderPositions(long& from, long& to)
+{
+    if ( from > to )
+    {
+        long tmp = from;
+        from = to;
+        to = tmp;
+    }
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -103,19 +117,27 @@ bool wxTextCtrl::Create(wxWindow *parent,
         return FALSE;
     }
 
-    // FIXME use renderer
-    wxCaret *caret = new wxCaret(this, 1, GetCharHeight());
-#ifndef __WXMSW__
-    caret->SetBlinkTime(0);
-#endif // __WXMSW__
-    SetCaret(caret);
-
     SetCursor(wxCURSOR_IBEAM);
 
     SetValue(value);
-    SetBestSize(size);
+    SetBestSize(m_sizeInitial);
+    CreateCaret();
 
-    caret->Show();
+    return TRUE;
+}
+
+bool wxTextCtrl::SetFont(const wxFont& font)
+{
+    if ( !wxControl::SetFont(font) )
+        return FALSE;
+
+    // recreate it, in fact
+    CreateCaret();
+
+    // and refresh everything, of course
+    SetInsertionPoint(0);
+    ClearSelection();
+    Refresh();
 
     return TRUE;
 }
@@ -149,11 +171,30 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
 
     // replace the part of the text with the new value
     wxString valueNew(m_value, (size_t)from);
+
+    // remember it for later use
+    wxCoord startNewText = GetTextWidth(valueNew);
+
+    // if we really replace something, refresh till the end of line as all
+    // remaining text in it is affected, but if we just added some text to the
+    // end of line, we only need to refresh the area occupied by this text
+    // refresh to the end of the line
+    wxCoord widthNewText;
+
     valueNew += text;
-    if ( (unsigned long)to < m_value.length() )
+    if ( (size_t)to < m_value.length() )
     {
         valueNew += m_value.c_str() + (size_t)to;
+
+        // refresh till the end of line
+        widthNewText = 0;
     }
+    else // text appended, not replaced
+    {
+        // refresh only the new text
+        widthNewText = GetTextWidth(text);
+    }
+
     m_value = valueNew;
 
     // force m_colLastVisible update
@@ -166,22 +207,17 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     // for selection anchor)
     ClearSelection();
 
-    // refresh to the end of the line
-    RefreshLine(0, from, -1);
+    // repaint
+    RefreshPixelRange(0, startNewText, widthNewText);
 
-    // and the affected parts of the next line (TODO)
+    // TODO: and the affected parts of the next line(s)
 }
 
 void wxTextCtrl::Remove(long from, long to)
 {
-    if ( from > to )
-    {
-        // Replace() only works with correctly ordered arguments, so exchange
-        // them
-        long tmp = from;
-        from = to;
-        to = tmp;
-    }
+    // Replace() only works with correctly ordered arguments, so exchange them
+    // if necessary
+    OrderPositions(from, to);
 
     Replace(from, to, _T(""));
 }
@@ -291,7 +327,7 @@ wxString wxTextCtrl::GetSelectionText() const
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    if ( from == -1 || to == -1 )
+    if ( from == -1 || to == from )
     {
         ClearSelection();
     }
@@ -309,14 +345,36 @@ void wxTextCtrl::SetSelection(long from, long to)
 
         if ( from != m_selStart || to != m_selEnd )
         {
+            // we need to use temp vars as RefreshTextRange() may call DoDraw()
+            // directly and so m_selStart/End must be reset by then
+            long selStartOld = m_selStart,
+                 selEndOld = m_selEnd;
+
             m_selStart = from;
             m_selEnd = to;
 
             wxLogTrace(_T("text"), _T("Selection range is %ld-%ld"),
                        m_selStart, m_selEnd);
 
-            // FIXME: shouldn't refresh everything
-            Refresh();
+            // refresh only the part of text which became (un)selected if
+            // possible
+            if ( selStartOld == m_selStart )
+            {
+                RefreshTextRange(selEndOld, m_selEnd);
+            }
+            else if ( selEndOld == m_selEnd )
+            {
+                RefreshTextRange(m_selStart, selStartOld);
+            }
+            else
+            {
+                // OPT: could check for other cases too but it is probably not
+                //      worth it as the two above are the most common ones
+                if ( selStartOld != -1 )
+                    RefreshTextRange(selStartOld, selEndOld);
+                if ( m_selStart != -1 )
+                    RefreshTextRange(m_selStart, m_selEnd);
+            }
         }
         //else: nothing to do
     }
@@ -326,11 +384,17 @@ void wxTextCtrl::ClearSelection()
 {
     if ( HasSelection() )
     {
+        // we need to use temp vars as RefreshTextRange() may call DoDraw()
+        // directly (see above as well)
+        long selStart = m_selStart,
+             selEnd = m_selEnd;
+
+        // no selection any more
         m_selStart =
         m_selEnd = -1;
 
-        // FIXME: shouldn't refresh everything
-        Refresh();
+        // refresh the old selection
+        RefreshTextRange(selStart, selEnd);
     }
 
     // the anchor should be moved even if there was no selection previously
@@ -714,7 +778,7 @@ void wxTextCtrl::UpdateLastVisible()
     w =
     wOld = 0;
 
-    m_colLastVisible = m_colStart;
+    m_colLastVisible = m_colStart - 1;
 
     const wxChar *pc = m_value.c_str() + (size_t)m_colStart;
     for ( ; *pc; pc++ )
@@ -808,13 +872,13 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
 
             wxString strBefore(line, (size_t)col);
             dc.GetTextExtent(strBefore, &width, NULL);
-            if ( width >= x )
+            if ( width > x )
             {
                 if ( matchDir == 1 )
                 {
                     // we were going to the right and, finally, moved beyond
                     // the original position - stop on the previous one
-                    //col--;
+                    col--;
 
                     break;
                 }
@@ -829,9 +893,10 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
             }
             else // width < x
             {
-                // same logic as above
+                // invert the logic above
                 if ( matchDir == -1 )
                 {
+                    // with the exception that we don't need to backtrack here
                     break;
                 }
 
@@ -866,12 +931,12 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
             text += line[col];
             dc.GetTextExtent(text, &width2, NULL);
 
-            wxASSERT_MSG( (width1 <= x) && (x <= width2),
+            wxASSERT_MSG( (width1 <= x) && (x < width2),
                           _T("incorrect HitTestLine() result") );
         }
         else // we return last char
         {
-            wxASSERT_MSG( x > width1, _T("incorrect HitTestLine() result") );
+            wxASSERT_MSG( x >= width1, _T("incorrect HitTestLine() result") );
         }
     }
 #endif // WXDEBUG_TEXT
@@ -979,7 +1044,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
             // scroll forward
             long col;
             HitTestLine(GetValue(), pos - width, &col);
-            ScrollText(col);
+            ScrollText(col + 1);
         }
     }
 }
@@ -1011,7 +1076,7 @@ void wxTextCtrl::ScrollText(long col)
         //      order of operands
         int dx = m_ofsHorz - ofsHorz;
 
-        // NB2: ScrollWindow() calls Refresh() which results in a call to
+        // NB2: we call Refresh() below which results in a call to
         //      DoDraw(), so we must update m_ofsHorz before calling it
         m_ofsHorz = ofsHorz;
         m_colStart = col;
@@ -1020,23 +1085,65 @@ void wxTextCtrl::ScrollText(long col)
         if ( dx > 0 )
         {
             // scrolling to the right: we need to recalc the last visible
-            // position beore scrolling
+            // position beore scrolling in order to make it appear exactly at
+            // the right edge of the text area after scrolling
             UpdateLastVisible();
         }
         else
         {
-            // when scrolling to the left, we don't need to worry about the
-            // last visible position, it will be updated later when we draw
-            // the text - but do force update
-            m_colLastVisible = -1;
+            // when scrolling to the left, we need to scroll the old rectangle
+            // occupied by the text - then the area where there was no text
+            // before will be refreshed and redrawn
 
-            m_posLastVisible++;
+            // but we still need to force updating after scrolling
+            m_colLastVisible = -1;
         }
 
-        wxRect rectText = m_rectText;
-        rectText.width = m_posLastVisible;
+        wxRect rect = m_rectText;
+        rect.width = m_posLastVisible;
 
-        ScrollWindow(dx, 0, &rectText);
+        rect = ScrollNoRefresh(dx, 0, &rect);
+
+        /*
+           we need to manually refresh the part which ScrollWindow() doesn't
+           refresh: indeed, if we had this:
+
+                                   ********o
+
+           where '*' is text and 'o' is blank area at the end (too small to
+           hold the next char) then after scrolling by 2 positions to the left
+           we're going to have
+
+                                   ******RRo
+
+           where 'R' is the area refreshed by ScrollWindow() - but we still
+           need to refresh the 'o' at the end as it may be now big enough to
+           hold the new character shifted into view.
+
+           when we are scrolling to the right, we need to update this rect as
+           well because it might have contained something before but doesn't
+           contain anything any more
+         */
+
+        // we can combine both rectangles into one when scrolling to the left,
+        // but we need two separate Refreshes() otherwise
+        if ( dx > 0 )
+        {
+            // refresh the uncovered part on the left
+            Refresh(TRUE, &rect);
+
+            // and now the area on the right
+            rect.x = m_rectText.x + m_posLastVisible;
+            rect.width = m_rectText.width - m_posLastVisible;
+        }
+        else
+        {
+            // just extend the rect covering the uncovered area to the edge of
+            // the text rect
+            rect.width += m_rectText.width - m_posLastVisible;
+        }
+
+        Refresh(TRUE, &rect);
     }
 }
 
@@ -1059,16 +1166,70 @@ void wxTextCtrl::DoPrepareDC(wxDC& dc)
 // refresh
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::RefreshLine(long line, long from, long to)
+void wxTextCtrl::RefreshTextRange(long start, long end)
+{
+    wxCHECK_RET( start != -1 && end != -1,
+                 _T("invalid RefreshTextRange() arguments") );
+
+    // accept arguments in any order as it is more conenient for the caller
+    OrderPositions(start, end);
+
+    long colStart, lineStart;
+    if ( !PositionToXY(start, &colStart, &lineStart) )
+    {
+        // the range is entirely beyond the end of the text, nothing to do
+        return;
+    }
+
+    long colEnd, lineEnd;
+    if ( !PositionToXY(end, &colEnd, &lineEnd) )
+    {
+        // the range spans beyond the end of text, refresh to the end
+        colEnd = wxSTRING_MAXLEN;
+        lineEnd = GetNumberOfLines() - 1;
+    }
+
+    // refresh all lines one by one
+    for ( long line = lineStart; line <= lineEnd; line++ )
+    {
+        // refresh the first line from the start of the range to the end, the
+        // intermediate ones entirely and the last one from the beginning to
+        // the end of the range
+        long posStart = line == lineStart ? colStart : 0;
+        long posCount;
+        if ( (line != lineEnd) || (colEnd == wxSTRING_MAXLEN) )
+        {
+            // intermediate line or the last one but we need to refresh it
+            // until the end anyhow - do it
+            posCount = wxSTRING_MAXLEN;
+        }
+        else // last line
+        {
+            // refresh just the positions in between the start and the end one
+            posCount = colEnd - posStart;
+        }
+
+        RefreshLineRange(line, posStart, posCount);
+    }
+}
+
+void wxTextCtrl::RefreshLineRange(long line, long start, long count)
 {
     wxString text = GetLineText(line);
 
+    RefreshPixelRange(line,
+                      GetTextWidth(text.Left((size_t)start)),
+                      GetTextWidth(text.Mid((size_t)start, (size_t)count)));
+}
+
+void wxTextCtrl::RefreshPixelRange(long line, wxCoord start, wxCoord width)
+{
     wxCoord h = GetCharHeight();
     wxRect rect;
-    rect.x = GetTextWidth(text.Left((size_t)from)) - m_ofsHorz;
+    rect.x = start - m_ofsHorz;
     rect.y = line*h;
 
-    if ( to == -1 )
+    if ( width == 0 )
     {
         // till the end of line
         rect.width = m_rectText.width - rect.x;
@@ -1076,15 +1237,13 @@ void wxTextCtrl::RefreshLine(long line, long from, long to)
     else
     {
         // only part of line
-        rect.width = GetTextWidth(text.Mid((size_t)from, (size_t)(to - from + 1)));
+        rect.width = width;
     }
 
     rect.height = h;
 
-    // account for the origin offset
-    wxPoint pt = GetClientAreaOrigin() + m_rectText.GetPosition();
-    rect.x += pt.x;
-    rect.y += pt.y;
+    // account for the text area offset
+    rect.Offset(m_rectText.GetPosition());
 
     wxLogTrace(_T("text"), _T("Refreshing (%d, %d)-(%d, %d)"),
                rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
@@ -1100,7 +1259,7 @@ void wxTextCtrl::RefreshLine(long line, long from, long to)
    Several remarks about wxTextCtrl redraw logic:
 
    1. only the regions which must be updated are redrawn, this means that we
-      never Refresh() the entire window but use RefreshLine() and
+      never Refresh() the entire window but use RefreshPixelRange() and
       ScrollWindow() which only refresh small parts of it and iterate over the
       update region in our DoDraw()
 
@@ -1172,7 +1331,7 @@ void wxTextCtrl::DrawTextLine(wxDC& dc, const wxRect& rect,
 void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 {
     // debugging trick to see the update rect visually
-#if 1
+#ifdef WXDEBUG_TEXT
     if ( 0 )
     {
         wxWindowDC dc(this);
@@ -1181,7 +1340,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.DrawRectangle(rectUpdate);
     }
-#endif
+#endif // WXDEBUG_TEXT
 
     // calculate the range of lines to refresh
     wxPoint pt1 = rectUpdate.GetPosition();
@@ -1204,7 +1363,12 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
     rectText.y = m_rectText.y + lineStart*rectText.height;
 
     // do draw the invalidated parts of each line
-    for ( long line = lineStart; line <= lineEnd; line++ )
+    for ( long line = lineStart;
+          line <= lineEnd;
+          line++,
+          rectText.y += rectText.height,
+          pt1.y += rectText.height,
+          pt2.y += rectText.height )
     {
         // calculate the update rect in text positions for this line
         if ( HitTest(pt1, &colStart, NULL) == wxTE_HT_AFTER )
@@ -1232,8 +1396,12 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
             UpdateLastVisible();
         }
 
-        wxASSERT_MSG( colStart <= m_colLastVisible,
-                      _T("incorrect m_colLastVisible value") );
+        if ( colStart > m_colLastVisible )
+        {
+            // don't bother redrawing something that is beyond the last
+            // visible position
+            continue;
+        }
 
         if ( colEnd > m_colLastVisible )
             colEnd = m_colLastVisible;
@@ -1251,8 +1419,14 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
             // these values are relative to the start of the line while the
             // string passed to DrawTextLine() is only part of it, so adjust
             // the selection range accordingly
-            selStart += colStart;
-            selEnd += colStart;
+            selStart -= colStart;
+            selEnd -= colStart;
+
+            if ( selStart < 0 )
+                selStart = 0;
+
+            if ( (size_t)selEnd >= text.length() )
+                selEnd = text.length();
         }
 
         // calculate the logical text coords
@@ -1263,11 +1437,6 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         DrawTextLine(dc, rectText, text, selStart, selEnd);
         wxLogTrace(_T("text"), _T("Line %ld: positions %ld-%ld redrawn."),
                    line, colStart, colEnd);
-
-        // adjust for the next line
-        rectText.y += rectText.height;
-        pt1.y += rectText.height;
-        pt2.y += rectText.height;
     }
 }
 
@@ -1317,6 +1486,24 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
 
         DoDrawTextInRect(dc, r);
     }
+}
+
+// ----------------------------------------------------------------------------
+// caret
+// ----------------------------------------------------------------------------
+
+void wxTextCtrl::CreateCaret()
+{
+    // FIXME use renderer
+    wxCaret *caret = new wxCaret(this, 1, GetCharHeight());
+#ifndef __WXMSW__
+    caret->SetBlinkTime(0);
+#endif // __WXMSW__
+
+    // SetCaret() will delete the old caret if any
+    SetCaret(caret);
+
+    caret->Show();
 }
 
 wxCoord wxTextCtrl::GetCaretPosition() const
@@ -1371,7 +1558,12 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         action = actionOrig;
     }
 
-    long newPos = -1;
+    // set newPos to -2 as it can't become equal to it in the assignments below
+    // (but it can become -1)
+    static const long INVALID_POS_VALUE = -2;
+
+    long newPos = INVALID_POS_VALUE;
+
     if ( action == wxACTION_TEXT_HOME )
     {
         newPos = m_curPos - m_curRow;
@@ -1434,7 +1626,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         return wxControl::PerformAction(action, numArg, strArg);
     }
 
-    if ( newPos != -1 )
+    if ( newPos != INVALID_POS_VALUE )
     {
         // bring the new position into the range
         if ( newPos < 0 )

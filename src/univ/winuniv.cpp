@@ -272,6 +272,32 @@ void wxWindow::DoDraw(wxControlRenderer *renderer)
 {
 }
 
+void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
+{
+    if ( rectClient )
+    {
+        wxRect rectWin = *rectClient;
+        rectWin.Offset(GetClientAreaOrigin());
+
+        wxWindowNative::Refresh(eraseBackground, &rectWin);
+
+        // debugging helper
+#if 0
+        wxWindowDC dc(this);
+        dc.SetBrush(*wxBLUE_BRUSH);
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawRectangle(rectWin);
+
+        ::GdiFlush();
+        ::Sleep(1000);
+#endif // 0
+    }
+    else
+    {
+        wxWindowNative::Refresh(eraseBackground);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // state flags
 // ----------------------------------------------------------------------------
@@ -576,25 +602,47 @@ int wxWindow::GetScrollRange(int orient) const
 
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+    wxRect r;
+
+    if ( dx )
+    {
+        r = ScrollNoRefresh(dx, 0, rect);
+        Refresh(TRUE /* erase bkgnd */, &r);
+    }
+
+    if ( dy )
+    {
+        r = ScrollNoRefresh(0, dy, rect);
+        Refresh(TRUE /* erase bkgnd */, &r);
+    }
+}
+
+wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
+{
+    wxASSERT_MSG( !dx || !dy, _T("can't be used for diag scrolling") );
+
+    // the rect to refresh (which we will calculate)
+    wxRect rect;
+
     if ( !dx && !dy )
     {
         // nothing to do
-        return;
+        return rect;
     }
 
     // calculate the part of the window which we can just redraw in the new
     // location
-    wxSize sizeTotal = rect ? rect->GetSize() : GetClientSize();
+    wxSize sizeTotal = rectTotal ? rectTotal->GetSize() : GetClientSize();
 
     wxLogTrace(_T("scroll"), _T("rect is %dx%d, scroll by %d, %d"),
                sizeTotal.x, sizeTotal.y, dx, dy);
 
     // the initial and end point of the region we move in client coords
     wxPoint ptSource, ptDest;
-    if ( rect )
+    if ( rectTotal )
     {
-        ptSource = rect->GetPosition();
-        ptDest = rect->GetPosition();
+        ptSource = rectTotal->GetPosition();
+        ptDest = rectTotal->GetPosition();
     }
 
     // the size of this region
@@ -606,12 +654,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         // just redraw everything as nothing of the displayed image will stay
         wxLogTrace(_T("scroll"), _T("refreshing everything"));
 
-        Refresh(TRUE, rect);
+        rect = rectTotal ? *rectTotal : GetClientRect();
     }
     else // move the part which doesn't change to the new location
     {
-        wxPoint ptOrigin = GetClientAreaOrigin();
-
         // note that when we scroll the canvas in some direction we move the
         // block which doesn't need to be refreshed in the opposite direction
 
@@ -645,7 +691,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         dcMem.Blit(wxPoint(0, 0), size, &dc, ptSource
 #if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
-                + ptOrigin
+                + GetClientAreaOrigin()
 #endif // broken wxGTK wxDC::Blit
                   );
         dc.Blit(ptDest, size, &dcMem, wxPoint(0, 0));
@@ -663,9 +709,8 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         //        diagonally anyhow and so adding extra logic to compute
         //        rectangle intersection is probably not worth the effort
 
-        wxRect rect;
-        rect.x = ptOrigin.x + ptSource.x;
-        rect.y = ptOrigin.y + ptSource.y;
+        rect.x = ptSource.x;
+        rect.y = ptSource.y;
 
         if ( dx )
         {
@@ -686,8 +731,6 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
                        rect.x, rect.y,
                        rect.GetRight() + 1, rect.GetBottom() + 1);
-
-            Refresh(TRUE /* erase bkgnd */, &rect);
         }
 
         if ( dy )
@@ -709,10 +752,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
                        rect.x, rect.y,
                        rect.GetRight() + 1, rect.GetBottom() + 1);
-
-            Refresh(TRUE /* erase bkgnd */, &rect);
         }
     }
+
+    return rect;
 }
 
 // ----------------------------------------------------------------------------
