@@ -212,7 +212,7 @@ bool wxApp::OnInitGui()
 
 bool wxApp::CallOnInit()
 {
-    wxAutoNSAutoreleasePool pool;
+//    wxAutoNSAutoreleasePool pool;
     return OnInit();
 }
 
