@@ -8,10 +8,11 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxd.d_wx import wx
-from wxd.d_stc import stc
+#from wxd.d_wx import wx
+#from wxd.d_stc import stc
 
 import wx
+from wx import stc
 
 import keyword
 import os
