@@ -684,11 +684,14 @@ getmakefiles()
     curl http://biolpc22.york.ac.uk/pub/CVS_Makefiles/wx-mk-evcprj.zip --output /c/transit/wx-mk-evcprj.zip
     echo Getting Digital Mars makefiles...
     curl http://biolpc22.york.ac.uk/pub/CVS_Makefiles/wx-mk-dmars.zip --output /c/transit/wx-mk-dmars.zip
+    echo Getting VC++ makefiles...
+    curl http://biolpc22.york.ac.uk/pub/CVS_Makefiles/wx-mk-msvc.zip --output /c/transit/wx-mk-msvc.zip
 
     cd $APPDIR
     echo Unarchiving makefiles and project files...
     unzip -o -a /c/transit/wx-mk-evcprj.zip
     unzip -o -a /c/transit/wx-mk-dmars.zip
+    unzip -o -a /c/transit/wx-mk-msvc.zip
     echo Done getting makefiles and project files.
 }
 
