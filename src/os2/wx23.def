@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  H:\Dev\Wx2\Wxwindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -10694,8 +10694,6 @@ EXPORTS
       sm_eventTable__9wxControl
       ;wxControl::OS2CreateControl(const char*,unsigned long,const wxPoint&,const wxSize&,const wxString&,unsigned long)
       OS2CreateControl__9wxControlFPCcUlRC7wxPointRC6wxSizeRC8wxStringT2
-      ;wxControl::OS2OnNotify(int,void*,void**)
-      OS2OnNotify__9wxControlFiPvPPv
       ;wxControl::GetExStyle(unsigned long&) const
       GetExStyle__9wxControlCFRUl
       ;wxControl::sm_eventTableEntries
@@ -10708,6 +10706,8 @@ EXPORTS
       Create__9wxControlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
       ;wxControl::ProcessCommand(wxCommandEvent&)
       ProcessCommand__9wxControlFR14wxCommandEvent
+      ;wxControl::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
+      OnCtlColor__9wxControlFUlT1UiT3PvT5
       ;wxControl::wxControl()
       __ct__9wxControlFv
       ;wxControl::GetEventTable() const
@@ -11151,20 +11151,16 @@ EXPORTS
       SetModal__8wxDialogFUl
       ;wxDialog::OnCancel(wxCommandEvent&)
       OnCancel__8wxDialogFR14wxCommandEvent
-      ;wxDialog::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
-      OnCtlColor__8wxDialogFUlT1UiT3PvT5
+      ;wxDialog::DoGetPosition(int*,int*) const
+      DoGetPosition__8wxDialogCFPiT1
       ;wxDialog::IsIconized() const
       IsIconized__8wxDialogCFv
       ;wxDialog::IsModal() const
       IsModal__8wxDialogCFv
       ;wxDialog::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
       Create__8wxDialogFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
-      ;wxDialog::SetTitle(const wxString&)
-      SetTitle__8wxDialogFRC8wxString
-      ;wxDialog::OnPaint(wxPaintEvent&)
-      OnPaint__8wxDialogFR12wxPaintEvent
-      ;wxDialog::OnSize(wxSizeEvent&)
-      OnSize__8wxDialogFR11wxSizeEvent
+      ;wxDialog::IsModalShowing() const
+      IsModalShowing__8wxDialogCFv
       wxModalDialogs
       ;wxDialog::sm_eventTableEntries
       sm_eventTableEntries__8wxDialog
@@ -11174,8 +11170,8 @@ EXPORTS
       OnCloseWindow__8wxDialogFR12wxCloseEvent
       ;wxDialog::DoSetClientSize(int,int)
       DoSetClientSize__8wxDialogFiT1
-      ;wxDialog::GetPosition(int*,int*) const
-      GetPosition__8wxDialogCFPiT1
+      ;wxDialog::Init()
+      Init__8wxDialogFv
       ;wxDialog::ShowModal()
       ShowModal__8wxDialogFv
       ;wxDialog::sm_classwxDialog
@@ -11185,12 +11181,8 @@ EXPORTS
       __vft8wxDialog8wxObject
       ;wxDialog::OnSysColourChanged(wxSysColourChangedEvent&)
       OnSysColourChanged__8wxDialogFR23wxSysColourChangedEvent
-      ;wxDialog::Centre(int)
-      Centre__8wxDialogFi
-      ;wxDialog::wxDialog()
-      __ct__8wxDialogFv
-      ;wxDialog::GetTitle() const
-      GetTitle__8wxDialogCFv
+      ;wxDialog::DoShowModal()
+      DoShowModal__8wxDialogFv
       ;wxDialog::Destroy()
       Destroy__8wxDialogFv
       ;wxDialog::Iconize(unsigned long)
@@ -11207,12 +11199,8 @@ EXPORTS
       wxConstructorForwxDialog__Fv
       ;wxDialog::OS2WindowProc(unsigned int,void*,void*)
       OS2WindowProc__8wxDialogFUiPvT2
-      ;wxDialog::IsShown() const
-      IsShown__8wxDialogCFv
       ;wxDialog::GetEventTable() const
       GetEventTable__8wxDialogCFv
-      ;wxDialog::Fit()
-      Fit__8wxDialogFv
       wxModelessWindows
       ;wxDialog::sm_eventTable
       sm_eventTable__8wxDialog
@@ -12860,6 +12848,8 @@ EXPORTS
       sm_classwxStaticText__12wxStaticText
       ;wxConstructorForwxStaticText()
       wxConstructorForwxStaticText__Fv
+      ;wxStaticText::SetFont(const wxFont&)
+      SetFont__12wxStaticTextFRC6wxFont
       __vft12wxStaticText8wxObject
       ;wxStaticText::DoGetBestSize() const
       DoGetBestSize__12wxStaticTextCFv
@@ -13107,14 +13097,18 @@ EXPORTS
       OnDropFiles__10wxTextCtrlFR16wxDropFilesEvent
       ;wxTextCtrl::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
       OnCtlColor__10wxTextCtrlFUlT1UiT3PvT5
-      ;wxTextCtrl::GetInsertionPoint() const
-      GetInsertionPoint__10wxTextCtrlCFv
-      ;wxTextCtrl::Undo()
-      Undo__10wxTextCtrlFv
-      ;wxTextCtrl::PositionToXY(long,long*,long*) const
-      PositionToXY__10wxTextCtrlCFlPlT2
       ;wxTextCtrl::AdjustSpaceLimit()
       AdjustSpaceLimit__10wxTextCtrlFv
+      ;wxTextCtrl::Undo()
+      Undo__10wxTextCtrlFv
+      ;wxTextCtrl::SetForegroundColour(const wxColour&)
+      SetForegroundColour__10wxTextCtrlFRC8wxColour
+      ;wxTextCtrl::SetBackgroundColour(const wxColour&)
+      SetBackgroundColour__10wxTextCtrlFRC8wxColour
+      ;wxTextCtrl::PositionToXY(long,long*,long*) const
+      PositionToXY__10wxTextCtrlCFlPlT2
+      ;wxTextCtrl::GetInsertionPoint() const
+      GetInsertionPoint__10wxTextCtrlCFv
       ;wxTextCtrl::SetValue(const wxString&)
       SetValue__10wxTextCtrlFRC8wxString
       ;wxTextCtrl::WriteText(const wxString&)
