@@ -121,7 +121,7 @@ bool MyApp::OnInit()
     wxBitmap bitmap;
     if (bitmap.LoadFile(_T("splash.png"), wxBITMAP_TYPE_PNG))
     {
-        wxSplashScreen* splash = new wxSplashScreen(bitmap,
+        new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
             6000, NULL, wxID_ANY, wxDefaultPosition, wxDefaultSize,
             wxSIMPLE_BORDER|wxSTAY_ON_TOP);
@@ -158,7 +158,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(wxID_ABOUT, _T("&About...\tF1"), _T("Show about frame"));
 
     menuFile->Append(wxID_EXIT, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
@@ -189,9 +189,21 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxString msg;
-    msg.Printf( _T("This is the About dialog of the wxSplashScreen sample.\n")
-                _T("Welcome to %s"), wxVERSION_STRING);
-
-    wxMessageBox(msg, _T("About sample"), wxOK | wxICON_INFORMATION, this);
+    wxBitmap bitmap;
+    if (bitmap.LoadFile(_T("splash.png"), wxBITMAP_TYPE_PNG))
+    {
+        wxImage image = bitmap.ConvertToImage();
+        image.Rescale( bitmap.GetWidth()/2, bitmap.GetHeight()/2 );
+        bitmap = wxBitmap(image); 
+        wxSplashScreen *splash = new wxSplashScreen(bitmap,
+            wxSPLASH_CENTRE_ON_PARENT | wxSPLASH_NO_TIMEOUT,
+            0, this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+            wxSIMPLE_BORDER|wxSTAY_ON_TOP);
+        wxStaticText *text = new wxStaticText( splash->GetSplashWindow(), wxID_EXIT, _T("click somewhere\non image"), wxPoint(13,11) );
+        text->SetBackgroundColour(*wxWHITE);
+        text->SetForegroundColour(*wxBLACK);
+        wxFont font = text->GetFont();
+        font.SetPointSize(2*font.GetPointSize()/3);
+        text->SetFont(font);
+    }
 }
