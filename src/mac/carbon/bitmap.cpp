@@ -51,8 +51,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject )
 // we don't dare premultiplied alpha yet
 #define wxMAC_USE_PREMULTIPLIED_ALPHA 0
 
-IconFamilyHandle wxMacCreateIconFamily(const wxBitmap& bmp)
+IconFamilyHandle wxMacCreateIconFamily(const wxBitmap& bitmap)
 {
+    wxBitmap bmp = bitmap ;
     // setup the header properly
     
     IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(8) ;
@@ -62,48 +63,54 @@ IconFamilyHandle wxMacCreateIconFamily(const wxBitmap& bmp)
     int w = bmp.GetWidth() ;
     int h = bmp.GetHeight() ;
     int sz = wxMax( w , h ) ;
-    if ( sz > 128 )
+    
+    OSType dataType ;
+    OSType maskType ;
+    
+    if ( sz == 64 )
     {
-        wxFAIL_MSG( wxT("Currently only 128 pixels wide images are supported") ) ;
+        bmp = wxBitmap( bitmap.ConvertToImage().Scale( 128 , 128 ) ) ;
+        sz = 128 ;
+        h = w = 128 ;
+    }
+    else if ( sz == 24 )
+    {
+        bmp = wxBitmap( bitmap.ConvertToImage().Scale( 48 , 48 ) ) ;
+        sz = 48 ;
+        h = w = 48 ;
     }
     
+    if ( sz == 128 )
+    {
+        dataType = kThumbnail32BitData ;
+        maskType = kThumbnail8BitMask ;
+    }
+    else if ( sz == 48 )
+    {
+        dataType = kHuge32BitData ;
+        maskType = kHuge8BitMask ;
+    }
+    else if ( sz == 32 )
+    {
+        dataType = kLarge32BitData ;
+        maskType = kLarge8BitMask ;
+    }
+    else if ( sz == 16 )
+    {
+        dataType = kSmall32BitData ;
+        maskType = kSmall8BitMask ;
+    }
+    else
+    {
+        return NULL ;
+    }
+
     Handle data = NULL ; 
     Handle maskdata = NULL ;
     unsigned char * maskptr = NULL ;
     unsigned char * ptr = NULL ;
     size_t size ;
     size_t masksize ;
-    OSType dataType ;
-    OSType maskType ;
-
-    bool hasAlpha = bmp.HasAlpha() ;
-    wxMask *mask = bmp.GetMask() ;
-    // thumbnail is 128 x 128 with 32 bits per pixel
-    
-    if ( sz > 48 )
-    {
-        sz = 128 ;
-        dataType = kThumbnail32BitData ;
-        maskType = kThumbnail8BitMask ;
-    }
-    else if ( sz > 32 )
-    {
-        sz = 48 ;
-        dataType = kHuge32BitData ;
-        maskType = kHuge8BitMask ;
-    }
-    else if ( sz > 16 )
-    {
-        sz = 32 ;
-        dataType = kLarge32BitData ;
-        maskType = kLarge8BitMask ;
-    }
-    else 
-    {
-        sz = 16 ;
-        dataType = kSmall32BitData ;
-        maskType = kSmall8BitMask ;
-    }
 
     size = sz * sz * 4 ;
     data = NewHandle( size) ;    
@@ -117,6 +124,8 @@ IconFamilyHandle wxMacCreateIconFamily(const wxBitmap& bmp)
     maskptr = (unsigned char*) *maskdata ;
     memset( maskptr , 0 , masksize ) ;
 
+    bool hasAlpha = bmp.HasAlpha() ;
+    wxMask *mask = bmp.GetMask() ;    
     unsigned char * source = (unsigned char*) bmp.GetRawAccess() ;
     unsigned char * masksource = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
     for ( int y = 0 ; y < h ; ++y )
@@ -159,6 +168,9 @@ IconFamilyHandle wxMacCreateIconFamily(const wxBitmap& bmp)
 IconRef wxMacCreateIconRef(const wxBitmap& bmp)
 {
     IconFamilyHandle iconFamily = wxMacCreateIconFamily( bmp ) ;
+    if ( iconFamily == NULL )
+        return NULL ;
+        
     IconRef iconRef ;
     static int iconCounter = 2 ;
     
@@ -224,7 +236,7 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
             return ;
         info->contentType = kControlContentIconRef ;
         info->u.iconRef = wxMacCreateIconRef( bitmap ) ;  
-         
+        wxASSERT_MSG( info->u.iconRef , wxT("Converting to IconRef not possible") ) ;
 #if wxMAC_USE_CORE_GRAPHICS              
         /*
             // only on 10.4 more controls will accept a CGImage
