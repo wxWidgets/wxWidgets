@@ -15,24 +15,20 @@ Classes: \helpref{wxNotebook}{wxnotebook}, \helpref{wxListbook}{wxlistbook}, \he
 
 \subsection{Introduction}\label{wxbookctrlintro}
 
-A book control is a convenient way of application control and presentation of information
-in the same window, without having to display it all at the same time. Such control defines
-multiple pages controlled by driver control. wxWidgets has three variants of this control
-differentiated by their pilot-like subcontrol:
+A book control is a convenient way of displaying multiple pages of information,
+displayed one page at a time. wxWidgets has three variants of this control:
 
 \begin{itemize}\itemsep=0pt
-\item \helpref{wxNotebook}{wxnotebook} usually with native tab control
-\item \helpref{wxListbook}{wxlistbook} controlled by \helpref{wxListCtrl}{wxlistctrl}
-\item \helpref{wxChoicebook}{wxchoicebook} controlled by \helpref{wxChoice}{wxchoice}
+\item \helpref{wxNotebook}{wxnotebook}: uses a row of tabs
+\item \helpref{wxListbook}{wxlistbook}: controlled by a \helpref{wxListCtrl}{wxlistctrl}
+\item \helpref{wxChoicebook}{wxchoicebook}: controlled by a \helpref{wxChoice}{wxchoice}
 \end{itemize}
 
 \subsection{Best book}\label{wxbestbookctrl}
 
-Just like \helpref{wxConfigBase}{wxconfigbase} class represents most native type of configuration
-storage, also book controls are special wrapper called wxBookCtrl which is mapped to the
-class best suited for given platform. Currently it serves \helpref{wxChoicebook}{wxchoicebook}
-for smartphones equipped with WinCE and \helpref{wxNotebook}{wxnotebook} for all other platforms.
-Mapping consists in:
+wxBookCtrl is mapped to the class best suited for a given platform.
+Currently it provides \helpref{wxChoicebook}{wxchoicebook} for smartphones equipped with
+WinCE, and \helpref{wxNotebook}{wxnotebook} for all other platforms. The mapping consists of:
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
@@ -49,4 +45,4 @@ Mapping consists in:
 \twocolitem{\windowstyle{wxBC\_DEFAULT}}{\windowstyle{wxCHB\_DEFAULT} or \windowstyle{wxNB\_DEFAULT}}
 \end{twocollist}
 
-See Widgets sample for the presentation of wxBookCtrl usage.
+See {\tt samples/widgets} for an example of wxBookCtrl usage.
