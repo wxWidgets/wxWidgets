@@ -2163,25 +2163,27 @@ long wxGridStringTable::GetNumberCols()
 
 wxString wxGridStringTable::GetValue( int row, int col )
 {
-    // TODO: bounds checking
-    //
+    wxASSERT_MSG( (row < GetNumberCols()) && (col < GetNumberCols()),
+                  _T("invalid row or column index in wxGridStringTable") );
+
     return m_data[row][col];
 }
 
 void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 {
-    // TODO: bounds checking
-    //
+    wxASSERT_MSG( (row < GetNumberCols()) && (col < GetNumberCols()),
+                  _T("invalid row or column index in wxGridStringTable") );
+
     m_data[row][col] = value;
 }
 
 bool wxGridStringTable::IsEmptyCell( int row, int col )
 {
-    // TODO: bounds checking
-    //
+    wxASSERT_MSG( (row < GetNumberCols()) && (col < GetNumberCols()),
+                  _T("invalid row or column index in wxGridStringTable") );
+
     return (m_data[row][col] == wxEmptyString);
 }
-
 
 void wxGridStringTable::Clear()
 {
@@ -2748,7 +2750,8 @@ wxGrid::wxGrid( wxWindow *parent,
                  long style,
                  const wxString& name )
   : wxScrolledWindow( parent, id, pos, size, (style | wxWANTS_CHARS), name ),
-    m_colMinWidths(wxKEY_INTEGER, GRID_HASH_SIZE)
+    m_colMinWidths(GRID_HASH_SIZE),
+    m_rowMinHeights(GRID_HASH_SIZE)
 {
     Create();
 }
@@ -3474,7 +3477,9 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
-                    y = wxMax( y, GetRowTop(m_dragRowOrCol) + WXGRID_MIN_ROW_HEIGHT );
+                    y = wxMax( y,
+                               GetRowTop(m_dragRowOrCol) +
+                               GetRowMinimalHeight(m_dragRowOrCol) );
                     dc.SetLogicalFunction(wxINVERT);
                     if ( m_dragLastPos >= 0 )
                     {
@@ -6876,64 +6881,98 @@ void wxGrid::SetColSize( int col, int width )
 
 void wxGrid::SetColMinimalWidth( int col, int width )
 {
-    m_colMinWidths.Put(col, (wxObject *)width);
+    m_colMinWidths.Put(col, width);
+}
+
+void wxGrid::SetRowMinimalHeight( int row, int width )
+{
+    m_rowMinHeights.Put(row, width);
 }
 
 int wxGrid::GetColMinimalWidth(int col) const
 {
-    wxObject *obj = m_colMinWidths.Get(m_dragRowOrCol);
-    return obj ? (int)obj : WXGRID_MIN_COL_WIDTH;
+    long value = m_colMinWidths.Get(col);
+    return value != wxNOT_FOUND ? (int)value : WXGRID_MIN_COL_WIDTH;
+}
+
+int wxGrid::GetRowMinimalHeight(int row) const
+{
+    long value = m_rowMinHeights.Get(row);
+    return value != wxNOT_FOUND ? (int)value : WXGRID_MIN_ROW_HEIGHT;
 }
 
 // ----------------------------------------------------------------------------
 // auto sizing
 // ----------------------------------------------------------------------------
 
-void wxGrid::AutoSizeColumn( int col, bool setAsMin )
+void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
 {
     wxClientDC dc(m_gridWin);
 
-    wxCoord width, widthMax = 0;
-    for ( int row = 0; row < m_numRows; row++ )
+    int row, col;
+    if ( column )
+        col = colOrRow;
+    else
+        row = colOrRow;
+
+    wxCoord extent, extentMax = 0;
+    int max = column ? m_numRows : m_numCols;
+    for ( int rowOrCol = 0; rowOrCol < m_numRows; rowOrCol++ )
     {
+        if ( column )
+            row = rowOrCol;
+        else
+            col = rowOrCol;
+
         wxGridCellAttr* attr = GetCellAttr(row, col);
         wxGridCellRenderer* renderer = attr->GetRenderer(this, row, col);
         if ( renderer )
         {
-            width = renderer->GetBestSize(*this, *attr, dc, row, col).x;
-            if ( width > widthMax )
+            wxSize size = renderer->GetBestSize(*this, *attr, dc, row, col);
+            extent = column ? size.x : size.y;
+            if ( extent > extentMax )
             {
-                widthMax = width;
+                extentMax = extent;
             }
         }
 
         attr->DecRef();
     }
 
-    // now also compare with the column label width
+    // now also compare with the column label extent
+    wxCoord w, h;
     dc.SetFont( GetLabelFont() );
-    dc.GetTextExtent( GetColLabelValue(col), &width, NULL );
-    if ( width > widthMax )
+    dc.GetTextExtent( column ? GetColLabelValue(col)
+                             : GetRowLabelValue(row), &w, &h );
+    extent = column ? w : h;
+    if ( extent > extentMax )
     {
-        widthMax = width;
+        extentMax = extent;
     }
 
-    if ( !widthMax )
+    if ( !extentMax )
     {
-        // empty column - give default width (notice that if widthMax is less
-        // than default width but != 0, it's ok)
-        widthMax = m_defaultColWidth;
+        // empty column - give default extent (notice that if extentMax is less
+        // than default extent but != 0, it's ok)
+        extentMax = column ? m_defaultColWidth : m_defaultRowHeight;
     }
     else
     {
         // leave some space around text
-        widthMax += 10;
+        extentMax += 10;
     }
 
-    SetColSize(col, widthMax);
+    if ( column )
+        SetColSize(col, extentMax);
+    else
+        SetRowSize(col, extentMax);
+
     if ( setAsMin )
     {
-        SetColMinimalWidth(col, widthMax);
+        if ( column )
+            SetColMinimalWidth(col, extentMax);
+        else
+            SetRowMinimalHeight(col, extentMax);
     }
 }
 
@@ -6960,7 +6999,10 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 
     for ( int row = 0; row < m_numRows; row++ )
     {
-        // if ( !calcOnly ) AutoSizeRow(row, setAsMin) -- TODO
+        if ( !calcOnly )
+        {
+            AutoSizeRow(row, setAsMin);
+        }
 
         height += GetRowHeight(row);
     }

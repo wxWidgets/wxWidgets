@@ -1079,10 +1079,13 @@ public:
 
     void     SetColSize( int col, int width );
 
-    // automatically size the column to fit to its contents, if setAsMin is
-    // TRUE, this optimal width will also be set as minimal width for this
-    // column
-    void     AutoSizeColumn( int col, bool setAsMin = TRUE );
+    // automatically size the column or row to fit to its contents, if
+    // setAsMin is TRUE, this optimal width will also be set as minimal width
+    // for this column
+    void     AutoSizeColumn( int col, bool setAsMin = TRUE )
+        { AutoSizeColOrRow(col, setAsMin, TRUE); }
+    void     AutoSizeRow( int row, bool setAsMin = TRUE )
+        { AutoSizeColOrRow(row, setAsMin, FALSE); }
 
     // auto size all columns (very ineffective for big grids!)
     void     AutoSizeColumns( bool setAsMin = TRUE )
@@ -1099,6 +1102,7 @@ public:
     // the grid creation because it won't resize the column if it's already
     // narrower than the minimal width
     void     SetColMinimalWidth( int col, int width );
+    void     SetRowMinimalHeight( int row, int width );
 
     void     SetDefaultCellBackgroundColour( const wxColour& );
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
@@ -1488,12 +1492,17 @@ protected:
     int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = TRUE);
     int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = TRUE);
 
+    // common part of AutoSizeColumn/Row()
+    void AutoSizeColOrRow(int n, bool setAsMin, bool column /* or row? */);
+
     // if a column has a minimal width, it will be the value for it in this
     // hash table
-    wxHashTable m_colMinWidths;
+    wxHashTableLong m_colMinWidths,
+                    m_rowMinHeights;
 
-    // get the minimal width of the given column
-    int        GetColMinimalWidth(int col) const;
+    // get the minimal width of the given column/row
+    int GetColMinimalWidth(int col) const;
+    int GetRowMinimalHeight(int col) const;
 
     // do we have some place to store attributes in?
     bool CanHaveAttributes();
