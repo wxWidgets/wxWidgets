@@ -13,46 +13,55 @@
 #define _WX_PROCESSH__
 
 #ifdef __GNUG__
-#pragma interface "process.h"
+    #pragma interface "process.h"
 #endif
 
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/event.h"
 
-class WXDLLEXPORT wxProcess: public wxEvtHandler
+// Process Event handling
+class WXDLLEXPORT wxProcessEvent : public wxEvent
 {
-  DECLARE_DYNAMIC_CLASS(wxProcess)
- public:
+DECLARE_DYNAMIC_CLASS(wxProcessEvent)
 
-  wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1);
-  virtual ~wxProcess();
+public:
+    wxProcessEvent(int id = 0, int pid = 0, int exitcode = 0) : wxEvent(id)
+    {
+        m_eventType = wxEVT_END_PROCESS;
+        m_pid = pid;
+        m_exitcode = exitcode;
+    }
 
-  virtual void OnTerminate(int pid);
+    // accessors
+        // PID of process which terminated
+    int GetPid() { return m_pid; }
 
- protected:
-  int m_id;
+        // the exit code
+    int GetExitCode() { return m_exitcode; }
+
+public:
+    int m_pid, m_exitcode;
 };
 
-// Process Event handling
-
-class WXDLLEXPORT wxProcessEvent: public wxEvent
+// A wxProcess object should be passed to wxExecute - than its OnTerminate()
+// function will be called when the process terminates.
+class WXDLLEXPORT wxProcess : public wxEvtHandler
 {
-  DECLARE_DYNAMIC_CLASS(wxProcessEvent)
- public:
+DECLARE_DYNAMIC_CLASS(wxProcess)
 
-  wxProcessEvent(int id = 0, int pid = -1);
-  
-  inline int GetPid() { return m_pid; }
-  inline void SetPid(int pid) { m_pid = pid; }
+public:
+    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1);
 
- public:
-  int m_pid;
+    virtual void OnTerminate(int pid, int status);
+
+protected:
+    int m_id;
 };
 
 typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);
 
-#define EVT_END_PROCESS(id, func) { wxEVT_END_PROCESS, id, -1, (wxObjectEvent) (wxEventFunction) (wxProcessEventFunction) & fn, NULL},
+#define EVT_END_PROCESS(id, func) { wxEVT_END_PROCESS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxProcessEventFunction) & func, NULL},
 
 #endif
     // _WX_PROCESSH__

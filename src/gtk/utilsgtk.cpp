@@ -18,6 +18,8 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
+#include "wx/process.h"
+
 #include <stdarg.h>
 #include <dirent.h>
 #include <string.h>
@@ -266,17 +268,21 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
     /* wait4 is not part of any standard, use at own risk
      * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
      * --- offer@sgi.com */
+    // VZ: wait4() will be woken up by a signal, not wait3 - so it's quite
+    //     different (also, wait3() waits for any child, wait4() only for this
+    //     one)
+    int status = -1;
 #if !defined(__sgi)
-    wait4(proc_data->pid, (int*) NULL, 0, (rusage *) NULL);
+    wait4(proc_data->pid, &status, 0, (rusage *) NULL);
 #else
-    wait3((int *) NULL, 0, (rusage *) NULL);
+    wait3(&status, 0, (rusage *) NULL);
 #endif
 
     close(source);
     gdk_input_remove(proc_data->tag);
 
     if (proc_data->process)
-        proc_data->process->OnTerminate(proc_data->pid);
+        proc_data->process->OnTerminate(proc_data->pid, status);
 
     if (proc_data->pid > 0)
         delete proc_data;

@@ -67,6 +67,7 @@ LIB_CPP_SRC=\
  common/tokenzr.cpp \
  common/resource.cpp \
  common/wxexpr.cpp \
+ common/process.cpp \
 \
  gtk/accel.cpp \
  gtk/app.cpp \
