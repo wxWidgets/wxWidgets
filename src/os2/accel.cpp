@@ -148,7 +148,7 @@ wxAcceleratorTable::wxAcceleratorTable(
         pArr->aaccel[i].key = uKey;
         pArr->aaccel[i].cmd = uCmd;
     }
-    pArr->codepage = 437;
+    pArr->codepage = ::WinQueryCp(wxTheApp->m_hMq);
     pArr->cAccel = (USHORT)n;
     M_ACCELDATA->m_hAccel = ::WinCreateAccelTable( vHabmain
                                                   ,pArr
