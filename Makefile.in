@@ -114,6 +114,7 @@ INTLDIR  = $(WXDIR)/locale
 ########################## Archive name ###############################
 
 # append a version suffix x.y.z to all file names
+VER_MAJMIN=$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)
 VER_SUFFIX=$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)$(EXTRA_VER)
 WXARCHIVE=@DISTDIR@-$(VER_SUFFIX).tar.gz
 WXGLARCHIVE=@DISTDIR@-gl-$(VER_SUFFIX).tar.gz
@@ -394,10 +395,11 @@ CREATE_INSTALLED_LINKS_GL: preinstall_gl
 afminstall: preinstall
 	@if test ! -d $(datadir); then $(INSTALL) -d $(datadir); fi
 	$(INSTALL) -d $(datadir)/wx
-	$(INSTALL) -d $(datadir)/wx/afm
-	$(INSTALL) -d $(datadir)/wx/gs_afm
-	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/afm
-	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/gs_afm
+	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)
+	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/afm
+	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/gs_afm
+	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/afm
+	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
@@ -412,7 +414,7 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 
 	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLCHAIN_NAME@-config $(bindir)/wx@TOOLCHAIN_NAME@-config
 	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLCHAIN_NAME@-config wx-config
-	$(INSTALL_PROGRAM) $(build_libdir)/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
+	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
 	@if test "x@WX_LIBRARY_IMPORTLIB@" != "x"; then	\
 		$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_LIBRARY_IMPORTLIB@ $(libdir)/@WX_LIBRARY_IMPORTLIB@; fi
 
@@ -457,7 +459,7 @@ preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@echo " Installing wxWindows OpenGl add-on..."
 	@echo " "
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
-	$(INSTALL_PROGRAM) $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
+	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
 install: @AFMINSTALL@ @WX_ALL_INSTALLED@
 	@echo " "
