@@ -81,7 +81,7 @@ class MyPanel: public wxPanel
 public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
     virtual ~MyPanel();
-    
+
     void OnSize( wxSizeEvent& event );
     void OnListBox( wxCommandEvent &event );
     void OnListBoxDoubleClick( wxCommandEvent &event );
@@ -100,7 +100,7 @@ public:
     void OnCopyToClipboard( wxCommandEvent &event );
     void OnMoveToEndOfText( wxCommandEvent &event );
     void OnMoveToEndOfEntry( wxCommandEvent &event );
-    
+
     wxListBox     *m_listbox;
     wxChoice      *m_choice;
     wxComboBox    *m_combo;
@@ -113,7 +113,7 @@ public:
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_textentry;
     wxCheckBox    *m_checkbox;
-    
+
     wxTextCtrl    *m_text;
     wxNotebook    *m_notebook;
 
@@ -128,6 +128,10 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+#if wxUSE_TOOLTIPS
+    void OnSetTooltipDelay(wxCommandEvent& event);
+    void OnToggleTooltips(wxCommandEvent& event);
+#endif // wxUSE_TOOLTIPS
     void OnIdle( wxIdleEvent& event );
     void OnSize( wxSizeEvent& event );
 
@@ -145,9 +149,16 @@ IMPLEMENT_APP(MyApp)
 // MyApp
 //----------------------------------------------------------------------
 
-const   int MINIMAL_QUIT   = 100;
-const   int MINIMAL_TEXT   = 101;
-const   int MINIMAL_ABOUT  = 102;
+enum
+{
+    MINIMAL_QUIT   = 100,
+    MINIMAL_TEXT,
+    MINIMAL_ABOUT,
+
+    // tooltip menu
+    MINIMAL_SET_TOOLTIP_DELAY = 200,
+    MINIMAL_ENABLE_TOOLTIPS
+};
 
 bool MyApp::OnInit()
 {
@@ -163,11 +174,22 @@ bool MyApp::OnInit()
   frame->SetIcon( wxICON(mondrian) );
 
   wxMenu *file_menu = new wxMenu;
-
   file_menu->Append(MINIMAL_ABOUT, "&About");
   file_menu->Append(MINIMAL_QUIT, "E&xit");
+
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
+
+#if wxUSE_TOOLTIPS
+  wxMenu *tooltip_menu = new wxMenu;
+  tooltip_menu->Append(MINIMAL_SET_TOOLTIP_DELAY, "Set &delay");
+  tooltip_menu->AppendSeparator();
+  tooltip_menu->Append(MINIMAL_ENABLE_TOOLTIPS, "&Toggle tooltips",
+                       "enable/disable tooltips", TRUE);
+  tooltip_menu->Check(MINIMAL_ENABLE_TOOLTIPS, TRUE);
+  menu_bar->Append(tooltip_menu, "&Tooltips");
+#endif // wxUSE_TOOLTIPS
+
   frame->SetMenuBar(menu_bar);
 
   frame->Show(TRUE);
@@ -401,7 +423,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
 #if wxUSE_TOOLTIPS
   m_listbox->SetToolTip( "This is a list box" );
-#endif
+#endif // wxUSE_TOOLTIPS
 
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
@@ -411,13 +433,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
 #if wxUSE_TOOLTIPS
   button->SetToolTip( "Press here to set italic font" );
-#endif
+#endif // wxUSE_TOOLTIPS
 
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
 #if wxUSE_TOOLTIPS
   m_checkbox->SetToolTip( "Click here to disable the listbox" );
-#endif
+#endif // wxUSE_TOOLTIPS
   m_notebook->AddPage(panel, "wxListBox", TRUE, Image_List);
 
   panel = new wxPanel(m_notebook);
@@ -456,9 +478,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   m_multitext->SetInsertionPoint(0);
   m_multitext->WriteText( "Prepended. " );
   m_multitext->AppendText( "\nPress function keys to test different \nwxTextCtrl functions." );
-  
+
   new MyTextCtrl( panel, -1, "This one is with wxTE_PROCESS_TAB style.",
                              wxPoint(10,120), wxSize(320,70), wxTE_MULTILINE | wxTE_PROCESS_TAB);
+#if wxUSE_TOOLTIPS
+  m_multitext->AppendText( "\nThis ctrl has a tooltip. " );
+  m_multitext->SetToolTip("Press F1 here.");
+#endif // wxUSE_TOOLTIPS
 
   (void)new wxStaticBox( panel, -1, "&Move cursor to the end of:", wxPoint(345, 0), wxSize(160, 100) );
   (void)new wxButton( panel, ID_MOVE_END_ENTRY, "Text &entry", wxPoint(370, 20), wxSize(110, 30) );
@@ -541,7 +567,7 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
   if (wxTheClipboard->IsSupported( data.GetFormat() ))
   {
      *m_text << "Clipboard supports requested format.\n";
-     
+
      if (wxTheClipboard->GetData( &data ))
      {
          *m_text << "Successfully retrieved data from the clipboard.\n";
@@ -661,7 +687,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
         cb->SetToolTip( "Click to enable listbox" );
       else
         cb->SetToolTip( "Click to disable listbox" );
-#endif
+#endif // wxUSE_TOOLTIPS
       m_listbox->Enable( event.GetInt() == 0 );
       break;
     }
@@ -864,6 +890,10 @@ MyPanel::~MyPanel()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MINIMAL_QUIT,   MyFrame::OnQuit)
     EVT_MENU(MINIMAL_ABOUT,  MyFrame::OnAbout)
+#if wxUSE_TOOLTIPS
+    EVT_MENU(MINIMAL_SET_TOOLTIP_DELAY,  MyFrame::OnSetTooltipDelay)
+    EVT_MENU(MINIMAL_ENABLE_TOOLTIPS,  MyFrame::OnToggleTooltips)
+#endif // wxUSE_TOOLTIPS
     EVT_SIZE(MyFrame::OnSize)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -886,6 +916,40 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
   wxMessageDialog dialog(this, "This is a control sample", "About Controls", wxOK );
   dialog.ShowModal();
 }
+
+#if wxUSE_TOOLTIPS
+void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
+{
+    static long s_delay = 5000;
+
+    wxString delay;
+    delay.Printf("%ld", s_delay);
+
+    delay = wxGetTextFromUser("Enter delay (in milliseconds)",
+                              "Set tooltip delay",
+                              delay,
+                              this);
+    if ( !delay )
+        return; // cancelled
+
+    sscanf(delay, "%ld", &s_delay);
+
+    wxToolTip::SetDelay(s_delay);
+
+    wxLogStatus(this, "Tooltip delay set to %ld milliseconds", s_delay);
+}
+
+void MyFrame::OnToggleTooltips(wxCommandEvent& event)
+{
+    static bool s_enabled = TRUE;
+
+    s_enabled = !s_enabled;
+
+    wxToolTip::Enable(s_enabled);
+
+    wxLogStatus(this, "Tooltips %sabled", s_enabled ? "en" : "dis");
+}
+#endif // tooltips
 
 void MyFrame::OnSize( wxSizeEvent& event )
 {

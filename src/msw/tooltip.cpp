@@ -69,28 +69,110 @@ inline LRESULT SendTooltipMessage(WXHWND hwnd,
                 : 0;
 }
 
+// send a message to all existing tooltip controls
+static void SendTooltipMessageToAll(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    // NB: it might be somewhat easier to maintain a list of all existing
+    //     wxToolTip controls (put them there in ctor, delete from the list
+    //     in dtor) - may be it's worth doing it this way? OTOH, typical
+    //     application won't have many top level windows, so iterating over all
+    //     of them shouldnt' take much time neither...
+
+    // iterate over all top level windows and send message to the tooltip
+    // control of each and every of them (or more precisely to all dialogs and
+    // frames)
+    wxDialog *dialog = NULL;
+    wxFrame *frame = NULL;
+
+    wxNode *node = wxTopLevelWindows.First();
+    while ( node )
+    {
+        wxWindow *win = (wxWindow *)node->Data();
+
+        node = node->Next();
+
+        if ( win->IsKindOf(CLASSINFO(wxFrame)) )
+        {
+            frame = (wxFrame *)win;
+            dialog = NULL;
+        }
+        else if ( win->IsKindOf(CLASSINFO(wxDialog)) )
+        {
+            dialog = (wxDialog *)win;
+            frame = NULL;
+        }
+        else
+        {
+            // skip this strange top level window
+            continue;
+        }
+
+        wxASSERT_MSG( dialog || frame, "logic error" );
+
+        WXHWND hwndTT = frame ? frame->GetToolTipCtrl()
+                              : dialog->GetToolTipCtrl();
+        if ( hwndTT )
+        {
+            (void)SendTooltipMessage(hwndTT, msg, wParam, (void *)lParam);
+        }
+    }
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// "semiglobal" functions - these methods work with the tooltip control which
-// is shared among all the wxToolTips of the same frame
+// static functions
 // ----------------------------------------------------------------------------
+
+void wxToolTip::Enable(bool flag)
+{
+    SendTooltipMessageToAll(TTM_ACTIVATE, flag, 0);
+}
+
+void wxToolTip::SetDelay(long milliseconds)
+{
+    SendTooltipMessageToAll(TTM_SETDELAYTIME, TTDT_INITIAL, milliseconds);
+}
+
+// ---------------------------------------------------------------------------
+// implementation helpers
+// ---------------------------------------------------------------------------
 
 // create the tooltip ctrl for our parent frame if it doesn't exist yet
 WXHWND wxToolTip::GetToolTipCtrl()
 {
+    // find either parent dialog or parent frame - tooltip controls are managed
+    // by these 2 classes only (it doesn't make sense to create one tooltip per
+    // each and every wxWindow)
+    wxFrame *frame = NULL;
+    wxDialog *dialog = NULL;
+
     wxWindow *parent = m_window;
-    while ( parent && !parent->IsKindOf(CLASSINFO(wxFrame)) )
+    while ( parent )
     {
+        if ( parent->IsKindOf(CLASSINFO(wxFrame)) )
+        {
+            frame = (wxFrame *)parent;
+
+            break;
+        }
+        else if ( parent->IsKindOf(CLASSINFO(wxDialog)) )
+        {
+            dialog = (wxDialog *)parent;
+
+            break;
+        }
+
         parent = parent->GetParent();
     }
 
-    wxCHECK_MSG( parent, 0, "can't create tooltip control outside a frame" );
+    wxCHECK_MSG( frame || dialog, 0,
+                 "can't create tooltip control outside a frame or a dialog" );
 
-    wxFrame *frame = (wxFrame *)parent;
-    HWND hwndTT = (HWND)frame->GetToolTipCtrl();
+    HWND hwndTT = (HWND)(frame ? frame->GetToolTipCtrl()
+                                 : dialog->GetToolTipCtrl());
     if ( !hwndTT )
     {
         hwndTT = ::CreateWindow(TOOLTIPS_CLASS,
@@ -103,7 +185,10 @@ WXHWND wxToolTip::GetToolTipCtrl()
 
         if ( hwndTT )
         {
-            frame->SetToolTipCtrl((WXHWND)hwndTT);
+            if ( frame )
+                frame->SetToolTipCtrl((WXHWND)hwndTT);
+            else
+                dialog->SetToolTipCtrl((WXHWND)hwndTT);
         }
         else
         {
@@ -114,20 +199,9 @@ WXHWND wxToolTip::GetToolTipCtrl()
     return (WXHWND)hwndTT;
 }
 
-void wxToolTip::Enable(bool flag)
-{
-    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_ACTIVATE, flag, 0);
-}
-
 void wxToolTip::RelayEvent(WXMSG *msg)
 {
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_RELAYEVENT, 0, msg);
-}
-
-void wxToolTip::SetDelay(long milliseconds)
-{
-    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_SETDELAYTIME,
-                             TTDT_INITIAL, (void *)milliseconds);
 }
 
 // ----------------------------------------------------------------------------

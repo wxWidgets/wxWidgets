@@ -271,6 +271,7 @@ public:
   void SetToolTip(wxToolTip *tooltip);
     // get the current tooltip (may return NULL if none)
   wxToolTip* GetToolTip() const { return m_tooltip; }
+
 #endif // wxUSE_TOOLTIPS
 
   // Accept files for dragging
@@ -767,7 +768,7 @@ private:
     // the associated tooltip (may be NULL if none)
 #if wxUSE_TOOLTIPS
     wxToolTip *m_tooltip;
-#endif
+#endif // tooltips
 
     DECLARE_EVENT_TABLE()
 };

@@ -25,15 +25,11 @@ public:
     void SetWindow(wxWindow *win);
     wxWindow *GetWindow() const { return m_window; }
 
-    // controlling tooltip behaviour: under MSW, these functions change the
-    // behaviour of the tooltips for all controls in the same frame as this
-    // one (it is an implementation limitation). Also, these functions won't
-    // do anything before the tooltip control is associated with a window, so
-    // SetWindow() should be called first
+    // controlling tooltip behaviour: globally change tooltip parameters
         // enable or disable the tooltips globally
-    void Enable(bool flag);
+    static void Enable(bool flag);
         // set the delay after which the tooltip appears
-    void SetDelay(long milliseconds);
+    static void SetDelay(long milliseconds);
 
     // implementation
     void RelayEvent(WXMSG *msg);
