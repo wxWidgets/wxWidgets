@@ -18,8 +18,7 @@
 
 #include "wx/choice.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -229,16 +228,18 @@ int wxChoice::FindString( const wxString &string ) const
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = (GtkLabel *) NULL;
-        if (bin->child) label = GTK_LABEL(bin->child);
-        if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
+        if (bin->child)
+            label = GTK_LABEL(bin->child);
+        if (!label)
+            label = GTK_LABEL( BUTTON_CHILD(m_widget) );
 
         wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-       if (string == wxString(label->label,*wxConvCurrent))
-           return count;
+        if (string == wxString(label->label,*wxConvCurrent))
+            return count;
 
-       child = child->next;
-       count++;
+        child = child->next;
+        count++;
     }
 
     return -1;
@@ -282,8 +283,10 @@ wxString wxChoice::GetString( int n ) const
         if (count == n)
         {
             GtkLabel *label = (GtkLabel *) NULL;
-            if (bin->child) label = GTK_LABEL(bin->child);
-            if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
+            if (bin->child)
+                label = GTK_LABEL(bin->child);
+            if (!label)
+                label = GTK_LABEL( BUTTON_CHILD(m_widget) );
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
@@ -337,8 +340,10 @@ void wxChoice::ApplyWidgetStyle()
 
         GtkBin *bin = GTK_BIN( child->data );
         GtkWidget *label = (GtkWidget *) NULL;
-        if (bin->child) label = bin->child;
-        if (!label) label = GTK_BUTTON(m_widget)->child;
+        if (bin->child)
+            label = bin->child;
+        if (!label)
+            label = BUTTON_CHILD(m_widget);
 
         gtk_widget_set_style( label, m_widgetStyle );
 
@@ -434,7 +439,8 @@ wxSize wxChoice::DoGetBestSize() const
     if ( ret.x < 80 )
         ret.x = 80;
 
-    ret.y = 16 + gdk_char_height( m_widget->style->font, 'H' );
+    ret.y = 16 + gdk_char_height(GET_STYLE_FONT( m_widget->style ), 'H');
+
     return ret;
 }
 

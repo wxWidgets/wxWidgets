@@ -20,8 +20,7 @@
 
 #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -492,11 +491,7 @@ void wxComboBox::Copy()
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-#if defined(__WXGTK13__) || (GTK_MINOR_VERSION > 0)
-    gtk_editable_copy_clipboard( GTK_EDITABLE(entry) );
-#else
-    gtk_editable_copy_clipboard( GTK_EDITABLE(entry), 0 );
-#endif
+    gtk_editable_copy_clipboard( GTK_EDITABLE(entry) DUMMY_CLIPBOARD_ARG );
 }
 
 void wxComboBox::Cut()
@@ -504,11 +499,7 @@ void wxComboBox::Cut()
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-#if defined(__WXGTK13__) || (GTK_MINOR_VERSION > 0)
-    gtk_editable_cut_clipboard( GTK_EDITABLE(entry) );
-#else
-    gtk_editable_cut_clipboard( GTK_EDITABLE(entry), 0 );
-#endif
+    gtk_editable_cut_clipboard( GTK_EDITABLE(entry) DUMMY_CLIPBOARD_ARG );
 }
 
 void wxComboBox::Paste()
@@ -516,11 +507,7 @@ void wxComboBox::Paste()
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-#if defined(__WXGTK13__) || (GTK_MINOR_VERSION > 0)
-    gtk_editable_paste_clipboard( GTK_EDITABLE(entry) );
-#else
-    gtk_editable_paste_clipboard( GTK_EDITABLE(entry), 0 );
-#endif
+    gtk_editable_paste_clipboard( GTK_EDITABLE(entry) DUMMY_CLIPBOARD_ARG);
 }
 
 void wxComboBox::SetInsertionPoint( long pos )
@@ -540,8 +527,7 @@ void wxComboBox::SetInsertionPointEnd()
 
 long wxComboBox::GetInsertionPoint() const
 {
-    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    return (long) GTK_EDITABLE(entry)->current_pos;
+    return (long) GET_EDITABLE_POS( GTK_COMBO(m_widget)->entry );
 }
 
 long wxComboBox::GetLastPosition() const

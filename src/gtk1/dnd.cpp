@@ -21,8 +21,8 @@
 #include "wx/intl.h"
 #include "wx/utils.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
+
 #include <gdk/gdkprivate.h>
 
 #include <gtk/gtkdnd.h>

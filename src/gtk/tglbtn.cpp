@@ -15,8 +15,7 @@
 
 #if wxUSE_TOGGLEBTN
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
@@ -125,8 +124,7 @@ void wxToggleButton::SetLabel(const wxString& label)
 
     wxControl::SetLabel(label);
 
-    gtk_label_set(GTK_LABEL(GTK_BUTTON(m_widget)->child),
-                 GetLabel().mbc_str());
+    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), GetLabel().mbc_str());
 }
 
 bool wxToggleButton::Enable(bool enable /*=TRUE*/)
@@ -134,7 +132,7 @@ bool wxToggleButton::Enable(bool enable /*=TRUE*/)
     if (!wxControl::Enable(enable))
         return FALSE;
 
-    gtk_widget_set_sensitive(GTK_BUTTON(m_widget)->child, enable);
+    gtk_widget_set_sensitive(BUTTON_CHILD(m_widget), enable);
 
     return TRUE;
 }
@@ -143,12 +141,12 @@ void wxToggleButton::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style(m_widget, m_widgetStyle);
-    gtk_widget_set_style(GTK_BUTTON(m_widget)->child, m_widgetStyle);
+    gtk_widget_set_style(BUTTON_CHILD(m_widget), m_widgetStyle);
 }
 
 bool wxToggleButton::IsOwnGtkWindow(GdkWindow *window)
 {
-    return (window == GTK_TOGGLE_BUTTON(m_widget)->event_window);
+    return window == TOGGLE_BUTTON_EVENT_WIN(m_widget);
 }
 
 void wxToggleButton::OnInternalIdle()
@@ -158,14 +156,15 @@ void wxToggleButton::OnInternalIdle()
     if (g_globalCursor.Ok())
         cursor = g_globalCursor;
 
-    if (GTK_TOGGLE_BUTTON(m_widget)->event_window && cursor.Ok()) {
+    GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    if ( win && cursor.Ok() )
+    {
       /* I now set the cursor the anew in every OnInternalIdle call
          as setting the cursor in a parent window also effects the
          windows above so that checking for the current cursor is
          not possible. */
 
-        gdk_window_set_cursor(GTK_TOGGLE_BUTTON(m_widget)->event_window,
-                            cursor.GetCursor());
+        gdk_window_set_cursor(win, cursor.GetCursor());
     }
 
     UpdateWindowUI();

@@ -54,8 +54,7 @@
 
 #include <math.h>
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 #include <gdk/gdkprivate.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkx.h>
@@ -64,6 +63,12 @@
 #include <gtk/gtkprivate.h>
 
 #include "wx/gtk/win_gtk.h"
+
+#ifdef __WXGTK20__
+    #define SET_CONTAINER_FOCUS(w, d) gtk_widget_child_focus((w), (d))
+#else
+    #define SET_CONTAINER_FOCUS(w, d) gtk_container_focus(GTK_CONTAINER(w), (d))
+#endif
 
 //-----------------------------------------------------------------------------
 // documentation on internals
@@ -1857,7 +1862,9 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 // "value_changed" from m_vAdjust
 //-----------------------------------------------------------------------------
 
-static void gtk_window_vscroll_callback( GtkAdjustment *adjust, wxWindowGTK *win )
+static void gtk_window_vscroll_callback( GtkAdjustment *adjust,
+                                         SCROLLBAR_CBACK_ARG
+                                         wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1873,14 +1880,7 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust, wxWindowGTK *win
 
     win->m_oldVerticalPos = adjust->value;
 
-    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
-    GtkRange *range = GTK_RANGE( scrolledWindow->vscrollbar );
-
-    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
-    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
-    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
+    wxEventType command = GtkScrollWinTypeToWx(GET_SCROLL_TYPE(win->m_widget));
 
     int value = (int)(adjust->value+0.5);
 
@@ -1893,7 +1893,9 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust, wxWindowGTK *win
 // "value_changed" from m_hAdjust
 //-----------------------------------------------------------------------------
 
-static void gtk_window_hscroll_callback( GtkAdjustment *adjust, wxWindowGTK *win )
+static void gtk_window_hscroll_callback( GtkAdjustment *adjust,
+                                         SCROLLBAR_CBACK_ARG
+                                         wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -1906,16 +1908,9 @@ static void gtk_window_hscroll_callback( GtkAdjustment *adjust, wxWindowGTK *win
     float diff = adjust->value - win->m_oldHorizontalPos;
     if (fabs(diff) < 0.2) return;
 
+    wxEventType command = GtkScrollWinTypeToWx(GET_SCROLL_TYPE(win->m_widget));
+
     win->m_oldHorizontalPos = adjust->value;
-
-    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
-    GtkRange *range = GTK_RANGE( scrolledWindow->hscrollbar );
-
-    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
-    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
-    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
 
     int value = (int)(adjust->value+0.5);
 
@@ -1939,7 +1934,11 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
 
 
     g_blockEventsOnScroll = TRUE;
+
+    // FIXME: there is no 'slider' field in GTK+ 2.0 any more
+#ifndef __WXGTK20__
     win->m_isScrolling = (gdk_event->window == widget->slider);
+#endif
 
     return FALSE;
 }
@@ -2341,7 +2340,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
 #ifndef __WXUNIVERSAL__
-#if (GTK_MINOR_VERSION > 0)
+
+#if GTK_CHECK_VERSION(1, 2, 0)
     GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
 
     if (HasFlag(wxRAISED_BORDER))
@@ -2360,7 +2360,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
     {
         gtk_pizza_set_shadow_type( pizza, GTK_MYSHADOW_NONE );
     }
-#else // GTK_MINOR_VERSION == 0
+#else // GTK+ 1.0
     GtkViewport *viewport = GTK_VIEWPORT(scrolledWindow->viewport);
 
     if (HasFlag(wxRAISED_BORDER))
@@ -2375,17 +2375,18 @@ bool wxWindowGTK::Create( wxWindow *parent,
     {
         gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_NONE );
     }
-#endif // GTK_MINOR_VERSION
+#endif // GTK+ > 1.0/<= 1.0
+
 #endif // __WXUNIVERSAL__
 
     GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
     m_acceptsFocus = TRUE;
 
-#if (GTK_MINOR_VERSION == 0)
+#if !GTK_CHECK_VERSION(1, 2, 0)
     // shut the viewport up
     gtk_viewport_set_hadjustment( viewport, (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) );
     gtk_viewport_set_vadjustment( viewport, (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) );
-#endif // GTK_MINOR_VERSION == 0
+#endif // GTK+ 1.0
 
     // I _really_ don't want scrollbars in the beginning
     m_vAdjust->lower = 0.0;
@@ -3167,7 +3168,7 @@ void wxWindowGTK::SetFocus()
         }
         else if (GTK_IS_CONTAINER(m_widget))
         {
-            gtk_container_focus( GTK_CONTAINER(m_widget), GTK_DIR_TAB_FORWARD );
+            SET_CONTAINER_FOCUS( m_widget, GTK_DIR_TAB_FORWARD );
         }
         else
         {
@@ -3541,10 +3542,9 @@ GtkStyle *wxWindowGTK::GetWidgetStyle()
     if (m_widgetStyle)
     {
         GtkStyle *remake = gtk_style_copy( m_widgetStyle );
-#ifdef __WXGTK20__
-        /* FIXME: is this necessary? */
-        _G_TYPE_IGC(remake, GtkObjectClass) = _G_TYPE_IGC(m_widgetStyle, GtkObjectClass);
-#else
+
+        // FIXME: no more klass in 2.0
+#ifndef __WXGTK20__
         remake->klass = m_widgetStyle->klass;
 #endif
 
@@ -3559,10 +3559,9 @@ GtkStyle *wxWindowGTK::GetWidgetStyle()
             def = gtk_widget_get_default_style();
 
         m_widgetStyle = gtk_style_copy( def );
-#ifdef __WXGTK20__
-        /* FIXME: is this necessary? */
-        _G_TYPE_IGC(m_widgetStyle, GtkObjectClass) = _G_TYPE_IGC(def, GtkObjectClass);
-#else
+
+        // FIXME: no more klass in 2.0
+#ifndef __WXGTK20__
         m_widgetStyle->klass = def->klass;
 #endif
     }
@@ -3590,8 +3589,7 @@ void wxWindowGTK::SetWidgetStyle()
 
     if (m_font != wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ))
     {
-        gdk_font_unref( style->font );
-        style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+        SET_STYLE_FONT(style, m_font.GetInternalFont( 1.0 ));
     }
 
     if (m_foregroundColour.Ok())
@@ -3701,6 +3699,9 @@ static gint gs_pop_y = 0;
 
 extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
                                              gint *x, gint *y,
+#ifdef __WXGTK20__
+                                             gboolean * WXUNUSED(whatever),
+#endif
                                              gpointer WXUNUSED(user_data) )
 {
     // ensure that the menu appears entirely on screen

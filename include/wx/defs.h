@@ -1878,6 +1878,7 @@ typedef unsigned long   Atom;  /* this might fail on a few architectures */
 #endif // Motif
 
 #ifdef __WXGTK__
+
 /* Stand-ins for GLIB types */
 typedef char           gchar;
 typedef signed char    gint8;
@@ -1888,24 +1889,28 @@ typedef void*          gpointer;
 typedef struct _GSList GSList;
 
 /* Stand-ins for GDK types */
-typedef gulong                  GdkAtom;
 typedef struct _GdkColor        GdkColor;
 typedef struct _GdkColormap     GdkColormap;
 typedef struct _GdkFont         GdkFont;
 typedef struct _GdkGC           GdkGC;
 typedef struct _GdkVisual       GdkVisual;
+
 #ifdef __WXGTK20__
+typedef struct _GdkAtom        *GdkAtom;
 typedef struct _GdkDrawable     GdkWindow;
 typedef struct _GdkDrawable     GdkBitmap;
 typedef struct _GdkDrawable     GdkPixmap;
-#else
+#else // GTK+ 1.2
+typedef gulong                  GdkAtom;
 typedef struct _GdkWindow       GdkWindow;
 typedef struct _GdkWindow       GdkBitmap;
 typedef struct _GdkWindow       GdkPixmap;
-#endif
+#endif // GTK+ 1.2/2.0
+
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkRegion       GdkRegion;
 typedef struct _GdkDragContext  GdkDragContext;
+
 #ifdef HAVE_XIM
 typedef struct _GdkIC           GdkIC;
 typedef struct _GdkICAttr       GdkICAttr;
@@ -1936,7 +1941,8 @@ typedef GtkWidget *WXWidget;
 typedef struct _PangoContext         PangoContext;
 typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
-#endif
+#endif // GTK+ 2.0
+
 #endif // GTK
 
 #ifdef __WXMGL__

@@ -50,8 +50,10 @@ static void gtk_pizza_size_request  (GtkWidget        *widget,
                                      GtkRequisition   *requisition);
 static void gtk_pizza_size_allocate (GtkWidget        *widget,
                                      GtkAllocation    *allocation);
+#ifndef __WXGTK20__
 static void gtk_pizza_draw          (GtkWidget        *widget,
                                      GdkRectangle     *area);
+#endif /* __WXGTK20__ */
 static gint gtk_pizza_expose        (GtkWidget        *widget,
                                      GdkEventExpose   *event);
 static void gtk_pizza_add           (GtkContainer     *container,
@@ -146,7 +148,9 @@ gtk_pizza_class_init (GtkPizzaClass *klass)
     widget_class->unrealize = gtk_pizza_unrealize;
     widget_class->size_request = gtk_pizza_size_request;
     widget_class->size_allocate = gtk_pizza_size_allocate;
+#ifndef __WXGTK20__
     widget_class->draw = gtk_pizza_draw;
+#endif
     widget_class->expose_event = gtk_pizza_expose;
 
     container_class->add = gtk_pizza_add;
@@ -160,7 +164,6 @@ gtk_pizza_class_init (GtkPizzaClass *klass)
     widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
                     GTK_RUN_LAST,
-
 #ifdef __WXGTK20__
                     GTK_CLASS_TYPE(object_class),
 #else
@@ -708,6 +711,8 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
     }
 }
 
+#ifndef __WXGTK20__
+
 static void
 gtk_pizza_draw (GtkWidget    *widget,
                 GdkRectangle *area)
@@ -743,6 +748,8 @@ gtk_pizza_draw (GtkWidget    *widget,
             gtk_widget_draw (child->widget, &child_area);
     }
 }
+
+#endif /* __WXGTK20__ */
 
 static gint
 gtk_pizza_expose (GtkWidget      *widget,
@@ -1048,6 +1055,7 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
 {
     GtkWidget *widget;
     XEvent xevent;
+    XID win;
 
     gint x,y,w,h,border;
 
@@ -1142,10 +1150,12 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
     gtk_pizza_position_children (pizza);
 
     gdk_flush();
+
+    win = GDK_WINDOW_XWINDOW (pizza->bin_window);
     while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (pizza->bin_window),
                          &xevent,
                          gtk_pizza_expose_predicate,
-                         (XPointer)&GDK_WINDOW_XWINDOW (pizza->bin_window)))
+                         (XPointer)&win))
     {
         GdkEvent event;
         GtkWidget *event_widget;

@@ -19,8 +19,7 @@
 
 #include <math.h>
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -41,7 +40,9 @@ static const float sensitivity = 0.02;
 // "value_changed"
 //-----------------------------------------------------------------------------
 
-static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
+static void gtk_slider_callback( GtkAdjustment *adjust,
+                                 SCROLLBAR_CBACK_ARG
+                                 wxSlider *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -53,13 +54,7 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
 
     win->m_oldPos = adjust->value;
 
-    GtkRange *range = GTK_RANGE( win->m_widget );
-
-    wxEventType command = wxEVT_SCROLL_THUMBTRACK;
-    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLL_LINEUP;
-    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLL_LINEDOWN;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLL_PAGEUP;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLL_PAGEDOWN;
+    wxEventType command = GtkScrollTypeToWx(GET_SCROLL_TYPE(win->m_widget));
 
     double dvalue = adjust->value;
     int value = (int)(dvalue < 0 ? dvalue - 0.5 : dvalue + 0.5);
@@ -247,11 +242,14 @@ int wxSlider::GetLineSize() const
 bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
 {
     GtkRange *range = GTK_RANGE(m_widget);
-    return ( (window == GTK_WIDGET(range)->window) ||
-             (window == range->trough) ||
-             (window == range->slider) ||
-             (window == range->step_forw) ||
-             (window == range->step_back) );
+    return ( (window == GTK_WIDGET(range)->window)
+#ifndef __WXGTK20__
+                || (window == range->trough)
+                || (window == range->slider)
+                || (window == range->step_forw)
+                || (window == range->step_back)
+#endif // GTK+ 1.x
+           );
 }
 
 void wxSlider::ApplyWidgetStyle()

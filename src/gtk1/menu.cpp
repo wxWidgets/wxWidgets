@@ -22,9 +22,26 @@
     #include "wx/accel.h"
 #endif // wxUSE_ACCEL
 
-#include <gdk/gdk.h>
+#include "wx/gtk/private.h"
+
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
+
+// FIXME: is this right? somehow I don't think so (VZ)
+#ifdef __WXGTK20__
+    #include <glib-object.h>
+
+    #define gtk_accel_group_attach(g, o) _gtk_accel_group_attach((g), (o))
+    #define gtk_accel_group_detach(g, o) _gtk_accel_group_detach((g), (o))
+    #define gtk_menu_ensure_uline_accel_group(m) gtk_menu_get_accel_group(m)
+
+    #define ACCEL_OBJECT        GObject
+    #define ACCEL_OBJECTS(a)    (a)->acceleratables
+    #define ACCEL_OBJ_CAST(obj) G_OBJECT(obj)
+#else // GTK+ 1.x
+    #define ACCEL_OBJECT        GtkObject
+    #define ACCEL_OBJECTS(a)    (a)->attach_objects
+    #define ACCEL_OBJ_CAST(obj) GTK_OBJECT(obj)
+#endif
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -33,13 +50,20 @@
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
-#if (GTK_MINOR_VERSION > 0) && wxUSE_ACCEL
-static wxString GetHotKey( const wxMenuItem& item );
+#if GTK_CHECK_VERSION(1, 2, 0) && wxUSE_ACCEL
+    static wxString GetHotKey( const wxMenuItem& item );
 #endif
 
 //-----------------------------------------------------------------------------
 // substitute for missing GtkPixmapMenuItem
 //-----------------------------------------------------------------------------
+
+// FIXME: I can't make this compile with GTK+ 2.0, disabling for now (VZ)
+#ifndef __WXGTK20__
+    #define USE_MENU_BITMAPS
+#endif
+
+#ifdef USE_MENU_BITMAPS
 
 #define GTK_TYPE_PIXMAP_MENU_ITEM            (gtk_pixmap_menu_item_get_type ())
 #define GTK_PIXMAP_MENU_ITEM(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItem))
@@ -77,6 +101,8 @@ GtkWidget* gtk_pixmap_menu_item_new            (void);
 void       gtk_pixmap_menu_item_set_pixmap     (GtkPixmapMenuItem *menu_item,
 					                            GtkWidget *pixmap);
 
+#endif // USE_MENU_BITMAPS
+
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
@@ -91,7 +117,7 @@ static wxString wxReplaceUnderscore( const wxString& title )
     {
         if (*pc == wxT('&'))
         {
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 1)
             str << wxT('_');
         }
         else if (*pc == wxT('/'))
@@ -139,7 +165,7 @@ wxMenuBar::wxMenuBar( long style )
     m_menus.DeleteContents( TRUE );
 
     /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 1)
     m_accel = gtk_accel_group_new();
     m_factory = gtk_item_factory_new( GTK_TYPE_MENU_BAR, "<main>", m_accel );
     m_menubar = gtk_item_factory_get_widget( m_factory, "<main>" );
@@ -180,7 +206,7 @@ wxMenuBar::wxMenuBar()
     m_menus.DeleteContents( TRUE );
 
     /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 1)
     m_accel = gtk_accel_group_new();
     m_factory = gtk_item_factory_new( GTK_TYPE_MENU_BAR, "<main>", m_accel );
     m_menubar = gtk_item_factory_get_widget( m_factory, "<main>" );
@@ -204,13 +230,13 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( (wxWindow*) NULL );
 
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
     /* support for native hot keys  */
-    gtk_accel_group_detach( menu->m_accel, GTK_OBJECT(top_frame->m_widget) );
+    gtk_accel_group_detach( menu->m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
 #endif
 
     wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
@@ -227,16 +253,16 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
 
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 1)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
     /* support for native hot keys  */
-    GtkObject *obj = GTK_OBJECT(top_frame->m_widget);
-    if ( !g_slist_find( menu->m_accel->attach_objects, obj ) )
+    ACCEL_OBJECT *obj = ACCEL_OBJ_CAST(top_frame->m_widget);
+    if ( !g_slist_find( ACCEL_OBJECTS(menu->m_accel), obj ) )
         gtk_accel_group_attach( menu->m_accel, obj );
-#endif
+#endif // GTK+ 1.2.1+
 
     wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
     while (node)
@@ -251,16 +277,16 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 void wxMenuBar::SetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = win;
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 1)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
     /* support for native key accelerators indicated by underscroes */
-    GtkObject *obj = GTK_OBJECT(top_frame->m_widget);
-    if ( !g_slist_find( m_accel->attach_objects, obj ) )
+    ACCEL_OBJECT *obj = ACCEL_OBJ_CAST(top_frame->m_widget);
+    if ( !g_slist_find( ACCEL_OBJECTS(m_accel), obj ) )
         gtk_accel_group_attach( m_accel, obj );
-#endif
+#endif // GTK+ 1.2.1+
 
     wxMenuList::Node *node = m_menus.GetFirst();
     while (node)
@@ -274,14 +300,14 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = (wxWindow*) NULL;
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 1)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
     /* support for native key accelerators indicated by underscroes */
-    gtk_accel_group_detach( m_accel, GTK_OBJECT(top_frame->m_widget) );
-#endif
+    gtk_accel_group_detach( m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
+#endif // GTK+ 1.2.1+
 
     wxMenuList::Node *node = m_menus.GetFirst();
     while (node)
@@ -308,7 +334,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     menu->SetTitle( str );
 
     /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
-#if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 1)
 
     /* local buffer in multibyte form */
     wxString buf;
@@ -527,7 +553,7 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
 
     wxString label;
     wxString text( menu->GetTitle() );
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
         if ( *pc == wxT('_') || *pc == wxT('&') )
@@ -764,7 +790,7 @@ void wxMenuItem::DoSetText( const wxString& str )
     {
         if (*pc == wxT('&'))
         {
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
             m_text << wxT('_');
         }
         else if ( *pc == wxT('_') )    // escape underscores
@@ -774,7 +800,7 @@ void wxMenuItem::DoSetText( const wxString& str )
         else if (*pc == wxT('/'))      /* we have to filter out slashes ... */
         {
             m_text << wxT('\\');  /* ... and replace them with back slashes */
-#endif
+#endif // GTK+ 1.2.0+
         }
         else
             m_text << *pc;
@@ -782,13 +808,14 @@ void wxMenuItem::DoSetText( const wxString& str )
 
     /* only GTK 1.2 knows about hot keys */
     m_hotKey = wxT("");
-#if (GTK_MINOR_VERSION > 0)
+
+#if GTK_CHECK_VERSION(1, 2, 0)
     if(*pc == wxT('\t'))
     {
        pc++;
        m_hotKey = pc;
     }
-#endif
+#endif // GTK+ 1.2.0+
 }
 
 #if wxUSE_ACCEL
@@ -869,7 +896,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void wxMenu::Init()
 {
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
     m_accel = gtk_accel_group_new();
     m_factory = gtk_item_factory_new( GTK_TYPE_MENU, "<main>", m_accel );
     m_menu = gtk_item_factory_get_widget( m_factory, "<main>" );
@@ -879,7 +906,7 @@ void wxMenu::Init()
 
     m_owner = (GtkWidget*) NULL;
 
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
     /* Tearoffs are entries, just like separators. So if we want this
        menu to be a tear-off one, we just append a tearoff entry
        immediately. */
@@ -894,7 +921,7 @@ void wxMenu::Init()
        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
        //GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/tearoff" );
     }
-#endif
+#endif // GTK+ 1.2.0+
 
     // append the title as the very first entry if we have it
     if ( !!m_title )
@@ -917,11 +944,13 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 {
     GtkWidget *menuItem;
 
+#if defined(USE_MENU_BITMAPS) || !GTK_CHECK_VERSION(1, 2, 0)
     bool appended = FALSE;
+#endif
 
     if ( mitem->IsSeparator() )
     {
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
         GtkItemFactoryEntry entry;
         entry.path = (char *)"/sep";
         entry.callback = (GtkItemFactoryCallback) NULL;
@@ -939,7 +968,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     }
     else if ( mitem->IsSubMenu() )
     {
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
         /* text has "_" instead of "&" after mitem->SetText() */
         wxString text( mitem->GetText() );
 
@@ -971,6 +1000,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         if ( m_invokingWindow )
             wxMenubarSetInvokingWindow(mitem->GetSubMenu(), m_invokingWindow);
     }
+#ifdef USE_MENU_BITMAPS
     else if (mitem->GetBitmap().Ok()) // An item with bitmap
     {
         wxString text( mitem->GetText() );
@@ -1006,9 +1036,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         appended = TRUE; // We've done this, don't do it again
     }
+#endif // USE_MENU_BITMAPS
     else // a normal item
     {
-#if (GTK_MINOR_VERSION > 0)
+#if GTK_CHECK_VERSION(1, 2, 0)
         /* text has "_" instead of "&" after mitem->SetText() */
         wxString text( mitem->GetText() );
 
@@ -1064,7 +1095,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                             (gpointer)this );
     }
 
-#if GTK_MINOR_VERSION == 0
+#if !GTK_CHECK_VERSION(1, 2, 0)
     if (!appended)
     {
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
@@ -1144,7 +1175,7 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 // helpers
 // ----------------------------------------------------------------------------
 
-#if (GTK_MINOR_VERSION > 0) && wxUSE_ACCEL
+#if GTK_CHECK_VERSION(1, 2, 0) && wxUSE_ACCEL
 
 static wxString GetHotKey( const wxMenuItem& item )
 {
@@ -1224,6 +1255,8 @@ static wxString GetHotKey( const wxMenuItem& item )
 //-----------------------------------------------------------------------------
 // substitute for missing GtkPixmapMenuItem
 //-----------------------------------------------------------------------------
+
+#ifdef USE_MENU_BITMAPS
 
 /*
  * Copyright (C) 1998, 1999, 2000 Free Software Foundation
@@ -1595,4 +1628,5 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
     gtk_widget_queue_resize(GTK_WIDGET(menu_item));
 }
 
+#endif // USE_MENU_BITMAPS
 

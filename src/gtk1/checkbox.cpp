@@ -18,8 +18,7 @@
 
 #include "wx/checkbox.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -107,7 +106,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     else
     {
         m_widgetCheckbox = gtk_check_button_new_with_label( m_label.mbc_str() );
-        m_widgetLabel = GTK_BUTTON( m_widgetCheckbox )->child;
+        m_widgetLabel = BUTTON_CHILD( m_widgetCheckbox );
         m_widget = m_widgetCheckbox;
     }
 
@@ -188,7 +187,7 @@ void wxCheckBox::ApplyWidgetStyle()
 
 bool wxCheckBox::IsOwnGtkWindow( GdkWindow *window )
 {
-    return (window == GTK_TOGGLE_BUTTON(m_widget)->event_window);
+    return window == TOGGLE_BUTTON_EVENT_WIN(m_widget);
 }
 
 void wxCheckBox::OnInternalIdle()
@@ -196,14 +195,15 @@ void wxCheckBox::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    if (GTK_TOGGLE_BUTTON(m_widgetCheckbox)->event_window && cursor.Ok())
+    GdkWindow *event_window = TOGGLE_BUTTON_EVENT_WIN(m_widgetCheckbox);
+    if ( event_window && cursor.Ok() )
     {
         /* I now set the cursor the anew in every OnInternalIdle call
            as setting the cursor in a parent window also effects the
            windows above so that checking for the current cursor is
            not possible. */
 
-       gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widgetCheckbox)->event_window, cursor.GetCursor() );
+       gdk_window_set_cursor( event_window, cursor.GetCursor() );
     }
 
     UpdateWindowUI();

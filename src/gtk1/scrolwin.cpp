@@ -31,10 +31,10 @@
 #include "wx/utils.h"
 #include "wx/dcclient.h"
 
-#include "wx/gtk/scrolwin.h"
+#include "wx/scrolwin.h"
 #include "wx/panel.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 
 // ----------------------------------------------------------------------------
@@ -72,7 +72,9 @@ extern bool g_isIdle;
 // "value_changed" from m_vAdjust
 //-----------------------------------------------------------------------------
 
-static void gtk_scrolled_window_vscroll_callback( GtkAdjustment *adjust, wxScrolledWindow *win )
+static void gtk_scrolled_window_vscroll_callback( GtkAdjustment *adjust,
+                                                  SCROLLBAR_CBACK_ARG
+                                                  wxScrolledWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -81,14 +83,17 @@ static void gtk_scrolled_window_vscroll_callback( GtkAdjustment *adjust, wxScrol
 
     if (!win->m_hasVMT) return;
 
-    win->GtkVScroll( adjust->value );
+    win->GtkVScroll( adjust->value,
+            GET_SCROLL_TYPE(GTK_SCROLLED_WINDOW(win->m_widget)->vscrollbar) );
 }
 
 //-----------------------------------------------------------------------------
 // "value_changed" from m_hAdjust
 //-----------------------------------------------------------------------------
 
-static void gtk_scrolled_window_hscroll_callback( GtkAdjustment *adjust, wxScrolledWindow *win )
+static void gtk_scrolled_window_hscroll_callback( GtkAdjustment *adjust,
+                                                  SCROLLBAR_CBACK_ARG
+                                                  wxScrolledWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -96,7 +101,8 @@ static void gtk_scrolled_window_hscroll_callback( GtkAdjustment *adjust, wxScrol
     if (g_blockEventsOnDrag) return;
     if (!win->m_hasVMT) return;
 
-    win->GtkHScroll( adjust->value );
+    win->GtkHScroll( adjust->value,
+            GET_SCROLL_TYPE(GTK_SCROLLED_WINDOW(win->m_widget)->hscrollbar) );
 }
 
 //-----------------------------------------------------------------------------
@@ -111,7 +117,11 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
         wxapp_install_idle_handler();
 
     g_blockEventsOnScroll = TRUE;
+
+    // FIXME: there is no slider field any more, what was meant here?
+#ifndef __WXGTK20__
     win->m_isScrolling = (gdk_event->window == widget->slider);
+#endif
 
     return FALSE;
 }
@@ -512,7 +522,9 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
     }
 }
 
-void wxScrolledWindow::GtkVScroll( float value )
+// TODO: [VH]Scroll functions should be combined
+
+void wxScrolledWindow::GtkVScroll( float value, unsigned int scroll_type )
 {
     if (!m_targetWindow)
         return;
@@ -525,21 +537,14 @@ void wxScrolledWindow::GtkVScroll( float value )
     if (y_pos == m_yScrollPosition)
         return;
 
-    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
-    GtkRange *range = GTK_RANGE(scrolledWindow->vscrollbar);
-
-    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
-    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
-    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
+    wxEventType command = GtkScrollWinTypeToWx(scroll_type);
 
     wxScrollWinEvent event( command, y_pos, wxVERTICAL );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
 }
 
-void wxScrolledWindow::GtkHScroll( float value )
+void wxScrolledWindow::GtkHScroll( float value, unsigned int scroll_type )
 {
     if (!m_targetWindow)
         return;
@@ -552,14 +557,7 @@ void wxScrolledWindow::GtkHScroll( float value )
     if (x_pos == m_xScrollPosition)
         return;
 
-    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
-    GtkRange *range = GTK_RANGE(scrolledWindow->hscrollbar);
-
-    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
-    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
-    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
-    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
+    wxEventType command = GtkScrollWinTypeToWx(scroll_type);
 
     wxScrollWinEvent event( command, x_pos, wxHORIZONTAL );
     event.SetEventObject( this );

@@ -21,8 +21,7 @@
 #include "wx/frame.h"
 #include "wx/log.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 #include <gdk/gdkkeysyms.h>
 
 #include "wx/gtk/win_gtk.h"
@@ -427,10 +426,10 @@ int wxRadioBox::FindString( const wxString &s ) const
     wxNode *node = m_boxes.First();
     while (node)
     {
-        GtkButton *button = GTK_BUTTON( node->Data() );
+        GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
+        if (s == label->label)
+            return count;
 
-        GtkLabel *label = GTK_LABEL( button->child );
-        if (s == label->label) return count;
         count++;
 
         node = node->Next();
@@ -504,8 +503,7 @@ wxString wxRadioBox::GetString( int n ) const
 
     wxCHECK_MSG( node, wxT(""), wxT("radiobox wrong index") );
 
-    GtkButton *button = GTK_BUTTON( node->Data() );
-    GtkLabel *label = GTK_LABEL( button->child );
+    GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
 
     return wxString( label->label );
 }
@@ -527,8 +525,7 @@ void wxRadioBox::SetString( int item, const wxString& label )
 
     wxCHECK_RET( node, wxT("radiobox wrong index") );
 
-    GtkButton *button = GTK_BUTTON( node->Data() );
-    GtkLabel *g_label = GTK_LABEL( button->child );
+    GtkLabel *g_label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
 
     gtk_label_set( g_label, label.mbc_str() );
 }
@@ -542,9 +539,10 @@ bool wxRadioBox::Enable( bool enable )
     while (node)
     {
         GtkButton *button = GTK_BUTTON( node->Data() );
-        GtkWidget *label = button->child;
+        GtkLabel *label = GTK_LABEL( BUTTON_CHILD(button) );
+
         gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
-        gtk_widget_set_sensitive( label, enable );
+        gtk_widget_set_sensitive( GTK_WIDGET(label), enable );
         node = node->Next();
     }
 
@@ -560,9 +558,10 @@ void wxRadioBox::Enable( int item, bool enable )
     wxCHECK_RET( node, wxT("radiobox wrong index") );
 
     GtkButton *button = GTK_BUTTON( node->Data() );
-    GtkWidget *label = button->child;
+    GtkLabel *label = GTK_LABEL( BUTTON_CHILD(button) );
+
     gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
-    gtk_widget_set_sensitive( label, enable );
+    gtk_widget_set_sensitive( GTK_WIDGET(label), enable );
 }
 
 void wxRadioBox::Show( int item, bool show )
@@ -591,7 +590,8 @@ wxString wxRadioBox::GetStringSelection() const
         GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->Data() );
         if (button->active)
         {
-            GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
+            GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
+
             return label->label;
         }
         node = node->Next();
@@ -663,8 +663,7 @@ void wxRadioBox::ApplyWidgetStyle()
         GtkWidget *widget = GTK_WIDGET( node->Data() );
         gtk_widget_set_style( widget, m_widgetStyle );
 
-        GtkButton *button = GTK_BUTTON( node->Data() );
-        gtk_widget_set_style( button->child, m_widgetStyle );
+        gtk_widget_set_style( BUTTON_CHILD(node->Data()), m_widgetStyle );
 
         node = node->Next();
     }

@@ -18,8 +18,7 @@
 
 #include "wx/radiobut.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -148,8 +147,7 @@ void wxRadioButton::SetLabel( const wxString& label )
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
   
     wxControl::SetLabel( label );
-    GtkButton *bin = GTK_BUTTON( m_widget );
-    GtkLabel *g_label = GTK_LABEL( bin->child );
+    GtkLabel *g_label = GTK_LABEL( BUTTON_CHILD(m_widget) );
     gtk_label_set( g_label, GetLabel().mbc_str() );
 }
 
@@ -188,7 +186,7 @@ bool wxRadioButton::Enable( bool enable )
     if ( !wxControl::Enable( enable ) )
         return FALSE;
   
-    gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
+    gtk_widget_set_sensitive( BUTTON_CHILD(m_widget), enable );
 
     return TRUE;
 }
@@ -197,12 +195,12 @@ void wxRadioButton::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
-    gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
+    gtk_widget_set_style( BUTTON_CHILD(m_widget), m_widgetStyle );
 }
 
 bool wxRadioButton::IsOwnGtkWindow( GdkWindow *window )
 {
-    return (window == GTK_TOGGLE_BUTTON(m_widget)->event_window);
+    return window == TOGGLE_BUTTON_EVENT_WIN(m_widget);
 }
 
 void wxRadioButton::OnInternalIdle()
@@ -210,14 +208,15 @@ void wxRadioButton::OnInternalIdle()
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    if (GTK_TOGGLE_BUTTON(m_widget)->event_window && cursor.Ok())
+    GdkWindow *win = TOGGLE_BUTTON_EVENT_WIN(m_widget);
+    if ( win && cursor.Ok())
     {
         /* I now set the cursor the anew in every OnInternalIdle call
        as setting the cursor in a parent window also effects the
        windows above so that checking for the current cursor is
        not possible. */
        
-       gdk_window_set_cursor( GTK_TOGGLE_BUTTON(m_widget)->event_window, cursor.GetCursor() );
+       gdk_window_set_cursor( win, cursor.GetCursor() );
     }
 
     UpdateWindowUI();

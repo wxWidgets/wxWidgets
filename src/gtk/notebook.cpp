@@ -21,9 +21,9 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
+
 #include <gdk/gdkkeysyms.h>
 
 // ----------------------------------------------------------------------------
@@ -686,7 +686,7 @@ void wxNotebook::ApplyWidgetStyle()
 bool wxNotebook::IsOwnGtkWindow( GdkWindow *window )
 {
     return ((m_widget->window == window) ||
-            (GTK_NOTEBOOK(m_widget)->panel == window));
+            (NOTEBOOK_PANEL(m_widget) == window));
 }
 
 //-----------------------------------------------------------------------------

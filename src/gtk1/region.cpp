@@ -20,12 +20,11 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/log.h"
+
 #include "wx/region.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
-
-#include "wx/log.h"
+#include "wx/gtk/private.h"
 
 // ----------------------------------------------------------------------------
 // wxRegionRefData: private class containing the information about the region
@@ -87,7 +86,7 @@ void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     m_refData = new wxRegionRefData();
     
 #ifdef __WXGTK20__
-    M_REGIONDATA->m_region = gdk_region_rectangle( rect );
+    M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
 #else
     GdkRegion *reg = gdk_region_new();
     M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
@@ -170,7 +169,7 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     {
         m_refData = new wxRegionRefData();
 #ifdef __WXGTK20__
-        M_REGIONDATA->m_region = gdk_region_rectangle( rect );
+        M_REGIONDATA->m_region = gdk_region_rectangle( &rect );
 #else
         GdkRegion *reg = gdk_region_new();
         M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
@@ -498,9 +497,9 @@ void wxRIRefData::CreateRects( const wxRegion& region )
     if (!gdkregion) return;
     
 #ifdef __WXGTK20__
-    GdkRectangles *gdkrects = NULL;
+    GdkRectangle *gdkrects = NULL;
     gint numRects = 0;
-    gdk_region_get_rectangles( gdkregion, &gdkrect, &numRects );
+    gdk_region_get_rectangles( gdkregion, &gdkrects, &numRects );
     
     m_numRects = numRects;
     if (numRects)
@@ -516,8 +515,8 @@ void wxRIRefData::CreateRects( const wxRegion& region )
             wr.height = gr.height;
         }
     }
-    g_delete( gdkrects ); // delete []
-#else
+    g_free( gdkrects );
+#else // GTK+ 1.x
     Region r = ((GdkRegionPrivate *)gdkregion)->xregion;
     if (r)
     {
@@ -536,7 +535,7 @@ void wxRIRefData::CreateRects( const wxRegion& region )
             }
         }
     }
-#endif
+#endif // GTK+ 2.0/1.x
 }
 
 wxRegionIterator::wxRegionIterator()

@@ -363,12 +363,12 @@ wxMenuBar *wxMDIChildFrame::GetMenuBar() const
 
 void wxMDIChildFrame::Activate()
 {
-#if (GTK_MINOR_VERSION > 0)
+#if defined(__WXGTK20__) || (GTK_MINOR_VERSION > 0)
     wxMDIParentFrame* parent = (wxMDIParentFrame*) GetParent();
     GtkNotebook* notebook = GTK_NOTEBOOK(parent->m_widget);
-    gint pageno = gtk_notebook_page_num( notebook, m_page->child );
+    gint pageno = gtk_notebook_page_num( notebook, m_widget );
     gtk_notebook_set_page( notebook, pageno );
-#else
+#else // GTK+ 1.0
     // the only way I can see to do this under gtk+ 1.0.X would
     // be to keep track of page numbers, start at first and
     // do "next" enough times to get to this page number - messy
@@ -402,7 +402,7 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 
     wxMDIParentFrame* parent = (wxMDIParentFrame*) GetParent();
     GtkNotebook* notebook = GTK_NOTEBOOK(parent->m_widget);
-    gtk_notebook_set_tab_label_text(notebook, m_page->child, title.mbc_str());
+    gtk_notebook_set_tab_label_text(notebook, m_widget, title.mbc_str());
 }
 
 //-----------------------------------------------------------------------------

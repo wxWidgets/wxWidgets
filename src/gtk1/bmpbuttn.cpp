@@ -17,8 +17,7 @@
 
 #include "wx/bmpbuttn.h"
 
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -199,7 +198,8 @@ wxString wxBitmapButton::GetLabel() const
 
 void wxBitmapButton::ApplyWidgetStyle()
 {
-    if (GTK_BUTTON(m_widget)->child == NULL) return;
+    if ( !BUTTON_CHILD(m_widget) )
+        return;
 
     wxButton::ApplyWidgetStyle();
 }
@@ -236,8 +236,8 @@ void wxBitmapButton::OnSetBitmap()
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (the_one.GetMask()) mask = the_one.GetMask()->GetBitmap();
 
-    GtkButton *bin = GTK_BUTTON(m_widget);
-    if (bin->child == NULL)
+    GtkWidget *child = BUTTON_CHILD(m_widget);
+    if (child == NULL)
     {
         // initial bitmap
         GtkWidget *pixmap = gtk_pixmap_new(the_one.GetPixmap(), mask);
@@ -246,7 +246,7 @@ void wxBitmapButton::OnSetBitmap()
     }
     else
     {   // subsequent bitmaps
-        GtkPixmap *g_pixmap = GTK_PIXMAP(bin->child);
+        GtkPixmap *g_pixmap = GTK_PIXMAP(child);
         gtk_pixmap_set(g_pixmap, the_one.GetPixmap(), mask);
     }
 }

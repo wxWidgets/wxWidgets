@@ -22,7 +22,7 @@
 #include "wx/debug.h"
 #include "wx/msgdlg.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -133,13 +133,13 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
       GTK_SIGNAL_FUNC(gtk_fontdialog_ok_callback), (gpointer*)this );
 
     // strange way to internationalize
-    gtk_label_set( GTK_LABEL( GTK_BUTTON(sel->ok_button)->child ), wxConvCurrent->cWX2MB(_("OK")) );
+    gtk_label_set( GTK_LABEL( BUTTON_CHILD(sel->ok_button) ), wxConvCurrent->cWX2MB(_("OK")) );
 
     gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_fontdialog_cancel_callback), (gpointer*)this );
 
     // strange way to internationalize
-    gtk_label_set( GTK_LABEL( GTK_BUTTON(sel->cancel_button)->child ), wxConvCurrent->cWX2MB(_("Cancel")) );
+    gtk_label_set( GTK_LABEL( BUTTON_CHILD(sel->cancel_button) ), wxConvCurrent->cWX2MB(_("Cancel")) );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );

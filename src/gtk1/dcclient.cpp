@@ -1358,11 +1358,11 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     y = YLOG2DEV(y);
 
 #if defined(__WXGTK20__) && wxUSE_WCHAR_T
-    /* FIXME: the layout engine should probably be abstracted at a higher level in wxDC... */
+    // TODO: the layout engine should be abstracted at a higher level!
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);
     {
-        wxWX2MBbuf data = text.mb_str(wxConvUTF8);
+        const wxWX2MBbuf data = text.mb_str(wxConvUTF8);
         pango_layout_set_text(layout, data, strlen(data));
     }
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
@@ -1371,7 +1371,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCoord width = rect.width;
     wxCoord height = rect.height;
     gdk_draw_layout( m_window, m_textGC, x, y, layout );
-#else
+#else // GTK+ 1.x
     wxCoord width = gdk_string_width( font, text.mbc_str() );
     wxCoord height = font->ascent + font->descent;
 
@@ -1382,7 +1382,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
     }
     gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text.mbc_str() );
-#endif
+#endif // GTK+ 2.0/1.x
 
     /* CMB 17/7/98: simple underline: ignores scaling and underlying
        X font's XA_UNDERLINE_POSITION and XA_UNDERLINE_THICKNESS

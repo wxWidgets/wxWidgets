@@ -376,7 +376,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         win_type = GTK_WINDOW_POPUP;
 
     if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
+    {
+        // there is no more GTK_WINDOW_DIALOG in 2.0
+#ifdef __WXGTK20__
+        win_type = GTK_WINDOW_TOPLEVEL;
+#else
         win_type = GTK_WINDOW_DIALOG;
+#endif
+    }
 
     m_widget = gtk_window_new( win_type );
 

@@ -26,9 +26,8 @@
 
 #include "wx/frame.h"
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <glib.h>
+#include "wx/gtk/private.h"
 
 extern GdkFont *GtkGetDefaultGuiFont();
 
@@ -222,7 +221,14 @@ bool wxToolBar::Create( wxWindow *parent,
 
     GtkOrientation orient = style & wxTB_VERTICAL ? GTK_ORIENTATION_VERTICAL
                                                   : GTK_ORIENTATION_HORIZONTAL;
+
+#ifdef __WXGTK20__
+    m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
+    gtk_toolbar_set_orientation(m_toolbar, orient);
+    gtk_toolbar_set_style(m_toolbar, GTK_TOOLBAR_ICONS);
+#else
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( orient, GTK_TOOLBAR_ICONS ) );
+#endif
 
     SetToolSeparation(7);
 
@@ -242,8 +248,11 @@ bool wxToolBar::Create( wxWindow *parent,
 
     gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
 
+    // FIXME: there is no such function for toolbars in 2.0
+#ifndef __WXGTK20__
     if (style & wxTB_FLAT)
         gtk_toolbar_set_button_relief( GTK_TOOLBAR(m_toolbar), GTK_RELIEF_NONE );
+#endif
 
 
     m_fg = new GdkColor;
@@ -270,8 +279,9 @@ bool wxToolBar::Create( wxWindow *parent,
                     GTK_TOOLBAR(m_toolbar)->tooltips->tip_window ) );
 
     g_style->bg[GTK_STATE_NORMAL] = *m_bg;
-    gdk_font_unref( g_style->font );
-	g_style->font = gdk_font_ref( GtkGetDefaultGuiFont() );
+
+    SET_STYLE_FONT(g_style, GtkGetDefaultGuiFont());
+
     gtk_widget_set_style( GTK_TOOLBAR(m_toolbar)->tooltips->tip_window, g_style );
 
     m_parent->DoAddChild( this );
@@ -478,7 +488,11 @@ void wxToolBar::SetMargins( int x, int y )
 
 void wxToolBar::SetToolSeparation( int separation )
 {
+    // FIXME: this function disappeared
+#ifndef __WXGTK20__
     gtk_toolbar_set_space_size( m_toolbar, separation );
+#endif
+
     m_toolSeparation = separation;
 }
 

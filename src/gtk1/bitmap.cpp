@@ -21,13 +21,23 @@
 #include "wx/dcmemory.h"
 #include "wx/app.h"
 
+#ifdef __WXGTK20__
+    // need this to get gdk_image_new_bitmap()
+    #define GDK_ENABLE_BROKEN
+#endif
+
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
-#if (GTK_MINOR_VERSION > 0)
-#include <gdk/gdkrgb.h>
-#endif
+#ifdef __WXGTK20__
+    #include <gdk/gdkimage.h>
+#else // GTK+ 1.2
+    // VZ: is this still needed? seems to compile fine without it...
+    #if (GTK_MINOR_VERSION > 0)
+        #include <gdk/gdkrgb.h>
+    #endif
+#endif // GTK+ 2.0/1.2
 
 extern void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           GdkGC               *gc,

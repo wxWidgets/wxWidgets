@@ -122,8 +122,8 @@ public:
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent& event);
 
-    void GtkVScroll( float value );
-    void GtkHScroll( float value );
+    void GtkVScroll( float value, unsigned int scroll_type );
+    void GtkHScroll( float value, unsigned int scroll_type );
     void GtkVConnectEvent();
     void GtkHConnectEvent();
     void GtkVDisconnectEvent();

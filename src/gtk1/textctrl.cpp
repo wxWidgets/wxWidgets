@@ -23,9 +23,13 @@
 #include <ctype.h>
 #include <math.h>               // for fabs
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-#include "gdk/gdkkeysyms.h"
+// TODO: reimplement wxTextCtrl using GtkTextView
+#ifdef __WXGTK20__
+    #define GTK_ENABLE_BROKEN       // need this to get GtkText at all
+#endif // __WXGTK20__
+
+#include "wx/gtk/private.h"
+#include <gdk/gdkkeysyms.h>
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -212,7 +216,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     bool multi_line = (style & wxTE_MULTILINE) != 0;
     if (multi_line)
     {
-#if (GTK_MINOR_VERSION > 2)
+#ifdef __WXGTK13__
         /* a multi-line edit control: create a vertical scrollbar by default and
            horizontal if requested */
         bool bHasHScrollbar = (style & wxHSCROLL) != 0;
@@ -234,7 +238,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         /* always wrap words */
         gtk_text_set_word_wrap( GTK_TEXT(m_text), TRUE );
 
-#if (GTK_MINOR_VERSION > 2)
+#ifdef __WXGTK13__
         /* put the horizontal scrollbar in the lower left hand corner */
         if (bHasHScrollbar)
         {
@@ -296,7 +300,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     {
         gint tmp = 0;
 
-#if GTK_MINOR_VERSION == 0
+#if !GTK_CHECK_VERSION(1, 2, 0)
         // if we don't realize it, GTK 1.0.6 dies with a SIGSEGV in
         // gtk_editable_insert_text()
         gtk_widget_realize(m_text);
@@ -312,8 +316,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         if (multi_line)
         {
             /* bring editable's cursor uptodate. bug in GTK. */
-
-            GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+            SET_EDITABLE_POS(m_text, gtk_text_get_point( GTK_TEXT(m_text) ));
         }
     }
 
@@ -446,7 +449,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         // After cursor movements, gtk_text_get_point() is wrong by one.
-        gtk_text_set_point( GTK_TEXT(m_text), GTK_EDITABLE(m_text)->current_pos );
+        gtk_text_set_point( GTK_TEXT(m_text), GET_EDITABLE_POS(m_text) );
 
         // if we have any special style, use it
         if ( !m_defaultStyle.IsDefault() )
@@ -457,24 +460,24 @@ void wxTextCtrl::WriteText( const wxString &text )
         }
         else // no style
         {
-            gint len = GTK_EDITABLE(m_text)->current_pos;
+            gint len = GET_EDITABLE_POS(m_text);
             gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
         }
 
         // Bring editable's cursor back uptodate.
-        GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+        SET_EDITABLE_POS(m_text, gtk_text_get_point( GTK_TEXT(m_text) ));
     }
     else // single line
     {
         // This moves the cursor pos to behind the inserted text.
-        gint len = GTK_EDITABLE(m_text)->current_pos;
+        gint len = GET_EDITABLE_POS(m_text);
         gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
 
         // Bring editable's cursor uptodate.
-        GTK_EDITABLE(m_text)->current_pos += text.Len();
+        len += text.Len();
 
         // Bring entry's cursor uptodate.
-        gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
+        gtk_entry_set_position( GTK_ENTRY(m_text), len );
     }
 
     m_modified = TRUE;
@@ -643,7 +646,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 
         /* bring editable's cursor uptodate. another bug in GTK. */
 
-        GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+        SET_EDITABLE_POS(m_text, gtk_text_get_point( GTK_TEXT(m_text) ));
     }
     else
     {
@@ -651,7 +654,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 
         /* bring editable's cursor uptodate. bug in GTK. */
 
-        GTK_EDITABLE(m_text)->current_pos = (guint32)pos;
+        SET_EDITABLE_POS(m_text, (guint32)pos);
     }
 }
 
@@ -810,7 +813,7 @@ long wxTextCtrl::GetInsertionPoint() const
 {
     wxCHECK_MSG( m_text != NULL, 0, wxT("invalid text ctrl") );
 
-    return (long) GTK_EDITABLE(m_text)->current_pos;
+    return (long) GET_EDITABLE_POS(m_text);
 }
 
 long wxTextCtrl::GetLastPosition() const
@@ -855,33 +858,21 @@ void wxTextCtrl::Cut()
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#if (GTK_MINOR_VERSION > 0)
-    gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
-#else
-    gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
-#endif
+    gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG );
 }
 
 void wxTextCtrl::Copy()
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#if (GTK_MINOR_VERSION > 0)
-    gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) );
-#else
-    gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
-#endif
+    gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG );
 }
 
 void wxTextCtrl::Paste()
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#if (GTK_MINOR_VERSION > 0)
-    gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
-#else
-    gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
-#endif
+    gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) DUMMY_CLIPBOARD_ARG );
 }
 
 // Undo/redo
@@ -917,21 +908,27 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    long from, to;
+    gint from, to;
+#ifdef __WXGTK20__
+    if ( !gtk_editable_get_selection_bounds(GTK_EDITABLE(m_text), &from, &to) )
+#else
     if ( !(GTK_EDITABLE(m_text)->has_selection) )
+#endif
     {
         from =
         to = GetInsertionPoint();
     }
     else // got selection
     {
+#ifndef __WXGTK20__
         from = (long) GTK_EDITABLE(m_text)->selection_start_pos;
         to = (long) GTK_EDITABLE(m_text)->selection_end_pos;
+#endif
 
         if ( from > to )
         {
             // exchange them to be compatible with wxMSW
-            long tmp = from;
+            gint tmp = from;
             from = to;
             to = tmp;
         }
@@ -947,7 +944,11 @@ bool wxTextCtrl::IsEditable() const
 {
     wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
+#ifdef __WXGTK20__
+    return gtk_editable_get_editable(GTK_EDITABLE(m_text));
+#else
     return GTK_EDITABLE(m_text)->editable;
+#endif
 }
 
 bool wxTextCtrl::IsModified() const
