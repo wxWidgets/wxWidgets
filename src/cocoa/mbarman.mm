@@ -127,7 +127,7 @@ wxMenuBarManager::wxMenuBarManager()
     m_menuMain = nil;
     m_mainMenuBarInstalled = true;
     m_mainMenuBar = NULL;
-    m_windowCurrent = NULL;
+    m_currentNSWindow = nil;
 
     NSApplication *theNSApplication = wxTheApp->GetNSApplication();
     // Create the services menu.
@@ -243,7 +243,10 @@ void wxMenuBarManager::InstallMainMenu()
 
 void wxMenuBarManager::WindowDidBecomeKey(NSNotification *notification)
 {
-    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    /* NOTE: m_currentNSWindow might be destroyed but we only ever use it
+       to look it up in the hash table.  Do not send messages to it. */
+    m_currentNSWindow = [notification object];
+    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa(m_currentNSWindow);
     if(win)
         InstallMenuBarForWindow(win);
     else
@@ -271,7 +274,6 @@ void wxMenuBarManager::WindowWillClose(NSNotification *notification)
 void wxMenuBarManager::InstallMenuBarForWindow(wxCocoaNSWindow *win)
 {
     wxASSERT(win);
-    m_windowCurrent = win;
     wxMenuBar *menubar = win->GetAppMenuBar(win);
     wxLogTrace(wxTRACE_COCOA,wxT("Found menubar=%p for window=%p."),menubar,win);
     SetMenuBar(menubar);
@@ -279,8 +281,12 @@ void wxMenuBarManager::InstallMenuBarForWindow(wxCocoaNSWindow *win)
 
 void wxMenuBarManager::UpdateMenuBar()
 {
-    if(m_windowCurrent)
-        InstallMenuBarForWindow(m_windowCurrent);
+    if(m_currentNSWindow)
+    {
+        wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa(m_currentNSWindow);
+        if(win)
+            InstallMenuBarForWindow(win);
+    }
 }
 
 #endif // wxUSE_MENUS

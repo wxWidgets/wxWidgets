@@ -64,7 +64,7 @@ protected:
     // Main menu (if app provides one)
     wxMenuBar *m_mainMenuBar;
     wxMenuBarManagerObserver *m_observer;
-    wxCocoaNSWindow *m_windowCurrent;
+    WX_NSWindow m_currentNSWindow;
 };
 
 #endif // wxUSE_MENUS
