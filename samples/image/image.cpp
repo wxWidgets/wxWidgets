@@ -68,12 +68,37 @@ public:
     MyFrame();
 
     void OnAbout( wxCommandEvent &event );
+    void OnNewFrame( wxCommandEvent &event );
     void OnQuit( wxCommandEvent &event );
 
     MyCanvas         *m_canvas;
 
 private:
     DECLARE_DYNAMIC_CLASS(MyFrame)
+    DECLARE_EVENT_TABLE()
+};
+
+class MyImageFrame : public wxFrame
+{
+public:
+    MyImageFrame(wxFrame *parent, const wxBitmap& bitmap)
+        : wxFrame(parent, -1, _T("Frame with image"),
+                  wxDefaultPosition, wxDefaultSize,
+                  wxCAPTION),
+          m_bitmap(bitmap)
+    {
+        SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
+    }
+
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
+    {
+        wxPaintDC dc( this );
+        dc.DrawBitmap( m_bitmap, 0, 0 );
+    }
+
+private:
+    wxBitmap m_bitmap;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -92,6 +117,10 @@ IMPLEMENT_APP(MyApp)
 // MyCanvas
 
 IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
+
+BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
+    EVT_PAINT(MyImageFrame::OnPaint)
+END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(MyCanvas::OnPaint)
@@ -414,12 +443,14 @@ void MyCanvas::CreateAntiAliasedBitmap()
 
 const int ID_QUIT  = 108;
 const int ID_ABOUT = 109;
+const int ID_NEW = 110;
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
+  EVT_MENU    (ID_NEW,  MyFrame::OnNewFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -427,7 +458,10 @@ MyFrame::MyFrame()
                   wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu();
+  file_menu->Append( ID_NEW, "&New frame");
+  file_menu->AppendSeparator();
   file_menu->Append( ID_ABOUT, "&About...");
+  file_menu->AppendSeparator();
   file_menu->Append( ID_QUIT, "E&xit");
 
   wxMenuBar *menu_bar = new wxMenuBar();
@@ -455,6 +489,11 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
   (void)wxMessageBox( "wxImage demo\n"
                       "Robert Roebling (c) 1998,2000",
                       "About wxImage Demo", wxICON_INFORMATION | wxOK );
+}
+
+void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
+{
+    (new MyImageFrame(this, *m_canvas->my_horse_bmp))->Show();
 }
 
 //-----------------------------------------------------------------------------
