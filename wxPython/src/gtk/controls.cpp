@@ -3633,7 +3633,11 @@ static PyObject *_wrap_wxComboBox_Append(PyObject *self, PyObject *args, PyObjec
 }
 
 static PyObject * wxComboBox_GetClientData(wxComboBox *self,int  n) {
+#ifdef __WXMAC__
+            wxPyClientData* data = (wxPyClientData*)self->wxItemContainer::GetClientObject(n);
+#else
             wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
+#endif
             if (data) {
                 Py_INCREF(data->m_obj);
                 return data->m_obj;
@@ -3674,7 +3678,11 @@ static PyObject *_wrap_wxComboBox_GetClientData(PyObject *self, PyObject *args, 
 
 static void  wxComboBox_SetClientData(wxComboBox *self,int  n,PyObject * clientData) {
             wxPyClientData* data = new wxPyClientData(clientData);
+#ifdef __WXMAC__
+            self->wxItemContainer::SetClientObject(n, data);
+#else
             self->SetClientObject(n, data);
+#endif
         }
 static PyObject *_wrap_wxComboBox_SetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

@@ -196,7 +196,11 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     }
     wxPyEndBlockThreads();
 }
+
+#if 0
 extern wxClipboard * wxTheClipboard; 
+
+#endif
 
 class wxPyDropSource : public wxDropSource {
 public:
