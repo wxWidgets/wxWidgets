@@ -205,7 +205,8 @@ void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
     wxLogDebug("wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
 
-    NSView *superview = [m_cocoaNSView superview];
+    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
+    NSView *superview = [nsview superview];
     wxCHECK_RET(superview,"NSView does not have a superview");
     NSRect parentRect = [superview frame];
 
