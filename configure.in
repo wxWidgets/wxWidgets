@@ -732,8 +732,13 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TREELAYOUT=no
   DEFAULT_wxUSE_METAFILE=no
   DEFAULT_wxUSE_MIMETYPE=no
-  DEFAULT_wxUSE_SYSTEM_OPTIONS=yes
-
+  DEFAULT_wxUSE_SYSTEM_OPTIONS=no
+  DEFAULT_wxUSE_PROTOCOL=no
+  DEFAULT_wxUSE_PROTOCOL_HTTP=no
+  DEFAULT_wxUSE_PROTOCOL_FTP=no
+  DEFAULT_wxUSE_PROTOCOL_FILE=no
+  DEFAULT_wxUSE_URL=no
+  
   DEFAULT_wxUSE_COMMONDLGS=no
   DEFAULT_wxUSE_CHOICEDLG=no
   DEFAULT_wxUSE_COLOURDLG=no
@@ -898,6 +903,11 @@ else
   DEFAULT_wxUSE_METAFILE=yes
   DEFAULT_wxUSE_MIMETYPE=yes
   DEFAULT_wxUSE_SYSTEM_OPTIONS=yes
+  DEFAULT_wxUSE_PROTOCOL=yes
+  DEFAULT_wxUSE_PROTOCOL_HTTP=yes
+  DEFAULT_wxUSE_PROTOCOL_FTP=yes
+  DEFAULT_wxUSE_PROTOCOL_FILE=yes
+  DEFAULT_wxUSE_URL=yes
 
   DEFAULT_wxUSE_COMMONDLGS=yes
   DEFAULT_wxUSE_CHOICEDLG=yes
@@ -1116,6 +1126,13 @@ WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChec
 
 WX_ARG_ENABLE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_ENABLE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
+
+WX_ARG_ENABLE(url,           [  --enable-url            use wxURL class], wxUSE_URL)
+WX_ARG_ENABLE(protocol,      [  --enable-protocol       use wxProtocol class], wxUSE_PROTOCOL)
+WX_ARG_ENABLE(protocol_http, [  --enable-protocol-http  HTTP support in wxProtocol], wxUSE_PROTOCOL_HTTP)
+WX_ARG_ENABLE(protocol_ftp,  [  --enable-protocol-ftp   FTP support in wxProtocol], wxUSE_PROTOCOL_FTP)
+WX_ARG_ENABLE(protocol_file, [  --enable-protocol-file  FILE support in wxProtocol], wxUSE_PROTOCOL_FILE)
+
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -4632,6 +4649,24 @@ fi
 
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
     AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
+fi
+
+if test "$wxUSE_URL" = "yes"; then
+    AC_DEFINE(wxUSE_URL)
+fi
+
+if test "$wxUSE_PROTOCOL" = "yes"; then
+    AC_DEFINE(wxUSE_PROTOCOL)
+
+    if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
+        AC_DEFINE(wxUSE_PROTOCOL_HTTP)
+    fi
+    if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
+        AC_DEFINE(wxUSE_PROTOCOL_FTP)
+    fi
+    if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
+        AC_DEFINE(wxUSE_PROTOCOL_FILE)
+    fi
 fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then
