@@ -17,6 +17,10 @@
 #include <wx/geometry.h>
 
 //---------------------------------------------------------------------------
+#ifdef __WXMAC__  // avoid a bug in Carbon headers
+#define scalb scalbn
+#endif
+//---------------------------------------------------------------------------
 
 typedef unsigned char byte;
 
