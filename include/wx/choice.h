@@ -63,7 +63,9 @@ public:
 // include the platform-dependent class definition
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/choice.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/choice.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/choice.h"

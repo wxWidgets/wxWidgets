@@ -363,6 +363,7 @@ bmpbuttn.cpp	Univ
 button.cpp	Univ
 checkbox.cpp	Univ
 checklst.cpp	Univ
+choice.cpp	Univ
 colschem.cpp	Univ
 combobox.cpp	Univ
 control.cpp	Univ
@@ -403,8 +404,7 @@ brush.cpp	GTK	LowLevel
 button.cpp	GTK
 checkbox.cpp	GTK
 checklst.cpp	GTK
-# FIXME: remove LowLevel from choice!
-choice.cpp	GTK	LowLevel
+choice.cpp	GTK
 clipbrd.cpp	GTK	LowLevel
 colour.cpp	GTK	LowLevel
 combobox.cpp	GTK
@@ -1404,6 +1404,7 @@ bmpbuttn.h	UnivH
 button.h	UnivH
 checkbox.h	UnivH
 checklst.h	UnivH
+choice.h	UnivH
 colschem.h	UnivH
 combobox.h	UnivH
 control.h	UnivH
