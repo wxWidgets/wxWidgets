@@ -84,7 +84,7 @@ private:
 };
 
 // Comparison routine for bsearch into an int* array of pagebreaks.
-static int integer_compare(void const* i0, void const* i1)
+extern "C" int wxCMPFUNC_CONV wxInteger_compare(void const* i0, void const* i1)
 {
     return *(int*)i0 - *(int*)i1;
 }
@@ -119,7 +119,7 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int* known_pagebreaks,
     // zero plus one element for each page.
     int* where = (int*) bsearch(&total_height, known_pagebreaks,
                                 1 + number_of_pages, sizeof(int),
-                                integer_compare);
+                                wxInteger_compare);
     // Add a pagebreak only if there isn't one already set here.
     if(NULL != where)
         {
