@@ -39,6 +39,8 @@ public:
     virtual bool DisplaySection(int sectionNo);
     virtual bool DisplaySection(const wxString& section);
     virtual bool DisplayBlock(long blockNo);
+    virtual bool DisplayContextPopup(int contextId);
+    virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos);
     virtual bool KeywordSearch(const wxString& k);
     virtual bool Quit();
 

@@ -121,7 +121,6 @@ public:
     void OnAdvancedHtmlHelp(wxCommandEvent& event);
     void OnMSHtmlHelp(wxCommandEvent& event);
 
-    void OnContextHelp(wxHelpEvent& event);
     void OnShowContextHelp(wxCommandEvent& event);
     void OnShowDialogContextHelp(wxCommandEvent& event);
 
@@ -151,8 +150,6 @@ class MyModalDialog : public wxDialog
 public:
     MyModalDialog(wxWindow *parent);
 
-    void OnContextHelp(wxHelpEvent& event);
-
 private:
 
     DECLARE_EVENT_TABLE()
@@ -166,7 +163,7 @@ private:
 enum
 {
     // menu items
-    HelpDemo_Quit = 1,
+    HelpDemo_Quit = 100,
     HelpDemo_Help_Index,
     HelpDemo_Help_Classes,
     HelpDemo_Help_Functions,
@@ -217,8 +214,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Help_ContextHelp, MyFrame::OnShowContextHelp)
     EVT_MENU(HelpDemo_Help_DialogContextHelp, MyFrame::OnShowDialogContextHelp)
 
-    EVT_HELP(-1, MyFrame::OnContextHelp)
-
     EVT_MENU(HelpDemo_Html_Help_Index, MyFrame::OnHtmlHelp)
     EVT_MENU(HelpDemo_Html_Help_Classes, MyFrame::OnHtmlHelp)
     EVT_MENU(HelpDemo_Html_Help_Functions, MyFrame::OnHtmlHelp)
@@ -260,6 +255,12 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    // Create a simple help provider to make SetHelpText() do something.
+    // Note that this must be set before any SetHelpText() calls are made.
+    //wxHelpProvider::Set(new wxSimpleHelpProvider);
+    wxHelpControllerHelpProvider* provider = new wxHelpControllerHelpProvider;
+    wxHelpProvider::Set(provider);
+
 #if wxUSE_HTML
 #if wxUSE_GIF
     // Required for images in the online documentation
@@ -276,6 +277,12 @@ bool MyApp::OnInit()
     // Create the main application window
     MyFrame *frame = new MyFrame("HelpDemo wxWindows App",
                                  wxPoint(50, 50), wxSize(450, 340));
+
+#if wxUSE_MS_HTML_HELP
+    provider->SetHelpController(& frame->GetMSHtmlHelpController());
+#else
+    provider->SetHelpController(& frame->GetHelpController());
+#endif
 
     frame->Show(TRUE);
     SetTopWindow(frame);
@@ -321,9 +328,6 @@ bool MyApp::OnInit()
     }
 #endif
 
-    // create a simple help provider to make SetHelpText() do something
-    wxHelpProvider::Set(new wxSimpleHelpProvider);
-
     return TRUE;
 }
 
@@ -341,7 +345,7 @@ int MyApp::OnExit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame((wxFrame *)NULL, 300, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(mondrian));
@@ -408,10 +412,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // a panel first - if there were several controls, it would allow us to
     // navigate between them from the keyboard
-    wxPanel *panel = new wxPanel(this, -1, wxPoint(0, 0), wxSize(400, 200));
+    wxPanel *panel = new wxPanel(this, 301, wxPoint(0, 0), wxSize(400, 200));
+    //panel->SetHelpText(_("This panel just holds a static text control."));
+    panel->SetHelpText(wxContextId(300));
 
     // and a static control whose parent is the panel
-    (void)new wxStaticText(panel, -1, "Hello, world!", wxPoint(10, 10));
+    wxStaticText* staticText = new wxStaticText(panel, 302, "Hello, world!", wxPoint(10, 10));
+    staticText->SetHelpText(_("This static text control isn't doing a lot right now."));
 }
 
 
@@ -439,14 +446,6 @@ void MyFrame::OnShowDialogContextHelp(wxCommandEvent& event)
 {
     MyModalDialog dialog(this);
     dialog.ShowModal();
-}
-
-void MyFrame::OnContextHelp(wxHelpEvent& event)
-{
-    // In a real app, if we didn't recognise this ID, we should call event.Skip()
-    wxString msg;
-    msg.Printf(wxT("We should now display help for window %d"), event.GetId());
-    wxMessageBox(msg);
 }
 
 void MyFrame::OnHtmlHelp(wxCommandEvent& event)
@@ -607,27 +606,32 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
-    EVT_HELP(-1, MyModalDialog::OnContextHelp)
 END_EVENT_TABLE()
 
 MyModalDialog::MyModalDialog(wxWindow *parent)
              : wxDialog()
 {
+    // Add the context-sensitive help button on the caption for MSW
+#ifdef __WXMSW__
+    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
+#endif
+
     wxDialog::Create(parent, -1, wxString("Modal dialog"));
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
 
     wxButton* btnOK = new wxButton(this, wxID_OK, "&OK");
+    btnOK->SetHelpText(_("The OK button confirms the dialog choices."));
+
     wxButton* btnCancel = new wxButton(this, wxID_CANCEL, "&Cancel");
+    btnCancel->SetHelpText(_("The Cancel button cancels the dialog."));
+
     sizerRow->Add(btnOK, 0, wxALIGN_CENTER | wxALL, 5);
     sizerRow->Add(btnCancel, 0, wxALIGN_CENTER | wxALL, 5);
 
-    // Add the context-sensitive help button on the caption for MSW and the
-    // explicit context-sensitive help button elsewhere
-#ifdef __WXMSW__
-    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
-#else
+    // Add explicit context-sensitive help button for non-MSW
+#ifndef __WXMSW__
     sizerRow->Add(new wxContextHelpButton(this), 0, wxALIGN_CENTER | wxALL, 5);
 #endif
 
@@ -647,35 +651,5 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
 
     btnOK->SetFocus();
     btnOK->SetDefault();
-}
-
-void MyModalDialog::OnContextHelp(wxHelpEvent& event)
-{
-    wxString msg;
-    switch (event.GetId())
-    {
-    case wxID_OK:
-        {
-            msg = _("The OK button confirms the dialog choices.");
-            break;
-        }
-    case wxID_CANCEL:
-        {
-            msg = _("The Cancel button cancels the dialog.");
-            break;
-        }
-    case wxID_APPLY:
-        {
-            msg = _("This is a text control that does nothing in particular.");
-            break;
-        }
-    case wxID_CONTEXT_HELP:
-        {
-            msg = _("If you didn't know what this button is for, why did you press it? :-)");
-            break;
-        }
-    }
-    if (!msg.IsEmpty())
-        wxMessageBox(msg, _("Help"), wxICON_INFORMATION, this);
 }
 

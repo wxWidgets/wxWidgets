@@ -31,6 +31,7 @@
   #include "wx/utils.h"
 #endif
 
+#include "wx/settings.h"
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
@@ -51,6 +52,8 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
   m_bOwnerDrawn  = FALSE;
   m_nHeight      = 0;
   m_nMarginWidth = ms_nLastMarginWidth;
+  if (wxNORMAL_FONT)
+    m_font = * wxNORMAL_FONT;
 }
 
 #if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)

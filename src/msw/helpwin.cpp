@@ -67,11 +67,10 @@ bool wxWinHelpController::DisplayContents(void)
     wxString str = GetValidFilename(m_helpFile);
     
 #if defined(__WIN95__)
-    WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_FINDER, 0L);
+    return (WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_FINDER, 0L) != 0);
 #else
-    WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_CONTENTS, 0L);
+    return (WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_CONTENTS, 0L) != 0);
 #endif
-    return TRUE;
 }
 
 bool wxWinHelpController::DisplaySection(int section)
@@ -81,8 +80,16 @@ bool wxWinHelpController::DisplaySection(int section)
     
     wxString str = GetValidFilename(m_helpFile);
 
-    WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)section);
-    return TRUE;
+    return (WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXT, (DWORD)section) != 0);
+}
+
+bool wxWinHelpController::DisplayContextPopup(int contextId)
+{
+    if (m_helpFile.IsEmpty()) return FALSE;
+    
+    wxString str = GetValidFilename(m_helpFile);
+
+    return (WinHelp((HWND) wxTheApp->GetTopWindow()->GetHWND(), (const wxChar*) str, HELP_CONTEXTPOPUP, (DWORD) contextId) != 0);
 }
 
 bool wxWinHelpController::DisplayBlock(long block)
@@ -97,15 +104,13 @@ bool wxWinHelpController::KeywordSearch(const wxString& k)
     
     wxString str = GetValidFilename(m_helpFile);
     
-    WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_PARTIALKEY, (DWORD)(const wxChar*) k);
-    return TRUE;
+    return (WinHelp(GetSuitableHWND(), (const wxChar*) str, HELP_PARTIALKEY, (DWORD)(const wxChar*) k) != 0);
 }
 
 // Can't close the help window explicitly in WinHelp
 bool wxWinHelpController::Quit(void)
 {
-    WinHelp(GetSuitableHWND(), 0, HELP_QUIT, 0L);
-    return TRUE;
+    return (WinHelp(GetSuitableHWND(), 0, HELP_QUIT, 0L) != 0);
 }
 
 // Append extension if necessary.

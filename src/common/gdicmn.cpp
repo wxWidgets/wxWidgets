@@ -36,6 +36,7 @@
 #include "wx/app.h"
 #include "wx/dc.h"
 #include "wx/utils.h"
+#include "wx/settings.h"
 
 #include "wx/log.h"
 #include <string.h>
@@ -360,13 +361,18 @@ void wxInitializeStockObjects ()
 #endif
 
   // why under MSW fonts shouldn't have the standard system size?
+/*
 #ifdef __WXMSW__
   static const int sizeFont = 10;
 #else
   static const int sizeFont = 12;
 #endif
+*/
 
-  wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+//  wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+  wxNORMAL_FONT = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+  static const int sizeFont = wxNORMAL_FONT->GetPointSize();
+
   wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
   wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL);

@@ -47,8 +47,18 @@ public:
     
     // If file is "", reloads file given  in Initialize
     virtual bool LoadFile(const wxString& file = "") = 0;
+
+    // Displays the contents
     virtual bool DisplayContents(void) = 0;
+
+    // Display the given section
     virtual bool DisplaySection(int sectionNo) = 0;
+
+    // Display the section using a context id
+    virtual bool DisplayContextPopup(int WXUNUSED(contextId)) { return FALSE; };
+
+    // Display the text in a popup, if possible
+    virtual bool DisplayTextPopup(const wxString& WXUNUSED(text), const wxPoint& WXUNUSED(pos)) { return FALSE; };
 
     // By default, uses KeywordSection to display a topic. Implementations
     // may override this for more specific behaviour.

@@ -313,6 +313,48 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 }
 
 // ----------------------------------------------------------------------------
+// wxHelpControllerHelpProvider
+// ----------------------------------------------------------------------------
+
+wxHelpControllerHelpProvider::wxHelpControllerHelpProvider(wxHelpControllerBase* hc)
+{
+    m_helpController = hc;
+}
+
+bool wxHelpControllerHelpProvider::ShowHelp(wxWindowBase *window)
+{
+    wxString text = GetHelp(window);
+    if ( !text.empty() )
+    {
+        if (m_helpController)
+        {
+            if (text.IsNumber())
+                return m_helpController->DisplayContextPopup(wxAtoi(text));
+
+            // If the help controller is capable of popping up the text...
+            else if (m_helpController->DisplayTextPopup(text, wxGetMousePosition()))
+            {
+                return TRUE;
+            }
+            else
+            // ...else use the default method.
+                return wxSimpleHelpProvider::ShowHelp(window);
+        }
+        else
+            return wxSimpleHelpProvider::ShowHelp(window);
+
+    }
+
+    return FALSE;
+}
+
+// Convenience function for turning context id into wxString
+wxString wxContextId(int id)
+{
+    return wxString(IntToString(id));
+}
+
+// ----------------------------------------------------------------------------
 // wxHelpProviderModule: module responsible for cleaning up help provider.
 // ----------------------------------------------------------------------------
 

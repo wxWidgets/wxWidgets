@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/help.h"
 
 #if wxUSE_HELP
 
@@ -83,7 +84,7 @@ private:
 // classes used to implement context help support
 // ----------------------------------------------------------------------------
 
-// wxHelpProvider is an ABC used by the program implementing context help to
+// wxHelpProvider is an abstract class used by the program implementing context help to
 // show the help text (or whatever: it may be HTML page or anything else) for
 // the given window.
 //
@@ -150,6 +151,31 @@ protected:
     wxStringHashTable m_hashWindows,
                      m_hashIds;
 };
+
+// wxHelpControllerHelpProvider is an implementation of wxHelpProvider which supports
+// both context identifiers and plain text help strings. If the help text is an integer,
+// it is passed to wxHelpController::DisplayContextPopup. Otherwise, it shows the string
+// in a tooltip as per wxSimpleHelpProvider.
+class WXDLLEXPORT wxHelpControllerHelpProvider : public wxSimpleHelpProvider
+{
+public:
+    // Note that it doesn't own the help controller. The help controller
+    // should be deleted separately.
+    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = (wxHelpControllerBase*) NULL);
+
+    // implement wxHelpProvider methods
+    virtual bool ShowHelp(wxWindowBase *window);
+
+    // Other accessors
+    void SetHelpController(wxHelpControllerBase* hc) { m_helpController = hc; }
+    wxHelpControllerBase* GetHelpController() const { return m_helpController; }
+
+protected:
+    wxHelpControllerBase*   m_helpController;
+};
+
+// Convenience function for turning context id into wxString
+wxString wxContextId(int id);
 
 #endif // _WX_CSHELPH__
 

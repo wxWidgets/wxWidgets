@@ -38,6 +38,7 @@ public:
     virtual bool DisplayContents();
     virtual bool DisplaySection(int sectionNo);
     virtual bool DisplayBlock(long blockNo);
+    virtual bool DisplayContextPopup(int contextId);
     virtual bool KeywordSearch(const wxString& k);
     virtual bool Quit();
 
