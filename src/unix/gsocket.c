@@ -34,7 +34,6 @@
 #endif
 
 #include <signal.h>
-/* #include <features.h> */
 
 #include "wx/setup.h"
 #include "wx/gsocket.h"
@@ -54,8 +53,9 @@
 
 /* Global initialisers */
 
-void GSocket_Init()
+bool GSocket_Init()
 {
+  return TRUE;
 }
 
 void GSocket_Cleanup()
@@ -84,6 +84,7 @@ GSocket *GSocket_new()
   socket->m_gui_dependent	= NULL;
   socket->m_blocking		= FALSE;
 
+  /* We initialize the GUI specific entries here */
   _GSocket_GUI_Init(socket);
 
   return socket;
@@ -93,17 +94,21 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
+  /* First, we check that the socket is really shutdowned */
   if (socket->m_fd != -1)
     GSocket_Shutdown(socket);
 
+  /* We destroy GUI specific variables */
   _GSocket_GUI_Destroy(socket);
 
+  /* We destroy private addresses */
   if (socket->m_local)
     GAddress_destroy(socket->m_local);
 
   if (socket->m_peer)
     GAddress_destroy(socket->m_peer);
 
+  /* We destroy socket itself */
   free(socket);
 }
 
@@ -113,12 +118,14 @@ void GSocket_Shutdown(GSocket *socket)
 
   assert(socket != NULL);
 
+  /* If socket has been created, we shutdown it */
   if (socket->m_fd != -1) {
     shutdown(socket->m_fd, 2);
     close(socket->m_fd);
     socket->m_fd = -1;
   }
 
+  /* We also disable GUI callbacks */
   for (evt=0;evt<GSOCK_MAX_EVENT;evt++)
     _GSocket_Uninstall_Fallback(socket, evt);
 }
@@ -129,11 +136,15 @@ GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
 {
   assert(socket != NULL);
 
-  if ((socket->m_fd != -1 && !socket->m_server))
+  if ((socket->m_fd != -1 && !socket->m_server)) {
+    socket->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
+  }
 
-  if (address == NULL || address->m_family == GSOCK_NOFAMILY)
+  if (address == NULL || address->m_family == GSOCK_NOFAMILY) {
+    socket->m_error = GSOCK_INVADDR;
     return GSOCK_INVADDR;
+  }
 
   if (socket->m_local)
     GAddress_destroy(socket->m_local);
@@ -566,7 +577,6 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 {
   struct sockaddr from;
-  
   SOCKLEN_T fromlen;
   int ret;
 

@@ -76,7 +76,7 @@ extern "C" {
 /* Global initialisers */
 
 /* GSocket_Init() must be called at the beginning */
-void GSocket_Init();
+bool GSocket_Init();
 /* GSocket_Cleanup() must be called at the ending */
 void GSocket_Cleanup();
 
