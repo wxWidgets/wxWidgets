@@ -1667,6 +1667,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/NSControl.mm
     src/cocoa/NSMenu.mm
     src/cocoa/NSPanel.mm
+    src/cocoa/NSTableView.mm
     src/cocoa/NSTextField.mm
     src/cocoa/NSView.mm
     src/cocoa/NSWindow.mm
@@ -1741,6 +1742,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/NSControl.h
     wx/cocoa/NSMenu.h
     wx/cocoa/NSPanel.h
+    wx/cocoa/NSTableView.h
     wx/cocoa/NSTextField.h
     wx/cocoa/NSView.h
     wx/cocoa/NSWindow.h
