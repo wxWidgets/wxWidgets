@@ -18,7 +18,8 @@
 // WX_BUILD_OPTIONS_SIGNATURE
 // ----------------------------------------------------------------------------
 
-#define __WX_BO_STRINGIZE(x)  #x
+#define __WX_BO_STRINGIZE(x)   __WX_BO_STRINGIZE0(x)
+#define __WX_BO_STRINGIZE0(x)  #x
 
 #if (wxMINOR_VERSION % 2) == 0
     #define __WX_BO_VERSION(x,y,z) \
@@ -39,11 +40,21 @@
 #else
     #define __WX_BO_UNICODE "ANSI"
 #endif
-    
+
+// GCC and Intel C++ share same C++ ABI, check if compiler versions are
+// compatible:
+#if (defined(__GNUG__) || defined(__INTEL_COMPILER) && \
+     defined(__GXX_ABI_VERSION))
+    #define __WX_BO_COMPILER \
+            ",compiler with C++ ABI " __WX_BO_STRINGIZE(__GXX_ABI_VERSION)
+#else
+    #define __WX_BO_COMPILER
+#endif
+        
 // This macro is passed as argument to wxConsoleApp::CheckBuildOptions()
 #define WX_BUILD_OPTIONS_SIGNATURE \
     __WX_BO_VERSION(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) \
-    " (" __WX_BO_DEBUG "," __WX_BO_UNICODE ")"
+    " (" __WX_BO_DEBUG "," __WX_BO_UNICODE __WX_BO_COMPILER ")"
 
 
 
