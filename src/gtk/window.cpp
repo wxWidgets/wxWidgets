@@ -1113,12 +1113,13 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         return FALSE;
     
 #ifdef __WXGTK20__
+#if 0
     // We have to pass key press events through GTK+'s Input Method context
-    // object in order to get correct characters. By doing so, we loose the
+    // object in order to get correct characters. By doing so, we lose the
     // ability to let other GTK+'s handlers (namely, widgets' default signal
     // handlers) handle the signal by returning false from this callback.
     // Because GTK+ sends the events to parent widgets as well, we can't
-    // afford loosing it, otherwise native widgets inserted into wxPanel
+    // afford losing it, otherwise native widgets inserted into wxPanel
     // would break in subtle ways (e.g. spacebar would no longer toggle
     // wxCheckButton's state). Therefore, we only pass the event to IM if it
     // originated in this window's widget, which we detect by checking if we've
@@ -1126,29 +1127,62 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // because gtk_window_key_press_callback is installed for native controls
     // as well and the wxKeyEvent it creates propagates upwards).
     static GdkEventKey s_lastEvent;
-    
     bool useIM = (win->m_imData != NULL) &&
                  memcmp(gdk_event, &s_lastEvent, sizeof(GdkEventKey)) != 0;
-    
     s_lastEvent = *gdk_event;
+#else
+    // 2005.01.26 modified by hzysoft@sina.com.tw:
+    // There is no need to store lastEvent. The original code makes GTK+ IM 
+    // dysfunction. When we get a key_press event here, it could be originate
+    // from the current widget or its child widgets.  However, only the widget
+    // with the INPUT FOCUS can generate the INITIAL key_press event.  That is, 
+    // if the CURRENT widget doesn't have the FOCUS at all, this event definitely
+    // originated from its child widgets and shouldn't be passed to IM context.
+    // In fact, what a GTK+ IM should do is filtering keyEvents and convert them
+    // into text input ONLY WHEN THE WIDGET HAS INPUT FOCUS.  Besides, when current
+    // widgets has both IM context and input focus, the event should be filtered 
+    // by gtk_im_context_filter_keypress().
+    // Then, we should, according to GTK+ 2.0 API doc, return whatever it returns.
+    bool useIM = (win->m_imData != NULL) && ( wxWindow::FindFocus() == win );
+#endif
+
 #endif
     
+#ifdef __WXGTK20__
+    // 2005.01.26 modified by hzysoft@sina.com.tw:
+    // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
+    // docs, if IM filter returns true, NO FURTHER PROCESSING SHOULD BE DONE for
+    // this keystroke. Making wxWidgets unable to receive EVT_KEY_DOWN in this
+    // situation is resonable. In reality, when IM is activated, wxWidgets should
+    // receive EVT_CHAR instead.
+    if (useIM)
+    {
+        // it may be useful for the input method, though:
+        bool ret = gtk_im_context_filter_keypress(win->m_imData->context, gdk_event);
+        win->m_imData->lastKeyEvent = NULL;
+        if( ret )
+        {
+            wxLogTrace(TRACE_KEYS, _T("Key event intercepted by IM"));
+            return ret;
+        }
+    }
+#endif
+
     wxKeyEvent event( wxEVT_KEY_DOWN );
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // unknown key pressed, ignore (the event would be useless anyhow)
-#ifdef __WXGTK20__
-        if ( useIM )
-        {
-            // it may be useful for the input method, though:
-            win->m_imData->lastKeyEvent = gdk_event;
-            bool ret = gtk_im_context_filter_keypress(win->m_imData->context,
-                                                      gdk_event);
-            win->m_imData->lastKeyEvent = NULL;
-            return ret;
-        }
-#endif
-        return FALSE;
+        // 2005.02.22 modified by PCMan.
+        // In GTK+ 1.2, strings sent by IMs are also regarded as key_press events whose 
+        // keyCodes cannot be recognized by wxWidgets. These MBCS strings, however, are 
+        // composed of more than one character, which means gdk_event->length will always 
+        // greater than one.
+        // When gtk_event->length == 1, this may be an ASCII character and can be translated 
+        // by WX.  However, when MBCS characters are sent by IM, gdk_event->length will >= 2.
+        // So when gdk_event->length >= 2, this is not an invalid key but a part of a string 
+        // sent by IM which contains user input and shouldn't be ignored.
+        if (gdk_event->length <= 1) // Only ignore those keys whose gdk_event->length <=1.
+            return FALSE;
     }
 
     // Emit KEY_DOWN event
@@ -1178,26 +1212,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     // will only be sent if it is not in an accelerator table.
     if (!ret)
     {
-#ifdef __WXGTK20__
-        if (useIM)
-        {
-            // In GTK 2.0, we need to hand over the key event to an input method
-            // and the IM will emit a "commit" event containing the actual utf8
-            // character.  In that case the EVT_CHAR events will be sent from
-            // there.
-            win->m_imData->lastKeyEvent = gdk_event;
-            if ( gtk_im_context_filter_keypress(win->m_imData->context,
-                                                gdk_event) )
-            {
-                win->m_imData->lastKeyEvent = NULL;
-                wxLogTrace(TRACE_KEYS, _T("Key event intercepted by IM"));
-                return TRUE;
-            }
-            else
-                win->m_imData->lastKeyEvent = NULL;
-        }
-#endif
-
         long key_code;
         KeySym keysym = gdk_event->keyval;
         // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
@@ -1345,7 +1359,7 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     {
 #if wxUSE_UNICODE
         event.m_uniChar = *pstr;
-        // Backward compatible for ISO-8859
+        // Backward compatible for ISO-8859-1
         event.m_keyCode = *pstr < 256 ? event.m_uniChar : 0;
         wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_uniChar);
 #else
