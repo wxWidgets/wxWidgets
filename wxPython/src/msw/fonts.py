@@ -194,6 +194,12 @@ class wxFontPtr(wxObjectPtr):
     def GetWeightString(self, *_args, **_kwargs):
         val = apply(fontsc.wxFont_GetWeightString,(self,) + _args, _kwargs)
         return val
+    def SetNoAntiAliasing(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_SetNoAntiAliasing,(self,) + _args, _kwargs)
+        return val
+    def GetNoAntiAliasing(self, *_args, **_kwargs):
+        val = apply(fontsc.wxFont_GetNoAntiAliasing,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFont instance at %s>" % (self.this,)
 class wxFont(wxFontPtr):

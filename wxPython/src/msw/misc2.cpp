@@ -388,7 +388,7 @@ static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -466,7 +466,7 @@ static PyObject *_wrap_wxLoadFileSelector(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -536,7 +536,7 @@ static PyObject *_wrap_wxSaveFileSelector(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -610,7 +610,7 @@ static PyObject *_wrap_wxDirSelector(PyObject *self, PyObject *args, PyObject *k
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -682,7 +682,7 @@ static PyObject *_wrap_wxGetTextFromUser(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -753,7 +753,7 @@ static PyObject *_wrap_wxGetPasswordFromUser(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -840,7 +840,7 @@ static PyObject *_wrap_wxGetSingleChoice(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1810,7 +1810,7 @@ static PyObject *_wrap_wxSysErrorMsg(PyObject *self, PyObject *args, PyObject *k
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1954,6 +1954,35 @@ static PyObject *_wrap_wxLogInfo(PyObject *self, PyObject *args, PyObject *kwarg
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxLogInfo(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLogDebug(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "msg", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLogDebug",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxLogDebug(*_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2547,7 +2576,7 @@ static PyObject *_wrap_wxToolTip_GetTip(PyObject *self, PyObject *args, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3360,7 +3389,7 @@ static PyObject *_wrap_wxTipProvider_GetTip(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3432,7 +3461,7 @@ static PyObject *_wrap_wxTipProvider_PreprocessTip(PyObject *self, PyObject *arg
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5003,7 +5032,7 @@ static PyObject *_wrap_wxLog_GetTimestamp(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5086,6 +5115,43 @@ static PyObject *_wrap_wxLog_IsAllowedTraceMask(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+static PyObject *_wrap_wxLog_SetLogLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    unsigned long  _arg0;
+    char *_kwnames[] = { "logLevel", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxLog_SetLogLevel",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxLog::SetLogLevel(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLog_GetLogLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    unsigned long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxLog_GetLogLevel",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (unsigned long )wxLog::GetLogLevel();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 static wxString  wxLog_TimeStamp(wxLog *self) {
             wxString msg;
             wxLog::TimeStamp(&msg);
@@ -5116,7 +5182,7 @@ static PyObject *_wrap_wxLog_TimeStamp(PyObject *self, PyObject *args, PyObject 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -7003,7 +7069,7 @@ static PyObject *_wrap_wxJoystick_GetProductName(PyObject *self, PyObject *args,
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8011,11 +8077,10 @@ static PyObject *_wrap_new_wxFileTypeInfoSequence(PyObject *self, PyObject *args
         PyObject* item = PySequence_GetItem(_obj0, i);
 #if wxUSE_UNICODE
         PyObject* str  = PyObject_Unicode(item);
-        _arg0->Add(PyUnicode_AsUnicode(str));
 #else
         PyObject* str  = PyObject_Str(item);
-        _arg0->Add(PyString_AsString(str));
 #endif
+        _arg0->Add(Py2wxString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }
@@ -8200,7 +8265,7 @@ static PyObject *_wrap_wxFileTypeInfo_GetMimeType(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8235,7 +8300,7 @@ static PyObject *_wrap_wxFileTypeInfo_GetOpenCommand(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8270,7 +8335,7 @@ static PyObject *_wrap_wxFileTypeInfo_GetPrintCommand(PyObject *self, PyObject *
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8305,7 +8370,7 @@ static PyObject *_wrap_wxFileTypeInfo_GetShortDesc(PyObject *self, PyObject *arg
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8340,7 +8405,7 @@ static PyObject *_wrap_wxFileTypeInfo_GetDescription(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8436,7 +8501,7 @@ static PyObject *_wrap_wxFileTypeInfo_GetIconFile(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8510,7 +8575,7 @@ static PyObject * wxFileType_GetMimeType(wxFileType *self) {
             wxString str;
             if (self->GetMimeType(&str)) {
 #if wxUSE_UNICODE
-	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+	      return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
 	      return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -8670,7 +8735,7 @@ static PyObject * wxFileType_GetIconInfo(wxFileType *self) {
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
                                                               wxT("wxIcon"), TRUE));
 #if wxUSE_UNICODE
-                PyTuple_SetItem(tuple, 1, PyUnicode_FromUnicode(iconFile.c_str(), iconFile.Len()));
+                PyTuple_SetItem(tuple, 1, PyUnicode_FromWideChar(iconFile.c_str(), iconFile.Len()));
 #else
                 PyTuple_SetItem(tuple, 1, PyString_FromStringAndSize(iconFile.c_str(), iconFile.Len()));
 #endif
@@ -8714,7 +8779,7 @@ static PyObject * wxFileType_GetDescription(wxFileType *self) {
             wxString str;
             if (self->GetDescription(&str)) {
 #if  wxUSE_UNICODE
-	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+	      return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
 	      return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -8754,7 +8819,7 @@ static PyObject * wxFileType_GetOpenCommand(wxFileType *self,const wxString & fi
             wxString str;
             if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if  wxUSE_UNICODE
-                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+                return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
                 return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -8817,7 +8882,7 @@ static PyObject * wxFileType_GetPrintCommand(wxFileType *self,const wxString & f
             wxString str;
             if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if wxUSE_UNICODE
-                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+                return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
                 return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -9096,7 +9161,7 @@ static PyObject *_wrap_wxFileType_ExpandCommand(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10270,7 +10335,7 @@ static PyObject *_wrap_wxFileHistory_GetHistoryFile(PyObject *self, PyObject *ar
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -11224,6 +11289,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "new_wxLogTextCtrl", (PyCFunction) _wrap_new_wxLogTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLogStderr", (PyCFunction) _wrap_new_wxLogStderr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_TimeStamp", (PyCFunction) _wrap_wxLog_TimeStamp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_GetLogLevel", (PyCFunction) _wrap_wxLog_GetLogLevel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_SetLogLevel", (PyCFunction) _wrap_wxLog_SetLogLevel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_IsAllowedTraceMask", (PyCFunction) _wrap_wxLog_IsAllowedTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_GetTraceMask", (PyCFunction) _wrap_wxLog_GetTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_GetVerbose", (PyCFunction) _wrap_wxLog_GetVerbose, METH_VARARGS | METH_KEYWORDS },
@@ -11325,6 +11392,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxLogStatusFrame", (PyCFunction) _wrap_wxLogStatusFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogStatus", (PyCFunction) _wrap_wxLogStatus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogVerbose", (PyCFunction) _wrap_wxLogVerbose, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLogDebug", (PyCFunction) _wrap_wxLogDebug, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogInfo", (PyCFunction) _wrap_wxLogInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogMessage", (PyCFunction) _wrap_wxLogMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogWarning", (PyCFunction) _wrap_wxLogWarning, METH_VARARGS | METH_KEYWORDS },
