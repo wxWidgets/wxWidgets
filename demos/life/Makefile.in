@@ -15,7 +15,7 @@ program_dir = demos/life
 
 PROGRAM=life
 
-OBJECTS=$(PROGRAM).o
+OBJECTS=$(PROGRAM).o dialogs.o game.o
 
 include ../../src/makeprog.env
 

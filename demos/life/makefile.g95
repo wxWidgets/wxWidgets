@@ -10,7 +10,7 @@
 WXDIR = ../..
 
 TARGET=life
-OBJECTS = $(TARGET).o
+OBJECTS = $(TARGET).o dialogs.o game.o
 
 include $(WXDIR)/src/makeprog.g95
 

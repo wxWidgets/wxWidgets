@@ -8,7 +8,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = life
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(PROGRAM).obj dialogs.obj game.obj
 
 !include $(WXDIR)\src\makeprog.wat
 
