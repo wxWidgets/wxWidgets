@@ -84,21 +84,20 @@ void wxDataFormat::SetType(  wxDataFormatId  Type )
         m_format = kDragFlavorTypeHFS ;
     else
     {
-        m_format = '????' ;
        wxFAIL_MSG( wxT("invalid dataformat") );
-    }
-}
 
-wxDataFormatId wxDataFormat::GetType() const
-{
-    return m_type;
+       m_format = '????';
+    }
 }
 
 wxString wxDataFormat::GetId() const
 {
-	char text[5] ;
-	strncpy( text , (char*) &m_format , 4 ) ;
-	text[4] = 0 ;
+    // note that m_format is not a pointer to string, it *is* itself a 4
+    // character string
+    char text[5] ;
+    strncpy( text , (char*) &m_format , 4 ) ;
+    text[4] = 0 ;
+
     return wxString::FromAscii( text ) ;
 }
 
@@ -108,14 +107,11 @@ void wxDataFormat::SetId(  NativeFormat  format )
 
     if (m_format == kScrapFlavorTypeText)
         m_type = wxDF_TEXT;
-    else
-    if (m_format == kScrapFlavorTypeUnicode )
+    else if (m_format == kScrapFlavorTypeUnicode )
         m_type = wxDF_UNICODETEXT;
-    else
-    if (m_format == kScrapFlavorTypePicture)
+    else if (m_format == kScrapFlavorTypePicture)
         m_type = wxDF_BITMAP;
-    else
-    if (m_format == kDragFlavorTypeHFS )
+    else if (m_format == kDragFlavorTypeHFS )
         m_type = wxDF_FILENAME;
     else
         m_type = wxDF_PRIVATE;
@@ -123,8 +119,6 @@ void wxDataFormat::SetId(  NativeFormat  format )
 
 void wxDataFormat::SetId( const wxChar* zId )
 {
-    wxString                        tmp(zId);
-
     m_type = wxDF_PRIVATE;
     m_format = 0;// TODO: get the format gdk_atom_intern( wxMBSTRINGCAST tmp.mbc_str(), FALSE );
 }
