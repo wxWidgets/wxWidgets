@@ -27,6 +27,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_DEBUGREPORT
