@@ -12,17 +12,22 @@ MERGE
 TODO
 ----------------------------------------------------------------------------
 
-wxMenuXXX
+kbd input
 
-* Alt-H, 'D', Esc -> assert
+* TODO: Tab navigation
+* a (processed) accel key combo shouldn't generate EVT_CHAR event!
+
+wxMenuXXX
 
 * popup menus
 * multirow menubar if not enough space
 * Break()?
-* "Alt" press/release handling incorrect, need a flag in wxWindow probably
 
 * menubar menus don't popup in the same place as under MSW when there is not
   enough space to the right (pretty minor but still)
+
+* pressing/releasing "Alt" when the menubar has focus gives it back to it
+  while Windows doesn't do it (very minor)
 
 Misc
 

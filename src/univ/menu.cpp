@@ -54,18 +54,44 @@ class WXDLLEXPORT wxMenuInfo
 {
 public:
     // ctor
-    wxMenuInfo(wxMenuBar *menubar, const wxString& text)
+    wxMenuInfo(const wxString& text)
     {
-        SetLabel(menubar, text);
+        SetLabel(text);
+        SetEnabled();
     }
 
     // modifiers
 
-    void SetLabel(wxMenuBar *menubar, const wxString& text)
+    void SetLabel(const wxString& text)
     {
         // remember the accel char (may be -1 if none)
         m_indexAccel = wxControl::FindAccelIndex(text, &m_label);
 
+        // calculate the width later, after the menu bar is created
+        m_width = 0;
+    }
+
+    void SetEnabled(bool enabled = TRUE) { m_isEnabled = TRUE; }
+
+    // accessors
+
+    const wxString& GetLabel() const { return m_label; }
+    bool IsEnabled() const { return m_isEnabled; }
+    wxCoord GetWidth(wxMenuBar *menubar) const
+    {
+        if ( !m_width )
+        {
+            wxConstCast(this, wxMenuInfo)->CalcWidth(menubar);
+        }
+
+        return m_width;
+    }
+
+    int GetAccelIndex() const { return m_indexAccel; }
+
+private:
+    void CalcWidth(wxMenuBar *menubar)
+    {
         wxSize size;
         wxClientDC dc(menubar);
         dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
@@ -75,16 +101,6 @@ public:
         m_width = menubar->GetRenderer()->GetMenuBarItemSize(size).x;
     }
 
-    void SetEnabled(bool enabled = TRUE) { m_isEnabled = TRUE; }
-
-    // accessors
-
-    const wxString& GetLabel() const { return m_label; }
-    bool IsEnabled() const { return m_isEnabled; }
-    wxCoord GetWidth() const { return m_width; }
-    int GetAccelIndex() const { return m_indexAccel; }
-
-private:
     wxString m_label;
     wxCoord m_width;
     int m_indexAccel;
@@ -222,6 +238,8 @@ BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
+    EVT_KILL_FOCUS(wxMenuBar::OnKillFocus)
+
     EVT_KEY_DOWN(wxMenuBar::OnKeyDown)
 
     EVT_LEFT_DOWN(wxMenuBar::OnLeftDown)
@@ -607,6 +625,22 @@ void wxPopupMenuWindow::OnMouseMove(wxMouseEvent& event)
 
 void wxPopupMenuWindow::ProcessMouseMove(const wxPoint& pt)
 {
+    // we need to ignore extra mouse events: example when this happens is when
+    // the mouse is on the menu and we open a submenu from keyboard - Windows
+    // then sends us a dummy mouse move event, we (correctly) determine that it
+    // happens in the parent menu and so immediately close the just opened
+    // submenu!
+#ifdef __WXMSW__
+    static wxPoint s_ptLast;
+    wxPoint ptCur = ClientToScreen(pt);
+    if ( ptCur == s_ptLast )
+    {
+        return;
+    }
+
+    s_ptLast = ptCur;
+#endif // __WXMSW__
+
     wxMenuItemList::Node *node = GetMenuItemFromPoint(pt);
 
     // don't reset current to NULL here, we only do it when the mouse leaves
@@ -868,17 +902,16 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                 {
                     item = nodeFound->GetData();
 
-                    if ( notUnique || !item->IsEnabled() )
+                    // go to this item anyhow
+                    ChangeCurrent(nodeFound);
+
+                    if ( !notUnique && item->IsEnabled() )
                     {
-                        // just select it but don't activate as the user might
-                        // have wanted to activate another item
-                        ChangeCurrent(nodeFound);
-                    }
-                    else // unique item with this accel
-                    {
-                        // activate the item
+                        // unique item with this accel - activate it
                         processed = ActivateItem(item);
                     }
+                    //else: just select it but don't activate as the user might
+                    //      have wanted to activate another item
 
                     // skip "processed = FALSE" below
                     break;
@@ -1408,7 +1441,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return FALSE;
 
-    wxMenuInfo *info = new wxMenuInfo(this, title);
+    wxMenuInfo *info = new wxMenuInfo(title);
     m_menuInfos.Insert(info, pos);
 
     RefreshAllItemsAfter(pos);
@@ -1424,7 +1457,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     {
         wxMenuInfo& info = m_menuInfos[pos];
 
-        info.SetLabel(this, title);
+        info.SetLabel(title);
 
         // even if the old menu was disabled, the new one is not any more
         info.SetEnabled();
@@ -1459,7 +1492,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 wxCoord wxMenuBar::GetItemWidth(size_t pos) const
 {
-    return m_menuInfos[pos].GetWidth();
+    return m_menuInfos[pos].GetWidth(wxConstCast(this, wxMenuBar));
 }
 
 void wxMenuBar::EnableTop(size_t pos, bool enable)
@@ -1488,7 +1521,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 
     if ( label != m_menuInfos[pos].GetLabel() )
     {
-        m_menuInfos[pos].SetLabel(this, label);
+        m_menuInfos[pos].SetLabel(label);
 
         RefreshItem(pos);
     }
@@ -1654,7 +1687,15 @@ int wxMenuBar::GetMenuFromPoint(const wxPoint& pos) const
 
 void wxMenuBar::SelectMenu(size_t pos)
 {
-    wxCHECK_RET( pos < GetCount(), _T("invalid menu index in SelectMenu") );
+    SetFocus();
+    CaptureMouse();
+
+    DoSelectMenu(pos);
+}
+
+void wxMenuBar::DoSelectMenu(size_t pos)
+{
+    wxCHECK_RET( pos < GetCount(), _T("invalid menu index in DoSelectMenu") );
 
     if ( m_current != -1 )
     {
@@ -1682,7 +1723,8 @@ void wxMenuBar::PopupMenu(size_t pos)
 {
     wxCHECK_RET( pos < GetCount(), _T("invalid menu index in PopupMenu") );
 
-    SelectMenu(pos);
+    SetFocus();
+    DoSelectMenu(pos);
     PopupMenu();
 }
 
@@ -1700,6 +1742,18 @@ void wxMenuBar::PopupMenu(size_t pos)
    would merging the changes back into trunk more difficult. But it still could
    be done later if really needed.
  */
+
+void wxMenuBar::OnKillFocus(wxFocusEvent& event)
+{
+    if ( m_current != -1 )
+    {
+        RefreshItem((size_t)m_current);
+
+        m_current = -1;
+    }
+
+    event.Skip();
+}
 
 void wxMenuBar::OnLeftDown(wxMouseEvent& event)
 {
@@ -1766,7 +1820,7 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
     }
 
     // select the new active item
-    SelectMenu(currentNew);
+    DoSelectMenu(currentNew);
 
     // show the menu if we know that we should, even if we hadn't been showing
     // it before (this may happen if the previous menu was disabled)
@@ -1796,8 +1850,12 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
     // the menu when up/down one is
     switch ( key )
     {
-        case WXK_ESCAPE:
         case WXK_MENU:
+            // Alt must be processed at wxWindow level too
+            event.Skip();
+            // fall through
+
+        case WXK_ESCAPE:
             // remove the selection and give the focus away
             if ( m_current != -1 )
             {
@@ -1843,7 +1901,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
                         currentNew = 0;
                 }
 
-                SelectMenu(currentNew);
+                DoSelectMenu(currentNew);
 
                 if ( wasMenuOpened )
                 {
@@ -1872,7 +1930,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
                         DismissMenu();
                     }
 
-                    SelectMenu(m_current);
+                    DoSelectMenu((size_t)idxFound);
 
                     // if the item is not unique, just select it but don't
                     // activate as the user might have wanted to activate

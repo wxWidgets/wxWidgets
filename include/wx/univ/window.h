@@ -214,7 +214,7 @@ protected:
     void OnPaint(wxPaintEvent& event);
     void OnErase(wxEraseEvent& event);
 
-#if wxUSE_ACCEL
+#if wxUSE_ACCEL || wxUSE_MENUS
     void OnKeyDown(wxKeyEvent& event);
 #endif // wxUSE_ACCEL
 
@@ -270,6 +270,11 @@ private:
 
     // the stack of windows which have captured the mouse
     static struct WXDLLEXPORT wxWindowNext *ms_winCaptureNext;
+
+#if wxUSE_MENUS
+    // the last window over which Alt was pressed (used by OnKeyUp)
+    static wxWindow *ms_winLastAltPress;
+#endif // wxUSE_MENUS
 
     DECLARE_DYNAMIC_CLASS(wxWindow)
     DECLARE_EVENT_TABLE()

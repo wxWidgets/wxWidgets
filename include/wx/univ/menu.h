@@ -191,6 +191,7 @@ protected:
     void OnLeftDown(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
 
     // process the mouse move event, return TRUE if we did, FALSE to continue
     // processing as usual
@@ -228,6 +229,9 @@ protected:
 
     // refresh all items after this one (including it)
     void RefreshAllItemsAfter(size_t pos);
+
+    // hide the currently shown menu and show this one
+    void DoSelectMenu(size_t pos);
 
     // popup the currently selected menu
     void PopupMenu();

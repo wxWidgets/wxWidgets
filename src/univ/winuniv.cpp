@@ -73,7 +73,7 @@
 BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
     EVT_SIZE(wxWindow::OnSize)
 
-#if wxUSE_ACCEL
+#if wxUSE_ACCEL || wxUSE_MENUS
     EVT_KEY_DOWN(wxWindow::OnKeyDown)
 #endif // wxUSE_ACCEL
 
@@ -994,10 +994,29 @@ void wxWindow::ReleaseMouse()
 // accelerators and menu hot keys
 // ----------------------------------------------------------------------------
 
-#if wxUSE_ACCEL
+#if wxUSE_MENUS
+    // the last window over which Alt was pressed (used by OnKeyUp)
+    wxWindow *wxWindow::ms_winLastAltPress = NULL;
+#endif // wxUSE_MENUS
+
+#if wxUSE_ACCEL || wxUSE_MENUS
 
 void wxWindow::OnKeyDown(wxKeyEvent& event)
 {
+#if wxUSE_MENUS
+    int key = event.GetKeyCode();
+    if ( !event.ControlDown() && (key == WXK_MENU || key == WXK_F10) )
+    {
+        ms_winLastAltPress = this;
+
+        // it can't be an accel anyhow
+        return;
+    }
+
+    ms_winLastAltPress = NULL;
+#endif // wxUSE_MENUS
+
+#if wxUSE_ACCEL
     for ( wxWindow *win = this; win; win = win->GetParent() )
     {
         int command = win->GetAcceleratorTable()->GetCommand(event);
@@ -1031,6 +1050,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
             break;
         }
     }
+#endif // wxUSE_ACCEL
 
     event.Skip();
 }
@@ -1072,7 +1092,6 @@ void wxWindow::OnChar(wxKeyEvent& event)
             int item = menubar->FindNextItemForAccel(-1, key);
             if ( item != -1 )
             {
-                menubar->SetFocus();
                 menubar->PopupMenu((size_t)item);
 
                 // skip "event.Skip()" below
@@ -1087,20 +1106,27 @@ void wxWindow::OnChar(wxKeyEvent& event)
 void wxWindow::OnKeyUp(wxKeyEvent& event)
 {
     int key = event.GetKeyCode();
-
     if ( !event.HasModifiers() && (key == WXK_MENU || key == WXK_F10) )
     {
-        wxMenuBar *menubar = GetParentFrameMenuBar();
-        if ( menubar && this != menubar )
+        // only process Alt release specially if there were no other key
+        // presses since Alt had been pressed and if both events happened in
+        // the same window
+        if ( ms_winLastAltPress == this )
         {
-            menubar->SetFocus();
-            menubar->SelectMenu(0);
+            wxMenuBar *menubar = GetParentFrameMenuBar();
+            if ( menubar && this != menubar )
+            {
+                menubar->SelectMenu(0);
+            }
         }
     }
     else
     {
         event.Skip();
     }
+
+    // in any case reset it
+    ms_winLastAltPress = NULL;
 }
 
 #endif // wxUSE_MENUS
