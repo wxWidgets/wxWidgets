@@ -191,14 +191,14 @@ bool wxApp::Initialize()
 #endif
 
     int iMsg = 96;
-			
+
    // for OLE, enlarge message queue to be as large as possible
    while (!SetMessageQueue(iMsg) && (iMsg -= 8));
 
 /*
     DWORD dwOleVer;
     dwOleVer = CoBuildVersion();
-	
+
     // check the OLE library version
     if (rmm != HIWORD(dwOleVer))
     {
@@ -774,7 +774,7 @@ bool wxApp::DoMessage()
     {
         // got WM_QUIT
         m_keepGoing = FALSE;
-        
+
         return FALSE;
     }
     else if ( rc == -1 )
@@ -798,7 +798,13 @@ bool wxApp::DoMessage()
         {
             s_hadGuiLock = FALSE;
 
-            s_aSavedMessages.Add(s_currentMsg);
+            // leave out WM_COMMAND messages: too dangerous, sometimes
+            // the message will be processed twice
+            if ( !wxIsWaitingForThread() ||
+                 s_currentMsg.message != WM_COMMAND )
+            {
+                s_aSavedMessages.Add(s_currentMsg);
+            }
 
             return TRUE;
         }
