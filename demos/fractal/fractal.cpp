@@ -34,6 +34,10 @@ hack doesn't fix.
 
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #ifndef  WX_PRECOMP
   #include "wx/wx.h"
 #endif //precompiled headers
@@ -117,7 +121,7 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
-  wxFrame(frame, -1, title, pos, size)
+  wxFrame(frame, -1, title, pos, size, wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE)
 {
 }
 

@@ -91,15 +91,13 @@ void ScoreFile::GetPlayerList( wxArrayString &list )
 	if (length <= 0) return;
 
 	wxString player;
-	long index, i = 0;
+	long index;
 	if (m_config->GetFirstGroup(player, index))
 	{
 	     list.Add( player );
-	     i++;
 		while (m_config->GetNextGroup(player, index))
 		{
 	          list.Add( player );
-		  i++;
 		}
 	}
 }

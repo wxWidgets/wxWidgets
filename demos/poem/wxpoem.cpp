@@ -177,7 +177,6 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 {
     int i = pages[current_page];
     int ch = -1;
-    int x = 10;
     int y = 0;
     int j;
     wxChar *line_ptr;
@@ -219,7 +218,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
        if (DrawIt)
        {
-         x = (width - xx)/2;
+         int x = (width - xx)/2;
          dc->SetFont(* BoldFont);
 
          // Change text to BLACK!
@@ -292,7 +291,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
                 if (DrawIt)
                 {
-                  x = (width - xx)/2;
+                  int x = (width - xx)/2;
                   dc->SetFont(* BoldFont);
 
                   // Change text to BLACK!
@@ -315,7 +314,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
                 if (DrawIt)
                 {
-                  x = (width - xx)/2;
+                  int x = (width - xx)/2;
                   dc->SetTextForeground(* wxBLACK);
                   dc->DrawText(line_ptr, x, y);
                 }
@@ -608,7 +607,13 @@ bool MyApp::OnInit()
 //    randomize();
   pages[0] = 0;
 
-  TheMainWindow = new MainWindow(NULL, 500, _T("wxPoem"), wxPoint(XPos, YPos), wxSize(100, 100), wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX);
+  TheMainWindow = new MainWindow(NULL,
+                                 wxID_ANY,
+                                 _T("wxPoem"),
+                                 wxPoint(XPos, YPos),
+                                 wxSize(100, 100),
+                                 wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX|wxFULL_REPAINT_ON_RESIZE
+                                 );
 
 #ifdef wx_x
   TheMainWindow->SetIcon(Icon(_T("wxpoem")));
@@ -804,7 +809,6 @@ int LoadIndex(wxChar *file_name)
     long data;
     FILE *index_file;
 
-    int i = 0;
     wxChar buf[100];
 
     if (file_name == NULL)
@@ -818,7 +822,7 @@ int LoadIndex(wxChar *file_name)
 
     wxFscanf(index_file, _T("%ld"), &nitems);
 
-      for (i = 0; i < nitems; i++)
+      for (int i = 0; i < nitems; i++)
       {
       wxFscanf(index_file, _T("%ld"), &data);
         poem_index[i] = data;
@@ -832,9 +836,7 @@ int LoadIndex(wxChar *file_name)
 // Get index
 int GetIndex()
 {
-    int indexn = 0;
-
-    indexn = (int)(rand() % nitems);
+    int indexn = (int)(rand() % nitems);
 
     if ((indexn < 0) || (indexn > nitems))
     { PoetryError(_T("No such poem!"));
@@ -872,8 +874,6 @@ void WritePreferences()
 // file, otherwise use index[index_ptr] to find the correct position.
 bool LoadPoem(wxChar *file_name, long position)
 {
-    int ch = 0;
-    int i = 0;
 //    int j = 0;
 //    int indexn = 0;
     wxChar buf[100];
@@ -907,8 +907,8 @@ bool LoadPoem(wxChar *file_name, long position)
 
       fseek(data_file, data, SEEK_SET);
 
-      ch = 0;
-      i = 0;
+      int ch = 0;
+      int i = 0;
       while ((ch != EOF) && (ch != '#'))
       {
         ch = getc(data_file);
@@ -1040,9 +1040,8 @@ void PoetryNotify(wxChar *Msg, wxChar *caption)
 bool Compile(void)
 {
     FILE *file;
-    long i = 0;
     int j;
-    int ch = 0;
+    int ch;
     wxChar buf[100];
 
     if (data_filename)
@@ -1063,10 +1062,9 @@ bool Compile(void)
     nitems ++;
 
     // Do rest
-    while (ch != EOF)
-    {
+    
+    do {
         ch = getc(file);
-        i ++;
         if (ch == '#')
         {
             ch = getc(file);
@@ -1075,7 +1073,7 @@ bool Compile(void)
             poem_index[nitems] = data;
             nitems ++;
         }
-    }
+    } while (ch != EOF);
     fclose(file);
 
     if (index_filename)
