@@ -176,21 +176,20 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     m_windowId = id == -1 ? NewControlId() : id;
 
     SetName(name);
-
-    // if the parent window has wxWS_EX_VALIDATE_RECURSIVELY set, we want to
-    // have it too - like this it's possible to set it only in the top level
-    // dialog/frame and all children will inherit it by defult
-    if ( parent && (parent->GetWindowStyle() & wxWS_EX_VALIDATE_RECURSIVELY) )
-    {
-        style |= wxWS_EX_VALIDATE_RECURSIVELY;
-    }
-
     SetWindowStyleFlag(style);
     SetParent(parent);
 
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
+
+    // if the parent window has wxWS_EX_VALIDATE_RECURSIVELY set, we want to
+    // have it too - like this it's possible to set it only in the top level
+    // dialog/frame and all children will inherit it by defult
+    if ( parent && (parent->GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) )
+    {
+        SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
+    }
 
     return TRUE;
 }
