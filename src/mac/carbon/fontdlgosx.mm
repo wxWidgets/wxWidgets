@@ -17,23 +17,10 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifdef __GNUG__
-#pragma implementation "fontdlg.h"
-#endif
-
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-    #include "wx/cmndata.h"
-    #include "wx/fontdlg.h"
-    #include "wx/fontutil.h"
-    #include "wx/log.h"
-#endif
+#include "wx/cmndata.h"
+#include "wx/fontdlg.h"
+#include "wx/fontutil.h"
+#include "wx/log.h"
     
 // ============================================================================
 // implementation
