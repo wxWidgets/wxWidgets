@@ -315,6 +315,21 @@ public:
 };
 
 #include <wx/docview.h>
+
+#ifdef __WXMSW__
+#include <wx/msw/private.h>
+#endif
+
+
+void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc)
+{
+#ifdef __WXMSW__
+    ::SendMessage(GetHwndOf(window), WM_PAINT, (long)GetHdcOf(dc), 0);
+//     ::SendMessage(GetHwndOf(window), WM_PRINTCLIENT, (long)GetHdcOf(dc),
+//                   PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN );
+#endif
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2282,6 +2297,41 @@ static PyObject *_wrap_wxTheMimeTypesManager_get() {
     SWIG_MakePtr(ptemp, (char *) wxTheMimeTypesManager,"_wxMimeTypesManager_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
+}
+
+static PyObject *_wrap_wxDrawWindowOnDC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxDC * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "window","dc", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDrawWindowOnDC",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDrawWindowOnDC. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDrawWindowOnDC. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxDrawWindowOnDC(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
 }
 
 static PyObject *_wrap_wxSystemSettings_GetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -11469,6 +11519,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxSystemSettings_GetMetric", (PyCFunction) _wrap_wxSystemSettings_GetMetric, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetFont", (PyCFunction) _wrap_wxSystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetColour", (PyCFunction) _wrap_wxSystemSettings_GetColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDrawWindowOnDC", (PyCFunction) _wrap_wxDrawWindowOnDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWaveData", (PyCFunction) _wrap_wxWaveData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxExecute", (PyCFunction) _wrap_wxExecute, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSafeShowMessage", (PyCFunction) _wrap_wxSafeShowMessage, METH_VARARGS | METH_KEYWORDS },
