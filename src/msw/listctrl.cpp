@@ -2080,21 +2080,18 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     eventType = wxEVT_COMMAND_LIST_CACHE_HINT;
 
-                    // we get some really stupid cache hints like ones for items in
-                    // range 0..0 for an empty control or, after deleting an item,
-                    // for items in invalid range - filter this garbage out
-                    if ( cacheHint->iFrom < cacheHint->iTo )
-                    {
-                        event.m_oldItemIndex = cacheHint->iFrom;
-
-                        long iMax = GetItemCount();
-                        event.m_itemIndex = cacheHint->iTo < iMax ? cacheHint->iTo
-                                                                  : iMax - 1;
-                    }
-                    else
-                    {
+                    // we get some really stupid cache hints like ones for
+                    // items in range 0..0 for an empty control or, after
+                    // deleting an item, for items in invalid range -- filter
+                    // this garbage out
+                    if ( cacheHint->iFrom > cacheHint->iTo )
                         return FALSE;
-                    }
+
+                    event.m_oldItemIndex = cacheHint->iFrom;
+
+                    const long iMax = GetItemCount();
+                    event.m_itemIndex = cacheHint->iTo < iMax ? cacheHint->iTo
+                                                              : iMax - 1;
                 }
                 break;
 
