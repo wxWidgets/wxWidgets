@@ -429,7 +429,7 @@ Returns the state image list (from which application-defined state images are ta
 
 \membersection{wxTreeCtrl::HitTest}\label{wxtreectrlhittest}
 
-\func{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}}
+\func{wxTreeItemId}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}}
 
 Calculates which (if any) item is under the given point, returning extra information
 in {\it flags}. {\it flags} is a bitlist of the following:
@@ -448,6 +448,9 @@ in {\it flags}. {\it flags} is a bitlist of the following:
 \twocolitem{wxTREE\_HITTEST\_TOLEFT}{To the right of the client area.}
 \twocolitem{wxTREE\_HITTEST\_TORIGHT}{To the left of the client area.}
 \end{twocollist}
+
+\pythonnote{in wxPython both the wxTreeItemId and the flags are
+returned as a tuple.}
 
 \membersection{wxTreeCtrl::InsertItem}\label{wxtreectrlinsertitem}
 

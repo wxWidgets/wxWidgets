@@ -3,7 +3,7 @@
 A list control presents lists in a number of formats: list view, report view,
 icon view and small icon view. In any case, elements are numbered from zero.
 
-Using many of wxListCtrl is shown in the 
+Using many of wxListCtrl is shown in the
 \helpref{corresponding sample}{samplelistctrl}.
 
 To intercept events from a list control, use the event table macros described
@@ -144,7 +144,7 @@ Deletes all items and all columns.
 
 \func{bool}{DeleteItem}{\param{long }{item}}
 
-Deletes the specified item. This function sends the 
+Deletes the specified item. This function sends the
 {\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event for the item being deleted.
 
 See also: \helpref{DeleteAllItems}{wxlistctrldeleteallitems}
@@ -155,7 +155,7 @@ See also: \helpref{DeleteAllItems}{wxlistctrldeleteallitems}
 
 Deletes all the items in the list control.
 
-{\bf NB:} This function does {\it not} send the 
+{\bf NB:} This function does {\it not} send the
 {\tt wxEVT\_COMMAND\_LIST\_DELETE\_ITEM} event because deleting many items
 from the control would be too slow then (unlike \helpref{DeleteItem}{wxlistctrldeleteitem}).
 
@@ -288,7 +288,7 @@ Returns the rectangle representing the item's size and position, in client coord
 {\it code} is one of wxLIST\_RECT\_BOUNDS, wxLIST\_RECT\_ICON, wxLIST\_RECT\_LABEL.
 
 \pythonnote{The wxPython version of this method accepts only the item
-ID and returns the wxRect.}
+ID and code and returns the wxRect.}
 
 \membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
 
@@ -322,7 +322,7 @@ Gets the item text for this item.
 
 \constfunc{long}{GetNextItem}{\param{long }{item}, \param{int }{geometry = wxLIST\_NEXT\_ALL}, \param{int }{state = wxLIST\_STATE\_DONTCARE}}
 
-Searches for an item with the given goemetry or state, starting from 
+Searches for an item with the given goemetry or state, starting from
 {\it item} but excluding the {\it item} itself. If {\it item} is -1,
 the first item that matches the specified flags will be returned.
 
@@ -642,7 +642,7 @@ Sets the whole window style.
 
 \func{bool}{SortItems}{\param{wxListCtrlCompare }{fnSortCallBack}, \param{long }{data}}
 
-Call this function to sorts the items in the list control. Sorting is done
+Call this function to sort the items in the list control. Sorting is done
 using the specified {\it fnSortCallBack} function. This function must have the
 following prototype:
 
@@ -658,7 +658,9 @@ second one and positive value if the first one is greater than the second one
 \wxheading{Parameters}
 
 \docparam{item1}{client data associated with the first item ({\bf NOT} the index).}
+
 \docparam{item2}{client data associated with the second item ({\bf NOT} the index).}
+
 \docparam{data}{the value passed to SortItems() itself.}
 
 Notice that the control may only be sorted on client data associated with the
@@ -668,3 +670,7 @@ you want to be able to sort the items in the control.
 Please see the \helpref{listctrl sample}{samplelistctrl} for an example of
 using this function.
 
+\pythonnote{wxPython uses the sortData parameter to pass the Python
+function to call, so it is not available for programmer use.  Call
+SortItems with a reference to a callable object that expects two
+parameters.}
