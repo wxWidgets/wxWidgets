@@ -2,13 +2,16 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.4.1.x
+2.4.2.1
 -------
 
 Use wxSTC in the demo for displaying the soucre code of the samples.
 
-Updated to Scintilla 1.53.
+Updated to Scintilla 1.54.
 
+Lots of bug fixes and such from the wxWindows folks.
+
+Added wxPython.lib.newevent from Miki Tebeka
 
 
 
