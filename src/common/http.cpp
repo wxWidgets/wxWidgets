@@ -239,9 +239,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   SaveState();
 
   // we may use non blocking sockets only if we can dispatch events from them
-  SetFlags( wxIsMainThread() && (wxTheApp && wxTheApp->IsMainLoopRunning())
-                ? wxSOCKET_NONE
-                : wxSOCKET_BLOCK );
+  SetFlags( wxIsMainThread() && wxApp::IsMainLoopRunning() ? wxSOCKET_NONE
+                                                           : wxSOCKET_BLOCK );
   Notify(false);
 
   wxString buf;

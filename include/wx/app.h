@@ -251,6 +251,10 @@ public:
     // make sure that idle events are sent again
     virtual void WakeUpIdle() { }
 
+    // this is just a convenience: by providing its implementation here we
+    // avoid #ifdefs in the code using it
+    static bool IsMainLoopRunning() { return false; }
+
 
     // debugging support
     // -----------------
@@ -378,10 +382,11 @@ public:
 
         // return true if we're running main loop, i.e. if the events can
         // (already) be dispatched
-    bool IsMainLoopRunning() const
+    static bool IsMainLoopRunning()
     {
 #if wxUSE_EVTLOOP_IN_APP
-        return m_mainLoop != NULL;
+        wxAppBase *app = wx_static_cast(wxAppBase *, GetInstance());
+        return app && app->m_mainLoop != NULL;
 #else
         return false;
 #endif
