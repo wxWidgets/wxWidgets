@@ -1076,7 +1076,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dcscreen.cpp
     src/msw/dialup.cpp
     src/msw/dib.cpp
-    src/msw/dirdlg.cpp
     src/msw/display.cpp
     src/msw/enhmeta.cpp
     src/msw/evtloop.cpp
@@ -1110,6 +1109,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
 </set>
+
+<set var="MSW_ONLY_LOWLEVEL_SRC" hints="files">
+    src/msw/dirdlg.cpp
+</set>
+
 <set var="MSW_SRC" hints="files">
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
@@ -1307,6 +1311,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- Files used by WindowsCE port but not by desktop MSW port: -->
 <set var="WINCE_SRC" hints="files">
+    src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
     src/msw/wince/filedlgwce.cpp
@@ -2292,7 +2297,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="LOWLEVEL_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC) $(MSW_ONLY_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_SRC)</if>

@@ -372,7 +372,18 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             <if cond="FORMAT=='borland'">
                 <sys-lib>ole2w32</sys-lib>
             </if>
-            <if cond="FORMAT!='borland'">
+            <if cond="FORMAT=='msevc4prj'">
+                <sys-lib>ole32</sys-lib>
+                <sys-lib>oleaut32</sys-lib>
+                <sys-lib>uuid</sys-lib>
+                <sys-lib>commctrl</sys-lib>
+                <sys-lib>commdlg</sys-lib>
+                <sys-lib>ceshell</sys-lib>
+                <sys-lib>aygshell</sys-lib>
+                <sys-lib>winsock</sys-lib>
+                <sys-lib>wininet</sys-lib>
+            </if>
+            <if cond="FORMAT!='borland' and FORMAT!='msevc4prj'">
                 <sys-lib>kernel32</sys-lib>
                 <sys-lib>user32</sys-lib>
                 <sys-lib>gdi32</sys-lib>
@@ -391,7 +402,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
                 <sys-lib>oleacc</sys-lib>
             </if>
-            <sys-lib>odbc32</sys-lib>
+            <if cond="FORMAT!='msevc4prj'">
+                <sys-lib>odbc32</sys-lib>
+            </if>
         </if>
     </template>
 
