@@ -131,7 +131,7 @@ public:
                   wxTextFileType type = typeDefault)
     { m_aLines.Insert(str, n); m_aTypes.Insert(type, n); }
     // delete one line
-  void RemoveLine(size_t n) { m_aLines.Remove(n); m_aTypes.Remove(n); }
+  void RemoveLine(size_t n) { m_aLines.RemoveAt(n); m_aTypes.RemoveAt(n); }
 
   // change the file on disk (default argument means "don't change type")
   // possibly in another format

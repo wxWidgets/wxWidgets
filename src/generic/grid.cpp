@@ -3022,7 +3022,7 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
     {
         for ( n = 0;  n < numRows;  n++ )
         {
-            m_data.Remove( pos );
+            m_data.RemoveAt( pos );
         }
     }
     if ( GetView() )

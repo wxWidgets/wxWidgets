@@ -237,7 +237,7 @@ wxPaintDC::~wxPaintDC()
         {
             ::EndPaint(GetHwndOf(m_canvas), &g_paintStruct);
 
-            ms_cache.Remove(index);
+            ms_cache.RemoveAt(index);
 
             // Reduce the number of bogus reports of non-freed memory
             // at app exit

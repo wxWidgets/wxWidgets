@@ -120,7 +120,7 @@ wxNotebookPage *wxNotebookBase::DoRemovePage(int nPage)
                  _T("invalid page index in wxNotebookBase::DoRemovePage()") );
 
     wxNotebookPage *pageRemoved = m_pages[nPage];
-    m_pages.Remove(nPage);
+    m_pages.RemoveAt(nPage);
 
     return pageRemoved;
 }

@@ -182,37 +182,8 @@ int wxBaseArray::Index(long lItem, bool bFromEnd) const
   return wxNOT_FOUND;
 }
 
-// search for an item in a sorted array (binary search)
-int wxBaseArray::Index(long lItem, CMPFUNC fnCompare) const
-{
-  size_t i,
-       lo = 0,
-       hi = m_nCount;
-  int res;
-
-  while ( lo < hi ) {
-    i = (lo + hi)/2;
-
-    res = (*fnCompare)((const void *)lItem, (const void *)m_pItems[i]);
-    if ( res < 0 )
-      hi = i;
-    else if ( res > 0 )
-      lo = i + 1;
-    else
-      return i;
-  }
-
-  return wxNOT_FOUND;
-}
-// add item at the end
-void wxBaseArray::Add(long lItem)
-{
-  Grow();
-  m_pItems[m_nCount++] = lItem;
-}
-
-// add item assuming the array is sorted with fnCompare function
-void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
+// search for a place to insert an item into a sorted array (binary search)
+size_t wxBaseArray::IndexForInsert(long lItem, CMPFUNC fnCompare) const
 {
   size_t i,
        lo = 0,
@@ -228,14 +199,33 @@ void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
     else if ( res > 0 )
       lo = i + 1;
     else {
-      lo = hi = i;
+      lo = i;
       break;
     }
   }
 
-  wxASSERT( lo == hi ); // I hope I got binary search right :-)
+  return lo;
+}
 
-  Insert(lItem, lo);
+// search for an item in a sorted array (binary search)
+int wxBaseArray::Index(long lItem, CMPFUNC fnCompare) const
+{
+    size_t n = IndexForInsert(lItem, fnCompare);
+
+    return n < m_nCount && m_pItems[n] == lItem ? n : wxNOT_FOUND;
+}
+
+// add item at the end
+void wxBaseArray::Add(long lItem)
+{
+  Grow();
+  m_pItems[m_nCount++] = lItem;
+}
+
+// add item assuming the array is sorted with fnCompare function
+void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
+{
+  Insert(lItem, IndexForInsert(lItem, fnCompare));
 }
 
 // add item at the given position

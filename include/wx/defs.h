@@ -1245,14 +1245,6 @@ enum wxBorder
 #define wxSP_3D               (wxSP_3DBORDER | wxSP_3DSASH)
 
 /*
- * wxTabCtrl flags
- */
-#define wxTC_MULTILINE        0x0000
-#define wxTC_RIGHTJUSTIFY     0x0010
-#define wxTC_FIXEDWIDTH       0x0020
-#define wxTC_OWNERDRAW        0x0040
-
-/*
  * wxNotebook flags
  */
 #define wxNB_FIXEDWIDTH       0x0010
@@ -1261,6 +1253,14 @@ enum wxBorder
 #define wxNB_RIGHT            0x0040
 #define wxNB_BOTTOM           0x0080
 #define wxNB_MULTILINE        0x0100
+
+/*
+ * wxTabCtrl flags
+ */
+#define wxTC_RIGHTJUSTIFY     0x0010
+#define wxTC_FIXEDWIDTH       0x0020
+#define wxTC_OWNERDRAW        0x0040
+#define wxTC_MULTILINE        wxNB_MULTILINE
 
 /*
  * wxStatusBar95 flags

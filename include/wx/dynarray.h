@@ -122,6 +122,8 @@ protected:
   int Index(long lItem, bool bFromEnd = FALSE) const;
     /// search for an item using binary search in a sorted array
   int Index(long lItem, CMPFUNC fnCompare) const;
+    /// search for a place to insert the element into a sorted array
+  size_t IndexForInsert(long lItem, CMPFUNC fnCompare) const;
     /// add new element at the end
   void Add(long lItem);
     /// add item assuming the array is sorted with fnCompare function
@@ -199,7 +201,6 @@ public:                                                             \
   void Insert(T Item, size_t uiIndex)                               \
     { wxBaseArray::Insert((long)Item, uiIndex) ; }                  \
                                                                     \
-  void Remove(size_t uiIndex) { RemoveAt(uiIndex); }                \
   void RemoveAt(size_t uiIndex) { wxBaseArray::RemoveAt(uiIndex); } \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
@@ -221,6 +222,10 @@ public:                                                             \
 //  3) it has no Sort() method because it's always sorted
 //  4) Index() method is much faster (the sorted arrays use binary search
 //     instead of linear one), but Add() is slower.
+//  5) there is no Insert() method because you can't insert an item into the
+//     given position in a sorted array but there is IndexForInsert()/AddAt()
+//     pair which may be used to optimize a common operation of "insert only if
+//     not found"
 //
 // Summary: use this class when the speed of Index() function is important, use
 // the normal arrays otherwise.
@@ -259,10 +264,16 @@ public:                                                             \
   int Index(T Item) const                                           \
     { return wxBaseArray::Index((long)Item, (CMPFUNC)m_fnCompare); }\
                                                                     \
+  size_t IndexForInsert(T Item) const                               \
+    { return wxBaseArray::IndexForInsert((long)Item,                \
+                                         (CMPFUNC)m_fnCompare); }   \
+                                                                    \
+  void AddAt(T item, size_t index)                                  \
+    { wxBaseArray::Insert((long)item, index); }                     \
+                                                                    \
   void Add(T Item)                                                  \
     { wxBaseArray::Add((long)Item, (CMPFUNC)m_fnCompare); }         \
                                                                     \
-  void Remove(size_t uiIndex) { RemoveAt(uiIndex); }                \
   void RemoveAt(size_t uiIndex) { wxBaseArray::RemoveAt(uiIndex); } \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
@@ -311,7 +322,6 @@ public:                                                             \
   T*   Detach(size_t uiIndex)                                       \
     { T* p = (T*)wxBaseArray::Item(uiIndex);                        \
       wxBaseArray::RemoveAt(uiIndex); return p; }                   \
-  void Remove(size_t uiIndex) { RemoveAt(uiIndex); }                \
   void RemoveAt(size_t uiIndex);                                    \
                                                                     \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \

@@ -161,7 +161,7 @@ bool wxNotebook::Create(wxWindow *parent,
   if ( m_windowStyle & wxTC_MULTILINE )
     tabStyle |= TCS_MULTILINE;
   if ( m_windowStyle & wxBORDER )
-    tabStyle &= WS_BORDER;
+    tabStyle |= WS_BORDER;
   if (m_windowStyle & wxNB_FIXEDWIDTH)
     tabStyle |= TCS_FIXEDWIDTH ;
   if (m_windowStyle & wxNB_BOTTOM)
@@ -326,7 +326,7 @@ bool wxNotebook::DeletePage(int nPage)
   TabCtrl_DeleteItem(m_hwnd, nPage);
 
   delete m_pages[nPage];
-  m_pages.Remove(nPage);
+  m_pages.RemoveAt(nPage);
 
   if ( m_pages.IsEmpty() ) {
       // no selection if the notebook became empty

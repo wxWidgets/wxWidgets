@@ -71,6 +71,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
+    EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
 END_EVENT_TABLE()
@@ -181,7 +182,9 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->Append(LIST_TOGGLE_FIRST, _T("&Toggle first item\tCtrl-T"));
     menuList->Append(LIST_DESELECT_ALL, _T("&Deselect All\tCtrl-D"));
     menuList->Append(LIST_SELECT_ALL, _T("S&elect All\tCtrl-A"));
+    menuList->AppendSeparator();
     menuList->Append(LIST_SHOW_COL_INFO, _T("Show &column info\tCtrl-C"));
+    menuList->Append(LIST_SHOW_SEL_INFO, _T("Show &selected items\tCtrl-S"));
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, _T("&Sort\tCtrl-S"));
     menuList->AppendSeparator();
@@ -457,6 +460,32 @@ void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
     m_logWindow->WriteText(wxString::Format(_T("Sorting %d items took %ld ms\n"),
                                             m_listCtrl->GetItemCount(),
                                             sw.Time()));
+}
+
+void MyFrame::OnShowSelInfo(wxCommandEvent& event)
+{
+    int selCount = m_listCtrl->GetSelectedItemCount();
+    wxLogMessage(_T("%d items selected:"), selCount);
+
+    // don't show too many items
+    size_t shownCount = 0;
+
+    long item = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL,
+                                        wxLIST_STATE_SELECTED);
+    while ( item != -1 )
+    {
+        wxLogMessage(_T("\t%ld (%s)"),
+                     item, m_listCtrl->GetItemText(item).c_str());
+
+        if ( ++shownCount > 10 )
+        {
+            wxLogMessage(_T("\t... more selected items snipped..."));
+            break;
+        }
+
+        item = m_listCtrl->GetNextItem(item, wxLIST_NEXT_ALL,
+                                       wxLIST_STATE_SELECTED);
+    }
 }
 
 void MyFrame::OnShowColInfo(wxCommandEvent& event)

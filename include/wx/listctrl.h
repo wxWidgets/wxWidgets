@@ -37,8 +37,6 @@ typedef int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, long sortDat
 #define wxLC_SMALL_ICON      0x0008
 #define wxLC_LIST            0x0010
 #define wxLC_REPORT          0x0020
-#define wxLC_MODE_MASK       \
-    (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
 
 #define wxLC_ALIGN_TOP       0x0040
 #define wxLC_ALIGN_LEFT      0x0080
@@ -280,25 +278,9 @@ private:
 // include the wxListCtrl class declaration
 // ----------------------------------------------------------------------------
 
-#if defined(__WXUNIVERSAL__)
-    #include "wx/generic/listctrl.h"
-#elif defined(__WXMSW__)
-    #ifdef __WIN16__
-        #include "wx/generic/listctrl.h"
-    #else
-        #include "wx/msw/listctrl.h"
-    #endif
-#elif defined(__WXMOTIF__)
-    #include "wx/generic/listctrl.h"
-#elif defined(__WXGTK__)
-    #include "wx/generic/listctrl.h"
-#elif defined(__WXQT__)
-    #include "wx/generic/listctrl.h"
-#elif defined(__WXMAC__)
-    #include "wx/generic/listctrl.h"
-#elif defined(__WXPM__)
-    #include "wx/generic/listctrl.h"
-#elif defined(__WXSTUBS__)
+#if 0 // defined(__WIN32__) && !defined(__WXUNIVERSAL__)
+    #include "wx/msw/listctrl.h"
+#else
     #include "wx/generic/listctrl.h"
 #endif
 

@@ -172,7 +172,7 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
             if ( accel )
                 m_accels[n] = accel;
             else
-                m_accels.Remove(n);
+                m_accels.RemoveAt(n);
         }
 
         if ( IsAttached() )
@@ -317,7 +317,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     {
         delete m_accels[n];
 
-        m_accels.Remove(n);
+        m_accels.RemoveAt(n);
     }
     //else: this item doesn't have an accel, nothing to do
 #endif // wxUSE_ACCEL

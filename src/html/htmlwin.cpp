@@ -315,7 +315,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         {
             m_HistoryPos++;
             for (int i = 0; i < c; i++)
-                m_History->Remove(m_HistoryPos);
+                m_History->RemoveAt(m_HistoryPos);
             m_History->Add(new wxHtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
         }
     }

@@ -8,6 +8,41 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+   FIXME for virtual list controls
+
+  +1. clicking on the item with a mouse is awfully slow, what is going on?
+      note that selecting with keyboard seems to be much faster
+   => fixed HighlightAll() - iterating over 1000000 items *is* slow
+
+   2. background colour is wrong?
+ */
+
+/*
+   TODO for better virtual list control support:
+
+   1. less dumb line caching, we should cache at least all those visible
+      in the control itself and probably twice as many (we might also need to
+      cache the first one always for geometry calculations?)
+
+  +2. storing selections: we can't use an array to store the selected indices
+      like right now as selecting all in a control with 1000000 items is not
+      doable like this - instead, store selections as collection of individual
+      items and ranges
+
+   => wxSelectionStore
+
+   3. we need to implement searching/sorting somehow
+
+   4. the idea of storing the line index in the line itself is really stupid,
+      we shouldn't need it - but for this we have to get rid of all calles to
+      wxListLineData::GetFoo() and replace them with something like
+        if ( IsVirtual()
+            ... we have it ourselves ...
+        else
+            line->GetFoo();
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -21,10 +56,6 @@
     #pragma implementation "listctrlbase.h"
 #endif
 
-#if 0
-    #include "listctrl.old.cpp"
-#else
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -37,7 +68,7 @@
 #include "wx/dcscreen.h"
 #include "wx/app.h"
 #include "wx/listctrl.h"
-#include "wx/generic/imaglist.h"
+#include "wx/imaglist.h"
 #include "wx/dynarray.h"
 
 #ifdef __WXGTK__
@@ -78,7 +109,7 @@ static const int SCROLL_UNIT_X = 15;
 static const int SCROLL_UNIT_Y = 15;
 
 // the spacing between the lines (in report mode)
-static const int LINE_SPACING = 1;
+static const int LINE_SPACING = 0;
 
 // extra margins around the text label
 static const int EXTRA_WIDTH = 3;
@@ -98,6 +129,76 @@ static const int WIDTH_COL_MIN = 10;
 // ============================================================================
 // private classes
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxSelectionStore
+// ----------------------------------------------------------------------------
+
+int CMPFUNC_CONV wxSizeTCmpFn(size_t n1, size_t n2) { return n1 - n2; }
+
+WX_DEFINE_SORTED_EXPORTED_ARRAY(size_t, wxIndexArray);
+
+// this class is used to store the selected items in the virtual list control
+// (but it is not tied to list control and so can be used with other controls
+// such as wxListBox in wxUniv)
+//
+// the idea is to make it really smart later (i.e. store the selections as an
+// array of ranes + individual items) but, as I don't have time to do it now
+// (this would require writing code to merge/break ranges and much more) keep
+// it simple but define a clean interface to it which allows it to be made
+// smarter later
+class WXDLLEXPORT wxSelectionStore
+{
+public:
+    wxSelectionStore() : m_itemsSel(wxSizeTCmpFn) { Init(); }
+
+    // set the total number of items we handle
+    void SetItemCount(size_t count) { m_count = count; }
+
+    // special case of SetItemCount(0)
+    void Clear() { m_itemsSel.Clear(); m_count = 0; }
+
+    // must be called when a new item is inserted/added
+    void OnItemAdd(size_t item) { wxFAIL_MSG( _T("TODO") ); }
+
+    // must be called when an item is deleted
+    void OnItemDelete(size_t item);
+
+    // select one item, use SelectRange() insted if possible!
+    //
+    // returns true if the items selection really changed
+    bool SelectItem(size_t item, bool select = TRUE);
+
+    // select the range of items
+    void SelectRange(size_t itemFrom, size_t itemTo, bool select = TRUE);
+
+    // return true if the given item is selected
+    bool IsSelected(size_t item) const;
+
+    // return the total number of selected items
+    size_t GetSelectedCount() const
+    {
+        return m_defaultState ? m_count - m_itemsSel.GetCount()
+                              : m_itemsSel.GetCount();
+    }
+
+private:
+    // (re)init
+    void Init() { m_defaultState = FALSE; }
+
+    // the total number of items we handle
+    size_t m_count;
+
+    // the default state: normally, FALSE (i.e. off) but maybe set to TRUE if
+    // there are more selected items than non selected ones - this allows to
+    // handle selection of all items efficiently
+    bool m_defaultState;
+
+    // the array of items whose selection state is different from default
+    wxIndexArray m_itemsSel;
+
+    DECLARE_NO_COPY_CLASS(wxSelectionStore)
+};
 
 //-----------------------------------------------------------------------------
 //  wxListItemData (internal)
@@ -237,11 +338,11 @@ public:
         wxRect m_rectIcon;
 
         // the part to be highlighted
-        wxRect m_rectHilight;
+        wxRect m_rectHighlight;
     } *m_gi;
 
     // is this item selected? [NB: not used in virtual mode]
-    bool m_hilighted;
+    bool m_highlighted;
 
     // back pointer to the list ctrl
     wxListMainWindow *m_owner;
@@ -255,7 +356,7 @@ public:
     inline bool InReportView() const;
 
     // are we in virtual report mode?
-    inline bool IsVirtal() const;
+    inline bool IsVirtual() const;
 
     // these 2 methods shouldn't be called for report view controls, in that
     // case we determine our position/size ourselves
@@ -294,18 +395,18 @@ public:
     wxSize GetSize() const { return GetRect().GetSize(); }
 
     // return true if the highlighting really changed
-    bool Hilight( bool on );
+    bool Highlight( bool on );
 
-    void ReverseHilight();
+    void ReverseHighlight();
 
     // draw the line on the given DC
     void Draw( wxDC *dc, int y = 0, int height = 0, bool highlighted = FALSE );
 
-    bool IsHilighted() const
+    bool IsHighlighted() const
     {
-        wxASSERT_MSG( !IsVirtal(), _T("unexpected call to IsHilighted") );
+        wxASSERT_MSG( !IsVirtual(), _T("unexpected call to IsHighlighted") );
 
-        return m_hilighted;
+        return m_highlighted;
     }
 
     // only for wxListMainWindow::CacheLineData()
@@ -322,7 +423,7 @@ private:
                        const wxListItemAttr *attr,
                        const wxColour& colText,
                        const wxFont& font,
-                       bool hilight);
+                       bool highlight);
 
     // the index of this line (only used in report mode)
     size_t m_lineIndex;
@@ -453,27 +554,36 @@ public:
     // return true if this is a virtual list control
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
+    // return true if we are in single selection mode, false if multi sel
+    bool IsSingleSel() const { return HasFlag(wxLC_SINGLE_SEL); }
+
     // do we have a header window?
     bool HasHeader() const
         { return HasFlag(wxLC_REPORT) && !HasFlag(wxLC_NO_HEADER); }
 
-    void HilightAll( bool on );
+    void HighlightAll( bool on );
 
     // all these functions only do something if the line is currently visible
 
     // change the line "selected" state, return TRUE if it really changed
-    bool HilightLine( size_t line, bool hilight = TRUE);
+    bool HighlightLine( size_t line, bool highlight = TRUE);
+
+    // as HighlightLine() but do it for the range of lines: this is incredibly
+    // more efficient for virtual list controls!
+    //
+    // NB: unlike HighlightLine() this one does refresh the lines on screen
+    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = TRUE );
 
     // toggle the line state and refresh it
-    void ReverseHilight( size_t line )
-        { HilightLine(line, !IsHilighted(line)); RefreshLine(line); }
+    void ReverseHighlight( size_t line )
+        { HighlightLine(line, !IsHighlighted(line)); RefreshLine(line); }
 
     // refresh one or several lines at once
     void RefreshLine( size_t line );
     void RefreshLines( size_t lineFrom, size_t lineTo );
 
     // return true if the line is highlighted
-    bool IsHilighted(size_t line) const;
+    bool IsHighlighted(size_t line) const;
 
     void EditLabel( long item );
     void OnRenameTimer();
@@ -489,7 +599,6 @@ public:
     void OnKeyDown( wxKeyEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
-    void OnSize( wxSizeEvent &event );
     void OnScroll(wxScrollWinEvent& event) ;
 
     void OnPaint( wxPaintEvent &event );
@@ -522,7 +631,10 @@ public:
     int GetSelectedItemCount();
 
     // set the scrollbars and update the positions of the items
-    void CalculatePositions();
+    void RecalculatePositions();
+
+    // refresh the window and the header
+    void RefreshAll();
 
     long GetNextItem( long item, int geometry, int state );
     void DeleteItem( long index );
@@ -541,6 +653,7 @@ public:
     bool IsEmpty() const { return GetItemCount() == 0; }
     void SetItemCount(long count);
 
+    void ResetCurrent() { m_current = (size_t)-1; }
     bool HasCurrent() const { return m_current != (size_t)-1; }
 
     // send out a wxListEvent
@@ -548,8 +661,16 @@ public:
                      wxEventType command,
                      wxPoint point = wxDefaultPosition );
 
-    // called by wxListCtrl when its font changes
-    void OnFontChange() { m_lineHeight = 0; }
+    // override base class virtual to reset m_lineHeight when the font changes
+    virtual bool SetFont(const wxFont& font)
+    {
+        if ( !wxScrolledWindow::SetFont(font) )
+            return FALSE;
+
+        m_lineHeight = 0;
+
+        return TRUE;
+    }
 
     // these are for wxListLineData usage only
 
@@ -589,8 +710,8 @@ public:
     // call
     bool                 m_dirty;
 
-    wxBrush             *m_hilightBrush;
-    wxColour            *m_hilightColour;
+    wxBrush             *m_highlightBrush;
+    wxColour            *m_highlightColour;
     int                  m_xScroll,
                          m_yScroll;
     wxImageList         *m_small_image_list;
@@ -613,15 +734,11 @@ public:
 
 protected:
     // the total count of items in a virtual list control
-    long m_countVirt;
+    size_t m_countVirt;
 
-    // the first and last lines being shown on screen right now (inclusive)
-    size_t m_lineFrom,
-           m_lineTo;
-
-    // the array containing the indices of all selected items, only used in
-    // virtual controls
-    wxArrayInt m_selections;
+    // the object maintaining the items selection state, only used in virtual
+    // controls
+    wxSelectionStore m_selStore;
 
     // common part of all ctors
     void Init();
@@ -644,16 +761,28 @@ protected:
         return &m_lines[n];
     }
 
-    // get the first line: this one is special as we have it even in virtual
-    // list control (it is useful to cache it as we use it for measuring, hit
-    // testing &c)
-    wxListLineData *GetFirstLine() const;
+    // get a dummy line which can be used for geometry calculations and such:
+    // you must use GetLine() if you want to really draw the line
+    wxListLineData *GetDummyLine() const;
 
     // cache the line data of the n-th line in m_lines[0]
     void CacheLineData(size_t line);
 
-    // update m_lineFrom/To
-    void UpdateShownLinesRange();
+    // get the range of visible lines
+    void GetVisibleLinesRange(size_t *from, size_t *to);
+
+    // force us to recalculate the range of visible lines
+    void ResetVisibleLinesRange() { m_lineFrom = (size_t)-1; }
+
+    // get the colour to be used for drawing the rules
+    wxColour GetRuleColour() const
+    {
+#ifdef __WXMAC__
+        return *wxWHITE;
+#else
+        return wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT);
+#endif
+    }
 
 private:
     // initialize the current item if needed
@@ -671,6 +800,12 @@ private:
     // the total header width or 0 if not calculated yet
     wxCoord m_headerWidth;
 
+    // the first and last lines being shown on screen right now (inclusive),
+    // both may be -1 if they must be calculated so never access them directly:
+    // use GetVisibleLinesRange() above instead
+    size_t m_lineFrom,
+           m_lineTo;
+
     DECLARE_DYNAMIC_CLASS(wxListMainWindow);
     DECLARE_EVENT_TABLE()
 };
@@ -678,6 +813,139 @@ private:
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxSelectionStore
+// ----------------------------------------------------------------------------
+
+bool wxSelectionStore::IsSelected(size_t item) const
+{
+    bool isSel = m_itemsSel.Index(item) != wxNOT_FOUND;
+
+    // if the default state is to be selected, being in m_itemsSel means that
+    // the item is not selected, so we have to inverse the logic
+    return m_defaultState ? !isSel : isSel;
+}
+
+bool wxSelectionStore::SelectItem(size_t item, bool select)
+{
+    // search for the item ourselves as like this we get the index where to
+    // insert it later if needed, so we do only one search in the array instead
+    // of two (adding item to a sorted array requires a search)
+    size_t index = m_itemsSel.IndexForInsert(item);
+    bool isSel = index < m_itemsSel.GetCount() && m_itemsSel[index] == item;
+
+    if ( select != m_defaultState )
+    {
+        if ( !isSel )
+        {
+            m_itemsSel.AddAt(item, index);
+
+            return TRUE;
+        }
+    }
+    else // reset to default state
+    {
+        if ( isSel )
+        {
+            m_itemsSel.RemoveAt(index);
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+void wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo, bool select)
+{
+    wxASSERT_MSG( itemFrom <= itemTo, _T("should be in order") );
+
+    // are we going to have more [un]selected items than the other ones?
+    if ( itemTo - itemFrom > m_count / 2 )
+    {
+        if ( select != m_defaultState )
+        {
+            // the default state now becomes the same as 'select'
+            m_defaultState = select;
+
+            // so all the old selections (which had state select) shouldn't be
+            // selected any more, but all the other ones should
+            wxIndexArray selOld = m_itemsSel;
+            m_itemsSel.Empty();
+
+            // TODO: it should be possible to optimize the searches a bit
+            //       knowing the possible range
+
+            size_t item;
+            for ( item = 0; item < itemFrom; item++ )
+            {
+                if ( selOld.Index(item) == wxNOT_FOUND )
+                    m_itemsSel.Add(item);
+            }
+
+            for ( item = itemTo + 1; item < m_count; item++ )
+            {
+                if ( selOld.Index(item) == wxNOT_FOUND )
+                    m_itemsSel.Add(item);
+            }
+        }
+        else // select == m_defaultState
+        {
+            // get the inclusive range of items between itemFrom and itemTo
+            size_t count = m_itemsSel.GetCount(),
+                   start = m_itemsSel.IndexForInsert(itemFrom),
+                   end = m_itemsSel.IndexForInsert(itemTo);
+
+            if ( start == count || m_itemsSel[start] < itemFrom )
+            {
+                start++;
+            }
+
+            if ( end == count || m_itemsSel[end] > itemTo )
+            {
+                end--;
+            }
+
+            if ( start <= end )
+            {
+                // delete all of them (from end to avoid changing indices)
+                for ( int i = end; i >= (int)start; i-- )
+                {
+                    m_itemsSel.RemoveAt(i);
+                }
+            }
+        }
+    }
+    else // "few" items change state
+    {
+        // just add the items to the selection
+        for ( size_t item = itemFrom; item <= itemTo; item++ )
+        {
+            SelectItem(item, select);
+        }
+    }
+}
+
+void wxSelectionStore::OnItemDelete(size_t item)
+{
+    size_t count = m_itemsSel.GetCount(),
+           i = m_itemsSel.IndexForInsert(item);
+
+    if ( i < count && m_itemsSel[i] == item )
+    {
+        // this item itself was in m_itemsSel, remove it from there
+        m_itemsSel.RemoveAt(i);
+    }
+
+    // and adjust the index of all which follow it
+    while ( i < count )
+    {
+        // all following elements must be greater than the one we deleted
+        wxASSERT_MSG( m_itemsSel[i] > item, _T("logic error") );
+
+        m_itemsSel[i++]--;
+    }
+}
 
 //-----------------------------------------------------------------------------
 //  wxListItemData
@@ -903,7 +1171,7 @@ int wxListHeaderData::GetFormat() const
 
 inline int wxListLineData::GetMode() const
 {
-    return m_owner->GetListCtrl()->GetWindowStyleFlag() & wxLC_MODE_MASK;
+    return m_owner->GetListCtrl()->GetWindowStyleFlag() & wxLC_MASK_TYPE;
 }
 
 inline bool wxListLineData::InReportView() const
@@ -911,7 +1179,7 @@ inline bool wxListLineData::InReportView() const
     return m_owner->HasFlag(wxLC_REPORT);
 }
 
-inline bool wxListLineData::IsVirtal() const
+inline bool wxListLineData::IsVirtual() const
 {
     return m_owner->IsVirtual();
 }
@@ -932,7 +1200,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner, size_t line )
         m_gi = new GeometryInfo;
     }
 
-    m_hilighted = FALSE;
+    m_highlighted = FALSE;
 
     InitItems( GetMode() == wxLC_REPORT ? m_owner->GetColumnCount() : 1 );
 }
@@ -987,7 +1255,7 @@ wxRect wxListLineData::GetIconRect() const
 
 wxRect wxListLineData::GetHighlightRect() const
 {
-    return InReportView() ? GetRect() : m_gi->m_rectHilight;
+    return InReportView() ? GetRect() : m_gi->m_rectHighlight;
 }
 
 void wxListLineData::CalculateSize( wxDC *dc, int spacing )
@@ -1044,13 +1312,13 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 
                 if ( item->HasText() )
                 {
-                    m_gi->m_rectHilight.width = m_gi->m_rectLabel.width;
-                    m_gi->m_rectHilight.height = m_gi->m_rectLabel.height;
+                    m_gi->m_rectHighlight.width = m_gi->m_rectLabel.width;
+                    m_gi->m_rectHighlight.height = m_gi->m_rectLabel.height;
                 }
                 else // no text, highlight the icon
                 {
-                    m_gi->m_rectHilight.width = m_gi->m_rectIcon.width;
-                    m_gi->m_rectHilight.height = m_gi->m_rectIcon.height;
+                    m_gi->m_rectHighlight.width = m_gi->m_rectIcon.width;
+                    m_gi->m_rectHighlight.height = m_gi->m_rectIcon.height;
                 }
             }
             break;
@@ -1084,8 +1352,8 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                         m_gi->m_rectAll.height = h;
                 }
 
-                m_gi->m_rectHilight.width = m_gi->m_rectAll.width;
-                m_gi->m_rectHilight.height = m_gi->m_rectAll.height;
+                m_gi->m_rectHighlight.width = m_gi->m_rectAll.width;
+                m_gi->m_rectHighlight.height = m_gi->m_rectAll.height;
             }
             break;
 
@@ -1128,13 +1396,13 @@ void wxListLineData::SetPosition( int x, int y,
                 else
                     m_gi->m_rectLabel.x = m_gi->m_rectAll.x + 2 + (spacing/2) - (m_gi->m_rectLabel.width/2);
                 m_gi->m_rectLabel.y = m_gi->m_rectAll.y + m_gi->m_rectAll.height + 2 - m_gi->m_rectLabel.height;
-                m_gi->m_rectHilight.x = m_gi->m_rectLabel.x - 2;
-                m_gi->m_rectHilight.y = m_gi->m_rectLabel.y - 2;
+                m_gi->m_rectHighlight.x = m_gi->m_rectLabel.x - 2;
+                m_gi->m_rectHighlight.y = m_gi->m_rectLabel.y - 2;
             }
             else // no text, highlight the icon
             {
-                m_gi->m_rectHilight.x = m_gi->m_rectIcon.x - 4;
-                m_gi->m_rectHilight.y = m_gi->m_rectIcon.y - 4;
+                m_gi->m_rectHighlight.x = m_gi->m_rectIcon.x - 4;
+                m_gi->m_rectHighlight.y = m_gi->m_rectIcon.y - 4;
             }
             break;
 
@@ -1142,8 +1410,8 @@ void wxListLineData::SetPosition( int x, int y,
             m_gi->m_rectAll.x = x;
             m_gi->m_rectAll.y = y;
 
-            m_gi->m_rectHilight.x = m_gi->m_rectAll.x;
-            m_gi->m_rectHilight.y = m_gi->m_rectAll.y;
+            m_gi->m_rectHighlight.x = m_gi->m_rectAll.x;
+            m_gi->m_rectHighlight.y = m_gi->m_rectAll.y;
             m_gi->m_rectLabel.y = m_gi->m_rectAll.y + 2;
 
             if (item->HasImage())
@@ -1257,12 +1525,12 @@ void wxListLineData::SetAttributes(wxDC *dc,
                                    const wxListItemAttr *attr,
                                    const wxColour& colText,
                                    const wxFont& font,
-                                   bool hilight)
+                                   bool highlight)
 {
     // don't use foregroud colour for drawing highlighted items - this might
     // make them completely invisible (and there is no way to do bit
     // arithmetics on wxColour, unfortunately)
-    if ( !hilight && attr && attr->HasTextColour() )
+    if ( !highlight && attr && attr->HasTextColour() )
     {
         dc->SetTextForeground(attr->GetTextColour());
     }
@@ -1281,7 +1549,7 @@ void wxListLineData::SetAttributes(wxDC *dc,
     }
 }
 
-void wxListLineData::Draw( wxDC *dc, int y, int height, bool hilighted )
+void wxListLineData::Draw( wxDC *dc, int y, int height, bool highlighted )
 {
     wxRect rect = GetRect();
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
@@ -1293,11 +1561,11 @@ void wxListLineData::Draw( wxDC *dc, int y, int height, bool hilighted )
 
     // use our own flag if we maintain it
     if ( !m_owner->IsVirtual() )
-        hilighted = m_hilighted;
+        highlighted = m_highlighted;
 
     // default foreground colour
     wxColour colText;
-    if ( hilighted )
+    if ( highlighted )
     {
         colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
     }
@@ -1314,14 +1582,14 @@ void wxListLineData::Draw( wxDC *dc, int y, int height, bool hilighted )
     //     customize the subitems (in report mode) too.
     wxListItemData *item = m_items.GetFirst()->GetData();
     wxListItemAttr *attr = item->GetAttributes();
-    SetAttributes(dc, attr, colText, font, hilighted);
+    SetAttributes(dc, attr, colText, font, highlighted);
 
     bool hasBgCol = attr && attr->HasBackgroundColour();
-    if ( hilighted || hasBgCol )
+    if ( highlighted || hasBgCol )
     {
-        if ( hilighted )
+        if ( highlighted )
         {
-            dc->SetBrush( *m_owner->m_hilightBrush );
+            dc->SetBrush( *m_owner->m_highlightBrush );
         }
         else
         {
@@ -1342,7 +1610,7 @@ void wxListLineData::Draw( wxDC *dc, int y, int height, bool hilighted )
         size_t col = 0;
         int x = HEADER_OFFSET_X;
 
-        y += EXTRA_HEIGHT / 2;
+        y += (LINE_SPACING + EXTRA_HEIGHT) / 2;
 
         while ( node )
         {
@@ -1395,21 +1663,21 @@ void wxListLineData::Draw( wxDC *dc, int y, int height, bool hilighted )
     }
 }
 
-bool wxListLineData::Hilight( bool on )
+bool wxListLineData::Highlight( bool on )
 {
-    wxCHECK_MSG( !m_owner->IsVirtual(), FALSE, _T("unexpected call to Hilight") );
+    wxCHECK_MSG( !m_owner->IsVirtual(), FALSE, _T("unexpected call to Highlight") );
 
-    if ( on == m_hilighted )
+    if ( on == m_highlighted )
         return FALSE;
 
-    m_hilighted = on;
+    m_highlighted = on;
 
     return TRUE;
 }
 
-void wxListLineData::ReverseHilight( void )
+void wxListLineData::ReverseHighlight( void )
 {
-    Hilight(!IsHilighted());
+    Highlight(!IsHighlighted());
 }
 
 //-----------------------------------------------------------------------------
@@ -1455,13 +1723,15 @@ wxListHeaderWindow::~wxListHeaderWindow( void )
 void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 {
 #ifdef __WXGTK__
-    GtkStateType state = GTK_STATE_NORMAL;
-    if (!m_parent->IsEnabled()) state = GTK_STATE_INSENSITIVE;
+    GtkStateType state = m_parent->IsEnabled() ? GTK_STATE_NORMAL
+                                               : GTK_STATE_INSENSITIVE;
 
     x = dc->XLOG2DEV( x );
 
-    gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
-                   (GdkRectangle*) NULL, m_wxwindow, "button", x-1, y-1, w+2, h+2);
+    gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window,
+                   state, GTK_SHADOW_OUT,
+                   (GdkRectangle*) NULL, m_wxwindow, "button",
+                   x-1, y-1, w+2, h+2);
 #elif defined( __WXMAC__  )
     const int m_corner = 1;
 
@@ -1482,7 +1752,7 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     dc->DrawRectangle( x, y, 1, h );              // left (outer)
     dc->DrawLine( x, y+h-1, x+1, y+h-1 );
     dc->DrawLine( x+w-1, y, x+w-1, y+1 );
-#else
+#else // !GTK, !Mac
     const int m_corner = 1;
 
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
@@ -1822,7 +2092,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxListMainWindow,wxScrolledWindow);
 
 BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_PAINT          (wxListMainWindow::OnPaint)
-  EVT_SIZE           (wxListMainWindow::OnSize)
   EVT_MOUSE_EVENTS   (wxListMainWindow::OnMouse)
   EVT_CHAR           (wxListMainWindow::OnChar)
   EVT_KEY_DOWN       (wxListMainWindow::OnKeyDown)
@@ -1837,7 +2106,7 @@ void wxListMainWindow::Init()
     m_dirty = TRUE;
     m_countVirt = 0;
     m_lineFrom =
-    m_lineTo = 0;
+    m_lineTo = (size_t)-1;
     m_linesPerPage = 0;
 
     m_headerWidth =
@@ -1881,7 +2150,7 @@ wxListMainWindow::wxListMainWindow()
 {
     Init();
 
-    m_hilightBrush = (wxBrush *) NULL;
+    m_highlightBrush = (wxBrush *) NULL;
 
     m_xScroll =
     m_yScroll = 0;
@@ -1898,7 +2167,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 {
     Init();
 
-    m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
+    m_highlightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
     wxSize sz = size;
     sz.y = 25;
 
@@ -1912,7 +2181,7 @@ wxListMainWindow::~wxListMainWindow()
 {
     DeleteEverything();
 
-    delete m_hilightBrush;
+    delete m_highlightBrush;
 
     delete m_renameTimer;
 }
@@ -1921,7 +2190,7 @@ void wxListMainWindow::CacheLineData(size_t line)
 {
     wxListCtrl *listctrl = GetListCtrl();
 
-    wxListLineData *ld = GetFirstLine();
+    wxListLineData *ld = GetDummyLine();
 
     size_t countCol = GetColumnCount();
     for ( size_t col = 0; col < countCol; col++ )
@@ -1933,7 +2202,7 @@ void wxListMainWindow::CacheLineData(size_t line)
     ld->SetLineIndex(line);
 }
 
-wxListLineData *wxListMainWindow::GetFirstLine() const
+wxListLineData *wxListMainWindow::GetDummyLine() const
 {
     wxASSERT_MSG( !IsEmpty(), _T("invalid line index") );
 
@@ -1985,58 +2254,62 @@ wxCoord wxListMainWindow::GetLineY(size_t line) const
     return LINE_SPACING + line*GetLineHeight();
 }
 
-bool wxListMainWindow::IsHilighted(size_t line) const
+bool wxListMainWindow::IsHighlighted(size_t line) const
 {
     if ( IsVirtual() )
     {
-        return m_selections.Index(line) != wxNOT_FOUND;
+        return m_selStore.IsSelected(line);
     }
     else // !virtual
     {
         wxListLineData *ld = GetLine(line);
-        wxCHECK_MSG( ld, FALSE, _T("invalid index in IsHilighted") );
+        wxCHECK_MSG( ld, FALSE, _T("invalid index in IsHighlighted") );
 
-        return ld->IsHilighted();
+        return ld->IsHighlighted();
     }
 }
 
-bool wxListMainWindow::HilightLine( size_t line, bool hilight )
+void wxListMainWindow::HighlightLines( size_t lineFrom, size_t lineTo, bool highlight )
+{
+    if ( IsVirtual() )
+    {
+        m_selStore.SelectRange(lineFrom, lineTo, highlight);
+        RefreshLines(lineFrom, lineTo);
+    }
+    else
+    {
+        // do it the dumb way
+        bool needsRefresh = FALSE;
+        for ( size_t line = lineFrom; line <= lineTo; line++ )
+        {
+            if ( HighlightLine(line, highlight) )
+                needsRefresh = TRUE;
+        }
+
+        if ( needsRefresh )
+            RefreshLines(lineFrom, lineTo);
+    }
+}
+
+bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
 {
     bool changed;
 
     if ( IsVirtual() )
     {
-        changed = FALSE;
-
-        int index = m_selections.Index(line);
-        if ( hilight )
-        {
-            if ( index == wxNOT_FOUND )
-            {
-                m_selections.Add(line);
-                changed = TRUE;
-            }
-        }
-        else // !hilight
-        {
-            if ( index != wxNOT_FOUND )
-            {
-                m_selections.RemoveAt((size_t)index);
-                changed = TRUE;
-            }
-        }
+        changed = m_selStore.SelectItem(line, highlight);
     }
     else // !virtual
     {
         wxListLineData *ld = GetLine(line);
-        wxCHECK_MSG( ld, FALSE, _T("invalid index in IsHilighted") );
+        wxCHECK_MSG( ld, FALSE, _T("invalid index in IsHighlighted") );
 
-        changed = ld->Hilight(hilight);
+        changed = ld->Highlight(highlight);
     }
 
     if ( changed )
     {
-        SendNotify( line, hilight ? wxEVT_COMMAND_LIST_ITEM_SELECTED
+        SendNotify( line, highlight ? wxEVT_COMMAND_LIST_ITEM_SELECTED
                                   : wxEVT_COMMAND_LIST_ITEM_DESELECTED );
     }
 
@@ -2058,10 +2331,13 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
 
     if ( HasFlag(wxLC_REPORT) )
     {
-        if ( lineFrom < m_lineFrom )
-            lineFrom = m_lineFrom;
-        if ( lineTo > m_lineTo )
-            lineTo = m_lineTo;
+        size_t visibleFrom, visibleTo;
+        GetVisibleLinesRange(&visibleFrom, &visibleTo);
+
+        if ( lineFrom < visibleFrom )
+            lineFrom = visibleFrom;
+        if ( lineTo > visibleTo )
+            lineTo = visibleTo;
 
         wxRect rect;
         rect.x = 0;
@@ -2088,12 +2364,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // done (a Windows requirement).
     wxPaintDC dc( this );
 
-    if ( m_dirty )
-    {
-        // postpone redrawing until the next OnIdle() call to minimize flicker
-        return;
-    }
-
     if ( IsEmpty() )
     {
         // empty control. nothing to draw
@@ -2111,53 +2381,45 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if ( HasFlag(wxLC_REPORT) )
     {
-        int lineSpacing = GetLineHeight();
+        int lineHeight = GetLineHeight();
 
-        for ( size_t line = m_lineFrom; line <= m_lineTo; line++ )
+        size_t visibleFrom, visibleTo;
+        GetVisibleLinesRange(&visibleFrom, &visibleTo);
+        for ( size_t line = visibleFrom; line <= visibleTo; line++ )
         {
             GetLine(line)->Draw( &dc,
                                  GetLineY(line),
-                                 lineSpacing,
-                                 IsHilighted(line) );
+                                 lineHeight,
+                                 IsHighlighted(line) );
         }
 
         if ( HasFlag(wxLC_HRULES) )
         {
-#ifdef __WXMAC__
-            wxPen pen(wxWHITE, 1, wxSOLID);
-#else
-            wxPen pen(wxSystemSettings::
-                        GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
-#endif
+            wxPen pen(GetRuleColour(), 1, wxSOLID);
             wxSize clientSize = GetClientSize();
 
-            for ( size_t i = m_lineFrom; i <= m_lineTo; i++ )
+            for ( size_t i = visibleFrom; i <= visibleTo; i++ )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
-                dc.DrawLine(0 - dev_x, i*lineSpacing,
-                            clientSize.x - dev_x, i*lineSpacing);
+                dc.DrawLine(0 - dev_x, i*lineHeight,
+                            clientSize.x - dev_x, i*lineHeight);
             }
 
             // Draw last horizontal rule
-            if ( m_lineTo > m_lineFrom )
+            if ( visibleTo > visibleFrom )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
-                dc.DrawLine(0 - dev_x, m_lineTo*lineSpacing,
-                            clientSize.x - dev_x , m_lineTo*lineSpacing );
+                dc.DrawLine(0 - dev_x, m_lineTo*lineHeight,
+                            clientSize.x - dev_x , m_lineTo*lineHeight );
             }
         }
 
         // Draw vertical rules if required
         if ( HasFlag(wxLC_VRULES) && !IsEmpty() )
         {
-#ifdef __WXMAC__
-            wxPen pen(wxWHITE, 1, wxSOLID);
-#else
-            wxPen pen(wxSystemSettings::
-                        GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
-#endif
+            wxPen pen(GetRuleColour(), 1, wxSOLID);
 
             int col = 0;
             wxRect firstItemRect;
@@ -2192,7 +2454,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if ( IsVirtual() )
         {
             // just offset the rect of the first line to position it correctly
-            wxListLineData *line = GetFirstLine();
+            wxListLineData *line = GetDummyLine();
             rect = line->GetHighlightRect();
             rect.y = GetLineY(m_current);
         }
@@ -2212,29 +2474,22 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.EndDrawing();
 }
 
-void wxListMainWindow::HilightAll( bool on )
+void wxListMainWindow::HighlightAll( bool on )
 {
-    bool needsRefresh = FALSE;
-
-    size_t count = GetItemCount();
-    for ( size_t line = 0; line < count; line++ )
+    if ( IsSingleSel() )
     {
-        if ( HilightLine( line, on ) )
+        wxASSERT_MSG( !on, _T("can't do this in a single sel control") );
+
+        // we just have one item to turn off
+        if ( HasCurrent() && IsHighlighted(m_current) )
         {
-            if ( HasFlag(wxLC_REPORT) )
-            {
-                needsRefresh = TRUE;
-            }
-            else
-            {
-                RefreshLine(line);
-            }
+            HighlightLine(m_current, FALSE);
+            RefreshLine(m_current);
         }
     }
-
-    if ( needsRefresh )
+    else // multi sel
     {
-        RefreshLines( 0, count - 1 );
+        HighlightLines(0, GetItemCount() - 1, on);
     }
 }
 
@@ -2370,7 +2625,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         wxCoord lineHeight = GetLineHeight();
 
         current = y / lineHeight;
-        hitResult = GetFirstLine()->IsHit( x, y % lineHeight );
+        hitResult = GetDummyLine()->IsHit( x, y % lineHeight );
     }
     else // !report
     {
@@ -2463,21 +2718,20 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         size_t oldCurrent = m_current;
 
-        if ( HasFlag(wxLC_SINGLE_SEL) ||
-             !(event.ControlDown() || event.ShiftDown()) )
+        if ( IsSingleSel() || !(event.ControlDown() || event.ShiftDown()) )
         {
+            HighlightAll( FALSE );
             m_current = current;
-            HilightAll( FALSE );
 
-            ReverseHilight(m_current);
+            ReverseHighlight(m_current);
         }
-        else // multi sel
+        else // multi sel & either ctrl or shift is down
         {
             if (event.ControlDown())
             {
                 m_current = current;
 
-                ReverseHilight(m_current);
+                ReverseHighlight(m_current);
             }
             else if (event.ShiftDown())
             {
@@ -2492,17 +2746,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                     lineFrom = m_current;
                 }
 
-                bool needsRefresh = FALSE;
-                for ( size_t i = lineFrom; i <= lineTo; i++ )
-                {
-                    if ( HilightLine(i, TRUE) )
-                        needsRefresh = TRUE;
-                }
-
-                if ( needsRefresh )
-                {
-                    RefreshLines(lineFrom, lineTo);
-                }
+                HighlightLines(lineFrom, lineTo);
             }
             else // !ctrl, !shift
             {
@@ -2525,11 +2769,22 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
 void wxListMainWindow::MoveToFocus()
 {
-    if (!HasCurrent())
+    if ( !HasCurrent() )
         return;
 
-    wxListLineData *data = IsVirtual() ? GetFirstLine() : GetLine(m_current);
-    wxRect rect = data->GetRect();
+    wxRect rect;
+
+    if ( IsVirtual() )
+    {
+        // just offset the rect of the first line to position it correctly
+        wxListLineData *line = GetDummyLine();
+        rect = line->GetRect();
+        rect.y = GetLineY(m_current);
+    }
+    else
+    {
+        rect = GetLine(m_current)->GetRect();
+    }
 
     int client_w, client_h;
     GetClientSize( &client_w, &client_h );
@@ -2539,14 +2794,16 @@ void wxListMainWindow::MoveToFocus()
 
     if ( HasFlag(wxLC_REPORT) )
     {
+        // the next we need the range of lines shown it might be different, so
+        // recalculate it
+        ResetVisibleLinesRange();
+
         if (rect.y < view_y )
             Scroll( -1, rect.y/m_yScroll );
         if (rect.y+rect.height+5 > view_y+client_h)
             Scroll( -1, (rect.y+rect.height-client_h+SCROLL_UNIT_Y)/m_yScroll );
-
-        UpdateShownLinesRange();
     }
-    else
+    else // !report
     {
         if (rect.x-view_x < 5)
             Scroll( (rect.x-5)/m_xScroll, -1 );
@@ -2568,7 +2825,7 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 
     // in single selection we just ignore Shift as we can't select several
     // items anyhow
-    if ( event.ShiftDown() && !HasFlag(wxLC_SINGLE_SEL) )
+    if ( event.ShiftDown() && !IsSingleSel() )
     {
         m_current = newCurrent;
 
@@ -2579,28 +2836,22 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
             oldCurrent = m_current;
         }
 
-        bool needsRefresh = FALSE;
-        for ( size_t line = oldCurrent; line <= newCurrent; line++ )
-        {
-            if ( HilightLine( line ) )
-            {
-                needsRefresh = TRUE;
-            }
-        }
-
-        if ( needsRefresh )
-            RefreshLines( oldCurrent, newCurrent );
+        HighlightLines(oldCurrent, newCurrent);
     }
     else // !shift
     {
+        // all previously selected items are unselected unless ctrl is held
+        if ( !event.ControlDown() )
+            HighlightAll(FALSE);
+
         m_current = newCurrent;
 
-        HilightLine( oldCurrent, FALSE );
+        HighlightLine( oldCurrent, FALSE );
         RefreshLine( oldCurrent );
 
         if ( !event.ControlDown() )
         {
-            HilightLine( m_current, TRUE );
+            HighlightLine( m_current, TRUE );
         }
     }
 
@@ -2762,7 +3013,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_SPACE:
-            if ( HasFlag(wxLC_SINGLE_SEL) )
+            if ( IsSingleSel() )
             {
                 wxListEvent le( wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
                                 GetParent()->GetId() );
@@ -2773,7 +3024,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             }
             else
             {
-                ReverseHilight(m_current);
+                ReverseHighlight(m_current);
             }
             break;
 
@@ -3106,9 +3357,9 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
                 m_current = item;
                 OnFocusLine( m_current );
 
-                if ( HasFlag(wxLC_SINGLE_SEL) && (oldCurrent != (size_t)-1) )
+                if ( IsSingleSel() && (oldCurrent != (size_t)-1) )
                 {
-                    HilightLine(oldCurrent, FALSE);
+                    HighlightLine(oldCurrent, FALSE);
                     RefreshLine(oldCurrent);
                 }
 
@@ -3130,7 +3381,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
     {
         bool on = (state & wxLIST_STATE_SELECTED) != 0;
 
-        if ( HasFlag(wxLC_SINGLE_SEL) )
+        if ( IsSingleSel() )
         {
             if ( on )
             {
@@ -3144,7 +3395,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
 
                     if ( oldCurrent != (size_t)-1 )
                     {
-                        HilightLine( oldCurrent, FALSE );
+                        HighlightLine( oldCurrent, FALSE );
                         RefreshLine( oldCurrent );
                     }
                 }
@@ -3157,7 +3408,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
             }
         }
 
-        if ( HilightLine(item, on) )
+        if ( HighlightLine(item, on) )
         {
             RefreshLine(item);
         }
@@ -3179,7 +3430,7 @@ int wxListMainWindow::GetItemState( long item, long stateMask )
 
     if ( stateMask & wxLIST_STATE_SELECTED )
     {
-        if ( IsHilighted(item) )
+        if ( IsHighlighted(item) )
             ret |= wxLIST_STATE_SELECTED;
     }
 
@@ -3206,6 +3457,7 @@ size_t wxListMainWindow::GetItemCount() const
 
 void wxListMainWindow::SetItemCount(long count)
 {
+    m_selStore.SetItemCount(count);
     m_countVirt = count;
 
     Refresh();
@@ -3214,14 +3466,14 @@ void wxListMainWindow::SetItemCount(long count)
 int wxListMainWindow::GetSelectedItemCount()
 {
     // deal with the quick case first
-    if ( HasFlag(wxLC_SINGLE_SEL) )
+    if ( IsSingleSel() )
     {
-        return m_current == (size_t)-1 ? FALSE : IsHilighted(m_current);
+        return HasCurrent() ? IsHighlighted(m_current) : FALSE;
     }
 
     // virtual controls remmebers all its selections itself
     if ( IsVirtual() )
-        return m_selections.GetCount();
+        return m_selStore.GetSelectedCount();
 
     // TODO: we probably should maintain the number of items selected even for
     //       non virtual controls as enumerating all lines is really slow...
@@ -3229,7 +3481,7 @@ int wxListMainWindow::GetSelectedItemCount()
     size_t count = GetItemCount();
     for ( size_t line = 0; line < count; line++ )
     {
-        if ( GetLine(line)->IsHilighted() )
+        if ( GetLine(line)->IsHighlighted() )
             countSel++;
     }
 
@@ -3245,7 +3497,16 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect )
     wxCHECK_RET( index >= 0 && (size_t)index < GetItemCount(),
                  _T("invalid index in GetItemRect") );
 
-    rect = GetLine((size_t)index)->GetRect();
+    if ( HasFlag(wxLC_REPORT) )
+    {
+        rect = GetDummyLine()->GetRect();
+        rect.y = GetLineY((size_t)index);
+    }
+    else
+    {
+        rect = GetLine((size_t)index)->GetRect();
+    }
+
     CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
 }
 
@@ -3264,13 +3525,7 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
 // geometry calculation
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
-{
-    // wait for the next OnIdle() with geometry recalculation
-    m_dirty = TRUE;
-}
-
-void wxListMainWindow::CalculatePositions()
+void wxListMainWindow::RecalculatePositions()
 {
     if ( IsEmpty() )
         return;
@@ -3293,15 +3548,17 @@ void wxListMainWindow::CalculatePositions()
     if ( HasFlag(wxLC_REPORT) )
     {
         // all lines have the same height
-        int lineSpacing = GetLineHeight();
+        int lineHeight = GetLineHeight();
 
         // scroll one line per step
-        m_yScroll = lineSpacing;
+        m_yScroll = lineHeight;
 
         size_t lineCount = GetItemCount();
-        int entireHeight = lineCount*lineSpacing + 2*LINE_SPACING;
+        int entireHeight = lineCount*lineHeight + LINE_SPACING;
 
-        m_linesPerPage = clientHeight / lineSpacing;
+        m_linesPerPage = clientHeight / lineHeight;
+
+        ResetVisibleLinesRange();
 
         SetScrollbars( m_xScroll, m_yScroll,
                        (GetHeaderWidth() + m_xScroll - 1)/m_xScroll,
@@ -3310,7 +3567,14 @@ void wxListMainWindow::CalculatePositions()
                        GetScrollPos(wxVERTICAL),
                        TRUE );
 
-        UpdateShownLinesRange();
+        // we must have an integer number of lines on screen and so we fit
+        // the real control size to the line height
+        wxRect rect;
+        rect.x = 0;
+        rect.y = LINE_SPACING;
+        rect.width = clientWidth;
+        rect.height = ((clientHeight - LINE_SPACING) / lineHeight)*lineHeight;
+        SetTargetRect(rect);
     }
     else // !report
     {
@@ -3320,7 +3584,7 @@ void wxListMainWindow::CalculatePositions()
 
         clientHeight -= 4;  // sunken frame
 
-        int entireWidth;
+        int entireWidth = 0;
 
         for (int tries = 0; tries < 2; tries++)
         {
@@ -3377,11 +3641,26 @@ void wxListMainWindow::CalculatePositions()
 
     // FIXME: why should we call it from here?
     UpdateCurrent();
+
+    RefreshAll();
+}
+
+void wxListMainWindow::RefreshAll()
+{
+    m_dirty = FALSE;
+    Refresh();
+
+    wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
+    if ( headerWin )
+    {
+        headerWin->m_dirty = FALSE;
+        headerWin->Refresh();
+    }
 }
 
 void wxListMainWindow::UpdateCurrent()
 {
-    if ( (m_current == (size_t)-1) && !IsEmpty() )
+    if ( !HasCurrent() && !IsEmpty() )
     {
         m_current = 0;
     }
@@ -3424,7 +3703,7 @@ long wxListMainWindow::GetNextItem( long item,
         if ( (state & wxLIST_STATE_FOCUSED) && (line == m_current) )
             return line;
 
-        if ( (state & wxLIST_STATE_SELECTED) && IsHilighted(line) )
+        if ( (state & wxLIST_STATE_SELECTED) && IsHighlighted(line) )
             return line;
     }
 
@@ -3435,17 +3714,19 @@ long wxListMainWindow::GetNextItem( long item,
 // deleting stuff
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::DeleteItem( long index )
+void wxListMainWindow::DeleteItem( long lindex )
 {
     size_t count = GetItemCount();
 
-    wxCHECK_RET( (index >= 0) && ((size_t)index < count),
+    wxCHECK_RET( (lindex >= 0) && ((size_t)lindex < count),
                  _T("invalid item index in DeleteItem") );
+
+    size_t index = (size_t)lindex;
 
     m_dirty = TRUE;
 
     // select the next item when the selected one is deleted
-    if ( m_current == (size_t)index )
+    if ( m_current == index )
     {
         // the last valid index after deleting the item will be count-2
         if ( ++m_current >= count - 2 )
@@ -3454,11 +3735,20 @@ void wxListMainWindow::DeleteItem( long index )
         }
     }
 
-    SendNotify( (size_t)index, wxEVT_COMMAND_LIST_DELETE_ITEM );
+    SendNotify( index, wxEVT_COMMAND_LIST_DELETE_ITEM );
 
-    if ( !IsVirtual() )
+    if ( IsVirtual() )
     {
-        m_lines.RemoveAt( (size_t)index );
+        if ( m_lineTo == --m_countVirt )
+        {
+            m_lineTo--;
+        }
+
+        m_selStore.OnItemDelete(index);
+    }
+    else
+    {
+        m_lines.RemoveAt( index );
     }
 }
 
@@ -3481,7 +3771,8 @@ void wxListMainWindow::DeleteAllItems()
     }
 
     m_dirty = TRUE;
-    m_current = (size_t)-1;
+
+    ResetCurrent();
 
     // to make the deletion of all items faster, we don't send the
     // notifications for each item deletion in this case but only one event
@@ -3492,9 +3783,16 @@ void wxListMainWindow::DeleteAllItems()
     event.SetEventObject( GetParent() );
     GetParent()->GetEventHandler()->ProcessEvent( event );
 
+    if ( IsVirtual() )
+    {
+        m_countVirt = 0;
+
+        ResetVisibleLinesRange();
+    }
+
     m_lines.Clear();
 
-    m_selections.Clear();
+    m_selStore.Clear();
 }
 
 void wxListMainWindow::DeleteEverything()
@@ -3670,8 +3968,9 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    // update our idea of which lines are shown before scrolling the window
-    UpdateShownLinesRange();
+    // update our idea of which lines are shown when we redraw the window the
+    // next time
+    ResetVisibleLinesRange();
 
     // FIXME
 #if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
@@ -3692,29 +3991,27 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
     }
 }
 
-void wxListMainWindow::UpdateShownLinesRange()
+void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 {
-    // only optimize redrawing for the report view using m_lineFrom/To
-    if ( !HasFlag(wxLC_REPORT) )
-        return;
+    wxASSERT_MSG( HasFlag(wxLC_REPORT), _T("this is for report mode only") );
 
-    size_t lineFromOld = m_lineFrom,
-           lineToOld = m_lineTo;
-
-    m_lineFrom = GetScrollPos(wxVERTICAL);
-
-    size_t count = GetItemCount();
-
-    wxASSERT_MSG( m_lineFrom < count, _T("invalid scroll position?") );
-
-    m_lineTo = m_lineFrom + m_linesPerPage - 1;
-    if ( m_lineTo >= count )
-        m_lineTo = count - 1;
-
-    if ( m_lineFrom != lineFromOld || m_lineTo != lineToOld )
+    if ( m_lineFrom == (size_t)-1 )
     {
-        m_dirty = TRUE;
+        m_lineFrom = GetScrollPos(wxVERTICAL);
+
+        size_t count = GetItemCount();
+
+        wxASSERT_MSG( m_lineFrom < count, _T("invalid scroll position?") );
+
+        m_lineTo = m_lineFrom + m_linesPerPage - 1;
+        if ( m_lineTo >= count )
+            m_lineTo = count - 1;
     }
+
+    if ( from )
+        *from = m_lineFrom;
+    if ( to )
+        *to = m_lineTo;
 }
 
 // -------------------------------------------------------------------------------------
@@ -3837,6 +4134,9 @@ wxListCtrl::wxListCtrl()
 
 wxListCtrl::~wxListCtrl()
 {
+    if ( m_mainWin )
+        m_mainWin->ResetCurrent();
+
     if (m_ownsImageListNormal)
         delete m_imageListNormal;
     if (m_ownsImageListSmall)
@@ -3874,7 +4174,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     m_mainWin = (wxListMainWindow*) NULL;
     m_headerWin = (wxListHeaderWindow*) NULL;
 
-    if ( !(style & (wxLC_REPORT | wxLC_LIST | wxLC_ICON)) )
+    if ( !(style & wxLC_MASK_TYPE) )
     {
         style = style | wxLC_LIST;
     }
@@ -3882,16 +4182,16 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return FALSE;
 
-    if ( style & wxSUNKEN_BORDER )
-        style -= wxSUNKEN_BORDER;
+    // don't create the inner window with the border
+    style &= ~wxSUNKEN_BORDER;
 
     m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, style );
 
-    if (HasFlag(wxLC_REPORT))
+    if ( HasFlag(wxLC_REPORT) )
     {
         CreateHeaderWindow();
 
-        if (HasFlag(wxLC_NO_HEADER))
+        if ( HasFlag(wxLC_NO_HEADER) )
         {
             // VZ: why do we create it at all then?
             m_headerWin->Show( FALSE );
@@ -3901,21 +4201,17 @@ bool wxListCtrl::Create(wxWindow *parent,
     return TRUE;
 }
 
-void wxListCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
-{
-    /* handled in OnIdle */
-
-    if (m_mainWin) m_mainWin->m_dirty = TRUE;
-}
-
 void wxListCtrl::SetSingleStyle( long style, bool add )
 {
+    wxASSERT_MSG( !(style & wxLC_VIRTUAL),
+                  _T("wxLC_VIRTUAL can't be [un]set") );
+
     long flag = GetWindowStyle();
 
     if (add)
     {
         if (style & wxLC_MASK_TYPE)
-            flag &= ~wxLC_MASK_TYPE;
+            flag &= ~(wxLC_MASK_TYPE | wxLC_VIRTUAL);
         if (style & wxLC_MASK_ALIGN)
             flag &= ~wxLC_MASK_ALIGN;
         if (style & wxLC_MASK_SORT)
@@ -4352,17 +4648,15 @@ bool wxListCtrl::SortItems( wxListCtrlCompare fn, long data )
 }
 
 // ----------------------------------------------------------------------------
-// OnIdle() handler: this is the place where we redraw the control
+// event handlers
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::OnIdle( wxIdleEvent & WXUNUSED(event) )
+void wxListCtrl::OnSize(wxSizeEvent& event)
 {
-    // do it only if needed
-    if ( !m_mainWin->m_dirty )
+    if ( !m_mainWin )
         return;
 
-    int cw = 0;
-    int ch = 0;
+    int cw, ch;
     GetClientSize( &cw, &ch );
 
     if ( m_mainWin->HasHeader() )
@@ -4375,16 +4669,18 @@ void wxListCtrl::OnIdle( wxIdleEvent & WXUNUSED(event) )
         m_mainWin->SetSize( 0, 0, cw, ch );
     }
 
-    m_mainWin->CalculatePositions();
+    m_mainWin->RecalculatePositions();
+}
 
-    m_mainWin->m_dirty = FALSE;
-    m_mainWin->Refresh();
+void wxListCtrl::OnIdle( wxIdleEvent & event )
+{
+    event.Skip();
 
-    if ( m_headerWin && m_headerWin->m_dirty )
-    {
-        m_headerWin->m_dirty = FALSE;
-        m_headerWin->Refresh();
-    }
+    // do it only if needed
+    if ( !m_mainWin->m_dirty )
+        return;
+
+    m_mainWin->RecalculatePositions();
 }
 
 // ----------------------------------------------------------------------------
@@ -4436,9 +4732,6 @@ bool wxListCtrl::SetFont( const wxFont &font )
     {
         m_headerWin->SetFont( font );
     }
-
-    // invalidate it as the font changed
-    m_mainWin->OnFontChange();
 
     return TRUE;
 }
@@ -4522,5 +4815,3 @@ void wxListCtrl::SetItemCount(long count)
 }
 
 #endif // wxUSE_LISTCTRL
-
-#endif
