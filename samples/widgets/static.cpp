@@ -170,7 +170,9 @@ protected:
     wxStaticBox *m_staticBox;
     wxStaticBoxSizer *m_sizerStatBox;
     wxStaticText *m_statText;
+#if wxUSE_STATLINE
     wxStaticLine *m_statLine;
+#endif // wxUSE_STATLINE
     wxSizer *m_sizerStatic;
 
     // the text entries for command parameters
@@ -214,7 +216,9 @@ StaticWidgetsPage::StaticWidgetsPage(wxNotebook *notebook,
     m_radioHAlign =
     m_radioVAlign = (wxRadioBox *)NULL;
 
+#if wxUSE_STATLINE
     m_statLine = (wxStaticLine *)NULL;
+#endif // wxUSE_STATLINE
     m_statText = (wxStaticText *)NULL;
 
     m_staticBox = (wxStaticBox *)NULL;
@@ -325,7 +329,9 @@ void StaticWidgetsPage::CreateStatic()
         // delete m_sizerStatBox; -- deleted by Remove()
         m_sizerStatic->Remove(m_sizerStatBox);
         delete m_statText;
+#if wxUSE_STATLINE
         delete m_statLine;
+#endif // wxUSE_STATLINE
     }
 
     int flagsBox = 0,
@@ -388,12 +394,16 @@ void StaticWidgetsPage::CreateStatic()
                                   wxDefaultPosition, wxDefaultSize,
                                   flagsText);
 
+#if wxUSE_STATLINE
     m_statLine = new wxStaticLine(this, wxID_ANY,
                                   wxDefaultPosition, wxDefaultSize,
                                   isVert ? wxLI_VERTICAL : wxLI_HORIZONTAL);
+#endif // wxUSE_STATLINE
 
     m_sizerStatBox->Add(m_statText, 1, wxGROW | wxALL, 5);
+#if wxUSE_STATLINE
     m_sizerStatBox->Add(m_statLine, 0, wxGROW | wxALL, 5);
+#endif // wxUSE_STATLINE
     m_sizerStatBox->Add(0, 0, 1);
 
     m_sizerStatic->Add(m_sizerStatBox, 1, wxGROW);
