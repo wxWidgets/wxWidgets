@@ -869,35 +869,6 @@ void cbMiniButton::Reset()
 
 void cbCloseBox::Draw( wxDC& dc )
 {
-#if defined(__WXGTK__) || defined(__WXX11__)
-
-    cbMiniButton::Draw( dc );
-
-    wxPen pen( wxColour( 64,64,64 ) ,1, wxSOLID );
-
-    dc.SetPen( pen );
-
-    int width = BTN_BOX_WIDTH - 7;
-
-    int xOfs = (mPressed) ? 4 : 3;
-    int yOfs = (mPressed) ? 4 : 3;
-
-    int one = 1;
-    for( int i = 0; i != BTN_X_WIEGHT; ++i )
-    {
-        dc.DrawLine( mPos.x + xOfs + i - one,
-                     mPos.y + yOfs - one,
-                     mPos.x + xOfs + i + width,
-                     mPos.y + yOfs + width  + one);
-
-        dc.DrawLine( mPos.x + xOfs + i + width ,
-                     mPos.y + yOfs - one - one,
-                     mPos.x + xOfs + i - one,
-                     mPos.y + yOfs + width );
-    }
-
-#else
-
     cbMiniButton::Draw( dc );
 
     dc.SetPen( *wxBLACK_PEN );
@@ -907,7 +878,7 @@ void cbCloseBox::Draw( wxDC& dc )
     int xOfs = (mPressed) ? 4 : 3;
     int yOfs = (mPressed) ? 4 : 3;
 
-    for( int i = 0; i != BTN_X_WIEGHT; ++i )
+    for( int i = 0; i != BTN_X_WEIGHT; ++i )
     {
         dc.DrawLine( mPos.x + xOfs + i,
                      mPos.y + yOfs,
@@ -919,9 +890,6 @@ void cbCloseBox::Draw( wxDC& dc )
                      mPos.x + xOfs + i - 1,
                      mPos.y + yOfs + width );
     }
-
-#endif
-
 }
 
 /***** Implementation fro class cbCollapseBox *****/

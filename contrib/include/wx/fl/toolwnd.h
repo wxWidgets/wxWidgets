@@ -25,7 +25,7 @@
 
 #define BTN_BOX_HEIGHT       12
 #define BTN_BOX_WIDTH        12
-#define BTN_X_WIEGHT         2
+#define BTN_X_WEIGHT         2
 
 class WXDLLIMPEXP_FL cbMiniButton;
 
