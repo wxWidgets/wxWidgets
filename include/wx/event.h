@@ -743,7 +743,7 @@ public:
 
     virtual wxEvent *Clone() const { return new wxMouseEvent(*this); }
 
-    wxMouseEvent& operator=(const wxMouseEvent& event) { Assign(event); }
+    wxMouseEvent& operator=(const wxMouseEvent& event) { Assign(event); return *this; }
 
 public:
     wxCoord m_x, m_y;
