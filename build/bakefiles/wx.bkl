@@ -163,6 +163,8 @@
         <modify-target target="install">
             <command>
 @echo " "
+@echo " ------------------------------------------------------"
+@echo " "
 @echo " The installation of wxWindows is finished.  On certain"
 @echo " platforms (e.g. Linux) you'll now have to run ldconfig"
 @echo " if you installed a shared library and also modify the"
@@ -172,6 +174,8 @@
 @echo " to be suitable for any purpose."
 @echo " "
 @echo " Read the wxWindows Licence on licencing conditions."
+@echo " "
+@echo " ------------------------------------------------------"
 @echo " "
             </command>
         </modify-target>
