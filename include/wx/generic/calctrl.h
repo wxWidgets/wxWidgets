@@ -42,10 +42,8 @@ public:
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxCAL_SHOW_HOLIDAYS,
+                   long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                    const wxString& name = wxCalendarNameStr)
-        : wxControl(parent, id, pos, size,
-                    style | wxWANTS_CHARS, wxDefaultValidator, name)
     {
         Init();
 
@@ -57,7 +55,7 @@ public:
                 const wxDateTime& date = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxCAL_SHOW_HOLIDAYS,
+                long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                 const wxString& name = wxCalendarNameStr);
 
     virtual ~wxCalendarCtrl();
