@@ -172,7 +172,7 @@ wxSize wxRadioBox::LayoutItems()
                 if (len > max_len) max_len = len;
 		
                 gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y );
-                y += 22;
+                y += 20;
 		
 	        node = node->Next();
 		if (!node) break;
@@ -185,7 +185,7 @@ wxSize wxRadioBox::LayoutItems()
 	    {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
 		
-		gtk_widget_set_usize( button, max_len, 22 );
+		gtk_widget_set_usize( button, max_len, 20 );
 		
 	        node = node->Next();
 		if (!node) break;

@@ -293,19 +293,23 @@ void wxTextCtrl::WriteText( const wxString &text )
     if (m_windowStyle & wxTE_MULTILINE)
     {
         /* this moves the cursor pos to behind the inserted text */
-	
 	gint len = GTK_EDITABLE(m_text)->current_pos;
-
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
 	
 	/* bring editable's cursor uptodate. bug in GTK. */
-	
 	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
-    
     }
     else
     {
-        gtk_entry_append_text( GTK_ENTRY(m_text), text );
+        /* this moves the cursor pos to behind the inserted text */
+	gint len = GTK_EDITABLE(m_text)->current_pos;
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
+	
+	/* bring editable's cursor uptodate. bug in GTK. */
+	GTK_EDITABLE(m_text)->current_pos += text.Len();
+	
+	/* bring entry's cursor uptodate. bug in GTK. */
+	gtk_entry_set_position( GTK_ENTRY(m_text), GTK_EDITABLE(m_text)->current_pos );
     }
 }
 
@@ -318,6 +322,8 @@ void wxTextCtrl::AppendText( const wxString &text )
         /* we'll insert at the last position */
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
+	
+	/* bring editable's cursor uptodate. bug in GTK. */
 	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
     else
@@ -582,6 +588,10 @@ void wxTextCtrl::SetInsertionPoint( long pos )
     else
     {
         gtk_entry_set_position( GTK_ENTRY(m_text), (int)pos );
+	
+	/* bring editable's cursor uptodate. bug in GTK. */
+	
+	GTK_EDITABLE(m_text)->current_pos = pos;
     }
 }
 

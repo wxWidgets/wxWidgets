@@ -443,16 +443,20 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   m_notebook->AddPage(panel, "wxComboBox", FALSE, Image_Combo);
 
   panel = new wxPanel(m_notebook);
-  m_textentry = new MyTextCtrl( panel, -1, "Write text here.", wxPoint(10,10), wxSize(320,28),
+  m_textentry = new MyTextCtrl( panel, -1, "Some text.", wxPoint(10,10), wxSize(320,28),
                                 //0);
                                 wxTE_PROCESS_ENTER);
-  (*m_textentry) << " More text.";          // this text is appended
+  (*m_textentry) << " Appended.";
   m_textentry->SetInsertionPoint(0);
-  m_textentry->WriteText("Less text.");     // this text is prepended
+  m_textentry->WriteText( "Prepended. " );
 
-  m_multitext = new MyTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,70),
+  m_multitext = new MyTextCtrl( panel, ID_TEXT, "Some text.", wxPoint(10,50), wxSize(320,70),
                                 wxTE_MULTILINE );
-  (*m_multitext) << " More text.\nPress function keys to test different \nwxTextCtrl functions.";
+  (*m_multitext) << " Appended.";
+  m_multitext->SetInsertionPoint(0);
+  m_multitext->WriteText( "Prepended. " );
+  m_multitext->AppendText( "\nPress function keys to test different \nwxTextCtrl functions." );
+  
   new MyTextCtrl( panel, -1, "This one is with wxTE_PROCESS_TAB style.",
                              wxPoint(10,120), wxSize(320,70), wxTE_MULTILINE | wxTE_PROCESS_TAB);
 
