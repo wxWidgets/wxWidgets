@@ -501,8 +501,6 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 
     win->GetEventHandler()->ProcessEvent(event);
 
-    win->OnInternalIdle();
-
     if (event.MoreRequested())
         needMore = TRUE;
 
@@ -516,6 +514,8 @@ bool wxApp::SendIdleEvents( wxWindow* win )
         node = node->Next();
     }
     
+    win->OnInternalIdle();
+
     return needMore;
 }
 
