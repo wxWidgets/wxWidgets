@@ -426,7 +426,9 @@ pascal void wxMacLiveScrollbarActionProc( ControlRef control , ControlPartCode p
 void wxWindowMac::Init()
 {
     m_frozenness = 0 ;
+#if WXWIN_COMPATIBILITY_2_4
     m_backgroundTransparent = FALSE;
+#endif
 
     // as all windows are created with WS_VISIBLE style...
     m_isShown = TRUE;
