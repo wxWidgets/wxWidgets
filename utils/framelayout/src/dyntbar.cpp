@@ -342,7 +342,7 @@ void wxDynamicToolBar::SizeToolWindows()
 	}
 }
 
-void wxDynamicToolBar::Layout()
+bool wxDynamicToolBar::Layout()
 {
 	if ( !mpLayoutMan ) mpLayoutMan = CreateDefaulLayout();
 
@@ -359,6 +359,7 @@ void wxDynamicToolBar::Layout()
 	mpLayoutMan->Layout( wndDim, result, items, mVertGap, mHorizGap );;
 
 	SizeToolWindows();
+    return TRUE;
 }
 
 void wxDynamicToolBar::GetPreferredDim( const wxSize& givenDim, wxSize& prefDim )

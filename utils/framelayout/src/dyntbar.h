@@ -141,7 +141,7 @@ public:
 	virtual void DrawSeparator( wxDynToolInfo& info, wxDC& dc );
 
 	// see definitions of orientation types
-	virtual void Layout();
+	virtual bool Layout();
 
 	virtual void GetPreferredDim( const wxSize& givenDim, wxSize& prefDim );
 

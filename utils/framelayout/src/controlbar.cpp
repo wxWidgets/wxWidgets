@@ -354,9 +354,9 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 
 	return;
 
-	pChild->ReParent( pNewParent );
+	//pChild->ReParent( pNewParent );
 
-	return;
+	//return;
 #endif
 	
 	wxMessageBox( "Sorry, docking is not supported for ports other than MSW and wxGTK" );
