@@ -190,12 +190,20 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
     switch ( cs )
     {
         default:
-            // assume the system charset
+            wxFAIL_MSG( _T("unexpected Win32 charset") );
+            // fall through and assume the system charset
+
+        case DEFAULT_CHARSET:
             fontEncoding = wxFONTENCODING_SYSTEM;
             break;
 
         case ANSI_CHARSET:
             fontEncoding = wxFONTENCODING_CP1252;
+            break;
+
+        case SYMBOL_CHARSET:
+            // what can we do here?
+            fontEncoding = wxFONTENCODING_MAX;
             break;
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
