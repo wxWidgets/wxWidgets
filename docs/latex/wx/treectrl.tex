@@ -237,6 +237,8 @@ Creates the tree control. See \helpref{wxTreeCtrl::wxTreeCtrl}{wxtreectrlconstr}
 Deletes the specified item. A {\tt EVT\_TREE\_DELETE\_ITEM} event will be
 generated.
 
+This function may cause a subsequent call to GetNextChild to fail.
+
 \membersection{wxTreeCtrl::DeleteAllItems}\label{wxtreectrldeleteallitems}
 
 \func{void}{DeleteAllItems}{\void}
@@ -251,6 +253,10 @@ any events unlike \helpref{Delete}{wxtreectrldelete} method.
 Deletes all children of the given item (but not the item itself). Note that
 this will {\bf not} generate any events unlike 
 \helpref{Delete}{wxtreectrldelete} method.
+
+If you have called \helpref{wxTreeCtrl::SetItemHasChildren}{wxtreectrlsetitemhaschildren}, you
+may need to call it again since {\it DeleteChildren} does not automatically
+clear the setting.
 
 \membersection{wxTreeCtrl::EditLabel}\label{wxtreectrleditlabel}
 
@@ -621,6 +627,7 @@ returned as a tuple.}
  \param{int}{ image = -1}, \param{int}{ selImage = -1}, \param{wxTreeItemData*}{ data = NULL}}
 
 Inserts an item after a given one ({\it previous}) or before one identified by its position ({\it before}).
+{\it before} must be less than the number of children.
 
 The {\it image} and {\it selImage} parameters are an index within
 the normal image list specifying the image to use for unselected and
@@ -840,7 +847,7 @@ The new mode takes effect immediately.
 Sorts the children of the given item using
 \helpref{OnCompareItems}{wxtreectrloncompareitems} method of wxTreeCtrl. You
 should override that method to change the sort order (the default is ascending
-alphabetical order).
+case-sensitive alphabetical order).
 
 \wxheading{See also}
 
