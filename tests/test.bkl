@@ -10,17 +10,17 @@
         <sources>
             test.cpp
             arrays/arrays.cpp
-            datetime/datetime.cpp
-            fileconf/fileconf.cpp
-            filename/filename.cpp
-            filesys/filesys.cpp
-            fontmap/fontmap.cpp
-            formatconverter/formatconverter.cpp
+            datetime/datetimetest.cpp
+            fileconf/fileconftest.cpp
+            filename/filenametest.cpp
+            filesys/filesystest.cpp
+            fontmap/fontmaptest.cpp
+            formatconverter/formatconvertertest.cpp
             hashes/hashes.cpp
-            longlong/longlong.cpp
-            mbconv/main.cpp
-            regex/regex.cpp
-            regex/wxregex.cpp
+            longlong/longlongtest.cpp
+            mbconv/mbconvtest.cpp
+            regex/regextest.cpp
+            regex/wxregextest.cpp
             strings/strings.cpp
             strings/stdstrings.cpp
             strings/unicode.cpp
