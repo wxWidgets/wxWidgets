@@ -2813,7 +2813,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC setup_h $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname)
+all : .SYMBOLIC setup_h $(LIBDIRNAME)\wxregex$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
@@ -9605,6 +9605,35 @@ $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib :  $(BASELIB_OBJECTS)
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\baselib.lbc
 !endif
 !endif
+
+build_cfg_file :  $(LIBDIRNAME)
+	@echo WXVER_MAJOR=2 >$(LIBDIRNAME)\build.cfg
+	@echo WXVER_MINOR=5 >>$(LIBDIRNAME)\build.cfg
+	@echo WXVER_RELEASE=1 >>$(LIBDIRNAME)\build.cfg
+	@echo BUILD=$(BUILD) >>$(LIBDIRNAME)\build.cfg
+	@echo MONOLITHIC=$(MONOLITHIC) >>$(LIBDIRNAME)\build.cfg
+	@echo SHARED=$(SHARED) >>$(LIBDIRNAME)\build.cfg
+	@echo UNICODE=$(UNICODE) >>$(LIBDIRNAME)\build.cfg
+	@echo WXUNIV=$(WXUNIV) >>$(LIBDIRNAME)\build.cfg
+	@echo CFG=$(CFG) >>$(LIBDIRNAME)\build.cfg
+	@echo VENDOR=$(VENDOR) >>$(LIBDIRNAME)\build.cfg
+	@echo OFFICIAL_BUILD=$(OFFICIAL_BUILD) >>$(LIBDIRNAME)\build.cfg
+	@echo DEBUG_FLAG=$(DEBUG_FLAG) >>$(LIBDIRNAME)\build.cfg
+	@echo DEBUG_INFO=$(DEBUG_INFO) >>$(LIBDIRNAME)\build.cfg
+	@echo RUNTIME_LIBS=$(RUNTIME_LIBS) >>$(LIBDIRNAME)\build.cfg
+	@echo MSLU=0 >>$(LIBDIRNAME)\build.cfg
+	@echo USE_EXCEPTIONS=$(USE_EXCEPTIONS) >>$(LIBDIRNAME)\build.cfg
+	@echo USE_GUI=$(USE_GUI) >>$(LIBDIRNAME)\build.cfg
+	@echo USE_HTML=$(USE_HTML) >>$(LIBDIRNAME)\build.cfg
+	@echo USE_ODBC=$(USE_ODBC) >>$(LIBDIRNAME)\build.cfg
+	@echo USE_OPENGL=$(USE_OPENGL) >>$(LIBDIRNAME)\build.cfg
+	@echo COMPILER=wat >>$(LIBDIRNAME)\build.cfg
+	@echo CC=$(CC) >>$(LIBDIRNAME)\build.cfg
+	@echo CXX=$(CXX) >>$(LIBDIRNAME)\build.cfg
+	@echo CFLAGS=$(CFLAGS) >>$(LIBDIRNAME)\build.cfg
+	@echo CPPFLAGS=$(CPPFLAGS) >>$(LIBDIRNAME)\build.cfg
+	@echo CXXFLAGS=$(CXXFLAGS) >>$(LIBDIRNAME)\build.cfg
+	@echo LDFLAGS=$(LDFLAGS) >>$(LIBDIRNAME)\build.cfg
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj

@@ -11,6 +11,13 @@ makefiles, e.g. wx24dsp or rpmspec ones.
 
     <include file="win32.bkl"/>
 
+    <set var="CC">cc</set>
+    <set var="CXX">c++</set>
+    <set var="CPPFLAGS"/>
+    <set var="CFLAGS"/>
+    <set var="CXXFLAGS"/>
+    <set var="LDFLAGS"/>
+
     <define-rule name="__fake">
         <template>
             <__fake_hook/>

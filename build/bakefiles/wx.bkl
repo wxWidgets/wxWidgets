@@ -154,6 +154,7 @@
             <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</src>
             <dst>$(SETUPHDIR)/wx/setup.h</dst>
         </copy-file-to-file-if-not-exist>
+
     </if>
 
 
@@ -187,5 +188,7 @@
         <fragment format="autoconf" file="make_dist.mk"/>
 
     </if>
+        
+    <include file="build_cfg.bkl"/>
 
 </makefile>
