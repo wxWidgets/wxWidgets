@@ -449,20 +449,14 @@ bool wxFile::Eof() const
     iRc = wxEof(m_fd);
 #endif // Windows/Unix
 
-    switch ( iRc ) {
-        case 1:
-            break;
-
-        case 0:
-            return false;
-
-        case wxInvalidOffset:
-            wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
-                break;
-
-        default:
-            wxFAIL_MSG(_("invalid eof() return value."));
-    }
+    if ( iRc == 1)
+        {}
+    else if ( iRc == 0 )
+        return false;
+    else if ( iRc == wxInvalidOffset )
+        wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
+    else
+        wxFAIL_MSG(_("invalid eof() return value."));
 
     return true;
 }
