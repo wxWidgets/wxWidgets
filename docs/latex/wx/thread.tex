@@ -23,9 +23,10 @@ terminate and destroy itself.
 
 This means, of course, that all detached threads {\bf must} be created on the
 heap because the thread will call {\tt delete this;} upon termination. Joinable
-threads may be created on the stack although more usually they will be created on the heap.
-Don't create global thread objects because they allocate memory in their constructor,
-which will cause problems for the memory checking system.
+threads may be created on the stack although more usually they will be created
+on the heap as well. Don't create global thread objects because they allocate
+memory in their constructor, which will cause problems for the memory checking
+system.
 
 \wxheading{Derived from}
 
