@@ -1194,34 +1194,35 @@ void wxFrameLayout::UnhookFromFrame()
 	// FOR NOW::
 
 	if ( mpFrame->GetEventHandler() == this )
-
+    {
 		mpFrame->PopEventHandler();
+    	return;
+    }
 
-	return;
-
-	// TBD ???:  Cannot reach this code
 	if ( mpFrame )
 	{
 		if ( this == mpFrame->GetEventHandler() )
-		
+        {
 			mpFrame->SetEventHandler( this->GetNextHandler() );
+        }
 		else
+		{
+			wxEvtHandler* pCur = mpFrame->GetEventHandler();
+
+			while ( pCur )
 			{
-				wxEvtHandler* pCur = mpFrame->GetEventHandler();
+				if ( pCur == this )
+                    break;
 
-				while( pCur )
-				{
-					if ( pCur == this ) break;
-
-					pCur = pCur->GetNextHandler();
-				}
-
-				// do not try to unhook ourselves if we're not hooked yet
-				if ( !pCur ) return;
+				pCur = pCur->GetNextHandler();
 			}
 
-		if ( GetPreviousHandler() )
+			// do not try to unhook ourselves if we're not hooked yet
+			if ( !pCur )
+                return;
+		}
 
+		if ( GetPreviousHandler() )
 			GetPreviousHandler()->SetNextHandler( GetNextHandler() );
 		else
 		{
@@ -1229,9 +1230,7 @@ void wxFrameLayout::UnhookFromFrame()
 			return;
 		}
 
-
 		if ( GetNextHandler() )
-
 			GetNextHandler()->SetPreviousHandler( GetPreviousHandler() );
 
 		SetNextHandler( NULL );
