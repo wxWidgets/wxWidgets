@@ -206,6 +206,8 @@ public:
         SetAlignment(0, 0);
     }
 
+    // VZ: considering the number of members wxGridCellAttr has now, this ctor
+    //     seems to be pretty useless... may be we should just remove it?
     wxGridCellAttr(const wxColour& colText,
                    const wxColour& colBack,
                    const wxFont& font,
@@ -236,6 +238,7 @@ public:
         m_hAlign = hAlign;
         m_vAlign = vAlign;
     }
+    void SetReadOnly(bool isReadOnly = TRUE) { m_isReadOnly = isReadOnly; }
 
     // takes ownership of the pointer
     void SetRenderer(wxGridCellRenderer *renderer)
@@ -258,12 +261,18 @@ public:
     wxGridCellRenderer *GetRenderer() const;
     wxGridCellEditor *GetEditor() const;
 
+    bool IsReadOnly() const { return m_isReadOnly; }
+
     void SetDefAttr(wxGridCellAttr* defAttr) { m_defGridAttr = defAttr; }
 
 private:
     // the common part of all ctors
-    void Init() {
+    void Init()
+    {
         m_nRef = 1;
+
+        m_isReadOnly = FALSE;
+
         m_renderer = NULL;
         m_editor = NULL;
     }
@@ -283,6 +292,8 @@ private:
     wxGridCellRenderer* m_renderer;
     wxGridCellEditor*   m_editor;
     wxGridCellAttr*     m_defGridAttr;
+
+    bool m_isReadOnly;
 
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
@@ -624,7 +635,7 @@ public:
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
-    void DrawCellHighlight( wxDC& dc );
+    void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
 
     void DrawRowLabels( wxDC& dc );
     void DrawRowLabel( wxDC& dc, int row );
@@ -666,8 +677,7 @@ public:
 
     void     EnableCellEditControl( bool enable );
 
-    bool     IsCellEditControlEnabled()
-             { return m_cellEditCtrlEnabled; }
+    bool     IsCellEditControlEnabled();
 
     void ShowCellEditControl();
     void HideCellEditControl();
@@ -791,7 +801,7 @@ public:
     wxGridCellRenderer *GetDefaultRenderer() const;
     wxGridCellRenderer* GetCellRenderer(int row, int col);
 
-        // takes ownership of the pointer
+    // takes ownership of the pointer
     void SetDefaultEditor(wxGridCellEditor *editor);
     void SetCellEditor(int row, int col, wxGridCellEditor *editor);
     wxGridCellEditor *GetDefaultEditor() const;
@@ -819,7 +829,11 @@ public:
     void SetCellValue( const wxGridCellCoords& coords, const wxString& s )
         { SetCellValue( coords.GetRow(), coords.GetCol(), s ); }
 
+    // returns TRUE if the cell can't be edited
+    bool IsReadOnly(int row, int col) const;
 
+    // make the cell editable/readonly
+    void SetReadOnly(int row, int col, bool isReadOnly = TRUE);
 
     // ------ selections of blocks of cells
     //

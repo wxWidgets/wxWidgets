@@ -546,6 +546,8 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
     // now we only have to draw the text
     dc.SetBackgroundMode( wxTRANSPARENT );
 
+    // TODO some special colours for attr.IsReadOnly() case?
+
     if ( isSelected )
     {
         dc.SetTextBackground( grid.GetSelectionBackground() );
@@ -3780,7 +3782,10 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     {
         wxClientDC dc(m_gridWin);
         PrepareDC(dc);
-        DrawCellHighlight(dc);
+
+        wxGridCellAttr* attr = GetCellAttr(coords);
+        DrawCellHighlight(dc, attr);
+        attr->DecRef();
 
         if ( IsSelection() )
         {
@@ -3874,14 +3879,14 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
 
     wxGridCellAttr* attr = GetCellAttr(row, col);
     attr->GetRenderer()->Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
-    attr->DecRef();
 
     if (m_currentCellCoords == coords)
-        DrawCellHighlight(dc);
+        DrawCellHighlight(dc, attr);
+
+    attr->DecRef();
 }
 
-
-void wxGrid::DrawCellHighlight( wxDC& dc )
+void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
 {
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
@@ -3895,10 +3900,44 @@ void wxGrid::DrawCellHighlight( wxDC& dc )
     rect.width = m_colWidths[col] - 1;
     rect.height = m_rowHeights[row] - 1;
 
-    dc.SetPen(wxPen(m_gridLineColour, 3, wxSOLID));
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    if ( attr->IsReadOnly() )
+    {
+        // hmmm... what could we do here to show that the cell is disabled?
+        // for now, I just draw a thinner border than for the other ones, but
+        // it doesn't look really good
+        dc.SetPen(wxPen(m_gridLineColour, 2, wxSOLID));
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-    dc.DrawRectangle(rect);
+        dc.DrawRectangle(rect);
+    }
+    else
+    {
+        // VZ: my experiments with 3d borders...
+#if 0
+        dc.SetPen(wxPen(m_gridLineColour, 3, wxSOLID));
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+        dc.DrawRectangle(rect);
+#else //1
+        // FIXME we should properly set colours for arbitrary bg
+        wxCoord x1 = rect.x,
+                y1 = rect.y,
+                x2 = rect.x + rect.width,
+                y2 = rect.y + rect.height;
+
+        dc.SetPen(*wxWHITE_PEN);
+        dc.DrawLine(x1, y1, x2 - 1, y1);
+        dc.DrawLine(x1, y1, x1, y2 - 1);
+
+        dc.SetPen(*wxLIGHT_GREY_PEN);
+        dc.DrawLine(x1 + 1, y2 - 1, x2 - 1, y2 - 1);
+        dc.DrawLine(x2 - 1, y1 + 1, x2 - 1, y2 - 1);
+
+        dc.SetPen(*wxBLACK_PEN);
+        dc.DrawLine(x1, y2, x2, y2);
+        dc.DrawLine(x2, y1, x2, y2);
+#endif // 0/1
+    }
 }
 
 void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
@@ -4246,6 +4285,24 @@ void wxGrid::EnableCellEditControl( bool enable )
     }
 }
 
+
+bool wxGrid::IsCellEditControlEnabled()
+{
+    bool enabled;
+
+    if ( m_cellEditCtrlEnabled )
+    {
+        wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
+        enabled = !attr->IsReadOnly();
+        attr->DecRef();
+    }
+    else
+    {
+        enabled = FALSE;
+    }
+
+    return enabled;
+}
 
 void wxGrid::ShowCellEditControl()
 {
@@ -5344,6 +5401,14 @@ wxGridCellEditor* wxGrid::GetCellEditor(int row, int col)
     return editor;
 }
 
+bool wxGrid::IsReadOnly(int row, int col) const
+{
+    wxGridCellAttr* attr = GetCellAttr(row, col);
+    bool isReadOnly = attr->IsReadOnly();
+    attr->DecRef();
+    return isReadOnly;
+}
+
 // ----------------------------------------------------------------------------
 // attribute support: cache, automatic provider creation, ...
 // ----------------------------------------------------------------------------
@@ -5540,6 +5605,16 @@ void wxGrid::SetCellEditor(int row, int col, wxGridCellEditor* editor)
     {
         wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
         attr->SetEditor(editor);
+        attr->DecRef();
+    }
+}
+
+void wxGrid::SetReadOnly(int row, int col, bool isReadOnly)
+{
+    if ( CanHaveAttributes() )
+    {
+        wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
+        attr->SetReadOnly(isReadOnly);
         attr->DecRef();
     }
 }

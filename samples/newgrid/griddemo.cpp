@@ -95,7 +95,6 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
-
 END_EVENT_TABLE()
 
 
@@ -187,6 +186,8 @@ GridFrame::GridFrame()
 
     grid->SetCellValue( 0, 1, "Blah" );
     grid->SetCellValue( 0, 2, "Blah" );
+    grid->SetCellValue( 0, 3, "Read only" );
+    grid->SetReadOnly( 0, 3 );
 
     grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
 
@@ -211,6 +212,9 @@ GridFrame::GridFrame()
     attr = new wxGridCellAttr;
     attr->SetBackgroundColour(*wxBLUE);
     grid->SetRowAttr(5, attr);
+
+    // VZ: cell borders don't look nice otherwise :-) (for now...)
+    grid->SetDefaultCellBackgroundColour(wxColour(200, 200, 180));
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
