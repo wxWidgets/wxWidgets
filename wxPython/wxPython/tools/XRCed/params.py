@@ -711,19 +711,21 @@ class ParamBitmap(PPanel):
         EVT_TEXT(self, XMLID('TEXT_FILE'), self.OnChange)
     def OnRadioStd(self, evt):
         self.SetModified()
-        self.SetValue('')
+        self.SetValue(['wxART_MISSING_IMAGE',''])
     def OnRadioFile(self, evt):
         self.SetModified()
         self.SetValue(['',''])
     def updateRadios(self):
         if self.value[0]:
+            self.radio_std.SetValue(true)
             self.text.Enable(false)
             self.button.Enable(false)
             self.combo.Enable(true)
         else:
+            self.radio_file.SetValue(true)
             self.text.Enable(true)
             self.button.Enable(true)
-            self.combo.Enable(false)            
+            self.combo.Enable(false)
     def OnChange(self, evt):
         PPanel.OnChange(self, evt)
         self.textModified = true
@@ -737,7 +739,7 @@ class ParamBitmap(PPanel):
     def SetValue(self, value):
         self.freeze = true
         if not value:
-            self.value = ['wxART_MISSING_IMAGE', '']
+            self.value = ['', '']
         else:
             self.value = value
         self.combo.SetValue(self.value[0])

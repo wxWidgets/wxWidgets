@@ -161,6 +161,7 @@ class ParamPage(wxPanel):
         xxx = self.xxx
         param = evt.GetEventObject().GetName()
         w = self.controls[param]
+        w.Enable(true)
         objElem = xxx.element
         if evt.IsChecked():
             # Ad  new text node in order of allParams
@@ -193,7 +194,7 @@ class ParamPage(wxPanel):
             del xxx.params[param]
             w.SetValue('')
             w.modified = false          # mark as not changed
-        w.Enable(evt.IsChecked())
+            w.Enable(false)
         # Set modified flag (provokes undo storing is necessary)
         panel.SetModified(true)
     def Apply(self):
