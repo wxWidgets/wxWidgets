@@ -14733,7 +14733,7 @@ for ac_dir in $SEARCH_LIB /usr/lib;
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine$mesa_link$xpm_link -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXWINE__"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WINE__"
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
@@ -15911,8 +15911,8 @@ case "${host}" in
         WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 
                         if test "$wxUSE_MAC" = 1; then
-                        WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.r"
-            WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.rsrc"
+                                    WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.${WX_CURRENT}.r"
+            WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.${WX_CURRENT}.rsrc"
         fi
         ;;
 esac
@@ -16076,7 +16076,7 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
         CXXFLAGS="$CXXFLAGS -fno-common"
                                         SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
         PIC_FLAG="-dynamic -fPIC"
-        SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1}"
+                                SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1}"
         SONAME_FLAGS_GL="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION} -install_name \$(libdir)/${WX_LIBRARY_LINK1_GL}"
       ;;
 
