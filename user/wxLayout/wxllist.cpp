@@ -24,8 +24,10 @@
 
 #ifdef M_BASEDIR
 #   include "gui/wxllist.h"
+#   undef  SHOW_SELECTIONS
 #else
 #   include "wxllist.h"
+#   define SHOW_SELECTIONS
 #endif
 
 #ifndef USE_PCH
@@ -1631,16 +1633,20 @@ wxLayoutList::IsSelected(const wxLayoutLine *line, CoordType *from,
 void
 wxLayoutList::StartHighlighting(wxDC &dc)
 {
+#ifdef SHOW_SELECTIONS
    dc.SetTextForeground(m_ColourBG);
    dc.SetTextBackground(m_ColourFG);
+#endif
 }
 
 /// Ends highlighting the selection
 void
 wxLayoutList::EndHighlighting(wxDC &dc)
 {
+#ifdef SHOW_SELECTIONS
    dc.SetTextForeground(m_ColourFG);
    dc.SetTextBackground(m_ColourBG);
+#endif
 }
 
 
