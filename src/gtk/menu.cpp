@@ -1122,10 +1122,6 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 {
     GtkWidget *menuItem;
 
-#if defined(USE_MENU_BITMAPS) || !GTK_CHECK_VERSION(1, 2, 0)
-    bool appended = FALSE;
-#endif
-
     // does this item terminate the current radio group?
     bool endOfRadioGroup = TRUE;
 
@@ -1213,8 +1209,6 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
         gtk_widget_show( menuItem );
-
-        appended = TRUE; // We've done this, don't do it again
     }
 #endif 
     else // a normal item
