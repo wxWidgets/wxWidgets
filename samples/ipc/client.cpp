@@ -75,11 +75,7 @@ MyClient *my_client ;
 bool MyApp::OnInit()
 {
     wxString server = "4242";
-#if wxUSE_DDE_FOR_SAMPLE
     wxString hostName = wxGetHostName();
-#else
-    wxString hostName = "localhost";
-#endif
 
     if (argc > 1)
         server = argv[1];

@@ -119,8 +119,8 @@ END_EVENT_TABLE()
 IMPLEMENT_APP(MyApp)
 
 
-// To append sockets for delayed deletion
-extern wxList wxPendingDelete;
+// To append sockets for delayed deletion [XXX: this should be removed]
+extern WXDLLEXPORT wxList wxPendingDelete;
 
 
 // ==========================================================================
@@ -177,10 +177,9 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
                            wxPoint(0, 0), m_panel->GetClientSize(),
                            wxTE_MULTILINE | wxTE_READONLY);
 
-  // Create the socket
+  // Create the socket - defaults to localhost:0
   wxIPV4address addr;
   addr.Service(3000);
-  addr.LocalHost();
 
   m_server = new wxSocketServer(addr);
   m_server->SetEventHandler(*this, SERVER_ID);
@@ -228,18 +227,18 @@ void MyFrame::Test1(wxSocketBase *sock)
 
   // Receive data from socket and send it back. We will first
   // get a byte with the buffer size, so we can specify the
-  // exact size and use the WAITALL flag. Also, we disabled
-  // input events so we won't have unwanted reentrance. This
-  // way we can avoid the infamous BLOCK (formerly SPEED) flag.
+  // exact size and use the wxSOCKET_WAITALL flag. Also, we
+  // disabled input events so we won't have unwanted reentrance.
+  // This way we can avoid the infamous wxSOCKET_BLOCK flag.
   //
   sock->SetFlags(wxSOCKET_WAITALL);
 
   sock->Read((char *)&len, 1);
 
-  buf = (char *)malloc(len);
+  buf = new char[len];
   sock->Read(buf, len);
   sock->Write(buf, len);
-  free(buf);
+  delete[] buf;
 
   m_text->AppendText(_T("Test 1 ends\n"));
 }
@@ -249,7 +248,7 @@ void MyFrame::Test2(wxSocketBase *sock)
 #define MAX_MSG_SIZE 10000
 
   wxString s;
-  char *buf = (char *)malloc(MAX_MSG_SIZE);
+  char *buf = new char[MAX_MSG_SIZE];
   wxUint32 len;
 
   m_text->AppendText(_T("Test 2 begins\n"));
@@ -263,7 +262,7 @@ void MyFrame::Test2(wxSocketBase *sock)
   m_text->AppendText(s);
 
   sock->WriteMsg(buf, len);
-  free(buf);
+  delete[] buf;
 
   m_text->AppendText(_T("Test 2 ends\n"));
 
@@ -272,8 +271,22 @@ void MyFrame::Test2(wxSocketBase *sock)
 
 void MyFrame::Test3(wxSocketBase *sock)
 {
+  unsigned char len;
+  char *buf;
+
   m_text->AppendText(_T("Test 3 begins\n"));
-  m_text->AppendText(_T("(not implemented)\n"));
+
+  // This test is similar to the first one, but the len is   
+  // expressed in kbytes - this tests large data transfers.
+  //
+  sock->SetFlags(wxSOCKET_WAITALL);
+
+  sock->Read((char *)&len, 1);
+  buf = new char[len * 1024];
+  sock->Read(buf, len * 1024);
+  sock->Write(buf, len * 1024);
+  delete[] buf;
+
   m_text->AppendText(_T("Test 3 ends\n"));
 }
 

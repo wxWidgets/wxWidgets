@@ -34,10 +34,10 @@
 #  include "wx/wx.h"
 #endif
 
-#  include "wx/socket.h"
-#  include "wx/url.h"
-#  include "wx/protocol/http.h"
-#  include "wx/progdlg.h"
+#include "wx/socket.h"
+#include "wx/url.h"
+#include "wx/protocol/http.h"
+#include "wx/progdlg.h"
 
 // --------------------------------------------------------------------------
 // resources
@@ -75,6 +75,7 @@ public:
   void OnTest3(wxCommandEvent& event);
   void OnCloseConnection(wxCommandEvent& event);
   void OnSocketEvent(wxSocketEvent& event);
+  void OnDatagram(wxCommandEvent& event);
 
   // convenience functions
   void UpdateStatusBar();
@@ -85,6 +86,7 @@ private:
   wxTextCtrl     *m_text;
   wxMenu         *m_menuFile;
   wxMenu         *m_menuSocket;
+  wxMenu         *m_menuDatagramSocket;
   wxMenuBar      *m_menuBar;
   bool            m_busy;
 
@@ -107,6 +109,7 @@ enum
   CLIENT_TEST2,
   CLIENT_TEST3,
   CLIENT_CLOSE,
+  CLIENT_DGRAM,
 
   // id for socket
   SOCKET_ID
@@ -124,6 +127,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(CLIENT_TEST2, MyFrame::OnTest2)
   EVT_MENU(CLIENT_TEST3, MyFrame::OnTest3)
   EVT_MENU(CLIENT_CLOSE, MyFrame::OnCloseConnection)
+  EVT_MENU(CLIENT_DGRAM, MyFrame::OnDatagram)
   EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
 END_EVENT_TABLE()
 
@@ -177,10 +181,14 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
   m_menuSocket->AppendSeparator();
   m_menuSocket->Append(CLIENT_CLOSE, _T("&Close session"), _T("Close connection"));
 
+  m_menuDatagramSocket = new wxMenu();
+  m_menuDatagramSocket->Append(CLIENT_DGRAM, _T("Send Datagram"), _("Test UDP sockets"));
+
   // Append menus to the menubar
   m_menuBar = new wxMenuBar();
   m_menuBar->Append(m_menuFile, _T("&File"));
   m_menuBar->Append(m_menuSocket, _T("&Socket"));
+  m_menuBar->Append(m_menuDatagramSocket, _T("&DatagramSocket"));
   SetMenuBar(m_menuBar);
 
   // Status bar
@@ -245,8 +253,8 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
 
   // Non-blocking connect
   m_text->AppendText(_T("Trying to connect (timeout = 10 sec) ...\n"));
-  m_sock->Connect(addr, FALSE);
-  m_sock->WaitOnConnect(10);
+  m_sock->Connect(addr, TRUE);
+//  m_sock->WaitOnConnect(10);
 
   if (m_sock->IsConnected())
     m_text->AppendText(_T("Succeeded ! Connection established\n"));
@@ -262,8 +270,9 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-  char *buf1, *buf2;
-  char len;
+  char *buf1;
+  char *buf2;
+  unsigned char len;
 
   // Disable socket menu entries (exception: Close Session)
   m_busy = TRUE;
@@ -277,24 +286,24 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 
   // Send some data and read it back. We know the size of the
   // buffer, so we can specify the exact number of bytes to be
-  // sent or received and use the WAITALL flag. Also, we have
-  // disabled menu entries which could interfere with the test,
-  // so we can safely avoid the BLOCK (formerly SPEED) flag.
+  // sent or received and use the wxSOCKET_WAITALL flag. Also,
+  // we have disabled menu entries which could interfere with
+  // the test, so we can safely avoid the wxSOCKET_BLOCK flag.
   //
   // First we send a byte with the length of the string, then
   // we send the string itself (do NOT try to send any integral
-  // value larger than a byte "as is" acrosss the network, or
+  // value larger than a byte "as is" across the network, or
   // you might be in trouble! Ever heard about big and little
   // endian computers?)
   //
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
-  buf1 = _T("Test string (less than 127 chars!)");
+  buf1 = _T("Test string (less than 256 chars!)");
   len  = wxStrlen(buf1) + 1;
   buf2 = new char[len];
 
   m_text->AppendText(_T("Sending a test buffer to the server ..."));
-  m_sock->Write(&len, 1);
+  m_sock->Write((char *)&len, 1);
   m_sock->Write(buf1, len);
   m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
 
@@ -352,7 +361,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 
   msg1 = (char *)s.c_str();
   len  = wxStrlen(msg1) + 1;
-  msg2 = (char *)malloc(len);
+  msg2 = new char[len];
 
   m_text->AppendText(_T("Sending the string with WriteMsg ..."));
   m_sock->WriteMsg(msg1, len);
@@ -384,22 +393,77 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 
   m_text->AppendText(_T("=== Test 2 ends ===\n"));
 
-  free(msg2);
+  delete[] msg2;
   m_busy = FALSE;
   UpdateStatusBar();
 }
 
 void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
 {
+  char *buf1;
+  char *buf2;
+  unsigned char len;
+
+  // Disable socket menu entries (exception: Close Session)
+  m_busy = TRUE;
+  UpdateStatusBar();
+
   m_text->AppendText(_T("\n=== Test 3 begins ===\n"));
-  m_text->AppendText(_T("Test 3 not implemented\n"));
+
+  // Tell the server which test we are running
+  char c = 0xDE;
+  m_sock->Write(&c, 1);
+
+  // This test also is similar to the first one but it sends a
+  // large buffer so that wxSocket is actually forced to split
+  // it into pieces and take care of sending everything before
+  // returning.
+  //
+  m_sock->SetFlags(wxSOCKET_WAITALL);
+
+  // Note that len is in kbytes here!
+  len  = 32;
+  buf1 = new char[len * 1024];
+  buf2 = new char[len * 1024];
+
+  for (int i = 0; i < len * 1024; i ++)
+    buf1[i] = (char)(i % 256);
+
+  m_text->AppendText(_T("Sending a large buffer (32K) to the server ..."));
+  m_sock->Write((char *)&len, 1);
+  m_sock->Write(buf1, len * 1024);
+  m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
+
+  m_text->AppendText(_T("Receiving the buffer back from server ..."));
+  m_sock->Read(buf2, len * 1024);
+  m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
+
+  m_text->AppendText(_T("Comparing the two buffers ..."));
+  if (memcmp(buf1, buf2, len) != 0)
+  {
+    m_text->AppendText(_T("failed!\n"));
+    m_text->AppendText(_T("Test 3 failed !\n"));
+  }
+  else
+  {
+    m_text->AppendText(_T("done\n"));
+    m_text->AppendText(_T("Test 3 passed !\n"));
+  }
   m_text->AppendText(_T("=== Test 3 ends ===\n"));
+
+  delete[] buf2;
+  m_busy = FALSE;
+  UpdateStatusBar();
 }
 
 void MyFrame::OnCloseConnection(wxCommandEvent& WXUNUSED(event))
 {
   m_sock->Close();
   UpdateStatusBar();
+}
+
+void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
+{
 }
 
 void MyFrame::OnSocketEvent(wxSocketEvent& event)

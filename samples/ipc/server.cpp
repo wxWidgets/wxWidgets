@@ -215,7 +215,7 @@ bool MyConnection::OnPoke(const wxString& WXUNUSED(topic),
                           int WXUNUSED(size),
                           wxIPCFormat WXUNUSED(format))
 {
-    wxLogStatus("Poke command: %s = %s", item, data);
+    wxLogStatus("Poke command: %s = %s", item.c_str(), data);
     return TRUE;
 }
 
