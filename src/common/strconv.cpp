@@ -585,7 +585,7 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         }
 #ifndef WC_UTF16
         else if (((wxUint32)cc) > 0xffff)
-	    {
+        {
             // no surrogate pair generation (yet?)
             return (size_t)-1;
         }
@@ -755,9 +755,9 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                         {
                             unsigned char n = *opsz;
                             *buf++ = L'\\';
-                            *buf++ = L'0' + n / 0100;
-                            *buf++ = L'0' + (n % 0100) / 010;
-                            *buf++ = L'0' + n % 010;
+                            *buf++ = (wchar_t)( L'0' + n / 0100 );
+                            *buf++ = (wchar_t)( L'0' + (n % 0100) / 010 );
+                            *buf++ = (wchar_t)( L'0' + n % 010 );
                         }
                         opsz++;
                         len += 4;
@@ -808,9 +808,9 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         {
             if (buf)
             {
-                *buf++ = (char) (psz[0] - L'0')*0100 +
-                                (psz[1] - L'0')*010 +
-                                (psz[2] - L'0');
+                *buf++ = (char) ((psz[0] - L'0')*0100 +
+                                 (psz[1] - L'0')*010 +
+                                 (psz[2] - L'0'));
             }
 
             psz += 3;
