@@ -50,6 +50,11 @@
 // define this for the platforms which don't support wxBitmapButton (such as
 // Motif), else a wxBitmapButton will be used
 #ifdef __WXMOTIF__
+//#define USE_MDI_PARENT_FRAME 1
+
+#ifdef USE_MDI_PARENT_FRAME
+    #include "wx/mdi.h"
+#endif // USE_MDI_PARENT_FRAME
     #define USE_STATIC_BITMAP
 #endif
 
@@ -127,7 +132,11 @@ class MyFrame : public wxFrame
 public:
     // ctor(s)
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+#ifdef USE_MDI_PARENT_FRAME
+class MyFrame : public wxMDIParentFrame
+#else
     virtual ~MyFrame();
+#endif
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -143,7 +152,9 @@ private:
         StatBar_Custom,
         StatBar_Max
     } m_statbarKind;
-
+    void OnUpdateSetStatusFields(wxUpdateUIEvent& event);
+    void OnUpdateStatusBarToggle(wxUpdateUIEvent& event);
+    void OnStatusBarToggle(wxCommandEvent& event);
     void DoCreateStatusBar(StatBarKind kind);
 
     wxStatusBar *m_statbarDefault;
@@ -172,6 +183,7 @@ enum
     StatusBar_SetFields,
     StatusBar_Recreate,
     StatusBar_About,
+    StatusBar_Toggle,
     StatusBar_Checkbox = 1000
 };
 
@@ -185,11 +197,18 @@ static const int BITMAP_SIZE_Y = 15;
 // the event tables connect the wxWindows events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
+#ifdef USE_MDI_PARENT_FRAME
+BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+#else
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+#endif
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
     EVT_MENU(StatusBar_About, MyFrame::OnAbout)
+    EVT_MENU(StatusBar_Toggle, MyFrame::OnStatusBarToggle)
+    EVT_UPDATE_UI(StatusBar_Toggle, MyFrame::OnUpdateStatusBarToggle)
+    EVT_UPDATE_UI(StatusBar_SetFields, MyFrame::OnUpdateSetStatusFields)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
@@ -237,7 +256,11 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+#ifdef USE_MDI_PARENT_FRAME
+       : wxMDIParentFrame((wxWindow *)NULL, -1, title, pos, size)
+#else
+       : wxFrame((wxWindow *)NULL, -1, title, pos, size)
+#endif
 {
     m_statbarDefault = NULL;
     m_statbarCustom = NULL;
@@ -255,6 +278,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *statbarMenu = new wxMenu;
     statbarMenu->Append(StatusBar_SetFields, "&Set field count\tCtrl-C",
                         "Set the number of status bar fields");
+    statbarMenu->Append(StatusBar_Toggle, "&Toggle Status Bar",
+                        "Toggle the status bar display", true);
     statbarMenu->Append(StatusBar_Recreate, "&Recreate\tCtrl-R",
                         "Toggle status bar format");
 
@@ -272,6 +297,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create default status bar to start with
     CreateStatusBar(2);
+    m_statbarKind = StatBar_Default;
     SetStatusText("Welcome to wxWindows!");
 
     m_statbarDefault = GetStatusBar();
@@ -316,6 +342,15 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
 
     m_statbarKind = kind;
 }
+
+void MyFrame::OnUpdateSetStatusFields(wxUpdateUIEvent& event)
+{
+    // only allow the setting of the number of status fields for the default
+    // status bar
+    wxStatusBar *sb = GetStatusBar();
+    event.Enable(sb == m_statbarDefault);
+}
+
 
 // event handlers
 void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
@@ -374,6 +409,30 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
     {
         wxLogStatus(this, wxT("Cancelled"));
     }
+}
+
+void MyFrame::OnUpdateStatusBarToggle(wxUpdateUIEvent& event)
+{
+	event.Check(GetStatusBar() != 0);
+}
+
+void MyFrame::OnStatusBarToggle(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *statbarOld = GetStatusBar();
+    if ( statbarOld )
+    {
+        statbarOld->Hide();
+        SetStatusBar(0);
+    }
+    else
+    {
+        DoCreateStatusBar(m_statbarKind);
+    }
+#ifdef __WXMSW__
+    // The following is a kludge suggested by Vadim Zeitlin (one of the wxWindows
+    // authors) while we look for a proper fix..
+//    SendSizeEvent();
+#endif
 }
 
 void MyFrame::OnRecreateStatusBar(wxCommandEvent& WXUNUSED(event))
