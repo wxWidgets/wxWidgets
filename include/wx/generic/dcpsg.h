@@ -12,7 +12,7 @@
 #define _WX_DCPSG_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "dcpsg.h"
 #endif
 
 #include "wx/dc.h"
