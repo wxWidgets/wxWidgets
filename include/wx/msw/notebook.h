@@ -40,7 +40,7 @@ WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
 class WXDLLEXPORT wxNotebookEvent : public wxCommandEvent
 {
 public:
-  wxNotebookEvent(WXTYPE commandType = 0, int id = 0, 
+  wxNotebookEvent(WXTYPE commandType = wxEVT_NULL, int id = 0,
                   int nSel = -1, int nOldSel = -1)
     : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
 

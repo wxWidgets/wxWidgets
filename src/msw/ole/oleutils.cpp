@@ -64,8 +64,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 // Debug support
 // ----------------------------------------------------------------------------
 
-#ifdef  __DEBUG__
-
+#if defined(__DEBUG__) && defined(_MSC_VER) && (_MSC_VER > 1000)
 const char *GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID
