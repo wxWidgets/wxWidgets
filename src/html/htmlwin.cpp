@@ -834,6 +834,35 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
+             
+//#define DEBUG_HTML_SELECTION 
+#ifdef DEBUG_HTML_SELECTION
+    {
+    int xc, yc, x, y;
+    wxGetMousePosition(&xc, &yc);
+    ScreenToClient(&xc, &yc);
+    CalcUnscrolledPosition(xc, yc, &x, &y);
+    wxHtmlCell *at = m_Cell->FindCellByPos(x, y);
+    wxHtmlCell *before = 
+        m_Cell->FindCellByPos(x, y, wxHTML_FIND_NEAREST_BEFORE);
+    wxHtmlCell *after = 
+        m_Cell->FindCellByPos(x, y, wxHTML_FIND_NEAREST_AFTER);
+    
+    dcm.SetBrush(*wxTRANSPARENT_BRUSH);
+    dcm.SetPen(*wxBLACK_PEN);
+    if (at)
+        dcm.DrawRectangle(at->GetAbsPos(),
+                          wxSize(at->GetWidth(),at->GetHeight()));
+    dcm.SetPen(*wxGREEN_PEN);
+    if (before)
+        dcm.DrawRectangle(before->GetAbsPos().x+1, before->GetAbsPos().y+1,
+                          before->GetWidth()-2,before->GetHeight()-2);
+    dcm.SetPen(*wxRED_PEN);
+    if (after)
+        dcm.DrawRectangle(after->GetAbsPos().x+2, after->GetAbsPos().y+2,
+                          after->GetWidth()-4,after->GetHeight()-4);
+    }
+#endif
  
     dcm.SetDeviceOrigin(0,0);
     dc.Blit(0, rect.GetTop(),
@@ -939,6 +968,9 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 {    
     if (m_tmpMouseMoved && (m_Cell != NULL))
     {
+#ifdef DEBUG_HTML_SELECTION
+        Refresh();
+#endif
         int xc, yc, x, y;
         wxGetMousePosition(&xc, &yc);
         ScreenToClient(&xc, &yc);
@@ -949,12 +981,35 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
         // handle selection update:
         if ( m_makingSelection )
         {
-            bool goingDown = m_tmpSelFromPos.y < y ||
-                             m_tmpSelFromPos.y == y && m_tmpSelFromPos.x < x;
-
             if ( !m_tmpSelFromCell )
                 m_tmpSelFromCell = m_Cell->FindCellByPos(
                                          m_tmpSelFromPos.x,m_tmpSelFromPos.y);
+            
+            // NB: a trick - we adjust selFromPos to be upper left or bottom
+            //     right corner of the first cell of the selection depending
+            //     on whether the mouse is moving to the right or to the left.
+            //     This gives us more "natural" behaviour when selecting
+            //     a line (specifically, first cell of the next line is not
+            //     included if you drag selection from left to right over
+            //     entire line):
+            wxPoint dirFromPos;
+            if ( !m_tmpSelFromCell )
+            {
+                dirFromPos = m_tmpSelFromPos;
+            }
+            else
+            {
+                dirFromPos = m_tmpSelFromCell->GetAbsPos();
+                if ( x < m_tmpSelFromPos.x )
+                {
+                    dirFromPos.x += m_tmpSelFromCell->GetWidth();
+                    dirFromPos.y += m_tmpSelFromCell->GetHeight();
+                }
+            }
+            bool goingDown = dirFromPos.y < y || 
+                             (dirFromPos.y == y && dirFromPos.x < x);
+
+            // determine selection span:
             if ( /*still*/ !m_tmpSelFromCell )
             {
                 if (goingDown)
@@ -981,14 +1036,14 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                 if (goingDown)
                 {
                     selcell = m_Cell->FindCellByPos(x, y,
-                                                 wxHTML_FIND_NEAREST_AFTER);
+                                                 wxHTML_FIND_NEAREST_BEFORE);
                     if (!selcell)
                         selcell = m_Cell->GetLastTerminal();
                 }
                 else
                 {
                     selcell = m_Cell->FindCellByPos(x, y,
-                                                 wxHTML_FIND_NEAREST_BEFORE);
+                                                 wxHTML_FIND_NEAREST_AFTER);
                     if (!selcell)
                         selcell = m_Cell->GetFirstTerminal();
                 }

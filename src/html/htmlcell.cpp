@@ -184,10 +184,10 @@ wxHtmlCell *wxHtmlCell::FindCellByPos(wxCoord x, wxCoord y,
     else
     {
         if ((flags & wxHTML_FIND_NEAREST_AFTER) &&
-                (y < 0 || (y == 0 && x <= 0)))
+                (y < 0 || (y < 0+m_Height && x < 0+m_Width)))
             return wxConstCast(this, wxHtmlCell);
         else if ((flags & wxHTML_FIND_NEAREST_BEFORE) &&
-                (y > m_Height-1 || (y == m_Height-1 && x >= m_Width)))
+                (y >= 0+m_Height || (y >= 0 && x >= 0)))
             return wxConstCast(this, wxHtmlCell);
         else
             return NULL;
@@ -283,6 +283,13 @@ void wxHtmlWordCell::Split(wxDC& dc,
     unsigned len = m_Word.length();
     unsigned i = 0;
     pos1 = 0;
+
+    // adjust for cases when the start/end position is completely
+    // outside the cell:
+    if ( pt1.y < 0 )
+        pt1.x = 0;
+    if ( pt2.y >= m_Height )
+        pt2.x = m_Width;
 
     // before selection:
     while ( pt1.x > 0 && i < len )
@@ -971,14 +978,16 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
     else if ( flags & wxHTML_FIND_NEAREST_AFTER )
     {
         wxHtmlCell *c;
-        int y2;
         for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
         {
-            y2 = cell->GetPosY() + cell->GetHeight() - 1;
-            if (y2 < y || (y2 == y && cell->GetPosX()+cell->GetWidth()-1 < x))
+            if ( cell->IsFormattingCell() )
                 continue;
-            c = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
-                                    flags);
+            int cellY = cell->GetPosY();
+            if (!( y < cellY || (y < cellY + cell->GetHeight() && 
+                                 x < cell->GetPosX() + cell->GetWidth()) ))
+                continue;
+            
+            c = cell->FindCellByPos(x - cell->GetPosX(), y - cellY, flags);
             if (c) return c;
         }
     }
@@ -987,11 +996,13 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
         wxHtmlCell *c2, *c = NULL;
         for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
         {
-            if (cell->GetPosY() > y ||
-                    (cell->GetPosY() == y && cell->GetPosX() > x))
+            if ( cell->IsFormattingCell() )
+                continue;
+            int cellY = cell->GetPosY();
+            if (!( cellY + cell->GetHeight() <= y ||
+                   (y >= cellY && x >= cell->GetPosX()) ))
                 break;
-            c2 = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
-                                     flags);
+            c2 = cell->FindCellByPos(x - cell->GetPosX(), y - cellY, flags);
             if (c2)
                 c = c2;
         }
