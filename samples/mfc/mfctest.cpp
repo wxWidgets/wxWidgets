@@ -28,19 +28,18 @@
 //
 // IMPORTANT NOTES:
 //
-// (1) You need to set wxUSE_MFC to 1 in include/wx/msw/setup.h, which switches
-// off some debugging features and also removes the windows.h inclusion
-// in wxprec.h (MFC headers don't like this to have been included previously).
-// Set to 'Use MFC in a shared DLL' or add _AFXDLL to preprocessor settings.
-// Then recompile wxWidgets and this sample.
+// (1) You may need to set wxUSE_MFC to 1 in include/wx/msw/setup.h but
+//     normally this shouldn't be needed any longer, i.e. it works without
+//     it for me (VZ)
 //
-// (2) I can't get the sample to link and run using a static MFC library, only the DLL
-// version. Perhaps someone else is a wizard at working out the required settings
-// in the wxWin library and the sample; then debugging the assert problem may be
-// easier.
-//
-// (3) Compiling wxWidgets in DLL mode currently includes windows.h, so you must only
-// try linking wxWidgets statically.
+// (2) You should link with MFC DLL, not static libraries
+
+// suppress warning about WINVER not being defined from MFC
+#ifndef WINVER
+#define WINVER 0x7000
+#endif
+
+#include "stdafx.h"
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -49,21 +48,11 @@
 #pragma hdrstop
 #endif
 
-#include "wx/wx.h"
-
-#if !wxUSE_MFC
-#error "Sorry, you need to edit include/wx/msw/setup.h, set wxUSE_MFC to 1, and recompile the library."
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
 #endif
 
-#ifdef new
-#undef new
-#endif
-
-#include "stdafx.h"
-
-#ifdef DrawText
-#undef DrawText
-#endif
+#include "wx/evtloop.h"
 
 #include "resource.h"
 
@@ -80,9 +69,11 @@ CTheApp theApp;
 
 // Define a new application type
 class MyApp: public wxApp
-{ public:
-bool OnInit(void);
-wxFrame *CreateFrame(void);
+{
+public:
+    virtual bool OnInit();
+
+    wxFrame *CreateFrame();
 };
 
 class MyCanvas: public wxScrolledWindow
@@ -97,33 +88,27 @@ public:
 class MyChild: public wxFrame
 {
 public:
-    MyCanvas *canvas;
     MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
-    ~MyChild(void);
-    
+    virtual ~MyChild();
+
     void OnQuit(wxCommandEvent& event);
     void OnNew(wxCommandEvent& event);
     void OnActivate(wxActivateEvent& event);
-    
+
+    MyCanvas *canvas;
+
     DECLARE_EVENT_TABLE()
 };
-
-// For drawing lines in a canvas
-long xpos = -1;
-long ypos = -1;
 
 // ID for the menu quit command
 #define HELLO_QUIT 1
 #define HELLO_NEW  2
 
 DECLARE_APP(MyApp)
-IMPLEMENT_APP(MyApp)
 
-/////////////////////////////////////////////////////////////////////////////
+// notice use of IMPLEMENT_APP_NO_MAIN() instead of the usual IMPLEMENT_APP!
+IMPLEMENT_APP_NO_MAIN(MyApp)
 
-// CMainWindow constructor:
-// Create the window with the appropriate style, size, menu, etc.
-//
 CMainWindow::CMainWindow()
 {
     LoadAccelTable( "MainAccelTable" );
@@ -131,19 +116,12 @@ CMainWindow::CMainWindow()
         WS_OVERLAPPEDWINDOW, rectDefault, NULL, "MainMenu" );
 }
 
-// OnPaint:
-// This routine draws the string "Hello, Windows!" in the center of the
-// client area.  It is called whenever Windows sends a WM_PAINT message.
-// Note that creating a CPaintDC automatically does a BeginPaint and
-// an EndPaint call is done when it is destroyed at the end of this
-// function.  CPaintDC's constructor needs the window (this).
-//
 void CMainWindow::OnPaint()
 {
     CString s = "Hello, Windows!";
     CPaintDC dc( this );
     CRect rect;
-    
+
     GetClientRect( rect );
     dc.SetTextAlign( TA_BASELINE | TA_CENTER );
     dc.SetTextColor( ::GetSysColor( COLOR_WINDOWTEXT ) );
@@ -152,14 +130,6 @@ void CMainWindow::OnPaint()
         s, s.GetLength() );
 }
 
-// OnAbout:
-// This member function is called when a WM_COMMAND message with an
-// IDM_ABOUT code is received by the CMainWindow class object.  The
-// message map below is responsible for this routing.
-//
-// We create a ClDialog object using the "AboutBox" resource (see
-// hello.rc), and invoke it.
-//
 void CMainWindow::OnAbout()
 {
     CDialog about( "AboutBox", this );
@@ -189,28 +159,27 @@ ON_COMMAND( IDM_TEST, OnTest )
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTheApp
-
-// InitInstance:
-// When any CTheApp object is created, this member function is automatically
-// called.  Any data may be set up at this point.
-//
-// Also, the main window of the application should be created and shown here.
-// Return TRUE if the initialization is successful.
-//
 BOOL CTheApp::InitInstance()
 {
-    SetDialogBkColor();     // hook gray dialogs (was default in MFC V1)
-    
-    wxEntry((WXHINSTANCE) m_hInstance, (WXHINSTANCE) m_hPrevInstance, m_lpCmdLine, m_nCmdShow, FALSE);
-     
+    if ( !CWinApp::InitInstance() )
+        return FALSE;
+
+    // TODO: cmd line parsing
+    WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
+    wxSetInstance(m_hInstance);
+    wxApp::m_nCmdShow = m_nCmdShow;
+    int argc = 0;
+    char **argv = NULL;
+    wxEntryStart(argc, argv);
+    if ( !wxTheApp || !wxTheApp->CallOnInit() )
+        return FALSE;
+
 #if START_WITH_MFC_WINDOW
     // Demonstrate creation of an initial MFC main window.
     m_pMainWnd = new CMainWindow();
     m_pMainWnd->ShowWindow( m_nCmdShow );
     m_pMainWnd->UpdateWindow();
-#else    
+#else
     // Demonstrate creation of an initial wxWidgets main window.
     // Wrap wxWidgets window in a dummy MFC window and
     // make the main window.
@@ -219,84 +188,80 @@ BOOL CTheApp::InitInstance()
         m_pMainWnd = new CDummyWindow((HWND) wxTheApp->GetTopWindow()->GetHWND());
     }
 #endif
-    
+
     return TRUE;
 }
 
 int CTheApp::ExitInstance()
 {
-    // OnExit isn't called by CleanUp so must be called explicitly.
-    wxTheApp->OnExit();
-    wxApp::CleanUp();
-    
+    if ( wxTheApp )
+        wxTheApp->OnExit();
+    wxEntryCleanup();
+
     return CWinApp::ExitInstance();
 }
 
-// Override this to provide wxWidgets message loop
-// compatibility
-
+// Override this to provide wxWidgets message loop compatibility
 BOOL CTheApp::PreTranslateMessage(MSG *msg)
 {
-    if (wxTheApp && wxTheApp->ProcessMessage((WXMSG*) msg))
+    wxEventLoop *evtLoop = wxEventLoop::GetActive();
+    if ( evtLoop && evtLoop->PreProcessMessage(msg) )
         return TRUE;
-    else
-        return CWinApp::PreTranslateMessage(msg);
+
+    return CWinApp::PreTranslateMessage(msg);
 }
 
-BOOL CTheApp::OnIdle(LONG lCount)
+BOOL CTheApp::OnIdle(LONG WXUNUSED(lCount))
 {
-    if (wxTheApp)
-        return wxTheApp->ProcessIdle();
-    else
-        return FALSE;
+    return wxTheApp && wxTheApp->ProcessIdle();
 }
 
 /*********************************************************************
 * wxWidgets elements
 ********************************************************************/
 
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
 #if !START_WITH_MFC_WINDOW
 
     // Exit app when the top level frame is deleted
     SetExitOnFrameDelete(TRUE);
-    
+
     (void) CreateFrame();
 #endif
 
     return TRUE;
 }
 
-wxFrame *MyApp::CreateFrame(void)
+wxFrame *MyApp::CreateFrame()
 {
     MyChild *subframe = new MyChild(NULL, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
         wxDEFAULT_FRAME_STYLE);
-    
+
     subframe->SetTitle("wxWidgets canvas frame");
-    
+
     // Give it a status line
     subframe->CreateStatusBar();
-    
+
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
-    
+
     file_menu->Append(HELLO_NEW, "&New MFC Window");
     file_menu->Append(HELLO_QUIT, "&Close");
-    
+
     wxMenuBar *menu_bar = new wxMenuBar;
-    
+
     menu_bar->Append(file_menu, "&File");
-    
+
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
-    
+
     int width, height;
     subframe->GetClientSize(&width, &height);
-    
+
     MyCanvas *canvas = new MyCanvas(subframe, wxPoint(0, 0), wxSize(width, height));
     canvas->SetCursor(wxCursor(wxCURSOR_PENCIL));
-    subframe->canvas = canvas;    
+    subframe->canvas = canvas;
     subframe->Show(TRUE);
 
     // Return the main frame window
@@ -309,28 +274,27 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 // Define a constructor for my canvas
-MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
-wxScrolledWindow(parent, -1, pos, size)
+MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
+        : wxScrolledWindow(parent, -1, pos, size)
 {
 }
 
 // Define the repainting behaviour
-void MyCanvas::OnPaint(wxPaintEvent& event)
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
-    
+
     dc.SetFont(* wxSWISS_FONT);
     dc.SetPen(* wxGREEN_PEN);
     dc.DrawLine(0, 0, 200, 200);
     dc.DrawLine(200, 0, 0, 200);
-    
+
     dc.SetBrush(* wxCYAN_BRUSH);
     dc.SetPen(* wxRED_PEN);
     dc.DrawRectangle(100, 100, 100, 50);
     dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
-    
+
     dc.DrawEllipse(250, 250, 100, 50);
-    dc.DrawSpline(50, 200, 50, 100, 200, 10);
     dc.DrawLine(50, 230, 200, 230);
     dc.DrawText("This is a test string", 50, 230);
 }
@@ -339,15 +303,19 @@ void MyCanvas::OnPaint(wxPaintEvent& event)
 // the left button.
 void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 {
+    static long s_xpos = -1;
+    static long s_ypos = -1;
+
     wxClientDC dc(this);
     dc.SetPen(* wxBLACK_PEN);
     wxPoint pos = event.GetPosition();
-    if (xpos > -1 && ypos > -1 && event.Dragging())
+    if (s_xpos > -1 && s_ypos > -1 && event.Dragging())
     {
-        dc.DrawLine(xpos, ypos, pos.x, pos.y);
+        dc.DrawLine(s_xpos, s_ypos, pos.x, pos.y);
     }
-    xpos = pos.x;
-    ypos = pos.y;
+
+    s_xpos = pos.x;
+    s_ypos = pos.y;
 }
 
 BEGIN_EVENT_TABLE(MyChild, wxFrame)
@@ -356,22 +324,22 @@ BEGIN_EVENT_TABLE(MyChild, wxFrame)
     EVT_ACTIVATE(MyChild::OnActivate)
 END_EVENT_TABLE()
 
-MyChild::MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style):
-wxFrame(frame, -1, title, pos, size, style)
+MyChild::MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style)
+       : wxFrame(frame, -1, title, pos, size, style)
 {
     canvas = NULL;
 }
 
-MyChild::~MyChild(void)
+MyChild::~MyChild()
 {
 }
 
-void MyChild::OnQuit(wxCommandEvent& event)
+void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void MyChild::OnNew(wxCommandEvent& event)
+void MyChild::OnNew(wxCommandEvent& WXUNUSED(event))
 {
     CMainWindow *mainWin = new CMainWindow();
     mainWin->ShowWindow( TRUE );
@@ -392,7 +360,7 @@ CDummyWindow::CDummyWindow(HWND hWnd):CWnd()
 }
 
 // Don't let the CWnd destructor delete the HWND
-CDummyWindow::~CDummyWindow(void)
+CDummyWindow::~CDummyWindow()
 {
     Detach();
 }

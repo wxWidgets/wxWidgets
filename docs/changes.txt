@@ -255,6 +255,7 @@ wxMSW:
 - set wxKeyEvent::m_uniChar in Unicode build
 - support for alpha channel in toolbar bitmaps (Jurgen Doornik)
 - wxFileDialog can now be moved and centered (Randall Fox)
+- restored (and improved) possibility to use wx with MFC broken in 2.5.2
 
 wxUniv/X11:
 
