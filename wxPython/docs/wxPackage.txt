@@ -23,7 +23,10 @@ Introduction
 Big things sometimes come in small packages.  This is certainly true
 of the new wx package, which is being introduced in wxPython 2.4.1 as
 a way to allow the "wx" prefix to be dropped from the names of all
-wxPython classes, functions, and constants.
+wxPython classes, functions, and constants.  This document should
+answer all the questions you might have concerning the new wx package.
+If not, feel free to contact the author.  I hope you like the new wx
+package as much as I do.
 
 
 Why change anything?
@@ -134,10 +137,44 @@ version 2.4.1 or higher.  So all you have to do is::
 
     import wx
 
+
+What are the issues with converting old code to use the new wx package?
+======================================================================= 
+
+Obviously, you need to change your import statements from::
+
+    from wxPython import wx
+
+or::
+
+    from wxPython.wx import *
+
+to::
+
+    import wx
+
+Then you need to refer to wx attributes without a "wx" prefix, such
+as::
+
+    class MyFrame(wx.Frame):
+
+In most cases, existing code can be modified with a simple search and
+replace.
+
+One extra issue you might run into when converting existing code is
+that the wx.__version__ attribute is no longer available, since the
+new wx namespace doesn't include any private attributes from the old
+wxPython.wx namespace.  The solution is to use the wx.VERSION_STRING
+attribute, which was introduced in wxPython 2.4.1.
+
+
+Where can I find example programs using the new wx syntax?
+==========================================================
+
 Example programs are included in the wxPython/samples/wx_examples
 directory, and are documented in the wxPythonExamples_ documentation
-file.
+file.  Also, all the code in the py package uses the new wx syntax.
+You can learn more about these in the PyManual_.
 
 .. _wxPythonExamples: wxPythonExamples.html
-
-Good luck.  I hope you like the new wx package as much as I do.
+.. _PyManual: PyManual.html
