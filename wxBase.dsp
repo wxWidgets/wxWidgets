@@ -1,0 +1,262 @@
+# Microsoft Developer Studio Project File - Name="wxBase" - Package Owner=<4>
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# ** DO NOT EDIT **
+
+# TARGTYPE "Win32 (x86) Static Library" 0x0104
+
+CFG=wxBase - Win32 Debug
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
+!MESSAGE 
+!MESSAGE NMAKE /f "wxBase.mak".
+!MESSAGE 
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "wxBase.mak" CFG="wxBase - Win32 Debug"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "wxBase - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxBase - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE 
+
+# Begin Project
+# PROP AllowPerConfigDependencies 0
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
+CPP=cl.exe
+RSC=rc.exe
+
+!IF  "$(CFG)" == "wxBase - Win32 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Release"
+# PROP Intermediate_Dir "Release"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /W3 /Zi /O2 /I "$(wx)\include" /I "$(wx)\src\zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "BaseDebug"
+# PROP Intermediate_Dir "BaseDebug"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MTd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D DEBUG=1 /D "_DEBUG" /D WXDEBUG=1 /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /Fr /Yu"wx/wxprec.h" /FD /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo /o"lib/wxBase.bsc"
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
+
+!ENDIF 
+
+# Begin Target
+
+# Name "wxBase - Win32 Release"
+# Name "wxBase - Win32 Debug"
+# Begin Source File
+
+SOURCE=.\src\common\appcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\config.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\datetime.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\dir.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\dummy.cpp
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\dynarray.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\dynlib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\event.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\extended.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\ffile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\file.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\fileconf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\filefn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\filesys.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\hash.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\init.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\intl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\list.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\log.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\longlong.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\main.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\mimetype.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\module.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\object.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\process.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\regconf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\registry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\strconv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\stream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\string.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\textfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\thread.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\timercmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\tokenzr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\txtstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\utils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\utilscmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\utilsexc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\variant.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\wxchar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\y_tab.c
+
+!IF  "$(CFG)" == "wxBase - Win32 Release"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
+
+# ADD CPP /W1
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# End Target
+# End Project
