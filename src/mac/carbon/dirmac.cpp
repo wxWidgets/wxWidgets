@@ -121,7 +121,7 @@ wxDirData::wxDirData(const wxString& dirname)
     FSRef theRef;
 
     // get the FSRef associated with the POSIX path
-    err = FSPathMakeRef((const UInt8 *) m_dirname, &theRef, NULL);
+    err = FSPathMakeRef((const UInt8 *) m_dirname.c_str(), &theRef, NULL);
     FSGetVRefNum(&theRef, &(m_CPB.hFileInfo.ioVRefNum));
     
     err = FSGetNodeID( &theRef , &m_dirId , &m_isDir ) ;
