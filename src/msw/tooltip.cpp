@@ -32,7 +32,7 @@
 #include "wx/tooltip.h"
 #include "wx/msw/private.h"
 
-#if defined(__WIN95__) && (!defined(__GNUWIN32__) || defined(__MINGW32__))
+#if defined(__WIN95__) && (!defined(__GNUWIN32_OLD__) || defined(__MINGW32__))
     #include <commctrl.h>
 #endif
 
