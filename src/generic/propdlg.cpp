@@ -82,8 +82,11 @@ void wxPropertySheetDialog::LayoutDialog()
 // Creates the buttons, if any
 void wxPropertySheetDialog::CreateButtons(int flags)
 {
-#if defined(__WXWINCE__) && defined(__SMARTPHONE__)
-    SetLeftMenu(wxID_CANCEL);
+#if defined(__SMARTPHONE__)
+    // TODO: if flags turns more buttons then make right menu from ID
+    // to real menu with all the other IDs available. Perhaps that could be
+    // embedded in CreateButtonSizer() directly.
+    SetRightMenu(wxID_CANCEL);
     SetLeftMenu(wxID_OK);
 #elif !defined(__WXWINCE__)
     wxSizer* sizer = CreateButtonSizer(flags);
