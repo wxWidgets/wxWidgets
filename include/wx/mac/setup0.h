@@ -334,6 +334,9 @@
 // Recommended setting: 1
 #define wxUSE_DYNLIB_CLASS  1
 
+// experimental extension, use with caution.
+#define wxUSE_DYNAMIC_LOADER  0
+
 // Set to 1 to use socket classes
 #define wxUSE_SOCKETS       1
 
