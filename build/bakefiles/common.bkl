@@ -1,0 +1,153 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <!-- bakefile modules we need: -->
+    <using module="datafiles"/>
+
+    <!-- load python module with wxwindows helpers: -->
+    <using module="wxwin"/>
+
+    <include file="config.bkl"/>
+    
+    
+    <!-- ================================================================== -->
+    <!--                     wxWindows version numbers:                     -->
+    <!-- ================================================================== -->
+
+    <set var="WXVER_MAJOR">$(wxwin.getVersionMajor())</set>
+    <set var="WXVER_MINOR">$(wxwin.getVersionMinor())</set>
+    <set var="WXVER_RELEASE">$(wxwin.getVersionRelease())</set>
+    <set var="WX_VERSION">$(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)</set>
+
+    <set var="WXSOVERSION">0.0.0</set>
+    <set var="WXMACVERSION">$(WX_VERSION)</set>
+    
+    
+    <!-- ================================================================== -->
+    <!--                     Names of libraries and DLLs:                   -->
+    <!-- ================================================================== -->
+
+    <set var="PORTNAME">
+        <if cond="USE_GUI=='0'">base</if>
+        <if cond="USE_GUI=='1'">$(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)</if>
+    </set>
+
+    <set var="COMPILERORGCC">
+        <if cond="isdefined('COMPILER')">$(COMPILER)</if>
+        <if cond="not isdefined('COMPILER')">gcc</if>
+    </set>
+    <set var="WXCOMPILER">
+        <if cond="PLATFORM_WIN32=='1'">_$(COMPILERORGCC)</if>
+    </set>
+    
+    <set var="WXDEBUGFLAG">
+        <if cond="BUILD=='debug'">d</if>
+    </set>
+    <set var="WXUNICODEFLAG">
+        <if cond="UNICODE=='1'">u</if>
+    </set>
+    <set var="WXNAMESUFFIX">
+        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+    </set>
+    
+    <set var="WXUNIVNAME">
+        <if cond="WXUNIV=='1'">univ</if>
+    </set>
+    <set var="WXUNIV_DEFINE">
+        <if cond="WXUNIV=='1'">__WXUNIVERSAL__</if>
+    </set>
+
+    <set var="WXNAMEPREFIX">wx</set>
+    <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)$(WXUNIVNAME)</set>
+    <set var="WXVERSIONTAG">-$(WXVER_MAJOR).$(WXVER_MINOR)</set>
+
+    <set var="TOOLCHAIN_NAME">
+        $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-$(WXVER_MAJOR).$(WXVER_MINOR)
+    </set>
+
+    
+    <!-- =============================================================== -->
+    <!--                    Names of component libraries:                -->
+    <!-- =============================================================== -->
+
+    <set var="WXLIB_CORE">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
+    </set>
+
+    <set var="WXLIB_MONO">
+        <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>
+    </set>
+    
+    
+    <!-- =============================================================== -->
+    <!--                   Where to store built libraries:               -->
+    <!-- =============================================================== -->
+
+    <set var="LIBDIRNAME">
+        <if cond="FORMAT=='autoconf'">$(top_builddir)/lib</if>
+    </set>
+
+    <!-- =============================================================== -->
+    <!--                         3rd party libs:                         -->
+    <!-- =============================================================== -->
+    
+    <!-- 3rd party libraries: -->
+    <include file="regex.bkl"/>
+    <include file="zlib.bkl"/>
+    <include file="png.bkl"/>
+    <include file="jpeg.bkl"/>
+    <include file="tiff.bkl"/>
+    <include file="odbc.bkl"/>
+
+    
+    <!-- =============================================================== -->
+    <!--                  Templates for wxWindows libs:                  -->
+    <!-- =============================================================== -->
+    
+    <set var="WXTOPDIR"></set>
+
+    <template id="wx">
+        <set var="wxid">$(wxwin.mk_wxid(id))</set>
+        <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
+        <include>$(SRCDIR)$(WXTOPDIR)/include</include>
+        <lib-path>$(LIBDIRNAME)</lib-path>
+    </template>
+
+    <template id="wx_append">
+        <ldflags>$(EXTRALIBS)</ldflags>
+        <!-- link against builtin 3rd party libs, if needed: -->
+        <sys-lib>$(LIB_JPEG)</sys-lib>
+        <sys-lib>$(LIB_PNG)</sys-lib>
+        <sys-lib>$(LIB_ZLIB)</sys-lib>
+        <sys-lib>$(LIB_TIFF)</sys-lib>
+        <sys-lib>$(LIB_ODBC)</sys-lib>
+        <sys-lib>$(LIB_REGEX)</sys-lib>
+    </template>
+
+    <template id="wx_lib" template="wx" template_append="wx_append">
+        <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
+        <dirname>$(LIBDIRNAME)</dirname>
+        <libname>$(WXLIBNAME)</libname>
+        <install-to>$(LIBDIR)</install-to>
+    </template>
+    
+    <template id="wx_dll" template="wx_lib">
+        <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
+        <dllname>$(WXDLLNAME)</dllname>
+        <version>$(WX_VERSION)</version>
+        <so_version>$(WXSOVERSION)</so_version>
+        <mac_version>$(WXMACVERSION)</mac_version>
+    </template>
+    
+    
+    <!-- =============================================================== -->
+    <!--               Support for wxWindows samples and contrib:        -->
+    <!-- =============================================================== -->
+
+    <!-- Link against one wxWin library. Value must be literal! -->
+    <define-tag name="wx-lib" rules="exe,dll">
+        <sys-lib>$(wxwin.libToLink(value))</sys-lib>
+    </define-tag>
+
+</makefile>
