@@ -50,6 +50,8 @@ public:
 // Cocoa callbacks
 // ------------------------------------------------------------------------
 protected:
+    // Static boxes cannot be enabled/disabled
+    virtual void CocoaSetEnabled(bool enable) { }
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
