@@ -45,7 +45,7 @@ long wxMiniFrame::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
       (GetWindowStyleFlag() & wxTINY_CAPTION_VERT))
     return ::ibDefWindowProc((HWND) GetHWND(), nMsg, wParam, lParam);
   else if ( m_oldWndProc )
-  	return ::CallWindowProc(CASTWNDPROC (FARPROC) m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+  	return ::CallWindowProc((FARPROC)m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
   else
   	return ::DefWindowProc((HWND) GetHWND(), nMsg, wParam, lParam);
 }
