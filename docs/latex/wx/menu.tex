@@ -42,7 +42,7 @@ this window.
 \membersection{wxMenu::wxMenu}\label{wxmenuconstr}
 
 \func{}{wxMenu}{\param{const wxString\& }{title = ""},
-  \param{const wxFunction}{ func = NULL}\param{long}{ style = 0}}
+ \param{const wxFunction}{ func = NULL}, \param{long}{ style = 0}}
 
 Constructs a wxMenu object.
 
@@ -56,18 +56,19 @@ Constructs a wxMenu object.
 
 \pythonnote{The wxPython version of the \tt{wxMenu} constructor
 doesn't accept the callback argument because of reference counting
-issues.  There is a specialized wxMenu constructor called
+issues.  There is a specialized wxMenu constructor called 
 \tt{wxPyMenu} which does and can be used for PopupMenus when callbacks
 are needed.  You must retain a reference to the menu while useing it
 otherwise your callback function will get dereferenced when the menu
 does.
 }
 
-\func{}{wxMenu}{\param{long}{ style }}
+\func{}{wxMenu}{\param{long}{ style}}
 
 Constructs a wxMenu object.
 
 \wxheading{Parameters}
+
 \docparam{style}{If set to \tt{wxMENU_TEAROFF}, the menu will be detachable.}
 
 \membersection{wxMenu::\destruct{wxMenu}}
@@ -127,7 +128,6 @@ creation of a menu or menubar.
 \helpref{wxMenu::AppendSeparator}{wxmenuappendseparator}, \helpref{wxMenu::SetLabel}{wxmenusetlabel}, \helpref{wxMenu::GetHelpString}{wxmenugethelpstring},\rtfsp
 \helpref{wxMenu::SetHelpString}{wxmenusethelpstring}, \helpref{wxMenuItem}{wxmenuitem}
 
-
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
@@ -136,7 +136,6 @@ implements the following methods:\par
 \twocolitem{\bf{AppendItem(aMenuItem)}}{}
 \end{twocollist}}
 }
-
 
 \membersection{wxMenu::AppendSeparator}\label{wxmenuappendseparator}
 
@@ -230,6 +229,7 @@ before matching.
 \membersection{wxMenu::FindItemForId}\label{wxmenufinditemforid}
 
 \constfunc{wxMenuItem*}{FindItemForId}{\param{int}{ id}}
+
 \constfunc{wxMenuItem*}{FindItem}{\param{int}{ id}}
 
 Finds the menu item object associated with the given menu item identifier.
@@ -449,7 +449,6 @@ menu bar.}
 \pythonnote{Only the default constructor is supported in wxPython.
 Use wxMenuBar.Append instead.}
 
-
 \membersection{wxMenuBar::\destruct{wxMenuBar}}
 
 \func{void}{\destruct{wxMenuBar}}{\void}
@@ -542,13 +541,14 @@ before matching.
 
 \membersection{wxMenuBar::FindItem}\label{wxmenubarfinditem}
 
-\constfunc{wxMenuItem *}{FindItem}{\param{int}{ id}, \param{wxMenu}{ **menu = NULL}
+\constfunc{wxMenuItem *}{FindItem}{\param{int}{ id}, \param{wxMenu}{ **menu = NULL}}
 
 Finds the menu item object associated with the given menu item identifier.
 
 \wxheading{Parameters}
 
 \docparam{id}{Menu item identifier.}
+
 \docparam{menu}{If not NULL, menu will get set to the associated menu.}
 
 \wxheading{Return value}
@@ -716,8 +716,3 @@ Use only after the menubar has been associated with a frame.
 
 \helpref{wxMenuBar::GetLabelTop}{wxmenubargetlabeltop}
 
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: t
-%%% End: 

@@ -8,7 +8,7 @@
 
 <wx/socket.h>
 
-\wxheading{wxSocket errors}%\label{wxsocketerrs} % Labels don't work on a non-section!
+\wxheading{wxSocket errors}
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -72,8 +72,8 @@ input to member functions that take a \helpref{wxSocketEvent}{wxsocketevent} arg
 % ---------------------------------------------------------------------------
 \wxheading{See also}
 
-\helpref{wxSocketEvent}{wxsocketevent}\\
-\helpref{wxSocketClient}{wxsocketclient}\\
+\helpref{wxSocketEvent}{wxsocketevent}, 
+\helpref{wxSocketClient}{wxsocketclient}, 
 \helpref{wxSocketServer}{wxsocketserver}
 
 % ---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ input to member functions that take a \helpref{wxSocketEvent}{wxsocketevent} arg
 
 \func{}{wxSocketBase}{\void}
 
-Default constructor. Don't use it; use \helpref{wxSocketClient}{wxsocketclient}
+Default constructor. Don't use it; use \helpref{wxSocketClient}{wxsocketclient} 
 or \helpref{wxSocketServer}{wxsocketserver}.
 
 \membersection{wxSocketBase::\destruct{wxSocketBase}}
@@ -111,7 +111,7 @@ Destroys the wxSocketBase object.
 \twocolitem{{\bf wxSOCKET\_NONE}}{Normal functionnality.}
 \twocolitem{{\bf wxSOCKET\_NOWAIT}}{Get the available data in the input queue and return immediately.}
 \twocolitem{{\bf wxSOCKET\_WAITALL}}{Wait for all required data unless an error occurs.}
-\twocolitem{{\bf wxSOCKET\_BLOCK}}{Block the GUI (do not wxYield) while reading / writing data.}
+\twocolitem{{\bf wxSOCKET\_BLOCK}}{Block the GUI (do not wxYield) while reading/writing data.}
 \end{twocollist}
 
 A brief overview on how to use these flags follows.
@@ -145,10 +145,13 @@ extra care to avoid unwanted reentrance.
 So:
 
 {\bf wxSOCKET\_NONE} will try to read SOME data, no matter how much.
+
 {\bf wxSOCKET\_NOWAIT} will always return immediately, even if it cannot
 read or write ANY data.
+
 {\bf wxSOCKET\_WAITALL} will only return when it has read or written ALL
 the data.
+
 {\bf wxSOCKET\_BLOCK} has nothing to do with the previous flags and
 it control whether the GUI blocks.
 
@@ -172,9 +175,11 @@ following flags can be used:
 \end{twocollist}%
 
 For example:
+
 \begin{verbatim}
   sock.SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
 \end{verbatim}
+
 In this example, the user will be notified about incoming socket data and
 whenever the connection is closed.
 
@@ -302,9 +307,9 @@ of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetF
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
-\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}\\
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
 \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
 
 %
@@ -333,13 +338,13 @@ Returns a reference to the current object.
 \wxheading{Remark/Warning}
 
 The exact behaviour of wxSocketBase::Read() depends on the combination
-of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
+of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
-\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}\\
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
 \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
 
 %
@@ -368,13 +373,13 @@ Returns a reference to the current object.
 \wxheading{Remark/Warning}
 
 The exact behaviour of wxSocketBase::Write() depends on the combination
-of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
+of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
-\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}\\
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
 \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
 
 %
@@ -412,10 +417,10 @@ depends on the wxSOCKET_BLOCK flag. For a detailed explanation, see \helpref{wxS
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
-\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}\\
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
-\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}\\
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}, 
 \helpref{wxSocketBase::ReadMsg}{wxsocketbasereadmsg}
 
 %
@@ -451,10 +456,10 @@ depends on the wxSOCKET_SPEED flag. For a detailed explanation, see \helpref{wxS
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
-\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}\\
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
-\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}\\
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}, 
 \helpref{wxSocketBase::WriteMsg}{wxsocketbasewritemsg}
 
 %
@@ -483,8 +488,8 @@ Returns a reference to the current object.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Error}{wxsocketbaseerror}\\
-\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}\\
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
 \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
 
 %
@@ -495,8 +500,8 @@ Returns a reference to the current object.
 \func{wxSocketBase\&}{Discard}{\void}
 
 This function simply deletes all bytes in the incoming queue. This function
-doesn't wait. That is, it will behave as if the wxSOCKET_NOWAIT flag was set. The
-wxSOCKET_SPEED and wxSOCKET_WAITALL flags have no effect on this function.
+doesn't wait. That is, it will behave as if the wxSOCKET\_NOWAIT flag was set. The
+wxSOCKET\_SPEED and wxSOCKET\_WAITALL flags have no effect on this function.
 
 Use LastCount to see the number of bytes discarded.
 
@@ -526,8 +531,8 @@ Returns TRUE if an event occured, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}\\
-\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}\\
+\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}, 
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}, 
 \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 %
@@ -551,8 +556,8 @@ Returns TRUE if there is data to be read, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Wait}{wxsocketbasewait}\\
-\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}\\
+\helpref{wxSocketBase::Wait}{wxsocketbasewait}, 
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}, 
 \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 %
@@ -576,8 +581,8 @@ Returns TRUE if you can write to the socket, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::Wait}{wxsocketbasewait}\\
-\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}\\
+\helpref{wxSocketBase::Wait}{wxsocketbasewait}, 
+\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}, 
 \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 %
@@ -602,8 +607,8 @@ Returns TRUE if the connection was lost, FALSE if the timeout was reached.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}\\
-\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}\\
+\helpref{wxSocketBase::WaitForRead}{wxsocketbasewaitforread}, 
+\helpref{wxSocketBase::WaitForWrite}{wxsocketbasewaitforwrite}, 
 \helpref{wxSocketBase::WaitForLost}{wxsocketbasewaitforlost}
 
 % ---------------------------------------------------------------------------
@@ -695,11 +700,11 @@ Callback and CallbackData.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}\\
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}\\
-\helpref{wxSocketEvent}{wxsocketevent}\\
-\helpref{wxEvtHandler}{wxevthandler}\\
-\helpref{wxSocketBase::Callback}{wxsocketbasecallback}\\
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
+\helpref{wxSocketEvent}{wxsocketevent}, 
+\helpref{wxEvtHandler}{wxevthandler}, 
+\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
 \helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}
 
 \membersection{wxSocketBase::Callback}\label{wxsocketbasecallback}
@@ -724,8 +729,8 @@ A pointer to the previous callback.
 
 \wxheading{See also}
 
-\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}\\
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}\\
+\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}, 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
 \helpref{wxSocketBase::Notify}{wxsocketbasenotify}
 
 \membersection{wxSocketBase::CallbackData}\label{wxsocketbasecallbackdata}
@@ -738,8 +743,8 @@ This function sets the the user data which will be passed to a \helpref{C callba
 
 A pointer to the previous user data.
 
-\helpref{wxSocketBase::Callback}{wxsocketbasecallback}\\
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}\\
+\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
 \helpref{wxSocketBase::Notify}{wxsocketbasenotify}
 
 % ---------------------------------------------------------------------------
@@ -791,14 +796,14 @@ Connects to a server using the specified address.
 
 If {\it wait} is TRUE, Connect will wait until the connection completes and
 the socket is ready to send or receive data, or until an event occurs.
+
 {\bf Warning !} This will block the GUI. 
 
 If {\it wait} is FALSE, Connect will try to establish the connection and
 return immediately, without blocking the GUI. When used this way, even if
 Connect returns FALSE, the connection request can be completed later.
 To detect this, use WaitConnection, or watch "connection" events (for
-succesful establishment) and "lost" events (for connection failure)
-
+succesful establishment) and "lost" events (for connection failure).
 
 \wxheading{Parameters}
 
@@ -819,8 +824,8 @@ with WaitOnConnect or by watching "connection" and "lost" events.
 
 \wxheading{See also}
 
-\helpref{wxSocketClient::WaitOnConnect}{wxsocketclientwaitonconnect}\\
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}\\
+\helpref{wxSocketClient::WaitOnConnect}{wxsocketclientwaitonconnect}, 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
 \helpref{wxSocketBase::Notify}{wxsocketbasenotify}
 
 %
@@ -880,8 +885,8 @@ The wxSOCKET_INPUT event is generated when the
 
 \wxheading{See also}
 
-\helpref{wxSocketBase}{wxsocketbase},\rtfsp
-\helpref{wxSocketClient}{wxsocketclient},\rtfsp
+\helpref{wxSocketBase}{wxsocketbase}, 
+\helpref{wxSocketClient}{wxsocketclient}, 
 \helpref{wxSocketServer}{wxsocketserver}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -968,9 +973,9 @@ connections.
 
 \wxheading{See also}
 
-\helpref{wxSocketServer::WaitForAccept}{wxsocketbasewaitforaccept}\\
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}\\
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}\\
+\helpref{wxSocketServer::WaitForAccept}{wxsocketbasewaitforaccept}, 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
 \helpref{wxSocketServer::AcceptWith}{wxsocketserveracceptwith}
 
 %
@@ -993,11 +998,10 @@ Returns TRUE on success, or FALSE if an error occured or if the
 {\it wait} parameter was FALSE and there were no pending
 connections.
 
-\helpref{wxSocketServer::WaitForAccept}{wxsocketbasewaitforaccept}\\
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}\\
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}\\
-\helpref{wxSocketServer::Accept}{wxsocketserveraccept} for a detailed explanation
-
+\helpref{wxSocketServer::WaitForAccept}{wxsocketbasewaitforaccept}, 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
+\helpref{wxSocketServer::Accept}{wxsocketserveraccept}
 
 %
 % WaitForAccept
@@ -1022,7 +1026,6 @@ Returns TRUE if an incoming connection arrived, FALSE if the timeout expired.
 
 \wxheading{See also}
 
-\helpref{wxSocketServer::Accept}{wxsocketserveraccept}\\
+\helpref{wxSocketServer::Accept}{wxsocketserveraccept}, 
 \helpref{wxSocketServer::AcceptWith}{wxsocketserveracceptwith}
-
 

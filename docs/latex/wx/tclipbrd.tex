@@ -26,7 +26,7 @@ implement both of them using almost the same code - or, in other
 words, if you implement drag and drop support for your application, you get
 clipboard support for free and vice versa.
 
-In the heart of both clipboard and drag and drop operations lies the 
+At the heart of both clipboard and drag and drop operations lies the 
 \helpref{wxDataObject}{wxdataobject} class. The objects of this class (or, to
 be precise, classes derived from it) represent the data which is being carried
 by the mouse during drag and drop operation or copied to or pasted from the
@@ -42,7 +42,7 @@ application and even the same window when, for example, you drag some text from
 one position to another in a word processor. Let us describe what each of them
 should do.
 
-\subsection{The data provider (source) duties}{wxdataobjectsource}
+\subsection{The data provider (source) duties}\label{wxdataobjectsource}
 
 The data provider is responsible for creating a 
 \helpref{wxDataObject}{wxdataobject} containing the data to be
@@ -66,7 +66,7 @@ deletes) data - in fact, this usually depends on which menu item the user
 chose. But for drag and drop it can only know it after 
 \helpref{DoDragDrop}{wxdropsourcedodragdrop} returns (from its return value).
 
-\subsection{The data receiver (target) duties}{wxdataobjecttarget}
+\subsection{The data receiver (target) duties}\label{wxdataobjecttarget}
 
 To receive (paste in usual terminology) data from the clipboard, you should
 create a \helpref{wxDataObject}{wxdataobject} derived class which supports the
@@ -80,5 +80,4 @@ virtual function will be called when a data object is dropped, from which the
 data itself may be requested by calling 
 \helpref{wxDropTarget::GetData}{wxdroptargetwxdroptarget} method which fills
 the data object.
-
 

@@ -1,14 +1,14 @@
 [OPTIONS]
-BMROOT=L:\wxWindows\docs\latex\wx ; Assume that bitmaps are where the source is
+BMROOT=d:\wx2\wxWindows\docs\latex\wx ; Assume that bitmaps are where the source is
 TITLE=wxWindows Manual
 CONTENTS=Contents
 COMPRESS=HIGH
 
 [FILES]
-Wx.rtf
+wx.rtf
 
 [CONFIG]
-CreateButton("Up", "&Up", "JumpId(`Wx.hlp', `Contents')")
+CreateButton("Up", "&Up", "JumpId(`wx.hlp', `Contents')")
 BrowseButtons()
 
 [MAP]

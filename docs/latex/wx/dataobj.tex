@@ -13,15 +13,15 @@
 
 A wxDataObject represents data that can be copied to or from the clipboard, or
 dragged and dropped. The important thing about wxDataObject is that this is a
-"smart" piece of data unlike usual "dumb" data containers such as memory
-buffers or files. Being "smart" here means that the data object itself should
+'smart' piece of data unlike usual 'dumb' data containers such as memory
+buffers or files. Being 'smart' here means that the data object itself should
 know what data formats it supports and how to render itself in each of
 supported formats.
 
 A supported format, incidentally, is exactly the format in which the data can
 be requested from a data object or from which the data object may be set. In
-the general case, an object may support different formats on "input" and
-"output", i.e. it may be able to render itself in a given format but not be
+the general case, an object may support different formats on 'input' and
+'output', i.e. it may be able to render itself in a given format but not be
 created from data on this format or vice versa. wxDataObject defines an
 enumeration type
 
@@ -36,14 +36,13 @@ enum Direction
 which allows to distinguish between them. See 
 \helpref{wxDataFormat}{wxdataformat} documentation for more about formats.
 
-Not surprizingly, being "smart" comes at a price of added complexity. This is
+Not surprizingly, being 'smart' comes at a price of added complexity. This is
 reasonable for the situations when you really need to support multiple formats,
 but may be annoying if you only want to do something simple like cut and paste
 text.
 
 To provide a solution for both cases, wxWindows has two predefined classes
-which derive from wxDataObject:
-\helpref{wxDataObjectSimple}{wxdataobjectsimple} and
+which derive from wxDataObject: \helpref{wxDataObjectSimple}{wxdataobjectsimple} and 
 \helpref{wxDataObjectComposite}{wxdataobjectcomposite}. 
 \helpref{wxDataObjectSimple}{wxdataobjectsimple} is
 the simplest wxDataObject possible and only holds data in a single format (such
@@ -54,23 +53,23 @@ because it achievs this by simply holding several wxDataObjectSimple objects.
 So, you have several solutions when you need a wxDataObject class (and you need
 one as soon as you want to transfer data via the clipboard or drag and drop):
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{0. Use one of built-in classes}{You may use wxTextDataObject,
 wxBitmapDataObject or wxFileDataObject in the simplest cases when you only need
-to support one format and your data is either text, bitmap or list of files}
+to support one format and your data is either text, bitmap or list of files.}
 \twocolitem{1. Derive your class from wxDataObjectSimple}{This is the simplest
 solution for custom data - you will only support one format and so probably
 won't be able to communicate with other programs, but data transfer will work
 in your program (or between different copies of it).}
-\twocolitem{2. Use wxDataObjectComposite}{This is a quite simple, but rather
-powerful solution which allows you to support any number of formats (either
+\twocolitem{2. Use wxDataObjectComposite}{This is a simple but powerful
+solution which allows you to support any number of formats (either
 standard or custom if you combine it with the previous solution).}
-\twocolitem{3. Derive from wxDataObject directly}{This is the solution of
+\twocolitem{3. Derive from wxDataObject directly}{This is the solution for
 maximal flexibility and efficiency, but it also is the most difficult to
 implement.}
 \end{twocollist}
 
-Please note that the easiest way to use Drag'n'Drop and the clipboard with
+Please note that the easiest way to use drag and drop and the clipboard with
 multiple formats is by using wxDataObjectComposite, but it is not the most
 efficient one as each wxDataObjectSimple would contain the whole data in its
 respective formars. Now imagine that you want to paste 200 pages of text in
@@ -80,14 +79,14 @@ will have to derive from wxDataObject directly and make it enumerate its
 formats and provide the data in the requested format on demand.
 
 Note that neither the GTK data transfer mechanisms for the clipboard and
-Drag'n'Drop nor the OLE data transfer copies any data until another application
-actually requests the data. This is in contrast to the "feel" offered to the
+drag and drop, neither does the OLE data transfer copy any data until another application
+actually requests the data. This is in contrast to the 'feel' offered to the
 user of a program who would normally think that the data resides in the
-clipboard after having pressed "Copy" - in reality it is only declared to be
+clipboard after having pressed 'Copy' - in reality it is only declared to be
 available.
 
 There are several predefined data object classes derived from
-wxDataObjectSimple: \helpref{wxFileDataObject}{wxfiledataobject},
+wxDataObjectSimple: \helpref{wxFileDataObject}{wxfiledataobject}, 
 \helpref{wxTextDataObject}{wxtextdataobject} and 
 \helpref{wxBitmapDataObject}{wxbitmapdataobject} which can be used without
 change.
@@ -98,8 +97,8 @@ format of user-defined data is given as mime-type string literal, such as
 "application/word" or "image/png". These strings are used as they are under
 Unix (so far only GTK) to identify a format and are translated into their
 Windows equivalent under Win32 (using the OLE IDataObject for data exchange to
-and from the clipboard and for Drag'n'Drop). Note that the format string
-translation under Windows is not yet finnished.
+and from the clipboard and for drag and drop). Note that the format string
+translation under Windows is not yet finished.
 
 \wxheading{Virtual functions to override}
 
@@ -147,12 +146,10 @@ Destructor.
 
 \membersection{wxDataObject::GetAllFormats}\label{wxdataobjectgetallformats}
 
-\constfunc{virtual void}{GetAllFormats}{
-    \param{wxDataFormat *}{formats},
-    \param{Direction}{ dir = Get}}
+\constfunc{virtual void}{GetAllFormats}{ \param{wxDataFormat *}{formats}, \param{Direction}{ dir = Get}}
 
-Copy all supported formats in the given direction to the array pointed to by
-{\it formats} (there is enough place for GetFormatCount(dir) formats in it).
+Copy all supported formats in the given direction to the array pointed to by 
+{\it formats}. There is enough space for GetFormatCount(dir) formats in it.
 
 \membersection{wxDataObject::GetDataHere}\label{wxdataobjectgetdatahere}
 
@@ -171,26 +168,22 @@ Returns the data size of the given format {\it format}.
 
 \constfunc{virtual size\_t}{GetFormatCount}{\param{Direction}{ dir = Get}}
 
-Return the number of available formats for rendering or setting the data.
+Returns the number of available formats for rendering or setting the data.
 
 \membersection{wxDataObject::GetPreferredFormat}\label{wxdataobjectgetpreferredformat}
 
 \constfunc{virtual wxDataFormat}{GetPreferredFormat}{\param{Direction}{ dir = Get}}
 
-Returns the preferred format for either rendering the data (if {\it dir} is
-{\tt Get}, its default value) or for setting it. Usually this will be the
+Returns the preferred format for either rendering the data (if {\it dir} is {\tt Get},
+its default value) or for setting it. Usually this will be the
 native format of the wxDataObject.
 
 \membersection{wxDataObject::SetData}\label{wxdataobjectsetdata}
 
-\func{virtual bool}{SetData}{
-    \param{const wxDataFormat\&}{ format},
-    \param{size\_t}{ len},
-    \param{const void }{*buf} }
+\func{virtual bool}{SetData}{ \param{const wxDataFormat\&}{ format}, \param{size\_t}{ len}, \param{const void }{*buf} }
 
 Set the data in the format {\it format} of the length {\it len} provided in the
 buffer {\it buf}.
 
-Returns TRUE on sucess, FALSE on failure.
-
+Returns TRUE on success, FALSE on failure.
 

@@ -22,7 +22,7 @@ overridden to increase efficiency.
 
 \wxheading{Derived from}
 
-\helpref{wxDataObjectSimple}{wxdataobjectsimple}
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}\\
 \helpref{wxDataObject}{wxdataobject}
 
 \wxheading{Include files}
@@ -44,7 +44,7 @@ overridden to increase efficiency.
 \func{}{wxTextDataObject}{\param{const wxString\& }{text = wxEmptyString}}
 
 Constructor, may be used to initialise the text (otherwise 
-\helpref{SetText}{wxtextdataobjectsettext} should be used later)
+\helpref{SetText}{wxtextdataobjectsettext} should be used later).
 
 \membersection{wxTextDataObject::GetTextLength}\label{wxtextdataobjectgettextlength}
 
@@ -73,5 +73,4 @@ Sets the text associated with the data object. This method is called
 when the data object receives the data and, by default, copies the text into
 the member variable. If you want to process the text on the fly you may wish to
 override this function.
-
 
