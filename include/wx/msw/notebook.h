@@ -165,6 +165,9 @@ public:
   // handler for child pages erase background event
   void DoEraseBackground(wxEraseEvent& event);
 
+  // real implementation of the above method
+  void DoEraseBackground(wxWindow *win, WXHDC hDC);
+
   // get the brush to be used for painting the background for the controls
   // which need it in their MSWControlColor()
   //

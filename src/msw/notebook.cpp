@@ -910,18 +910,22 @@ WXHBRUSH wxNotebook::GetThemeBackgroundBrush(WXHDC hDC, wxWindow *win) const
 
 void wxNotebook::DoEraseBackground(wxEraseEvent& event)
 {
+    DoEraseBackground((wxWindow *)event.GetEventObject(),
+                      (WXHDC)GetHdcOf(*event.GetDC()));
+}
+
+void wxNotebook::DoEraseBackground(wxWindow *win, WXHDC hDC)
+{
     // we can either draw the background ourselves or let DrawThemeBackground()
     // do it, but as we already have the correct brush, let's do it ourselves
     // (note that we use the same code in wxControl::MSWControlColor(), so if
     // it breaks, it should at least break in consistent way)
-    wxWindow *win = (wxWindow *)event.GetEventObject();
-    HDC hdc = GetHdcOf(*event.GetDC());
-    WXHBRUSH hbr = GetThemeBackgroundBrush((WXHDC)hdc, win);
+    WXHBRUSH hbr = GetThemeBackgroundBrush(hDC, win);
     if ( hbr )
     {
         RECT rectClient;
         ::GetClientRect(GetHwndOf(win), &rectClient);
-        ::FillRect(hdc, &rectClient, (HBRUSH)hbr);
+        ::FillRect((HDC)hDC, &rectClient, (HBRUSH)hbr);
     }
 }
 
