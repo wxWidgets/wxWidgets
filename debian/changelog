@@ -1,3 +1,18 @@
+wxwindows2.4 (2.4.0.8) unstable; urgency=low
+
+  * The "I wish people would read the existing discussion about new releases
+    before posting 'reminder' bugs" release.  Closes: #189144
+  * Moved back to using png2.  gtk1 forces that on anything using it and
+    gtk2 support is still too flakey both in wx and dependent apps for
+    us to entertain it in a stable release.  This is a *really* messed
+    up situation for anyone trying to maintain a development machine.
+    Thank the png and gtk theme people if its a pain in your ass too.
+    Closes: #186779
+  * Add real package options to the gl build deps.  Closes: #182210
+  * Really fix the XRCed problem, unlike 2.4.0.7 ; ) Closes: #183712
+
+ -- Ron Lee <ron@debian.org>  Tue, 15 Apr 2003 18:42:54 -0700
+
 wxwindows2.4 (2.4.0.3) unstable; urgency=low
 
   * Changed Conflict to Replaces so people can use 2.4 -dev before all

@@ -697,13 +697,17 @@ install-gtk-py: build-gtk-py-stamp
 		-name '*.py?' -exec rm '{}' ';'
 
 	dh_installman debian/wxPython-tools.1
-	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1  \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2png.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1 \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1   \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1
+	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1     \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2png.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1      \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycwrap.1
+		#usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalacarte.1
+		#usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalamode.1
+		#usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywrap.1
 
 install-headers: DH_OPTIONS=-p$(package_headers)
 install-headers: install-gtk-shared-stamp
