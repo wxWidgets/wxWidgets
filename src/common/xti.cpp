@@ -279,6 +279,12 @@ wxTypeInfo *wxTypeInfo::FindType(const wxChar *typeName)
     return (wxTypeInfo *)iter->second;
 }
 
+#if wxUSE_UNICODE
+wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to , converterFromString_t from , const char *name) :
+wxTypeInfo( kind , to , from , name)
+{ wxASSERT_MSG( kind == wxT_OBJECT_PTR || kind == wxT_OBJECT , wxT("Illegal Kind for Enum Type")) ; m_classInfo = classInfo ;}
+#endif
+
 wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to , converterFromString_t from , const wxString &name) :
 wxTypeInfo( kind , to , from , name)
 { wxASSERT_MSG( kind == wxT_OBJECT_PTR || kind == wxT_OBJECT , wxT("Illegal Kind for Enum Type")) ; m_classInfo = classInfo ;}
