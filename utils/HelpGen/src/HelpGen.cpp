@@ -79,7 +79,11 @@ class HelpGenApp: public wxApp
 public:
     HelpGenApp() {};
 
+#if wxUSE_GUI
     bool OnInit();
+#else
+    int OnRun();
+#endif
 };
 
 IMPLEMENT_APP(HelpGenApp);
@@ -472,7 +476,11 @@ int main(int argc, char **argv)
 {
 */
 
+#if wxUSE_GUI
 bool HelpGenApp::OnInit()
+#else
+int HelpGenApp::OnRun()
+#endif
 {
     enum
     {
@@ -1930,6 +1938,9 @@ static const char *GetCurrentTime(const char *timeFormat)
 
 /*
    $Log$
+   Revision 1.10  2000/03/11 10:05:23  VS
+   now compiles with wxBase
+
    Revision 1.9  2000/01/16 13:25:21  VS
    compilation fixes (gcc)
 
