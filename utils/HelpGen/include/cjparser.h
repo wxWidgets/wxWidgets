@@ -7,7 +7,7 @@
 // Created:     22/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleskandars Gluchovas
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __CJPARSESR_G__
@@ -22,72 +22,72 @@
 
 // class parses given "memory-resident" Java or C++ source code
 // and captures information about classes/attrubutes/methods/
-// arguments/etc into structures. Conforms with SourceParserBase 
+// arguments/etc into structures. Conforms with SourceParserBase
 // interface requirements.
 
 class CJSourceParser : public SourceParserBase
 {
 protected:
-	// begining of the full-text area of the source file
-	char* mpStart;
+    // begining of the full-text area of the source file
+    char* mpStart;
 
-	// points to first character after the end
-	// of teh full-text area
-	char* mpEnd;
+    // points to first character after the end
+    // of teh full-text area
+    char* mpEnd;
 
-	// current "privacy level"
-	int   mCurVis;
+    // current "privacy level"
+    int   mCurVis;
 
-	// current parsing position int full-text area
-	char*  cur;
+    // current parsing position int full-text area
+    char*  cur;
 
-	// about the current class
-	bool   mIsVirtual;
-	bool   mIsTemplate;
-	size_t mNestingLevel;
+    // about the current class
+    bool   mIsVirtual;
+    bool   mIsTemplate;
+    size_t mNestingLevel;
 
-	// context data for which is currently being collected
-	spContext* mpCurCtx;
+    // context data for which is currently being collected
+    spContext* mpCurCtx;
 
-	int mCurCtxType; // type of the current context
+    int mCurCtxType; // type of the current context
 
-	bool mCommentsOn;
-	bool mMacrosOn;
+    bool mCommentsOn;
+    bool mMacrosOn;
 
 protected:
 
-	void AttachComments( spContext& ctx, char* cur );
-	void ParseKeyword( char*& cur );
-	bool ParseNameAndRetVal( char*& cur, bool& isAMacro );
-	bool ParseArguments( char*& cur );
-	void ParseMemberVar( char*& cur );
-	void SkipFunction( char*& cur );
-	void SkipFunctionBody( char*& cur );
-	bool CheckVisibilty( char*& cur );
+    void AttachComments( spContext& ctx, char* cur );
+    void ParseKeyword( char*& cur );
+    bool ParseNameAndRetVal( char*& cur, bool& isAMacro );
+    bool ParseArguments( char*& cur );
+    void ParseMemberVar( char*& cur );
+    void SkipFunction( char*& cur );
+    void SkipFunctionBody( char*& cur );
+    bool CheckVisibilty( char*& cur );
 
-	void AddClassNode( char*& cur );
-	void AddMacroNode( char*& cur );
-	void AddEnumNode( char*& cur );
-	void AddTypeDefNode( char*& cur );
+    void AddClassNode( char*& cur );
+    void AddMacroNode( char*& cur );
+    void AddEnumNode( char*& cur );
+    void AddTypeDefNode( char*& cur );
 
-	void DumpOperationInfo( spOperation& info, const string& tab, ostream& os );
-	void DumpClassHeader( spClass& info, ostream& os );
-	void DumpClassBody( spClass& info, ostream& os );
+    void DumpOperationInfo( spOperation& info, const string& tab, ostream& os );
+    void DumpClassHeader( spClass& info, ostream& os );
+    void DumpClassBody( spClass& info, ostream& os );
 
 public:
 
-	// NOTE:: discarding of macros or comments improves performance and 
-	//		  decreases memory usage
+    // NOTE:: discarding of macros or comments improves performance and
+    //          decreases memory usage
 
-	CJSourceParser(bool collectCommnets = 1,
-				   bool collectMacros   = 1);
+    CJSourceParser(bool collectCommnets = 1,
+                   bool collectMacros   = 1);
 
-	// returns the root-node of the created context tree
-	// (user is responsible for releasing it from the heep)
-	// "end" should point to the last (character + 1) of the 
-	// source text
+    // returns the root-node of the created context tree
+    // (user is responsible for releasing it from the heep)
+    // "end" should point to the last (character + 1) of the
+    // source text
 
-	virtual spFile* Parse( char* start, char* end );
+    virtual spFile* Parse( char* start, char* end );
 };
 
 // inline'ed helpers used (just info):

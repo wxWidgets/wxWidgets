@@ -238,7 +238,7 @@ inline void ScriptTemplate::PrintVar( TVarInfo*   pInfo,
 				if ( !sz ) 
 				{
 					// DBG::
-					int u;
+					int u = 0;
 					++u;
 					break;
 				}

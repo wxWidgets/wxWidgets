@@ -33,6 +33,7 @@
    (ii) plans for version 2
     1. Use wxTextFile for direct file access to avoid one scan method problems
     2. Use command line parser class for the options
+    3. support for overloaded functions in diff mode (search for OVER)
 
    (iii) plans for version 3
     1. Merging with existing files
@@ -120,15 +121,70 @@ private:
     wxTeXFile& operator=(const wxTeXFile&);
 };
 
+// helper class which manages the classes and function names to ignore for
+// the documentation purposes (used by both HelpGenVisitor and DocManager)
+class IgnoreNamesHandler
+{
+public:
+    IgnoreNamesHandler() : m_ignore(CompareIgnoreListEntries) { }
+    ~IgnoreNamesHandler() { WX_CLEAR_ARRAY(m_ignore); }
+
+    // load file with classes/functions to ignore (add them to the names we
+    // already have)
+    bool AddNamesFromFile(const wxString& filename);
+
+    // return TRUE if we ignore this function
+    bool IgnoreMethod(const wxString& classname,
+                      const wxString& funcname) const
+    {
+        if ( IgnoreClass(classname) )
+            return TRUE;
+
+        IgnoreListEntry ignore(classname, funcname);
+
+        return m_ignore.Index(&ignore) != wxNOT_FOUND;
+    }
+
+    // return TRUE if we ignore this class entirely
+    bool IgnoreClass(const wxString& classname) const
+    {
+        IgnoreListEntry ignore(classname, "");
+
+        return m_ignore.Index(&ignore) != wxNOT_FOUND;
+    }
+
+protected:
+    struct IgnoreListEntry
+    {
+        IgnoreListEntry(const wxString& classname,
+                        const wxString& funcname)
+            : m_classname(classname), m_funcname(funcname)
+        {
+        }
+
+        wxString m_classname;
+        wxString m_funcname;    // if empty, ignore class entirely
+    };
+
+    static int CompareIgnoreListEntries(IgnoreListEntry *first,
+                                        IgnoreListEntry *second);
+
+    // for efficiency, let's sort it
+    WX_DEFINE_SORTED_ARRAY(IgnoreListEntry *, ArrayNamesToIgnore);
+
+    ArrayNamesToIgnore m_ignore;
+
+private:
+    IgnoreNamesHandler(const IgnoreNamesHandler&);
+    IgnoreNamesHandler& operator=(const IgnoreNamesHandler&);
+};
+
 // visitor implementation which writes all collected data to a .tex file
 class HelpGenVisitor : public spVisitor
 {
 public:
     // ctor
-    HelpGenVisitor(const wxString& directoryOut) : m_directoryOut(directoryOut)
-    {
-        Reset();
-    }
+    HelpGenVisitor(const wxString& directoryOut, bool overwrite);
 
     virtual void VisitFile( spFile& fl );
     virtual void VisitClass( spClass& cl );
@@ -140,6 +196,9 @@ public:
     virtual void VisitParameter( spParameter& param );
 
     void EndVisit();
+
+    // get our `ignore' object
+    IgnoreNamesHandler& GetIgnoreHandler() { return m_ignoreNames; }
 
     // shut up g++ warning (ain't it stupid?)
     virtual ~HelpGenVisitor() { }
@@ -160,7 +219,9 @@ protected:
     // terminate the function documentation if it was started
     void CloseFunction();
 
-    wxString  m_directoryOut;   // directory for the output
+    wxString  m_directoryOut,   // directory for the output
+              m_fileHeader;     // name of the .h file we parse
+    bool      m_overwrite;      // overwrite existing files?
     wxTeXFile m_file;           // file we're writing to now
 
     // state variables
@@ -178,6 +239,10 @@ protected:
     // headers included by this file
     wxArrayString m_headers;
 
+    // ignore handler: tells us which classes to ignore for doc generation
+    // purposes
+    IgnoreNamesHandler m_ignoreNames;
+
 private:
     HelpGenVisitor(const HelpGenVisitor&);
     HelpGenVisitor& operator=(const HelpGenVisitor&);
@@ -189,17 +254,17 @@ private:
 class DocManager
 {
 public:
-    DocManager() : m_ignore(CompareIgnoreListEntries) { }
+    DocManager(bool checkParamNames);
     ~DocManager();
-
-    // load file with class names and function names to ignore during diff
-    bool LoadIgnoreFile(const wxString& filename);
 
     // returns FALSE on failure
     bool ParseTeXFile(const wxString& filename);
 
     // returns FALSE if there were any differences
     bool DumpDifferences(spContext *ctxTop) const;
+
+    // get our `ignore' object
+    IgnoreNamesHandler& GetIgnoreHandler() { return m_ignoreNames; }
 
 protected:
     // parsing TeX files
@@ -242,40 +307,8 @@ protected:
 
     // functions and classes to ignore during diff
     // -------------------------------------------
-    struct IgnoreListEntry
-    {
-        IgnoreListEntry(const wxString& classname,
-                        const wxString& funcname)
-            : m_classname(classname), m_funcname(funcname)
-        {
-        }
 
-        wxString m_classname;
-        wxString m_funcname;    // if empty, ignore class entirely
-    };
-
-    static int CompareIgnoreListEntries(IgnoreListEntry *first,
-                                        IgnoreListEntry *second);
-
-    // for efficiency, let's sort it
-    WX_DEFINE_SORTED_ARRAY(IgnoreListEntry *, ArrayNamesToIgnore);
-
-    ArrayNamesToIgnore m_ignore;
-
-    // return TRUE if we ignore this function
-    bool IgnoreMethod(const wxString& classname,
-                      const wxString& funcname) const
-    {
-        IgnoreListEntry ignore(classname, funcname);
-
-        return m_ignore.Index(&ignore) != wxNOT_FOUND;
-    }
-
-    // return TRUE if we ignore this class entirely
-    bool IgnoreClass(const wxString& classname) const
-    {
-        return IgnoreMethod(classname, "");
-    }
+    IgnoreNamesHandler m_ignoreNames;
 
     // information about all functions documented in the TeX file(s)
     // -------------------------------------------------------------
@@ -367,6 +400,13 @@ protected:
     // the class name appears in m_classes
     wxArrayString    m_classes;
     ArrayMethodInfos m_methods;
+
+    // are we checking parameter names?
+    bool m_checkParamNames;
+
+private:
+    DocManager(const DocManager&);
+    DocManager& operator=(const DocManager&);
 };
 
 // -----------------------------------------------------------------------------
@@ -397,18 +437,20 @@ static void usage()
 "       -v          be verbose\n"
 "       -H          give this usage message\n"
 "       -V          print the version info\n"
+"       -i file     file with classes/function to ignore\n"
 "\n"
 "   where mode is one of: dump, diff\n"
 "\n"
 "   dump means generate .tex files for TeX2RTF converter from specified\n"
 "   headers files, mode options are:\n"
+"       -f          overwrite existing files\n"
 "       -o outdir   directory for generated files\n"
 "\n"
 "   diff means compare the set of methods documented .tex file with the\n"
 "   methods declared in the header:\n"
 "           %s diff <file.h> <files.tex...>.\n"
-"   options are:\n"
-"       -i file     file with classes/function to ignore during diff\n"
+"   mode specific options are:\n"
+"       -p          do check parameter names (not done by default)\n"
 "\n", basename.c_str(), basename.c_str());
 
     exit(1);
@@ -430,7 +472,10 @@ int main(int argc, char **argv)
     }
 
     wxArrayString filesH, filesTeX;
-    wxString directoryOut, ignoreFile;
+    wxString directoryOut,      // directory for 'dmup' output
+             ignoreFile;        // file with classes/functions to ignore
+    bool overwrite = FALSE,     // overwrite existing files during 'dump'?
+         paramNames = FALSE;    // check param names during 'diff'?
 
     for ( int current = 1; current < argc ; current++ ) {
         // all options have one letter
@@ -452,12 +497,6 @@ int main(int argc, char **argv)
                         usage();
 
                     case 'i':
-                        if ( mode != Mode_Diff ) {
-                            wxLogError("-i is only valid with diff.");
-
-                            break;
-                        }
-
                         current++;
                         if ( current >= argc ) {
                             wxLogError("-i option requires an argument.");
@@ -466,6 +505,26 @@ int main(int argc, char **argv)
                         }
 
                         ignoreFile = argv[current];
+                        continue;
+
+                    case 'p':
+                        if ( mode != Mode_Diff ) {
+                            wxLogError("-p is only valid with diff.");
+
+                            break;
+                        }
+
+                        paramNames = TRUE;
+                        continue;
+
+                    case 'f':
+                        if ( mode != Mode_Dump ) {
+                            wxLogError("-f is only valid with dump.");
+
+                            break;
+                        }
+
+                        overwrite = TRUE;
                         continue;
 
                     case 'o':
@@ -501,12 +560,16 @@ int main(int argc, char **argv)
                         continue;
 
                     default:
+                        wxLogError("unknown option '%s'", argv[current]);
                         break;
                 }
             }
+            else {
+                wxLogError("only one letter options are allowed, not '%s'.",
+                           argv[current]);
+            }
 
             // only get here after a break from switch or from else branch of if
-            wxLogError("unknown option '%s'", argv[current]);
 
             usage();
         }
@@ -517,7 +580,7 @@ int main(int argc, char **argv)
                 else if ( strcmp(argv[current], "dump") == 0 )
                     mode = Mode_Dump;
                 else {
-                    wxLogError("unknown mode '%s'.");
+                    wxLogError("unknown mode '%s'.", argv[current]);
 
                     usage();
                 }
@@ -538,7 +601,10 @@ int main(int argc, char **argv)
 
     // create a parser object and a visitor derivation
     CJSourceParser parser;
-    HelpGenVisitor visitor(directoryOut);
+    HelpGenVisitor visitor(directoryOut, overwrite);
+    if ( !!ignoreFile && mode == Mode_Dump )
+        visitor.GetIgnoreHandler().AddNamesFromFile(ignoreFile);
+
     spContext *ctxTop = NULL;
 
     // parse all header files
@@ -555,6 +621,11 @@ int main(int argc, char **argv)
             visitor.VisitAll(*ctxTop);
             visitor.EndVisit();
         }
+
+#ifdef __WXDEBUG__
+        if ( 0 && ctxTop )
+            ctxTop->Dump("");
+#endif // __WXDEBUG__
     }
 
     // parse all TeX files
@@ -566,7 +637,7 @@ int main(int argc, char **argv)
             return 1;
         }
 
-        DocManager docman;
+        DocManager docman(paramNames);
 
         size_t nFiles = filesTeX.GetCount();
         for ( size_t n = 0; n < nFiles; n++ ) {
@@ -578,7 +649,7 @@ int main(int argc, char **argv)
         }
 
         if ( !!ignoreFile )
-            docman.LoadIgnoreFile(ignoreFile);
+            docman.GetIgnoreHandler().AddNamesFromFile(ignoreFile);
 
         docman.DumpDifferences(ctxTop);
     }
@@ -589,6 +660,15 @@ int main(int argc, char **argv)
 // -----------------------------------------------------------------------------
 // HelpGenVisitor implementation
 // -----------------------------------------------------------------------------
+
+HelpGenVisitor::HelpGenVisitor(const wxString& directoryOut,
+                               bool overwrite)
+              : m_directoryOut(directoryOut)
+{
+    m_overwrite = overwrite;
+
+    Reset();
+}
 
 void HelpGenVisitor::Reset()
 {
@@ -657,19 +737,30 @@ void HelpGenVisitor::EndVisit()
 {
     CloseFunction();
 
+    m_fileHeader.Empty();
+
     wxLogVerbose("%s: finished generating for the current file.",
                  GetCurrentTime("%H:%M:%S"));
 }
 
 void HelpGenVisitor::VisitFile( spFile& file )
 {
+    m_fileHeader = file.mFileName;
     wxLogVerbose("%s: started generating docs for classes from file '%s'...",
-                 GetCurrentTime("%H:%M:%S"), file.mFileName.c_str());
+                 GetCurrentTime("%H:%M:%S"), m_fileHeader.c_str());
 }
 
 void HelpGenVisitor::VisitClass( spClass& cl )
 {
+    m_inClass = FALSE; // will be left FALSE on error
+
     wxString name = cl.GetName();
+
+    if ( m_ignoreNames.IgnoreClass(name) ) {
+        wxLogVerbose("Skipping ignored class '%s'.", name.c_str());
+
+        return;
+    }
 
     // the file name is built from the class name by removing the leading "wx"
     // if any and converting it to the lower case
@@ -684,11 +775,9 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     filename.MakeLower();
     filename += ".tex";
 
-    if ( wxFile::Exists(filename) ) {
-        wxLogError("Won't overwrite existing file '%s' - please use '-o'.",
+    if ( !m_overwrite && wxFile::Exists(filename) ) {
+        wxLogError("Won't overwrite existing file '%s' - please use '-f'.",
                    filename.c_str());
-
-        m_inClass = FALSE;
 
         return;
     }
@@ -720,7 +809,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
                       "\n"
                       "\n"
                       "\\section{\\class{%s}}\\label{%s}\n",
-                      filename.c_str(), GetCurrentTime("%d/%b/%y %H:%M:%S"),
+                      m_fileHeader.c_str(), GetCurrentTime("%d/%b/%y %H:%M:%S"),
                       name.c_str(), wxString(name).MakeLower().c_str());
 
         totalText << header << '\n';
@@ -931,8 +1020,14 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
 {
     CloseFunction();
 
-    if ( !m_inClass || !op.IsInClass() ) {
-        // FIXME that's a bug too
+    if ( !m_inClass ) {
+        // we don't generate docs right now - either we ignore this class
+        // entirely or we couldn't open the file
+        return;
+    }
+
+    if ( !op.IsInClass() ) {
+        // TODO document global functions
         wxLogWarning("skipped global function '%s'.", op.GetName().c_str());
 
         return;
@@ -940,6 +1035,15 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
 
     if ( op.mVisibility == SP_VIS_PRIVATE ) {
         // FIXME should we document protected functions?
+        return;
+    }
+
+    wxString funcname = op.GetName(),
+             classname = op.GetClass().GetName();
+    if ( m_ignoreNames.IgnoreMethod(classname, funcname) ) {
+        wxLogVerbose("Skipping ignored '%s::%s'.",
+                     classname.c_str(), funcname.c_str());
+
         return;
     }
 
@@ -953,13 +1057,11 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
 
     // start function documentation
     wxString totalText;
-    const char *funcname = op.GetName().c_str();
-    const char *classname = op.GetClass().GetName().c_str();
 
     // check for the special case of dtor
     wxString dtor;
-    if ( (funcname[0] == '~') && (strcmp(funcname + 1, classname) == 0) ) {
-        dtor.Printf("\\destruct{%s}", classname);
+    if ( (funcname[0] == '~') && (classname == funcname.c_str() + 1) ) {
+        dtor.Printf("\\destruct{%s}", classname.c_str());
         funcname = dtor;
     }
 
@@ -967,12 +1069,12 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
                      "\\membersection{%s::%s}\\label{%s}\n"
                      "\n"
                      "\\%sfunc{%s%s}{%s}{",
-                     classname, funcname,
+                     classname.c_str(), funcname.c_str(),
                      MakeLabel(classname, funcname).c_str(),
                      op.mIsConstant ? "const" : "",
                      op.mIsVirtual ? "virtual " : "",
                      op.mRetType.c_str(),
-                     funcname);
+                     funcname.c_str());
 
     m_file.WriteTeX(totalText);
 }
@@ -1004,6 +1106,11 @@ void HelpGenVisitor::VisitParameter( spParameter& param )
 // ---------------------------------------------------------------------------
 // DocManager
 // ---------------------------------------------------------------------------
+
+DocManager::DocManager(bool checkParamNames)
+{
+    m_checkParamNames = checkParamNames;
+}
 
 size_t DocManager::TryMatch(const char *str, const char *match)
 {
@@ -1280,7 +1387,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
         lenMatch = TryMatch(current, "void");
         if ( !lenMatch ) {
             lenMatch = TryMatch(current, "param");
-            while ( lenMatch ) {
+            while ( lenMatch && (current - buf < len) ) {
                 current += lenMatch;
 
                 // now come {paramtype}{paramname}
@@ -1423,7 +1530,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
         const wxString& nameClass = ctxClass->mName;
         int index = m_classes.Index(nameClass);
         if ( index == wxNOT_FOUND ) {
-            if ( !IgnoreClass(nameClass) ) {
+            if ( !m_ignoreNames.IgnoreClass(nameClass) ) {
                 foundDiff = TRUE;
 
                 wxLogError("Class '%s' is not documented at all.",
@@ -1466,7 +1573,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
             }
 
             if ( aMethodsWithSameName.IsEmpty() && ctxMethod->IsPublic() ) {
-                if ( !IgnoreMethod(nameClass, nameMethod) ) {
+                if ( !m_ignoreNames.IgnoreMethod(nameClass, nameMethod) ) {
                     foundDiff = TRUE;
 
                     wxLogError("'%s::%s' is not documented.",
@@ -1481,7 +1588,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                 index = (size_t)aMethodsWithSameName[0u];
                 methodExists[index] = TRUE;
 
-                if ( IgnoreMethod(nameClass, nameMethod) )
+                if ( m_ignoreNames.IgnoreMethod(nameClass, nameMethod) )
                     continue;
 
                 if ( !ctxMethod->IsPublic() ) {
@@ -1533,7 +1640,8 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
 
                         spParameter *ctxParam = (spParameter *)ctx;
                         const ParamInfo& param = method.GetParam(nParam);
-                        if ( param.GetName() != ctxParam->mName ) {
+                        if ( m_checkParamNames &&
+                             (param.GetName() != ctxParam->mName) ) {
                             foundDiff = TRUE;
 
                             wxLogError("Parameter #%d of '%s::%s' should be "
@@ -1575,9 +1683,9 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                 }
             }
             else {
-                // TODO add real support for overloaded methods
+                // TODO OVER add real support for overloaded methods
 
-                if ( IgnoreMethod(nameClass, nameMethod) )
+                if ( m_ignoreNames.IgnoreMethod(nameClass, nameMethod) )
                     continue;
 
                 if ( aOverloadedMethods.Index(nameMethod) == wxNOT_FOUND ) {
@@ -1602,7 +1710,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
         for ( nMethod = 0; nMethod < countMethods; nMethod++ ) {
             if ( !methodExists[nMethod] ) {
                 const wxString& nameMethod = methods[nMethod]->GetName();
-                if ( !IgnoreMethod(nameClass, nameMethod) ) {
+                if ( !m_ignoreNames.IgnoreMethod(nameClass, nameMethod) ) {
                     foundDiff = TRUE;
 
                     wxLogError("'%s::%s' is documented but doesn't exist.",
@@ -1633,11 +1741,14 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
 DocManager::~DocManager()
 {
     WX_CLEAR_ARRAY(m_methods);
-    WX_CLEAR_ARRAY(m_ignore);
 }
 
-int DocManager::CompareIgnoreListEntries(IgnoreListEntry *first,
-                                         IgnoreListEntry *second)
+// ---------------------------------------------------------------------------
+// IgnoreNamesHandler implementation
+// ---------------------------------------------------------------------------
+
+int IgnoreNamesHandler::CompareIgnoreListEntries(IgnoreListEntry *first,
+                                                 IgnoreListEntry *second)
 {
     // first compare the classes
     int rc = first->m_classname.Cmp(second->m_classname);
@@ -1647,7 +1758,7 @@ int DocManager::CompareIgnoreListEntries(IgnoreListEntry *first,
     return rc;
 }
 
-bool DocManager::LoadIgnoreFile(const wxString& filename)
+bool IgnoreNamesHandler::AddNamesFromFile(const wxString& filename)
 {
     wxFile file(filename, wxFile::read);
     if ( !file.IsOpened() )
@@ -1803,11 +1914,52 @@ static const char *GetCurrentTime(const char *timeFormat)
 
 /*
    $Log$
+   Revision 1.7  1999/02/21 22:32:32  VZ
+   1. more C++ parser fixes - now it almost parses wx/string.h
+    a) #if/#ifdef/#else (very) limited support
+    b) param type fix - now indirection chars are correctly handled
+    c) class/struct/union distinction
+    d) public/private fixes
+    e) Dump() function added - very useful for debugging
+
+   2. option to ignore parameter names during 'diff' (in fact, they're ignored
+      by default, and this option switches it on)
+
    Revision 1.6  1999/02/20 23:00:26  VZ
    1. new 'diff' mode which seems to work
    2. output files are not overwritten in 'dmup' mode
    3. fixes for better handling of const functions and operators
+    ----------------------------
+    revision 1.5
+    date: 1999/02/15 23:07:25;  author: VZ;  state: Exp;  lines: +106 -45
+    1. Parser improvements
+     a) const and virtual methods are parsed correctly (not static yet)
+     b) "const" which is part of the return type is not swallowed
 
+    2. HelpGen improvements: -o outputdir parameter added to the cmd line,
+       "//---------" kind comments discarded now.
+    ----------------------------
+    revision 1.4
+    date: 1999/01/13 14:23:31;  author: JS;  state: Exp;  lines: +4 -4
+
+    some tweaks to HelpGen
+    ----------------------------
+    revision 1.3
+    date: 1999/01/09 20:18:03;  author: JS;  state: Exp;  lines: +7 -2
+
+    HelpGen starting to compile with VC++
+    ----------------------------
+    revision 1.2
+    date: 1999/01/08 19:46:22;  author: VZ;  state: Exp;  lines: +208 -35
+
+    supports typedefs, generates "See also:" and adds "virtual " for virtual
+    functions
+    ----------------------------
+    revision 1.1
+    date: 1999/01/08 17:45:55;  author: VZ;  state: Exp;
+
+    HelpGen is a prototype of the tool for automatic generation of the .tex files
+    for wxWindows documentation from C++ headers
 */
 
 /* vi: set tw=80 et ts=4 sw=4: */
