@@ -1287,9 +1287,9 @@ class WXDLLEXPORT wxPICTResourceHandler: public wxBitmapHandler
 public:
     inline wxPICTResourceHandler()
     {
-        m_name = wxT("Macintosh Pict resource");
-        m_extension = wxEmptyString;
-        m_type = wxBITMAP_TYPE_PICT_RESOURCE;
+        SetName(wxT("Macintosh Pict resource"));
+        SetExtension(wxEmptyString);
+        SetType(wxBITMAP_TYPE_PICT_RESOURCE);
     };
 
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
