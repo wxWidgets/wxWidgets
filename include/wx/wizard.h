@@ -74,6 +74,7 @@ public:
     // wxNullBitmap from here - the default one will be used then.
     virtual wxBitmap GetBitmap() const { return m_bitmap; }
 
+#if wxUSE_VALIDATOR
     /// Override the base functions to allow a validator to be assigned to this page.
     bool TransferDataToWindow()
     {
@@ -87,6 +88,7 @@ public:
     {
         return GetValidator() ? GetValidator()->Validate(this) : wxPanel::Validate();
     }
+#endif // wxUSE_VALIDATOR
 
 protected:
     // common part of ctors:
