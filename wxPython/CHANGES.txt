@@ -86,7 +86,7 @@ for any class that is OOR aware.
 
 Added OOR support for wxGridCellRenderer, wxGridCellEditor,
 wxGridCellAttr, wxGridCellAttrProvider, wxGridTableBase and their
-derived classes..
+derived classes.
 
 
 
