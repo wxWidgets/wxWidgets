@@ -45,6 +45,10 @@
 #   include   <unistd.h>
 #endif
 
+#ifdef __WXMAC__
+    #include "wx/mac/private.h"
+#endif
+
 IMPLEMENT_CLASS(wxHelpControllerHtml, wxHTMLHelpControllerBase)
 
 /**
@@ -272,7 +276,11 @@ wxHelpControllerHtml::DisplayHelp(const wxString &relativeURL)
    wxBusyCursor b; // display a busy cursor
 
    wxString url;
-   url << m_MapFile << SEP<< relativeURL;
+   wxString mapfileurl = m_MapFile ;
+#ifdef __WXMAC__
+    mapfileurl = wxMac2UnixFilename(m_MapFile) ;
+#endif
+   url << mapfileurl << SEP<< relativeURL;
    if(! m_Frame || m_NewFrameEachTime)
    {
       m_Frame = new wxHelpFrame(NULL, -1, m_FrameTitle,
