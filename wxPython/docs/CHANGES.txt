@@ -73,7 +73,19 @@ wxGTK2: Reimplemented DoDrawRotatedText() by way of a rotation of an
 alpha blended text bitmap.  It would be better if Pango could draw
 directly into an wxImage (as FreeType can,) but that is for later...
 
-Added wrappers for wx.MediaCtrl.
+Added wrappers and a demo for wx.MediaCtrl.
+
+wxGTK: Patch applied for Freeze()/Thaw() for wxTextCtrtl.
+
+Added "gravity" for splitter window (patch 1046105). Gravity is a
+floating-point factor between 0.0 and 1.0 which controls position of
+sash while resizing the wx.SplitterWindow.  The gravity specifies
+how much the left/top window will grow while resizing.
+
+wxMSW: wx.Slider's C++ implementation rewritten to be more
+maintainable and hopefully less buggy.  The position of the labels has
+also been changed in order to better comply with Microsoft's examples
+of how to use the control.
 
 
 
