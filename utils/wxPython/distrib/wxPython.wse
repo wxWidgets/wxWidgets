@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.1.4.exe
+  EXE Filename=wxPython-2.1.5.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6

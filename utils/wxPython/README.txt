@@ -45,6 +45,13 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
+What's new in 2.1.5
+-------------------
+This is a quick bug-fix release to take care of a few nasties that
+crept in at the last minute before 2.1.4 was called done.  No new
+major features.
+
+
 
 What's new in 2.1.4
 --------------------
