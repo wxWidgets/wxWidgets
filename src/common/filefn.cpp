@@ -156,6 +156,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
 // private globals
 // ----------------------------------------------------------------------------
 
+// MT-FIXME: get rid of this horror and all code using it
 static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
@@ -669,11 +670,6 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
       wxStrcpy(wxFileFunctionsBuffer, wxT("~"));
       if (user != wxT(""))
              wxStrcat(wxFileFunctionsBuffer, (const wxChar*) user);
-#ifdef __WXMSW__
-//      strcat(wxFileFunctionsBuffer, "\\");
-#else
-//      strcat(wxFileFunctionsBuffer, "/");
-#endif
       wxStrcat(wxFileFunctionsBuffer, dest + len);
       wxStrcpy (dest, wxFileFunctionsBuffer);
     }
@@ -681,75 +677,27 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
   return dest;
 }
 
-// Return just the filename, not the path
-// (basename)
+// Return just the filename, not the path (basename)
 wxChar *wxFileNameFromPath (wxChar *path)
 {
-    if (path)
-    {
-        register wxChar *tcp;
+    wxString p = path;
+    wxString n = wxFileNameFromPath(p);
 
-        tcp = path + wxStrlen (path);
-        while (--tcp >= path)
-        {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-            // Classic or Carbon CodeWarrior like
-            // Carbon with Apple DevTools is Unix like
-            if (*tcp == wxT(':'))
-                return tcp + 1;
-#else
-            // Unix like or Windows
-            if (*tcp == wxT('/') || *tcp == wxT('\\'))
-                return tcp + 1;
-#endif
-#ifdef __VMS__
-            if (*tcp == wxT(':') || *tcp == wxT(']'))
-                return tcp + 1;
-#endif
-        } /* while */
-#if defined(__WXMSW__) || defined(__WXPM__)
-        // MSDOS like
-        if (wxIsalpha (*path) && *(path + 1) == wxT(':'))
-            return path + 2;
-#endif
-    }
-    return path;
+    return path + p.length() - n.length();
 }
 
-wxString wxFileNameFromPath (const wxString& path1)
+wxString wxFileNameFromPath (const wxString& path)
 {
-    if (path1 != wxT(""))
-    {
-        wxChar *path = WXSTRINGCAST path1 ;
-        register wxChar *tcp;
+    wxString name, ext;
+    wxFileName::SplitPath(path, NULL, &name, &ext);
 
-        tcp = path + wxStrlen (path);
-        while (--tcp >= path)
-        {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-            // Classic or Carbon CodeWarrior like
-            // Carbon with Apple DevTools is Unix like
-            if (*tcp == wxT(':') )
-                return wxString(tcp + 1);
-#else
-            // Unix like or Windows
-            if (*tcp == wxT('/') || *tcp == wxT('\\'))
-                return wxString(tcp + 1);
-#endif
-#ifdef __VMS__
-            if (*tcp == wxT(':') || *tcp == wxT(']'))
-                return wxString(tcp + 1);
-#endif
-        } /* while */
-#if defined(__WXMSW__) || defined(__WXPM__)
-        // MSDOS like
-        if (wxIsalpha (*path) && *(path + 1) == wxT(':'))
-            return wxString(path + 2);
-#endif
+    wxString fullname = name;
+    if ( !ext.empty() )
+    {
+        fullname << wxFILE_SEP_EXT << ext;
     }
-    // Yes, this should return the path, not an empty string, otherwise
-    // we get "thing.txt" -> "".
-    return path1;
+
+    return fullname;
 }
 
 // Return just the directory, or NULL if no directory
@@ -1396,7 +1344,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     }
 
     wxString result;
-    gs_dir->GetFirst(&result, wxFileNameFromPath((wxChar*) spec), dirFlags);
+    gs_dir->GetFirst(&result, wxFileNameFromPath(wxString(spec)), dirFlags);
     if ( result.IsEmpty() )
     {
         wxDELETE(gs_dir);
