@@ -113,6 +113,21 @@ initial width:
 
 Within wxDesigner, this stretch factor gets set from the {\it Option} menu.
 
+\subsubsection{Hiding controls using sizers}\label{sizershiding}
+
+You can hide controls contained in sizers the same way you would hide any control,
+using the \helpref{wxWindow::Show}{wxwindowshow} method.
+
+However, wxSizer also offers a separate method which can tell the sizer not to 
+consider that control in its size calculations.  To hide a window using the sizer,
+call \helpref{wxSizer::Show}{wxsizershow}.  You must then call Layout on the sizer 
+to force an update.
+
+This is useful when hiding parts of the interface, since you can avoid removing
+the controls from the sizer and having to add them back later.
+
+Note: This is supported only by wxBoxSizer and wxFlexGridSizer.
+
 \wxheading{wxBoxSizer}
 
 \helpref{wxBoxSizer}{wxboxsizer} can lay out its children either vertically

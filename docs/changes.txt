@@ -86,8 +86,8 @@ All GUI ports:
 - Wizard now validates when pressing Back or Next
 - Implemented wxNotebook::DoGetBestSize so Fit now works
 - Added FindItemByPosition to wxMenu
-- wxTimer now derives from wxEvtHandler and is its own owner
-  object by default
+- wxTimer now derives from wxEvtHandler and is its own owner object by default
+- implemented wxFlexGridSizer::Show() (Wade Brainerd)
 
 Unix:
 
