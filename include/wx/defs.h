@@ -863,5 +863,8 @@ typedef int (*WXFARPROC)();
 
 #endif
 
+// for drag & drop and clipboard operations
+typedef unsigned short wxDataFormat;
+
 #endif
     // __WXDEFSH__
