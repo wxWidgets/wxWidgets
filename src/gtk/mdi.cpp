@@ -237,11 +237,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
     GtkNotebook *notebook = GTK_NOTEBOOK(m_clientWindow->m_widget);
     if (!notebook) return (wxMDIChildFrame*) NULL;
 
-#if (GTK_MINOR_VERSION > 0)
     gint i = gtk_notebook_get_current_page( notebook );
-#else
-    gint i = gtk_notebook_current_page( notebook );
-#endif
     if (i < 0) return (wxMDIChildFrame*) NULL;
 
     GtkNotebookPage* page = (GtkNotebookPage*) (g_list_nth(notebook->children,i)->data);
@@ -325,6 +321,16 @@ bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
     return wxWindow::Create( parent->GetClientWindow(), id, wxDefaultPosition, size, style, name );
 }
 
+void wxMDIChildFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
+{
+    wxWindow::DoSetSize( x, y, width, height, sizeFlags );
+}
+
+void wxMDIChildFrame::DoSetClientSize(int width, int height)
+{
+    wxWindow::DoSetClientSize( width, height );
+}
+
 void wxMDIChildFrame::DoGetClientSize( int *width, int *height ) const
 {
     wxWindow::DoGetClientSize( width, height );
@@ -361,17 +367,10 @@ wxMenuBar *wxMDIChildFrame::GetMenuBar() const
 
 void wxMDIChildFrame::Activate()
 {
-#if defined(__WXGTK20__) || (GTK_MINOR_VERSION > 0)
     wxMDIParentFrame* parent = (wxMDIParentFrame*) GetParent();
     GtkNotebook* notebook = GTK_NOTEBOOK(parent->m_widget);
     gint pageno = gtk_notebook_page_num( notebook, m_widget );
     gtk_notebook_set_page( notebook, pageno );
-#else // GTK+ 1.0
-    // the only way I can see to do this under gtk+ 1.0.X would
-    // be to keep track of page numbers, start at first and
-    // do "next" enough times to get to this page number - messy
-    // - J. Russell Smyth
-#endif
 }
 
 void wxMDIChildFrame::OnActivate( wxActivateEvent& WXUNUSED(event) )

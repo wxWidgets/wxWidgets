@@ -184,6 +184,11 @@ public:
     bool               m_justInserted;
 
 protected:
+    // override wxFrame methods to not do anything
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize( int *width, int *height ) const;
 
 private:
