@@ -71,15 +71,21 @@ public :
 	    wxASSERT( dc->Ok() ) ;
 	    GetPort( &m_oldPort ) ;
 	    SetPort( (GrafPtr) dc->m_macPort ) ;
+	    m_clipRgn = NewRgn() ;
+	    GetClip( m_clipRgn ) ;
 	    m_dc = dc ;
 	    dc->MacSetupPort( NULL ) ;
     }
     ~wxMacFastPortSetter()
     {
+        SetPort( (GrafPtr) m_dc->m_macPort ) ;
+        SetClip( m_clipRgn ) ;
 	    SetPort( m_oldPort ) ;
 	    m_dc->MacCleanupPort( NULL ) ;
+	    DisposeRgn( m_clipRgn ) ;
     }
 private :
+    RgnHandle m_clipRgn ;
     GrafPtr m_oldPort ;
     const wxDC*   m_dc ;
 } ;
