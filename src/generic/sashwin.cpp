@@ -36,6 +36,8 @@
 #include "wx/sashwin.h"
 #include "wx/laywin.h"
 
+DEFINE_EVENT_TYPE(wxEVT_SASH_DRAGGED)
+
 IMPLEMENT_DYNAMIC_CLASS(wxSashWindow, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxSashEvent, wxCommandEvent)
 
