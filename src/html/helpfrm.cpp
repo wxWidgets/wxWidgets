@@ -476,7 +476,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
 
     wxProgressDialog progress(_("Searching..."), _("No matching page found yet"),
                               status.GetMaxIndex(), this,
-                              wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
+                              wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxGA_SMOOTH);
 
     while (status.IsActive()) {
         curi = status.GetCurIndex();
@@ -510,6 +510,7 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
     wxProgressDialog *progress = NULL;
     wxString proginfo;
 
+wxLogDebug("building context");
     m_ContentsBox->Clear();
 
     int cnt = m_Data->GetContentsCnt();
@@ -559,6 +560,7 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
     if (show_progress)
         delete progress;
     m_ContentsBox -> Expand(roots[0]);
+wxLogDebug("...done");
 }
 
 
