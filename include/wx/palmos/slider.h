@@ -85,8 +85,9 @@ protected:
 private:
 
     void Init();
-    int m_oldPos;
-    int m_lineSize;
+    int m_oldPos;    // needed for tracing thumb position during scrolling
+    int m_oldValue;  // needed for comparing thumb position before and after scrolling
+    int m_lineSize;  // imitate line size
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)
 };

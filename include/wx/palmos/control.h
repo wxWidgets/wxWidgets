@@ -111,7 +111,7 @@ protected:
                            const wxString& label,
                            const wxPoint& pos,
                            const wxSize& size,
-                           int groupID = 0);
+                           uint8_t groupID = 0);
     inline bool IsPalmControl() const { return m_palmControl; }
 
     bool PalmCreateField(const wxString& label,

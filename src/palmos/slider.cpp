@@ -100,7 +100,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
 // Slider
 void wxSlider::Init()
 {
-    m_oldPos = 0;
+    m_oldValue = m_oldPos = 0;
     m_lineSize = 1;
 }
 
@@ -120,7 +120,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     // wxSL_INVERSE is ignored - always off
     // wxSL_VERTICAL is impossible in native form
     wxCHECK_MSG(!(style & wxSL_VERTICAL), false, _T("non vertical slider on PalmOS"));
-     
+
     if(!wxControl::Create(parent, id, pos, size, style, validator, name))
         return false;
 
@@ -128,7 +128,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if(form==NULL)
         return false;
 
-    m_oldPos = value;
+    m_oldValue = m_oldPos = value;
 
     SliderControlType *slider = CtlNewSliderControl (
                                    (void **)&form,
@@ -201,7 +201,7 @@ int wxSlider::GetValue() const
 void wxSlider::SetValue(int value)
 {
     SetIntValue(value);
-    m_oldPos = value;
+    m_oldValue = m_oldPos = value;
 }
 
 wxSize wxSlider::DoGetBestSize() const
@@ -298,65 +298,42 @@ bool wxSlider::SendUpdatedEvent()
 {
     m_oldPos = GetValue();
 
-    // first track event
+    // first thumb event
     wxScrollEvent eventWxTrack(wxEVT_SCROLL_THUMBRELEASE, GetId());
     eventWxTrack.SetPosition(m_oldPos);
     eventWxTrack.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventWxTrack);
+    bool handled = GetEventHandler()->ProcessEvent(eventWxTrack);
 
-    // then scroll event
-    wxCommandEvent event(wxEVT_COMMAND_SLIDER_UPDATED, GetId());
-    event.SetEventObject(this);
-    event.SetInt(m_oldPos);
-    return ProcessCommand(event);
+    // then slider event if position changed
+    if( m_oldValue != m_oldPos )
+    {
+        m_oldValue = m_oldPos;
+        wxCommandEvent event(wxEVT_COMMAND_SLIDER_UPDATED, GetId());
+        event.SetEventObject(this);
+        event.SetInt(m_oldPos);
+        return ProcessCommand(event);
+    }
+
+    return handled;
 }
 
 bool wxSlider::SendScrollEvent(EventType* event)
 {
     wxEventType scrollEvent;
     int newPos = event->data.ctlRepeat.value;
-    if ( newPos == GetMax() )
+    if ( newPos == m_oldPos )
     {
-        scrollEvent = wxEVT_SCROLL_TOP;
-    }
-    else if ( newPos == GetMin() )
-    {
-        scrollEvent = wxEVT_SCROLL_BOTTOM;
-    }
-    else if ( newPos == ( m_oldPos + GetLineSize() ) )
-    {
-        scrollEvent = wxEVT_SCROLL_LINEUP;
-    }
-    else if ( newPos == ( m_oldPos - GetLineSize() ) )
-    {
-        scrollEvent = wxEVT_SCROLL_LINEDOWN;
-    }
-    else if ( newPos == ( m_oldPos + GetPageSize() ) )
-    {
-        scrollEvent = wxEVT_SCROLL_PAGEUP;
-    }
-    else if ( newPos == ( m_oldPos - GetPageSize() ) )
-    {
-        scrollEvent = wxEVT_SCROLL_PAGEDOWN;
-    }
-    else
-    {
+        // nothing changed since last event
         return false;
     }
 
     m_oldPos = newPos;
 
     // first track event
-    wxScrollEvent eventWxTrack(wxEVT_SCROLL_THUMBTRACK, GetId());
-    eventWxTrack.SetPosition(newPos);
-    eventWxTrack.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventWxTrack);
-
-    // then scroll event
-    wxScrollEvent eventWxScroll(scrollEvent, GetId());
-    eventWxScroll.SetPosition(newPos);
-    eventWxScroll.SetEventObject(this);
-    return GetEventHandler()->ProcessEvent(eventWxScroll);
+    wxScrollEvent eventWx(wxEVT_SCROLL_THUMBTRACK, GetId());
+    eventWx.SetPosition(newPos);
+    eventWx.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(eventWx);
 }
 
 void wxSlider::Command (wxCommandEvent & event)

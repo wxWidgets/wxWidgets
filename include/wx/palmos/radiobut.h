@@ -51,6 +51,7 @@ public:
 
     // implementation only from now on
     virtual void Command(wxCommandEvent& event);
+    void SetGroup(uint8_t group);
 
     // send a notification event, return true if processed
     bool SendClickEvent();
@@ -65,6 +66,8 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    uint8_t m_groupID;
 
     // pushButtonCtl or checkboxCtl
     ControlStyleType m_radioStyle;

@@ -103,6 +103,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 void wxRadioButton::Init()
 {
     m_radioStyle = pushButtonCtl;
+    m_groupID = 0;
 }
 
 bool wxRadioButton::Create(wxWindow *parent,
@@ -126,8 +127,14 @@ bool wxRadioButton::Create(wxWindow *parent,
                           m_radioStyle == checkboxCtl ? checkboxCtl : pushButtonCtl,
                           label,
                           pos,
-                          size
+                          size,
+                          m_groupID
                       );
+}
+
+void wxRadioButton::SetGroup(uint8_t group)
+{
+    m_groupID = group;
 }
 
 // ----------------------------------------------------------------------------

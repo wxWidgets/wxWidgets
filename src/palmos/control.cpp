@@ -111,7 +111,7 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
                                   const wxString& label,
                                   const wxPoint& pos,
                                   const wxSize& size,
-                                  int groupID)
+                                  uint8_t groupID)
 {
     FormType* form = GetParentForm();
     if(form==NULL)

@@ -42,6 +42,8 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
+#include "wx/radiobut.h"
+
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxRadioBoxStyle )
@@ -152,7 +154,28 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxValidator& val,
                         const wxString& name)
 {
-    return false;
+    // initialize members
+    m_majorDim = majorDim == 0 ? n : majorDim;
+
+    if(!wxControl::Create(parent, id, pos, size, style, val, name))
+        return false;
+
+    for(int i=0; i<n; i++)
+    {
+        wxRadioButton* rb = new wxRadioButton();
+        rb->SetGroup( id );
+        rb->Create(
+              this,
+              wxID_ANY,
+              choices[n],
+              pos,
+              size,
+              ( n == 0 ? wxRB_GROUP : 0 ) |
+              ( style & wxRA_USE_CHECKBOX ) ? wxRB_USE_CHECKBOX : 0
+        );
+    }
+
+    SetSize(size);
 }
 
 bool wxRadioBox::Create(wxWindow *parent,
@@ -166,7 +189,10 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxValidator& val,
                         const wxString& name)
 {
-    return false;
+    wxCArrayString chs(choices);
+
+    return Create( parent, id, title, pos, size, chs.GetCount(),
+                   chs.GetStrings(), majorDim, style, val, name );
 }
 
 wxRadioBox::~wxRadioBox()
