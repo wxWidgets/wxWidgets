@@ -481,7 +481,7 @@ and can be downloaded from http://www.digitalmars.com/
    
 1. You need to download and unzip in turn (later packages will overwrite
    older files)
-      Digital Mars C/C++ Compiler Version 8.38 or later
+      Digital Mars C/C++ Compiler Version 8.40 or later
       Basic utilities
    from http://www.digitalmars.com/download/freecompiler.html
 
