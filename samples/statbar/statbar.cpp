@@ -45,6 +45,7 @@
     #include "wx/msgdlg.h"
     #include "wx/textdlg.h"
     #include "wx/sizer.h"
+    #include "wx/stattext.h"
 #endif
 
 #include "wx/datetime.h"
