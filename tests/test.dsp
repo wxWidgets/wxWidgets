@@ -439,6 +439,10 @@ SOURCE=.\arrays\arrays.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\datetime\datetime.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\bstream.cpp
 # End Source File
 # Begin Source File
