@@ -211,47 +211,27 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
 
     /* local buffer in multibyte form */
-    char buf[200];
-    strcpy( buf, "/" );
-    strcat( buf, str.mb_str() );
-    
+    wxString buf;
+    buf << '/' << str.mb_str();
+    char *cbuf = new char[buf.Length()];
     GtkItemFactoryEntry entry;
-    entry.path = buf;
+    entry.path = buf.c_str();
     entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) NULL;
     entry.callback_action = 0;
-    
-/*
-    if ((m_style & wxMB_TEAROFF) || (menu->GetStyle() & wxMENU_TEAROFF)) 
-        entry.item_type = "<Tearoff>";
-    else
-*/
-        entry.item_type = "<Branch>";
-    
+    entry.item_type = "<Branch>";
+
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
-    
     /* in order to get the pointer to the item we need the item text _without_ underscores */
     wxString tmp = _T("<main>/");
     for ( pc = str; *pc != _T('\0'); pc++ )
     {
-        if (*pc == _T('_')) pc++; /* skip it */
-        tmp << *pc;
+       if (*pc == _T('_')) pc++; /* skip it */
+       tmp << *pc;
     }
-    
     menu->m_owner = gtk_item_factory_get_item( m_factory, tmp.mb_str() );
-    
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
-    
-/*
-    if ((m_style & wxMB_TEAROFF) || (menu->GetStyle() & wxMENU_TEAROFF)) 
-    {
-        entry.item_type = "<Tearoff>";
-	tmp.Remove( 0, 6 );
-	tmp.Append( _T("/tearoff") );
-        strcpy( buf, tmp.mb_str() );
-        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );
-    }
-*/
+    delete [] cbuf;
 #else
 
     menu->m_owner = gtk_menu_item_new_with_label( str.mb_str() );
@@ -690,6 +670,23 @@ wxMenu::Init( const wxString& title, const wxFunction func, long style )
     }
 
     m_owner = (GtkWidget*) NULL;
+
+#if (GTK_MINOR_VERSION > 0)
+    /* Tearoffs are entries, just like separators. So if we want this
+       menu to be a tear-off one, we just append a tearoff entry
+       immediately. */
+    if(m_style & wxMENU_TEAROFF)
+    {
+       GtkItemFactoryEntry entry;
+       entry.path = "/tearoff";
+       entry.callback = (GtkItemFactoryCallback) NULL;
+       entry.callback_action = 0;
+       entry.item_type = "<Tearoff>";
+       entry.accelerator = (gchar*) NULL;
+       gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
+       GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/tearoff" );
+    }
+#endif
 }
 
 wxMenu::~wxMenu()
@@ -861,13 +858,7 @@ void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxStri
     entry.path = buf;
     entry.callback = (GtkItemFactoryCallback) 0;
     entry.callback_action = 0;
-    
-/*
-    if (m_style & wxMENU_TEAROFF)
-        entry.item_type = "<Tearoff>";
-    else
-*/
-        entry.item_type = "<Branch>";
+    entry.item_type = "<Branch>";
     
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     
