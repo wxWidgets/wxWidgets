@@ -1464,6 +1464,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 	long yy = YLOG2DEVMAC(y);
 #if TARGET_CARBON
 	bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
+	useDrawThemeText = false ;
 #endif
 	MacInstallFont() ;
     if ( 0 )
@@ -1525,7 +1526,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
             		::DrawThemeTextBox( mString,
             							kThemeCurrentPortFont,
             							kThemeStateActive,
-            							true,
+            							false,
             							&frame,
             							teJustLeft,
             							nil );
@@ -1551,7 +1552,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     		::DrawThemeTextBox( mString,
     							kThemeCurrentPortFont,
     							kThemeStateActive,
-    							true,
+    							false,
     							&frame,
     							teJustLeft,
     							nil );
@@ -1594,6 +1595,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 	::GetFontInfo( &fi ) ;
 #if TARGET_CARBON	
 	bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
+	useGetThemeText = false ;
 #endif
 
 	if ( height )
