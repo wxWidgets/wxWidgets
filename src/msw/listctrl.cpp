@@ -1853,7 +1853,19 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     wxConvertFromMSWListItem(NULL, event.m_item, item);
                     if ( ((LV_ITEM)item).pszText == NULL ||
                          ((LV_ITEM)item).iItem == -1 )
+                    {
+                        // don't keep a stale wxTextCtrl around
+                        if ( m_textCtrl )
+                        {
+                            // EDIT control will be deleted by the list control itself so
+                            // prevent us from deleting it as well
+                            m_textCtrl->UnsubclassWin();
+                            m_textCtrl->SetHWND(0);
+                            delete m_textCtrl;
+                            m_textCtrl = NULL;
+                        }
                         return FALSE;
+                    }
 
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
@@ -1865,7 +1877,19 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     wxConvertFromMSWListItem(NULL, event.m_item, item);
                     if ( ((LV_ITEM)item).pszText == NULL ||
                          ((LV_ITEM)item).iItem == -1 )
+                    {
+                        // don't keep a stale wxTextCtrl around
+                        if ( m_textCtrl )
+                        {
+                            // EDIT control will be deleted by the list control itself so
+                            // prevent us from deleting it as well
+                            m_textCtrl->UnsubclassWin();
+                            m_textCtrl->SetHWND(0);
+                            delete m_textCtrl;
+                            m_textCtrl = NULL;
+                        }
                         return FALSE;
+                    }
 
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
