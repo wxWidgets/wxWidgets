@@ -912,15 +912,17 @@ bool wxFileName::Normalize(int flags,
         m_ext.MakeLower();
     }
 
+    // we do have the path now
+    //
+    // NB: need to do this before (maybe) calling Assign() below
+    m_relative = FALSE;
+
 #if defined(__WIN32__)
     if ( (flags & wxPATH_NORM_LONG) && (format == wxPATH_DOS) )
     {
         Assign(GetLongPath());
     }
 #endif // Win32
-
-    // we do have the path now
-    m_relative = FALSE;
 
     return TRUE;
 }
