@@ -17,9 +17,12 @@ class TestPanel(wx.Panel):
 
         self.text = wx.TextCtrl(self, -1, "1", (30, 50), (60, -1))
         h = self.text.GetSize().height
-        w = self.text.GetSize().width + self.text.GetPosition().x
+        w = self.text.GetSize().width + self.text.GetPosition().x + 2
 
-        self.spin = wx.SpinButton(self, -1, (w + 6, 50), (h/2, h), wx.SP_VERTICAL)
+        self.spin = wx.SpinButton(self, -1,
+                                  (w, 50),
+                                  (h*2/3, h),
+                                  wx.SP_VERTICAL)
         self.spin.SetRange(1, 100)
         self.spin.SetValue(1)
 
