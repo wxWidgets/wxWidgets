@@ -371,32 +371,84 @@ void wxWindowMac::DoGetPosition(int *x, int *y) const
 }
 
 #if wxUSE_MENUS
+
+static void MacMenuAfterDisplay( wxMenu* menu );
+static void MacMenuBeforeDisplay( wxMenu* menu );
+
 bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->SetInvokingWindow(this);
     menu->UpdateUI();
     ClientToScreen( &x , &y ) ;
 
-    ::InsertMenu( (MenuHandle) menu->GetHMenu() , -1 ) ;
+    MacMenuBeforeDisplay(menu);
     long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() ,y,x, 0) ;
     if ( HiWord(menuResult) != 0 )
     {
         MenuCommand id ;
         GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &id ) ;
-
-        wxMenuItem* item = menu->FindChildItem(id);
+        wxMenuItem* item = NULL ;
+        wxMenu* realmenu ;
+        item = menu->FindItem(id, &realmenu) ;
         if (item->IsCheckable())
         {
-            item->Check( !item->IsChecked() );
+            item->Check( !item->IsChecked() ) ;
         }
-        menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
+        menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
     }
-    ::DeleteMenu( menu->MacGetMenuId() ) ;
+    MacMenuAfterDisplay(menu);
     menu->SetInvokingWindow(NULL);
 
   return TRUE;
 }
+
+
+// NOTE: In 2.5 functions similar to these are members of wxMenu.  For 2.4 we
+// put a slightly modified version of them here as statics just to get the
+// popup submenus working, and to preserve binary compatibility.
+
+// MacOS needs to know about submenus somewhere within this menu
+// before it can be displayed
+static void MacMenuBeforeDisplay( wxMenu* menu )
+{
+    int pos ;
+    wxMenuItemList::Node *node;
+    wxMenuItem *item;
+    for (pos = 0, node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++)
+    {
+        item = (wxMenuItem *)node->GetData();
+        wxMenu* subMenu = item->GetSubMenu() ;
+        if (subMenu)
+        {
+            MacMenuBeforeDisplay( subMenu ) ;
+        }
+    }
+
+    ::InsertMenu(MAC_WXHMENU( menu->GetHMenu()), -1);
+
+}
+
+// undo all changes from the MacMenuBeforeDisplay call
+static void MacMenuAfterDisplay( wxMenu* menu )
+{
+    ::DeleteMenu(menu->MacGetMenuId());
+
+    int pos ;
+    wxMenuItemList::Node *node;
+    wxMenuItem *item;
+    for (pos = 0, node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++)
+    {
+        item = (wxMenuItem *)node->GetData();
+        wxMenu* subMenu = item->GetSubMenu() ;
+        if (subMenu)
+        {
+            MacMenuAfterDisplay( subMenu ) ;
+        }
+    }
+}
+
 #endif
+
 
 void wxWindowMac::DoScreenToClient(int *x, int *y) const
 {
