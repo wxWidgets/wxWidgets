@@ -281,7 +281,7 @@ build-gtk-debug-stamp: configure-gtk-debug-stamp
 build-gtk-shared-contrib-stamp: build-gtk-shared-stamp
 	dh_testdir
 	cd $(objdir_gtk_shared)/contrib/src && $(FAST_MAKE)
-	cd $(objdir_gtk_shared)/contrib/utils/wxrc && $(FAST_MAKE)
+	cd $(objdir_gtk_shared)/utils/wxrc && $(FAST_MAKE)
 	#cd $(objdir_gtk_shared)/contrib/utils/wxrcedit && $(FAST_MAKE)
 	touch $@
 
@@ -553,7 +553,7 @@ install-common: install-gtk-shared-stamp
 	dh_install $(objdir_gtk_install)/share/aclocal 	usr/share
 	dh_installman debian/wx-config.1
 
-	dh_install $(objdir_gtk_shared)/contrib/utils/wxrc/wxrc		usr/bin
+	dh_install $(objdir_gtk_shared)/utils/wxrc/wxrc	usr/bin
 #	dh_install $(objdir_gtk_shared)/contrib/utils/wxrcedit/wxrcedit	usr/bin
 
 	dh_installman debian/wxrc-tools.1

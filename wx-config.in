@@ -534,6 +534,48 @@ find_best_delegate()
 }
 
 
+# Legacy wx-config helpers.
+# -------------------------
+
+# get_legacy_mask
+# Returns a mask in the format used by wx2.4.
+get_legacy_mask()
+{
+    [ $# -gt 0 ] || set m
+    eval [ "x\${$1_chartype}" != "xunicode" ] || _unicode_flag=u
+    eval [ "x\${$1_debugtype}" != "xdebug" ] || _debug_flag=d
+    eval echo "wx\${$1_toolkit}${_unicode_flag}${_debug_flag}-\${$1_version}\${$1_host}-config"
+}
+
+# find_legacy_configs
+# Returns a list of configs installed by wx2.4 releases.
+find_legacy_configs()
+{
+    cd "$prefix/bin" 2> /dev/null &&            \
+        ls wx*-2.4-config | grep -v ^wxbase;    \
+        ls wx*-2.4-config | grep ^wxbase
+}
+
+# find_best_legacy_config
+# Returns the best legacy config for a given specification.
+# This assumes no matching new style config has been found.
+find_best_legacy_config()
+{
+    _legacy_configs=$(find_legacy_configs)
+    if [ -n "$_legacy_configs" ]; then
+        _legacy_mask=$(get_legacy_mask)
+        for d in $_legacy_configs; do
+            if echo $d | grep -E $_legacy_mask > /dev/null 2>&1 ; then
+                echo "$d"
+                return
+            fi
+        done
+    fi
+    false
+}
+
+
+
 # The only action we can perform authoritatively prior to delegation
 # is to list all the possible delegates.
 # --------------------------------------------------------------
@@ -552,10 +594,11 @@ if [ -n "$output_option_list" ]; then
     _best_delegate=$(find_best_delegate)
 
     if [ "x$WXDEBUG" = "xverbose" ]; then
-        echo " all = $_remains_in_prefix"
-        echo " matching = $_delegates"
-        echo " best = $_best_delegate"
-        echo " this = $this_config"
+        decho
+        decho " all      = $_remains_in_prefix"
+        decho " matching = $_delegates"
+        decho " best     = $_best_delegate"
+        decho " this     = $this_config"
     fi
 
     for d in $_delegates; do
@@ -587,7 +630,14 @@ if [ -n "$output_option_list" ]; then
 
     elif [ -z "$_delegates" ]; then
 
-        cat <<-EOF
+        _last_chance=$(find_best_legacy_config)
+        if [ -n "$_last_chance" ]; then
+
+            echo "  Specification matches legacy config: $_last_chance"
+
+        else
+        
+            cat <<-EOF
 	  No config found to match: $config_spec
 	  in $wxconfdir
 
@@ -596,6 +646,8 @@ if [ -n "$output_option_list" ]; then
 	  you may call its wx-config directly by specifying its full path.
 
 	EOF
+
+        fi
 
     else
         echo " Specification was ambiguous.  Use additional feature options"
@@ -616,6 +668,15 @@ if [ -n "$output_option_list" ]; then
         echo "  Also available in $prefix:"
         for d in $_remains_in_prefix; do
             echo "    $d"
+        done
+    fi
+
+    _legacy_configs=$(find_legacy_configs)
+    if [ -n "$_legacy_configs" ]; then
+        echo
+        echo "  Legacy configs available in $prefix:"
+        for d in $_legacy_configs; do
+            echo "    ${d%-config}"
         done
     fi
 
@@ -660,7 +721,22 @@ if ! user_mask_fits "$this_config" ; then
     fi
 
     if [ $_numdelegates -eq 0 ]; then
-        cat 1>&2 <<-EOF
+
+        _last_chance=$(find_best_legacy_config)
+        if [ -n "$_last_chance" ]; then
+
+            if [ -n "$WXDEBUG" ]; then
+                decho "  found a suitable legacy delegate: $_last_chance"
+                decho "--> $prefix/bin/$_last_chance $*"
+            fi
+
+            export WXCONFIG_DELEGATED=yes
+            $prefix/bin/$_last_chance $*
+            exit
+
+        else
+
+            cat 1>&2 <<-EOF
 
 	  Warning: No config found to match: $config_spec
 	           in $wxconfdir
@@ -672,12 +748,13 @@ if ! user_mask_fits "$this_config" ; then
 
 	EOF
 
-        # PIPEDREAM:  This will probably give Vadim an aneurysm if I
-        # mention it out of context, but from here we are actually
-        # just a teensy step from simply building the missing config
-        # for the user on the fly if this is an in tree wx-config.
+            # PIPEDREAM:  This will probably give Vadim an aneurysm if I
+            # mention it out of context, but from here we are actually
+            # just a teensy step from simply building the missing config
+            # for the user on the fly if this is an in tree wx-config.
 
-        exit 1
+            exit 1
+        fi
     fi
 
     if [ $_numdelegates -gt 1 ]; then

@@ -938,12 +938,16 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
 
 	mkdir $(DISTDIR)/utils/hhp2cached
-	cp $(UTILSDIR)/hhp2cached/*.* $(DISTDIR)/utils/hhp2cached
+	cp $(UTILSDIR)/hhp2cached/Makefile.in $(DISTDIR)/utils/hhp2cached
+	cp $(UTILSDIR)/hhp2cached/*.cpp $(DISTDIR)/utils/hhp2cached
+	cp $(UTILSDIR)/hhp2cached/*.rc $(DISTDIR)/utils/hhp2cached
 
 	mkdir $(DISTDIR)/utils/HelpGen
 	mkdir $(DISTDIR)/utils/HelpGen/src
 	cp $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
-	cp $(UTILSDIR)/HelpGen/src/*.* $(DISTDIR)/utils/HelpGen/src
+	cp $(UTILSDIR)/HelpGen/src/Makefile.in $(DISTDIR)/utils/HelpGen/src
+	cp $(UTILSDIR)/HelpGen/src/*.h $(DISTDIR)/utils/HelpGen/src
+	cp $(UTILSDIR)/HelpGen/src/*.cpp $(DISTDIR)/utils/HelpGen/src
 
 	mkdir $(DISTDIR)/utils/helpview
 	mkdir $(DISTDIR)/utils/helpview/src
@@ -954,6 +958,11 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/helpview/src/Makefile.in $(DISTDIR)/utils/helpview/src
 	cp $(UTILSDIR)/helpview/src/test.zip $(DISTDIR)/utils/helpview/src
 	cp $(UTILSDIR)/helpview/src/bitmaps/*.xpm $(DISTDIR)/utils/helpview/src/bitmaps
+
+	mkdir $(DISTDIR)/utils/wxrc
+	cp $(UTILSDIR)/wxrc/Makefile.in $(DISTDIR)/utils/wxrc
+	cp $(UTILSDIR)/wxrc/*.cpp $(DISTDIR)/utils/wxrc
+	cp $(UTILSDIR)/wxrc/*.rc $(DISTDIR)/utils/wxrc
 
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc

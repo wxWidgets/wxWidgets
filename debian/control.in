@@ -69,7 +69,7 @@ Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}
 Conflicts: wx-common
-Replaces: wx-common
+Replaces: wx-common, wxwin2.4-headers
 Provides: wx-common
 Description: wxWidgets Cross-platform C++ GUI toolkit (common support files)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
