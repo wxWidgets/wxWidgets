@@ -1185,8 +1185,8 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 	    if (s.Len() < min_width)
 	      s.Pad(min_width - s.Len(), _T(' '), adj_left);
 	    *this += s;
-	    done = TRUE;
 	  }
+	  done = TRUE;
 	  break;
 	case _T('n'):
 	  if (ilen == 0) {
