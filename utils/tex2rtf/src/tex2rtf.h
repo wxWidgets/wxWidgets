@@ -60,7 +60,7 @@ class MyFrame: public wxFrame
     void OnModeWinHelp(wxCommandEvent& event);
     void OnModeHTML(wxCommandEvent& event);
     void OnModeXLP(wxCommandEvent& event);
-    void OnOptionsCurleyBrace(wxCommandEvent& event);
+    void OnOptionsCurlyBrace(wxCommandEvent& event);
     void OnOptionsSyntaxChecking(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -131,7 +131,7 @@ class ItemizeStruc: public wxObject
 #define TEX_MODE_HTML   11
 #define TEX_MODE_XLP    12
 
-#define TEX_OPTIONS_CURLEY_BRACE 13
+#define TEX_OPTIONS_CURLY_BRACE 13
 #define TEX_OPTIONS_SYNTAX_CHECKING 14
 
 #define TEX_HELP        15

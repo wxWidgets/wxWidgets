@@ -93,7 +93,7 @@ DO:
   \end{verbatim} block
 
 - check that your changes/additions to any TEX documentation 
-  compiles before checking it in!  Use the '-checkcurleybraces' 
+  compiles before checking it in!  Use the '-checkcurlybraces' 
   and '-checksyntax' commandline parameters (or the OPTIONS menu 
   if running in GUI mode) to check for some of the more common 
   mistakes.  See TROUBLESHOOTING below for more details
@@ -154,7 +154,7 @@ here is one important tip:
    caused the problem.
 
 	When making changes/additions to the documentation, always use 
-	the '-checkcurleybraces' and '-checksyntax' commandline parameters
+	the '-checkcurlybraces' and '-checksyntax' commandline parameters
 	(or turn these options on in the GUI version via the OPTIONS menu 
 	choice), BEFORE checking in your changes.  These two debugging 
 	options will catch many of the more common mistakes that are made

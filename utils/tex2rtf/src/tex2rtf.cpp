@@ -269,10 +269,17 @@ bool MyApp::OnInit()
         }
       }
     }
-    else if (wxStrcmp(argv[i], _T("-checkcurleybraces")) == 0)
+    else if (wxStrcmp(argv[i], _T("-checkcurlybraces")) == 0)
     {
       i ++;
-      checkCurleyBraces = true;
+      checkCurlyBraces = true;
+    }
+    else if (wxStrcmp(argv[i], _T("-checkcurleybraces")) == 0)
+    {
+      // Support the old, incorrectly spelled version of -checkcurlybraces
+      // so that old scripts which run tex2rtf -checkcurleybraces still work.
+      i ++;
+      checkCurlyBraces = true;
     }
     else if (wxStrcmp(argv[i], _T("-checksyntax")) == 0)
     {
@@ -351,10 +358,10 @@ bool MyApp::OnInit()
 
     wxMenu *options_menu = new wxMenu;
 
-    options_menu->Append(TEX_OPTIONS_CURLEY_BRACE, _T("Curley brace matching"), _T("Checks for mismatched curley braces"),true);
+    options_menu->Append(TEX_OPTIONS_CURLY_BRACE, _T("Curly brace matching"), _T("Checks for mismatched curly braces"),true);
     options_menu->Append(TEX_OPTIONS_SYNTAX_CHECKING, _T("Syntax checking"), _T("Syntax checking for common errors"),true);
 
-    options_menu->Check(TEX_OPTIONS_CURLEY_BRACE, checkCurleyBraces);
+    options_menu->Check(TEX_OPTIONS_CURLY_BRACE, checkCurlyBraces);
     options_menu->Check(TEX_OPTIONS_SYNTAX_CHECKING, checkSyntax);
 
     wxMenu *help_menu = new wxMenu;
@@ -590,7 +597,7 @@ void ShowOptions(void)
     OnInform(_T("    -charset <pc | pca | ansi | mac> (default ansi)"));
     OnInform(_T("    -twice"));
     OnInform(_T("    -sync"));
-    OnInform(_T("    -checkcurleybraces"));
+    OnInform(_T("    -checkcurlybraces"));
     OnInform(_T("    -checksyntax"));
     OnInform(_T("    -macros <filename>"));
     OnInform(_T("    -winhelp"));
@@ -616,7 +623,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEX_MODE_WINHELP, MyFrame::OnModeWinHelp)
     EVT_MENU(TEX_MODE_HTML, MyFrame::OnModeHTML)
     EVT_MENU(TEX_MODE_XLP, MyFrame::OnModeXLP)
-    EVT_MENU(TEX_OPTIONS_CURLEY_BRACE, MyFrame::OnOptionsCurleyBrace)
+    EVT_MENU(TEX_OPTIONS_CURLY_BRACE, MyFrame::OnOptionsCurlyBrace)
     EVT_MENU(TEX_OPTIONS_SYNTAX_CHECKING, MyFrame::OnOptionsSyntaxChecking)
     EVT_MENU(TEX_HELP, MyFrame::OnHelp)
     EVT_MENU(TEX_ABOUT, MyFrame::OnAbout)
@@ -793,17 +800,17 @@ void MyFrame::OnModeXLP(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_STATUSBAR
 }
 
-void MyFrame::OnOptionsCurleyBrace(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnOptionsCurlyBrace(wxCommandEvent& WXUNUSED(event))
 {
-    checkCurleyBraces = !checkCurleyBraces;
+    checkCurlyBraces = !checkCurlyBraces;
 #if wxUSE_STATUSBAR
-    if (checkCurleyBraces)
+    if (checkCurlyBraces)
     {
-        SetStatusText(_T("Checking curley braces: YES"), 1);
+        SetStatusText(_T("Checking curly braces: YES"), 1);
     }
     else
     {
-        SetStatusText(_T("Checking curley braces: NO"), 1);
+        SetStatusText(_T("Checking curly braces: NO"), 1);
     }
 #endif // wxUSE_STATUSBAR
 }

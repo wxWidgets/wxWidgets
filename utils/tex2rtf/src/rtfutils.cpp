@@ -240,6 +240,7 @@ void WriteWinHelpContentsFileLine(wxChar *topicName, wxChar *xitle, int level)
   wxChar title[255];
   int s=0;
   int d=0;
+  // assuming iso-8859-1 here even in Unicode build (FIXME?)
   while ( (xitle[s]!=0)&&(d<255) )
   {
     wxChar ch=wxChar(xitle[s]&0xff);
@@ -248,12 +249,12 @@ void WriteWinHelpContentsFileLine(wxChar *topicName, wxChar *xitle, int level)
       wxChar ch2=wxChar(xitle[s+2]&0xff);
       wxChar ch3=wxChar(xitle[s+3]&0xff);
       s+=4; // next character
-      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]=_T('ö');  }
-      if ((ch1==0x27)&&(ch2==0x65)&&(ch3==0x34)) { title[d++]=_T('ä');  }
-      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x63)) { title[d++]=_T('ü');  }
-      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x36)) { title[d++]=_T('Ö');  }
-      if ((ch1==0x27)&&(ch2==0x63)&&(ch3==0x34)) { title[d++]=_T('Ä');  }
-      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x63)) { title[d++]=_T('Ü');  }
+      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]=wxChar('ö');  }
+      if ((ch1==0x27)&&(ch2==0x65)&&(ch3==0x34)) { title[d++]=wxChar('ä');  }
+      if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x63)) { title[d++]=wxChar('ü');  }
+      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x36)) { title[d++]=wxChar('Ö');  }
+      if ((ch1==0x27)&&(ch2==0x63)&&(ch3==0x34)) { title[d++]=wxChar('Ä');  }
+      if ((ch1==0x27)&&(ch2==0x64)&&(ch3==0x63)) { title[d++]=wxChar('Ü');  }
     } else {
       title[d++]=ch;
       s++;
@@ -670,7 +671,7 @@ void ProcessText2RTF(TexChunk *chunk)
       i += 1;
       changed = true;
     }
-    else if (inVerbatim && (ch == '{' || ch == '}')) // Escape the curley bracket
+    else if (inVerbatim && (ch == '{' || ch == '}')) // Escape the curly bracket
     {
       BigBuffer[ptr] = '\\'; ptr ++;
       BigBuffer[ptr] = ch; ptr ++;
