@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 2.5.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-13 04:17+0930\n"
-"PO-Revision-Date: 2005-02-18 23:00+0100\n"
+"PO-Revision-Date: 2005-02-21 15:01+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: LUGOS <lugos@lugos.si>\n"
 "MIME-Version: 1.0\n"
@@ -132,7 +132,7 @@ msgstr ""
 #: ../contrib/src/deprecated/resource.cpp:3123
 #, c-format
 msgid "%s: ill-formed resource file syntax."
-msgstr ""
+msgstr "%s: slabo oblikovana skladnja datoteke vira."
 
 #: ../src/html/helpfrm.cpp:341
 #: ../src/html/helpfrm.cpp:343
@@ -560,11 +560,12 @@ msgstr "(zaznamki)"
 #: ../contrib/src/deprecated/resource.cpp:1840
 #: ../contrib/src/deprecated/resource.cpp:1970
 #: ../contrib/src/deprecated/resource.cpp:3062
-#, fuzzy
 msgid ""
 ", expected static, #include or #define\n"
 "while parsing resource."
-msgstr "Neprièakovan konec datoteke med razèlenjevanjem vira."
+msgstr ""
+", prièakovano static, #include ali #define\n"
+"pri razèlenjevanju vira."
 
 # generic/dirdlgg.cpp:264
 # generic/filedlgg.cpp:713
@@ -1054,7 +1055,7 @@ msgstr "Vrednosti '%s' ni mogoèe zbrisati iz kljuèa '%s'."
 #: ../src/msw/registry.cpp:1061
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
-msgstr ""
+msgstr "Podkljuèev kljuèa '%s' ni mogoèe pre¹teti"
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -1086,7 +1087,7 @@ msgstr "ne morem najti trenutne pozicije v datoteki '%s'"
 #: ../src/msw/registry.cpp:351
 #, c-format
 msgid "Can't get info about registry key '%s'"
-msgstr ""
+msgstr "Informacije o kljuèu '%s' niso dosegljive"
 
 # html/helpfrm.cpp:1174
 #: ../src/common/zstream.cpp:237
@@ -1148,9 +1149,9 @@ msgstr "ne morem prebrati vrednosti kljuèa '%s'"
 # common/image.cpp:653
 # common/image.cpp:673
 #: ../src/common/image.cpp:1179
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "Ne morem nalo¾iti slike iz datoteke '%s': datoteka ne obstaja"
+msgstr "Slike ni mogoèe shraniti v datoteko '%s': neznana konènica."
 
 # generic/logg.cpp:535
 # generic/logg.cpp:932
@@ -1229,9 +1230,9 @@ msgstr ""
 
 # generic/helpext.cpp:96
 #: ../src/xrc/xmlres.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find font node '%s'."
-msgstr "ne morem odpreti URL '%s'"
+msgstr ""
 
 # msw/dialup.cpp:832
 #: ../src/msw/dialup.cpp:814
@@ -1254,7 +1255,7 @@ msgstr "Imena uradnega gostitelja ni mogoèe dobiti"
 # msw/dialup.cpp:925
 #: ../src/msw/dialup.cpp:908
 msgid "Cannot hang up - no active dialup connection."
-msgstr ""
+msgstr "Povezave ni mogoèe prekiniti - ni aktivne klicne povezave."
 
 # msw/app.cpp:252
 #: ../src/msw/app.cpp:308
@@ -1281,9 +1282,9 @@ msgstr "Nalaganje ikone z '%s' ni mo¾no."
 
 # common/ffile.cpp:101
 #: ../src/xrc/xmlres.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr "ne morem zadpreti datoteke '%s'"
+msgstr "Ni mogoèe nalo¾iti virov iz datoteke '%s'."
 
 # html/htmlfilt.cpp:146
 #: ../src/html/htmlfilt.cpp:164
@@ -1328,22 +1329,22 @@ msgstr "ne morem odpreti indeksne datoteke '%s'"
 
 # html/helpdata.cpp:353
 #: ../src/common/intl.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse Plural-Forms:'%s'"
-msgstr "ne morem datoteke: '%s' z vsebino"
+msgstr "Mno¾inskih oblik ni mogoèe razèleniti: '%s'"
 
 # html/helpdata.cpp:353
 #: ../src/xrc/xmlres.cpp:1108
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse coordinates from '%s'."
-msgstr "ne morem datoteke: '%s' z vsebino"
+msgstr "Koordinat iz '%s' ni mogoèe razèleniti."
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
 #: ../src/xrc/xmlres.cpp:1148
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse dimension from '%s'."
-msgstr "Ne morem o¹tevilèiti datotek v imeniku '%s'"
+msgstr "Razèlenitev dimenzije iz '%s' ni mo¾na."
 
 # html/helpfrm.cpp:1174
 #: ../src/html/helpfrm.cpp:1548
@@ -1353,9 +1354,9 @@ msgstr "Prazne strani ni mogoèe natisniti."
 # html/helpdata.cpp:353
 #: ../src/msw/volume.cpp:160
 #: ../src/msw/volume.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read typename from '%s'!"
-msgstr "ne morem datoteke: '%s' z vsebino"
+msgstr "Imena tipa ni mogoèe prebrati iz '%s'!"
 
 #: ../src/unix/threadpsx.cpp:1080
 msgid "Cannot retrieve thread scheduling policy."
@@ -1529,14 +1530,14 @@ msgstr "Zaèasne datoteke '%s' ni mogoèe ustvariti."
 #: ../src/html/chm.cpp:274
 #, c-format
 msgid "Could not extract %s into %s: %s"
-msgstr ""
+msgstr "Ni mogoèe izvleèi %s v %s: %s"
 
 # msw/dib.cpp:434
 #: ../contrib/src/deprecated/resource.cpp:1830
 #: ../contrib/src/deprecated/resource.cpp:1960
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find resource include file %s."
-msgstr "Ne morem odpreti datoteke '%s'"
+msgstr "Datoteke include vira %s ni mogoèe najti."
 
 # generic/tabg.cpp:1042
 #: ../src/generic/tabg.cpp:1049
@@ -1601,7 +1602,7 @@ msgstr "Mutexa ni mogoèe odkleniti."
 #: ../src/os2/thread.cpp:154
 #, fuzzy
 msgid "Couldn't acquire a mutex lock"
-msgstr "Ne morem alocirati pomnilnika."
+msgstr "Zaklenjenega mutexa ne morem pridobiti."
 
 # msw/dragimag.cpp:142
 # msw/dragimag.cpp:179
@@ -1619,8 +1620,9 @@ msgstr "Na seznam slik ni mogoèe dodati slike."
 # msw/timer.cpp:96
 #: ../src/msw/timer.cpp:106
 #: ../src/os2/timer.cpp:155
+#, fuzzy
 msgid "Couldn't create a timer"
-msgstr ""
+msgstr "Èasovnika ni mogoèe ustvariti"
 
 # common/imagbmp.cpp:266
 # common/imagbmp.cpp:278
@@ -1639,12 +1641,12 @@ msgstr "Simbola '%s' v dinamièni knji¾nici ni mogoèe najti."
 #: ../src/mac/classic/thread.cpp:521
 #: ../src/msw/thread.cpp:856
 msgid "Couldn't get the current thread pointer"
-msgstr ""
+msgstr "Trenutnega kazalca niti ni mogoèe dobiti"
 
 # common/imagpng.cpp:251
 #: ../src/common/imagpng.cpp:596
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr ""
+msgstr "Slike PNG ni mogoèe nalo¾iti - datoteka je pokvarjena ali pa primanjkuje spomina."
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
@@ -1663,7 +1665,7 @@ msgstr "Zvoka ni mogoèe odpreti: %s"
 #: ../src/msw/ole/dataobj.cpp:147
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr ""
+msgstr "Registracija oblike zapisa odlo¾i¹èa '%s' ni uspela."
 
 # common/imagbmp.cpp:266
 # common/imagbmp.cpp:278
@@ -1781,9 +1783,9 @@ msgstr "Zbri¹i element"
 # 
 # msw/iniconf.cpp:476
 #: ../src/unix/snglinst.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Deleted stale lock file '%s'."
-msgstr "ne morem zbrisati datoteke INI'%s'"
+msgstr "Zbrisana stara zaklenjena datoteka '%s'."
 
 #: ../src/generic/dirctrlg.cpp:628
 msgid "Desktop"
@@ -1989,23 +1991,20 @@ msgstr "Executive, 7 1/4 x 10 1/2 in"
 #: ../contrib/src/deprecated/resource.cpp:1869
 #: ../contrib/src/deprecated/resource.cpp:1999
 #: ../contrib/src/deprecated/resource.cpp:3091
-#, fuzzy
 msgid "Expected '*' while parsing resource."
-msgstr "Neprièakovan konec datoteke med razèlenjevanjem vira."
+msgstr "Prièakovan '*' pri razèlenjevanju vira."
 
 #: ../contrib/src/deprecated/resource.cpp:1886
 #: ../contrib/src/deprecated/resource.cpp:2015
 #: ../contrib/src/deprecated/resource.cpp:3108
-#, fuzzy
 msgid "Expected '=' while parsing resource."
-msgstr "Neprièakovan konec datoteke med razèlenjevanjem vira."
+msgstr "Prièakovan '=' pri razèlenjevanju vira."
 
 #: ../contrib/src/deprecated/resource.cpp:1855
 #: ../contrib/src/deprecated/resource.cpp:1985
 #: ../contrib/src/deprecated/resource.cpp:3077
-#, fuzzy
 msgid "Expected 'char' while parsing resource."
-msgstr "Neprièakovan konec datoteke med razèlenjevanjem vira."
+msgstr "Prièakovan 'char' pri razèlenjevanju vira."
 
 #: ../src/msw/registry.cpp:1125
 #, c-format
@@ -2025,7 +2024,7 @@ msgstr ""
 #: ../src/msw/dialup.cpp:843
 #, c-format
 msgid "Failed to %s dialup connection: %s"
-msgstr ""
+msgstr "Neuspe¹no %s klicne povezave: %s"
 
 #: ../src/unix/snglinst.cpp:274
 msgid "Failed to access lock file."
@@ -2048,9 +2047,9 @@ msgstr "Neuspe¹no zapiranje datoteène roèice."
 
 # common/ffile.cpp:182
 #: ../src/unix/snglinst.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close lock file '%s'"
-msgstr "ne morem izprazniti datoteje '%s'"
+msgstr "Zapiranje zaklenjene datoteke '%s' ni uspelo."
 
 # msw/clipbrd.cpp:122
 #: ../src/msw/clipbrd.cpp:122
@@ -2065,13 +2064,13 @@ msgstr "Neuspela povezava: manjkajoèe uporabni¹ko ime/geslo."
 # msw/dialup.cpp:747
 #: ../src/msw/dialup.cpp:729
 msgid "Failed to connect: no ISP to dial."
-msgstr "Neuspe¹na povezava: ni ISP za klicanje"
+msgstr "Neuspela povezava: ni ISP za klicanje"
 
 # msw/registry.cpp:594
 #: ../src/msw/registry.cpp:618
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr "Neuspe¹no kopiranje vrednosti registra '%s'"
+msgstr "Neuspelo kopiranje vrednosti registra '%s'"
 
 # msw/registry.cpp:603
 #: ../src/msw/registry.cpp:627
@@ -2081,15 +2080,15 @@ msgstr ""
 
 # common/ffile.cpp:182
 #: ../src/common/filefn.cpp:996
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy the file '%s' to '%s'"
-msgstr "ne morem izprazniti datoteje '%s'"
+msgstr "Datoteke '%s' ni mogoèe kopirati v '%s'"
 
 # common/ffile.cpp:182
 #: ../src/msw/registry.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr "ne morem izprazniti datoteje '%s'"
+msgstr "Registrskega podkljuèa '%s' ni mogoèe kopirati v '%s'."
 
 # msw/dde.cpp:934
 #: ../src/msw/dde.cpp:988
@@ -2099,7 +2098,7 @@ msgstr "Niza DDE ni mogoèe ustvariti."
 # msw/mdi.cpp:428
 #: ../src/msw/mdi.cpp:455
 msgid "Failed to create MDI parent frame."
-msgstr ""
+msgstr "Ustvarjanje star¹evskega okvira MDI ni uspelo."
 
 # msw/statbr95.cpp:149
 #: ../src/msw/statbr95.cpp:112
@@ -2134,9 +2133,9 @@ msgstr "Kazalke ni mogoèe ustvariti."
 # 
 # msw/registry.cpp:399
 #: ../src/unix/mimetype.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory %s/.gnome."
-msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
+msgstr "Imenika %s/.gnome ni mogoèe ustvariti."
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -2144,9 +2143,9 @@ msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
 # 
 # msw/registry.cpp:399
 #: ../src/unix/mimetype.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory %s/mime-info."
-msgstr "ne morem ustvariti 'registry' kljuèa '%s'"
+msgstr "Imenika %s/mime-info ni mogoèe ustvariti."
 
 # generic/dirdlgg.cpp:551
 #: ../src/generic/dirdlgg.cpp:239
@@ -2177,7 +2176,7 @@ msgstr ""
 #: ../src/html/winpars.cpp:549
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
-msgstr "Ne morem prikazati dokumenta HTML, kodiranega v %s"
+msgstr "Dokumenta HTML, kodiranega v %s, ni mogoèe prikazati."
 
 # msw/clipbrd.cpp:134
 #: ../src/mac/carbon/clipbrd.cpp:187
@@ -2193,7 +2192,7 @@ msgstr "Izpraznitev odlo¾i¹èa ni uspela."
 # msw/registry.cpp:399
 #: ../src/unix/displayx11.cpp:201
 msgid "Failed to enumerate video modes"
-msgstr "Pre¹tevanje video-naèinov ni uspelo"
+msgstr "Pre¹tevanje video-naèinov ni uspelo."
 
 # msw/dde.cpp:616
 #: ../src/msw/dde.cpp:652
@@ -2249,15 +2248,17 @@ msgstr "Pridobivanje podatkov z odlo¾i¹èa ni uspelo."
 # msw/clipbrd.cpp:623
 #: ../src/msw/clipbrd.cpp:716
 msgid "Failed to get data from the clipboard"
-msgstr ""
+msgstr "Podatkov z odlo¾i¹èa ni mogoèe pridobiti."
 
 # msw/statbr95.cpp:149
 #: ../src/msw/stackwalk.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to get stack backtrace:\n"
 "%s"
-msgstr "Statusne vrstice ni mogoèe ustvariti."
+msgstr ""
+"Zasledovanja kopice ni mogoèe pridobiti:\n"
+"%s"
 
 # common/timercmn.cpp:196
 #: ../src/common/stopwatch.cpp:189
@@ -2267,7 +2268,7 @@ msgstr "Lokalnega sistemskega èasa ni mogoèe razbrati."
 # generic/dirdlgg.cpp:550
 #: ../src/common/filefn.cpp:1389
 msgid "Failed to get the working directory"
-msgstr ""
+msgstr "Delovnega imenika ni mogoèe pridobiti."
 
 #: ../src/univ/theme.cpp:122
 msgid "Failed to initialize GUI: no built-in themes found."
@@ -2283,9 +2284,9 @@ msgstr "OpenGl neuspe¹no inicializiran."
 
 # common/ffile.cpp:182
 #: ../src/unix/snglinst.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "ne morem izprazniti datoteje '%s'"
+msgstr "Zaklenjene datoteke '%s' ni mogoèe pregledati."
 
 #: ../src/unix/threadpsx.cpp:896
 msgid "Failed to join a thread, potential memory leak detected - please restart the program"
@@ -2304,9 +2305,9 @@ msgstr "Slike %d iz datoteke '%s' ni mogoèe nalo¾iti."
 
 # common/ffile.cpp:182
 #: ../src/msw/enhmeta.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "Slike %d iz datoteke '%s' ni mogoèe nalo¾iti."
+msgstr "Meta-datoteke iz datoteke \"%s\" ni mogoèe nalo¾iti."
 
 # generic/dirdlgg.cpp:550
 #: ../src/msw/volume.cpp:312
@@ -2329,7 +2330,7 @@ msgstr "Deljene knji¾nice '%s' ni mogoèe nalo¾iti. Napaka '%s'"
 #: ../src/unix/snglinst.cpp:203
 #, fuzzy, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "ne morem izprazniti datoteje '%s'"
+msgstr "Ni mogoèe zakleniti zaklenjene datoteke '%s'"
 
 #: ../src/common/regex.cpp:300
 #, c-format
@@ -2338,15 +2339,15 @@ msgstr ""
 
 # common/ffile.cpp:182
 #: ../src/common/filename.cpp:1894
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "ne morem izprazniti datoteje '%s'"
+msgstr "Sprememba datoteènih èasov za '%s' ni uspela."
 
 # generic/dirdlgg.cpp:550
 #: ../src/common/filename.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s' for %s"
-msgstr "Ne morem ustvariti imenika"
+msgstr "'%s' ni mogoèe odpreti za %s"
 
 # generic/dirdlgg.cpp:550
 #: ../src/html/chm.cpp:142
@@ -2426,9 +2427,9 @@ msgstr "Zaklenjene datoteke '%s' ni mogoèe odstraniti."
 # common/file.cpp:580
 # common/file.cpp:583
 #: ../src/unix/snglinst.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr "ne odstraniti zaèasne datoteke '%s'"
+msgstr "Odstranjevanje stare zaklenjene datoteke '%s' ni uspelo."
 
 # msw/registry.cpp:440
 #: ../src/msw/registry.cpp:456
@@ -2633,7 +2634,7 @@ msgstr "enakomerna pisava"
 
 #: ../src/html/helpfrm.cpp:1256
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr ""
+msgstr "Pisava nespremenljive velikosti.<br> <b>krepko</b> <i>le¾eèe</i>"
 
 #: ../src/common/paper.cpp:128
 msgid "Folio, 8 1/2 x 13 in"
@@ -2904,11 +2905,11 @@ msgstr ""
 
 #: ../include/wx/xti.h:1648
 msgid "Illegal Parameter Count for ConstructObject Method"
-msgstr ""
+msgstr "Neveljavno ¹tevilo parametrov za metodo ConstructObject"
 
 #: ../include/wx/xti.h:1721
 msgid "Illegal Parameter Count for Create Method"
-msgstr ""
+msgstr "Neveljavno ¹tevilo parametrov za metodo Create"
 
 # generic/dirdlgg.cpp:268
 # generic/filedlgg.cpp:717
@@ -3083,7 +3084,7 @@ msgstr "Svetlo"
 
 #: ../src/html/chm.cpp:820
 msgid "Link contained '//', converted to absolute link."
-msgstr ""
+msgstr "Povezava je vsebovala '//', pretvorjeno nazaj v absolutno povezavo."
 
 # generic/filedlgg.cpp:1270
 # msw/filedlg.cpp:483
@@ -3129,7 +3130,6 @@ msgstr "Dnevnik je bil shranjen v datoteko '%s'"
 
 #: ../include/wx/xti.h:500
 #: ../include/wx/xti.h:504
-#, fuzzy
 msgid "Long Conversions not supported"
 msgstr "Dolge pretvorbe niso podprte"
 
@@ -3180,7 +3180,7 @@ msgstr "Po&manj¹aj"
 #: ../src/unix/mimetype.cpp:2292
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
-msgstr ""
+msgstr "Datoteka mime.types %s, vrstica %d: nezakljuèen navedeni niz."
 
 #: ../src/mgl/app.cpp:165
 #, c-format
@@ -3783,6 +3783,9 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
+"Registrski kljuè '%s' je potreben za obièajno delovanje sistema,\n"
+"z njegovim brisanjem svoj sistem prepu¹èate v neuporabno stanje:\n"
+"operacija prekinjena."
 
 # msw/registry.cpp:432
 #: ../src/msw/registry.cpp:448
@@ -3838,7 +3841,7 @@ msgstr "Zamenjaj z:"
 
 #: ../src/xrc/xmlres.cpp:418
 msgid "Resource files must have same version number!"
-msgstr ""
+msgstr "Datoteke virov morajo imeti enako ¹tevilko razlièice!"
 
 #: ../src/common/stockitem.cpp:144
 msgid "Revert to Saved"
@@ -4095,7 +4098,7 @@ msgstr ""
 #: ../src/palmos/colour.cpp:38
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr ""
+msgstr "Niz v barvo: nepravilna specifikacija barve: %s"
 
 #: ../include/wx/xti.h:427
 #: ../include/wx/xti.h:431
@@ -4103,9 +4106,9 @@ msgid "String conversions not supported"
 msgstr "Pretvorbe nizov niso podprte"
 
 #: ../src/xrc/xmlres.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-msgstr "Podrazreda '%s' ni moè najti za vir '%s', ni podrazredenja!"
+msgstr "Podrazreda '%s' ni moè najti za vir '%s', brez razdelitve na podrazrede (subclassing)!"
 
 # generic/fontdlgg.cpp:210
 #: ../src/generic/fontdlgg.cpp:228
@@ -4266,7 +4269,7 @@ msgstr "Vrednost opcije '%s' mora biti podana."
 #: ../src/msw/dialup.cpp:418
 #, c-format
 msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
-msgstr ""
+msgstr "Razlièica storitve oddaljenega dostopa (RAS), name¹èena na tem raèunalniku, je zastarela, prosimo nadgradite jo (manjka naslednja zahtevana funkcija: %s)."
 
 #: ../src/html/htmprint.cpp:601
 msgid "There was a problem during page setup: you may need to set a default printer."
@@ -4274,7 +4277,7 @@ msgstr "Med pripravo strani je pri¹lo do te¾ave: morda morate nastaviti privzeti
 
 #: ../src/msw/datectrl.cpp:116
 msgid "This system doesn't support date picker control, please upgrade your version of comctl32.dll"
-msgstr ""
+msgstr "Ta sistem ne podpira kontrolnika za izbor datuma, prosimo nadgradite svojo razlièico comctl32.dll"
 
 # msw/thread.cpp:1083
 #: ../src/msw/thread.cpp:1210
@@ -4306,7 +4309,7 @@ msgstr "Zlo¾i &Vertikalno"
 
 #: ../src/common/ftp.cpp:635
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
-msgstr ""
+msgstr "Èasovna prekoraèitev pri èakanju na stre¾nik FTP za povezavo, poskusite pasiven naèin."
 
 #: ../src/msw/timer.cpp:116
 #: ../src/os2/timer.cpp:141
@@ -4361,7 +4364,7 @@ msgstr "Vrsta"
 #: ../src/common/xtixml.cpp:351
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
-msgstr ""
+msgstr "Tip mora imeti pretvorbo enum - long"
 
 #: ../src/common/paper.cpp:150
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -4443,7 +4446,7 @@ msgstr "Neznana napaka DDE %'8x"
 
 #: ../src/common/xtistrm.cpp:370
 msgid "Unknown Object passed to GetObjectClassInfo"
-msgstr ""
+msgstr "Neznan objekt pripu¹èen k GetObjectClassInfo"
 
 #: ../src/unix/dlunix.cpp:282
 msgid "Unknown dynamic library error"
@@ -4475,7 +4478,7 @@ msgstr "Nepoznana opcija '%s'"
 
 #: ../src/xrc/xmlres.cpp:760
 msgid "Unknown style flag "
-msgstr ""
+msgstr "Neznana zastavica sloga"
 
 # common/cmdline.cpp:518
 #: ../src/common/xtixml.cpp:324
@@ -4487,7 +4490,7 @@ msgstr "Neznana lastnost %s"
 #: ../src/common/mimecmn.cpp:161
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
-msgstr ""
+msgstr "Neujemajoèi '{' v vnosu za vsto mime %s."
 
 # common/docview.cpp:1923
 # common/docview.cpp:1938
@@ -4719,18 +4722,18 @@ msgstr "Napaka razèlenjevanja XML: '%s' v vrstici %d"
 
 #: ../src/common/xpmdecod.cpp:776
 msgid "XPM: Malformed pixel data!"
-msgstr ""
+msgstr "XPM: napaèno oblikovani podatki toèk!"
 
 #: ../src/common/xpmdecod.cpp:711
 #: ../src/common/xpmdecod.cpp:721
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
-msgstr ""
+msgstr "XPM: napaèno oblikovana definicija barve '%s'!"
 
 #: ../src/xrc/xmlres.cpp:518
 #, c-format
 msgid "XRC resource '%s' (class '%s') not found!"
-msgstr ""
+msgstr "Vira XRC '%s' (razred '%s') ni moè najti!"
 
 #: ../src/xrc/xmlres.cpp:1017
 #: ../src/xrc/xmlres.cpp:1029
@@ -4741,7 +4744,7 @@ msgstr "XRC-vir: iz '%s' ni mogoèe ustvariti bitne slike."
 #: ../src/xrc/xmlres.cpp:973
 #, c-format
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
-msgstr ""
+msgstr "Vir XRC: nepravilna barvna specifikacija '%s' za lastnost '%s'."
 
 # common/dlgcmn.cpp:109
 # common/dlgcmn.cpp:116
@@ -4880,7 +4883,7 @@ msgstr ""
 
 #: ../src/common/zipstrm.cpp:1317
 msgid "assuming this is a multi-part zip concatenated"
-msgstr ""
+msgstr "predvidevajoè, da gre za povezan veèdelni zip"
 
 # common/fileconf.cpp:1450
 #: ../src/common/fileconf.cpp:1804
@@ -4898,7 +4901,7 @@ msgstr "neuporaben podpis"
 
 #: ../src/common/zipstrm.cpp:1567
 msgid "bad zipfile offset to entry"
-msgstr ""
+msgstr "slab odmik zipfile od vnosa"
 
 #: ../src/common/ftp.cpp:385
 msgid "binary"
@@ -5141,7 +5144,7 @@ msgstr "privzeto"
 
 #: ../src/common/xtistrm.cpp:843
 msgid "delegate has no type info"
-msgstr ""
+msgstr "delegat nima informacije o tipu"
 
 #: ../src/common/datetime.cpp:3674
 msgid "eighteenth"
@@ -5190,7 +5193,7 @@ msgstr "napaka pri branju lokalne glave zip"
 #: ../src/common/zipstrm.cpp:2208
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr ""
+msgstr "napaka pri pisanju vnosa zip '%s': slab crc ali dol¾ina"
 
 # msw/dialup.cpp:861
 #: ../src/msw/dialup.cpp:844
