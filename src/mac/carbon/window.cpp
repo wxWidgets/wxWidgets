@@ -1587,9 +1587,14 @@ wxPoint wxWindowMac::GetClientAreaOrigin() const
     GetRegionBounds( rgn , &content ) ;
     DisposeRgn( rgn ) ;
 #if !TARGET_API_MAC_OSX
-    Rect structure ;
-    GetControlBounds( (ControlRef) m_macControl , &structure ) ;
-    OffsetRect( &content , -structure.left , -structure.top ) ;
+    // if the content rgn is empty / not supported
+    // don't attempt to correct the coordinates to wxWindow relative ones
+    if (!::EmptyRect( &content ) )
+    {
+        Rect structure ;
+        GetControlBounds( (ControlRef) m_macControl , &structure ) ;
+        OffsetRect( &content , -structure.left , -structure.top ) ;
+    }
 #endif 
 
     return wxPoint( content.left + MacGetLeftBorderSize(  ) , content.top + MacGetTopBorderSize(  ) );
