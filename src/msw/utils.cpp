@@ -436,14 +436,29 @@ wxChar *wxGetUserHome(const wxString& user)
 bool wxDirExists(const wxString& dir)
 {
 #if defined(__WIN32__)
-    DWORD attribs = GetFileAttributes(dir);
-    return ((attribs != (DWORD)-1) && (attribs & FILE_ATTRIBUTE_DIRECTORY));
+    WIN32_FIND_DATA fileInfo;
 #else // Win16
     #ifdef __BORLANDC__
         struct ffblk fileInfo;
     #else
         struct find_t fileInfo;
     #endif
+#endif // Win32/16
+
+#if defined(__WIN32__)
+    HANDLE h = ::FindFirstFile(dir, &fileInfo);
+
+    if ( h == INVALID_HANDLE_VALUE )
+    {
+        wxLogLastError(wxT("FindFirstFile"));
+
+        return FALSE;
+    }
+
+    ::FindClose(h);
+
+    return (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+#else // Win16
     // In Borland findfirst has a different argument
     // ordering from _dos_findfirst. But _dos_findfirst
     // _should_ be ok in both MS and Borland... why not?
