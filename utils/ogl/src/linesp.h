@@ -44,6 +44,7 @@ public:
 
   int           m_type;
   wxRealPoint*  m_point;  // Line point
+  wxRealPoint   m_originalPos;
 
 };
 

@@ -400,6 +400,7 @@ void wxDiagram::ReadLines(wxExprDatabase& database)
       shape->Show(TRUE);
 
       OnShapeLoad(database, *shape, *clause);
+      shape->SetCanvas(GetCanvas());
 
       long image_to = -1; long image_from = -1;
       clause->GetAttributeValue("to", image_to);

@@ -1583,9 +1583,10 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int 
 
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
-
+/*
   if (pt->m_eraseObject)
     this->Erase(dc);
+*/
 
   dc.SetLogicalFunction(wxXOR);
 
@@ -1694,8 +1695,11 @@ void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int ke
   this->Recompute();
   this->ResetControlPoints();
 
+  this->Erase(dc);
+/*
   if (!pt->m_eraseObject)
     this->Show(FALSE);
+*/
 
   this->SetSize(pt->controlPointDragEndWidth, pt->controlPointDragEndHeight);
 
@@ -1711,8 +1715,10 @@ void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int ke
   else
     theObject->Move(dc, pt->controlPointDragPosX, pt->controlPointDragPosY);
 
+/*
   if (!eraseIt)
     theObject->Show(TRUE);
+*/
     
   // Recursively redraw links if we have a composite.
   if (theObject->GetChildren().Number() > 0)

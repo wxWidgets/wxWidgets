@@ -249,7 +249,7 @@ void wxLineShape::FormatText(wxDC& dc, const wxString& s, int i)
       EraseRegion(dc, region, xx, yy);
       if (m_labelObjects[i])
       {
-        m_labelObjects[i]->Select(FALSE);
+        m_labelObjects[i]->Select(FALSE, &dc);
         m_labelObjects[i]->Erase(dc);
         m_labelObjects[i]->SetSize(actualW, actualH);
       }
@@ -391,12 +391,13 @@ void GraphicsStraightenLine(wxRealPoint *point1, wxRealPoint *point2)
   else point2->y = point1->y;
 }
 
-void wxLineShape::Straighten(wxDC& dc)
+void wxLineShape::Straighten(wxDC *dc)
 {
   if (!m_lineControlPoints || m_lineControlPoints->Number() < 3)
     return;
 
-  Erase(dc);
+  if (dc)
+    Erase(* dc);
 
   wxNode *first_point_node = m_lineControlPoints->First();
   wxNode *last_point_node = m_lineControlPoints->Last();
@@ -417,7 +418,8 @@ void wxLineShape::Straighten(wxDC& dc)
     node = node->Next();
   }
 
-  Draw(dc);
+  if (dc)
+    Draw(* dc);
 }
 
 
@@ -1496,7 +1498,7 @@ void wxLineShape::ReadPrologAttributes(wxExpr *clause)
   m_attachmentFrom = 0;
 
   clause->AssignAttributeValue("attachment_to", &m_attachmentTo);
-  clause->AssignAttributeValue("attachmen_from", &m_attachmentFrom);
+  clause->AssignAttributeValue("attachment_from", &m_attachmentFrom);
 
   wxExpr *line_list = NULL;
 
@@ -1666,12 +1668,12 @@ void wxLineShape::Select(bool select, wxDC* dc)
             m_labelObjects[i]->RemoveFromCanvas(m_canvas);
             delete m_labelObjects[i];
           }
-          m_labelObjects[i] = new wxLabelShape(this, region, w, h);
+          m_labelObjects[i] = OnCreateLabelShape(this, region, w, h);
           m_labelObjects[i]->AddToCanvas(m_canvas);
           m_labelObjects[i]->Show(TRUE);
           if (dc)
             m_labelObjects[i]->Move(*dc, (double)(x + xx), (double)(y + yy));
-          m_labelObjects[i]->Select(TRUE);
+          m_labelObjects[i]->Select(TRUE, dc);
         }
       }
     }
@@ -1683,6 +1685,7 @@ void wxLineShape::Select(bool select, wxDC* dc)
       if (m_labelObjects[i])
       {
         m_labelObjects[i]->Select(FALSE, dc);
+        m_labelObjects[i]->Erase(*dc);
         m_labelObjects[i]->RemoveFromCanvas(m_canvas);
         delete m_labelObjects[i];
         m_labelObjects[i] = NULL;
@@ -1704,6 +1707,7 @@ wxLineControlPoint::wxLineControlPoint(wxShapeCanvas *theCanvas, wxShape *object
   m_xpos = x;
   m_ypos = y;
   m_type = the_type;
+  m_point = NULL;
 }
 
 wxLineControlPoint::~wxLineControlPoint()
@@ -1770,7 +1774,7 @@ void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, doub
 
   if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM || lpt->m_type == CONTROL_POINT_ENDPOINT_TO)
   {
-    lpt->SetX(x); lpt->SetY(y);
+//    lpt->SetX(x); lpt->SetY(y);
   }
 
 }
@@ -1785,6 +1789,7 @@ void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, 
   wxLineShape *lineShape = (wxLineShape *)this;
   if (lpt->m_type == CONTROL_POINT_LINE)
   {
+    lpt->m_originalPos = * (lpt->m_point);
     m_canvas->Snap(&x, &y);
 
     this->Erase(dc);
@@ -1817,18 +1822,6 @@ void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, 
 
   if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM || lpt->m_type == CONTROL_POINT_ENDPOINT_TO)
   {
-    lpt->Erase(dc);
-    lineShape->OnDraw(dc);
-    if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM)
-    {
-      lineShape->GetFrom()->OnDraw(dc);
-      lineShape->GetFrom()->OnDrawContents(dc);
-    }
-    else
-    {
-      lineShape->GetTo()->OnDraw(dc);
-      lineShape->GetTo()->OnDrawContents(dc);
-    }
     m_canvas->SetCursor(g_oglBullseyeCursor);
     lpt->m_oldCursor = wxSTANDARD_CURSOR;
   }
@@ -1848,19 +1841,26 @@ void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, in
   {
     m_canvas->Snap(&x, &y);
 
-    dc.SetLogicalFunction(wxCOPY);
-    lpt->m_xpos = x; lpt->m_ypos = y;
-    lpt->m_point->x = x; lpt->m_point->y = y;
+    wxRealPoint pt = wxRealPoint(x, y);
 
-    lineShape->GetEventHandler()->OnMoveLink(dc);
+    // Move the control point back to where it was;
+    // MoveControlPoint will move it to the new position
+    // if it decides it wants. We only moved the position
+    // during user feedback so we could redraw the line
+    // as it changed shape.
+    lpt->m_xpos = lpt->m_originalPos.x; lpt->m_ypos = lpt->m_originalPos.y;
+    lpt->m_point->x = lpt->m_originalPos.x; lpt->m_point->y = lpt->m_originalPos.y;
+
+    OnMoveMiddleControlPoint(dc, lpt, pt);
   }
   if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM)
   {
     if (lpt->m_oldCursor)
       m_canvas->SetCursor(lpt->m_oldCursor);
-    this->Erase(dc);
 
-    lpt->m_xpos = x; lpt->m_ypos = y;
+//    this->Erase(dc);
+
+//    lpt->m_xpos = x; lpt->m_ypos = y;
 
     if (lineShape->GetFrom())
     {
@@ -1872,7 +1872,7 @@ void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, in
     if (lpt->m_oldCursor)
       m_canvas->SetCursor(lpt->m_oldCursor);
 
-    lpt->m_xpos = x; lpt->m_ypos = y;
+//    lpt->m_xpos = x; lpt->m_ypos = y;
 
     if (lineShape->GetTo())
     {
@@ -1890,11 +1890,20 @@ void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, in
   // N.B. in OnMoveControlPoint, an event handler in Hardy could have deselected
   // the line and therefore deleted 'this'. -> GPF, intermittently.
   // So assume at this point that we've been blown away.
-  wxLineShape *lineObj = lineShape;
-  wxShapeCanvas *objCanvas = m_canvas;
 
-  lineObj->OnMoveControlPoint(i+1, x, y);
+  lineShape->OnMoveControlPoint(i+1, x, y);
 #endif
+}
+
+// This is called only when a non-end control point is moved.
+bool wxLineShape::OnMoveMiddleControlPoint(wxDC& dc, wxLineControlPoint* lpt, const wxRealPoint& pt)
+{
+    lpt->m_xpos = pt.x; lpt->m_ypos = pt.y;
+    lpt->m_point->x = pt.x; lpt->m_point->y = pt.y;
+
+    GetEventHandler()->OnMoveLink(dc);
+
+    return TRUE;
 }
 
 // Implement movement of endpoint to a new attachment
@@ -2394,6 +2403,12 @@ void wxArrowHead::SetSize(double size)
   }
 }
 
+// Can override this to create a different class of label shape
+wxLabelShape* wxLineShape::OnCreateLabelShape(wxLineShape *parent, wxShapeRegion *region, double w, double h)
+{
+    return new wxLabelShape(parent, region, w, h);
+}
+
 /*
  * Label object
  *
@@ -2456,14 +2471,19 @@ void wxLabelShape::OnEndDragLeft(double x, double y, int keys, int attachment)
 
 bool wxLabelShape::OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display)
 {
-  m_shapeRegion->SetSize(m_width, m_height);
+    return m_lineShape->OnLabelMovePre(dc, this, x, y, old_x, old_y, display);
+}
+
+bool wxLineShape::OnLabelMovePre(wxDC& dc, wxLabelShape* labelShape, double x, double y, double old_x, double old_y, bool display)
+{
+  labelShape->m_shapeRegion->SetSize(labelShape->GetWidth(), labelShape->GetHeight());
 
   // Find position in line's region list
   int i = 0;
-  wxNode *node = m_lineShape->GetRegions().First();
+  wxNode *node = GetRegions().First();
   while (node)
   {
-    if (m_shapeRegion == (wxShapeRegion *)node->Data())
+    if (labelShape->m_shapeRegion == (wxShapeRegion *)node->Data())
       node = NULL;
     else
     {
@@ -2472,18 +2492,21 @@ bool wxLabelShape::OnMovePre(wxDC& dc, double x, double y, double old_x, double 
     }
   }
   double xx, yy;
-  m_lineShape->GetLabelPosition(i, &xx, &yy);
+  GetLabelPosition(i, &xx, &yy);
   // Set the region's offset, relative to the default position for
   // each region.
-  m_shapeRegion->SetPosition((double)(x - xx), (double)(y - yy));
+  labelShape->m_shapeRegion->SetPosition((double)(x - xx), (double)(y - yy));
+
+  labelShape->SetX(x);
+  labelShape->SetY(y);
 
   // Need to reformat to fit region.
-  if (m_shapeRegion->GetText())
+  if (labelShape->m_shapeRegion->GetText())
   {
 
-    wxString s(m_shapeRegion->GetText());
-    m_lineShape->FormatText(dc, s, i);
-    m_lineShape->DrawRegion(dc, m_shapeRegion, xx, yy);
+    wxString s(labelShape->m_shapeRegion->GetText());
+    labelShape->FormatText(dc, s, i);
+    DrawRegion(dc, labelShape->m_shapeRegion, xx, yy);
   }
   return TRUE;
 }

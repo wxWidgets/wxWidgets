@@ -88,6 +88,7 @@ class wxArrowHead: public wxObject
 };
 
 // Line object
+class wxLabelShape;
 class wxLineShape: public wxShape
 {
  DECLARE_DYNAMIC_CLASS(wxLineShape)
@@ -107,7 +108,9 @@ class wxLineShape: public wxShape
   void OnDrawControlPoints(wxDC& dc);
   void OnEraseControlPoints(wxDC& dc);
   void OnErase(wxDC& dc);
-  virtual inline void OnMoveControlPoint(int WXUNUSED(which), double WXUNUSED(x), double WXUNUSED(y)) {}
+  virtual bool OnMoveControlPoint(int WXUNUSED(which), double WXUNUSED(x), double WXUNUSED(y)) { return FALSE; }
+  virtual bool OnMoveMiddleControlPoint(wxDC& dc, wxLineControlPoint* lpt, const wxRealPoint& pt);
+  virtual bool OnLabelMovePre(wxDC& dc, wxLabelShape* labelShape, double x, double y, double old_x, double old_y, bool display);
   void OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
   void GetBoundingBoxMin(double *w, double *h);
   void FormatText(wxDC& dc, const wxString& s, int regionId = 0);
@@ -139,8 +142,11 @@ class wxLineShape: public wxShape
   // position is 0 (middle), 1 (start), 2 (end)
   void GetLabelPosition(int position, double *x, double *y);
 
+  // Can override this to create a different class of label shape
+  virtual wxLabelShape* OnCreateLabelShape(wxLineShape *parent = NULL, wxShapeRegion *region = NULL, double w = 0.0, double h = 0.0);
+
   // Straighten verticals and horizontals
-  virtual void Straighten(wxDC& dc);
+  virtual void Straighten(wxDC* dc = NULL);
 
   // Not implemented
   inline void SetMaintainStraightLines(bool flag) { m_maintainStraightLines = flag; }

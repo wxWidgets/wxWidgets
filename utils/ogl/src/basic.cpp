@@ -1056,11 +1056,11 @@ bool wxShape::AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, co
     return FALSE;
 }
 
-void wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
+bool wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
                                        double x, double y)
 {
   if (!GetAttachmentMode())
-      return;
+      return FALSE;
 
   int newAttachment, oldAttachment;
   double distance;
@@ -1069,7 +1069,7 @@ void wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
   // the user has moved the point to
   bool hit = HitTest(x, y, &newAttachment, &distance);
   if (!hit)
-    return;
+    return FALSE;
 
   EraseLinks(dc);
 
@@ -1138,6 +1138,8 @@ void wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
     newOrdering.Append(to_move);
 
   GetEventHandler()->OnChangeAttachment(newAttachment, to_move, newOrdering);
+
+  return TRUE;
 }
 
 void wxShape::OnChangeAttachment(int attachment, wxLineShape* line, wxList& ordering)
@@ -1467,14 +1469,14 @@ void wxShape::Move(wxDC& dc, double x, double y, bool display)
   double old_x = m_xpos;
   double old_y = m_ypos;
 
-  m_xpos = x; m_ypos = y;
-
   if (!GetEventHandler()->OnMovePre(dc, x, y, old_x, old_y, display))
   {
-    m_xpos = old_x;
-    m_ypos = old_y;
+//    m_xpos = old_x;
+//    m_ypos = old_y;
     return;
   }
+
+  m_xpos = x; m_ypos = y;
 
   ResetControlPoints();
 

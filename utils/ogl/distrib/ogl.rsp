@@ -1,21 +1,20 @@
 src/*.cpp
-src/*.c
 src/*.h
 src/*.rc
 src/*.def
 src/*.xbm
-src/make*.*
+src/*.xpm
+src/makefile*
 src/*.txt
 src/*.ico
 src/*.bmp
 
 samples/ogledit/*.cpp
-samples/ogledit/*.c
 samples/ogledit/*.h
 samples/ogledit/*.rc
 samples/ogledit/*.def
 samples/ogledit/*.xbm
-samples/ogledit/make*.*
+samples/ogledit/makefile*
 samples/ogledit/*.txt
 
 samples/ogledit/*.ico
@@ -23,6 +22,7 @@ samples/ogledit/*.bmp
 samples/ogledit/bitmaps/*.bmp
 samples/ogledit/bitmaps/*.gif
 samples/ogledit/bitmaps/*.xbm
+samples/ogledit/bitmaps/*.xpm
 
 distrib/*.rsp
 distrib/*.bat

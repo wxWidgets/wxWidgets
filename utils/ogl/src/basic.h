@@ -394,7 +394,7 @@ class wxShape: public wxShapeEvtHandler
   virtual void EraseLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
   virtual void DrawLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
 
-  virtual void MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
+  virtual bool MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
                                        double x, double y);
 
   // Reorders the lines coming into the node image at this attachment
@@ -637,6 +637,9 @@ class wxEllipseShape: public wxShape
 
   inline double GetWidth() const { return m_width; }
   inline double GetHeight() const { return m_height; }
+
+  inline void SetWidth(double w) { m_width = w; }
+  inline void SetHeight(double h) { m_height = h; }
 
 protected:
   double m_width;
