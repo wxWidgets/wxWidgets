@@ -1,3 +1,10 @@
+wxwindows2.3 (2.3.3) unstable; urgency=low
+
+  * New dynamic library/object loading code.
+  * Fixes several showstoppers from 2.3.2
+
+ -- Ron Lee <ron@debian.org>  Wed, 19 Dec 2001 15:41:31 -0800
+
 wxwindows2.3 (2.3.2) unstable; urgency=low
 
   * Major Overhaul.  First serious release contender.
