@@ -1682,6 +1682,12 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
 
 void wxMenuBar::RefreshAllItemsAfter(size_t pos)
 {
+    if ( !IsCreated() )
+    {
+        // no need to refresh if nothing is shown yet
+        return;
+    }
+
     wxRect rect = GetItemRect(pos);
     rect.width = GetClientSize().x - rect.x;
     RefreshRect(rect);
@@ -1691,6 +1697,12 @@ void wxMenuBar::RefreshItem(size_t pos)
 {
     wxCHECK_RET( pos != (size_t)-1,
                  _T("invalid item in wxMenuBar::RefreshItem") );
+
+    if ( !IsCreated() )
+    {
+        // no need to refresh if nothing is shown yet
+        return;
+    }
 
     RefreshRect(GetItemRect(pos));
 }
@@ -1760,6 +1772,7 @@ void wxMenuBar::DoDraw(wxControlRenderer *renderer)
 wxRect wxMenuBar::GetItemRect(size_t pos) const
 {
     wxASSERT_MSG( pos < GetCount(), _T("invalid menu bar item index") );
+    wxASSERT_MSG( IsCreated(), _T("can't call this method yet") );
 
     wxRect rect;
     rect.x =
