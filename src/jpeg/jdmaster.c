@@ -15,11 +15,6 @@
 #include "jinclude.h"
 #include "jpeglib.h"
 
-#if defined(__VISAGECPP__)
-/* Visual Age fixups for multiple declarations */
-#  define start_input_pass   start_input_pass2 /* already in jcmaint.c */
-#endif
-
 /* Private state */
 
 typedef struct {
@@ -559,10 +554,4 @@ jinit_master_decompress (j_decompress_ptr cinfo)
 
   master_selection(cinfo);
 }
-
-#if defined(__VISAGECPP__)
-#  ifdef start_input_pass2
-#   undef start_input_pass2
-#  endif
-#endif
 
