@@ -13,6 +13,7 @@
 #define _WX_BMPBUTTN_H_
 
 #include "wx/button.h"
+#include "wx/dcclient.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 
