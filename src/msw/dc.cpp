@@ -77,6 +77,25 @@ static const int MM_METRIC = 10;
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
 #define DSTCOPY 0x00AA0029      // a.k.a. NOP operation
 
+// ----------------------------------------------------------------------------
+// macros for logical <-> device coords conversion
+// ----------------------------------------------------------------------------
+
+/*
+   We currently let Windows do all the translations itself so these macros are
+   not really needed (any more) but keep them to enhance readability of the
+   code by allowing to see where are the logical and where are the device
+   coordinates used.
+ */
+
+// logical to device
+#define XLOG2DEV(x) (x)
+#define YLOG2DEV(y) (y)
+
+// device to logical
+#define XDEV2LOG(x) (x)
+#define YDEV2LOG(y) (y)
+
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
@@ -184,11 +203,7 @@ wxDC::wxDC()
 
     m_bOwnsDC = FALSE;
     m_hDC = 0;
-
-    m_windowExtX = VIEWPORT_EXTENT;
-    m_windowExtY = VIEWPORT_EXTENT;
 }
-
 
 wxDC::~wxDC()
 {
@@ -437,14 +452,17 @@ void wxDC::Clear()
 
     (void) ::SetMapMode(GetHdc(), MM_TEXT);
 
-    DWORD colour = GetBkColor(GetHdc());
-    HBRUSH brush = CreateSolidBrush(colour);
-    FillRect(GetHdc(), &rect, brush);
-    DeleteObject(brush);
+    DWORD colour = ::GetBkColor(GetHdc());
+    HBRUSH brush = ::CreateSolidBrush(colour);
+    ::FillRect(GetHdc(), &rect, brush);
+    ::DeleteObject(brush);
+
+    int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
+        height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
 
     ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
     ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
-    ::SetWindowExtEx(GetHdc(), m_windowExtX, m_windowExtY, NULL);
+    ::SetWindowExtEx(GetHdc(), width, height, NULL);
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
 }
@@ -523,10 +541,6 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
     (void)MoveToEx(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), NULL);
     (void)LineTo(GetHdc(), XLOG2DEV(x2), YLOG2DEV(y2));
-
-    // Normalization: Windows doesn't draw the last point of the line.
-    // But apparently neither does GTK+, so we take it out again.
-//    (void)LineTo(GetHdc(), XLOG2DEV(x2) + 1, YLOG2DEV(y2));
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
@@ -1423,7 +1437,7 @@ wxCoord wxDC::GetCharHeight() const
 
     GetTextMetrics(GetHdc(), &lpTextMetric);
 
-    return YDEV2LOGREL(lpTextMetric.tmHeight);
+    return lpTextMetric.tmHeight;
 }
 
 wxCoord wxDC::GetCharWidth() const
@@ -1436,7 +1450,7 @@ wxCoord wxDC::GetCharWidth() const
 
     GetTextMetrics(GetHdc(), &lpTextMetric);
 
-    return XDEV2LOGREL(lpTextMetric.tmAveCharWidth);
+    return lpTextMetric.tmAveCharWidth;
 }
 
 void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
@@ -1472,10 +1486,14 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     GetTextExtentPoint(GetHdc(), string, string.length(), &sizeRect);
     GetTextMetrics(GetHdc(), &tm);
 
-    if (x) *x = XDEV2LOGREL(sizeRect.cx);
-    if (y) *y = YDEV2LOGREL(sizeRect.cy);
-    if (descent) *descent = tm.tmDescent;
-    if (externalLeading) *externalLeading = tm.tmExternalLeading;
+    if (x)
+        *x = sizeRect.cx;
+    if (y)
+        *y = sizeRect.cy;
+    if (descent)
+        *descent = tm.tmDescent;
+    if (externalLeading)
+        *externalLeading = tm.tmExternalLeading;
 
     if ( hfontOld )
     {
@@ -1491,68 +1509,67 @@ void wxDC::SetMapMode(int mode)
 
     m_mappingMode = mode;
 
-    int pixel_width = 0;
-    int pixel_height = 0;
-    int mm_width = 0;
-    int mm_height = 0;
-
-    pixel_width = GetDeviceCaps(GetHdc(), HORZRES);
-    pixel_height = GetDeviceCaps(GetHdc(), VERTRES);
-    mm_width = GetDeviceCaps(GetHdc(), HORZSIZE);
-    mm_height = GetDeviceCaps(GetHdc(), VERTSIZE);
-
-    if ((pixel_width == 0) || (pixel_height == 0) || (mm_width == 0) || (mm_height == 0))
+    if ( mode == wxMM_TEXT )
     {
-        return;
+        m_logicalScaleX =
+        m_logicalScaleY = 1.0;
     }
-
-    double mm2pixelsX = pixel_width/mm_width;
-    double mm2pixelsY = pixel_height/mm_height;
-
-    switch (mode)
+    else // need to do some calculations
     {
-    case wxMM_TWIPS:
+        int pixel_width = ::GetDeviceCaps(GetHdc(), HORZRES),
+            pixel_height = ::GetDeviceCaps(GetHdc(), VERTRES),
+            mm_width = ::GetDeviceCaps(GetHdc(), HORZSIZE),
+            mm_height = ::GetDeviceCaps(GetHdc(), VERTSIZE);
+
+        if ( (mm_width == 0) || (mm_height == 0) )
         {
-            m_logicalScaleX = (twips2mm * mm2pixelsX);
-            m_logicalScaleY = (twips2mm * mm2pixelsY);
-            break;
+            // we can't calculate mm2pixels[XY] then!
+            return;
         }
-    case wxMM_POINTS:
+
+        double mm2pixelsX = pixel_width / mm_width,
+               mm2pixelsY = pixel_height / mm_height;
+
+        switch (mode)
         {
-            m_logicalScaleX = (pt2mm * mm2pixelsX);
-            m_logicalScaleY = (pt2mm * mm2pixelsY);
-            break;
-        }
-    case wxMM_METRIC:
-        {
-            m_logicalScaleX = mm2pixelsX;
-            m_logicalScaleY = mm2pixelsY;
-            break;
-        }
-    case wxMM_LOMETRIC:
-        {
-            m_logicalScaleX = (mm2pixelsX/10.0);
-            m_logicalScaleY = (mm2pixelsY/10.0);
-            break;
-        }
-    default:
-    case wxMM_TEXT:
-        {
-            m_logicalScaleX = 1.0;
-            m_logicalScaleY = 1.0;
-            break;
+            case wxMM_TWIPS:
+                m_logicalScaleX = twips2mm * mm2pixelsX;
+                m_logicalScaleY = twips2mm * mm2pixelsY;
+                break;
+
+            case wxMM_POINTS:
+                m_logicalScaleX = pt2mm * mm2pixelsX;
+                m_logicalScaleY = pt2mm * mm2pixelsY;
+                break;
+
+            case wxMM_METRIC:
+                m_logicalScaleX = mm2pixelsX;
+                m_logicalScaleY = mm2pixelsY;
+                break;
+
+            case wxMM_LOMETRIC:
+                m_logicalScaleX = mm2pixelsX / 10.0;
+                m_logicalScaleY = mm2pixelsY / 10.0;
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unknown mapping mode in SetMapMode") );
         }
     }
 
-    if (::GetMapMode(GetHdc()) != MM_ANISOTROPIC)
-        ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
+    // VZ: it seems very wasteful to always use MM_ANISOTROPIC when in 99% of
+    //     cases we could do with MM_TEXT and in the remaining 0.9% with
+    //     MM_ISOTROPIC (TODO!)
+    ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
-    SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
-    m_windowExtX = (int)MS_XDEV2LOG(VIEWPORT_EXTENT);
-    m_windowExtY = (int)MS_YDEV2LOG(VIEWPORT_EXTENT);
-    ::SetWindowExtEx(GetHdc(), m_windowExtX, m_windowExtY, NULL);
-    ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
-    ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
+    int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
+        height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
+
+    ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
+    ::SetWindowExtEx(GetHdc(), width, height, NULL);
+
+    ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
+    ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
 }
 
 void wxDC::SetUserScale(double x, double y)
@@ -1560,6 +1577,9 @@ void wxDC::SetUserScale(double x, double y)
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return;
 #endif
+
+    if ( x == m_userScaleX && y == m_userScaleY )
+        return;
 
     m_userScaleX = x;
     m_userScaleY = y;
@@ -1573,10 +1593,16 @@ void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
     if (!GetHDC()) return;
 #endif
 
-    m_signX = xLeftRight ? 1 : -1;
-    m_signY = yBottomUp ? -1 : 1;
+    int signX = xLeftRight ? 1 : -1,
+        signY = yBottomUp ? -1 : 1;
 
-    SetMapMode(m_mappingMode);
+    if ( signX != m_signX || signY != m_signY )
+    {
+        m_signX = signX;
+        m_signY = signY;
+
+        SetMapMode(m_mappingMode);
+    }
 }
 
 void wxDC::SetSystemScale(double x, double y)
@@ -1584,6 +1610,9 @@ void wxDC::SetSystemScale(double x, double y)
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return;
 #endif
+
+    if ( x == m_scaleX && y == m_scaleY )
+        return;
 
     m_scaleX = x;
     m_scaleY = y;
@@ -1597,6 +1626,9 @@ void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
     if (!GetHDC()) return;
 #endif
 
+    if ( x == m_logicalOriginX && y == m_logicalOriginY )
+        return;
+
     m_logicalOriginX = x;
     m_logicalOriginY = y;
 
@@ -1608,6 +1640,9 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return;
 #endif
+
+    if ( x == m_deviceOriginX && y == m_deviceOriginY )
+        return;
 
     m_deviceOriginX = x;
     m_deviceOriginY = y;
@@ -1621,49 +1656,45 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-    double xRel = x - m_deviceOriginX;
-    xRel /= m_logicalScaleX*m_userScaleX*m_signX*m_scaleX;
-    return (wxCoord)(xRel + m_logicalOriginX);
+    return DeviceToLogicalXRel(x - m_deviceOriginX)*m_signX + m_logicalOriginX;
 }
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-	// axis orientation is not taken into account for conversion of a distance
-    return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_scaleX));
+    // axis orientation is not taken into account for conversion of a distance
+    return (wxCoord)(x / (m_logicalScaleX*m_userScaleX*m_scaleX));
 }
 
 wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-    double yRel = y - m_deviceOriginY;
-    yRel /= m_logicalScaleY*m_userScaleY*m_signY*m_scaleY;
-    return (wxCoord)(yRel + m_logicalOriginY);
+    return DeviceToLogicalYRel(y - m_deviceOriginY)*m_signY + m_logicalOriginY;
 }
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-	// axis orientation is not taken into account for conversion of a distance
-	return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_scaleY));
+    // axis orientation is not taken into account for conversion of a distance
+    return (wxCoord)( y / (m_logicalScaleY*m_userScaleY*m_scaleY));
 }
 
 wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
-    return (wxCoord) ((x - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
+    return LogicalToDeviceXRel(x - m_logicalOriginX)*m_signX + m_deviceOriginX;
 }
 
 wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-	// axis orientation is not taken into account for conversion of a distance
+    // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_scaleX);
 }
 
 wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
-    return (wxCoord) ((y - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
+    return LogicalToDeviceYRel(y - m_logicalOriginY)*m_signY + m_deviceOriginY;
 }
 
 wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-	// axis orientation is not taken into account for conversion of a distance
+    // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_scaleY);
 }
 
