@@ -150,7 +150,7 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
                 wxString *src = m_WParser -> GetSource();
 
                 for (int i = tag.GetBeginPos(); i < tag.GetEndPos1(); i++) title += (*src)[(unsigned int) i];
-                wfr -> SetTitle(title);
+                wfr -> OnSetTitle(title);
             }
         }
         return TRUE;

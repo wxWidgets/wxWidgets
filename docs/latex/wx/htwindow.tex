@@ -69,6 +69,12 @@ See also: \helpref{Cells Overview}{cells},
 Returns full location of the opened page. If no page is opened or if the displayed page wasn't
 produced by call to LoadPage, empty string is returned.
 
+\membersection{wxHtmlWindow::GetOpenedPageTitle}\label{wxhtmlwindowgetopenedpagetitle}
+
+\func{wxString}{GetOpenedPageTitle}{\void}
+
+Returns title of the opened page or wxEmptyString if current page does not contain {\tt <TITLE>} tag.
+
 \membersection{wxHtmlWindow::GetRelatedFrame}\label{wxhtmlwindowgetrelatedframe}
 
 \constfunc{wxFrame*}{GetRelatedFrame}{\void}
@@ -119,6 +125,14 @@ FALSE if an error occured, TRUE otherwise
 
 Called when user clicks on hypertext link. Default behaviour is to call 
 \helpref{LoadPage}{wxhtmlwindowloadpage} and do nothing else.
+
+
+\membersection{wxHtmlWindow::OnSetTitle}\label{wxhtmlwindowonsettitle}
+
+\func{virtual void}{OnSetTitle}{\param{const wxString\& }{title}}
+
+Called on parsing {\tt <TITLE>} tag.
+
 
 \membersection{wxHtmlWindow::ReadCustomization}\label{wxhtmlwindowreadcustomization}
 
@@ -233,6 +247,7 @@ this sets statusbar slot where messages will be displayed.
 \wxheading{Parameters}
 
 \docparam{bar}{statusbar slot number (0..n)}
+
 
 \membersection{wxHtmlWindow::WriteCustomization}\label{wxhtmlwindowwritecustomization}
 

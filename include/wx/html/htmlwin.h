@@ -68,7 +68,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         wxHtmlWindow() : wxScrolledWindow() {};
         wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-		     long style = wxHW_SCROLLBAR_AUTO,
+                     long style = wxHW_SCROLLBAR_AUTO,
                      const wxString& name = "htmlWindow");
         ~wxHtmlWindow();
 
@@ -92,6 +92,9 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         wxString GetOpenedPage() const {return m_OpenedPage;}
                 // Returns full location of opened page
 
+        wxString GetOpenedPageTitle() const {return m_OpenedPageTitle;}
+                // Returns <TITLE> of opened page or empty string otherwise
+
         void SetRelatedFrame(wxFrame* frame, const wxString& format);
                 // sets frame in which page title will  be displayed. Format is format of
                 // frame title, e.g. "HtmlHelp : %s". It must contain exactly one %s
@@ -105,7 +108,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // sets fonts to be used when displaying HTML page.
                 // *_italic_mode can be either wxSLANT or wxITALIC
 
-        void SetTitle(const wxString& title);
+        virtual void OnSetTitle(const wxString& title);
                 // Sets the title of the window
                 // (depending on the information passed to SetRelatedFrame() method)
 
@@ -176,6 +179,8 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // contains name of actualy opened page or empty string if no page opened
         wxString m_OpenedAnchor;
                 // contains name of current anchor within m_OpenedPage
+        wxString m_OpenedPageTitle;
+                // contains title of actualy opened page or empty string if no <TITLE> tag
         wxFileSystem* m_FS;
                 // class for opening files (file system)
 

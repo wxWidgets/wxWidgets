@@ -51,7 +51,7 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
     m_RelatedStatusBar = -1;
     m_RelatedFrame = NULL;
     m_TitleFormat = "%s";
-    m_OpenedPage = m_OpenedAnchor = wxEmptyString;
+    m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
     m_Cell = NULL;
     m_Parser = new wxHtmlWinParser(this);
     m_Parser -> SetFS(m_FS);
@@ -96,8 +96,11 @@ void wxHtmlWindow::SetRelatedStatusBar(int bar)
 
 void wxHtmlWindow::SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes)
 {
+    wxString op = m_OpenedPage;
+
     m_Parser -> SetFonts(normal_face, normal_italic_mode, fixed_face, fixed_italic_mode, sizes);
-    if (!m_OpenedPage.IsEmpty()) LoadPage(m_OpenedPage);
+    SetPage(wxT("")); // fonts changed => contents invalid
+    if (!op.IsEmpty()) LoadPage(op);
 }
 
 
@@ -108,7 +111,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
 
     dc -> SetMapMode(wxMM_TEXT);
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
-    m_OpenedPage = m_OpenedAnchor = wxEmptyString;
+    m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
     m_Parser -> SetDC(dc);
     if (m_Cell) {
       delete m_Cell;
@@ -237,13 +240,14 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
 }
 
 
-void wxHtmlWindow::SetTitle(const wxString& title)
+void wxHtmlWindow::OnSetTitle(const wxString& title)
 {
     if (m_RelatedFrame) {
         wxString tit;
         tit.Printf(m_TitleFormat, title.c_str());
         m_RelatedFrame -> SetTitle(tit);
     }
+    m_OpenedPageTitle = title;
 }
 
 
@@ -290,6 +294,9 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
 {
     wxString oldpath;
     wxString tmp;
+    int p_fontsizes[7];
+    wxString p_fff, p_ffn;
+    int p_imf, p_imn;
 
     if (path != wxEmptyString) {
         oldpath = cfg -> GetPath();
@@ -297,14 +304,15 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     }
 
     m_Borders = cfg -> Read("wxHtmlWindow/Borders", m_Borders);
-    m_Parser -> m_FontFaceFixed = cfg -> Read("wxHtmlWindow/FontFaceFixed", m_Parser -> m_FontFaceFixed);
-    m_Parser -> m_FontFaceNormal = cfg -> Read("wxHtmlWindow/FontFaceNormal", m_Parser -> m_FontFaceNormal);
-    m_Parser -> m_ItalicModeFixed = cfg -> Read("wxHtmlWindow/ItalicModeFixed", m_Parser -> m_ItalicModeFixed);
-    m_Parser -> m_ItalicModeNormal = cfg -> Read("wxHtmlWindow/ItalicModeNormal", m_Parser -> m_ItalicModeNormal);
+    p_fff = cfg -> Read("wxHtmlWindow/FontFaceFixed", m_Parser -> m_FontFaceFixed);
+    p_ffn = cfg -> Read("wxHtmlWindow/FontFaceNormal", m_Parser -> m_FontFaceNormal);
+    p_imf = cfg -> Read("wxHtmlWindow/ItalicModeFixed", m_Parser -> m_ItalicModeFixed);
+    p_imn = cfg -> Read("wxHtmlWindow/ItalicModeNormal", m_Parser -> m_ItalicModeNormal);
     for (int i = 0; i < 7; i++) {
         tmp.Printf(wxT("wxHtmlWindow/FontsSize%i"), i);
-        m_Parser -> m_FontsSizes[i] = cfg -> Read(tmp, m_Parser -> m_FontsSizes[i]);
+        p_fontsizes[i] = cfg -> Read(tmp, m_Parser -> m_FontsSizes[i]);
     }
+    m_Parser -> SetFonts(p_ffn, p_imn, p_fff, p_imf, p_fontsizes);
 
     if (path != wxEmptyString)
         cfg -> SetPath(oldpath);
