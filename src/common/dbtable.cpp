@@ -351,7 +351,7 @@ void wxDbTable::cleanup()
         if (!found)
         {
             wxString msg;
-            msg.Printf(wxT("Unable to find the tableID in the linked\nlist of tables in use.\n\n%s"),s);
+            msg.Printf(wxT("Unable to find the tableID in the linked\nlist of tables in use.\n\n%s"),s.c_str());
             wxLogDebug (msg,wxT("NOTICE..."));
         }
     }
@@ -1404,6 +1404,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
     {
         switch (pDb->Dbms())
         {
+            case dbmsINFORMIX:
             case dbmsSYBASE_ASA:
             case dbmsSYBASE_ASE:
             case dbmsMY_SQL:
@@ -1441,7 +1442,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
         }
         sqlStmt += wxT(")");
 
-        if (pDb->Dbms() == dbmsSYBASE_ASA ||
+        if (pDb->Dbms() == dbmsINFORMIX ||
+            pDb->Dbms() == dbmsSYBASE_ASA ||
             pDb->Dbms() == dbmsSYBASE_ASE)
         {
             sqlStmt += wxT(" CONSTRAINT ");
@@ -2091,7 +2093,7 @@ void wxDbTable::SetColDefs(UWORD index, const wxString &fieldName, int dataType,
         wxStrncpy(colDefs[index].ColName, fieldName, DB_MAX_COLUMN_NAME_LEN);
         colDefs[index].ColName[DB_MAX_COLUMN_NAME_LEN] = 0;
         wxString tmpMsg;
-        tmpMsg.sprintf("Column name '%s' is too long. Truncated to '%s'.",fieldName,colDefs[index].ColName);
+        tmpMsg.Printf("Column name '%s' is too long. Truncated to '%s'.",fieldName.c_str(),colDefs[index].ColName);
         wxASSERT_MSG(assertColumnNameTooLong,tmpMsg.c_str());
     }
     else
