@@ -545,11 +545,13 @@ LifeNavigator::LifeNavigator(wxWindow *parent)
         *be = new wxBitmapButton(panel, ID_EAST ,  bmpe),
         *bs = new wxBitmapButton(panel, ID_SOUTH,  bmps);
 
+#if wxUSE_TOOLTIPS
     bn->SetToolTip(_("Find northernmost cell"));
     bw->SetToolTip(_("Find westernmost cell"));
     bc->SetToolTip(_("Find center of mass"));
     be->SetToolTip(_("Find easternmost cell"));
     bs->SetToolTip(_("Find southernmost cell"));
+#endif
 
     // add buttons to sizers
     sizer2->Add( bw, 0, wxCENTRE | wxWEST,  4 );
