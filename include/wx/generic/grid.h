@@ -922,8 +922,7 @@ protected:
     int  m_batchCount;
 
     int  m_cursorMode;
-    enum { WXGRID_CURSOR_DEFAULT,
-           WXGRID_CURSOR_SELECT_CELL,
+    enum { WXGRID_CURSOR_SELECT_CELL,
            WXGRID_CURSOR_RESIZE_ROW,
            WXGRID_CURSOR_RESIZE_COL,
            WXGRID_CURSOR_SELECT_ROW,

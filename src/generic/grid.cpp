@@ -1612,6 +1612,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             }
         }
 
+        m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
         m_dragLastPos  = -1;
     }
 
@@ -1800,6 +1801,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             }
         }
 
+        m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
         m_dragLastPos  = -1;
     }
 
@@ -2004,6 +2006,13 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             {
                 // no default action at the moment
             }
+        }
+
+        // ------------ Moving and no button action
+        //
+        else if ( event.Moving() && !event.IsButton() )
+        {
+            m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
         }
     }
 }
