@@ -68,7 +68,7 @@ methodOverrideMap = {
                  'void %s(const wxString& text);',
 
                  '''void %s(const wxString& text) {
-                    wxWX2MBbuf buf = (wxWX2MBbuf)text.mb_str(wxConvUTF8);
+                    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
                     SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
                  0),
 
@@ -130,7 +130,7 @@ methodOverrideMap = {
                        mbuf.UngetWriteBuf(len);
                        mbuf.AppendByte(0);
                        if (linePos)  *linePos = pos;
-                       return wxString(buf, wxConvUTF8);''',
+                       return stc2wx(buf);''',
 
                     0),
 
@@ -249,7 +249,7 @@ methodOverrideMap = {
                      flags |= wholeWord     ? SCFIND_WHOLEWORD : 0;
                      ft.chrg.cpMin = minPos;
                      ft.chrg.cpMax = maxPos;
-                     ft.lpstrText = (char*)(const char*)text.mb_str(wxConvUTF8);
+                     ft.lpstrText = (char*)(const char*)wx2stc(text);
 
                      return SendMsg(%s, flags, (long)&ft);''',
                   0),
@@ -305,7 +305,7 @@ methodOverrideMap = {
                        SendMsg(%s, line, (long)buf);
                        mbuf.UngetWriteBuf(len);
                        mbuf.AppendByte(0);
-                       return wxString(buf, wxConvUTF8);''',
+                       return stc2wx(buf);''',
 
                     ('Retrieve the contents of a line.',)),
 
@@ -326,7 +326,7 @@ methodOverrideMap = {
                             SendMsg(%s, 0, (long)buf);
                             mbuf.UngetWriteBuf(len);
                             mbuf.AppendByte(0);
-                            return wxString(buf, wxConvUTF8);''',
+                            return stc2wx(buf);''',
 
                     ('Retrieve the selected text.',)),
 
@@ -350,7 +350,7 @@ methodOverrideMap = {
                             SendMsg(%s, 0, (long)&tr);
                             mbuf.UngetWriteBuf(len);
                             mbuf.AppendByte(0);
-                            return wxString(buf, wxConvUTF8);''',
+                            return stc2wx(buf);''',
 
                        ('Retrieve a range of text.',)),
 
@@ -371,7 +371,7 @@ methodOverrideMap = {
                         SendMsg(%s, len+1, (long)buf);
                         mbuf.UngetWriteBuf(len);
                         mbuf.AppendByte(0);
-                        return wxString(buf, wxConvUTF8);''',
+                        return stc2wx(buf);''',
 
                  ('Retrieve all the text in the document.', )),
 
@@ -388,7 +388,7 @@ methodOverrideMap = {
 
                        '''
                        int %s(const wxString& text) {
-                           wxWX2MBbuf buf = (wxWX2MBbuf)text.mb_str(wxConvUTF8);
+                           wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
                            return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
                        0),
 
@@ -397,7 +397,7 @@ methodOverrideMap = {
 
                        '''
                        int %s(const wxString& text) {
-                           wxWX2MBbuf buf = (wxWX2MBbuf)text.mb_str(wxConvUTF8);
+                           wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
                            return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
                        0),
 
@@ -406,7 +406,7 @@ methodOverrideMap = {
 
                        '''
                        int %s(const wxString& text) {
-                           wxWX2MBbuf buf = (wxWX2MBbuf)text.mb_str(wxConvUTF8);
+                           wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
                            return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
                        0),
 
@@ -662,7 +662,7 @@ def makeArgString(param):
     typ, name = param
 
     if typ == 'string':
-        return '(long)(const char*)%s.mb_str(wxConvUTF8)' % name
+        return '(long)(const char*)wx2stc(%s)' % name
     if typ == 'colour':
         return 'wxColourAsLong(%s)' % name
 

@@ -187,7 +187,7 @@ void Font::Create(const char *faceName, int characterSet, int size, bool bold, b
                     italic ? wxITALIC :  wxNORMAL,
                     bold ? wxBOLD : wxNORMAL,
                     false,
-                    wxString(faceName, wxConvUTF8),
+                    stc2wx(faceName),
                     encoding);
 }
 
@@ -393,12 +393,9 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
     hdc->SetTextBackground(wxColourFromCA(back));
     FillRectangle(rc, back);
 
-    // will convert from UTF-8 in unicode mode
-    wxString str(s, wxConvUTF8, len);
-
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(str, rc.left, ybase - font.ascent);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
 }
 
 void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
@@ -410,11 +407,8 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
     FillRectangle(rc, back);
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
-    // will convert from UTF-8 in unicode mode
-    wxString str(s, wxConvUTF8, len);
-
     // see comments above
-    hdc->DrawText(str, rc.left, ybase - font.ascent);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
     hdc->DestroyClippingRegion();
 }
 
@@ -423,17 +417,13 @@ int SurfaceImpl::WidthText(Font &font, const char *s, int len) {
     int w;
     int h;
 
-    // will convert from UTF-8 in unicode mode
-    wxString str(s, wxConvUTF8, len);
-
-    hdc->GetTextExtent(str, &w, &h);
+    hdc->GetTextExtent(stc2wx(s, len), &w, &h);
     return w;
 }
 
 
 void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positions) {
-    // will convert from UTF-8 in unicode mode
-    wxString str(s, wxConvUTF8, len);
+    wxString str = stc2wx(s, len);
     SetFont(font);
 
     // Calculate the position of each character based on the widths of
@@ -481,9 +471,7 @@ int SurfaceImpl::WidthChar(Font &font, char ch) {
     int h;
     char s[2] = { ch, 0 };
 
-    // will convert from UTF-8 in unicode mode
-    wxString str(s, wxConvUTF8, 1);
-    hdc->GetTextExtent(str, &w, &h);
+    hdc->GetTextExtent(stc2wx(s, 1), &w, &h);
     return w;
 }
 
@@ -643,9 +631,7 @@ void Window::SetCursor(Cursor curs) {
 
 
 void Window::SetTitle(const char *s) {
-    // will convert from UTF-8 in unicode mode
-    wxString str(s, wxConvUTF8);
-    GETWIN(id)->SetTitle(str);
+    GETWIN(id)->SetTitle(stc2wx(s));
 }
 
 
@@ -807,7 +793,7 @@ int ListBox::Find(const char *prefix) {
 
 void ListBox::GetValue(int n, char *value, int len) {
     wxString text = GETLB(id)->GetString(n);
-    strncpy(value, text.mb_str(wxConvUTF8), len);
+    strncpy(value, wx2stc(text), len);
     value[len-1] = '\0';
 }
 
@@ -864,7 +850,7 @@ unsigned int Platform::DoubleClickTime() {
 }
 
 void Platform::DebugDisplay(const char *s) {
-    wxLogDebug(wxString(s, *wxConvCurrent));
+    wxLogDebug(stc2wx(s));
 }
 
 bool Platform::IsKeyDown(int key) {
@@ -923,9 +909,10 @@ void Platform::Assert(const char *c, const char *file, int line) {
 	char buffer[2000];
 	sprintf(buffer, "Assertion [%s] failed at %s %d", c, file, line);
 	if (assertionPopUps) {
-		int idButton = wxMessageBox(wxString(buffer, *wxConvCurrent),
-                                            wxT("Assertion failure"),
-                                            wxICON_HAND | wxOK);
+            /*int idButton = */
+            wxMessageBox(stc2wx(buffer),
+                         wxT("Assertion failure"),
+                         wxICON_HAND | wxOK);
 //  		if (idButton == IDRETRY) {
 //  			::DebugBreak();
 //  		} else if (idButton == IDIGNORE) {

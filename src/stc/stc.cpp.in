@@ -497,7 +497,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
             wxMemoryBuffer buf(scn.length+1);
             buf.AppendData((void*)scn.text, scn.length);
             buf.AppendByte(0);
-            evt.SetText(wxString(buf, wxConvUTF8));
+            evt.SetText(stc2wx(buf));
         }
         evt.SetLength(scn.length);
         evt.SetLinesAdded(scn.linesAdded);

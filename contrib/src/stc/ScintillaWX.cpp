@@ -172,7 +172,7 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
 #if wxUSE_DRAG_AND_DROP
-    wxString dragText(drag.s, wxConvUTF8, drag.len);
+    wxString dragText = stc2wx(drag.s, drag.len);
 
     // Send an event to allow the drag text to be changed
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
@@ -320,7 +320,7 @@ void ScintillaWX::Copy() {
         SelectionText st;
         CopySelectionRange(&st);
         wxTheClipboard->Open();
-        wxString text(st.s, wxConvUTF8, st.len);
+        wxString text = stc2wx(st.s, st.len);
         wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
@@ -338,7 +338,7 @@ void ScintillaWX::Paste() {
     gotData = wxTheClipboard->GetData(data);
     wxTheClipboard->Close();
     if (gotData) {
-        wxWX2MBbuf buf = (wxWX2MBbuf)data.GetText().mb_str(wxConvUTF8);
+        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(data.GetText());
         int        len = strlen(buf);
         pdoc->InsertString(currentPos, buf, len);
         SetEmptySelection(currentPos + len);
@@ -370,7 +370,7 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
     if (!label[0])
         ((wxMenu*)popup.GetID())->AppendSeparator();
     else
-        ((wxMenu*)popup.GetID())->Append(cmd, wxString(label, *wxConvCurrent));
+        ((wxMenu*)popup.GetID())->Append(cmd, stc2wx(label));
 
     if (!enabled)
         ((wxMenu*)popup.GetID())->Enable(cmd, enabled);
@@ -601,7 +601,7 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     dragResult = evt.GetDragResult();
     if (dragResult == wxDragMove || dragResult == wxDragCopy) {
         DropAt(evt.GetPosition(),
-               evt.GetDragText().mb_str(wxConvUTF8),
+               wx2stc(evt.GetDragText()),
                dragResult == wxDragMove,
                FALSE); // TODO: rectangular?
         return TRUE;
