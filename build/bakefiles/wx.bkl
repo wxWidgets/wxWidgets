@@ -54,9 +54,9 @@
         <action id="install-wxconfig">
             <dependency-of>install</dependency-of>
             <command>
-                $(INSTALL_DIR) $(BINDIR)
-                $(INSTALL_PROGRAM) wx$(TOOLCHAIN_NAME)-config $(BINDIR)
-                (cd $(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) wx$(TOOLCHAIN_NAME)-config wx-config)
+                $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
+                $(INSTALL_PROGRAM) wx$(TOOLCHAIN_NAME)-config $(DESTDIR)$(BINDIR)
+                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) wx$(TOOLCHAIN_NAME)-config wx-config)
             </command>
         </action>
 

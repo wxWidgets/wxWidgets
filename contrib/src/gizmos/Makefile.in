@@ -14,6 +14,7 @@ AR = @AR@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+DESTDIR = @DESTDIR@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
@@ -237,26 +238,26 @@ gizmoslib_statpict.o: $(srcdir)/statpict.cpp
 	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
 install: all $(__install_gizmosdll___depname) $(__install_gizmoslib___depname)
-	$(INSTALL_DIR) $(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)
 	for f in wx/gizmos/dynamicsash.h wx/gizmos/editlbox.h wx/gizmos/ledctrl.h wx/gizmos/multicell.h wx/gizmos/splittree.h wx/gizmos/statpict.h wx/gizmos/gizmos.h; do \
-	if test ! -d $(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
 	done
 
 install-strip: install
-	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3)
+	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3)
 
 @COND_SHARED_1@install_gizmosdll: 
-@COND_SHARED_1@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
-@COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3) $(libdir)
-@COND_SHARED_1@	(cd $(libdir) ; $(__gizmosdll___so_symlinks_inst_cmd))
+@COND_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__gizmosdll___so_symlinks_inst_cmd))
 
 @COND_SHARED_0@install_gizmoslib: 
-@COND_SHARED_0@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(HOST_SUFFIX).a $(libdir)
+@COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
 uninstall: 
 

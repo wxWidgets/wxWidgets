@@ -14,6 +14,7 @@ AR = @AR@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+DESTDIR = @DESTDIR@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_ESD = @EXTRALIBS_ESD@
@@ -234,26 +235,26 @@ distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all $(__install_mmediadll___depname) $(__install_mmedialib___depname)
-	$(INSTALL_DIR) $(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)
 	for f in wx/mmedia/cdbase.h wx/mmedia/cdunix.h wx/mmedia/cdwin.h wx/mmedia/sndaiff.h wx/mmedia/sndbase.h wx/mmedia/sndcodec.h wx/mmedia/sndcpcm.h wx/mmedia/sndesd.h wx/mmedia/sndfile.h wx/mmedia/sndg72x.h wx/mmedia/sndmsad.h wx/mmedia/sndoss.h wx/mmedia/sndpcm.h wx/mmedia/sndulaw.h wx/mmedia/sndwav.h wx/mmedia/sndwin.h wx/mmedia/vidbase.h wx/mmedia/vidwin.h wx/mmedia/vidxanm.h; do \
-	if test ! -d $(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
 	done
 
 install-strip: install
-	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
+	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
 
 @COND_SHARED_1@install_mmediadll: 
-@COND_SHARED_1@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
-@COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) $(libdir)
-@COND_SHARED_1@	(cd $(libdir) ; $(__mmediadll___so_symlinks_inst_cmd))
+@COND_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__mmediadll___so_symlinks_inst_cmd))
 
 @COND_SHARED_0@install_mmedialib: 
-@COND_SHARED_0@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a $(libdir)
+@COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3): $(__mmediadll_PCH_DEP)  $(MMEDIADLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mmediadll___macinstnamecmd) $(__mmediadll___importlib) $(__mmediadll___soname_flags) $(__mmediadll___macver) $(EXTRALIBS_ESD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)

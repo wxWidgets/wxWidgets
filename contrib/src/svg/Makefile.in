@@ -14,6 +14,7 @@ AR = @AR@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+DESTDIR = @DESTDIR@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
@@ -181,26 +182,26 @@ distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all $(__install_svgdll___depname) $(__install_svglib___depname)
-	$(INSTALL_DIR) $(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)
 	for f in wx/svg/dcsvg.h; do \
-	if test ! -d $(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
 	done
 
 install-strip: install
-	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3)
+	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3)
 
 @COND_SHARED_1@install_svgdll: 
-@COND_SHARED_1@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
-@COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3) $(libdir)
-@COND_SHARED_1@	(cd $(libdir) ; $(__svgdll___so_symlinks_inst_cmd))
+@COND_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3) $(DESTDIR)$(libdir)
+@COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__svgdll___so_symlinks_inst_cmd))
 
 @COND_SHARED_0@install_svglib: 
-@COND_SHARED_0@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX).a $(libdir)
+@COND_SHARED_0@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__svgdll___targetsuf3): $(__svgdll_PCH_DEP)  $(SVGDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(SVGDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__svgdll___macinstnamecmd) $(__svgdll___importlib) $(__svgdll___soname_flags) $(__svgdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
