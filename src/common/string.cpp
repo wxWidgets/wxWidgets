@@ -1620,7 +1620,7 @@ size_t wxString::find_last_of(const wxChar* sz, size_t nStart) const
         wxASSERT( nStart <= Len() );
     }
 
-    for ( const wxChar *p = c_str() + length() - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
     {
         if ( wxStrchr(sz, *p) )
             return p - c_str();

@@ -186,6 +186,7 @@ All:
 - always NUL-terminate the log messages
 - wxRegEx::Compile() now calculates the number of groups correctly
 - wxHTTP::GetHeader() didn't find headers which not all in upper case
+- wxString::find_last_of() ignored "start" parameter (Robert Vazan)
 
 All (GUI):
 
