@@ -141,7 +141,7 @@ public:
     void DoMiddleButtonUp(Point pt);
     void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
-    int  DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool meta, bool* consumed);
+    int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
     void DoTick() { Tick(); }
     void DoOnIdle(wxIdleEvent& evt);
 

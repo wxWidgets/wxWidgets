@@ -2752,7 +2752,7 @@ void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
 
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
-    // On (some?) non-US keyboards the AltGr key is required to enter some
+    // On (some?) non-US PC keyboards the AltGr key is required to enter some
     // common characters.  It comes to us as both Alt and Ctrl down so we need
     // to let the char through in that case, otherwise if only ctrl or only
     // alt let's skip it.
@@ -2767,32 +2767,38 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
 #endif
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
-    int key = evt.GetKeyCode();
+    if (!m_lastKeyDownConsumed && !skip) {
+#if wxUSE_UNICODE
+        int key = evt.GetUnicodeKey();
+        bool keyOk = true;
 
-//     printf("OnChar key:%d  consumed:%d  ctrl:%d  alt:%d  skip:%d\n",
-//            key, m_lastKeyDownConsumed, ctrl, alt, skip);
-
-    if ( (key <= WXK_START || key > WXK_COMMAND) &&
-         !m_lastKeyDownConsumed && !skip) {
-        m_swx->DoAddChar(key);
-        return;
+        // if the unicode key code is not really a unicode character (it may
+        // be a function key or etc., the platforms appear to always give us a
+        // small value in this case) then fallback to the ascii key code but
+        // don't do anything for function keys or etc.
+        if (key <= 255) {
+            key = evt.GetKeyCode();
+            keyOk = (key <= 255);
+        }
+        if (keyOk) {
+            m_swx->DoAddChar(key);
+            return;
+        }
+#else
+        int key = evt.GetKeyCode();
+        if (key <= WXK_START || key > WXK_COMMAND) {
+            m_swx->DoAddChar(key);
+            return;
+        }
+#endif
     }
+    
     evt.Skip();
 }
 
 
 void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
-    int key = evt.GetKeyCode();
-    bool shift = evt.ShiftDown(),
-         ctrl  = evt.ControlDown(),
-         alt   = evt.AltDown(),
-         meta  = evt.MetaDown();
-
-    int processed = m_swx->DoKeyDown(key, shift, ctrl, alt, meta, &m_lastKeyDownConsumed);
-
-//     printf("KeyDn  key:%d  shift:%d  ctrl:%d  alt:%d  processed:%d  consumed:%d\n",
-//            key, shift, ctrl, alt, processed, m_lastKeyDownConsumed);
-
+    int processed = m_swx->DoKeyDown(evt, &m_lastKeyDownConsumed);
     if (!processed && !m_lastKeyDownConsumed)
         evt.Skip();
 }

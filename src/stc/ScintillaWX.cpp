@@ -760,17 +760,15 @@ void ScintillaWX::DoAddChar(int key) {
 }
 
 
-#ifdef __WXMAC__
-int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool meta, bool* consumed) {
-#else
-int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool WXUNUSED(meta), bool* consumed) {
-#endif
-#if defined(__WXGTK__) || defined(__WXMAC__)
-    // Ctrl chars (A-Z) end up with the wrong keycode on wxGTK
-    // TODO:  Check this, it shouldn't be true any longer.
+int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
+{
+    int key = evt.GetKeyCode();
+    bool shift = evt.ShiftDown(),
+         ctrl  = evt.ControlDown(),
+         alt   = evt.AltDown();
+ 
     if (ctrl && key >= 1 && key <= 26)
         key += 'A' - 1;
-#endif
 
     switch (key) {
     case WXK_DOWN:              key = SCK_DOWN;     break;
@@ -802,7 +800,7 @@ int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool WXUNU
     }
 
 #ifdef __WXMAC__
-    if ( meta ) {
+    if ( evt.MetaDown() ) {
         // check for a few common Mac Meta-key combos and remap them to Ctrl
         // for Scintilla
         switch ( key ) {
