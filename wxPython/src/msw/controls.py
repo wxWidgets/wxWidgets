@@ -23,10 +23,9 @@ class Button(core.Control):
         return "<%s.%s; proxy of C++ wxButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyButtonNameStr) -> Button
+            Validator validator=DefaultValidator, String name=ButtonNameStr) -> Button
 
         Create and show a button.
         """
@@ -38,10 +37,9 @@ class Button(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyButtonNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ButtonNameStr) -> bool
 
         Acutally create the GUI Button for 2-phase creation.
         """
@@ -56,7 +54,7 @@ class Button(core.Control):
         return _controls.Button_SetDefault(*args, **kwargs)
 
     def SetImageLabel(*args, **kwargs):
-        """SetImageLabel(wxBitmap bitmap)"""
+        """SetImageLabel(Bitmap bitmap)"""
         return _controls.Button_SetImageLabel(*args, **kwargs)
 
     def SetImageMargins(*args, **kwargs):
@@ -75,6 +73,8 @@ class ButtonPtr(Button):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Button
 _controls.Button_swigregister(ButtonPtr)
+cvar = _controls.cvar
+ButtonNameStr = cvar.ButtonNameStr
 
 def PreButton(*args, **kwargs):
     """
@@ -96,10 +96,10 @@ class BitmapButton(Button):
         return "<%s.%s; proxy of C++ wxBitmapButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=BU_AUTODRAW, 
             Validator validator=DefaultValidator, 
-            wxString name=wxPyButtonNameStr) -> BitmapButton
+            String name=ButtonNameStr) -> BitmapButton
 
         Create and show a button.
         """
@@ -111,10 +111,10 @@ class BitmapButton(Button):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+        Create(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=BU_AUTODRAW, 
             Validator validator=DefaultValidator, 
-            wxString name=wxPyButtonNameStr) -> bool
+            String name=ButtonNameStr) -> bool
 
         Acutally create the GUI BitmapButton for 2-phase creation.
         """
@@ -122,7 +122,7 @@ class BitmapButton(Button):
 
     def GetBitmapLabel(*args, **kwargs):
         """
-        GetBitmapLabel() -> wxBitmap
+        GetBitmapLabel() -> Bitmap
 
         Returns the label bitmap (the one passed to the constructor).
         """
@@ -130,7 +130,7 @@ class BitmapButton(Button):
 
     def GetBitmapDisabled(*args, **kwargs):
         """
-        GetBitmapDisabled() -> wxBitmap
+        GetBitmapDisabled() -> Bitmap
 
         Returns the bitmap for the disabled state.
         """
@@ -138,7 +138,7 @@ class BitmapButton(Button):
 
     def GetBitmapFocus(*args, **kwargs):
         """
-        GetBitmapFocus() -> wxBitmap
+        GetBitmapFocus() -> Bitmap
 
         Returns the bitmap for the focused state.
         """
@@ -146,7 +146,7 @@ class BitmapButton(Button):
 
     def GetBitmapSelected(*args, **kwargs):
         """
-        GetBitmapSelected() -> wxBitmap
+        GetBitmapSelected() -> Bitmap
 
         Returns the bitmap for the selected state.
         """
@@ -154,7 +154,7 @@ class BitmapButton(Button):
 
     def SetBitmapDisabled(*args, **kwargs):
         """
-        SetBitmapDisabled(wxBitmap bitmap)
+        SetBitmapDisabled(Bitmap bitmap)
 
         Sets the bitmap for the disabled button appearance.
         """
@@ -162,7 +162,7 @@ class BitmapButton(Button):
 
     def SetBitmapFocus(*args, **kwargs):
         """
-        SetBitmapFocus(wxBitmap bitmap)
+        SetBitmapFocus(Bitmap bitmap)
 
         Sets the bitmap for the button appearance when it has the keyboard focus.
         """
@@ -170,7 +170,7 @@ class BitmapButton(Button):
 
     def SetBitmapSelected(*args, **kwargs):
         """
-        SetBitmapSelected(wxBitmap bitmap)
+        SetBitmapSelected(Bitmap bitmap)
 
         Sets the bitmap for the selected (depressed) button appearance.
         """
@@ -178,7 +178,7 @@ class BitmapButton(Button):
 
     def SetBitmapLabel(*args, **kwargs):
         """
-        SetBitmapLabel(wxBitmap bitmap)
+        SetBitmapLabel(Bitmap bitmap)
 
         Sets the bitmap label for the button.  This is the bitmap used for the
         unselected state, and for all other states if no other bitmaps are provided.
@@ -228,10 +228,9 @@ class CheckBox(core.Control):
         return "<%s.%s; proxy of C++ wxCheckBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyCheckBoxNameStr) -> CheckBox
+            Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> CheckBox
         """
         newobj = _controls.new_CheckBox(*args, **kwargs)
         self.this = newobj.this
@@ -241,10 +240,9 @@ class CheckBox(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyCheckBoxNameStr) -> bool
+            Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> bool
         """
         return _controls.CheckBox_Create(*args, **kwargs)
 
@@ -261,11 +259,11 @@ class CheckBox(core.Control):
         return _controls.CheckBox_SetValue(*args, **kwargs)
 
     def Get3StateValue(*args, **kwargs):
-        """Get3StateValue() -> wxCheckBoxState"""
+        """Get3StateValue() -> int"""
         return _controls.CheckBox_Get3StateValue(*args, **kwargs)
 
     def Set3StateValue(*args, **kwargs):
-        """Set3StateValue(wxCheckBoxState state)"""
+        """Set3StateValue(int state)"""
         return _controls.CheckBox_Set3StateValue(*args, **kwargs)
 
     def Is3State(*args, **kwargs):
@@ -283,6 +281,7 @@ class CheckBoxPtr(CheckBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = CheckBox
 _controls.CheckBox_swigregister(CheckBoxPtr)
+CheckBoxNameStr = cvar.CheckBoxNameStr
 
 def PreCheckBox(*args, **kwargs):
     """PreCheckBox() -> CheckBox"""
@@ -298,9 +297,9 @@ class Choice(core.ControlWithItems):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyChoiceNameStr) -> Choice
+            String name=ChoiceNameStr) -> Choice
         """
         newobj = _controls.new_Choice(*args, **kwargs)
         self.this = newobj.this
@@ -311,9 +310,9 @@ class Choice(core.ControlWithItems):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyChoiceNameStr) -> bool
+            String name=ChoiceNameStr) -> bool
         """
         return _controls.Choice_Create(*args, **kwargs)
 
@@ -330,11 +329,11 @@ class Choice(core.ControlWithItems):
         return _controls.Choice_SetSelection(*args, **kwargs)
 
     def SetStringSelection(*args, **kwargs):
-        """SetStringSelection(wxString string)"""
+        """SetStringSelection(String string)"""
         return _controls.Choice_SetStringSelection(*args, **kwargs)
 
     def SetString(*args, **kwargs):
-        """SetString(int n, wxString s)"""
+        """SetString(int n, String s)"""
         return _controls.Choice_SetString(*args, **kwargs)
 
 
@@ -344,6 +343,7 @@ class ChoicePtr(Choice):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Choice
 _controls.Choice_swigregister(ChoicePtr)
+ChoiceNameStr = cvar.ChoiceNameStr
 
 def PreChoice(*args, **kwargs):
     """PreChoice() -> Choice"""
@@ -358,11 +358,11 @@ class ComboBox(Choice):
         return "<%s.%s; proxy of C++ wxComboBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString value=wxPyEmptyString, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+        __init__(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyComboBoxNameStr) -> ComboBox
+            String name=ComboBoxNameStr) -> ComboBox
         """
         newobj = _controls.new_ComboBox(*args, **kwargs)
         self.this = newobj.this
@@ -372,20 +372,20 @@ class ComboBox(Choice):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString value=wxPyEmptyString, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+        Create(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyComboBoxNameStr) -> bool
+            String name=ComboBoxNameStr) -> bool
         """
         return _controls.ComboBox_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> wxString"""
+        """GetValue() -> String"""
         return _controls.ComboBox_GetValue(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
-        """SetValue(wxString value)"""
+        """SetValue(String value)"""
         return _controls.ComboBox_SetValue(*args, **kwargs)
 
     def Copy(*args, **kwargs):
@@ -413,7 +413,7 @@ class ComboBox(Choice):
         return _controls.ComboBox_GetLastPosition(*args, **kwargs)
 
     def Replace(*args, **kwargs):
-        """Replace(long from, long to, wxString value)"""
+        """Replace(long from, long to, String value)"""
         return _controls.ComboBox_Replace(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
@@ -443,6 +443,7 @@ class ComboBoxPtr(ComboBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ComboBox
 _controls.ComboBox_swigregister(ComboBoxPtr)
+ComboBoxNameStr = cvar.ComboBoxNameStr
 
 def PreComboBox(*args, **kwargs):
     """PreComboBox() -> ComboBox"""
@@ -464,7 +465,7 @@ class Gauge(core.Control):
         __init__(Window parent, int id, int range, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=GA_HORIZONTAL, 
             Validator validator=DefaultValidator, 
-            wxString name=wxPyGaugeNameStr) -> Gauge
+            String name=GaugeNameStr) -> Gauge
         """
         newobj = _controls.new_Gauge(*args, **kwargs)
         self.this = newobj.this
@@ -477,7 +478,7 @@ class Gauge(core.Control):
         Create(Window parent, int id, int range, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=GA_HORIZONTAL, 
             Validator validator=DefaultValidator, 
-            wxString name=wxPyGaugeNameStr) -> bool
+            String name=GaugeNameStr) -> bool
         """
         return _controls.Gauge_Create(*args, **kwargs)
 
@@ -524,6 +525,7 @@ class GaugePtr(Gauge):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Gauge
 _controls.Gauge_swigregister(GaugePtr)
+GaugeNameStr = cvar.GaugeNameStr
 
 def PreGauge(*args, **kwargs):
     """PreGauge() -> Gauge"""
@@ -538,9 +540,9 @@ class StaticBox(core.Control):
         return "<%s.%s; proxy of C++ wxStaticBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            wxString name=wxPyStaticBoxNameStr) -> StaticBox
+            String name=StaticBoxNameStr) -> StaticBox
         """
         newobj = _controls.new_StaticBox(*args, **kwargs)
         self.this = newobj.this
@@ -550,9 +552,9 @@ class StaticBox(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            wxString name=wxPyStaticBoxNameStr) -> bool
+            String name=StaticBoxNameStr) -> bool
         """
         return _controls.StaticBox_Create(*args, **kwargs)
 
@@ -563,6 +565,9 @@ class StaticBoxPtr(StaticBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = StaticBox
 _controls.StaticBox_swigregister(StaticBoxPtr)
+StaticBitmapNameStr = cvar.StaticBitmapNameStr
+StaticBoxNameStr = cvar.StaticBoxNameStr
+StaticTextNameStr = cvar.StaticTextNameStr
 
 def PreStaticBox(*args, **kwargs):
     """PreStaticBox() -> StaticBox"""
@@ -579,7 +584,7 @@ class StaticLine(core.Control):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=LI_HORIZONTAL, 
-            wxString name=wxPyStaticTextNameStr) -> StaticLine
+            String name=StaticTextNameStr) -> StaticLine
         """
         newobj = _controls.new_StaticLine(*args, **kwargs)
         self.this = newobj.this
@@ -591,7 +596,7 @@ class StaticLine(core.Control):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=LI_HORIZONTAL, 
-            wxString name=wxPyStaticTextNameStr) -> bool
+            String name=StaticTextNameStr) -> bool
         """
         return _controls.StaticLine_Create(*args, **kwargs)
 
@@ -629,9 +634,9 @@ class StaticText(core.Control):
         return "<%s.%s; proxy of C++ wxStaticText instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            wxString name=wxPyStaticTextNameStr) -> StaticText
+            String name=StaticTextNameStr) -> StaticText
         """
         newobj = _controls.new_StaticText(*args, **kwargs)
         self.this = newobj.this
@@ -641,9 +646,9 @@ class StaticText(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            wxString name=wxPyStaticTextNameStr) -> bool
+            String name=StaticTextNameStr) -> bool
         """
         return _controls.StaticText_Create(*args, **kwargs)
 
@@ -668,9 +673,9 @@ class StaticBitmap(core.Control):
         return "<%s.%s; proxy of C++ wxStaticBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            wxString name=wxPyStaticBitmapNameStr) -> StaticBitmap
+            String name=StaticBitmapNameStr) -> StaticBitmap
         """
         newobj = _controls.new_StaticBitmap(*args, **kwargs)
         self.this = newobj.this
@@ -678,22 +683,22 @@ class StaticBitmap(core.Control):
         del newobj.thisown
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
+        Create(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            wxString name=wxPyStaticBitmapNameStr) -> bool
+            String name=StaticBitmapNameStr) -> bool
         """
         return _controls.StaticBitmap_Create(*args, **kwargs)
 
     def GetBitmap(*args, **kwargs):
-        """GetBitmap() -> wxBitmap"""
+        """GetBitmap() -> Bitmap"""
         return _controls.StaticBitmap_GetBitmap(*args, **kwargs)
 
     def SetBitmap(*args, **kwargs):
-        """SetBitmap(wxBitmap bitmap)"""
+        """SetBitmap(Bitmap bitmap)"""
         return _controls.StaticBitmap_SetBitmap(*args, **kwargs)
 
     def SetIcon(*args, **kwargs):
-        """SetIcon(wxIcon icon)"""
+        """SetIcon(Icon icon)"""
         return _controls.StaticBitmap_SetIcon(*args, **kwargs)
 
 
@@ -718,9 +723,9 @@ class ListBox(core.ControlWithItems):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyListBoxNameStr) -> ListBox
+            String name=ListBoxNameStr) -> ListBox
         """
         newobj = _controls.new_ListBox(*args, **kwargs)
         self.this = newobj.this
@@ -731,14 +736,14 @@ class ListBox(core.ControlWithItems):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyListBoxNameStr) -> bool
+            String name=ListBoxNameStr) -> bool
         """
         return _controls.ListBox_Create(*args, **kwargs)
 
     def Insert(*args, **kwargs):
-        """Insert(wxString item, int pos, PyObject clientData=None)"""
+        """Insert(String item, int pos, PyObject clientData=None)"""
         return _controls.ListBox_Insert(*args, **kwargs)
 
     def InsertItems(*args, **kwargs):
@@ -770,7 +775,7 @@ class ListBox(core.ControlWithItems):
         return _controls.ListBox_DeselectAll(*args, **kwargs)
 
     def SetStringSelection(*args, **kwargs):
-        """SetStringSelection(wxString s, bool select=True) -> bool"""
+        """SetStringSelection(String s, bool select=True) -> bool"""
         return _controls.ListBox_SetStringSelection(*args, **kwargs)
 
     def GetSelections(*args, **kwargs):
@@ -782,7 +787,7 @@ class ListBox(core.ControlWithItems):
         return _controls.ListBox_SetFirstItem(*args, **kwargs)
 
     def SetFirstItemStr(*args, **kwargs):
-        """SetFirstItemStr(wxString s)"""
+        """SetFirstItemStr(String s)"""
         return _controls.ListBox_SetFirstItemStr(*args, **kwargs)
 
     def EnsureVisible(*args, **kwargs):
@@ -790,7 +795,7 @@ class ListBox(core.ControlWithItems):
         return _controls.ListBox_EnsureVisible(*args, **kwargs)
 
     def AppendAndEnsureVisible(*args, **kwargs):
-        """AppendAndEnsureVisible(wxString s)"""
+        """AppendAndEnsureVisible(String s)"""
         return _controls.ListBox_AppendAndEnsureVisible(*args, **kwargs)
 
     def IsSorted(*args, **kwargs):
@@ -804,6 +809,7 @@ class ListBoxPtr(ListBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ListBox
 _controls.ListBox_swigregister(ListBoxPtr)
+ListBoxNameStr = cvar.ListBoxNameStr
 
 def PreListBox(*args, **kwargs):
     """PreListBox() -> ListBox"""
@@ -819,9 +825,9 @@ class CheckListBox(ListBox):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyListBoxNameStr) -> CheckListBox
+            String name=ListBoxNameStr) -> CheckListBox
         """
         newobj = _controls.new_CheckListBox(*args, **kwargs)
         self.this = newobj.this
@@ -830,9 +836,9 @@ class CheckListBox(ListBox):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, wxString choices_array=None, 
+            int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyListBoxNameStr) -> bool
+            String name=ListBoxNameStr) -> bool
         """
         return _controls.CheckListBox_Create(*args, **kwargs)
 
@@ -914,8 +920,8 @@ class TextAttr(object):
     def __init__(self, *args):
         """
         __init__() -> TextAttr
-        __init__(wxColour colText, wxColour colBack=wxNullColour, wxFont font=wxNullFont, 
-            wxTextAttrAlignment alignment=TEXT_ALIGNMENT_DEFAULT) -> TextAttr
+        __init__(Colour colText, Colour colBack=wxNullColour, Font font=wxNullFont, 
+            int alignment=TEXT_ALIGNMENT_DEFAULT) -> TextAttr
         """
         newobj = _controls.new_TextAttr(*args)
         self.this = newobj.this
@@ -926,19 +932,19 @@ class TextAttr(object):
         return _controls.TextAttr_Init(*args, **kwargs)
 
     def SetTextColour(*args, **kwargs):
-        """SetTextColour(wxColour colText)"""
+        """SetTextColour(Colour colText)"""
         return _controls.TextAttr_SetTextColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(wxColour colBack)"""
+        """SetBackgroundColour(Colour colBack)"""
         return _controls.TextAttr_SetBackgroundColour(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(wxFont font, long flags=TEXT_ATTR_FONT)"""
+        """SetFont(Font font, long flags=TEXT_ATTR_FONT)"""
         return _controls.TextAttr_SetFont(*args, **kwargs)
 
     def SetAlignment(*args, **kwargs):
-        """SetAlignment(wxTextAttrAlignment alignment)"""
+        """SetAlignment(int alignment)"""
         return _controls.TextAttr_SetAlignment(*args, **kwargs)
 
     def SetTabs(*args, **kwargs):
@@ -990,19 +996,19 @@ class TextAttr(object):
         return _controls.TextAttr_HasFlag(*args, **kwargs)
 
     def GetTextColour(*args, **kwargs):
-        """GetTextColour() -> wxColour"""
+        """GetTextColour() -> Colour"""
         return _controls.TextAttr_GetTextColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> wxColour"""
+        """GetBackgroundColour() -> Colour"""
         return _controls.TextAttr_GetBackgroundColour(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> wxFont"""
+        """GetFont() -> Font"""
         return _controls.TextAttr_GetFont(*args, **kwargs)
 
     def GetAlignment(*args, **kwargs):
-        """GetAlignment() -> wxTextAttrAlignment"""
+        """GetAlignment() -> int"""
         return _controls.TextAttr_GetAlignment(*args, **kwargs)
 
     def GetTabs(*args, **kwargs):
@@ -1037,6 +1043,7 @@ class TextAttrPtr(TextAttr):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TextAttr
 _controls.TextAttr_swigregister(TextAttrPtr)
+TextCtrlNameStr = cvar.TextCtrlNameStr
 
 def TextAttr_Combine(*args, **kwargs):
     """TextAttr_Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
@@ -1047,10 +1054,10 @@ class TextCtrl(core.Control):
         return "<%s.%s; proxy of C++ wxTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString value=wxPyEmptyString, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
+        __init__(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyTextCtrlNameStr) -> TextCtrl
+            String name=TextCtrlNameStr) -> TextCtrl
         """
         newobj = _controls.new_TextCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -1060,23 +1067,23 @@ class TextCtrl(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString value=wxPyEmptyString, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
+        Create(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyTextCtrlNameStr) -> bool
+            String name=TextCtrlNameStr) -> bool
         """
         return _controls.TextCtrl_Create(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> wxString"""
+        """GetValue() -> String"""
         return _controls.TextCtrl_GetValue(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
-        """SetValue(wxString value)"""
+        """SetValue(String value)"""
         return _controls.TextCtrl_SetValue(*args, **kwargs)
 
     def GetRange(*args, **kwargs):
-        """GetRange(long from, long to) -> wxString"""
+        """GetRange(long from, long to) -> String"""
         return _controls.TextCtrl_GetRange(*args, **kwargs)
 
     def GetLineLength(*args, **kwargs):
@@ -1084,7 +1091,7 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_GetLineLength(*args, **kwargs)
 
     def GetLineText(*args, **kwargs):
-        """GetLineText(long lineNo) -> wxString"""
+        """GetLineText(long lineNo) -> String"""
         return _controls.TextCtrl_GetLineText(*args, **kwargs)
 
     def GetNumberOfLines(*args, **kwargs):
@@ -1116,7 +1123,7 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
-        """GetStringSelection() -> wxString"""
+        """GetStringSelection() -> String"""
         return _controls.TextCtrl_GetStringSelection(*args, **kwargs)
 
     def Clear(*args, **kwargs):
@@ -1124,7 +1131,7 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_Clear(*args, **kwargs)
 
     def Replace(*args, **kwargs):
-        """Replace(long from, long to, wxString value)"""
+        """Replace(long from, long to, String value)"""
         return _controls.TextCtrl_Replace(*args, **kwargs)
 
     def Remove(*args, **kwargs):
@@ -1132,11 +1139,11 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_Remove(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(wxString file) -> bool"""
+        """LoadFile(String file) -> bool"""
         return _controls.TextCtrl_LoadFile(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(wxString file=wxPyEmptyString) -> bool"""
+        """SaveFile(String file=EmptyString) -> bool"""
         return _controls.TextCtrl_SaveFile(*args, **kwargs)
 
     def MarkDirty(*args, **kwargs):
@@ -1152,11 +1159,11 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_SetMaxLength(*args, **kwargs)
 
     def WriteText(*args, **kwargs):
-        """WriteText(wxString text)"""
+        """WriteText(String text)"""
         return _controls.TextCtrl_WriteText(*args, **kwargs)
 
     def AppendText(*args, **kwargs):
-        """AppendText(wxString text)"""
+        """AppendText(String text)"""
         return _controls.TextCtrl_AppendText(*args, **kwargs)
 
     def EmulateKeyPress(*args, **kwargs):
@@ -1268,11 +1275,11 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_HideNativeCaret(*args, **kwargs)
 
     def write(*args, **kwargs):
-        """write(wxString text)"""
+        """write(String text)"""
         return _controls.TextCtrl_write(*args, **kwargs)
 
     def GetString(*args, **kwargs):
-        """GetString(long from, long to) -> wxString"""
+        """GetString(long from, long to) -> String"""
         return _controls.TextCtrl_GetString(*args, **kwargs)
 
 
@@ -1336,7 +1343,7 @@ class ScrollBar(core.Control):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SB_HORIZONTAL, 
-            Validator validator=DefaultValidator, wxString name=wxPyScrollBarNameStr) -> ScrollBar
+            Validator validator=DefaultValidator, String name=ScrollBarNameStr) -> ScrollBar
         """
         newobj = _controls.new_ScrollBar(*args, **kwargs)
         self.this = newobj.this
@@ -1348,7 +1355,7 @@ class ScrollBar(core.Control):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SB_HORIZONTAL, 
-            Validator validator=DefaultValidator, wxString name=wxPyScrollBarNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ScrollBarNameStr) -> bool
         """
         return _controls.ScrollBar_Create(*args, **kwargs)
 
@@ -1391,6 +1398,7 @@ class ScrollBarPtr(ScrollBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ScrollBar
 _controls.ScrollBar_swigregister(ScrollBarPtr)
+ScrollBarNameStr = cvar.ScrollBarNameStr
 
 def PreScrollBar(*args, **kwargs):
     """PreScrollBar() -> ScrollBar"""
@@ -1411,7 +1419,7 @@ class SpinButton(core.Control):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SP_HORIZONTAL, 
-            wxString name=wxPySPIN_BUTTON_NAME) -> SpinButton
+            String name=SPIN_BUTTON_NAME) -> SpinButton
         """
         newobj = _controls.new_SpinButton(*args, **kwargs)
         self.this = newobj.this
@@ -1423,7 +1431,7 @@ class SpinButton(core.Control):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SP_HORIZONTAL, 
-            wxString name=wxPySPIN_BUTTON_NAME) -> bool
+            String name=SPIN_BUTTON_NAME) -> bool
         """
         return _controls.SpinButton_Create(*args, **kwargs)
 
@@ -1466,6 +1474,8 @@ class SpinButtonPtr(SpinButton):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = SpinButton
 _controls.SpinButton_swigregister(SpinButtonPtr)
+SPIN_BUTTON_NAME = cvar.SPIN_BUTTON_NAME
+SpinCtrlNameStr = cvar.SpinCtrlNameStr
 
 def PreSpinButton(*args, **kwargs):
     """PreSpinButton() -> SpinButton"""
@@ -1478,10 +1488,10 @@ class SpinCtrl(core.Control):
         return "<%s.%s; proxy of C++ wxSpinCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id=-1, wxString value=wxPyEmptyString, 
+        __init__(Window parent, int id=-1, String value=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SP_ARROW_KEYS, int min=0, 
-            int max=100, int initial=0, wxString name=wxPySpinCtrlNameStr) -> SpinCtrl
+            long style=SP_ARROW_KEYS, int min=0, int max=100, 
+            int initial=0, String name=SpinCtrlNameStr) -> SpinCtrl
         """
         newobj = _controls.new_SpinCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -1491,10 +1501,10 @@ class SpinCtrl(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id=-1, wxString value=wxPyEmptyString, 
+        Create(Window parent, int id=-1, String value=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SP_ARROW_KEYS, int min=0, 
-            int max=100, int initial=0, wxString name=wxPySpinCtrlNameStr) -> bool
+            long style=SP_ARROW_KEYS, int min=0, int max=100, 
+            int initial=0, String name=SpinCtrlNameStr) -> bool
         """
         return _controls.SpinCtrl_Create(*args, **kwargs)
 
@@ -1507,7 +1517,7 @@ class SpinCtrl(core.Control):
         return _controls.SpinCtrl_SetValue(*args, **kwargs)
 
     def SetValueString(*args, **kwargs):
-        """SetValueString(wxString text)"""
+        """SetValueString(String text)"""
         return _controls.SpinCtrl_SetValueString(*args, **kwargs)
 
     def SetRange(*args, **kwargs):
@@ -1550,11 +1560,11 @@ class RadioBox(core.Control):
         return "<%s.%s; proxy of C++ wxRadioBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString label, Point point=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point point=DefaultPosition, 
             Size size=DefaultSize, int choices=0, 
-            wxString choices_array=None, int majorDimension=0, 
+            String choices_array=None, int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
-            wxString name=wxPyRadioBoxNameStr) -> RadioBox
+            String name=RadioBoxNameStr) -> RadioBox
         """
         newobj = _controls.new_RadioBox(*args, **kwargs)
         self.this = newobj.this
@@ -1564,11 +1574,11 @@ class RadioBox(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString label, Point point=DefaultPosition, 
+        Create(Window parent, int id, String label, Point point=DefaultPosition, 
             Size size=DefaultSize, int choices=0, 
-            wxString choices_array=None, int majorDimension=0, 
+            String choices_array=None, int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
-            wxString name=wxPyRadioBoxNameStr) -> bool
+            String name=RadioBoxNameStr) -> bool
         """
         return _controls.RadioBox_Create(*args, **kwargs)
 
@@ -1581,11 +1591,11 @@ class RadioBox(core.Control):
         return _controls.RadioBox_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
-        """GetStringSelection() -> wxString"""
+        """GetStringSelection() -> String"""
         return _controls.RadioBox_GetStringSelection(*args, **kwargs)
 
     def SetStringSelection(*args, **kwargs):
-        """SetStringSelection(wxString s) -> bool"""
+        """SetStringSelection(String s) -> bool"""
         return _controls.RadioBox_SetStringSelection(*args, **kwargs)
 
     def GetCount(*args, **kwargs):
@@ -1593,15 +1603,15 @@ class RadioBox(core.Control):
         return _controls.RadioBox_GetCount(*args, **kwargs)
 
     def FindString(*args, **kwargs):
-        """FindString(wxString s) -> int"""
+        """FindString(String s) -> int"""
         return _controls.RadioBox_FindString(*args, **kwargs)
 
     def GetString(*args, **kwargs):
-        """GetString(int n) -> wxString"""
+        """GetString(int n) -> String"""
         return _controls.RadioBox_GetString(*args, **kwargs)
 
     def SetString(*args, **kwargs):
-        """SetString(int n, wxString label)"""
+        """SetString(int n, String label)"""
         return _controls.RadioBox_SetString(*args, **kwargs)
 
     GetItemLabel = GetString 
@@ -1623,7 +1633,7 @@ class RadioBox(core.Control):
         return _controls.RadioBox_GetRowCount(*args, **kwargs)
 
     def GetNextItem(*args, **kwargs):
-        """GetNextItem(int item, wxDirection dir, long style) -> int"""
+        """GetNextItem(int item, int dir, long style) -> int"""
         return _controls.RadioBox_GetNextItem(*args, **kwargs)
 
 
@@ -1633,6 +1643,8 @@ class RadioBoxPtr(RadioBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = RadioBox
 _controls.RadioBox_swigregister(RadioBoxPtr)
+RadioBoxNameStr = cvar.RadioBoxNameStr
+RadioButtonNameStr = cvar.RadioButtonNameStr
 
 def PreRadioBox(*args, **kwargs):
     """PreRadioBox() -> RadioBox"""
@@ -1647,10 +1659,9 @@ class RadioButton(core.Control):
         return "<%s.%s; proxy of C++ wxRadioButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyRadioButtonNameStr) -> RadioButton
+            Validator validator=DefaultValidator, String name=RadioButtonNameStr) -> RadioButton
         """
         newobj = _controls.new_RadioButton(*args, **kwargs)
         self.this = newobj.this
@@ -1660,10 +1671,9 @@ class RadioButton(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyRadioButtonNameStr) -> bool
+            Validator validator=DefaultValidator, String name=RadioButtonNameStr) -> bool
         """
         return _controls.RadioButton_Create(*args, **kwargs)
 
@@ -1699,7 +1709,7 @@ class Slider(core.Control):
         __init__(Window parent, int id, int value, int minValue, int maxValue, 
             Point point=DefaultPosition, Size size=DefaultSize, 
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
-            wxString name=wxPySliderNameStr) -> Slider
+            String name=SliderNameStr) -> Slider
         """
         newobj = _controls.new_Slider(*args, **kwargs)
         self.this = newobj.this
@@ -1712,7 +1722,7 @@ class Slider(core.Control):
         Create(Window parent, int id, int value, int minValue, int maxValue, 
             Point point=DefaultPosition, Size size=DefaultSize, 
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
-            wxString name=wxPySliderNameStr) -> bool
+            String name=SliderNameStr) -> bool
         """
         return _controls.Slider_Create(*args, **kwargs)
 
@@ -1807,6 +1817,7 @@ class SliderPtr(Slider):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Slider
 _controls.Slider_swigregister(SliderPtr)
+SliderNameStr = cvar.SliderNameStr
 
 def PreSlider(*args, **kwargs):
     """PreSlider() -> Slider"""
@@ -1824,10 +1835,9 @@ class ToggleButton(core.Control):
         return "<%s.%s; proxy of C++ wxToggleButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyToggleButtonNameStr) -> ToggleButton
+            Validator validator=DefaultValidator, String name=ToggleButtonNameStr) -> ToggleButton
         """
         newobj = _controls.new_ToggleButton(*args, **kwargs)
         self.this = newobj.this
@@ -1837,10 +1847,9 @@ class ToggleButton(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+        Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, 
-            wxString name=wxPyToggleButtonNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ToggleButtonNameStr) -> bool
         """
         return _controls.ToggleButton_Create(*args, **kwargs)
 
@@ -1853,7 +1862,7 @@ class ToggleButton(core.Control):
         return _controls.ToggleButton_GetValue(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(wxString label)"""
+        """SetLabel(String label)"""
         return _controls.ToggleButton_SetLabel(*args, **kwargs)
 
 
@@ -1863,6 +1872,7 @@ class ToggleButtonPtr(ToggleButton):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ToggleButton
 _controls.ToggleButton_swigregister(ToggleButtonPtr)
+ToggleButtonNameStr = cvar.ToggleButtonNameStr
 
 def PreToggleButton(*args, **kwargs):
     """PreToggleButton() -> ToggleButton"""
@@ -1889,25 +1899,25 @@ class BookCtrl(core.Control):
         return _controls.BookCtrl_GetSelection(*args, **kwargs)
 
     def SetPageText(*args, **kwargs):
-        """SetPageText(size_t n, wxString strText) -> bool"""
+        """SetPageText(size_t n, String strText) -> bool"""
         return _controls.BookCtrl_SetPageText(*args, **kwargs)
 
     def GetPageText(*args, **kwargs):
-        """GetPageText(size_t n) -> wxString"""
+        """GetPageText(size_t n) -> String"""
         return _controls.BookCtrl_GetPageText(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
-        """SetImageList(wxImageList imageList)"""
+        """SetImageList(ImageList imageList)"""
         return _controls.BookCtrl_SetImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
-        """AssignImageList(wxImageList imageList)"""
+        """AssignImageList(ImageList imageList)"""
         val = _controls.BookCtrl_AssignImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def GetImageList(*args, **kwargs):
-        """GetImageList() -> wxImageList"""
+        """GetImageList() -> ImageList"""
         return _controls.BookCtrl_GetImageList(*args, **kwargs)
 
     def GetPageImage(*args, **kwargs):
@@ -1939,12 +1949,12 @@ class BookCtrl(core.Control):
         return _controls.BookCtrl_DeleteAllPages(*args, **kwargs)
 
     def AddPage(*args, **kwargs):
-        """AddPage(Window page, wxString text, bool select=False, int imageId=-1) -> bool"""
+        """AddPage(Window page, String text, bool select=False, int imageId=-1) -> bool"""
         return _controls.BookCtrl_AddPage(*args, **kwargs)
 
     def InsertPage(*args, **kwargs):
         """
-        InsertPage(size_t n, Window page, wxString text, bool select=False, 
+        InsertPage(size_t n, Window page, String text, bool select=False, 
             int imageId=-1) -> bool
         """
         return _controls.BookCtrl_InsertPage(*args, **kwargs)
@@ -1964,6 +1974,7 @@ class BookCtrlPtr(BookCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = BookCtrl
 _controls.BookCtrl_swigregister(BookCtrlPtr)
+NOTEBOOK_NAME = cvar.NOTEBOOK_NAME
 
 class BookCtrlEvent(core.NotifyEvent):
     def __repr__(self):
@@ -2019,7 +2030,7 @@ class Notebook(BookCtrl):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=wxPyNOTEBOOK_NAME) -> Notebook
+            long style=0, String name=NOTEBOOK_NAME) -> Notebook
         """
         newobj = _controls.new_Notebook(*args, **kwargs)
         self.this = newobj.this
@@ -2030,7 +2041,7 @@ class Notebook(BookCtrl):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=wxPyNOTEBOOK_NAME) -> bool
+            long style=0, String name=NOTEBOOK_NAME) -> bool
         """
         return _controls.Notebook_Create(*args, **kwargs)
 
@@ -2059,7 +2070,7 @@ class Notebook(BookCtrl):
         return _controls.Notebook_CalcSizeFromPage(*args, **kwargs)
 
     def ApplyThemeBackground(*args, **kwargs):
-        """ApplyThemeBackground(Window window, wxColour colour)"""
+        """ApplyThemeBackground(Window window, Colour colour)"""
         return _controls.Notebook_ApplyThemeBackground(*args, **kwargs)
 
 
@@ -2146,7 +2157,7 @@ class Listbook(BookCtrl):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=wxPyEmptyString) -> Listbook
+            long style=0, String name=EmptyString) -> Listbook
         """
         newobj = _controls.new_Listbook(*args, **kwargs)
         self.this = newobj.this
@@ -2157,7 +2168,7 @@ class Listbook(BookCtrl):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=wxPyEmptyString) -> bool
+            long style=0, String name=EmptyString) -> bool
         """
         return _controls.Listbook_Create(*args, **kwargs)
 
@@ -2317,7 +2328,7 @@ class ToolBarToolBase(core.Object):
         return _controls.ToolBarToolBase_GetStyle(*args, **kwargs)
 
     def GetKind(*args, **kwargs):
-        """GetKind() -> wxItemKind"""
+        """GetKind() -> int"""
         return _controls.ToolBarToolBase_GetKind(*args, **kwargs)
 
     def IsEnabled(*args, **kwargs):
@@ -2333,27 +2344,27 @@ class ToolBarToolBase(core.Object):
         return _controls.ToolBarToolBase_CanBeToggled(*args, **kwargs)
 
     def GetNormalBitmap(*args, **kwargs):
-        """GetNormalBitmap() -> wxBitmap"""
+        """GetNormalBitmap() -> Bitmap"""
         return _controls.ToolBarToolBase_GetNormalBitmap(*args, **kwargs)
 
     def GetDisabledBitmap(*args, **kwargs):
-        """GetDisabledBitmap() -> wxBitmap"""
+        """GetDisabledBitmap() -> Bitmap"""
         return _controls.ToolBarToolBase_GetDisabledBitmap(*args, **kwargs)
 
     def GetBitmap(*args, **kwargs):
-        """GetBitmap() -> wxBitmap"""
+        """GetBitmap() -> Bitmap"""
         return _controls.ToolBarToolBase_GetBitmap(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> wxString"""
+        """GetLabel() -> String"""
         return _controls.ToolBarToolBase_GetLabel(*args, **kwargs)
 
     def GetShortHelp(*args, **kwargs):
-        """GetShortHelp() -> wxString"""
+        """GetShortHelp() -> String"""
         return _controls.ToolBarToolBase_GetShortHelp(*args, **kwargs)
 
     def GetLongHelp(*args, **kwargs):
-        """GetLongHelp() -> wxString"""
+        """GetLongHelp() -> String"""
         return _controls.ToolBarToolBase_GetLongHelp(*args, **kwargs)
 
     def Enable(*args, **kwargs):
@@ -2369,23 +2380,23 @@ class ToolBarToolBase(core.Object):
         return _controls.ToolBarToolBase_SetToggle(*args, **kwargs)
 
     def SetShortHelp(*args, **kwargs):
-        """SetShortHelp(wxString help) -> bool"""
+        """SetShortHelp(String help) -> bool"""
         return _controls.ToolBarToolBase_SetShortHelp(*args, **kwargs)
 
     def SetLongHelp(*args, **kwargs):
-        """SetLongHelp(wxString help) -> bool"""
+        """SetLongHelp(String help) -> bool"""
         return _controls.ToolBarToolBase_SetLongHelp(*args, **kwargs)
 
     def SetNormalBitmap(*args, **kwargs):
-        """SetNormalBitmap(wxBitmap bmp)"""
+        """SetNormalBitmap(Bitmap bmp)"""
         return _controls.ToolBarToolBase_SetNormalBitmap(*args, **kwargs)
 
     def SetDisabledBitmap(*args, **kwargs):
-        """SetDisabledBitmap(wxBitmap bmp)"""
+        """SetDisabledBitmap(Bitmap bmp)"""
         return _controls.ToolBarToolBase_SetDisabledBitmap(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(wxString label)"""
+        """SetLabel(String label)"""
         return _controls.ToolBarToolBase_SetLabel(*args, **kwargs)
 
     def Detach(*args, **kwargs):
@@ -2423,19 +2434,18 @@ class ToolBarBase(core.Control):
         return "<%s.%s; proxy of C++ wxToolBarBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def DoAddTool(*args, **kwargs):
         """
-        DoAddTool(int id, wxString label, wxBitmap bitmap, wxBitmap bmpDisabled=wxNullBitmap, 
-            wxItemKind kind=ITEM_NORMAL, 
-            wxString shortHelp=wxPyEmptyString, 
-            wxString longHelp=wxPyEmptyString, PyObject clientData=None) -> ToolBarToolBase
+        DoAddTool(int id, String label, Bitmap bitmap, Bitmap bmpDisabled=wxNullBitmap, 
+            int kind=ITEM_NORMAL, String shortHelp=EmptyString, 
+            String longHelp=EmptyString, 
+            PyObject clientData=None) -> ToolBarToolBase
         """
         return _controls.ToolBarBase_DoAddTool(*args, **kwargs)
 
     def DoInsertTool(*args, **kwargs):
         """
-        DoInsertTool(size_t pos, int id, wxString label, wxBitmap bitmap, 
-            wxBitmap bmpDisabled=wxNullBitmap, wxItemKind kind=ITEM_NORMAL, 
-            wxString shortHelp=wxPyEmptyString, 
-            wxString longHelp=wxPyEmptyString, 
+        DoInsertTool(size_t pos, int id, String label, Bitmap bitmap, Bitmap bmpDisabled=wxNullBitmap, 
+            int kind=ITEM_NORMAL, 
+            String shortHelp=EmptyString, String longHelp=EmptyString, 
             PyObject clientData=None) -> ToolBarToolBase
         """
         return _controls.ToolBarBase_DoInsertTool(*args, **kwargs)
@@ -2563,6 +2573,14 @@ class ToolBarBase(core.Control):
         return self.DoAddTool(id, '', bitmap, bmpDisabled, wx.ITEM_RADIO,
                               shortHelp, longHelp, clientData)
 
+    def AddToolItem(*args, **kwargs):
+        """AddToolItem(ToolBarToolBase tool) -> ToolBarToolBase"""
+        return _controls.ToolBarBase_AddToolItem(*args, **kwargs)
+
+    def InsertToolItem(*args, **kwargs):
+        """InsertToolItem(size_t pos, ToolBarToolBase tool) -> ToolBarToolBase"""
+        return _controls.ToolBarBase_InsertToolItem(*args, **kwargs)
+
     def AddControl(*args, **kwargs):
         """AddControl(Control control) -> ToolBarToolBase"""
         return _controls.ToolBarBase_AddControl(*args, **kwargs)
@@ -2636,19 +2654,19 @@ class ToolBarBase(core.Control):
         return _controls.ToolBarBase_GetToolEnabled(*args, **kwargs)
 
     def SetToolShortHelp(*args, **kwargs):
-        """SetToolShortHelp(int id, wxString helpString)"""
+        """SetToolShortHelp(int id, String helpString)"""
         return _controls.ToolBarBase_SetToolShortHelp(*args, **kwargs)
 
     def GetToolShortHelp(*args, **kwargs):
-        """GetToolShortHelp(int id) -> wxString"""
+        """GetToolShortHelp(int id) -> String"""
         return _controls.ToolBarBase_GetToolShortHelp(*args, **kwargs)
 
     def SetToolLongHelp(*args, **kwargs):
-        """SetToolLongHelp(int id, wxString helpString)"""
+        """SetToolLongHelp(int id, String helpString)"""
         return _controls.ToolBarBase_SetToolLongHelp(*args, **kwargs)
 
     def GetToolLongHelp(*args, **kwargs):
-        """GetToolLongHelp(int id) -> wxString"""
+        """GetToolLongHelp(int id) -> String"""
         return _controls.ToolBarBase_GetToolLongHelp(*args, **kwargs)
 
     def SetMarginsXY(*args, **kwargs):
@@ -2715,6 +2733,10 @@ class ToolBarBase(core.Control):
         """FindToolForPosition(int x, int y) -> ToolBarToolBase"""
         return _controls.ToolBarBase_FindToolForPosition(*args, **kwargs)
 
+    def FindById(*args, **kwargs):
+        """FindById(int toolid) -> ToolBarToolBase"""
+        return _controls.ToolBarBase_FindById(*args, **kwargs)
+
     def IsVertical(*args, **kwargs):
         """IsVertical() -> bool"""
         return _controls.ToolBarBase_IsVertical(*args, **kwargs)
@@ -2734,7 +2756,7 @@ class ToolBar(ToolBarBase):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxNO_BORDER|wxTB_HORIZONTAL, 
-            wxString name=wxPyToolBarNameStr) -> ToolBar
+            String name=wxPyToolBarNameStr) -> ToolBar
         """
         newobj = _controls.new_ToolBar(*args, **kwargs)
         self.this = newobj.this
@@ -2746,7 +2768,7 @@ class ToolBar(ToolBarBase):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxNO_BORDER|wxTB_HORIZONTAL, 
-            wxString name=wxPyToolBarNameStr) -> bool
+            String name=wxPyToolBarNameStr) -> bool
         """
         return _controls.ToolBar_Create(*args, **kwargs)
 
@@ -2845,23 +2867,23 @@ class ListItemAttr(object):
         return "<%s.%s; proxy of C++ wxListItemAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(wxColour colText=wxNullColour, wxColour colBack=wxNullColour, 
-            wxFont font=wxNullFont) -> ListItemAttr
+        __init__(Colour colText=wxNullColour, Colour colBack=wxNullColour, 
+            Font font=wxNullFont) -> ListItemAttr
         """
         newobj = _controls.new_ListItemAttr(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def SetTextColour(*args, **kwargs):
-        """SetTextColour(wxColour colText)"""
+        """SetTextColour(Colour colText)"""
         return _controls.ListItemAttr_SetTextColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(wxColour colBack)"""
+        """SetBackgroundColour(Colour colBack)"""
         return _controls.ListItemAttr_SetBackgroundColour(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(wxFont font)"""
+        """SetFont(Font font)"""
         return _controls.ListItemAttr_SetFont(*args, **kwargs)
 
     def HasTextColour(*args, **kwargs):
@@ -2877,15 +2899,15 @@ class ListItemAttr(object):
         return _controls.ListItemAttr_HasFont(*args, **kwargs)
 
     def GetTextColour(*args, **kwargs):
-        """GetTextColour() -> wxColour"""
+        """GetTextColour() -> Colour"""
         return _controls.ListItemAttr_GetTextColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> wxColour"""
+        """GetBackgroundColour() -> Colour"""
         return _controls.ListItemAttr_GetBackgroundColour(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> wxFont"""
+        """GetFont() -> Font"""
         return _controls.ListItemAttr_GetFont(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
@@ -2899,6 +2921,7 @@ class ListItemAttrPtr(ListItemAttr):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ListItemAttr
 _controls.ListItemAttr_swigregister(ListItemAttrPtr)
+ListCtrlNameStr = cvar.ListCtrlNameStr
 
 #---------------------------------------------------------------------------
 
@@ -2946,7 +2969,7 @@ class ListItem(core.Object):
         return _controls.ListItem_SetStateMask(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(wxString text)"""
+        """SetText(String text)"""
         return _controls.ListItem_SetText(*args, **kwargs)
 
     def SetImage(*args, **kwargs):
@@ -2962,19 +2985,19 @@ class ListItem(core.Object):
         return _controls.ListItem_SetWidth(*args, **kwargs)
 
     def SetAlign(*args, **kwargs):
-        """SetAlign(wxListColumnFormat align)"""
+        """SetAlign(int align)"""
         return _controls.ListItem_SetAlign(*args, **kwargs)
 
     def SetTextColour(*args, **kwargs):
-        """SetTextColour(wxColour colText)"""
+        """SetTextColour(Colour colText)"""
         return _controls.ListItem_SetTextColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(wxColour colBack)"""
+        """SetBackgroundColour(Colour colBack)"""
         return _controls.ListItem_SetBackgroundColour(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(wxFont font)"""
+        """SetFont(Font font)"""
         return _controls.ListItem_SetFont(*args, **kwargs)
 
     def GetMask(*args, **kwargs):
@@ -2994,7 +3017,7 @@ class ListItem(core.Object):
         return _controls.ListItem_GetState(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> wxString"""
+        """GetText() -> String"""
         return _controls.ListItem_GetText(*args, **kwargs)
 
     def GetImage(*args, **kwargs):
@@ -3010,7 +3033,7 @@ class ListItem(core.Object):
         return _controls.ListItem_GetWidth(*args, **kwargs)
 
     def GetAlign(*args, **kwargs):
-        """GetAlign() -> wxListColumnFormat"""
+        """GetAlign() -> int"""
         return _controls.ListItem_GetAlign(*args, **kwargs)
 
     def GetAttributes(*args, **kwargs):
@@ -3022,15 +3045,15 @@ class ListItem(core.Object):
         return _controls.ListItem_HasAttributes(*args, **kwargs)
 
     def GetTextColour(*args, **kwargs):
-        """GetTextColour() -> wxColour"""
+        """GetTextColour() -> Colour"""
         return _controls.ListItem_GetTextColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> wxColour"""
+        """GetBackgroundColour() -> Colour"""
         return _controls.ListItem_GetBackgroundColour(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> wxFont"""
+        """GetFont() -> Font"""
         return _controls.ListItem_GetFont(*args, **kwargs)
 
     m_mask = property(_controls.ListItem_m_mask_get, _controls.ListItem_m_mask_set)
@@ -3087,11 +3110,11 @@ class ListEvent(core.NotifyEvent):
 
     GetPosition = GetPoint 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> wxString"""
+        """GetLabel() -> String"""
         return _controls.ListEvent_GetLabel(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> wxString"""
+        """GetText() -> String"""
         return _controls.ListEvent_GetText(*args, **kwargs)
 
     def GetImage(*args, **kwargs):
@@ -3188,7 +3211,7 @@ class ListCtrl(core.Control):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_ICON, 
-            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> ListCtrl
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> ListCtrl
         """
         newobj = _controls.new_ListCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -3200,7 +3223,7 @@ class ListCtrl(core.Control):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_ICON, 
-            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> bool
         """
         return _controls.ListCtrl_Create(*args, **kwargs)
 
@@ -3209,11 +3232,11 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl__setCallbackInfo(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
-        """SetForegroundColour(wxColour col) -> bool"""
+        """SetForegroundColour(Colour col) -> bool"""
         return _controls.ListCtrl_SetForegroundColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(wxColour col) -> bool"""
+        """SetBackgroundColour(Colour col) -> bool"""
         return _controls.ListCtrl_SetBackgroundColour(*args, **kwargs)
 
     def GetColumn(*args, **kwargs):
@@ -3257,7 +3280,7 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_SetItem(*args, **kwargs)
 
     def SetStringItem(*args, **kwargs):
-        """SetStringItem(long index, int col, wxString label, int imageId=-1) -> long"""
+        """SetStringItem(long index, int col, String label, int imageId=-1) -> long"""
         return _controls.ListCtrl_SetStringItem(*args, **kwargs)
 
     def GetItemState(*args, **kwargs):
@@ -3273,11 +3296,11 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_SetItemImage(*args, **kwargs)
 
     def GetItemText(*args, **kwargs):
-        """GetItemText(long item) -> wxString"""
+        """GetItemText(long item) -> String"""
         return _controls.ListCtrl_GetItemText(*args, **kwargs)
 
     def SetItemText(*args, **kwargs):
-        """SetItemText(long item, wxString str)"""
+        """SetItemText(long item, String str)"""
         return _controls.ListCtrl_SetItemText(*args, **kwargs)
 
     def GetItemData(*args, **kwargs):
@@ -3317,11 +3340,11 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_GetSelectedItemCount(*args, **kwargs)
 
     def GetTextColour(*args, **kwargs):
-        """GetTextColour() -> wxColour"""
+        """GetTextColour() -> Colour"""
         return _controls.ListCtrl_GetTextColour(*args, **kwargs)
 
     def SetTextColour(*args, **kwargs):
-        """SetTextColour(wxColour col)"""
+        """SetTextColour(Colour col)"""
         return _controls.ListCtrl_SetTextColour(*args, **kwargs)
 
     def GetTopItem(*args, **kwargs):
@@ -3341,15 +3364,15 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_GetNextItem(*args, **kwargs)
 
     def GetImageList(*args, **kwargs):
-        """GetImageList(int which) -> wxImageList"""
+        """GetImageList(int which) -> ImageList"""
         return _controls.ListCtrl_GetImageList(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
-        """SetImageList(wxImageList imageList, int which)"""
+        """SetImageList(ImageList imageList, int which)"""
         return _controls.ListCtrl_SetImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
-        """AssignImageList(wxImageList imageList, int which)"""
+        """AssignImageList(ImageList imageList, int which)"""
         val = _controls.ListCtrl_AssignImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
@@ -3403,7 +3426,7 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_EnsureVisible(*args, **kwargs)
 
     def FindItem(*args, **kwargs):
-        """FindItem(long start, wxString str, bool partial=False) -> long"""
+        """FindItem(long start, String str, bool partial=False) -> long"""
         return _controls.ListCtrl_FindItem(*args, **kwargs)
 
     def FindItemData(*args, **kwargs):
@@ -3428,7 +3451,7 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_InsertItem(*args, **kwargs)
 
     def InsertStringItem(*args, **kwargs):
-        """InsertStringItem(long index, wxString label) -> long"""
+        """InsertStringItem(long index, String label) -> long"""
         return _controls.ListCtrl_InsertStringItem(*args, **kwargs)
 
     def InsertImageItem(*args, **kwargs):
@@ -3436,7 +3459,7 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_InsertImageItem(*args, **kwargs)
 
     def InsertImageStringItem(*args, **kwargs):
-        """InsertImageStringItem(long index, wxString label, int imageIndex) -> long"""
+        """InsertImageStringItem(long index, String label, int imageIndex) -> long"""
         return _controls.ListCtrl_InsertImageStringItem(*args, **kwargs)
 
     def InsertColumnInfo(*args, **kwargs):
@@ -3445,7 +3468,7 @@ class ListCtrl(core.Control):
 
     def InsertColumn(*args, **kwargs):
         """
-        InsertColumn(long col, wxString heading, int format=LIST_FORMAT_LEFT, 
+        InsertColumn(long col, String heading, int format=LIST_FORMAT_LEFT, 
             int width=-1) -> long
         """
         return _controls.ListCtrl_InsertColumn(*args, **kwargs)
@@ -3459,19 +3482,19 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_ScrollList(*args, **kwargs)
 
     def SetItemTextColour(*args, **kwargs):
-        """SetItemTextColour(long item, wxColour col)"""
+        """SetItemTextColour(long item, Colour col)"""
         return _controls.ListCtrl_SetItemTextColour(*args, **kwargs)
 
     def GetItemTextColour(*args, **kwargs):
-        """GetItemTextColour(long item) -> wxColour"""
+        """GetItemTextColour(long item) -> Colour"""
         return _controls.ListCtrl_GetItemTextColour(*args, **kwargs)
 
     def SetItemBackgroundColour(*args, **kwargs):
-        """SetItemBackgroundColour(long item, wxColour col)"""
+        """SetItemBackgroundColour(long item, Colour col)"""
         return _controls.ListCtrl_SetItemBackgroundColour(*args, **kwargs)
 
     def GetItemBackgroundColour(*args, **kwargs):
-        """GetItemBackgroundColour(long item) -> wxColour"""
+        """GetItemBackgroundColour(long item) -> Colour"""
         return _controls.ListCtrl_GetItemBackgroundColour(*args, **kwargs)
 
     #
@@ -3564,7 +3587,7 @@ class ListView(ListCtrl):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_REPORT, 
-            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> ListView
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> ListView
         """
         newobj = _controls.new_ListView(*args, **kwargs)
         self.this = newobj.this
@@ -3576,7 +3599,7 @@ class ListView(ListCtrl):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_REPORT, 
-            Validator validator=DefaultValidator, wxString name=wxPyListCtrlNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> bool
         """
         return _controls.ListView_Create(*args, **kwargs)
 
@@ -3702,6 +3725,7 @@ class TreeItemIdPtr(TreeItemId):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TreeItemId
 _controls.TreeItemId_swigregister(TreeItemIdPtr)
+TreeCtrlNameStr = cvar.TreeCtrlNameStr
 
 class TreeItemData(object):
     def __repr__(self):
@@ -3829,11 +3853,11 @@ class TreeEvent(core.NotifyEvent):
         return _controls.TreeEvent_SetKeyEvent(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> wxString"""
+        """GetLabel() -> String"""
         return _controls.TreeEvent_GetLabel(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(wxString label)"""
+        """SetLabel(String label)"""
         return _controls.TreeEvent_SetLabel(*args, **kwargs)
 
     def IsEditCancelled(*args, **kwargs):
@@ -3845,7 +3869,7 @@ class TreeEvent(core.NotifyEvent):
         return _controls.TreeEvent_SetEditCanceled(*args, **kwargs)
 
     def SetToolTip(*args, **kwargs):
-        """SetToolTip(wxString toolTip)"""
+        """SetToolTip(String toolTip)"""
         return _controls.TreeEvent_SetToolTip(*args, **kwargs)
 
 
@@ -3866,7 +3890,7 @@ class TreeCtrl(core.Control):
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
-            wxString name=wxPy_TreeCtrlNameStr) -> TreeCtrl
+            String name=TreeCtrlNameStr) -> TreeCtrl
         """
         newobj = _controls.new_TreeCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -3879,7 +3903,7 @@ class TreeCtrl(core.Control):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
-            wxString name=wxPy_TreeCtrlNameStr) -> bool
+            String name=TreeCtrlNameStr) -> bool
         """
         return _controls.TreeCtrl_Create(*args, **kwargs)
 
@@ -3908,39 +3932,39 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_SetSpacing(*args, **kwargs)
 
     def GetImageList(*args, **kwargs):
-        """GetImageList() -> wxImageList"""
+        """GetImageList() -> ImageList"""
         return _controls.TreeCtrl_GetImageList(*args, **kwargs)
 
     def GetStateImageList(*args, **kwargs):
-        """GetStateImageList() -> wxImageList"""
+        """GetStateImageList() -> ImageList"""
         return _controls.TreeCtrl_GetStateImageList(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
-        """SetImageList(wxImageList imageList)"""
+        """SetImageList(ImageList imageList)"""
         return _controls.TreeCtrl_SetImageList(*args, **kwargs)
 
     def SetStateImageList(*args, **kwargs):
-        """SetStateImageList(wxImageList imageList)"""
+        """SetStateImageList(ImageList imageList)"""
         return _controls.TreeCtrl_SetStateImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
-        """AssignImageList(wxImageList imageList)"""
+        """AssignImageList(ImageList imageList)"""
         val = _controls.TreeCtrl_AssignImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def AssignStateImageList(*args, **kwargs):
-        """AssignStateImageList(wxImageList imageList)"""
+        """AssignStateImageList(ImageList imageList)"""
         val = _controls.TreeCtrl_AssignStateImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def GetItemText(*args, **kwargs):
-        """GetItemText(TreeItemId item) -> wxString"""
+        """GetItemText(TreeItemId item) -> String"""
         return _controls.TreeCtrl_GetItemText(*args, **kwargs)
 
     def GetItemImage(*args, **kwargs):
-        """GetItemImage(TreeItemId item, wxTreeItemIcon which=TreeItemIcon_Normal) -> int"""
+        """GetItemImage(TreeItemId item, int which=TreeItemIcon_Normal) -> int"""
         return _controls.TreeCtrl_GetItemImage(*args, **kwargs)
 
     def GetItemData(*args, **kwargs):
@@ -3953,23 +3977,23 @@ class TreeCtrl(core.Control):
 
     GetPyData = GetItemPyData 
     def GetItemTextColour(*args, **kwargs):
-        """GetItemTextColour(TreeItemId item) -> wxColour"""
+        """GetItemTextColour(TreeItemId item) -> Colour"""
         return _controls.TreeCtrl_GetItemTextColour(*args, **kwargs)
 
     def GetItemBackgroundColour(*args, **kwargs):
-        """GetItemBackgroundColour(TreeItemId item) -> wxColour"""
+        """GetItemBackgroundColour(TreeItemId item) -> Colour"""
         return _controls.TreeCtrl_GetItemBackgroundColour(*args, **kwargs)
 
     def GetItemFont(*args, **kwargs):
-        """GetItemFont(TreeItemId item) -> wxFont"""
+        """GetItemFont(TreeItemId item) -> Font"""
         return _controls.TreeCtrl_GetItemFont(*args, **kwargs)
 
     def SetItemText(*args, **kwargs):
-        """SetItemText(TreeItemId item, wxString text)"""
+        """SetItemText(TreeItemId item, String text)"""
         return _controls.TreeCtrl_SetItemText(*args, **kwargs)
 
     def SetItemImage(*args, **kwargs):
-        """SetItemImage(TreeItemId item, int image, wxTreeItemIcon which=TreeItemIcon_Normal)"""
+        """SetItemImage(TreeItemId item, int image, int which=TreeItemIcon_Normal)"""
         return _controls.TreeCtrl_SetItemImage(*args, **kwargs)
 
     def SetItemData(*args, **kwargs):
@@ -3994,15 +4018,15 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_SetItemDropHighlight(*args, **kwargs)
 
     def SetItemTextColour(*args, **kwargs):
-        """SetItemTextColour(TreeItemId item, wxColour col)"""
+        """SetItemTextColour(TreeItemId item, Colour col)"""
         return _controls.TreeCtrl_SetItemTextColour(*args, **kwargs)
 
     def SetItemBackgroundColour(*args, **kwargs):
-        """SetItemBackgroundColour(TreeItemId item, wxColour col)"""
+        """SetItemBackgroundColour(TreeItemId item, Colour col)"""
         return _controls.TreeCtrl_SetItemBackgroundColour(*args, **kwargs)
 
     def SetItemFont(*args, **kwargs):
-        """SetItemFont(TreeItemId item, wxFont font)"""
+        """SetItemFont(TreeItemId item, Font font)"""
         return _controls.TreeCtrl_SetItemFont(*args, **kwargs)
 
     def IsVisible(*args, **kwargs):
@@ -4078,36 +4102,33 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_GetPrevVisible(*args, **kwargs)
 
     def AddRoot(*args, **kwargs):
-        """
-        AddRoot(wxString text, int image=-1, int selectedImage=-1, 
-            TreeItemData data=None) -> TreeItemId
-        """
+        """AddRoot(String text, int image=-1, int selectedImage=-1, TreeItemData data=None) -> TreeItemId"""
         return _controls.TreeCtrl_AddRoot(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
         """
-        PrependItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
+        PrependItem(TreeItemId parent, String text, int image=-1, int selectedImage=-1, 
             TreeItemData data=None) -> TreeItemId
         """
         return _controls.TreeCtrl_PrependItem(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
         """
-        InsertItem(TreeItemId parent, TreeItemId idPrevious, wxString text, 
+        InsertItem(TreeItemId parent, TreeItemId idPrevious, String text, 
             int image=-1, int selectedImage=-1, TreeItemData data=None) -> TreeItemId
         """
         return _controls.TreeCtrl_InsertItem(*args, **kwargs)
 
     def InsertItemBefore(*args, **kwargs):
         """
-        InsertItemBefore(TreeItemId parent, size_t index, wxString text, int image=-1, 
+        InsertItemBefore(TreeItemId parent, size_t index, String text, int image=-1, 
             int selectedImage=-1, TreeItemData data=None) -> TreeItemId
         """
         return _controls.TreeCtrl_InsertItemBefore(*args, **kwargs)
 
     def AppendItem(*args, **kwargs):
         """
-        AppendItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
+        AppendItem(TreeItemId parent, String text, int image=-1, int selectedImage=-1, 
             TreeItemData data=None) -> TreeItemId
         """
         return _controls.TreeCtrl_AppendItem(*args, **kwargs)
@@ -4218,11 +4239,11 @@ class GenericDirCtrl(core.Control):
         return "<%s.%s; proxy of C++ wxGenericDirCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id=-1, wxString dir=wxPyDirDialogDefaultFolderStr, 
-            Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
-            wxString filter=wxPyEmptyString, 
-            int defaultFilter=0, wxString name=wxPy_TreeCtrlNameStr) -> GenericDirCtrl
+        __init__(Window parent, int id=-1, String dir=DirDialogDefaultFolderStr, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
+            String filter=EmptyString, 
+            int defaultFilter=0, String name=TreeCtrlNameStr) -> GenericDirCtrl
         """
         newobj = _controls.new_GenericDirCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -4232,36 +4253,36 @@ class GenericDirCtrl(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id=-1, wxString dir=wxPyDirDialogDefaultFolderStr, 
-            Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
-            wxString filter=wxPyEmptyString, 
-            int defaultFilter=0, wxString name=wxPy_TreeCtrlNameStr) -> bool
+        Create(Window parent, int id=-1, String dir=DirDialogDefaultFolderStr, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
+            String filter=EmptyString, 
+            int defaultFilter=0, String name=TreeCtrlNameStr) -> bool
         """
         return _controls.GenericDirCtrl_Create(*args, **kwargs)
 
     def ExpandPath(*args, **kwargs):
-        """ExpandPath(wxString path) -> bool"""
+        """ExpandPath(String path) -> bool"""
         return _controls.GenericDirCtrl_ExpandPath(*args, **kwargs)
 
     def GetDefaultPath(*args, **kwargs):
-        """GetDefaultPath() -> wxString"""
+        """GetDefaultPath() -> String"""
         return _controls.GenericDirCtrl_GetDefaultPath(*args, **kwargs)
 
     def SetDefaultPath(*args, **kwargs):
-        """SetDefaultPath(wxString path)"""
+        """SetDefaultPath(String path)"""
         return _controls.GenericDirCtrl_SetDefaultPath(*args, **kwargs)
 
     def GetPath(*args, **kwargs):
-        """GetPath() -> wxString"""
+        """GetPath() -> String"""
         return _controls.GenericDirCtrl_GetPath(*args, **kwargs)
 
     def GetFilePath(*args, **kwargs):
-        """GetFilePath() -> wxString"""
+        """GetFilePath() -> String"""
         return _controls.GenericDirCtrl_GetFilePath(*args, **kwargs)
 
     def SetPath(*args, **kwargs):
-        """SetPath(wxString path)"""
+        """SetPath(String path)"""
         return _controls.GenericDirCtrl_SetPath(*args, **kwargs)
 
     def ShowHidden(*args, **kwargs):
@@ -4273,11 +4294,11 @@ class GenericDirCtrl(core.Control):
         return _controls.GenericDirCtrl_GetShowHidden(*args, **kwargs)
 
     def GetFilter(*args, **kwargs):
-        """GetFilter() -> wxString"""
+        """GetFilter() -> String"""
         return _controls.GenericDirCtrl_GetFilter(*args, **kwargs)
 
     def SetFilter(*args, **kwargs):
-        """SetFilter(wxString filter)"""
+        """SetFilter(String filter)"""
         return _controls.GenericDirCtrl_SetFilter(*args, **kwargs)
 
     def GetFilterIndex(*args, **kwargs):
@@ -4293,7 +4314,7 @@ class GenericDirCtrl(core.Control):
         return _controls.GenericDirCtrl_GetRootId(*args, **kwargs)
 
     def GetTreeCtrl(*args, **kwargs):
-        """GetTreeCtrl() -> wxTreeCtrl"""
+        """GetTreeCtrl() -> TreeCtrl"""
         return _controls.GenericDirCtrl_GetTreeCtrl(*args, **kwargs)
 
     def GetFilterListCtrl(*args, **kwargs):
@@ -4326,6 +4347,7 @@ class GenericDirCtrlPtr(GenericDirCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = GenericDirCtrl
 _controls.GenericDirCtrl_swigregister(GenericDirCtrlPtr)
+DirDialogDefaultFolderStr = cvar.DirDialogDefaultFolderStr
 
 def PreGenericDirCtrl(*args, **kwargs):
     """PreGenericDirCtrl() -> GenericDirCtrl"""
@@ -4355,7 +4377,7 @@ class DirFilterListCtrl(Choice):
         return _controls.DirFilterListCtrl_Create(*args, **kwargs)
 
     def FillFilterList(*args, **kwargs):
-        """FillFilterList(wxString filter, int defaultFilter)"""
+        """FillFilterList(String filter, int defaultFilter)"""
         return _controls.DirFilterListCtrl_FillFilterList(*args, **kwargs)
 
 
@@ -4381,7 +4403,7 @@ class PyControl(core.Control):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyControlNameStr) -> PyControl
+            String name=ControlNameStr) -> PyControl
         """
         newobj = _controls.new_PyControl(*args, **kwargs)
         self.this = newobj.this
@@ -4502,19 +4524,19 @@ class HelpEvent(core.CommandEvent):
         return _controls.HelpEvent_SetPosition(*args, **kwargs)
 
     def GetLink(*args, **kwargs):
-        """GetLink() -> wxString"""
+        """GetLink() -> String"""
         return _controls.HelpEvent_GetLink(*args, **kwargs)
 
     def SetLink(*args, **kwargs):
-        """SetLink(wxString link)"""
+        """SetLink(String link)"""
         return _controls.HelpEvent_SetLink(*args, **kwargs)
 
     def GetTarget(*args, **kwargs):
-        """GetTarget() -> wxString"""
+        """GetTarget() -> String"""
         return _controls.HelpEvent_GetTarget(*args, **kwargs)
 
     def SetTarget(*args, **kwargs):
-        """SetTarget(wxString target)"""
+        """SetTarget(String target)"""
         return _controls.HelpEvent_SetTarget(*args, **kwargs)
 
 
@@ -4593,7 +4615,7 @@ class HelpProvider(object):
 
     Get = staticmethod(Get)
     def GetHelp(*args, **kwargs):
-        """GetHelp(Window window) -> wxString"""
+        """GetHelp(Window window) -> String"""
         return _controls.HelpProvider_GetHelp(*args, **kwargs)
 
     def ShowHelp(*args, **kwargs):
@@ -4601,11 +4623,11 @@ class HelpProvider(object):
         return _controls.HelpProvider_ShowHelp(*args, **kwargs)
 
     def AddHelp(*args, **kwargs):
-        """AddHelp(Window window, wxString text)"""
+        """AddHelp(Window window, String text)"""
         return _controls.HelpProvider_AddHelp(*args, **kwargs)
 
     def AddHelpById(*args, **kwargs):
-        """AddHelpById(int id, wxString text)"""
+        """AddHelpById(int id, String text)"""
         return _controls.HelpProvider_AddHelpById(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
@@ -4651,7 +4673,7 @@ class DragImage(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGenericDragImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxBitmap image, wxCursor cursor=wxNullCursor) -> DragImage"""
+        """__init__(Bitmap image, Cursor cursor=wxNullCursor) -> DragImage"""
         newobj = _controls.new_DragImage(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4663,7 +4685,7 @@ class DragImage(core.Object):
         except: pass
 
     def SetBackingBitmap(*args, **kwargs):
-        """SetBackingBitmap(wxBitmap bitmap)"""
+        """SetBackingBitmap(Bitmap bitmap)"""
         return _controls.DragImage_SetBackingBitmap(*args, **kwargs)
 
     def BeginDrag(*args, **kwargs):
@@ -4698,14 +4720,11 @@ class DragImage(core.Object):
         return _controls.DragImage_GetImageRect(*args, **kwargs)
 
     def DoDrawImage(*args, **kwargs):
-        """DoDrawImage(wxDC dc, Point pos) -> bool"""
+        """DoDrawImage(DC dc, Point pos) -> bool"""
         return _controls.DragImage_DoDrawImage(*args, **kwargs)
 
     def UpdateBackingFromWindow(*args, **kwargs):
-        """
-        UpdateBackingFromWindow(wxDC windowDC, wxMemoryDC destDC, Rect sourceRect, 
-            Rect destRect) -> bool
-        """
+        """UpdateBackingFromWindow(DC windowDC, MemoryDC destDC, Rect sourceRect, Rect destRect) -> bool"""
         return _controls.DragImage_UpdateBackingFromWindow(*args, **kwargs)
 
     def RedrawImage(*args, **kwargs):
@@ -4721,13 +4740,13 @@ class DragImagePtr(DragImage):
 _controls.DragImage_swigregister(DragImagePtr)
 
 def DragIcon(*args, **kwargs):
-    """DragIcon(wxIcon image, wxCursor cursor=wxNullCursor) -> DragImage"""
+    """DragIcon(Icon image, Cursor cursor=wxNullCursor) -> DragImage"""
     val = _controls.new_DragIcon(*args, **kwargs)
     val.thisown = 1
     return val
 
 def DragString(*args, **kwargs):
-    """DragString(wxString str, wxCursor cursor=wxNullCursor) -> DragImage"""
+    """DragString(String str, Cursor cursor=wxNullCursor) -> DragImage"""
     val = _controls.new_DragString(*args, **kwargs)
     val.thisown = 1
     return val

@@ -151,6 +151,7 @@
 %rename(GenericFindWindowAtPoint)           wxGenericFindWindowAtPoint;
 %rename(FindWindowAtPoint)                  wxFindWindowAtPoint;
 %rename(GetTopLevelParent)                  wxGetTopLevelParent;
+%rename(GetKeyState)                        wxGetKeyState;
 %rename(WakeUpMainThread)                   wxWakeUpMainThread;
 %rename(MutexGuiEnter)                      wxMutexGuiEnter;
 %rename(MutexGuiLeave)                      wxMutexGuiLeave;

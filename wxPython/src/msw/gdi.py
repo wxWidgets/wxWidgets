@@ -92,7 +92,7 @@ class Colour(core.Object):
         return _gdi.Colour___ne__(*args, **kwargs)
 
     def InitFromName(*args, **kwargs):
-        """InitFromName(wxString colourName)"""
+        """InitFromName(String colourName)"""
         return _gdi.Colour_InitFromName(*args, **kwargs)
 
     def Get(*args, **kwargs):
@@ -101,7 +101,7 @@ class Colour(core.Object):
 
     asTuple = Get
     def __str__(self):                  return str(self.asTuple())
-    def __repr__(self):                 return 'wxColour' + str(self.asTuple())
+    def __repr__(self):                 return 'wx.Colour' + str(self.asTuple())
     def __nonzero__(self):              return self.Ok()
     def __getinitargs__(self):          return ()
     def __getstate__(self):             return self.asTuple()
@@ -116,7 +116,7 @@ class ColourPtr(Colour):
 _gdi.Colour_swigregister(ColourPtr)
 
 def NamedColour(*args, **kwargs):
-    """NamedColour(wxString colorName) -> Colour"""
+    """NamedColour(String colorName) -> Colour"""
     val = _gdi.new_NamedColour(*args, **kwargs)
     val.thisown = 1
     return val
@@ -351,7 +351,7 @@ class Bitmap(GDIObject):
         return "<%s.%s; proxy of C++ wxBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(wxString name, wxBitmapType type=BITMAP_TYPE_ANY) -> Bitmap
+        __init__(String name, int type=BITMAP_TYPE_ANY) -> Bitmap
 
         Loads a bitmap from a file.
         """
@@ -452,7 +452,7 @@ class Bitmap(GDIObject):
 
     def SaveFile(*args, **kwargs):
         """
-        SaveFile(wxString name, wxBitmapType type, Palette palette=(wxPalette *) NULL) -> bool
+        SaveFile(String name, int type, Palette palette=(wxPalette *) NULL) -> bool
 
         Saves a bitmap in the named file.
         """
@@ -460,7 +460,7 @@ class Bitmap(GDIObject):
 
     def LoadFile(*args, **kwargs):
         """
-        LoadFile(wxString name, wxBitmapType type) -> bool
+        LoadFile(String name, int type) -> bool
 
         Loads a bitmap from a file
         """
@@ -615,7 +615,7 @@ class Icon(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString name, long flags, int desiredWidth=-1, int desiredHeight=-1) -> Icon"""
+        """__init__(String name, long flags, int desiredWidth=-1, int desiredHeight=-1) -> Icon"""
         newobj = _gdi.new_Icon(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -627,7 +627,7 @@ class Icon(GDIObject):
         except: pass
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(wxString name, long flags) -> bool"""
+        """LoadFile(String name, long flags) -> bool"""
         return _gdi.Icon_LoadFile(*args, **kwargs)
 
     def GetHandle(*args, **kwargs):
@@ -711,7 +711,7 @@ class IconLocation(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconLocation instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString filename=&wxPyEmptyString, int num=0) -> IconLocation"""
+        """__init__(String filename=&wxPyEmptyString, int num=0) -> IconLocation"""
         newobj = _gdi.new_IconLocation(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -728,11 +728,11 @@ class IconLocation(object):
 
     def __nonzero__(self): return self.Ok() 
     def SetFileName(*args, **kwargs):
-        """SetFileName(wxString filename)"""
+        """SetFileName(String filename)"""
         return _gdi.IconLocation_SetFileName(*args, **kwargs)
 
     def GetFileName(*args, **kwargs):
-        """GetFileName() -> wxString"""
+        """GetFileName() -> String"""
         return _gdi.IconLocation_GetFileName(*args, **kwargs)
 
     def SetIndex(*args, **kwargs):
@@ -771,7 +771,7 @@ class IconBundle(object):
         return _gdi.IconBundle_AddIcon(*args, **kwargs)
 
     def AddIconFromFile(*args, **kwargs):
-        """AddIconFromFile(wxString file, long type)"""
+        """AddIconFromFile(String file, long type)"""
         return _gdi.IconBundle_AddIconFromFile(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
@@ -787,7 +787,7 @@ class IconBundlePtr(IconBundle):
 _gdi.IconBundle_swigregister(IconBundlePtr)
 
 def IconBundleFromFile(*args, **kwargs):
-    """IconBundleFromFile(wxString file, long type) -> IconBundle"""
+    """IconBundleFromFile(String file, long type) -> IconBundle"""
     val = _gdi.new_IconBundleFromFile(*args, **kwargs)
     val.thisown = 1
     return val
@@ -802,7 +802,7 @@ class Cursor(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString cursorName, long flags, int hotSpotX=0, int hotSpotY=0) -> Cursor"""
+        """__init__(String cursorName, long flags, int hotSpotX=0, int hotSpotY=0) -> Cursor"""
         newobj = _gdi.new_Cursor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -912,19 +912,19 @@ class Region(GDIObject):
         return _gdi.Region_Offset(*args, **kwargs)
 
     def Contains(*args, **kwargs):
-        """Contains(int x, int y) -> wxRegionContain"""
+        """Contains(int x, int y) -> int"""
         return _gdi.Region_Contains(*args, **kwargs)
 
     def ContainsPoint(*args, **kwargs):
-        """ContainsPoint(Point pt) -> wxRegionContain"""
+        """ContainsPoint(Point pt) -> int"""
         return _gdi.Region_ContainsPoint(*args, **kwargs)
 
     def ContainsRect(*args, **kwargs):
-        """ContainsRect(Rect rect) -> wxRegionContain"""
+        """ContainsRect(Rect rect) -> int"""
         return _gdi.Region_ContainsRect(*args, **kwargs)
 
     def ContainsRectDim(*args, **kwargs):
-        """ContainsRectDim(int x, int y, int w, int h) -> wxRegionContain"""
+        """ContainsRectDim(int x, int y, int w, int h) -> int"""
         return _gdi.Region_ContainsRectDim(*args, **kwargs)
 
     def GetBox(*args, **kwargs):
@@ -1191,11 +1191,11 @@ class NativeFontInfo(object):
         return _gdi.NativeFontInfo_GetPointSize(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle() -> wxFontStyle"""
+        """GetStyle() -> int"""
         return _gdi.NativeFontInfo_GetStyle(*args, **kwargs)
 
     def GetWeight(*args, **kwargs):
-        """GetWeight() -> wxFontWeight"""
+        """GetWeight() -> int"""
         return _gdi.NativeFontInfo_GetWeight(*args, **kwargs)
 
     def GetUnderlined(*args, **kwargs):
@@ -1203,15 +1203,15 @@ class NativeFontInfo(object):
         return _gdi.NativeFontInfo_GetUnderlined(*args, **kwargs)
 
     def GetFaceName(*args, **kwargs):
-        """GetFaceName() -> wxString"""
+        """GetFaceName() -> String"""
         return _gdi.NativeFontInfo_GetFaceName(*args, **kwargs)
 
     def GetFamily(*args, **kwargs):
-        """GetFamily() -> wxFontFamily"""
+        """GetFamily() -> int"""
         return _gdi.NativeFontInfo_GetFamily(*args, **kwargs)
 
     def GetEncoding(*args, **kwargs):
-        """GetEncoding() -> wxFontEncoding"""
+        """GetEncoding() -> int"""
         return _gdi.NativeFontInfo_GetEncoding(*args, **kwargs)
 
     def SetPointSize(*args, **kwargs):
@@ -1219,11 +1219,11 @@ class NativeFontInfo(object):
         return _gdi.NativeFontInfo_SetPointSize(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(wxFontStyle style)"""
+        """SetStyle(int style)"""
         return _gdi.NativeFontInfo_SetStyle(*args, **kwargs)
 
     def SetWeight(*args, **kwargs):
-        """SetWeight(wxFontWeight weight)"""
+        """SetWeight(int weight)"""
         return _gdi.NativeFontInfo_SetWeight(*args, **kwargs)
 
     def SetUnderlined(*args, **kwargs):
@@ -1231,35 +1231,35 @@ class NativeFontInfo(object):
         return _gdi.NativeFontInfo_SetUnderlined(*args, **kwargs)
 
     def SetFaceName(*args, **kwargs):
-        """SetFaceName(wxString facename)"""
+        """SetFaceName(String facename)"""
         return _gdi.NativeFontInfo_SetFaceName(*args, **kwargs)
 
     def SetFamily(*args, **kwargs):
-        """SetFamily(wxFontFamily family)"""
+        """SetFamily(int family)"""
         return _gdi.NativeFontInfo_SetFamily(*args, **kwargs)
 
     def SetEncoding(*args, **kwargs):
-        """SetEncoding(wxFontEncoding encoding)"""
+        """SetEncoding(int encoding)"""
         return _gdi.NativeFontInfo_SetEncoding(*args, **kwargs)
 
     def FromString(*args, **kwargs):
-        """FromString(wxString s) -> bool"""
+        """FromString(String s) -> bool"""
         return _gdi.NativeFontInfo_FromString(*args, **kwargs)
 
     def ToString(*args, **kwargs):
-        """ToString() -> wxString"""
+        """ToString() -> String"""
         return _gdi.NativeFontInfo_ToString(*args, **kwargs)
 
     def __str__(*args, **kwargs):
-        """__str__() -> wxString"""
+        """__str__() -> String"""
         return _gdi.NativeFontInfo___str__(*args, **kwargs)
 
     def FromUserString(*args, **kwargs):
-        """FromUserString(wxString s) -> bool"""
+        """FromUserString(String s) -> bool"""
         return _gdi.NativeFontInfo_FromUserString(*args, **kwargs)
 
     def ToUserString(*args, **kwargs):
-        """ToUserString() -> wxString"""
+        """ToUserString() -> String"""
         return _gdi.NativeFontInfo_ToUserString(*args, **kwargs)
 
 
@@ -1288,11 +1288,11 @@ class NativeEncodingInfo(object):
         except: pass
 
     def FromString(*args, **kwargs):
-        """FromString(wxString s) -> bool"""
+        """FromString(String s) -> bool"""
         return _gdi.NativeEncodingInfo_FromString(*args, **kwargs)
 
     def ToString(*args, **kwargs):
-        """ToString() -> wxString"""
+        """ToString() -> String"""
         return _gdi.NativeEncodingInfo_ToString(*args, **kwargs)
 
 
@@ -1305,7 +1305,7 @@ _gdi.NativeEncodingInfo_swigregister(NativeEncodingInfoPtr)
 
 
 def GetNativeFontEncoding(*args, **kwargs):
-    """GetNativeFontEncoding(wxFontEncoding encoding) -> NativeEncodingInfo"""
+    """GetNativeFontEncoding(int encoding) -> NativeEncodingInfo"""
     return _gdi.GetNativeFontEncoding(*args, **kwargs)
 
 def TestFontEncoding(*args, **kwargs):
@@ -1339,7 +1339,7 @@ class FontMapper(object):
 
     Set = staticmethod(Set)
     def CharsetToEncoding(*args, **kwargs):
-        """CharsetToEncoding(wxString charset, bool interactive=True) -> wxFontEncoding"""
+        """CharsetToEncoding(String charset, bool interactive=True) -> int"""
         return _gdi.FontMapper_CharsetToEncoding(*args, **kwargs)
 
     def GetSupportedEncodingsCount(*args, **kwargs):
@@ -1348,42 +1348,39 @@ class FontMapper(object):
 
     GetSupportedEncodingsCount = staticmethod(GetSupportedEncodingsCount)
     def GetEncoding(*args, **kwargs):
-        """FontMapper.GetEncoding(size_t n) -> wxFontEncoding"""
+        """FontMapper.GetEncoding(size_t n) -> int"""
         return _gdi.FontMapper_GetEncoding(*args, **kwargs)
 
     GetEncoding = staticmethod(GetEncoding)
     def GetEncodingName(*args, **kwargs):
-        """FontMapper.GetEncodingName(wxFontEncoding encoding) -> wxString"""
+        """FontMapper.GetEncodingName(int encoding) -> String"""
         return _gdi.FontMapper_GetEncodingName(*args, **kwargs)
 
     GetEncodingName = staticmethod(GetEncodingName)
     def GetEncodingDescription(*args, **kwargs):
-        """FontMapper.GetEncodingDescription(wxFontEncoding encoding) -> wxString"""
+        """FontMapper.GetEncodingDescription(int encoding) -> String"""
         return _gdi.FontMapper_GetEncodingDescription(*args, **kwargs)
 
     GetEncodingDescription = staticmethod(GetEncodingDescription)
     def SetConfig(*args, **kwargs):
-        """SetConfig(wxConfigBase config)"""
+        """SetConfig(ConfigBase config)"""
         return _gdi.FontMapper_SetConfig(*args, **kwargs)
 
     def SetConfigPath(*args, **kwargs):
-        """SetConfigPath(wxString prefix)"""
+        """SetConfigPath(String prefix)"""
         return _gdi.FontMapper_SetConfigPath(*args, **kwargs)
 
     def GetDefaultConfigPath(*args, **kwargs):
-        """FontMapper.GetDefaultConfigPath() -> wxString"""
+        """FontMapper.GetDefaultConfigPath() -> String"""
         return _gdi.FontMapper_GetDefaultConfigPath(*args, **kwargs)
 
     GetDefaultConfigPath = staticmethod(GetDefaultConfigPath)
     def GetAltForEncoding(*args, **kwargs):
-        """
-        GetAltForEncoding(wxFontEncoding encoding, wxString facename=wxPyEmptyString, 
-            bool interactive=True) -> PyObject
-        """
+        """GetAltForEncoding(int encoding, String facename=EmptyString, bool interactive=True) -> PyObject"""
         return _gdi.FontMapper_GetAltForEncoding(*args, **kwargs)
 
     def IsEncodingAvailable(*args, **kwargs):
-        """IsEncodingAvailable(wxFontEncoding encoding, wxString facename=wxPyEmptyString) -> bool"""
+        """IsEncodingAvailable(int encoding, String facename=EmptyString) -> bool"""
         return _gdi.FontMapper_IsEncodingAvailable(*args, **kwargs)
 
     def SetDialogParent(*args, **kwargs):
@@ -1391,7 +1388,7 @@ class FontMapper(object):
         return _gdi.FontMapper_SetDialogParent(*args, **kwargs)
 
     def SetDialogTitle(*args, **kwargs):
-        """SetDialogTitle(wxString title)"""
+        """SetDialogTitle(String title)"""
         return _gdi.FontMapper_SetDialogTitle(*args, **kwargs)
 
 
@@ -1415,19 +1412,19 @@ def FontMapper_GetSupportedEncodingsCount(*args, **kwargs):
     return _gdi.FontMapper_GetSupportedEncodingsCount(*args, **kwargs)
 
 def FontMapper_GetEncoding(*args, **kwargs):
-    """FontMapper_GetEncoding(size_t n) -> wxFontEncoding"""
+    """FontMapper_GetEncoding(size_t n) -> int"""
     return _gdi.FontMapper_GetEncoding(*args, **kwargs)
 
 def FontMapper_GetEncodingName(*args, **kwargs):
-    """FontMapper_GetEncodingName(wxFontEncoding encoding) -> wxString"""
+    """FontMapper_GetEncodingName(int encoding) -> String"""
     return _gdi.FontMapper_GetEncodingName(*args, **kwargs)
 
 def FontMapper_GetEncodingDescription(*args, **kwargs):
-    """FontMapper_GetEncodingDescription(wxFontEncoding encoding) -> wxString"""
+    """FontMapper_GetEncodingDescription(int encoding) -> String"""
     return _gdi.FontMapper_GetEncodingDescription(*args, **kwargs)
 
 def FontMapper_GetDefaultConfigPath(*args, **kwargs):
-    """FontMapper_GetDefaultConfigPath() -> wxString"""
+    """FontMapper_GetDefaultConfigPath() -> String"""
     return _gdi.FontMapper_GetDefaultConfigPath(*args, **kwargs)
 
 #---------------------------------------------------------------------------
@@ -1438,8 +1435,8 @@ class Font(GDIObject):
     def __init__(self, *args, **kwargs):
         """
         __init__(int pointSize, int family, int style, int weight, bool underline=False, 
-            wxString face=wxPyEmptyString, 
-            wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font
+            String face=EmptyString, 
+            int encoding=FONTENCODING_DEFAULT) -> Font
         """
         newobj = _gdi.new_Font(*args, **kwargs)
         self.this = newobj.this
@@ -1485,11 +1482,11 @@ class Font(GDIObject):
         return _gdi.Font_GetUnderlined(*args, **kwargs)
 
     def GetFaceName(*args, **kwargs):
-        """GetFaceName() -> wxString"""
+        """GetFaceName() -> String"""
         return _gdi.Font_GetFaceName(*args, **kwargs)
 
     def GetEncoding(*args, **kwargs):
-        """GetEncoding() -> wxFontEncoding"""
+        """GetEncoding() -> int"""
         return _gdi.Font_GetEncoding(*args, **kwargs)
 
     def GetNativeFontInfo(*args, **kwargs):
@@ -1501,11 +1498,11 @@ class Font(GDIObject):
         return _gdi.Font_IsFixedWidth(*args, **kwargs)
 
     def GetNativeFontInfoDesc(*args, **kwargs):
-        """GetNativeFontInfoDesc() -> wxString"""
+        """GetNativeFontInfoDesc() -> String"""
         return _gdi.Font_GetNativeFontInfoDesc(*args, **kwargs)
 
     def GetNativeFontInfoUserDesc(*args, **kwargs):
-        """GetNativeFontInfoUserDesc() -> wxString"""
+        """GetNativeFontInfoUserDesc() -> String"""
         return _gdi.Font_GetNativeFontInfoUserDesc(*args, **kwargs)
 
     def SetPointSize(*args, **kwargs):
@@ -1525,7 +1522,7 @@ class Font(GDIObject):
         return _gdi.Font_SetWeight(*args, **kwargs)
 
     def SetFaceName(*args, **kwargs):
-        """SetFaceName(wxString faceName)"""
+        """SetFaceName(String faceName)"""
         return _gdi.Font_SetFaceName(*args, **kwargs)
 
     def SetUnderlined(*args, **kwargs):
@@ -1533,7 +1530,7 @@ class Font(GDIObject):
         return _gdi.Font_SetUnderlined(*args, **kwargs)
 
     def SetEncoding(*args, **kwargs):
-        """SetEncoding(wxFontEncoding encoding)"""
+        """SetEncoding(int encoding)"""
         return _gdi.Font_SetEncoding(*args, **kwargs)
 
     def SetNativeFontInfo(*args, **kwargs):
@@ -1541,23 +1538,23 @@ class Font(GDIObject):
         return _gdi.Font_SetNativeFontInfo(*args, **kwargs)
 
     def SetNativeFontInfoFromString(*args, **kwargs):
-        """SetNativeFontInfoFromString(wxString info)"""
+        """SetNativeFontInfoFromString(String info)"""
         return _gdi.Font_SetNativeFontInfoFromString(*args, **kwargs)
 
     def SetNativeFontInfoUserDesc(*args, **kwargs):
-        """SetNativeFontInfoUserDesc(wxString info)"""
+        """SetNativeFontInfoUserDesc(String info)"""
         return _gdi.Font_SetNativeFontInfoUserDesc(*args, **kwargs)
 
     def GetFamilyString(*args, **kwargs):
-        """GetFamilyString() -> wxString"""
+        """GetFamilyString() -> String"""
         return _gdi.Font_GetFamilyString(*args, **kwargs)
 
     def GetStyleString(*args, **kwargs):
-        """GetStyleString() -> wxString"""
+        """GetStyleString() -> String"""
         return _gdi.Font_GetStyleString(*args, **kwargs)
 
     def GetWeightString(*args, **kwargs):
-        """GetWeightString() -> wxString"""
+        """GetWeightString() -> String"""
         return _gdi.Font_GetWeightString(*args, **kwargs)
 
     def SetNoAntiAliasing(*args, **kwargs):
@@ -1569,12 +1566,12 @@ class Font(GDIObject):
         return _gdi.Font_GetNoAntiAliasing(*args, **kwargs)
 
     def GetDefaultEncoding(*args, **kwargs):
-        """Font.GetDefaultEncoding() -> wxFontEncoding"""
+        """Font.GetDefaultEncoding() -> int"""
         return _gdi.Font_GetDefaultEncoding(*args, **kwargs)
 
     GetDefaultEncoding = staticmethod(GetDefaultEncoding)
     def SetDefaultEncoding(*args, **kwargs):
-        """Font.SetDefaultEncoding(wxFontEncoding encoding)"""
+        """Font.SetDefaultEncoding(int encoding)"""
         return _gdi.Font_SetDefaultEncoding(*args, **kwargs)
 
     SetDefaultEncoding = staticmethod(SetDefaultEncoding)
@@ -1593,26 +1590,26 @@ def FontFromNativeInfo(*args, **kwargs):
     return val
 
 def FontFromNativeInfoString(*args, **kwargs):
-    """FontFromNativeInfoString(wxString info) -> Font"""
+    """FontFromNativeInfoString(String info) -> Font"""
     val = _gdi.new_FontFromNativeInfoString(*args, **kwargs)
     val.thisown = 1
     return val
 
 def Font2(*args, **kwargs):
     """
-    Font2(int pointSize, wxFontFamily family, int flags=FONTFLAG_DEFAULT, 
-        wxString face=wxPyEmptyString, wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font
+    Font2(int pointSize, int family, int flags=FONTFLAG_DEFAULT, 
+        String face=EmptyString, int encoding=FONTENCODING_DEFAULT) -> Font
     """
     val = _gdi.new_Font2(*args, **kwargs)
     val.thisown = 1
     return val
 
 def Font_GetDefaultEncoding(*args, **kwargs):
-    """Font_GetDefaultEncoding() -> wxFontEncoding"""
+    """Font_GetDefaultEncoding() -> int"""
     return _gdi.Font_GetDefaultEncoding(*args, **kwargs)
 
 def Font_SetDefaultEncoding(*args, **kwargs):
-    """Font_SetDefaultEncoding(wxFontEncoding encoding)"""
+    """Font_SetDefaultEncoding(int encoding)"""
     return _gdi.Font_SetDefaultEncoding(*args, **kwargs)
 
 #---------------------------------------------------------------------------
@@ -1639,11 +1636,11 @@ class FontEnumerator(object):
         return _gdi.FontEnumerator__setCallbackInfo(*args, **kwargs)
 
     def EnumerateFacenames(*args, **kwargs):
-        """EnumerateFacenames(wxFontEncoding encoding=FONTENCODING_SYSTEM, bool fixedWidthOnly=False) -> bool"""
+        """EnumerateFacenames(int encoding=FONTENCODING_SYSTEM, bool fixedWidthOnly=False) -> bool"""
         return _gdi.FontEnumerator_EnumerateFacenames(*args, **kwargs)
 
     def EnumerateEncodings(*args, **kwargs):
-        """EnumerateEncodings(wxString facename=wxPyEmptyString) -> bool"""
+        """EnumerateEncodings(String facename=EmptyString) -> bool"""
         return _gdi.FontEnumerator_EnumerateEncodings(*args, **kwargs)
 
     def GetEncodings(*args, **kwargs):
@@ -1935,8 +1932,8 @@ class Locale(object):
 
     def Init1(*args, **kwargs):
         """
-        Init1(wxString szName, wxString szShort=wxPyEmptyString, 
-            wxString szLocale=wxPyEmptyString, bool bLoadDefault=True, 
+        Init1(String szName, String szShort=EmptyString, String szLocale=EmptyString, 
+            bool bLoadDefault=True, 
             bool bConvertEncoding=False) -> bool
         """
         return _gdi.Locale_Init1(*args, **kwargs)
@@ -1958,12 +1955,12 @@ class Locale(object):
 
     GetSystemLanguage = staticmethod(GetSystemLanguage)
     def GetSystemEncoding(*args, **kwargs):
-        """Locale.GetSystemEncoding() -> wxFontEncoding"""
+        """Locale.GetSystemEncoding() -> int"""
         return _gdi.Locale_GetSystemEncoding(*args, **kwargs)
 
     GetSystemEncoding = staticmethod(GetSystemEncoding)
     def GetSystemEncodingName(*args, **kwargs):
-        """Locale.GetSystemEncodingName() -> wxString"""
+        """Locale.GetSystemEncodingName() -> String"""
         return _gdi.Locale_GetSystemEncodingName(*args, **kwargs)
 
     GetSystemEncodingName = staticmethod(GetSystemEncodingName)
@@ -1973,7 +1970,7 @@ class Locale(object):
 
     def __nonzero__(self): return self.IsOk() 
     def GetLocale(*args, **kwargs):
-        """GetLocale() -> wxString"""
+        """GetLocale() -> String"""
         return _gdi.Locale_GetLocale(*args, **kwargs)
 
     def GetLanguage(*args, **kwargs):
@@ -1981,24 +1978,24 @@ class Locale(object):
         return _gdi.Locale_GetLanguage(*args, **kwargs)
 
     def GetSysName(*args, **kwargs):
-        """GetSysName() -> wxString"""
+        """GetSysName() -> String"""
         return _gdi.Locale_GetSysName(*args, **kwargs)
 
     def GetCanonicalName(*args, **kwargs):
-        """GetCanonicalName() -> wxString"""
+        """GetCanonicalName() -> String"""
         return _gdi.Locale_GetCanonicalName(*args, **kwargs)
 
     def AddCatalogLookupPathPrefix(*args, **kwargs):
-        """Locale.AddCatalogLookupPathPrefix(wxString prefix)"""
+        """Locale.AddCatalogLookupPathPrefix(String prefix)"""
         return _gdi.Locale_AddCatalogLookupPathPrefix(*args, **kwargs)
 
     AddCatalogLookupPathPrefix = staticmethod(AddCatalogLookupPathPrefix)
     def AddCatalog(*args, **kwargs):
-        """AddCatalog(wxString szDomain) -> bool"""
+        """AddCatalog(String szDomain) -> bool"""
         return _gdi.Locale_AddCatalog(*args, **kwargs)
 
     def IsLoaded(*args, **kwargs):
-        """IsLoaded(wxString szDomain) -> bool"""
+        """IsLoaded(String szDomain) -> bool"""
         return _gdi.Locale_IsLoaded(*args, **kwargs)
 
     def GetLanguageInfo(*args, **kwargs):
@@ -2007,12 +2004,12 @@ class Locale(object):
 
     GetLanguageInfo = staticmethod(GetLanguageInfo)
     def GetLanguageName(*args, **kwargs):
-        """Locale.GetLanguageName(int lang) -> wxString"""
+        """Locale.GetLanguageName(int lang) -> String"""
         return _gdi.Locale_GetLanguageName(*args, **kwargs)
 
     GetLanguageName = staticmethod(GetLanguageName)
     def FindLanguageInfo(*args, **kwargs):
-        """Locale.FindLanguageInfo(wxString locale) -> LanguageInfo"""
+        """Locale.FindLanguageInfo(String locale) -> LanguageInfo"""
         return _gdi.Locale_FindLanguageInfo(*args, **kwargs)
 
     FindLanguageInfo = staticmethod(FindLanguageInfo)
@@ -2022,11 +2019,11 @@ class Locale(object):
 
     AddLanguage = staticmethod(AddLanguage)
     def GetString(*args, **kwargs):
-        """GetString(wxString szOrigString, wxString szDomain=wxPyEmptyString) -> wxString"""
+        """GetString(String szOrigString, String szDomain=EmptyString) -> String"""
         return _gdi.Locale_GetString(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> wxString"""
+        """GetName() -> String"""
         return _gdi.Locale_GetName(*args, **kwargs)
 
 
@@ -2042,15 +2039,15 @@ def Locale_GetSystemLanguage(*args, **kwargs):
     return _gdi.Locale_GetSystemLanguage(*args, **kwargs)
 
 def Locale_GetSystemEncoding(*args, **kwargs):
-    """Locale_GetSystemEncoding() -> wxFontEncoding"""
+    """Locale_GetSystemEncoding() -> int"""
     return _gdi.Locale_GetSystemEncoding(*args, **kwargs)
 
 def Locale_GetSystemEncodingName(*args, **kwargs):
-    """Locale_GetSystemEncodingName() -> wxString"""
+    """Locale_GetSystemEncodingName() -> String"""
     return _gdi.Locale_GetSystemEncodingName(*args, **kwargs)
 
 def Locale_AddCatalogLookupPathPrefix(*args, **kwargs):
-    """Locale_AddCatalogLookupPathPrefix(wxString prefix)"""
+    """Locale_AddCatalogLookupPathPrefix(String prefix)"""
     return _gdi.Locale_AddCatalogLookupPathPrefix(*args, **kwargs)
 
 def Locale_GetLanguageInfo(*args, **kwargs):
@@ -2058,11 +2055,11 @@ def Locale_GetLanguageInfo(*args, **kwargs):
     return _gdi.Locale_GetLanguageInfo(*args, **kwargs)
 
 def Locale_GetLanguageName(*args, **kwargs):
-    """Locale_GetLanguageName(int lang) -> wxString"""
+    """Locale_GetLanguageName(int lang) -> String"""
     return _gdi.Locale_GetLanguageName(*args, **kwargs)
 
 def Locale_FindLanguageInfo(*args, **kwargs):
-    """Locale_FindLanguageInfo(wxString locale) -> LanguageInfo"""
+    """Locale_FindLanguageInfo(String locale) -> LanguageInfo"""
     return _gdi.Locale_FindLanguageInfo(*args, **kwargs)
 
 def Locale_AddLanguage(*args, **kwargs):
@@ -2098,28 +2095,25 @@ class EncodingConverter(core.Object):
         except: pass
 
     def Init(*args, **kwargs):
-        """
-        Init(wxFontEncoding input_enc, wxFontEncoding output_enc, 
-            int method=CONVERT_STRICT) -> bool
-        """
+        """Init(int input_enc, int output_enc, int method=CONVERT_STRICT) -> bool"""
         return _gdi.EncodingConverter_Init(*args, **kwargs)
 
     def Convert(*args, **kwargs):
-        """Convert(wxString input) -> wxString"""
+        """Convert(String input) -> String"""
         return _gdi.EncodingConverter_Convert(*args, **kwargs)
 
     def GetPlatformEquivalents(*args, **kwargs):
-        """EncodingConverter.GetPlatformEquivalents(wxFontEncoding enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
+        """EncodingConverter.GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
         return _gdi.EncodingConverter_GetPlatformEquivalents(*args, **kwargs)
 
     GetPlatformEquivalents = staticmethod(GetPlatformEquivalents)
     def GetAllEquivalents(*args, **kwargs):
-        """EncodingConverter.GetAllEquivalents(wxFontEncoding enc) -> wxFontEncodingArray"""
+        """EncodingConverter.GetAllEquivalents(int enc) -> wxFontEncodingArray"""
         return _gdi.EncodingConverter_GetAllEquivalents(*args, **kwargs)
 
     GetAllEquivalents = staticmethod(GetAllEquivalents)
     def CanConvert(*args, **kwargs):
-        """EncodingConverter.CanConvert(wxFontEncoding encIn, wxFontEncoding encOut) -> bool"""
+        """EncodingConverter.CanConvert(int encIn, int encOut) -> bool"""
         return _gdi.EncodingConverter_CanConvert(*args, **kwargs)
 
     CanConvert = staticmethod(CanConvert)
@@ -2134,21 +2128,21 @@ _gdi.EncodingConverter_swigregister(EncodingConverterPtr)
 
 def GetTranslation(*args):
     """
-    GetTranslation(wxString sz) -> wxString
-    GetTranslation(wxString sz1, wxString sz2, size_t n) -> wxString
+    GetTranslation(String sz) -> String
+    GetTranslation(String sz1, String sz2, size_t n) -> String
     """
     return _gdi.GetTranslation(*args)
 
 def EncodingConverter_GetPlatformEquivalents(*args, **kwargs):
-    """EncodingConverter_GetPlatformEquivalents(wxFontEncoding enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
+    """EncodingConverter_GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
     return _gdi.EncodingConverter_GetPlatformEquivalents(*args, **kwargs)
 
 def EncodingConverter_GetAllEquivalents(*args, **kwargs):
-    """EncodingConverter_GetAllEquivalents(wxFontEncoding enc) -> wxFontEncodingArray"""
+    """EncodingConverter_GetAllEquivalents(int enc) -> wxFontEncodingArray"""
     return _gdi.EncodingConverter_GetAllEquivalents(*args, **kwargs)
 
 def EncodingConverter_CanConvert(*args, **kwargs):
-    """EncodingConverter_CanConvert(wxFontEncoding encIn, wxFontEncoding encOut) -> bool"""
+    """EncodingConverter_CanConvert(int encIn, int encOut) -> bool"""
     return _gdi.EncodingConverter_CanConvert(*args, **kwargs)
 
 #----------------------------------------------------------------------------
@@ -2316,19 +2310,19 @@ class DC(core.Object):
         return _gdi.DC_DrawBitmap(*args, **kwargs)
 
     def DrawTextXY(*args, **kwargs):
-        """DrawTextXY(wxString text, int x, int y)"""
+        """DrawTextXY(String text, int x, int y)"""
         return _gdi.DC_DrawTextXY(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
-        """DrawText(wxString text, Point pt)"""
+        """DrawText(String text, Point pt)"""
         return _gdi.DC_DrawText(*args, **kwargs)
 
     def DrawRotatedTextXY(*args, **kwargs):
-        """DrawRotatedTextXY(wxString text, int x, int y, double angle)"""
+        """DrawRotatedTextXY(String text, int x, int y, double angle)"""
         return _gdi.DC_DrawRotatedTextXY(*args, **kwargs)
 
     def DrawRotatedText(*args, **kwargs):
-        """DrawRotatedText(wxString text, Point pt, double angle)"""
+        """DrawRotatedText(String text, Point pt, double angle)"""
         return _gdi.DC_DrawRotatedText(*args, **kwargs)
 
     def BlitXY(*args, **kwargs):
@@ -2359,14 +2353,14 @@ class DC(core.Object):
 
     def DrawLabel(*args, **kwargs):
         """
-        DrawLabel(wxString text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+        DrawLabel(String text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
             int indexAccel=-1)
         """
         return _gdi.DC_DrawLabel(*args, **kwargs)
 
     def DrawImageLabel(*args, **kwargs):
         """
-        DrawImageLabel(wxString text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+        DrawImageLabel(String text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
             int indexAccel=-1) -> Rect
         """
         return _gdi.DC_DrawImageLabel(*args, **kwargs)
@@ -2380,7 +2374,7 @@ class DC(core.Object):
         return _gdi.DC_Clear(*args, **kwargs)
 
     def StartDoc(*args, **kwargs):
-        """StartDoc(wxString message) -> bool"""
+        """StartDoc(String message) -> bool"""
         return _gdi.DC_StartDoc(*args, **kwargs)
 
     def EndDoc(*args, **kwargs):
@@ -3064,7 +3058,7 @@ class MetaFile(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMetaFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString filename=wxPyEmptyString) -> MetaFile"""
+        """__init__(String filename=EmptyString) -> MetaFile"""
         newobj = _gdi.new_MetaFile(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3096,7 +3090,7 @@ class MetaFile(core.Object):
         return _gdi.MetaFile_GetHeight(*args, **kwargs)
 
     def GetFileName(*args, **kwargs):
-        """GetFileName() -> wxString"""
+        """GetFileName() -> String"""
         return _gdi.MetaFile_GetFileName(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -3113,8 +3107,8 @@ class MetaFileDC(DC):
         return "<%s.%s; proxy of C++ wxMetaFileDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(wxString filename=wxPyEmptyString, int width=0, int height=0, 
-            wxString description=wxPyEmptyString) -> MetaFileDC
+        __init__(String filename=EmptyString, int width=0, int height=0, 
+            String description=EmptyString) -> MetaFileDC
         """
         newobj = _gdi.new_MetaFileDC(*args, **kwargs)
         self.this = newobj.this
@@ -3294,20 +3288,20 @@ class ColourDatabase(core.Object):
         except: pass
 
     def Find(*args, **kwargs):
-        """Find(wxString name) -> Colour"""
+        """Find(String name) -> Colour"""
         return _gdi.ColourDatabase_Find(*args, **kwargs)
 
     def FindName(*args, **kwargs):
-        """FindName(Colour colour) -> wxString"""
+        """FindName(Colour colour) -> String"""
         return _gdi.ColourDatabase_FindName(*args, **kwargs)
 
     FindColour = Find 
     def AddColour(*args, **kwargs):
-        """AddColour(wxString name, Colour colour)"""
+        """AddColour(String name, Colour colour)"""
         return _gdi.ColourDatabase_AddColour(*args, **kwargs)
 
     def Append(*args, **kwargs):
-        """Append(wxString name, int red, int green, int blue)"""
+        """Append(String name, int red, int green, int blue)"""
         return _gdi.ColourDatabase_Append(*args, **kwargs)
 
 
@@ -3329,8 +3323,8 @@ class FontList(core.Object):
     def FindOrCreateFont(*args, **kwargs):
         """
         FindOrCreateFont(int point_size, int family, int style, int weight, 
-            bool underline=False, wxString facename=wxPyEmptyString, 
-            wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font
+            bool underline=False, String facename=EmptyString, 
+            int encoding=FONTENCODING_DEFAULT) -> Font
         """
         return _gdi.FontList_FindOrCreateFont(*args, **kwargs)
 

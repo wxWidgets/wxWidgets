@@ -267,12 +267,11 @@ static swig_type_info *swig_types[32];
 #include "treelistctrl.h"
 #include "wx/wxPython/pytree.h"
 
-    
-    static const wxString wxPyDynamicSashNameStr(wxT("dynamicSashWindow"));
-    static const wxString wxPyEditableListBoxNameStr(wxT("editableListBox"));
-    static const wxString wxPyTreeListCtrlNameStr(wxT("treelistctrl"));
-    static const wxString wxPyEmptyString(wxT(""));
 
+ static const wxString wxPyDynamicSashNameStr(wxT("dynamicSashWindow")); 
+ static const wxString wxPyEditableListBoxNameStr(wxT("editableListBox")); 
+ static const wxString wxPyTreeListCtrlNameStr(wxT("treelistctrl")); 
+ static const wxString wxPyEmptyString(wxEmptyString); 
 PyObject *wxEditableListBox_GetStrings(wxEditableListBox *self){
             wxArrayString strings;
             self->GetStrings(strings);
@@ -471,6 +470,66 @@ PyObject *wxPyTreeListCtrl_GetBoundingRect(wxPyTreeListCtrl *self,wxTreeItemId c
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_DynamicSashNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DynamicSashNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DynamicSashNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDynamicSashNameStr)->c_str(), (&wxPyDynamicSashNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDynamicSashNameStr)->c_str(), (&wxPyDynamicSashNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_EditableListBoxNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable EditableListBoxNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_EditableListBoxNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyEditableListBoxNameStr)->c_str(), (&wxPyEditableListBoxNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyEditableListBoxNameStr)->c_str(), (&wxPyEditableListBoxNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_TreeListCtrlNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable TreeListCtrlNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_TreeListCtrlNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyTreeListCtrlNameStr)->c_str(), (&wxPyTreeListCtrlNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyTreeListCtrlNameStr)->c_str(), (&wxPyTreeListCtrlNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_DynamicSashSplitEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxObject *arg1 = (wxObject *) 0 ;
@@ -7300,6 +7359,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"DynamicSashNameStr",_wrap_DynamicSashNameStr_get, _wrap_DynamicSashNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"EditableListBoxNameStr",_wrap_EditableListBoxNameStr_get, _wrap_EditableListBoxNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"TreeListCtrlNameStr",_wrap_TreeListCtrlNameStr_get, _wrap_TreeListCtrlNameStr_set);
     
     
     wxPyPtrTypeMap_Add("wxTreeCompanionWindow", "wxPyTreeCompanionWindow");

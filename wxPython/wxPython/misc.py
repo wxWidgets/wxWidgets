@@ -183,6 +183,7 @@ wxGetActiveWindow = wx.misc.GetActiveWindow
 wxGenericFindWindowAtPoint = wx.misc.GenericFindWindowAtPoint
 wxFindWindowAtPoint = wx.misc.FindWindowAtPoint
 wxGetTopLevelParent = wx.misc.GetTopLevelParent
+wxGetKeyState = wx.misc.GetKeyState
 wxWakeUpMainThread = wx.misc.WakeUpMainThread
 wxMutexGuiEnter = wx.misc.MutexGuiEnter
 wxMutexGuiLeave = wx.misc.MutexGuiLeave

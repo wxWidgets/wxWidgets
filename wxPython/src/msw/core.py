@@ -562,7 +562,7 @@ class Object(object):
         return "<%s.%s; proxy of C++ wxObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetClassName(*args, **kwargs):
         """
-        GetClassName() -> wxString
+        GetClassName() -> String
 
         Returns the class name of the C++ object using wxRTTI.
         """
@@ -585,41 +585,32 @@ class ObjectPtr(Object):
 _core.Object_swigregister(ObjectPtr)
 _wxPySetDictionary = _core._wxPySetDictionary
 
+_wxPyFixStockObjects = _core._wxPyFixStockObjects
+
+cvar = _core.cvar
+EmptyString = cvar.EmptyString
 
 #---------------------------------------------------------------------------
 
 BITMAP_TYPE_INVALID = _core.BITMAP_TYPE_INVALID
 BITMAP_TYPE_BMP = _core.BITMAP_TYPE_BMP
-BITMAP_TYPE_BMP_RESOURCE = _core.BITMAP_TYPE_BMP_RESOURCE
-BITMAP_TYPE_RESOURCE = _core.BITMAP_TYPE_RESOURCE
 BITMAP_TYPE_ICO = _core.BITMAP_TYPE_ICO
-BITMAP_TYPE_ICO_RESOURCE = _core.BITMAP_TYPE_ICO_RESOURCE
 BITMAP_TYPE_CUR = _core.BITMAP_TYPE_CUR
-BITMAP_TYPE_CUR_RESOURCE = _core.BITMAP_TYPE_CUR_RESOURCE
 BITMAP_TYPE_XBM = _core.BITMAP_TYPE_XBM
 BITMAP_TYPE_XBM_DATA = _core.BITMAP_TYPE_XBM_DATA
 BITMAP_TYPE_XPM = _core.BITMAP_TYPE_XPM
 BITMAP_TYPE_XPM_DATA = _core.BITMAP_TYPE_XPM_DATA
 BITMAP_TYPE_TIF = _core.BITMAP_TYPE_TIF
-BITMAP_TYPE_TIF_RESOURCE = _core.BITMAP_TYPE_TIF_RESOURCE
 BITMAP_TYPE_GIF = _core.BITMAP_TYPE_GIF
-BITMAP_TYPE_GIF_RESOURCE = _core.BITMAP_TYPE_GIF_RESOURCE
 BITMAP_TYPE_PNG = _core.BITMAP_TYPE_PNG
-BITMAP_TYPE_PNG_RESOURCE = _core.BITMAP_TYPE_PNG_RESOURCE
 BITMAP_TYPE_JPEG = _core.BITMAP_TYPE_JPEG
-BITMAP_TYPE_JPEG_RESOURCE = _core.BITMAP_TYPE_JPEG_RESOURCE
 BITMAP_TYPE_PNM = _core.BITMAP_TYPE_PNM
-BITMAP_TYPE_PNM_RESOURCE = _core.BITMAP_TYPE_PNM_RESOURCE
 BITMAP_TYPE_PCX = _core.BITMAP_TYPE_PCX
-BITMAP_TYPE_PCX_RESOURCE = _core.BITMAP_TYPE_PCX_RESOURCE
 BITMAP_TYPE_PICT = _core.BITMAP_TYPE_PICT
-BITMAP_TYPE_PICT_RESOURCE = _core.BITMAP_TYPE_PICT_RESOURCE
 BITMAP_TYPE_ICON = _core.BITMAP_TYPE_ICON
-BITMAP_TYPE_ICON_RESOURCE = _core.BITMAP_TYPE_ICON_RESOURCE
 BITMAP_TYPE_ANI = _core.BITMAP_TYPE_ANI
 BITMAP_TYPE_IFF = _core.BITMAP_TYPE_IFF
 BITMAP_TYPE_MACCURSOR = _core.BITMAP_TYPE_MACCURSOR
-BITMAP_TYPE_MACCURSOR_RESOURCE = _core.BITMAP_TYPE_MACCURSOR_RESOURCE
 BITMAP_TYPE_ANY = _core.BITMAP_TYPE_ANY
 CURSOR_NONE = _core.CURSOR_NONE
 CURSOR_ARROW = _core.CURSOR_ARROW
@@ -1538,7 +1529,7 @@ class InputStream(object):
         return _core.InputStream_Ungetch(*args, **kwargs)
 
     def SeekI(*args, **kwargs):
-        """SeekI(long pos, wxSeekMode mode=FromStart) -> long"""
+        """SeekI(long pos, int mode=FromStart) -> long"""
         return _core.InputStream_SeekI(*args, **kwargs)
 
     def TellI(*args, **kwargs):
@@ -1552,7 +1543,6 @@ class InputStreamPtr(InputStream):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = InputStream
 _core.InputStream_swigregister(InputStreamPtr)
-cvar = _core.cvar
 DefaultPosition = cvar.DefaultPosition
 DefaultSize = cvar.DefaultSize
 
@@ -1579,8 +1569,8 @@ class FSFile(Object):
         return "<%s.%s; proxy of C++ wxFSFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(wxInputStream stream, wxString loc, wxString mimetype, 
-            wxString anchor, wxDateTime modif) -> FSFile
+        __init__(InputStream stream, String loc, String mimetype, String anchor, 
+            DateTime modif) -> FSFile
         """
         newobj = _core.new_FSFile(*args, **kwargs)
         self.this = newobj.this
@@ -1593,23 +1583,23 @@ class FSFile(Object):
         except: pass
 
     def GetStream(*args, **kwargs):
-        """GetStream() -> wxInputStream"""
+        """GetStream() -> InputStream"""
         return _core.FSFile_GetStream(*args, **kwargs)
 
     def GetMimeType(*args, **kwargs):
-        """GetMimeType() -> wxString"""
+        """GetMimeType() -> String"""
         return _core.FSFile_GetMimeType(*args, **kwargs)
 
     def GetLocation(*args, **kwargs):
-        """GetLocation() -> wxString"""
+        """GetLocation() -> String"""
         return _core.FSFile_GetLocation(*args, **kwargs)
 
     def GetAnchor(*args, **kwargs):
-        """GetAnchor() -> wxString"""
+        """GetAnchor() -> String"""
         return _core.FSFile_GetAnchor(*args, **kwargs)
 
     def GetModificationTime(*args, **kwargs):
-        """GetModificationTime() -> wxDateTime"""
+        """GetModificationTime() -> DateTime"""
         return _core.FSFile_GetModificationTime(*args, **kwargs)
 
 
@@ -1648,39 +1638,39 @@ class FileSystemHandler(CPPFileSystemHandler):
         return _core.FileSystemHandler__setCallbackInfo(*args, **kwargs)
 
     def CanOpen(*args, **kwargs):
-        """CanOpen(wxString location) -> bool"""
+        """CanOpen(String location) -> bool"""
         return _core.FileSystemHandler_CanOpen(*args, **kwargs)
 
     def OpenFile(*args, **kwargs):
-        """OpenFile(FileSystem fs, wxString location) -> FSFile"""
+        """OpenFile(FileSystem fs, String location) -> FSFile"""
         return _core.FileSystemHandler_OpenFile(*args, **kwargs)
 
     def FindFirst(*args, **kwargs):
-        """FindFirst(wxString spec, int flags=0) -> wxString"""
+        """FindFirst(String spec, int flags=0) -> String"""
         return _core.FileSystemHandler_FindFirst(*args, **kwargs)
 
     def FindNext(*args, **kwargs):
-        """FindNext() -> wxString"""
+        """FindNext() -> String"""
         return _core.FileSystemHandler_FindNext(*args, **kwargs)
 
     def GetProtocol(*args, **kwargs):
-        """GetProtocol(wxString location) -> wxString"""
+        """GetProtocol(String location) -> String"""
         return _core.FileSystemHandler_GetProtocol(*args, **kwargs)
 
     def GetLeftLocation(*args, **kwargs):
-        """GetLeftLocation(wxString location) -> wxString"""
+        """GetLeftLocation(String location) -> String"""
         return _core.FileSystemHandler_GetLeftLocation(*args, **kwargs)
 
     def GetAnchor(*args, **kwargs):
-        """GetAnchor(wxString location) -> wxString"""
+        """GetAnchor(String location) -> String"""
         return _core.FileSystemHandler_GetAnchor(*args, **kwargs)
 
     def GetRightLocation(*args, **kwargs):
-        """GetRightLocation(wxString location) -> wxString"""
+        """GetRightLocation(String location) -> String"""
         return _core.FileSystemHandler_GetRightLocation(*args, **kwargs)
 
     def GetMimeTypeFromExt(*args, **kwargs):
-        """GetMimeTypeFromExt(wxString location) -> wxString"""
+        """GetMimeTypeFromExt(String location) -> String"""
         return _core.FileSystemHandler_GetMimeTypeFromExt(*args, **kwargs)
 
 
@@ -1707,23 +1697,23 @@ class FileSystem(Object):
         except: pass
 
     def ChangePathTo(*args, **kwargs):
-        """ChangePathTo(wxString location, bool is_dir=False)"""
+        """ChangePathTo(String location, bool is_dir=False)"""
         return _core.FileSystem_ChangePathTo(*args, **kwargs)
 
     def GetPath(*args, **kwargs):
-        """GetPath() -> wxString"""
+        """GetPath() -> String"""
         return _core.FileSystem_GetPath(*args, **kwargs)
 
     def OpenFile(*args, **kwargs):
-        """OpenFile(wxString location) -> FSFile"""
+        """OpenFile(String location) -> FSFile"""
         return _core.FileSystem_OpenFile(*args, **kwargs)
 
     def FindFirst(*args, **kwargs):
-        """FindFirst(wxString spec, int flags=0) -> wxString"""
+        """FindFirst(String spec, int flags=0) -> String"""
         return _core.FileSystem_FindFirst(*args, **kwargs)
 
     def FindNext(*args, **kwargs):
-        """FindNext() -> wxString"""
+        """FindNext() -> String"""
         return _core.FileSystem_FindNext(*args, **kwargs)
 
     def AddHandler(*args, **kwargs):
@@ -1737,7 +1727,7 @@ class FileSystem(Object):
 
     CleanUpHandlers = staticmethod(CleanUpHandlers)
     def FileNameToURL(*args, **kwargs):
-        """FileSystem.FileNameToURL(wxString filename) -> wxString"""
+        """FileSystem.FileNameToURL(String filename) -> String"""
         return _core.FileSystem_FileNameToURL(*args, **kwargs)
 
     FileNameToURL = staticmethod(FileNameToURL)
@@ -1758,12 +1748,12 @@ def FileSystem_CleanUpHandlers(*args, **kwargs):
     return _core.FileSystem_CleanUpHandlers(*args, **kwargs)
 
 def FileSystem_FileNameToURL(*args, **kwargs):
-    """FileSystem_FileNameToURL(wxString filename) -> wxString"""
+    """FileSystem_FileNameToURL(String filename) -> String"""
     return _core.FileSystem_FileNameToURL(*args, **kwargs)
 
 
 def FileSystem_URLToFileName(*args, **kwargs):
-    """FileSystem_URLToFileName(wxString url) -> wxString"""
+    """FileSystem_URLToFileName(String url) -> String"""
     return _core.FileSystem_URLToFileName(*args, **kwargs)
 class InternetFSHandler(CPPFileSystemHandler):
     def __repr__(self):
@@ -1775,11 +1765,11 @@ class InternetFSHandler(CPPFileSystemHandler):
         self.thisown = 1
         del newobj.thisown
     def CanOpen(*args, **kwargs):
-        """CanOpen(wxString location) -> bool"""
+        """CanOpen(String location) -> bool"""
         return _core.InternetFSHandler_CanOpen(*args, **kwargs)
 
     def OpenFile(*args, **kwargs):
-        """OpenFile(FileSystem fs, wxString location) -> FSFile"""
+        """OpenFile(FileSystem fs, String location) -> FSFile"""
         return _core.InternetFSHandler_OpenFile(*args, **kwargs)
 
 
@@ -1800,19 +1790,19 @@ class ZipFSHandler(CPPFileSystemHandler):
         self.thisown = 1
         del newobj.thisown
     def CanOpen(*args, **kwargs):
-        """CanOpen(wxString location) -> bool"""
+        """CanOpen(String location) -> bool"""
         return _core.ZipFSHandler_CanOpen(*args, **kwargs)
 
     def OpenFile(*args, **kwargs):
-        """OpenFile(FileSystem fs, wxString location) -> FSFile"""
+        """OpenFile(FileSystem fs, String location) -> FSFile"""
         return _core.ZipFSHandler_OpenFile(*args, **kwargs)
 
     def FindFirst(*args, **kwargs):
-        """FindFirst(wxString spec, int flags=0) -> wxString"""
+        """FindFirst(String spec, int flags=0) -> String"""
         return _core.ZipFSHandler_FindFirst(*args, **kwargs)
 
     def FindNext(*args, **kwargs):
-        """FindNext() -> wxString"""
+        """FindNext() -> String"""
         return _core.ZipFSHandler_FindNext(*args, **kwargs)
 
 
@@ -1825,15 +1815,15 @@ _core.ZipFSHandler_swigregister(ZipFSHandlerPtr)
 
 
 def __wxMemoryFSHandler_AddFile_wxImage(*args, **kwargs):
-    """__wxMemoryFSHandler_AddFile_wxImage(wxString filename, Image image, long type)"""
+    """__wxMemoryFSHandler_AddFile_wxImage(String filename, Image image, long type)"""
     return _core.__wxMemoryFSHandler_AddFile_wxImage(*args, **kwargs)
 
 def __wxMemoryFSHandler_AddFile_wxBitmap(*args, **kwargs):
-    """__wxMemoryFSHandler_AddFile_wxBitmap(wxString filename, wxBitmap bitmap, long type)"""
+    """__wxMemoryFSHandler_AddFile_wxBitmap(String filename, Bitmap bitmap, long type)"""
     return _core.__wxMemoryFSHandler_AddFile_wxBitmap(*args, **kwargs)
 
 def __wxMemoryFSHandler_AddFile_Data(*args, **kwargs):
-    """__wxMemoryFSHandler_AddFile_Data(wxString filename, PyObject data)"""
+    """__wxMemoryFSHandler_AddFile_Data(String filename, PyObject data)"""
     return _core.__wxMemoryFSHandler_AddFile_Data(*args, **kwargs)
 def MemoryFSHandler_AddFile(filename, a, b=''):
     if isinstance(a, wx.Image):
@@ -1854,25 +1844,25 @@ class MemoryFSHandler(CPPFileSystemHandler):
         self.thisown = 1
         del newobj.thisown
     def RemoveFile(*args, **kwargs):
-        """MemoryFSHandler.RemoveFile(wxString filename)"""
+        """MemoryFSHandler.RemoveFile(String filename)"""
         return _core.MemoryFSHandler_RemoveFile(*args, **kwargs)
 
     RemoveFile = staticmethod(RemoveFile)
     AddFile = staticmethod(MemoryFSHandler_AddFile) 
     def CanOpen(*args, **kwargs):
-        """CanOpen(wxString location) -> bool"""
+        """CanOpen(String location) -> bool"""
         return _core.MemoryFSHandler_CanOpen(*args, **kwargs)
 
     def OpenFile(*args, **kwargs):
-        """OpenFile(FileSystem fs, wxString location) -> FSFile"""
+        """OpenFile(FileSystem fs, String location) -> FSFile"""
         return _core.MemoryFSHandler_OpenFile(*args, **kwargs)
 
     def FindFirst(*args, **kwargs):
-        """FindFirst(wxString spec, int flags=0) -> wxString"""
+        """FindFirst(String spec, int flags=0) -> String"""
         return _core.MemoryFSHandler_FindFirst(*args, **kwargs)
 
     def FindNext(*args, **kwargs):
-        """FindNext() -> wxString"""
+        """FindNext() -> String"""
         return _core.MemoryFSHandler_FindNext(*args, **kwargs)
 
 
@@ -1884,7 +1874,7 @@ class MemoryFSHandlerPtr(MemoryFSHandler):
 _core.MemoryFSHandler_swigregister(MemoryFSHandlerPtr)
 
 def MemoryFSHandler_RemoveFile(*args, **kwargs):
-    """MemoryFSHandler_RemoveFile(wxString filename)"""
+    """MemoryFSHandler_RemoveFile(String filename)"""
     return _core.MemoryFSHandler_RemoveFile(*args, **kwargs)
 
 #---------------------------------------------------------------------------
@@ -1894,11 +1884,11 @@ class ImageHandler(Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetName(*args, **kwargs):
-        """GetName() -> wxString"""
+        """GetName() -> String"""
         return _core.ImageHandler_GetName(*args, **kwargs)
 
     def GetExtension(*args, **kwargs):
-        """GetExtension() -> wxString"""
+        """GetExtension() -> String"""
         return _core.ImageHandler_GetExtension(*args, **kwargs)
 
     def GetType(*args, **kwargs):
@@ -1906,19 +1896,19 @@ class ImageHandler(Object):
         return _core.ImageHandler_GetType(*args, **kwargs)
 
     def GetMimeType(*args, **kwargs):
-        """GetMimeType() -> wxString"""
+        """GetMimeType() -> String"""
         return _core.ImageHandler_GetMimeType(*args, **kwargs)
 
     def CanRead(*args, **kwargs):
-        """CanRead(wxString name) -> bool"""
+        """CanRead(String name) -> bool"""
         return _core.ImageHandler_CanRead(*args, **kwargs)
 
     def SetName(*args, **kwargs):
-        """SetName(wxString name)"""
+        """SetName(String name)"""
         return _core.ImageHandler_SetName(*args, **kwargs)
 
     def SetExtension(*args, **kwargs):
-        """SetExtension(wxString extension)"""
+        """SetExtension(String extension)"""
         return _core.ImageHandler_SetExtension(*args, **kwargs)
 
     def SetType(*args, **kwargs):
@@ -1926,7 +1916,7 @@ class ImageHandler(Object):
         return _core.ImageHandler_SetType(*args, **kwargs)
 
     def SetMimeType(*args, **kwargs):
-        """SetMimeType(wxString mimetype)"""
+        """SetMimeType(String mimetype)"""
         return _core.ImageHandler_SetMimeType(*args, **kwargs)
 
 
@@ -1985,7 +1975,7 @@ class Image(Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString name, long type=BITMAP_TYPE_ANY, int index=-1) -> Image"""
+        """__init__(String name, long type=BITMAP_TYPE_ANY, int index=-1) -> Image"""
         newobj = _core.new_Image(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2063,42 +2053,42 @@ class Image(Object):
         return _core.Image_SetMaskFromImage(*args, **kwargs)
 
     def CanRead(*args, **kwargs):
-        """Image.CanRead(wxString name) -> bool"""
+        """Image.CanRead(String name) -> bool"""
         return _core.Image_CanRead(*args, **kwargs)
 
     CanRead = staticmethod(CanRead)
     def GetImageCount(*args, **kwargs):
-        """Image.GetImageCount(wxString name, long type=BITMAP_TYPE_ANY) -> int"""
+        """Image.GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
         return _core.Image_GetImageCount(*args, **kwargs)
 
     GetImageCount = staticmethod(GetImageCount)
     def LoadFile(*args, **kwargs):
-        """LoadFile(wxString name, long type=BITMAP_TYPE_ANY, int index=-1) -> bool"""
+        """LoadFile(String name, long type=BITMAP_TYPE_ANY, int index=-1) -> bool"""
         return _core.Image_LoadFile(*args, **kwargs)
 
     def LoadMimeFile(*args, **kwargs):
-        """LoadMimeFile(wxString name, wxString mimetype, int index=-1) -> bool"""
+        """LoadMimeFile(String name, String mimetype, int index=-1) -> bool"""
         return _core.Image_LoadMimeFile(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(wxString name, int type) -> bool"""
+        """SaveFile(String name, int type) -> bool"""
         return _core.Image_SaveFile(*args, **kwargs)
 
     def SaveMimeFile(*args, **kwargs):
-        """SaveMimeFile(wxString name, wxString mimetype) -> bool"""
+        """SaveMimeFile(String name, String mimetype) -> bool"""
         return _core.Image_SaveMimeFile(*args, **kwargs)
 
     def CanReadStream(*args, **kwargs):
-        """Image.CanReadStream(wxInputStream stream) -> bool"""
+        """Image.CanReadStream(InputStream stream) -> bool"""
         return _core.Image_CanReadStream(*args, **kwargs)
 
     CanReadStream = staticmethod(CanReadStream)
     def LoadStream(*args, **kwargs):
-        """LoadStream(wxInputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> bool"""
+        """LoadStream(InputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> bool"""
         return _core.Image_LoadStream(*args, **kwargs)
 
     def LoadMimeStream(*args, **kwargs):
-        """LoadMimeStream(wxInputStream stream, wxString mimetype, int index=-1) -> bool"""
+        """LoadMimeStream(InputStream stream, String mimetype, int index=-1) -> bool"""
         return _core.Image_LoadMimeStream(*args, **kwargs)
 
     def Ok(*args, **kwargs):
@@ -2208,23 +2198,23 @@ class Image(Object):
         return _core.Image_ConvertToMono(*args, **kwargs)
 
     def SetOption(*args, **kwargs):
-        """SetOption(wxString name, wxString value)"""
+        """SetOption(String name, String value)"""
         return _core.Image_SetOption(*args, **kwargs)
 
     def SetOptionInt(*args, **kwargs):
-        """SetOptionInt(wxString name, int value)"""
+        """SetOptionInt(String name, int value)"""
         return _core.Image_SetOptionInt(*args, **kwargs)
 
     def GetOption(*args, **kwargs):
-        """GetOption(wxString name) -> wxString"""
+        """GetOption(String name) -> String"""
         return _core.Image_GetOption(*args, **kwargs)
 
     def GetOptionInt(*args, **kwargs):
-        """GetOptionInt(wxString name) -> int"""
+        """GetOptionInt(String name) -> int"""
         return _core.Image_GetOptionInt(*args, **kwargs)
 
     def HasOption(*args, **kwargs):
-        """HasOption(wxString name) -> bool"""
+        """HasOption(String name) -> bool"""
         return _core.Image_HasOption(*args, **kwargs)
 
     def CountColours(*args, **kwargs):
@@ -2246,21 +2236,21 @@ class Image(Object):
 
     InsertHandler = staticmethod(InsertHandler)
     def RemoveHandler(*args, **kwargs):
-        """Image.RemoveHandler(wxString name) -> bool"""
+        """Image.RemoveHandler(String name) -> bool"""
         return _core.Image_RemoveHandler(*args, **kwargs)
 
     RemoveHandler = staticmethod(RemoveHandler)
     def GetImageExtWildcard(*args, **kwargs):
-        """Image.GetImageExtWildcard() -> wxString"""
+        """Image.GetImageExtWildcard() -> String"""
         return _core.Image_GetImageExtWildcard(*args, **kwargs)
 
     GetImageExtWildcard = staticmethod(GetImageExtWildcard)
     def ConvertToBitmap(*args, **kwargs):
-        """ConvertToBitmap() -> wxBitmap"""
+        """ConvertToBitmap() -> Bitmap"""
         return _core.Image_ConvertToBitmap(*args, **kwargs)
 
     def ConvertToMonoBitmap(*args, **kwargs):
-        """ConvertToMonoBitmap(unsigned char red, unsigned char green, unsigned char blue) -> wxBitmap"""
+        """ConvertToMonoBitmap(unsigned char red, unsigned char green, unsigned char blue) -> Bitmap"""
         return _core.Image_ConvertToMonoBitmap(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -2273,19 +2263,19 @@ class ImagePtr(Image):
 _core.Image_swigregister(ImagePtr)
 
 def ImageFromMime(*args, **kwargs):
-    """ImageFromMime(wxString name, wxString mimetype, int index=-1) -> Image"""
+    """ImageFromMime(String name, String mimetype, int index=-1) -> Image"""
     val = _core.new_ImageFromMime(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ImageFromStream(*args, **kwargs):
-    """ImageFromStream(wxInputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> Image"""
+    """ImageFromStream(InputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> Image"""
     val = _core.new_ImageFromStream(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ImageFromStreamMime(*args, **kwargs):
-    """ImageFromStreamMime(wxInputStream stream, wxString mimetype, int index=-1) -> Image"""
+    """ImageFromStreamMime(InputStream stream, String mimetype, int index=-1) -> Image"""
     val = _core.new_ImageFromStreamMime(*args, **kwargs)
     val.thisown = 1
     return val
@@ -2297,7 +2287,7 @@ def EmptyImage(*args, **kwargs):
     return val
 
 def ImageFromBitmap(*args, **kwargs):
-    """ImageFromBitmap(wxBitmap bitmap) -> Image"""
+    """ImageFromBitmap(Bitmap bitmap) -> Image"""
     val = _core.new_ImageFromBitmap(*args, **kwargs)
     val.thisown = 1
     return val
@@ -2309,15 +2299,15 @@ def ImageFromData(*args, **kwargs):
     return val
 
 def Image_CanRead(*args, **kwargs):
-    """Image_CanRead(wxString name) -> bool"""
+    """Image_CanRead(String name) -> bool"""
     return _core.Image_CanRead(*args, **kwargs)
 
 def Image_GetImageCount(*args, **kwargs):
-    """Image_GetImageCount(wxString name, long type=BITMAP_TYPE_ANY) -> int"""
+    """Image_GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
     return _core.Image_GetImageCount(*args, **kwargs)
 
 def Image_CanReadStream(*args, **kwargs):
-    """Image_CanReadStream(wxInputStream stream) -> bool"""
+    """Image_CanReadStream(InputStream stream) -> bool"""
     return _core.Image_CanReadStream(*args, **kwargs)
 
 def Image_AddHandler(*args, **kwargs):
@@ -2329,11 +2319,11 @@ def Image_InsertHandler(*args, **kwargs):
     return _core.Image_InsertHandler(*args, **kwargs)
 
 def Image_RemoveHandler(*args, **kwargs):
-    """Image_RemoveHandler(wxString name) -> bool"""
+    """Image_RemoveHandler(String name) -> bool"""
     return _core.Image_RemoveHandler(*args, **kwargs)
 
 def Image_GetImageExtWildcard(*args, **kwargs):
-    """Image_GetImageExtWildcard() -> wxString"""
+    """Image_GetImageExtWildcard() -> String"""
     return _core.Image_GetImageExtWildcard(*args, **kwargs)
 
 
@@ -3142,11 +3132,11 @@ class CommandEvent(Event):
         return _core.CommandEvent_GetSelection(*args, **kwargs)
 
     def SetString(*args, **kwargs):
-        """SetString(wxString s)"""
+        """SetString(String s)"""
         return _core.CommandEvent_SetString(*args, **kwargs)
 
     def GetString(*args, **kwargs):
-        """GetString() -> wxString"""
+        """GetString() -> String"""
         return _core.CommandEvent_GetString(*args, **kwargs)
 
     def IsChecked(*args, **kwargs):
@@ -3431,7 +3421,7 @@ class MouseEvent(Event):
         return _core.MouseEvent_GetPositionTuple(*args, **kwargs)
 
     def GetLogicalPosition(*args, **kwargs):
-        """GetLogicalPosition(wxDC dc) -> Point"""
+        """GetLogicalPosition(DC dc) -> Point"""
         return _core.MouseEvent_GetLogicalPosition(*args, **kwargs)
 
     def GetX(*args, **kwargs):
@@ -3498,11 +3488,11 @@ class SetCursorEvent(Event):
         return _core.SetCursorEvent_GetY(*args, **kwargs)
 
     def SetCursor(*args, **kwargs):
-        """SetCursor(wxCursor cursor)"""
+        """SetCursor(Cursor cursor)"""
         return _core.SetCursorEvent_SetCursor(*args, **kwargs)
 
     def GetCursor(*args, **kwargs):
-        """GetCursor() -> wxCursor"""
+        """GetCursor() -> Cursor"""
         return _core.SetCursorEvent_GetCursor(*args, **kwargs)
 
     def HasCursor(*args, **kwargs):
@@ -3723,13 +3713,13 @@ class EraseEvent(Event):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEraseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int Id=0, wxDC dc=(wxDC *) NULL) -> EraseEvent"""
+        """__init__(int Id=0, DC dc=(wxDC *) NULL) -> EraseEvent"""
         newobj = _core.new_EraseEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetDC(*args, **kwargs):
-        """GetDC() -> wxDC"""
+        """GetDC() -> DC"""
         return _core.EraseEvent_GetDC(*args, **kwargs)
 
 
@@ -4023,7 +4013,7 @@ class UpdateUIEvent(CommandEvent):
         return _core.UpdateUIEvent_GetEnabled(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> wxString"""
+        """GetText() -> String"""
         return _core.UpdateUIEvent_GetText(*args, **kwargs)
 
     def GetSetText(*args, **kwargs):
@@ -4047,7 +4037,7 @@ class UpdateUIEvent(CommandEvent):
         return _core.UpdateUIEvent_Enable(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(wxString text)"""
+        """SetText(String text)"""
         return _core.UpdateUIEvent_SetText(*args, **kwargs)
 
     def SetUpdateInterval(*args, **kwargs):
@@ -4071,12 +4061,12 @@ class UpdateUIEvent(CommandEvent):
 
     ResetUpdateTime = staticmethod(ResetUpdateTime)
     def SetMode(*args, **kwargs):
-        """UpdateUIEvent.SetMode(wxUpdateUIMode mode)"""
+        """UpdateUIEvent.SetMode(int mode)"""
         return _core.UpdateUIEvent_SetMode(*args, **kwargs)
 
     SetMode = staticmethod(SetMode)
     def GetMode(*args, **kwargs):
-        """UpdateUIEvent.GetMode() -> wxUpdateUIMode"""
+        """UpdateUIEvent.GetMode() -> int"""
         return _core.UpdateUIEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
@@ -4105,11 +4095,11 @@ def UpdateUIEvent_ResetUpdateTime(*args, **kwargs):
     return _core.UpdateUIEvent_ResetUpdateTime(*args, **kwargs)
 
 def UpdateUIEvent_SetMode(*args, **kwargs):
-    """UpdateUIEvent_SetMode(wxUpdateUIMode mode)"""
+    """UpdateUIEvent_SetMode(int mode)"""
     return _core.UpdateUIEvent_SetMode(*args, **kwargs)
 
 def UpdateUIEvent_GetMode(*args, **kwargs):
-    """UpdateUIEvent_GetMode() -> wxUpdateUIMode"""
+    """UpdateUIEvent_GetMode() -> int"""
     return _core.UpdateUIEvent_GetMode(*args, **kwargs)
 
 #---------------------------------------------------------------------------
@@ -4363,12 +4353,12 @@ class IdleEvent(Event):
         return _core.IdleEvent_MoreRequested(*args, **kwargs)
 
     def SetMode(*args, **kwargs):
-        """IdleEvent.SetMode(wxIdleMode mode)"""
+        """IdleEvent.SetMode(int mode)"""
         return _core.IdleEvent_SetMode(*args, **kwargs)
 
     SetMode = staticmethod(SetMode)
     def GetMode(*args, **kwargs):
-        """IdleEvent.GetMode() -> wxIdleMode"""
+        """IdleEvent.GetMode() -> int"""
         return _core.IdleEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
@@ -4386,11 +4376,11 @@ class IdleEventPtr(IdleEvent):
 _core.IdleEvent_swigregister(IdleEventPtr)
 
 def IdleEvent_SetMode(*args, **kwargs):
-    """IdleEvent_SetMode(wxIdleMode mode)"""
+    """IdleEvent_SetMode(int mode)"""
     return _core.IdleEvent_SetMode(*args, **kwargs)
 
 def IdleEvent_GetMode(*args, **kwargs):
-    """IdleEvent_GetMode() -> wxIdleMode"""
+    """IdleEvent_GetMode() -> int"""
     return _core.IdleEvent_GetMode(*args, **kwargs)
 
 def IdleEvent_CanSend(*args, **kwargs):
@@ -4497,7 +4487,7 @@ class PyApp(EvtHandler):
 
     def GetAppName(*args, **kwargs):
         """
-        GetAppName() -> wxString
+        GetAppName() -> String
 
         Get the application name.
         """
@@ -4505,16 +4495,16 @@ class PyApp(EvtHandler):
 
     def SetAppName(*args, **kwargs):
         """
-        SetAppName(wxString name)
+        SetAppName(String name)
 
         Set the application name. This value may be used automatically
-        by wxConfig and such.
+        by wx.Config and such.
         """
         return _core.PyApp_SetAppName(*args, **kwargs)
 
     def GetClassName(*args, **kwargs):
         """
-        GetClassName() -> wxString
+        GetClassName() -> String
 
         Get the application's class name.
         """
@@ -4522,7 +4512,7 @@ class PyApp(EvtHandler):
 
     def SetClassName(*args, **kwargs):
         """
-        SetClassName(wxString name)
+        SetClassName(String name)
 
         Set the application's class name. This value may be used for X-resources if
         applicable for the platform
@@ -4531,7 +4521,7 @@ class PyApp(EvtHandler):
 
     def GetVendorName(*args, **kwargs):
         """
-        GetVendorName() -> wxString
+        GetVendorName() -> String
 
         Get the application's vendor name.
         """
@@ -4539,10 +4529,10 @@ class PyApp(EvtHandler):
 
     def SetVendorName(*args, **kwargs):
         """
-        SetVendorName(wxString name)
+        SetVendorName(String name)
 
         Set the application's vendor name. This value may be used automatically
-        by wxConfig and such.
+        by wx.Config and such.
         """
         return _core.PyApp_SetVendorName(*args, **kwargs)
 
@@ -4553,7 +4543,7 @@ class PyApp(EvtHandler):
         Create the app traits object to which we delegate for everything which either
         should be configurable by the user (then he can change the default behaviour
         simply by overriding CreateTraits() and returning his own traits object) or
-        which is GUI/console dependent as then wxAppTraits allows us to abstract the
+        which is GUI/console dependent as then wx.AppTraits allows us to abstract the
         differences behind the common facade
         """
         return _core.PyApp_GetTraits(*args, **kwargs)
@@ -4562,7 +4552,7 @@ class PyApp(EvtHandler):
         """
         ProcessPendingEvents()
 
-        Process all events in the wxPendingEvents list -- it is necessary to call this
+        Process all events in the Pending Events list -- it is necessary to call this
         function to process posted events. This happens during each event loop
         iteration.
         """
@@ -4732,10 +4722,10 @@ class PyApp(EvtHandler):
         Set the OnAssert behaviour for debug and hybrid builds.  The following flags
         may be or'd together:
 
-         wxPYAPP_ASSERT_SUPPRESS         Don't do anything
-         wxPYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)
-         wxPYAPP_ASSERT_DIALOG           Display a message dialog
-         wxPYAPP_ASSERT_LOG              Write the assertion info to the wxLog
+         wx.PYAPP_ASSERT_SUPPRESS         Don't do anything
+         wx.PYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)
+         wx.PYAPP_ASSERT_DIALOG           Display a message dialog
+         wx.PYAPP_ASSERT_LOG              Write the assertion info to the wx.Log
 
         """
         return _core.PyApp_SetAssertMode(*args, **kwargs)
@@ -4769,7 +4759,7 @@ class PyApp(EvtHandler):
 
     GetMacExitMenuItemId = staticmethod(GetMacExitMenuItemId)
     def GetMacHelpMenuTitleName(*args, **kwargs):
-        """PyApp.GetMacHelpMenuTitleName() -> wxString"""
+        """PyApp.GetMacHelpMenuTitleName() -> String"""
         return _core.PyApp_GetMacHelpMenuTitleName(*args, **kwargs)
 
     GetMacHelpMenuTitleName = staticmethod(GetMacHelpMenuTitleName)
@@ -4794,7 +4784,7 @@ class PyApp(EvtHandler):
 
     SetMacExitMenuItemId = staticmethod(SetMacExitMenuItemId)
     def SetMacHelpMenuTitleName(*args, **kwargs):
-        """PyApp.SetMacHelpMenuTitleName(wxString val)"""
+        """PyApp.SetMacHelpMenuTitleName(String val)"""
         return _core.PyApp_SetMacHelpMenuTitleName(*args, **kwargs)
 
     SetMacHelpMenuTitleName = staticmethod(SetMacHelpMenuTitleName)
@@ -4841,7 +4831,7 @@ def PyApp_GetMacExitMenuItemId(*args, **kwargs):
     return _core.PyApp_GetMacExitMenuItemId(*args, **kwargs)
 
 def PyApp_GetMacHelpMenuTitleName(*args, **kwargs):
-    """PyApp_GetMacHelpMenuTitleName() -> wxString"""
+    """PyApp_GetMacHelpMenuTitleName() -> String"""
     return _core.PyApp_GetMacHelpMenuTitleName(*args, **kwargs)
 
 def PyApp_SetMacSupportPCMenuShortcuts(*args, **kwargs):
@@ -4861,7 +4851,7 @@ def PyApp_SetMacExitMenuItemId(*args, **kwargs):
     return _core.PyApp_SetMacExitMenuItemId(*args, **kwargs)
 
 def PyApp_SetMacHelpMenuTitleName(*args, **kwargs):
-    """PyApp_SetMacHelpMenuTitleName(wxString val)"""
+    """PyApp_SetMacHelpMenuTitleName(String val)"""
     return _core.PyApp_SetMacHelpMenuTitleName(*args, **kwargs)
 
 def PyApp_GetComCtl32Version(*args, **kwargs):
@@ -4941,7 +4931,7 @@ def GetApp(*args, **kwargs):
     """
     GetApp() -> PyApp
 
-    Return a reference to the current wxApp object.
+    Return a reference to the current wx.App object.
     """
     return _core.GetApp(*args, **kwargs)
 #----------------------------------------------------------------------
@@ -4966,8 +4956,8 @@ class PyOnDemandOutputWindow:
     def CreateOutputWindow(self, st):
         self.frame = wx.Frame(self.parent, -1, self.title,
                               style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-        self.text  = wxTextCtrl(self.frame, -1, "",
-                                style = wx.TE_MULTILINE | wx.TE_READONLY)
+        self.text  = wx.TextCtrl(self.frame, -1, "",
+                                 style = wx.TE_MULTILINE | wx.TE_READONLY)
         self.frame.SetSize((450, 300))
         self.frame.Show(True)
         EVT_CLOSE(self.frame, self.OnCloseWindow)
@@ -5125,7 +5115,7 @@ class PyWidgetTester(wx.App):
         wx.App.__init__(self, 0)
 
     def OnInit(self):
-        self.frame = wxFrame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
+        self.frame = wx.Frame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
         self.SetTopWindow(self.frame)
         return True
 
@@ -5240,7 +5230,7 @@ _core.AcceleratorTable_swigregister(AcceleratorTablePtr)
 
 
 def GetAccelFromString(*args, **kwargs):
-    """GetAccelFromString(wxString label) -> AcceleratorEntry"""
+    """GetAccelFromString(String label) -> AcceleratorEntry"""
     return _core.GetAccelFromString(*args, **kwargs)
 #---------------------------------------------------------------------------
 
@@ -5250,7 +5240,7 @@ class Window(EvtHandler):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=PanelNameStr) -> Window
+            long style=0, String name=PanelNameStr) -> Window
         """
         newobj = _core.new_Window(*args, **kwargs)
         self.this = newobj.this
@@ -5261,7 +5251,7 @@ class Window(EvtHandler):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=PanelNameStr) -> bool
+            long style=0, String name=PanelNameStr) -> bool
         """
         return _core.Window_Create(*args, **kwargs)
 
@@ -5286,27 +5276,27 @@ class Window(EvtHandler):
         return _core.Window_IsBeingDeleted(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """SetTitle(wxString title)"""
+        """SetTitle(String title)"""
         return _core.Window_SetTitle(*args, **kwargs)
 
     def GetTitle(*args, **kwargs):
-        """GetTitle() -> wxString"""
+        """GetTitle() -> String"""
         return _core.Window_GetTitle(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(wxString label)"""
+        """SetLabel(String label)"""
         return _core.Window_SetLabel(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> wxString"""
+        """GetLabel() -> String"""
         return _core.Window_GetLabel(*args, **kwargs)
 
     def SetName(*args, **kwargs):
-        """SetName(wxString name)"""
+        """SetName(String name)"""
         return _core.Window_SetName(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> wxString"""
+        """GetName() -> String"""
         return _core.Window_GetName(*args, **kwargs)
 
     def SetId(*args, **kwargs):
@@ -5695,7 +5685,7 @@ class Window(EvtHandler):
         return _core.Window_FindWindowById(*args, **kwargs)
 
     def FindWindowByName(*args, **kwargs):
-        """FindWindowByName(wxString name) -> Window"""
+        """FindWindowByName(String name) -> Window"""
         return _core.Window_FindWindowByName(*args, **kwargs)
 
     def GetEventHandler(*args, **kwargs):
@@ -5812,11 +5802,11 @@ class Window(EvtHandler):
         return _core.Window_Thaw(*args, **kwargs)
 
     def PrepareDC(*args, **kwargs):
-        """PrepareDC(wxDC dc)"""
+        """PrepareDC(DC dc)"""
         return _core.Window_PrepareDC(*args, **kwargs)
 
     def GetUpdateRegion(*args, **kwargs):
-        """GetUpdateRegion() -> wxRegion"""
+        """GetUpdateRegion() -> Region"""
         return _core.Window_GetUpdateRegion(*args, **kwargs)
 
     def GetUpdateClientRect(*args, **kwargs):
@@ -5836,43 +5826,43 @@ class Window(EvtHandler):
         return _core.Window_isExposedRect(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(wxColour colour) -> bool"""
+        """SetBackgroundColour(Colour colour) -> bool"""
         return _core.Window_SetBackgroundColour(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
-        """SetForegroundColour(wxColour colour) -> bool"""
+        """SetForegroundColour(Colour colour) -> bool"""
         return _core.Window_SetForegroundColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> wxColour"""
+        """GetBackgroundColour() -> Colour"""
         return _core.Window_GetBackgroundColour(*args, **kwargs)
 
     def GetForegroundColour(*args, **kwargs):
-        """GetForegroundColour() -> wxColour"""
+        """GetForegroundColour() -> Colour"""
         return _core.Window_GetForegroundColour(*args, **kwargs)
 
     def SetCursor(*args, **kwargs):
-        """SetCursor(wxCursor cursor) -> bool"""
+        """SetCursor(Cursor cursor) -> bool"""
         return _core.Window_SetCursor(*args, **kwargs)
 
     def GetCursor(*args, **kwargs):
-        """GetCursor() -> wxCursor"""
+        """GetCursor() -> Cursor"""
         return _core.Window_GetCursor(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(wxFont font) -> bool"""
+        """SetFont(Font font) -> bool"""
         return _core.Window_SetFont(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> wxFont"""
+        """GetFont() -> Font"""
         return _core.Window_GetFont(*args, **kwargs)
 
     def SetCaret(*args, **kwargs):
-        """SetCaret(wxCaret caret)"""
+        """SetCaret(Caret caret)"""
         return _core.Window_SetCaret(*args, **kwargs)
 
     def GetCaret(*args, **kwargs):
-        """GetCaret() -> wxCaret"""
+        """GetCaret() -> Caret"""
         return _core.Window_GetCaret(*args, **kwargs)
 
     def GetCharHeight(*args, **kwargs):
@@ -5885,7 +5875,7 @@ class Window(EvtHandler):
 
     def GetTextExtent(*args, **kwargs):
         """
-        GetTextExtent(wxString string) -> (width, height)
+        GetTextExtent(String string) -> (width, height)
 
         Get the width and height of the text using the current font.
         """
@@ -5893,7 +5883,7 @@ class Window(EvtHandler):
 
     def GetFullTextExtent(*args, **kwargs):
         """
-        GetFullTextExtent(wxString string, Font font=None) ->
+        GetFullTextExtent(String string, Font font=None) ->
            (width, height, descent, externalLeading)
 
         Get the width, height, decent and leading of the text using the current or specified font.
@@ -5917,19 +5907,19 @@ class Window(EvtHandler):
         return _core.Window_ScreenToClient(*args, **kwargs)
 
     def HitTestXY(*args, **kwargs):
-        """HitTestXY(int x, int y) -> wxHitTest"""
+        """HitTestXY(int x, int y) -> int"""
         return _core.Window_HitTestXY(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> wxHitTest"""
+        """HitTest(Point pt) -> int"""
         return _core.Window_HitTest(*args, **kwargs)
 
     def GetBorderFlags(*args, **kwargs):
-        """GetBorderFlags(long flags) -> wxBorder"""
+        """GetBorderFlags(long flags) -> int"""
         return _core.Window_GetBorderFlags(*args, **kwargs)
 
     def GetBorder(*args, **kwargs):
-        """GetBorder() -> wxBorder"""
+        """GetBorder() -> int"""
         return _core.Window_GetBorder(*args, **kwargs)
 
     def UpdateWindowUI(*args, **kwargs):
@@ -6005,37 +5995,37 @@ class Window(EvtHandler):
         return _core.Window_PageDown(*args, **kwargs)
 
     def SetHelpText(*args, **kwargs):
-        """SetHelpText(wxString text)"""
+        """SetHelpText(String text)"""
         return _core.Window_SetHelpText(*args, **kwargs)
 
     def SetHelpTextForId(*args, **kwargs):
-        """SetHelpTextForId(wxString text)"""
+        """SetHelpTextForId(String text)"""
         return _core.Window_SetHelpTextForId(*args, **kwargs)
 
     def GetHelpText(*args, **kwargs):
-        """GetHelpText() -> wxString"""
+        """GetHelpText() -> String"""
         return _core.Window_GetHelpText(*args, **kwargs)
 
     def SetToolTipString(*args, **kwargs):
-        """SetToolTipString(wxString tip)"""
+        """SetToolTipString(String tip)"""
         return _core.Window_SetToolTipString(*args, **kwargs)
 
     def SetToolTip(*args, **kwargs):
-        """SetToolTip(wxToolTip tip)"""
+        """SetToolTip(ToolTip tip)"""
         return _core.Window_SetToolTip(*args, **kwargs)
 
     def GetToolTip(*args, **kwargs):
-        """GetToolTip() -> wxToolTip"""
+        """GetToolTip() -> ToolTip"""
         return _core.Window_GetToolTip(*args, **kwargs)
 
     def SetDropTarget(*args, **kwargs):
-        """SetDropTarget(wxPyDropTarget dropTarget)"""
+        """SetDropTarget(PyDropTarget dropTarget)"""
         val = _core.Window_SetDropTarget(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def GetDropTarget(*args, **kwargs):
-        """GetDropTarget() -> wxPyDropTarget"""
+        """GetDropTarget() -> PyDropTarget"""
         return _core.Window_GetDropTarget(*args, **kwargs)
 
     def DragAcceptFiles(*args, **kwargs):
@@ -6147,11 +6137,11 @@ def FindWindowById(*args, **kwargs):
     return _core.FindWindowById(*args, **kwargs)
 
 def FindWindowByName(*args, **kwargs):
-    """FindWindowByName(wxString name, Window parent=None) -> Window"""
+    """FindWindowByName(String name, Window parent=None) -> Window"""
     return _core.FindWindowByName(*args, **kwargs)
 
 def FindWindowByLabel(*args, **kwargs):
-    """FindWindowByLabel(wxString label, Window parent=None) -> Window"""
+    """FindWindowByLabel(String label, Window parent=None) -> Window"""
     return _core.FindWindowByLabel(*args, **kwargs)
 
 def Window_FromHWND(*args, **kwargs):
@@ -6251,7 +6241,7 @@ class Menu(EvtHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenu instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString title=wxPyEmptyString, long style=0) -> Menu"""
+        """__init__(String title=EmptyString, long style=0) -> Menu"""
         newobj = _core.new_Menu(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -6259,10 +6249,7 @@ class Menu(EvtHandler):
         self._setOORInfo(self)
 
     def Append(*args, **kwargs):
-        """
-        Append(int id, wxString text, wxString help=wxPyEmptyString, 
-            wxItemKind kind=ITEM_NORMAL)
-        """
+        """Append(int id, String text, String help=EmptyString, int kind=ITEM_NORMAL)"""
         return _core.Menu_Append(*args, **kwargs)
 
     def AppendSeparator(*args, **kwargs):
@@ -6270,15 +6257,15 @@ class Menu(EvtHandler):
         return _core.Menu_AppendSeparator(*args, **kwargs)
 
     def AppendCheckItem(*args, **kwargs):
-        """AppendCheckItem(int id, wxString text, wxString help=wxPyEmptyString)"""
+        """AppendCheckItem(int id, String text, String help=EmptyString)"""
         return _core.Menu_AppendCheckItem(*args, **kwargs)
 
     def AppendRadioItem(*args, **kwargs):
-        """AppendRadioItem(int id, wxString text, wxString help=wxPyEmptyString)"""
+        """AppendRadioItem(int id, String text, String help=EmptyString)"""
         return _core.Menu_AppendRadioItem(*args, **kwargs)
 
     def AppendMenu(*args, **kwargs):
-        """AppendMenu(int id, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
+        """AppendMenu(int id, String text, Menu submenu, String help=EmptyString)"""
         return _core.Menu_AppendMenu(*args, **kwargs)
 
     def AppendItem(*args, **kwargs):
@@ -6295,8 +6282,8 @@ class Menu(EvtHandler):
 
     def Insert(*args, **kwargs):
         """
-        Insert(size_t pos, int id, wxString text, wxString help=wxPyEmptyString, 
-            wxItemKind kind=ITEM_NORMAL)
+        Insert(size_t pos, int id, String text, String help=EmptyString, 
+            int kind=ITEM_NORMAL)
         """
         return _core.Menu_Insert(*args, **kwargs)
 
@@ -6305,15 +6292,15 @@ class Menu(EvtHandler):
         return _core.Menu_InsertSeparator(*args, **kwargs)
 
     def InsertCheckItem(*args, **kwargs):
-        """InsertCheckItem(size_t pos, int id, wxString text, wxString help=wxPyEmptyString)"""
+        """InsertCheckItem(size_t pos, int id, String text, String help=EmptyString)"""
         return _core.Menu_InsertCheckItem(*args, **kwargs)
 
     def InsertRadioItem(*args, **kwargs):
-        """InsertRadioItem(size_t pos, int id, wxString text, wxString help=wxPyEmptyString)"""
+        """InsertRadioItem(size_t pos, int id, String text, String help=EmptyString)"""
         return _core.Menu_InsertRadioItem(*args, **kwargs)
 
     def InsertMenu(*args, **kwargs):
-        """InsertMenu(size_t pos, int id, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
+        """InsertMenu(size_t pos, int id, String text, Menu submenu, String help=EmptyString)"""
         return _core.Menu_InsertMenu(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
@@ -6321,10 +6308,7 @@ class Menu(EvtHandler):
         return _core.Menu_PrependItem(*args, **kwargs)
 
     def Prepend(*args, **kwargs):
-        """
-        Prepend(int id, wxString text, wxString help=wxPyEmptyString, 
-            wxItemKind kind=ITEM_NORMAL)
-        """
+        """Prepend(int id, String text, String help=EmptyString, int kind=ITEM_NORMAL)"""
         return _core.Menu_Prepend(*args, **kwargs)
 
     def PrependSeparator(*args, **kwargs):
@@ -6332,15 +6316,15 @@ class Menu(EvtHandler):
         return _core.Menu_PrependSeparator(*args, **kwargs)
 
     def PrependCheckItem(*args, **kwargs):
-        """PrependCheckItem(int id, wxString text, wxString help=wxPyEmptyString)"""
+        """PrependCheckItem(int id, String text, String help=EmptyString)"""
         return _core.Menu_PrependCheckItem(*args, **kwargs)
 
     def PrependRadioItem(*args, **kwargs):
-        """PrependRadioItem(int id, wxString text, wxString help=wxPyEmptyString)"""
+        """PrependRadioItem(int id, String text, String help=EmptyString)"""
         return _core.Menu_PrependRadioItem(*args, **kwargs)
 
     def PrependMenu(*args, **kwargs):
-        """PrependMenu(int id, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
+        """PrependMenu(int id, String text, Menu submenu, String help=EmptyString)"""
         return _core.Menu_PrependMenu(*args, **kwargs)
 
     def Remove(*args, **kwargs):
@@ -6392,7 +6376,7 @@ class Menu(EvtHandler):
         return _core.Menu_GetMenuItems(*args, **kwargs)
 
     def FindItem(*args, **kwargs):
-        """FindItem(wxString item) -> int"""
+        """FindItem(String item) -> int"""
         return _core.Menu_FindItem(*args, **kwargs)
 
     def FindItemById(*args, **kwargs):
@@ -6420,27 +6404,27 @@ class Menu(EvtHandler):
         return _core.Menu_IsChecked(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(int id, wxString label)"""
+        """SetLabel(int id, String label)"""
         return _core.Menu_SetLabel(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel(int id) -> wxString"""
+        """GetLabel(int id) -> String"""
         return _core.Menu_GetLabel(*args, **kwargs)
 
     def SetHelpString(*args, **kwargs):
-        """SetHelpString(int id, wxString helpString)"""
+        """SetHelpString(int id, String helpString)"""
         return _core.Menu_SetHelpString(*args, **kwargs)
 
     def GetHelpString(*args, **kwargs):
-        """GetHelpString(int id) -> wxString"""
+        """GetHelpString(int id) -> String"""
         return _core.Menu_GetHelpString(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """SetTitle(wxString title)"""
+        """SetTitle(String title)"""
         return _core.Menu_SetTitle(*args, **kwargs)
 
     def GetTitle(*args, **kwargs):
-        """GetTitle() -> wxString"""
+        """GetTitle() -> String"""
         return _core.Menu_GetTitle(*args, **kwargs)
 
     def SetEventHandler(*args, **kwargs):
@@ -6514,11 +6498,11 @@ class MenuBar(Window):
         self._setOORInfo(self)
 
     def Append(*args, **kwargs):
-        """Append(Menu menu, wxString title) -> bool"""
+        """Append(Menu menu, String title) -> bool"""
         return _core.MenuBar_Append(*args, **kwargs)
 
     def Insert(*args, **kwargs):
-        """Insert(size_t pos, Menu menu, wxString title) -> bool"""
+        """Insert(size_t pos, Menu menu, String title) -> bool"""
         return _core.MenuBar_Insert(*args, **kwargs)
 
     def GetMenuCount(*args, **kwargs):
@@ -6530,7 +6514,7 @@ class MenuBar(Window):
         return _core.MenuBar_GetMenu(*args, **kwargs)
 
     def Replace(*args, **kwargs):
-        """Replace(size_t pos, Menu menu, wxString title) -> Menu"""
+        """Replace(size_t pos, Menu menu, String title) -> Menu"""
         return _core.MenuBar_Replace(*args, **kwargs)
 
     def Remove(*args, **kwargs):
@@ -6546,15 +6530,15 @@ class MenuBar(Window):
         return _core.MenuBar_IsEnabledTop(*args, **kwargs)
 
     def SetLabelTop(*args, **kwargs):
-        """SetLabelTop(size_t pos, wxString label)"""
+        """SetLabelTop(size_t pos, String label)"""
         return _core.MenuBar_SetLabelTop(*args, **kwargs)
 
     def GetLabelTop(*args, **kwargs):
-        """GetLabelTop(size_t pos) -> wxString"""
+        """GetLabelTop(size_t pos) -> String"""
         return _core.MenuBar_GetLabelTop(*args, **kwargs)
 
     def FindMenuItem(*args, **kwargs):
-        """FindMenuItem(wxString menu, wxString item) -> int"""
+        """FindMenuItem(String menu, String item) -> int"""
         return _core.MenuBar_FindMenuItem(*args, **kwargs)
 
     def FindItemById(*args, **kwargs):
@@ -6562,7 +6546,7 @@ class MenuBar(Window):
         return _core.MenuBar_FindItemById(*args, **kwargs)
 
     def FindMenu(*args, **kwargs):
-        """FindMenu(wxString title) -> int"""
+        """FindMenu(String title) -> int"""
         return _core.MenuBar_FindMenu(*args, **kwargs)
 
     def Enable(*args, **kwargs):
@@ -6582,19 +6566,19 @@ class MenuBar(Window):
         return _core.MenuBar_IsEnabled(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(int id, wxString label)"""
+        """SetLabel(int id, String label)"""
         return _core.MenuBar_SetLabel(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel(int id) -> wxString"""
+        """GetLabel(int id) -> String"""
         return _core.MenuBar_GetLabel(*args, **kwargs)
 
     def SetHelpString(*args, **kwargs):
-        """SetHelpString(int id, wxString helpString)"""
+        """SetHelpString(int id, String helpString)"""
         return _core.MenuBar_SetHelpString(*args, **kwargs)
 
     def GetHelpString(*args, **kwargs):
-        """GetHelpString(int id) -> wxString"""
+        """GetHelpString(int id) -> String"""
         return _core.MenuBar_GetHelpString(*args, **kwargs)
 
     def GetFrame(*args, **kwargs):
@@ -6628,9 +6612,9 @@ class MenuItem(Object):
         return "<%s.%s; proxy of C++ wxMenuItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Menu parentMenu=None, int id=ID_SEPARATOR, wxString text=wxPyEmptyString, 
-            wxString help=wxPyEmptyString, 
-            wxItemKind kind=ITEM_NORMAL, Menu subMenu=None) -> MenuItem
+        __init__(Menu parentMenu=None, int id=ID_SEPARATOR, String text=EmptyString, 
+            String help=EmptyString, int kind=ITEM_NORMAL, 
+            Menu subMenu=None) -> MenuItem
         """
         newobj = _core.new_MenuItem(*args, **kwargs)
         self.this = newobj.this
@@ -6657,24 +6641,24 @@ class MenuItem(Object):
         return _core.MenuItem_IsSeparator(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(wxString str)"""
+        """SetText(String str)"""
         return _core.MenuItem_SetText(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> wxString"""
+        """GetLabel() -> String"""
         return _core.MenuItem_GetLabel(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> wxString"""
+        """GetText() -> String"""
         return _core.MenuItem_GetText(*args, **kwargs)
 
     def GetLabelFromText(*args, **kwargs):
-        """MenuItem.GetLabelFromText(wxString text) -> wxString"""
+        """MenuItem.GetLabelFromText(String text) -> String"""
         return _core.MenuItem_GetLabelFromText(*args, **kwargs)
 
     GetLabelFromText = staticmethod(GetLabelFromText)
     def GetKind(*args, **kwargs):
-        """GetKind() -> wxItemKind"""
+        """GetKind() -> int"""
         return _core.MenuItem_GetKind(*args, **kwargs)
 
     def SetCheckable(*args, **kwargs):
@@ -6718,11 +6702,11 @@ class MenuItem(Object):
         return _core.MenuItem_Toggle(*args, **kwargs)
 
     def SetHelp(*args, **kwargs):
-        """SetHelp(wxString str)"""
+        """SetHelp(String str)"""
         return _core.MenuItem_SetHelp(*args, **kwargs)
 
     def GetHelp(*args, **kwargs):
-        """GetHelp() -> wxString"""
+        """GetHelp() -> String"""
         return _core.MenuItem_GetHelp(*args, **kwargs)
 
     def GetAccel(*args, **kwargs):
@@ -6734,39 +6718,39 @@ class MenuItem(Object):
         return _core.MenuItem_SetAccel(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(wxFont font)"""
+        """SetFont(Font font)"""
         return _core.MenuItem_SetFont(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> wxFont"""
+        """GetFont() -> Font"""
         return _core.MenuItem_GetFont(*args, **kwargs)
 
     def SetTextColour(*args, **kwargs):
-        """SetTextColour(wxColour colText)"""
+        """SetTextColour(Colour colText)"""
         return _core.MenuItem_SetTextColour(*args, **kwargs)
 
     def GetTextColour(*args, **kwargs):
-        """GetTextColour() -> wxColour"""
+        """GetTextColour() -> Colour"""
         return _core.MenuItem_GetTextColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(wxColour colBack)"""
+        """SetBackgroundColour(Colour colBack)"""
         return _core.MenuItem_SetBackgroundColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> wxColour"""
+        """GetBackgroundColour() -> Colour"""
         return _core.MenuItem_GetBackgroundColour(*args, **kwargs)
 
     def SetBitmaps(*args, **kwargs):
-        """SetBitmaps(wxBitmap bmpChecked, wxBitmap bmpUnchecked=wxNullBitmap)"""
+        """SetBitmaps(Bitmap bmpChecked, Bitmap bmpUnchecked=wxNullBitmap)"""
         return _core.MenuItem_SetBitmaps(*args, **kwargs)
 
     def SetDisabledBitmap(*args, **kwargs):
-        """SetDisabledBitmap(wxBitmap bmpDisabled)"""
+        """SetDisabledBitmap(Bitmap bmpDisabled)"""
         return _core.MenuItem_SetDisabledBitmap(*args, **kwargs)
 
     def GetDisabledBitmap(*args, **kwargs):
-        """GetDisabledBitmap() -> wxBitmap"""
+        """GetDisabledBitmap() -> Bitmap"""
         return _core.MenuItem_GetDisabledBitmap(*args, **kwargs)
 
     def SetMarginWidth(*args, **kwargs):
@@ -6795,11 +6779,11 @@ class MenuItem(Object):
         return _core.MenuItem_ResetOwnerDrawn(*args, **kwargs)
 
     def SetBitmap(*args, **kwargs):
-        """SetBitmap(wxBitmap bitmap)"""
+        """SetBitmap(Bitmap bitmap)"""
         return _core.MenuItem_SetBitmap(*args, **kwargs)
 
     def GetBitmap(*args, **kwargs):
-        """GetBitmap() -> wxBitmap"""
+        """GetBitmap() -> Bitmap"""
         return _core.MenuItem_GetBitmap(*args, **kwargs)
 
 
@@ -6811,7 +6795,7 @@ class MenuItemPtr(MenuItem):
 _core.MenuItem_swigregister(MenuItemPtr)
 
 def MenuItem_GetLabelFromText(*args, **kwargs):
-    """MenuItem_GetLabelFromText(wxString text) -> wxString"""
+    """MenuItem_GetLabelFromText(String text) -> String"""
     return _core.MenuItem_GetLabelFromText(*args, **kwargs)
 
 def MenuItem_GetDefaultMarginWidth(*args, **kwargs):
@@ -6827,7 +6811,7 @@ class Control(Window):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyControlNameStr) -> Control
+            String name=ControlNameStr) -> Control
         """
         newobj = _core.new_Control(*args, **kwargs)
         self.this = newobj.this
@@ -6839,7 +6823,7 @@ class Control(Window):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            wxString name=wxPyControlNameStr) -> bool
+            String name=ControlNameStr) -> bool
         """
         return _core.Control_Create(*args, **kwargs)
 
@@ -6848,11 +6832,11 @@ class Control(Window):
         return _core.Control_Command(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> wxString"""
+        """GetLabel() -> String"""
         return _core.Control_GetLabel(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(wxString label)"""
+        """SetLabel(String label)"""
         return _core.Control_SetLabel(*args, **kwargs)
 
 
@@ -6862,6 +6846,7 @@ class ControlPtr(Control):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Control
 _core.Control_swigregister(ControlPtr)
+ControlNameStr = cvar.ControlNameStr
 
 def PreControl(*args, **kwargs):
     """PreControl() -> Control"""
@@ -6876,7 +6861,7 @@ class ItemContainer(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxItemContainer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Append(*args, **kwargs):
-        """Append(wxString item, PyObject clientData=None) -> int"""
+        """Append(String item, PyObject clientData=None) -> int"""
         return _core.ItemContainer_Append(*args, **kwargs)
 
     def AppendItems(*args, **kwargs):
@@ -6884,7 +6869,7 @@ class ItemContainer(object):
         return _core.ItemContainer_AppendItems(*args, **kwargs)
 
     def Insert(*args, **kwargs):
-        """Insert(wxString item, int pos, PyObject clientData=None) -> int"""
+        """Insert(String item, int pos, PyObject clientData=None) -> int"""
         return _core.ItemContainer_Insert(*args, **kwargs)
 
     def Clear(*args, **kwargs):
@@ -6904,7 +6889,7 @@ class ItemContainer(object):
         return _core.ItemContainer_IsEmpty(*args, **kwargs)
 
     def GetString(*args, **kwargs):
-        """GetString(int n) -> wxString"""
+        """GetString(int n) -> String"""
         return _core.ItemContainer_GetString(*args, **kwargs)
 
     def GetStrings(*args, **kwargs):
@@ -6912,11 +6897,11 @@ class ItemContainer(object):
         return _core.ItemContainer_GetStrings(*args, **kwargs)
 
     def SetString(*args, **kwargs):
-        """SetString(int n, wxString s)"""
+        """SetString(int n, String s)"""
         return _core.ItemContainer_SetString(*args, **kwargs)
 
     def FindString(*args, **kwargs):
-        """FindString(wxString s) -> int"""
+        """FindString(String s) -> int"""
         return _core.ItemContainer_FindString(*args, **kwargs)
 
     def Select(*args, **kwargs):
@@ -6928,7 +6913,7 @@ class ItemContainer(object):
         return _core.ItemContainer_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
-        """GetStringSelection() -> wxString"""
+        """GetStringSelection() -> String"""
         return _core.ItemContainer_GetStringSelection(*args, **kwargs)
 
     def GetClientData(*args, **kwargs):
@@ -7489,11 +7474,11 @@ class FlexGridSizer(GridSizer):
         return _core.FlexGridSizer_GetFlexibleDirection(*args, **kwargs)
 
     def SetNonFlexibleGrowMode(*args, **kwargs):
-        """SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode)"""
+        """SetNonFlexibleGrowMode(int mode)"""
         return _core.FlexGridSizer_SetNonFlexibleGrowMode(*args, **kwargs)
 
     def GetNonFlexibleGrowMode(*args, **kwargs):
-        """GetNonFlexibleGrowMode() -> wxFlexSizerGrowMode"""
+        """GetNonFlexibleGrowMode() -> int"""
         return _core.FlexGridSizer_GetNonFlexibleGrowMode(*args, **kwargs)
 
     def GetRowHeights(*args, **kwargs):
@@ -7856,10 +7841,7 @@ class IndividualLayoutConstraint(Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIndividualLayoutConstraint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Set(*args, **kwargs):
-        """
-        Set(wxRelationship rel, Window otherW, wxEdge otherE, int val=0, 
-            int marg=wxLAYOUT_DEFAULT_MARGIN)
-        """
+        """Set(int rel, Window otherW, int otherE, int val=0, int marg=wxLAYOUT_DEFAULT_MARGIN)"""
         return _core.IndividualLayoutConstraint_Set(*args, **kwargs)
 
     def LeftOf(*args, **kwargs):
@@ -7879,11 +7861,11 @@ class IndividualLayoutConstraint(Object):
         return _core.IndividualLayoutConstraint_Below(*args, **kwargs)
 
     def SameAs(*args, **kwargs):
-        """SameAs(Window otherW, wxEdge edge, int marg=0)"""
+        """SameAs(Window otherW, int edge, int marg=0)"""
         return _core.IndividualLayoutConstraint_SameAs(*args, **kwargs)
 
     def PercentOf(*args, **kwargs):
-        """PercentOf(Window otherW, wxEdge wh, int per)"""
+        """PercentOf(Window otherW, int wh, int per)"""
         return _core.IndividualLayoutConstraint_PercentOf(*args, **kwargs)
 
     def Absolute(*args, **kwargs):
@@ -7903,11 +7885,11 @@ class IndividualLayoutConstraint(Object):
         return _core.IndividualLayoutConstraint_GetOtherWindow(*args, **kwargs)
 
     def GetMyEdge(*args, **kwargs):
-        """GetMyEdge() -> wxEdge"""
+        """GetMyEdge() -> int"""
         return _core.IndividualLayoutConstraint_GetMyEdge(*args, **kwargs)
 
     def SetEdge(*args, **kwargs):
-        """SetEdge(wxEdge which)"""
+        """SetEdge(int which)"""
         return _core.IndividualLayoutConstraint_SetEdge(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
@@ -7943,11 +7925,11 @@ class IndividualLayoutConstraint(Object):
         return _core.IndividualLayoutConstraint_SetDone(*args, **kwargs)
 
     def GetRelationship(*args, **kwargs):
-        """GetRelationship() -> wxRelationship"""
+        """GetRelationship() -> int"""
         return _core.IndividualLayoutConstraint_GetRelationship(*args, **kwargs)
 
     def SetRelationship(*args, **kwargs):
-        """SetRelationship(wxRelationship r)"""
+        """SetRelationship(int r)"""
         return _core.IndividualLayoutConstraint_SetRelationship(*args, **kwargs)
 
     def ResetIfWin(*args, **kwargs):
@@ -7959,7 +7941,7 @@ class IndividualLayoutConstraint(Object):
         return _core.IndividualLayoutConstraint_SatisfyConstraint(*args, **kwargs)
 
     def GetEdge(*args, **kwargs):
-        """GetEdge(wxEdge which, Window thisWin, Window other) -> int"""
+        """GetEdge(int which, Window thisWin, Window other) -> int"""
         return _core.IndividualLayoutConstraint_GetEdge(*args, **kwargs)
 
 
@@ -8038,7 +8020,6 @@ if RELEASE_VERSION != _core.RELEASE_VERSION:
 class PyDeadObjectError(AttributeError):
     pass
 
-
 class _wxPyDeadObject(object):
     """
     Instances of wx objects that are OOR capable will have their __class__
@@ -8048,15 +8029,46 @@ class _wxPyDeadObject(object):
     reprStr = "wxPython wrapper for DELETED %s object! (The C++ object no longer exists.)"
     attrStr = "The C++ part of the %s object has been deleted, attribute access no longer allowed."
 
-    def __repr__( self ):
+    def __repr__(self):
         if not hasattr(self, "_name"):
             self._name = "[unknown]"
         return self.reprStr % self._name
 
-    def __getattr__( self, *args ):
+    def __getattr__(self, *args):
         if not hasattr(self, "_name"):
             self._name = "[unknown]"
-        raise PyDeadObjectError( self.attrStr % self._name )
+        raise PyDeadObjectError(self.attrStr % self._name)
+
+    def __nonzero__(self):
+        return 0
+
+
+
+class PyUnbornObjectError(AttributeError):
+    pass
+
+class _wxPyUnbornObject(object):
+    """
+    Some stock objects are created when the wx.core module is
+    imported, but their C++ instance is not created until the wx.App
+    object is created and initialized.  These object instances will
+    temporarily have their __class__ changed to this class so an
+    exception will be raised if they are used before the C++ instance
+    is ready.
+    """
+
+    reprStr = "wxPython wrapper for UNBORN object! (The C++ object is not initialized yet.)"
+    attrStr = "The C++ part of this object has not been initialized, attribute access not allowed."
+
+    def __repr__(self):
+        #if not hasattr(self, "_name"):
+        #    self._name = "[unknown]"
+        return self.reprStr #% self._name
+
+    def __getattr__(self, *args):
+        #if not hasattr(self, "_name"):
+        #    self._name = "[unknown]"
+        raise PyUnbornObjectError(self.attrStr) # % self._name )
 
     def __nonzero__(self):
         return 0
@@ -8190,6 +8202,11 @@ from gdi import *
 from windows import *
 from controls import *
 from misc import *
+
+
+# Fixup the stock objects since they can't be used yet.  (They will be
+# restored in wx.PyApp.OnInit.)
+_core._wxPyFixStockObjects()
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
