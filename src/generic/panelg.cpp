@@ -42,7 +42,7 @@ END_EVENT_TABLE()
 
 void wxPanel::Init()
 {
-    m_lastFocus = 0;
+    m_winLastFocused = (wxWindow *)NULL;
     m_btnDefault = (wxButton *)NULL;
 }
 
@@ -144,11 +144,13 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 
 void wxPanel::OnFocus(wxFocusEvent& event)
 {
-    if (m_lastFocus != 0)
+    if ( m_winLastFocused )
     {
-        wxWindow* child = FindWindow(m_lastFocus);
-        if (child)
-            child->SetFocus();
+        // it might happen that the window got reparented...
+        if ( m_winLastFocused->GetParent() != this )
+            m_winLastFocused = (wxWindow *)NULL;
+        else
+            m_winLastFocused->SetFocus();
     }
     else
         event.Skip();

@@ -79,15 +79,15 @@ public:
     void OnFocus(wxFocusEvent& event);
 
         // called by wxWindow whenever it gets focus
-    void SetLastFocus(long focus) { m_lastFocus = focus; }
-    long GetLastFocus() const { return m_lastFocus; }
+    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
+    wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
 protected:
     // common part of all ctors
     void Init();
 
     // the child which had the focus last time this panel was activated
-    long m_lastFocus;
+    wxWindow *m_winLastFocused;
 
     // a default button or NULL
     wxButton *m_btnDefault;

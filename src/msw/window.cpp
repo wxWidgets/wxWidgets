@@ -246,6 +246,11 @@ void wxWindow::Init()
     // wxWnd
     m_hMenu = 0;
 
+    m_hWnd = 0;
+
+    // pass WM_GETDLGCODE to DefWindowProc()
+    m_lDlgCode = 0;
+
     m_xThumbSize = 0;
     m_yThumbSize = 0;
     m_backgroundTransparent = FALSE;
@@ -324,11 +329,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
         m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
                      DLGC_WANTTAB | DLGC_WANTMESSAGE;
         
-    }
-    else
-    {
-        // default behaviour
-        m_lDlgCode = 0;
     }
 
     MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
@@ -1382,6 +1382,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
         if ( bProcess )
         {
             bool bCtrlDown = (::GetKeyState(VK_CONTROL) & 0x100) != 0;
+            bool bShiftDown = (::GetKeyState(VK_SHIFT) & 0x100) != 0;
 
             // WM_GETDLGCODE: ask the control if it wants the key for itself,
             // don't process it if it's the case (except for Ctrl-Tab/Enter
@@ -1398,13 +1399,16 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
             switch ( msg->wParam )
             {
                 case VK_TAB:
-                    if ( lDlgCode & DLGC_WANTTAB ) {
+                    // assume that nobody wants Shift-TAB for himself - if we
+                    // don't do it there is no easy way for a control to grab
+                    // TABs but still let Shift-TAB work as navugation key
+                    if ( (lDlgCode & DLGC_WANTTAB) && !bShiftDown ) {
                         bProcess = FALSE;
                     }
                     else {
                         // Ctrl-Tab cycles thru notebook pages
                         bWindowChange = bCtrlDown;
-                        bForward = !(::GetKeyState(VK_SHIFT) & 0x100);
+                        bForward = !bShiftDown;
                     }
                     break;
 
@@ -1430,6 +1434,11 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                             // call IsDialogMessage() which would interpret
                             // it
                             return FALSE;
+                        }
+                        else if ( lDlgCode & DLGC_BUTTON )
+                        {
+                            // buttons want process Enter themselevs
+                            bProcess = FALSE;
                         }
                         // else: but if it does not it makes sense to make it
                         //       work like a TAB - and that's what we do.
@@ -2318,10 +2327,10 @@ bool wxWindow::HandleSetFocus(WXHWND WXUNUSED(hwnd))
 #endif // wxUSE_CARET
 
     // panel wants to track the window which was the last to have focus in it
-    wxWindow *parent = GetParent();
-    if ( parent && parent->IsKindOf(CLASSINFO(wxPanel)) )
+    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
+    if ( panel )
     {
-        ((wxPanel *)parent)->SetLastFocus(GetId());
+        panel->SetLastFocus(this);
     }
 
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);

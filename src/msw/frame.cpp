@@ -86,9 +86,6 @@ bool wxFrame::Create(wxWindow *parent,
     m_hwndToolTip = 0;
 #endif
 
-  if (!parent)
-    wxTopLevelWindows.Append(this);
-
   SetName(name);
   m_windowStyle = style;
   m_frameMenuBar = NULL;
@@ -118,6 +115,9 @@ bool wxFrame::Create(wxWindow *parent,
   // with this style.
   if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
     parent = NULL;
+
+  if (!parent)
+    wxTopLevelWindows.Append(this);
 
   MSWCreate(m_windowId, parent, wxFrameClassName, this, title,
             x, y, width, height, style);
@@ -609,17 +609,29 @@ void wxFrame::OnSize(wxSizeEvent& event)
 // subwindow found.
 void wxFrame::OnActivate(wxActivateEvent& event)
 {
-  for(wxNode *node = GetChildren().First(); node; node = node->Next())
-  {
-    // Find a child that's a subwindow, but not a dialog box.
-    wxWindow *child = (wxWindow *)node->Data();
-    if (!child->IsKindOf(CLASSINFO(wxFrame)) &&
-         !child->IsKindOf(CLASSINFO(wxDialog)))
+    for ( wxWindowList::Node *node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-      child->SetFocus();
-      return;
+        // FIXME all this is totally bogus - we need to do the same as wxPanel,
+        //       but how to do it without duplicating the code?
+
+        // restore focus
+        wxWindow *child = node->GetData();
+
+        if ( !child->IsTopLevel()
+#if wxUSE_TOOLBAR
+             && !wxDynamicCast(child, wxToolBar)
+#endif // wxUSE_TOOLBAR
+#if wxUSE_STATUSBAR
+             && !wxDynamicCast(child, wxStatusBar)
+#endif // wxUSE_STATUSBAR
+           )
+        {
+            child->SetFocus();
+            return;
+        }
     }
-  }
 }
 
 // The default implementation for the close window event.

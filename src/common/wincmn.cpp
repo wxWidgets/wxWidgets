@@ -191,6 +191,16 @@ wxWindowBase::~wxWindowBase()
 
     wxASSERT_MSG( GetChildren().GetCount() == 0, _T("children not destroyed") );
 
+    // make sure that there are no dangling pointers left pointing to us
+    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
+    if ( panel )
+    {
+        if ( panel->GetLastFocus() == this )
+        {
+            panel->SetLastFocus((wxWindow *)NULL);
+        }
+    }
+
 #if wxUSE_CARET
     if ( m_caret )
         delete m_caret;
