@@ -162,6 +162,8 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         void CreateSearch();
         // Add books to search choice panel
 
+        virtual void AddToolbarButtons(wxToolBar *toolBar, int style);
+        // Add custom buttons to toolbar
 
         virtual void OptionsDialog();
         // Displays options dialog (fonts etc.)

@@ -47,8 +47,24 @@ wxHtmlHelpController::~wxHtmlHelpController()
 {
     WriteCustomization(m_Config, m_ConfigRoot);
     if (m_helpFrame)
-        m_helpFrame->Close();
+        DestroyHelpWindow();
 }
+
+
+void wxHtmlHelpController::DestroyHelpWindow()
+{
+    //if (m_Config) WriteCustomization(m_Config, m_ConfigRoot);
+    if (m_helpFrame)
+        m_helpFrame->Destroy();
+}
+
+void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt) 
+{
+    evt.Skip(); 
+
+    m_helpFrame = NULL; 
+}
+
 
 void wxHtmlHelpController::SetTitleFormat(const wxString& title)
 {
@@ -77,6 +93,14 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     return retval;
 }
 
+
+
+wxHtmlHelpFrame *wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
+{
+    return new wxHtmlHelpFrame(data);
+}
+
+
 void wxHtmlHelpController::CreateHelpWindow()
 {
     if (m_helpFrame) {
@@ -91,7 +115,7 @@ void wxHtmlHelpController::CreateHelpWindow()
             m_ConfigRoot = _T("wxWindows/wxHtmlHelpController");
     }
 
-    m_helpFrame = new wxHtmlHelpFrame(&m_helpData);
+    m_helpFrame = CreateHelpFrame(&m_helpData);
     m_helpFrame->PushEventHandler(this);
 
     if (m_Config)

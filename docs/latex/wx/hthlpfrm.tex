@@ -156,3 +156,14 @@ Add books to search choice panel
 Saves user's settings for this frame (see \helpref{wxHtmlHelpController::WriteCustomization}{wxhtmlhelpcontrollerwritecustomization})
 
 
+\membersection{wxHtmlHelpFrame::AddToolbarButtons}\label{wxhtmlhelpframeaddtoolbarbuttons}
+
+\func{virtual void}{AddToolbarButtons}{\param{wxToolBar *}{toolBar}, \param{int }{style}} 
+
+You may override this virtual method to add more buttons into help frame's
+toolbar. {\it toolBar} is pointer to the toolbar and {\it style} is style
+flag as passed to Create method.
+
+wxToolBar::Realize is called immediately after returning from this function.
+
+See {\it samples/html/helpview} for an example.

@@ -29,9 +29,18 @@ have the following line in your .rc file:
 #include "wx/html/msw/wxhtml.rc"
 \end{verbatim}
 
+\wxheading{Note}
+
+It is strongly recommended to use preprocessed {\bf .hhp.cached} version of
+projects. It can be either created on-the-fly (see 
+\helpref{SetTempDir}{wxhtmlhelpcontrollersettempdir}) or you can use
+{\bf hhp2cached} utility from {\it utils/hhp2cached} to create it and
+distribute the cached version together with helpfiles. See {\it samples/html/help}
+sample for demonstration of its use.
+
 \wxheading{Derived from}
 
-wxEvtHandler
+\helpref{wxEvtHandler}{wxevthandler}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -139,6 +148,10 @@ forms are much faster to read. Default value is empty string (empty string means
 that no cached data are stored). Note that these files are {\it not}
 deleted when program exits.
 
+Once created these cached files will be used in all subsequent executions 
+of your application. If cached files become older than corresponding .hhp
+file (e.g. if you regenerate documentation) it will be refreshed.
+
 \membersection{wxHtmlHelpController::SetTitleFormat}\label{wxhtmlhelpcontrollersettitleformat}
 
 \func{void}{SetTitleFormat}{\param{const wxString\& }{format}}
@@ -167,4 +180,13 @@ default wxConfig object if available (for details see
 \func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
 
 Stores controllers setting (position of window etc.)
+
+\membersection{wxHtmlHelpController::CreateHelpFrame}\label{wxhtmlhelpcontrollercreatehelpframe}
+
+\func{virtual wxHtmlHelpFrame*}{CreateHelpFrame}{\param{wxHtmlHelpData * }{data}}
+
+This protected virtual method may be overriden so that the controller
+uses slightly different frame. See {\it samples/html/helpview} sample for
+an example.
+
 

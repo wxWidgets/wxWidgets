@@ -68,14 +68,12 @@ class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
         virtual void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
 
     protected:
+        virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData *data);
+    
         virtual void CreateHelpWindow();
-        virtual void DestroyHelpWindow()
-        {
-            //if (m_Config) WriteCustomization(m_Config, m_ConfigRoot);
-            if (m_helpFrame) m_helpFrame->Destroy();
-        }
+        virtual void DestroyHelpWindow();
 
-        void OnCloseFrame(wxCloseEvent& evt) { m_helpFrame = NULL; evt.Skip(); }
+        void OnCloseFrame(wxCloseEvent& evt);
         wxHtmlHelpData m_helpData;
         wxHtmlHelpFrame* m_helpFrame;
         wxConfigBase *m_Config;

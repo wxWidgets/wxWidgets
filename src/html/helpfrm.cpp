@@ -177,43 +177,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     if (style & wxHF_TOOLBAR) {
         wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_DOCKABLE);
         toolBar->SetMargins( 2, 2 );
-
-        toolBar -> AddTool(wxID_HTML_PANEL, wxBITMAP(wpanel), wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
-                           _("Show/hide navigation panel"));
-        toolBar -> AddSeparator();
-        toolBar -> AddTool(wxID_HTML_BACK, wxBITMAP(wback), wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
-                           _("Go back to the previous HTML page"));
-        toolBar -> AddTool(wxID_HTML_FORWARD, wxBITMAP(wforward), wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
-                           _("Go forward to the next HTML page"));
-        toolBar -> AddSeparator();
-
-        if (style & wxHF_BOOKMARKS) {
-            m_Bookmarks = new wxComboBox(toolBar, wxID_HTML_BOOKMARKSLIST, wxEmptyString, 
-                                         wxDefaultPosition, wxSize(300,-1), 0, NULL, wxCB_READONLY | wxCB_SORT);
-            m_Bookmarks -> Append(_("<bookmarks>"));
-            for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
-                m_Bookmarks -> Append(m_BookmarksNames[i]);
-            m_Bookmarks -> SetSelection(0);
-            toolBar -> AddControl(m_Bookmarks);
-#ifdef __WXGTK__
-            toolBar -> AddSeparator();
-#endif
-            toolBar -> AddTool(wxID_HTML_BOOKMARKSADD, wxBITMAP(wbkadd), wxNullBitmap,
-                               FALSE, -1, -1, (wxObject *) NULL,
-                               _("Add current page to bookmarks"));
-            toolBar -> AddTool(wxID_HTML_BOOKMARKSREMOVE, wxBITMAP(wbkdel), wxNullBitmap,
-                               FALSE, -1, -1, (wxObject *) NULL,
-                               _("Remove current page from bookmarks"));
-        }
-
-        toolBar -> AddSeparator();
-        toolBar -> AddTool(wxID_HTML_OPTIONS, wxBITMAP(woptions), wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
-                           _("Display options dialog"));
-
+        AddToolbarButtons(toolBar, style);
         toolBar -> Realize();
     }
 
@@ -390,12 +354,55 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
 wxHtmlHelpFrame::~wxHtmlHelpFrame()
 {
+    PopEventHandler(); // wxhtmlhelpcontroller
     delete m_ContentsImageList;
     if (m_DataCreated)
         delete m_Data;
     if (m_NormalFonts) delete m_NormalFonts;
     if (m_FixedFonts) delete m_FixedFonts;
 }
+
+
+void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
+{
+    toolBar -> AddTool(wxID_HTML_PANEL, wxBITMAP(wpanel), wxNullBitmap,
+                       FALSE, -1, -1, (wxObject *) NULL,
+                       _("Show/hide navigation panel"));
+    toolBar -> AddSeparator();
+    toolBar -> AddTool(wxID_HTML_BACK, wxBITMAP(wback), wxNullBitmap,
+                       FALSE, -1, -1, (wxObject *) NULL,
+                       _("Go back to the previous HTML page"));
+    toolBar -> AddTool(wxID_HTML_FORWARD, wxBITMAP(wforward), wxNullBitmap,
+                       FALSE, -1, -1, (wxObject *) NULL,
+                       _("Go forward to the next HTML page"));
+    toolBar -> AddSeparator();
+
+    if (style & wxHF_BOOKMARKS) {
+        m_Bookmarks = new wxComboBox(toolBar, wxID_HTML_BOOKMARKSLIST, wxEmptyString, 
+                                     wxDefaultPosition, wxSize(300,-1), 0, NULL, wxCB_READONLY | wxCB_SORT);
+        m_Bookmarks -> Append(_("<bookmarks>"));
+        for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
+            m_Bookmarks -> Append(m_BookmarksNames[i]);
+        m_Bookmarks -> SetSelection(0);
+        toolBar -> AddControl(m_Bookmarks);
+#ifdef __WXGTK__
+        toolBar -> AddSeparator();
+#endif
+        toolBar -> AddTool(wxID_HTML_BOOKMARKSADD, wxBITMAP(wbkadd), wxNullBitmap,
+                           FALSE, -1, -1, (wxObject *) NULL,
+                           _("Add current page to bookmarks"));
+        toolBar -> AddTool(wxID_HTML_BOOKMARKSREMOVE, wxBITMAP(wbkdel), wxNullBitmap,
+                           FALSE, -1, -1, (wxObject *) NULL,
+                           _("Remove current page from bookmarks"));
+    }
+
+    toolBar -> AddSeparator();
+    toolBar -> AddTool(wxID_HTML_OPTIONS, wxBITMAP(woptions), wxNullBitmap,
+                       FALSE, -1, -1, (wxObject *) NULL,
+                       _("Display options dialog"));
+}
+
+
 
 bool wxHtmlHelpFrame::Display(const wxString& x)
 {
@@ -447,6 +454,8 @@ bool wxHtmlHelpFrame::DisplayIndex()
     m_NavigPan -> SetSelection(1);
     return TRUE;
 }
+
+
 
 bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
 {
