@@ -513,11 +513,65 @@ bool wxSetEnv(const wxString& var, const wxChar *value)
 // process management
 // ----------------------------------------------------------------------------
 
-int wxKill(long WXUNUSED(pid), int WXUNUSED(sig))
+int wxKill(long pid, wxSignal sig)
 {
-    // TODO use SendMessage(WM_QUIT) and TerminateProcess() if needed
+#ifndef __WIN32__
+    return -1;
+#else
+    // This in a work in progress. We need to eliminate the call to wxSleep,
+    // deal with child processes, and also test it :-)
+    HWND hHwnd;
+    HANDLE hProcess;
+    unsigned long code;
+    bool terminateSuccess = TRUE;
 
-    return 0;
+    hProcess = OpenProcess(PROCESS_TERMINATE | PROCESS_QUERY_INFORMATION,
+                           FALSE, (unsigned long)pid);
+    if (hProcess == NULL)
+        return -1;
+
+    if (sig == wxSIGKILL)
+        terminateSuccess = (TerminateProcess(hProcess, 0) != 0);
+    else if (sig != wxSIGNONE)
+    {
+        hHwnd = ::FindWindow(NULL, NULL);
+        while (hHwnd != 0)
+        {
+            if (::GetParent(hHwnd) == 0)
+            {
+                unsigned long testpid = 0;
+                GetWindowThreadProcessId(hHwnd, &testpid);
+                if ((unsigned long)pid == testpid)
+                {
+                    PostMessage(hHwnd, WM_QUIT, 0, 0);
+                    // How to make this better?
+                    // If we don't wait, the return value is wrong.
+                    wxSleep(1);
+                    break;
+                }
+            }
+            hHwnd = GetWindow(hHwnd, GW_HWNDNEXT);
+        }
+    }
+
+    GetExitCodeProcess(hProcess, &code);
+    CloseHandle(hProcess);
+
+    if (sig == wxSIGNONE)
+    {
+        if (code == STILL_ACTIVE)
+            return 0;
+        else
+            return -1;
+    }
+    else
+    {
+        if (!terminateSuccess || code == STILL_ACTIVE)
+            return -1;
+        else
+            return 0;
+    }
+#endif
 }
 
 // Execute a program in an Interactive Shell

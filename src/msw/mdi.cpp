@@ -650,6 +650,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                                                      : wxDEFAULT_MDICHILDFRAME_ICON);
 
   SetName(name);
+  wxWindowBase::Show(TRUE); // MDI child frame starts off shown
 
   if ( id > -1 )
     m_windowId = id;
