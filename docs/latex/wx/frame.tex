@@ -64,6 +64,22 @@ styles: {\tt wxDEFAULT\_FRAME\_STYLE \& (wxRESIZE\_BORDER \pipe wxRESIZE\_BOX \p
 
 See also \helpref{window styles overview}{windowstyles}.
 
+\wxheading{Default event processing}
+
+wxFrame processes the following events:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxEVT\_SIZE}{If the frame has exactly one child window, not
+counting the status and toolbar, this child is resized to take the entire frame
+client area. If two or more windows are present, they should be laid out
+explicitly either by manually handling wxEVT\_SIZE or using 
+\helpref{sizers}{sizeroverview}}
+
+\twocolitem{wxEVT\_MENU\_HIGHLIGHT}{The default implementation displays the
+\helpref{help string}{wxmenuitemgethelp} associated with the selected item in
+the first pane of the status bar, if there is one.}
+\end{twocollist}
+
 \wxheading{Remarks}
 
 An application should normally define an \helpref{wxCloseEvent}{wxcloseevent} handler for the
@@ -343,13 +359,6 @@ This function only works under Windows.
 
 \helpref{wxFrame::Iconize}{wxframeiconize}
 
-\membersection{wxFrame::OnActivate}
-
-\func{void}{OnActivate}{\param{wxActivateEvent\&}{ event}}
-
-Called when a window is activated or deactivated (MS Windows
-only). See also \helpref{wxActivateEvent}{wxactivateevent}.
-
 \membersection{wxFrame::OnCreateStatusBar}\label{wxframeoncreatestatusbar}
 
 \func{virtual wxStatusBar*}{OnCreateStatusBar}{\param{int }{number},
@@ -412,26 +421,6 @@ implementation returns an instance of \helpref{wxToolBar}{wxtoolbar}.
 \wxheading{See also}
 
 \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar}.
-
-\membersection{wxFrame::OnMenuHighlight}\label{wxframeonmenuhighlight}
-
-\func{void}{OnMenuHighlight}{\param{wxMenuEvent\&}{ event}}
-
-The default implementation displays an appropriate help string
-in the status bar, if there is one.
-
-See \helpref{wxMenuEvent}{wxmenuevent}.
-
-\membersection{wxFrame::OnSize}\label{wxframeonsize}
-
-\func{void}{OnSize}{\param{wxSizeEvent\& }{event}}
-
-The default {\bf wxFrame::OnSize} implementation looks for a single subwindow,
-and if one is found, resizes it to fit
-inside the frame. Override this member if more complex behaviour
-is required (for example, if there are several subwindows).
-
-See \helpref{wxSizeEvent}{wxsizeevent}.
 
 \membersection{wxFrame::SendSizeEvent}\label{wxframesendsizeevent}
 
