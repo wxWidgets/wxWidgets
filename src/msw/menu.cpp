@@ -532,7 +532,7 @@ wxMenuBar::~wxMenuBar()
 
 void wxMenuBar::Refresh()
 {
-    wxCHECK_RET( IsAttached(), wxT("can't refresh unatteched menubar") );
+    wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
     DrawMenuBar(GetHwndOf(m_menuBarFrame));
 }
@@ -819,7 +819,7 @@ void wxMenuBar::RebuildAccelTable()
 
 void wxMenuBar::Attach(wxFrame *frame)
 {
-    wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
+//    wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
 
     m_menuBarFrame = frame;
 
