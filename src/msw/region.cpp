@@ -166,12 +166,12 @@ void wxRegion::Clear()
 
 bool wxRegion::Offset(wxCoord x, wxCoord y)
 {
-    wxCHECK_MSG( M_REGION, FALSE, _T("invalid wxRegion") );
+    wxCHECK_MSG( M_REGION, false, _T("invalid wxRegion") );
 
     if ( !x && !y )
     {
         // nothing to do
-        return TRUE;
+        return true;
     }
 
     AllocExclusive();
@@ -180,10 +180,10 @@ bool wxRegion::Offset(wxCoord x, wxCoord y)
     {
         wxLogLastError(_T("OffsetRgn"));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 // combine another region with this one
@@ -209,7 +209,7 @@ bool wxRegion::Combine(const wxRegion& rgn, wxRegionOp op)
             case wxRGN_AND:
             case wxRGN_DIFF:
                 // leave empty/invalid
-                return FALSE;
+                return false;
         }
     }
     else // we have a valid region
@@ -248,11 +248,11 @@ bool wxRegion::Combine(const wxRegion& rgn, wxRegionOp op)
         {
             wxLogLastError(_T("CombineRgn"));
 
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 // Combine rectangle (x, y, w, h) with this.

@@ -62,17 +62,17 @@ public:
 
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups
-  virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const;
-  virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const;
 
-  virtual bool Flush(bool WXUNUSED(bCurrentOnly) = FALSE) { return TRUE; }
+  virtual bool Flush(bool WXUNUSED(bCurrentOnly) = false) { return true; }
 
   // rename
   virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
   virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
 
   // delete
-  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = TRUE);
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true);
   virtual bool DeleteGroup(const wxString& key);
   virtual bool DeleteAll();
 

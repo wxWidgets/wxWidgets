@@ -60,7 +60,7 @@ wxBEGIN_FLAGS( wxRadioBoxStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -98,11 +98,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 #endif
 
 /*
-	selection
-	content
-		label
-		dimension
-		item
+    selection
+    content
+        label
+        dimension
+        item
 */
 
 // there are two possible ways to create the radio buttons: either as children
@@ -202,9 +202,9 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
     if ( cmd == BN_CLICKED )
     {
         if (id == GetId())
-            return TRUE;
+            return true;
 
-        int selectedButton = -1;
+        int selectedButton = wxID_ANY;
 
         for ( int i = 0; i < m_noItems; i++ )
         {
@@ -216,13 +216,13 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
             }
         }
 
-        if ( selectedButton == -1 )
+        if ( selectedButton == wxID_ANY )
         {
             // just ignore it - due to a hack with WM_NCHITTEST handling in our
             // wnd proc, we can receive dummy click messages when we click near
             // the radiobox edge (this is ugly but Julian wouldn't let me get
             // rid of this...)
-            return FALSE;
+            return false;
         }
 
         if ( selectedButton != m_selectedButton )
@@ -233,16 +233,16 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
         }
         //else: don't generate events when the selection doesn't change
 
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 // Radio box item
 wxRadioBox::wxRadioBox()
 {
-    m_selectedButton = -1;
+    m_selectedButton = wxID_ANY;
     m_noItems = 0;
     m_noRowsOrCols = 0;
     m_radioButtons = NULL;
@@ -264,7 +264,7 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxString& name)
 {
     // initialize members
-    m_selectedButton = -1;
+    m_selectedButton = wxID_ANY;
     m_noItems = 0;
 
     m_majorDim = majorDim == 0 ? n : majorDim;
@@ -272,12 +272,12 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     // common initialization
     if ( !CreateControl(parent, id, pos, size, style, val, name) )
-        return FALSE;
+        return false;
 
     // create the static box
     if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX | WS_GROUP,
                            pos, size, title, 0) )
-        return FALSE;
+        return false;
 
     // and now create the buttons
     m_noItems = n;
@@ -303,7 +303,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     for ( int i = 0; i < n; i++ )
     {
         m_radioWidth[i] =
-        m_radioHeight[i] = -1;
+        m_radioHeight[i] = wxDefaultCoord;
         long styleBtn = BS_AUTORADIOBUTTON | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
         if ( i == 0 && style == 0 )
             styleBtn |= WS_GROUP;
@@ -323,7 +323,7 @@ bool wxRadioBox::Create(wxWindow *parent,
         {
             wxLogLastError(wxT("CreateWindow(radio btn)"));
 
-            return FALSE;
+            return false;
         }
 
         m_radioButtons[i] = (WXHWND)hwndBtn;
@@ -355,8 +355,8 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     // Now that we have items determine what is the best size and set it.
     SetBestSize(size);
-    
-    return TRUE;
+
+    return true;
 }
 
 bool wxRadioBox::Create(wxWindow *parent,
@@ -377,7 +377,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 wxRadioBox::~wxRadioBox()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 
     if (m_radioButtons)
     {
@@ -398,7 +398,7 @@ void wxRadioBox::SetString(int item, const wxString& label)
 {
     wxCHECK_RET( item >= 0 && item < m_noItems, wxT("invalid radiobox index") );
 
-    m_radioWidth[item] = m_radioHeight[item] = -1;
+    m_radioWidth[item] = m_radioHeight[item] = wxDefaultCoord;
     SetWindowText((HWND)m_radioButtons[item], label.c_str());
 }
 
@@ -482,7 +482,7 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
     extraHeight /= 2;
 #endif
     */
-    
+
     int height = GetNumVer() * sizeBtn.y + cy1/2 + extraHeight;
     int width  = GetNumHor() * (sizeBtn.x + cx1) + cx1;
 
@@ -516,9 +516,9 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int xx = x;
     int yy = y;
 
-    if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (x == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         xx = currentX;
-    if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         yy = currentY;
 
 #if RADIOBTN_PARENT_IS_RADIOBOX
@@ -543,7 +543,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         totHeight = totSize.y;
 
     // only change our width/height if asked for
-    if ( width == -1 )
+    if ( width == wxDefaultCoord )
     {
         if ( sizeFlags & wxSIZE_AUTO_WIDTH )
             width = totWidth;
@@ -551,7 +551,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             width = widthOld;
     }
 
-    if ( height == -1 )
+    if ( height == wxDefaultCoord )
     {
         if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
             height = totHeight;
@@ -659,8 +659,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxRadioBox::GetSize(int *width, int *height) const
 {
-    RECT rect;
-    rect.left = -1; rect.right = -1; rect.top = -1; rect.bottom = -1;
+    RECT rect = { -1, -1, -1, -1 };
 
     if (m_hWnd)
         wxFindMaxSize(m_hWnd, &rect);
@@ -712,7 +711,7 @@ void wxRadioBox::SetFocus()
 {
     if (m_noItems > 0)
     {
-        ::SetFocus((HWND)m_radioButtons[m_selectedButton == -1
+        ::SetFocus((HWND)m_radioButtons[m_selectedButton == wxID_ANY
                                             ? 0
                                             : m_selectedButton]);
     }
@@ -722,7 +721,7 @@ void wxRadioBox::SetFocus()
 bool wxRadioBox::Show(bool show)
 {
     if ( !wxControl::Show(show) )
-        return FALSE;
+        return false;
 
     int nCmdShow = show ? SW_SHOW : SW_HIDE;
     for ( int i = 0; i < m_noItems; i++ )
@@ -730,7 +729,7 @@ bool wxRadioBox::Show(bool show)
         ::ShowWindow((HWND)m_radioButtons[i], nCmdShow);
     }
 
-    return TRUE;
+    return true;
 }
 
 // Enable a specific button
@@ -746,12 +745,12 @@ void wxRadioBox::Enable(int item, bool enable)
 bool wxRadioBox::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
-        return FALSE;
+        return false;
 
     for (int i = 0; i < m_noItems; i++)
         ::EnableWindow((HWND) m_radioButtons[i], enable);
 
-    return TRUE;
+    return true;
 }
 
 // Show a specific button
@@ -769,10 +768,10 @@ bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
     for ( size_t i = 0; i < count; i++ )
     {
         if ( GetRadioButtons()[i] == hWnd )
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 void wxRadioBox::Command(wxCommandEvent & event)
@@ -809,7 +808,7 @@ bool wxRadioBox::SetFont(const wxFont& font)
     if ( !wxControl::SetFont(font) )
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
     // also set the font of our radio buttons
@@ -823,7 +822,7 @@ bool wxRadioBox::SetFont(const wxFont& font)
         ::InvalidateRect(hwndBtn, NULL, FALSE /* don't erase bg */);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -963,7 +962,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
 
-                bool processed = TRUE;
+                bool processed = true;
 
                 wxDirection dir;
                 switch ( wParam )
@@ -985,7 +984,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                         break;
 
                     default:
-                        processed = FALSE;
+                        processed = false;
 
                         // just to suppress the compiler warning
                         dir = wxALL;
@@ -1050,7 +1049,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 #endif
                 {
                     wxWindow* subjectOfHelp = radiobox;
-                    bool eventProcessed = FALSE;
+                    bool eventProcessed = false;
                     while (subjectOfHelp && !eventProcessed)
                     {
                         wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(),

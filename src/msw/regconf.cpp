@@ -220,9 +220,9 @@ void wxRegConfig::SetPath(const wxString& strPath)
             strFullPath.reserve(2*m_strPath.length());
 
             strFullPath << m_strPath;
-            if ( strFullPath.Len() == 0 || 
+            if ( strFullPath.Len() == 0 ||
                  strFullPath.Last() != wxCONFIG_PATH_SEPARATOR )
-                strFullPath << wxCONFIG_PATH_SEPARATOR; 
+                strFullPath << wxCONFIG_PATH_SEPARATOR;
             strFullPath << strPath;
         }
 
@@ -423,7 +423,7 @@ bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex) const
     while ( m_keyGlobal.GetNextKey(str, lIndex) ) {
       if ( !m_keyLocal.Exists() || !LocalKey().HasSubKey(str) ) {
         // ok, found one - return it
-        return TRUE;
+        return true;
       }
     }
 
@@ -433,7 +433,7 @@ bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex) const
 
   // if we don't have the key at all, don't try to enumerate anything under it
   if ( !m_keyLocal.Exists() )
-      return FALSE;
+      return false;
 
   // much easier with local entries: get the next one we find
   // (don't forget to clear our flag bit and set it again later)
@@ -458,7 +458,7 @@ bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
     while ( m_keyGlobal.GetNextValue(str, lIndex) ) {
       if ( !m_keyLocal.Exists() || !LocalKey().HasValue(str) ) {
         // ok, found one - return it
-        return TRUE;
+        return true;
       }
     }
 
@@ -468,7 +468,7 @@ bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
 
   // if we don't have the key at all, don't try to enumerate anything under it
   if ( !m_keyLocal.Exists() )
-      return FALSE;
+      return false;
 
   // much easier with local entries: get the next one we find
   // (don't forget to clear our flag bit and set it again later)
@@ -560,11 +560,11 @@ wxConfigBase::EntryType wxRegConfig::GetEntryType(const wxString& key) const
 
 bool wxRegConfig::DoReadString(const wxString& key, wxString *pStr) const
 {
-    wxCHECK_MSG( pStr, FALSE, _T("wxRegConfig::Read(): NULL param") );
+    wxCHECK_MSG( pStr, false, _T("wxRegConfig::Read(): NULL param") );
 
   wxConfigPathChanger path(this, key);
 
-  bool bQueryGlobal = TRUE;
+  bool bQueryGlobal = true;
 
   // if immutable key exists in global key we must check that it's not
   // overriden by the local key with the same name
@@ -575,21 +575,21 @@ bool wxRegConfig::DoReadString(const wxString& key, wxString *pStr) const
                    path.Name().c_str());
       }
 
-      return TRUE;
+      return true;
     }
     else {
       // don't waste time - it's not there anyhow
-      bQueryGlobal = FALSE;
+      bQueryGlobal = false;
     }
   }
 
   // first try local key
   if ( (m_keyLocal.Exists() && TryGetValue(LocalKey(), path.Name(), *pStr)) ||
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 // this exactly reproduces the string version above except for ExpandEnvVars(),
@@ -597,11 +597,11 @@ bool wxRegConfig::DoReadString(const wxString& key, wxString *pStr) const
 
 bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
 {
-    wxCHECK_MSG( plResult, FALSE, _T("wxRegConfig::Read(): NULL param") );
+    wxCHECK_MSG( plResult, false, _T("wxRegConfig::Read(): NULL param") );
 
   wxConfigPathChanger path(this, key);
 
-  bool bQueryGlobal = TRUE;
+  bool bQueryGlobal = true;
 
   // if immutable key exists in global key we must check that it's not
   // overriden by the local key with the same name
@@ -612,21 +612,21 @@ bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
                      path.Name().c_str());
       }
 
-      return TRUE;
+      return true;
     }
     else {
       // don't waste time - it's not there anyhow
-      bQueryGlobal = FALSE;
+      bQueryGlobal = false;
     }
   }
 
   // first try local key
   if ( (m_keyLocal.Exists() && TryGetValue(LocalKey(), path.Name(), plResult)) ||
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), plResult)) ) {
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
@@ -635,7 +635,7 @@ bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
 
   if ( IsImmutable(path.Name()) ) {
     wxLogError(wxT("Can't change immutable entry '%s'."), path.Name().c_str());
-    return FALSE;
+    return false;
   }
 
   return LocalKey().SetValue(path.Name(), szValue);
@@ -647,7 +647,7 @@ bool wxRegConfig::DoWriteLong(const wxString& key, long lValue)
 
   if ( IsImmutable(path.Name()) ) {
     wxLogError(wxT("Can't change immutable entry '%s'."), path.Name().c_str());
-    return FALSE;
+    return false;
   }
 
   return LocalKey().SetValue(path.Name(), lValue);
@@ -661,11 +661,11 @@ bool wxRegConfig::RenameEntry(const wxString& oldName, const wxString& newName)
 {
     // check that the old entry exists...
     if ( !HasEntry(oldName) )
-        return FALSE;
+        return false;
 
     // and that the new one doesn't
     if ( HasEntry(newName) )
-        return FALSE;
+        return false;
 
     return m_keyLocal.RenameValue(oldName, newName);
 }
@@ -674,11 +674,11 @@ bool wxRegConfig::RenameGroup(const wxString& oldName, const wxString& newName)
 {
     // check that the old group exists...
     if ( !HasGroup(oldName) )
-        return FALSE;
+        return false;
 
     // and that the new one doesn't
     if ( HasGroup(newName) )
-        return FALSE;
+        return false;
 
     return wxRegKey(m_keyLocal, oldName).Rename(newName);
 }
@@ -693,7 +693,7 @@ bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
 
   if ( m_keyLocal.Exists() ) {
     if ( !m_keyLocal.DeleteValue(path.Name()) )
-      return FALSE;
+      return false;
 
     if ( bGroupIfEmptyAlso && m_keyLocal.IsEmpty() ) {
       wxString strKey = GetPath().AfterLast(wxCONFIG_PATH_SEPARATOR);
@@ -702,14 +702,14 @@ bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 bool wxRegConfig::DeleteGroup(const wxString& key)
 {
   wxConfigPathChanger path(this, key);
 
-  return m_keyLocal.Exists() ? LocalKey().DeleteKey(path.Name()) : TRUE;
+  return m_keyLocal.Exists() ? LocalKey().DeleteKey(path.Name()) : true;
 }
 
 bool wxRegConfig::DeleteAll()

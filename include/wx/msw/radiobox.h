@@ -85,14 +85,14 @@ public:
     virtual int GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
-    virtual void Enable(int n, bool enable = TRUE);
-    virtual void Show(int n, bool show = TRUE);
+    virtual void Enable(int n, bool enable = true);
+    virtual void Show(int n, bool show = true);
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
     void SetFocus();
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
     void SetLabelFont(const wxFont& WXUNUSED(font)) {};
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 

@@ -32,7 +32,7 @@ typedef unsigned long ulong;
 // ----------------------------------------------------------------------------
 // class wxRegKey encapsulates window HKEY handle
 // ----------------------------------------------------------------------------
-class WXDLLIMPEXP_BASE wxRegKey 
+class WXDLLIMPEXP_BASE wxRegKey
 {
 public:
   // NB: do _not_ change the values of elements in these enumerations!
@@ -121,7 +121,7 @@ public:
 
   // get infomation about the key
     // get the (full) key name. Abbreviate std root keys if bShortPrefix.
-  wxString GetName(bool bShortPrefix = TRUE) const;
+  wxString GetName(bool bShortPrefix = true) const;
     // return true if the key exists
   bool  Exists() const;
     // get the info about key (any number of these pointers may be NULL)
@@ -139,7 +139,7 @@ public:
     // which need the key to be opened if the key is not opened yet)
   bool  Open(AccessMode mode = Write);
     // create the key: will fail if the key already exists and !bOkIfExists
-  bool  Create(bool bOkIfExists = TRUE);
+  bool  Create(bool bOkIfExists = true);
     // rename a value from old name to new one
   bool  RenameValue(const wxChar *szValueOld, const wxChar *szValueNew);
     // rename the key
@@ -166,7 +166,7 @@ public:
   // access to values and subkeys
     // get value type
   ValueType GetValueType(const wxChar *szValue) const;
-    // returns TRUE if the value contains a number (else it's some string)
+    // returns true if the value contains a number (else it's some string)
   bool IsNumericValue(const wxChar *szValue) const;
 
     // assignment operators set the default value of the key
@@ -185,10 +185,10 @@ public:
   bool  SetValue(const wxChar *szValue, const wxString& strValue);
     // retrieve the string value
   bool  QueryValue(const wxChar *szValue, wxString& strValue) const
-    { return QueryValue(szValue, strValue, FALSE); }
+    { return QueryValue(szValue, strValue, false); }
     // retrieve raw string value
   bool  QueryRawValue(const wxChar *szValue, wxString& strValue) const
-    { return QueryValue(szValue, strValue, TRUE); }
+    { return QueryValue(szValue, strValue, true); }
     // retrieve either raw or expanded string value
   bool  QueryValue(const wxChar *szValue, wxString& strValue, bool raw) const;
 
