@@ -260,11 +260,20 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
             else
                 c->SetAlignHor(old);
 
-            return TRUE;
+            return true;
         }
         else
         {
-            return FALSE;
+            // Same as BR
+            int al = m_WParser->GetContainer()->GetAlignHor();
+            wxHtmlContainerCell *c;
+
+            m_WParser->CloseContainer();
+            c = m_WParser->OpenContainer();
+            c->SetAlignHor(al);
+            c->SetAlign(tag);
+            c->SetMinHeight(m_WParser->GetCharHeight());
+            return false;
         }
     }
 

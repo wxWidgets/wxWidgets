@@ -96,6 +96,7 @@ wxMSW:
 wxHTML:
 
 - improved tables layout algorithm (Tim Kosse)
+- <div> handling fix (Xavier Nodet)
 
 
 2.5.1
