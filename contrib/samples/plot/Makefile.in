@@ -1,0 +1,16 @@
+# Makefile for mmedia sample.
+# $Id$
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+program_dir = contrib/samples/plot
+
+PROGRAM=plot
+
+OBJECTS=plot.o
+
+APPEXTRALIBS=$(top_builddir)/lib/libplot.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
+include $(top_builddir)/src/makeprog.env
+

@@ -820,6 +820,7 @@ trap 'rm -fr `echo "
             src/xml/Makefile
             src/canvas/Makefile
             src/gizmos/Makefile
+            src/plot/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
@@ -833,6 +834,7 @@ trap 'rm -fr `echo "
             samples/gizmos/multicell/Makefile
             samples/gizmos/splittree/Makefile
             samples/xml/Makefile
+            samples/plot/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
@@ -923,6 +925,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             src/xml/Makefile
             src/canvas/Makefile
             src/gizmos/Makefile
+            src/plot/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
@@ -936,6 +939,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             samples/gizmos/multicell/Makefile
             samples/gizmos/splittree/Makefile
             samples/xml/Makefile
+            samples/plot/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile

@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=mmedia ogl stc gizmos canvas xml
+CONTRIB_SAMPLES=mmedia ogl stc gizmos canvas xml plot
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done
