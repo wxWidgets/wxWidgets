@@ -1,7 +1,0 @@
-node scrollbar
-var style of flags wxSB_HORIZONTAL,wxSB_VERTICAL
-var value of integer
-var thumbsize of integer
-var range of integer
-var pagesize of integer
-derived from control

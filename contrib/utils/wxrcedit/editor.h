@@ -58,9 +58,9 @@ class EditorFrame : public wxFrame
         void LoadFile(const wxString& filename);
         void NewFile();
         void SaveFile(const wxString& filename);
+        wxString GetFileName() { return m_FileName; }
         
         void RefreshTree();
-        void RefreshPreview(wxXmlNode *node);
         void RefreshProps(wxXmlNode *node);
         void RefreshPropsEdit();
         bool SelectNode(wxXmlNode *node, wxTreeItemId *root = NULL);
@@ -96,7 +96,6 @@ class EditorFrame : public wxFrame
 
         wxString m_FileName;
         wxXmlDocument *m_Resource;
-        wxWindow *m_Preview;
 
         DECLARE_EVENT_TABLE()
         void OnTreeSel(wxTreeEvent& event);

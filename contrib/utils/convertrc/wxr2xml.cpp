@@ -92,28 +92,24 @@ bool wxr2xml::ParseResources()
 
 void wxr2xml::ParsePanel(wxItemResource * res)
 {
-    m_xmlfile.Write("\t<panel");
+    m_xmlfile.Write("\t<object class=\"wxPanel\"");
     PanelStuff(res);
     WriteControlInfo(res);
     m_xmlfile.Write("\n");
-    m_xmlfile.Write("\t\t<children>\n");
     ParseControls(res);
-    m_xmlfile.Write(" \t\t</children>\n");
-    m_xmlfile.Write("\t</panel>\n\n");
+    m_xmlfile.Write("\t</object>\n\n");
 }
 
 void wxr2xml::ParseDialog(wxItemResource * res)
 {
     PanelStuff(res);
-    m_xmlfile.Write("\t<dialog");
+    m_xmlfile.Write("\t<object class=\"wxDialog\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetTitle(res));
 
     m_xmlfile.Write("\n");
-    m_xmlfile.Write("\t\t<children>\n");
     ParseControls(res);
-    m_xmlfile.Write("\t\t</children>\n");
-    m_xmlfile.Write("\t</dialog>\n\n");
+    m_xmlfile.Write("\t</object>\n\n");
 }
 
 void wxr2xml::ParseControls(wxItemResource * res)
@@ -194,18 +190,18 @@ wxString wxr2xml::GetPosition(wxItemResource * res)
 
 void wxr2xml::ParseButton(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<button");
+    m_xmlfile.Write("\t\t\t<object class=\"wxButton\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetLabel(res));
-    m_xmlfile.Write("\t\t\t</button>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::ParseTextCtrl(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<textctrl");
+    m_xmlfile.Write("\t\t\t<object class=\"wxTextCtrl\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetValue4(res));
-    m_xmlfile.Write("\t\t\t</textctrl>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 
 }
 
@@ -225,11 +221,11 @@ wxString wxr2xml::GetValue4(wxItemResource * res)
 
 void wxr2xml::ParseCheckBox(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<checkbox");
+    m_xmlfile.Write("\t\t\t<object class=\"wxCheckBox\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetLabel(res));
     m_xmlfile.Write(GetCheckStatus(res));
-    m_xmlfile.Write("\t\t\t</checkbox>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 wxString wxr2xml::GetLabel(wxItemResource * res)
@@ -239,38 +235,38 @@ wxString wxr2xml::GetLabel(wxItemResource * res)
 
 void wxr2xml::ParseRadioBox(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<radiobox");
+    m_xmlfile.Write("\t\t\t<object class=\"wxRadioBox\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetLabel(res));
     // Add radio box items
     WriteStringList(res);
     // Value1
     m_xmlfile.Write(GetDimension(res));
-    m_xmlfile.Write("\t\t\t</radiobox>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::ParseListBox(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<listbox");
+    m_xmlfile.Write("\t\t\t<object class=\"wxListBox\"");
     WriteControlInfo(res);
     WriteStringList(res);
-    m_xmlfile.Write("\t\t\t</listbox>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::ParseStaticText(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<statictext");
+    m_xmlfile.Write("\t\t\t<object class=\"wxStaticText\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetLabel(res));
-    m_xmlfile.Write("\t\t\t</statictext>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::ParseStaticBox(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<staticbox");
+    m_xmlfile.Write("\t\t\t<object class=\"wxStaticBox\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetLabel(res));
-    m_xmlfile.Write("\t\t\t</staticbox>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::WriteStringList(wxItemResource * res)
@@ -286,20 +282,20 @@ void wxr2xml::WriteStringList(wxItemResource * res)
 
 void wxr2xml::ParseChoice(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<choice");
+    m_xmlfile.Write("\t\t\t<object class=\"wxChoice\"");
     WriteControlInfo(res);
     // Add choice items
     WriteStringList(res);
-    m_xmlfile.Write("\t\t\t</choice>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::ParseGauge(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<gauge");
+    m_xmlfile.Write("\t\t\t<object class=\"wxGauge\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetValue1(res));
     m_xmlfile.Write(GetRange(res));
-    m_xmlfile.Write("\n\t\t\t</gauge>\n");
+    m_xmlfile.Write("\n\t\t\t</object>\n");
 }
 
 wxString wxr2xml::GetValue1(wxItemResource * res)
@@ -318,12 +314,12 @@ wxString wxr2xml::GetRange(wxItemResource * res)
 
 void wxr2xml::ParseSlider(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<slider");
+    m_xmlfile.Write("\t\t\t<object class=\"wxSlider\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetValue1(res));
     m_xmlfile.Write(GetMax(res));
     m_xmlfile.Write(GetMin(res));
-    m_xmlfile.Write("\n\t\t\t</slider>\n");
+    m_xmlfile.Write("\n\t\t\t</object>\n");
 }
 
 wxString wxr2xml::GetMax(wxItemResource * res)
@@ -342,34 +338,34 @@ wxString wxr2xml::GetMin(wxItemResource * res)
 
 void wxr2xml::ParseComboBox(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<combobox");
+    m_xmlfile.Write("\t\t\t<object class=\"wxComboBox\"");
     WriteControlInfo(res);
     // Add combo items
     WriteStringList(res);
-    m_xmlfile.Write("\n\t\t\t</combobox>\n");
+    m_xmlfile.Write("\n\t\t\t</object>\n");
 }
 
 void wxr2xml::ParseRadioButton(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<radiobutton");
+    m_xmlfile.Write("\t\t\t<object class=\"wxRadioButton\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetLabel(res));
 
     wxString msg;
     m_xmlfile.Write(GetValue1(res));
     m_xmlfile.Write(GetCheckStatus(res));
-    m_xmlfile.Write("\t\t\t</radiobutton>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::ParseScrollBar(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<scrollbar");
+    m_xmlfile.Write("\t\t\t<object class=\"wxScrollBar\"");
     WriteControlInfo(res);
     m_xmlfile.Write(GetValue1(res));
     m_xmlfile.Write("\t\t\t\t<thumbsize>"+GetValue2(res)+"</thumbsize>\n");
     m_xmlfile.Write("\t\t\t\t<range>"+GetValue3(res)+"</range>\n");
     m_xmlfile.Write("\t\t\t\t<pagesize>"+GetValue5(res)+"</pagesize>\n");
-    m_xmlfile.Write("\t\t\t</scrollbar>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 wxString wxr2xml::GetCheckStatus(wxItemResource * res)
@@ -584,18 +580,16 @@ void wxr2xml::ParseMenuBar(wxItemResource * res)
     wxItemResource *child;
     wxNode *node = res->GetChildren().First();
     // Get Menu Bar Name
-    m_xmlfile.Write("\t<menubar ");
+    m_xmlfile.Write("\t<object class=\"wxMenuBar\" ");
     m_xmlfile.Write(GenerateName(res));
     m_xmlfile.Write(">\n");
-    m_xmlfile.Write("\t\t<children>\n");
     while (node) {
         child = (wxItemResource *) node->Data();
         ParseMenu(child);
         node = node->Next();
     }
 
-    m_xmlfile.Write("\t\t</children>\n");
-    m_xmlfile.Write("\t</menubar> \n\n");
+    m_xmlfile.Write("\t</object> \n\n");
 }
 
 void wxr2xml::ParseMenu(wxItemResource * res)
@@ -603,7 +597,7 @@ void wxr2xml::ParseMenu(wxItemResource * res)
     wxItemResource *child;
     wxNode *node = res->GetChildren().First();
     // Get Menu 
-    m_xmlfile.Write("\t\t\t<menu ");
+    m_xmlfile.Write("\t\t\t<object class=\"wxMenu\" ");
     wxString menuname;
     menuname << "name = \"menu_" << res->GetValue1() << "\"";
     m_xmlfile.Write(menuname);
@@ -613,7 +607,6 @@ void wxr2xml::ParseMenu(wxItemResource * res)
     if (res->GetValue4() != "")
         m_xmlfile.Write("\t\t\t\t<help>" + res->GetValue4() +
         "</help>\n");
-        m_xmlfile.Write("\t\t\t<children>\n");
     // Read in menu items and additional menus
     while (node) {
         child = (wxItemResource *) node->Data();
@@ -623,17 +616,16 @@ void wxr2xml::ParseMenu(wxItemResource * res)
             ParseMenu(child);
             node = node->Next();
     }
-    m_xmlfile.Write("\t\t\t</children>\n");
-    m_xmlfile.Write("\t\t\t</menu> \n");
+    m_xmlfile.Write("\t\t\t</object> \n");
 }
 
 void wxr2xml::ParseMenuItem(wxItemResource * res)
 {
     // Get Menu Item or Separator
     if (res->GetTitle() == "") {
-        m_xmlfile.Write("\t\t\t<separator/>\n");
+        m_xmlfile.Write("\t\t\t<object class=\"separator\"/>\n");
     } else {
-        m_xmlfile.Write("\t\t\t\t<menuitem ");
+        m_xmlfile.Write("\t\t\t\t<object class=\"wxMenuItem\" ");
         wxString menuname;
         menuname << "name = \"menuitem_" << res->GetValue1() << "\"";
         m_xmlfile.Write(menuname);
@@ -645,7 +637,7 @@ void wxr2xml::ParseMenuItem(wxItemResource * res)
         res->GetValue4() + "</help>\n");
         if (res->GetValue2())
             m_xmlfile.Write("\t\t\t\t<checkable>1</checkable>\n");
-        m_xmlfile.Write("\t\t\t</menuitem> \n");
+        m_xmlfile.Write("\t\t\t</object> \n");
     }
 }
 
@@ -657,7 +649,7 @@ wxString wxr2xml::FixMenuString(wxString phrase)
 
 void wxr2xml::ParseStaticBitmap(wxItemResource * res)
 {
-    m_xmlfile.Write("\t\t\t<staticbitmap");
+    m_xmlfile.Write("\t\t\t<object class=\"wxStaticBitmap\"");
     WriteControlInfo(res);
     // value4 holds bitmap name
     wxString bitmapname;
@@ -667,13 +659,13 @@ void wxr2xml::ParseStaticBitmap(wxItemResource * res)
     bitmapname += _T(".bmp");
     bitmap.SaveFile(bitmapname, wxBITMAP_TYPE_BMP);
     m_xmlfile.Write("\n\t\t\t\t<bitmap>" + bitmapname + "</bitmap>");
-    m_xmlfile.Write("\t\t\t</staticbitmap>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
     // bitmap5
 }
 //Parse a bitmap resource
 void wxr2xml::ParseBitmap(wxItemResource * res)
 {
-    m_xmlfile.Write("\t<bitmap ");
+    m_xmlfile.Write("\t<object class=\"wxBitmap\" ");
     m_xmlfile.Write(GenerateName(res)+">");
     wxString bitmapname;
     bitmapname = res->GetName();
@@ -682,7 +674,7 @@ void wxr2xml::ParseBitmap(wxItemResource * res)
     bitmapname += _T(".bmp");
     bitmap.SaveFile(bitmapname, wxBITMAP_TYPE_BMP);
     m_xmlfile.Write(bitmapname);
-    m_xmlfile.Write("</bitmap>\n\n");
+    m_xmlfile.Write("</object>\n\n");
 }
 
 void wxr2xml::PanelStuff(wxItemResource * res)
@@ -727,7 +719,7 @@ wxString wxr2xml::GetValue5(wxItemResource *res)
 void wxr2xml::ParseBitmapButton(wxItemResource *res)
 {
     
-    m_xmlfile.Write("\t\t\t<bitmapbutton");
+    m_xmlfile.Write("\t\t\t<object class=\"wxBitmapButton\"");
     WriteControlInfo(res);
     // value4 holds bitmap name
     wxString bitmapname;
@@ -738,7 +730,7 @@ void wxr2xml::ParseBitmapButton(wxItemResource *res)
     bitmap.SaveFile(bitmapname, wxBITMAP_TYPE_BMP);
     m_xmlfile.Write("\t\t\t\t<bitmap>" + bitmapname + "</bitmap>\n");
     
-    m_xmlfile.Write("\t\t\t</bitmapbutton>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 void wxr2xml::WriteFontInfo(wxItemResource *res)
@@ -779,19 +771,19 @@ void wxr2xml::GetFontFace(wxFont font)
         case wxDEFAULT:
             break;
         case wxDECORATIVE:
-            m_xmlfile.Write("\t\t\t\t<face>Decorative</face>\n");
+            m_xmlfile.Write("\t\t\t\t<face>decorative</face>\n");
             break;
         case wxROMAN:
-            m_xmlfile.Write("\t\t\t\t<face>Roman</face>\n");
+            m_xmlfile.Write("\t\t\t\t<face>roman</face>\n");
             break;
         case wxSCRIPT:
-            m_xmlfile.Write("\t\t\t\t<face>Script</face>\n");
+            m_xmlfile.Write("\t\t\t\t<face>script</face>\n");
             break;
         case wxSWISS:
-            m_xmlfile.Write("\t\t\t\t<face>Swiss</face>\n");
+            m_xmlfile.Write("\t\t\t\t<face>swiss</face>\n");
             break;
         case wxMODERN:
-            m_xmlfile.Write("\t\t\t\t<face>Modern</face>\n");
+            m_xmlfile.Write("\t\t\t\t<face>modern</face>\n");
             break;
         default:
             wxLogError("Unknown font face");

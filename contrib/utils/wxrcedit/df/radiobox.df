@@ -1,7 +1,0 @@
-node radiobox
-var style of flags wxRA_SPECIFY_COLS,wxRA_HORIZONTAL,wxRA_SPECIFY_ROWS,wxRA_VERTICAL
-var label of text
-var dimension of integer
-var selection of integer
-var content of not_implemented
-derived from control

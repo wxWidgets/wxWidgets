@@ -51,7 +51,7 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
 
 bool wxTreeCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("treectrl");
+    return IsOfClass(node, _T("wxTreeCtrl"));
 }
 
 

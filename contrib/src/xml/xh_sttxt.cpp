@@ -47,7 +47,7 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
 
 bool wxStaticTextXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("statictext");
+    return IsOfClass(node, _T("wxStaticText"));
 }
 
 

@@ -49,7 +49,7 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
 
 bool wxButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("button");
+    return IsOfClass(node, _T("wxButton"));
 }
 
 

@@ -81,4 +81,20 @@ wxString XmlReadValue(wxXmlNode *parent, const wxString& name)
 
 
 
+wxString XmlGetClass(wxXmlNode *parent)
+{
+    return parent->GetPropVal(_T("class"), wxEmptyString);
+}
+
+
+
+void XmlSetClass(wxXmlNode *parent, const wxString& classname)
+{
+    parent->DeleteProperty(_T("class"));
+    parent->AddProperty(_T("class"), classname);
+}
+
+
+
+
 

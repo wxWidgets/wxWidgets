@@ -41,30 +41,30 @@ wxNotebookXmlHandler::wxNotebookXmlHandler()
 
 wxObject *wxNotebookXmlHandler::DoCreateResource()
 { 
-    if (m_Node->GetName() == _T("notebookpage"))
+    if (m_Class == _T("notebookpage"))
     {
-        wxXmlNode *n = GetParamNode(_T("window"))->GetChildren();
-        while (n)
+        wxXmlNode *n = GetParamNode(_T("object"));
+
+        if (n)
         {
-            if (n->GetType() == wxXML_ELEMENT_NODE)
-            {
-                bool old_ins = m_IsInside;
-                m_IsInside = FALSE;
-                m_IsInside = old_ins;
-                wxObject *item = CreateResFromNode(n, m_Notebook, NULL);
-                wxWindow *wnd = wxDynamicCast(item, wxWindow);
-                
-                if (wnd)
-                    m_Notebook->AddPage(wnd, GetText(_T("label")),
-                                             GetBool(_T("selected"), 0));
-                else 
-                    wxLogError(_T("Error in resource."));              
-                return wnd;
-            }
-            n = n->GetNext();
+            bool old_ins = m_IsInside;
+            m_IsInside = FALSE;
+            m_IsInside = old_ins;
+            wxObject *item = CreateResFromNode(n, m_Notebook, NULL);
+            wxWindow *wnd = wxDynamicCast(item, wxWindow);
+
+            if (wnd)
+                m_Notebook->AddPage(wnd, GetText(_T("label")),
+                                         GetBool(_T("selected"), 0));
+            else 
+                wxLogError(_T("Error in resource."));              
+            return wnd;
         }
-        wxLogError(_T("Error in resource: no control within notebook's <page> tag."));
-        return NULL;
+        else
+        {
+            wxLogError(_T("Error in resource: no control within notebook's <page> tag."));
+            return NULL;
+        }
     }
     
     else {
@@ -93,8 +93,8 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
 
 bool wxNotebookXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_IsInside && node->GetName() == _T("notebook")) ||
-            (m_IsInside && node->GetName() == _T("notebookpage")));
+    return ((!m_IsInside && IsOfClass(node, _T("wxNotebook"))) ||
+            (m_IsInside && IsOfClass(node, _T("notebookpage"))));
 }
 
 #endif

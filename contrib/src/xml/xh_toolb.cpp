@@ -38,7 +38,7 @@ wxToolBarXmlHandler::wxToolBarXmlHandler()
 
 wxObject *wxToolBarXmlHandler::DoCreateResource()
 { 
-    if (m_Node->GetName() == _T("tool"))
+    if (m_Class == _T("tool"))
     {
         wxCHECK_MSG(m_Toolbar, NULL, _T("Incorrect syntax of XML resource: tool not within a toolbar!"));
         m_Toolbar->AddTool(GetID(),
@@ -53,14 +53,14 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         return m_Toolbar; // must return non-NULL
     }
     
-    else if (m_Node->GetName() == _T("separator"))
+    else if (m_Class == _T("separator"))
     {
         wxCHECK_MSG(m_Toolbar, NULL, _T("Incorrect syntax of XML resource: separator not within a toolbar!"));
         m_Toolbar->AddSeparator();
         return m_Toolbar; // must return non-NULL
     }
     
-    else /*<toolbar>*/
+    else /*<object class="wxToolBar">*/
     {
         int style = GetStyle(_T("style"), wxNO_BORDER | wxTB_HORIZONTAL);
 #ifdef __WXMSW__
@@ -86,22 +86,23 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         if (separation != -1)
             toolbar->SetToolSeparation(separation);
 
-        wxXmlNode *children_node = GetParamNode(_T("children"));
+        wxXmlNode *children_node = GetParamNode(_T("object"));
         if (children_node == NULL) return toolbar;
 
         m_IsInside = TRUE;
         m_Toolbar = toolbar;
 
-        wxXmlNode *n = children_node->GetChildren();
+        wxXmlNode *n = children_node;
 
         while (n)
         {
-            if (n->GetType() == wxXML_ELEMENT_NODE)
+            if (n->GetType() == wxXML_ELEMENT_NODE && 
+                n->GetName() == _T("object"))
             {
                 wxObject *created = CreateResFromNode(n, toolbar, NULL);
                 wxControl *control = wxDynamicCast(created, wxControl);
-                if (n->GetName() != _T("tool") &&
-                    n->GetName() != _T("separator") &&
+                if (IsOfClass(n, _T("tool")) &&
+                    IsOfClass(n, _T("separator")) &&
                     control != NULL)
                     toolbar->AddControl(control);
             }
@@ -120,9 +121,9 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
 bool wxToolBarXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return ((!m_IsInside && node->GetName() == _T("toolbar")) ||
-            (m_IsInside && node->GetName() == _T("tool")) || 
-            (m_IsInside && node->GetName() == _T("separator")));
+    return ((!m_IsInside && IsOfClass(node, _T("wxToolBar"))) ||
+            (m_IsInside && IsOfClass(node, _T("tool"))) || 
+            (m_IsInside && IsOfClass(node, _T("separator"))));
 }
 
 #endif

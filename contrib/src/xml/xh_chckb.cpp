@@ -51,7 +51,7 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
 
 bool wxCheckBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("checkbox");
+    return IsOfClass(node, _T("wxCheckBox"));
 }
 
 #endif

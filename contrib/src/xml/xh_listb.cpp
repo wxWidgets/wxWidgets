@@ -37,15 +37,14 @@ wxListBoxXmlHandler::wxListBoxXmlHandler()
 
 wxObject *wxListBoxXmlHandler::DoCreateResource()
 { 
-    if( m_Node->GetName() == _T("listbox"))
+    if( m_Class == _T("wxListBox"))
     {
         // find the selection
         long selection = GetLong( _T("selection"), -1 );
 
         // need to build the list of strings from children
         m_InsideBox = TRUE;
-        CreateChildren( NULL, TRUE /* only this handler */, 
-                        GetParamNode(_T("content")));
+        CreateChildrenPrivately( NULL, GetParamNode(_T("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
         {
@@ -94,10 +93,9 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
 
 bool wxListBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return( node->GetName() == _T("listbox") ||
-        ( m_InsideBox &&
-            node->GetName() == _T("item" )) 
-        );
+    return (IsOfClass(node, _T("wxListBox")) ||
+           (m_InsideBox && node->GetName() == _T("item"))
+           );
 }
 
 

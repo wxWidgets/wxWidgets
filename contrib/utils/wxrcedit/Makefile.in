@@ -6,57 +6,24 @@ program_dir = contrib/utils/wxrcedit
 
 PROGRAM=wxrcedit
 
-OBJECTS=edapp.o editor.o nodehnd.o prophnd.o xmlhelpr.o
+OBJECTS=edapp.o editor.o nodehnd.o prophnd.o xmlhelpr.o preview.o
 
 DATADIRS = df
-DATAFILES = \
-          df/boxsizer.df \
-          df/break.df \
-          df/button.df \
-          df/checkbox.df \
-          df/checklist.df \
-          df/choice.df \
-          df/combobox.df \
-          df/control.df \
-          df/dialog.df \
-          df/flexgridsizer.df \
-          df/gauge.df \
-          df/gridsizer.df \
-          df/htmlwindow.df \
-          df/menu.df \
-          df/menu_item.df \
-          df/menubar.df \
-          df/menuitem.df \
-          df/notebook.df \
-          df/notebookpage.df \
-          df/panel.df \
-          df/panel_item.df \
-          df/panelbase.df \
-          df/radiobox.df \
-          df/radiobutton.df \
-          df/separator.df \
-          df/sizer_item.df \
-          df/sizeritem.df \
-          df/slider.df \
-          df/spacer.df \
-          df/spinbutton.df \
-          df/spinctrl.df \
-          df/staticbitmap.df \
-          df/staticboxsizer.df \
-          df/statictext.df \
-          df/textctrl.df \
-          df/toolbar_item.df \
-          df/tool.df \
-          df/toolbar.df \
-          df/window.df \
-          df/listbox.df \
-          df/bitmapbutton.df \
-          df/calendarctrl.df \
-          df/listctrl.df \
-          df/scrollbar.df \
-          df/staticbox.df \
-          df/treectrl.df
-
+DATAFILES = df/break.df df/control.df df/menu_item.df df/notebookpage.df \
+            df/panel_item.df df/panelbase.df df/separator.df df/sizer_item.df \
+            df/sizeritem.df df/spacer.df df/tool.df df/toolbar_item.df \
+            df/unknown.df df/window.df df/wxBitmapButton.df df/wxBoxSizer.df \
+            df/wxButton.df df/wxCalendarCtrl.df df/wxCheckBox.df \
+            df/wxCheckList.df df/wxChoice.df df/wxComboBox.df df/wxDialog.df \
+            df/wxFlexGridSizer.df df/wxGauge.df df/wxGridSizer.df \
+            df/wxHtmlWindow.df df/wxListBox.df df/wxListCtrl.df df/wxMenu.df \
+            df/wxMenuBar.df df/wxMenuItem.df df/wxNotebook.df df/wxPanel.df \
+            df/wxRadioBox.df df/wxRadioButton.df df/wxScrollBar.df \
+            df/wxSlider.df df/wxSpinButton.df df/wxSpinCtrl.df \
+            df/wxStaticBitmap.df df/wxStaticBox.df df/wxStaticBoxSizer.df \
+            df/wxStaticLine.df df/wxStaticText.df df/wxTextCtrl.df \
+            df/wxToolBar.df df/wxTreeCtrl.df 
+            
 APPEXTRALIBS=$(top_builddir)/lib/libwxxml.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 

@@ -93,7 +93,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
 
 bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("spinctrl");
+    return IsOfClass(node, _T("wxSpinCtrl"));
 }
 
 #endif // wxUSE_SPINCTRL

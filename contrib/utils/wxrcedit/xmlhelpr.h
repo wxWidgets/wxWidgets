@@ -19,5 +19,7 @@
 void XmlWriteValue(wxXmlNode *parent, const wxString& name, const wxString& value);
 wxString XmlReadValue(wxXmlNode *parent, const wxString& name);
 wxXmlNode *XmlFindNode(wxXmlNode *parent, const wxString& name);
+wxString XmlGetClass(wxXmlNode *parent);
+void XmlSetClass(wxXmlNode *parent, const wxString& classname);
 
 #endif 

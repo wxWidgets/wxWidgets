@@ -56,7 +56,7 @@ wxObject *wxScrollBarXmlHandler::DoCreateResource()
 
 bool wxScrollBarXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("scrollbar");
+    return IsOfClass(node, _T("wxScrollBar"));
 }
 
 

@@ -40,8 +40,8 @@ wxObject *wxTextCtrlXmlHandler::DoCreateResource()
                                     GetText(_T("value")),
                                     GetPosition(), GetSize(),
                                     GetStyle(),
-									wxDefaultValidator,
-                                    GetText(_T("name"))
+                                    wxDefaultValidator,
+                                    GetName()
                                     );
     SetupWindow(text);
     
@@ -52,7 +52,7 @@ wxObject *wxTextCtrlXmlHandler::DoCreateResource()
 
 bool wxTextCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("textctrl");
+    return IsOfClass(node, _T("wxTextCtrl"));
 }
 
 

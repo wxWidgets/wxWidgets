@@ -59,5 +59,5 @@ wxObject *wxPanelXmlHandler::DoCreateResource()
 
 bool wxPanelXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("panel");
+    return IsOfClass(node, _T("wxPanel"));
 }

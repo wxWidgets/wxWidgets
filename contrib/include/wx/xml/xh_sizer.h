@@ -30,6 +30,8 @@ class WXDLLEXPORT wxSizerXmlHandler : public wxXmlResourceHandler
     private:
         bool m_IsInside;
         wxSizer *m_ParentSizer;
+        
+        bool IsSizerNode(wxXmlNode *node);
 };
 
 

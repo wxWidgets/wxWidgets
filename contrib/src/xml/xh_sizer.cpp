@@ -25,12 +25,12 @@
 #include "wx/statbox.h"
 #include "wx/notebook.h"
 
-static bool IsSizerNode(wxXmlNode *node)
+bool wxSizerXmlHandler::IsSizerNode(wxXmlNode *node)
 {
-    return (node->GetName() == _T("boxsizer")) ||
-           (node->GetName() == _T("staticboxsizer")) ||
-           (node->GetName() == _T("gridsizer")) ||
-           (node->GetName() == _T("flexgridsizer"));
+    return (IsOfClass(node, _T("wxBoxSizer"))) ||
+           (IsOfClass(node, _T("wxStaticBoxSizer"))) ||
+           (IsOfClass(node, _T("wxGridSizer"))) ||
+           (IsOfClass(node, _T("wxFlexGridSizer")));
 }
 
 
@@ -73,51 +73,50 @@ wxSizerXmlHandler::wxSizerXmlHandler()
 
 wxObject *wxSizerXmlHandler::DoCreateResource()
 { 
-    if (m_Node->GetName() == _T("sizeritem"))
+    if (m_Class == _T("sizeritem"))
     {
-        wxXmlNode *n = GetParamNode(_T("window"))->GetChildren();
+        wxXmlNode *n = GetParamNode(_T("object"));
 
-        while (n)
+        if (n)
         {
-            if (n->GetType() == wxXML_ELEMENT_NODE)
-            {        
-                bool old_ins = m_IsInside;
-                wxSizer *old_par = m_ParentSizer;
-                m_IsInside = FALSE;
-                if (!IsSizerNode(n)) m_ParentSizer = NULL;
-                wxObject *item = CreateResFromNode(n, m_Parent, NULL);
-                m_IsInside = old_ins;
-                m_ParentSizer = old_par;
-                wxSizer *sizer = wxDynamicCast(item, wxSizer);
-                wxWindow *wnd = wxDynamicCast(item, wxWindow);
-                wxSize minsize = GetSize(_T("minsize"));
-                
-                if (sizer)
-                {
-                    m_ParentSizer->Add(sizer, GetLong(_T("option")), 
-                                       GetStyle(_T("flag")), GetDimension(_T("border")));
-                    if (!(minsize == wxDefaultSize))
-                        m_ParentSizer->SetItemMinSize(sizer, minsize.x, minsize.y);
-                }
-                else if (wnd)
-                {
-                    m_ParentSizer->Add(wnd, GetLong(_T("option")), 
-                                       GetStyle(_T("flag")), GetDimension(_T("border")));
-                    if (!(minsize == wxDefaultSize))
-                        m_ParentSizer->SetItemMinSize(wnd, minsize.x, minsize.y);
-                }
-                else 
-                    wxLogError(_T("Error in resource."));
-                
-                return item;
+            bool old_ins = m_IsInside;
+            wxSizer *old_par = m_ParentSizer;
+            m_IsInside = FALSE;
+            if (!IsSizerNode(n)) m_ParentSizer = NULL;
+            wxObject *item = CreateResFromNode(n, m_Parent, NULL);
+            m_IsInside = old_ins;
+            m_ParentSizer = old_par;
+            wxSizer *sizer = wxDynamicCast(item, wxSizer);
+            wxWindow *wnd = wxDynamicCast(item, wxWindow);
+            wxSize minsize = GetSize(_T("minsize"));
+
+            if (sizer)
+            {
+                m_ParentSizer->Add(sizer, GetLong(_T("option")), 
+                                   GetStyle(_T("flag")), GetDimension(_T("border")));
+                if (!(minsize == wxDefaultSize))
+                    m_ParentSizer->SetItemMinSize(sizer, minsize.x, minsize.y);
             }
-            n = n->GetNext();
+            else if (wnd)
+            {
+                m_ParentSizer->Add(wnd, GetLong(_T("option")), 
+                                   GetStyle(_T("flag")), GetDimension(_T("border")));
+                if (!(minsize == wxDefaultSize))
+                    m_ParentSizer->SetItemMinSize(wnd, minsize.x, minsize.y);
+            }
+            else 
+                wxLogError(_T("Error in resource."));
+
+            return item;
         }
-        wxLogError(_T("Error in resource: no control/sizer within sizer's <item> tag."));
-        return NULL;
+        else /*n == NULL*/
+        {
+            wxLogError(_T("Error in resource: no control/sizer within sizer's <item> tag."));
+            return NULL;
+        }
     }
     
-    else if (m_Node->GetName() == _T("spacer"))
+    else if (m_Class == _T("spacer"))
     {
         wxCHECK_MSG(m_ParentSizer, NULL, _T("Incorrect syntax of XML resource: spacer not within sizer!"));
         wxSize sz = GetSize();
@@ -130,29 +129,29 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
     else {
         wxSizer *sizer = NULL;
         
-        wxXmlNode *parentNode = m_Node->GetParent()->GetParent();
+        wxXmlNode *parentNode = m_Node->GetParent();
 
         wxCHECK_MSG(m_ParentSizer != NULL ||
-                ((parentNode->GetName() == _T("panel") ||
-                  parentNode->GetName() == _T("dialog")) &&
+                ((IsOfClass(parentNode, _T("wxPanel")) ||
+                  IsOfClass(parentNode, _T("wxDialog"))) &&
                  parentNode->GetType() == wxXML_ELEMENT_NODE), NULL,
-                _T("Incorrect use of sizer: parent is not 'dialog' or 'panel'."));
+                _T("Incorrect use of sizer: parent is not 'wxDialog' or 'wxPanel'."));
 
-        if (m_Node->GetName() == _T("boxsizer"))
+        if (m_Class == _T("wxBoxSizer"))
             sizer = new wxBoxSizer(GetStyle(_T("orient"), wxHORIZONTAL));
 
-        else if (m_Node->GetName() == _T("staticboxsizer"))
+        else if (m_Class == _T("wxStaticBoxSizer"))
         {
             sizer = new wxStaticBoxSizer(
                          new wxStaticBox(m_ParentAsWindow, -1, GetText(_T("label"))),
                          GetStyle(_T("orient"), wxHORIZONTAL));
         }
         
-        else if (m_Node->GetName() == _T("gridsizer"))
+        else if (m_Class == _T("wxGridSizer"))
             sizer = new wxGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
                                     GetDimension(_T("vgap")), GetDimension(_T("hgap")));
                                     
-        else if (m_Node->GetName() == _T("flexgridsizer"))
+        else if (m_Class == _T("wxFlexGridSizer"))
             sizer = new wxFlexGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
                                     GetDimension(_T("vgap")), GetDimension(_T("hgap")));
 
@@ -193,6 +192,6 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
 bool wxSizerXmlHandler::CanHandle(wxXmlNode *node)
 {
     return ((!m_IsInside && IsSizerNode(node)) ||
-            (m_IsInside && node->GetName() == _T("sizeritem")) ||
-            (m_IsInside && node->GetName() == _T("spacer")));
+            (m_IsInside && IsOfClass(node, _T("sizeritem"))) ||
+            (m_IsInside && IsOfClass(node, _T("spacer"))));
 }

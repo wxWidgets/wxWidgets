@@ -46,7 +46,7 @@ wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 
 bool wxStaticBitmapXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("staticbitmap");
+    return IsOfClass(node, _T("wxStaticBitmap"));
 }
 
 

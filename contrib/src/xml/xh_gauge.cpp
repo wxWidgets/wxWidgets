@@ -67,7 +67,7 @@ wxObject *wxGaugeXmlHandler::DoCreateResource()
 
 bool wxGaugeXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("gauge");
+    return IsOfClass(node, _T("wxGauge"));
 }
 
 

@@ -1,6 +1,0 @@
-node spinbutton
-var style of flags wxSP_HORIZONTAL,wxSP_VERTICAL,wxSP_ARROW_KEYS,wxSP_WRAP
-var value of integer
-var min of integer
-var max of integer
-derived from control

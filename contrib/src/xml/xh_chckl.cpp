@@ -31,12 +31,11 @@ wxCheckListXmlHandler::wxCheckListXmlHandler()
 
 wxObject *wxCheckListXmlHandler::DoCreateResource()
 { 
-    if( m_Node->GetName() == _T("checklist"))
+    if (m_Class == _T("wxCheckList"))
     {
         // need to build the list of strings from children
         m_InsideBox = TRUE;
-        CreateChildren( NULL, TRUE /* only this handler */,
-                        GetParamNode(_T("content")));
+        CreateChildrenPrivately(NULL, GetParamNode(_T("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
         {
@@ -64,7 +63,7 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
         while (n)
         {
             if (n->GetType() != wxXML_ELEMENT_NODE ||
-                n->GetName() != _T("item" ))
+                n->GetName() != _T("item"))
                { n = n->GetNext(); continue; }
 
             // checking boolean is a bit ugly here (see GetBool() )
@@ -102,10 +101,9 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
 
 bool wxCheckListXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return( node->GetName() == _T("checklist") ||
-        ( m_InsideBox &&
-            node->GetName() == _T("item" )) 
-        );
+    return (IsOfClass(node, _T("wxCheckList")) ||
+           (m_InsideBox && node->GetName() == _T("item"))
+           );
 }
 
 

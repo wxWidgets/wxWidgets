@@ -123,7 +123,7 @@ microsoft reuses the keyword DIALOG for other things
     wxString title;
     wxString ptsize,face;
     
-    m_xmlfile.Write("\t<dialog");
+    m_xmlfile.Write("\t<object class=\"wxDialog\"");
     //Avoid duplicate names this way
     dlgname.Replace("IDD_","DLG_");
     WriteBasicInfo(x,y,width,height,dlgname);
@@ -152,10 +152,8 @@ microsoft reuses the keyword DIALOG for other things
     token=GetToken();
     }
 
-    m_xmlfile.Write("\t<children>\n");
     ParseControls();
-    m_xmlfile.Write("\t</children>\n");
-    m_xmlfile.Write("\t</dialog>\n");
+    m_xmlfile.Write("\t</object>\n");
 }
 
 /*
@@ -207,9 +205,9 @@ void rc2xml::ParseStaticText()
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<statictext");
+    m_xmlfile.Write("\t\t<object class=\"wxStaticText\"");
     WriteBasicInfo(x,y,width,height,varname);WriteLabel(phrase);
-    m_xmlfile.Write("\t\t</statictext>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 //EDITTEXT        IDC_RADIUS,36,65,40,14,ES_AUTOHSCROLL
@@ -222,9 +220,9 @@ void rc2xml::ParseTextCtrl()
     ReadRect(x,y,width,height);
 //TODO
 //style=GetToken();
-    m_xmlfile.Write("\t\t<textctrl");
+    m_xmlfile.Write("\t\t<object class\"wxTextCtrl\"");
     WriteBasicInfo(x,y,width,height,varname);
-    m_xmlfile.Write("\t\t</textctrl>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 //PUSHBUTTON      "Create/Update",IDC_CREATE,15,25,53,13,NOT WS_TABSTOP
@@ -238,10 +236,10 @@ void rc2xml::ParsePushButton()
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<button");
+    m_xmlfile.Write("\t\t<object class\"wxButton\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteLabel(phrase);
-    m_xmlfile.Write("\t\t</button>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 
@@ -271,10 +269,10 @@ void rc2xml::ParseGroupBox()
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<staticbox");
+    m_xmlfile.Write("\t\t<object class=\"wxStaticBox\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteLabel(phrase);
-    m_xmlfile.Write("\t\t</staticbox>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 }
 
 void rc2xml::ReadRect(int & x, int & y, int & width, int & height)
@@ -375,9 +373,9 @@ void rc2xml::ParseComboBox()
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<combobox");
+    m_xmlfile.Write("\t\t<object class=\"wxComboBox\"");
     WriteBasicInfo(x,y,width,height,varname);
-    m_xmlfile.Write("\n\t\t</combobox>\n");
+    m_xmlfile.Write("\n\t\t</object>\n");
 
 }
 
@@ -386,12 +384,11 @@ void rc2xml::ParseMenu(wxString varname)
     wxString token="";
 
     //Write menubar to xml file
-    m_xmlfile.Write("\t<menubar");
+    m_xmlfile.Write("\t<object class=\"wxMenuBar\"");
     //Avoid duplicate names this way
     varname.Replace("IDR_","MB_");
     WriteName(varname);
     m_xmlfile.Write(">\n");
-    m_xmlfile.Write("\t\t<children>\n");
 
     while ((token!="BEGIN")&(token!="{"))
         token=GetToken();
@@ -404,8 +401,7 @@ void rc2xml::ParseMenu(wxString varname)
         ParsePopupMenu();
         }
     }
-    m_xmlfile.Write("\t\t</children>\n");
-    m_xmlfile.Write("\t</menubar>\n");
+    m_xmlfile.Write("\t</object>\n");
 }
 
 void rc2xml::ParsePopupMenu()
@@ -423,11 +419,10 @@ void rc2xml::ParsePopupMenu()
 //Write Menu item
 //Generate a fake name since RC menus don't have one
     name<<"Menu_"<<menucount;
-    m_xmlfile.Write("\t\t<menu");
+    m_xmlfile.Write("\t\t<object class=\"wxMenu\"");
     WriteName(name);
     m_xmlfile.Write(">\n");
     WriteLabel(token);
-    m_xmlfile.Write("\t\t\t<children>\n");
 
     while ((token!="BEGIN")&(token!="{"))
         token=GetToken();
@@ -441,8 +436,7 @@ void rc2xml::ParsePopupMenu()
     if (token=="MENUITEM")
         ParseMenuItem();
     }
-    m_xmlfile.Write("\t\t\t</children>\n");
-    m_xmlfile.Write("\t\t\t</menu>\n");
+    m_xmlfile.Write("\t\t\t</object>\n");
 }
 
 wxString rc2xml::PeekToken()
@@ -484,10 +478,10 @@ void rc2xml::ParseSlider(wxString label, wxString varname)
 
     int x,y,width,height;
     ReadRect(x,y,width,height);
-    m_xmlfile.Write("\t\t<slider");
+    m_xmlfile.Write("\t\t<object class=\"wxSlider\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteStyle(style);
-    m_xmlfile.Write("\n\t\t</slider>\n");
+    m_xmlfile.Write("\n\t\t</object>\n");
 
 }
 /*    
@@ -503,10 +497,10 @@ void rc2xml::ParseProgressBar(wxString label, wxString varname)
     ReadRect(x,y,width,height);
 
 //Always horizontal in MFC
-    m_xmlfile.Write("\t\t<gauge");
+    m_xmlfile.Write("\t\t<object class=\"wxGauge\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteStyle(style);
-    m_xmlfile.Write("\t\t</gauge>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 }
 
 bool rc2xml::ReadOrs(wxString & orstring)
@@ -538,19 +532,19 @@ void rc2xml::ParseCtrlButton(wxString label, wxString varname)
     if (token.Find("BS_AUTOCHECKBOX")!=-1)
         {
         ReadRect(x,y,width,height);
-        m_xmlfile.Write("\t\t<checkbox");
+        m_xmlfile.Write("\t\t<object class=\"wxCheckBox\"");
         WriteBasicInfo(x,y,width,height,varname);
         WriteLabel(label);
-        m_xmlfile.Write("\t\t</checkbox>\n");
+        m_xmlfile.Write("\t\t</object>\n");
         }
 
     if (token.Find("BS_AUTORADIOBUTTON")!=-1)
         {
         ReadRect(x,y,width,height);
-        m_xmlfile.Write("\t\t<radiobutton");
+        m_xmlfile.Write("\t\t<object class=\"wxRadioButton\"");
         WriteBasicInfo(x,y,width,height,varname);
         WriteLabel(label);
-        m_xmlfile.Write("\t\t</radiobutton>\n");
+        m_xmlfile.Write("\t\t</object>\n");
         }
 
 }
@@ -654,9 +648,9 @@ void rc2xml::ParseListBox()
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<listbox");
+    m_xmlfile.Write("\t\t<object class=\"wxListBox\"");
     WriteBasicInfo(x,y,width,height,varname);
-    m_xmlfile.Write("\n\t\t</listbox>\n");
+    m_xmlfile.Write("\n\t\t</object>\n");
 
 }
 /*
@@ -673,10 +667,10 @@ void rc2xml::ParseRichEdit(wxString label, wxString varname)
     wxString style;
 //Make it a rich text control
     style+="wxTE_MULTILINE ";
-    m_xmlfile.Write("\t\t<textctrl");
+    m_xmlfile.Write("\t\t<object class=\"wxTextCtrl\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteStyle(style);
-    m_xmlfile.Write("\t\t</textctrl>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 /*
@@ -696,10 +690,10 @@ void rc2xml::ParseSpinCtrl(wxString label, wxString varname)
 
     int x,y,width,height;
     ReadRect(x,y,width,height);
-    m_xmlfile.Write("\t\t<spinbutton");
+    m_xmlfile.Write("\t\t<object class=\"wxSpinButton\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteStyle(style);
-    m_xmlfile.Write("\n\t\t</spinbutton>\n");
+    m_xmlfile.Write("\n\t\t</object>\n");
 
 }
 
@@ -770,7 +764,7 @@ void rc2xml::ParseToolBar(wxString varname)
         wxLogError("Unable to load bitmap:"+*bitmappath);
 
 //Write toolbar to xml file
-    m_xmlfile.Write("	<toolbar");
+    m_xmlfile.Write("	<object class=\"wxToolBar\"");
 //Avoid duplicate names this way
     varname.Replace("IDR_","TB_");
     WriteName(varname);
@@ -779,7 +773,6 @@ void rc2xml::ParseToolBar(wxString varname)
     style+="wxTB_FLAT";
     WriteStyle(style);
 
-    m_xmlfile.Write("\t\t<children>\n");
 
 //Grab width and height
     int width,height;
@@ -797,7 +790,7 @@ void rc2xml::ParseToolBar(wxString varname)
         if (token=="BUTTON")
             {
             buttonname=GetToken();
-            m_xmlfile.Write("\t\t\t<tool");
+            m_xmlfile.Write("\t\t\t<object class=\"tool\"");
             WriteName(buttonname);
             m_xmlfile.Write(">\n");
     //Write tool tip if any
@@ -812,17 +805,16 @@ void rc2xml::ParseToolBar(wxString varname)
             buttonname+=".bmp";
             m_xmlfile.Write("\t\t\t\t<bitmap>"+buttonname+"</bitmap>\n");
         WriteToolButton(buttonname,c,width,height,bitmap);
-        m_xmlfile.Write("\t\t\t</tool>\n");
+        m_xmlfile.Write("\t\t\t</object>\n");
         c++;
         }
     else if (token=="SEPARATOR")
     {
-    m_xmlfile.Write("\t\t\t<separator/>\n");
+    m_xmlfile.Write("\t\t\t<object class=\"separator\"/>\n");
     }
     token=GetToken();
     }
-    m_xmlfile.Write("\t</children>\n");
-    m_xmlfile.Write("\t</toolbar>\n");
+    m_xmlfile.Write("\t</object>\n");
 }
 
 //Extract bitmaps from larger toolbar bitmap
@@ -890,7 +882,7 @@ void rc2xml::ParseMenuItem()
 //int spot;
     if (PeekToken()=="SEPARATOR")
         {
-        m_xmlfile.Write("\t\t\t<separator/>\n");
+        m_xmlfile.Write("\t\t\t<object class=\"separator\"/>\n");
         return;
         }
 
@@ -899,7 +891,7 @@ void rc2xml::ParseMenuItem()
 //Remove \t because it causes problems
 //spot=token.First("\\t");
 //token=token.Left(spot);
-    m_xmlfile.Write("\t\t\t<menuitem");
+    m_xmlfile.Write("\t\t\t<object class=\"wxMenuItem\"");
     WriteName(name);
     m_xmlfile.Write(">\n");
     WriteLabel(token);
@@ -926,7 +918,7 @@ void rc2xml::ParseMenuItem()
         
         ptoken=PeekToken();
         }
-    m_xmlfile.Write("\t\t\t</menuitem>\n"); 
+    m_xmlfile.Write("\t\t\t</object>\n"); 
 
 }
 
@@ -942,11 +934,11 @@ void rc2xml::ParseIconStatic()
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<staticbitmap");
+    m_xmlfile.Write("\t\t<object class=\"wxStaticBitmap\"");
     WriteBasicInfo(x,y,width,height,varname);
 //Save icon as a bitmap
     WriteIcon(iconname);
-    m_xmlfile.Write("\t\t</staticbitmap>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 //IDR_MAINFRAME           ICON    DISCARDABLE     "res\\mfcexample.ico"
@@ -984,10 +976,10 @@ void rc2xml::ParseStaticBitmap(wxString bitmapname, wxString varname)
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<staticbitmap");
+    m_xmlfile.Write("\t\t<object class=\"wxStaticBitmap\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteBitmap(bitmapname);
-    m_xmlfile.Write("\t\t</staticbitmap>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 
@@ -1058,10 +1050,10 @@ if (token.Find("SBS_VERT")!=-1)
     else
         style=_T("wxSB_HORIZONTAL");
 
-    m_xmlfile.Write("\t\t<scrollbar");
+    m_xmlfile.Write("\t\t<object class=\"wxScrollBar\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteStyle(style);
-    m_xmlfile.Write("\n\t\t</scrollbar>\n");
+    m_xmlfile.Write("\n\t\t</object>\n");
 
 }
 //    CONTROL         "Tree1",IDC_TREE1,"SysTreeView32",WS_BORDER | WS_TABSTOP,
@@ -1074,9 +1066,9 @@ void rc2xml::ParseTreeCtrl(wxString label, wxString varname)
     ReadOrs(token);
     int x,y,width,height;
     ReadRect(x,y,width,height);
-    m_xmlfile.Write("\t\t<treectrl");
+    m_xmlfile.Write("\t\t<object class=\"wxTreeCtrl\"");
     WriteBasicInfo(x,y,width,height,varname);
-    m_xmlfile.Write("\t\t</treectrl>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 //    CONTROL         "MonthCalendar1",IDC_MONTHCALENDAR1,"SysMonthCal32",
@@ -1089,9 +1081,9 @@ void rc2xml::ParseCalendar(wxString label, wxString varname)
     ReadOrs(token);
     int x,y,width,height;
     ReadRect(x,y,width,height);
-    m_xmlfile.Write("\t\t<calendarctrl");
+    m_xmlfile.Write("\t\t<object class=\"wxCalendarCtrl\"");
     WriteBasicInfo(x,y,width,height,varname);
-    m_xmlfile.Write("\t\t</calendarctrl>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 }
 //    CONTROL         "List1",IDC_LIST1,"SysListView32",WS_BORDER | WS_TABSTOP,
   //                  7,89,68,71
@@ -1103,9 +1095,9 @@ void rc2xml::ParseListCtrl(wxString label, wxString varname)
     ReadOrs(token);
     int x,y,width,height;
     ReadRect(x,y,width,height);
-    m_xmlfile.Write("\t\t<listctrl");
+    m_xmlfile.Write("\t\t<object class=\"wxListCtrl\"");
     WriteBasicInfo(x,y,width,height,varname);
-    m_xmlfile.Write("\t\t</listctrl>\n");
+    m_xmlfile.Write("\t\t</object>\n");
 
 }
 

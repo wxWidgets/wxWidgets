@@ -59,7 +59,7 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
 
 bool wxRadioButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("radiobutton");
+    return IsOfClass(node, _T("wxRadioButton"));
 }
 
 

@@ -1,0 +1,13 @@
+node wxSlider
+var value of integer
+var min of integer
+var max of integer
+var style of flags wxSL_HORIZONTAL,wxSL_VERTICAL,wxSL_AUTOTICKS,wxSL_LABELS,wxSL_LEFT,wxSL_TOP,wxSL_RIGHT,wxSL_BOTTOM,wxSL_BOTH,wxSL_SELRANGE
+var tickfreq of integer
+var pagesize of integer
+var linesize of integer
+var thumb of integer
+var tick of integer
+var selmin of integer
+var selmax of integer
+derived from control

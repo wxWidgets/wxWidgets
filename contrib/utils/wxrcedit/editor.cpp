@@ -31,6 +31,7 @@
 #include "editor.h"
 #include "nodehnd.h"
 #include "xmlhelpr.h"
+#include "preview.h"
 
 
 
@@ -146,7 +147,6 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     m_SelectedNode = NULL;
     m_Resource = NULL;
     m_FileName = wxEmptyString;
-    m_Preview = NULL;
     m_SelectedProp = -1;
 
     wxMenu *menuFile = new wxMenu;
@@ -187,7 +187,6 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
 #endif
     // must stay last:
     m_Handlers.Append(new NodeHandlerUnknown(this));
-
   
     // Create toolbar:
     wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT);
@@ -295,6 +294,8 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
 
 EditorFrame::~EditorFrame()
 {
+    PreviewFrame::Get()->Close();
+
     wxConfigBase *cfg = wxConfigBase::Get();
     
     cfg->Write("editor_x", (long)GetPosition().x);
@@ -396,102 +397,6 @@ void EditorFrame::NewFile()
     
     RefreshTree();
     SetTitle("unnamed");
-}
-
-
-
-void EditorFrame::RefreshPreview(wxXmlNode *node)
-{
-    wxConfigBase *cfg = wxConfigBase::Get();
-
-    wxBusyCursor bcur;
-    wxXmlResource *res = new wxXmlResource;
-    wxString tempfile;
-    wxPoint pos = wxPoint(cfg->Read("preview_x", -1), cfg->Read("preview_y", -1));
-    wxSize size = wxSize(cfg->Read("preview_w", 50), cfg->Read("preview_h", 300));
-   
-    while (node->GetParent() != m_Resource->GetRoot())
-        node = node->GetParent();
-
-    m_Preview = wxFindWindowByName("preview_window");
-    if (m_Preview) 
-    {
-        pos = m_Preview->GetPosition();
-	    size = m_Preview->GetSize();
-
-        cfg->Write("preview_x", (long)pos.x);
-        cfg->Write("preview_y", (long)pos.y);
-        cfg->Write("preview_w", (long)size.x);
-        cfg->Write("preview_h", (long)size.y);
-    }
-    
-    res->InitAllHandlers();
-    
-    wxGetTempFileName("xmleditor", tempfile);
-    m_Resource->Save(tempfile, wxXML_IO_BIN);
-    res->Load(tempfile);
-    
-    if (node->GetName() == "dialog")
-    {
-        wxDialog *dlg = new wxDialog;
-        if (res->LoadDialog(dlg, NULL, node->GetPropVal("name", "-1")))
-        {
-            if (pos.x != -1) dlg->Move(pos);
-            dlg->Show(TRUE);
-            if (m_Preview) m_Preview->Close(TRUE);
-            m_Preview = dlg;
-            m_Preview->SetName("preview_window");
-            m_Preview->SetFocus();
-        }
-        else
-        {
-            delete dlg;
-            wxLogError(_("Cannot preview the dialog -- XML resource corrupted."));
-        }
-    }
-    
-    else if (node->GetName() == "menubar" || node->GetName() == "menu")
-    {
-        wxMenuBar *mbar;
-        
-        if (node->GetName() == "menubar")
-            mbar = res->LoadMenuBar(node->GetPropVal("name", "-1"));
-        else
-        {
-            mbar = new wxMenuBar;
-            wxMenu *m = res->LoadMenu(node->GetPropVal("name", "-1"));
-            if (m != NULL) mbar->Append(m, node->GetPropVal("name", "-1"));
-            else { delete mbar; mbar = NULL; }
-        }
-        if (mbar == NULL)
-            wxLogError(_("Cannot preview the menu -- XML resource corrupted."));
-        else
-        {
-            wxFrame *frame = new wxFrame(NULL, -1, _("Menu preview"), pos, size);
-            frame->SetMenuBar(mbar);
-            frame->CreateStatusBar();
-            if (m_Preview) m_Preview->Close(TRUE);
-            m_Preview = frame;
-            m_Preview->SetName("preview_window");
-            m_Preview->Show(TRUE);
-            m_Preview->SetFocus();
-        }
-    }
-
-    else if (node->GetName() == "toolbar")
-    {
-        wxFrame *frame = new wxFrame(NULL, -1, _("Menu preview"), pos, size);
-        frame->SetToolBar(res->LoadToolBar(frame, node->GetPropVal("name", "-1")));
-        frame->CreateStatusBar();
-        if (m_Preview) m_Preview->Close(TRUE);
-        m_Preview = frame;
-        m_Preview->SetName("preview_window");
-        m_Preview->Show(TRUE);
-        m_Preview->SetFocus();
-    }
-    
-    delete res;
-    wxRemoveFile(tempfile);
 }
 
 
@@ -802,7 +707,7 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
             {
             XmlTreeData* dt = (XmlTreeData*)m_TreeCtrl->GetItemData(m_TreeCtrl->GetSelection());;
             if (dt != NULL && dt->Node != NULL)
-                RefreshPreview(dt->Node);
+                PreviewFrame::Get()->Preview(dt->Node);
             break;
             }
 
@@ -873,7 +778,9 @@ void EditorFrame::OnNewNode(wxCommandEvent& event)
             NodeHandler *hnd = FindHandler(realnode);
             wxString name = hnd->GetChildTypes()[event.GetId()-ID_NEWSYBNODE];
 
-            wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, name);
+            wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, _T("object"));
+            node->AddProperty(_T("class"), name);
+
             hnd->InsertNode(realnode, node, m_SelectedNode);
             wxTreeItemId root = m_TreeCtrl->GetSelection();
             SelectNode(node, &root);
@@ -887,7 +794,9 @@ void EditorFrame::OnNewNode(wxCommandEvent& event)
         NodeHandler *hnd = FindHandler(realnode);
         wxString name = hnd->GetChildTypes()[event.GetId()-ID_NEWNODE];
 
-        wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, name);
+        wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, _T("object"));
+        node->AddProperty(_T("class"), name);
+
         hnd->InsertNode(realnode, node);
         wxTreeItemId root = m_TreeCtrl->GetSelection();
         SelectNode(node, &root);
@@ -898,15 +807,16 @@ void EditorFrame::OnNewNode(wxCommandEvent& event)
         wxString name;
         switch (event.GetId())
         {
-            case ID_NEWDIALOG : name = "dialog"; break;
-            case ID_NEWPANEL : name = "panel"; break;
-            case ID_NEWMENU : name = "menu"; break;
-            case ID_NEWMENUBAR : name = "menubar"; break;
-            case ID_NEWTOOLBAR : name = "toolbar"; break;
+            case ID_NEWDIALOG : name = _T("wxDialog"); break;
+            case ID_NEWPANEL : name = _T("wxPanel"); break;
+            case ID_NEWMENU : name = _T("wxMenu"); break;
+            case ID_NEWMENUBAR : name = _T("wxMenuBar"); break;
+            case ID_NEWTOOLBAR : name = _T("wxToolBar"); break;
             default : return; // never occurs
         }
         
-        wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, name);
+        wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE, _T("object"));
+        node->AddProperty(_T("class"), name);
         m_Resource->GetRoot()->AddChild(node);
         NotifyChanged(CHANGED_TREE);
         SelectNode(node);
@@ -921,11 +831,11 @@ void EditorFrame::OnRightClickTree(wxPoint pos)
     
     if (m_SelectedNode == NULL || m_SelectedNode == m_Resource->GetRoot())
     {
-        popup->Append(ID_NEWDIALOG, _("New dialog"));
-        popup->Append(ID_NEWPANEL, _("New panel"));
-        popup->Append(ID_NEWMENU, _("New menu"));
-        popup->Append(ID_NEWMENUBAR, _("New menubar"));
-        popup->Append(ID_NEWTOOLBAR, _("New toolbar"));
+        popup->Append(ID_NEWDIALOG, _("New wxDialog"));
+        popup->Append(ID_NEWPANEL, _("New wxPanel"));
+        popup->Append(ID_NEWMENU, _("New wxMenu"));
+        popup->Append(ID_NEWMENUBAR, _("New wxMenuBar"));
+        popup->Append(ID_NEWTOOLBAR, _("New wxToolBar"));
     }
     
     else
@@ -940,10 +850,20 @@ void EditorFrame::OnRightClickTree(wxPoint pos)
             if (!arr.IsEmpty())
             {
                 wxMenu *news = new wxMenu;
+                wxMenu *news2 = news;
                 for (size_t i = 0; i < arr.GetCount(); i++)
                 {
-                    news->Append(i + ID_NEWNODE, arr[i]);
-                    if (i % 16 == 15) news->Break();
+                    news2->Append(i + ID_NEWNODE, arr[i]);
+#ifdef __WXGTK__ // doesn't support Break
+                    if (i % 20 == 19) 
+                    {
+                        wxMenu *m = new wxMenu;
+                        news2->Append(ID_NEWNODE+arr.GetCount(), _("More..."), m);
+                        news2 = m;
+                    }
+#else
+                    if (i % 16 == 15) news2->Break();
+#endif
                 }
                 popup->Append(ID_NEWNODE-1, _("New child"), news);
             }
@@ -963,10 +883,20 @@ void EditorFrame::OnRightClickTree(wxPoint pos)
             if (!arr.IsEmpty())
             {
                 wxMenu *news = new wxMenu;
+                wxMenu *news2 = news;
                 for (size_t i = 0; i < arr.GetCount(); i++)
                 {
-                    news->Append(i + ID_NEWSYBNODE, arr[i]);
-                    if (i % 16 == 15) news->Break();
+                    news2->Append(i + ID_NEWSYBNODE, arr[i]);
+#ifdef __WXGTK__ // doesn't support Break
+                    if (i % 20 == 19) 
+                    {
+                        wxMenu *m = new wxMenu;
+                        news2->Append(ID_NEWSYBNODE+arr.GetCount(), _("More..."), m);
+                        news2 = m;
+                    }
+#else
+                    if (i % 16 == 15) news2->Break();
+#endif
                 }
                 popup->Append(ID_NEWSYBNODE-1, _("New sybling"), news);
             }
@@ -974,10 +904,10 @@ void EditorFrame::OnRightClickTree(wxPoint pos)
 
 
         popup->AppendSeparator();
-        popup->Append(ID_CUT, "Cut");
-        popup->Append(ID_COPY, "Copy");
-        popup->Append(ID_PASTE_SYBLING, "Paste as sybling");
-        popup->Append(ID_PASTE_CHILD, "Paste as child");
+        popup->Append(ID_CUT, _("Cut"));
+        popup->Append(ID_COPY, _("Copy"));
+        popup->Append(ID_PASTE_SYBLING, _("Paste as sybling"));
+        popup->Append(ID_PASTE_CHILD, _("Paste as child"));
         popup->AppendSeparator();
         popup->Append(ID_DELETE_NODE, _("Delete"));
         popup->Enable(ID_PASTE_SYBLING, m_Clipboard != NULL);

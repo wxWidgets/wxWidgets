@@ -83,7 +83,7 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_SWITCH, "c", "cpp-code",  "output C++ source rather than .rsc file" },
         { wxCMD_LINE_SWITCH, "u", "uncompressed",  "do not compress .xml files (C++ only)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++ function name (with -c) [InitXmlResource]" },
-        { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.rsc/cpp]" },
+        { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.xrs/cpp]" },
         { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of neccessary handlers to this file" },
 
         { wxCMD_LINE_PARAM,  NULL, NULL, "input file",
@@ -133,7 +133,7 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
     flagCompress = flagCPP && !cmdline.Found("u");
 
     if (!cmdline.Found("o", &parOutput)) 
-        parOutput = flagCPP ? "resource.cpp" : "resource.rsc";
+        parOutput = flagCPP ? "resource.cpp" : "resource.xrs";
     parOutputPath = wxPathOnly(parOutput);
     if (!parOutputPath) parOutputPath = ".";
 
@@ -189,8 +189,8 @@ wxArrayString XmlResApp::PrepareTempFiles()
 
         FindFilesInXML(doc.GetRoot(), flist, path);
 
-        doc.Save(parOutputPath + "/" + name + ".xmb", flagCompress ? wxXML_IO_BINZ : wxXML_IO_BIN);
-        flist.Add(name + ".xmb");
+        doc.Save(parOutputPath + "/" + name + ".xrc", flagCompress ? wxXML_IO_BINZ : wxXML_IO_BIN);
+        flist.Add(name + ".xrc");
     }
     
     return flist;
@@ -285,38 +285,32 @@ static wxString FileToCppArray(wxString filename, int num)
     wxString snum;
     wxFFile file(filename, "rb");
     size_t lng = file.Length();
-    int linelng;
     
     snum.Printf("%i", num);
     output.Printf("static size_t xml_res_size_" + snum + " = %i;\n", lng);
-    output += "static unsigned char xml_res_file_" + snum + "[] = \"\\\n";
+    output += "static unsigned char xml_res_file_" + snum + "[] = {\n";
+    // we cannot use string literals because MSVC is dumb wannabe compiler
+    // with arbitrary limitation to 2048 strings :(
     
     unsigned char *buffer = new unsigned char[lng];
     file.Read(buffer, lng);
     
     for (size_t i = 0, linelng = 0; i < lng; i++)
     {
-        if (linelng > 70) 
+        tmp.Printf("%i", buffer[i]);
+        if (i != 0) output << ',';
+        if (linelng > 70)
         {
             linelng = 0;
-            output += "\\\n";
+            output << "\n";
         }
-        if (buffer[i] < 32 || buffer[i] == '"' || buffer[i] == '\\')
-        {
-            tmp.Printf("\\%03o", buffer[i]);
-            output += tmp;
-            linelng += 4;
-        }
-        else
-        {
-            output << (wxChar)buffer[i];
-            linelng++;
-        }
+        output << tmp;
+        linelng += tmp.Length()+1;
     }
     
     delete[] buffer;
     
-    output += "\"\n;\n\n";
+    output += "};\n\n";
     
     return output;
 }
@@ -378,7 +372,7 @@ void " + parFuncname + "()\n\
         wxString name, ext, path;
         wxSplitPath(parFiles[i], &path, &name, &ext);
         file.Write("    wxTheXmlResource->Load(\"memory:xml_resource/" + 
-                   name + ".xmb" + "\");\n");
+                   name + ".xrc" + "\");\n");
     }
     
     file.Write("\n}\n");

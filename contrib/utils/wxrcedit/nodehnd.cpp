@@ -149,6 +149,11 @@ NodeHandler *NodeHandler::CreateFromFile(const wxString& filename, EditorFrame *
     ni->Type = HANDLER_NONE;
     ni->Icon = 0;
     ni->Read(filename);
+    
+    // maybe we already parsed it?
+    for (size_t i = 0; i < s_AllNodes->GetCount(); i++)
+        if ((*s_AllNodes)[i].Node == ni->Node) return NULL;
+    
     s_AllNodes->Add(*ni); // add a copy
     
     if (ni->Type == HANDLER_NONE || ni->Node.IsEmpty() || ni->Abstract) 
@@ -226,7 +231,7 @@ NodeHandler::~NodeHandler()
 
 bool NodeHandler::CanHandle(wxXmlNode *node)
 {
-    return (m_NodeInfo->Node == node->GetName());
+    return (m_NodeInfo->Node == XmlGetClass(node));
 }
 
 
@@ -248,11 +253,11 @@ wxTreeItemId NodeHandler::CreateTreeNode(wxTreeCtrl *treectrl,
 
 wxString NodeHandler::GetTreeString(wxXmlNode *node)
 {
-    wxString xmlid = node->GetPropVal("name", "");
+    wxString xmlid = node->GetPropVal(_T("name"), wxEmptyString);
     if (xmlid.IsEmpty())
-        return node->GetName();
+        return XmlGetClass(node);
     else
-        return (node->GetName() + " '" + xmlid + "'");
+        return XmlGetClass(node) + _T(" '") + xmlid + _T("'");
 }
 
 
@@ -325,13 +330,12 @@ wxTreeItemId NodeHandlerPanel::CreateTreeNode(wxTreeCtrl *treectrl,
 {
     wxTreeItemId root = NodeHandler::CreateTreeNode(treectrl, parent, node);
     
-    wxXmlNode *n = XmlFindNode(node, "children");
+    wxXmlNode *n = XmlFindNode(node, "object");
 
-    if (n) n = n->GetChildren();
-    
     while (n)
     {
-        if (n->GetType() == wxXML_ELEMENT_NODE)
+        if (n->GetType() == wxXML_ELEMENT_NODE &&
+            n->GetName() == _T("object"))
             EditorFrame::Get()->CreateTreeNode(treectrl, root, n);
         n = n->GetNext();
     }
@@ -343,16 +347,10 @@ wxTreeItemId NodeHandlerPanel::CreateTreeNode(wxTreeCtrl *treectrl,
 
 void NodeHandlerPanel::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before)
 {
-    wxXmlNode *cnd = XmlFindNode(parent, "children");
-    if (cnd == NULL)
-    {
-        cnd = new wxXmlNode(wxXML_ELEMENT_NODE, "children");
-        parent->AddChild(cnd);
-    }
     if (insert_before)
-        cnd->InsertChild(node, insert_before);
+        parent->InsertChild(node, insert_before);
     else
-        cnd->AddChild(node);
+        parent->AddChild(node);
     EditorFrame::Get()->NotifyChanged(CHANGED_TREE);
 }
 
@@ -361,32 +359,24 @@ void NodeHandlerPanel::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode 
 
 
 void NodeHandlerSizer::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before)
-{
-    wxXmlNode *cnd = XmlFindNode(parent, "children");
-    if (cnd == NULL)
-    {
-        cnd = new wxXmlNode(wxXML_ELEMENT_NODE, "children");
-        parent->AddChild(cnd);
-    }
-    
-    if (node->GetName() == "spacer" || node->GetName() == "sizeritem")
+{  
+    if (XmlGetClass(node) == _T("spacer") || XmlGetClass(node) == _T("sizeritem"))
     {
         if (insert_before)
-            cnd->InsertChild(node, insert_before);
+            parent->InsertChild(node, insert_before);
         else
-            cnd->AddChild(node);
+            parent->AddChild(node);
     }
     else
     {
-        wxXmlNode *itemnode = new wxXmlNode(wxXML_ELEMENT_NODE, "sizeritem");
-        wxXmlNode *winnode = new wxXmlNode(wxXML_ELEMENT_NODE, "window");
-        itemnode->AddChild(winnode);
-        winnode->AddChild(node);
+        wxXmlNode *itemnode = new wxXmlNode(wxXML_ELEMENT_NODE, _T("object"));
+        itemnode->AddProperty(_T("class"), _T("sizeritem"));
+        itemnode->AddChild(node);
 
         if (insert_before)
-            cnd->InsertChild(itemnode, insert_before);
+            parent->InsertChild(itemnode, insert_before);
         else
-            cnd->AddChild(itemnode);
+            parent->AddChild(itemnode);
     }
     EditorFrame::Get()->NotifyChanged(CHANGED_TREE);
 }
@@ -398,7 +388,7 @@ int NodeHandlerSizer::GetTreeIcon(wxXmlNode *node)
     int orig = NodeHandler::GetTreeIcon(node);
     if (orig == 0)
     {
-        if (XmlReadValue(node, "orient") == "wxVERTICAL") return 2;
+        if (XmlReadValue(node, _T("orient")) == _T("wxVERTICAL")) return 2;
         else return 3;
     }
     else return orig;
@@ -450,17 +440,7 @@ int NodeHandlerSizerItem::GetTreeIcon(wxXmlNode *node)
 
 wxXmlNode *NodeHandlerSizerItem::GetRealNode(wxXmlNode *node)
 {
-    wxXmlNode *n = XmlFindNode(node, "window");
-    
-    if (n) n = n->GetChildren();
-    
-    while (n)
-    {
-        if (n->GetType() == wxXML_ELEMENT_NODE)
-            return n;
-        n = n->GetNext();
-    }
-    return NULL;
+    return XmlFindNode(node, _T("object"));
 }
 
 
@@ -469,31 +449,23 @@ wxXmlNode *NodeHandlerSizerItem::GetRealNode(wxXmlNode *node)
 
 
 void NodeHandlerNotebook::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before)
-{
-    wxXmlNode *cnd = XmlFindNode(parent, "children");
-    if (cnd == NULL)
-    {
-        cnd = new wxXmlNode(wxXML_ELEMENT_NODE, "children");
-        parent->AddChild(cnd);
-    }
-    
+{  
     {
         wxXmlNode *itemnode;
         
-        if (node->GetName() == "notebookpage")
+        if (XmlGetClass(node) == _T("notebookpage"))
             itemnode = node;
         else
         {
-            itemnode = new wxXmlNode(wxXML_ELEMENT_NODE, "notebookpage");
-            wxXmlNode *winnode = new wxXmlNode(wxXML_ELEMENT_NODE, "window");
-            itemnode->AddChild(winnode);
-            winnode->AddChild(node);
+            itemnode = new wxXmlNode(wxXML_ELEMENT_NODE, _T("object"));
+            itemnode->AddProperty(_T("class"), _T("notebookpage"));
+            itemnode->AddChild(node);
         }
 
         if (insert_before)
-            cnd->InsertChild(itemnode, insert_before);
+            parent->InsertChild(itemnode, insert_before);
         else
-            cnd->AddChild(itemnode);
+            parent->AddChild(itemnode);
     }
     EditorFrame::Get()->NotifyChanged(CHANGED_TREE);
 }

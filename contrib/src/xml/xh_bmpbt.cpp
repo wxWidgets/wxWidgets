@@ -60,7 +60,7 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 
 bool wxBitmapButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("bitmapbutton");
+    return IsOfClass(node, _T("wxBitmapButton"));
 }
 
 

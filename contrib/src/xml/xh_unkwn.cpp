@@ -43,7 +43,7 @@ wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
         wnd = m_ParentAsWindow->FindWindow(name);
         
     if (wnd == NULL)
-        wxLogError(_T("Cannot find specified window for <unknown> (id=%li, name='%s')."), id, name.mb_str());
+        wxLogError(_T("Cannot find specified window for class 'unknown' (id=%li, name='%s')."), id, name.mb_str());
     else
     {
         if (wnd->GetParent() != m_ParentAsWindow)
@@ -56,6 +56,6 @@ wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
 
 bool wxUnknownWidgetXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("unknown");
+    return IsOfClass(node, _T("unknown"));
 }
 

@@ -87,7 +87,7 @@ wxObject *wxSliderXmlHandler::DoCreateResource()
 
 bool wxSliderXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("slider");
+    return IsOfClass(node, _T("wxSlider"));
 }
 
 

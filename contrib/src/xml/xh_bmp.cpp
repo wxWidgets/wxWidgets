@@ -37,7 +37,7 @@ wxObject *wxBitmapXmlHandler::DoCreateResource()
 
 bool wxBitmapXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("bitmap");
+    return IsOfClass(node, _T("wxBitmap"));
 }
 
 
@@ -55,6 +55,6 @@ wxObject *wxIconXmlHandler::DoCreateResource()
 
 bool wxIconXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("icon");
+    return IsOfClass(node, _T("wxIcon"));
 }
 

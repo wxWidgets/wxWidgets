@@ -49,7 +49,7 @@ wxObject *wxStaticLineXmlHandler::DoCreateResource()
 
 bool wxStaticLineXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("staticline");
+    return IsOfClass(node, _T("wxStaticLine"));
 }
 
 #endif

@@ -1,0 +1,6 @@
+node wxComboBox
+var style of flags wxCB_SIMPLE,wxCB_SORT,wxCB_READONLY,wxCB_DROPDOWN
+var value of string
+var selection of integer
+var content of not_implemented
+derived from control

@@ -1,0 +1,3 @@
+node wxStaticBitmap
+var bitmap of text
+derived from control

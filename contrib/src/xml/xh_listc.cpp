@@ -63,5 +63,5 @@ wxObject *wxListCtrlXmlHandler::DoCreateResource()
 
 bool wxListCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("listctrl");
+    return IsOfClass(node, _T("wxListCtrl"));
 }

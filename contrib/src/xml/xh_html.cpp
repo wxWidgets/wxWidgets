@@ -66,7 +66,7 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
 
 bool wxHtmlWindowXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("htmlwindow");
+    return IsOfClass(node, _T("wxHtmlWindow"));
 }
 
 #endif // wxUSE_HTML

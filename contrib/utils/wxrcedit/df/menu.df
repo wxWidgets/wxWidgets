@@ -1,8 +1,0 @@
-node menu
-type panel
-icon 0
-childtype menu_item
-var label of text
-var style of flags wxMENU_TEAROFF
-var help of text
-derived from menu_item

@@ -74,7 +74,7 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
 
 bool wxDialogXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("dialog");
+    return IsOfClass(node, _T("wxDialog"));
 }
 
 

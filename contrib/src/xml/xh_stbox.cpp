@@ -46,7 +46,7 @@ wxObject *wxStaticBoxXmlHandler::DoCreateResource()
 
 bool wxStaticBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == _T("staticbox");
+    return IsOfClass(node, _T("wxStaticBox"));
 }
 
 

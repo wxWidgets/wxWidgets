@@ -124,7 +124,7 @@ class WXDLLEXPORT wxXmlResource : public wxObject
         void UpdateResources();
         
         // Finds resource (calls UpdateResources) and returns node containing it
-        wxXmlNode *FindResource(const wxString& name, const wxString& type);
+        wxXmlNode *FindResource(const wxString& name, const wxString& classname);
         
         // Creates resource from info in given node:
         wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
@@ -212,10 +212,16 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
 
         // Variables (filled by CreateResource)
         wxXmlNode *m_Node;
+        wxString m_Class;
         wxObject *m_Parent, *m_Instance;
         wxWindow *m_ParentAsWindow, *m_InstanceAsWindow;
         
         // --- Handy methods:
+
+        // Returns true if the node has property class equal to classname,
+        // e.g. <object class="wxDialog">
+        bool IsOfClass(wxXmlNode *node, const wxString& classname)
+            { return node->GetPropVal(_T("class"), wxEmptyString) == classname; }
 
         // Gets node content from wxXML_ENTITY_NODE
         // (the problem is, <tag>content<tag> is represented as
@@ -278,9 +284,8 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // Sets common window options:
         void SetupWindow(wxWindow *wnd);
     
-        void CreateChildren(wxObject *parent, bool only_this_handler = FALSE,
-                          wxXmlNode *children_node = NULL /*stands for
-                             GetParamNode("children")*/);
+        void CreateChildren(wxObject *parent, bool this_hnd_only = FALSE);
+        void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL);
         wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL)
             { return m_Resource->CreateResFromNode(node, parent, instance); }
 

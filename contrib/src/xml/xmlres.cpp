@@ -131,21 +131,21 @@ void wxXmlResource::ClearHandlers()
 
 wxMenu *wxXmlResource::LoadMenu(const wxString& name)
 {
-    return (wxMenu*)CreateResFromNode(FindResource(name, wxT("menu")), NULL, NULL);
+    return (wxMenu*)CreateResFromNode(FindResource(name, wxT("wxMenu")), NULL, NULL);
 }
 
 
 
 wxMenuBar *wxXmlResource::LoadMenuBar(const wxString& name)
 {
-    return (wxMenuBar*)CreateResFromNode(FindResource(name, wxT("menubar")), NULL, NULL);
+    return (wxMenuBar*)CreateResFromNode(FindResource(name, wxT("wxMenuBar")), NULL, NULL);
 }
 
 
 
 wxToolBar *wxXmlResource::LoadToolBar(wxWindow *parent, const wxString& name)
 {
-    return (wxToolBar*)CreateResFromNode(FindResource(name, wxT("toolbar")), parent, NULL);
+    return (wxToolBar*)CreateResFromNode(FindResource(name, wxT("wxToolBar")), parent, NULL);
 }
 
 
@@ -160,19 +160,19 @@ wxDialog *wxXmlResource::LoadDialog(wxWindow *parent, const wxString& name)
 
 bool wxXmlResource::LoadDialog(wxDialog *dlg, wxWindow *parent, const wxString& name)
 {
-    return CreateResFromNode(FindResource(name, wxT("dialog")), parent, dlg) != NULL;
+    return CreateResFromNode(FindResource(name, wxT("wxDialog")), parent, dlg) != NULL;
 }
 
 
 
 wxPanel *wxXmlResource::LoadPanel(wxWindow *parent, const wxString& name)
 {
-    return (wxPanel*)CreateResFromNode(FindResource(name, wxT("panel")), parent, NULL);
+    return (wxPanel*)CreateResFromNode(FindResource(name, wxT("wxPanel")), parent, NULL);
 }
 
 bool wxXmlResource::LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name)
 {
-    return CreateResFromNode(FindResource(name, wxT("panel")), parent, panel) != NULL;
+    return CreateResFromNode(FindResource(name, wxT("wxPanel")), parent, panel) != NULL;
 }
 
 
@@ -180,7 +180,7 @@ bool wxXmlResource::LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& 
 wxBitmap wxXmlResource::LoadBitmap(const wxString& name)
 {
     wxBitmap *bmp = (wxBitmap*)CreateResFromNode(
-                               FindResource(name, wxT("bitmap")), NULL, NULL);
+                               FindResource(name, wxT("wxBitmap")), NULL, NULL);
     wxBitmap rt;
 
     if (bmp) { rt = *bmp; delete bmp; }
@@ -190,7 +190,7 @@ wxBitmap wxXmlResource::LoadBitmap(const wxString& name)
 wxIcon wxXmlResource::LoadIcon(const wxString& name)
 {
     wxIcon *icon = (wxIcon*)CreateResFromNode(
-                            FindResource(name, wxT("icon")), NULL, NULL);
+                            FindResource(name, wxT("wxIcon")), NULL, NULL);
     wxIcon rt;
 
     if (icon) { rt = *icon; delete icon; }
@@ -314,7 +314,7 @@ void wxXmlResource::UpdateResources()
 
 
 
-wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& type)
+wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& classname)
 {
     UpdateResources(); //ensure everything is up-to-date
     
@@ -324,10 +324,12 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& typ
         if (m_Data[f].Doc == NULL || m_Data[f].Doc->GetRoot() == NULL) continue;
         for (wxXmlNode *node = m_Data[f].Doc->GetRoot()->GetChildren(); 
                                       node; node = node->GetNext())
-            if (    node->GetType() == wxXML_ELEMENT_NODE &&
-                    (!type || node->GetName() == type) &&
-                    node->GetPropVal(wxT("name"), &dummy) &&
-                    dummy == name)
+            if (node->GetType() == wxXML_ELEMENT_NODE &&
+                (!classname || 
+                  node->GetPropVal(wxT("class"), wxEmptyString) == classname) &&
+                node->GetName() == wxT("object") &&
+                node->GetPropVal(wxT("name"), &dummy) &&
+                dummy == name)
             {
 #if wxUSE_FILESYSTEM
                 m_CurFileSystem.ChangePathTo(m_Data[f].File);
@@ -336,8 +338,8 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& typ
             }
     }
 
-    wxLogError(_("XML resource '%s' (type '%s') not found!"), 
-               name.c_str(), type.c_str());
+    wxLogError(_("XML resource '%s' (class '%s') not found!"), 
+               name.c_str(), classname.c_str());
     return NULL;
 }
 
@@ -353,7 +355,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
     while (ND)
     {
         handler = (wxXmlResourceHandler*)ND->GetData();
-        if (handler->CanHandle(node))
+        if (node->GetName() == _T("object") && handler->CanHandle(node))
         {
             ret = handler->CreateResource(node, parent, instance);
             if (ret) return ret;
@@ -361,7 +363,9 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
         ND = ND->GetNext();
     }
 
-    wxLogError(_("No handler found for XML node '%s'!"), node->GetName().c_str());
+    wxLogError(_("No handler found for XML node '%s', class '%s'!"), 
+               node->GetName().c_str(), 
+               node->GetPropVal(_T("class"), wxEmptyString).c_str());
     return NULL;
 }
 
@@ -383,10 +387,12 @@ wxXmlResourceHandler::wxXmlResourceHandler()
 wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent, wxObject *instance)
 {
     wxXmlNode *myNode = m_Node;
+    wxString myClass = m_Class;
     wxObject *myParent = m_Parent, *myInstance = m_Instance;
     wxWindow *myParentAW = m_ParentAsWindow, *myInstanceAW = m_InstanceAsWindow;
     
     m_Node = node;
+    m_Class = node->GetPropVal(_T("class"), wxEmptyString);
     m_Parent = parent;
     m_Instance = instance;
     m_ParentAsWindow = wxDynamicCast(m_Parent, wxWindow);
@@ -395,6 +401,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     wxObject *returned = DoCreateResource();
     
     m_Node = myNode;
+    m_Class = myClass;
     m_Parent = myParent; m_ParentAsWindow = myParentAW;
     m_Instance = myInstance; m_InstanceAsWindow = myInstanceAW;
     
@@ -810,25 +817,36 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
 }
 
 
-void wxXmlResourceHandler::CreateChildren(wxObject *parent, 
-                bool only_this_handler, wxXmlNode *children_node)
+void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
 {
-    if (children_node == NULL) children_node = GetParamNode(_T("children"));
-    if (children_node == NULL) return;
-
-    wxXmlNode *n = children_node->GetChildren();
+    wxXmlNode *n = m_Node->GetChildren();
 
     while (n)
     {
-        if (n->GetType() == wxXML_ELEMENT_NODE)
+        if (n->GetType() == wxXML_ELEMENT_NODE &&
+            n->GetName() == _T("object"))
         {        
-            if (only_this_handler)
-            {
-                if (CanHandle(n))
-                    CreateResource(n, parent, NULL);
-            }
+            if (this_hnd_only && CanHandle(n))
+                CreateResource(n, parent, NULL);
             else
                 m_Resource->CreateResFromNode(n, parent, NULL);
+        }
+        n = n->GetNext();
+    }
+}
+
+
+void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL)
+{
+    wxXmlNode *root;
+    if (rootnode == NULL) root = m_Node; else root = rootnode;
+    wxXmlNode *n = root->GetChildren();
+
+    while (n)
+    {
+        if (n->GetType() == wxXML_ELEMENT_NODE && CanHandle(n))
+        {
+            CreateResource(n, parent, NULL);
         }
         n = n->GetNext();
     }
