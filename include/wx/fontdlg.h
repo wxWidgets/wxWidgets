@@ -8,9 +8,7 @@
 #   define wxFontDialog wxGenericFontDialog
 #   define sm_classwxFontDialog sm_classwxGenericFontDialog
 #elif defined(__WXGTK__)
-#include "wx/generic/fontdlgg.h"
-#   define wxFontDialog wxGenericFontDialog
-#   define sm_classwxFontDialog sm_classwxGenericFontDialog
+#include "wx/gtk/fontdlg.h"
 #elif defined(__WXQT__)
 #include "wx/generic/fontdlgg.h"
 #   define wxFontDialog wxGenericFontDialog

@@ -60,6 +60,7 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_ITEM_DESELECTED(LIST_CTRL, MyListCtrl::OnDeselected)
     EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
     EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
+    EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -146,7 +147,7 @@ bool MyApp::OnInit(void)
 
   // Make a panel with a message
   frame->m_listCtrl = new MyListCtrl(frame, LIST_CTRL, wxPoint(0, 0), wxSize(400, 200),
-          wxLC_LIST|wxSUNKEN_BORDER|wxLC_EDIT_LABELS);
+          wxLC_LIST|wxSUNKEN_BORDER|wxLC_EDIT_LABELS );
 //          wxLC_LIST|wxLC_USER_TEXT|wxSUNKEN_BORDER); // wxLC_USER_TEXT requires app to supply all text on demand
   frame->m_logWindow = new wxTextCtrl(frame, -1, "", wxPoint(0, 0), wxSize(400, 200), wxTE_MULTILINE|wxSUNKEN_BORDER);
 
@@ -353,6 +354,20 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 
 // MyListCtrl
 
+void MyListCtrl::OnColClick(wxListEvent& event)
+{
+    if ( !wxGetApp().GetTopWindow() )
+        return;
+
+    wxTextCtrl *text = ((MyFrame *)wxGetApp().GetTopWindow())->m_logWindow;
+    if ( !text )
+        return;
+
+    wxString msg;
+    msg.Printf( "OnColumnClick at %d.\n", event.GetColumn() );
+    text->WriteText(msg);
+}
+
 void MyListCtrl::OnBeginDrag(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
@@ -406,10 +421,7 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
 
     text->WriteText("OnEndLabelEdit: ");
     text->WriteText(event.m_item.m_text);
-    if (event.m_cancelled)
-        text->WriteText(" cancelled by user\n");
-    else
-        text->WriteText(" accepted by user\n");
+    text->WriteText("\n");
 }
 
 void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))

@@ -57,7 +57,7 @@ choicdgg.cpp	G
 colrdlgg.cpp	G	G
 dcpsg.cpp	G	U
 dirdlgg.cpp	G	16
-fontdlgg.cpp	G	G
+fontdlgg.cpp	G	G,R
 filedlgg.cpp	G	U,X
 gridg.cpp	G
 helphtml.cpp	G	G
@@ -294,6 +294,7 @@ dcscreen.cpp	R
 dialog.cpp	R
 dnd.cpp	R
 font.cpp	R
+fontdlg.cpp	R
 frame.cpp	R
 gauge.cpp	R
 gdiobj.cpp	R
@@ -601,6 +602,7 @@ dialog.h	K
 dnd.h	K
 filedlg.h	K
 font.h	K
+fontdlg.h	K
 frame.h	K
 gauge.h	K
 gdiobj.h	K

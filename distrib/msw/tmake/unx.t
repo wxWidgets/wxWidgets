@@ -512,7 +512,7 @@ CREATE_INSTALLED_LINKS:  $(libdir)/@WX_TARGET_LIBRARY@
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
 
 parser.o:    parser.c lexer.c
-	$(CCLEX) -c $(CFLAGS) -o $@ parser.c
+	$(CCLEX) -c $(CFLAGS) $(PICFLAGS) -o $@ parser.c
 
 parser.c:	$(COMMDIR)/parser.y lexer.c
 	$(YACC) $(COMMDIR)/parser.y

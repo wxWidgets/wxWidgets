@@ -26,7 +26,8 @@ public:
         wxListCtrl(parent, id, pos, size, style)
         {
         }
-
+	
+    void OnColClick(wxListEvent& event);
     void OnBeginDrag(wxListEvent& event);
     void OnBeginRDrag(wxListEvent& event);
     void OnBeginLabelEdit(wxListEvent& event);

@@ -30,8 +30,6 @@ class wxLog;
 
 class wxApp: public wxAppBase
 {
-DECLARE_DYNAMIC_CLASS(wxApp)
-
 public:
     wxApp();
     ~wxApp();
@@ -82,6 +80,7 @@ private:
     /// Set to TRUE while we are in wxYield().
     bool m_suppressIdleEvents;
 
+    DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
 };
 

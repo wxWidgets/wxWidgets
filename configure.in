@@ -1301,6 +1301,8 @@ SEARCH_INCLUDE="\
                               \
     /usr/include/Motif1.2     \
     /opt/xpm/include/X11      \
+    /opt/GBxpm/include/       \
+    /opt/GBxpm/X11/include/   \
                               \
     /usr/Motif1.2/include     \
     /usr/dt/include           \

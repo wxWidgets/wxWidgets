@@ -875,22 +875,37 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     for (int j = 0; j < m_owner->GetColumnCount(); j++)
     {
         xpos += m_owner->GetColumnWidth( j );
+        m_column = j;
         if ((abs(x-xpos) < 3) && (y < 22))
         {
             hit_border = TRUE;
-            m_column = j;
             break;
         }
+	if (x-xpos < 0)
+	{
+	    break;
+	}
         m_minX = xpos;
     }
 
-    if (event.LeftDown() && hit_border)
+    if (event.LeftDown())
     {
-        m_isDragging = TRUE;
-        m_currentX = x;
-        DrawCurrent();
-        CaptureMouse();
-        return;
+        if (hit_border)
+	{
+            m_isDragging = TRUE;
+            m_currentX = x;
+            DrawCurrent();
+            CaptureMouse();
+            return;
+	}
+	else
+	{
+            wxListEvent le( wxEVT_COMMAND_LIST_COL_CLICK, GetParent()->GetId() );
+            le.SetEventObject( GetParent() );
+	    le.m_col = m_column;
+            GetParent()->GetEventHandler()->ProcessEvent( le );
+	    return;
+	}
     }
 
     if (event.Moving())
@@ -2570,16 +2585,21 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
                 {
                     m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, 
 		      wxPoint(0,0), wxSize(width,23), wxTAB_TRAVERSAL );
+		    if (HasFlag(wxLC_NO_HEADER))
+		        m_headerWin->Show( FALSE );
                 }
                 else
                 {  
-                    m_headerWin->Show( TRUE );
+		    if (flag & wxLC_NO_HEADER)
+		        m_headerWin->Show( FALSE );
+		    else
+                        m_headerWin->Show( TRUE );
                 } 
             }
         }
         else
         {
-            if (HasFlag(wxLC_REPORT))
+            if (HasFlag(wxLC_REPORT) && !(HasFlag(wxLC_NO_HEADER)))
             {
                 m_headerWin->Show( FALSE );
             }
@@ -2943,7 +2963,7 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
     int w = 0;
     int h = 0;
 
-    if (HasFlag(wxLC_REPORT))
+    if (HasFlag(wxLC_REPORT) && !HasFlag(wxLC_NO_HEADER))
     {
         m_headerWin->GetPosition( &x, &y );
         m_headerWin->GetSize( &w, &h );

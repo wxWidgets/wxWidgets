@@ -15,6 +15,7 @@
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/gdicmn.h"
+#include "wx/tokenzr.h"
 #include <strings.h>
 
 #include "gdk/gdk.h"
@@ -99,14 +100,49 @@ wxFont::wxFont()
     if (wxTheFontList) wxTheFontList->Append( this );
 }
 
-wxFont::wxFont( char *xFontName )
+wxFont::wxFont( GdkFont *font, char *xFontName )
 {
     if (!xFontName) return;
 
     m_refData = new wxFontRefData();
 
-    M_FONTDATA->m_byXFontName = TRUE;
-    M_FONTDATA->m_font = gdk_font_load( xFontName );
+//  M_FONTDATA->m_byXFontName = TRUE;
+    M_FONTDATA->m_font = font;
+    
+    wxString tmp;
+    
+    wxString fontname( xFontName );
+    wxStringTokenizer tn( fontname, _T("-") );
+    
+    tn.GetNextToken();                           // foundry
+    
+    M_FONTDATA->m_faceName = tn.GetNextToken();  // courier
+
+    tmp = tn.GetNextToken().MakeUpper();
+    if (tmp == _T("BOLD")) M_FONTDATA->m_weight = wxBOLD;
+    
+    tmp = tn.GetNextToken().MakeUpper();
+    if (tmp == _T("I")) M_FONTDATA->m_style = wxITALIC;
+    if (tmp == _T("O")) M_FONTDATA->m_style = wxITALIC;
+    
+    tn.GetNextToken();                           // set width
+    tn.GetNextToken();                           // ?
+    tn.GetNextToken();                           // pixel size
+    
+    tmp = tn.GetNextToken();                     // pointsize
+    int num =  wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
+    M_FONTDATA->m_pointSize = num / 10;
+    
+    tn.GetNextToken();                           // x-res
+    tn.GetNextToken();                           // y-res
+    
+    tmp = tn.GetNextToken().MakeUpper();
+    if (tmp == _T("M")) M_FONTDATA->m_family = wxMODERN;
+    else if (M_FONTDATA->m_faceName == _T("TIMES")) M_FONTDATA->m_family = wxROMAN;
+    else if (M_FONTDATA->m_faceName == _T("HELVETICA")) M_FONTDATA->m_family = wxSWISS;
+    else if (M_FONTDATA->m_faceName == _T("LUCIDATYPEWRITER")) M_FONTDATA->m_family = wxTELETYPE;
+    else if (M_FONTDATA->m_faceName == _T("LUCIDA")) M_FONTDATA->m_family = wxDECORATIVE;
+    else if (M_FONTDATA->m_faceName == _T("UTOPIA")) M_FONTDATA->m_family = wxSCRIPT;
 }
 
 wxFont::wxFont( int pointSize, int family, int style, int weight, bool underlined, const wxString& face )

@@ -79,9 +79,7 @@ class wxAcceleratorEntry: public wxObject
 
 class wxAcceleratorTable: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
-  
-  public:
+public:
     wxAcceleratorTable();
     wxAcceleratorTable(int n, wxAcceleratorEntry entries[] );
     ~wxAcceleratorTable();
@@ -99,10 +97,12 @@ class wxAcceleratorTable: public wxObject
 
     bool Ok() const;
     
-//  private:
+//  implementation
   
-    int GetCommand( wxKeyEvent &event ); 
+    int GetCommand( wxKeyEvent &event );
     
+private:
+    DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
 };
 
 #endif

@@ -33,23 +33,24 @@ class wxBitmap;
 
 class wxMask: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxMask)
-
 public:
-  wxMask();
-  wxMask( const wxBitmap& bitmap, const wxColour& colour );
-  wxMask( const wxBitmap& bitmap, int paletteIndex );
-  wxMask( const wxBitmap& bitmap );
-  ~wxMask();
+    wxMask();
+    wxMask( const wxBitmap& bitmap, const wxColour& colour );
+    wxMask( const wxBitmap& bitmap, int paletteIndex );
+    wxMask( const wxBitmap& bitmap );
+    ~wxMask();
   
-  bool Create( const wxBitmap& bitmap, const wxColour& colour );
-  bool Create( const wxBitmap& bitmap, int paletteIndex );
-  bool Create( const wxBitmap& bitmap );
+    bool Create( const wxBitmap& bitmap, const wxColour& colour );
+    bool Create( const wxBitmap& bitmap, int paletteIndex );
+    bool Create( const wxBitmap& bitmap );
 
- // implementation
-
-  GdkBitmap   *m_bitmap;
-  GdkBitmap *GetBitmap() const;
+    // implementation
+    GdkBitmap   *m_bitmap;
+    
+    GdkBitmap *GetBitmap() const;
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxMask)
 };
 
 //-----------------------------------------------------------------------------
@@ -58,47 +59,48 @@ public:
 
 class wxBitmap: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxBitmap)
-
 public:
-  wxBitmap();
-  wxBitmap( int width, int height, int depth = -1 );
-  wxBitmap( const char bits[], int width, int height, int depth = 1 );
-  wxBitmap( const char **bits );
-  wxBitmap( char **bits );
-  wxBitmap( const wxBitmap& bmp );
-  wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM );
-  ~wxBitmap();
-  wxBitmap& operator = ( const wxBitmap& bmp );
-  bool operator == ( const wxBitmap& bmp );
-  bool operator != ( const wxBitmap& bmp );
-  bool Ok() const;
+    wxBitmap();
+    wxBitmap( int width, int height, int depth = -1 );
+    wxBitmap( const char bits[], int width, int height, int depth = 1 );
+    wxBitmap( const char **bits );
+    wxBitmap( char **bits );
+    wxBitmap( const wxBitmap& bmp );
+    wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM );
+    ~wxBitmap();
+    wxBitmap& operator = ( const wxBitmap& bmp );
+    bool operator == ( const wxBitmap& bmp );
+    bool operator != ( const wxBitmap& bmp );
+    bool Ok() const;
 
-  int GetHeight() const;
-  int GetWidth() const;
-  int GetDepth() const;
+    int GetHeight() const;
+    int GetWidth() const;
+    int GetDepth() const;
 
-  wxMask *GetMask() const;
-  void SetMask( wxMask *mask );
+    wxMask *GetMask() const;
+    void SetMask( wxMask *mask );
 
-  bool SaveFile( const wxString &name, int type, wxPalette *palette = (wxPalette *) NULL );
-  bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM );
+    bool SaveFile( const wxString &name, int type, wxPalette *palette = (wxPalette *) NULL );
+    bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM );
 
-  wxPalette *GetPalette() const;
-  wxPalette *GetColourMap() const
+    wxPalette *GetPalette() const;
+    wxPalette *GetColourMap() const
     { return GetPalette(); };
 
-// implementation
+    // implementation
 
-  void SetHeight( int height );
-  void SetWidth( int width );
-  void SetDepth( int depth );
-  void SetPixmap( GdkPixmap *pixmap );
+    void SetHeight( int height );
+    void SetWidth( int width );
+    void SetDepth( int depth );
+    void SetPixmap( GdkPixmap *pixmap );
 
-  GdkPixmap *GetPixmap() const;
-  GdkBitmap *GetBitmap() const;
+    GdkPixmap *GetPixmap() const;
+    GdkBitmap *GetBitmap() const;
 
     // no data :-)
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
 #endif // __GTKBITMAPH__

@@ -71,7 +71,7 @@ typedef int (*wxListCtrlCompare)(long item1, long item2, long sortData);
 #define wxLC_AUTOARRANGE     0x0100  // not supported in wxGLC
 #define wxLC_USER_TEXT       0x0200  // not supported in wxGLC (how does it work?)
 #define wxLC_EDIT_LABELS     0x0400
-#define wxLC_NO_HEADER       0x0800  // not supported in wxGLC
+#define wxLC_NO_HEADER       0x0800
 #define wxLC_NO_SORT_HEADER  0x1000  // not supported in wxGLC
 #define wxLC_SINGLE_SEL      0x2000
 #define wxLC_SORT_ASCENDING  0x4000

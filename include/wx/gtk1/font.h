@@ -82,7 +82,7 @@ public:
     
   // implementation
   
-  wxFont( char *xFontName );
+  wxFont( GdkFont* font, char *xFontName );
   void Unshare();
 
   GdkFont* GetInternalFont(float scale = 1.0) const;
