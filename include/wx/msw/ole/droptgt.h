@@ -29,8 +29,6 @@
 class  wxIDropTarget;
 struct IDataObject;
 
-typedef unsigned short wxDataFormat;
-
 // ----------------------------------------------------------------------------
 // An instance of the class wxDropTarget may be associated with any wxWindow
 // derived object via SetDropTarget() function. If this is done, the virtual
