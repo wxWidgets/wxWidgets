@@ -142,7 +142,7 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxString *choices,
                         int majorDim,
                         long style,
-                        const wxValidator& val,
+                        const wxValidator& wxVALIDATOR_PARAM(val),
                         const wxString& name)
 {
     // for compatibility with the other ports which don't handle (yet?)
