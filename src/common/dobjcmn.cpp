@@ -229,6 +229,12 @@ void wxFileDataObjectBase::SetFilenames(const wxChar* filenames)
 // wxCustomDataObject
 // ----------------------------------------------------------------------------
 
+wxCustomDataObject::wxCustomDataObject(const wxDataFormat& format)
+    : wxDataObjectSimple(format)
+{
+}
+
+
 wxCustomDataObject::~wxCustomDataObject()
 {
     Free();
