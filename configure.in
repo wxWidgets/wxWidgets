@@ -931,13 +931,13 @@ if test "$wxUSE_GUI" = "no"; then
   DEFAULT_wxUSE_FS_ZIP=no
   DEFAULT_wxUSE_BUSYINFO=no
   DEFAULT_wxUSE_ZIPSTREAM=no
-  DEFAULT_wxUSE_VALIDATORS=yes
+  DEFAULT_wxUSE_VALIDATORS=no
   DEFAULT_wxUSE_ACCEL=no
   DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_BMPBUTTON=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
-  DEFAULT_wxUSE_CHOICE=yes
+  DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
@@ -956,7 +956,7 @@ if test "$wxUSE_GUI" = "no"; then
   DEFAULT_wxUSE_STATBMP=no
   DEFAULT_wxUSE_STATBOX=no
   DEFAULT_wxUSE_STATLINE=no
-  DEFAULT_wxUSE_STATUSBAR=yes
+  DEFAULT_wxUSE_STATUSBAR=no
   DEFAULT_wxUSE_TABDIALOG=no
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TREECTRL=no
@@ -1397,7 +1397,12 @@ dnl Define search path for includes and libraries: all headers and libs will be
 dnl looked for in all directories of this path
 dnl ---------------------------------------------------------------------------
 
+dnl notice that /usr/include should not be in this list, otherwise it breaks
+dnl compilation on Solaris/gcc because standard headers are included instead
+dnl of the gcc ones
 SEARCH_INCLUDE="\
+    /usr/local/include        \
+                              \
     /usr/Motif-1.2/include    \
     /usr/Motif-2.1/include    \
                               \
@@ -1439,9 +1444,6 @@ SEARCH_INCLUDE="\
     /usr/x386/include         \
     /usr/XFree86/include/X11  \
                               \
-    /usr/include              \
-    /usr/local/include        \
-                              \
     /usr/include/gtk          \
     /usr/local/include/gtk    \
     /usr/include/glib         \
@@ -1461,7 +1463,7 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/include      \
     /usr/openwin/share/include \
-    "
+"
 
 SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` "
 
@@ -2136,8 +2138,18 @@ else
   dnl on some systems, _REENTRANT should bedefined if we want to use any _r()
   dnl functions - add tests for other functions here as well
   if test "$ac_cv_func_strtok_r" = "yes"; then
-    CFLAGS="${CFLAGS} -D_REENTRANT"
-    CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+    dnl and now try with C++
+    unset ac_cv_func_strtok_r
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
+    AC_CHECK_FUNCS(strtok_r)
+    AC_LANG_RESTORE
+
+    if test "$ac_cv_func_strtok_r" != "yes"; then
+      ac_cv_func_strtok_r=yes
+      CFLAGS="${CFLAGS} -D_REENTRANT"
+      CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+    fi
   fi
 fi
 
@@ -2870,9 +2882,8 @@ if test "$GXX" = yes ; then
 fi
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
 
-CPPFLAGS="-I\${top_srcdir}/include $CPPFLAGS"
-CFLAGS="$CFLAGS $EXTRA_CFLAGS"
-CXXFLAGS="$CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS"
+CFLAGS=`echo $CFLAGS $EXTRA_CFLAGS | sed 's/ \\+/ /g'`
+CXXFLAGS=`echo $CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
 
 if test "$wxUSE_GUI" = "yes"; then
     dnl TODO add checks that these samples will really compile (i.e. all the
@@ -2998,13 +3009,13 @@ AC_OUTPUT([
             samples/listctrl/Makefile
             samples/mdi/Makefile
             samples/minifram/Makefile
-	    samples/minimal/Makefile
+            samples/minimal/Makefile
             samples/nettest/Makefile
             samples/newgrid/Makefile
             samples/notebook/Makefile
             samples/png/Makefile
             samples/printing/Makefile
-	    samples/proplist/Makefile
+            samples/proplist/Makefile
             samples/richedit/Makefile
             samples/resource/Makefile
             samples/sashtest/Makefile
