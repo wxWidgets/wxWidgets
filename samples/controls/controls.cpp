@@ -86,8 +86,10 @@ public:
     void OnListBox( wxCommandEvent &event );
     void OnListBoxDoubleClick( wxCommandEvent &event );
     void OnListBoxButtons( wxCommandEvent &event );
+#if wxUSE_CHOICE
     void OnChoice( wxCommandEvent &event );
     void OnChoiceButtons( wxCommandEvent &event );
+#endif
     void OnCombo( wxCommandEvent &event );
     void OnComboTextChanged( wxCommandEvent &event );
     void OnComboTextEnter( wxCommandEvent &event );
@@ -118,8 +120,10 @@ public:
 
     wxListBox     *m_listbox,
                   *m_listboxSorted;
+#if wxUSE_CHOICE
     wxChoice      *m_choice,
                   *m_choiceSorted;
+#endif
     wxComboBox    *m_combo;
     wxRadioBox    *m_radio;
     wxGauge       *m_gauge,
@@ -443,6 +447,7 @@ EVT_BUTTON    (ID_LISTBOX_APPEND,       MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_DELETE,       MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_FONT,         MyPanel::OnListBoxButtons)
 EVT_CHECKBOX  (ID_LISTBOX_ENABLE,       MyPanel::OnListBoxButtons)
+#if wxUSE_CHOICE
 EVT_CHOICE    (ID_CHOICE,               MyPanel::OnChoice)
 EVT_CHOICE    (ID_CHOICE_SORTED,        MyPanel::OnChoice)
 EVT_BUTTON    (ID_CHOICE_SEL_NUM,       MyPanel::OnChoiceButtons)
@@ -452,6 +457,7 @@ EVT_BUTTON    (ID_CHOICE_APPEND,        MyPanel::OnChoiceButtons)
 EVT_BUTTON    (ID_CHOICE_DELETE,        MyPanel::OnChoiceButtons)
 EVT_BUTTON    (ID_CHOICE_FONT,          MyPanel::OnChoiceButtons)
 EVT_CHECKBOX  (ID_CHOICE_ENABLE,        MyPanel::OnChoiceButtons)
+#endif
 EVT_COMBOBOX  (ID_COMBO,                MyPanel::OnCombo)
 EVT_TEXT      (ID_COMBO,                MyPanel::OnComboTextChanged)
 EVT_TEXT_ENTER(ID_COMBO,                MyPanel::OnComboTextEnter)
@@ -629,6 +635,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
     m_notebook->AddPage(panel, "wxListBox", TRUE, Image_List);
 
+#if wxUSE_CHOICE
     panel = new wxPanel(m_notebook);
     m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
     m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
@@ -648,6 +655,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, "&Disable", wxPoint(20,130), wxSize(140,30) );
 
     m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
+#endif // wxUSE_CHOICE
 
     panel = new wxPanel(m_notebook);
     (void)new wxStaticBox( panel, -1, "&Box around combobox",
@@ -1032,6 +1040,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
     }
 }
 
+#if wxUSE_CHOICE
 void MyPanel::OnChoice( wxCommandEvent &event )
 {
     wxChoice *choice = event.GetId() == ID_CHOICE ? m_choice
@@ -1115,6 +1124,7 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
             }
     }
 }
+#endif // wxUSE_CHOICE
 
 void MyPanel::OnCombo( wxCommandEvent &event )
 {
