@@ -87,6 +87,10 @@ void wxBitmapRefData::Free()
 void wxBitmap::Init()
 {
     m_bIsMono = FALSE;
+    //
+    // True for all bitmaps created from bits, wxImages, Xpms
+    //
+    m_bFlip = TRUE;
 } // end of wxBitmap::Init
 
 bool wxBitmap::CopyFromIconOrCursor(
@@ -265,7 +269,7 @@ wxBitmap::wxBitmap(
 )
 {
     Init();
-
+    m_bFlip = FALSE;
     (void)Create( nW
                  ,nH
                  ,nD
@@ -296,7 +300,7 @@ wxBitmap::wxBitmap(
 )
 {
     Init();
-
+    m_bFlip = FALSE;
     LoadFile( rFilename
              ,(int)lType
             );
@@ -697,10 +701,6 @@ bool wxBitmap::CreateFromImage (
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
         }
-        //
-        // Debug stuff
-        //
-
         hPSScreen = ::GpiCreatePS( vHabmain
                                   ,hDCScreen
                                   ,&vSize
@@ -1127,7 +1127,7 @@ wxBitmap wxBitmap::GetSubBitmap(
         vBmih.cx        = rRect.width;
         vBmih.cy        = rRect.height;
         vBmih.cPlanes   = 1;
-        vBmih.cBitCount = 1;
+        vBmih.cBitCount = 24;
 
         HBITMAP                     hBmpMask = ::GpiCreateBitmap( hPSDst
                                                                  ,&vBmih
@@ -1292,7 +1292,7 @@ bool wxMask::Create(
     vBmih.cx        = rBitmap.GetWidth();
     vBmih.cy        = rBitmap.GetHeight();
     vBmih.cPlanes   = 1;
-    vBmih.cBitCount = 1;
+    vBmih.cBitCount = 24;
 
     m_hMaskBitmap = ::GpiCreateBitmap( hPSDst
                                       ,&vBmih
@@ -1586,12 +1586,12 @@ HBITMAP wxInvertMask(
                                                   0, 0, nWidth, nHeight
                                                 };
 
-    memset(&vBmih, '\0', sizeof(BITMAPINFOHEADER2));
-    vBmih.cbFix     =  sizeof(BITMAPINFOHEADER2);
+    memset(&vBmih, '\0', 16);
+    vBmih.cbFix     = 16;
     vBmih.cx        = nWidth;
     vBmih.cy        = nHeight;
     vBmih.cPlanes   = 1;
-    vBmih.cBitCount = 1;
+    vBmih.cBitCount = 24;
 
     hBmpInvMask = ::GpiCreateBitmap( hPSDst
                                     ,&vBmih

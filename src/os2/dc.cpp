@@ -672,6 +672,16 @@ void wxDC::DoDrawLine(
         vY1 = OS2Y(vY1,0);
         vY2 = OS2Y(vY2,0);
     }
+    else
+    {
+        if (m_vSelectedBitmap != wxNullBitmap)
+        {
+            m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
+            m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
+            vY1 = OS2Y(vY1,0);
+            vY2 = OS2Y(vY2,0);
+        }
+    }
     vPoint[0].x = vX1;
     vPoint[0].y = vY1;
     vPoint[1].x = vX2;
@@ -1000,6 +1010,15 @@ void wxDC::DoDrawRectangle(
           m_vRclPaint.xRight == 0 &&
           m_vRclPaint.xLeft == 0))
         vY = OS2Y(vY,vHeight);
+    else
+    {
+        if (m_vSelectedBitmap != wxNullBitmap)
+        {
+            m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
+            m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
+            vY = OS2Y(vY,vHeight);
+        }
+    }
 
     wxCoord                         vX2 = vX + vWidth;
     wxCoord                         vY2 = vY + vHeight;
@@ -1069,6 +1088,9 @@ void wxDC::DoDrawRoundedRectangle(
 {
     POINTL                          vPoint[2];
     LONG                            lControl;
+    LONG                            lColor;
+    LONG                            lBorderColor;
+    int                             nIsTRANSPARENT = 0;
 
     //
     // Might be a memory DC with no Paint rect.
@@ -1078,25 +1100,73 @@ void wxDC::DoDrawRoundedRectangle(
           m_vRclPaint.xRight == 0 &&
           m_vRclPaint.xLeft == 0))
         vY = OS2Y(vY,vHeight);
+    else
+    {
+        if (m_vSelectedBitmap != wxNullBitmap)
+        {
+            m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
+            m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
+            vY = OS2Y(vY,vHeight);
+        }
+    }
 
     wxCoord                         vX2 = (vX + vWidth);
     wxCoord                         vY2 = (vY + vHeight);
 
     vPoint[0].x = vX;
-    vPoint[0].y = YLOG2DEV(vY) - vHeight;
-    vPoint[1].x = vX + vWidth;
-    vPoint[1].y = vY;
+    vPoint[0].y = vY;
+    vPoint[1].x = vX + vWidth - 1;
+    vPoint[1].y = vY + vHeight - 1;
     ::GpiMove(m_hPS, &vPoint[0]);
 
+    lColor       = m_brush.GetColour().GetPixel();
+    lBorderColor = m_pen.GetColour().GetPixel();
     lControl = DRO_OUTLINEFILL; //DRO_FILL;
     if (m_brush.GetStyle() == wxTRANSPARENT)
+        nIsTRANSPARENT = 1;
+    if(lColor == lBorderColor || nIsTRANSPARENT)
+    {
+        lControl = DRO_OUTLINEFILL; //DRO_FILL;
+        if(m_brush.GetStyle() == wxTRANSPARENT)
+            lControl = DRO_OUTLINE;
+
+        ::GpiSetColor(m_hPS, lColor);
+        ::GpiBox( m_hPS         // handle to a presentation space
+                 ,lControl      // draw the box outline ? or ?
+                 ,&vPoint[1]    // address of the corner
+                 ,(LONG)dRadius // horizontal corner radius
+                 ,(LONG)dRadius // vertical corner radius
+                );
+    }
+    else
+    {
         lControl = DRO_OUTLINE;
-    ::GpiBox( m_hPS         // handle to a presentation space
-             ,DRO_OUTLINE   // draw the box outline ? or ?
-             ,&vPoint[1]    // address of the corner
-             ,(LONG)dRadius // horizontal corner radius
-             ,(LONG)dRadius // vertical corner radius
-            );
+        ::GpiSetColor( m_hPS
+                      ,lBorderColor
+                     );
+        ::GpiBox( m_hPS
+                 ,lControl
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+        lControl = DRO_FILL;
+        ::GpiSetColor( m_hPS
+                      ,lColor
+                     );
+        vPoint[0].x = vX + 1;
+        vPoint[0].y = vY + 1;
+        vPoint[1].x = vX + vWidth - 2;
+        vPoint[1].y = vY + vHeight - 2;
+        ::GpiMove(m_hPS, &vPoint[0]);
+        ::GpiBox( m_hPS
+                 ,lControl
+                 ,&vPoint[1]
+                 ,0L
+                 ,0L
+                );
+    }
+
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX2, vY2);
 } // end of wxDC::DoDrawRoundedRectangle
@@ -1240,17 +1310,35 @@ void wxDC::DoDrawBitmap(
     {
         HBITMAP                         hBitmap =  (HBITMAP)rBmp.GetHBITMAP();
         HBITMAP                         hBitmapOld;
+        POINTL                          vPoint[4];
 
         vY = OS2Y(vY,rBmp.GetHeight());
 
         //
         // Flip the picture as OS/2 is upside-down
         //
-        POINTL                      vPoint[4] = { vX, vY + rBmp.GetHeight()
-                                                 ,vX + rBmp.GetWidth(), vY
-                                                 ,0, 0
-                                                 ,rBmp.GetWidth(), rBmp.GetHeight()
-                                                };
+        if (rBmp.Flip())
+        {
+            vPoint[0].x = vX;
+            vPoint[0].y = vY + rBmp.GetHeight();
+            vPoint[1].x = vX + rBmp.GetWidth();
+            vPoint[1].y = vY;
+            vPoint[2].x = 0;
+            vPoint[2].y = 0;
+            vPoint[3].x = rBmp.GetWidth();
+            vPoint[3].y = rBmp.GetHeight();
+        }
+        else
+        {
+            vPoint[0].x = vX;
+            vPoint[0].y = vY;
+            vPoint[1].x = vX + rBmp.GetWidth();
+            vPoint[1].y = vY + rBmp.GetHeight();
+            vPoint[2].x = 0;
+            vPoint[2].y = 0;
+            vPoint[3].x = rBmp.GetWidth();
+            vPoint[3].y = rBmp.GetHeight();
+        }
         if (bUseMask)
         {
             wxMask*                     pMask = rBmp.GetMask();
@@ -1700,7 +1788,16 @@ void wxDC::DrawAnyText(
           m_vRclPaint.xLeft == 0))
         vPtlStart.y = OS2Y(vY,vTextY);
     else
-        vPtlStart.y = vY;
+    {
+        if (m_vSelectedBitmap != wxNullBitmap)
+        {
+            m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
+            m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
+            vPtlStart.y = OS2Y(vY,vTextY);
+        }
+        else
+            vPtlStart.y = vY;
+    }
 
     PCH                             pzStr = (PCH)rsText.c_str();
 

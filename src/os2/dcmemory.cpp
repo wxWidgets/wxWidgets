@@ -146,9 +146,14 @@ void wxMemoryDC::SelectObject(
                  (rBitmap.GetSelectedInto() == this),
                  wxT("Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(NULL)") );
 
+    WXHBITMAP                       hBmp = rBitmap.GetHBITMAP();
+
+    if (!hBmp)
+    {
+        m_vSelectedBitmap.SetSelectedInto(NULL);
+    }
     m_vSelectedBitmap = rBitmap;
 
-    WXHBITMAP                       hBmp = rBitmap.GetHBITMAP();
 
     if (!hBmp)
     {
