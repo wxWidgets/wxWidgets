@@ -1,0 +1,10 @@
+# Purpose: makefile for calendar example (VC++ 1.5x)
+# Created: 2000-01-03
+
+WXDIR = $(WXWIN)
+
+TARGET=calendar
+OBJECTS=$(TARGET).obj
+
+!include $(WXDIR)\src\makeprog.msc
+
