@@ -49,7 +49,7 @@
 
 #include "wx/regex.h"
 
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
     #define regerror wx_regerror
     #define regfree wx_regfree
 #endif
@@ -266,7 +266,7 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
     }
 
     // do match it
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
 	rm_detail_t rd;
     int rc = wx_regexec(&self->m_RegEx, str, wxStrlen(str), &rd, m_nMatches, m_Matches, flagsRE);
 #else
