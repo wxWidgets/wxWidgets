@@ -25,7 +25,7 @@
 
 struct wxHtmlCacheItem;
 
-class wxHtmlTagsCache : public wxObject
+class WXDLLEXPORT wxHtmlTagsCache : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlTagsCache)
 

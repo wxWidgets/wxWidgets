@@ -560,9 +560,9 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         if ( cmp == 0 )
         {
             rgbVal = theRGBRecords[middle].rgb;
-            *r = (rgbVal >> 16) & 0xFF;
-            *g = (rgbVal >> 8) & 0xFF;
-            *b = (rgbVal) & 0xFF;
+            *r = (unsigned char)((rgbVal >> 16) & 0xFF);
+            *g = (unsigned char)((rgbVal >> 8) & 0xFF);
+            *b = (unsigned char)((rgbVal) & 0xFF);
             *isNone = FALSE;
             free(name);
             return TRUE;
