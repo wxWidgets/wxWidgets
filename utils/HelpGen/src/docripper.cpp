@@ -369,13 +369,13 @@ void RipperDocGen::LinkSuperClassRefs()
 
 void RipperDocGen::ProcessFile( const char* sourceFile )
 {
-	cout << "Processing file " << sourceFile << "..." << endl;
+	wxSTD cout << "Processing file " << sourceFile << "..." << wxSTD endl;
 
 	spFile* pCtx = mpParser->ParseFile( sourceFile );
 
 	if ( pCtx == NULL )
 	{
-		cout << "Cannot open file " << sourceFile << ", skipped..." << endl;
+		wxSTD cout << "Cannot open file " << sourceFile << ", skipped..." << wxSTD endl;
 
 		return;
 	}
