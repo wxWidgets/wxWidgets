@@ -286,11 +286,15 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
 // helper for OnPaint()
 void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 {
-    HBRUSH hbr = (HBRUSH)DoMSWControlColor(GetHdcOf(dc), wxNullColour);
+    // note that static box should be transparent, so it should show its
+    // parents colour, not its own
+    wxWindow * const parent = GetParent();
+
+    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(dc.GetHDC());
     if ( !hbr )
     {
-        wxBrush *
-            brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
+        wxBrush *brush =
+            wxTheBrushList->FindOrCreateBrush(parent->GetBackgroundColour());
         if ( brush )
             hbr = GetHbrushOf(*brush);
     }

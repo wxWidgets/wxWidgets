@@ -12,6 +12,7 @@ All:
 wxMSW:
 
 - fixed static box border when the label is empty
+- fixed SetBackgroundColour() to change only label background, not entire box
 
 2.5.5
 -----
