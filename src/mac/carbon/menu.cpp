@@ -626,10 +626,16 @@ void wxMenuBar::MacInstallMenuBar()
   	wxString message ;
   	wxCHECK_RET( menubar != NULL, "can't read MBAR resource" );
   	::SetMenuBar( menubar ) ;
+#if TARGET_API_MAC_CARBON
+    ::DisposeMenuBar( menubar ) ;
+#else
   	::DisposeHandle( menubar ) ;
+#endif
 
 		MenuHandle menu = ::GetMenuHandle( kwxMacAppleMenuId ) ;
+#if TARGET_API_MAC_OS8
 		::AppendResMenu(menu, 'DRVR');
+#endif
  
    	for (int i = 0; i < m_menus.GetCount(); i++)
   	{
@@ -646,6 +652,11 @@ void wxMenuBar::MacInstallMenuBar()
 			  {
 			    continue ;
 			  }
+
+		    for ( int i = CountMenuItems( mh ) ; i >= firstUserHelpMenuItem ; --i )
+		    {
+		      DeleteMenuItem( mh , i ) ;
+		    }
 					
 			  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
 		  		{
