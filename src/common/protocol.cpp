@@ -91,7 +91,7 @@ bool wxProtocol::Reconnect()
 // ----------------------------------------------------------------------------
 
 /* static */
-wxProtocolError wxProtocol::ReadLine(wxSocketBase *socket, wxString& result)
+wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
 {
     static const int LINE_BUF = 4095;
 
