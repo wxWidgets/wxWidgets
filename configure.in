@@ -661,7 +661,6 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_ZLIB=no
   DEFAULT_wxUSE_LIBPNG=no
-  DEFAULT_wxUSE_LIBGIF=no
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_ODBC=no
 
@@ -744,6 +743,10 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
+  
+  DEFAULT_wxUSE_GIF=no
+  DEFAULT_wxUSE_PCX=no
+  DEFAULT_wxUSE_PNM=no
 else
   DEFAULT_wxUSE_THREADS=yes
 
@@ -768,7 +771,6 @@ else
 
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
-  DEFAULT_wxUSE_LIBGIF=yes
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_ODBC=no
 
@@ -851,6 +853,10 @@ else
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
+  
+  DEFAULT_wxUSE_GIF=yes
+  DEFAULT_wxUSE_PCX=yes
+  DEFAULT_wxUSE_PNM=yes
 fi
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -886,7 +892,6 @@ AC_ARG_WITH(gtk-exec-prefix, [  --with-gtk-exec-prefix=PFX  Exec prefix where GT
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
 WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(libpng,        [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
-WX_ARG_WITH(libgif,        [  --with-libgif           use libgif (GIF file format)], wxUSE_LIBGIF)
 WX_ARG_WITH(libjpeg,       [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
@@ -1114,6 +1119,14 @@ WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUS
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
+
+dnl ---------------------------------------------------------------------------
+dnl support for image formats that do not rely on external library
+dnl ---------------------------------------------------------------------------
+
+WX_ARG_ENABLE(gif,         [  --enable-gif             use gif images (GIF file format)], wxUSE_GIF)
+WX_ARG_ENABLE(pcx,         [  --enable-pcx             use pcx images (PCX file format)], wxUSE_PCX)
+WX_ARG_ENABLE(pnm,         [  --enable-pnm             use pnm images (PNM file format)], wxUSE_PNM)
 
 dnl cache the options values before (may be) aborting below
 WX_ARG_CACHE_FLUSH
@@ -2077,10 +2090,6 @@ if test "$wxUSE_LIBPNG" = "yes" ; then
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
 fi
 
-if test "$wxUSE_LIBGIF" = "yes" ; then
-  AC_DEFINE(wxUSE_LIBGIF)
-fi
-
 JPEG_INCLUDE=
 if test "$wxUSE_LIBJPEG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBJPEG)
@@ -2631,6 +2640,18 @@ fi
 if test "$wxUSE_VALIDATORS" = "yes"; then
     AC_DEFINE(wxUSE_VALIDATORS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+fi
+
+if test "$wxUSE_GIF" = "yes" ; then
+  AC_DEFINE(wxUSE_GIF)
+fi
+
+if test "$wxUSE_PCX" = "yes" ; then
+  AC_DEFINE(wxUSE_PCX)
+fi
+
+if test "$wxUSE_PNM" = "yes" ; then
+  AC_DEFINE(wxUSE_PNM)
 fi
 
 dnl ---------------------------------------------------------------------------
