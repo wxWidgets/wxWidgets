@@ -104,6 +104,9 @@ public:
     // in dismissing it if the mouse is cilcked outside it)
     virtual bool ProcessLeftDown(wxMouseEvent& event);
 
+    // Overridden to grab the input on some plaforms
+    virtual bool Show( bool show = true );
+    
 protected:
     // common part of all ctors
     void Init();

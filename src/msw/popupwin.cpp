@@ -38,8 +38,6 @@
 
 #include "wx/msw/private.h"     // for GetDesktopWindow()
 
-IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
-
 // ============================================================================
 // implementation
 // ============================================================================
