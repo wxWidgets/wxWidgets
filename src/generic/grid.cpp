@@ -41,6 +41,7 @@
     #include "wx/log.h"
     #include "wx/textctrl.h"
     #include "wx/checkbox.h"
+    #include "wx/combobox.h"
     #include "wx/valtext.h"
 #endif
 
@@ -856,6 +857,84 @@ void wxGridCellBoolEditor::Reset()
 void wxGridCellBoolEditor::StartingClick()
 {
     CBox()->SetValue(!CBox()->GetValue());
+}
+
+// ----------------------------------------------------------------------------
+// wxGridCellChoiceEditor
+// ----------------------------------------------------------------------------
+
+wxGridCellChoiceEditor::wxGridCellChoiceEditor(size_t count,
+                                               const wxChar* choices[],
+                                               bool allowOthers)
+                      : m_allowOthers(allowOthers)
+{
+    m_choices.Alloc(count);
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_choices.Add(choices[n]);
+    }
+}
+
+void wxGridCellChoiceEditor::Create(wxWindow* parent,
+                                    wxWindowID id,
+                                    wxEvtHandler* evtHandler)
+{
+    size_t count = m_choices.GetCount();
+    wxString *choices = new wxString[count];
+    for ( size_t n = 0; n < count; n++ )
+    {
+        choices[n] = m_choices[n];
+    }
+
+    m_control = new wxComboBox(parent, id, wxEmptyString,
+                               wxDefaultPosition, wxDefaultSize,
+                               count, choices,
+                               m_allowOthers ? 0 : wxCB_READONLY);
+
+    delete [] choices;
+
+    wxGridCellEditor::Create(parent, id, evtHandler);
+}
+
+void wxGridCellChoiceEditor::PaintBackground(const wxRect& WXUNUSED(rectCell),
+                                             wxGridCellAttr * WXUNUSED(attr))
+{
+    // as we fill the entire client area, don't do anything here to minimize
+    // flicker
+}
+
+void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
+{
+    wxASSERT_MSG(m_control,
+                 wxT("The wxGridCellEditor must be Created first!"));
+
+    m_startValue = grid->GetTable()->GetValue(row, col);
+
+    Combo()->SetValue(m_startValue);
+    Combo()->SetInsertionPointEnd();
+    Combo()->SetFocus();
+}
+
+bool wxGridCellChoiceEditor::EndEdit(int row, int col, 
+                                     bool saveValue,
+                                     wxGrid* grid)
+{
+    wxString value = Combo()->GetValue();
+    bool changed = value != m_startValue;
+
+    if ( changed )
+        grid->GetTable()->SetValue(row, col, value);
+
+    m_startValue = wxEmptyString;
+    Combo()->SetValue(m_startValue);
+
+    return changed;
+}
+
+void wxGridCellChoiceEditor::Reset()
+{
+    Combo()->SetValue(m_startValue);
+    Combo()->SetInsertionPointEnd();
 }
 
 // ----------------------------------------------------------------------------
@@ -5363,7 +5442,7 @@ int wxGrid::YToRow( int y )
             return i;
     }
 
-    return m_numRows; //-1;
+    return -1;
 }
 
 
@@ -5377,7 +5456,7 @@ int wxGrid::XToCol( int x )
             return i;
     }
 
-    return m_numCols; //-1;
+    return -1;
 }
 
 

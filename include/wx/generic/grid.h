@@ -77,6 +77,7 @@ class WXDLLEXPORT wxGridWindow;
 class WXDLLEXPORT wxGridTypeRegistry;
 
 class WXDLLEXPORT wxCheckBox;
+class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxSpinCtrl;
 
@@ -409,6 +410,33 @@ private:
     bool m_startValue;
 };
 
+// the editor for string data allowing to choose from the list of strings
+class WXDLLEXPORT wxGridCellChoiceEditor : public wxGridCellEditor
+{
+public:
+    // if !allowOthers, user can't type a string not in choices array
+    wxGridCellChoiceEditor(size_t count, const wxChar* choices[],
+                           bool allowOthers = FALSE);
+
+    virtual void Create(wxWindow* parent,
+                        wxWindowID id,
+                        wxEvtHandler* evtHandler);
+
+    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+
+    virtual void Reset();
+
+protected:
+    wxComboBox *Combo() const { return (wxComboBox *)m_control; }
+
+private:
+    wxString        m_startValue;
+    wxArrayString   m_choices;
+    bool            m_allowOthers;
+};
 // ----------------------------------------------------------------------------
 // wxGridCellAttr: this class can be used to alter the cells appearance in
 // the grid by changing their colour/font/... from default. An object of this

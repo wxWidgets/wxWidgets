@@ -960,12 +960,17 @@ BugsGridFrame::BugsGridFrame()
     grid->SetTable(table, TRUE);
 
     wxGridCellAttr *attrRO = new wxGridCellAttr,
-                   *attrRangeEditor = new wxGridCellAttr;
+                   *attrRangeEditor = new wxGridCellAttr,
+                   *attrCombo = new wxGridCellAttr;
+
     attrRO->SetReadOnly();
     attrRangeEditor->SetEditor(new wxGridCellNumberEditor(1, 5));
+    attrCombo->SetEditor(new wxGridCellChoiceEditor(WXSIZEOF(severities),
+                                                    severities));
 
     grid->SetColAttr(Col_Id, attrRO);
     grid->SetColAttr(Col_Priority, attrRangeEditor);
+    grid->SetColAttr(Col_Severity, attrCombo);
 
     grid->AutoSizeColumns();
 }
