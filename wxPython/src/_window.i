@@ -167,6 +167,8 @@ public:
     %pythonAppend wxWindow         "self._setOORInfo(self)"
     %pythonAppend wxWindow()       ""
 
+    RefDoc(wxWindow, ""); // turn it off for the ctors
+    
     DocCtorStr(
         wxWindow(wxWindow* parent, const wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,

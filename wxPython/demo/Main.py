@@ -212,7 +212,6 @@ _treeList = [
         'FileHistory',
         'FontEnumerator',
         'Joystick',
-        'NewNamespace',
         'OGL',
         'PrintFramework',
         'ShapedWindow',

@@ -414,6 +414,7 @@ wxDirFilterListCtrlPtr = wx.controls.DirFilterListCtrlPtr
 wxPreDirFilterListCtrl = wx.controls.PreDirFilterListCtrl
 wxPyControl = wx.controls.PyControl
 wxPyControlPtr = wx.controls.PyControlPtr
+wxPrePyControl = wx.controls.PrePyControl
 wxFRAME_EX_CONTEXTHELP = wx.controls.FRAME_EX_CONTEXTHELP
 wxDIALOG_EX_CONTEXTHELP = wx.controls.DIALOG_EX_CONTEXTHELP
 wxEVT_HELP = wx.controls.wxEVT_HELP

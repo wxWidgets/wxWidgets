@@ -195,7 +195,10 @@ class MimeTypesDemoPanel(wx.Panel):
         tsizer.Fit(self)
         
         # Populate the Known MIME types list with what is in the database
-        mtypes = wx.TheMimeTypesManager.EnumAllFileTypes()
+        try:
+            mtypes = wx.TheMimeTypesManager.EnumAllFileTypes()
+        except wx.PyAssertionError:
+            mtypes = []
         for mt in mtypes:
             self.mimelist.Append(mt)
 

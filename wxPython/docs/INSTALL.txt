@@ -3,10 +3,12 @@ Installing wxPython 2.5 from Source
 
 
 This document will describe the few differences and additions to the
-content in BUILD.txt for installing wxPython built from source.
-Please follow the intstructions both in this file and in BUILD.txt to
-perform this task.  Where there is overlap the items described here
-will take precedence.
+content in the BUILD_ document for installing wxPython built from
+source.  Please follow the intstructions both in this file and in
+BUILD_ to perform this task.  Where there is overlap the items
+described here will take precedence for doing installations.
+
+.. _BUILD: BUILD.html
 
 
 
@@ -35,7 +37,7 @@ Installing on Unix-like Systems (not OS X)
    It does add extra code to the build but probably not enough to
    worry about it.  However if you want to get as lean a build as
    possible you can leave it out, but if your code does something bad
-   then instead of exceptions you'll likely get a crash.
+   then instead of exceptions you'll likely get a crash::
 
 		      --enable-debug_flag \
 

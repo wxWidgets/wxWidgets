@@ -1559,6 +1559,28 @@ extern wxPyApp *wxPythonApp;
         PCLASS::CBNAME(cell, x, y);                                             \
     }
 
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK__COLOUR(CBNAME)                                      \
+    void CBNAME(const wxColour& c);                                         \
+    void base_##CBNAME(const wxColour& c)
+
+#define IMP_PYCALLBACK__COLOUR(CLASS, PCLASS, CBNAME)                           \
+    void CLASS::CBNAME(const wxColour& c) {                                     \
+        bool found;                                                             \
+        bool blocked = wxPyBeginBlockThreads();                                 \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* obj = wxPyConstructObject((void*)&c, wxT("wxColour"), 0); \
+            wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)",obj));        \
+            Py_DECREF(obj);                                                     \
+        }                                                                       \
+        wxPyEndBlockThreads(blocked);                                           \
+        if (! found)                                                            \
+            PCLASS::CBNAME(c);                                                  \
+    }                                                                           \
+    void CLASS::base_##CBNAME(const wxColour& c) {                              \
+        PCLASS::CBNAME(c);                                                      \
+    }
 
 //---------------------------------------------------------------------------
 

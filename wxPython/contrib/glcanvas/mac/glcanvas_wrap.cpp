@@ -332,7 +332,15 @@ SWIG_CheckLongInRange(long value, const char* type,
 SWIGSTATICINLINE(long)
 SWIG_AsLong(PyObject * obj)
 {
-  return PyInt_Check(obj) ? PyInt_AsLong(obj) : PyLong_AsLong(obj);
+    if (PyNumber_Check(obj))
+        return PyInt_AsLong(obj);
+    else {
+        PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
+                                               obj->ob_type->tp_name);
+        PyErr_SetObject(PyExc_TypeError, errmsg);
+        Py_DECREF(errmsg);
+        return 0;
+    }
 }
 
 

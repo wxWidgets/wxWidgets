@@ -69,7 +69,7 @@ Name: core;     Description: "wxPython modules and library";  Types: full compac
 Name: docs;     Description: "Documentation";                 Types: full
 Name: demo;     Description: "Demo application";              Types: full
 Name: samples;  Description: "Sample applications";           Types: full
-Name: ; Description: "Manifest files for XP LnF";     Types: full
+Name: manifest; Description: "Manifest files for XP LnF";     Types: full
 
 ;;------------------------------------------------------------
 
@@ -92,6 +92,7 @@ Source: "wx\_wizard.pyd";                      DestDir: "{app}\wx"; Components: 
 Source: "wx\_gizmos.pyd";                      DestDir: "{app}\wx"; Components: core
 Source: "wx\_glcanvas.pyd";                    DestDir: "{app}\wx"; Components: core
 Source: "wx\_iewin.pyd";                       DestDir: "{app}\wx"; Components: core
+Source: "wx\_activex.pyd";                     DestDir: "{app}\wx"; Components: core
 Source: "wx\_ogl.pyd";                         DestDir: "{app}\wx"; Components: core
 Source: "wx\_stc.pyd";                         DestDir: "{app}\wx"; Components: core
 Source: "wx\_xrc.pyd";                         DestDir: "{app}\wx"; Components: core
@@ -161,6 +162,7 @@ Source: "demo\data\*.wav";                  DestDir: "{app}\wx\demo\data"; Compo
 Source: "demo\data\*.wdr";                  DestDir: "{app}\wx\demo\data"; Components: demo
 Source: "demo\data\*.xrc";                  DestDir: "{app}\wx\demo\data"; Components: demo
 Source: "demo\data\*.gif";                  DestDir: "{app}\wx\demo\data"; Components: demo
+Source: "demo\data\*.swf";                  DestDir: "{app}\wx\demo\data"; Components: demo
 
 ;;Source: "demo\dllwidget\*.cpp";             DestDir: "{app}\wx\demo\dllwidget"; Components: demo
 ;;Source: "demo\dllwidget\*.py";              DestDir: "{app}\wx\demo\dllwidget"; Components: demo
@@ -221,10 +223,6 @@ Source: "samples\StyleEditor\*.txt";        DestDir: "{app}\wx\samples\StyleEdit
 Source: "samples\StyleEditor\*.py";         DestDir: "{app}\wx\samples\StyleEditor"; Components: samples
 Source: "samples\StyleEditor\*.cfg";        DestDir: "{app}\wx\samples\StyleEditor"; Components: samples
 
-Source: "samples\wx_examples\basic\*.py";   DestDir: "{app}\wx\samples\wx_examples\basic"; Components: samples
-Source: "samples\wx_examples\hello\*.py";   DestDir: "{app}\wx\samples\wx_examples\hello"; Components: samples
-Source: "samples\wx_examples\hello\*.jpg";  DestDir: "{app}\wx\samples\wx_examples\hello"; Components: samples
-
 Source: "samples\wxProject\*.txt";          DestDir: "{app}\wx\samples\wxProject"; Components: samples
 Source: "samples\wxProject\*.py";           DestDir: "{app}\wx\samples\wxProject"; Components: samples
 
@@ -256,12 +254,9 @@ Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.ex
 Name: "{group}\Sample Apps";           Filename: "{app}\wx\samples"; Components: samples
 
 Name: "{group}\wxWindows Reference";   Filename: "{app}\wx\docs\wx.chm";                Components: docs
-Name: "{group}\wxOGL Reference";       Filename: "{app}\wx\docs\ogl.chm";               Components: docs
-Name: "{group}\licence.txt";           Filename: "{app}\wx\docs\licence\licence.txt";   Components: core
-Name: "{group}\README.txt";            Filename: "{app}\wx\docs\README.txt";            Components: docs
-Name: "{group}\CHANGES.txt";           Filename: "{app}\wx\docs\CHANGES.txt";           Components: docs
 Name: "{group}\Migration Guide";       Filename: "{app}\wx\docs\MigrationGuide.html";   Components: docs
-Name: "{group}\Other wxPython Docs";   Filename: "{app}\wx\docs\wxPythonDocs.html";     Components: docs
+Name: "{group}\Recent Changes";        Filename: "{app}\wx\docs\CHANGES.html";          Components: docs
+Name: "{group}\Other Docs";            Filename: "{app}\wx\docs";                       Components: docs
 
 
 ;;------------------------------------------------------------

@@ -73,7 +73,8 @@ def runTest(frame, nb, log):
         dlg.Destroy()
 
 
-overview = """\<html><body>
+overview = """\
+<html><body>
 <h2>wx.lib.pdfwin.PDFWindow</h2>
 
 The wx.lib.pdfwin.PDFWindow class is another example of using ActiveX

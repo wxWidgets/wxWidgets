@@ -1775,7 +1775,7 @@ class RadioBox(core.Control):
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=RadioBoxNameStr) -> RadioBox
         """
-        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']
         newobj = _controls.new_RadioBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1921,7 +1921,7 @@ class Slider(core.Control):
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=SliderNameStr) -> Slider
         """
-        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']
         newobj = _controls.new_Slider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4702,6 +4702,14 @@ class PyControl(core.Control):
         """base_RemoveChild(Window child)"""
         return _controls.PyControl_base_RemoveChild(*args, **kwargs)
 
+    def base_ShouldInheritColours(*args, **kwargs):
+        """base_ShouldInheritColours() -> bool"""
+        return _controls.PyControl_base_ShouldInheritColours(*args, **kwargs)
+
+    def base_ApplyParentThemeBackground(*args, **kwargs):
+        """base_ApplyParentThemeBackground(Colour c)"""
+        return _controls.PyControl_base_ApplyParentThemeBackground(*args, **kwargs)
+
 
 class PyControlPtr(PyControl):
     def __init__(self, this):
@@ -4709,6 +4717,12 @@ class PyControlPtr(PyControl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyControl
 _controls.PyControl_swigregister(PyControlPtr)
+
+def PrePyControl(*args, **kwargs):
+    """PrePyControl() -> PyControl"""
+    val = _controls.new_PrePyControl(*args, **kwargs)
+    val.thisown = 1
+    return val
 
 #---------------------------------------------------------------------------
 

@@ -9,7 +9,7 @@ resourceText = r'''<?xml version="1.0"?>
 
 <!-- Notice that the class is NOT a standard wx class -->
 
-<object class="MyBluePanel" name="MyPanel">
+<object class="MyCustomPanel" name="MyPanel">
     <size>200,100</size>
     <object class="wxStaticText" name="label1">
         <label>This blue panel is a class derived from wx.Panel,\nand is loaded by a custom XmlResourceHandler.</label>
@@ -21,35 +21,53 @@ resourceText = r'''<?xml version="1.0"?>
 
 #----------------------------------------------------------------------
 
-class MyBluePanel(wx.Panel):
+class MyCustomPanel(wx.Panel):
     def __init__(self, parent, id, pos, size, style, name):
         wx.Panel.__init__(self, parent, id, pos, size, style, name)
 
         # This is the little bit of customization that we do for this
-        # silly example.  It could just as easily have been done in
-        # the resource.
-        self.SetBackgroundColour("BLUE")
-        self.SetForegroundColour("WHITE")
+        # silly example.  
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        t = wx.StaticText(self, -1, "MyCustomPanel")
+        f = t.GetFont()
+        f.SetWeight(wx.BOLD)
+        f.SetPointSize(f.GetPointSize()+2)
+        t.SetFont(f)
+        self.t = t
+
+    def OnSize(self, evt):
+        sz = self.GetSize()
+        w, h = self.t.GetTextExtent(self.t.GetLabel())
+        self.t.SetPosition(((sz.width-w)/2, (sz.height-h)/2))
 
 
 # To do it the more complex way, (see below) we need to write the
 # class a little differently...  This could obviously be done with a
 # single class, but I wanted to make separate ones to make clear what
 # the different requirements are.
-class PreMyBluePanel(wx.Panel):
+class PreMyCustomPanel(wx.Panel):
     def __init__(self):
         p = wx.PrePanel()
         self.PostCreate(p)
 
     def Create(self, parent, id, pos, size, style, name):
         wx.Panel.Create(self, parent, id, pos, size, style, name)
-        self.SetBackgroundColour("BLUE")
-        self.SetForegroundColour("WHITE")
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        t = wx.StaticText(self, -1, "MyCustomPanel")
+        f = t.GetFont()
+        f.SetWeight(wx.BOLD)
+        f.SetPointSize(f.GetPointSize()+2)
+        t.SetFont(f)
+        self.t = t
 
+    def OnSize(self, evt):
+        sz = self.GetSize()
+        w, h = self.t.GetTextExtent(self.t.GetLabel())
+        self.t.SetPosition(((sz.width-w)/2, (sz.height-h)/2))
 
 #----------------------------------------------------------------------
 
-class MyBluePanelXmlHandler(xrc.XmlResourceHandler):
+class MyCustomPanelXmlHandler(xrc.XmlResourceHandler):
     def __init__(self):
         xrc.XmlResourceHandler.__init__(self)
         # Specify the styles recognized by objects of this type
@@ -61,7 +79,7 @@ class MyBluePanelXmlHandler(xrc.XmlResourceHandler):
 
     # This method and the next one are required for XmlResourceHandlers
     def CanHandle(self, node):
-        return self.IsOfClass(node, "MyBluePanel")
+        return self.IsOfClass(node, "MyCustomPanel")
 
     def DoCreateResource(self):
         # NOTE: wxWindows can be created in either a single-phase or
@@ -86,20 +104,20 @@ class MyBluePanelXmlHandler(xrc.XmlResourceHandler):
             assert self.GetInstance() is None
 
             # Now create the object
-            panel = MyBluePanel(self.GetParentAsWindow(),
-                                self.GetID(),
-                                self.GetPosition(),
-                                self.GetSize(),
-                                self.GetStyle("style", wx.TAB_TRAVERSAL),
-                                self.GetName()
-                                )
+            panel = MyCustomPanel(self.GetParentAsWindow(),
+                                  self.GetID(),
+                                  self.GetPosition(),
+                                  self.GetSize(),
+                                  self.GetStyle("style", wx.TAB_TRAVERSAL),
+                                  self.GetName()
+                                  )
         else:
             # When using the more complex (but more flexible) method
             # the instance may already have been created, check for it
             panel = self.GetInstance()
             if panel is None:
                 # if not, then create the instance (but not the window)
-                panel = PreMyBluePanel()
+                panel = PreMyCustomPanel()
 
             # Now call the panel's Create method to actually create the window
             panel.Create(self.GetParentAsWindow(),
@@ -139,11 +157,11 @@ class TestPanel(wx.Panel):
 
         # Load the resource
         res = xrc.EmptyXmlResource()
-        res.InsertHandler(MyBluePanelXmlHandler())
+        res.InsertHandler(MyCustomPanelXmlHandler())
         res.LoadFromString(resourceText)
 
         # Now create a panel from the resource data
-        panel = res.LoadObject(self, "MyPanel", "MyBluePanel")
+        panel = res.LoadObject(self, "MyPanel", "MyCustomPanel")
 
         # and do the layout
         sizer = wx.BoxSizer(wx.VERTICAL)

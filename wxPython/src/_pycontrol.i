@@ -61,6 +61,7 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     
     PYPRIVATE;
 };
@@ -92,6 +93,7 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, ShouldInheritColours);
+IMP_PYCALLBACK__COLOUR(wxPyControl, wxControl, ApplyParentThemeBackground);
 %}
 
 // And now the one for SWIG to see
@@ -99,6 +101,7 @@ class wxPyControl : public wxControl
 {
 public:
     %pythonAppend wxPyControl         "self._setOORInfo(self); self._setCallbackInfo(self, PyControl)"
+    %pythonAppend wxPyControl()       ""
 
     wxPyControl(wxWindow* parent, const wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -107,9 +110,9 @@ public:
                 const wxValidator& validator=wxDefaultValidator,
                 const wxString& name = wxPyControlNameStr);
 
+    %name(PrePyControl) wxPyControl();
+    
     void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyControl)"
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
 
     void base_DoMoveWindow(int x, int y, int width, int height);
@@ -142,6 +145,9 @@ public:
 
     void base_AddChild(wxWindow* child);
     void base_RemoveChild(wxWindow* child);
+
+    bool base_ShouldInheritColours();
+    void base_ApplyParentThemeBackground(const wxColour& c);
 };
 
 

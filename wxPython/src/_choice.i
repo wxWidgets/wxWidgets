@@ -37,6 +37,8 @@ public:
     %pythonAppend wxChoice         "self._setOORInfo(self)"
     %pythonAppend wxChoice()       ""
 
+    RefDoc(wxChoice, ""); // turn it off for the ctors
+    
     DocCtorAStr(
         wxChoice(wxWindow *parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,

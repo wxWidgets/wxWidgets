@@ -74,8 +74,9 @@ def runTest(frame, nb, log):
         dlg.Destroy()
 
 
-overview = """\<html><body>
-<h2>wx.lib.pdfwin.FlashWindow</h2>
+overview = """\
+<html><body>
+<h2>wx.lib.flashwin.FlashWindow</h2>
 
 The wx.lib.pdfwin.FlashWindow class is yet another example of using
 ActiveX controls from wxPython using the new wx.activex module.  This
