@@ -833,6 +833,8 @@ class CheckListBox(ListBox):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setOORInfo(self)
+
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 

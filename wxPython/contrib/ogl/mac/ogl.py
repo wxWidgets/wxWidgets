@@ -137,6 +137,26 @@ class ShapeRegionPtr(ShapeRegion):
         self.__class__ = ShapeRegion
 _ogl.ShapeRegion_swigregister(ShapeRegionPtr)
 
+class AttachmentPoint(core.Object):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxAttachmentPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(int id=0, double x=0.0, double y=0.0) -> AttachmentPoint"""
+        newobj = _ogl.new_AttachmentPoint(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    m_id = property(_ogl.AttachmentPoint_m_id_get, _ogl.AttachmentPoint_m_id_set)
+    m_x = property(_ogl.AttachmentPoint_m_x_get, _ogl.AttachmentPoint_m_x_set)
+    m_y = property(_ogl.AttachmentPoint_m_y_get, _ogl.AttachmentPoint_m_y_set)
+
+class AttachmentPointPtr(AttachmentPoint):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = AttachmentPoint
+_ogl.AttachmentPoint_swigregister(AttachmentPointPtr)
+
 class PyShapeEvtHandler(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyShapeEvtHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -755,6 +775,10 @@ class PyShape(PyShapeEvtHandler):
         """AttachmentIsValid(int attachment) -> bool"""
         return _ogl.PyShape_AttachmentIsValid(*args, **kwargs)
 
+    def GetAttachments(*args, **kwargs):
+        """GetAttachments() -> PyObject"""
+        return _ogl.PyShape_GetAttachments(*args, **kwargs)
+
     def GetAttachmentPositionEdge(*args, **kwargs):
         """
         GetAttachmentPositionEdge(int attachment, double OUTPUT, double OUTPUT, int nth=0, 
@@ -875,6 +899,10 @@ class PyShape(PyShapeEvtHandler):
     def GetRotation(*args, **kwargs):
         """GetRotation() -> double"""
         return _ogl.PyShape_GetRotation(*args, **kwargs)
+
+    def SetRotation(*args, **kwargs):
+        """SetRotation(double rotation)"""
+        return _ogl.PyShape_SetRotation(*args, **kwargs)
 
     def ClearAttachments(*args, **kwargs):
         """ClearAttachments()"""
@@ -1234,6 +1262,10 @@ class PyRectangleShape(PyShape):
     def SetCornerRadius(*args, **kwargs):
         """SetCornerRadius(double radius)"""
         return _ogl.PyRectangleShape_SetCornerRadius(*args, **kwargs)
+
+    def GetCornerRadius(*args, **kwargs):
+        """GetCornerRadius() -> double"""
+        return _ogl.PyRectangleShape_GetCornerRadius(*args, **kwargs)
 
     def base_OnDelete(*args, **kwargs):
         """base_OnDelete()"""
@@ -3197,6 +3229,30 @@ class PyLineShape(PyShape):
         """Unlink()"""
         return _ogl.PyLineShape_Unlink(*args, **kwargs)
 
+    def SetAlignmentOrientation(*args, **kwargs):
+        """SetAlignmentOrientation(bool isEnd, bool isHoriz)"""
+        return _ogl.PyLineShape_SetAlignmentOrientation(*args, **kwargs)
+
+    def SetAlignmentType(*args, **kwargs):
+        """SetAlignmentType(bool isEnd, int alignType)"""
+        return _ogl.PyLineShape_SetAlignmentType(*args, **kwargs)
+
+    def GetAlignmentOrientation(*args, **kwargs):
+        """GetAlignmentOrientation(bool isEnd) -> bool"""
+        return _ogl.PyLineShape_GetAlignmentOrientation(*args, **kwargs)
+
+    def GetAlignmentType(*args, **kwargs):
+        """GetAlignmentType(bool isEnd) -> int"""
+        return _ogl.PyLineShape_GetAlignmentType(*args, **kwargs)
+
+    def GetAlignmentStart(*args, **kwargs):
+        """GetAlignmentStart() -> int"""
+        return _ogl.PyLineShape_GetAlignmentStart(*args, **kwargs)
+
+    def GetAlignmentEnd(*args, **kwargs):
+        """GetAlignmentEnd() -> int"""
+        return _ogl.PyLineShape_GetAlignmentEnd(*args, **kwargs)
+
     def base_OnDraw(*args, **kwargs):
         """base_OnDraw(DC dc)"""
         return _ogl.PyLineShape_base_OnDraw(*args, **kwargs)
@@ -3366,6 +3422,26 @@ class PyPolygonShape(PyShape):
     def GetPoints(*args, **kwargs):
         """GetPoints() -> PyObject"""
         return _ogl.PyPolygonShape_GetPoints(*args, **kwargs)
+
+    def GetOriginalPoints(*args, **kwargs):
+        """GetOriginalPoints() -> PyObject"""
+        return _ogl.PyPolygonShape_GetOriginalPoints(*args, **kwargs)
+
+    def GetOriginalWidth(*args, **kwargs):
+        """GetOriginalWidth() -> double"""
+        return _ogl.PyPolygonShape_GetOriginalWidth(*args, **kwargs)
+
+    def GetOriginalHeight(*args, **kwargs):
+        """GetOriginalHeight() -> double"""
+        return _ogl.PyPolygonShape_GetOriginalHeight(*args, **kwargs)
+
+    def SetOriginalWidth(*args, **kwargs):
+        """SetOriginalWidth(double w)"""
+        return _ogl.PyPolygonShape_SetOriginalWidth(*args, **kwargs)
+
+    def SetOriginalHeight(*args, **kwargs):
+        """SetOriginalHeight(double h)"""
+        return _ogl.PyPolygonShape_SetOriginalHeight(*args, **kwargs)
 
     def UpdateOriginalPoints(*args, **kwargs):
         """UpdateOriginalPoints()"""
