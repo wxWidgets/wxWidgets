@@ -138,7 +138,7 @@ bool wxThread::IsAlive() const
 void wxThread::SetPriority(int WXUNUSED(prio)) { }
 int wxThread::GetPriority() const { return 0; }
 
-wxMutex wxMainMutex; // controls access to all GUI functions
+wxMutex *wxMainMutex; // controls access to all GUI functions
 
 wxThread::wxThread()
 {
@@ -168,13 +168,15 @@ public:
 };
 
 bool wxThreadModule::OnInit() {
-  wxMainMutex.Lock();
+  wxMainMutex = new wxMutex();
+  wxMainMutex->Lock();
   return TRUE;
 }
 
 void wxThreadModule::OnExit()
 {
-  wxMainMutex.Unlock();
+  wxMainMutex->Unlock();
+  delete wxMainMutex;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)

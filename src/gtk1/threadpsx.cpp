@@ -37,7 +37,7 @@ static pthread_t p_mainid;
 static wxMutex p_list_mutex;
 static wxList p_threads_list;
 
-wxMutex wxMainMutex; // controls access to all GUI functions
+wxMutex *wxMainMutex; // controls access to all GUI functions
 
 /////////////////////////////////////////////////////////////////////////////
 // GUI thread manager
@@ -288,10 +288,10 @@ void *wxThread::Join()
       wxYield();
 
     if (do_unlock)
-      wxMainMutex.Unlock();
+      wxMainMutex->Unlock();
     pthread_join(p_internal->thread_id, &status);
     if (do_unlock)
-      wxMainMutex.Lock();
+      wxMainMutex->Lock();
 
     p_list_mutex.Lock();
     delete p_threads_list.Nth(p_internal->id);
@@ -377,17 +377,19 @@ class wxThreadModule : public wxModule {
   DECLARE_DYNAMIC_CLASS(wxThreadModule)
 public:
   virtual bool OnInit() {
+    wxMainMutex = new wxMutex();
     wxThreadGuiInit();
     p_mainid = pthread_self();
     p_threads_list = wxList(wxKEY_INTEGER);
-    wxMainMutex.Lock();
+    wxMainMutex->Lock();
 
     return TRUE;
   }
 
   virtual void OnExit() {
-    wxMainMutex.Unlock();
+    wxMainMutex->Unlock();
     wxThreadGuiExit();
+    delete wxMainMutex;
   }
 };
 

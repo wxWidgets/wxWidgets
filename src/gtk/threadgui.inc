@@ -79,12 +79,12 @@ void wxMutexGuiLeave()
 
 void wxMutexGuiEnter()
 {
-  wxMainMutex.Lock();
+  wxMainMutex->Lock();
 }
 
 void wxMutexGuiLeave()
 {
-  wxMainMutex.Unlock();
+  wxMainMutex->Unlock();
 }
 
 #endif

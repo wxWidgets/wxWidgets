@@ -44,7 +44,7 @@ enum thread_state {
 /////////////////////////////////////////////////////////////////////////////
 
 static HANDLE p_mainid;
-wxMutex wxMainMutex; // controls access to all GUI functions
+wxMutex *wxMainMutex; // controls access to all GUI functions
 
 /////////////////////////////////////////////////////////////////////////////
 // Windows implementation
@@ -260,10 +260,10 @@ void *wxThread::Join()
     return NULL;
 
   if (wxThread::IsMain())
-    wxMainMutex.Unlock();
+    wxMainMutex->Unlock();
   WaitForSingleObject(p_internal->thread_id, INFINITE);
   if (wxThread::IsMain())
-    wxMainMutex.Lock();
+    wxMainMutex->Lock();
 
   GetExitCodeThread(p_internal->thread_id, &exit_code);
   CloseHandle(p_internal->thread_id);
@@ -310,14 +310,16 @@ class wxThreadModule : public wxModule {
   DECLARE_DYNAMIC_CLASS(wxThreadModule)
 public:
   virtual bool OnInit() {
+    wxMainMutex = new wxMutex();
     p_mainid = GetCurrentThread();
-    wxMainMutex.Lock();
+    wxMainMutex->Lock();
     return TRUE;
   }
 
   // Global cleanup
   virtual void OnExit() {
-    wxMainMutex.Unlock();
+    wxMainMutex->Unlock();
+    delete wxMainMutex;
   }
 };
 

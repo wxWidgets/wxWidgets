@@ -28,7 +28,7 @@ enum thread_state {
 // Static variables
 /////////////////////////////////////////////////////////////////////////////
 
-wxMutex wxMainMutex; // controls access to all GUI functions
+wxMutex *wxMainMutex; // controls access to all GUI functions
 
 /////////////////////////////////////////////////////////////////////////////
 // Windows implementation
@@ -243,13 +243,15 @@ class wxThreadModule : public wxModule {
 public:
   virtual bool OnInit() {
     /* TODO p_mainid = GetCurrentThread(); */
-    wxMainMutex.Lock();
+    wxMainMutex = new wxMutex();
+    wxMainMutex->Lock();
     return TRUE;
   }
 
   // Global cleanup
   virtual void OnExit() {
-    wxMainMutex.Unlock();
+    wxMainMutex->Unlock();
+    delete wxMainMutex;
   }
 };
 

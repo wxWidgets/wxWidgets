@@ -34,7 +34,7 @@ enum thread_state {
 /////////////////////////////////////////////////////////////////////////////
 
 static int p_mainid;
-wxMutex wxMainMutex;
+wxMutex *wxMainMutex;
 
 #include "threadgui.inc"
 
@@ -166,10 +166,10 @@ void *wxThread::Join()
     int stat;
 
     if (do_unlock)
-      wxMainMutex.Unlock();
+      wxMainMutex->Unlock();
     waitpid(p_internal->thread_id, &stat, 0);
     if (do_unlock)
-      wxMainMutex.Lock();
+      wxMainMutex->Lock();
     if (!WIFEXITED(stat) && !WIFSIGNALED(stat))
       return 0;
     p_internal->state = STATE_IDLE;
@@ -238,14 +238,16 @@ class wxThreadModule : public wxModule {
   DECLARE_DYNAMIC_CLASS(wxThreadModule)
 public:
   virtual bool OnInit() {
+    wxMainMutex = new wxMutex();
     wxThreadGuiInit();
     p_mainid = (int)getpid();
-    wxMainMutex.Lock();
+    wxMainMutex->Lock();
   }
 
   virtual void OnExit() {
-    wxMainMutex.Unlock();
+    wxMainMutex->Unlock();
     wxThreadGuiExit();
+    delete wxMainMutex;
   }
 };
 
