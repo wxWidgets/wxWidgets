@@ -1118,6 +1118,12 @@ void wxWindowMSW::Update()
     {
         wxLogLastError(_T("UpdateWindow"));
     }
+
+#ifdef __WIN32__
+    // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
+    // handler needs to be realyl drawn right now
+    (void)::GdiFlush();
+#endif // __WIN32__
 }
 
 // ---------------------------------------------------------------------------

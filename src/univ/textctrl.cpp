@@ -1427,11 +1427,19 @@ void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
                 if ( m_selStart != -1 )
                     RefreshTextRange(m_selStart, m_selEnd);
             }
+
+#ifdef __WXMSW__
+            // we need to fully repaint the invalidated areas of the window
+            // before scrolling it (from DoSetInsertionPoint below), otherwise
+            // they may stay unpainted
+            m_targetWindow->Update();
+#endif
+
+            // the cursor should always be at the end of the selection to which
+            // it had been extended to
+            DoSetInsertionPoint(selEndOld == m_selEnd ? m_selStart : m_selEnd);
         }
         //else: nothing to do
-
-        // the cursor should always be at the end of the selection
-        DoSetInsertionPoint(m_selEnd);
     }
 }
 
@@ -3557,6 +3565,14 @@ void wxTextCtrl::OnScroll(wxScrollWinEvent& event)
 // refresh
 // ----------------------------------------------------------------------------
 
+void wxTextCtrl::RefreshSelection()
+{
+    if ( HasSelection() )
+    {
+        RefreshTextRange(m_selStart, m_selEnd);
+    }
+}
+
 void wxTextCtrl::RefreshLineRange(wxTextCoord lineFirst, wxTextCoord lineLast)
 {
     wxASSERT_MSG( lineFirst <= lineLast || !lineLast,
@@ -4740,13 +4756,13 @@ bool wxStdTextCtrlInputHandler::HandleMouseMove(wxControl *control,
 bool wxStdTextCtrlInputHandler::HandleFocus(wxControl *control,
                                             const wxFocusEvent& event)
 {
-    // if we don't have selection, our appearance doesn't change
     wxTextCtrl *text = wxStaticCast(control, wxTextCtrl);
-    if ( !text->HasSelection() )
-        return FALSE;
 
-    // refresh
-    return TRUE;
+    // the selection appearance changes depending on whether we have the focus
+    text->RefreshSelection();
+
+    // never refresh entirely
+    return FALSE;
 }
 
 #endif // wxUSE_TEXTCTRL

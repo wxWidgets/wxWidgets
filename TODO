@@ -20,13 +20,10 @@ samples:
 
 wxTextCtrl
 
-*!! display corrupted when typing text in quickly (even single line)
+*!! display corrupted when typing text in quickly (single line only)
 *   caret leaves traces under wxGTK
 ?   text ctrl display pb when text is truncated
-*+  remember selection when losing/gaining activation
-*   too much is refreshed when double clicking (word select)
-
-*!  scrolling by dragging mouse outside the window
+?   too much is refreshed when double clicking (word select)
 
 All
 
@@ -65,6 +62,8 @@ All
 +   wxTextCtrl update rect overlaps with horz scrollbar
 +   scrollbars don't disappear after deleting long line
 +   vertical cursor movement should remember the original x position
++   remember selection when losing/gaining activation
++   scrolling by dragging mouse outside the window
 
 MSW
 

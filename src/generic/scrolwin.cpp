@@ -163,6 +163,10 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     if ( wxEvtHandler::ProcessEvent(event) )
         return TRUE;
 
+    // reset the skipped flag to FALSE as it might have been set to TRUE in
+    // ProcessEvent() above
+    event.Skip(FALSE);
+
     switch ( event.GetEventType() )
     {
         case wxEVT_SCROLLWIN_TOP:
@@ -351,18 +355,20 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     {
         // can't scroll further
         event.Skip();
+
+        return;
     }
 
     int orient = event.GetOrientation();
     if (orient == wxHORIZONTAL)
     {
         m_xScrollPosition += nScrollInc;
-        m_win->SetScrollPos(wxHORIZONTAL, m_xScrollPosition, FALSE);
+        m_targetWindow->SetScrollPos(wxHORIZONTAL, m_xScrollPosition, FALSE);
     }
     else
     {
         m_yScrollPosition += nScrollInc;
-        m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition, FALSE);
+        m_targetWindow->SetScrollPos(wxVERTICAL, m_yScrollPosition, FALSE);
     }
 
     bool needsRefresh = FALSE;
@@ -537,14 +543,14 @@ void wxScrollHelper::AdjustScrollbars()
         m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition);
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
-        m_win->SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
+        m_targetWindow->SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
         // The amount by which we scroll when paging
         SetScrollPageSize(wxHORIZONTAL, noPagePositions);
     }
     else
     {
         m_xScrollPosition = 0;
-        m_win->SetScrollbar (wxHORIZONTAL, 0, 0, 0, FALSE);
+        m_targetWindow->SetScrollbar (wxHORIZONTAL, 0, 0, 0, FALSE);
     }
 
     if (m_yScrollLines > 0)
@@ -561,14 +567,14 @@ void wxScrollHelper::AdjustScrollbars()
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 
-        m_win->SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
+        m_targetWindow->SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
         // The amount by which we scroll when paging
         SetScrollPageSize(wxVERTICAL, noPagePositions);
     }
     else
     {
         m_yScrollPosition = 0;
-        m_win->SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE);
+        m_targetWindow->SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE);
     }
 
     if (oldXScroll != m_xScrollPosition)
@@ -834,7 +840,9 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
 
 bool wxScrollHelper::SendAutoScrollEvents(wxScrollWinEvent& event) const
 {
-    return TRUE;
+    // only send the event if the window is scrollable in this direction
+    wxWindow *win = (wxWindow *)event.GetEventObject();
+    return win->GetScrollbar(event.GetOrientation()) != NULL;
 }
 
 void wxScrollHelper::StopAutoScrolling()
@@ -873,7 +881,7 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
             orient = wxVERTICAL;
             pos = 0;
         }
-        else
+        else // we're lower or to the right of the window
         {
             wxSize size = m_targetWindow->GetClientSize();
             if ( pt.x > size.x )
@@ -894,6 +902,11 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
             }
         }
 
+        // only start the auto scroll timer if the window can be scrolled in
+        // this direction
+        if ( !m_targetWindow->GetScrollbar(orient) )
+            return;
+
         delete m_timerAutoScroll;
         m_timerAutoScroll = new wxAutoScrollTimer
                                 (
@@ -903,7 +916,7 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
                                     pos,
                                     orient
                                 );
-        m_timerAutoScroll->Start(500); // FIXME: make configurable
+        m_timerAutoScroll->Start(50); // FIXME: make configurable
     }
 
     // don't prevent the usual processing of the event from taking place

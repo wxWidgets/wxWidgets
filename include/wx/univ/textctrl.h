@@ -270,6 +270,9 @@ public:
     bool WrapLines() const
         { return !IsSingleLine() && !(GetWindowStyle() & wxHSCROLL); }
 
+    // only for wxStdTextCtrlInputHandler
+    void RefreshSelection();
+
 protected:
     // override base class methods
     virtual void DoDrawBorder(wxDC& dc, const wxRect& rect);
