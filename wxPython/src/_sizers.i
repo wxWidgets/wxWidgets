@@ -274,7 +274,7 @@ public:
                 childinfo = (childinfo, )
             self.Add(*childinfo)
 
-    # for backwards compatibility only, do not use in new code
+    %# for backwards compatibility only, please do not use in new code
     AddWindow = AddSizer = AddSpacer = Add
     PrependWindow = PrependSizer = PrependSpacer = Prepend
     InsertWindow = InsertSizer = InsertSpacer = Insert
