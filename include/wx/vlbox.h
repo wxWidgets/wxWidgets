@@ -202,6 +202,14 @@ protected:
     // the base class version doesn't do anything
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
 
+    // this method is used to draw the items background and, maybe, a border
+    // around it
+    //
+    // the base class version implements a reasonable default behaviour which
+    // consists in drawing the selected item with the standard background
+    // colour and drawing a border around the item if it is either selected or
+    // current
+    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 
     // we implement OnGetLineHeight() in terms of OnMeasureItem() because this
     // allows us to add borders to the items easily
@@ -269,6 +277,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxVListBox)
 };
 
 #endif // _WX_VLBOX_H_

@@ -144,6 +144,8 @@ public:
 
 private:
     const wxHtmlListBox& m_hlbox;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlListBoxStyle)
 };
 
 

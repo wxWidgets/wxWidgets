@@ -45,7 +45,7 @@
 
 // you can also have a file containing HTML strings for testing, enable this if
 // you want to use it
-//#define USE_HTML_FILE
+#define USE_HTML_FILE
 #ifdef USE_HTML_FILE
     #include "wx/textfile.h"
 #endif
@@ -84,6 +84,8 @@ protected:
 #ifdef USE_HTML_FILE
     wxTextFile m_file;
 #endif
+
+    DECLARE_NO_COPY_CLASS(MyHtmlListBox)
 };
 
 class MyFrame : public wxFrame

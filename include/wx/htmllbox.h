@@ -120,6 +120,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxHtmlListBox)
 };
 
 #endif // _WX_HTMLLBOX_H_

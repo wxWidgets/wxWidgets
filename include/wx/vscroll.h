@@ -146,7 +146,8 @@ protected:
     //
     // finally note that lineMin is inclusive, while lineMax is exclusive, as
     // usual
-    virtual void OnGetLinesHint(size_t lineMin, size_t lineMax) const { }
+    virtual void OnGetLinesHint(size_t WXUNUSED(lineMin),
+                                size_t WXUNUSED(lineMax)) const { }
 
     // when the number of lines changes, we try to estimate the total height
     // of all lines which is a rather expensive operation in terms of lines
@@ -194,6 +195,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxVScrolledWindow)
 };
 
 #endif // _WX_VSCROLL_H_

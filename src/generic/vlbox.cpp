@@ -319,7 +319,30 @@ void wxVListBox::OnDrawSeparator(wxDC& WXUNUSED(dc),
 {
 }
 
-void wxVListBox::OnPaint(wxPaintEvent& event)
+void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
+{
+    // we need to render selected and current items differently
+    const bool isSelected = IsSelected(n),
+               isCurrent = IsCurrent(n);
+    if ( isSelected || isCurrent )
+    {
+        if ( isSelected )
+        {
+            dc.SetBrush(wxBrush(m_colBgSel, wxSOLID));
+        }
+        else // !selected
+        {
+            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        }
+
+        dc.SetPen(*(isCurrent ? wxBLACK_PEN : wxTRANSPARENT_PEN));
+
+        dc.DrawRectangle(rect);
+    }
+    //else: do nothing for the normal items
+}
+
+void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
@@ -344,25 +367,9 @@ void wxVListBox::OnPaint(wxPaintEvent& event)
             // don't allow drawing outside of the lines rectangle
             wxDCClipper clip(dc, rectLine);
 
-            // we need to render selected and current items differently
-            const bool isSelected = IsSelected(line);
-            if ( isSelected || IsCurrent(line) )
-            {
-                if ( isSelected )
-                {
-                    dc.SetBrush(wxBrush(m_colBgSel, wxSOLID));
-                }
-                else // !selected
-                {
-                    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-                }
-
-                dc.SetPen(*(IsCurrent(line) ? wxBLACK_PEN : wxTRANSPARENT_PEN));
-
-                dc.DrawRectangle(rectLine);
-            }
-
             wxRect rect = rectLine;
+            OnDrawBackground(dc, rect, line);
+
             OnDrawSeparator(dc, rect, line);
 
             rect.Deflate(m_ptMargins.x, m_ptMargins.y);
