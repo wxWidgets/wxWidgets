@@ -5986,7 +5986,7 @@ fi
 rm -f confcache
 
 
-if test "$cross_compiling" = "yes" ; then
+if test "$build" != "$host" ; then
     CC=$host_alias-gcc
     CXX=$host_alias-c++
     AR=$host_alias-ar
@@ -7022,7 +7022,7 @@ WXWINE=
 
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     if test "$cross_compiling" = "yes" ; then
-        echo "configure: warning: Cross compiling --- skipping windows.h check" 1>&2
+                echo "configure: warning: skipping windows.h check for cross-compilation" 1>&2
     else
         echo $ac_n "checking for Windows headers""... $ac_c" 1>&6
 echo "configure:7029: checking for Windows headers" >&5
@@ -8857,7 +8857,7 @@ fi
 done
 
 
-if test "$wxUSE_GUI" = "yes"; then
+if test "$wxUSE_GUI" = "yes" -a test "$wxUSE_UNIX" = "yes"; then
         for ac_hdr in X11/XKBlib.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`

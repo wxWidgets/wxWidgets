@@ -442,6 +442,7 @@ dnl ---------------------------------------------------------------------------
 dnl the file passed to AC_INIT should be specific to our package
 AC_INIT(wx-config.in)
 
+dnl sets build, host, target variables and the same with _alias
 AC_CANONICAL_SYSTEM
 
 dnl When making releases do:
@@ -1312,7 +1313,7 @@ AC_CACHE_SAVE
 
 dnl cross-compiling support: we're cross compiling if the build system is
 dnl different from the target one (assume host and target be always the same)
-if test "$cross_compiling" = "yes" ; then
+if test "$build" != "$host" ; then
     CC=$host_alias-gcc
     CXX=$host_alias-c++
     AR=$host_alias-ar
@@ -1536,7 +1537,8 @@ WXWINE=
 
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     if test "$cross_compiling" = "yes" ; then
-        AC_MSG_WARN(Cross compiling --- skipping windows.h check)
+        dnl mingw32 will find them even if they're not in one of standard paths
+        AC_MSG_WARN(skipping windows.h check for cross-compilation)
     else
         AC_MSG_CHECKING(for Windows headers)
         WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
@@ -2142,7 +2144,7 @@ AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
 
-if test "$wxUSE_GUI" = "yes"; then
+if test "$wxUSE_GUI" = "yes" -a test "$wxUSE_UNIX" = "yes"; then
     dnl defines HAVE_X11_XKBLIB_H
     AC_CHECK_HEADERS(X11/XKBlib.h)
 fi
