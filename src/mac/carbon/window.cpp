@@ -1028,7 +1028,7 @@ void  wxWindow::MacCreateRealWindow( const wxString& title,
 			attr |= kWindowSideTitlebarAttribute ;
 		}
 	}
-	else if ( HasFlag( wxTHICK_FRAME ) )
+	else if ( HasFlag( wxCAPTION ) )
 	{
 		if ( HasFlag( wxDIALOG_MODAL ) )
 		{
@@ -1038,6 +1038,7 @@ void  wxWindow::MacCreateRealWindow( const wxString& title,
 		{
 			wclass = kDocumentWindowClass ;
 		}
+		/*
 		else
 		{
 			if ( HasFlag( wxCAPTION ) )
@@ -1049,6 +1050,7 @@ void  wxWindow::MacCreateRealWindow( const wxString& title,
 				wclass = kModalWindowClass ;
 			}
 		}
+		*/
 	}
 	else
 	{
@@ -2023,56 +2025,6 @@ void wxWindow::MacSuperChangedPosition()
 		node = node->Next();
 	}
 }
-/*
-
-bool wxWindow::MacSetupFocusPort(  ) 
-{
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *rootwin ;
-	GrafPtr port ;
-	
-	MacGetPortParams( &localOrigin , &clipRect , &window , &rootwin) ;
-	return 	MacSetPortFocusParams( localOrigin, clipRect, window , rootwin ) ; 
-}
-
-bool wxWindow::MacSetupFocusClientPort(  ) 
-{
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *rootwin ;
-	GrafPtr port ;
-	
-	MacGetPortClientParams( &localOrigin , &clipRect , &window , &rootwin) ;
-	return 	MacSetPortFocusParams( localOrigin, clipRect, window , rootwin ) ; 
-}
-
-bool wxWindow::MacSetupDrawingPort(  ) 
-{
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *rootwin ;
-	GrafPtr port ;
-	
-	MacGetPortParams( &localOrigin , &clipRect , &window , &rootwin) ;
-	return 	MacSetPortDrawingParams( localOrigin, clipRect, window , rootwin ) ; 
-}
-
-bool wxWindow::MacSetupDrawingClientPort(  ) 
-{
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *rootwin ;
-	GrafPtr port ;
-	
-	MacGetPortClientParams( &localOrigin , &clipRect , &window , &rootwin) ;
-	return 	MacSetPortDrawingParams( localOrigin, clipRect, window , rootwin ) ; 
-}
-*/
 
 bool wxWindow::MacSetPortFocusParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindow* win ) 
 {
