@@ -553,6 +553,24 @@ AC_CHECK_SIZEOF(long)
 AC_CHECK_SIZEOF(long long)
 dnl   defines the size of certain types of variables in SIZEOF_???
 
+dnl ######################
+dnl # check C++ features #
+dnl ######################
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+dnl Check for existence of builtin 'bool' data type
+dnl
+dnl do nothing for cross-compilation - assume bool is not defined 
+AC_MSG_CHECKING(if C++ compiler supports bool)
+AC_TRY_RUN([ int main() {bool b = true; return 0;} ],
+	   AC_DEFINE(HAVE_BOOL) AC_MSG_RESULT(yes),
+	   AC_MSG_RESULT(no),
+	   AC_MSG_RESULT(no assumed for cross-compilation))
+
+AC_LANG_RESTORE
+
 dnl ############################
 dnl # checks library functions #
 dnl ############################
