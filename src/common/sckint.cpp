@@ -84,6 +84,7 @@
 // --------- SocketWaiter ---------------------------------------
 // --------------------------------------------------------------
 
+#if wxUSE_THREADS
 SocketWaiter::SocketWaiter(wxSocketBase *socket,
 				 wxSocketInternal *internal)
   : m_socket(socket), m_internal(internal), m_fd(internal->GetFD())
@@ -314,6 +315,7 @@ void *SocketRequester::Entry()
   }
   return NULL;
 }
+#endif
 
 // --------------------------------------------------------------
 // --------- wxSocketInternal -----------------------------------
@@ -322,19 +324,23 @@ void *SocketRequester::Entry()
 wxSocketInternal::wxSocketInternal(wxSocketBase *socket)
 {
   m_socket = socket;
+#if wxUSE_THREADS
   m_thread_requester = NULL;
   m_thread_waiter = NULL;
   m_invalid_requester = TRUE;
   m_request_locker.Lock();
+#endif
 }
 
 wxSocketInternal::~wxSocketInternal()
 {
+#if wxUSE_THREADS
   StopRequester();
   wxASSERT(m_thread_requester == NULL);
   StopWaiter();
   wxASSERT(m_thread_waiter == NULL);
   m_request_locker.Unlock();
+#endif
 }
 
 // ----------------------------------------------------------------------
@@ -343,6 +349,7 @@ wxSocketInternal::~wxSocketInternal()
 // ----------------------------------------------------------------------
 SockRequest *wxSocketInternal::WaitForReq()
 {
+#if wxUSE_THREADS
   wxNode *node;
 
   node = m_requests.First();
@@ -355,6 +362,9 @@ SockRequest *wxSocketInternal::WaitForReq()
   }
 
   return (SockRequest *)node->Data();
+#else
+  return NULL;
+#endif
 }
 
 // ----------------------------------------------------------------------
@@ -373,16 +383,21 @@ void wxSocketInternal::EndRequest(SockRequest *req)
 
 void wxSocketInternal::AcquireFD()
 {
+#if wxUSE_THREADS
   m_fd_locker.Lock();
+#endif
 }
 
 void wxSocketInternal::ReleaseFD()
 {
+#if wxUSE_THREADS
   m_fd_locker.Unlock();
+#endif
 }
 
 void wxSocketInternal::ResumeRequester()
 {
+#if wxUSE_THREADS
   wxThreadError err;
 
   wxASSERT(m_thread_requester == NULL);
@@ -403,10 +418,12 @@ void wxSocketInternal::ResumeRequester()
     m_invalid_requester = FALSE;
   }
   m_end_requester.Unlock();
+#endif
 }
 
 void wxSocketInternal::StopRequester()
 {
+#if wxUSE_THREADS
   if (m_invalid_requester) {
     delete m_thread_requester;
     m_thread_requester = NULL;
@@ -429,10 +446,12 @@ void wxSocketInternal::StopRequester()
 
   delete m_thread_requester;
   m_thread_requester = NULL;
+#endif
 }
 
 void wxSocketInternal::ResumeWaiter()
 {
+#if wxUSE_THREADS
   wxThreadError err;
 
   if (m_thread_waiter != NULL)
@@ -446,10 +465,12 @@ void wxSocketInternal::ResumeWaiter()
 
   err = m_thread_waiter->Run();
   wxASSERT(err == wxTHREAD_NO_ERROR);
+#endif
 }
 
 void wxSocketInternal::StopWaiter()
 {
+#if wxUSE_THREADS
   if (m_thread_waiter == NULL)
     return;
 
@@ -457,6 +478,7 @@ void wxSocketInternal::StopWaiter()
 
   delete m_thread_waiter;
   m_thread_waiter = NULL;
+#endif
 }
 
 // ----------------------------------------------------------------------
@@ -464,6 +486,7 @@ void wxSocketInternal::StopWaiter()
 // ----------------------------------------------------------------------
 void wxSocketInternal::QueueRequest(SockRequest *request, bool async)
 {
+#if wxUSE_THREADS
   if (async) {
     if (m_thread_requester == NULL)
       ResumeRequester();
@@ -508,11 +531,14 @@ void wxSocketInternal::QueueRequest(SockRequest *request, bool async)
     request->done = TRUE;
     m_request_locker.Unlock();
   }
+#endif
 }
 
 void wxSocketInternal::WaitForEnd(SockRequest *request)
 {
+#if wxUSE_THREADS
   // TODOTODO
+#endif
 }
 
 #endif
