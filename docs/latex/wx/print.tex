@@ -760,6 +760,10 @@ it should be designed to take no parameters (other than the self
 reference) and to return a tuple of four integers.
 }
 
+\perlnote{When this method is overridden in a derived class,
+it must not take any parameters, an return a 4-element list.
+}
+
 \membersection{wxPrintout::GetPageSizeMM}\label{wxprintoutgetpagesizemm}
 
 \func{void}{GetPageSizeMM}{\param{int *}{w}, \param{int *}{h}}
@@ -767,6 +771,9 @@ reference) and to return a tuple of four integers.
 Returns the size of the printer page in millimetres.
 
 \pythonnote{This method returns the output-only parameters as a tuple.}
+
+\perlnote{In wxPerl this method takes no arguments and returns a
+2-element list {\tt ( w, h )}}
 
 \membersection{wxPrintout::GetPageSizePixels}\label{wxprintoutgetpagesizepixels}
 
@@ -781,6 +788,9 @@ previewing is to be supported.
 
 \pythonnote{This method returns the output-only parameters as a tuple.}
 
+\perlnote{In wxPerl this method takes no arguments and returns a
+2-element list {\tt ( w, h )}}
+
 \membersection{wxPrintout::GetPPIPrinter}\label{wxprintoutgetppiprinter}
 
 \func{void}{GetPPIPrinter}{\param{int *}{w}, \param{int *}{h}}
@@ -792,6 +802,9 @@ this by a scaling factor to take the preview DC size into account.
 
 \pythonnote{This method returns the output-only parameters as a tuple.}
 
+\perlnote{In wxPerl this method takes no arguments and returns a
+2-element list {\tt ( w, h )}}
+
 \membersection{wxPrintout::GetPPIScreen}\label{wxprintoutgetppiscreen}
 
 \func{void}{GetPPIScreen}{\param{int *}{w}, \param{int *}{h}}
@@ -802,6 +815,9 @@ factor for drawing text onto the printer. Remember to multiply
 this by a scaling factor to take the preview DC size into account.
 
 \pythonnote{This method returns the output-only parameters as a tuple.}
+
+\perlnote{In wxPerl this method takes no arguments and returns a
+2-element list {\tt ( w, h )}}
 
 \membersection{wxPrintout::HasPage}\label{wxprintouthaspage}
 

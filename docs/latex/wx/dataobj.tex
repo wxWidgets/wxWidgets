@@ -155,6 +155,10 @@ Destructor.
 Copy all supported formats in the given direction to the array pointed to by 
 {\it formats}. There is enough space for GetFormatCount(dir) formats in it.
 
+\perlnote{In wxPerl this method only takes the {\tt dir} parameter. 
+In scalar context it returns the first format,
+in list context it returns a list containing all the supported formats.}
+
 \membersection{wxDataObject::GetDataHere}\label{wxdataobjectgetdatahere}
 
 \constfunc{virtual bool}{GetDataHere}{\param{const wxDataFormat\&}{ format}, \param{void }{*buf} }

@@ -6,16 +6,36 @@ generalization of the C locale concept.
 In wxWindows this class manages message catalogs which contain the translations
 of the strings used to the current language.
 
-\perlnote{In wxPerl the {\tt Wx} module exports a '\_' function
-that corresponds to the '\_' C++ macro.
+\perlnote{In wxPerl you can't use the '\_' function name, so
+the {\tt Wx::Locale} module can export the {\tt gettext} and 
+{\tt gettext\_noop} under any given name. 
 \begin{verbatim}
-  use Wx qw(_);
+  # this imports gettext ( equivalent to Wx::GetTranslation
+  # and gettext_noop ( a noop )
+  # into your module
+  use Wx::Locale qw(:default);
 
   # ....
 
-  print _( ``Panic!'' );
+  # use the functions
+  print gettext( ``Panic!'' ); 
 
-  my( \$button ) = Wx::Button->new( \$window, -1, _( ``Label'' ) );
+  button = Wx::Button->new( window, -1, gettext( ``Label'' ) );
+\end{verbatim}
+If you need to translate a lot of strings, then adding gettext( ) around
+each one is a long task ( that is why \_( ) was introduced ), so just choose
+a shorter name for gettext:
+\begin{verbatim}
+  #
+  use Wx::Locale 'gettext' => 't',
+                 'gettext_noop' => 'gettext_noop';
+
+  # ...
+
+  # use the functions
+  print t( ``Panic!!'' );
+
+  # ...
 \end{verbatim}
 }
 
@@ -371,6 +391,8 @@ struct WXDLLEXPORT wxLanguageInfo
 
 {\it Language} should be greater than wxLANGUAGE\_USER\_DEFINED.
 
+\perlnote{In wxPerl Wx::LanguageInfo has only one method:\par
+Wx::LanguageInfo->new( language, canonicalName, WinLang, WinSubLang, Description )}
 
 
 \membersection{wxLocale::GetCanonicalName}\label{wxlocalegetcanonicalname}

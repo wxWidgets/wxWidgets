@@ -525,7 +525,7 @@ Gets the rectangle surrounding the current clipping region.
 rectangle are returned as a tuple.}
 
 \perlnote{This method takes no arguments and returns a four element list
-{\tt ( \$x, \$y, \$width, \$height )}}
+{\tt ( x, y, width, height )}}
 
 \membersection{wxDC::GetFont}\label{wxdcgetfont}
 
@@ -609,7 +609,7 @@ implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
 \twocolitem{{\bf GetSize()}}{Returns a Wx::Size}
 \twocolitem{{\bf GetSizeWH()}}{Returns a 2-element list
-  {\tt ( \$width, \$height )}}
+  {\tt ( width, height )}}
 \end{twocollist}
 }}
 
@@ -650,7 +650,7 @@ See also \helpref{wxFont}{wxfont}, \helpref{wxDC::SetFont}{wxdcsetfont}.
 
 \perlnote{In wxPerl this method is implemented as 
   {\bf GetTextExtent( string, font = undef )} returning a four element
-  array {\tt ( \$width, \$height, \$descent, \$externalLeading )}
+  array {\tt ( width, height, descent, externalLeading )}
 }
 
 \membersection{wxDC::GetTextForeground}\label{wxdcgettextforeground}
@@ -669,7 +669,7 @@ Gets the current text foreground colour (see \helpref{wxDC::SetTextForeground}{w
 Gets the current user scale factor (set by \helpref{SetUserScale}{wxdcsetuserscale}).
 
 \perlnote{In wxPerl this method takes no arguments and returna a two element
- array {\tt ( \$x, \$y )}}
+ array {\tt ( x, y )}}
 
 \membersection{wxDC::LogicalToDeviceX}\label{wxdclogicaltodevicex}
 
