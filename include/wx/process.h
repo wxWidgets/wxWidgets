@@ -120,10 +120,14 @@ public:
     DECLARE_DYNAMIC_CLASS(wxProcessEvent)
 };
 
-typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);
+typedef void (wxEvtHandler::*wxProcessEventFunction)(wxProcessEvent&);
 
 #define EVT_END_PROCESS(id, func) \
-   DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_PROCESS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxProcessEventFunction) & func, NULL),
+   DECLARE_EVENT_TABLE_ENTRY( \
+           wxEVT_END_PROCESS, id, -1, \
+           (wxObjectEventFunction) \
+           (wxEventFunction) \
+           (wxProcessEventFunction) & func, NULL),
 
 #endif
     // _WX_PROCESSH__
