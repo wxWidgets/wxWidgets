@@ -725,13 +725,30 @@ if ! user_mask_fits "$this_config" ; then
         _last_chance=$(find_best_legacy_config)
         if [ -n "$_last_chance" ]; then
 
+            for arg; do
+                case "$arg" in
+                    --prefix*|--exec-prefix*|               \
+                    --version|--release|--basename|         \
+                    --static|--libs|--gl_libs|              \
+                    --cppflags|--cflags|--cxxflags|         \
+                    --cc|--cxx|--ld|                        \
+                    --rezflags|--inplace)
+                        _legacy_args="$_legacy_args $arg"
+                        ;;
+                    
+                    --static|--static=y*|--static=Y*)
+                        _legacy_args="$_legacy_args --static"
+                        ;;
+                esac
+            done
+
             if [ -n "$WXDEBUG" ]; then
                 decho "  found a suitable legacy delegate: $_last_chance"
-                decho "--> $prefix/bin/$_last_chance $*"
+                decho "--> $prefix/bin/$_last_chance $_legacy_args"
             fi
 
             export WXCONFIG_DELEGATED=yes
-            $prefix/bin/$_last_chance $*
+            $prefix/bin/$_last_chance $_legacy_args
             exit
 
         else
