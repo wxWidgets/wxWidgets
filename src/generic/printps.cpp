@@ -167,11 +167,15 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     // Create an abort window
     wxBeginBusyCursor();
 
+    int
+       pagesPerCopy = maxPage-minPage+1,
+       totalPages = pagesPerCopy * m_printDialogData.GetNoCopies(),
+       printedPages = 0;
     // Open the progress bar dialog
     wxProgressDialog *progressDialog = new wxProgressDialog (
        printout->GetTitle(),
        _("Printing..."),
-       maxPage-minPage+1,
+       totalPages,
        parent,
        /* disable parent only */ true,
        /* show abort button */ true);
@@ -204,8 +208,8 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
             else
             {
                wxString msg;
-               msg.Printf(_("Printing page %d..."), pn);
-               if(progressDialog->Update(pn-minPage, msg))
+               msg.Printf(_("Printing page %d..."), printedPages+1);
+               if(progressDialog->Update(printedPages++, msg))
                {
                   dc->StartPage();
                   printout->OnPrintPage(pn);
@@ -214,15 +218,15 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
                else
                {
                   sm_abortIt = true;
-                  keepGoing = false; //FIXME: do we need both?
+                  keepGoing = false;
                }
             }
         }
-        delete progressDialog;
         printout->OnEndDocument();
     }
 
     printout->OnEndPrinting();
+    delete progressDialog;
 
     wxEndBusyCursor();
 
