@@ -3817,13 +3817,15 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider) {
                 attrProvider->UpdateAttrRows( pos, -((int)numRows) );
-                // No need to touch column attributes, unless we
+// ifdef'd out following patch from Paul Gammans
+#if 0
                 // removed _all_ rows, in this case, we remove
                 // all column attributes.
                 // I hate to do this here, but the
                 // needed data is not available inside UpdateAttrRows.
                 if ( !GetNumberRows() )
                     attrProvider->UpdateAttrCols( 0, -GetNumberCols() );
+#endif                    
             }
             if ( !GetBatchCount() )
             {
@@ -3950,6 +3952,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider) {
                 attrProvider->UpdateAttrCols( pos, -((int)numCols) );
+// ifdef'd out following patch from Paul Gammans                
+#if 0
                 // No need to touch row attributes, unless we
                 // removed _all_ columns, in this case, we remove
                 // all row attributes.
@@ -3957,6 +3961,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 // needed data is not available inside UpdateAttrCols.
                 if ( !GetNumberCols() )
                     attrProvider->UpdateAttrRows( 0, -GetNumberRows() );
+#endif                    
             }
             if ( !GetBatchCount() )
             {
@@ -6174,12 +6179,8 @@ void wxGrid::EnableEditing( bool edit )
     //
     if ( edit != m_editable )
     {
+        if(!edit) EnableCellEditControl(edit);
         m_editable = edit;
-
-        // FIXME IMHO this won't disable the edit control if edit == FALSE
-        //       because of the check in the beginning of
-        //       EnableCellEditControl() just below (VZ)
-        EnableCellEditControl(m_editable);
     }
 }
 
@@ -6273,6 +6274,7 @@ void wxGrid::ShowCellEditControl()
     {
         if ( !IsVisible( m_currentCellCoords ) )
         {
+            m_cellEditCtrlEnabled = false;        
             return;
         }
         else
