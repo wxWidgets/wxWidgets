@@ -612,10 +612,6 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 {
     DEBUG_MAIN_THREAD
 
-    if (!win->m_hasVMT)
-        return;
-
-/*
     if (win->GetName() == wxT("columntitles"))
     {
         wxPrintf( wxT("OnExpose from ") );
@@ -626,7 +622,6 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
                                          (int)gdk_event->area.width,
                                          (int)gdk_event->area.height );
     }
-*/
                                 
     win->GetUpdateRegion().Union( gdk_event->area.x,
                                   gdk_event->area.y,
@@ -635,6 +630,9 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 
 
     if (gdk_event->count > 0)
+        return;
+
+    if (!win->m_hasVMT)
         return;
 
     wxEraseEvent eevent( win->GetId() );
@@ -659,9 +657,11 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget),
 
     if (g_isIdle)
         wxapp_install_idle_handler();
+        
+    if ((rect->x == 0) && (rect->y == 0) && (rect->width <= 1) && (rect->height <= 1))
+        return;
 
-/*
-    if ((win->GetName() == wxT("columntitles")) && (rect->x == 2))
+    if (win->GetName() == wxT("columntitles"))
     {
         wxPrintf( wxT("OnDraw from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -671,10 +671,12 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget),
                                          (int)rect->width,
                                          (int)rect->height );
     }
-*/
                                 
     win->GetUpdateRegion().Union( rect->x, rect->y,
                                   rect->width, rect->height );
+
+    if (!win->m_hasVMT)
+        return;
 
     wxEraseEvent eevent( win->GetId() );
     eevent.SetEventObject( win );

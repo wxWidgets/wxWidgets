@@ -154,6 +154,8 @@ private:
     MyFrame *m_owner;
 
     ScreenToShow m_show;
+    wxBitmap     m_smile_bmp;
+    wxIcon       m_std_icon;
 
     DECLARE_EVENT_TABLE()
 };
@@ -310,10 +312,14 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOTION (MyCanvas::OnMouseMove)
 END_EVENT_TABLE()
 
+#include "../image/smile.xpm"
+
 MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
 {
     m_owner = parent;
     m_show = Show_Default;
+    m_smile_bmp = wxBitmap(smile_xpm);
+    m_std_icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
 }
 
 //draw a polygon and an overlapping rectangle
@@ -578,29 +584,26 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.DrawCheckMark(25, 80, 30, 30);
     dc.DrawCheckMark(60, 80, 60, 60);
 
-    // this is the test for "blitting bitmap into DC damages selected brush"
-    // bug
-    wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
-    wxCoord rectSize = icon.GetWidth() + 10;
+    // this is the test for "blitting bitmap into DC damages selected brush" bug
+    wxIcon m_std_icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
+    wxCoord rectSize = m_std_icon.GetWidth() + 10;
     wxCoord x = 100;
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush( *wxGREEN_BRUSH );
     dc.DrawRectangle(x, 10, rectSize, rectSize);
-    dc.DrawBitmap(icon, x + 5, 15, TRUE);
+    dc.DrawBitmap(m_std_icon, x + 5, 15, TRUE);
     x += rectSize + 10;
     dc.DrawRectangle(x, 10, rectSize, rectSize);
-    dc.DrawIcon(wxTheApp->GetStdIcon(wxICON_INFORMATION), x + 5, 15);
+    dc.DrawIcon(m_std_icon, x + 5, 15);
     x += rectSize + 10;
     dc.DrawRectangle(x, 10, rectSize, rectSize);
 
     // test for "transparent" bitmap drawing (it intersects with the last
     // rectangle above)
     //dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    #include "../image/smile.xpm"
-    wxBitmap bmp(smile_xpm);
 
-    if (bmp.Ok())
-        dc.DrawBitmap(bmp, x + rectSize - 20, rectSize - 10, TRUE);
+    if (m_smile_bmp.Ok())
+        dc.DrawBitmap(m_smile_bmp, x + rectSize - 20, rectSize - 10, TRUE);
 
     dc.SetBrush( *wxBLACK_BRUSH );
     dc.DrawRectangle( 0, 160, 1000, 300 );

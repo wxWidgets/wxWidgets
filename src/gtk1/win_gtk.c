@@ -193,6 +193,7 @@ gtk_pizza_init (GtkPizza *pizza)
     pizza->visibility = GDK_VISIBILITY_PARTIAL;
 
     pizza->clear_on_draw = TRUE;
+    pizza->use_filter = FALSE;
 }
 
 GtkWidget*
@@ -215,7 +216,7 @@ gtk_pizza_scroll_set_adjustments (GtkPizza     *pizza,
 
 void
 gtk_pizza_set_shadow_type (GtkPizza      *pizza,
-                             GtkMyShadowType  type)
+                           GtkMyShadowType  type)
 {
     g_return_if_fail (pizza != NULL);
     g_return_if_fail (GTK_IS_PIZZA (pizza));
@@ -234,7 +235,7 @@ gtk_pizza_set_shadow_type (GtkPizza      *pizza,
 
 void
 gtk_pizza_set_clear (GtkPizza     *pizza,
-                        gboolean        clear)
+                     gboolean        clear)
 {
     g_return_if_fail (pizza != NULL);
     g_return_if_fail (GTK_IS_PIZZA (pizza));
@@ -242,6 +243,16 @@ gtk_pizza_set_clear (GtkPizza     *pizza,
     pizza->clear_on_draw = clear;
 }
 
+void       
+gtk_pizza_set_filter (GtkPizza          *pizza,
+                      gboolean           use)
+{
+    g_return_if_fail (pizza != NULL);
+    g_return_if_fail (GTK_IS_PIZZA (pizza));
+
+    pizza->use_filter = use;
+}	
+					
 void
 gtk_pizza_put (GtkPizza    *pizza,
                  GtkWidget     *widget,
@@ -274,11 +285,14 @@ gtk_pizza_put (GtkPizza    *pizza,
     if (!IS_ONSCREEN (x, y))
        GTK_PRIVATE_SET_FLAG (widget, GTK_IS_OFFSCREEN);
 
+/*
     if (GTK_WIDGET_REALIZED (pizza))
         gtk_widget_realize (widget);
+*/
 
     gtk_widget_set_usize (widget, width, height);
 
+/*
     if (GTK_WIDGET_VISIBLE (pizza) && GTK_WIDGET_VISIBLE (widget))
     {
         if (GTK_WIDGET_MAPPED (pizza))
@@ -286,6 +300,7 @@ gtk_pizza_put (GtkPizza    *pizza,
 
         gtk_widget_queue_resize (widget);
     }
+*/
 }
 
 void
@@ -683,14 +698,6 @@ gtk_pizza_expose (GtkWidget      *widget,
 
     pizza = GTK_PIZZA (widget);
 
-/*
-    if (event->window == widget->window)
-    {
-        gtk_pizza_draw_border( pizza );
-        return FALSE;
-    }
-*/
-
     if (event->window != pizza->bin_window)
         return FALSE;
 
@@ -881,26 +888,28 @@ gtk_pizza_adjust_allocations (GtkPizza *pizza,
                                gint       dx,
                                gint       dy)
 {
-  GList *tmp_list;
-  GtkPizzaAdjData data;
+    GList *tmp_list;
+    GtkPizzaAdjData data;
 
-  data.dx = dx;
-  data.dy = dy;
+    data.dx = dx;
+    data.dy = dy;
 
-  tmp_list = pizza->children;
-  while (tmp_list)
+    tmp_list = pizza->children;
+    while (tmp_list)
     {
-      GtkPizzaChild *child = tmp_list->data;
-      tmp_list = tmp_list->next;
+        GtkPizzaChild *child = tmp_list->data;
+        tmp_list = tmp_list->next;
 
-      child->widget->allocation.x += dx;
-      child->widget->allocation.y += dy;
+        child->widget->allocation.x += dx;
+        child->widget->allocation.y += dy;
 
-      if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-          GTK_IS_CONTAINER (child->widget))
-        gtk_container_forall (GTK_CONTAINER (child->widget),
-                              gtk_pizza_adjust_allocations_recurse,
-                              &data);
+        if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+            GTK_IS_CONTAINER (child->widget))
+        {
+            gtk_container_forall (GTK_CONTAINER (child->widget),
+                                  gtk_pizza_adjust_allocations_recurse,
+                                  &data);
+        }
     }
 }
 
@@ -912,23 +921,23 @@ static void
 gtk_pizza_expose_area (GtkPizza    *pizza,
                         gint x, gint y, gint width, gint height)
 {
-  if (pizza->visibility == GDK_VISIBILITY_UNOBSCURED)
+    if (pizza->visibility == GDK_VISIBILITY_UNOBSCURED)
     {
-      GdkEventExpose event;
+        GdkEventExpose event;
 
-      event.type = GDK_EXPOSE;
-      event.send_event = TRUE;
-      event.window = pizza->bin_window;
-      event.count = 0;
+        event.type = GDK_EXPOSE;
+        event.send_event = TRUE;
+        event.window = pizza->bin_window;
+        event.count = 0;
 
-      event.area.x = x;
-      event.area.y = y;
-      event.area.width = width;
-      event.area.height = height;
+        event.area.x = x;
+        event.area.y = y;
+        event.area.width = width;
+        event.area.height = height;
 
-      gdk_window_ref (event.window);
-      gtk_widget_event (GTK_WIDGET (pizza), (GdkEvent *)&event);
-      gdk_window_unref (event.window);
+        gdk_window_ref (event.window);
+        gtk_widget_event (GTK_WIDGET (pizza), (GdkEvent *)&event);
+        gdk_window_unref (event.window);
     }
 }
 
@@ -1143,12 +1152,13 @@ gtk_pizza_filter (GdkXEvent *gdk_xevent,
                    GdkEvent  *event,
                    gpointer   data)
 {
-  XEvent *xevent;
-  GtkPizza *pizza;
+    XEvent *xevent;
+    GtkPizza *pizza;
 
-  xevent = (XEvent *)gdk_xevent;
-  pizza = GTK_PIZZA (data);
-
+    xevent = (XEvent *)gdk_xevent;
+    
+    pizza = GTK_PIZZA (data);
+    
   switch (xevent->type)
     {
     case Expose:
@@ -1176,7 +1186,7 @@ gtk_pizza_filter (GdkXEvent *gdk_xevent,
       break;
     }
 
-  return GDK_FILTER_CONTINUE;
+    return GDK_FILTER_CONTINUE;
 }
 
 /* Although GDK does have a GDK_VISIBILITY_NOTIFY event,
@@ -1188,34 +1198,33 @@ gtk_pizza_main_filter (GdkXEvent *gdk_xevent,
                         GdkEvent  *event,
                         gpointer   data)
 {
-  XEvent *xevent;
-  GtkPizza *pizza;
+    XEvent *xevent;
+    GtkPizza *pizza;
 
-  xevent = (XEvent *)gdk_xevent;
-  pizza = GTK_PIZZA (data);
+    xevent = (XEvent *)gdk_xevent;
+    pizza = GTK_PIZZA (data);
 
-  if (xevent->type == VisibilityNotify)
+    if (xevent->type == VisibilityNotify)
     {
-      switch (xevent->xvisibility.state)
+        switch (xevent->xvisibility.state)
         {
-        case VisibilityFullyObscured:
-          pizza->visibility = GDK_VISIBILITY_FULLY_OBSCURED;
-          break;
+            case VisibilityFullyObscured:
+                pizza->visibility = GDK_VISIBILITY_FULLY_OBSCURED;
+                break;
 
-        case VisibilityPartiallyObscured:
-          pizza->visibility = GDK_VISIBILITY_PARTIAL;
-          break;
+            case VisibilityPartiallyObscured:
+                pizza->visibility = GDK_VISIBILITY_PARTIAL;
+                break;
 
-        case VisibilityUnobscured:
-          pizza->visibility = GDK_VISIBILITY_UNOBSCURED;
-          break;
+            case VisibilityUnobscured:
+                pizza->visibility = GDK_VISIBILITY_UNOBSCURED;
+                break;
         }
-
-      return GDK_FILTER_REMOVE;
+        
+        return GDK_FILTER_REMOVE;
     }
 
-
-  return GDK_FILTER_CONTINUE;
+    return GDK_FILTER_CONTINUE;
 }
 
 

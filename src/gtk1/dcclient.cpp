@@ -100,11 +100,24 @@ void gdk_draw_bitmap     (GdkDrawable  *drawable,
 // Implement Pool of Graphic contexts. Creating them takes too much time.
 //-----------------------------------------------------------------------------
 
+enum wxPoolGCType
+{
+   wxGC_ERROR = 0,
+   wxTEXT_MONO,
+   wxBG_MONO,
+   wxPEN_MONO,
+   wxBRUSH_MONO,
+   wxTEXT_COLOUR,
+   wxBG_COLOUR,
+   wxPEN_COLOUR,
+   wxBRUSH_COLOUR
+};
+
 struct wxGC
 {
-    GdkGC  *m_gc;
-    bool    m_mono;
-    bool    m_used;
+    GdkGC        *m_gc;
+    wxPoolGCType  m_type;
+    bool          m_used;
 };
 
 static wxGC wxGCPool[200];
@@ -123,7 +136,7 @@ static void wxCleanUpGCPool()
     }
 }
 
-static GdkGC* wxGetPoolGC( GdkWindow *window, bool mono=FALSE )
+static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
 {
     for (int i = 0; i < 200; i++)
     {
@@ -131,10 +144,10 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, bool mono=FALSE )
         {
             wxGCPool[i].m_gc = gdk_gc_new( window );
             gdk_gc_set_exposures( wxGCPool[i].m_gc, FALSE );
-            wxGCPool[i].m_mono = mono;
+            wxGCPool[i].m_type = type;
             wxGCPool[i].m_used = FALSE;
         }
-        if ((!wxGCPool[i].m_used) && (wxGCPool[i].m_mono == mono))
+        if ((!wxGCPool[i].m_used) && (wxGCPool[i].m_type == type))
         {
             wxGCPool[i].m_used = TRUE;
             return wxGCPool[i].m_gc;
@@ -1587,10 +1600,10 @@ void wxWindowDC::SetUpDC()
     
     if (!m_penGC)
     {
-        m_penGC = wxGetPoolGC( m_window );
-        m_brushGC = wxGetPoolGC( m_window );
-        m_textGC = wxGetPoolGC( m_window );
-        m_bgGC = wxGetPoolGC( m_window );
+        m_penGC = wxGetPoolGC( m_window, wxPEN_COLOUR );
+        m_brushGC = wxGetPoolGC( m_window, wxBRUSH_COLOUR );
+        m_textGC = wxGetPoolGC( m_window, wxTEXT_COLOUR );
+        m_bgGC = wxGetPoolGC( m_window, wxBG_COLOUR );
     }
 
     /* background colour */
@@ -1606,14 +1619,12 @@ void wxWindowDC::SetUpDC()
     gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
 
     gdk_gc_set_fill( m_textGC, GDK_SOLID );
-    gdk_gc_set_line_attributes( m_textGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
 
     /* m_penGC */
     m_pen.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_foreground( m_penGC, m_pen.GetColour().GetColor() );
     gdk_gc_set_background( m_penGC, bg_col );
     
-    gdk_gc_set_fill( m_penGC, GDK_SOLID );
     gdk_gc_set_line_attributes( m_penGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
 
     
@@ -1623,7 +1634,6 @@ void wxWindowDC::SetUpDC()
     gdk_gc_set_background( m_brushGC, bg_col );
     
     gdk_gc_set_fill( m_brushGC, GDK_SOLID );
-    gdk_gc_set_line_attributes( m_brushGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
     
     
     /* m_bgGC */
@@ -1631,13 +1641,11 @@ void wxWindowDC::SetUpDC()
     gdk_gc_set_foreground( m_bgGC, bg_col );
 
     gdk_gc_set_fill( m_bgGC, GDK_SOLID );
-    gdk_gc_set_line_attributes( m_bgGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
   
     /* ROPs */
     gdk_gc_set_function( m_textGC, GDK_COPY );
     gdk_gc_set_function( m_brushGC, GDK_COPY );
     gdk_gc_set_function( m_penGC, GDK_COPY );
-    gdk_gc_set_function( m_bgGC, GDK_COPY );
     
     /* clipping */
     gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
@@ -1886,7 +1894,6 @@ wxPaintDC::wxPaintDC()
 wxPaintDC::wxPaintDC( wxWindow *win )
   : wxWindowDC( win )
 {
-/*
     if (!win->GetUpdateRegion().IsEmpty())
     {
         m_paintClippingRegion = win->GetUpdateRegion();
@@ -1897,7 +1904,6 @@ wxPaintDC::wxPaintDC( wxWindow *win )
         gdk_gc_set_clip_region( m_textGC, m_paintClippingRegion.GetRegion() );
         gdk_gc_set_clip_region( m_bgGC, m_paintClippingRegion.GetRegion() );
     }
-*/
 }
 
 //-----------------------------------------------------------------------------
