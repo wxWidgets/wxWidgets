@@ -134,6 +134,7 @@ private:
 class WXDLLEXPORT wxDirDialog: public wxDialog
 {
 public:
+    wxDirDialog() {}
     wxDirDialog(wxWindow *parent, 
 		const wxString& message = wxFileSelectorPromptStr,
 		const wxString& defaultPath = wxEmptyString,
