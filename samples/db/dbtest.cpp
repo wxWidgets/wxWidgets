@@ -54,6 +54,12 @@ IMPLEMENT_APP(DatabaseDemoApp)
 extern wxChar ListDB_Selection[];   /* Used to return the first column value for the selected line from the listDB routines */
 extern wxChar ListDB_Selection2[];  /* Used to return the second column value for the selected line from the listDB routines */
 
+
+#if !wxUSE_ODBC
+  #error Sample cannot be compiled unless setup.h has wxUSE_ODBC set to 1
+#endif
+
+
 const char *GetExtendedDBErrorMsg(wxDb *pDb, char *ErrFile, int ErrLine)
 {
     static wxString msg;
@@ -1171,11 +1177,21 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
     if (widgetName == pDataTypesBtn->GetName())
     {
         CheckSupportForAllDataTypes(wxGetApp().READONLY_DB);
+
         return;
     }  // Data types Button
 
     if (widgetName == pDbDiagsBtn->GetName())
     {
+/*
+strcpy(wxGetApp().Contact->Addr1,"12345678901234567890");
+//wxString sqlStmt = "UPDATE CONTACTS set ADDRESS1='1234567890ABCEFG' where NAME='12345'";
+//if (wxGetApp().Contact->GetDb()->ExecSql(sqlStmt))
+if (wxGetApp().Contact->UpdateWhere("NAME = '12345'"))
+wxGetApp().Contact->GetDb()->CommitTrans();
+else
+wxGetApp().Contact->GetDb()->RollbackTrans();
+*/
         DisplayDbDiagnostics(wxGetApp().READONLY_DB);
         return;
     }
@@ -1602,7 +1618,7 @@ bool CeditorDlg::Save()
                 }
                 else
                 {
-                    // Some other unexpexted error occurred
+                    // Some other unexpected error occurred
                     wxString tStr;
                     tStr  = wxT("Database insert failed\n\n");
                     tStr += GetExtendedDBErrorMsg(wxGetApp().Contact->GetDb(),__FILE__,__LINE__);
@@ -1612,6 +1628,7 @@ bool CeditorDlg::Save()
         }
         else  // mode == mEdit
         {
+            wxGetApp().Contact->GetDb()->RollbackTrans();
             wxGetApp().Contact->whereStr.Printf("NAME = '%s'",saveName.c_str());
             if (!wxGetApp().Contact->UpdateWhere(wxGetApp().Contact->whereStr))
             {
