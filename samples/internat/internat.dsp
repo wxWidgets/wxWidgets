@@ -17,6 +17,9 @@ CFG=internat - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
+!MESSAGE "internat - Win32 Release Unicode DLL" (based on "Win32 (x86) Application")
+!MESSAGE "internat - Win32 Debug Unicode DLL" (based on "Win32 (x86) Application")
+!MESSAGE "internat - Win32 Debug Unicode" (based on "Win32 (x86) Application")
 !MESSAGE "internat - Win32 Release DLL" (based on "Win32 (x86) Application")
 !MESSAGE "internat - Win32 Debug DLL" (based on "Win32 (x86) Application")
 !MESSAGE "internat - Win32 Release" (based on "Win32 (x86) Application")
@@ -30,7 +33,111 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!ELSEIF "$(CFG)" == "internat - Win32 Release DLL"
+!IF "$(CFG)" == "internat - Win32 Release Unicode DLL"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ReleaseUnicodeDll"
+# PROP BASE Intermediate_Dir "ReleaseUnicodeDll"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ReleaseUnicodeDll"
+# PROP Intermediate_Dir "ReleaseUnicodeDll"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
+# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MD  /D WXUSINGDLL  /D _UNICODE /D UNICODE  /I..\..\lib\mswdllu 
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\wxmsw233u.lib
+
+!IF "$(CFG)" == "internat - Win32 Debug Unicode DLL"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "DebugUnicodeDll"
+# PROP BASE Intermediate_Dir "DebugUnicodeDll"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "DebugUnicodeDll"
+# PROP Intermediate_Dir "DebugUnicodeDll"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
+# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D WXUSINGDLL  /D _UNICODE /D UNICODE  /I..\..\lib\mswdllud 
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ..\..\lib\wxmsw233ud.lib
+
+!IF "$(CFG)" == "internat - Win32 Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ReleaseUnicode"
+# PROP BASE Intermediate_Dir "ReleaseUnicode"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ReleaseUnicode"
+# PROP Intermediate_Dir "ReleaseUnicode"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
+# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MD  /D _UNICODE /D UNICODE  /I..\..\lib\mswu 
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\png.lib ..\..\lib\jpeg.lib ..\..\lib\tiff.lib ..\..\lib\wxmswu.lib
+
+!IF "$(CFG)" == "internat - Win32 Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "DebugUnicode"
+# PROP BASE Intermediate_Dir "DebugUnicode"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "DebugUnicode"
+# PROP Intermediate_Dir "DebugUnicode"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
+# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D _UNICODE /D UNICODE  /I..\..\lib\mswud 
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ..\..\lib\zlibd.lib ..\..\lib\regexd.lib ..\..\lib\pngd.lib ..\..\lib\jpegd.lib ..\..\lib\tiffd.lib ..\..\lib\wxmswud.lib
+
+!IF "$(CFG)" == "internat - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -44,19 +151,19 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
-# ADD CPP /nologo /W4 /O2 /I "../../include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=1 /YX /FD /c /MD  /D WXUSINGDLL  /I..\..\lib\mswdll 
+# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MD  /D WXUSINGDLL  /I..\..\lib\mswdll 
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
-# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "../../include"
-# ADD RSC /l 0x409 /d "NDEBUG" /I "../../include"
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\wxmsw250.lib
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\wxmsw233.lib
 
-!ELSEIF "$(CFG)" == "internat - Win32 Debug DLL"
+!IF "$(CFG)" == "internat - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -70,19 +177,19 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
-# ADD CPP /nologo /W4 /Zi /Od /I "../../include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=1 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D WXUSINGDLL  /I..\..\lib\mswdlld 
+# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D WXUSINGDLL  /I..\..\lib\mswdlld 
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "../../include"
-# ADD RSC /l 0x409 /d "_DEBUG" /I "../../include"
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ..\..\lib\wxmsw250d.lib
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ..\..\lib\wxmsw233d.lib
 
-!ELSEIF "$(CFG)" == "internat - Win32 Release"
+!IF "$(CFG)" == "internat - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -96,11 +203,11 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
-# ADD CPP /nologo /W4 /O2 /I "../../include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=1 /YX /FD /c /MD  /I..\..\lib\msw 
+# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MD  /I..\..\lib\msw 
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
-# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "../../include"
-# ADD RSC /l 0x409 /d "NDEBUG" /I "../../include"
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -108,7 +215,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\png.lib ..\..\lib\jpeg.lib ..\..\lib\tiff.lib ..\..\lib\wxmsw.lib
 
-!ELSEIF "$(CFG)" == "internat - Win32 Debug"
+!IF "$(CFG)" == "internat - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -122,11 +229,11 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /YX /FD /c
-# ADD CPP /nologo /W4 /Zi /Od /I "../../include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=1 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /I..\..\lib\mswd 
+# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D WINVER=0x400 /D WIN32 /D WINVER=0x400 /D wxUSE_GUI=1 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /I..\..\lib\mswd 
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "../../include"
-# ADD RSC /l 0x409 /d "_DEBUG" /I "../../include"
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -138,6 +245,9 @@ LINK32=link.exe
 
 # Begin Target
 
+# Name "internat - Win32 Release Unicode DLL"
+# Name "internat - Win32 Debug Unicode DLL"
+# Name "internat - Win32 Debug Unicode"
 # Name "internat - Win32 Release DLL"
 # Name "internat - Win32 Debug DLL"
 # Name "internat - Win32 Release"
