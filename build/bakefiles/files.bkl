@@ -186,6 +186,11 @@
     src/common/utilscmn.cpp
 </set>
 <set var="BASE_CMN_HDR">
+    wx/apptrait.h
+    wx/beforestd.h
+    wx/containr.h
+    wx/msgout.h
+    wx/types.h
     wx/init.h
     wx/arrimpl.cpp
     wx/listimpl.cpp
@@ -474,14 +479,10 @@
     wx/generic/wizard.h
     wx/generic/treectlg.h
 
-    <!-- Not sure this is the right list for all of these, but they -->
-    <!-- were missing and this seemed as good of a place as any...  -->
     wx/accel.h
     wx/access.h
     wx/afterstd.h
-    wx/apptrait.h
     wx/artprov.h
-    wx/beforestd.h
     wx/bitmap.h
     wx/busyinfo.h
     wx/calctrl.h
@@ -490,7 +491,6 @@
     wx/cmdproc.h
     wx/colordlg.h
     wx/colour.h
-    wx/containr.h
     wx/cshelp.h
     wx/dataobj.h
     wx/dbgrid.h
@@ -520,7 +520,6 @@
     wx/helpbase.h
     wx/helpwin.h
     wx/iconbndl.h
-    wx/iconbndl.h
     wx/imagbmp.h
     wx/image.h
     wx/imaggif.h
@@ -535,13 +534,11 @@
     wx/joystick.h
     wx/laywin.h
     wx/listbase.h
-    wx/listbase.h
     wx/listctrl.h
     wx/matrix.h
     wx/menuitem.h
     wx/metafile.h
     wx/minifram.h
-    wx/msgout.h
     wx/notebook.h
     wx/ownerdrw.h
     wx/paper.h
@@ -574,23 +571,17 @@
     wx/toplevel.h
     wx/treebase.h
     wx/treectrl.h
-    wx/types.h
     wx/valgen.h
     wx/vlbox.h
     wx/vms_x_fix.h
     wx/vscroll.h
     wx/wave.h
     wx/wizard.h
-    wx/wxhtml.h
     wx/xpmdecod.h
     wx/xpmhand.h
 
     wx/generic/dragimgg.h
     wx/generic/gridsel.h
-    wx/generic/listctrl.h
-    wx/generic/mdig.h
-    wx/generic/paletteg.h
-    wx/generic/statline.h
 
 </set>
 
@@ -657,6 +648,7 @@
 </set>
 <set var="GTK_LOWLEVEL_HDR">
     $(XWIN_LOWLEVEL_HDR)
+    wx/generic/paletteg.h
 </set>
 <set var="GTK_SRC">
     <!-- Generic implementations used by wxGTK: -->
@@ -775,6 +767,7 @@
     wx/generic/tabg.h
     wx/generic/dirdlgg.h
     wx/generic/statusbr.h
+    wx/generic/listctrl.h
 </set>
 
 
@@ -1758,6 +1751,7 @@
     wx/generic/tabg.h
     wx/generic/caret.h
     wx/generic/mdig.h
+    wx/generic/paletteg.h
 </set>
 
 
@@ -1875,6 +1869,7 @@
     wx/generic/dirdlgg.h
     wx/generic/statusbr.h
     wx/generic/accel.h
+    wx/generic/listctrl.h
 </set>
 
 
@@ -1914,6 +1909,7 @@
     src/generic/htmllbox.cpp
 </set>
 <set var="HTML_HDR">
+    wx/wxhtml.h
     wx/html/forcelnk.h
     wx/html/helpctrl.h
     wx/html/helpdata.h
