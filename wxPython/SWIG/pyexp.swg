@@ -1,3 +1,5 @@
+#include <string.h>
+#include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
 #if defined(__WIN32__)
 #   if defined(_MSC_VER)
@@ -18,6 +20,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
