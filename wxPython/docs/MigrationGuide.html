@@ -46,7 +46,7 @@ yet.</p>
 <p>Also, you will probably not be able to do any kind of GUI or bitmap
 operation unless you first have created an app object, (even on
 Windows where most anything was possible before.)</p>
-<p><strong>[Changed in 2.5.2.0]</strong> All the Window and GDI (pen, bitmap, etc.)
+<p><strong>[Changed in 2.5.2.x]</strong> All the Window and GDI (pen, bitmap, etc.)
 class constructors and also many toplevel functions and static methods
 will now check that a wx.App object has already been created and will
 raise a wx.PyNoAppError exception if not.</p>
@@ -156,7 +156,7 @@ EVT_MY_CUSTOM_EVENT = wx.PyEventBinder(myCustomEventType, 1)
 </pre>
 <p>The second parameter is an integer in [0, 1, 2] that specifies the
 number of IDs that are needed to be passed to Connect.</p>
-<p><strong>[Changed in 2.5.2.0]</strong> There is also an Unbind method added to
+<p><strong>[Changed in 2.5.2.x]</strong> There is also an Unbind method added to
 wx.EvtHandler that can be used to disconenct event handlers.  It looks
 like this:</p>
 <pre class="literal-block">
@@ -227,7 +227,7 @@ just fine.</p>
 </div>
 <div class="section" id="new-wx-dc-methods">
 <h1><a name="new-wx-dc-methods">New wx.DC Methods</a></h1>
-<p><strong>[Changed in 2.5.2.0]</strong> In wxPython 2.5.1.5 there was a new
+<p><strong>[Changed in 2.5.2.x]</strong> In wxPython 2.5.1.5 there was a new
 implementation of the wx.DC Draw and other methods that broke
 backwards compatibility in the name of consistency.  That change has
 been reverted and the wx.DC Draw methods with 2.4 compatible
@@ -375,10 +375,10 @@ library) has been added to C++ and wrapped for wxPython.  It can also
 be used from XRC.</p>
 <p>You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
-wrappers will figure out what to do.  <strong>[Changed in 2.5.2.0]</strong>
+wrappers will figure out what to do.  <strong>[Changed in 2.5.2.x]</strong>
 AddWindow, AddSize, AddSpacer and etc. will now issue a
 DeprecationWarning.</p>
-<p><strong>[Changed in 2.5.2.0]</strong> wx.ADJUST_MINSIZE is now the default
+<p><strong>[Changed in 2.5.2.x]</strong> wx.ADJUST_MINSIZE is now the default
 behaviour for window items in sizers.  This means that the item's
 GetMinSize and/or GetBestSize will be called when calculating layout
 and the return value from that will be used for the minimum size used
@@ -553,7 +553,7 @@ fully transparent.</li>
 </div>
 <div class="section" id="ogl-is-dead-long-live-ogl">
 <h1><a name="ogl-is-dead-long-live-ogl">OGL is dead! LONG LIVE OGL!</a></h1>
-<p><strong>[Changed in 2.5.2.0]</strong></p>
+<p><strong>[Changed in 2.5.2.x]</strong></p>
 <p>The wx.ogl module has been deprecated in favor of the new Python port
 of the OGL library located at wx.lib.ogl contributed by Pierre Hjälm.
 This will hopefully greatly extend the life of OGL within wxPython by
@@ -703,10 +703,10 @@ functions in wxPython for parameters that are expecting an integer.
 If the object is not already an integer then it will be asked to
 convert itself to one.  A similar conversion fragment is in place for
 parameters that expect floating point values.</p>
-<p><strong>[Changed in 2.5.2.0]</strong>  The MaskedEditCtrl modules have been moved
+<p><strong>[Changed in 2.5.2.x]</strong>  The MaskedEditCtrl modules have been moved
 to their own sub-package, wx.lib.masked.  See the docstrings and demo
 for changes in capabilities, usage, etc.</p>
-<p><strong>[Changed in 2.5.2.0]</strong> wx.MaskColour constructor has been deprecated
+<p><strong>[Changed in 2.5.2.x]</strong> wx.MaskColour constructor has been deprecated
 and will raise a DeprecationWarning if used.  The main wx.Mask
 constructor has been modified to be compatible with wx.MaskColour so
 you should use it instead.</p>

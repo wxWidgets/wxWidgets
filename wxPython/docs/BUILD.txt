@@ -256,7 +256,7 @@ by hand and something doesn't seem to be working correctly please
 refer to the build scripts to see what may need to be done
 differently.
 
-The *.btm files are for 4NT and the others are for bash.  They are:
+The \*.btm files are for 4NT and the others are for bash.  They are::
 
    .make/.make.btm	  Builds the main lib and the needed contribs
    .mymake/.mymake.btm	  Builds just one lib, use by .make

@@ -52,7 +52,7 @@ Also, you will probably not be able to do any kind of GUI or bitmap
 operation unless you first have created an app object, (even on
 Windows where most anything was possible before.)
 
-**[Changed in 2.5.2.0]** All the Window and GDI (pen, bitmap, etc.)
+**[Changed in 2.5.2.x]** All the Window and GDI (pen, bitmap, etc.)
 class constructors and also many toplevel functions and static methods
 will now check that a wx.App object has already been created and will
 raise a wx.PyNoAppError exception if not.
@@ -176,7 +176,7 @@ Change it like so::
 The second parameter is an integer in [0, 1, 2] that specifies the
 number of IDs that are needed to be passed to Connect.
 
-**[Changed in 2.5.2.0]** There is also an Unbind method added to
+**[Changed in 2.5.2.x]** There is also an Unbind method added to
 wx.EvtHandler that can be used to disconenct event handlers.  It looks
 like this::
 
@@ -257,7 +257,7 @@ just fine.
 New wx.DC Methods
 -----------------
 
-**[Changed in 2.5.2.0]** In wxPython 2.5.1.5 there was a new
+**[Changed in 2.5.2.x]** In wxPython 2.5.1.5 there was a new
 implementation of the wx.DC Draw and other methods that broke
 backwards compatibility in the name of consistency.  That change has
 been reverted and the wx.DC Draw methods with 2.4 compatible
@@ -423,11 +423,11 @@ be used from XRC.
 
 You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
-wrappers will figure out what to do.  **[Changed in 2.5.2.0]**
+wrappers will figure out what to do.  **[Changed in 2.5.2.x]**
 AddWindow, AddSize, AddSpacer and etc. will now issue a
 DeprecationWarning. 
 
-**[Changed in 2.5.2.0]** wx.ADJUST_MINSIZE is now the default
+**[Changed in 2.5.2.x]** wx.ADJUST_MINSIZE is now the default
 behaviour for window items in sizers.  This means that the item's
 GetMinSize and/or GetBestSize will be called when calculating layout
 and the return value from that will be used for the minimum size used
@@ -624,7 +624,7 @@ following:
 OGL is dead! LONG LIVE OGL!
 ---------------------------
 
-**[Changed in 2.5.2.0]** 
+**[Changed in 2.5.2.x]** 
 
 The wx.ogl module has been deprecated in favor of the new Python port
 of the OGL library located at wx.lib.ogl contributed by Pierre Hjälm.
@@ -791,11 +791,11 @@ If the object is not already an integer then it will be asked to
 convert itself to one.  A similar conversion fragment is in place for
 parameters that expect floating point values.
 
-**[Changed in 2.5.2.0]**  The MaskedEditCtrl modules have been moved
+**[Changed in 2.5.2.x]**  The MaskedEditCtrl modules have been moved
 to their own sub-package, wx.lib.masked.  See the docstrings and demo
 for changes in capabilities, usage, etc.
 
-**[Changed in 2.5.2.0]** wx.MaskColour constructor has been deprecated
+**[Changed in 2.5.2.x]** wx.MaskColour constructor has been deprecated
 and will raise a DeprecationWarning if used.  The main wx.Mask
 constructor has been modified to be compatible with wx.MaskColour so
 you should use it instead.
