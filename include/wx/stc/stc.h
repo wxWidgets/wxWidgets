@@ -63,7 +63,15 @@ const int wxSTC_MARK_ARROW        = 2;
 const int wxSTC_MARK_SMALLRECT    = 3;
 const int wxSTC_MARK_SHORTARROW   = 4;
 const int wxSTC_MARK_EMPTY        = 5;
+const int wxSTC_MARK_ARROWDOWN    = 6;
+const int wxSTC_MARK_MINUS        = 7;
+const int wxSTC_MARK_PLUS         = 8;
 
+const int wxSTC_MARKNUM_FOLDER    = 30;
+const int wxSTC_MARKNUM_FOLDEROPEN= 31;
+const int wxSTC_MASK_FOLDERS      = ((1 << wxSTC_MARKNUM_FOLDER) | (1 << wxSTC_MARKNUM_FOLDEROPEN));
+
+const int wxSTC_INDIC_MAX         = 7;
 const int wxSTC_INDIC_PLAIN       = 0;
 const int wxSTC_INDIC_SQUIGGLE    = 1;
 const int wxSTC_INDIC_TT          = 2;
@@ -71,6 +79,12 @@ const int wxSTC_INDIC0_MASK       = 32;
 const int wxSTC_INDIC1_MASK       = 64;
 const int wxSTC_INDIC2_MASK       = 128;
 const int wxSTC_INDICS_MASK       = (wxSTC_INDIC0_MASK | wxSTC_INDIC1_MASK | wxSTC_INDIC2_MASK);
+
+
+const int wxSTC_FOLDLEVELBASE       = 0x0400;
+const int wxSTC_FOLDLEVELWHITEFLAG  = 0x1000;
+const int wxSTC_FOLDLEVELHEADERFLAG = 0x2000;
+const int wxSTC_FOLDLEVELNUMBERMASK = 0x0FFF;
 
 
 // key commands
@@ -158,12 +172,22 @@ extern const wxChar* wxSTCNameStr;
 class wxStyledTextCtrl : public wxControl {
 public:
 
+#ifdef SWIG
+    wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize, long style = 0,
+                     const char* name = wxSTCNameStr);
+#else
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxSTCNameStr);
-    ~wxStyledTextCtrl();
+#endif
 
+
+#ifndef SWIG
+    ~wxStyledTextCtrl();
+#endif
 
 
     // Text retrieval and modification
@@ -175,8 +199,10 @@ public:
     bool     GetReadOnly();
     wxString GetTextRange(int startPos, int endPos);
     wxString GetStyledTextRange(int startPos, int endPos);
+#ifndef SWIG
     void     GetTextRange(int startPos, int endPos, char* buff);
     void     GetStyledTextRange(int startPos, int endPos, char* buff);
+#endif
     void     AddText(const wxString& text);
     void     AddStyledText(const wxString& text);
     void     InsertText(int pos, const wxString& text);
@@ -208,7 +234,11 @@ public:
 
 
     // Selection and information
+#ifdef SWIG
+    void     GetSelection(int* OUTPUT, int* OUTPUT);
+#else
     void     GetSelection(int* startPos, int* endPos);
+#endif
     void     SetSelection(int  startPos, int  endPos);
     wxString GetSelectedText();
     void     HideSelection(bool hide);
@@ -223,7 +253,7 @@ public:
     int      GetLineStartPos(int line);
     int      GetLineLengthAtPos(int pos);
     int      GetLineLength(int line);
-    wxString GetCurrentLineText(int* linePos=NULL);
+    wxString GetCurrentLineText();
     int      GetCurrentLine();
     int      PositionFromPoint(wxPoint pt);
     int      LineFromPoint(wxPoint pt);
@@ -401,10 +431,11 @@ public:
     void     ShowLines(int lineStart, int lineEnd);
     void     HideLines(int lineStart, int lineEnd);
     bool     GetLineVisible(int line);
-    void     SetFoldExpanded(int line);
+    void     SetFoldExpanded(int line, bool expanded);
     bool     GetFoldExpanded(int line);
     void     ToggleFold(int line);
     void     EnsureVisible(int line);
+    void     SetFoldFlags(int flags);
 
 
     // Long Lines
@@ -424,7 +455,7 @@ public:
     void     SetKeywords(int keywordSet, const wxString& keywordList);
 
 
-
+#ifndef SWIG
 private:
     // Event handlers
     void OnPaint(wxPaintEvent& evt);
@@ -459,6 +490,7 @@ private:
 
     friend class ScintillaWX;
     friend class Platform;
+#endif
 };
 
 //----------------------------------------------------------------------
@@ -543,6 +575,7 @@ enum {
     wxEVT_STC_NEEDSHOWN
 };
 
+#ifndef SWIG
 typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 
 #define EVT_STC_CHANGE(id, fn) { wxEVT_STC_CHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
@@ -557,6 +590,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_CMDKEY(id, fn) { wxEVT_STC_CMDKEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 #define EVT_STC_UNKNOWNCMDKEY(id, fn) { wxEVT_STC_UNKNOWNCMDKEY, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 
+#endif
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

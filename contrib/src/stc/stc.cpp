@@ -421,7 +421,7 @@ int wxStyledTextCtrl::GetCurrentLine() {
 }
 
 
-wxString wxStyledTextCtrl::GetCurrentLineText(int* linePos) {
+wxString wxStyledTextCtrl::GetCurrentLineText(/*int* linePos*/) {
     wxString text;
     int   len  = GetLineLength(GetCurrentLine());
     char* buff = text.GetWriteBuf(len+1);
@@ -429,8 +429,8 @@ wxString wxStyledTextCtrl::GetCurrentLineText(int* linePos) {
     int pos = SendMsg(SCI_GETCURLINE, len+1, (long)buff);
     text.UngetWriteBuf();
 
-    if (linePos)
-        *linePos = pos;
+    /* if (linePos)
+     *linePos = pos; */
 
     return text;
 }
@@ -1009,7 +1009,7 @@ int wxStyledTextCtrl::IndicatorGetStyle(int indicNum) {
 
 
 void wxStyledTextCtrl::IndicatorSetColour(int indicNum, const wxColour& colour) {
-    SendMsg(SCI_INDICSETSTYLE, indicNum, wxColourAsLong(colour));
+    SendMsg(SCI_INDICSETFORE, indicNum, wxColourAsLong(colour));
 }
 
 
@@ -1196,8 +1196,8 @@ bool wxStyledTextCtrl::GetLineVisible(int line) {
 }
 
 
-void wxStyledTextCtrl::SetFoldExpanded(int line) {
-    SendMsg(SCI_SETFOLDEXPANDED, line);
+void wxStyledTextCtrl::SetFoldExpanded(int line, bool expanded) {
+    SendMsg(SCI_SETFOLDEXPANDED, line, expanded);
 }
 
 
@@ -1213,6 +1213,11 @@ void wxStyledTextCtrl::ToggleFold(int line) {
 
 void wxStyledTextCtrl::EnsureVisible(int line) {
     SendMsg(SCI_ENSUREVISIBLE, line);
+}
+
+
+void wxStyledTextCtrl::SetFoldFlags(int flags) {
+    SendMsg(SCI_SETFOLDFLAGS, flags);
 }
 
 
