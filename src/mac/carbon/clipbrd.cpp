@@ -45,13 +45,13 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 #endif
     void * data = NULL ;
     Size byteCount;
-    
+
     switch (dataFormat.GetType())
     {
     case wxDF_OEMTEXT:
         dataFormat = wxDF_TEXT;
         // fall through
-        
+
     case wxDF_TEXT:
         break;
     case wxDF_UNICODETEXT:
@@ -65,33 +65,33 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
             return NULL;
         }
     }
-    
+
 #if TARGET_CARBON
     ScrapRef scrapRef;
-    
+
     err = GetCurrentScrap( &scrapRef );
-    if ( err != noTypeErr && err != memFullErr )    
+    if ( err != noTypeErr && err != memFullErr )
     {
         ScrapFlavorFlags    flavorFlags;
-        
+
         if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
         {
             if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
             {
                 Size allocSize = byteCount ;
-                if ( dataFormat.GetType() == wxDF_TEXT )  
+                if ( dataFormat.GetType() == wxDF_TEXT )
                     allocSize += 1 ;
-                else if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+                else if ( dataFormat.GetType() == wxDF_UNICODETEXT )
                     allocSize += 2 ;
-                
+
                 data = new char[ allocSize ] ;
-                    
+
                 if (( err = GetScrapFlavorData( scrapRef, dataFormat.GetFormatId(), &byteCount , data )) == noErr )
                 {
                     *len = allocSize ;
-                    if ( dataFormat.GetType() == wxDF_TEXT )  
+                    if ( dataFormat.GetType() == wxDF_TEXT )
                         ((char*)data)[byteCount] = 0 ;
-                    if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+                    if ( dataFormat.GetType() == wxDF_UNICODETEXT )
                         ((wxChar*)data)[byteCount/2] = 0 ;
                 }
                 else
@@ -102,7 +102,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
             }
         }
     }
-    
+
 #else
     long offset ;
     Handle datahandle = NewHandle(0) ;
@@ -113,17 +113,17 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     {
         byteCount = GetHandleSize( datahandle ) ;
         Size allocSize = byteCount ;
-        if ( dataFormat.GetType() == wxDF_TEXT )  
+        if ( dataFormat.GetType() == wxDF_TEXT )
             allocSize += 1 ;
-        else if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+        else if ( dataFormat.GetType() == wxDF_UNICODETEXT )
             allocSize += 2 ;
 
         data = new char[ allocSize ] ;
 
         memcpy( (char*) data , (char*) *datahandle , byteCount ) ;
-        if ( dataFormat.GetType() == wxDF_TEXT )  
+        if ( dataFormat.GetType() == wxDF_TEXT )
             ((char*)data)[byteCount] = 0 ;
-        if ( dataFormat.GetType() == wxDF_UNICODETEXT )  
+        if ( dataFormat.GetType() == wxDF_UNICODETEXT )
             ((wxChar*)data)[byteCount/2] = 0 ;
         *len = byteCount ;
     }
@@ -132,7 +132,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     if ( err )
     {
         wxLogSysError(_("Failed to get clipboard data."));
-        
+
         return NULL ;
     }
 
@@ -214,12 +214,8 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
-    wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
-
-    wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
-
-    Clear();
-
+    // as we can only store one wxDataObject, this is the same in this
+    // implementation
     return AddData( data );
 }
 
@@ -288,7 +284,7 @@ bool wxClipboard::AddData( wxDataObject *data )
            {
                    bool created = false ;
                    PicHandle pict = NULL ;
-                   
+
                    wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data ;
                    pict = (PicHandle) bitmapDataObject->GetBitmap().GetPict( &created ) ;
 
@@ -323,13 +319,13 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
 #if TARGET_CARBON
     OSStatus err = noErr;
     ScrapRef scrapRef;
-    
+
     err = GetCurrentScrap( &scrapRef );
-    if ( err != noTypeErr && err != memFullErr )    
+    if ( err != noTypeErr && err != memFullErr )
     {
         ScrapFlavorFlags    flavorFlags;
         Size                byteCount;
-        
+
         if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
         {
             if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
@@ -339,7 +335,7 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
         }
     }
     return FALSE;
-    
+
 #else
     long offset ;
     Handle datahandle = NewHandle(0) ;
@@ -368,12 +364,12 @@ bool wxClipboard::GetData( wxDataObject& data )
       for (size_t i = 0; !transferred && i < formatcount ; i++)
       {
           wxDataFormat format = array[i] ;
-          if ( m_data->IsSupported( format ) ) 
+          if ( m_data->IsSupported( format ) )
           {
             int size = m_data->GetDataSize( format );
             transferred = true ;
 
-            if (size == 0) 
+            if (size == 0)
             {
               data.SetData(format , 0 , 0 ) ;
             }
@@ -388,7 +384,7 @@ bool wxClipboard::GetData( wxDataObject& data )
        }
     }
     /* get formats from wxDataObjects */
-    if ( !transferred ) 
+    if ( !transferred )
     {
       for (size_t i = 0; !transferred && i < formatcount ; i++)
       {
