@@ -142,23 +142,57 @@ bool wxShell(
   const wxString&                   rCommand
 )
 {
-    wxChar*                         zShell;
-
-    if ((zShell = wxGetenv(_T("COMSPEC"))) == NULL)
-        zShell = _T("\\CMD.EXE");
-
+    wxChar*                         zShell = _T("CMD.EXE");
+    wxString                        sInputs;
     wxChar                          zTmp[255];
+    STARTDATA                       SData = {0};
+    PSZ                             PgmTitle = "Command Shell";
+    APIRET                          rc;
+    PID                             vPid = 0;
+    ULONG                           ulSessID = 0;
+    UCHAR                           achObjBuf[256] = {0}; //error data if DosStart fails
+    RESULTCODES                     vResult;
 
-    if (rCommand != "")
-        wxSprintf( zTmp
-                  ,"%s /c %s"
-                  ,zShell
-                  ,WXSTRINGCAST rCommand
-                 );
-    else
-        wxStrcpy(zTmp, zShell);
+    SData.Length   = sizeof(STARTDATA);
+    SData.Related  = SSF_RELATED_INDEPENDENT;
+    SData.FgBg     = SSF_FGBG_FORE;
+    SData.TraceOpt = SSF_TRACEOPT_NONE;
+    SData.PgmTitle = PgmTitle;
+    SData.PgmName  = zShell;
 
-    return (wxExecute((wxChar*)zTmp, FALSE) != 0);
+//    sInputs = "/C " + rCommand;
+    SData.PgmInputs     = NULL; //(BYTE*)sInputs.c_str();
+    SData.TermQ         = 0;
+    SData.Environment   = 0;
+    SData.InheritOpt    = SSF_INHERTOPT_SHELL;
+    SData.SessionType   = SSF_TYPE_WINDOWABLEVIO;
+    SData.IconFile      = 0;
+    SData.PgmHandle     = 0;
+    SData.PgmControl    = SSF_CONTROL_VISIBLE | SSF_CONTROL_MAXIMIZE;
+    SData.InitXPos      = 30;
+    SData.InitYPos      = 40;
+    SData.InitXSize     = 200;
+    SData.InitYSize     = 140;
+    SData.Reserved      = 0;
+    SData.ObjectBuffer  = (char*)achObjBuf;
+    SData.ObjectBuffLen = (ULONG)sizeof(achObjBuf);
+
+    rc = ::DosStartSession(&SData, &ulSessID, &vPid);
+    if (rc == 0)
+    {
+        PTIB                            ptib;
+        PPIB                            ppib;
+
+        ::DosGetInfoBlocks(&ptib, &ppib);
+
+        ::DosWaitChild( DCWA_PROCESS
+                       ,DCWW_WAIT
+                       ,&vResult
+                       ,&ppib->pib_ulpid
+                       ,vPid
+                      );
+    }
+    return (rc != 0);
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)

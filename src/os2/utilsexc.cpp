@@ -25,6 +25,11 @@
 
 #include "wx/os2/private.h"
 
+#define INCL_DOSPROCESS
+#define INCL_DOSERRORS
+#define INCL_DOS
+#include <os2.h>
+
 #include <ctype.h>
 #include <direct.h>
 
@@ -50,6 +55,7 @@ struct wxExecuteData
 public:
     ~wxExecuteData()
     {
+        cout << "Closing thread: " << endl;
         DosExit(EXIT_PROCESS, 0);
     }
 
@@ -67,8 +73,10 @@ static ULONG wxExecuteThread(
     ULONG                           ulRc;
     PID                             vPidChild;
 
-     ulRc = ::DosWaitChild( DCWA_PROCESSTREE
-                          ,DCWW_WAIT
+    cout << "Executing thread: " << endl;
+
+    ulRc = ::DosWaitChild( DCWA_PROCESSTREE
+                          ,DCWW_NOWAIT
                           ,&pData->vResultCodes
                           ,&vPidChild
                           ,pData->vResultCodes.codeTerminate // process PID to look at
@@ -78,14 +86,11 @@ static ULONG wxExecuteThread(
         wxLogLastError("DosWaitChild");
     }
     delete pData;
-
-
-//    ::WinSendMsg(pData->hWnd, (ULONG)wxWM_PROC_TERMINATED, 0, (MPARAM)pData);
     return 0;
 }
 
-// Unlike windows where everything needs a window, console apps in OS/2
-// need no windows so this is not ever used
+// window procedure of a hidden window which is created just to receive
+// the notification message when a process exits
 MRESULT APIENTRY wxExecuteWindowCbk(
   HWND                              hWnd
 , ULONG                             ulMessage
@@ -128,7 +133,11 @@ long wxExecute(
 , wxProcess*                        pHandler
 )
 {
-    wxCHECK_MSG(!!rCommand, 0, wxT("empty command in wxExecute"));
+    if (rCommand.IsEmpty())
+    {
+        cout << "empty command in wxExecute." << endl;
+        return 0;
+    }
 
     // create the process
     UCHAR                           vLoadError[CCHMAXPATH] = {0};
@@ -146,39 +155,20 @@ long wxExecute(
     else
         ulExecFlag = EXEC_ASYNCRESULT;
 
-    if (::DosExecPgm( (PCHAR)vLoadError
-                     ,sizeof(vLoadError)
-                     ,ulExecFlag
-                     ,zArgs
-                     ,zEnvs
-                     ,&vResultCodes
-                     ,rCommand
-                    ))
+    rc = ::DosExecPgm( (PCHAR)vLoadError
+                      ,sizeof(vLoadError)
+                      ,ulExecFlag
+                      ,zArgs
+                      ,zEnvs
+                      ,&vResultCodes
+                      ,(PSZ)rCommand.c_str()
+                     );
+    if (rc != NO_ERROR)
     {
-        wxLogSysError(_("Execution of command '%s' failed"), rCommand.c_str());
+        wxLogSysError(_("Execution of command '%s' failed with error: %ul"), rCommand.c_str(), rc);
         return 0;
     }
-
-    // PM does not need non visible object windows to run console child processes
-/*
-    HWND                            hwnd = ::WinCreateWindow( HWND_DESKTOP
-                                                             ,wxPanelClassName
-                                                             ,NULL
-                                                             ,0
-                                                             ,0
-                                                             ,0
-                                                             ,0
-                                                             ,0
-                                                             ,NULLHANDLE
-                                                             ,NULLHANDLE
-                                                             ,ulWindowId
-                                                             ,NULL
-                                                             ,NULL
-                                                            );
-    wxASSERT_MSG( hwnd, wxT("can't create a hidden window for wxExecute") );
-    pOldProc = ::WinSubclassWindow(hwnd, (PFNWP)&wxExecuteWindowCbk);
-
-*/
+    cout << "Executing: " << rCommand.c_str() << endl;
     // Alloc data
     wxExecuteData*                  pData = new wxExecuteData;
 
@@ -205,8 +195,6 @@ long wxExecute(
     if (rc != NO_ERROR)
     {
         wxLogLastError("CreateThread in wxExecute");
-
-//      ::WinDestroyWindow(hwnd);
         delete pData;
 
         // the process still started up successfully...
@@ -214,11 +202,15 @@ long wxExecute(
     }
     if (!bSync)
     {
-        // clean up will be done when the process terminates
-
         // return the pid
+        // warning: don't exit your app unless you actively
+        // kill and cleanup you child processes
+        // Maybe detach the process here???
+        // If cmd.exe need to pass DETACH to detach the process here
         return vResultCodes.codeTerminate;
     }
+
+    // waiting until command executed
     ::DosWaitThread(&vTID, DCWW_WAIT);
 
     ULONG ulExitCode = pData->vResultCodes.codeResult;
