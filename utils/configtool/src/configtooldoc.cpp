@@ -101,13 +101,11 @@ bool ctConfigToolDoc::OnCloseDocument()
 // Saves the doc
 bool ctConfigToolDoc::Save()
 {
-    bool ret = FALSE;
-
     if (!IsModified() && m_savedYet) return TRUE;
-    if (m_documentFile == wxT("") || !m_savedYet)
-        ret = SaveAs();
-    else
-        ret = OnSaveDocument(m_documentFile);
+
+    bool ret = (m_documentFile == wxT("") || !m_savedYet) ?
+                 SaveAs() :
+                 OnSaveDocument(m_documentFile);
     if ( ret )
         SetDocumentSaved(TRUE);
     return ret;

@@ -19,6 +19,8 @@
 #include "wx/imaglist.h"
 #include "wx/docview.h"
 
+// #define USE_CONFIG_BROWSER_PAGE
+
 class WXDLLEXPORT wxHtmlWindow;
 class WXDLLEXPORT wxSplitterWindow;
 class WXDLLEXPORT wxNotebookEvent;
@@ -27,7 +29,9 @@ class ctConfigTreeCtrl;
 class ctPropertyEditor;
 class ctOutputWindow;
 class ctFindReplaceDialog;
+#ifdef USE_CONFIG_BROWSER_PAGE
 class ctConfigurationBrowserWindow;
+#endif
 
 /*!
  * \brief The main window of the application.
@@ -156,7 +160,9 @@ protected:
 
     // The control panel for browsing, adding and removing
     // configurations.
+#ifdef USE_CONFIG_BROWSER_PAGE
     ctConfigurationBrowserWindow*   m_configBrowserPage;
+#endif
 
     ctFindReplaceDialog*    m_findDialog;
 };

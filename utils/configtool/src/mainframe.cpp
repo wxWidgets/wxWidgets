@@ -98,7 +98,9 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
     m_editMenu = NULL;
     m_configurePage = NULL;
     m_setupPage = NULL;
+#ifdef USE_CONFIG_BROWSER_PAGE
     m_configBrowserPage = NULL;
+#endif
     m_mainNotebook = NULL;
     m_findDialog = NULL;
 
@@ -118,13 +120,13 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
     m_configurePage = new ctOutputWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
         wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
-#if 0
+#ifdef USE_CONFIG_BROWSER_PAGE
     m_configBrowserPage = new ctConfigurationBrowserWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
         wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 #endif
 
     m_mainNotebook->AddPage(m_propertyEditor, _T("Properties"));
-#if 0
+#ifdef USE_CONFIG_BROWSER_PAGE
     m_mainNotebook->AddPage(m_configBrowserPage, _T("Configuration Browser"));
 #endif
     m_mainNotebook->AddPage(m_setupPage, _T("setup.h"));

@@ -77,12 +77,9 @@ wxString apColourToHexString(const wxColour& col)
 // Convert 6-digit hex string to a colour
 wxColour apHexStringToColour(const wxString& hex)
 {
-    unsigned int r = 0;
-    unsigned int g = 0;
-    unsigned int b = 0;
-    r = wxHexToDec(hex.Mid(0, 2));
-    g = wxHexToDec(hex.Mid(2, 2));
-    b = wxHexToDec(hex.Mid(4, 2));
+    unsigned int r = wxHexToDec(hex.Mid(0, 2));
+    unsigned int g = wxHexToDec(hex.Mid(2, 2));
+    unsigned int b = wxHexToDec(hex.Mid(4, 2));
 
     return wxColour(r, g, b);
 }
@@ -258,13 +255,10 @@ bool apInvokeAppForFile(const wxString& filename)
     }
 
     wxString cmd;
-    bool ok = ft->GetOpenCommand(&cmd,
-                                 wxFileType::MessageParameters(filename, _T("")));
+    ft->GetOpenCommand(&cmd, wxFileType::MessageParameters(filename, _T("")));
     delete ft;
 
-    ok = (wxExecute(cmd, FALSE) != 0);
-
-    return ok;
+    return (wxExecute(cmd, FALSE) != 0);
 }
 
 // Find the absolute path where this application has been run from.
@@ -521,11 +515,10 @@ bool ctMatchString(const wxString& matchAgainst, const wxString& matchText, bool
 
     wxString left(matchAgainst);
     bool success = FALSE;
-    int pos = 0;
     int matchTextLen = (int) matchText.Length();
     while (!success && !matchAgainst.IsEmpty())
     {
-        pos = left.Find(matchText);
+        int pos = left.Find(matchText);
         if (pos == -1)
             return FALSE;
 
