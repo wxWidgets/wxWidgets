@@ -69,6 +69,36 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ogl"=.\UTILS\OGL\SRC\ogl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ogledit"=.\UTILS\OGL\SAMPLES\ogledit\ogledit.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name ogl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxWin
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "wxWin"=.\Wxwin.dsp - Package Owner=<4>
 
 Package=<5>
