@@ -1000,6 +1000,8 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
 #if wxUSE_UNICODE
     event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
 #endif
+    wxGetMousePosition( &x, &y );
+    win->ScreenToClient( &x, &y );
     event.m_x = x;
     event.m_y = y;
     event.SetEventObject( win );
