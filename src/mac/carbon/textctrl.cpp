@@ -1202,17 +1202,19 @@ void wxTextCtrl::Remove(long from, long to)
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    if ( from == -1 )
-        from = 0;
-
-    if ( to == -1 )
-        to = GetLastPosition();
-
     if ( !m_macUsesTXN )
     {
         ControlEditTextSelectionRec selection ;
-        selection.selStart = from ;
-        selection.selEnd = to ;
+        if ((from == -1) && (to == -1))
+        {
+        	selection.selStart = 0 ;
+        	selection.selEnd = 32767 ;
+        } 
+        else
+        {
+        	selection.selStart = from ;
+        	selection.selEnd = to ;
+    	}
 
         TESetSelect( selection.selStart , selection.selEnd , ((TEHandle) m_macTE) ) ;
         ::SetControlData((ControlHandle)  m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
@@ -1226,7 +1228,10 @@ void wxTextCtrl::SetSelection(long from, long to)
         may force a redraw in the text area. */
         SetPort((**tpvars).fDrawingEnvironment);
         /* change the selection */
-        TXNSetSelection( (**tpvars).fTXNRec, from, to);
+        if ((from == -1) && (to == -1))
+        	TXNSelectAll((TXNObject) m_macTXN);
+        else
+        	TXNSetSelection( (**tpvars).fTXNRec, from, to);
         TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
     }
 }
