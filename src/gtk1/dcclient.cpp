@@ -1427,23 +1427,21 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCHECK_RET( font, wxT("invalid font") );
 #endif
 
-
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
 #ifdef __WXGTK20__
     wxCHECK_RET( m_context, wxT("no Pango context") );
-    wxCHECK_RET( m_layout, wxT("o Pango layout") );
+    wxCHECK_RET( m_layout, wxT("no Pango layout") );
     wxCHECK_RET( m_fontdesc, wxT("no Pango font description") );
 
 #if wxUSE_UNICODE
     const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
-    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 #else
     const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
     const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 #endif
+    pango_layout_set_text( m_layout, (const char*) data, strlen( (const char*) data ));
 
     if (m_scaleY != 1.0)
     {
@@ -1465,7 +1463,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
          // reset unscaled size
          pango_font_description_set_size( m_fontdesc, oldSize );
          
-         // actually apply scaled font
+         // actually apply unscaled font
          pango_layout_set_font_description( m_layout, m_fontdesc );
     }
     else
@@ -1474,9 +1472,15 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
          gdk_draw_layout( m_window, m_textGC, x, y, m_layout );
     }
     
-    // Measure layout.
+#if 0
+    // Measure layout
     int w,h;
     pango_layout_get_pixel_size( m_layout, &w, &h );
+#else
+    int w = 10;
+    int h = 10;
+#endif
+
     wxCoord width = w;
     wxCoord height = h;
     

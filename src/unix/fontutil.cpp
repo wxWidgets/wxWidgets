@@ -144,7 +144,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 
 wxString wxNativeFontInfo::ToString() const
 {
-    wxString tmp = wxGTK_CONV_BACK( pango_font_description_to_string( description ) );
+    char *str = pango_font_description_to_string( description );
+    wxString tmp = wxGTK_CONV_BACK(  str );
+    g_free( str );
 
     return tmp;
 }

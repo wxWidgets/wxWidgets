@@ -66,7 +66,6 @@ void wxToolTip::Apply( wxWindow *win )
         ss_bg.blue = 50000;
         gdk_color_alloc( gtk_widget_get_default_colormap(), &ss_bg );
 
-#if GTK_CHECK_VERSION(1, 2, 0)
         gtk_tooltips_force_window( ss_tooltips );
 
         GtkStyle *g_style =
@@ -77,9 +76,6 @@ void wxToolTip::Apply( wxWindow *win )
         g_style->bg[GTK_STATE_NORMAL] = ss_bg;
 
         gtk_widget_set_style( ss_tooltips->tip_window, g_style );
-#else // GTK+ 1.0
-        gtk_tooltips_set_colors( ss_tooltips, &ss_bg, &ss_fg );
-#endif
     }
 
     m_window = win;
