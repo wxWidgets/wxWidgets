@@ -349,9 +349,9 @@ wxEvent::wxEvent(const wxEvent &src)
     , m_timeStamp(src.m_timeStamp)
     , m_id(src.m_id)
     , m_callbackUserData(src.m_callbackUserData)
+    , m_propagationLevel(src.m_propagationLevel)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
-    , m_propagationLevel(src.m_propagationLevel)
 {
 }
 
