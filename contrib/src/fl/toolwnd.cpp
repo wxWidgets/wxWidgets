@@ -41,9 +41,9 @@ static const unsigned char _gCheckerImg[16] = { _IMG_A,_IMG_B,_IMG_C,_IMG_D,
 
 /***** Implementation for class wxToolWindow *****/
 
-IMPLEMENT_DYNAMIC_CLASS( wxToolWindow, wxWindow )
+IMPLEMENT_DYNAMIC_CLASS( wxToolWindow, wxFrame)
 
-BEGIN_EVENT_TABLE( wxToolWindow, wxWindow )
+BEGIN_EVENT_TABLE( wxToolWindow, wxFrame )
 
 	EVT_PAINT    ( wxToolWindow::OnPaint )
 	EVT_MOTION   ( wxToolWindow::OnMotion )

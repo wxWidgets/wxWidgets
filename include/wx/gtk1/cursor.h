@@ -19,6 +19,10 @@
 #include "wx/object.h"
 #include "wx/gdicmn.h"
 
+#if wxUSE_IMAGE
+#include "wx/image.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // wxCursor
 //-----------------------------------------------------------------------------
@@ -30,6 +34,9 @@ public:
     wxCursor();
     wxCursor( int cursorId );
     wxCursor( const wxCursor &cursor );
+#if wxUSE_IMAGE
+    wxCursor( const wxImage & image );
+#endif
     wxCursor( const char bits[], int width, int  height,
               int hotSpotX=-1, int hotSpotY=-1,
               const char maskBits[]=0, wxColour *fg=0, wxColour *bg=0 );

@@ -58,6 +58,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCursor,wxObject)
 
 wxCursor::wxCursor()
 {
+
 }
 
 wxCursor::wxCursor( int cursorId )
@@ -144,6 +145,142 @@ wxCursor::wxCursor( const wxCursor &cursor )
 {
     Ref( cursor );
 }
+
+#if wxUSE_IMAGE
+wxCursor::wxCursor( const wxImage & image )
+{
+    unsigned char * rgbBits = image.GetData();
+    int w = image.GetWidth()  ;
+    int h = image.GetHeight() ;
+    bool bHasMask = image.HasMask() ;
+    int imagebitcount = (w*h)/8;
+
+    unsigned char r, g, b ;
+    unsigned char * bits = new unsigned char [imagebitcount];
+    unsigned char * maskBits = new unsigned char [imagebitcount];
+
+    int i,j, i8; unsigned char c, cMask;
+    for (i=0; i<imagebitcount; i++)
+        {
+        bits[i] = 0;
+        i8 = i * 8;
+
+        cMask = 1;
+        for (j=0; j<8; j++)
+           {
+           // possible overflow if we do the summation first ?
+           c = rgbBits[(i8+j)*3]/3 + rgbBits[(i8+j)*3+1]/3 + rgbBits[(i8+j)*3+2]/3 ;
+           //if average value is > mid grey
+           if (c>127)
+              bits[i] = bits[i] | cMask ;
+           cMask = cMask * 2 ;
+           }
+        }
+    if (bHasMask)
+        {
+        r = image.GetMaskRed() ;
+        g = image.GetMaskGreen() ;
+        b = image.GetMaskBlue() ;
+
+        for (i=0; i<imagebitcount; i++)
+        {
+        maskBits[i] = 0x0;
+        i8 = i * 8;
+
+        cMask = 1;
+        for (j=0; j<8; j++)
+           {
+           if (rgbBits[(i8+j)*3] != r || rgbBits[(i8+j)*3+1] != g || rgbBits[(i8+j)*3+2] != b)
+              maskBits[i] = maskBits[i] | cMask ;
+           cMask = cMask * 2 ;
+           }
+        }
+        }
+      else
+        {
+        for (i=0; i<imagebitcount; i++)
+            maskBits[i]= 0xFF ;
+        }
+    //find the most frequent color(s)
+    //it seems a waste of effort to copy the image
+    //but otherwise we need to remove the const modifier ??
+    wxImage tmpImage = image.Copy();
+    wxHashTable hTable;
+
+    //colors as rrggbb
+    unsigned long key;
+    unsigned long keyMaskColor = 0;
+    if (bHasMask) keyMaskColor = (r << 16) | (g << 8) | b;
+
+    tmpImage.ComputeHistogram( hTable );
+
+    long MostFreqCol = 0 ; long nMost = 0;
+    long NextFreqCol = 0 ; long nNext = 0;
+    long value ;
+    hTable.BeginFind();
+    wxNode *node = NULL;
+    while ((node = hTable.Next()) != NULL)
+    {
+        wxHNode *hnode = (wxHNode*) node->GetData();
+        value = hnode->value;
+        key = node->GetKeyInteger() ;
+        if (!bHasMask || (key != keyMaskColor) )
+        {
+        if (value > nMost)
+            {
+            nMost = value;
+            MostFreqCol = key;
+            }
+        else
+            if (value > nNext)
+            {
+            nNext = value ;
+            NextFreqCol = key;
+            }
+        }
+    }
+
+
+    wxColour fg = wxColour ( (unsigned char)(MostFreqCol >> 16),
+                             (unsigned char)(MostFreqCol >> 8),
+                             (unsigned char)(MostFreqCol) ) ;
+
+    wxColour bg = wxColour ( (unsigned char)(NextFreqCol >> 16),
+                             (unsigned char)(NextFreqCol >> 8),
+                             (unsigned char)(NextFreqCol) ) ;
+
+
+
+    int hotSpotX=0; 
+    int hotSpotY=0;
+
+    if (image.HasOption(wxCUR_HOTSPOT_X))
+       hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
+    if (image.HasOption(wxCUR_HOTSPOT_Y))
+       hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+   
+    if (hotSpotX < 0 || hotSpotX >= w)
+            hotSpotX = 0;
+    if (hotSpotY < 0 || hotSpotY >= h)
+            hotSpotY = 0;
+
+    GdkBitmap *data = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) bits,
+        w, h );
+    GdkBitmap *mask = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) maskBits,
+        w, h );
+
+    m_refData = new wxCursorRefData;
+    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
+        data, mask, fg.GetColor(), bg.GetColor(),
+        hotSpotX, hotSpotY );
+
+    gdk_bitmap_unref( data );
+    gdk_bitmap_unref( mask );
+    delete [] bits ;
+    delete [] maskBits;
+
+}
+#endif
 
 wxCursor::~wxCursor()
 {
