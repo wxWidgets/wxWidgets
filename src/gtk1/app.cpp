@@ -584,7 +584,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     }
     else
     {
-        g_thread_init(NULL);
+        if (!g_thread_supported())
+            g_thread_init(NULL);
     }
 #endif // wxUSE_THREADS
 
