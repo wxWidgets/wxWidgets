@@ -101,6 +101,7 @@ GENERICOBJS= \
   ..\generic\$D\choicdgg.obj \
   ..\generic\$D\colrdlgg.obj \
   ..\generic\$D\dcpsg.obj \
+  ..\generic\$D\dirctrlg.obj \
   ..\generic\$D\dragimgg.obj \
   ..\generic\$D\fontdlgg.obj \
   ..\generic\$D\grid.obj \
@@ -144,6 +145,7 @@ GENLIBOBJS= \
   choicdgg.obj \
   colrdlgg.obj \
   dcpsg.obj \
+  dirctrlg.obj \
   dragimgg.obj \
   fontdlgg.obj \
   grid.obj \
@@ -207,6 +209,7 @@ COMMONOBJS = \
   ..\common\$D\docview.obj \
   ..\common\$D\dynarray.obj \
   ..\common\$D\dynlib.obj \
+  ..\common\$D\effects.obj \
   ..\common\$D\encconv.obj \
   ..\common\$D\event.obj \
   ..\common\$D\extended.obj \
@@ -317,6 +320,7 @@ COMLIBOBJS1 = \
   docview.obj \
   dynarray.obj \
   dynlib.obj \
+  effects.obj \
   encconv.obj \
   event.obj \
   extended.obj \
@@ -338,10 +342,10 @@ COMLIBOBJS1 = \
   gifdecod.obj \
   hash.obj \
   helpbase.obj \
-  http.obj \
-  imagall.obj
+  http.obj
 
 COMLIBOBJS2 = \
+  imagall.obj \
   imagbmp.obj \
   image.obj \
   imaggif.obj \
@@ -382,10 +386,10 @@ COMLIBOBJS2 = \
   strconv.obj \
   stream.obj \
   string.obj \
-  tbarbase.obj \
-  textcmn.obj
+  tbarbase.obj
 
 COMLIBOBJS3 = \
+  textcmn.obj \
   textfile.obj \
   timercmn.obj \
   tokenzr.obj \
@@ -429,6 +433,7 @@ OS2OBJS = \
   ..\os2\$D\dcprint.obj \
   ..\os2\$D\dcscreen.obj \
   ..\os2\$D\dialog.obj \
+  ..\os2\$D\dir.obj \
   ..\os2\$D\dirdlg.obj \
   ..\os2\$D\dnd.obj \
   ..\os2\$D\filedlg.obj \
@@ -438,8 +443,8 @@ OS2OBJS = \
   ..\os2\$D\fontutil.obj \
   ..\os2\$D\frame.obj \
   ..\os2\$D\gauge.obj \
-  ..\os2\$D\gdiobj.obj \
   ..\os2\$D\gdiimage.obj \
+  ..\os2\$D\gdiobj.obj \
   ..\os2\$D\gsocket.obj \
   ..\os2\$D\helpwin.obj \
   ..\os2\$D\icon.obj \
@@ -509,6 +514,7 @@ OS2LIBOBJS1 = \
   dcprint.obj \
   dcscreen.obj \
   dialog.obj \
+  dir.obj \
   dirdlg.obj \
   dnd.obj \
   filedlg.obj \
@@ -530,10 +536,10 @@ OS2LIBOBJS1 = \
   mdi.obj \
   menu.obj \
   menuitem.obj \
-  metafile.obj \
-  mimetype.obj
+  metafile.obj
 
 OS2LIBOBJS2 = \
+  mimetype.obj \
   minifram.obj \
   msgdlg.obj \
   nativdlg.obj \
@@ -652,6 +658,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\docview.obj
   copy ..\common\$D\dynarray.obj
   copy ..\common\$D\dynlib.obj
+  copy ..\common\$D\effects.obj
   copy ..\common\$D\encconv.obj
   copy ..\common\$D\event.obj
   copy ..\common\$D\extended.obj
@@ -674,9 +681,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\hash.obj
   copy ..\common\$D\helpbase.obj
   copy ..\common\$D\http.obj
-  copy ..\common\$D\imagall.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\imagall.obj
   copy ..\common\$D\imagbmp.obj
   copy ..\common\$D\image.obj
   copy ..\common\$D\imaggif.obj
@@ -718,9 +725,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\stream.obj
   copy ..\common\$D\string.obj
   copy ..\common\$D\tbarbase.obj
-  copy ..\common\$D\textcmn.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
   copy ..\common\$D\timercmn.obj
   copy ..\common\$D\tokenzr.obj
@@ -749,6 +756,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\colrdlgg.obj
   copy ..\generic\$D\dragimgg.obj
   copy ..\generic\$D\dcpsg.obj
+  copy ..\generic\$D\dirctrlg.obj
   copy ..\generic\$D\fontdlgg.obj
   copy ..\generic\$D\grid.obj
   copy ..\generic\$D\gridsel.obj
@@ -826,6 +834,7 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\dcprint.obj
   copy ..\os2\$D\dcscreen.obj
   copy ..\os2\$D\dialog.obj
+  copy ..\os2\$D\dir.obj
   copy ..\os2\$D\dirdlg.obj
   copy ..\os2\$D\dnd.obj
   copy ..\os2\$D\filedlg.obj
@@ -848,9 +857,9 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\menu.obj
   copy ..\os2\$D\menuitem.obj
   copy ..\os2\$D\metafile.obj
-  copy ..\os2\$D\mimetype.obj
 
 $(OS2LIBOBJS2):
+  copy ..\os2\$D\mimetype.obj
   copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj
   copy ..\os2\$D\nativdlg.obj

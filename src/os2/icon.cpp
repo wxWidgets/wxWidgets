@@ -87,6 +87,89 @@ wxIcon::~wxIcon()
 {
 }
 
+void wxIcon::CreateIconFromXpm(
+  const char**                      ppData
+)
+{
+    wxBitmap                        vBmp(ppData);
+
+    CopyFromBitmap(vBmp);
+} // end of wxIcon::CreateIconFromXpm
+
+void wxIcon::CopyFromBitmap(
+  const wxBitmap&                   rBmp
+)
+{
+    wxMask*                         pMask = rBmp.GetMask();
+
+    if (!pMask)
+    {
+        //
+        // We must have a mask for an icon, so even if it's probably incorrect,
+        // do create it (grey is the "standard" transparent colour)
+        //
+        pMask = new wxMask( rBmp
+                           ,*wxLIGHT_GREY
+                          );
+    }
+
+    POINTERINFO                        vIconInfo;
+
+    memset(&vIconInfo, '\0', sizeof(POINTERINFO));
+    vIconInfo.fPointer = FALSE;  // we want an icon, not a pointer
+    vIconInfo.hbmColor = GetHbitmapOf(rBmp);
+
+    SIZEL                           vSize = {0, 0};
+    DEVOPENSTRUC                    vDop = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    HDC                             hDCSrc = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    HDC                             hDCDst = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    HPS                             hPSSrc = ::GpiCreatePS(vHabmain, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
+    HPS                             hPSDst = ::GpiCreatePS(vHabmain, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
+    POINTL                          vPoint[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight(),
+                                                  0, 0, rBmp.GetWidth(), rBmp.GetHeight()
+                                                };
+    ::GpiSetBitmap(hPSSrc, (HBITMAP) pMask->GetMaskBitmap());
+    ::GpiSetBitmap(hPSDst, (HBITMAP) vIconInfo.hbmColor);
+    ::GpiBitBlt( hPSDst
+                ,hPSSrc
+                ,4L
+                ,vPoint
+                ,ROP_SRCAND
+                ,BBO_IGNORE
+               );
+
+    ::GpiSetBitmap(hPSSrc, NULL);
+    ::GpiSetBitmap(hPSDst, NULL);
+    ::GpiDestroyPS(hPSSrc);
+    ::GpiDestroyPS(hPSDst);
+    ::DevCloseDC(hDCSrc);
+    ::DevCloseDC(hDCDst);
+
+    HICON                           hIcon = ::WinCreatePointerIndirect( HWND_DESKTOP
+                                                                       ,&vIconInfo
+                                                                      );
+
+    if (!hIcon)
+    {
+        wxLogLastError(wxT("WinCreatePointerIndirect"));
+    }
+    else
+    {
+        SetHICON((WXHICON)hIcon);
+        SetSize( rBmp.GetWidth()
+                ,rBmp.GetHeight()
+               );
+    }
+
+    if (!rBmp.GetMask())
+    {
+        //
+        // We created the mask, now delete it
+        //
+        delete pMask;
+    }
+} // end of wxIcon::CopyFromBitmap
+
 bool wxIcon::LoadFile(
   const wxString&                   rFilename
 , long                              lType
