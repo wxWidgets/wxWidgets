@@ -3129,6 +3129,16 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     }
     else
     {
+        // If we got to this point, we are not dragging or moving the mouse.
+        // Because the code in carbon/toplevel.cpp will only set focus to the tree
+        // if we skip for EVT_LEFT_DOWN, we MUST skip this event here for focus to work.
+        // We skip even if we didn't hit an item because we still should
+        // restore focus to the tree control even if we didn't exactly hit an item.
+        if ( event.LeftDown() )
+        {
+            event.Skip();
+        }
+
         // here we process only the messages which happen on tree items
 
         m_dragCount = 0;
