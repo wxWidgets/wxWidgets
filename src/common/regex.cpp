@@ -148,7 +148,9 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
 
         msg = wxString(buf.data(), wxConvLibc);
 #else // !Unicode
-        (void)regerror(errorcode, &m_RegEx, wxStringBuffer(msg, len), len);
+        (void)regerror(errorcode, &m_RegEx, msg.GetWriteBuf(len), len);
+
+        msg.UngetWriteBuf();
 #endif // Unicode/!Unicode
     }
     else // regerror() returned 0
@@ -178,9 +180,15 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     if ( flags & wxRE_NEWLINE )
         flagsRE |= REG_NEWLINE;
 
+
     // compile it
+#if wxUSE_NEW_REGEX
+    int errorcode = wx_regcomp(&m_RegEx, expr, expr.Length(), flagsRE);
+#else
     int errorcode = regcomp(&m_RegEx, expr.mb_str(), flagsRE);
-    if ( errorcode )
+#endif
+
+     if ( errorcode )
     {
         wxLogError(_("Invalid regular expression '%s': %s"),
                    expr.c_str(), GetErrorMsg(errorcode).c_str());
@@ -253,7 +261,12 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
     }
 
     // do match it
+#ifdef wxUSE_NEW_REGEX
+	rm_detail_t rd;
+    int rc = wx_regexec(&self->m_RegEx, str, wxStrlen(str), &rd, m_nMatches, m_Matches, flagsRE);
+#else
     int rc = regexec(&self->m_RegEx, wxConvertWX2MB(str), m_nMatches, m_Matches, flagsRE);
+#endif
 
     switch ( rc )
     {
