@@ -318,7 +318,7 @@ void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
     wxStringTokenizer tokenizer(s, wxT(", "));
 
     while (tokenizer.HasMoreTokens())
-        m_HandlersHash.Put(tokenizer.NextToken(), handler);
+        m_HandlersHash.Put(tokenizer.GetNextToken(), handler);
 
     if (m_HandlersList.IndexOf(handler) == wxNOT_FOUND)
         m_HandlersList.Append(handler);
@@ -341,7 +341,7 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, wxString tags)
 
     while (tokenizer.HasMoreTokens())
     {
-        key = tokenizer.NextToken();
+        key = tokenizer.GetNextToken();
         m_HandlersHash.Delete(key);
         m_HandlersHash.Put(key, handler);
     }
@@ -448,6 +448,8 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
     const wxChar *c, *last;
     const wxChar *in_str = input.c_str();
     wxString output;
+    
+    output.reserve(input.length());
 
     for (c = in_str, last = in_str; *c != wxT('\0'); c++)
     {
@@ -456,8 +458,11 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
             if (c - last > 0)
                 output.append(last, c - last);
             if (++c == wxT('\0')) break;
+        
             wxString entity;
             const wxChar *ent_s = c;
+            wxChar entity_char;
+        
             for (; (*c >= wxT('a') && *c <= wxT('z')) ||
                    (*c >= wxT('A') && *c <= wxT('Z')) ||
                    (*c >= wxT('0') && *c <= wxT('9')) ||
@@ -465,7 +470,14 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
             entity.append(ent_s, c - ent_s);
             if (*c != wxT(';')) c--;
             last = c+1;
-            output << GetEntityChar(entity);
+            entity_char = GetEntityChar(entity);
+            if (entity_char)
+                output << entity_char;
+            else
+            {
+                output.append(ent_s-1, c-ent_s+2);
+                wxLogDebug(wxT("Unrecognized HTML entity: '%s'"), entity.c_str());
+            }
         }
     }
     if (*last != wxT('\0'))
@@ -795,7 +807,7 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
     }
 
     if (code == 0)
-        return wxT('?');
+        return 0;
     else
         return GetCharForCode(code);
 }
