@@ -558,6 +558,11 @@ void wxTreeCtrl::Init()
       wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT),
       wxSOLID
     );
+    m_normalBrush = new wxBrush
+    (
+      wxSystemSettings::GetSystemColour(wxSYS_COLOUR_LISTBOX),
+      wxSOLID
+    );
 
     m_imageListNormal =
     m_imageListState = (wxImageList *) NULL;
@@ -588,7 +593,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
     SetValidator( validator );
 #endif
 
-    SetBackgroundColour( *wxWHITE );
+    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
 //  m_dottedPen = wxPen( "grey", 0, wxDOT );  too slow under XFree86
     m_dottedPen = wxPen( "grey", 0, 0 );
 
@@ -598,6 +603,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 wxTreeCtrl::~wxTreeCtrl()
 {
     wxDELETE( m_hilightBrush );
+    wxDELETE( m_normalBrush );
 
     DeleteAllItems();
 
@@ -1621,7 +1627,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             else
                 colText = *wxBLACK;
 
-            brush = wxWHITE_BRUSH;
+            brush = m_normalBrush;
         }
 
         // prepare to draw

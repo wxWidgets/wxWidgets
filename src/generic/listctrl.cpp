@@ -1175,7 +1175,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
     m_renameTimer = new wxListRenameTimer( this );
     m_renameAccept = FALSE;
 
-    SetBackgroundColour( *wxWHITE );
+    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
 }
 
 wxListMainWindow::~wxListMainWindow()
@@ -2743,7 +2743,7 @@ bool wxListCtrl::Create(wxWindow *parent,
         m_headerWin = (wxListHeaderWindow *) NULL;
     }
 
-    SetBackgroundColour( *wxWHITE );
+    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
 
     return ret;
 }
