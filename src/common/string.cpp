@@ -910,6 +910,8 @@ bool wxString::IsWord() const
 bool wxString::IsNumber() const
 {
   const wxChar *s = (const wxChar*) *this;
+  if (wxStrlen(s))
+     if ((s[0] == '-') || (s[0] == '+')) s++;
   while(*s){
     if(!wxIsdigit(*s)) return(FALSE);
     s++;

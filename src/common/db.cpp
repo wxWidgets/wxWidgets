@@ -547,6 +547,9 @@ bool wxDB::getDbInfo(void)
     if (SQLGetInfo(hdbc, SQL_PROCEDURES, (UCHAR*) dbInf.procedureSupport, 2, &cb) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
 
+    if (SQLGetInfo(hdbc, SQL_ACCESSIBLE_TABLES, (UCHAR*) dbInf.accessibleTables, 2, &cb) != SQL_SUCCESS)
+        return(DispAllErrors(henv, hdbc));
+    
     if (SQLGetInfo(hdbc, SQL_CURSOR_COMMIT_BEHAVIOR, (UCHAR*) &dbInf.cursorCommitBehavior, sizeof(dbInf.cursorCommitBehavior), &cb) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
 
@@ -627,6 +630,7 @@ bool wxDB::getDbInfo(void)
     cout << "Max. Connections: "       << dbInf.maxConnections   << endl;
     cout << "Outer Joins: "            << dbInf.outerJoins       << endl;
     cout << "Support for Procedures: " << dbInf.procedureSupport << endl;
+    cout << "All tables accessible : " << dbInf.accessibleTables << endl;
 
     cout << "Cursor COMMIT Behavior: ";
     switch(dbInf.cursorCommitBehavior)
@@ -1559,9 +1563,6 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
  *        userID == ""    ... UserID set equal to 'this->uid'
  *        userID != ""    ... UserID set equal to 'userID'
  *
- * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance
- *       to avoid undesired unbinding of columns.
  */
 {
     int      noCols = 0;
@@ -2345,33 +2346,135 @@ bool wxDB::TableExists(const char *tableName, const char *userID, const char *ta
 }  // wxDB::TableExists()
 
 
+
+/********** wxDB::TablePrivileges() **********/
+bool wxDB::TablePrivileges(const char* privilege, const char *tableName,
+                           const char *userID, const char *tablePath)
+{
+   SqlPrivilegesInfo  result;
+   SDWORD             cbRetVal;
+   RETCODE            retcode;
+
+   //We probably need to be able to dynamically set this based on 
+   //the driver type, and state.  - roger gammans
+   char curRole[]="public";
+
+   wxString UserID;
+   wxString TableName;
+
+   assert(tableName && wxStrlen(tableName));
+
+   if (userID)
+   {
+      if (!wxStrlen(userID))
+         UserID = uid;
+      else
+         UserID = userID;
+   }
+   else
+      UserID = "";
+
+   // Oracle user names may only be in uppercase, so force 
+   // the name to uppercase
+   // if (Dbms() == dbmsORACLE)
+   //        UserID = UserID.Upper();
+   //
+   //   However we fors case-insentive compare so it shouldn't matter.
+
+
+   TableName = tableName;
+   // Oracle table names are uppercase only, so force 
+   // the name to uppercase just in case programmer forgot to do this
+   if (Dbms() == dbmsORACLE)
+      TableName = TableName.Upper();
+
+   SQLFreeStmt(hstmt, SQL_CLOSE);
+
+   retcode = SQLTablePrivileges(hstmt,
+                 NULL, 0,                                    // All qualifiers
+                 NULL, 0,                                       // All owners
+                (UCHAR FAR *)TableName.GetData(), SQL_NTS);  
+
+#ifdef DBDEBUG_CONSOLE 
+   fprintf(stderr ,"SQLTablePrivileges() returned %i \n",retcode);
+#endif
+/*
+   retcode = SQLBindCol (hstmt, 1, SQL_C_CHAR, &result.TableQualifier, 128, &cbRetVal);
+   retcode = SQLBindCol (hstmt, 2, SQL_C_CHAR, &result.TableOwner, 128, &cbRetVal);
+   retcode = SQLBindCol (hstmt, 3, SQL_C_CHAR, &result.TableName, 128, &cbRetVal);
+   retcode = SQLBindCol (hstmt, 4, SQL_C_CHAR, &result.Grantor, 128, &cbRetVal);
+   retcode = SQLBindCol (hstmt, 5, SQL_C_CHAR, &result.Grantee, 128, &cbRetVal);
+   retcode = SQLBindCol (hstmt, 6, SQL_C_CHAR, &result.Privilege, 128, &cbRetVal);
+   retcode = SQLBindCol (hstmt, 7, SQL_C_CHAR, &result.Grantable, 3, &cbRetVal);
+*/
+   retcode = SQLFetch(hstmt);
+   while (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
+   {
+      GetData(1, SQL_C_CHAR, &result.TableQualifier, 128, &cbRetVal);
+      GetData(2, SQL_C_CHAR, &result.TableOwner, 128, &cbRetVal);
+      GetData(3, SQL_C_CHAR, &result.TableName, 128, &cbRetVal);
+      GetData(4, SQL_C_CHAR, &result.Grantor, 128, &cbRetVal);
+      GetData(5, SQL_C_CHAR, &result.Grantee, 128, &cbRetVal);
+      GetData(6, SQL_C_CHAR, &result.Privilege, 128, &cbRetVal);
+      GetData(7, SQL_C_CHAR, &result.Grantable, 3, &cbRetVal);
+
+#ifdef DBDEBUG_CONSOLE
+      fprintf(stderr,"Scanning %s privilege  on table %s.%s  granted by %s to %s\n",
+              result.Privilege,result.TableOwner,result.TableName,
+              result.Grantor, result.Grantee);
+#endif 
+      if (UserID.IsSameAs(result.TableOwner,false)) 
+      {
+         SQLFreeStmt(hstmt, SQL_CLOSE);
+         return true;
+      }
+      if (UserID.IsSameAs(result.Grantee,false) &&
+          !strcmp(result.Privilege, privilege)) 
+      {
+         SQLFreeStmt(hstmt, SQL_CLOSE);
+         return true;
+      }
+      if (!strcmp(result.Grantee,curRole) &&
+          !strcmp(result.Privilege, privilege))
+      {
+         SQLFreeStmt(hstmt, SQL_CLOSE);
+         return true;
+      }
+      retcode = SQLFetch(hstmt);
+   } 
+
+   SQLFreeStmt(hstmt, SQL_CLOSE);
+   return false;
+}  // wxDB::TablePrivileges()
+
+
 /********** wxDB::SqlLog() **********/
 bool wxDB::SqlLog(enum sqlLog state, const char *filename, bool append)
 {
-    assert(state == sqlLogON  || state == sqlLogOFF);
-    assert(state == sqlLogOFF || filename);
+   assert(state == sqlLogON  || state == sqlLogOFF);
+   assert(state == sqlLogOFF || filename);
 
-    if (state == sqlLogON)
-    {
-        if (fpSqlLog == 0)
-        {
-            fpSqlLog = fopen(filename, (append ? "at" : "wt"));
-            if (fpSqlLog == NULL)
-                return(FALSE);
-        }
-    }
-    else  // sqlLogOFF
-    {
-        if (fpSqlLog)
-        {
-            if (fclose(fpSqlLog))
-                return(FALSE);
-            fpSqlLog = 0;
-        }
-    }
+   if (state == sqlLogON)
+   {
+      if (fpSqlLog == 0)
+      {
+         fpSqlLog = fopen(filename, (append ? "at" : "wt"));
+         if (fpSqlLog == NULL)
+            return(FALSE);
+      }
+   }
+   else  // sqlLogOFF
+   {
+      if (fpSqlLog)
+      {
+         if (fclose(fpSqlLog))
+            return(FALSE);
+         fpSqlLog = 0;
+      }
+   }
 
-    sqlLogState = state;
-    return(TRUE);
+   sqlLogState = state;
+   return(TRUE);
 
 }  // wxDB::SqlLog()
 
