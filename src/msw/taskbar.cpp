@@ -36,7 +36,7 @@
 #include "wx/msw/winundef.h"
 
 #include <string.h>
-#include "wx/msw/taskbar.h"
+#include "wx/taskbar.h"
 #include "wx/msw/private.h"
 
 #ifndef __TWIN32__
@@ -69,6 +69,7 @@ DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_UP )
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DCLICK )
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DCLICK )
 
+#if WXWIN_COMPATIBILITY_2_4
 BEGIN_EVENT_TABLE(wxTaskBarIcon, wxEvtHandler)
     EVT_TASKBAR_MOVE         (wxTaskBarIcon::_OnMouseMove)
     EVT_TASKBAR_LEFT_DOWN    (wxTaskBarIcon::_OnLButtonDown)
@@ -78,6 +79,7 @@ BEGIN_EVENT_TABLE(wxTaskBarIcon, wxEvtHandler)
     EVT_TASKBAR_LEFT_DCLICK  (wxTaskBarIcon::_OnLButtonDClick)
     EVT_TASKBAR_RIGHT_DCLICK (wxTaskBarIcon::_OnRButtonDClick)
 END_EVENT_TABLE()
+#endif
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
@@ -113,7 +115,7 @@ wxTaskBarIcon::~wxTaskBarIcon(void)
 // Operations
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    if (!IsOK())
+    if (!IsOk())
         return false;
 
     NOTIFYICONDATA notifyData;
@@ -209,35 +211,15 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
     return rval;
 }
 
-
+#if WXWIN_COMPATIBILITY_2_4
 // Overridables
-void wxTaskBarIcon::OnMouseMove(wxEvent&)
-{
-}
-
-void wxTaskBarIcon::OnLButtonDown(wxEvent&)
-{
-}
-
-void wxTaskBarIcon::OnLButtonUp(wxEvent&)
-{
-}
-
-void wxTaskBarIcon::OnRButtonDown(wxEvent&)
-{
-}
-
-void wxTaskBarIcon::OnRButtonUp(wxEvent&)
-{
-}
-
-void wxTaskBarIcon::OnLButtonDClick(wxEvent&)
-{
-}
-
-void wxTaskBarIcon::OnRButtonDClick(wxEvent&)
-{
-}
+void wxTaskBarIcon::OnMouseMove(wxEvent&)         {}
+void wxTaskBarIcon::OnLButtonDown(wxEvent&)       {}
+void wxTaskBarIcon::OnLButtonUp(wxEvent&)         {}
+void wxTaskBarIcon::OnRButtonDown(wxEvent&)       {}
+void wxTaskBarIcon::OnRButtonUp(wxEvent&)         {}
+void wxTaskBarIcon::OnLButtonDClick(wxEvent&)     {}
+void wxTaskBarIcon::OnRButtonDClick(wxEvent&)     {}
 
 void wxTaskBarIcon::_OnMouseMove(wxEvent& e)      { OnMouseMove(e);     }
 void wxTaskBarIcon::_OnLButtonDown(wxEvent& e)    { OnLButtonDown(e);   }
@@ -246,7 +228,7 @@ void wxTaskBarIcon::_OnRButtonDown(wxEvent& e)    { OnRButtonDown(e);   }
 void wxTaskBarIcon::_OnRButtonUp(wxEvent& e)      { OnRButtonUp(e);     }
 void wxTaskBarIcon::_OnLButtonDClick(wxEvent& e)  { OnLButtonDClick(e); }
 void wxTaskBarIcon::_OnRButtonDClick(wxEvent& e)  { OnRButtonDClick(e); }
-
+#endif
 
 wxTaskBarIcon* wxTaskBarIcon::FindObjectForHWND(WXHWND hWnd)
 {

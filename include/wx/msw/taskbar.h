@@ -17,7 +17,6 @@
 #pragma interface "taskbar.h"
 #endif
 
-#include "wx/event.h"
 #include "wx/list.h"
 #include "wx/icon.h"
 
@@ -25,7 +24,8 @@ class wxTaskBarIcon;
 
 WX_DECLARE_EXPORTED_LIST(wxTaskBarIcon, wxTaskBarIconList);
 
-class WXDLLEXPORT wxTaskBarIcon: public wxEvtHandler {
+class WXDLLEXPORT wxTaskBarIcon: public wxTaskBarIconBase
+{
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 public:
     wxTaskBarIcon(void);
@@ -33,13 +33,16 @@ public:
 
 // Accessors
     inline WXHWND GetHWND() const { return m_hWnd; }
-    inline bool IsOK() const { return (m_hWnd != 0) ; }
+    inline bool IsOk() const { return (m_hWnd != 0) ; }
     inline bool IsIconInstalled() const { return m_iconAdded; }
 
 // Operations
     bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
     bool RemoveIcon(void);
     bool PopupMenu(wxMenu *menu); //, int x, int y);
+
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( bool IsOK() const );
 
 // Overridables
     virtual void OnMouseMove(wxEvent&);
@@ -49,6 +52,7 @@ public:
     virtual void OnRButtonUp(wxEvent&);
     virtual void OnLButtonDClick(wxEvent&);
     virtual void OnRButtonDClick(wxEvent&);
+#endif
 
 // Implementation
     static wxTaskBarIcon* FindObjectForHWND(WXHWND hWnd);
@@ -66,6 +70,7 @@ protected:
     static bool     sm_registeredClass;
     static unsigned int sm_taskbarMsg;
 
+#if WXWIN_COMPATIBILITY_2_4
     // non-virtual default event handlers to forward events to the virtuals
     void _OnMouseMove(wxEvent&);
     void _OnLButtonDown(wxEvent&);
@@ -75,45 +80,13 @@ protected:
     void _OnLButtonDClick(wxEvent&);
     void _OnRButtonDClick(wxEvent&);
 
-
     DECLARE_EVENT_TABLE()
+#endif
 };
 
-
-// ----------------------------------------------------------------------------
-// wxTaskBarIcon events
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTaskBarIconEvent : public wxEvent
-{
-public:
-    wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon)
-        : wxEvent(-1, evtType)
-        {
-            SetEventObject(tbIcon);
-        }
-
-    virtual wxEvent *Clone() const { return new wxTaskBarIconEvent(*this); }
-};
-
-BEGIN_DECLARE_EVENT_TYPES()
-DECLARE_EVENT_TYPE( wxEVT_TASKBAR_MOVE, 1550 )
-DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DOWN, 1551 )
-DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_UP, 1552 )
-DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DOWN, 1553 )
-DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_UP, 1554 )
-DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DCLICK, 1555 )
-DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DCLICK, 1556 )
-END_DECLARE_EVENT_TYPES()
-
-#define EVT_TASKBAR_MOVE(fn)         DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
-#define EVT_TASKBAR_LEFT_DOWN(fn)    DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
-#define EVT_TASKBAR_LEFT_UP(fn)      DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
-#define EVT_TASKBAR_RIGHT_DOWN(fn)   DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
-#define EVT_TASKBAR_RIGHT_UP(fn)     DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
-#define EVT_TASKBAR_LEFT_DCLICK(fn)  DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
-#define EVT_TASKBAR_RIGHT_DCLICK(fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
-
+#if WXWIN_COMPATIBILITY_2_4    
+inline bool wxTaskBarIcon::IsOK() const { return IsOk(); }
+#endif
 
 #endif
     // _TASKBAR_H_
