@@ -377,7 +377,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
-            _T("Text wxWidgets sample"), 50, 50, 700, 420);
+            _T("Text wxWidgets sample"), 50, 50, 700, 550);
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
@@ -952,7 +952,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     }
 
     m_multitext = new MyTextCtrl( this, wxID_ANY, _T("Multi line."),
-      wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );
+      wxPoint(180,10), wxSize(200,70), wxTE_MULTILINE );
     m_multitext->SetFont(*wxITALIC_FONT);
     (*m_multitext) << _T(" Appended.");
     m_multitext->SetInsertionPoint(0);
@@ -965,11 +965,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif
 
     m_tab = new MyTextCtrl( this, 100, _T("Multiline, allow <TAB> processing."),
-      wxPoint(180,90), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+      wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
     m_tab->SetClientData((void *)_T("tab"));
 
     m_enter = new MyTextCtrl( this, 100, _T("Multiline, allow <ENTER> processing."),
-      wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE);
     m_enter->SetClientData((void *)_T("enter"));
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, _T("Allows more than 30Kb of text\n")
@@ -979,7 +979,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 _T("wxHSCROLL style\n")
                                 _T("\nAnd here is a link in quotation marks to ")
                                 _T("test wxTE_AUTO_URL: \"http://www.wxwidgets.org\""),
-                                wxPoint(450, 10), wxSize(230, 230),
+                                wxPoint(450, 10), wxSize(200, 230),
                                 wxTE_RICH | wxTE_MULTILINE | wxTE_AUTO_URL);
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
