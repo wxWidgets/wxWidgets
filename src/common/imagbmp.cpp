@@ -1318,14 +1318,13 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen;
-    static const char *rifftxt = "RIFF";
-    static const char *listtxt = "LIST";
-    static const char *icotxt  = "icon";
 
-    wxInt32 riff32 = (wxInt32) rifftxt;
-    wxInt32 list32 = (wxInt32) listtxt;
-    wxInt32 ico32  = (wxInt32) icotxt;
-
+    wxInt32 riff32;
+    memcpy( &riff32, "RIFF", 4 );
+    wxInt32 list32;
+    memcpy( &list32, "LIST", 4 );
+    wxInt32 ico32;
+    memcpy( &ico32, "icon", 4 );
     int iIcon = 0;
 
     stream.SeekI(0);
@@ -1370,14 +1369,16 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen ;
-    static const char *rifftxt = "RIFF";
-    static const char *listtxt = "LIST";
-    static const char *anihtxt = "anih";
-
-    wxInt32 riff32 = (wxInt32) rifftxt;
-    wxInt32 list32 = (wxInt32) listtxt;
-    wxInt32 anih32 = (wxInt32) anihtxt;
-
+    
+    wxInt32 riff32;
+    memcpy( &riff32, "RIFF", 4 );
+    wxInt32 list32;
+    memcpy( &list32, "LIST", 4 );
+    wxInt32 ico32;
+    memcpy( &ico32, "icon", 4 ); 
+    wxInt32 anih32;
+    memcpy( &anih32, "anih", 4 );
+    
     stream.SeekI(0);
     if ( !stream.Read(&FCC1, 4) )
         return FALSE;
@@ -1420,14 +1421,16 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen ;
-    static const char *rifftxt = "RIFF";
-    static const char *listtxt = "LIST";
-    static const char *anihtxt = "anih";
 
-    wxInt32 riff32 = (wxInt32) rifftxt;
-    wxInt32 list32 = (wxInt32) listtxt;
-    wxInt32 anih32 = (wxInt32) anihtxt;
-
+    wxInt32 riff32;
+    memcpy( &riff32, "RIFF", 4 );
+    wxInt32 list32;
+    memcpy( &list32, "LIST", 4 );
+    wxInt32 ico32;
+    memcpy( &ico32, "icon", 4 );
+    wxInt32 anih32;
+    memcpy( &anih32, "anih", 4 );
+    
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
     if ( FCC1 != riff32 )
