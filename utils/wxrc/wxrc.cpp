@@ -58,6 +58,7 @@ private:
     wxArrayString PrepareTempFiles();
     void FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxString& inputPath);
 
+    wxString GetInternalFileName(const wxString& name, const wxArrayString& flist);
     void DeleteTempFiles(const wxArrayString& flist);
     void MakePackageZIP(const wxArrayString& flist);
     void MakePackageCPP(const wxArrayString& flist);
@@ -181,6 +182,28 @@ void XmlResApp::CompileRes()
 }
 
 
+wxString XmlResApp::GetInternalFileName(const wxString& name, const wxArrayString& flist)
+{
+    wxString name2 = name;
+    name2.Replace(":", "_");
+    name2.Replace("/", "_");
+    name2.Replace("\\", "_");
+    name2.Replace("*", "_");
+    name2.Replace("?", "_");
+    
+    wxString s = wxFileNameFromPath(parOutput) + "$" + name2;
+
+    if (wxFileExists(s) && flist.Index(s) == wxNOT_FOUND)
+    {        
+        for (int i = 0;; i++)
+        {
+            s.Printf(wxFileNameFromPath(parOutput) + "$%03i-" + name2, i);
+            if (!wxFileExists(s) || flist.Index(s) != wxNOT_FOUND)
+                break;
+        }
+    }
+    return s;
+}
 
 wxArrayString XmlResApp::PrepareTempFiles()
 {
@@ -205,8 +228,10 @@ wxArrayString XmlResApp::PrepareTempFiles()
 
         FindFilesInXML(doc.GetRoot(), flist, path);
 
-        doc.Save(parOutputPath + "/" + name + ".xrc");
-        flist.Add(name + ".xrc");
+        wxString internalName = GetInternalFileName(parFiles[i], flist);
+        
+        doc.Save(parOutputPath + "/" + internalName);
+        flist.Add(internalName);
     }
     
     return flist;
@@ -233,18 +258,14 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             // ...and known to contain filename
         {
             wxString fullname;
-            wxString filename = n->GetContent();
             if (wxIsAbsolutePath(n->GetContent())) fullname = n->GetContent();
             else fullname = inputPath + "/" + n->GetContent();
-            
-            filename.Replace("/", "_");
-            filename.Replace("\\", "_");
-            filename.Replace("*", "_");
-            filename.Replace("?", "_");
-            n->SetContent(filename);
-            
+
             if (flagVerbose) 
-                wxPrintf("adding " + filename +  "...\n");
+                wxPrintf("adding     " + fullname +  "...\n");
+            
+            wxString filename = GetInternalFileName(n->GetContent(), flist);
+            n->SetContent(filename);
 
             flist.Add(filename);
 
@@ -342,20 +363,20 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
         wxPrintf("creating C++ source file " + parOutput +  "...\n");
     
     file.Write("\
-#include \"wx/wxprec.h\"\n\
+#include <wx/wxprec.h>\n\
 \n\
 #ifdef __BORLANDC__\n\
     #pragma hdrstop\n\
 #endif\n\
 \n\
 #ifndef WX_PRECOMP\n\
-    #include \"wx/wx.h\"\n\
+    #include <wx/wx.h>\n\
 #endif\n\
 \
-#include \"wx/filesys.h\"\n\
-#include \"wx/fs_mem.h\"\n\
-#include \"wx/xrc/xmlres.h\"\n\
-#include \"wx/xrc/xh_all.h\"\n\
+#include <wx/filesys.h>\n\
+#include <wx/fs_mem.h>\n\
+#include <wx/xrc/xmlres.h>\n\
+#include <wx/xrc/xh_all.h>\n\
 \n");
 
     for (i = 0; i < flist.Count(); i++)
@@ -367,10 +388,10 @@ void " + parFuncname + "()\n\
 \n\
     // Check for memory FS. If not present, load the handler:\n\
     {\n\
-        wxMemoryFSHandler::AddFile(\"xml_resource/dummy_file\", \"dummy one\");\n\
+        wxMemoryFSHandler::AddFile(\"XRC_resource/dummy_file\", \"dummy one\");\n\
         wxFileSystem fsys;\n\
-        wxFSFile *f = fsys.OpenFile(\"memory:xml_resource/dummy_file\");\n\
-        wxMemoryFSHandler::RemoveFile(\"xml_resource/dummy_file\");\n\
+        wxFSFile *f = fsys.OpenFile(\"memory:XRC_resource/dummy_file\");\n\
+        wxMemoryFSHandler::RemoveFile(\"XRC_resource/dummy_file\");\n\
         if (f) delete f;\n\
         else wxFileSystem::AddHandler(new wxMemoryFSHandler);\n\
     }\n\
@@ -379,17 +400,15 @@ void " + parFuncname + "()\n\
     for (i = 0; i < flist.Count(); i++)
     {
         wxString s;
-        s.Printf("    wxMemoryFSHandler::AddFile(\"xml_resource/" + flist[i] +
+        s.Printf("    wxMemoryFSHandler::AddFile(\"XRC_resource/" + flist[i] +
                  "\", xml_res_file_%i, xml_res_size_%i);\n", i, i);
         file.Write(s);
     }
 
     for (i = 0; i < parFiles.Count(); i++)
     {
-        wxString name, ext, path;
-        wxSplitPath(parFiles[i], &path, &name, &ext);
-        file.Write("    wxXmlResource::Get()->Load(\"memory:xml_resource/" + 
-                   name + ".xrc" + "\");\n");
+        file.Write("    wxXmlResource::Get()->Load(\"memory:XRC_resource/" + 
+                   GetInternalFileName(parFiles[i], flist) + "\");\n");
     }
     
     file.Write("}\n");
