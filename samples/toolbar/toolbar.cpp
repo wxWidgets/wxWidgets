@@ -37,6 +37,7 @@
 #define USE_GENERIC_TBAR 0
 
 // define this to use XPMs everywhere (by default, BMPs are used under Win)
+// BMPs use less space, but aren't compiled into the executable on other platforms
 #ifdef __WXMSW__
     #define USE_XPM_BITMAPS 0
 #else
