@@ -153,18 +153,11 @@ void wxTextCtrl::Init()
     m_editable = TRUE;
     m_modified = FALSE;
     
-    m_sourceFont = wxFont( 12, wxMODERN, wxNORMAL, wxNORMAL );
-
     m_undos.DeleteContents( TRUE );
     
     m_lang = wxSOURCE_LANG_NONE;
     
     m_capturing = FALSE;
-    
-    wxClientDC dc(this);
-    dc.SetFont( m_sourceFont );
-    m_lineHeight = dc.GetCharHeight();
-    m_charWidth = dc.GetCharWidth();
     
     m_cursorX = 0;
     m_cursorY = 0;
@@ -227,6 +220,16 @@ bool wxTextCtrl::Create( wxWindow *parent,
     
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
     
+    if (HasFlag(wxTE_PASSWORD))
+        m_sourceFont = wxFont( 12, wxMODERN, wxNORMAL, wxNORMAL );
+    else
+        m_sourceFont = GetFont();
+
+    wxClientDC dc(this);
+    dc.SetFont( m_sourceFont );
+    m_lineHeight = dc.GetCharHeight();
+    m_charWidth = dc.GetCharWidth();
+    
     SetValue( value );
 
     wxSize size_best( DoGetBestSize() );
@@ -283,20 +286,32 @@ void wxTextCtrl::SetValue(const wxString& value)
             pos = value.find( wxT('\n'), begin );
             if (pos < 0)
             {
-                if (value.Len()-begin > m_longestLine)
-                    m_longestLine = value.Len()-begin;
-
-                m_lines.Add( new wxSourceLine( value.Mid( begin, value.Len()-begin ) ) );
+                wxSourceLine *sl = new wxSourceLine( value.Mid( begin, value.Len()-begin ) );
+                m_lines.Add( sl );
+                
+                // if (sl->m_text.Len() > m_longestLine)
+                //    m_longestLine = sl->m_text.Len();
+                int ww = 0;
+                GetTextExtent( sl->m_text, &ww, NULL, NULL, NULL );
+                ww /= m_charWidth;
+                if (ww > m_longestLine)
+                    m_longestLine = ww;
             
                 break;
             }
             else
             {
-                if (pos-begin > m_longestLine)
-                     m_longestLine = pos-begin;
-                
-                m_lines.Add( new wxSourceLine( value.Mid( begin, pos-begin ) ) );
+                wxSourceLine *sl = new wxSourceLine( value.Mid( begin, pos-begin ) );
+                m_lines.Add( sl );
             
+                // if (sl->m_text.Len() > m_longestLine)
+                //      m_longestLine = sl->m_text.Len();
+                int ww = 0;
+                GetTextExtent( sl->m_text, &ww, NULL, NULL, NULL );
+                ww /= m_charWidth;
+                if (ww > m_longestLine)
+                    m_longestLine = ww;
+                
                 begin = pos+1;
             }
         }
@@ -374,6 +389,50 @@ void wxTextCtrl::DiscardEdits()
 
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
+}
+
+int wxTextCtrl::PosToPixel( int line, int pos )
+{
+    // TODO add support for Tabs
+
+    if (line >= m_lines.GetCount()) return 0;
+    
+    wxString text = m_lines[line].m_text;
+    
+    if (text.IsEmpty()) return 0;
+    
+    if (pos < text.Len())
+        text.Remove( pos, text.Len()-pos );
+        
+    int w = 0;
+    
+    GetTextExtent( text, &w, NULL, NULL, NULL );
+
+    return w;
+}
+
+int wxTextCtrl::PixelToPos( int line, int pixel )
+{
+    if (pixel < 2) return 0;
+    
+    if (line >= m_lines.GetCount()) return 0;
+    
+    wxString text = m_lines[line].m_text;
+    
+    int w = 0;
+    int res = text.Len();
+    while (res > 0)
+    {
+        GetTextExtent( text, &w, NULL, NULL, NULL );
+        
+        if (w < pixel)
+            return res;
+            
+        res--;
+        text.Remove( res,1 );
+    }
+    
+    return 0;
 }
 
 void wxTextCtrl::WriteText(const wxString& text2)
@@ -1030,16 +1089,26 @@ void wxTextCtrl::DoChar( char c )
     
     m_lines[m_cursorY].m_text = tmp;
     
-    if (tmp.Len() > m_longestLine)
+//    if (tmp.Len() > m_longestLine)
+//    {
+//        m_longestLine = tmp.Len();
+//        MyAdjustScrollbars();
+//    }
+    
+    int ww = 0;
+    GetTextExtent( tmp, &ww, NULL, NULL, NULL );
+    ww /= m_charWidth;
+    if (ww > m_longestLine)
     {
-        m_longestLine = tmp.Len();
+        m_longestLine = ww;
         MyAdjustScrollbars();
     }
-    
+
     m_cursorX++;
     
     int y = m_cursorY*m_lineHeight;
-    int x = (m_cursorX-1)*m_charWidth;
+    // int x = (m_cursorX-1)*m_charWidth;
+    int x = PosToPixel( m_cursorY, m_cursorX-1 );
     CalcScrolledPosition( x, y, &x, &y );
     wxRect rect( x+2, y+2, 10000, m_lineHeight );
     Refresh( TRUE, &rect );
@@ -1053,10 +1122,13 @@ void wxTextCtrl::DoChar( char c )
     int view_y = 0;
     GetViewStart( &view_x, &view_y );
     
-    if (m_cursorX < view_x)
-        Scroll( m_cursorX, -1 );
-    else if (m_cursorX > view_x+size_x-1)
-        Scroll( m_cursorX-size_x+1, -1 );
+    //int xx = m_cursorX;
+    int xx = PosToPixel( m_cursorY, m_cursorX ) / m_charWidth;
+    
+    if (xx < view_x)
+        Scroll( xx, -1 );
+    else if (xx > view_x+size_x-1)
+        Scroll( xx-size_x+1, -1 );
 }
 
 void wxTextCtrl::DoBack()
@@ -1091,7 +1163,8 @@ void wxTextCtrl::DoBack()
         m_cursorX--;
         
         int y = m_cursorY*m_lineHeight;
-        int x = m_cursorX*m_charWidth;
+        // int x = m_cursorX*m_charWidth;
+        int x = PosToPixel( m_cursorY, m_cursorX );
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 10000, m_lineHeight );
         Refresh( TRUE, &rect );
@@ -1130,7 +1203,8 @@ void wxTextCtrl::DoDelete()
         m_lines[m_cursorY].m_text = tmp;
         
         int y = m_cursorY*m_lineHeight;
-        int x = m_cursorX*m_charWidth;
+        // int x = m_cursorX*m_charWidth;
+        int x = PosToPixel( m_cursorY, m_cursorX );
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 10000, m_lineHeight );
         Refresh( TRUE, &rect );
@@ -1344,87 +1418,197 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
     wxString comment( ' ', line.Len() );
     wxString my_string( ' ', line.Len() );
     
-    if (lineNum == m_bracketY)
+    if (m_lang != wxSOURCE_LANG_NONE)
     {
-        wxString red( ' ', line.Len() );
-        if (m_bracketX < (int)line.Len())
+        if (lineNum == m_bracketY)
         {
-            red.SetChar( m_bracketX, line[m_bracketX] );
-            line.SetChar( m_bracketX, ' ' );
-            dc.SetTextForeground( *wxRED );
-            dc.DrawText( red, x, y );
-            dc.SetTextForeground( *wxBLACK );
-        }
-    }
-
-    int pos = 0;
-    wxString token( GetNextToken( line, pos) );
-    while (!token.IsNull())
-    {
-        if (m_keywords.Index( token ) != wxNOT_FOUND)
-        {
-            int end_pos = pos + (int)token.Len();
-            for (int i = pos; i < end_pos; i++)
+            wxString red( ' ', line.Len() );
+            if (m_bracketX < (int)line.Len())
             {
-                keyword.SetChar( i, line[i] );
-                line.SetChar( i, ' ' );
-            }
-        } else
-        if (m_defines.Index( token ) != wxNOT_FOUND)
-        {
-            int end_pos = pos + (int)token.Len();
-            for (int i = pos; i < end_pos; i++)
-            {
-                define.SetChar( i, line[i] );
-                line.SetChar( i, ' ' );
-            }
-        } else
-        if ((m_variables.Index( token ) != wxNOT_FOUND) ||
-            ((token.Len() > 2) && (token[0] == 'w') && (token[1] == 'x')))
-        {
-            int end_pos = pos + (int)token.Len();
-            for (int i = pos; i < end_pos; i++)
-            {
-                variable.SetChar( i, line[i] );
-                line.SetChar( i, ' ' );
-            }
-        } else
-        if ((token.Len() >= 2) && (token[0] == '/') && (token[1] == '/') && (m_lang == wxSOURCE_LANG_CPP))
-        {
-            int end_pos = pos + (int)token.Len();
-            for (int i = pos; i < end_pos; i++)
-            {
-                comment.SetChar( i, line[i] );
-                line.SetChar( i, ' ' );
-            }
-        } else
-        if ((token[0] == '#') &&
-            ((m_lang == wxSOURCE_LANG_PYTHON) || (m_lang == wxSOURCE_LANG_PERL)))
-        {
-            int end_pos = pos + (int)token.Len();
-            for (int i = pos; i < end_pos; i++)
-            {
-                comment.SetChar( i, line[i] );
-                line.SetChar( i, ' ' );
-            }
-            
-        } else
-        if ((token[0] == '"') || (token[0] == '\''))
-        {
-            int end_pos = pos + (int)token.Len();
-            for (int i = pos; i < end_pos; i++)
-            {
-                my_string.SetChar( i, line[i] );
-                line.SetChar( i, ' ' );
+                red.SetChar( m_bracketX, line[m_bracketX] );
+                line.SetChar( m_bracketX, ' ' );
+                dc.SetTextForeground( *wxRED );
+                dc.DrawText( red, x, y );
+                dc.SetTextForeground( *wxBLACK );
             }
         }
-        pos += token.Len();
-        token = GetNextToken( line, pos);
+    
+        int pos = 0;
+        wxString token( GetNextToken( line, pos) );
+        while (!token.IsNull())
+        {
+            if (m_keywords.Index( token ) != wxNOT_FOUND)
+            {
+                int end_pos = pos + (int)token.Len();
+                for (int i = pos; i < end_pos; i++)
+                {
+                    keyword.SetChar( i, line[i] );
+                    line.SetChar( i, ' ' );
+                }
+            } else
+            if (m_defines.Index( token ) != wxNOT_FOUND)
+            {
+                int end_pos = pos + (int)token.Len();
+                for (int i = pos; i < end_pos; i++)
+                {
+                    define.SetChar( i, line[i] );
+                    line.SetChar( i, ' ' );
+                }
+            } else
+            if ((m_variables.Index( token ) != wxNOT_FOUND) ||
+                ((token.Len() > 2) && (token[0] == 'w') && (token[1] == 'x')))
+            {
+                int end_pos = pos + (int)token.Len();
+                for (int i = pos; i < end_pos; i++)
+                {
+                    variable.SetChar( i, line[i] );
+                    line.SetChar( i, ' ' );
+                }
+            } else
+            if ((token.Len() >= 2) && (token[0] == '/') && (token[1] == '/') && (m_lang == wxSOURCE_LANG_CPP))
+            {
+                int end_pos = pos + (int)token.Len();
+                for (int i = pos; i < end_pos; i++)
+                {
+                    comment.SetChar( i, line[i] );
+                    line.SetChar( i, ' ' );
+                }
+            } else
+            if ((token[0] == '#') &&
+                ((m_lang == wxSOURCE_LANG_PYTHON) || (m_lang == wxSOURCE_LANG_PERL)))
+            {
+                int end_pos = pos + (int)token.Len();
+                for (int i = pos; i < end_pos; i++)
+                {
+                    comment.SetChar( i, line[i] );
+                    line.SetChar( i, ' ' );
+                }
+                
+            } else
+            if ((token[0] == '"') || (token[0] == '\''))
+            {
+                int end_pos = pos + (int)token.Len();
+                for (int i = pos; i < end_pos; i++)
+                {
+                    my_string.SetChar( i, line[i] );
+                    line.SetChar( i, ' ' );
+                }
+            }
+            pos += token.Len();
+            token = GetNextToken( line, pos);
+        }
     }
 
     if ((lineNum < selStartY) || (lineNum > selEndY))
     {
         dc.DrawText( line, x, y );
+        if (m_lang != wxSOURCE_LANG_NONE)
+        {
+            dc.SetTextForeground( m_keywordColour );
+            dc.DrawText( keyword, x, y );
+            dc.SetTextForeground( m_defineColour );
+            dc.DrawText( define, x, y );
+            dc.SetTextForeground( m_variableColour );
+            dc.DrawText( variable, x, y );
+            dc.SetTextForeground( m_commentColour );
+            dc.DrawText( comment, x, y );
+            dc.SetTextForeground( m_stringColour );
+            dc.DrawText( my_string, x, y );
+            dc.SetTextForeground( *wxBLACK );
+        }
+        return;
+    }
+    
+    if (selStartY == selEndY)
+    {
+        // int xx = selStartX*m_charWidth;
+        int xx = PosToPixel( lineNum, selStartX );
+        // int ww = (selEndX-selStartX)*m_charWidth;
+        int ww = PosToPixel( lineNum, selEndX ) - xx;
+        dc.DrawRectangle( xx+2, lineNum*m_lineHeight+2, ww, m_lineHeight );
+        
+        if (m_lang != wxSOURCE_LANG_NONE)
+        {
+            int i;
+            wxString tmp1( line );
+            wxString tmp2( line );
+            
+            for (i = selStartX; i < selEndX; i++)
+                if ((int)tmp1.Len() > i)
+                    tmp1.SetChar( i, ' ' );
+            dc.DrawText( tmp1, x, y );
+            for (i = 0; i < selStartX; i++)
+                if ((int)tmp2.Len() > i)
+                    tmp2.SetChar( i, ' ' );
+            for (i = selEndX; i < (int)tmp2.Len(); i++)
+                if ((int)tmp2.Len() > i)
+                    tmp2.SetChar( i, ' ' );
+            dc.SetTextForeground( *wxWHITE );
+            dc.DrawText( tmp2, x, y );
+            dc.SetTextForeground( *wxBLACK );
+        }
+    } else
+    if ((lineNum > selStartY) && (lineNum < selEndY))
+    {
+        dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, 10000, m_lineHeight );
+        if (m_lang != wxSOURCE_LANG_NONE)
+        {
+            dc.SetTextForeground( *wxWHITE );
+            dc.DrawText( line, x, y );
+            dc.SetTextForeground( *wxBLACK );
+        }
+    } else
+    if (lineNum == selStartY)
+    {
+        // int xx = selStartX*m_charWidth;
+        int xx = PosToPixel( lineNum, selStartX );
+        dc.DrawRectangle( xx+2, lineNum*m_lineHeight+2, 10000, m_lineHeight );
+        
+        if (m_lang != wxSOURCE_LANG_NONE)
+        {
+            int i;
+            wxString tmp1( line );
+            wxString tmp2( line );
+            for (i = selStartX; i < (int)tmp1.Len(); i++)
+                tmp1.SetChar( i, ' ' );
+            dc.DrawText( tmp1, x, y );
+            for (i = 0; i < selStartX; i++)
+                if ((int)tmp2.Len() > i)
+                    tmp2.SetChar( i, ' ' );
+            dc.SetTextForeground( *wxWHITE );
+            dc.DrawText( tmp2, x, y );
+            dc.SetTextForeground( *wxBLACK );
+        }
+    } else
+    if (lineNum == selEndY)
+    {
+        // int ww = selEndX*m_charWidth;
+        int ww = PosToPixel( lineNum, selEndX );
+        dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, ww, m_lineHeight );
+        
+        if (m_lang != wxSOURCE_LANG_NONE)
+        {
+            int i;
+            wxString tmp1( line );
+            wxString tmp2( line );
+            for (i = 0; i < selEndX; i++)
+                if ((int)tmp1.Len() > i)
+                   tmp1.SetChar( i, ' ' );
+            dc.DrawText( tmp1, x, y );
+            for (i = selEndX; i < (int)tmp2.Len(); i++)
+                tmp2.SetChar( i, ' ' );
+            dc.SetTextForeground( *wxWHITE );
+            dc.DrawText( tmp2, x, y );
+            dc.SetTextForeground( *wxBLACK );
+        }
+    }
+    
+    if (m_lang == wxSOURCE_LANG_NONE)
+    {
+        dc.DrawText( line, x, y );
+    }
+    else
+    {
         dc.SetTextForeground( m_keywordColour );
         dc.DrawText( keyword, x, y );
         dc.SetTextForeground( m_defineColour );
@@ -1436,83 +1620,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         dc.SetTextForeground( m_stringColour );
         dc.DrawText( my_string, x, y );
         dc.SetTextForeground( *wxBLACK );
-        return;
     }
-    
-    if (selStartY == selEndY)
-    {
-        int i;
-        wxString tmp1( line );
-        wxString tmp2( line );
-        dc.DrawRectangle( selStartX*m_charWidth+2, lineNum*m_lineHeight+2, 
-                          (selEndX-selStartX)*m_charWidth, m_lineHeight );
-        for (i = selStartX; i < selEndX; i++)
-            if ((int)tmp1.Len() > i)
-                tmp1.SetChar( i, ' ' );
-        dc.DrawText( tmp1, x, y );
-        for (i = 0; i < selStartX; i++)
-            if ((int)tmp2.Len() > i)
-                tmp2.SetChar( i, ' ' );
-        for (i = selEndX; i < (int)tmp2.Len(); i++)
-            if ((int)tmp2.Len() > i)
-                tmp2.SetChar( i, ' ' );
-        dc.SetTextForeground( *wxWHITE );
-        dc.DrawText( tmp2, x, y );
-        dc.SetTextForeground( *wxBLACK );
-    } else
-    if ((lineNum > selStartY) && (lineNum < selEndY))
-    {
-        dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, 10000, m_lineHeight );
-        dc.SetTextForeground( *wxWHITE );
-        dc.DrawText( line, x, y );
-        dc.SetTextForeground( *wxBLACK );
-    } else
-    if (lineNum == selStartY)
-    {
-        int i;
-        wxString tmp1( line );
-        wxString tmp2( line );
-        dc.DrawRectangle( selStartX*m_charWidth+2, lineNum*m_lineHeight+2, 
-                          10000, m_lineHeight );
-        for (i = selStartX; i < (int)tmp1.Len(); i++)
-            tmp1.SetChar( i, ' ' );
-        dc.DrawText( tmp1, x, y );
-        for (i = 0; i < selStartX; i++)
-            if ((int)tmp2.Len() > i)
-                tmp2.SetChar( i, ' ' );
-        dc.SetTextForeground( *wxWHITE );
-        dc.DrawText( tmp2, x, y );
-        dc.SetTextForeground( *wxBLACK );
-    } else
-    if (lineNum == selEndY)
-    {
-        int i;
-        wxString tmp1( line );
-        wxString tmp2( line );
-        dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, 
-                          selEndX*m_charWidth, m_lineHeight );
-        for (i = 0; i < selEndX; i++)
-            if ((int)tmp1.Len() > i)
-               tmp1.SetChar( i, ' ' );
-        dc.DrawText( tmp1, x, y );
-        for (i = selEndX; i < (int)tmp2.Len(); i++)
-            tmp2.SetChar( i, ' ' );
-        dc.SetTextForeground( *wxWHITE );
-        dc.DrawText( tmp2, x, y );
-        dc.SetTextForeground( *wxBLACK );
-    }
-    
-    dc.SetTextForeground( m_keywordColour );
-    dc.DrawText( keyword, x, y );
-    dc.SetTextForeground( m_defineColour );
-    dc.DrawText( define, x, y );
-    dc.SetTextForeground( m_variableColour );
-    dc.DrawText( variable, x, y );
-    dc.SetTextForeground( m_commentColour );
-    dc.DrawText( comment, x, y );
-    dc.SetTextForeground( m_stringColour );
-    dc.DrawText( my_string, x, y );
-    dc.SetTextForeground( *wxBLACK );
 }
 
 void wxTextCtrl::OnPaint( wxPaintEvent &event )
@@ -1547,7 +1655,9 @@ void wxTextCtrl::OnPaint( wxPaintEvent &event )
     }
     
     dc.SetBrush( *wxRED_BRUSH );
-    dc.DrawRectangle( m_cursorX*m_charWidth+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
+    // int xx = m_cursorX*m_charWidth;
+    int xx = PosToPixel( m_cursorY, m_cursorX );
+    dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
 }
 
 void wxTextCtrl::OnMouse( wxMouseEvent &event )
@@ -1587,8 +1697,9 @@ void wxTextCtrl::OnMouse( wxMouseEvent &event )
         int x = event.GetX();
         int y = event.GetY();
         CalcUnscrolledPosition( x, y, &x, &y );
-        x /= m_charWidth;
         y /= m_lineHeight;
+        // x /= m_charWidth;
+        x = PixelToPos( y, x );
         MoveCursor( 
             wxMin( 1000, wxMax( 0, x ) ), 
             wxMin( (int)m_lines.GetCount()-1, wxMax( 0, y ) ),
@@ -1776,7 +1887,8 @@ void wxTextCtrl::OnIdle( wxIdleEvent &event )
 {
     m_ignoreInput = FALSE;
     
-    SearchForBrackets();
+    if (m_lang != wxSOURCE_LANG_NONE)
+        SearchForBrackets();
     
     event.Skip( TRUE );
 }
@@ -1932,13 +2044,17 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
                 h = m_lineHeight;
                 if (m_selEndX > new_x)
                 {
-                    x = new_x*m_charWidth;
-                    w = (m_selEndX-new_x)*m_charWidth;
+                    // x = new_x*m_charWidth;
+                    x = PosToPixel( new_y, new_x );
+                    // w = (m_selEndX-new_x)*m_charWidth;
+                    w = PosToPixel( new_y, m_selEndX ) - x;
                 }
                 else
                 {
-                    x = m_selEndX*m_charWidth;
-                    w = (-m_selEndX+new_x)*m_charWidth;
+                    // x = m_selEndX*m_charWidth;
+                    x = PosToPixel( new_y, m_selEndX );
+                    // w = (-m_selEndX+new_x)*m_charWidth;
+                    w = PosToPixel( new_y, new_x ) - x;
                 }
             }
             else
@@ -1989,7 +2105,7 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
             int x = 0;
             int y = ry1*m_lineHeight;
             CalcScrolledPosition( x, y, &x, &y );
-            wxRect rect( 0+2, y+2, 10000, (ry2-ry1+1)*m_lineHeight );
+            wxRect rect( 0, y+2, 10000, (ry2-ry1+1)*m_lineHeight );
         
             Refresh( TRUE, &rect );
         }
@@ -2004,7 +2120,8 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
 
     if (!no_cursor_refresh)
     {
-        int x = m_cursorX*m_charWidth;
+        // int x = m_cursorX*m_charWidth;
+        int x = PosToPixel( m_cursorY, m_cursorX );
         int y = m_cursorY*m_lineHeight;
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 4, m_lineHeight+2 );
@@ -2018,7 +2135,9 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
         PrepareDC( dc );
         dc.SetPen( *wxTRANSPARENT_PEN );
         dc.SetBrush( *wxRED_BRUSH );
-        dc.DrawRectangle( m_cursorX*m_charWidth+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
+        // int xx = m_cursorX*m_charWidth;
+        int xx = PosToPixel( m_cursorY, m_cursorX );
+        dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
     }
     
     int size_x = 0;
@@ -2045,10 +2164,13 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
             Scroll( -1, m_cursorY-size_y+1 );
     }
     
-    if (m_cursorX < view_x)
-        Scroll( m_cursorX, -1 );
-    else if (m_cursorX > view_x+size_x-1)
-        Scroll( m_cursorX-size_x+1, -1 );
+    //int xx = m_cursorX;
+    int xx = PosToPixel( m_cursorY, m_cursorX ) / m_charWidth;
+    
+    if (xx < view_x)
+        Scroll( xx, -1 );
+    else if (xx > view_x+size_x-1)
+        Scroll( xx-size_x+1, -1 );
 }
 
 void wxTextCtrl::MyAdjustScrollbars()

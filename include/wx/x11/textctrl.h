@@ -226,6 +226,9 @@ public:
     bool OverwriteMode()                    { return m_overwrite; }
 
     // implementation from now on...
+    
+    int PosToPixel( int line, int pos );
+    int PixelToPos( int line, int pixel );
 
     void SearchForBrackets();
     
