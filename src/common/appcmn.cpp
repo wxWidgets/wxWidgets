@@ -279,12 +279,13 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         unsigned w, h, bpp;
         if ( wxSscanf(modeDesc.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3 )
         {
-            wxLogError(_("Unsupported display mode '%s'."), themeName.c_str());
+            wxLogError(_("Invalid display mode specification '%s'."), modeDesc.c_str());
 
             return FALSE;
         }
 
-        SetDisplayMode(wxDisplayModeInfo(wxSize(w, h), bpp));
+        if ( !SetDisplayMode(wxDisplayModeInfo(wxSize(w, h), bpp)) )
+            return FALSE;
     }
 #endif
 
