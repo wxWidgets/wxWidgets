@@ -49,9 +49,7 @@ enum wxURIFlags
 
 // Generic class for parsing URIs.
 //
-// Originally based off of RFC 2396 - then
-// extended to meet the newer RFC 2396.bis
-// specifications.
+// See RFC 3986
 class WXDLLIMPEXP_BASE wxURI : public wxObject
 {
 public:

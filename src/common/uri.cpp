@@ -375,7 +375,7 @@ bool wxURI::IsReference() const
 // Master URI parsing method.  Just calls the individual parsing methods
 //
 // URI = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
-// URI-reference = URI / relative-URITestCase
+// URI-reference = URI / relative
 // ---------------------------------------------------------------------------
 
 const wxChar* wxURI::Parse(const wxChar* uri)
