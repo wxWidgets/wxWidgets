@@ -104,6 +104,9 @@ public:
     virtual wxString GetLabel() const;
     virtual void SetLabel(const wxString& label);
 
+    // we inherit a version returning false from wxStaticBox, override it again
+    virtual bool AcceptsFocus() const { return true; }
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
