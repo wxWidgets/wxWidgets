@@ -75,7 +75,8 @@ public:
     void OnOption(wxCommandEvent &event);
     void OnMouseMove(wxMouseEvent &event);
 
-    wxColour SelectColour() const;
+    wxColour SelectColour();
+    void PrepareDC(wxDC& dc);
 
 protected:
     int      m_backgroundMode;
@@ -218,8 +219,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuUserScale->Append( UserScale_Restore, "Restore to normal\tCtrl-0" );
 
     wxMenu *menuAxis = new wxMenu;
-    menuAxis->Append( AxisMirror_Horiz, "Mirror horizontally\tCtrl-\\", "", TRUE );
-    menuAxis->Append( AxisMirror_Vertic, "Mirror vertically\tCtrl-/", "", TRUE );
+    menuAxis->Append( AxisMirror_Horiz, "Mirror horizontally\tCtrl-M", "", TRUE );
+    menuAxis->Append( AxisMirror_Vertic, "Mirror vertically\tCtrl-N", "", TRUE );
 
     wxMenu *menuLogical = new wxMenu;
     menuLogical->Append( LogicalOrigin_MoveDown, "Move &down\tCtrl-D" );
@@ -363,13 +364,18 @@ void MyFrame::OnOption(wxCommandEvent &event)
     Refresh();
 }
 
-void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
+void MyFrame::PrepareDC(wxDC& dc)
 {
-    wxPaintDC dc(this);
     dc.SetMapMode( m_mapMode );
     dc.SetUserScale( m_xUserScale, m_yUserScale );
     dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
     dc.SetAxisOrientation( m_xAxisReversed, m_yAxisReversed );
+}
+
+void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
 
     dc.SetBackgroundMode( m_backgroundMode );
     if ( m_backgroundBrush.Ok() )
@@ -378,6 +384,12 @@ void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( m_colourForeground );
     if ( m_colourBackground.Ok() )
         dc.SetTextBackground( m_colourBackground );
+
+    // mark the origin
+    dc.DrawCircle(0, 0, 10);
+#ifndef __WXGTK__   // not implemented in wxGTK :-(
+    dc.FloodFill(0, 0, wxColour(255, 0, 0));
+#endif // __WXGTK__
 
     dc.DrawRectangle( 10, 10, 90, 90 );
     dc.DrawRoundedRectangle( 10, 110, 90, 90, 5 );
@@ -390,9 +402,7 @@ void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
 void MyFrame::OnMouseMove(wxMouseEvent &event)
 {
     wxClientDC dc(this);
-    dc.SetMapMode( m_mapMode );
-    dc.SetUserScale( m_xUserScale, m_yUserScale );
-    dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
+    PrepareDC(dc);
 
     wxPoint pos = event.GetPosition();
     long x = dc.DeviceToLogicalX( pos.x );
@@ -402,7 +412,7 @@ void MyFrame::OnMouseMove(wxMouseEvent &event)
     SetStatusText( str );
 }
 
-wxColour MyFrame::SelectColour() const
+wxColour MyFrame::SelectColour()
 {
     wxColour col;
     wxColourData data;

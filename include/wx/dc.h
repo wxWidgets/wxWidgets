@@ -57,7 +57,7 @@ public:
         m_deviceOriginX = m_deviceOriginY = 0;
 
         m_logicalScaleX = m_logicalScaleY =
-        m_userScaleX = m_userScaleY = 
+        m_userScaleX = m_userScaleY =
         m_scaleX = m_scaleY = 1.0;
 
         m_logicalFunction = -1;
@@ -181,6 +181,8 @@ public:
     void DrawRoundedRectangle(const wxRect& r, double radius)
         { DoDrawRoundedRectangle(r.x, r.y, r.width, r.height, radius); }
 
+    void DrawCircle(long x, long y, long radius)
+        { DoDrawEllipse(x - radius, y - radius, 2*radius, 2*radius); }
     void DrawEllipse(long x, long y, long width, long height)
         { DoDrawEllipse(x, y, width, height); }
     void DrawEllipse(const wxPoint& pt, const wxSize& sz)
