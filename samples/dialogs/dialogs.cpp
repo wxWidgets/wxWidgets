@@ -388,7 +388,14 @@ MyFrame::MyFrame(wxWindow *parent,
     m_clrData.SetChooseFull(true);
     for (int i = 0; i < 16; i++)
     {
-        m_clrData.SetCustomColour(i, wxColour(i*16, i*16, i*16));
+        m_clrData.SetCustomColour(
+          i,
+          wxColour(
+            (unsigned char)(i*16),
+            (unsigned char)(i*16),
+            (unsigned char)(i*16)
+          )
+        );
     }
 #endif // wxUSE_COLOURDLG
 
@@ -446,7 +453,11 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
     data.SetChooseFull(true);
     for (int i = 0; i < 16; i++)
     {
-        wxColour colour(i*16, i*16, i*16);
+        wxColour colour(
+            (unsigned char)(i*16),
+            (unsigned char)(i*16),
+            (unsigned char)(i*16)
+        );
         data.SetCustomColour(i, colour);
     }
 

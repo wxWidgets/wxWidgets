@@ -77,7 +77,7 @@ class RadioWidgetsPage : public WidgetsPage
 {
 public:
     RadioWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
-    virtual ~RadioWidgetsPage();
+    virtual ~RadioWidgetsPage(){};
 
 protected:
     // event handlers
@@ -260,10 +260,6 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
-}
-
-RadioWidgetsPage::~RadioWidgetsPage()
-{
 }
 
 // ----------------------------------------------------------------------------

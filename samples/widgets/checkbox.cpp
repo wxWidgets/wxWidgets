@@ -74,7 +74,7 @@ class CheckBoxWidgetsPage : public WidgetsPage
 {
 public:
     CheckBoxWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
-    virtual ~CheckBoxWidgetsPage();
+    virtual ~CheckBoxWidgetsPage(){};
 
 protected:
     // event handlers
@@ -221,10 +221,6 @@ CheckBoxWidgetsPage::CheckBoxWidgetsPage(wxNotebook *notebook,
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
-}
-
-CheckBoxWidgetsPage::~CheckBoxWidgetsPage()
-{
 }
 
 void CheckBoxWidgetsPage::Reset()

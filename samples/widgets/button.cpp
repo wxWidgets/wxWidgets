@@ -78,7 +78,7 @@ class ButtonWidgetsPage : public WidgetsPage
 {
 public:
     ButtonWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
-    virtual ~ButtonWidgetsPage();
+    virtual ~ButtonWidgetsPage(){};
 
 protected:
     // event handlers
@@ -235,10 +235,6 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
-}
-
-ButtonWidgetsPage::~ButtonWidgetsPage()
-{
 }
 
 // ----------------------------------------------------------------------------

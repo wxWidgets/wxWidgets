@@ -140,7 +140,7 @@ class StaticWidgetsPage : public WidgetsPage
 {
 public:
     StaticWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
-    virtual ~StaticWidgetsPage();
+    virtual ~StaticWidgetsPage(){};
 
 protected:
     // event handlers
@@ -300,10 +300,6 @@ StaticWidgetsPage::StaticWidgetsPage(wxNotebook *notebook,
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
-}
-
-StaticWidgetsPage::~StaticWidgetsPage()
-{
 }
 
 // ----------------------------------------------------------------------------

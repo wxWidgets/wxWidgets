@@ -72,7 +72,7 @@ class SpinBtnWidgetsPage : public WidgetsPage
 {
 public:
     SpinBtnWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
-    virtual ~SpinBtnWidgetsPage();
+    virtual ~SpinBtnWidgetsPage(){};
 
 protected:
     // event handlers
@@ -249,10 +249,6 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
-}
-
-SpinBtnWidgetsPage::~SpinBtnWidgetsPage()
-{
 }
 
 // ----------------------------------------------------------------------------

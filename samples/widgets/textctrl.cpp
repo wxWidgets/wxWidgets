@@ -114,7 +114,7 @@ class TextWidgetsPage : public WidgetsPage
 public:
     // ctor(s) and dtor
     TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
-    virtual ~TextWidgetsPage();
+    virtual ~TextWidgetsPage(){};
 
 protected:
     // create an info text contorl
@@ -497,10 +497,6 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
-}
-
-TextWidgetsPage::~TextWidgetsPage()
-{
 }
 
 // ----------------------------------------------------------------------------

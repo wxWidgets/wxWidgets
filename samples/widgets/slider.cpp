@@ -88,7 +88,7 @@ class SliderWidgetsPage : public WidgetsPage
 {
 public:
     SliderWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
-    virtual ~SliderWidgetsPage();
+    virtual ~SliderWidgetsPage(){};
 
 protected:
     // event handlers
@@ -311,10 +311,6 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
-}
-
-SliderWidgetsPage::~SliderWidgetsPage()
-{
 }
 
 // ----------------------------------------------------------------------------
