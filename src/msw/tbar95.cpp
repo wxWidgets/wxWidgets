@@ -707,6 +707,9 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
         }
         else
         {
+#if wxUSE_UNICODE
+            ttText->lpszText = (wxChar *)help.c_str();
+#else
             // VZ: I don't know why it happens, but the versions of
             //     comctl32.dll starting from 4.70 sometimes send TTN_NEEDTEXTW 
             //     even to ANSI programs (normally, this message is supposed
@@ -733,6 +736,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
             dst[lenUnicode] = 0;
 
             delete [] pwz;
+#endif
         }
     }
 
