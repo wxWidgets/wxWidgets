@@ -34,7 +34,6 @@ static void _GSocket_Motif_Output(XtPointer data, int *fid,
 
 bool _GSocket_GUI_Init(GSocket *socket)
 {
-  int i;
   int *m_id;
 
   socket->m_gui_dependent = (char *)malloc(sizeof(int)*2);
