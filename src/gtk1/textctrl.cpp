@@ -1087,29 +1087,44 @@ void wxTextCtrl::Remove( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#ifndef __WXGTK20__
-    gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
+#ifdef __WXGTK20__
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        GtkTextBuffer *
+            text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+
+        GtkTextIter fromi, toi;
+        gtk_text_buffer_get_iter_at_offset( text_buffer, &fromi, from );
+        gtk_text_buffer_get_iter_at_offset( text_buffer, &toi, to );
+
+        gtk_text_buffer_delete( text_buffer, &fromi, &toi );
+    }
+    else // single line
 #endif
+    gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
 void wxTextCtrl::Replace( long from, long to, const wxString &value )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-#ifndef __WXGTK20__
-    gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
+    Remove( from, to );
 
     if (!value.IsEmpty())
     {
+#ifdef __WXGTK20__
+        SetInsertionPoint( from );
+        WriteText( value );
+#else // GTK 1.x
         gint pos = (gint)from;
 #if wxUSE_UNICODE
         wxWX2MBbuf buf = value.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &pos );
 #else
         gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
-#endif
+#endif // wxUSE_UNICODE
+#endif // GTK 1.x/2.x
     }
-#endif
 }
 
 void wxTextCtrl::Cut()
