@@ -156,6 +156,11 @@ public:
 // wxDialUpManager events
 // ----------------------------------------------------------------------------
 
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED, 450)
+    DECLARE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED, 451)
+END_DECLARE_EVENT_TYPES()
+
 // the event class for the dialup events
 class WXDLLEXPORT wxDialUpEvent : public wxEvent
 {
@@ -178,11 +183,6 @@ public:
 
 // the type of dialup event handler function
 typedef void (wxEvtHandler::*wxDialUpEventFunction)(wxDialUpEvent&);
-
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED, 450)
-    DECLARE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED, 451)
-END_DECLARE_EVENT_TYPES()
 
 // macros to catch dialup events
 #define EVT_DIALUP_CONNECTED(func) \
