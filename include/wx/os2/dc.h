@@ -250,6 +250,8 @@ protected:
                         ,wxCoord vYsrc
                         ,int     nRop = wxCOPY
                         ,bool    bUseMask = FALSE
+                        ,wxCoord xsrcMask = -1
+                        ,wxCoord ysrcMask = -1
                        );
 
     virtual void DoSetClippingRegionAsRegion(const wxRegion& rRegion);

@@ -1387,7 +1387,8 @@ wxSize wxDC::GetPPI() const
 bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   wxCoord width, wxCoord height,
                   wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                  int rop, bool useMask)
+                  int rop, bool useMask,
+                  wxCoord xsrcMask, wxCoord ysrcMask)
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid dc") );
     wxCHECK_MSG( source, FALSE, wxT("invalid source dc") );
@@ -1395,6 +1396,17 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     // transform the source DC coords to the device ones
     xsrc = source->LogicalToDeviceX(xsrc);
     ysrc = source->LogicalToDeviceY(ysrc);
+
+    /* TODO: use the mask origin when drawing transparently */
+    if (xsrcMask == -1 && ysrcMask == -1)
+    {
+        xsrcMask = xsrc; ysrcMask = ysrc;
+    }
+    else
+    {
+        xsrcMask = source->LogicalToDeviceX(xsrcMask);
+        ysrcMask = source->LogicalToDeviceY(ysrcMask);
+    }
 
     CalcBoundingBox(xdest, ydest);
     CalcBoundingBox(xdest + width, ydest + height);

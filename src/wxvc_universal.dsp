@@ -464,6 +464,10 @@ SOURCE=.\common\string.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\sysopt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\tbarbase.cpp
 # End Source File
 # Begin Source File

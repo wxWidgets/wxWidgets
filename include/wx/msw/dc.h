@@ -71,6 +71,28 @@
 
 #define     wx_round(a)    (int)((a)+.5)
 
+#if wxUSE_DC_CACHEING
+/*
+ * Cached blitting, maintaining a cache
+ * of bitmaps required for transparent blitting
+ * instead of constant creation/deletion
+ */
+
+class wxDCCacheEntry: public wxObject
+{
+public:
+    wxDCCacheEntry(WXHBITMAP hBitmap, int w, int h, int depth);
+    wxDCCacheEntry(WXHDC hDC, int depth);
+    ~wxDCCacheEntry();
+
+    WXHBITMAP   m_bitmap;
+    WXHDC       m_dc;
+    int         m_width;
+    int         m_height;
+    int         m_depth;
+};
+#endif
+
 class WXDLLEXPORT wxDC : public wxDCBase
 {
 public:
@@ -141,6 +163,15 @@ public:
     // update the internal clip box variables
     void UpdateClipBox();
 
+#if wxUSE_DC_CACHEING
+    static wxDCCacheEntry* FindBitmapInCache(WXHDC hDC, int w, int h);
+    static wxDCCacheEntry* FindDCInCache(wxDCCacheEntry* notThis, WXHDC hDC);
+
+    static void AddToBitmapCache(wxDCCacheEntry* entry);
+    static void AddToDCCache(wxDCCacheEntry* entry);
+    static void ClearCache();
+#endif
+
 protected:
     virtual void DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
@@ -176,7 +207,7 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE);
+                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     // this is gnarly - we can't even call this function DoSetClippingRegion()
     // because of virtual function hiding
@@ -225,6 +256,11 @@ protected:
     WXHBRUSH          m_oldBrush;
     WXHFONT           m_oldFont;
     WXHPALETTE        m_oldPalette;
+
+#if wxUSE_DC_CACHEING
+    static wxList     sm_bitmapCache;
+    static wxList     sm_dcCache;
+#endif
 
     DECLARE_DYNAMIC_CLASS(wxDC)
 };

@@ -169,7 +169,7 @@ SOURCE=.\plot.cpp
 
 SOURCE=.\plot.rc
 # ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809 /i "..\..\include"
+# ADD RSC /l 0x809 /i "..\..\..\include"
 # End Source File
 # End Target
 # End Project

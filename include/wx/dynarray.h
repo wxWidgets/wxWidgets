@@ -458,7 +458,7 @@ WX_DEFINE_EXPORTED_ARRAY(void *, wxArrayPtrVoid);
 //@}
 
 // -----------------------------------------------------------------------------
-// convinience macros
+// convenience macros
 // -----------------------------------------------------------------------------
 
 // append all element of one array to another one

@@ -373,6 +373,8 @@ bool wxPrinterDC::DoBlit(
 , wxCoord                           vYsrc
 , int                               nRop
 , bool                              bUseMask
+, wxCoord                           xsrcMask
+, wxCoord                           ysrcMask
 )
 {
     bool                            bSuccess = TRUE;

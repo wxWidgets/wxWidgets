@@ -871,7 +871,8 @@ void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
 
 // TODO: use scaled Blit e.g. as per John Price's implementation in Contrib/Utilities
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask )
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask,
+                         wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid dc" );
 
@@ -893,6 +894,12 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     Pixmap sourcePixmap = (Pixmap) NULL;
     double scaleX, scaleY;
     GetUserScale(& scaleX, & scaleY);
+
+    /* TODO: use the mask origin when drawing transparently */
+    if (xsrcMask == -1 && ysrcMask == -1)
+    {
+        xsrcMask = xsrc; ysrcMask = ysrc;
+    }
 
     // Sorry, can't scale masks just yet
     if (!useMask && (scaleX != 1.0 || scaleY != 1.0) && sourceDC->IsKindOf(CLASSINFO(wxMemoryDC)))

@@ -197,6 +197,7 @@ socket.cpp	Common	Socket,Base
 stream.cpp	Common	Base
 strconv.cpp	Common	Base
 string.cpp	Common	Base
+sysopt.cpp	Common	Base
 tbarbase.cpp	Common
 textcmn.cpp	Common
 textfile.cpp	Common	Base
@@ -765,6 +766,7 @@ statusbr.h	WXH
 strconv.h	WXH	Base
 stream.h	WXH	Base
 string.h	WXH	Base
+sysopt.h	WXH	Base
 tab.h	WXH
 tabctrl.h	WXH
 taskbar.h	WXH

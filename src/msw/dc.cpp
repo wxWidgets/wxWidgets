@@ -40,7 +40,7 @@
     #include "wx/icon.h"
 #endif
 
-#include "wx/settings.h"
+#include "wx/sysopt.h"
 #include "wx/dcprint.h"
 
 #include <string.h>
@@ -884,7 +884,9 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         // than the wxWindows fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
         bool ok = FALSE;
-        if (wxSystemSettings::GetOptionInt(wxT("no-maskblt")) == 0)
+#if wxUSE_SYSTEM_OPTIONS
+        if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
+#endif
         {
             HDC hdcMem = ::CreateCompatibleDC(GetHdc());
             ::SelectObject(hdcMem, GetHbitmapOf(bmp));
@@ -1609,7 +1611,8 @@ wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   wxCoord width, wxCoord height,
                   wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                  int rop, bool useMask)
+                  int rop, bool useMask,
+                  wxCoord xsrcMask, wxCoord ysrcMask)
 {
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return FALSE;
@@ -1627,6 +1630,11 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             // programs - just silently ignore useMask parameter
             useMask = FALSE;
         }
+    }
+
+    if (xsrcMask == -1 && ysrcMask == -1)
+    {
+        xsrcMask = xsrc; ysrcMask = ysrc;
     }
 
     COLORREF old_textground = ::GetTextColor(GetHdc());
@@ -1677,11 +1685,13 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         // On some systems, MaskBlt succeeds yet is much much slower
         // than the wxWindows fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
-        if (wxSystemSettings::GetOptionInt(wxT("no-maskblt")) == 0)
+#if wxUSE_SYSTEM_OPTIONS
+        if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
+#endif
         {
            success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
                             GetHdcOf(*source), xsrc, ysrc,
-                            (HBITMAP)mask->GetMaskBitmap(), xsrc, ysrc,
+                            (HBITMAP)mask->GetMaskBitmap(), xsrcMask, ysrcMask,
                             MAKEROP4(dwRop, DSTCOPY)) != 0;
         }
 
@@ -1689,13 +1699,35 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
 #endif // Win32
         {
             // Blit bitmap with mask
+            HDC dc_mask ;
+            HDC  dc_buffer ;
+            HBITMAP buffer_bmap ;
 
-            // create a temp buffer bitmap and DCs to access it and the mask
-            HDC dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
-            HDC dc_buffer = ::CreateCompatibleDC(GetHdc());
-            HBITMAP buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
-            ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
-            ::SelectObject(dc_buffer, buffer_bmap);
+#if wxUSE_DC_CACHEING
+            if (CacheEnabled())
+            {
+                // create a temp buffer bitmap and DCs to access it and the mask
+                wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, source->GetHDC());
+                dc_mask = (HDC) dcCacheEntry1->m_dc;
+
+                wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, dest->GetHDC());
+                dc_buffer = (HDC) dcCacheEntry2->m_dc;
+
+                wxDCCacheEntry* bitmapCacheEntry = FindBitmapInCache(dest->GetHDC(),
+                    width, height);
+
+                buffer_bmap = (HBITMAP) bitmapCacheEntry->m_bitmap;
+            }
+            else
+#endif
+            {
+                // create a temp buffer bitmap and DCs to access it and the mask
+                dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
+                dc_buffer = ::CreateCompatibleDC(GetHdc());
+                buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
+                ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
+                ::SelectObject(dc_buffer, buffer_bmap);
+            }
 
             // copy dest to buffer
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
@@ -1715,7 +1747,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             COLORREF prevBkCol = ::SetBkColor(GetHdc(), RGB(255, 255, 255));
             COLORREF prevCol = ::SetTextColor(GetHdc(), RGB(0, 0, 0));
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-                           dc_mask, xsrc, ysrc, SRCAND) )
+                           dc_mask, xsrcMask, ysrcMask, SRCAND) )
             {
                 wxLogLastError(wxT("BitBlt"));
             }
@@ -1724,7 +1756,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             ::SetBkColor(GetHdc(), RGB(0, 0, 0));
             ::SetTextColor(GetHdc(), RGB(255, 255, 255));
             if ( !::BitBlt(GetHdc(), xdest, ydest, (int)width, (int)height,
-                           dc_mask, xsrc, ysrc, SRCAND) )
+                           dc_mask, xsrcMask, ysrcMask, SRCAND) )
             {
                 wxLogLastError(wxT("BitBlt"));
             }
@@ -1742,10 +1774,16 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
 
             // tidy up temporary DCs and bitmap
             ::SelectObject(dc_mask, 0);
-            ::DeleteDC(dc_mask);
             ::SelectObject(dc_buffer, 0);
-            ::DeleteDC(dc_buffer);
-            ::DeleteObject(buffer_bmap);
+
+#if wxUSE_DC_CACHEING
+            if (!CacheEnabled())
+#endif
+            {
+                ::DeleteDC(dc_mask);
+                ::DeleteDC(dc_buffer);
+                ::DeleteObject(buffer_bmap);
+            }
         }
     }
     else // no mask, just BitBlt() it
@@ -1826,4 +1864,128 @@ void wxDC::DoGetTextExtent(const wxString& string, float *x, float *y,
 }
 #endif
 
+#if wxUSE_DC_CACHEING
+
+/*
+ * This implementation is a bit ugly and uses the old-fashioned wxList class, so I will
+ * improve it in due course, either using arrays, or simply storing pointers to one
+ * entry for the bitmap, and two for the DCs. -- JACS
+ */
+
+wxList wxDC::sm_bitmapCache;
+wxList wxDC::sm_dcCache;
+
+wxDCCacheEntry::wxDCCacheEntry(WXHBITMAP hBitmap, int w, int h, int depth)
+{
+    m_bitmap = hBitmap;
+    m_dc = 0;
+    m_width = w;
+    m_height = h;
+    m_depth = depth;
+}
+
+wxDCCacheEntry::wxDCCacheEntry(WXHDC hDC, int depth)
+{
+    m_bitmap = 0;
+    m_dc = hDC;
+    m_width = 0;
+    m_height = 0;
+    m_depth = depth;
+}
+
+wxDCCacheEntry::~wxDCCacheEntry()
+{
+    if (m_bitmap)
+        ::DeleteObject((HBITMAP) m_bitmap);
+    if (m_dc)
+        ::DeleteDC((HDC) m_dc);
+}
+
+wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
+{
+    int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
+    wxNode* node = sm_bitmapCache.First();
+    while (node)
+    {
+        wxDCCacheEntry* entry = (wxDCCacheEntry*) node->Data();
+
+        if (entry->m_depth == depth)
+        {
+            if (entry->m_width < w || entry->m_height < h)
+            {
+                ::DeleteObject((HBITMAP) entry->m_bitmap);
+                entry->m_bitmap = (WXHBITMAP) ::CreateCompatibleBitmap((HDC) dc, w, h);
+                if ( !entry->m_bitmap)
+                {
+                    wxLogLastError(wxT("CreateCompatibleBitmap"));
+                }
+                entry->m_width = w; entry->m_height = h;
+                return entry;
+            }
+            return entry;
+        }
+
+        node = node->Next();
+    }
+    WXHBITMAP hBitmap = (WXHBITMAP) ::CreateCompatibleBitmap((HDC) dc, w, h);
+    if ( !hBitmap)
+    {
+        wxLogLastError(wxT("CreateCompatibleBitmap"));
+    }
+    wxDCCacheEntry* entry = new wxDCCacheEntry(hBitmap, w, h, depth);
+    AddToBitmapCache(entry);
+    return entry;
+}
+
+wxDCCacheEntry* wxDC::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
+{
+    int depth = ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
+    wxNode* node = sm_dcCache.First();
+    while (node)
+    {
+        wxDCCacheEntry* entry = (wxDCCacheEntry*) node->Data();
+
+        // Don't return the same one as we already have
+        if (!notThis || (notThis != entry))
+        {
+            if (entry->m_depth == depth)
+            {
+                return entry;
+            }
+        }
+
+        node = node->Next();
+    }
+    WXHDC hDC = (WXHDC) ::CreateCompatibleDC((HDC) dc);
+    if ( !hDC)
+    {
+        wxLogLastError(wxT("CreateCompatibleDC"));
+    }
+    wxDCCacheEntry* entry = new wxDCCacheEntry(hDC, depth);
+    AddToDCCache(entry);
+    return entry;
+}
+
+void wxDC::AddToBitmapCache(wxDCCacheEntry* entry)
+{
+    sm_bitmapCache.Append(entry);
+}
+
+void wxDC::AddToDCCache(wxDCCacheEntry* entry)
+{
+    sm_dcCache.Append(entry);
+}
+
+void wxDC::ClearCache()
+{
+    sm_bitmapCache.DeleteContents(TRUE);
+    sm_bitmapCache.Clear();
+    sm_bitmapCache.DeleteContents(FALSE);
+    sm_dcCache.DeleteContents(TRUE);
+    sm_dcCache.Clear();
+    sm_dcCache.DeleteContents(FALSE);
+}
+
+#endif
+    // wxUSE_DC_CACHEING
 

@@ -1090,7 +1090,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
                          int logical_func,
-                         bool useMask )
+                         bool useMask,
+                         wxCoord xsrcMask, wxCoord ysrcMask )
 {
    /* this is the nth try to get this utterly useless function to
       work. it now completely ignores the scaling or translation
@@ -1114,6 +1115,12 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
     bool use_bitmap_method = FALSE;
     bool is_mono = FALSE;
+
+    /* TODO: use the mask origin when drawing transparently */
+    if (xsrcMask == -1 && ysrcMask == -1)
+    {
+        xsrcMask = xsrc; ysrcMask = ysrc;
+    }
 
     if (srcDC->m_isMemDC)
     {

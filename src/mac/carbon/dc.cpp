@@ -944,11 +944,18 @@ bool  wxDC::CanDrawBitmap(void) const
 
 
 bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                        wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask )
+                        wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
+                        wxCoord xsrcMask,  wxCoord ysrcMask )
 {
     wxCHECK_MSG(Ok(), false, wxT("wxDC::DoBlit Illegal dc"));
     wxCHECK_MSG(source->Ok(), false, wxT("wxDC::DoBlit  Illegal source DC"));
     wxMacPortSetter helper(this) ;
+
+    /* TODO: use the mask origin when drawing transparently */
+    if (xsrcMask == -1 && ysrcMask == -1)
+    {
+        xsrcMask = xsrc; ysrcMask = ysrc;
+    }
 
 	CGrafPtr			sourcePort = (CGrafPtr) source->m_macPort ;
 	PixMapHandle	bmappixels =  GetGWorldPixMap( sourcePort ) ; 

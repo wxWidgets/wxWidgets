@@ -383,6 +383,9 @@
 // wxMimeTypesManager class
 #define wxUSE_MIMETYPE 1
 
+// wxSystemOptions class
+#define wxUSE_SYSTEM_OPTIONS 1
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------
@@ -559,6 +562,9 @@
 
 // wxValidator class and related methods
 #define wxUSE_VALIDATORS 1
+
+// wxDC cacheing implementation
+#define wxUSE_DC_CACHEING 1
 
 // ----------------------------------------------------------------------------
 // common dialogs

@@ -1,0 +1,89 @@
+\section{\class{wxSystemOptions}}\label{wxsystemoptions}
+
+wxSystemOptions stores option/value pairs that wxWindows itself or
+applications can use to alter behaviour at run-time. It can be
+used to optimize behaviour that doesn't deserve a distinct API,
+but is still important to be able to configure.
+
+These options are currently recognised by wxWindows:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Option}}{{\bf Value}}
+\twocolitem{no-maskblt}{1 to never use WIN32's MaskBlt function, 0 to allow it to be used where possible. Default: 0.
+
+In some circumstances the MaskBlt function can be slower than using the fallback code, especially if using
+DC cacheing. By default, MaskBlt will be used where it is implemented by the operating system and driver.
+}
+\end{twocollist}
+
+The compile-time option to include or exclude this functionality
+is wxUSE\_SYSTEM\_OPTIONS.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/sysopt.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSystemOptions::wxSystemOptions}
+
+\func{}{wxSystemOptions}{\void}
+
+Default constructor. You don't need to create an instance of wxSystemOptions
+since all of its functions are static.
+
+\membersection{wxSystemOptions::GetOption}\label{wxsystemoptionsgetoption}
+
+\constfunc{wxString}{GetOption}{\param{const wxString\&}{ name}}
+
+Gets an option. The function is case-insensitive to {\it name}.
+
+\wxheading{See also}
+
+\helpref{wxSystemOptions::SetOption}{wxsystemoptionssetoption},\rtfsp
+\helpref{wxSystemOptions::GetOptionInt}{wxsystemoptionsgetoptionint},\rtfsp
+\helpref{wxSystemOptions::HasOption}{wxsystemoptionshasoption}
+
+\membersection{wxSystemOptions::GetOptionInt}\label{wxsystemoptionsgetoptionint}
+
+\constfunc{int}{GetOptionInt}{\param{const wxString\&}{ name}}
+
+Gets an option as an integer. The function is case-insensitive to {\it name}.
+
+\wxheading{See also}
+
+\helpref{wxSystemOptions::SetOption}{wxsystemoptionssetoption},\rtfsp
+\helpref{wxSystemOptions::GetOption}{wxsystemoptionsgetoption},\rtfsp
+\helpref{wxSystemOptions::HasOption}{wxsystemoptionshasoption}
+
+\membersection{wxSystemOptions::HasOption}\label{wxsystemoptionshasoption}
+
+\constfunc{bool}{HasOption}{\param{const wxString\&}{ name}}
+
+Returns TRUE if the given option is present. The function is case-insensitive to {\it name}.
+
+\wxheading{See also}
+
+\helpref{wxSystemOptions::SetOption}{wxsystemoptionssetoption},\rtfsp
+\helpref{wxSystemOptions::GetOption}{wxsystemoptionsgetoption},\rtfsp
+\helpref{wxSystemOptions::GetOptionInt}{wxsystemoptionsgetoptionint}
+
+\membersection{wxSystemOptions::SetOption}\label{wxsystemoptionssetoption}
+
+\func{void}{SetOption}{\param{const wxString\&}{ name}, \param{const wxString\&}{ value}}
+
+\func{void}{SetOption}{\param{const wxString\&}{ name}, \param{int}{ value}}
+
+Sets an option. The function is case-insensitive to {\it name}.
+
+\wxheading{See also}
+
+\helpref{wxSystemOptions::GetOption}{wxsystemoptionsgetoption},\rtfsp
+\helpref{wxSystemOptions::GetOptionInt}{wxsystemoptionsgetoptionint},\rtfsp
+\helpref{wxSystemOptions::HasOption}{wxsystemoptionshasoption}
+

@@ -71,6 +71,7 @@
 #define wxUSE_FONTMAP 0
 #define wxUSE_MIMETYPE 0
 #define wxUSE_IMAGE        1
+#define wxUSE_SYSTEM_OPTIONS 1
 
 #define wxUSE_CONTROLS     1
 #define wxUSE_POPUPWIN     1
@@ -107,6 +108,7 @@
 #define wxUSE_GRID         0
 #define wxUSE_NEW_GRID     0
 #define wxUSE_VALIDATORS 0
+#define wxUSE_DC_CACHEING 0
 #define wxUSE_ACCEL 1
 #define wxUSE_GENERIC_DIALOGS_IN_MSW 0
 #define wxUSE_COMMON_DIALOGS 0
@@ -221,6 +223,7 @@
 #define wxUSE_FONTMAP 0
 #define wxUSE_MIMETYPE 0
 #define wxUSE_IMAGE        1
+#define wxUSE_SYSTEM_OPTIONS 1
 
 #define wxUSE_CONTROLS     1
 #define wxUSE_POPUPWIN     1
@@ -257,6 +260,7 @@
 #define wxUSE_GRID         0
 #define wxUSE_NEW_GRID     0
 #define wxUSE_VALIDATORS 0
+#define wxUSE_DC_CACHEING 1
 #define wxUSE_ACCEL 1
 #define wxUSE_GENERIC_DIALOGS_IN_MSW 0
 #define wxUSE_COMMON_DIALOGS 0

@@ -69,7 +69,7 @@ protected:
 
     virtual bool DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                         int logical_func = wxCOPY, bool useMask = FALSE );
+                         int logical_func = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1 );
 
     virtual void DoDrawText( const wxString &text, wxCoord x, wxCoord y );
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,

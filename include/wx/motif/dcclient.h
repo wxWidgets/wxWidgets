@@ -117,7 +117,7 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc,
-            int rop = wxCOPY, bool useMask = FALSE);
+            int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,

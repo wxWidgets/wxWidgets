@@ -274,17 +274,17 @@ public:
 
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
-              int rop = wxCOPY, bool useMask = FALSE)
+              int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1)
     {
         return DoBlit(xdest, ydest, width, height,
-                      source, xsrc, ysrc, rop, useMask);
+                      source, xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
     }
     bool Blit(const wxPoint& destPt, const wxSize& sz,
               wxDC *source, const wxPoint& srcPt,
-              int rop = wxCOPY, bool useMask = FALSE)
+              int rop = wxCOPY, bool useMask = FALSE, const wxPoint& srcPtMask = wxPoint(-1, -1))
     {
         return DoBlit(destPt.x, destPt.y, sz.x, sz.y,
-                      source, srcPt.x, srcPt.y, rop, useMask);
+                      source, srcPt.x, srcPt.y, rop, useMask, srcPtMask.x, srcPtMask.y);
     }
 
 #if wxUSE_SPLINES
@@ -486,6 +486,16 @@ public:
     virtual void SetOptimization(bool WXUNUSED(opt)) { }
     virtual bool GetOptimization() { return FALSE; }
 
+    // Some platforms have a DC cache, which should be cleared
+    // at appropriate points such as after a series of DC operations.
+    // Put ClearCache in the wxDC implementation class, since it has to be
+    // static.
+    // static void ClearCache() ;
+#if wxUSE_DC_CACHEING
+    static void EnableCache(bool cacheing) { sm_cacheing = cacheing; }
+    static bool CacheEnabled() { return sm_cacheing ; }
+#endif
+
     // bounding box
     // ------------
 
@@ -624,7 +634,7 @@ protected:
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE) = 0;
+                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1) = 0;
 
     virtual void DoGetSize(int *width, int *height) const = 0;
     virtual void DoGetSizeMM(int* width, int* height) const = 0;
@@ -688,6 +698,9 @@ protected:
     bool m_clipping:1;
     bool m_isInteractive:1;
     bool m_isBBoxValid:1;
+#if wxUSE_DC_CACHEING
+    static bool sm_cacheing;
+#endif
 
     // coordinate system variables
 

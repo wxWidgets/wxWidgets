@@ -61,11 +61,11 @@ released for each drawing operation.
 
 \func{bool}{Blit}{\param{wxCoord}{ xdest}, \param{wxCoord}{ ydest}, \param{wxCoord}{ width}, \param{wxCoord}{ height},
   \param{wxDC* }{source}, \param{wxCoord}{ xsrc}, \param{wxCoord}{ ysrc}, \param{int}{ logicalFunc = wxCOPY},
-  \param{bool }{useMask = FALSE}}
+  \param{bool }{useMask = FALSE}, \param{wxCoord}{ xsrcMask = -1}, \param{wxCoord}{ ysrcMask = -1}}
 
 Copy from a source DC to this DC, specifying the destination
-coordinates, size of area to copy, source DC, source coordinates, and
-logical function.
+coordinates, size of area to copy, source DC, source coordinates,
+logical function, whether to use a bitmap mask, and mask source position.
 
 \wxheading{Parameters}
 
@@ -86,7 +86,7 @@ logical function.
 \docparam{logicalFunc}{Logical function to use: see \helpref{wxDC::SetLogicalFunction}{wxdcsetlogicalfunction}.}
 
 \docparam{useMask}{If TRUE, Blit does a transparent blit using the mask that is associated with the bitmap
-selected into the source device context. The Windows implementation does the following:
+selected into the source device context. The Windows implementation does the following if MaskBlt cannot be used:
 
 \begin{enumerate}
 \item Creates a temporary bitmap and copies the destination area into it.
@@ -103,7 +103,20 @@ and the background colour set to WHITE.
 
 This sequence of operations ensures that the source's transparent area need not be black,
 and logical functions are supported.
+
+{\bf Note:} on Windows, blitting with masks can be speeded up considerably by using 
+\helpref{DC cacheing}{wxdcenablecache}. You can also influence whether MaskBlt
+or the explicit mask blitting code above is used, by using \helpref{wxSystemOptions}{wxsystemoptions} and
+setting the {\bf no-maskblt} option to 1.
+
 }
+
+\docparam{xsrcMask}{Source x position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and ysrc
+will be assumed for the mask source position. Currently only implemented on Windows.}
+
+\docparam{ysrcMask}{Source y position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and ysrc
+will be assumed for the mask source position. Currently only implemented on Windows.}
+
 
 \wxheading{Remarks}
 
@@ -114,6 +127,22 @@ See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
 \wxheading{See also}
 
 \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
+
+\membersection{wxDC::CacheEnabled}\label{wxdccacheenabled}
+
+\func{static bool}{CacheEnabled}{\void}
+
+On supported platforms (currently only Windows), returns TRUE
+if the DC cache is enabled. The DC cache
+can speed up the \helpref{Blit}{wxdcblit} operation when
+drawing a large number of masked bitmaps.
+
+If using the cache functions in your code, please test for the
+wxUSE\_DC\_CACHEING preprocessor symbol for portability.
+
+\wxheading{See also}
+
+\helpref{wxDC::EnableCache}{wxdcenablecache}, \helpref{wxDC::ClearCache}
 
 \membersection{wxDC::CalcBoundingBox}\label{wxdccalcboundingbox}
 
@@ -132,6 +161,24 @@ Adds the specified point to the bounding box which can be retrieved with
 \func{void}{Clear}{\void}
 
 Clears the device context using the current background brush.
+
+\membersection{wxDC::ClearCache}\label{wxdcclearcache}
+
+\func{static void}{ClearCache}{\void}
+
+On supported platforms (currently only Windows), clears
+the contents of the DC cache (one bitmap and two Windows device contexts). The DC cache
+can speed up the \helpref{Blit}{wxdcblit} operation when
+drawing a large number of masked bitmaps. You should
+call ClearCache at the end of length DC operations if you wish to only use
+the cache transiently; you should also call it as your application exits.
+
+If using the cache functions in your code, please test for the
+wxUSE\_DC\_CACHEING preprocessor symbol for portability.
+
+\wxheading{See also}
+
+\helpref{wxDC::EnableCache}{wxdcenablecache}, \helpref{wxDC::CacheEnabled}
 
 \membersection{wxDC::CrossHair}\label{wxdccrosshair}
 
@@ -369,6 +416,21 @@ text more precisely.
 \helpref{logical function}{wxdcgetlogicalfunction} is used by this function
 but it is ignored by wxMSW. Thus, you should avoid using logical functions
 with this function in portable programs.
+
+\membersection{wxDC::EnableCache}\label{wxdcenablecache}
+
+\func{static void}{EnableCache}{\param{bool}{ enableCache}}
+
+On supported platforms (currently only Windows), enables the DC cache
+which can speed up the \helpref{Blit}{wxdcblit} operation when
+drawing a large number of masked bitmaps.
+
+If using the cache functions in your code, please test for the
+wxUSE\_DC\_CACHEING preprocessor symbol for portability.
+
+\wxheading{See also}
+
+\helpref{wxDC::CacheEnabled}{wxdccacheenabled}, \helpref{wxDC::ClearCache}
 
 \membersection{wxDC::EndDoc}\label{wxdcenddoc}
 

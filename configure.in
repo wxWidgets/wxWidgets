@@ -690,6 +690,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_WXTREE=no
   DEFAULT_wxUSE_METAFILE=no
   DEFAULT_wxUSE_MIMETYPE=no
+  DEFAULT_wxUSE_SYSTEM_OPTIONS=yes
 
   DEFAULT_wxUSE_COMMONDLGS=no
   DEFAULT_wxUSE_CHOICEDLG=no
@@ -843,6 +844,7 @@ else
   DEFAULT_wxUSE_WXTREE=yes
   DEFAULT_wxUSE_METAFILE=yes
   DEFAULT_wxUSE_MIMETYPE=yes
+  DEFAULT_wxUSE_SYSTEM_OPTIONS=yes
 
   DEFAULT_wxUSE_COMMONDLGS=yes
   DEFAULT_wxUSE_CHOICEDLG=yes
@@ -1048,6 +1050,7 @@ WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals and pass t
 WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 
 WX_ARG_ENABLE(mimetype,    [  --enable-mimetypes      use wxMimeTypesManager], wxUSE_MIMETYPE)
+WX_ARG_ENABLE(system_options,    [  --enable-sysoptions      use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -4249,6 +4252,10 @@ fi
 
 if test "$wxUSE_MIMETYPE" = "yes"; then
     AC_DEFINE(wxUSE_MIMETYPE)
+fi
+
+if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
+    AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
 fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then
