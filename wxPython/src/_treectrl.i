@@ -256,6 +256,7 @@ public:
 
         // Set the tooltip for the item (for EVT_TREE_ITEM_GETTOOLTIP events)
     void SetToolTip(const wxString& toolTip);
+    wxString GetToolTip();
 };
 
 //---------------------------------------------------------------------------

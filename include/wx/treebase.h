@@ -283,7 +283,8 @@ public:
 
         // Set the tooltip for the item (for EVT\_TREE\_ITEM\_GETTOOLTIP events)
     void SetToolTip(const wxString& toolTip) { m_label = toolTip; }
-
+    wxString GetToolTip() { return m_label; }
+    
 #if WXWIN_COMPATIBILITY_2_2
     // for compatibility only, don't use
     wxDEPRECATED( int GetCode() const);
