@@ -1492,24 +1492,28 @@ int WXDLLEXPORT wxSystem(const wxChar *psz)
 #endif // wxNEED_WX_STDLIB_H
 
 #ifdef wxNEED_WX_TIME_H
-WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm)
+WXDLLEXPORT size_t
+wxStrftime(wxChar *s, size_t maxsize, const wxChar *fmt, const struct tm *tm)
 {
-    if (!max) return 0;
-
-    char *buf = (char *)malloc(max);
-    size_t ret = strftime(buf, max, wxConvLocal.cWX2MB(fmt), tm);
-    if (ret)
-    {
-        wxStrcpy(s, wxConvLocal.cMB2WX(buf));
-        free(buf);
-        return wxStrlen(s);
-    }
-    else
-    {
-        free(buf);
-        *s = 0;
+    if ( !maxsize )
         return 0;
-  }
+
+    wxCharBuffer buf(maxsize);
+
+    wxCharBuffer bufFmt(wxConvLocal.cWX2MB(fmt));
+    if ( !bufFmt )
+        return 0;
+
+    size_t ret = strftime(buf.data(), maxsize, bufFmt, tm);
+    if  ( !ret )
+        return 0;
+
+    wxWCharBuffer wbuf = wxConvLocal.cMB2WX(buf);
+    if ( !wbuf )
+        return 0;
+
+    wxStrncpy(s, wbuf, maxsize);
+    return wxStrlen(s);
 }
 #endif // wxNEED_WX_TIME_H
 
