@@ -285,7 +285,7 @@ void wxPreviewControlBar::OnPrint(wxCommandEvent& WXUNUSED(event))
 
 void wxPreviewControlBar::OnChar(wxKeyEvent &event)
 {
-   switch(event.KeyCode())
+   switch(event.GetKeyCode())
    {
    case WXK_NEXT:
       OnNext(); break;

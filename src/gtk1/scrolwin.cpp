@@ -895,7 +895,7 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
         yScrollOld = GetScrollPos(wxVERTICAL);
 
     int dsty;
-    switch ( event.KeyCode() )
+    switch ( event.GetKeyCode() )
     {
         case WXK_PAGEUP:
         case WXK_PRIOR:

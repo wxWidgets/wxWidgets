@@ -614,7 +614,7 @@ void wxComboBox::SetEditable( bool editable )
 
 void wxComboBox::OnChar( wxKeyEvent &event )
 {
-    if ( event.KeyCode() == WXK_RETURN )
+    if ( event.GetKeyCode() == WXK_RETURN )
     {
         wxString value = GetValue();
 

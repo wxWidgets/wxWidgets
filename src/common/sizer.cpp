@@ -6,6 +6,7 @@
 // Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn, Dirk Holtwick and Robert Roebling
+//              (c) 2003, Ron Lee
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,6 +25,7 @@
 #include "wx/utils.h"
 #include "wx/statbox.h"
 #include "wx/notebook.h"
+#include <wx/listimpl.cpp>
 
 //---------------------------------------------------------------------------
 
@@ -39,32 +41,35 @@ IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer)
 #endif
 
+WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
+
+
 //---------------------------------------------------------------------------
 // wxSizerItem
 //---------------------------------------------------------------------------
 
-wxSizerItem::wxSizerItem( int width, int height, int option, int flag, int border, wxObject* userData )
-    : m_window( 0 )
-    , m_sizer( 0 )
+wxSizerItem::wxSizerItem( int width, int height, int proportion, int flag, int border, wxObject* userData )
+    : m_window( NULL )
+    , m_sizer( NULL )
     , m_size( wxSize( width, height ) ) // size is set directly
     , m_minSize( m_size )               // minimal size is the initial size
-    , m_option( option )
+    , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_show( TRUE )                    // Cannot be changed
+    , m_show( true )
     , m_userData( userData )
 {
     SetRatio( m_size );
 }
 
-wxSizerItem::wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData )
+wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border, wxObject* userData )
     : m_window( window )
-    , m_sizer( 0 )
+    , m_sizer( NULL )
     , m_minSize( window->GetSize() )    // minimal size is the initial size
-    , m_option( option )
+    , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_show( TRUE )
+    , m_show( true )
     , m_userData( userData )
 {
     // aspect ratio calculated from initial size
@@ -73,14 +78,14 @@ wxSizerItem::wxSizerItem( wxWindow *window, int option, int flag, int border, wx
     // m_size is calculated later
 }
 
-wxSizerItem::wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData )
-    : m_window( 0 )
+wxSizerItem::wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData )
+    : m_window( NULL )
     , m_sizer( sizer )
-    , m_option( option )
+    , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_show( TRUE )
-    , m_ratio( 0 )
+    , m_show( true )
+    , m_ratio( 0.0 )
     , m_userData( userData )
 {
     // m_minSize is calculated later
@@ -242,15 +247,37 @@ bool wxSizerItem::IsSpacer()
     return (m_window == NULL) && (m_sizer == NULL);
 }
 
+void wxSizerItem::Show( bool show )
+{
+    m_show = show;
+
+    if( IsWindow() )
+        m_window->Show( show );
+    else if( IsSizer() )
+        m_sizer->ShowItems( show );
+
+    // ... nothing else to do to hide/show spacers
+}
+
+void wxSizerItem::SetOption( int option )
+{
+    SetProportion( option );
+}
+
+int wxSizerItem::GetOption() const
+{
+    return GetProportion();
+}
+
+
 //---------------------------------------------------------------------------
 // wxSizer
 //---------------------------------------------------------------------------
 
 wxSizer::wxSizer()
+    : m_minSize( wxSize( 0, 0 ) )
 {
-    m_children.DeleteContents( TRUE );
-    m_minSize.x = 0;
-    m_minSize.y = 0;
+    m_children.DeleteContents( true );
 }
 
 wxSizer::~wxSizer()
@@ -258,148 +285,199 @@ wxSizer::~wxSizer()
     Clear();
 }
 
-void wxSizer::Add( wxWindow *window, int option, int flag, int border, wxObject* userData )
+void wxSizer::Add( wxWindow *window, int proportion, int flag, int border, wxObject* userData )
 {
-    m_children.Append( new wxSizerItem( window, option, flag, border, userData ) );
-    window->SetContainingSizer(this);
+    m_children.Append( new wxSizerItem( window, proportion, flag, border, userData ) );
+    window->SetContainingSizer( this );
 }
 
-void wxSizer::Add( wxSizer *sizer, int option, int flag, int border, wxObject* userData )
+void wxSizer::Add( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData )
 {
-    m_children.Append( new wxSizerItem( sizer, option, flag, border, userData ) );
+    m_children.Append( new wxSizerItem( sizer, proportion, flag, border, userData ) );
 }
 
-void wxSizer::Add( int width, int height, int option, int flag, int border, wxObject* userData )
+void wxSizer::Add( int width, int height, int proportion, int flag, int border, wxObject* userData )
 {
-    m_children.Append( new wxSizerItem( width, height, option, flag, border, userData ) );
+    m_children.Append( new wxSizerItem( width, height, proportion, flag, border, userData ) );
 }
 
-void wxSizer::Prepend( wxWindow *window, int option, int flag, int border, wxObject* userData )
+void wxSizer::Add( wxSizerItem *item )
 {
-    m_children.Insert( new wxSizerItem( window, option, flag, border, userData ) );
-    window->SetContainingSizer(this);
+    m_children.Append( item );
+
+    if( item->GetWindow() )
+        item->GetWindow()->SetContainingSizer( this );
 }
 
-void wxSizer::Prepend( wxSizer *sizer, int option, int flag, int border, wxObject* userData )
+void wxSizer::Prepend( wxWindow *window, int proportion, int flag, int border, wxObject* userData )
 {
-    m_children.Insert( new wxSizerItem( sizer, option, flag, border, userData ) );
+    m_children.Insert( new wxSizerItem( window, proportion, flag, border, userData ) );
+    window->SetContainingSizer( this );
 }
 
-void wxSizer::Prepend( int width, int height, int option, int flag, int border, wxObject* userData )
+void wxSizer::Prepend( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData )
 {
-    m_children.Insert( new wxSizerItem( width, height, option, flag, border, userData ) );
+    m_children.Insert( new wxSizerItem( sizer, proportion, flag, border, userData ) );
 }
 
-void wxSizer::Insert( int before, wxWindow *window, int option, int flag, int border, wxObject* userData )
+void wxSizer::Prepend( int width, int height, int proportion, int flag, int border, wxObject* userData )
 {
-    m_children.Insert( before, new wxSizerItem( window, option, flag, border, userData ) );
-    window->SetContainingSizer(this);
+    m_children.Insert( new wxSizerItem( width, height, proportion, flag, border, userData ) );
 }
 
-void wxSizer::Insert( int before, wxSizer *sizer, int option, int flag, int border, wxObject* userData )
+void wxSizer::Prepend( wxSizerItem *item )
 {
-    m_children.Insert( before, new wxSizerItem( sizer, option, flag, border, userData ) );
+    m_children.Insert( item );
+
+    if( item->GetWindow() )
+        item->GetWindow()->SetContainingSizer( this );
 }
 
-void wxSizer::Insert( int before, int width, int height, int option, int flag, int border, wxObject* userData )
+void wxSizer::Insert( size_t index,
+                      wxWindow *window,
+                      int proportion,
+                      int flag,
+                      int border,
+                      wxObject* userData )
 {
-    m_children.Insert( before, new wxSizerItem( width, height, option, flag, border, userData ) );
+    m_children.Insert( index,
+                       new wxSizerItem( window, proportion, flag, border, userData ) );
+    window->SetContainingSizer( this );
+}
+
+void wxSizer::Insert( size_t index,
+                      wxSizer *sizer,
+                      int proportion,
+                      int flag,
+                      int border,
+                      wxObject* userData )
+{
+    m_children.Insert( index,
+                       new wxSizerItem( sizer, proportion, flag, border, userData ) );
+}
+
+void wxSizer::Insert( size_t index,
+                      int width,
+                      int height,
+                      int proportion,
+                      int flag,
+                      int border,
+                      wxObject* userData )
+{
+    m_children.Insert( index,
+                       new wxSizerItem( width, height, proportion, flag, border, userData ) );
+}
+
+void wxSizer::Insert( size_t index, wxSizerItem *item )
+{
+    m_children.Insert( index, item );
+
+    if( item->GetWindow() )
+        item->GetWindow()->SetContainingSizer( this );
 }
 
 bool wxSizer::Remove( wxWindow *window )
 {
-    wxASSERT( window );
-
-    wxNode *node = m_children.First();
-    while (node)
-    {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
-        if (item->GetWindow() == window)
-        {
-            item->GetWindow()->SetContainingSizer(NULL);
-            m_children.DeleteNode( node );
-            return TRUE;
-        }
-        node = node->Next();
-    }
-
-    return FALSE;
+    return Detach( window );
 }
 
 bool wxSizer::Remove( wxSizer *sizer )
 {
-    wxASSERT( sizer );
+    wxASSERT_MSG( sizer, _T("Removing NULL sizer") );
 
-    wxNode *node = m_children.First();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
+        wxSizerItem     *item = node->GetData();
+
         if (item->GetSizer() == sizer)
-        {
-            m_children.DeleteNode( node );
-            return TRUE;
-        }
-        node = node->Next();
+            return m_children.DeleteNode( node );
+
+        node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
-bool wxSizer::Remove( int pos )
+bool wxSizer::Remove( size_t index )
 {
-    if ((size_t)pos >= m_children.GetCount())
-        return FALSE;
-    wxNode *node = m_children.Nth( pos );
-    if (!node) return FALSE;
+    wxCHECK_MSG( index < m_children.GetCount(),
+                 false,
+                 _T("Remove index is out of range") );
 
-    m_children.DeleteNode( node );
+    wxSizerItemList::Node   *node = m_children.Item( index );
 
-    return TRUE;
+    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+
+    return m_children.DeleteNode( node );
 }
 
 bool wxSizer::Detach( wxSizer *sizer )
 {
-    wxASSERT( sizer );
+    wxASSERT_MSG( sizer, _T("Detaching NULL sizer") );
 
-    wxNode *node = m_children.First();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
+        wxSizerItem     *item = node->GetData();
+
         if (item->GetSizer() == sizer)
         {
             item->DetachSizer();
-            m_children.DeleteNode( node );
-            return TRUE;
+            return m_children.DeleteNode( node );
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
-bool wxSizer::Detach( int pos )
+bool wxSizer::Detach( wxWindow *window )
 {
-    if ((size_t)pos >= m_children.GetCount())
-        return FALSE;
-    wxNode *node = m_children.Nth( pos );
-    if (!node) return FALSE;
+    wxASSERT_MSG( window, _T("Detaching NULL window") );
 
-    ( (wxSizerItem*)node->Data() )->DetachSizer();
-    m_children.DeleteNode( node );
+    wxSizerItemList::Node   *node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
 
-    return TRUE;
+        if (item->GetWindow() == window)
+        {
+            item->GetWindow()->SetContainingSizer( NULL );
+            return m_children.DeleteNode( node );
+        }
+        node = node->GetNext();
+    }
+
+    return false;
+}
+
+bool wxSizer::Detach( size_t index )
+{
+    wxCHECK_MSG( index < m_children.GetCount(),
+                 false,
+                 _T("Detach index is out of range") );
+
+    wxSizerItemList::Node   *node = m_children.Item( index );
+
+    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+
+    node->GetData()->DetachSizer();
+
+    return m_children.DeleteNode( node );
 }
 
 void wxSizer::Clear( bool delete_windows )
 {
     // First clear the ContainingSizer pointers
-    wxNode *node = m_children.First();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
+        wxSizerItem     *item = node->GetData();
+
         if (item->IsWindow())
-            item->GetWindow()->SetContainingSizer(NULL);
-        node = node->Next();
+            item->GetWindow()->SetContainingSizer( NULL );
+        node = node->GetNext();
     }
 
     // Destroy the windows if needed
@@ -412,12 +490,13 @@ void wxSizer::Clear( bool delete_windows )
 
 void wxSizer::DeleteWindows()
 {
-    wxNode *node = m_children.First();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
+        wxSizerItem     *item = node->GetData();
+
         item->DeleteWindows();
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -484,9 +563,10 @@ wxSize wxSizer::GetMaxWindowSize( wxWindow *window )
 
 wxSize wxSizer::GetMinWindowSize( wxWindow *window )
 {
-    wxSize minSize( GetMinSize() );
-    wxSize size( window->GetSize() );
-    wxSize client_size( window->GetClientSize() );
+    wxSize      minSize( GetMinSize() );
+    wxSize      size( window->GetSize() );
+    wxSize      client_size( window->GetClientSize() );
+
     return wxSize( minSize.x+size.x-client_size.x,
                    minSize.y+size.y-client_size.y );
 }
@@ -568,80 +648,88 @@ void wxSizer::DoSetMinSize( int width, int height )
 
 bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
 {
-    wxASSERT( window );
+    wxASSERT_MSG( window, _T("SetMinSize for NULL window") );
 
-    wxNode *node = m_children.First();
+    // Is it our immediate child?
+
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
+        wxSizerItem     *item = node->GetData();
+
         if (item->GetWindow() == window)
         {
             item->SetInitSize( width, height );
-            return TRUE;
+            return true;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    node = m_children.First();
+    // No?  Search any subsizers we own then
+
+    node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
-        if (item->GetSizer())
+        wxSizerItem     *item = node->GetData();
+
+        if ( item->GetSizer() &&
+             item->GetSizer()->DoSetItemMinSize( window, width, height ) )
         {
-            // It's a sizer, so lets search recursively.
-            if (item->GetSizer()->DoSetItemMinSize( window, width, height ))
-            {
-                // A child sizer found the requested windw, exit.
-                return TRUE;
-            }
+            // A child sizer found the requested windw, exit.
+            return true;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
 {
-    wxASSERT( sizer );
+    wxASSERT_MSG( sizer, _T("SetMinSize for NULL sizer") );
 
-    wxNode *node = m_children.First();
+    // Is it our immediate child?
+
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
+        wxSizerItem     *item = node->GetData();
+
         if (item->GetSizer() == sizer)
         {
             item->GetSizer()->DoSetMinSize( width, height );
-            return TRUE;
+            return true;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    node = m_children.First();
+    // No?  Search any subsizers we own then
+
+    node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
-        if (item->GetSizer())
+        wxSizerItem     *item = node->GetData();
+
+        if ( item->GetSizer() &&
+             item->GetSizer()->DoSetItemMinSize( sizer, width, height ) )
         {
-            // It's a sizer, so lets search recursively.
-            if (item->GetSizer()->DoSetItemMinSize( sizer, width, height ))
-            {
-                // A child sizer found the requested windw, exit.
-                return TRUE;
-            }
+            // A child found the requested sizer, exit.
+            return true;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
-bool wxSizer::DoSetItemMinSize( int pos, int width, int height )
+bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
 {
-    wxNode *node = m_children.Nth( pos );
-    if (!node) return FALSE;
+    wxSizerItemList::Node   *node = m_children.Item( index );
 
-    wxSizerItem *item = (wxSizerItem*) node->Data();
+    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+
+    wxSizerItem     *item = node->GetData();
+
     if (item->GetSizer())
     {
         // Sizers contains the minimal size in them, if not calculated ...
@@ -653,111 +741,129 @@ bool wxSizer::DoSetItemMinSize( int pos, int width, int height )
         item->SetInitSize( width, height );
     }
 
-    return TRUE;
+    return true;
 }
 
-void wxSizer::Show(wxWindow *window, bool show)
+void wxSizer::Show( wxWindow *window, bool show )
 {
-    wxNode *node = m_children.GetFirst();
+    wxASSERT_MSG( window, _T("Show for NULL window") );
+
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
+        wxSizerItem     *item = node->GetData();
 
-        if (item->IsWindow() && item->GetWindow() == window)
+        if (item->GetWindow() == window)
         {
-            item->Show(show);
-            window->Show(show);
-            return;
+            item->Show( show );
+            break;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
-void wxSizer::Show(wxSizer *sizer, bool show)
+void wxSizer::Show( wxSizer *sizer, bool show )
 {
-    wxNode *node = m_children.GetFirst();
+    wxASSERT_MSG( sizer, _T("Show for NULL sizer") );
+
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
+        wxSizerItem     *item = node->GetData();
 
-        if (item->IsSizer() && item->GetSizer() == sizer)
+        if (item->GetSizer() == sizer)
         {
-            item->Show(show);
-            sizer->ShowItems(show);
-            return;
+            item->Show( show );
+            break;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
-void wxSizer::ShowItems (bool show)
+void wxSizer::Show( size_t index, bool show )
 {
-    wxNode *node = m_children.GetFirst();
+    wxCHECK_RET( index < m_children.GetCount(),
+                 _T("Show index is out of range") );
+
+    m_children.Item( index )->GetData()->Show( show );
+}
+
+void wxSizer::ShowItems( bool show )
+{
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
-
-        if (item->IsWindow())
-            item->GetWindow()->Show (show);
-        else if (item->IsSizer())
-            item->GetSizer()->ShowItems (show);
-
-        node = node->Next();
+        node->GetData()->Show( show );
+        node = node->GetNext();
     }
 }
 
-bool wxSizer::IsShown (wxWindow *window)
+bool wxSizer::IsShown( wxWindow *window )
 {
-    wxNode *node = m_children.GetFirst();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
+        wxSizerItem     *item = node->GetData();
         
-        if (item->IsWindow() && item->GetWindow() == window)
+        if (item->GetWindow() == window)
         {
             return item->IsShown();
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    return FALSE;
+    wxFAIL_MSG( _T("IsShown failed to find sizer item") );
+
+    return false;
 }
 
-bool wxSizer::IsShown (wxSizer *sizer)
+bool wxSizer::IsShown( wxSizer *sizer )
 {
-    wxNode *node = m_children.GetFirst();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
+        wxSizerItem     *item = node->GetData();
 
-        if (item->IsSizer() && item->GetSizer() == sizer)
+        if (item->GetSizer() == sizer)
         {
             return item->IsShown();
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    return FALSE;
+    wxFAIL_MSG( _T("IsShown failed to find sizer item") );
+
+    return false;
 }
+
+bool wxSizer::IsShown( size_t index )
+{
+    wxCHECK_MSG( index < m_children.GetCount(),
+                 false,
+                 _T("IsShown index is out of range") );
+
+    return m_children.Item( index )->GetData()->IsShown();
+}
+
 
 //---------------------------------------------------------------------------
 // wxGridSizer
 //---------------------------------------------------------------------------
 
 wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
+    : m_rows( rows )
+    , m_cols( cols )
+    , m_vgap( vgap )
+    , m_hgap( hgap )
 {
-    m_rows = rows;
-    m_cols = cols;
-    m_vgap = vgap;
-    m_hgap = hgap;
 }
 
 wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
+    : m_rows( 0 )
+    , m_cols( cols )
+    , m_vgap( vgap )
+    , m_hgap( hgap )
 {
-    m_rows = 0;
-    m_cols = cols;
-    m_vgap = vgap;
-    m_hgap = hgap;
 }
 
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
@@ -807,10 +913,11 @@ void wxGridSizer::RecalcSizes()
             int i = r * ncols + c;
             if (i < nitems)
             {
-                wxNode *node = m_children.Nth( i );
-                wxASSERT( node );
+                wxSizerItemList::Node   *node = m_children.Item( i );
 
-                SetItemBounds( (wxSizerItem*) node->Data(), x, y, w, h);
+                wxASSERT_MSG( node, _T("Failed to find SizerItemList node") );
+
+                SetItemBounds( node->GetData(), x, y, w, h);
             }
             y = y + h + m_vgap;
         }
@@ -828,19 +935,20 @@ wxSize wxGridSizer::CalcMin()
     int w = 0;
     int h = 0;
 
-    wxNode *node = m_children.First();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
-        wxSize sz( item->CalcMin() );
+        wxSizerItem     *item = node->GetData();
+        wxSize           sz( item->CalcMin() );
+
         w = wxMax( w, sz.x );
         h = wxMax( h, sz.y );
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
-    return wxSize(ncols * w + (ncols-1) * m_hgap,
-                  nrows * h + (nrows-1) * m_vgap);
+    return wxSize( ncols * w + (ncols-1) * m_hgap,
+                   nrows * h + (nrows-1) * m_vgap );
 }
 
 void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
@@ -883,16 +991,16 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
 
 wxFlexGridSizer::wxFlexGridSizer( int rows, int cols, int vgap, int hgap )
    : wxGridSizer( rows, cols, vgap, hgap )
+   , m_rowHeights( NULL )
+   , m_colWidths( NULL )
 {
-    m_rowHeights = (int*) NULL;
-    m_colWidths = (int*) NULL;
 }
 
 wxFlexGridSizer::wxFlexGridSizer( int cols, int vgap, int hgap )
    : wxGridSizer( cols, vgap, hgap )
+   , m_rowHeights( NULL )
+   , m_colWidths( NULL )
 {
-    m_rowHeights = (int*) NULL;
-    m_colWidths = (int*) NULL;
 }
 
 wxFlexGridSizer::~wxFlexGridSizer()
@@ -979,13 +1087,14 @@ void wxFlexGridSizer::RecalcSizes()
             int i = r * ncols + c;
             if (i < nitems)
             {
-                wxNode *node = m_children.Nth( i );
-                wxASSERT( node );
+                wxSizerItemList::Node   *node = m_children.Item( i );
+
+                wxASSERT_MSG( node, _T("Failed to find node") );
 
                 int w = wxMax( 0, wxMin( m_colWidths[c], sz.x - x ) );
                 int h = wxMax( 0, wxMin( m_rowHeights[r], sz.y - y ) );
 
-                SetItemBounds( (wxSizerItem*) node->Data(), x, y, w, h);
+                SetItemBounds( node->GetData(), x, y, w, h);
             }
             y = y + m_rowHeights[r] + m_vgap;
         }
@@ -1001,18 +1110,20 @@ wxSize wxFlexGridSizer::CalcMin()
 
     CreateArrays();
 
-    int i = 0;
-    wxNode *node = m_children.First();
+    int                      i = 0;
+    wxSizerItemList::Node   *node = m_children.GetFirst();
+
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*)node->Data();
-        wxSize sz( item->CalcMin() );
-        int row = i / ncols;
-        int col = i % ncols;
+        wxSizerItem    *item = node->GetData();
+        wxSize          sz( item->CalcMin() );
+        int             row = i / ncols;
+        int             col = i % ncols;
+
         m_rowHeights[ row ] = wxMax( sz.y, m_rowHeights[ row ] );
         m_colWidths[ col ] = wxMax( sz.x, m_colWidths[ col ] );
 
-        node = node->Next();
+        node = node->GetNext();
         i++;
     }
 
@@ -1051,8 +1162,8 @@ void wxFlexGridSizer::RemoveGrowableCol( size_t WXUNUSED(idx) )
 //---------------------------------------------------------------------------
 
 wxBoxSizer::wxBoxSizer( int orient )
+    : m_orient( orient )
 {
-    m_orient = orient;
 }
 
 void wxBoxSizer::RecalcSizes()
@@ -1078,22 +1189,23 @@ void wxBoxSizer::RecalcSizes()
 
     wxPoint pt( m_position );
 
-    wxNode *node = m_children.GetFirst();
+    wxSizerItemList::Node   *node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
+        wxSizerItem     *item = node->GetData();
+
         if (item->IsShown())
         {
             int weight = 1;
-            if (item->GetOption())
-                weight = item->GetOption();
+            if (item->GetProportion())
+                weight = item->GetProportion();
 
             wxSize size( item->CalcMin() );
 
             if (m_orient == wxVERTICAL)
             {
                 wxCoord height = size.y;
-                if (item->GetOption())
+                if (item->GetProportion())
                 {
                     height = (delta * weight) + extra;
                     extra = 0; // only the first item will get the remainder as extra size
@@ -1118,7 +1230,7 @@ void wxBoxSizer::RecalcSizes()
             else
             {
                 wxCoord width = size.x;
-                if (item->GetOption())
+                if (item->GetProportion())
                 {
                     width = (delta * weight) + extra;
                     extra = 0; // only the first item will get the remainder as extra size
@@ -1142,7 +1254,7 @@ void wxBoxSizer::RecalcSizes()
             }
         }
 
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -1158,14 +1270,16 @@ wxSize wxBoxSizer::CalcMin()
     m_fixedHeight = 0;
 
     // Find how long each stretch unit needs to be
-    int stretchSize = 1;
-    wxNode *node = m_children.GetFirst();
+    int                      stretchSize = 1;
+    wxSizerItemList::Node   *node = m_children.GetFirst();
+
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
-        if (item->IsShown() && item->GetOption() != 0)
+        wxSizerItem     *item = node->GetData();
+
+        if (item->IsShown() && item->GetProportion() != 0)
         {
-            int stretch = item->GetOption();
+            int stretch = item->GetProportion();
             wxSize size( item->CalcMin() );
             int sizePerStretch;
             // Integer division rounded up is (a + b - 1) / b
@@ -1176,24 +1290,26 @@ wxSize wxBoxSizer::CalcMin()
             if (sizePerStretch > stretchSize)
                 stretchSize = sizePerStretch;
         }
-        node = node->Next();
+        node = node->GetNext();
     }
+
     // Calculate overall minimum size
     node = m_children.GetFirst();
     while (node)
     {
-        wxSizerItem *item = (wxSizerItem*) node->Data();
+        wxSizerItem     *item = node->GetData();
+
         if (item->IsShown())
         {
-            m_stretchable += item->GetOption();
+            m_stretchable += item->GetProportion();
 
             wxSize size( item->CalcMin() );
-            if (item->GetOption() != 0)
+            if (item->GetProportion() != 0)
             {
                 if (m_orient == wxHORIZONTAL)
-                    size.x = stretchSize * item->GetOption();
+                    size.x = stretchSize * item->GetProportion();
                 else
-                    size.y = stretchSize * item->GetOption();
+                    size.y = stretchSize * item->GetProportion();
             }
 
             if (m_orient == wxHORIZONTAL)
@@ -1207,7 +1323,7 @@ wxSize wxBoxSizer::CalcMin()
                 m_minWidth = wxMax( m_minWidth, size.x );
             }
 
-            if (item->GetOption() == 0)
+            if (item->GetProportion() == 0)
             {
                 if (m_orient == wxVERTICAL)
                 {
@@ -1221,7 +1337,7 @@ wxSize wxBoxSizer::CalcMin()
                 }
             }
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return wxSize( m_minWidth, m_minHeight );
@@ -1234,15 +1350,15 @@ wxSize wxBoxSizer::CalcMin()
 #if wxUSE_STATBOX
 
 wxStaticBoxSizer::wxStaticBoxSizer( wxStaticBox *box, int orient )
-                : wxBoxSizer( orient )
+    : wxBoxSizer( orient )
+    , m_staticBox( box )
 {
     wxASSERT_MSG( box, wxT("wxStaticBoxSizer needs a static box") );
-
-    m_staticBox = box;
 }
 
-static void GetStaticBoxBorders(wxStaticBox *box,
-                                int *borderTop, int *borderOther)
+static void GetStaticBoxBorders( wxStaticBox *box,
+                                 int *borderTop,
+                                 int *borderOther)
 {
     // this has to be done platform by platform as there is no way to
     // guess the thickness of a wxStaticBox border
@@ -1297,10 +1413,9 @@ wxSize wxStaticBoxSizer::CalcMin()
 #if wxUSE_NOTEBOOK
 
 wxNotebookSizer::wxNotebookSizer( wxNotebook *nb )
+    : m_notebook( nb )
 {
     wxASSERT_MSG( nb, wxT("wxNotebookSizer needs a notebook") );
-
-    m_notebook = nb;
 }
 
 void wxNotebookSizer::RecalcSizes()

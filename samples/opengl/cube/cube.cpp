@@ -78,7 +78,7 @@ ScanCodeCtrl::ScanCodeCtrl( wxWindow* parent, wxWindowID id, int code,
 
 void ScanCodeCtrl::OnKeyDown( wxKeyEvent& event )
 { wxString buf;
-  buf.Printf( "0x%04x", event.KeyCode() );
+  buf.Printf( "0x%04x", event.GetKeyCode() );
   SetValue( buf );
 }
 

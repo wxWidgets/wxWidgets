@@ -285,13 +285,13 @@ void SpinBtnWidgetsPage::CreateSpin()
             val = valOld;
         }
 
-        m_sizerSpin->Remove(m_spinbtn);
-        m_sizerSpin->Remove(m_spinctrl);
+        m_sizerSpin->Detach( m_spinbtn );
+        m_sizerSpin->Detach( m_spinctrl );
 
         // there are 3 spacers left
-        m_sizerSpin->Remove((int)0);
-        m_sizerSpin->Remove((int)0);
-        m_sizerSpin->Remove((int)0);
+        m_sizerSpin->Remove( 0u );
+        m_sizerSpin->Remove( 0u );
+        m_sizerSpin->Remove( 0u );
 
         delete m_spinbtn;
         delete m_spinctrl;

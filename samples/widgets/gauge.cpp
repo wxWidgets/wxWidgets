@@ -271,7 +271,7 @@ void GaugeWidgetsPage::CreateGauge()
     {
         val = m_gauge->GetValue();
 
-        m_sizerGauge->Remove(m_gauge);
+        m_sizerGauge->Detach( m_gauge );
         delete m_gauge;
     }
 

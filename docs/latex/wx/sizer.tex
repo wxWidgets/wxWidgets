@@ -128,18 +128,13 @@ Here, the sizer will do the actual calculation of its children minimal sizes.
 
 \func{bool}{Detach}{\param{wxSizer* }{sizer}}
 
-\func{bool}{Detach}{\param{int }{nth}}
+\func{bool}{Detach}{\param{size\_t }{index}}
 
 Detach a child from the sizer without destroying it. {\it window} is the window to be
-detached, {\it sizer} is the equivalent sizer and {\it nth} is the position of
+detached, {\it sizer} is the equivalent sizer and {\it index} is the position of
 the child in the sizer, typically 0 for the first item. This method does not
 cause any layout or resizing to take place, call \helpref{wxSizer::Layout}{wxsizerlayout}
 to update the layout "on screen" after detaching a child from the sizer.
-
-{\bf NB:} Detaching a wxWindow from a wxSizer is equivalent to Removing it.  There is
-currently no wxSizer method that will detach and destroy a window automatically.
-You must either act to destroy it yourself, or allow its parent to destroy it in the
-normal course of events.
 
 Returns TRUE if the child item was found and detached, FALSE otherwise.
 
@@ -191,15 +186,15 @@ size of all the children and their borders or the minimal size set by
 
 \membersection{wxSizer::Insert}\label{wxsizerinsert}
 
-\func{void}{Insert}{\param{int }{before}, \param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{void}{Insert}{\param{size\_t }{index}, \param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Insert}{\param{int }{before}, \param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{void}{Insert}{\param{size\_t }{index}, \param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-\func{void}{Insert}{\param{int }{before}, \param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+\func{void}{Insert}{\param{size\_t }{index}, \param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-Insert a child into the sizer.
+Insert a child into the sizer before any existing item at {\it index}.
 
-\docparam{before}{The position this child should assume in the sizer.}
+\docparam{index}{The position this child should assume in the sizer.}
 
 See \helpref{wxSizer::Add}{wxsizeradd} for the meaning of the other parameters.
 
@@ -236,16 +231,18 @@ and sizes.
 
 \func{bool}{Remove}{\param{wxSizer* }{sizer}}
 
-\func{bool}{Remove}{\param{int }{nth}}
+\func{bool}{Remove}{\param{size\_t }{index}}
 
-Removes a child from the sizer. {\it window} is the window to be removed, {\it sizer} is the
-equivalent sizer and {\it nth} is the position of the child in the sizer, typically 0 for
-the first item. This method does not cause any layout or resizing to take place, call
+Removes a child from the sizer and destroys it.  {\it sizer} is the wxSizer to be removed,
+{\it index} is the position of the child in the sizer, typically 0 for the first item.
+This method does not cause any layout or resizing to take place, call
 \helpref{wxSizer::Layout}{wxsizerlayout} to update the layout "on screen" after removing a
 child from the sizer.
 
-{\bf NB:} wxWindows are not deleted by Remove, but wxSizers are.  To remove a sizer without
-deleting it, use \helpref{wxSizer::Detach}{wxsizerdetach} instead.
+{\bf NB:} The method taking a wxWindow* parameter is deprecated.  For historical reasons
+it does not destroy the window as would usually be expected from Remove.  You should use
+\helpref{wxSizer::Detach}{wxsizerdetach} in new code instead.  There is currently no wxSizer
+method that will both detach and destroy a wxWindow item.
 
 Returns TRUE if the child item was found and removed, FALSE otherwise.
 
@@ -275,7 +272,7 @@ bigger.
 
 \func{void}{SetItemMinSize}{\param{wxSizer* }{sizer}, \param{int}{ width}, \param{int}{ height}}
 
-\func{void}{SetItemMinSize}{\param{int}{ pos}, \param{int}{ width}, \param{int}{ height}}
+\func{void}{SetItemMinSize}{\param{size\_t }{index}, \param{int}{ width}, \param{int}{ height}}
 
 Set an item's minimum size by window, sizer, or position. The item will be found recursively
 in the sizer's descendants. This function enables an application to set the size of an item
@@ -307,6 +304,8 @@ minimal size. For windows with managed scrollbars this will set them appropriate
 
 \func{void}{Show}{\param{wxSizer* }{sizer}, \param{bool }{show = TRUE}}
 
-Shows or hides a window or sizer. To make a sizer item disappear or 
-reappear, use Show() followed by Layout().
+\func{void}{Show}{\param{size\_t }{index}, \param{bool }{show = TRUE}}
+
+Shows or hides the {\it window}, {\it sizer}, or item at {\it index}.
+To make a sizer item disappear or reappear, use Show() followed by Layout().
 

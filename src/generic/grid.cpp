@@ -923,7 +923,7 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
 {
     if ( !HasRange() )
     {
-        int keycode = (int) event.KeyCode();
+        int keycode = event.GetKeyCode();
         if ( isdigit(keycode) || keycode == '+' || keycode == '-'
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
@@ -1063,7 +1063,7 @@ void wxGridCellFloatEditor::Reset()
 
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
-    int keycode = (int)event.KeyCode();
+    int keycode = event.GetKeyCode();
         if ( isdigit(keycode) || keycode == '+' || keycode == '-' || keycode == '.'
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
@@ -1495,7 +1495,7 @@ wxString wxGridCellChoiceEditor::GetValue() const
 
 void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
 {
-    switch ( event.KeyCode() )
+    switch ( event.GetKeyCode() )
     {
         case WXK_ESCAPE:
             m_editor->Reset();
@@ -1520,7 +1520,7 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
 
 void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
 {
-    switch ( event.KeyCode() )
+    switch ( event.GetKeyCode() )
     {
         case WXK_ESCAPE:
         case WXK_TAB:
@@ -6082,7 +6082,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
         // try local handlers
         //
-        switch ( event.KeyCode() )
+        switch ( event.GetKeyCode() )
         {
             case WXK_UP:
                 if ( event.ControlDown() )
@@ -6247,7 +6247,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
                     // <F2> is special and will always start editing, for
                     // other keys - ask the editor itself
-                    if ( (event.KeyCode() == WXK_F2 && !event.HasModifiers())
+                    if ( (event.GetKeyCode() == WXK_F2 && !event.HasModifiers())
                          || editor->IsAcceptedKey(event) )
                     {
                         // ensure cell is visble
@@ -6285,7 +6285,7 @@ void wxGrid::OnKeyUp( wxKeyEvent& event )
 {
     // try local handlers
     //
-    if ( event.KeyCode() == WXK_SHIFT )
+    if ( event.GetKeyCode() == WXK_SHIFT )
     {
         if ( m_selectingTopLeft != wxGridNoCellCoords &&
              m_selectingBottomRight != wxGridNoCellCoords )

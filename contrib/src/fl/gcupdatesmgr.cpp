@@ -172,8 +172,8 @@ void cbGCUpdatesMgr::UpdateNow()
             // number of bars, that were changed in the current row
             int nBars = 0; 
 
-            wxRect r1 = pRow->mUMgrData.mPrevBounds;
-            wxRect r2 = pRow->mBoundsInParent;
+            //wxRect r1 = pRow->mUMgrData.mPrevBounds;
+            //wxRect r2 = pRow->mBoundsInParent;
 
             if ( WasChanged( pRow->mUMgrData, pRow->mBoundsInParent ) )
             

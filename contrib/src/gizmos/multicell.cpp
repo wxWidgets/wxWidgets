@@ -296,11 +296,10 @@ void wxMultiCellSizer::RecalcSizes()
 	wxPoint c_point;
 	wxSize  c_size;
 
-	wxNode *current;
-	current = m_children.GetFirst();
+	wxSizerItemList::Node 	*current = m_children.GetFirst();
 	while (current != NULL)
 	{
-		wxSizerItem *item = (wxSizerItem*) current->Data();
+		wxSizerItem 	*item = current->GetData();
 
 		wxMultiCellItemHandle *rect;
 		if (item != NULL &&
@@ -372,7 +371,7 @@ void wxMultiCellSizer::RecalcSizes()
 			}
 			item->SetDimension(c_point, c_size);
 		}
-		current = current->Next();
+		current = current->GetNext();
 	}
 }
 //---------------------------------------------------------------------------
@@ -404,10 +403,10 @@ void wxMultiCellSizer :: GetMinimums()
 		m_weights[x]->SetWidth(0);
 	}
 
-	wxNode *node = m_children.GetFirst();
+	wxSizerItemList::Node 	*node = m_children.GetFirst();
 	while (node)
 	{
-		wxSizerItem *item = (wxSizerItem*) node->Data();
+		wxSizerItem 	*item = node->GetData();
 		wxMultiCellItemHandle *rect;
 		if (item != NULL &&
 			(rect = (wxMultiCellItemHandle *)item->GetUserData()) != NULL)
@@ -506,7 +505,7 @@ void wxMultiCellSizer :: GetMinimums()
 				m_maxWidth[col] = wxMax(m_maxWidth[col], m_defaultCellSize.GetWidth());
 				m_weights[col]->SetWidth(wxMax(m_weights[col]->GetWidth(), rect->GetWeight().GetWidth()));
 			}
-			node = node->Next();
+			node = node->GetNext();
 		}
 	}
 } // wxMultiCellSizer :: GetMinimums

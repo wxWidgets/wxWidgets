@@ -1175,7 +1175,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if ((key_event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
+    if ((key_event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
         event.SetEventObject(this);
@@ -1183,7 +1183,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
         if (GetEventHandler()->ProcessEvent(event)) return;
     }
 
-    if ((key_event.KeyCode() == WXK_RETURN) && !(m_windowStyle & wxTE_MULTILINE))
+    if ((key_event.GetKeyCode() == WXK_RETURN) && !(m_windowStyle & wxTE_MULTILINE))
     {
         // This will invoke the dialog default action, such
         // as the clicking the default button.

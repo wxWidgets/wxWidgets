@@ -3408,7 +3408,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
         le.m_itemIndex = m_current;
         GetLine(m_current)->GetItem( 0, le.m_item );
-        le.m_code = (int)event.KeyCode();
+        le.m_code = event.GetKeyCode();
         le.SetEventObject( parent );
         parent->GetEventHandler()->ProcessEvent( le );
     }
@@ -3425,7 +3425,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     ke.SetEventObject( parent );
     if (parent->GetEventHandler()->ProcessEvent( ke )) return;
 
-    if (event.KeyCode() == WXK_TAB)
+    if (event.GetKeyCode() == WXK_TAB)
     {
         wxNavigationKeyEvent nevent;
         nevent.SetWindowChange( event.ControlDown() );
@@ -3443,7 +3443,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         return;
     }
 
-    switch (event.KeyCode())
+    switch (event.GetKeyCode())
     {
         case WXK_UP:
             if ( m_current > 0 )

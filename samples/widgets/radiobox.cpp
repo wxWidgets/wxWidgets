@@ -288,7 +288,7 @@ void RadioWidgetsPage::CreateRadio()
     {
         sel = m_radio->GetSelection();
 
-        m_sizerRadio->Remove(m_radio);
+        m_sizerRadio->Detach( m_radio );
 
         delete m_radio;
     }

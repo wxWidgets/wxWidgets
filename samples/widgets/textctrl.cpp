@@ -542,7 +542,7 @@ void TextWidgetsPage::CreateText()
     {
         valueOld = m_text->GetValue();
 
-        m_sizerText->Remove(m_text);
+        m_sizerText->Detach( m_text );
         delete m_text;
     }
     else

@@ -266,7 +266,7 @@ void ButtonWidgetsPage::CreateButton()
         size_t count = m_sizerButton->GetChildren().GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            m_sizerButton->Remove(0);
+            m_sizerButton->Remove( 0u );
         }
 
         delete m_button;

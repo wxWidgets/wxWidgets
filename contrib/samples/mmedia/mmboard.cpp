@@ -379,11 +379,11 @@ void MMBoardFrame::CloseVideoWindow()
 {
     if (!m_video_window)
         return;
-    
-    m_sizer->Remove(m_video_window);
+
+    m_sizer->Detach( m_video_window );
     delete m_video_window;
     m_video_window = NULL;
-    
+
     m_sizer->Fit(this);
 }
 

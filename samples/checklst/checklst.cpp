@@ -290,7 +290,7 @@ void CheckListBoxFrame::OnToggleSelection(wxCommandEvent& event)
 {
     wxSizer *sizer = m_panel->GetSizer();
 
-    sizer->Remove(m_pListBox);
+    sizer->Detach( m_pListBox );
     delete m_pListBox;
 
     CreateCheckListbox(event.IsChecked() ? wxLB_EXTENDED : 0);

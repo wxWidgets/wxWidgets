@@ -340,7 +340,7 @@ void ComboboxWidgetsPage::CreateCombo()
             items.Add(m_combobox->GetString(n));
         }
 
-        m_sizerCombo->Remove(m_combobox);
+        m_sizerCombo->Detach( m_combobox );
         delete m_combobox;
     }
 

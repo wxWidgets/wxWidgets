@@ -863,8 +863,8 @@ public:
     // Get Y position
     wxCoord GetY() const { return m_y; }
 
-    // deprecated
-    long KeyCode() const { return m_keyCode; }
+    // deprecated, Use GetKeyCode instead.
+    wxDEPRECATED( long KeyCode() const );
 
     virtual wxEvent *Clone() const { return new wxKeyEvent(*this); }
 

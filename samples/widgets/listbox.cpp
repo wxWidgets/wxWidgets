@@ -351,7 +351,7 @@ void ListboxWidgetsPage::CreateLbox()
             items.Add(m_lbox->GetString(n));
         }
 
-        m_sizerLbox->Remove(m_lbox);
+        m_sizerLbox->Detach( m_lbox );
         delete m_lbox;
     }
 

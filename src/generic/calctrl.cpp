@@ -1571,7 +1571,7 @@ void wxCalendarCtrl::OnYearChange(wxCommandEvent& event)
 void wxCalendarCtrl::OnChar(wxKeyEvent& event)
 {
     wxDateTime target;
-    switch ( event.KeyCode() )
+    switch ( event.GetKeyCode() )
     {
         case _T('+'):
         case WXK_ADD:

@@ -255,7 +255,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid spin ctrl") );
 
-    if (event.KeyCode() == WXK_RETURN)
+    if (event.GetKeyCode() == WXK_RETURN)
     {
         wxWindow *top_frame = m_parent;
         while (top_frame->GetParent() && !(top_frame->GetParent()->IsTopLevel()))

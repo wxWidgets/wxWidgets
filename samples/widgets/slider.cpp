@@ -315,13 +315,13 @@ void SliderWidgetsPage::CreateSlider()
             val = valOld;
         }
 
-        m_sizerSlider->Remove(m_slider);
+        m_sizerSlider->Detach( m_slider );
 
         if ( m_sizerSlider->GetChildren().GetCount() )
         {
             // we have 2 spacers, remove them too
-            m_sizerSlider->Remove((int)0);
-            m_sizerSlider->Remove((int)0);
+            m_sizerSlider->Remove( 0u );
+            m_sizerSlider->Remove( 0u );
         }
 
         delete m_slider;

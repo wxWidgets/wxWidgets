@@ -998,14 +998,14 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     {
         m_btnDetails->SetLabel(ms_details + EXPAND_SUFFIX);
 
-        sizer->Remove(m_listctrl);
+        sizer->Detach( m_listctrl );
 
 #if wxUSE_STATLINE
-        sizer->Remove(m_statline);
+        sizer->Detach( m_statline );
 #endif // wxUSE_STATLINE
 
 #if wxUSE_FILE
-        sizer->Remove(m_btnSave);
+        sizer->Detach( m_btnSave );
 #endif // wxUSE_FILE
     }
     else // show details now

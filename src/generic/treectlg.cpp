@@ -2529,7 +2529,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     // home  : go to root
     // end   : go to last item without opening parents
     // alnum : start or continue searching for the item with this prefix
-    int keyCode = event.KeyCode();
+    int keyCode = event.GetKeyCode();
     switch ( keyCode )
     {
         case '+':
