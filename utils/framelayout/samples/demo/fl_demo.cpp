@@ -43,7 +43,6 @@
 #include "barhintspl.h"
 #include "hintanimpl.h"
 #include "controlarea.h"
-#include "objstore.h"
 
 #include "dyntbar.h"
 #include "dyntbarhnd.h"  // fl-dimension-handler for dynamic toolbar
@@ -99,8 +98,6 @@ bool MyApp::OnInit(void)
     wxMenu *file_menu = new wxMenu;
     wxMenu *active_menu = new wxMenu;
 
-    file_menu->Append( ID_LOAD,  "&Load layouts"  );
-    file_menu->Append( ID_STORE, "&Store layouts" );
     file_menu->AppendSeparator();
         
     file_menu->Append( ID_AUTOSAVE, "&Auto Save Layouts", "save layouts on exit", TRUE );
@@ -258,9 +255,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( MINIMAL_QUIT,  MyFrame::OnQuit  )
     EVT_MENU( MINIMAL_ABOUT, MyFrame::OnAbout )
 
-    EVT_MENU( ID_LOAD,      MyFrame::OnLoad      )
-    EVT_MENU( ID_STORE,     MyFrame::OnStore     )
-    EVT_MENU( ID_AUTOSAVE,  MyFrame::OnAutoSave  )
     EVT_MENU( ID_SETTINGS,  MyFrame::OnSettings  )
     EVT_MENU( ID_REMOVE,    MyFrame::OnRemove    )
     EVT_MENU( ID_REMOVEALL, MyFrame::OnRemoveAll )
@@ -322,38 +316,28 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     int idx1 = mImageList.Add( bmp1 );
     int idx2 = mImageList.Add( bmp2 );
 
-    // load configuation if present      
+    InitAboutBox();
 
-    if ( wxFileExists( "layouts_for_demo.dat" ) )
-    {
-        wxCommandEvent evt;
-        this->OnLoad( evt );
-    }
-    else
-    {
-        InitAboutBox();
+    // create multiple layouts
 
-        // create multiple layouts
+    mpNestedLayout = 0;
 
-        mpNestedLayout = 0;
+    mpClntWindow = CreateTxtCtrl("client window");
 
-        mpClntWindow = CreateTxtCtrl("client window");
+    for( i = 0; i != MAX_LAYOUTS; ++i )
 
-        for( i = 0; i != MAX_LAYOUTS; ++i )
-                    
-            CreateLayout( i );
+	CreateLayout( i );
 
-        for( i = SECOND_LAYOUT; i != MAX_LAYOUTS; ++i )
+    for( i = SECOND_LAYOUT; i != MAX_LAYOUTS; ++i )
 
-            // hide others
-            mLayouts[i]->HideBarWindows();
+	// hide others
+	mLayouts[i]->HideBarWindows();
 
-        // activate first one 
+    // activate first one 
 
-        mLayouts[FIRST_LAYOUT]->Activate();
+    mLayouts[FIRST_LAYOUT]->Activate();
 
-        mActiveLayoutNo = FIRST_LAYOUT;
-    }
+    mActiveLayoutNo = FIRST_LAYOUT;
 }
 
 /*** event handlers ***/
@@ -366,65 +350,11 @@ bool MyFrame::OnClose(void)
     this->Show(FALSE);
 
 
-    if ( (mAutoSave && mSavedAlready) || !mAutoSave );
-		else
-		{
-			wxCommandEvent evt;
-			this->OnStore(evt);
-		}
 
-	mAboutBox.Destroy();
-	this->Destroy();
+    mAboutBox.Destroy();
+    this->Destroy();
 
-	return TRUE;
-}
-
-void MyFrame::OnLoad( wxCommandEvent& event )
-{
-    if ( !wxFileExists( "layouts_for_demo.dat" ) )
-    {               
-        wxMessageBox( 
-            
-"File \"layouts_for_demo.dat\" was not found,\n select\
-(File|Store Layouts) menu item to store layout information first"
-                    );
-        return;
-    }
-
-    DestroyEverything();
-
-    wxIOStreamWrapper stm;
-    stm.CreateForInput( "layouts_for_demo.dat" );
-
-    wxObjectStorage store( stm );
-
-    SerializeMe( store );
-
-    if ( mLayouts[mActiveLayoutNo] )
-
-        mLayouts[mActiveLayoutNo]->Activate();
-}
-
-void MyFrame::OnStore( wxCommandEvent& event )
-{
-    wxIOStreamWrapper stm;
-    stm.CreateForOutput( "layouts_for_demo.dat" );
-
-    wxObjectStorage store( stm );
-
-    SerializeMe( store );
-
-    mSavedAlready = TRUE;
-}
-
-void MyFrame::OnAutoSave( wxCommandEvent& event )
-{
-    mAutoSave = !mAutoSave;
-
-    wxCommandEvent evt;
-    this->OnStore(evt);
-
-    SyncMenuBarItems();
+    return TRUE;
 }
 
 void MyFrame::OnSettings( wxCommandEvent& event )
@@ -499,14 +429,8 @@ void MyFrame::OnQuit( wxCommandEvent& event )
 
     this->Show(FALSE);
 
-    if ( (mAutoSave && mSavedAlready) || !mAutoSave );
-		else
-		{
-			wxCommandEvent evt;
-			this->OnStore(evt);
-		}
 
-	Destroy();
+    Destroy();
 }
 
 void set_dlg_font( wxWindow* pParent, wxFont& font )
@@ -588,28 +512,21 @@ void MyFrame::OnChar( wxKeyEvent& event )
         // "AI" :-)
         wxMessageBox("There are only 3 layouts in this demo :-(");
     else
-    if ( event.m_keyCode == WXK_TAB )
+	if ( event.m_keyCode == WXK_TAB )
 	{
-		//  USEFUL TRICK:: avoids flickering of application's frame 
-		//                 when closing NN windows on exit:
+	    //  USEFUL TRICK:: avoids flickering of application's frame 
+	    //                 when closing NN windows on exit:
 
-		this->Show(FALSE);
+	    this->Show(FALSE);
 
-		if ( (mAutoSave && mSavedAlready) || !mAutoSave );
-			else
-			{
-				wxCommandEvent evt;
-				this->OnStore(evt);
-			}
-
-		Destroy();
+	    Destroy();
 	}
-    else
-    if ( event.m_keyCode == WXK_CONTROL )
-    
-        this->OnSettings( evt );
-    else
-        event.Skip();
+	else
+	    if ( event.m_keyCode == WXK_CONTROL )
+
+		this->OnSettings( evt );
+	    else
+		event.Skip();
 }
 
 void MyFrame::OnSayItsOk( wxCommandEvent& event )
@@ -924,7 +841,6 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
 
     // functions from "wxinfo.h"
     ::wxCreateClassInfoTree( pClassView, cinfId,     1 );
-    ::wxCreateSerializerInfoTree( pClassView, serId, 1 );
 
 #ifdef __WXMSW__
                                                                          // (default arg anyway)
@@ -1215,32 +1131,6 @@ void MyFrame::ActivateLayout( int layoutNo )
         Refresh();
 
     SyncMenuBarItems();
-}
-
-void MyFrame::SerializeMe( wxObjectStorage& store )
-{
-    store.AddInitialRef( this );
-	store.AddInitialRef( mpInternalFrm );
-    store.AddInitialRef( &mAboutBox  );
-    store.AddInitialRef( &mImageList );
-
-    store.XchgInt ( mActiveLayoutNo );
-    store.XchgBool( mAutoSave );
-
-    store.XchgObjPtr( (wxObject**) &mpClntWindow );
-
-    for( int i = 0; i != MAX_LAYOUTS; ++i )
-    {
-        if ( i == THIRD_LAYOUT )
-
-            store.XchgObjPtr( (wxObject**) &(mpNestedLayout) );
-    
-        store.XchgObjPtr( (wxObject**) &(mLayouts[i]) );
-    }
-
-    store.XchgObjPtr( (wxObject**) &(mpAboutBoxLayout) );
-
-    store.Finalize(); // finish serialization
 }
 
 #ifdef __HACK_MY_MSDEV40__

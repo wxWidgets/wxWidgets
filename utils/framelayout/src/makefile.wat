@@ -15,10 +15,10 @@ LNK = $(name).lnk
 IFLAGS      = -i=$(WXINC) -i=$(WXBASEINC) -i=..\..\mfutils\src -i=..\..\prologio\src
 
 OBJECTS = antiflickpl.obj bardragpl.obj barhintspl.obj cbcustom.obj\
- cbstore.obj controlarea.obj controlbar.obj dyntbar.obj dyntbarhnd.obj\
+ controlarea.obj controlbar.obj dyntbar.obj dyntbarhnd.obj\
  frmview.obj garbagec.obj gcupdatesmgr.obj hintanimpl.obj newbmpbtn.obj\
- objstore.obj panedrawpl.obj pf_sample.obj rowdragpl.obj rowlayoutpl.obj\
- settingsdlg.obj toolwnd.obj updatesmgr.obj wxinfo.obj
+ panedrawpl.obj rowdragpl.obj rowlayoutpl.obj\
+ toolwnd.obj updatesmgr.obj 
 
 all: $(OBJECTSLIB)
 

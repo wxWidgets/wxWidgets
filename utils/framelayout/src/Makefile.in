@@ -28,17 +28,14 @@ antiflickpl.cpp \
 bardragpl.cpp \
 barhintspl.cpp \
 cbcustom.cpp \
-cbstore.cpp \
 controlarea.cpp \
 controlbar.cpp \
 dyntbar.cpp \
 dyntbarhnd.cpp \
-frmview.cpp \
 garbagec.cpp \
 gcupdatesmgr.cpp \
 hintanimpl.cpp \
 newbmpbtn.cpp \
-objstore.cpp \
 panedrawpl.cpp \
 rowdragpl.cpp \
 rowlayoutpl.cpp \

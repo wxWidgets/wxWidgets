@@ -15,7 +15,6 @@
 #include "wx/object.h"
 #include "wx/treectrl.h"
 
-#include "objstore.h"
 
 /*
  * creates tree with hierarchically cauptured 
@@ -32,10 +31,5 @@ void wxCreateClassInfoTree( wxTreeCtrl* pTree,
  * serializer-classes (at current run-time)
  * NOTE:: "objstore.cpp" should be compiled in
  */
-
-void wxCreateSerializerInfoTree( wxTreeCtrl* pTree, 	   // existing tree control
-								 wxTreeItemId parentBranchId,
-								 long classImageNo = -1    // (-1) - text only  
-							   );
 
 #endif

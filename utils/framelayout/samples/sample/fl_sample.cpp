@@ -26,7 +26,6 @@
 #endif
 
 #include "controlbar.h"
-#include "objstore.h"
 
 // plugins used
 #include "barhintspl.h"
@@ -58,7 +57,6 @@ protected:
     wxWindow*      mpClientWnd;
 	wxPanel*       mpInternalFrm;
 
-    void SerializeMe( wxObjectStorage& store );
 
     wxTextCtrl* CreateTextCtrl( const wxString& value );
 
@@ -67,8 +65,6 @@ public:
     MyFrame( wxWindow* parent, char *title );
     ~MyFrame();
     
-    void OnLoad( wxCommandEvent& event );
-	void OnStore( wxCommandEvent& event );
     void OnQuit( wxCommandEvent& event );
 
     bool OnClose(void) { return TRUE; }
@@ -112,8 +108,6 @@ bool MyApp::OnInit(void)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
-    EVT_MENU( ID_LOAD,  MyFrame::OnLoad  )
-    EVT_MENU( ID_STORE, MyFrame::OnStore )
     EVT_MENU( ID_QUIT,  MyFrame::OnQuit  )
 
 END_EVENT_TABLE()
@@ -204,66 +198,11 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 	return pCtrl;
 }
 
-void MyFrame::OnLoad( wxCommandEvent& event )
-{
-    if ( !wxFileExists( LAYOUT_FILE ) )
-    {               
-        wxMessageBox( "layout data file `layout.dat' not found\n\n store layout first" );
-
-        return;
-    }
-
-    mpLayout->HideBarWindows();       // hide first, to avoid flickered destruction
-    mpLayout->DestroyBarWindows();
-
-	if ( mpClientWnd )
-	{
-    	mpClientWnd->Destroy();
-    	delete mpLayout;
-
-		mpClientWnd = NULL;
-	}
-
-    wxIOStreamWrapper stm;
-    stm.CreateForInput( LAYOUT_FILE ); // TRUE - create stream for input
-
-    wxObjectStorage store( stm );
-
-    SerializeMe( store );
-
-    mpLayout->Activate();
-}
-
-void MyFrame::OnStore( wxCommandEvent& event )
-{
-    wxIOStreamWrapper stm;
-    stm.CreateForOutput( LAYOUT_FILE ); // FALSE - create stream for output
-
-    wxObjectStorage store( stm );
-
-    SerializeMe( store );
-}
-
 void MyFrame::OnQuit( wxCommandEvent& event )
 {
     Show( FALSE ); // TRICK:: hide it, to avoid flickered destruction
 
     Close(TRUE);
-}
-
-void MyFrame::SerializeMe( wxObjectStorage& store )
-{
-	// mark contaienr-frames as not serializable
-		
-	store.AddInitialRef( mpInternalFrm );
-	store.AddInitialRef( this );
-
-	// does all the rest for as
-
-    store.XchgObjPtr( (wxObject**) &(mpLayout) );
-	store.XchgObjPtr( (wxObject**) &(mpClientWnd) );
-
-	store.Finalize(); // finish serialization
 }
 
 #ifdef __HACK_MY_MSDEV40__

@@ -41,7 +41,6 @@
 #define THIRD_LAYOUT  2
 
 class wxFrameLayout;
-class wxObjectStorage;
 
 // FOR NOW::
 typedef wxPanel MyTestPanel;
@@ -50,15 +49,15 @@ typedef wxPanel MyTestPanel;
 
 class MyApp: public wxApp
 { 
-public:
-    bool OnInit(void);
+    public:
+	bool OnInit(void);
 };
 
 // Define a new frame type
 
 class MyFrame: public wxFrame
 { 
-protected:
+    protected:
 
 	wxFrameLayout* mLayouts[MAX_LAYOUTS];
 
@@ -100,7 +99,6 @@ protected:
 
 	void ActivateLayout( int layoutNo );
 
-	void SerializeMe( wxObjectStorage& store );
 
 public: /* public */
 
@@ -115,9 +113,6 @@ public: /* public */
 	
 	bool OnClose(void);
 
-	void OnLoad( wxCommandEvent& event );
-	void OnStore( wxCommandEvent& event );
-	void OnAutoSave( wxCommandEvent& event );
     void OnQuit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
 	void OnSettings( wxCommandEvent& event );

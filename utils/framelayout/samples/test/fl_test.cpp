@@ -63,8 +63,6 @@ bool MyApp::OnInit(void)
 
 	wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append( NEW_TEST_LOAD, "&Load layouts"  );
-    file_menu->Append( NEW_TEST_SAVE, "&Store layouts" );
 	file_menu->Append( NEW_TEST_EXIT, "E&xit" );
 
 	wxMenuBar *menu_bar = new wxMenuBar;
@@ -100,51 +98,9 @@ BEGIN_EVENT_TABLE( MyFrame, wxFrame )
 
 // EVT_CHAR_HOOK(MyFrame::OnKeyDown)
 //	EVT_PAINT( MyFrame::OnPaint )
-	EVT_MENU( NEW_TEST_SAVE, MyFrame::OnSave )
-	EVT_MENU( NEW_TEST_LOAD, MyFrame::OnLoad )
 	EVT_MENU( NEW_TEST_EXIT, MyFrame::OnExit )
 
 END_EVENT_TABLE()
-
-void MyFrame::OnLoad( wxCommandEvent& event )
-{						
-    mpLayout->HideBarWindows();
-    mpLayout->DestroyBarWindows();
-	delete mpLayout;
-
-	if ( mpClientWnd )
-	{
-		mpClientWnd->Destroy();
-		mpClientWnd = NULL;
-	}
-
-	mpLayout = NULL;
-
-	wxIOStreamWrapper& stm = *(new wxIOStreamWrapper());
-
-	stm.CreateForInput( "layouts1.dat" );
-	
-	mStore.SetDataStream( stm );
-
-	mStore.XchgObjPtr( (wxObject**) &mpLayout );
-
-	mStore.Finalize(); // finish serialization
-
-	mpLayout->Activate();
-}
-
-void MyFrame::OnSave( wxCommandEvent& event )
-{
-	wxIOStreamWrapper& stm = *(new wxIOStreamWrapper());
-
-	stm.CreateForOutput( "layouts1.dat" );
-	
-	mStore.SetDataStream( stm );
-	
-	mStore.XchgObjPtr( (wxObject**) &mpLayout );
-
-	mStore.Finalize(); // finish serialization
-}
 
 void MyFrame::OnExit( wxCommandEvent& event )
 {
@@ -180,9 +136,6 @@ MyFrame::MyFrame(wxFrame *frame)
 	
 	mpClientWnd = CreateTextCtrl( "Client window" );
 
-	mStore.AddInitialRef( this );
-	mStore.AddInitialRef( mpInternalFrm );
-	//mStore.AddInitialRef( mpClientWnd );
 
     mpLayout = new wxFrameLayout( mpInternalFrm, mpClientWnd );
 

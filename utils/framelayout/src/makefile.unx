@@ -17,25 +17,19 @@ antiflickpl.cpp \
 bardragpl.cpp \
 barhintspl.cpp \
 cbcustom.cpp \
-cbstore.cpp \
 controlarea.cpp \
 controlbar.cpp \
 dyntbar.cpp \
 dyntbarhnd.cpp \
-frmview.cpp \
 garbagec.cpp \
 gcupdatesmgr.cpp \
 hintanimpl.cpp \
 newbmpbtn.cpp \
-objstore.cpp \
 panedrawpl.cpp \
-pf_sample.cpp \
 rowdragpl.cpp \
 rowlayoutpl.cpp \
-settingsdlg.cpp \
 toolwnd.cpp \
 updatesmgr.cpp \
-wxinfo.cpp
 
 all:    $(FLLIB)
 

@@ -12,9 +12,9 @@ WXDIR = ../../..
 LIBTARGET=$(WXDIR)/lib/libfl.a
 
 OBJECTS = antiflickpl.o bardragpl.o barhintspl.o cbcustom.o\
- cbstore.o controlarea.o controlbar.o dyntbar.o dyntbarhnd.o\
- frmview.o garbagec.o gcupdatesmgr.o hintanimpl.o newbmpbtn.o\
- objstore.o panedrawpl.o rowdragpl.o rowlayoutpl.o\
+ controlarea.o controlbar.o dyntbar.o dyntbarhnd.o\
+ garbagec.o gcupdatesmgr.o hintanimpl.o newbmpbtn.o\
+ panedrawpl.o rowdragpl.o rowlayoutpl.o\
  toolwnd.o updatesmgr.o 
 
 include $(WXDIR)/src/makelib.g95

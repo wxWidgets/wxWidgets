@@ -135,25 +135,4 @@ void wxCreateClassInfoTree( wxTreeCtrl* pTree,
 	} while( nHanged != 0 );
 }
 
-void wxCreateSerializerInfoTree( wxTreeCtrl* pTree, 
-								 wxTreeItemId parentBranchId,
-								 long classImageNo  
-							   )
-{
-	expand_item( pTree, parentBranchId );
 
-	wxSerializerInfo::InitializeSerializers();
-
-	// FOR NOW:: no hierarchy - one branch
-
-	wxSerializerInfo* pCur = wxSerializerInfo::first;
-	
-	while( pCur )
-	{
-		wxString fullName = pCur->className + wxString( "Serializer" );
-
-		pTree->AppendItem( parentBranchId, fullName, classImageNo );
-
-		pCur = pCur->next;
-	}
-}
