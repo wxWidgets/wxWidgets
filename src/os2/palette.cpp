@@ -150,7 +150,8 @@ int wxPalette::GetPixel(
     //
     // Now loop through and find the matching entry
     //
-    for (int i = 0; i < ulNumEntries; i++)
+    int                             i;
+    for (i = 0; i < ulNumEntries; i++)
     {
         if (pualTable[i] == ulRGB)
         {
