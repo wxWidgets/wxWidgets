@@ -1240,6 +1240,12 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 
 bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
+    if ( item == wxTreeItemId(TVI_ROOT) )
+    {
+        // virtual (hidden) root is never visible
+        return FALSE;
+    }
+
     // Bug in Gnu-Win32 headers, so don't use the macro TreeView_GetItemRect
     RECT rect;
 
