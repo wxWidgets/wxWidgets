@@ -28,6 +28,8 @@
 #include	<../iodbc/itrace.h>
 
 #include	"../iodbc/herr.ci"
+#include        <strings.h>
+#include        <stdio.h>
 
 static	HERR	_iodbcdm_popsqlerr( HERR herr )
 {

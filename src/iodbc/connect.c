@@ -26,6 +26,8 @@
 #include	<../iodbc/hstmt.h>
 
 #include	<../iodbc/itrace.h>
+#include        <strings.h>
+#include        <stdio.h>
 
 extern	char*	_iodbcdm_getkeyvalbydsn();
 extern	char*	_iodbcdm_getkeyvalinstr();
@@ -292,7 +294,7 @@ RETCODE	_iodbcdm_driverunload( HDBC	hdbc )
 	GENV_t FAR*	genv;
 	HPROC		hproc;
 	RETCODE		retcode = SQL_SUCCESS;
-	int		sqlstat = en_00000;
+/*	int		sqlstat = en_00000; */
 
 	if( hdbc == SQL_NULL_HDBC )
 	{
@@ -952,16 +954,16 @@ RETCODE SQL_API	SQLBrowseConnect (
 			SWORD FAR*	pcbConnStrOut )
 {
 	DBC_t FAR*	pdbc 	= (DBC_t FAR*)hdbc;
-	HDLL		hdll;
+/*	HDLL		hdll; */
 	char  FAR*	drv;
 	char		drvbuf[1024];
 	char  FAR*	dsn;
 	char  		dsnbuf[SQL_MAX_DSN_LENGTH + 1];
-	UCHAR		cnstr2drv[1024];
+/*	UCHAR		cnstr2drv[1024]; */
 
-	HPROC		hproc, dialproc;
+	HPROC		hproc /*, dialproc*/ ;
 
-	int		sqlstat = en_00000;
+/*	int		sqlstat = en_00000; */
 	RETCODE		retcode = SQL_SUCCESS;
 	RETCODE		setopterr = SQL_SUCCESS;
 

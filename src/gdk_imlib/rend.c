@@ -204,7 +204,7 @@ grender_shaped_15_fast_dither_ordered(GdkImlibImage * im, int w, int h, XImage *
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				      unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/  er, eg, eb;
    unsigned char      *ptr2;
    unsigned short     *img;
    int                 jmp;
@@ -262,7 +262,7 @@ grender_15_fast_dither(GdkImlibImage * im, int w, int h, XImage * xim,
 		       XImage * sxim, int *er1, int *er2, int *xarray,
 		       unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, *ter, ex,  er, eg, eb;
    unsigned char      *ptr2;
    unsigned short     *img;
    int                 jmp;
@@ -308,7 +308,7 @@ grender_15_fast_dither_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 			       unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/  er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned short     *img;
@@ -414,7 +414,7 @@ grender_shaped_16_fast_dither_ordered(GdkImlibImage * im, int w, int h, XImage *
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				      unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/  er, eg, eb;
    unsigned char      *ptr2;
    unsigned short     *img;
    int                 jmp;
@@ -519,7 +519,7 @@ grender_16_fast_dither_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 			       unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex, */  er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned short     *img;
@@ -635,7 +635,7 @@ grender_shaped_15_dither_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				 unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/  er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =
@@ -728,7 +728,7 @@ grender_15_dither_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			  XImage * sxim, int *er1, int *er2, int *xarray,
 			  unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex, */ er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =
@@ -822,7 +822,7 @@ grender_shaped_16_dither_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				 unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex, */  er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =
@@ -915,7 +915,7 @@ grender_16_dither_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			  XImage * sxim, int *er1, int *er2, int *xarray,
 			  unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/ er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =
@@ -2816,7 +2816,7 @@ grender_shaped_15_fast_dither_mod_ordered(GdkImlibImage * im, int w, int h, XIma
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 					  unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/ er, eg, eb;
    unsigned char      *ptr2;
    unsigned short     *img;
    int                 jmp;
@@ -2926,7 +2926,7 @@ grender_15_fast_dither_mod_ordered(GdkImlibImage * im, int w, int h, XImage * xi
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				   unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/  er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned short     *img;
@@ -3038,7 +3038,7 @@ grender_shaped_16_fast_dither_mod_ordered(GdkImlibImage * im, int w, int h, XIma
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 					  unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/ er, eg, eb;
    unsigned char      *ptr2;
    unsigned short     *img;
    int                 jmp;
@@ -3149,7 +3149,7 @@ grender_16_fast_dither_mod_ordered(GdkImlibImage * im, int w, int h, XImage * xi
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				   unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/  er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned short     *img;
@@ -3200,7 +3200,7 @@ grender_shaped_15_dither_mod_ordered(GdkImlibImage * im, int w, int h, XImage * 
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				     unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex, */ er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =
@@ -3255,7 +3255,7 @@ grender_15_dither_mod_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			      XImage * sxim, int *er1, int *er2, int *xarray,
 			      unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex, */ er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =
@@ -3300,7 +3300,7 @@ grender_shaped_16_dither_mod_ordered(GdkImlibImage * im, int w, int h, XImage * 
 			       XImage * sxim, int *er1, int *er2, int *xarray,
 				     unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex,*/ er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =
@@ -3355,7 +3355,7 @@ grender_16_dither_mod_ordered(GdkImlibImage * im, int w, int h, XImage * xim,
 			      XImage * sxim, int *er1, int *er2, int *xarray,
 			      unsigned char **yarray)
 {
-   int                 x, y, val, r, g, b, *ter, ex, er, eg, eb;
+   int                 x, y, val, r, g, b, /* *ter, ex, */ er, eg, eb;
    unsigned char      *ptr2;
 
    unsigned char       dither[4][4] =

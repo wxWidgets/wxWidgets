@@ -27,6 +27,9 @@
 
 #include	<../iodbc/itrace.h>
 
+#include        <strings.h>
+#include        <stdio.h>
+
 RETCODE SQL_API	SQLDataSources( 
 			HENV		henv,
 			UWORD		fDir,
@@ -118,7 +121,7 @@ RETCODE SQL_API	SQLGetInfo(
 	HPROC		hproc;
 	RETCODE		retcode	= SQL_SUCCESS;
 
-	DWORD		dword;
+	DWORD		dword = 0;
 	int		size = 0, len = 0;
 	char		buf[16] = { '\0' };
 

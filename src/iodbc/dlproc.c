@@ -32,7 +32,7 @@ HPROC	_iodbcdm_getproc( HDBC hdbc, int idx )
 {
 	DBC_t FAR*	pdbc	= (DBC_t FAR*)hdbc;
 	ENV_t FAR*	penv;
-	HDLL		hdll;
+/*	HDLL		hdll; */
 	HPROC FAR*	phproc;
 
 	if( idx <= 0 || idx > SQL_EXT_API_LAST )

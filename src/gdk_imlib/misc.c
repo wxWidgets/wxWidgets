@@ -524,7 +524,7 @@ gdk_imlib_init_params(GdkImlibInitParams * p)
    XWindowAttributes   xwa;
    XVisualInfo         xvi, *xvir;
    char               *homedir;
-   char                file[4096];
+/*   char                file[4096]; */
    char                s[4096], *s1, *s2;
    FILE               *f;
    int                 override = 0;
@@ -533,7 +533,7 @@ gdk_imlib_init_params(GdkImlibInitParams * p)
    int                 num;
    int                 i, max, maxn;
    int                 clas;
-   char               *palfile;
+   char               *palfile = NULL;
    int                 loadpal;
    int                 vis;
    int                 newcm;

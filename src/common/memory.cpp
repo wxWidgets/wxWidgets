@@ -387,7 +387,9 @@ int wxMemStruct::ValidateNode ()
 	    ErrorMsg ("Object already deleted");
 	else {
 	    // Can't use the error routines as we have no recognisable object.
-	    // wxTrace("Can't verify memory struct - all bets are off!\n");
+#ifndef __WXGTK__
+	     wxTrace("Can't verify memory struct - all bets are off!\n");
+#endif
 	}
 	return 0;
     }
@@ -627,7 +629,7 @@ bool wxDebugContext::PrintList (void)
   if (!HasStream())
     return FALSE;
 
-  TraverseList ((PmSFV)&wxMemStruct::PrintNode, (checkPoint ? checkPoint->m_next : NULL));
+  TraverseList ((PmSFV)&wxMemStruct::PrintNode, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
 
   return TRUE;
 #else
@@ -649,10 +651,10 @@ bool wxDebugContext::Dump(void)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = (char*) (const char*) appNameStr;
-        wxTrace("Memory dump of %s at %s:\n", appName, wxNow());
+        wxTrace("Memory dump of %s at %s:\n", appName, WXSTRINGCAST wxNow() );
     }
   }
-  TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : NULL));
+  TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
 
   return TRUE;
 #else
@@ -700,7 +702,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 
   wxDebugStatsStruct *list = NULL;
 
-  wxMemStruct *from = (checkPoint ? checkPoint->m_next : NULL);
+  wxMemStruct *from = (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL );
   if (!from)
     from = wxDebugContext::GetHead ();
 
@@ -819,7 +821,7 @@ int wxDebugContext::Check(bool checkAll)
 {
   int nFailures = 0;
     
-  wxMemStruct *from = (checkPoint ? checkPoint->m_next : NULL);
+  wxMemStruct *from = (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL );
   if (!from || checkAll)
     from = wxDebugContext::GetHead ();
 
@@ -918,7 +920,7 @@ void operator delete[] (void * buf)
 #endif
 
 // TODO: store whether this is a vector or not.
-void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bool isVect)
+void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
 {
   // If not in debugging allocation mode, do the normal thing
   // so we don't leave any trace of ourselves in the node list.
@@ -969,7 +971,7 @@ void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bo
 }
 
 // TODO: check whether was allocated as a vector
-void wxDebugFree(void * buf, bool isVect)
+void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 {
   if (!buf)
     return;

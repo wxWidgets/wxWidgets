@@ -935,7 +935,7 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 {
    GdkImlibImage      *im;
    unsigned char      *ptr;
-   int                 pc, c, i, j, k, ncolors, cpp, comment, transp, quote,
+   int                 /* pc, */ c, i, j, k, ncolors, cpp, comment, transp, quote,
                        context, len, count, done;
    int                 w, h;
    char               *line, s[65536], tok[65536], col[65536];
@@ -947,8 +947,11 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 	int                 r, g, b;
      }
                       *cmap;
+		      
    int                 lookup[128][128];
 
+   cmap = NULL;
+   j = 0;		      
    if (!data)
       return NULL;
    im = malloc(sizeof(GdkImlibImage));
@@ -1133,10 +1136,10 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 	       {
 		  if (cpp == 1)
 		     for (i = 0; i < ncolors; i++)
-			lookup[cmap[i].str[0]][cmap[i].str[1]] = i;
+			lookup[(int)cmap[i].str[0]][(int)cmap[i].str[1]] = i;
 		  if (cpp == 2)
 		     for (i = 0; i < ncolors; i++)
-			lookup[cmap[i].str[0]][cmap[i].str[1]] = i;
+			lookup[(int)cmap[i].str[0]][(int)cmap[i].str[1]] = i;
 		  context++;
 	       }
 	  }
@@ -1154,7 +1157,7 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 		       for (i = 0; ((i < 65536) && (line[i])); i++)
 			 {
 			    col[0] = line[i];
-			    if (cmap[lookup[col[0]][0]].transp)
+			    if (cmap[lookup[(int)col[0]][0]].transp)
 			      {
 				 *ptr++ = 255;
 				 *ptr++ = 0;
@@ -1162,9 +1165,9 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 			      }
 			    else
 			      {
-				 *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].r;
-				 *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].g;
-				 *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].b;
+				 *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].r;
+				 *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].g;
+				 *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].b;
 			      }
 			 }
 		    }
@@ -1173,9 +1176,9 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 		       for (i = 0; ((i < 65536) && (line[i])); i++)
 			 {
 			    col[0] = line[i];
-			    *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].r;
-			    *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].g;
-			    *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].b;
+			    *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].r;
+			    *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].g;
+			    *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].b;
 			 }
 		    }
 	       }
@@ -1187,7 +1190,7 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 			 {
 			    col[0] = line[i++];
 			    col[1] = line[i];
-			    if (cmap[lookup[col[0]][col[1]]].transp)
+			    if (cmap[lookup[(int)col[0]][(int)col[1]]].transp)
 			      {
 				 *ptr++ = 255;
 				 *ptr++ = 0;
@@ -1195,9 +1198,9 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 			      }
 			    else
 			      {
-				 *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].r;
-				 *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].g;
-				 *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].b;
+				 *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].r;
+				 *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].g;
+				 *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].b;
 			      }
 			 }
 		    }
@@ -1207,9 +1210,9 @@ gdk_imlib_create_image_from_xpm_data(char **data)
 			 {
 			    col[0] = line[i++];
 			    col[1] = line[i];
-			    *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].r;
-			    *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].g;
-			    *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].b;
+			    *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].r;
+			    *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].g;
+			    *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].b;
 			 }
 		    }
 	       }

@@ -159,7 +159,7 @@ bool wxObjectInputStream::ReadObjectDef(wxObjectStreamInfo *info)
   sig[WXOBJ_BEG_LEN] = 0;
   if (wxString(sig) != WXOBJ_BEGIN)
     return FALSE;
-  info->object = wxCreateDynamicObject((char *)data_s.ReadString());
+  info->object = wxCreateDynamicObject( WXSTRINGCAST data_s.ReadString());
   info->object_name = data_s.ReadString();
   info->n_children = data_s.Read8();
   info->children = wxList();

@@ -483,7 +483,7 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
    FILE               *file;
    unsigned char      *data, *ptr;
    int                 pc, c, i, j, k, ncolors, cpp, comment, transp, quote,
-                       context, len, token, done;
+                       context, len, /*token,*/ done;
    char                line[65536], s[65536], tok[65536], col[65536];
    XColor              xcol;
    struct _cmap
@@ -495,8 +495,12 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
                       *cmap;
    int                 lookup[128][128];
 
+   i = 0;
+   j = 0;
+   
    transp = 0;
    done = 0;
+   cmap = NULL;
 
    file = fopen(f, "r");
    if (!file)
@@ -574,7 +578,7 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 		       /* Color Table */
 		       if (j < ncolors)
 			 {
-			    int                 colptr = 0;
+			    /* int                 colptr = 0;  not used */
 			    int                 slen;
 
 			    tok[0] = 0;
@@ -645,10 +649,10 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 			 {
 			    if (cpp == 1)
 			       for (i = 0; i < ncolors; i++)
-				  lookup[cmap[i].str[0]][cmap[i].str[1]] = i;
+				  lookup[(int)cmap[i].str[0]][(int)cmap[i].str[1]] = i;
 			    if (cpp == 2)
 			       for (i = 0; i < ncolors; i++)
-				  lookup[cmap[i].str[0]][cmap[i].str[1]] = i;
+				  lookup[(int)cmap[i].str[0]][(int)cmap[i].str[1]] = i;
 			    context++;
 			 }
 		    }
@@ -667,7 +671,7 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 				 for (i = 0; ((i < 65536) && (line[i])); i++)
 				   {
 				      col[0] = line[i];
-				      if (cmap[lookup[col[0]][0]].transp)
+				      if (cmap[lookup[(int)col[0]][0]].transp)
 					{
 					   *ptr++ = 255;
 					   *ptr++ = 0;
@@ -675,9 +679,9 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 					}
 				      else
 					{
-					   *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].r;
-					   *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].g;
-					   *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].b;
+					   *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].r;
+					   *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].g;
+					   *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].b;
 					}
 				   }
 			      }
@@ -686,9 +690,9 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 				 for (i = 0; ((i < 65536) && (line[i])); i++)
 				   {
 				      col[0] = line[i];
-				      *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].r;
-				      *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].g;
-				      *ptr++ = (unsigned char)cmap[lookup[col[0]][0]].b;
+				      *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].r;
+				      *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].g;
+				      *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][0]].b;
 				   }
 			      }
 			 }
@@ -700,7 +704,7 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 				   {
 				      col[0] = line[i++];
 				      col[1] = line[i];
-				      if (cmap[lookup[col[0]][col[1]]].transp)
+				      if (cmap[lookup[(int)col[0]][(int)col[1]]].transp)
 					{
 					   *ptr++ = 255;
 					   *ptr++ = 0;
@@ -708,9 +712,9 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 					}
 				      else
 					{
-					   *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].r;
-					   *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].g;
-					   *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].b;
+					   *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].r;
+					   *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].g;
+					   *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].b;
 					}
 				   }
 			      }
@@ -720,9 +724,9 @@ g_LoadXPM(char *f, int *w, int *h, int *t)
 				   {
 				      col[0] = line[i++];
 				      col[1] = line[i];
-				      *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].r;
-				      *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].g;
-				      *ptr++ = (unsigned char)cmap[lookup[col[0]][col[1]]].b;
+				      *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].r;
+				      *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].g;
+				      *ptr++ = (unsigned char)cmap[lookup[(int)col[0]][(int)col[1]]].b;
 				   }
 			      }
 			 }

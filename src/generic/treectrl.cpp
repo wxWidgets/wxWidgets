@@ -719,7 +719,7 @@ bool wxTreeCtrl::SelectItem(long itemId)
   return TRUE;
 };
 
-void wxTreeCtrl::SelectItem(wxGenericTreeItem *item)
+void wxTreeCtrl::SelectItem(wxGenericTreeItem *item, bool bDoEvents )
 {
   if (m_current != item)
   {
@@ -732,7 +732,7 @@ void wxTreeCtrl::SelectItem(wxGenericTreeItem *item)
     m_current->SetHilight( TRUE );
     RefreshLine( m_current );
 
-    m_current->SendSelected( this );
+    if (bDoEvents) m_current->SendSelected( this );
   }
 }
 

@@ -19,6 +19,7 @@
 #include	<../iodbc/isqlext.h>
 
 #include	<stdio.h>
+#include        <strings.h>
 
 static int	
 upper_strneq( 
@@ -26,8 +27,8 @@ upper_strneq(
 	char*	s2,
 	int	n )
 {
-	int	i;
-	char	c1, c2;
+	int	i; 
+	char	c1 = 0, c2 = 0;
 
 	for(i=1;i<n;i++)
 	{
@@ -108,7 +109,7 @@ readtoken(
 static char*
 getinitfile(char* buf, int size)	
 {
-	int	i, j;
+	int	/* i, */ j;
 	char*	ptr;
 
 	j = STRLEN("/odbc.ini") + 1;

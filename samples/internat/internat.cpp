@@ -133,18 +133,18 @@ MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
 {
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
   Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
   wxMessageDialog(this, _("I18n sample\n© Vadim Zeitlin & Julian Smart"),
                   _("About Internat"), wxOK | wxICON_INFORMATION).ShowModal();
 }
 
-void MyFrame::OnPlay(wxCommandEvent& event)
+void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
   wxString str = wxGetTextFromUser(_("Enter your number:"),
                                    _("Try to guess my number!"),

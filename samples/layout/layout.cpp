@@ -181,7 +181,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
 
-void MyFrame::LoadFile(wxCommandEvent& event)
+void MyFrame::LoadFile(wxCommandEvent& WXUNUSED(event) )
 {
       char *s = wxFileSelector("Load text file", NULL, NULL, NULL, "*.txt");
       if (s)
@@ -192,47 +192,47 @@ void MyFrame::LoadFile(wxCommandEvent& event)
       }
 }
 
-void MyFrame::Quit(wxCommandEvent& event)
+void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 {
       this->Close(TRUE);
 }
 
-void MyFrame::TestSizers(wxCommandEvent& event)
+void MyFrame::TestSizers(wxCommandEvent& WXUNUSED(event) )
 {
   SizerFrame *newFrame = new SizerFrame(NULL, "Sizer Test Frame", 50, 50, 500, 500);
   newFrame->Show(TRUE);
 }
 
-void MyFrame::About(wxCommandEvent& event)
+void MyFrame::About(wxCommandEvent& WXUNUSED(event) )
 {
       (void)wxMessageBox("wxWindows GUI library layout demo\n",
             "About Layout Demo", wxOK|wxCENTRE);
 }
 
 // Size the subwindows when the frame is resized
-void MyFrame::OnSize(wxSizeEvent& event)
+void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event) )
 {
     Layout();
 }
 
-void MyFrame::Draw(wxDC& dc, bool draw_bitmaps)
+void MyFrame::Draw(wxDC& dc, bool WXUNUSED(draw_bitmaps) )
 {
   dc.SetPen(wxGREEN_PEN);
-  dc.DrawLine(0.0, 0.0, 200.0, 200.0);
-  dc.DrawLine(200.0, 0.0, 0.0, 200.0);
+  dc.DrawLine(0, 0, 200, 200);
+  dc.DrawLine(200, 0, 0, 200);
 
   dc.SetBrush(wxCYAN_BRUSH);
   dc.SetPen(wxRED_PEN);
 
-  dc.DrawRectangle(100.0, 100.0, 100.0, 50.0);
-  dc.DrawRoundedRectangle(150.0, 150.0, 100.0, 50.0,20.0);
+  dc.DrawRectangle(100, 100, 100, 50);
+  dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
 
-  dc.DrawEllipse(250.0, 250.0, 100.0, 50.0);
-  dc.DrawSpline(50.0, 200.0, 50.0, 100.0, 200.0, 10.0);
-  dc.DrawLine(50.0, 230.0, 200.0, 230.0);
+  dc.DrawEllipse(250, 250, 100, 50);
+  dc.DrawSpline(50, 200, 50, 100, 200, 10);
+  dc.DrawLine(50, 230, 200, 230);
 
   dc.SetPen(wxBLACK_PEN);
-  dc.DrawArc(50.0, 300.0, 100.0, 250.0, 100.0, 300.0);
+  dc.DrawArc(50, 300, 100, 250, 100, 300 );
 }
 
 BEGIN_EVENT_TABLE(MyWindow, wxWindow)
@@ -250,7 +250,7 @@ MyWindow::~MyWindow(void)
 }
 
 // Define the repainting behaviour
-void MyWindow::OnPaint(wxPaintEvent& event)
+void MyWindow::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   wxPaintDC dc(this);
   frame->Draw(dc,TRUE);

@@ -184,13 +184,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(GRID_QUIT, MyFrame::Quit)
 END_EVENT_TABLE()
 
-void MyFrame::ToggleEditable(wxCommandEvent& event)
+void MyFrame::ToggleEditable(wxCommandEvent& WXUNUSED(event))
 {
       grid->SetEditable(!grid->GetEditable());
       grid->Refresh();
 }
 
-void MyFrame::ToggleRowLabel(wxCommandEvent& event)
+void MyFrame::ToggleRowLabel(wxCommandEvent& WXUNUSED(event))
 {
       if (grid->GetLabelSize(wxVERTICAL) > 0)
         grid->SetLabelSize(wxVERTICAL, 0);
@@ -199,7 +199,7 @@ void MyFrame::ToggleRowLabel(wxCommandEvent& event)
       grid->Refresh();
 }
 
-void MyFrame::ToggleColLabel(wxCommandEvent& event)
+void MyFrame::ToggleColLabel(wxCommandEvent& WXUNUSED(event))
 {
       if (grid->GetLabelSize(wxHORIZONTAL) > 0)
         grid->SetLabelSize(wxHORIZONTAL, 0);
@@ -208,7 +208,7 @@ void MyFrame::ToggleColLabel(wxCommandEvent& event)
       grid->Refresh();
 }
 
-void MyFrame::ToggleDividers(wxCommandEvent& event)
+void MyFrame::ToggleDividers(wxCommandEvent& WXUNUSED(event))
 {
       if (!grid->GetDividerPen())
         grid->SetDividerPen(wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID));
@@ -217,25 +217,25 @@ void MyFrame::ToggleDividers(wxCommandEvent& event)
       grid->Refresh();
 }
 
-void MyFrame::LeftCell(wxCommandEvent& event)
+void MyFrame::LeftCell(wxCommandEvent& WXUNUSED(event))
 {
       grid->SetCellAlignment(wxLEFT);
       grid->Refresh();
 }
 
-void MyFrame::CentreCell(wxCommandEvent& event)
+void MyFrame::CentreCell(wxCommandEvent& WXUNUSED(event))
 {
       grid->SetCellAlignment(wxCENTRE);
       grid->Refresh();
 }
 
-void MyFrame::RightCell(wxCommandEvent& event)
+void MyFrame::RightCell(wxCommandEvent& WXUNUSED(event))
 {
       grid->SetCellAlignment(wxRIGHT);
       grid->Refresh();
 }
 
-void MyFrame::ColourLabelBackground(wxCommandEvent& event)
+void MyFrame::ColourLabelBackground(wxCommandEvent& WXUNUSED(event))
 {
       wxColourData data;
       data.SetChooseFull(TRUE);
@@ -249,7 +249,7 @@ void MyFrame::ColourLabelBackground(wxCommandEvent& event)
       }
 }
 
-void MyFrame::ColourLabelText(wxCommandEvent& event)
+void MyFrame::ColourLabelText(wxCommandEvent& WXUNUSED(event))
 {
       wxColourData data;
       data.SetChooseFull(TRUE);
@@ -263,14 +263,14 @@ void MyFrame::ColourLabelText(wxCommandEvent& event)
       }
 }
 
-void MyFrame::NormalLabelColouring(wxCommandEvent& event)
+void MyFrame::NormalLabelColouring(wxCommandEvent& WXUNUSED(event))
 {
       grid->SetLabelBackgroundColour(*wxLIGHT_GREY);
       grid->SetLabelTextColour(*wxBLACK);
       grid->Refresh();
 }
 
-void MyFrame::ColourCellBackground(wxCommandEvent& event)
+void MyFrame::ColourCellBackground(wxCommandEvent& WXUNUSED(event))
 {
       wxColourData data;
       data.SetChooseFull(TRUE);
@@ -284,7 +284,7 @@ void MyFrame::ColourCellBackground(wxCommandEvent& event)
       }
 }
 
-void MyFrame::ColourCellText(wxCommandEvent& event)
+void MyFrame::ColourCellText(wxCommandEvent& WXUNUSED(event))
 {
       wxColourData data;
       data.SetChooseFull(TRUE);
@@ -298,14 +298,14 @@ void MyFrame::ColourCellText(wxCommandEvent& event)
       }
 }
 
-void MyFrame::NormalCellColouring(wxCommandEvent& event)
+void MyFrame::NormalCellColouring(wxCommandEvent& WXUNUSED(event))
 {
       grid->SetCellBackgroundColour(*wxWHITE);
       grid->SetCellTextColour(*wxBLACK);
       grid->Refresh();
 }
 
-void MyFrame::Quit(wxCommandEvent& event)
+void MyFrame::Quit(wxCommandEvent& WXUNUSED(event))
 {
       this->Close(TRUE);
 }

@@ -80,8 +80,8 @@ bool MyApp::OnInit(void)
   // Show the frame
   frame->Show(TRUE);
 
-//  wxDebugContext::SetCheckpoint();
-//  wxDebugContext::SetFile("debug.log");
+  wxDebugContext::SetCheckpoint();
+  wxDebugContext::SetFile("debug.log");
 
   wxString *thing = new wxString; // WXDEBUG_NEW wxString;
   wxDate* date = new wxDate;
@@ -92,9 +92,9 @@ bool MyApp::OnInit(void)
 
   const char *data = (const char*) thing ;
 
-//  wxDebugContext::PrintClasses();
-//  wxDebugContext::Dump();
-//  wxDebugContext::PrintStatistics();
+  wxDebugContext::PrintClasses();
+  wxDebugContext::Dump();
+  wxDebugContext::PrintStatistics();
 
   // Don't delete these two objects, to force wxApp to flag a memory leak.
 //  delete thing;

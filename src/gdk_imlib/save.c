@@ -83,7 +83,7 @@ gdk_imlib_save_image(GdkImlibImage * im, char *file, GdkImlibSaveInfo * info)
      {
 	int                 bx, by, bxx, byy;
 	int                 w, h;
-	int                 sx, sy;
+	int                 sx = 0, sy = 0;
 	int                 tx = 35, ty = 35;
 	int                 x, y;
 	unsigned char      *ptr;

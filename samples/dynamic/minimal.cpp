@@ -95,12 +95,12 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {}
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
   Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "This is a minimal sample\nA second line in the message box",
   	"About Minimal", wxYES_NO|wxCANCEL);
