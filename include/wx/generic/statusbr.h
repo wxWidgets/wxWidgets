@@ -35,7 +35,7 @@ public:
       Create(parent, id, pos, size, style, name);
   }
 
-  ~wxStatusBar(void);
+  ~wxStatusBar();
 
   bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -44,15 +44,15 @@ public:
            const wxString& name = wxPanelNameStr);
 
   // Create status line
-  virtual void SetFieldsCount(int number=1, int *widths = NULL);
-  inline int GetFieldsCount(void) const { return m_nFields; }
+  virtual void SetFieldsCount(int number=1, const int widths[] = NULL);
+  inline int GetFieldsCount() const { return m_nFields; }
 
   // Set status line text
   virtual void SetStatusText(const wxString& text, int number = 0);
   virtual wxString GetStatusText(int number = 0) const;
 
   // Set status line widths
-  virtual void SetStatusWidths(int n, int *widths_field);
+  virtual void SetStatusWidths(int n, const int widths_field[]);
 
   virtual void DrawFieldText(wxDC& dc, int i);
   virtual void DrawField(wxDC& dc, int i);
@@ -60,8 +60,8 @@ public:
   // Get the position and size of the field's internal bounding rectangle
   virtual bool GetFieldRect(int i, wxRectangle& rect) const;
 
-  inline int GetBorderX(void) const { return m_borderX; }
-  inline int GetBorderY(void) const { return m_borderY; }
+  inline int GetBorderX() const { return m_borderX; }
+  inline int GetBorderY() const { return m_borderY; }
   inline void SetBorderX(int x);
   inline void SetBorderY(int y);
 
@@ -70,7 +70,7 @@ public:
 
   void OnPaint(wxPaintEvent& event);
 
-  virtual void InitColours(void);
+  virtual void InitColours();
 
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
