@@ -40,13 +40,10 @@ hintanimpl.cpp \
 newbmpbtn.cpp \
 objstore.cpp \
 panedrawpl.cpp \
-pf_sample.cpp \
 rowdragpl.cpp \
 rowlayoutpl.cpp \
-settingsdlg.cpp \
 toolwnd.cpp \
-updatesmgr.cpp \
-wxinfo.cpp
+updatesmgr.cpp 
 
 #define library objects
 LIB_OBJ= \
@@ -64,7 +61,7 @@ ADD_COMPILE=
 include ../../../../template.mak
 
 install::
-	@echo "Installing library files and headers for libwx_gl_gtk.."
+	@echo "Installing library files and headers for libwx_fl_gtk.."
 	@echo "  Creating directory.."
 	@$(WXBASEDIR)/mkinstalldirs /usr/local/include/wx_fl
 	@echo "  Copying headers from framelayout/src"

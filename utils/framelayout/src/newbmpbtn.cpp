@@ -71,7 +71,6 @@ static int* create_array( int width, int height, int fill = 0 )
 static void gray_out_pixmap( int* src, int* dest, int width, int height )
 {
 	// assuming the pixels along the edges are of the background color
-	int bgCol = GET_ELEM(src,0,0);
 
 	int x = 0;
 	int y = 1;
@@ -80,9 +79,6 @@ static void gray_out_pixmap( int* src, int* dest, int width, int height )
 	{
 		int cur       = GET_ELEM(src,x,y);
 
-		int r = GET_RED(cur);
-		int g = GET_GREEN(cur);
-		int b = GET_BLUE(cur);
 
 		if ( IS_IN_ARRAY(x-1,y-1) )
 		{
@@ -167,11 +163,6 @@ void greay_out_image_on_dc( wxDC& dc, int width, int height )
 			wxColour col;
 			dc.GetPixel( x,y, &col );
 
-			int r = col.Red(), 
-				g = col.Green(), 
-				b = col.Blue();
-
-			int o = MAKE_INT_COLOR( r,g,b );
 
 			GET_ELEM(src,x,y) = MAKE_INT_COLOR( col.Red(), col.Green(), col.Blue() );
 		}
@@ -233,37 +224,38 @@ wxNewBitmapButton::wxNewBitmapButton( const wxBitmap& labelBitmap,
 									  int  marginY,
 									  int  textToLabelGap,
 									  bool isSticky)
-	: 	mpDepressedImg( NULL ),
+	:	mTextToLabelGap  ( textToLabelGap ),
+		mMarginX( marginX ),
+		mMarginY( marginY ),
+		mTextAlignment( alignText ),
+		mIsSticky( isSticky ),
+		mIsFlat( isFlat ),
+		mLabelText( labelText ),
+		mImageFileType( -1 ),
+		mDepressedBmp( labelBitmap ),
+
+	 	mpDepressedImg( NULL ),
 		mpPressedImg  ( NULL ),
 		mpDisabledImg ( NULL ),
 		mpFocusedImg  ( NULL ),
 
-		mMarginX( marginX ),
-		mMarginY( marginY ),
-		mTextAlignment( alignText ),
-		mIsFlat( isFlat ),
 
-		mIsPressed       ( FALSE ),
 		mDragStarted     ( FALSE ),
+		mIsPressed       ( FALSE ),
+		mIsInFocus( FALSE ),
 		mPrevPressedState( FALSE ),
-		mTextToLabelGap  ( textToLabelGap ),
+		mPrevInFocusState( FALSE ),
+		mHasFocusedBmp( FALSE ),
+		mFiredEventType( firedEventType ),
 
 		mBlackPen( wxColour(  0,  0,  0), 1, wxSOLID ),
 		mDarkPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
 		mGrayPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
 		mLightPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHIGHLIGHT), 1, wxSOLID ),
 
-		mFiredEventType( firedEventType ),
-		mIsSticky( isSticky ),
 		mIsCreated( FALSE ),
-		mSizeIsSet( FALSE ),
+		mSizeIsSet( FALSE )
 
-		mHasFocusedBmp( FALSE ),
-		mIsInFocus( FALSE ),
-
-		mDepressedBmp( labelBitmap ),
-		mLabelText( labelText ),
-		mImageFileType( -1 )
 {
 }
 
@@ -278,39 +270,38 @@ wxNewBitmapButton::wxNewBitmapButton( const wxString& bitmapFileName,
 									  int  textToLabelGap,
 									  bool isSticky)
 
-	: 	mpDepressedImg( NULL ),
+	:	mTextToLabelGap  ( 2 ),
+		mMarginX( 2 ),
+		mMarginY( 2 ),
+		mTextAlignment( alignText ),
+		mIsSticky( FALSE ),
+		mIsFlat( isFlat ),
+		mLabelText( labelText ),
+		mImageFileName( bitmapFileName ),
+		mImageFileType( bitmapFileType ),
+
+	  	mpDepressedImg( NULL ),
 		mpPressedImg  ( NULL ),
 		mpDisabledImg ( NULL ),
 		mpFocusedImg  ( NULL ),
 
-		mMarginX( 2 ),
-		mMarginY( 2 ),
-		mTextAlignment( alignText ),
-		mIsFlat( isFlat ),
-
-		mIsPressed       ( FALSE ),
 		mDragStarted     ( FALSE ),
+		mIsPressed       ( FALSE ),
+		mIsInFocus       ( FALSE ),
 		mPrevPressedState( FALSE ),
-		mTextToLabelGap  ( 2 ),
+		mPrevInFocusState( FALSE ),
+		mHasFocusedBmp( FALSE ),
+		mFiredEventType( wxEVT_COMMAND_MENU_SELECTED ),
 
 		mBlackPen( wxColour(  0,  0,  0), 1, wxSOLID ),
 		mDarkPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
 		mGrayPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
 		mLightPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHIGHLIGHT), 1, wxSOLID ),
 
-		mFiredEventType( wxEVT_COMMAND_MENU_SELECTED ),
-		mIsSticky( FALSE ),
 		mIsCreated( FALSE ),
-		mSizeIsSet( FALSE ),
+		mSizeIsSet( FALSE )
 
-		mHasFocusedBmp( FALSE ),
-		mIsInFocus( FALSE ),
-
-		mLabelText( labelText ),
-		mImageFileName( bitmapFileName ),
-		mImageFileType( bitmapFileType )
 {
-	//mDepressedBmp.LoadFile( bitmapFileName, bitmapFileType );
 }
 
 wxNewBitmapButton::~wxNewBitmapButton(void) 
@@ -379,6 +370,11 @@ wxBitmap* wxNewBitmapButton::GetStateLabel()
 		return mpDisabledImg;
 }
 
+static const unsigned char _gDisableImage[] = { 0x55,0xAA,0x55,0xAA,
+										      0x55,0xAA,0x55,0xAA,
+										      0x55,0xAA,0x55,0xAA,
+										      0x55,0xAA,0x55,0xAA
+											};
 void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 										  bool isEnabled, bool isPressed )
 {
@@ -461,10 +457,11 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 
 	if ( hasImage )
 	{
+
 		destDc.Blit( imgPos.x, imgPos.y, 
-					 srcBmp->GetWidth()+1,
-					 srcBmp->GetHeight()+1,
-					 &srcDc, 0,0, wxCOPY,TRUE );
+				 srcBmp->GetWidth()+1,
+				 srcBmp->GetHeight()+1,
+				 &srcDc, 0,0, wxCOPY,TRUE );
 	}
 
 	if ( hasText )
@@ -482,17 +479,73 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 
 		destDc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT) );
 
-		// Should be wxSYS_COLOUR_BTNTEXT, but gtk gives white?
-		destDc.SetTextForeground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNTEXT) );
+		if( isEnabled ){
+			destDc.SetTextForeground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNTEXT) );
+		}else{
+			destDc.SetTextForeground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW) );
+		}
 		destDc.SetTextBackground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE) );
 
 		destDc.DrawText( mLabelText, txtPos.x, txtPos.y );
 	}
 
-	if ( !isEnabled )
-	
-		greay_out_image_on_dc( destDc, destDim.x, destDim.y );
 
+	destDc.SetBrush( grayBrush );
+	destDc.SetPen( nullPen );
+
+	destDc.DrawRectangle( 0,0, destDim.x+1, destDim.y+1 );
+
+	if ( isPressed )
+	{
+		++imgPos.x; ++imgPos.y;
+		++txtPos.x; ++txtPos.y;
+	}
+
+	if ( hasImage )
+	{
+
+		destDc.Blit( imgPos.x, imgPos.y, 
+				 srcBmp->GetWidth()+1,
+				 srcBmp->GetHeight()+1,
+				 &srcDc, 0,0, wxCOPY,TRUE );
+	}
+
+	if ( hasText )
+	{
+		wxWindow* pTopWnd = this;
+
+		do
+		{
+			wxWindow* pParent = pTopWnd->GetParent();
+
+			if ( pParent == 0 ) break;
+
+			pTopWnd = pParent;
+		} while(1);
+
+		destDc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT) );
+
+		if( isEnabled ){
+			destDc.SetTextForeground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNTEXT) );
+		}else{
+			destDc.SetTextForeground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW) );
+		}
+		destDc.SetTextBackground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE) );
+
+		destDc.DrawText( mLabelText, txtPos.x, txtPos.y );
+	}
+
+	if ( !isEnabled ){
+	
+#ifdef __WXMSW // This is currently MSW specific
+		greay_out_image_on_dc( destDc, destDim.x, destDim.y );
+#else
+		wxBrush checkerBrush( wxBitmap( (const char*)_gDisableImage,8,8) );
+		checkerBrush.SetColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ) );
+		destDc.SetBrush( checkerBrush );
+		destDc.DrawRectangle( imgPos.x, imgPos.y, srcBmp->GetWidth()+1, srcBmp->GetHeight()+1);
+#endif
+	}
 	// adjust button size to fit the new dimensions of the label
 	if ( !mSizeIsSet && 0 )
 	{
@@ -503,6 +556,17 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 			);
 	}
 }
+void wxNewBitmapButton::RenderAllLabelImages()
+{
+	if( !mIsCreated ) return;
+	RenderLabelImage( mpDisabledImg, &mDepressedBmp, FALSE );
+	RenderLabelImage( mpPressedImg,   &mDepressedBmp, TRUE, TRUE );
+	RenderLabelImage( mpDepressedImg, &mDepressedBmp, TRUE, FALSE );
+	if ( mHasFocusedBmp ){
+		RenderLabelImage( mpFocusedImg, &mFocusedBmp, TRUE, FALSE );
+	}
+}
+	
 
 void wxNewBitmapButton::RenderLabelImages()
 {
@@ -572,7 +636,8 @@ void wxNewBitmapButton::SetLabel(const wxBitmap& labelBitmap,
 	mLabelText    = labelText;
 	mDepressedBmp = labelBitmap;
 
-	RenderLabelImages();
+	//RenderLabelImages();
+	RenderAllLabelImages();
 }
 
 void wxNewBitmapButton::SetAlignments( int alignText,
@@ -587,7 +652,8 @@ void wxNewBitmapButton::SetAlignments( int alignText,
 	mTextAlignment  = alignText;
 	mTextToLabelGap = textToLabelGap;
 
-	RenderLabelImages();
+	//RenderLabelImages();
+	RenderAllLabelImages();
 }
 
 // event handlers
@@ -636,6 +702,8 @@ bool wxNewBitmapButton::IsInWindow( int x, int y )
 
 void wxNewBitmapButton::OnMouseMove( wxMouseEvent& event )
 {
+	mPrevPressedState=mIsPressed;
+	mPrevInFocusState=mIsInFocus;
 	if ( !mIsInFocus && IsInWindow( event.m_x, event.m_y ) )
 	{
 		if ( !mDragStarted )
@@ -659,16 +727,11 @@ void wxNewBitmapButton::OnMouseMove( wxMouseEvent& event )
 			mIsPressed = TRUE;
 		else
 			mIsPressed = FALSE;
-
-		if ( mIsPressed != mPrevPressedState )
-			
-			Refresh();
-
-		mPrevPressedState = mIsPressed;
 	}
 
-	// FOR NOW::
-	Refresh();
+	if((mIsPressed != mPrevPressedState)||(mIsInFocus!=mPrevInFocusState)){
+		Refresh();
+	}
 }
 
 void wxNewBitmapButton::OnSize( wxSizeEvent& event )
@@ -678,6 +741,7 @@ void wxNewBitmapButton::OnSize( wxSizeEvent& event )
 
 void wxNewBitmapButton::Reshape( )
 {
+	
 	bool wasCreated = mIsCreated;
 	mIsCreated = TRUE;
 
@@ -693,7 +757,8 @@ void wxNewBitmapButton::Reshape( )
 			//wxMessageBox("Image Loaded!!!");
 		}
 
-		RenderLabelImages();
+		//RenderLabelImages();
+		RenderAllLabelImages();
 
 		wxBitmap* pCurImg = GetStateLabel();
 
@@ -713,7 +778,7 @@ void wxNewBitmapButton::DrawLabel( wxDC& dc )
 		wxSizeEvent evt;
 		OnSize( evt ); // fake it up!
 
-		RenderLabelImages();
+		//RenderLabelImages();
 		pCurBmp = GetStateLabel();
 	}
 
@@ -734,7 +799,7 @@ void wxNewBitmapButton::OnPaint( wxPaintEvent& event )
 	wxPaintDC dc(this);
 
 	// first, make sure images for current state are prepared
-	RenderLabelImages();
+	//RenderLabelImages();
 
 	DrawLabel( dc );
 

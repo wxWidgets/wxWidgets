@@ -42,11 +42,11 @@ protected:
 	int      mMarginY;
 	int      mTextAlignment;
 	bool     mIsSticky;
+	bool     mIsFlat;
 
 	wxString mLabelText;
 	wxString mImageFileName;
 	int      mImageFileType;
-	bool     mIsFlat;
 
 	wxBitmap mDepressedBmp; // source image for rendering
 	                        // labels for particular state
@@ -64,6 +64,7 @@ protected:
 	bool      mIsPressed; 
 	bool      mIsInFocus;
 	bool      mPrevPressedState;
+	bool	  mPrevInFocusState;
 
 	bool      mHasFocusedBmp;
 
@@ -142,6 +143,7 @@ public:
 								   bool isPressed = FALSE);
 
 	virtual void RenderLabelImages();
+	virtual void RenderAllLabelImages();
 
 	// event handlers
 	void OnLButtonDown( wxMouseEvent& event );

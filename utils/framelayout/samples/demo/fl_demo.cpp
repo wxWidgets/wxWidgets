@@ -769,7 +769,7 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
 					  new cbDynToolBarDimHandler()
                     ); 
 
-    cbDimInfo sizes4( 430,35, // when docked horizontally      
+    cbDimInfo sizes4( 450,35, // when docked horizontally      
                       44,375, // when docked vertically        
                       80,100, // when floated                  
                       TRUE, // the bar is fixed-size
@@ -789,8 +789,6 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     pTBar2->AddTool( 3, wxBitmap("bookmarks_icon") );
     pTBar2->AddTool( 4, wxBitmap("nextmark_icon") );
     pTBar2->AddTool( 5, wxBitmap("prevmark_icon") );
-
-
 
     wxDynamicToolBar* pTBar3 = new wxDynamicToolBar( mpInternalFrm, -1 );
 
@@ -821,7 +819,6 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     pTBar2->AddTool( 4, nextmark_xpm );
     pTBar2->AddTool( 5, prevmark_xpm );
 
-
     wxDynamicToolBar* pTBar3 = new wxDynamicToolBar( mpInternalFrm, -1 );
 
     pTBar3->AddTool( 1, wxBitmap(open_xpm), " Open " );
@@ -832,6 +829,8 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     pTBar3->AddTool( 5, wxBitmap(copy_xpm), " Copy " );
     pTBar3->AddTool( 6, wxBitmap(paste_xpm), " Paste " );
 
+    pTBar3->EnableTool( 2, FALSE );
+
     wxDynamicToolBar* pTBar4 = new wxDynamicToolBar( mpInternalFrm, -1 );
 
     pTBar4->AddTool( 1, wxBitmap(bookmarks_xpm), "Bookmarks ", TRUE );
@@ -839,6 +838,8 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     pTBar4->AddTool( 3, wxBitmap(prevmark_xpm), "Prev bookmark ", TRUE );
     //pTBar4->AddSeparator();
     pTBar4->AddTool( 4, wxBitmap(search_xpm),"Search ", TRUE );
+
+    pTBar4->EnableTool( 4, FALSE );
 #endif
 
     layout.AddBar( pTBar2,              
