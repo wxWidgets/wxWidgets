@@ -171,8 +171,8 @@ END_EVENT_TABLE()
 
 void MyFrame::LoadFile(wxCommandEvent& WXUNUSED(event) )
 {
-      char *s = wxFileSelector("Load text file", (const char *) NULL, (const char *) NULL, (const char *) NULL, "*.txt");
-      if (s)
+      wxString s = wxFileSelector("Load text file", (const char *) NULL, (const char *) NULL, (const char *) NULL, "*.txt");
+      if (s != "")
       {
 #ifdef __WXMSW__
         frame->text_window->LoadFile(s);

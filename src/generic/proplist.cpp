@@ -1465,7 +1465,7 @@ void wxFilenameListValidator::OnEdit(wxProperty *property, wxPropertyListView *v
   if (!view->GetValueText())
     return;
 
-  char *s = wxFileSelector(
+  wxString s = wxFileSelector(
      m_filenameMessage.GetData(),
      wxPathOnly(property->GetValue().StringValue()),
      wxFileNameFromPath(property->GetValue().StringValue()),
@@ -1473,9 +1473,9 @@ void wxFilenameListValidator::OnEdit(wxProperty *property, wxPropertyListView *v
      m_filenameWildCard.GetData(),
      0,
      parentWindow);
-  if (s)
+  if (s != "")
   {
-    property->GetValue() = wxString(s);
+    property->GetValue() = s;
     view->DisplayProperty(property);
     view->UpdatePropertyDisplayInList(property);
     view->OnPropertyChanged(property);

@@ -107,10 +107,10 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event))
 {
-  char *f = wxFileSelector( "Save Image", (const char *)NULL, (const char *)NULL, 
+  wxString f = wxFileSelector( "Save Image", (const char *)NULL, (const char *)NULL,
                             "png", "PNG files (*.png)|*.png" );
 
-  if (!f)  return;
+  if (f == "")  return;
   
   wxBitmap *backstore = new wxBitmap( 150, 150 );
   
@@ -135,10 +135,10 @@ void MyFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnLoadFile(wxCommandEvent& WXUNUSED(event))
 {
 	// Show file selector.
-	char *f = wxFileSelector("Open Image", (const char *) NULL, (const char *) NULL,"png",
+	wxString f = wxFileSelector("Open Image", (const char *) NULL, (const char *) NULL,"png",
 		  "PNG files (*.png)|*.png");
 
-	if (!f)
+	if (f == "")
 	  return;
 
     if ( g_TestBitmap )
