@@ -303,7 +303,7 @@ static bool wxIsNumeric(const wxString& val)
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
-        if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ','))
+        if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ',') && (val[i] != wxT('e')) && (val[i] != wxT('E')))
           if(!((i == 0) && (val[i] == '-')))
             return FALSE;
     }
