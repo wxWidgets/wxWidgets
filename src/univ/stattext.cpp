@@ -87,8 +87,6 @@ wxSize wxStaticText::DoGetBestClientSize() const
 
 void wxStaticText::DoDraw(wxControlRenderer *renderer)
 {
-    wxControl::DoDraw(renderer);
-
     renderer->DrawLabel();
 }
 

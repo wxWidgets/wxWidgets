@@ -31,8 +31,6 @@
     #error "This file can't be compiled without GUI!"
 #endif
 
-#if wxUSE_LOGGUI || wxUSE_LOGWINDOW
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/button.h"
@@ -47,6 +45,8 @@
     #include "wx/statbmp.h"
     #include "wx/button.h"
 #endif // WX_PRECOMP
+
+#if wxUSE_LOGGUI || wxUSE_LOGWINDOW
 
 #include "wx/file.h"
 #include "wx/textfile.h"
@@ -183,24 +183,6 @@ void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
     wxLog::OnLog(wxLOG_Status, msg, time(NULL));
     gs_pFrame = (wxFrame *) NULL;
   }
-}
-
-// ----------------------------------------------------------------------------
-// wxLogTextCtrl implementation
-// ----------------------------------------------------------------------------
-
-wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
-{
-    m_pTextCtrl = pTextCtrl;
-}
-
-void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
-{
-    wxString msg;
-    TimeStamp(&msg);
-    msg << szString << wxT('\n');
-
-    m_pTextCtrl->AppendText(msg);
 }
 
 // ----------------------------------------------------------------------------
@@ -1055,3 +1037,26 @@ static int OpenLogFile(wxFile& file, wxString *pFilename)
 #endif // wxUSE_FILE
 
 #endif // !(wxUSE_LOGGUI || wxUSE_LOGWINDOW)
+
+#if wxUSE_TEXTCTRL
+
+// ----------------------------------------------------------------------------
+// wxLogTextCtrl implementation
+// ----------------------------------------------------------------------------
+
+wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
+{
+    m_pTextCtrl = pTextCtrl;
+}
+
+void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+{
+    wxString msg;
+    TimeStamp(&msg);
+    msg << szString << wxT('\n');
+
+    m_pTextCtrl->AppendText(msg);
+}
+
+#endif // wxUSE_TEXTCTRL
+

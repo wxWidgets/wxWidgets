@@ -307,40 +307,18 @@ wxRenderer::~wxRenderer()
 // ----------------------------------------------------------------------------
 
 wxControlRenderer::wxControlRenderer(wxWindow *window,
-                                   wxDC& dc,
-                                   wxRenderer *renderer)
+                                     wxDC& dc,
+                                     wxRenderer *renderer)
                 : m_dc(dc)
 {
     m_window = window;
     m_renderer = renderer;
 
-    wxSize size = m_window->GetSize();
+    wxSize size = m_window->GetClientSize();
     m_rect.x =
     m_rect.y = 0;
     m_rect.width = size.x;
     m_rect.height = size.y;
-}
-
-void wxControlRenderer::DrawBorder()
-{
-    int flags = m_window->GetStateFlags();
-
-    // if the scrollbars are outside the border, we must adjust the rect to
-    // exclude them
-    if ( !m_renderer->AreScrollbarsInsideBorder() )
-    {
-        wxScrollBar *scrollbar = m_window->GetScrollbar(wxVERTICAL);
-        if ( scrollbar )
-            m_rect.width -= scrollbar->GetSize().x;
-
-        scrollbar = m_window->GetScrollbar(wxHORIZONTAL);
-        if ( scrollbar )
-            m_rect.height -= scrollbar->GetSize().y;
-    }
-
-    // draw outline
-    m_renderer->DrawBorder(m_dc, m_window->GetBorder(),
-                           m_rect, flags, &m_rect);
 }
 
 void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
@@ -398,29 +376,14 @@ void wxControlRenderer::DrawButtonBorder()
 void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)
 {
     int style = m_window->GetWindowStyle();
-    DrawBitmap(bitmap, m_rect,
+    DrawBitmap(m_dc, bitmap, m_rect,
                style & wxALIGN_MASK,
                style & wxBI_EXPAND ? wxEXPAND : wxSTRETCH_NOT);
 }
 
-void wxControlRenderer::DrawBackgroundBitmap()
-{
-    if ( m_window->GetBackgroundBitmap().Ok() )
-    {
-        // get the bitmap and the flags
-        int alignment;
-        wxStretch stretch;
-        wxBitmap bmp = m_window->GetBackgroundBitmap(&alignment, &stretch);
-        DrawBitmap(bmp, m_rect, alignment, stretch);
-    }
-    else // just fill it with bg colour if no bitmap
-    {
-        m_renderer->DrawBackground(m_dc, wxTHEME_BG_COLOUR(m_window),
-                                   m_rect, m_window->GetStateFlags());
-    }
-}
-
-void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
+/* static */
+void wxControlRenderer::DrawBitmap(wxDC &dc,
+                                   const wxBitmap& bitmap,
                                    const wxRect& rect,
                                    int alignment,
                                    wxStretch stretch)
@@ -443,7 +406,7 @@ void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
             for ( y = 0; y < rect.height; y += height )
             {
                 // no need to use mask here as we cover the entire window area
-                m_dc.DrawBitmap(bmp, x, y);
+                dc.DrawBitmap(bmp, x, y);
             }
         }
     }
@@ -482,7 +445,7 @@ void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
     }
 
     // do draw it
-    m_dc.DrawBitmap(bmp, x, y, TRUE /* use mask */);
+    dc.DrawBitmap(bmp, x, y, TRUE /* use mask */);
 }
 
 void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,

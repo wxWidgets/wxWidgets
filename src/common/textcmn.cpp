@@ -78,6 +78,7 @@ wxTextCtrlBase::~wxTextCtrlBase()
 
 bool wxTextCtrlBase::LoadFile(const wxString& filename)
 {
+#if wxUSE_FFILE
     wxFFile file(filename);
     if ( file.IsOpened() )
     {
@@ -95,6 +96,7 @@ bool wxTextCtrlBase::LoadFile(const wxString& filename)
     }
 
     wxLogError(_("File couldn't be loaded."));
+#endif // wxUSE_FFILE
 
     return FALSE;
 }
@@ -110,6 +112,7 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
         return FALSE;
     }
 
+#if wxUSE_FFILE
     wxFFile file(filename, "w");
     if ( file.IsOpened() && file.Write(GetValue()) )
     {
@@ -122,6 +125,7 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
     }
 
     wxLogError(_("The text couldn't be saved."));
+#endif // wxUSE_FFILE
 
     return FALSE;
 }
@@ -209,6 +213,30 @@ int wxTextCtrlBase::underflow()
 }
 
 #endif // NO_TEXT_WINDOW_STREAM
+
+// ----------------------------------------------------------------------------
+// clipboard stuff
+// ----------------------------------------------------------------------------
+
+bool wxTextCtrlBase::CanCopy() const
+{
+    // can copy if there's a selection
+    long from, to;
+    GetSelection(&from, &to);
+    return from != to;
+}
+
+bool wxTextCtrlBase::CanCut() const
+{
+    // can cut if there's a selection and if we're not read only
+    return CanCopy() && IsEditable();
+}
+
+bool wxTextCtrlBase::CanPaste() const
+{
+    // can paste if we are not read only
+    return IsEditable();
+}
 
 #endif // wxUSE_TEXTCTRL
 

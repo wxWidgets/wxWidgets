@@ -44,6 +44,7 @@
     wxUSE_STATLINE || \
     wxUSE_STATUSBAR || \
     wxUSE_TAB_DIALOG || \
+    wxUSE_TEXTCTRL || \
     wxUSE_TOOLBAR || \
     wxUSE_TOOLTIPS || \
     wxUSE_TREECTRL
@@ -102,6 +103,17 @@
 #        endif
 #    endif
 #endif /* wxUSE_STOPWATCH */
+
+#if wxUSE_TEXTCTRL
+#   if defined(__WXUNIVERSAL__) && !wxUSE_CARET
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxTextCtrl requires wxCaret in wxUniversal"
+#        else
+#            undef wxUSE_CARET
+#            define wxUSE_CARET 1
+#        endif
+#   endif
+#endif /* wxUSE_RADIOBTN */
 
 #if !defined(wxUSE_DYNAMIC_CLASSES) || !wxUSE_DYNAMIC_CLASSES
 #   if wxABORT_ON_CONFIG_ERROR

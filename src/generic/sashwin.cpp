@@ -22,11 +22,11 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SASH
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
-
-#if wxUSE_SASH
 
 #include <math.h>
 #include <stdlib.h>

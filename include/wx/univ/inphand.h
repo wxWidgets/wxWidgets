@@ -38,6 +38,7 @@ class WXDLLEXPORT wxScrollBar;
 #define wxINP_HANDLER_RADIOBTN          _T("radiobtn")
 #define wxINP_HANDLER_SCROLLBAR         _T("scrollbar")
 #define wxINP_HANDLER_LISTBOX           _T("listbox")
+#define wxINP_HANDLER_TEXTCTRL          _T("textctrl")
 
 // ----------------------------------------------------------------------------
 // wxInputHandler: maps the events to the actions

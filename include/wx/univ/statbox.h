@@ -49,13 +49,9 @@ public:
 
     // the origin of the static box is inside the border and under the label:
     // take account of this
-    virtual wxPoint GetClientAreaOrigin() const;
+    virtual wxPoint GetBoxAreaOrigin() const;
 
 protected:
-    // take into account the border/label here as well
-    virtual void DoSetClientSize(int width, int height);
-    virtual void DoGetClientSize(int *width, int *height) const;
-
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);
 

@@ -484,12 +484,15 @@ void wxScrollHelper::DoPrepareDC(wxDC& dc)
                         -m_yScrollPosition * m_yScrollPixelsPerLine );
     dc.SetUserScale( m_scaleX, m_scaleY );
 
+    // now done in wxPaintDC itself
+#if 0
     // for wxUniversal we need to set the clipping region to avoid overwriting
     // the scrollbars with the user drawing
     wxSize size = m_win->GetClientSize();
     dc.SetClippingRegion(m_xScrollPosition * m_xScrollPixelsPerLine,
                          m_yScrollPosition * m_yScrollPixelsPerLine,
                          size.x, size.y);
+#endif // 0
 }
 
 void wxScrollHelper::GetScrollPixelsPerUnit (int *x_unit, int *y_unit) const

@@ -115,8 +115,8 @@ public:
     // return all state flags at once (combination of wxCONTROL_XXX values)
     int GetStateFlags() const;
 
-    // operations
-    virtual void SetCurrent(bool doit = TRUE);
+    // set the "highlighted" flag and return TRUE if it changed
+    virtual bool SetCurrent(bool doit = TRUE);
 
     // get the scrollbar (may be NULL) for the given orientation
     wxScrollBar *GetScrollbar(int orient) const
@@ -175,10 +175,10 @@ protected:
     void OnErase(wxEraseEvent& event);
 
     // draw the control background, return TRUE if done
-    virtual bool DoDrawBackground(wxControlRenderer *renderer);
+    virtual bool DoDrawBackground(wxDC& dc);
 
     // draw the controls border
-    virtual void DoDrawBorder(wxControlRenderer *renderer);
+    virtual void DoDrawBorder(wxDC& dc);
 
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);

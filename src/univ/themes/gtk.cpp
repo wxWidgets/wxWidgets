@@ -1698,12 +1698,6 @@ bool wxGTKInputHandler::HandleMouseMove(wxControl *control,
         return FALSE;
     }
 
-    // don't refresh static controls uselessly - they never react to this
-    if ( control->AcceptsFocus() )
-    {
-        control->Refresh();
-    }
-
     return TRUE;
 }
 

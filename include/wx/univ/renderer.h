@@ -416,16 +416,11 @@ public:
                    size_t itemFirst, size_t itemLast);
     void DrawCheckItems(const wxCheckListBox *listbox,
                         size_t itemFirst, size_t itemLast);
-    void DrawBorder();
     void DrawButtonBorder();
     // the line must be either horizontal or vertical
     void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
     void DrawFrame();
     void DrawBitmap(const wxBitmap& bitmap);
-    void DrawBitmap(const wxBitmap& bitmap,
-                    const wxRect& rect,
-                    int alignment = wxALIGN_CENTRE | wxALIGN_CENTRE_VERTICAL,
-                    wxStretch stretch = wxSTRETCH_NOT);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar, int thumbPosOld);
 
@@ -438,6 +433,13 @@ public:
     const wxRect& GetRect() const { return m_rect; }
     wxRect& GetRect() { return m_rect; }
 
+    // static helpers
+    static void DrawBitmap(wxDC &dc,
+                           const wxBitmap& bitmap,
+                           const wxRect& rect,
+                           int alignment = wxALIGN_CENTRE |
+                                           wxALIGN_CENTRE_VERTICAL,
+                           wxStretch stretch = wxSTRETCH_NOT);
 private:
     // common part of DrawItems() and DrawCheckItems()
     void DoDrawItems(const wxListBox *listbox,

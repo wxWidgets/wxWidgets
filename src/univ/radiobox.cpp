@@ -249,6 +249,11 @@ wxSize wxRadioBox::DoGetBestClientSize() const
     sizeBtn.x += 2*BOX_BORDER_X;
     sizeBtn.y += 2*BOX_BORDER_Y;
 
+    // account for the area taken by static box
+    wxRect rect = GetBorderGeometry();
+    sizeBtn.x += rect.x + rect.width;
+    sizeBtn.y += rect.y + rect.height;
+
     return sizeBtn;
 }
 
@@ -257,7 +262,7 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
     wxStaticBox::DoMoveWindow(x0, y0, width, height);
 
     wxSize sizeBtn = GetMaxButtonSize();
-    wxPoint ptOrigin = GetClientAreaOrigin();
+    wxPoint ptOrigin = GetBoxAreaOrigin();
 
     x0 += ptOrigin.x + BOX_BORDER_X;
     y0 += ptOrigin.y + BOX_BORDER_Y;

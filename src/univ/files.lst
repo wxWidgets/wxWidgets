@@ -15,6 +15,7 @@ UNIVOBJS = \
            statbox.o \
            statline.o \
            stattext.o \
+           textctrl.o \
            theme.o \
            gtk.o \
            winuniv.o \
@@ -37,6 +38,7 @@ UNIVDEPS = \
            statbox.d \
            statline.d \
            stattext.d \
+           textctrl.d \
            theme.d \
            gtk.d \
            winuniv.d \

@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_TAB_DIALOG
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -1279,3 +1281,4 @@ void wxPanelTabView::ShowWindowForTab(int id)
   newWindow->Refresh();
 }
 
+#endif // wxUSE_TAB_DIALOG

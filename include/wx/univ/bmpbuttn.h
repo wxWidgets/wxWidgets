@@ -51,7 +51,7 @@ public:
 
     virtual bool Enable(bool enable = TRUE);
 
-    virtual void SetCurrent(bool doit = TRUE);
+    virtual bool SetCurrent(bool doit = TRUE);
 
     virtual void Press();
     virtual void Release();

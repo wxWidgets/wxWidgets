@@ -94,11 +94,11 @@ bool wxBitmapButton::Enable(bool enable)
     return TRUE;
 }
 
-void wxBitmapButton::SetCurrent(bool doit)
+bool wxBitmapButton::SetCurrent(bool doit)
 {
     ChangeBitmap(doit ? m_bmpFocus : m_bmpNormal);
 
-    wxButton::SetCurrent(doit);
+    return wxButton::SetCurrent(doit);
 }
 
 void wxBitmapButton::OnSetFocus(wxFocusEvent& event)

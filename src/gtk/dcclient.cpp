@@ -2213,6 +2213,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 wxPaintDC::wxPaintDC( wxWindow *win )
          : wxClientDC( win )
 {
+#ifdef __WXUNIVERSAL__
+    wxPoint ptOrigin = win->GetClientAreaOrigin();
+    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    wxSize size = win->GetClientSize();
+    SetClippingRegion(wxPoint(0, 0), size);
+#endif // __WXUNIVERSAL__
+
 #if USE_PAINT_REGION
     if (!win->m_clipPaintRegion)
         return;
@@ -2229,12 +2236,6 @@ wxPaintDC::wxPaintDC( wxWindow *win )
         gdk_gc_set_clip_region( m_bgGC, region );
     }
 #endif // USE_PAINT_REGION
-
-#ifdef __WXUNIVERSAL__
-    wxPoint ptOrigin = win->GetClientAreaOrigin();
-    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
-    SetClippingRegion(ptOrigin, win->GetClientSize());
-#endif // __WXUNIVERSAL__
 }
 
 //-----------------------------------------------------------------------------

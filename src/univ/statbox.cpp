@@ -86,7 +86,7 @@ wxRect wxStaticBox::GetBorderGeometry() const
     return rect;
 }
 
-wxPoint wxStaticBox::GetClientAreaOrigin() const
+wxPoint wxStaticBox::GetBoxAreaOrigin() const
 {
     wxPoint pt = wxControl::GetClientAreaOrigin();
     wxRect rect = GetBorderGeometry();
@@ -96,6 +96,7 @@ wxPoint wxStaticBox::GetClientAreaOrigin() const
     return pt;
 }
 
+#if 0
 void wxStaticBox::DoSetClientSize(int width, int height)
 {
     wxRect rect = GetBorderGeometry();
@@ -114,6 +115,8 @@ void wxStaticBox::DoGetClientSize(int *width, int *height) const
     if ( height )
         *height -= rect.y + rect.height;
 }
+
+#endif // 0
 
 #endif // wxUSE_STATBOX
 

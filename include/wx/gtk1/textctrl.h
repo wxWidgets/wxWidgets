@@ -92,10 +92,6 @@ public:
     virtual void Cut();
     virtual void Paste();
 
-    virtual bool CanCopy() const;
-    virtual bool CanCut() const;
-    virtual bool CanPaste() const;
-
     // Undo/redo
     virtual void Undo();
     virtual void Redo();

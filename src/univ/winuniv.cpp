@@ -37,6 +37,7 @@
     #include "wx/scrolbar.h"
 #endif // WX_PRECOMP
 
+#include "wx/univ/colschem.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/theme.h"
 
@@ -147,9 +148,7 @@ void wxWindow::OnErase(wxEraseEvent& event)
         return;
     }
 
-    wxControlRenderer renderer(this, *event.GetDC(), m_renderer);
-
-    DoDrawBackground(&renderer);
+    DoDrawBackground(*event.GetDC());
 
     // if we have both scrollbars, we also have a square in the corner between
     // them which we must paint
@@ -176,10 +175,9 @@ void wxWindow::OnNcPaint(wxPaintEvent& event)
     {
         // get the DC to use and create renderer on it
         wxWindowDC dc(this);
-        wxControlRenderer renderer(this, dc, m_renderer);
 
         // draw the border
-        DoDrawBorder(&renderer);
+        DoDrawBorder(dc);
     }
 }
 
@@ -201,16 +199,56 @@ void wxWindow::OnPaint(wxPaintEvent& event)
     }
 }
 
-bool wxWindow::DoDrawBackground(wxControlRenderer *renderer)
+bool wxWindow::DoDrawBackground(wxDC& dc)
 {
-    renderer->DrawBackgroundBitmap();
+    wxRect rect;
+    wxSize size = GetSize(); // full, not client only
+    rect.width = size.x;
+    rect.height = size.y;
+
+    if ( GetBackgroundBitmap().Ok() )
+    {
+        // get the bitmap and the flags
+        int alignment;
+        wxStretch stretch;
+        wxBitmap bmp = GetBackgroundBitmap(&alignment, &stretch);
+        wxControlRenderer::DrawBitmap(dc, bmp, rect, alignment, stretch);
+    }
+    else // just fill it with bg colour if no bitmap
+    {
+        m_renderer->DrawBackground(dc, wxTHEME_BG_COLOUR(this),
+                                   rect, GetStateFlags());
+    }
 
     return TRUE;
 }
 
-void wxWindow::DoDrawBorder(wxControlRenderer *renderer)
+void wxWindow::DoDrawBorder(wxDC& dc)
 {
-    renderer->DrawBorder();
+    // get the window rect
+    wxRect rect;
+    wxSize size = GetSize();
+    rect.x =
+    rect.y = 0;
+    rect.width = size.x;
+    rect.height = size.y;
+
+    // if the scrollbars are outside the border, we must adjust the rect to
+    // exclude them
+    if ( !m_renderer->AreScrollbarsInsideBorder() )
+    {
+        wxScrollBar *scrollbar = GetScrollbar(wxVERTICAL);
+        if ( scrollbar )
+            rect.width -= scrollbar->GetSize().x;
+
+        scrollbar = GetScrollbar(wxHORIZONTAL);
+        if ( scrollbar )
+            rect.height -= scrollbar->GetSize().y;
+    }
+
+    // draw outline
+    m_renderer->DrawBorder(dc, GetBorder(),
+                           rect, GetStateFlags(), &rect);
 }
 
 void wxWindow::DoDraw(wxControlRenderer *renderer)
@@ -242,9 +280,17 @@ bool wxWindow::IsCurrent() const
     return m_isCurrent;
 }
 
-void wxWindow::SetCurrent(bool doit)
+bool wxWindow::SetCurrent(bool doit)
 {
+    if ( doit == m_isCurrent )
+        return FALSE;
+
     m_isCurrent = doit;
+
+    if ( CanBeHighlighted() )
+        Refresh();
+
+    return TRUE;
 }
 
 int wxWindow::GetStateFlags() const

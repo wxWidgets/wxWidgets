@@ -45,6 +45,7 @@
     #include "wx/scrolwin.h"
     #include "wx/statbox.h"
     #include "wx/stattext.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/statbmp.h"
@@ -52,7 +53,7 @@
 
 #include "wx/univ/theme.h"
 
-#define DEBUG_SCROLL
+//#define DEBUG_SCROLL
 //#define DEBUG_LISTBOX
 
 // ----------------------------------------------------------------------------
@@ -227,9 +228,9 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     wxStaticText *text;
 
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
-    new wxStaticText(this,
+    new wxStaticText(this, -1,
                      _T("&Multi line\n(and very very very very long)\nstatic text"),
-                     wxPoint(210, 10));
+                     wxPoint(210, 10), wxDefaultSize, wxBORDER_SUNKEN);
 
     (new wxStaticText(this, _T("&Disabled text"), wxPoint(10, 30)))->Disable();
 
@@ -364,6 +365,9 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                                    wxDefaultSize,
                                                    WXSIZEOF(choices), choices);
     checkLbox->Check(2);
+
+    new wxTextCtrl(this, -1, _T("Hello, Universe!"),
+                   wxPoint(550, 150), wxDefaultSize);
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
@@ -429,6 +433,6 @@ void MyUnivCanvas::OnPaint(wxPaintEvent& event)
     dc.DrawLabel(_T("This is the bottom of the canvas"),
                  wxRect(0, 950, 950, 50), wxALIGN_RIGHT | wxBOTTOM);
 
-    event.Skip();
+    //event.Skip();
 }
 
