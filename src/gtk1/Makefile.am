@@ -9,7 +9,7 @@ SUFFIXES = .cpp .c
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
 LIBS = $(GUILIBS)
 
-VPATH = .:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
+VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
 
 EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
 

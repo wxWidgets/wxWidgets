@@ -9,7 +9,7 @@ dnl
 dnl This script is under the wxWindows licence.
 dnl
 dnl Version: $Id$
-dnl ////////////////////////////////////////////////////////////////////////
+dnl ---------------------------------------------------------------------------
 
 dnl ---------------------------------------------------------------------------
 dnl initialization
@@ -30,7 +30,7 @@ dnl       never defined in configure.in (remove these lines to see what I'm
 dnl       speaking about) - Tom Tromey <tromey@cygnus.com> told me that it will
 dnl       be fixed in the next release.
 LIBOBJS=
-dnl LIBOBJS="$LIBOBJS common/extended.o"
+LIBOBJS="$LIBOBJS ../common/extended.o"
 
 dnl ------------------------------------------------------------------------
 dnl Check platform (host system)
@@ -149,6 +149,7 @@ if test "$USE_UNIX" = 1 ; then
   wxUSE_UNIX=yes
   AC_DEFINE(__UNIX__)
   EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/../unix"
+  SRC_SUBDIRS="$SRC_SUBDIRS unix"
   INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS unix"
 fi
 
@@ -1053,8 +1054,8 @@ AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
 AC_CHECK_SIZEOF(long long, 0)
 
-dnl for bytesex stuff
-AC_C_BIGENDIAN
+dnl for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
+WX_C_BIGENDIAN
 
 dnl check for iostream (as opposed to iostream.h) standard header
 WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
@@ -1876,6 +1877,7 @@ AC_SUBST(EXTRA_VPATH)
 AC_SUBST(LTLIBOBJS)
 
 dnl additional subdirectories where we will build
+AC_SUBST(SRC_SUBDIRS)
 AC_SUBST(INCLUDE_SUBDIRS)
 AC_SUBST(UTILS_SUBDIRS)
 AC_SUBST(DOCS_SUBDIRS)
@@ -1903,9 +1905,13 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
             wx-config
-            Makefile 
-	    src/Makefile
-	    src/gtk/Makefile
+            Makefile
+            src/Makefile
+            src/common/Makefile
+            src/generic/Makefile
+            src/gtk/Makefile
+            src/motif/Makefile
+            src/unix/Makefile
             include/Makefile
             include/wx/Makefile
             include/wx/generic/Makefile

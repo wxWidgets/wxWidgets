@@ -56,7 +56,6 @@ wx_motif_include_HEADERS = \
  region.h \
  scrolbar.h \
  settings.h \
- setup0.h \
  slider.h \
  spinbutt.h \
  statbmp.h \
