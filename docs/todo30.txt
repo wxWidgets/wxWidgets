@@ -196,6 +196,14 @@ wxMiscellaneous
   these classes, as per the patch on SF.
 - Rewrite wxFileHistory using wxString and wxArrayString, and
   put in separate file.
-
+- Add wxArrayString methods to wxTextValidator and any other
+  class that needs them.
+- Add wxNotebook::GetTabRect or similar so we can estimate
+  page size better in wxNotebookBase::CalcSizeFromPage.
+- Add function to clear all wxNotebook tabs without
+  destroying the pages.
+- Add individual setters to wxScrollBar and other classes
+  that use a combined setter.
+- Remove traces of old resource system from wxWizard.
 
 Version:      $Id$
