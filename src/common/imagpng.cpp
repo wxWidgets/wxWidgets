@@ -177,26 +177,14 @@ void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep data,
 void
 PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
 {
-    wxPNGInfoStruct *info = WX_PNG_INFO(png_ptr);
-    if (info->verbose)
-        wxLogError( wxString::FromAscii(message) );
-
-#ifdef USE_FAR_KEYWORD
-    {
-       jmp_buf jmpbuf;
-       png_memcpy(jmpbuf,info->jmpbuf,sizeof(jmp_buf));
-       longjmp(jmpbuf, 1);
-    }
-#else
-    longjmp(info->jmpbuf, 1);
-#endif
+    wxLogFatalError( wxString::FromAscii(message) );
 }
 
 void
 PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 {
-    wxPNGInfoStruct *info = WX_PNG_INFO(png_ptr);
-    if (info->verbose)
+    wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : NULL;
+    if ( !info || info->verbose )
         wxLogWarning( wxString::FromAscii(message) );
 }
 
@@ -531,10 +519,13 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     image->Destroy();
 
-    png_structp png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING,
-        (voidp) NULL,
-        (png_error_ptr) NULL,
-        (png_error_ptr) NULL );
+    png_structp png_ptr = png_create_read_struct
+                          (
+                            PNG_LIBPNG_VER_STRING,
+                            (voidp) NULL,
+                            wx_png_error,
+                            wx_png_warning
+                          );
     if (!png_ptr)
         goto error;
 
@@ -640,7 +631,13 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     wxinfo.verbose = verbose;
     wxinfo.stream.out = &stream;
 
-    png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_structp png_ptr = png_create_write_struct
+                          (
+                            PNG_LIBPNG_VER_STRING,
+                            NULL,
+                            wx_png_error,
+                            wx_png_warning
+                          );
     if (!png_ptr)
     {
         if (verbose)
