@@ -213,6 +213,10 @@ protected:
     void OnMouseDown(wxMouseEvent& event);
     void OnMouseUp(wxMouseEvent& event);
     void OnIdle(wxIdleEvent& event);
+#if wxUSE_CLIPBOARD
+    void OnKeyUp(wxKeyEvent& event);
+    void OnCopy(wxCommandEvent& event);
+#endif
 
     // Returns new filter (will be stored into m_DefaultFilter variable)
     virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
@@ -223,6 +227,18 @@ protected:
     // Returns true if text selection is enabled (wxClipboard must be available
     // and wxHW_NO_SELECTION not used)
     bool IsSelectionEnabled() const;
+
+    // Convert selection to text:
+    wxString SelectionToText();
+
+    enum ClipboardType
+    {
+        Primary,
+        Secondary
+    };
+    
+    // Copies selection to clipboard:
+    void CopySelection(ClipboardType t = Secondary);
 
 protected:
     // This is pointer to the first cell in parsed data.

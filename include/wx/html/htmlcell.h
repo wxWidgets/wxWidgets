@@ -41,13 +41,8 @@ public:
           m_fromCell(NULL), m_toCell(NULL) {}
 
     void Set(const wxPoint& fromPos, wxHtmlCell *fromCell,
-             const wxPoint& toPos, wxHtmlCell *toCell)
-    {
-        m_fromCell = fromCell;
-        m_toCell = toCell;
-        m_fromPos = fromPos;
-        m_toPos = toPos;
-    }
+             const wxPoint& toPos, wxHtmlCell *toCell);
+    void Set(wxHtmlCell *fromCell, wxHtmlCell *toCell);
     
     const wxHtmlCell *GetFromCell() const { return m_fromCell; }
     const wxHtmlCell *GetToCell() const { return m_toCell; }
@@ -107,6 +102,8 @@ enum
 };
 
 
+
+
 // ---------------------------------------------------------------------------
 // wxHtmlCell
 //                  Internal data structure. It represents fragments of parsed
@@ -136,11 +133,14 @@ public:
 
     // returns the link associated with this cell. The position is position
     // within the cell so it varies from 0 to m_Width, from 0 to m_Height
-    virtual wxHtmlLinkInfo* GetLink(int WXUNUSED(x) = 0, int WXUNUSED(y) = 0) const
+    virtual wxHtmlLinkInfo* GetLink(int WXUNUSED(x) = 0,
+                                    int WXUNUSED(y) = 0) const
         { return m_Link; }
 
-    // members access methods
+    // return next cell among parent's cells
     wxHtmlCell *GetNext() const {return m_Next;}
+    // returns first child cell (if there are any, i.e. if this is container):
+    virtual wxHtmlCell* GetFirstChild() const { return NULL; }
 
     // members writing methods
     virtual void SetPos(int x, int y) {m_PosX = x, m_PosY = y;}
@@ -229,6 +229,20 @@ public:
     virtual wxHtmlCell *GetLastTerminal() const 
         { return wxConstCast(this, wxHtmlCell); }
 
+    // Returns cell's depth, i.e. how far under the root cell it is
+    // (if it is the root, depth is 0)
+    unsigned GetDepth() const;
+    
+    // Returns true if the cell appears before 'cell' in natural order of
+    // cells (= as they are read). If cell A is (grand)parent of cell B,
+    // then both A.IsBefore(B) and B.IsBefore(A) always return true.
+    bool IsBefore(wxHtmlCell *cell) const;
+
+    // Converts the cell into text representation. If sel != NULL then
+    // only part of the cell inside the selection is converted.
+    virtual wxString ConvertToText(wxHtmlSelection *WXUNUSED(sel)) const
+        { return wxEmptyString; }
+
 protected:
     wxHtmlCell *m_Next;
             // pointer to the next cell
@@ -252,15 +266,15 @@ protected:
 
 
 
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Inherited cells:
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxHtmlWordCell
 //                  Single word in input stream.
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxHtmlWordCell : public wxHtmlCell
 {
@@ -268,6 +282,7 @@ public:
     wxHtmlWordCell(const wxString& word, wxDC& dc);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
               wxHtmlRenderingState& state);
+    wxString ConvertToText(wxHtmlSelection *sel) const;
 
 protected:
     wxString m_Word;
@@ -329,8 +344,10 @@ public:
     virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
     virtual void GetHorizontalConstraints(int *left, int *right) const;
 
-    // returns pointer to the first cell in container or NULL
-    wxHtmlCell* GetFirstCell() const {return m_Cells;}
+    virtual wxHtmlCell* GetFirstChild() const { return m_Cells; }
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( wxHtmlCell* GetFirstCell() const );
+#endif
 
     // see comment in wxHtmlCell about this method
     virtual bool IsTerminalCell() const { return FALSE; }
@@ -374,14 +391,18 @@ protected:
     DECLARE_NO_COPY_CLASS(wxHtmlContainerCell)
 };
 
+#if WXWIN_COMPATIBILITY_2_4
+inline wxHtmlCell* wxHtmlContainerCell::GetFirstCell() const
+    { return GetFirstChild(); }
+#endif
 
 
 
 
-//--------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // wxHtmlColourCell
 //                  Color changer.
-//--------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxHtmlColourCell : public wxHtmlCell
 {
@@ -488,6 +509,26 @@ private:
     const wxHtmlCell *m_Cell;
 };
 
+
+
+// ----------------------------------------------------------------------------
+// wxHtmlTerminalCellsInterator
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxHtmlTerminalCellsInterator
+{
+public:
+    wxHtmlTerminalCellsInterator(const wxHtmlCell *from, const wxHtmlCell *to)
+        : m_to(to), m_pos(from) {}
+
+    operator bool() const { return m_pos; }
+    const wxHtmlCell* operator++();
+    const wxHtmlCell* operator->() const { return m_pos; }
+    const wxHtmlCell* operator*() const { return m_pos; }
+
+private:
+    const wxHtmlCell *m_to, *m_pos;
+};
 
 
 
