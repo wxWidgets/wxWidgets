@@ -318,7 +318,7 @@ wxSize wxRadioBox::LayoutItems()
         num_of_rows = m_majorDim;
     }
     
-    int lineheight = GetCharHeight();
+    int lineheight = GetCharHeight()+2;
     
     if ( HasFlag(wxRA_SPECIFY_COLS) ||
          (HasFlag(wxRA_SPECIFY_ROWS) && (num_of_cols > 1)) )
@@ -339,7 +339,7 @@ wxSize wxRadioBox::LayoutItems()
                 req.height = 2;
                 (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(button) )->size_request )
                       (button, &req );
-
+                      
                 if (req.width > max_len) max_len = req.width;
 
                 gtk_pizza_move( GTK_PIZZA(m_parent->m_wxwindow), button, m_x+x, m_y+y );
