@@ -21,6 +21,10 @@
 #import <AppKit/NSButton.h>
 #include "wx/cocoa/string.h"
 
+wxButtonBase::wxButtonBase()
+{
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 BEGIN_EVENT_TABLE(wxButton, wxButtonBase)
 END_EVENT_TABLE()
