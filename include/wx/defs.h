@@ -567,6 +567,11 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxTR_EDIT_LABELS     0x0008
 #define wxTR_LINES_AT_ROOT   0x0010
 
+#define wxTR_SINGLE          0x0000
+#define wxTR_MULTIPLE        0x0020
+#define wxTR_EXTENDED        0x0040
+#define wxTR_HAS_VARIABLE_ROW_HIGHT 0x0080
+
 /*
  * wxListCtrl flags
  */

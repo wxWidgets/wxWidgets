@@ -745,15 +745,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 void wxFrame::MakeModal( bool modal )
 {
     if (modal)
-    {
         gtk_grab_add( m_widget );
-        gtk_main();
-        gtk_grab_remove( m_widget );
-    }
     else
-    {
-        gtk_main_quit();
-    }
+        gtk_grab_remove( m_widget );
 }
 
 void wxFrame::OnInternalIdle()

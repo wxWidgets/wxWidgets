@@ -366,24 +366,25 @@ void wxPreviewControlBar::CreateButtons()
         x += gap + buttonWidth;
     }
 
-    static const char *choices[] =
-    {
-        "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%",
-        "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "110%",
-        "120%", "150%", "200%"
-    };
-
     if (m_buttonFlags & wxPREVIEW_ZOOM)
     {
+        static const char *choices[] =
+        {
+            "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%",
+            "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "110%",
+            "120%", "150%", "200%"
+        };
+
         m_zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM,
                                      wxPoint(x, y), wxSize(100, -1));
+				     
+        // Yes, this look stupid, but this is because gcc gives up otherwise.
+        int n = WXSIZEOF(choices);
+        for ( int i = 0; i < n; i++ )
+           m_zoomControl->Append(choices[i]);
+	
         SetZoomControl(m_printPreview->GetZoom());
     }
-
-    // Yes, this look stupid, but this is because gcc gives up otherwise.
-    int n = WXSIZEOF(choices);
-    for ( int i = 0; i < n; i++ )
-        m_zoomControl->Append(choices[i]);
 
     //  m_closeButton->SetDefault();
 }
@@ -548,7 +549,7 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_previewFrame = NULL;
     m_previewBitmap = NULL;
     m_currentPage = 1;
-    m_currentZoom = 30;
+    m_currentZoom = 70;
     m_topMargin = 40;
     m_leftMargin = 40;
     m_pageWidth = 0;
