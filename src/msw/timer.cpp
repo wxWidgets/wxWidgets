@@ -53,6 +53,11 @@ UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
     #define _EXPORT _export
 #endif
 
+// should probably be in wx/msw/private.h
+#ifdef __WXMICROWIN__
+    #define MakeProcInstance(proc, hinst) proc
+#endif
+
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 
 // ============================================================================
@@ -81,18 +86,11 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
 
     wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeour") );
 
-    wxTimerList.DeleteObject(this);
-
-#ifdef __WXMICROWIN__
-    m_id = SetTimer(NULL, (UINT)(m_id ? m_id : 1),
-                    (UINT)milliseconds, (TIMERPROC) wxTimerProc);
-#else
     TIMERPROC wxTimerProcInst = (TIMERPROC)
         MakeProcInstance((FARPROC)wxTimerProc, wxGetInstance());
 
-    m_id = SetTimer(NULL, (UINT)(m_id ? m_id : 1),
-                    (UINT)milliseconds, wxTimerProcInst);
-#endif
+    m_id = ::SetTimer(NULL, (UINT)(m_id ? m_id : 1),
+                      (UINT)m_milli, wxTimerProcInst);
 
     if ( m_id > 0 )
     {
@@ -112,7 +110,8 @@ void wxTimer::Stop()
 {
     if ( m_id )
     {
-        KillTimer(NULL, (UINT)m_id);
+        ::KillTimer(NULL, (UINT)m_id);
+
         wxTimerList.DeleteObject(this);
     }
 
