@@ -48,6 +48,7 @@ public:
     {
         m_clipping = FALSE;
         m_ok = TRUE;
+        m_isBBoxValid = FALSE;
 
         m_minX = m_minY = m_maxX = m_maxY = 0;
 
@@ -400,10 +401,22 @@ public:
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
-        if ( x < m_minX ) m_minX = x;
-        if ( y < m_minY ) m_minY = y;
-        if ( x > m_maxX ) m_maxX = x;
-        if ( y > m_maxY ) m_maxY = y;
+      if ( m_isBBoxValid )
+      {
+         if ( x < m_minX ) m_minX = x;
+         if ( y < m_minY ) m_minY = y;
+         if ( x > m_maxX ) m_maxX = x;
+         if ( y > m_maxY ) m_maxY = y;
+      }
+      else
+      {
+         m_isBBoxValid = TRUE;
+
+         m_minX = x;
+         m_minY = y;
+         m_maxX = x;
+         m_maxY = y;
+      }
     }
 
     // Get the final bounding box of the PostScript or Metafile picture.
@@ -577,6 +590,7 @@ protected:
     bool m_ok:1;
     bool m_clipping:1;
     bool m_isInteractive:1;
+    bool m_isBBoxValid:1;
 
     // coordinate system variables
 
