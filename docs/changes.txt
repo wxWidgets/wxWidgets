@@ -103,8 +103,17 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
       control is sized to a blending of the min size and best size.
       This can be done by calling SetBestFittingSize.
 
+! wxURL has undergone some radical changes.
 
+    * Many accessors of wxURL - GetHostName, GetProtocolName, and GetPath,
+      have been replaced by its parent's (wxURI) counterparts.
+  
+    * ConvertToValidURI has been replaced by wxURI, and even applications
+      with 2.4 compatability enabled will have the second parameter, delims,
+      completely ignored.
 
+    * ConvertFromURI has been replaced by wxURI::Unescape.
+    
 - no initialization/cleanup can be done in wxApp/~wxApp because they are
   now called much earlier/later than before; please move any exiting code
   from there to wxApp::OnInit()/OnExit()
@@ -164,6 +173,8 @@ DEPRECATED METHODS SINCE 2.4.x
 Deprecated methods may still be used but will disappear in future wxWidgets
 versions, please update your code to not use them.
 
+- wxURL::GetInputStream() and similar functionality has been depreciated in 
+  favor of other ways of connecting, such as though sockets or wxFileSystem.
 - wxDocManager::GetNoHistoryFiles() renamed to GetHistoryFilesCount()
 - wxSizer::Remove(wxWindow *), use Detach() instead [it is more clear]
 - wxSizer::Set/GetOption(): use Set/GetProportion() instead
@@ -207,8 +218,9 @@ All:
 - Norwegian (Bokmål) translation added (Hans F. Nordhaug)
 - wxDynamicLibrary::HasSymbol() added
 - added wxTextInputStream::operator>>(wchar_t) for compilers which support this
-- added wxURI
+- added wxURI, a class for dealing with Uniform Resource Identifiers
 - changed wxURL to inherit from wxURI and provide assignment and comparison
+- Added UTF7 character conversion for platforms that don't support it
 
 All (GUI):
 
