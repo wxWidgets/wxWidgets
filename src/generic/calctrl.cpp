@@ -33,6 +33,7 @@
     #include "wx/settings.h"
     #include "wx/brush.h"
     #include "wx/combobox.h"
+    #include "wx/stattext.h"
 #endif //WX_PRECOMP
 
 #include "wx/calctrl.h"
@@ -175,12 +176,22 @@ bool wxCalendarCtrl::Create(wxWindow * WXUNUSED(parent),
                             long style,
                             const wxString& WXUNUSED(name))
 {
-    SetWindowStyle(style | (wxRAISED_BORDER | wxWANTS_CHARS));
+    // needed to get the arrow keys normally used for the dialog navigation
+    SetWindowStyle(style | wxWANTS_CHARS);
 
     m_date = date.IsValid() ? date : wxDateTime::Today();
 
-    m_comboMonth = new wxMonthComboBox(this);
     m_spinYear = new wxYearSpinCtrl(this);
+    m_staticYear = new wxStaticText(GetParent(), -1, m_date.Format(_T("%Y")),
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxALIGN_CENTRE);
+
+    m_comboMonth = new wxMonthComboBox(this);
+    m_staticMonth = new wxStaticText(GetParent(), -1, m_date.Format(_T("%B")),
+                                     wxDefaultPosition, wxDefaultSize,
+                                     wxALIGN_CENTRE);
+
+    ShowCurrentControls();
 
     wxSize sizeReal;
     if ( size.x == -1 || size.y == -1 )
@@ -225,8 +236,8 @@ bool wxCalendarCtrl::Show(bool show)
         return FALSE;
     }
 
-    m_comboMonth->Show(show);
-    m_spinYear->Show(show);
+    GetMonthControl()->Show(show);
+    GetYearControl()->Show(show);
 
     return TRUE;
 }
@@ -238,10 +249,81 @@ bool wxCalendarCtrl::Enable(bool enable)
         return FALSE;
     }
 
-    m_comboMonth->Enable(enable);
-    m_spinYear->Enable(enable);
+    GetMonthControl()->Enable(enable);
+    GetYearControl()->Enable(enable);
 
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// enable/disable month/year controls
+// ----------------------------------------------------------------------------
+
+void wxCalendarCtrl::ShowCurrentControls()
+{
+    if ( AllowMonthChange() )
+    {
+        m_comboMonth->Show();
+        m_staticMonth->Hide();
+
+        if ( AllowYearChange() )
+        {
+            m_spinYear->Show();
+            m_staticYear->Hide();
+
+            // skip the rest
+            return;
+        }
+    }
+    else
+    {
+        m_comboMonth->Hide();
+        m_staticMonth->Show();
+    }
+
+    // year change not allowed here
+    m_spinYear->Hide();
+    m_staticYear->Show();
+}
+
+wxControl *wxCalendarCtrl::GetMonthControl() const
+{
+    return AllowMonthChange() ? m_comboMonth : m_staticMonth;
+}
+
+wxControl *wxCalendarCtrl::GetYearControl() const
+{
+    return AllowYearChange() ? m_spinYear : m_staticYear;
+}
+
+void wxCalendarCtrl::EnableYearChange(bool enable)
+{
+    if ( enable != AllowYearChange() )
+    {
+        long style = GetWindowStyle();
+        if ( enable )
+            style &= ~wxCAL_NO_YEAR_CHANGE;
+        else
+            style |= wxCAL_NO_YEAR_CHANGE;
+        SetWindowStyle(style);
+
+        ShowCurrentControls();
+    }
+}
+
+void wxCalendarCtrl::EnableMonthChange(bool enable)
+{
+    if ( enable != AllowMonthChange() )
+    {
+        long style = GetWindowStyle();
+        if ( enable )
+            style &= ~wxCAL_NO_MONTH_CHANGE;
+        else
+            style |= wxCAL_NO_MONTH_CHANGE;
+        SetWindowStyle(style);
+
+        ShowCurrentControls();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -250,20 +332,32 @@ bool wxCalendarCtrl::Enable(bool enable)
 
 void wxCalendarCtrl::SetDate(const wxDateTime& date)
 {
-    if ( m_date.GetMonth() == date.GetMonth() &&
-         m_date.GetYear() == date.GetYear() )
+    bool sameMonth = m_date.GetMonth() == date.GetMonth(),
+         sameYear = m_date.GetYear() == date.GetYear();
+
+    if ( sameMonth && sameYear )
     {
         // just change the day
         ChangeDay(date);
     }
     else
     {
+        if ( !AllowMonthChange() || (!AllowYearChange() && !sameYear) )
+        {
+            // forbidden
+            return;
+        }
+
         // change everything
         m_date = date;
 
         // update the controls
         m_comboMonth->SetSelection(m_date.GetMonth());
-        m_spinYear->SetValue(m_date.Format(_T("%Y")));
+
+        if ( AllowYearChange() )
+        {
+            m_spinYear->SetValue(m_date.Format(_T("%Y")));
+        }
 
         // update the calendar
         Refresh();
@@ -346,6 +440,10 @@ size_t wxCalendarCtrl::GetWeek(const wxDateTime& date) const
 // size or position changes: the combobox and spinctrl are along the top of
 // the available area and the calendar takes up therest of the space
 
+// the static controls are supposed to be always smaller than combo/spin so we
+// always use the latter for size calculations and position the static to take
+// the same space
+
 // the constants used for the layout
 #define VERT_MARGIN     5           // distance between combo and calendar
 #define HORZ_MARGIN    15           //                            spin
@@ -363,6 +461,12 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
 
     height += VERT_MARGIN + wxMax(sizeCombo.y, sizeSpin.y);
 
+    if ( GetWindowStyle() & (wxRAISED_BORDER | wxSUNKEN_BORDER) )
+    {
+        // the border would clip the last line otherwise
+        height += 4;
+    }
+
     return wxSize(width, height);
 }
 
@@ -376,10 +480,15 @@ void wxCalendarCtrl::DoSetSize(int x, int y,
 void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
     wxSize sizeCombo = m_comboMonth->GetSize();
+    wxSize sizeStatic = m_staticMonth->GetSize();
+
+    int dy = (sizeCombo.y - sizeStatic.y) / 2;
     m_comboMonth->Move(x, y);
+    m_staticMonth->SetSize(x, y + dy, sizeCombo.x, sizeStatic.y);
 
     int xDiff = sizeCombo.x + HORZ_MARGIN;
     m_spinYear->SetSize(x + xDiff, y, width - xDiff, sizeCombo.y);
+    m_staticYear->SetSize(x + xDiff, y + dy, width - xDiff, sizeStatic.y);
 
     wxSize sizeSpin = m_spinYear->GetSize();
     int yDiff = wxMax(sizeSpin.y, sizeCombo.y) + VERT_MARGIN;
@@ -394,7 +503,7 @@ void wxCalendarCtrl::DoGetPosition(int *x, int *y) const
     // our real top corner is not in this position
     if ( y )
     {
-        *y -= m_comboMonth->GetSize().y + VERT_MARGIN;
+        *y -= GetMonthControl()->GetSize().y + VERT_MARGIN;
     }
 }
 
@@ -405,7 +514,7 @@ void wxCalendarCtrl::DoGetSize(int *width, int *height) const
     // our real height is bigger
     if ( height )
     {
-        *height += m_comboMonth->GetSize().y + VERT_MARGIN;
+        *height += GetMonthControl()->GetSize().y + VERT_MARGIN;
     }
 }
 

@@ -1117,6 +1117,8 @@ enum wxStretch
 #define wxCAL_SUNDAY_FIRST      0x0000
 #define wxCAL_MONDAY_FIRST      0x0001
 #define wxCAL_SHOW_HOLIDAYS     0x0002
+#define wxCAL_NO_YEAR_CHANGE    0x0004
+#define wxCAL_NO_MONTH_CHANGE   0x000c // no month change => no year change
 
 /*
  * extended dialog specifiers. these values are stored in a different

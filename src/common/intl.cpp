@@ -178,7 +178,7 @@ private:
 
   const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 index) const
     { return (const char *)(m_pData + Swap(pTable[index].ofsString)); }
-    
+
   // convert encoding to platform native one, if neccessary
   void ConvertEncoding();
 
@@ -478,27 +478,33 @@ void wxMsgCatalog::ConvertEncoding()
     const char *hdr = StringAtOfs(m_pOrigTable, 0);
     if (hdr == NULL) return; // not supported by this catalog, does not have non-fuzzy header
     if (hdr[0] != 0) return; // ditto
-    
+
     /* we support catalogs with header (msgid "") that is _not_ marked as "#, fuzzy" (otherwise
        the string would not be included into compiled catalog) */
     wxString header(StringAtOfs(m_pTransTable, 0));
     wxString charset;
     int pos = header.Find("Content-Type: text/plain; charset=");
-    if (pos == -1) return; // incorrectly filled Content-Type header
-    pos += 34 ; /*strlen("Content-Type: text/plain; charset=")*/
-    while (header[pos] != '\n') charset << header[pos++];
-    
-    if ((enc = wxTheFontMapper -> CharsetToEncoding(charset, FALSE)) == wxFONTENCODING_SYSTEM) return;
+    if (pos == wxNOT_FOUND)
+        return; // incorrectly filled Content-Type header
+    size_t n = pos + 34; /*strlen("Content-Type: text/plain; charset=")*/
+    while (header[n] != '\n')
+        charset << header[n++];
+
+    enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
+    if ( enc == wxFONTENCODING_SYSTEM )
+        return; // unknown encoding
 
     wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
-    if (a[0] == enc) return; // no conversion needed, locale uses native encoding
-    
-    if (a.GetCount() == 0) return; // we don't know common equiv. under this platform
-    
+    if (a[0] == enc)
+        return; // no conversion needed, locale uses native encoding
+
+    if (a.GetCount() == 0)
+        return; // we don't know common equiv. under this platform
+
     wxEncodingConverter converter;
-    
+
     converter.Init(enc, a[0]);
-    for (unsigned i = 0; i < m_numStrings; i++)
+    for (size_t i = 0; i < m_numStrings; i++)
         converter.Convert((char*)StringAtOfs(m_pTransTable, i));
 #endif
 }

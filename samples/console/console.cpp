@@ -35,8 +35,8 @@
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_STRINGS
-//#define TEST_THREADS
-#define TEST_TIME
+#define TEST_THREADS
+//#define TEST_TIME
 
 // ============================================================================
 // implementation

@@ -21,6 +21,7 @@
 #include "wx/spinctrl.h"        // for wxSpinEvent
 
 class WXDLLEXPORT wxComboBox;
+class WXDLLEXPORT wxStaticText;
 
 #define wxCalendarNameStr _T("CalendarCtrl")
 
@@ -67,6 +68,22 @@ public:
     void SetDate(const wxDateTime& date);
     const wxDateTime& GetDate() const { return m_date; }
 
+    // calendar mode
+    // -------------
+
+    // some calendar styles can't be changed after the control creation by
+    // just using SetWindowStyle() and Refresh() and the functions below
+    // should be used instead for them
+
+    // corresponds to wxCAL_NO_YEAR_CHANGE bit
+    void EnableYearChange(bool enable = TRUE);
+
+    // corresponds to wxCAL_NO_MONTH_CHANGE bit
+    void EnableMonthChange(bool enable = TRUE);
+
+    // corresponds to wxCAL_SHOW_HOLIDAYS bit
+    void EnableHolidayDisplay(bool display = TRUE);
+
     // customization
     // -------------
 
@@ -99,11 +116,6 @@ public:
 
     const wxColour& GetHolidayColourFg() const { return m_colHolidayFg; }
     const wxColour& GetHolidayColourBg() const { return m_colHolidayBg; }
-
-    // this function should be called instead of directly changing the
-    // wxCAL_SHOW_HOLIDAYS bit in the control style after the control creation
-    // (this won't work)
-    void EnableHolidayDisplay(bool display = TRUE);
 
     // an item without custom attributes is drawn with the default colours and
     // font and without border, setting custom attributes allows to modify this
@@ -205,8 +217,29 @@ private:
         GenerateEvent(type2);
     }
 
+    // do we allow changing the month/year?
+    bool AllowMonthChange() const
+    {
+        return (GetWindowStyle() & wxCAL_NO_MONTH_CHANGE)
+                != wxCAL_NO_MONTH_CHANGE;
+    }
+    bool AllowYearChange() const
+    {
+        return !(GetWindowStyle() & wxCAL_NO_YEAR_CHANGE);
+    }
+
+    // show the correct controls
+    void ShowCurrentControls();
+
+    // get the currently shown control for month/year
+    wxControl *GetMonthControl() const;
+    wxControl *GetYearControl() const;
+
     // the subcontrols
+    wxStaticText *m_staticMonth;
     wxComboBox *m_comboMonth;
+
+    wxStaticText *m_staticYear;
     wxSpinCtrl *m_spinYear;
 
     // the current selection

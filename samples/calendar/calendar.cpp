@@ -68,8 +68,9 @@ public:
     void OnCalendarWeekDayClick(wxCalendarEvent& event);
     void OnCalendarChange(wxCalendarEvent& event);
 
+    wxCalendarCtrl *GetCal() const { return m_calendar; }
+
     void StartWithMonday(bool on);
-    void ShowHolidays(bool on);
     void HighlightSpecial(bool on);
 
 private:
@@ -94,6 +95,11 @@ public:
     void OnCalHolidays(wxCommandEvent& event);
     void OnCalSpecial(wxCommandEvent& event);
 
+    void OnCalAllowMonth(wxCommandEvent& event);
+    void OnCalAllowYear(wxCommandEvent& event);
+
+    void OnAllowYearUpdate(wxUpdateUIEvent& event);
+
 private:
     MyPanel *m_panel;
 
@@ -114,6 +120,8 @@ enum
     Calendar_Cal_Monday = 200,
     Calendar_Cal_Holidays,
     Calendar_Cal_Special,
+    Calendar_Cal_Month,
+    Calendar_Cal_Year,
     Calendar_CalCtrl = 1000,
 };
 
@@ -131,6 +139,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Calendar_Cal_Monday, MyFrame::OnCalMonday)
     EVT_MENU(Calendar_Cal_Holidays, MyFrame::OnCalHolidays)
     EVT_MENU(Calendar_Cal_Special, MyFrame::OnCalSpecial)
+
+    EVT_MENU(Calendar_Cal_Month, MyFrame::OnCalAllowMonth)
+    EVT_MENU(Calendar_Cal_Year, MyFrame::OnCalAllowYear)
+
+    EVT_UPDATE_UI(Calendar_Cal_Year, MyFrame::OnAllowYearUpdate)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
@@ -158,7 +171,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWindows App",
+    MyFrame *frame = new MyFrame("Calendar wxWindows sample",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
@@ -189,7 +202,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuCal = new wxMenu;
     menuCal->Append(Calendar_Cal_Monday,
-                    "&Monday first weekday\tCtrl-M",
+                    "Monday &first weekday\tCtrl-F",
                     "Toggle between Mon and Sun as the first week day",
                     TRUE);
     menuCal->Append(Calendar_Cal_Holidays, "Show &holidays\tCtrl-H",
@@ -197,6 +210,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                     TRUE);
     menuCal->Append(Calendar_Cal_Special, "Highlight &special dates\tCtrl-S",
                     "Test custom highlighting",
+                    TRUE);
+    menuCal->AppendSeparator();
+    menuCal->Append(Calendar_Cal_Month, "&Month can be changed\tCtrl-M",
+                    "Allow changing the month in the calendar",
+                    TRUE);
+    menuCal->Append(Calendar_Cal_Year, "&Year can be changed\tCtrl-Y",
+                    "Allow changing the year in the calendar",
                     TRUE);
 
     // now append the freshly created menu to the menu bar...
@@ -206,6 +226,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     menuBar->Check(Calendar_Cal_Monday, TRUE);
     menuBar->Check(Calendar_Cal_Holidays, TRUE);
+    menuBar->Check(Calendar_Cal_Month, TRUE);
+    menuBar->Check(Calendar_Cal_Year, TRUE);
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -233,17 +255,37 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCalMonday(wxCommandEvent& event)
 {
-    m_panel->StartWithMonday(GetMenuBar()->IsChecked(event.GetInt()) != 0);
+    m_panel->StartWithMonday(GetMenuBar()->IsChecked(event.GetInt()));
 }
 
 void MyFrame::OnCalHolidays(wxCommandEvent& event)
 {
-    m_panel->ShowHolidays(GetMenuBar()->IsChecked(event.GetInt()) != 0);
+    bool enable = GetMenuBar()->IsChecked(event.GetInt());
+    m_panel->GetCal()->EnableHolidayDisplay(enable);
 }
 
 void MyFrame::OnCalSpecial(wxCommandEvent& event)
 {
-    m_panel->HighlightSpecial(GetMenuBar()->IsChecked(event.GetInt()) != 0);
+    m_panel->HighlightSpecial(GetMenuBar()->IsChecked(event.GetInt()));
+}
+
+void MyFrame::OnCalAllowMonth(wxCommandEvent& event)
+{
+    bool allow = GetMenuBar()->IsChecked(event.GetInt());
+
+    m_panel->GetCal()->EnableMonthChange(allow);
+}
+
+void MyFrame::OnCalAllowYear(wxCommandEvent& event)
+{
+    bool allow = GetMenuBar()->IsChecked(event.GetInt());
+
+    m_panel->GetCal()->EnableYearChange(allow);
+}
+
+void MyFrame::OnAllowYearUpdate(wxUpdateUIEvent& event)
+{
+    event.Enable( GetMenuBar()->IsChecked(Calendar_Cal_Month));
 }
 
 // ----------------------------------------------------------------------------
@@ -263,7 +305,9 @@ MyPanel::MyPanel(wxFrame *frame)
                                     wxDefaultDateTime,
                                     wxDefaultPosition,
                                     wxDefaultSize,
-                                    wxCAL_MONDAY_FIRST | wxCAL_SHOW_HOLIDAYS);
+                                    wxCAL_MONDAY_FIRST |
+                                    wxCAL_SHOW_HOLIDAYS |
+                                    wxRAISED_BORDER);
 
     wxLayoutConstraints *c = new wxLayoutConstraints;
     c->left.SameAs(this, wxLeft, 10);
@@ -313,11 +357,6 @@ void MyPanel::StartWithMonday(bool on)
     m_calendar->SetWindowStyle(style);
 
     m_calendar->Refresh();
-}
-
-void MyPanel::ShowHolidays(bool on)
-{
-    m_calendar->EnableHolidayDisplay(on);
 }
 
 void MyPanel::HighlightSpecial(bool on)
