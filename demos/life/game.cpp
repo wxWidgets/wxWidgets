@@ -24,7 +24,7 @@
 #include <string.h>           // for memset
 
 
-#define ARRAYSIZE  8192       // size of the static array for BeginFind & co.
+#define ARRAYSIZE  1024       // size of the static array for BeginFind & co.
 #define ALLOCBOXES 16         // number of cellboxes to alloc at once
 
 // ==========================================================================
