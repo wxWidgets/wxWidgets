@@ -68,6 +68,8 @@ or output encoding is not supported.)
 
 \func{void}{Convert}{\param{wxChar* }{str}}
 
+\func{void}{Convert}{\param{const char* }{input}, \param{wxChar* }{output}}
+
 Convert input string according to settings passed to \helpref{Init}{wxencodingconverterinit}.
 Note that you must call Init before using Convert!
 
@@ -75,7 +77,7 @@ Note that you must call Init before using Convert!
 
 \membersection{wxEncodingConverter::GetPlatformEquivalents}\label{wxencodingconvertergetplatformequivalents}
 
-\func{wxFontEncodingArray}{GetPlatformEquivalents}{\param{wxFontEncoding }{enc}, \param{int }{platform = wxPLATFORM\_CURRENT}}
+\func{static wxFontEncodingArray}{GetPlatformEquivalents}{\param{wxFontEncoding }{enc}, \param{int }{platform = wxPLATFORM\_CURRENT}}
 
 Return equivalents for given font that are used
 under given platform. Supported platforms:
@@ -121,15 +123,22 @@ encoding is native for this platform or not.)
 \item helpref{Convert}{wxencodingconverterconvert} is not limited to 
 converting between equivalent encodings, it can convert between arbitrary
 two encodings!
+
+\item If {\it enc} is present in returned array, then it is {\bf always} first
+item of it.
+
+\item Please not that returned array may not contain any item at all!
 \end{itemize}
 
 
 \membersection{wxEncodingConverter::GetAllEquivalents}\label{wxencodingconvertergetallequivalents}
 
-\func{wxFontEncodingArray}{GetAllEquivalents}{\param{wxFontEncoding }{enc}}
+\func{static wxFontEncodingArray}{GetAllEquivalents}{\param{wxFontEncoding }{enc}}
 
 Similar to 
 \helpref{GetPlatformEquivalents}{wxencodingconvertergetplatformequivalents}, 
 but this one will return ALL 
 equivalent encodings, regardless the platform, and including itself.
 
+This platform's encodings are before others in the array. And again, if {\it enc} is in the array,
+it is the very first item in it.

@@ -82,10 +82,16 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             
             // Convert input string according to settings passed to Init.
             // Note that you must call Init before using Convert!
-            wxString Convert(const wxString& input);
             void Convert(const wxChar* input, wxChar* output);
             void Convert(wxChar* str) { Convert(str, str); }
-            
+            wxString Convert(const wxString& input);
+
+#if wxUSE_UNICODE // otherwise wxChar === char
+            void Convert(const char* input, wxChar* output);
+            void Convert(const wxChar* input, char* output);
+            void Convert(const char* input, char* output);
+            void Convert(char* str) { Convert(str, str); }
+#endif        
             // Return equivalent(s) for given font that are used
             // under given platform. wxPLATFORM_CURRENT means the plaform
             // this binary was compiled for
@@ -124,7 +130,7 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
     private:
     
             wxChar *m_Table;
-            bool m_UnicodeInput;
+            bool m_UnicodeInput, m_UnicodeOutput;
             bool m_JustCopy;
             
 };
