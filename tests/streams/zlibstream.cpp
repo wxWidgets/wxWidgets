@@ -176,7 +176,7 @@ zlibStream::zlibStream()
 
 zlibStream::~zlibStream()
 {
-    delete m_pCompressedData;
+    delete[] m_pCompressedData;
 
     delete m_pTmpMemInStream;
     delete m_pTmpMemOutStream;
