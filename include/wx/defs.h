@@ -1783,8 +1783,15 @@ typedef int             (__stdcall *WXFARPROC)();
 
 
 #if defined(__WXPM__)
+#ifdef __EMX__
+/* Need a well-known type for WXFARPROC
+   below. MPARAM is typedef'ed too late. */
+#define WXWPARAM        void *
+#define WXLPARAM        void *
+#else
 #define WXWPARAM        MPARAM
 #define WXLPARAM        MPARAM
+#endif
 #define RECT            RECTL
 #define LOGFONT         FATTRS
 #define LOWORD          SHORT1FROMMP
@@ -1842,6 +1849,9 @@ typedef struct tagLOGPALETTE
     // VA 3.0 for some reason needs base data types when typedefing a proc proto???
 typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
 #else
+#ifdef __EMX__
+#define _System
+#endif
 typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
 #endif
 
