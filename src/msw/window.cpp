@@ -118,8 +118,12 @@
 #include "wx/msw/missing.h"
 
 #if defined(__WXWINCE__)
-#include "wx/msw/wince/missing.h"
+    #include "wx/msw/wince/missing.h"
 #endif
+
+#if defined(TME_LEAVE) && defined(WM_MOUSELEAVE)
+    #define HAVE_TRACKMOUSEEVENT
+#endif // everything needed for TrackMouseEvent()
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -1246,7 +1250,7 @@ bool wxWindowMSW::IsMouseInWindow() const
 
 void wxWindowMSW::OnInternalIdle()
 {
-#ifdef __WXWINCE__
+#ifndef HAVE_TRACKMOUSEEVENT
     // Check if we need to send a LEAVE event
     if ( m_mouseInWindow )
     {
@@ -1257,7 +1261,7 @@ void wxWindowMSW::OnInternalIdle()
             GenerateMouseLeave();
         }
     }
-#endif // !__WXWINCE__
+#endif // !HAVE_TRACKMOUSEEVENT
 
     if (wxUpdateUIEvent::CanUpdate(this))
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
@@ -2360,23 +2364,20 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                                         wParam);
             break;
 
-#ifdef WM_MOUSELEAVE
+#ifdef HAVE_TRACKMOUSEEVENT
         case WM_MOUSELEAVE:
+            // filter out excess WM_MOUSELEAVE events sent after PopupMenu() (on XP at least)
+            if ( m_mouseInWindow )
             {
-                // filter out excess WM_MOUSELEAVE events sent after PopupMenu() (on XP at least)
-                if ( m_mouseInWindow )
-                {
-                    GenerateMouseLeave();
-                }
-
-                // always pass processed back as false, this allows the window
-                // manager to process the message too.  This is needed to
-                // ensure windows XP themes work properly as the mouse moves
-                // over widgets like buttons.
-                processed = false;
+                GenerateMouseLeave();
             }
+
+            // always pass processed back as false, this allows the window
+            // manager to process the message too.  This is needed to
+            // ensure windows XP themes work properly as the mouse moves
+            // over widgets like buttons. So don't set processed to true here.
             break;
-#endif // WM_MOUSELEAVE
+#endif // HAVE_TRACKMOUSEEVENT
 
 #if wxUSE_MOUSEWHEEL
         case WM_MOUSEWHEEL:
@@ -4418,17 +4419,18 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
         {
             // Generate an ENTER event
             m_mouseInWindow = true;
-#ifndef __WXWINCE__
-            TRACKMOUSEEVENT trackinfo;
 
-            trackinfo.cbSize = sizeof(trackinfo);
+#ifdef HAVE_TRACKMOUSEEVENT
+            WinStruct<TRACKMOUSEEVENT> trackinfo;
+
             trackinfo.dwFlags = TME_LEAVE;
             trackinfo.hwndTrack = GetHwnd();
-            //Use the commctrl.h _TrackMouseEvent, which will call the
-            // appropriate TrackMouseEvent or emulate it ( win95 )
-            // else we need _WIN32_WINNT >= 0x0400
+
+            // Use the commctrl.h _TrackMouseEvent(), which will call the real
+            // TrackMouseEvent() if available or emulate it
             _TrackMouseEvent(&trackinfo);
-#endif // __WXWINCE__
+#endif // HAVE_TRACKMOUSEEVENT
+
             wxMouseEvent event(wxEVT_ENTER_WINDOW);
             InitMouseEvent(event, x, y, flags);
 
