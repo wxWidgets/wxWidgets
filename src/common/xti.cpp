@@ -24,15 +24,15 @@
 #ifndef WX_PRECOMP
 #include "wx/hash.h"
 #include "wx/object.h"
-#include "wx/xti.h"
 #endif
 
+#if wxUSE_EXTENDED_RTTI
+
+#include "wx/xti.h"
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
 #include "wx/list.h"
 #include <string.h>
-
-#if wxUSE_EXTENDED_RTTI
 
 #include "wx/beforestd.h"
 #include <map>
