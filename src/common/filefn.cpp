@@ -1592,7 +1592,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         ok = getcwd(cbuf, sz) != NULL;
     #endif // platform
 
-    #if wxUSE_UNICODE && !defined(__WXMAC__)
+    #if wxUSE_UNICODE && !(defined(__WXMAC__) && !defined(__DARWIN__))
         // finally convert the result to Unicode if needed
         wxConvFile.MB2WC(buf, cbuf, sz);
     #endif // wxUSE_UNICODE
