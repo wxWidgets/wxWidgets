@@ -168,7 +168,8 @@ OSStatus MLTESetObjectVisibility( STPTextPaneVars *varsp, Boolean vis , long wxS
     TXNControlData iControlData[1] = {{ vis }};
     err = ::TXNSetTXNObjectControls( varsp->fTXNRec, false, 1, iControlTags, iControlData );
 #endif
-    if ( vis )
+    wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(varsp->fUserPaneRec);
+    if ( vis && textctrl )
     {
         Rect bounds ;
         UMAGetControlBoundsInWindowCoords( varsp->fUserPaneRec, &bounds);
@@ -204,7 +205,7 @@ static void TPUpdateVisibility(ControlRef theControl) {
         // we only recalculate when visible, otherwise scrollbars get drawn at incorrect places
         if ( varsp->fVisible )
         {
-            TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
+            TXNSetFrameBounds( varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
                 varsp->fRTextArea.bottom, varsp->fRTextArea.right, varsp->fTXNFrame);
         }
         InvalWindowRect( GetControlOwner( theControl ) , &oldBounds ) ;
@@ -557,7 +558,7 @@ OSStatus mUPOpenControl(STPTextPaneVars* &handle, ControlRef theControl, long wx
     SetControlData(theControl, kControlEntireControl, kControlUserPaneKeyDownProcTag, sizeof(gTPKeyProc), &gTPKeyProc);
     SetControlData(theControl, kControlEntireControl, kControlUserPaneActivateProcTag, sizeof(gTPActivateProc), &gTPActivateProc);
     SetControlData(theControl, kControlEntireControl, kControlUserPaneFocusProcTag, sizeof(gTPFocusProc), &gTPFocusProc);
-
+    
         /* calculate the rectangles used by the control */
     UMAGetControlBoundsInWindowCoords(theControl, &bounds);
     varsp->fRTextOutlineRegion = NewRgn() ;
@@ -736,6 +737,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     wxString st = str ;
     wxMacConvertNewlines13To10( &st ) ;
+#if 1
     {
         short featurSet;
 
@@ -784,6 +786,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     {
         SetEditable( false ) ;
     }
+#else
+    wxMacCFStringHolder cf ;
+    CreateEditUnicodeTextControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds , cf , style & wxTE_PASSWORD , NULL , (ControlRef*) &m_macControl ) ;
+#endif
+        
 
     return TRUE;
 }
