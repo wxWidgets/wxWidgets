@@ -70,6 +70,25 @@ void wxItemContainer::Append(const wxArrayString& strings)
     }
 }
 
+int wxItemContainer::Insert(const wxString& item, int pos, void *clientData)
+{
+    int n = DoInsert(item, pos);
+    if ( n != wxNOT_FOUND )
+        SetClientData(n, clientData);
+
+    return n;
+}
+
+int
+wxItemContainer::Insert(const wxString& item, int pos, wxClientData *clientData)
+{
+    int n = DoInsert(item, pos);
+    if ( n != wxNOT_FOUND )
+        SetClientObject(n, clientData);
+
+    return n;
+}
+
 // ----------------------------------------------------------------------------
 // client data
 // ----------------------------------------------------------------------------

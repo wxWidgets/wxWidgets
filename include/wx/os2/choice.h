@@ -59,6 +59,7 @@ public:
     // Implement base class virtuals
     //
     virtual int      DoAppend(const wxString& rsItem);
+    virtual int      DoInsert(const wxString& rsItem, int pos);
     virtual void     Delete(int n);
     virtual void     Clear(void);
 

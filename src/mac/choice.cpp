@@ -81,6 +81,22 @@ int wxChoice::DoAppend(const wxString& item)
     return index ;
 }
 
+int wxChoice::DoInsert(const wxString& item, int pos)
+{
+    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
+    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+
+    if (pos == GetCount())
+        return DoAppend(item);
+
+    UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item);
+    m_strings.Insert( item, pos ) ;
+    m_datas.Insert( NULL, pos ) ;
+    DoSetItemClientData( pos , NULL ) ;
+    SetControl32BitMaximum( (ControlHandle) m_macControl , pos) ;
+    return pos ;
+}
+
 void wxChoice::Delete(int n)
 {
     wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );

@@ -47,6 +47,11 @@ public:
     // append several items at once to the control
     void Append(const wxArrayString& strings);
 
+    int Insert(const wxString& item, int pos)
+        { return DoInsert(item, pos); }
+    int Insert(const wxString& item, int pos, void *clientData);
+    int Insert(const wxString& item, int pos, wxClientData *clientData);
+
     // deleting items
     // --------------
 
@@ -94,6 +99,7 @@ public:
 
 protected:
     virtual int DoAppend(const wxString& item) = 0;
+    virtual int DoInsert(const wxString& item, int pos) = 0;
 
     virtual void DoSetItemClientData(int n, void* clientData) = 0;
     virtual void* DoGetItemClientData(int n) const = 0;

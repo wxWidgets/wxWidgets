@@ -109,8 +109,8 @@ public:
 protected:
     // NB: due to wxGTK implementation details, DoInsert() is implemented
     //     using DoInsertItems() and not the other way round
-    void DoInsert(const wxString& item, int pos)
-        { InsertItems(1, &item, pos); }
+    virtual int DoInsert(const wxString& item, int pos)
+        { InsertItems(1, &item, pos); return pos; }
 
     // to be implemented in derived classes
     virtual void DoInsertItems(const wxArrayString& items, int pos) = 0;

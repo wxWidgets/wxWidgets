@@ -330,6 +330,7 @@ public:
 
 protected:
     virtual int DoAppend(const wxString& item);
+    virtual int DoInsert(const wxString& item, int pos);
     virtual void DoSetItemClientData(int n, void* clientData);
     virtual void* DoGetItemClientData(int n) const;
     virtual void DoSetItemClientObject(int n, wxClientData* clientData);

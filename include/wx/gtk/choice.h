@@ -60,6 +60,7 @@ protected:
 
     void ApplyWidgetStyle();
     virtual int DoAppend(const wxString& item);
+    virtual int DoInsert(const wxString& item, int pos);
 
     virtual void DoSetItemClientData( int n, void* clientData );
     virtual void* DoGetItemClientData( int n ) const;
@@ -70,7 +71,7 @@ protected:
 
 private:
     // common part of Create() and DoAppend()
-    size_t GtkAppendHelper(GtkWidget *menu, const wxString& item);
+    int GtkAddHelper(GtkWidget *menu, int pos, const wxString& item);
 
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)

@@ -209,6 +209,14 @@ int wxChoice::DoAppend(const wxString& item)
     return GetCount() - 1;
 }
 
+int wxChoice::DoInsert(const wxString& item, int pos)
+{
+    wxCHECK_MSG(FALSE, -1, wxT("insert not implemented"));
+
+//    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+//    if (pos == GetCount()) return DoAppend(item);
+}
+
 void wxChoice::Delete(int n)
 {
     Widget w = (Widget)m_widgetArray[n];

@@ -115,6 +115,20 @@ int wxChoice::DoAppend(const wxString& item)
     return n;
 }
 
+int wxChoice::DoInsert(const wxString& item, int pos)
+{
+    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
+    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+
+    int n = (int)SendMessage(GetHwnd(), CB_INSERTSTRING, pos, (LONG)item.c_str());
+    if ( n == CB_ERR )
+    {
+        wxLogLastError(wxT("SendMessage(CB_INSERTSTRING)"));
+    }
+
+    return n;
+}
+
 void wxChoice::Delete(int n)
 {
     wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );

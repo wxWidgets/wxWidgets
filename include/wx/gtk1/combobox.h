@@ -69,6 +69,10 @@ public:
     void Append( const wxString &item, void* clientData );
     void Append( const wxString &item, wxClientData* clientData );
   
+    void Insert( const wxString &item, int pos );
+    void Insert( const wxString &item, int pos, void* clientData );
+    void Insert( const wxString &item, int pos, wxClientData* clientData );
+  
     void SetClientData( int n, void* clientData );
     void* GetClientData( int n );
     void SetClientObject( int n, wxClientData* clientData );
@@ -122,6 +126,7 @@ public:
     void DisableEvents();
     void EnableEvents();
     void AppendCommon( const wxString &item );
+    void InsertCommon( const wxString &item, int pos );
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();

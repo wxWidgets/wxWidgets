@@ -111,6 +111,32 @@ int wxChoice::DoAppend(
     return nIndex;
 } // end of wxChoice::DoAppend
 
+int wxChoice::DoInsert(
+  const wxString&                   rsItem
+  int                               pos
+)
+{
+    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
+    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+
+    if (pos == GetCount())
+        return DoAppend(item);
+
+    int                             nIndex;
+    SHORT                           nIndexType = 0;
+
+    if (m_windowStyle & wxLB_SORT)
+        nIndexType = LIT_SORTASCENDING;
+    else
+        nIndexType = pos;
+    nIndex = (int)::WinSendMsg( GetHwnd()
+                               ,LM_INSERTITEM
+                               ,(MPARAM)nIndexType
+                               ,(MPARAM)rsItem.c_str()
+                              );
+    return nIndex;
+} // end of wxChoice::DoInsert
+
 void wxChoice::Delete(
   int                               n
 )

@@ -102,7 +102,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     for (int i = 0; i < n; i++)
     {
-        GtkAppendHelper(menu, choices[i]);
+        GtkAddHelper(menu, i, choices[i]);
     }
 
     gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
@@ -136,7 +136,20 @@ int wxChoice::DoAppend( const wxString &item )
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
 
-    return GtkAppendHelper(menu, item);
+    return GtkAddHelper(menu, GetCount(), item);
+}
+
+int wxChoice::DoInsert( const wxString &item, int pos )
+{
+    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice control") );
+    wxCHECK_MSG( (pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+
+    if (pos == GetCount())
+        return DoAppend(item);
+
+    GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
+
+    return GtkAddHelper(menu, pos, item);
 }
 
 void wxChoice::DoSetItemClientData( int n, void* clientData )
@@ -388,8 +401,10 @@ void wxChoice::ApplyWidgetStyle()
     }
 }
 
-size_t wxChoice::GtkAppendHelper(GtkWidget *menu, const wxString& item)
+int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
 {
+    wxCHECK_MSG((pos>=0) && (pos<=(int)m_clientList.GetCount()), -1, wxT("invalid index"));
+
     GtkWidget *menu_item = gtk_menu_item_new_with_label( wxGTK_CONV( item ) );
 
     size_t index;
@@ -412,14 +427,22 @@ size_t wxChoice::GtkAppendHelper(GtkWidget *menu, const wxString& item)
     }
     else
     {
-        // normal control, just append
-        gtk_menu_append( GTK_MENU(menu), menu_item );
-
-        m_clientList.Append( (wxObject*) NULL );
-
         // don't call wxChoice::GetCount() from here because it doesn't work
         // if we're called from ctor (and GtkMenuShell is still NULL)
+
+        // normal control, just append
+        if (pos == (int)m_clientList.GetCount())
+        {
+        gtk_menu_append( GTK_MENU(menu), menu_item );
+        m_clientList.Append( (wxObject*) NULL );
         index = m_clientList.GetCount() - 1;
+        }
+        else
+        {
+            gtk_menu_insert( GTK_MENU(menu), menu_item, pos );
+            m_clientList.Insert( pos, (wxObject*) NULL );
+            index = pos;
+        }
     }
 
     if (GTK_WIDGET_REALIZED(m_widget))

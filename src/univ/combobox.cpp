@@ -825,6 +825,18 @@ int wxComboBox::DoAppend(const wxString& item)
     return GetLBox()->Append(item);
 }
 
+int wxComboBox::DoInsert(const wxString& item, int pos)
+{
+    wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
+    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+
+    if (pos == GetCount())
+        return DoAppend(item);
+
+    GetLBox()->Insert(1, &item, pos);
+    return pos;
+}
+
 void wxComboBox::DoSetItemClientData(int n, void* clientData)
 {
     GetLBox()->SetClientData(n, clientData);
