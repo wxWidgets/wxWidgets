@@ -216,6 +216,11 @@ static bool g_captureWindowHasMouse = FALSE;
 // keeps its previous value
 static wxWindowGTK *g_focusWindowLast = (wxWindowGTK *)NULL;
 
+// the frame that is currently active (i.e. its child has focus). It is
+// used to generate wxActivateEvents
+static wxWindowGTK *g_activeFrame = (wxWindowGTK *)NULL;
+static bool g_activeFrameLostFocus = FALSE;
+
 // if we detect that the app has got/lost the focus, we set this variable to
 // either TRUE or FALSE and an activate event will be sent during the next
 // OnIdle() call and it is reset to -1: this value means that we shouldn't
@@ -357,6 +362,16 @@ wxWindow *wxFindFocusedChild(wxWindowGTK *win)
 
     return (wxWindow *)NULL;
 }
+
+// Returns toplevel grandparent of given window:
+static wxWindowGTK* wxGetTopLevelParent(wxWindowGTK *win)
+{
+    wxWindowGTK *p = win;
+    while (p && !p->IsTopLevel())
+         p = p->GetParent();
+    return p;
+}
+
 
 static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 {
@@ -1709,14 +1724,24 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
-    if (win->IsTopLevel())
+    
+    wxWindowGTK *active = wxGetTopLevelParent(win);
+    if ( active != g_activeFrame )
     {
-        wxActivateEvent event( wxEVT_ACTIVATE, TRUE, win->GetId() );
-        event.SetEventObject( win );
+        if ( g_activeFrame )
+        {
+            wxActivateEvent event(wxEVT_ACTIVATE, FALSE, g_activeFrame->GetId());
+            event.SetEventObject(g_activeFrame);
+            g_activeFrame->GetEventHandler()->ProcessEvent(event);
+        }
 
-        // ignore return value
-        win->GetEventHandler()->ProcessEvent( event );
+        g_activeFrame = active;
+        wxActivateEvent event(wxEVT_ACTIVATE, TRUE, g_activeFrame->GetId());
+        event.SetEventObject(g_activeFrame);
+        g_activeFrame->GetEventHandler()->ProcessEvent(event);
     }
+    g_activeFrameLostFocus = FALSE;
+
 
     wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
     event.SetEventObject( win );
@@ -1791,14 +1816,8 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     }
 #endif // wxUSE_CARET
 
-    if (win->IsTopLevel())
-    {
-        wxActivateEvent event( wxEVT_ACTIVATE, FALSE, win->GetId() );
-        event.SetEventObject( win );
-
-        // ignore return value
-        win->GetEventHandler()->ProcessEvent( event );
-    }
+    wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
+    g_activeFrameLostFocus = TRUE;
 
     wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
     event.SetEventObject( win );
@@ -2491,6 +2510,9 @@ wxWindowGTK::~wxWindowGTK()
     if (g_focusWindow == this)
         g_focusWindow = NULL;
 
+    if (g_activeFrame == this)
+        g_activeFrame = NULL;
+
     m_isBeingDeleted = TRUE;
     m_hasVMT = FALSE;
 
@@ -2808,6 +2830,18 @@ void wxWindowGTK::OnInternalIdle()
         g_sendActivateEvent = -1;
 
         wxTheApp->SetActive(activate, (wxWindow *)g_focusWindowLast);
+    }
+
+    if ( g_activeFrameLostFocus )
+    {
+        if ( g_activeFrame )
+        {
+            wxActivateEvent event(wxEVT_ACTIVATE, FALSE, g_activeFrame->GetId());
+            event.SetEventObject(g_activeFrame);
+            g_activeFrame->GetEventHandler()->ProcessEvent(event);
+            g_activeFrame = NULL;
+        }
+        g_activeFrameLostFocus = FALSE;
     }
 
     wxCursor cursor = m_cursor;
