@@ -215,7 +215,7 @@ cppflags()
         flags="$flags -DwxUSE_GUI=0"
     fi
 
-    echo "$flags${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS} ${GCC_PRAGMA_FLAGS}"
+    echo "$flags ${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS} ${GCC_PRAGMA_FLAGS}"
 }
 
 if test $# -eq 0; then
