@@ -56,14 +56,24 @@ item: Create Shortcut
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
+  Source=%MAINDIR%\docs\changes.txt
+  Destination=%GROUP%\Change Log.lnk
+  Working Directory=%MAINDIR%
+end
+item: Create Shortcut
   Source=%MAINDIR%\bin\dialoged.exe
   Destination=%GROUP%\Dialog Editor.lnk
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\docs\changes.txt
-  Destination=%GROUP%\Change Log.lnk
+  Source=%MAINDIR%\bin\dbgview.exe
+  Destination=%GROUP%\DebugView.lnk
   Working Directory=%MAINDIR%
+end
+item: Create Shortcut
+  Source=%MAINDIR%\bin\life.exe
+  Destination=%GROUP%\Life! Demo.lnk
+  Working Directory=%MAINDIR%\bin
 end
 item: Else Statement
 end
@@ -71,12 +81,6 @@ item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Change Log
   Command Line=%MAINDIR%\docs\changes.txt
-  Default Directory=%MAINDIR%
-end
-item: Add ProgMan Icon
-  Group=%GROUP%
-  Icon Name=Dialog Editor
-  Command Line=%MAINDIR%\bin\dialoged.exe
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon
@@ -119,6 +123,24 @@ item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Tex2RTF Help
   Command Line=%MAINDIR%\docs\winhelp\tex2rtf.hlp
+  Default Directory=%MAINDIR%
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=Dialog Editor
+  Command Line=%MAINDIR%\bin\dialoged.exe
+  Default Directory=%MAINDIR%
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=DebugView
+  Command Line=%MAINDIR%\bin\dbgview.exe
+  Default Directory=%MAINDIR%\bin
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=Life! Demo
+  Command Line=%MAINDIR%\bin\life.exe
   Default Directory=%MAINDIR%
 end
 item: End Block

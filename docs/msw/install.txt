@@ -8,9 +8,9 @@ although a huge number of bugs found in earlier versions
 of wxWindows have been fixed.
 
 IMPORTANT NOTE: If you experience problems installing, please
-re-read this instructions and other related files (release.txt,
-todo.txt, bugs.txt etc.) carefully before mailing wxwin-users or
-the author. Preferably, try to fix the problem first and
+re-read this instructions and other related files (changes.txt,
+readme.txt, notes on the Web site) carefully before mailing
+wx-users or the author. Preferably, try to fix the problem first and
 then send a patch to the author. Please report bugs using the
 bug report form on the wxWindows web site.
 
@@ -201,6 +201,11 @@ Note (5): for some further notes about upgrading your project
 files to be compatible with wxWindows 2.1.14, please see
 "Highlights of wxWindows 2.1.14" from the Download page of the
 web site or CD-ROM.
+
+Note (6): to create your own IDE files, see the technical note on the
+wxWindows web site or CD-ROM, entitled "Compiling wxWindows
+applications in the VC++ IDE". You can also copy .dsp and .dsw
+files from an existing wxWindows sample and adapt them.
 
 Visual C++ 1.5 compilation (16-bit)
 -----------------------------------
@@ -529,14 +534,10 @@ General Notes
 -------------
 
 - Debugging: under Windows 95, debugging output isn't output in
-  the same way that it is under NT or Windows 3.1. Set
-  wxUSE_DBWIN32 to 1 if you wish to enable code to output debugging
-  info to an external debug monitor, such as Andrew Tucker's DBWIN32.
-  You can download DBWIN32 from:
-
-        http://ftp.digital.com/pub/micro/NT/WinSite/programr/dbwin32.zip
-
-  and it's also on the wxWindows CD-ROM under Packages.
+  the same way that it is under NT or Windows 3.1.
+  Please see DebugView (bin/dbgview.exe in the distribution), also
+  available from http://www.sysinternals.com and on the wxWindows CD-ROM
+  under Packages.
 
 - If you are installing wxWindows 2 from CVS, you may find that
   include/wx/msw/setup.h is missing. This is deliberate, to avoid
