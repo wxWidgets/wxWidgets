@@ -386,6 +386,7 @@ ALL_HEADERS = \
 		layout.h \
 		laywin.h \
 		list.h \
+		listbase.h \
 		listbox.h \
 		listctrl.h \
 		listimpl.cpp \

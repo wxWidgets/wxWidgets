@@ -356,6 +356,7 @@ ALL_HEADERS = \
 		layout.h \
 		laywin.h \
 		list.h \
+		listbase.h \
 		listbox.h \
 		listctrl.h \
 		listimpl.cpp \
@@ -598,6 +599,7 @@ ALL_HEADERS = \
 		generic/spinctlg.h \
 		generic/splash.h \
 		generic/splitter.h \
+		generic/statline.h \
 		generic/statusbr.h \
 		generic/tabg.h \
 		generic/textdlgg.h \
