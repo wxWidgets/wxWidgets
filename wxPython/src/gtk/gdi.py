@@ -325,13 +325,15 @@ class wxColourDatabasePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def FindColour(self, *_args, **_kwargs):
-        val = gdic.wxColourDatabase_FindColour(self, *_args, **_kwargs)
-        if val: val = wxColourPtr(val) 
-        return val
-    def FindColourNoAdd(self, *_args, **_kwargs):
-        val = gdic.wxColourDatabase_FindColourNoAdd(self, *_args, **_kwargs)
-        if val: val = wxColourPtr(val) 
+    def __del__(self, delfunc=gdic.delete_wxColourDatabase):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
+    def Find(self, *_args, **_kwargs):
+        val = gdic.wxColourDatabase_Find(self, *_args, **_kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def FindName(self, *_args, **_kwargs):
         val = gdic.wxColourDatabase_FindName(self, *_args, **_kwargs)
@@ -345,8 +347,9 @@ class wxColourDatabasePtr(wxObjectPtr):
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxColourDatabase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxColourDatabase(wxColourDatabasePtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = gdic.new_wxColourDatabase(*_args,**_kwargs)
+        self.thisown = 1
 
 
 
