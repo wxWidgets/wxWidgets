@@ -814,15 +814,17 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
             {
                 if (goingDown)
                 {
-                    m_tmpSelFromCell = m_Cell->FindCellByPos(x, y,
-                                                 wxHTML_FIND_NEAREST_AFTER);
+                    m_tmpSelFromCell = m_Cell->FindCellByPos(
+                                         m_tmpSelFromPos.x,m_tmpSelFromPos.y,
+                                         wxHTML_FIND_NEAREST_AFTER);
                     if (!m_tmpSelFromCell)
                         m_tmpSelFromCell = m_Cell->GetFirstTerminal();
                 }
                 else
                 {
-                    m_tmpSelFromCell = m_Cell->FindCellByPos(x, y,
-                                                 wxHTML_FIND_NEAREST_BEFORE);
+                    m_tmpSelFromCell = m_Cell->FindCellByPos(
+                                         m_tmpSelFromPos.x,m_tmpSelFromPos.y,
+                                         wxHTML_FIND_NEAREST_BEFORE);
                     if (!m_tmpSelFromCell)
                         m_tmpSelFromCell = m_Cell->GetLastTerminal();
                 }

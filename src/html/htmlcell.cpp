@@ -233,13 +233,66 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 }
 
 
-
-void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
-                          int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                          wxHtmlRenderingState& state)
+// Splits m_Word into up to three parts according to selection, returns
+// substring before, in and after selection and the points (in relative coords)
+// where s2 and s3 start:
+void wxHtmlWordCell::Split(wxDC& dc, 
+                           const wxPoint& selFrom, const wxPoint& selTo,
+                           wxString& s1, wxString& s2, wxString& s3,
+                           unsigned& pos1, unsigned& pos2)
 {
-    if (state.GetSelectionState() != wxHTML_SEL_OUT &&
-        dc.GetBackgroundMode() != wxSOLID)
+    wxPoint pt1 = (selFrom == wxDefaultPosition) ?
+                   wxDefaultPosition : selFrom - GetAbsPos();
+    wxPoint pt2 = (selTo == wxDefaultPosition) ?
+                   wxPoint(m_Width, -1) : selTo - GetAbsPos();
+
+    wxCoord charW, charH;
+    unsigned len = m_Word.length();
+    unsigned i = 0;
+    pos1 = 0;
+    s1 = s2 = s3 = wxEmptyString;
+
+    // before selection:
+    while ( pt1.x > 0 && i < len )
+    {
+        dc.GetTextExtent(m_Word[i], &charW, &charH);
+        pt1.x -= charW;
+        if ( pt1.x >= 0 )
+        {
+            pos1 += charW;
+            i++;
+        }
+    }
+
+    // in selection:
+    unsigned j = i;
+    pos2 = pos1;
+        pt2.x -= pos2;
+    while ( pt2.x > 0 && j < len )
+    {
+        dc.GetTextExtent(m_Word[j], &charW, &charH);
+        pt2.x -= charW;
+        if ( pt2.x >= 0 )
+        {
+            pos2 += charW;
+            j++;
+        }
+    }
+    
+    s1 = m_Word.Mid(0, i);
+    s2 = m_Word.Mid(i, j-i);
+    s3 = m_Word.Mid(j);
+#if 0 // FIXME
+    printf("  '%s' %i '%s' %i '%s'\n", s1.mb_str(), pos1,
+            s2.mb_str(), pos2,s3.mb_str());
+#endif
+}
+
+
+static void SwitchSelState(wxDC& dc, wxHtmlRenderingState& state,
+                           bool toSelection)
+{
+    if ( toSelection )
     {
         dc.SetBackgroundMode(wxSOLID);
         dc.SetTextBackground(
@@ -247,16 +300,67 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         dc.SetTextForeground(
                 wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
     }
-    else if (state.GetSelectionState() == wxHTML_SEL_OUT &&
-             dc.GetBackgroundMode() == wxSOLID)
+    else
     {
         dc.SetBackgroundMode(wxTRANSPARENT);
         dc.SetTextForeground(state.GetFgColour());
         dc.SetTextBackground(state.GetBgColour());
     }
+}
 
-    // FIXME - use selection
-    dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
+
+void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
+                          int WXUNUSED(view_y1), int WXUNUSED(view_y2),
+                          wxHtmlRenderingState& state)
+{
+#if 0 // useful for debugging
+    dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width,m_Height);
+#endif
+
+    if ( state.GetSelectionState() == wxHTML_SEL_CHANGING )
+    {
+        // Selection changing, we must draw the word piecewise:
+    
+        unsigned ofs1, ofs2;
+        wxString textBefore, textInside, textAfter;
+        wxHtmlSelection *s = state.GetSelection();
+        
+        Split(dc, 
+              this == s->GetFromCell() ? s->GetFromPos() : wxDefaultPosition,
+              this == s->GetToCell() ? s->GetToPos() : wxDefaultPosition,
+              textBefore, textInside, textAfter, ofs1, ofs2);
+        dc.DrawText(textBefore, x + m_PosX, y + m_PosY);
+        int w1,w2,w3,h123;
+        dc.GetTextExtent(textBefore, &w1,&h123);
+        dc.GetTextExtent(textInside, &w2,&h123);
+        dc.GetTextExtent(textAfter, &w3,&h123);
+        if ( !textInside.empty() )
+        {
+            SwitchSelState(dc, state, true);
+            dc.DrawText(textInside, x + m_PosX + ofs1, y + m_PosY);
+        }
+        if ( !textAfter.empty() )
+        {
+            SwitchSelState(dc, state, false);
+            dc.DrawText(textAfter, x + m_PosX + ofs2, y + m_PosY);
+        }
+    }
+    else
+    {
+        // Not changing selection state, draw the word in single mode:
+
+        if ( state.GetSelectionState() != wxHTML_SEL_OUT &&
+             dc.GetBackgroundMode() != wxSOLID )
+        {
+            SwitchSelState(dc, state, true);
+        }
+        else if ( state.GetSelectionState() == wxHTML_SEL_OUT &&
+                  dc.GetBackgroundMode() == wxSOLID )
+        {
+            SwitchSelState(dc, state, false);
+        }
+        dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
+    }
 }
     
 
