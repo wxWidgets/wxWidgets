@@ -31,6 +31,7 @@
 #if wxUSE_FONTMAP
 
 #ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
     #include "wx/font.h"
     #include "wx/encinfo.h"
 #endif
