@@ -23,7 +23,7 @@ class wxToggleButton;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxCheckBoxNameStr;
+extern const wxChar *wxCheckBoxNameStr;
 
 //-----------------------------------------------------------------------------
 // wxToggleButton
