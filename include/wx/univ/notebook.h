@@ -115,6 +115,9 @@ public:
                                long numArg = 0l,
                                const wxString& strArg = wxEmptyString);
 
+    // refresh the currently selected tab
+    void RefreshCurrent();
+
 protected:
     virtual wxNotebookPage *DoRemovePage(int nPage);
 
@@ -264,6 +267,9 @@ public:
     virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
     virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
     virtual bool HandleActivation(wxControl *control, bool activated);
+
+protected:
+    void HandleFocusChange(wxControl *control);
 };
 
 #endif // _WX_UNIV_NOTEBOOK_H_

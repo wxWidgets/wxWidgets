@@ -67,6 +67,13 @@ public:
         {
             m_radio->OnRadioButton(event);
         }
+        else if ( event.GetEventType() == wxEVT_KEY_DOWN )
+        {
+            if ( m_radio->OnKeyDown((wxKeyEvent &)event) )
+            {
+                return TRUE;
+            }
+        }
 
         // just pass it on
         return GetNextHandler()->ProcessEvent(event);
@@ -221,13 +228,30 @@ void wxRadioBox::SetSelection(int n)
 
     m_selection = n;
 
+    wxRadioButton *btn = m_buttons[n];
+
+    // the selected button is always focused in the radiobox
+    btn->SetFocus();
+
     // this will also unselect the previously selected button in our group
-    m_buttons[n]->SetValue(TRUE);
+    btn->SetValue(TRUE);
 }
 
 int wxRadioBox::GetSelection() const
 {
     return m_selection;
+}
+
+void wxRadioBox::SendRadioEvent()
+{
+    wxCHECK_RET( m_selection != -1, _T("no active radio button") );
+
+    wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, GetId());
+    InitCommandEvent(event);
+    event.SetInt(m_selection);
+    event.SetString(GetString(m_selection));
+
+    Command(event);
 }
 
 void wxRadioBox::OnRadioButton(wxEvent& event)
@@ -237,11 +261,7 @@ void wxRadioBox::OnRadioButton(wxEvent& event)
 
     m_selection = n;
 
-    wxCommandEvent event2(wxEVT_COMMAND_RADIOBOX_SELECTED, GetId());
-    InitCommandEvent(event2);
-    event2.SetInt(n);
-    event2.SetString(GetString(n));
-    Command(event2);
+    SendRadioEvent();
 }
 
 // ----------------------------------------------------------------------------
@@ -392,6 +412,48 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
             }
         }
     }
+}
+
+// ----------------------------------------------------------------------------
+// keyboard navigation
+// ----------------------------------------------------------------------------
+
+bool wxRadioBox::OnKeyDown(wxKeyEvent& event)
+{
+    wxDirection dir;
+    switch ( event.GetKeyCode() )
+    {
+        case WXK_UP:
+            dir = wxUP;
+            break;
+
+        case WXK_LEFT:
+            dir = wxLEFT;
+            break;
+
+        case WXK_DOWN:
+            dir = wxDOWN;
+            break;
+
+        case WXK_RIGHT:
+            dir = wxRIGHT;
+            break;
+
+        default:
+            return FALSE;
+    }
+
+    int selOld = GetSelection();
+    int selNew = GetNextItem(selOld, dir, GetWindowStyle());
+    if ( selNew != selOld )
+    {
+        SetSelection(selNew);
+
+        // emulate the button click
+        SendRadioEvent();
+    }
+
+    return TRUE;
 }
 
 #endif // wxUSE_RADIOBOX

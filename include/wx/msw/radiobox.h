@@ -71,6 +71,9 @@ public:
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
     void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
+    virtual int GetColumnCount() const;
+    virtual int GetRowCount() const;
+
     // implementation only from now on
     // -------------------------------
 

@@ -69,6 +69,9 @@ public:
     virtual int GetSelection() const;
 
     virtual int GetCount() const { return m_buttons.GetCount(); }
+    virtual int GetColumnCount() const { return m_numCols; }
+    virtual int GetRowCount() const { return m_numRows; }
+
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
 
@@ -88,12 +91,16 @@ public:
 
     // implementation only: called by wxRadioHookHandler
     void OnRadioButton(wxEvent& event);
+    bool OnKeyDown(wxKeyEvent& event);
 
 protected:
     // override the base class methods dealing with window positioning/sizing
     // as we must move/size the buttons as well
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestClientSize() const;
+
+    // generate a radiobutton click event for the current item
+    void SendRadioEvent();
 
     // common part of all ctors
     void Init();

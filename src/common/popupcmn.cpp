@@ -267,6 +267,14 @@ void wxPopupComboWindow::OnDismiss()
 
 void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 {
+    // let the window have it first (we're the first event handler in the chain
+    // of handlers for this window)
+    wxEvtHandler *handler = GetNextHandler();
+    if ( handler && handler->ProcessEvent(event) )
+    {
+        return;
+    }
+
     wxPoint pos = event.GetPosition();
 
     // scrollbar on which the click occured
@@ -298,7 +306,9 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
             // pass just in case
 
         case wxHT_WINDOW_INSIDE:
-            event.Skip();
+            // as we had also passed it to the next handler above, there is no
+            // need to skip it now
+            //event.Skip();
             break;
     }
 

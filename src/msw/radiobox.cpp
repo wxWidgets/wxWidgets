@@ -930,60 +930,23 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 bool processed = TRUE;
 
-                bool horz = (radiobox->GetWindowStyle() & wxRA_SPECIFY_COLS) != 0;
-                int num = radiobox->Number(),
-                    rows = radiobox->GetNumVer(),
-                    cols = radiobox->GetNumHor();
-
-                int selOld = radiobox->GetSelection();
-                int selNew = selOld;
-
-                // wrapping will be handled below for the cases when we
-                // add/substract more than 1 but here otherwise as it's simpler
+                wxDirection dir;
                 switch ( wParam )
                 {
                     case VK_UP:
-                        if ( horz )
-                            selNew -= cols;
-                        else
-                        {
-                            if ( selNew )
-                                selNew--;
-                            else
-                                selNew = num - 1;
-                        }
+                        dir = wxUP;
                         break;
 
                     case VK_LEFT:
-                        if ( horz )
-                        {
-                            if ( selNew )
-                                selNew--;
-                            else
-                                selNew = num - 1;
-                        }
-                        else
-                            selNew -= rows;
+                        dir = wxLEFT;
                         break;
 
                     case VK_DOWN:
-                        if ( horz )
-                            selNew += cols;
-                        else
-                        {
-                            if ( ++selNew == num )
-                                selNew = 0;
-                        }
+                        dir = wxDOWN;
                         break;
 
                     case VK_RIGHT:
-                        if ( horz )
-                        {
-                            if ( ++selNew == num )
-                                selNew = 0;
-                        }
-                        else
-                            selNew += rows;
+                        dir = wxRIGHT;
                         break;
 
                     default:
@@ -992,29 +955,13 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 if ( processed )
                 {
-                    // ensure that selNew is in range [0..num)
-                    if ( selNew >= num )
-                    {
-                        selNew -= num;
-
-                        int dim = horz ? cols : rows;
-                        selNew += dim - 1;
-                        selNew %= dim;
-                    }
-                    else if ( selNew < 0 )
-                    {
-                        selNew += num;
-
-                        int dim = horz ? cols : rows;
-                        if ( selNew % dim == 0 )
-                        {
-                            selNew -= dim - 1;
-                        }
-                        else
-                        {
-                            selNew++;
-                        }
-                    }
+                    int selOld = radiobox->GetSelection();
+                    int selNew = radiobox->GetNextItem
+                                 (
+                                  selOld,
+                                  dir,
+                                  radiobox->GetWindowStyle()
+                                 );
 
                     if ( selNew != selOld )
                     {

@@ -12,6 +12,10 @@
 #ifndef _WX_RADIOBOX_H_BASE_
 #define _WX_RADIOBOX_H_BASE_
 
+#ifdef __GNUG__
+    #pragma interface "radioboxbase.h"
+#endif
+
 #if wxUSE_RADIOBOX
 
 #include "wx/control.h"
@@ -19,9 +23,9 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
 
 // ----------------------------------------------------------------------------
-// wxRadioBoxBase is not a base class at all, but rather a mix-in because the
+// wxRadioBoxBase is not a normal base class, but rather a mix-in because the
 // real wxRadioBox derives from different classes on different platforms: for
-// example, it is a 
+// example, it is a wxStaticBox in wxUniv but not in wxMSW
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxRadioBoxBase
@@ -75,10 +79,19 @@ public:
     virtual void Enable(int n, bool enable = TRUE) = 0;
     virtual void Show(int n, bool show = TRUE) = 0;
 
-    // for compatibility only, don't use
+    // layout parameters
+    virtual int GetColumnCount() const = 0;
+    virtual int GetRowCount() const = 0;
+
+    // return the item above/below/to the left/right of the given one
+    int GetNextItem(int item, wxDirection dir, long style) const;
+
+    // for compatibility only, don't use these methods in new code!
+#ifdef WXWIN_COMPATIBILITY_2
     int Number() const { return GetCount(); }
     wxString GetLabel(int n) const { return GetString(n); }
     void SetLabel(int n, const wxString& label) { SetString(n, label); }
+#endif // WXWIN_COMPATIBILITY_2
 };
 
 #if defined(__WXUNIVERSAL__)

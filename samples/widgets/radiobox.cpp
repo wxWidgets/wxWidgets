@@ -400,7 +400,7 @@ void RadioWidgetsPage::OnButtonSelection(wxCommandEvent& WXUNUSED(event))
 {
     unsigned long sel;
     if ( !m_textSel->GetValue().ToULong(&sel) ||
-            (sel >= (size_t)m_radio->Number()) )
+            (sel >= (size_t)m_radio->GetCount()) )
     {
         wxLogWarning(_T("Invalid number specified as new selection."));
     }
@@ -421,7 +421,7 @@ void RadioWidgetsPage::OnUpdateUISelection(wxUpdateUIEvent& event)
 {
     unsigned long n;
     event.Enable( m_textSel->GetValue().ToULong(&n) &&
-                   (n < (size_t)m_radio->Number()) );
+                   (n < (size_t)m_radio->GetCount()) );
 }
 
 void RadioWidgetsPage::OnUpdateUIReset(wxUpdateUIEvent& event)

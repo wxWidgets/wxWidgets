@@ -19,7 +19,6 @@ kbd input
 
 wxMenuXXX
 
-* popup menus
 * multirow menubar if not enough space
 * Break()?
 
@@ -34,10 +33,6 @@ Misc
 *** problems with large fonts!
 
 *   sizer calculate layout slightly incorrectly
-
-wxRadioBox:
-
-*   no kbd interface?
 
 widgets sample:
 

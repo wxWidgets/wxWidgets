@@ -167,6 +167,7 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // event handlers
+    void OnLeftDown(wxMouseEvent& event);
     void OnLeftUp(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
@@ -269,6 +270,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
     EVT_KEY_DOWN(wxPopupMenuWindow::OnKeyDown)
 
+    EVT_LEFT_DOWN(wxPopupMenuWindow::OnLeftDown)
     EVT_LEFT_UP(wxPopupMenuWindow::OnLeftUp)
     EVT_MOTION(wxPopupMenuWindow::OnMouseMove)
     EVT_LEAVE_WINDOW(wxPopupMenuWindow::OnMouseLeave)
@@ -646,6 +648,36 @@ bool wxPopupMenuWindow::ActivateItem(wxMenuItem *item, InputMethod how)
 // ----------------------------------------------------------------------------
 // wxPopupMenuWindow input handling
 // ----------------------------------------------------------------------------
+
+void wxPopupMenuWindow::OnLeftDown(wxMouseEvent& event)
+{
+    // wxPopupWindowHandler dismisses the window when the mouse is clicked
+    // outside it which is usually just fine, but there is one case when we
+    // don't want to do it: if the mouse was clicked on the parent submenu item
+    // which opens this menu, so check for it
+
+    wxPoint pos = event.GetPosition();
+    if ( HitTest(pos.x, pos.y) == wxHT_WINDOW_OUTSIDE )
+    {
+        wxMenu *menu = m_menu->GetParent();
+        if ( menu )
+        {
+            wxPopupMenuWindow *win = menu->m_popupMenu;
+
+            wxCHECK_RET( win, _T("parent menu not shown?") );
+
+            pos = ClientToScreen(pos);
+            if ( win->GetMenuItemFromPoint(win->ScreenToClient(pos)) )
+            {
+                // eat the event
+                return;
+            }
+            //else: it is outside the parent menu as well, do dismiss this one
+        }
+    }
+
+    event.Skip();
+}
 
 void wxPopupMenuWindow::OnLeftUp(wxMouseEvent& event)
 {

@@ -413,30 +413,58 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
 // wxNotebook drawing
 // ----------------------------------------------------------------------------
 
+void wxNotebook::RefreshCurrent()
+{
+    if ( m_sel != INVALID_PAGE )
+    {
+        RefreshTab(m_sel);
+    }
+}
+
 void wxNotebook::RefreshTab(int page)
 {
     wxCHECK_RET( IS_VALID_PAGE(page), _T("invalid notebook page") );
 
-    wxRect r = GetTabRect(page);
+    wxRect rect = GetTabRect(page);
     if ( (size_t)page == m_sel )
     {
         const wxSize indent = GetRenderer()->GetTabIndent();
 
-        if ( r.x >= 2*indent.x && r.y >= indent.y )
+        switch ( GetTabOrientation() )
         {
-            r.Inflate(2*indent.x, indent.y);
+            default:
+                wxFAIL_MSG(_T("unknown tab orientation"));
+                // fall through
+
+            case wxTOP:
+                rect.Inflate(indent.x, indent.y);
+                break;
+
+            case wxBOTTOM:
+                rect.Inflate(indent.x, 0);
+                rect.height += indent.y;
+                break;
+
+            case wxLEFT:
+                rect.Inflate(indent.x, indent.y);
+                break;
+
+            case wxRIGHT:
+                rect.Inflate(0, indent.y);
+                rect.width += indent.x;
+                break;
         }
     }
 
-    Refresh(TRUE, &r);
+    RefreshRect(rect);
 }
 
 void wxNotebook::RefreshAllTabs()
 {
-    wxRect r = GetAllTabsRect();
-    if ( r.width || r.height )
+    wxRect rect = GetAllTabsRect();
+    if ( rect.width || rect.height )
     {
-        Refresh(TRUE, &r);
+        RefreshRect(rect);
     }
     //else: we don't have tabs at all
 }
@@ -653,19 +681,17 @@ wxRect wxNotebook::GetTabRect(int page) const
         widthThis = m_widths[page];
     }
 
-    rect = GetAllTabsRect();
+    rect = GetTabsPart();
     if ( IsVertical() )
     {
-        rect.y = widthBefore;
+        rect.y += widthBefore - m_offset;
         rect.height = widthThis;
     }
     else // horz
     {
-        rect.x = widthBefore;
+        rect.x += widthBefore - m_offset;
         rect.width = widthThis;
     }
-
-    rect.x -= m_offset;
 
     return rect;
 }
@@ -1359,17 +1385,24 @@ bool wxStdNotebookInputHandler::HandleMouseMove(wxControl *control,
 bool wxStdNotebookInputHandler::HandleFocus(wxControl *control,
                                             const wxFocusEvent& event)
 {
-    // buttons change appearance when they get/lose focus, so return TRUE to
-    // refresh
-    return TRUE;
+    HandleFocusChange(control);
+
+    return FALSE;
 }
 
 bool wxStdNotebookInputHandler::HandleActivation(wxControl *control,
-                                                 bool activated)
+                                                 bool WXUNUSED(activated))
 {
-    // the default button changes appearance when the app is [de]activated, so
-    // return TRUE to refresh
-    return TRUE;
+    // we react to the focus change in the same way as to the [de]activation
+    HandleFocusChange(control);
+
+    return FALSE;
+}
+
+void wxStdNotebookInputHandler::HandleFocusChange(wxControl *control)
+{
+    wxNotebook *notebook = wxStaticCast(control, wxNotebook);
+    notebook->RefreshCurrent();
 }
 
 #endif // wxUSE_NOTEBOOK
