@@ -148,6 +148,10 @@ transient thread state structure.  Since wxPython is now saving
 tstates for it's own callbacks it ended up using garbage after
 win32com got rid of the tstate...
 
+Added a generic static text control to wxPython.lib.stattext.  This is
+so things like Boa and PythonCard can have a static text that can
+respond to mouse events and etc.
+
 
 
 
