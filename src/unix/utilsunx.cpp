@@ -29,7 +29,7 @@
 #include "wx/stream.h"
 
 #ifdef HAVE_STATFS
-#  ifdef __DARWIN__
+#  ifdef __BSD__
 #    include <sys/param.h>
 #    include <sys/mount.h>
 #  else
