@@ -121,8 +121,11 @@ wxGenericColourDialog::wxGenericColourDialog()
   colourSelection = 0;
 }
 
-wxGenericColourDialog::wxGenericColourDialog(wxWindow *parent, wxColourData *data):
-  wxDialog(parent, -1, wxT("Colour"), wxPoint(0, 0), wxSize(900, 900), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+wxGenericColourDialog::wxGenericColourDialog(wxWindow *parent,
+                                             wxColourData *data)
+                     : wxDialog(parent, -1, wxT("Colour"),
+                                wxPoint(0, 0), wxSize(900, 900),
+                                wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL)
 {
   whichKind = 1;
   colourSelection = 0;
@@ -140,16 +143,21 @@ void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
-  dialogParent = parent;
+    if ( !wxDialog::Create(parent, -1, wxT("Colour"),
+                           wxPoint(0, 0), wxSize(900, 900),
+                           wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL) )
+        return FALSE;
 
-  if (data)
-    colourData = *data;
+    dialogParent = parent;
 
-  InitializeColours();
-  CalculateMeasurements();
-  CreateWidgets();
+    if (data)
+        colourData = *data;
 
-  return TRUE;
+    InitializeColours();
+    CalculateMeasurements();
+    CreateWidgets();
+
+    return TRUE;
 }
 
 int wxGenericColourDialog::ShowModal()
