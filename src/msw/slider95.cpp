@@ -103,6 +103,7 @@ wxBEGIN_FLAGS( wxSliderStyle )
     wxFLAGS_MEMBER(wxSL_BOTTOM)
     wxFLAGS_MEMBER(wxSL_BOTH)
     wxFLAGS_MEMBER(wxSL_SELRANGE)
+    wxFLAGS_MEMBER(wxSL_INVERSE)
 
 wxEND_FLAGS( wxSliderStyle )
 
@@ -306,7 +307,7 @@ bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation),
             return false;
     }
 
-    int newPos = (int) ::SendMessage((HWND) control, TBM_GETPOS, 0, 0);
+    int newPos = MSWInvertOrNot((int) ::SendMessage((HWND) control, TBM_GETPOS, 0, 0));
     if ( (newPos < GetMin()) || (newPos > GetMax()) )
     {
         // out of range - but we did process it
@@ -506,14 +507,22 @@ wxSize wxSlider95::DoGetBestSize() const
 // slider-specific methods
 // ----------------------------------------------------------------------------
 
+int wxSlider95::MSWInvertOrNot(int value) const
+{
+    if (m_windowStyle & wxSL_INVERSE) 
+        return (m_rangeMax + m_rangeMin) - value; 
+    else 
+        return value; 
+}
+
 int wxSlider95::GetValue() const
 {
-    return ::SendMessage(GetHwnd(), TBM_GETPOS, 0, 0);
+    return MSWInvertOrNot(::SendMessage(GetHwnd(), TBM_GETPOS, 0, 0));
 }
 
 void wxSlider95::SetValue(int value)
 {
-    ::SendMessage(GetHwnd(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)value);
+    ::SendMessage(GetHwnd(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)MSWInvertOrNot(value));
 
     if ( m_labels )
     {
@@ -530,8 +539,8 @@ void wxSlider95::SetRange(int minValue, int maxValue)
 
     if ( m_labels )
     {
-        ::SetWindowText((*m_labels)[SliderLabel_Min], Format(m_rangeMin));
-        ::SetWindowText((*m_labels)[SliderLabel_Max], Format(m_rangeMax));
+        ::SetWindowText((*m_labels)[SliderLabel_Min], Format(MSWInvertOrNot(m_rangeMin)));
+        ::SetWindowText((*m_labels)[SliderLabel_Max], Format(MSWInvertOrNot(m_rangeMax)));
     }
 }
 
@@ -597,12 +606,12 @@ void wxSlider95::SetThumbLength(int len)
 
 int wxSlider95::GetThumbLength() const
 {
-  return (int)::SendMessage( GetHwnd(), TBM_GETTHUMBLENGTH, 0, 0);
+    return (int)::SendMessage( GetHwnd(), TBM_GETTHUMBLENGTH, 0, 0);
 }
 
 void wxSlider95::SetTick(int tickPos)
 {
-  ::SendMessage( GetHwnd(), TBM_SETTIC, (WPARAM) 0, (LPARAM) tickPos );
+    ::SendMessage( GetHwnd(), TBM_SETTIC, (WPARAM) 0, (LPARAM) tickPos );
 }
 
 // ----------------------------------------------------------------------------

@@ -99,6 +99,9 @@ protected:
     // format an integer value as string
     static wxString Format(int n) { return wxString::Format(_T("%d"), n); }
 
+	// Common processing to invert slider values based on wxSL_INVERSE 
+    int MSWInvertOrNot(int value) const; 
+
     // get the boundig box for the slider and possible labels
     wxRect GetBoundingBox() const;
 
