@@ -549,7 +549,8 @@ bool wxDebugReport::DoProcess()
 
 #if wxUSE_ZIPSTREAM
 
-wxDEFINE_SCOPED_PTR_TYPE(wxZipOutputStream)
+wxDECLARE_SCOPED_PTR(wxZipOutputStream, wxDbgZipOutputStreamPtr)
+wxDEFINE_SCOPED_PTR(wxZipOutputStream, wxDbgZipOutputStreamPtr)
 
 // ----------------------------------------------------------------------------
 // wxDebugReportCompress
@@ -564,7 +565,7 @@ bool wxDebugReportCompress::DoProcess()
     // create the streams
     wxFileName fn(GetDirectory(), GetReportName(), _T("zip"));
     wxFFileOutputStream os(fn.GetFullPath(), _T("wb"));
-    wxZipOutputStreamPtr zos(new wxZipOutputStream(os, 9));
+    wxDbgZipOutputStreamPtr zos(new wxZipOutputStream(os, 9));
 
     // add all files to the ZIP one
     wxString name, desc;
