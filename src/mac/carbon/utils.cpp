@@ -54,6 +54,31 @@
     #include <wtime.h>
 #endif
 
+// ---------------------------------------------------------------------------
+// code used in both base and GUI compilation
+// ---------------------------------------------------------------------------
+
+// our OS version is the same in non GUI and GUI cases
+static int DoGetOSVersion(int *majorVsn, int *minorVsn)
+{
+    long theSystem ;
+
+    // are there x-platform conventions ?
+
+    Gestalt(gestaltSystemVersion, &theSystem) ;
+    if (minorVsn != NULL) {
+        *minorVsn = (theSystem & 0xFF ) ;
+    }
+    if (majorVsn != NULL) {
+        *majorVsn = (theSystem >> 8 ) ;
+    }
+#ifdef __DARWIN__
+    return wxMAC_DARWIN;
+#else
+    return wxMAC;
+#endif
+}
+
 #if wxUSE_BASE
 
 #ifndef __DARWIN__
@@ -195,27 +220,6 @@ void wxFlushEvents()
 void wxBell()
 {
     SysBeep(30);
-}
-
-// our OS version is the same in non GUI and GUI cases
-static int DoGetOSVersion(int *majorVsn, int *minorVsn)
-{
-    long theSystem ;
-
-    // are there x-platform conventions ?
-
-    Gestalt(gestaltSystemVersion, &theSystem) ;
-    if (minorVsn != NULL) {
-        *minorVsn = (theSystem & 0xFF ) ;
-    }
-    if (majorVsn != NULL) {
-        *majorVsn = (theSystem >> 8 ) ;
-    }
-#ifdef __DARWIN__
-    return wxMAC_DARWIN;
-#else
-    return wxMAC;
-#endif
 }
 
 wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
