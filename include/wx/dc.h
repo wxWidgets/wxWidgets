@@ -3,7 +3,6 @@
 
 #ifdef __GNUG__
     #pragma interface "dcbase.h"
-    #pragma implementation "dcbase.h"
 #endif
 
 // ----------------------------------------------------------------------------

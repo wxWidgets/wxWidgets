@@ -13,6 +13,7 @@ LIB_CPP_SRC=\
  common/cmndata.cpp \
  common/config.cpp \
  common/date.cpp \
+ common/dcbase.cpp \
  common/docmdi.cpp \
  common/docview.cpp \
  common/dynarray.cpp \

@@ -109,34 +109,29 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_bgGC = (GdkGC *) NULL;
     m_cmap = (GdkColormap *) NULL;
     m_owner = (wxWindow *)NULL;
+    m_isMemDC = FALSE;
   
-    if (!window)
-        return;
+    wxASSERT_MSG( window, "DC needs a window" );
     
     GtkWidget *widget = window->m_wxwindow;
-    if (!widget)
-        return;
+    
+    wxASSERT_MSG( widget, "DC needs a widget" );
     
     m_window = widget->window;
     
     /* not realized ? */
     if (!m_window)
     {
-         /* force realization */
-         gtk_widget_realize( widget );
-         m_window = widget->window;
+         /* don't report problems */
+	 m_ok = TRUE;
+	 
+	 return;
     }
-    
-    /* still not realized ? */
-    if (!m_window)
-        return;
     
     if (window->m_wxwindow)
         m_cmap = gtk_widget_get_colormap( window->m_wxwindow );
     else
         m_cmap = gtk_widget_get_colormap( window->m_widget );
-    
-    m_isMemDC = FALSE;
         
     SetUpDC();
 
@@ -173,8 +168,8 @@ void wxWindowDC::DoDrawLine( long x1, long y1, long x2, long y2 )
   
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
-        gdk_draw_line( m_window, m_penGC, 
-                       XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
+        if (m_window)
+            gdk_draw_line( m_window, m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
                        
         CalcBoundingBox(x1, y1);
         CalcBoundingBox(x2, y2);
@@ -192,8 +187,11 @@ void wxWindowDC::DoCrossHair( long x, long y )
         GetSize( &w, &h );
         long xx = XLOG2DEV(x);
         long yy = YLOG2DEV(y);
-        gdk_draw_line( m_window, m_penGC, 0, yy, XLOG2DEVREL(w), yy );
-        gdk_draw_line( m_window, m_penGC, xx, 0, xx, YLOG2DEVREL(h) );
+        if (m_window)
+	{
+            gdk_draw_line( m_window, m_penGC, 0, yy, XLOG2DEVREL(w), yy );
+            gdk_draw_line( m_window, m_penGC, xx, 0, xx, YLOG2DEVREL(h) );
+	}
     }
 }
 
@@ -238,11 +236,14 @@ void wxWindowDC::DoDrawArc( long x1, long y1, long x2, long y2,
     while (alpha2 <= 0) alpha2 += 360*64;
     while (alpha1 > 360*64) alpha1 -= 360*64;
 
-    if (m_brush.GetStyle() != wxTRANSPARENT)
-        gdk_draw_arc( m_window, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+    if (m_window)
+    {
+        if (m_brush.GetStyle() != wxTRANSPARENT)
+            gdk_draw_arc( m_window, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
     
-    if (m_pen.GetStyle() != wxTRANSPARENT)
-        gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+            gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+    }
       
     CalcBoundingBox (x1, y1);
     CalcBoundingBox (x2, y2);
@@ -261,13 +262,17 @@ void wxWindowDC::DoDrawEllipticArc( long x, long y, long width, long height, dou
     if (ww < 0) { ww = -ww; xx = xx - ww; }
     if (hh < 0) { hh = -hh; yy = yy - hh; }
   
-    long start = long(sa * 64.0);
-    long end = long(ea * 64.0);
-    if (m_brush.GetStyle() != wxTRANSPARENT)
-        gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
+    if (m_window)
+    {
+        long start = long(sa * 64.0);
+        long end = long(ea * 64.0);
+    
+        if (m_brush.GetStyle() != wxTRANSPARENT)
+            gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
   
-    if (m_pen.GetStyle() != wxTRANSPARENT)
-        gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, start, end );
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+            gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, start, end );
+    }
         
     CalcBoundingBox (x, y);
     CalcBoundingBox (x + width, y + height);
@@ -277,7 +282,7 @@ void wxWindowDC::DoDrawPoint( long x, long y )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
-    if (m_pen.GetStyle() != wxTRANSPARENT)
+    if ((m_pen.GetStyle() != wxTRANSPARENT) && m_window)
         gdk_draw_point( m_window, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
         
     CalcBoundingBox (x, y);
@@ -298,7 +303,8 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffse
         long x2 = XLOG2DEV(points[i+1].x + xoffset);
         long y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
         long y2 = YLOG2DEV(points[i+1].y + yoffset);
-        gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
+	if (m_window)
+            gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
         
         CalcBoundingBox( points[i+1].x + xoffset, points[i+1].y + yoffset );
     }
@@ -325,7 +331,8 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], long xoffset, long yoff
      
     // To do: Fillstyle
    
-    if (m_pen.GetStyle() != wxTRANSPARENT)
+    if ((m_pen.GetStyle() != wxTRANSPARENT) && m_window)
+    {
         for (i = 0 ; i < n ; i++)
         {
             gdk_draw_line( m_window, m_penGC, 
@@ -334,6 +341,7 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], long xoffset, long yoff
                            gdkpoints[(i+1)%n].x,
                            gdkpoints[(i+1)%n].y);
         }
+    }
         
     delete[] gdkpoints;
 }
@@ -354,11 +362,14 @@ void wxWindowDC::DoDrawRectangle( long x, long y, long width, long height )
     if (ww < 0) { ww = -ww; xx = xx - ww; }
     if (hh < 0) { hh = -hh; yy = yy - hh; }
 
-    if (m_brush.GetStyle() != wxTRANSPARENT)
-      gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
+    if (m_window)
+    {
+        if (m_brush.GetStyle() != wxTRANSPARENT)
+            gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
     
-    if (m_pen.GetStyle() != wxTRANSPARENT)
-      gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+            gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+    }
  
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
@@ -399,33 +410,36 @@ void wxWindowDC::DoDrawRoundedRectangle( long x, long y, long width, long height
         hh--;
     }
 
-    // CMB: ensure dd is not larger than rectangle otherwise we
-    // get an hour glass shape
-    long dd = 2 * rr;
-    if (dd > ww) dd = ww;
-    if (dd > hh) dd = hh;
-    rr = dd / 2;
+    if (m_window)
+    {
+        // CMB: ensure dd is not larger than rectangle otherwise we
+        // get an hour glass shape
+        long dd = 2 * rr;
+        if (dd > ww) dd = ww;
+        if (dd > hh) dd = hh;
+        rr = dd / 2;
 
-    if (m_brush.GetStyle() != wxTRANSPARENT)
-    {
-        gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
-        gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
-        gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
-        gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-        gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-        gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-    }
+        if (m_brush.GetStyle() != wxTRANSPARENT)
+        {
+            gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
+            gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
+            gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
+            gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+            gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+            gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+        }
   
-    if (m_pen.GetStyle() != wxTRANSPARENT)
-    {
-        gdk_draw_line( m_window, m_penGC, xx+rr, yy, xx+ww-rr, yy );
-        gdk_draw_line( m_window, m_penGC, xx+rr, yy+hh, xx+ww-rr, yy+hh );
-        gdk_draw_line( m_window, m_penGC, xx, yy+rr, xx, yy+hh-rr );
-        gdk_draw_line( m_window, m_penGC, xx+ww, yy+rr, xx+ww, yy+hh-rr );
-        gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, dd, dd, 90*64, 90*64 );
-        gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-        gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-        gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+        {    
+            gdk_draw_line( m_window, m_penGC, xx+rr, yy, xx+ww-rr, yy );
+            gdk_draw_line( m_window, m_penGC, xx+rr, yy+hh, xx+ww-rr, yy+hh );
+            gdk_draw_line( m_window, m_penGC, xx, yy+rr, xx, yy+hh-rr );
+            gdk_draw_line( m_window, m_penGC, xx+ww, yy+rr, xx+ww, yy+hh-rr );
+            gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, dd, dd, 90*64, 90*64 );
+            gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+            gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+            gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+	}
     }
     
     // this ignores the radius
@@ -446,11 +460,14 @@ void wxWindowDC::DoDrawEllipse( long x, long y, long width, long height )
     if (ww < 0) { ww = -ww; xx = xx - ww; }
     if (hh < 0) { hh = -hh; yy = yy - hh; }
   
-    if (m_brush.GetStyle() != wxTRANSPARENT)
-        gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
+    if (m_window)
+    {
+        if (m_brush.GetStyle() != wxTRANSPARENT)
+            gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
   
-    if (m_pen.GetStyle() != wxTRANSPARENT)
-        gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+            gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
+    }
         
     CalcBoundingBox( x - width, y - height );
     CalcBoundingBox( x + width, y + height );
@@ -469,6 +486,8 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
     wxCHECK_RET( bitmap.Ok(), _T("invalid bitmap") );
+    
+    if (!m_window) return;
     
     /* scale/translate size and position */
   
@@ -548,6 +567,8 @@ bool wxWindowDC::DoBlit( long xdest, long ydest, long width, long height,
     wxCHECK_MSG( Ok(), FALSE, _T("invalid window dc") );
     
     wxCHECK_MSG( source, FALSE, _T("invalid source dc") );
+    
+    if (!m_window) return FALSE;
     
     wxClientDC *srcDC = (wxClientDC*)source;
     wxMemoryDC *memDC = (wxMemoryDC*)source;
@@ -733,6 +754,8 @@ void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
 
+    if (!m_window) return;
+    
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
     x = XLOG2DEV(x);
@@ -796,6 +819,8 @@ void wxWindowDC::Clear()
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
+    if (!m_window) return;
+    
     /* - we either are a memory dc or have a window as the
        owner. anything else shouldn't happen.
        - we don't use gdk_window_clear() as we don't set
@@ -835,6 +860,8 @@ void wxWindowDC::SetPen( const wxPen &pen )
   
     if (!m_pen.Ok()) return;
   
+    if (!m_window) return;
+    
     gint width = m_pen.GetWidth();
     // CMB: if width is non-zero scale it with the dc
     if (width <= 0)
@@ -891,6 +918,8 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
   
     if (!m_brush.Ok()) return;
   
+    if (!m_window) return;
+    
     m_brush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_foreground( m_brushGC, m_brush.GetColour().GetColor() );
   
@@ -934,6 +963,8 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
   
     if (!m_backgroundBrush.Ok()) return;
   
+    if (!m_window) return;
+    
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_background( m_brushGC, m_backgroundBrush.GetColour().GetColor() );
     gdk_gc_set_background( m_penGC, m_backgroundBrush.GetColour().GetColor() );
@@ -1000,6 +1031,9 @@ void wxWindowDC::SetLogicalFunction( int function )
     }
     
     m_logicalFunction = function;
+    
+    if (!m_window) return;
+    
     gdk_gc_set_function( m_penGC, mode );
     gdk_gc_set_function( m_brushGC, mode );
     gdk_gc_set_function( m_textGC, mode );
@@ -1014,6 +1048,8 @@ void wxWindowDC::SetTextForeground( const wxColour &col )
     m_textForegroundColour = col;
     if (!m_textForegroundColour.Ok()) return;
   
+    if (!m_window) return;
+    
     m_textForegroundColour.CalcPixel( m_cmap );
     gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
 }
@@ -1027,6 +1063,8 @@ void wxWindowDC::SetTextBackground( const wxColour &col )
     m_textBackgroundColour = col;
     if (!m_textBackgroundColour.Ok()) return;
   
+    if (!m_window) return;
+    
     m_textBackgroundColour.CalcPixel( m_cmap );
     gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
 }
@@ -1037,6 +1075,8 @@ void wxWindowDC::SetBackgroundMode( int mode )
   
     m_backgroundMode = mode;
 
+    if (!m_window) return;
+    
     // CMB 21/7/98: fill style of cross-hatch brushes is affected by
     // transparent/solid background mode
     
@@ -1058,6 +1098,8 @@ void wxWindowDC::DoSetClippingRegion( long x, long y, long width, long height )
   
     wxDC::DoSetClippingRegion( x, y, width, height );
   
+    if (!m_window) return;
+    
     GdkRectangle rect;
     rect.x = XLOG2DEV(x);
     rect.y = YLOG2DEV(y);
@@ -1079,6 +1121,8 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         return;
     }
     
+    if (!m_window) return;
+    
     gdk_gc_set_clip_region( m_penGC, region.GetRegion() );
     gdk_gc_set_clip_region( m_brushGC, region.GetRegion() );
     gdk_gc_set_clip_region( m_textGC, region.GetRegion() );
@@ -1091,6 +1135,8 @@ void wxWindowDC::DestroyClippingRegion()
   
     wxDC::DestroyClippingRegion();
   
+    if (!m_window) return;
+    
     gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
     gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
     gdk_gc_set_clip_rectangle( m_textGC, (GdkRectangle *) NULL );

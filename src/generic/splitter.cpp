@@ -599,13 +599,9 @@ void wxSplitterWindow::SizeWindows()
 	        m_windowTwo->Layout();
         }
     }
-#ifdef __WXGTK__
-    Refresh();
-#else
     wxClientDC dc(this);
     DrawBorders(dc);
     DrawSash(dc);
-#endif
 }
 
 // Set pane for unsplit window
