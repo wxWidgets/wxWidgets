@@ -138,8 +138,8 @@ recv() or send() as needed so as to transfer all the data. Note that
 "blocking" here refers to when the function returns, not to whether
 the GUI blocks during this time.
 
-The {\bf wxSOCKET\_BLOCK} controls whether the GUI blocks during IO
-operations. If this flag is not used, then the application must take
+The {\bf wxSOCKET\_BLOCK} flag controls whether the GUI blocks during
+IO operations. If this flag is not used, then the application must take
 extra care to avoid unwanted reentrance. 
 
 So:
@@ -153,7 +153,7 @@ read or write ANY data.
 the data.
 
 {\bf wxSOCKET\_BLOCK} has nothing to do with the previous flags and
-it control whether the GUI blocks.
+it controls whether the GUI blocks.
 
 %
 % SetNotify
@@ -188,7 +188,7 @@ For more information on socket events see \helpref{wxSocket events}{wxsocketbase
 %
 % SetTimeout
 %
-\membersection{wxSocketBase::SetTimeout}{wxsocketbasesettimeout}
+\membersection{wxSocketBase::SetTimeout}\label{wxsocketbasesettimeout}
 
 \func{void}{SetTimeout}{\param{int }{seconds}}
 
@@ -452,7 +452,7 @@ Returns a reference to the current object.
 
 wxSocketBase::ReadMsg() will behave as if the wxSOCKET\_WAITALL flag was always set
 and it will always ignore the wxSOCKET\_NOWAIT flag. The exact behaviour of ReadMsg
-depends on the wxSOCKET\_SPEED flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
+depends on the wxSOCKET\_BLOCK flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
@@ -501,7 +501,7 @@ Returns a reference to the current object.
 
 This function simply deletes all bytes in the incoming queue. This function
 doesn't wait. That is, it will behave as if the wxSOCKET\_NOWAIT flag was set. The
-wxSOCKET\_SPEED and wxSOCKET\_WAITALL flags have no effect on this function.
+wxSOCKET\_BLOCK and wxSOCKET\_WAITALL flags have no effect on this function.
 
 Use LastCount to see the number of bytes discarded.
 
@@ -639,7 +639,7 @@ Calls to SaveState / RestoreState can be nested.
 \func{void}{SaveState}{\void}
 
 This function saves the current state of the socket object in a stack:
-actually it saves all flags (those set with SetFlags, SetNotify, Notfy)
+actually it saves all flags (those set with SetFlags, SetNotify, Notify)
 and the state of the asynchronous callbacks (Callback, CallbackData).
 
 Calls to SaveState / RestoreState can be nested.
@@ -879,10 +879,6 @@ functions that take a wxSocketEvent argument.
 \twocolitem{{\bf EVT\_SOCKET(id, func)}}{Process a socket event, supplying the member function.}
 \end{twocollist}%
 
-[TODO:]
-A brief note on how to use events.
-The wxSOCKET\_INPUT event is generated when the
-
 \wxheading{See also}
 
 \helpref{wxSocketBase}{wxsocketbase}, 
@@ -1001,7 +997,7 @@ connections.
 \helpref{wxSocketServer::WaitForAccept}{wxsocketserverwaitforaccept}, 
 \helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
 \helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
-\helpref{wxSocketServer::Accept}{wxsocketserveraccept}
+\helpref{wxSocketServer::Accept}{wxsocketserveraccept} for a detailed explanation
 
 %
 % WaitForAccept
