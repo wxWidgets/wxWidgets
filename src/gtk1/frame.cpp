@@ -202,10 +202,16 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
    so we do this directly after realization */
 
 static gint
-gtk_frame_realized_callback( GtkWidget *WXUNUSED(widget), wxFrame *win )
+gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
+
+    /* I haven't been able to set the position of
+       the dialog before it is shown, so I set the
+       position in "realize" */
+    printf( "%d %d\n", win->m_x, win->m_y );
+    gtk_window_reposition( GTK_WINDOW(widget), win->m_x, win->m_y );
 
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -399,7 +405,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
 
-    GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
+    GtkWindowType win_type = GTK_WINDOW_DIALOG;  // this makes window placement work
     if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
 
     m_widget = gtk_window_new( win_type );
@@ -564,7 +570,7 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     {
         if ((m_x != old_x) || (m_y != old_y))
         {
-            gtk_widget_set_uposition( m_widget, m_x, m_y );
+            gtk_window_reposition( GTK_WINDOW(m_widget), m_x, m_y );
         }
     }
 

@@ -121,7 +121,7 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
     /* I haven't been able to set the position of
        the dialog before it is shown, so I set the
        position in "realize" */
-    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
+    gtk_window_reposition( GTK_WINDOW(widget), win->m_x, win->m_y );
 
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -497,7 +497,7 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         {
             /* we set the position here and when showing the dialog
                for the first time in idle time */
-            gtk_widget_set_uposition( m_widget, m_x, m_y );
+            gtk_window_reposition( GTK_WINDOW(m_widget), m_x, m_y );
         }
     }
 

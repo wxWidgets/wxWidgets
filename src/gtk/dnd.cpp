@@ -230,7 +230,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
 
     if (!ret)
     {
-        wxLogDebug( wxT( "Drop target: OnDrop returned TRUE") );
+        wxLogDebug( wxT( "Drop target: OnDrop returned FALSE") );
 
         /* cancel the whole thing */
         gtk_drag_finish( context,

@@ -664,7 +664,7 @@ bool DnDApp::OnInit()
     // create the main frame window
     DnDFrame *frame = new DnDFrame((wxFrame  *) NULL,
                                    "Drag-and-Drop/Clipboard wxWindows Sample",
-                                   50, 50, 450, 340);
+                                   10, 10, 450, 340);
 
     // activate it
     frame->Show(TRUE);
