@@ -182,14 +182,18 @@ class EditWindow(stc.StyledTextCtrl):
         else:
             self.BraceHighlight(braceAtCaret, braceOpposite)
 
-    def CanCut(self):
-        """Return true if text is selected and can be cut."""
-        return self.CanCopy()
-
     def CanCopy(self):
-        """Return true if text is selected and can be copied."""
+        """Return True if text is selected and can be copied."""
         return self.GetSelectionStart() != self.GetSelectionEnd()
 
+    def CanCut(self):
+        """Return True if text is selected and can be cut."""
+        return self.CanCopy() and self.CanEdit()
+
     def CanEdit(self):
-        """Return true if editing should succeed."""
-        return True
+        """Return True if editing should succeed."""
+        return not self.GetReadOnly()
+
+    def CanPaste(self):
+        """Return True if pasting should succeed."""
+        return stc.StyledTextCtrl.CanPaste(self) and self.CanEdit()
