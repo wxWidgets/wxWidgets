@@ -2543,14 +2543,8 @@ wxTreeItemId wxGenericTreeCtrl::HitTest(const wxPoint& point, int& flags)
         return wxTreeItemId();
     }
 
-    wxClientDC dc(this);
-    PrepareDC(dc);
-    wxCoord x = dc.DeviceToLogicalX( point.x );
-    wxCoord y = dc.DeviceToLogicalY( point.y );
-    wxGenericTreeItem *hit =  m_anchor->HitTest(wxPoint(x, y),
-                                                this,
-                                                flags,
-                                                0 );
+    wxGenericTreeItem *hit =  m_anchor->HitTest(CalcUnscrolledPosition(point),
+                                                this, flags, 0);
     if (hit == NULL)
     {
         flags = wxTREE_HITTEST_NOWHERE;
@@ -2601,10 +2595,10 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
     if (m_dirty) wxYieldIfNeeded();
 
     wxString s = m_currentEdit->GetText();
-    int x = m_currentEdit->GetX();
-    int y = m_currentEdit->GetY();
     int w = m_currentEdit->GetWidth();
     int h = m_currentEdit->GetHeight();
+    int x, y;
+    CalcScrolledPosition(m_currentEdit->GetX(), m_currentEdit->GetY(), &x, &y);
 
     int image_h = 0;
     int image_w = 0;
@@ -2624,11 +2618,6 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
     }
     x += image_w;
     w -= image_w + 4; // I don't know why +4 is needed
-
-    wxClientDC dc(this);
-    PrepareDC( dc );
-    x = dc.LogicalToDeviceX( x );
-    y = dc.LogicalToDeviceY( y );
 
     wxTreeTextCtrl *text = new wxTreeTextCtrl(this, -1,
                                               &m_renameAccept,
@@ -2678,21 +2667,15 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    wxClientDC dc(this);
-    PrepareDC(dc);
-    wxCoord x = dc.DeviceToLogicalX( event.GetX() );
-    wxCoord y = dc.DeviceToLogicalY( event.GetY() );
+    wxPoint pt = CalcUnscrolledPosition(event.GetPosition());
 
     int flags = 0;
-    wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y),
-                                                 this,
-                                                 flags,
-                                                 0 );
+    wxGenericTreeItem *item = m_anchor->HitTest(pt, this, flags, 0);
 
     if ( event.Dragging() && !m_isDragging )
     {
         if (m_dragCount == 0)
-            m_dragStart = wxPoint(x,y);
+            m_dragStart = pt;
 
         m_dragCount++;
 
@@ -2769,7 +2752,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, GetId());
 
         event.m_item = (long) item;
-        event.m_pointDrag = wxPoint(x, y);
+        event.m_pointDrag = pt;
         event.SetEventObject(this);
 
         (void)GetEventHandler()->ProcessEvent(event);
@@ -2795,9 +2778,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         {
             wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, GetId());
             nevent.m_item = (long) item;
-            CalcScrolledPosition(x, y,
-                                 &nevent.m_pointDrag.x,
-                                 &nevent.m_pointDrag.y);
+            nevent.m_pointDrag = CalcScrolledPosition(pt);
             nevent.SetEventObject(this);
             GetEventHandler()->ProcessEvent(nevent);
         }
@@ -2858,9 +2839,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 // send activate event first
                 wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
                 nevent.m_item = (long) item;
-                CalcScrolledPosition(x, y,
-                                     &nevent.m_pointDrag.x,
-                                     &nevent.m_pointDrag.y);
+                nevent.m_pointDrag = CalcScrolledPosition(pt);
                 nevent.SetEventObject( this );
                 if ( !GetEventHandler()->ProcessEvent( nevent ) )
                 {
@@ -2993,16 +2972,12 @@ void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 {
     if (m_dirty) return;
 
-    wxClientDC dc(this);
-    PrepareDC(dc);
-
-    wxRect client = GetClientRect();
+    wxSize client = GetClientSize();
 
     wxRect rect;
-    rect.x = dc.LogicalToDeviceX(-client.x);
-    rect.width = client.width;
-    rect.y = dc.LogicalToDeviceY(-client.y + item->GetY());
-    rect.height = client.height;
+    CalcScrolledPosition(0, item->GetY(), &rect.x, &rect.y);
+    rect.width = client.x;
+    rect.height = client.y;
 
     Refresh(TRUE, &rect);
 
@@ -3013,15 +2988,9 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
     if (m_dirty) return;
 
-    wxClientDC dc(this);
-    PrepareDC(dc);
-
-    wxRect client = GetClientRect();
-
     wxRect rect;
-    rect.x = dc.LogicalToDeviceX(-client.x);
-    rect.y = dc.LogicalToDeviceY(-client.y + item->GetY());
-    rect.width = client.width;
+    CalcScrolledPosition(0, item->GetY(), &rect.x, &rect.y);
+    rect.width = GetClientSize().x;
     rect.height = GetLineHeight(item); //dc.GetCharHeight() + 6;
 
     Refresh(TRUE, &rect);

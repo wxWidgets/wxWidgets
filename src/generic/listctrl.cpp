@@ -2917,14 +2917,10 @@ void wxListMainWindow::EditLabel( long item )
     if (m_dirty)
         wxSafeYield();
 
-    wxClientDC dc(this);
-    PrepareDC( dc );
-
     wxString s = data->GetText(0);
     wxRect rectLabel = GetLineLabelRect(m_currentEdit);
 
-    rectLabel.x = dc.LogicalToDeviceX( rectLabel.x );
-    rectLabel.y = dc.LogicalToDeviceY( rectLabel.y );
+    CalcScrolledPosition(rectLabel.x, rectLabel.y, &rectLabel.x, &rectLabel.y);
 
     wxListTextCtrl *text = new wxListTextCtrl
                                (
