@@ -750,7 +750,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
 
      image->SetMask(FALSE);
 
-    return stream.IsOk();
+    return ( stream.LastError() == wxSTREAM_NO_ERROR || stream.LastError() == wxSTREAM_EOF );
 }
 
 bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
