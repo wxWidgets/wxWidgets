@@ -198,7 +198,7 @@ bool wxSocketBase::Destroy()
 bool wxSocketBase::Close()
 {
   // Interrupt pending waits
-  InterruptAllWaits();
+  InterruptWait();
 
   if (m_socket)
   {
