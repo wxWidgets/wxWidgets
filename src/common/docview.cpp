@@ -41,6 +41,7 @@
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/ffile.h"
 #endif
 
 #ifdef __WXMAC__
