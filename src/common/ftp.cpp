@@ -240,7 +240,7 @@ public:
     : wxSocketInputStream(*sock), m_ftp(ftp_clt) {}
   virtual ~wxInputFTPStream(void)
   { 
-     if (Eof())
+     if (LastError() != wxStream_NOERROR)
        m_ftp->GetResult('2');
      else
        m_ftp->Abort();
@@ -256,7 +256,7 @@ public:
     : wxSocketOutputStream(*sock), m_ftp(ftp_clt) {}
   virtual ~wxOutputFTPStream(void)
   {
-     if (Bad())
+     if (LastError() != wxStream_NOERROR)
        m_ftp->GetResult('2');
      else
        m_ftp->Abort();

@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "wx/gtk/win_gtk.h"
+#include <gtk/gtkfeatures.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +35,9 @@ static void gtk_myfixed_add           (GtkContainer     *container,
 static void gtk_myfixed_remove        (GtkContainer     *container,
 				     GtkWidget        *widget);
 static void gtk_myfixed_foreach       (GtkContainer     *container,
+#if (GTK_MINOR_VERSION == 1)
+				     gboolean	      include_internals,
+#endif
 				     GtkCallback      callback,
 				     gpointer         callback_data);
 
@@ -88,7 +92,11 @@ gtk_myfixed_class_init (GtkMyFixedClass *klass)
 
   container_class->add = gtk_myfixed_add;
   container_class->remove = gtk_myfixed_remove;
+#if (GTK_MINOR_VERSION == 1)
+  container_class->forall = gtk_myfixed_foreach;
+#else
   container_class->foreach = gtk_myfixed_foreach;
+#endif
 }
 
 static void
@@ -454,6 +462,9 @@ gtk_myfixed_remove (GtkContainer *container,
 
 static void
 gtk_myfixed_foreach (GtkContainer *container,
+#if (GTK_MINOR_VERSION == 1)
+		   gboolean	 include_internals,
+#endif
 		   GtkCallback   callback,
 		   gpointer      callback_data)
 {

@@ -56,7 +56,8 @@ class wxTCPConnection: public wxConnectionBase
 protected:
   wxSocketBase *m_sock;
   wxSocketStream *m_sockstrm;
-  wxDataStream *m_codec;
+  wxDataInputStream *m_codeci;
+  wxDataOutputStream *m_codeco;
   wxString m_topic;
 
   friend class wxTCPServer;

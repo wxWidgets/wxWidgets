@@ -36,6 +36,7 @@
 #include "wx/listbox.h"
 #include "wx/choice.h"
 #include "wx/checkbox.h"
+#include "wx/settings.h"
 #include "wx/slider.h"
 #include "wx/statbox.h"
 #if wxUSE_GAUGE

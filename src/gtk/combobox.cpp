@@ -300,19 +300,31 @@ void wxComboBox::SetValue( const wxString& value )
 void wxComboBox::Copy(void)
 {
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+#if (GTK_MINOR_VERSION == 1)
+  gtk_editable_copy_clipboard( GTK_EDITABLE(entry) );
+#else
   gtk_editable_copy_clipboard( GTK_EDITABLE(entry), 0 );
+#endif
 }
 
 void wxComboBox::Cut(void)
 {
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+#if (GTK_MINOR_VERSION == 1)
+  gtk_editable_cut_clipboard( GTK_EDITABLE(entry) );
+#else
   gtk_editable_cut_clipboard( GTK_EDITABLE(entry), 0 );
+#endif
 }
 
 void wxComboBox::Paste(void)
 {
   GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+#if (GTK_MINOR_VERSION == 1)
+  gtk_editable_paste_clipboard( GTK_EDITABLE(entry) );
+#else
   gtk_editable_paste_clipboard( GTK_EDITABLE(entry), 0 );
+#endif
 }
 
 void wxComboBox::SetInsertionPoint( long pos )

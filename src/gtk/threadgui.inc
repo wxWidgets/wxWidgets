@@ -21,7 +21,6 @@
 
 #include <gdk/gdk.h>
 
-
 /////////////////////////////////////////////////////////////////////////////
 // Static variables
 /////////////////////////////////////////////////////////////////////////////
@@ -63,3 +62,29 @@ static void wxThreadGuiExit()
   close(p_thrd_pipe[0]);
   close(p_thrd_pipe[1]);
 }
+
+#ifdef NO_DEFINE_GDK_1_1
+
+void wxMutexGuiEnter()
+{
+  gdk_mutex_enter();
+}
+
+void wxMutexGuiLeave()
+{
+  gdk_mutex_leave();
+}
+
+#else
+
+void wxMutexGuiEnter()
+{
+  wxMainMutex.Lock();
+}
+
+void wxMutexGuiLeave()
+{
+  wxMainMutex.Unlock();
+}
+
+#endif

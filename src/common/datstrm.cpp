@@ -200,12 +200,3 @@ void wxDataOutputStream::WriteDouble(double d)
 #endif
   Write(buf, 10);
 }
-
-// ---------------------------------------------------------------------------
-// wxDataStream
-// ---------------------------------------------------------------------------
-
-wxDataStream::wxDataStream(wxStream& stream)
- : wxDataInputStream(stream), wxDataOutputStream(stream)
-{
-}

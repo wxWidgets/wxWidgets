@@ -41,7 +41,7 @@ wxSocketOutputStream::~wxSocketOutputStream()
 
 wxOutputStream& wxSocketOutputStream::Write(const void *buffer, size_t size)
 {
-  m_o_socket->Write((const char *)buffer, size);
+  m_lastcount = m_o_socket->Write((const char *)buffer, size).LastCount();
   return *this;
 }
 
@@ -60,19 +60,19 @@ wxSocketInputStream::~wxSocketInputStream()
 
 wxInputStream& wxSocketInputStream::Read(void *buffer, size_t size)
 {
-  m_i_socket->Read((char *)buffer, size);
+  m_lastcount = m_i_socket->Read((char *)buffer, size).LastCount();
   return *this;
 }
 
 // ---------------------------------------------------------------------------
-// wxSocketStream (IO)
+// wxSocketStream
 // ---------------------------------------------------------------------------
-wxSocketStream::wxSocketStream(wxSocketBase& i_s, wxSocketBase& o_s)
-  : wxSocketInputStream(i_s), wxSocketOutputStream(o_s)
-{
-}
 
 wxSocketStream::wxSocketStream(wxSocketBase& s)
   : wxSocketInputStream(s), wxSocketOutputStream(s)
+{
+}
+
+wxSocketStream::~wxSocketStream()
 {
 }

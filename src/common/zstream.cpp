@@ -36,7 +36,7 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream& stream)
   int err;
 
   // I need a private stream buffer.
-  m_i_streambuf = new wxStreamBuffer(*this);
+  m_i_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::read);
   m_i_destroybuf = TRUE;
   m_inflate = new z_stream_s;
 
@@ -64,7 +64,7 @@ wxZlibInputStream::~wxZlibInputStream()
   delete m_inflate;
 }
 
-size_t wxZlibInputStream::DoRead(void *buffer, size_t size)
+size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
 {
   int err;
 
@@ -78,7 +78,7 @@ size_t wxZlibInputStream::DoRead(void *buffer, size_t size)
       m_inflate->next_in = m_z_buffer;
       m_inflate->avail_in = m_parent_i_stream->LastRead();
 
-      if (m_parent_i_stream->Eof())
+      if (m_parent_i_stream->LastError() != wxStream_NOERROR)
         return (size - m_inflate->avail_in);
     }
     err = inflate(m_inflate, Z_FINISH);
@@ -87,13 +87,6 @@ size_t wxZlibInputStream::DoRead(void *buffer, size_t size)
   }
 
   return size-m_inflate->avail_in;
-}
-
-bool wxZlibInputStream::Eof() const
-{
-  if (!m_eof)
-    return m_parent_i_stream->Eof();
-  return m_eof;
 }
 
 //////////////////////
@@ -105,7 +98,7 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream)
 {
   int err;
 
-  m_o_streambuf = new wxStreamBuffer(*this);
+  m_o_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::write);
   m_o_destroybuf = TRUE;
   m_deflate = new z_stream_s;
 
@@ -155,7 +148,6 @@ void wxZlibOutputStream::Sync()
 
   err = deflate(m_deflate, Z_FULL_FLUSH);
   if (err != Z_OK) {
-    m_bad = TRUE;
     return;
   }
 
@@ -164,7 +156,7 @@ void wxZlibOutputStream::Sync()
   m_deflate->avail_out = m_z_size;
 }
 
-size_t wxZlibOutputStream::DoWrite(const void *buffer, size_t size)
+size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
   int err;
 
@@ -175,7 +167,7 @@ size_t wxZlibOutputStream::DoWrite(const void *buffer, size_t size)
 
     if (m_deflate->avail_out == 0) {
       m_parent_o_stream->Write(m_z_buffer, m_z_size);
-      if (m_parent_o_stream->Bad())
+      if (m_parent_o_stream->LastError() != wxStream_NOERROR)
         return (size - m_deflate->avail_in);
 
       m_deflate->next_out = m_z_buffer;
@@ -187,11 +179,4 @@ size_t wxZlibOutputStream::DoWrite(const void *buffer, size_t size)
       return (size - m_deflate->avail_in);
   }
   return size;
-}
-
-bool wxZlibOutputStream::Bad() const
-{
-  if (!m_bad)
-    return m_parent_o_stream->Bad();
-  return m_bad;
 }

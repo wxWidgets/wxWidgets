@@ -259,7 +259,7 @@ public:
 
   virtual bool Connect(wxSockAddress& addr_man, bool wait = TRUE);
 
-  bool WaitOnConnect(long seconds = -1);
+  bool WaitOnConnect(long seconds = -1, long microseconds = 0);
 
   virtual void OnRequest(wxRequestEvent flags);
 };

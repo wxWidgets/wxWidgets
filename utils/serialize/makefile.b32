@@ -12,9 +12,10 @@
 
 WXDIR = $(WXWIN)
 
-DLL=1
+!if "$(DLL)" == "1"
 WXBUILDDLL=1
 WXUSINGDLL=1
+!endif
 
 !include $(WXDIR)\src\makeb32.env
 

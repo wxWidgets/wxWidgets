@@ -21,23 +21,11 @@
 #include <wx/stream.h>
 #include <wx/file.h>
 
-// Disable warnings such as
-// 'wxFileStream' : inherits 'wxFileInputStream::Peek' via dominance
-
-#ifdef _MSC_VER
-#pragma warning(disable:4250)
-#endif
-
-class wxFileStreamBase {
-protected:
-  wxFile *m_file;
-  bool m_file_destroy;
-};
-
-class wxFileInputStream: public virtual wxInputStream,
-                         public virtual wxFileStreamBase {
+class wxFileInputStream: public wxInputStream {
  public:
-  wxFileInputStream(const wxString& fileName);
+  wxFileInputStream(const wxString& ifileName);
+  wxFileInputStream(wxFile& file);
+  wxFileInputStream(int fd);
   virtual ~wxFileInputStream();
 
   virtual char Peek();
@@ -47,15 +35,20 @@ class wxFileInputStream: public virtual wxInputStream,
  protected:
   wxFileInputStream();
 
-  size_t DoRead(void *buffer, size_t size);
-  off_t DoSeekInput(off_t pos, wxSeekMode mode);
-  off_t DoTellInput() const;
+  size_t OnSysRead(void *buffer, size_t size);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
+
+ protected:
+  wxFile *m_file;
+  bool m_file_destroy;
 };
 
-class wxFileOutputStream: public virtual wxOutputStream,
-                          public virtual wxFileStreamBase {
+class wxFileOutputStream: public wxOutputStream {
  public:
   wxFileOutputStream(const wxString& fileName);
+  wxFileOutputStream(wxFile& file);
+  wxFileOutputStream(int fd);
   virtual ~wxFileOutputStream();
 
   // To solve an ambiguity on GCC
@@ -69,20 +62,13 @@ class wxFileOutputStream: public virtual wxOutputStream,
  protected:
   wxFileOutputStream();
 
-  size_t DoWrite(const void *buffer, size_t size);
-  off_t DoSeekOutput(off_t pos, wxSeekMode mode);
-  off_t DoTellOutput() const;
-};
+  size_t OnSysWrite(const void *buffer, size_t size);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
 
-class wxFileStream: public wxStream,
-                    public wxFileInputStream, public wxFileOutputStream {
- public:
-  wxFileStream(const wxString& fileName);
-  virtual ~wxFileStream();
+ protected:
+  wxFile *m_file;
+  bool m_file_destroy;
 };
-
-#ifdef _MSC_VER
-#pragma warning(default:4250)
-#endif
 
 #endif

@@ -18,11 +18,11 @@
 #include "wx/stream.h"
 #include "wx/socket.h"
 
-class WXDLLEXPORT wxSocketOutputStream : public virtual wxOutputStream
+class WXDLLEXPORT wxSocketOutputStream : public wxOutputStream
 {
  public:
   wxSocketOutputStream(wxSocketBase& s);
-  virtual ~wxSocketOutputStream();
+  ~wxSocketOutputStream();
 
   wxOutputStream& Write(const void *buffer, size_t size);
   off_t SeekO( off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode) ) 
@@ -30,13 +30,11 @@ class WXDLLEXPORT wxSocketOutputStream : public virtual wxOutputStream
   off_t TellO() 
     { return -1; }
 
-  bool Bad() { return m_o_socket->IsDisconnected(); }
-  size_t LastWrite() { return m_o_socket->LastCount(); }
  protected:
   wxSocketBase *m_o_socket;
 };
 
-class WXDLLEXPORT wxSocketInputStream : public virtual wxInputStream
+class WXDLLEXPORT wxSocketInputStream : public wxInputStream
 {
  public:
   wxSocketInputStream(wxSocketBase& s);
@@ -48,19 +46,16 @@ class WXDLLEXPORT wxSocketInputStream : public virtual wxInputStream
   off_t TellI() 
     { return -1; }
 
-  bool Eof() { return m_i_socket->IsDisconnected(); }
-  size_t LastRead() { return m_i_socket->LastCount(); }
  protected:
   wxSocketBase *m_i_socket;
 };
 
 class WXDLLEXPORT wxSocketStream : public wxSocketInputStream,
-                                   public wxSocketOutputStream,
-				   public wxStream {
-
+				   public wxSocketOutputStream
+{
  public:
-  wxSocketStream(wxSocketBase& i_s, wxSocketBase& o_s);
   wxSocketStream(wxSocketBase& s);
+  ~wxSocketStream();
 };
 
 #endif

@@ -152,7 +152,8 @@ private:
 // ---------------------------------------------------------------------------
 // Global variables
 
-// GUI mutex.
-WXDLLEXPORT_DATA(extern wxMutex) wxMainMutex;
+// GUI mutex handling.
+void WXDLLEXPORT wxMutexGuiEnter();
+void WXDLLEXPORT wxMutexGuiLeave();
 
 #endif

@@ -22,12 +22,8 @@ class wxZlibInputStream: public wxFilterInputStream {
   wxZlibInputStream(wxInputStream& stream);
   virtual ~wxZlibInputStream();
 
-  bool Eof() const;
-
  protected:
-  size_t DoRead(void *buffer, size_t size);
-  off_t DoSeekInput(off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
-  off_t DoTellInput() const { return wxInvalidOffset; }
+  size_t OnSysRead(void *buffer, size_t size);
 
  protected:
   size_t m_z_size;
@@ -42,12 +38,8 @@ class wxZlibOutputStream: public wxFilterOutputStream {
 
   void Sync();
 
-  bool Bad() const;
-
  protected:
-  size_t DoWrite(const void *buffer, size_t size);
-  off_t DoSeekOutput(off_t WXUNUSED(pos), wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
-  off_t DoTellOutput() const { return wxInvalidOffset; }
+  size_t OnSysWrite(const void *buffer, size_t size);
 
  protected:
   size_t m_z_size;

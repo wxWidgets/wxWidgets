@@ -92,7 +92,8 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
   wxSocketHandler *hsock = &wxSocketHandler::Master();
   wxSocketClient *client = hsock->CreateClient();
   wxSocketStream *stream = new wxSocketStream(*client);
-  wxDataStream data_s(*stream);
+  wxDataInputStream data_is(*stream);
+  wxDataOutputStream data_os(*stream);
   
   client->SetNotify(wxSocketBase::REQ_READ | wxSocketBase::REQ_LOST);
   addr.Service(server_name);
@@ -107,10 +108,10 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
   // Send topic name, and enquire whether this has succeeded
   unsigned char msg;
   
-  data_s.Write8(IPC_CONNECT);
-  data_s.WriteString(topic);
+  data_os.Write8(IPC_CONNECT);
+  data_os.WriteString(topic);
   
-  msg = data_s.Read8();
+  msg = data_is.Read8();
   
   // OK! Confirmation.
   if (msg == IPC_CONNECT) {
@@ -183,14 +184,15 @@ wxConnectionBase *wxTCPServer::OnAcceptConnection( const wxString& WXUNUSED(topi
 
 wxTCPConnection::wxTCPConnection (void)
   : wxConnectionBase(),
-    m_sock(NULL), m_sockstrm(NULL), m_codec(NULL)
+    m_sock(NULL), m_sockstrm(NULL), m_codeci(NULL), m_codeco(NULL)
 {
 }
 
 wxTCPConnection::~wxTCPConnection (void)
 {
   wxDELETE(m_sock);
-  wxDELETE(m_codec);
+  wxDELETE(m_codeci);
+  wxDELETE(m_codeco);
   wxDELETE(m_sockstrm);
 }
 
@@ -203,7 +205,7 @@ void wxTCPConnection::Compress(bool WXUNUSED(on))
 bool wxTCPConnection::Disconnect (void)
 {
   // Send the the disconnect message to the peer.
-  m_codec->Write8(IPC_DISCONNECT);
+  m_codeco->Write8(IPC_DISCONNECT);
   m_sock->Close();
 
   return TRUE;
@@ -215,13 +217,13 @@ bool wxTCPConnection::Execute (char *data, int size, wxDataFormat format)
     return FALSE;
 
   // Prepare EXECUTE message
-  m_codec->Write8(IPC_EXECUTE);
-  m_codec->Write8(format);
+  m_codeco->Write8(IPC_EXECUTE);
+  m_codeco->Write8(format);
   if (size < 0)
-    m_codec->WriteString(data);
+    m_codeco->WriteString(data);
   else {
-    m_codec->Write32(size);
-    m_codec->Write(data, size);
+    m_codeco->Write32(size);
+    m_codeco->Write(data, size);
   }
 
   return TRUE;
@@ -232,23 +234,23 @@ char *wxTCPConnection::Request (const wxString& item, int *size, wxDataFormat fo
   if (!m_sock->IsConnected())
     return NULL;
 
-  m_codec->Write8(IPC_REQUEST);
-  m_codec->WriteString(item);
-  m_codec->Write8(format);
+  m_codeco->Write8(IPC_REQUEST);
+  m_codeco->WriteString(item);
+  m_codeco->Write8(format);
 
   // If Unpack doesn't initialize it.
   int ret;
 
-  ret = m_codec->Read8();
+  ret = m_codeci->Read8();
   if (ret == IPC_FAIL)
     return NULL;
   else {
     size_t s;
     char *data = NULL;
 
-    s = m_codec->Read32();
+    s = m_codeci->Read32();
     data = new char[s];
-    m_codec->Read(data, s);
+    m_codeci->Read(data, s);
 
     if (size)
       *size = s;
@@ -261,14 +263,14 @@ bool wxTCPConnection::Poke (const wxString& item, char *data, int size, wxDataFo
   if (!m_sock->IsConnected())
     return FALSE;
 
-  m_codec->Write8(IPC_POKE);
-  m_codec->WriteString(item);
-  m_codec->Write8(format);
+  m_codeco->Write8(IPC_POKE);
+  m_codeco->WriteString(item);
+  m_codeco->Write8(format);
   if (size < 0)
-    m_codec->WriteString(data);
+    m_codeco->WriteString(data);
   else {
-    m_codec->Write32(size);
-    m_codec->Write(data, size);
+    m_codeco->Write32(size);
+    m_codeco->Write(data, size);
   }
 
   return TRUE;
@@ -281,10 +283,10 @@ bool wxTCPConnection::StartAdvise (const wxString& item)
   if (!m_sock->IsConnected())
     return FALSE;
 
-  m_codec->Write8(IPC_ADVISE_START);
-  m_codec->WriteString(item);
+  m_codeco->Write8(IPC_ADVISE_START);
+  m_codeco->WriteString(item);
 
-  ret = m_codec->Read8();
+  ret = m_codeci->Read8();
 
   if (ret != IPC_FAIL)
     return TRUE;
@@ -299,10 +301,10 @@ bool wxTCPConnection::StopAdvise (const wxString& item)
   if (!m_sock->IsConnected())
     return FALSE;
 
-  m_codec->Write8(IPC_ADVISE_STOP);
-  m_codec->WriteString(item);
+  m_codeco->Write8(IPC_ADVISE_STOP);
+  m_codeco->WriteString(item);
 
-  msg = m_codec->Read8();
+  msg = m_codeci->Read8();
 
   if (msg != IPC_FAIL)
     return TRUE;
@@ -317,14 +319,14 @@ bool wxTCPConnection::Advise (const wxString& item,
   if (!m_sock->IsConnected())
     return FALSE;
 
-  m_codec->Write8(IPC_ADVISE);
-  m_codec->WriteString(item);
-  m_codec->Write8(format);
+  m_codeco->Write8(IPC_ADVISE);
+  m_codeco->WriteString(item);
+  m_codeco->Write8(format);
   if (size < 0)
-    m_codec->WriteString(data);
+    m_codeco->WriteString(data);
   else {
-    m_codec->Write32(size);
-    m_codec->Write(data, size);
+    m_codeco->Write32(size);
+    m_codeco->Write(data, size);
   }
 
   return TRUE;
@@ -335,7 +337,8 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
 {
   int msg = 0;
   wxTCPConnection *connection = (wxTCPConnection *)cdata;
-  wxDataStream *codec;
+  wxDataInputStream *codeci;
+  wxDataOutputStream *codeco; 
   wxString topic_name = connection->m_topic;
   wxString item;
 
@@ -347,8 +350,9 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
   }
 
   // Receive message number.
-  codec = connection->m_codec;
-  msg = codec->Read8();
+  codeci = connection->m_codeci;
+  codeco = connection->m_codeco;
+  msg = codeci->Read8();
 
   switch (msg) {
   case IPC_EXECUTE: {
@@ -356,10 +360,10 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
     size_t size; 
     wxDataFormat format;
     
-    format = (wxDataFormat)codec->Read8();
-    size = codec->Read32();
+    format = (wxDataFormat)codeci->Read8();
+    size = codeci->Read32();
     data = new char[size];
-    codec->Read(data, size);
+    codeci->Read(data, size);
 
     connection->OnExecute (topic_name, data, size, format);
 
@@ -371,11 +375,11 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
     size_t size;
     wxDataFormat format;
 
-    item = codec->ReadString();
-    format = (wxDataFormat)codec->Read8();
-    size = codec->Read32();
+    item = codeci->ReadString();
+    format = (wxDataFormat)codeci->Read8();
+    size = codeci->Read32();
     data = new char[size];
-    codec->Read(data, size);
+    codeci->Read(data, size);
     
     connection->OnAdvise (topic_name, item, data, size, format);
 
@@ -383,24 +387,24 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
     break;
   }
   case IPC_ADVISE_START: {
-    item = codec->ReadString();
+    item = codeci->ReadString();
 
     bool ok = connection->OnStartAdvise (topic_name, item);
     if (ok)
-      codec->Write8(IPC_ADVISE_START);
+      codeco->Write8(IPC_ADVISE_START);
     else
-      codec->Write8(IPC_FAIL);
+      codeco->Write8(IPC_FAIL);
 
     break;
   }
   case IPC_ADVISE_STOP: {
-    item = codec->ReadString();
+    item = codeci->ReadString();
 
     bool ok = connection->OnStopAdvise (topic_name, item);
     if (ok)
-      codec->Write8(IPC_ADVISE_STOP);
+      codeco->Write8(IPC_ADVISE_STOP);
     else
-      codec->Write8(IPC_FAIL);
+      codeco->Write8(IPC_FAIL);
 
     break;
   }
@@ -409,11 +413,11 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
     size_t size;
     char *data;
 
-    item = codec->ReadString();
-    format = (wxDataFormat)codec->Read8();
-    size = codec->Read32();
+    item = codeci->ReadString();
+    format = (wxDataFormat)codeci->Read8();
+    size = codeci->Read32();
     data = new char[size];
-    codec->Read(data, size);
+    codeci->Read(data, size);
     
     connection->OnPoke (topic_name, item, data, size, format);
 
@@ -424,21 +428,21 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
   case IPC_REQUEST: {
     wxDataFormat format;
 
-    item = codec->ReadString();
-    format = (wxDataFormat)codec->Read8();
+    item = codeci->ReadString();
+    format = (wxDataFormat)codeci->Read8();
 
     int user_size = -1;
     char *user_data = connection->OnRequest (topic_name, item, &user_size, format);
 
     if (user_data) {
-      codec->Write8(IPC_REQUEST_REPLY);
+      codeco->Write8(IPC_REQUEST_REPLY);
       if (user_size != -1) {
-        codec->Write32(user_size);
-        codec->Write(user_data, user_size);
+        codeco->Write32(user_size);
+        codeco->Write(user_data, user_size);
       } else
-        codec->WriteString(user_data);
+        codeco->WriteString(user_data);
     } else
-      codec->Write8(IPC_FAIL);
+      codeco->Write8(IPC_FAIL);
 
     break;
   }
@@ -448,7 +452,7 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
     break;
   }
   default:
-    codec->Write8(IPC_FAIL);
+    codeco->Write8(IPC_FAIL);
     break;
   }
 }
@@ -458,7 +462,8 @@ void Server_OnRequest(wxSocketServer& server,
 {
   wxTCPServer *ipcserv = (wxTCPServer *)cdata;
   wxSocketStream *stream;
-  wxDataStream *codec;
+  wxDataInputStream *codeci;
+  wxDataOutputStream *codeco;
 
   if (evt != wxSocketBase::EVT_ACCEPT)
     return;
@@ -469,17 +474,18 @@ void Server_OnRequest(wxSocketServer& server,
   sock->SetNotify(wxSocketBase::REQ_READ | wxSocketBase::REQ_LOST);
 
   stream = new wxSocketStream(*sock);
-  codec = new wxDataStream(*stream);
+  codeci = new wxDataInputStream(*stream);
+  codeco = new wxDataOutputStream(*stream);
 
   if (!sock->Ok())
     return;
 
   int msg;
-  msg = codec->Read8();
+  msg = codeci->Read8();
 
   if (msg == IPC_CONNECT) {
     wxString topic_name;
-    topic_name = codec->ReadString();
+    topic_name = codeci->ReadString();
 
     /* Register new socket with the notifier */
     wxTCPConnection *new_connection =
@@ -487,21 +493,22 @@ void Server_OnRequest(wxSocketServer& server,
     if (new_connection) {
       if (!new_connection->IsKindOf(CLASSINFO(wxTCPConnection))) {
         delete new_connection;
-        codec->Write8(IPC_FAIL);
+        codeco->Write8(IPC_FAIL);
         return;
       }
       // Acknowledge success
-      codec->Write8(IPC_CONNECT);
+      codeco->Write8(IPC_CONNECT);
       
       new_connection->m_topic = topic_name;
       new_connection->m_sockstrm = stream;
-      new_connection->m_codec = codec;
+      new_connection->m_codeci = codeci;
+      new_connection->m_codeco = codeco;
       sock->Callback(Client_OnRequest);
       sock->CallbackData((char *)new_connection);
       sock->Notify(TRUE);
     } else {
       // Send failure message
-      codec->Write8(IPC_FAIL);
+      codeco->Write8(IPC_FAIL);
     }
   }
 }

@@ -1246,9 +1246,9 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
   return TRUE;
 }
 
-bool wxSocketClient::WaitOnConnect(long seconds)
+bool wxSocketClient::WaitOnConnect(long seconds, long microseconds)
 {
-  int ret = _Wait(seconds, 0, REQ_CONNECT | REQ_LOST);
+  int ret = _Wait(seconds, microseconds, REQ_CONNECT | REQ_LOST);
 
   if (ret)
     m_connected = TRUE;

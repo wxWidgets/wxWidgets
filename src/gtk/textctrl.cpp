@@ -300,17 +300,29 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
 
 void wxTextCtrl::Cut()
 {
+#if (GTK_MINOR_VERSION == 1)
+  gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
+#else
   gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
+#endif
 }
 
 void wxTextCtrl::Copy()
 {
+#if (GTK_MINOR_VERSION == 1)
+  gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) );
+#else
   gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
+#endif
 }
 
 void wxTextCtrl::Paste()
 {
+#if (GTK_MINOR_VERSION == 1)
+  gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
+#else
   gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
+#endif
 }
 
 void wxTextCtrl::Clear()
