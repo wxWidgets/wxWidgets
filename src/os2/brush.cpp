@@ -29,164 +29,232 @@ IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
 
 wxBrushRefData::wxBrushRefData()
 {
-    m_style = wxSOLID;
+    m_nStyle = wxSOLID;
     m_hBrush = 0;
-}
+    memset(&m_vBundle, '\0', sizeof(AREABUNDLE));
+} // end of wxBrushRefData::wxBrushRefData
 
-wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
+wxBrushRefData::wxBrushRefData(
+  const wxBrushRefData&             rData
+)
 {
-    m_style = data.m_style;
-    m_stipple = data.m_stipple;
-    m_colour = data.m_colour;
-    m_hBrush = 0;
-}
+    m_nStyle   = rData.m_nStyle;
+    m_vStipple = rData.m_vStipple;
+    m_vColour  = rData.m_vColour;
+    m_hBrush   = 0;
+    memcpy(&m_vBundle, &rData.m_vBundle, sizeof(AREABUNDLE));
+} // end of wxBrushRefData::wxBrushRefData
 
 wxBrushRefData::~wxBrushRefData()
 {
-// TODO: delete data
-}
+} // end of wxBrushRefData::~wxBrushRefData
 
+//
 // Brushes
+//
 wxBrush::wxBrush()
 {
     if ( wxTheBrushList )
         wxTheBrushList->AddBrush(this);
-}
+} // end of wxBrush::wxBrush
 
 wxBrush::~wxBrush()
 {
     if ( wxTheBrushList )
         wxTheBrushList->RemoveBrush(this);
-}
+} // end of wxBrush::~wxBrush
 
-wxBrush::wxBrush(const wxColour& col, int Style)
+wxBrush::wxBrush(
+  const wxColour&                   rColour
+, int                               nStyle
+)
 {
     m_refData = new wxBrushRefData;
 
-    M_BRUSHDATA->m_colour = col;
-    M_BRUSHDATA->m_style = Style;
-    M_BRUSHDATA->m_hBrush = 0;
+    M_BRUSHDATA->m_vColour = rColour;
+    M_BRUSHDATA->m_nStyle  = nStyle;
+    M_BRUSHDATA->m_hBrush  = 0;
+    memset(&M_BRUSHDATA->m_vBundle, '\0', sizeof(AREABUNDLE));
 
     RealizeResource();
 
     if ( wxTheBrushList )
         wxTheBrushList->AddBrush(this);
-}
+} // end of wxBrush::wxBrush
 
-wxBrush::wxBrush(const wxBitmap& stipple)
+wxBrush::wxBrush(
+  const wxBitmap&                   rStipple
+)
 {
     m_refData = new wxBrushRefData;
 
-    M_BRUSHDATA->m_style = wxSTIPPLE;
-    M_BRUSHDATA->m_stipple = stipple;
-    M_BRUSHDATA->m_hBrush = 0;
+    M_BRUSHDATA->m_nStyle   = wxSTIPPLE;
+    M_BRUSHDATA->m_vStipple = rStipple;
+    M_BRUSHDATA->m_hBrush  = 0;
+    memset(&M_BRUSHDATA->m_vBundle, '\0', sizeof(AREABUNDLE));
 
     RealizeResource();
 
     if ( wxTheBrushList )
         wxTheBrushList->AddBrush(this);
-}
+} // end of wxBrush::wxBrush
 
-bool wxBrush::RealizeResource(void)
+bool wxBrush::RealizeResource()
 {
-// TODO:
-/*
-    if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0))
+    BOOL                            bOk;
+    ERRORID                         vError;
+    wxString                        sError;
+
+    if (M_BRUSHDATA && M_BRUSHDATA->m_hBrush == 0L)
     {
-        if (M_BRUSHDATA->m_style==wxTRANSPARENT)
+        SIZEL                   vSize = {0, 0};
+        DEVOPENSTRUC            vDop = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+        HDC                     hDC = ::DevOpenDC( vHabmain
+                                                  ,OD_MEMORY
+                                                  ,"*"
+                                                  ,5L
+                                                  ,(PDEVOPENDATA)&vDop
+                                                  ,NULLHANDLE
+                                                 );
+        M_BRUSHDATA->m_hBrush = (WXHPEN)::GpiCreatePS( vHabmain
+                                                      ,hDC
+                                                      ,&vSize
+                                                      ,PU_PELS | GPIT_MICRO | GPIA_ASSOC
+                                                     );
+    }
+    if (M_BRUSHDATA)
+    {
+        //
+        // Set the color table to RGB mode
+        //
+        if (!::GpiCreateLogColorTable( (HPS)M_BRUSHDATA->m_hBrush
+                                      ,0L
+                                      ,LCOLF_RGB
+                                      ,0L
+                                      ,0L
+                                      ,NULL
+                                     ))
         {
-            M_BRUSHDATA->m_hBrush = (WXHBRUSH) ::GetStockObject(NULL_BRUSH);
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Unable to set current color table to RGB mode. Error: %s\n", sError);
+            return FALSE;
+        }
+
+        if (M_BRUSHDATA->m_nStyle==wxTRANSPARENT)
+        {
             return TRUE;
         }
-        COLORREF ms_colour = 0 ;
+        COLORREF                    vPmColour = 0L;
 
-        ms_colour = M_BRUSHDATA->m_colour.GetPixel() ;
+        vPmColour = M_BRUSHDATA->m_vColour.GetPixel() ;
 
-        switch (M_BRUSHDATA->m_style)
+        M_BRUSHDATA->m_vBundle.usSet = LCID_DEFAULT;
+        switch (M_BRUSHDATA->m_nStyle)
         {
-//
-    // Don't reset cbrush, wxTRANSPARENT is handled by wxBrush::SelectBrush()
-    // this could save (many) time if frequently switching from
-    // wxSOLID to wxTRANSPARENT, because Create... is not always called!!
-    //
-    // NB August 95: now create and select a Null brush instead.
-    // This could be optimized as above.
-    case wxTRANSPARENT:
-      M_BRUSHDATA->m_hBrush = NULL;  // Must always select a suitable background brush
-                      // - could choose white always for a quick solution
-      break;
-//
+            case wxTRANSPARENT:
+                M_BRUSHDATA->m_hBrush = NULL;  // Must always select a suitable background brush
+                break;                         // - could choose white always for a quick solution
+
             case wxBDIAGONAL_HATCH:
-                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_BDIAGONAL,ms_colour) ;
-                break ;
+                M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_DIAG3;
+                break;
 
             case wxCROSSDIAG_HATCH:
-                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_DIAGCROSS,ms_colour) ;
-                break ;
+                M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_DIAGHATCH;
+                break;
 
             case wxFDIAGONAL_HATCH:
-                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_FDIAGONAL,ms_colour) ;
-                break ;
+                M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_DIAG1;
+                break;
 
             case wxCROSS_HATCH:
-                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_CROSS,ms_colour) ;
-                break ;
+                M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_HATCH;
+                break;
 
             case wxHORIZONTAL_HATCH:
-                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_HORIZONTAL,ms_colour) ;
-                break ;
+                M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_HORIZ;
+                break;
 
             case wxVERTICAL_HATCH:
-                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateHatchBrush(HS_VERTICAL,ms_colour) ;
-                break ;
+                M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_VERT;
+                break;
 
             case wxSTIPPLE:
-                if (M_BRUSHDATA->m_stipple.Ok())
-                    M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreatePatternBrush((HBITMAP) M_BRUSHDATA->m_stipple.GetHBITMAP()) ;
+                if (M_BRUSHDATA->m_vStipple.Ok())
+                {
+                    ::GpiSetBitmapId( M_BRUSHDATA->m_hBrush
+                                     ,(USHORT)M_BRUSHDATA->m_vStipple.GetHBITMAP()
+                                     ,(USHORT)M_BRUSHDATA->m_vStipple.GetId()
+                                    );
+                    ::GpiSetPatternSet( M_BRUSHDATA->m_hBrush
+                                       ,(USHORT)M_BRUSHDATA->m_vStipple.GetId()
+                                      );
+                }
                 else
-                    M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateSolidBrush(ms_colour) ;
+                    M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_SOLID;
                 break ;
 
             case wxSOLID:
             default:
-                M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateSolidBrush(ms_colour) ;
+                M_BRUSHDATA->m_vBundle.usSymbol = PATSYM_SOLID;
                 break;
         }
 #ifdef WXDEBUG_CREATE
         if (M_BRUSHDATA->m_hBrush==NULL) wxError("Cannot create brush","Internal error") ;
 #endif
-        return TRUE;
+        M_BRUSHDATA->m_vBundle.lColor        = vPmColour;
+        M_BRUSHDATA->m_vBundle.lBackColor    = CLR_DEFAULT;
+        M_BRUSHDATA->m_vBundle.usMixMode     = FM_OVERPAINT;
+        M_BRUSHDATA->m_vBundle.usBackMixMode = BM_OVERPAINT;
+
+        bOk = ::GpiSetAttrs( M_BRUSHDATA->m_hBrush
+                            ,PRIM_AREA
+                            ,ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE |
+                             ABB_SET | ABB_SYMBOL
+                            ,ABB_REF_POINT
+                            ,&M_BRUSHDATA->m_vBundle
+                           );
+        if (!bOk)
+        {
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n", sError);
+        }
+        return bOk;
     }
-    else
-        return FALSE;
-*/
     return FALSE;
-}
+} // end of wxBrush::RealizeResource
 
-WXHANDLE wxBrush::GetResourceHandle(void)
+WXHANDLE wxBrush::GetResourceHandle()
 {
-  return (WXHANDLE) M_BRUSHDATA->m_hBrush;
-}
+    if (!M_BRUSHDATA)
+        return 0;
+    return (WXHANDLE)M_BRUSHDATA->m_hBrush;
+} // end of wxBrush::GetResourceHandle
 
-bool wxBrush::FreeResource(bool WXUNUSED(force))
+bool wxBrush::FreeResource(
+  bool                              WXUNUSED(bForce)
+)
 {
     if (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush != 0))
     {
-// TODO    DeleteObject((HBRUSH) M_BRUSHDATA->m_hBrush);
         M_BRUSHDATA->m_hBrush = 0;
         return TRUE;
     }
     else return FALSE;
-}
+} // end of wxBrush::FreeResource
 
 bool wxBrush::IsFree() const
 {
   return (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0));
-}
+} // end of wxBrush::IsFree
 
 void wxBrush::Unshare()
 {
+    //
     // Don't change shared data
+    //
     if (!m_refData)
     {
         m_refData = new wxBrushRefData();
@@ -197,41 +265,57 @@ void wxBrush::Unshare()
         UnRef();
         m_refData = ref;
     }
-}
+} // end of wxBrush::Unshare
 
-void wxBrush::SetColour(const wxColour& col)
+void wxBrush::SetColour(
+  const wxColour&                   rColour
+)
 {
     Unshare();
-
-    M_BRUSHDATA->m_colour = col;
-
+    M_BRUSHDATA->m_vColour = rColour;
     RealizeResource();
 }
 
-void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
+void wxBrush::SetColour(
+  unsigned char                     cRed
+, unsigned char                     cGreen
+, unsigned char                     cBlue
+)
 {
     Unshare();
-
-    M_BRUSHDATA->m_colour.Set(r, g, b);
-
+    M_BRUSHDATA->m_vColour.Set( cRed
+                               ,cGreen
+                               ,cBlue
+                              );
     RealizeResource();
-}
+} // end of wxBrush::SetColour
 
-void wxBrush::SetStyle(int Style)
+void wxBrush::SetStyle(
+  int                               nStyle
+)
 {
     Unshare();
-
-    M_BRUSHDATA->m_style = Style;
-
+    M_BRUSHDATA->m_nStyle = nStyle;
     RealizeResource();
-}
+} // end of wxBrush::SetStyle
 
-void wxBrush::SetStipple(const wxBitmap& Stipple)
+void wxBrush::SetStipple(
+  const wxBitmap&                   rStipple
+)
 {
     Unshare();
-
-    M_BRUSHDATA->m_stipple = Stipple;
-
+    M_BRUSHDATA->m_vStipple = rStipple;
     RealizeResource();
-}
+} // end of wxBrush::SetStipple
+
+void wxBrush::SetPS(
+  HPS                               hPS
+)
+{
+    Unshare();
+    if (M_BRUSHDATA->m_hBrush)
+        ::GpiDestroyPS(M_BRUSHDATA->m_hBrush);
+    M_BRUSHDATA->m_hBrush = hPS;
+    RealizeResource();
+} // end of WxWinGdi_CPen::SetPS
 

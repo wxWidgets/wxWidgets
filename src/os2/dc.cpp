@@ -1011,15 +1011,43 @@ void wxDC::SetPen(
                 m_hOldPen = m_pen.GetPS();
         }
     }
-
 }
 
 void wxDC::SetBrush(
   const wxBrush&                    rBrush
 )
 {
-   // TODO
-}
+    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+
+    if (m_brush == rBrush)
+        return;
+    m_brush = rBrush;
+    if (!m_brush.Ok())
+        return;
+
+    if (m_hOldBrush)
+        m_hOldBrush = 0L;
+    m_brush = rBrush;
+
+    if (!m_brush.Ok())
+    {
+        if (m_hOldBrush)
+        {
+            m_brush.SetPS((HPS)m_hOldBrush);
+        }
+        m_hOldBrush = 0L;
+    }
+
+    if (m_brush.Ok())
+    {
+        if (m_brush.GetResourceHandle())
+        {
+            m_brush.SetPS(m_hPS);
+            if (!m_hOldBrush)
+                m_hOldBrush = m_brush.GetPS();
+        }
+    }
+} // end of wxDC::SetBrush
 
 void wxDC::SetBackground(const wxBrush& brush)
 {

@@ -274,36 +274,6 @@ wxPaintDC::wxPaintDC(
         HPS                         hPS;
         HRGN                        hRgn;
 
-        memset(&g_paintStruct, '\0', sizeof(RECTL));
-        if (!::WinQueryUpdateRect(GetWinHwnd(m_pCanvas), &g_paintStruct))
-        {
-             wxLogLastError("CreateRectRgn");
-//             return;
-        }
-        m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(m_pCanvas));
-        m_hPS = ::GpiCreatePS( wxGetInstance()
-                              ,m_hDC
-                              ,&vSizl
-                              ,PU_PELS | GPIF_LONG | GPIA_ASSOC
-                             );
-
-        // Set the wxWindows color table
-        ::GpiCreateLogColorTable( m_hPS
-                                 ,0L
-                                 ,LCOLF_CONSECRGB
-                                 ,0L
-                                 ,(LONG)wxTheColourDatabase->m_nSize
-                                 ,(PLONG)wxTheColourDatabase->m_palTable
-                                );
-        ::GpiCreateLogColorTable( m_hPS
-                                 ,0L
-                                 ,LCOLF_RGB
-                                 ,0L
-                                 ,0L
-                                 ,NULL
-                                );
-
-#if 0
         hPS = ::WinBeginPaint( GetWinHwnd(m_pCanvas)
                               ,NULLHANDLE
                               ,&g_paintStruct
@@ -327,7 +297,6 @@ wxPaintDC::wxPaintDC(
                                      ,NULL
                                     );
         }
-#endif
 
         m_bIsPaintTime   = TRUE;
         m_hDC = (WXHDC) -1; // to satisfy those anonizmous efforts
