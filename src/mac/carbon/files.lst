@@ -90,6 +90,7 @@ ALL_SOURCES = \
 		common/imagpng.cpp \
 		common/imagpnm.cpp \
 		common/imagtiff.cpp \
+		common/imagxpm.cpp \
 		common/intl.cpp \
 		common/ipcbase.cpp \
 		common/layout.cpp \
@@ -259,6 +260,7 @@ ALL_HEADERS = \
 		imagpng.h \
 		imagpnm.h \
 		imagtiff.h \
+		imagxpm.h \
 		intl.h \
 		ioswrap.h \
 		ipcbase.h \
@@ -476,6 +478,7 @@ COMMONOBJS = \
 		imagpng.o \
 		imagpnm.o \
 		imagtiff.o \
+		imagxpm.o \
 		intl.o \
 		ipcbase.o \
 		layout.o \
@@ -582,6 +585,7 @@ COMMONDEPS = \
 		imagpng.d \
 		imagpnm.d \
 		imagtiff.d \
+		imagxpm.d \
 		intl.d \
 		ipcbase.d \
 		layout.d \
