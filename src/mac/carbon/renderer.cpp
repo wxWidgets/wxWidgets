@@ -34,7 +34,7 @@
 // wxRendererMac: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererMac : public wxRendererNative
+class WXDLLEXPORT wxRendererMac : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
@@ -114,7 +114,7 @@ static const char *aqua_arrow_down_xpm[] = {
 // ============================================================================
 
 /* static */
-wxRendererNative& wxRendererMac::Get()
+wxRendererNative& wxRendererNative::Get()
 {
     static wxRendererMac s_rendererMac;
 
