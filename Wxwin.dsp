@@ -46,21 +46,6 @@ BSC32=bscmake.exe
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
-# Begin Custom Build
-InputPath=.\Release\Wxwin.lib
-SOURCE=$(InputPath)
-
-BuildCmds= \
-	copy src\common\doslex.c src\common\lex_yy.c \
-	copy src\common\dosyacc.c src\common\y_tab.c \
-	
-
-"src\common\lex_yy.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"src\common\y_tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
 
 !ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
 
