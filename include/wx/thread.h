@@ -312,7 +312,7 @@ protected:
     // Returns TRUE if the thread was asked to terminate: this function should
     // be called by the thread from time to time, otherwise the main thread
     // will be left forever in Delete()!
-    bool TestDestroy() const;
+    bool TestDestroy();
 
     // exits from the current thread - can be called only from this thread
     void Exit(void *exitcode = 0);

@@ -634,7 +634,7 @@ void wxThread::Exit(void *status)
 }
 
 // also test whether we were paused
-bool wxThread::TestDestroy() const
+bool wxThread::TestDestroy()
 {
     wxCriticalSectionLocker lock((wxCriticalSection&)m_critsect);
 
