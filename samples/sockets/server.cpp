@@ -264,7 +264,7 @@ void MyFrame::Test2(wxSocketBase *sock)
 
   s.Printf(_("Client says: %s\n"), buf);
   m_text->AppendText(s);
-  m_text->AppendText(_("Sending the data back"));
+  m_text->AppendText(_("Sending the data back\n"));
 
   sock->WriteMsg(buf, len);
   delete[] buf;

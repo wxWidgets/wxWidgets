@@ -528,9 +528,9 @@ void MyFrame::OnCloseConnection(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
 {
-  m_text->AppendText(_("=== Datagram test begins ==="));
-  m_text->AppendText(_("Sorry, not implemented"));
-  m_text->AppendText(_("=== Datagram test ends ==="));
+  m_text->AppendText(_("=== Datagram test begins ===\n"));
+  m_text->AppendText(_("Sorry, not implemented\n"));
+  m_text->AppendText(_("=== Datagram test ends ===\n"));
 }
 
 void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
