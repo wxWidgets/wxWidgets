@@ -1068,7 +1068,7 @@ public:
     void DisableCellEditControl() { EnableCellEditControl(FALSE); }
     bool CanEnableCellControl() const;
     bool IsCellEditControlEnabled() const;
-    bool IsCellEditControlDisplayed() const;
+    bool IsCellEditControlShown() const;
 
     bool IsCurrentCellReadOnly() const;
 

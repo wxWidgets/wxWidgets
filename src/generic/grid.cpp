@@ -4399,7 +4399,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         {
             // Hide the edit control, so it
             // won't interfer with drag-shrinking.
-            if ( IsCellEditControlEnabled() )
+            if ( IsCellEditControlShown() )
             {
                 HideCellEditControl();
                 SaveEditControlValue();
@@ -5453,7 +5453,8 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     rect.height = GetRowHeight(row) - 1;
 
     // if the editor is shown, we should use it and not the renderer
-    if ( isCurrent && IsCellEditControlEnabled() )
+    // Note: However, only if it is really _shown_, i.e. not hidden!
+    if ( isCurrent && IsCellEditControlShown() )
     {
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
         editor->PaintBackground(rect, attr);
@@ -5547,7 +5548,7 @@ void wxGrid::DrawHighlight(wxDC& dc)
         m_currentCellCoords.Set(0, 0);
     }
 
-    if ( IsCellEditControlEnabled() )
+    if ( IsCellEditControlShown() )
     {
         // don't show highlight when the edit control is shown
         return;
@@ -5945,7 +5946,7 @@ bool wxGrid::IsCellEditControlEnabled() const
     return m_cellEditCtrlEnabled ? !IsCurrentCellReadOnly() : FALSE;
 }
 
-bool wxGrid::IsCellEditControlDisplayed() const
+bool wxGrid::IsCellEditControlShown() const
 {
     if (m_cellEditCtrlEnabled)
     {
@@ -7710,7 +7711,7 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
 
         if ( m_currentCellCoords.GetRow() == row &&
              m_currentCellCoords.GetCol() == col &&
-             IsCellEditControlDisplayed())
+             IsCellEditControlShown())
              // Note: If we are using IsCellEditControlEnabled,
              // this interacts badly with calling SetCellValue from
              // an EVT_GRID_CELL_CHANGE handler.
