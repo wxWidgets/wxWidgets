@@ -180,6 +180,8 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
     // the CS_OWNDC style for GLCanvas.
 
 /*
+    From Angel Popov <jumpo@bitex.com>
+
     Here are two snips from a dicussion in the OpenGL Gamedev list that explains
     how this problem can be fixed:
 
@@ -220,6 +222,7 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
 
             return FALSE;
         }
+        registeredGLCanvasClass = TRUE;
     }
 
     wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
