@@ -54,6 +54,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
     EVT_CHAR(wxSpinCtrl::OnChar)
+
+    EVT_SET_FOCUS(wxSpinCtrl::OnSetFocus)
+
     EVT_SPIN(-1, wxSpinCtrl::OnSpinChange)
 END_EVENT_TABLE()
 
@@ -90,6 +93,12 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
     switch ( message )
     {
         case WM_SETFOCUS:
+            // if the focus comes from the spin control itself, don't set it
+            // back to it -- we don't want to go into an infinite loop
+            if ( wParam == spin->GetHWND() )
+                break;
+            //else: fall through
+
         case WM_KILLFOCUS:
         case WM_CHAR:
         case WM_DEADCHAR:
@@ -197,6 +206,15 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
     event.Skip();
 }
 
+void wxSpinCtrl::OnSetFocus(wxFocusEvent& event)
+{
+    // when we get focus, give it to our buddy window as it needs it more than
+    // we do
+    ::SetFocus((HWND)m_hwndBuddy);
+
+    event.Skip();
+}
+
 // ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
@@ -239,14 +257,13 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     wxPoint posBtn(pos);
     posBtn.x += sizeText.x + MARGIN_BETWEEN;
 
-    // create the spin button
-    if ( !wxSpinButton::Create(parent, id, posBtn, sizeBtn, style, name) )
-    {
-        return FALSE;
-    }
+    // we must create the text control before the spin button for the purpose
+    // of the dialog navigation: if there is a static text just before the spin
+    // control, activating it by Alt-letter should give focus to the text
+    // control, not the spin and the dialog navigation code will give focus to
+    // the next control (at Windows level), not the one after it
 
-    SetRange(min, max);
-    SetValue(initial);
+    // create the text window
 
     bool want3D;
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
@@ -260,13 +277,12 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( style & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
 
-    // create the text window
     m_hwndBuddy = (WXHWND)::CreateWindowEx
                     (
                      exStyle,       // sunken border
                      _T("EDIT"),             // window class
                      NULL,                   // no window title
-                     msStyle /* | WS_CLIPSIBLINGS */,   // style (will be shown later)
+                     msStyle,                // style (will be shown later)
                      pos.x, pos.y,           // position
                      0, 0,                   // size (will be set later)
                      GetHwndOf(parent),      // parent
@@ -281,6 +297,16 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
         return FALSE;
     }
+
+
+    // create the spin button
+    if ( !wxSpinButton::Create(parent, id, posBtn, sizeBtn, style, name) )
+    {
+        return FALSE;
+    }
+
+    SetRange(min, max);
+    SetValue(initial);
 
     // subclass the text ctrl to be able to intercept some events
     m_wndProcBuddy = (WXFARPROC)::GetWindowLong(GetBuddyHwnd(), GWL_WNDPROC);
