@@ -1763,24 +1763,6 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 
 wxTextCtrl* wxTreeCtrl::GetEditControl() const
 {
-    // normally, we could try to do something like this to return something
-    // even when the editing was started by the user and not by calling
-    // EditLabel() - but as nobody has asked for this so far and there might be
-    // problems in the code below, I leave it disabled for now (VZ)
-#if 0
-    if ( !m_textCtrl )
-    {
-        HWND hwndText = TreeView_GetEditControl(GetHwnd());
-        if ( hwndText )
-        {
-            m_textCtrl = new wxTextCtrl(this, -1);
-            m_textCtrl->Hide();
-            m_textCtrl->SetHWND((WXHWND)hwndText);
-        }
-        //else: not editing label right now
-    }
-#endif // 0
-
     return m_textCtrl;
 }
 
@@ -1810,26 +1792,19 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 
     DeleteTextCtrl();
 
+    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     HWND hWnd = (HWND) TreeView_EditLabel(GetHwnd(), HITEM(item));
 
     // this is not an error - the TVN_BEGINLABELEDIT handler might have
     // returned FALSE
     if ( !hWnd )
     {
+        delete m_textCtrl;
+        m_textCtrl = NULL;
         return NULL;
     }
 
-    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
-    m_textCtrl->SetParent(this);
-    m_textCtrl->SetHWND((WXHWND)hWnd);
-    m_textCtrl->SubclassWin((WXHWND)hWnd);
-
-    // set wxTE_PROCESS_ENTER style for the text control to force it to process
-    // the Enter presses itself, otherwise they could be stolen from it by the
-    // dialog navigation code
-    m_textCtrl->
-        SetWindowStyle(m_textCtrl->GetWindowStyle() | wxTE_PROCESS_ENTER);
-
+    // textctrl is subclassed in MSWOnNotify
     return m_textCtrl;
 }
 
@@ -2531,6 +2506,32 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case TVN_BEGINLABELEDIT:
             // return TRUE to cancel label editing
             *result = !event.IsAllowed();
+            // set ES_WANTRETURN ( like we do in BeginLabelEdit )
+            if(event.IsAllowed())
+            {
+                HWND hText = TreeView_GetEditControl(GetHwnd());
+                if(hText != NULL)
+                {
+                    // MBN: if m_textCtrl already has an HWND, it is a stale 
+                    // pointer from a previous edit (because the user
+                    // didn't modify the label before dismissing the control,
+                    // and TVN_ENDLABELEDIT was not sent), so delete it
+                    if(m_textCtrl && m_textCtrl->GetHWND() != 0)
+                        DeleteTextCtrl();
+                    if(!m_textCtrl)
+                        m_textCtrl = new wxTextCtrl();
+                    m_textCtrl->SetParent(this);
+                    m_textCtrl->SetHWND((WXHWND)hText);
+                    m_textCtrl->SubclassWin((WXHWND)hText);
+
+                    // set wxTE_PROCESS_ENTER style for the text control to
+                    // force it to process the Enter presses itself, otherwise
+                    // they could be stolen from it by the dialog
+                    // navigation code
+                    m_textCtrl->SetWindowStyle(m_textCtrl->GetWindowStyle()
+                                               | wxTE_PROCESS_ENTER);
+                }
+            }
             break;
 
         case TVN_ENDLABELEDIT:
