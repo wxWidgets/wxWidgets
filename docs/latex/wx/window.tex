@@ -620,6 +620,17 @@ Gets the window's title. Applicable only to frames and dialogs.
 
 \helpref{wxWindow::SetTitle}{wxwindowsettitle}
 
+\membersection{wxWindow::GetUpdateRegion}\label{wxwindowgetupdateregion}
+
+\constfunc{virtual wxRegion}{GetUpdateRegion}{\void}
+
+Returns the region specifying which parts of the window have been damaged. Should
+only be called within an \helpref{OnPaint}{wxwindowonpaint} event handler.
+
+\wxheading{See also}
+
+\helpref{wxRegion}{wxregion}, \helpref{wxRegionIterator}{wxregioniterator}, \helpref{wxWindow::OnPaint}{wxwindowonpaint}
+
 \membersection{wxWindow::GetWindowStyleFlag}
 
 \constfunc{long}{GetWindowStyleFlag}{\void}
@@ -1146,7 +1157,7 @@ terms of the client area, and are unscrolled, so you will need to do
 some calculations using the current view position to obtain logical,
 scrolled units.
 
-Here is an example of using the \helpref{wxUpdateIterator}{wxupdateiterator} class:
+Here is an example of using the \helpref{wxRegionIterator}{wxregioniterator} class:
 
 {\small%
 \begin{verbatim}
@@ -1160,7 +1171,7 @@ void MyWindow::OnPaint(wxPaintEvent& event)
   ViewStart(&vbX,&vbY);
 
   int vX,vY,vW,vH;                 // Dimensions of client area in pixels
-  wxUpdateIterator upd(this); // get the update rect list
+  wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
 
   while (upd)
   {

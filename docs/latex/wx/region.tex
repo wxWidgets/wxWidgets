@@ -8,6 +8,10 @@ reference counting, so copying and assignment operations are fast.
 \helpref{wxGDIObject}{wxgdiobject}\\
 \helpref{wxObject}{wxobject}
 
+\wxheading{See also}
+
+\helpref{wxRegionIterator}{wxregioniterator}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxRegion::wxRegion}\label{wxregionconstr}
@@ -179,4 +183,105 @@ for any overlapping areas. The result is stored in this region.
 
 Copies {\it region} by reference counting.
 
+\section{\class{wxRegionIterator}}\label{wxregioniterator}
+
+This class is used to iterate through the rectangles in a region,
+typically when examining the damaged regions of a window within an OnPaint call.
+
+To use it, construct an iterator object on the stack and loop through the
+regions, testing the object and incrementing the iterator at the end of the loop.
+
+See \helpref{wxWindow::OnPaint}{wxwindowonpaint} for an example of use.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnPaint}{wxwindowonpaint}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRegionIterator::wxRegionIterator}
+
+\func{}{wxRegionIterator}{\void}
+
+Default constructor.
+
+\func{}{wxRegionIterator}{\param{const wxRegion\&}{ region}}
+
+Creates an iterator object given a region.
+
+\membersection{wxRegionIterator::GetX}
+
+\constfunc{long}{GetX}{\void}
+
+Returns the x value for the current region.
+
+\membersection{wxRegionIterator::GetY}
+
+\constfunc{long}{GetY}{\void}
+
+Returns the y value for the current region.
+
+\membersection{wxRegionIterator::GetW}
+
+\constfunc{long}{GetW}{\void}
+
+An alias for GetWidth.
+
+\membersection{wxRegionIterator::GetWidth}
+
+\constfunc{long}{GetWidth}{\void}
+
+Returns the width value for the current region.
+
+\membersection{wxRegionIterator::GetH}
+
+\constfunc{long}{GetH}{\void}
+
+An alias for GetHeight.
+
+\membersection{wxRegionIterator::GetHeight}
+
+\constfunc{long}{GetWidth}{\void}
+
+Returns the width value for the current region.
+
+\membersection{wxRegionIterator::GetRect}
+
+\constfunc{wxRect}{GetRect}{\void}
+
+Returns the current rectangle.
+
+\membersection{wxRegionIterator::HaveRects}
+
+\constfunc{bool}{HaveRects}{\void}
+
+Returns TRUE if there are still some rectangles; otherwise returns FALSE.
+
+\membersection{wxRegionIterator::Reset}
+
+\func{void}{Reset}{\void}
+
+Resets the iterator to the beginning of the rectangles.
+
+\func{void}{Reset}{\param{const wxRegion\&}{ region}}
+
+Resets the iterator to the given region.
+
+\membersection{wxRegionIterator::operator $++$}
+
+\func{void}{operator $++$}{\void}
+
+Increment operator. Increments the iterator to the next region.
+
+\membersection{wxRegionIterator::operator bool}
+
+\constfunc{}{operator bool}{\void}
+
+Returns TRUE if there are still some rectangles; otherwise returns FALSE.
+
+You can use this to test the iterator object as if it were of type bool.
 
