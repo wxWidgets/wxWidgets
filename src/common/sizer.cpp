@@ -280,7 +280,10 @@ void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
 void wxSizerItem::DeleteWindows()
 {
     if (m_window)
+    {
          m_window->Destroy();
+         m_window = NULL;
+    }
 
     if (m_sizer)
         m_sizer->DeleteWindows();
