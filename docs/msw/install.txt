@@ -692,23 +692,26 @@ OLD VERSIONS:
   from e.g. the MinGW distribution, to a directory in your path.
 
 
-Symantec C++ compilation
+Symantec & DigitalMars C++ compilation
 ------------------------
+The DigitalMars compiler is a free succssor to the Symantec compiler
+and can be downloaded from http://www.digitalmars.com/
 
 1. Make sure your WXWIN variable is set, and uses the FAT (short
    name) form.
-2. Edit setup.h and set wxUSE_DRAG_AND_DROP to 0.
+2. Edit setup.h and set the following to 0
+        wxUSE_SOCKETS 0   //linker error digital mars library missing gethostbyname
+        wxUSE_OLE 0            // bug in macro
+        wxUSE_DRAG_AND_DROP 0   //linker error ??
+        wxUSE_DATAOBJ 0  //linker error ??
+        wxUSE_CLIPBOARD 0 // requires dataobj
+        wxUSE_ENH_METAFILE    0 // requires clipboard
 3. Change directory to wx\src\msw. Type 'make -f makefile.sc' to
    make the wxWindows core library.
 4. Change directory to wx\samples\minimal and type 'make -f makefile.sc'
    to make this sample.
 
-Note: the minimal sample doesn't link properly ('Error: no
-start address').
-32-bit compilation only (partially) supported at present, using SC++ 6.1.
-Some functionality is missing using this compiler (see makefile).
-Add -D__WIN95__ if your SC++ has Windows 95 support, and ignore
-Step (2). 16-bit compilation is left as an exercise for the user!
+16-bit compilation is no longer supported.
 
 
 Salford C++ compilation
