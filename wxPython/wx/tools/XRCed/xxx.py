@@ -49,9 +49,9 @@ class xxxParam(xxxNode):
         def value(self):
             return self.textNode.data.encode(g.currentEncoding)
         def update(self, value):
-	    try: # handle exception if encoding is wrong
+            try: # handle exception if encoding is wrong
                 self.textNode.data = unicode(value, g.currentEncoding)
-	    except UnicodeDecodeError:
+            except UnicodeDecodeError:
                 wxLogMessage("Unicode error: set encoding in file\nglobals.py to something appropriate")
 
 # Integer parameter
@@ -502,8 +502,8 @@ class xxxSplitterWindow(xxxContainer):
     allParams = ['orientation', 'sashpos', 'minsize', 'pos', 'size', 'style']
     paramDict = {'orientation': ParamOrientation, 'sashpos': ParamUnit, 'minsize': ParamUnit }
     winStyles = ['wxSP_3D', 'wxSP_3DSASH', 'wxSP_3DBORDER', 'wxSP_BORDER',
-    			 'wxSP_NOBORDER', 'wxSP_PERMIT_UNSPLIT', 'wxSP_LIVE_UPDATE',
-    			 'wxSP_NO_XP_THEME' ]
+                         'wxSP_NOBORDER', 'wxSP_PERMIT_UNSPLIT', 'wxSP_LIVE_UPDATE',
+                         'wxSP_NO_XP_THEME' ]
 
 class xxxGenericDirCtrl(xxxObject):
     allParams = ['defaultfolder', 'filter', 'defaultfilter', 'pos', 'size', 'style']

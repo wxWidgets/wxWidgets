@@ -416,10 +416,10 @@ class ParamEncoding(ParamText):
 class ContentDialog(wxDialog):
     def __init__(self, parent, value):
         # Load from resource
-	pre = wxPreDialog()
+        pre = wxPreDialog()
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT')
         self.this = pre.this
-	self._setOORInfo(self)
+        self._setOORInfo(self)
         self.list = XRCCTRL(self, 'LIST')
         # Set list items
         for v in value:
@@ -466,10 +466,10 @@ class ContentDialog(wxDialog):
 
 class ContentCheckListDialog(wxDialog):
     def __init__(self, parent, value):
-	pre = wxPreDialog()
+        pre = wxPreDialog()
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECK_LIST')
         self.this = pre.this
-	self._setOORInfo(self)
+        self._setOORInfo(self)
         self.list = XRCCTRL(self, 'CHECK_LIST')
         # Set list items
         i = 0
@@ -598,10 +598,10 @@ class ParamContentCheckList(ParamContent):
 
 class IntListDialog(wxDialog):
     def __init__(self, parent, value):
-	pre = wxPreDialog()
+        pre = wxPreDialog()
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_INTLIST')
         self.this = pre.this
-	self._setOORInfo(self)
+        self._setOORInfo(self)
         self.list = XRCCTRL(self, 'LIST')
         # Set list items
         value.sort()
@@ -774,10 +774,10 @@ class ParamFile(PPanel):
 
 class ParamBitmap(PPanel):
     def __init__(self, parent, name):
-	pre = wxPrePanel()
+        pre = wxPrePanel()
         g.frame.res.LoadOnPanel(pre, parent, 'PANEL_BITMAP')
         self.this = pre.this
-	self._setOORInfo(self)
+        self._setOORInfo(self)
         self.SetBackgroundColour(parent.GetBackgroundColour())
         self.SetForegroundColour(parent.GetForegroundColour())
         self.modified = self.freeze = False
