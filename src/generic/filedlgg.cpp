@@ -195,7 +195,11 @@ int wxFileIconsTable::GetIconID(const wxString& extension)
     if (img.GetWidth() == 16 && img.GetHeight() == 16)
         m_ImageList.Add(img.ConvertToBitmap());
     else
-        m_ImageList.Add(CreateAntialiasedBitmap(img.Scale(32, 32)));
+    {
+        if (img.GetWidth() != 32 || img.GetHeight() != 32)
+            img.Rescale(32, 32);
+        m_ImageList.Add(CreateAntialiasedBitmap(img));
+    }
     m_HashTable.Put(extension, new wxFileIconEntry(id));
     return id;
 }
