@@ -668,6 +668,11 @@ wxOutputStream::~wxOutputStream()
 {
 }
 
+void wxOutputStream::PutC(char c)
+{
+  Write((void *) &c, 1);
+}
+
 wxOutputStream& wxOutputStream::Write(const void *buffer, size_t size)
 {
   m_lastcount = OnSysWrite(buffer, size);

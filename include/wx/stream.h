@@ -119,6 +119,7 @@ class WXDLLEXPORT wxOutputStream: public wxStreamBase {
   wxOutputStream();
   virtual ~wxOutputStream();
 
+  void PutC(char c);
   virtual wxOutputStream& Write(const void *buffer, size_t size);
   wxOutputStream& Write(wxInputStream& stream_in);
 
