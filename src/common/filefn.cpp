@@ -33,6 +33,7 @@
 #include "wx/intl.h"
 #include "wx/file.h"
 #include "wx/filename.h"
+#include "wx/dir.h"
 
 // there are just too many of those...
 #ifdef __VISUALC__
@@ -1715,6 +1716,58 @@ wxString wxFindNextFile()
     wxString result;
     // TODO:
     return result;
+}
+
+#else // generic implementation:
+
+static wxDir *gs_dir = NULL;
+static wxString gs_dirPath;
+
+wxString wxFindFirstFile(const wxChar *spec, int flags)
+{
+    gs_dirPath = wxPathOnly(spec);
+    if ( gs_dirPath.IsEmpty() )
+        gs_dirPath = wxT(".");
+    if ( gs_dirPath.Last() != wxFILE_SEP_PATH )
+        gs_dirPath << wxFILE_SEP_PATH;
+
+    if (gs_dir)
+        delete gs_dir;
+    gs_dir = new wxDir(gs_dirPath);
+    
+    if ( !gs_dir->IsOpened() )
+    {
+        wxLogSysError(_("Can not enumerate files '%s'"), spec);
+        return wxEmptyString;
+    }
+    
+    int dirFlags = 0;
+    switch (flags)
+    {
+        case wxDIR:  dirFlags = wxDIR_DIRS; break;
+        case wxFILE: dirFlags = wxDIR_FILES; break;
+        default:     dirFlags = wxDIR_DIRS | wxDIR_FILES; break;
+    }
+    
+    wxString result;
+    gs_dir->GetFirst(&result, wxFileNameFromPath(spec), dirFlags);
+    if ( result.IsEmpty() )
+        wxDELETE(gs_dir);
+
+    return gs_dirPath + result;
+}
+
+wxString wxFindNextFile()
+{
+    wxASSERT_MSG( gs_dir, wxT("You must call wxFindFirstFile before!") );
+
+    wxString result;
+    gs_dir->GetNext(&result);
+    
+    if ( result.IsEmpty() )
+        wxDELETE(gs_dir);
+    
+    return gs_dirPath + result;
 }
 
 #endif // Unix/Windows/OS/2
