@@ -22,8 +22,8 @@
 
 #if wxUSE_FILEDLG
 
-#ifndef __UNIX__
-#error wxFileDialog currently only supports unix
+#if !defined(__UNIX__) && !defined(__DOS__)
+#error wxFileDialog currently only supports Unix and DOS
 #endif
 
 #include "wx/checkbox.h"
@@ -52,11 +52,19 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <dirent.h>
-#include <pwd.h>
-#ifndef __VMS
-# include <grp.h>
+
+#ifdef __UNIX__
+    #include <dirent.h>
+    #include <pwd.h>
+    #ifndef __VMS
+    # include <grp.h>
+    #endif
 #endif
+
+#ifdef __WATCOMC__
+    #include <direct.h>
+#endif
+
 # include <time.h>
 #include <unistd.h>
 
@@ -300,6 +308,7 @@ static wxImage CutEmptyBorders(const wxImage& img)
 
 int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 {
+#if wxUSE_MIMETYPE
     if (!extension.IsEmpty())
     {
         wxFileIconEntry *entry = (wxFileIconEntry*) m_HashTable.Get(extension);
@@ -331,6 +340,14 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     }
     m_HashTable.Put(extension, new wxFileIconEntry(id));
     return id;
+
+#else // !wxUSE_MIMETYPE
+
+    if (extension == wxT("exe"))
+        return FI_EXECUTABLE;
+    else
+        return FI_UNKNOWN;
+#endif // wxUSE_MIMETYPE/!wxUSE_MIMETYPE
 }
 
 
@@ -365,7 +382,7 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     struct stat buff;
     stat( m_fileName.fn_str(), &buff );
 
-#if !defined( __EMX__ ) && !defined(__VMS)
+#if defined(__UNIX__) && (!defined( __EMX__ ) && !defined(__VMS))
     struct stat lbuff;
     lstat( m_fileName.fn_str(), &lbuff );
     m_isLink = S_ISLNK( lbuff.st_mode );
