@@ -56,7 +56,7 @@
 
 // maximum possible length for a string means "take all string" everywhere
 //  (as sizeof(StringData) is unknown here we substract 100)
-#define   STRING_MAXLEN     (UINT_MAX - 100)
+const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
 
 // 'naughty' cast
 #define   WXSTRINGCAST (char *)(const char *)
@@ -206,7 +206,7 @@ private:
     // ctors, use Reinit() otherwise)
   void Init() { m_pchData = (char *)g_szNul; }
     // initializaes the string with (a part of) C-string
-  void InitWith(const char *psz, size_t nPos = 0, size_t nLen = STRING_MAXLEN);
+  void InitWith(const char *psz, size_t nPos = 0, size_t nLen = wxSTRING_MAXLEN);
     // as Init, but also frees old data
   void Reinit() { GetStringData()->Unlock(); Init(); }
 
@@ -254,11 +254,11 @@ public:
     // string containing nRepeat copies of ch
   wxString(char ch, size_t nRepeat = 1);
     // ctor takes first nLength characters from C string
-    // (default value of STRING_MAXLEN means take all the string)
-  wxString(const char *psz, size_t nLength = STRING_MAXLEN)
+    // (default value of wxSTRING_MAXLEN means take all the string)
+  wxString(const char *psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith(psz, 0, nLength); }
     // from C string (for compilers using unsigned char)
-  wxString(const unsigned char* psz, size_t nLength = STRING_MAXLEN);
+  wxString(const unsigned char* psz, size_t nLength = wxSTRING_MAXLEN);
     // from wide (UNICODE) string
   wxString(const wchar_t *pwz);
     // dtor is not virtual, this class must not be inherited from!
@@ -422,7 +422,7 @@ public:
   // simple sub-string extraction
       // return substring starting at nFirst of length nCount (or till the end
       // if nCount = default value)
-  wxString Mid(size_t nFirst, size_t nCount = STRING_MAXLEN) const;
+  wxString Mid(size_t nFirst, size_t nCount = wxSTRING_MAXLEN) const;
 
     // operator version of Mid()
   wxString  operator()(size_t start, size_t len) const
@@ -570,7 +570,7 @@ public:
     // return the length of the string
   size_t length() const { return Len(); }
     // return the maximum size of the string
-  size_t max_size() const { return STRING_MAXLEN; }
+  size_t max_size() const { return wxSTRING_MAXLEN; }
     // resize the string, filling the space with c if c != 0
   void resize(size_t nSize, char ch = '\0');
     // delete the contents of the string

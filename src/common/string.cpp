@@ -63,7 +63,7 @@
 // ---------------------------------------------------------------------------
 
 #ifdef  wxSTD_STRING_COMPATIBILITY
-  const size_t wxString::npos = STRING_MAXLEN;
+  const size_t wxString::npos = wxSTRING_MAXLEN;
 #endif // wxSTD_STRING_COMPATIBILITY
 
 // ----------------------------------------------------------------------------
@@ -104,9 +104,17 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
     // always available), but it's unsafe because it doesn't check for buffer
     // size - so give a warning
     #define wxVsprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
-#ifndef __SC__
+#if defined(__VISUALC__)
     #pragma message("Using sprintf() because no snprintf()-like function defined")
-#endif
+#elif defined(__GNUG__)
+    #warning "Using sprintf() because no snprintf()-like function defined"
+#elif defined(__SUNCC__)
+    // nothing -- I don't know about "#warning" for Sun's CC
+#else
+    // change this to some analogue of '#warning' for your compiler
+    #error "Using sprintf() because no snprintf()-like function defined"
+#endif //compiler
+
 #endif // no vsnprintf
 
 // ----------------------------------------------------------------------------
@@ -211,7 +219,7 @@ void wxString::InitWith(const char *psz, size_t nPos, size_t nLength)
 
   wxASSERT( nPos <= Strlen(psz) );
 
-  if ( nLength == STRING_MAXLEN )
+  if ( nLength == wxSTRING_MAXLEN )
     nLength = Strlen(psz + nPos);
 
   STATISTICS_ADD(InitialLength, nLength);
@@ -611,8 +619,8 @@ wxString wxString::Mid(size_t nFirst, size_t nCount) const
   wxStringData *pData = GetStringData();
   size_t nLen = pData->nDataLength;
 
-  // default value of nCount is STRING_MAXLEN and means "till the end"
-  if ( nCount == STRING_MAXLEN )
+  // default value of nCount is wxSTRING_MAXLEN and means "till the end"
+  if ( nCount == wxSTRING_MAXLEN )
   {
     nCount = nLen - nFirst;
   }
