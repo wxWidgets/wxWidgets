@@ -15,7 +15,7 @@
 #include "wx/tbarbase.h"     // the base class for all toolbars
 
 #if wxUSE_TOOLBAR
-    #if !wxUSE_TOOLBAR_NATIVE
+    #if !wxUSE_TOOLBAR_NATIVE && !defined(__WXUNIVERSAL__)
         #include "wx/tbarsmpl.h"
 
         class WXDLLEXPORT wxToolBar : public wxToolBarSimple
@@ -40,7 +40,7 @@
                 return wxToolBarSimple::AddTool(id, bitmap, wxNullBitmap, FALSE, -1, -1, NULL,
                        shortHelpString, longHelpString);
             }
-            
+
             // old form
             wxToolBarToolBase *AddTool
                                (
@@ -56,7 +56,7 @@
                 return wxToolBarSimple::AddTool(id, bitmap, pushedBitmap, toggle, -1, -1, clientData,
                        shortHelpString, longHelpString);
             }
-            
+
             // virtual overridden
             virtual wxToolBarToolBase *AddTool
                                (
@@ -74,7 +74,7 @@
                 return wxToolBarSimple::AddTool(id, bitmap, pushedBitmap, toggle, xPos, yPos, clientData,
                        shortHelpString, longHelpString);
             }
-            
+
         private:
             DECLARE_DYNAMIC_CLASS(wxToolBar)
         };

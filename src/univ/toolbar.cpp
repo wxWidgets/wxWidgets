@@ -34,9 +34,9 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
-
-    #include "wx/univ/renderer.h"
 #endif
+
+#include "wx/univ/renderer.h"
 
 #include "wx/toolbar.h"
 #include "wx/image.h"
