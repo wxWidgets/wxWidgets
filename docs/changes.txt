@@ -86,6 +86,14 @@ wxUniv:
 - 3rd state support for checkboxes
 - wxLB_SORT and wxCB_SORT now cause case-insensitive sorting
 
+wxPalmOS:
+
+- William Osborne has won and new port was born
+  (see: "wxPalmOS porting challenge")
+- polishing of the port (unnecessary 2.4 API compatibility, removed
+  all wxMSW specific code which was base for the new port)
+- enumeration of available volumes
+
 
 2.5.3
 -----
