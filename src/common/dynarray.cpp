@@ -253,6 +253,8 @@ int name::Index(T lItem, CMPFUNC fnCompare) const                           \
 /* add item at the end */                                                   \
 void name::Add(T lItem, size_t nInsert)                                     \
 {                                                                           \
+  if (nInsert == 0)                                                         \
+      return;                                                               \
   Grow(nInsert);                                                            \
   for (size_t i = 0; i < nInsert; i++)                                      \
       m_pItems[m_nCount++] = lItem;                                         \
@@ -271,6 +273,8 @@ void name::Insert(T lItem, size_t nIndex, size_t nInsert)                   \
   wxCHECK_RET( m_nCount <= m_nCount + nInsert,                              \
                wxT("array size overflow in wxArray::Insert") );             \
                                                                             \
+  if (nInsert == 0)                                                         \
+      return;                                                               \
   Grow(nInsert);                                                            \
                                                                             \
   memmove(&m_pItems[nIndex + nInsert], &m_pItems[nIndex],                   \
