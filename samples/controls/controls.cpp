@@ -549,7 +549,8 @@ m_text(NULL), m_notebook(NULL)
     m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
 #ifndef __WIN16__
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
-    m_spinbutton->SetRange(0,100);
+    m_spinbutton->SetRange(-10,30);
+    m_spinbutton->SetValue(-5);
 #endif
     m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
 }
@@ -885,8 +886,14 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 {
     wxString value;
-    value.sprintf( "%d", (int)event.GetPosition() );
+    value.Printf( "%d", event.GetPosition() );
     m_spintext->SetValue( value );
+
+    value.Printf("Spin control range: (%d, %d), current = %d\n",
+                 m_spinbutton->GetMin(), m_spinbutton->GetMax(),
+                 m_spinbutton->GetValue());
+
+    m_text->AppendText(value);
 }
 #endif
 
