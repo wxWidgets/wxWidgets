@@ -265,12 +265,19 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
    m_CanUsePing = -1; // unknown
    m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
    m_BeaconPort = 80;
-   SetConnectCommand("pon", "poff"); // default values for Debian/GNU linux
+
+#ifdef __SGI__
+   m_ConnectCommand = _T("/usr/etc/ppp");
+#elif defined(__LINUX__)
+   // default values for Debian/GNU linux
+   m_ConnectCommand = _T("pon");
+   m_HangUpCommand = _T("poff");
+#endif
+
    wxChar * dial = wxGetenv(_T("WXDIALUP_DIALCMD"));
    wxChar * hup = wxGetenv(_T("WXDIALUP_HUPCMD"));
-   if(dial || hup)
-      SetConnectCommand(dial ? wxString(dial) : m_ConnectCommand,
-                        hup ? wxString(hup) : m_HangUpCommand);
+   SetConnectCommand(dial ? wxString(dial) : m_ConnectCommand,
+                     hup ? wxString(hup) : m_HangUpCommand);
 }
 
 wxDialUpManagerImpl::~wxDialUpManagerImpl()
@@ -444,11 +451,11 @@ wxDialUpManagerImpl::CheckConnect(void)
    if((hp = gethostbyname(m_BeaconHost.mb_str())) == NULL)
       return 0; // no DNS no net
 
-   serv_addr.sin_family		= hp->h_addrtype;
+   serv_addr.sin_family = hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
-   serv_addr.sin_port		= htons(m_BeaconPort);
+   serv_addr.sin_port = htons(m_BeaconPort);
 
-   int	sockfd;
+   int sockfd;
    if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
    {
       return -1;  // no info
@@ -472,14 +479,29 @@ int
 wxDialUpManagerImpl::CheckIfconfig(void)
 {
    int rc = -1;
-   // First time check for ifconfig location. We only use the variant
-   // which does not take arguments, a la GNU.
-   if(m_CanUseIfconfig == -1) // unknown
+
+   // First time check for ifconfig location. We only use the variant which
+   // does not take arguments, a la GNU.
+   if ( m_CanUseIfconfig == -1 ) // unknown
    {
-      if(wxFileExists("/sbin/ifconfig"))
-         m_IfconfigPath = "/sbin/ifconfig";
-      else if(wxFileExists("/usr/sbin/ifconfig"))
-         m_IfconfigPath = "/usr/sbin/ifconfig";
+       static const wxChar *ifconfigLocations[] =
+       {
+           _T("/sbin"),         // Linux, FreeBSD
+           _T("/usr/sbin"),     // SunOS, Solaris, AIX, HP-UX
+           _T("/usr/etc"),      // IRIX
+       };
+
+       for ( size_t n = 0; n < WXSIZEOF(ifconfigLocations); n++ )
+       {
+           wxString path(ifconfigLocations[n]);
+           path << _T("/ifconfig");
+
+           if ( wxFileExists(path) )
+           {
+               m_IfconfigPath = path;
+               break;
+           }
+       }
    }
 
    wxLogNull ln; // suppress all error messages
