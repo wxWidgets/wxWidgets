@@ -3311,6 +3311,8 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
             return true;
         }
     }
+#else
+    wxUnusedVar(lParam);
 #endif // wxUSE_TOOLTIPS
 
     return false;
