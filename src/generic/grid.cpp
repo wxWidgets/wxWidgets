@@ -854,7 +854,7 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
                             wxGridRowLabelWindow *rowLblWin,
                             wxGridColLabelWindow *colLblWin,
                             wxWindowID id, const wxPoint &pos, const wxSize &size )
-        : wxPanel( parent, id, pos, size, wxSUNKEN_BORDER, "grid window" )
+        : wxPanel( parent, id, pos, size, 0, "grid window" )
 {
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
@@ -1124,8 +1124,8 @@ void wxGrid::CalcDimensions()
 
     if ( m_numRows > 0  &&  m_numCols > 0 )
     {
-        int right = m_colRights[ m_numCols-1 ] + 20;
-        int bottom = m_rowBottoms[ m_numRows-1 ] + 20;
+        int right = m_colRights[ m_numCols-1 ] + 50;
+        int bottom = m_rowBottoms[ m_numRows-1 ] + 50;
 
         // TODO: restore the scroll position that we had before sizing
         //
@@ -2814,18 +2814,18 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 {
     if ( m_rowHeights[row] <= 0 ) return;
 
-    // draw the label's horizontal border (the vertical border is
-    // provided by the cell area window margin)
-    //
+    int rowTop = m_rowBottoms[row] - m_rowHeights[row];
+    
     dc.SetPen( *wxBLACK_PEN );
-
-    dc.DrawLine( 0, m_rowBottoms[row]+1,
-                 m_rowLabelWidth, m_rowBottoms[row]+1 );
-
+    dc.DrawLine( m_rowLabelWidth-1, rowTop,
+                 m_rowLabelWidth-1, m_rowBottoms[row]-1 );
+    
+    dc.DrawLine( 0, m_rowBottoms[row]-1,
+                 m_rowLabelWidth-1, m_rowBottoms[row]-1 );
+    
     dc.SetPen( *wxWHITE_PEN );
-
-    dc.DrawLine( 0, m_rowBottoms[row]+2,
-                 m_rowLabelWidth, m_rowBottoms[row]+2 );
+    dc.DrawLine( 0, rowTop, 0, m_rowBottoms[row]-1 );
+    dc.DrawLine( 0, rowTop, m_rowLabelWidth-1, rowTop );
 
     dc.SetBackgroundMode( wxTRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
@@ -2861,18 +2861,22 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
 {
     if ( m_colWidths[col] <= 0 ) return;
 
-    // draw the label's vertical border (the horizontal border is
-    // provided by the cell area window margin)
-    //
+    int colLeft = m_colRights[col] - m_colWidths[col];
+    
     dc.SetPen( *wxBLACK_PEN );
-
-    dc.DrawLine( m_colRights[col]+1, 0,
-                 m_colRights[col]+1, m_colLabelHeight );
-
+    dc.DrawLine( m_colRights[col]-1, 0,
+                 m_colRights[col]-1, m_colLabelHeight-1 );
+    
+    dc.DrawLine( colLeft, m_colLabelHeight-1,
+                 m_colRights[col]-1, m_colLabelHeight-1 );
+    
     dc.SetPen( *wxWHITE_PEN );
+    dc.DrawLine( colLeft, 0, colLeft, m_colLabelHeight-1 );
+    dc.DrawLine( colLeft, 0, m_colRights[col]-1, 0 );
 
-    dc.DrawLine( m_colRights[col]+2, 0,
-                 m_colRights[col]+2, m_colLabelHeight );
+    dc.SetBackgroundMode( wxTRANSPARENT );
+    dc.SetTextForeground( GetLabelTextColour() );
+    dc.SetFont( GetLabelFont() );
 
     dc.SetBackgroundMode( wxTRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
