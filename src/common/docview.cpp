@@ -774,6 +774,24 @@ wxDocManager::~wxDocManager()
     sm_docManager = (wxDocManager*) NULL;
 }
 
+// closes the specified document
+bool wxDocManager::CloseDocument(wxDocument* doc, bool force)
+{
+    if (doc->Close() || force)
+    {
+        // Implicitly deletes the document when
+        // the last view is deleted
+        doc->DeleteAllViews();
+
+        // Check we're really deleted
+        if (m_docs.Member(doc))
+            delete doc;
+        
+        return TRUE;
+    }
+    return FALSE;
+}
+
 bool wxDocManager::CloseDocuments(bool force)
 {
     wxNode *node = m_docs.GetFirst();
@@ -781,17 +799,9 @@ bool wxDocManager::CloseDocuments(bool force)
     {
         wxDocument *doc = (wxDocument *)node->GetData();
         wxNode *next = node->GetNext();
-
-        if (!doc->Close() && !force)
+        
+        if (!CloseDocument(doc, force))
             return FALSE;
-
-        // Implicitly deletes the document when the last
-        // view is removed (deleted)
-        doc->DeleteAllViews();
-
-        // Check document is deleted
-        if (m_docs.Member(doc))
-            delete doc;
 
         // This assumes that documents are not connected in
         // any way, i.e. deleting one document does NOT
@@ -1070,27 +1080,15 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
         delete[] templates;
         return (wxDocument *) NULL;
     }
+    
+    wxDocument* docToClose = NULL;
 
     // If we've reached the max number of docs, close the
     // first one.
     if ( (int)GetDocuments().GetCount() >= m_maxDocsOpen )
     {
         wxDocument *doc = (wxDocument *)GetDocuments().GetFirst()->GetData();
-        if (doc->Close())
-        {
-            // Implicitly deletes the document when
-            // the last view is deleted
-            doc->DeleteAllViews();
-
-            // Check we're really deleted
-            if (m_docs.Member(doc))
-                delete doc;
-        }
-        else
-        {
-            delete[] templates;
-            return (wxDocument *) NULL;
-        }
+        docToClose = doc;
     }
 
     // New document: user chooses a template, unless there's only one.
@@ -1098,9 +1096,18 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
     {
         if (n == 1)
         {
+            if (docToClose)
+            {
+                if (!CloseDocument(docToClose, FALSE))
+                {
+                    return NULL;
+                }
+            }
+            
             wxDocTemplate *temp = templates[0];
             delete[] templates;
             wxDocument *newDoc = temp->CreateDocument(path, flags);
+            
             if (newDoc)
             {
                 newDoc->SetDocumentName(temp->GetDocumentName());
@@ -1114,7 +1121,16 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
         delete[] templates;
         if (temp)
         {
+            if (docToClose)
+            {
+                if (!CloseDocument(docToClose, FALSE))
+                {
+                    return NULL;
+                }
+            }
+            
             wxDocument *newDoc = temp->CreateDocument(path, flags);
+
             if (newDoc)
             {
                 newDoc->SetDocumentName(temp->GetDocumentName());
@@ -1143,6 +1159,14 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
 
     if (temp)
     {
+        if (docToClose)
+        {
+            if (!CloseDocument(docToClose, FALSE))
+            {
+                return NULL;
+            }
+        }
+        
         wxDocument *newDoc = temp->CreateDocument(path2, flags);
         if (newDoc)
         {

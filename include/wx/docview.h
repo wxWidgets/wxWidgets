@@ -373,6 +373,9 @@ public:
     // closes all currently open documents
     bool CloseDocuments(bool force = TRUE);
 
+    // closes the specified document
+    bool CloseDocument(wxDocument* doc, bool force = FALSE);
+
     // Clear remaining documents and templates
     bool Clear(bool force = TRUE);
 
