@@ -338,8 +338,10 @@ def main():
     else:
         IF22 = ""
 
-    if string.find(WXDLL, "h") != -1:
-        PYVER = PYVER + "-hybrid"
+    # Starting with 2.3.3 the hybrid build is the release build too, so
+    # no need to label it that way.
+    ##if string.find(WXDLL, "h") != -1:
+    ##    PYVER = PYVER + "-hybrid"
 
     MSLU=''
     if len(sys.argv) > 1 and sys.argv[1] == "UNICODE=1":
