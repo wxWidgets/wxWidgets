@@ -5541,6 +5541,10 @@ if test "$wxUSE_HTML" = "yes" ; then
     CORE_GUI_LIBS="html $CORE_GUI_LIBS"
 fi
 
+if test "$wxUSE_GUI" != "yes"; then
+    CORE_GUI_LIBS=""
+fi
+
 AC_SUBST(CORE_BASE_LIBS)
 AC_SUBST(CORE_GUI_LIBS)
 
