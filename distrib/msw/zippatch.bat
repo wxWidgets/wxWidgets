@@ -5,7 +5,7 @@ set dest=%src\deliver
 set wise=0
 
 Rem Set this to the required patch version
-set version=01
+set version=02
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage

@@ -148,6 +148,8 @@ if the buffer is NULL.
 
 \func{char*}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{char* }{buf=NULL}}
 
+\func{bool}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{wxString\& }{buf}}
+
 Makes a temporary filename based on {\it prefix}, opens and closes the file,
 and places the name in {\it buf}. If {\it buf} is NULL, new store
 is allocated for the temporary filename using {\it new}.

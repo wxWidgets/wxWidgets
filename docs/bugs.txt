@@ -102,6 +102,22 @@ wxWINDOWS VERSION: wxWindows 2.1.11
 PLATFORMS: Windows + Python 1.5
 DATE IDENTIFIED: 10/11/1999
 IDENTIFIED BY: A.T.Hofkamp
+DATE FIXED: 11/11/1999
+FIXED BY: Vaclav Slavik
+
+BUG NUMBER:             6
+SHORT DESCRIPTION: MSWindows Paths in include files
+DETAILS: I may be wrong, but it looks like all the paths in the
+include files are based on a unix system. The problem is when
+you go to compile VC++6 can't find any of the other includes it
+needs. [Note from JACS: VC++ accepts forward slashes so
+there must be a setup problem.]
+WORKAROUND: Change all the paths in the includes
+wxWINDOWS VERSION: 2.1.11
+PLATFORMS: wxMSW
+DATE IDENTIFIED: 11/11/1999
+IDENTIFIED BY: Mark A Russell <markarussell@earthlink.net>
+
 
 
 ---------------------------END OF BUGLIST-------------------------

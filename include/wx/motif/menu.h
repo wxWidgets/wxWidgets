@@ -47,13 +47,11 @@ public:
 
     bool ProcessCommand(wxCommandEvent& event);
 
-#if WXWIN_COMPATIBILITY
     wxMenu(const wxString& title, const wxFunction func)
         : wxMenuBase(title)
     {
         Callback(func);
     }
-#endif // WXWIN_COMPATIBILITY
 
     //// Motif-specific
     WXWidget GetButtonWidget() const { return m_buttonWidget; }

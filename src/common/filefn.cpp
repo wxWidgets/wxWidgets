@@ -612,7 +612,6 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     return wxRealPath(buf);
 }
 
-
 /* Contract Paths to be build upon an environment variable
    component:
 
@@ -1218,6 +1217,18 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
   if (buf) buf[0] = 0;
   return (wxChar *) NULL;
 #endif
+}
+
+bool wxGetTempFileName(const wxString& prefix, wxString& buf)
+{
+    wxChar buf2[512];
+    if (wxGetTempFileName(prefix, buf2) != (wxChar*) NULL)
+    {
+        buf = buf2;
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 // Get first file name matching given wild card.

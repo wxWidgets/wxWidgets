@@ -175,12 +175,12 @@ public:
         { return FindItem(itemId, itemMenu); }
 
     wxList& GetItems() const { return (wxList &)m_items; }
+#endif // WXWIN_COMPATIBILITY
 
     // wxWin 1.6x compatible menu event handling
     wxFunction GetCallback() const { return m_callback; }
     void Callback(const wxFunction func) { m_callback = func; }
     wxFunction m_callback;
-#endif // WXWIN_COMPATIBILITY
 
     // unlike FindItem(), this function doesn't recurse but only looks through
     // our direct children and also may return the index of the found child if

@@ -98,9 +98,11 @@ WXDLLEXPORT void wxStripExtension(wxString& buffer);
 
 // Get a temporary filename, opening and closing the file.
 WXDLLEXPORT wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL);
+WXDLLEXPORT bool wxGetTempFileName(const wxString& prefix, wxString& buf);
 
 // Expand file name (~/ and ${OPENWINHOME}/ stuff)
 WXDLLEXPORT wxChar* wxExpandPath(wxChar *dest, const wxChar *path);
+WXDLLEXPORT bool wxExpandPath(wxString& dest, const wxChar *path);
 
 // Contract w.r.t environment (</usr/openwin/lib, OPENWHOME> -> ${OPENWINHOME}/lib)
 // and make (if under the home tree) relative to home
