@@ -139,7 +139,9 @@ const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
 const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
 const wxChar *wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
 const wxChar *wxPanelClassName         = wxT("wxPanelClass");
+const wxChar *wxPanelClassNameNR       = wxT("wxPanelClassNR");
 const wxChar *wxCanvasClassName        = wxT("wxCanvasClass");
+const wxChar *wxCanvasClassNameNR      = wxT("wxCanvasClassNR");
 
 HICON wxSTD_FRAME_ICON = (HICON) NULL;
 HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;
@@ -379,6 +381,17 @@ bool wxApp::RegisterWindowClasses()
         return FALSE;
     }
 
+    // Register the no redraw panel window class.
+    wndclass.lpszClassName = wxPanelClassNameNR;
+    wndclass.style         = styleNoRedraw;
+
+    if ( !RegisterClass(&wndclass) )
+    {
+        wxLogLastError("RegisterClass(no redraw panel)");
+
+        return FALSE;
+    }
+
     // Register the canvas and textsubwindow class name
     wndclass.hbrBackground = (HBRUSH)NULL;
     wndclass.lpszClassName = wxCanvasClassName;
@@ -386,6 +399,15 @@ bool wxApp::RegisterWindowClasses()
     if ( !RegisterClass(&wndclass) )
     {
         wxLogLastError("RegisterClass(canvas)");
+
+        return FALSE;
+    }
+
+    wndclass.lpszClassName = wxCanvasClassNameNR;
+    wndclass.style         = styleNoRedraw;
+    if ( !RegisterClass(&wndclass) )
+    {
+        wxLogLastError("RegisterClass(no redraw canvas)");
 
         return FALSE;
     }
