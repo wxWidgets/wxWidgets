@@ -411,7 +411,7 @@ void ComboboxWidgetsPage::OnButtonClear(wxCommandEvent& event)
 
 void ComboboxWidgetsPage::OnButtonAdd(wxCommandEvent& event)
 {
-    static size_t s_item = 0;
+    static unsigned int s_item = 0;
 
     wxString s = m_textAdd->GetValue();
     if ( !m_textAdd->IsModified() )
@@ -426,7 +426,7 @@ void ComboboxWidgetsPage::OnButtonAdd(wxCommandEvent& event)
 void ComboboxWidgetsPage::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
 {
     // "many" means 1000 here
-    for ( size_t n = 0; n < 1000; n++ )
+    for ( unsigned int n = 0; n < 1000; n++ )
     {
         m_combobox->Append(wxString::Format(_T("item #%u"), n));
     }

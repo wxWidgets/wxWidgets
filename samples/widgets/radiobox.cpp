@@ -65,8 +65,8 @@ enum
 };
 
 // default values for the number of radiobox items
-static const size_t DEFAULT_NUM_ENTRIES = 12;
-static const size_t DEFAULT_MAJOR_DIM = 3;
+static const unsigned int DEFAULT_NUM_ENTRIES = 12;
+static const unsigned int DEFAULT_MAJOR_DIM = 3;
 
 // ----------------------------------------------------------------------------
 // RadioWidgetsPage
@@ -272,8 +272,8 @@ RadioWidgetsPage::~RadioWidgetsPage()
 
 void RadioWidgetsPage::Reset()
 {
-    m_textMajorDim->SetValue(wxString::Format(_T("%d"), DEFAULT_MAJOR_DIM));
-    m_textNumBtns->SetValue(wxString::Format(_T("%d"), DEFAULT_NUM_ENTRIES));
+    m_textMajorDim->SetValue(wxString::Format(_T("%u"), DEFAULT_MAJOR_DIM));
+    m_textNumBtns->SetValue(wxString::Format(_T("%u"), DEFAULT_NUM_ENTRIES));
     m_textLabel->SetValue(_T("I'm a radiobox"));
     m_textLabelBtns->SetValue(_T("item"));
 
@@ -320,7 +320,8 @@ void RadioWidgetsPage::CreateRadio()
     wxString labelBtn = m_textLabelBtns->GetValue();
     for ( size_t n = 0; n < count; n++ )
     {
-        items[n] = wxString::Format(_T("%s %u"), labelBtn.c_str(), n + 1);
+        items[n] = wxString::Format(_T("%s %lu"),
+                                    labelBtn.c_str(), (unsigned long)n + 1);
     }
 
     int flags = m_chkVert->GetValue() ? wxRA_VERTICAL
