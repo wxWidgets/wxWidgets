@@ -4120,6 +4120,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             if ( dragCol >= 0 )
             {
                 m_dragRowOrCol = dragCol;
+            }
 
             return;
         }
