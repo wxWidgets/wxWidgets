@@ -31,7 +31,7 @@ public:
         // same as above
     wxCaret(wxWindowBase *window, const wxSize& size)
     {
-        wxCaretBase::Init();
+        Init();
 
         (void)Create(window, size);
     }
