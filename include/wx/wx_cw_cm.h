@@ -68,16 +68,3 @@
 
 #define USE_DEFINE
 
-// in order to avoid problems further down in wxWidgets
-
-#ifdef __cplusplus
-
-extern "C"
-{
-#endif
-    char *strdup(const char *s) ;
-    int isascii( int c ) ;
-#ifdef __cplusplus
-}
-#endif
-

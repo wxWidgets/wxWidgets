@@ -1427,8 +1427,8 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 // missing C RTL functions
 // ----------------------------------------------------------------------------
 
-#if (defined(__MWERKS__) && !defined(__MACH__) && (__MSL__ < 0x00008000)) || \
-     defined(__WXWINCE__)
+#if wxNEED_STRDUP
+
 char *strdup(const char *s)
 {
     char *dest = (char*) malloc( strlen( s ) + 1 ) ;
@@ -1436,30 +1436,17 @@ char *strdup(const char *s)
         strcpy( dest , s ) ;
     return dest ;
 }
-#endif
 
-#if (defined(__MWERKS__) && !defined(__MACH__)) || (defined(__WXWINCE__) && _WIN32_WCE <= 211)
-
-int isascii( int c )
-{
-    return ( c >= 0 && c < 128 );
-}
-#endif
+#endif // wxNEED_STRDUP
 
 #if defined(__WXWINCE__) && (_WIN32_WCE <= 211)
-#if (_WIN32_WCE < 300)
+
 void *calloc( size_t num, size_t size )
 {
     void** ptr = (void **)malloc(num * size);
     memset( ptr, 0, num * size);
     return ptr;
 }
-#endif
 
-int isspace(int c)
-{
-    return (c == ' ');
-}
-
-#endif
+#endif // __WXWINCE__ <= 211
 

@@ -841,9 +841,29 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     #define wxIsspace(c) ((((unsigned)c) < 128) && isspace(c))
 #endif /* VC++ */
 
-#if defined(__MWERKS__) && !defined(isascii)
-    #define isascii(c) ((unsigned)(c) < 0x7f)
+/*
+   a few compilers don't have the (non standard but common) isascii function,
+   define it ourselves for them
+ */
+#ifndef isascii
+    #if defined(__MWERKS__)
+        #define wxNEED_ISASCII
+    #elif defined(_WIN32_WCE)
+        #if _WIN32_WCE <= 211
+            #define wxNEED_ISASCII
+        #endif
+    #endif
+#endif /* isascii */
+
+#ifdef wxNEED_ISASCII
+    inline int isascii(int c) { return (unsigned)c < 0x80; }
 #endif
+
+#ifdef _WIN32_WCE
+    #if _WIN32_WCE <= 211
+        #define isspace(c) ((c) == _T(' ') || (c) == _T('\t'))
+    #endif
+#endif /* _WIN32_WCE */
 
 /*
    we had goofed and defined wxIsctrl() instead of (correct) wxIscntrl() in the
@@ -854,6 +874,20 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #define wxIsctrl wxIscntrl
 
 /* string.h functions */
+
+#ifndef strdup
+    #if defined(__MWERKS__) && !defined(__MACH__) && (__MSL__ < 0x00008000)
+        #define wxNEED_STRDUP
+    #elif defined(__WXWINCE__)
+        #if _WIN32_WCE <= 211
+            #define wxNEED_STRDUP
+        #endif
+    #endif
+#endif /* strdup */
+
+#ifdef wxNEED_STRDUP
+    WXDLLIMPEXP_BASE char *strdup(const char* s);
+#endif
 
 /* VZ: this is never defined neither currently */
 #ifdef wxNEED_WX_STRING_H
@@ -957,13 +991,7 @@ WXDLLIMPEXP_BASE wxChar *wxCtime(const time_t *timep);
 #if (_WIN32_WCE < 300)
 WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #endif
-WXDLLIMPEXP_BASE char* strdup(const char* s);
-
-#if _WIN32_WCE <= 211
-WXDLLIMPEXP_BASE int isspace(int c);
-WXDLLIMPEXP_BASE int isascii( int c );
-#endif
-#endif
+#endif /* _WIN32_WCE */
 
 /* multibyte to wide char conversion functions and macros */
 
