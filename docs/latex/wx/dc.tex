@@ -497,7 +497,8 @@ the {\it current brush colour}, and using a style:
 \item wxFLOOD\_BORDER: the area to be flooded is bounded by the given colour.
 \end{itemize}
 
-{\it Note:} this function is available in MS Windows only.
+{\it Note:} The present implementation for non-Windows platforms may fail to find
+colour borders if the pixels do not match the colour exactly.
 
 \membersection{wxDC::GetBackground}\label{wxdcgetbackground}
 

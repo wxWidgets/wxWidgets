@@ -45,6 +45,7 @@
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/image.h"
+#include "wx/log.h"
 
 #include <math.h>
 
@@ -230,12 +231,39 @@ wxWindowDC::~wxWindowDC()
     m_userRegion = (WXRegion) 0;
 }
 
-void wxWindowDC::DoFloodFill( wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1),
-                           const wxColour& WXUNUSED(col), int WXUNUSED(style) )
+void wxWindowDC::DoFloodFill( wxCoord x1, wxCoord y1,
+                             const wxColour& col, int style )
 {
-    wxFAIL_MSG("not implemented");
-}
+    if (GetBrush().GetStyle() == wxTRANSPARENT)
+    {
+        wxLogDebug(wxT("In FloodFill, current brush is transparent, no filling done"));
+        return ;
+    }
+    int height = 0;
+    int width  = 0;
+    this->GetSize(&width, &height);
+    //it would be nice to fail if we don't get a sensible size...
+    if (width < 1 || height < 1)
+    {
+        wxLogError(wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
+        return ;
+    }
 
+    //this is much faster than doing the individual pixels
+    wxMemoryDC memdc;
+    wxBitmap bitmap(width, height);
+    memdc.SelectObject(bitmap);
+    memdc.Blit(0, 0, width, height, (wxDC*) this, 0, 0);
+    memdc.SelectObject(wxNullBitmap);
+
+    wxImage image(bitmap);
+    image.DoFloodFill (x,y, GetBrush(), col, style, GetLogicalFunction());
+    bitmap = wxBitmap(image);
+    memdc.SelectObject(bitmap);
+    this->Blit(0, 0, width, height, &memdc, 0, 0);
+    memdc.SelectObject(wxNullBitmap);
+}
+  
 bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 {
     // Generic (and therefore rather inefficient) method.

@@ -334,7 +334,34 @@ void wxDC::Clear()
 
 void wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
-    wxFAIL_MSG( wxT("wxDC::DoFloodFill not implemented") );
+    if (GetBrush().GetStyle() == wxTRANSPARENT)
+    {
+        wxLogDebug(wxT("In FloodFill, Current Brush is transparent, no filling done"));
+        return ;
+    }
+    int height = 0;
+    int width  = 0;
+    this->GetSize(&width, &height);
+    //it would be nice to fail if we don't get a sensible size...
+    if (width < 1 || height < 1)
+    {
+        wxLogError(wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
+        return ;
+    }
+
+    //this is much faster than doing the individual pixels
+    wxMemoryDC memdc;
+    wxBitmap bitmap(width, height);
+    memdc.SelectObject(bitmap);
+    memdc.Blit(0, 0, width, height, (wxDC*) this, 0, 0);
+    memdc.SelectObject(wxNullBitmap);
+
+    wxImage image(bitmap);
+    image.DoFloodFill (x,y, GetBrush(), col, style, GetLogicalFunction());
+    bitmap = wxBitmap(image);
+    memdc.SelectObject(bitmap);
+    this->Blit(0, 0, width, height, &memdc, 0, 0);
+    memdc.SelectObject(wxNullBitmap);
 }
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const

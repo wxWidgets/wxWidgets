@@ -51,8 +51,6 @@ src/*.bat
 
 src/common/dosyacc.c
 src/common/doslex.c
-src/common/y_tab.c
-src/common/lex_yy.c
 src/common/*.rc
 
 src/msw/*.cpp
