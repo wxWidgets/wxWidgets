@@ -381,18 +381,19 @@ MMBoardTime MMBoardVideoFile::GetLength()
 {
   MMBoardTime btime;
 
-  btime.seconds = btime.minutes = btime.hours = 1;
+  btime.seconds = 1;
+  btime.minutes = btime.hours = 0;
   return btime;
 }
 
 bool MMBoardVideoFile::IsStopped()
 {
-  return FALSE;
+  return m_video_driver->IsStopped();
 }
 
 bool MMBoardVideoFile::IsPaused()
 {
-  return FALSE;
+  return m_video_driver->IsPaused();
 }
 
 wxString MMBoardVideoFile::GetStringType()

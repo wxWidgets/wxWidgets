@@ -357,7 +357,7 @@ void MMBoardFrame::OpenVideoWindow()
 
   m_video_window = new wxWindow(m_panel, -1, wxDefaultPosition, wxSize(400, 400));
   m_video_window->SetBackgroundColour(*wxBLACK);
-  m_sizer->Prepend(m_video_window, 0, wxCENTRE, 0);
+  m_sizer->Prepend(m_video_window, 0, wxGROW | wxSHRINK | wxCENTRE, 0);
 
   m_sizer->Fit(this);
 }
