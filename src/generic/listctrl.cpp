@@ -2044,6 +2044,14 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                                     : wxEVT_COMMAND_LIST_COL_RIGHT_CLICK,
                                 parent->GetId() );
                 le.SetEventObject( parent );
+                le.m_pointDrag = event.GetPosition();
+
+                // the position should be relative to the parent window, not
+                // this one for compatibility with MSW and common sense: the
+                // user code doesn't know anything at all about this header
+                // window, so why should it get positions relative to it?
+                le.m_pointDrag.y -= GetSize().y;
+
                 le.m_col = m_column;
                 parent->GetEventHandler()->ProcessEvent( le );
             }
