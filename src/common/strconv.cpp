@@ -883,8 +883,8 @@ wxGetCharacterSet(const wxChar *name, wxFontEncoding encoding)
     // check for the special case of ASCII charset
     if ( (!name && encoding == wxFONTENCODING_DEFAULT)
 #if wxUSE_FONTMAP
-            || wxFontMapper::Get()->
-                    CharsetToEncoding(name) == wxFONTENCODING_DEFAULT
+            || (name && wxFontMapper::Get()->
+                    CharsetToEncoding(name) == wxFONTENCODING_DEFAULT)
 #endif // wxUSE_FONTMAP
        )
     {
