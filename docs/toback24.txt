@@ -306,6 +306,12 @@ Checking in src/mac/bmpbuttn.cpp;
 new revision: 1.26; previous revision: 1.25
 done
 
+39. Fix for files opened by another app in wxFileName::GetModificationTime():
+
+Checking in src/common/filename.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/filename.cpp,v  <--  filename.cpp
+new revision: 1.131; previous revision: 1.130
+
 =======
 
 
