@@ -38,7 +38,7 @@ _treeList = [
     ('Window Layout', ['wxLayoutConstraints', 'Sizers']),
 
     ('Miscellaneous', ['wxTimer', 'wxGLCanvas', 'DialogUnits', 'wxImage',
-                      'PrintFramework']),
+                      'PrintFramework', 'wxOGL']),
 
     ('wxPython Library', ['Sizers', 'Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas']),
@@ -188,6 +188,7 @@ class wxPythonDemo(wxFrame):
             #self.nb.ResizeChildren();
             self.nb.Refresh();
             #wxYield()
+            self.window = None
 
         else:
             if os.path.exists(itemText + '.py'):
@@ -199,15 +200,16 @@ class wxPythonDemo(wxFrame):
                 self.nb.Refresh();
                 wxYield()
 
-                window = module.runTest(self, self.nb, self)
-                if window:
-                    self.nb.AddPage(window, 'Demo')
+                self.window = module.runTest(self, self.nb, self)
+                if self.window:
+                    self.nb.AddPage(self.window, 'Demo')
                     self.nb.SetSelection(2)
                     self.nb.ResizeChildren();
 
             else:
                 self.ovr.Clear()
                 self.txt.Clear()
+                self.window = None
 
 
     #---------------------------------------------
@@ -254,12 +256,14 @@ class wxPythonDemo(wxFrame):
     #---------------------------------------------
     def OnCloseWindow(self, event):
         self.dying = true
+        self.window = None
         self.Destroy()
 
     #---------------------------------------------
     def OnIdle(self, event):
         if self.otherWin:
             self.otherWin.Raise()
+            self.window = self.otherWin
             self.otherWin = None
 
 
