@@ -132,6 +132,7 @@
 extern wxList     wxPendingDelete;
 extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
+extern wxCursor   g_globalCursor;
 static bool       g_capturing = FALSE;
 static wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
@@ -1250,9 +1251,6 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
-    if (widget->window && win->GetCursor().Ok() )
-        gdk_window_set_cursor( widget->window, win->GetCursor().GetCursor() );
-
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
 #if (GTK_MINOR_VERSION > 0)
     event.SetTimestamp( gdk_event->time );
@@ -1299,9 +1297,6 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
     
-    if (widget->window && win->GetCursor().Ok() )
-        gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
-
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
 #if (GTK_MINOR_VERSION > 0)
     event.SetTimestamp( gdk_event->time );
@@ -2032,6 +2027,15 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
 void wxWindow::OnInternalIdle()
 {
+    GdkWindow *window = GetConnectWidget()->window;
+    if (window)
+    {
+        if (g_globalCursor.Ok())
+	    gdk_window_set_cursor( window, g_globalCursor.GetCursor() );
+        else
+	    gdk_window_set_cursor( window, m_cursor.GetCursor() );
+    }
+
     UpdateWindowUI();
 }
 
@@ -2391,11 +2395,7 @@ bool wxWindow::SetCursor( const wxCursor &cursor )
         return TRUE;
     }
 
-        if ((m_widget) && (m_widget->window))
-             gdk_window_set_cursor( m_widget->window, GetCursor().GetCursor() );
-
-        if ((m_wxwindow) && (m_wxwindow->window))
-             gdk_window_set_cursor( m_wxwindow->window, GetCursor().GetCursor() );
+//    gdk_window_set_cursor( connect_widget->window, GetCursor().GetCursor() );
 
     // cursor was set
     return TRUE;

@@ -46,7 +46,7 @@ wxCriticalSection *wxPendingEventsLocker = NULL;
 
 /* Current cursor, in order to hang on to
  * cursor handle when setting the cursor globally */
-wxCursor *g_globalCursor = (wxCursor *) NULL;
+wxCursor g_globalCursor;
 
 /* Don't allow event propagation during drag */
 bool g_blockEventsOnDrag = FALSE;

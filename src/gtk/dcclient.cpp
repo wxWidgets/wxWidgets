@@ -1200,6 +1200,26 @@ void wxWindowDC::Destroy()
     m_bgGC = (GdkGC*) NULL;
 }
 
+void wxWindowDC::ComputeScaleAndOrigin()
+{
+    /* CMB: copy scale to see if it changes */
+    double origScaleX = m_scaleX;
+    double origScaleY = m_scaleY;
+
+    wxDC::ComputeScaleAndOrigin();
+
+    /* CMB: if scale has changed call SetPen to recalulate the line width */
+    if ((m_scaleX != origScaleX || m_scaleY != origScaleY) &&
+        (m_pen.Ok()))
+    {
+      /* this is a bit artificial, but we need to force wxDC to think
+         the pen has changed */
+      wxPen pen = m_pen;
+      m_pen = wxNullPen;
+      SetPen( pen );
+  }
+}
+
 // Resolution in pixels per logical inch
 wxSize wxWindowDC::GetPPI() const
 {

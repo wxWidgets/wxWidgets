@@ -97,22 +97,8 @@ wxSize wxDC::GetPPI() const
 
 void wxDC::ComputeScaleAndOrigin()
 {
-    /* CMB: copy scale to see if it changes */
-    double origScaleX = m_scaleX;
-    double origScaleY = m_scaleY;
-
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
-
-    /* CMB: if scale has changed call SetPen to recalulate the line width */
-    if (m_scaleX != origScaleX || m_scaleY != origScaleY)
-    {
-      /* this is a bit artificial, but we need to force wxDC to think
-         the pen has changed */
-      wxPen pen = m_pen;
-      m_pen = wxNullPen;
-      SetPen( pen );
-  }
 }
 
 void wxDC::SetMapMode( int mode )

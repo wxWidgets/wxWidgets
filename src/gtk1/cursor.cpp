@@ -17,6 +17,13 @@
 #include "gdk/gdk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // wxCursor
 //-----------------------------------------------------------------------------
 
@@ -137,38 +144,31 @@ GdkCursor *wxCursor::GetCursor() const
 // busy cursor routines
 //-----------------------------------------------------------------------------
 
-extern wxCursor *g_globalCursor;
+extern wxCursor g_globalCursor;
 
-static wxCursor *gs_savedCursor = NULL;
+static wxCursor  gs_savedCursor;
 static int       gs_busyCount = 0;
 
 void wxEndBusyCursor()
 {
-    if ( --gs_busyCount > 0 )
+    if (--gs_busyCount > 0)
         return;
 
-    wxCHECK_RET( gs_savedCursor && gs_savedCursor->Ok(),
-                 _T("calling wxEndBusyCursor() without wxBeginBusyCursor()?") );
-
-    wxSetCursor(*gs_savedCursor);
-    delete gs_savedCursor;
-    gs_savedCursor = NULL;
+    wxSetCursor( gs_savedCursor );
+    gs_savedCursor = wxNullCursor;
 }
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 {
-    if ( gs_busyCount++ > 0 )
+    if (gs_busyCount++ > 0)
         return;
 
-    wxASSERT_MSG( !gs_savedCursor,
+    wxASSERT_MSG( !gs_savedCursor.Ok(),
                   _T("forgot to call wxEndBusyCursor, will leak memory") );
 
-    gs_savedCursor = new wxCursor;
-    if ( g_globalCursor && g_globalCursor->Ok() )
-        *gs_savedCursor = *g_globalCursor;
-    else
-        *gs_savedCursor = wxCursor(wxCURSOR_ARROW);
-    wxSetCursor(wxCursor(wxCURSOR_WATCH));
+    gs_savedCursor = g_globalCursor;
+    
+    wxSetCursor( wxCursor(wxCURSOR_WATCH) );
 }
 
 bool wxIsBusy()
@@ -178,5 +178,8 @@ bool wxIsBusy()
 
 void wxSetCursor( const wxCursor& cursor )
 {
-    if (g_globalCursor) (*g_globalCursor) = cursor;
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
+    g_globalCursor = cursor;
 }

@@ -70,7 +70,7 @@ public:
     // implementation
     // --------------
 
-    void ComputeScaleAndOrigin();
+    virtual void ComputeScaleAndOrigin();
 
     long XDEV2LOG(long x) const
     {

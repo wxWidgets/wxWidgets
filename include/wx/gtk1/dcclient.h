@@ -118,6 +118,8 @@ public:
 
     void SetUpDC();
     void Destroy();
+    void ComputeScaleAndOrigin();
+
     GdkWindow *GetWindow() { return m_window; }
 };
 
