@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 #----------------------------------------------------------------------
 # Name:        wxPython.lib.rightalign
 # Purpose:     A class derived from wxTextCtrl that aligns the text
