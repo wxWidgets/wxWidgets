@@ -156,7 +156,8 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
     ++filterIndex ;
 
 
-		for ( int i = 0 ; i < myData->extensions.GetCount() ; i++ )
+        const size_t extCount = myData->extensions.GetCount();
+		for ( size_t i = 0 ; i < extCount; i++ )
 		{
 			int j ;
 			for ( j = 0 ; gfilters[j] ; j++ )
@@ -196,7 +197,7 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
 	      return true ;
 	
 	    {
-	      if ( type == data->filtermactypes[i] )
+	      if ( type == (OSType)data->filtermactypes[i] )
 		      return true ;
 	    
 	      wxStringTokenizer tokenizer( data->extensions[i] , ";" ) ;
@@ -428,7 +429,8 @@ int wxFileDialog::ShowModal()
 	  	if ( myData.extensions.GetCount() > 0 )
 	  	{
 	  	  mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
-	  	  for ( int i = 0 ; i < myData.extensions.GetCount() ; ++i ) {
+          const size_t extCount = myData.extensions.GetCount();
+	  	  for ( size_t i = 0 ; i < extCount; ++i ) {
 	  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
 	  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
 	  	    (*mNavOptions.popupExtension)[i].menuType = i ;

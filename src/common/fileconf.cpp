@@ -1525,9 +1525,9 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 
     size_t  nCount = pGroup->m_aEntries.Count();
 
-    wxLogTrace( _T("wxFileConfig"),
-                _T("  Removing %u Entries"),
-                nCount );
+    wxLogTrace(_T("wxFileConfig"),
+               _T("Removing %lu Entries"),
+               (unsigned long)nCount );
 
     for ( size_t nEntry = 0; nEntry < nCount; nEntry++ )
     {
@@ -1547,8 +1547,8 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
     nCount = pGroup->m_aSubgroups.Count();
 
     wxLogTrace( _T("wxFileConfig"),
-                _T("  Removing %u SubGroups"),
-                nCount );
+                _T("Removing %lu SubGroups"),
+                (unsigned long)nCount );
 
     for ( size_t nGroup = 0; nGroup < nCount; nGroup++ )
     {
