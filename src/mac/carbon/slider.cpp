@@ -127,7 +127,7 @@ wxSlider::~wxSlider()
 
 int wxSlider::GetValue() const
 {
- 	return GetControlValue( (ControlHandle) m_macControl) ;
+ 	return GetControl32BitValue( (ControlHandle) m_macControl) ;
 }
 
 void wxSlider::SetValue(int value)
@@ -136,7 +136,7 @@ void wxSlider::SetValue(int value)
 	valuestring.Printf( "%d" , value ) ;	
 	if ( m_macValueStatic )
 		m_macValueStatic->SetLabel( valuestring ) ;
- 	SetControlValue( (ControlHandle) m_macControl , value ) ;
+ 	SetControl32BitValue( (ControlHandle) m_macControl , value ) ;
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -146,8 +146,8 @@ void wxSlider::SetRange(int minValue, int maxValue)
   m_rangeMin = minValue;
   m_rangeMax = maxValue;
 
-  SetControlMinimum( (ControlHandle) m_macControl, m_rangeMin);
-  SetControlMaximum( (ControlHandle) m_macControl, m_rangeMax);
+  SetControl32BitMinimum( (ControlHandle) m_macControl, m_rangeMin);
+  SetControl32BitMaximum( (ControlHandle) m_macControl, m_rangeMax);
   
   if(m_macMinimumStatic) {
     value.Printf("%d", m_rangeMin);
@@ -241,7 +241,7 @@ void wxSlider::Command (wxCommandEvent & event)
 
 void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
-	SInt16 value = ::GetControlValue( (ControlHandle) m_macControl ) ;
+	SInt16 value = ::GetControl32BitValue( (ControlHandle) m_macControl ) ;
 	
 	SetValue( value ) ;		
 	

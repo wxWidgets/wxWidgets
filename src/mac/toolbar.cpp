@@ -240,11 +240,11 @@ bool wxToolBar::Realize()
             }
             if ( tool->CanBeToggled() && tool->IsToggled() )
             {
-                ::SetControlValue( m_macToolHandle , 1 ) ;
+                ::SetControl32BitValue( m_macToolHandle , 1 ) ;
             }
             else
             {
-                ::SetControlValue( m_macToolHandle , 0 ) ;
+                ::SetControl32BitValue( m_macToolHandle , 0 ) ;
             }
             /*
               ::SetControlFontStyle( m_macToolHandle , &controlstyle ) ;
@@ -336,7 +336,7 @@ void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
             wxToolBarTool *tool = (wxToolBarTool *)m_tools.Nth( index )->Data();
             if ( tool->CanBeToggled() )
             {
-                tool->Toggle( GetControlValue( (ControlHandle) control ) ) ;
+                tool->Toggle( GetControl32BitValue( (ControlHandle) control ) ) ;
             }
             OnLeftClick( tool->GetId() , tool -> IsToggled() ) ;
             break ;
@@ -533,7 +533,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
         return ;
         
     ControlHandle control = (ControlHandle) m_macToolHandles[ tool->m_index ] ;
-        ::SetControlValue( control , toggle ) ;
+        ::SetControl32BitValue( control , toggle ) ;
 }
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),

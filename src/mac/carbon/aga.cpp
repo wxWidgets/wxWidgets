@@ -955,9 +955,9 @@ pascal SInt32 AGAProgressBarDefProc (SInt16 procID, ControlHandle theControl, Co
 				GetForeColor( &oldForeColor ) ;
 				
 				{
-					int			theValue = GetControlValue(theControl) ;
-					int			theMinimum = GetControlMinimum(theControl) ;
-					int			theMaximum = GetControlMaximum(theControl) ;
+					int			theValue = GetControl32BitValue(theControl) ;
+					int			theMinimum = GetControl32BitMinimum(theControl) ;
+					int			theMaximum = GetControl32BitMaximum(theControl) ;
 					
 					AGADrawRectProgress( &(**theControl).contrlRect , kAGAStateEnabled , (( double )( theValue - theMinimum )) / ( theMaximum-theMinimum ) ) ;
 				}
@@ -1052,7 +1052,7 @@ pascal SInt32 AGABevelButtonDefProc (SInt16 procID, ControlHandle theControl, Co
 					AGASetFontStyle( &info->fontStyle ) ;
 					Boolean mRadioBehavior = false ;
 					
-					int	mValue = GetControlValue( theControl ) ;
+					int	mValue = GetControl32BitValue( theControl ) ;
 					long theValue = (mRadioBehavior ? mValue : 0);
 					Boolean inPushed = (**theControl).contrlHilite ;
 					Boolean down = inPushed || (theValue != 0);
@@ -1193,7 +1193,7 @@ pascal SInt32 AGAButtonDefProc (SInt16 procID, ControlHandle theControl, Control
 					Boolean mRadioBehavior = false ;
 					
 					Rect frame, tempRect;
-					int	mValue = GetControlValue( theControl ) ;
+					int	mValue = GetControl32BitValue( theControl ) ;
 					long theValue = (mRadioBehavior ? mValue : 0);
 					Boolean inPushed = (**theControl).contrlHilite ;
 					Boolean down = inPushed || (theValue != 0);
@@ -1429,7 +1429,7 @@ pascal SInt32 AGACheckBoxDefProc (SInt16 procID, ControlHandle theControl, Contr
 						Rect frame =  (**theControl).contrlRect ;
 						Boolean hasColor = true;
 						Boolean disabled = (*theControl)->contrlHilite == 255 ;
-						int	mValue = GetControlValue( theControl ) ;
+						int	mValue = GetControl32BitValue( theControl ) ;
 						Boolean inPushed = (**theControl).contrlHilite ;
 						int mEnabled = 1 ;
 						int triState_Off = 3 ;
@@ -1625,7 +1625,7 @@ pascal SInt32 AGARadioButtonDefProc (SInt16 procID, ControlHandle theControl, Co
 						Rect frame =  (**theControl).contrlRect ;
 						Boolean hasColor = true;
 						Boolean disabled = (*theControl)->contrlHilite == 255 ;
-						int	mValue = GetControlValue( theControl ) ;
+						int	mValue = GetControl32BitValue( theControl ) ;
 						Boolean inPushed = (**theControl).contrlHilite ;
 						int mEnabled = 1 ;
 						int triState_Off = 3 ;

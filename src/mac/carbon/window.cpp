@@ -37,6 +37,7 @@
 #include "wx/menuitem.h"
 #include "wx/spinctrl.h"
 #include "wx/log.h"
+#include "wx/geometry.h"
 
 #if wxUSE_CARET
     #include "wx/caret.h"
@@ -1434,6 +1435,48 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
 extern int wxBusyCursorCount ;
 static wxWindow *gs_lastWhich = NULL;
 
+bool wxWindowMac::MacSetupCursor( const wxPoint& pt) 
+{
+    // first trigger a set cursor event
+    
+    wxPoint clientorigin = GetClientAreaOrigin() ;
+    wxSize clientsize = GetClientSize() ;
+    wxCursor cursor ;
+    if ( wxRect2DInt( clientorigin.x , clientorigin.y , clientsize.x , clientsize.y ).Contains( wxPoint2DInt( pt ) ) )
+    {  
+        wxSetCursorEvent event( pt.x , pt.y );
+
+        bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
+        if ( processedEvtSetCursor && event.HasCursor() )
+        {
+           cursor = event.GetCursor() ;
+        }
+        else
+        {
+            
+            // the test for processedEvtSetCursor is here to prevent using m_cursor
+            // if the user code caught EVT_SET_CURSOR() and returned nothing from
+            // it - this is a way to say that our cursor shouldn't be used for this
+            // point
+            if ( !processedEvtSetCursor && m_cursor.Ok() )
+            {
+                cursor = m_cursor ;
+            }
+            if ( wxIsBusy() )
+            {
+            }
+            else
+            {
+                if ( !GetParent() )
+                    cursor = *wxSTANDARD_CURSOR  ;
+            }
+        }
+        if ( cursor.Ok() )
+            cursor.MacInstall() ;
+    }
+    return cursor.Ok() ;
+}
+
 bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
 {
     if ((event.m_x < m_x) || (event.m_y < m_y) ||
@@ -1462,14 +1505,18 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
         }
     }
 
+    wxWindow* cursorTarget = this ;
+    wxPoint cursorPoint( x , y ) ;
+
+    while( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
+    {
+        cursorTarget = cursorTarget->GetParent() ;
+        if ( cursorTarget )
+            cursorPoint += cursorTarget->GetPosition() ;
+    }
     event.m_x = x ;
     event.m_y = y ;
     event.SetEventObject( this ) ;
-
-    if ( wxBusyCursorCount == 0 )
-    {
-        m_cursor.MacInstall() ;
-    }
 
     if ( event.GetEventType() == wxEVT_LEFT_DOWN )
     {

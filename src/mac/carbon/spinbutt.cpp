@@ -90,8 +90,8 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 {
 	m_min = minVal;
 	m_max = maxVal;
-    SetControlMaximum( (ControlHandle) m_macControl , maxVal ) ;
-    SetControlMinimum((ControlHandle) m_macControl , minVal ) ;
+    SetControl32BitMaximum( (ControlHandle) m_macControl , maxVal ) ;
+    SetControl32BitMinimum((ControlHandle) m_macControl , minVal ) ;
 }
 
 void wxSpinButton::MacHandleValueChanged( int inc )
@@ -134,7 +134,7 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     {
         m_value = oldValue ;
     }
-    SetControlValue( (ControlHandle) m_macControl , m_value ) ;
+    SetControl32BitValue( (ControlHandle) m_macControl , m_value ) ;
 
     /* always send a thumbtrack event */
     if (scrollEvent != wxEVT_SCROLL_THUMBTRACK)

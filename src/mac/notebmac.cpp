@@ -205,7 +205,7 @@ int wxNotebook::SetSelection(int nPage)
     return m_nSelection ;
 
     ChangePage(m_nSelection, nPage);
-	SetControlValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
+	SetControl32BitValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
 
     return m_nSelection;
 }
@@ -328,7 +328,7 @@ bool wxNotebook::InsertPage(int nPage,
  */
 void wxNotebook::MacSetupTabs()
 {
-    SetControlMaximum( (ControlHandle) m_macControl , GetPageCount() ) ;
+    SetControl32BitMaximum( (ControlHandle) m_macControl , GetPageCount() ) ;
 
     wxNotebookPage *page;
     ControlTabInfoRec info;
@@ -518,7 +518,7 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
       {
 	    {
             wxNotebookEvent changing(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
- 				     ::GetControlValue(control) - 1, m_nSelection);
+ 				     ::GetControl32BitValue(control) - 1, m_nSelection);
  	        changing.SetEventObject(this);
  	        ProcessEvent(changing);
  
@@ -529,7 +529,7 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
      	       wxTheApp->s_lastMouseDown = 0 ;
      
      	       wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
-     				     ::GetControlValue(control) - 1, m_nSelection);
+     				     ::GetControl32BitValue(control) - 1, m_nSelection);
      	       event.SetEventObject(this);
      
     	       ProcessEvent(event);
@@ -543,7 +543,7 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
 void wxNotebook::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
 #if 0
-  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId , ::GetControlValue((ControlHandle)m_macControl) - 1, m_nSelection);
+  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId , ::GetControl32BitValue((ControlHandle)m_macControl) - 1, m_nSelection);
   event.SetEventObject(this);
 
   ProcessEvent(event);

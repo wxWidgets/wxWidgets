@@ -61,13 +61,13 @@ void wxGauge::SetBezelFace(int w)
 void wxGauge::SetRange(int r)
 {
     m_rangeMax = r;
-    ::SetControlMaximum( (ControlHandle) m_macControl , m_rangeMax ) ;
+    ::SetControl32BitMaximum( (ControlHandle) m_macControl , m_rangeMax ) ;
 }
 
 void wxGauge::SetValue(int pos)
 {
     m_gaugePos = pos;
-   	::SetControlValue( (ControlHandle) m_macControl , m_gaugePos ) ;
+   	::SetControl32BitValue( (ControlHandle) m_macControl , m_gaugePos ) ;
 }
 
 int wxGauge::GetShadowWidth() const

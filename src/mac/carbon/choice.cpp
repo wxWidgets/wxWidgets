@@ -50,10 +50,10 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 	
 		m_macPopUpMenuHandle =  NewUniqueMenu() ;
 		SetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
-	 	SetControlMinimum( (ControlHandle) m_macControl , 0 ) ;
-		SetControlMaximum( (ControlHandle) m_macControl , 0) ;
+	 	SetControl32BitMinimum( (ControlHandle) m_macControl , 0 ) ;
+		SetControl32BitMaximum( (ControlHandle) m_macControl , 0) ;
 		if ( n > 0 )
-			SetControlValue( (ControlHandle) m_macControl , 1 ) ;
+			SetControl32BitValue( (ControlHandle) m_macControl , 1 ) ;
 
 		MacPostControlCreate() ;
 
@@ -77,7 +77,7 @@ int wxChoice::DoAppend(const wxString& item)
 	m_datas.Add( NULL ) ;
 	int index = m_strings.GetCount()  - 1  ;
 	DoSetItemClientData( index , NULL ) ;
-	SetControlMaximum( (ControlHandle) m_macControl , GetCount()) ;
+	SetControl32BitMaximum( (ControlHandle) m_macControl , GetCount()) ;
 	return index ;
 }
 
@@ -93,7 +93,7 @@ void wxChoice::Delete(int n)
     ::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , n + 1) ;
     m_strings.Remove( n ) ;
     m_datas.RemoveAt( n ) ;
-	SetControlMaximum( (ControlHandle) m_macControl , GetCount()) ;
+	SetControl32BitMaximum( (ControlHandle) m_macControl , GetCount()) ;
 }
 
 void wxChoice::Clear()
@@ -106,7 +106,7 @@ void wxChoice::Clear()
     }
     m_strings.Empty() ;
     m_datas.Empty() ;
-    SetControlMaximum( (ControlHandle) m_macControl , 0 ) ;
+    SetControl32BitMaximum( (ControlHandle) m_macControl , 0 ) ;
 }
 
 void wxChoice::FreeData()
@@ -127,12 +127,12 @@ void wxChoice::FreeData()
 
 int wxChoice::GetSelection() const
 {
-    return GetControlValue( (ControlHandle) m_macControl ) -1 ;
+    return GetControl32BitValue( (ControlHandle) m_macControl ) -1 ;
 }
 
 void wxChoice::SetSelection(int n)
 {
-    SetControlValue( (ControlHandle) m_macControl , n + 1 ) ;
+    SetControl32BitValue( (ControlHandle) m_macControl , n + 1 ) ;
 }
 
 // ----------------------------------------------------------------------------
