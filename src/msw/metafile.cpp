@@ -222,7 +222,7 @@ wxMetafileDC::~wxMetafileDC()
 }
 
 void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
-                                 long *descent, long *externalLeading, wxFont *theFont, bool use16bit) const
+                                 long *descent, long *externalLeading, wxFont *theFont, bool WXUNUSED(use16bit)) const
 {
     wxFont *fontToUse = theFont;
     if (!fontToUse)
@@ -382,7 +382,7 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
 
     wxChar tempFileBuf[256];
     wxGetTempFileName(wxT("mf"), tempFileBuf);
-    FILE *fHandle = wxFopen(wxFNCONV(wxConvFile), _T("wb"));
+    FILE *fHandle = wxFopen(wxFNCONV(tempFileBuf), _T("wb"));
     if (!fHandle)
         return FALSE;
     fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
