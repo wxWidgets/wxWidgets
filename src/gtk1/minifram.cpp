@@ -389,4 +389,15 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     return TRUE;
 }
 
+void wxMiniFrame::SetTitle( const wxString &title )
+{
+    wxFrame::SetTitle( title );
+    
+#ifdef __WXGTK20__
+    gdk_window_invalidate_rect( GTK_PIZZA(m_mainWidget)->bin_window, NULL, true );
+#else
+    gtk_widget_draw( m_mainWidget, (GdkRectangle*) NULL );
+#endif
+}
+
 #endif
