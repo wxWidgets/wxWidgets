@@ -87,7 +87,7 @@ public:
 //     wxWizardPage(wxWizard *parent,
 //                  const wxBitmap& bitmap = wxNullBitmap,
 //                  const char* resource = NULL);
-//     %name(wxPreWizardPage)wxWizardPage();
+//     %name(PreWizardPage)wxWizardPage();
 
     %extend {
         bool Create(wxWizard *parent,
