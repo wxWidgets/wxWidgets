@@ -21,6 +21,7 @@
 #include <wx/file.h>
 #include <wx/timer.h>
 #include <wx/log.h>
+#include "wx/image.h"
 
 
 #include "smile.xpm"
@@ -28,6 +29,52 @@
 #include "wx/canvas/canvas.h"
 
 // derived classes
+
+
+class MywxCanvasImage: public wxCanvasImage
+{
+public:
+    MywxCanvasImage( const wxImage &image, double x, double y, double w, double h );
+
+    void MywxCanvasImage::OnMouse(wxMouseEvent &event);
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(MywxCanvasImage,wxCanvasImage)
+  EVT_MOUSE_EVENTS( MywxCanvasImage::OnMouse )
+END_EVENT_TABLE()
+
+MywxCanvasImage::MywxCanvasImage( const wxImage &image, double x, double y, double w, double h )
+    :wxCanvasImage( image, x, y, w, h )
+{
+}
+
+void MywxCanvasImage::OnMouse(wxMouseEvent &event)
+{
+    static bool first=false;
+    static dx=0;
+    static dy=0;
+
+    int x = event.GetX();
+    int y = event.GetY();
+    if (event.m_leftDown)
+    {   if (!first)
+        {
+           first=true;
+           dx=x;
+           dy=y;
+        }
+        Move(m_area.x+x-dx,m_area.y+y-dy);
+        CaptureMouse();
+    }
+    else if (IsCapturedMouse())
+    {
+        ReleaseMouse();
+        first=false;
+        dx=0;dy=0;
+    }
+}
 
 class MyFrame;
 class MyApp;
@@ -107,7 +154,7 @@ MyFrame::MyFrame()
     SetStatusWidths( 2, widths );
 
     m_canvas = new wxCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
-    
+
     m_canvas->Freeze();
 
     m_canvas->SetArea( 400, 600 );
@@ -139,9 +186,12 @@ MyFrame::MyFrame()
     m_canvas->Append( m_sm3 );
 
     for (i = 10; i < 300; i+=10)
-        m_canvas->Append( new wxCanvasLine( 10,150,i,300, 0,255,0 ) );
-                    
-    m_sm4 = new wxCanvasImage( image, 0,270,64,32 );
+        m_canvas->Append( new wxCanvasLine( 10,-15,i,300, 0,255,0 ) );
+
+//    m_canvas->Append( new wxCanvasLine( 10,-1500e6,50,300000e6, 0,255,0 ) );
+//    m_canvas->Append( new wxCanvasLine( 10,-150000,50,300000, 0,255,0 ) );
+
+    m_sm4 = new MywxCanvasImage( image, 0,270,64,32 );
     m_canvas->Append( m_sm4 );
 
     m_canvas->Thaw();
@@ -149,9 +199,9 @@ MyFrame::MyFrame()
     m_log = new wxTextCtrl( this, -1, "", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
     delete old_log;
-    
+
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-    
+
     topsizer->Add( m_canvas, 1, wxEXPAND );
     topsizer->Add( m_log, 0, wxEXPAND );
 
