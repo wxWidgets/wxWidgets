@@ -37,7 +37,7 @@
 
 // Normally, new is automatically defined to be the
 // debugging version. If not, this does it.
-#if !defined(new) && defined(WXDEBUG_NEW) && wxUSE_MEMORY_TRACING
+#if !defined(new) && defined(WXDEBUG_NEW) && wxUSE_MEMORY_TRACING && wxUSE_GLOBAL_MEMORY_OPERATORS
 #define new WXDEBUG_NEW
 #endif
 
