@@ -50,7 +50,6 @@
 
 
 #if TEST_ALL
-
     #define TEST_CMDLINE
     #define TEST_DATETIME
     #define TEST_DIR
@@ -78,6 +77,7 @@
     #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
 //    #define TEST_SOCKETS  --FIXME! (RN)
+    #define TEST_STDPATHS
     #define TEST_STREAMS
     #define TEST_TEXTSTREAM
     #define TEST_THREADS
@@ -86,11 +86,8 @@
 //    #define TEST_VOLUME   --FIXME! (RN)
     #define TEST_WCHAR
     #define TEST_ZIP
-
 #else // #if TEST_ALL
-
-    #define TEST_DATETIME
-
+    #define TEST_STDPATHS
 #endif
 
 // some tests are interactive, define this to run them
@@ -803,116 +800,6 @@ static void DumpFileName(const wxChar *desc, const wxFileName& fn)
     }
 }
 #endif
-
-static struct FileNameInfo
-{
-    const wxChar *fullname;
-    const wxChar *volume;
-    const wxChar *path;
-    const wxChar *name;
-    const wxChar *ext;
-    bool isAbsolute;
-    wxPathFormat format;
-} filenames[] =
-{
-    // Unix file names
-    { _T("/usr/bin/ls"), _T(""), _T("/usr/bin"), _T("ls"), _T(""), true, wxPATH_UNIX },
-    { _T("/usr/bin/"), _T(""), _T("/usr/bin"), _T(""), _T(""), true, wxPATH_UNIX },
-    { _T("~/.zshrc"), _T(""), _T("~"), _T(".zshrc"), _T(""), true, wxPATH_UNIX },
-    { _T("../../foo"), _T(""), _T("../.."), _T("foo"), _T(""), false, wxPATH_UNIX },
-    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), false, wxPATH_UNIX },
-    { _T("~/foo.bar"), _T(""), _T("~"), _T("foo"), _T("bar"), true, wxPATH_UNIX },
-    { _T("/foo"), _T(""), _T("/"), _T("foo"), _T(""), true, wxPATH_UNIX },
-    { _T("Mahogany-0.60/foo.bar"), _T(""), _T("Mahogany-0.60"), _T("foo"), _T("bar"), false, wxPATH_UNIX },
-    { _T("/tmp/wxwin.tar.bz"), _T(""), _T("/tmp"), _T("wxwin.tar"), _T("bz"), true, wxPATH_UNIX },
-
-    // Windows file names
-    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), false, wxPATH_DOS },
-    { _T("\\foo.bar"), _T(""), _T("\\"), _T("foo"), _T("bar"), false, wxPATH_DOS },
-    { _T("c:foo.bar"), _T("c"), _T(""), _T("foo"), _T("bar"), false, wxPATH_DOS },
-    { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
-    { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), true, wxPATH_DOS },
-    { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
-    { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), true, wxPATH_DOS },
-
-    // wxFileName support for Mac file names is broken currently
-#if 0
-    // Mac file names
-    { _T("Volume:Dir:File"), _T("Volume"), _T("Dir"), _T("File"), _T(""), true, wxPATH_MAC },
-    { _T("Volume:Dir:Subdir:File"), _T("Volume"), _T("Dir:Subdir"), _T("File"), _T(""), true, wxPATH_MAC },
-    { _T("Volume:"), _T("Volume"), _T(""), _T(""), _T(""), true, wxPATH_MAC },
-    { _T(":Dir:File"), _T(""), _T("Dir"), _T("File"), _T(""), false, wxPATH_MAC },
-    { _T(":File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), false, wxPATH_MAC },
-    { _T("File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), false, wxPATH_MAC },
-#endif // 0
-
-    // VMS file names
-    { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), true, wxPATH_VMS },
-    { _T("file.txt"), _T(""), _T(""), _T("file"), _T("txt"), false, wxPATH_VMS },
-};
-
-static void TestFileNameConstruction()
-{
-    wxPuts(_T("*** testing wxFileName construction ***"));
-
-    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
-    {
-        const FileNameInfo& fni = filenames[n];
-
-        wxFileName fn(fni.fullname, fni.format);
-
-        wxString fullname = fn.GetFullPath(fni.format);
-        if ( fullname != fni.fullname )
-        {
-            wxPrintf(_T("ERROR: fullname should be '%s'\n"), fni.fullname);
-        }
-
-        bool isAbsolute = fn.IsAbsolute(fni.format);
-        wxPrintf(_T("'%s' is %s (%s)\n\t"),
-               fullname.c_str(),
-               isAbsolute ? "absolute" : "relative",
-               isAbsolute == fni.isAbsolute ? "ok" : "ERROR");
-
-        if ( !fn.Normalize(wxPATH_NORM_ALL, wxEmptyString, fni.format) )
-        {
-            wxPuts(_T("ERROR (couldn't be normalized)"));
-        }
-        else
-        {
-            wxPrintf(_T("normalized: '%s'\n"), fn.GetFullPath(fni.format).c_str());
-        }
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-static void TestFileNameSplit()
-{
-    wxPuts(_T("*** testing wxFileName splitting ***"));
-
-    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
-    {
-        const FileNameInfo& fni = filenames[n];
-        wxString volume, path, name, ext;
-        wxFileName::SplitPath(fni.fullname,
-                              &volume, &path, &name, &ext, fni.format);
-
-        wxPrintf(_T("%s -> volume = '%s', path = '%s', name = '%s', ext = '%s'"),
-               fni.fullname,
-               volume.c_str(), path.c_str(), name.c_str(), ext.c_str());
-
-        if ( volume != fni.volume )
-            wxPrintf(_T(" (ERROR: volume = '%s')"), fni.volume);
-        if ( path != fni.path )
-            wxPrintf(_T(" (ERROR: path = '%s')"), fni.path);
-        if ( name != fni.name )
-            wxPrintf(_T(" (ERROR: name = '%s')"), fni.name);
-        if ( ext != fni.ext )
-            wxPrintf(_T(" (ERROR: ext = '%s')"), fni.ext);
-
-        wxPuts(wxEmptyString);
-    }
-}
 
 static void TestFileNameTemp()
 {
@@ -2850,7 +2737,8 @@ static bool TestFtpConnect()
     else
     {
         wxPrintf(_T("--- Connected to %s, current directory is '%s'\n"),
-               hostname, ftp.Pwd().c_str());
+                 hostname, ftp.Pwd().c_str());
+        ftp.Close();
     }
 
     return true;
@@ -3119,6 +3007,32 @@ static void TestFtpUpload()
 }
 
 #endif // TEST_FTP
+
+// ----------------------------------------------------------------------------
+// standard paths
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_STDPATHS
+
+#include "wx/stdpaths.h"
+
+static void TestStandardPaths()
+{
+    wxPuts(_T("*** Testing wxStandardPaths ***\n"));
+
+    wxTheApp->SetAppName(_T("console"));
+
+    wxStandardPaths& stdp = wxStandardPaths::Get();
+    wxPrintf(_T("Config dir (sys):\t%s\n"), stdp.GetConfigDir().c_str());
+    wxPrintf(_T("Config dir (user):\t%s\n"), stdp.GetUserConfigDir().c_str());
+    wxPrintf(_T("Data dir (sys):\t\t%s\n"), stdp.GetDataDir().c_str());
+    wxPrintf(_T("Data dir (sys local):\t%s\n"), stdp.GetLocalDataDir().c_str());
+    wxPrintf(_T("Data dir (user):\t%s\n"), stdp.GetUserDataDir().c_str());
+    wxPrintf(_T("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir().c_str());
+    wxPrintf(_T("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir().c_str());
+}
+
+#endif // TEST_STDPATHS
 
 // ----------------------------------------------------------------------------
 // streams
@@ -4672,7 +4586,7 @@ int main(int argc, char **argv)
             TestFtpMisc();
             TestFtpFileSize();
             TestFtpUpload();
-        #endif
+        #endif // TEST_ALL
 
         #if TEST_INTERACTIVE
             TestFtpInteractive();
@@ -4808,6 +4722,10 @@ int main(int argc, char **argv)
 
 #ifdef TEST_SCOPEGUARD
     TestScopeGuard();
+#endif
+
+#ifdef TEST_STDPATHS
+    TestStandardPaths();
 #endif
 
 #ifdef TEST_USLEEP
