@@ -67,14 +67,15 @@ GENERICOBJS= \
   $(GENDIR)/laywin.$(OBJSUFF) \
   $(GENDIR)/msgdlgg.$(OBJSUFF) \
   $(GENDIR)/panelg.$(OBJSUFF) \
-  $(GENDIR)/printps.$(OBJSUFF) \
-  $(GENDIR)/prntdlgg.$(OBJSUFF) \
   $(GENDIR)/sashwin.$(OBJSUFF) \
   $(GENDIR)/scrolwin.$(OBJSUFF) \
   $(GENDIR)/splitter.$(OBJSUFF) \
   $(GENDIR)/statusbr.$(OBJSUFF) \
   $(GENDIR)/tabg.$(OBJSUFF) \
   $(GENDIR)/textdlgg.$(OBJSUFF)
+
+#  $(GENDIR)/prntdlgg.$(OBJSUFF) \
+#  $(GENDIR)/printps.$(OBJSUFF) \
 
 COMMONOBJS = \
   $(COMMDIR)/config.$(OBJSUFF) \
@@ -96,7 +97,6 @@ COMMONOBJS = \
   $(COMMDIR)/module.$(OBJSUFF) \
   $(COMMDIR)/object.$(OBJSUFF) \
   $(COMMDIR)/odbc.$(OBJSUFF) \
-  $(COMMDIR)/postscrp.$(OBJSUFF) \
   $(COMMDIR)/process.$(OBJSUFF) \
   $(COMMDIR)/prntbase.$(OBJSUFF) \
   $(COMMDIR)/resource.$(OBJSUFF) \
@@ -134,8 +134,7 @@ COMMONOBJS = \
   $(COMMDIR)/url.$(OBJSUFF) \
   $(COMMDIR)/wincmn.$(OBJSUFF)
 
-# This must be renamed! It conflicts with the g++ fstream.h.
-#  $(COMMDIR)/fstream.$(OBJSUFF) \
+#  $(COMMDIR)/postscrp.$(OBJSUFF) \
 
 # NOTE: if the socket-related files above fail with a syntax error in Sockets.h,
 # remove the files (probably all GnuWin32 releases < b20).
