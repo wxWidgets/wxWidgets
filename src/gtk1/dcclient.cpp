@@ -104,8 +104,9 @@ void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
     g_return_if_fail (gc != NULL);
 
 #ifdef __WXGTK20__
-    if (GDK_WINDOW_DESTROYED(drawable) || GDK_WINDOW_DESTROYED(src))
-        return;
+    // This doesn't seem to exist for bitmaps (1-bit)
+    // if (GDK_WINDOW_DESTROYED(drawable) || GDK_WINDOW_DESTROYED(src))
+    //    return;
 
     gdk_drawable_get_size(src, &src_width, &src_height);
 #else
