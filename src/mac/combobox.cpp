@@ -21,7 +21,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 #endif
 
-// right now we don't support editable comboboxes
+// composite combobox implementation by Dan "Bud" Keith bud@otsys.com
+
 
 static int nextPopUpMenuId = 1000 ;
 MenuHandle NewUniqueMenu() 
@@ -30,6 +31,176 @@ MenuHandle NewUniqueMenu()
   nextPopUpMenuId++ ;
   return handle ;
 }
+
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// the margin between the text control and the choice
+static const wxCoord MARGIN = 2;
+static const int    POPUPWIDTH = 18;
+static const int    POPUPHEIGHT = 23;
+
+
+// ----------------------------------------------------------------------------
+// wxComboBoxText: text control forwards events to combobox
+// ----------------------------------------------------------------------------
+
+class wxComboBoxText : public wxTextCtrl
+{
+public:
+    wxComboBoxText( wxComboBox * cb )
+        : wxTextCtrl( cb->GetParent(), 1 )
+    {
+        m_cb = cb;
+    }
+
+protected:
+    void OnTextChange( wxCommandEvent& event )
+    {
+        wxString    s = GetValue();
+            
+        m_cb->DelegateTextChanged( s );
+
+        event.Skip();
+    }
+
+private:
+    wxComboBox *m_cb;
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxComboBoxText, wxTextCtrl)
+    EVT_TEXT(-1, wxComboBoxText::OnTextChange)
+END_EVENT_TABLE()
+
+class wxComboBoxChoice : public wxChoice
+{
+public:
+    wxComboBoxChoice(wxComboBox *cb, int style)
+        : wxChoice( cb->GetParent(), 1 )
+    {
+        m_cb = cb;
+    }
+
+protected:
+    void OnChoice( wxCommandEvent& e )
+    {
+        wxString    s = e.GetString();
+
+        m_cb->DelegateChoice( s );
+    }
+
+private:
+    wxComboBox *m_cb;
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxComboBoxChoice, wxChoice)
+    EVT_CHOICE(-1, wxComboBoxChoice::OnChoice)
+END_EVENT_TABLE()
+
+
+
+
+wxComboBox::~wxComboBox()
+{
+   // delete the controls now, don't leave them alive even though they woudl
+    // still be eventually deleted by our parent - but it will be too late, the
+    // user code expects them to be gone now
+    delete m_text;
+    delete m_choice;
+}
+
+
+// ----------------------------------------------------------------------------
+// geometry
+// ----------------------------------------------------------------------------
+
+wxSize wxComboBox::DoGetBestSize() const
+{
+    wxSize size = m_choice->GetBestSize();
+    
+    if ( m_text != 0 )
+    {
+        wxSize  sizeText = m_text->GetBestSize();
+        
+        size.x = POPUPWIDTH + sizeText.x + MARGIN;
+    }
+
+    return size;
+}
+
+void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
+    height = POPUPHEIGHT;
+    
+    wxControl::DoMoveWindow(x, y, width, height);
+
+    if ( m_text == 0 )
+    {
+        m_choice->SetSize(x, y, width, -1);
+    }
+    else
+    {
+        wxCoord wText = width - POPUPWIDTH;
+        m_text->SetSize(x, y, wText, height);
+        m_choice->SetSize(x + wText + MARGIN, y, POPUPWIDTH, -1);
+    }    
+}
+
+
+
+// ----------------------------------------------------------------------------
+// operations forwarded to the subcontrols
+// ----------------------------------------------------------------------------
+
+bool wxComboBox::Enable(bool enable)
+{
+    if ( !wxControl::Enable(enable) )
+        return FALSE;
+
+    m_choice->Enable(enable);
+    
+    if ( m_text != 0 )
+    {
+        m_text->Enable(enable);
+    }
+
+    return TRUE;
+}
+
+bool wxComboBox::Show(bool show)
+{
+    if ( !wxControl::Show(show) )
+        return FALSE;
+
+    // under GTK Show() is called the first time before we are fully
+    // constructed
+    if ( m_choice )
+    {
+        m_choice->Show(show);
+        if ( m_text != 0 )
+        {
+            m_text->Show(show);
+        }
+    }
+
+    return TRUE;
+}
+
+
+void wxComboBox::DelegateTextChanged( const wxString& value ) {
+}
+
+
+void wxComboBox::DelegateChoice( const wxString& value )
+{
+    SetStringSelection( value );
+}
+
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
@@ -40,36 +211,64 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    m_noStrings = n;
 
-		Rect bounds ;
-		Str255 title ;
-	
-		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
-	
-		m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0, 
-	  	kControlPopupButtonProc , (long) this ) ; 
-	
-		m_macPopUpMenuHandle =  NewUniqueMenu() ;
-		SetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
-		for ( int i = 0 ; i < n ; i++ )
-		{
-			Str255 label;
-			wxMenuItem::MacBuildMenuString( label , NULL , NULL , choices[i] ,false);
-			AppendMenu( (MenuHandle) m_macPopUpMenuHandle , label ) ;
-		}
-		SetControlMinimum( (ControlHandle) m_macControl , 0 ) ;
-		SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
-		SetControlValue( (ControlHandle) m_macControl , 1 ) ;
+    Rect bounds ;
+    Str255 title ;
 
-		MacPostControlCreate() ;
+    if ( !wxControl::Create(parent, id, pos, size, style,
+                            wxDefaultValidator, name) )
+    {
+        return FALSE;
+    }
 
-  	return TRUE;
+    m_choice = new wxComboBoxChoice(this, style);
+
+    wxSize csize = size;
+    if ( style & wxCB_READONLY )
+    {
+        m_text = 0;
+    }
+    else
+    {
+        m_text = new wxComboBoxText(this);
+        if ( size.y == -1 ) {
+          csize.y = m_text->GetSize().y ;
+        }
+    }
+    
+    DoSetSize(pos.x, pos.y, csize.x, csize.y);
+    for ( int i = 0 ; i < n ; i++ )
+    {
+    	m_choice->DoAppend( choices[ i ] );
+    }
+
+    // have to disable this window to avoid interfering it with message
+    // processing to the text and the button... but pretend it is enabled to
+    // make IsEnabled() return TRUE
+    wxControl::Enable(FALSE); // don't use non virtual Disable() here!
+    m_isEnabled = TRUE;
+
+    // we don't even need to show this window itself - and not doing it avoids
+    // that it overwrites the text control
+    wxControl::Show(FALSE);
+
+    return TRUE;
 }
 
 wxString wxComboBox::GetValue() const
 {
-    return GetStringSelection() ;
+    wxString        result;
+    
+    if ( m_text == 0 )
+    {
+        result = m_choice->GetString( m_choice->GetSelection() );
+    }
+    else
+    {
+        result = m_text->GetValue();
+    }
+
+    return result;
 }
 
 void wxComboBox::SetValue(const wxString& value)
@@ -80,22 +279,47 @@ void wxComboBox::SetValue(const wxString& value)
 // Clipboard operations
 void wxComboBox::Copy()
 {
-    // TODO
+    if ( m_text != 0 )
+    {
+        m_text->Copy();
+    }
 }
 
 void wxComboBox::Cut()
 {
-    // TODO
+    if ( m_text != 0 )
+    {
+        m_text->Cut();
+    }
 }
 
 void wxComboBox::Paste()
 {
-    // TODO
+    if ( m_text != 0 )
+    {
+        m_text->Paste();
+    }
 }
 
 void wxComboBox::SetEditable(bool editable)
 {
-    // TODO
+    if ( ( m_text == 0 ) && editable )
+    {
+        m_text = new wxComboBoxText( this );
+    }
+    else if ( ( m_text != 0 ) && !editable )
+    {
+        delete m_text;
+        m_text = 0;
+    }
+
+    int currentX, currentY;
+    GetPosition( &currentX, &currentY );
+    
+    int currentW, currentH;
+    GetSize( &currentW, &currentH );
+
+    DoMoveWindow( currentX, currentY, currentW, currentH );
 }
 
 void wxComboBox::SetInsertionPoint(long pos)
@@ -137,63 +361,42 @@ void wxComboBox::SetSelection(long from, long to)
 
 void wxComboBox::Append(const wxString& item)
 {
-	Str255 label;
-	wxMenuItem::MacBuildMenuString( label , NULL , NULL , item ,false);
-	AppendMenu( (MenuHandle) m_macPopUpMenuHandle , label ) ;
-    m_noStrings ++;
-	SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
+    m_choice->DoAppend( item );
 }
 
 void wxComboBox::Delete(int n)
 {
-	wxASSERT( n < m_noStrings ) ;
-    ::DeleteMenuItem( (MenuHandle) m_macPopUpMenuHandle , n + 1) ;
-    m_noStrings --;
-	SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
+    m_choice->Delete( n );
 }
 
 void wxComboBox::Clear()
 {
-    for ( int i = 0 ; i < m_noStrings ; i++ )
-    {
-    	::DeleteMenuItem((MenuHandle) m_macPopUpMenuHandle , 1 ) ;
-	}
-    m_noStrings = 0;
-	SetControlMaximum( (ControlHandle) m_macControl , m_noStrings) ;
+    m_choice->Clear();
 }
 
 int wxComboBox::GetSelection() const
 {
-    return GetControlValue( (ControlHandle) m_macControl ) -1 ;
+    return m_choice->GetSelection();
 }
 
 void wxComboBox::SetSelection(int n)
 {
-    SetControlValue( (ControlHandle) m_macControl , n + 1 ) ;
+    m_choice->SetSelection( n );
+    
+    if ( m_text != 0 )
+    {
+        m_text->SetValue( GetString( n ) );
+    }
 }
 
 int wxComboBox::FindString(const wxString& s) const
 {
-    for( int i = 0 ; i < m_noStrings ; i++ )
-    {
-    	if ( GetString( i ) == s )
-    		return i ; 
-    }
-    return -1;
+    return m_choice->FindString( s );
 }
 
 wxString wxComboBox::GetString(int n) const
 {
-    Str255 p_text ;
-    char   c_text[255];
-    ::GetMenuItemText( (MenuHandle) m_macPopUpMenuHandle , n+1 , p_text ) ;
-#if TARGET_CARBON
-    p2cstrcpy( c_text, p_text ) ;
-#else
-	p2cstr( p_text ) ;
-    strcpy( c_text, (char *) p_text ) ;
-#endif
-    return wxString( c_text );
+    return m_choice->GetString( n );
 }
 
 wxString wxComboBox::GetStringSelection() const
