@@ -3867,25 +3867,28 @@ void wxWindowGTK::GtkSendPaintEvents()
         if (!parent)
             parent = (wxWindow*)this;
 
-        wxRegionIterator upd( m_updateRegion );
-        while (upd)
+        if (GTK_WIDGET_MAPPED(parent->m_widget))
         {
-            GdkRectangle rect;
-            rect.x = upd.GetX();
-            rect.y = upd.GetY();
-            rect.width = upd.GetWidth();
-            rect.height = upd.GetHeight();
+            wxRegionIterator upd( m_updateRegion );
+            while (upd)
+            {
+                GdkRectangle rect;
+                rect.x = upd.GetX();
+                rect.y = upd.GetY();
+                rect.width = upd.GetWidth();
+                rect.height = upd.GetHeight();
 
-            gtk_paint_flat_box( parent->m_widget->style,
-                        pizza->bin_window,
-                        (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
-                        GTK_SHADOW_NONE,
-                        &rect,
-                        parent->m_widget,
-                        (char *)"base",
-                        0, 0, -1, -1 );
+                gtk_paint_flat_box( parent->m_widget->style,
+                            pizza->bin_window,
+                            (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
+                            GTK_SHADOW_NONE,
+                            &rect,
+                            parent->m_widget,
+                            (char *)"base",
+                            0, 0, -1, -1 );
 
-            upd ++;
+                upd ++;
+            }
         }
     }
     else
