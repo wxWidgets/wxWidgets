@@ -84,11 +84,15 @@ PreviewFrame::PreviewFrame()
             wxSize(cfg->Read(_T("previewframe_w"), 400), cfg->Read(_T("previewframe_h"), 400))));
 
     m_Splitter = new wxSplitterWindow(this, wxID_ANY);
+#if wxUSE_LOG
     m_LogCtrl = new wxTextCtrl(m_Splitter, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                wxDefaultSize, wxTE_MULTILINE);
+#endif // wxUSE_LOG
     m_ScrollWin = new wxScrolledWindow(m_Splitter, wxID_ANY);
     m_ScrollWin->SetBackgroundColour(_T("light steel blue"));
+#if wxUSE_LOG
     m_Splitter->SplitHorizontally(m_ScrollWin, m_LogCtrl, cfg->Read(_T("previewframe_sash"), 300));
+#endif // wxUSE_LOG
 
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -135,8 +139,10 @@ void PreviewFrame::MakeDirty()
     if (m_Node == NULL) return;
     if (m_Dirty) return;
     m_Dirty = true;
+#if wxUSE_LOG
     m_LogCtrl->Clear();
     m_LogCtrl->SetValue(_("Resource modified.\nMove mouse cursor over the preview window to refresh it."));
+#endif // wxUSE_LOG
 }
 
 
@@ -177,9 +183,11 @@ void PreviewFrame::Preview(wxXmlNode *node, wxXmlDocument *orig_doc)
    m_Node = node;
    m_Doc = orig_doc;
 
+#if wxUSE_LOG
    m_LogCtrl->Clear();
    wxLogTextCtrl mylog(m_LogCtrl);
    wxLog *oldlog = wxLog::SetActiveTarget(&mylog);
+#endif // wxUSE_LOG
 
    wxString oldcwd = wxGetCwd();
    wxSetWorkingDirectory(wxPathOnly(EditorFrame::Get()->GetFileName()));
@@ -194,7 +202,9 @@ void PreviewFrame::Preview(wxXmlNode *node, wxXmlDocument *orig_doc)
        PreviewWXFrame();
 
    wxSetWorkingDirectory(oldcwd);
+#if wxUSE_LOG
    wxLog::SetActiveTarget(oldlog);
+#endif // wxUSE_LOG
 
    m_Dirty = false;
 }

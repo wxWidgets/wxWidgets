@@ -69,7 +69,9 @@ public:
     void OnPlotDClick( wxPlotEvent &event );
 
     wxPlotWindow   *m_plot;
+#if wxUSE_LOG
     wxTextCtrl     *m_log;
+#endif // wxUSE_LOG
 
 private:
     DECLARE_DYNAMIC_CLASS(MyFrame)
@@ -134,22 +136,26 @@ MyFrame::MyFrame()
     oo->Add( 1000, 2000 );
     m_plot->Add( oo );
   
+#if wxUSE_LOG
     m_log = new wxTextCtrl( this, -1, _T("This is the log window.\n"), wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
     delete old_log;
+#endif // wxUSE_LOG
     
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
     
     topsizer->Add( m_plot, 1, wxEXPAND );
+#if wxUSE_LOG
     topsizer->Add( m_log, 0, wxEXPAND );
+#endif // wxUSE_LOG
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
     SetSizer( topsizer );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
-  Close( TRUE );
+  Close( true );
 }
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )

@@ -50,7 +50,9 @@ class PreviewFrame : public wxFrame
         wxXmlNode *m_Node;
         wxXmlDocument *m_Doc;
         wxScrolledWindow *m_ScrollWin;
+#if wxUSE_LOG
         wxTextCtrl *m_LogCtrl;
+#endif // wxUSE_LOG
         wxSplitterWindow *m_Splitter;
 
         wxXmlResource *m_RC;

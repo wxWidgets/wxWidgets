@@ -370,11 +370,13 @@ bool wxAppConsole::OnCmdLineParsed(wxCmdLineParser& parser)
 #if wxUSE_LOG
     if ( parser.Found(OPTION_VERBOSE) )
     {
-        wxLog::SetVerbose(TRUE);
+        wxLog::SetVerbose(true);
     }
+#else
+    wxUnusedVar(parser);
 #endif // wxUSE_LOG
 
-    return TRUE;
+    return true;
 }
 
 bool wxAppConsole::OnCmdLineHelp(wxCmdLineParser& parser)
