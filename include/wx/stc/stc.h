@@ -189,6 +189,7 @@
 #define wxSTC_FIND_MATCHCASE 4
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
+#define wxSTC_FIND_POSIX 0x00400000
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
@@ -327,6 +328,7 @@
 #define wxSTC_LEX_FORTRAN 36
 #define wxSTC_LEX_F77 37
 #define wxSTC_LEX_CSS 38
+#define wxSTC_LEX_POV 39
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -596,6 +598,8 @@
 #define wxSTC_ERR_DIFF_DELETION 12
 #define wxSTC_ERR_DIFF_MESSAGE 13
 #define wxSTC_ERR_PHP 14
+#define wxSTC_ERR_ELF 15
+#define wxSTC_ERR_IFC 16
 
 // Lexical states for SCLEX_BATCH
 #define wxSTC_BAT_DEFAULT 0
@@ -791,6 +795,21 @@
 #define wxSTC_CSS_ID 10
 #define wxSTC_CSS_IMPORTANT 11
 #define wxSTC_CSS_DIRECTIVE 12
+#define wxSTC_CSS_DOUBLESTRING 13
+#define wxSTC_CSS_SINGLESTRING 14
+
+// Lexical states for SCLEX_POV
+#define wxSTC_POV_DEFAULT 0
+#define wxSTC_POV_COMMENT 1
+#define wxSTC_POV_COMMENTLINE 2
+#define wxSTC_POV_COMMENTDOC 3
+#define wxSTC_POV_NUMBER 4
+#define wxSTC_POV_WORD 5
+#define wxSTC_POV_STRING 6
+#define wxSTC_POV_OPERATOR 7
+#define wxSTC_POV_IDENTIFIER 8
+#define wxSTC_POV_BRACE 9
+#define wxSTC_POV_WORD2 10
 
 
 //-----------------------------------------
@@ -972,6 +991,18 @@
 // caret position.
 #define wxSTC_CMD_LINEENDDISPLAYEXTEND 2348
 
+// These are like their namesakes Home(Extend)?, LineEnd(Extend)?, VCHome(Extend)?
+// except they behave differently when word-wrap is enabled:
+// They go first to the start / end of the display line, like (Home|LineEnd)Display
+// The difference is that, the cursor is already at the point, it goes on to the start
+// or end of the document line, as appropriate for (Home|LineEnd|VCHome)Extend.
+#define wxSTC_CMD_HOMEWRAP 2349
+#define wxSTC_CMD_HOMEWRAPEXTEND 2450
+#define wxSTC_CMD_LINEENDWRAP 2451
+#define wxSTC_CMD_LINEENDWRAPEXTEND 2452
+#define wxSTC_CMD_VCHOMEWRAP 2453
+#define wxSTC_CMD_VCHOMEWRAPEXTEND 2454
+
 // Move to the previous change in capitalisation.
 #define wxSTC_CMD_WORDPARTLEFT 2390
 
@@ -991,6 +1022,12 @@
 
 // Delete forwards from the current position to the end of the line.
 #define wxSTC_CMD_DELLINERIGHT 2396
+
+// Move caret between paragraphs (delimited by empty lines)
+#define wxSTC_CMD_PARADOWN 2413
+#define wxSTC_CMD_PARADOWNEXTEND 2414
+#define wxSTC_CMD_PARAUP 2415
+#define wxSTC_CMD_PARAUPEXTEND 2416
 
 
 // END of generated section
@@ -1255,6 +1292,9 @@ public:
 
     // Set the character set of the font in a style.
     void StyleSetCharacterSet(int style, int characterSet);
+
+    // Set a style to be a hotspot or not.
+    void StyleSetHotSpot(int style, bool hotspot);
 
     // Set the foreground colour of the selection and whether to use this setting.
     void SetSelForeground(bool useSetting, const wxColour& fore);
@@ -1680,6 +1720,12 @@ public:
     // Set the background colour for the call tip.
     void CallTipSetBackground(const wxColour& back);
 
+    // Set the foreground colour for the call tip.
+    void CallTipSetForeground(const wxColour& fore);
+
+    // Set the foreground colour for the highlighted part of the call tip.
+    void CallTipSetForegroundHighlight(const wxColour& fore);
+
     // Find the display line of a document line taking hidden lines into account.
     int VisibleFromDocLine(int line);
 
@@ -1807,7 +1853,6 @@ public:
     void TargetFromSelection();
 
     // Join the lines in the target.
-    // This is an experimental feature and may be changed or removed.
     void LinesJoin();
 
     // Split the lines in the target into lines that are less wide than pixelWidth
@@ -2002,6 +2047,15 @@ public:
     // Is printing line wrapped.
     int GetPrintWrapMode();
 
+    // Set a fore colour for active hotspots.
+    void SetHotspotActiveForeground(bool useSetting, const wxColour& fore);
+
+    // Set a back colour for active hotspots.
+    void SetHotspotActiveBackground(bool useSetting, const wxColour& back);
+
+    // Enable / Disable underlining active hotspots.
+    void SetHotspotActiveUnderline(bool underline);
+
     // Start notifying the container of all key presses and commands.
     void StartRecord();
 
@@ -2139,10 +2193,10 @@ private:
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
-
-private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxStyledTextCtrl)
+
+protected:
 
     ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
@@ -2262,6 +2316,8 @@ private:
 #endif
 };
 
+
+
 #ifndef SWIG
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CHANGE,                  1650)
@@ -2287,6 +2343,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DRAG_OVER,               1670)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DO_DROP,                 1671)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_ZOOM,                    1672)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_HOTSPOT_CLICK,           1673)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_HOTSPOT_DCLICK,          1674)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_CALLTIP_CLICK,           1675)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -2313,6 +2372,9 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_DRAG_OVER,
         wxEVT_STC_DO_DROP,
         wxEVT_STC_ZOOM,
+        wxEVT_STC_HOTSPOT_CLICK,
+        wxEVT_STC_HOTSPOT_DCLICK,
+        wxEVT_STC_CALLTIP_CLICK
     };
 #endif
 
@@ -2344,6 +2406,10 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_DRAG_OVER(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DO_DROP(id, fn)                 DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_ZOOM(id, fn)                    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_CLICK(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_HOTSPOT_DCLICK(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_CALLTIP_CLICK(id, fn))          DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+
 #endif
 
 //----------------------------------------------------------------------
