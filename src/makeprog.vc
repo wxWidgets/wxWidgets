@@ -33,6 +33,9 @@ wxclean:
         nmake -f makefile.vc clean
 #        cd $(THISDIR)
 
+
+!if "$(wxUSE_GUI)" == "1" 
+
 $(PROGRAM).exe:      $(WXLIB) $(OBJECTS) $(PROGRAM).res
 	$(link) @<<
 -out:$(PROGRAM).exe
@@ -43,6 +46,19 @@ $(LIBS)
 
 $(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
     $(rc) -r /i$(WXDIR)\include /i$(WXDIR)\contrib\include -fo$@ $(PROGRAM).rc
+
+!else
+
+$(PROGRAM).exe:      $(WXLIB) $(OBJECTS)
+	$(link) @<<
+-out:$(PROGRAM).exe
+$(LINKFLAGS)
+$(OBJECTS) $(DUMMYOBJ)
+$(LIBS)
+<<
+
+!endif
+
 
 clean:
         -$(RM) $(OBJECTS)
