@@ -85,10 +85,12 @@ Constructor.
 Add file to list of files stored in memory. Stored 
 data (bitmap, text or raw data)
 will be copied into private memory stream and available under 
-name "memory:" + filename.
+name "memory:" + \arg{filename}.
 
-Note that when storing image/bitmap, you must use image format that wxWidgets
-can write (e.g. JPG, PNG, see \helpref{wxImage documentation}{wximage})!
+The \arg{type} argument is one of {\tt wxBITMAP\_TYPE\_XXX} constants.
+Note that you must use a \arg{type} value (aka image format)
+that wxWidgets can save (e.g. JPG, PNG, see \helpref{wxImage
+documentation}{wximage})!
 
 
 \membersection{wxMemoryFSHandler::RemoveFile}\label{wxmemoryfshandlerremovefile}
