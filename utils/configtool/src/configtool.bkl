@@ -31,10 +31,9 @@
     </exe>
 
     <wx-data id="data">
-        <files>
-            wxconfigtool.pjd
-            ../configs/wxwin250.wxs
-        </files>
+        <dstdir>$(BUILDDIR)</dstdir>
+        <srcdir>$(SRCDIR)/../configs</srcdir>
+        <files>wxwin250.wxs</files>
     </wx-data>
-
+    
 </makefile>

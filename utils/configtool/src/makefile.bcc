@@ -131,10 +131,10 @@ __RUNTIME_LIBS_7 = i
 __RUNTIME_LIBS_7 = 
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -226,10 +226,15 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\wxconfigtool.exe del $(OBJS)\wxconfigtool.exe
+	-if exist $(OBJS)\wxconfigtool.tds del $(OBJS)\wxconfigtool.tds
+	-if exist $(OBJS)\wxconfigtool.ilc del $(OBJS)\wxconfigtool.ilc
+	-if exist $(OBJS)\wxconfigtool.ild del $(OBJS)\wxconfigtool.ild
+	-if exist $(OBJS)\wxconfigtool.ilf del $(OBJS)\wxconfigtool.ilf
+	-if exist $(OBJS)\wxconfigtool.ils del $(OBJS)\wxconfigtool.ils
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (wxconfigtool.pjd ../configs/wxwin250.wxs) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (wxwin250.wxs) do if not exist $(OBJS)\%f copy .\..\configs\%f $(OBJS)
 
 $(OBJS)\wxconfigtool.exe: $(WXCONFIGTOOL_OBJECTS)  $(OBJS)\wxconfigtool_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|

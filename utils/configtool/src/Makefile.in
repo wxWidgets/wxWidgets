@@ -124,9 +124,9 @@ clean:
 
 data: 
 	@mkdir -p .
-	@for f in wxconfigtool.pjd ../configs/wxwin250.wxs; do \
-	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
-	cp -pRf $(srcdir)/$$f . ; \
+	@for f in wxwin250.wxs; do \
+	if test \( ! -s ./$$f \) -o \( $(srcdir)/../configs/$$f -nt ./$$f  \) ; then \
+	cp -pRf $(srcdir)/../configs/$$f . ; \
 	fi; \
 	done
 

@@ -137,7 +137,7 @@ __RUNTIME_LIBS_5 =
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIB_ADV_p =
 !ifeq MONOLITHIC 0
@@ -261,7 +261,7 @@ clean : .SYMBOLIC
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (wxconfigtool.pjd ../configs/wxwin250.wxs) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (wxwin250.wxs) do if not exist $(OBJS)\%f copy .\..\configs\%f $(OBJS)
 
 $(OBJS)\wxconfigtool.exe :  $(WXCONFIGTOOL_OBJECTS) $(OBJS)\wxconfigtool_sample.res
 	@%create $(OBJS)\wxconfigtool.lbc

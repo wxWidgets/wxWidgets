@@ -153,10 +153,10 @@ __RUNTIME_LIBS_7 = D
 __RUNTIME_LIBS_7 = T
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = /D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = /d wxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = /d _UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -290,10 +290,12 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\wxconfigtool.exe del $(OBJS)\wxconfigtool.exe
+	-if exist $(OBJS)\wxconfigtool.ilk del $(OBJS)\wxconfigtool.ilk
+	-if exist $(OBJS)\wxconfigtool.pdb del $(OBJS)\wxconfigtool.pdb
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (wxconfigtool.pjd ../configs/wxwin250.wxs) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (wxwin250.wxs) do if not exist $(OBJS)\%f copy .\..\configs\%f $(OBJS)
 
 $(OBJS)\wxconfigtool.exe: $(WXCONFIGTOOL_OBJECTS) $(OBJS)\wxconfigtool_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
