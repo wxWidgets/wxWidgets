@@ -185,7 +185,7 @@ bool wxHtmlTag::HasParam(const wxString& par) const
 {
     const wxChar *st = m_Params, *p = par;
     const wxChar *st2, *p2;
-    const wxChar invalid = wxT(1);
+    const wxChar invalid = wxT('\001');
 
     if (*st == 0) return FALSE;
     if (*p == 0) return FALSE;
@@ -215,7 +215,7 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 {
     const wxChar *st = m_Params, *p = par;
     const wxChar *st2, *p2;
-    const wxChar invalid = wxT(1);
+    const wxChar invalid = wxT('\001');
     bool comma;
     char comma_char;
 
