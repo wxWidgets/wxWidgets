@@ -88,11 +88,8 @@ protected:
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
 
-    // get the MSW window flags corresponding to wxWindows ones
-    //
-    // the functions returns the flags (WS_XXX) directly and puts the ext
-    // (WS_EX_XXX) flags into the provided pointer if not NULL
-    long MSWGetCreateWindowFlags(long *exflags) const;
+    // translate wxWindows flags to Windows ones
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 
     // is the frame currently iconized?
     bool m_iconized;

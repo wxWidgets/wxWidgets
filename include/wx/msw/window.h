@@ -98,6 +98,7 @@ public:
     virtual void Freeze();
     virtual void Thaw();
 
+    virtual void SetWindowStyleFlag( long style );
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font );
 
@@ -169,13 +170,6 @@ public:
     wxWindow* GetWindowChild(wxWindowID id);
 #endif // __WXUNIVERSAL__
 
-    // a MSW only function which sends a size event to the window using its
-    // current size - this has an effect of refreshing the window layout
-/*
-FUNCTION IS NOW A MEMBER OF wxFrame - gt
-    void SendSizeEvent();
-*/
-
     // implementation from now on
     // --------------------------
 
@@ -215,11 +209,26 @@ public:
     // Make a Windows extended style from the given wxWindows window style
     static WXDWORD MakeExtendedStyle(long style,
                                      bool eliminateBorders = FALSE);
+
     // Determine whether 3D effects are wanted
     WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
 
     // MSW only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
+
+    // translate wxWindows style flags for this control into the Windows style
+    // and optional extended style for the corresponding native control
+    //
+    // this is the function that should be overridden in the derived classes,
+    // but you will mostly use MSWGetCreateWindowFlags() below
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+
+    // get the MSW window flags corresponding to wxWindows ones
+    //
+    // the functions returns the flags (WS_XXX) directly and puts the ext
+    // (WS_EX_XXX) flags into the provided pointer if not NULL
+    WXDWORD MSWGetCreateWindowFlags(WXDWORD *exflags = NULL) const
+        { return MSWGetStyle(GetWindowStyle(), exflags); }
 
     // translate wxWindows coords into Windows ones suitable to be passed to
     // ::CreateWindow()

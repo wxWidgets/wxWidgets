@@ -327,7 +327,7 @@ public:
 
         // extra style: the less often used style bits which can't be set with
         // SetWindowStyleFlag()
-    void SetExtraStyle(long exStyle) { m_exStyle = exStyle; }
+    virtual void SetExtraStyle(long exStyle) { m_exStyle = exStyle; }
     long GetExtraStyle() const { return m_exStyle; }
 
         // make the window modal (all other windows unresponsive)

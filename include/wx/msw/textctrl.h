@@ -124,6 +124,8 @@ public:
     // Implementation from now on
     // --------------------------
 
+    virtual void SetWindowStyleFlag(long style);
+
     virtual void Command(wxCommandEvent& event);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
@@ -203,6 +205,8 @@ protected:
     // override some base class virtuals
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
     virtual wxSize DoGetBestSize() const;
+
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 #if wxUSE_RICHEDIT
     // we're using RICHEDIT (and not simple EDIT) control if this field is not

@@ -101,20 +101,24 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsShowing = FALSE;
 }
 
-long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
+WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 {
-    long style = GetWindowStyle();
+    // let the base class deal with the common styles but fix the ones which
+    // don't make sense for us (we also deal with the borders ourselves)
+    WXDWORD msflags = wxWindow::MSWGetStyle
+                      (
+                        (style & ~wxBORDER_MASK) | wxBORDER_NONE, exflags
+                      ) & ~WS_CHILD;
 
     // first select the kind of window being created
     //
     // note that if we don't set WS_POPUP, Windows assumes WS_OVERLAPPED and
     // creates a window with both caption and border, hence we also test it
     // below in some other cases
-    long msflags;
     if ( style & wxFRAME_TOOL_WINDOW )
-        msflags = WS_POPUP;
+        msflags |= WS_POPUP;
     else
-        msflags = WS_OVERLAPPED;
+        msflags |= WS_OVERLAPPED;
 
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
@@ -141,9 +145,6 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
     if ( style & wxMAXIMIZE )
         msflags |= WS_MAXIMIZE;
 
-    if ( style & wxCLIP_CHILDREN )
-        msflags |= WS_CLIPCHILDREN;
-
     // Keep this here because it saves recoding this function in wxTinyFrame
 #if wxUSE_ITSY_BITSY && !defined(__WIN32__)
     if ( style & wxTINY_CAPTION_VERT )
@@ -157,8 +158,6 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
 
     if ( exflags )
     {
-        *exflags = MakeExtendedStyle(style);
-
 #if !defined(__WIN16__) && !defined(__SC__)
         if ( !(GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) )
         {
@@ -177,7 +176,7 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
             *exflags |= WS_EX_TOPMOST;
 
 #ifdef __WIN32__
-        if ( m_exStyle & wxFRAME_EX_CONTEXTHELP )
+        if ( GetExtraStyle() & wxFRAME_EX_CONTEXTHELP )
             *exflags |= WS_EX_CONTEXTHELP;
 #endif // __WIN32__
     }
@@ -232,7 +231,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         return FALSE;
     }
 
-    long exflags;
+    WXDWORD exflags;
     (void)MSWGetCreateWindowFlags(&exflags);
 
     if ( exflags )
@@ -315,8 +314,8 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
                                       const wxPoint& pos,
                                       const wxSize& size)
 {
-    long exflags;
-    long flags = MSWGetCreateWindowFlags(&exflags);
+    WXDWORD exflags;
+    WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
     return MSWCreate(wxCanvasClassName, title, pos, size, flags, exflags);
 }

@@ -195,44 +195,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( parent )
         parent->AddChild(this);
 
-    // translate wxWin style flags to MSW ones, checking for consistency while
-    // doing it
-    long msStyle = ES_LEFT | WS_TABSTOP;
-
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
-
-    if ( m_windowStyle & wxTE_MULTILINE )
-    {
-        wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
-                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline text controls (they always process it)") );
-
-        msStyle |= ES_MULTILINE | ES_WANTRETURN;
-        if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
-            msStyle |= WS_VSCROLL;
-        m_windowStyle |= wxTE_PROCESS_ENTER;
-    }
-    else // !multiline
-    {
-        // there is really no reason to not have this style for single line
-        // text controls
-        msStyle |= ES_AUTOHSCROLL;
-    }
-
-    if ( m_windowStyle & wxHSCROLL )
-        msStyle |= WS_HSCROLL | ES_AUTOHSCROLL;
-
-    if ( m_windowStyle & wxTE_READONLY )
-        msStyle |= ES_READONLY;
-
-    if ( m_windowStyle & wxTE_PASSWORD )
-        msStyle |= ES_PASSWORD;
-
-    if ( m_windowStyle & wxTE_AUTO_SCROLL )
-        msStyle |= ES_AUTOHSCROLL;
-
-    if ( m_windowStyle & wxTE_NOHIDESEL )
-        msStyle |= ES_NOHIDESEL;
+    // translate wxWin style flags to MSW ones
+    WXDWORD msStyle = MSWGetCreateWindowFlags();
 
     // do create the control - either an EDIT or RICHEDIT
     wxString windowClass = wxT("EDIT");
@@ -389,6 +353,68 @@ void wxTextCtrl::AdoptAttributesFromHWND()
         m_windowStyle |= wxTE_READONLY;
     if (style & ES_WANTRETURN)
         m_windowStyle |= wxTE_PROCESS_ENTER;
+}
+
+WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    long msStyle = wxControl::MSWGetStyle(style, exstyle);
+
+    // default styles
+    msStyle |= ES_LEFT | WS_TABSTOP;
+
+    if ( style & wxTE_MULTILINE )
+    {
+        wxASSERT_MSG( !(style & wxTE_PROCESS_ENTER),
+                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline text controls (they always process it)") );
+
+        msStyle |= ES_MULTILINE | ES_WANTRETURN;
+        if ( !(style & wxTE_NO_VSCROLL) )
+            msStyle |= WS_VSCROLL;
+
+        style |= wxTE_PROCESS_ENTER;
+    }
+    else // !multiline
+    {
+        // there is really no reason to not have this style for single line
+        // text controls
+        msStyle |= ES_AUTOHSCROLL;
+    }
+
+    if ( style & wxHSCROLL )
+        msStyle |= WS_HSCROLL | ES_AUTOHSCROLL;
+
+    if ( style & wxTE_READONLY )
+        msStyle |= ES_READONLY;
+
+    if ( style & wxTE_PASSWORD )
+        msStyle |= ES_PASSWORD;
+
+    if ( style & wxTE_AUTO_SCROLL )
+        msStyle |= ES_AUTOHSCROLL;
+
+    if ( style & wxTE_NOHIDESEL )
+        msStyle |= ES_NOHIDESEL;
+
+    return msStyle;
+}
+
+void wxTextCtrl::SetWindowStyleFlag(long style)
+{
+#if wxUSE_RICHEDIT
+    // we have to deal with some styles separately because they can't be
+    // changed by simply calling SetWindowLong(GWL_STYLE) but can be changed
+    // using richedit-specific EM_SETOPTIONS
+    if ( IsRich() &&
+            ((style & wxTE_NOHIDESEL) != (GetWindowStyle() & wxTE_NOHIDESEL)) )
+    {
+        bool set = (style & wxTE_NOHIDESEL) != 0;
+
+        ::SendMessage(GetHwnd(), EM_SETOPTIONS, set ? ECOOP_OR : ECOOP_AND,
+                      set ? ECO_NOHIDESEL : ~ECO_NOHIDESEL);
+    }
+#endif // wxUSE_RICHEDIT
+
+    wxControl::SetWindowStyleFlag(style);
 }
 
 // ----------------------------------------------------------------------------

@@ -386,45 +386,26 @@ bool wxWindowMSW::Create(wxWindow *parent,
 
     parent->AddChild(this);
 
-    // all windows are created visible
-    DWORD msflags = WS_CHILD | WS_VISIBLE;
+    // note that all windows are created visible by default
+    WXDWORD exstyle;
+    DWORD msflags = WS_VISIBLE | MSWGetCreateWindowFlags(&exstyle);
 
 #ifdef __WXUNIVERSAL__
     // no 3d effects, we draw them ourselves
-    WXDWORD exStyle = 0;
-#else // !wxUniversal
-    if ( style & wxCLIP_CHILDREN )
-        msflags |= WS_CLIPCHILDREN;
-    if ( style & wxCLIP_SIBLINGS )
-        msflags |= WS_CLIPSIBLINGS;
-
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-
-    // Even with extended styles, need to combine with WS_BORDER
-    // for them to look right.
-    if ( want3D ||
-        (m_windowStyle & (wxBORDER |
-                          wxSIMPLE_BORDER |
-                          wxRAISED_BORDER |
-                          wxSUNKEN_BORDER |
-                          wxDOUBLE_BORDER)) )
-    {
-        msflags |= WS_BORDER;
-    }
-#endif // wxUniversal/!wxUniversal
+    exStyle = 0;
+#endif // wxUniversal
 
     if ( style & wxPOPUP_WINDOW )
     {
         // a popup window floats on top of everything
-        exStyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
+        exstyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
 
         // it is also created hidden as other top level windows
         msflags &= ~WS_VISIBLE;
         m_isShown = FALSE;
     }
 
-    return MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exStyle);
+    return MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
 }
 
 // ---------------------------------------------------------------------------
@@ -962,7 +943,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     wxAssociateWinWithHandle(hwnd, this);
 
     m_oldWndProc = (WXFARPROC)::GetWindowLong((HWND)hWnd, GWL_WNDPROC);
-    
+
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
     if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
@@ -1028,6 +1009,113 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
 #endif
 }
 
+// ----------------------------------------------------------------------------
+// Style handling
+// ----------------------------------------------------------------------------
+
+void wxWindowMSW::SetWindowStyleFlag(long flags)
+{
+    long flagsOld = GetWindowStyleFlag();
+    if ( flags == flagsOld )
+        return;
+
+    // update the internal variable
+    wxWindowBase::SetWindowStyleFlag(flags);
+
+    // now update the Windows style as well if needed
+    WXDWORD exstyle, exstyleOld;
+    long style = MSWGetStyle(flags, &exstyle),
+         styleOld = MSWGetStyle(flagsOld, &exstyleOld);
+
+    if ( style != styleOld )
+    {
+        // some flags (e.g. WS_VISIBLE or WS_DISABLED) should not be changed by
+        // this function so instead of simply setting the style to the new
+        // value we clear the bits which were set in styleOld but are set in
+        // the new one and set the ones which were not set before
+        long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+        styleReal &= ~styleOld;
+        styleReal |= style;
+
+        ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
+    }
+
+    // and the extended style
+    if ( exstyle != exstyleOld )
+    {
+        long exstyleReal = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
+        exstyleReal &= ~exstyleOld;
+        exstyleReal |= exstyle;
+
+        ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyleReal);
+
+        // we must call SetWindowPos() to flash the cached extended style and
+        // also to make the change to wxSTAY_ON_TOP style take effect: just
+        // setting the style simply doesn't work
+        if ( !::SetWindowPos(GetHwnd(),
+                             exstyleReal & WS_EX_TOPMOST ? HWND_TOPMOST
+                                                         : HWND_NOTOPMOST,
+                             0, 0, 0, 0,
+                             SWP_NOMOVE | SWP_NOSIZE) )
+        {
+            wxLogLastError(_T("SetWindowPos"));
+        }
+    }
+}
+
+WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
+{
+    // translate the style
+    WXDWORD style = WS_CHILD;
+
+    if ( flags & wxCLIP_CHILDREN )
+        style |= WS_CLIPCHILDREN;
+
+    if ( flags & wxCLIP_SIBLINGS )
+        style |= WS_CLIPSIBLINGS;
+
+    if ( (flags & wxBORDER_MASK) != wxBORDER_NONE )
+        style |= WS_BORDER;
+
+    // now deal with ext style if the caller wants it
+    if ( exstyle )
+    {
+        *exstyle = 0;
+
+        if ( flags & wxTRANSPARENT_WINDOW )
+            *exstyle |= WS_EX_TRANSPARENT;
+
+        switch ( flags & wxBORDER_MASK )
+        {
+            default:
+                wxFAIL_MSG( _T("unknown border style") );
+                // fall through
+
+            case wxBORDER_NONE:
+            case wxBORDER_SIMPLE:
+                break;
+
+            case wxBORDER_STATIC:
+                *exstyle |= WS_EX_STATICEDGE;
+                break;
+
+            case wxBORDER_RAISED:
+                *exstyle |= WS_EX_WINDOWEDGE;
+                break;
+
+            case wxBORDER_DEFAULT:
+            case wxBORDER_SUNKEN:
+                *exstyle |= WS_EX_CLIENTEDGE;
+                break;
+
+            case wxBORDER_DOUBLE:
+                *exstyle |= WS_EX_DLGMODALFRAME;
+                break;
+        }
+    }
+
+    return style;
+}
 
 // Make a Windows extended style from the given wxWindows window style
 WXDWORD wxWindowMSW::MakeExtendedStyle(long style, bool eliminateBorders)
@@ -3667,7 +3755,7 @@ bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
     MINMAXINFO *info = (MINMAXINFO *)mmInfo;
 
     bool rc = FALSE;
-    
+
     int minWidth = GetMinWidth(),
         minHeight = GetMinHeight(),
         maxWidth = GetMaxWidth(),
