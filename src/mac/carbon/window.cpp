@@ -1132,6 +1132,30 @@ void wxWindowMac::MacRootWindowToWindow( short *x , short *y ) const
     if ( y ) *y = y1 ;
 }
 
+void wxWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , int &bottom )
+{
+    RgnHandle rgn = NewRgn() ;
+    Rect content ;
+    if ( GetControlRegion( (ControlRef) m_macControl , kControlContentMetaPart , rgn ) == noErr )
+    {
+        GetRegionBounds( rgn , &content ) ;
+        DisposeRgn( rgn ) ;
+    }
+    else
+    {
+        GetControlBounds( (ControlRef) m_macControl , &content ) ;
+    }
+    Rect structure ;
+    GetControlBounds( (ControlRef) m_macControl , &structure ) ;
+#if !TARGET_API_MAC_OSX    
+    OffsetRect( &content , -structure.left , -structure.top ) ;
+#endif
+    left = content.left - structure.left ;
+    top = content.top  - structure.top ;
+    right = structure.right - content.right ;
+    bottom = structure.bottom - content.bottom ;
+}
+
 wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
 {
     wxSize sizeTotal = size;

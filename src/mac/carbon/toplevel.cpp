@@ -579,18 +579,21 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
         {
             UInt32 attributes = cEvent.GetParameter<UInt32>(kEventParamAttributes,typeUInt32) ;
             Rect newRect = cEvent.GetParameter<Rect>(kEventParamCurrentBounds) ;
-            wxRect r( newRect.left , newRect.top , newRect.right - newRect.left , newRect.bottom - newRect.top ) ;
 
             if ( (attributes & kWindowBoundsChangeSizeChanged) || (attributes & kWindowBoundsChangeOriginChanged) )
             {
+                // all (Mac) rects are in content area coordinates, all wxRects in structure coordinates
+                int left , top , right , bottom ;
+                toplevelWindow->MacGetContentAreaInset( left , top , right , bottom ) ;
+                wxRect r( newRect.left - left  , newRect.top  - top  , 
+                    newRect.right - newRect.left + left + right  , newRect.bottom - newRect.top + top + bottom ) ;
                 // this is a EVT_SIZING not a EVT_SIZE type !
                 wxSizeEvent wxevent( r , toplevelWindow->GetId() ) ;
                 wxevent.SetEventObject( toplevelWindow ) ;
                 wxRect adjustR = r ;
                 if ( toplevelWindow->GetEventHandler()->ProcessEvent(wxevent) )
-                {
                     adjustR = wxevent.GetRect() ;
-                }
+
                 if ( toplevelWindow->GetMaxWidth() != -1 && adjustR.GetWidth() > toplevelWindow->GetMaxWidth() )
                     adjustR.SetWidth( toplevelWindow->GetMaxWidth() ) ;
                 if ( toplevelWindow->GetMaxHeight() != -1 && adjustR.GetHeight() > toplevelWindow->GetMaxHeight() )
@@ -599,7 +602,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                     adjustR.SetWidth( toplevelWindow->GetMinWidth() ) ;
                 if ( toplevelWindow->GetMinHeight() != -1 && adjustR.GetHeight() < toplevelWindow->GetMinHeight() )
                     adjustR.SetHeight( toplevelWindow->GetMinHeight() ) ;
-                Rect adjustedRect = { adjustR.y , adjustR.x , adjustR.y + adjustR.height , adjustR.x + adjustR.width } ;
+                Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + adjustR.height + bottom , adjustR.x + adjustR.width  + right } ;
                 if ( !EqualRect( &newRect , &adjustedRect ) )
                     cEvent.SetParameter( kEventParamCurrentBounds , &adjustedRect ) ;
             }
@@ -716,6 +719,8 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 {
     // init our fields
     Init();
+
+    style = style & ~wxFRAME_SHAPED ;
 
     m_windowStyle = style;
 
@@ -1072,6 +1077,19 @@ bool wxTopLevelWindowMac::Show(bool show)
 }
 
 // we are still using coordinates of the content view, todo switch to structure bounds
+
+void wxTopLevelWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , int &bottom )
+{
+    Rect content ;
+    Rect structure ;
+    GetWindowBounds( (WindowRef) m_macWindow, kWindowStructureRgn , &structure ) ;
+    GetWindowBounds( (WindowRef) m_macWindow, kWindowContentRgn , &content ) ;
+
+    left = content.left - structure.left ;
+    top = content.top  - structure.top ;
+    right = structure.right - content.right ;
+    bottom = structure.bottom - content.bottom ;
+}
 
 void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
 {
