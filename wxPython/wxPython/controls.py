@@ -24,6 +24,7 @@ wxBU_TOP = wx.controls.BU_TOP
 wxBU_RIGHT = wx.controls.BU_RIGHT
 wxBU_BOTTOM = wx.controls.BU_BOTTOM
 wxBU_EXACTFIT = wx.controls.BU_EXACTFIT
+wxBU_AUTODRAW = wx.controls.BU_AUTODRAW
 wxPreButton = wx.controls.PreButton
 wxButton_GetDefaultSize = wx.controls.Button_GetDefaultSize
 wxButton = wx.controls.Button

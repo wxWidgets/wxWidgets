@@ -1621,6 +1621,14 @@ class PyEventBinder(object):
 
         self.Bind(target, id1, id2, func)
 
+
+# These two are square pegs that don't fit the PyEventBinder hole...
+def EVT_COMMAND(win, id, cmd, func):
+    win.Connect(id, -1, cmd, func)
+def EVT_COMMAND_RANGE(win, id1, id2, cmd, func):
+    win.Connect(id1, id2, cmd, func)
+
+    
 #---------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------
@@ -1788,6 +1796,7 @@ EVT_WINDOW_DESTROY = wx.PyEventBinder( wxEVT_DESTROY )
 EVT_SET_CURSOR = wx.PyEventBinder( wxEVT_SET_CURSOR )
 EVT_MOUSE_CAPTURE_CHANGED = wx.PyEventBinder( wxEVT_MOUSE_CAPTURE_CHANGED )
 
+EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
 
 EVT_LEFT_DOWN = wx.PyEventBinder( wxEVT_LEFT_DOWN )
 EVT_LEFT_UP = wx.PyEventBinder( wxEVT_LEFT_UP )
@@ -3668,6 +3677,11 @@ _core.ControlWithItems_swigregister(ControlWithItemsPtr)
 #---------------------------------------------------------------------------
 
 class SizerItem(Object):
+    def __init__(self, *args, **kwargs):
+        newobj = _core.new_SizerItem(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
     def DeleteWindows(*args, **kwargs): return _core.SizerItem_DeleteWindows(*args, **kwargs)
     def DetachSizer(*args, **kwargs): return _core.SizerItem_DetachSizer(*args, **kwargs)
     def GetSize(*args, **kwargs): return _core.SizerItem_GetSize(*args, **kwargs)
@@ -3684,8 +3698,6 @@ class SizerItem(Object):
     def IsSpacer(*args, **kwargs): return _core.SizerItem_IsSpacer(*args, **kwargs)
     def SetProportion(*args, **kwargs): return _core.SizerItem_SetProportion(*args, **kwargs)
     def GetProportion(*args, **kwargs): return _core.SizerItem_GetProportion(*args, **kwargs)
-    SetOption = SetProportion 
-    GetOption = GetProportion 
     def SetFlag(*args, **kwargs): return _core.SizerItem_SetFlag(*args, **kwargs)
     def GetFlag(*args, **kwargs): return _core.SizerItem_GetFlag(*args, **kwargs)
     def SetBorder(*args, **kwargs): return _core.SizerItem_SetBorder(*args, **kwargs)
@@ -3700,7 +3712,6 @@ class SizerItem(Object):
     def IsShown(*args, **kwargs): return _core.SizerItem_IsShown(*args, **kwargs)
     def GetPosition(*args, **kwargs): return _core.SizerItem_GetPosition(*args, **kwargs)
     def GetUserData(*args, **kwargs): return _core.SizerItem_GetUserData(*args, **kwargs)
-    def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizerItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
@@ -3711,36 +3722,36 @@ class SizerItemPtr(SizerItem):
         self.__class__ = SizerItem
 _core.SizerItem_swigregister(SizerItemPtr)
 
+def SizerItemSpacer(*args, **kwargs):
+    val = _core.new_SizerItemSpacer(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def SizerItemWindow(*args, **kwargs):
+    val = _core.new_SizerItemWindow(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def SizerItemSizer(*args, **kwargs):
+    val = _core.new_SizerItemSizer(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 class Sizer(Object):
     def _setOORInfo(*args, **kwargs): return _core.Sizer__setOORInfo(*args, **kwargs)
-    def _Add(*args, **kwargs): return _core.Sizer__Add(*args, **kwargs)
-    def _Insert(*args, **kwargs): return _core.Sizer__Insert(*args, **kwargs)
-    def _Prepend(*args, **kwargs): return _core.Sizer__Prepend(*args, **kwargs)
+    def Add(*args, **kwargs): return _core.Sizer_Add(*args, **kwargs)
+    def Insert(*args, **kwargs): return _core.Sizer_Insert(*args, **kwargs)
+    def Prepend(*args, **kwargs): return _core.Sizer_Prepend(*args, **kwargs)
     def Remove(*args, **kwargs): return _core.Sizer_Remove(*args, **kwargs)
     def _SetItemMinSize(*args, **kwargs): return _core.Sizer__SetItemMinSize(*args, **kwargs)
-    def Add(self, item, *args, **kw):
-        if type(item) == type(1):
-            item = (item, args[0])  # backwards compatibility, args are width, height
-            args = args[1:]
-        self._Add(item, *args, **kw)
-
+    def AddItem(*args, **kwargs): return _core.Sizer_AddItem(*args, **kwargs)
+    def InsertItem(*args, **kwargs): return _core.Sizer_InsertItem(*args, **kwargs)
+    def PrependItem(*args, **kwargs): return _core.Sizer_PrependItem(*args, **kwargs)
     def AddMany(self, widgets):
         for childinfo in widgets:
             if type(childinfo) != type(()):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
-
-    def Prepend(self, item, *args, **kw):
-        if type(item) == type(1):
-            item = (item, args[0])  # backwards compatibility, args are width, height
-            args = args[1:]
-        self._Prepend(item, *args, **kw)
-
-    def Insert(self, before, item, *args, **kw):
-        if type(item) == type(1):
-            item = (item, args[0])  # backwards compatibility, args are width, height
-            args = args[1:]
-        self._Insert(before, item, *args, **kw)
 
 
     AddWindow = AddSizer = AddSpacer = Add
@@ -3767,6 +3778,8 @@ class Sizer(Object):
     def GetMinSizeTuple(self):
         return self.GetMinSize().asTuple()
 
+    def RecalcSizes(*args, **kwargs): return _core.Sizer_RecalcSizes(*args, **kwargs)
+    def CalcMin(*args, **kwargs): return _core.Sizer_CalcMin(*args, **kwargs)
     def Layout(*args, **kwargs): return _core.Sizer_Layout(*args, **kwargs)
     def Fit(*args, **kwargs): return _core.Sizer_Fit(*args, **kwargs)
     def FitInside(*args, **kwargs): return _core.Sizer_FitInside(*args, **kwargs)
@@ -3913,6 +3926,154 @@ class FlexGridSizerPtr(FlexGridSizer):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = FlexGridSizer
 _core.FlexGridSizer_swigregister(FlexGridSizerPtr)
+
+#---------------------------------------------------------------------------
+
+class GBPosition(object):
+    def __init__(self, *args, **kwargs):
+        newobj = _core.new_GBPosition(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def GetRow(*args, **kwargs): return _core.GBPosition_GetRow(*args, **kwargs)
+    def GetCol(*args, **kwargs): return _core.GBPosition_GetCol(*args, **kwargs)
+    def SetRow(*args, **kwargs): return _core.GBPosition_SetRow(*args, **kwargs)
+    def SetCol(*args, **kwargs): return _core.GBPosition_SetCol(*args, **kwargs)
+    def __eq__(*args, **kwargs): return _core.GBPosition___eq__(*args, **kwargs)
+    def __ne__(*args, **kwargs): return _core.GBPosition___ne__(*args, **kwargs)
+    def asTuple(*args, **kwargs): return _core.GBPosition_asTuple(*args, **kwargs)
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return 'wxGBPosition'+str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.SetRow(val)
+        elif index == 1: self.SetCol(val)
+        else: raise IndexError
+    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
+
+    row = property(GetRow, SetRow)
+    col = property(GetCol, SetCol)
+
+
+class GBPositionPtr(GBPosition):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = GBPosition
+_core.GBPosition_swigregister(GBPositionPtr)
+
+class GBSpan(object):
+    def __init__(self, *args, **kwargs):
+        newobj = _core.new_GBSpan(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def GetRowspan(*args, **kwargs): return _core.GBSpan_GetRowspan(*args, **kwargs)
+    def GetColspan(*args, **kwargs): return _core.GBSpan_GetColspan(*args, **kwargs)
+    def SetRowspan(*args, **kwargs): return _core.GBSpan_SetRowspan(*args, **kwargs)
+    def SetColspan(*args, **kwargs): return _core.GBSpan_SetColspan(*args, **kwargs)
+    def __eq__(*args, **kwargs): return _core.GBSpan___eq__(*args, **kwargs)
+    def __ne__(*args, **kwargs): return _core.GBSpan___ne__(*args, **kwargs)
+    def asTuple(*args, **kwargs): return _core.GBSpan_asTuple(*args, **kwargs)
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return 'wxGBSpan'+str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.SetRowspan(val)
+        elif index == 1: self.SetColspan(val)
+        else: raise IndexError
+    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __getinitargs__(self):           return ()
+    def __getstate__(self):              return self.asTuple()
+    def __setstate__(self, state):       self.Set(*state)
+
+    rowspan = property(GetRowspan, SetRowspan)
+    colspan = property(GetColspan, SetColspan)
+
+
+class GBSpanPtr(GBSpan):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = GBSpan
+_core.GBSpan_swigregister(GBSpanPtr)
+
+class GBSizerItem(SizerItem):
+    def __init__(self, *args, **kwargs):
+        newobj = _core.new_GBSizerItem(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def GetPos(*args, **kwargs): return _core.GBSizerItem_GetPos(*args, **kwargs)
+    def GetPosTuple(self): return self.GetPos().asTuple() 
+    def GetSpan(*args, **kwargs): return _core.GBSizerItem_GetSpan(*args, **kwargs)
+    def GetSpanTuple(self): return self.GetSpan().asTuple() 
+    def SetPos(*args, **kwargs): return _core.GBSizerItem_SetPos(*args, **kwargs)
+    def SetSpan(*args, **kwargs): return _core.GBSizerItem_SetSpan(*args, **kwargs)
+    def Intersects(*args): return _core.GBSizerItem_Intersects(*args)
+    def GetEndPos(*args, **kwargs): return _core.GBSizerItem_GetEndPos(*args, **kwargs)
+    def GetSizer(*args, **kwargs): return _core.GBSizerItem_GetSizer(*args, **kwargs)
+    def SetSizer(*args, **kwargs): return _core.GBSizerItem_SetSizer(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxGBSizerItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class GBSizerItemPtr(GBSizerItem):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = GBSizerItem
+_core.GBSizerItem_swigregister(GBSizerItemPtr)
+DefaultSpan = cvar.DefaultSpan
+
+def GBSizerItemWindow(*args, **kwargs):
+    val = _core.new_GBSizerItemWindow(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def GBSizerItemSizer(*args, **kwargs):
+    val = _core.new_GBSizerItemSizer(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def GBSizerItemSpacer(*args, **kwargs):
+    val = _core.new_GBSizerItemSpacer(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+class GridBagSizer(FlexGridSizer):
+    def __init__(self, *args, **kwargs):
+        newobj = _core.new_GridBagSizer(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def Add(*args, **kwargs): return _core.GridBagSizer_Add(*args, **kwargs)
+    def AddItem(*args, **kwargs): return _core.GridBagSizer_AddItem(*args, **kwargs)
+    def GetEmptyCellSize(*args, **kwargs): return _core.GridBagSizer_GetEmptyCellSize(*args, **kwargs)
+    def SetEmptyCellSize(*args, **kwargs): return _core.GridBagSizer_SetEmptyCellSize(*args, **kwargs)
+    def GetItemPosition(*args): return _core.GridBagSizer_GetItemPosition(*args)
+    def SetItemPosition(*args): return _core.GridBagSizer_SetItemPosition(*args)
+    def GetItemSpan(*args): return _core.GridBagSizer_GetItemSpan(*args)
+    def SetItemSpan(*args): return _core.GridBagSizer_SetItemSpan(*args)
+    def FindItem(*args): return _core.GridBagSizer_FindItem(*args)
+    def FindItemAtPosition(*args, **kwargs): return _core.GridBagSizer_FindItemAtPosition(*args, **kwargs)
+    def FindItemWithData(*args, **kwargs): return _core.GridBagSizer_FindItemWithData(*args, **kwargs)
+    def RecalcSizes(*args, **kwargs): return _core.GridBagSizer_RecalcSizes(*args, **kwargs)
+    def CalcMin(*args, **kwargs): return _core.GridBagSizer_CalcMin(*args, **kwargs)
+    def CheckForIntersection(*args): return _core.GridBagSizer_CheckForIntersection(*args)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxGridBagSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class GridBagSizerPtr(GridBagSizer):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = GridBagSizer
+_core.GridBagSizer_swigregister(GridBagSizerPtr)
 
 #---------------------------------------------------------------------------
 
