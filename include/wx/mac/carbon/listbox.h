@@ -126,8 +126,9 @@ public:
 #endif // wxUSE_OWNER_DRAWN
 
     // Windows callbacks
-
+#if !__WXMAC_OSX__
     void OnChar(wxKeyEvent& event);
+#endif
 
     void*           m_macList ;
     wxArrayString   m_stringArray ;
@@ -148,7 +149,9 @@ protected:
     int             MacGetSelections(wxArrayInt& aSelections) const ;
     bool            MacIsSelected( int n ) const ;
     void            MacScrollTo( int n ) ;
+#if !__WXMAC_OSX__
     void            OnSize( wxSizeEvent &size ) ;
+#endif
     void            MacDoClick() ;
     void            MacDoDoubleClick() ;
 
