@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/tglbtn.h"
+#include "wx/button.h"
 
 #if wxUSE_TOGGLEBTN
 
@@ -44,10 +45,6 @@ static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxTog
 IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
 
-// bool Create(wxWindow *parent, wxWindowID id, const wxString &label,
-//             const wxPoint &pos, const wxSize &size, long style,
-//             const wxValidator& validator, const wxString &name)
-// Create the control.
 bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString &label, const wxPoint &pos,
                             const wxSize &size, long style,
@@ -122,74 +119,69 @@ bool wxToggleButton::GetValue() const
    return GTK_TOGGLE_BUTTON(m_widget)->active;
 }
 
-// void SetLabel(const wxString& label)
-// Set the button's label.
 void wxToggleButton::SetLabel(const wxString& label)
 {
-   wxCHECK_RET(m_widget != NULL, wxT("invalid toggle button"));
+    wxCHECK_RET(m_widget != NULL, wxT("invalid toggle button"));
 
-   wxControl::SetLabel(label);
+    wxControl::SetLabel(label);
 
-   gtk_label_set(GTK_LABEL(GTK_BUTTON(m_widget)->child),
+    gtk_label_set(GTK_LABEL(GTK_BUTTON(m_widget)->child),
                  GetLabel().mbc_str());
 }
 
-// bool Enable(bool enable)
-// Enable (or disable) the control.
 bool wxToggleButton::Enable(bool enable /*=TRUE*/)
 {
-   if (!wxControl::Enable(enable))
-      return FALSE;
+    if (!wxControl::Enable(enable))
+        return FALSE;
 
-   gtk_widget_set_sensitive(GTK_BUTTON(m_widget)->child, enable);
+    gtk_widget_set_sensitive(GTK_BUTTON(m_widget)->child, enable);
 
-   return TRUE;
+    return TRUE;
 }
 
-// void ApplyWidgetStyle()
-// I don't really know what this does.
 void wxToggleButton::ApplyWidgetStyle()
 {
-   SetWidgetStyle();
-   gtk_widget_set_style(m_widget, m_widgetStyle);
-   gtk_widget_set_style(GTK_BUTTON(m_widget)->child, m_widgetStyle);
+    SetWidgetStyle();
+    gtk_widget_set_style(m_widget, m_widgetStyle);
+    gtk_widget_set_style(GTK_BUTTON(m_widget)->child, m_widgetStyle);
 }
 
-// bool IsOwnGtkWindow(GdkWindow *window)
-// I'm not really sure what this is for, either.
 bool wxToggleButton::IsOwnGtkWindow(GdkWindow *window)
 {
-   return (window == GTK_TOGGLE_BUTTON(m_widget)->event_window);
+    return (window == GTK_TOGGLE_BUTTON(m_widget)->event_window);
 }
 
-// void OnInternalIdle()
-// Apparently gtk cursors are difficult to deal with.
 void wxToggleButton::OnInternalIdle()
 {
-   wxCursor cursor = m_cursor;
-   if (g_globalCursor.Ok())
-      cursor = g_globalCursor;
+    wxCursor cursor = m_cursor;
+    
+    if (g_globalCursor.Ok())
+        cursor = g_globalCursor;
 
-   if (GTK_TOGGLE_BUTTON(m_widget)->event_window && cursor.Ok()) {
+    if (GTK_TOGGLE_BUTTON(m_widget)->event_window && cursor.Ok()) {
       /* I now set the cursor the anew in every OnInternalIdle call
          as setting the cursor in a parent window also effects the
          windows above so that checking for the current cursor is
          not possible. */
 
-      gdk_window_set_cursor(GTK_TOGGLE_BUTTON(m_widget)->event_window,
+        gdk_window_set_cursor(GTK_TOGGLE_BUTTON(m_widget)->event_window,
                             cursor.GetCursor());
-   }
+    }
 
-   UpdateWindowUI();
+    UpdateWindowUI();
 }
 
 // wxSize DoGetBestSize() const
 // Get the "best" size for this control.
 wxSize wxToggleButton::DoGetBestSize() const
 {
-   wxSize ret(wxControl::DoGetBestSize());
-   if (ret.x < 80)
-      ret.x = 80;
+    wxSize ret(wxControl::DoGetBestSize());
+   
+    if (!HasFlag(wxBU_EXACTFIT))
+    {
+        if (ret.x < 80) ret.x = 80;
+    }
+    
 
    return ret;
 }

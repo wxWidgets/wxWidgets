@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -81,7 +81,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxButton creation failed") );
-	    return FALSE;
+        return FALSE;
     }
 
 /*
@@ -89,7 +89,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     for (size_t i = 0; i < label2.Len(); i++)
     {
         if (label2.GetChar(i) == wxT('&'))
-	    label2.SetChar(i,wxT('_'));
+        label2.SetChar(i,wxT('_'));
     }
     
     GtkWidget *accel_label = gtk_accel_label_new( label2.mb_str() );
@@ -186,7 +186,12 @@ void wxButton::ApplyWidgetStyle()
 wxSize wxButton::DoGetBestSize() const
 {
     wxSize ret( wxControl::DoGetBestSize() );
-    if (ret.x < 80) ret.x = 80;
+    
+    if (!HasFlag(wxBU_EXACTFIT))
+    {
+        if (ret.x < 80) ret.x = 80;
+    }
+    
     return ret;
 }
 

@@ -439,9 +439,16 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         SetPixmap( gdk_pixmap_new( wxGetRootWindow()->window, width, height, -1 ) );
 
-        // Retrieve depth
-
-        GdkVisual *visual = gdk_window_get_visual( wxGetRootWindow()->window );
+        // Retrieve depth, using XVisualInfo from app, if set
+        GdkVisual *visual;
+        if (wxTheApp->m_glVisualInfo)
+        {
+            visual = gdkx_visual_get( ((XVisualInfo *) wxTheApp->m_glVisualInfo)->visualid );
+        }
+        else
+        {
+            visual = gdk_window_get_visual( wxGetRootWindow()->window );
+        }
         wxASSERT( visual );
 
         int bpp = visual->depth;
@@ -451,9 +458,10 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
         if (bpp < 8) bpp = 8;
 
-#if (GTK_MINOR_VERSION > 0)
-
-        if (!image.HasMask() && (bpp > 8))
+        // We handle 8-bit bitmaps ourselves using the colour cube, 12-bit 
+        // visuals are not supported by GDK so we do these ourselves, too.
+        // 15-bit and 16-bit should actually work and 24-bit certainly does.
+        if (!image.HasMask() && (bpp > 12))
         {
             static bool s_hasInitialized = FALSE;
 
@@ -476,8 +484,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
             gdk_gc_unref( gc );
             return TRUE;
         }
-
-#endif
 
         // Create picture image
 
@@ -505,7 +511,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         enum byte_order { RGB, RBG, BRG, BGR, GRB, GBR };
         byte_order b_o = RGB;
 
-        if (bpp >= 24)
+        if (bpp > 8)
         {
             if ((visual->red_mask > visual->green_mask) && (visual->green_mask > visual->blue_mask))      b_o = RGB;
             else if ((visual->red_mask > visual->blue_mask) && (visual->blue_mask > visual->green_mask))  b_o = RGB;
@@ -543,7 +549,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
                 switch (bpp)
                 {
-                case 8:
+                    case 8:
                     {
                         int pixel = -1;
                         if (wxTheApp->m_colorCube)
@@ -555,7 +561,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
                             GdkColormap *cmap = gtk_widget_get_default_colormap();
                             GdkColor *colors = cmap->colors;
                             int max = 3 * (65536);
-
+    
                             for (int i = 0; i < cmap->size; i++)
                             {
                                 int rdiff = (r << 8) - colors[i].red;
@@ -565,39 +571,74 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
                                 if (sum < max) { pixel = i; max = sum; }
                             }
                         }
-
+    
                         gdk_image_put_pixel( data_image, x, y, pixel );
-
+    
                         break;
                     }
-                case 15:
-                    {
-                        guint32 pixel = ((r & 0xf8) << 7) | ((g & 0xf8) << 2) | ((b & 0xf8) >> 3);
-                        gdk_image_put_pixel( data_image, x, y, pixel );
-                        break;
-                    }
-                case 16:
-                    {
-                        guint32 pixel = ((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >> 3);
-                        gdk_image_put_pixel( data_image, x, y, pixel );
-                        break;
-                    }
-                case 32:
-                case 24:
+                    case 12:  // SGI only
                     {
                         guint32 pixel = 0;
                         switch (b_o)
                         {
-                        case RGB: pixel = (r << 16) | (g << 8) | b; break;
-                        case RBG: pixel = (r << 16) | (b << 8) | g; break;
-                        case BRG: pixel = (b << 16) | (r << 8) | g; break;
-                        case BGR: pixel = (b << 16) | (g << 8) | r; break;
-                        case GRB: pixel = (g << 16) | (r << 8) | b; break;
-                        case GBR: pixel = (g << 16) | (b << 8) | r; break;
+                            case RGB: pixel = ((r & 0xf0) << 4) | (g & 0xf0) | ((b & 0xf0) >> 4); break;
+                            case RBG: pixel = ((r & 0xf0) << 4) | (b & 0xf0) | ((g & 0xf0) >> 4); break;
+                            case GRB: pixel = ((g & 0xf0) << 4) | (r & 0xf0) | ((b & 0xf0) >> 4); break;
+                            case GBR: pixel = ((g & 0xf0) << 4) | (b & 0xf0) | ((r & 0xf0) >> 4); break;
+                            case BRG: pixel = ((b & 0xf0) << 4) | (r & 0xf0) | ((g & 0xf0) >> 4); break;
+                            case BGR: pixel = ((b & 0xf0) << 4) | (g & 0xf0) | ((r & 0xf0) >> 4); break;
+                        }
+                        gdk_image_put_pixel( data_image, x, y, pixel );
+                        break;
+                    }
+                    case 15:
+                    {
+                        guint32 pixel = 0;
+                        switch (b_o)
+                        {
+                            case RGB: pixel = ((r & 0xf8) << 7) | ((g & 0xf8) << 2) | ((b & 0xf8) >> 3); break;
+                            case RBG: pixel = ((r & 0xf8) << 7) | ((b & 0xf8) << 2) | ((g & 0xf8) >> 3); break;
+                            case GRB: pixel = ((g & 0xf8) << 7) | ((r & 0xf8) << 2) | ((b & 0xf8) >> 3); break;
+                            case GBR: pixel = ((g & 0xf8) << 7) | ((b & 0xf8) << 2) | ((r & 0xf8) >> 3); break;
+                            case BRG: pixel = ((b & 0xf8) << 7) | ((r & 0xf8) << 2) | ((g & 0xf8) >> 3); break;
+                            case BGR: pixel = ((b & 0xf8) << 7) | ((g & 0xf8) << 2) | ((r & 0xf8) >> 3); break;
+                        }
+                        gdk_image_put_pixel( data_image, x, y, pixel );
+                        break;
+                    }
+                    case 16:
+                    {
+                        // I actually don't know if for 16-bit displays, it is alway the green
+                        // component or the second component which has 6 bits.
+                        guint32 pixel = 0;
+                        switch (b_o)
+                        {
+                            case RGB: pixel = ((r & 0xf8) << 7) | ((g & 0xfc) << 2) | ((b & 0xf8) >> 3); break;
+                            case RBG: pixel = ((r & 0xf8) << 7) | ((b & 0xfc) << 2) | ((g & 0xf8) >> 3); break;
+                            case GRB: pixel = ((g & 0xf8) << 7) | ((r & 0xfc) << 2) | ((b & 0xf8) >> 3); break;
+                            case GBR: pixel = ((g & 0xf8) << 7) | ((b & 0xfc) << 2) | ((r & 0xf8) >> 3); break;
+                            case BRG: pixel = ((b & 0xf8) << 7) | ((r & 0xfc) << 2) | ((g & 0xf8) >> 3); break;
+                            case BGR: pixel = ((b & 0xf8) << 7) | ((g & 0xfc) << 2) | ((r & 0xf8) >> 3); break;
+                        }
+                        gdk_image_put_pixel( data_image, x, y, pixel );
+                        break;
+                    }
+                    case 32:
+                    case 24:
+                    {
+                        guint32 pixel = 0;
+                        switch (b_o)
+                        {
+                            case RGB: pixel = (r << 16) | (g << 8) | b; break;
+                            case RBG: pixel = (r << 16) | (b << 8) | g; break;
+                            case BRG: pixel = (b << 16) | (r << 8) | g; break;
+                            case BGR: pixel = (b << 16) | (g << 8) | r; break;
+                            case GRB: pixel = (g << 16) | (r << 8) | b; break;
+                            case GBR: pixel = (g << 16) | (b << 8) | r; break;
                         }
                         gdk_image_put_pixel( data_image, x, y, pixel );
                     }
-                default: break;
+                    default: break;
                 }
             } // for
         }  // for
@@ -711,27 +752,27 @@ wxImage wxBitmap::ConvertToImage() const
         for (int i = 0; i < GetWidth(); i++)
         {
             wxUint32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-                if (bpp == 1)
+            if (bpp == 1)
+            {
+                if (pixel == 0)
                 {
-                    if (pixel == 0)
-                        {
                     data[pos]   = 0;
                     data[pos+1] = 0;
                     data[pos+2] = 0;
-                        }
-                        else
-                        {
+                }
+                else
+                {
                     data[pos]   = 255;
                     data[pos+1] = 255;
                     data[pos+2] = 255;
-                        }
+                }
             }
             else if (use_shift)
             {
                 data[pos] =   (pixel >> red_shift_right)   << red_shift_left;
                 data[pos+1] = (pixel >> green_shift_right) << green_shift_left;
                 data[pos+2] = (pixel >> blue_shift_right)  << blue_shift_left;
-                }
+            }
             else if (cmap->colors)
             {
                 data[pos] =   cmap->colors[pixel].red   >> 8;
