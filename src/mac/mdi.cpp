@@ -106,8 +106,12 @@ wxMDIParentFrame::~wxMDIParentFrame()
 {
     DestroyChildren();
     // already delete by DestroyChildren()
+#if wxUSE_TOOLBAR
     m_frameToolBar = NULL;
+#endif
+#if wxUSE_STATUSBAR
     m_frameStatusBar = NULL;
+#endif    
     m_clientWindow = NULL ;
     
     if (m_windowMenu)
@@ -273,8 +277,12 @@ wxMDIChildFrame::~wxMDIChildFrame()
         mdiparent->m_currentChild = NULL;
     DestroyChildren();
     // already delete by DestroyChildren()
+#if wxUSE_TOOLBAR
     m_frameToolBar = NULL;
+#endif
+#if wxUSE_STATUSBAR
     m_frameStatusBar = NULL;
+#endif    
 }
 
 void wxMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
