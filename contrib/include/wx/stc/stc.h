@@ -2161,6 +2161,12 @@ public:
     bool GetLastKeydownProcessed() { return m_lastKeyDownConsumed; }
     void SetLastKeydownProcessed(bool val) { m_lastKeyDownConsumed = val; }
 
+    // Write the contents of the editor to filename
+    bool SaveFile(const wxString& filename);
+
+    // Load the contents of filename into the editor
+    bool LoadFile(const wxString& filename);
+
 
 //----------------------------------------------------------------------
 
