@@ -67,13 +67,12 @@ const wxChar *wxTextFile::GetEOL(wxTextFileType type)
         wxFAIL_MSG(wxT("bad file type in wxTextFile::GetEOL."));
         // fall through nevertheless - we must return something...
 
-      case wxTextFileType_None: return wxT("");
-      case wxTextFileType_Unix: return wxT("\n");
-      case wxTextFileType_Dos:  return wxT("\r\n");
-      case wxTextFileType_Mac:  return wxT("\r");
+      case wxTextFileType_None: return wxT(_T(""));
+      case wxTextFileType_Unix: return wxT(_T("\n"));
+      case wxTextFileType_Dos:  return wxT(_T("\r\n"));
+      case wxTextFileType_Mac:  return wxT(_T("\r"));
     }
 }
-
 
 wxString wxTextFile::Translate(const wxString& text, wxTextFileType type)
 {
@@ -93,32 +92,38 @@ wxString wxTextFile::Translate(const wxString& text, wxTextFileType type)
     {
         wxChar ch = *pc;
         switch ( ch ) {
-            case '\n':
+            case _T('\n'):
                 // Dos/Unix line termination
                 result += eol;
-                chLast = '\n';
+                chLast = 0;
                 break;
 
-            case '\r':
-                if ( chLast == '\r' ) {
+            case _T('\r'):
+                if ( chLast == _T('\r') ) {
                     // Mac empty line
                     result += eol;
                 }
-                else
-                    chLast = '\r';
+                else {
+                    // just remember it: we don't know whether it is just "\r"
+                    // or "\r\n" yet
+                    chLast = _T('\r');
+                }
                 break;
 
             default:
-                if ( chLast == '\r' ) {
+                if ( chLast == _T('\r') ) {
                     // Mac line termination
                     result += eol;
-                    chLast = ch;
                 }
-                else {
-                    // add to the current line
-                    result += ch;
-                }
+
+                // add to the current line
+                result += ch;
         }
+    }
+
+    if ( chLast ) {
+        // trailing '\r'
+        result += eol;
     }
 
     return result;
@@ -269,7 +274,7 @@ bool wxTextFile::Read()
         case '\r':
           if ( chLast == '\r' ) {
             // Mac empty line
-            m_aLines.Add("");
+            m_aLines.Add(wxEmptyString);
             m_aTypes.Add(wxTextFileType_Mac);
           }
           else
