@@ -2431,7 +2431,7 @@ bool wxWindow::OS2Create(
     wxAssociateWinWithHandle((HWND)m_hWnd
                              ,this
                             );
-    // 
+    //
     // Now need to subclass window.
     //
 
@@ -3972,4 +3972,44 @@ static void TranslateKbdEventToMouse(
 
     pWin->ScreenToClient(pX, pY);
 } // end of TranslateKbdEventToMouse
+
+// Find the wxWindow at the current mouse position, returning the mouse
+// position.
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+{
+    return wxFindWindowAtPoint(wxGetMousePosition());
+}
+
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+#if 0
+    POINT pt2;
+    pt2.x = pt.x;
+    pt2.y = pt.y;
+    HWND hWndHit = ::WindowFromPoint(pt2);
+
+    wxWindow* win = wxFindWinFromHandle((WXHWND) hWndHit) ;
+    HWND hWnd = hWndHit;
+
+    // Try to find a window with a wxWindow associated with it
+    while (!win && (hWnd != 0))
+    {
+        hWnd = ::GetParent(hWnd);
+        win = wxFindWinFromHandle((WXHWND) hWnd) ;
+    }
+    return win;
+#endif
+    return (wxWindow*)NULL;
+}
+
+// Get the current mouse position.
+wxPoint wxGetMousePosition()
+{
+#if 0
+    POINT pt;
+    GetCursorPos( & pt );
+    return wxPoint(pt.x, pt.y);
+#endif
+    return wxPoint(0,0);
+}
 
