@@ -1140,7 +1140,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
-    m_peer = new wxMacControl(this) ;
+    m_peer = new wxMacControl(this , true /*isRootControl*/) ;
 #if TARGET_API_MAC_OSX
     
     if ( m_macUsesCompositing )

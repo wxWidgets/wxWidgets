@@ -765,6 +765,38 @@ void wxMacWakeUp()
 
 #if wxUSE_GUI
 
+// ----------------------------------------------------------------------------
+// Native Struct Conversions
+// ----------------------------------------------------------------------------
+
+
+void wxMacRectToNative( const wxRect *wx , Rect *n ) 
+{
+    n->left = wx->x ;
+    n->top = wx->y ;
+    n->right = wx->x + wx->width ;
+    n->bottom = wx->y + wx->height ;
+}
+
+void wxMacNativeToRect( const Rect *n , wxRect* wx ) 
+{
+    wx->x = n->left ;
+    wx->y = n->top ;
+    wx->width = n->right - n->left ;
+    wx->height = n->bottom - n->top ;
+}
+
+void wxMacPointToNative( const wxPoint* wx , Point *n ) 
+{
+    n->h = wx->x ;
+    n->v = wx->y ;
+}
+
+void wxMacNativeToPoint( const Point *n , wxPoint* wx ) 
+{
+    wx->x = n->h ;
+    wx->y = n->v ;
+}
 
 // ----------------------------------------------------------------------------
 // Carbon Event Support
@@ -785,10 +817,11 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 // Control Access Support
 // ----------------------------------------------------------------------------
 
-wxMacControl::wxMacControl(wxWindow* peer)
+wxMacControl::wxMacControl(wxWindow* peer , bool isRootControl )
 {
     Init() ;
     m_peer = peer ;
+    m_isRootControl = isRootControl ;
     m_isCompositing = peer->MacGetTopLevelWindow()->MacUsesCompositing() ;
 }
 
@@ -818,6 +851,7 @@ void wxMacControl::Init()
     m_controlRef = NULL ;
     m_needsFocusRect = false ;
     m_isCompositing = false ;
+    m_isRootControl = false ;
 }
 
 void wxMacControl::Dispose()
@@ -1078,17 +1112,62 @@ bool wxMacControl::GetNeedsDisplay() const
     return false ;
 #endif
 }
+#endif
 
-void wxMacControl::SetNeedsDisplay( bool needsDisplay , RgnHandle where )
+void wxMacControl::SetNeedsDisplay( RgnHandle where )
 {
+    if ( !IsVisible() )
+        return ;
+        
 #if TARGET_API_MAC_OSX
-    if ( where != NULL )
-        HIViewSetNeedsDisplayInRegion( m_controlRef , where , needsDisplay ) ;
+    if ( m_isCompositing )
+    {
+        HIViewSetNeedsDisplayInRegion( m_controlRef , where , true ) ;
+    }
     else
-        HIViewSetNeedsDisplay( m_controlRef , needsDisplay ) ;
 #endif
+    {
+        Rect controlBounds ; 
+        GetControlBounds( m_controlRef, &controlBounds ) ;
+        RgnHandle update = NewRgn() ;
+        CopyRgn( where , update ) ;
+        OffsetRgn( update , controlBounds.left , controlBounds.top ) ;
+        InvalWindowRgn( GetControlOwner( m_controlRef) , update ) ; 
+    }
 }
+
+void wxMacControl::SetNeedsDisplay( Rect* where )
+{
+    if ( !IsVisible() )
+        return ;
+
+#if TARGET_API_MAC_OSX
+    if ( m_isCompositing )
+    {
+        if ( where != NULL )
+        {
+            RgnHandle update = NewRgn() ;
+            RectRgn( update , where ) ;
+            HIViewSetNeedsDisplayInRegion( m_controlRef , update , true ) ;
+            DisposeRgn( update ) ;
+        }
+        else
+            HIViewSetNeedsDisplay( m_controlRef , true ) ;
+    }
+    else
 #endif
+    {
+        Rect controlBounds ; 
+        GetControlBounds( m_controlRef, &controlBounds ) ;
+        if ( where )
+        {
+            Rect whereLocal = *where ;
+            OffsetRect( &whereLocal , controlBounds.left , controlBounds.top ) ;
+            SectRect( &controlBounds , &whereLocal, &controlBounds ) ;
+        }
+        InvalWindowRect( GetControlOwner( m_controlRef) , &controlBounds ) ; 
+    }
+}
 
 void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to )
 {
@@ -1107,8 +1186,12 @@ void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to
     {
         Rect fromRect ;
         Rect toRect ;
-        from->GetRect( &fromRect ) ;
-        to->GetRect( &toRect ) ;
+        GetControlBounds( from->m_controlRef , &fromRect ) ;
+        GetControlBounds( to->m_controlRef , &toRect ) ;
+        if ( from->m_isRootControl )
+            fromRect.left = fromRect.top = 0 ;
+        if ( to->m_isRootControl )
+            toRect.left = toRect.top = 0 ; 
                     
         pt->x = pt->x + fromRect.left - toRect.left ;
         pt->y = pt->y + fromRect.top - toRect.top ;
@@ -1130,26 +1213,57 @@ void wxMacControl::SetRect( Rect *r )
     else
 #endif
     {
-        Rect former ;
-        GetControlBounds( m_controlRef , &former ) ;
-        InvalWindowRect( GetControlOwner( m_controlRef ) , &former ) ;
-        SetControlBounds( m_controlRef , r ) ;
-        InvalWindowRect( GetControlOwner( m_controlRef ) , r ) ;
+        bool vis = IsVisible() ;
+        if ( vis )
+        {
+            Rect former ;
+            GetControlBounds( m_controlRef , &former ) ;
+            InvalWindowRect( GetControlOwner( m_controlRef ) , &former ) ;
+        }
+        
+        Rect controlBounds = *r ;
+        
+        wxMacControl* parent = m_peer->GetParent()->GetPeer() ;
+        if( parent->m_isRootControl == false )
+        {
+            Rect superRect ;
+            GetControlBounds( parent->m_controlRef , &superRect ) ;
+            OffsetRect( &controlBounds , superRect.left , superRect.top ) ;
+        }
+        
+        SetControlBounds( m_controlRef , &controlBounds ) ;
+        if ( vis )
+        {
+            InvalWindowRect( GetControlOwner( m_controlRef ) , &controlBounds ) ;
+        }
     }
 }
 
 void wxMacControl::GetRect( Rect *r )
 {
     GetControlBounds( m_controlRef , r ) ;
-    // correct the case of the root control 
-    if ( r->left == -32768 && r->top == -32768 && r->bottom == 32767 && r->right == 32767)
+    if ( m_isCompositing == false )
     {
-        WindowRef wr = GetControlOwner( m_controlRef ) ;
-        GetWindowBounds( wr , kWindowContentRgn , r ) ;
-        r->right -= r->left ;
-        r->bottom -= r->top ;
-        r->left = 0 ;
-        r->top = 0 ;
+        // correct the case of the root control 
+        if ( m_isRootControl )
+        {
+            WindowRef wr = GetControlOwner( m_controlRef ) ;
+            GetWindowBounds( wr , kWindowContentRgn , r ) ;
+            r->right -= r->left ;
+            r->bottom -= r->top ;
+            r->left = 0 ;
+            r->top = 0 ;
+        }
+        else 
+        {
+            wxMacControl* parent = m_peer->GetParent()->GetPeer() ;
+            if( parent->m_isRootControl == false )
+            {
+                Rect superRect ;
+                GetControlBounds( parent->m_controlRef , &superRect ) ;
+                OffsetRect( r , -superRect.left , -superRect.top ) ;
+            }
+        }
     }
 }
 
@@ -1183,7 +1297,18 @@ void wxMacControl::GetFeatures( UInt32 * features )
 
 OSStatus wxMacControl::GetRegion( ControlPartCode partCode , RgnHandle region )
 {
-    return GetControlRegion( m_controlRef , partCode , region ) ;
+    OSStatus err = GetControlRegion( m_controlRef , partCode , region ) ;
+    if ( m_isCompositing == false )
+    {
+        if ( !m_isRootControl )
+        {
+            Rect r ;
+            GetControlBounds(m_controlRef, &r ) ;
+            if ( !EmptyRgn( region ) )
+                OffsetRgn( region , -r.left , -r.top ) ; 
+        }
+    }
+    return err ;
 }
 
 OSStatus wxMacControl::SetZOrder( bool above , wxMacControl* other )
