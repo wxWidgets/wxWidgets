@@ -1181,51 +1181,11 @@ enum wxBorder
 #define wxDIALOG_EX_CONTEXTHELP 0x00000004
 
 /*
- * wxFrame/wxDialog style flags
- */
-#define wxSTAY_ON_TOP           0x8000
-#define wxICONIZE               0x4000
-#define wxMINIMIZE              wxICONIZE
-#define wxMAXIMIZE              0x2000
-#define wxCLOSE_BOX                 0x1000
-
-#define wxSYSTEM_MENU           0x0800
-#define wxMINIMIZE_BOX          0x0400
-#define wxMAXIMIZE_BOX          0x0200
-#define wxTINY_CAPTION_HORIZ    0x0100
-#define wxTINY_CAPTION_VERT     0x0080
-#define wxRESIZE_BORDER         0x0040
-
-#define wxDIALOG_NO_PARENT      0x0001  /*  Don't make owned by apps top window */
-#define wxFRAME_NO_TASKBAR      0x0002  /*  No taskbar button (MSW only) */
-#define wxFRAME_TOOL_WINDOW     0x0004  /*  No taskbar button, no system menu */
-#define wxFRAME_FLOAT_ON_PARENT 0x0008  /*  Always above its parent */
-#define wxFRAME_SHAPED          0x0010  /*  Create a window that is able to be shaped */
-
-/*  deprecated versions defined for compatibility reasons */
-#define wxRESIZE_BOX            wxMAXIMIZE_BOX
-#define wxTHICK_FRAME           wxRESIZE_BORDER
-
-/*  obsolete styles, unused any more */
-#define wxDIALOG_MODAL          0x0020  /*  free flag value 0x0020 */
-#define wxDIALOG_MODELESS       0
-#define wxNO_3D                 0
-#define wxUSER_COLOURS          0
-
-
-/*
  * MDI parent frame style flags
  * Can overlap with some of the above.
  */
 
 #define wxFRAME_NO_WINDOW_MENU  0x0100
-
-#define wxDEFAULT_FRAME_STYLE \
-  (wxSYSTEM_MENU | wxRESIZE_BORDER | \
-   wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCLOSE_BOX | \
-   wxCAPTION | wxCLIP_CHILDREN)
-
-#define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX)
 
 /*
  * wxExtDialog style flags

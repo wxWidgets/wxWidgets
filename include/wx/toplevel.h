@@ -34,6 +34,51 @@ class WXDLLEXPORT wxTopLevelWindowBase;
 // constants
 // ----------------------------------------------------------------------------
 
+// style common to both wxFrame and wxDialog
+#define wxSTAY_ON_TOP           0x8000
+#define wxICONIZE               0x4000
+#define wxMINIMIZE              wxICONIZE
+#define wxMAXIMIZE              0x2000
+#define wxCLOSE_BOX             0x1000
+
+#define wxSYSTEM_MENU           0x0800
+#define wxMINIMIZE_BOX          0x0400
+#define wxMAXIMIZE_BOX          0x0200
+#define wxTINY_CAPTION_HORIZ    0x0100
+#define wxTINY_CAPTION_VERT     0x0080
+#define wxRESIZE_BORDER         0x0040
+
+// deprecated versions defined for compatibility reasons
+#define wxRESIZE_BOX            wxMAXIMIZE_BOX
+#define wxTHICK_FRAME           wxRESIZE_BORDER
+
+// obsolete styles, unused any more
+#define wxDIALOG_MODAL          0
+#define wxDIALOG_MODELESS       0
+#define wxNO_3D                 0
+#define wxUSER_COLOURS          0
+
+// default style
+//
+// under Windows CE (at least when compiling with eVC 4) we should create
+// top level windows without any styles at all for them to appear
+// "correctly", i.e. as full screen windows with a "hide" button (same as
+// "close" but round instead of squared and just hides the applications
+// instead of closing it) in the title bar
+#ifdef __WXWINCE__
+    #define wxDEFAULT_FRAME_STYLE (0)
+#else // !__WXWINCE__
+    #define wxDEFAULT_FRAME_STYLE \
+            (wxSYSTEM_MENU | \
+             wxRESIZE_BORDER | \
+             wxMINIMIZE_BOX | \
+             wxMAXIMIZE_BOX | \
+             wxCLOSE_BOX | \
+             wxCAPTION | \
+             wxCLIP_CHILDREN)
+#endif
+
+
 // Dialogs are created in a special way
 #define wxTOPLEVEL_EX_DIALOG        0x00000008
 
