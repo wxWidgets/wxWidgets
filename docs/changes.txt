@@ -78,6 +78,7 @@ All GUI ports:
   the file history, including not adding filenames if not using the
   default extension for the template
 - Speeded up wxImage::Scale using fixed point arithmetic (Wade Brainerd)
+- Added BLOB support to wxDB (John Skiff)
 
 Unix:
 
