@@ -5023,8 +5023,10 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
     case WXK_CLEAR:     keySym = VK_CLEAR; break;
     case WXK_SHIFT:     keySym = VK_SHIFT; break;
     case WXK_CONTROL:   keySym = VK_CONTROL; break;
+    case WXK_ALT:       keySym = VK_MENU; break;
     case WXK_MENU :     keySym = VK_MENU; break;
     case WXK_PAUSE:     keySym = VK_PAUSE; break;
+    case WXK_CAPITAL:   keySym = VK_CAPITAL; break;
     case WXK_PRIOR:     keySym = VK_PRIOR; break;
     case WXK_NEXT :     keySym = VK_NEXT; break;
     case WXK_END:       keySym = VK_END; break;
@@ -5094,12 +5096,24 @@ bool wxGetKeyState(wxKeyCode key)
 {
     bool bVirtual;
     int vkey = wxCharCodeWXToMSW(key, &bVirtual);
-    
-    //there aren't WXK_ macros for non-virtual key codes
-    if (bVirtual == false)
-        return false;
+    SHORT state;
 
-    return GetKeyState(vkey) < 0;
+    switch (key)
+    {
+    case WXK_NUMLOCK:
+    case WXK_CAPITAL:
+    case WXK_SCROLL:
+        // get the toggle state of the special key
+        state = GetKeyState(vkey);
+        break;
+        
+    default:
+        // Get the current state of the physical key
+        state = GetAsyncKeyState(vkey);
+        break;
+    }
+    // if the most significant bit is set then the key is down
+    return ( state & 0x0001 ) != 0;
 }
 
 wxWindow *wxGetActiveWindow()
