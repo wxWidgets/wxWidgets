@@ -36,9 +36,13 @@ capabilities, (right click to try it out.)
 if wxPlatform == '__WXMSW__':
     face1 = 'Ariel'
     face2 = 'Times New Roman'
+    face3 = 'Courier New'
+    pb = 6
 else:
     face1 = 'Helvetica'
     face2 = 'Times'
+    face3 = 'Courier'
+    pb = 10
 
 
 #----------------------------------------------------------------------
@@ -50,10 +54,11 @@ def runTest(frame, nb, log):
 
 
     # make some styles
-    ed.StyleSetSpec(1, "size:9,bold,face:%s,fore:#0000FF" % face1)
-    ed.StyleSetSpec(2, "face:%s,italic,fore:#FF0000,size:8" % face2)
-    ed.StyleSetSpec(3, "face:%s,bold,size:9" % face2)
-    ed.StyleSetSpec(4, "face:%s,size:6" % face1)
+    ed.StyleSetSpec(wxSTC_STYLE_DEFAULT, "size:%d,face:%s" % (pb+2, face3))
+    ed.StyleSetSpec(1, "size:%d,bold,face:%s,fore:#0000FF" % (pb+3, face1))
+    ed.StyleSetSpec(2, "face:%s,italic,fore:#FF0000,size:%d" % (face2, pb+2))
+    ed.StyleSetSpec(3, "face:%s,bold,size:%d" % (face2, pb+3))
+    ed.StyleSetSpec(4, "face:%s,size:%d" % (face1, pb))
 
 
     # now set some text to those styles...  Normally this would be
@@ -73,7 +78,7 @@ def runTest(frame, nb, log):
     # line numbers in the margin
     ed.SetMarginType(0, wxSTC_MARGIN_NUMBER)
     ed.SetMarginWidth(0, 22)
-    ed.StyleSetSpec(wxSTC_STYLE_LINENUMBER, "size:6,face:Ariel")
+    ed.StyleSetSpec(wxSTC_STYLE_LINENUMBER, "size:%d,face:%s" % (pb, face1))
 
     # setup some markers
     ed.SetMarginType(1, wxSTC_MARGIN_SYMBOL)
