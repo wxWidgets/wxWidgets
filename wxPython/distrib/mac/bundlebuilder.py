@@ -81,7 +81,7 @@ class BundleBuilder(Defaults):
 
 	# The property list ("plist")
 	plist = Plist(CFBundleDevelopmentRegion = "English",
-		      CFBundleInfoDictionaryVersion = "6.0")
+	              CFBundleInfoDictionaryVersion = "6.0")
 
 	# The type of the bundle.
 	type = "APPL"
@@ -94,6 +94,10 @@ class BundleBuilder(Defaults):
 	# List of (src, dest) tuples; dest should be a path relative to the bundle
 	# (eg. "Contents/Resources/MyStuff/SomeFile.ext).
 	files = []
+
+	# List of shared libraries (dylibs, Frameworks) to bundle with the app
+	# will be placed in Contents/Frameworks
+	libs = []
 
 	# Directory where the bundle will be assembled.
 	builddir = "build"
@@ -127,6 +131,8 @@ class BundleBuilder(Defaults):
 			else:
 				self.creator = "????"
 		plist.CFBundleSignature = self.creator
+		if not hasattr(plist, "CFBundleIdentifier"):
+			plist.CFBundleIdentifier = self.name
 
 	def build(self):
 		"""Build the bundle."""
@@ -171,6 +177,9 @@ class BundleBuilder(Defaults):
 		for path in self.resources:
 			files.append((path, pathjoin("Contents", "Resources",
 				os.path.basename(path))))
+		for path in self.libs:
+			files.append((path, pathjoin("Contents", "Frameworks",
+				os.path.basename(path))))
 		if self.symlink:
 			self.message("Making symbolic links", 1)
 			msg = "Making symlink from"
@@ -207,7 +216,7 @@ else:
 	PYC_EXT = ".pyo"
 
 MAGIC = imp.get_magic()
-USE_FROZEN = hasattr(imp, "set_frozenmodules")
+USE_ZIPIMPORT = 0  ## "zipimport" in sys.builtin_module_names
 
 # For standalone apps, we have our own minimal site.py. We don't need
 # all the cruft of the real site.py.
@@ -216,28 +225,30 @@ import sys
 del sys.path[1:]  # sys.path[0] is Contents/Resources/
 """
 
-if USE_FROZEN:
-	FROZEN_ARCHIVE = "FrozenModules.marshal"
-	SITE_PY += """\
-# bootstrapping
-import imp, marshal
-f = open(sys.path[0] + "/%s", "rb")
-imp.set_frozenmodules(marshal.load(f))
-f.close()
-""" % FROZEN_ARCHIVE
+if USE_ZIPIMPORT:
+	ZIP_ARCHIVE = "Modules.zip"
+	SITE_PY += "sys.path.append(sys.path[0] + '/%s')\n" % ZIP_ARCHIVE
+	def getPycData(fullname, code, ispkg):
+		if ispkg:
+			fullname += ".__init__"
+		path = fullname.replace(".", os.sep) + PYC_EXT
+		return path, MAGIC + '\0\0\0\0' + marshal.dumps(code)
 
 SITE_CO = compile(SITE_PY, "<-bundlebuilder.py->", "exec")
 
 EXT_LOADER = """\
-import imp, sys, os
-for p in sys.path:
-	path = os.path.join(p, "%(filename)s")
-	if os.path.exists(path):
-		break
-else:
-	assert 0, "file not found: %(filename)s"
-mod = imp.load_dynamic("%(name)s", path)
-sys.modules["%(name)s"] = mod
+def __load():
+	import imp, sys, os
+	for p in sys.path:
+		path = os.path.join(p, "%(filename)s")
+		if os.path.exists(path):
+			break
+	else:
+		assert 0, "file not found: %(filename)s"
+	mod = imp.load_dynamic("%(name)s", path)
+
+__load()
+del __load
 """
 
 MAYMISS_MODULES = ['mac', 'os2', 'nt', 'ntpath', 'dos', 'dospath',
@@ -250,13 +261,15 @@ STRIP_EXEC = "/usr/bin/strip"
 BOOTSTRAP_SCRIPT = """\
 #!/bin/sh
 
-execdir=$(dirname ${0})
+execdir=$(dirname "${0}")
+DYLD_LIBRARY_PATH=$(dirname "${execdir}")/Frameworks
+export DYLD_LIBRARY_PATH
 executable=${execdir}/%(executable)s
-resdir=$(dirname ${execdir})/Resources
+resdir=$(dirname "${execdir}")/Resources
 main=${resdir}/%(mainprogram)s
 PYTHONPATH=$resdir
 export PYTHONPATH
-exec ${executable} ${main} ${1}
+exec "${executable}" "${main}" "${1}"
 """
 
 
@@ -277,7 +290,8 @@ class AppBuilder(BundleBuilder):
 	# when building a Cocoa app.
 	nibname = None
 
-	# The name of the icon file to be copied to Resources and used for the Finder icon.
+	# The name of the icon file to be copied to Resources and used for
+	# the Finder icon.
 	iconfile = None
 
 	# Symlink the executable instead of copying it.
@@ -371,7 +385,7 @@ class AppBuilder(BundleBuilder):
 		if self.iconfile is not None:
 			iconbase = os.path.basename(self.iconfile)
 			self.plist.CFBundleIconFile = iconbase
-			self.files.append( (self.iconfile, pathjoin(resdir, iconbase)) )
+			self.files.append((self.iconfile, pathjoin(resdir, iconbase)))
 
 	def postProcess(self):
 		if self.standalone:
@@ -392,23 +406,17 @@ class AppBuilder(BundleBuilder):
 	def addPythonModules(self):
 		self.message("Adding Python modules", 1)
 
-		if USE_FROZEN:
-			# This anticipates the acceptance of this patch:
-			#   http://www.python.org/sf/642578
-			# Create a file containing all modules, frozen.
-			frozenmodules = []
-			for name, code, ispkg in self.pymodules:
-				if ispkg:
-					self.message("Adding Python package %s" % name, 2)
-				else:
-					self.message("Adding Python module %s" % name, 2)
-				frozenmodules.append((name, marshal.dumps(code), ispkg))
-			frozenmodules = tuple(frozenmodules)
-			relpath = pathjoin("Contents", "Resources", FROZEN_ARCHIVE)
+		if USE_ZIPIMPORT:
+			# Create a zip file containing all modules as pyc.
+			import zipfile
+			relpath = pathjoin("Contents", "Resources", ZIP_ARCHIVE)
 			abspath = pathjoin(self.bundlepath, relpath)
-			f = open(abspath, "wb")
-			marshal.dump(frozenmodules, f)
-			f.close()
+			zf = zipfile.ZipFile(abspath, "w", zipfile.ZIP_DEFLATED)
+			for name, code, ispkg in self.pymodules:
+				self.message("Adding Python module %s" % name, 2)
+				path, pyc = getPycData(name, code, ispkg)
+				zf.writestr(path, pyc)
+			zf.close()
 			# add site.pyc
 			sitepath = pathjoin(self.bundlepath, "Contents", "Resources",
 					"site" + PYC_EXT)
@@ -446,6 +454,9 @@ class AppBuilder(BundleBuilder):
 		self.message("Finding module dependencies", 1)
 		import modulefinder
 		mf = modulefinder.ModuleFinder(excludes=self.excludeModules)
+		if USE_ZIPIMPORT:
+			# zipimport imports zlib, must add it manually
+			mf.import_hook("zlib")
 		# manually add our own site.py
 		site = mf.add_module("site")
 		site.__code__ = SITE_CO
@@ -468,9 +479,10 @@ class AppBuilder(BundleBuilder):
 				# C extension
 				path = mod.__file__
 				filename = os.path.basename(path)
-				if USE_FROZEN:
-					# "proper" freezing, put extensions in Contents/Resources/,
-					# freeze a tiny "loader" program. Due to Thomas Heller.
+				if USE_ZIPIMPORT:
+					# Python modules are stored in a Zip archive, but put
+					# extensions in Contents/Resources/.a and add a tiny "loader"
+					# program in the Zip archive. Due to Thomas Heller.
 					dstpath = pathjoin("Contents", "Resources", filename)
 					source = EXT_LOADER % {"name": name, "filename": filename}
 					code = compile(source, "<dynloader for %s>" % name, "exec")
@@ -483,9 +495,9 @@ class AppBuilder(BundleBuilder):
 				self.binaries.append(dstpath)
 			if mod.__code__ is not None:
 				ispkg = mod.__path__ is not None
-				if not USE_FROZEN or name != "site":
+				if not USE_ZIPIMPORT or name != "site":
 					# Our site.py is doing the bootstrapping, so we must
-					# include a real .pyc file if USE_FROZEN is True.
+					# include a real .pyc file if USE_ZIPIMPORT is True.
 					self.pymodules.append((name, mod.__code__, ispkg))
 
 		if hasattr(mf, "any_missing_maybe"):
@@ -508,17 +520,17 @@ class AppBuilder(BundleBuilder):
 		maybe.sort()
 		if maybe:
 			self.message("Warning: couldn't find the following submodules:", 1)
-			self.message("	  (Note that these could be false alarms -- "
-				     "it's not always", 1)
-			self.message("	  possible to distinguish between \"from package "
-				     "import submodule\" ", 1)
-			self.message("	  and \"from package import name\")", 1)
+			self.message("    (Note that these could be false alarms -- "
+			             "it's not always", 1)
+			self.message("    possible to distinguish between \"from package "
+			             "import submodule\" ", 1)
+			self.message("    and \"from package import name\")", 1)
 			for name in maybe:
-				self.message("	? " + name, 1)
+				self.message("  ? " + name, 1)
 		if missing:
 			self.message("Warning: couldn't find the following modules:", 1)
 			for name in missing:
-				self.message("	? " + name, 1)
+				self.message("  ? " + name, 1)
 
 	def report(self):
 		# XXX something decent
@@ -554,10 +566,9 @@ def findPackageContents(name, searchpath=None):
 
 def writePyc(code, path):
 	f = open(path, "wb")
-	f.write("\0" * 8)  # don't bother about a time stamp
-	marshal.dump(code, f)
-	f.seek(0, 0)
 	f.write(MAGIC)
+	f.write("\0" * 4)  # don't bother about a time stamp
+	marshal.dump(code, f)
 	f.close()
 
 def copy(src, dst, mkdirs=0):
@@ -585,6 +596,8 @@ def makedirs(dir):
 
 def symlink(src, dst, mkdirs=0):
 	"""Copy a file or a directory."""
+	if not os.path.exists(src):
+		raise IOError, "No such file or directory: '%s'" % src
 	if mkdirs:
 		makedirs(os.path.dirname(dst))
 	os.symlink(os.path.abspath(src), dst)
@@ -603,31 +616,33 @@ Usage:
   python mybuildscript.py [options] command
 
 Commands:
-  build	     build the application
+  build      build the application
   report     print a report
 
 Options:
-  -b, --builddir=DIR	 the build directory; defaults to "build"
-  -n, --name=NAME	 application name
-  -r, --resource=FILE	 extra file or folder to be copied to Resources
-  -e, --executable=FILE	 the executable to be used
+  -b, --builddir=DIR     the build directory; defaults to "build"
+  -n, --name=NAME        application name
+  -r, --resource=FILE    extra file or folder to be copied to Resources
+  -e, --executable=FILE  the executable to be used
   -m, --mainprogram=FILE the Python main program
-  -p, --plist=FILE	 .plist file (default: generate one)
-      --nib=NAME	 main nib name
-  -c, --creator=CCCC	 4-char creator code (default: '????')
-      --iconfile=FILE	 Filename of the icon to be copied to Resources and
-			 used as the Finder icon
-  -l, --link		 symlink files/folder instead of copying them
-      --link-exec	 symlink the executable instead of copying it
-      --standalone	 build a standalone application, which is fully
-			 independent of a Python installation
-  -x, --exclude=MODULE	 exclude module (with --standalone)
-  -i, --include=MODULE	 include module (with --standalone)
-      --package=PACKAGE	 include a whole package (with --standalone)
-      --strip		 strip binaries (remove debug info)
-  -v, --verbose		 increase verbosity level
-  -q, --quiet		 decrease verbosity level
-  -h, --help		 print this message
+  -p, --plist=FILE       .plist file (default: generate one)
+      --nib=NAME         main nib name
+  -c, --creator=CCCC     4-char creator code (default: '????')
+      --iconfile=FILE    filename of the icon (an .icns file) to be used
+                         as the Finder icon
+  -l, --link             symlink files/folder instead of copying them
+      --link-exec        symlink the executable instead of copying it
+      --standalone       build a standalone application, which is fully
+                         independent of a Python installation
+      --lib=FILE	 shared library or framework to be copied into
+			 the bundle
+  -x, --exclude=MODULE   exclude module (with --standalone)
+  -i, --include=MODULE   include module (with --standalone)
+      --package=PACKAGE  include a whole package (with --standalone)
+      --strip            strip binaries (remove debug info)
+  -v, --verbose          increase verbosity level
+  -q, --quiet            decrease verbosity level
+  -h, --help             print this message
 """
 
 def usage(msg=None):
@@ -644,7 +659,8 @@ def main(builder=None):
 	longopts = ("builddir=", "name=", "resource=", "executable=",
 		"mainprogram=", "creator=", "nib=", "plist=", "link",
 		"link-exec", "help", "verbose", "quiet", "standalone",
-		"exclude=", "include=", "package=", "strip", "iconfile=")
+		"exclude=", "include=", "package=", "strip", "iconfile=",
+		"lib=")
 
 	try:
 		options, args = getopt.getopt(sys.argv[1:], shortopts, longopts)
@@ -666,6 +682,8 @@ def main(builder=None):
 			builder.creator = arg
 		elif opt == '--iconfile':
 			builder.iconfile = arg
+		elif opt == "--lib":
+			builder.libs.append(arg)
 		elif opt == "--nib":
 			builder.nibname = arg
 		elif opt in ('-p', '--plist'):
