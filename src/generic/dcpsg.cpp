@@ -1957,7 +1957,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         lastStyle =  Style;
         lastWeight = Weight;
 
-        char *name = (char*) NULL;
+        const char *name = NULL;
 
         switch (Family)
         {
