@@ -86,6 +86,7 @@ GENERICOBJS = \
 		$(GENDIR)/scrolwin.$(OBJSUFF) \
 		$(GENDIR)/splitter.$(OBJSUFF) \
 		$(GENDIR)/statusbr.$(OBJSUFF) \
+        $(GENDIR)/tabg.$(OBJSUFF) \
 		$(GENDIR)/tbarsmpl.$(OBJSUFF) \
 		$(GENDIR)/textdlgg.$(OBJSUFF) \
 		$(GENDIR)/tipdlg.$(OBJSUFF) \
@@ -395,17 +396,25 @@ JPEGOBJS    = \
 		$(JPEGDIR)/jquant2.$(OBJSUFF) \
 		$(JPEGDIR)/jdmerge.$(OBJSUFF)
 
-XPMOBJS =    $(XPMDIR)/crbuffri.o\
+XPMOBJS =    $(XPMDIR)/attrib.o\
+		$(XPMDIR)/crbuffri.o\
 		$(XPMDIR)/crdatfri.o\
-		$(XPMDIR)/create.o $(XPMDIR)/crifrbuf.o\
+		$(XPMDIR)/create.o\
+		$(XPMDIR)/crifrbuf.o\
 		$(XPMDIR)/crifrdat.o\
 		$(XPMDIR)/data.o\
-		$(XPMDIR)/hashtab.o $(XPMDIR)/misc.o\
-		$(XPMDIR)/parse.o $(XPMDIR)/rdftodat.o\
+		$(XPMDIR)/image.o\
+		$(XPMDIR)/info.o\
+		$(XPMDIR)/hashtab.o\
+		$(XPMDIR)/misc.o\
+		$(XPMDIR)/parse.o\
+		$(XPMDIR)/rdftodat.o\
 		$(XPMDIR)/rdftoi.o\
-		$(XPMDIR)/rgb.o $(XPMDIR)/scan.o\
-		$(XPMDIR)/simx.o $(XPMDIR)/wrffrdat.o\
-		$(XPMDIR)/wrffrp.o $(XPMDIR)/wrffri.o
+		$(XPMDIR)/rgb.o\
+		$(XPMDIR)/scan.o\
+		$(XPMDIR)/simx.o\
+		$(XPMDIR)/wrffrdat.o\
+		$(XPMDIR)/wrffri.o
 
 TIFFOBJS = $(TIFFDIR)/tif_aux.o \
 		$(TIFFDIR)/tif_close.o \
@@ -535,10 +544,10 @@ $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
 	$(CCLEX) -c $(CPPFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
 
 $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-	$(COPY) ../common/dosyacc.c ../common/y_tab.c
+	$(COPY) ..\common\dosyacc.c ..\common\y_tab.c
 
 $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-	$(COPY) ../common/doslex.c ../common/lex_yy.c
+	$(COPY) ..\common\doslex.c ..\common\lex_yy.c
 
 # Replace lex with flex if you run into compilation
 # problems with lex_yy.c. See also note about LEX_SCANNER
