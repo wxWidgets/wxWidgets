@@ -1,0 +1,339 @@
+============================
+wxPython 2.5 Migration Guide
+============================
+
+This document will help explain some of the major changes in wxPython
+2.5 and let you know what you need to do to adapt your programs to
+those changes.  Be sure to also check in the CHANGES.txt file like
+usual to see info about the not so major changes and other things that
+have been added to wxPython.
+
+
+
+Module Initialization
+---------------------
+
+The import-startup-bootstrap process employed by wxPython was changed
+such that wxWindows and the underlying gui toolkit are **not**
+initialized until the wx.App object is created (but before wx.App.OnInit
+is called.)  This was required because of some changes that were made
+to the C++ wxApp class.
+
+There are both benefits and potential problems with this change.  The
+benefits are that you can import wxPython without requiring access to
+a GUI (for checking version numbers, etc.) and that in a
+multi-threaded environment the thread that creates the app object will
+now be the GUI thread instead of the one that imports wxPython.  Some
+potential problems are that the C++ side of the "stock-objects"
+(wx.BLUE_PEN, wx.TheColourDatabase, etc.) are not initialized until
+the wx.App object is created, so you should not use them until after
+you have created your wx.App object.  (In fact, until I find a better
+solution trying to use one of the stock objects before the app is
+created will probably result in a crash.)
+
+Also, you will probably not be able to do any kind of GUI or bitmap
+operation unless you first have created an app object, (even on
+Windows where most anything was possible before.)
+
+
+
+SWIG 1.3
+--------
+
+wxPython is now using SWIG 1.3.x from CVS (with several of my own
+customizations added that I hope to get folded back into the main SWIG
+distribution.)  This has some far reaching ramifications:
+
+    All classes derive from object and so all are now "new-style
+    classes"
+
+    Public data members of the C++ classes are wrapped as Python
+    properties using property() instead of using __getattr__/__setattr__
+    like before.  Normally you shouldn't notice any difference, but if
+    you were previously doing something with __getattr__/__setattr__
+    in derived classes then you may have to adjust things.
+
+    Static C++ methods are wrapped using the staticmethod()
+    feature of Python and so are accessible as ClassName.MethodName
+    as expected.  They are still available as top level functions
+    ClassName_MethodName as before.
+
+    The relationship between the wxFoo and wxFooPtr classes have
+    changed for the better.  Specifically, all instances that you see
+    will be wxFoo even if they are created internally using wxFooPtr,
+    because wxFooPtr.__init__ will change the instance's __class__ as
+    part of the initialization.  If you have any code that checks
+    class type using something like isinstance(obj, wxFooPtr) you will
+    need to change it to isinstance(obj, wxFoo).
+
+    
+
+Binding Events
+--------------
+
+All of the EVT_* functions are now instances of the wx.PyEventBinder
+class.  They have a __call__ method so they can still be used as
+functions like before, but making them instances adds some
+flexibility.
+
+wx.EvtHandler (the base class for wx.Window) now has a Bind method that
+makes binding events to windows a little easier.  Here is its
+definition and docstring::
+
+        def Bind(self, event, handler, source=None, id=wxID_ANY, id2=wxID_ANY):
+            """
+            Bind an event to an event handler.
+
+              event     One of the EVT_* objects that specifies the
+                        type of event to bind.
+
+              handler   A callable object to be invoked when the event
+                        is delivered to self.  Pass None to disconnect an
+                        event handler.
+
+              source    Sometimes the event originates from a different window
+                        than self, but you still want to catch it in self.  (For
+                        example, a button event delivered to a frame.)  By
+                        passing the source of the event, the event handling
+                        system is able to differentiate between the same event
+                        type from different controls.
+
+              id,id2    Used for menu IDs or for event types that require a
+                        range of IDs
+
+            """
+
+Some examples of its use::
+
+     self.Bind(wx.EVT_SIZE,   self.OnSize)
+     self.Bind(wx.EVT_BUTTON, self.OnButtonClick, theButton)
+     self.Bind(wx.EVT_MENU,   self.OnExit, id=ID_EXIT)
+     
+I hope to be able to remove the need for using IDs even for menu
+events too...
+
+If you create your own custom event types and EVT_* functions, and you
+want to be able to use them with the Bind method above then you should
+change your EVT_* to be an instance of wxPyEventBinder instead of a
+function.  If you used to have something like this::
+
+    myCustomEventType = wxNewEventType()
+    def EVT_MY_CUSTOM_EVENT(win, id, func):
+        win.Connect(id, -1, myCustomEventType, func)
+
+
+Change it like so::
+
+    myCustomEventType = wxNewEventType()
+    EVT_MY_CUSTOM_EVENT = wxPyEventBinder(myCustomEventType, 1)
+
+The second parameter is an integer in [0, 1, 2] that specifies the
+number of IDs that are needed to be passed to Connect.
+
+
+
+The wx Namespace
+----------------
+
+The second phase of the wx Namespace Transition has begun.  That means
+that the real names of the classes and other symbols do not have the
+'wx' prefix and the modules are located in a Python package named
+wx.  There is still a Python package named wxPython with modules
+that have the names with the wx prefix for backwards compatibility.
+Instead of dynamically changing the names at module load time like in
+2.4, the compatibility modules are generated at build time and contain
+assignment statements like this::
+
+    wxWindow = wx.core.Window
+
+Don't let the "core" in the name bother you.  That and some other
+modules are implementation details, and everything that was in the
+wxPython.wx before will still be in the wx package namespace after
+this change.  So from your code you would use it as wx.Window.
+
+A few notes about how all of this was accomplished might be
+interesting...  SWIG is now run twice for each module that it is
+generating code for.  The first time it outputs an XML representaion
+of the parse tree, which can be up to 20MB and 300K lines in size!
+That XML is then run through a little Python script that creates a
+file full of SWIG %rename directives that take the wx off of the
+names, and also generates the Python compatibility file described
+above that puts the wx back on the names.  SWIG is then run a second
+time to generate the C++ code to implement the extension module, and
+uses the %rename directives that were generated in the first step.
+
+Not every name is handled correctly (but the bulk of them are) and so
+some work has to be done by hand, especially for the reverse-renamers.
+So expect a few flaws here and there until everything gets sorted out.
+
+
+
+New wx.DC Methods
+-----------------
+
+Many of the Draw methods of wx.DC have alternate forms in C++ that take
+wxPoint or wxSize parameters (let's call these *Type A*) instead of
+the individual x, y, width, height, etc. parameters (and we'll call
+these *Type B*).  In the rest of the library I normally made the *Type
+A* forms of the methods be the default method with the "normal" name,
+and had renamed the *Type B* forms of the methods to some similar
+name.  For example in wx.Window we have these Python methods::
+
+    SetSize(size)               # Type A
+    SetSizeWH(width, height)    # Type B
+
+
+For various reasons the new *Type A* methods in wx.DC were never added
+and the existing *Type B* methods renamed.  Now that lots of other
+things are also changing in wxPython that it has been decided that it
+is a good time to also do the method renaming in wx.DC too, in order
+to be consistent with the rest of the library.  The methods in wx.DC
+that are affected are listed here::
+
+    FloodFillXY(x, y, colour, style = wx.FLOOD_SURFACE)
+    FloodFill(point, colour,  style = wx.FLOOD_SURFACE)
+
+    GetPixelXY(x, y)
+    GetPixel(point)
+
+    DrawLineXY(x1, y1, x2, y2)
+    DrawLine(point1, point2)
+
+    CrossHairXY(x, y)
+    CrossHair(point)
+
+    DrawArcXY(x1, y1, x2, y2, xc, yc)
+    DrawArc(point1, point2, center)
+
+    DrawCheckMarkXY(x, y, width, height)
+    DrawCheckMark(rect)
+
+    DrawEllipticArcXY(x, y, w, h, start_angle, end_angle)
+    DrawEllipticArc(point, size, start_angle, end_angle)
+
+    DrawPointXY(x, y)
+    DrawPoint(point)
+
+    DrawRectangleXY(x, y, width, height)
+    DrawRectangle(point, size)
+    DrawRectangleRect(rect)
+
+    DrawRoundedRectangleXY(x, y, width, height, radius)
+    DrawRoundedRectangle(point, size, radius)
+    DrawRoundedRectangleRect(rect, radius)
+
+    DrawCircleXY(x, y, radius)
+    DrawCircle(point, radius)
+
+    DrawEllipseXY(x, y, width, height)
+    DrawEllipse(point, size)
+    DrawEllipseRect(rect)
+
+    DrawIconXY(icon, x, y)
+    DrawIcon(icon, point)
+
+    DrawBitmapXY(bmp, x, y, useMask = FALSE)
+    DrawBitmap(bmp, point, useMask = FALSE)
+
+    DrawTextXY(text, x, y)
+    DrawText(text, point)
+
+    DrawRotatedTextXY(text, x, y, angle)
+    DrawRotatedText(text, point, angle)
+
+    
+    BlitXY(xdest, ydest, width, height, sourceDC, xsrc, ysrc,
+           rop = wxCOPY, useMask = FALSE, xsrcMask = -1, ysrcMask = -1)
+    Blit(destPt, size, sourceDC, srcPt,
+         rop = wxCOPY, useMask = FALSE, srcPtMask = wx.DefaultPosition)
+
+	
+If you have code that draws on a DC you **will** get errors because of
+these changes, but it should be easy to fix the code.  You can either
+change the name of the *Type B* method called as shown above, or just
+add parentheses around the parameters as needed to turn them into
+tuples and let the SWIG typemaps turn them into the wx.Point or
+wx.Size object that is expected.  For example, if you had this code
+before::
+
+    dc.DrawRectangle(x, y, width, height)
+
+You could just change it like this::
+
+    dc.DrawRectangle((x, y), (width, height))
+
+Or if you were already using a point and size::
+
+    dc.DrawRectangle(p.x, p.y, s.width, s.height)
+
+Then you can just change it like this::
+
+    dc.DrawRectangle(p, s)
+
+
+
+
+Building, Extending and Embedding wxPython
+------------------------------------------
+
+wxPython's setup.py script now expects to use existing libraries for
+the contribs (gizmos, stc, xrc, etc.) rather than building local
+copies of them.  If you build your own copies of wxPython please be
+aware that you now need to also build the ogl, stc, xrc, and gizmos
+libraries in addition to the main wx lib.  [[TODO: update the
+BUILD.*.txt files too!]]
+
+The wxPython.h and other header files are now in
+.../wxPython/include/wx/wxPython instead of in wxPython/src.  You should
+include it via the "wx/wxPython/wxPython.h" path and add
+.../wxPython/include to your list of include paths.  [[TODO:  Install
+these headers on Linux...]]
+
+You no longer need to call wxClassInfo::CleanUpClasses() and
+wxClassInfo::InitializeClasses() in your extensions or when embedding
+wxPython. 
+
+
+
+
+Two (or Three!) Phase Create
+----------------------------
+
+If you use the Precreate/Create method of instantiating a window, (for
+example, to set an extended style flag, or for XRC handlers) then
+there is now a new method named PostCreate to help with transplanting
+the brain of the prewindow instance into the derived window instance.
+For example::
+
+    class MyDialog(wx.Dialog):
+        def __init__(self, parent, ID, title, pos, size, style):
+            pre = wx.PreDialog()
+            pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
+            pre.Create(parent, ID, title, pos, size, style)
+            self.PostCreate(pre)
+
+
+
+
+Other Stuff
+-----------
+
+Instead of over a dozen separate extension modules linked together
+into a single extension module, the "core" module is now just a few
+extensions that are linked independently, and then merged together
+later into the main namespace via Python code.
+
+Because of the above, the "internal" module names have changed, but
+you shouldn't have been using them anyway so it shouldn't bother
+you. ;-)
+
+The wxPython.help module no longer exists and the classes therein are
+now part of the core module imported with wxPython.wx or the wx
+package.
+
+
+
+
+
+
+
