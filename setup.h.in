@@ -451,6 +451,11 @@
 #endif
 
 /*
+ * Use wxTreeLayout class
+ */
+#define wxUSE_TREELAYOUT 0
+
+/*
  * Use this control
  */
 #define wxUSE_TREECTRL 0
