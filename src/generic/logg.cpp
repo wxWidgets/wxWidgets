@@ -763,8 +763,10 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
-    sizerTop->SetSizeHints(this);
-    sizerTop->Fit(this);
+    // see comments in OnDetails()
+    wxSize size = sizerTop->Fit(this);
+    m_maxHeight = size.y;
+    SetSizeHints(size.x, size.y, m_maxWidth, m_maxHeight);
 
     btnOk->SetFocus();
 
@@ -1007,9 +1009,33 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 
     m_showingDetails = !m_showingDetails;
 
-    // in any case, our size changed - update
-    sizer->SetSizeHints(this);
-    sizer->Fit(this);
+    // in any case, our size changed - relayout everything and set new hints
+    // ---------------------------------------------------------------------
+
+    // we have to reset min size constraints or Fit() would never reduce the
+    // dialog size when collapsing it and we have to reset max constraint
+    // because it wouldn't expand it otherwise
+    m_minHeight =
+    m_maxHeight = -1;
+
+    // wxSizer::FitSize() is private, otherwise we might use it directly...
+    wxSize sizeTotal = GetSize(),
+           sizeClient = GetClientSize();
+
+    wxSize size = sizer->GetMinSize();
+    size.x += sizeTotal.x - sizeClient.x;
+    size.y += sizeTotal.y - sizeClient.y;
+
+    // we don't want to allow expanding the dialog in vertical direction as
+    // this would show the "hidden" details but we can resize the dialog
+    // vertically while the details are shown
+    if ( !m_showingDetails )
+        m_maxHeight = size.y;
+
+    SetSizeHints(size.x, size.y, m_maxWidth, m_maxHeight);
+
+    // don't change the width when expanding/collapsing
+    SetSize(-1, size.y);
 
 #ifdef __WXGTK__
     // VS: this is neccessary in order to force frame redraw under
