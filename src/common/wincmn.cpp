@@ -47,6 +47,10 @@
     #include "wx/dcclient.h"
 #endif //WX_PRECOMP
 
+#if defined(__WXMAC__) && wxUSE_SCROLLBAR
+    #include "wx/scrolbar.h"
+#endif
+
 #if wxUSE_CONSTRAINTS
     #include "wx/layout.h"
 #endif // wxUSE_CONSTRAINTS
@@ -492,6 +496,24 @@ void wxWindowBase::FitInside()
     }
 }
 
+// On Mac, scrollbars are explicitly children.
+#ifdef __WXMAC__
+static bool wxHasRealChildren(const wxWindowBase* win)
+{
+    int realChildCount = 0;
+    
+    for ( wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *win = node->GetData();
+        if ( !win->IsTopLevel() && win->IsShown() && !win->IsKindOf(CLASSINFO(wxScrollBar)))
+            realChildCount ++;
+    }
+    return (realChildCount > 0);
+}
+#endif
+
 // return the size best suited for the current window
 wxSize wxWindowBase::DoGetBestSize() const
 {
@@ -536,7 +558,11 @@ wxSize wxWindowBase::DoGetBestSize() const
         return wxSize(maxX, maxY);
     }
 #endif // wxUSE_CONSTRAINTS
-    else if ( !GetChildren().empty() )
+    else if ( !GetChildren().empty()
+#ifdef __WXMAC__
+              && wxHasRealChildren(this)
+#endif
+              )
     {
         // our minimal acceptable size is such that all our visible child windows fit inside
         int maxX = 0,
