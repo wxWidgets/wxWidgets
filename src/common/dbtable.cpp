@@ -477,7 +477,7 @@ bool wxDbTable::bindParams(bool forUpdate)
                 break;
             case DB_DATA_TYPE_BLOB:
                 fSqlType = pDb->GetTypeInfBlob().FsqlType;
-                precision = 50000;
+                precision = -1;
                 scale = 0;
                 if (colDefs[i].Null)
                     colDefs[i].CbValue = SQL_NULL_DATA;
@@ -637,6 +637,36 @@ bool wxDbTable::execUpdate(const wxString &pSqlStmt)
     {
         // Record updated successfully
         return(TRUE);
+    }
+    else if (retcode == SQL_NEED_DATA)
+    {
+        PTR pParmID;
+        while ((retcode = SQLParamData(hstmtUpdate, &pParmID) == SQL_NEED_DATA))
+        {
+            // Find the parameter
+            int i;
+            for (i=0; i < noCols; i++)
+            {
+                if (colDefs[i].PtrDataObj == pParmID)
+                {
+                    // We found it.  Store the parameter.
+                    retcode = SQLPutData(hstmtUpdate, pParmID, colDefs[i].SzDataObj);
+                    if (retcode != SQL_SUCCESS)
+                    {
+                        pDb->DispNextError();
+                        return pDb->DispAllErrors(henv, hdbc, hstmtUpdate);
+                    }
+                    break;
+                }
+            }
+        }
+        if (retcode == SQL_SUCCESS ||
+            retcode == SQL_NO_DATA_FOUND ||
+            retcode == SQL_SUCCESS_WITH_INFO)
+        {
+            // Record updated successfully
+            return(TRUE);
+        }
     }
 
     // Problem updating record
@@ -1831,7 +1861,8 @@ int wxDbTable::Insert(void)
     // Insert the record by executing the already prepared insert statement
     RETCODE retcode;
     retcode=SQLExecute(hstmtInsert);
-    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO &&
+        retcode != SQL_NEED_DATA)
     {
         // Check to see if integrity constraint was violated
         pDb->GetNextError(henv, hdbc, hstmtInsert);
@@ -1842,6 +1873,30 @@ int wxDbTable::Insert(void)
             pDb->DispNextError();
             pDb->DispAllErrors(henv, hdbc, hstmtInsert);
             return(DB_FAILURE);
+        }
+    }
+    if (retcode == SQL_NEED_DATA)
+    {
+        PTR pParmID;
+        while ((retcode = SQLParamData(hstmtInsert, &pParmID) == SQL_NEED_DATA))
+        {
+            // Find the parameter
+            int i;
+            for (i=0; i < noCols; i++)
+            {
+                if (colDefs[i].PtrDataObj == pParmID)
+                {
+                    // We found it.  Store the parameter.
+                    retcode = SQLPutData(hstmtInsert, pParmID, colDefs[i].SzDataObj);
+                    if (retcode != SQL_SUCCESS)
+                    {
+                        pDb->DispNextError();
+                        pDb->DispAllErrors(henv, hdbc, hstmtInsert);
+                        return(DB_FAILURE);
+                    }
+                    break;
+                }
+            }
         }
     }
 

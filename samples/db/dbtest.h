@@ -42,7 +42,7 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 const wxChar     CONTACT_TABLE_NAME[]       = "contacts";
 
 
-#define wxODBC_BLOB_EXPERIMENT 0
+#define wxODBC_BLOB_EXPERIMENT 1
 
 // Number of columns in the CONTACT table
 #if wxODBC_BLOB_EXPERIMENT > 0
