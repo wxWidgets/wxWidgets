@@ -892,6 +892,19 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
     return TRUE;
 }
 
+void wxWindowMac::MacChildAdded() 
+{
+    if ( m_vScrollBar )
+    {
+        m_vScrollBar->Raise() ;
+    }
+    if ( m_hScrollBar )
+    {
+        m_hScrollBar->Raise() ;
+    }
+
+}
+
 void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
 {
     wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid mac control") ) ;
@@ -904,6 +917,7 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
     ControlRef container = (ControlRef) GetParent()->GetHandle() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     ::EmbedControl( m_peer->GetControlRef() , container ) ;
+    GetParent()->MacChildAdded() ;
 
     // adjust font, controlsize etc
     DoSetWindowVariant( m_windowVariant ) ;

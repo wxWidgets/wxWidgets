@@ -181,6 +181,7 @@ public:
     // the absolute coortinates of this window's root have changed
     virtual void        MacTopLevelWindowChangedPosition() ;
     
+    virtual void        MacChildAdded() ;
     virtual void        MacVisibilityChanged() ;
     virtual void        MacEnabledStateChanged() ;
     virtual void        MacHiliteChanged() ;
