@@ -1261,6 +1261,14 @@ static void *SwigwxHtmlHelpFrameTowxFrame(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxHtmlHelpFrameTowxTopLevelWindow(void *ptr) {
+    wxHtmlHelpFrame *src;
+    wxTopLevelWindow *dest;
+    src = (wxHtmlHelpFrame *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxHtmlHelpFrameTowxWindow(void *ptr) {
     wxHtmlHelpFrame *src;
     wxWindow *dest;
@@ -2528,6 +2536,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxTopLevelWindow","_class_wxHtmlHelpFrame",SwigwxHtmlHelpFrameTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxHtmlHelpFrame",SwigwxHtmlHelpFrameTowxTopLevelWindow},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -2537,17 +2547,21 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
+    { "_class_wxTopLevelWindow","_class_wxHtmlHelpFrame",SwigwxHtmlHelpFrameTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxHtmlHelpFrame",SwigwxHtmlHelpFrameTowxTopLevelWindow},
     { "_WXTYPE","_wxDateTime_t",0},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},

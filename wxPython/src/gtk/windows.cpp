@@ -3642,43 +3642,6 @@ static PyObject *_wrap_wxWindow_ScrollWindow(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxWindow_SetAcceleratorTable(_swigobj,_swigarg0)  (_swigobj->SetAcceleratorTable(_swigarg0))
-static PyObject *_wrap_wxWindow_SetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWindow * _arg0;
-    wxAcceleratorTable * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","accel", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_SetAcceleratorTable",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetAcceleratorTable. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetAcceleratorTable. Expected _wxAcceleratorTable_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxWindow_SetAcceleratorTable(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxWindow_SetAutoLayout(_swigobj,_swigarg0)  (_swigobj->SetAutoLayout(_swigarg0))
 static PyObject *_wrap_wxWindow_SetAutoLayout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5655,6 +5618,43 @@ static PyObject *_wrap_wxWindow_PrevControlId(PyObject *self, PyObject *args, Py
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxWindow_SetAcceleratorTable(_swigobj,_swigarg0)  (_swigobj->SetAcceleratorTable(_swigarg0))
+static PyObject *_wrap_wxWindow_SetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxAcceleratorTable * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","accel", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_SetAcceleratorTable",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetAcceleratorTable. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetAcceleratorTable. Expected _wxAcceleratorTable_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_SetAcceleratorTable(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -10009,6 +10009,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "new_wxPrePanel", (PyCFunction) _wrap_new_wxPrePanel, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPanel", (PyCFunction) _wrap_new_wxPanel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetAcceleratorTable", (PyCFunction) _wrap_wxWindow_GetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetAcceleratorTable", (PyCFunction) _wrap_wxWindow_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PrevControlId", (PyCFunction) _wrap_wxWindow_PrevControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NextControlId", (PyCFunction) _wrap_wxWindow_NextControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NewControlId", (PyCFunction) _wrap_wxWindow_NewControlId, METH_VARARGS | METH_KEYWORDS },
@@ -10071,7 +10072,6 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetBackgroundColour", (PyCFunction) _wrap_wxWindow_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetAutoLayout", (PyCFunction) _wrap_wxWindow_GetAutoLayout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetAutoLayout", (PyCFunction) _wrap_wxWindow_SetAutoLayout, METH_VARARGS | METH_KEYWORDS },
-	 { "wxWindow_SetAcceleratorTable", (PyCFunction) _wrap_wxWindow_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ScrollWindow", (PyCFunction) _wrap_wxWindow_ScrollWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ScreenToClient", (PyCFunction) _wrap_wxWindow_ScreenToClient, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ScreenToClientXY", (PyCFunction) _wrap_wxWindow_ScreenToClientXY, METH_VARARGS | METH_KEYWORDS },

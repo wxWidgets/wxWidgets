@@ -901,7 +901,7 @@ static PyObject *_wrap_new_wxCalendarCtrl(PyObject *self, PyObject *args, PyObje
     wxDateTime * _arg2 = (wxDateTime *) &wxDefaultDateTime;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    long  _arg5 = (long ) (wxCAL_SHOW_HOLIDAYS);
+    long  _arg5 = (long ) (wxCAL_SHOW_HOLIDAYS)|wxWANTS_CHARS;
     char * _arg6 = (char *) "calendar";
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
@@ -993,7 +993,7 @@ static PyObject *_wrap_wxCalendarCtrl_Create(PyObject *self, PyObject *args, PyO
     wxDateTime * _arg3 = (wxDateTime *) &wxDefaultDateTime;
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg5 = (wxSize *) &wxDefaultSize;
-    long  _arg6 = (long ) (wxCAL_SHOW_HOLIDAYS);
+    long  _arg6 = (long ) (wxCAL_SHOW_HOLIDAYS)|wxWANTS_CHARS;
     char * _arg7 = (char *) "calendar";
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
@@ -1845,12 +1845,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCommandEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
     { "_wxCommandEvent","_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
