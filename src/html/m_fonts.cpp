@@ -44,17 +44,17 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
         wxString oldface = m_WParser -> GetFontFace();
 
         if (tag.HasParam(wxT("COLOR"))) {
-	    unsigned long tmp = 0; 
+            unsigned long tmp = 0; 
             wxColour clr;
             if (tag.ScanParam(wxT("COLOR"), wxT("#%lX"), &tmp) == 1) {
                 clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
                 m_WParser -> SetActualColor(clr);
                 m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr));
-	    }
+            }
         }
 
         if (tag.HasParam(wxT("SIZE"))) {
-	    long tmp = 0;
+            long tmp = 0;
             wxChar c = tag.GetParam(wxT("SIZE"))[(unsigned int) 0];
             if (tag.ScanParam(wxT("SIZE"), wxT("%li"), &tmp) == 1) {
                 if (c == '+' || c == '-')
@@ -62,7 +62,7 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
                 else
                     m_WParser -> SetFontSize(tmp);
                 m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
-	    }
+            }
         }
         
         if (tag.HasParam(wxT("FACE"))) {
@@ -102,7 +102,7 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
 TAG_HANDLER_END(FONT)
 
 
-TAG_HANDLER_BEGIN(FACES_U, "U")
+TAG_HANDLER_BEGIN(FACES_U, "U,STRIKE")
 
     TAG_HANDLER_PROC(tag)
     {
@@ -144,7 +144,7 @@ TAG_HANDLER_END(FACES_B)
 
 
 
-TAG_HANDLER_BEGIN(FACES_I, "I,EM,CITE")
+TAG_HANDLER_BEGIN(FACES_I, "I,EM,CITE,ADDRESS")
 
     TAG_HANDLER_PROC(tag)
     {
@@ -165,7 +165,7 @@ TAG_HANDLER_END(FACES_I)
 
 
 
-TAG_HANDLER_BEGIN(FACES_TT, "TT")
+TAG_HANDLER_BEGIN(FACES_TT, "TT,CODE,KBD,SAMP")
 
     TAG_HANDLER_PROC(tag)
     {
@@ -206,7 +206,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         m_WParser -> SetFontUnderlined(FALSE);
         m_WParser -> SetFontFixed(FALSE);
 
-             if (tag.GetName() == wxT("H1"))
+        if (tag.GetName() == wxT("H1"))
                 m_WParser -> SetFontSize(7);
         else if (tag.GetName() == wxT("H2"))
                 m_WParser -> SetFontSize(6);
@@ -259,6 +259,26 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
 TAG_HANDLER_END(Hx)
 
 
+TAG_HANDLER_BEGIN(BIGSMALL, "BIG,SMALL")
+
+    TAG_HANDLER_PROC(tag)
+    {
+        int oldsize = m_WParser -> GetFontSize();
+        int sz = (tag.GetName() == wxT("BIG")) ? +1 : -1;
+
+        m_WParser -> SetFontSize(sz);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+
+        ParseInner(tag);
+
+        m_WParser -> SetFontSize(oldsize);
+        m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        return TRUE;
+    }
+
+TAG_HANDLER_END(BIGSMALL)
+
+
 
 
 TAGS_MODULE_BEGIN(Fonts)
@@ -269,6 +289,7 @@ TAGS_MODULE_BEGIN(Fonts)
     TAGS_MODULE_ADD(FACES_B)
     TAGS_MODULE_ADD(FACES_TT)
     TAGS_MODULE_ADD(Hx)
+    TAGS_MODULE_ADD(BIGSMALL)
 
 TAGS_MODULE_END(Fonts)
 
