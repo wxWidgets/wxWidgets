@@ -146,6 +146,11 @@ wxTextBuffer::wxTextBuffer(const wxString& strBufferName)
     m_isOpened = false;
 }
 
+wxTextBuffer::~wxTextBuffer()
+{
+    // required here for Darwin
+}
+
 // ----------------------------------------------------------------------------
 // buffer operations
 // ----------------------------------------------------------------------------

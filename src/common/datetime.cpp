@@ -4030,6 +4030,11 @@ void wxDateTimeHolidayAuthority::AddAuthority(wxDateTimeHolidayAuthority *auth)
     ms_authorities.push_back(auth);
 }
 
+wxDateTimeHolidayAuthority::~wxDateTimeHolidayAuthority()
+{
+    // required here for Darwin
+}
+
 // ----------------------------------------------------------------------------
 // wxDateTimeWorkDays
 // ----------------------------------------------------------------------------

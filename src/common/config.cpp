@@ -73,6 +73,11 @@ wxConfigBase::wxConfigBase(const wxString& appName,
     m_bRecordDefaults = false;
 }
 
+wxConfigBase::~wxConfigBase()
+{
+    // required here for Darwin
+}
+
 wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 {
   wxConfigBase *pOld = ms_pConfig;
