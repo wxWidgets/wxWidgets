@@ -197,10 +197,12 @@ inline WORD __wxMSW_ctype(wxChar ch)
 
 #else//!Windows
 
+// wchar_t will be used in buffer.h, so include it rather unconditionally
+#include <wchar.h>
+
 // check whether we are doing Unicode
 #if wxUSE_UNICODE
 
-#include <wchar.h>
 #include <wctype.h>
 
 // this is probably glibc-specific
