@@ -586,7 +586,7 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
         wxPixelDataIn(wxBitmap& bmp, const wxRect& rect)
             : m_bmp(bmp), m_pixels(bmp, *this)
         {
-            InitRect(rect.GetPositions(), rect.GetSize());
+            InitRect(rect.GetPosition(), rect.GetSize());
         }
 
         wxPixelDataIn(wxBitmap& bmp, const wxPoint& pt, const wxSize& sz)
