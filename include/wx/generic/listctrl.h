@@ -159,14 +159,6 @@ enum {
     wxLIST_FIND_RIGHT
 };
 
-// Flag values for Set/GetImageList
-enum {
-    wxIMAGE_LIST_NORMAL, // Normal icons
-    wxIMAGE_LIST_SMALL,  // Small icons
-    wxIMAGE_LIST_STATE   // State icons: unimplemented (see WIN32 documentation)
-                         // not implemented in wxGLC (see non-existing documentation..)
-};
-
 //-----------------------------------------------------------------------------
 // wxListItem
 //-----------------------------------------------------------------------------
