@@ -544,7 +544,7 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
     data.SetInitialFont(m_canvas->GetTextFont());
     data.SetColour(m_canvas->GetColour());
 
-    wxFontDialog dialog(this, &data);
+    wxFontDialog dialog(this, data);
     if ( dialog.ShowModal() == wxID_OK )
     {
         wxFontData retData = dialog.GetFontData();
