@@ -290,6 +290,7 @@ case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
     AC_DEFINE(__EMX__)
     USE_OS2=1
+    AC_DEFINE(__OS2__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
     dnl "c++" wrapper is not always available, so always use plain gcc.
