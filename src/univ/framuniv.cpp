@@ -55,7 +55,6 @@ bool wxFrame::Create(wxWindow *parent,
                 long style,
                 const wxString& name)
 {
-    m_renderer = NULL;
     return wxTopLevelWindow::Create(parent, id, title, pos, size, style, name);
 }
 
