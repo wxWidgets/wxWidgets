@@ -909,6 +909,7 @@ void HelpGenVisitor::CloseClass()
         m_inClass = FALSE;
         m_classname.clear();
     }
+	m_file.FlushAll();
 }
 
 void HelpGenVisitor::EndVisit()
@@ -920,6 +921,11 @@ void HelpGenVisitor::EndVisit()
     m_fileHeader.Empty();
 
     m_file.FlushAll();
+	if (m_file.IsOpened())
+	{
+		m_file.Flush();
+		m_file.Close();
+	}
 
     wxLogVerbose("%s: finished generating for the current file.",
                  GetCurrentTime("%H:%M:%S"));
@@ -935,6 +941,12 @@ void HelpGenVisitor::VisitFile( spFile& file )
 void HelpGenVisitor::VisitClass( spClass& cl )
 {
     CloseClass();
+
+	if (m_file.IsOpened())
+	{
+		m_file.Flush();
+		m_file.Close();
+	}
 
     wxString name = cl.GetName();
 
@@ -1104,6 +1116,8 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     InsertDataStructuresHeader();
     InsertTypedefDocs();
     InsertEnumDocs();
+
+	m_file.Flush();
 }
 
 void HelpGenVisitor::VisitEnumeration( spEnumeration& en )
@@ -2149,6 +2163,10 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.19  2002/01/03 13:34:12  JS
+   Added FlushAll to CloseClass, otherwise text was only flushed right at the end,
+   and appeared in one file.
+
    Revision 1.18  2002/01/03 12:02:47  JS
    Added main() and corrected VC++ project settings
 
