@@ -81,7 +81,7 @@ class ParamBinaryOr(PPanel):
         buttonOk = wxButton(dlg, wxID_OK, 'OK')
         buttonOk.SetDefault()
         sizer.Add(buttonOk, 0, wxRIGHT, 10)
-        sizer.Add(0, 0, 1)
+        sizer.Add((0, 0), 1)
         sizer.Add(wxButton(dlg, wxID_CANCEL, 'Cancel'))
         topSizer.Add(sizer, 0, wxALL | wxEXPAND, 10)
         dlg.SetAutoLayout(True)
@@ -90,7 +90,7 @@ class ParamBinaryOr(PPanel):
         dlg.Center()
         if dlg.ShowModal() == wxID_OK:
             value = []
-            for i in range(listBox.Number()):
+            for i in range(listBox.GetCount()):
                 if listBox.IsChecked(i):
                     value.append(self.values[i])
             # Add ignored flags
@@ -166,7 +166,7 @@ class ParamColour(PPanel):
         if self.IsEnabled(): dc.SetPen(wxBLACK_PEN)
         else: dc.SetPen(wxGREY_PEN)
         size = self.button.GetSize()
-        dc.DrawRectangle(0, 0, size.width, size.height)
+        dc.DrawRectangle((0, 0), size)
     def OnLeftDown(self, evt):
         data = wxColourData()
         data.SetColour(self.GetValue())
@@ -446,10 +446,10 @@ class ContentDialog(wxDialog):
         self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
-        self.ID_BUTTON_APPEND = XMLID('BUTTON_APPEND')
-        self.ID_BUTTON_REMOVE = XMLID('BUTTON_REMOVE')
-        self.ID_BUTTON_UP = XMLID('BUTTON_UP')
-        self.ID_BUTTON_DOWN = XMLID('BUTTON_DOWN')
+        self.ID_BUTTON_APPEND = XRCID('BUTTON_APPEND')
+        self.ID_BUTTON_REMOVE = XRCID('BUTTON_REMOVE')
+        self.ID_BUTTON_UP = XRCID('BUTTON_UP')
+        self.ID_BUTTON_DOWN = XRCID('BUTTON_DOWN')
         EVT_BUTTON(self, self.ID_BUTTON_UP, self.OnButtonUp)
         EVT_BUTTON(self, self.ID_BUTTON_DOWN, self.OnButtonDown)
         EVT_BUTTON(self, self.ID_BUTTON_APPEND, self.OnButtonAppend)
@@ -481,7 +481,7 @@ class ContentDialog(wxDialog):
             evt.Enable(self.list.GetSelection() > 0)
         elif evt.GetId() == self.ID_BUTTON_DOWN:
             evt.Enable(self.list.GetSelection() != -1 and \
-                       self.list.GetSelection() < self.list.Number() - 1)
+                       self.list.GetSelection() < self.list.GetCount() - 1)
 
 class ContentCheckListDialog(wxDialog):
     def __init__(self, parent, value):
@@ -499,10 +499,10 @@ class ContentCheckListDialog(wxDialog):
         self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
-        self.ID_BUTTON_APPEND = XMLID('BUTTON_APPEND')
-        self.ID_BUTTON_REMOVE = XMLID('BUTTON_REMOVE')
-        self.ID_BUTTON_UP = XMLID('BUTTON_UP')
-        self.ID_BUTTON_DOWN = XMLID('BUTTON_DOWN')
+        self.ID_BUTTON_APPEND = XRCID('BUTTON_APPEND')
+        self.ID_BUTTON_REMOVE = XRCID('BUTTON_REMOVE')
+        self.ID_BUTTON_UP = XRCID('BUTTON_UP')
+        self.ID_BUTTON_DOWN = XRCID('BUTTON_DOWN')
         EVT_CHECKLISTBOX(self, self.list.GetId(), self.OnCheck)
         EVT_BUTTON(self, self.ID_BUTTON_UP, self.OnButtonUp)
         EVT_BUTTON(self, self.ID_BUTTON_DOWN, self.OnButtonDown)
@@ -540,7 +540,7 @@ class ContentCheckListDialog(wxDialog):
             evt.Enable(self.list.GetSelection() > 0)
         elif evt.GetId() == self.ID_BUTTON_DOWN:
             evt.Enable(self.list.GetSelection() != -1 and \
-                       self.list.GetSelection() < self.list.Number() - 1)
+                       self.list.GetSelection() < self.list.GetCount() - 1)
 
 class ParamContent(PPanel):
     def __init__(self, parent, name):
@@ -586,7 +586,7 @@ class ParamContent(PPanel):
         dlg = ContentDialog(self, self.value)
         if dlg.ShowModal() == wxID_OK:
             value = []
-            for i in range(dlg.list.Number()):
+            for i in range(dlg.list.GetCount()):
                 value.append(dlg.list.GetString(i))
             # Add ignored flags
             self.SetValue(value)
@@ -608,7 +608,7 @@ class ParamContentCheckList(ParamContent):
         dlg = ContentCheckListDialog(self, self.value)
         if dlg.ShowModal() == wxID_OK:
             value = []
-            for i in range(dlg.list.Number()):
+            for i in range(dlg.list.GetCount()):
                 value.append((dlg.list.GetString(i), dlg.list.IsChecked(i)))
             # Add ignored flags
             self.SetValue(value)
@@ -633,8 +633,8 @@ class IntListDialog(wxDialog):
         self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
-        self.ID_BUTTON_ADD = XMLID('BUTTON_ADD')
-        self.ID_BUTTON_REMOVE = XMLID('BUTTON_REMOVE')
+        self.ID_BUTTON_ADD = XRCID('BUTTON_ADD')
+        self.ID_BUTTON_REMOVE = XRCID('BUTTON_REMOVE')
         EVT_BUTTON(self, self.ID_BUTTON_ADD, self.OnButtonAppend)
         EVT_BUTTON(self, self.ID_BUTTON_REMOVE, self.OnButtonRemove)
         EVT_UPDATE_UI(self, self.ID_BUTTON_REMOVE, self.OnUpdateUI)
@@ -649,7 +649,7 @@ class IntListDialog(wxDialog):
             if i == -1:                 # ignore non-unique
                 # Find place to insert
                 found = False
-                for i in range(self.list.Number()):
+                for i in range(self.list.GetCount()):
                     if int(self.list.GetString(i)) > v:
                         found = True
                         break
@@ -677,7 +677,7 @@ class ParamIntList(ParamContent):
         dlg = IntListDialog(self, self.value)
         if dlg.ShowModal() == wxID_OK:
             value = []
-            for i in range(dlg.list.Number()):
+            for i in range(dlg.list.GetCount()):
                 value.append(int(dlg.list.GetString(i)))
             # Add ignored flags
             self.SetValue(value)
@@ -800,12 +800,12 @@ class ParamBitmap(PPanel):
         self.SetAutoLayout(True)
         self.GetSizer().SetMinSize((260, -1))
         self.GetSizer().Fit(self)
-        EVT_RADIOBUTTON(self, XMLID('RADIO_STD'), self.OnRadioStd)
-        EVT_RADIOBUTTON(self, XMLID('RADIO_FILE'), self.OnRadioFile)
-        EVT_BUTTON(self, XMLID('BUTTON_BROWSE'), self.OnButtonBrowse)
-        EVT_COMBOBOX(self, XMLID('COMBO_STD'), self.OnCombo)
-        EVT_TEXT(self, XMLID('COMBO_STD'), self.OnChange)
-        EVT_TEXT(self, XMLID('TEXT_FILE'), self.OnChange)
+        EVT_RADIOBUTTON(self, XRCID('RADIO_STD'), self.OnRadioStd)
+        EVT_RADIOBUTTON(self, XRCID('RADIO_FILE'), self.OnRadioFile)
+        EVT_BUTTON(self, XRCID('BUTTON_BROWSE'), self.OnButtonBrowse)
+        EVT_COMBOBOX(self, XRCID('COMBO_STD'), self.OnCombo)
+        EVT_TEXT(self, XRCID('COMBO_STD'), self.OnChange)
+        EVT_TEXT(self, XRCID('TEXT_FILE'), self.OnChange)
     def OnRadioStd(self, evt):
         self.SetModified()
         self.SetValue(['wxART_MISSING_IMAGE',''])
