@@ -204,7 +204,7 @@ void wxWizard::DoCreateControls()
         x -= sizeBtn.x;
         x -= BUTTON_MARGIN ;
 
-        (void*) new wxButton(this, wxID_HELP, _("&Help"), wxPoint(x, y), sizeBtn);
+        (void)new wxButton(this, wxID_HELP, _("&Help"), wxPoint(x, y), sizeBtn);
         x += sizeBtn.x;
         x += BUTTON_MARGIN ;
     }
