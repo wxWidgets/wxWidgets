@@ -1049,6 +1049,8 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
     wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
 
+    // VS: ListView_EditLabel requires that the list has focus.  
+    SetFocus();
     HWND hWnd = (HWND) ListView_EditLabel(GetHwnd(), item);
 
     if (m_textCtrl)
