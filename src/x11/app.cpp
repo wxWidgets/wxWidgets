@@ -25,6 +25,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/evtloop.h"
+#include "wx/timer.h"
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
@@ -992,6 +993,11 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     while (wxTheApp && wxTheApp->Pending())
         wxTheApp->Dispatch();
+
+#if wxUSE_TIMER
+    wxTimer::NotifyTimers();
+#endif
+    ProcessIdle();
 
     s_inYield = FALSE;
 

@@ -92,7 +92,7 @@ void FortyCanvas::OnDraw(wxDC& dc)
 {
 	dc.SetFont(* m_font);
 	m_game->Redraw(dc);
-
+#if 0
 	// if player name not set (and selection dialog is not displayed)
 	// then ask the player for their name
 	if (m_player.Length() == 0 && !m_playerDialog)
@@ -117,8 +117,40 @@ void FortyCanvas::OnDraw(wxDC& dc)
 			((wxFrame*)GetParent())->Close(TRUE);
 		}
 	}
+#endif
 }
 
+void FortyCanvas::ShowPlayerDialog()
+{
+	// if player name not set (and selection dialog is not displayed)
+	// then ask the player for their name
+	if (m_player.Length() == 0 && !m_playerDialog)
+	{
+ 		m_playerDialog = new PlayerSelectionDialog(this, m_scoreFile);
+		m_playerDialog->ShowModal();
+		m_player = m_playerDialog->GetPlayersName();
+		if (m_player.Length() > 0)
+		{
+			// user entered a name - lookup their score
+			int wins, games, score;
+			m_scoreFile->ReadPlayersScore(m_player, wins, games, score);
+			m_game->NewPlayer(wins, games, score);
+                        
+                        wxClientDC dc(this);
+                        dc.SetFont(* m_font);
+			m_game->DisplayScore(dc);
+			m_playerDialog->Destroy();
+			m_playerDialog = 0;
+                        Refresh(false);
+		}
+		else
+		{
+			// user cancelled the dialog - exit the app
+			((wxFrame*)GetParent())->Close(TRUE);
+		}
+        }
+}
+        
 /*
 Called when the main frame is closed
 */

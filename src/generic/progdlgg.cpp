@@ -270,6 +270,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     // Update the display (especially on X, GTK)
     wxYield();
+    wxYield();
 
 #ifdef __WXMAC__
     MacUpdateImmediately();
@@ -330,6 +331,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
         m_msg->SetLabel(newmsg);
 
         wxYield();
+        wxYield();
     }
 
     if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
@@ -369,6 +371,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
             }
 
             wxYield();
+            wxYield();
 
             (void)ShowModal();
         }
@@ -381,6 +384,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     else
     {
         // update the display
+        wxYield();
         wxYield();
     }
 

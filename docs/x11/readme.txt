@@ -34,9 +34,10 @@ Alternatively, you may also use the bug reporting system
 linked from the wxWindows web page.
 
 The library produced by the install process will be called 
-libwx_x11.a (static) and libwx_x11-2.3.so.0.0.0 (shared) so that
-once a binary incompatible version of wxWindows/X11 comes out 
-we'll augment the library version number to avoid linking problems.
+libwx_x11univ[d].a (static) and libwx_x11univ[d]-2.3.so.0.0.0
+(shared) so that once a binary incompatible version of
+wxWindows/X11 comes out we'll augment the library version number
+to avoid linking problems.
 
 Please send problems concerning installation, feature requests, 
 bug reports or comments to the wxWindows users list. Information 
@@ -49,9 +50,20 @@ suitable for any special or general purpose.
 Status
 ======
 
-This is new port and doesn't yet compile, but do please join in
-and help. It's actually quite a simple port since most of the hard work
-is done by the wxUniversal widgets.
+Many of the samples are running.
+
+Some remaining issues:
+
+- some refresh efficiency issues
+- progress dialog not working (see dialogs sample)
+- clipboard implementation missing
+- drag and drop implementation missing
+- wxToggleButton implementation missing
+- wxSpinCtrl implementation missing
+- tooltips implementation missing
+- code common to the Motif and X11 ports needs to be
+  merged
+- need thread safety in event loop
 
   Regards,
 

@@ -31,40 +31,6 @@
 #include "forty.h"
 #include "card.h"
 #include "scoredg.h"
-#ifdef wx_x
-#include "cards.xbm"
-#endif
-
-class FortyFrame: public wxFrame
-{
-public:
-        FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h,bool largecards);
-	virtual ~FortyFrame();
-
-	void OnCloseWindow(wxCloseEvent& event);
-
-	// Menu callbacks
-	void NewGame(wxCommandEvent& event);
-	void Exit(wxCommandEvent& event);
-	void About(wxCommandEvent& event);
-	void Undo(wxCommandEvent& event);
-	void Redo(wxCommandEvent& event);
-	void Scores(wxCommandEvent& event);
-	void ToggleRightButtonUndo(wxCommandEvent& event);
-	void ToggleHelpingHand(wxCommandEvent& event);
-        void ToggleCardSize(wxCommandEvent& event);
-
-	DECLARE_EVENT_TABLE()
-
-private:
-	enum MenuCommands { NEW_GAME = 10, SCORES, EXIT,
-						UNDO, REDO,
-                                                RIGHT_BUTTON_UNDO, HELPING_HAND, LARGE_CARDS,
-						ABOUT };
-
-	wxMenuBar*		m_menuBar;
-	FortyCanvas*	m_canvas;
-};
 
 BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
 	EVT_MENU(NEW_GAME, FortyFrame::NewGame)
@@ -105,6 +71,8 @@ bool FortyApp::OnInit()
 
  	// Show the frame
 	frame->Show(TRUE);
+
+        frame->GetCanvas()->ShowPlayerDialog();
 
 	return TRUE;
 }

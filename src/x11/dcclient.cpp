@@ -1375,7 +1375,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         slen = strlen(text);
         XCharStruct overall_return;
 
-        (void)XTextExtents(xfont, text.c_str(), slen, &direction,
+        (void)XTextExtents(xfont, (char*) text.c_str(), slen, &direction,
                                  &ascent, &descent, &overall_return);
 
         cx = overall_return.width;

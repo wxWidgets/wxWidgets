@@ -856,7 +856,7 @@ void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
-#if 1
+#if !wxUSE_NANOX
 
     XWindowAttributes attr;
     Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );

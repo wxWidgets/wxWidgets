@@ -16,7 +16,7 @@ IMPORTANT NOTE:
 First steps
 -----------
 
-- Download wxX11-x.y.z.tgz, where x.y.z is the version number.
+- Download wxWindows-X-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as
   wxWindows-HTML.zip or wxWindows-PDF.zip.
 

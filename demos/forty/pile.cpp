@@ -40,6 +40,8 @@
 #include <string.h>
 #include "card.h"
 #include "pile.h"
+#include "forty.h"
+#include "canvas.h"
 
 #include "wx/app.h"
 
@@ -75,12 +77,11 @@ Pile::Pile(int x, int y, int dx, int dy)
 //+-------------------------------------------------------------+
 void Pile::Redraw(wxDC& dc )
 {
-   wxWindow *frame = wxTheApp->GetTopWindow();
+   FortyFrame *frame = (FortyFrame*) wxTheApp->GetTopWindow();
    wxWindow *canvas = (wxWindow *) NULL;
    if (frame)
    {
-     wxNode *node = frame->GetChildren().First();
-     if (node) canvas = (wxWindow*)node->Data();
+       canvas = frame->GetCanvas();
    }
 
 	if (m_topCard >= 0)

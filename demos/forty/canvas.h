@@ -38,6 +38,7 @@ public:
 	void EnableHelpingHand(bool enable)		{ m_helpingHand = enable; }
 	void EnableRightButtonUndo(bool enable)	{ m_rightBtnUndo = enable; }
         void LayoutGame();
+        void ShowPlayerDialog();
 
 	DECLARE_EVENT_TABLE()
 

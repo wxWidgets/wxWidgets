@@ -25,9 +25,13 @@
 
 
 wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
-           : wxFrame(parent, -1, wxT(""),
+           : wxFrame(parent, -1, wxT("Busy"),
                      wxDefaultPosition, wxDefaultSize,
+#if defined(__WXX11__)
+                     wxTHICK_FRAME | wxFRAME_TOOL_WINDOW)
+#else
                      wxSIMPLE_BORDER | wxFRAME_TOOL_WINDOW)
+#endif
 {
     wxPanel *panel = new wxPanel( this );
     wxStaticText *text = new wxStaticText(panel, -1, message);

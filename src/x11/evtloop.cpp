@@ -239,6 +239,16 @@ bool wxEventLoop::Dispatch()
     
     if (XPending((Display*) wxGetDisplay()) == 0)
     {
+#if wxUSE_NANOX
+        GR_TIMEOUT timeout = 10; // Milliseconds
+        // Wait for next event, or timeout
+        GrGetNextEventTimeout(& event, timeout);
+
+        // Fall through to ProcessEvent.
+        // we'll assume that ProcessEvent will just ignore
+        // the event if there was a timeout and no event.
+            
+#else
         struct timeval tv;
         tv.tv_sec=0;
         tv.tv_usec=10000; // TODO make this configurable
@@ -256,6 +266,7 @@ bool wxEventLoop::Dispatch()
             // An event was pending, so get it
             XNextEvent((Display*) wxGetDisplay(), & event);
         }
+#endif
     } else
     {
        XNextEvent((Display*) wxGetDisplay(), & event);

@@ -662,7 +662,7 @@ void MyFrame::ShowBusyInfo(wxCommandEvent& WXUNUSED(event))
 {
     wxWindowDisabler disableAll;
 
-    wxBusyInfo info("Sleep^H^H^H^H^HWorkiing, please wait...", this);
+    wxBusyInfo info("Working, please wait...", this);
 
     for ( int i = 0; i < 30; i++ )
     {
