@@ -76,6 +76,7 @@ class WXDLLEXPORT wxGridRowLabelWindow;
 class WXDLLEXPORT wxGridTableBase;
 class WXDLLEXPORT wxGridWindow;
 class WXDLLEXPORT wxGridTypeRegistry;
+class WXDLLEXPORT wxGridSelection;
 
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxComboBox;
@@ -960,7 +961,13 @@ public:
 
     ~wxGrid();
 
-    bool CreateGrid( int numRows, int numCols );
+    enum wxGridSelectionModes {wxGridSelectCells,
+                               wxGridSelectRows,
+                               wxGridSelectColumns};
+
+    bool CreateGrid( int numRows, int numCols,
+                     wxGrid::wxGridSelectionModes selmode =
+                     wxGrid::wxGridSelectCells );
 
 
     // ------ grid dimensions
@@ -1269,33 +1276,14 @@ public:
 
     void SelectAll();
 
-    bool IsSelection()
-        { return ( m_selectedTopLeft != wxGridNoCellCoords &&
-                   m_selectedBottomRight != wxGridNoCellCoords );
-        }
+    bool IsSelection();
 
     void ClearSelection();
 
-    bool IsInSelection( int row, int col )
-        { return ( IsSelection() &&
-                   row >= m_selectedTopLeft.GetRow() &&
-                   col >= m_selectedTopLeft.GetCol() &&
-                   row <= m_selectedBottomRight.GetRow() &&
-                   col <= m_selectedBottomRight.GetCol() );
-        }
+    bool IsInSelection( int row, int col );
 
     bool IsInSelection( const wxGridCellCoords& coords )
         { return IsInSelection( coords.GetRow(), coords.GetCol() ); }
-
-    void GetSelection( int* topRow, int* leftCol, int* bottomRow, int* rightCol )
-        {
-            // these will all be -1 if there is no selected block
-            //
-            *topRow    = m_selectedTopLeft.GetRow();
-            *leftCol   = m_selectedTopLeft.GetCol();
-            *bottomRow = m_selectedBottomRight.GetRow();
-            *rightCol  = m_selectedBottomRight.GetCol();
-        }
 
 
     // This function returns the rectangle that encloses the block of cells
@@ -1310,8 +1298,8 @@ public:
     //
     wxRect SelectionToDeviceRect()
         {
-            return BlockToDeviceRect( m_selectedTopLeft,
-                                      m_selectedBottomRight );
+            return BlockToDeviceRect( m_selectingTopLeft,
+                                      m_selectingBottomRight );
         }
 
     // Access or update the selection fore/back colours
@@ -1531,8 +1519,9 @@ protected:
 
     wxGridCellCoords m_currentCellCoords;
 
-    wxGridCellCoords m_selectedTopLeft;
-    wxGridCellCoords m_selectedBottomRight;
+    wxGridCellCoords m_selectingTopLeft;
+    wxGridCellCoords m_selectingBottomRight;
+    wxGridSelection  *m_selection;
     wxColour    m_selectionBackground;
     wxColour    m_selectionForeground;
 
@@ -1725,7 +1714,7 @@ protected:
     bool GetModelValues();
     bool SetModelValues();
 
-	friend class wxGridSelection;
+        friend class wxGridSelection;
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
@@ -1898,4 +1887,3 @@ const wxEventType wxEVT_GRID_CHANGE_SEL_LABEL = wxEVT_FIRST + 1578;
 #endif  // #ifndef __WXGRID_H__
 
 #endif  // ifndef wxUSE_NEW_GRID
-

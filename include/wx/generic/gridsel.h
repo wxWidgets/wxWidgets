@@ -24,11 +24,8 @@
 
 class WXDLLEXPORT wxGridSelection{
 public:
-    enum wxGridSelectionModes {wxGridSelectCells,
-			       wxGridSelectRows,
-			       wxGridSelectColumns};
-    wxGridSelection( wxGrid * grid, wxGridSelection::wxGridSelectionModes sel =
-		     wxGridSelection::wxGridSelectCells );
+    wxGridSelection( wxGrid * grid, wxGrid::wxGridSelectionModes sel =
+                     wxGrid::wxGridSelectCells );
     bool IsSelection();
     bool IsInSelection ( int row, int col );
     void SelectRow( int row, bool addToSelected = FALSE );
@@ -43,32 +40,32 @@ public:
 
 private:
     int BlockContain( int topRow1, int leftCol1,
-		       int bottomRow1, int rightCol1,
-		       int topRow2, int leftCol2,
-		       int bottomRow2, int rightCol2 );
+                       int bottomRow1, int rightCol1,
+                       int topRow2, int leftCol2,
+                       int bottomRow2, int rightCol2 );
       // returns 1, if Block1 contains Block2,
       //        -1, if Block2 contains Block1,
       //         0, otherwise
 
     int BlockContainsCell( int topRow, int leftCol,
-			   int bottomRow, int rightCol,
-			   int row, int col )
+                           int bottomRow, int rightCol,
+                           int row, int col )
       // returns 1, if Block contains Cell,
       //         0, otherwise
     {
         return ( topRow <= row && row <= bottomRow &&
-		 leftCol <= col && col <= rightCol );
+                 leftCol <= col && col <= rightCol );
     }
 
-    wxGridCellCoordsArray	m_cellSelection;
-    wxGridCellCoordsArray	m_blockSelectionTopLeft;
-    wxGridCellCoordsArray	m_blockSelectionBottomRight;
-    wxArrayInt			m_rowSelection;
-    wxArrayInt 			m_colSelection;
+    wxGridCellCoordsArray               m_cellSelection;
+    wxGridCellCoordsArray               m_blockSelectionTopLeft;
+    wxGridCellCoordsArray               m_blockSelectionBottomRight;
+    wxArrayInt                          m_rowSelection;
+    wxArrayInt                          m_colSelection;
 
-    wxGrid			*m_grid;
-    wxGridSelectionModes	m_selectionMode;
+    wxGrid                              *m_grid;
+    wxGrid::wxGridSelectionModes        m_selectionMode;
 };
 
-#endif	// #ifdef __WXGRIDSEL_H__
-#endif	// #ifndef wxUSE_NEW_GRID
+#endif  // #ifdef __WXGRIDSEL_H__
+#endif  // #ifndef wxUSE_NEW_GRID

@@ -482,23 +482,27 @@ void GridFrame::InsertCol( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
+#if 0
     if ( grid->IsSelection() )
     {
         int topRow, bottomRow, leftCol, rightCol;
         grid->GetSelection( &topRow, &leftCol, &bottomRow, &rightCol );
         grid->DeleteRows( topRow, bottomRow - topRow + 1 );
     }
+#endif
 }
 
 
 void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
+#if 0
     if ( grid->IsSelection() )
     {
         int topRow, bottomRow, leftCol, rightCol;
         grid->GetSelection( &topRow, &leftCol, &bottomRow, &rightCol );
         grid->DeleteCols( leftCol, rightCol - leftCol + 1 );
     }
+#endif
 }
 
 
