@@ -644,24 +644,36 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawText(fontInfo, 5, 5 + dc.GetCharHeight());
     }
 
+    // the origin for our table
+    int x = 5,
+        y = dc.GetCharHeight() * (2 + 1);
+
     // prepare to draw the font
     dc.SetFont(m_font);
     dc.SetTextForeground(m_colour);
 
-    // the size of one cell (char + small margin)
-    int w = dc.GetCharWidth() + 5,
-        h = dc.GetCharHeight() + 4;
+    // the size of one cell (Normally biggest char + small margin)
+    long maxCharWidth, maxCharHeight;
+    dc.GetTextExtent(wxT("W"), &maxCharWidth, &maxCharHeight);
+    int w = maxCharWidth + 5,
+        h = maxCharHeight + 4;
 
-    // the origin for our table
-    int x = 5,
-        y = 2*h;
 
     // print all font symbols from 32 to 256 in 7 rows of 32 chars each
-    for ( int i = 1; i < 8; i++ )
+    for ( int i = 0; i < 7; i++ )
     {
         for ( int j = 0; j < 32; j++ )
         {
-            dc.DrawText(wxChar(32*i + j), x + w*j, y + h*i);
+            wxChar c = 32 * (i + 1) + j;
+
+            long charWidth, charHeight;
+            dc.GetTextExtent(c, &charWidth, &charHeight);
+            dc.DrawText
+            (
+                c,
+                x + w*j + (maxCharWidth - charWidth) / 2 + 1,
+                y + h*i + (maxCharHeight - charHeight) / 2
+            );
         }
     }
 
@@ -670,17 +682,16 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int l;
 
     // horizontal
-    y += h;
     for ( l = 0; l < 8; l++ )
     {
         int yl = y + h*l - 2;
-        dc.DrawLine(x - 2, yl, x + 32*w - 2, yl);
+        dc.DrawLine(x - 2, yl, x + 32*w - 1, yl);
     }
 
     // and vertical
     for ( l = 0; l < 33; l++ )
     {
         int xl = x + w*l - 2;
-        dc.DrawLine(xl, y, xl, y + 7*h - 2);
+        dc.DrawLine(xl, y - 2, xl, y + 7*h - 1);
     }
 }
