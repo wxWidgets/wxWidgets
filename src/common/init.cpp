@@ -392,7 +392,7 @@ int wxEntryReal(int& argc, wxChar **argv)
     WX_SUPPRESS_UNUSED_WARN(cleanupOnExit);
 
     // app initialization
-    if ( !wxTheApp->OnInit() )
+    if ( !wxTheApp->CallOnInit() )
     {
         // don't call OnExit() if OnInit() failed
         return -1;

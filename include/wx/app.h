@@ -97,6 +97,9 @@ public:
     // class version!
     virtual bool Initialize(int& argc, wxChar **argv);
 
+    // This gives wxCocoa a chance to call OnInit() with a memory pool in place
+    virtual bool CallOnInit() { return OnInit(); }
+
     // Called before OnRun(), this is a good place to do initialization -- if
     // anything fails, return false from here to prevent the program from
     // continuing. The command line is normally parsed here, call the base
