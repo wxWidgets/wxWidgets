@@ -107,6 +107,22 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
     iconInfo.hbmMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
     iconInfo.hbmColor = GetHbitmapOf(bmp);
 
+    /* GRG: black out the transparent area to preserve background
+     * colour, because Windows blits the original bitmap using
+     * SRCINVERT (XOR) after applying the mask to the dest rect.
+     */
+    HDC dcSrc = ::CreateCompatibleDC(NULL);
+    HDC dcDst = ::CreateCompatibleDC(NULL);
+    SelectObject(dcSrc, (HBITMAP)mask->GetMaskBitmap());
+    SelectObject(dcDst, iconInfo.hbmColor);
+
+    BitBlt(dcDst, 0, 0, bmp.GetWidth(), bmp.GetHeight(), dcSrc, 0, 0, SRCAND);
+
+    SelectObject(dcDst, NULL);
+    SelectObject(dcSrc, NULL);
+    DeleteDC(dcDst);
+    DeleteDC(dcSrc);
+
     HICON hicon = ::CreateIconIndirect(&iconInfo);
     if ( !hicon )
     {
