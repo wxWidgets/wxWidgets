@@ -729,8 +729,13 @@ void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
     wxCHECK_RET( scrollbar, _T("no scrollbar to set position for") );
 
     scrollbar->SetThumbPosition(pos);
+
+    // VZ: I think we can safely ignore this as we always refresh it
+    //     automatically whenever the value chanegs
+#if 0
     if ( refresh )
         Refresh();
+#endif
 }
 
 int wxWindow::GetScrollPos(int orient) const
