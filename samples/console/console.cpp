@@ -19,10 +19,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_GUI
-    #error "This sample can't be compiled in GUI mode."
-#endif // wxUSE_GUI
-
 #include <stdio.h>
 
 #include "wx/string.h"
