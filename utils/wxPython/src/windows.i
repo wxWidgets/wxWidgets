@@ -190,7 +190,6 @@ public:
         }
     }
 
-
     int  GetCharHeight();
     int  GetCharWidth();
     %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);
@@ -201,6 +200,11 @@ public:
     wxFont& GetFont();
     wxColour GetForegroundColour();
     wxWindow * GetGrandParent();
+    %addmethods {
+        long GetHandle() {
+            return (long)self->GetHandle();
+        }
+    }
     int GetId();
     wxString GetLabel();
     void SetLabel(const wxString& label);
@@ -490,9 +494,11 @@ public:
 
     void Append(wxMenu *menu, const wxString& title);
     void Check(int id, bool flag);
-    bool Checked(int id);
+//    bool Checked(int id);
     void Enable(int id, bool enable);
-    bool Enabled(int id);
+//    bool Enabled(int id);
+    bool IsChecked(int id);
+    bool IsEnabled(int id);
     int FindMenuItem(const wxString& menuString, const wxString& itemString);
     wxMenuItem * FindItemForId(int id);
     void SetLabel(int id, const wxString& label);
@@ -505,6 +511,9 @@ public:
     int GetMenuCount();
     wxMenu* GetMenu(int i);
     void Refresh();
+    wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
+    wxMenu *Remove(size_t pos);
+
 };
 
 
@@ -512,29 +521,29 @@ public:
 
 class wxMenuItem {
 public:
-#ifndef __WXGTK__
+//#ifndef __WXGTK__
     wxMenuItem(wxMenu* parentMenu=NULL, int id=ID_SEPARATOR,
                const wxString& text = wxPyEmptyStr,
                const wxString& helpString = wxPyEmptyStr,
                bool checkable = FALSE, wxMenu* subMenu = NULL);
-#else
-    wxMenuItem();
-#endif
+//#else
+//    wxMenuItem();
+//#endif
 
     bool IsSeparator();
     bool IsEnabled();
     bool IsChecked();
     bool IsCheckable();
+    bool IsSubMenu();
     int  GetId();
+    void SetId(int id);
     wxMenu* GetSubMenu();
-    void SetName(const wxString& strName);
-    wxString GetName();
     wxString GetHelp();
     void SetHelp(const wxString& strHelp);
     void Enable(bool bDoEnable = TRUE);
     void Check(bool bDoCheck = TRUE);
 
-#ifdef __WXMSW__
+//#ifdef __WXMSW__
     wxColour& GetBackgroundColour();
     wxBitmap GetBitmap(bool checked = TRUE);
     wxFont& GetFont();
@@ -544,9 +553,13 @@ public:
     void SetBitmaps(const wxBitmap& checked, const wxBitmap& unchecked = wxNullBitmap);
     void SetFont(const wxFont& font);
     void SetMarginWidth(int width);
+    void SetText(const wxString& str);
+    const wxString& GetText();
     void SetTextColour(const wxColour& colour);
     void DeleteSubMenu();
-#endif
+    void SetCheckable(bool checkable);
+    void SetSubMenu(wxMenu *menu);
+//#endif
 };
 
 //---------------------------------------------------------------------------

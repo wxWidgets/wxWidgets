@@ -89,6 +89,23 @@ class wxCaret(wxCaretPtr):
 
 
 
+class wxBusyCursorPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxBusyCursor(self)
+    def __repr__(self):
+        return "<C wxBusyCursor instance at %s>" % (self.this,)
+class wxBusyCursor(wxBusyCursorPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxBusyCursor,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

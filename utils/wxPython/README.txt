@@ -63,6 +63,8 @@ an EVT_SIZE handler that calls Layout().
 
 Fixed deadlock problem that happened when using threads.
 
+Added new HTML printing classes.
+
 
 
 
@@ -120,7 +122,7 @@ wxGTK.  Added them back in since the methods exist now.
 
 Wrapped the wxHtmlHelpController and related classes.
 
-Wrapped the C++ versions of wxSizer and firends.  The Python-only
+Wrapped the C++ versions of wxSizer and friends.  The Python-only
 versions are still in the library, but depreciated.  (You will get a
 warning message if you try to use them, but the warning can be
 disabled.) The usage of the C++ versions is slightly different, and
@@ -196,7 +198,7 @@ in the wxWindows docs...
 
 Some new 3rd party contributions in wxPython.lib.  PyShell, in
 shell.py is an interesting implementaion of an interactive Python
-shell in wxWindows.  floatbar.py has a class derived from wxTooBar
+shell in wxWindows.  floatbar.py has a class derived from wxToolBar
 that can sense mouse drags and then reparent itself into another
 frame. Moving the new frame close to where it came from puts the tool
 bar back into the original parent.  (Unfortunately there is currently

@@ -472,6 +472,15 @@ def EVT_TREE_KEY_DOWN(win, id, func):
 def EVT_TREE_DELETE_ITEM(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
 
+def EVT_TREE_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_ACTIVATED, func)
+
+def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, func)
+
+def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
+
 
 # wxSpinButton
 def EVT_SPIN_UP(win, id, func):

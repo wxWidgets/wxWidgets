@@ -57,6 +57,8 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/print.h>
 #include <wx/printdlg.h>
 
+#include "printfw.h"
+
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
@@ -106,66 +108,53 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
-class wxPyPrintout : public wxPrintout {
-public:
-    wxPyPrintout(const wxString& title) : wxPrintout(title) {}
-
-    DEC_PYCALLBACK_BOOL_INTINT(OnBeginDocument);
-    DEC_PYCALLBACK__(OnEndDocument);
-    DEC_PYCALLBACK__(OnBeginPrinting);
-    DEC_PYCALLBACK__(OnEndPrinting);
-    DEC_PYCALLBACK__(OnPreparePrinting);
-    DEC_PYCALLBACK_BOOL_INT_pure(OnPrintPage);
-    DEC_PYCALLBACK_BOOL_INT(HasPage);
 
 
-    // Since this one would be tough and ugly to do with the Macros...
-    void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
-        bool hadErr = false;
+// Since this one would be tough and ugly to do with the Macros...
+void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
+    bool hadErr = false;
 
-        bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("GetPageInfo")) {
-            PyObject* result = m_myInst.callCallbackObj(Py_BuildValue("()"));
-            if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
-                PyObject* val;
+    bool doSave = wxPyRestoreThread();
+    if (m_myInst.findCallback("GetPageInfo")) {
+        PyObject* result = m_myInst.callCallbackObj(Py_BuildValue("()"));
+        if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
+            PyObject* val;
 
-                val = PyTuple_GetItem(result, 0);
-                if (PyInt_Check(val))    *minPage = PyInt_AsLong(val);
-                else hadErr = true;
+            val = PyTuple_GetItem(result, 0);
+            if (PyInt_Check(val))    *minPage = PyInt_AsLong(val);
+            else hadErr = true;
 
-                val = PyTuple_GetItem(result, 1);
-                if (PyInt_Check(val))    *maxPage = PyInt_AsLong(val);
-                else hadErr = true;
+            val = PyTuple_GetItem(result, 1);
+            if (PyInt_Check(val))    *maxPage = PyInt_AsLong(val);
+            else hadErr = true;
 
-                val = PyTuple_GetItem(result, 2);
-                if (PyInt_Check(val))    *pageFrom = PyInt_AsLong(val);
-                else hadErr = true;
+            val = PyTuple_GetItem(result, 2);
+            if (PyInt_Check(val))    *pageFrom = PyInt_AsLong(val);
+            else hadErr = true;
 
-                val = PyTuple_GetItem(result, 3);
-                if (PyInt_Check(val))    *pageTo = PyInt_AsLong(val);
-                else hadErr = true;
-            }
-            else
-                hadErr = true;
-
-            if (hadErr) {
-                PyErr_SetString(PyExc_TypeError, "GetPageInfo should return a tuple of 4 integers.");
-                PyErr_Print();
-            }
-            Py_DECREF(result);
+            val = PyTuple_GetItem(result, 3);
+            if (PyInt_Check(val))    *pageTo = PyInt_AsLong(val);
+            else hadErr = true;
         }
         else
-            wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
+            hadErr = true;
 
-        wxPySaveThread(doSave);
+        if (hadErr) {
+            PyErr_SetString(PyExc_TypeError, "GetPageInfo should return a tuple of 4 integers.");
+            PyErr_Print();
+        }
+        Py_DECREF(result);
     }
-
-    void base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
+    else
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
-    }
 
-    PYPRIVATE;
-};
+    wxPySaveThread(doSave);
+}
+
+void wxPyPrintout::base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
+    wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
+}
+
 
 IMP_PYCALLBACK_BOOL_INTINT(wxPyPrintout, wxPrintout, OnBeginDocument);
 IMP_PYCALLBACK__(wxPyPrintout, wxPrintout, OnEndDocument);
@@ -4546,6 +4535,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxFont","_wxFont",0},
     { "_class_wxPyValidator","_wxPyValidator",0},
     { "_class_wxCloseEvent","_wxCloseEvent",0},
+    { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
     { "_wxClientDC","_class_wxClientDC",0},
@@ -4650,6 +4640,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxActivateEvent","_class_wxActivateEvent",0},
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
+    { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},

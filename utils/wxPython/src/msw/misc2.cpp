@@ -1714,7 +1714,70 @@ static PyObject *_wrap_wxCaret_OnKillFocus(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define new_wxBusyCursor(_swigarg0) (new wxBusyCursor(_swigarg0))
+static PyObject *_wrap_new_wxBusyCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBusyCursor * _result;
+    wxCursor * _arg0 = (wxCursor *) wxHOURGLASS_CURSOR;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "cursor", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxBusyCursor",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxBusyCursor. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxBusyCursor *)new_wxBusyCursor(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBusyCursor_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxBusyCursor(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxBusyCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBusyCursor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxBusyCursor",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBusyCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxBusyCursor. Expected _wxBusyCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxBusyCursor(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef misc2cMethods[] = {
+	 { "delete_wxBusyCursor", (PyCFunction) _wrap_delete_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxBusyCursor", (PyCFunction) _wrap_new_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_OnKillFocus", (PyCFunction) _wrap_wxCaret_OnKillFocus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_OnSetFocus", (PyCFunction) _wrap_wxCaret_OnSetFocus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Hide", (PyCFunction) _wrap_wxCaret_Hide, METH_VARARGS | METH_KEYWORDS },
@@ -1809,6 +1872,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxToolTip","_wxToolTip",0},
     { "_wxColour","_class_wxColour",0},
     { "_class_wxDialog","_wxDialog",0},
+    { "_wxBusyCursor","_class_wxBusyCursor",0},
     { "_wxCaret","_class_wxCaret",0},
     { "_wxBrush","_class_wxBrush",0},
     { "_uint","_wxPrintQuality",0},
@@ -1824,6 +1888,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxValidator","_wxValidator",0},
+    { "_class_wxBusyCursor","_wxBusyCursor",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
@@ -1855,6 +1920,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxWindow","_wxWindow",0},
     { "_class_wxFont","_wxFont",0},
     { "_class_wxPyValidator","_wxPyValidator",0},
+    { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
@@ -1906,6 +1972,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxScreenDC","_wxScreenDC",0},
     { "_wxPalette","_class_wxPalette",0},
     { "_wxRegion","_class_wxRegion",0},
+    { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSize","_wxSize",0},
     { "_class_wxBitmap","_wxBitmap",0},

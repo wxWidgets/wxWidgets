@@ -1766,6 +1766,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPNGHandler","_wxPNGHandler",0},
     { "_wxColour","_class_wxColour",0},
     { "_class_wxDialog","_wxDialog",0},
+    { "_wxBusyCursor","_class_wxBusyCursor",0},
     { "_wxPageSetupDialog","_class_wxPageSetupDialog",0},
     { "_class_wxPrinter","_wxPrinter",0},
     { "_wxIdleEvent","_class_wxIdleEvent",0},
@@ -1820,6 +1821,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxTextEntryDialog","_class_wxTextEntryDialog",0},
     { "_class_wxIconizeEvent","_wxIconizeEvent",0},
     { "_class_wxStaticBitmap","_wxStaticBitmap",0},
+    { "_class_wxBusyCursor","_wxBusyCursor",0},
     { "_wxMDIChildFrame","_class_wxMDIChildFrame",0},
     { "_wxListItem","_class_wxListItem",0},
     { "_class_wxToolBar","_wxToolBar",0},
@@ -1890,6 +1892,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyValidator","_wxPyValidator",0},
     { "_class_wxCloseEvent","_wxCloseEvent",0},
     { "_wxSashEvent","_class_wxSashEvent",0},
+    { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
     { "_wxClientDC","_class_wxClientDC",0},
@@ -2012,6 +2015,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxActivateEvent","_class_wxActivateEvent",0},
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
+    { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxGridEvent","_wxGridEvent",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
@@ -2165,6 +2169,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxSB_HORIZONTAL", PyInt_FromLong((long) wxSB_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxSB_VERTICAL", PyInt_FromLong((long) wxSB_VERTICAL));
 	 PyDict_SetItemString(d,"wxST_SIZEGRIP", PyInt_FromLong((long) wxST_SIZEGRIP));
+	 PyDict_SetItemString(d,"wxST_NO_AUTORESIZE", PyInt_FromLong((long) wxST_NO_AUTORESIZE));
 	 PyDict_SetItemString(d,"wxBU_AUTODRAW", PyInt_FromLong((long) wxBU_AUTODRAW));
 	 PyDict_SetItemString(d,"wxBU_NOAUTODRAW", PyInt_FromLong((long) wxBU_NOAUTODRAW));
 	 PyDict_SetItemString(d,"wxTR_HAS_BUTTONS", PyInt_FromLong((long) wxTR_HAS_BUTTONS));
@@ -2309,6 +2314,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxSAVE", PyInt_FromLong((long) wxSAVE));
 	 PyDict_SetItemString(d,"wxHIDE_READONLY", PyInt_FromLong((long) wxHIDE_READONLY));
 	 PyDict_SetItemString(d,"wxOVERWRITE_PROMPT", PyInt_FromLong((long) wxOVERWRITE_PROMPT));
+	 PyDict_SetItemString(d,"wxFILE_MUST_EXIST", PyInt_FromLong((long) wxFILE_MUST_EXIST));
 	 PyDict_SetItemString(d,"wxACCEL_ALT", PyInt_FromLong((long) wxACCEL_ALT));
 	 PyDict_SetItemString(d,"wxACCEL_CTRL", PyInt_FromLong((long) wxACCEL_CTRL));
 	 PyDict_SetItemString(d,"wxACCEL_SHIFT", PyInt_FromLong((long) wxACCEL_SHIFT));
@@ -2695,6 +2701,9 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SEL_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SEL_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_KEY_DOWN", PyInt_FromLong((long) wxEVT_COMMAND_TREE_KEY_DOWN));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_ACTIVATED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_ACTIVATED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_BEGIN_DRAG", PyInt_FromLong((long) wxEVT_COMMAND_LIST_BEGIN_DRAG));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_BEGIN_RDRAG", PyInt_FromLong((long) wxEVT_COMMAND_LIST_BEGIN_RDRAG));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT", PyInt_FromLong((long) wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));

@@ -194,6 +194,9 @@ class wxPythonDemo(wxFrame):
                 self.tree.EnsureVisible(selectedDemo)
 
 
+            self.WriteText('window handle: %s\n' % self.GetHandle())
+
+
     #---------------------------------------------
     def WriteText(self, text):
         self.log.WriteText(text)

@@ -181,19 +181,7 @@ public:
 
 
 //---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.2  1999/04/30 03:29:19  RD
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.1  1999/01/30 07:30:16  RD
-//
-// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-//
-// Various cleanup, tweaks, minor additions, etc. to maintain
-// compatibility with the current wxWindows.
-//
-//
-//
+
+
+
+//---------------------------------------------------------------------------

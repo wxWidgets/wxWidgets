@@ -298,7 +298,7 @@ HELPEREXPORT bool wxPyRestoreThread() {
     // occurs, so I put in this code as a guard condition since there are
     // many possibilites for nested events and callbacks in wxPython.  If
     // The current thread is our thread, then we can assume that we
-    // already have the lock.
+    // already have the lock.  (I hope!)
     //
 #ifdef WXP_WITH_THREAD
     _wxPyNestCount += 1;

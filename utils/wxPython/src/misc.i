@@ -16,6 +16,7 @@
 #include "helpers.h"
 #include <wx/resource.h>
 #include <wx/tooltip.h>
+#include <wx/busyinfo.h>
 %}
 
 //----------------------------------------------------------------------
@@ -328,6 +329,15 @@ public:
 };
 
 //---------------------------------------------------------------------------
+
+class wxBusyInfo {
+public:
+    wxBusyInfo(const wxString& message);
+    ~wxBusyInfo();
+};
+
+
+
 //---------------------------------------------------------------------------
 
 

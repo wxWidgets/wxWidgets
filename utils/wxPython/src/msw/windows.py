@@ -195,6 +195,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetGrandParent,(self,) + _args, _kwargs)
         if val: val = wxWindowPtr(val) 
         return val
+    def GetHandle(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetHandle,(self,) + _args, _kwargs)
+        return val
     def GetId(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetId,(self,) + _args, _kwargs)
         return val
@@ -675,14 +678,14 @@ class wxMenuBarPtr(wxEvtHandlerPtr):
     def Check(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_Check,(self,) + _args, _kwargs)
         return val
-    def Checked(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenuBar_Checked,(self,) + _args, _kwargs)
-        return val
     def Enable(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_Enable,(self,) + _args, _kwargs)
         return val
-    def Enabled(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenuBar_Enabled,(self,) + _args, _kwargs)
+    def IsChecked(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_IsChecked,(self,) + _args, _kwargs)
+        return val
+    def IsEnabled(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_IsEnabled,(self,) + _args, _kwargs)
         return val
     def FindMenuItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_FindMenuItem,(self,) + _args, _kwargs)
@@ -722,6 +725,14 @@ class wxMenuBarPtr(wxEvtHandlerPtr):
     def Refresh(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_Refresh,(self,) + _args, _kwargs)
         return val
+    def Replace(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_Replace,(self,) + _args, _kwargs)
+        if val: val = wxMenuPtr(val) 
+        return val
+    def Remove(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_Remove,(self,) + _args, _kwargs)
+        if val: val = wxMenuPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxMenuBar instance at %s>" % (self.this,)
 class wxMenuBar(wxMenuBarPtr):
@@ -748,18 +759,18 @@ class wxMenuItemPtr :
     def IsCheckable(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_IsCheckable,(self,) + _args, _kwargs)
         return val
+    def IsSubMenu(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_IsSubMenu,(self,) + _args, _kwargs)
+        return val
     def GetId(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetId,(self,) + _args, _kwargs)
+        return val
+    def SetId(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetId,(self,) + _args, _kwargs)
         return val
     def GetSubMenu(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetSubMenu,(self,) + _args, _kwargs)
         if val: val = wxMenuPtr(val) 
-        return val
-    def SetName(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenuItem_SetName,(self,) + _args, _kwargs)
-        return val
-    def GetName(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenuItem_GetName,(self,) + _args, _kwargs)
         return val
     def GetHelp(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetHelp,(self,) + _args, _kwargs)
@@ -804,11 +815,23 @@ class wxMenuItemPtr :
     def SetMarginWidth(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetMarginWidth,(self,) + _args, _kwargs)
         return val
+    def SetText(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetText,(self,) + _args, _kwargs)
+        return val
+    def GetText(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetText,(self,) + _args, _kwargs)
+        return val
     def SetTextColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetTextColour,(self,) + _args, _kwargs)
         return val
     def DeleteSubMenu(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_DeleteSubMenu,(self,) + _args, _kwargs)
+        return val
+    def SetCheckable(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetCheckable,(self,) + _args, _kwargs)
+        return val
+    def SetSubMenu(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetSubMenu,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxMenuItem instance at %s>" % (self.this,)

@@ -1666,6 +1666,35 @@ static PyObject *_wrap_wxWindow_GetGrandParent(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+static long  wxWindow_GetHandle(wxWindow *self) {
+            return (long)self->GetHandle();
+        }
+static PyObject *_wrap_wxWindow_GetHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetHandle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetHandle. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxWindow_GetHandle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 #define wxWindow_GetId(_swigobj)  (_swigobj->GetId())
 static PyObject *_wrap_wxWindow_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6330,34 +6359,6 @@ static PyObject *_wrap_wxMenuBar_Check(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-#define wxMenuBar_Checked(_swigobj,_swigarg0)  (_swigobj->Checked(_swigarg0))
-static PyObject *_wrap_wxMenuBar_Checked(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxMenuBar * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","id", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuBar_Checked",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_Checked. Expected _wxMenuBar_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxMenuBar_Checked(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxMenuBar_Enable(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Enable(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxMenuBar_Enable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6389,8 +6390,8 @@ static PyObject *_wrap_wxMenuBar_Enable(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
-#define wxMenuBar_Enabled(_swigobj,_swigarg0)  (_swigobj->Enabled(_swigarg0))
-static PyObject *_wrap_wxMenuBar_Enabled(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxMenuBar_IsChecked(_swigobj,_swigarg0)  (_swigobj->IsChecked(_swigarg0))
+static PyObject *_wrap_wxMenuBar_IsChecked(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxMenuBar * _arg0;
@@ -6399,18 +6400,46 @@ static PyObject *_wrap_wxMenuBar_Enabled(PyObject *self, PyObject *args, PyObjec
     char *_kwnames[] = { "self","id", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuBar_Enabled",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuBar_IsChecked",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_Enabled. Expected _wxMenuBar_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_IsChecked. Expected _wxMenuBar_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxMenuBar_Enabled(_arg0,_arg1);
+        _result = (bool )wxMenuBar_IsChecked(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxMenuBar_IsEnabled(_swigobj,_swigarg0)  (_swigobj->IsEnabled(_swigarg0))
+static PyObject *_wrap_wxMenuBar_IsEnabled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMenuBar * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuBar_IsEnabled",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_IsEnabled. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxMenuBar_IsEnabled(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -6847,6 +6876,98 @@ static PyObject *_wrap_wxMenuBar_Refresh(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxMenuBar_Replace(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Replace(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxMenuBar_Replace(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenu * _result;
+    wxMenuBar * _arg0;
+    size_t  _arg1;
+    wxMenu * _arg2;
+    wxString * _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "self","pos","menu","title", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO:wxMenuBar_Replace",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_Replace. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxMenuBar_Replace. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxMenu *)wxMenuBar_Replace(_arg0,_arg1,_arg2,*_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenu_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj3)
+        delete _arg3;
+}
+    return _resultobj;
+}
+
+#define wxMenuBar_Remove(_swigobj,_swigarg0)  (_swigobj->Remove(_swigarg0))
+static PyObject *_wrap_wxMenuBar_Remove(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenu * _result;
+    wxMenuBar * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuBar_Remove",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_Remove. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxMenu *)wxMenuBar_Remove(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenu_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define new_wxMenuItem(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxMenuItem(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_new_wxMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7030,6 +7151,33 @@ static PyObject *_wrap_wxMenuItem_IsCheckable(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxMenuItem_IsSubMenu(_swigobj)  (_swigobj->IsSubMenu())
+static PyObject *_wrap_wxMenuItem_IsSubMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMenuItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuItem_IsSubMenu",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_IsSubMenu. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxMenuItem_IsSubMenu(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxMenuItem_GetId(_swigobj)  (_swigobj->GetId())
 static PyObject *_wrap_wxMenuItem_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7054,6 +7202,34 @@ static PyObject *_wrap_wxMenuItem_GetId(PyObject *self, PyObject *args, PyObject
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxMenuItem_SetId(_swigobj,_swigarg0)  (_swigobj->SetId(_swigarg0))
+static PyObject *_wrap_wxMenuItem_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuItem * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuItem_SetId",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetId. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMenuItem_SetId(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -7088,78 +7264,6 @@ static PyObject *_wrap_wxMenuItem_GetSubMenu(PyObject *self, PyObject *args, PyO
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
-    return _resultobj;
-}
-
-#define wxMenuItem_SetName(_swigobj,_swigarg0)  (_swigobj->SetName(_swigarg0))
-static PyObject *_wrap_wxMenuItem_SetName(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMenuItem * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","strName", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenuItem_SetName",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetName. Expected _wxMenuItem_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxMenuItem_SetName(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxMenuItem_GetName(_swigobj)  (_swigobj->GetName())
-static PyObject *_wrap_wxMenuItem_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxMenuItem * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuItem_GetName",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_GetName. Expected _wxMenuItem_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxMenuItem_GetName(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
-}
-{
-    delete _result;
-}
     return _resultobj;
 }
 
@@ -7604,6 +7708,76 @@ static PyObject *_wrap_wxMenuItem_SetMarginWidth(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxMenuItem_SetText(_swigobj,_swigarg0)  (_swigobj->SetText(_swigarg0))
+static PyObject *_wrap_wxMenuItem_SetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuItem * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","str", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenuItem_SetText",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetText. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMenuItem_SetText(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxMenuItem_GetText(_swigobj)  (_swigobj->GetText())
+static PyObject *_wrap_wxMenuItem_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxMenuItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuItem_GetText",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_GetText. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxMenuItem_GetText(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+}
+    return _resultobj;
+}
+
 #define wxMenuItem_SetTextColour(_swigobj,_swigarg0)  (_swigobj->SetTextColour(_swigarg0))
 static PyObject *_wrap_wxMenuItem_SetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7667,9 +7841,79 @@ static PyObject *_wrap_wxMenuItem_DeleteSubMenu(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxMenuItem_SetCheckable(_swigobj,_swigarg0)  (_swigobj->SetCheckable(_swigarg0))
+static PyObject *_wrap_wxMenuItem_SetCheckable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuItem * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","checkable", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuItem_SetCheckable",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetCheckable. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMenuItem_SetCheckable(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxMenuItem_SetSubMenu(_swigobj,_swigarg0)  (_swigobj->SetSubMenu(_swigarg0))
+static PyObject *_wrap_wxMenuItem_SetSubMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuItem * _arg0;
+    wxMenu * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menu", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenuItem_SetSubMenu",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetSubMenu. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetSubMenu. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMenuItem_SetSubMenu(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef windowscMethods[] = {
+	 { "wxMenuItem_SetSubMenu", (PyCFunction) _wrap_wxMenuItem_SetSubMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuItem_SetCheckable", (PyCFunction) _wrap_wxMenuItem_SetCheckable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_DeleteSubMenu", (PyCFunction) _wrap_wxMenuItem_DeleteSubMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetTextColour", (PyCFunction) _wrap_wxMenuItem_SetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuItem_GetText", (PyCFunction) _wrap_wxMenuItem_GetText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuItem_SetText", (PyCFunction) _wrap_wxMenuItem_SetText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetMarginWidth", (PyCFunction) _wrap_wxMenuItem_SetMarginWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetFont", (PyCFunction) _wrap_wxMenuItem_SetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetBitmaps", (PyCFunction) _wrap_wxMenuItem_SetBitmaps, METH_VARARGS | METH_KEYWORDS },
@@ -7683,15 +7927,17 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuItem_Enable", (PyCFunction) _wrap_wxMenuItem_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetHelp", (PyCFunction) _wrap_wxMenuItem_SetHelp, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetHelp", (PyCFunction) _wrap_wxMenuItem_GetHelp, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenuItem_GetName", (PyCFunction) _wrap_wxMenuItem_GetName, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenuItem_SetName", (PyCFunction) _wrap_wxMenuItem_SetName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetSubMenu", (PyCFunction) _wrap_wxMenuItem_GetSubMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuItem_SetId", (PyCFunction) _wrap_wxMenuItem_SetId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetId", (PyCFunction) _wrap_wxMenuItem_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuItem_IsSubMenu", (PyCFunction) _wrap_wxMenuItem_IsSubMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_IsCheckable", (PyCFunction) _wrap_wxMenuItem_IsCheckable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_IsChecked", (PyCFunction) _wrap_wxMenuItem_IsChecked, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_IsEnabled", (PyCFunction) _wrap_wxMenuItem_IsEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_IsSeparator", (PyCFunction) _wrap_wxMenuItem_IsSeparator, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenuItem", (PyCFunction) _wrap_new_wxMenuItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_Remove", (PyCFunction) _wrap_wxMenuBar_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_Replace", (PyCFunction) _wrap_wxMenuBar_Replace, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Refresh", (PyCFunction) _wrap_wxMenuBar_Refresh, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetMenu", (PyCFunction) _wrap_wxMenuBar_GetMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetMenuCount", (PyCFunction) _wrap_wxMenuBar_GetMenuCount, METH_VARARGS | METH_KEYWORDS },
@@ -7704,9 +7950,9 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuBar_SetLabel", (PyCFunction) _wrap_wxMenuBar_SetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_FindItemForId", (PyCFunction) _wrap_wxMenuBar_FindItemForId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_FindMenuItem", (PyCFunction) _wrap_wxMenuBar_FindMenuItem, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenuBar_Enabled", (PyCFunction) _wrap_wxMenuBar_Enabled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_IsEnabled", (PyCFunction) _wrap_wxMenuBar_IsEnabled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_IsChecked", (PyCFunction) _wrap_wxMenuBar_IsChecked, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Enable", (PyCFunction) _wrap_wxMenuBar_Enable, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenuBar_Checked", (PyCFunction) _wrap_wxMenuBar_Checked, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Check", (PyCFunction) _wrap_wxMenuBar_Check, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Append", (PyCFunction) _wrap_wxMenuBar_Append, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenuBar", (PyCFunction) _wrap_new_wxMenuBar, METH_VARARGS | METH_KEYWORDS },
@@ -7839,6 +8085,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetLabel", (PyCFunction) _wrap_wxWindow_SetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetLabel", (PyCFunction) _wrap_wxWindow_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetId", (PyCFunction) _wrap_wxWindow_GetId, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetHandle", (PyCFunction) _wrap_wxWindow_GetHandle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetGrandParent", (PyCFunction) _wrap_wxWindow_GetGrandParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetForegroundColour", (PyCFunction) _wrap_wxWindow_GetForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetFont", (PyCFunction) _wrap_wxWindow_GetFont, METH_VARARGS | METH_KEYWORDS },
@@ -8005,6 +8252,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxWindow","_wxWindow",0},
     { "_class_wxFont","_wxFont",0},
     { "_class_wxPyValidator","_wxPyValidator",0},
+    { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
@@ -8058,6 +8306,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxScreenDC","_wxScreenDC",0},
     { "_wxPalette","_class_wxPalette",0},
     { "_wxRegion","_class_wxRegion",0},
+    { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSize","_wxSize",0},
     { "_class_wxBitmap","_wxBitmap",0},
