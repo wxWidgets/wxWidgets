@@ -310,6 +310,10 @@ wxCursor::wxCursor(
                                                                   );
             break;
     }
+    //
+    // No need to destroy the stock cursors
+    //
+    ((wxCursorRefData *)m_refData)->m_bDestroyCursor = FALSE;
 } // end of wxCursor::wxCursor
 
 // Global cursor setting

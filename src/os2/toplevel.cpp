@@ -801,7 +801,7 @@ void wxTopLevelWindowOS2::Maximize(
         // We can't maximize the hidden frame because it shows it as well, so
         // just remember that we should do it later in this case
         //
-        m_bMaximizeOnShow = TRUE;
+        m_bMaximizeOnShow = bMaximize;
     }
 } // end of wxTopLevelWindowOS2::Maximize
 

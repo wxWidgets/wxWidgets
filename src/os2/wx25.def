@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -13090,6 +13090,8 @@ EXPORTS
       SetFocus__10wxSpinCtrlFv
       ;wxSpinCtrl::SetValue(const wxString&)
       SetValue__10wxSpinCtrlFRC8wxString
+      ;wxSpinCtrl::OnSetFocus(wxFocusEvent&)
+      OnSetFocus__10wxSpinCtrlFR12wxFocusEvent
       ;wxSpinCtrl::sm_classwxSpinCtrl
       sm_classwxSpinCtrl__10wxSpinCtrl
       ;wxSpinCtrl::m_svAllSpins

@@ -49,7 +49,9 @@ wxArraySpins                        wxSpinCtrl::m_svAllSpins;
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
+    EVT_CHAR(wxSpinCtrl::OnChar)
     EVT_SPIN(-1, wxSpinCtrl::OnSpinChange)
+    EVT_SET_FOCUS(wxSpinCtrl::OnSetFocus)
 END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 // constants
@@ -403,6 +405,18 @@ void wxSpinCtrl::OnSpinChange(
         vEvent.Skip();
     }
 } // end of wxSpinCtrl::OnSpinChange
+
+void wxSpinCtrl::OnSetFocus (
+  wxFocusEvent&                     rEvent
+)
+{
+    //
+    // When we get focus, give it to our buddy window as it needs it more than
+    // we do
+    //
+    ::WinSetFocus(HWND_DESKTOP, (HWND)m_hWndBuddy);
+    rEvent.Skip();
+} // end of wxSpinCtrl::OnSetFocus
 
 bool wxSpinCtrl::ProcessTextCommand(
   WXWORD                            wCmd
