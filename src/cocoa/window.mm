@@ -87,9 +87,9 @@ void wxWindowCocoa::CocoaAddChild(wxWindowCocoa *child)
 
 void wxWindowCocoa::CocoaRemoveFromParent(void)
 {
-    wxASSERT(m_cocoaNSView);
     if(m_dummyNSView)
     {
+        wxASSERT(m_cocoaNSView);
         // balances the alloc
         [m_dummyNSView removeFromSuperview];
         // But since we also retained it ourselves
