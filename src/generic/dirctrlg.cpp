@@ -1642,7 +1642,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         wxLogNull logNull;
         if ( ft && ft->GetIcon(&iconLoc) )
         {
-            ic = wxIcon( iconLoc.GetFileName() );
+            ic = wxIcon( iconLoc );
         }
     }
 
