@@ -186,10 +186,12 @@ bool wxApp::Initialize()
         return FALSE;
     }
 */
-	
+
+#ifndef __GNUWIN32__
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
       wxFatalError(_("Cannot initialize OLE"));
+#endif
 
 #if CTL3D
     if (!Ctl3dRegister(wxhInstance))
@@ -502,7 +504,9 @@ void wxApp::CleanUp()
   if ( wxDisableButtonBrush )
     ::DeleteObject( wxDisableButtonBrush ) ;
 
+#ifndef __GNUWIN32__
   ::OleUninitialize();
+#endif
 
 #if CTL3D
   Ctl3dUnregister(wxhInstance);
