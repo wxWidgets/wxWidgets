@@ -198,6 +198,7 @@ wxMSW:
 
 - compilation fix for VC++ command line build (missing version.mak)
 - fixed release mode build with VC 7.x (Martin Ecker)
+- fix iostream.h problem with VC 7.1 (it doesn't support it any longer) 
 - compilation fix for XRC with mingw32
 
 
