@@ -542,7 +542,7 @@ void wxThread::Sleep(unsigned long milliseconds)
         YieldToAnyThread();
         Microseconds(&now);
         msnow = (now.hi * 4294967296.0 + now.lo) ;
-    } while( msstart - msnow < mssleep );
+    } while( msnow - msstart < mssleep );
 }
 
 int wxThread::GetCPUCount()
