@@ -750,7 +750,7 @@ bool wxFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
       return FALSE;
   }
   else
-    return FALSE;
+    return wxWindow::MSWOnCommand(id, cmd, control);
 }
 
 void wxFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
