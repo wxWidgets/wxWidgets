@@ -3,6 +3,7 @@
 # Author:       Will Sadkin
 # Created:      09/19/2002
 # Copyright:   (c) 2002 by Will Sadkin, 2002
+# RCS-ID:      $Id$
 # License:     wxWindows license
 #----------------------------------------------------------------------------
 # NOTE:
@@ -26,22 +27,24 @@ import string
 _debug = 0
 _indent = 0
 
-def _dbg(*args, **kwargs):
-    global _indent
+if _debug:
+    def _dbg(*args, **kwargs):
+        global _indent
 
-    if _debug:
         if len(args):
             if _indent:      print ' ' * 3 * _indent,
             for arg in args: print arg,
             print
-    # else do nothing
+        # else do nothing
 
-    # post process args:
-    for kwarg, value in kwargs.items():
-        if kwarg == 'indent' and value:         _indent = _indent + 1
-        elif kwarg == 'indent' and value == 0:  _indent = _indent - 1
-        if _indent < 0: _indent = 0
-
+        # post process args:
+        for kwarg, value in kwargs.items():
+            if kwarg == 'indent' and value:         _indent = _indent + 1
+            elif kwarg == 'indent' and value == 0:  _indent = _indent - 1
+            if _indent < 0: _indent = 0
+else:
+    def _dbg(*args, **kwargs):
+        pass
 
 
 # This class of event fires whenever the value of the time changes in the control:
@@ -55,9 +58,39 @@ class TimeUpdatedEvent(wxPyCommandEvent):
         wxPyCommandEvent.__init__(self, wxEVT_TIMEVAL_UPDATED, id)
         self.value = value
     def GetValue(self):
-        """Retrieve the value of the float control at the time this event was generated"""
+        """Retrieve the value of the time control at the time this event was generated"""
         return self.value
 
+
+# Set up all the positions of the cells in the wxTimeCtrl (once at module import):
+# Format of control is:
+#               hh:mm:ss xM
+#                         1
+# positions:    01234567890
+_listCells = ['hour', 'minute', 'second', 'am_pm']
+_listCellRange =   [(0,1,2), (3,4,5), (6,7,8), (9,10,11)]
+_listDelimPos =  [2,5,8]
+
+# Create dictionary of cell ranges, indexed by name or position in the range:
+_dictCellRange = {}
+for i in range(4):
+    _dictCellRange[_listCells[i]] = _listCellRange[i]
+for cell in _listCells:
+    for i in _dictCellRange[cell]:
+        _dictCellRange[i] = _dictCellRange[cell]
+
+
+# Create lists of starting and ending positions for each range, and a dictionary of starting
+# positions indexed by name
+_listStartCellPos = []
+_listEndCellPos = []
+for tup in _listCellRange:
+    _listStartCellPos.append(tup[0])  # 1st char of cell
+    _listEndCellPos.append(tup[1])    # last char of cell (not including delimiter)
+
+_dictStartCellPos = {}
+for i in range(4):
+    _dictStartCellPos[_listCells[i]] = _listStartCellPos[i]
 
 
 class wxTimeCtrl(wxTextCtrl):
@@ -72,46 +105,16 @@ class wxTimeCtrl(wxTextCtrl):
                             pos=pos, size=size, style=style, name=name)
 
         self.__fmt24hr = fmt24hr
+
         if size == wxDefaultSize:
             # set appropriate default sizes depending on format:
             if self.__fmt24hr:
-                testText = '00:00:00 '
+                testText = '00:00:00X'     # give it a little extra space
             else:
-                testText = '00:00:00 XXX'
+                testText = '00:00:00 XXX'  # give it a little extra space
             w, h = self.GetTextExtent(testText)
             self.SetClientSize( (w+4, self.GetClientSize().height) )
 
-        # Set up all the positions of the cells in the wxTimeCtrl (once):
-        # Format of control is:
-        #               hh:mm:ss xM
-        #                         1
-        # positions:    01234567890
-
-        self.__listCells = ['hour', 'minute', 'second', 'am_pm']
-        self.__listCellRange =   [(0,1,2), (3,4,5), (6,7,8), (9,10,11)]
-        self.__listDelimPos =  [2,5,8]
-
-        # Create dictionary of cell ranges, indexed by name or position in the range:
-        self.__dictCellRange = {}
-        for i in range(4):
-            self.__dictCellRange[self.__listCells[i]] = self.__listCellRange[i]
-
-        for cell in self.__listCells:
-            for i in self.__dictCellRange[cell]:
-                self.__dictCellRange[i] = self.__dictCellRange[cell]
-
-
-        # Create lists of starting and ending positions for each range, and a dictionary of starting
-        # positions indexed by name
-        self.__listStartCellPos = []
-        self.__listEndCellPos = []
-        for tup in self.__listCellRange:
-            self.__listStartCellPos.append(tup[0])  # 1st char of cell
-            self.__listEndCellPos.append(tup[1])    # last char of cell (not including delimiter)
-
-        self.__dictStartCellPos = {}
-        for i in range(4):
-            self.__dictStartCellPos[self.__listCells[i]] = self.__listStartCellPos[i]
 
         if self.__fmt24hr:  self.__lastCell = 'second'
         else:               self.__lastCell = 'am_pm'
@@ -123,18 +126,39 @@ class wxTimeCtrl(wxTextCtrl):
             self.SetValue('12:00:00 AM')
 
         # set initial position and selection state
-        self.__SetCurrentCell(self.__dictStartCellPos['hour'])
+        self.__SetCurrentCell(_dictStartCellPos['hour'])
         self.__bSelection = false
+        self.__posSelectTo = self.__posCurrent
 
+        # Set up internal event handlers to change the event reaction behavior of
+        # the base wxTextCtrl:
         EVT_TEXT(self, self.GetId(), self.__OnTextChange)
         EVT_SET_FOCUS(self, self.__OnFocus)
+        EVT_LEFT_UP(self, self.__OnChangePos)
+        EVT_LEFT_DCLICK(self, self.__OnDoubleClick)
         EVT_CHAR(self, self.__OnChar)
 
         if spinButton:
             self.BindSpinbutton(spinButton)     # bind spin button up/down events to this control
 
+
+    def BindSpinButton(self, sb):
+        """
+        This function binds an externally created spin button to the control, so that
+        up/down events from the button automatically change the control.
+        """
+        _dbg('wxTimeCtrl::BindSpinButton')
+        self.__spinButton = sb
+        if self.__spinButton:
+            # bind event handlers to spin ctrl
+            EVT_SPIN_UP(self.__spinButton, self.__spinButton.GetId(), self.__OnSpinUp)
+            EVT_SPIN_DOWN(self.__spinButton, self.__spinButton.GetId(), self.__OnSpinDown)
+
+
+
     def __repr__(self):
         return "<wxTimeCtrl: %s>" % self.GetValue()
+
 
 
     def SetValue(self, value):
@@ -142,8 +166,8 @@ class wxTimeCtrl(wxTextCtrl):
         Validating SetValue function for time strings, doing 12/24 format conversion as appropriate.
         """
         _dbg('wxTimeCtrl::SetValue', indent=1)
-        dict_range = self.__dictCellRange
-        dict_start = self.__dictStartCellPos
+        dict_range = _dictCellRange             # (for brevity)
+        dict_start = _dictStartCellPos
 
         fmt12len = dict_range['am_pm'][-1]
         fmt24len = dict_range['second'][-1]
@@ -169,7 +193,6 @@ class wxTimeCtrl(wxTextCtrl):
             if len_ok and hour_ok and min_ok and sec_ok and separators_correct:
                 _dbg('valid time string')
 
-
                 self.__hour = hour
                 if len(value) == fmt12len:                      # handle 12 hour format conversion for actual hour:
                     am = value[dict_start['am_pm']:] == 'AM'
@@ -187,7 +210,6 @@ class wxTimeCtrl(wxTextCtrl):
                 _dbg('need_to_convert =', need_to_convert)
 
                 if need_to_convert:     #convert to 12/24 hour format as specified:
-                    dict_start = self.__dictStartCellPos
                     if self.__fmt24hr and len(value) == fmt12len:
                         text = '%.2d:%.2d:%.2d' % (hour, minute, second)
                     else:
@@ -218,7 +240,7 @@ class wxTimeCtrl(wxTextCtrl):
             raise ValueError, 'value is not a valid time string'
         _dbg(indent=0)
 
-    def SetFromWxDateTime(self, wxdt):
+    def SetWxDateTime(self, wxdt):
         value = '%2d:%.2d:%.2d' % (wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
         self.SetValue(value)
 
@@ -236,18 +258,6 @@ class wxTimeCtrl(wxTextCtrl):
         t = DateTime.Time(self.__hour, self.__minute, self.__second)
         return t
 
-    def BindSpinButton(self, sb):
-        """
-        This function binds an externally created spin button to the control, so that
-        up/down events from the button automatically change the control.
-        """
-        _dbg('wxTimeCtrl::BindSpinButton')
-        self.__spinButton = sb
-        if self.__spinButton:
-            EVT_SPIN_UP(self.__spinButton, self.__spinButton.GetId(), self.__OnSpinUp)  # bind event handler to spin ctrl
-            EVT_SPIN_DOWN(self.__spinButton, self.__spinButton.GetId(), self.__OnSpinDown)  # bind event handler to spin ctrl
-
-
 #-------------------------------------------------------------------------------------------------------------
 # these are private functions and overrides:
 
@@ -256,7 +266,8 @@ class wxTimeCtrl(wxTextCtrl):
         Sets state variables that indicate the current cell and position within the control.
         """
         self.__posCurrent = pos
-        self.__cellStart, self.__cellEnd = self.__dictCellRange[pos][0], self.__dictCellRange[pos][-1]
+        self.__cellStart, self.__cellEnd = _dictCellRange[pos][0], _dictCellRange[pos][-1]
+
 
     def SetInsertionPoint(self, pos):
         """
@@ -264,6 +275,54 @@ class wxTimeCtrl(wxTextCtrl):
         """
         self.__SetCurrentCell(pos)
         wxTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
+
+
+    def SetSelection(self, sel_start, sel_to):
+        _dbg('wxTimeCtrl::SetSelection', sel_start, sel_to)
+        self.__bSelection = sel_start != sel_to
+        self.__posSelectTo = sel_to
+        wxTextCtrl.SetSelection(self, sel_start, sel_to)
+
+
+    def __OnFocus(self,event):
+        """
+        This event handler is currently necessary to work around new default
+        behavior as of wxPython2.3.3;
+        The TAB key auto selects the entire contents of the wxTextCtrl *after*
+        the EVT_SET_FOCUS event occurs; therefore we can't query/adjust the selection
+        *here*, because it hasn't happened yet.  So to prevent this behavior, and
+        preserve the correct selection when the focus event is not due to tab,
+        we need to pull the following trick:
+        """
+        _dbg('wxTimeCtrl::OnFocus')
+        wxCallAfter(self.__FixSelection)
+
+
+    def __FixSelection(self):
+        """
+        This gets called after the TAB traversal selection is made, if the
+        focus event was due to this, but before the EVT_LEFT_* events if
+        the focus shift was due to a mouse event.
+
+        The trouble is that, a priori, there's no explicit notification of
+        why the focus event we received.  However, the whole reason we need to
+        do this is because the default behavior on TAB traveral in a wxTextCtrl is
+        now to select the entire contents of the window, something we don't want.
+        So we can *now* test the selection range, and if it's "the whole text"
+        we can assume the cause, change the insertion point to the start of
+        the control, and deselect.
+        """
+        _dbg('wxTimeCtrl::FixSelection', indent=1)
+        sel_start, sel_to = self.GetSelection()
+        if sel_start == 0 and sel_to in _dictCellRange[self.__lastCell]:
+            # This isn't normally allowed, and so assume we got here by the new
+            # "tab traversal" behavior, so we need to reset the selection
+            # and insertion point:
+            _dbg('entire text selected; resetting selection to start of control')
+            self.__SetCurrentCell(0)
+            self.SetInsertionPoint(0)
+            self.SetSelection(self.__posCurrent, self.__posCurrent)
+        _dbg(indent=0)
 
 
     def __OnTextChange(self, event):
@@ -284,17 +343,11 @@ class wxTimeCtrl(wxTextCtrl):
         event.Skip()
         _dbg(indent=0)
 
-    def __OnFocus(self, event):
-        """
-        This internal event handler ensures legal setting of input cursor on (re)focus to the control.
-        """
-        _dbg('wxTimeCtrl::OnFocus; ctrl id=', event.GetId())
-        self.__SetCurrentCell(0)
-        self.__bSelection = false
-        self.__posSelectTo = self.__posCurrent
+    def __OnSpin(self, key):
+        self.IncrementValue(key, self.__posCurrent)
+        self.SetFocus()
         self.SetInsertionPoint(self.__posCurrent)
-        event.Skip()
-
+        self.SetSelection(self.__posCurrent, self.__posSelectTo)
 
     def __OnSpinUp(self, event):
         """
@@ -302,9 +355,8 @@ class wxTimeCtrl(wxTextCtrl):
         causes control to behave as if up arrow was pressed.
         """
         _dbg('wxTimeCtrl::OnSpinUp')
-        pos = self.GetInsertionPoint()
-        self.IncrementValue(WXK_UP, pos)
-        self.SetInsertionPoint(pos)
+        self.__OnSpin(WXK_UP)
+
 
     def __OnSpinDown(self, event):
         """
@@ -312,9 +364,42 @@ class wxTimeCtrl(wxTextCtrl):
         causes control to behave as if down arrow was pressed.
         """
         _dbg('wxTimeCtrl::OnSpinDown')
+        self.__OnSpin(WXK_DOWN)
+
+
+    def __OnChangePos(self, event):
+        """
+        Event handler for left mouse click events; this handler
+        changes limits the selection to the new cell boundaries.
+        """
+        _dbg('wxTimeCtrl::OnChangePos', indent=1)
         pos = self.GetInsertionPoint()
-        self.IncrementValue(WXK_DOWN, pos)
-        self.SetInsertionPoint(pos)
+        self.__SetCurrentCell(pos)
+        sel_start, sel_to = self.GetSelection()
+        selection = sel_start != sel_to
+        if not selection:
+            if pos in _listDelimPos:                    # disallow position at end of field:
+                self.__posCurrent = pos-1
+            self.__posSelectTo = self.__posCurrent
+            self.__bSelection = false
+        else:
+            # only allow selection to end of current cell:
+            if sel_to < pos:   self.__posSelectTo = self.__cellStart
+            elif sel_to > pos: self.__posSelectTo = self.__cellEnd
+
+        _dbg('new pos =', pos, 'select to ', self.__posSelectTo, indent=0)
+        self.SetSelection(self.__posCurrent, self.__posSelectTo)
+        event.Skip()
+
+    def __OnDoubleClick(self, event):
+        """
+        Event handler for left double-click mouse events; this handler
+        causes the cell at the double-click point to be selected.
+        """
+        _dbg('wxTimeCtrl::OnDoubleClick')
+        pos = self.GetInsertionPoint()
+        self.__SetCurrentCell(pos)
+        self.SetSelection(self.__cellStart, self.__cellEnd)
 
 
     def __OnChar(self, event):
@@ -339,7 +424,7 @@ class wxTimeCtrl(wxTextCtrl):
         sel_start, sel_to = self.GetSelection()
         selection = sel_start != sel_to
         if not selection:
-            self.__bSelection = false           # predict unselection of entire region
+            self.__bSelection = false                       # predict unselection of entire region
 
         _dbg('keycode = ', key)
         _dbg('pos = ', pos)
@@ -350,8 +435,8 @@ class wxTimeCtrl(wxTextCtrl):
 
         elif key == WXK_TAB:                                # skip to next field if applicable:
             _dbg('key == WXK_TAB')
-            dict_range = self.__dictCellRange
-            dict_start = self.__dictStartCellPos
+            dict_range = _dictCellRange                     # (for brevity)
+            dict_start = _dictStartCellPos
             if event.ShiftDown():                           # tabbing backwords
 
                 ###(NOTE: doesn't work; wxTE_PROCESS_TAB doesn't appear to send us this event!)
@@ -398,30 +483,30 @@ class wxTimeCtrl(wxTextCtrl):
                 if sel_to != pos:
                     if sel_to - 1 == pos:                   # allow unselection of position
                         self.__bSelection = false           # predict unselection of entire region
+                        self.__posSelectTo = pos
                     event.Skip()
-                if pos in self.__listStartCellPos:          # can't select pass delimiters
+                if pos in _listStartCellPos:                # can't select pass delimiters
                     _dbg(indent=0)
                     return
-                elif pos in self.__listEndCellPos:          # can't use normal selection, because position ends up
+                elif pos in _listEndCellPos:                # can't use normal selection, because position ends up
                                                             # at delimeter
                     _dbg('set selection from', pos-1, 'to', self.__posCurrent)
-                    self.__bSelection = true
-                    self.__posSelectTo = pos
                     self.__posCurrent = pos-1
-                    self.SetSelection(self.__posCurrent, self.__posSelectTo)
+                    self.SetSelection(self.__posCurrent, pos)
                     _dbg(indent=0)
                     return
-                else: event.Skip()                          # allow selection
+                else:
+                    self.__posSelectTo = sel_to - 1         # predict change in selection
+                    event.Skip()                            # allow selection
 
             # else... not selecting
             if selection:
                 _dbg('sel_start=', sel_start, 'sel_to=', sel_to, '(Clearing selection)')
                 self.SetSelection(pos,pos)                  # clear selection
-                self.__bSelection = false
 
             if pos == 0:                                    # let base ctrl handle left bound case
                 event.Skip()
-            elif pos in self.__listStartCellPos:            # skip (left) OVER the colon/space:
+            elif pos in _listStartCellPos:                  # skip (left) OVER the colon/space:
                 self.SetInsertionPoint(pos-1)               # (this causes a EVT_TEXT)
                 self.__SetCurrentCell(pos-2)                # set resulting position as "current"
             else:
@@ -433,15 +518,13 @@ class wxTimeCtrl(wxTextCtrl):
             _dbg('key == WXK_RIGHT')
             if event.ShiftDown():
                 _dbg('event.ShiftDown()')
-                if sel_to in self.__listDelimPos:           # can't select pass delimiters
+                if sel_to in _listDelimPos:                 # can't select pass delimiters
                     _dbg(indent=0)
                     return
-                elif pos in self.__listEndCellPos:          # can't use normal selection, because position ends up
+                elif pos in _listEndCellPos:                # can't use normal selection, because position ends up
                                                             # at delimeter
                     _dbg('set selection from', self.__posCurrent, 'to', pos+1)
-                    self.__bSelection = true
-                    self.__posSelectTo = pos+1
-                    self.SetSelection(self.__posCurrent, self.__posSelectTo)
+                    self.SetSelection(self.__posCurrent, pos+1)
                     _dbg(indent=0)
                     return
                 else: event.Skip()
@@ -451,25 +534,30 @@ class wxTimeCtrl(wxTextCtrl):
                     _dbg('sel_start=', sel_start, 'sel_to=', sel_to, '(Clearing selection)')
                     pos = sel_start
                     self.SetSelection(pos,pos)              # clear selection
-                    self.__bSelection = false
-                if pos == self.__dictStartCellPos[self.__lastCell]+1:
+                if pos == _dictStartCellPos[self.__lastCell]+1:
                     _dbg(indent=0)
                     return                                  # don't allow cursor past last cell
-                if pos in self.__listEndCellPos:            # skip (right) OVER the colon/space:
+                if pos in _listEndCellPos:                  # skip (right) OVER the colon/space:
                     self.SetInsertionPoint(pos+1)           # (this causes a EVT_TEXT)
                     self.__SetCurrentCell(pos+2)            # set resulting position
                 else:
                     self.__SetCurrentCell(pos+1)            # record the new cell position after the event is finished
-                self.__bSelection = false
                 event.Skip()
 
         elif key in (WXK_UP, WXK_DOWN):
             _dbg('key in (WXK_UP, WXK_DOWN)')
             self.IncrementValue(key, pos)                   # increment/decrement as appropriate
-            self.SetInsertionPoint(pos)
+
 
         elif key < WXK_SPACE or key == WXK_DELETE or key > 255:
             event.Skip()                                    # non alphanumeric; process normally (Right thing to do?)
+
+        elif chr(key) in ['!', 'c', 'C']:                   # Special character; sets the value of the control to "now"
+            _dbg("key == '!'; setting time to 'now'")
+            now = wxDateTime_Now()
+            self.SetWxDateTime(now)
+            _dbg(indent=0)
+            return
 
         elif chr(key) in string.digits:                     # let ChangeValue validate and update current position
             self.ChangeValue(chr(key), pos)                 # handle event (and swallow it)
@@ -482,6 +570,7 @@ class wxTimeCtrl(wxTextCtrl):
             return
         _dbg(indent=0)
 
+
     def IncrementValue(self, key, pos):
         _dbg('wxTimeCtrl::IncrementValue', key, pos)
         text = self.GetValue()
@@ -490,15 +579,16 @@ class wxTimeCtrl(wxTextCtrl):
         selection = sel_start != sel_to
         cell_selected = selection and sel_to -1 != pos
 
-        dict_start = self.__dictStartCellPos
+        dict_start = _dictStartCellPos                      # (for brevity)
 
         # Determine whether we should change the entire cell or just a portion of it:
-        if( not selection
-            or cell_selected
-            or text[pos] == ' '
-            or text[pos] == '9' and text[pos-1] == ' ' and key == WXK_UP
-            or text[pos] == '1' and text[pos-1] == ' ' and key == WXK_DOWN
+        if( cell_selected
+            or (pos in _listStartCellPos and not selection)
+            or (text[pos] == ' ' and text[pos+1] not in ('1', '2'))
+            or (text[pos] == '9' and text[pos-1] == ' ' and key == WXK_UP)
+            or (text[pos] == '1' and text[pos-1] == ' ' and key == WXK_DOWN)
             or pos >= dict_start['am_pm']):
+
             _dbg(indent=1)
             self.IncrementCell(key, pos)
             _dbg(indent=0)
@@ -511,8 +601,8 @@ class wxTimeCtrl(wxTextCtrl):
                 else:                digit = ' '
             else:
                 if pos == dict_start['hour']:
-                    if int(text[pos + 1]) >3:   mod = 2            # allow for 20-23
-                    else:                       mod = 3            # allow 00-19
+                    if int(text[pos + 1]) >3:   mod = 2             # allow for 20-23
+                    else:                       mod = 3             # allow 00-19
                 elif pos == dict_start['hour'] + 1:
                     if self.__fmt24hr:
                         if text[pos - 1] == '2': mod = 4            # allow hours 20-23
@@ -533,13 +623,12 @@ class wxTimeCtrl(wxTextCtrl):
             _dbg(indent=0)
 
 
-
     def IncrementCell(self, key, pos):
         _dbg('wxTimeCtrl::IncrementCell', key, pos)
         self.__SetCurrentCell(pos)                                  # determine current cell
         hour, minute, second = self.__hour, self.__minute, self.__second
         text = self.GetValue()
-        dict_start = self.__dictStartCellPos
+        dict_start = _dictStartCellPos                              # (for brevity)
         if key == WXK_UP:   inc = 1
         else:               inc = -1
 
@@ -558,11 +647,10 @@ class wxTimeCtrl(wxTextCtrl):
         newvalue = '%.2d:%.2d:%.2d' % (hour, minute, second)
 
         self.__posCurrent = self.__cellStart
-        self.__posSelectTo = self.__cellEnd
-        self.__bSelection = true
         _dbg(indent=1)
         self.SetValue(newvalue)
         _dbg(indent=0)
+        self.SetSelection(self.__cellStart, self.__cellEnd)
 
 
     def ChangeValue(self, char, pos):
@@ -574,10 +662,11 @@ class wxTimeCtrl(wxTextCtrl):
         self.__posSelectTo = sel_to
         self.__bSelection = selection = sel_start != sel_to
         cell_selected = selection and sel_to -1 != pos
+        _dbg('cell_selected =', cell_selected)
 
-        dict_start = self.__dictStartCellPos
+        dict_start = _dictStartCellPos                          # (for brevity)
 
-        if pos in self.__listDelimPos: return                   # don't allow change of punctuation
+        if pos in _listDelimPos: return                         # don't allow change of punctuation
 
         elif( 0 < pos < dict_start['am_pm'] and char not in string.digits):
             return                                              # AM/PM not allowed in this position
@@ -588,25 +677,28 @@ class wxTimeCtrl(wxTextCtrl):
 
         if pos == hour_start:                                   # if at 1st position,
             if self.__fmt24hr:                                  # and using 24 hour format
-                if char not in ('0', '1', '2'):                 # return if digit not 0,1, or 2
-                    return
-                if cell_selected:                               # replace cell contents
+                if cell_selected:                               # replace cell contents with hour represented by digit
                     newtext = '%.2d' % int(char) + text[hour_start+2:]
+                elif char not in ('0', '1', '2'):               # return if digit not 0,1, or 2
+                    return
                 else:                                           # relace current position
                     newtext = char + text[pos+1:]
             else:                                               # (12 hour format)
-                if char not in ('1', ' '):                      # can only type a 1 or space
-                    return
-                if text[pos+1] not in ('0', '1', '2'):          # and then, only if other column is 0,1, or 2
-                    return
-                if( char == ' '                                 # and char isn't space and
-                      and (cell_selected or text[pos+1] == '0')):  # 2nd column is 0 or cell isn't selected
-                    return
-                # else... ok
-                if cell_selected:                               # replace cell contents
-                    newtext = '%2d' % int(char) + text[hour_start+2:]
-                else:                                           # relace current position
-                    newtext = char + text[pos+1:]
+                if cell_selected:
+                    if char == ' ': return                      # can't erase entire cell
+                    elif char == '0':                           # treat 0 as '12'
+                        newtext = '12' + text[hour_start+2:]
+                    else:                                       # replace cell contents with hour represented by digit
+                        newtext = '%2d' % int(char) + text[hour_start+2:]
+                else:
+                    if char not in ('1', ' '):                  # can only type a 1 or space
+                        return
+                    if text[pos+1] not in ('0', '1', '2'):      # and then, only if other column is 0,1, or 2
+                        return
+                    if char == ' ' and text[pos+1] == '0':      # and char isn't space if 2nd column is 0
+                        return
+                    else:                                       # ok; replace current position
+                        newtext = char + text[pos+1:]
                 if char == ' ': self.SetInsertionPoint(pos+1)   # move insert point to legal position
 
         elif pos == hour_start+1:                               # if editing 2nd position of hour
@@ -634,16 +726,17 @@ class wxTimeCtrl(wxTextCtrl):
         else: return    # not a valid position
 
         # update member position vars and set selection to character changed
-        self.__posCurrent = pos+1
-        self.__SetCurrentCell(self.__posCurrent)
+        if not cell_selected:
+            _dbg('selecting current digit')
+            self.SetSelection(self.__posCurrent, pos+1)
         _dbg(indent=1)
         _dbg('newtext=', newtext)
         _dbg(indent=0)
         self.SetValue(newtext)
-        self.SetInsertionPoint(pos+1)
+        self.SetSelection(self.__posCurrent, self.__posSelectTo)
 
 #----------------------------------------------------------------------------
-
+# Test jig for wxTimeCtrl:
 
 if __name__ == '__main__':
     import traceback
@@ -654,14 +747,16 @@ if __name__ == '__main__':
                      fmt24hr = 0, test_mx = 0,
                      style = wxTAB_TRAVERSAL ):
 
-            self.test_mx = test_mx
             wxPanel.__init__(self, parent, id, pos, size, style)
 
-            sizer = wxBoxSizer( wxHORIZONTAL )
+            self.test_mx = test_mx
+
             self.tc = wxTimeCtrl(self, 10, fmt24hr = fmt24hr)
-            sizer.AddWindow( self.tc, 0, wxALIGN_CENTRE|wxLEFT|wxTOP|wxBOTTOM, 5 )
             sb = wxSpinButton( self, 20, wxDefaultPosition, wxSize(-1,20), 0 )
             self.tc.BindSpinButton(sb)
+
+            sizer = wxBoxSizer( wxHORIZONTAL )
+            sizer.AddWindow( self.tc, 0, wxALIGN_CENTRE|wxLEFT|wxTOP|wxBOTTOM, 5 )
             sizer.AddWindow( sb, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 )
 
             self.SetAutoLayout( true )
@@ -686,7 +781,7 @@ if __name__ == '__main__':
             fmt24hr = '24' in sys.argv
             test_mx = 'mx' in sys.argv
             try:
-                frame = wxFrame(NULL, -1, "Junk", wxPoint(20,20), wxSize(100,100) )
+                frame = wxFrame(NULL, -1, "wxTimeCtrl Test", wxPoint(20,20), wxSize(100,100) )
                 panel = TestPanel(frame, -1, wxPoint(-1,-1), fmt24hr=fmt24hr, test_mx = test_mx)
                 frame.Show(true)
             except:
