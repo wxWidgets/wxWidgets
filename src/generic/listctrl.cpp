@@ -417,10 +417,10 @@ private:
     // get the mode (i.e. style)  of the list control
     inline int GetMode() const;
 
-    void SetAttributes(wxDC *dc,
+    // prepare the DC for drawing with these item's attributes, return true if
+    // we need to draw the items background to highlight it, false otherwise
+    bool SetAttributes(wxDC *dc,
                        const wxListItemAttr *attr,
-                       const wxColour& colText,
-                       const wxFont& font,
                        bool highlight);
 
     // these are only used by GetImage/SetImage above, we don't support images
@@ -1518,38 +1518,83 @@ void wxListLineData::SetAttr(wxListItemAttr *attr)
     item->SetAttr(attr);
 }
 
-void wxListLineData::SetAttributes(wxDC *dc,
+bool wxListLineData::SetAttributes(wxDC *dc,
                                    const wxListItemAttr *attr,
-                                   const wxColour& colText,
-                                   const wxFont& font,
-                                   bool highlight)
+                                   bool highlighted)
 {
-    // don't use foregroud colour for drawing highlighted items - this might
+    wxWindow *listctrl = m_owner->GetParent();
+
+    // fg colour
+
+    // don't use foreground colour for drawing highlighted items - this might
     // make them completely invisible (and there is no way to do bit
     // arithmetics on wxColour, unfortunately)
-    if ( !highlight && attr && attr->HasTextColour() )
+    wxColour colText;
+    if ( highlighted )
     {
-        dc->SetTextForeground(attr->GetTextColour());
+        colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     }
     else
     {
-        dc->SetTextForeground(colText);
+        if ( attr && attr->HasTextColour() )
+        {
+            colText = attr->GetTextColour();
+        }
+        else
+        {
+            colText = listctrl->GetForegroundColour();
+        }
     }
 
+    dc->SetTextForeground(colText);
+
+    // font
+    wxFont font;
     if ( attr && attr->HasFont() )
     {
-        dc->SetFont(attr->GetFont());
+        font = attr->GetFont();
     }
     else
     {
-        dc->SetFont(font);
+        font = listctrl->GetFont();
     }
+
+    dc->SetFont(font);
+
+    // bg colour
+    bool hasBgCol = attr && attr->HasBackgroundColour();
+    if ( highlighted || hasBgCol )
+    {
+        if ( highlighted )
+        {
+            dc->SetBrush( *m_owner->m_highlightBrush );
+        }
+        else
+        {
+            dc->SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
+        }
+
+        dc->SetPen( *wxTRANSPARENT_PEN );
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 void wxListLineData::Draw( wxDC *dc )
 {
     wxListItemDataList::Node *node = m_items.GetFirst();
     wxCHECK_RET( node, _T("no subitems at all??") );
+
+    bool highlighted = IsHighlighted();
+
+    wxListItemAttr *attr = GetAttr();
+
+    if ( SetAttributes(dc, attr, highlighted) )
+    {
+        dc->DrawRectangle( m_gi->m_rectHighlight );
+    }
 
     wxListItemData *item = node->GetData();
     if (item->HasImage())
@@ -1575,43 +1620,12 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     if ( !IsVirtual() )
         highlighted = m_highlighted;
 
-    // default foreground colour
-    wxWindow *listctrl = m_owner->GetParent();
-    wxColour colText;
-    if ( highlighted )
-    {
-        colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
-    }
-    else
-    {
-        colText = listctrl->GetForegroundColour();
-    }
-
-    // default font
-    wxFont font = listctrl->GetFont();
-
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
-    //       GetAttr() and move this code into the loop below
+    //       GetAttr() and move these lines into the loop below
     wxListItemAttr *attr = GetAttr();
-    SetAttributes(dc, attr, colText, font, highlighted);
-
-    bool hasBgCol = attr && attr->HasBackgroundColour();
-    if ( highlighted || hasBgCol )
+    if ( SetAttributes(dc, attr, highlighted) )
     {
-        if ( highlighted )
-        {
-            dc->SetBrush( *m_owner->m_highlightBrush );
-        }
-        else
-        {
-            if ( hasBgCol )
-                dc->SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
-            else
-                dc->SetBrush( * wxWHITE_BRUSH );
-        }
-
-        dc->SetPen( * wxTRANSPARENT_PEN );
         dc->DrawRectangle( rectHL );
     }
 
