@@ -44,14 +44,6 @@
 #  include "gsocket.h"
 #endif /* __GSOCKET_STANDALONE__ */
 
-/* Redefine some GUI-only functions to do nothing in console mode */
-#if defined(wxUSE_GUI) && !wxUSE_GUI
-#  define _GSocket_GUI_Init(socket) (1)
-#  define _GSocket_GUI_Destroy(socket)
-#  define _GSocket_Enable_Events(socket)
-#  define _GSocket_Disable_Events(socket)
-#endif /* wxUSE_GUI */
-
 #ifndef __WXWINCE__
 #include <assert.h>
 #else
@@ -761,119 +753,118 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-#if defined(wxUSE_GUI) && !wxUSE_GUI
-
-  GSocketEventFlags result = 0;
-  fd_set readfds;
-  fd_set writefds;
-  fd_set exceptfds;
-  static const struct timeval tv = { 0, 0 };
-
-  assert(socket != NULL);
-
-  FD_ZERO(&readfds);
-  FD_ZERO(&writefds);
-  FD_ZERO(&exceptfds);
-  FD_SET(socket->m_fd, &readfds);
-  FD_SET(socket->m_fd, &writefds);
-  FD_SET(socket->m_fd, &exceptfds);
-
-  /* Check 'sticky' CONNECTION flag first */
-  result |= (GSOCK_CONNECTION_FLAG & socket->m_detected);
-
-  /* If we have already detected a LOST event, then don't try
-   * to do any further processing.
-   */
-  if ((socket->m_detected & GSOCK_LOST_FLAG) != 0)
+  if (USE_GUI())
   {
-    socket->m_establishing = FALSE;
+    GSocketEventFlags result = 0;
+    fd_set readfds;
+    fd_set writefds;
+    fd_set exceptfds;
+    static const struct timeval tv = { 0, 0 };
 
-    return (GSOCK_LOST_FLAG & flags);
-  }
+    assert(socket != NULL);
 
-  /* Try select now */
-  if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
-  {
-    /* What to do here? */
-    return (result & flags);
-  }
+    FD_ZERO(&readfds);
+    FD_ZERO(&writefds);
+    FD_ZERO(&exceptfds);
+    FD_SET(socket->m_fd, &readfds);
+    FD_SET(socket->m_fd, &writefds);
+    FD_SET(socket->m_fd, &exceptfds);
 
-  /* Check for readability */
-  if (FD_ISSET(socket->m_fd, &readfds))
-  {
-    char c;
+    /* Check 'sticky' CONNECTION flag first */
+    result |= (GSOCK_CONNECTION_FLAG & socket->m_detected);
 
-    if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
+    /* If we have already detected a LOST event, then don't try
+     * to do any further processing.
+     */
+    if ((socket->m_detected & GSOCK_LOST_FLAG) != 0)
     {
-      result |= GSOCK_INPUT_FLAG;
-    }
-    else
-    {
-      if (socket->m_server && socket->m_stream)
-      {
-        result |= GSOCK_CONNECTION_FLAG;
-        socket->m_detected |= GSOCK_CONNECTION_FLAG;
-      }
-      else
-      {
-        socket->m_detected = GSOCK_LOST_FLAG;
-        socket->m_establishing = FALSE;
-    
-        /* LOST event: Abort any further processing */
-        return (GSOCK_LOST_FLAG & flags);
-      }
-    }
-  }
-
-  /* Check for writability */
-  if (FD_ISSET(socket->m_fd, &writefds))
-  {
-    if (socket->m_establishing && !socket->m_server)
-    {
-      int error;
-      SOCKLEN_T len = sizeof(error);
-
       socket->m_establishing = FALSE;
 
-      getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+      return (GSOCK_LOST_FLAG & flags);
+    }
 
-      if (error)
+    /* Try select now */
+    if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
+    {
+      /* What to do here? */
+      return (result & flags);
+    }
+
+    /* Check for readability */
+    if (FD_ISSET(socket->m_fd, &readfds))
+    {
+      char c;
+
+      if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
       {
-        socket->m_detected = GSOCK_LOST_FLAG;
-
-        /* LOST event: Abort any further processing */
-        return (GSOCK_LOST_FLAG & flags);
+        result |= GSOCK_INPUT_FLAG;
       }
       else
       {
-        result |= GSOCK_CONNECTION_FLAG;
-        socket->m_detected |= GSOCK_CONNECTION_FLAG;
+        if (socket->m_server && socket->m_stream)
+        {
+          result |= GSOCK_CONNECTION_FLAG;
+          socket->m_detected |= GSOCK_CONNECTION_FLAG;
+        }
+        else
+        {
+          socket->m_detected = GSOCK_LOST_FLAG;
+          socket->m_establishing = FALSE;
+      
+          /* LOST event: Abort any further processing */
+          return (GSOCK_LOST_FLAG & flags);
+        }
       }
     }
-    else
+
+    /* Check for writability */
+    if (FD_ISSET(socket->m_fd, &writefds))
     {
-      result |= GSOCK_OUTPUT_FLAG;
+      if (socket->m_establishing && !socket->m_server)
+      {
+        int error;
+        SOCKLEN_T len = sizeof(error);
+
+        socket->m_establishing = FALSE;
+
+        getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+
+        if (error)
+        {
+          socket->m_detected = GSOCK_LOST_FLAG;
+
+          /* LOST event: Abort any further processing */
+          return (GSOCK_LOST_FLAG & flags);
+        }
+        else
+        {
+          result |= GSOCK_CONNECTION_FLAG;
+          socket->m_detected |= GSOCK_CONNECTION_FLAG;
+        }
+      }
+      else
+      {
+        result |= GSOCK_OUTPUT_FLAG;
+      }
     }
-  }
 
-  /* Check for exceptions and errors (is this useful in Unices?) */
-  if (FD_ISSET(socket->m_fd, &exceptfds))
+    /* Check for exceptions and errors (is this useful in Unices?) */
+    if (FD_ISSET(socket->m_fd, &exceptfds))
+    {
+      socket->m_establishing = FALSE;
+      socket->m_detected = GSOCK_LOST_FLAG;
+
+      /* LOST event: Abort any further processing */
+      return (GSOCK_LOST_FLAG & flags);
+    }
+
+    return (result & flags);
+  }
+  else /* !USE_GUI() */
   {
-    socket->m_establishing = FALSE;
-    socket->m_detected = GSOCK_LOST_FLAG;
-
-    /* LOST event: Abort any further processing */
-    return (GSOCK_LOST_FLAG & flags);
+    assert(socket != NULL);
+    return flags & socket->m_detected;
   }
-
-  return (result & flags);
-
-#else
-
-  assert(socket != NULL);
-  return flags & socket->m_detected;
-
-#endif /* !wxUSE_GUI */
 }
 
 /* Attributes */
