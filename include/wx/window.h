@@ -21,9 +21,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/event.h"           // the base class
-
 #include "wx/list.h"            // defines wxWindowList
-
 #include "wx/cursor.h"          // we have member variables of these classes
 #include "wx/font.h"            // so we can't do without them
 #include "wx/colour.h"

@@ -38,6 +38,11 @@
 #   endif
 #endif
 
+// iostream.h includes windows.h for MinGW with gcc 3
+#if defined(__WXMSW__) && defined(__GNUWIN32__)
+#include "wx/msw/winundef.h"
+#endif
+
 #ifdef __WXDEBUG__
 
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = FALSE);

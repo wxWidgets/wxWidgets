@@ -34,8 +34,9 @@
     #include "wx/panel.h"
     #include "wx/bmpbuttn.h"
     #include "wx/settings.h"
-    #include "wx/dcscreen.h"
 #endif
+
+#include "wx/dcscreen.h"
 
 #include "wx/msw/private.h"
 
