@@ -755,6 +755,33 @@ Returns the average character width for this window.
 Returns a reference to the list of the window's children.
 
 
+\membersection{wxControl::GetClassDefaultAttributes}\label{wxwindowgetclassdefaultattributes}
+
+\func{static wxVisualAttributes}{GetClassDefaultAttributes}{\param{wxWindowVariant}{ variant = \texttt{wxWINDOW\_VARIANT\_NORMAL}}}
+
+Returns the default font and colours which are used by the control. This is
+useful if you want to use the same font or colour in your own control as in a
+standard control -- which is a much better idea than hard coding specific
+colours or fonts which might look completely out of place on the users
+system, especially if it uses themes.
+
+The \arg{variant} parameter is only relevant under Mac currently and is
+ignore under other platforms. Under Mac, it will change the size of the
+returned font. See \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant} 
+for more about this.
+
+This static method is ``overridden'' in many derived classes and so calling,
+for example, \helpref{wxButton}::GetClassDefaultAttributes() will typically
+return the values appropriate for a button which will be normally different
+from those returned by, say, \helpref{wxListCtrl}::GetClassDefaultAttributes().
+
+The \texttt{wxVisualAttributes} structure has at least the fields 
+\texttt{font}, \texttt{colFg} and \texttt{colBg}. All of them may be invalid
+if it was not possible to determine the default control appearance or,
+especially for the background colour, if the field doesn't make sense as is
+the case for \texttt{colBg} for the controls with themed background.
+
+
 \membersection{wxWindow::GetClientSize}\label{wxwindowgetclientsize}
 
 \constfunc{void}{GetClientSize}{\param{int* }{width}, \param{int* }{height}}
@@ -813,6 +840,25 @@ Return the cursor associated with this window.
 \wxheading{See also}
 
 \helpref{wxWindow::SetCursor}{wxwindowsetcursor}
+
+
+\membersection{wxControl::GetDefaultAttributes}\label{wxwindowgetdefaultattributes}
+
+\constfunc{virtual wxVisualAttributes}{GetDefaultAttributes}{\void}
+
+Currently this is the same as calling 
+\helpref{GetClassDefaultAttributes}{wxwindowgetclassdefaultattributes}(\helpref{GetWindowVariant}{wxwindowgetwindowvariant}()).
+
+One advantage of using this function compared to the static version is that
+the call is automatically dispatched to the correct class (as usual with
+virtual functions) and you don't have to specify the class name explicitly.
+
+The other one is that in the future this function could return different
+results, for example it might return a different font for an ``Ok'' button
+than for a generic button if the users GUI is configured to show such buttons
+in bold font. Of course, the down side is that it is impossible to call this
+function without actually having an object to apply it to whereas the static
+version can be used without having to create an object first.
 
 
 \membersection{wxWindow::GetDropTarget}\label{wxwindowgetdroptarget}

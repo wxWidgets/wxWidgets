@@ -133,23 +133,11 @@ wxWindowBase::wxWindowBase()
     m_windowValidator = (wxValidator *) NULL;
 #endif // wxUSE_VALIDATORS
 
-    // use the system default colours
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-    m_foregroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-
-    // don't set the font here for wxMSW as we don't call WM_SETFONT here and
-    // so the font is *not* really set - but calls to SetFont() later won't do
-    // anything because m_font appears to be already set!
-#ifndef __WXMSW__
-    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-#endif // __WXMSW__
-
-    // the colours/fonts are default for now
+    // the colours/fonts are default for now, so leave m_font,
+    // m_backgroundColour and m_foregroundColour uninitialized and set those
     m_hasBgCol =
     m_hasFgCol =
     m_hasFont = false;
-
-    m_isBeingDeleted = false;
 
     // no style bits
     m_exStyle =
@@ -186,16 +174,19 @@ wxWindowBase::wxWindowBase()
 #endif
 
     m_virtualSize = wxDefaultSize;
-    
+
     m_minVirtualWidth =
     m_minVirtualHeight =
     m_maxVirtualWidth =
     m_maxVirtualHeight = -1;
 
-    m_windowVariant = wxWINDOW_VARIANT_NORMAL ;
+    m_windowVariant = wxWINDOW_VARIANT_NORMAL;
 
     // Whether we're using the current theme for this window (wxGTK only for now)
     m_themeEnabled = false;
+
+    // VZ: this one shouldn't exist...
+    m_isBeingDeleted = false;
 }
 
 // common part of window creation process
@@ -625,37 +616,47 @@ void wxWindowBase::SetSizeHints(int minW, int minH,
 
 void wxWindowBase::SetWindowVariant( wxWindowVariant variant )
 {
-    if ( m_windowVariant == variant )
-        return ;
-    
-    m_windowVariant = variant ; 
+    if ( m_windowVariant != variant )
+    {
+        m_windowVariant = variant;
 
-    DoSetWindowVariant( variant ) ;
-    return ;
+        DoSetWindowVariant(variant);
+    }
 }
 
 void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
 {
-    wxFont font = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) ;
-    int size = font.GetPointSize() ;
+    // adjust the font height to correspond to our new variant (notice that
+    // we're only called if something really changed)
+    wxFont font = GetFont();
+    int size = font.GetPointSize();
     switch ( variant )
     {
-        case wxWINDOW_VARIANT_NORMAL :
-            break ;
-        case wxWINDOW_VARIANT_SMALL :
-            font.SetPointSize( size * 3 / 4 ) ;
-            break ;
-        case wxWINDOW_VARIANT_MINI :
-            font.SetPointSize( size * 2 / 3 ) ;
-            break ;
-        case wxWINDOW_VARIANT_LARGE :
-            font.SetPointSize( size * 5 / 4 ) ;
-            break ;
+        case wxWINDOW_VARIANT_NORMAL:
+            break;
+
+        case wxWINDOW_VARIANT_SMALL:
+            size *= 3;
+            size /= 4;
+            break;
+
+        case wxWINDOW_VARIANT_MINI:
+            size *= 2;
+            size /= 3;
+            break;
+
+        case wxWINDOW_VARIANT_LARGE:
+            size *= 5;
+            size /= 4;
+            break;
+
         default:
             wxFAIL_MSG(_T("unexpected window variant"));
-            break ;
+            break;
     }
-    SetFont( font ) ;  
+
+    font.SetPointSize(size);
+    SetFont(font);
 }
 
 void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
@@ -866,8 +867,63 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
 }
 
 // ----------------------------------------------------------------------------
-// cursors, fonts &c
+// colours, fonts &c
 // ----------------------------------------------------------------------------
+
+/* static */ wxVisualAttributes
+wxWindowBase::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    // it is important to return valid values for all attributes from here,
+    // GetXXX() below rely on this
+    wxVisualAttributes attrs;
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+
+    return attrs;
+}
+
+wxColour wxWindowBase::GetBackgroundColour() const
+{
+    if ( !m_backgroundColour.Ok() )
+    {
+        wxASSERT_MSG( !m_hasBgCol, _T("we have invalid explicit bg colour?") );
+
+        // get our default background colour
+        wxColour colBg = GetDefaultAttributes().colBg;
+
+        // we must return some valid colour to avoid redoing this every time
+        // and also to avoid surprizing the applications written for older
+        // wxWindows versions where GetBackgroundColour() always returned
+        // something -- so give them something even if it doesn't make sense
+        // for this window (e.g. it has a themed background)
+        if ( !colBg.Ok() )
+            colBg = GetClassDefaultAttributes().colBg;
+
+        // cache it for the next call
+        wxConstCast(this, wxWindowBase)->m_backgroundColour = colBg;
+    }
+
+    return m_backgroundColour;
+}
+
+wxColour wxWindowBase::GetForegroundColour() const
+{
+    // logic is the same as above
+    if ( !m_hasFgCol && !m_foregroundColour.Ok() )
+    {
+        wxASSERT_MSG( !m_hasFgCol, _T("we have invalid explicit fg colour?") );
+
+        wxColour colFg = GetDefaultAttributes().colFg;
+
+        if ( !colFg.Ok() )
+            colFg = GetClassDefaultAttributes().colFg;
+
+        wxConstCast(this, wxWindowBase)->m_foregroundColour = colFg;
+    }
+
+    return m_foregroundColour;
+}
 
 bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
 {
@@ -908,18 +964,36 @@ bool wxWindowBase::SetCursor(const wxCursor& cursor)
     return true;
 }
 
+wxFont& wxWindowBase::DoGetFont() const
+{
+    // logic is the same as in GetBackgroundColour()
+    if ( !m_font.Ok() )
+    {
+        wxASSERT_MSG( !m_hasFont, _T("we have invalid explicit font?") );
+
+        wxFont font = GetDefaultAttributes().font;
+        if ( !font.Ok() )
+            font = GetClassDefaultAttributes().font;
+
+        wxConstCast(this, wxWindowBase)->m_font = font;
+    }
+
+    // cast is here for non-const GetFont() convenience
+    return wxConstCast(this, wxWindowBase)->m_font;
+}
+
 bool wxWindowBase::SetFont(const wxFont& font)
 {
-    // don't try to set invalid font, always fall back to the default
-    const wxFont& fontOk = font.Ok() ? font : *wxSWISS_FONT;
+    if ( !font.Ok() )
+        return false;
 
-    if ( fontOk == m_font )
+    if ( font == m_font )
     {
         // no change
         return false;
     }
 
-    m_font = fontOk;
+    m_font = font;
 
     m_hasFont = true;
 
@@ -982,7 +1056,7 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
     m_windowValidator = (wxValidator *)validator.Clone();
 
     if ( m_windowValidator )
-        m_windowValidator->SetWindow(this) ;
+        m_windowValidator->SetWindow(this);
 }
 #endif // wxUSE_VALIDATORS
 
@@ -1505,7 +1579,7 @@ void wxWindowBase::SetSizer(wxSizer *sizer, bool deleteOld)
 {
     if ( sizer == m_windowSizer)
         return;
-    
+
     if ( deleteOld )
         delete m_windowSizer;
 
@@ -1906,9 +1980,9 @@ wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt)
     int charHeight = GetCharHeight();
     wxPoint pt2(-1, -1);
     if (pt.x != -1)
-        pt2.x = (int) ((pt.x * 4) / charWidth) ;
+        pt2.x = (int) ((pt.x * 4) / charWidth);
     if (pt.y != -1)
-        pt2.y = (int) ((pt.y * 8) / charHeight) ;
+        pt2.y = (int) ((pt.y * 8) / charHeight);
 
     return pt2;
 }
@@ -1919,9 +1993,9 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
     int charHeight = GetCharHeight();
     wxPoint pt2(-1, -1);
     if (pt.x != -1)
-        pt2.x = (int) ((pt.x * charWidth) / 4) ;
+        pt2.x = (int) ((pt.x * charWidth) / 4);
     if (pt.y != -1)
-        pt2.y = (int) ((pt.y * charHeight) / 8) ;
+        pt2.y = (int) ((pt.y * charHeight) / 8);
 
     return pt2;
 }
