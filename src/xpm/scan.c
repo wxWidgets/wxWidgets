@@ -261,7 +261,7 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
     /*
      * scan shape mask if any
      */
-    if (shapeimage) 
+    if (shapeimage)
     {
 #ifndef FOR_MSW
 # ifndef AMIGA
@@ -293,7 +293,7 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
      *
      */
 
-    if (image) 
+    if (image)
     {
 #ifndef FOR_MSW
 # ifndef AMIGA
@@ -301,7 +301,7 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 	        (image->byte_order == image->bitmap_bit_order))
     	    ErrorStatus = GetImagePixels1(image, width, height, &pmap,
 	    				  storePixel);
-	    else if (image->format == ZPixmap) 
+	    else if (image->format == ZPixmap)
     	{
 	        if (image->bits_per_pixel == 8)
     		    ErrorStatus = GetImagePixels8(image, width, height, &pmap);
@@ -309,7 +309,7 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 		        ErrorStatus = GetImagePixels16(image, width, height, &pmap);
     	    else if (image->bits_per_pixel == 32)
 	        	ErrorStatus = GetImagePixels32(image, width, height, &pmap);
-    	} 
+    	}
 	    else
 	        ErrorStatus = GetImagePixels(image, width, height, &pmap);
 # else
@@ -317,11 +317,8 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 		    		      storePixel);
 # endif /* AMIGA */
 
-#else
-
 	    ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
 		    			storePixel);
-/* calling convention all messed up OS/2 -- figure out later */
 
 #endif
 
@@ -989,9 +986,18 @@ AGetImagePixels (
 #else  /* ndef FOR_MSW */
 
 #ifdef __OS2__
-/* Visual Age cannot deal with old, non-ansi, code */
-static int
-MSWGetImagePixels(
+
+#ifdef __VISAGECPP30__
+static int MSWGetImagePixels(
+  Display*     display
+, XImage*      image
+, unsigned int width
+, unsigned int height
+, PixelsMap*   pmap
+, int          (*storeFunc) (Pixel, PixelsMap*, unsigned int*)
+)
+#else
+static int MSWGetImagePixels(
   Display*     display
 , XImage*      image
 , unsigned int width
@@ -999,6 +1005,8 @@ MSWGetImagePixels(
 , PixelsMap*   pmap
 , int          (*storeFunc) ()
 )
+#endif
+
 #else
 static int
 MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
