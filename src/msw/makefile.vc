@@ -35,7 +35,7 @@ PERIPH_CLEAN_TARGET=
 # Set to 0 if not using GLCanvas (only affects DLL build)
 USE_GLCANVAS=1
 
-# Set to 0 if you are using MSVC 5
+# Set to 1 if you are using MSVC 5
 USE_MSVC_5=0
 
 # These are absolute paths, so that the compiler

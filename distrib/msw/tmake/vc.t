@@ -92,7 +92,7 @@ PERIPH_CLEAN_TARGET=
 # Set to 0 if not using GLCanvas (only affects DLL build)
 USE_GLCANVAS=1
 
-# Set to 0 if you are using MSVC 5
+# Set to 1 if you are using MSVC 5
 USE_MSVC_5=0
 
 # These are absolute paths, so that the compiler
@@ -294,7 +294,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(link) @<<
     $(LINKFLAGS) $(INCREMENTAL)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
-    $(DUMMYOBJ) $(OBJECTS) $(MSLU_LIBS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib $(WXDIR)\lib\regex$(LIBEXT).lib $(DELAY_LOAD)
+    $(DUMMYOBJ) $(OBJECTS) $(MSLU_LIBS) $(guilibsdll) shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib $(WXDIR)\lib\regex$(LIBEXT).lib $(DELAY_LOAD)
 <<
 
 !endif
