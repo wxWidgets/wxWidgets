@@ -111,10 +111,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent, const wxString& message, 
   }
 
   if (ok)
-  {
     ok->SetDefault();
-    ok->SetFocus();
-  }
 
   Layout();
   Centre(wxBOTH);
