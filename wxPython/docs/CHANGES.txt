@@ -55,6 +55,16 @@ Updated the AnalogClockWindow with many enhancements from E. A. Tacão.
 
 wxMac now has wx.ToggleButton!
 
+wx.stc.StyledTextCtrl has been update to version 1.58 of Scintilla.
+
+To help with the wx.stc.StyledTextCtrl performance issues on wxMac
+I've added a SetUseAntiAliasing method (and GetUseAntiAliasing) too
+that will turn off the use of antialiased fonts in the wxSTC, allowing
+it to bypass the slow text measuring routines and use the fast and
+simple one instead.  By default the setting is turned off.  When run
+on OSX The Py* apps have a new item on the Options menu for
+controlling this setting if you would like to experiment with it.
+
 
 
 

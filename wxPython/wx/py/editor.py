@@ -607,15 +607,18 @@ class Editor:
 
     def getStatus(self):
         """Return (filepath, line, column) status tuple."""
-        pos = self.window.GetCurrentPos()
-        line = self.window.LineFromPosition(pos) + 1
-        col = self.window.GetColumn(pos)
-        if self.buffer:
-            name = self.buffer.doc.filepath or self.buffer.name
+        if self.window:
+            pos = self.window.GetCurrentPos()
+            line = self.window.LineFromPosition(pos) + 1
+            col = self.window.GetColumn(pos)
+            if self.buffer:
+                name = self.buffer.doc.filepath or self.buffer.name
+            else:
+                name = ''
+            status = (name, line, col)
+            return status
         else:
-            name = ''
-        status = (name, line, col)
-        return status
+            return ('', 0, 0)
 
     def getText(self):
         """Return contents of editor."""

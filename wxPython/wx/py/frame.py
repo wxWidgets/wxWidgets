@@ -35,6 +35,7 @@ ID_COPY_PLUS = wx.NewId()
 ID_NAMESPACE = wx.NewId()
 ID_PASTE_PLUS = wx.NewId()
 ID_WRAP = wx.NewId()
+ID_USEAA = wx.NewId()
 
 
 class Frame(wx.Frame):
@@ -106,18 +107,18 @@ class Frame(wx.Frame):
 
         m = self.autocompMenu = wx.Menu()
         m.Append(ID_AUTOCOMP_SHOW, 'Show Auto Completion',
-                 'Show auto completion list', 1)
+                 'Show auto completion list', wx.ITEM_CHECK)
         m.Append(ID_AUTOCOMP_MAGIC, 'Include Magic Attributes',
                  'Include attributes visible to __getattr__ and __setattr__',
-                 1)
+                 wx.ITEM_CHECK)
         m.Append(ID_AUTOCOMP_SINGLE, 'Include Single Underscores',
-                 'Include attibutes prefixed by a single underscore', 1)
+                 'Include attibutes prefixed by a single underscore', wx.ITEM_CHECK)
         m.Append(ID_AUTOCOMP_DOUBLE, 'Include Double Underscores',
-                 'Include attibutes prefixed by a double underscore', 1)
+                 'Include attibutes prefixed by a double underscore', wx.ITEM_CHECK)
 
         m = self.calltipsMenu = wx.Menu()
         m.Append(ID_CALLTIPS_SHOW, 'Show Call Tips',
-                 'Show call tips with argument signature and docstring', 1)
+                 'Show call tips with argument signature and docstring', wx.ITEM_CHECK)
 
         m = self.optionsMenu = wx.Menu()
         m.AppendMenu(ID_AUTOCOMP, '&Auto Completion', self.autocompMenu,
@@ -125,7 +126,10 @@ class Frame(wx.Frame):
         m.AppendMenu(ID_CALLTIPS, '&Call Tips', self.calltipsMenu,
                      'Call Tip Options')
         m.Append(ID_WRAP, '&Wrap Lines',
-                 'Wrap lines at right edge', 1)
+                 'Wrap lines at right edge', wx.ITEM_CHECK)
+        if wx.Platform == "__WXMAC__":
+            m.Append(ID_USEAA, '&Use AntiAliasing',
+                     'Use anti-aliased fonts', wx.ITEM_CHECK)
 
         m = self.helpMenu = wx.Menu()
         m.AppendSeparator()
@@ -163,6 +167,7 @@ class Frame(wx.Frame):
         wx.EVT_MENU(self, ID_AUTOCOMP_DOUBLE, self.OnAutoCompleteDouble)
         wx.EVT_MENU(self, ID_CALLTIPS_SHOW, self.OnCallTipsShow)
         wx.EVT_MENU(self, ID_WRAP, self.OnWrap)
+        wx.EVT_MENU(self, ID_USEAA, self.OnUseAA)
 
         wx.EVT_UPDATE_UI(self, ID_NEW, self.OnUpdateMenu)
         wx.EVT_UPDATE_UI(self, ID_OPEN, self.OnUpdateMenu)
@@ -187,6 +192,7 @@ class Frame(wx.Frame):
         wx.EVT_UPDATE_UI(self, ID_AUTOCOMP_DOUBLE, self.OnUpdateMenu)
         wx.EVT_UPDATE_UI(self, ID_CALLTIPS_SHOW, self.OnUpdateMenu)
         wx.EVT_UPDATE_UI(self, ID_WRAP, self.OnUpdateMenu)
+        wx.EVT_UPDATE_UI(self, ID_USEAA, self.OnUpdateMenu)
 
     def OnFileNew(self, event):
         self.bufferNew()
@@ -284,6 +290,11 @@ class Frame(wx.Frame):
         win = wx.Window_FindFocus()
         win.SetWrapMode(event.IsChecked())
 
+    def OnUseAA(self, event):
+        win = wx.Window_FindFocus()
+        win.SetUseAntiAliasing(event.IsChecked())
+        
+
     def OnUpdateMenu(self, event):
         """Update menu items based on current status and context."""
         win = wx.Window_FindFocus()
@@ -342,6 +353,8 @@ class Frame(wx.Frame):
                 event.Check(win.autoCallTip)
             elif id == ID_WRAP:
                 event.Check(win.GetWrapMode())
+            elif id == ID_USEAA:
+                event.Check(win.GetUseAntiAliasing())
             else:
                 event.Enable(False)
         except AttributeError:
