@@ -932,7 +932,7 @@ wxString wxLocale::GetSystemEncodingName()
 #ifdef __WIN32__
     // FIXME: what is the error return value for GetACP()?
     UINT codepage = ::GetACP();
-    encname.Printf(_T("cp%u"), codepage);
+    encname.Printf(_T("windows-%u"), codepage);
 #elif defined(__UNIX_LIKE__)
 
 #if defined(HAVE_LANGINFO_H) && defined(CODESET)
