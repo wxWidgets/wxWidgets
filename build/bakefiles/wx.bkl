@@ -12,21 +12,22 @@
     </phony>
 
     <set var="BUILDING_LIB">1</set>
-
+    
     <!-- common rules, names etc. for wx: -->
     <include file="common.bkl"/>
-
+    
     <!-- list of files sorted into categories: -->
     <include file="files.bkl"/>
-
+    
     <!-- wxWindows variant where everything is in one library: -->
     <include file="monolithic.bkl"/>
     <!-- ...and when there are multiple libraries: -->
     <include file="multilib.bkl"/>
     <!-- OpenGL canvas is built as separate library in both cases: -->
     <include file="opengl.bkl"/>
-    
-    
+    <!-- Dynamically loadable plugins: -->
+    <include file="plugins.bkl"/>
+ 
     <!-- Samples target (not dependency of 'all'): -->
     <subproject id="samples">
         <installable>no</installable>

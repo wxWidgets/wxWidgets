@@ -1993,6 +1993,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/joystick.h
     wx/laywin.h
     wx/sashwin.h
+    wx/sound.h
     wx/splash.h
     wx/taskbar.h
     wx/tipdlg.h
@@ -2033,13 +2034,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_UNIX_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/unix/joystick.cpp
+    src/unix/sound.cpp
     src/unix/taskbarx11.cpp
-    src/unix/wave.cpp
 </set>
 <set var="ADVANCED_UNIX_HDR" hints="files">
     wx/unix/joystick.h
+    wx/unix/sound.h
     wx/unix/taskbarx11.h
-    wx/unix/wave.h
 </set>
 
 
@@ -2165,6 +2166,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 
+<!-- ====================================================================== -->
+<!--                             Misc plugin sources:                       -->
+<!-- ====================================================================== -->
+
+<set var="UNIX_SOUND_SRC_SDL" hints="files">
+    src/unix/sound_sdl.cpp
+</set>
 
 <!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
@@ -2337,5 +2345,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC)
         $(XML_SRC) $(ODBC_SRC)
     </set>
+    
+    
+    
+    <!-- ================================================================ -->
+    <!--        Define where plugins sources go if USE_PLUGINS=0          -->
+    <!-- ================================================================ -->
 
+    <!-- wxAdv sources -->
+    <set var="PLUGIN_ADV_SRC">
+        <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
+            $(UNIX_SOUND_SRC_SDL)
+        </if>
+    </set>
+    
+    <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_ADV_SRC)</set>
+    
 </makefile>

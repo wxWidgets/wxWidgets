@@ -10,7 +10,8 @@
     <using module="wxwin"/>
 
     <include file="config.bkl"/>
-    
+
+    <include file="plugins_deps.bkl"/>
     
     <!-- ================================================================== -->
     <!--                     wxWindows version numbers:                     -->
@@ -464,9 +465,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
     <!-- =============================================================== -->
 
     <if cond="WX_STABLE_BRANCH=='1'">
-        <set var="PLUGIN_VERSION">
+        <set var="PLUGIN_VERSION0">
             <if cond="PLATFORM_UNIX=='1'">
-                -$(WXVER_MAJOR).$(WXVER_MINOR)
+                $(WXVER_MAJOR).$(WXVER_MINOR)
             </if>
             <if cond="PLATFORM_UNIX=='0'">
                 $(WXVER_MAJOR)$(WXVER_MINOR)
@@ -474,32 +475,50 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         </set>
     </if>
     <if cond="WX_STABLE_BRANCH=='0'">
-        <set var="PLUGIN_VERSION">
+        <set var="PLUGIN_VERSION0">
             <if cond="PLATFORM_UNIX=='1'">
-                -$(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)
+                $(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)
             </if>
             <if cond="PLATFORM_UNIX=='0'">
                 $(WXVER_MAJOR)$(WXVER_MINOR)$(WXVER_RELEASE)
             </if>
         </set>
     </if>
+    <set var="PLUGVERDELIM">
+        <if cond="PLATFORM_UNIX=='1'">-</if>
+        <if cond="PLATFORM_UNIX=='0'"></if>
+    </set>
+    <set var="PLUGIN_VERSION">$(PLUGVERDELIM)$(PLUGIN_VERSION0)</set>
+    
+    <set var="PLUGINSUFFIX">
+        <if cond="UNICODE=='0' and BUILD=='release'"></if>
+        <if cond="UNICODE=='0' and BUILD=='debug'">_d</if>
+        <if cond="UNICODE=='1' and BUILD=='release'">_u</if>
+        <if cond="UNICODE=='1' and BUILD=='debug'">_ud</if>
+    </set>
+
+    <set var="PLUGINS_INST_DIR" make_var="1">
+        $(LIBDIR)/wx/$(PLUGIN_VERSION0)
+    </set>
 
     <define-rule name="wx-base-plugin" extends="module">
         <template>
             <dllname>
-                $(id)$(addPrefixIfNotEmpty('_',WXNAMESUFFIX))$(PLUGIN_VERSION)$(WXCOMPILER)
+                $(id)$(PLUGINSUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
             <define>WXUSINGDLL</define>
             <define>wxUSE_GUI=0</define>
+            <install-to>$(PLUGINS_INST_DIR)</install-to>
         </template>
     </define-rule>
     
     <define-rule name="wx-gui-plugin" extends="module">
         <template template="wx">
             <dllname>
-                $(id)_$(PORTNAME)$(WXUNIVNAME)$(WXNAMESUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
+                $(id)_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
             <define>WXUSINGDLL</define>
+            <install-to>$(PLUGINS_INST_DIR)</install-to>
         </template>
     </define-rule>
     

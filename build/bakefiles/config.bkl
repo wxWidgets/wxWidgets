@@ -100,6 +100,20 @@ Acts according to DEBUG_INFO by default.
         </description>
     </option>
     
+    <if cond="FORMAT=='autoconf'"> <!-- FIXME - temporary -->
+        <option name="USE_PLUGINS">
+            <values>0,1</values>
+            <default-value>1</default-value>
+            <description>
+                Build parts of the library as dynamically loadable plugins
+                (only supported in multilib build)?
+            </description>
+        </option>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="USE_PLUGINS">0</set> <!-- FIXME - temporary -->
+    </if>
+    
     <option name="USE_GUI">
         <values>0,1</values>
         <values-description>Base,GUI</values-description>
@@ -181,6 +195,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="EXTRALIBS_ODBC"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
+        <option name="EXTRALIBS_SDL"/>
         <option name="HOST_SUFFIX"/>
         <option name="SAMPLES_RPATH_FLAG"/>
         <option name="SAMPLES_RPATH_POSTLINK"/>
@@ -188,6 +203,10 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
         <set var="RUNTIME_LIBS">dynamic</set>
         <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
+    
+        <option name="WITH_PLUGIN_SDL">
+            <values>0,1</values>
+        </option>
     </if>
 
     
@@ -223,6 +242,9 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='vc'">opengl32.lib glu32.lib</if>
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
+        <set var="EXTRALIBS_SDL"/>
+
+        <set var="WITH_PLUGIN_SDL">0</set>
 
         <set var="SRCDIR">
             <if cond="BUILDING_LIB=='1'">..$(DIRSEP)..</if>

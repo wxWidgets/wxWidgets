@@ -43,6 +43,7 @@ EXTRALIBS = {
     'xml' : '$(EXTRALIBS_XML)',
     'html' : '$(EXTRALIBS_HTML)',
     'odbc' : '$(EXTRALIBS_ODBC)',
+    'adv' : '$(PLUGIN_ADV_EXTRALIBS)',
 }
 
 def mkLibName(wxid):
@@ -142,4 +143,4 @@ def headersOnly(files):
 
 def makeDspDependency(lib):
     """Returns suitable entry for <depends-on-dsp> for main libs."""
-    return '%s:$(nativePaths(WXTOPDIR))build\msw\wx_%s.dsp' % (lib,lib)
+    return '%s:$(nativePaths(WXTOPDIR))build\\msw\\wx_%s.dsp' % (lib,lib)

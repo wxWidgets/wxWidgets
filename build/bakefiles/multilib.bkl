@@ -79,15 +79,16 @@
          cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_ADV</define>
-        <sources>$(ADVANCED_SRC)</sources>
+        <sources>$(ADVANCED_SRC) $(PLUGIN_ADV_SRC)</sources>
         <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
         <library>coredll</library>
         <library>basedll</library>
+        <ldlibs>$(PLUGIN_ADV_EXTRALIBS)</ldlibs>
     </dll>
     
     <lib id="advlib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
-        <sources>$(ADVANCED_SRC)</sources>
+        <sources>$(ADVANCED_SRC) $(PLUGIN_ADV_SRC)</sources>
         <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
     </lib>
     
@@ -190,5 +191,5 @@
     </lib>
     
     <set var="MSVC6PRJ_MERGED_TARGETS" append="1">xml=xmllib+xmldll</set>
-
+    
 </makefile>
