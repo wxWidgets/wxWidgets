@@ -1091,7 +1091,7 @@ wxTreeItemId wxGenericTreeCtrl::GetNextChild(const wxTreeItemId& item,
     size_t *pIndex = (size_t *)&cookie;
     if ( *pIndex < children.Count() )
     {
-        return children.Item(*pIndex++);
+        return children.Item((*pIndex)++);
     }
     else
     {
