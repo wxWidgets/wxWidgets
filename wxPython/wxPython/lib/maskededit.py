@@ -54,14 +54,29 @@ mask=
 Allowed mask characters and function:
     Character   Function
             #       Allow numeric only (0-9)
-            N       Allow letters (a-z,A-Z) and numbers (0-9)
-            A       Allow uppercase letters only (A-Z)
-            a       Allow lowercase letters only (a-z)
-            X       Allow any typeable character
-            C       Allow any letter, upper or lower (a-z,A-Z)
+            N       Allow letters and numbers (0-9)
+            A       Allow uppercase letters only
+            a       Allow lowercase letters only
+            C       Allow any letter, upper or lower
+            X       Allow string.letters, string.punctuation, string.digits
 
-  Using these characters, a variety of template masks can be built. See the
-  demo for some other common examples include date+time, social security
+
+  Note:
+    These controls define these sets of characters using string.letters,
+    string.uppercase, etc.  These sets are affected by the system locale
+    setting, so in order to have the masked controls accept characters
+    that are specific to your users' language, your application should
+    set the locale.
+    For example, to allow international characters to be used in the
+    above masks, you can place the following in your code as part of
+    your application's initialization code:
+
+      import locale
+      locale.setlocale(locale.LC_ALL, '')
+
+
+  Using these mask characters, a variety of template masks can be built. See
+  the demo for some other common examples include date+time, social security
   number, etc.  If any of these characters are needed as template rather
   than mask characters, they can be escaped with \, ie. \N means "literal N".
   (use \\ for literal backslash, as in: r'CCC\\NNN'.)
@@ -561,22 +576,13 @@ control = (WXK_BACK, WXK_DELETE, WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V,
 ## Constants for masking. This is where mask characters
 ## are defined.
 ##  maskchars used to identify valid mask characters from all others
-##  masktran  used to replace mask chars with spaces
-##  maskchardict  used to defined allowed character sets for each mask char
 ##   #- allow numeric 0-9 only
 ##   A- allow uppercase only. Combine with forceupper to force lowercase to upper
 ##   a- allow lowercase only. Combine with forcelower to force upper to lowercase
-##   X- allow any character (letters, punctuation, digits)
+##   X- allow any character (string.letters, string.punctuation, string.digits)
+## Note: locale settings affect what "uppercase", lowercase, etc comprise.
 ##
 maskchars = ("#","A","a","X","C","N")
-maskchardict  = {
-        "#": string.digits,
-        "A": string.uppercase,
-        "a": string.lowercase,
-        "X": string.letters + string.punctuation + string.digits,
-        "C": string.letters,
-        "N": string.letters + string.digits
-        }
 
 months = '(01|02|03|04|05|06|07|08|09|10|11|12)'
 charmonths = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)'
@@ -1017,6 +1023,19 @@ class wxMaskedEditMixin:
         ## so that they can be augmented and/or changed in derived classes:
         self._nav = list(nav)
         self._control = list(control)
+
+        ## Dynamically evaluate and store string constants for mask chars
+        ## so that locale settings can be made after this module is imported
+        ## and the controls created after that is done can allow the
+        ## appropriate characters:
+        self.maskchardict  = {
+            "#": string.digits,
+            "A": string.uppercase,
+            "a": string.lowercase,
+            "X": string.letters + string.punctuation + string.digits,
+            "C": string.letters,
+            "N": string.letters + string.digits
+        }
 
         ## self._ignoreChange is used by wxMaskedComboBox, because
         ## of the hack necessary to determine the selection; it causes
@@ -2978,7 +2997,7 @@ class wxMaskedEditMixin:
             mask character plus control options
         """
         maskChar = self.maskdict[pos]
-        okchars = maskchardict[maskChar]        ## entry, get mask approved characters
+        okchars = self.maskchardict[maskChar]    ## entry, get mask approved characters
         field = self._FindField(pos)
         if okchars and field._okSpaces:          ## Allow spaces?
             okchars += " "
@@ -3952,15 +3971,26 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         self._SetSelection(0, len(self._mask))
 
         # make SetValue behave the same as if you had typed the value in:
-        value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
-        if self._isDec:
-            self._isNeg = False     # (clear current assumptions)
-            value = self._adjustDec(value)
-        elif self._isInt:
-            self._isNeg = False     # (clear current assumptions)
-            value = self._adjustInt(value)
-        elif self._isDate:
-            value = self._adjustDate(value)
+        try:
+            value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+            if self._isDec:
+                self._isNeg = False     # (clear current assumptions)
+                value = self._adjustDec(value)
+            elif self._isInt:
+                self._isNeg = False     # (clear current assumptions)
+                value = self._adjustInt(value)
+            elif self._isDate and not self.IsValid(value) and self._4digityear:
+                value = self._adjustDate(value, fixcentury=true)
+        except ValueError:
+            # If date, year might be 2 digits vs. 4; try adjusting it:
+            if self._isDate and self._4digityear:
+                dateparts = value.split(' ')
+                dateparts[0] = self._adjustDate(dateparts[0], fixcentury=true)
+                value = string.join(dateparts, ' ')
+                dbg('adjusted value: "%s"' % value)
+                value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+            else:
+                raise
 
         self._SetValue(value)
         dbg(indent=0)
@@ -4193,15 +4223,26 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         self._SetSelection(0, len(self._mask))
 
         # make SetValue behave the same as if you had typed the value in:
-        value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
-        if self._isDec:
-            self._isNeg = False     # (clear current assumptions)
-            value = self._adjustDec(value)
-        elif self._isInt:
-            self._isNeg = False     # (clear current assumptions)
-            value = self._adjustInt(value)
-        elif self._isDate:
-            value = self._adjustDate(value)
+        try:
+            value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+            if self._isDec:
+                self._isNeg = False     # (clear current assumptions)
+                value = self._adjustDec(value)
+            elif self._isInt:
+                self._isNeg = False     # (clear current assumptions)
+                value = self._adjustInt(value)
+            elif self._isDate and not self.IsValid(value) and self._4digityear:
+                value = self._adjustDate(value, fixcentury=true)
+        except ValueError:
+            # If date, year might be 2 digits vs. 4; try adjusting it:
+            if self._isDate and self._4digityear:
+                dateparts = value.split(' ')
+                dateparts[0] = self._adjustDate(dateparts[0], fixcentury=true)
+                value = string.join(dateparts, ' ')
+                dbg('adjusted value: "%s"' % value)
+                value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+            else:
+                raise
 
         self._SetValue(value)
 
@@ -4311,8 +4352,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
 
         self._ignoreChange = False              # tell _OnTextChange() to pay attn again
 
-        dbg('computed selection:', sel_start, sel_to, indent=0)
-        dbg(suspend=0)  # resume regular debugging
+        dbg('computed selection:', sel_start, sel_to, indent=0, suspend=0)
         return sel_start, sel_to
 
 
@@ -4455,6 +4495,45 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
             print "value:", self.GetAddress()
         return False
 
+    def SetValue(self, value):
+        dbg('wxIpAddrCtrl::SetValue(%s)' % str(value), indent=1)
+        if type(value) != types.StringType:
+            raise ValueError('%s must be a string', str(value))
+
+        bValid = True   # assume true
+        parts = value.split('.')
+        if len(parts) != 4:
+            bValid = False
+        else:
+            for i in range(4):
+                part = parts[i]
+                if not 0 <= len(part) <= 3:
+                    bValid = False
+                    break
+                elif part.strip():  # non-empty part
+                    try:
+                        j = string.atoi(part)
+                        if not 0 <= j <= 255:
+                            bValid = False
+                            break
+                        else:
+                            parts[i] = '%3d' % j
+                    except:
+                        bValid = False
+                        break
+                else:
+                    # allow empty sections for SetValue (will result in "invalid" value,
+                    # but this may be useful for initializing the control:
+                    parts[i] = '   '    # convert empty field to 3-char length
+
+        if not bValid:
+            dbg(indent=0)
+            raise ValueError('value (%s) must be a string of form n.n.n.n where n is empty or in range 0-255' % str(value))
+        else:
+            dbg('parts:', parts)
+            value = string.join(parts, '.')
+            wxMaskedTextCtrl.SetValue(self, value)
+        dbg(indent=0)
 
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
@@ -4891,11 +4970,13 @@ i=1
 ##   9. Exposed all (valid) autoformats to demo, binding descriptions to
 ##      autoformats.
 ##  10. Fixed a couple of bugs in email regexp.
-##  11. Modified autoformats to be more amenable to international use.
+##  11. Made maskchardict an instance var, to make mask chars to be more
+##      amenable to international use.
 ##  12. Clarified meaning of '-' formatcode in doc.
 ##  13. Fixed a couple of coding bugs being flagged by Python2.1.
 ##  14. Fixed several issues with sign positioning, erasure and validity
 ##      checking for "numeric" masked controls.
+##  15. Added validation to wxIpAddrCtrl.SetValue().
 ##
 ##  Version 1.1
 ##   1. Changed calling interface to use boolean "useFixedWidthFont" (True by default)
