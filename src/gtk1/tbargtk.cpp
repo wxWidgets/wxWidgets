@@ -44,6 +44,28 @@ extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
 
 // ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// translate wxWindows toolbar style flags to GTK orientation and style
+static void GetGtkStyle(long style,
+                        GtkOrientation *orient, GtkToolbarStyle *gtkStyle)
+{
+    *orient = style & wxTB_VERTICAL ? GTK_ORIENTATION_VERTICAL
+                                    : GTK_ORIENTATION_HORIZONTAL;
+
+
+    if ( style & wxTB_TEXT )
+    {
+        *gtkStyle = style & wxTB_NOICONS ? GTK_TOOLBAR_TEXT : GTK_TOOLBAR_BOTH;
+    }
+    else // no text, hence we must have the icons or what would we show?
+    {
+        *gtkStyle = GTK_TOOLBAR_ICONS;
+    }
+}
+
+// ----------------------------------------------------------------------------
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
@@ -52,13 +74,14 @@ class wxToolBarTool : public wxToolBarToolBase
 public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
+                  const wxString& label,
                   const wxBitmap& bitmap1,
                   const wxBitmap& bitmap2,
-                  bool toggle,
+                  wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelpString,
                   const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
+        : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
                             clientData, shortHelpString, longHelpString)
     {
         Init();
@@ -68,6 +91,27 @@ public:
         : wxToolBarToolBase(tbar, control)
     {
         Init();
+    }
+
+    // this is only called for the normal buttons, i.e. not separators nor
+    // controls
+    GtkToolbarChildType GetGtkChildType() const
+    {
+        switch ( GetKind() )
+        {
+            case wxITEM_CHECK:
+                return GTK_TOOLBAR_CHILD_TOGGLEBUTTON;
+
+            case wxITEM_RADIO:
+                return GTK_TOOLBAR_CHILD_RADIOBUTTON;
+
+            default:
+                wxFAIL_MSG( _T("unknown toolbar child type") );
+                // fall through
+
+            case wxITEM_NORMAL:
+                return GTK_TOOLBAR_CHILD_BUTTON;
+        }
     }
 
     GtkWidget            *m_item;
@@ -167,14 +211,15 @@ void wxToolBarTool::Init()
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
+                                         const wxString& text,
                                          const wxBitmap& bitmap1,
                                          const wxBitmap& bitmap2,
-                                         bool toggle,
+                                         wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelpString,
                                          const wxString& longHelpString)
 {
-    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
+    return new wxToolBarTool(this, id, text, bitmap1, bitmap2, kind,
                              clientData, shortHelpString, longHelpString);
 }
 
@@ -219,15 +264,15 @@ bool wxToolBar::Create( wxWindow *parent,
         return FALSE;
     }
 
-    GtkOrientation orient = style & wxTB_VERTICAL ? GTK_ORIENTATION_VERTICAL
-                                                  : GTK_ORIENTATION_HORIZONTAL;
-
 #ifdef __WXGTK20__
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
-    gtk_toolbar_set_orientation(m_toolbar, orient);
-    gtk_toolbar_set_style(m_toolbar, GTK_TOOLBAR_ICONS);
+    GtkSetStyle();
 #else
-    m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( orient, GTK_TOOLBAR_ICONS ) );
+    GtkOrientation orient;
+    GtkToolbarStyle gtkStyle;
+    GetGtkStyle(style, &orient, &gtkStyle);
+
+    m_toolbar = GTK_TOOLBAR( gtk_toolbar_new(orient, gtkStyle) );
 #endif
 
     SetToolSeparation(7);
@@ -293,6 +338,24 @@ bool wxToolBar::Create( wxWindow *parent,
     return TRUE;
 }
 
+void wxToolBar::GtkSetStyle()
+{
+    GtkOrientation orient;
+    GtkToolbarStyle style;
+    GetGtkStyle(GetWindowStyle(), &orient, &style);
+
+    gtk_toolbar_set_orientation(m_toolbar, orient);
+    gtk_toolbar_set_style(m_toolbar, style);
+}
+
+void wxToolBar::SetWindowStyleFlag( long style )
+{
+    wxToolBarBase::SetWindowStyleFlag(style);
+
+    if ( m_toolbar )
+        GtkSetStyle();
+}
+
 bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
@@ -337,11 +400,9 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             tool->m_item = gtk_toolbar_insert_element
                            (
                               m_toolbar,
-                              tool->CanBeToggled()
-                                ? GTK_TOOLBAR_CHILD_TOGGLEBUTTON
-                                : GTK_TOOLBAR_CHILD_BUTTON,
+                              tool->GetGtkChildType(),
                               (GtkWidget *)NULL,
-                              (const char *)NULL,
+                              tool->GetLabel().mbc_str(),
                               tool->GetShortHelp().mbc_str(),
                               "", // tooltip_private_text (?)
                               tool->m_pixmap,

@@ -74,7 +74,7 @@ bool wxToolBarToolBase::Enable(bool enable)
 
 bool wxToolBarToolBase::Toggle(bool toggle)
 {
-    wxASSERT_MSG( m_isToggle, _T("can't toggle this tool") );
+    wxASSERT_MSG( CanBeToggled(), _T("can't toggle this tool") );
 
     if ( m_toggled == toggle )
         return FALSE;
@@ -86,10 +86,11 @@ bool wxToolBarToolBase::Toggle(bool toggle)
 
 bool wxToolBarToolBase::SetToggle(bool toggle)
 {
-    if ( m_isToggle == toggle )
+    wxItemKind kind = toggle ? wxITEM_CHECK : wxITEM_NORMAL;
+    if ( m_kind == kind )
         return FALSE;
 
-    m_isToggle = toggle;
+    m_kind = kind;
 
     return TRUE;
 }
@@ -132,34 +133,36 @@ wxToolBarBase::wxToolBarBase()
     m_maxRows = m_maxCols = 0;
 }
 
-wxToolBarToolBase *wxToolBarBase::AddTool(int id,
-                                          const wxBitmap& bitmap,
-                                          const wxBitmap& pushedBitmap,
-                                          bool toggle,
-                                          wxCoord WXUNUSED(xPos),
-                                          wxCoord WXUNUSED(yPos),
-                                          wxObject *clientData,
-                                          const wxString& helpString1,
-                                          const wxString& helpString2)
+wxToolBarToolBase *wxToolBarBase::DoAddTool(int id,
+                                            const wxString& label,
+                                            const wxBitmap& bitmap,
+                                            const wxBitmap& bmpDisabled,
+                                            wxItemKind kind,
+                                            const wxString& shortHelp,
+                                            const wxString& longHelp,
+                                            wxObject *clientData,
+                                            wxCoord WXUNUSED(xPos),
+                                            wxCoord WXUNUSED(yPos))
 {
-    return InsertTool(GetToolsCount(), id, bitmap, pushedBitmap,
-                      toggle, clientData, helpString1, helpString2);
+    return InsertTool(GetToolsCount(), id, label, bitmap, bmpDisabled,
+                      kind, shortHelp, longHelp, clientData);
 }
 
 wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
                                              int id,
+                                             const wxString& label,
                                              const wxBitmap& bitmap,
-                                             const wxBitmap& pushedBitmap,
-                                             bool toggle,
-                                             wxObject *clientData,
-                                             const wxString& helpString1,
-                                             const wxString& helpString2)
+                                             const wxBitmap& bmpDisabled,
+                                             wxItemKind kind,
+                                             const wxString& shortHelp,
+                                             const wxString& longHelp,
+                                             wxObject *clientData)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
                  _T("invalid position in wxToolBar::InsertTool()") );
 
-    wxToolBarToolBase *tool = CreateTool(id, bitmap, pushedBitmap, toggle,
-                                         clientData, helpString1, helpString2);
+    wxToolBarToolBase *tool = CreateTool(id, label, bitmap, bmpDisabled, kind,
+                                         clientData, shortHelp, longHelp);
 
     if ( !tool || !DoInsertTool(pos, tool) )
     {
@@ -214,8 +217,9 @@ wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
                  _T("invalid position in wxToolBar::InsertSeparator()") );
 
     wxToolBarToolBase *tool = CreateTool(wxID_SEPARATOR,
+                                         wxEmptyString,
                                          wxNullBitmap, wxNullBitmap,
-                                         FALSE, (wxObject *)NULL,
+                                         wxITEM_SEPARATOR, (wxObject *)NULL,
                                          wxEmptyString, wxEmptyString);
 
     if ( !tool || !DoInsertTool(pos, tool) )

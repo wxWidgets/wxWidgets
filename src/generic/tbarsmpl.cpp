@@ -48,14 +48,15 @@ class WXDLLEXPORT wxToolBarToolSimple : public wxToolBarToolBase
 public:
     wxToolBarToolSimple(wxToolBarSimple *tbar,
                         int id,
-                        const wxBitmap& bitmap1,
-                        const wxBitmap& bitmap2,
-                        bool toggle,
+                        const wxString& label,
+                        const wxBitmap& bmpNormal,
+                        const wxBitmap& bmpDisabled,
+                        wxItemKind kind,
                         wxObject *clientData,
-                        const wxString& shortHelpString,
-                        const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
-                            clientData, shortHelpString, longHelpString)
+                        const wxString& shortHelp,
+                        const wxString& longHelp)
+        : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
+                            clientData, shortHelp, longHelp)
     {
     }
 
@@ -73,10 +74,10 @@ public:
     wxCoord GetWidth() const { return m_width; }
     wxCoord GetHeight() const { return m_height; }
 
-    wxCoord               m_x;
-    wxCoord               m_y;
-    wxCoord               m_width;
-    wxCoord               m_height;
+    wxCoord m_x;
+    wxCoord m_y;
+    wxCoord m_width;
+    wxCoord m_height;
 };
 
 // ----------------------------------------------------------------------------
@@ -108,15 +109,16 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 
 wxToolBarToolBase *wxToolBarSimple::CreateTool(int id,
-                                               const wxBitmap& bitmap1,
-                                               const wxBitmap& bitmap2,
-                                               bool toggle,
+                                               const wxString& label,
+                                               const wxBitmap& bmpNormal,
+                                               const wxBitmap& bmpDisabled,
+                                               wxItemKind kind,
                                                wxObject *clientData,
-                                               const wxString& shortHelpString,
-                                               const wxString& longHelpString)
+                                               const wxString& shortHelp,
+                                               const wxString& longHelp)
 {
-    return new wxToolBarToolSimple(this, id, bitmap1, bitmap2, toggle,
-                                   clientData, shortHelpString, longHelpString);
+    return new wxToolBarToolSimple(this, id, label, bmpNormal, bmpDisabled,
+                                   kind, clientData, shortHelp, longHelp);
 }
 
 wxToolBarToolBase *wxToolBarSimple::CreateTool(wxControl *control)
@@ -162,23 +164,24 @@ void wxToolBarSimple::Init()
     m_yScrollLinesPerPage = 0;
 }
 
-wxToolBarToolBase *wxToolBarSimple::AddTool(int id,
-                                            const wxBitmap& bitmap,
-                                            const wxBitmap& pushedBitmap,
-                                            bool toggle,
-                                            wxCoord xPos,
-                                            wxCoord yPos,
-                                            wxObject *clientData,
-                                            const wxString& helpString1,
-                                            const wxString& helpString2)
+wxToolBarToolBase *wxToolBarSimple::DoAddTool(int id,
+                                              const wxString& label,
+                                              const wxBitmap& bitmap,
+                                              const wxBitmap& bmpDisabled,
+                                              wxItemKind kind,
+                                              const wxString& shortHelp,
+                                              const wxString& longHelp,
+                                              wxObject *clientData,
+                                              wxCoord xPos,
+                                              wxCoord yPos)
 {
     // rememeber the position for DoInsertTool()
     m_xPos = xPos;
     m_yPos = yPos;
 
-    return wxToolBarBase::AddTool(id, bitmap, pushedBitmap, toggle,
-                                  xPos, yPos, clientData,
-                                  helpString1, helpString2);
+    return wxToolBarBase::DoAddTool(id, label, bitmap, bmpDisabled, kind,
+                                    shortHelp, longHelp,
+                                    clientData, xPos, yPos);
 }
 
 bool wxToolBarSimple::DoInsertTool(size_t WXUNUSED(pos),

@@ -54,6 +54,8 @@ public:
 
     virtual void SetToolShortHelp(int id, const wxString& helpString);
 
+    virtual void SetWindowStyleFlag( long style );
+
     // implementation from now on
     // --------------------------
 
@@ -70,6 +72,9 @@ protected:
     // common part of all ctors
     void Init();
 
+    // set the GTK toolbar style and orientation
+    void GtkSetStyle();
+
     // implement base class pure virtuals
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
@@ -79,9 +84,10 @@ protected:
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
     virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxString& label,
                                           const wxBitmap& bitmap1,
                                           const wxBitmap& bitmap2,
-                                          bool toggle,
+                                          wxItemKind kind,
                                           wxObject *clientData,
                                           const wxString& shortHelpString,
                                           const wxString& longHelpString);

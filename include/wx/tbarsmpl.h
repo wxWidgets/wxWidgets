@@ -54,19 +54,6 @@ public:
     virtual ~wxToolBarSimple();
 
     // override/implement base class virtuals
-    virtual wxToolBarToolBase *AddTool
-                               (
-                                   int id,
-                                   const wxBitmap& bitmap,
-                                   const wxBitmap& pushedBitmap,
-                                   bool toggle,
-                                   wxCoord xPos,
-                                   wxCoord yPos = -1,
-                                   wxObject *clientData = NULL,
-                                   const wxString& helpString1 = wxEmptyString,
-                                   const wxString& helpString2 = wxEmptyString
-                               );
-
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
     virtual bool Realize();
@@ -119,6 +106,20 @@ protected:
     void Init();
 
     // implement base class pure virtuals
+    virtual wxToolBarToolBase *DoAddTool
+                               (
+                                   int id,
+                                   const wxString& label,
+                                   const wxBitmap& bitmap,
+                                   const wxBitmap& bmpDisabled,
+                                   wxItemKind kind,
+                                   const wxString& shortHelp = wxEmptyString,
+                                   const wxString& longHelp = wxEmptyString,
+                                   wxObject *clientData = NULL,
+                                   wxCoord xPos = -1,
+                                   wxCoord yPos = -1
+                               );
+
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
 
@@ -127,12 +128,13 @@ protected:
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
     virtual wxToolBarToolBase *CreateTool(int id,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
-                                          bool toggle,
+                                          const wxString& label,
+                                          const wxBitmap& bmpNormal,
+                                          const wxBitmap& bmpDisabled,
+                                          wxItemKind kind,
                                           wxObject *clientData,
-                                          const wxString& shortHelpString,
-                                          const wxString& longHelpString);
+                                          const wxString& shortHelp,
+                                          const wxString& longHelp);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
     // helpers
