@@ -25,6 +25,10 @@
 
 #if wxUSE_STACKWALKER
 
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/stackwalk.h"
 
 #include "wx/msw/debughlp.h"
@@ -164,7 +168,7 @@ EnumSymbolsProc(PSYMBOL_INFO pSymInfo, ULONG WXUNUSED(SymSize), PVOID data)
     {
         frame->OnParam(pSymInfo);
     }
-    
+
     // return true to continue enumeration, false would have stopped it
     return TRUE;
 }

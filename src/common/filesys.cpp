@@ -460,8 +460,8 @@ void wxFileSystem::CleanUpHandlers()
     WX_CLEAR_LIST(wxList, m_Handlers);
 }
 
-const static wxString g_unixPathString(wxT("/"));
-const static wxString g_nativePathString(wxFILE_SEP_PATH);
+static const wxString g_unixPathString(wxT("/"));
+static const wxString g_nativePathString(wxFILE_SEP_PATH);
 
 // Returns the native path for a file URL
 wxFileName wxFileSystem::URLToFileName(const wxString& url)

@@ -62,7 +62,7 @@ wxURI::wxURI(const wxString& uri) : m_hostType(wxURI_REGNAME), m_fields(0)
     Create(uri);
 }
 
-wxURI::wxURI(const wxURI& uri)  : m_hostType(wxURI_REGNAME), m_fields(0)
+wxURI::wxURI(const wxURI& uri)  : wxObject(), m_hostType(wxURI_REGNAME), m_fields(0)
 {
     Assign(uri);
 }

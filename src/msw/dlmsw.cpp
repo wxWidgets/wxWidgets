@@ -262,7 +262,7 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 /* static */
 void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 {
-    return ::GetProcAddress(handle, name.ToAscii());
+    return (void *)::GetProcAddress(handle, name.ToAscii());
 }
 
 // ----------------------------------------------------------------------------
