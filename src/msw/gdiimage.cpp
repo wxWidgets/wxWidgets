@@ -402,12 +402,24 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 #ifdef __WIN32__
     HICON hicon = NULL;
 
+    // Parse the filename: it may be of the form
+    // filename;n in order to specify the nth icon in the file.
+    // For the moment, ignore the issue of possible semicolons in the filename.
+    int iconIndex = 0;
+    wxString name1(name);
+    wxString strIconIndex = name.AfterLast(wxT(';'));
+    if (!strIconIndex.IsEmpty())
+    {
+        iconIndex = wxAtoi(strIconIndex);
+        name1 = name.BeforeLast(wxT(';'));
+    }
+
     // were we asked for a large icon?
     if ( desiredWidth == ::GetSystemMetrics(SM_CXICON) &&
          desiredHeight == ::GetSystemMetrics(SM_CYICON) )
     {
-        // get the first large icon from file
-        if ( !::ExtractIconEx(name, 0, &hicon, NULL, 1) )
+        // get the specified large icon from file
+        if ( !::ExtractIconEx(name1, iconIndex, &hicon, NULL, 1) )
         {
             // it is not an error, but it might still be useful to be informed
             // about it optionally
@@ -419,8 +431,8 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     else if ( desiredWidth == ::GetSystemMetrics(SM_CXSMICON) &&
               desiredHeight == ::GetSystemMetrics(SM_CYSMICON) )
     {
-        // get the first small icon from file
-        if ( !::ExtractIconEx(name, 0, NULL, &hicon, 1) )
+        // get the specified small icon from file
+        if ( !::ExtractIconEx(name1, iconIndex, NULL, &hicon, 1) )
         {
             wxLogTrace(_T("iconload"),
                        _T("No small icons found in the file '%s'."),
@@ -432,7 +444,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     if ( !hicon )
     {
         // take any (the first one) icon from the file by default
-        hicon = ::ExtractIcon(wxGetInstance(), name, 0 /* first */);
+        hicon = ::ExtractIcon(wxGetInstance(), name1, 0 /* first */);
     }
 
     if ( !hicon )
