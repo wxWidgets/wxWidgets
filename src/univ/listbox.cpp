@@ -121,7 +121,7 @@ wxListBox::~wxListBox()
 int wxListBox::DoAppend(const wxString& item)
 {
     size_t index = m_strings.Add(item);
-    m_clientData.Insert(NULL, index);
+    m_itemsClientData.Insert(NULL, index);
 
     m_updateScrollbarY = TRUE;
 
@@ -153,7 +153,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     for ( size_t n = 0; n < count; n++ )
     {
         m_strings.Insert(items[n], pos + n);
-        m_clientData.Insert(NULL, pos + n);
+        m_itemsClientData.Insert(NULL, pos + n);
     }
 
     // the number of items has changed
@@ -177,11 +177,11 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
         return;
 
     m_strings.Alloc(count);
-    m_clientData.Alloc(count);
+    m_itemsClientData.Alloc(count);
     for ( size_t n = 0; n < count; n++ )
     {
         size_t index = m_strings.Add(items[n]);
-        m_clientData.Insert(clientData ? clientData[n] : NULL, index);
+        m_itemsClientData.Insert(clientData ? clientData[n] : NULL, index);
     }
 
     m_updateScrollbarY = TRUE;
@@ -234,14 +234,14 @@ void wxListBox::DoClear()
 
     if ( HasClientObjectData() )
     {
-        size_t count = m_clientData.GetCount();
+        size_t count = m_itemsClientData.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            delete m_clientData[n];
+            delete m_itemsClientData[n];
         }
     }
 
-    m_clientData.Clear();
+    m_itemsClientData.Clear();
 }
 
 void wxListBox::Clear()
@@ -261,10 +261,10 @@ void wxListBox::Delete(int n)
 
     if ( HasClientObjectData() )
     {
-        delete m_clientData[n];
+        delete m_itemsClientData[n];
     }
 
-    m_clientData.RemoveAt(n);
+    m_itemsClientData.RemoveAt(n);
 
     m_updateScrollbarY = TRUE;
 
@@ -277,22 +277,22 @@ void wxListBox::Delete(int n)
 
 void wxListBox::DoSetItemClientData(int n, void* clientData)
 {
-    m_clientData[n] = clientData;
+    m_itemsClientData[n] = clientData;
 }
 
 void *wxListBox::DoGetItemClientData(int n) const
 {
-    return m_clientData[n];
+    return m_itemsClientData[n];
 }
 
 void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
 {
-    m_clientData[n] = clientData;
+    m_itemsClientData[n] = clientData;
 }
 
 wxClientData* wxListBox::DoGetItemClientObject(int n) const
 {
-    return (wxClientData *)m_clientData[n];
+    return (wxClientData *)m_itemsClientData[n];
 }
 
 // ----------------------------------------------------------------------------

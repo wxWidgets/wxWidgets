@@ -173,7 +173,7 @@ protected:
     wxArrayInt m_selections;
 
     // and this one the client data (either void or wxClientData)
-    wxArrayPtrVoid m_clientData;
+    wxArrayPtrVoid m_itemsClientData;
 
     // the current item
     int m_current;
