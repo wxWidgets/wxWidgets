@@ -32,9 +32,10 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxPalette;
 
-#if !defined(__WXMSW__)
-
+#if defined(__WXMGL__)
 // Only used by some ports
+// FIXME -- make all ports (but MSW which uses wxGDIImage) use these base classes
+
 // ----------------------------------------------------------------------------
 // wxBitmapHandler: class which knows how to create/load/save bitmaps in
 // different formats
