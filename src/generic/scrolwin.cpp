@@ -519,7 +519,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
     int w, h;
     m_targetWindow->GetClientSize(&w, &h);
 
-    if (x_pos != -1)
+    if ((x_pos != -1) && (m_xScrollPixelsPerLine))
     {
         int old_x = m_xScrollPosition;
         m_xScrollPosition = x_pos;
@@ -539,7 +539,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition, TRUE );
         m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
     }
-    if (y_pos != -1)
+    if ((y_pos != -1) && (m_yScrollPixelsPerLine))
     {
         int old_y = m_yScrollPosition;
         m_yScrollPosition = y_pos;
