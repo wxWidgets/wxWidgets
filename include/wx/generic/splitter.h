@@ -208,7 +208,7 @@ protected:
 
     void SendUnsplitEvent(wxWindow *winRemoved);
 
-private:
+protected:
     void Init();
 
 
