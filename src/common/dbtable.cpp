@@ -763,7 +763,8 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
     if (!queryOnly && noCols > 0)
     {
         bool needComma = FALSE;
-        sqlStmt.Printf(wxT("INSERT INTO %s ("), pDb->SQLTableName(tableName.c_str()));
+        sqlStmt.Printf(wxT("INSERT INTO %s ("),
+                       pDb->SQLTableName(tableName.c_str()).c_str());
         for (i = 0; i < noCols; i++)
         {
             if (! colDefs[i].InsertAllowed)
@@ -915,11 +916,13 @@ void wxDbTable::BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxStrin
     // delete all records from the database in this case.
     if (typeOfDel == DB_DEL_WHERE && (pWhereClause.Length() == 0))
     {
-        pSqlStmt.Printf(wxT("DELETE FROM %s"), pDb->SQLTableName(tableName.c_str()));
+        pSqlStmt.Printf(wxT("DELETE FROM %s"),
+                        pDb->SQLTableName(tableName.c_str()).c_str());
         return;
     }
 
-    pSqlStmt.Printf(wxT("DELETE FROM %s WHERE "), pDb->SQLTableName(tableName.c_str()));
+    pSqlStmt.Printf(wxT("DELETE FROM %s WHERE "),
+                    pDb->SQLTableName(tableName.c_str()).c_str());
 
     // Append the WHERE clause to the SQL DELETE statement
     switch(typeOfDel)
@@ -1117,7 +1120,8 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
 
     bool firstColumn = TRUE;
 
-    pSqlStmt.Printf(wxT("UPDATE %s SET "), pDb->SQLTableName(tableName.Upper().c_str()));
+    pSqlStmt.Printf(wxT("UPDATE %s SET "),
+                    pDb->SQLTableName(tableName.Upper().c_str()).c_str());
 
     // Append a list of columns to be updated
     int i;
@@ -1341,7 +1345,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
     // Build a CREATE TABLE string from the colDefs structure.
     bool needComma = FALSE;
 
-    sqlStmt.Printf(wxT("CREATE TABLE %s ("), pDb->SQLTableName(tableName.c_str()));
+    sqlStmt.Printf(wxT("CREATE TABLE %s ("),
+                   pDb->SQLTableName(tableName.c_str()).c_str());
 
     for (i = 0; i < noCols; i++)
     {
@@ -1503,7 +1508,8 @@ bool wxDbTable::DropTable()
 
     wxString sqlStmt;
 
-    sqlStmt.Printf(wxT("DROP TABLE %s"), pDb->SQLTableName(tableName.c_str()));
+    sqlStmt.Printf(wxT("DROP TABLE %s"),
+                   pDb->SQLTableName(tableName.c_str()).c_str());
 
     pDb->WriteSqlLog(sqlStmt);
 
@@ -1688,12 +1694,17 @@ bool wxDbTable::DropIndex(const wxString &idxName)
 
     if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL ||
         pDb->Dbms() == dbmsDBASE /*|| Paradox needs this syntax too when we add support*/)
-        sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),pDb->SQLTableName(idxName.c_str()), pDb->SQLTableName(tableName.c_str()));
+        sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),
+                       pDb->SQLTableName(idxName.c_str()).c_str(),
+                       pDb->SQLTableName(tableName.c_str().c_str()));
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
              (pDb->Dbms() == dbmsSYBASE_ASE))
-        sqlStmt.Printf(wxT("DROP INDEX %s.%s"), pDb->SQLTableName(tableName.c_str()), pDb->SQLTableName(idxName.c_str()));
+        sqlStmt.Printf(wxT("DROP INDEX %s.%s"),
+                       pDb->SQLTableName(tableName.c_str()).c_str(),
+                       pDb->SQLTableName(idxName.c_str()).c_str());
     else
-        sqlStmt.Printf(wxT("DROP INDEX %s"),pDb->SQLTableName(idxName.c_str()));
+        sqlStmt.Printf(wxT("DROP INDEX %s"),
+                       pDb->SQLTableName(idxName.c_str()).c_str());
 
     pDb->WriteSqlLog(sqlStmt);
 
