@@ -20,7 +20,11 @@
 /// Name for map file.
 #define WXEXTHELP_MAPFILE   "wxhelp.map"
 /// Path separator.
+#ifdef __WXMSW__
+#define WXEXTHELP_SEPARATOR '\\'
+#else
 #define WXEXTHELP_SEPARATOR '/'
+#endif
 /// Maximum line length in map file.
 #define WXEXTHELP_BUFLEN 512
 /// Character introducing comments/documentation field in map file.
