@@ -38,7 +38,7 @@ if not haveGLCanvas:
 
 elif not haveOpenGL:
     def runTest(frame, nb, log):
-        dlg = wxMessageDialog(
+        dlg = wx.MessageDialog(
             frame, 'The OpenGL package was not found.  You can get it at\n'
             'http://PyOpenGL.sourceforge.net/', 'Sorry', wx.OK | wx.ICON_INFORMATION
             )

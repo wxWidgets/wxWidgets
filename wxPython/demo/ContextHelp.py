@@ -43,8 +43,8 @@ class TestPanel(wx.Panel):
         cBtnText.SetHelpText("Some helpful text...")
 
         s = wx.BoxSizer(wx.HORIZONTAL)
-        s.Add(cBtn, 0, wxALL, 5)
-        s.Add(cBtnText, 0, wxALL, 5)
+        s.Add(cBtn, 0, wx.ALL, 5)
+        s.Add(cBtnText, 0, wx.ALL, 5)
         sizer.Add((20,20))
         sizer.Add(s)
 

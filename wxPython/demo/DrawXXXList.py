@@ -141,8 +141,8 @@ def makeRandomColors(num):
     colors = []
 
     for i in range(num):
-        c = whrandom.choice(colours)
-        colors.append(wxNamedColour(c))
+        c = random.choice(colours)
+        colors.append(wx.NamedColour(c))
     return colors
 
 

@@ -13,7 +13,7 @@ BUFFERED = 1
 #---------------------------------------------------------------------------
 
 class MyCanvas(wx.ScrolledWindow):
-    def __init__(self, parent, id = -1):
+    def __init__(self, parent, id = -1, size = wx.DefaultSize):
         wx.ScrolledWindow.__init__(self, parent, id, (0, 0), size=size, style=wx.SUNKEN_BORDER)
 
         self.lines = []

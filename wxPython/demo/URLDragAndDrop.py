@@ -42,10 +42,10 @@ class TestPanel(wx.Panel):
         text.SetFont(wx.Font(24, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         text.SetLabel(msg)
         w,h = text.GetTextExtent(msg)
-        text.SetSize(wxSize(w,h+1))
-        text.SetForegroundColour(wxBLUE)
-        outsideSizer.Add(text, 0, wxEXPAND|wxALL, 5)
-        outsideSizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
+        text.SetSize(wx.Size(w,h+1))
+        text.SetForegroundColour(wx.BLUE)
+        outsideSizer.Add(text, 0, wx.EXPAND|wx.ALL, 5)
+        outsideSizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         outsideSizer.Add((20,20))
 
         self.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD, False))
@@ -55,7 +55,7 @@ class TestPanel(wx.Panel):
 
         inSizer.Add((20,20))
         inSizer.Add((20,20))
-        inSizer.Add(wxStaticText(self, -1,
+        inSizer.Add(wx.StaticText(self, -1,
                                  "Drag URLs from your browser to\nthis window:",
                                  style = wx.ALIGN_RIGHT),
                     0, wx.ALIGN_RIGHT )

@@ -16,9 +16,9 @@ class MyCustomRenderer(gridlib.PyGridCellRenderer):
         gridlib.PyGridCellRenderer.__init__(self)
 
     def Draw(self, grid, attr, dc, rect, row, col, isSelected):
-        dc.SetBackgroundMode(wxSOLID)
-        dc.SetBrush(wxBrush(wxBLACK, wxSOLID))
-        dc.SetPen(wxTRANSPARENT_PEN)
+        dc.SetBackgroundMode(wx.SOLID)
+        dc.SetBrush(wx.Brush(wx.BLACK, wx.SOLID))
+        dc.SetPen(wx.TRANSPARENT_PEN)
         dc.DrawRectangleRect(rect)
 
         dc.SetBackgroundMode(wx.TRANSPARENT)

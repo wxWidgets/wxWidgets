@@ -71,7 +71,7 @@ class TestValidatorPanel(wx.Panel):
         fgs = wx.FlexGridSizer(0, 2)
 
         fgs.Add((1,1))
-        fgs.Add(wxStaticText(self, -1, "These controls have validators that limit\n"
+        fgs.Add(wx.StaticText(self, -1, "These controls have validators that limit\n"
                              "the type of characters that can be entered."))
 
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
@@ -84,14 +84,14 @@ class TestValidatorPanel(wx.Panel):
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
         label = wx.StaticText(self, -1, "Digits Only: ")
-        fgs.Add(label, 0, wx.ALIGN_RIGHT|wxCENTER)
+        fgs.Add(label, 0, wx.ALIGN_RIGHT|wx.CENTER)
         fgs.Add(wx.TextCtrl(self, -1, "", validator = MyValidator(DIGIT_ONLY)))
 
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
         fgs.Add((0,0))
         b = wx.Button(self, -1, "Test Dialog Validation")
-        self.Bind(EVT_BUTTON, self.OnDoDialog, b)
+        self.Bind(wx.EVT_BUTTON, self.OnDoDialog, b)
         fgs.Add(b)
 
         border = wx.BoxSizer()
@@ -174,7 +174,7 @@ class TestValidateDialog(wx.Dialog):
         fgs = wx.FlexGridSizer(0, 2)
 
         fgs.Add((1,1));
-        fgs.Add(wxStaticText(self, -1,
+        fgs.Add(wx.StaticText(self, -1,
                              "These controls must have text entered into them.  Each\n"
                              "one has a validator that is checked when the Okay\n"
                              "button is clicked."))

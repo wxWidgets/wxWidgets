@@ -247,10 +247,10 @@ class CustomDnDPanel(wx.Panel):
 
         rbox.Add(rb1)
         rbox.Add(rb2)
-        box.Add(text1, 0, wxALL, 10)
-        box.Add(rbox, 0, wxALIGN_CENTER)
+        box.Add(text1, 0, wx.ALL, 10)
+        box.Add(rbox, 0, wx.ALIGN_CENTER)
         box.Add((10,90))
-        box.Add(text2, 0, wxALL, 10)
+        box.Add(text2, 0, wx.ALL, 10)
 
         sizer.Add(box)
 

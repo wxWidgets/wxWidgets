@@ -15,12 +15,12 @@ class TestPanel(wx.Panel):
         self.log = log
 
         b = wx.Button(self, 10, "Default Button", (20, 20))
-        self.Bind(EVT_BUTTON, self.OnClick, b)
+        self.Bind(wx.EVT_BUTTON, self.OnClick, b)
         b.SetDefault()
         b.SetSize(b.GetBestSize())
 
         b = wx.Button(self, 20, "HELLO AGAIN!", (20, 80), (120, 45))
-        self.Bind(EVT_BUTTON, self.OnClick, b)
+        self.Bind(wx.EVT_BUTTON, self.OnClick, b)
         b.SetToolTipString("This is a Hello button...")
 
         if 0:  # a test case for catching wx.PyAssertionError

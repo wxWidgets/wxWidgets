@@ -62,16 +62,16 @@ class TestPanel(wx.Panel):
         message2 = wx.StaticText(self, -1, txt)
         message2.SetFont(f1)
 
-        targetPanel = Tile(self, log, bgColor=wxColour(80,10,10), active=0)
-        buttonPanel = wxPanel(self ,-1)
-        sizer       = wxBoxSizer(wxHORIZONTAL)
+        targetPanel = Tile(self, log, bgColor=wx.Colour(80,10,10), active=0)
+        buttonPanel = wx.Panel(self ,-1)
+        sizer       = wx.BoxSizer(wx.HORIZONTAL)
         target      = targetPanel.tile
 
         sizer.Add((0,0), 1)
         for factor in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7]:
-            sizer.Add(Tile(buttonPanel, log, factor-0.05, target), 0, wxALIGN_CENTER)
+            sizer.Add(Tile(buttonPanel, log, factor-0.05, target), 0, wx.ALIGN_CENTER)
             sizer.Add((0,0),1)
-            sizer.Add(Tile(buttonPanel, log, factor,      target), 0, wxALIGN_CENTER)
+            sizer.Add(Tile(buttonPanel, log, factor,      target), 0, wx.ALIGN_CENTER)
             sizer.Add((0,0),1)
 
         buttonPanel.SetAutoLayout(1)
@@ -137,7 +137,7 @@ class Tile(wx.Panel):
 
 
 
-class InnerTile(wxPanel):
+class InnerTile(wx.Panel):
     IDLE_COLOR  = wx.Colour( 80, 10, 10)
     START_COLOR = wx.Colour(200, 70, 50)
     FINAL_COLOR = wx.Colour( 20, 80,240)

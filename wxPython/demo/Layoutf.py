@@ -18,7 +18,7 @@ class TestLayoutf(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
 
         self.SetAutoLayout(True)
-        self.Bind(EVT_BUTTON, self.OnButton, id=ID_Button)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=ID_Button)
 
         self.panelA = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
         self.panelA.SetBackgroundColour(wx.BLUE)

@@ -21,9 +21,9 @@ class HugeTable(gridlib.PyGridTableBase):
         gridlib.PyGridTableBase.__init__(self)
         self.log = log
 
-        self.odd=wxGridCellAttr()
+        self.odd=gridlib.GridCellAttr()
         self.odd.SetBackgroundColour("sky blue")
-        self.even=wxGridCellAttr()
+        self.even=gridlib.GridCellAttr()
         self.even.SetBackgroundColour("sea green")
 
     def GetAttr(self, row, col, kind):

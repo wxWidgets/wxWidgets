@@ -79,7 +79,7 @@ class TestPanel(scrolled.wxScrolledPanel):
         panel3.SetAutoLayout(1)
         panel3.SetupScrolling()
 
-        hbox = wxBoxSizer(wxHORIZONTAL)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add((20,20))
         hbox.Add(panel1, 0)
         hbox.Add((40, 10))

@@ -126,9 +126,9 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_COMBOBOX, self.OnSelectID, combo)
         combo.Select(0)
 
-        cb = wxCheckBox(self, -1, "Use custom provider")
+        cb = wx.CheckBox(self, -1, "Use custom provider")
         fgs.Add(cb, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        self.Bind(EVT_CHECKBOX, self.OnUseCustom, cb)
+        self.Bind(wx.EVT_CHECKBOX, self.OnUseCustom, cb)
 
         fgs.Add((10, 10), 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         fgs.Add((10, 10), 0, wx.ALIGN_CENTRE|wx.ALL, 5)

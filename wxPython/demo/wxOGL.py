@@ -301,7 +301,7 @@ def runTest(frame, nb, log):
     # This creates some pens and brushes that the OGL library uses.
     # It should be called after the app object has been created, but
     # before OGL is used.
-    wx.OGLInitialize()
+    ogl.OGLInitialize()
 
     win = TestWindow(nb, log, frame)
     return win

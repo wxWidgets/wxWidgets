@@ -219,8 +219,8 @@ class MegaImageRenderer(Grid.PyGridCellRenderer):
             dc.SetBrush(wx.Brush(wx.BLUE, wx.SOLID))
             dc.SetPen(wx.Pen(wx.BLUE, 1, wx.SOLID))
         else:
-            dc.SetBrush(wxBrush(wxWHITE, wxSOLID))
-            dc.SetPen(wxPen(wxWHITE, 1, wxSOLID))
+            dc.SetBrush(wx.Brush(wx.WHITE, wx.SOLID))
+            dc.SetPen(wx.Pen(wx.WHITE, 1, wx.SOLID))
         dc.DrawRectangleRect(rect)
 
         #dc.DrawRectangle((rect.x, rect.y), (rect.width, rect.height))
@@ -236,7 +236,7 @@ class MegaImageRenderer(Grid.PyGridCellRenderer):
 
         dc.Blit((rect.x+1, rect.y+1), (width, height),
                 image,
-                (0, 0), wxCOPY, True)
+                (0, 0), wx.COPY, True)
 
 
 class MegaFontRenderer(Grid.PyGridCellRenderer):
@@ -265,8 +265,8 @@ class MegaFontRenderer(Grid.PyGridCellRenderer):
             dc.SetBrush(wx.Brush(wx.BLUE, wx.SOLID))
             dc.SetPen(wx.Pen(wx.BLUE, 1, wx.SOLID))
         else:
-            dc.SetBrush(wxBrush(wxWHITE, wxSOLID))
-            dc.SetPen(wxPen(wxWHITE, 1, wxSOLID))
+            dc.SetBrush(wx.Brush(wx.WHITE, wx.SOLID))
+            dc.SetPen(wx.Pen(wx.WHITE, 1, wx.SOLID))
         dc.DrawRectangleRect(rect)
 
         #dc.DrawRectangle((rect.x, rect.y), (rect.width, rect.height))

@@ -56,7 +56,7 @@ class TestColourSelect(wx.Panel):
         # show a button with all default values
         self.colourDefaults = csel.ColourSelect(self, -1)
 
-        self.colourDefaults.Bind(csel.EVT_COLOURSELECT, self.OnSelectColour, self.colourDefaults.GetId())
+        self.Bind(csel.EVT_COLOURSELECT, self.OnSelectColour, id=self.colourDefaults.GetId())
         
         buttonSizer.AddMany([
             (wx.StaticText(self, -1, "Default Colour/Size"), 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL),

@@ -11,6 +11,10 @@ import  sys
 
 import  wx
 
+import images
+
+import ColorPanel
+
 colourList = [ "Aquamarine", "Black", "Blue", "Blue Violet", "Brown", "Cadet Blue",
                "Coral", "Cornflower Blue", "Cyan", "Dark Grey", "Dark Green",
                "Dark Olive Green", "Dark Orchid", "Dark Slate Blue",
@@ -43,7 +47,7 @@ class TestLB(wx.Listbook):
 
 
         # make an image list using the BlomXX images
-        il = wxImageList(32, 32)
+        il = wx.ImageList(32, 32)
         for x in range(1, 15):
             f = getattr(images, 'getBlom%02dBitmap' % x)
             bmp = f()
@@ -59,18 +63,18 @@ class TestLB(wx.Listbook):
             imID += 1
             if imID == il.GetImageCount(): imID = 0
             if first:
-                st = wxStaticText(win.win, -1,
+                st = wx.StaticText(win.win, -1,
                           "You can put nearly any type of window here,\n"
                           "and the list can be on any side of the Listbook",
-                          wxPoint(10, 10))
+                          wx.Point(10, 10))
                 #st.SetForegroundColour(wxWHITE)
                 #st.SetBackgroundColour(wxBLUE)
                 first = False
             
                 
 
-        EVT_LISTBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
-        EVT_LISTBOOK_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)
+        wx.EVT_LISTBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
+        wx.EVT_LISTBOOK_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)
 
 
     def makeColorPanel(self, color):
