@@ -109,6 +109,8 @@ public:
         return wxPoint(m_x, m_y);
     }    
     bool DoEnable( bool enable ) ;
+    
+    void UpdateToggleImage( bool toggle ) ;
 private :
     void Init() 
     {
@@ -123,6 +125,9 @@ private :
 static const EventTypeSpec eventList[] =
 {
 	{ kEventClassControl , kEventControlHit } ,
+#ifdef __WXMAC_OSX__
+	{ kEventClassControl , kEventControlHitTest } ,
+#endif
 } ;
 
 static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
@@ -148,6 +153,21 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
                 result = noErr; 
             }
             break ;
+#ifdef __WXMAC_OSX__
+        case kEventControlHitTest :
+            {
+                HIPoint pt = cEvent.GetParameter<HIPoint>(kEventParamMouseLocation) ;
+                HIRect rect ;
+                HIViewGetBounds( controlRef , &rect ) ;
+                
+                ControlPartCode pc = kControlNoPart ;
+                if ( CGRectContainsPoint( rect , pt ) )
+                    pc = kControlButtonPart ;
+                cEvent.SetParameter( kEventParamControlPart , typeControlPartCode, pc ) ;
+                result = noErr ;
+            }
+            break ;
+#endif
         default :
             break ;
     }
@@ -221,14 +241,7 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
         int mac_x = position.x ;
         int mac_y = position.y ;
 #ifdef __WXMAC_OSX__
-        wxSize toolSize = m_tbar->GetToolSize() ;    
-        int iconsize = 16 ;
-        if ( toolSize.x >= 24 && toolSize.y >= 24)
-        {
-            iconsize = 24 ;
-        }
-        mac_x += ( toolSize.x - iconsize ) / 2 ;
-        mac_y += ( toolSize.y - iconsize ) / 2  ;
+        // already correctly set up
 #else
         WindowRef rootwindow = (WindowRef) GetToolBar()->MacGetTopLevelWindowRef() ;    
         GetToolBar()->MacWindowToRootWindow( &x , &y ) ;
@@ -272,6 +285,46 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
     }
 }
 
+void wxToolBarTool::UpdateToggleImage( bool toggle ) 
+{
+#ifdef __WXMAC_OSX__
+    if ( toggle )
+    {
+        int w = m_bmpNormal.GetWidth() ;
+        int h = m_bmpNormal.GetHeight() ;
+        wxBitmap bmp( w , h ) ;
+        wxMemoryDC dc ;
+        dc.SelectObject( bmp ) ;
+        dc.SetPen( wxNullPen ) ;
+        dc.SetBackground( *wxWHITE ) ;
+        dc.DrawRectangle( 0 , 0 , w , h ) ;
+        dc.DrawBitmap( m_bmpNormal , 0 , 0 , true) ;
+        dc.SelectObject( wxNullBitmap ) ;
+        ControlButtonContentInfo info ;
+        wxMacCreateBitmapButton( &info , bmp ) ;
+    	SetControlData( m_controlHandle , 0, kControlIconContentTag, sizeof( info ),
+    			(Ptr)&info );
+        wxMacReleaseBitmapButton( &info ) ;
+    }
+    else
+    {
+        ControlButtonContentInfo info ;
+        wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
+    	SetControlData( m_controlHandle , 0, kControlIconContentTag, sizeof( info ),
+    			(Ptr)&info );
+        wxMacReleaseBitmapButton( &info ) ;
+    }
+
+    IconTransformType transform = toggle ? kTransformSelected : kTransformNone ;
+	SetControlData( m_controlHandle, 0, kControlIconTransformTag, sizeof( transform ),
+			(Ptr)&transform );
+    HIViewSetNeedsDisplay( m_controlHandle , true ) ;
+
+#else
+    ::SetControl32BitValue( m_controlHandle , toggle ) ;
+#endif
+}
+
 wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
   int id,
   const wxString& label,
@@ -313,15 +366,6 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
         wxMacCreateBitmapButton( &info , GetNormalBitmap() ) ;
         
 #ifdef __WXMAC_OSX__
-        int iconsize = 16 ;
-        if ( toolSize.x >= 24 && toolSize.y >= 24)
-        {
-            iconsize = 24 ;
-        }
-        toolrect.left += ( toolSize.x - iconsize ) / 2 ;
-        toolrect.right = toolrect.left + iconsize ;
-        toolrect.top += ( toolSize.y - iconsize ) / 2  ;
-        toolrect.bottom = toolrect.top + iconsize ;
         CreateIconControl( window , &toolrect , &info , false , &m_controlHandle ) ;
 #else        
         SInt16 behaviour = kControlBehaviorOffsetContents ;
@@ -340,14 +384,6 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
         InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
             GetEventTypeCount(eventList), eventList, this,NULL);          
 
-        if ( CanBeToggled() && IsToggled() )
-        {
-#ifdef __WXMAC_OSX__
-            // overlay with rounded white rect and set selected to 1
-#else
-            ::SetControl32BitValue( m_controlHandle , 1 ) ;
-#endif
-        }
     }
     ControlRef container = (ControlRef) tbar->GetHandle() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
@@ -355,6 +391,10 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     {
         UMAShowControl( m_controlHandle ) ;
         ::EmbedControl( m_controlHandle , container ) ;
+    }
+    if ( CanBeToggled() && IsToggled() )
+    {
+        UpdateToggleImage( true ) ;
     }
 }
 
@@ -465,8 +505,16 @@ bool wxToolBar::Realize()
         if ( y + cursize.y > maxHeight )
             maxHeight = y + cursize.y ;
             
-        tool->SetPosition( wxPoint( x , y ) ) ;
-        
+        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        {
+            int x1 = x + (maxToolWidth - cursize.x)/2 ;
+            tool->SetPosition( wxPoint( x1 , y ) ) ;
+        }
+        else
+        {
+            int y1 = y + (maxToolHeight - cursize.y)/2 ;
+            tool->SetPosition( wxPoint( x , y1 ) ) ;
+        }    
         if ( GetWindowStyleFlag() & wxTB_VERTICAL )
         {
             y += cursize.y ;
@@ -578,13 +626,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
     wxToolBarTool *tool = (wxToolBarTool *)t;
     if ( tool->IsButton() )
     {
-#ifdef __WXMAC_OSX__
-        IconTransformType transform = toggle ? kTransformSelected : kTransformNone ;
-    	SetControlData( (ControlRef) tool->GetControlHandle(), 0, kControlIconTransformTag, sizeof( transform ),
-    			(Ptr)&transform );
-#else
-        ::SetControl32BitValue( (ControlRef) tool->GetControlHandle() , toggle ) ;
-#endif
+        tool->UpdateToggleImage( toggle ) ;
     }
 }
 
