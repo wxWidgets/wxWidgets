@@ -199,8 +199,8 @@ wxImage wxImage::Copy() const
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
-    if (M_IMGDATA->m_hasMask)
-        image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
+    image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
+    image.SetMask( M_IMGDATA->m_hasMask );
 
     memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
 
