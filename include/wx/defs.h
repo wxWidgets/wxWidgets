@@ -896,6 +896,7 @@ typedef void *          WXRGNDATA;
 typedef void *          WXMSG;
 typedef unsigned long   WXHCONV;
 typedef unsigned long   WXHKEY;
+typedef unsigned long   WXHTREEITEM;
 typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
