@@ -72,7 +72,7 @@ void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW,
 
     if ( rel == wxPercentOf )
     {
-        percentage = val;
+        percent = val;
     }
     else
     {
