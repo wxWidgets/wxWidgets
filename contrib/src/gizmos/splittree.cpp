@@ -58,18 +58,25 @@ BEGIN_EVENT_TABLE(wxRemotelyScrolledTreeCtrl, wxGenericTreeCtrl)
 #else
 BEGIN_EVENT_TABLE(wxRemotelyScrolledTreeCtrl, wxTreeCtrl)
 #endif
-	EVT_SIZE(wxRemotelyScrolledTreeCtrl::OnSize)
-	EVT_PAINT(wxRemotelyScrolledTreeCtrl::OnPaint)
-	EVT_TREE_ITEM_EXPANDED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
-	EVT_TREE_ITEM_COLLAPSED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
-	EVT_SCROLLWIN(wxRemotelyScrolledTreeCtrl::OnScroll)
+    EVT_SIZE(wxRemotelyScrolledTreeCtrl::OnSize)
+    EVT_PAINT(wxRemotelyScrolledTreeCtrl::OnPaint)
+    EVT_TREE_ITEM_EXPANDED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
+    EVT_TREE_ITEM_COLLAPSED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
+    EVT_SCROLLWIN(wxRemotelyScrolledTreeCtrl::OnScroll)
 END_EVENT_TABLE()
 
-wxRemotelyScrolledTreeCtrl::wxRemotelyScrolledTreeCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pt,
-        const wxSize& sz, long style):
-        wxTreeCtrl(parent, id, pt, sz, style)
+wxRemotelyScrolledTreeCtrl::wxRemotelyScrolledTreeCtrl(
+    wxWindow* parent, wxWindowID id, const wxPoint& pt,
+    const wxSize& sz, long style)
+    : wxTreeCtrl(parent, id, pt, sz, style & ~wxTR_ROW_LINES)
 {
-	m_companionWindow = NULL;
+    m_companionWindow = NULL;
+
+    // We draw the row lines ourself so they match what's done
+    // by the companion window.  That is why the flag is turned
+    // off above, so wxGenericTreeCtrl doesn't draw them in a
+    // different colour.
+    m_drawRowLines = (style & wxTR_ROW_LINES) != 0;
 }
 
 wxRemotelyScrolledTreeCtrl::~wxRemotelyScrolledTreeCtrl()
@@ -108,9 +115,9 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(int pixelsPerUnitX, int pixelsPer
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
         win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, 0, noUnitsX, 0, xPos, 0, noRefresh);
 
-	    wxScrolledWindow* scrolledWindow = GetScrolledWindow();
-	    if (scrolledWindow)
-	    {
+        wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+        if (scrolledWindow)
+        {
             scrolledWindow->SetScrollbars(0, pixelsPerUnitY, 0, noUnitsY, 0, yPos, noRefresh);
         }
     }
@@ -159,13 +166,13 @@ void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
         scrolledWindow->GetViewStart(& x2, & y2);
         * y = y2;
     }
-	else
+    else
 #endif
-	{
-		// x is wrong since the horizontal scrollbar is controlled by the
-		// tree control, but we probably don't need it.
+    {
+        // x is wrong since the horizontal scrollbar is controlled by the
+        // tree control, but we probably don't need it.
         scrolledWindow->GetViewStart(x, y);
-	}
+    }
 }
 
 // In case we're using the generic tree control.
@@ -174,7 +181,7 @@ void wxRemotelyScrolledTreeCtrl::PrepareDC(wxDC& dc)
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
-	    wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+        wxScrolledWindow* scrolledWindow = GetScrolledWindow();
 
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
 
@@ -200,9 +207,9 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int posHoriz, int posVert)
     if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
 #endif
     {
-	    UINT sbCode = SB_THUMBPOSITION;
-	    HWND vertScrollBar = 0;
-	    MSWDefWindowProc((WXUINT) WM_VSCROLL, MAKELONG(sbCode, posVert), (WXHWND) vertScrollBar);
+        UINT sbCode = SB_THUMBPOSITION;
+        HWND vertScrollBar = 0;
+        MSWDefWindowProc((WXUINT) WM_VSCROLL, MAKELONG(sbCode, posVert), (WXHWND) vertScrollBar);
     }
 #if USE_GENERIC_TREECTRL
     else
@@ -211,78 +218,75 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int posHoriz, int posVert)
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
-		win->Refresh();
-		/* Doesn't work yet because scrolling is ignored by Scroll
+        win->Refresh();
+        /* Doesn't work yet because scrolling is ignored by Scroll
         int xppu, yppu;
-	    wxScrolledWindow* scrolledWindow = GetScrolledWindow();
-	    if (scrolledWindow)
-	    {
-			scrolledWindow->GetScrollPixelsPerUnit(& xppu, & yppu);
-			win->Scroll(-1, posVert*yppu);
-		}
-		*/
+        wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+        if (scrolledWindow)
+        {
+            scrolledWindow->GetScrollPixelsPerUnit(& xppu, & yppu);
+            win->Scroll(-1, posVert*yppu);
+        }
+        */
     }
 #endif
 }
 
 void wxRemotelyScrolledTreeCtrl::OnSize(wxSizeEvent& event)
 {
-	HideVScrollbar();
-	AdjustRemoteScrollbars();
-	event.Skip();
+    HideVScrollbar();
+    AdjustRemoteScrollbars();
+    event.Skip();
 }
 
 void wxRemotelyScrolledTreeCtrl::OnExpand(wxTreeEvent& event)
 {
-	AdjustRemoteScrollbars();
-	event.Skip();
+    AdjustRemoteScrollbars();
+    event.Skip();
 
     // If we don't have this, we get some bits of lines still remaining
     if (event.GetEventType() == wxEVT_COMMAND_TREE_ITEM_COLLAPSED)
         Refresh();
 
-	// Pass on the event
-	if (m_companionWindow)
-		m_companionWindow->GetEventHandler()->ProcessEvent(event);
+    // Pass on the event
+    if (m_companionWindow)
+        m_companionWindow->GetEventHandler()->ProcessEvent(event);
 }
 
 void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
 {
-	wxPaintDC dc(this);
+    wxPaintDC dc(this);
 
-	wxTreeCtrl::OnPaint(event);
+    wxTreeCtrl::OnPaint(event);
 
-    // The generic tree already knows how to draw lines
-#ifdef __WXMSW__
-    if ((GetWindowStyle() & wxTR_ROW_LINES) == 0)
-        return FALSE;
+    if (! m_drawRowLines)
+        return;
 
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
 
-	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
-	dc.SetPen(pen);
-	dc.SetBrush(* wxTRANSPARENT_BRUSH);
+    wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+    dc.SetPen(pen);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     wxSize clientSize = GetClientSize();
-	wxRect itemRect;
-	int cy=0;
-	wxTreeItemId h, lastH;
-	for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
-	{
-		if (GetBoundingRect(h, itemRect))
-		{
-			cy = itemRect.GetTop();
-			dc.DrawLine(0, cy, clientSize.x, cy);
-			lastH = h;
-		}
-	}
-	if (GetBoundingRect(lastH, itemRect))
-	{
-		cy = itemRect.GetBottom();
-		dc.DrawLine(0, cy, clientSize.x, cy);
-	}
-#endif
+    wxRect itemRect;
+    int cy=0;
+    wxTreeItemId h, lastH;
+    for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
+    {
+        if (GetBoundingRect(h, itemRect))
+        {
+            cy = itemRect.GetTop();
+            dc.DrawLine(0, cy, clientSize.x, cy);
+            lastH = h;
+        }
+    }
+    if (GetBoundingRect(lastH, itemRect))
+    {
+        cy = itemRect.GetBottom();
+        dc.DrawLine(0, cy, clientSize.x, cy);
+    }
 }
 
 
@@ -291,50 +295,50 @@ void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
 {
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
-	{
-		// This is for the generic tree control.
-		// It calls SetScrollbars which has been overridden
-		// to adjust the parent scrolled window vertical
-		// scrollbar.
-		((wxGenericTreeCtrl*) this)->AdjustMyScrollbars();
+    {
+        // This is for the generic tree control.
+        // It calls SetScrollbars which has been overridden
+        // to adjust the parent scrolled window vertical
+        // scrollbar.
+        ((wxGenericTreeCtrl*) this)->AdjustMyScrollbars();
         return;
-	}
-	else
+    }
+    else
 #endif
-	{
-		// This is for the wxMSW tree control
-		wxScrolledWindow* scrolledWindow = GetScrolledWindow();
-		if (scrolledWindow)
-		{
-			wxRect itemRect;
-			if (GetBoundingRect(GetRootItem(), itemRect))
-			{
+    {
+        // This is for the wxMSW tree control
+        wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+        if (scrolledWindow)
+        {
+            wxRect itemRect;
+            if (GetBoundingRect(GetRootItem(), itemRect))
+            {
                 // Actually, the real height seems to be 1 less than reported
                 // (e.g. 16 instead of 16)
                 int itemHeight = itemRect.GetHeight() - 1;
-				
-				int w, h;
-				GetClientSize(&w, &h);
-				
-				wxRect rect(0, 0, 0, 0);
-				CalcTreeSize(rect);
+
+                int w, h;
+                GetClientSize(&w, &h);
+
+                wxRect rect(0, 0, 0, 0);
+                CalcTreeSize(rect);
 
                 double f = ((double) (rect.GetHeight()) / (double) itemHeight)  ;
                 int treeViewHeight = (int) ceil(f);
-				
-				int scrollPixelsPerLine = itemHeight;
-				int scrollPos = - (itemRect.y / itemHeight);
-				
-				scrolledWindow->SetScrollbars(0, scrollPixelsPerLine, 0, treeViewHeight, 0, scrollPos);
-				
-				// Ensure that when a scrollbar becomes hidden or visible,
-				// the contained window sizes are right.
-				// Problem: this is called too early (?)
-				wxSizeEvent event(scrolledWindow->GetSize(), scrolledWindow->GetId());
-				scrolledWindow->GetEventHandler()->ProcessEvent(event);
-			}
-		}
-	}
+
+                int scrollPixelsPerLine = itemHeight;
+                int scrollPos = - (itemRect.y / itemHeight);
+
+                scrolledWindow->SetScrollbars(0, scrollPixelsPerLine, 0, treeViewHeight, 0, scrollPos);
+
+                // Ensure that when a scrollbar becomes hidden or visible,
+                // the contained window sizes are right.
+                // Problem: this is called too early (?)
+                wxSizeEvent event(scrolledWindow->GetSize(), scrolledWindow->GetId());
+                scrolledWindow->GetEventHandler()->ProcessEvent(event);
+            }
+        }
+    }
 }
 
 
@@ -347,10 +351,10 @@ static wxRect CombineRectangles(const wxRect& rect1, const wxRect& rect2)
     int bottom1 = rect1.GetBottom();
     int right2 = rect2.GetRight();
     int bottom2 = rect2.GetBottom();
-    
+
     wxPoint topLeft = wxPoint(wxMin(rect1.x, rect2.x), wxMin(rect1.y, rect2.y));
     wxPoint bottomRight = wxPoint(wxMax(right1, right2), wxMax(bottom1, bottom2));
-    
+
     rect.x = topLeft.x; rect.y = topLeft.y;
     rect.SetRight(bottomRight.x);
     rect.SetBottom(bottomRight.y);
@@ -363,40 +367,40 @@ static wxRect CombineRectangles(const wxRect& rect1, const wxRect& rect2)
 // correctly
 void wxRemotelyScrolledTreeCtrl::CalcTreeSize(wxRect& rect)
 {
-	CalcTreeSize(GetRootItem(), rect);
+    CalcTreeSize(GetRootItem(), rect);
 }
 
 void wxRemotelyScrolledTreeCtrl::CalcTreeSize(const wxTreeItemId& id, wxRect& rect)
 {
-	// More efficient implementation would be to find the last item (but how?)
-	// Q: is the bounding rect relative to the top of the virtual tree workspace
-	// or the top of the window? How would we convert?
-	wxRect itemSize;
-	if (GetBoundingRect(id, itemSize))
-	{
-		rect = CombineRectangles(rect, itemSize);
-	}
+    // More efficient implementation would be to find the last item (but how?)
+    // Q: is the bounding rect relative to the top of the virtual tree workspace
+    // or the top of the window? How would we convert?
+    wxRect itemSize;
+    if (GetBoundingRect(id, itemSize))
+    {
+        rect = CombineRectangles(rect, itemSize);
+    }
 
-	long cookie;
-	wxTreeItemId childId = GetFirstChild(id, cookie);
-	while (childId != 0)
-	{
-		CalcTreeSize(childId, rect);
-		childId = GetNextChild(childId, cookie);
-	}
+    long cookie;
+    wxTreeItemId childId = GetFirstChild(id, cookie);
+    while (childId != 0)
+    {
+        CalcTreeSize(childId, rect);
+        childId = GetNextChild(childId, cookie);
+    }
 }
 
 // Find the scrolled window that contains this control
 wxScrolledWindow* wxRemotelyScrolledTreeCtrl::GetScrolledWindow() const
 {
-	wxWindow* parent = wxWindow::GetParent();
-	while (parent)
-	{
-		if (parent->IsKindOf(CLASSINFO(wxScrolledWindow)))
-			return (wxScrolledWindow*) parent;
-		parent = parent->GetParent();
-	}
-	return NULL;
+    wxWindow* parent = wxWindow::GetParent();
+    while (parent)
+    {
+        if (parent->IsKindOf(CLASSINFO(wxScrolledWindow)))
+            return (wxScrolledWindow*) parent;
+        parent = parent->GetParent();
+    }
+    return NULL;
 }
 
 void wxRemotelyScrolledTreeCtrl::OnScroll(wxScrollWinEvent& event)
@@ -426,78 +430,78 @@ void wxRemotelyScrolledTreeCtrl::OnScroll(wxScrollWinEvent& event)
 IMPLEMENT_CLASS(wxTreeCompanionWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxTreeCompanionWindow, wxWindow)
-	EVT_PAINT(wxTreeCompanionWindow::OnPaint)
-	EVT_SCROLLWIN(wxTreeCompanionWindow::OnScroll)
-	EVT_TREE_ITEM_EXPANDED(-1, wxTreeCompanionWindow::OnExpand)
-	EVT_TREE_ITEM_COLLAPSED(-1, wxTreeCompanionWindow::OnExpand)
+    EVT_PAINT(wxTreeCompanionWindow::OnPaint)
+    EVT_SCROLLWIN(wxTreeCompanionWindow::OnScroll)
+    EVT_TREE_ITEM_EXPANDED(-1, wxTreeCompanionWindow::OnExpand)
+    EVT_TREE_ITEM_COLLAPSED(-1, wxTreeCompanionWindow::OnExpand)
 END_EVENT_TABLE()
 
 wxTreeCompanionWindow::wxTreeCompanionWindow(wxWindow* parent, wxWindowID id,
       const wxPoint& pos,
       const wxSize& sz,
       long style):
-	wxWindow(parent, id, pos, sz, style)
+    wxWindow(parent, id, pos, sz, style)
 {
-	m_treeCtrl = NULL;
+    m_treeCtrl = NULL;
 }
 
 void wxTreeCompanionWindow::DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect)
 {
-	// TEST CODE
+    // TEST CODE
 #if 1
-	if (m_treeCtrl)
-	{
-		wxString text = m_treeCtrl->GetItemText(id);
-		dc.SetTextForeground(* wxBLACK);
-		dc.SetBackgroundMode(wxTRANSPARENT);
+    if (m_treeCtrl)
+    {
+        wxString text = m_treeCtrl->GetItemText(id);
+        dc.SetTextForeground(* wxBLACK);
+        dc.SetBackgroundMode(wxTRANSPARENT);
 
-		int textW, textH;
-		dc.GetTextExtent(text, & textW, & textH);
+        int textW, textH;
+        dc.GetTextExtent(text, & textW, & textH);
 
-		int x = 5;
-		int y = rect.GetY() + wxMax(0, (rect.GetHeight() - textH) / 2);
+        int x = 5;
+        int y = rect.GetY() + wxMax(0, (rect.GetHeight() - textH) / 2);
 
-		dc.DrawText(text, x, y);
-	}
+        dc.DrawText(text, x, y);
+    }
 #endif
 }
 
 void wxTreeCompanionWindow::OnPaint(wxPaintEvent& event)
 {
-	wxPaintDC dc(this);
+    wxPaintDC dc(this);
 
     if (!m_treeCtrl)
         return;
 
         wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
-	dc.SetPen(pen);
-	dc.SetBrush(* wxTRANSPARENT_BRUSH);
-	wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-	dc.SetFont(font);
+    dc.SetPen(pen);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
+    wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(font);
 
     wxSize clientSize = GetClientSize();
-	wxRect itemRect;
-	int cy=0;
-	wxTreeItemId h, lastH;
-	for(h=m_treeCtrl->GetFirstVisibleItem();h;h=m_treeCtrl->GetNextVisible(h))
-	{
-		if (m_treeCtrl->GetBoundingRect(h, itemRect))
-		{
-			cy = itemRect.GetTop();
-			wxRect drawItemRect(0, cy, clientSize.x, itemRect.GetHeight());
+    wxRect itemRect;
+    int cy=0;
+    wxTreeItemId h, lastH;
+    for(h=m_treeCtrl->GetFirstVisibleItem();h;h=m_treeCtrl->GetNextVisible(h))
+    {
+        if (m_treeCtrl->GetBoundingRect(h, itemRect))
+        {
+            cy = itemRect.GetTop();
+            wxRect drawItemRect(0, cy, clientSize.x, itemRect.GetHeight());
 
-			lastH = h;
+            lastH = h;
 
-			// Draw the actual item
-			DrawItem(dc, h, drawItemRect);
-			dc.DrawLine(0, cy, clientSize.x, cy);
-		}
-	}
-	if (lastH.IsOk() && m_treeCtrl->GetBoundingRect(lastH, itemRect))
-	{
-		cy = itemRect.GetBottom();
-		dc.DrawLine(0, cy, clientSize.x, cy);
-	}
+            // Draw the actual item
+            DrawItem(dc, h, drawItemRect);
+            dc.DrawLine(0, cy, clientSize.x, cy);
+        }
+    }
+    if (lastH.IsOk() && m_treeCtrl->GetBoundingRect(lastH, itemRect))
+    {
+        cy = itemRect.GetBottom();
+        dc.DrawLine(0, cy, clientSize.x, cy);
+    }
 }
 
 void wxTreeCompanionWindow::OnScroll(wxScrollWinEvent& event)
@@ -511,15 +515,15 @@ void wxTreeCompanionWindow::OnScroll(wxScrollWinEvent& event)
     if (!m_treeCtrl)
         return;
 
-	// TODO: scroll the window physically instead of just refreshing.
-	Refresh(TRUE);
+    // TODO: scroll the window physically instead of just refreshing.
+    Refresh(TRUE);
 }
 
 void wxTreeCompanionWindow::OnExpand(wxTreeEvent& event)
 {
-	// TODO: something more optimized than simply refresh the whole
-	// window when the tree is expanded/collapsed. Tricky.
-	Refresh();
+    // TODO: something more optimized than simply refresh the whole
+    // window when the tree is expanded/collapsed. Tricky.
+    Refresh();
 }
 
 /*
@@ -529,7 +533,7 @@ void wxTreeCompanionWindow::OnExpand(wxTreeEvent& event)
 IMPLEMENT_CLASS(wxThinSplitterWindow, wxSplitterWindow)
 
 BEGIN_EVENT_TABLE(wxThinSplitterWindow, wxSplitterWindow)
-	EVT_SIZE(wxThinSplitterWindow::OnSize)
+    EVT_SIZE(wxThinSplitterWindow::OnSize)
 END_EVENT_TABLE()
 
 wxThinSplitterWindow::wxThinSplitterWindow(wxWindow* parent, wxWindowID id,
@@ -542,9 +546,9 @@ wxThinSplitterWindow::wxThinSplitterWindow(wxWindow* parent, wxWindowID id,
 
 void wxThinSplitterWindow::SizeWindows()
 {
-	// The client size may have changed inbetween
-	// the sizing of the first window and the sizing of
-	// the second. So repeat SizeWindows.
+    // The client size may have changed inbetween
+    // the sizing of the first window and the sizing of
+    // the second. So repeat SizeWindows.
     wxSplitterWindow::SizeWindows();
     wxSplitterWindow::SizeWindows();
 }
@@ -552,7 +556,7 @@ void wxThinSplitterWindow::SizeWindows()
 // Tests for x, y over sash
 bool wxThinSplitterWindow::SashHitTest(int x, int y, int tolerance)
 {
-	return wxSplitterWindow::SashHitTest(x, y, 4);
+    return wxSplitterWindow::SashHitTest(x, y, 4);
 }
 
 void wxThinSplitterWindow::DrawSash(wxDC& dc)
@@ -565,42 +569,42 @@ void wxThinSplitterWindow::DrawSash(wxDC& dc)
     int w, h;
     GetClientSize(&w, &h);
 
-	if ( m_splitMode == wxSPLIT_VERTICAL )
-	{
-		dc.SetPen(* m_facePen);
-		dc.SetBrush(* m_faceBrush);
-		int h1 = h-1;
-		int y1 = 0;
-		if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
-			h1 += 1; // Not sure why this is necessary...
-		if ( (GetWindowStyleFlag() & wxSP_3DBORDER) == wxSP_3DBORDER)
-		{
-			y1 = 2; h1 -= 3;
-		}
-		dc.DrawRectangle(m_sashPosition, y1, m_sashSize, h1);
-	}
-	else
-	{
-		dc.SetPen(* m_facePen);
-		dc.SetBrush(* m_faceBrush);
-		int w1 = w-1;
-		int x1 = 0;
-		if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
-			w1 ++;
-		if ( (GetWindowStyleFlag() & wxSP_3DBORDER) == wxSP_3DBORDER)
-		{
-			x1 = 2; w1 -= 3;
-		}
-		dc.DrawRectangle(x1, m_sashPosition, w1, m_sashSize);
-	}
-	
+    if ( m_splitMode == wxSPLIT_VERTICAL )
+    {
+        dc.SetPen(* m_facePen);
+        dc.SetBrush(* m_faceBrush);
+        int h1 = h-1;
+        int y1 = 0;
+        if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
+            h1 += 1; // Not sure why this is necessary...
+        if ( (GetWindowStyleFlag() & wxSP_3DBORDER) == wxSP_3DBORDER)
+        {
+            y1 = 2; h1 -= 3;
+        }
+        dc.DrawRectangle(m_sashPosition, y1, m_sashSize, h1);
+    }
+    else
+    {
+        dc.SetPen(* m_facePen);
+        dc.SetBrush(* m_faceBrush);
+        int w1 = w-1;
+        int x1 = 0;
+        if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
+            w1 ++;
+        if ( (GetWindowStyleFlag() & wxSP_3DBORDER) == wxSP_3DBORDER)
+        {
+            x1 = 2; w1 -= 3;
+        }
+        dc.DrawRectangle(x1, m_sashPosition, w1, m_sashSize);
+    }
+
     dc.SetPen(wxNullPen);
     dc.SetBrush(wxNullBrush);
 }
 
 void wxThinSplitterWindow::OnSize(wxSizeEvent& event)
 {
-	wxSplitterWindow::OnSize(event);
+    wxSplitterWindow::OnSize(event);
 }
 
 /*
@@ -610,8 +614,8 @@ void wxThinSplitterWindow::OnSize(wxSizeEvent& event)
 IMPLEMENT_CLASS(wxSplitterScrolledWindow, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxSplitterScrolledWindow, wxScrolledWindow)
-	EVT_SCROLLWIN(wxSplitterScrolledWindow::OnScroll)
-	EVT_SIZE(wxSplitterScrolledWindow::OnSize)
+    EVT_SCROLLWIN(wxSplitterScrolledWindow::OnScroll)
+    EVT_SIZE(wxSplitterScrolledWindow::OnSize)
 END_EVENT_TABLE()
 
 wxSplitterScrolledWindow::wxSplitterScrolledWindow(wxWindow* parent, wxWindowID id,
@@ -624,11 +628,11 @@ wxSplitterScrolledWindow::wxSplitterScrolledWindow(wxWindow* parent, wxWindowID 
 
 void wxSplitterScrolledWindow::OnSize(wxSizeEvent& event)
 {
-	wxSize sz = GetClientSize();
-	if (GetChildren().First())
-	{
-		((wxWindow*) GetChildren().First()->Data())->SetSize(0, 0, sz.x, sz.y);
-	}
+    wxSize sz = GetClientSize();
+    if (GetChildren().First())
+    {
+        ((wxWindow*) GetChildren().First()->Data())->SetSize(0, 0, sz.x, sz.y);
+    }
 }
 
 void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
@@ -642,7 +646,7 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
         return;
     }
     inOnScroll = TRUE;
-    
+
     int orient = event.GetOrientation();
 
     int nScrollInc = CalcScrollInc(event);

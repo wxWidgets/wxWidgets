@@ -15,7 +15,7 @@
 #define _WX_SPLITTREE_H_
 
 #ifdef __GNUG__
-	#pragma interface "splittree.h"
+    #pragma interface "splittree.h"
 #endif
 
 #ifdef GIZMOISDLL
@@ -54,17 +54,17 @@ class wxSplitterScrolledWindow;
 
 class GIZMODLLEXPORT wxRemotelyScrolledTreeCtrl: public wxTreeCtrl
 {
-	DECLARE_CLASS(wxRemotelyScrolledTreeCtrl)
+    DECLARE_CLASS(wxRemotelyScrolledTreeCtrl)
 public:
     wxRemotelyScrolledTreeCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pt = wxDefaultPosition,
         const wxSize& sz = wxDefaultSize, long style = wxTR_HAS_BUTTONS);
-	~wxRemotelyScrolledTreeCtrl();
+    ~wxRemotelyScrolledTreeCtrl();
 
 //// Events
-	void OnSize(wxSizeEvent& event);
-	void OnExpand(wxTreeEvent& event);
+    void OnSize(wxSizeEvent& event);
+    void OnExpand(wxTreeEvent& event);
     void OnScroll(wxScrollWinEvent& event);
-	void OnPaint(wxPaintEvent& event);
+    void OnPaint(wxPaintEvent& event);
 
 //// Overrides
     // Override this in case we're using the generic tree control.
@@ -89,18 +89,18 @@ public:
     virtual int GetScrollPos(int orient) const;
 
 //// Helpers
-	void HideVScrollbar();
+    void HideVScrollbar();
 
-	// Calculate the tree overall size so we can set the scrollbar
-	// correctly
-	void CalcTreeSize(wxRect& rect);
-	void CalcTreeSize(const wxTreeItemId& id, wxRect& rect);
+    // Calculate the tree overall size so we can set the scrollbar
+    // correctly
+    void CalcTreeSize(wxRect& rect);
+    void CalcTreeSize(const wxTreeItemId& id, wxRect& rect);
 
-	// Adjust the containing wxScrolledWindow's scrollbars appropriately
-	void AdjustRemoteScrollbars();
+    // Adjust the containing wxScrolledWindow's scrollbars appropriately
+    void AdjustRemoteScrollbars();
 
-	// Find the scrolled window that contains this control
-	wxScrolledWindow* GetScrolledWindow() const;
+    // Find the scrolled window that contains this control
+    wxScrolledWindow* GetScrolledWindow() const;
 
     // Scroll to the given line (in scroll units where each unit is
     // the height of an item)
@@ -108,15 +108,16 @@ public:
 
 //// Accessors
 
-	// The companion window is one which will get notified when certain
-	// events happen such as node expansion
-	void SetCompanionWindow(wxWindow* companion) { m_companionWindow = companion; }
-	wxWindow* GetCompanionWindow() const { return m_companionWindow; }
+    // The companion window is one which will get notified when certain
+    // events happen such as node expansion
+    void SetCompanionWindow(wxWindow* companion) { m_companionWindow = companion; }
+    wxWindow* GetCompanionWindow() const { return m_companionWindow; }
 
 
     DECLARE_EVENT_TABLE()
 protected:
-	wxWindow*	m_companionWindow;
+    wxWindow*   m_companionWindow;
+    bool        m_drawRowLines;
 };
 
 /*
@@ -136,22 +137,22 @@ public:
       long style = 0);
 
 //// Overrides
-	virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect);
+    virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect);
 
 //// Events
-	void OnPaint(wxPaintEvent& event);
+    void OnPaint(wxPaintEvent& event);
     void OnScroll(wxScrollWinEvent& event);
-	void OnExpand(wxTreeEvent& event);
+    void OnExpand(wxTreeEvent& event);
 
 //// Operations
 
 //// Accessors
-	wxRemotelyScrolledTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; };
-	void SetTreeCtrl(wxRemotelyScrolledTreeCtrl* treeCtrl) { m_treeCtrl = treeCtrl; }
+    wxRemotelyScrolledTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; };
+    void SetTreeCtrl(wxRemotelyScrolledTreeCtrl* treeCtrl) { m_treeCtrl = treeCtrl; }
 
 //// Data members
 protected:
-	wxRemotelyScrolledTreeCtrl*	m_treeCtrl;
+    wxRemotelyScrolledTreeCtrl* m_treeCtrl;
 
     DECLARE_EVENT_TABLE()
 };
@@ -180,7 +181,7 @@ public:
     // Tests for x, y over sash. Overriding this allows us to increase
     // the tolerance.
     bool SashHitTest(int x, int y, int tolerance = 2);
-	void DrawSash(wxDC& dc);
+    void DrawSash(wxDC& dc);
 
 //// Events
 
