@@ -553,6 +553,32 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                                      const wxString& facename,
                                      bool interactive)
 {
+#if wxUSE_GUI
+    // we need a flag to prevent infinite recursion which happens, for
+    // example, when GetAltForEncoding() is called from an OnPaint() handler:
+    // in this case, wxYield() which is called from wxMessageBox() we use here
+    // will lead to another call of OnPaint() and hence to another call of
+    // GetAltForEncoding() - and it is impossible to catch this from the user
+    // code because we are called from wxFont ctor implicitly.
+
+    // assume we're always called from the main thread, so that it is safe to
+    // use a static var
+    static bool s_inGetAltForEncoding = FALSE;
+
+    if ( interactive && s_inGetAltForEncoding )
+        return FALSE;
+
+    class ReentrancyBlocker
+    {
+    public:
+        ReentrancyBlocker(bool& b) : m_b(b) { m_b = TRUE; }
+       ~ReentrancyBlocker() { m_b = FALSE; }
+
+    private:
+       bool& m_b;
+    } blocker(s_inGetAltForEncoding);
+#endif // wxUSE_GUI
+
     wxCHECK_MSG( info, FALSE, wxT("bad pointer in GetAltForEncoding") );
 
     info->facename = facename;
