@@ -35,6 +35,7 @@ unnecessary to process both events at once.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxNotebookEvent::wxNotebookEvent}\label{wxnotebookeventconstr}
 
 \func{}{wxNotebookEvent}{\param{wxEventType}{ eventType = wxEVT\_NULL},
@@ -42,11 +43,13 @@ unnecessary to process both events at once.
 
 Constructor (used internally by wxWidgets only).
 
+
 \membersection{wxNotebookEvent::GetOldSelection}\label{wxnotebookeventgetoldselection}
 
 \constfunc{int}{GetOldSelection}{\void}
 
 Returns the page that was selected before the change, $-1$ if none was selected.
+
 
 \membersection{wxNotebookEvent::GetSelection}\label{wxnotebookeventgetselection}
 
@@ -57,13 +60,20 @@ Returns the currently selected page, or $-1$ if none was selected.
 {\bf NB:} under Windows, GetSelection() will return the same value as\rtfsp
 \helpref{GetOldSelection()}{wxnotebookeventgetoldselection} when called from
 {\tt EVT\_NOTEBOOK\_PAGE\_CHANGING} handler and not the page which is going to
-be selected.
+be selected. Also note that the values of selection and old selection returned
+for an event generated in response to a call to 
+\helpref{wxNotebook::SetSelection}{wxnotebooksetselection} shouldn't be trusted
+as they are currently inconsistent under different platforms (but in this case
+you presumably don't need them anyhow as you already have the corresponding
+information).
+
 
 \membersection{wxNotebookEvent::SetOldSelection}\label{wxnotebookeventsetoldselection}
 
 \func{void}{SetOldSelection}{\param{int}{ page}}
 
 Sets the id of the page selected before the change.
+
 
 \membersection{wxNotebookEvent::SetSelection}\label{wxnotebookeventsetselection}
 
