@@ -284,9 +284,12 @@ DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_STOP,     wxMEDIA_STO
 //Function type(s) our events need
 typedef void (wxEvtHandler::*wxMediaEventFunction)(wxMediaEvent&);
 
+#define wxMediaEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxMediaEventFunction, &func)
+
 //Macro for usage with message maps
-#define EVT_MEDIA_FINISHED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_FINISHED, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxMediaEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_MEDIA_STOP(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_STOP, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxMediaEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_MEDIA_FINISHED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_FINISHED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
+#define EVT_MEDIA_STOP(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_STOP, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 
 // ----------------------------------------------------------------------------
 // End compilation gaurd
