@@ -86,7 +86,7 @@ public:
    
     // calculate size for wxNotebookSizer
   wxSize CalcSizeFromPage(const wxSize& sizePage) const;
-
+  wxRect GetPageRect() const ;
 /*
     // get number of pages in the dialog
   int GetPageCount() const;
@@ -134,8 +134,9 @@ public:
   // -------------------
   virtual void Command(wxCommandEvent& event);
 protected:
-    virtual wxNotebookPage *DoRemovePage(size_t page) ;
-    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
+  virtual wxSize DoGetBestSize() const ;
+  virtual wxNotebookPage *DoRemovePage(size_t page) ;
+  virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
   // common part of all ctors
   void Init();
 
