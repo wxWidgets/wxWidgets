@@ -60,7 +60,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	if ( err != noErr )
 #endif
 	{
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
 #if TARGET_CARBON && PM_USE_SESSION_APIS
@@ -81,7 +81,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	err = PrError() ;
 	if ( err != noErr )
 	{
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
 		UMAPrClose(NULL) ;
@@ -93,7 +93,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	err = PrError() ;
 	if ( err )
 	{
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
 		UMAPrClose(NULL) ;
@@ -117,7 +117,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     if ( err != noErr || m_macPrintSessionPort == kPMNoReference )
   #endif
     {
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
@@ -139,7 +139,7 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
     if ( err != noErr )
     {
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if TARGET_CARBON && PM_USE_SESSION_APIS
@@ -178,7 +178,7 @@ wxPrinterDC::~wxPrinterDC(void)
 		}
 		else
 		{
-			message.Printf( "Print Error %d", err ) ;
+			message.Printf( "Print Error %ld", err ) ;
 			wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		    dialog.ShowModal();
 		}
@@ -196,7 +196,7 @@ wxPrinterDC::~wxPrinterDC(void)
   #endif
      	if ( err != noErr )
      	{
-			message.Printf( "Print Error %d", err ) ;
+			message.Printf( "Print Error %ld", err ) ;
 			wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		    dialog.ShowModal();
      	}
@@ -252,7 +252,7 @@ void wxPrinterDC::StartPage(void)
 	err = PrError() ;
 	if ( err != noErr )
 	{
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
    		::PrClosePage( (TPPrPort) m_macPrintSessionPort ) ;
@@ -271,7 +271,7 @@ void wxPrinterDC::StartPage(void)
   #endif
 	if ( err != noErr )
 	{
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if PM_USE_SESSION_APIS
@@ -302,7 +302,7 @@ void wxPrinterDC::EndPage(void)
 	err = PrError() ;
 	if ( err != noErr )
 	{
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
 		::PrCloseDoc( (TPPrPort) m_macPrintSessionPort  ) ;
@@ -318,7 +318,7 @@ void wxPrinterDC::EndPage(void)
   #endif
 	if ( err != noErr )
 	{
-		message.Printf( "Print Error %d", err ) ;
+		message.Printf( "Print Error %ld", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
   #if PM_USE_SESSION_APIS
