@@ -321,10 +321,10 @@
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>wsock32</sys-lib>
             </if>
-            <if cond="FORMAT=='msvc' or FORMAT=='borland'">
+            <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
                 <sys-lib>oleacc</sys-lib>
             </if>
-        </if>        
+        </if>
     </template>
 
     <define-tag name="msvc-headers" rules="dll,lib">
