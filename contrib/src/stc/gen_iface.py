@@ -488,13 +488,13 @@ methodOverrideMap = {
     'AddRefDocument' : (0,
                        'void %s(void* docPointer);',
                        '''void %s(void* docPointer) {
-                           SendMsg(%s, (long)docPointer);''',
+                           SendMsg(%s, 0, (long)docPointer);''',
                         0),
 
     'ReleaseDocument' : (0,
                        'void %s(void* docPointer);',
                        '''void %s(void* docPointer) {
-                           SendMsg(%s, (long)docPointer);''',
+                           SendMsg(%s, 0, (long)docPointer);''',
                          0),
     'SetCodePage' : (0,
                      0,

@@ -1565,12 +1565,12 @@ void* wxStyledTextCtrl::CreateDocument() {
 
 // Extend life of document.
 void wxStyledTextCtrl::AddRefDocument(void* docPointer) {
-                           SendMsg(2376, (long)docPointer);
+                           SendMsg(2376, 0, (long)docPointer);
 }
 
 // Release a reference to the document, deleting document if it fades to black.
 void wxStyledTextCtrl::ReleaseDocument(void* docPointer) {
-                           SendMsg(2377, (long)docPointer);
+                           SendMsg(2377, 0, (long)docPointer);
 }
 
 // Get which document modification events are sent to the container.
