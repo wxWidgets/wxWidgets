@@ -94,6 +94,10 @@ AC_DEFUN([AM_PATH_WXCONFIG],
      WX_LOOKUP_PATH="$WX_LOOKUP_PATH:$wx_config_prefix/bin"
   fi
 
+  if test "x$4" != "x" ; then
+     wx_config_args="$wx_config_args $4"
+  fi
+
   dnl don't search the PATH if WX_CONFIG_NAME is absolute filename
   if test -x "$WX_CONFIG_NAME" ; then
      AC_MSG_CHECKING(for wx-config)
@@ -147,11 +151,7 @@ AC_DEFUN([AM_PATH_WXCONFIG],
     if test "x$wx_ver_ok" = x ; then
       no_wx=yes
     else
-      if test "x$4" = "x" ; then
-        wx_libs_arg="--libs"
-      else
-        wx_libs_arg="--libs=$4"
-      fi
+      wx_libs_arg="--libs"
       WX_LIBS=`$WX_CONFIG_WITH_ARGS $wx_libs_arg`
       WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static $wx_libs_arg`
 
