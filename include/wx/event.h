@@ -863,7 +863,7 @@ protected:
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxWindow;
 
-class WXDLLEXPORT wxUpdateUIEvent: public wxEvent
+class WXDLLEXPORT wxUpdateUIEvent: public wxCommandEvent
 {
   DECLARE_DYNAMIC_CLASS(wxUpdateUIEvent)
 

@@ -439,7 +439,6 @@ wxBitmapList::wxBitmapList ()
 
 wxBitmapList::~wxBitmapList ()
 {
-  wxLogDebug("~wxBitmapList: count = %d", Number());
 #ifdef __WXMSW__
 
   wxNode *node = First ();
