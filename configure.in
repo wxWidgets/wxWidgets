@@ -1373,6 +1373,7 @@ case "${host}" in
       else
           dnl Include resources for the "native" port (wxPM).
           RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
+	  CLEANRESPROGRAMOBJ=""
       fi
       AC_CACHE_CHECK([for gcc 3 or later], wx_cv_gcc3,[
           AC_TRY_COMPILE([],
@@ -2050,6 +2051,7 @@ if test "$USE_WIN32" = 1 ; then
 
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
+    CLEANRESPROGRAMOBJ=${RESPROGRAMOBJ}
 
     dnl install Win32-specific files in "make install"
     WIN32INSTALL=win32install
@@ -5515,6 +5517,7 @@ dnl additional resurces settings
 AC_SUBST(RESCOMP)
 AC_SUBST(RESFLAGS)
 AC_SUBST(RESPROGRAMOBJ)
+AC_SUBST(CLEANRESPROGRAMOBJ)
 AC_SUBST(WX_RESOURCES_MACOSX_ASCII)
 AC_SUBST(WX_RESOURCES_MACOSX_DATA)
 
