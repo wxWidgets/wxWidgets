@@ -321,7 +321,7 @@ int wxDividedShape::GetNumberOfAttachments() const
   return maxN + 1;
 }
 
-bool wxDividedShape::AttachmentIsValid(int attachment)
+bool wxDividedShape::AttachmentIsValid(int attachment) const
 {
   int totalNumberAttachments = (GetRegions().GetCount() * 2) + 2;
   if (attachment >= totalNumberAttachments)

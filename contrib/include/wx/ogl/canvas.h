@@ -23,7 +23,7 @@
 #define StartDraggingRight     3
 #define ContinueDraggingRight  4
 
-extern wxChar* wxShapeCanvasNameStr;
+extern const wxChar* wxShapeCanvasNameStr;
 
 // When drag_count reaches 0, process drag message
 

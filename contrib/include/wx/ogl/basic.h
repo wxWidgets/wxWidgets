@@ -177,7 +177,7 @@ class wxShapeEvtHandler: public wxObject, public wxClientDataContainer
 
   // Does the copy - override for new event handlers which might store
   // app-specific data.
-  virtual void CopyData(wxShapeEvtHandler& copy) {};
+  virtual void CopyData(wxShapeEvtHandler& WXUNUSED(copy)) {};
 
  private:
   wxShapeEvtHandler*    m_previousHandler;
@@ -223,7 +223,7 @@ class wxShape: public wxShapeEvtHandler
   virtual void OnEraseContents(wxDC& dc);
   virtual void OnHighlight(wxDC& dc);
   virtual void OnLeftClick(double x, double y, int keys = 0, int attachment = 0);
-  virtual void OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0) {}
+  virtual void OnLeftDoubleClick(double WXUNUSED(x), double WXUNUSED(y), int WXUNUSED(keys) = 0, int WXUNUSED(attachment) = 0) {}
   virtual void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
   virtual void OnSize(double x, double y);
   virtual bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
@@ -616,7 +616,7 @@ class wxPolygonShape: public wxShape
   int GetNumberOfAttachments() const;
   bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
-  bool AttachmentIsValid(int attachment);
+  bool AttachmentIsValid(int attachment) const;
   // Does the copying for this object
   void Copy(wxShape& copy);
 

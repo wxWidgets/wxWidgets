@@ -793,7 +793,7 @@ bool wxPolygonShape::GetAttachmentPosition(int attachment, double *x, double *y,
   { return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line); }
 }
 
-bool wxPolygonShape::AttachmentIsValid(int attachment)
+bool wxPolygonShape::AttachmentIsValid(int attachment) const
 {
   if (!m_points)
     return FALSE;
