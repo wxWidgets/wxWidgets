@@ -54,6 +54,8 @@ or test if it can be opened for writing with Access()}
 contents of the file is not erased and the file pointer is initially placed at the end of the file;
 can not be used with Access(). This is the same as {\bf wxFile::write} if the
 file doesn't exist.}
+\twocolitem{{\bf wxFile::write\_excl}}{Open the file securely for writing (Uses O\_EXCL | O\_CREAT).
+Will fail if the file already exists, else create and open it atomically.  Useful for opening temporary files without being vulnerable to race exploits.}
 \end{twocollist}
 
 Other constants defined elsewhere but used by wxFile functions are wxInvalidOffset which represents an
