@@ -354,13 +354,13 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
     for ( size_t nWeek = 1; nWeek <= 6; nWeek++, y += m_heightRow )
     {
         // if the update region doesn't intersect this row, don't paint it
-        if ( !IsExposed(0, y, 7*m_widthCol, y + m_heightRow - 1) )
+        if ( !IsExposed(0, y, 7*m_widthCol, m_heightRow - 1) )
         {
             date += wxDateSpan::Week();
 
             continue;
         }
-
+        
         printf("painting week %d at y = %d\n", nWeek, y);
 
         for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )

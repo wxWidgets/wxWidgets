@@ -598,9 +598,6 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 
-    if (gdk_event->count > 0)
-        return;
-
 /*
     wxPrintf( "OnExpose from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -610,6 +607,9 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
                                 (int)gdk_event->area.width,
                                 (int)gdk_event->area.height );
 */
+
+    if (gdk_event->count > 0)
+        return;
 
     wxEraseEvent eevent( win->GetId() );
     eevent.SetEventObject( win );
