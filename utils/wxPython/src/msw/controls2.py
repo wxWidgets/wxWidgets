@@ -348,9 +348,12 @@ class wxTreeItemDataPtr :
     def __del__(self):
         if self.thisown == 1 :
             controls2c.delete_wxTreeItemData(self.this)
-    def GetItemId(self):
-        val = controls2c.wxTreeItemData_GetItemId(self.this)
+    def GetId(self):
+        val = controls2c.wxTreeItemData_GetId(self.this)
         val = wxTreeItemIdPtr(val)
+        return val
+    def SetId(self,arg0):
+        val = controls2c.wxTreeItemData_SetId(self.this,arg0.this)
         return val
     def __repr__(self):
         return "<C wxTreeItemData instance>"

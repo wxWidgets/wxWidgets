@@ -231,7 +231,7 @@ class ColoredPanel(wxWindow):
 
 
 class TestNotebookWindow(wxFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, 'Test wxNotebook',
                          wxPyDefaultPosition, wxPyDefaultSize)
 
@@ -239,9 +239,19 @@ class TestNotebookWindow(wxFrame):
 
         win = ColoredPanel(nb, wxBLUE)
         nb.AddPage(win, "Blue")
-        st = wxStaticText(win, -1, "You can put any type of window here!", wxPoint(10, 10))
+        st = wxStaticText(win, -1,
+                          "You can put nearly any type of window here!",
+                          wxPoint(10, 10))
         st.SetForegroundColour(wxWHITE)
         st.SetBackgroundColour(wxBLUE)
+        st = wxStaticText(win, -1,
+                          "Check the next tab for an example...",
+                          wxPoint(10, 30))
+        st.SetForegroundColour(wxWHITE)
+        st.SetBackgroundColour(wxBLUE)
+
+        win = TestTreeCtrlPanel(nb, log)
+        nb.AddPage(win, "TreeCtrl")
 
         win = ColoredPanel(nb, wxRED)
         nb.AddPage(win, "Red")
@@ -266,7 +276,7 @@ class TestNotebookWindow(wxFrame):
 
 
         nb.SetSelection(0)
-        self.SetSize(wxSize(300, 300))  # force a redraw so the notebook will draw
+        self.SetSize(wxSize(350, 300))  # force a redraw so the notebook will draw
 
 
     def OnCloseWindow(self, event):
@@ -419,6 +429,56 @@ class TestToolBar(wxFrame):
 
 
 #---------------------------------------------------------------------------
+
+class TestTreeCtrlPanel(wxPanel):
+    def __init__(self, parent, log):
+        wxPanel.__init__(self, parent, -1)
+
+        self.log = log
+        tID = 1101
+
+        self.tree = wxTreeCtrl(self, tID)
+        root = self.tree.AddRoot("The Root Item")
+        for x in range(10):
+            child = self.tree.AppendItem(root, "Item %d" % x)
+            for y in range(5):
+                last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
+
+        self.tree.Expand(root)
+        EVT_TREE_ITEM_EXPANDED  (self, tID, self.OnItemExpanded)
+        EVT_TREE_ITEM_COLLAPSED (self, tID, self.OnItemCollapsed)
+        EVT_TREE_SEL_CHANGED    (self, tID, self.OnSelChanged)
+
+
+    def OnSize(self, event):
+        w,h = self.GetClientSize()
+        self.tree.SetDimensions(0, 0, w, h)
+
+
+    def OnItemExpanded(self, event):
+        item = event.GetItem()
+        self.log.WriteText("OnItemExpanded: %s\n" % self.tree.GetItemText(item))
+
+    def OnItemCollapsed(self, event):
+        item = event.GetItem()
+        self.log.WriteText("OnItemCollapsed: %s\n" % self.tree.GetItemText(item))
+
+    def OnSelChanged(self, event):
+        item = event.GetItem()
+        self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(item))
+
+
+
+
+class TestTreeCtrl(wxFrame):
+    def __init__(self, parent, log):
+        wxFrame.__init__(self, parent, -1, 'Test TreeCtrl',
+                         wxPyDefaultPosition, wxSize(250, 300))
+
+        p = TestTreeCtrlPanel(self, log)
+
+
+#---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 
@@ -525,6 +585,10 @@ class AppFrame(wxFrame):
         mID = NewId()
         menu.Append(mID, '&ToolBar')
         EVT_MENU(self, mID, self.OnTestToolBar)
+
+        mID = NewId()
+        menu.Append(mID, 'T&ree Control')
+        EVT_MENU(self, mID, self.OnTestTreeCtrl)
 
         return menu
 
@@ -653,7 +717,7 @@ class AppFrame(wxFrame):
 
 
     def OnTestNotebook(self, event):
-        win = TestNotebookWindow(self)
+        win = TestNotebookWindow(self, self)
         win.Show(true)
 
     def OnTestSplitter(self, event):
@@ -666,6 +730,10 @@ class AppFrame(wxFrame):
 
     def OnTestToolBar(self, event):
         win = TestToolBar(self, self)
+        win.Show(true)
+
+    def OnTestTreeCtrl(self, event):
+        win = TestTreeCtrl(self, self)
         win.Show(true)
 
 
@@ -717,6 +785,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.7  1998/11/11 03:13:19  RD
+# Additions for wxTreeCtrl
+#
 # Revision 1.6  1998/10/20 06:45:33  RD
 # New wxTreeCtrl wrappers (untested)
 # some changes in helpers

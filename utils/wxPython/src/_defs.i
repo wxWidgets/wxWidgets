@@ -667,6 +667,8 @@ enum wxEventType {
  wxEVT_COMMAND_TREE_SET_INFO,
  wxEVT_COMMAND_TREE_ITEM_EXPANDED,
  wxEVT_COMMAND_TREE_ITEM_EXPANDING,
+ wxEVT_COMMAND_TREE_ITEM_COLLAPSED,
+ wxEVT_COMMAND_TREE_ITEM_COLLAPSING,
  wxEVT_COMMAND_TREE_SEL_CHANGED,
  wxEVT_COMMAND_TREE_SEL_CHANGING,
  wxEVT_COMMAND_TREE_KEY_DOWN,
@@ -699,6 +701,9 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/11/11 03:12:24  RD
+// Additions for wxTreeCtrl
+//
 // Revision 1.6  1998/10/20 06:43:53  RD
 // New wxTreeCtrl wrappers (untested)
 // some changes in helpers

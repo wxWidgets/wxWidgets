@@ -189,192 +189,6 @@ public:
 //----------------------------------------------------------------------
 
 
-#ifdef SKIPTHIS
-
-
-enum {
-    wxTREE_MASK_HANDLE,
-    wxTREE_MASK_STATE,
-    wxTREE_MASK_TEXT,
-    wxTREE_MASK_IMAGE,
-    wxTREE_MASK_SELECTED_IMAGE,
-    wxTREE_MASK_CHILDREN,
-    wxTREE_MASK_DATA,
-
-    wxTREE_STATE_BOLD,
-    wxTREE_STATE_DROPHILITED,
-    wxTREE_STATE_EXPANDED,
-    wxTREE_STATE_EXPANDEDONCE,
-    wxTREE_STATE_FOCUSED,
-    wxTREE_STATE_SELECTED,
-    wxTREE_STATE_CUT,
-
-    wxTREE_HITTEST_ABOVE,
-    wxTREE_HITTEST_BELOW,
-    wxTREE_HITTEST_NOWHERE,
-    wxTREE_HITTEST_ONITEMBUTTON,
-    wxTREE_HITTEST_ONITEMICON,
-    wxTREE_HITTEST_ONITEMINDENT,
-    wxTREE_HITTEST_ONITEMLABEL,
-    wxTREE_HITTEST_ONITEMRIGHT,
-    wxTREE_HITTEST_ONITEMSTATEICON,
-    wxTREE_HITTEST_TOLEFT,
-    wxTREE_HITTEST_TORIGHT,
-    wxTREE_HITTEST_ONITEM,
-};
-
-
-enum {
-    wxTREE_NEXT_CARET,
-    wxTREE_NEXT_CHILD,
-    wxTREE_NEXT_DROPHILITE,
-    wxTREE_NEXT_FIRSTVISIBLE,
-    wxTREE_NEXT_NEXT,
-    wxTREE_NEXT_NEXTVISIBLE,
-    wxTREE_NEXT_PARENT,
-    wxTREE_NEXT_PREVIOUS,
-    wxTREE_NEXT_PREVIOUSVISIBLE,
-    wxTREE_NEXT_ROOT
-};
-
-enum {
-    wxTREE_EXPAND_EXPAND,
-    wxTREE_EXPAND_COLLAPSE,
-    wxTREE_EXPAND_COLLAPSE_RESET,
-    wxTREE_EXPAND_TOGGLE
-};
-
-enum {
-    wxTREE_INSERT_LAST,
-    wxTREE_INSERT_FIRST,
-    wxTREE_INSERT_SORT,
-};
-
-
-
-
-class wxTreeItem {
-public:
-    long            m_mask;
-    long            m_itemId;
-    long            m_state;
-    long            m_stateMask;
-    wxString        m_text;
-    int             m_image;
-    int             m_selectedImage;
-    int             m_children;
-    long            m_data;
-
-    wxTreeItem();
-    ~wxTreeItem();
-};
-
-
-
-class  wxTreeEvent : public wxCommandEvent {
-public:
-    int           m_code;
-    wxTreeItem    m_item;
-    long          m_oldItem;
-    wxPoint       m_pointDrag;
-};
-
-
-
-
-class wxTreeCtrl : public wxControl {
-public:
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
-            const wxPoint& pos = wxPyDefaultPosition,
-            const wxSize& size = wxPyDefaultSize,
-            long style = wxTR_HAS_BUTTONS,
-            const wxValidator& validator = wxPyDefaultValidator,
-            char* name = "wxTreeCtrl");
-
-    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
-
-    bool DeleteAllItems();
-#ifdef __WXMSW__
-    bool DeleteItem(long item);
-#else
-    void DeleteItem(long item);
-#endif
-#ifdef __WXMSW__
-    wxTextCtrl* EditLabel(long item);
-    bool EnsureVisible(long item);
-    bool ExpandItem(long item, int action);
-    long GetChild(long item);
-#endif
-    int GetCount();
-#ifdef __WXMSW__
-    wxTextCtrl* GetEditControl();
-    long GetFirstVisibleItem();
-#endif
-    wxImageList* GetImageList(int which = wxIMAGE_LIST_NORMAL);
-    int GetIndent();
-    long GetItemData(long item);
-
-    %addmethods {
-        %new wxTreeItem* GetItem() {
-            wxTreeItem* info = new wxTreeItem;
-            self->GetItem(*info);
-            return info;
-        }
-#ifdef __WXMSW__
-        %new wxRect* GetItemRect(long item, int textOnly = FALSE) {
-            wxRect* rect = new wxRect;
-            self->GetItemRect(item, *rect, textOnly);
-            return rect;
-        }
-#endif
-    }
-
-#ifdef __WXMSW__
-    int GetItemState(long item, long stateMask);
-#endif
-    wxString GetItemText(long item);
-#ifdef __WXMSW__
-    long GetNextItem(long item, int code);
-    long GetNextVisibleItem(long item);
-#endif
-    long GetParent(long item);
-    long GetRootItem();
-    long GetSelection();
-    long HitTest(const wxPoint& point, int& OUTPUT); // *** check this
-    long InsertItem(long parent, wxTreeItem& info,
-                    long insertAfter = wxTREE_INSERT_LAST);
-    %name(InsertItemString)
-        long InsertItem(long parent, const wxString& label,
-                        int image = -1, int selImage = -1,
-                        long insertAfter = wxTREE_INSERT_LAST);
-    bool ItemHasChildren(long item);
-#ifdef __WXMSW__
-    bool ScrollTo(long item);
-#endif
-    bool SelectItem(long item);
-    void SetIndent(int indent);
-    void SetImageList(wxImageList* imageList, int which = wxIMAGE_LIST_NORMAL);
-    bool SetItem(wxTreeItem& info);
-#ifdef __WXMSW__
-    bool SetItemImage(long item, int image, int selImage);
-#else
-    void SetItemImage(long item, int image, int selImage);
-#endif
-#ifdef __WXMSW__
-    bool SetItemState(long item, long state, long stateMask);
-#endif
-    void SetItemText(long item, const wxString& text);
-    bool SetItemData(long item, long data);
-#ifdef __WXMSW__
-    bool SortChildren(long item);
-#endif
-};
-
-#endif
-
-
-//----------------------------------------------------------------------
-
 #ifdef __WXMSW__
 class wxTreeItemId {
 public:
@@ -396,7 +210,8 @@ public:
     wxTreeItemData();
     ~wxTreeItemData();
 
-    const wxTreeItemId& GetItemId();
+    const wxTreeItemId& GetId();
+    void SetId(const wxTreeItemId& id);
 };
 
 
@@ -568,6 +383,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/11/11 03:12:25  RD
+// Additions for wxTreeCtrl
+//
 // Revision 1.6  1998/10/20 06:43:55  RD
 // New wxTreeCtrl wrappers (untested)
 // some changes in helpers
