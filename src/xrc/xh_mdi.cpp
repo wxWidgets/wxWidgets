@@ -68,7 +68,7 @@ wxWindow *wxMdiXmlHandler::CreateFrame()
     {
         XRC_MAKE_INSTANCE(frame, wxMDIParentFrame);
 
-        ((wxMDIParentFrame*)frame)->Create(m_parentAsWindow,
+        frame->Create(m_parentAsWindow,
                       GetID(),
                       GetText(wxT("title")),
                       wxDefaultPosition, wxDefaultSize,
@@ -86,7 +86,7 @@ wxWindow *wxMdiXmlHandler::CreateFrame()
 
         XRC_MAKE_INSTANCE(frame, wxMDIChildFrame);
 
-        ((wxMDIChildFrame*) frame)->Create(mdiParent,
+        frame->Create(mdiParent,
                       GetID(),
                       GetText(wxT("title")),
                       wxDefaultPosition, wxDefaultSize,
