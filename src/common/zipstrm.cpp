@@ -58,7 +58,7 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
         m_lasterror = wxStream_READ_ERR;
         return;
     }
-    m_Size = zinfo.uncompressed_size;
+    m_Size = (size_t)zinfo.uncompressed_size;
 }
 
 

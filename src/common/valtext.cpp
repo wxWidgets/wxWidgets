@@ -269,7 +269,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 
     if ( m_validatorWindow )
     {
-        int keyCode = event.KeyCode();
+        long keyCode = event.KeyCode();
 
         // we don't filter special keys and Delete
         if (

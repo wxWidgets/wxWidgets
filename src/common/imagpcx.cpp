@@ -303,7 +303,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     wxHashTable h(wxKEY_INTEGER);   // image histogram
     unsigned long key;              // key in the hashtable
     unsigned int i;
- 
+
     // See if we can save as 8 bit.
     //
     if (image->CountColours(256) <= 256)
@@ -370,7 +370,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
                     key = (r << 16) | (g << 8) | b;
 
                     hnode = (wxHNode *) h.Get(key);
-                    p[i] = hnode->index;
+                    p[i] = (unsigned char)hnode->index;
                 }
                 break;
             }
@@ -388,7 +388,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
 
         RLEencode(p, bytesperline * nplanes, stream);
     }
-    
+
     free(p);
 
     // For 8 bit images, build the palette and write it to the stream

@@ -387,7 +387,7 @@ bool wxVariantDataLong::Write(wxOutputStream& str) const
 {
     wxTextOutputStream s(str);
 
-    s.Write32(m_value);
+    s.Write32((size_t)m_value);
     return TRUE;
 }
 

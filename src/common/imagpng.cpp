@@ -141,18 +141,18 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         png_set_expand( png_ptr );
     png_set_filler( png_ptr, 0xff, PNG_FILLER_AFTER );
 
-    image->Create( width, height );
+    image->Create( (int)width, (int)height );
 
     if (!image->Ok())
         goto error_nolines;
 
-    lines = (unsigned char **)malloc( height * sizeof(unsigned char *) );
+    lines = (unsigned char **)malloc( (size_t)(height * sizeof(unsigned char *)) );
     if (lines == NULL)
         goto error_nolines;
 
     for (i = 0; i < height; i++)
     {
-        if ((lines[i] = (unsigned char *)malloc(width * (sizeof(unsigned char) * 4))) == NULL)
+        if ((lines[i] = (unsigned char *)malloc( (size_t)(width * (sizeof(unsigned char) * 4)))) == NULL)
         {
             for ( unsigned int n = 0; n < i; n++ )
                 free( lines[n] );

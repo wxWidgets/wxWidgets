@@ -1008,7 +1008,7 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     fprintf( m_pstream, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
                 // this is a hack - we must scale font size (in pts) according to m_scaleY but
                 // YLOG2DEVREL works with wxCoord type (int or longint). Se we first convert font size
-                // to 1/1000th of pt and then back. 
+                // to 1/1000th of pt and then back.
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -1142,9 +1142,9 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
-    
+
     wxCoord text_w, text_h, text_descent;
-    
+
     GetTextExtent(text, &text_w, &text_h, &text_descent);
 
     SetFont( m_font );
@@ -1266,9 +1266,9 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         if (!m_colour)
         {
             // Anything not white is black
-            if (! (red == (unsigned char) 255 && 
-	           blue == (unsigned char) 255 &&
-		   green == (unsigned char) 255))
+            if (! (red == (unsigned char) 255 &&
+                   blue == (unsigned char) 255 &&
+                   green == (unsigned char) 255))
             {
                 red = (unsigned char) 0;
                 green = (unsigned char) 0;
@@ -1282,11 +1282,11 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
             double redPS = (double)(red) / 255.0;
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
-	
-	    fprintf( m_pstream, 
-	            "%.8f %.8f %.8f setrgbcolor\n",
-		    redPS, greenPS, bluePS );
-		
+
+            fprintf( m_pstream,
+                    "%.8f %.8f %.8f setrgbcolor\n",
+                    redPS, greenPS, bluePS );
+
             m_currentRed = red;
             m_currentBlue = blue;
             m_currentGreen = green;
@@ -1298,13 +1298,13 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     long by = y + (long)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
 
     // FIXME only correct for 90 degrees
-    fprintf( m_pstream, "%d %d moveto\n", XLOG2DEV(x + size), YLOG2DEV(by) );
+    fprintf(m_pstream, "%d %d moveto\n", XLOG2DEV(x + size), YLOG2DEV(by) );
     fprintf(m_pstream, "%.8f rotate\n", angle);
 
     /* I don't know how to write char to a stream, so I use a mini string */
     char tmpbuf[2];
     tmpbuf[1] = 0;
-    
+
     fprintf( m_pstream, "(" );
     const wxWX2MBbuf textbuf = text.mb_str();
     int len = strlen(textbuf);
@@ -1315,22 +1315,22 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         if (c == ')' || c == '(' || c == '\\')
         {
             /* Cope with special characters */
-	    fprintf( m_pstream, "\\" );
-	    tmpbuf[0] = (char) c;
-	    fprintf( m_pstream, tmpbuf );
+            fprintf( m_pstream, "\\" );
+            tmpbuf[0] = (char) c;
+            fprintf( m_pstream, tmpbuf );
         }
         else if ( c >= 128 )
         {
             /* Cope with character codes > 127 */
-	    fprintf(m_pstream, "\\%o", c);
+            fprintf(m_pstream, "\\%o", c);
         }
         else
-	{
-	    tmpbuf[0] = (char) c;
-	    fprintf( m_pstream, tmpbuf );
-	}
+        {
+            tmpbuf[0] = (char) c;
+            fprintf( m_pstream, tmpbuf );
+        }
     }
-    
+
     fprintf( m_pstream, ") show\n" );
     fprintf( m_pstream, "%.8f rotate\n", -angle );
 
@@ -1340,13 +1340,13 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
         long w, h;
         GetTextExtent(text, &w, &h);
 
-        fprintf( m_pstream, 
+        fprintf( m_pstream,
                  "gsave\n"
-                 "%d %d moveto\n"		
+                 "%d %d moveto\n"
                  "%ld setlinewidth\n"
                  "%d %d lineto\n"
                  "stroke\n"
-                 "grestore\n", 
+                 "grestore\n",
                  XLOG2DEV(x), YLOG2DEV(uy),
                  (long)m_underlineThickness,
                  XLOG2DEV(x + w), YLOG2DEV(uy) );
@@ -1609,8 +1609,8 @@ void wxPostScriptDC::EndDoc ()
     wxCoord wx_printer_translate_x, wx_printer_translate_y;
     double wx_printer_scale_x, wx_printer_scale_y;
 
-    wx_printer_translate_x = m_printData.GetPrinterTranslateX();
-    wx_printer_translate_y = m_printData.GetPrinterTranslateY();
+    wx_printer_translate_x = (wxCoord)m_printData.GetPrinterTranslateX();
+    wx_printer_translate_y = (wxCoord)m_printData.GetPrinterTranslateY();
 
     wx_printer_scale_x = m_printData.GetPrinterScaleX();
     wx_printer_scale_y = m_printData.GetPrinterScaleY();
@@ -1737,8 +1737,8 @@ void wxPostScriptDC::StartPage()
     wxCoord translate_x, translate_y;
     double scale_x, scale_y;
 
-    translate_x = m_printData.GetPrinterTranslateX();
-    translate_y = m_printData.GetPrinterTranslateY();
+    translate_x = (wxCoord)m_printData.GetPrinterTranslateX();
+    translate_y = (wxCoord)m_printData.GetPrinterTranslateY();
 
     scale_x = m_printData.GetPrinterScaleX();
     scale_y = m_printData.GetPrinterScaleY();
@@ -1972,7 +1972,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         }
 #endif
 #endif
-        
+
         if (afmFile==NULL)
         {
             wxLogDebug( wxT("GetTextExtent: can't open AFM file '%hs'\n"), afmName.c_str() );

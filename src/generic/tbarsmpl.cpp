@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -86,11 +86,11 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
-	EVT_SIZE(wxToolBarSimple::OnSize)
+    EVT_SIZE(wxToolBarSimple::OnSize)
     EVT_SCROLL(wxToolBarSimple::OnScroll)
-	EVT_PAINT(wxToolBarSimple::OnPaint)
-	EVT_KILL_FOCUS(wxToolBarSimple::OnKillFocus)
-	EVT_MOUSE_EVENTS(wxToolBarSimple::OnMouseEvent)
+    EVT_PAINT(wxToolBarSimple::OnPaint)
+    EVT_KILL_FOCUS(wxToolBarSimple::OnKillFocus)
+    EVT_MOUSE_EVENTS(wxToolBarSimple::OnMouseEvent)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -186,10 +186,10 @@ bool wxToolBarSimple::DoInsertTool(size_t WXUNUSED(pos),
     {
         // Calculate reasonable max size in case Layout() not called
         if ((tool->m_x + tool->GetBitmap1().GetWidth() + m_xMargin) > m_maxWidth)
-            m_maxWidth = (tool->m_x + tool->GetWidth() + m_xMargin);
+            m_maxWidth = (wxCoord)((tool->m_x + tool->GetWidth() + m_xMargin));
 
         if ((tool->m_y + tool->GetBitmap1().GetHeight() + m_yMargin) > m_maxHeight)
-            m_maxHeight = (tool->m_y + tool->GetHeight() + m_yMargin);
+            m_maxHeight = (wxCoord)((tool->m_y + tool->GetHeight() + m_yMargin));
     }
 
     return TRUE;

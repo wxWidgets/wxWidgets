@@ -865,19 +865,14 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
     {
         case wxID_OK:
             return wxOK;
-            break;
         case wxID_YES:
             return wxYES;
-            break;
         case wxID_NO:
             return wxNO;
-            break;
         default:
         case wxID_CANCEL:
             return wxCANCEL;
-            break;
     }
-    return ans;
 }
 
 #if wxUSE_TEXTDLG

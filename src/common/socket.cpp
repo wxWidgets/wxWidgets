@@ -154,7 +154,7 @@ public:
 
   void Notify()
   {
-    *m_state = m_new_val;  // Change the value
+    *m_state = (int)m_new_val;  // Change the value
   }
 };
 
@@ -177,7 +177,7 @@ wxUint32 wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
   timer.m_state = (int *)&m_defer_buffer;
   timer.m_new_val = 0;
 
-  timer.Start(m_timeout * 1000, FALSE);
+  timer.Start((int)(m_timeout * 1000), FALSE);
 
   // If the socket is readable, call DoDefer for the first time
   if (GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
@@ -352,8 +352,8 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
     do
     {
       discard_len = ((len2 > MAX_DISCARD_SIZE)? MAX_DISCARD_SIZE : len2);
-      discard_len = _Read(discard_buffer, discard_len);
-      len2 -= discard_len;
+      discard_len = _Read(discard_buffer, (wxUint32)discard_len);
+      len2 -= (wxUint32)discard_len;
     }
     while ((discard_len > 0) && len2);
 
@@ -431,7 +431,7 @@ wxUint32 wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
   timer.m_state   = (int *)&m_defer_buffer;
   timer.m_new_val = 0;
 
-  timer.Start(m_timeout * 1000, FALSE);
+  timer.Start((int)(m_timeout * 1000), FALSE);
 
   // If the socket is writable, call DoDefer for the first time
   if (GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
@@ -648,7 +648,7 @@ void wxSocketBase::DoDefer()
   else
   {
     m_defer_buffer += ret;
-    m_defer_timer->Start(m_timeout * 1000, FALSE);
+    m_defer_timer->Start((int)(m_timeout * 1000), FALSE);
   }
 
   //wxLogMessage("DoDefer ha transferido %d bytes", ret);
@@ -798,7 +798,7 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
   {
     timer.m_state = &state;
     timer.m_new_val = 0;
-    timer.Start(timeout, TRUE);
+    timer.Start((int)timeout, TRUE);
   }
 
   // Active polling (without using events)

@@ -38,9 +38,9 @@ public:
     void OnCancel(wxCommandEvent& event);
 
 private:
-    int     m_dialogStyle;
+    long m_dialogStyle;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #if !defined( __WXMSW__ ) && !defined( __WXMAC__) && !defined(__WXPM__)

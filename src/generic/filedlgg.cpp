@@ -109,7 +109,7 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
 
     struct stat buff;
     stat( m_fileName.fn_str(), &buff );
-    
+
 #ifndef __EMX__
     struct stat lbuff;
     lstat( m_fileName.fn_str(), &lbuff );
@@ -187,7 +187,7 @@ wxString wxFileData::GetEntry( int num )
         }
         break;
         case 1:
-        {   
+        {
             if (m_isDir) s = _("<DIR>");
             else if (m_isLink) s = _("<LINK>");
             else s = LongToString( m_size );
@@ -396,7 +396,7 @@ void wxFileCtrl::Update()
     }
 
     SortItems( ListCompare, 0 );
-    
+
     SetColumnWidth( 1, wxLIST_AUTOSIZE );
     SetColumnWidth( 2, wxLIST_AUTOSIZE );
     SetColumnWidth( 3, wxLIST_AUTOSIZE );
@@ -586,10 +586,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     m_message = message;
     m_dialogStyle = style;
-    
+
     if ((m_dialogStyle & wxMULTIPLE ) && !(m_dialogStyle & wxOPEN))
         m_dialogStyle |= wxOPEN;
-    
+
     m_dir = defaultDir;
     if ((m_dir.IsEmpty()) || (m_dir == wxT(".")))
     {
@@ -674,10 +674,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
 
     if (m_dialogStyle & wxMULTIPLE)
-        m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition, 
+        m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
 	                         wxSize(440,180), wxLC_LIST | wxSUNKEN_BORDER );
     else
-        m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition, 
+        m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
 	                         wxSize(440,180), wxLC_LIST | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
@@ -735,7 +735,7 @@ void wxFileDialog::OnChoice( wxCommandEvent &event )
 
 void wxFileDialog::OnCheck( wxCommandEvent &event )
 {
-    m_list->ShowHidden( event.GetInt() );
+    m_list->ShowHidden( event.GetInt() != 0 );
 }
 
 void wxFileDialog::OnActivated( wxListEvent &event )
@@ -753,16 +753,16 @@ void wxFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
 void wxFileDialog::OnSelected( wxListEvent &event )
 {
     if (FindFocus() != m_list) return;
-    
+
     wxString filename( event.m_item.m_text );
     if (filename == wxT("..")) return;
-    
+
     wxString dir;
     m_list->GetDir( dir );
     if (dir != wxT("/")) dir += wxT("/");
     dir += filename;
     if (wxDirExists(dir)) return;
-    
+
     m_text->SetValue( filename );
 }
 
@@ -850,7 +850,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
     }
 
     SetPath( filename );
-    
+
     wxCommandEvent event;
     wxDialog::OnOK(event);
 }
@@ -919,7 +919,7 @@ void wxFileDialog::GetPaths( wxArrayString& paths ) const
         paths.Add( GetPath() );
         return;
     }
-    
+
     paths.Alloc( m_list->GetSelectedItemCount() );
 
     wxString dir;

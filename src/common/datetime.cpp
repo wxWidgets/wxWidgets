@@ -1258,18 +1258,18 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     wxASSERT_MSG( jdn > -2, _T("JDN out of range") );
 
     // calculate the century
-    int temp = (jdn + JDN_OFFSET) * 4 - 1;
-    int century = temp / DAYS_PER_400_YEARS;
+    long temp = (jdn + JDN_OFFSET) * 4 - 1;
+    long century = temp / DAYS_PER_400_YEARS;
 
     // then the year and day of year (1 <= dayOfYear <= 366)
     temp = ((temp % DAYS_PER_400_YEARS) / 4) * 4 + 3;
-    int year = (century * 100) + (temp / DAYS_PER_4_YEARS);
-    int dayOfYear = (temp % DAYS_PER_4_YEARS) / 4 + 1;
+    long year = (century * 100) + (temp / DAYS_PER_4_YEARS);
+    long dayOfYear = (temp % DAYS_PER_4_YEARS) / 4 + 1;
 
     // and finally the month and day of the month
     temp = dayOfYear * 5 - 3;
-    int month = temp / DAYS_PER_5_MONTHS;
-    int day = (temp % DAYS_PER_5_MONTHS) / 5 + 1;
+    long month = temp / DAYS_PER_5_MONTHS;
+    long day = (temp % DAYS_PER_5_MONTHS) / 5 + 1;
 
     // month is counted from March - convert to normal
     if ( month < 10 )
@@ -1296,18 +1296,18 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     tm.year = (int)year;
     tm.mon = (Month)(month - 1); // algorithm yields 1 for January, not 0
     tm.mday = (wxDateTime_t)day;
-    tm.msec = timeOnly % 1000;
+    tm.msec = (wxDateTime_t)(timeOnly % 1000);
     timeOnly -= tm.msec;
     timeOnly /= 1000;               // now we have time in seconds
 
-    tm.sec = timeOnly % 60;
+    tm.sec = (wxDateTime_t)(timeOnly % 60);
     timeOnly -= tm.sec;
     timeOnly /= 60;                 // now we have time in minutes
 
-    tm.min = timeOnly % 60;
+    tm.min = (wxDateTime_t)(timeOnly % 60);
     timeOnly -= tm.min;
 
-    tm.hour = timeOnly / 60;
+    tm.hour = (wxDateTime_t)(timeOnly / 60);
 
     return tm;
 }
@@ -1734,7 +1734,7 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
 
 wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 {
-    int secDiff = GetTimeZone() + tz.GetOffset();
+    long secDiff = GetTimeZone() + tz.GetOffset();
 
     // we need to know whether DST is or not in effect for this date unless
     // the test disabled by the caller
@@ -1770,7 +1770,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
         }
         else
         {
-            time += tz.GetOffset();
+            time += (int)tz.GetOffset();
 
 #ifdef __VMS__ // time is unsigned so avoid the warning
             int time2 = (int) time;
@@ -2563,7 +2563,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
 
                 haveHour = TRUE;
                 hourIsIn12hFormat = TRUE;
-                hour = num % 12;        // 12 should be 0
+                hour = (wxDateTime_t)(num % 12);        // 12 should be 0
                 break;
 
             case _T('j'):       // day of the year
@@ -2819,7 +2819,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 }
 
                 haveYear = TRUE;
-                year = 1900 + num;
+                year = 1900 + (wxDateTime_t)num;
                 break;
 
             case _T('Y'):       // year with century
@@ -3059,7 +3059,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 haveYear = TRUE;
 
                 // no roll over - 99 means 99, not 1999 for us
-                year = val;
+                year = (wxDateTime_t)val;
             }
             else if ( isMonth )
             {
@@ -3103,7 +3103,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
                 haveDay = TRUE;
 
-                day = val;
+                day = (wxDateTime_t)val;
             }
         }
         else // not a number

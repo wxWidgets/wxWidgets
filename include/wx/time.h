@@ -72,16 +72,16 @@ public:
     bool operator!=(const wxTime& t) const { return m_time != t.m_time; }
 
     friend wxTime WXDLLEXPORT operator+(const wxTime& t, long s)
-        { return wxTime(t.m_time + wxTimeSpan::Seconds(s)); }
+        { return wxTime(t.m_time + wxTimeSpan::Seconds((int)s)); }
     friend wxTime WXDLLEXPORT operator+(long s, const wxTime& t)
-        { return wxTime(t.m_time + wxTimeSpan::Seconds(s)); }
+        { return wxTime(t.m_time + wxTimeSpan::Seconds((int)s)); }
 
     long operator-(const wxTime& t) const
         { return (m_time - t.m_time).GetValue().ToLong(); }
     wxTime operator-(long s) const
-        { return wxTime(m_time - wxTimeSpan::Seconds(s)); }
-    void operator+=(long s) { m_time += wxTimeSpan::Seconds(s); }
-    void operator-=(long s) { m_time -= wxTimeSpan::Seconds(s); }
+        { return wxTime(m_time - wxTimeSpan::Seconds((int)s)); }
+    void operator+=(long s) { m_time += wxTimeSpan::Seconds((int)s); }
+    void operator-=(long s) { m_time -= wxTimeSpan::Seconds((int)s); }
     bool IsBetween(const wxTime& a, const wxTime& b) const
         { return *this >= a && *this <= b; }
 

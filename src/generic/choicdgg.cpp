@@ -235,14 +235,14 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
     m_dialogStyle = style;
 
     wxBeginBusyCursor();
-    
+
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
-    
+
     // 2) list box
-    m_listbox = new wxListBox( this, wxID_LISTBOX, wxDefaultPosition, wxSize(160,100) , 
+    m_listbox = new wxListBox( this, wxID_LISTBOX, wxDefaultPosition, wxSize(160,100) ,
                                         n, choices, wxLB_ALWAYS_SB );
     m_listbox->SetSelection( m_selection );
     if (clientData)
@@ -262,7 +262,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
-    
+
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 

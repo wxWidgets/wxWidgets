@@ -77,7 +77,7 @@ public:
 
 protected:
     int         m_selection;
-    int         m_dialogStyle;
+    long        m_dialogStyle;
     wxString    m_stringSelection;
     wxListBox  *m_listbox;
 

@@ -68,7 +68,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
-    
+
     // 1) icon
     if (style & wxICON_MASK)
     {
@@ -76,12 +76,12 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
             this, -1, wxTheApp->GetStdIcon(style & wxICON_MASK));
          icon_text->Add( icon, 0, wxCENTER );
     }
-    
+
     // 2) text
     icon_text->Add( CreateTextSizer( message ), 0, wxCENTER | wxLEFT, 10 );
-    
+
     topsizer->Add( icon_text, 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
-    
+
 #if wxUSE_STATLINE
     // 3) static line
     topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
@@ -92,7 +92,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
-    
+
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
     wxSize size( GetSize() );

@@ -81,8 +81,8 @@ public:
     long operator-(const wxDate &dt) const
         { return GetJulianDate() - dt.GetJulianDate(); }
 
-    wxDate &operator+=(long i) { m_date += wxTimeSpan::Days(i); return *this; }
-    wxDate &operator-=(long i) { m_date -= wxTimeSpan::Days(i); return *this; }
+    wxDate &operator+=(long i) { m_date += wxTimeSpan::Days((int)i); return *this; }
+    wxDate &operator-=(long i) { m_date -= wxTimeSpan::Days((int)i); return *this; }
 
     wxDate &operator++() { return *this += 1; }
     wxDate &operator++(int) { return *this += 1; }

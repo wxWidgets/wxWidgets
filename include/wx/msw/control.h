@@ -48,77 +48,77 @@ public:
 
     virtual ~wxControl();
 
-   // Simulates an event
-   virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
+    // Simulates an event
+    virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
 
-   // implementation from now on
-   // --------------------------
+    // implementation from now on
+    // --------------------------
 
-   // Calls the callback and appropriate event handlers
-   bool ProcessCommand(wxCommandEvent& event);
+    // Calls the callback and appropriate event handlers
+    bool ProcessCommand(wxCommandEvent& event);
 
-   // MSW-specific
+    // MSW-specific
 #ifdef __WIN95__
-   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 #endif // Win95
 
-   // For ownerdraw items
-   virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
-   virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
+    // For ownerdraw items
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
+    virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
 
-   wxArrayLong GetSubcontrols() { return m_subControls; }
+    wxArrayLong GetSubcontrols() { return m_subControls; }
 
-   void OnEraseBackground(wxEraseEvent& event);
+    void OnEraseBackground(wxEraseEvent& event);
 
-   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                               WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 #if WXWIN_COMPATIBILITY
-   virtual void SetButtonColour(const wxColour& WXUNUSED(col)) { }
-   wxColour* GetButtonColour() const { return NULL; }
+    virtual void SetButtonColour(const wxColour& WXUNUSED(col)) { }
+    wxColour* GetButtonColour() const { return NULL; }
 
-   inline virtual void SetLabelFont(const wxFont& font);
-   inline virtual void SetButtonFont(const wxFont& font);
-   inline wxFont& GetLabelFont() const;
-   inline wxFont& GetButtonFont() const;
+    inline virtual void SetLabelFont(const wxFont& font);
+    inline virtual void SetButtonFont(const wxFont& font);
+    inline wxFont& GetLabelFont() const;
+    inline wxFont& GetButtonFont() const;
 
-   // Adds callback
-   inline void Callback(const wxFunction function);
+    // Adds callback
+    inline void Callback(const wxFunction function);
 
-   wxFunction GetCallback() { return m_callback; }
+    wxFunction GetCallback() { return m_callback; }
 
 protected:
-   wxFunction       m_callback;     // Callback associated with the window
+    wxFunction       m_callback;     // Callback associated with the window
 #endif // WXWIN_COMPATIBILITY
 
 protected:
-   // for controls like radiobuttons which are really composite this array
-   // holds the ids (not HWNDs!) of the sub controls
-   wxArrayLong m_subControls;
+    // for controls like radiobuttons which are really composite this array
+    // holds the ids (not HWNDs!) of the sub controls
+    wxArrayLong m_subControls;
 
-   virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const;
 
-   // create the control of the given class with the given style, returns FALSE
-   // if creation failed
-   //
-   // All parameters except classname and style are optional, if the
-   // size/position are not given, they should be set later with SetSize() and,
-   // label (the title of the window), of course, is left empty. The extended
-   // style is determined from the style and the app 3D settings automatically
-   // if it's not specified explicitly.
-   bool MSWCreateControl(const wxChar *classname,
-                         WXDWORD style,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         const wxString& label = wxEmptyString,
-                         WXDWORD exstyle = (WXDWORD)-1);
+    // create the control of the given class with the given style, returns FALSE
+    // if creation failed
+    //
+    // All parameters except classname and style are optional, if the
+    // size/position are not given, they should be set later with SetSize() and,
+    // label (the title of the window), of course, is left empty. The extended
+    // style is determined from the style and the app 3D settings automatically
+    // if it's not specified explicitly.
+    bool MSWCreateControl(const wxChar *classname,
+            WXDWORD style,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            const wxString& label = wxEmptyString,
+            WXDWORD exstyle = (WXDWORD)-1);
 
-   // determine the extended styles combination for this window (may slightly
-   // modify style parameter, this is why it's non const)
-   WXDWORD GetExStyle(WXDWORD& style, bool *want3D) const;
+    // determine the extended styles combination for this window (may slightly
+    // modify style parameter, this is why it's non const)
+    WXDWORD GetExStyle(WXDWORD& style, bool *want3D) const;
 
 private:
-   DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 

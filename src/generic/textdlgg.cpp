@@ -80,12 +80,12 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     m_value = value;
 
     wxBeginBusyCursor();
-    
+
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
-    
+
     // 2) text ctrl
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value, wxDefaultPosition, wxSize(300, -1));
     topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
@@ -97,10 +97,10 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
-    
+
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
-    
+
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
