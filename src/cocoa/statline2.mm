@@ -15,6 +15,8 @@
 #endif //WX_PRECOMP
 #include "wx/statline.h"
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSBox.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
@@ -28,6 +30,7 @@ bool wxStaticLine::Create(wxWindow *parent, wxWindowID winid,
            long style,
            const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
     SetNSView([[NSBox alloc] initWithFrame: MakeDefaultNSRect(size)]);

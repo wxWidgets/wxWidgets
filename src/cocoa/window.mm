@@ -568,6 +568,7 @@ void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags
 
 void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {
+    wxAutoNSAutoreleasePool pool;
 //    wxLogDebug("wxWindow=%p::DoMoveWindow(%d,%d,%d,%d)",this,x,y,width,height);
 
     NSView *nsview = GetNSViewForSuperview();

@@ -17,6 +17,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/NSTableDataSource.h"
 
 #import <Foundation/NSArray.h>
@@ -37,6 +38,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
             const wxValidator& validator,
             const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
 
