@@ -2,7 +2,7 @@
 // Name:        msw/checklst.cpp
 // Purpose:     implementation of wxCheckListBox class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     16.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -87,7 +87,7 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
  * check until you click to the right of it, which is OK for WIN32.
  */
 
-bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc, 
+bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                                     wxODAction act, wxODStatus stat)
 {
   if ( IsChecked() )
@@ -97,8 +97,8 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     // ## using native API for performance and precision
     size_t nCheckWidth  = GetDefaultMarginWidth(),
          nCheckHeight = m_pParent->GetItemHeight();
-          
-    int x = rc.GetX(), 
+
+    int x = rc.GetX(),
         y = rc.GetY();
 
     HDC hdc = (HDC)dc.GetHDC();
@@ -106,7 +106,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     // create pens
     HPEN hpenBack = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_WINDOW)),
          hpenGray = CreatePen(PS_SOLID, 0, RGB(128, 128, 128)),
-         hpenPrev = SelectObject(hdc, hpenBack);
+         hpenPrev = (HPEN)SelectObject(hdc, hpenBack);
 
     // we erase the 1-pixel border
     Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
@@ -118,7 +118,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       // first create a monochrome bitmap in a memory DC
       HDC hdcMem = CreateCompatibleDC(hdc);
       HBITMAP hbmpCheck = CreateBitmap(nCheckWidth, nCheckHeight, 1, 1, 0);
-      HBITMAP hbmpOld = SelectObject(hdcMem, hbmpCheck);
+      HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
 
       // then draw a check mark into it
       RECT rect = { 0, 0, nCheckWidth, nCheckHeight };
@@ -143,7 +143,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 #endif
 
       // finally copy it to screen DC and clean up
-      BitBlt(hdc, x, y, nCheckWidth - 1, nCheckHeight, 
+      BitBlt(hdc, x, y, nCheckWidth - 1, nCheckHeight,
              hdcMem, 0, 0, SRCCOPY);
 
       SelectObject(hdcMem, hbmpOld);
@@ -158,7 +158,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
     // draw hollow gray rectangle
     (void)SelectObject(hdc, hpenGray);
-    HBRUSH hbrPrev  = SelectObject(hdc, GetStockObject(NULL_BRUSH));
+    HBRUSH hbrPrev  = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
     Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
 
     // clean up
@@ -185,7 +185,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
 // change the state of the item and redraw it
 void wxCheckListBoxItem::Toggle()
-{ 
+{
   m_bChecked = !m_bChecked;
 
   size_t nHeight = m_pParent->GetItemHeight();
