@@ -35,13 +35,10 @@ class wxHtmlTagsModule;
 
 class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlWinParser)
-
     friend class wxHtmlWindow;
 
     public:
-        wxHtmlWinParser() : wxHtmlParser() {wxHtmlWinParser(NULL);}
-        wxHtmlWinParser(wxWindow *wnd);
+        wxHtmlWinParser(wxWindow *wnd = NULL);
 
         virtual void InitParser(const wxString& source);
         virtual void DoneParser();
@@ -60,7 +57,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         wxWindow *GetWindow() {return m_Window;}
                 // returns associated wxWindow
 
-        void SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, int *sizes);
+        void SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes);
                 // sets fonts to be used when displaying HTML page.
                 // *_italic_mode can be either wxSLANT or wxITALIC
 

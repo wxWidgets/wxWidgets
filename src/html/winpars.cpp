@@ -34,7 +34,6 @@
 // wxHtmlWinParser
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinParser,wxHtmlParser)
 
 wxList wxHtmlWinParser::m_Modules;
 
@@ -80,7 +79,7 @@ void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 
 
 
-void wxHtmlWinParser::SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, int *sizes)
+void wxHtmlWinParser::SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes)
 {
     for (int i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
     m_FontFaceFixed = fixed_face;

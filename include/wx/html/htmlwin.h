@@ -56,14 +56,8 @@ class WXDLLEXPORT HtmlHistoryItem : public wxObject
         int m_Pos;
 };
 
-#undef WXDLLEXPORTLOCAL
-#define WXDLLEXPORTLOCAL WXDLLEXPORT
-     // ?? Don't know why - but Allen Van Sickel reported it to fix problems with DLL
 
-WX_DECLARE_OBJARRAY(HtmlHistoryItem, HtmlHistoryArray);
-
-#undef WXDLLEXPORTLOCAL
-#define WXDLLEXPORTLOCAL
+WX_DECLARE_EXPORTED_OBJARRAY(HtmlHistoryItem, HtmlHistoryArray);
 
 
 class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
@@ -107,7 +101,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // after(!) calling SetRelatedFrame, this sets statusbar slot where messages
                 // will be displayed. Default is -1 = no messages.
 
-        void SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, int *sizes);
+        void SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes);
                 // sets fonts to be used when displaying HTML page.
                 // *_italic_mode can be either wxSLANT or wxITALIC
 
