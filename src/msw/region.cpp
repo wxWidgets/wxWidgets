@@ -26,8 +26,8 @@
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
-    IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
+IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
 
 //-----------------------------------------------------------------------------
 // wxRegionRefData implementation
@@ -197,14 +197,17 @@ bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 // Outer bounds of region
 void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
 {
-    if (m_refData) {
+    if (m_refData)
+    {
         RECT rect;
         ::GetRgnBox(M_REGION, & rect);
         x = rect.left;
         y = rect.top;
         w = rect.right - rect.left;
         h = rect.bottom - rect.top;
-    } else {
+    }
+    else
+    {
         x = y = w = h = 0;
     }
 }
@@ -219,12 +222,10 @@ wxRect wxRegion::GetBox() const
 // Is region empty?
 bool wxRegion::Empty() const
 {
-    if (M_REGION == 0)
-        return TRUE;
     wxCoord x, y, w, h;
     GetBox(x, y, w, h);
 
-    return ((w == 0) && (h == 0));
+    return (w == 0) && (h == 0);
 }
 
 //-----------------------------------------------------------------------------
