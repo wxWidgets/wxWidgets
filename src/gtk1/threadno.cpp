@@ -31,23 +31,23 @@ wxMutex::~wxMutex()
 wxMutexError wxMutex::Lock()
 {
   m_locked++;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::TryLock()
 {
   if (m_locked > 0)
-    return MUTEX_BUSY;
+    return wxMUTEX_BUSY;
   m_locked++;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 wxMutexError wxMutex::Unlock()
 {
   if (m_locked == 0)
-    return MUTEX_UNLOCKED;
+    return wxMUTEX_UNLOCKED;
   m_locked--;
-  return MUTEX_NO_ERROR;
+  return wxMUTEX_NO_ERROR;
 }
 
 wxCondition::wxCondition()
@@ -85,22 +85,22 @@ wxThreadError wxThread::Create()
 {
   p_internal->exit_status = Entry();
   OnExit();
-  return THREAD_NO_ERROR;
+  return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Destroy()
 {
-  return THREAD_NOT_RUNNING;
+  return wxTHREAD_NOT_RUNNING;
 }
 
 wxThreadError wxThread::Pause()
 {
-  return THREAD_NOT_RUNNING;
+  return wxTHREAD_NOT_RUNNING;
 }
 
 wxThreadError wxThread::Resume()
 {
-  return THREAD_NOT_RUNNING;
+  return wxTHREAD_NOT_RUNNING;
 }
 
 void wxThread::DeferDestroy( bool WXUNUSED(on) )
@@ -181,3 +181,11 @@ void wxThreadModule::OnExit()
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+
+void wxMutexGuiEnter()
+{
+}
+
+void wxMutexGuiLeave()
+{
+}
