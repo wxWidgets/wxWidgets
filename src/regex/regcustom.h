@@ -76,6 +76,12 @@
 #endif
 #define __REG_NOFRONT           /* don't want regcomp() and regexec() */
 #define _ANSI_ARGS_(x)          x
+
+/* under FreeBSD re_comp and re_exec are declared (differently) in unistd.h */
+#ifdef __FreeBSD__
+#define re_comp wx_re_comp
+#define re_exec wx_re_exec
+#endif
 /* --- end --- */
 
 /* internal character type and related */
