@@ -49,7 +49,7 @@ class wxPseudoMetaFilePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=oglshapesc.delete_wxPseudoMetaFile):
+    def __del__(self, delfunc=oglshapesc.delete_wxPseudoMetaFile):
         if self.thisown == 1:
             delfunc(self)
     def Draw(self, *_args, **_kwargs):

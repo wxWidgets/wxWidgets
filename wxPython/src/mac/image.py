@@ -192,9 +192,9 @@ class wxImagePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,imagec=imagec):
-        if self.thisown == 1 :
-            imagec.delete_wxImage(self)
+    def __del__(self, delfunc=imagec.delete_wxImage):
+        if self.thisown == 1:
+            delfunc(self)
     def Create(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Create,(self,) + _args, _kwargs)
         return val

@@ -3020,75 +3020,6 @@ static PyObject *_wrap_new_wxLocale(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
-#define wxLocale_Init(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Init(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_wxLocale_Init(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxLocale * _arg0;
-    wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyString;
-    wxString * _arg3 = (wxString *) &wxPyEmptyString;
-    bool  _arg4 = (bool ) TRUE;
-    bool  _arg5 = (bool ) FALSE;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _obj2 = 0;
-    PyObject * _obj3 = 0;
-    int tempbool4 = (int) TRUE;
-    int tempbool5 = (int) FALSE;
-    char *_kwnames[] = { "self","szName","szShort","szLocale","bLoadDefault","bConvertEncoding", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OOii:wxLocale_Init",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3,&tempbool4,&tempbool5)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLocale_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_Init. Expected _wxLocale_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-    if (_obj2)
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-    if (_obj3)
-{
-    _arg3 = wxString_in_helper(_obj3);
-    if (_arg3 == NULL)
-        return NULL;
-}
-    _arg4 = (bool ) tempbool4;
-    _arg5 = (bool ) tempbool5;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxLocale_Init(_arg0,*_arg1,*_arg2,*_arg3,_arg4,_arg5);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    if (_obj3)
-        delete _arg3;
-}
-    return _resultobj;
-}
-
 #define delete_wxLocale(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxLocale(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3114,6 +3045,105 @@ static PyObject *_wrap_delete_wxLocale(PyObject *self, PyObject *args, PyObject 
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxLocale_Init1(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Init(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_wxLocale_Init1(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxLocale * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
+    bool  _arg4 = (bool ) TRUE;
+    bool  _arg5 = (bool ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
+    int tempbool4 = (int) TRUE;
+    int tempbool5 = (int) FALSE;
+    char *_kwnames[] = { "self","szName","szShort","szLocale","bLoadDefault","bConvertEncoding", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OOii:wxLocale_Init1",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3,&tempbool4,&tempbool5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLocale_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_Init1. Expected _wxLocale_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
+    _arg4 = (bool ) tempbool4;
+    _arg5 = (bool ) tempbool5;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxLocale_Init1(_arg0,*_arg1,*_arg2,*_arg3,_arg4,_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    if (_obj3)
+        delete _arg3;
+}
+    return _resultobj;
+}
+
+#define wxLocale_Init2(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Init(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxLocale_Init2(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxLocale * _arg0;
+    int  _arg1 = (int ) (wxLANGUAGE_DEFAULT);
+    int  _arg2 = (int ) (wxLOCALE_LOAD_DEFAULT)|(wxLOCALE_CONV_ENCODING);
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","language","flags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxLocale_Init2",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLocale_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_Init2. Expected _wxLocale_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxLocale_Init2(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3817,8 +3847,9 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxLocale_GetSystemEncodingName", (PyCFunction) _wrap_wxLocale_GetSystemEncodingName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_GetSystemEncoding", (PyCFunction) _wrap_wxLocale_GetSystemEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_GetSystemLanguage", (PyCFunction) _wrap_wxLocale_GetSystemLanguage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLocale_Init2", (PyCFunction) _wrap_wxLocale_Init2, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLocale_Init1", (PyCFunction) _wrap_wxLocale_Init1, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxLocale", (PyCFunction) _wrap_delete_wxLocale, METH_VARARGS | METH_KEYWORDS },
-	 { "wxLocale_Init", (PyCFunction) _wrap_wxLocale_Init, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLocale", (PyCFunction) _wrap_new_wxLocale, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLanguageInfo_Description_get", (PyCFunction) _wrap_wxLanguageInfo_Description_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLanguageInfo_Description_set", (PyCFunction) _wrap_wxLanguageInfo_Description_set, METH_VARARGS | METH_KEYWORDS },

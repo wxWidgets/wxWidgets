@@ -56,7 +56,7 @@ class wxXmlResourcePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=xrcc.delete_wxXmlResource):
+    def __del__(self, delfunc=xrcc.delete_wxXmlResource):
         if self.thisown == 1:
             delfunc(self)
     def Load(self, *_args, **_kwargs):
@@ -210,7 +210,7 @@ class wxXmlNodePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=xrcc.delete_wxXmlNode):
+    def __del__(self, delfunc=xrcc.delete_wxXmlNode):
         if self.thisown == 1:
             delfunc(self)
     def AddChild(self, *_args, **_kwargs):
@@ -302,7 +302,7 @@ class wxXmlDocumentPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=xrcc.delete_wxXmlDocument):
+    def __del__(self, delfunc=xrcc.delete_wxXmlDocument):
         if self.thisown == 1:
             delfunc(self)
     def Load(self, *_args, **_kwargs):

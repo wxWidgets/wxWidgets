@@ -909,7 +909,6 @@ static PyObject *_wrap_wxGetApp(PyObject *self, PyObject *args, PyObject *kwargs
     PyObject * _resultobj;
     wxPyApp * _result;
     char *_kwnames[] = {  NULL };
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetApp",_kwnames)) 
@@ -920,13 +919,7 @@ static PyObject *_wrap_wxGetApp(PyObject *self, PyObject *args, PyObject *kwargs
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyApp_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 

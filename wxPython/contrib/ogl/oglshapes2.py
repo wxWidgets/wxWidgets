@@ -257,7 +257,7 @@ class wxArrowHeadPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=oglshapes2c.delete_wxArrowHead):
+    def __del__(self, delfunc=oglshapes2c.delete_wxArrowHead):
         if self.thisown == 1:
             delfunc(self)
     def _GetType(self, *_args, **_kwargs):
