@@ -120,8 +120,8 @@ private:
 
 #if WXWIN_COMPATIBILITY
     inline void wxControl::Callback(const wxFunction f) { m_callback = f; };
-    inline wxFont& wxControl::GetLabelFont() const { return GetFont(); }
-    inline wxFont& wxControl::GetButtonFont() const { return GetFont(); }
+    inline wxFont& wxControl::GetLabelFont() const { return (wxFont &)GetFont(); }
+    inline wxFont& wxControl::GetButtonFont() const { return (wxFont &)GetFont(); }
     inline void wxControl::SetLabelFont(const wxFont& font) { SetFont(font); }
     inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
 #endif // WXWIN_COMPATIBILITY
