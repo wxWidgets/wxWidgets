@@ -261,7 +261,7 @@ public:
     DocDeclAStr(
         virtual wxTextCtrlHitTestResult, HitTest(const wxPoint& pt,
                                                  long* OUTPUT, long* OUTPUT) const,
-        "HitTest(Point pt) -> (result, row, col)",
+        "HitTest(Point pt) -> (result, col, row)",
         "Find the row, col coresponding to the character at the point given in
 pixels. NB: pt is in device coords but is not adjusted for the client
 area origin nor scrolling.", "");

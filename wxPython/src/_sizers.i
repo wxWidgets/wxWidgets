@@ -841,7 +841,7 @@ as well.", "");
     // wxList& GetChildren();
     %extend {
         DocAStr(GetChildren,
-                "GetChildren(sefl) -> list",
+                "GetChildren(self) -> list",
                 "Returns a list of all the `wx.SizerItem` objects managed by the sizer.", "");
         PyObject* GetChildren() {
             wxSizerItemList& list = self->GetChildren();
