@@ -152,6 +152,7 @@ Source: "wxPython\tools\XRCed\*.sh";        DestDir: "{app}\wxPython\tools\XRCed
 
 Source: "scripts\*.bat";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\*.py";                     DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\helpviewer";               DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\img2png";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\img2py";                   DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\img2xpm";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
