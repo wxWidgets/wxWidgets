@@ -54,7 +54,9 @@
 static int rgMonthDays[13] =
 	{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 
-#if wxUSE_TIMEDATE
+#if wxUSE_DATETIME
+#include "wx/datetime.h"
+
 static BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
 	WORD wHour, WORD wMinute, WORD wSecond, DATE& dtDest);
 static BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest);
@@ -600,7 +602,8 @@ bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
         oleVariant.bstrVal = wxConvertStringToOle(str);
     }
 // For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
-#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
+// Now obsolete
+#if 0 // wxUSE_TIMEDATE && !defined(__WATCOMC__)
     else if (type == wxT("date"))
     {
         wxDate date( variant.GetDate() );
@@ -617,6 +620,17 @@ bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 
 		if (!OleDateFromTm(time.GetYear(), time.GetMonth(), time.GetDay(),
 			time.GetHour(), time.GetMinute(), time.GetSecond(), oleVariant.date))
+			return FALSE;
+    }
+#endif
+#if wxUSE_DATETIME
+    else if (type == wxT("datetime"))
+    {
+        wxDateTime date( variant.GetDateTime() );
+        oleVariant.vt = VT_DATE;
+
+		if (!OleDateFromTm(date.GetYear(), date.GetMonth(), date.GetDay(),
+				date.GetHour(), date.GetMinute(), date.GetSecond(), oleVariant.date))
 			return FALSE;
     }
 #endif
@@ -695,15 +709,14 @@ bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 		}
 	case VT_DATE:
 		{
-#if wxUSE_TIMEDATE
+#if wxUSE_DATETIME
             struct tm tmTemp;
 			if (!TmFromOleDate(oleVariant.date, tmTemp))
 				return FALSE;
 
-			wxDate date(tmTemp.tm_yday, tmTemp.tm_mon, tmTemp.tm_year);
-			wxTime time(date, tmTemp.tm_hour, tmTemp.tm_min, tmTemp.tm_sec);
+			wxDateTime date(tmTemp.tm_yday, (wxDateTime::Month) tmTemp.tm_mon, tmTemp.tm_year, tmTemp.tm_hour, tmTemp.tm_min, tmTemp.tm_sec);
 
-			variant = time;
+			variant = date;
 #endif
 
             break;
