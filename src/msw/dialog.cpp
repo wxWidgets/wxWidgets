@@ -531,7 +531,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             // we want to override the busy cursor for modal dialogs:
             // typically, wxBeginBusyCursor() is called and then a modal dialog
             // is shown, but the modal dialog shouldn't have hourglass cursor
-            if ( wxIsBusy() )
+            if ( IsModalShowing() && wxIsBusy() )
             {
                 // set our cursor for all windows (but see below)
                 wxCursor cursor = m_cursor;
