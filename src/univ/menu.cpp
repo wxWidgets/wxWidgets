@@ -2292,8 +2292,7 @@ void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 
 void wxMenuBar::OnDismiss()
 {
-    if ( GetCapture() )
-        ReleaseMouse();
+    ReleaseMouse();
 
     if ( m_current != -1 )
     {
