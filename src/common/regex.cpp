@@ -49,6 +49,11 @@
 
 #include "wx/regex.h"
 
+#ifdef wxUSE_NEW_REGEX
+    #define regerror wx_regerror
+    #define regfree wx_regfree
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
