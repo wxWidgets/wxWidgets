@@ -35,6 +35,13 @@ public:
         m_hasPixel = FALSE;
     }
     
+    wxColourRefData(const wxColourRefData& data)
+    {
+        m_color = data.m_color;
+        m_colormap = data.m_colormap;
+        m_hasPixel = data.m_hasPixel;
+    }
+
     ~wxColourRefData()
     {
         FreeColour();
