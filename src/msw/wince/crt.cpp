@@ -9,13 +9,17 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/msw/wince/missing.h"
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
   #pragma hdrstop
 #endif
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
+#include "wx/msw/wince/missing.h"
 
 extern "C" void *
 bsearch(const void *key, const void *base, size_t num, size_t size,
@@ -42,4 +46,26 @@ bsearch(const void *key, const void *base, size_t num, size_t size,
     return NULL;
 }
 
+extern "C"
+void abort()
+{
+    wxString name;
+    if ( wxTheApp )
+        name = wxTheApp->GetAppName();
+    if ( name.empty() )
+        name = L"wxWindows Application";
+
+    MessageBox(NULL, L"Abnormal program termination", name, MB_ICONHAND | MB_OK);
+
+    ::ExitProcess(3);
+}
+
+extern "C"
+char *getenv(const char * WXUNUSED(name))
+{
+    // no way to implement it in Unicode-only environment without using
+    // wxCharBuffer and it is of no use in C code which uses this function
+    // (libjpeg)
+    return NULL;
+}
 
