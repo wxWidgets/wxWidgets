@@ -158,15 +158,13 @@ CONFTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) $(CXXFLAGS)
+	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
 CONFTEST_OBJECTS =  &
 	$(OBJS)\conftest_conftest.obj
 LIBDIRNAME = &
 	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-
-MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -181,7 +179,7 @@ $(OBJS)\conftest_conftest.obj :  .AUTODEPEND .\conftest.cpp
 	$(CXX) -zq -fo=$^@ $(CONFTEST_CXXFLAGS) $<
 
 $(OBJS)\conftest_conftest.res :  .AUTODEPEND .\conftest.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -197,6 +195,6 @@ $(OBJS)\conftest.exe :  $(CONFTEST_OBJECTS) $(OBJS)\conftest_conftest.res
 	@%append $(OBJS)\conftest.lbc option incremental
 	@%append $(OBJS)\conftest.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(CONFTEST_OBJECTS)) do @%append $(OBJS)\conftest.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\conftest.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\conftest.lbc library %i
 	@%append $(OBJS)\conftest.lbc option resource=$(OBJS)\conftest_conftest.res
 	wlink @$(OBJS)\conftest.lbc

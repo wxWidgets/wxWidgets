@@ -110,6 +110,9 @@ __RUNTIME_LIBS_7 =
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 !endif
+!if "$(MSLU)" == "1"
+__UNICOWS_LIB_p = unicows.lib
+!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
@@ -120,8 +123,6 @@ __WXLIB_MONO_p = \
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 !endif
-
-MAKEARGS = -DBUILD=$(BUILD) -DCFG=$(CFG) -DCPPFLAGS=$(CPPFLAGS) -DCXX=$(CXX) -DCXXFLAGS=$(CXXFLAGS) -DDEBUG_FLAG=$(DEBUG_FLAG) -DDEBUG_INFO=$(DEBUG_INFO) -DLDFLAGS=$(LDFLAGS) -DMONOLITHIC=$(MONOLITHIC) -DOFFICIAL_BUILD=$(OFFICIAL_BUILD) -DRUNTIME_LIBS=$(RUNTIME_LIBS) -DSHARED=$(SHARED) -DUNICODE=$(UNICODE) -DUSE_GUI=$(USE_GUI) -DWXUNIV=$(WXUNIV)
 
 
 all: $(OBJS)
@@ -142,7 +143,7 @@ clean:
 
 $(OBJS)\console.exe: $(CONSOLE_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap  @&&|
-	c0x32.obj $(CONSOLE_OBJECTS),$@,, $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
+	c0x32.obj $(CONSOLE_OBJECTS),$@,, $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 
 data: 

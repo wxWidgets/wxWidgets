@@ -35,7 +35,7 @@ top_srcdir = @top_srcdir@
 CLIENT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -I../../samples $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(__client___win32rc) \
 	client_client.o
@@ -43,7 +43,7 @@ LIBDIRNAME = $(top_builddir)lib
 SERVER_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -I../../samples $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(__server___win32rc) \
 	server_server.o
@@ -111,14 +111,14 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_2 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) -i $(top_srcdir)/include \
 	$(__INC_TIFF_p_0) $(__INC_JPEG_p_6) $(__INC_PNG_p_6) $(__INC_ZLIB_p_0) \
 	$(__INC_ODBC_p_0) $(__INC_REGEX_p_0) $(__INC_EXPAT_p_6) -i $(srcdir) \
-	$(__DLLFLAG_p_6) -o client$(EXEEXT) Carbon.r \
+	$(__DLLFLAG_p_6) -i ../../samples -o client$(EXEEXT) Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r ../../samples/sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_2 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_2)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_3 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) -i $(top_srcdir)/include \
 	$(__INC_TIFF_p_0) $(__INC_JPEG_p_6) $(__INC_PNG_p_6) $(__INC_ZLIB_p_0) \
 	$(__INC_ODBC_p_0) $(__INC_REGEX_p_0) $(__INC_EXPAT_p_6) -i $(srcdir) \
-	$(__DLLFLAG_p_6) -o server$(EXEEXT) Carbon.r \
+	$(__DLLFLAG_p_6) -i ../../samples -o server$(EXEEXT) Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r ../../samples/sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_3 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_3)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -162,7 +162,7 @@ client_client.o: $(srcdir)/client.cpp
 	$(CXXC) -c -o $@ $(CLIENT_CXXFLAGS) $<
 
 client_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_6) $(__INC_JPEG_p_0) $(__INC_PNG_p_0) $(__INC_ZLIB_p_6) $(__INC_ODBC_p_6) $(__INC_REGEX_p_6) $(__INC_EXPAT_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0)
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_6) $(__INC_JPEG_p_0) $(__INC_PNG_p_0) $(__INC_ZLIB_p_6) $(__INC_ODBC_p_6) $(__INC_REGEX_p_6) $(__INC_EXPAT_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir ../../samples
 
 distclean: clean
 	rm -f configure config.cache config.log config.status
@@ -178,7 +178,7 @@ server$(EXEEXT): $(SERVER_OBJECTS) $(__server___win32rc)
 	$(__server___mac_setfilecmd)
 
 server_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_6) $(__INC_JPEG_p_0) $(__INC_PNG_p_0) $(__INC_ZLIB_p_6) $(__INC_ODBC_p_6) $(__INC_REGEX_p_6) $(__INC_EXPAT_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0)
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_6) $(__INC_JPEG_p_0) $(__INC_PNG_p_0) $(__INC_ZLIB_p_6) $(__INC_ODBC_p_6) $(__INC_REGEX_p_6) $(__INC_EXPAT_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir ../../samples
 
 server_server.o: $(srcdir)/server.cpp
 	$(CXXC) -c -o $@ $(SERVER_CXXFLAGS) $<

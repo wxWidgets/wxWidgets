@@ -24,7 +24,7 @@ CLIENT_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
 	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
-	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
+	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I..\..\samples $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_client.obj
 LIBDIRNAME = \
@@ -35,7 +35,7 @@ SERVER_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
 	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
-	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
+	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I..\..\samples $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_server.obj
 
@@ -125,6 +125,9 @@ __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_0 = -dwxUSE_UNICODE=1
 !endif
+!if "$(MSLU)" == "1"
+__UNICOWS_LIB_p = unicows.lib
+!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
@@ -146,8 +149,6 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 __WXUNIV_DEFINE_p_0 = -d__WXUNIVERSAL__
 !endif
 
-MAKEARGS = -DBUILD=$(BUILD) -DCFG=$(CFG) -DCPPFLAGS=$(CPPFLAGS) -DCXX=$(CXX) -DCXXFLAGS=$(CXXFLAGS) -DDEBUG_FLAG=$(DEBUG_FLAG) -DDEBUG_INFO=$(DEBUG_INFO) -DLDFLAGS=$(LDFLAGS) -DMONOLITHIC=$(MONOLITHIC) -DOFFICIAL_BUILD=$(OFFICIAL_BUILD) -DRUNTIME_LIBS=$(RUNTIME_LIBS) -DSHARED=$(SHARED) -DUNICODE=$(UNICODE) -DUSE_GUI=$(USE_GUI) -DWXUNIV=$(WXUNIV)
-
 
 all: $(OBJS)
 $(OBJS):
@@ -161,13 +162,13 @@ $(OBJS)\client_client.obj: .\client.cpp
 	$(CXX) -q -c -P -o$@ $(CLIENT_CXXFLAGS) $**
 
 $(OBJS)\client_client.res: .\client.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_0) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_0) -i..\..\samples $**
 
 $(OBJS)\server_server.obj: .\server.cpp
 	$(CXX) -q -c -P -o$@ $(SERVER_CXXFLAGS) $**
 
 $(OBJS)\server_server.res: .\server.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_0) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_0) -i..\..\samples $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -177,10 +178,10 @@ clean:
 
 $(OBJS)\client.exe: $(CLIENT_OBJECTS)  $(OBJS)\client_client.res
 	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
-	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\client_client.res
+	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\client_client.res
 |
 
 $(OBJS)\server.exe: $(SERVER_OBJECTS)  $(OBJS)\server_server.res
 	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
-	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\server_server.res
+	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\server_server.res
 |

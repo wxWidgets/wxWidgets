@@ -158,15 +158,13 @@ ACCESSTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) $(CXXFLAGS)
+	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
 ACCESSTEST_OBJECTS =  &
 	$(OBJS)\accesstest_accesstest.obj
 LIBDIRNAME = &
 	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-
-MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -181,7 +179,7 @@ $(OBJS)\accesstest_accesstest.obj :  .AUTODEPEND .\accesstest.cpp
 	$(CXX) -zq -fo=$^@ $(ACCESSTEST_CXXFLAGS) $<
 
 $(OBJS)\accesstest_accesstest.res :  .AUTODEPEND .\accesstest.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
 
 $(OBJS)\accesstest.exe :  $(ACCESSTEST_OBJECTS) $(OBJS)\accesstest_accesstest.res
 	@%create $(OBJS)\accesstest.lbc
@@ -190,7 +188,7 @@ $(OBJS)\accesstest.exe :  $(ACCESSTEST_OBJECTS) $(OBJS)\accesstest_accesstest.re
 	@%append $(OBJS)\accesstest.lbc option incremental
 	@%append $(OBJS)\accesstest.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(ACCESSTEST_OBJECTS)) do @%append $(OBJS)\accesstest.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\accesstest.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\accesstest.lbc library %i
 	@%append $(OBJS)\accesstest.lbc option resource=$(OBJS)\accesstest_accesstest.res
 	wlink @$(OBJS)\accesstest.lbc
 

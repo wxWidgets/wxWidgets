@@ -36,7 +36,7 @@ LIBDIRNAME = $(top_builddir)lib
 MINIMAL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -I../../samples $(CXXFLAGS)
 MINIMAL_OBJECTS =  \
 	minimal_minimal.o \
 	$(__minimal___win32rc)
@@ -118,7 +118,8 @@ COND_PLATFORM_MAC_1___minimal___mac_rezcmd = $(RESCOMP) -d __DARWIN__ -t APPL -d
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include \
 	$(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) \
 	$(__INC_ODBC_p_1) $(__INC_REGEX_p_1) $(__INC_EXPAT_p_1) -i $(srcdir) \
-	$(__DLLFLAG_p_1) -o minimal$(EXEEXT) $(MACOSX_RESOURCES) mondrian.r
+	$(__DLLFLAG_p_1) -i ../../samples -o minimal$(EXEEXT) $(MACOSX_RESOURCES) \
+	mondrian.r
 @COND_PLATFORM_MAC_1@__minimal___mac_rezcmd = $(COND_PLATFORM_MAC_1___minimal___mac_rezcmd)
 @COND_PLATFORM_MAC_1@__minimal___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C minimal$(EXEEXT)
@@ -150,7 +151,7 @@ minimal_minimal.o: $(srcdir)/minimal.cpp
 	$(CXXC) -c -o $@ $(MINIMAL_CXXFLAGS) $<
 
 minimal_minimal_rc.o: $(srcdir)/minimal.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir ../../samples
 
 uninstall: 
 
