@@ -82,7 +82,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
 # -----------------------------------------------
 
 # main makefile:
-addMakefile('wx.bkl', {'all':'..','autoconf':'../..'}, [ '$(MDEPS)' ],
+addMakefile('wx.bkl', {'all':'../msw','autoconf':'../..'}, [ '$(MDEPS)' ],
             args={
                 'borland':'-DOPTIONS_FILE=config.bcc',
                 'msvc':'-DOPTIONS_FILE=config.vc',
@@ -95,10 +95,10 @@ addMakefile('wx.bkl', {'all':'..','autoconf':'../..'}, [ '$(MDEPS)' ],
 addMakefile('../../samples/samples.bkl', {'all':'../../samples'},
             args={
             'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
-            'borland':'-DOPTIONS_FILE=../build/config.bcc -DWRITE_OPTIONS_FILE=0',
-            'msvc':'-DOPTIONS_FILE=../build/config.vc -DWRITE_OPTIONS_FILE=0',
-            'mingw':'-DOPTIONS_FILE=../build/config.gcc -DWRITE_OPTIONS_FILE=0',
-            'watcom':'-DOPTIONS_FILE=../build/config.wat -DWRITE_OPTIONS_FILE=0',
+            'borland':'-DOPTIONS_FILE=../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0',
+            'msvc':'-DOPTIONS_FILE=../build/msw/config.vc -DWRITE_OPTIONS_FILE=0',
+            'mingw':'-DOPTIONS_FILE=../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0',
+            'watcom':'-DOPTIONS_FILE=../build/msw/config.wat -DWRITE_OPTIONS_FILE=0',
             'msvc6prj':None,
             })
 
@@ -117,11 +117,11 @@ def onSubmakefile(type, dirname, names):
     if type==SAMPLES_DIR:
         prefix = ''.join(['../' for i in range(0,depth)])
         dirflags = '-DWXTOPDIR=%s../' % prefix
-        cfgbase = '%s../build/config.' % prefix
+        cfgbase = '%s../build/msw/config.' % prefix
     elif type==CONTRIB_DIR:
         dirflags = '-DSRCDIR=../../src/%s' % dirname.split('/')[-1]
         dirflags += ' -DWXTOPDIR=../../../'
-        cfgbase = '../../../build/config.'
+        cfgbase = '../../../build/msw/config.'
 
     args = {
         'all':dirflags,
@@ -188,7 +188,13 @@ clean:
 \trm -f $(COMPAT_TARGETS)
 %s
 
-library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../makefile.gcc
+library: ../../Makefile.in\\
+         ../msw/makefile.bcc\\
+         ../msw/makefile.vc\\
+         ../msw/makefile.wat\\
+         ../msw/makefile.gcc\\
+         ../msw/wx.dsw\\
+         ../../src/wxWindows.dsp
 
 ../../autoconf_inc.m4: ../../Makefile.in
 
