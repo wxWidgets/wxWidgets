@@ -106,11 +106,6 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
   #error  "Please define string case-insensitive compare for your OS/compiler"
 #endif  // OS/compiler
 }
-wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
-wxString WXDLLEXPORT operator+(const wxString& string, char ch);
-wxString WXDLLEXPORT operator+(char ch, const wxString& string);
-wxString WXDLLEXPORT operator+(const wxString& string, const char *psz);
-wxString WXDLLEXPORT operator+(const char *psz, const wxString& string);
 
 // ----------------------------------------------------------------------------
 // global data
@@ -914,6 +909,11 @@ inline bool operator>=(const wxString& s1, const char  * s2) { return s1.Cmp(s2)
 ///
 inline bool operator>=(const char  * s1, const wxString& s2) { return s2.Cmp(s1) <= 0; }
 //@}
+wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
+wxString WXDLLEXPORT operator+(const wxString& string, char ch);
+wxString WXDLLEXPORT operator+(char ch, const wxString& string);
+wxString WXDLLEXPORT operator+(const wxString& string, const char *psz);
+wxString WXDLLEXPORT operator+(const char *psz, const wxString& string);
 
 // ---------------------------------------------------------------------------
 /** @name Global functions complementing standard C string library
