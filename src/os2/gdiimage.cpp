@@ -298,17 +298,15 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
   const wxString&                   rName
 )
 {
-    wxNode*                         pNode = ms_handlers.First();
-
-    while (pNode)
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
+    while ( node )
     {
-        wxGDIImageHandler*          pHandler = (wxGDIImageHandler *)pNode->Data();
-
-        if (pHandler->GetName() == rName)
-            return(pHandler);
-        pNode = pNode->Next();
+        wxGDIImageHandler *handler = node->GetData();
+        if ( handler->GetName() == name )
+            return handler;
+        node = node->GetNext();
     }
-    return(NULL);
+    return((wxGDIImageHandler*)NULL);
 }
 
 wxGDIImageHandler* wxGDIImage::FindHandler(
@@ -316,20 +314,19 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
 , long                              lType
 )
 {
-    wxNode*                         pNode = ms_handlers.First();
-
-    while (pNode)
+    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
+    while ( node )
     {
-        wxGDIImageHandler*          pHandler = (wxGDIImageHandler *)pNode->Data();
-
-        if ((pHandler->GetExtension() = rExtension) &&
-            (lType == -1 || pHandler->GetType() == lType))
+        wxGDIImageHandler *handler = node->GetData();
+        if ( (handler->GetExtension() = extension) &&
+             (type == -1 || handler->GetType() == type) )
         {
-            return(pHandler);
+            return handler;
         }
-        pNode = pNode->Next();
+
+        node = node->GetNext();
     }
-    return(NULL);
+    return((wxGDIImageHandler*)NULL);
 }
 
 wxGDIImageHandler* wxGDIImage::FindHandler(
