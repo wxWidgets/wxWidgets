@@ -187,7 +187,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc)
 
 #define WXEXECUTE_NARGS   127
 
-long wxExecute( const wxString& command, bool sync, wxProcess *process )
+long wxExecute( const wxString& command, int flags, wxProcess *process )
 {
     wxCHECK_MSG( !command.IsEmpty(), 0, wxT("can't exec empty command") );
 
@@ -247,7 +247,7 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
     argv[argc] = NULL;
 
     // do execute the command
-    long lRc = wxExecute(argv, sync, process);
+    long lRc = wxExecute(argv, flags, process);
 
     // clean up
     argc = 0;
@@ -280,7 +280,7 @@ static wxString wxMakeShellCommand(const wxString& command)
 
 bool wxShell(const wxString& command)
 {
-    return wxExecute(wxMakeShellCommand(command), TRUE /* sync */) == 0;
+    return wxExecute(wxMakeShellCommand(command), wxEXEC_SYNC) == 0;
 }
 
 bool wxShell(const wxString& command, wxArrayString& output)
@@ -519,7 +519,7 @@ wxStreamTempBuffer::~wxStreamTempBuffer()
 #endif // wxUSE_STREAMS
 
 long wxExecute(wxChar **argv,
-               bool sync,
+               int flags,
                wxProcess *process)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
@@ -527,7 +527,7 @@ long wxExecute(wxChar **argv,
     //
     // we define this as a macro, not a variable, to avoid compiler warnings
     // about "ERROR_RETURN_CODE value may be clobbered by fork()"
-    #define ERROR_RETURN_CODE ((sync) ? -1 : 0)
+    #define ERROR_RETURN_CODE ((flags & wxEXEC_SYNC) ? -1 : 0)
 
     wxCHECK_MSG( *argv, ERROR_RETURN_CODE, wxT("can't exec empty command") );
 
@@ -632,7 +632,7 @@ long wxExecute(wxChar **argv,
         // input/output which might block the process or irritate the user. If
         // one wants proper IO for the subprocess, the right thing to do is to
         // start an xterm executing it.
-        if ( !sync )
+        if ( !(flags & wxEXEC_SYNC) )
         {
             for ( int fd = 0; fd < FD_SETSIZE; fd++ )
             {
@@ -710,7 +710,7 @@ long wxExecute(wxChar **argv,
 #if wxUSE_GUI && !defined(__WXMICROWIN__)
         wxEndProcessData *data = new wxEndProcessData;
 
-        if ( sync )
+        if ( flags & wxEXEC_SYNC )
         {
             // we may have process for capturing the program output, but it's
             // not used in wxEndProcessData in the case of sync execution
@@ -759,7 +759,9 @@ long wxExecute(wxChar **argv,
             return pid;
         }
 #else // !wxUSE_GUI
-        wxASSERT_MSG( sync, wxT("async execution not supported yet") );
+
+        wxASSERT_MSG( flags & wxEXEC_SYNC,
+                      wxT("async execution not supported yet") );
 
         int exitcode = 0;
         if ( waitpid(pid, &exitcode, 0) == -1 || !WIFEXITED(exitcode) )

@@ -148,17 +148,33 @@ WXDLLEXPORT wxString wxDecToHex(int dec);
 // Process management
 // ----------------------------------------------------------------------------
 
-// Execute another program. Returns 0 if there was an error, a PID otherwise.
-WXDLLEXPORT long wxExecute(wxChar **argv, bool sync = FALSE,
+// NB: for backwars compatibility reasons the values of wxEXEC_[A]SYNC *must*
+//     be 0 and 1, don't change!
+
+enum
+{
+    wxEXEC_ASYNC    = 0,    // execute the process asynchronously
+    wxEXEC_SYNC     = 1,    //                     synchronously
+    wxEXEC_NOHIDE   = 2     // under Windows, don't hide the child even if it's
+                            // IO is redirected (this is done by default)
+};
+
+// Execute another program.
+//
+// If flags contain wxEXEC_SYNC, return -1 on failure and the exit code of the
+// process if everything was ok. Otherwise (i.e. if wxEXEC_ASYNC), return 0 on
+// failure and the PID of the launched process if ok.
+WXDLLEXPORT long wxExecute(wxChar **argv, int flags = wxEXEC_ASYNC,
                            wxProcess *process = (wxProcess *) NULL);
-WXDLLEXPORT long wxExecute(const wxString& command, bool sync = FALSE,
+WXDLLEXPORT long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
                            wxProcess *process = (wxProcess *) NULL);
 
-// execute the command capturing its output into an array line by line
+// execute the command capturing its output into an array line by line, this is
+// always synchronous
 WXDLLEXPORT long wxExecute(const wxString& command,
                            wxArrayString& output);
 
-// also capture stderr
+// also capture stderr (also synchronous)
 WXDLLEXPORT long wxExecute(const wxString& command,
                            wxArrayString& output,
                            wxArrayString& error);

@@ -360,7 +360,7 @@ static bool wxExecuteDDE(const wxString& ddeServer,
 
 #endif // wxUSE_IPC
 
-long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
+long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 {
     wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
 
@@ -439,7 +439,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         // termination, try to execute DDE command right now, it can succeed if
         // the process is already running - but as it fails if it's not
         // running, suppress any errors it might generate
-        if ( !sync )
+        if ( !(flags & wxEXEC_SYNC) )
         {
             wxLogNull noErrors;
             if ( wxExecuteDDE(ddeServer, ddeTopic, ddeCommand) )
@@ -484,8 +484,9 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         {
             wxLogSysError(_("Can't create the inter-process read pipe"));
 
-            // indicate failure in both cases
-            return sync ? -1 : 0;
+            // indicate failure: we need to return different error code
+            // depending on the sync flag
+            return flags & wxEXEC_SYNC ? -1 : 0;
         }
 
         // and a stdout one
@@ -496,7 +497,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
             wxLogSysError(_("Can't create the inter-process write pipe"));
 
-            return sync ? -1 : 0;
+            return flags & wxEXEC_SYNC ? -1 : 0;
         }
 
         (void)::CreatePipe(&hpipeStderr[0], &hpipeStderr[1], &security, 0);
@@ -513,15 +514,20 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 #if wxUSE_STREAMS
     if ( redirect )
     {
-        // when the std IO is redirected, we don't show the (console) process
-        // window
-        si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+        si.dwFlags = STARTF_USESTDHANDLES;
 
         si.hStdInput = hpipeStdin[0];
         si.hStdOutput = hpipeStdout[1];
         si.hStdError = hpipeStderr[1];
 
-        si.wShowWindow = SW_HIDE;
+        // when the std IO is redirected, we don't show the (console) process
+        // window by default, but this can be overridden by the caller by
+        // specifying wxEXEC_NOHIDE flag
+        if ( !(flags & wxEXEC_NOHIDE) )
+        {
+            si.dwFlags |= STARTF_USESHOWWINDOW;
+            si.wShowWindow = SW_HIDE;
+        }
 
         // we must duplicate the handle to the write side of stdin pipe to make
         // it non inheritable: indeed, we must close hpipeStdin[1] before
@@ -587,7 +593,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
         wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
 
-        return sync ? -1 : 0;
+        return flags & wxEXEC_SYNC ? -1 : 0;
     }
 
 #if wxUSE_STREAMS
@@ -632,8 +638,8 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     data->hProcess    = pi.hProcess;
     data->dwProcessId = pi.dwProcessId;
     data->hWnd        = hwnd;
-    data->state       = sync;
-    if ( sync )
+    data->state       = (flags & wxEXEC_SYNC) != 0;
+    if ( flags & wxEXEC_SYNC )
     {
         // handler may be !NULL for capturing program output, but we don't use
         // it wxExecuteData struct in this case
@@ -712,7 +718,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     }
 #endif // wxUSE_IPC
 
-    if ( !sync )
+    if ( !(flags & wxEXEC_SYNC) )
     {
         // clean up will be done when the process terminates
 
@@ -742,21 +748,24 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     return dwExitCode;
 #else // Win16
     long instanceID = WinExec((LPCSTR) WXSTRINGCAST command, SW_SHOW);
-    if (instanceID < 32) return(0);
+    if (instanceID < 32)
+        return flags & wxEXEC_SYNC ? -1 : 0;
 
-    if (sync) {
+    if ( flags & wxEXEC_SYNC )
+    {
         int running;
-        do {
+        do
+        {
             wxYield();
             running = GetModuleUsage((HINSTANCE)instanceID);
         } while (running);
     }
 
-    return(instanceID);
+    return instanceID;
 #endif // Win16/32
 }
 
-long wxExecute(char **argv, bool sync, wxProcess *handler)
+long wxExecute(char **argv, int flags, wxProcess *handler)
 {
     wxString command;
 
@@ -767,6 +776,6 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
 
     command.RemoveLast();
 
-    return wxExecute(command, sync, handler);
+    return wxExecute(command, flags, handler);
 }
 

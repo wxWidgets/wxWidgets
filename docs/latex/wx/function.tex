@@ -424,9 +424,9 @@ processes.
 
 \membersection{::wxExecute}\label{wxexecute}
 
-\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{bool }{sync = FALSE}, \param{wxProcess *}{callback = NULL}}
+\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{int }{sync = wxEXEC\_ASYNC}, \param{wxProcess *}{callback = NULL}}
 
-\func{long}{wxExecute}{\param{char **}{argv}, \param{bool }{sync = FALSE}, \param{wxProcess *}{callback = NULL}}
+\func{long}{wxExecute}{\param{char **}{argv}, \param{int }{flags = wxEXEC\_ASYNC}, \param{wxProcess *}{callback = NULL}}
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}}
 
@@ -450,8 +450,9 @@ arguments, terminated by NULL.
 The semantics of the third and fourth versions is different from the first two
 and is described in more details below.
 
-If {\it sync} is FALSE (the default), flow of control immediately returns.
-If TRUE, the current application waits until the other program has terminated.
+If {\it flags} parameter contains {\tt wxEXEC\_ASYNC} flag (the default), flow
+of control immediately returns. If it contains {\tt wxEXEC\_SYNC}, the current
+application waits until the other program has terminated.
 
 In the case of synchronous execution, the return value is the exit code of
 the process (which terminates by the moment the function returns) and will be
@@ -469,10 +470,15 @@ case of using DDE under Windows for command execution). In particular, in this,
 and only this, case the calling code will not get the notification about
 process termination.
 
-If callback isn't NULL and if execution is asynchronous (note that callback
-parameter can not be non-NULL for synchronous execution),
+If callback isn't NULL and if execution is asynchronous, 
 \helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
-the process finishes.
+the process finishes. Specifying this parameter also allows you to redirect the
+standard input and/or output of the process being launched by calling 
+\helpref{Redirect}{wxprocessredirect}. If the child process IO is redirected,
+under Windows the process window is not shown by default (this avoids having to
+flush an unnecessary console for the processes which don't create any windows
+anyhow) but a {\tt wxEXEC\_NOHIDE} flag can be used to prevent this from
+happening, i.e. with this flag the child process window will be shown normally.
 
 Finally, you may use the third overloaded version of this function to execute
 a process (always synchronously) and capture its output in the array
@@ -481,6 +487,20 @@ the messages from standard error output in the {\it errors} array.
 
 See also \helpref{wxShell}{wxshell}, \helpref{wxProcess}{wxprocess},
 \helpref{Exec sample}{sampleexec}.
+
+\wxheading{Parameters}
+
+\docparam{command}{The command to execute and any parameters to pass to it as a
+single string.}
+
+\docparam{argv}{The command to execute should be the first element of this
+array, any additional ones are the command parameters and the array must be
+terminated with a NULL pointer.}
+
+\docparam{flags}{Combination of bit masks {\tt wxEXEC\_ASYNC}, 
+{\tt wxEXEC\_SYNC} and {\tt wxEXEC\_NOHIDE}}
+
+\docparam{callback}{An optional pointer to \helpref{wxProcess}{wxprocess}}
 
 \wxheading{Include files}
 
