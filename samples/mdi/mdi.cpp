@@ -233,17 +233,17 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(MDI_NEW_WINDOW, "&New window");
+    file_menu->Append(MDI_NEW_WINDOW, "&New window\tCtrl-N");
     file_menu->Append(MDI_CHILD_QUIT, "&Close child", "Close this window");
-    file_menu->Append(MDI_QUIT, "&Exit");
+    file_menu->Append(MDI_QUIT, "&Exit\tAlt-X");
 
     wxMenu *option_menu = new wxMenu;
 
-    option_menu->Append(MDI_REFRESH, "&Refresh picture");
+    option_menu->Append(MDI_REFRESH, "&Refresh picture\tF5");
     option_menu->Append(MDI_CHANGE_TITLE, "Change &title...\tCtrl-T");
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, "&About");
+    help_menu->Append(MDI_ABOUT, "&About\tF1");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 

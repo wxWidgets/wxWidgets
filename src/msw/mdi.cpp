@@ -1038,7 +1038,7 @@ long wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXUINT wParam, WXLPARAM l
 
 bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
 {
-    return m_acceleratorTable.Translate(GetParent(), msg);
+    return wxFrame::MSWTranslateMessage(msg);
 }
 
 // ---------------------------------------------------------------------------
