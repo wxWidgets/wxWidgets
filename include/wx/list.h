@@ -142,6 +142,7 @@ public:
 
     // @@ no check is done that the list is really keyed on strings
     const char *GetKeyString() const { return m_key.string; }
+    long GetKeyInteger() const { return m_key.integer; }
 
 #ifdef wxLIST_COMPATIBILITY
     // compatibility methods

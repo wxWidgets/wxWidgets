@@ -111,7 +111,7 @@ and other intermediate compiler files.
 
 Gotchas:
 
-- libwx.a is 28 MB or more - but only 2.9 MB if compiled with no
+- libwx.a is 48 MB or more - but much less if compiled with no
   debug info (-g0) and level 4 optimization (-O4).
 - install.exe doesn't have built-in decompression because lzexpand.lib
   isn't available with Gnu-Win32. However, you can use it with external

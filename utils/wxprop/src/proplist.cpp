@@ -438,7 +438,8 @@ bool wxPropertyListView::CreateControls(void)
 #endif
 
   // May need to be changed in future to eliminate clashes with app.
-  panel->SetClientData((char *)this);
+  // WHAT WAS THIS FOR?
+//  panel->SetClientData((char *)this);
 
   // These buttons are at the bottom of the window, but create them now
   // so the constraints are evaluated in the correct order

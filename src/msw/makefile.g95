@@ -221,12 +221,13 @@ MSWOBJS = \
   wave.$(OBJSUFF) \
   window.$(OBJSUFF)
 
-# OLE not supported yet by GnuWin32 (?)
+# OLE not supported yet by GnuWin32
 #  $(OLEDIR)/droptgt.$(OBJSUFF) \
 #  $(OLEDIR)/dropsrc.$(OBJSUFF) \
 #  $(OLEDIR)/dataobj.$(OBJSUFF) \
 #  $(OLEDIR)/oleutils.$(OBJSUFF) \
 #  $(OLEDIR)/uuid.$(OBJSUFF)
+
 
 OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS)
 

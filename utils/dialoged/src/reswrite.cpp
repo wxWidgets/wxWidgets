@@ -32,6 +32,7 @@
 #if wxUSE_IOSTREAMH
 #if defined(__WXMSW__) && !defined(__GNUWIN32__)
 #include <strstrea.h>
+#include <fstream.h>
 #else
 #include <strstream.h>
 #include <fstream.h>
@@ -40,7 +41,6 @@
 #include <strstream>
 #include <fstream>
 #endif
-
 
 #include "wx/scrolbar.h"
 #include "wx/string.h"

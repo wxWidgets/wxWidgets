@@ -83,16 +83,16 @@ class wxAcceleratorTable: public wxObject
     wxAcceleratorTable(int n, wxAcceleratorEntry entries[] );
     ~wxAcceleratorTable();
 
-    inline wxAcceleratorTable(const wxAcceleratorTable& accel) 
+    inline wxAcceleratorTable(const wxAcceleratorTable& accel) : wxObject()
       { Ref(accel); }
     inline wxAcceleratorTable(const wxAcceleratorTable* accel) 
       { if (accel) Ref(*accel); }
-    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) 
-      { if (*this == accel) return (*this); Ref(accel); return *this; }
-    inline bool operator == (const wxAcceleratorTable& accel) 
+    inline bool operator == (const wxAcceleratorTable& accel)
       { return m_refData == accel.m_refData; }
     inline bool operator != (const wxAcceleratorTable& accel) 
       { return m_refData != accel.m_refData; }
+    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel)
+      { if (*this == accel) return (*this); Ref(accel); return *this; }
 
     bool Ok() const;
     

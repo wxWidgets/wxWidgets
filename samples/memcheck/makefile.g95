@@ -26,7 +26,6 @@ $(OBJDIR):
 
 memcheck$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
 	$(CC) $(LDFLAGS) -o memcheck$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-	$(RSRC) memcheck.$(RESSUFF) memcheck.exe
 
 $(OBJDIR)/memcheck.$(OBJSUFF):	memcheck.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ memcheck.$(SRCSUFF)

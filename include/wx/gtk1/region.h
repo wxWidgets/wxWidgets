@@ -58,7 +58,7 @@ class wxRegion : public wxGDIObject
     wxRegion(void);
     ~wxRegion(void);
 
-    inline wxRegion( const wxRegion& r ) 
+    inline wxRegion( const wxRegion& r ): wxGDIObject()
       { Ref(r); }
     inline wxRegion& operator = ( const wxRegion& r )
       { Ref(r); return (*this); }

@@ -1,37 +1,6 @@
 Current issues and bugs
 -----------------------
 
-Debugging code
---------------
-
-wxDebugContext and global memory operators doesn't work correctly,
-for different (unresolved) reasons on different compilers.
-
-1) In VC++ 5.0, if you use wxDebugAlloc for new and wxDebugFree
-for delete, you get a crash to do with deallocating the debug
-buffer in wxDebugContext. So although the global operators are
-defined, they are #ifdefed to just call malloc and free to avoid
-the problem. This means that non-object memory checking doesn't work.
-The problem does seem to be something to do with a pointer
-mysteriously changing its address, very similar to 2).
-
-2) In BC++ 4.5, there isn't a crash, but instead the ofstream
-pointer passed to SetStream from SetFile (which is called in
-memcheck.cpp) gets mysteriously changed as it's passed to SetStream.
-This means that when counting the number of outstanding memory
-blocks, we can't compare the allocated block with m_debugStream
-to say 'ignore this block because we can't free it before the
-very end of the application'. Therefore it always looks like
-there's a memory leak of one object, in memory.cpp, unless you
-don't call wxDebugContext::SetFile.
-
-The fact that pointers appear to change in both cases must
-indicate a common problem and solution. If we could use the
-standard global memory operators for ofstream and
-wxDebugStreamBuf it might help, but I don't know how to do that -
-I've redefined 'new' throughout as WXDEBUG_NEW (which is itself
-defined as the 3-argument operator).
-
 Owner-draw menus
 ----------------
 

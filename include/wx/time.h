@@ -49,6 +49,7 @@ private:                // static member functions
 public:
         wxTime();                         // current time 
         wxTime(clockTy s)                 { sec = s; }
+        void operator=(const wxTime& t)     { sec = t.sec; } // Ordering required for some compilers
         wxTime(const wxTime& t)                 { (*this) = t ; }
 		  wxTime(hourTy h, minuteTy m, secondTy s =0, bool dst =FALSE);
 		  wxTime(const wxDate&, hourTy h =0, minuteTy m =0, secondTy s=0, bool dst =FALSE);
@@ -61,7 +62,6 @@ public:
         bool operator>=(const wxTime& t) const    { return sec >= t.sec; }
         bool operator==(const wxTime& t) const    { return sec == t.sec; }
         bool operator!=(const wxTime& t) const    { return sec != t.sec; }
-        void operator=(const wxTime& t)     { sec = t.sec; }
         friend wxTime operator+(const wxTime& t, long s)    { return wxTime(t.sec+s); }
 		  friend wxTime operator+(long s, const wxTime& t)    { return wxTime(t.sec+s); }
 		  long operator-(const wxTime& t) const     { return sec - t.sec; }

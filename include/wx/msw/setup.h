@@ -125,12 +125,6 @@
                                   // be WXDEBUG_NEW (see object.h).
                                   // If this causes problems (e.g. link errors), set this to 0.
 
-// GnuWin32 (b19) can't copy with these operators.
-#ifdef __GNUWIN32__
-#undef wxUSE_GLOBAL_MEMORY_OPERATORS 1
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-#endif
-
 #define REMOVE_UNUSED_ARG 1
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.

@@ -193,6 +193,9 @@ public:
   class LineList
   {
   public:
+    void      SetNext(LineList *pNext)  { m_pNext = pNext; }
+    void      SetPrev(LineList *pPrev)  { m_pPrev = pPrev; }
+
     // ctor
     LineList(const wxString& str, LineList *pNext = (LineList *) NULL) : m_strLine(str)
       { SetNext(pNext); SetPrev((LineList *) NULL); }
@@ -200,8 +203,6 @@ public:
     //
     LineList *Next() const              { return m_pNext;  }
     LineList *Prev() const              { return m_pPrev;  }
-    void      SetNext(LineList *pNext)  { m_pNext = pNext; }
-    void      SetPrev(LineList *pPrev)  { m_pPrev = pPrev; }
 
     //
     void SetText(const wxString& str) { m_strLine = str;  }
@@ -316,9 +317,9 @@ public:
     wxFileConfig   *Config()  const { return m_pConfig; }
     bool            IsDirty() const { return m_bDirty;  }
 
-    bool  IsEmpty() const { return Entries().IsEmpty() && Groups().IsEmpty(); }
     const ArrayEntries& Entries() const { return m_aEntries;   }
     const ArrayGroups&  Groups()  const { return m_aSubgroups; }
+    bool  IsEmpty() const { return Entries().IsEmpty() && Groups().IsEmpty(); }
 
     // find entry/subgroup (NULL if not found)
     ConfigGroup *FindSubgroup(const char *szName) const;

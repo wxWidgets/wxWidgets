@@ -653,7 +653,7 @@ wxItemResource *wxResourceManager::FindResourceForWindow(wxWindow *win)
     wxWindow *w = (wxWindow *)node->Data();
     if (w == win)
     {
-      return (wxItemResource *)node->key.integer;
+      return (wxItemResource *)node->GetKeyInteger();
     }
   }
   return NULL;

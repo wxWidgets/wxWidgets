@@ -1135,7 +1135,7 @@ const wxEventTable theClass::sm_eventTable =\
 const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
 #define END_EVENT_TABLE() \
- { 0, 0, 0, 0 } };
+ { 0, 0, 0, 0, 0 } };
  
 /*
  * Event table macros
