@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #include "wx/defs.h"
 
@@ -20,8 +22,6 @@
     #pragma implementation "grid.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
