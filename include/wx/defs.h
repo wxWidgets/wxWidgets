@@ -369,20 +369,6 @@ typedef short int WXTYPE;
 // because -1 is a valid (and largely used) value for window id.
 typedef int wxWindowID;
 
-// Macro to cut down on compiler warnings.
-#if REMOVE_UNUSED_ARG
-    #define WXUNUSED(identifier) /* identifier */
-#else  // stupid, broken compiler
-    #define WXUNUSED(identifier) identifier
-#endif
-
-// some arguments are only used in debug mode, but unused in release one
-#ifdef __WXDEBUG__
-    #define WXUNUSED_UNLESS_DEBUG(param)  param
-#else
-    #define WXUNUSED_UNLESS_DEBUG(param)  WXUNUSED(param)
-#endif
-
 // ----------------------------------------------------------------------------
 // portable calling conventions macros
 // ----------------------------------------------------------------------------
@@ -497,8 +483,8 @@ class WXDLLEXPORT wxObject;
 class WXDLLEXPORT wxEvent;
 #endif
 
- /** symbolic constant used by all Find()-like functions returning positive
-      integer on success as failure indicator */
+// symbolic constant used by all Find()-like functions returning positive
+// integer on success as failure indicator
 #define wxNOT_FOUND       (-1)
 
 // ----------------------------------------------------------------------------
@@ -510,38 +496,36 @@ class WXDLLEXPORT wxEvent;
 #include "wx/debug.h"
 #endif
 
-// NULL declaration
+// NULL declaration: it must be defined as 0 for C++ programs (in particular,
+// it must not be defined as "(void *)0" which is standard for C but completely
+// breaks C++ code)
 #include <stddef.h>
 
-//@{
-/// delete pointer if it is not NULL and NULL it afterwards
+// Macro to cut down on compiler warnings.
+#if REMOVE_UNUSED_ARG
+    #define WXUNUSED(identifier) /* identifier */
+#else  // stupid, broken compiler
+    #define WXUNUSED(identifier) identifier
+#endif
+
+// some arguments are only used in debug mode, but unused in release one
+#ifdef __WXDEBUG__
+    #define WXUNUSED_UNLESS_DEBUG(param)  param
+#else
+    #define WXUNUSED_UNLESS_DEBUG(param)  WXUNUSED(param)
+#endif
+
+// delete pointer if it is not NULL and NULL it afterwards
 // (checking that it's !NULL before passing it to delete is just a
 //  a question of style, because delete will do it itself anyhow, but it might
 //  be considered as an error by some overzealous debugging implementations of
 //  the library, so we do it ourselves)
-#if defined(__SGI_CC__)
-// Okay this is bad styling, but the native SGI compiler is very picky, it
-// wont let you compare/assign between a NULL (void *) and another pointer
-// type. To be really clean we'd need to pass in another argument, the type
-// of p.
-// Also note the use of 0L, this would allow future possible 64bit support
-// (as yet untested) by ensuring that we zero all the bits in a pointer
-// (which is always the same length as a long (at least with the LP64 standard)
-// --- offer aug 98
-#define wxDELETE(p)      if ( (p) ) { delete (p); p = 0L; }
-#else
 #define wxDELETE(p)      if ( (p) != NULL ) { delete p; p = NULL; }
-#endif /* __SGI__CC__ */
 
 // delete an array and NULL it (see comments above)
-#if defined(__SGI_CC__)
-// see above comment.
-#define wxDELETEA(p)      if ( (p) ) { delete [] (p); p = 0L; }
-#else
-#define wxDELETEA(p)      if ( ((void *) (p)) != NULL ) { delete [] p; p = NULL; }
-#endif /* __SGI__CC__ */
+#define wxDELETEA(p)     if ( (p) ) { delete [] (p); p = NULL; }
 
-/// size of statically declared array
+// size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
 
 // ----------------------------------------------------------------------------
