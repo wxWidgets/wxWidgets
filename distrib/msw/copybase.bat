@@ -51,6 +51,8 @@ rem The files not in src/files.lst
 copy /q src\msw\dummy.cpp %DEST%\src\msw\dummy.cpp
 copy /q src\msw\dummydll.cpp %DEST%\src\msw\dummydll.cpp
 
+copy /q src\common\unictabl.inc %DEST%\src\common\unictabl.inc
+
 rem The rest is generated from src/files.lst
 
 copy /q include\wx\app.h %DEST%\include\wx\app.h
@@ -123,6 +125,7 @@ copy /q include\wx\time.h %DEST%\include\wx\time.h
 copy /q include\wx\timer.h %DEST%\include\wx\timer.h
 copy /q include\wx\tokenzr.h %DEST%\include\wx\tokenzr.h
 copy /q include\wx\txtstrm.h %DEST%\include\wx\txtstrm.h
+copy /q include\wx\unzip.h %DEST%\include\wx\unzip.h
 copy /q include\wx\url.h %DEST%\include\wx\url.h
 copy /q include\wx\utils.h %DEST%\include\wx\utils.h
 copy /q include\wx\variant.h %DEST%\include\wx\variant.h

@@ -901,6 +901,7 @@ treebase.h	WXH
 treectrl.h	WXH
 txtstrm.h	WXH	Base
 types.h	WXH
+unzip.h	WXH	Base
 url.h	WXH	Base
 utils.h	WXH	Base
 valgen.h	WXH
