@@ -449,7 +449,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     if ( convertEncoding )
     {
         wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
-        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charset, FALSE);
+        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(m_charset, FALSE);
         if ( enc == wxFONTENCODING_SYSTEM )
         {
             convertEncoding = FALSE; // unknown encoding
