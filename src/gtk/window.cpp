@@ -251,16 +251,6 @@ static bool g_activeFrameLostFocus = FALSE;
 // yet, defer setting the focus to idle time.
 wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 
-// When GTK+ focus_in/out signal is being processed, we shouldn't do
-// any focus changes
-static bool gs_inFocusSignalHandler = false;
-
-struct InFocusHandlerLock
-{
-    InFocusHandlerLock() { gs_inFocusSignalHandler = true; }
-    ~InFocusHandlerLock() { gs_inFocusSignalHandler = false; }
-};
-
 // if we detect that the app has got/lost the focus, we set this variable to
 // either TRUE or FALSE and an activate event will be sent during the next
 // OnIdle() call and it is reset to -1: this value means that we shouldn't
@@ -1973,8 +1963,6 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
                                           GdkEvent *WXUNUSED(event),
                                           wxWindow *win )
 {
-    InFocusHandlerLock flock;
-
     DEBUG_MAIN_THREAD
 
     if (g_isIdle)
@@ -2069,8 +2057,6 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
-    
-    InFocusHandlerLock flock;
 
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -3619,14 +3605,6 @@ void wxWindowGTK::SetFocus()
     if ( m_hasFocus )
     {
         // don't do anything if we already have focus
-        return;
-    }
-
-    if (gs_inFocusSignalHandler)
-    {
-        wxLogTrace(TRACE_FOCUS,
-                   _T("in focus handler, delaying SetFocus(%p)"), this);
-        g_delayedFocus = this;
         return;
     }
 
