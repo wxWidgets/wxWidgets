@@ -3001,7 +3001,7 @@ if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     BUILD=debug
 fi
 
-WX_VERSION_TAG=`echo WX${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
+WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
 TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
