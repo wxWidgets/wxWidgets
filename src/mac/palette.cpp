@@ -36,7 +36,10 @@ wxPaletteRefData::wxPaletteRefData()
 
 wxPaletteRefData::~wxPaletteRefData()
 {
-	delete[] m_palette ;
+    if (m_palette != NULL) {
+        delete[] m_palette ;
+        m_palette = NULL;
+    }
 }
 
 wxPalette::wxPalette()

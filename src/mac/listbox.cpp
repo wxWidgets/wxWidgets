@@ -265,6 +265,7 @@ void wxListBox::Free()
         size_t uiCount = m_aItems.Count();
         while ( uiCount-- != 0 ) {
             delete m_aItems[uiCount];
+            m_aItems[uiCount] = NULL;
         }
 
         m_aItems.Clear();
@@ -373,6 +374,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         size_t ui = m_aItems.Count();
         while ( ui-- != 0 ) {
             delete m_aItems[ui];
+            m_aItems[ui] = NULL;
         }
         m_aItems.Empty();
 

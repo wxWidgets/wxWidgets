@@ -92,8 +92,10 @@ bool wxTimer::IsRunning() const
 wxTimer::~wxTimer()
 {
     Stop();
-    delete m_info ;
-    m_info = NULL ;
+    if (m_info != NULL) {
+        delete m_info ;
+        m_info = NULL ;
+    }
     int index = gTimersInProcess.Index( this ) ;
     if ( index != wxNOT_FOUND )
         gTimersInProcess.RemoveAt( index ) ;  

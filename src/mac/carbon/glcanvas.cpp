@@ -141,8 +141,10 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID i
 
 wxGLCanvas::~wxGLCanvas()
 {
-  if (m_glContext)
-    delete m_glContext;
+    if (m_glContext != NULL) {
+        delete m_glContext;
+        m_glContext = NULL;
+    }
 }
 
 static AGLPixelFormat ChoosePixelFormat(const int *attribList)

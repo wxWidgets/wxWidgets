@@ -71,8 +71,10 @@ bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 
 wxPrintDialog::~wxPrintDialog()
 {
-    if (m_destroyDC && m_printerDC)
+    if (m_destroyDC && m_printerDC) {
         delete m_printerDC;
+        m_printerDC = NULL;
+    }
 }
 
 int wxPrintDialog::ShowModal()

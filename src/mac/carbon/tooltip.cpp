@@ -201,10 +201,12 @@ void wxMacToolTip::Setup( WindowRef win  , wxString text , wxPoint localPosition
 
 wxMacToolTip::~wxMacToolTip() 
 {
-    if ( m_timer )
+    if ( m_timer ) {
         delete m_timer ;
-	if ( m_backpict ) 
-		Clear() ;
+        m_timer = NULL;
+    }
+    if ( m_backpict ) 
+        Clear() ;
 }
 
 const short kTipBorder = 2 ;

@@ -104,16 +104,19 @@ BEGIN_EVENT_TABLE(wxComboBoxChoice, wxChoice)
     EVT_CHOICE(-1, wxComboBoxChoice::OnChoice)
 END_EVENT_TABLE()
 
-
-
-
 wxComboBox::~wxComboBox()
 {
-   // delete the controls now, don't leave them alive even though they woudl
+   // delete the controls now, don't leave them alive even though they would
     // still be eventually deleted by our parent - but it will be too late, the
     // user code expects them to be gone now
-    delete m_text;
-    delete m_choice;
+    if (m_text != NULL) {
+        delete m_text;
+        m_text = NULL;
+    }
+    if (m_choice != NULL) {
+        delete m_choice;
+        m_choice = NULL;
+    }
 }
 
 

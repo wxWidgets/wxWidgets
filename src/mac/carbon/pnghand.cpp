@@ -111,12 +111,11 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
   Width = width; Height = height; Depth = depth;
   ColorType = (colortype>=0) ? colortype: ((Depth>8) ? COLORTYPE_COLOR: 0);
   delete m_palette;
-  delete[] RawImage ;
-  RawImage = 0;
-  m_palette = 0;
+  m_palette = NULL;
+  delete[] RawImage;
+  RawImage = NULL;
 
-  if (lpbi)  
-  {
+  if (lpbi) {
   	wxMacDestroyGWorld( (GWorldPtr) lpbi ) ;
   }
   lpbi = wxMacCreateGWorld( Width , Height , Depth);
@@ -134,11 +133,18 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
 
 wxPNGReader::~wxPNGReader ( )
 {
- 	delete[] RawImage ;
-  if (lpbi)  {
+    if (RawImage != NULL) {
+        delete[] RawImage ;
+        RawImage = NULL;
+    }
+    if (lpbi)  {
   	wxMacDestroyGWorld( (GWorldPtr) lpbi ) ;
-  }
-  delete m_palette;
+        lpbi = NULL;
+    }
+    if (m_palette != NULL) {
+        delete m_palette;
+        m_palette = NULL;
+    }
 }
 
 
@@ -260,10 +266,12 @@ void wxPNGReader::NullData()
 {
   if (lpbi)  {
   	wxMacDestroyGWorld( (GWorldPtr) lpbi ) ;
+        lpbi = NULL;
   }
-  delete m_palette;
-  lpbi = NULL;
-  m_palette = NULL;
+  if (m_palette != NULL) {
+      delete m_palette;
+      m_palette = NULL;
+  }
 }
 
 wxBitmap* wxPNGReader::GetBitmap(void)
@@ -432,7 +440,7 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
   if (!info_ptr)
   {
     fclose(fp);
-    delete(png_ptr);
+    delete png_ptr;
     return FALSE;
   }
   /* set error handling */
@@ -440,8 +448,8 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
   {
     png_read_destroy(png_ptr, info_ptr, (png_info *)0);
     fclose(fp);
-    delete(png_ptr);
-    delete(info_ptr);
+    delete png_ptr;
+    delete info_ptr;
 
     /* If we get here, we had a problem reading the file */
     return FALSE;
@@ -623,8 +631,8 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
   png_read_destroy(png_ptr, info_ptr, (png_info *)0);
 
   /* free the structures */
-  delete(png_ptr);
-  delete(info_ptr);
+  delete png_ptr;
+  delete info_ptr;
 
   /* close the file */
   fclose(fp);
@@ -663,7 +671,7 @@ bool wxPNGReader::SaveFile(char * ImageFileName)
   if (!info_ptr)
   {
     fclose(fp);
-    delete(png_ptr);
+    delete png_ptr;
     return FALSE;
   }
 
@@ -672,8 +680,8 @@ bool wxPNGReader::SaveFile(char * ImageFileName)
   {
     png_write_destroy(png_ptr);
     fclose(fp);
-    delete(png_ptr);
-    delete(info_ptr);
+    delete png_ptr;
+    delete info_ptr;
 
     /* If we get here, we had a problem reading the file */
     return FALSE;
@@ -770,8 +778,8 @@ bool wxPNGReader::SaveFile(char * ImageFileName)
     delete[] (info_ptr->palette);
 
   /* free the structures */
-  delete(png_ptr);
-  delete(info_ptr);
+  delete png_ptr;
+  delete info_ptr;
 
   /* close the file */
   fclose(fp);

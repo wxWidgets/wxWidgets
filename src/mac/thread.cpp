@@ -99,7 +99,7 @@ public:
     {
         if ( m_locked > 0 )
         {
-            wxLogDebug(_T("Warning: freeing a locked mutex (%d locks)."), m_locked);
+            wxLogDebug(_T("Warning: freeing a locked mutex (%ld locks)."), m_locked);
         }
     }
 
@@ -576,7 +576,10 @@ wxThread::wxThread(wxThreadKind kind)
 wxThread::~wxThread()
 {
     s_threads.Remove( (void*) this ) ;
-    delete m_internal;
+    if (m_internal != NULL) {
+        delete m_internal;
+        m_internal = NULL;
+    }
 }
 
 // create/start thread

@@ -253,7 +253,10 @@ wxString wxDir::GetName() const
 
 wxDir::~wxDir()
 {
-    delete M_DIR;
+    if (M_DIR != NULL) {
+        delete M_DIR;
+        m_data = NULL;
+    }
 }
 
 // ----------------------------------------------------------------------------
