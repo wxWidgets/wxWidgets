@@ -16,7 +16,7 @@
 
 #define UMA_USE_8_6 0 
 
-#if __POWERPC__
+#if defined(__POWERPC__) || defined(__MACH__)
 #define UMA_USE_APPEARANCE 1
 #define UMA_USE_WINDOWMGR 1
 #else
