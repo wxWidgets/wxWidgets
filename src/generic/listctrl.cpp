@@ -1879,7 +1879,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     int numColumns = m_owner->GetColumnCount();
     wxListItem item;
-    for (int i = 0; i < numColumns; i++)
+    for ( int i = 0; i < numColumns && x < w; i++ )
     {
         m_owner->GetColumn( i, item );
         int wCol = item.m_width;
@@ -1923,11 +1923,9 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawText( item.GetText(),
                      x + EXTRA_WIDTH, HEADER_OFFSET_Y + EXTRA_HEIGHT );
 
-        if ( x > w - wCol + 5 )
-            break;
-
         x += wCol;
     }
+
     dc.EndDrawing();
 }
 
