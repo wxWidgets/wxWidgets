@@ -64,6 +64,7 @@ extern "C" {
 #if defined(__GNUWIN32__) && !defined(__TWIN32__)
     #include <sys/unistd.h>
     #include <sys/stat.h>
+    #include <sys/cygwin.h> // for cygwin_conv_to_full_win32_path()
 #endif  //GNUWIN32
 
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
@@ -372,6 +373,13 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     // add a trailing slash if needed
     if ( strDir.Last() != wxT('/') )
       strDir << wxT('/');
+
+    #ifdef __GNUWIN32__
+      // Cygwin returns unix type path but that does not work well
+      static wxChar windowsPath[MAX_PATH];
+      cygwin_conv_to_full_win32_path(strDir, windowsPath);
+      strDir = windowsPath;
+    #endif
   #else   // Windows
     #ifdef  __WIN32__
       const wxChar *szHome = wxGetenv(wxT("HOMEDRIVE"));

@@ -93,13 +93,6 @@
     #endif
 #endif
 
-#ifdef __GNUWIN32__
-    #include <wchar.h>
-    #ifndef __TWIN32__
-        #include <sys/unistd.h>
-    #endif
-#endif
-
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.
@@ -121,7 +114,18 @@
 
 #ifdef __WINDOWS__
     #include <windows.h>
-#endif
+
+    // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
+    //
+    // note that it must be included after <windows.h>
+    #ifdef __GNUWIN32__
+        #include <sys/cygwin.h>
+        #include <wchar.h>
+        #ifndef __TWIN32__
+            #include <sys/unistd.h>
+        #endif
+    #endif // __GNUWIN32__
+#endif // __WINDOWS__
 
 // TODO: Borland probably has _wgetcwd as well?
 #ifdef _MSC_VER
@@ -1456,11 +1460,11 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         }
 #endif // __DJGPP__
 
-#ifdef __CYGWIN10__
-        // another example of DOS/Unix mix
+#ifdef __GNUWIN32__
+        // another example of DOS/Unix mix (Cygwin)
         wxString pathUnix = buf;
         cygwin_conv_to_full_win32_path(pathUnix, buf);
-#endif // __CYGWIN10__
+#endif // __GNUWIN32__
 
         // finally convert the result to Unicode if needed
 #if wxUSE_UNICODE && !defined(HAVE_WGETCWD)
