@@ -135,7 +135,7 @@ static pthread_key_t gs_keySelf;
 static size_t gs_nThreadsBeingDeleted = 0;
 
 // a mutex to protect gs_nThreadsBeingDeleted
-static pthread_mutex_t gs_mutexDeleteThread = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t gs_mutexDeleteThread;
 
 // and a condition variable which will be signaled when all
 // gs_nThreadsBeingDeleted will have been deleted
@@ -1448,6 +1448,10 @@ bool wxThreadModule::OnInit()
 
     gs_mutexGui->Lock();
 #endif // wxUSE_GUI
+
+    // under Solaris we get a warning from CC when using
+    // PTHREAD_MUTEX_INITIALIZER, so do it dynamically
+    pthread_mutex_init(&gs_mutexDeleteThread, NULL);
 
     return TRUE;
 }

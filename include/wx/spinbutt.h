@@ -13,7 +13,9 @@
 #define _WX_SPINBUTT_H_BASE_
 
 #ifdef __GNUG__
-    #pragma interface "spinbutbase.h"
+    #ifndef __WXMOTIF__ // because there is no matching .cpp for Motif
+        #pragma interface "spinbutbase.h"
+    #endif // Motif
 #endif
 
 // ----------------------------------------------------------------------------
