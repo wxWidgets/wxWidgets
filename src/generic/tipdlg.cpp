@@ -55,6 +55,20 @@
 
 static const int wxID_NEXT_TIP = 32000;  // whatever
 
+// ---------------------------------------------------------------------------
+// macros
+// ---------------------------------------------------------------------------
+
+/* Macro for avoiding #ifdefs when value have to be different depending on size of
+   device we display on
+ */
+
+#if defined(__SMARTPHONE__)
+    #define wxLARGESMALL(large,small) small
+#else
+    #define wxLARGESMALL(large,small) large
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -210,20 +224,25 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     // 1) create all controls in tab order
 
+#ifndef __SMARTPHONE__
     wxButton *btnClose = new wxButton(this, wxID_CANCEL, _("&Close"));
+#endif
 
     m_checkbox = new wxCheckBox(this, wxID_ANY, _("&Show tips at startup"));
     m_checkbox->SetValue(showAtStartup);
 
+#ifndef __SMARTPHONE__
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
+#endif
 
     wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."));
 
+#ifndef __SMARTPHONE__
     wxFont font = text->GetFont();
     font.SetPointSize(int(1.6 * font.GetPointSize()));
     font.SetWeight(wxFONTWEIGHT_BOLD);
-    
     text->SetFont(font);
+#endif
 
     m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                             wxDefaultPosition, wxSize(200, 160),
@@ -260,17 +279,21 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
     icon_text->Add( bmp, 0, wxCENTER );
-    icon_text->Add( text, 1, wxCENTER | wxLEFT, 20 );
-    topsizer->Add( icon_text, 0, wxEXPAND | wxALL, 10 );
+    icon_text->Add( text, 1, wxCENTER | wxLEFT, wxLARGESMALL(20,0) );
+    topsizer->Add( icon_text, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
 
-    topsizer->Add( m_text, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
+    topsizer->Add( m_text, 1, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(10,0) );
 
     wxBoxSizer *bottom = new wxBoxSizer( wxHORIZONTAL );
     bottom->Add( m_checkbox, 0, wxCENTER );
+
+#ifndef __SMARTPHONE__
     bottom->Add( 10,10,1 );
-    bottom->Add( btnNext, 0, wxCENTER | wxLEFT, 10 );
-    bottom->Add( btnClose, 0, wxCENTER | wxLEFT, 10 );
-    topsizer->Add( bottom, 0, wxEXPAND | wxALL, 10 );
+    bottom->Add( btnNext, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
+    bottom->Add( btnClose, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
+#endif
+
+    topsizer->Add( bottom, 0, wxEXPAND | wxALL, wxLARGESMALL(10,0) );
 
     SetTipText();
 
@@ -280,6 +303,11 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     topsizer->Fit( this );
 
     Centre(wxBOTH | wxCENTER_FRAME);
+
+#ifdef __SMARTPHONE__
+    SetRightMenu(wxID_NEXT_TIP, _("Next"));
+    SetLeftMenu(wxID_CANCEL, _("Close"));
+#endif
 
 }
 
