@@ -2241,8 +2241,8 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     WXLRESULT rc = 0;
     bool isMultiple = (GetWindowStyle() & wxTR_MULTIPLE) != 0;
 
-#if (!defined(_WIN32_WCE)) || (defined(_WIN32_WCE) && (_WIN32_WCE >= 400))
-    if (nMsg == WM_CONTEXTMENU)
+#ifdef WM_CONTEXTMENU
+    if ( nMsg == WM_CONTEXTMENU )
     {
         wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
         event.m_item = GetSelection();
