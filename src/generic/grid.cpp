@@ -2252,22 +2252,6 @@ void wxGridTableBase::SetColAttr(wxGridCellAttr *attr, int col)
     }
 }
 
-void wxGridTableBase::UpdateAttrRows( size_t pos, int numRows )
-{
-    if ( m_attrProvider )
-    {
-        m_attrProvider->UpdateAttrRows( pos, numRows );
-    }
-}
-
-void wxGridTableBase::UpdateAttrCols( size_t pos, int numCols )
-{
-    if ( m_attrProvider )
-    {
-        m_attrProvider->UpdateAttrCols( pos, numCols );
-    }
-}
-
 bool wxGridTableBase::InsertRows( size_t WXUNUSED(pos),
                                   size_t WXUNUSED(numRows) )
 {
@@ -2555,7 +2539,6 @@ bool wxGridStringTable::InsertRows( size_t pos, size_t numRows )
     {
         m_data.Insert( sa, row );
     }
-    UpdateAttrRows( pos, numRows );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -2635,7 +2618,6 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
             m_data.Remove( pos );
         }
     }
-    UpdateAttrRows( pos, -((int)numRows) );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -2669,7 +2651,6 @@ bool wxGridStringTable::InsertCols( size_t pos, size_t numCols )
             m_data[row].Insert( wxEmptyString, col );
         }
     }
-    UpdateAttrCols( pos, numCols );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -2754,7 +2735,6 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
             }
         }
     }
-    UpdateAttrCols( pos, -((int)numCols) );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -4423,26 +4403,26 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     //
     if ( event.LeftDown() && coords != wxGridNoCellCoords )
     {
-        if ( !event.ShiftDown() && !event.ControlDown() )
-            ClearSelection();
-        if ( event.ShiftDown() )
+        if ( !SendEvent( wxEVT_GRID_CELL_LEFT_CLICK,
+                       coords.GetRow(),
+                       coords.GetCol(),
+                       event ) )
         {
-            m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                      m_currentCellCoords.GetCol(),
-                                      coords.GetRow(),
-                                      coords.GetCol(),
-                                      event.ControlDown(),
-                                      event.ShiftDown(),
-                                      event.AltDown(),
-                                      event.MetaDown() );
-        }
-        else if ( XToEdgeOfCol(x) < 0  &&
-                  YToEdgeOfRow(y) < 0 )
-        {
-            if ( !SendEvent( wxEVT_GRID_CELL_LEFT_CLICK,
-                             coords.GetRow(),
-                             coords.GetCol(),
-                             event ) )
+            if ( !event.ShiftDown() && !event.ControlDown() )
+                ClearSelection();
+            if ( event.ShiftDown() )
+            {
+                m_selection->SelectBlock( m_currentCellCoords.GetRow(),
+                                          m_currentCellCoords.GetCol(),
+                                          coords.GetRow(),
+                                          coords.GetCol(),
+                                          event.ControlDown(),
+                                          event.ShiftDown(),
+                                          event.AltDown(),
+                                          event.MetaDown() );
+            }
+            else if ( XToEdgeOfCol(x) < 0  &&
+                      YToEdgeOfRow(y) < 0 )
             {
                 DisableCellEditControl();
                 MakeCellVisible( coords );
@@ -4798,16 +4778,6 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         //
         if ( ok )
         {
-#if 0
-            if ( m_numCols == 0 )
-            {
-                m_table->AppendCols( WXGRID_DEFAULT_NUMBER_COLS );
-                //
-                // TODO: perhaps instead of appending the default number of cols
-                // we should remember what the last non-zero number of cols was ?
-                //
-            }
-#endif
             if ( m_currentCellCoords == wxGridNoCellCoords )
             {
                 // if we have just inserted cols into an empty grid the current
@@ -4817,6 +4787,10 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
             }
 
             m_selection->UpdateRows( pos, numRows );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider)
+                attrProvider->UpdateAttrRows( pos, numRows );
+
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
@@ -4846,16 +4820,6 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
 
     if ( m_table && m_table->AppendRows( numRows ) )
     {
-#if 0
-        if ( m_numCols == 0 )
-        {
-            m_table->AppendCols( WXGRID_DEFAULT_NUMBER_COLS );
-            //
-            // TODO: perhaps instead of appending the default number of cols
-            // we should remember what the last non-zero number of cols was ?
-            //
-        }
-#endif
         if ( m_currentCellCoords == wxGridNoCellCoords )
         {
             // if we have just inserted cols into an empty grid the current
@@ -4904,6 +4868,17 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
             // operation to this view object as a grid table message
             //
             m_selection->UpdateRows( pos, -((int)numRows) );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider) {
+                attrProvider->UpdateAttrRows( pos, -((int)numRows) );
+                // No need to touch column attributes, unless we
+                // removed _all_ rows, in this case, we remove
+                // all column attributes.
+                // I hate to do this here, but the
+                // needed data is not available inside UpdateAttrRows.
+                if ( !GetNumberRows() )
+                    attrProvider->UpdateAttrCols( 0, -GetNumberCols() );
+            }
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
@@ -4948,6 +4923,9 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
             }
 
             m_selection->UpdateCols( pos, numCols );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider)
+                attrProvider->UpdateAttrCols( pos, numCols );
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
@@ -5024,6 +5002,17 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
             // operation to this view object as a grid table message
             //
             m_selection->UpdateCols( pos, -((int)numCols) );
+            wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
+            if (attrProvider) {
+                attrProvider->UpdateAttrCols( pos, -((int)numCols) );
+                // No need to touch row attributes, unless we
+                // removed _all_ columns, in this case, we remove
+                // all row attributes.
+                // I hate to do this here, but the
+                // needed data is not available inside UpdateAttrCols.
+                if ( !GetNumberCols() )
+                    attrProvider->UpdateAttrRows( 0, -GetNumberRows() );
+            }
             if ( !GetBatchCount() )
             {
                 CalcDimensions();

@@ -944,6 +944,10 @@ void wxGridSelection::UpdateRows( size_t pos, int numRows )
             }
         }
     }
+    // No need to touch selected columns, unless we removed _all_
+    // rows, in this case, we remove all columns from the selection.
+    if ( !m_grid->GetNumberRows() )
+        m_colSelection.Clear();
 }
 
 void wxGridSelection::UpdateCols( size_t pos, int numCols )
@@ -1046,6 +1050,11 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
             }
         }
     }
+
+    // No need to touch selected rows, unless we removed _all_
+    // columns, in this case, we remove all rows from the selection.
+    if ( !m_grid->GetNumberCols() )
+        m_rowSelection.Clear();
 }
 
 int wxGridSelection::BlockContain( int topRow1, int leftCol1,

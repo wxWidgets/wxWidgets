@@ -756,11 +756,6 @@ public:
     // a wxGridCellAttrProvider if necessary.
     virtual bool CanHaveAttributes();
 
-
-    // change row/col number in attribute if needed
-    virtual void UpdateAttrRows( size_t pos, int numRows );
-    virtual void UpdateAttrCols( size_t pos, int numCols );
-
     // by default forwarded to wxGridCellAttrProvider if any. May be
     // overridden to handle attributes directly in the table.
     virtual wxGridCellAttr *GetAttr( int row, int col );
