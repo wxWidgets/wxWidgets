@@ -68,155 +68,252 @@
 #endif
 #include <stdarg.h>
 
-#define wxEXECUTE_WIN_MESSAGE 10000
+// this message is sent when the process we're waiting for terminates
+#define wxWM_PROC_TERMINATED (WM_USER + 10000)
 
-struct wxExecuteData {
-  HWND window;
-  HINSTANCE process;
-  wxProcess *handler;
-  char state;
+// structure describing the process we're being waiting for
+struct wxExecuteData
+{
+public:
+    ~wxExecuteData()
+    {
+        if ( !::CloseHandle(hProcess) )
+        {
+            wxLogLastError("CloseHandle(hProcess)");
+        }
+    }
+
+    HWND       hWnd;          // window to send wxWM_PROC_TERMINATED to
+    HANDLE     hProcess;      // handle of the process
+    DWORD      dwProcessId;   // pid of the process
+    wxProcess *handler;
+    DWORD      dwExitCode;    // the exit code of the process
+    bool       state;         // set to FALSE when the process finishes
 };
 
 
 #ifdef __WIN32__
 static DWORD wxExecuteThread(wxExecuteData *data)
 {
-  WaitForSingleObject(data->process, INFINITE);
+    WaitForSingleObject(data->hProcess, INFINITE);
 
-  // Send an implicit message to the window
-  SendMessage(data->window, wxEXECUTE_WIN_MESSAGE, 0, (LPARAM)data);
+    // get the exit code
+    if ( !GetExitCodeProcess(data->hProcess, &data->dwExitCode) )
+    {
+        wxLogLastError("GetExitCodeProcess");
+    }
 
-  return 0;
+    wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
+                  "process should have terminated" );
+
+    // send a message indicating process termination to the window
+    SendMessage(data->hWnd, wxWM_PROC_TERMINATED, 0, (LPARAM)data);
+    
+    return 0;
 }
 #endif
 
-
+// window procedure of a hidden window which is created just to receive
+// the notification message when a process exits
 LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
                                             WPARAM wParam, LPARAM lParam)
 {
-  wxExecuteData *data = (wxExecuteData *)lParam;
+    if ( message == wxWM_PROC_TERMINATED )
+    {
+        DestroyWindow(hWnd);    // we don't need it any more
 
-  if (message == wxEXECUTE_WIN_MESSAGE) {
-    DestroyWindow(hWnd);
-    if (data->handler)
-      data->handler->OnTerminate((int)data->process, -1);
+        wxExecuteData *data = (wxExecuteData *)lParam;
+        if ( data->handler )
+        {
+            data->handler->OnTerminate((int)data->dwProcessId,
+                                       (int)data->dwExitCode);
+        }
+        
+        if ( data->state )
+        {
+            // we're executing synchronously, tell the waiting thread
+            // that the process finished
+            data->state = 0;
+        }
+        else
+        {
+            // asynchronous execution - we should do the clean up
+            delete data;
+        }
+    }
 
-    if (data->state)
-      data->state = 0;
-    else
-      delete data;
-  }
-  return 0;
+    return 0;
 }
 
 extern char wxPanelClassName[];
 
 long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 {
-  if (command == "")
-    return 0;
+    wxCHECK_MSG( !!command, 0, "empty command in wxExecute" );
 
 #if defined(__WIN32__) && !defined(__TWIN32__)
-  char * cl;
-  char * argp;
-  int clen;
-  HINSTANCE result;
-  DWORD dresult;
-  HWND window;
-  wxExecuteData *data;
-  DWORD tid;
+    // the old code is disabled because we really need a process handle
+    // if we want to execute it asynchronously or even just get its
+    // return code and for this we must use CreateProcess() and not
+    // ShellExecute()
+#if 0
+    // isolate command and arguments
+    wxString commandName;
+    bool insideQuotes = FALSE;
+    const char *pc;
+    for ( pc = command.c_str(); *pc != '\0'; pc++ )
+    {
+        switch ( *pc )
+        {
+            case ' ':
+            case '\t':
+                if ( !insideQuotes )
+                    break;
+                // fall through
 
-  // copy the command line
-  clen = command.Length();
-  if (!clen) return -1;
-  cl = (char *) calloc( 1, 256);
-  if (!cl) return -1;
-  strcpy( cl, WXSTRINGCAST command);
+            case '"':
+                insideQuotes = !insideQuotes;
+                // fall through
 
-  // isolate command and arguments
-  argp = strchr( cl, ' ');
-  if (argp)
-    *argp++ = '\0';
+            default:
+                commandName += *pc;
+                continue;   // skip the next break
+        }
 
+        // only reached for space not inside quotes
+        break;
+    }
+
+    wxString commandArgs = pc;
+
+    wxWindow *winTop = wxTheApp->GetTopWindow();
+    HWND hwndTop = (HWND)(winTop ? winTop->GetHWND() : 0);
+
+    HANDLE result;
 #ifdef __GNUWIN32__
-  result = ShellExecute((HWND) (wxTheApp->GetTopWindow() ? (HWND) wxTheApp->GetTopWindow()->GetHWND() : NULL),
-     (const wchar_t) "open", (const wchar_t) cl, (const wchar_t) argp,
-     (const wchar_t) NULL, SW_SHOWNORMAL);
-#else
-  result = ShellExecute( (HWND) (wxTheApp->GetTopWindow() ? wxTheApp->GetTopWindow()->GetHWND() : NULL),
-     "open", cl, argp, NULL, SW_SHOWNORMAL);
-#endif
+    result = ShellExecute(hwndTop,
+                          (const wchar_t)"open",
+                          (const wchar_t)commandName,
+                          (const wchar_t)commandArgs,
+                          (const wchar_t)NULL,
+                          SW_SHOWNORMAL);
+#else // !GNUWIN32
+    result = ShellExecute(hwndTop, "open", commandName,
+                          commandArgs, NULL, SW_SHOWNORMAL);
+#endif // GNUWIN32
+    
+    if ( ((long)result) <= 32 )
+        wxLogSysError(_("Can't execute command '%s'"), command.c_str());
 
-  if (((long)result) <= 32) {
-   free(cl);
+    return result;
+#else // 1
+    // create the process
+    STARTUPINFO si;
+    ::ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
 
-   wxLogSysError(_("Can't execute command '%s'"), command.c_str());
-   return 0;
-  }
+    PROCESS_INFORMATION pi;
 
-  // Alloc data
-  data = new wxExecuteData;
+    if ( ::CreateProcess(
+                         NULL,       // application name (use only cmd line)
+                         (char *)command.c_str(),    // full command line
+                         NULL,       // security attributes: defaults for both
+                         NULL,       //   the process and its main thread
+                         FALSE,      // don't inherit handles
+                         CREATE_DEFAULT_ERROR_MODE,  // flags
+                         NULL,       // environment (use the same)
+                         NULL,       // current directory (use the same)
+                         &si,        // startup info (unused here)
+                         &pi         // process info
+                        ) == 0 )
+    {
+        wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
 
-  // Create window
-  window = CreateWindow(wxPanelClassName, NULL, 0, 0, 0, 0, 0, NULL,
-                        (HMENU) NULL, wxGetInstance(), 0);
+        return 0;
+    }
 
-  FARPROC ExecuteWindowInstance = MakeProcInstance((FARPROC) wxExecuteWindowCbk,
-                                                   wxGetInstance());
+    // close unneeded handle
+    if ( !::CloseHandle(pi.hThread) )
+        wxLogLastError("CloseHandle(hThread)");
 
-  SetWindowLong(window, GWL_WNDPROC, (LONG) ExecuteWindowInstance);
-  SetWindowLong(window, GWL_USERDATA, (LONG) data);
+    // create a hidden window to receive notification about process
+    // termination
+    HWND hwnd = ::CreateWindow(wxPanelClassName, NULL, 0, 0, 0, 0, 0, NULL,
+                               (HMENU)NULL, wxGetInstance(), 0);
+    wxASSERT_MSG( hwnd, "can't create a hidden window for wxExecute" );
+    
+    FARPROC ExecuteWindowInstance = MakeProcInstance((FARPROC)wxExecuteWindowCbk,
+                                                     wxGetInstance());
+    
+    ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) ExecuteWindowInstance);
+    
+    // Alloc data
+    wxExecuteData *data = new wxExecuteData;
+    data->hProcess    = pi.hProcess;
+    data->dwProcessId = pi.dwProcessId;
+    data->hWnd        = hwnd;
+    data->state       = sync;
+    data->handler     = handler;
 
-  data->process = result;
-  data->window  = window;
-  data->state   = sync;
-  data->handler = (sync) ? NULL : handler;
+    DWORD tid;
+    HANDLE hThread = ::CreateThread(NULL,
+                                    0,
+                                    (LPTHREAD_START_ROUTINE)wxExecuteThread,
+                                    (void *)data,
+                                    0,
+                                    &tid);
 
-  dresult = (DWORD)CreateThread(NULL, 0,
-                                (LPTHREAD_START_ROUTINE)wxExecuteThread,
-                                (void *)data, 0, &tid);
-  if (dresult == 0) {
-    wxDebugMsg("wxExecute PANIC: I can't create the waiting thread !"); 
-    DestroyWindow(window);
-    return (long)result;
-  }
+    if ( !hThread )
+    {
+        wxLogLastError("CreateThread in wxExecute");
 
-  if (!sync)
-  {
-    free(cl);
-    return (long)result;
-  }
+        DestroyWindow(hwnd);
+        delete data;
 
-  // waiting until command executed
-  while (data->state)
-    wxYield();
+        // the process still started up successfully...
+        return pi.dwProcessId;
+    }
+    
+    if ( !sync )
+    {
+        // clean up will be done when the process terminates
+        return pi.dwProcessId;
+    }
+    
+    // waiting until command executed
+    while ( data->state )
+        wxYield();
+    
+    delete data;
 
-  free(cl);
-  return 0;
-#else
-  long instanceID = WinExec((LPCSTR) WXSTRINGCAST command, SW_SHOW);
-  if (instanceID < 32) return(0);
+    return pi.dwProcessId;
+#endif // 0/1
+#else // Win16
+    long instanceID = WinExec((LPCSTR) WXSTRINGCAST command, SW_SHOW);
+    if (instanceID < 32) return(0);
+    
+    if (sync) {
+        int running;
+        do {
+            wxYield();
+            running = GetModuleUsage((HANDLE)instanceID);
+        } while (running);
+    }
 
-  if (sync) {
-    int running;
-    do {
-      wxYield();
-      running = GetModuleUsage((HANDLE)instanceID);
-    } while (running);
-  }
-  return(instanceID);
-#endif
+    return(instanceID);
+#endif // Win16/32
 }
 
 long wxExecute(char **argv, bool sync, wxProcess *handler)
 {
-  wxString command = "";
+    wxString command;
+    
+    while ( *argv != NULL )
+    {
+        command << *argv++ << ' ';
+    }
 
-  while (*argv != NULL) {
-    command += *argv;
-    command += ' ';
-    argv++;
-  }
-  command.RemoveLast();
-  return wxExecute(command, sync, handler);
+    command.RemoveLast();
+
+    return wxExecute(command, sync, handler);
 }
