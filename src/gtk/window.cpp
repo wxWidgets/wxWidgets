@@ -4267,6 +4267,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     m_clipPaintRegion = FALSE;
 #else
+    wxCHECK_RET( GTK_PIZZA(m_wxwindow)->bin_window != NULL, wxT("window needs client area for scrolling") );
 
     gdk_window_scroll( GTK_PIZZA(m_wxwindow)->bin_window, dx, dy );
 
