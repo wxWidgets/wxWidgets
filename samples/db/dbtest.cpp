@@ -1027,7 +1027,7 @@ void Ccontact::Initialize()
     IsDeveloper        = FALSE;
     Contributions      = 0;
     LinesOfCode        = 0L;
-    wxStrcpy(Picture,"\xff\x01\xff\x02\xff\x03\xff\x04\xff\x05");
+    Picture[0]         = 0;
 }  // Ccontact::Initialize
 
 
