@@ -49,6 +49,7 @@ wxCalendarNameStr = wx.calendar.CalendarNameStr
 wxCalendarCtrl = wx.calendar.CalendarCtrl
 wxCalendarCtrlPtr = wx.calendar.CalendarCtrlPtr
 wxPreCalendarCtrl = wx.calendar.PreCalendarCtrl
+wxCalendarCtrl_GetClassDefaultAttributes = wx.calendar.CalendarCtrl_GetClassDefaultAttributes
 
 
 d = globals()

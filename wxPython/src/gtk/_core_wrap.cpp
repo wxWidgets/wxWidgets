@@ -1350,7 +1350,7 @@ int PyApp_GetComCtl32Version(){ wxPyRaiseNotImplemented(); return 0; }
 
  static const wxString wxPyPanelNameStr(wxPanelNameStr); 
 wxVisualAttributes *new_wxVisualAttributes(){ return new wxVisualAttributes; }
-void delete_wxVisualAttributes(wxVisualAttributes *self){}
+void delete_wxVisualAttributes(wxVisualAttributes *self){ delete self; }
 PyObject *wxWindow_GetChildren(wxWindow *self){
             wxWindowList& list = self->GetChildren();
             return wxPy_ConvertList(&list);

@@ -1983,6 +1983,23 @@ class Grid(_windows.ScrolledWindow):
         """GetGridCornerLabelWindow(self) -> Window"""
         return _grid.Grid_GetGridCornerLabelWindow(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class GridPtr(Grid):
     def __init__(self, this):
@@ -1990,6 +2007,22 @@ class GridPtr(Grid):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Grid
 _grid.Grid_swigregister(GridPtr)
+
+def Grid_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    Grid_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 
 class GridEvent(_core.NotifyEvent):
     def __repr__(self):

@@ -93,6 +93,7 @@ wxGridCellCoords = wx.grid.GridCellCoords
 wxGridCellCoordsPtr = wx.grid.GridCellCoordsPtr
 wxGrid = wx.grid.Grid
 wxGridPtr = wx.grid.GridPtr
+wxGrid_GetClassDefaultAttributes = wx.grid.Grid_GetClassDefaultAttributes
 wxGridEvent = wx.grid.GridEvent
 wxGridEventPtr = wx.grid.GridEventPtr
 wxGridSizeEvent = wx.grid.GridSizeEvent

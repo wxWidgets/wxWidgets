@@ -105,6 +105,7 @@ wxHtmlWindow = wx.html.HtmlWindow
 wxHtmlWindowPtr = wx.html.HtmlWindowPtr
 wxPreHtmlWindow = wx.html.PreHtmlWindow
 wxHtmlWindow_AddFilter = wx.html.HtmlWindow_AddFilter
+wxHtmlWindow_GetClassDefaultAttributes = wx.html.HtmlWindow_GetClassDefaultAttributes
 wxHtmlDCRenderer = wx.html.HtmlDCRenderer
 wxHtmlDCRendererPtr = wx.html.HtmlDCRendererPtr
 wxPAGE_ODD = wx.html.PAGE_ODD
