@@ -1,5 +1,5 @@
 
-import pprint, string
+import pprint, string, os
 from wxPython.wx import *
 from mimetypes_wdr import *
 
@@ -19,7 +19,7 @@ class MimeTypesTestPanel(wxPanel):
         EVT_LISTBOX(self, ID_LISTBOX, self.OnListbox)
         EVT_BUTTON(self, ID_LOOKUP_BTN, self.OnLookup)
 
-        self.GetInputText().SetValue("html")
+        self.GetInputText().SetValue("wav")
         self.OnLookup()
 
         mimetypes = wxTheMimeTypesManager.EnumAllFileTypes()
@@ -75,15 +75,15 @@ class MimeTypesTestPanel(wxPanel):
         self.GetExtensionsTxt().SetValue(str(ft.GetExtensions()))
         self.GetDescriptionTxt().SetValue(str(ft.GetDescription()))
 
-        ext = ft.GetExtensions()[0]
+        filename = os.path.join("SPAM", ft.GetExtensions()[0])
         mime = ft.GetMimeType() or ""
-        cmd = ft.GetOpenCommand("SPAM" + ext, mime)
+        cmd = ft.GetOpenCommand(filename, mime)
         self.GetOpenCmdTxt().SetValue(str(cmd))
 
-        cmd = ft.GetPrintCommand("SPAM" + ext, mime)
+        cmd = ft.GetPrintCommand(filename, mime)
         self.GetPrintCmdTxt().SetValue(str(cmd))
 
-        all = ft.GetAllCommands("SPAM" + ext, mime)
+        all = ft.GetAllCommands(filename, mime)
         if all is None:
             self.GetAllCmdsTxt().SetValue("")
         else:
