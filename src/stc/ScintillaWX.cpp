@@ -636,6 +636,7 @@ long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lPar
             LexerManager::GetInstance()->Load((const char*)lParam);
             break;
 #endif
+
       default:
           return ScintillaBase::WndProc(iMessage, wParam, lParam);
       }
@@ -983,7 +984,9 @@ void ScintillaWX::DoDragLeave() {
 
 // Force the whole window to be repainted
 void ScintillaWX::FullPaint() {
+#ifndef __WXMAC__
     stc->Refresh(false);
+#endif
     stc->Update();
 }
 

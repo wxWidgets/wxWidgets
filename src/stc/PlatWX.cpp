@@ -806,6 +806,14 @@ public:
         event.Skip();
     }
 
+#ifdef __WXMAC__
+    virtual bool Show(bool show = true) {
+        bool rv = wxWindow::Show(show);
+        GetParent()->Refresh(false);
+        return rv;
+    }
+#endif
+    
     void OnActivate(wxListEvent& WXUNUSED(event)) {
         doubleClickAction(doubleClickActionData);
     }
