@@ -200,7 +200,7 @@ wxObject *wxObjectInputStream::GetChild(int no) const
   wxObjectStreamInfo *info;
 
   if (m_current_info->children_removed >= m_current_info->n_children)
-    return NULL;
+    return (wxObject *) NULL;
 
   node = m_current_info->children.Nth(m_current_info->children_removed+no);
 
