@@ -49,6 +49,11 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
+    // wxMOTIF-specific
+    bool Create(const wxString& fontname,
+                wxFontEncoding fontenc = wxFONTENCODING_DEFAULT);
+    bool Create(const wxNativeFontInfo& fontinfo);
+    
     virtual ~wxFont();
 
     // assignment
@@ -62,7 +67,8 @@ public:
     virtual bool GetUnderlined() const;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
-
+    virtual wxNativeFontInfo *GetNativeFontInfo() const;
+    
     virtual void SetPointSize(int pointSize);
     virtual void SetFamily(int family);
     virtual void SetStyle(int style);
@@ -70,7 +76,8 @@ public:
     virtual void SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);
-
+    virtual void SetNativeFontInfo( const wxNativeFontInfo& info );
+    
     // Implementation
 
     // Find an existing, or create a new, XFontStruct
