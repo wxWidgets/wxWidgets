@@ -82,6 +82,7 @@
     #define TEST_STRINGS
     #define TEST_THREADS
     #define TEST_TIMER
+    #define TEST_UNICODE
     // #define TEST_VCARD            -- don't enable this (VZ)
     #define TEST_VOLUME
     #define TEST_WCHAR
@@ -91,7 +92,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_STREAMS
+    #define TEST_UNICODE
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -3466,8 +3467,25 @@ static void TestFSVolume()
 #endif // TEST_VOLUME
 
 // ----------------------------------------------------------------------------
-// wide char (Unicode) support
+// wide char and Unicode support
 // ----------------------------------------------------------------------------
+
+#ifdef TEST_UNICODE
+
+static void TestUnicodeToFromAscii()
+{
+    wxPuts(_T("Testing wxString::To/FromAscii()\n"));
+
+    static const char *msg = "Hello, world!";
+    wxString s = wxString::FromAscii(msg);
+
+    wxPrintf(_T("Message in Unicode: %s\n"), s.c_str());
+    printf("Message in ASCII: %s\n", s.ToAscii());
+
+    wxPutchar(_T('\n'));
+}
+
+#endif // TEST_UNICODE
 
 #ifdef TEST_WCHAR
 
@@ -3752,6 +3770,10 @@ struct Date
 static const Date testDates[] =
 {
     {  1, wxDateTime::Jan,  1970, 00, 00, 00, 2440587.5, wxDateTime::Thu,         0,     -3600 },
+    {  7, wxDateTime::Feb,  2036, 00, 00, 00, 2464730.5, wxDateTime::Thu,        -1,        -1 },
+    {  8, wxDateTime::Feb,  2036, 00, 00, 00, 2464731.5, wxDateTime::Fri,        -1,        -1 },
+    {  1, wxDateTime::Jan,  2037, 00, 00, 00, 2465059.5, wxDateTime::Thu,        -1,        -1 },
+    {  1, wxDateTime::Jan,  2038, 00, 00, 00, 2465424.5, wxDateTime::Fri,        -1,        -1 },
     { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon,        -1,        -1 },
     { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, wxDateTime::Sat, 202219200, 202212000 },
     { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, wxDateTime::Sun, 194400000, 194396400 },
@@ -6119,6 +6141,10 @@ int main(int argc, char **argv)
 #ifdef TEST_VOLUME
     TestFSVolume();
 #endif // TEST_VOLUME
+
+#ifdef TEST_UNICODE
+    TestUnicodeToFromAscii();
+#endif // TEST_UNICODE
 
 #ifdef TEST_WCHAR
     TestUtf8();
