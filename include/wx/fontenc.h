@@ -76,8 +76,6 @@ enum wxFontEncoding
     wxFONTENCODING_UTF32BE,         // UTF-32 Big Endian Unicode encoding
     wxFONTENCODING_UTF32LE,         // UTF-32 Little Endian Unicode encoding
 
-    wxFONTENCODING_UNICODE,         // Unicode (for wxEncodingConverter only)
-
     wxFONTENCODING_MAX,             // highest enumerated encoding value
 
 
@@ -90,6 +88,13 @@ enum wxFontEncoding
     wxFONTENCODING_UTF32 = wxFONTENCODING_UTF32LE,  // native UTF-32
 #endif // WORDS_BIGENDIAN
 
+    // alias for the native Unicode encoding on this platform
+    // (this is used by wxEncodingConverter and wxUTFFile only for now)
+#if SIZEOF_WCHAR_T == 2
+    wxFONTENCODING_UNICODE = wxFONTENCODING_UTF16,
+#else // SIZEOF_WCHAR_T == 4
+    wxFONTENCODING_UNICODE = wxFONTENCODING_UTF32,
+#endif
 
     // alternative names for Far Eastern encodings
         // Chinese
