@@ -27,7 +27,9 @@
     foreach $file (sort keys %wxMSW) {
         next if $wxMSW{$file} =~ /\b16\b/;
 
-        my $tag = $wxMSW{$file} =~ /\bO\b/ ? "WXOLESRCS" : "WXMSWSRCS";
+        my $tag;
+	if ( $wxMSW{$file} =~ /\bO\b/ ) { $tag = "WXOLESRCS" }
+	else { $tag = $file =~ /\.c$/ ? "WXCSRCS" : "WXMSWSRCS" }
         $project{$tag} .= $file . " "
     }
 
