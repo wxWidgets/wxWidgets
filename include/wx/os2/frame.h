@@ -48,27 +48,18 @@ public:
     virtual ~wxFrame();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool bMaximize = TRUE);
-    virtual bool IsMaximized(void) const;
-    virtual void Iconize(bool bIconize = TRUE);
-    virtual bool IsIconized(void) const;
-    virtual void Restore(void);
 #if wxUSE_MENUS_NATIVE
     virtual void SetMenuBar(wxMenuBar* pMenubar);
 #endif
-    virtual void SetIcon(const wxIcon& rIcon);
     virtual bool ShowFullScreen( bool bShow
                                 ,long lStyle = wxFULLSCREEN_ALL
                                );
-    virtual bool IsFullScreen(void) const { return m_bFsIsShowing; };
 
 
     // implementation only from now on
     // -------------------------------
 
-    void         AlterChildPos(void);
-    // override some more virtuals
-    virtual bool Show(bool bShow = TRUE);
+    virtual void Raise(void);
 
     // event handlers
     void OnActivate(wxActivateEvent& rEvent);
@@ -125,18 +116,7 @@ public:
                           ,WXHMENU hMenu
                          );
 
-    bool OS2Create( int           nId
-                   ,wxWindow*     pParent
-                   ,const wxChar* zWclass
-                   ,wxWindow*     pWxWin
-                   ,const wxChar* zTitle
-                   ,int           nX
-                   ,int           nY
-                   ,int           nWidth
-                   ,int           nHeight
-                   ,long          nStyle
-                  );
-
+    void SendSizeEvent(void);
     // tooltip management
 #if wxUSE_TOOLTIPS
     WXHWND GetToolTipCtrl(void) const { return m_hWndToolTip; }
@@ -152,7 +132,6 @@ public:
     void      SetClient(WXHWND    c_Hwnd);
     void      SetClient(wxWindow* c_Window);
     wxWindow *GetClient();
-    HWND      GetFrame(void) const { return m_hFrame; }
 
  friend MRESULT EXPENTRY wxFrameWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);
  friend MRESULT EXPENTRY wxFrameMainWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);
@@ -161,22 +140,15 @@ protected:
     // common part of all ctors
     void         Init(void);
 
-    // common part of Iconize(), Maximize() and Restore()
-    void         DoShowWindow(int nShowCmd);
-
+    virtual WXHICON GetDefaultIcon(void) const;
     // override base class virtuals
     virtual void DoGetClientSize( int* pWidth
                                  ,int* pHeight
                                 ) const;
-    virtual void DoGetSize( int* pWidth
-                           ,int* pHeight
-                          ) const;
-    virtual void DoGetPosition( int* pX
-                               ,int* pY
-                              ) const;
     virtual void DoSetClientSize( int nWidth
                                  ,int nWeight
                                 );
+    inline virtual bool IsMDIChild(void) const { return FALSE; }
 
 #if wxUSE_MENUS_NATIVE
     // helper
@@ -229,7 +201,6 @@ private:
     // that we don't have child objects for (m_hWnd in wxWindow is the
     // handle of the Frame's client window!
     //
-    WXHWND                          m_hFrame;
     WXHWND                          m_hTitleBar;
     WXHWND                          m_hHScroll;
     WXHWND                          m_hVScroll;
@@ -238,8 +209,6 @@ private:
     // Swp structures for various client data
     // DW: Better off in attached RefData?
     //
-    SWP                             m_vSwp;
-    SWP                             m_vSwpClient;
     SWP                             m_vSwpTitleBar;
     SWP                             m_vSwpMenuBar;
     SWP                             m_vSwpHScroll;

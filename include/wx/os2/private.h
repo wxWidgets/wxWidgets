@@ -232,10 +232,22 @@ inline bool wxStyleHasBorder(long style)
                    wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
+inline RECTL wxGetWindowRect(HWND hWnd)
+{
+    RECTL                           vRect;
+
+    ::WinQueryWindowRect(hWnd, &vRect);
+    return vRect;
+} // end of wxGetWindowRect
+
 WXDLLEXPORT extern void wxOS2SetFont( HWND          hWnd
                                      ,const wxFont& rFont
                                     );
 
+
+WXDLLEXPORT extern bool wxCheckWindowWndProc( WXHWND                            hWnd
+                                             ,WXFARPROC                         fnWndProc
+                                            );
 
 #endif
     // _WX_PRIVATE_H_

@@ -26,6 +26,13 @@
 // ---------------------------------------------------------------------------
 // forward declarations
 // ---------------------------------------------------------------------------
+#ifndef CW_USEDEFAULT
+#  define  CW_USEDEFAULT ((int)0x80000000)
+#endif
+
+// ---------------------------------------------------------------------------
+// forward declarations
+// ---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxButton;
 
@@ -247,21 +254,15 @@ public:
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
 
     // returns TRUE if the window has been created
-    bool OS2Create( WXHWND        hParent
-                   ,PSZ           zClass
-                   ,const wxChar* zTitle
-                   ,WXDWORD       dwStyle
-                   ,long          lX
-                   ,long          lY
-                   ,long          lWidth
-                   ,long          lHeight
-                   ,WXHWND        hOwner
-                   ,WXHWND        hZOrder
-                   ,unsigned long lId
-                   ,void*         pCtlData = NULL
-                   ,void*         pPresParams = NULL
-                   ,WXDWORD       dwExStyle = 0L
-                  );
+    bool         OS2Create( PSZ            zClass
+                           ,const char*    zTitle
+                           ,WXDWORD        dwStyle
+                           ,const wxPoint& rPos
+                           ,const wxSize&  rSize
+                           ,void*          pCtlData
+                           ,WXDWORD        dwExStyle
+                           ,bool           bIsChild
+                          );
     virtual bool OS2Command( WXUINT uParam
                             ,WXWORD nId
                            );

@@ -41,7 +41,6 @@ public:
     {
         long                        lModalStyle = lStyle ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
 
-        bModal = FALSE;
         Create( pParent
                ,-1
                ,rsTitle
@@ -84,30 +83,19 @@ public:
                );
     ~wxDialog();
 
-    virtual bool Destroy(void);
-    virtual bool Show(bool bShow);
-    virtual void Iconize(bool bIconize);
-    virtual bool IsIconized(void) const;
-
-    virtual bool IsTopLevel(void) const { return TRUE; }
-
-    void         SetModal(bool bFlag);
+            void SetModal(bool bFlag);
     virtual bool IsModal(void) const;
 
-    //
     // For now, same as Show(TRUE) but returns return code
-    //
-    virtual int  ShowModal(void);
-    virtual void EndModal(int nRetCode);
+    virtual int ShowModal();
+
+    // may be called to terminate the dialog with the given return code
+    virtual void EndModal(int retCode);
 
     //
     // Returns TRUE if we're in a modal loop
     //
-    bool IsModalShowing() const;
-
-#if WXWIN_COMPATIBILITY
-    bool Iconized() const { return IsIconized(); };
-#endif
+            bool IsModalShowing() const;
 
     //
     // Implementation only from now on
@@ -115,15 +103,16 @@ public:
     //
 
     //
+    // Override some base class virtuals
+    //
+    virtual bool Show(bool bShow);
+
+    //
     // Event handlers
     //
     bool OnClose(void);
     void OnCharHook(wxKeyEvent& rEvent);
     void OnCloseWindow(wxCloseEvent& rEvent);
-
-    //
-    // May be called to terminate the dialog with the given return code
-    //
 
     //
     // Standard buttons
@@ -144,16 +133,8 @@ public:
                                   ,WXWPARAM wParam
                                   ,WXLPARAM lParam
                                  );
+
 protected:
-    //
-    // Override more base class virtuals
-    //
-    virtual void DoSetClientSize( int nWidth
-                                 ,int nHeight
-                                );
-    virtual void DoGetPosition( int* pnX
-                               ,int* pnY
-                              ) const;
     //
     // Show modal dialog and enter modal loop
     //
@@ -162,7 +143,7 @@ protected:
     //
     // Common part of all ctors
     //
-    void Init();
+    void Init(void);
 
 private:
     wxWindow*                       m_pOldFocus;
