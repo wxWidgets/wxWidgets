@@ -58,7 +58,7 @@
 
 void wxStreamBuffer::SetError(wxStreamError err)
 {
-   if ( m_stream->m_lasterror == wxSTREAM_NO_ERROR )
+   if ( m_stream && m_stream->m_lasterror == wxSTREAM_NO_ERROR )
        m_stream->m_lasterror = err;
 }
 
@@ -198,7 +198,9 @@ bool wxStreamBuffer::FillBuffer()
 {
     wxInputStream *inStream = GetInputStream();
 
-    wxCHECK_MSG( inStream, FALSE, _T("should have a stream in wxStreamBuffer") );
+    // It's legal to have no stream, so we shouldn't don't about it just return FALSE
+    if ( !inStream )
+        return FALSE;
 
     size_t count = inStream->OnSysRead(m_buffer_start, m_buffer_size);
     if ( !count )
@@ -259,7 +261,7 @@ void wxStreamBuffer::GetFromBuffer(void *buffer, size_t size)
 void wxStreamBuffer::PutToBuffer(const void *buffer, size_t size)
 {
     size_t left = GetBytesLeft();
-    
+
     if ( size > left )
     {
         if ( m_fixed )
@@ -451,7 +453,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
         // lasterror is reset before all new IO calls
         m_stream->Reset();
     }
-    
+
     size_t ret = 0;
 
     if ( !HasBuffer() && m_fixed )
@@ -479,7 +481,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
             //
             // FIXME: fine, but if it fails we should (re)try writing it by
             //        chunks as this will (hopefully) always work (VZ)
-            
+
             if ( size > left && m_fixed )
             {
                 PutToBuffer(buffer, left);
@@ -510,7 +512,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
         // i am not entirely sure what we do this for
         m_stream->m_lastcount = ret;
     }
-    
+
     return ret;
 }
 
@@ -736,7 +738,7 @@ size_t wxInputStream::GetWBack(void *buf, size_t size)
         toget = size;
     }
 
-    // copy the data from the cache 
+    // copy the data from the cache
     memcpy(buf, m_wback + m_wbackcur, toget);
 
     m_wbackcur += toget;
@@ -871,11 +873,11 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
        buffer if possible, but is it really needed? It would only work
        when seeking in wxFromCurrent mode, else it would invalidate
        anyway... */
-       
+
     if (m_wback)
     {
         wxLogDebug( wxT("Seeking in stream which has data written back to it.") );
-        
+
         free(m_wback);
         m_wback = NULL;
         m_wbacksize = 0;
@@ -1108,13 +1110,13 @@ off_t wxBufferedInputStream::SeekI(off_t pos, wxSeekMode mode)
     if (m_wback)
     {
         wxLogDebug( wxT("Seeking in stream which has data written back to it.") );
-        
+
         free(m_wback);
         m_wback = NULL;
         m_wbacksize = 0;
         m_wbackcur = 0;
     }
-    
+
     return m_i_streambuf->Seek(pos, mode);
 }
 
@@ -1124,7 +1126,7 @@ off_t wxBufferedInputStream::TellI() const
 
     if (pos != wxInvalidOffset)
         pos -= (m_wbacksize - m_wbackcur);
-        
+
     return pos;
 }
 
