@@ -281,7 +281,7 @@ const wxWCharBuffer wxMBConv::cMB2WC(const char *szString, size_t nStringLen, si
 
     //success - return actual length and the buffer
     *pOutSize = nActualLength;
-    return theBuffer;  
+    return theBuffer;
 }
 
 const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *szString, size_t nStringLen, size_t* pOutSize) const
@@ -316,7 +316,7 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *szString, size_t nStringLen, 
 
         //Increase the actual length (+1 for current null character)
         nActualLength += nLen + 1;
-        
+
         //if buffer too big, realloc the buffer
         if (nActualLength > (nCurrentSize+1))
         {
@@ -343,7 +343,7 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *szString, size_t nStringLen, 
 
     //success - return actual length and the buffer
     *pOutSize = nActualLength;
-    return theBuffer;  
+    return theBuffer;
 }
 
 // ----------------------------------------------------------------------------
@@ -364,7 +364,7 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // wxConvBrokenFileNames is made for GTK2 in Unicode mode when
 // files are accidentally written in an encoding which is not
 // the system encoding. Typically, the system encoding will be
-// UTF8 but there might be files stored in ISO8859-1 on disk. 
+// UTF8 but there might be files stored in ISO8859-1 on disk.
 // ----------------------------------------------------------------------------
 
 class wxConvBrokenFileNames: public wxMBConvLibc
@@ -405,7 +405,7 @@ size_t wxConvBrokenFileNames::WC2MB(char *outputBuf, const wchar_t *psz, size_t 
 }
 
 // ----------------------------------------------------------------------------
-// UTF-7 
+// UTF-7
 // ----------------------------------------------------------------------------
 
 // Implementation (C) 2004 Fredrik Roubert
@@ -615,6 +615,8 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 static wxUint32 utf8_max[]=
     { 0x7f, 0x7ff, 0xffff, 0x1fffff, 0x3ffffff, 0x7fffffff, 0xffffffff };
 
+// boundaries of the private use area we use to (temporarily) remap invalid
+// characters invalid in a UTF-8 encoded string
 const wxUint32 wxUnicodePUA = 0x100000;
 const wxUint32 wxUnicodePUAEnd = wxUnicodePUA + 256;
 
@@ -718,26 +720,23 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 #endif
                     }
                 }
-                else
-                if (m_options & MAP_INVALID_UTF8_TO_OCTAL)
+                else if (m_options & MAP_INVALID_UTF8_TO_OCTAL)
                 {
                     while (opsz < psz && (!buf || len < n))
                     {
-                        wchar_t str[6];
-                        wxSnprintf( str, 5, L"\\%o", (int) (unsigned char) *opsz );
-                        if (buf)
-                            *buf++ = str[0];
-                        if (buf)
-                            *buf++ = str[1];
-                        if (buf)
-                            *buf++ = str[2];
-                        if (buf)
-                            *buf++ = str[3];
+                        if ( buf && len + 3 < n )
+                        {
+                            unsigned char n = *opsz;
+                            *buf++ = L'\\';
+                            *buf++ = L'0' + n / 0100;
+                            *buf++ = L'0' + (n % 0100) / 010;
+                            *buf++ = L'0' + n % 010;
+                        }
                         opsz++;
                         len += 4;
                     }
                 }
-                else
+                else // MAP_INVALID_UTF8_NOT
                 {
                     return (size_t)-1;
                 }
@@ -747,6 +746,11 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     if (buf && (len < n))
         *buf = 0;
     return len;
+}
+
+static inline bool isoctal(wchar_t wch)
+{
+    return L'0' <= wch && wch <= L'7';
 }
 
 size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
@@ -763,26 +767,26 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #else
         cc=(*psz++) & 0x7fffffff;
 #endif
-        if ((m_options & MAP_INVALID_UTF8_TO_PUA)
-            && cc >= wxUnicodePUA && cc < wxUnicodePUAEnd)
+
+        if ( (m_options & MAP_INVALID_UTF8_TO_PUA)
+                && cc >= wxUnicodePUA && cc < wxUnicodePUAEnd )
         {
             if (buf)
                 *buf++ = (char)(cc - wxUnicodePUA);
             len++;
-        } 
-        else
-        if ((m_options & MAP_INVALID_UTF8_TO_OCTAL)
-            && cc == L'\\')
+        }
+        else if ( (m_options & MAP_INVALID_UTF8_TO_OCTAL) &&
+                    cc == L'\\' &&
+                        isoctal(psz[0]) && isoctal(psz[1]) && isoctal(psz[2]) )
         {
-            wchar_t str[4];
-            str[0] = *psz; psz++;
-            str[1] = *psz; psz++;
-            str[2] = *psz; psz++;
-            str[3] = 0;
-            int octal;
-            wxSscanf( str, L"%o", &octal );
             if (buf)
-                *buf++ = (char) octal;
+            {
+                *buf++ = (char) (psz[0] - L'0')*0100 +
+                                (psz[1] - L'0')*010 +
+                                (psz[2] - L'0');
+            }
+
+            psz += 3;
             len++;
         }
         else
@@ -810,7 +814,8 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         }
     }
 
-    if (buf && (len<n)) *buf = 0;
+    if (buf && (len<n))
+        *buf = 0;
 
     return len;
 }
@@ -1448,7 +1453,7 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     //     as MB<->WC conversion would fail "randomly".
     wxMutexLocker lock(wxConstCast(this, wxMBConv_iconv)->m_iconvMutex);
 #endif
- 
+
     size_t inbuf = strlen(psz);
     size_t outbuf = n * SIZEOF_WCHAR_T;
     size_t res, cres;
@@ -1510,7 +1515,7 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     // NB: explained in MB2WC
     wxMutexLocker lock(wxConstCast(this, wxMBConv_iconv)->m_iconvMutex);
 #endif
-    
+
     size_t inbuf = wxWcslen(psz) * SIZEOF_WCHAR_T;
     size_t outbuf = n;
     size_t res, cres;
@@ -2083,9 +2088,9 @@ public:
 #if SIZEOF_WCHAR_T == 4
         UniChar* szUniCharBuffer = new UniChar[nOutSize];
 #endif
- 
+
         CFStringGetCharacters(theString, theRange, szUniCharBuffer);
-        
+
         CFRelease(theString);
 
         szUniCharBuffer[nOutLength] = '\0' ;
@@ -2095,14 +2100,14 @@ public:
         converter.MB2WC(szOut, (const char*)szUniCharBuffer , nOutSize ) ;
         delete[] szUniCharBuffer;
 #endif
-    
+
         return nOutLength;
     }
 
     size_t WC2MB(char *szOut, const wchar_t *szUnConv, size_t nOutSize) const
     {
         wxASSERT(szUnConv);
-        
+
         size_t nRealOutSize;
         size_t nBufSize = wxWcslen(szUnConv);
         UniChar* szUniBuffer = (UniChar*) szUnConv;
@@ -2130,7 +2135,7 @@ public:
         {
             if (szOut != NULL)
                 CFStringGetCharacters(theString, CFRangeMake(0, nOutSize - 1), (UniChar*) szOut);
-            
+
             nRealOutSize = CFStringGetLength(theString) + 1;
         }
         else
@@ -2143,7 +2148,7 @@ public:
                     //0 tells CFString to return NULL if it meets such a character
                 false, //not an external representation
                 (UInt8*) szOut,
-                nOutSize, 
+                nOutSize,
                 (CFIndex*) &nRealOutSize
                         );
         }
@@ -2159,7 +2164,7 @@ public:
 
     bool IsOk() const
     {
-        return m_encoding != kCFStringEncodingInvalidId && 
+        return m_encoding != kCFStringEncodingInvalidId &&
               CFStringIsEncodingAvailable(m_encoding);
     }
 
@@ -2297,7 +2302,7 @@ public:
         if ( buf  && res < n)
         {
             buf[res] = 0;
-            
+
             //we need to double-trip to verify it didn't insert any ? in place
             //of bogus characters
             wxWCharBuffer wcBuf(n);
@@ -2536,7 +2541,7 @@ wxMBConv *wxCSConv::DoCreate() const
 #if defined(__WXMAC__)
     {
         // leave UTF16 and UTF32 to the built-ins of wx
-        if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE || 
+        if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ||
             ( m_encoding >= wxFONTENCODING_MACMIN && m_encoding <= wxFONTENCODING_MACMAX ) ) )
         {
 
