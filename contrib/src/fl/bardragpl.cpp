@@ -236,7 +236,7 @@ void cbBarDragPlugin::CalcOnScreenDims( wxRect& rect )
     }
 }
 
-// helpers 
+// helpers
 
 static inline void check_upper_overrun( int& pos, int width, int mousePos )
 {
@@ -274,7 +274,7 @@ void cbBarDragPlugin::StickToPane( cbDockPane* pPane, wxPoint& mousePos )
 
     // true, if hint enters the pane through it's lower edge
 
-    bool fromLowerEdge = ( pPane->IsHorizontal() ) 
+    bool fromLowerEdge = ( pPane->IsHorizontal() )
                            ? mousePos.y > bounds.y
                            : mousePos.x > bounds.x;
 
@@ -348,7 +348,7 @@ void cbBarDragPlugin::UnstickFromPane( cbDockPane* pPane, wxPoint& mousePos )
 
     // true, if hint leaves the pane through it's lower edge
 
-    bool fromLowerEdge = ( pPane->IsHorizontal() ) 
+    bool fromLowerEdge = ( pPane->IsHorizontal() )
                            ? mousePos.y > bounds.y
                            : mousePos.x > bounds.x;
 
@@ -444,7 +444,7 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
         if ( mpSrcPane->mProps.mExactDockPredictionOn && mpCurPane )
         {
 #ifdef  __WXDEBUG__
-            bool success = 
+            bool success =
 #endif
                            mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, false );
 
@@ -476,7 +476,7 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
 
         mPrevHintRect = actualRect;
     }
-    else 
+    else
     {
         // otherwise, if real-time updates option is ON
 
@@ -501,7 +501,7 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
             mpDraggedBar->mUMgrData.SetDirty( true );
 
 #ifdef  __WXDEBUG__
-            bool success = 
+            bool success =
 #endif
                            mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane, false );
 
@@ -551,10 +551,10 @@ void cbBarDragPlugin::OnMouseMove( cbMotionEvent& event )
         cbDockPane* pPane = HitTestPanes( mHintRect );
 
         // enable sticking again, if we've left the pane completely
-        if ( !pPane ) 
+        if ( !pPane )
             mCanStick = true;
 
-        if ( mCanStick && pPane && 
+        if ( mCanStick && pPane &&
              GetDistanceToPane( pPane, mousePos ) < GetBarHeightInPane( pPane ) )
             StickToPane( pPane, mousePos );
         else
@@ -583,7 +583,7 @@ void cbBarDragPlugin::OnMouseMove( cbMotionEvent& event )
             {
                 cbDockPane* pPane = HitTestPanes( mHintRect );
 
-                if ( pPane && 
+                if ( pPane &&
                      pPane != mpCurPane &&
                      GetDistanceToPane( pPane, mousePos ) < GetBarHeightInPane( pPane ) )
                     StickToPane( pPane, mousePos );
@@ -713,7 +713,7 @@ void cbBarDragPlugin::OnLButtonUp( cbLeftUpEvent& event )
 
         if ( mBarWasFloating && mpDraggedBar->mState != wxCBAR_FLOATING )
         {
-            // save bar's floating position before it was docked 
+            // save bar's floating position before it was docked
 
             mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mFloatedBarBounds;
         }
@@ -753,7 +753,7 @@ void cbBarDragPlugin::OnLDblClick( cbLeftDClickEvent& event )
 void cbBarDragPlugin::OnStartBarDragging( cbStartBarDraggingEvent& event )
 {
     mpDraggedBar = event.mpBar;
-    mpSrcPane    = event.mpPane; 
+    mpSrcPane    = event.mpPane;
 
     mpLayout->CaptureEventsForPane( event.mpPane );
     mpLayout->CaptureEventsForPlugin( this );
@@ -792,24 +792,22 @@ void cbBarDragPlugin::OnStartBarDragging( cbStartBarDraggingEvent& event )
 
     mPrevHintRect.x = POS_UNDEFINED;
 
-    mCanStick = false; // we're not stuck into any pane now - 
+    mCanStick = false; // we're not stuck into any pane now -
                        // there's nowhere to "stick-twice"
 
     mBarWidthInSrcPane = mpDraggedBar->mDimInfo.mSizes[ mpDraggedBar->mState ].x;
 
-    if ( mpSrcPane->mProps.mRealTimeUpdatesOn == false && 
+    if ( mpSrcPane->mProps.mRealTimeUpdatesOn == false &&
          mpSrcPane->mProps.mExactDockPredictionOn  )
         mpLayout->GetUpdatesManager().OnStartChanges(); // capture initial state of layout
 
     // simulate the first mouse movement
 
     int x = event.mPos.x, y = event.mPos.y;
-
     mpSrcPane->FrameToPane( &x, &y );
 
-    cbMotionEvent motionEvt( wxPoint(x,y), event.mpPane );
-
-
+    wxPoint pt(x,y);
+    cbMotionEvent motionEvt( pt, event.mpPane );
     this->OnMouseMove( motionEvt );
 
     return; // event is "eaten" by this plugin
@@ -859,7 +857,7 @@ void cbBarDragPlugin::DoDrawHintRect( wxRect& rect, bool isInClientRect)
 
     if ( isInClientRect )
     {
-        // BUG BUG BUG (wx):: somehow stippled brush works only  
+        // BUG BUG BUG (wx):: somehow stippled brush works only
         // when the bitmap created on stack, not
         // as a member of the class
 
@@ -891,16 +889,16 @@ void cbBarDragPlugin::DoDrawHintRect( wxRect& rect, bool isInClientRect)
     {
         mpScrDc->SetPen( mpLayout->mBlackPen );
 
-        mpScrDc->DrawLine( scrRect.x, scrRect.y, 
+        mpScrDc->DrawLine( scrRect.x, scrRect.y,
                            scrRect.x + scrRect.width, scrRect.y );
 
-        mpScrDc->DrawLine( scrRect.x, scrRect.y + 1, 
+        mpScrDc->DrawLine( scrRect.x, scrRect.y + 1,
                            scrRect.x, scrRect.y + scrRect.height );
 
-        mpScrDc->DrawLine( scrRect.x+1, scrRect.y + scrRect.height, 
+        mpScrDc->DrawLine( scrRect.x+1, scrRect.y + scrRect.height,
                            scrRect.x + scrRect.width, scrRect.y + scrRect.height );
 
-        mpScrDc->DrawLine( scrRect.x + scrRect.width , scrRect.y, 
+        mpScrDc->DrawLine( scrRect.x + scrRect.width , scrRect.y,
                            scrRect.x + scrRect.width, scrRect.y + scrRect.height + 1);
     }
 

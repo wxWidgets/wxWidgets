@@ -1435,14 +1435,14 @@ void wxColourListValidator::OnEdit(wxProperty *property, wxPropertyListView *vie
     return;
 
   wxChar *s = property->GetValue().StringValue();
-  int r = 0;
-  int g = 0;
-  int b = 0;
+  unsigned char r = 0;
+  unsigned char g = 0;
+  unsigned char b = 0;
   if (s)
   {
-    r = wxHexToDec(s);
-    g = wxHexToDec(s+2);
-    b = wxHexToDec(s+4);
+    r = (unsigned char)wxHexToDec(s);
+    g = (unsigned char)wxHexToDec(s+2);
+    b = (unsigned char)wxHexToDec(s+4);
   }
 
   wxColour col(r,g,b);
@@ -1453,7 +1453,9 @@ void wxColourListValidator::OnEdit(wxProperty *property, wxPropertyListView *vie
 
   for (int i = 0; i < 16; i++)
   {
-    wxColour colour(i*16, i*16, i*16);
+    wxColour colour((unsigned char)(i*16),
+                    (unsigned char)(i*16),
+                    (unsigned char)(i*16));
     data.SetCustomColour(i, colour);
   }
 

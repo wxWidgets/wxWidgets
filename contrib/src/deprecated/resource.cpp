@@ -151,13 +151,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxResourceTable, wxHashTable)
 
 wxItemResource::wxItemResource()
 {
-    m_itemType = wxT("");
-    m_title = wxT("");
-    m_name = wxT("");
+    m_itemType = wxEmptyString;
+    m_title = wxEmptyString;
+    m_name = wxEmptyString;
     m_windowStyle = 0;
     m_x = m_y = m_width = m_height = 0;
     m_value1 = m_value2 = m_value3 = m_value5 = 0;
-    m_value4 = wxT("");
+    m_value4 = wxEmptyString;
     m_windowId = 0;
     m_exStyle = 0;
 }
@@ -196,9 +196,9 @@ wxItemResource *wxResourceTable::FindResource(const wxString& name) const
 void wxResourceTable::AddResource(wxItemResource *item)
 {
     wxString name = item->GetName();
-    if (name == wxT(""))
+    if (name.empty())
         name = item->GetTitle();
-    if (name == wxT(""))
+    if (name.empty())
         name = wxT("no name");
 
     // Delete existing resource, if any.
@@ -324,7 +324,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
 {
     int id = childResource->GetId();
     if ( id == 0 )
-        id = -1;
+        id = wxID_ANY;
 
     bool dlgUnits = ((parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0);
 
@@ -346,7 +346,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
 
     if (itemType == wxString(wxT("wxButton")) || itemType == wxString(wxT("wxBitmapButton")))
     {
-        if (childResource->GetValue4() != wxT(""))
+        if (!childResource->GetValue4().empty())
         {
             // Bitmap button
             wxBitmap bitmap = childResource->GetBitmap();
@@ -375,7 +375,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
     else if (itemType == wxString(wxT("wxMessage")) || itemType == wxString(wxT("wxStaticText")) ||
         itemType == wxString(wxT("wxStaticBitmap")))
     {
-        if (childResource->GetValue4() != wxT("") || itemType == wxString(wxT("wxStaticBitmap")) )
+        if (!childResource->GetValue4().empty() || itemType == wxString(wxT("wxStaticBitmap")) )
         {
             // Bitmap message
             wxBitmap bitmap = childResource->GetBitmap();
@@ -611,7 +611,7 @@ bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db)
         if (item)
         {
             // Remove any existing resource of same name
-            if (item->GetName() != wxT(""))
+            if (!item->GetName().empty())
                 table.DeleteResource(item->GetName());
             table.AddResource(item);
         }
@@ -661,12 +661,12 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
         dialogItem->SetType(wxT("wxPanel"));
     else
         dialogItem->SetType(wxT("wxDialog"));
-    wxString style = wxT("");
-    wxString title = wxT("");
-    wxString name = wxT("");
-    wxString backColourHex = wxT("");
-    wxString labelColourHex = wxT("");
-    wxString buttonColourHex = wxT("");
+    wxString style = wxEmptyString;
+    wxString title = wxEmptyString;
+    wxString name = wxEmptyString;
+    wxString backColourHex = wxEmptyString;
+    wxString labelColourHex = wxEmptyString;
+    wxString buttonColourHex = wxEmptyString;
 
     long windowStyle = wxDEFAULT_DIALOG_STYLE;
     if (isPanel)
@@ -706,7 +706,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
     expr->GetAttributeValue(wxT("id"), id);
     dialogItem->SetId(id);
 
-    if (style != wxT(""))
+    if (!style.empty())
     {
         windowStyle = wxParseWindowStyle(style);
     }
@@ -731,7 +731,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
     else if (style.Find(wxT("HORIZONTAL_LABEL")) != wxNOT_FOUND)
         dialogItem->SetResourceStyle(dialogItem->GetResourceStyle() | wxRESOURCE_HORIZONTAL_LABEL);
 
-    if (backColourHex != wxT(""))
+    if (!backColourHex.empty())
     {
         int r = 0;
         int g = 0;
@@ -741,7 +741,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
         b = wxHexToDec(backColourHex.Mid(4, 2));
         dialogItem->SetBackgroundColour(wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
     }
-    if (labelColourHex != wxT(""))
+    if (!labelColourHex.empty())
     {
         int r = 0;
         int g = 0;
@@ -751,7 +751,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
         b = wxHexToDec(labelColourHex.Mid(4, 2));
         dialogItem->SetLabelColour(wxColour((unsigned char)r,(unsigned char)g,(unsigned char)b));
     }
-    if (buttonColourHex != wxT(""))
+    if (!buttonColourHex.empty())
     {
         int r = 0;
         int g = 0;
@@ -776,7 +776,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
         if (controlExpr->Number() == 3)
         {
             wxString controlKeyword(controlExpr->Nth(1)->StringValue());
-            if (controlKeyword != wxT("") && controlKeyword == wxT("control"))
+            if (!controlKeyword.empty() && controlKeyword == wxT("control"))
             {
                 // The value part: always a list.
                 wxExpr *listExpr = controlExpr->Nth(2);
@@ -906,7 +906,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
             wxString str(expr->Nth(count)->StringValue());
             count ++;
 
-            if (str != wxT(""))
+            if (!str.empty())
             {
                 controlItem->SetValue4(str);
                 controlItem->SetType(wxT("wxBitmapButton"));
@@ -1416,18 +1416,18 @@ wxItemResource *wxResourceInterpretBitmap(wxResourceTable& WXUNUSED(table), wxEx
                     wxExpr *coloursExpr = listExpr->Nth(3);
                     wxExpr *xresExpr = listExpr->Nth(4);
                     wxExpr *yresExpr = listExpr->Nth(5);
-                    if (nameExpr && nameExpr->StringValue() != wxT(""))
+                    if (nameExpr && !nameExpr->StringValue().empty())
                     {
                         bitmapSpec->SetName(nameExpr->StringValue());
                     }
-                    if (typeExpr && typeExpr->StringValue() != wxT(""))
+                    if (typeExpr && !typeExpr->StringValue().empty())
                     {
                         bitmapSpec->SetValue1(wxParseWindowStyle(typeExpr->StringValue()));
                     }
                     else
                         bitmapSpec->SetValue1(0);
 
-                    if (platformExpr && platformExpr->StringValue() != wxT(""))
+                    if (platformExpr && !platformExpr->StringValue().empty())
                     {
                         wxString plat(platformExpr->StringValue());
                         if (plat == wxT("windows") || plat == wxT("WINDOWS"))
@@ -1486,7 +1486,7 @@ wxFont wxResourceInterpretFontSpec(wxExpr *expr)
     int style = wxNORMAL;
     int weight = wxNORMAL;
     int underline = 0;
-    wxString faceName(wxT(""));
+    wxString faceName;
 
     wxExpr *pointExpr = expr->Nth(0);
     wxExpr *familyExpr = expr->Nth(1);
@@ -1604,7 +1604,7 @@ static bool wxEatWhiteSpace(FILE *fd)
 }
 static bool wxEatWhiteSpace(wxInputStream *is)
 {
-    int ch = is->GetC() ;
+    char ch = is->GetC() ;
     if ((ch != ' ') && (ch != '/') && (ch != ' ') && (ch != 10) && (ch != 13) && (ch != 9))
     {
         is->Ungetch(ch);
@@ -2385,7 +2385,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
     wxItemResource *item = table->FindResource(resource);
     if (item)
     {
-        if ((item->GetType() == wxT("")) || (item->GetType() != wxT("wxBitmap")))
+        if ((item->GetType().empty()) || (item->GetType() != wxT("wxBitmap")))
         {
             wxLogWarning(_("%s not a bitmap resource specification."), (const wxChar*) resource);
             return wxNullBitmap;
@@ -2539,7 +2539,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
     wxItemResource *item = table->FindResource(resource);
     if (item)
     {
-        if ((item->GetType() == wxT("")) || wxStrcmp(item->GetType(), wxT("wxIcon")) != 0)
+        if ((item->GetType().empty()) || wxStrcmp(item->GetType(), wxT("wxIcon")) != 0)
         {
             wxLogWarning(_("%s not an icon resource specification."), (const wxChar*) resource);
             return wxNullIcon;
@@ -2695,7 +2695,7 @@ wxMenu *wxResourceCreateMenu(wxItemResource *item)
     while (node)
     {
         wxItemResource *child = (wxItemResource *)node->GetData();
-        if ((child->GetType() != wxT("")) && (child->GetType() == wxT("wxMenuSeparator")))
+        if ((!child->GetType().empty()) && (child->GetType() == wxT("wxMenuSeparator")))
             menu->AppendSeparator();
         else if (child->GetChildren().GetCount() > 0)
         {
@@ -2718,7 +2718,7 @@ wxMenuBar *wxResourceCreateMenuBar(const wxString& resource, wxResourceTable *ta
         table = wxDefaultResourceTable;
 
     wxItemResource *menuResource = table->FindResource(resource);
-    if (menuResource && (menuResource->GetType() != wxT("")) && (menuResource->GetType() == wxT("wxMenu")))
+    if (menuResource && (!menuResource->GetType().empty()) && (menuResource->GetType() == wxT("wxMenu")))
     {
         if (!menuBar)
             menuBar = new wxMenuBar;
@@ -2742,7 +2742,7 @@ wxMenu *wxResourceCreateMenu(const wxString& resource, wxResourceTable *table)
         table = wxDefaultResourceTable;
 
     wxItemResource *menuResource = table->FindResource(resource);
-    if (menuResource && (menuResource->GetType() != wxT("")) && (menuResource->GetType() == wxT("wxMenu")))
+    if (menuResource && (!menuResource->GetType().empty()) && (menuResource->GetType() == wxT("wxMenu")))
         //  if (menuResource && (menuResource->GetType() == wxTYPE_MENU))
         return wxResourceCreateMenu(menuResource);
     return (wxMenu *) NULL;
@@ -3184,7 +3184,7 @@ bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& 
 
     wxItemResource *resource = table->FindResource((const wxChar *)resourceName);
     //  if (!resource || (resource->GetType() != wxTYPE_DIALOG_BOX))
-    if (!resource || (resource->GetType() == wxT("")) ||
+    if (!resource || (resource->GetType().empty()) ||
         ! ((resource->GetType() == wxT("wxDialog")) || (resource->GetType() == wxT("wxPanel"))))
         return false;
 

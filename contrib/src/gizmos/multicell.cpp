@@ -87,12 +87,6 @@ wxMultiCellItemHandle :: wxMultiCellItemHandle( int row, int column, wxResizable
     Initialize(row, column, 1, 1, wxSize(1, 1), style, weight, align);
 }
 //---------------------------------------------------------------------------
-wxMultiCellItemHandle :: wxMultiCellItemHandle( int row, int column, int align)
-{
-    Initialize(row, column, 1, 1, wxSize(1,1), wxNOT_RESIZABLE, wxSize(1, 1), align);
-}
-
-//---------------------------------------------------------------------------
 int wxMultiCellItemHandle::GetColumn()
 {
     return m_column;
@@ -653,7 +647,7 @@ void wxMultiCellCanvas :: CalculateConstraints()
             if (!m_cells[CELL_LOC(row, col)])
             {
                 // Create an empty static text field as a placeholder
-                m_cells[CELL_LOC(row, col)] = new wxCell(new wxStaticText(m_parent, wxID_ANY, wxT("")));
+                m_cells[CELL_LOC(row, col)] = new wxCell(new wxStaticText(m_parent, wxID_ANY, wxEmptyString));
             }
             wxFlexGridSizer::Add(m_cells[CELL_LOC(row, col)]->m_window);
         }

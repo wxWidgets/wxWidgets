@@ -51,14 +51,14 @@ static int* create_array( int width, int height, int fill = 0 )
 
 #define IS_IN_ARRAY(x,y) ( (x) < width && (y) < height && (x) >= 0 && (y) >= 0 )
 
-#define GET_RED(col)    col        & 0xFF  
-#define GET_GREEN(col) (col >> 8)  & 0xFF     
-#define GET_BLUE(col)  (col >> 16) & 0xFF 
+#define GET_RED(col)    col        & 0xFF
+#define GET_GREEN(col) (col >> 8)  & 0xFF
+#define GET_BLUE(col)  (col >> 16) & 0xFF
 
 #define MAKE_INT_COLOR(red,green,blue) (     (red)                      | \
                                          ( ( (green) << 8 ) & 0xFF00  ) | \
                                          ( ( (blue)  << 16) & 0xFF0000) \
-                                       )   
+                                       )
 
 #define IS_GREATER(col1,col2) ( ( (GET_RED(col1)  ) > (GET_RED(col2)  ) + MIN_COLOR_DIFF ) && \
                                 ( (GET_GREEN(col1)) > (GET_GREEN(col2)) + MIN_COLOR_DIFF ) &&  \
@@ -101,7 +101,7 @@ static void gray_out_pixmap( int* src, int* dest, int width, int height )
             else
             {
                 if ( GET_ELEM(dest,x-1,y-1) == MASK_LIGHT )
-                    
+
                     GET_ELEM(dest,x,y) = MASK_BG;
 
                 if ( GET_ELEM(dest,x-1,y-1 ) == MASK_DARK )
@@ -114,14 +114,14 @@ static void gray_out_pixmap( int* src, int* dest, int width, int height )
 
         // go zig-zag
 
-        if ( IS_IN_ARRAY(x+1,y-1) ) 
+        if ( IS_IN_ARRAY(x+1,y-1) )
         {
             ++x;
             --y;
         }
         else
         {
-            while ( IS_IN_ARRAY(x-1,y+1) ) 
+            while ( IS_IN_ARRAY(x-1,y+1) )
             {
                 --x;
                 ++y;
@@ -183,13 +183,13 @@ void gray_out_image_on_dc( wxDC& dc, int width, int height )
 
             switch (mask)
             {
-                case MASK_BG    : { dc.SetPen( bgPen ); 
+                case MASK_BG    : { dc.SetPen( bgPen );
                                     dc.DrawPoint( x,y ); break;
                                   }
-                case MASK_DARK  : { dc.SetPen( darkPen ); 
+                case MASK_DARK  : { dc.SetPen( darkPen );
                                     dc.DrawPoint( x,y ); break;
                                   }
-                case MASK_LIGHT : { dc.SetPen( lightPen ); 
+                case MASK_LIGHT : { dc.SetPen( lightPen );
                                     dc.DrawPoint( x,y ); break;
                                   }
                 default : break;
@@ -274,7 +274,7 @@ wxNewBitmapButton::wxNewBitmapButton( const wxString& bitmapFileName,
                                       const wxString& labelText,
                                       int  alignText,
                                       bool isFlat,
-                                      int  WXUNUSED(firedEventType), 
+                                      int  WXUNUSED(firedEventType),
                                       int  WXUNUSED(marginX),
                                       int  WXUNUSED(marginY),
                                       int  WXUNUSED(textToLabelGap),
@@ -313,7 +313,7 @@ wxNewBitmapButton::wxNewBitmapButton( const wxString& bitmapFileName,
 {
 }
 
-wxNewBitmapButton::~wxNewBitmapButton(void) 
+wxNewBitmapButton::~wxNewBitmapButton(void)
 {
     DestroyLabels();
 }
@@ -379,11 +379,16 @@ wxBitmap* wxNewBitmapButton::GetStateLabel()
         return mpDisabledImg;
 }
 
+#ifndef __WXMSW__
+
 static const unsigned char _gDisableImage[] = { 0x55,0xAA,0x55,0xAA,
                                               0x55,0xAA,0x55,0xAA,
                                               0x55,0xAA,0x55,0xAA,
                                               0x55,0xAA,0x55,0xAA
                                             };
+
+#endif
+
 void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
                                           bool isEnabled, bool isPressed )
 {
@@ -454,11 +459,9 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
     destDc.SelectObject( *destBmp );
 
     wxBrush grayBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE), wxSOLID );
-    wxPen   nullPen( wxColour(0,0,0), 1, wxTRANSPARENT );
 
     destDc.SetBrush( grayBrush );
-    destDc.SetPen( nullPen );
-
+    destDc.SetPen( *wxTRANSPARENT_PEN );
     destDc.DrawRectangle( 0,0, destDim.x+1, destDim.y+1 );
 
     if ( isPressed )
@@ -688,7 +691,7 @@ void wxNewBitmapButton::OnLButtonUp( wxMouseEvent& event )
     mIsPressed   = false;
     Refresh();
 
-    if ( IsInWindow( event.m_x, event.m_y ) ) 
+    if ( IsInWindow( event.m_x, event.m_y ) )
     {
         // fire event, if mouse was released
         // within the bounds of button
@@ -742,16 +745,16 @@ void wxNewBitmapButton::OnSize( wxSizeEvent& WXUNUSED(event) )
 }
 
 void wxNewBitmapButton::Reshape( )
-{   
+{
     bool wasCreated = mIsCreated;
     mIsCreated = true;
 
     if ( !wasCreated )
     {
         // in the case of loading button from stream, check if we
-        // have non-empty image-file name, load if possible 
+        // have non-empty image-file name, load if possible
 
-        if ( mImageFileName != wxT("") )
+        if (!mImageFileName.empty())
         {
             mDepressedBmp.LoadFile( mImageFileName, mImageFileType );
 
@@ -786,10 +789,10 @@ void wxNewBitmapButton::DrawLabel( wxDC& dc )
     wxMemoryDC mdc;
     mdc.SelectObject( *pCurBmp );
 
-    dc.Blit( mMarginX, mMarginY, 
+    dc.Blit( mMarginX, mMarginY,
              pCurBmp->GetWidth(),
              pCurBmp->GetHeight(),
-             &mdc, 0,0, wxCOPY 
+             &mdc, 0,0, wxCOPY
            );
 
     mdc.SelectObject( wxNullBitmap );
