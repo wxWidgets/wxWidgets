@@ -254,7 +254,13 @@ void EditorFrame::LoadFile(const wxString& filename)
 void EditorFrame::SaveFile(const wxString& filename)
 {
     m_FileName = filename;
-
+    
+    // change version:
+    wxXmlNode *root = m_Resource->GetRoot();
+    root->DeleteProperty(wxT("version"));
+    root->AddProperty(wxT("version"), wxT(WX_XMLRES_CURRENT_VERSION_STRING));
+    
+    // save it:
     if (!m_Resource->Save(filename))
         wxLogError(_("Error saving ") + filename);
     else
