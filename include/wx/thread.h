@@ -151,9 +151,9 @@ public:
     WXCRITICAL_INLINE ~wxCriticalSection();
 
     // enter the section (the same as locking a mutex)
-    void WXCRITICAL_INLINE Enter();
+    WXCRITICAL_INLINE void Enter();
     // leave the critical section (same as unlocking a mutex)
-    void WXCRITICAL_INLINE Leave();
+    WXCRITICAL_INLINE void Leave();
 
 private:
     // no assignment operator nor copy ctor

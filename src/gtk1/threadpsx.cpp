@@ -405,7 +405,12 @@ bool wxThread::IsMain()
 
 void wxThread::Yield()
 {
+#ifdef HAVE_SCHED_YIELD
     sched_yield();
+#else // !HAVE_SCHED_YIELD
+    // may be it will have the desired effect?
+    Sleep(0);
+#endif // HAVE_SCHED_YIELD
 }
 
 void wxThread::Sleep(unsigned long milliseconds)
@@ -434,6 +439,7 @@ wxThreadError wxThread::Create()
     pthread_attr_t attr;
     pthread_attr_init(&attr);
 
+#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
     int prio;
     if ( pthread_attr_getschedpolicy(&attr, &prio) != 0 )
     {
@@ -456,6 +462,7 @@ wxThreadError wxThread::Create()
                            (p_internal->GetPriority()*(max_prio-min_prio))/100;
         pthread_attr_setschedparam(&attr, &sp);
     }
+#endif // HAVE_THREAD_PRIORITY_FUNCTIONS
 
     // create the new OS thread object
     int rc = pthread_create(&p_internal->thread_id, &attr,
@@ -482,8 +489,9 @@ wxThreadError wxThread::Run()
 
 void wxThread::SetPriority(unsigned int prio)
 {
-    wxCHECK_RET( (WXTHREAD_MIN_PRIORITY <= prio) &&
-                 (prio <= WXTHREAD_MAX_PRIORITY), "invalid thread priority" );
+    wxCHECK_RET( ((int)WXTHREAD_MIN_PRIORITY <= (int)prio) &&
+                 ((int)prio <= (int)WXTHREAD_MAX_PRIORITY),
+                 "invalid thread priority" );
 
     wxCriticalSectionLocker lock(m_critsect);
 
@@ -496,6 +504,7 @@ void wxThread::SetPriority(unsigned int prio)
 
         case STATE_RUNNING:
         case STATE_PAUSED:
+#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
             {
                 struct sched_param sparam;
                 sparam.sched_priority = prio;
@@ -506,6 +515,7 @@ void wxThread::SetPriority(unsigned int prio)
                     wxLogError(_("Failed to set thread priority %d."), prio);
                 }
             }
+#endif // HAVE_THREAD_PRIORITY_FUNCTIONS
             break;
 
         case STATE_EXITED:
@@ -604,7 +614,9 @@ wxThreadError wxThread::Kill()
             return wxTHREAD_NOT_RUNNING;
 
         default:
+#ifdef HAVE_PTHREAD_CANCEL
             if ( pthread_cancel(p_internal->GetId()) != 0 )
+#endif
             {
                 wxLogError(_("Failed to terminate a thread."));
 
