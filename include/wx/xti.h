@@ -167,7 +167,7 @@ template<typename e>
 void wxSetFromString(const wxString &s , wxFlags<e> &data )
 {
     wxEnumData* edata = wxGetEnumData((e) 0) ;
-    data.Clear() ;
+    data.reset() ;
 
     wxArrayString array ;
     wxSetStringToArray( s , array ) ;
@@ -178,7 +178,7 @@ void wxSetFromString(const wxString &s , wxFlags<e> &data )
         int ivalue ;
         if ( edata->HasEnumMemberValue( flag , &ivalue ) )
         {
-            data.Set( (e) ivalue ) ;
+            data.set( (e) ivalue ) ;
         }
     }
 }
@@ -193,7 +193,7 @@ void wxSetToString( wxString &s , const wxFlags<e> &data )
     for ( i = 0 ; i < count ; i++ )
     {
         e value = (e) edata->GetEnumMemberValueByIndex(i) ;
-        if ( data.Contains( value ) )
+        if ( data.test( value ) )
         {
             // this could also be done by the templated calls
             if ( !s.IsEmpty() )
@@ -215,8 +215,8 @@ void wxSetToString( wxString &s , const wxFlags<e> &data )
 { \
     wxSetToString( s , data ) ; \
 } \
-    void FromLong##SetName( long data , wxxVariant& result ) { result = wxxVariant(SetName(data)) ;} \
-    void ToLong##SetName( const wxxVariant& data , long &result ) { result = (long) data.Get<SetName>() ;} \
+    void FromLong##SetName( long data , wxxVariant& result ) { result = wxxVariant(SetName((unsigned long)data)) ;} \
+    void ToLong##SetName( const wxxVariant& data , long &result ) { result = (long) data.Get<SetName>().to_ulong() ;} \
 template<> const wxTypeInfo* wxGetTypeInfo( SetName * ) \
 { \
     static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e , &wxToStringConverter<SetName> , &wxFromStringConverter<SetName> , &ToLong##SetName , &FromLong##SetName, #SetName ) ; return &s_typeInfo ; \
@@ -749,6 +749,8 @@ enum {
     wxPROP_OBJECT_GRAPH     = 0x00000002 ,
     // this will only be streamed out and in as enum/set, the internal representation is still a long
     wxPROP_ENUM_STORE_LONG  = 0x00000004 ,
+    // don't stream out this property, needed eg to avoid streaming out children that are always created by their parents
+    wxPROP_DONT_STREAM = 0x00000008 ,
 }  ;
 
 class WXDLLIMPEXP_BASE wxPropertyInfo
@@ -838,7 +840,8 @@ WX_DECLARE_EXPORTED_STRING_HASH_MAP( wxPropertyInfo* , wxPropertyInfoMap ) ;
 #define WX_END_PROPERTIES_TABLE() \
     return first ; }
 
-
+#define WX_HIDE_PROPERTY( name ) \
+    static wxPropertyInfo _propertyInfo##name( first , class_t::GetClassInfoStatic() , #name , wxGetTypeInfo( (void*) NULL ) ,NULL , wxxVariant() , wxPROP_DONT_STREAM , wxEmptyString , wxEmptyString ) ;
 
 #define WX_PROPERTY( name , type , setter , getter ,defaultValue , flags , help , group) \
     WX_SETTER( name , class_t , type , setter ) \
@@ -1192,6 +1195,9 @@ struct wxConstructorBridge_8 : public wxConstructorBridge
 typedef wxObject *(*wxObjectConstructorFn)(void);
 typedef wxObject* (*wxVariantToObjectConverter)( wxxVariant &data ) ;
 typedef wxxVariant (*wxObjectToVariantConverter)( wxObject* ) ;
+class wxWriter ;
+class wxPersister ;
+typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxWriter * , wxPersister * , wxxVariantArray & ) ;
 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
@@ -1208,11 +1214,13 @@ public:
         const int _ConstructorPropertiesCount ,
         wxVariantToObjectConverter _PtrConverter1 ,
         wxVariantToObjectConverter _Converter2 ,
-        wxObjectToVariantConverter _Converter3
+        wxObjectToVariantConverter _Converter3 ,
+        wxObjectStreamingCallback _streamingCallback = NULL
         ) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
         m_objectSize(size), m_objectConstructor(ctor) , m_firstProperty(_Props ) , m_firstHandler(_Handlers ) , m_constructor( _Constructor ) ,
         m_constructorProperties(_ConstructorProperties) , m_constructorPropertiesCount(_ConstructorPropertiesCount),
-        m_variantOfPtrToObjectConverter( _PtrConverter1 ) , m_variantToObjectConverter( _Converter2 ) , m_objectToVariantConverter( _Converter3 ) , m_next(sm_first)
+        m_variantOfPtrToObjectConverter( _PtrConverter1 ) , m_variantToObjectConverter( _Converter2 ) , m_objectToVariantConverter( _Converter3 ) , 
+        m_next(sm_first) , m_streamingCallback( _streamingCallback ) 
     {
         sm_first = this;
         Register() ;
@@ -1221,7 +1229,8 @@ public:
     wxClassInfo(const wxChar *_UnitName, const wxChar *_ClassName, const wxClassInfo **_Parents) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
         m_objectSize(0), m_objectConstructor(NULL) , m_firstProperty(NULL ) , m_firstHandler(NULL ) , m_constructor( NULL ) ,
         m_constructorProperties(NULL) , m_constructorPropertiesCount(NULL),
-        m_variantOfPtrToObjectConverter( NULL ) , m_variantToObjectConverter( NULL ) , m_objectToVariantConverter( NULL ) , m_next(sm_first)
+        m_variantOfPtrToObjectConverter( NULL ) , m_variantToObjectConverter( NULL ) , m_objectToVariantConverter( NULL ) , m_next(sm_first) ,
+        m_streamingCallback( NULL )
     {
         sm_first = this;
         Register() ;
@@ -1237,6 +1246,7 @@ public:
     wxObject *CreateObject() const { return AllocateObject() ; }
 
     const wxChar       *GetClassName() const { return m_className; }
+    const wxChar       *GetIncludeName() const { return m_unitName ; }
     const wxClassInfo **GetParents() const { return m_parents; }
     int                 GetSize() const { return m_objectSize; }
 
@@ -1263,6 +1273,15 @@ public:
         }
         return false ;
     }
+
+    // if there is a callback registered with that class it will be called before this
+    // object will be written to disk, it can veto streaming out this object by returning
+    // false, if this class has not registered a callback, the search will go up the inheritance tree
+    // if no callback has been registered true will be returned by default
+    bool BeforeWriteObject( const wxObject *obj, wxWriter *streamer , wxPersister *persister , wxxVariantArray &metadata) const  ;
+
+    // gets the streaming callback from this class or any superclass
+    wxObjectStreamingCallback GetStreamingCallback() const ;
 
 #ifdef WXWIN_COMPATIBILITY_2_4
     // Initializes parent pointers and hash table for fast searching.
@@ -1353,7 +1372,7 @@ private:
     wxVariantToObjectConverter m_variantOfPtrToObjectConverter ;
     wxVariantToObjectConverter m_variantToObjectConverter ;
     wxObjectToVariantConverter m_objectToVariantConverter ;
-
+    wxObjectStreamingCallback m_streamingCallback ;
     const wxPropertyAccessor *FindAccessor (const wxChar *propertyName) const ;
 
 
@@ -1441,7 +1460,7 @@ public :
 
 // Single inheritance with one base class
 
-#define _IMPLEMENT_DYNAMIC_CLASS(name, basename, unit)                 \
+#define _IMPLEMENT_DYNAMIC_CLASS(name, basename, unit , callback)                 \
     wxObject* wxConstructorFor##name()                             \
 { return new name; }                                          \
     const wxClassInfo* name::sm_classParents##name[] = { &basename::sm_class##basename ,NULL } ; \
@@ -1451,7 +1470,7 @@ public :
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::sm_constructor##name , name::sm_constructorProperties##name ,     \
-    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , NULL , wxObjectToVariantConverter##name);    \
+    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , NULL , wxObjectToVariantConverter##name , callback);    \
     template<> void wxStringReadValue(const wxString & , name & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") ) ;}\
     template<> void wxStringWriteValue(wxString & , name const & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
     template<> void wxStringReadValue(const wxString & , name * & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") ) ;}\
@@ -1462,7 +1481,7 @@ public :
     template<> const wxTypeInfo* wxGetTypeInfo( name * ){ static wxClassTypeInfo s_typeInfo(wxT_OBJECT , &name::sm_class##name) ; return &s_typeInfo ; } \
     template<> const wxTypeInfo* wxGetTypeInfo( name ** ){ static wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &name::sm_class##name) ; return &s_typeInfo ; }
 
-#define _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY(name, basename, unit)                 \
+#define _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY(name, basename, unit, callback )                 \
     wxObject* wxConstructorFor##name()                             \
 { return new name; }                                          \
     const wxClassInfo* name::sm_classParents##name[] = { &basename::sm_class##basename ,NULL } ; \
@@ -1473,7 +1492,7 @@ public :
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::sm_constructor##name , name::sm_constructorProperties##name ,     \
-    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
+    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name, callback);    \
     template<> void wxStringReadValue(const wxString & , name & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") ) ;}\
     template<> void wxStringWriteValue(wxString & , name const & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") );}\
     template<> void wxStringReadValue(const wxString & , name * & ){wxASSERT_MSG( 0 , wxT("Illegal Spezialication Called") ) ;}\
@@ -1485,22 +1504,25 @@ public :
     template<> const wxTypeInfo* wxGetTypeInfo( name ** ){ static wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &name::sm_class##name) ; return &s_typeInfo ; }
 
 #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename ) \
-    _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , "" ) \
+    _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , "" , NULL ) \
     const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
     WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS( name , basename ) \
-    _IMPLEMENT_DYNAMIC_CLASS( name , basename , "" ) \
+    _IMPLEMENT_DYNAMIC_CLASS( name , basename , "" , NULL ) \
     wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
     WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS_XTI( name , basename , unit ) \
-    _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit )
+    _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit , NULL )
+
+#define IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name , basename , unit , callback ) \
+    _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit , &callback )
 
 #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name , basename , unit ) \
-    _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , unit )
+    _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , unit , NULL  )
 
 // this is for classes that do not derive from wxobject, there are no creators for these
 

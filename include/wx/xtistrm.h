@@ -144,64 +144,9 @@ private :
     void WriteAllProperties( const wxObject * obj , const wxClassInfo* ci , wxPersister *persister, wxWriterInternalPropertiesData * data ) ;
     void WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , const wxPropertyInfo* pi , wxPersister *persister , wxWriterInternalPropertiesData *data ) ;
     void WriteObject(const wxObject *object, const wxClassInfo *classInfo , wxPersister *persister , bool isEmbedded, wxxVariantArray &metadata ) ;
-    void FindConnectEntry(const wxWindow * evSource,const wxDelegateTypeInfo* dti, const wxObject* &sink , const wxHandlerInfo *&handler) ;
+    void FindConnectEntry(const wxEvtHandler * evSource,const wxDelegateTypeInfo* dti, const wxObject* &sink , const wxHandlerInfo *&handler) ;
 } ;
 
-class wxXmlWriter : public wxWriter
-{
-public :
-
-    wxXmlWriter( wxXmlNode * parent ) ;
-    ~wxXmlWriter() ;
-
-    //
-    // streaming callbacks
-    //
-    // these callbacks really write out the values in the stream format
-    //
-
-    //
-    // streaming callbacks
-    //
-    // these callbacks really write out the values in the stream format
-
-    // begins writing out a new toplevel entry which has the indicated unique name
-    virtual void DoBeginWriteTopLevelEntry( const wxString &name )  ;
-
-    // ends writing out a new toplevel entry which has the indicated unique name
-    virtual void DoEndWriteTopLevelEntry( const wxString &name )  ;
-
-    // start of writing an object having the passed in ID
-    virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID , wxxVariantArray &metadata ) ;
-
-    // end of writing an toplevel object name param is used for unique identification within the container
-    virtual void DoEndWriteObject(const wxObject *object, const wxClassInfo *classInfo, int objectID ) ;
-
-    // writes a simple property in the stream format
-    virtual void DoWriteSimpleType( wxxVariant &value )  ;
-
-    // start of writing a complex property into the stream (
-    virtual void DoBeginWriteProperty( const wxPropertyInfo *propInfo )  ;
-
-    // end of writing a complex property into the stream
-    virtual void DoEndWriteProperty( const wxPropertyInfo *propInfo ) ;
-
-    virtual void DoBeginWriteElement() ;
-    virtual void DoEndWriteElement() ;
-
-    // insert an object reference to an already written object 
-    virtual void DoWriteRepeatedObject( int objectID )  ;
-
-    // insert a null reference
-    virtual void DoWriteNullObject()  ;
-
-    // writes a delegate in the stream format
-    virtual void DoWriteDelegate( const wxObject *object,  const wxClassInfo* classInfo , const wxPropertyInfo *propInfo , 
-        const wxObject *eventSink , int sinkObjectID , const wxClassInfo* eventSinkClassInfo , const wxHandlerInfo* handlerIndo ) ;
-private :
-    struct wxXmlWriterInternal ;
-    wxXmlWriterInternal* m_data ;
-} ;
 
 /*
 Streaming callbacks for depersisting XML to code, or running objects
@@ -234,31 +179,6 @@ private :
     struct wxReaderInternal;
     wxReaderInternal *m_data;
 } ;
-
-/*
-wxXmlReader handles streaming in a class from XML
-*/
-
-class wxXmlReader : public wxReader
-{
-public:
-    wxXmlReader(wxXmlNode *parent) { m_parent = parent ; }
-    ~wxXmlReader() {}
-
-    // Reads a component from XML.  The return value is the root object ID, which can
-    // then be used to ask the depersister about that object
-
-    virtual int ReadObject( const wxString &name , wxDepersister *depersist ) ;
-
-private :
-    int ReadComponent(wxXmlNode *parent, wxDepersister *callbacks);
-
-    // read the content of this node (simple type) and return the corresponding value
-    wxxVariant ReadValue(wxXmlNode *Node,
-        const wxTypeInfo *type );
-
-    wxXmlNode * m_parent ;
-};
 
 // This abstract class matches the allocate-init/create model of creation of objects.
 // At runtime, these will create actual instances, and manipulate them.

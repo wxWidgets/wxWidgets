@@ -316,10 +316,6 @@ WX_ILLEGAL_TYPE_SPECIALIZATION( bool * )
 WX_ILLEGAL_TYPE_SPECIALIZATION( long * )
 WX_ILLEGAL_TYPE_SPECIALIZATION( wxString * )
 
-//
-
-// make wxWindowList known
-
 WX_COLLECTION_TYPE_INFO( wxString , wxArrayString ) ;
 
 template<> void wxCollectionToVariantArray( wxArrayString const &theArray, wxxVariantArray &value)
@@ -445,6 +441,28 @@ const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) con
     return 0;
 }
 
+wxObjectStreamingCallback wxClassInfo::GetStreamingCallback() const
+{
+    if ( m_streamingCallback )
+        return m_streamingCallback ;
+
+    wxObjectStreamingCallback retval = NULL ;
+	const wxClassInfo** parents = GetParents() ;
+    for ( int i = 0 ; parents[i] && retval == NULL ; ++ i )
+	{
+        retval = parents[i]->GetStreamingCallback() ;
+	}
+    return retval ;
+}
+
+bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxWriter *streamer , wxPersister *persister , wxxVariantArray &metadata) const  
+{
+    wxObjectStreamingCallback sb = GetStreamingCallback() ;
+    if ( sb )
+        return (*sb)(obj , streamer , persister , metadata ) ;
+
+    return true ;
+}
 
 void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const wxxVariant &value) const
 {
