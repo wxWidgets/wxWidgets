@@ -133,14 +133,6 @@ protected:
     // common part of the 3 methods above
     WXHBRUSH MSWControlColorSolid(WXHDC pDC, wxColour colBg);
 
-    // another WM_CTLCOLOR-related function: if it returns false, we return
-    // NULL_BRUSH from MSWControlColor() to prevent the system from erasing the
-    // background at all
-    //
-    // override this function to return true for controls which do want to
-    // draw their background themselves
-    virtual bool MSWAlwaysDrawBg() const { return false; }
-
     // this is a helper for the derived class GetClassDefaultAttributes()
     // implementation: it returns the right colours for the classes which
     // contain something else (e.g. wxListBox, wxTextCtrl, ...) instead of

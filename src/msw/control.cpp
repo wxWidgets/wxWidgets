@@ -371,7 +371,8 @@ WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
     }
 #endif // wxUSE_UXTHEME
 
-    return MSWAlwaysDrawBg() ? 0 : ::GetStockObject(NULL_BRUSH);
+    // let the control deal with background itself
+    return 0;
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
