@@ -32,9 +32,13 @@
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 #endif
 
-wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
-        const wxString& defaultPath,
-        long style, const wxPoint& pos)
+wxDirDialog::wxDirDialog(wxWindow *parent,
+                         const wxString& message,
+                         const wxString& defaultPath,
+                         long style,
+                         const wxPoint& WXUNUSED(pos),
+                         const wxSize& WXUNUSED(size),
+                         const wxString& WXUNUSED(name))
 {
 	wxASSERT_MSG( NavServicesAvailable() , "Navigation Services are not running" ) ;
     m_message = message;

@@ -16,18 +16,16 @@
 #pragma interface "dirdlg.h"
 #endif
 
-#include "wx/dialog.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
-
 class WXDLLEXPORT wxDirDialog : public wxDialog
 {
 public:
     wxDirDialog(wxWindow *parent,
-                const wxString& message = wxFileSelectorPromptStr,
+                const wxString& message = wxDirSelectorPromptStr,
                 const wxString& defaultPath = wxEmptyString,
                 long style = 0,
-                const wxPoint& pos = wxDefaultPosition);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                const wxString& name = wxDirDialogNameStr);
 
     void SetMessage(const wxString& message) { m_message = message; }
     void SetPath(const wxString& path);

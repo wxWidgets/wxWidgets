@@ -81,7 +81,9 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxString& message,
                          const wxString& defaultPath,
                          long WXUNUSED(style),
-                         const wxPoint& WXUNUSED(pos))
+                         const wxPoint& WXUNUSED(pos),
+                         const wxSize& WXUNUSED(size),
+                         const wxString& WXUNUSED(name))
 {
     m_message = message;
     m_parent = parent;

@@ -19,11 +19,6 @@
 #pragma interface "dirdlgg.h"
 #endif
 
-#include "wx/defs.h"
-
-#if wxUSE_DIRDLG
-
-#include "wx/dialog.h"
 class WXDLLEXPORT wxGenericDirCtrl;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxTreeEvent;
@@ -35,13 +30,15 @@ class WXDLLEXPORT wxTreeEvent;
 class WXDLLEXPORT wxGenericDirDialog: public wxDialog
 {
 public:
-    wxGenericDirDialog(): wxDialog() {}
-    wxGenericDirDialog(wxWindow* parent, const wxString& title,
+    wxGenericDirDialog() : wxDialog() { }
+
+    wxGenericDirDialog(wxWindow* parent,
+                       const wxString& title = wxDirSelectorPromptStr,
                        const wxString& defaultPath = wxEmptyString,
-                       long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON,
+                       long style = wxDD_DEFAULT_STYLE,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& sz = wxSize(450, 550),
-                       const wxString& name = _T("dialog"));
+                       const wxString& name = wxDirDialogNameStr);
 
     //// Accessors
     inline void SetMessage(const wxString& message) { m_message = message; }
@@ -75,11 +72,5 @@ protected:
 
     DECLARE_EVENT_TABLE()
 };
-
-#if !defined(__WXMSW__) && !defined(__WXMAC__)
-    #define wxDirDialog wxGenericDirDialog
-#endif
-
-#endif // wxUSE_DIRDLG
 
 #endif // _WX_DIRDLGG_H_

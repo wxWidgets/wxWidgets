@@ -9,7 +9,37 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogDefaultFolderStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirSelectorPromptStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
+
+#define wxDD_DEFAULT_STYLE \
+    (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
+
+/*
+    The interface (TODO: make the other classes really derive from it!) is
+    something like this:
+
+class WXDLLEXPORT wxDirDialogBase : public wxDialog
+{
+public:
+    wxDirDialogBase(wxWindow *parent,
+                    const wxString& title = wxFileSelectorPromptStr,
+                    const wxString& defaultPath = wxEmptyString,
+                    long style = wxDD_DEFAULT_STYLE,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& sz = wxDefaultSize,
+                    const wxString& name = _T("dirdialog"));
+
+    void SetMessage(const wxString& message);
+    void SetPath(const wxString& path);
+    void SetStyle(long style);
+
+    wxString GetMessage() const;
+    wxString GetPath() const;
+    long GetStyle() const;
+};
+
+*/
 
 #if defined(__WXMSW__)
     #if defined(__WIN16__) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS) || defined(__SALFORDC__) || !wxUSE_OLE
@@ -32,16 +62,18 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
     #include "wx/generic/dirdlgg.h"
 #endif
 
+#if !defined(__WXMSW__) && !defined(__WXMAC__)
+    #define wxDirDialog wxGenericDirDialog
+#endif
+
 // ----------------------------------------------------------------------------
 // common ::wxDirSelector() function
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxDirSelectorPromptStr;
-
 WXDLLEXPORT wxString
 wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
               const wxString& defaultPath = wxEmptyString,
-              long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON,
+              long style = wxDD_DEFAULT_STYLE,
               const wxPoint& pos = wxDefaultPosition,
               wxWindow *parent = NULL);
 
