@@ -31,6 +31,7 @@ class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxPalette;
+class WXDLLEXPORT wxRawBitmapData;
 
 // ----------------------------------------------------------------------------
 // wxBitmap: a mono or colour bitmap
@@ -58,13 +59,24 @@ public:
     // New constructor for generalised creation from data
     wxBitmap(void *data, long type, int width, int height, int depth = 1);
 
-    // If depth is omitted, will create a bitmap compatible with the display
+    // Create a new, uninitialized bitmap of the given size and depth (if it
+    // is omitted, will create a bitmap compatible with the display)
+    //
+    // NB: this ctor will create a DIB for 24 and 32bpp bitmaps, use ctor
+    //     taking a DC argument if you want to force using DDB in this case
     wxBitmap(int width, int height, int depth = -1);
 
+    // Create a bitmap compatible with the given DC
+    wxBitmap(int width, int height, const wxDC& dc);
+
 #if wxUSE_IMAGE
-    // Convert from wxImage:
+    // Convert from wxImage
     wxBitmap(const wxImage& image, int depth = -1)
         { (void)CreateFromImage(image, depth); }
+
+    // Create a DDB compatible with the given DC from wxImage
+    wxBitmap(const wxImage& image, const wxDC& dc)
+        { (void)CreateFromImage(image, dc); }
 #endif // wxUSE_IMAGE
 
     // we must have this, otherwise icons are silently copied into bitmaps using
@@ -108,12 +120,17 @@ public:
     bool CopyFromCursor(const wxCursor& cursor);
 
     virtual bool Create(int width, int height, int depth = -1);
+    virtual bool Create(int width, int height, const wxDC& dc);
     virtual bool Create(void *data, long type, int width, int height, int depth = 1);
     virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
     virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 
     wxBitmapRefData *GetBitmapData() const
         { return (wxBitmapRefData *)m_refData; }
+
+    // raw bitmap access support functions
+    bool GetRawData(wxRawBitmapData *data);
+    void UngetRawData(wxRawBitmapData *) { /* nothing to do here */ }
 
 #if wxUSE_PALETTE
     wxPalette* GetPalette() const;
@@ -140,14 +157,16 @@ public:
     void SetOk(bool isOk);
 #endif // WXWIN_COMPATIBILITY_2
 
-#if wxUSE_PALETTE
 #if WXWIN_COMPATIBILITY
+#if wxUSE_PALETTE
     wxPalette *GetColourMap() const { return GetPalette(); }
     void SetColourMap(wxPalette *cmap) { SetPalette(*cmap); };
-#endif // WXWIN_COMPATIBILITY
 #endif // wxUSE_PALETTE
+#endif // WXWIN_COMPATIBILITY
 
-    // Implementation
+    // implementation only from now on
+    // -------------------------------
+
 public:
     void SetHBITMAP(WXHBITMAP bmp) { SetHandle((WXHANDLE)bmp); }
     WXHBITMAP GetHBITMAP() const { return (WXHBITMAP)GetHandle(); }
@@ -180,16 +199,19 @@ protected:
     // creates the bitmap from XPM data, supposed to be called from ctor
     bool CreateFromXpm(const char **bits);
 
+    // creates an uninitialized bitmap, called from Create()s above
+    bool DoCreate(int w, int h, int depth, WXHDC hdc);
+
 #if wxUSE_IMAGE
     // creates the bitmap from wxImage, supposed to be called from ctor
     bool CreateFromImage(const wxImage& image, int depth);
+
+    // creates a DDB from wxImage, supposed to be called from ctor
+    bool CreateFromImage(const wxImage& image, const wxDC& dc);
+
+    // common part of the 2 methods above (hdc may be 0)
+    bool CreateFromImage(const wxImage& image, int depth, WXHDC hdc);
 #endif // wxUSE_IMAGE
-
-#if wxUSE_DIB_FOR_BITMAP
-    void *CreateDIB(int width, int height, int depth);
-
-    void CopyDIBLine(void* src, void* dest, int count) const;
-#endif // wxUSE_DIB_FOR_BITMAP
 
 private:
 #ifdef __WIN32__

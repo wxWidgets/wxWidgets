@@ -50,6 +50,8 @@
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
+#include "wx/rawbmp.h"
+
 // missing from mingw32 header
 #ifndef CLR_INVALID
     #define CLR_INVALID ((COLORREF)-1)
@@ -123,6 +125,34 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+// decide whether we should create a DIB or a DDB for the given parameters
+static bool wxShouldCreateDIB(int w, int h, int d, WXHDC hdc)
+{
+    // here is the logic:
+    //
+    //  (a) if hdc is specified, the caller explicitly wants DDB
+    //  (b) otherwise, create a DIB if depth >= 24 (we don't support 16bpp or
+    //      less DIBs anyhow)
+    //  (c) finally, create DIBs under Win9x even if the depth hasn't been
+    //      explicitly specified but the current display depth is 24 or more
+    //      and the image is "big", i.e. > 16Mb which is the theoretical limit
+    //      for DDBs under Win9x
+    //
+    // consequences (all of which seem to make sense):
+    //
+    //  (i)     by default, DDBs are created (depth == -1 usually)
+    //  (ii)    DIBs can be created by explicitly specifying the depth
+    //  (iii)   using a DC always forces creating a DDB
+    return !hdc &&
+            (d >= 24 ||
+                (d == -1 &&
+                    wxDIB::GetLineSize(w, wxDisplayDepth())*h > 16*1024*1024));
+}
+
+// ----------------------------------------------------------------------------
 // wxBitmapRefData
 // ----------------------------------------------------------------------------
 
@@ -161,7 +191,6 @@ void wxBitmapRefData::Free()
 void wxBitmap::Init()
 {
     // m_refData = NULL; done in the base class ctor
-
 }
 
 wxGDIImageRefData *wxBitmap::CreateData() const
@@ -387,26 +416,54 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, (int)type);
 }
 
-bool wxBitmap::Create(int w, int h, int d)
+bool wxBitmap::Create(int width, int height, int depth)
+{
+    return DoCreate(width, height, depth, 0);
+}
+
+bool wxBitmap::Create(int width, int height, const wxDC& dc)
+{
+    wxCHECK_MSG( dc.Ok(), FALSE, _T("invalid HDC in wxBitmap::Create()") );
+
+    return DoCreate(width, height, -1, dc.GetHDC());
+}
+
+bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 {
     UnRef();
 
     m_refData = new wxBitmapRefData;
 
-#if wxUSE_DIB_FOR_BITMAP
-    if ( w && h && d >= 16 )
+    GetBitmapData()->m_width = w;
+    GetBitmapData()->m_height = h;
+
+    HBITMAP hbmp;
+
+    if ( wxShouldCreateDIB(w, h, d, hdc) )
     {
-        if ( !CreateDIB(w, h, d) )
+        if ( d == -1 )
+        {
+            // create DIBs without alpha channel by default
+            d = 24;
+        }
+
+        wxDIB dib(w, h, d);
+        if ( !dib.IsOk() )
            return FALSE;
+
+        // don't delete the DIB section in dib object dtor
+        hbmp = dib.Detach();
+
+        GetBitmapData()->m_depth = d;
+        GetBitmapData()->m_hasAlpha = d == 32; // 32bpp DIBs have alpha channel
     }
-    else
-#endif // wxUSE_DIB_FOR_BITMAP
+    else // create a DDB
     {
-        GetBitmapData()->m_width = w;
-        GetBitmapData()->m_height = h;
+        if ( d == -1 )
+            d = wxDisplayDepth();
+
         GetBitmapData()->m_depth = d;
 
-        HBITMAP hbmp;
 #ifndef __WXMICROWIN__
         if ( d > 0 )
         {
@@ -428,13 +485,13 @@ bool wxBitmap::Create(int w, int h, int d)
 
             GetBitmapData()->m_depth = wxDisplayDepth();
         }
+    }
 
-        SetHBITMAP((WXHBITMAP)hbmp);
+    SetHBITMAP((WXHBITMAP)hbmp);
 
 #if WXWIN_COMPATIBILITY_2
-        GetBitmapData()->m_ok = hbmp != 0;
+    GetBitmapData()->m_ok = hbmp != 0;
 #endif // WXWIN_COMPATIBILITY_2
-    }
 
     return Ok();
 }
@@ -449,7 +506,7 @@ bool wxBitmap::Create(int w, int h, int d)
 // make sense to use #ifdefs inside the function bodies
 #ifdef __WXMICROWIN__
 
-bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
+bool wxBitmap::CreateFromImage(const wxImage& image, int depth, const wxDC& dc)
 {
     // Set this to 1 to experiment with mask code,
     // which currently doesn't work
@@ -637,7 +694,20 @@ wxImage wxBitmap::ConvertToImage() const
 // wxImage to/from conversions
 // ----------------------------------------------------------------------------
 
-bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
+bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
+{
+    return CreateFromImage(image, depth, 0);
+}
+
+bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
+{
+    wxCHECK_MSG( dc.Ok(), FALSE,
+                    _T("invalid HDC in wxBitmap::CreateFromImage()") );
+
+    return CreateFromImage(image, -1, dc.GetHDC());
+}
+
+bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
 {
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") );
 
@@ -656,7 +726,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     wxBitmapRefData *refData = new wxBitmapRefData;
     refData->m_width = w;
     refData->m_height = h;
-    refData->m_depth = dib.GetDepth();
     refData->m_hasAlpha = image.HasAlpha();
 
     m_refData = refData;
@@ -665,16 +734,21 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // next either store DIB as is or create a DDB from it
     HBITMAP hbitmap;
 
-    // TODO: if we're ready to use DIB as is, we can just do this:
-    // if ( ... )
-    //  hbitmap = dib.Detach();
-    // else
+    // are we going to use DIB?
+    if ( wxShouldCreateDIB(w, h, depth, hdc) )
+    {
+        // don't delete the DIB section in dib object dtor
+        hbitmap = dib.Detach();
+
+        refData->m_depth = dib.GetDepth();
+    }
+    else // we need to convert DIB to DDB
     {
         // create and set the device-dependent bitmap
         //
         // VZ: why don't we just use SetDIBits() instead? because of the
         //     palette or is there some other reason?
-        hbitmap = ::CreateCompatibleBitmap(ScreenHDC(), w, h);
+        hbitmap = ::CreateCompatibleBitmap(hdc ? (HDC)hdc : ScreenHDC(), w, h);
         if ( !hbitmap )
         {
             wxLogLastError(_T("CreateCompatibleBitmap()"));
@@ -745,6 +819,8 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
             ::SelectPalette(hdcMem, hOldPalette, FALSE);
         }
 #endif // wxUSE_PALETTE
+
+        refData->m_depth = depth == -1 ? wxDisplayDepth() : depth;
     }
 
     // validate this object
@@ -1118,6 +1194,46 @@ void wxBitmap::SetQuality(int WXUNUSED(quality))
 }
 
 #endif // WXWIN_COMPATIBILITY_2_4
+
+// ----------------------------------------------------------------------------
+// raw bitmap access support
+// ----------------------------------------------------------------------------
+
+bool wxBitmap::GetRawData(wxRawBitmapData *data)
+{
+    wxCHECK_MSG( data, FALSE, _T("NULL pointer in wxBitmap::GetRawData") );
+
+    if ( !Ok() )
+    {
+        // no bitmap, no data (raw or otherwise)
+        return FALSE;
+    }
+
+    // we only support raw access to the DIBs, so check if we have one
+    DIBSECTION ds;
+    if ( !::GetObject(GetHbitmap(), sizeof(ds), &ds) )
+    {
+        return FALSE;
+    }
+
+    // ok, store the relevant info in wxRawBitmapData
+    const LONG h = ds.dsBm.bmHeight;
+
+    data->m_width = ds.dsBm.bmWidth;
+    data->m_height = h;
+    data->m_bypp = ds.dsBm.bmBitsPixel / 8;
+
+    // remember that DIBs are stored in top to bottom order!
+    const LONG bytesPerRow = ds.dsBm.bmWidthBytes;
+    data->m_stride = -bytesPerRow;
+    data->m_pixels = (unsigned char *)ds.dsBm.bmBits;
+    if ( h > 1 )
+    {
+        data->m_pixels += (h - 1)*bytesPerRow;
+    }
+
+    return TRUE;
+}
 
 // ----------------------------------------------------------------------------
 // TODO: to be replaced by something better
