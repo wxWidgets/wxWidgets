@@ -26,6 +26,9 @@ public:
     // Create a DC corresponding to a window
     wxWindowDC(wxWindow *win);
     ~wxWindowDC(void);
+
+    // NSView specific functions
+    virtual void Clear();
 protected:
     wxWindow *m_window;
 };

@@ -14,6 +14,9 @@
 
 #import <AppKit/NSView.h>
 #import <AppKit/NSAffineTransform.h>
+#import <AppKit/NSColor.h>
+#import <AppKit/NSGraphicsContext.h>
+#import <AppKit/NSBezierPath.h>
 
 /*
  * wxWindowDC
@@ -34,6 +37,19 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 wxWindowDC::~wxWindowDC(void)
 {
 };
+
+void wxWindowDC::Clear()
+{
+    wxASSERT(m_window);
+
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+
+    [m_backgroundBrush.GetNSColor() set];
+    [NSBezierPath fillRect:[m_window->GetNSView() bounds]];
+
+    [context restoreGraphicsState];
+}
 
 /*
  * wxClientDC
