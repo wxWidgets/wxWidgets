@@ -122,15 +122,13 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
     theFont.SetFamily(wxDEFAULT);  
 
     //TODOTODO: Get other styles?  Font weight?
-    theFont.SetStyle(0 +
-                     ((fontstyle & bold) ? wxFONTFLAG_BOLD : 0) +
-                     ((fontstyle & italic) ? wxFONTFLAG_ITALIC : 0) +
-                     ((fontstyle & underline) ? wxFONTFLAG_UNDERLINED : 0)
-                     );
+    theFont.SetStyle(((fontstyle & italic) ? wxFONTSTYLE_ITALIC : 0));
     theFont.SetWeight((fontstyle & bold) ? wxBOLD : wxNORMAL);   
+    theFont.SetUnderlined(((fontstyle & underline) ? true : false));
     
     //for debugging
-    //wxPrintf(wxT("FaceName:%s\nSize:%i\n"), theFont.GetFaceName().c_str(), theFont.GetPointSize());
+    //wxPrintf(wxT("FaceName:%s\nSize:%i\nStyle:%i\n"), theFont.GetFaceName().c_str(), theFont.GetPointSize(),
+    //theFont.GetStyle());
     
     //phew!!  We're done - set the chosen font
     theFontData.SetChosenFont(theFont);
