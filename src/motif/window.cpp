@@ -757,7 +757,9 @@ int wxWindow::GetScrollPos(int orient) const
 int wxWindow::GetScrollRange(int orient) const
 {
     Widget scrollBar = (Widget)GetScrollbar((wxOrientation)orient);
-    wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
+    // CE scintilla windows don't always have these scrollbars 
+    // and it tends to pile up a whole bunch of asserts
+    //wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
 
     int range = 0;
     if (scrollBar) 
@@ -768,10 +770,11 @@ int wxWindow::GetScrollRange(int orient) const
 int wxWindow::GetScrollThumb(int orient) const
 {
     Widget scrollBar = (Widget)GetScrollbar((wxOrientation)orient);
-    wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
+    //wxCHECK_MSG( scrollBar, 0, "no such scrollbar" );
 
-    int thumb;
-    XtVaGetValues(scrollBar, XmNsliderSize, &thumb, NULL);
+    int thumb = 0;
+    if (scrollBar)
+        XtVaGetValues(scrollBar, XmNsliderSize, &thumb, NULL);
     return thumb;
 }
 

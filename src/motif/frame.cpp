@@ -355,7 +355,12 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
             yy -= tbh;
     }
 #endif // wxUSE_TOOLBAR
-    *x = xx; *y = yy;
+
+//CE found a call here with NULL y pointer
+    if (x)
+        *x = xx; 
+    if (y)
+        *y = yy;
 }
 
 // Set the client size (i.e. leave the calculation of borders etc.
