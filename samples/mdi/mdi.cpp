@@ -331,7 +331,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Print"));
     currentX += width + 5;
     toolBar->AddSeparator();
-    toolBar->AddTool(7, *bitmaps[7], wxNullBitmap, true, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Help"));
+    toolBar->AddTool( MDI_ABOUT, *bitmaps[7], wxNullBitmap, true, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Help"));
 
     toolBar->Realize();
 
