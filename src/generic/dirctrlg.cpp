@@ -68,8 +68,8 @@
 
 #endif // __WXPM__
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
-#include "moreextr.h"
+#if defined(__WXMAC__)
+#  include "MoreFilesExtras.h"
 #endif
 
 #ifdef __BORLANDC__
@@ -598,7 +598,7 @@ void wxGenericDirCtrl::SetupSections()
         }
     }
 #endif
-#elif defined(__WXMAC__) && !defined(__UNIX__)
+#elif defined(__WXMAC__)
     FSSpec volume ;
     short index = 1 ;
     while(1) {

@@ -40,10 +40,8 @@
   #include <windows.h>
 #endif
 
-#ifndef __DARWIN__
-  #include "MoreFiles.h"
-  #include "MoreFilesExtras.h"
-#endif
+#include "MoreFiles.h"
+#include "MoreFilesExtras.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -75,6 +73,8 @@ public:
 
     bool Read(wxString *filename); // reads the next 
     void Rewind() ;
+
+    const wxString& GetName() const { return m_dirname; }
 
 private:
 	CInfoPBRec			m_CPB ;
@@ -116,11 +116,7 @@ wxDirData::wxDirData(const wxString& dirname)
 	m_CPB.hFileInfo.ioNamePtr = m_name ;
 	m_index = 0 ;
 
-#ifdef __DARWIN__
-	// TODO: what are we supposed to do for Mac OS X
-#else
 	FSpGetDirectoryID( &fsspec , &m_dirId , &m_isDir ) ;
-#endif
 }
 
 wxDirData::~wxDirData()
@@ -235,6 +231,22 @@ bool wxDir::Open(const wxString& dirname)
 bool wxDir::IsOpened() const
 {
     return m_data != NULL;
+}
+
+wxString wxDir::GetName() const
+{
+    wxString name;
+    if ( m_data )
+    {
+	name = M_DIR->GetName();
+	if ( !name.empty() && (name.Last() == _T('/')) )
+	{
+	    // chop off the last (back)slash
+	    name.Truncate(name.length() - 1);
+	}
+    }
+
+    return name;
 }
 
 wxDir::~wxDir()
