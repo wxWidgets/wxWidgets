@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/setup.h"
@@ -25,19 +25,22 @@
 #endif
 
 
-#ifdef __WXGTK__
-extern "C" {
-#include "../../src/iodbc/isql.h"
-#include "../../src/iodbc/isqlext.h"
-#include "../../src/iodbc/odbc_funcs.h"
-#include "../../src/iodbc/odbc_types.h"
-typedef float   SFLOAT;
-typedef double  SDOUBLE;
-#define ULONG UDWORD
+#ifdef __UNIX__
+extern "C"
+{
+    #include "../../src/iodbc/isql.h"
+    #include "../../src/iodbc/isqlext.h"
+    #include "../../src/iodbc/odbc_funcs.h"
+    #include "../../src/iodbc/odbc_types.h"
+
+    typedef float   SFLOAT;
+    typedef double  SDOUBLE;
+
+    #define ULONG UDWORD
 }
-#else
-#include <sqlext.h>
-#endif
+#else // !Unix
+    #include <sqlext.h>
+#endif // Unix/!Unix
 
 #include "wx/defs.h"
 #include "wx/list.h"
@@ -60,13 +63,11 @@ class WXDLLEXPORT wxRecordSet;
 
 class WXDLLEXPORT wxDatabase: public wxObject
 {
-  // JACS
   DECLARE_DYNAMIC_CLASS(wxDatabase)
- private:
  protected:
   static HENV hEnv;
   static int refCount;
-  
+
   HDBC hDBC;
   char* username;
   char* password;
@@ -83,19 +84,19 @@ class WXDLLEXPORT wxDatabase: public wxObject
   bool err_occured;
 
   wxList recordSets; // Record sets: Added by JACS
-  
+
  public:
-  wxDatabase(void);
-  ~wxDatabase(void);
-  
+  wxDatabase();
+  ~wxDatabase();
+
   bool Open(char *, bool exclusive =FALSE, bool readOnly =TRUE, char *username ="ODBC", char *password ="");
-  bool Close(void);
+  bool Close();
 
   // Cleanup operations, added by JACS
   void DeleteRecordSets(void); // Called when the database is deleted
   void ResetRecordSets(void); // Required if the database is closed
   inline wxList& GetRecordSets(void) { return recordSets; }
-  
+
   inline char *GetUsername(void) { return username; }
   inline char *GetPassword(void) { return password; }
   inline char *GetDataSource(void) { return datasource; }
@@ -103,31 +104,31 @@ class WXDLLEXPORT wxDatabase: public wxObject
   inline wxRETCODE GetErrorCode(void) { return retcode; }
   inline HDBC GetHDBC(void) { return hDBC; }
   inline HENV GetHENV(void) { return hEnv; }
-  
+
   void SetPassword(char *s);
   void SetUsername(char *s);
   void SetDataSource(char *s);
-  
+
   // Database attributes
-  char *GetDatabaseName(void);
-  bool CanUpdate(void);
-  bool CanTransact(void);
-  bool InWaitForDataSource(void);
+  char *GetDatabaseName();
+  bool CanUpdate();
+  bool CanTransact();
+  bool InWaitForDataSource();
   void SetLoginTimeout(long seconds);
   void SetQueryTimeout(long seconds);
   void SetSynchronousMode(bool synchronous);
 
   // Database operations
-  bool BeginTrans(void);
-  bool CommitTrans(void);
-  bool RollbackTrans(void);
-  void Cancel(void);
+  bool BeginTrans();
+  bool CommitTrans();
+  bool RollbackTrans();
+  void Cancel();
 
   // Error handling
-  bool ErrorOccured(void);
-  char* GetErrorMessage(void);
-  long  GetErrorNumber(void);
-  char* GetErrorClass(void);
+  bool ErrorOccured();
+  char* GetErrorMessage();
+  long  GetErrorNumber();
+  char* GetErrorClass();
   inline void ErrorSnapshot(HSTMT =SQL_NULL_HSTMT);
 
   // Overridables
@@ -154,23 +155,23 @@ class WXDLLEXPORT wxQueryField: public wxObject
   long size;
   bool dirty;
 
-  bool AllocData(void);
+  bool AllocData();
 
   public:
-  wxQueryField(void);
-  ~wxQueryField(void);
-  
+  wxQueryField();
+  ~wxQueryField();
+
   bool SetData(void*, long);
   void SetDirty(bool =TRUE);
-  void ClearData(void);
+  void ClearData();
   void SetType(short);
   void SetSize(long);
-  
-  void* GetData(void);
-  short GetType(void);
-  long GetSize(void);
-  
-  bool IsDirty(void);
+
+  void* GetData();
+  short GetType();
+  long GetSize();
+
+  bool IsDirty();
 };
 
 // Represents a column description
@@ -184,13 +185,13 @@ class WXDLLEXPORT wxQueryCol: public wxObject
   bool nullable;
   long varsize;
   void* var;
-  
+
   public:
   wxList fields;
-  
-  wxQueryCol(void);
-  ~wxQueryCol(void);
-  
+
+  wxQueryCol();
+  ~wxQueryCol();
+
   void* BindVar(void*, long);
   void FillVar(int);
   void AppendField(void*, long);
@@ -199,10 +200,10 @@ class WXDLLEXPORT wxQueryCol: public wxObject
   void SetNullable(bool);
   void SetFieldDirty(int, bool =TRUE);
   void SetType(short);
-  
-  char* GetName(void);
-  short GetType(void);
-  bool IsNullable(void);
+
+  char* GetName();
+  short GetType();
+  bool IsNullable();
   void* GetData(int);
   long GetSize(int);
 
@@ -217,7 +218,7 @@ class WXDLLEXPORT wxRecordSet: public wxObject
   int cursor;
   int type;
   int options;
-  
+
   protected:
   HSTMT hStmt;
   int nFields;
@@ -232,48 +233,50 @@ class WXDLLEXPORT wxRecordSet: public wxObject
   wxRETCODE retcode;
   wxList cols;
   wxList fetchbuf;
-  
+
   void FillVars(int);
 
   public:
   // JACS gave parent a default value for benefit of IMPLEMENT_DYNAMIC_CLASS
-  wxRecordSet(wxDatabase *parent = NULL, int =wxOPEN_TYPE_DYNASET, int =wxOPTION_DEFAULT);
-  ~wxRecordSet(void);
-  
+  wxRecordSet(wxDatabase *parent = NULL,
+              int = wxOPEN_TYPE_DYNASET,
+              int = wxOPTION_DEFAULT);
+  ~wxRecordSet();
+
   // My own, lower-level functions.
   bool BeginQuery(int openType, char *sql = NULL, int options = wxOPTION_DEFAULT);
-  bool EndQuery(void);
+  bool EndQuery();
   bool Query(char* columns, char* table =NULL, char *filter =NULL);
 
   // Attributes
   inline int GetNumberFields(void) { return nFields; }
   inline int GetNumberParams(void) { return nParams; }
-  long GetNumberRecords(void);
-  long GetNumberCols(void);
+  long GetNumberRecords();
+  long GetNumberCols();
   inline char *GetFilter(void) { return recordFilter; }
   inline char *GetSortString(void) { return sortString; }
   inline wxDatabase *GetDatabase(void) { return parentdb; }
   inline wxRETCODE GetErrorCode(void) { return retcode; }
-  bool CanAppend(void);
-  bool CanRestart(void);
-  bool CanScroll(void);
-  bool CanTransact(void);
-  bool CanUpdate(void);
-  long GetCurrentRecord(void);
-  bool RecordCountFinal(void);
-  bool GetResultSet(void);
+  bool CanAppend();
+  bool CanRestart();
+  bool CanScroll();
+  bool CanTransact();
+  bool CanUpdate();
+  long GetCurrentRecord();
+  bool RecordCountFinal();
+  bool GetResultSet();
   bool ExecuteSQL(char*);
-  bool GetTables(void);
+  bool GetTables();
   bool GetColumns(char* =NULL);
   bool GetPrimaryKeys(char* =NULL);
   bool GetForeignKeys(char* , char * );
-  char *GetTableName(void);
+  char *GetTableName();
   void SetTableName(char*);
-  char *GetSQL(void);
-  bool IsOpen(void);
-  bool IsBOF(void);
-  bool IsEOF(void);
-  bool IsDeleted(void);
+  char *GetSQL();
+  bool IsOpen();
+  bool IsBOF();
+  bool IsEOF();
+  bool IsDeleted();
 
   bool GetFieldData(int colPos, int dataType, void *dataPtr);
   bool GetFieldData(const char*, int dataType, void *dataPtr);
@@ -286,50 +289,50 @@ class WXDLLEXPORT wxRecordSet: public wxObject
   void* BindVar(const char*, void*, long);
 
   void SetType(int);
-  int GetType(void);
+  int GetType();
   void SetOptions(int);
-  int GetOptions(void);
-    
+  int GetOptions();
+
   // Update operations
-  void AddNew(void);
-  bool Delete(void);
-  void Edit(void);
-  bool Update(void);
+  void AddNew();
+  bool Delete();
+  void Edit();
+  bool Update();
 
   // Record navigation
   virtual bool Move(long rows);
-  virtual bool MoveFirst(void);
-  virtual bool MoveLast(void);
-  virtual bool MoveNext(void);
-  virtual bool MovePrev(void);
+  virtual bool MoveFirst();
+  virtual bool MoveLast();
+  virtual bool MoveNext();
+  virtual bool MovePrev();
   virtual bool GoTo(long);
 
   // Others
-  bool GetDataSources(void);
+  bool GetDataSources();
 
   // Associate a column name/position with a data location
   //   bool BindColumn(int colPos, int dataType, void *dataPtr);
 
-  void Cancel(void);
+  void Cancel();
   bool IsFieldDirty(int);
   bool IsFieldDirty(const char*);
   bool IsFieldNull(int);
   bool IsFieldNull(const char*);
   bool IsColNullable(int);
   bool IsColNullable(const char*);
-  virtual bool Requery(void);
+  virtual bool Requery();
   virtual void SetFieldDirty(int, bool dirty = TRUE);
   virtual void SetFieldDirty(const char*, bool dirty = TRUE);
   void SetFieldNull(void *p, bool isNull = TRUE);
 
   // Overridables
-  virtual char *GetDefaultConnect(void);
-  virtual char *GetDefaultSQL(void);
-  
+  virtual char *GetDefaultConnect();
+  virtual char *GetDefaultSQL();
+
   // Internal
-  
+
   // Build SQL query from column specification
-  bool ConstructDefaultSQL(void);
+  bool ConstructDefaultSQL();
   void SetDefaultSQL(char *s);
   bool ReleaseHandle(void); // Added JACS
 };
