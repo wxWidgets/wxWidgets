@@ -82,6 +82,11 @@ void ConvertToIeeeExtended(double num, unsigned char *bytes)
 		}
 	}
 
+    // disable the warning about 'possible loss of data'
+    #ifdef _MSC_VER
+        #pragma warning(disable: 4244)
+    #endif // Visual C++
+
 	bytes[0] = expon >> 8;
 	bytes[1] = expon;
 	bytes[2] = (unsigned char) hiMant >> 24;
@@ -92,6 +97,10 @@ void ConvertToIeeeExtended(double num, unsigned char *bytes)
 	bytes[7] = (unsigned char) loMant >> 16;
 	bytes[8] = (unsigned char) loMant >> 8;
 	bytes[9] = (unsigned char) loMant;
+
+    #ifdef _MSC_VER
+        #pragma warning(default: 4244)
+    #endif // Visual C++
 }
 
 /*
