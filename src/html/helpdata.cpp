@@ -394,6 +394,17 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
 }
 
 
+
+static wxString SafeFileName(const wxString& s)
+{
+    wxString res(s);
+    res.Replace(wxT("#"), wxT("_"));
+    res.Replace(wxT(":"), wxT("_"));
+    res.Replace(wxT("\\"), wxT("_"));
+    res.Replace(wxT("/"), wxT("_"));
+    return res;
+}
+
 bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   wxFontEncoding encoding,
                                   const wxString& title, const wxString& contfile,
@@ -446,7 +457,7 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
             if (m_TempPath != wxEmptyString) 
             {
                 wxFileOutputStream *outs = new wxFileOutputStream(m_TempPath + 
-                                                  wxFileNameFromPath(bookfile.GetLocation()) + wxT(".cached"));
+                                                  SafeFileName(wxFileNameFromPath(bookfile.GetLocation())) + wxT(".cached"));
                 SaveCachedBook(bookr, outs);
                 delete outs;
             }
