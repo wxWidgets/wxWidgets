@@ -69,6 +69,40 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
   notebook->ProcessEvent(event);
 }
 
+static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
+{ 
+  if ((win->m_x == alloc->x) &&
+      (win->m_y == alloc->y) &&
+      (win->m_width == alloc->width) &&
+      (win->m_height == alloc->height))
+  {
+    return;
+  };
+  
+/*
+  printf( "OnResize from " );
+  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+    printf( win->GetClassInfo()->GetClassName() );
+  printf( " .\n" );
+    
+  printf( "  Old: X: %d  Y: %d ", win->m_x, win->m_y );
+  printf( "  W: %d  H: %d ", win->m_width, win->m_height );
+  printf( " .\n" );
+    
+  printf( "  New: X: %d  Y: %d ", alloc->x, alloc->y );
+  printf( "  W: %d  H: %d ", alloc->width, alloc->height );
+  printf( " .\n" );
+*/
+  
+  win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
+  
+/*
+  printf( "  Res: X: %d  Y: %d ", win->m_x, win->m_y );
+  printf( "  W: %d  H: %d ", win->m_width, win->m_height );
+  printf( " .\n" );
+*/    
+};
+  
 //-----------------------------------------------------------------------------
 // wxNotebook
 //-----------------------------------------------------------------------------
@@ -370,7 +404,6 @@ void wxNotebook::AddChild( wxWindow *win )
 
   m_children.Append(win);
 
-
   wxNotebookPage *page = new wxNotebookPage();
 
   page->m_id = GetPageCount();
@@ -384,7 +417,10 @@ void wxNotebook::AddChild( wxWindow *win )
     (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
 
   page->m_parent = GTK_NOTEBOOK(m_widget);
-
+  
+  gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
+    GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );
+  
   if (!page->m_page)
   {
      wxLogFatalError( "Notebook page creation error" );
@@ -404,12 +440,12 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     // @@@@ the numbers I substract here are completely arbitrary, instead we
     // should somehow calculate the size of the page from the size of the
     // notebook
-    page->SetSize(event.GetSize().GetX() - 5,
+/*    page->SetSize(event.GetSize().GetX() - 5,
                                  event.GetSize().GetY() - 30);
 
     if ( page->GetAutoLayout() )
       page->Layout();
-
+*/
     node = node->Next();
   };
 }

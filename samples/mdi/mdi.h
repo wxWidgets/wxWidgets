@@ -77,6 +77,7 @@ class MyChild: public wxMDIChildFrame
     MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
     ~MyChild(void);
     bool OnClose(void);
+    void OnSize(wxSizeEvent& event);
     void OnActivate(wxActivateEvent& event);
     void OnQuit(wxCommandEvent& event);
 

@@ -108,7 +108,9 @@ void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, 
 
 //-----------------------------------------------------------------------------
 // size 
-//      I don't any longer intercept GTK's internal resize events (except frames)
+//      I don't any longer intercept GTK's internal resize events, except 
+//      for frames and from within MDI and tabbed windows (client area
+//      size determined internally by GTK, not wxWin).
 
 /*
 void gtk_window_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
@@ -730,6 +732,7 @@ wxWindow::wxWindow()
   m_drawingOffsetX = 0;
   m_drawingOffsetY = 0;
   m_pDropTarget = NULL;
+  m_resizing = FALSE;
 };
 
 wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
@@ -913,6 +916,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_drawingOffsetX = 0;
   m_drawingOffsetY = 0;
   m_pDropTarget = NULL;
+  m_resizing = FALSE;
 }
 
 void wxWindow::PostCreation(void)
@@ -1059,6 +1063,9 @@ void wxWindow::ImplementSetPosition(void)
 
 void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
+  if (m_resizing) return; // I don't like recursions
+  m_resizing = TRUE;
+  
   int newX = x;
   int newY = y;
   int newW = width;
@@ -1099,6 +1106,8 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
   wxSizeEvent event( wxSize(m_width,m_height), GetId() );
   event.SetEventObject( this );
   ProcessEvent( event );
+  
+  m_resizing = FALSE;
 };
 
 void wxWindow::SetSize( int width, int height )
@@ -1113,8 +1122,8 @@ void wxWindow::Move( int x, int y )
 
 void wxWindow::GetSize( int *width, int *height ) const
 {
-  (*width) = m_width;
-  (*height) = m_height;
+  if (width) (*width) = m_width;
+  if (height) (*height) = m_height;
 };
 
 void wxWindow::SetClientSize( int width, int height )
@@ -1422,6 +1431,8 @@ void wxWindow::AddChild( wxWindow *child )
       };
     };
   };
+  
+  // wxNotebooks are very special, so they have their own AddChild
   
   if (IsKindOf(CLASSINFO(wxNotebook)))
   {
@@ -1828,7 +1839,7 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     m_vAdjust->page_increment = (float)(wxMax(fthumb-2,0));
     m_vAdjust->page_size = fthumb;
   };
- 
+  
   if (m_wxwindow->window)
   {  
     if (orient == wxHORIZONTAL)

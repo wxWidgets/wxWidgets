@@ -1314,12 +1314,12 @@ void wxListMainWindow::DrawImage( int index, wxPaintDC *dc, int x, int y )
 {
   if ((m_mode & wxLC_ICON) && (m_normal_image_list))
   {
-    m_normal_image_list->Draw( index, *dc, x, y );
+    m_normal_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
     return;
   };
   if ((m_mode & wxLC_SMALL_ICON) && (m_small_image_list))
   {
-    m_small_image_list->Draw( index, *dc, x, y );
+    m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
   };
 };
 
@@ -2210,6 +2210,11 @@ bool wxListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(p
 int wxListCtrl::GetItemCount(void) 
 {
   return m_mainWin->GetItemCount();
+};
+
+void wxListCtrl::SetItemSpacing( int spacing, bool isSmall )
+{
+  m_mainWin->SetItemSpacing( spacing, isSmall );
 };
 
 int wxListCtrl::GetItemSpacing( bool isSmall )

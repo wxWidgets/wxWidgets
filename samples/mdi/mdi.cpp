@@ -206,7 +206,7 @@ void MyCanvas::OnDraw(wxDC& dc)
   points[0].x = 200; points[0].y = 300;
   points[1].x = 100; points[1].y = 400;
   points[2].x = 300; points[2].y = 400;
-
+  
   dc.DrawPolygon(3, points);
 }
 
@@ -271,6 +271,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
 
 BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
   EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
+  EVT_SIZE( MyChild::OnSize)
 END_EVENT_TABLE()
 
 MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size,
@@ -286,7 +287,15 @@ MyChild::~MyChild(void)
   my_children.DeleteObject(this);
 }
 
-void MyChild::OnQuit(wxCommandEvent& event)
+void MyChild::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+  int x = 0;
+  int y = 0;
+  GetClientSize( &x, &y );
+  if (canvas) canvas->SetSize( x, y );
+}
+
+void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
       Close(TRUE);
 }

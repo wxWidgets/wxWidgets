@@ -222,7 +222,8 @@ wxFileCtrl::wxFileCtrl( wxWindow *win, const wxWindowID id, const wxString &dirN
       const long style, const wxString &name ) :
   wxListCtrl( win, id, pos, size, style, name )
 {
-  wxImageList *imageList = new wxImageList();
+  SetItemSpacing( 20 );
+  wxImageList *imageList = new wxImageList( 18, 18 );
   imageList->Add( wxBitmap( folder_xpm ) );
   imageList->Add( wxBitmap( txt_xpm ) );
   imageList->Add( wxBitmap( list_xpm ) );

@@ -180,7 +180,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 9, choices );
   m_notebook->AddPage(panel, "wxComboBox");
   
-  wxTextCtrl *text = new wxTextCtrl( m_notebook, ID_TEXT, "Write text here.", wxPoint(0,20), wxSize(120,100), wxTE_MULTILINE );
+  wxTextCtrl *text = new wxTextCtrl( m_notebook, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(120,100), wxTE_MULTILINE );
   m_notebook->AddPage( text, "wxTextCtrl" );
 }
 

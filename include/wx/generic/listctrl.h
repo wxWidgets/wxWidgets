@@ -594,6 +594,7 @@ class wxListCtrl: public wxControl
     bool GetItemPosition( long item, wxPoint& pos ) const; // not supported in wxGLC
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount(void);
+    void SetItemSpacing( int spacing, bool isSmall = FALSE );
     int GetItemSpacing( bool isSmall );
     int GetSelectedItemCount(void);
 //  wxColour GetTextColour(void) const; // wxGLC has colours for every Item (see wxListItem)

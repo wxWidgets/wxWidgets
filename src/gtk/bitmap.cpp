@@ -278,8 +278,6 @@ void wxBitmap::Resize( int height, int width )
 {
   if (!Ok()) return;
   
-  return;
-  
 #ifdef USE_GDK_IMLIB
   
   if (M_BMPDATA->m_bitmap) return;  // not supported for bitmaps

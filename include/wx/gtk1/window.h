@@ -222,6 +222,7 @@ class wxWindow: public wxEvtHandler
     bool            m_hasScrolling;
     bool            m_hasVMT;
     bool            m_sizeSet;
+    bool            m_resizing;
     
   public:  // Layout section
   
