@@ -158,7 +158,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
     rval = win->PopupMenu(menu, 0, 0);
 
     win->PopEventHandler(FALSE);
-    delete win;
+    win->Destroy();
     return rval;
 }
 
