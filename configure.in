@@ -1969,13 +1969,13 @@ dnl ---------------------------------------------------------------------------
 ZLIB_INCLUDE=
 if test "$wxUSE_ZLIB" = "yes" ; then
   AC_DEFINE(wxUSE_ZLIB)
-  ZLIB_INCLUDE="-I\${srcdir}/../zlib"
+  ZLIB_INCLUDE="-I\${top_srcdir}/src/zlib"
 fi
 
 PNG_INCLUDE=
 if test "$wxUSE_LIBPNG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBPNG)
-  PNG_INCLUDE="-I\${srcdir}/../png"
+  PNG_INCLUDE="-I\${top_srcdir}/src/png"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
 fi
 
@@ -1986,7 +1986,7 @@ fi
 JPEG_INCLUDE=
 if test "$wxUSE_LIBJPEG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBJPEG)
-  JPEG_INCLUDE="-I\${srcdir}/../jpeg"
+  JPEG_INCLUDE="-I\${top_srcdir}/src/jpeg"
 fi
 
 if test "$wxUSE_OPENGL" = "yes"; then
@@ -2658,13 +2658,16 @@ AC_OUTPUT([
           ],
           [
             chmod +x wx-config
-dnl The following line is more elegant but test -e is not supported by all
-dnl test varieties.
-dnl            if test ! -e include/wx/${TOOLKIT_DIR}/setup.h; then
-            cat include/wx/${TOOLKIT_DIR}/setup.h >/dev/null 2>&1
-            if test $? != 0; then
-              ${LN_S} `pwd`/setup.h include/wx/${TOOLKIT_DIR}/setup.h
-            fi
+	    if test ! -d include; then 
+	      mkdir include 
+	    fi
+	    if test ! -d include/wx; then 
+	      mkdir include/wx 
+	    fi
+	    if test ! -d include/wx/${TOOLKIT_DIR}; then 
+	      mkdir include/wx/${TOOLKIT_DIR} 
+	    fi
+	    cp -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
           ],
           [
             LN_S="${ac_cv_prog_LN_S}"
