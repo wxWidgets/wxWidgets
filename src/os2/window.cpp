@@ -702,48 +702,48 @@ void wxWindow::ScrollWindow(
 // subclassing
 // ---------------------------------------------------------------------------
 
-void wxWindow::SubclassWin(WXHWND hWnd)
+void wxWindow::SubclassWin(
+  WXHWND                            hWnd
+)
 {
     HAB                             hab;
     HWND                            hwnd = (HWND)hWnd;
 
     wxASSERT_MSG( !m_fnOldWndProc, wxT("subclassing window twice?") );
 
-/*
-* TODO: implement something like this:
-*   wxCHECK_RET(::WinIsWindow(hab, hwnd), wxT("invalid HWND in SubclassWin") );
-*
-*   wxAssociateWinWithHandle(hwnd, this);
-*
-*   m_fnOldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
-*   SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
-*/
-}
+    wxCHECK_RET(::WinIsWindow(hab, hwnd), wxT("invalid HWND in SubclassWin") );
+
+    wxAssociateWinWithHandle(hwnd, this);
+
+    m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(hwnd, wxWndProc);
+    ::WinSetWindowULong(hwnd, QWS_USER, wxWndProc);
+} // end of wxWindow::SubclassWin
 
 void wxWindow::UnsubclassWin()
 {
-/*
-* TODO:
+    HAB                             hab;
 
     wxRemoveHandleAssociation(this);
 
+    //
     // Restore old Window proc
-    HWND hwnd = GetHwnd();
-    if ( hwnd )
+    //
+    HWND                            hwnd = GetHwnd();
+
+    if (hwnd)
     {
         m_hWnd = 0;
 
-        wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in UnsubclassWin") );
+        wxCHECK_RET( ::WinIsWindow(hab, hwnd), wxT("invalid HWND in UnsubclassWin") );
 
-        FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
-        if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )
+        PFNWP                       fnProc = (PFNWP)::WinQueryWindowULong(hwnd, QWS_USER);
+        if ( (m_fnOldWndProc != 0) && (fnProc != (PFNWP) m_fnOldWndProc))
         {
-            SetWindowLong(hwnd, GWL_WNDPROC, (LONG) m_oldWndProc);
-            m_oldWndProc = 0;
+            WinSubclassWindow(hwnd, (PFNWP)m_fnOldWndProc);
+            m_fnOldWndProc = 0;
         }
     }
-*/
-}
+} // end of wxWindow::UnsubclassWin
 
 //
 // Make a Windows extended style from the given wxWindows window style
@@ -760,135 +760,201 @@ WXDWORD wxWindow::MakeExtendedStyle(
     return exStyle;
 } // end of wxWindow::MakeExtendedStyle
 
+//
 // Determines whether native 3D effects or CTL3D should be used,
 // applying a default border style if required, and returning an extended
 // style to pass to CreateWindowEx.
-WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle,
-                                     bool *want3D) const
+//
+WXDWORD wxWindow::Determine3DEffects(
+  WXDWORD                           dwDefaultBorderStyle
+, YBool*                            pbWant3D
+) const
 {
-   DWORD exStyle = 0L; // remove after implementation doe
-/* TODO:  this ought to be fun
-*
-    // If matches certain criteria, then assume no 3D effects
-    // unless specifically requested (dealt with in MakeExtendedStyle)
-    if ( !GetParent() || !IsKindOf(CLASSINFO(wxControl)) || (m_windowStyle & wxNO_BORDER) )
-    {
-        *want3D = FALSE;
-        return MakeExtendedStyle(m_windowStyle, FALSE);
-    }
-
-    // Determine whether we should be using 3D effects or not.
-    bool nativeBorder = FALSE; // by default, we don't want a Win95 effect
-
-    // 1) App can specify global 3D effects
-    *want3D = wxTheApp->GetAuto3D();
-
-    // 2) If the parent is being drawn with user colours, or simple border specified,
-    // switch effects off. TODO: replace wxUSER_COLOURS with wxNO_3D
-    if ( GetParent() && (GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) || (m_windowStyle & wxSIMPLE_BORDER) )
-        *want3D = FALSE;
-
-    // 3) Control can override this global setting by defining
-    // a border style, e.g. wxSUNKEN_BORDER
-    if ( m_windowStyle & wxSUNKEN_BORDER  )
-        *want3D = TRUE;
-
-    // 4) If it's a special border, CTL3D can't cope so we want a native border
-    if ( (m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-        (m_windowStyle & wxSTATIC_BORDER) )
-    {
-        *want3D = TRUE;
-        nativeBorder = TRUE;
-    }
-
-    // 5) If this isn't a Win95 app, and we are using CTL3D, remove border
-    // effects from extended style
-#if wxUSE_CTL3D
-    if ( *want3D )
-        nativeBorder = FALSE;
-#endif
-
-    DWORD exStyle = MakeExtendedStyle(m_windowStyle, !nativeBorder);
-
-    // If we want 3D, but haven't specified a border here,
-    // apply the default border style specified.
-    // TODO what about non-Win95 WIN32? Does it have borders?
-#if defined(__WIN95__) && !wxUSE_CTL3D
-    if ( defaultBorderStyle && (*want3D) && ! ((m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER ) ||
-        (m_windowStyle & wxSTATIC_BORDER) || (m_windowStyle & wxSIMPLE_BORDER) ))
-        exStyle |= defaultBorderStyle; // WS_EX_CLIENTEDGE;
-#endif
-*/
-    return exStyle;
-}
+    WXDWORD                         dwStyle = 0L; 
+   
+    //
+    // Native PM does not have any specialize 3D effects like WIN32 does
+    //
+    *pbWant3D = FALSE;
+    return dwStyle;
+} // end of wxWindow::Determine3DEffects
 
 #if WXWIN_COMPATIBILITY
-void wxWindow::OnCommand(wxWindow& win, wxCommandEvent& event)
+void wxWindow::OnCommand(
+  wxWindow&                         rWin
+, wxCommandEvent&                   rEvent
+)
 {
-    // TODO:
-}
+    if (GetEventHandler()->ProcessEvent(rEvent))
+        return;
+    if (m_parent)
+        m_parent->GetEventHandler()->OnCommand( rWin
+                                               ,rEvent
+                                              );
+} // end of wxWindow::OnCommand
 
-wxObject* wxWindow::GetChild(int number) const
+wxObject* wxWindow::GetChild(
+  int                               nNumber
+) const
 {
-    // TODO:
-    return((wxObject*)this);
-}
+    //
+    // Return a pointer to the Nth object in the Panel
+    //
+    wxNode*                         pNode = GetChildren().First();
+    int                             n = nNumber;
 
-void wxWindow::OnDefaultAction(wxControl *initiatingItem)
-{
-    // TODO:
-}
+    while (pNode && n--)
+        pNode = pNode->Next();
+    if (pNode)
+    {
+        wxObject*                   pObj = (wxObject*)pNode->Data();
+        return(pObj);
+    }
+    else
+        return NULL;
+} // end of wxWindow::GetChild
 
 #endif // WXWIN_COMPATIBILITY
 
+//
 // Setup background and foreground colours correctly
+//
 void wxWindow::SetupColours()
 {
     if ( GetParent() )
         SetBackgroundColour(GetParent()->GetBackgroundColour());
-}
+} // end of wxWindow::SetupColours
 
-void wxWindow::OnIdle(wxIdleEvent& event)
+void wxWindow::OnIdle(
+  wxIdleEvent&                      rEvent
+)
 {
-    // TODO:
-}
+    //
+    // Check if we need to send a LEAVE event
+    //
+    if (m_bMouseInWindow)
+    {
+        POINTL                      vPoint;
 
+        ::WinQueryPointerPos(HWND_DESKTOP, &vPoint);
+        if (::WinWindowFromPoint(HWND_DESKTOP, &vPoint, FALSE) != (HWND)GetHwnd())
+        {
+            //
+            // Generate a LEAVE event
+            //
+            m_bMouseInWindow = FALSE;
+
+            //
+            // Unfortunately the mouse button and keyboard state may have changed
+            // by the time the OnIdle function is called, so 'state' may be
+            // meaningless.
+            //
+            int                     nState = 0;
+
+            if (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) != 0)
+                nState |= VK_SHIFT;
+            if (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) != 0;
+                nState |= VK_CTRL;
+
+            wxMouseEvent            rEvent(wxEVT_LEAVE_WINDOW);
+
+            InitMouseEvent( rEvent
+                           ,vPoint.x
+                           ,vPoint.y
+                           ,nState
+                          );
+            (void)GetEventHandler()->ProcessEvent(event);
+        }
+    }
+    UpdateWindowUI();
+} // end of wxWindow::OnIdle
+
+//
 // Set this window to be the child of 'parent'.
-bool wxWindow::Reparent(wxWindow *parent)
+//
+bool wxWindow::Reparent(
+  wxWindow*                         pParent
+)
 {
-    if ( !wxWindowBase::Reparent(parent) )
+    if (!wxWindowBase::Reparent(pParent))
         return FALSE;
-   // TODO:
-    return FALSE;
-}
+
+    HWND                            hWndChild = GetHwnd();
+    HWND                            hWndParent = GetParent() ? GetWinHwnd(GetParent()) : (HWND)0;
+
+    ::WinSetParent(hWndChild, hWndParent, TRUE);
+    return TRUE;
+} // end of wxWindow::Reparent
 
 void wxWindow::Clear()
 {
-    // TODO:
-}
+    wxClientDC                      vDc(this);
+    wxBrush                         vBrush( GetBackgroundColour()
+                                           ,wxSOLID
+                                          );
 
-void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
+    vDc.SetBackground(vBrush);
+    vDc.Clear();
+} // end of wxWindow::Clear
+
+void wxWindow::Refresh(
+  bool                              bEraseBack
+, const wxRect*                     pRect
+)
 {
-    // TODO:
-}
+    HWND                            hWnd = GetHwnd();
+
+    if (hWnd)
+    {
+        if (pRect)
+        {
+            RECTL                   vOs2Rect;
+
+            vOs2Rect.xLeft   = pRect->x;
+            vOS2Rect.yTop    = pRect->y;
+            vOs2Rect.xRight  = pRect->x + pRect->width;
+            vOs2Rect.yBottom = pRect->y + pRect->height;
+
+            ::WinInvalidateRect(hWnd, &vOs2Rect, bEraseBack);
+        }
+        else
+            ::WinInvalidateRect(hWnd, NULL, bEraseBack);
+    }
+} // end of wxWindow::Refresh
 
 // ---------------------------------------------------------------------------
 // drag and drop
 // ---------------------------------------------------------------------------
 
 #if wxUSE_DRAG_AND_DROP
-void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
+void wxWindow::SetDropTarget(
+  wxDropTarget*                     pDropTarget
+)
 {
-    // TODO:
-}
+    if (m_dropTarget != 0) 
+    {
+        m_dropTarget->Revoke(m_hWnd);
+        delete m_dropTarget;
+    }
+    m_dropTarget = pDropTarget;
+    if (m_dropTarget != 0)
+        m_dropTarget->Register(m_hWnd);
+} // end of wxWindow::SetDropTarget
 #endif
 
+//
 // old style file-manager drag&drop support: we retain the old-style
 // DragAcceptFiles in parallel with SetDropTarget.
-void wxWindow::DragAcceptFiles(bool accept)
+//
+void wxWindow::DragAcceptFiles(
+  bool                              bAccept
+)
 {
-    // TODO:
-}
+    HWND                            hWnd = GetHwnd();
+
+    if (hWnd && bAccept)
+        ::DragAcceptDroppedFiles(hWnd, NULL, NULL, DO_COPY, 0L);
+} // end of wxWindow::DragAcceptFiles
 
 // ----------------------------------------------------------------------------
 // tooltips
@@ -896,13 +962,15 @@ void wxWindow::DragAcceptFiles(bool accept)
 
 #if wxUSE_TOOLTIPS
 
-void wxWindow::DoSetToolTip(wxToolTip *tooltip)
+void wxWindow::DoSetToolTip(
+  wxToolTip*                        pTooltip
+)
 {
-    wxWindowBase::DoSetToolTip(tooltip);
+    wxWindowBase::DoSetToolTip(pTooltip);
 
-    if ( m_tooltip )
+    if (m_pTooltip)
         m_tooltip->SetWindow(this);
-}
+} // end of wxWindow::DoSetToolTip
 
 #endif // wxUSE_TOOLTIPS
 
@@ -913,36 +981,112 @@ void wxWindow::DoSetToolTip(wxToolTip *tooltip)
 // Get total size
 void wxWindow::DoGetSize( int *width, int *height ) const
 {
-    // TODO:
+    HWND hWnd = GetHwnd();
+    RECT rect;
+    GetWindowRect(hWnd, &rect);
+
+    if ( x )
+        *x = rect.right - rect.left;
+    if ( y )
+        *y = rect.bottom - rect.top;
 }
 
 void wxWindow::DoGetPosition( int *x, int *y ) const
 {
-    // TODO:
+    HWND hWnd = GetHwnd();
+
+    RECT rect;
+    GetWindowRect(hWnd, &rect);
+
+    POINT point;
+    point.x = rect.left;
+    point.y = rect.top;
+
+    // we do the adjustments with respect to the parent only for the "real"
+    // children, not for the dialogs/frames
+    if ( !IsTopLevel() )
+    {
+        HWND hParentWnd = 0;
+        wxWindow *parent = GetParent();
+        if ( parent )
+            hParentWnd = GetWinHwnd(parent);
+
+        // Since we now have the absolute screen coords, if there's a parent we
+        // must subtract its top left corner
+        if ( hParentWnd )
+        {
+            ::ScreenToClient(hParentWnd, &point);
+        }
+
+        // We may be faking the client origin. So a window that's really at (0,
+        // 30) may appear (to wxWin apps) to be at (0, 0).
+        wxPoint pt(parent->GetClientAreaOrigin());
+        point.x -= pt.x;
+        point.y -= pt.y;
+    }
+
+    if ( x )
+        *x = point.x;
+    if ( y )
+        *y = point.y;
 }
 
 void wxWindow::DoScreenToClient( int *x, int *y ) const
 {
-    // TODO:
+    POINT pt;
+    if ( x )
+        pt.x = *x;
+    if ( y )
+        pt.y = *y;
+
+    HWND hWnd = GetHwnd();
+    ::ScreenToClient(hWnd, &pt);
+
+    if ( x )
+        *x = pt.x;
+    if ( y )
+        *y = pt.y;
 }
 
 void wxWindow::DoClientToScreen( int *x, int *y ) const
 {
-    // TODO:
+    POINT pt;
+    if ( x )
+        pt.x = *x;
+    if ( y )
+        pt.y = *y;
+
+    HWND hWnd = GetHwnd();
+    ::ClientToScreen(hWnd, &pt);
+
+    if ( x )
+        *x = pt.x;
+    if ( y )
+        *y = pt.y;
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindow::DoGetClientSize( int *width, int *height ) const
 {
-    // TODO:
+    HWND hWnd = GetHwnd();
+    RECT rect;
+    ::GetClientRect(hWnd, &rect);
+    if ( x )
+        *x = rect.right;
+    if ( y )
+        *y = rect.bottom;
 }
 
 void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
-   // TODO:
+    if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+    {
+        wxLogLastError("MoveWindow");
+    }
 }
 
-// set the size of the window: if the dimensions are positive, just use them,
+//
+// Set the size of the window: if the dimensions are positive, just use them,
 // but if any of them is equal to -1, it means that we must find the value for
 // it ourselves (unless sizeFlags contains wxSIZE_ALLOW_MINUS_ONE flag, in
 // which case -1 is a valid value for x and y)
@@ -950,16 +1094,104 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 // If sizeFlags contains wxSIZE_AUTO_WIDTH/HEIGHT flags (default), we calculate
 // the width/height to best suit our contents, otherwise we reuse the current
 // width/height
+//
 void wxWindow::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
-    // TODO:
+    // get the current size and position...
+    int currentX, currentY;
+    GetPosition(&currentX, &currentY);
+    int currentW,currentH;
+    GetSize(&currentW, &currentH);
+
+    // ... and don't do anything (avoiding flicker) if it's already ok
+    if ( x == currentX && y == currentY &&
+         width == currentW && height == currentH )
+    {
+        return;
+    }
+
+    if ( x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        x = currentX;
+    if ( y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        y = currentY;
+
+    AdjustForParentClientOrigin(x, y, sizeFlags);
+
+    wxSize size(-1, -1);
+    if ( width == -1 )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+        {
+            size = DoGetBestSize();
+            width = size.x;
+        }
+        else
+        {
+            // just take the current one
+            width = currentW;
+        }
+    }
+
+    if ( height == -1 )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+        {
+            if ( size.x == -1 )
+            {
+                size = DoGetBestSize();
+            }
+            //else: already called DoGetBestSize() above
+
+            height = size.y;
+        }
+        else
+        {
+            // just take the current one
+            height = currentH;
+        }
+    }
+
+    DoMoveWindow(x, y, width, height);
 }
 
 void wxWindow::DoSetClientSize(int width, int height)
 {
-    // TODO:
+    wxWindow *parent = GetParent();
+    HWND hWnd = GetHwnd();
+    HWND hParentWnd = (HWND) 0;
+    if ( parent )
+        hParentWnd = (HWND) parent->GetHWND();
+
+    RECT rect;
+    ::GetClientRect(hWnd, &rect);
+
+    RECT rect2;
+    GetWindowRect(hWnd, &rect2);
+
+    // Find the difference between the entire window (title bar and all)
+    // and the client area; add this to the new client size to move the
+    // window
+    int actual_width = rect2.right - rect2.left - rect.right + width;
+    int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
+
+    // If there's a parent, must subtract the parent's top left corner
+    // since MoveWindow moves relative to the parent
+
+    POINT point;
+    point.x = rect2.left;
+    point.y = rect2.top;
+    if ( parent )
+    {
+        ::ScreenToClient(hParentWnd, &point);
+    }
+
+    DoMoveWindow(point.x, point.y, actual_width, actual_height);
+
+    wxSizeEvent event(wxSize(width, height), m_windowId);
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 wxPoint wxWindow::GetClientAreaOrigin() const
@@ -969,7 +1201,17 @@ wxPoint wxWindow::GetClientAreaOrigin() const
 
 void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 {
-    // TODO:
+    // don't do it for the dialogs/frames - they float independently of their
+    // parent
+    if ( !IsTopLevel() )
+    {
+        wxWindow *parent = GetParent();
+        if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
+        {
+            wxPoint pt(parent->GetClientAreaOrigin());
+            x += pt.x; y += pt.y;
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
