@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -56,47 +58,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include "export.h"
 #include <wx/calctrl.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -1821,7 +1804,6 @@ static PyMethodDef calendarcMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
     { "_wxEvent","_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
     { "_signed_long","_long",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -1833,15 +1815,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
-    { "_class_wxObject","_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
-    { "_class_wxObject","_class_wxCalendarEvent",SwigwxCalendarEventTowxObject},
-    { "_class_wxObject","_wxCalendarEvent",SwigwxCalendarEventTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -1857,9 +1833,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
-    { "_class_wxEvent","_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
-    { "_wxCommandEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
     { "_wxCommandEvent","_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
     { "_char","_wxChar",0},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
@@ -1882,16 +1855,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
-    { "_class_wxWindow","_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
-    { "_wxObject","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
     { "_wxObject","_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
-    { "_wxObject","_class_wxCalendarEvent",SwigwxCalendarEventTowxObject},
     { "_wxObject","_wxCalendarEvent",SwigwxCalendarEventTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},
-    { "_wxControl","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
     { "_wxControl","_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -1932,8 +1900,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_class_wxControl","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
-    { "_class_wxControl","_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -1943,11 +1909,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxCommandEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
-    { "_wxEvtHandler","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
-    { "_wxWindow","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
     { "_wxWindow","_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
 {0,0,0}};
 

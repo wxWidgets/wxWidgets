@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -57,47 +59,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/menuitem.h>
 #include <wx/tooltip.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -10244,41 +10227,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxMenuBar",SwigwxMenuBarTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxMenuBar",SwigwxMenuBarTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxMenu",SwigwxMenuTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxMenu",SwigwxMenuTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxScrolledWindow",SwigwxScrolledWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxScrolledWindow",SwigwxScrolledWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxPanel",SwigwxPanelTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPanel",SwigwxPanelTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxWindow",SwigwxWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxWindow",SwigwxWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxPyValidator",SwigwxPyValidatorTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPyValidator",SwigwxPyValidatorTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxValidator",SwigwxValidatorTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxValidator",SwigwxValidatorTowxEvtHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxMenuItem",SwigwxMenuItemTowxObject},
-    { "_class_wxObject","_wxMenuItem",SwigwxMenuItemTowxObject},
-    { "_class_wxObject","_class_wxMenuBar",SwigwxMenuBarTowxObject},
-    { "_class_wxObject","_wxMenuBar",SwigwxMenuBarTowxObject},
-    { "_class_wxObject","_class_wxMenu",SwigwxMenuTowxObject},
-    { "_class_wxObject","_wxMenu",SwigwxMenuTowxObject},
-    { "_class_wxObject","_class_wxScrolledWindow",SwigwxScrolledWindowTowxObject},
-    { "_class_wxObject","_wxScrolledWindow",SwigwxScrolledWindowTowxObject},
-    { "_class_wxObject","_class_wxPanel",SwigwxPanelTowxObject},
-    { "_class_wxObject","_wxPanel",SwigwxPanelTowxObject},
-    { "_class_wxObject","_class_wxWindow",SwigwxWindowTowxObject},
-    { "_class_wxObject","_wxWindow",SwigwxWindowTowxObject},
-    { "_class_wxObject","_class_wxPyValidator",SwigwxPyValidatorTowxObject},
-    { "_class_wxObject","_wxPyValidator",SwigwxPyValidatorTowxObject},
-    { "_class_wxObject","_class_wxValidator",SwigwxValidatorTowxObject},
-    { "_class_wxObject","_wxValidator",SwigwxValidatorTowxObject},
-    { "_class_wxObject","_class_wxEvtHandler",SwigwxEvtHandlerTowxObject},
-    { "_class_wxObject","_wxEvtHandler",SwigwxEvtHandlerTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -10286,7 +10237,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPanel","_class_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
     { "_wxPanel","_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
@@ -10297,8 +10247,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
     { "_char","_wxChar",0},
-    { "_class_wxValidator","_class_wxPyValidator",SwigwxPyValidatorTowxValidator},
-    { "_class_wxValidator","_wxPyValidator",SwigwxPyValidatorTowxValidator},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
@@ -10307,8 +10255,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
     { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
-    { "_class_wxPanel","_class_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
-    { "_class_wxPanel","_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
@@ -10319,29 +10265,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxMenuBar",SwigwxMenuBarTowxWindow},
-    { "_class_wxWindow","_wxMenuBar",SwigwxMenuBarTowxWindow},
-    { "_class_wxWindow","_class_wxScrolledWindow",SwigwxScrolledWindowTowxWindow},
-    { "_class_wxWindow","_wxScrolledWindow",SwigwxScrolledWindowTowxWindow},
-    { "_class_wxWindow","_class_wxPanel",SwigwxPanelTowxWindow},
-    { "_class_wxWindow","_wxPanel",SwigwxPanelTowxWindow},
-    { "_wxObject","_class_wxMenuItem",SwigwxMenuItemTowxObject},
     { "_wxObject","_wxMenuItem",SwigwxMenuItemTowxObject},
-    { "_wxObject","_class_wxMenuBar",SwigwxMenuBarTowxObject},
     { "_wxObject","_wxMenuBar",SwigwxMenuBarTowxObject},
-    { "_wxObject","_class_wxMenu",SwigwxMenuTowxObject},
     { "_wxObject","_wxMenu",SwigwxMenuTowxObject},
-    { "_wxObject","_class_wxScrolledWindow",SwigwxScrolledWindowTowxObject},
     { "_wxObject","_wxScrolledWindow",SwigwxScrolledWindowTowxObject},
-    { "_wxObject","_class_wxPanel",SwigwxPanelTowxObject},
     { "_wxObject","_wxPanel",SwigwxPanelTowxObject},
-    { "_wxObject","_class_wxWindow",SwigwxWindowTowxObject},
     { "_wxObject","_wxWindow",SwigwxWindowTowxObject},
-    { "_wxObject","_class_wxPyValidator",SwigwxPyValidatorTowxObject},
     { "_wxObject","_wxPyValidator",SwigwxPyValidatorTowxObject},
-    { "_wxObject","_class_wxValidator",SwigwxValidatorTowxObject},
     { "_wxObject","_wxValidator",SwigwxValidatorTowxObject},
-    { "_wxObject","_class_wxEvtHandler",SwigwxEvtHandlerTowxObject},
     { "_wxObject","_wxEvtHandler",SwigwxEvtHandlerTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -10381,7 +10312,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_wxValidator","_class_wxPyValidator",SwigwxPyValidatorTowxValidator},
     { "_wxValidator","_wxPyValidator",SwigwxPyValidatorTowxValidator},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
@@ -10392,25 +10322,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxEvtHandler","_class_wxMenuBar",SwigwxMenuBarTowxEvtHandler},
     { "_wxEvtHandler","_wxMenuBar",SwigwxMenuBarTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxMenu",SwigwxMenuTowxEvtHandler},
     { "_wxEvtHandler","_wxMenu",SwigwxMenuTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxScrolledWindow",SwigwxScrolledWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxScrolledWindow",SwigwxScrolledWindowTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxPanel",SwigwxPanelTowxEvtHandler},
     { "_wxEvtHandler","_wxPanel",SwigwxPanelTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxWindow",SwigwxWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxWindow",SwigwxWindowTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxPyValidator",SwigwxPyValidatorTowxEvtHandler},
     { "_wxEvtHandler","_wxPyValidator",SwigwxPyValidatorTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxValidator",SwigwxValidatorTowxEvtHandler},
     { "_wxEvtHandler","_wxValidator",SwigwxValidatorTowxEvtHandler},
-    { "_wxWindow","_class_wxMenuBar",SwigwxMenuBarTowxWindow},
     { "_wxWindow","_wxMenuBar",SwigwxMenuBarTowxWindow},
-    { "_wxWindow","_class_wxScrolledWindow",SwigwxScrolledWindowTowxWindow},
     { "_wxWindow","_wxScrolledWindow",SwigwxScrolledWindowTowxWindow},
-    { "_wxWindow","_class_wxPanel",SwigwxPanelTowxWindow},
     { "_wxWindow","_wxPanel",SwigwxPanelTowxWindow},
 {0,0,0}};
 

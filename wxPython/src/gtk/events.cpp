@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -56,47 +58,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/spinbutt.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -7218,71 +7201,38 @@ static PyMethodDef eventscMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
-    { "_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
     { "_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
-    { "_wxEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
     { "_wxEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
-    { "_wxEvent","_class_wxTimerEvent",SwigwxTimerEventTowxEvent},
     { "_wxEvent","_wxTimerEvent",SwigwxTimerEventTowxEvent},
-    { "_wxEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
     { "_wxEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
-    { "_wxEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxEvent},
     { "_wxEvent","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxEvent},
-    { "_wxEvent","_class_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxEvent},
     { "_wxEvent","_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxEvent},
-    { "_wxEvent","_class_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxEvent},
     { "_wxEvent","_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxEvent},
-    { "_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
     { "_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
-    { "_wxEvent","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
     { "_wxEvent","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
-    { "_wxEvent","_class_wxUpdateUIEvent",SwigwxUpdateUIEventTowxEvent},
     { "_wxEvent","_wxUpdateUIEvent",SwigwxUpdateUIEventTowxEvent},
-    { "_wxEvent","_class_wxIdleEvent",SwigwxIdleEventTowxEvent},
     { "_wxEvent","_wxIdleEvent",SwigwxIdleEventTowxEvent},
-    { "_wxEvent","_class_wxDropFilesEvent",SwigwxDropFilesEventTowxEvent},
     { "_wxEvent","_wxDropFilesEvent",SwigwxDropFilesEventTowxEvent},
-    { "_wxEvent","_class_wxJoystickEvent",SwigwxJoystickEventTowxEvent},
     { "_wxEvent","_wxJoystickEvent",SwigwxJoystickEventTowxEvent},
-    { "_wxEvent","_class_wxMaximizeEvent",SwigwxMaximizeEventTowxEvent},
     { "_wxEvent","_wxMaximizeEvent",SwigwxMaximizeEventTowxEvent},
-    { "_wxEvent","_class_wxIconizeEvent",SwigwxIconizeEventTowxEvent},
     { "_wxEvent","_wxIconizeEvent",SwigwxIconizeEventTowxEvent},
-    { "_wxEvent","_class_wxShowEvent",SwigwxShowEventTowxEvent},
     { "_wxEvent","_wxShowEvent",SwigwxShowEventTowxEvent},
-    { "_wxEvent","_class_wxMenuEvent",SwigwxMenuEventTowxEvent},
     { "_wxEvent","_wxMenuEvent",SwigwxMenuEventTowxEvent},
-    { "_wxEvent","_class_wxInitDialogEvent",SwigwxInitDialogEventTowxEvent},
     { "_wxEvent","_wxInitDialogEvent",SwigwxInitDialogEventTowxEvent},
-    { "_wxEvent","_class_wxActivateEvent",SwigwxActivateEventTowxEvent},
     { "_wxEvent","_wxActivateEvent",SwigwxActivateEventTowxEvent},
-    { "_wxEvent","_class_wxFocusEvent",SwigwxFocusEventTowxEvent},
     { "_wxEvent","_wxFocusEvent",SwigwxFocusEventTowxEvent},
-    { "_wxEvent","_class_wxEraseEvent",SwigwxEraseEventTowxEvent},
     { "_wxEvent","_wxEraseEvent",SwigwxEraseEventTowxEvent},
-    { "_wxEvent","_class_wxPaintEvent",SwigwxPaintEventTowxEvent},
     { "_wxEvent","_wxPaintEvent",SwigwxPaintEventTowxEvent},
-    { "_wxEvent","_class_wxMoveEvent",SwigwxMoveEventTowxEvent},
     { "_wxEvent","_wxMoveEvent",SwigwxMoveEventTowxEvent},
-    { "_wxEvent","_class_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxEvent},
     { "_wxEvent","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxEvent},
-    { "_wxEvent","_class_wxKeyEvent",SwigwxKeyEventTowxEvent},
     { "_wxEvent","_wxKeyEvent",SwigwxKeyEventTowxEvent},
-    { "_wxEvent","_class_wxMouseEvent",SwigwxMouseEventTowxEvent},
     { "_wxEvent","_wxMouseEvent",SwigwxMouseEventTowxEvent},
-    { "_wxEvent","_class_wxSpinEvent",SwigwxSpinEventTowxEvent},
     { "_wxEvent","_wxSpinEvent",SwigwxSpinEventTowxEvent},
-    { "_wxEvent","_class_wxScrollWinEvent",SwigwxScrollWinEventTowxEvent},
     { "_wxEvent","_wxScrollWinEvent",SwigwxScrollWinEventTowxEvent},
-    { "_wxEvent","_class_wxScrollEvent",SwigwxScrollEventTowxEvent},
     { "_wxEvent","_wxScrollEvent",SwigwxScrollEventTowxEvent},
-    { "_wxEvent","_class_wxCommandEvent",SwigwxCommandEventTowxEvent},
     { "_wxEvent","_wxCommandEvent",SwigwxCommandEventTowxEvent},
-    { "_wxEvent","_class_wxCloseEvent",SwigwxCloseEventTowxEvent},
     { "_wxEvent","_wxCloseEvent",SwigwxCloseEventTowxEvent},
-    { "_wxEvent","_class_wxSizeEvent",SwigwxSizeEventTowxEvent},
     { "_wxEvent","_wxSizeEvent",SwigwxSizeEventTowxEvent},
     { "_signed_long","_long",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -7297,74 +7247,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxObject},
-    { "_class_wxObject","_wxPyCommandEvent",SwigwxPyCommandEventTowxObject},
-    { "_class_wxObject","_class_wxPyEvent",SwigwxPyEventTowxObject},
-    { "_class_wxObject","_wxPyEvent",SwigwxPyEventTowxObject},
-    { "_class_wxObject","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
-    { "_class_wxObject","_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
-    { "_class_wxObject","_class_wxTimerEvent",SwigwxTimerEventTowxObject},
-    { "_class_wxObject","_wxTimerEvent",SwigwxTimerEventTowxObject},
-    { "_class_wxObject","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxObject},
-    { "_class_wxObject","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxObject},
-    { "_class_wxObject","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxObject},
-    { "_class_wxObject","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxObject},
-    { "_class_wxObject","_class_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxObject},
-    { "_class_wxObject","_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxObject},
-    { "_class_wxObject","_class_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxObject},
-    { "_class_wxObject","_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxObject},
-    { "_class_wxObject","_class_wxNotifyEvent",SwigwxNotifyEventTowxObject},
-    { "_class_wxObject","_wxNotifyEvent",SwigwxNotifyEventTowxObject},
-    { "_class_wxObject","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxObject},
-    { "_class_wxObject","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxObject},
-    { "_class_wxObject","_class_wxUpdateUIEvent",SwigwxUpdateUIEventTowxObject},
-    { "_class_wxObject","_wxUpdateUIEvent",SwigwxUpdateUIEventTowxObject},
-    { "_class_wxObject","_class_wxIdleEvent",SwigwxIdleEventTowxObject},
-    { "_class_wxObject","_wxIdleEvent",SwigwxIdleEventTowxObject},
-    { "_class_wxObject","_class_wxDropFilesEvent",SwigwxDropFilesEventTowxObject},
-    { "_class_wxObject","_wxDropFilesEvent",SwigwxDropFilesEventTowxObject},
-    { "_class_wxObject","_class_wxJoystickEvent",SwigwxJoystickEventTowxObject},
-    { "_class_wxObject","_wxJoystickEvent",SwigwxJoystickEventTowxObject},
-    { "_class_wxObject","_class_wxMaximizeEvent",SwigwxMaximizeEventTowxObject},
-    { "_class_wxObject","_wxMaximizeEvent",SwigwxMaximizeEventTowxObject},
-    { "_class_wxObject","_class_wxIconizeEvent",SwigwxIconizeEventTowxObject},
-    { "_class_wxObject","_wxIconizeEvent",SwigwxIconizeEventTowxObject},
-    { "_class_wxObject","_class_wxShowEvent",SwigwxShowEventTowxObject},
-    { "_class_wxObject","_wxShowEvent",SwigwxShowEventTowxObject},
-    { "_class_wxObject","_class_wxMenuEvent",SwigwxMenuEventTowxObject},
-    { "_class_wxObject","_wxMenuEvent",SwigwxMenuEventTowxObject},
-    { "_class_wxObject","_class_wxInitDialogEvent",SwigwxInitDialogEventTowxObject},
-    { "_class_wxObject","_wxInitDialogEvent",SwigwxInitDialogEventTowxObject},
-    { "_class_wxObject","_class_wxActivateEvent",SwigwxActivateEventTowxObject},
-    { "_class_wxObject","_wxActivateEvent",SwigwxActivateEventTowxObject},
-    { "_class_wxObject","_class_wxFocusEvent",SwigwxFocusEventTowxObject},
-    { "_class_wxObject","_wxFocusEvent",SwigwxFocusEventTowxObject},
-    { "_class_wxObject","_class_wxEraseEvent",SwigwxEraseEventTowxObject},
-    { "_class_wxObject","_wxEraseEvent",SwigwxEraseEventTowxObject},
-    { "_class_wxObject","_class_wxPaintEvent",SwigwxPaintEventTowxObject},
-    { "_class_wxObject","_wxPaintEvent",SwigwxPaintEventTowxObject},
-    { "_class_wxObject","_class_wxMoveEvent",SwigwxMoveEventTowxObject},
-    { "_class_wxObject","_wxMoveEvent",SwigwxMoveEventTowxObject},
-    { "_class_wxObject","_class_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxObject},
-    { "_class_wxObject","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxObject},
-    { "_class_wxObject","_class_wxKeyEvent",SwigwxKeyEventTowxObject},
-    { "_class_wxObject","_wxKeyEvent",SwigwxKeyEventTowxObject},
-    { "_class_wxObject","_class_wxMouseEvent",SwigwxMouseEventTowxObject},
-    { "_class_wxObject","_wxMouseEvent",SwigwxMouseEventTowxObject},
-    { "_class_wxObject","_class_wxSpinEvent",SwigwxSpinEventTowxObject},
-    { "_class_wxObject","_wxSpinEvent",SwigwxSpinEventTowxObject},
-    { "_class_wxObject","_class_wxScrollWinEvent",SwigwxScrollWinEventTowxObject},
-    { "_class_wxObject","_wxScrollWinEvent",SwigwxScrollWinEventTowxObject},
-    { "_class_wxObject","_class_wxScrollEvent",SwigwxScrollEventTowxObject},
-    { "_class_wxObject","_wxScrollEvent",SwigwxScrollEventTowxObject},
-    { "_class_wxObject","_class_wxCommandEvent",SwigwxCommandEventTowxObject},
-    { "_class_wxObject","_wxCommandEvent",SwigwxCommandEventTowxObject},
-    { "_class_wxObject","_class_wxCloseEvent",SwigwxCloseEventTowxObject},
-    { "_class_wxObject","_wxCloseEvent",SwigwxCloseEventTowxObject},
-    { "_class_wxObject","_class_wxSizeEvent",SwigwxSizeEventTowxObject},
-    { "_class_wxObject","_wxSizeEvent",SwigwxSizeEventTowxObject},
-    { "_class_wxObject","_class_wxEvent",SwigwxEventTowxObject},
-    { "_class_wxObject","_wxEvent",SwigwxEventTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -7380,89 +7262,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
-    { "_class_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
-    { "_class_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
-    { "_class_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
-    { "_class_wxEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
-    { "_class_wxEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxEvent},
-    { "_class_wxEvent","_class_wxTimerEvent",SwigwxTimerEventTowxEvent},
-    { "_class_wxEvent","_wxTimerEvent",SwigwxTimerEventTowxEvent},
-    { "_class_wxEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
-    { "_class_wxEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
-    { "_class_wxEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxEvent},
-    { "_class_wxEvent","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxEvent},
-    { "_class_wxEvent","_class_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxEvent},
-    { "_class_wxEvent","_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxEvent},
-    { "_class_wxEvent","_class_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxEvent},
-    { "_class_wxEvent","_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxEvent},
-    { "_class_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
-    { "_class_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
-    { "_class_wxEvent","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
-    { "_class_wxEvent","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
-    { "_class_wxEvent","_class_wxUpdateUIEvent",SwigwxUpdateUIEventTowxEvent},
-    { "_class_wxEvent","_wxUpdateUIEvent",SwigwxUpdateUIEventTowxEvent},
-    { "_class_wxEvent","_class_wxIdleEvent",SwigwxIdleEventTowxEvent},
-    { "_class_wxEvent","_wxIdleEvent",SwigwxIdleEventTowxEvent},
-    { "_class_wxEvent","_class_wxDropFilesEvent",SwigwxDropFilesEventTowxEvent},
-    { "_class_wxEvent","_wxDropFilesEvent",SwigwxDropFilesEventTowxEvent},
-    { "_class_wxEvent","_class_wxJoystickEvent",SwigwxJoystickEventTowxEvent},
-    { "_class_wxEvent","_wxJoystickEvent",SwigwxJoystickEventTowxEvent},
-    { "_class_wxEvent","_class_wxMaximizeEvent",SwigwxMaximizeEventTowxEvent},
-    { "_class_wxEvent","_wxMaximizeEvent",SwigwxMaximizeEventTowxEvent},
-    { "_class_wxEvent","_class_wxIconizeEvent",SwigwxIconizeEventTowxEvent},
-    { "_class_wxEvent","_wxIconizeEvent",SwigwxIconizeEventTowxEvent},
-    { "_class_wxEvent","_class_wxShowEvent",SwigwxShowEventTowxEvent},
-    { "_class_wxEvent","_wxShowEvent",SwigwxShowEventTowxEvent},
-    { "_class_wxEvent","_class_wxMenuEvent",SwigwxMenuEventTowxEvent},
-    { "_class_wxEvent","_wxMenuEvent",SwigwxMenuEventTowxEvent},
-    { "_class_wxEvent","_class_wxInitDialogEvent",SwigwxInitDialogEventTowxEvent},
-    { "_class_wxEvent","_wxInitDialogEvent",SwigwxInitDialogEventTowxEvent},
-    { "_class_wxEvent","_class_wxActivateEvent",SwigwxActivateEventTowxEvent},
-    { "_class_wxEvent","_wxActivateEvent",SwigwxActivateEventTowxEvent},
-    { "_class_wxEvent","_class_wxFocusEvent",SwigwxFocusEventTowxEvent},
-    { "_class_wxEvent","_wxFocusEvent",SwigwxFocusEventTowxEvent},
-    { "_class_wxEvent","_class_wxEraseEvent",SwigwxEraseEventTowxEvent},
-    { "_class_wxEvent","_wxEraseEvent",SwigwxEraseEventTowxEvent},
-    { "_class_wxEvent","_class_wxPaintEvent",SwigwxPaintEventTowxEvent},
-    { "_class_wxEvent","_wxPaintEvent",SwigwxPaintEventTowxEvent},
-    { "_class_wxEvent","_class_wxMoveEvent",SwigwxMoveEventTowxEvent},
-    { "_class_wxEvent","_wxMoveEvent",SwigwxMoveEventTowxEvent},
-    { "_class_wxEvent","_class_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxEvent},
-    { "_class_wxEvent","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxEvent},
-    { "_class_wxEvent","_class_wxKeyEvent",SwigwxKeyEventTowxEvent},
-    { "_class_wxEvent","_wxKeyEvent",SwigwxKeyEventTowxEvent},
-    { "_class_wxEvent","_class_wxMouseEvent",SwigwxMouseEventTowxEvent},
-    { "_class_wxEvent","_wxMouseEvent",SwigwxMouseEventTowxEvent},
-    { "_class_wxEvent","_class_wxSpinEvent",SwigwxSpinEventTowxEvent},
-    { "_class_wxEvent","_wxSpinEvent",SwigwxSpinEventTowxEvent},
-    { "_class_wxEvent","_class_wxScrollWinEvent",SwigwxScrollWinEventTowxEvent},
-    { "_class_wxEvent","_wxScrollWinEvent",SwigwxScrollWinEventTowxEvent},
-    { "_class_wxEvent","_class_wxScrollEvent",SwigwxScrollEventTowxEvent},
-    { "_class_wxEvent","_wxScrollEvent",SwigwxScrollEventTowxEvent},
-    { "_class_wxEvent","_class_wxCommandEvent",SwigwxCommandEventTowxEvent},
-    { "_class_wxEvent","_wxCommandEvent",SwigwxCommandEventTowxEvent},
-    { "_class_wxEvent","_class_wxCloseEvent",SwigwxCloseEventTowxEvent},
-    { "_class_wxEvent","_wxCloseEvent",SwigwxCloseEventTowxEvent},
-    { "_class_wxEvent","_class_wxSizeEvent",SwigwxSizeEventTowxEvent},
-    { "_class_wxEvent","_wxSizeEvent",SwigwxSizeEventTowxEvent},
-    { "_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
     { "_wxCommandEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
     { "_wxCommandEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
     { "_wxCommandEvent","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},
     { "_wxCommandEvent","_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},
     { "_char","_wxChar",0},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
-    { "_wxScrollEvent","_class_wxSpinEvent",SwigwxSpinEventTowxScrollEvent},
     { "_wxScrollEvent","_wxSpinEvent",SwigwxSpinEventTowxScrollEvent},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
@@ -7481,73 +7289,39 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_wxObject","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxObject},
     { "_wxObject","_wxPyCommandEvent",SwigwxPyCommandEventTowxObject},
-    { "_wxObject","_class_wxPyEvent",SwigwxPyEventTowxObject},
     { "_wxObject","_wxPyEvent",SwigwxPyEventTowxObject},
-    { "_wxObject","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
     { "_wxObject","_wxTextUrlEvent",SwigwxTextUrlEventTowxObject},
-    { "_wxObject","_class_wxTimerEvent",SwigwxTimerEventTowxObject},
     { "_wxObject","_wxTimerEvent",SwigwxTimerEventTowxObject},
-    { "_wxObject","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxObject},
     { "_wxObject","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxObject},
-    { "_wxObject","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxObject},
     { "_wxObject","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxObject},
-    { "_wxObject","_class_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxObject},
     { "_wxObject","_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxObject},
-    { "_wxObject","_class_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxObject},
     { "_wxObject","_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxObject},
-    { "_wxObject","_class_wxNotifyEvent",SwigwxNotifyEventTowxObject},
     { "_wxObject","_wxNotifyEvent",SwigwxNotifyEventTowxObject},
-    { "_wxObject","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxObject},
     { "_wxObject","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxObject},
-    { "_wxObject","_class_wxUpdateUIEvent",SwigwxUpdateUIEventTowxObject},
     { "_wxObject","_wxUpdateUIEvent",SwigwxUpdateUIEventTowxObject},
-    { "_wxObject","_class_wxIdleEvent",SwigwxIdleEventTowxObject},
     { "_wxObject","_wxIdleEvent",SwigwxIdleEventTowxObject},
-    { "_wxObject","_class_wxDropFilesEvent",SwigwxDropFilesEventTowxObject},
     { "_wxObject","_wxDropFilesEvent",SwigwxDropFilesEventTowxObject},
-    { "_wxObject","_class_wxJoystickEvent",SwigwxJoystickEventTowxObject},
     { "_wxObject","_wxJoystickEvent",SwigwxJoystickEventTowxObject},
-    { "_wxObject","_class_wxMaximizeEvent",SwigwxMaximizeEventTowxObject},
     { "_wxObject","_wxMaximizeEvent",SwigwxMaximizeEventTowxObject},
-    { "_wxObject","_class_wxIconizeEvent",SwigwxIconizeEventTowxObject},
     { "_wxObject","_wxIconizeEvent",SwigwxIconizeEventTowxObject},
-    { "_wxObject","_class_wxShowEvent",SwigwxShowEventTowxObject},
     { "_wxObject","_wxShowEvent",SwigwxShowEventTowxObject},
-    { "_wxObject","_class_wxMenuEvent",SwigwxMenuEventTowxObject},
     { "_wxObject","_wxMenuEvent",SwigwxMenuEventTowxObject},
-    { "_wxObject","_class_wxInitDialogEvent",SwigwxInitDialogEventTowxObject},
     { "_wxObject","_wxInitDialogEvent",SwigwxInitDialogEventTowxObject},
-    { "_wxObject","_class_wxActivateEvent",SwigwxActivateEventTowxObject},
     { "_wxObject","_wxActivateEvent",SwigwxActivateEventTowxObject},
-    { "_wxObject","_class_wxFocusEvent",SwigwxFocusEventTowxObject},
     { "_wxObject","_wxFocusEvent",SwigwxFocusEventTowxObject},
-    { "_wxObject","_class_wxEraseEvent",SwigwxEraseEventTowxObject},
     { "_wxObject","_wxEraseEvent",SwigwxEraseEventTowxObject},
-    { "_wxObject","_class_wxPaintEvent",SwigwxPaintEventTowxObject},
     { "_wxObject","_wxPaintEvent",SwigwxPaintEventTowxObject},
-    { "_wxObject","_class_wxMoveEvent",SwigwxMoveEventTowxObject},
     { "_wxObject","_wxMoveEvent",SwigwxMoveEventTowxObject},
-    { "_wxObject","_class_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxObject},
     { "_wxObject","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxObject},
-    { "_wxObject","_class_wxKeyEvent",SwigwxKeyEventTowxObject},
     { "_wxObject","_wxKeyEvent",SwigwxKeyEventTowxObject},
-    { "_wxObject","_class_wxMouseEvent",SwigwxMouseEventTowxObject},
     { "_wxObject","_wxMouseEvent",SwigwxMouseEventTowxObject},
-    { "_wxObject","_class_wxSpinEvent",SwigwxSpinEventTowxObject},
     { "_wxObject","_wxSpinEvent",SwigwxSpinEventTowxObject},
-    { "_wxObject","_class_wxScrollWinEvent",SwigwxScrollWinEventTowxObject},
     { "_wxObject","_wxScrollWinEvent",SwigwxScrollWinEventTowxObject},
-    { "_wxObject","_class_wxScrollEvent",SwigwxScrollEventTowxObject},
     { "_wxObject","_wxScrollEvent",SwigwxScrollEventTowxObject},
-    { "_wxObject","_class_wxCommandEvent",SwigwxCommandEventTowxObject},
     { "_wxObject","_wxCommandEvent",SwigwxCommandEventTowxObject},
-    { "_wxObject","_class_wxCloseEvent",SwigwxCloseEventTowxObject},
     { "_wxObject","_wxCloseEvent",SwigwxCloseEventTowxObject},
-    { "_wxObject","_class_wxSizeEvent",SwigwxSizeEventTowxObject},
     { "_wxObject","_wxSizeEvent",SwigwxSizeEventTowxObject},
-    { "_wxObject","_class_wxEvent",SwigwxEventTowxObject},
     { "_wxObject","_wxEvent",SwigwxEventTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -7562,8 +7336,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_class_wxScrollEvent","_class_wxSpinEvent",SwigwxSpinEventTowxScrollEvent},
-    { "_class_wxScrollEvent","_wxSpinEvent",SwigwxSpinEventTowxScrollEvent},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_time_t",0},
@@ -7598,20 +7370,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxTextUrlEvent",SwigwxTextUrlEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},
 {0,0,0}};
 
 static PyObject *SWIG_globals;

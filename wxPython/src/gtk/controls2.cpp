@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -61,47 +63,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -9721,13 +9704,9 @@ static PyMethodDef controls2cMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxTreeEvent",SwigwxTreeEventTowxEvent},
     { "_wxEvent","_wxTreeEvent",SwigwxTreeEventTowxEvent},
-    { "_wxEvent","_class_wxListEvent",SwigwxListEventTowxEvent},
     { "_wxEvent","_wxListEvent",SwigwxListEventTowxEvent},
     { "_signed_long","_long",0},
-    { "_class_wxPyListCtrl","_class_wxListView",SwigwxListViewTowxPyListCtrl},
-    { "_class_wxPyListCtrl","_wxListView",SwigwxListViewTowxPyListCtrl},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -9737,33 +9716,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxListView",SwigwxListViewTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxListView",SwigwxListViewTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxPyListCtrl",SwigwxPyListCtrlTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPyListCtrl",SwigwxPyListCtrlTowxEvtHandler},
-    { "_wxNotifyEvent","_class_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
-    { "_wxNotifyEvent","_class_wxListEvent",SwigwxListEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxListEvent",SwigwxListEventTowxNotifyEvent},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxObject},
-    { "_class_wxObject","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxObject},
-    { "_class_wxObject","_class_wxTreeEvent",SwigwxTreeEventTowxObject},
-    { "_class_wxObject","_wxTreeEvent",SwigwxTreeEventTowxObject},
-    { "_class_wxObject","_class_wxPyTreeItemData",SwigwxPyTreeItemDataTowxObject},
-    { "_class_wxObject","_wxPyTreeItemData",SwigwxPyTreeItemDataTowxObject},
-    { "_class_wxObject","_class_wxListView",SwigwxListViewTowxObject},
-    { "_class_wxObject","_wxListView",SwigwxListViewTowxObject},
-    { "_class_wxObject","_class_wxPyListCtrl",SwigwxPyListCtrlTowxObject},
-    { "_class_wxObject","_wxPyListCtrl",SwigwxPyListCtrlTowxObject},
-    { "_class_wxObject","_class_wxListEvent",SwigwxListEventTowxObject},
-    { "_class_wxObject","_wxListEvent",SwigwxListEventTowxObject},
-    { "_class_wxObject","_class_wxListItem",SwigwxListItemTowxObject},
-    { "_class_wxObject","_wxListItem",SwigwxListItemTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -9779,19 +9736,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxTreeEvent",SwigwxTreeEventTowxEvent},
-    { "_class_wxEvent","_wxTreeEvent",SwigwxTreeEventTowxEvent},
-    { "_class_wxEvent","_class_wxListEvent",SwigwxListEventTowxEvent},
-    { "_class_wxEvent","_wxListEvent",SwigwxListEventTowxEvent},
-    { "_wxCommandEvent","_class_wxTreeEvent",SwigwxTreeEventTowxCommandEvent},
     { "_wxCommandEvent","_wxTreeEvent",SwigwxTreeEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxListEvent",SwigwxListEventTowxCommandEvent},
     { "_wxCommandEvent","_wxListEvent",SwigwxListEventTowxCommandEvent},
     { "_char","_wxChar",0},
-    { "_class_wxNotifyEvent","_class_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_class_wxListEvent",SwigwxListEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_wxListEvent",SwigwxListEventTowxNotifyEvent},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
@@ -9810,34 +9757,18 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxWindow},
-    { "_class_wxWindow","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxWindow},
-    { "_class_wxWindow","_class_wxListView",SwigwxListViewTowxWindow},
-    { "_class_wxWindow","_wxListView",SwigwxListViewTowxWindow},
-    { "_class_wxWindow","_class_wxPyListCtrl",SwigwxPyListCtrlTowxWindow},
-    { "_class_wxWindow","_wxPyListCtrl",SwigwxPyListCtrlTowxWindow},
-    { "_wxObject","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxObject},
     { "_wxObject","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxObject},
-    { "_wxObject","_class_wxTreeEvent",SwigwxTreeEventTowxObject},
     { "_wxObject","_wxTreeEvent",SwigwxTreeEventTowxObject},
-    { "_wxObject","_class_wxPyTreeItemData",SwigwxPyTreeItemDataTowxObject},
     { "_wxObject","_wxPyTreeItemData",SwigwxPyTreeItemDataTowxObject},
-    { "_wxObject","_class_wxListView",SwigwxListViewTowxObject},
     { "_wxObject","_wxListView",SwigwxListViewTowxObject},
-    { "_wxObject","_class_wxPyListCtrl",SwigwxPyListCtrlTowxObject},
     { "_wxObject","_wxPyListCtrl",SwigwxPyListCtrlTowxObject},
-    { "_wxObject","_class_wxListEvent",SwigwxListEventTowxObject},
     { "_wxObject","_wxListEvent",SwigwxListEventTowxObject},
-    { "_wxObject","_class_wxListItem",SwigwxListItemTowxObject},
     { "_wxObject","_wxListItem",SwigwxListItemTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},
-    { "_wxControl","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxControl},
     { "_wxControl","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxControl},
-    { "_wxControl","_class_wxListView",SwigwxListViewTowxControl},
     { "_wxControl","_wxListView",SwigwxListViewTowxControl},
-    { "_wxControl","_class_wxPyListCtrl",SwigwxPyListCtrlTowxControl},
     { "_wxControl","_wxPyListCtrl",SwigwxPyListCtrlTowxControl},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -9874,12 +9805,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_class_wxControl","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxControl},
-    { "_class_wxControl","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxControl},
-    { "_class_wxControl","_class_wxListView",SwigwxListViewTowxControl},
-    { "_class_wxControl","_wxListView",SwigwxListViewTowxControl},
-    { "_class_wxControl","_class_wxPyListCtrl",SwigwxPyListCtrlTowxControl},
-    { "_class_wxControl","_wxPyListCtrl",SwigwxPyListCtrlTowxControl},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -9889,23 +9814,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxCommandEvent","_class_wxTreeEvent",SwigwxTreeEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxTreeEvent",SwigwxTreeEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxListEvent",SwigwxListEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxListEvent",SwigwxListEventTowxCommandEvent},
-    { "_wxPyListCtrl","_class_wxListView",SwigwxListViewTowxPyListCtrl},
     { "_wxPyListCtrl","_wxListView",SwigwxListViewTowxPyListCtrl},
-    { "_wxEvtHandler","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxListView",SwigwxListViewTowxEvtHandler},
     { "_wxEvtHandler","_wxListView",SwigwxListViewTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxPyListCtrl",SwigwxPyListCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxPyListCtrl",SwigwxPyListCtrlTowxEvtHandler},
-    { "_wxWindow","_class_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxWindow},
     { "_wxWindow","_wxPyTreeCtrl",SwigwxPyTreeCtrlTowxWindow},
-    { "_wxWindow","_class_wxListView",SwigwxListViewTowxWindow},
     { "_wxWindow","_wxListView",SwigwxListViewTowxWindow},
-    { "_wxWindow","_class_wxPyListCtrl",SwigwxPyListCtrlTowxWindow},
     { "_wxWindow","_wxPyListCtrl",SwigwxPyListCtrlTowxWindow},
 {0,0,0}};
 

@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -59,47 +61,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fs_mem.h>
 #include <wx/fs_zip.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -2216,20 +2199,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
-    { "_class_wxObject","_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
-    { "_class_wxObject","_class_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
-    { "_class_wxObject","_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
-    { "_class_wxObject","_class_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
-    { "_class_wxObject","_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
-    { "_class_wxObject","_class_wxFileSystem",SwigwxFileSystemTowxObject},
-    { "_class_wxObject","_wxFileSystem",SwigwxFileSystemTowxObject},
-    { "_class_wxObject","_class_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
-    { "_class_wxObject","_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
-    { "_class_wxObject","_class_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
-    { "_class_wxObject","_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
-    { "_class_wxObject","_class_wxFSFile",SwigwxFSFileTowxObject},
-    { "_class_wxObject","_wxFSFile",SwigwxFSFileTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -2266,19 +2235,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_wxObject","_class_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
     { "_wxObject","_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxObject},
-    { "_wxObject","_class_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
     { "_wxObject","_wxZipFSHandler",SwigwxZipFSHandlerTowxObject},
-    { "_wxObject","_class_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
     { "_wxObject","_wxInternetFSHandler",SwigwxInternetFSHandlerTowxObject},
-    { "_wxObject","_class_wxFileSystem",SwigwxFileSystemTowxObject},
     { "_wxObject","_wxFileSystem",SwigwxFileSystemTowxObject},
-    { "_wxObject","_class_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
     { "_wxObject","_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxObject},
-    { "_wxObject","_class_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
     { "_wxObject","_wxFileSystemHandler",SwigwxFileSystemHandlerTowxObject},
-    { "_wxObject","_class_wxFSFile",SwigwxFSFileTowxObject},
     { "_wxObject","_wxFSFile",SwigwxFSFileTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -2294,13 +2256,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_wxFileSystemHandler","_class_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxFileSystemHandler},
     { "_wxFileSystemHandler","_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxFileSystemHandler},
-    { "_wxFileSystemHandler","_class_wxZipFSHandler",SwigwxZipFSHandlerTowxFileSystemHandler},
     { "_wxFileSystemHandler","_wxZipFSHandler",SwigwxZipFSHandlerTowxFileSystemHandler},
-    { "_wxFileSystemHandler","_class_wxInternetFSHandler",SwigwxInternetFSHandlerTowxFileSystemHandler},
     { "_wxFileSystemHandler","_wxInternetFSHandler",SwigwxInternetFSHandlerTowxFileSystemHandler},
-    { "_wxFileSystemHandler","_class_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxFileSystemHandler},
     { "_wxFileSystemHandler","_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxFileSystemHandler},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
@@ -2339,14 +2297,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxFileSystemHandler","_class_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxFileSystemHandler},
-    { "_class_wxFileSystemHandler","_wxMemoryFSHandler",SwigwxMemoryFSHandlerTowxFileSystemHandler},
-    { "_class_wxFileSystemHandler","_class_wxZipFSHandler",SwigwxZipFSHandlerTowxFileSystemHandler},
-    { "_class_wxFileSystemHandler","_wxZipFSHandler",SwigwxZipFSHandlerTowxFileSystemHandler},
-    { "_class_wxFileSystemHandler","_class_wxInternetFSHandler",SwigwxInternetFSHandlerTowxFileSystemHandler},
-    { "_class_wxFileSystemHandler","_wxInternetFSHandler",SwigwxInternetFSHandlerTowxFileSystemHandler},
-    { "_class_wxFileSystemHandler","_class_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxFileSystemHandler},
-    { "_class_wxFileSystemHandler","_wxPyFileSystemHandler",SwigwxPyFileSystemHandlerTowxFileSystemHandler},
 {0,0,0}};
 
 static PyObject *SWIG_globals;

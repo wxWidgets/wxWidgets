@@ -520,6 +520,9 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def LoadPage(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_LoadPage,(self,) + _args, _kwargs)
         return val
+    def AppendToPage(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_AppendToPage,(self,) + _args, _kwargs)
+        return val
     def GetOpenedPage(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_GetOpenedPage,(self,) + _args, _kwargs)
         return val

@@ -88,7 +88,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 #ifdef __cplusplus
 extern "C" {
@@ -1167,8 +1167,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxXmlResource",SwigwxXmlResourceTowxObject},
-    { "_class_wxObject","_wxXmlResource",SwigwxXmlResourceTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -1205,7 +1203,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_wxObject","_class_wxXmlResource",SwigwxXmlResourceTowxObject},
     { "_wxObject","_wxXmlResource",SwigwxXmlResourceTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},

@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -57,47 +59,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/toolbar.h>
 #include <wx/tbarsmpl.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -137,26 +120,20 @@ static void *SwigwxStatusBarTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+#define new_wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxStatusBar(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStatusBar * _result;
     wxWindow * _arg0;
-    wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
-    long  _arg4 = (long ) wxST_SIZEGRIP;
-    char * _arg5 = (char *) "statusBar";
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    long  _arg2 = (long ) wxST_SIZEGRIP;
+    char * _arg3 = (char *) "statusBar";
     PyObject * _argo0 = 0;
-    wxPoint  temp;
-    PyObject * _obj2 = 0;
-    wxSize  temp0;
-    PyObject * _obj3 = 0;
-    char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
+    char *_kwnames[] = { "parent","id","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxStatusBar",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ils:new_wxStatusBar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -165,21 +142,9 @@ static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
-    if (_obj2)
-{
-    _arg2 = &temp;
-    if (! wxPoint_helper(_obj2, &_arg2))
-        return NULL;
-}
-    if (_obj3)
-{
-    _arg3 = &temp0;
-    if (! wxSize_helper(_obj3, &_arg3))
-        return NULL;
-}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxStatusBar *)new_wxStatusBar(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+        _result = (wxStatusBar *)new_wxStatusBar(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -3571,31 +3536,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxToolBar",SwigwxToolBarTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxToolBar",SwigwxToolBarTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
-    { "_class_wxToolBarBase","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
-    { "_class_wxToolBarBase","_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
-    { "_class_wxToolBarBase","_class_wxToolBar",SwigwxToolBarTowxToolBarBase},
-    { "_class_wxToolBarBase","_wxToolBar",SwigwxToolBarTowxToolBarBase},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxObject},
-    { "_class_wxObject","_wxToolBarSimple",SwigwxToolBarSimpleTowxObject},
-    { "_class_wxObject","_class_wxToolBar",SwigwxToolBarTowxObject},
-    { "_class_wxObject","_wxToolBar",SwigwxToolBarTowxObject},
-    { "_class_wxObject","_class_wxToolBarBase",SwigwxToolBarBaseTowxObject},
-    { "_class_wxObject","_wxToolBarBase",SwigwxToolBarBaseTowxObject},
-    { "_class_wxObject","_class_wxToolBarToolBase",SwigwxToolBarToolBaseTowxObject},
-    { "_class_wxObject","_wxToolBarToolBase",SwigwxToolBarToolBaseTowxObject},
-    { "_class_wxObject","_class_wxStatusBar",SwigwxStatusBarTowxObject},
-    { "_class_wxObject","_wxStatusBar",SwigwxStatusBarTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -3630,32 +3573,16 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
-    { "_class_wxWindow","_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
-    { "_class_wxWindow","_class_wxToolBar",SwigwxToolBarTowxWindow},
-    { "_class_wxWindow","_wxToolBar",SwigwxToolBarTowxWindow},
-    { "_class_wxWindow","_class_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
-    { "_class_wxWindow","_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
-    { "_class_wxWindow","_class_wxStatusBar",SwigwxStatusBarTowxWindow},
-    { "_class_wxWindow","_wxStatusBar",SwigwxStatusBarTowxWindow},
-    { "_wxObject","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxObject},
     { "_wxObject","_wxToolBarSimple",SwigwxToolBarSimpleTowxObject},
-    { "_wxObject","_class_wxToolBar",SwigwxToolBarTowxObject},
     { "_wxObject","_wxToolBar",SwigwxToolBarTowxObject},
-    { "_wxObject","_class_wxToolBarBase",SwigwxToolBarBaseTowxObject},
     { "_wxObject","_wxToolBarBase",SwigwxToolBarBaseTowxObject},
-    { "_wxObject","_class_wxToolBarToolBase",SwigwxToolBarToolBaseTowxObject},
     { "_wxObject","_wxToolBarToolBase",SwigwxToolBarToolBaseTowxObject},
-    { "_wxObject","_class_wxStatusBar",SwigwxStatusBarTowxObject},
     { "_wxObject","_wxStatusBar",SwigwxStatusBarTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},
-    { "_wxControl","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
     { "_wxControl","_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
-    { "_wxControl","_class_wxToolBar",SwigwxToolBarTowxControl},
     { "_wxControl","_wxToolBar",SwigwxToolBarTowxControl},
-    { "_wxControl","_class_wxToolBarBase",SwigwxToolBarBaseTowxControl},
     { "_wxControl","_wxToolBarBase",SwigwxToolBarBaseTowxControl},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -3692,16 +3619,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_wxToolBarBase","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
     { "_wxToolBarBase","_wxToolBarSimple",SwigwxToolBarSimpleTowxToolBarBase},
-    { "_wxToolBarBase","_class_wxToolBar",SwigwxToolBarTowxToolBarBase},
     { "_wxToolBarBase","_wxToolBar",SwigwxToolBarTowxToolBarBase},
-    { "_class_wxControl","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
-    { "_class_wxControl","_wxToolBarSimple",SwigwxToolBarSimpleTowxControl},
-    { "_class_wxControl","_class_wxToolBar",SwigwxToolBarTowxControl},
-    { "_class_wxControl","_wxToolBar",SwigwxToolBarTowxControl},
-    { "_class_wxControl","_class_wxToolBarBase",SwigwxToolBarBaseTowxControl},
-    { "_class_wxControl","_wxToolBarBase",SwigwxToolBarBaseTowxControl},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -3711,21 +3630,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxEvtHandler","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
     { "_wxEvtHandler","_wxToolBarSimple",SwigwxToolBarSimpleTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxToolBar",SwigwxToolBarTowxEvtHandler},
     { "_wxEvtHandler","_wxToolBar",SwigwxToolBarTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
     { "_wxEvtHandler","_wxToolBarBase",SwigwxToolBarBaseTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
     { "_wxEvtHandler","_wxStatusBar",SwigwxStatusBarTowxEvtHandler},
-    { "_wxWindow","_class_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
     { "_wxWindow","_wxToolBarSimple",SwigwxToolBarSimpleTowxWindow},
-    { "_wxWindow","_class_wxToolBar",SwigwxToolBarTowxWindow},
     { "_wxWindow","_wxToolBar",SwigwxToolBarTowxWindow},
-    { "_wxWindow","_class_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
     { "_wxWindow","_wxToolBarBase",SwigwxToolBarBaseTowxWindow},
-    { "_wxWindow","_class_wxStatusBar",SwigwxStatusBarTowxWindow},
     { "_wxWindow","_wxStatusBar",SwigwxStatusBarTowxWindow},
 {0,0,0}};
 

@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -58,47 +60,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/laywin.h>
 #include <wx/popupwin.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -2480,11 +2463,8 @@ static PyMethodDef windows3cMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxEvent},
     { "_wxEvent","_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxEvent},
-    { "_wxEvent","_class_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxEvent},
     { "_wxEvent","_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxEvent},
-    { "_wxEvent","_class_wxSashEvent",SwigwxSashEventTowxEvent},
     { "_wxEvent","_wxSashEvent",SwigwxSashEventTowxEvent},
     { "_signed_long","_long",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -2496,35 +2476,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxPopupWindow",SwigwxPopupWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPopupWindow",SwigwxPopupWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxSashWindow",SwigwxSashWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxSashWindow",SwigwxSashWindowTowxEvtHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_wxSashWindow","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxSashWindow},
     { "_wxSashWindow","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxSashWindow},
-    { "_class_wxObject","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxObject},
-    { "_class_wxObject","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxObject},
-    { "_class_wxObject","_class_wxPopupWindow",SwigwxPopupWindowTowxObject},
-    { "_class_wxObject","_wxPopupWindow",SwigwxPopupWindowTowxObject},
-    { "_class_wxObject","_class_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
-    { "_class_wxObject","_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
-    { "_class_wxObject","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
-    { "_class_wxObject","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
-    { "_class_wxObject","_class_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
-    { "_class_wxObject","_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
-    { "_class_wxObject","_class_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
-    { "_class_wxObject","_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
-    { "_class_wxObject","_class_wxSashWindow",SwigwxSashWindowTowxObject},
-    { "_class_wxObject","_wxSashWindow",SwigwxSashWindowTowxObject},
-    { "_class_wxObject","_class_wxSashEvent",SwigwxSashEventTowxObject},
-    { "_class_wxObject","_wxSashEvent",SwigwxSashEventTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -2532,10 +2487,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPopupWindow","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxPopupWindow},
     { "_wxPopupWindow","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxPopupWindow},
-    { "_class_wxSashWindow","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxSashWindow},
-    { "_class_wxSashWindow","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxSashWindow},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -2544,13 +2496,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxEvent},
-    { "_class_wxEvent","_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxEvent},
-    { "_class_wxEvent","_class_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxEvent},
-    { "_class_wxEvent","_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxEvent},
-    { "_class_wxEvent","_class_wxSashEvent",SwigwxSashEventTowxEvent},
-    { "_class_wxEvent","_wxSashEvent",SwigwxSashEventTowxEvent},
-    { "_wxCommandEvent","_class_wxSashEvent",SwigwxSashEventTowxCommandEvent},
     { "_wxCommandEvent","_wxSashEvent",SwigwxSashEventTowxCommandEvent},
     { "_char","_wxChar",0},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
@@ -2561,8 +2506,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
     { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
-    { "_class_wxPopupWindow","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxPopupWindow},
-    { "_class_wxPopupWindow","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxPopupWindow},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
@@ -2573,29 +2516,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxWindow},
-    { "_class_wxWindow","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxWindow},
-    { "_class_wxWindow","_class_wxPopupWindow",SwigwxPopupWindowTowxWindow},
-    { "_class_wxWindow","_wxPopupWindow",SwigwxPopupWindowTowxWindow},
-    { "_class_wxWindow","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxWindow},
-    { "_class_wxWindow","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxWindow},
-    { "_class_wxWindow","_class_wxSashWindow",SwigwxSashWindowTowxWindow},
-    { "_class_wxWindow","_wxSashWindow",SwigwxSashWindowTowxWindow},
-    { "_wxObject","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxObject},
     { "_wxObject","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxObject},
-    { "_wxObject","_class_wxPopupWindow",SwigwxPopupWindowTowxObject},
     { "_wxObject","_wxPopupWindow",SwigwxPopupWindowTowxObject},
-    { "_wxObject","_class_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
     { "_wxObject","_wxLayoutAlgorithm",SwigwxLayoutAlgorithmTowxObject},
-    { "_wxObject","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
     { "_wxObject","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxObject},
-    { "_wxObject","_class_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
     { "_wxObject","_wxCalculateLayoutEvent",SwigwxCalculateLayoutEventTowxObject},
-    { "_wxObject","_class_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
     { "_wxObject","_wxQueryLayoutInfoEvent",SwigwxQueryLayoutInfoEventTowxObject},
-    { "_wxObject","_class_wxSashWindow",SwigwxSashWindowTowxObject},
     { "_wxObject","_wxSashWindow",SwigwxSashWindowTowxObject},
-    { "_wxObject","_class_wxSashEvent",SwigwxSashEventTowxObject},
     { "_wxObject","_wxSashEvent",SwigwxSashEventTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -2644,23 +2571,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxCommandEvent","_class_wxSashEvent",SwigwxSashEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxSashEvent",SwigwxSashEventTowxCommandEvent},
-    { "_wxEvtHandler","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxPopupWindow",SwigwxPopupWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxPopupWindow",SwigwxPopupWindowTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxSashWindow",SwigwxSashWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxSashWindow",SwigwxSashWindowTowxEvtHandler},
-    { "_wxWindow","_class_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxWindow},
     { "_wxWindow","_wxPyPopupTransientWindow",SwigwxPyPopupTransientWindowTowxWindow},
-    { "_wxWindow","_class_wxPopupWindow",SwigwxPopupWindowTowxWindow},
     { "_wxWindow","_wxPopupWindow",SwigwxPopupWindowTowxWindow},
-    { "_wxWindow","_class_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxWindow},
     { "_wxWindow","_wxSashLayoutWindow",SwigwxSashLayoutWindowTowxWindow},
-    { "_wxWindow","_class_wxSashWindow",SwigwxSashWindowTowxWindow},
     { "_wxWindow","_wxSashWindow",SwigwxSashWindowTowxWindow},
 {0,0,0}};
 

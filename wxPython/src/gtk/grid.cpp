@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -57,47 +59,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/grid.h>
 #include <wx/generic/gridctrl.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -14393,32 +14376,11 @@ static PyMethodDef gridcMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
     { "_wxEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
-    { "_wxEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
     { "_wxEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
-    { "_wxEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxEvent},
     { "_wxEvent","_wxGridSizeEvent",SwigwxGridSizeEventTowxEvent},
-    { "_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent},
     { "_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent},
     { "_signed_long","_long",0},
-    { "_class_wxGridCellRenderer","_class_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_class_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_class_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_class_wxGridCellBoolRenderer",SwigwxGridCellBoolRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxGridCellBoolRenderer",SwigwxGridCellBoolRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_class_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_class_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_class_wxGridCellStringRenderer",SwigwxGridCellStringRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxGridCellStringRenderer",SwigwxGridCellStringRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_class_wxPyGridCellRenderer",SwigwxPyGridCellRendererTowxGridCellRenderer},
-    { "_class_wxGridCellRenderer","_wxPyGridCellRenderer",SwigwxPyGridCellRendererTowxGridCellRenderer},
-    { "_wxGridCellChoiceEditor","_class_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellChoiceEditor},
     { "_wxGridCellChoiceEditor","_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellChoiceEditor},
     { "_wxPrintQuality","_WXGRIDSELECTIONMODES",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -14430,33 +14392,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxGrid",SwigwxGridTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxGrid",SwigwxGridTowxEvtHandler},
-    { "_wxNotifyEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxNotifyEvent},
-    { "_wxNotifyEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxGridSizeEvent",SwigwxGridSizeEventTowxNotifyEvent},
-    { "_wxNotifyEvent","_class_wxGridEvent",SwigwxGridEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxGridEvent",SwigwxGridEventTowxNotifyEvent},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
-    { "_class_wxObject","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
-    { "_class_wxObject","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
-    { "_class_wxObject","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
-    { "_class_wxObject","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxObject},
-    { "_class_wxObject","_wxGridSizeEvent",SwigwxGridSizeEventTowxObject},
-    { "_class_wxObject","_class_wxGridEvent",SwigwxGridEventTowxObject},
-    { "_class_wxObject","_wxGridEvent",SwigwxGridEventTowxObject},
-    { "_class_wxObject","_class_wxGrid",SwigwxGridTowxObject},
-    { "_class_wxObject","_wxGrid",SwigwxGridTowxObject},
-    { "_class_wxObject","_class_wxGridStringTable",SwigwxGridStringTableTowxObject},
-    { "_class_wxObject","_wxGridStringTable",SwigwxGridStringTableTowxObject},
-    { "_class_wxObject","_class_wxPyGridTableBase",SwigwxPyGridTableBaseTowxObject},
-    { "_class_wxObject","_wxPyGridTableBase",SwigwxPyGridTableBaseTowxObject},
-    { "_class_wxObject","_class_wxGridTableBase",SwigwxGridTableBaseTowxObject},
-    { "_class_wxObject","_wxGridTableBase",SwigwxGridTableBaseTowxObject},
     { "_size_t","_WXGRIDSELECTIONMODES",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
@@ -14465,7 +14406,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPanel","_class_wxGrid",SwigwxGridTowxPanel},
     { "_wxPanel","_wxGrid",SwigwxGridTowxPanel},
     { "_uint","_WXGRIDSELECTIONMODES",0},
     { "_uint","_wxCoord",0},
@@ -14476,45 +14416,18 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
-    { "_class_wxEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxEvent},
-    { "_class_wxEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
-    { "_class_wxEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxEvent},
-    { "_class_wxEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxEvent},
-    { "_class_wxEvent","_wxGridSizeEvent",SwigwxGridSizeEventTowxEvent},
-    { "_class_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent},
-    { "_class_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent},
-    { "_class_wxGridCellChoiceEditor","_class_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellChoiceEditor},
-    { "_class_wxGridCellChoiceEditor","_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellChoiceEditor},
-    { "_wxCommandEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
     { "_wxCommandEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
     { "_wxCommandEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxCommandEvent},
     { "_wxCommandEvent","_wxGridSizeEvent",SwigwxGridSizeEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxGridEvent",SwigwxGridEventTowxCommandEvent},
     { "_wxCommandEvent","_wxGridEvent",SwigwxGridEventTowxCommandEvent},
     { "_char","_wxChar",0},
-    { "_wxGridCellStringRenderer","_class_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellStringRenderer},
     { "_wxGridCellStringRenderer","_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellStringRenderer},
-    { "_wxGridCellStringRenderer","_class_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellStringRenderer},
     { "_wxGridCellStringRenderer","_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellStringRenderer},
-    { "_wxGridCellStringRenderer","_class_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellStringRenderer},
     { "_wxGridCellStringRenderer","_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellStringRenderer},
-    { "_wxGridCellStringRenderer","_class_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellStringRenderer},
     { "_wxGridCellStringRenderer","_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellStringRenderer},
-    { "_wxGridCellStringRenderer","_class_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellStringRenderer},
     { "_wxGridCellStringRenderer","_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellStringRenderer},
-    { "_class_wxNotifyEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_wxGridSizeEvent",SwigwxGridSizeEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_class_wxGridEvent",SwigwxGridEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_wxGridEvent",SwigwxGridEventTowxNotifyEvent},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
-    { "_wxGridTableBase","_class_wxGridStringTable",SwigwxGridStringTableTowxGridTableBase},
     { "_wxGridTableBase","_wxGridStringTable",SwigwxGridStringTableTowxGridTableBase},
-    { "_wxGridTableBase","_class_wxPyGridTableBase",SwigwxPyGridTableBaseTowxGridTableBase},
     { "_wxGridTableBase","_wxPyGridTableBase",SwigwxPyGridTableBaseTowxGridTableBase},
     { "_EBool","_WXGRIDSELECTIONMODES",0},
     { "_EBool","_wxCoord",0},
@@ -14522,12 +14435,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
-    { "_class_wxGridCellTextEditor","_class_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellTextEditor},
-    { "_class_wxGridCellTextEditor","_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellTextEditor},
-    { "_class_wxGridCellTextEditor","_class_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellTextEditor},
-    { "_class_wxGridCellTextEditor","_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellTextEditor},
-    { "_class_wxGridCellTextEditor","_class_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellTextEditor},
-    { "_class_wxGridCellTextEditor","_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellTextEditor},
     { "_unsigned_long","_long",0},
     { "_WXGRIDSELECTIONMODES","_int",0},
     { "_WXGRIDSELECTIONMODES","_signed_int",0},
@@ -14540,72 +14447,36 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXGRIDSELECTIONMODES","_wxPrintQuality",0},
     { "_WXGRIDSELECTIONMODES","_wxCoord",0},
     { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
-    { "_class_wxGridCellStringRenderer","_class_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_class_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_class_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_class_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_class_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellStringRenderer},
-    { "_class_wxGridCellStringRenderer","_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellStringRenderer},
-    { "_class_wxPanel","_class_wxGrid",SwigwxGridTowxPanel},
-    { "_class_wxPanel","_wxGrid",SwigwxGridTowxPanel},
     { "_signed_int","_WXGRIDSELECTIONMODES",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
-    { "_wxGridCellEditor","_class_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellEditor},
-    { "_wxGridCellEditor","_class_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellEditor},
-    { "_wxGridCellEditor","_class_wxGridCellChoiceEditor",SwigwxGridCellChoiceEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxGridCellChoiceEditor",SwigwxGridCellChoiceEditorTowxGridCellEditor},
-    { "_wxGridCellEditor","_class_wxGridCellBoolEditor",SwigwxGridCellBoolEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxGridCellBoolEditor",SwigwxGridCellBoolEditorTowxGridCellEditor},
-    { "_wxGridCellEditor","_class_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellEditor},
-    { "_wxGridCellEditor","_class_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellEditor},
-    { "_wxGridCellEditor","_class_wxGridCellTextEditor",SwigwxGridCellTextEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxGridCellTextEditor",SwigwxGridCellTextEditorTowxGridCellEditor},
-    { "_wxGridCellEditor","_class_wxPyGridCellEditor",SwigwxPyGridCellEditorTowxGridCellEditor},
     { "_wxGridCellEditor","_wxPyGridCellEditor",SwigwxPyGridCellEditorTowxGridCellEditor},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
-    { "_wxGridCellAttrProvider","_class_wxPyGridCellAttrProvider",SwigwxPyGridCellAttrProviderTowxGridCellAttrProvider},
     { "_wxGridCellAttrProvider","_wxPyGridCellAttrProvider",SwigwxPyGridCellAttrProviderTowxGridCellAttrProvider},
-    { "_class_wxGridTableBase","_class_wxGridStringTable",SwigwxGridStringTableTowxGridTableBase},
-    { "_class_wxGridTableBase","_wxGridStringTable",SwigwxGridStringTableTowxGridTableBase},
-    { "_class_wxGridTableBase","_class_wxPyGridTableBase",SwigwxPyGridTableBaseTowxGridTableBase},
-    { "_class_wxGridTableBase","_wxPyGridTableBase",SwigwxPyGridTableBaseTowxGridTableBase},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxGrid",SwigwxGridTowxWindow},
-    { "_class_wxWindow","_wxGrid",SwigwxGridTowxWindow},
-    { "_wxObject","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
     { "_wxObject","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxObject},
-    { "_wxObject","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
     { "_wxObject","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxObject},
-    { "_wxObject","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxObject},
     { "_wxObject","_wxGridSizeEvent",SwigwxGridSizeEventTowxObject},
-    { "_wxObject","_class_wxGridEvent",SwigwxGridEventTowxObject},
     { "_wxObject","_wxGridEvent",SwigwxGridEventTowxObject},
-    { "_wxObject","_class_wxGrid",SwigwxGridTowxObject},
     { "_wxObject","_wxGrid",SwigwxGridTowxObject},
-    { "_wxObject","_class_wxGridStringTable",SwigwxGridStringTableTowxObject},
     { "_wxObject","_wxGridStringTable",SwigwxGridStringTableTowxObject},
-    { "_wxObject","_class_wxPyGridTableBase",SwigwxPyGridTableBaseTowxObject},
     { "_wxObject","_wxPyGridTableBase",SwigwxPyGridTableBaseTowxObject},
-    { "_wxObject","_class_wxGridTableBase",SwigwxGridTableBaseTowxObject},
     { "_wxObject","_wxGridTableBase",SwigwxGridTableBaseTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxScrolledWindow","_class_wxGrid",SwigwxGridTowxScrolledWindow},
     { "_wxScrolledWindow","_wxGrid",SwigwxGridTowxScrolledWindow},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_WXGRIDSELECTIONMODES",0},
@@ -14647,24 +14518,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_class_wxGridCellEditor","_class_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_class_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxGridCellEnumEditor",SwigwxGridCellEnumEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_class_wxGridCellChoiceEditor",SwigwxGridCellChoiceEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxGridCellChoiceEditor",SwigwxGridCellChoiceEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_class_wxGridCellBoolEditor",SwigwxGridCellBoolEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxGridCellBoolEditor",SwigwxGridCellBoolEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_class_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_class_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_class_wxGridCellTextEditor",SwigwxGridCellTextEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxGridCellTextEditor",SwigwxGridCellTextEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_class_wxPyGridCellEditor",SwigwxPyGridCellEditorTowxGridCellEditor},
-    { "_class_wxGridCellEditor","_wxPyGridCellEditor",SwigwxPyGridCellEditorTowxGridCellEditor},
-    { "_class_wxGridCellAttrProvider","_class_wxPyGridCellAttrProvider",SwigwxPyGridCellAttrProviderTowxGridCellAttrProvider},
-    { "_class_wxGridCellAttrProvider","_wxPyGridCellAttrProvider",SwigwxPyGridCellAttrProviderTowxGridCellAttrProvider},
     { "_wxCoord","_WXGRIDSELECTIONMODES",0},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
@@ -14675,41 +14528,18 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxGridCellRenderer","_class_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxGridCellAutoWrapStringRenderer",SwigwxGridCellAutoWrapStringRendererTowxGridCellRenderer},
-    { "_wxGridCellRenderer","_class_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxGridCellEnumRenderer",SwigwxGridCellEnumRendererTowxGridCellRenderer},
-    { "_wxGridCellRenderer","_class_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxGridCellDateTimeRenderer",SwigwxGridCellDateTimeRendererTowxGridCellRenderer},
-    { "_wxGridCellRenderer","_class_wxGridCellBoolRenderer",SwigwxGridCellBoolRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxGridCellBoolRenderer",SwigwxGridCellBoolRendererTowxGridCellRenderer},
-    { "_wxGridCellRenderer","_class_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxGridCellFloatRenderer",SwigwxGridCellFloatRendererTowxGridCellRenderer},
-    { "_wxGridCellRenderer","_class_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxGridCellNumberRenderer",SwigwxGridCellNumberRendererTowxGridCellRenderer},
-    { "_wxGridCellRenderer","_class_wxGridCellStringRenderer",SwigwxGridCellStringRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxGridCellStringRenderer",SwigwxGridCellStringRendererTowxGridCellRenderer},
-    { "_wxGridCellRenderer","_class_wxPyGridCellRenderer",SwigwxPyGridCellRendererTowxGridCellRenderer},
     { "_wxGridCellRenderer","_wxPyGridCellRenderer",SwigwxPyGridCellRendererTowxGridCellRenderer},
-    { "_wxGridCellTextEditor","_class_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellTextEditor},
     { "_wxGridCellTextEditor","_wxGridCellAutoWrapStringEditor",SwigwxGridCellAutoWrapStringEditorTowxGridCellTextEditor},
-    { "_wxGridCellTextEditor","_class_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellTextEditor},
     { "_wxGridCellTextEditor","_wxGridCellFloatEditor",SwigwxGridCellFloatEditorTowxGridCellTextEditor},
-    { "_wxGridCellTextEditor","_class_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellTextEditor},
     { "_wxGridCellTextEditor","_wxGridCellNumberEditor",SwigwxGridCellNumberEditorTowxGridCellTextEditor},
-    { "_class_wxCommandEvent","_class_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxGridEditorCreatedEvent",SwigwxGridEditorCreatedEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxGridRangeSelectEvent",SwigwxGridRangeSelectEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxGridSizeEvent",SwigwxGridSizeEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxGridSizeEvent",SwigwxGridSizeEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxGridEvent",SwigwxGridEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxGridEvent",SwigwxGridEventTowxCommandEvent},
-    { "_wxEvtHandler","_class_wxGrid",SwigwxGridTowxEvtHandler},
     { "_wxEvtHandler","_wxGrid",SwigwxGridTowxEvtHandler},
-    { "_class_wxScrolledWindow","_class_wxGrid",SwigwxGridTowxScrolledWindow},
-    { "_class_wxScrolledWindow","_wxGrid",SwigwxGridTowxScrolledWindow},
-    { "_wxWindow","_class_wxGrid",SwigwxGridTowxWindow},
     { "_wxWindow","_wxGrid",SwigwxGridTowxWindow},
 {0,0,0}};
 

@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -64,47 +66,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/msw/taskbar.h>
 #endif
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -2222,9 +2205,7 @@ static PyMethodDef windows2cMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxEvent},
     { "_wxEvent","_wxSplitterEvent",SwigwxSplitterEventTowxEvent},
-    { "_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
     { "_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
     { "_signed_long","_long",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -2236,23 +2217,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxNotebook",SwigwxNotebookTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxNotebook",SwigwxNotebookTowxEvtHandler},
-    { "_wxNotifyEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
     { "_wxNotifyEvent","_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
-    { "_class_wxObject","_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
-    { "_class_wxObject","_class_wxSplitterEvent",SwigwxSplitterEventTowxObject},
-    { "_class_wxObject","_wxSplitterEvent",SwigwxSplitterEventTowxObject},
-    { "_class_wxObject","_class_wxNotebook",SwigwxNotebookTowxObject},
-    { "_class_wxObject","_wxNotebook",SwigwxNotebookTowxObject},
-    { "_class_wxObject","_class_wxNotebookEvent",SwigwxNotebookEventTowxObject},
-    { "_class_wxObject","_wxNotebookEvent",SwigwxNotebookEventTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -2268,17 +2236,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxEvent},
-    { "_class_wxEvent","_wxSplitterEvent",SwigwxSplitterEventTowxEvent},
-    { "_class_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
-    { "_class_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
-    { "_wxCommandEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
     { "_wxCommandEvent","_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent},
     { "_wxCommandEvent","_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent},
     { "_char","_wxChar",0},
-    { "_class_wxNotifyEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
-    { "_class_wxNotifyEvent","_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
@@ -2297,22 +2257,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxSplitterWindow",SwigwxSplitterWindowTowxWindow},
-    { "_class_wxWindow","_wxSplitterWindow",SwigwxSplitterWindowTowxWindow},
-    { "_class_wxWindow","_class_wxNotebook",SwigwxNotebookTowxWindow},
-    { "_class_wxWindow","_wxNotebook",SwigwxNotebookTowxWindow},
-    { "_wxObject","_class_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
     { "_wxObject","_wxSplitterWindow",SwigwxSplitterWindowTowxObject},
-    { "_wxObject","_class_wxSplitterEvent",SwigwxSplitterEventTowxObject},
     { "_wxObject","_wxSplitterEvent",SwigwxSplitterEventTowxObject},
-    { "_wxObject","_class_wxNotebook",SwigwxNotebookTowxObject},
     { "_wxObject","_wxNotebook",SwigwxNotebookTowxObject},
-    { "_wxObject","_class_wxNotebookEvent",SwigwxNotebookEventTowxObject},
     { "_wxObject","_wxNotebookEvent",SwigwxNotebookEventTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},
-    { "_wxControl","_class_wxNotebook",SwigwxNotebookTowxControl},
     { "_wxControl","_wxNotebook",SwigwxNotebookTowxControl},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -2349,8 +2300,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_class_wxControl","_class_wxNotebook",SwigwxNotebookTowxControl},
-    { "_class_wxControl","_wxNotebook",SwigwxNotebookTowxControl},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -2360,17 +2309,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxCommandEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent},
-    { "_wxEvtHandler","_class_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxNotebook",SwigwxNotebookTowxEvtHandler},
     { "_wxEvtHandler","_wxNotebook",SwigwxNotebookTowxEvtHandler},
-    { "_wxWindow","_class_wxSplitterWindow",SwigwxSplitterWindowTowxWindow},
     { "_wxWindow","_wxSplitterWindow",SwigwxSplitterWindowTowxWindow},
-    { "_wxWindow","_class_wxNotebook",SwigwxNotebookTowxWindow},
     { "_wxWindow","_wxNotebook",SwigwxNotebookTowxWindow},
 {0,0,0}};
 

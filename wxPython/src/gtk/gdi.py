@@ -845,8 +845,36 @@ class wxDCPtr(wxObjectPtr):
     def ResetBoundingBox(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_ResetBoundingBox,(self,) + _args, _kwargs)
         return val
+    def GetBoundingBox(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetBoundingBox,(self,) + _args, _kwargs)
+        return val
+    def _DrawPointList(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC__DrawPointList,(self,) + _args, _kwargs)
+        return val
+    def _DrawLineList(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC__DrawLineList,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxDC instance at %s>" % (self.this,)
+    
+    def DrawPointList(self, points, pens=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(points):
+           raise ValueError('points and pens must have same length')
+        return self._DrawPointList(points, pens)
+
+    def DrawLineList(self, lines, pens=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(lines):
+           raise ValueError('lines and pens must have same length')
+        return self._DrawLineList(lines, pens)
+
 class wxDC(wxDCPtr):
     def __init__(self,this):
         self.this = this

@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -56,47 +58,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/image.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -2451,41 +2434,16 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_wxImageHandler","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
     { "_wxImageHandler","_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
-    { "_wxImageHandler","_class_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
     { "_wxImageHandler","_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
-    { "_wxImageHandler","_class_wxPNMHandler",SwigwxPNMHandlerTowxImageHandler},
     { "_wxImageHandler","_wxPNMHandler",SwigwxPNMHandlerTowxImageHandler},
-    { "_wxImageHandler","_class_wxGIFHandler",SwigwxGIFHandlerTowxImageHandler},
     { "_wxImageHandler","_wxGIFHandler",SwigwxGIFHandlerTowxImageHandler},
-    { "_wxImageHandler","_class_wxBMPHandler",SwigwxBMPHandlerTowxImageHandler},
     { "_wxImageHandler","_wxBMPHandler",SwigwxBMPHandlerTowxImageHandler},
-    { "_wxImageHandler","_class_wxJPEGHandler",SwigwxJPEGHandlerTowxImageHandler},
     { "_wxImageHandler","_wxJPEGHandler",SwigwxJPEGHandlerTowxImageHandler},
-    { "_wxImageHandler","_class_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
     { "_wxImageHandler","_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxImage",SwigwxImageTowxObject},
-    { "_class_wxObject","_wxImage",SwigwxImageTowxObject},
-    { "_class_wxObject","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
-    { "_class_wxObject","_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
-    { "_class_wxObject","_class_wxPCXHandler",SwigwxPCXHandlerTowxObject},
-    { "_class_wxObject","_wxPCXHandler",SwigwxPCXHandlerTowxObject},
-    { "_class_wxObject","_class_wxPNMHandler",SwigwxPNMHandlerTowxObject},
-    { "_class_wxObject","_wxPNMHandler",SwigwxPNMHandlerTowxObject},
-    { "_class_wxObject","_class_wxGIFHandler",SwigwxGIFHandlerTowxObject},
-    { "_class_wxObject","_wxGIFHandler",SwigwxGIFHandlerTowxObject},
-    { "_class_wxObject","_class_wxBMPHandler",SwigwxBMPHandlerTowxObject},
-    { "_class_wxObject","_wxBMPHandler",SwigwxBMPHandlerTowxObject},
-    { "_class_wxObject","_class_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
-    { "_class_wxObject","_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
-    { "_class_wxObject","_class_wxPNGHandler",SwigwxPNGHandlerTowxObject},
-    { "_class_wxObject","_wxPNGHandler",SwigwxPNGHandlerTowxObject},
-    { "_class_wxObject","_class_wxImageHandler",SwigwxImageHandlerTowxObject},
-    { "_class_wxObject","_wxImageHandler",SwigwxImageHandlerTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -2520,40 +2478,17 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_wxObject","_class_wxImage",SwigwxImageTowxObject},
     { "_wxObject","_wxImage",SwigwxImageTowxObject},
-    { "_wxObject","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
     { "_wxObject","_wxTIFFHandler",SwigwxTIFFHandlerTowxObject},
-    { "_wxObject","_class_wxPCXHandler",SwigwxPCXHandlerTowxObject},
     { "_wxObject","_wxPCXHandler",SwigwxPCXHandlerTowxObject},
-    { "_wxObject","_class_wxPNMHandler",SwigwxPNMHandlerTowxObject},
     { "_wxObject","_wxPNMHandler",SwigwxPNMHandlerTowxObject},
-    { "_wxObject","_class_wxGIFHandler",SwigwxGIFHandlerTowxObject},
     { "_wxObject","_wxGIFHandler",SwigwxGIFHandlerTowxObject},
-    { "_wxObject","_class_wxBMPHandler",SwigwxBMPHandlerTowxObject},
     { "_wxObject","_wxBMPHandler",SwigwxBMPHandlerTowxObject},
-    { "_wxObject","_class_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
     { "_wxObject","_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
-    { "_wxObject","_class_wxPNGHandler",SwigwxPNGHandlerTowxObject},
     { "_wxObject","_wxPNGHandler",SwigwxPNGHandlerTowxObject},
-    { "_wxObject","_class_wxImageHandler",SwigwxImageHandlerTowxObject},
     { "_wxObject","_wxImageHandler",SwigwxImageHandlerTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_class_wxImageHandler","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_class_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_class_wxPNMHandler",SwigwxPNMHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxPNMHandler",SwigwxPNMHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_class_wxGIFHandler",SwigwxGIFHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxGIFHandler",SwigwxGIFHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_class_wxBMPHandler",SwigwxBMPHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxBMPHandler",SwigwxBMPHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_class_wxJPEGHandler",SwigwxJPEGHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxJPEGHandler",SwigwxJPEGHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_class_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},

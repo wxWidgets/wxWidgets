@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -59,47 +61,28 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "printfw.h"
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -5323,33 +5306,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxPreviewFrame",SwigwxPreviewFrameTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPreviewFrame",SwigwxPreviewFrameTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxPreviewFrame",SwigwxPreviewFrameTowxObject},
-    { "_class_wxObject","_wxPreviewFrame",SwigwxPreviewFrameTowxObject},
-    { "_class_wxObject","_class_wxPrintPreview",SwigwxPrintPreviewTowxObject},
-    { "_class_wxObject","_wxPrintPreview",SwigwxPrintPreviewTowxObject},
-    { "_class_wxObject","_class_wxPrinter",SwigwxPrinterTowxObject},
-    { "_class_wxObject","_wxPrinter",SwigwxPrinterTowxObject},
-    { "_class_wxObject","_class_wxPyPrintout",SwigwxPyPrintoutTowxObject},
-    { "_class_wxObject","_wxPyPrintout",SwigwxPyPrintoutTowxObject},
-    { "_class_wxObject","_class_wxPrintDialog",SwigwxPrintDialogTowxObject},
-    { "_class_wxObject","_wxPrintDialog",SwigwxPrintDialogTowxObject},
-    { "_class_wxObject","_class_wxPrintDialogData",SwigwxPrintDialogDataTowxObject},
-    { "_class_wxObject","_wxPrintDialogData",SwigwxPrintDialogDataTowxObject},
-    { "_class_wxObject","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxObject},
-    { "_class_wxObject","_wxPageSetupDialog",SwigwxPageSetupDialogTowxObject},
-    { "_class_wxObject","_class_wxPageSetupDialogData",SwigwxPageSetupDialogDataTowxObject},
-    { "_class_wxObject","_wxPageSetupDialogData",SwigwxPageSetupDialogDataTowxObject},
-    { "_class_wxObject","_class_wxPrintData",SwigwxPrintDataTowxObject},
-    { "_class_wxObject","_wxPrintData",SwigwxPrintDataTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -5357,16 +5316,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxTopLevelWindow","_class_wxPreviewFrame",SwigwxPreviewFrameTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxPreviewFrame",SwigwxPreviewFrameTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxPrintDialog",SwigwxPrintDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxPrintDialog",SwigwxPrintDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxTopLevelWindow},
-    { "_class_wxDialog","_class_wxPrintDialog",SwigwxPrintDialogTowxDialog},
-    { "_class_wxDialog","_wxPrintDialog",SwigwxPrintDialogTowxDialog},
-    { "_class_wxDialog","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog},
-    { "_class_wxDialog","_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -5389,40 +5341,19 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
-    { "_class_wxTopLevelWindow","_class_wxPreviewFrame",SwigwxPreviewFrameTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxPreviewFrame",SwigwxPreviewFrameTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxPrintDialog",SwigwxPrintDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxPrintDialog",SwigwxPrintDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxTopLevelWindow},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxPreviewFrame",SwigwxPreviewFrameTowxWindow},
-    { "_class_wxWindow","_wxPreviewFrame",SwigwxPreviewFrameTowxWindow},
-    { "_class_wxWindow","_class_wxPrintDialog",SwigwxPrintDialogTowxWindow},
-    { "_class_wxWindow","_wxPrintDialog",SwigwxPrintDialogTowxWindow},
-    { "_class_wxWindow","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow},
-    { "_class_wxWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow},
-    { "_wxObject","_class_wxPreviewFrame",SwigwxPreviewFrameTowxObject},
     { "_wxObject","_wxPreviewFrame",SwigwxPreviewFrameTowxObject},
-    { "_wxObject","_class_wxPrintPreview",SwigwxPrintPreviewTowxObject},
     { "_wxObject","_wxPrintPreview",SwigwxPrintPreviewTowxObject},
-    { "_wxObject","_class_wxPrinter",SwigwxPrinterTowxObject},
     { "_wxObject","_wxPrinter",SwigwxPrinterTowxObject},
-    { "_wxObject","_class_wxPyPrintout",SwigwxPyPrintoutTowxObject},
     { "_wxObject","_wxPyPrintout",SwigwxPyPrintoutTowxObject},
-    { "_wxObject","_class_wxPrintDialog",SwigwxPrintDialogTowxObject},
     { "_wxObject","_wxPrintDialog",SwigwxPrintDialogTowxObject},
-    { "_wxObject","_class_wxPrintDialogData",SwigwxPrintDialogDataTowxObject},
     { "_wxObject","_wxPrintDialogData",SwigwxPrintDialogDataTowxObject},
-    { "_wxObject","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxObject},
     { "_wxObject","_wxPageSetupDialog",SwigwxPageSetupDialogTowxObject},
-    { "_wxObject","_class_wxPageSetupDialogData",SwigwxPageSetupDialogDataTowxObject},
     { "_wxObject","_wxPageSetupDialogData",SwigwxPageSetupDialogDataTowxObject},
-    { "_wxObject","_class_wxPrintData",SwigwxPrintDataTowxObject},
     { "_wxObject","_wxPrintData",SwigwxPrintDataTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -5434,14 +5365,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
-    { "_wxDialog","_class_wxPrintDialog",SwigwxPrintDialogTowxDialog},
     { "_wxDialog","_wxPrintDialog",SwigwxPrintDialogTowxDialog},
-    { "_wxDialog","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog},
     { "_wxDialog","_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_wxFrame","_class_wxPreviewFrame",SwigwxPreviewFrameTowxFrame},
     { "_wxFrame","_wxPreviewFrame",SwigwxPreviewFrameTowxFrame},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
@@ -5477,20 +5405,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxEvtHandler","_class_wxPreviewFrame",SwigwxPreviewFrameTowxEvtHandler},
     { "_wxEvtHandler","_wxPreviewFrame",SwigwxPreviewFrameTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler},
-    { "_wxWindow","_class_wxPreviewFrame",SwigwxPreviewFrameTowxWindow},
     { "_wxWindow","_wxPreviewFrame",SwigwxPreviewFrameTowxWindow},
-    { "_wxWindow","_class_wxPrintDialog",SwigwxPrintDialogTowxWindow},
     { "_wxWindow","_wxPrintDialog",SwigwxPrintDialogTowxWindow},
-    { "_wxWindow","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow},
     { "_wxWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow},
-    { "_class_wxFrame","_class_wxPreviewFrame",SwigwxPreviewFrameTowxFrame},
-    { "_class_wxFrame","_wxPreviewFrame",SwigwxPreviewFrameTowxFrame},
 {0,0,0}};
 
 static PyObject *SWIG_globals;

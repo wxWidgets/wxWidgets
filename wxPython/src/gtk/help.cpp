@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -56,47 +58,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include "export.h"
 #include <wx/cshelp.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -1131,9 +1114,7 @@ static PyMethodDef helpcMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxContextMenuEvent",SwigwxContextMenuEventTowxEvent},
     { "_wxEvent","_wxContextMenuEvent",SwigwxContextMenuEventTowxEvent},
-    { "_wxEvent","_class_wxHelpEvent",SwigwxHelpEventTowxEvent},
     { "_wxEvent","_wxHelpEvent",SwigwxHelpEventTowxEvent},
     { "_signed_long","_long",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -1145,21 +1126,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxContextHelpButton",SwigwxContextHelpButtonTowxEvtHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_wxBitmapButton","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxBitmapButton},
     { "_wxBitmapButton","_wxContextHelpButton",SwigwxContextHelpButtonTowxBitmapButton},
-    { "_class_wxObject","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxObject},
-    { "_class_wxObject","_wxContextHelpButton",SwigwxContextHelpButtonTowxObject},
-    { "_class_wxObject","_class_wxContextHelp",SwigwxContextHelpTowxObject},
-    { "_class_wxObject","_wxContextHelp",SwigwxContextHelpTowxObject},
-    { "_class_wxObject","_class_wxContextMenuEvent",SwigwxContextMenuEventTowxObject},
-    { "_class_wxObject","_wxContextMenuEvent",SwigwxContextMenuEventTowxObject},
-    { "_class_wxObject","_class_wxHelpEvent",SwigwxHelpEventTowxObject},
-    { "_class_wxObject","_wxHelpEvent",SwigwxHelpEventTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -1175,18 +1145,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxContextMenuEvent",SwigwxContextMenuEventTowxEvent},
-    { "_class_wxEvent","_wxContextMenuEvent",SwigwxContextMenuEventTowxEvent},
-    { "_class_wxEvent","_class_wxHelpEvent",SwigwxHelpEventTowxEvent},
-    { "_class_wxEvent","_wxHelpEvent",SwigwxHelpEventTowxEvent},
-    { "_wxCommandEvent","_class_wxContextMenuEvent",SwigwxContextMenuEventTowxCommandEvent},
     { "_wxCommandEvent","_wxContextMenuEvent",SwigwxContextMenuEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxHelpEvent",SwigwxHelpEventTowxCommandEvent},
     { "_wxCommandEvent","_wxHelpEvent",SwigwxHelpEventTowxCommandEvent},
-    { "_class_wxButton","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxButton},
-    { "_class_wxButton","_wxContextHelpButton",SwigwxContextHelpButtonTowxButton},
     { "_char","_wxChar",0},
-    { "_wxHelpProvider","_class_wxSimpleHelpProvider",SwigwxSimpleHelpProviderTowxHelpProvider},
     { "_wxHelpProvider","_wxSimpleHelpProvider",SwigwxSimpleHelpProviderTowxHelpProvider},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
@@ -1206,20 +1167,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxWindow},
-    { "_class_wxWindow","_wxContextHelpButton",SwigwxContextHelpButtonTowxWindow},
-    { "_wxObject","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxObject},
     { "_wxObject","_wxContextHelpButton",SwigwxContextHelpButtonTowxObject},
-    { "_wxObject","_class_wxContextHelp",SwigwxContextHelpTowxObject},
     { "_wxObject","_wxContextHelp",SwigwxContextHelpTowxObject},
-    { "_wxObject","_class_wxContextMenuEvent",SwigwxContextMenuEventTowxObject},
     { "_wxObject","_wxContextMenuEvent",SwigwxContextMenuEventTowxObject},
-    { "_wxObject","_class_wxHelpEvent",SwigwxHelpEventTowxObject},
     { "_wxObject","_wxHelpEvent",SwigwxHelpEventTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},
-    { "_wxControl","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxControl},
     { "_wxControl","_wxContextHelpButton",SwigwxContextHelpButtonTowxControl},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -1231,8 +1185,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_class_wxBitmapButton","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxBitmapButton},
-    { "_class_wxBitmapButton","_wxContextHelpButton",SwigwxContextHelpButtonTowxBitmapButton},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_time_t",0},
@@ -1258,10 +1210,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_wxButton","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxButton},
     { "_wxButton","_wxContextHelpButton",SwigwxContextHelpButtonTowxButton},
-    { "_class_wxControl","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxControl},
-    { "_class_wxControl","_wxContextHelpButton",SwigwxContextHelpButtonTowxControl},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -1271,15 +1220,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxCommandEvent","_class_wxContextMenuEvent",SwigwxContextMenuEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxContextMenuEvent",SwigwxContextMenuEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxHelpEvent",SwigwxHelpEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxHelpEvent",SwigwxHelpEventTowxCommandEvent},
-    { "_wxEvtHandler","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxEvtHandler},
     { "_wxEvtHandler","_wxContextHelpButton",SwigwxContextHelpButtonTowxEvtHandler},
-    { "_class_wxHelpProvider","_class_wxSimpleHelpProvider",SwigwxSimpleHelpProviderTowxHelpProvider},
-    { "_class_wxHelpProvider","_wxSimpleHelpProvider",SwigwxSimpleHelpProviderTowxHelpProvider},
-    { "_wxWindow","_class_wxContextHelpButton",SwigwxContextHelpButtonTowxWindow},
     { "_wxWindow","_wxContextHelpButton",SwigwxContextHelpButtonTowxWindow},
 {0,0,0}};
 

@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -64,47 +66,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fontmap.h>
 #include <wx/fontutil.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -224,6 +207,13 @@ public:
 private:
     wxDash* m_dash;
 };
+
+static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
+    *x1 = dc->MinX();
+    *y1 = dc->MinY();
+    *x2 = dc->MaxX();
+    *y2 = dc->MaxY();
+}
                                       // Alternate 'constructor'
     wxMemoryDC* wxMemoryDCFromDC(wxDC* oldDC) {
         return new wxMemoryDC(oldDC);
@@ -8661,6 +8651,289 @@ static PyObject *_wrap_wxDC_ResetBoundingBox(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static PyObject *_wrap_wxDC_GetBoundingBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    int * _arg3;
+    int  temp1;
+    int * _arg4;
+    int  temp2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+{
+  _arg3 = &temp1;
+}
+{
+  _arg4 = &temp2;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_GetBoundingBox",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_GetBoundingBox. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_GetBoundingBox(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static PyObject * wxDC__DrawPointList(wxDC *self,PyObject * pyPoints,PyObject * pyPens) {
+            bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
+            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
+            int       numObjs = 0;
+            int       numPens = 0;
+            wxPen*    pen;
+            PyObject* obj;
+            int       x1, y1;
+            int       i = 0;
+
+            if (!PySequence_Check(pyPoints)) {
+                goto err0;
+            }
+            if (!PySequence_Check(pyPens)) {
+                goto err1;
+            }
+            numObjs = PySequence_Length(pyPoints);
+            numPens = PySequence_Length(pyPens);
+
+            for (i = 0; i < numObjs; i++) {
+                // Use a new pen?
+                if (i < numPens) {
+                    if (isFastPens) {
+                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
+                    }
+                    else {
+                        obj = PySequence_GetItem(pyPens, i);
+                    }
+                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        if (!isFastPens)
+                            Py_DECREF(obj);
+                        goto err1;
+                    }
+
+                    self->SetPen(*pen);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                }
+
+                // Get the point coordinants
+                if (isFastSeq) {
+                    obj = PySequence_Fast_GET_ITEM(pyPoints, i);
+                }
+                else {
+                    obj = PySequence_GetItem(pyPoints, i);
+                }
+                if (! _2int_seq_helper(obj, &x1, &y1)) {
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                    goto err0;
+                }
+
+                // Now draw the point
+                self->DrawPoint(x1, y1);
+
+                if (!isFastSeq)
+                    Py_DECREF(obj);
+            }
+
+            Py_INCREF(Py_None);
+            return Py_None;
+
+        err1:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
+            return NULL;
+        err0:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y) sequences.");
+            return NULL;
+        }
+static PyObject *_wrap_wxDC__DrawPointList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxDC * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","pyPoints","pyPens", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxDC__DrawPointList",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC__DrawPointList. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxDC__DrawPointList(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxDC__DrawLineList(wxDC *self,PyObject * pyLines,PyObject * pyPens) {
+            bool      isFastSeq  = PyList_Check(pyLines) || PyTuple_Check(pyLines);
+            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
+            int       numObjs = 0;
+            int       numPens = 0;
+            wxPen*    pen;
+            PyObject* obj;
+            int       x1, y1, x2, y2;
+            int       i = 0;
+
+            if (!PySequence_Check(pyLines)) {
+                goto err0;
+            }
+            if (!PySequence_Check(pyPens)) {
+                goto err1;
+            }
+            numObjs = PySequence_Length(pyLines);
+            numPens = PySequence_Length(pyPens);
+
+            for (i = 0; i < numObjs; i++) {
+                // Use a new pen?
+                if (i < numPens) {
+                    if (isFastPens) {
+                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
+                    }
+                    else {
+                        obj = PySequence_GetItem(pyPens, i);
+                    }
+                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+                        if (!isFastPens)
+                            Py_DECREF(obj);
+                        goto err1;
+                    }
+
+                    self->SetPen(*pen);
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                }
+
+                // Get the line coordinants
+                if (isFastSeq) {
+                    obj = PySequence_Fast_GET_ITEM(pyLines, i);
+                }
+                else {
+                    obj = PySequence_GetItem(pyLines, i);
+                }
+                if (! _4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                    goto err0;
+                }
+
+                // Now draw the line
+                self->DrawLine(x1, y1, x2, y2);
+
+                if (!isFastSeq)
+                    Py_DECREF(obj);
+            }
+
+            Py_INCREF(Py_None);
+            return Py_None;
+
+        err1:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
+            return NULL;
+        err0:
+            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x1,y1, x2,y2) sequences.");
+            return NULL;
+        }
+static PyObject *_wrap_wxDC__DrawLineList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxDC * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","pyLines","pyPens", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxDC__DrawLineList",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC__DrawLineList. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxDC__DrawLineList(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxMemoryDCTowxDC(void *ptr) {
     wxMemoryDC *src;
     wxDC *dest;
@@ -10882,6 +11155,9 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxScreenDC", (PyCFunction) _wrap_new_wxScreenDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDC_SelectObject", (PyCFunction) _wrap_wxMemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMemoryDC", (PyCFunction) _wrap_new_wxMemoryDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC__DrawLineList", (PyCFunction) _wrap_wxDC__DrawLineList, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC__DrawPointList", (PyCFunction) _wrap_wxDC__DrawPointList, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_GetBoundingBox", (PyCFunction) _wrap_wxDC_GetBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_ResetBoundingBox", (PyCFunction) _wrap_wxDC_ResetBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_CalcBoundingBox", (PyCFunction) _wrap_wxDC_CalcBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetAxisOrientation", (PyCFunction) _wrap_wxDC_SetAxisOrientation, METH_VARARGS | METH_KEYWORDS },
@@ -11119,91 +11395,25 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_wxPen","_class_wxPyPen",SwigwxPyPenTowxPen},
     { "_wxPen","_wxPyPen",SwigwxPyPenTowxPen},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_wxGDIObject","_class_wxRegion",SwigwxRegionTowxGDIObject},
     { "_wxGDIObject","_wxRegion",SwigwxRegionTowxGDIObject},
-    { "_wxGDIObject","_class_wxPalette",SwigwxPaletteTowxGDIObject},
     { "_wxGDIObject","_wxPalette",SwigwxPaletteTowxGDIObject},
-    { "_wxGDIObject","_class_wxBrush",SwigwxBrushTowxGDIObject},
     { "_wxGDIObject","_wxBrush",SwigwxBrushTowxGDIObject},
-    { "_wxGDIObject","_class_wxPyPen",SwigwxPyPenTowxGDIObject},
     { "_wxGDIObject","_wxPyPen",SwigwxPyPenTowxGDIObject},
-    { "_wxGDIObject","_class_wxPen",SwigwxPenTowxGDIObject},
     { "_wxGDIObject","_wxPen",SwigwxPenTowxGDIObject},
-    { "_wxGDIObject","_class_wxFont",SwigwxFontTowxGDIObject},
     { "_wxGDIObject","_wxFont",SwigwxFontTowxGDIObject},
-    { "_wxGDIObject","_class_wxCursor",SwigwxCursorTowxGDIObject},
     { "_wxGDIObject","_wxCursor",SwigwxCursorTowxGDIObject},
-    { "_wxGDIObject","_class_wxIcon",SwigwxIconTowxGDIObject},
     { "_wxGDIObject","_wxIcon",SwigwxIconTowxGDIObject},
-    { "_wxGDIObject","_class_wxBitmap",SwigwxBitmapTowxGDIObject},
     { "_wxGDIObject","_wxBitmap",SwigwxBitmapTowxGDIObject},
-    { "_wxDC","_class_wxPostScriptDC",SwigwxPostScriptDCTowxDC},
     { "_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC},
-    { "_wxDC","_class_wxWindowDC",SwigwxWindowDCTowxDC},
     { "_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC},
-    { "_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC},
     { "_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC},
-    { "_wxDC","_class_wxClientDC",SwigwxClientDCTowxDC},
     { "_wxDC","_wxClientDC",SwigwxClientDCTowxDC},
-    { "_wxDC","_class_wxScreenDC",SwigwxScreenDCTowxDC},
     { "_wxDC","_wxScreenDC",SwigwxScreenDCTowxDC},
-    { "_wxDC","_class_wxMemoryDC",SwigwxMemoryDCTowxDC},
     { "_wxDC","_wxMemoryDC",SwigwxMemoryDCTowxDC},
-    { "_class_wxObject","_class_wxRegionIterator",SwigwxRegionIteratorTowxObject},
-    { "_class_wxObject","_wxRegionIterator",SwigwxRegionIteratorTowxObject},
-    { "_class_wxObject","_class_wxRegion",SwigwxRegionTowxObject},
-    { "_class_wxObject","_wxRegion",SwigwxRegionTowxObject},
-    { "_class_wxObject","_class_wxImageList",SwigwxImageListTowxObject},
-    { "_class_wxObject","_wxImageList",SwigwxImageListTowxObject},
-    { "_class_wxObject","_class_wxPalette",SwigwxPaletteTowxObject},
-    { "_class_wxObject","_wxPalette",SwigwxPaletteTowxObject},
-    { "_class_wxObject","_class_wxPostScriptDC",SwigwxPostScriptDCTowxObject},
-    { "_class_wxObject","_wxPostScriptDC",SwigwxPostScriptDCTowxObject},
-    { "_class_wxObject","_class_wxWindowDC",SwigwxWindowDCTowxObject},
-    { "_class_wxObject","_wxWindowDC",SwigwxWindowDCTowxObject},
-    { "_class_wxObject","_class_wxPaintDC",SwigwxPaintDCTowxObject},
-    { "_class_wxObject","_wxPaintDC",SwigwxPaintDCTowxObject},
-    { "_class_wxObject","_class_wxClientDC",SwigwxClientDCTowxObject},
-    { "_class_wxObject","_wxClientDC",SwigwxClientDCTowxObject},
-    { "_class_wxObject","_class_wxScreenDC",SwigwxScreenDCTowxObject},
-    { "_class_wxObject","_wxScreenDC",SwigwxScreenDCTowxObject},
-    { "_class_wxObject","_class_wxMemoryDC",SwigwxMemoryDCTowxObject},
-    { "_class_wxObject","_wxMemoryDC",SwigwxMemoryDCTowxObject},
-    { "_class_wxObject","_class_wxDC",SwigwxDCTowxObject},
-    { "_class_wxObject","_wxDC",SwigwxDCTowxObject},
-    { "_class_wxObject","_class_wxBrushList",SwigwxBrushListTowxObject},
-    { "_class_wxObject","_wxBrushList",SwigwxBrushListTowxObject},
-    { "_class_wxObject","_class_wxBrush",SwigwxBrushTowxObject},
-    { "_class_wxObject","_wxBrush",SwigwxBrushTowxObject},
-    { "_class_wxObject","_class_wxPenList",SwigwxPenListTowxObject},
-    { "_class_wxObject","_wxPenList",SwigwxPenListTowxObject},
-    { "_class_wxObject","_class_wxPyPen",SwigwxPyPenTowxObject},
-    { "_class_wxObject","_wxPyPen",SwigwxPyPenTowxObject},
-    { "_class_wxObject","_class_wxPen",SwigwxPenTowxObject},
-    { "_class_wxObject","_wxPen",SwigwxPenTowxObject},
-    { "_class_wxObject","_class_wxColourDatabase",SwigwxColourDatabaseTowxObject},
-    { "_class_wxObject","_wxColourDatabase",SwigwxColourDatabaseTowxObject},
-    { "_class_wxObject","_class_wxColour",SwigwxColourTowxObject},
-    { "_class_wxObject","_wxColour",SwigwxColourTowxObject},
-    { "_class_wxObject","_class_wxFontList",SwigwxFontListTowxObject},
-    { "_class_wxObject","_wxFontList",SwigwxFontListTowxObject},
-    { "_class_wxObject","_class_wxFont",SwigwxFontTowxObject},
-    { "_class_wxObject","_wxFont",SwigwxFontTowxObject},
-    { "_class_wxObject","_class_wxCursor",SwigwxCursorTowxObject},
-    { "_class_wxObject","_wxCursor",SwigwxCursorTowxObject},
-    { "_class_wxObject","_class_wxIcon",SwigwxIconTowxObject},
-    { "_class_wxObject","_wxIcon",SwigwxIconTowxObject},
-    { "_class_wxObject","_class_wxMask",SwigwxMaskTowxObject},
-    { "_class_wxObject","_wxMask",SwigwxMaskTowxObject},
-    { "_class_wxObject","_class_wxBitmap",SwigwxBitmapTowxObject},
-    { "_class_wxObject","_wxBitmap",SwigwxBitmapTowxObject},
-    { "_class_wxObject","_class_wxGDIObject",SwigwxGDIObjectTowxObject},
-    { "_class_wxObject","_wxGDIObject",SwigwxGDIObjectTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -11227,18 +11437,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
-    { "_class_wxDC","_class_wxPostScriptDC",SwigwxPostScriptDCTowxDC},
-    { "_class_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC},
-    { "_class_wxDC","_class_wxWindowDC",SwigwxWindowDCTowxDC},
-    { "_class_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC},
-    { "_class_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC},
-    { "_class_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC},
-    { "_class_wxDC","_class_wxClientDC",SwigwxClientDCTowxDC},
-    { "_class_wxDC","_wxClientDC",SwigwxClientDCTowxDC},
-    { "_class_wxDC","_class_wxScreenDC",SwigwxScreenDCTowxDC},
-    { "_class_wxDC","_wxScreenDC",SwigwxScreenDCTowxDC},
-    { "_class_wxDC","_class_wxMemoryDC",SwigwxMemoryDCTowxDC},
-    { "_class_wxDC","_wxMemoryDC",SwigwxMemoryDCTowxDC},
     { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
@@ -11250,55 +11448,30 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_wxObject","_class_wxRegionIterator",SwigwxRegionIteratorTowxObject},
     { "_wxObject","_wxRegionIterator",SwigwxRegionIteratorTowxObject},
-    { "_wxObject","_class_wxRegion",SwigwxRegionTowxObject},
     { "_wxObject","_wxRegion",SwigwxRegionTowxObject},
-    { "_wxObject","_class_wxImageList",SwigwxImageListTowxObject},
     { "_wxObject","_wxImageList",SwigwxImageListTowxObject},
-    { "_wxObject","_class_wxPalette",SwigwxPaletteTowxObject},
     { "_wxObject","_wxPalette",SwigwxPaletteTowxObject},
-    { "_wxObject","_class_wxPostScriptDC",SwigwxPostScriptDCTowxObject},
     { "_wxObject","_wxPostScriptDC",SwigwxPostScriptDCTowxObject},
-    { "_wxObject","_class_wxWindowDC",SwigwxWindowDCTowxObject},
     { "_wxObject","_wxWindowDC",SwigwxWindowDCTowxObject},
-    { "_wxObject","_class_wxPaintDC",SwigwxPaintDCTowxObject},
     { "_wxObject","_wxPaintDC",SwigwxPaintDCTowxObject},
-    { "_wxObject","_class_wxClientDC",SwigwxClientDCTowxObject},
     { "_wxObject","_wxClientDC",SwigwxClientDCTowxObject},
-    { "_wxObject","_class_wxScreenDC",SwigwxScreenDCTowxObject},
     { "_wxObject","_wxScreenDC",SwigwxScreenDCTowxObject},
-    { "_wxObject","_class_wxMemoryDC",SwigwxMemoryDCTowxObject},
     { "_wxObject","_wxMemoryDC",SwigwxMemoryDCTowxObject},
-    { "_wxObject","_class_wxDC",SwigwxDCTowxObject},
     { "_wxObject","_wxDC",SwigwxDCTowxObject},
-    { "_wxObject","_class_wxBrushList",SwigwxBrushListTowxObject},
     { "_wxObject","_wxBrushList",SwigwxBrushListTowxObject},
-    { "_wxObject","_class_wxBrush",SwigwxBrushTowxObject},
     { "_wxObject","_wxBrush",SwigwxBrushTowxObject},
-    { "_wxObject","_class_wxPenList",SwigwxPenListTowxObject},
     { "_wxObject","_wxPenList",SwigwxPenListTowxObject},
-    { "_wxObject","_class_wxPyPen",SwigwxPyPenTowxObject},
     { "_wxObject","_wxPyPen",SwigwxPyPenTowxObject},
-    { "_wxObject","_class_wxPen",SwigwxPenTowxObject},
     { "_wxObject","_wxPen",SwigwxPenTowxObject},
-    { "_wxObject","_class_wxColourDatabase",SwigwxColourDatabaseTowxObject},
     { "_wxObject","_wxColourDatabase",SwigwxColourDatabaseTowxObject},
-    { "_wxObject","_class_wxColour",SwigwxColourTowxObject},
     { "_wxObject","_wxColour",SwigwxColourTowxObject},
-    { "_wxObject","_class_wxFontList",SwigwxFontListTowxObject},
     { "_wxObject","_wxFontList",SwigwxFontListTowxObject},
-    { "_wxObject","_class_wxFont",SwigwxFontTowxObject},
     { "_wxObject","_wxFont",SwigwxFontTowxObject},
-    { "_wxObject","_class_wxCursor",SwigwxCursorTowxObject},
     { "_wxObject","_wxCursor",SwigwxCursorTowxObject},
-    { "_wxObject","_class_wxIcon",SwigwxIconTowxObject},
     { "_wxObject","_wxIcon",SwigwxIconTowxObject},
-    { "_wxObject","_class_wxMask",SwigwxMaskTowxObject},
     { "_wxObject","_wxMask",SwigwxMaskTowxObject},
-    { "_wxObject","_class_wxBitmap",SwigwxBitmapTowxObject},
     { "_wxObject","_wxBitmap",SwigwxBitmapTowxObject},
-    { "_wxObject","_class_wxGDIObject",SwigwxGDIObjectTowxObject},
     { "_wxObject","_wxGDIObject",SwigwxGDIObjectTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -11310,8 +11483,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
-    { "_class_wxPen","_class_wxPyPen",SwigwxPyPenTowxPen},
-    { "_class_wxPen","_wxPyPen",SwigwxPyPenTowxPen},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
@@ -11324,24 +11495,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
-    { "_class_wxGDIObject","_class_wxRegion",SwigwxRegionTowxGDIObject},
-    { "_class_wxGDIObject","_wxRegion",SwigwxRegionTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxPalette",SwigwxPaletteTowxGDIObject},
-    { "_class_wxGDIObject","_wxPalette",SwigwxPaletteTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxBrush",SwigwxBrushTowxGDIObject},
-    { "_class_wxGDIObject","_wxBrush",SwigwxBrushTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxPyPen",SwigwxPyPenTowxGDIObject},
-    { "_class_wxGDIObject","_wxPyPen",SwigwxPyPenTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxPen",SwigwxPenTowxGDIObject},
-    { "_class_wxGDIObject","_wxPen",SwigwxPenTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxFont",SwigwxFontTowxGDIObject},
-    { "_class_wxGDIObject","_wxFont",SwigwxFontTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxCursor",SwigwxCursorTowxGDIObject},
-    { "_class_wxGDIObject","_wxCursor",SwigwxCursorTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxIcon",SwigwxIconTowxGDIObject},
-    { "_class_wxGDIObject","_wxIcon",SwigwxIconTowxGDIObject},
-    { "_class_wxGDIObject","_class_wxBitmap",SwigwxBitmapTowxGDIObject},
-    { "_class_wxGDIObject","_wxBitmap",SwigwxBitmapTowxGDIObject},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_time_t",0},

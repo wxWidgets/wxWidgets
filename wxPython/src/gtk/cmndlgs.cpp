@@ -27,19 +27,21 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export 
+#	    define SWIGEXPORT(a) a _export
 #	else
-#	    define SWIGEXPORT(a) a 
+#	    define SWIGEXPORT(a) a
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a 
+#   define SWIGEXPORT(a) a
 #endif
+
+#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
+
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -60,47 +62,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/progdlg.h>
 #include <wx/fdrepdlg.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -3931,7 +3914,6 @@ static PyMethodDef cmndlgscMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
     { "_wxEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
     { "_signed_long","_long",0},
     { "_wxPrintQuality","_wxCoord",0},
@@ -3943,53 +3925,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxEvtHandler","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxFontDialog",SwigwxFontDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxFontDialog",SwigwxFontDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxTextEntryDialog",SwigwxTextEntryDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxFileDialog",SwigwxFileDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxFileDialog",SwigwxFileDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxDirDialog",SwigwxDirDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxDirDialog",SwigwxDirDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_class_wxColourDialog",SwigwxColourDialogTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_class_wxObject","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
-    { "_class_wxObject","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
-    { "_class_wxObject","_class_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
-    { "_class_wxObject","_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
-    { "_class_wxObject","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
-    { "_class_wxObject","_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
-    { "_class_wxObject","_class_wxProgressDialog",SwigwxProgressDialogTowxObject},
-    { "_class_wxObject","_wxProgressDialog",SwigwxProgressDialogTowxObject},
-    { "_class_wxObject","_class_wxMessageDialog",SwigwxMessageDialogTowxObject},
-    { "_class_wxObject","_wxMessageDialog",SwigwxMessageDialogTowxObject},
-    { "_class_wxObject","_class_wxFontDialog",SwigwxFontDialogTowxObject},
-    { "_class_wxObject","_wxFontDialog",SwigwxFontDialogTowxObject},
-    { "_class_wxObject","_class_wxFontData",SwigwxFontDataTowxObject},
-    { "_class_wxObject","_wxFontData",SwigwxFontDataTowxObject},
-    { "_class_wxObject","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
-    { "_class_wxObject","_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
-    { "_class_wxObject","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
-    { "_class_wxObject","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
-    { "_class_wxObject","_class_wxFileDialog",SwigwxFileDialogTowxObject},
-    { "_class_wxObject","_wxFileDialog",SwigwxFileDialogTowxObject},
-    { "_class_wxObject","_class_wxDirDialog",SwigwxDirDialogTowxObject},
-    { "_class_wxObject","_wxDirDialog",SwigwxDirDialogTowxObject},
-    { "_class_wxObject","_class_wxColourDialog",SwigwxColourDialogTowxObject},
-    { "_class_wxObject","_wxColourDialog",SwigwxColourDialogTowxObject},
-    { "_class_wxObject","_class_wxColourData",SwigwxColourDataTowxObject},
-    { "_class_wxObject","_wxColourData",SwigwxColourDataTowxObject},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -3997,40 +3935,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxTopLevelWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
-    { "_wxTopLevelWindow","_class_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
-    { "_class_wxDialog","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
-    { "_class_wxDialog","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
-    { "_class_wxDialog","_class_wxMessageDialog",SwigwxMessageDialogTowxDialog},
-    { "_class_wxDialog","_wxMessageDialog",SwigwxMessageDialogTowxDialog},
-    { "_class_wxDialog","_class_wxFontDialog",SwigwxFontDialogTowxDialog},
-    { "_class_wxDialog","_wxFontDialog",SwigwxFontDialogTowxDialog},
-    { "_class_wxDialog","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxDialog},
-    { "_class_wxDialog","_wxTextEntryDialog",SwigwxTextEntryDialogTowxDialog},
-    { "_class_wxDialog","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxDialog},
-    { "_class_wxDialog","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxDialog},
-    { "_class_wxDialog","_class_wxFileDialog",SwigwxFileDialogTowxDialog},
-    { "_class_wxDialog","_wxFileDialog",SwigwxFileDialogTowxDialog},
-    { "_class_wxDialog","_class_wxDirDialog",SwigwxDirDialogTowxDialog},
-    { "_class_wxDialog","_wxDirDialog",SwigwxDirDialogTowxDialog},
-    { "_class_wxDialog","_class_wxColourDialog",SwigwxColourDialogTowxDialog},
-    { "_class_wxDialog","_wxColourDialog",SwigwxColourDialogTowxDialog},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -4039,9 +3952,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_class_wxEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
-    { "_class_wxEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
-    { "_wxCommandEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
     { "_wxCommandEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
     { "_char","_wxChar",0},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
@@ -4057,72 +3967,23 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
-    { "_class_wxTopLevelWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_class_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
-    { "_class_wxTopLevelWindow","_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
-    { "_class_wxWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
-    { "_class_wxWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxWindow},
-    { "_class_wxWindow","_wxProgressDialog",SwigwxProgressDialogTowxWindow},
-    { "_class_wxWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxWindow},
-    { "_class_wxWindow","_wxMessageDialog",SwigwxMessageDialogTowxWindow},
-    { "_class_wxWindow","_class_wxFontDialog",SwigwxFontDialogTowxWindow},
-    { "_class_wxWindow","_wxFontDialog",SwigwxFontDialogTowxWindow},
-    { "_class_wxWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxWindow},
-    { "_class_wxWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxWindow},
-    { "_class_wxWindow","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxWindow},
-    { "_class_wxWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxWindow},
-    { "_class_wxWindow","_class_wxFileDialog",SwigwxFileDialogTowxWindow},
-    { "_class_wxWindow","_wxFileDialog",SwigwxFileDialogTowxWindow},
-    { "_class_wxWindow","_class_wxDirDialog",SwigwxDirDialogTowxWindow},
-    { "_class_wxWindow","_wxDirDialog",SwigwxDirDialogTowxWindow},
-    { "_class_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow},
-    { "_class_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow},
-    { "_wxObject","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
     { "_wxObject","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
-    { "_wxObject","_class_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
     { "_wxObject","_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
-    { "_wxObject","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
     { "_wxObject","_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
-    { "_wxObject","_class_wxProgressDialog",SwigwxProgressDialogTowxObject},
     { "_wxObject","_wxProgressDialog",SwigwxProgressDialogTowxObject},
-    { "_wxObject","_class_wxMessageDialog",SwigwxMessageDialogTowxObject},
     { "_wxObject","_wxMessageDialog",SwigwxMessageDialogTowxObject},
-    { "_wxObject","_class_wxFontDialog",SwigwxFontDialogTowxObject},
     { "_wxObject","_wxFontDialog",SwigwxFontDialogTowxObject},
-    { "_wxObject","_class_wxFontData",SwigwxFontDataTowxObject},
     { "_wxObject","_wxFontData",SwigwxFontDataTowxObject},
-    { "_wxObject","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
     { "_wxObject","_wxTextEntryDialog",SwigwxTextEntryDialogTowxObject},
-    { "_wxObject","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
     { "_wxObject","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxObject},
-    { "_wxObject","_class_wxFileDialog",SwigwxFileDialogTowxObject},
     { "_wxObject","_wxFileDialog",SwigwxFileDialogTowxObject},
-    { "_wxObject","_class_wxDirDialog",SwigwxDirDialogTowxObject},
     { "_wxObject","_wxDirDialog",SwigwxDirDialogTowxObject},
-    { "_wxObject","_class_wxColourDialog",SwigwxColourDialogTowxObject},
     { "_wxObject","_wxColourDialog",SwigwxColourDialogTowxObject},
-    { "_wxObject","_class_wxColourData",SwigwxColourDataTowxObject},
     { "_wxObject","_wxColourData",SwigwxColourDataTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
@@ -4134,26 +3995,17 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
-    { "_wxDialog","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
     { "_wxDialog","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
-    { "_wxDialog","_class_wxMessageDialog",SwigwxMessageDialogTowxDialog},
     { "_wxDialog","_wxMessageDialog",SwigwxMessageDialogTowxDialog},
-    { "_wxDialog","_class_wxFontDialog",SwigwxFontDialogTowxDialog},
     { "_wxDialog","_wxFontDialog",SwigwxFontDialogTowxDialog},
-    { "_wxDialog","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxDialog},
     { "_wxDialog","_wxTextEntryDialog",SwigwxTextEntryDialogTowxDialog},
-    { "_wxDialog","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxDialog},
     { "_wxDialog","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxDialog},
-    { "_wxDialog","_class_wxFileDialog",SwigwxFileDialogTowxDialog},
     { "_wxDialog","_wxFileDialog",SwigwxFileDialogTowxDialog},
-    { "_wxDialog","_class_wxDirDialog",SwigwxDirDialogTowxDialog},
     { "_wxDialog","_wxDirDialog",SwigwxDirDialogTowxDialog},
-    { "_wxDialog","_class_wxColourDialog",SwigwxColourDialogTowxDialog},
     { "_wxDialog","_wxColourDialog",SwigwxColourDialogTowxDialog},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_wxFrame","_class_wxProgressDialog",SwigwxProgressDialogTowxFrame},
     { "_wxFrame","_wxProgressDialog",SwigwxProgressDialogTowxFrame},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
@@ -4189,46 +4041,24 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_class_wxCommandEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
-    { "_wxEvtHandler","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxFontDialog",SwigwxFontDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxFontDialog",SwigwxFontDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxTextEntryDialog",SwigwxTextEntryDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxFileDialog",SwigwxFileDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxFileDialog",SwigwxFileDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxDirDialog",SwigwxDirDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxDirDialog",SwigwxDirDialogTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxColourDialog",SwigwxColourDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler},
-    { "_wxWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
     { "_wxWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
-    { "_wxWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxWindow},
     { "_wxWindow","_wxProgressDialog",SwigwxProgressDialogTowxWindow},
-    { "_wxWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxWindow},
     { "_wxWindow","_wxMessageDialog",SwigwxMessageDialogTowxWindow},
-    { "_wxWindow","_class_wxFontDialog",SwigwxFontDialogTowxWindow},
     { "_wxWindow","_wxFontDialog",SwigwxFontDialogTowxWindow},
-    { "_wxWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxWindow},
     { "_wxWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxWindow},
-    { "_wxWindow","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxWindow},
     { "_wxWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxWindow},
-    { "_wxWindow","_class_wxFileDialog",SwigwxFileDialogTowxWindow},
     { "_wxWindow","_wxFileDialog",SwigwxFileDialogTowxWindow},
-    { "_wxWindow","_class_wxDirDialog",SwigwxDirDialogTowxWindow},
     { "_wxWindow","_wxDirDialog",SwigwxDirDialogTowxWindow},
-    { "_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow},
     { "_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow},
-    { "_class_wxFrame","_class_wxProgressDialog",SwigwxProgressDialogTowxFrame},
-    { "_class_wxFrame","_wxProgressDialog",SwigwxProgressDialogTowxFrame},
 {0,0,0}};
 
 static PyObject *SWIG_globals;
