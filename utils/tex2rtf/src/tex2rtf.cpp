@@ -342,10 +342,10 @@ bool MyApp::OnInit()
 
     wxMenu *options_menu = new wxMenu;
 
-    options_menu->Append(TEX_OPTIONS_CURELY_BRACE, _T("Curley brace matching"), _T("Checks for mismatched curley braces"),true);
+    options_menu->Append(TEX_OPTIONS_CURLEY_BRACE, _T("Curley brace matching"), _T("Checks for mismatched curley braces"),true);
     options_menu->Append(TEX_OPTIONS_SYNTAX_CHECKING, _T("Syntax checking"), _T("Syntax checking for common errors"),true);
 
-    options_menu->Check(TEX_OPTIONS_CURELY_BRACE, checkCurleyBraces);
+    options_menu->Check(TEX_OPTIONS_CURLEY_BRACE, checkCurleyBraces);
     options_menu->Check(TEX_OPTIONS_SYNTAX_CHECKING, checkSyntax);
 
     wxMenu *help_menu = new wxMenu;
@@ -593,7 +593,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEX_MODE_WINHELP, MyFrame::OnModeWinHelp)
     EVT_MENU(TEX_MODE_HTML, MyFrame::OnModeHTML)
     EVT_MENU(TEX_MODE_XLP, MyFrame::OnModeXLP)
-    EVT_MENU(TEX_OPTIONS_CURELY_BRACE, MyFrame::OnOptionsCurleyBrace)
+    EVT_MENU(TEX_OPTIONS_CURLEY_BRACE, MyFrame::OnOptionsCurleyBrace)
     EVT_MENU(TEX_OPTIONS_SYNTAX_CHECKING, MyFrame::OnOptionsSyntaxChecking)
     EVT_MENU(TEX_HELP, MyFrame::OnHelp)
     EVT_MENU(TEX_ABOUT, MyFrame::OnAbout)

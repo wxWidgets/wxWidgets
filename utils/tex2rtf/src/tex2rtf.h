@@ -131,7 +131,7 @@ class ItemizeStruc: public wxObject
 #define TEX_MODE_HTML   11
 #define TEX_MODE_XLP    12
 
-#define TEX_OPTIONS_CURELY_BRACE 13
+#define TEX_OPTIONS_CURLEY_BRACE 13
 #define TEX_OPTIONS_SYNTAX_CHECKING 14
 
 #define TEX_HELP        15
