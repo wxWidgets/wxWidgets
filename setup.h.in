@@ -1151,9 +1151,6 @@
 /* Define if you have the <sched.h> header file.  */
 #undef HAVE_SCHED_H
 
-/* Define if you have the <strings.h> header file.  */
-#undef HAVE_STRINGS_H
-
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
@@ -1195,6 +1192,12 @@
 
 /* Define this if you have fputws() and putwc() */
 #undef HAVE_FPUTWC
+
+/* Define this if you have strcasecmp() function in <string.h> */
+#undef HAVE_STRCASECMP_IN_STRING_H
+
+/* Define this if you have strcasecmp() function in <strings.h> */
+#undef HAVE_STRCASECMP_IN_STRINGS_H
 
 /* Define this if you have wprintf() and related functions */
 #undef HAVE_WPRINTF

@@ -1509,27 +1509,45 @@ dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
 
-dnl test for strings.h needed under AIX, but do not check for it wxMac as
-dnl it exists but is only a simple redirection to string.h and it is in
-dnl conflict with Strings.h in FlatCarbon headers
-dnl
-dnl Autoconf 2.5 tends to check for strings.h on its own, so avoiding the 
-dnl test (as the current configure script does) is not possible.  Instead, 
-dnl you must remind autoconf that strings.h is NOT valid.  The autoconf 
-dnl test succeeds because there is a strings.h file that simply includes 
-dnl string.h.  Unfortunately, there is also a strings.h as part of the 
-dnl FlatCarbon headers.                                    -- David Elliott
-if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
-    AC_CACHE_CHECK([for strings.h], ac_cv_header_strings_h, 
-                   [ac_cv_header_strings_h=no])
-    if test "$ac_cv_header_strings_h" = "no"; then
-        AC_MSG_RESULT([forced no into cache])
+dnl look for strcasecmp() in string.h and then strings.h if it's not there
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+AC_CACHE_CHECK([for strcasecmp() in string.h], ac_cv_string_strcasecmp, [
+    AC_TRY_LINK([
+        #include <string.h>
+        ],
+        [
+            strcasecmp("foo", "bar");
+        ],
+        ac_cv_string_strcasecmp=yes,
+        ac_cv_string_strcasecmp=no
+    )
+])
+
+if test x"$ac_cv_string_strcasecmp" = "xyes"; then
+    AC_DEFINE(HAVE_STRCASECMP_IN_STRING_H)
+else
+    AC_CACHE_CHECK([for strcasecmp() in strings.h], ac_cv_strings_strcasecmp, [
+        AC_TRY_LINK([
+            #include <strings.h>
+            ],
+            [
+                strcasecmp("foo", "bar");
+            ],
+            ac_cv_strings_strcasecmp=yes,
+            ac_cv_strings_strcasecmp=no
+        )
+    ])
+
+    if test x"$ac_cv_string_strcasecmp" = "xyes"; then
+        AC_DEFINE(HAVE_STRCASECMP_IN_STRINGS_H)
     else
-        AC_MSG_WARN([strings.h is not compatible with Mac OS X])
+        AC_MSG_ERROR([No case-insensitive string comparison function found.])
     fi
 fi
-dnl defines HAVE_STRINGS_H
-AC_CHECK_HEADERS(strings.h)
+
+AC_LANG_RESTORE
 
 dnl defines HAVE_STDLIB_H
 AC_CHECK_HEADERS(stdlib.h)

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        string.h
+// Name:        wx/string.h
 // Purpose:     wxString and wxArrayString classes
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -47,9 +47,9 @@
 #  include <stdlib.h>
 #endif
 
-#ifdef HAVE_STRINGS_H
+#ifdef HAVE_STRCASECMP_IN_STRINGS_H
     #include <strings.h>    // for strcasecmp()
-#endif // HAVE_STRINGS_H
+#endif // HAVE_STRCASECMP_IN_STRINGS_H
 
 #include "wx/wxchar.h"      // for wxChar
 #include "wx/buffer.h"      // for wxCharBuffer
@@ -134,7 +134,9 @@ inline int Stricmp(const char *psz1, const char *psz2)
   return stricmp(psz1, psz2);
 #elif defined(__WXPM__)
   return stricmp(psz1, psz2);
-#elif defined(__UNIX__) || defined(__GNUWIN32__)
+#elif defined(HAVE_STRCASECMP_IN_STRING_H) || \
+      defined(HAVE_STRCASECMP_IN_STRINGS_H) || \
+      defined(__GNUWIN32__)
   return strcasecmp(psz1, psz2);
 #elif defined(__MWERKS__) && !defined(__INTEL__)
   register char c1, c2;
@@ -216,7 +218,7 @@ struct WXDLLIMPEXP_BASE wxStringData
 
   // VC++ will refuse to inline Unlock but profiling shows that it is wrong
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-	__forceinline
+  __forceinline
 #endif
   // VC++ free must take place in same DLL as allocation when using non dll
   // run-time library (e.g. Multithreaded instead of Multithreaded DLL)
@@ -331,21 +333,21 @@ public:
   wxStringBase(const void *pStart, const void *pEnd);
 
     // dtor is not virtual, this class must not be inherited from!
-  ~wxStringBase() 
-  { 
+  ~wxStringBase()
+  {
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-	//RN - according to the above VC++ does indeed inline this,
-	//even though it spits out two warnings
-	#pragma warning (disable:4714)
+      //RN - according to the above VC++ does indeed inline this,
+      //even though it spits out two warnings
+      #pragma warning (disable:4714)
 #endif
 
-	  GetStringData()->Unlock(); 
+      GetStringData()->Unlock();
   }
 
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-  	//re-enable inlining warning
-	#pragma warning (default:4714)
-#endif  
+    //re-enable inlining warning
+    #pragma warning (default:4714)
+#endif
   // overloaded assignment
     // from another wxString
   wxStringBase& operator=(const wxStringBase& stringSrc);
@@ -452,7 +454,7 @@ public:
   wxStringBase& insert(size_t nPos, size_t n, wxChar ch)
     { return insert(nPos, wxStringBase(n, ch)); }
   iterator insert(iterator it, wxChar ch)
-    { size_t idx = it - begin(); insert(idx, 1, ch); return begin() + idx; } 
+    { size_t idx = it - begin(); insert(idx, 1, ch); return begin() + idx; }
   void insert(iterator it, const_iterator first, const_iterator last)
     { insert(it - begin(), first, last - first); }
   void insert(iterator it, size_type n, wxChar ch)
@@ -1222,7 +1224,7 @@ public:
   wxString& insert(size_t nPos, size_t n, wxChar ch)
     { return (wxString&)wxStringBase::insert(nPos, n, ch); }
   iterator insert(iterator it, wxChar ch)
-    { return wxStringBase::insert(it, ch); } 
+    { return wxStringBase::insert(it, ch); }
   void insert(iterator it, const_iterator first, const_iterator last)
     { wxStringBase::insert(it, first, last); }
   void insert(iterator it, size_type n, wxChar ch)
