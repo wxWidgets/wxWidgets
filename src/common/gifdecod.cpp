@@ -31,6 +31,24 @@
 
 
 //---------------------------------------------------------------------------
+// GIFImage constructor
+//---------------------------------------------------------------------------
+GIFImage::GIFImage()
+{
+    w = 0;
+    h = 0;
+    left = 0;
+    top = 0;
+    transparent = 0;
+    disposal = 0;
+    delay = -1;
+    p = (unsigned char *) NULL;
+    pal = (unsigned char *) NULL;
+    next = (GIFImage *) NULL;
+    prev = (GIFImage *) NULL;
+}
+
+//---------------------------------------------------------------------------
 // wxGIFDecoder constructor and destructor
 //---------------------------------------------------------------------------
 
@@ -309,6 +327,11 @@ int wxGIFDecoder::getcode(int bits, int ab_fin)
 
             /* prefetch data */
             m_f->Read((void *) m_buffer, m_restbyte);
+            if (m_f->LastRead() != m_restbyte)
+            {
+                code = ab_fin;
+                return code;
+            }
             m_bufp = m_buffer;
         }
 
@@ -332,12 +355,32 @@ int wxGIFDecoder::getcode(int bits, int ab_fin)
 // dgif:
 //  GIF decoding function. The initial code size (aka root size)
 //  is 'bits'. Supports interlaced images (interl == 1).
-//
+//  Returns wxGIF_OK (== 0) on success, or an error code if something
+// fails (see header file for details)
 int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
 {
-    int *ab_prefix = new int[4096]; /* alphabet (prefixes) */
-    int *ab_tail = new int[4096];   /* alphabet (tails) */
-    int *stack = new int[4096];     /* decompression stack */
+    static const int allocSize = 4096 + 1;
+    int *ab_prefix = new int[allocSize]; /* alphabet (prefixes) */
+    if (ab_prefix == NULL)
+    {
+        return wxGIF_MEMERR;
+    }
+
+    int *ab_tail = new int[allocSize];   /* alphabet (tails) */
+    if (ab_tail == NULL)
+    {
+        delete[] ab_prefix;
+        return wxGIF_MEMERR;
+    }
+
+    int *stack = new int[allocSize];     /* decompression stack */
+    if (stack == NULL)
+    {
+        delete[] ab_prefix;
+        delete[] ab_tail;
+        return wxGIF_MEMERR;
+    }
+
     int ab_clr;                     /* clear code */
     int ab_fin;                     /* end of info code */
     int ab_bits;                    /* actual symbol width, in bits */
@@ -401,6 +444,17 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
         {
             stack[pos++] = ab_tail[code];
             code         = ab_prefix[code];
+
+            // Don't overflow. This shouldn't happen with normal
+            // GIF files, the allocSize of 4096+1 is enough. This
+            // will only happen with badly formed GIFs.
+            if (pos >= allocSize)
+            {
+                delete[] ab_prefix;
+                delete[] ab_tail;
+                delete[] stack;
+                return wxGIF_INVFORMAT;
+            }
         }
         stack[pos] = code;              /* push last code into the stack */
         abcabca    = code;              /* save for special case */
@@ -422,6 +476,14 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
         /* dump stack data to the buffer */
         while (pos >= 0)
         {
+            if (pos >= allocSize)
+            {
+                delete[] ab_prefix;
+                delete[] ab_tail;
+                delete[] stack;
+                return wxGIF_INVFORMAT;
+            }
+
             (img->p)[x + (y * (img->w))] = (char)stack[pos--];
 
             if (++x >= (img->w))
@@ -505,7 +567,7 @@ as an End of Information itself)
     delete [] ab_tail ;
     delete [] stack ;
 
-    return 0;
+    return wxGIF_OK;
 }
 
 
@@ -534,27 +596,42 @@ bool wxGIFDecoder::CanRead()
 //
 int wxGIFDecoder::ReadGIF()
 {
-    int           ncolors, bits, interl, transparent, disposal, i;
+    unsigned int ncolors;
+    int           bits, interl, transparent, disposal, i;
     long          size;
     long          delay;
     unsigned char type = 0;
     unsigned char pal[768];
     unsigned char buf[16];
     GIFImage      **ppimg;
-        GIFImage      *pimg, *pprev;
+    GIFImage      *pimg, *pprev;
 
     /* check GIF signature */
     if (!CanRead())
         return wxGIF_INVFORMAT;
 
     /* check for animated GIF support (ver. >= 89a) */
-    m_f->Read(buf, 6);
+
+    static const size_t headerSize = (3 + 3);
+    m_f->Read(buf, headerSize);
+    if (m_f->LastRead() != headerSize)
+    {
+        return wxGIF_INVFORMAT;
+    }
 
     if (memcmp(buf + 3, "89a", 3) < 0)
+    {
         m_anim = FALSE;
+    }
 
     /* read logical screen descriptor block (LSDB) */
-    m_f->Read(buf, 7);
+    static const size_t lsdbSize = (2 + 2 + 1 + 1 + 1);
+    m_f->Read(buf, lsdbSize);
+    if (m_f->LastRead() != lsdbSize)
+    {
+        return wxGIF_INVFORMAT;
+    }
+
     m_screenw = buf[0] + 256 * buf[1];
     m_screenh = buf[2] + 256 * buf[3];
 
@@ -564,7 +641,12 @@ int wxGIFDecoder::ReadGIF()
         m_background = buf[5];
 
         ncolors = 2 << (buf[4] & 0x07);
-        m_f->Read(pal, 3 * ncolors);
+        size_t numBytes = 3 * ncolors;
+        m_f->Read(pal, numBytes);
+        if (m_f->LastRead() != numBytes)
+        {
+            return wxGIF_INVFORMAT;
+        }
     }
 
     /* transparent colour, disposal method and delay default to unused */
@@ -583,6 +665,23 @@ int wxGIFDecoder::ReadGIF()
     {
         type = (unsigned char)m_f->GetC();
 
+        /*
+        If the end of file has been reached (or an error) and a ";"
+        (0x3B) hasn't been encountered yet, exit the loop. (Without this
+        check the while loop would loop endlessly.) Later on, in the next while
+        loop, the file will be treated as being truncated (But still
+        be decoded as far as possible). returning wxGIF_TRUNCATED is not
+        possible here since some init code is done after this loop.
+        */
+        if (m_f->Eof())// || !m_f->IsOk())
+        {
+            /*
+            type is set to some bogus value, so there's no
+            need to continue evaluating it.
+            */
+            break; // Alternative : "return wxGIF_INVFORMAT;"
+        }
+
         /* end of data? */
         if (type == 0x3B)
         {
@@ -595,7 +694,13 @@ int wxGIFDecoder::ReadGIF()
             if (((unsigned char)m_f->GetC()) == 0xF9)
             /* graphics control extension, parse it */
             {
-                m_f->Read(buf, 6);
+                static const size_t gceSize = 6;
+                m_f->Read(buf, gceSize);
+                if (m_f->LastRead() != gceSize)
+                {
+                    Destroy();
+                    return wxGIF_INVFORMAT;
+                }
 
                 /* read delay and convert from 1/100 of a second to ms */
                 delay = 10 * (buf[2] + 256 * buf[3]);
@@ -613,6 +718,11 @@ int wxGIFDecoder::ReadGIF()
                 while ((i = (unsigned char)m_f->GetC()) != 0)
                 {
                     m_f->SeekI(i, wxFromCurrent);
+                    if (m_f->Eof())
+                    {
+                        done = TRUE;
+                        break;
+                    }
                 }
             }
         }
@@ -630,7 +740,14 @@ int wxGIFDecoder::ReadGIF()
             }
 
             /* fill in the data */
-            m_f->Read(buf, 9);
+            static const size_t idbSize = (2 + 2 + 2 + 2 + 1);
+            m_f->Read(buf, idbSize);
+            if (m_f->LastRead() != idbSize)
+            {
+                Destroy();
+                return wxGIF_INVFORMAT;
+            }
+
             pimg->left = buf[0] + 256 * buf[1];
             pimg->top = buf[2] + 256 * buf[3];
 /*
@@ -639,6 +756,13 @@ int wxGIFDecoder::ReadGIF()
 */
             pimg->w = buf[4] + 256 * buf[5];
             pimg->h = buf[6] + 256 * buf[7];
+
+            if (pimg->w == 0 || pimg->h == 0)
+            {
+                Destroy();
+                return wxGIF_INVFORMAT;
+            }
+
             interl = ((buf[8] & 0x40)? 1 : 0);
             size = pimg->w * pimg->h;
 
@@ -664,16 +788,29 @@ int wxGIFDecoder::ReadGIF()
             if ((buf[8] & 0x80) == 0x80)
             {
                 ncolors = 2 << (buf[8] & 0x07);
-                m_f->Read(pimg->pal, 3 * ncolors);
+                size_t numBytes = 3 * ncolors;
+                m_f->Read(pimg->pal, numBytes);
+                if (m_f->LastRead() != numBytes)
+                {
+                    Destroy();
+                    return wxGIF_INVFORMAT;
+                }
             }
             else
+            {
                 memcpy(pimg->pal, pal, 768);
+            }
 
             /* get initial code size from first byte in raster data */
             bits = (unsigned char)m_f->GetC();
 
             /* decode image */
-            dgif(pimg, interl, bits);
+            int result = dgif(pimg, interl, bits);
+            if (result != wxGIF_OK)
+            {
+                Destroy();
+                return result;
+            }
             m_nimages++;
 
             /* if this is not an animated GIF, exit after first image */
@@ -682,20 +819,23 @@ int wxGIFDecoder::ReadGIF()
         }
     }
 
-    /* setup image pointers */
-    if (m_nimages != 0)
+    if (m_nimages == 0)
     {
-        m_image = 1;
-        m_plast = pimg;
-        m_pimage = m_pfirst;
+        Destroy();
+        return wxGIF_INVFORMAT;
     }
+
+    /* setup image pointers */
+    m_image = 1;
+    m_plast = pimg;
+    m_pimage = m_pfirst;
 
     /* try to read to the end of the stream */
     while (type != 0x3B)
     {
         if (!m_f->IsOk())
             return wxGIF_TRUNCATED;
-            
+
         type = (unsigned char)m_f->GetC();
 
         if (type == 0x21)
@@ -712,13 +852,26 @@ int wxGIFDecoder::ReadGIF()
         else if (type == 0x2C)
         {
             /* image descriptor block */
-            m_f->Read(buf, 9);
+            static const size_t idbSize = (2 + 2 + 2 + 2 + 1);
+            m_f->Read(buf, idbSize);
+            if (m_f->LastRead() != idbSize)
+            {
+                Destroy();
+                return wxGIF_INVFORMAT;
+            }
 
             /* local color map */
             if ((buf[8] & 0x80) == 0x80)
             {
                 ncolors = 2 << (buf[8] & 0x07);
-                m_f->SeekI(3 * ncolors, wxFromCurrent);
+                off_t pos = m_f->TellI();
+                off_t numBytes = 3 * ncolors;
+                m_f->SeekI(numBytes, wxFromCurrent);
+                if (m_f->TellI() != (pos + numBytes))
+                {
+                    Destroy();
+                    return wxGIF_INVFORMAT;
+                }
             }
 
             /* initial code size */

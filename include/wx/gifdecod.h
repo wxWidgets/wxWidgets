@@ -64,6 +64,9 @@ enum
 class GIFImage
 {
 public:
+    // def ctor
+    GIFImage();
+
     unsigned int w;                 /* width */
     unsigned int h;                 /* height */
     unsigned int left;              /* x coord (in logical screen) */
