@@ -31,6 +31,8 @@
 
 #include "wx/listctrl.h"
 #include "wx/timer.h"           // for wxStopWatch
+#include "wx/colordlg.h"        // for wxGetColourFromUser
+
 #include "listtest.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -48,6 +50,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SELECT_ALL, MyFrame::OnSelectAll)
     EVT_MENU(LIST_DELETE_ALL, MyFrame::OnDeleteAll)
     EVT_MENU(LIST_SORT, MyFrame::OnSort)
+    EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
+    EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
@@ -75,15 +79,10 @@ int wxCALLBACK MyCompareFunction(long item1, long item2, long sortData)
 }
 
 // `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL, "wxListCtrl Test", 50, 50, 450, 340);
-
-  // This reduces flicker effects - even better would be to define OnEraseBackground
-  // to do nothing. When the list control's scrollbars are show or hidden, the
-  // frame is sent a background erase event.
-  frame->SetBackgroundColour( *wxWHITE );
 
   // Give it an icon
   frame->SetIcon( wxICON(mondrian) );
@@ -132,29 +131,42 @@ bool MyApp::OnInit(void)
 #endif
 
   // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+  wxMenu *menuFile = new wxMenu;
+  menuFile->Append(LIST_ABOUT, "&About");
+  menuFile->AppendSeparator();
+#if 0 // what is this for? (VZ)
+  menuFile->Append(BUSY_ON,         "&Busy cursor on");
+  menuFile->Append(BUSY_OFF,         "&Busy cursor off");
+  menuFile->AppendSeparator();
+#endif
+  menuFile->Append(LIST_QUIT, "E&xit\tAlt-X");
 
-  file_menu->Append(LIST_LIST_VIEW,         "&List view\tF1");
-  file_menu->Append(LIST_REPORT_VIEW,         "&Report view\tF2");
-  file_menu->Append(LIST_ICON_VIEW,         "&Icon view\tF3");
-  file_menu->Append(LIST_ICON_TEXT_VIEW,     "Icon view with &text\tF4");
-  file_menu->Append(LIST_SMALL_ICON_VIEW,     "&Small icon view\tF5");
-  file_menu->Append(LIST_SMALL_ICON_TEXT_VIEW,     "Small icon &view with text\tF6");
-  file_menu->Append(LIST_DESELECT_ALL, "&Deselect All");
-  file_menu->Append(LIST_SELECT_ALL, "S&elect All");
-  file_menu->AppendSeparator();
-  file_menu->Append(LIST_SORT, "&Sort\tCtrl-S");
-  file_menu->AppendSeparator();
-  file_menu->Append(LIST_DELETE_ALL, "Delete &all items");
-  file_menu->AppendSeparator();
-  file_menu->Append(BUSY_ON,         "&Busy cursor on");
-  file_menu->Append(BUSY_OFF,         "&Busy cursor off");
-  file_menu->AppendSeparator();
-  file_menu->Append(LIST_ABOUT, "&About");
-  file_menu->Append(LIST_QUIT, "E&xit\tAlt-X");
-  wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "&File");
-  frame->SetMenuBar(menu_bar);
+  wxMenu *menuView = new wxMenu;
+  menuView->Append(LIST_LIST_VIEW,         "&List view\tF1");
+  menuView->Append(LIST_REPORT_VIEW,         "&Report view\tF2");
+  menuView->Append(LIST_ICON_VIEW,         "&Icon view\tF3");
+  menuView->Append(LIST_ICON_TEXT_VIEW,     "Icon view with &text\tF4");
+  menuView->Append(LIST_SMALL_ICON_VIEW,     "&Small icon view\tF5");
+  menuView->Append(LIST_SMALL_ICON_TEXT_VIEW,     "Small icon &view with text\tF6");
+
+  wxMenu *menuList = new wxMenu;
+  menuList->Append(LIST_DESELECT_ALL, "&Deselect All\tCtrl-D");
+  menuList->Append(LIST_SELECT_ALL, "S&elect All\tCtrl-A");
+  menuList->AppendSeparator();
+  menuList->Append(LIST_SORT, "&Sort\tCtrl-S");
+  menuList->AppendSeparator();
+  menuList->Append(LIST_DELETE_ALL, "Delete &all items");
+
+  wxMenu *menuCol = new wxMenu;
+  menuCol->Append(LIST_SET_FG_COL, "&Foreground colour...");
+  menuCol->Append(LIST_SET_BG_COL, "&Background colour...");
+
+  wxMenuBar *menubar = new wxMenuBar;
+  menubar->Append(menuFile, "&File");
+  menubar->Append(menuView, "&View");
+  menubar->Append(menuList, "&List");
+  menubar->Append(menuCol, "&Colour");
+  frame->SetMenuBar(menubar);
 
   // Make a panel with a message
   frame->m_listCtrl = new MyListCtrl(frame, LIST_CTRL, wxPoint(0, 0), wxSize(400, 200),
@@ -177,15 +189,14 @@ bool MyApp::OnInit(void)
   frame->m_logWindow->SetConstraints(c);
   frame->SetAutoLayout(TRUE);
 
+  wxString buf;
   for ( int i=0; i < 30; i++)
-    {
-        wxChar buf[20];
-        wxSprintf(buf, _T("Item %d"), i);
-        frame->m_listCtrl->InsertItem(i, buf);
-    }
+  {
+      buf.Printf(_T("Item %d"), i);
+      frame->m_listCtrl->InsertItem(i, buf);
+  }
 
   frame->CreateStatusBar(3);
-  frame->SetStatusText("", 0);
 
   // Show the frame
   frame->Show(TRUE);
@@ -196,14 +207,14 @@ bool MyApp::OnInit(void)
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
-  wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
+       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
     m_listCtrl = (MyListCtrl *) NULL;
     m_logWindow = (wxTextCtrl *) NULL;
 }
 
-MyFrame::~MyFrame(void)
+MyFrame::~MyFrame()
 {
     delete wxGetApp().m_imageListNormal;
     delete wxGetApp().m_imageListSmall;
@@ -394,6 +405,18 @@ void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
     m_logWindow->WriteText(wxString::Format(_T("Sorting %d items took %ld ms\n"),
                                             m_listCtrl->GetItemCount(),
                                             sw.Time()));
+}
+
+void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
+{
+    m_listCtrl->SetForegroundColour(wxGetColourFromUser(this));
+    m_listCtrl->Refresh();
+}
+
+void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
+{
+    m_listCtrl->SetBackgroundColour(wxGetColourFromUser(this));
+    m_listCtrl->Refresh();
 }
 
 void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))

@@ -570,11 +570,26 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.FloodFill(0, 0, wxColour(255, 0, 0));
 #endif //
 
-    dc.DrawIcon( wxICON(mondrian), 410, 40 );
+    dc.DrawIcon( wxICON(mondrian), 40, 40 );
 
+    // this is the test for "blitting bitmap into DC damages selected brush"
+    // bug
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush( *wxGREEN_BRUSH );
+    dc.DrawRectangle(100, 10, 40, 40);
+    dc.DrawBitmap(wxTheApp->GetStdIcon(wxICON_INFORMATION), 102, 12, TRUE);
+    dc.DrawRectangle(150, 10, 40, 40);
+    dc.DrawIcon(wxTheApp->GetStdIcon(wxICON_INFORMATION), 152, 12);
+    dc.DrawRectangle(200, 10, 40, 40);
+
+    // test for "transparent" bitmap drawing (it intersects with the last
+    // rectangle above)
+    //dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    #include "../image/smile.xpm"
+    wxBitmap bmp(smile_xpm);
+    dc.DrawBitmap(bmp, 210, 30, TRUE);
 
     dc.SetBrush( *wxBLACK_BRUSH );
-    dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle( 0, 160, 1000, 300 );
 
     // draw lines
@@ -772,6 +787,7 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
 
     // reuse the text colour here
     dc.SetPen(wxPen(m_owner->m_colourForeground, 1, wxSOLID));
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
     {
@@ -780,7 +796,7 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
 
         dc.DrawText(rasterOperations[n].name, x, y - 20);
         dc.SetLogicalFunction(rasterOperations[n].rop);
-        //dc.DrawRectangle(x, y, w, h);
+        dc.DrawRectangle(x, y, w, h);
         dc.DrawLine(x, y, x + w, y + h);
         dc.DrawLine(x + w, y, x, y + h);
     }
