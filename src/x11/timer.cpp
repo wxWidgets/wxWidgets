@@ -62,9 +62,12 @@ void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, unsigned long when)
 {
     if ( desc->running )
         return; // already scheduled
-        
+      
+#pragma 
+#if 0
     if ( when == 0 )
         when = wxGetLocalTimeMillis() + desc->timer->GetInterval();
+#endif
     desc->shotTime = when;
     desc->running = TRUE;
 
@@ -106,7 +109,11 @@ void wxTimerScheduler::NotifyTimers()
     {
         bool oneShot;
         volatile bool timerDeleted;
-        unsigned long now = wxGetLocalTimeMillis();
+#pragma        
+        unsigned long now;
+#if 0
+        now = wxGetLocalTimeMillis();
+#endif
         wxTimerDesc *desc;
 
         while ( m_timers && m_timers->shotTime <= now )

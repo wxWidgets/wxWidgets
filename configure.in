@@ -4059,10 +4059,17 @@ if test "$wxUSE_IPC" = "yes"; then
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-    AC_DEFINE(wxUSE_CLIPBOARD)
+    if test "$wxUSE_X11" = 1; then
+        AC_MSG_WARN([Clipboard not yet supported under X11... disabled])
+        wxUSE_CLIPBOARD=no
+    fi
 
-    dnl required by clipboard code in configuration check
-    AC_DEFINE(wxUSE_DATAOBJ)
+    if test "$wxUSE_CLIPBOARD" = "yes"; then
+        AC_DEFINE(wxUSE_CLIPBOARD)
+
+        dnl required by clipboard code in configuration check
+        AC_DEFINE(wxUSE_DATAOBJ)
+    fi
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
@@ -4332,7 +4339,11 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
             if test "$wxUSE_UNIVERSAL" = "yes"; then
                 AC_MSG_WARN([wxTooltip not supported yet in wxUNIVERSAL... disabled])
             else
-                AC_DEFINE(wxUSE_TOOLTIPS)
+                if test "$wxUSE_X11" = "1"; then
+                    AC_MSG_WARN([wxTooltip not supported yet under X11... disabled])
+                else
+                    AC_DEFINE(wxUSE_TOOLTIPS)
+                fi
             fi
         fi
     fi

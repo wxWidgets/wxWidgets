@@ -172,14 +172,10 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     int h = size.GetHeight();
     int x = size.GetX();
     int y = size.GetY();
-    int h = size.GetHeight();
-    if (w == -1) w = 10;
-    if (h == -1) h = 10;
+    if (w == -1) w = 20;
+    if (h == -1) h = 20;
     if (x == -1) x = 0;
     if (y == -1) y = 0;
-
-    int innerWidth = w - 2*m_borderSize;
-    int innerHeight = h - 2*m_borderSize;
 
     int screen = DefaultScreen(wxGlobalDisplay());
 
@@ -189,8 +185,8 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     else
         parentWindow = RootWindow(wxGlobalDisplay(), screen);
 
-    Widget window = XCreateSimpleWindow(wxGlobalDisplay(), 
-        x, y, innerWidth, innerHeight, borderWidth,
+    Window window = XCreateSimpleWindow(wxGlobalDisplay(), parentWindow,
+        x, y, w, h, m_borderSize,
         m_backgroundColour.AllocColour(wxGlobalDisplay()),
         m_foregroundColour.AllocColour(wxGlobalDisplay()));
 
@@ -201,12 +197,10 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask);
 
-    m_mainWindow = (WXWindow) window;
-
     wxAddWindowToTable(window, (wxWindow*) this);
 
     // If a subwindow, show.
-    if (parent && !parent->IsKindOf(CLASSINFO(wxTopLevelWindowX11)) && parent->IsShown())
+//    if (parent && !parent->IsKindOf(CLASSINFO(wxTopLevelWindowX11)) && parent->IsShown())
     {
         m_isShown = TRUE;
         XMapWindow(wxGlobalDisplay(), window);
@@ -305,7 +299,7 @@ wxWindowX11::~wxWindowX11()
         XSelectInput(wxGlobalDisplay(), (Window) GetMainWindow(),
             NoEventMask);
         wxDeleteWindowFromTable((Window) GetMainWindow());
-        XDestroyWindow((Window) GetMainWindow());
+        XDestroyWindow(wxGlobalDisplay(), (Window) GetMainWindow());
         SetMainWindow((WXWindow) NULL);
     }
 }
@@ -448,6 +442,7 @@ void wxWindowX11::DestroyScrollbar(wxOrientation orientation)
 
 void wxWindowX11::SetFocus()
 {
+#if 0
     Window wMain = (Window) GetMainWidget();
     if (wMain)
     {
@@ -458,6 +453,7 @@ void wxWindowX11::SetFocus()
         wmhints.input = True;
         XSetWMHints(wxGlobalDisplay(), wMain, &wmhints)
     }
+#endif
 }
 
 // Get the window with the focus
@@ -558,7 +554,7 @@ void wxWindowX11::DoReleaseMouse()
     if ( !m_winCaptured )
         return;
 
-    Widget wMain = (Widget)GetMainWidget();
+    Window wMain = (Window)GetMainWindow();
 
     // TODO: should we also call XUngrabButton, XUngrabKeyboard?
     if ( wMain )
@@ -1075,7 +1071,7 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         windowChanges.height = height - m_borderSize*2;
         valueMask |= CWHeight;
     }
-    AdjustForParentClientOrigin(valueMask.x, valueMask.y, sizeFlags);
+    AdjustForParentClientOrigin( x, y, sizeFlags);
 
     XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
         valueMask, & windowChanges);
@@ -1150,7 +1146,7 @@ void wxWindowX11::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW,
         sizeHints.height_inc = incH;
     }
 
-    XSetWMNormalHints(wxGlobalDisplay(), (Window) GetMainWindow(), & sizeHints)
+    XSetWMNormalHints(wxGlobalDisplay(), (Window) GetMainWindow(), & sizeHints);
 }
 
 void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
