@@ -435,7 +435,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 
     int nbHor,nbVer;
 
-    if (m_windowStyle & wxRA_VERTICAL)
+    if (m_windowStyle & wxRA_HORIZONTAL)
     {
       nbVer = m_majorDim ;
       nbHor = (m_noItems+m_majorDim-1)/m_majorDim ;
@@ -509,7 +509,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     }
 
     MoveWindow((HWND) m_radioButtons[i],x_offset,y_offset,eachWidth,eachHeight,TRUE);
-    if (m_windowStyle & wxRA_VERTICAL)
+    if (m_windowStyle & wxRA_HORIZONTAL)
     {
       y_offset += maxHeight;
       if (m_radioWidth[0]>0)
