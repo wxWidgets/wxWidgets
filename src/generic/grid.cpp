@@ -320,59 +320,50 @@ void wxGridTableBase::SetAttr(const wxGridCellAttr *attr, int row, int col )
     }
 }
 
-// FIXME VZ: these should be wxFAIL_MSG(), not wxLogWarning, they're for the
-//           programmer, not the user!
-
 bool wxGridTableBase::InsertRows( size_t pos, size_t numRows )
 {
-    wxLogWarning( wxT("Called grid table class function InsertRows(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function"),
-                  pos, numRows );
+    wxFAIL_MSG( wxT("Called grid table class function InsertRows\n"
+                    "but your derived table class does not override this function") );
 
     return FALSE;
 }
 
 bool wxGridTableBase::AppendRows( size_t numRows )
 {
-    wxLogWarning( wxT("Called grid table class function AppendRows(N=%d)\n"
-                  "but your derived table class does not override this function"),
-                  numRows );
+    wxFAIL_MSG( wxT("Called grid table class function AppendRows\n"
+                    "but your derived table class does not override this function"));
 
     return FALSE;
 }
 
 bool wxGridTableBase::DeleteRows( size_t pos, size_t numRows )
 {
-    wxLogWarning( wxT("Called grid table class function DeleteRows(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function"),
-                  pos, numRows );
+    wxFAIL_MSG( wxT("Called grid table class function DeleteRows\n"
+                    "but your derived table class does not override this function"));
 
     return FALSE;
 }
 
 bool wxGridTableBase::InsertCols( size_t pos, size_t numCols )
 {
-    wxLogWarning( wxT("Called grid table class function InsertCols(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function"),
-                  pos, numCols );
+    wxFAIL_MSG( wxT("Called grid table class function InsertCols\n"
+                  "but your derived table class does not override this function"));
 
     return FALSE;
 }
 
 bool wxGridTableBase::AppendCols( size_t numCols )
 {
-    wxLogWarning( wxT("Called grid table class function AppendCols(N=%d)\n"
-                  "but your derived table class does not override this function"),
-                  numCols );
+    wxFAIL_MSG(wxT("Called grid table class function AppendCols\n"
+                   "but your derived table class does not override this function"));
 
     return FALSE;
 }
 
 bool wxGridTableBase::DeleteCols( size_t pos, size_t numCols )
 {
-    wxLogWarning( wxT("Called grid table class function DeleteCols(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function"),
-                  pos, numCols );
+    wxFAIL_MSG( wxT("Called grid table class function DeleteCols\n"
+                    "but your derived table class does not override this function"));
 
     return FALSE;
 }
@@ -612,9 +603,11 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
 
     if ( pos >= curNumRows )
     {
-        wxLogError( wxT("Called wxGridStringTable::DeleteRows(pos=%d, N=%d)...\n"
-                    "Pos value is invalid for present table with %d rows"),
-                    pos, numRows, curNumRows );
+        wxString errmsg;
+        errmsg.Printf("Called wxGridStringTable::DeleteRows(pos=%d, N=%d)\n"
+                      "Pos value is invalid for present table with %d rows",
+                      pos, numRows, curNumRows );
+        wxFAIL_MSG( wxT(errmsg) );
         return FALSE;
     }
 
@@ -690,8 +683,8 @@ bool wxGridStringTable::AppendCols( size_t numCols )
     {
         // TODO: something better than this ?
         //
-        wxLogError( wxT("Unable to append cols to a grid table with no rows.\n"
-                    "Call AppendRows() first") );
+        wxFAIL_MSG( wxT("Unable to append cols to a grid table with no rows.\n"
+                        "Call AppendRows() first") );
         return FALSE;
     }
 
@@ -724,9 +717,11 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
 
     if ( pos >= curNumCols )
     {
-        wxLogError( wxT("Called wxGridStringTable::DeleteCols(pos=%d, N=%d)...\n"
-                    "Pos value is invalid for present table with %d cols"),
-                    pos, numCols, curNumCols );
+        wxString errmsg;
+        errmsg.Printf( "Called wxGridStringTable::DeleteCols(pos=%d, N=%d)...\n"
+                        "Pos value is invalid for present table with %d cols",
+                        pos, numCols, curNumCols );
+        wxFAIL_MSG( wxT( errmsg ) );
         return FALSE;
     }
 
@@ -1234,7 +1229,7 @@ bool wxGrid::CreateGrid( int numRows, int numCols )
 {
     if ( m_created )
     {
-        wxLogError( wxT("wxGrid::CreateGrid(numRows, numCols) called more than once") );
+        wxFAIL_MSG( wxT("wxGrid::CreateGrid called more than once") );
         return FALSE;
     }
     else
@@ -1714,7 +1709,6 @@ void wxGrid::CalcCellsExposed( wxRegion& reg )
         CalcUnscrolledPosition( r.GetLeft(), r.GetTop(), &left, &top );
         CalcUnscrolledPosition( r.GetRight(), r.GetBottom(), &right, &bottom );
 
-	left++; top++;
         // find the cells within these bounds
         //
         int row, col;
@@ -2331,7 +2325,7 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( wxT("Called wxGrid::InsertRows() before calling CreateGrid()") );
+        wxFAIL_MSG( wxT("Called wxGrid::InsertRows() before calling CreateGrid()") );
         return FALSE;
     }
 
@@ -2381,7 +2375,7 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( wxT("Called wxGrid::AppendRows() before calling CreateGrid()") );
+        wxFAIL_MSG( wxT("Called wxGrid::AppendRows() before calling CreateGrid()") );
         return FALSE;
     }
 
@@ -2415,7 +2409,7 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( wxT("Called wxGrid::DeleteRows() before calling CreateGrid()") );
+        wxFAIL_MSG( wxT("Called wxGrid::DeleteRows() before calling CreateGrid()") );
         return FALSE;
     }
 
@@ -2446,7 +2440,7 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( wxT("Called wxGrid::InsertCols() before calling CreateGrid()") );
+        wxFAIL_MSG( wxT("Called wxGrid::InsertCols() before calling CreateGrid()") );
         return FALSE;
     }
 
@@ -2488,7 +2482,7 @@ bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( wxT("Called wxGrid::AppendCols() before calling CreateGrid()") );
+        wxFAIL_MSG( wxT("Called wxGrid::AppendCols() before calling CreateGrid()") );
         return FALSE;
     }
 
@@ -2522,7 +2516,7 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( wxT("Called wxGrid::DeleteCols() before calling CreateGrid()") );
+        wxFAIL_MSG( wxT("Called wxGrid::DeleteCols() before calling CreateGrid()") );
         return FALSE;
     }
 
@@ -2670,7 +2664,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
     {
         // shouldn't be here - we are going round in circles...
         //
-        wxLogFatalError( wxT("wxGrid::OnKeyDown called while alread active") );
+        wxFAIL_MSG( wxT("wxGrid::OnKeyDown called while alread active") );
     }
 
     m_inOnKeyDown = TRUE;
@@ -2922,13 +2916,13 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
 
     // right hand border
     //
-    dc.DrawLine( m_colRights[col]-1, m_rowBottoms[row] - m_rowHeights[row],
-                 m_colRights[col]-1, m_rowBottoms[row]-1 );
+    dc.DrawLine( m_colRights[col], m_rowBottoms[row] - m_rowHeights[row],
+                 m_colRights[col], m_rowBottoms[row] );
 
     // bottom border
     //
-    dc.DrawLine( m_colRights[col] - m_colWidths[col], m_rowBottoms[row]-1,
-                 m_colRights[col]-1, m_rowBottoms[row]-1 );
+    dc.DrawLine( m_colRights[col] - m_colWidths[col], m_rowBottoms[row],
+                 m_colRights[col], m_rowBottoms[row] );
 }
 
 
@@ -3040,13 +3034,13 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     int i;
     for ( i = 0; i < m_numRows; i++ )
     {
-        if ( m_rowBottoms[i]-1 > bottom )
+        if ( m_rowBottoms[i] > bottom )
         {
             break;
         }
-        else if ( m_rowBottoms[i]-1 >= top )
+        else if ( m_rowBottoms[i] >= top )
         {
-            dc.DrawLine( left, m_rowBottoms[i]-1, right, m_rowBottoms[i]-1 );
+            dc.DrawLine( left, m_rowBottoms[i], right, m_rowBottoms[i] );
         }
     }
 
@@ -3055,13 +3049,13 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
     //
     for ( i = 0; i < m_numCols; i++ )
     {
-        if ( m_colRights[i]-1 > right )
+        if ( m_colRights[i] > right )
         {
             break;
         }
-        else if ( m_colRights[i]-1 >= left )
+        else if ( m_colRights[i] >= left )
         {
-            dc.DrawLine( m_colRights[i]-1, top, m_colRights[i]-1, bottom );
+            dc.DrawLine( m_colRights[i], top, m_colRights[i], bottom );
         }
     }
 }
