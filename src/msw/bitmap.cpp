@@ -332,7 +332,6 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 
 bool wxBitmap::Create(int w, int h, int d)
 {
-#ifndef __WXMICROWIN__
     UnRef();
 
     m_refData = new wxBitmapRefData;
@@ -342,7 +341,7 @@ bool wxBitmap::Create(int w, int h, int d)
     GetBitmapData()->m_depth = d;
 
     HBITMAP hbmp;
-
+#ifndef __WXMICROWIN__
     if ( d > 0 )
     {
         hbmp = ::CreateBitmap(w, h, 1, d, NULL);
@@ -352,6 +351,7 @@ bool wxBitmap::Create(int w, int h, int d)
         }
     }
     else
+#endif
     {
         ScreenHDC dc;
         hbmp = ::CreateCompatibleBitmap(dc, w, h);
@@ -369,9 +369,6 @@ bool wxBitmap::Create(int w, int h, int d)
     GetBitmapData()->m_ok = hbmp != 0;
 #endif // WXWIN_COMPATIBILITY_2
     return Ok();
-#else
-    return FALSE;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -383,8 +380,56 @@ bool wxBitmap::Create(int w, int h, int d)
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
 #ifdef __WXMICROWIN__
-    // TODO
-    return FALSE;
+
+    // Initial attempt at a simple-minded implementation.
+    // The bitmap will always be created at the screen depth,
+    // so the 'depth' argument is ignored.
+    // TODO: transparency (create a mask image)
+    
+    HDC hScreenDC = ::GetDC(NULL);
+    int screenDepth = ::GetDeviceCaps(hScreenDC, BITSPIXEL);
+
+    HBITMAP hBitmap = ::CreateCompatibleBitmap(hScreenDC, image.GetWidth(), image.GetHeight());
+    if (hBitmap == NULL)
+    {
+        ::ReleaseDC(NULL, hScreenDC);
+	return FALSE;
+    }
+    HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
+    ::ReleaseDC(NULL, hScreenDC);
+
+    HBITMAP hOldBitmap = ::SelectObject(hMemDC, hBitmap);
+
+    int i, j;
+    for (i = 0; i < image.GetWidth(); i++)
+    {
+	for (j = 0; j < image.GetHeight(); j++)
+	{
+	    unsigned char red = image.GetRed(i, j);
+	    unsigned char green = image.GetGreen(i, j);
+	    unsigned char blue = image.GetBlue(i, j);
+
+	    ::SetPixel(hMemDC, i, j, PALETTERGB(red, green, blue));
+	}
+    }
+
+    ::SelectObject(hMemDC, hOldBitmap);
+    ::DeleteDC(hMemDC);
+    
+    m_refData = new wxBitmapRefData();
+
+    SetWidth(image.GetWidth());
+    SetHeight(image.GetHeight());
+    SetDepth(screenDepth);
+    SetHBITMAP( (WXHBITMAP) hBitmap );
+    
+#if wxUSE_PALETTE
+    // Copy the palette from the source image
+    SetPalette(image.GetPalette());
+#endif // wxUSE_PALETTE
+
+    return TRUE;
+
 #else
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )
 
@@ -621,9 +666,68 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 wxImage wxBitmap::ConvertToImage() const
 {
 #ifdef __WXMICROWIN__
-    // TODO
-    return wxImage();
-#else
+    // Initial attempt at a simple-minded implementation.
+    // The bitmap will always be created at the screen depth,
+    // so the 'depth' argument is ignored.
+    // TODO: transparency (create a mask image)
+
+    if (!Ok())
+    {
+        wxFAIL_MSG( wxT("bitmap is invalid") );
+	return wxNullImage;
+    }
+
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
+
+    // create an wxImage object
+    int width = GetWidth();
+    int height = GetHeight();
+    image.Create( width, height );
+    unsigned char *data = image.GetData();
+    if( !data )
+    {
+        wxFAIL_MSG( wxT("could not allocate data for image") );
+        return wxNullImage;
+    }
+    
+    HDC hScreenDC = ::GetDC(NULL);
+
+    HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
+    ::ReleaseDC(NULL, hScreenDC);
+
+    HBITMAP hBitmap = (HBITMAP) GetHBITMAP();
+    
+    HBITMAP hOldBitmap = ::SelectObject(hMemDC, hBitmap);
+
+    int i, j;
+    for (i = 0; i < GetWidth(); i++)
+    {
+	for (j = 0; j < GetHeight(); j++)
+	{
+	    COLORREF color = ::GetPixel(hMemDC, i, j);
+	    unsigned char red = GetRValue(color);
+	    unsigned char green = GetGValue(color);
+	    unsigned char blue = GetBValue(color);
+
+	    image.SetRGB(i, j, red, green, blue);
+	}
+    }
+
+    ::SelectObject(hMemDC, hOldBitmap);
+    ::DeleteDC(hMemDC);
+    
+#if wxUSE_PALETTE
+    // Copy the palette from the source image
+    if (GetPalette())
+        image.SetPalette(* GetPalette());
+#endif // wxUSE_PALETTE
+
+    return image;
+
+#else // __MICROWIN__
+
     wxImage image;
 
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );

@@ -377,7 +377,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
     //
     // the correct solution is to create the controls as siblings of the
     // static box
-    wxASSERT_MSG( !wxDynamicCastThis(wxStaticBox),
+    wxASSERT_MSG( !wxDynamicCast(parent, wxStaticBox),
                   _T("wxStaticBox can't be used as a window parent!") );
 #endif // wxUSE_STATBOX
 

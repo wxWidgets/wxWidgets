@@ -355,6 +355,7 @@ void ListboxWidgetsPage::CreateLbox()
         delete m_lbox;
     }
 
+#if wxUSE_CHECKLISTBOX
     if ( m_chkCheck->GetValue() )
     {
         m_lbox = new wxCheckListBox(this, ListboxPage_Listbox,
@@ -363,6 +364,7 @@ void ListboxWidgetsPage::CreateLbox()
                                     flags);
     }
     else // just a listbox
+#endif
     {
         m_lbox = new wxListBox(this, ListboxPage_Listbox,
                                wxDefaultPosition, wxDefaultSize,

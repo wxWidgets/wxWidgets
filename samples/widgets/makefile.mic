@@ -50,9 +50,10 @@ LIBNAME =
 include $(TOP)/Makefile.rules
 
 # List of objects to compile
-OBJS = minimal.o
+OBJS = button.o combobox.o gauge.o listbox.o notebook.o radiobox.o slider.o spinbtn.o \
+ static.o textctrl.o widgets.o
 
-all: minimal
+all: widgets
 
 ######################### Makefile.rules section #############################
 
@@ -60,7 +61,7 @@ all: minimal
 
 ######################## Tools targets section ###############################
 
-minimal: $(OBJS) $(MWINLIBS) $(WXLIB) $(TOP)/config
+widgets: $(OBJS) $(MWINLIBS) $(WXLIB) $(TOP)/config
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@ $(WXLIB) $(MWINLIBS) -lm
 
 #.SUFFIXES: .cpp .cxx .c
@@ -76,7 +77,7 @@ minimal: $(OBJS) $(MWINLIBS) $(WXLIB) $(TOP)/config
 
 cleanwx:
 	-$(RM) *.o
-	-$(RM) minimal
+	-$(RM) widgets
 
 wx:
 	@pushd $(WXDIR)/src/msw; make -f makefile.mic all; popd

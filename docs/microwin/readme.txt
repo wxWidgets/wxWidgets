@@ -106,16 +106,39 @@ wxMSW/wxMicroWindows port itself.
 Things missing from MicroWindows that need to be worked around
 ==============================================================
 
+wxImage/inline XPM/::CreateBitmap support
+-----------------------------------------
+
+This is the main obstacle to getting a good range
+of widgets working, since wxUniversal uses inline XPMs
+to implement most of the widgets.
+
+See src/engine/devimage.c for routines for loading JPEGs,
+XPMs etc. Unfortunately the XPM routines are also #ifdefed
+for FILE_IO, even though for inline XPMs we don't need file I/O.
+(Embedded systems tend not to have file I/O, anyway.)
+
+Now, wxWindows has its own XPM decoder, src/common/xpmdecod.cpp,
+so in theory we don't need to use MicroWindows' code there.
+wxImage can load an inline XPM, _but_ we need to convert to
+a wxBitmap since this is what the widgets need.
+
+There is no ::CreateBitmap or BITMAPINFO. (BMPs can be converted
+to C using convbmp, then need to use Gr... functions.)
+
+So how can we convert from wxImage to wxBitmap in MicroWindows?
+
+Well, a simple-minded way would be to use CreateCompatibleBitmap
+which returns an HBITMAP, select it into an HDC, and draw
+the pixels from the wxImage to the HDC one by one with SetPixel.
+
+
+Other missing features
+----------------------
+
 No ::GetKeyState (see include/wx/msw/private.h). Should probably use
 GdOpenKeyboard/GdCloseKeyboard/GdReadKeyboard. Could perhaps emulate
 GetKeyState this way.
-
-No ::CreateBitmap or BITMAPINFO. But BMPs can be converted
-to C using convbmp, then need to use Gr... functions.
-We MUST implement creation from XPMs, since wxUniversal
-makes use of XPMs, or else create our own bitmaps for
-drawing radioboxes, checkboxes etc.: see renderers
-in src/univ.
 
 No ::DestroyIcon, ::DestroyCursor - use ::DestroyObject instead?
 Also no LoadCursor, LoadImage. So how do we make cursors? No ::SetCursor.

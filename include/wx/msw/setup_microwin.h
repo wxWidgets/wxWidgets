@@ -117,7 +117,7 @@
 // Default is 1
 //
 // Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_MEMORY_TRACING 1
+#define wxUSE_MEMORY_TRACING 0
 
 // In debug mode, cause new and delete to be redefined globally.
 // If this causes problems (e.g. link errors), set this to 0.
@@ -459,18 +459,18 @@
 #define wxUSE_BMPBUTTON    1    // wxBitmapButton
 #define wxUSE_CALENDARCTRL 0    // wxCalendarCtrl
 #define wxUSE_CHECKBOX     1    // wxCheckBox
-#define wxUSE_CHECKLISTBOX 0    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
+#define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       1    // wxChoice
 #define wxUSE_COMBOBOX     1    // wxComboBox
-#define wxUSE_GAUGE        0    // wxGauge
+#define wxUSE_GAUGE        1    // wxGauge
 #define wxUSE_LISTBOX      1    // wxListBox
 #define wxUSE_LISTCTRL     0    // wxListCtrl
-#define wxUSE_RADIOBOX     0    // wxRadioBox
+#define wxUSE_RADIOBOX     1    // wxRadioBox
 #define wxUSE_RADIOBTN     1    // wxRadioButton
 #define wxUSE_SCROLLBAR    1    // wxScrollBar
 #define wxUSE_SLIDER       1    // wxSlider
-#define wxUSE_SPINBTN      0    // wxSpinButton
-#define wxUSE_SPINCTRL     0    // wxSpinCtrl
+#define wxUSE_SPINBTN      1    // wxSpinButton
+#define wxUSE_SPINCTRL     1    // wxSpinCtrl
 #define wxUSE_STATBOX      1    // wxStaticBox
 #define wxUSE_STATLINE     1    // wxStaticLine
 #define wxUSE_STATTEXT     1    // wxStaticText
@@ -521,7 +521,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_NOTEBOOK 0
+#define wxUSE_NOTEBOOK 1
 
 // wxTabDialog is a generic version of wxNotebook but it is incompatible with
 // the new class. It shouldn't be used in new code.
@@ -574,7 +574,7 @@
 //
 // Recommended setting: 1 (set it to 0 if you don't use any of the controls
 // enumerated above, then this class is mostly useless too)
-#define wxUSE_IMAGLIST      0
+#define wxUSE_IMAGLIST      1
 
 // Use wxMenu, wxMenuBar, wxMenuItem.
 //

@@ -182,14 +182,14 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
                                        wxImageList *imaglist)
                   : WidgetsPage(notebook)
 {
-    imaglist->Add(wxBitmap(combobox_xpm));
-
     // init everything
     m_chkSort =
     m_chkReadonly = (wxCheckBox *)NULL;
 
     m_combobox = (wxComboBox *)NULL;
     m_sizerCombo = (wxSizer *)NULL;
+
+    imaglist->Add(wxBitmap(combobox_xpm));
 
     /*
        What we create here is a frame having 3 panes: style pane is the
@@ -441,38 +441,49 @@ void ComboboxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& event)
 
 void ComboboxWidgetsPage::OnUpdateUICurText(wxUpdateUIEvent& event)
 {
-    event.SetText( wxString::Format(_T("%d"), m_combobox->GetSelection()) );
+    if (m_combobox)
+        event.SetText( wxString::Format(_T("%d"), m_combobox->GetSelection()) );
 }
 
 void ComboboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    event.Enable( m_chkSort->GetValue() || m_chkReadonly->GetValue() );
+    if (m_combobox)
+        event.Enable( m_chkSort->GetValue() || m_chkReadonly->GetValue() );
 }
 
 void ComboboxWidgetsPage::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
 {
-    unsigned long n;
-    event.Enable(m_textDelete->GetValue().ToULong(&n) &&
-                    (n < (unsigned)m_combobox->GetCount()));
+    if (m_combobox)
+    {
+      unsigned long n;
+      event.Enable(m_textDelete->GetValue().ToULong(&n) &&
+  		 (n < (unsigned)m_combobox->GetCount()));
+    }
 }
 
 void ComboboxWidgetsPage::OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event)
 {
-    event.Enable(m_combobox->GetSelection() != -1);
+    if (m_combobox)
+        event.Enable(m_combobox->GetSelection() != -1);
 }
 
 void ComboboxWidgetsPage::OnUpdateUIClearButton(wxUpdateUIEvent& event)
 {
-    event.Enable(m_combobox->GetCount() != 0);
+    if (m_combobox)
+        event.Enable(m_combobox->GetCount() != 0);
 }
 
 void ComboboxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 {
-    event.Enable(!(m_combobox->GetWindowStyle() & wxCB_SORT));
+    if (m_combobox)
+        event.Enable(!(m_combobox->GetWindowStyle() & wxCB_SORT));
 }
 
 void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
 {
+    if (!m_combobox)
+	return;
+    
     wxString s = event.GetString();
 
     wxASSERT_MSG( s == m_combobox->GetValue(),
