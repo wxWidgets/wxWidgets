@@ -239,34 +239,25 @@ bool wxDataObjectComposite::SetData(const wxDataFormat& format,
 
 #if defined(__WXGTK20__) && wxUSE_UNICODE
 
+static inline wxMBConv& GetConv(const wxDataFormat& format)
+{
+    // use UTF8 for wxDF_UNICODETEXT and UCS4 for wxDF_TEXT
+    return format == wxDF_UNICODETEXT ? wxConvUTF8 : wxConvLibc;
+}
+
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
-    if (format == wxDF_UNICODETEXT)
-    {
-        // Use UTF8 not UCS4
-        wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
-        return strlen( (const char*) buffer ) + 1;
-    }
-    else  // == wxDF_TEXT
-    {
-        wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
-        return strlen( (const char*) buffer ) + 1;
-    }
+    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
+    return buffer ? strlen(buffer) + 1 : 0;
 }
 
 bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 {
-    if (format == wxDF_UNICODETEXT)
-    {
-        // Use UTF8 not UCS4
-        wxCharBuffer buffer = wxConvUTF8.cWX2MB( GetText().c_str() );
-        strcpy( (char*) buf, (const char*) buffer );
-    }
-    else
-    {
-        wxCharBuffer buffer = wxConvLibc.cWX2MB( GetText().c_str() );
-        strcpy( (char*) buf, (const char*) buffer );
-    }
+    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
+    if ( !buffer )
+        return false;
+
+    strcpy( (char*) buf, buffer );
 
     return true;
 }
@@ -274,10 +265,11 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 bool wxTextDataObject::SetData(const wxDataFormat& format,
                                size_t WXUNUSED(len), const void *buf)
 {
-    if (format == wxDF_UNICODETEXT)
-        SetText( wxConvUTF8.cMB2WX( (const char*) buf ) );
-    else
-        SetText( wxConvLibc.cMB2WX( (const char*) buf ) );
+    wxWCharBuffer buffer = GetConv(format).cMB2WX((const char *)buf);
+    if ( !buffer )
+        return false;
+
+    SetText(buffer);
 
     return true;
 }
