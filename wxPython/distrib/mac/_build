@@ -126,8 +126,9 @@ fi
 
 #-----------------------------------
 msg configuring wxWindows
+
 buildDir="$srcPath/build-pkg"
-dFlag="--enable-optimise --enable-debug_flag"
+dFlag="--enable-debug_flag --enable-optimise"
 if [ $debug ]; then
     buildDir="$srcPath/build-pkg-debug"
     dFlag="--enable-debug"
