@@ -27,7 +27,7 @@ while test $# -gt 0; do
         shift
         ;;
 
-       -l*|-L*|-flat_namespace)
+       -l*|-L*|-flat_namespace|-headerpad_max_install_names)
         # collect these options
         args="$args $1"
         ;;
