@@ -63,7 +63,7 @@ public:
 protected:
     inline wxMenu* CreatePopupMenu()
     {   wxASSERT(m_taskBarIcon);
-        m_taskBarIcon->CreatePopupMenu();
+        return m_taskBarIcon->CreatePopupMenu();
     }
     wxTaskBarIcon *m_taskBarIcon;
     wxTaskBarIconWindow *m_iconWindow;
