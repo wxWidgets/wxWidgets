@@ -20,6 +20,7 @@
 #if wxUSE_HTML
 
 #include "wx/object.h"
+#include "wx/arrstr.h"
 
 class WXDLLIMPEXP_CORE wxColour;
 class WXDLLIMPEXP_HTML wxHtmlEntitiesParser;

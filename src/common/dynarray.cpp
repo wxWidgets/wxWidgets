@@ -378,6 +378,36 @@ void name::Remove(T lItem)                                                  \
 void name::Sort(CMPFUNC fCmp)                                               \
 {                                                                           \
   qsort(m_pItems, m_nCount, sizeof(T), fCmp);                               \
+}                                                                           \
+                                                                            \
+void name::assign(const_iterator first, const_iterator last)                \
+{                                                                           \
+  clear();                                                                  \
+  reserve(last - first);                                                    \
+  for(; first != last; ++first)                                             \
+    push_back(*first);                                                      \
+}                                                                           \
+                                                                            \
+void name::assign(size_type n, const_reference v)                           \
+{                                                                           \
+  clear();                                                                  \
+  reserve(n);                                                               \
+  for( size_type i = 0; i < n; ++i )                                        \
+    push_back(v);                                                           \
+}                                                                           \
+                                                                            \
+void name::insert(iterator it, const_iterator first, const_iterator last)   \
+{                                                                           \
+  size_t nInsert = last - first, nIndex = it - begin();                     \
+  if (nInsert == 0)                                                         \
+      return;                                                               \
+  Grow(nInsert);                                                            \
+                                                                            \
+  memmove(&m_pItems[nIndex + nInsert], &m_pItems[nIndex],                   \
+          (m_nCount - nIndex)*sizeof(T));                                   \
+  for (size_t i = 0; i < nInsert; ++i, ++it, ++first)                       \
+      *it = *first;                                                         \
+  m_nCount += nInsert;                                                      \
 }
 
 #endif
@@ -390,7 +420,7 @@ _WX_DEFINE_BASEARRAY(const void *, wxBaseArrayPtrVoid)
 _WX_DEFINE_BASEARRAY(short,        wxBaseArrayShort)
 _WX_DEFINE_BASEARRAY(int,          wxBaseArrayInt)
 _WX_DEFINE_BASEARRAY(long,         wxBaseArrayLong)
-//_WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
+_WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
 
 #if wxUSE_STL
 #include "wx/arrstr.h"
