@@ -611,19 +611,37 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
         /* we use the "XCopyArea" way to copy a memory dc into
 	   y different window if the memory dc BOTH
 	   a) doesn't have any mask or its mask isn't used
-	   b) it is clipped.
-	   we HAVE TO use the direct way for memory dcs
-	   that have mask since the XCopyArea doesn't know
-	   about masks and we SHOULD use the direct way if
-	   all of the bitmap in the memory dc is copied in
-	   which case XCopyArea wouldn't be able able to
-	   boost performace by reducing the area to be scaled */
+	   b) it is clipped
+	   c) is not 1-bit */
     
-	use_bitmap_method = ( (useMask && (memDC->m_selected.GetMask())) ||
-	                       ((xsrc == 0) && (ysrc == 0) &&
-			        (width == memDC->m_selected.GetWidth()) &&
-			        (height == memDC->m_selected.GetHeight()) )
-			    );
+        if (useMask && (memDC->m_selected.GetMask()))
+	{
+	   /* we HAVE TO use the direct way for memory dcs
+	      that have mask since the XCopyArea doesn't know
+	      about masks and */
+	    use_bitmap_method = TRUE;
+	}
+	else if (memDC->m_selected.GetDepth() == 1)
+	{
+	   /* we HAVE TO use the direct way for memory dcs
+	      that are bitmaps because XCopyArea doesn't copy
+	      with different bit depths */
+	    use_bitmap_method = TRUE;
+	}
+	else if ((xsrc == 0) && (ysrc == 0) &&
+		 (width == memDC->m_selected.GetWidth()) &&
+		 (height == memDC->m_selected.GetHeight()))
+	{
+	   /* we SHOULD use the direct way if all of the bitmap 
+	      in the memory dc is copied in which case XCopyArea 
+	      wouldn't be able able to boost performace by reducing 
+	      the area to be scaled */
+	    use_bitmap_method = TRUE;
+	}
+	else
+	{
+	    use_bitmap_method = FALSE;
+	}
     }
     
     CalcBoundingBox( xdest, ydest );
@@ -648,6 +666,8 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
     
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
+	    printf( "scaling.\n" );
+	
             wxImage image( memDC->m_selected );
 	    image = image.Scale( bm_ww, bm_hh );
 	
@@ -682,14 +702,16 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
         GdkPixmap *pm = use_bitmap.GetPixmap();
         if (pm)
         {
-            gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, ww, hh );
+            gdk_draw_pixmap( m_window, m_penGC, pm, xsrc, ysrc, xx, yy, ww, hh );
         }
         else
         {
             GdkBitmap *bm = use_bitmap.GetBitmap();
             if (bm)
             {
-                gdk_draw_bitmap( m_window, m_penGC, bm, 0, 0, xx, yy, ww, hh );
+	        /* we use the textGC here because blitting a bitmap is done
+		   using the current text colour */
+                gdk_draw_bitmap( m_window, m_textGC, bm, xsrc, ysrc, xx, yy, ww, hh );
 	    }
         }
     
@@ -837,15 +859,27 @@ void wxWindowDC::Clear()
 {
     wxCHECK_RET( Ok(), "invalid window dc" );
   
-    if (!m_isMemDC)
+    /* - we either are a memory dc or have a window as the
+       owner. anything else shouldn't happen.
+       - we don't use gdk_window_clear() as we don't set
+       the window's background colour anymore. it is too
+       much pain to keep the DC's and the window's back-
+       ground colour in synch. */
+  
+    if (m_owner)
     {
-        gdk_window_clear( m_window );
+        int width,height;
+        m_owner->GetSize( &width, &height );
+        gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
+	return;
     }
-    else
+
+    if (m_isMemDC)
     {
         int width,height;
         GetSize( &width, &height );
         gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
+	return;
     }
 }
 
@@ -961,11 +995,6 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
     m_backgroundBrush = brush;
   
     if (!m_backgroundBrush.Ok()) return;
-  
-    if (m_owner)
-    {
-        m_owner->SetBackgroundColour( m_backgroundBrush.GetColour() );
-    }
   
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_background( m_brushGC, m_backgroundBrush.GetColour().GetColor() );

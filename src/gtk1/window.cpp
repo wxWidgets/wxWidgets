@@ -2424,12 +2424,11 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         {
             gdk_window_clear_area( m_wxwindow->window,
                                    rect->x, rect->y,
-                                   rect->width,
-                                   rect->height );
+                                   rect->width, rect->height );
         }
         else
         {
-            Clear();
+            gdk_window_clear( m_wxwindow->window );
         }
     }
 
@@ -2484,7 +2483,10 @@ void wxWindow::Clear()
 {
     wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-    if (m_wxwindow && m_wxwindow->window) gdk_window_clear( m_wxwindow->window );
+    if (m_wxwindow && m_wxwindow->window)
+    {
+        gdk_window_clear( m_wxwindow->window );
+    }
 }
 
 #if wxUSE_TOOLTIPS
@@ -2537,14 +2539,18 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
     m_backgroundColour = colour;
     if (!m_backgroundColour.Ok()) return;
 
-    if (m_wxwindow)
+    if (m_wxwindow && m_wxwindow->window)
     {
-        GdkWindow *window = m_wxwindow->window;
-        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
-        gdk_window_set_background( window, m_backgroundColour.GetColor() );
+	/* wxMSW doesn't clear the window here. I don't do that
+	   either to provide compatibility. call Clear() to do 
+	   the job. */
+	   
+        m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_wxwindow->window ) );
+        gdk_window_set_background( m_wxwindow->window, m_backgroundColour.GetColor() );
     }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    
     if (sysbg.Red() == colour.Red() &&
         sysbg.Green() == colour.Green() &&
         sysbg.Blue() == colour.Blue())

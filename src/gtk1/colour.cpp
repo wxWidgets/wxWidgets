@@ -167,6 +167,7 @@ void wxColour::CalcPixel( GdkColormap *cmap )
     if (!Ok()) return;
 
     if ((M_COLDATA->m_hasPixel) && (M_COLDATA->m_colormap == cmap)) return;
+    
     M_COLDATA->FreeColour();
 
     GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;

@@ -190,12 +190,20 @@ cp ./gtk/glcanvas.h ~/wxgtk_dist/wxGTK/utils/glcanvas/gtk
 
 mkdir ~/wxgtk_dist/wxGTK/utils/glcanvas/samples
 mkdir ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/cube
+mkdir ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/isosurf
 mkdir ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/penguin
 
 cd samples/cube
 cp Makefile ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/cube
 cp cube.h ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/cube
 cp cube.cpp ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/cube
+cd ..
+
+cd isosurf
+cp Makefile ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/isosurf
+cp isosurf.h ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/isosurf
+cp isosurf.cpp ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/isosurf
+cp isosurf.dat.gz ~/wxgtk_dist/wxGTK/utils/glcanvas/samples/isosurf
 cd ..
 
 cd penguin

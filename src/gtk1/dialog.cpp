@@ -433,7 +433,7 @@ int wxDialog::ShowModal()
        wxFAIL_MSG( "wxDialog:ShowModal called twice" );
        return GetReturnCode();
     }
-
+    
     Show( TRUE );
 
     m_modalShowing = TRUE;
