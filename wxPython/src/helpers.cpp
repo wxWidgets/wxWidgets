@@ -543,7 +543,7 @@ void __wxPyCleanup() {
 }
 
 
-// Save a reference to the dictionary of the wx.core module, and inject
+// Save a reference to the dictionary of the wx._core module, and inject
 // a few more things into it.
 PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 {
@@ -561,7 +561,7 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
     PyDict_SetItemString(wxPython_dict, "__wxPyPtrTypeMap", wxPyPtrTypeMap);
 
     // Create an exception object to use for wxASSERTions
-    wxPyAssertionError = PyErr_NewException("wx.core.PyAssertionError",
+    wxPyAssertionError = PyErr_NewException("wx._core.PyAssertionError",
                                             PyExc_AssertionError, NULL);
     PyDict_SetItemString(wxPython_dict, "PyAssertionError", wxPyAssertionError);
 
