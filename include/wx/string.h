@@ -708,9 +708,11 @@ public:
           /// find first n characters of sz
           size_t find(const char* sz, size_t nStart = 0, size_t n = npos) const;
 #endif
+          // Gives a duplicate symbol (presumably a case-insensitivity problem)
+#if !defined(__BORLANDC__)
           /// find the first occurence of character ch after nStart
           size_t find(char ch, size_t nStart = 0) const;
-
+#endif
           // wxWin compatibility
           inline bool Contains(const wxString& str) const { return Find(str) != -1; }
 

@@ -43,9 +43,15 @@
   #include "wx/resource.h"
 #endif
 
-#if wxUSE_DRAG_AND_DROP
+// To UG: there's no point in putting this #if here
+// if you don't do the same for the Ole calls further down.
+// Also, OLE is used not just for drag and drop (it's used by automatn.cpp).
+// #if wxUSE_DRAG_AND_DROP
+#ifndef __GNUWIN32__
 #include <ole2.h>
 #endif
+// #endif
+
 #include <string.h>
 #include <ctype.h>
 

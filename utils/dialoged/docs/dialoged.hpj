@@ -1,5 +1,5 @@
 [OPTIONS]
-BMROOT=d:\wx2\utils\dialoged\docs ; Assume that bitmaps are where the source is
+BMROOT=. ; Assume that bitmaps are where the source is
 TITLE=Dialog Editor Manual
 CONTENTS=Contents
 COMPRESS=HIGH

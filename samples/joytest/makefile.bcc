@@ -1,75 +1,19 @@
 #
 # File:		makefile.bcc
 # Author:	Julian Smart
-# Created:	1993
+# Created:	1998
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
-# "%W% %G%"
-#
-# Makefile : Builds joytest example (DOS).
-
-!if "$(BCCDIR)" == ""
-!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
-!endif
+# Builds a BC++ 16-bit sample
 
 !if "$(WXWIN)" == ""
 !error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
 !endif
 
-!ifndef FINAL
-FINAL=0
-!endif
-
 WXDIR = $(WXWIN)
-!include $(WXDIR)\src\makebcc.env
 
-THISDIR = $(WXDIR)\samples\joytest
-WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) mathwl cwl import
-INC=-I$(WXDIR)\include\base -I$(WXDIR)\include\msw
-CFG=$(WXDIR)\src\wxwin.cfg
+TARGET=joytest
+OBJECTS=$(TARGET).obj
 
-!if "$(FINAL)" == "0"
-LINKFLAGS=/v/Vt /Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
-OPT = -Od
-DEBUG_FLAGS= -v
-!else
-LINKFLAGS=/Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
-OPT = -O2
-DEBUG_FLAGS =
-!endif
-CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+!include $(WXDIR)\src\makeprog.bcc
 
-HEADERS = joytest.h
-SOURCES = joytest.$(SRCSUFF)
-OBJECTS = joytest.obj
-
-joytest:    joytest.exe
-
-all:    joytest.exe
-
-joytest.exe:      $(WXLIB) joytest.obj joytest.def joytest.res
-        tlink $(LINKFLAGS) @&&!
-c0wl.obj joytest.obj
-joytest
-nul
-$(LIBS)
-joytest.def
-!
-        rc -30 -K joytest.res
-
-.$(SRCSUFF).obj:
-	bcc $(CPPFLAGS) -c {$< }
-
-joytest.obj:      joytest.$(SRCSUFF)
-
-joytest.res :      joytest.rc $(WXDIR)\include\msw\wx.rc
-    rc -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa joytest
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.rws

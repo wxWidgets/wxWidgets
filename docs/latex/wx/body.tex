@@ -7,7 +7,8 @@
 
 wxWindows is a C++ framework providing GUI (Graphical User
 Interface) and other facilities on more than one platform.  Version 2.0 currently
-supports subsets MS Windows (16-bit, Windows 95 and Windows NT) and GTK.
+supports subsets MS Windows (16-bit, Windows 95 and Windows NT) and GTK+, with Motif
+and Mac ports in an advanced state.
 
 wxWindows was originally developed at the Artificial Intelligence
 Applications Institute, University of Edinburgh, for internal use.
@@ -55,9 +56,6 @@ that are often indistinguishable from those produced using single-platform
 toolkits
 such as Motif and MFC.
 
-wxWindows 2.0 currently maps to two native APIs: GTK and
-MS Windows. Motif, Xt and Mac ports are also in preparation.
-
 The importance of using a platform-independent class library cannot be
 overstated, since GUI application development is very time-consuming,
 and sustained popularity of particular GUIs cannot be guaranteed.
@@ -85,17 +83,16 @@ here are some of the benefits:
 \item Constraint-based layout option.
 \item Print/preview and document/view architectures.
 \item Status line facility, toolbar
-\item Easy, object-oriented interprocess comms (DDE subset) under Unix and
-MS Windows.
 \item Encapsulated PostScript generation under Unix, normal MS Windows printing on the
 PC.
-\item MDI support under Windows and GTK.
-\item Can be used to create DLLs under Windows, dynamic libraries on the Sun.
+\item MDI (Multiple Document Interface) support.
+\item Can be used to create DLLs under Windows, dynamic libraries on Unix.
 \item Common dialogs for file browsing, printing, colour selection, etc.
 \item Under MS Windows, support for creating metafiles and copying
 them to the clipboard.
-\item Hypertext help facility, with an API for invocation from applications.
+\item An API for invoking help from applications.
 \item Dialog Editor for building dialogs.
+\item Socket support.
 \end{itemize}
 
 \section{Changes from version 1.xx}\label{versionchanges}
@@ -106,9 +103,8 @@ Removals:
 
 \begin{itemize}\itemsep=0pt
 \item XView is no longer supported;
-\item Mac is not yet supported;
 \item all controls (panel items) no longer have labels attached to them;
-\item wxForm removed;
+\item wxForm has been removed;
 \item wxCanvasDC, wxPanelDC removed (replaced by wxClientDC, wxWindowDC, wxPaintDC which
 can be used for any window);
 \item wxMultiText, wxTextWindow, wxText removed and replaced by wxTextCtrl;
@@ -179,7 +175,7 @@ following setups.
 
 \begin{enumerate}\itemsep=0pt
 \item Almost any C++ compiler, including GNU C++.
-\item Almost any Unix workstation, and GTK 1.0 or higher.
+\item Almost any Unix workstation, and one of: GTK+ 1.0, Motif 1.2 or higher, Lesstif.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
@@ -189,14 +185,14 @@ wxWindows is currently available from the Artificial Intelligence
 Applications Institute by anonymous FTP and World Wide Web:
 
 \begin{verbatim}
-  ftp://ftp.aiai.ed.ac.uk/pub/packages/wxwin
-  http://web.ukonline.co.uk/julian.smart/wxwin
+  ftp://www.remstar.com/pub/wxwin
+  http://wxwin.home.ml.org
 \end{verbatim}
 
 \section{Acknowledgments}
 
 Thanks are due to AIAI for being willing to release the original version of
-wxWindows into the public domain, and to our patient wives Harriet, Tanja and others.
+wxWindows into the public domain, and to our patient partners.
 
 We would particularly like to thank the following for their contributions to wxWindows, and the many others who have been involved in
 the project over the years. Apologies for any unintentional omissions from this list. 
@@ -277,95 +273,33 @@ multi-megabyte .pch files.
 
 \section{Libraries}
 
-Please the wxGTK documentation for use of the Unix version of wxWindows.
+Please the wxGTK or wxMotif documentation for use of the Unix version of wxWindows.
 Under Windows, use the library wx.lib for stand-alone Windows
 applications, or wxdll.lib for creating DLLs.
 
 \section{Configuration}
 
-The following lists the options configurable in the file
-\rtfsp{\tt "wx/msw/setup.h"} and {\tt "wx/gtk/setup.h"} Some settings are a matter
+Options are configurable in the file
+\rtfsp{\tt "wx/XXX/setup.h"} where XXX is the required platform (such as msw, motif, gtk, mac). Some settings are a matter
 of taste, some help with platform-specific problems, and
-others can be set to minimize the size of the library.
-
-\subsection{General features}
-
-\begin{twocollist}\itemsep=0pt
-\twocolitem{USE\_CLIPBOARD}{If 1, clipboard code is compiled (Windows only).}
-\twocolitem{USE\_CONSTRAINTS}{If 1, the constaint-based window layout system is compiled.}
-\twocolitem{USE\_DOC\_VIEW\_ARCHITECTURE}{If 1, wxDocument, wxView and related classes are compiled.}
-\twocolitem{USE\_DYNAMIC\_CLASSES}{If 1, the run-time class macros and classes are compiled. Recommended,
-and necessary for the document/view framework.}
-\twocolitem{USE\_HELP}{If 1, interface to help system is compiled.}
-\twocolitem{USE\_GAUGE}{If 1, the wxGauge class compiled.}
-\twocolitem{USE\_GLOBAL\_MEMORY\_OPERATORS}{If 1, redefines global new and delete operators to be compatible
-with the extended arguments of the debugging wxObject new and delete operators. If this causes problems
-for your compiler, set to 0.}
-\twocolitem{USE\_IPC}{If 1, interprocess communication code is compiled.}
-\twocolitem{USE\_MEMORY\_TRACING}{If 1, enables debugging versions of wxObject::new and wxObject::delete
-if the value of DEBUG is defined to more than 0.}
-\twocolitem{USE\_METAFILE}{If 1, Windows Metafile code is compiled.}
-\twocolitem{USE\_POSTSCRIPT}{If 1, PostScript code is compiled.}
-\twocolitem{USE\_POSTSCRIPT\_ARCHITECTURE\_IN\_MSW}{Set to 1 to enable the printing architecture
-to make use of either native Windows printing facilities, or the wxPostScriptDC class depending
-on the wxApp::SetPrintMode setting.}
-\twocolitem{USE\_PRINTING\_ARCHITECTURE}{If 1, wxPrinter, wxPrintout and related classes are compiled
-for the print/preview framework.}
-\twocolitem{USE\_RESOURCES}{If 1, win.ini or .Xdefaults-style resource read/write code is compiled.}
-\twocolitem{USE\_WX\_RESOURCES}{If 1, wxWindows resource file (.WXR) code is compiled.}
-\end{twocollist}
-
-\subsection{Windows and NT features}
-
-\begin{twocollist}
-\twocolitem{CTL3D}{CTL3D should only be used for 16-bit Windows programs.
-On Windows 95 and NT, native 3D effects are used. If you want to
-use it and don't already have CTL3D installed, copy the files in
-contrib/ctl3d to appropriate places (ctl3dv2.lib/ctl3d32.lib into your compiler lib
-directory, ctl3d.h into an include directory, and ctl3dv2.dll into
-windows/system). You may need to find a compiler-specific version of ctl3dv2.lib
-or ctl3d32.lib. Define CTL3D to be 1 in wx\_setup.h and link your executables with ctl3dv2.lib
-or ctl3d32.lib.}
-\twocolitem{USE\_ODBC}{If 1, compiles wxDatabase and wxRecordSet classes for ODBC
-access. Requires sql.h, sqlext.h files if set to 1 (see topic on database support).}
-\end{twocollist}
+others can be set to minimize the size of the library. Please see the setup.h file
+and {\tt install.txt} files for details on configuration.
 
 \section{Makefiles}
 
 At the moment there is no attempt to make Unix makefiles and
 PC makefiles compatible, i.e. one makefile is required for
-each environment.
+each environment. wxGTK has its own configure system which can also
+be used with wxMotif, although wxMotif has a simple makefile system of its own.
 
 Sample makefiles for Unix (suffix .UNX), MS C++ (suffix .DOS and .NT), Borland
-C++ (.BCC) and Symantec C++ (.SC) are included for the library, demos
-and utilities. The NT, Borland and Symantec makefiles cannot be
-guaranteed to be up-to-date since the author does not have
-these compilers.
+C++ (.BCC and .B32) and Symantec C++ (.SC) are included for the library, demos
+and utilities.
 
 The controlling makefile for wxWindows is in the platform-specific
-directory, such as {\tt src/msw} or {\tt src/x}. This makefile will
-recursively execute the makefile in {\tt src/base}.
+directory, such as {\tt src/msw} or {\tt src/motif}.
 
-\subsection{Windows makefiles}
-
-For Microsoft C++, normally it is only necessary to type {\tt nmake -f
-makefile.dos} (or an alias or batch file which does this). By default,
-binaries are made with debugging information, and no optimization. Use
-FINAL=1 on the command line to remove debugging information (this only
-really necessary at the link stage), and DLL=1 to make a DLL version of
-the library, if building a library.
-
-\subsection{Unix makefiles}
-
-TODO.
-
-Debugging information is included by default; you may add DEBUG= as an
-argument to make to compile without it, or use the Unix {\bf strip}
-command to remove debugging information from an executable.
-
-\normalbox{{\it Important note:} Most compiler flags are kept centrally in
-src/make.env, which is included by all other makefiles. This is the
-file to edit to tailor wxWindows compilation to your environment.}
+Please see the platform-specific {\tt install.txt} file for further details.
 
 \section{Windows-specific files}
 
@@ -449,64 +383,9 @@ fine on some platforms, and then fail under Windows.
 One of the purposes of wxWindows is to reduce the need for conditional
 compilation in source code, which can be messy and confusing to follow.
 However, sometimes it is necessary to incorporate platform-specific
-features (such as metafile use under MS Windows). The following identifiers
-may be used for this purpose, along with any user-supplied ones:
-
-{\bf GUIs:}
-
-\begin{verbatim}
-__X__           any X, but not GTK
-__WXMOTIF__     Motif
-__WXGTK__       GTK
-__WXMSW__       Any Windows
-__MAC__         MacOS
-__UNIX__        any Unix
-__WIN95__       GUI for Windows 95 and above; NT 4.0 and above.
-__WIN32__       WIN32 API
-__NT__          Windows NT
-__CURSES__      CURSES
-\end{verbatim}
-
-{\bf OSes:}
-
-\begin{verbatim}
-__HPUX__
-__SVR4__
-__SYSV__
-__LINUX__
-__SGI__
-__ULTRIX__
-__BSD__
-__VMS__
-__SUN__         Any Sun
-__SUNOS__
-__SOLARIS__
-__ALPHA__
-__AIX__
-__DATA_GENERAL__
-__OSF__
-__FREEBSD__
-\end{verbatim}
-
-{\bf Compilers:}
-
-\begin{verbatim}
-__GNUWIN32__    Gnu-Win32 compiler
-__DJGPP__       DJGPP
-__GNUG__        Gnu C++ on any platform
-__BORLANDC__    Borland C++
-__WATCOMC__     Watcom C++
-__SYMANTECC__   Symantec C++
-__VISUALC__     VC++
-__SUNCC__
-\end{verbatim}
-
-{\bf wxWindows modes:}
-
-\begin{verbatim}
-__WXDEBUG__       usage: #ifdef __DEBUG__ (=> debug mode, else => release)
-\end{verbatim}
-
+features (such as metafile use under MS Windows). The symbols
+listed in the file {\tt symbols.txt} may be used for this purpose,
+along with any user-supplied ones.
 
 \section{C++ issues}
 
@@ -553,7 +432,7 @@ approach is to store filenames on their own, with no directory
 information.  The application searches through a number of locally
 defined directories to find the file. To support this, the class {\bf
 wxPathList} makes adding directories and searching for files easy, and
-the global function {\bf FileNameFromPath} allows the application to
+the global function {\bf wxFileNameFromPath} allows the application to
 strip off the filename from the path if the filename must be stored.
 This has undesirable ramifications for people who have documents of the
 same name in different directories.
@@ -573,6 +452,7 @@ dos2unix).
 See also the File Functions section of the reference manual for
 descriptions of miscellaneous file handling functions.
 
+\begin{comment}
 \chapter{Utilities supplied with wxWindows}\label{utilities}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
@@ -677,6 +557,7 @@ platform.
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
 To be written.
+\end{comment}
 
 \chapter{Programming strategies}\label{strategies}
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
@@ -807,5 +688,4 @@ technique is to just make arbitrary changes to the code until something
 different happens. You may have an intuition why a change will make a difference;
 otherwise, just try altering the order of code, comment lines out, anything
 to get over an impasse. Obviously, this is usually a last resort.
-
 

@@ -16,6 +16,12 @@
     #pragma interface "treectrl.h"
 #endif
 
+#ifdef __WXMSW__
+WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
+#else
+#define wxTreeCtrlNameStr "wxTreeCtrl"
+#endif
+
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/object.h"
@@ -201,7 +207,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
 	       const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = "wxTreeCtrl")
+               const wxString& name = wxTreeCtrlNameStr)
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -213,7 +219,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
 	        const wxValidator &validator = wxDefaultValidator,
-                const wxString& name = "wxTreeCtrl");
+                const wxString& name = wxTreeCtrlNameStr);
 
     // accessors
     // ---------

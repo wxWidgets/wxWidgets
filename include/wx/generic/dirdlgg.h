@@ -82,7 +82,7 @@ class WXDLLEXPORT wxDirDialog: public wxDialog
  public:
     wxDirDialog(wxWindow *parent, 
 		const wxString& message = wxFileSelectorPromptStr,
-		const wxString& defaultPath = "",
+		const wxString& defaultPath = wxEmptyString,
 		long style = 0, const wxPoint& pos = wxDefaultPosition);
     inline void SetMessage(const wxString& message) { m_message = message; }
     inline void SetPath(const wxString& path) { m_path = path; }

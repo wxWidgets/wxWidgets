@@ -14,7 +14,7 @@ WXLIB = $(WXDIR)\lib
 
 LIBTARGET   = $(WXLIB)\wx.lib
 DUMMY=dummydll
-ODBCLIB     = ..\..\contrib\odbc\odbc32.lib
+# ODBCLIB     = ..\..\contrib\odbc\odbc32.lib
 
 EXTRATARGETS = # wxxpm
 EXTRATARGETSCLEAN = # clean_wxxpm
@@ -68,7 +68,6 @@ COMMONOBJS = cmndata.obj &
   log.obj &
   memory.obj &
   module.obj &
-  odbc.obj &
   object.obj &
   prntbase.obj &
   resource.obj &
@@ -106,7 +105,8 @@ COMMONOBJS = cmndata.obj &
   variant.obj &
   wincmn.obj
 
-# Can't compile this yet under Watcom C++
+# Can't compile these yet under Watcom C++
+#  odbc.obj &
 #  db.obj &
 #  dbtable.obj &
 
@@ -227,8 +227,9 @@ $(LIBTARGET) : $(OBJECTS)
 	
 clean:   .SYMBOLIC
     -erase *.obj
-    -erase $(LIBLARGET)
+    -erase $(LIBTARGET)
     -erase *.pch
+    -erase *.err
 
 cleanall:   clean
 

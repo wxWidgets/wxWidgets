@@ -112,7 +112,7 @@ WXDLLEXPORT int wxKill(long pid, int sig=wxSIGTERM);
 
 // Execute a command in an interactive shell window
 // If no command then just the shell
-WXDLLEXPORT bool wxShell(const wxString& command = "");
+WXDLLEXPORT bool wxShell(const wxString& command = wxEmptyString);
 
 // Sleep for nSecs seconds under UNIX, do nothing under Windows
 WXDLLEXPORT void wxSleep(int nSecs);
@@ -243,15 +243,15 @@ WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFat
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file = "");
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file = "");
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file = "");
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file = "");
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file = wxEmptyString);
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file = wxEmptyString);
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file = wxEmptyString);
+WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file = wxEmptyString);
 
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file = "");
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file = "");
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file = "");
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = "");
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file = wxEmptyString);
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file = wxEmptyString);
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file = wxEmptyString);
+WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = wxEmptyString);
 #endif // wxUSE_RESOURCES
 
 // Get current Home dir and copy to dest (returns pstr->c_str())
@@ -259,7 +259,7 @@ WXDLLEXPORT const char* wxGetHomeDir(wxString *pstr);
 
 // Get the user's home dir (caller must copy--- volatile)
 // returns NULL is no HOME dir is known
-WXDLLEXPORT char* wxGetUserHome(const wxString& user = "");
+WXDLLEXPORT char* wxGetUserHome(const wxString& user = wxEmptyString);
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.

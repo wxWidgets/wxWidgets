@@ -173,9 +173,13 @@ PDIB DibOpenFile(LPSTR szFile)
 		  HRSRC h;
 
           // TODO: Unicode version
+#ifdef __WIN16__
+		  h = FindResource(GetCurrentInstance(), szFile, RT_BITMAP);
+#else
 		  h = FindResourceA(GetCurrentInstance(), szFile, RT_BITMAP);
+#endif
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(__WIN32__)
 		  //!!! can we call GlobalFree() on this? is it the right format.
 		  //!!! can we write to this resource?
 		  if (h)

@@ -176,7 +176,11 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 #ifdef UNICODE
   HMODULE handle = LoadLibraryW(lib_name);
 #else
+#ifdef __WIN16__
+  HMODULE handle = ::LoadLibrary(lib_name);
+#else
   HMODULE handle = LoadLibraryA(lib_name);
+#endif
 #endif
   if (!handle)
     return NULL;

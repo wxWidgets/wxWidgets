@@ -626,7 +626,12 @@ void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
   if (!m_notebook)
     return;
 
+// Because of name truncation!
+#if defined(__BORLANDC__) && defined(__WIN16__)
+  wxNotebookEvent event(wxEVT_COMMAND_NB_PAGE_CHANGED, m_notebook->GetId());
+#else
   wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_notebook->GetId());
+#endif
 
   // Translate from wxTabView's ids (which aren't position-dependent)
   // to wxNotebook's (which are).

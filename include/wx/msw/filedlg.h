@@ -39,7 +39,7 @@ protected:
     int         m_filterIndex;
 public:
     wxFileDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
-        const wxString& defaultDir = "", const wxString& defaultFile = "", const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+        const wxString& defaultDir = wxEmptyString, const wxString& defaultFile = wxEmptyString, const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
         long style = 0, const wxPoint& pos = wxDefaultPosition);
 
     inline void SetMessage(const wxString& message) { m_message = message; }

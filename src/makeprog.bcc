@@ -1,0 +1,47 @@
+# makeprog.bcc
+# Incude file for samples
+
+!include $(WXDIR)\src\makebcc.env
+
+WXLIB = $(WXDIR)\lib\wx.lib
+LIBS=$(WXLIB) mathwl cwl import
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+!if "$(FINAL)" == "0"
+LINKFLAGS=/v/Vt /Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS= -v
+!else
+LINKFLAGS=/Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
+OPT = -O2
+DEBUG_FLAGS =
+!endif
+CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+
+all:    $(TARGET).exe
+
+$(TARGET).exe:      $(WXLIB) $(OBJECTS) $(TARGET).def $(TARGET).res
+        tlink $(LINKFLAGS) @&&!
+c0wl.obj $(OBJECTS)
+$(TARGET)
+nul
+$(LIBS)
+$(TARGET).def
+!
+        rc -K $(TARGET).res
+
+.$(SRCSUFF).obj:
+	bcc $(CPPFLAGS) -c {$< }
+
+$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.rws

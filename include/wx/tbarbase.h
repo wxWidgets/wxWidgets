@@ -36,7 +36,7 @@ class WXDLLEXPORT wxToolBarTool: public wxObject
  public:
   wxToolBarTool(int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
                 bool toggle = FALSE, long xPos = -1, long yPos = -1,
-                const wxString& shortHelpString = "", const wxString& longHelpString = "");
+                const wxString& shortHelpString = wxEmptyString, const wxString& longHelpString = wxEmptyString);
   ~wxToolBarTool ();
   inline void SetSize( long w, long h ) { m_width = w; m_height = h; }
   inline long GetWidth () const { return m_width; }
@@ -86,7 +86,7 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
   // If toggle is TRUE, the button toggles between the two states.
   virtual wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
                bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
-               const wxString& helpString1 = "", const wxString& helpString2 = "");
+               const wxString& helpString1 = wxEmptyString, const wxString& helpString2 = wxEmptyString);
   virtual void AddSeparator(void);
   virtual void ClearTools(void);
 

@@ -1,5 +1,5 @@
 \documentstyle[a4,11pt,makeidx,verbatim,texhelp,fancyheadings,palatino]{report}
-% JACS: doesn't make it through Tex2RTF, sorry.I'll put it into texhelp.sty
+% JACS: doesn't make it through Tex2RTF, sorry. I'll put it into texhelp.sty
 % since Tex2RTF doesn't parse it.
 % BTW, style MUST be report for it to work for Tex2RTF.
 %KB:
@@ -30,7 +30,7 @@
 %\winhelponly{\\$$\image{1cm;0cm}{wxwin.wmf}$$}
 }}
 \winhelpignore{\author{Julian Smart}
-\date{November 4th 1998}
+\date{December 27th 1998}
 }
 \makeindex
 \begin{document}
@@ -85,26 +85,13 @@
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
 \begin{center}
-Copyright (c) 1998 Julian Smart, Markus Holzem, Robert Roebling and other
+Copyright (c) 1998 Julian Smart, Robert Roebling and other
 members of the wxWindows team\\
 Portions (c) 1996 Artificial Intelligence Applications Institute\\
 \end{center}
 
-Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose is hereby granted without fee, provided that the
-above copyright notice, author statement and this permission notice appear in
-all copies of this software and related documentation.
-
-THE SOFTWARE IS PROVIDED ``AS-IS'' AND WITHOUT WARRANTY OF ANY KIND, EXPRESS,
-IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
-MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-
-IN NO EVENT SHALL THE ARTIFICIAL INTELLIGENCE APPLICATIONS INSTITUTE OR THE
-UNIVERSITY OF EDINBURGH OR ANY MEMBERS OF THE WXWINDOWS TEAM BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR
-CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF THE POSSIBILITY OF
-DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH
-THE USE OR PERFORMANCE OF THIS SOFTWARE.
+Please see the wxWindows licence files (preamble.txt, lgpl.txt, gpl.txt, licence.txt,
+licendoc.txt) for conditions of software and documentation use.
 
 \input{body.tex}
 \helpinput{classes.tex}
@@ -130,8 +117,20 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 \end{comment}
 
 \newpage
+% Note: In RTF, the \printindex must come before the
+% change of header/footer, since the \printindex inserts
+% the RTF \sect command which divides one chapter from
+% the next.
+\rtfonly{\printindex
 \addcontentsline{toc}{chapter}{Index}
 \setheader{{\it INDEX}}{}{}{}{}{{\it INDEX}}%
-\setfooter{\thepage}{}{}{}{}{\thepage}%
+\setfooter{\thepage}{}{}{}{}{\thepage}
+}
+% In Latex, it must be this way around (I think)
+\latexonly{\addcontentsline{toc}{chapter}{Index}
+\setheader{{\it INDEX}}{}{}{}{}{{\it INDEX}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}
 \printindex
+}
+
 \end{document}

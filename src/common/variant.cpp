@@ -627,9 +627,18 @@ bool wxVariantDataChar::Read(wxString& str)
  * wxVariantDataString
  */
 
+#if defined(__BORLANDC__) && defined(__WIN16__)
+// Change name because of truncation
+#define wxVariantDataString wxVariantStringData
+#endif
+
 class WXDLLEXPORT wxVariantDataString: public wxVariantData
 {
+#if defined(__BORLANDC__) && defined(__WIN16__)
+DECLARE_DYNAMIC_CLASS(wxVariantStringData)
+#else
 DECLARE_DYNAMIC_CLASS(wxVariantDataString)
+#endif
 public:
     wxVariantDataString() { }
     wxVariantDataString(const wxString& value) { m_value = value; }
@@ -705,7 +714,11 @@ bool wxVariantDataString::Read(wxString& str)
     return TRUE;
 }
 
+#if defined(__BORLANDC__) && defined(__WIN16__)
+IMPLEMENT_DYNAMIC_CLASS(wxVariantStringData, wxVariantData)
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxVariantDataString, wxVariantData)
+#endif
 
 /*
  * wxVariantDataTime

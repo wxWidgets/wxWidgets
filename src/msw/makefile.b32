@@ -72,22 +72,27 @@ DOCDIR = $(WXDIR)\docs
 
 GENERICOBJS= \
   $(MSWDIR)\choicdgg.obj \
-  $(MSWDIR)\colrdlgg.obj \
-  $(MSWDIR)\fontdlgg.obj \
   $(MSWDIR)\gridg.obj \
-  $(MSWDIR)\helpxlp.obj \
+  $(MSWDIR)\imaglist.obj \
   $(MSWDIR)\laywin.obj \
-  $(MSWDIR)\msgdlgg.obj \
   $(MSWDIR)\panelg.obj \
   $(MSWDIR)\sashwin.obj \
   $(MSWDIR)\scrolwin.obj \
   $(MSWDIR)\splitter.obj \
   $(MSWDIR)\statusbr.obj \
   $(MSWDIR)\tabg.obj \
-  $(MSWDIR)\textdlgg.obj
+  $(MSWDIR)\textdlgg.obj \
 
+# Not needed:
+#  $(MSWDIR)\colrdlgg.obj \
+#  $(MSWDIR)\fontdlgg.obj \
+#  $(MSWDIR)\helpxlp.obj \
+#  $(MSWDIR)\msgdlgg.obj \
 #  $(MSWDIR)\printps.obj \
 #  $(MSWDIR)\prntdlgg.obj \
+#  $(MSWDIR)\listctrl.obj \
+#  $(MSWDIR)\notebook.obj \
+#  $(MSWDIR)\treectrl.obj
 
 COMMONOBJS = \
   $(MSWDIR)\config.obj \
@@ -220,16 +225,16 @@ MSWOBJS = \
   $(MSWDIR)\spinbutt.obj \
   $(MSWDIR)\statbmp.obj \
   $(MSWDIR)\statbox.obj \
-  $(MSWDIR)\statbr95.obj \
   $(MSWDIR)\stattext.obj \
+  $(MSWDIR)\statbr95.obj \
   $(MSWDIR)\tabctrl.obj \
-  $(MSWDIR)\taskbar.obj \
-  $(MSWDIR)\tbar95.obj \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\thread.obj \
   $(MSWDIR)\timer.obj \
   $(MSWDIR)\treectrl.obj \
+  $(MSWDIR)\taskbar.obj \
+  $(MSWDIR)\tbar95.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
@@ -253,15 +258,15 @@ all:	all_libs all_execs
 
 !if "$(DLL)" == "0"
 
-$(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(BASEOBJECTS)
+$(LIBTARGET): $(DUMMY).obj $(OBJECTS)
         erase $(LIBTARGET)
 	tlib $(LIBTARGET) /P512 @&&!
--+$(OBJECTS:.obj =.obj -+) -+$(BASEOBJECTS:.obj =.obj -+) -+$(PERIPH_LIBS:.lib =.lib -+)
+-+$(OBJECTS:.obj =.obj -+) -+$(PERIPH_LIBS:.lib =.lib -+)
 !
 
 !else
 
-$(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(BASEOBJECTS)
+$(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 	erase $(LIBTARGET)
 	erase $(WXLIBDIR)\wx.dll
         tlink32 $(LINK_FLAGS) /v @&&!
@@ -648,7 +653,7 @@ ctl3d:  $(CFG)
         cd $(WXDIR)\src\msw
 
 wxxpm:	$(CFG)
-	cd $(WXDIR)\src\common\wxxpm
+	cd $(WXDIR)\src\xpm
 	make -f makefile.b32 -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
 	cd $(WXDIR)\src\msw
 

@@ -1,5 +1,5 @@
 [OPTIONS]
-BMROOT=d:\wx2\wxwind~1\utils\wxprop\docs ; Assume that bitmaps are where the source is
+BMROOT=d:\wx2\wxWind~1\utils\wxprop\docs ; Assume that bitmaps are where the source is
 TITLE=Property Classes Manual
 CONTENTS=Contents
 COMPRESS=HIGH

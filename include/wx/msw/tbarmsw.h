@@ -54,7 +54,7 @@ public:
   // If toggle is TRUE, the button toggles between the two states.
   wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
                bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
-               const wxString& helpString1 = "", const wxString& helpString2 = "");
+               const wxString& helpString1 = wxEmptyString, const wxString& helpString2 = wxEmptyString);
 
   void DrawTool(wxDC& dc, wxMemoryDC& memDc, wxToolBarTool *tool);
 

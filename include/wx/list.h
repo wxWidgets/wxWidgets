@@ -289,7 +289,7 @@ protected:
 private:
     // helpers
         // common part of all ctors
-    void Init(wxKeyType keyType);
+    void Init(wxKeyType keyType = wxKEY_NONE);
         // common part of copy ctor and assignment operator
     void DoCopy(const wxListBase& list);
         // common part of all Append()s

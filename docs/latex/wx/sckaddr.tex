@@ -27,11 +27,13 @@
 %
 
 \membersection{wxSockAddress::wxSockAddress}
+
 \func{}{wxSockAddress}{\void}
 
 Default constructor.
 
 \membersection{wxSockAddress::\destruct{wxSockAddress}}
+
 \func{}{\destruct{wxSockAddress}}{\void}
 
 Default destructor.
@@ -48,6 +50,7 @@ Delete all informations about the address.
 % Build
 %
 \membersection{wxSockAddress::Build}
+
 \func{void}{Build}{\param{struct sockaddr *\&}{ addr}, \param{size\_t\&}{ len}}
 
 Build a coded socket address.
@@ -56,6 +59,7 @@ Build a coded socket address.
 % Disassemble
 %
 \membersection{wxSockAddress::Disassemble}
+
 \func{void}{Disassemble}{\param{struct sockaddr *}{addr}, \param{size\_t}{ len}}
 
 Decode a socket address. {\bf Actually, you don't have to use this
@@ -65,6 +69,7 @@ function: only wxSocketBase use it.}
 % SockAddrLen
 %
 \membersection{wxSockAddress::SockAddrLen}
+
 \func{int}{SockAddrLen}{\void};
 
 Returns the length of the socket address.
@@ -89,6 +94,7 @@ Returns the length of the socket address.
 %
 
 \membersection{wxIPV4address::Hostname}
+
 \func{bool}{Hostname}{\param{const wxString\&}{ hostname}}
 
 Use the specified {\it hostname} for the address.
@@ -102,6 +108,7 @@ Returns FALSE if something bad happens (invalid hostname, invalid IP address).
 %
 
 \membersection{wxIPV4address::Hostname}
+
 \func{wxString}{Hostname}{\void}
 
 Returns the hostname which matches the IP address.
@@ -111,6 +118,7 @@ Returns the hostname which matches the IP address.
 %
 
 \membersection{wxIPV4address::Service}
+
 \func{bool}{Service}{\param{const wxString\&}{ service}}
 
 Use the specified {\it service} string for the address.
@@ -124,6 +132,7 @@ Returns FALSE if something bad happens (invalid service).
 %
 
 \membersection{wxIPV4address::Service}
+
 \func{bool}{Service}{\param{unsigned short}{ service}}
 
 Use the specified {\it service} for the address.
@@ -137,6 +146,7 @@ Returns FALSE if something bad happens (invalid service).
 %
 
 \membersection{wxIPV4address::Service}
+
 \func{unsigned short}{Service}{\void}
 
 Returns the current service.
@@ -146,6 +156,7 @@ Returns the current service.
 %
 
 \membersection{wxIPV4address::LocalHost}
+
 \func{bool}{LocalHost}{\void}
 
 Initialize peer host to local host.
@@ -153,3 +164,4 @@ Initialize peer host to local host.
 \wxheading{Return value}
 
 Returns FALSE if something bad happens.
+

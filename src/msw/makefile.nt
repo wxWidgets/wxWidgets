@@ -1376,7 +1376,8 @@ clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib
 cleanall: clean
 
 # Making documents
-docs:   hlp
+docs:   allhlp allhtml allpdfrtf
+alldocs: docs
 hlp:    wxhlp portinghlp # faqhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
 faqhlp: $(DOCDIR)/winhelp/faq.hlp
@@ -1399,8 +1400,6 @@ portingrtf: $(DOCDIR)/winhelp/porting.rtf
 portinghlp: $(DOCDIR)/winhelp/porting.hlp
 portingpdfrtf: $(DOCDIR)/pdf/porting.rtf
 portingps:	$(WXDIR)\docs\ps\porting.ps
-
-alldocs: allhlp allhtml allpdfrtf # allps # TeX can't cope with references!
 
 allhlp: wxhlp portinghlp # faqhlp
         cd $(WXDIR)\utils\wxprop\src
@@ -1678,3 +1677,10 @@ $(WXDIR)\docs\ps\faq.ps:	$(WXDIR)\docs\latex\faq\faq.dvi
 # In order to force document reprocessing
 touchmanual:
     -touch $(WXDIR)\docs\latex\wx\manual.tex
+
+updatedocs: touchmanual alldocs
+
+# Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
+# Office StartUp folder, and PDFMaker should be installed.
+updatepdf:  # touchmanual pdfrtf
+    start /w "winword d:\wx2\wxWindows\docs\latex\pdf\wx.rtf /mGeneratePDF"

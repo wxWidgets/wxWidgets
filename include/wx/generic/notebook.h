@@ -226,6 +226,29 @@ protected:
 // ----------------------------------------------------------------------------
 typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 
+// Because of name truncation!
+#if defined(__BORLANDC__) && defined(__WIN16__)
+
+#define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
+  {                                                                         \
+    wxEVT_COMMAND_NB_PAGE_CHANGED,                                    \
+    id,                                                                     \
+    -1,                                                                     \
+    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
+    NULL                                                                    \
+  },
+
+#define EVT_NOTEBOOK_PAGE_CHANGING(id, fn)                                  \
+  {                                                                         \
+    wxEVT_COMMAND_NB_PAGE_CHANGING, \                                 \
+    id,                                                                     \
+    -1,                                                                     \
+    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
+    NULL                                                                    \
+  },
+
+#else
+
 #define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
   {                                                                         \
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,                                    \
@@ -243,5 +266,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
     (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
     NULL                                                                    \
   },
+
+#endif
 
 #endif // _WX_NOTEBOOK_H_

@@ -813,7 +813,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     }
     else
     {
-        TVSORTCB tvSort;
+        TV_SORTCB tvSort;
         tvSort.hParent = (HTREEITEM)(WXHTREEITEM)item;
         tvSort.lpfnCompare = (PFNTVCOMPARE)TreeView_CompareCallback;
         tvSort.lParam = (LPARAM)this;

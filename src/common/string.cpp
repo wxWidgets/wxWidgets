@@ -1116,6 +1116,8 @@ size_t wxString::find(const char* sz, size_t nStart, size_t n) const
 }
 #endif
 
+// Gives a duplicate symbol (presumably a case-insensitivity problem)
+#if !defined(__BORLANDC__)
 size_t wxString::find(char ch, size_t nStart) const
 {
   wxASSERT( nStart <= Len() );
@@ -1124,6 +1126,7 @@ size_t wxString::find(char ch, size_t nStart) const
 
   return p == NULL ? npos : p - c_str();
 }
+#endif
 
 size_t wxString::rfind(const wxString& str, size_t nStart) const
 {

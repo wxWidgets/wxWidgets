@@ -141,7 +141,7 @@ void wxIniConfig::SetPath(const wxString& strPath)
   // other functions assume that all this is true, i.e. there are no trailing
   // underscores at the end except if the group is the root one
   wxASSERT( (m_strPath.IsEmpty() || m_strPath.Last() != PATH_SEP_REPLACE) &&
-            (m_strGroup == PATH_SEP_REPLACE ||
+            (m_strGroup == wxString(PATH_SEP_REPLACE) ||
              m_strGroup.Last() != PATH_SEP_REPLACE) );
 }
 
@@ -152,7 +152,7 @@ const wxString& wxIniConfig::GetPath() const
   // always return abs path
   s_str = wxCONFIG_PATH_SEPARATOR;
 
-  if ( m_strGroup == PATH_SEP_REPLACE ) {
+  if ( m_strGroup == (const char*) PATH_SEP_REPLACE ) {
     // we're at the root level, nothing to do
   }
   else {
@@ -183,7 +183,7 @@ wxString wxIniConfig::GetKeyName(const wxString& szKey) const
 {
   wxString strKey;
 
-  if ( m_strGroup != PATH_SEP_REPLACE )
+  if ( m_strGroup != wxString(PATH_SEP_REPLACE) )
     strKey << m_strGroup << PATH_SEP_REPLACE;
   if ( !m_strPath.IsEmpty() )
     strKey << m_strPath << PATH_SEP_REPLACE;

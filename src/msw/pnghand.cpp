@@ -122,7 +122,11 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
   ColorType = (colortype>=0) ? colortype: ((Depth>8) ? COLORTYPE_COLOR: 0);
 
   if (lpbi)  {
+#ifdef __WIN16__
+	 GlobalFreePtr((unsigned int) lpbi);
+#else
 	 GlobalFreePtr(lpbi);
+#endif
 //	 delete Palette;
   }
   RawImage = 0;
@@ -137,7 +141,11 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
 wxPNGReader::~wxPNGReader ( )
 {
   if (lpbi)  {
+#ifdef __WIN16__
+	 GlobalFreePtr((unsigned int) lpbi);
+#else
 	 GlobalFreePtr(lpbi);
+#endif
 	 delete Palette;
   }
 }

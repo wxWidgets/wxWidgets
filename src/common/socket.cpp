@@ -469,12 +469,22 @@ void wxSocketBase::Discard()
 bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
+#ifdef __WXMSW__
+  int len_addr = sizeof(my_addr);
+#else
   size_t len_addr = sizeof(my_addr);
+#endif
 
   if (m_fd < 0)
     return FALSE;
 
-  if (getpeername(m_fd, (struct sockaddr *)&my_addr, (socklen_t *)&len_addr) < 0)
+  if (getpeername(m_fd, (struct sockaddr *)&my_addr,
+#ifdef __WXMSW__
+    &len_addr)
+#else
+    (socklen_t *)&len_addr)
+#endif
+     < 0)
     return FALSE;
 
   addr_man.Disassemble(&my_addr, len_addr);
@@ -484,12 +494,23 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
+#ifdef __WXMSW__
+  int len_addr = sizeof(my_addr);
+#else
   size_t len_addr = sizeof(my_addr);
+#endif
 
   if (m_fd < 0)
     return FALSE;
 
-  if (getsockname(m_fd, (struct sockaddr *)&my_addr, (socklen_t *)&len_addr) < 0)
+  if (getsockname(m_fd, (struct sockaddr *)&my_addr,
+#ifdef __WXMSW__
+    &len_addr)
+#else
+    (socklen_t *)&len_addr)
+#endif
+     < 0)
+
     return FALSE;
 
   addr_man.Disassemble(&my_addr, len_addr);

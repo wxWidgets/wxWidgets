@@ -688,6 +688,9 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 #define BI_RGB       0
 #define BI_RLE8      1
 #define BI_RLE4      2
+#endif
+
+#ifndef BI_BITFIELDS
 #define BI_BITFIELDS 3
 #endif
 

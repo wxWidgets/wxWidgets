@@ -29,6 +29,10 @@
   #define   off_t       _off_t
 #endif
 
+#if defined(__BORLANDC__) && defined(__WIN16__)
+typedef long off_t;
+#endif
+
 const off_t wxInvalidOffset = (off_t)-1;
 
 typedef enum {
@@ -85,7 +89,7 @@ WXDLLEXPORT char* wxExpandPath(char *dest, const char *path);
 // and make (if under the home tree) relative to home
 // [caller must copy-- volatile]
 WXDLLEXPORT char* wxContractPath (const wxString& filename,
-   const wxString& envname = "", const wxString& user = "");
+   const wxString& envname = wxEmptyString, const wxString& user = wxEmptyString);
 
 // Destructive removal of /./ and /../ stuff
 WXDLLEXPORT char* wxRealPath(char *path);

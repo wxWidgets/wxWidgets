@@ -145,7 +145,7 @@ int wxNodeBase::IndexOf() const
 // wxListBase
 // -----------------------------------------------------------------------------
 
-void wxListBase::Init(wxKeyType keyType = wxKEY_NONE)
+void wxListBase::Init(wxKeyType keyType)
 {
   m_nodeFirst =
   m_nodeLast = (wxNodeBase *) NULL;

@@ -22,6 +22,7 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
+WXDLLEXPORT_DATA(extern const char*) wxStatusLineNameStr;
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
@@ -102,7 +103,7 @@ public:
 
   // Create status line
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
-    const wxString& name = "statusBar");
+    const wxString& name = wxStatusLineNameStr);
   inline wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
   inline void SetStatusBar(wxStatusBar *statusBar) { m_frameStatusBar = statusBar; }
   virtual void PositionStatusBar(void);

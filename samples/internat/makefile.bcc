@@ -1,73 +1,19 @@
 #
 # File:		makefile.bcc
 # Author:	Julian Smart
-# Created:	1993
+# Created:	1998
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
-# "%W% %G%"
-#
-# Makefile : Builds internat example (DOS).
-
-!if "$(BCCDIR)" == ""
-!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
-!endif
+# Builds a BC++ 16-bit sample
 
 !if "$(WXWIN)" == ""
 !error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
 !endif
 
 WXDIR = $(WXWIN)
-!include $(WXDIR)\src\makebcc.env
 
-THISDIR = $(WXDIR)\samples\internat
-WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) mathwl cwl import
-INC=-I$(WXDIR)\include\base -I$(WXDIR)\include\msw
-CFG=$(WXDIR)\src\wxwin.cfg
+TARGET=internat
+OBJECTS=$(TARGET).obj
 
-!ifndef FINAL
-FINAL=0
-!endif
+!include $(WXDIR)\src\makeprog.bcc
 
-!if "$(FINAL)" == "0"
-LINKFLAGS=/v/Vt /Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
-OPT = -Od
-DEBUG_FLAGS= -v
-!else
-LINKFLAGS=/Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
-OPT = -O2
-DEBUG_FLAGS=
-!endif
-CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
-
-OBJECTS = internat.obj
-
-internat:    internat.exe
-
-all:    internat.exe
-
-internat.exe:    $(WXLIB) internat.obj internat.def internat.res
-        tlink $(LINKFLAGS) @&&!
-c0wl.obj internat.obj
-internat
-nul
-$(LIBS)
-internat.def
-!
-        rc -31 -K internat.res
-
-.$(SRCSUFF).obj:
-	bcc $(CPPFLAGS) -c {$< }
-
-internat.obj:      internat.$(SRCSUFF)
-
-internat.res :      internat.rc $(WXDIR)\include\msw\wx.rc
-    rc -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa internat
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.rws

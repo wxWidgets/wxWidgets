@@ -29,8 +29,6 @@ include $(WXDIR)/src/makeg95.env
 #               USE_GAUGE should be 1
 #   xpm:      XPM pixmap support
 #               USE_XPM_IN_X should be 1
-#   image:    GIF, BMP image reading
-#               USE_IMAGE_LOADING_IN_X should be 1
 #   wxstring: string class
 #               USE_GNU_WXSTRING should be 1
 #

@@ -187,8 +187,15 @@ const wxEventType wxEVT_COMMAND_LIST_ITEM_ACTIVATED =       wxEVT_FIRST + 715;
  /* Tab and notebook control event types */
 const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED =           wxEVT_FIRST + 800;
 const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING =          wxEVT_FIRST + 801;
+
+#if defined(__BORLANDC__) && defined(__WIN16__)
+// For 16-bit BC++, these 2 are identical (truncated)
+const wxEventType wxEVT_COMMAND_NB_PAGE_CHANGED =     wxEVT_FIRST + 802;
+const wxEventType wxEVT_COMMAND_NB_PAGE_CHANGING =    wxEVT_FIRST + 803;
+#else
 const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED =     wxEVT_FIRST + 802;
 const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING =    wxEVT_FIRST + 803;
+#endif
 
 const wxEventType wxEVT_USER_FIRST =                        wxEVT_FIRST + 2000;
 

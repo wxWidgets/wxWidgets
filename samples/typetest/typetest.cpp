@@ -235,10 +235,10 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     wxTextCtrl& textCtrl = * GetTextCtrl();
 
     wxVariant var1 = "String value";
-    textCtrl << "var1 = " << (wxString) var1 << "\n";
+    textCtrl << "var1 = " << var1.MakeString() << "\n";
 
-    // Implicit conversion
-    wxString str = var1;
+    // Conversion
+    wxString str = var1.MakeString();
 
     var1 = 123.456;
     textCtrl << "var1 = " << var1.GetReal() << "\n";
@@ -255,20 +255,20 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     wxStringList stringList;
     stringList.Add("one"); stringList.Add("two"); stringList.Add("three");
     var1 = stringList;
-    textCtrl << "var1 = " << (wxString) var1 << "\n";
+    textCtrl << "var1 = " << var1.MakeString() << "\n";
 
     var1.ClearList();
     var1.Append(wxVariant(1.2345));
     var1.Append(wxVariant("hello"));
     var1.Append(wxVariant(54321L));
 
-    textCtrl << "var1 = " << (wxString) var1 << "\n";
+    textCtrl << "var1 = " << var1.MakeString() << "\n";
 
     size_t n = var1.GetCount();
     size_t i;
     for (i = (size_t) 0; i < n; i++)
     {
-        textCtrl << "var1[" << (int) i << "] (type " << var1[i].GetType() << ") = " << (wxString) var1[i] << "\n";
+        textCtrl << "var1[" << (int) i << "] (type " << var1[i].GetType() << ") = " << var1[i].MakeString() << "\n";
     }
 }
 
