@@ -305,13 +305,11 @@ public:
 
     // on alpha-linux this gives overload problems:
     // Also on Solaris, so removing for now (JACS)
-/*
 #if ! defined(__ALPHA__)
     /// operator version of GetChar
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
 #endif
-*/
 
     /// operator version of GetChar
     char  operator[](int n) const
