@@ -4,10 +4,10 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="treectrl" template="wx_sample" template_append="wx_append">
-        <sources>treectrl.cpp</sources>
+        <sources>treetest.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>treectrl.rc</win32-res>
+        <win32-res>treetest.rc</win32-res>
     </exe>
 
 </makefile>

@@ -7,7 +7,7 @@
         <sources>griddemo.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>grid.rc</win32-res>
+        <win32-res>griddemo.rc</win32-res>
     </exe>
 
 </makefile>
