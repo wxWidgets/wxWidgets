@@ -61,7 +61,7 @@
 
 #ifndef HUGE_VAL
 # define HUGE_VAL HUGE
-#endif HUGE_VAL
+#endif /*HUGE_VAL*/
 
 
 /****************************************************************
@@ -75,11 +75,10 @@
 #ifdef applec	/* The Apple C compiler works */
 # define FloatToUnsigned(f)	((wxUint32)(f))
 # define UnsignedToFloat(u)	((wxFloat64)(u))
-#else applec
-# define FloatToUnsigned(f)	((wxUint32)(((wxInt32)((f) - 2147483648.0)) + 2147483647L + 1))
+#else /*applec*/
+# define FloatToUnsigned(f)	((wxUint32)((((wxInt32)((f) - 2147483648.0)) + 2147483647L) + 1))
 # define UnsignedToFloat(u)	(((wxFloat64)((wxInt32)((u) - 2147483647L - 1))) + 2147483648.0)
-#endif applec
-
+#endif /*applec*/
 
 
  
