@@ -88,18 +88,26 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
  p_imageListNormal->Add(wxICON(DocOpen));
  SetImageList(p_imageListNormal);
  ct_BrowserDB = NULL;
+ popupMenu1   = NULL;
+ popupMenu2   = NULL;
 }
 //----------------------------------------------------------------------------------------
 DBTree::~DBTree()
 {
+//  delete (pDoc->db_Br+i_Which);
  // wxLogMessage("DBTree::~DBTree() - Vor  OnCloseDB()");
  (pDoc->db_Br+i_Which)->OnCloseDB(FALSE);
  // wxLogMessage("DBTree::~DBTree() - Nach OnCloseDB()");
  (pDoc->db_Br+i_Which)->db_BrowserDB = NULL;
  (pDoc->db_Br+i_Which)->ct_BrowserDB = NULL;
  (pDoc->db_Br+i_Which)->cl_BrowserDB = NULL;
+
  delete ct_BrowserDB;
  delete p_imageListNormal;
+ if (popupMenu1)       // If the DSN has no Tables, then no delete should be done !
+  delete popupMenu1;
+ if (popupMenu1)       // If the DSN has no Tables, then no delete should be done !
+  delete popupMenu2;
 }
 //----------------------------------------------------------------------------------------
 #undef TREE_EVENT_HANDLER
@@ -202,7 +210,7 @@ int  DBTree::OnPopulate()
      z++;
      if (z % 10 == 0)
      {
-      Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - Table %6d has been read."),(ct_BrowserDB->pTableInf+x)->tableName,z);
+      Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - Table %6d (from %d) has been read."),(ct_BrowserDB->pTableInf+x)->tableName,z,ct_BrowserDB->numTables);
       pDoc->p_MainFrame->SetStatusText(Temp0, 0);
      }
     }    // if ((ct_BrowserDB->pTableInf+x)->tableType == "TABLE" or VIEW)
