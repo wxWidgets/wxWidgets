@@ -121,12 +121,7 @@ public:
     // event loop: it may return true to continue running the event loop or
     // false to stop it (in the latter case it may rethrow the exception as
     // well)
-    virtual bool OnExceptionInMainLoop() {
-        throw;
-#if defined(__DMC__) || (defined(_MSC_VER) && _MSC_VER < 1200)
-        return false;
-#endif
-        }
+    virtual bool OnExceptionInMainLoop();
 
     // Called when an unhandled C++ exception occurs inside OnRun(): note that
     // the exception type is lost by now, so if you really want to handle the

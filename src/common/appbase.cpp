@@ -284,6 +284,10 @@ int wxAppConsole::FilterEvent(wxEvent& WXUNUSED(event))
     return -1;
 }
 
+// ----------------------------------------------------------------------------
+// exception handling
+// ----------------------------------------------------------------------------
+
 #if wxUSE_EXCEPTIONS
 
 void
@@ -293,6 +297,17 @@ wxAppConsole::HandleEvent(wxEvtHandler *handler,
 {
     // by default, simply call the handler
     (handler->*func)(event);
+}
+
+bool
+wxAppConsole::OnExceptionInMainLoop()
+{
+    throw;
+
+    // some compilers are too stupid to know that we never return after throw
+#if defined(__DMC__) || (defined(_MSC_VER) && _MSC_VER < 1200)
+    return false;
+#endif
 }
 
 #endif // wxUSE_EXCEPTIONS
