@@ -332,7 +332,6 @@ wxCONSTRUCTOR_DUMMY(wxWindow)
 #endif // __WXUNIVERSAL__/__WXMSW__
 
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
-    EVT_ERASE_BACKGROUND(wxWindowMSW::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
 #ifdef __WXWINCE__
     EVT_INIT_DIALOG(wxWindowMSW::OnInitDialog)
@@ -4050,29 +4049,6 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
     if ( ::IsIconic(GetHwnd()) )
         return true;
 
-#if 0
-    if (GetParent() && GetParent()->GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
-    {
-        return false;
-    }
-
-    if (GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
-    {
-        if (wxUxThemeEngine::Get())
-        {
-            WXHTHEME hTheme = wxUxThemeEngine::Get()->m_pfnOpenThemeData(GetHWND(), L"TAB");
-            if (hTheme)
-            {
-                WXURECT rect;
-                ::GetClientRect((HWND) GetHWND(), (RECT*) & rect);
-                wxUxThemeEngine::Get()->m_pfnDrawThemeBackground(hTheme, hdc, 10 /* TABP_BODY */, 0, &rect, &rect);
-                wxUxThemeEngine::Get()->m_pfnCloseThemeData(hTheme);
-                return true;
-            }
-        }
-    }
-#endif
-
     wxDCTemp dc(hdc);
 
     dc.SetHDC(hdc);
@@ -4089,33 +4065,6 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
     dc.SelectOldObjects(hdc);
 
     return rc;
-}
-
-void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
-{
-    RECT rect;
-    ::GetClientRect(GetHwnd(), &rect);
-
-    wxColour backgroundColour( GetBackgroundColour());
-    COLORREF ref = PALETTERGB(backgroundColour.Red(),
-                              backgroundColour.Green(),
-                              backgroundColour.Blue());
-    HBRUSH hBrush = ::CreateSolidBrush(ref);
-    if ( !hBrush )
-        wxLogLastError(wxT("CreateSolidBrush"));
-
-    HDC hdc = (HDC)event.GetDC()->GetHDC();
-
-#ifndef __WXWINCE__
-    int mode = ::SetMapMode(hdc, MM_TEXT);
-#endif
-
-    ::FillRect(hdc, &rect, hBrush);
-    ::DeleteObject(hBrush);
-
-#ifndef __WXWINCE__
-    ::SetMapMode(hdc, mode);
-#endif
 }
 
 // ---------------------------------------------------------------------------

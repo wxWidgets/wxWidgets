@@ -165,7 +165,6 @@ public:
     // event handlers
     // --------------
 
-    void OnEraseBackground(wxEraseEvent& event);
     void OnPaint(wxPaintEvent& event);
 #ifdef __WXWINCE__
     void OnInitDialog( wxInitDialogEvent& event );
