@@ -778,6 +778,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
             DrawAnyText(text, x, y);
 
             (void)::SelectObject(GetHdc(), hfontOld);
+            (void)::DeleteObject(hfont);
         }
 
         // call the bounding box by adding all four vertices of the rectangle
@@ -1379,7 +1380,6 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             wxLogLastError("BitBlt");
         }
     }
-
     ::SetTextColor(GetHdc(), old_textground);
     ::SetBkColor(GetHdc(), old_background);
 
