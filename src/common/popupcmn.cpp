@@ -418,8 +418,14 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 
     // when we lose focus we always disappear - unless it goes to the popup (in
     // which case we don't really lose it)
-    if ( event.GetWindow() != m_popup )
-        m_popup->DismissAndNotify();
+    wxWindow *win = event.GetWindow();
+    while ( win )
+    {
+        if ( win == m_popup )
+            return;
+        win = win->GetParent();
+    }
+    m_popup->DismissAndNotify();
 }
 
 void wxPopupFocusHandler::OnKeyDown(wxKeyEvent& event)
