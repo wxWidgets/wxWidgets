@@ -468,7 +468,7 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\wxtest.cpp
+SOURCE=.\test.cpp
 # End Source File
 # Begin Source File
 

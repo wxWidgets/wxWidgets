@@ -468,11 +468,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\vscroll.cpp
+SOURCE=.\vscroll.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\vscroll.rc
+SOURCE=.\vstest.cpp
 # End Source File
 # End Group
 # End Target
