@@ -825,7 +825,6 @@ void wxPy_ReinitStockObjects(int pass)
     REINITOBJ(wxTheColourDatabase, wxColourDatabase);
 
 
-    REINITOBJ(wxTheClipboard, wxClipboard);
     REINITOBJ2(wxDefaultValidator, wxValidator);
     REINITOBJ2(wxNullImage, wxImage);
     REINITOBJ2(wxNullAcceleratorTable, wxAcceleratorTable);

@@ -7,6 +7,7 @@ PyDropTarget
 #SystemSettings_GetSystemFont
 #SystemSettings_GetSystemMetric
 
+TheClipboard
 
 # With the * on the end these will cause code to be added that 
 # will scan for other names in the source module tha have the

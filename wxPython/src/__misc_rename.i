@@ -334,7 +334,6 @@
 %rename(DragCancel)                         wxDragCancel;
 %rename(IsDragResultOk)                     wxIsDragResultOk;
 %rename(Clipboard)                          wxClipboard;
-%rename(TheClipboard)                       wxTheClipboard;
 %rename(ClipboardLocker)                    wxClipboardLocker;
 %rename(VideoMode)                          wxVideoMode;
 %rename(DefaultVideoMode)                   wxDefaultVideoMode;

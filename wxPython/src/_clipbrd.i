@@ -117,13 +117,40 @@ exit.  Returns False if the operation is unsuccesful for any reason.", "");
         "On platforms supporting it (the X11 based platforms), selects the
 so called PRIMARY SELECTION as the clipboard as opposed to the
 normal clipboard, if primary is True.", "");
+
+
+    DocDeclStr(
+        static wxClipboard *, Get(),
+        "Returns global instance (wxTheClipboard) of the object.", "");
+    
 };
 
 
-%immutable;
-wxClipboard* const wxTheClipboard;
-%mutable;
-
+// Previously we just declared wxTheClipboard as a global, but in C++
+// is has been changed to be a macro for wxClipboard::Get, but the
+// swig generated code will try to evaluate it when it assigns to the
+// swig wrapper var so this causes Get to be called too early on
+// wxGTK.  So instead we'll create a Python class that can delay the
+// Get until it is really needed, which is similar in effect to what
+// is really happening on the C++ side too.
+%pythoncode {
+    class _wxPyDelayedInitWrapper(object):
+        def __init__(self, initfunc, *args, **kwargs):
+            self._initfunc = initfunc
+            self._args = args
+            self._kwargs = kwargs
+            self._instance = None
+        def _checkInstance(self):
+            if self._instance is None:
+                self._instance = self._initfunc(*self._args, **self._kwargs)        
+        def __getattr__(self, name):
+            self._checkInstance()
+            return getattr(self._instance, name)
+        def __repr__(self):
+            self._checkInstance()
+            return repr(self._instance)
+    TheClipboard = _wxPyDelayedInitWrapper(Clipboard.Get)
+}
 
 
 //---------------------------------------------------------------------------

@@ -563,7 +563,7 @@ wxFileDropTarget = wx._misc.FileDropTarget
 wxFileDropTargetPtr = wx._misc.FileDropTargetPtr
 wxClipboard = wx._misc.Clipboard
 wxClipboardPtr = wx._misc.ClipboardPtr
-wxTheClipboard = wx._misc.TheClipboard
+wxClipboard_Get = wx._misc.Clipboard_Get
 wxClipboardLocker = wx._misc.ClipboardLocker
 wxClipboardLockerPtr = wx._misc.ClipboardLockerPtr
 wxVideoMode = wx._misc.VideoMode
@@ -576,5 +576,6 @@ wxDisplay_GetFromPoint = wx._misc.Display_GetFromPoint
 wxDisplay_GetFromWindow = wx._misc.Display_GetFromWindow
 wxPyTimer = wx._misc.PyTimer
 wxPyDropTarget = wx._misc.PyDropTarget
+wxTheClipboard = wx._misc.TheClipboard
 
 
