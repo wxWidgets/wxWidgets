@@ -614,7 +614,7 @@ bool wxTextCtrl::Enable( bool enable )
         // nothing to do
         return FALSE;
     }
-    
+
     if (m_windowStyle & wxTE_MULTILINE)
     {
         gtk_text_set_editable( GTK_TEXT(m_text), enable );
@@ -812,6 +812,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
         event.SetEventObject(this);
+        event.SetString(GetValue());
         if (GetEventHandler()->ProcessEvent(event)) return;
     }
 
