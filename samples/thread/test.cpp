@@ -38,6 +38,8 @@
 #include "wx/dynarray.h"
 #include "wx/time.h"
 
+#include "wx/progdlg.h"
+
 class MyThread;
 WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
 
@@ -69,6 +71,9 @@ public:
     // operations
     void WriteText(const wxString& text) { m_txtctrl->WriteText(text); }
 
+    // accessors for MyWorkerThread (called in its context!)
+    bool Cancelled();
+
     // callbacks
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -79,9 +84,10 @@ public:
     void OnStopThread(wxCommandEvent& event);
     void OnPauseThread(wxCommandEvent& event);
     void OnResumeThread(wxCommandEvent& event);
-    
+
     void OnStartWorker(wxCommandEvent& event);
     void OnWorkerEvent(wxCommandEvent& event);
+    void OnUpdateWorker(wxUpdateUIEvent& event);
 
     void OnIdle(wxIdleEvent &event);
 
@@ -94,6 +100,15 @@ private:
 
     // remember the number of running threads and total number of threads
     size_t m_nRunning, m_nCount;
+
+    // the progress dialog which we show while worker thread is running
+    wxProgressDialog *m_dlgProgress;
+
+    // was the worker thread cancelled by user?
+    bool m_cancelled;
+
+    // protects m_cancelled
+    wxCriticalSection m_critsectWork;
 
     DECLARE_EVENT_TABLE()
 };
@@ -156,7 +171,7 @@ void MyThread::WriteText(const wxString& text)
 
     msg << text;
     m_frame->WriteText(msg);
-    
+
     wxMutexGuiLeave();
 }
 
@@ -228,29 +243,33 @@ void MyWorkerThread::OnExit()
 
 void *MyWorkerThread::Entry()
 {
-    for ( m_count = 0; m_count < 10; m_count++ )
+    for ( m_count = 0; !m_frame->Cancelled() && (m_count < 100); m_count++ )
     {
         // check if we were asked to exit
         if ( TestDestroy() )
             break;
-        
+
         wxString text;
         text.Printf("[%u] Thread 0x%x here!!", m_count, GetId());
 
-        // create any type of command event here        
+        // create any type of command event here
         wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
-        event.SetInt( WORKER_EVENT );
+        event.SetInt( m_count );
         event.SetString( text );
-        
+
         // send in a thread-safe way
         wxPostEvent( m_frame, event );
-        
+
         // same as:
         // m_frame->AddPendingEvent( event );
 
         // wxSleep() can't be called from non-main thread!
-        wxThread::Sleep(1000);
+        wxThread::Sleep(200);
     }
+
+    wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
+    event.SetInt(-1); // that's all
+    wxPostEvent( m_frame, event );
 
     return NULL;
 }
@@ -268,7 +287,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEST_STOP_THREAD, MyFrame::OnStopThread)
     EVT_MENU(TEST_PAUSE_THREAD, MyFrame::OnPauseThread)
     EVT_MENU(TEST_RESUME_THREAD, MyFrame::OnResumeThread)
-    
+
+    EVT_UPDATE_UI(TEST_START_WORKER, MyFrame::OnUpdateWorker)
     EVT_MENU(TEST_START_WORKER, MyFrame::OnStartWorker)
     EVT_MENU(WORKER_EVENT, MyFrame::OnWorkerEvent)
 
@@ -302,7 +322,7 @@ bool MyApp::OnInit()
     thread_menu->Append(TEST_RESUME_THREAD, "&Resume suspended thread\tCtrl-R");
     thread_menu->AppendSeparator();
     thread_menu->Append(TEST_START_WORKER, "Start &worker thread\tCtrl-W");
-    
+
     menu_bar->Append(thread_menu, "&Thread");
     frame->SetMenuBar(menu_bar);
 
@@ -320,6 +340,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
     m_nRunning = m_nCount = 0;
+
+    m_dlgProgress = (wxProgressDialog *)NULL;
 
     CreateStatusBar(2);
 
@@ -517,6 +539,11 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
     m_txtctrl->Clear();
 }
 
+void MyFrame::OnUpdateWorker(wxUpdateUIEvent& event)
+{
+    event.Enable( m_dlgProgress == NULL );
+}
+
 void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
 {
     MyWorkerThread *thread = new MyWorkerThread(this);
@@ -525,14 +552,59 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
     {
         wxLogError("Can't create thread!");
     }
-    
+
+    m_dlgProgress = new wxProgressDialog
+                        (
+                         "Progress dialog",
+                         "Wait until the thread terminates or press [Cancel]",
+                         100,
+                         this,
+                         wxPD_CAN_ABORT |
+                         wxPD_APP_MODAL |
+                         wxPD_ELAPSED_TIME |
+                         wxPD_ESTIMATED_TIME |
+                         wxPD_REMAINING_TIME
+                        );
+
+    // thread is not running yet, no need for crit sect
+    m_cancelled = FALSE;
+
     thread->Run();
 }
 
 void MyFrame::OnWorkerEvent(wxCommandEvent& event)
 {
+#if 0
     WriteText( "Got message from worker thread: " );
     WriteText( event.GetString() );
     WriteText( "\n" );
+#else
+    int n = event.GetInt();
+    if ( n == -1 )
+    {
+        m_dlgProgress->Destroy();
+        m_dlgProgress = (wxProgressDialog *)NULL;
+
+        // the dialog is aborted because the event came from another thread, so
+        // we may need to wake up the main event loop for the dialog to be
+        // really closed
+        wxWakeUpIdle();
+    }
+    else
+    {
+        if ( !m_dlgProgress->Update(n) )
+        {
+            wxCriticalSectionLocker lock(m_critsectWork);
+
+            m_cancelled = TRUE;
+        }
+    }
+#endif
 }
 
+bool MyFrame::Cancelled()
+{
+    wxCriticalSectionLocker lock(m_critsectWork);
+
+    return m_cancelled;
+}

@@ -254,7 +254,7 @@ bool MyApp::LoadImages()
     if ( !path )
         return FALSE;
     gs_bmpMask.LoadFile(path, wxBITMAP_TYPE_BMP);
-    
+
 //    This is so wrong, it hurts.
 //    gs_bmpMask.SetDepth(1);
 //    wxMask *mask = new wxMask(gs_bmpMask);
@@ -573,45 +573,54 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle( 0, 100, 1000, 300 );
 
-    // test the rectangle outline drawing - there should be one pixel between 
+    // test the rectangle outline drawing - there should be one pixel between
     // the rect and the lines
     dc.SetPen(*wxWHITE_PEN);
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
     dc.DrawRectangle(100, 170, 49, 29);
     dc.DrawRectangle(150, 170, 49, 29);
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(200, 160, 200, 210); 
-    dc.DrawLine(100, 200, 210, 200); 
-    
-    // test the rectangle filled drawing - there should be one pixel between 
+    dc.DrawLine(200, 210, 200, 170);
+    dc.DrawLine(210, 200, 100, 200);
+
+    // test the rectangle filled drawing - there should be one pixel between
     // the rect and the lines
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRectangle(300, 170, 49, 29);
     dc.DrawRectangle(350, 170, 49, 29);
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(400, 160, 400, 210); 
-    dc.DrawLine(300, 200, 410, 200); 
-    
-    // test the rectangle outline drawing - there should be one pixel between 
+    dc.DrawLine(400, 170, 400, 210);
+    dc.DrawLine(300, 200, 410, 200);
+
+    // and now for filled rect with outline
+    dc.SetPen(*wxRED_PEN);
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle(500, 170, 49, 29);
+    dc.DrawRectangle(550, 170, 49, 29);
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(600, 170, 600, 210);
+    dc.DrawLine(500, 200, 610, 200);
+
+    // test the rectangle outline drawing - there should be one pixel between
     // the rect and the lines
     dc.SetPen(*wxWHITE_PEN);
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
     dc.DrawRoundedRectangle(100, 270, 49, 29, 6);
     dc.DrawRoundedRectangle(150, 270, 49, 29, 6);
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(200, 260, 200, 310); 
-    dc.DrawLine(100, 300, 210, 300); 
-    
-    // test the rectangle filled drawing - there should be one pixel between 
+    dc.DrawLine(200, 270, 200, 310);
+    dc.DrawLine(100, 300, 210, 300);
+
+    // test the rectangle filled drawing - there should be one pixel between
     // the rect and the lines
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRoundedRectangle(300, 270, 49, 29, 6);
     dc.DrawRoundedRectangle(350, 270, 49, 29, 6);
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(400, 260, 400, 310); 
-    dc.DrawLine(300, 300, 410, 300); 
+    dc.DrawLine(400, 270, 400, 310);
+    dc.DrawLine(300, 300, 410, 300);
 
 }
 
