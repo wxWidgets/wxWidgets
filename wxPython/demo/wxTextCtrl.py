@@ -33,12 +33,16 @@ class TestPanel(wxPanel):
         EVT_TEXT(self, 20, self.EvtText)
 
         l3 = wxStaticText(self, -1, "Multi-line")
-        t3 = wxTextCtrl(self, 30, "How does it work with a long line of text set in the control",
+        t3 = wxTextCtrl(self, 30,
+                        "Here is a looooooooooooooong line of text set in the control.\n\n"
+                        "The quick brown fox jumped over the lazy dog...",
                        size=(200, 100), style=wxTE_MULTILINE)
         t3.SetInsertionPoint(0)
         EVT_TEXT(self, 30, self.EvtText)
         b = wxButton(self, -1, "Test Replace")
         EVT_BUTTON(self, b.GetId(), self.OnTestReplace)
+        b2 = wxButton(self, -1, "Test GetSelection")
+        EVT_BUTTON(self, b2.GetId(), self.OnTestGetSelection)
         self.tc = t3
 
         l4 = wxStaticText(self, -1, "Rich Text")
@@ -54,10 +58,14 @@ class TestPanel(wxPanel):
         t4.SetStyle(63, 77, wxTextAttr("BLUE", wxNullColour, f))
 ##         print 'a2', sys.getrefcount(f)
 
+        bsizer = wxBoxSizer(wxVERTICAL)
+        bsizer.Add(b, 0, wxGROW)
+        bsizer.Add(b2, 0, wxGROW)
+
         sizer = wxFlexGridSizer(cols=3, hgap=6, vgap=6)
         sizer.AddMany([ l1, t1, (0,0),
                         l2, t2, (0,0),
-                        l3, t3, b,
+                        l3, t3, bsizer,
                         l4, t4, (0,0),
                         ])
         border = wxBoxSizer(wxVERTICAL)
@@ -76,8 +84,17 @@ class TestPanel(wxPanel):
 
 
     def OnTestReplace(self, evt):
-        self.tc.Replace(4, 8, "DOES")
-        #self.tc.Remove(4, 8)
+        self.tc.Replace(5, 9, "IS A")
+        #self.tc.Remove(5, 9)
+
+    def OnTestGetSelection(self, evt):
+        start, end = self.tc.GetSelection()
+        text = self.tc.GetValue()
+        # Looks like a bug here, but only if not wxTE_RICH...
+        if wxPlatform == "__WXMSW__":
+            text = string.replace(text, '\n', '\r\n')
+        self.log.write("GetSelection(): (%d, %d)\n\tSelectedText: %s\n" %
+                       (start, end, repr(text[start:end])))
 
 
 #---------------------------------------------------------------------------
