@@ -138,6 +138,8 @@ public:
     #include "wx/unix/apptbase.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/apptbase.h"
+#elif defined(__OS2__)
+    #include "wx/os2/apptbase.h"
 #else // no platform-specific methods to add to wxAppTraits
     // wxAppTraits must be a class because it was forward declared as class
     class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
