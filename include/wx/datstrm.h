@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/stream.h"
+#include "wx/longlong.h"
 
 #if wxUSE_STREAMS
 
@@ -28,6 +29,7 @@ public:
     
     bool IsOk() { return m_input->IsOk(); }
 
+    wxUint64 Read64();
     wxUint32 Read32();
     wxUint16 Read16();
     wxUint8 Read8();
@@ -41,6 +43,7 @@ public:
     wxDataInputStream& operator>>(wxUint8& c);
     wxDataInputStream& operator>>(wxUint16& i);
     wxDataInputStream& operator>>(wxUint32& i);
+    wxDataInputStream& operator>>(wxUint64& i);
     wxDataInputStream& operator>>(double& i);
     wxDataInputStream& operator>>(float& f);
 
@@ -59,6 +62,7 @@ public:
 
     bool IsOk() { return m_output->IsOk(); }
 
+    void Write64(wxUint64 i);
     void Write32(wxUint32 i);
     void Write16(wxUint16 i);
     void Write8(wxUint8 i);
@@ -73,6 +77,7 @@ public:
     wxDataOutputStream& operator<<(wxUint8 c);
     wxDataOutputStream& operator<<(wxUint16 i);
     wxDataOutputStream& operator<<(wxUint32 i);
+    wxDataOutputStream& operator<<(wxUint64 i);
     wxDataOutputStream& operator<<(double f);
     wxDataOutputStream& operator<<(float f);
 

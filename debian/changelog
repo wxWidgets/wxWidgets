@@ -22,6 +22,25 @@ wxwindows2.3 (2.3.0) unstable; urgency=low
 
  -- Ron Lee <ron@debian.org>  Sat, 27 Jan 2001 01:51:24 -0800
 
+wxwindows2.2 (2.2.8.4) unstable; urgency=low
+
+  * Put the (modified) size_t == ulong kludge back into sndwav.cpp
+    it's still needed until wxDataOutputStream is made 64 bit
+    friendly, which may not happen for 2.2 since it will probably
+    not be binary compatible.
+  * caps a memory leak in the jpeg handler.
+
+ -- Ron Lee <ron@debian.org>  Sun, 25 Nov 2001 11:53:59 -0800
+
+wxwindows2.2 (2.2.8.3) unstable; urgency=low
+
+  * Backported size_t test from 2.3 tree, removes the need for
+    specific tests for various 64 bit platforms including now
+    S/390 (thanks to Gerhard Tonn for the report).
+    Closes: #120768
+
+ -- Ron Lee <ron@debian.org>  Fri, 23 Nov 2001 20:53:49 -0800
+
 wxwindows2.2 (2.2.8.2) unstable; urgency=low
 
   * python-dev doesn't get me python?  More bytes in Build-Dep then

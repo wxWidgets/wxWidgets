@@ -164,13 +164,11 @@
     #endif // compilers
 #endif // HAVE_BOOL
 
-#if !defined(HAVE_BOOL) && !defined(bool)
+#if !defined(HAVE_BOOL) && !defined(bool) && !defined(VMS)
     // NB: of course, this doesn't replace the standard type, because, for
     //     example, overloading based on bool/int parameter doesn't work and
     //     so should be avoided in portable programs
-#ifndef VMS
 typedef unsigned int bool;
-#endif
 #endif // bool
 
 typedef short int WXTYPE;
@@ -433,47 +431,27 @@ enum
 #define wxInt8    char    signed
 #define wxUint8   char  unsigned
 
-#ifdef __WIN16__
+#if defined(__WIN16__) || (defined(SIZEOF_INT) && (SIZEOF_INT == 2))
 #define wxInt16    int    signed
 #define wxUint16   int  unsigned
 #define wxInt32   long    signed
 #define wxUint32  long  unsigned
-#endif
-
-#ifdef __WIN32__
+#else
 #define wxInt16  short    signed
 #define wxUint16 short  unsigned
 #define wxInt32    int    signed
 #define wxUint32   int  unsigned
 #endif
 
-#ifdef __WXMAC__
-#define wxInt16  short    signed
-#define wxUint16 short  unsigned
-#define wxInt32    int    signed
-#define wxUint32   int  unsigned
-#endif
-
-#ifdef __WXOS2__
-#define wxInt16  short    signed
-#define wxUint16 short  unsigned
-#define wxInt32    int    signed
-#define wxUint32   int  unsigned
-#endif
-
-#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXOS2__)
-  #if defined(SIZEOF_INT)
-    /* well, this shouldn't happen... */
-    #define wxInt16  short    signed
-    #define wxUint16 short  unsigned
-    #define wxInt32    int    signed
-    #define wxUint32   int  unsigned
-  #else
-    #define wxInt16  short    signed
-    #define wxUint16 short  unsigned
-    #define wxInt32    int    signed
-    #define wxUint32   int  unsigned
-  #endif
+#if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
+#define wxInt64   long    signed
+#define wxUint64  long  unsigned
+#elif defined(SIZEOF_LONG_LONG) && (SIZEOF_LONG_LONG == 8)
+#define wxInt64   long long    signed
+#define wxUint64  long long  unsigned
+#else   // FIXME: what else can we do here aside from implementing wxULongLong
+#define wxInt64   wxLongLong
+#define wxUint64  wxLongLong
 #endif
 
 #define  wxByte   wxUint8
@@ -572,6 +550,29 @@ typedef float wxFloat32 ;
 #endif
 // machine specific byte swapping
 
+#define wxUINT64_SWAP_ALWAYS(val) \
+   ((wxUint64) ( \
+    ((wxLongLong(val) & wxLongLong(0L, 0x000000ffU)) << 56) | \
+    ((wxLongLong(val) & wxLongLong(0L, 0x0000ff00U)) << 40) | \
+    ((wxLongLong(val) & wxLongLong(0L, 0x00ff0000U)) << 24) | \
+    ((wxLongLong(val) & wxLongLong(0L, 0xff000000U)) <<  8) | \
+    ((wxLongLong(val) & wxLongLong(0x000000ffL, 0U)) >>  8) | \
+    ((wxLongLong(val) & wxLongLong(0x0000ff00L, 0U)) >> 24) | \
+    ((wxLongLong(val) & wxLongLong(0x00ff0000L, 0U)) >> 40) | \
+    ((wxLongLong(val) & wxLongLong(0xff000000L, 0U)) >> 56)).GetValue())
+
+#define wxINT64_SWAP_ALWAYS(val) \
+   ((wxInt64) ( \
+    ((wxLongLong(val) & wxLongLong(0L, 0x000000ffU)) << 56) | \
+    ((wxLongLong(val) & wxLongLong(0L, 0x0000ff00U)) << 40) | \
+    ((wxLongLong(val) & wxLongLong(0L, 0x00ff0000U)) << 24) | \
+    ((wxLongLong(val) & wxLongLong(0L, 0xff000000U)) <<  8) | \
+    ((wxLongLong(val) & wxLongLong(0x000000ffL, 0U)) >>  8) | \
+    ((wxLongLong(val) & wxLongLong(0x0000ff00L, 0U)) >> 24) | \
+    ((wxLongLong(val) & wxLongLong(0x00ff0000L, 0U)) >> 40) | \
+    ((wxLongLong(val) & wxLongLong(0xff000000L, 0U)) >> 56)).GetValue())
+
+
 #ifdef WORDS_BIGENDIAN
   #define wxUINT16_SWAP_ON_BE(val)  wxUINT16_SWAP_ALWAYS(val)
   #define wxINT16_SWAP_ON_BE(val)   wxINT16_SWAP_ALWAYS(val)
@@ -581,6 +582,8 @@ typedef float wxFloat32 ;
   #define wxINT32_SWAP_ON_BE(val)   wxINT32_SWAP_ALWAYS(val)
   #define wxUINT32_SWAP_ON_LE(val)  (val)
   #define wxINT32_SWAP_ON_LE(val)   (val)
+  #define wxUINT64_SWAP_ON_BE(val)  wxUINT64_SWAP_ALWAYS(val)
+  #define wxUINT64_SWAP_ON_LE(val)  (val)
 #else
   #define wxUINT16_SWAP_ON_LE(val)  wxUINT16_SWAP_ALWAYS(val)
   #define wxINT16_SWAP_ON_LE(val)   wxINT16_SWAP_ALWAYS(val)
@@ -590,6 +593,8 @@ typedef float wxFloat32 ;
   #define wxINT32_SWAP_ON_LE(val)   wxINT32_SWAP_ALWAYS(val)
   #define wxUINT32_SWAP_ON_BE(val)  (val)
   #define wxINT32_SWAP_ON_BE(val)   (val)
+  #define wxUINT64_SWAP_ON_LE(val)  wxUINT64_SWAP_ALWAYS(val)
+  #define wxUINT64_SWAP_ON_BE(val)  (val)
 #endif
 
 // ----------------------------------------------------------------------------
