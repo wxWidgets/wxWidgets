@@ -1,0 +1,72 @@
+1. HAVE_EXPLICIT fix:
+
+http://sf.net/tracker/index.php?func=detail&aid=651314&group_id=9863&atid=109863
+
+Checking in defs.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/defs.h,v  <--  defs.h
+new revision: 1.324; previous revision: 1.323
+done
+
+
+
+2. wxCheckListBox::Check() event sending fix:
+
+http://sf.net/tracker/index.php?func=detail&aid=651140&group_id=9863&atid=109863
+
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.221; previous revision: 1.220
+done
+cvs diff: [23:41:08] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs
+Checking in docs/latex/wx/checklst.tex;
+/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/checklst.tex,v  <--  checklst.tex
+new revision: 1.8; previous revision: 1.7
+done
+Checking in src/msw/checklst.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/checklst.cpp,v  <--  checklst.cpp
+new revision: 1.35; previous revision: 1.34
+done
+
+
+
+3. imagpng.cpp compilation fix for Watcom 11
+
+http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863
+
+Checking in src/common/imagpng.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/imagpng.cpp,v  <--  imagpng.cpp
+new revision: 1.29; previous revision: 1.28
+done
+
+
+
+4. wxCaret::SetSize() bug fix
+
+http://sf.net/tracker/index.php?func=detail&aid=659209&group_id=9863&atid=109863
+
+Checking in src/msw/caret.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/caret.cpp,v  <--  caret.cpp
+new revision: 1.15; previous revision: 1.14
+done
+cvs diff: [01:41:47] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/src/msw
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.223; previous revision: 1.222
+done
+
+
+
+5 wxTR_MULTIPLE and wxTR_EDIT_LABELS
+
+http://sf.net/tracker/index.php?func=detail&aid=622089&group_id=9863&atid=109863
+
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.224; previous revision: 1.223
+done
+cvs diff: [21:21:39] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs
+Checking in src/msw/treectrl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/treectrl.cpp,v  <--  treectrl.cpp
+new revision: 1.136; previous revision: 1.135
+done
+
