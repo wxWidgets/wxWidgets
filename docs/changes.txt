@@ -54,6 +54,8 @@ wxMSW:
 - support for enhanced metafiles added, support for copying/pasting metafiles
   (WMF and enhanced ones) fixed/added.
 - implemented setting colours for push buttons
+- wxStatusBar95 may be now used in dialogs, panels (not only frames) and can be
+   positioned along the top of the screen and not only at the bottom
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
 - loading/saving big (> 32K) files in wxTextCtrl works
 - tooltips work with wxRadioBox

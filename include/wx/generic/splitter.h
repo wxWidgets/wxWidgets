@@ -187,6 +187,7 @@ protected:
     void OnSashPosChanging(wxSplitterEvent& event);
     void OnDoubleClick(wxSplitterEvent& event);
     void OnUnsplitEvent(wxSplitterEvent& event);
+    void OnSetCursor(wxSetCursorEvent& event);
 
     void SendUnsplitEvent(wxWindow *winRemoved);
 

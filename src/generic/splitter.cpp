@@ -42,6 +42,8 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_IDLE(wxSplitterWindow::OnIdle)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
 
+    EVT_SET_CURSOR(wxSplitterWindow::OnSetCursor)
+
     EVT_SPLITTER_SASH_POS_CHANGED(-1, wxSplitterWindow::OnSashPosChanged)
     // NB: we borrow OnSashPosChanged for purposes of
     // EVT_SPLITTER_SASH_POS_CHANGING since default implementation is identical
@@ -234,8 +236,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             }
         }
 
-        if ( m_permitUnsplitAlways
-                || m_minimumPaneSize == 0 )
+        if ( m_permitUnsplitAlways || m_minimumPaneSize == 0 )
         {
             // Deal with possible unsplit scenarios
             if ( new_sash_position == 0 )
@@ -929,4 +930,22 @@ void wxSplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
 
     // for compatibility, call the virtual function
     OnUnsplit(win);
+}
+
+void wxSplitterWindow::OnSetCursor(wxSetCursorEvent& event)
+{
+    // this is currently called (and needed) under MSW only...
+#ifdef __WXMSW__
+
+    // if we don't do it, the resizing cursor might be set for child window:
+    // and like this we explicitly say that our cursor should not be used for
+    // children windows which overlap us
+
+    if ( SashHitTest(event.GetX(), event.GetY()) )
+    {
+        // default processing is ok
+        event.Skip();
+    }
+    //else: do nothing, in particular, don't call Skip()
+#endif // wxMSW
 }

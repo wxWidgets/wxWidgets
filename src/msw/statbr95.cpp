@@ -109,8 +109,22 @@ bool wxStatusBar95::Create(wxWindow *parent,
     m_windowId = id == -1 ? NewControlId() : id;
 
     DWORD wstyle = WS_CHILD | WS_VISIBLE;
-    if ( style & wxST_SIZEGRIP )
+
+    // setting SBARS_SIZEGRIP is perfectly useless: it's always on by default
+    // (at least in the version of comctl32.dll I'm using), and the only way to
+    // turn it off is to use CCS_TOP style - as we position the status bar
+    // manually anyhow (see DoMoveWindow), use CCS_TOP style if wxST_SIZEGRIP
+    // is not given
+    if ( !(style & wxST_SIZEGRIP) )
+    {
+        wstyle |= CCS_TOP;
+    }
+    else
+    {
+        // may be some versions of comctl32.dll do need it - anyhow, it won't
+        // do any harm
         wstyle |= SBARS_SIZEGRIP;
+    }
 
     m_hWnd = (WXHWND)CreateStatusWindow(wstyle,
                                         wxEmptyString,
@@ -303,10 +317,21 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
 
 void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
 {
-  FORWARD_WM_SIZE(GetHwnd(), SIZE_RESTORED, x, y, SendMessage);
+    // the status bar wnd proc must be forwarded the WM_SIZE message whenever
+    // the stat bar position/size is changed because it normally positions the
+    // control itself along bottom or top side of the parent window - failing
+    // to do so will result in nasty visual effects
+    FORWARD_WM_SIZE(GetHwnd(), SIZE_RESTORED, x, y, SendMessage);
 
-  // adjust fields widths to the new size
-  SetFieldsWidth();
+    // but now, when the standard status bar wnd proc did all it wanted to do,
+    // move the status bar to its correct location - usually this call may be
+    // omitted because for normal status bars (positioned along the bottom
+    // edge) the position is already set correctly, but if the user wants to
+    // position them in some exotic location, this is really needed
+    wxWindow::DoMoveWindow(x, y, width, height);
+
+    // adjust fields widths to the new size
+    SetFieldsWidth();
 }
 
 #endif // __WIN95__ && wxUSE_NATIVE_STATUSBAR

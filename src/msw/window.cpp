@@ -2667,29 +2667,65 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
                                int WXUNUSED(mouseMsg))
 {
     // the logic is as follows:
+    // -1. don't set cursor for non client area, including but not limited to
+    //     the title bar, scrollbars, &c
+    //  0. allow the user to override default behaviour by using EVT_SET_CURSOR
     //  1. if we have the cursor set it unless wxIsBusy()
     //  2. if we're a top level window, set some cursor anyhow
     //  3. if wxIsBusy(), set the busy cursor, otherwise the global one
 
-    HCURSOR hcursor = 0;
-    bool isBusy = wxIsBusy();
-    if ( m_cursor.Ok() )
+    if ( nHitTest != HTCLIENT )
     {
-        hcursor = GetHcursorOf(m_cursor);
+        return FALSE;
     }
 
-    if ( !GetParent() )
+    HCURSOR hcursor = 0;
+
+    // first ask the user code - it may wish to set the cursor in some very
+    // specific way (for example, depending on the current position)
+    POINT pt;
+    if ( !::GetCursorPos(&pt) )
     {
-        if ( isBusy )
+        wxLogLastError("GetCursorPos");
+    }
+
+    int x = pt.x,
+        y = pt.y;
+    ScreenToClient(&x, &y);
+    wxSetCursorEvent event(x, y);
+
+    bool processedEvtSetCursor = GetEventHandler()->ProcessEvent(event);
+    if ( processedEvtSetCursor && event.HasCursor() )
+    {
+        hcursor = GetHcursorOf(event.GetCursor());
+    }
+
+    if ( !hcursor )
+    {
+        bool isBusy = wxIsBusy();
+
+        // the test for processedEvtSetCursor is here to prevent using m_cursor
+        // if the user code caught EVT_SET_CURSOR() and returned nothing from
+        // it - this is a way to say that our cursor shouldn't be used for this
+        // point
+        if ( !processedEvtSetCursor && m_cursor.Ok() )
         {
-            hcursor = wxGetCurrentBusyCursor();
+            hcursor = GetHcursorOf(m_cursor);
         }
-        else if ( !hcursor )
+
+        if ( !GetParent() )
         {
-            const wxCursor *cursor = wxGetGlobalCursor();
-            if ( cursor && cursor->Ok() )
+            if ( isBusy )
             {
-                hcursor = GetHcursorOf(*cursor);
+                hcursor = wxGetCurrentBusyCursor();
+            }
+            else if ( !hcursor )
+            {
+                const wxCursor *cursor = wxGetGlobalCursor();
+                if ( cursor && cursor->Ok() )
+                {
+                    hcursor = GetHcursorOf(*cursor);
+                }
             }
         }
     }

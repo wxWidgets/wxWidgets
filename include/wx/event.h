@@ -21,6 +21,7 @@
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
+    #include "wx/cursor.h"
 #endif
 
 #include "wx/thread.h"
@@ -117,6 +118,9 @@ enum
     wxEVT_NAVIGATION_KEY =                    wxEVT_FIRST + 214,
     wxEVT_KEY_DOWN =                          wxEVT_FIRST + 215,
     wxEVT_KEY_UP =                            wxEVT_FIRST + 216,
+
+    /* Set cursor event */
+    wxEVT_SET_CURSOR =                        wxEVT_FIRST + 230,
 
     /*
      * wxScrollbar and wxSlider event identifiers
@@ -712,6 +716,35 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
+};
+
+// Cursor set event
+
+/*
+   wxEVT_SET_CURSOR
+ */
+
+class WXDLLEXPORT wxSetCursorEvent : public wxEvent
+{
+public:
+    wxSetCursorEvent(wxCoord x, wxCoord y)
+    {
+        m_eventType = wxEVT_SET_CURSOR;
+
+        m_x = x;
+        m_y = y;
+    }
+
+    wxCoord GetX() const { return m_x; }
+    wxCoord GetY() const { return m_y; }
+
+    void SetCursor(const wxCursor& cursor) { m_cursor = cursor; }
+    const wxCursor& GetCursor() const { return m_cursor; }
+    bool HasCursor() const { return m_cursor.Ok(); }
+
+private:
+    wxCoord  m_x, m_y;
+    wxCursor m_cursor;
 };
 
 // Keyboard input event class
@@ -1555,6 +1588,9 @@ typedef void (wxEvtHandler::*wxMaximizeEventFunction)(wxShowEvent&);
 typedef void (wxEvtHandler::*wxNavigationKeyEventFunction)(wxNavigationKeyEvent&);
 typedef void (wxEvtHandler::*wxPaletteChangedEventFunction)(wxPaletteChangedEvent&);
 typedef void (wxEvtHandler::*wxQueryNewPaletteEventFunction)(wxQueryNewPaletteEvent&);
+typedef void (wxEvtHandler::*wxWindowCreateEventFunction)(wxWindowCreateEvent&);
+typedef void (wxEvtHandler::*wxWindowDestroyEventFunction)(wxWindowDestroyEvent&);
+typedef void (wxEvtHandler::*wxSetCursorEventFunction)(wxSetCursorEvent&);
 #endif // wxUSE_GUI
 
 // N.B. In GNU-WIN32, you *have* to take the address of a member function
@@ -1613,8 +1649,9 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_NAVIGATION_KEY(func) { wxEVT_NAVIGATION_KEY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNavigationKeyEventFunction) & func, (wxObject *) NULL },
 #define EVT_PALETTE_CHANGED(func) { wxEVT_PALETTE_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaletteChangedEventFunction) & func, (wxObject *) NULL },
 #define EVT_QUERY_NEW_PALETTE(func) { wxEVT_QUERY_NEW_PALETTE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL },
-#define EVT_WINDOW_CREATE(func) { wxEVT_CREATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL },
-#define EVT_WINDOW_DESTROY(func) { wxEVT_DESTROY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL },
+#define EVT_WINDOW_CREATE(func) { wxEVT_CREATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowCreateEventFunction) & func, (wxObject *) NULL },
+#define EVT_WINDOW_DESTROY(func) { wxEVT_DESTROY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowDestroyEventFunction) & func, (wxObject *) NULL },
+#define EVT_SET_CURSOR(func) { wxEVT_SET_CURSOR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSetCursorEventFunction) & func, (wxObject *) NULL },
 
 // Mouse events
 #define EVT_LEFT_DOWN(func) { wxEVT_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL },

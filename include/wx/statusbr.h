@@ -71,7 +71,7 @@ public:
                 wxWindowID id,
                 const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
                 const wxSize& WXUNUSED(size) = wxDefaultSize,
-                long style = 0,
+                long style = wxST_SIZEGRIP,
                 const wxString& name = wxPanelNameStr)
     {
         Create(parent, id, style, name);
