@@ -1,0 +1,23 @@
+###############################################################################
+# Purpose: Makefile.in for xml resources sample for Unix with autoconf
+# Created: 17.09.00
+# Author:  VS
+# Version: $Id$
+###############################################################################
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+program_dir = contrib/samples/xml
+
+PROGRAM=xmldemo
+
+OBJECTS=$(PROGRAM).o
+
+APPEXTRALIBS=$(top_builddir)/lib/libwxxml.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
+DATADIRS = rc
+DATAFILES = rc/resource.xml rc/fileopen.gif rc/filesave.gif rc/fuzzy.gif \
+            rc/quotes.gif rc/scanning.gif rc/update.gif
+
+include $(top_builddir)/src/makeprog.env
