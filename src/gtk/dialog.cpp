@@ -387,7 +387,7 @@ void wxDialog::OnPaint( wxPaintEvent& WXUNUSED(event) )
     // yes
 }
 
-void wxDialog::OnCloseWindow(wxCloseEvent& event)
+void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     // We'll send a Cancel message by default,
     // which may close the dialog.
