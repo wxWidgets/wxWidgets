@@ -93,6 +93,11 @@ public:
         Init();
     }
 
+    // is this a radio button?
+    //
+    // unlike GetKind(), can be called for any kind of tools, not just buttons
+    bool IsRadio() const { return IsButton() && GetKind() == wxITEM_RADIO; }
+
     // this is only called for the normal buttons, i.e. not separators nor
     // controls
     GtkToolbarChildType GetGtkChildType() const
@@ -161,6 +166,12 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
                                                : (GdkBitmap *)NULL;
 
             gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
+        }
+
+        if ( tool->IsRadio() && !tool->IsToggled() )
+        {
+            // radio button went up, don't report this as a wxWin event
+            return;
         }
     }
 
@@ -397,35 +408,70 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_BUTTON:
-            tool->m_item = gtk_toolbar_insert_element
-                           (
-                              m_toolbar,
-                              tool->GetGtkChildType(),
-                              (GtkWidget *)NULL,
-                              tool->GetLabel().mbc_str(),
-                              tool->GetShortHelp().mbc_str(),
-                              "", // tooltip_private_text (?)
-                              tool->m_pixmap,
-                              (GtkSignalFunc)gtk_toolbar_callback,
-                              (gpointer)tool,
-                              pos
-                           );
-
-            if ( !tool->m_item )
+            // for a radio button we need the widget which starts the radio
+            // group it belongs to, i.e. the first radio button immediately
+            // preceding this one
             {
-                wxFAIL_MSG( _T("gtk_toolbar_insert_element() failed") );
+                GtkWidget *widget = NULL;
 
-                return FALSE;
+                if ( tool->IsRadio() )
+                {
+                    wxToolBarToolsList::Node *node = pos ? m_tools.Item(pos - 1)
+                                                         : NULL;
+                    while ( node )
+                    {
+                        wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
+                        if ( !tool->IsRadio() )
+                            break;
+
+                        widget = tool->m_item;
+
+                        node = node->GetPrevious();
+                    }
+
+                    if ( !widget )
+                    {
+                        // this is the first button in the radio button group,
+                        // it will be toggled automatically by GTK so bring the
+                        // internal flag in sync
+                        tool->Toggle(TRUE);
+                    }
+                }
+
+                tool->m_item = gtk_toolbar_insert_element
+                               (
+                                  m_toolbar,
+                                  tool->GetGtkChildType(),
+                                  widget,
+                                  tool->GetLabel().empty()
+                                    ? NULL
+                                    : tool->GetLabel().mbc_str(),
+                                  tool->GetShortHelp().empty()
+                                    ? NULL
+                                    : tool->GetShortHelp().mbc_str(),
+                                  "", // tooltip_private_text (?)
+                                  tool->m_pixmap,
+                                  (GtkSignalFunc)gtk_toolbar_callback,
+                                  (gpointer)tool,
+                                  pos
+                               );
+
+                if ( !tool->m_item )
+                {
+                    wxFAIL_MSG( _T("gtk_toolbar_insert_element() failed") );
+
+                    return FALSE;
+                }
+
+                gtk_signal_connect( GTK_OBJECT(tool->m_item),
+                                    "enter_notify_event", 
+                                    GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
+                                    (gpointer)tool );
+                gtk_signal_connect( GTK_OBJECT(tool->m_item),
+                                    "leave_notify_event", 
+                                    GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
+                                    (gpointer)tool );
             }
-
-            gtk_signal_connect( GTK_OBJECT(tool->m_item),
-                                "enter_notify_event", 
-                                GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
-                                (gpointer)tool );
-            gtk_signal_connect( GTK_OBJECT(tool->m_item),
-                                "leave_notify_event", 
-                                GTK_SIGNAL_FUNC(gtk_toolbar_tool_callback),
-                                (gpointer)tool );
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
