@@ -1257,7 +1257,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // do *not* use the listctrl colour for headers - one day we will have a
     // function to set it separately
-    // dc.SetTextForeground( *wxBLACK );
+    //dc.SetTextForeground( *wxBLACK );
     dc.SetTextForeground(wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOWTEXT ));
 
     int x = 1;          // left of the header rect
@@ -1268,40 +1268,24 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         m_owner->GetColumn( i, item );
         int wCol = item.m_width;
+        int cw = wCol - 2; // the width of the rect to draw
 
         int xEnd = x + wCol;
 
-#ifdef __WXGTK__
-        int cw = wCol; // the width of the rect to draw
-        int ch = h;
-        GtkStateType state = GTK_STATE_NORMAL;
-        if (!m_parent->IsEnabled()) state = GTK_STATE_INSENSITIVE;
-    
-        int xx = dc.XLOG2DEV( x );
-    
-	    gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
-		    (GdkRectangle*) NULL, m_wxwindow, "button", xx-1, y-1, cw, ch);
-        
-        // The +6 is a guess, I don' t know how GTK figures out
-        // where to draw lables.
-        int cy = y+6 + gdk_char_height( m_wxwindow->style->font, 'H' );
-        GdkRectangle clip;
-        clip.x = xx+4;
-        clip.y = 2;
-        clip.width = cw-6;
-        clip.height = ch-4;
-        gtk_paint_string (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state,
-		    &clip, m_wxwindow, "label", xx+4, cy, item.m_text.c_str() );
-#else
-        int cw = wCol - 2; // the width of the rect to draw
-        int ch = h - 2;
+        // VZ: no, draw it normally - this is better now as we allow resizing
+        //     of the last column as well
+#if 0
+        // let the last column occupy all available space
+        if ( i == numColumns - 1 )
+            cw = w-x-1;
+#endif // 0
+
         dc.SetPen( *wxWHITE_PEN );
-        DoDrawRect( &dc, x, y, cw, ch );
-        dc.SetClippingRegion( x, y, cw-5, ch-2 );
+
+        DoDrawRect( &dc, x, y, cw, h-2 );
+        dc.SetClippingRegion( x, y, cw-5, h-4 );
         dc.DrawText( item.m_text, x+4, y+3 );
         dc.DestroyClippingRegion();
-#endif        
-        
         x += wCol;
 
         if (xEnd > w+5)
