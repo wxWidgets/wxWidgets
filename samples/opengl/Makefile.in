@@ -3,13 +3,13 @@
 #
 
 all:
-	cd penguin && make
-	cd cube && make
-	cd isosurf && make
+	cd penguin && $(MAKE)
+	cd cube && $(MAKE)
+	cd isosurf && $(MAKE)
 
 clean:
-	cd penguin && make clean
-	cd cube && make clean
-	cd isosurf && make clean
+	cd penguin && $(MAKE) clean
+	cd cube && $(MAKE) clean
+	cd isosurf && $(MAKE) clean
 
 
