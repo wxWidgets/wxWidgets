@@ -97,8 +97,6 @@ public:
     
     ~wxSound();
 
-    %nokwargs Create;
-    %nokwargs Play;
     
     // Create from resource or file
     bool Create(const wxString& fileName/*, bool isResource = false*/);
