@@ -16,6 +16,8 @@
     #pragma interface "listctrlbase.h"
 #endif
 
+#include "wx/defs.h" // headers should include this before first wxUSE_XXX check
+
 #if wxUSE_LISTCTRL
 
 #include "wx/listbase.h"
