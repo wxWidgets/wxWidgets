@@ -755,7 +755,7 @@ void wxControl::Refresh(bool eraseBack, const wxRect *rect)
 
 void wxControl::MacRedrawControl()
 {
-    if ( (ControlHandle) m_macControl && MacGetRootWindow() )
+    if ( (ControlHandle) m_macControl && MacGetRootWindow() && m_macControlIsShown )
     {
         wxClientDC dc(this) ;
         wxMacPortSetter helper(&dc) ;
