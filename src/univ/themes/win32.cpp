@@ -427,10 +427,10 @@ class wxWin32InputHandler : public wxInputHandler
 public:
     wxWin32InputHandler(wxWin32Renderer *renderer);
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
-    virtual bool HandleMouse(wxControl *control,
+    virtual bool HandleMouse(wxInputConsumer *control,
                              const wxMouseEvent& event);
 
 protected:
@@ -443,8 +443,8 @@ public:
     wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer,
                                  wxInputHandler *handler);
 
-    virtual bool HandleMouse(wxControl *control, const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool HandleMouse(wxInputConsumer *control, const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxInputConsumer *control, const wxMouseEvent& event);
 
     virtual bool OnScrollTimer(wxScrollBar *scrollbar,
                                const wxControlAction& action);
@@ -474,7 +474,7 @@ public:
     wxWin32CheckboxInputHandler(wxInputHandler *handler)
         : wxStdCheckboxInputHandler(handler) { }
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
 };
@@ -485,7 +485,7 @@ public:
     wxWin32TextCtrlInputHandler(wxInputHandler *handler)
         : wxStdTextCtrlInputHandler(handler) { }
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
 };
@@ -3050,20 +3050,20 @@ wxWin32InputHandler::wxWin32InputHandler(wxWin32Renderer *renderer)
     m_renderer = renderer;
 }
 
-bool wxWin32InputHandler::HandleKey(wxControl *control,
+bool wxWin32InputHandler::HandleKey(wxInputConsumer *control,
                                     const wxKeyEvent& event,
                                     bool pressed)
 {
     return FALSE;
 }
 
-bool wxWin32InputHandler::HandleMouse(wxControl *control,
+bool wxWin32InputHandler::HandleMouse(wxInputConsumer *control,
                                       const wxMouseEvent& event)
 {
     // clicking on the control gives it focus
-    if ( event.ButtonDown() && wxWindow::FindFocus() != control )
+    if ( event.ButtonDown() && wxWindow::FindFocus() != control->GetInputWindow() )
     {
-        control->SetFocus();
+        control->GetInputWindow()->SetFocus();
 
         return TRUE;
     }
@@ -3113,7 +3113,7 @@ bool wxWin32ScrollBarInputHandler::OnScrollTimer(wxScrollBar *scrollbar,
     return wxStdScrollBarInputHandler::OnScrollTimer(scrollbar, action);
 }
 
-bool wxWin32ScrollBarInputHandler::HandleMouse(wxControl *control,
+bool wxWin32ScrollBarInputHandler::HandleMouse(wxInputConsumer *control,
                                                const wxMouseEvent& event)
 {
     // remember the current state
@@ -3133,7 +3133,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouse(wxControl *control,
     return rc;
 }
 
-bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxControl *control,
+bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
                                                    const wxMouseEvent& event)
 {
     // we don't highlight scrollbar elements, so there is no need to process
@@ -3148,7 +3148,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxControl *control,
         return FALSE;
     }
 
-    wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
+    wxScrollBar *scrollbar = wxStaticCast(control->GetInputWindow(), wxScrollBar);
     wxHitTest ht;
     if ( m_scrollPaused )
     {
@@ -3240,7 +3240,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxControl *control,
 // wxWin32CheckboxInputHandler
 // ----------------------------------------------------------------------------
 
-bool wxWin32CheckboxInputHandler::HandleKey(wxControl *control,
+bool wxWin32CheckboxInputHandler::HandleKey(wxInputConsumer *control,
                                             const wxKeyEvent& event,
                                             bool pressed)
 {
@@ -3281,7 +3281,7 @@ bool wxWin32CheckboxInputHandler::HandleKey(wxControl *control,
 // wxWin32TextCtrlInputHandler
 // ----------------------------------------------------------------------------
 
-bool wxWin32TextCtrlInputHandler::HandleKey(wxControl *control,
+bool wxWin32TextCtrlInputHandler::HandleKey(wxInputConsumer *control,
                                             const wxKeyEvent& event,
                                             bool pressed)
 {

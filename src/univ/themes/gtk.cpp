@@ -419,12 +419,12 @@ class wxGTKInputHandler : public wxInputHandler
 public:
     wxGTKInputHandler(wxGTKRenderer *renderer);
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
-    virtual bool HandleMouse(wxControl *control,
+    virtual bool HandleMouse(wxInputConsumer *control,
                              const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxInputConsumer *control, const wxMouseEvent& event);
 
 protected:
     wxGTKRenderer *m_renderer;
@@ -470,7 +470,7 @@ public:
     wxGTKCheckboxInputHandler(wxInputHandler *handler)
         : wxStdCheckboxInputHandler(handler) { }
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
 };
@@ -481,7 +481,7 @@ public:
     wxGTKTextCtrlInputHandler(wxInputHandler *handler)
         : wxStdTextCtrlInputHandler(handler) { }
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *control,
                            const wxKeyEvent& event,
                            bool pressed);
 };
@@ -2352,20 +2352,20 @@ wxGTKInputHandler::wxGTKInputHandler(wxGTKRenderer *renderer)
     m_renderer = renderer;
 }
 
-bool wxGTKInputHandler::HandleKey(wxControl *control,
+bool wxGTKInputHandler::HandleKey(wxInputConsumer *control,
                                   const wxKeyEvent& event,
                                   bool pressed)
 {
     return FALSE;
 }
 
-bool wxGTKInputHandler::HandleMouse(wxControl *control,
+bool wxGTKInputHandler::HandleMouse(wxInputConsumer *control,
                                     const wxMouseEvent& event)
 {
     // clicking on the control gives it focus
-    if ( event.ButtonDown() && wxWindow::FindFocus() != control )
+    if ( event.ButtonDown() && wxWindow::FindFocus() != control->GetInputWindow() )
     {
-        control->SetFocus();
+        control->GetInputWindow()->SetFocus();
 
         return TRUE;
     }
@@ -2373,16 +2373,16 @@ bool wxGTKInputHandler::HandleMouse(wxControl *control,
     return FALSE;
 }
 
-bool wxGTKInputHandler::HandleMouseMove(wxControl *control,
+bool wxGTKInputHandler::HandleMouseMove(wxInputConsumer *control,
                                         const wxMouseEvent& event)
 {
     if ( event.Entering() )
     {
-        control->SetCurrent(TRUE);
+        control->GetInputWindow()->SetCurrent(TRUE);
     }
     else if ( event.Leaving() )
     {
-        control->SetCurrent(FALSE);
+        control->GetInputWindow()->SetCurrent(FALSE);
     }
     else
     {
@@ -2396,7 +2396,7 @@ bool wxGTKInputHandler::HandleMouseMove(wxControl *control,
 // wxGTKCheckboxInputHandler
 // ----------------------------------------------------------------------------
 
-bool wxGTKCheckboxInputHandler::HandleKey(wxControl *control,
+bool wxGTKCheckboxInputHandler::HandleKey(wxInputConsumer *control,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
@@ -2418,7 +2418,7 @@ bool wxGTKCheckboxInputHandler::HandleKey(wxControl *control,
 // wxGTKTextCtrlInputHandler
 // ----------------------------------------------------------------------------
 
-bool wxGTKTextCtrlInputHandler::HandleKey(wxControl *control,
+bool wxGTKTextCtrlInputHandler::HandleKey(wxInputConsumer *control,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
