@@ -24,7 +24,6 @@
 #include "wx/layout.h"
 #include "wx/dialog.h"
 #include "wx/scrolbar.h"
-#include "wx/scrolwin.h"
 #include "wx/statbox.h"
 #include "wx/button.h"
 #include "wx/settings.h"
@@ -37,8 +36,6 @@
 #include "wx/log.h"
 #include "wx/geometry.h"
 #include "wx/textctrl.h"
-#include "wx/laywin.h"
-#include "wx/splitter.h"
 
 #include "wx/toolbar.h"
 #include "wx/dc.h"
@@ -2732,9 +2729,8 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
                 MacRootWindowToWindow( &x , &y ) ;
 
                 if ( !includeOuterStructures || (
-                    parent->IsKindOf( CLASSINFO( wxScrolledWindow ) ) ||
-                    parent->IsKindOf( CLASSINFO( wxSashLayoutWindow ) ) ||
-                    ( parent->GetParent() && parent->GetParent()->IsKindOf( CLASSINFO( wxSplitterWindow ) ) )
+                    parent->MacClipChildren() ||
+                    ( parent->GetParent() && parent->GetParent()->MacClipGrandChildren() )
                     ) )
                 {
                     SetRectRgn( tempRgn ,
