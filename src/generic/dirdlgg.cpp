@@ -312,18 +312,21 @@ void wxDirCtrl::OnExpandItem(wxTreeEvent &event)
     wxBeginBusyCursor();
 
     wxDirItemData *data = (wxDirItemData *)GetItemData(event.GetItem());
-    wxASSERT(data);
 
     m_paths.Clear();
     m_names.Clear();
 
-    wxDir dir(data->m_path);
+    wxString path = data->m_path;
+
+    wxDir dir(path);
+
+    path += _T('/');
 
     wxString filename;
     bool cont = dir.GetFirst(&filename, "", wxDIR_DIRS | wxDIR_HIDDEN);
     while ( cont )
     {
-        m_paths.Add(data->m_path);
+        m_paths.Add(path + filename);
         m_names.Add(filename);
 
         cont = dir.GetNext(&filename);
@@ -443,7 +446,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
     long cookie = 0;
     // default to root dir
     wxTreeItemId item = m_dir->GetFirstChild(m_dir->GetRootItem(), cookie);
-    
+
     if (!m_path.IsEmpty() && (m_path != wxT("/")) && (m_dir->m_paths.Count() > 1))
     {
         size_t count = m_dir->m_paths.GetCount();
@@ -452,14 +455,14 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
             if (m_path.Find( m_dir->m_paths[i] ) == 0)
             {
                 path = m_dir->m_paths[i];
-                
+
                 for (size_t j = 0; j < i; j++)
                    item = m_dir->GetNextChild(m_dir->GetRootItem(), cookie);
-                
+
                 wxStringTokenizer tk2(path, wxFILE_SEP_PATH, wxTOKEN_STRTOK);
                 for (size_t h = 0; h < tk2.CountTokens(); h++)
                    tk.GetNextToken();
-                
+
                 break;
             }
         }
