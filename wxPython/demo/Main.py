@@ -465,8 +465,8 @@ class wxPythonDemo(wx.Frame):
         self.Centre(wx.BOTH)
         self.CreateStatusBar(1, wx.ST_SIZEGRIP)
 
-        splitter = wx.SplitterWindow(self, -1, style=wx.CLIP_CHILDREN)
-        splitter2 = wx.SplitterWindow(splitter, -1, style=wx.CLIP_CHILDREN)
+        splitter = wx.SplitterWindow(self, -1, style=wx.CLIP_CHILDREN | wx.SP_LIVE_UPDATE | wx.SP_3D)
+        splitter2 = wx.SplitterWindow(splitter, -1, style=wx.CLIP_CHILDREN | wx.SP_LIVE_UPDATE | wx.SP_3D)
 
         # Set up a log on the View Log Notebook page
         self.log = wx.TextCtrl(splitter2, -1,

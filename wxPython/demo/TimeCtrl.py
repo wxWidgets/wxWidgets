@@ -16,7 +16,9 @@ class TestPanel( scrolled.ScrolledPanel ):
         scrolled.ScrolledPanel.__init__( self, parent, -1 )
         self.log = log
 
-
+        box_label = wx.StaticBox( self, -1, "Change Controls through API" )
+        buttonbox = wx.StaticBoxSizer( box_label, wx.HORIZONTAL )
+        
         text1 = wx.StaticText( self, -1, "12-hour format:")
         self.time12 = masked.TimeCtrl( self, -1, name="12 hour control" )
         spin1 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
@@ -70,9 +72,7 @@ class TestPanel( scrolled.ScrolledPanel ):
         radio_vbox.Add( self.radio24to12, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
         radio_vbox.Add( self.radioWx, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
         radio_vbox.Add( self.radioMx, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-
-        box_label = wx.StaticBox( self, -1, "Change Controls through API" )
-        buttonbox = wx.StaticBoxSizer( box_label, wx.HORIZONTAL )
+        
         buttonbox.Add( buttonChange, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
         buttonbox.Add( radio_vbox, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
 

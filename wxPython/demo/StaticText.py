@@ -26,7 +26,7 @@ class TestPanel(wx.Panel):
         text = wx.StaticText(self, -1, str, (20, 100))
         font = wx.Font(18, wx.SWISS, wx.NORMAL, wx.NORMAL)
         text.SetFont(font)
-        #text.SetSize(text.GetBestSize())
+        text.SetSize(text.GetBestSize())
 
         wx.StaticText(self, -1, "Multi-line wx.StaticText\nline 2\nline 3\n\nafter empty line", (20,150))
         wx.StaticText(self, -1, "Align right multi-line\nline 2\nline 3\n\nafter empty line", (220,150), style=wx.ALIGN_RIGHT)

@@ -18,10 +18,6 @@ class TestWindow(wx.ScrolledWindow):
         #self.clrList.sort()
         self.bg_bmp = images.getGridBGBitmap()
 
-        # Event handlers
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
-
         # This could also be done by getting the window's default font;
         # either way, we need to have a font loaded for later on.
         #self.SetBackgroundColour("WHITE")
@@ -54,6 +50,11 @@ class TestWindow(wx.ScrolledWindow):
         self.SetScrollbars(
             self.cellWidth, self.lineHeight, numCells, len(self.clrList) + 2
             )
+            
+        # Event handlers - moved here so events won't fire before init is 
+        # finished.
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
 
 
     # tile the background bitmap loaded in __init__()

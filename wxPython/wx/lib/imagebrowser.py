@@ -135,11 +135,11 @@ class ImageDialog(wx.Dialog):
 
         self.dir_x = self.x_pos
         self.dir_y = self.y_pos
-        self.DisplayDir()       # display the directory value
+        self.dir = wx.StaticText(self, -1, self.set_dir, (self.dir_x, self.dir_y), (250, -1))
 
         self.y_pos = self.y_pos + self.delta
 
-        btn = wx.Button(self, 12331, ' Set Directory ', (self.x_pos, self.y_pos), size)
+        btn = wx.Button(self, 12331, ' Set Directory ', (self.x_pos, self.y_pos))
         self.Bind(wx.EVT_BUTTON, self.SetDirect, btn)
 
         self.type_posy = self.y_pos     # save the y position for the image type combo
@@ -148,7 +148,6 @@ class ImageDialog(wx.Dialog):
         self.GetFiles()     # get the file list
 
         self.y_pos = self.y_pos + self.delta + 10
-
         self.list_height = 150
 
     # List of Labels
@@ -223,7 +222,8 @@ class ImageDialog(wx.Dialog):
         self.fl_list.sort()     # sort the file list
 
     def DisplayDir(self):       # display the working directory
-        wx.StaticText(self, -1, self.set_dir, (self.dir_x, self.dir_y), (250, -1))
+        if self.dir:
+            self.dir.SetLabel(self.set_dir)
 
     def OnSetType(self, event):
         val = event.GetString()      # get file type value
