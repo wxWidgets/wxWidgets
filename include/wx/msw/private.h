@@ -55,6 +55,12 @@ extern WXDLLEXPORT_DATA(HFONT) wxSTATUS_LINE_FONT;
 #endif // wxUSE_GUI
 
 // ---------------------------------------------------------------------------
+// global data
+// ---------------------------------------------------------------------------
+
+extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
+
+// ---------------------------------------------------------------------------
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
@@ -451,6 +457,64 @@ private:
     DECLARE_NO_COPY_CLASS(GlobalPtr)
 };
 
+// register the class when it is first needed and unregister it in dtor
+class ClassRegistrar
+{
+public:
+    // ctor doesn't register the class, call Initialize() for this
+    ClassRegistrar() { m_registered = -1; }
+
+    // return true if the class is already registered
+    bool IsInitialized() const { return m_registered != -1; }
+
+    // return true if the class had been already registered
+    bool IsRegistered() const { return m_registered == 1; }
+
+    // try to register the class if not done yet, return true on success
+    bool Register(const WNDCLASS& wc)
+    {
+        // we should only be called if we hadn't been initialized yet
+        wxASSERT_MSG( m_registered == -1,
+                        _T("calling ClassRegistrar::Register() twice?") );
+
+        m_registered = ::RegisterClass(&wc) ? 1 : 0;
+        if ( !IsRegistered() )
+        {
+            wxLogLastError(_T("RegisterClassEx()"));
+        }
+        else
+        {
+            m_clsname = wc.lpszClassName;
+        }
+
+        return m_registered == 1;
+    }
+
+    // get the name of the registered class (returns empty string if not
+    // registered)
+    const wxString& GetName() const { return m_clsname; }
+
+    // unregister the class if it had been registered
+    ~ClassRegistrar()
+    {
+        if ( IsRegistered() )
+        {
+            if ( !::UnregisterClass(m_clsname, wxhInstance) )
+            {
+                wxLogLastError(_T("UnregisterClass"));
+            }
+        }
+    }
+
+private:
+    // initial value is -1 which means that we hadn't tried registering the
+    // class yet, it becomes true or false (1 or 0) when Initialize() is called
+    int m_registered;
+
+    // the name of the class, only non empty if it had been registered
+    wxString m_clsname;
+};
+
 // ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
 // returns Foo cast to the Windows type for oruselves, while GetFooOf() takes
@@ -497,12 +561,6 @@ private:
 #define GetHrgnOf(rgn)          ((HRGN)(rgn).GetHRGN())
 
 #endif // wxUSE_GUI
-
-// ---------------------------------------------------------------------------
-// global data
-// ---------------------------------------------------------------------------
-
-extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 
 // ---------------------------------------------------------------------------
 // global functions
