@@ -27,15 +27,10 @@
 #endif
 
 #include "wx/filesys.h"
+#include "wx/wfstream.h"
 #include "wx/zipstrm.h"
 #include "wx/fs_zip.h"
 
-/* Not the right solution (paths in makefiles) but... */
-#ifdef __BORLANDC__
-#include "../common/unzip.h"
-#else
-#include "unzip.h"
-#endif
 
 //----------------------------------------------------------------------------
 // wxZipFSHandler
@@ -56,9 +51,18 @@ wxZipFSHandler::wxZipFSHandler() : wxFileSystemHandler()
 wxZipFSHandler::~wxZipFSHandler()
 {
     if (m_Archive)
-        unzClose((unzFile)m_Archive);
+        CloseArchive(m_Archive);
     if (m_DirsFound)
         delete m_DirsFound;
+}
+
+
+
+void wxZipFSHandler::CloseArchive(wxZipInputStream *archive)
+{
+    wxInputStream *stream = archive->GetFilterInputStream();
+    delete archive;
+    delete stream;
 }
 
 
@@ -125,7 +129,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
 
     if (m_Archive)
     {
-        unzClose((unzFile)m_Archive);
+        CloseArchive(m_Archive);
         m_Archive = NULL;
     }
 
@@ -147,26 +151,18 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
 
     m_ZipFile = left;
     wxString nativename = wxFileSystem::URLToFileName(m_ZipFile).GetFullPath();
-    m_Archive = (void*) unzOpen(nativename.mb_str(wxConvFile));
+    m_Archive = new wxZipInputStream(*new wxFFileInputStream(nativename));
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
 
     if (m_Archive)
     {
-        if (unzGoToFirstFile((unzFile)m_Archive) != UNZ_OK)
+        if (m_AllowDirs)
         {
-            unzClose((unzFile)m_Archive);
-            m_Archive = NULL;
+            delete m_DirsFound;
+            m_DirsFound = new wxLongToLongHashMap();
         }
-        else
-        {
-            if (m_AllowDirs)
-            {
-                delete m_DirsFound;
-                m_DirsFound = new wxLongToLongHashMap();
-            }
-            return DoFind();
-        }
+        return DoFind();
     }
     return wxEmptyString;
 }
@@ -183,16 +179,20 @@ wxString wxZipFSHandler::FindNext()
 
 wxString wxZipFSHandler::DoFind()
 {
-    static char namebuf[1024]; // char, not wxChar!
-    char *c;
     wxString namestr, dir, filename;
     wxString match = wxEmptyString;
 
     while (match == wxEmptyString)
     {
-        unzGetCurrentFileInfo((unzFile)m_Archive, NULL, namebuf, 1024, NULL, 0, NULL, 0);
-        for (c = namebuf; *c; c++) if (*c == '\\') *c = '/';
-        namestr = wxString::FromAscii(namebuf); // TODO what encoding does ZIP use?
+        wxZipEntry *entry = m_Archive->GetNextEntry();
+        if (!entry)
+        {
+            CloseArchive(m_Archive);
+            m_Archive = NULL;
+            break;
+        }
+        namestr = entry->GetName(wxPATH_UNIX);
+        delete entry;
 
         if (m_AllowDirs)
         {
@@ -221,13 +221,6 @@ wxString wxZipFSHandler::DoFind()
         if (m_AllowFiles && !filename.IsEmpty() && m_BaseDir == dir &&
                             wxMatchWild(m_Pattern, filename, false))
             match = m_ZipFile + wxT("#zip:") + namestr;
-
-        if (unzGoToNextFile((unzFile)m_Archive) != UNZ_OK)
-        {
-            unzClose((unzFile)m_Archive);
-            m_Archive = NULL;
-            break;
-        }
     }
 
     return match;

@@ -214,7 +214,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/textfile.cpp
     src/common/tokenzr.cpp
     src/common/txtstrm.cpp
-    src/common/unzip.c
+    src/common/archive.cpp
     src/common/uri.cpp
     src/common/variant.cpp
     src/common/wfstream.cpp

@@ -37,12 +37,13 @@ class WXDLLIMPEXP_BASE wxZipFSHandler : public wxFileSystemHandler
 
     private:
         // these vars are used by FindFirst/Next:
-        void *m_Archive;
+        class wxZipInputStream *m_Archive;
         wxString m_Pattern, m_BaseDir, m_ZipFile;
         bool m_AllowDirs, m_AllowFiles;
         wxLongToLongHashMap *m_DirsFound;
 
         wxString DoFind();
+        void CloseArchive(class wxZipInputStream *archive);
 
     DECLARE_NO_COPY_CLASS(wxZipFSHandler)
 };

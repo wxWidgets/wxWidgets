@@ -217,6 +217,7 @@ OTHER CHANGES
 
 All:
 
+- new classes for reading and writing ZIP files (M.J.Wetherell)
 - Norwegian (Bokmål) translation added (Hans F. Nordhaug)
 - wxDynamicLibrary::HasSymbol() added
 - added wxTextInputStream::operator>>(wchar_t) for compilers which support this

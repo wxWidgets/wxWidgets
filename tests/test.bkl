@@ -9,6 +9,7 @@
                    template_append="wx_append_base">
         <sources>
             test.cpp
+            archive/archivetest.cpp
             arrays/arrays.cpp
             datetime/datetimetest.cpp
             fileconf/fileconftest.cpp
