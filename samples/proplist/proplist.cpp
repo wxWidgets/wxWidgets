@@ -237,8 +237,18 @@ void MyApp::PropertyFormTest(bool useDialog)
     propFrame->Initialize();
     m_childWindow = propFrame;
   }
-  
-  wxWindow *panel = propDialog ? propDialog : propFrame->GetPropertyPanel();
+
+  // BCC32 does not like ?:
+  wxWindow *panel ;
+  if ( propDialog )
+  {
+    panel = propDialog ;
+  }
+  else
+  {
+    panel = propFrame->GetPropertyPanel() ;
+  }
+    
   wxLayoutConstraints* c;
 
 #if 0

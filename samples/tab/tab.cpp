@@ -23,6 +23,10 @@
 #include "wx/tab.h"
 #include "tab.h"
 
+#if wxUSE_TAB_DIALOG == 0
+#error "wxUSE_TAB_DIALOG must be defined as 1 in setup.h."
+#endif
+
 // If 1, use a dialog. Otherwise use a frame.
 #define USE_TABBED_DIALOG 1
 
@@ -166,7 +170,7 @@ void MyDialog::Init(void)
   
   // Note, omit the wxTAB_STYLE_COLOUR_INTERIOR, so we will guarantee a match
   // with the panel background, and save a bit of time.
-  wxPanelTabView *view = new wxPanelTabView(this, wxTAB_STYLE_DRAW_BOX);
+  wxPanelTabView *view = new wxPanelTabView((wxPanel *)this, wxTAB_STYLE_DRAW_BOX);
 
   wxGetApp().InitTabView(view, this);
 
