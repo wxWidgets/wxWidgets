@@ -323,6 +323,10 @@ and the splitter is created unsplitted. If there are two children, the
 splitter is created splitted, either horizontally or vertically depending
 on the value of "orientation" attribute.
 
+wxStatusBar
+-----------
+fields                     Integer number of fields
+widths                     Width1, Width2, Width3, ...
 
 wxToolBar
 ---------

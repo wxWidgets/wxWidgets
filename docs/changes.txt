@@ -113,6 +113,7 @@ All (GUI):
 - fixed scrollbar problem in wxGrid (not showing scrollbars
   when sizing smaller) (Shane Harper)
 - dbbrowse demo fixed for Unicode (Wlodzimierz Skiba)
+- added wxStatusBar support to XRC (Brian Ravnsgaard Riis)
 
 wxMSW:
 
