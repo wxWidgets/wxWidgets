@@ -2208,8 +2208,6 @@ EXPORTS
       Assign__10wxFileNameFRC8wxString12wxPathFormat
       ;wxFileName::SetPath(const wxString&,wxPathFormat)
       SetPath__10wxFileNameFRC8wxString12wxPathFormat
-      ;wxFileName::IsWild(wxPathFormat)
-      IsWild__10wxFileNameF12wxPathFormat
       ;wxFileName::GetTimes(wxDateTime*,wxDateTime*,wxDateTime*) const
       GetTimes__10wxFileNameCFP10wxDateTimeN21
       ;wxFileName::Clear()
@@ -2246,6 +2244,8 @@ EXPORTS
       Assign__10wxFileNameFRC8wxStringN3112wxPathFormat
       ;wxFileName::SameAs(const wxFileName&,wxPathFormat)
       SameAs__10wxFileNameFRC10wxFileName12wxPathFormat
+      ;wxFileName::IsAbsolute(wxPathFormat) const
+      IsAbsolute__10wxFileNameCF12wxPathFormat
       ;wxFileName::GetVolumeSeparator(wxPathFormat)
       GetVolumeSeparator__10wxFileNameF12wxPathFormat
       ;wxFileName::GetPath(unsigned long,wxPathFormat) const
@@ -2403,9 +2403,11 @@ EXPORTS
       FromUserString__16wxNativeFontInfoFRC8wxString
   ;From object file:  ..\common\fontmap.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxConstructorForwxFontMapperModule()
+      wxConstructorForwxFontMapperModule__Fv
+      __vft12wxFontMapper
       ;wxFontMapper::GetConfig()
       GetConfig__12wxFontMapperFv
-      __vft12wxFontMapper
       ;wxFontMapper::GetConfigPath()
       GetConfigPath__12wxFontMapperFv
       ;wxFontMapper::RestorePath(const wxString&)
@@ -2416,6 +2418,8 @@ EXPORTS
       CharsetToEncoding__12wxFontMapperFRC8wxStringUl
       ;wxFontMapper::GetAltForEncoding(wxFontEncoding,wxFontEncoding*,const wxString&,unsigned long)
       GetAltForEncoding__12wxFontMapperF14wxFontEncodingP14wxFontEncodingRC8wxStringUl
+      ;wxFontMapperModule::sm_classwxFontMapperModule
+      sm_classwxFontMapperModule__18wxFontMapperModule
       ;wxFontMapper::ChangePath(const wxString&,wxString*)
       ChangePath__12wxFontMapperFRC8wxStringP8wxString
       ;wxFontMapper::GetEncodingName(wxFontEncoding)
@@ -2978,6 +2982,36 @@ EXPORTS
       GetContentType__6wxHTTPFv
       ;wxHTTP::Abort()
       Abort__6wxHTTPFv
+  ;From object file:  ..\common\iconbndl.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxIconArray::DoCopy(const wxIconArray&)
+      DoCopy__11wxIconArrayFRC11wxIconArray
+      ;wxIconArray::Insert(const wxIcon&,unsigned int)
+      Insert__11wxIconArrayFRC6wxIconUi
+      ;wxIconArray::~wxIconArray()
+      __dt__11wxIconArrayFv
+      ;wxIconBundle::DeleteIcons()
+      DeleteIcons__12wxIconBundleFv
+      ;wxIconArray::Add(const wxIcon&)
+      Add__11wxIconArrayFRC6wxIcon
+      ;wxIconArray::Index(const wxIcon&,unsigned long) const
+      Index__11wxIconArrayCFRC6wxIconUl
+      ;wxIconBundle::operator=(const wxIconBundle&)
+      __as__12wxIconBundleFRC12wxIconBundle
+      ;wxIconArray::RemoveAt(unsigned int)
+      RemoveAt__11wxIconArrayFUi
+      ;wxIconArray::DoEmpty()
+      DoEmpty__11wxIconArrayFv
+      ;wxIconBundle::AddIcon(const wxIcon&)
+      AddIcon__12wxIconBundleFRC6wxIcon
+      ;wxIconBundle::AddIcon(const wxString&,long)
+      AddIcon__12wxIconBundleFRC8wxStringl
+      ;wxIconBundle::GetIcon(const wxSize&) const
+      GetIcon__12wxIconBundleCFRC6wxSize
+      ;wxIconArray::wxIconArray(const wxIconArray&)
+      __ct__11wxIconArrayFRC11wxIconArray
+      ;wxIconArray::operator=(const wxIconArray&)
+      __as__11wxIconArrayFRC11wxIconArray
   ;From object file:  ..\common\imagall.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxInitAllImageHandlers()
@@ -3172,16 +3206,12 @@ EXPORTS
       SetData__7wxImageFPUciT2
       ;wxImage::GetMaskBlue() const
       GetMaskBlue__7wxImageCFv
-      ;wxImage::ConvertToBitmap() const
-      ConvertToBitmap__7wxImageCFv
       ;wxImage::CleanUpHandlers()
       CleanUpHandlers__7wxImageFv
       ;wxImageHandler::CanRead(const wxString&)
       CanRead__14wxImageHandlerFRC8wxString
       ;wxImageHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
       SaveFile__14wxImageHandlerFP7wxImageR14wxOutputStreamUl
-      ;wxImage::wxImage(const wxBitmap&)
-      __ct__7wxImageFRC8wxBitmap
       ;wxImage::CountColours(unsigned long) const
       CountColours__7wxImageCFUl
       ;wxImage::wxImage(const wxString&,long,int)
@@ -3210,6 +3240,14 @@ EXPORTS
       AddHandler__7wxImageFP14wxImageHandler
       ;wxImage::HasOption(const wxString&) const
       HasOption__7wxImageCFRC8wxString
+  ;From object file:  ..\common\imagfill.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxImage::MatchBoundaryPixel(int,int,int,int,const wxColour&,const wxColour&)
+      MatchBoundaryPixel__7wxImageFiN31RC8wxColourT5
+      ;wxImage::DoFloodFill(int,int,const wxBrush&,const wxColour&,int,int)
+      DoFloodFill__7wxImageFiT1RC7wxBrushRC8wxColourN21
+      ;wxImage::MatchPixel(int,int,int,int,const wxColour&)
+      MatchPixel__7wxImageFiN31RC8wxColour
   ;From object file:  ..\common\imaggif.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGIFHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
@@ -5210,9 +5248,13 @@ EXPORTS
       wxConstructorForwxStatusBar__Fv
   ;From object file:  ..\common\strconv.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxStrConvModule::sm_classwxStrConvModule
+      sm_classwxStrConvModule__15wxStrConvModule
       wxConvCurrent
       wxConvFile
       wxConvLibc
+      ;wxConstructorForwxStrConvModule()
+      wxConstructorForwxStrConvModule__Fv
   ;From object file:  ..\common\stream.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxStreamBuffer::SetBufferIO(void*,unsigned int,unsigned long)
@@ -5625,8 +5667,6 @@ EXPORTS
       __dt__17wxToolBarToolBaseFv
       ;wxToolBarBase::ClearTools()
       ClearTools__13wxToolBarBaseFv
-      ;wxToolBarBase::InsertTool(unsigned int,int,const wxBitmap&,const wxBitmap&,unsigned long,wxObject*,const wxString&,const wxString&)
-      InsertTool__13wxToolBarBaseFUiiRC8wxBitmapT3UlP8wxObjectRC8wxStringT7
       ;wxToolBarToolBase::Enable(unsigned long)
       Enable__17wxToolBarToolBaseFUl
       ;wxToolBarBase::SetToolClientData(int,wxObject*)
@@ -5645,6 +5685,8 @@ EXPORTS
       Toggle__17wxToolBarToolBaseFUl
       __vft17wxToolBarToolBase8wxObject
       __vft13wxToolBarBase8wxObject
+      ;wxToolBarBase::InsertTool(unsigned int,int,const wxString&,const wxBitmap&,const wxBitmap&,wxItemKind,const wxString&,const wxString&,wxObject*)
+      InsertTool__13wxToolBarBaseFUiiRC8wxStringRC8wxBitmapT410wxItemKindN23P8wxObject
       ;wxToolBarBase::InsertControl(unsigned int,wxControl*)
       InsertControl__13wxToolBarBaseFUiP9wxControl
       ;wxToolBarBase::SetMargins(int,int)
@@ -5663,6 +5705,8 @@ EXPORTS
       OnIdle__13wxToolBarBaseFR11wxIdleEvent
       ;wxToolBarBase::AddControl(wxControl*)
       AddControl__13wxToolBarBaseFP9wxControl
+      ;wxToolBarBase::DoAddTool(int,const wxString&,const wxBitmap&,const wxBitmap&,wxItemKind,const wxString&,const wxString&,wxObject*,int,int)
+      DoAddTool__13wxToolBarBaseFiRC8wxStringRC8wxBitmapT310wxItemKindN22P8wxObjectN21
       ;wxToolBarBase::InsertSeparator(unsigned int)
       InsertSeparator__13wxToolBarBaseFUi
       ;wxToolBarBase::GetToolState(int) const
@@ -5681,8 +5725,6 @@ EXPORTS
       GetEventTable__13wxToolBarBaseCFv
       ;wxToolBarBase::DoToolbarUpdates()
       DoToolbarUpdates__13wxToolBarBaseFv
-      ;wxToolBarBase::AddTool(int,const wxBitmap&,const wxBitmap&,unsigned long,int,int,wxObject*,const wxString&,const wxString&)
-      AddTool__13wxToolBarBaseFiRC8wxBitmapT2UlN21P8wxObjectRC8wxStringT8
       ;wxToolBarBase::ToggleTool(int,unsigned long)
       ToggleTool__13wxToolBarBaseFiUl
       ;wxToolBarBase::SetToggle(int,unsigned long)
@@ -7105,24 +7147,6 @@ EXPORTS
       __vft16wxZipInputStream12wxStreamBase
       ;wxZipInputStream::Eof() const
       Eof__16wxZipInputStreamCFv
-  ;From object file:  ..\common\zstream.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxZlibInputStream::wxZlibInputStream(wxInputStream&)
-      __ct__17wxZlibInputStreamFR13wxInputStream
-      ;wxZlibOutputStream::wxZlibOutputStream(wxOutputStream&,int)
-      __ct__18wxZlibOutputStreamFR14wxOutputStreami
-      ;wxZlibInputStream::OnSysRead(void*,unsigned int)
-      OnSysRead__17wxZlibInputStreamFPvUi
-      ;wxZlibOutputStream::Sync()
-      Sync__18wxZlibOutputStreamFv
-      ;wxZlibOutputStream::OnSysWrite(const void*,unsigned int)
-      OnSysWrite__18wxZlibOutputStreamFPCvUi
-      __vft18wxZlibOutputStream12wxStreamBase
-      ;wxZlibInputStream::~wxZlibInputStream()
-      __dt__17wxZlibInputStreamFv
-      ;wxZlibOutputStream::~wxZlibOutputStream()
-      __dt__18wxZlibOutputStreamFv
-      __vft17wxZlibInputStream12wxStreamBase
   ;From object file:  ..\generic\busyinfo.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxBusyInfo::~wxBusyInfo()
@@ -7262,6 +7286,8 @@ EXPORTS
       GetEventTable__14wxCalendarCtrlCFv
       ;wxCalendarCtrl::GetMonthControl() const
       GetMonthControl__14wxCalendarCtrlCFv
+      ;wxCalendarCtrl::Destroy()
+      Destroy__14wxCalendarCtrlFv
   ;From object file:  ..\generic\caret.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxCaret::Blink()
@@ -9231,6 +9257,8 @@ EXPORTS
       __vft16wxListMainWindow8wxObject
       ;wxListCtrl::SetFont(const wxFont&)
       SetFont__10wxListCtrlFRC6wxFont
+      ;wxListHeaderWindow::SendListEvent(int,wxPoint)
+      SendListEvent__18wxListHeaderWindowFi7wxPoint
       ;wxListCtrl::ResizeReportView(unsigned long)
       ResizeReportView__10wxListCtrlFUl
       ;wxListMainWindow::OnSetFocus(wxFocusEvent&)
@@ -9715,8 +9743,6 @@ EXPORTS
       __ct__16wxProgressDialogFRC8wxStringT1iP8wxWindowT3
       ;wxProgressDialog::CreateLabel(const wxString&,wxWindow**)
       CreateLabel__16wxProgressDialogFRC8wxStringPP8wxWindow
-      ;wxProgressDialog::OnShow(wxShowEvent&)
-      OnShow__16wxProgressDialogFR11wxShowEvent
       __vft16wxProgressDialog8wxObject
       ;wxProgressDialog::GetEventTable() const
       GetEventTable__16wxProgressDialogCFv
@@ -10418,6 +10444,7 @@ EXPORTS
       ;wxGenericTreeCtrl::FillArray(wxGenericTreeItem*,wxArrayTreeItemIds&) const
       FillArray__17wxGenericTreeCtrlCFP17wxGenericTreeItemR18wxArrayTreeItemIds
   ;From object file:  ..\generic\treelay.cpp
+  ;From object file:  ..\generic\wizard.cpp
   ;From object file:  ..\html\helpctrl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlHelpController::DisplayTextPopup(const wxString&,const wxPoint&)
@@ -13204,6 +13231,8 @@ EXPORTS
       sm_classwxMenuBar__9wxMenuBar
       ;wxMenuBar::RebuildAccelTable()
       RebuildAccelTable__9wxMenuBarFv
+      ;wxMenu::EndRadioGroup()
+      EndRadioGroup__6wxMenuFv
       ;wxMenu::OS2Command(unsigned int,unsigned short)
       OS2Command__6wxMenuFUiUs
       ;wxMenuBar::EnableTop(unsigned int,unsigned long)
@@ -14337,8 +14366,6 @@ EXPORTS
   ;From object file:  ..\os2\thread.cpp
     ;PUBDEFs (Symbols available from object file):
       p_wxMainMutex
-      ;wxCondition::Wait(unsigned long,unsigned long)
-      Wait__11wxConditionFUlT1
       ;wxCriticalSection::Leave()
       Leave__17wxCriticalSectionFv
       ;wxMutex::~wxMutex()
@@ -14355,6 +14382,10 @@ EXPORTS
       GetId__8wxThreadCFv
       ;wxThread::Delete(void**)
       Delete__8wxThreadFPPv
+      ;wxCondition::wxCondition(wxMutex&)
+      __ct__11wxConditionFR7wxMutex
+      ;wxCondition::Wait(unsigned long)
+      Wait__11wxConditionFUl
       ;wxThreadInternal::OS2ThreadStart(wxThread*)
       OS2ThreadStart__16wxThreadInternalFP8wxThread
       ;wxMutex::Lock()
@@ -14386,8 +14417,6 @@ EXPORTS
       wxGuiOwnedByMainThread__Fv
       ;wxCriticalSection::~wxCriticalSection()
       __dt__17wxCriticalSectionFv
-      ;wxCondition::wxCondition()
-      __ct__11wxConditionFv
       ;wxThread::Yield()
       Yield__8wxThreadFv
       ;wxMutex::TryLock()
@@ -14470,8 +14499,6 @@ EXPORTS
       sm_eventTable__9wxToolBar
       ;wxToolBar::GetToolSize() const
       GetToolSize__9wxToolBarCFv
-      ;wxToolBar::CreateTool(int,const wxBitmap&,const wxBitmap&,unsigned long,wxObject*,const wxString&,const wxString&)
-      CreateTool__9wxToolBarFiRC8wxBitmapT2UlP8wxObjectRC8wxStringT6
       ;wxToolBar::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__9wxToolBarFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxToolBar::OS2Command(unsigned int,unsigned short)
@@ -14503,6 +14530,8 @@ EXPORTS
       GetEventTable__9wxToolBarCFv
       ;wxToolBar::OS2WindowProc(unsigned int,void*,void*)
       OS2WindowProc__9wxToolBarFUiPvT2
+      ;wxToolBar::CreateTool(int,const wxString&,const wxBitmap&,const wxBitmap&,wxItemKind,wxObject*,const wxString&,const wxString&)
+      CreateTool__9wxToolBarFiRC8wxStringRC8wxBitmapT310wxItemKindP8wxObjectN22
       ;wxToolBar::OnSysColourChanged(wxSysColourChangedEvent&)
       OnSysColourChanged__9wxToolBarFR23wxSysColourChangedEvent
       ;wxConstructorForwxToolBar()
@@ -14575,6 +14604,8 @@ EXPORTS
       Create__19wxTopLevelWindowOS2FP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
       ;wxTopLevelWindowOS2::Show(unsigned long)
       Show__19wxTopLevelWindowOS2FUl
+      ;wxTopLevelWindowOS2::SetIcons(const wxIconBundle&)
+      SetIcons__19wxTopLevelWindowOS2FRC12wxIconBundle
       ;wxTopLevelWindowOS2::IsIconized() const
       IsIconized__19wxTopLevelWindowOS2CFv
       ;wxTopLevelWindowOS2::SendSizeEvent()
