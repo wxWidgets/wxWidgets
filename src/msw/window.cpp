@@ -1347,7 +1347,7 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
 
         ::RedrawWindow(hWnd, pRect, NULL, flags);
 #else
-        wxUnusedVar( eraseBack );
+        ::InvalidateRect(hWnd, pRect, eraseBack);
 #endif
     }
 }
