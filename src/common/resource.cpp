@@ -823,10 +823,14 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
     // Check for bitmap resource name (in case loading old-style resource file)
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
-        wxString str(expr->Nth(count)->StringValue());
-        controlItem->SetValue4(str);
         count ++;
-        controlItem->SetType("wxBitmapButton");
+        wxString str(expr->Nth(count)->StringValue());
+
+        if (str != "")
+        {
+            controlItem->SetValue4(str);
+            controlItem->SetType("wxBitmapButton");
+        }
     }
     if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
       controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
