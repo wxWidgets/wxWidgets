@@ -252,7 +252,7 @@ Identical to wxBitmap class, except that it creates wxIcon instead of wxBitmap.
 
 wxButton
 --------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxButton]    
 
@@ -263,14 +263,14 @@ default                    Boolean                 false
 
 wxCalendarCtrl
 --------------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxCalendarCtrl]
 
 
 wxCheckBox
 ----------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxCheckBox]
 checked                    Boolean                 false
@@ -278,7 +278,7 @@ checked                    Boolean                 false
 
 wxCheckList
 -----------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxCheckList]
 content                    (see below)             (empty)
@@ -303,7 +303,7 @@ Example:
 
 wxDialog
 --------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxDialog]         wxDEFAULT_DIALOG_STYLE
 title                      I18nString              ""
@@ -315,7 +315,7 @@ wxDialog may have children objects.
 
 wxFrame
 --------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxDialog]         wxDEFAULT_FRAME_STYLE
 title                      I18nString              ""
@@ -329,7 +329,7 @@ set as frame's tool-, menu- and statusbar respectively.
 
 wxScrolledWindow
 ----------------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxScrolledWindow] wxHSCROLL | wxVSCROLL
 
@@ -338,7 +338,7 @@ wxScolledWindow may have children objects.
 
 wxSplitterWindow
 ----------------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxSplitterWindow] wxSP_3D
 sashpos                    Integer                 0
@@ -362,7 +362,7 @@ widths                     Width1, Width2, Width3, ...
 
 wxToolBar
 ---------
-position                   Position                -1,-1
+pos                        Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxToolBar]        wxNO_BORDER|wxTB_HORIZONTAL
 bitmapsize                 Size                    -1,-1
@@ -389,15 +389,15 @@ appear within wxToolBar node. Their attributes are as follows:
     label                  I18nString              ""
     tooltip                I18nString              ""
     longhelp               I18nString              ""
-    position               Position                -1,-1
+    pos                    Position                -1,-1
 
     Constraints:
       At most one of "toggle" and "radio" attributes may be 1.
-      Attribute "position" may not appear if "label" or "radio" attributes
+      Attribute "pos" may not appear if "label" or "radio" attributes
       are used or if parent wxToolBar's style contains wxTB_TEXT.
     
     Note:
-      Use of "position" attribute is strongly discouraged, it is deprecated
+      Use of "pos" attribute is strongly discouraged, it is deprecated
       usage of wxToolBar and it is not supported by MSW and GTK
       implementations.
 
