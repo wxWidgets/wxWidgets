@@ -601,6 +601,8 @@
 %rename(WakeUpIdle)                         wxWakeUpIdle;
 %rename(PostEvent)                          wxPostEvent;
 %rename(App_CleanUp)                        wxApp_CleanUp;
+%rename(SetDefaultPyEncoding)               wxSetDefaultPyEncoding;
+%rename(GetDefaultPyEncoding)               wxGetDefaultPyEncoding;
 %rename(EventLoop)                          wxEventLoop;
 %rename(AcceleratorEntry)                   wxAcceleratorEntry;
 %rename(AcceleratorTable)                   wxAcceleratorTable;

@@ -355,6 +355,21 @@ DocDeclStrName(
 
 
 
+
+
+DocDeclAStr(
+    void , wxSetDefaultPyEncoding(const char* encoding),
+    "SetDefaultPyEncoding(string encoding)",
+    "Sets the encoding that wxPython will use when it needs to convert a
+Python string or unicode object to or from a wxString.", "");
+
+DocDeclAStr(
+    const char* , wxGetDefaultPyEncoding(),
+    "GetDefaultPyEncoding() -> string",
+    "Gets the current encoding that wxPython will use when it needs to
+convert a Python string or unicode object to or from a wxString.", "");
+
+
 //---------------------------------------------------------------------------
 // Include some extra wxApp related python code here
 

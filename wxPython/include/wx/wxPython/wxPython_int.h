@@ -91,6 +91,9 @@ void      __wxPyCleanup();
 PyObject* __wxPySetDictionary(PyObject*, PyObject* args);
 PyObject* __wxPyFixStockObjects(PyObject*, PyObject* args);
 
+void        wxSetDefaultPyEncoding(const char* encoding);
+const char* wxGetDefaultPyEncoding();
+
 
 void wxPyEventThunker(wxObject*, wxEvent& event);
 

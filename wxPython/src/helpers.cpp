@@ -78,6 +78,8 @@ wxPyThreadStateArray* wxPyTStates = NULL;
 wxMutex*              wxPyTMutex = NULL;
 #endif
 
+#define DEFAULTENCODING_SIZE 64
+static char wxPyDefaultEncoding[DEFAULTENCODING_SIZE] = "ascii";
 
 static PyObject* wxPython_dict = NULL;
 static PyObject* wxPyAssertionError = NULL;
@@ -1903,7 +1905,7 @@ wxString* wxString_in_helper(PyObject* source) {
 #if wxUSE_UNICODE
     PyObject* uni = source;
     if (PyString_Check(source)) {
-        uni = PyUnicode_FromObject(source);
+        uni = PyUnicode_FromEncodedObject(source, wxPyDefaultEncoding, "strict");
         if (PyErr_Occurred()) return NULL;
     }
     target = new wxString();
@@ -1918,7 +1920,11 @@ wxString* wxString_in_helper(PyObject* source) {
 #else
     // Convert to a string object if it isn't already, then to wxString
     PyObject* str = source;
-    if (!PyString_Check(source)) {
+    if (PyUnicode_Check(source)) {
+        str = PyUnicode_AsEncodedString(source, wxPyDefaultEncoding, "strict");
+        if (PyErr_Occurred()) return NULL;
+    }    
+    else if (!PyString_Check(source)) {
         str = PyObject_Str(source);
         if (PyErr_Occurred()) return NULL;
     }
@@ -1943,7 +1949,7 @@ wxString Py2wxString(PyObject* source)
     // Convert to a unicode object, if not already, then to a wxString
     PyObject* uni = source;
     if (!PyUnicode_Check(source)) {
-        uni = PyUnicode_FromObject(source);
+        uni = PyUnicode_FromEncodedObject(source, wxPyDefaultEncoding, "strict");
         if (PyErr_Occurred()) return wxEmptyString;  // TODO:  should we PyErr_Clear?
     }    
     size_t len = PyUnicode_GET_SIZE(uni);
@@ -1957,7 +1963,11 @@ wxString Py2wxString(PyObject* source)
 #else
     // Convert to a string object if it isn't already, then to wxString
     PyObject* str = source;
-    if (!PyString_Check(source)) {
+    if (PyUnicode_Check(source)) {
+        str = PyUnicode_AsEncodedString(source, wxPyDefaultEncoding, "strict");
+        if (PyErr_Occurred()) return wxEmptyString;    // TODO:  should we PyErr_Clear?
+    }    
+    else if (!PyString_Check(source)) {
         str = PyObject_Str(source);
         if (PyErr_Occurred()) return wxEmptyString;    // TODO:  should we PyErr_Clear?
     }
@@ -1985,6 +1995,17 @@ PyObject* wx2PyString(const wxString& src)
     return str;
 }
 
+
+
+void wxSetDefaultPyEncoding(const char* encoding)
+{
+    strncpy(wxPyDefaultEncoding, encoding, DEFAULTENCODING_SIZE);
+}
+
+const char* wxGetDefaultPyEncoding()
+{
+    return wxPyDefaultEncoding;
+}
 
 //----------------------------------------------------------------------
 
