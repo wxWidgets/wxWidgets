@@ -193,8 +193,11 @@ void wxSetCursor(wxCursor& cursor);
 //---------------------------------------------------------------------------
 // Miscellaneous functions
 
-long NewId();
-void RegisterId(long id);
+long wxNewId();
+void wxRegisterId(long id);
+%name(NewId) long wxNewId();
+%name(RegisterId) void wxRegisterId(long id);
+
 void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
 void wxBell();
 void wxDisplaySize(int *OUTPUT, int *OUTPUT);
@@ -217,6 +220,7 @@ int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 #endif
 
 bool wxYield();
+bool wxSafeYield();
 
 %inline %{
     char* wxGetResource(char *section, char *entry, char *file = NULL) {
@@ -407,7 +411,19 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14  1999/04/30 03:29:19  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
+// Revision 1.13.4.1  1999/03/27 23:29:15  RD
+//
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.13  1999/02/25 07:08:34  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.12  1999/02/20 10:02:37  RD

@@ -11,6 +11,15 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+//---------------------------------------------------------------------------
+// Tell SWIG to wrap all the wrappers with Python's thread macros
+
+%except(python) {
+    wxPy_BEGIN_ALLOW_THREADS;
+    $function
+    wxPy_END_ALLOW_THREADS;
+}
+
 //----------------------------------------------------------------------
 // Here are some to map (int LCOUNT, int* LIST), etc. from a python list
 
@@ -30,7 +39,12 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 //----------------------------------------------------------------------
 
 %typemap(python,build) int LCOUNT {
-    $target = PyList_Size(_in_LIST);
+    if (_in_LIST) {
+        $target = PyList_Size(_in_LIST);
+    }
+    else {
+        $target = 0;
+    }
 }
 
 
@@ -148,7 +162,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    $target = new wxString(PyString_AsString($source));
+    $target = new wxString(PyString_AsString($source), PyString_Size($source));
 }
 %typemap(python, freearg) wxString& {
     if ($target)
@@ -198,7 +212,23 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1999/04/30 03:29:19  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
+// Revision 1.4.4.2  1999/03/28 06:35:01  RD
+//
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
+// Revision 1.4.4.1  1999/03/16 06:04:03  RD
+//
+// wxPython 2.0b7
+//
 // Revision 1.4  1998/11/25 08:45:27  RD
+//
 // Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 // Added events for wxGrid
 // Other various fixes and additions

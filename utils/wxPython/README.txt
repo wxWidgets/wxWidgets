@@ -59,6 +59,59 @@ Or you can send mail directly to the list using this address:
 
 
 
+What's new in 2.0b9
+-------------------
+Bug fix for ListCtrl in test4.py (Was a missing file...  DSM!)
+
+Bug fix for occassional GPF on Win32 systems upon termination of a
+wxPython application.
+
+Added wxListBox.GetSelections returning selections as a Tuple.
+
+Added a wxTreeItemData that is able to hold any Python object and be
+associated with items in a wxTreeCtrl.  Added test pytree.py to show
+this feature off.
+
+Added wxSafeYield function.
+
+OpenGL Canvas can be optionally compiled in to wxPython.
+
+Awesome new Demo Framework for showing off wxPython and for learning
+how it all works.
+
+The pre-built Win32 version is no longer distributing the wxWindows
+DLL.  It is statically linked with the wxWindows library instead.
+
+Added a couple missing items from the docs.
+
+Added wxImage, wxImageHandler, wxPNGHandler, wxJPEGHandler,
+wxGIFHandler and wxBMPHandler.
+
+
+
+What's new in 2.0b8
+-------------------
+Support for using Python threads in wxPython apps.
+
+Several missing methods from various classes.
+
+Various bug fixes.
+
+
+
+What's new in 2.0b7
+-------------------
+Added DLG_PNT and DLG_SZE convienience methods to wxWindow class.
+
+Added missing constructor and other methods for wxMenuItem.
+
+
+
+What's new in 2.0b6
+-------------------
+Just a quickie update to fix the self-installer to be compatible with
+Python 1.5.2b2's Registry settings.
+
 
 What's new in 2.0b5
 -------------------

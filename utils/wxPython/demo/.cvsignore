@@ -1,0 +1,5 @@
+*.pyc
+.emacs.desktop
+hangman_dict.txt
+setup.bat
+tmphtml.txt

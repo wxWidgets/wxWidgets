@@ -25,7 +25,7 @@ from cmndlgs import *
 
 from windows3 import *
 
-from utils import *
+from image import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -203,6 +203,7 @@ wxSL_BOTH = wxc.wxSL_BOTH
 wxSL_SELRANGE = wxc.wxSL_SELRANGE
 wxSB_HORIZONTAL = wxc.wxSB_HORIZONTAL
 wxSB_VERTICAL = wxc.wxSB_VERTICAL
+wxST_SIZEGRIP = wxc.wxST_SIZEGRIP
 wxBU_AUTODRAW = wxc.wxBU_AUTODRAW
 wxBU_NOAUTODRAW = wxc.wxBU_NOAUTODRAW
 wxTR_HAS_BUTTONS = wxc.wxTR_HAS_BUTTONS
@@ -232,10 +233,6 @@ wxSP_WRAP = wxc.wxSP_WRAP
 wxSP_NOBORDER = wxc.wxSP_NOBORDER
 wxSP_3D = wxc.wxSP_3D
 wxSP_BORDER = wxc.wxSP_BORDER
-wxTAB_MULTILINE = wxc.wxTAB_MULTILINE
-wxTAB_RIGHTJUSTIFY = wxc.wxTAB_RIGHTJUSTIFY
-wxTAB_FIXEDWIDTH = wxc.wxTAB_FIXEDWIDTH
-wxTAB_OWNERDRAW = wxc.wxTAB_OWNERDRAW
 wxFLOOD_SURFACE = wxc.wxFLOOD_SURFACE
 wxFLOOD_BORDER = wxc.wxFLOOD_BORDER
 wxODDEVEN_RULE = wxc.wxODDEVEN_RULE
@@ -308,6 +305,7 @@ wxID_CANCEL = wxc.wxID_CANCEL
 wxID_APPLY = wxc.wxID_APPLY
 wxID_YES = wxc.wxID_YES
 wxID_NO = wxc.wxID_NO
+wxID_STATIC = wxc.wxID_STATIC
 wxBITMAP_TYPE_BMP = wxc.wxBITMAP_TYPE_BMP
 wxBITMAP_TYPE_BMP_RESOURCE = wxc.wxBITMAP_TYPE_BMP_RESOURCE
 wxBITMAP_TYPE_ICO = wxc.wxBITMAP_TYPE_ICO
@@ -326,6 +324,7 @@ wxBITMAP_TYPE_PNG = wxc.wxBITMAP_TYPE_PNG
 wxBITMAP_TYPE_PNG_RESOURCE = wxc.wxBITMAP_TYPE_PNG_RESOURCE
 wxBITMAP_TYPE_ANY = wxc.wxBITMAP_TYPE_ANY
 wxBITMAP_TYPE_RESOURCE = wxc.wxBITMAP_TYPE_RESOURCE
+wxBITMAP_TYPE_JPEG = wxc.wxBITMAP_TYPE_JPEG
 wxOPEN = wxc.wxOPEN
 wxSAVE = wxc.wxSAVE
 wxHIDE_READONLY = wxc.wxHIDE_READONLY
@@ -333,10 +332,6 @@ wxOVERWRITE_PROMPT = wxc.wxOVERWRITE_PROMPT
 wxACCEL_ALT = wxc.wxACCEL_ALT
 wxACCEL_CTRL = wxc.wxACCEL_CTRL
 wxACCEL_SHIFT = wxc.wxACCEL_SHIFT
-ERR_PARAM = wxc.ERR_PARAM
-ERR_NODATA = wxc.ERR_NODATA
-ERR_CANCEL = wxc.ERR_CANCEL
-ERR_SUCCESS = wxc.ERR_SUCCESS
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -490,6 +485,73 @@ wxCURSOR_SPRAYCAN = wxc.wxCURSOR_SPRAYCAN
 wxCURSOR_WAIT = wxc.wxCURSOR_WAIT
 wxCURSOR_WATCH = wxc.wxCURSOR_WATCH
 wxCURSOR_BLANK = wxc.wxCURSOR_BLANK
+wxPAPER_NONE = wxc.wxPAPER_NONE
+wxPAPER_LETTER = wxc.wxPAPER_LETTER
+wxPAPER_LEGAL = wxc.wxPAPER_LEGAL
+wxPAPER_A4 = wxc.wxPAPER_A4
+wxPAPER_CSHEET = wxc.wxPAPER_CSHEET
+wxPAPER_DSHEET = wxc.wxPAPER_DSHEET
+wxPAPER_ESHEET = wxc.wxPAPER_ESHEET
+wxPAPER_LETTERSMALL = wxc.wxPAPER_LETTERSMALL
+wxPAPER_TABLOID = wxc.wxPAPER_TABLOID
+wxPAPER_LEDGER = wxc.wxPAPER_LEDGER
+wxPAPER_STATEMENT = wxc.wxPAPER_STATEMENT
+wxPAPER_EXECUTIVE = wxc.wxPAPER_EXECUTIVE
+wxPAPER_A3 = wxc.wxPAPER_A3
+wxPAPER_A4SMALL = wxc.wxPAPER_A4SMALL
+wxPAPER_A5 = wxc.wxPAPER_A5
+wxPAPER_B4 = wxc.wxPAPER_B4
+wxPAPER_B5 = wxc.wxPAPER_B5
+wxPAPER_FOLIO = wxc.wxPAPER_FOLIO
+wxPAPER_QUARTO = wxc.wxPAPER_QUARTO
+wxPAPER_10X14 = wxc.wxPAPER_10X14
+wxPAPER_11X17 = wxc.wxPAPER_11X17
+wxPAPER_NOTE = wxc.wxPAPER_NOTE
+wxPAPER_ENV_9 = wxc.wxPAPER_ENV_9
+wxPAPER_ENV_10 = wxc.wxPAPER_ENV_10
+wxPAPER_ENV_11 = wxc.wxPAPER_ENV_11
+wxPAPER_ENV_12 = wxc.wxPAPER_ENV_12
+wxPAPER_ENV_14 = wxc.wxPAPER_ENV_14
+wxPAPER_ENV_DL = wxc.wxPAPER_ENV_DL
+wxPAPER_ENV_C5 = wxc.wxPAPER_ENV_C5
+wxPAPER_ENV_C3 = wxc.wxPAPER_ENV_C3
+wxPAPER_ENV_C4 = wxc.wxPAPER_ENV_C4
+wxPAPER_ENV_C6 = wxc.wxPAPER_ENV_C6
+wxPAPER_ENV_C65 = wxc.wxPAPER_ENV_C65
+wxPAPER_ENV_B4 = wxc.wxPAPER_ENV_B4
+wxPAPER_ENV_B5 = wxc.wxPAPER_ENV_B5
+wxPAPER_ENV_B6 = wxc.wxPAPER_ENV_B6
+wxPAPER_ENV_ITALY = wxc.wxPAPER_ENV_ITALY
+wxPAPER_ENV_MONARCH = wxc.wxPAPER_ENV_MONARCH
+wxPAPER_ENV_PERSONAL = wxc.wxPAPER_ENV_PERSONAL
+wxPAPER_FANFOLD_US = wxc.wxPAPER_FANFOLD_US
+wxPAPER_FANFOLD_STD_GERMAN = wxc.wxPAPER_FANFOLD_STD_GERMAN
+wxPAPER_FANFOLD_LGL_GERMAN = wxc.wxPAPER_FANFOLD_LGL_GERMAN
+wxPAPER_ISO_B4 = wxc.wxPAPER_ISO_B4
+wxPAPER_JAPANESE_POSTCARD = wxc.wxPAPER_JAPANESE_POSTCARD
+wxPAPER_9X11 = wxc.wxPAPER_9X11
+wxPAPER_10X11 = wxc.wxPAPER_10X11
+wxPAPER_15X11 = wxc.wxPAPER_15X11
+wxPAPER_ENV_INVITE = wxc.wxPAPER_ENV_INVITE
+wxPAPER_LETTER_EXTRA = wxc.wxPAPER_LETTER_EXTRA
+wxPAPER_LEGAL_EXTRA = wxc.wxPAPER_LEGAL_EXTRA
+wxPAPER_TABLOID_EXTRA = wxc.wxPAPER_TABLOID_EXTRA
+wxPAPER_A4_EXTRA = wxc.wxPAPER_A4_EXTRA
+wxPAPER_LETTER_TRANSVERSE = wxc.wxPAPER_LETTER_TRANSVERSE
+wxPAPER_A4_TRANSVERSE = wxc.wxPAPER_A4_TRANSVERSE
+wxPAPER_LETTER_EXTRA_TRANSVERSE = wxc.wxPAPER_LETTER_EXTRA_TRANSVERSE
+wxPAPER_A_PLUS = wxc.wxPAPER_A_PLUS
+wxPAPER_B_PLUS = wxc.wxPAPER_B_PLUS
+wxPAPER_LETTER_PLUS = wxc.wxPAPER_LETTER_PLUS
+wxPAPER_A4_PLUS = wxc.wxPAPER_A4_PLUS
+wxPAPER_A5_TRANSVERSE = wxc.wxPAPER_A5_TRANSVERSE
+wxPAPER_B5_TRANSVERSE = wxc.wxPAPER_B5_TRANSVERSE
+wxPAPER_A3_EXTRA = wxc.wxPAPER_A3_EXTRA
+wxPAPER_A5_EXTRA = wxc.wxPAPER_A5_EXTRA
+wxPAPER_B5_EXTRA = wxc.wxPAPER_B5_EXTRA
+wxPAPER_A2 = wxc.wxPAPER_A2
+wxPAPER_A3_TRANSVERSE = wxc.wxPAPER_A3_TRANSVERSE
+wxPAPER_A3_EXTRA_TRANSVERSE = wxc.wxPAPER_A3_EXTRA_TRANSVERSE
 FALSE = wxc.FALSE
 false = wxc.false
 TRUE = wxc.TRUE
@@ -672,8 +734,9 @@ def _StdWindowCallbacks(win):
     _checkForCallback(win, "OnEraseBackground",    wxEVT_ERASE_BACKGROUND)
     _checkForCallback(win, "OnSysColourChanged",   wxEVT_SYS_COLOUR_CHANGED)
     _checkForCallback(win, "OnInitDialog",         wxEVT_INIT_DIALOG)
-    _checkForCallback(win, "OnIdle",               wxEVT_IDLE)
     _checkForCallback(win, "OnPaint",              wxEVT_PAINT)
+    _checkForCallback(win, "OnIdle",               wxEVT_IDLE)
+
 
 def _StdFrameCallbacks(win):
     _StdWindowCallbacks(win)
@@ -691,7 +754,7 @@ def _StdDialogCallbacks(win):
     _checkForCallback(win, "OnCharHook",    wxEVT_CHAR_HOOK)
 
 
-def _StdOnScrollCallback(win):
+def _StdOnScrollCallbacks(win):
     try:    cb = getattr(win, "OnScroll")
     except: pass
     else:   EVT_SCROLL(win, cb)
@@ -769,6 +832,9 @@ def EVT_ICONIZE(win, func):
 
 def EVT_NAVIGATION_KEY(win, func):
     win.Connect(-1, -1, wxEVT_NAVIGATION_KEY, func)
+
+def EVT_IDLE(win, func):
+    win.Connect(-1, -1, wxEVT_IDLE, func)
 
 
 # Mouse Events
@@ -1196,26 +1262,31 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 
 #----------------------------------------------------------------------
 
-## class wxPyStdOutWindow(wxFrame):
-##     def __init__(self, title = "wxPython: stdout/stderr"):
-##         wxFrame.__init__(self, NULL, title)
-##         self.title = title
-##         self.text = wxTextWindow(self)
-##         self.text.SetFont(wxFont(10, wxMODERN, wxNORMAL, wxBOLD))
-##         self.SetSize(-1,-1,400,200)
-##         self.Show(false)
-##         self.isShown = false
+##  class wxPyStdOutWindow:
+##       def __init__(self, title = "wxPython: stdout/stderr"):
+##          self.frame = None
+##          self.title = title
 
-##     def write(self, str):  # with this method,
-##         if not self.isShown:
-##             self.Show(true)
-##             self.isShown = true
-##         self.text.WriteText(str)
+##      def write(self, str):
+##          if not self.frame:
+##              self.frame = wxFrame(NULL, -1, self.title)
+##              self.text  = wxTextCtrl(self.frame, -1, "", wxPoint(0,0), wxDefaultSize,
+##                                      wxTE_MULTILINE|wxTE_READONLY)
+##              self.frame.SetSize(wxSize(450, 300))
+##              self.frame.Show(true)
+##              EVT_CLOSE(self.frame, self.OnCloseWindow)
+##          self.text.AppendText(str)
 
-##     def OnCloseWindow(self, event): # doesn't allow the window to close, just hides it
-##         self.Show(false)
-##         self.isShown = false
+##      def OnCloseWindow(self, event):
+##          wxBell()
+##          self.frame.Destroy()
+##          self.frame = None
+##          self.text  = None
 
+
+##      def close(self):
+##          if self.frame:
+##              self.frame.Close(true)
 
 _defRedirect = (wxPlatform == '__WXMSW__')
 
@@ -1247,22 +1318,35 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            raise self.error, 'wxPyStdOutWindow not yet implemented.'
-            #self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
+            #raise self.error, 'wxPyStdOutWindow not yet implemented.'
+            self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
         if self.stdioWin != None:
-            self.stdioWin.Show(false)
-            self.stdioWin.Destroy()
-            self.stdioWin = None
+            self.stdioWin.close()
 
 
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.8  1999/03/05 07:23:07  RD
-# Minor wxPython changes for wxWin 2.0
+# Revision 1.9  1999/04/30 03:29:48  RD
+# wxPython 2.0b9, first phase (win32)
+# Added gobs of stuff, see wxPython/README.txt for details
+#
+# Revision 1.11.4.2  1999/03/28 06:35:01  RD
+#
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
+# Revision 1.11.4.1  1999/03/27 23:29:13  RD
+#
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
 #
 # Revision 1.11  1999/02/20 09:02:55  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        utils.i
-// Purpose:     SWIG definitions of various utility classes classes
+// Purpose:     SWIG definitions of various utility classes
 //
 // Author:      Robin Dunn
 //
@@ -53,11 +53,6 @@ public:
              const wxString& globalFilename = wxPyEmptyStr,
              long style = 0);
     ~wxConfig();
-
-    //static wxConfigBase * Create();
-    //static wxConfigBase * Get();
-    //static wxConfigBase * Set(wxConfigBase *pConfig);
-
 
 
     void DontCreateOnDemand();
@@ -121,11 +116,9 @@ public:
     %name(ReadInt)long Read(const wxString& key, long defaultVal = 0);
     %name(ReadFloat)double Read(const wxString& key, double defaultVal = 0.0);
 
-    void SetAppName(const wxString& appName);
     void SetExpandEnvVars (bool bDoIt = TRUE);
     void SetPath(const wxString& strPath);
     void SetRecordDefaults(bool bDoIt = TRUE);
-    void SetVendorName(const wxString& vendorName);
 
     bool Write(const wxString& key, const wxString& value);
     %name(WriteInt)bool Write(const wxString& key, long value);
@@ -138,7 +131,19 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1999/04/30 03:29:19  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
+// Revision 1.3.4.1  1999/03/27 23:29:15  RD
+//
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.3  1999/02/25 07:08:36  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.2  1999/02/20 09:03:02  RD

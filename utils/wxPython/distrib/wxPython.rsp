@@ -1,8 +1,8 @@
 wxPython\*.txt
 
-wxPython\tests\*.py
-wxPython\tests\bitmaps\*.bmp
-wxPython\tests\bitmaps\*.ico
+wxPython\demo\*.py
+wxPython\demo\bitmaps\*.bmp
+wxPython\demo\bitmaps\*.ico
 
 
 
@@ -32,5 +32,7 @@ wxPython\src\motif\*.py
 wxPython\src\qt\*.cpp
 wxPython\src\qt\*.h
 wxPython\src\qt\*.py
+
+wxPython\SWIG.patches\*.patch
 
 

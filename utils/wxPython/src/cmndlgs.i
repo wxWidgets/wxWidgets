@@ -198,22 +198,17 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxPageSetupData {
+
+class wxPageSetupDialogData {
 public:
-    wxPageSetupData();
-    ~wxPageSetupData();
+    wxPageSetupDialogData();
+    ~wxPageSetupDialogData();
 
     void EnableHelp(bool flag);
     void EnableMargins(bool flag);
     void EnableOrientation(bool flag);
     void EnablePaper(bool flag);
     void EnablePrinter(bool flag);
-    wxPoint GetPaperSize();
-    wxPoint GetMarginTopLeft();
-    wxPoint GetMarginBottomRight();
-    wxPoint GetMinMarginTopLeft();
-    wxPoint GetMinMarginBottomRight();
-    int GetOrientation();
     bool GetDefaultMinMargins();
     bool GetEnableMargins();
     bool GetEnableOrientation();
@@ -221,33 +216,42 @@ public:
     bool GetEnablePrinter();
     bool GetEnableHelp();
     bool GetDefaultInfo();
-    void SetPaperSize(const wxPoint& size);
+    wxPoint GetMarginTopLeft();
+    wxPoint GetMarginBottomRight();
+    wxPoint GetMinMarginTopLeft();
+    wxPoint GetMinMarginBottomRight();
+    wxPaperSize GetPaperId();
+    wxSize GetPaperSize();
+    wxPrintData& GetPrintData();
+    void SetDefaultInfo(bool flag);
+    void SetDefaultMinMargins(bool flag);
     void SetMarginTopLeft(const wxPoint& pt);
     void SetMarginBottomRight(const wxPoint& pt);
     void SetMinMarginTopLeft(const wxPoint& pt);
     void SetMinMarginBottomRight(const wxPoint& pt);
-    void SetOrientation(int orientation);
-    void SetDefaultMinMargins(bool flag);
-    void SetDefaultInfo(bool flag);
+    void SetPaperId(wxPaperSize& id);
+    void SetPaperSize(const wxSize& size);
+    void SetPrintData(const wxPrintData& printData);
 };
 
 
 class wxPageSetupDialog : public wxDialog {
 public:
-    wxPageSetupDialog(wxWindow* parent, wxPageSetupData* data = NULL);
+    wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = NULL);
 
     %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
-    wxPageSetupData& GetPageSetupData();
+    wxPageSetupDialogData& GetPageSetupData();
     int ShowModal();
 };
 
 //----------------------------------------------------------------------
 
-class wxPrintData {
+
+class wxPrintDialogData {
 public:
-    wxPrintData();
-    ~wxPrintData();
+    wxPrintDialogData();
+    ~wxPrintDialogData();
 
     void EnableHelp(bool flag);
     void EnablePageNumbers(bool flag);
@@ -259,14 +263,15 @@ public:
     int GetMaxPage();
     int GetMinPage();
     int GetNoCopies();
-    int GetOrientation();
+    wxPrintData& GetPrintData();
+    bool GetPrintToFile();
     int GetToPage();
     void SetCollate(bool flag);
     void SetFromPage(int page);
     void SetMaxPage(int page);
     void SetMinPage(int page);
-    void SetOrientation(int orientation);
     void SetNoCopies(int n);
+    void SetPrintData(const wxPrintData& printData);
     void SetPrintToFile(bool flag);
     void SetSetupDialog(bool flag);
     void SetToPage(int page);
@@ -275,11 +280,11 @@ public:
 
 class wxPrintDialog : public wxDialog {
 public:
-    wxPrintDialog(wxWindow* parent, wxPrintData* data = NULL);
+    wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
     %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
-    wxPrintData& GetPrintData();
+    wxPrintDialogData& GetPrintDialogData();
     %new wxDC* GetPrintDC();
     int ShowModal();
 };
@@ -305,7 +310,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1999/04/30 03:29:18  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
 // Revision 1.8  1998/12/17 14:07:25  RR
+//
 //   Removed minor differences between wxMSW and wxGTK
 //
 // Revision 1.7  1998/12/15 20:41:14  RD

@@ -35,8 +35,9 @@ def _StdWindowCallbacks(win):
     _checkForCallback(win, "OnEraseBackground",    wxEVT_ERASE_BACKGROUND)
     _checkForCallback(win, "OnSysColourChanged",   wxEVT_SYS_COLOUR_CHANGED)
     _checkForCallback(win, "OnInitDialog",         wxEVT_INIT_DIALOG)
-    _checkForCallback(win, "OnIdle",               wxEVT_IDLE)
     _checkForCallback(win, "OnPaint",              wxEVT_PAINT)
+    _checkForCallback(win, "OnIdle",               wxEVT_IDLE)
+
 
 def _StdFrameCallbacks(win):
     _StdWindowCallbacks(win)
@@ -54,7 +55,7 @@ def _StdDialogCallbacks(win):
     _checkForCallback(win, "OnCharHook",    wxEVT_CHAR_HOOK)
 
 
-def _StdOnScrollCallback(win):
+def _StdOnScrollCallbacks(win):
     try:    cb = getattr(win, "OnScroll")
     except: pass
     else:   EVT_SCROLL(win, cb)
@@ -132,6 +133,9 @@ def EVT_ICONIZE(win, func):
 
 def EVT_NAVIGATION_KEY(win, func):
     win.Connect(-1, -1, wxEVT_NAVIGATION_KEY, func)
+
+def EVT_IDLE(win, func):
+    win.Connect(-1, -1, wxEVT_IDLE, func)
 
 
 # Mouse Events
@@ -559,26 +563,31 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 
 #----------------------------------------------------------------------
 
-## class wxPyStdOutWindow(wxFrame):
-##     def __init__(self, title = "wxPython: stdout/stderr"):
-##         wxFrame.__init__(self, NULL, title)
-##         self.title = title
-##         self.text = wxTextWindow(self)
-##         self.text.SetFont(wxFont(10, wxMODERN, wxNORMAL, wxBOLD))
-##         self.SetSize(-1,-1,400,200)
-##         self.Show(false)
-##         self.isShown = false
+##  class wxPyStdOutWindow:
+##       def __init__(self, title = "wxPython: stdout/stderr"):
+##          self.frame = None
+##          self.title = title
 
-##     def write(self, str):  # with this method,
-##         if not self.isShown:
-##             self.Show(true)
-##             self.isShown = true
-##         self.text.WriteText(str)
+##      def write(self, str):
+##          if not self.frame:
+##              self.frame = wxFrame(NULL, -1, self.title)
+##              self.text  = wxTextCtrl(self.frame, -1, "", wxPoint(0,0), wxDefaultSize,
+##                                      wxTE_MULTILINE|wxTE_READONLY)
+##              self.frame.SetSize(wxSize(450, 300))
+##              self.frame.Show(true)
+##              EVT_CLOSE(self.frame, self.OnCloseWindow)
+##          self.text.AppendText(str)
 
-##     def OnCloseWindow(self, event): # doesn't allow the window to close, just hides it
-##         self.Show(false)
-##         self.isShown = false
+##      def OnCloseWindow(self, event):
+##          wxBell()
+##          self.frame.Destroy()
+##          self.frame = None
+##          self.text  = None
 
+
+##      def close(self):
+##          if self.frame:
+##              self.frame.Close(true)
 
 _defRedirect = (wxPlatform == '__WXMSW__')
 
@@ -610,20 +619,36 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            raise self.error, 'wxPyStdOutWindow not yet implemented.'
-            #self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
+            #raise self.error, 'wxPyStdOutWindow not yet implemented.'
+            self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
         if self.stdioWin != None:
-            self.stdioWin.Show(false)
-            self.stdioWin.Destroy()
-            self.stdioWin = None
+            self.stdioWin.close()
 
 
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.12  1999/04/30 03:29:18  RD
+# wxPython 2.0b9, first phase (win32)
+# Added gobs of stuff, see wxPython/README.txt for details
+#
+# Revision 1.11.4.2  1999/03/28 06:35:01  RD
+#
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
+# Revision 1.11.4.1  1999/03/27 23:29:13  RD
+#
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
 # Revision 1.11  1999/02/20 09:02:55  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 # window handle.  If you can get the window handle into the python code,

@@ -383,6 +383,9 @@ class wxListBoxPtr(wxControlPtr):
     def GetSelection(self):
         val = controlsc.wxListBox_GetSelection(self.this)
         return val
+    def GetSelections(self):
+        val = controlsc.wxListBox_GetSelections(self.this)
+        return val
     def GetString(self,arg0):
         val = controlsc.wxListBox_GetString(self.this,arg0)
         return val
@@ -535,6 +538,9 @@ class wxTextCtrlPtr(wxControlPtr):
         return val
     def WriteText(self,arg0):
         val = controlsc.wxTextCtrl_WriteText(self.this,arg0)
+        return val
+    def AppendText(self,arg0):
+        val = controlsc.wxTextCtrl_AppendText(self.this,arg0)
         return val
     def XYToPosition(self,arg0,arg1):
         val = controlsc.wxTextCtrl_XYToPosition(self.this,arg0,arg1)

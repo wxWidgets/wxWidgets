@@ -16,6 +16,7 @@
 #include "helpers.h"
 #include <wx/slider.h>
 #include <wx/spinbutt.h>
+#include <wx/dynarray.h>
 
 #ifdef __WXMSW__
 #if wxUSE_OWNER_DRAWN
@@ -255,7 +256,20 @@ public:
     int FindString(const wxString& string);
     // TODO:    char* GetClientData(const int n);
     int GetSelection();
-    // TODO: int GetSelections(int **selections);
+
+    // int GetSelections(int **selections);
+    %addmethods {
+      PyObject* GetSelections() {
+          wxArrayInt lst;
+          self->GetSelections(lst);
+          PyObject *tup = PyTuple_New(lst.GetCount());
+          for(int i=0; i<lst.GetCount(); i++) {
+              PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
+          }
+          return tup;
+      }
+    }
+
     wxString GetString(int n);
     wxString GetStringSelection();
     int Number();
@@ -328,6 +342,7 @@ public:
     void SetValue(const wxString& value);
     void ShowPosition(long pos);
     void WriteText(const wxString& text);
+    void AppendText(const wxString& text);
     long XYToPosition(long x, long y);
 };
 
@@ -384,7 +399,7 @@ public:
 
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
-    wxBitmap& GetBitmap();
+    const wxBitmap& GetBitmap();
     void SetBitmap(const wxBitmap& bitmap);
 };
 
@@ -483,7 +498,19 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12  1999/04/30 03:29:18  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
+// Revision 1.11.4.1  1999/03/27 23:29:14  RD
+//
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.11  1999/02/25 07:08:30  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.10  1998/12/17 17:52:19  RD

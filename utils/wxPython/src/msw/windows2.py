@@ -155,6 +155,7 @@ class wxGridPtr(wxPanelPtr):
     def GetCurrentRect(self):
         val = windows2c.wxGrid_GetCurrentRect(self.this)
         val = wxRectPtr(val)
+        val.thisown = 1
         return val
     def GetCursorColumn(self):
         val = windows2c.wxGrid_GetCursorColumn(self.this)
@@ -420,6 +421,9 @@ class wxNotebookPtr(wxControlPtr):
     def DeletePage(self,arg0):
         val = windows2c.wxNotebook_DeletePage(self.this,arg0)
         return val
+    def RemovePage(self,arg0):
+        val = windows2c.wxNotebook_RemovePage(self.this,arg0)
+        return val
     def DeleteAllPages(self):
         val = windows2c.wxNotebook_DeleteAllPages(self.this)
         return val
@@ -431,6 +435,9 @@ class wxNotebookPtr(wxControlPtr):
         return val
     def GetPage(self,arg0):
         val = windows2c.wxNotebook_GetPage(self.this,arg0)
+        return val
+    def ResizeChildren(self):
+        val = windows2c.wxNotebook_ResizeChildren(self.this)
         return val
     def __repr__(self):
         return "<C wxNotebook instance>"

@@ -37,9 +37,7 @@
 %import stattool.i
 %import frames.i
 %import windows3.i
-#ifndef SEPARATE
-%import utils.i
-#endif
+%import image.i
 
 
 %native(_wxStart)           __wxStart;
@@ -47,7 +45,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "2.0b6"
+#define __version__ "2.0b9"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -115,8 +113,10 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
 extern "C" SWIGEXPORT(void,initwindows3c)();
+extern "C" SWIGEXPORT(void,initimagec)();
 #ifndef SEPARATE
 extern "C" SWIGEXPORT(void,initutilsc)();
+extern "C" SWIGEXPORT(void,initglcanvasc)();
 #endif
 %}
 
@@ -143,8 +143,12 @@ extern "C" SWIGEXPORT(void,initutilsc)();
     initstattoolc();
     initframesc();
     initwindows3c();
+    initimagec();
 #ifndef SEPARATE
     initutilsc();
+#ifdef WITH_GLCANVAS
+    initglcanvasc();
+#endif
 #endif
 %}
 
@@ -153,105 +157,5 @@ extern "C" SWIGEXPORT(void,initutilsc)();
 //----------------------------------------------------------------------
 
 %pragma(python) include="_extras.py";
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.8  1999/03/05 07:22:32  RD
-// Minor wxPython changes for wxWin 2.0
-//
-// Revision 1.7  1999/02/25 07:08:37  RD
-//
-// wxPython version 2.0b5
-//
-// Revision 1.6  1999/02/20 09:03:04  RD
-// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-// window handle.  If you can get the window handle into the python code,
-// it should just work...  More news on this later.
-//
-// Added wxImageList, wxToolTip.
-//
-// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-// wxRegConfig class.
-//
-// As usual, some bug fixes, tweaks, etc.
-//
-// Revision 1.5  1999/02/01 00:10:41  RD
-//
-// Added the missing EVT_LIST_ITEM_SELECTED and friends.
-//
-// Revision 1.4  1999/01/30 07:30:16  RD
-//
-// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-//
-// Various cleanup, tweaks, minor additions, etc. to maintain
-// compatibility with the current wxWindows.
-//
-// Revision 1.3  1998/12/17 17:52:21  RD
-//
-// wxPython 0.5.2
-// Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
-// versions are much closer now!
-//
-// Revision 1.2  1998/12/16 22:10:57  RD
-//
-// Tweaks needed to be able to build wxPython with wxGTK.
-//
-// Revision 1.1  1998/12/15 20:41:27  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.9  1998/10/20 07:38:04  RD
-// bug fix
-//
-// Revision 1.8  1998/10/07 07:34:35  RD
-// Version 0.4.1 for wxGTK
-//
-// Revision 1.7  1998/10/02 06:40:44  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.6  1998/08/27 21:59:10  RD
-// Some chicken-and-egg problems solved for wxPython on wxGTK
-//
-// Revision 1.5  1998/08/27 00:00:28  RD
-// - more tweaks
-// - have discovered some problems but not yet discovered solutions...
-//
-// Revision 1.4  1998/08/18 19:48:20  RD
-// more wxGTK compatibility things.
-//
-// It builds now but there are serious runtime problems...
-//
-// Revision 1.3  1998/08/15 07:36:53  RD
-// - Moved the header in the .i files out of the code that gets put into
-// the .cpp files.  It caused CVS conflicts because of the RCS ID being
-// different each time.
-//
-// - A few minor fixes.
-//
-// Revision 1.2  1998/08/14 23:36:49  RD
-// Beginings of wxGTK compatibility
-//
-// Revision 1.1  1998/08/09 08:25:53  RD
-// Initial version
-//
-//
 
 

@@ -22,7 +22,7 @@ class TestSimpleControlsDlg(wxDialog):
     def __init__(self, parent, log):
         self.log = log
         wxDialog.__init__(self, parent, -1, "Test Simple Controls",
-                          wxDefaultPosition, wxSize(350, 350))
+                          wxDefaultPosition, wxSize(350, 400))
 
 
         sampleList = ["zero", "one", "two", "three", "four", "five",
@@ -250,10 +250,9 @@ class ColoredPanel(wxWindow):
 
 class TestNotebookWindow(wxFrame):
     def __init__(self, parent, log):
-        wxFrame.__init__(self, parent, -1, 'Test wxNotebook',
-                         wxDefaultPosition, wxDefaultSize)
+        wxFrame.__init__(self, parent, -1, 'Test wxNotebook')
 
-        nb = wxNotebook(self, -1)
+        nb = wxNotebook(self, -1, wxPoint(0,0), self.GetClientSize())
 
         win = ColoredPanel(nb, wxBLUE)
         nb.AddPage(win, "Blue")
@@ -295,9 +294,8 @@ class TestNotebookWindow(wxFrame):
         win = ColoredPanel(nb, wxNamedColour('INDIAN RED'))
         nb.AddPage(win, "INDIAN RED")
 
-
         nb.SetSelection(0)
-        self.SetSize(wxSize(350, 300))  # force a redraw so the notebook will draw
+        self.SetSize(wxSize(350, 300))
 
 
     def OnCloseWindow(self, event):
@@ -518,8 +516,8 @@ class TestListCtrlPanel(wxPanel):
                                wxLC_REPORT|wxSUNKEN_BORDER)
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
-        self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
-        wxToolTip_Enable(true)
+        #self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
+        #wxToolTip_Enable(true)
 
         self.list.InsertColumn(0, "Column 0")
         self.list.InsertColumn(1, "Column 1")
@@ -896,7 +894,7 @@ class AppFrame(wxFrame):
 
 
     def OnTestPageSetupDlg(self, event):
-        data = wxPageSetupData()
+        data = wxPageSetupDialogData()
         data.SetMarginTopLeft(wxPoint(50,50))
         data.SetMarginBottomRight(wxPoint(50,50))
         dlg = wxPageSetupDialog(self, data)
@@ -908,7 +906,7 @@ class AppFrame(wxFrame):
         dlg.Destroy()
 
     def OnTestPrintDlg(self, event):
-        data = wxPrintData()
+        data = wxPrintDialogData()
         data.EnablePrintToFile(true)
         data.EnablePageNumbers(true)
         data.EnableSelection(true)
@@ -1000,7 +998,16 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.16  1999/04/30 03:29:54  RD
+# wxPython 2.0b9, first phase (win32)
+# Added gobs of stuff, see wxPython/README.txt for details
+#
+# Revision 1.15.2.1  1999/03/16 06:05:50  RD
+#
+# wxPython 2.0b7
+#
 # Revision 1.15  1999/03/05 07:23:42  RD
+#
 # Minor wxPython changes for wxWin 2.0
 #
 # Revision 1.14  1999/02/27 04:20:50  RD

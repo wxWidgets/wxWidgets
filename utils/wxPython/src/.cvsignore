@@ -5,10 +5,12 @@ Setup
 Setup.save
 Setup.save
 config.c
+glcanvasc.exp
 make.bat
 sedscript
 templates
 transfer.zip
+utilsc.exp
 vc50.pdb
 vc60.pdb
 wxPython.001

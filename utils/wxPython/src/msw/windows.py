@@ -16,6 +16,9 @@ class wxEvtHandlerPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def ProcessEvent(self,arg0):
+        val = windowsc.wxEvtHandler_ProcessEvent(self.this,arg0.this)
+        return val
     def Connect(self,arg0,arg1,arg2,arg3):
         val = windowsc.wxEvtHandler_Connect(self.this,arg0,arg1,arg2,arg3)
         return val
@@ -323,6 +326,16 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def ConvertDialogSizeToPixels(self,arg0):
         val = windowsc.wxWindow_ConvertDialogSizeToPixels(self.this,arg0.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
+        return val
+    def DLG_PNT(self,arg0):
+        val = windowsc.wxWindow_DLG_PNT(self.this,arg0.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
+        return val
+    def DLG_SZE(self,arg0):
+        val = windowsc.wxWindow_DLG_SZE(self.this,arg0.this)
         val = wxSizePtr(val)
         val.thisown = 1
         return val
@@ -672,14 +685,60 @@ class wxMenuItemPtr :
     def Check(self,*args):
         val = apply(windowsc.wxMenuItem_Check,(self.this,)+args)
         return val
+    def GetBackgroundColour(self):
+        val = windowsc.wxMenuItem_GetBackgroundColour(self.this)
+        val = wxColourPtr(val)
+        return val
+    def GetBitmap(self,*args):
+        val = apply(windowsc.wxMenuItem_GetBitmap,(self.this,)+args)
+        val = wxBitmapPtr(val)
+        val.thisown = 1
+        return val
+    def GetFont(self):
+        val = windowsc.wxMenuItem_GetFont(self.this)
+        val = wxFontPtr(val)
+        return val
+    def GetMarginWidth(self):
+        val = windowsc.wxMenuItem_GetMarginWidth(self.this)
+        return val
+    def GetTextColour(self):
+        val = windowsc.wxMenuItem_GetTextColour(self.this)
+        val = wxColourPtr(val)
+        return val
+    def SetBackgroundColour(self,arg0):
+        val = windowsc.wxMenuItem_SetBackgroundColour(self.this,arg0.this)
+        return val
+    def SetBitmaps(self,arg0,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
+        val = apply(windowsc.wxMenuItem_SetBitmaps,(self.this,arg0.this,)+args)
+        return val
+    def SetFont(self,arg0):
+        val = windowsc.wxMenuItem_SetFont(self.this,arg0.this)
+        return val
+    def SetMarginWidth(self,arg0):
+        val = windowsc.wxMenuItem_SetMarginWidth(self.this,arg0)
+        return val
+    def SetTextColour(self,arg0):
+        val = windowsc.wxMenuItem_SetTextColour(self.this,arg0.this)
+        return val
     def DeleteSubMenu(self):
         val = windowsc.wxMenuItem_DeleteSubMenu(self.this)
         return val
     def __repr__(self):
         return "<C wxMenuItem instance>"
 class wxMenuItem(wxMenuItemPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*args) :
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        try: argl[5] = argl[5].this
+        except: pass
+        args = tuple(argl)
+        self.this = apply(windowsc.new_wxMenuItem,()+args)
+        self.thisown = 1
 
 
 

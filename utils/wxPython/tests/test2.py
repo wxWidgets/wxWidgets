@@ -19,9 +19,9 @@ from wxPython.wx import *
 
 
 
-class MyCanvas(wxWindow):
+class MyCanvas(wxScrolledWindow):
     def __init__(self, parent):
-        wxWindow.__init__(self, parent, -1, wxPoint(0, 0), wxPyDefaultSize, wxSUNKEN_BORDER)
+        wxScrolledWindow.__init__(self, parent, -1, wxPoint(0, 0), wxPyDefaultSize, wxSUNKEN_BORDER)
 
         self.SetBackgroundColour(wxNamedColor("WHITE"))
         self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftButtonEvent)
@@ -30,9 +30,9 @@ class MyCanvas(wxWindow):
 
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
         bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
-        print 'bmp OK:', bmp.Ok()
-        print 'bmp: (%dx%dx%d)' % (bmp.GetWidth(), bmp.GetHeight(), bmp.GetDepth())
         self.bmp = bmp
+
+        self.SetScrollbars(20, 20, 50, 50)
 
         self.lines = []
 
@@ -40,6 +40,7 @@ class MyCanvas(wxWindow):
 
     def OnPaint(self, event):
         dc = wxPaintDC(self)
+        self.PrepareDC(dc)
         self.DoDrawing(dc)
 
 
@@ -133,6 +134,7 @@ class MyApp(wxApp):
         self.SetTopWindow(frame)
         return true
 
+
 #---------------------------------------------------------------------------
 
 
@@ -152,6 +154,17 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.3  1999/04/30 03:29:53  RD
+# wxPython 2.0b9, first phase (win32)
+# Added gobs of stuff, see wxPython/README.txt for details
+#
+# Revision 1.2.4.1  1999/03/27 23:30:00  RD
+#
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
 # Revision 1.2  1998/12/15 20:44:34  RD
 # Changed the import semantics from "from wxPython import *" to "from
 # wxPython.wx import *"  This is for people who are worried about

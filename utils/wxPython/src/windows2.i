@@ -128,7 +128,7 @@ public:
     wxString& GetCellValue(int row, int col);
     int GetCols();
     int GetColumnWidth(int col);
-    wxRect& GetCurrentRect();
+    wxRect GetCurrentRect();
     int GetCursorColumn();
     int GetCursorRow();
     bool GetEditable();
@@ -238,10 +238,11 @@ public:
     // LINK ERROR: void SetPageSize(const wxSize& size);
     // LINK ERROR: void SetPadding(const wxSize& padding);
     bool DeletePage(int nPage);
+    bool RemovePage(int nPage);
     bool DeleteAllPages();
     bool AddPage(/*wxNotebookPage*/ wxWindow *pPage,
                  const wxString& strText,
-                 bool bSelect = FALSE,
+                 int bSelect = FALSE,
                  int imageId = -1);
 #ifdef __WXMSW__
     bool InsertPage(int nPage,
@@ -251,6 +252,14 @@ public:
                     int imageId = -1);
 #endif
     wxNotebookPage *GetPage(int nPage);
+
+    %addmethods {
+        void ResizeChildren() {
+            wxSizeEvent evt(self->GetClientSize());
+            self->OnSize(evt);
+        }
+    }
+
 
 };
 
@@ -332,7 +341,16 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1999/04/30 03:29:19  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
+// Revision 1.9.4.1  1999/03/16 06:04:05  RD
+//
+// wxPython 2.0b7
+//
 // Revision 1.9  1999/02/25 07:08:36  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.8  1998/12/17 18:05:53  RD

@@ -66,9 +66,10 @@ wxBitmap* wxNoRefBitmap(char* name, long flags);
         return new wxBitmap(width, height, depth);
     }
 
-                                // This one won't own the reference, so Python won't call
-                                // the dtor, this is good for toolbars and such where
-                                // the parent will manage the bitmap.
+                                // This one won't own the reference, so Python
+                                // won't call the dtor, this is good for
+                                // toolbars and such where the parent will
+                                // manage the bitmap.
     wxBitmap* wxNoRefBitmap(char* name, long flags) {
         return new wxBitmap(name, flags);
     }
@@ -546,98 +547,3 @@ public:
 
 //---------------------------------------------------------------------------
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.14  1999/02/20 10:02:36  RD
-// Changes needed to enable wxGTK compatibility.
-//
-// Revision 1.13  1999/02/20 09:02:58  RD
-// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-// window handle.  If you can get the window handle into the python code,
-// it should just work...  More news on this later.
-//
-// Added wxImageList, wxToolTip.
-//
-// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-// wxRegConfig class.
-//
-// As usual, some bug fixes, tweaks, etc.
-//
-// Revision 1.12  1999/01/30 07:30:11  RD
-//
-// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-//
-// Various cleanup, tweaks, minor additions, etc. to maintain
-// compatibility with the current wxWindows.
-//
-// Revision 1.11  1998/12/18 15:49:05  RR
-//
-//   wxClipboard now serves the primary selection as well
-//   wxPython fixes
-//   warning mesages
-//
-// Revision 1.10  1998/12/17 18:05:50  RD
-//
-// wxPython 0.5.2
-// Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
-// versions are much closer now!
-//
-// Revision 1.9  1998/12/17 14:07:37  RR
-//
-//   Removed minor differences between wxMSW and wxGTK
-//
-// Revision 1.8  1998/12/16 22:10:54  RD
-//
-// Tweaks needed to be able to build wxPython with wxGTK.
-//
-// Revision 1.7  1998/12/15 20:41:18  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.6  1998/11/25 08:45:24  RD
-//
-// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-// Added events for wxGrid
-// Other various fixes and additions
-//
-// Revision 1.5  1998/10/20 06:43:57  RD
-// New wxTreeCtrl wrappers (untested)
-// some changes in helpers
-// etc.
-//
-// Revision 1.4  1998/10/02 06:40:38  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.3  1998/08/18 19:48:16  RD
-// more wxGTK compatibility things.
-//
-// It builds now but there are serious runtime problems...
-//
-// Revision 1.2  1998/08/15 07:36:35  RD
-// - Moved the header in the .i files out of the code that gets put into
-// the .cpp files.  It caused CVS conflicts because of the RCS ID being
-// different each time.
-//
-// - A few minor fixes.
-//
-// Revision 1.1  1998/08/09 08:25:50  RD
-// Initial version
-//
-//

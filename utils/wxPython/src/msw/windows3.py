@@ -255,6 +255,13 @@ class wxLayoutAlgorithmPtr :
         args = tuple(argl)
         val = apply(windows3c.wxLayoutAlgorithm_LayoutFrame,(self.this,arg0.this,)+args)
         return val
+    def LayoutWindow(self,arg0,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
+        val = apply(windows3c.wxLayoutAlgorithm_LayoutWindow,(self.this,arg0.this,)+args)
+        return val
     def __repr__(self):
         return "<C wxLayoutAlgorithm instance>"
 class wxLayoutAlgorithm(wxLayoutAlgorithmPtr):

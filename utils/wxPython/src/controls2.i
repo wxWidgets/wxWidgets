@@ -233,17 +233,47 @@ public:
 
 
 
-// ****  This isn't very useful yet.  This needs to be specialized to enable
-// derived Python classes...
-class wxTreeItemData {
+%{
+class wxPyTreeItemData : public wxTreeItemData {
 public:
-    wxTreeItemData();
-    ~wxTreeItemData();
+    wxPyTreeItemData(PyObject* obj = NULL) {
+	if (obj == NULL)
+            obj = Py_None;
+	Py_INCREF(obj);
+	m_obj = obj;
+    }
+
+    ~wxPyTreeItemData() {
+	Py_DECREF(m_obj);
+    }
+
+    PyObject* GetData() {
+        Py_INCREF(m_obj);
+        return m_obj;
+    }
+
+    void SetData(PyObject* obj) {
+        Py_DECREF(m_obj);
+        m_obj = obj;
+        Py_INCREF(obj);
+    }
+
+    PyObject* m_obj;
+};
+%}
+
+
+
+%name(wxTreeItemData) class wxPyTreeItemData {
+public:
+    wxPyTreeItemData(PyObject* obj = NULL);
+
+    PyObject* GetData();
+    void      SetData(PyObject* obj);
 
     const wxTreeItemId& GetId();
-    void SetId(const wxTreeItemId& id);
+    void                SetId(const wxTreeItemId& id);
 };
-
 
 
 
@@ -284,13 +314,49 @@ public:
     wxString GetItemText(const wxTreeItemId& item);
     int GetItemImage(const wxTreeItemId& item);
     int GetItemSelectedImage(const wxTreeItemId& item);
-    wxTreeItemData *GetItemData(const wxTreeItemId& item);
 
     void SetItemText(const wxTreeItemId& item, const wxString& text);
     void SetItemImage(const wxTreeItemId& item, int image);
     void SetItemSelectedImage(const wxTreeItemId& item, int image);
-    void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
     void SetItemHasChildren(const wxTreeItemId& item, bool hasChildren = TRUE);
+
+    %addmethods {
+	// [Get|Set]ItemData substitutes.  Automatically create wxPyTreeItemData
+	// if needed.
+        wxPyTreeItemData* GetItemData(const wxTreeItemId& item) {
+            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
+            if (data == NULL) {
+                data = new wxPyTreeItemData();
+                self->SetItemData(item, data);
+            }
+            return data;
+        }
+
+        void SetItemData(const wxTreeItemId& item, wxPyTreeItemData* data) {
+	  self->SetItemData(item, data);
+	}
+
+	// [Get|Set]PyData are short-cuts.  Also made somewhat crash-proof by
+	// automatically creating data classes.
+	PyObject* GetPyData(const wxTreeItemId& item) {
+            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
+            if (data == NULL) {
+                data = new wxPyTreeItemData();
+                self->SetItemData(item, data);
+            }
+            return data->GetData();
+	}
+
+        void SetPyData(const wxTreeItemId& item, PyObject* obj) {
+            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
+            if (data == NULL) {
+                data = new wxPyTreeItemData(obj);
+                self->SetItemData(item, data);
+            } else
+                data->SetData(obj);
+   	}
+    }
+
 
     bool IsVisible(const wxTreeItemId& item);
     bool ItemHasChildren(const wxTreeItemId& item);
@@ -312,20 +378,20 @@ public:
 
     wxTreeItemId AddRoot(const wxString& text,
                          int image = -1, int selectedImage = -1,
-                         wxTreeItemData *data = NULL);
+                         wxPyTreeItemData *data = NULL);
     wxTreeItemId PrependItem(const wxTreeItemId& parent,
                              const wxString& text,
                              int image = -1, int selectedImage = -1,
-                             wxTreeItemData *data = NULL);
+                             wxPyTreeItemData *data = NULL);
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
                             const wxTreeItemId& idPrevious,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
-                            wxTreeItemData *data = NULL);
+                            wxPyTreeItemData *data = NULL);
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
-                            wxTreeItemData *data = NULL);
+                            wxPyTreeItemData *data = NULL);
 
     void Delete(const wxTreeItemId& item);
     void DeleteChildren(const wxTreeItemId& item);
@@ -417,7 +483,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.17  1999/04/30 03:29:18  RD
+// wxPython 2.0b9, first phase (win32)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
 // Revision 1.16  1999/02/25 07:08:32  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.15  1999/02/20 09:02:56  RD

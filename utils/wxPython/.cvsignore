@@ -1,4 +1,3 @@
-docs
 *.zip
 .cvsignore
 .emacs.desktop
@@ -26,6 +25,7 @@ controls2.pyc
 controls2.pyc
 controls2.pyo
 controls2.pyo
+docs
 events.py
 events.py
 events.pyc
@@ -44,6 +44,10 @@ gdi.pyc
 gdi.pyc
 gdi.pyo
 gdi.pyo
+glcanvas.py
+glcanvas.pyc
+image.py
+image.pyc
 mdi.py
 mdi.py
 mdi.pyc
@@ -67,6 +71,8 @@ utils.py
 utils.pyc
 utils.pyc
 utils.pyo
+utilsc.ilk
+utilsc.pyd
 windows.py
 windows.py
 windows.pyc

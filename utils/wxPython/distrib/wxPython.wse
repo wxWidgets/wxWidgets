@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.0b6.exe
+  EXE Filename=wxPython-2.0b9.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -191,7 +191,7 @@ end
 item: End Block
 end
 item: Display Graphic
-  Pathname=e:\Projects\wxPython\distrib\wxPython.BMP
+  Pathname=e:\Projects\wx\utils\wxPython\distrib\wxPython.BMP
   X Position=32784
   Y Position=16
   Flags=0000001010000000
@@ -972,11 +972,6 @@ item: If/While Statement
   Flags=00001010
 end
 item: Install File
-  Source=e:\Projects\wx\lib\wx200.dll
-  Destination=%SYS%\wx200.dll
-  Flags=0000001010010010
-end
-item: Install File
   Source=c:\WINNT\System32\Msvcirt.dll
   Destination=%SYS%\Msvcirt.dll
   Flags=0000001010000011
@@ -987,178 +982,63 @@ item: Install File
   Flags=0000001010000011
 end
 item: Install File
-  Source=e:\Projects\wxPython\__init__.py
-  Destination=%MAINDIR%\wxPython\__init__.py
+  Source=e:\Projects\wx\utils\wxPython\*.py
+  Destination=%MAINDIR%\wxPython
+  Description=wxPython shadow class modules
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\cmndlgs.py
-  Destination=%MAINDIR%\wxPython\cmndlgs.py
+  Source=e:\Projects\wx\utils\wxPython\*.pyd
+  Destination=%MAINDIR%\wxPython\
+  Description=wxPython extension modules
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\controls2.py
-  Destination=%MAINDIR%\wxPython\controls2.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\events.py
-  Destination=%MAINDIR%\wxPython\events.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\frames.py
-  Destination=%MAINDIR%\wxPython\frames.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\gdi.py
-  Destination=%MAINDIR%\wxPython\gdi.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\mdi.py
-  Destination=%MAINDIR%\wxPython\mdi.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\misc.py
-  Destination=%MAINDIR%\wxPython\misc.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\stattool.py
-  Destination=%MAINDIR%\wxPython\stattool.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\utils.py
-  Destination=%MAINDIR%\wxPython\utils.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\windows.py
-  Destination=%MAINDIR%\wxPython\windows.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\windows2.py
-  Destination=%MAINDIR%\wxPython\windows2.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\windows3.py
-  Destination=%MAINDIR%\wxPython\windows3.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\controls.py
-  Destination=%MAINDIR%\wxPython\controls.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\wx.py
-  Destination=%MAINDIR%\wxPython\wx.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\wxc.pyd
-  Destination=%MAINDIR%\wxPython\wxc.pyd
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\distrib\SelfInst-README.txt
+  Source=e:\Projects\wx\utils\wxPython\distrib\SelfInst-README.txt
   Destination=%MAINDIR%\wxPython\README.txt
+  Description=README file
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\test1.py
-  Destination=%MAINDIR%\wxPython\demo\test1.py
+  Source=e:\Projects\wx\utils\wxPython\lib\*.py
+  Destination=%MAINDIR%\wxPython\lib
+  Description=wxPython Standard Library
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\test2.py
-  Destination=%MAINDIR%\wxPython\demo\test2.py
+  Source=e:\Projects\wx\utils\wxPython\demo\*.py
+  Destination=%MAINDIR%\wxPython\demo
+  Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\test3.py
-  Destination=%MAINDIR%\wxPython\demo\test3.py
+  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.bmp
+  Destination=%MAINDIR%\wxPython\demo\bitmaps
+  Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\test4.py
-  Destination=%MAINDIR%\wxPython\demo\test4.py
+  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.gif
+  Destination=%MAINDIR%\wxPython\demo\bitmaps
+  Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\test5.py
-  Destination=%MAINDIR%\wxPython\demo\test5.py
+  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.jpg
+  Destination=%MAINDIR%\wxPython\demo\bitmaps
+  Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\test6.py
-  Destination=%MAINDIR%\wxPython\demo\test6.py
+  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.png
+  Destination=%MAINDIR%\wxPython\demo\bitmaps
+  Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\test7.py
-  Destination=%MAINDIR%\wxPython\demo\test7.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\wxSlash.py
-  Destination=%MAINDIR%\wxPython\demo\wxSlash.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=E:\PROJECTS\wxPython\tests\wxPlotCanvas.py
-  Destination=%MAINDIR%\wxPython\demo\wxPlotCanvas.py
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\copy.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\copy.bmp
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\mondrian.ico
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\mondrian.ico
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\new.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\new.bmp
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\open.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\open.bmp
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\paste.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\paste.bmp
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\smiles.ico
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\smiles.ico
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\tog1.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\tog1.bmp
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\test2.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\test2.bmp
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\tog2.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\tog2.bmp
+  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.ico
+  Destination=%MAINDIR%\wxPython\demo\bitmaps
+  Description=Demos
   Flags=0000000010000010
 end
 item: End Block
@@ -1173,11 +1053,13 @@ end
 item: Install File
   Source=e:\projects\wx\docs\html\wx\*.*
   Destination=%MAINDIR%\wxPython\docs
+  Description=wxPython documentation
   Flags=0000000010000010
 end
 item: Install File
   Source=e:\projects\wx\docs\html\wx\wx.htm
   Destination=%MAINDIR%\wxPython\docs\index.htm
+  Description=wxPython documentation
   Flags=0000000010000010
 end
 item: End Block

@@ -370,6 +370,17 @@
 +  *
 +  * -- Revision History
 +  * $Log$
++  * Revision 1.2  1999/04/30 03:28:35  RD
++  * wxPython 2.0b9, first phase (win32)
++  * Added gobs of stuff, see wxPython/README.txt for details
++  *
++  * Revision 1.1.4.1  1999/03/27 23:28:59  RD
++  *
++  * wxPython 2.0b8
++  *     Python thread support
++  *     various minor additions
++  *     various minor fixes
++  *
 +  * Revision 1.1  1998/10/03 05:56:03  RD
 +  * *** empty log message ***
 +  *

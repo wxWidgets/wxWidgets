@@ -50,7 +50,6 @@ class MyMiniFrame(wxMiniFrame):
 
     def OnCloseWindow(self, event):
         self.Destroy()
-
 #---------------------------------------------------------------------------
 
 class MyFrame(wxFrame):
@@ -147,6 +146,10 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.6  1999/04/30 03:29:53  RD
+# wxPython 2.0b9, first phase (win32)
+# Added gobs of stuff, see wxPython/README.txt for details
+#
 # Revision 1.5  1999/02/20 09:04:43  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 # window handle.  If you can get the window handle into the python code,
