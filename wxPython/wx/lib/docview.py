@@ -1318,7 +1318,7 @@ class DocManager(wx.EvtHandler):
         """
         Creates a new document and reads in the selected file.
         """
-        if not self.CreateDocument('', 0):
+        if not self.CreateDocument('', DEFAULT_DOCMAN_FLAGS):
             self.OnOpenFileFailure()
 
 
@@ -1709,6 +1709,11 @@ class DocManager(wx.EvtHandler):
             else:
                 return None
 
+        if path and flags & DOC_SILENT:
+            temp = self.FindTemplateForPath(path)
+        else:
+            temp, path = self.SelectDocumentPath(templates, path, flags)
+
         # Existing document
         if self.GetFlags() & DOC_OPEN_ONCE:
             for document in self._docs:
@@ -1719,11 +1724,6 @@ class DocManager(wx.EvtHandler):
                         if hasattr(firstView.GetFrame(), "IsIconized") and firstView.GetFrame().IsIconized():  # Not in wxWindows code but useful nonetheless
                             firstView.GetFrame().Iconize(False)
                     return None
-
-        if flags & DOC_SILENT:
-            temp = self.FindTemplateForPath(path)
-        else:
-            temp, path = self.SelectDocumentPath(templates, path, flags)
 
         if temp:
             newDoc = temp.CreateDocument(path, flags)

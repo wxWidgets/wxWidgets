@@ -91,6 +91,7 @@ class TextEditView(wx.lib.docview.View):
             sizer.Add(self._textsw, 1, wx.EXPAND, 0)
             self._frame.SetSizer(sizer)
             self._frame.Layout()
+            self._frame.Show(True)
             self.Activate(True)
             return True
         else:  # flags & wx.lib.docview.DOC_SDI

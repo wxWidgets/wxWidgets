@@ -20,7 +20,12 @@ import os
 import os.path
 import time
 import string
+import pickle
+import getpass
+import tempfile
+import mmap
 _ = wx.GetTranslation
+
 
 #----------------------------------------------------------------------------
 # Constants
@@ -236,7 +241,7 @@ class OptionsDialog(wx.Dialog):
         Initializes the options dialog with a notebook page that contains new
         instances of the passed optionsPanelClasses.
         """
-        wx.Dialog.__init__(self, parent, -1, _("Options"), size = (310, 375))
+        wx.Dialog.__init__(self, parent, -1, _("Options"), size = (310, 400))
 
         self._optionsPanels = []
         self._docManager = docManager
@@ -307,14 +312,11 @@ class GeneralOptionsPanel(wx.Panel):
                                       choices = [_("Show each document in its own window (SDI)"),
                                                  _("Show All documents in a single window (MDI)")],
                                       majorDimension=1,
-                                      #style = wx.RA_SPECIFY_ROWS
                                       )
-        #self._documentRadioBox.SetBackgroundColour(backgroundColor) # wxBug: uses wrong background color
         if config.ReadInt("UseMDI", True):
             self._documentRadioBox.SetSelection(1)
         else:
             self._documentRadioBox.SetSelection(0)
-            
         def OnDocumentInterfaceSelect(event):
             if not self._documentInterfaceMessageShown:
                 msgTitle = wx.GetApp().GetAppName()
@@ -324,8 +326,7 @@ class GeneralOptionsPanel(wx.Panel):
                               msgTitle,
                               wx.OK | wx.ICON_INFORMATION,
                               self.GetParent())
-                self._documentInterfaceMessageShown = True
-                
+                self._documentInterfaceMessageShown = True            
         wx.EVT_RADIOBOX(self, self._documentRadioBox.GetId(), OnDocumentInterfaceSelect)
         optionsBorderSizer = wx.BoxSizer(wx.VERTICAL)
         optionsSizer = wx.BoxSizer(wx.VERTICAL)
@@ -361,8 +362,88 @@ class DocApp(wx.PySimpleApp):
         self._services = []
         self._defaultIcon = None
         self._registeredCloseEvent = False
-        self._debug = False
+        if not hasattr(self, "_debug"):  # only set if not already initialized
+            self._debug = False
+        if not hasattr(self, "_singleInstance"):  # only set if not already initialized
+            self._singleInstance = True
+            
+        # if _singleInstance is TRUE only allow one single instance of app to run.
+        # When user tries to run a second instance of the app, abort startup,
+        # But if user also specifies files to open in command line, send message to running app to open those files
+        if self._singleInstance:
+            # create shared memory temporary file
+            if wx.Platform == '__WXMSW__':
+                tfile = tempfile.TemporaryFile(prefix="ag", suffix="tmp")
+                fno = tfile.fileno()
+                self._sharedMemory = mmap.mmap(fno, 1024, "shared_memory")
+            else:
+                tfile = file(os.path.join(tempfile.gettempdir(), tempfile.gettempprefix() + getpass.getuser() + "AGSharedMemory"), 'w+b')
+                tfile.write("*")
+                tfile.seek(1024)
+                tfile.write(" ")
+                tfile.flush()
+                fno = tfile.fileno()
+                self._sharedMemory = mmap.mmap(fno, 1024)
+
+            self._singleInstanceChecker = wx.SingleInstanceChecker(self.GetAppName() + '-' + wx.GetUserId())
+            if self._singleInstanceChecker.IsAnotherRunning():
+                # have running single instance open file arguments
+                foundArgs = False
+                args = sys.argv[1:]
+                for arg in args:
+                    if arg[0] != '/' and arg[0] != '-':
+                        foundArgs = True
+                        break
+                          
+                if foundArgs:                      
+                    data = pickle.dumps(args)
+                    while 1:
+                        self._sharedMemory.seek(0)
+                        marker = self._sharedMemory.read_byte()
+                        if marker == '\0' or marker == '*':        # available buffer
+                            self._sharedMemory.seek(0)
+                            self._sharedMemory.write_byte('-')     # set writing marker
+                            self._sharedMemory.write(data)  # write files we tried to open to shared memory
+                            self._sharedMemory.seek(0)
+                            self._sharedMemory.write_byte('+')     # set finished writing marker
+                            self._sharedMemory.flush()
+                            break
+                        else:
+                            time.sleep(1)  # give enough time for buffer to be available
+                        
+                return False
+            else:
+                self._timer = wx.PyTimer(self.DoBackgroundListenAndLoad)
+                self._timer.Start(250)
+
         return True
+        
+
+    def DoBackgroundListenAndLoad(self):
+        """
+        Open any files specified in the given command line argument passed in via shared memory
+        """
+
+        self._sharedMemory.seek(0)
+        if self._sharedMemory.read_byte() == '+':  # available data
+            data = self._sharedMemory.read(1024-1)
+            self._sharedMemory.seek(0)
+            self._sharedMemory.write_byte("*")     # finished reading, set buffer free marker
+            self._sharedMemory.flush()
+            args = pickle.loads(data)
+            for arg in args:
+                if arg[0] != '/' and arg[0] != '-':
+                    self.GetDocumentManager().CreateDocument(arg, wx.lib.docview.DOC_SILENT)
+            
+            # force display of running app
+            topWindow = wx.GetApp().GetTopWindow()
+            if topWindow.IsIconized():
+                topWindow.Iconize(False)
+            else:
+                topWindow.Raise()
+            
+        
+        self._timer.Start(1000) # 1 second interval
 
 
     def OpenCommandLineArgs(self):
@@ -654,9 +735,24 @@ class DocApp(wx.PySimpleApp):
 
     def SetDebug(self, debug):
         """
-        Returns False if the application is in debug mode.
+        Sets the application's debug mode.
         """
         self._debug = debug
+
+
+    def GetSingleInstance(self):
+        """
+        Returns True if the application is in single instance mode.  Used to determine if multiple instances of the application is allowed to launch.
+        """
+        return self._singleInstance
+
+
+    def SetSingleInstance(self, singleInstance):
+        """
+        Sets application's single instance mode.
+        """
+        self._singleInstance = singleInstance
+
 
 
     def CreateChildDocument(self, parentDocument, documentType, objectToEdit, path = ''):
@@ -720,9 +816,12 @@ class DocApp(wx.PySimpleApp):
 
     def ShowSplash(self, image):
         """
-        Shows a splash window with the given image.
+        Shows a splash window with the given image.  Input parameter 'image' can either be a wx.Bitmap or a filename.
         """
-        splash_bmp = wx.Image(image).ConvertToBitmap()
+        if isinstance(image, wx.Bitmap):
+            splash_bmp = image
+        else:
+            splash_bmp = wx.Image(image).ConvertToBitmap()
         self._splash = wx.SplashScreen(splash_bmp,wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_NO_TIMEOUT,0, None, -1) 
         self._splash.Show()
 
@@ -765,33 +864,6 @@ class _DocFrameFileDropTarget(wx.FileDropTarget):
                           msgTitle,
                           wx.OK | wx.ICON_EXCLAMATION,
                           self._docManager.FindSuitableParent())
-
-
-def _AboutDialog(frame):
-    """
-    Opens an AboutDialog.  Shared by DocMDIParentFrame and DocSDIFrame.
-    """
-    dlg = wx.Dialog(frame, -1, _("About ") + wx.GetApp().GetAppName(), style = wx.DEFAULT_DIALOG_STYLE)
-    dlg.SetBackgroundColour(wx.WHITE)
-    sizer = wx.BoxSizer(wx.VERTICAL)
-    splash_bmp = wx.Image("activegrid/tool/images/splash.jpg").ConvertToBitmap()
-    image = wx.StaticBitmap(dlg, -1, splash_bmp, (0,0), (splash_bmp.GetWidth(), splash_bmp.GetHeight()))
-    sizer.Add(image, 0, wx.ALIGN_CENTER|wx.ALL, 0)
-    sizer.Add(wx.StaticText(dlg, -1, _("ActiveGrid Application Builder\nVersion 1.0\n\nCopyright (c) 2003-2005 ActiveGrid Incorporated and Contributors.  All rights reserved.")), 0, wx.ALIGN_LEFT|wx.ALL, 5)
-    sizer.Add(wx.StaticText(dlg, -1, _("ActiveGrid Development Team:\nLawrence Bruhmuller\nMatt Fryer\nJoel Hare\nMorgan Hua\nJeff Norton\nPeter Yared")), 0, wx.ALIGN_LEFT|wx.ALL, 5)
-    sizer.Add(wx.StaticText(dlg, -1, _("http://www.activegrid.com")), 0, wx.ALIGN_LEFT|wx.ALL, 5)
-
-
-    btn = wx.Button(dlg, wx.ID_OK)
-    sizer.Add(btn, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-    dlg.SetSizer(sizer)
-    dlg.SetAutoLayout(True)
-    sizer.Fit(dlg)
-    
-    dlg.CenterOnScreen()
-    dlg.ShowModal()
-    dlg.Destroy()
 
 
 class DocMDIParentFrame(wx.lib.docview.DocMDIParentFrame):
@@ -1273,7 +1345,7 @@ class DocMDIParentFrame(wx.lib.docview.DocMDIParentFrame):
 
     def UpdateWindowMenu(self):
         """
-        Updates the WindowMenu Windows platforms.
+        Updates the WindowMenu on Windows platforms.
         """
         if wx.Platform == '__WXMSW__':
             children = filter(lambda child: isinstance(child, wx.MDIChildFrame), self.GetChildren())
@@ -1332,7 +1404,9 @@ class DocMDIParentFrame(wx.lib.docview.DocMDIParentFrame):
         """
         Invokes the about dialog.
         """
-        _AboutDialog(self)
+        aboutService = wx.GetApp().GetService(AboutService)
+        if aboutService:
+            aboutService.ShowAbout()
 
 
     def OnViewToolBar(self, event):
@@ -1671,7 +1745,9 @@ class DocSDIFrame(wx.lib.docview.DocChildFrame):
         """
         Invokes the about dialog.
         """
-        _AboutDialog(self)
+        aboutService = wx.GetApp().GetService(AboutService)
+        if aboutService:
+            aboutService.ShowAbout()
 
 
     def OnViewToolBar(self, event):
@@ -1724,9 +1800,68 @@ class DocSDIFrame(wx.lib.docview.DocChildFrame):
             self._docManager.FileHistoryRemoveMenu(self._fileMenu)
 
 
+class AboutService(DocService):
+    """
+    About Dialog Service that installs under the Help menu to show the properties of the current application.
+    """
+
+    def __init__(self, aboutDialog = None):
+        """
+        Initializes the AboutService.
+        """
+        if aboutDialog:
+            self._dlg = aboutDialog
+        else:
+            self._dlg = AboutDialog  # use default AboutDialog
+        
+
+    def ShowAbout(self):
+        """
+        Show the AboutDialog
+        """
+        dlg = self._dlg(wx.GetApp().GetTopWindow())
+        dlg.CenterOnScreen()
+        dlg.ShowModal()
+        dlg.Destroy()
+
+
+    def SetAboutDialog(self, dlg):
+        """
+        Customize the AboutDialog
+        """
+        self._dlg = dlg
+
+
+class AboutDialog(wx.Dialog):
+    """
+    Opens an AboutDialog.  Shared by DocMDIParentFrame and DocSDIFrame.
+    """
+    
+    def __init__(self, parent):
+        """
+        Initializes the about dialog.
+        """
+        wx.Dialog.__init__(self, parent, -1, _("About ") + wx.GetApp().GetAppName(), style = wx.DEFAULT_DIALOG_STYLE)
+
+        self.SetBackgroundColour(wx.WHITE)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        splash_bmp = wx.Image("activegrid/tool/images/splash.jpg").ConvertToBitmap()
+        image = wx.StaticBitmap(self, -1, splash_bmp, (0,0), (splash_bmp.GetWidth(), splash_bmp.GetHeight()))
+        sizer.Add(image, 0, wx.ALIGN_CENTER|wx.ALL, 0)
+        sizer.Add(wx.StaticText(self, -1, wx.GetApp().GetAppName()), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+    
+        btn = wx.Button(self, wx.ID_OK)
+        sizer.Add(btn, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+    
+        self.SetSizer(sizer)
+        self.SetAutoLayout(True)
+        sizer.Fit(self)
+    
+
+
 class FilePropertiesService(DocService):
     """
-    Service that installas under the File menu to show the properties of the file associated
+    Service that installs under the File menu to show the properties of the file associated
     with the current document.
     """
 
@@ -1825,7 +1960,7 @@ class FilePropertiesService(DocService):
         and creates odd word boundaries.  Instead, we will chop the path without regard to
         spaces, but pay attention to path delimiters.
         """
-        chopped = None
+        chopped = ""
         textLen = len(text)
         start = 0
 
@@ -1840,7 +1975,7 @@ class FilePropertiesService(DocService):
                 if lastSep != -1 and lastSep != start:
                     end = lastSep
 
-            if chopped:
+            if len(chopped):
                 chopped = chopped + '\n' + text[start:end]
             else:
                 chopped = text[start:end]
@@ -1867,6 +2002,8 @@ class FilePropertiesDialog(wx.Dialog):
 
         filePropertiesService = wx.GetApp().GetService(FilePropertiesService)
 
+        fileExists = os.path.exists(filename)
+
         notebook = wx.Notebook(self, -1)
         tab = wx.Panel(notebook, -1)
 
@@ -1879,20 +2016,24 @@ class FilePropertiesDialog(wx.Dialog):
         gridSizer.Add(wx.StaticText(tab, -1, filePropertiesService.chopPath(os.path.dirname(filename))), flag=wx.BOTTOM, border=SPACE, row=1, col=1)
 
         gridSizer.Add(wx.StaticText(tab, -1, _("Size:")), flag=wx.RIGHT, border=HALF_SPACE, row=2, col=0)
-        gridSizer.Add(wx.StaticText(tab, -1, str(os.path.getsize(filename)) + ' ' + _("bytes")), row=2, col=1)
+        if fileExists:
+            gridSizer.Add(wx.StaticText(tab, -1, str(os.path.getsize(filename)) + ' ' + _("bytes")), row=2, col=1)
 
         lineSizer = wx.BoxSizer(wx.VERTICAL)    # let the line expand horizontally without vertical expansion
         lineSizer.Add(wx.StaticLine(tab, -1, size = (10,-1)), 0, wx.EXPAND)
         gridSizer.Add(lineSizer, flag=wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|wx.TOP, border=HALF_SPACE, row=3, col=0, colspan=2)
 
         gridSizer.Add(wx.StaticText(tab, -1, _("Created:")), flag=wx.RIGHT, border=HALF_SPACE, row=4, col=0)
-        gridSizer.Add(wx.StaticText(tab, -1, time.ctime(os.path.getctime(filename))), row=4, col=1)
+        if fileExists:
+            gridSizer.Add(wx.StaticText(tab, -1, time.ctime(os.path.getctime(filename))), row=4, col=1)
 
         gridSizer.Add(wx.StaticText(tab, -1, _("Modified:")), flag=wx.RIGHT, border=HALF_SPACE, row=5, col=0)
-        gridSizer.Add(wx.StaticText(tab, -1, time.ctime(os.path.getmtime(filename))), row=5, col=1)
+        if fileExists:
+            gridSizer.Add(wx.StaticText(tab, -1, time.ctime(os.path.getmtime(filename))), row=5, col=1)
 
         gridSizer.Add(wx.StaticText(tab, -1, _("Accessed:")), flag=wx.RIGHT, border=HALF_SPACE, row=6, col=0)
-        gridSizer.Add(wx.StaticText(tab, -1, time.ctime(os.path.getatime(filename))), row=6, col=1)
+        if fileExists:
+            gridSizer.Add(wx.StaticText(tab, -1, time.ctime(os.path.getatime(filename))), row=6, col=1)
 
         # add a border around the inside of the tab
         spacerGrid = wx.BoxSizer(wx.VERTICAL)
