@@ -1,0 +1,538 @@
+\chapter{wxPython Notes}\label{wxPython}
+\pagenumbering{arabic}%
+\setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+%----------------------------------------------------------------------
+\section{What is wxPython?}\label{wxpwhat}
+
+wxPython is a blending of the wxWindows GUI classes and the
+\urlref{Python}{http://www.python.org/} programming language.
+
+\wxheading{Python}
+
+So what is Python?  Go to
+\urlref{http://www.python.org}{http://www.python.org}
+to learn more, but in a nutshell Python is an interpreted,
+interactive, object-oriented programming language. It is often
+compared to Tcl, Perl, Scheme or Java.
+
+Python combines remarkable power with very clear syntax. It has
+modules, classes, exceptions, very high level dynamic data types, and
+dynamic typing. There are interfaces to many system calls and
+libraries, and new built-in modules are easily written in C or
+C++. Python is also usable as an extension language for applications
+that need a programmable interface.
+
+Python is copyrighted but freely usable and distributable, even for
+commercial use.
+
+\wxheading{wxPython}
+
+wxPython is a Python package that can be imported at runtime that
+includes a collection of Python modules and an extension module
+(native code).  It provides a series of Python classes that mirror (or
+shadow) many of the wxWindows GUI classes.  This extension module
+attempts to mirror the class heiarchy of wxWindows as closely as
+possble. This means that there is a wxFrame class in wxPython that
+looks, smells, tastes and acts almost the same as the wxFrame class in
+the C++ version.
+
+wxPython is very versitile.  It can be used to create standalone GUI
+applications, or in situations where Python is embedded in a C++
+application as an internal scripting or macro language.
+
+Currently wxPython is available for Win32 platforms and the GTK
+toolkit (wxGTK) on most *nix/X-windows platforms.  The effort to
+enable wxPython for wxMotif will begin shortly.  See \helpref{Building
+Python}{wxpbuild} for details about getting wxPython working for you.
+
+
+%----------------------------------------------------------------------
+\section{Why use wxPython?}\label{wxpwhy}
+
+
+So why would you want to use wxPython over just C++ and wxWindows?
+Personally I prefer using Python for everything.  I only use C++ when
+I absolutly have to eek more performance out of an algorithm, and even
+then I ususally code it as an extension module and leave the majority
+of the program in Python.
+
+Another good thing to use wxPython for is quick prototyping of your
+wxWindows apps.  With C++ you have to continuously go though the
+edit-compile-link-run cycle, which can be quite time comsuming.  With
+Python it is only an edit-run cycle.  You can easily build an
+application in a few hours with Python that would normally take a few
+days or longer with C++.  Converting a wxPython app to a C++/wxWindows app
+should be a straight forward task.
+
+
+%----------------------------------------------------------------------
+\section{Other Python GUIs}\label{wxpother}
+
+There are other GUI solutions out there for Python.
+
+\wxheading{Tkinter}
+
+Tkinter is the defacto standard GUI for Python.  It is available
+on nearly every platform that Python and Tcl/TK are.  Why Tcl/Tk?
+Well because Tkinter is just a wrapper around Tcl's GUI toolkit, Tk.
+This has its upsides and its downsides...
+
+The upside is that Tk is a pretty veristile toolkit.  It can be made
+to do a lot of things in a lot of different environments.  It is fairly
+easy to create new widgets and use them interchangably in your
+programs.
+
+The downside is Tcl.  When using Tkinter you actually have two
+separate language interpreters running, the Python interpreter and the
+Tcl interpreter for the GUI.  Since the guts of Tcl is mostly about
+string processing, it is fairly slow as well.  (Not too bad on a fast
+Pentium II, but you really notice the difference on slower machines.)
+
+It wasn't until the lastest version of Tcl/Tk that native Look and
+Feel's were possible on non-Motif platforms.  This is because Tk
+usually implements it's own widgets (controls) even when there are
+native controls available.
+
+Tkinter is a pretty low-level toolkit.  You have to do a lot of work
+(verbose program code) to do things that would be much simpler with a higher
+level of abstraction.
+
+\wxheading{PythonWin}
+
+PythonWin is an add-on package for Python for the Win32 platform.  It
+includes wrappers for MFC as well as much of the win32 API.  Because
+of its foundation, it is very familiar for programmers who have
+experience with MFC and the Win32 API.  It is obviously not compatible
+with other platforms and toolkits.  PythonWin is organized as separate
+packages and modules so you can use the pieces you need without having
+to use the GUI portions.
+
+\wxheading{Others}
+
+There are quite a few other GUI modules available for Python, some in
+active use, some that havn't been updated for ages.  Most are simple
+wrappers around some C or C++ toolkit or another, and most are not
+cross-platform compatible.  See \urlref{this
+link}{http://www.python.org/download/Contributed.html\#Graphics}
+for a listing of a few of them.
+
+
+%----------------------------------------------------------------------
+\section{Building wxPython}\label{wxpbuild}
+
+I used SWIG (\urlref{http://www.swig.org}{http://www.swig.org}) to
+create the source code for the extension module.  This enabled me to
+only have to deal with a small amount of code and only have to bother
+with the exceptional issues.  SWIG takes care of the rest and
+generates all the repetative code for me.  You don't need SWIG to
+build the extension module as all the generated C++ code is included
+under the src directory.  If you try to build wxPython and get errors
+because SWIG is missing, then simply touch the .cpp and .py files so
+make won't attempt to build them from the .i files.
+
+I added a few minor features to SWIG to control some of the code
+generation.  If you want to play around with this the patches are in
+wxPython/SWIG.patches and they should be applied to the 1.1p5 version
+of SWIG.  These new patches are documented at
+\urlref{this site}{http://starship.skyport.net/crew/robind/python/\#swig},
+and they should also end up in the 1.2 version of SWIG.
+
+wxPython is organized as a Python package.  This means that the
+directory containing the results of the build process should be a
+subdirectory of a directory on the \tt{PYTHONPATH}, (and preferably
+should be named wxPython.)  You can control where the build process
+will dump wxPython by setting the \tt{TARGETDIR} makefile variable.
+The default is \tt{\$(WXWIN)/utils/wxPython}.  If you leave it here
+then you should add \tt{\$(WXWIN)/utils} to your \tt{PYTHONPATH}.
+However, you may prefer to use something that is already on your
+\tt{PYTHONPATH}, such as the \tt{site-packages} directory on Unix
+ systems.
+
+
+\wxheading{Win32}
+
+These instructions assume that you have Microsoft Visual C++ 5.0 or
+6.0, that you have installed the command-line tools, and that the
+appropriate environment variables are set for these tools.  You should
+also have Python 1.5.1 installed, and wxWindows installed and built as
+specified below.
+
+\begin{enumerate}\itemsep=0pt
+\item Build wxWindows with \tt{wxUSE_RESOURCE_LOADING_IN_MSW} set to 1 in
+\tt{include/wx/msw/setup.h} so icons can be loaded dynamically.  While
+there, make sure \tt{wxUSE_OWNER_DRAWN} is also set to 1.
+
+\item Change into the \tt{\$(WXWIN)/utils/wxPython/src} directory.
+
+\item Edit makefile.vc and specify where your python installation is at.
+You may also want to fiddle with the \tt{TARGETDIR} variable as described
+above.
+
+\item Run \tt{nmake -f makefile.vc}
+
+\item If it builds successfully, congratulations!  Move on to the next
+step.  If not then you can try mailing the wxwin-developers list for
+help.  Also, I will always have a pre-built win32 version of this extension module at
+\urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython}.
+
+\item Change to the \tt{\$(WXWIN)/utils/wxPython/tests} directory.
+
+\item Try executing the test programs.  Note that some of these print
+diagnositc or test info to standard output, so they will require the
+console version of python.  For example:
+
+    \tt{python test1.py}
+
+To run them without requiring a console, you can use the \tt{pythonw.exe}
+version of Python either from the command line or from a shortcut.
+
+\end{enumerate}
+
+
+\wxheading{Unix}
+
+These directions assume that you have already successfully built
+wxWindows for GTK, and installed Python 1.5.1.  If you build Python
+yourself, you will get everything installed that you need simply by
+doing \bftt{make install}.  If you get Python from an RPM or other
+pre-packaged source then there will probably be a separate package
+with the development libraries, etc. that you will need to install.
+
+
+\begin{enumerate}\itemsep=0pt
+\item Change into the \tt{\$(WXWIN)/utils/wxPython/src} directory.
+
+\item Edit \tt{Setup.in} and ensure that the flags, directories, and toolkit
+options are correct, (hopefully this will be done by \tt{configure}
+soon.)  See the above commentary about \tt{TARGETDIR}.  There are a
+few sample Setup.in.[platform] files provided.
+
+\item Run this command to generate a makefile:
+
+    \tt{make -f Makefile.pre.in boot}
+
+\item Once you have the \tt{Makefile}, run \bftt{make} to build and then
+\bftt{make install} to install the wxPython extension module.
+
+\item Change to the \tt{\$(WXWIN)/utils/wxPython/tests} directory.
+
+\item Try executing the test programs.  For example:
+
+    \tt{python test1.py}
+
+\end{enumerate}
+
+
+
+%----------------------------------------------------------------------
+\section{Using wxPython}\label{wxpusing}
+
+\wxheading{First things first...}
+
+I'm not going to try and teach the Python language here.  You can do
+that at the \urlref{Python Tutorial}{http://www.python.org/doc/tut/tut.html}.
+I'm also going to assume that you know a bit about wxWindows already,
+enough to notice the similarities in the classes used.
+
+Take a look at the following wxPython program.  You can find a similar
+program in the \tt{wxPython/tests} directory, named \tt{test7.py}.  If your
+Python and wxPython are properly installed, you should be able to run
+it by issuing this command:
+
+\begin{indented}{1cm}
+    \bftt{python test7.py}
+\end{indented}
+
+\hrule
+
+\begin{verbatim}
+001: ## import all of the wxPython GUI package
+002: from wxPython.wx import *
+003:
+004: ## Create a new frame class, derived from the wxPython Frame.
+005: class MyFrame(wxFrame):
+006:
+007:     def __init__(self, parent, id, title):
+008:         # First, call the base class' __init__ method to create the frame
+009:         wxFrame.__init__(self, parent, id, title,
+010:                          wxPoint(100, 100), wxSize(160, 100))
+011:
+012:         # Associate some events with methods of this class
+013:         EVT_SIZE(self, self.OnSize)
+014:         EVT_MOVE(self, self.OnMove)
+015:
+016:         # Add a panel and some controls to display the size and position
+017:         panel = wxPanel(self, -1)
+018:         wxStaticText(panel, -1, "Size:",
+019:                      wxDLG_PNT(panel, wxPoint(4, 4)),  wxDefaultSize)
+020:         wxStaticText(panel, -1, "Pos:",
+021:                      wxDLG_PNT(panel, wxPoint(4, 14)), wxDefaultSize)
+022:         self.sizeCtrl = wxTextCtrl(panel, -1, "",
+023:                                    wxDLG_PNT(panel, wxPoint(24, 4)),
+024:                                    wxDLG_SZE(panel, wxSize(36, -1)),
+025:                                    wxTE_READONLY)
+026:         self.posCtrl = wxTextCtrl(panel, -1, "",
+027:                                   wxDLG_PNT(panel, wxPoint(24, 14)),
+028:                                   wxDLG_SZE(panel, wxSize(36, -1)),
+029:                                   wxTE_READONLY)
+030:
+031:
+032:     # This method is called automatically when the CLOSE event is
+033:     # sent to this window
+034:     def OnCloseWindow(self, event):
+035:         # tell the window to kill itself
+036:         self.Destroy()
+037:
+038:     # This method is called by the system when the window is resized,
+039:     # because of the association above.
+040:     def OnSize(self, event):
+041:         size = event.GetSize()
+042:         self.sizeCtrl.SetValue("%s, %s" % (size.width, size.height))
+043:
+044:         # tell the event system to continue looking for an event handler,
+045:         # so the default handler will get called.
+046:         event.Skip()
+047:
+048:     # This method is called by the system when the window is moved,
+049:     # because of the association above.
+050:     def OnMove(self, event):
+051:         pos = event.GetPosition()
+052:         self.posCtrl.SetValue("%s, %s" % (pos.x, pos.y))
+053:
+054:
+055: # Every wxWindows application must have a class derived from wxApp
+056: class MyApp(wxApp):
+057:
+058:     # wxWindows calls this method to initialize the application
+059:     def OnInit(self):
+060:
+061:         # Create an instance of our customized Frame class
+062:         frame = MyFrame(NULL, -1, "This is a test")
+063:         frame.Show(true)
+064:
+065:         # Tell wxWindows that this is our main window
+066:         self.SetTopWindow(frame)
+067:
+068:         # Return a success flag
+069:         return true
+070:
+071:
+072: app = MyApp(0)     # Create an instance of the application class
+073: app.MainLoop()     # Tell it to start processing events
+074:
+\end{verbatim}
+\hrule
+
+\wxheading{Things to notice:}\begin{enumerate}\itemsep=0pt
+\item At line 2 the wxPython classes, constants, and etc. are imported
+into the current module's namespace.  If you prefer to reduce
+namespace polution you can use "\tt{from wxPython import wx}" and
+then access all the wxPython identifiers through the wx module, for
+example, "\tt{wx.wxFrame}".
+
+\item At line 13 the frame's sizing and moving events are connected to
+methods of the class.  These helper functions are intended to be like
+the event table macros that wxWindows employs.  But since static event
+tables are impossible with wxPython, we use helpers that are named the
+same to dynamically build the table.  The only real difference is
+that the first arguemnt to the event helpers is always the window that
+the event table entry should be added to.
+
+\item Notice the use of \tt{wxDLG_PNT} and \tt{wxDLG_SZE} in lines 19
+- 29 to convert from dialog units to pixels.  These helpers are unique
+to wxPython since Python can't do method overloading like C++.
+
+\item There is an \tt{OnCloseWindow} method at line 34 but no call to
+EVT_CLOSE to attach the event to the method.  Does it really get
+called?  The answer is, yes it does.  This is because many of the
+\em{standard} events are attached to windows that have the associated
+\em{standard} method names.  I have tried to follow the lead of the
+C++ classes in this area to determine what is \em{standard} but since
+that changes from time to time I can make no guarentees, nor will it
+be fully documented.  When in doubt, use an EVT_*** function.
+
+\item At lines 17 to 21 notice that there are no saved references to
+the panel or the static text items that are created.  Those of you
+who know Python might be wondering what happens when Python deletes
+these objects when they go out of scope.  Do they disappear from the GUI?  They
+don't.  Remember that in wxPython the Python objects are just shadows of the
+coresponding C++ objects.  Once the C++ windows and controls are
+attached to their parents, the parents manage them and delete them
+when necessary.  For this reason, most wxPython objects do not need to
+have a __del__ method that explicitly causes the C++ object to be
+deleted.  If you ever have the need to forcibly delete a window, use
+the Destroy() method as shown on line 36.
+
+\item Just like wxWindows in C++, wxPython apps need to create a class
+derived from \tt{wxApp} (line 56) that implements a method named
+\tt{OnInit}, (line 59.) This method should create the application's
+main window (line 62) and use \tt{wxApp.SetTopWindow()} (line 66) to
+inform wxWindows about it.
+
+\item And finally, at line 72 an instance of the application class is
+created.  At this point wxPython finishes initializing itself, and calls
+the \tt{OnInit} method to get things started.  (The zero parameter here is
+a flag for functionality that isn't quite implemented yet.  Just
+ignore it for now.)  The call to \tt{MainLoop} at line 73 starts the event
+loop which continues until the application terminates or all the top
+level windows are closed.
+
+\end{enumerate}
+
+
+
+%----------------------------------------------------------------------
+\section{wxWindows classes implemented in wxPython}\label{wxpclasses}
+
+The following classes are supported in wxPython.  Most provide nearly
+full implementations of the public interfaces specified in the C++
+documentation, others are less so.  They will all be brought as close
+as possible to the C++ spec over time.
+
+\begin{itemize}\itemsep=0pt
+\item \helpref{wxAcceleratorEntry}{wxacceleratorentry}
+\item \helpref{wxAcceleratorTable}{wxacceleratortable}
+\item \helpref{wxActivateEvent}{wxactivateevent}
+\item \helpref{wxBitmapButton}{wxbitmapbutton}
+\item \helpref{wxBitmap}{wxbitmap}
+\item \helpref{wxBrush}{wxbrush}
+\item \helpref{wxButton}{wxbutton}
+\item \helpref{wxCalculateLayoutEvent}{wxcalculatelayoutevent}
+\item \helpref{wxCheckBox}{wxcheckbox}
+\item \helpref{wxCheckListBox}{wxchecklistbox}
+\item \helpref{wxChoice}{wxchoice}
+\item \helpref{wxClientDC}{wxclientdc}
+\item \helpref{wxCloseEvent}{wxcloseevent}
+\item \helpref{wxColourData}{wxcolourdata}
+\item \helpref{wxColourDialog}{wxcolourdialog}
+\item \helpref{wxColour}{wxcolour}
+\item \helpref{wxComboBox}{wxcombobox}
+\item \helpref{wxCommandEvent}{wxcommandevent}
+\item \helpref{wxConfig}{wxconfigbase}
+\item \helpref{wxControl}{wxcontrol}
+\item \helpref{wxCursor}{wxcursor}
+\item \helpref{wxDC}{wxdc}
+\item \helpref{wxDialog}{wxdialog}
+\item \helpref{wxDirDialog}{wxdirdialog}
+\item \helpref{wxDropFilesEvent}{wxdropfilesevent}
+\item \helpref{wxEraseEvent}{wxeraseevent}
+\item \helpref{wxEvent}{wxevent}
+\item \helpref{wxEvtHandler}{wxevthandler}
+\item \helpref{wxFileDialog}{wxfiledialog}
+\item \helpref{wxFocusEvent}{wxfocusevent}
+\item \helpref{wxFontData}{wxfontdata}
+\item \helpref{wxFontDialog}{wxfontdialog}
+\item \helpref{wxFont}{wxfont}
+\item \helpref{wxFrame}{wxframe}
+\item \helpref{wxGauge}{wxgauge}
+\item \helpref{wxGridCell}{wxgridcell}
+\item \helpref{wxGridEvent}{wxgridevent}
+\item \helpref{wxGrid}{wxgrid}
+\item \helpref{wxIconizeEvent}{wxiconizeevent}
+\item \helpref{wxIcon}{wxicon}
+\item \helpref{wxIdleEvent}{wxidleevent}
+\item \helpref{wxImageList}{wximagelist}
+\item \helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}
+\item \helpref{wxInitDialogEvent}{wxinitdialogevent}
+\item \helpref{wxJoystickEvent}{wxjoystickevent}
+\item \helpref{wxKeyEvent}{wxkeyevent}
+\item \helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}
+\item \helpref{wxLayoutConstraints}{wxlayoutconstraints}
+\item \helpref{wxListBox}{wxlistbox}
+\item \helpref{wxListCtrl}{wxlistctrl}
+\item \helpref{wxListEvent}{wxlistevent}
+\item \helpref{wxListItem}{wxlistitem}
+\item \helpref{wxMDIChildFrame}{wxmdichildframe}
+\item \helpref{wxMDIClientWindow}{wxmdiclientwindow}
+\item \helpref{wxMDIParentFrame}{wxmdiparentframe}
+\item \helpref{wxMask}{wxmask}
+\item \helpref{wxMaximizeEvent}{wxmaximizeevent}
+\item \helpref{wxMemoryDC}{wxmemorydc}
+\item \helpref{wxMenuBar}{wxmenubar}
+\item \helpref{wxMenuEvent}{wxmenuevent}
+\item \helpref{wxMenuItem}{wxmenuitem}
+\item \helpref{wxMenu}{wxmenu}
+\item \helpref{wxMessageDialog}{wxmessagedialog}
+\item \helpref{wxMetaFileDC}{wxmetafiledc}
+\item \helpref{wxMiniFrame}{wxminiframe}
+\item \helpref{wxMouseEvent}{wxmouseevent}
+\item \helpref{wxMoveEvent}{wxmoveevent}
+\item \helpref{wxNotebookEvent}{wxnotebookevent}
+\item \helpref{wxNotebook}{wxnotebook}
+\item \helpref{wxPageSetupData}{wxpagesetupdata}
+\item \helpref{wxPageSetupDialog}{wxpagesetupdialog}
+\item \helpref{wxPaintDC}{wxpaintdc}
+\item \helpref{wxPaintEvent}{wxpaintevent}
+\item \helpref{wxPalette}{wxpalette}
+\item \helpref{wxPanel}{wxpanel}
+\item \helpref{wxPen}{wxpen}
+\item \helpref{wxPoint}{wxpoint}
+\item \helpref{wxPostScriptDC}{wxpostscriptdc}
+\item \helpref{wxPrintData}{wxprintdata}
+\item \helpref{wxPrintDialog}{wxprintdialog}
+\item \helpref{wxPrinterDC}{wxprinterdc}
+\item \helpref{wxQueryLayoutInfoEvent}{wxquerylayoutinfoevent}
+\item \helpref{wxRadioBox}{wxradiobox}
+\item \helpref{wxRadioButton}{wxradiobutton}
+\item \helpref{wxRealPoint}{wxrealpoint}
+\item \helpref{wxRect}{wxrect}
+\item \helpref{wxRegionIterator}{wxregioniterator}
+\item \helpref{wxRegion}{wxregion}
+\item \helpref{wxSashEvent}{wxsashevent}
+\item \helpref{wxSashLayoutWindow}{wxsashlayoutwindow}
+\item \helpref{wxSashWindow}{wxsashwindow}
+\item \helpref{wxScreenDC}{wxscreendc}
+\item \helpref{wxScrollBar}{wxscrollbar}
+\item \helpref{wxScrollEvent}{wxscrollevent}
+\item \helpref{wxScrolledWindow}{wxscrolledwindow}
+\item \helpref{wxShowEvent}{wxshowevent}
+\item \helpref{wxSingleChoiceDialog}{wxsinglechoicedialog}
+\item \helpref{wxSizeEvent}{wxsizeevent}
+\item \helpref{wxSize}{wxsize}
+\item \helpref{wxSlider}{wxslider}
+\item \helpref{wxSpinButton}{wxspinbutton}
+\item \helpref{wxSpinEvent}{wxspinevent}
+\item \helpref{wxSplitterWindow}{wxsplitterwindow}
+\item \helpref{wxStaticBitmap}{wxstaticbitmap}
+\item \helpref{wxStaticBox}{wxstaticbox}
+\item \helpref{wxStaticText}{wxstatictext}
+\item \helpref{wxStatusBar}{wxstatusbar}
+\item \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}
+\item \helpref{wxTaskBarIcon}{wxtaskbaricon}
+\item \helpref{wxTextCtrl}{wxtextctrl}
+\item \helpref{wxTextEntryDialog}{wxtextentrydialog}
+\item \helpref{wxTimer}{wxtimer}
+\item \helpref{wxToolBarTool}{wxtoolbartool}
+\item \helpref{wxToolBar}{wxtoolbar}
+\item \helpref{wxTreeCtrl}{wxtreectrl}
+\item \helpref{wxTreeEvent}{wxtreeevent}
+\item \helpref{wxTreeItemData}{wxtreeitemdata}
+\item \helpref{wxTreeItemId}{wxtreeitemid}
+\item \helpref{wxUpdateUIEvent}{wxupdateuievent}
+\item \helpref{wxWindowDC}{wxwindowdc}
+\item \helpref{wxWindow}{wxwindow}
+\end{itemize}
+
+%----------------------------------------------------------------------
+\section{Where to go for help}\label{wxphelp}
+
+Since wxPython is a blending of multiple technologies, help comes from
+multiple sources.  See
+\urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython} for details on
+various sources of help, but probably the best source is the
+wxPython-users mail list.  You can view the archive or subscribe by
+going to
+
+\urlref{http://starship.python.net/mailman/listinfo/wxpython-users}{http://starship.python.net/mailman/listinfo/wxpython-users}
+
+Or you can send mail directly to the list using this address:
+
+wxpython-users@starship.python.net
+
+
+
+
+
+

@@ -187,14 +187,14 @@ filling the shape.
 \func{void}{DrawEllipticArc}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height},
  \param{double}{ start}, \param{double}{ end}}
 
-Draws an arc of an ellipse. The current pen is used for drawing the arc and 
+Draws an arc of an ellipse. The current pen is used for drawing the arc and
 the current brush is used for drawing the pie. This function is currently only available for
 X window and PostScript device contexts.
 
 {\it x} and {\it y} specify the x and y coordinates of the upper-left corner of the rectangle that contains
 the ellipse.
 
-{\it width} and {\it height} specify the width and height of the rectangle that contains 
+{\it width} and {\it height} specify the width and height of the rectangle that contains
 the ellipse.
 
 {\it start} and {\it end} specify the start and end of the arc relative to the three-o'clock
@@ -228,6 +228,9 @@ pointers to points, adding the optional offset coordinate. The current
 pen is used for drawing the lines.  The programmer is responsible for
 deleting the list of points.
 
+\pythonnote{The wxPython version of this method accepts a Python list
+of wxPoint objects.}
+
 \membersection{wxDC::DrawPolygon}\label{wxdcdrawpolygon}
 
 \func{void}{DrawPolygon}{\param{int}{ n}, \param{wxPoint}{ points[]}, \param{long}{ xoffset = 0}, \param{long}{ yoffset = 0},\\
@@ -247,6 +250,9 @@ for filling the shape.  Using a transparent brush suppresses filling.
 The programmer is responsible for deleting the list of points.
 
 Note that wxWindows automatically closes the first and last points.
+
+\pythonnote{The wxPython version of this method accepts a Python list
+of wxPoint objects.}
 
 \membersection{wxDC::DrawPoint}\label{wxdcdrawpoint}
 
@@ -291,6 +297,9 @@ program `XFIG'.
 \func{void}{DrawSpline}{\param{long}{ x1}, \param{long}{ y1}, \param{long}{ x2}, \param{long}{ y2}, \param{long}{ x3}, \param{long}{ y3}}
 
 Draws a three-point spline using the current pen.
+
+\pythonnote{The wxPython version of this method accepts a Python list
+of wxPoint objects.}
 
 \membersection{wxDC::DrawText}\label{wxdcdrawtext}
 
@@ -368,6 +377,9 @@ Gets the average character width of the currently set font.
 
 Gets the rectangle surrounding the current clipping region.
 
+\pythonnote{No arguments are required and the four values defining the
+rectangle are returned as a tuple.}
+
 \membersection{wxDC::GetFont}\label{wxdcgetfont}
 
 \func{wxFont\&}{GetFont}{\void}
@@ -428,6 +440,9 @@ printer page:
   dc.SetUserScale(min(scaleX,scaleY),min(scaleX,scaleY));
 \end{verbatim}
 
+\pythonnote{No arguments are required and the two values defining the
+size are returned as a tuple.}
+
 \membersection{wxDC::GetTextBackground}\label{wxdcgettextbackground}
 
 \func{wxColour\&}{GetTextBackground}{\void}
@@ -452,6 +467,14 @@ yet work under Windows, so you need to set a font for
 the device context first.
 
 See also \helpref{wxFont}{wxfont}, \helpref{wxDC::SetFont}{wxdcsetfont}.
+
+\pythonnote{The following methods are implemented in wxPython:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetTextExtent(string)}}{Returns a 2-tuple, (width, height)}
+\twocolitem{\bf{GetFullTextExtent(string, font=NULL)}}{Returns a
+4-tuple, (width, height, descent, externalLeading) }
+\end{twocollist}}
+}
 
 \membersection{wxDC::GetTextForeground}\label{wxdcgettextforeground}
 

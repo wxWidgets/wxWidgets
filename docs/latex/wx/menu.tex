@@ -51,6 +51,15 @@ Constructs a wxMenu object.
 
 \docparam{func}{A callback function if the menu is used as a popup using \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu}.}
 
+\pythonnote{The wxPython version of the \tt{wxMenu} constructor
+doesn't accept the callback argument because of reference counting
+issues.  There is a specialized wxMenu constructor called
+\tt{wxPyMenu} which does and can be used for PopupMenus when callbacks
+are needed.  You must retain a reference to the menu while useing it
+otherwise your callback function will get dereferenced when the menu
+does.
+}
+
 \membersection{wxMenu::\destruct{wxMenu}}
 
 \func{}{\destruct{wxMenu}}{\void}
@@ -107,6 +116,17 @@ creation of a menu or menubar.
 
 \helpref{wxMenu::AppendSeparator}{wxmenuappendseparator}, \helpref{wxMenu::SetLabel}{wxmenusetlabel}, \helpref{wxMenu::GetHelpString}{wxmenugethelpstring},\rtfsp
 \helpref{wxMenu::SetHelpString}{wxmenusethelpstring}, \helpref{wxMenuItem}{wxmenuitem}
+
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{Append(id, string, helpStr="", checkable=FALSE)}}{}
+\twocolitem{\bf{AppendMenu(id, string, aMenu, helpStr="")}}{}
+\twocolitem{\bf{AppendItem(aMenuItem)}}{}
+\end{twocollist}}
+}
+
 
 \membersection{wxMenu::AppendSeparator}\label{wxmenuappendseparator}
 
@@ -388,6 +408,10 @@ Construct a menu bar from arrays of menus and titles.
 menu bar.}
 
 \docparam{titles}{An array of title strings. Deallocate this array after creating the menu bar.}
+
+\pythonnote{Only the default constructor is supported in wxPython.
+Use wxMenuBar.Append instead.}
+
 
 \membersection{wxMenuBar::\destruct{wxMenuBar}}
 

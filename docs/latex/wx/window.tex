@@ -164,6 +164,15 @@ a screen coordinate will be passed out.}
 
 \docparam{pt}{The client position for the second form of the function.}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{ClientToScreen(point)}}{Accepts and returns a wxPoint}
+\twocolitem{\bf{ClientToScreenXY(x, y)}}{Returns a 2-tuple, (x, y)}
+\end{twocollist}}
+}
+
+
 \membersection{wxWindow::Close}\label{wxwindowclose}
 
 \func{virtual bool}{Close}{\param{const bool}{ force = FALSE}}
@@ -225,6 +234,23 @@ You can also use these functions programmatically. A convenience macro is define
 
 \helpref{wxWindow::ConvertPixelsToDialog}{wxwindowconvertpixelstodialog}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{ConvertDialogPointToPixels(point)}}{Accepts and returns a wxPoint}
+\twocolitem{\bf{ConvertDialogSizeToPixels(size)}}{Accepts and returns a wxSize}
+\end{twocollist}}
+
+Additionally, the following helper functions are defined:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{wxDLG_PNT(win, point)}}{Converts a wxPoint from dialog
+units to pixels}
+\twocolitem{\bf{wxDLG_SZE(win, size)}}{Converts a wxSize from dialog
+units to pixels}
+\end{twocollist}}
+}
+
+
 \membersection{wxWindow::ConvertPixelsToDialog}\label{wxwindowconvertpixelstodialog}
 
 \func{wxPoint}{ConvertPixelsToDialog}{\param{const wxPoint\&}{ pt}}
@@ -247,6 +273,15 @@ Dialogs created using Dialog Editor optionally use dialog units.
 \wxheading{See also}
 
 \helpref{wxWindow::ConvertDialogToPixels}{wxwindowconvertdialogtopixels}
+
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{ConvertDialogPointToPixels(point)}}{Accepts and returns a wxPoint}
+\twocolitem{\bf{ConvertDialogSizeToPixels(size)}}{Accepts and returns a wxSize}
+\end{twocollist}}
+}
 
 \membersection{wxWindow::Destroy}\label{wxwindowdestroy}
 
@@ -327,6 +362,14 @@ Find a child of this window, by identifier.
 
 Find a child of this window, by name.
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{FindWindowById(id)}}{Accepts an integer}
+\twocolitem{\bf{FindWindowByName(name)}}{Accepts a string}
+\end{twocollist}}
+}
+
 \membersection{wxWindow::Fit}\label{wxwindowfit}
 
 \func{virtual void}{Fit}{\void}
@@ -379,6 +422,14 @@ area which may be drawn on by the programmer, excluding title bar, border etc.
 
 \docparam{height}{Receives the client height in pixels.}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{wxGetClientSizeTuple()}}{Returns a 2-tuple of (width, height)}
+\twocolitem{\bf{wxGetClientSize()}}{Returns a wxSize object}
+\end{twocollist}}
+}
+
 \membersection{wxWindow::GetConstraints}\label{wxwindowgetconstraints}
 
 \constfunc{wxLayoutConstraints*}{GetConstraints}{\void}
@@ -399,7 +450,7 @@ Returns the associated drop target, which may be NULL.
 
 \wxheading{See also}
 
-\helpref{wxWindow::SetDropTarget}{wxwindowsetdroptarget}, 
+\helpref{wxWindow::SetDropTarget}{wxwindowsetdroptarget},
 \helpref{Drag and drop overview}{wxdndoverview}
 
 \membersection{wxWindow::GetEventHandler}\label{wxwindowgeteventhandler}
@@ -486,6 +537,14 @@ if no parent, relative to the whole display.
 \docparam{x}{Receives the x position of the window.}
 
 \docparam{y}{Receives the y position of the window.}
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetPosition()}}{Returns a wxPoint}
+\twocolitem{\bf{GetPositionTuple()}}{Returns a tuple (x, y)}
+\end{twocollist}}
+}
 
 \membersection{wxWindow::GetLabel}
 
@@ -589,6 +648,14 @@ This gets the size of the entire window in pixels.
 
 \docparam{height}{Receives the window height.}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetSize()}}{Returns a wxSize}
+\twocolitem{\bf{GetSizeTuple()}}{Returns a 2-tuple (width, height)}
+\end{twocollist}}
+}
+
 \membersection{wxWindow::GetTextExtent}
 
 \constfunc{virtual void}{GetTextExtent}{\param{const wxString\& }{string}, \param{int* }{x}, \param{int* }{y},
@@ -613,6 +680,17 @@ window with the currently selected font.
 \docparam{font}{Font to use instead of the current window font (optional).}
 
 \docparam{use16}{If TRUE, {\it string} contains 16-bit characters. The default is FALSE.}
+
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetTextExtent(string)}}{Returns a 2-tuple,  (width, height)}
+\twocolitem{\bf{GetFullTextExtent(string, font=NULL)}}{Returns a
+4-tuple, (width, height, descent, externalLeading) }
+\end{twocollist}}
+}
+
 
 \membersection{wxWindow::GetTitle}\label{wxwindowgettitle}
 
@@ -754,6 +832,14 @@ as the call:
 
 \helpref{wxWindow::SetSize}{wxwindowsetsize}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{Move(point)}}{Accepts a wxPoint}
+\twocolitem{\bf{MoveXY(x, y)}}{Accepts a pair of integers}
+\end{twocollist}}
+}
+
 \membersection{wxWindow::OnActivate}\label{wxwindowonactivate}
 
 \func{void}{OnActivate}{\param{wxActivateEvent\&}{ event}}
@@ -795,7 +881,7 @@ Note that the ASCII values do not have explicit key codes: they are passed as AS
 values.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept modifier
-keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.
@@ -990,7 +1076,7 @@ use the EVT\_KEY\_DOWN macro in an event table definition. Your {\bf OnKeyDown} 
 default function to achieve default keypress functionality.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.
@@ -1019,7 +1105,7 @@ use the EVT\_KEY\_UP macro in an event table definition. Your {\bf OnKeyUp} hand
 default function to achieve default keypress functionality.
 
 Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow key up events to be intercepted.
@@ -1478,6 +1564,15 @@ Converts from screen to client window coordinates.
 
 \docparam{pt}{The screen position for the second form of the function.}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{ScreenToClient(point)}}{Accepts and returns a wxPoint}
+\twocolitem{\bf{ScreenToClientXY(x, y)}}{Returns a 2-tuple, (x, y)}
+\end{twocollist}}
+}
+
+
 \membersection{wxWindow::ScrollWindow}\label{wxwindowscrollwindow}
 
 \func{virtual void}{ScrollWindow}{\param{int }{dx}, \param{int }{dy}, \param{const wxRect*}{ rect = NULL}}
@@ -1570,6 +1665,14 @@ around panel items, for example.
 
 \docparam{size}{The required client size.}
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetClientSize(size)}}{Accepts a wxSize}
+\twocolitem{\bf{SetClientSizeWH(width, height)}}{}
+\end{twocollist}}
+}
+
 \membersection{wxWindow::SetCursor}\label{wxwindowsetcursor}
 
 \func{virtual void}{SetCursor}{\param{const wxCursor\&}{cursor}}
@@ -1650,7 +1753,7 @@ If the window already has a drop target, it is deleted.
 
 \wxheading{See also}
 
-\helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget}, 
+\helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget},
 \helpref{Drag and drop overview}{wxdndoverview}
 
 \membersection{wxWindow::SetFocus}\label{wxwindowsetfocus}
@@ -1958,6 +2061,15 @@ by wxWindows, or that the current value of the dimension should be used.
 \wxheading{See also}
 
 \helpref{wxWindow::Move}{wxwindowmove}
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetDimensions(x, y, width, height, sizeFlags=wxSIZE_AUTO)}}{}
+\twocolitem{\bf{SetSize(size)}}{}
+\twocolitem{\bf{SetPosition(point)}}{}
+\end{twocollist}}
+}
 
 \membersection{wxWindow::SetSizeHints}\label{wxwindowsetsizehints}
 

@@ -79,6 +79,14 @@ The new zero-based image index.
 
 The original bitmap or icon is not affected by the {\bf Add} operation, and can be deleted afterwards.
 
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{Add(bitmap, mask=wxNullBitmap)}}{}
+\twocolitem{\bf{AddWithColourMask(bitmap, colour)}}{}
+\twocolitem{\bf{AddIcon(icon)}}{}
+\end{twocollist}}
+}
 \membersection{wxImageList::Create}\label{wximagelistcreate}
 
 \func{bool}{Create}{\param{int }{width}, \param{int }{height}, \param{const bool }{mask = TRUE},\rtfsp
@@ -160,5 +168,7 @@ TRUE if the replacement was successful, FALSE otherwise.
 \wxheading{Remarks}
 
 The original bitmap or icon is not affected by the {\bf Replace} operation, and can be deleted afterwards.
+
+\pythonnote{The second form is called \tt{ReplaceIcon} in wxPython.}
 
 
