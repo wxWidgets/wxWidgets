@@ -95,9 +95,15 @@ bool wxIsStockID(wxWindowID id)
 
 wxString wxGetStockLabel(wxWindowID id)
 {
+#ifdef __SMARTPHONE__
+    #define STOCKITEM(stockid, label) \
+        case stockid:                 \
+            return wxStripMenuCodes(label);
+#else
     #define STOCKITEM(stockid, label) \
         case stockid:                 \
             return label;
+#endif
 
     switch (id)
     {
