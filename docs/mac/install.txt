@@ -8,8 +8,8 @@ follow, in order to successfully compile the code (also necessary if you don't
 want to build the carbon targets)
 
 1. you need CodeWarrior Pro 5.3 , i.e. 5.0 with all the upgrades
-2. you have to download the 3.3.2 universal interfaces from 
-	ftp://ftp.apple.com/developer/Development_Kits/UniversalInterfaces3.3.2.sit.hqx
+2. you have to download the 3.4.0 (or greater) universal interfaces from 
+	ftp://ftp.apple.com/developer/Development_Kits/UniversalHeaders3.4.1.img.bin
 3. put the Interfaces and Libraries Folder into the MacOS Support folder and replace older versions
 4. remove from the MacOS Support folder the separate OpenTransport folder
 5. open the file MacOS Support:MacHeaders:MacHeaders.c and add the line
@@ -81,7 +81,7 @@ Apple Developers Tools
 As in all Unix projects, you need to do something like this under MacOS 10.1
 with the Apple Developers Tools installed:
 
-1) cd into the source dir
+1) cd into the base dir
 2) mkdir build
 3) cd build
 4) ../configure
