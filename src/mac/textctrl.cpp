@@ -426,7 +426,7 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
         /* set up locals */
     focusResult = kControlFocusNoPart;
     tpvars = (STPTextPaneVars **) GetControlReference(theControl);
-    if (tpvars != NULL) {
+    if (tpvars != NULL && IsControlVisible( theControl ) ) {
         state = HGetState((Handle) tpvars);
         HLock((Handle) tpvars);
         varsp = *tpvars;
