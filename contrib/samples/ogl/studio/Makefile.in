@@ -148,7 +148,7 @@ studio$(EXEEXT): $(STUDIO_OBJECTS) $(__studio___win32rc)
 	$(__studio___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-studio.app/Contents/PkgInfo: studio$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+studio.app/Contents/PkgInfo: studio$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p studio.app/Contents
 	mkdir -p studio.app/Contents/MacOS
 	mkdir -p studio.app/Contents/Resources
@@ -157,7 +157,7 @@ studio.app/Contents/PkgInfo: studio$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/studio/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >studio.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >studio.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >studio.app/Contents/PkgInfo

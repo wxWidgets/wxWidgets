@@ -129,7 +129,7 @@ led$(EXEEXT): $(LED_OBJECTS) $(__led___win32rc)
 	$(__led___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-led.app/Contents/PkgInfo: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+led.app/Contents/PkgInfo: led$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p led.app/Contents
 	mkdir -p led.app/Contents/MacOS
 	mkdir -p led.app/Contents/Resources
@@ -138,7 +138,7 @@ led.app/Contents/PkgInfo: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/led/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >led.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >led.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >led.app/Contents/PkgInfo

@@ -133,7 +133,7 @@ ogledit$(EXEEXT): $(OGLEDIT_OBJECTS) $(__ogledit___win32rc)
 	$(__ogledit___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-ogledit.app/Contents/PkgInfo: ogledit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+ogledit.app/Contents/PkgInfo: ogledit$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p ogledit.app/Contents
 	mkdir -p ogledit.app/Contents/MacOS
 	mkdir -p ogledit.app/Contents/Resources
@@ -142,7 +142,7 @@ ogledit.app/Contents/PkgInfo: ogledit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/ogledit/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >ogledit.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >ogledit.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >ogledit.app/Contents/PkgInfo

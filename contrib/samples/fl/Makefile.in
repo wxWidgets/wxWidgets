@@ -221,7 +221,7 @@ fl_demo1$(EXEEXT): $(FL_DEMO1_OBJECTS) $(__fl_demo1___win32rc)
 	$(__fl_demo1___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_demo1.app/Contents
 	mkdir -p fl_demo1.app/Contents/MacOS
 	mkdir -p fl_demo1.app/Contents/Resources
@@ -230,7 +230,7 @@ fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/fl_demo1/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >fl_demo1.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >fl_demo1.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >fl_demo1.app/Contents/PkgInfo
@@ -251,7 +251,7 @@ fl_demo2$(EXEEXT): $(FL_DEMO2_OBJECTS) $(__fl_demo2___win32rc)
 	$(__fl_demo2___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_demo2.app/Contents
 	mkdir -p fl_demo2.app/Contents/MacOS
 	mkdir -p fl_demo2.app/Contents/Resources
@@ -260,7 +260,7 @@ fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/fl_demo2/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >fl_demo2.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >fl_demo2.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >fl_demo2.app/Contents/PkgInfo
@@ -281,7 +281,7 @@ fl_sample1$(EXEEXT): $(FL_SAMPLE1_OBJECTS) $(__fl_sample1___win32rc)
 	$(__fl_sample1___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_sample1.app/Contents
 	mkdir -p fl_sample1.app/Contents/MacOS
 	mkdir -p fl_sample1.app/Contents/Resources
@@ -290,7 +290,7 @@ fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/Info.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/fl_sample1/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >fl_sample1.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >fl_sample1.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >fl_sample1.app/Contents/PkgInfo
@@ -311,7 +311,7 @@ fl_sample2$(EXEEXT): $(FL_SAMPLE2_OBJECTS) $(__fl_sample2___win32rc)
 	$(__fl_sample2___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_sample2.app/Contents
 	mkdir -p fl_sample2.app/Contents/MacOS
 	mkdir -p fl_sample2.app/Contents/Resources
@@ -320,7 +320,7 @@ fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/Info.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/fl_sample2/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >fl_sample2.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >fl_sample2.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >fl_sample2.app/Contents/PkgInfo
@@ -341,7 +341,7 @@ fl_sample3$(EXEEXT): $(FL_SAMPLE3_OBJECTS) $(__fl_sample3___win32rc)
 	$(__fl_sample3___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_sample3.app/Contents
 	mkdir -p fl_sample3.app/Contents/MacOS
 	mkdir -p fl_sample3.app/Contents/Resources
@@ -350,7 +350,7 @@ fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/Info.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/fl_sample3/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >fl_sample3.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >fl_sample3.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >fl_sample3.app/Contents/PkgInfo

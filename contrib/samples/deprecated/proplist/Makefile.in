@@ -130,7 +130,7 @@ proplist$(EXEEXT): $(PROPLIST_OBJECTS) $(__proplist___win32rc)
 	$(__proplist___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-proplist.app/Contents/PkgInfo: proplist$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+proplist.app/Contents/PkgInfo: proplist$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p proplist.app/Contents
 	mkdir -p proplist.app/Contents/MacOS
 	mkdir -p proplist.app/Contents/Resources
@@ -139,7 +139,7 @@ proplist.app/Contents/PkgInfo: proplist$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/proplist/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >proplist.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >proplist.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >proplist.app/Contents/PkgInfo

@@ -132,7 +132,7 @@ stctest$(EXEEXT): $(STCTEST_OBJECTS) $(__stctest___win32rc)
 	$(__stctest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-stctest.app/Contents/PkgInfo: stctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+stctest.app/Contents/PkgInfo: stctest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p stctest.app/Contents
 	mkdir -p stctest.app/Contents/MacOS
 	mkdir -p stctest.app/Contents/Resources
@@ -141,7 +141,7 @@ stctest.app/Contents/PkgInfo: stctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/stctest/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >stctest.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >stctest.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >stctest.app/Contents/PkgInfo

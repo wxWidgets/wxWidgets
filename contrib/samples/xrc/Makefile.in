@@ -145,7 +145,7 @@ xrcdemo$(EXEEXT): $(XRCDEMO_OBJECTS) $(__xrcdemo___win32rc)
 	$(__xrcdemo___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p xrcdemo.app/Contents
 	mkdir -p xrcdemo.app/Contents/MacOS
 	mkdir -p xrcdemo.app/Contents/Resources
@@ -154,7 +154,7 @@ xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/xrcdemo/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >xrcdemo.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >xrcdemo.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >xrcdemo.app/Contents/PkgInfo
