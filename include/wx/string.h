@@ -168,11 +168,13 @@ inline int Stricmp(const char *psz1, const char *psz2)
 // wxSnprintf() is like snprintf() if it's available and sprintf() (always
 // available, but dangerous!) if not
 extern int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
-                                  const wxChar *format, ...);
+                                  const wxChar *format,
+                                  ...) ATTRIBUTE_PRINTF_3;
 
 // and wxVsnprintf() is like vsnprintf() or vsprintf()
 extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
-                                   const wxChar *format, va_list argptr);
+                                   const wxChar *format,
+                                   va_list argptr);
 
 // return an empty wxString
 class WXDLLEXPORT wxString; // not yet defined
@@ -718,12 +720,13 @@ public:
 
   // formated input/output
     // as sprintf(), returns the number of characters written or < 0 on error
-  int Printf(const wxChar *pszFormat, ...);
+    // (take 'this' into account in attribute parameter count)
+  int Printf(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_2;
     // as vprintf(), returns the number of characters written or < 0 on error
   int PrintfV(const wxChar* pszFormat, va_list argptr);
 
     // returns the string containing the result of Printf() to it
-  static wxString Format(const wxChar *pszFormat, ...);
+  static wxString Format(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_1;
     // the same as above, but takes a va_list
   static wxString FormatV(const wxChar *pszFormat, va_list argptr);
 
@@ -751,8 +754,9 @@ public:
     // values for first parameter of Strip function
   enum stripType {leading = 0x1, trailing = 0x2, both = 0x3};
 
-    // use Printf()
-  int sprintf(const wxChar *pszFormat, ...);
+  // use Printf()
+  // (take 'this' into account in attribute parameter count)
+  int sprintf(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_2;
 
     // use Cmp()
   inline int CompareTo(const wxChar* psz, caseCompare cmp = exact) const

@@ -487,11 +487,13 @@ WXDLLEXPORT const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 #define DECLARE_LOG_FUNCTION(level)                                 \
 extern void WXDLLEXPORT wxVLog##level(const wxChar *szFormat,       \
                                       va_list argptr);              \
-extern void WXDLLEXPORT wxLog##level(const wxChar *szFormat, ...)
+extern void WXDLLEXPORT wxLog##level(const wxChar *szFormat,        \
+                                     ...) ATTRIBUTE_PRINTF_1
 #define DECLARE_LOG_FUNCTION2(level, arg1)                          \
 extern void WXDLLEXPORT wxVLog##level(arg1, const wxChar *szFormat, \
                                       va_list argptr);              \
-extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...)
+extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat,  \
+                                     ...) ATTRIBUTE_PRINTF_2
 
 #else // !wxUSE_LOG
 

@@ -330,8 +330,8 @@ private:
 };
 
 // Output a debug message, in a system dependent fashion.
-void WXDLLEXPORT wxTrace(const wxChar *fmt ...);
-void WXDLLEXPORT wxTraceLevel(int level, const wxChar *fmt ...);
+void WXDLLEXPORT wxTrace(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
+void WXDLLEXPORT wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_PRINTF_2;
 
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel
