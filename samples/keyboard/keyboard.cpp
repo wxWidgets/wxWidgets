@@ -137,11 +137,11 @@ class TextWindow : public wxWindow
 {
 public:
     TextWindow(wxWindow *parent)
-        : wxWindow(parent, -1, wxDefaultPosition, wxDefaultSize,
+        : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                    wxRAISED_BORDER)
     {
-        m_skip = TRUE;
-        m_showRaw = FALSE;
+        m_skip = true;
+        m_showRaw = false;
 
         SetBackgroundColour(*wxBLUE);
     }
@@ -242,12 +242,12 @@ bool MyApp::OnInit()
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
-    frame->Show(TRUE);
+    frame->Show(true);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -256,7 +256,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, -1, title, pos, size, style),
+       : wxFrame(NULL, wxID_ANY, title, pos, size, style),
          m_winText(NULL)
 {
 #if wxUSE_MENUS
@@ -284,15 +284,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
-    menuBar->Check(Keyboard_Skip, TRUE);
+    menuBar->Check(Keyboard_Skip, true);
 
 #ifndef wxHAS_RAW_KEY_CODES
-    menuBar->Enable(Keyboard_ShowRaw, FALSE);
+    menuBar->Enable(Keyboard_ShowRaw, false);
 #endif // !wxHAS_RAW_KEY_CODES
 #endif // wxUSE_MENUS
 
     m_winText = new TextWindow(this);
-    m_lboxLog = new wxListBox(this, -1);
+    m_lboxLog = new wxListBox(this, wxID_ANY);
 
     m_logTarget = new LboxLogger(m_lboxLog, wxLog::GetActiveTarget());
     wxLog::SetActiveTarget(m_logTarget);
@@ -308,8 +308,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
