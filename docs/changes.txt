@@ -217,6 +217,7 @@ wxMSW:
 - fixes for wxLocale::Init and Borland C++
 - Fix for bug whereby owner-drawn buttons didn't draw multiline labels correctly
 - Alt-letter didn't switch focus to a spin ctrl following static control with hotkey
+- Fix for multiple consecutive groups of radiobuttons
 
 wxMotif:
 
