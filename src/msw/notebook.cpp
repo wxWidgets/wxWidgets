@@ -974,10 +974,11 @@ void wxNotebook::ApplyThemeBackground(wxWindow*, const wxColour&)
 #endif
 }
 
+#if wxUSE_UXTHEME
 long wxNotebook::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     static bool g_TestedForTheme = false;
-    static bool g_UseTheme = false;
+    static bool g_supportsThemes = false;
     switch ( nMsg )
     {
         case WM_ERASEBKGND:
@@ -986,19 +987,25 @@ long wxNotebook::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             {
                 int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
 
-                g_UseTheme = (commCtrlVersion >= 600);
+                g_supportsThemes = (commCtrlVersion >= 600);
                 g_TestedForTheme = true;
             }
 
-            // If using XP themes, it seems we can get away
+            // If currently an XP theme is active, it seems we can get away
             // with not drawing a background, which reduces flicker.
-            if (g_UseTheme)            
-                return true;
+            if (g_supportsThemes)
+            {
+                wxUxThemeEngine *p = wxUxThemeEngine::Get();
+                if (p && p->IsThemeActive() )
+                {
+                    return true;
+                }
+            }
         }
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
-
+#endif // #if wxUSE_UXTHEME
 
 #endif // wxUSE_NOTEBOOK

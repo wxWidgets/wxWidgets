@@ -175,8 +175,10 @@ protected:
   // set the size of the given page to fit in the notebook
   void AdjustPageSize(wxNotebookPage *page);
 
-  // override WndProc
-  virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    // override WndProc.
+#if wxUSE_UXTHEME
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+#endif
 
   // the current selection (-1 if none)
   int m_nSelection;
