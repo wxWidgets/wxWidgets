@@ -25,7 +25,15 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include "wx/log.h"
+
+    #include "wx/app.h"
+    #include "wx/frame.h"
+
+    #include "wx/scrolwin.h"
+    #include "wx/menu.h"
+
+    #include "wx/textdlg.h"       // for wxGetTextFromUser
 #endif
 
 #include "wx/splitter.h"
@@ -42,6 +50,7 @@ enum
     SPLIT_VERTICAL,
     SPLIT_UNSPLIT,
     SPLIT_LIVE,
+    SPLIT_SETPOSITION,
     SPLIT_SETMINSIZE
 };
 
@@ -66,6 +75,7 @@ public:
     void SplitVertical(wxCommandEvent& event);
     void Unsplit(wxCommandEvent& event);
     void ToggleLive(wxCommandEvent& event);
+    void SetPosition(wxCommandEvent& event);
     void SetMinSize(wxCommandEvent& event);
 
     void Quit(wxCommandEvent& event);
@@ -138,6 +148,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_HORIZONTAL, MyFrame::SplitHorizontal)
     EVT_MENU(SPLIT_UNSPLIT, MyFrame::Unsplit)
     EVT_MENU(SPLIT_LIVE, MyFrame::ToggleLive)
+    EVT_MENU(SPLIT_SETPOSITION, MyFrame::SetPosition)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::SetMinSize)
 
     EVT_MENU(SPLIT_QUIT, MyFrame::Quit)
@@ -156,18 +167,33 @@ MyFrame::MyFrame()
     CreateStatusBar(2);
 
     // Make a menubar
-    wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(SPLIT_VERTICAL, _T("Split &Vertically\tCtrl-V"), _T("Split vertically"));
-    fileMenu->Append(SPLIT_HORIZONTAL, _T("Split &Horizontally\tCtrl-H"), _T("Split horizontally"));
-    fileMenu->Append(SPLIT_UNSPLIT, _T("&Unsplit\tCtrl-U"), _T("Unsplit"));
-    fileMenu->AppendSeparator();
-    fileMenu->Append(SPLIT_LIVE, _T("&Live update"), _T("Toggle live update mode"), TRUE);
-    fileMenu->Append(SPLIT_SETMINSIZE, _T("Set &min size"), _T("Set minimum pane size"));
-    fileMenu->AppendSeparator();
-    fileMenu->Append(SPLIT_QUIT, _T("E&xit\tAlt-X"), _T("Exit"));
+    wxMenu *splitMenu = new wxMenu;
+    splitMenu->Append(SPLIT_VERTICAL,
+                      _T("Split &Vertically\tCtrl-V"),
+                      _T("Split vertically"));
+    splitMenu->Append(SPLIT_HORIZONTAL,
+                      _T("Split &Horizontally\tCtrl-H"),
+                      _T("Split horizontally"));
+    splitMenu->Append(SPLIT_UNSPLIT,
+                      _T("&Unsplit\tCtrl-U"),
+                      _T("Unsplit"));
+    splitMenu->AppendSeparator();
+
+    splitMenu->AppendCheckItem(SPLIT_LIVE,
+                               _T("&Live update\tCtrl-L"),
+                               _T("Toggle live update mode"));
+    splitMenu->Append(SPLIT_SETPOSITION,
+                      _T("Set splitter &position\tCtrl-P"),
+                      _T("Set the splitter position"));
+    splitMenu->Append(SPLIT_SETMINSIZE,
+                      _T("Set &min size\tCtrl-M"),
+                      _T("Set minimum pane size"));
+    splitMenu->AppendSeparator();
+
+    splitMenu->Append(SPLIT_QUIT, _T("E&xit\tAlt-X"), _T("Exit"));
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(fileMenu, _T("&File"));
+    menuBar->Append(splitMenu, _T("&Splitter"));
 
     SetMenuBar(menuBar);
 
@@ -251,12 +277,32 @@ void MyFrame::ToggleLive(wxCommandEvent& event )
     m_splitter->SetWindowStyleFlag(style);
 }
 
+void MyFrame::SetPosition(wxCommandEvent& WXUNUSED(event) )
+{
+    wxString str;
+    str.Printf( wxT("%d"), m_splitter->GetSashPosition());
+    str = wxGetTextFromUser(_T("Enter splitter position:"), _T(""), str, this);
+    if ( str.empty() )
+        return;
+
+    long pos;
+    if ( !str.ToLong(&pos) )
+    {
+        wxLogError(_T("The splitter position should be an integer."));
+        return;
+    }
+
+    m_splitter->SetSashPosition(pos);
+
+    wxLogStatus(this, _T("Splitter position set to %ld"), pos);
+}
+
 void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
     str.Printf( wxT("%d"), m_splitter->GetMinimumPaneSize());
     str = wxGetTextFromUser(_T("Enter minimal size for panes:"), _T(""), str, this);
-    if ( str.IsEmpty() )
+    if ( str.empty() )
         return;
 
     int minsize = wxStrtol( str, (wxChar**)NULL, 10 );
