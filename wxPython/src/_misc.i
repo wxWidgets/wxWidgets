@@ -143,7 +143,7 @@ public:
 class wxFileHistory : public wxObject
 {
 public:
-    wxFileHistory(int maxFiles = 9);
+    wxFileHistory(int maxFiles = 9, wxWindowID idBase = wxID_FILE1);
     ~wxFileHistory();
 
     // Operations
