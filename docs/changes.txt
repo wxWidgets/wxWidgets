@@ -91,6 +91,7 @@ versions, please update your code to not use them.
 - wxWave class; use wxSound instead
 - The wxHIDE_READONLY flag for wxFileDialog was not implemented
   and has now been removed
+- wxTaskBarIcon::OnXXX() virtual methods: use events instead
 
 
 OTHER CHANGES
