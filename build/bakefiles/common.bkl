@@ -92,13 +92,22 @@
     <!-- =============================================================== -->
     <!--                   Where to store built libraries:               -->
     <!-- =============================================================== -->
-
+    
     <set var="LIBDIRNAME">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
-        <if cond="FORMAT!='autoconf'">
-            $(WXTOPDIR)lib$(DIRSEP)$(COMPILER)
-        </if>
+        <if cond="FORMAT!='autoconf'">$(TOP_SRCDIR)lib$(DIRSEP)$(COMPILER)</if>
     </set>
+    
+    <!-- =============================================================== -->
+    <!--                        Templates for libs:                      -->
+    <!-- =============================================================== -->
+    
+    <template id="anylib">
+        <depends cond="FORMAT!='autoconf' and BUILDING_LIB=='1'">setup.h</depends>
+        <dirname>$(LIBDIRNAME)</dirname>
+        <install-to>$(LIBDIR)</install-to>
+    </template>
+
 
     <!-- =============================================================== -->
     <!--                         3rd party libs:                         -->
@@ -117,32 +126,35 @@
     <!--                  Templates for wxWindows libs:                  -->
     <!-- =============================================================== -->
     
-    <set var="WXTOPDIR"></set>
-
     <template id="wx">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
-        <include>$(SRCDIR)/$(WXTOPDIR)include</include>
+        <include>$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
+        <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
+        <include>$(INC_TIFF)</include>
+        <include>$(INC_JPEG)</include>
+        <include>$(INC_PNG)</include>
+        <include>$(INC_ZLIB)</include>
+        <include>$(INC_ODBC)</include>
+        <include>$(INC_REGEX)</include>
     </template>
 
     <template id="wx_append">
         <ldflags>$(EXTRALIBS)</ldflags>
         <!-- link against builtin 3rd party libs, if needed: -->
+        <sys-lib>$(LIB_TIFF)</sys-lib>
         <sys-lib>$(LIB_JPEG)</sys-lib>
         <sys-lib>$(LIB_PNG)</sys-lib>
         <sys-lib>$(LIB_ZLIB)</sys-lib>
-        <sys-lib>$(LIB_TIFF)</sys-lib>
         <sys-lib>$(LIB_ODBC)</sys-lib>
         <sys-lib>$(LIB_REGEX)</sys-lib>
     </template>
 
-    <template id="wx_lib_b" template="wx">
+    <template id="wx_lib_b" template="wx,anylib">
         <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
-        <dirname>$(LIBDIRNAME)</dirname>
         <libname>$(WXLIBNAME)</libname>
-        <install-to>$(LIBDIR)</install-to>
     </template>
     
     <template id="wx_dll_b" template="wx_lib_b">

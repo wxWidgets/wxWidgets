@@ -55,6 +55,7 @@
         <option name="TOOLKIT_VERSION"/>
         <option name="EXTRALIBS"/>
         <option name="SAMPLES_RPATH_FLAG"/>
+        <set var="TOP_SRCDIR">$(top_srcdir)/</set>
     </if>
 
     
@@ -63,6 +64,8 @@
     <!-- ================================================================== -->
 
     <if cond="FORMAT!='autoconf'">
+        <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
+
         <set var="TOOLKIT">MSW</set>
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
         <set var="TOOLKIT_VERSION"/>
@@ -70,6 +73,7 @@
         <option name="EXTRALIBS"/>
 
         <set var="SRCDIR">..</set>
+        <set var="TOP_SRCDIR">$(SRCDIR)/$(WXTOPDIR)</set>
         <set var="BUILDDIR">objs_$(COMPILER)</set>
     </if>
 
