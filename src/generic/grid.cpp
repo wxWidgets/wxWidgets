@@ -3384,10 +3384,10 @@ void wxGrid::CalcDimensions()
     int cw, ch;
     GetClientSize( &cw, &ch );
 
-    if ( m_numRows > 0  &&  m_numCols > 0 )
+    if ( m_numRows > 0  ||  m_numCols > 0 )
     {
-        int right = GetColRight( m_numCols-1 ) + m_extraWidth;
-        int bottom = GetRowBottom( m_numRows-1 ) + m_extraHeight;
+        int right = m_numCols > 0 ? GetColRight( m_numCols-1 ) + m_extraWidth : 0;
+        int bottom = m_numRows > 0 ? GetRowBottom( m_numRows-1 ) + m_extraHeight : 0;
 
         // TODO: restore the scroll position that we had before sizing
         //
@@ -4774,6 +4774,7 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         //
         if ( ok )
         {
+#if 0
             if ( m_numCols == 0 )
             {
                 m_table->AppendCols( WXGRID_DEFAULT_NUMBER_COLS );
@@ -4782,7 +4783,7 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
                 // we should remember what the last non-zero number of cols was ?
                 //
             }
-
+#endif
             if ( m_currentCellCoords == wxGridNoCellCoords )
             {
                 // if we have just inserted cols into an empty grid the current
@@ -4821,6 +4822,7 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
 
     if ( m_table && m_table->AppendRows( numRows ) )
     {
+#if 0
         if ( m_numCols == 0 )
         {
             m_table->AppendCols( WXGRID_DEFAULT_NUMBER_COLS );
@@ -4829,7 +4831,7 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
             // we should remember what the last non-zero number of cols was ?
             //
         }
-
+#endif
         if ( m_currentCellCoords == wxGridNoCellCoords )
         {
             // if we have just inserted cols into an empty grid the current
@@ -5104,7 +5106,10 @@ bool wxGrid::SendEvent( const wxEventType type,
 
 void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-    wxPaintDC dc( this );
+    m_rowLabelWin->Refresh();
+    m_colLabelWin->Refresh();
+    m_cornerLabelWin->Refresh();
+    m_gridWin->Refresh();
 }
 
 

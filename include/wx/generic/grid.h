@@ -1049,7 +1049,16 @@ public:
     // flicker
     //
     void     BeginBatch() { m_batchCount++; }
-    void     EndBatch() { if ( m_batchCount > 0 ) m_batchCount--; }
+    void     EndBatch()
+    {
+        if ( m_batchCount > 0 )
+	{
+	    m_batchCount--;
+	    if ( !m_batchCount )
+	        Refresh();
+	}
+    }
+
     int      GetBatchCount() { return m_batchCount; }
 
 
