@@ -6,7 +6,7 @@
 // Created:     06/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleksandras Gluchovas
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -51,136 +51,136 @@
 // should find a way to make these be non-global, but this
 // works for right now.
 #if wxCHECK_VERSION(2,3,0)
-	wxEventType cbEVT_PL_LEFT_DOWN = wxNewEventType();
-	wxEventType cbEVT_PL_LEFT_UP = wxNewEventType();
-	wxEventType cbEVT_PL_RIGHT_DOWN = wxNewEventType();
-	wxEventType cbEVT_PL_RIGHT_UP = wxNewEventType();
-	wxEventType cbEVT_PL_MOTION = wxNewEventType();
+    wxEventType cbEVT_PL_LEFT_DOWN = wxNewEventType();
+    wxEventType cbEVT_PL_LEFT_UP = wxNewEventType();
+    wxEventType cbEVT_PL_RIGHT_DOWN = wxNewEventType();
+    wxEventType cbEVT_PL_RIGHT_UP = wxNewEventType();
+    wxEventType cbEVT_PL_MOTION = wxNewEventType();
 
-	wxEventType cbEVT_PL_LEFT_DCLICK = wxNewEventType();
+    wxEventType cbEVT_PL_LEFT_DCLICK = wxNewEventType();
 
-	wxEventType cbEVT_PL_LAYOUT_ROW = wxNewEventType();
-	wxEventType cbEVT_PL_RESIZE_ROW = wxNewEventType();
-	wxEventType cbEVT_PL_LAYOUT_ROWS = wxNewEventType();
-	wxEventType cbEVT_PL_INSERT_BAR = wxNewEventType();
-	wxEventType cbEVT_PL_RESIZE_BAR = wxNewEventType();
-	wxEventType cbEVT_PL_REMOVE_BAR = wxNewEventType();
-	wxEventType cbEVT_PL_SIZE_BAR_WND = wxNewEventType();
+    wxEventType cbEVT_PL_LAYOUT_ROW = wxNewEventType();
+    wxEventType cbEVT_PL_RESIZE_ROW = wxNewEventType();
+    wxEventType cbEVT_PL_LAYOUT_ROWS = wxNewEventType();
+    wxEventType cbEVT_PL_INSERT_BAR = wxNewEventType();
+    wxEventType cbEVT_PL_RESIZE_BAR = wxNewEventType();
+    wxEventType cbEVT_PL_REMOVE_BAR = wxNewEventType();
+    wxEventType cbEVT_PL_SIZE_BAR_WND = wxNewEventType();
 
-	wxEventType cbEVT_PL_DRAW_BAR_DECOR = wxNewEventType();
-	wxEventType cbEVT_PL_DRAW_ROW_DECOR = wxNewEventType();
-	wxEventType cbEVT_PL_DRAW_PANE_DECOR = wxNewEventType();
-	wxEventType cbEVT_PL_DRAW_BAR_HANDLES = wxNewEventType();
-	wxEventType cbEVT_PL_DRAW_ROW_HANDLES = wxNewEventType();
-	wxEventType cbEVT_PL_DRAW_ROW_BKGROUND = wxNewEventType();
-	wxEventType cbEVT_PL_DRAW_PANE_BKGROUND = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_BAR_DECOR = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_ROW_DECOR = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_PANE_DECOR = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_BAR_HANDLES = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_ROW_HANDLES = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_ROW_BKGROUND = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_PANE_BKGROUND = wxNewEventType();
 
-	wxEventType cbEVT_PL_START_BAR_DRAGGING = wxNewEventType();
-	wxEventType cbEVT_PL_DRAW_HINT_RECT = wxNewEventType();
+    wxEventType cbEVT_PL_START_BAR_DRAGGING = wxNewEventType();
+    wxEventType cbEVT_PL_DRAW_HINT_RECT = wxNewEventType();
 
-	wxEventType cbEVT_PL_START_DRAW_IN_AREA = wxNewEventType();
-	wxEventType cbEVT_PL_FINISH_DRAW_IN_AREA = wxNewEventType();
+    wxEventType cbEVT_PL_START_DRAW_IN_AREA = wxNewEventType();
+    wxEventType cbEVT_PL_FINISH_DRAW_IN_AREA = wxNewEventType();
 
-	wxEventType cbEVT_PL_CUSTOMIZE_BAR = wxNewEventType();
-	wxEventType cbEVT_PL_CUSTOMIZE_LAYOUT = wxNewEventType();
+    wxEventType cbEVT_PL_CUSTOMIZE_BAR = wxNewEventType();
+    wxEventType cbEVT_PL_CUSTOMIZE_LAYOUT = wxNewEventType();
 
-	wxEventType wxCUSTOM_CB_PLUGIN_EVENTS_START_AT = wxNewEventType();
+    wxEventType wxCUSTOM_CB_PLUGIN_EVENTS_START_AT = wxNewEventType();
 #endif // #if wxCHECK_VERSION(2,3,0)
 
 // some ascii-art, still can't get these *nice* cursors working on wx... :-(
 
 static const char* _gHorizCursorImg[] = 
 {
-	"............XX....XX............",
-	"............XX....XX............",
-	"............XX....XX............",
-	"............XX....XX............",
-	"............XX....XX............",
-	"...X........XX....XX........X...",
-	"..XX........XX....XX........XX..",
-	".XXX........XX....XX........XXX.",
-	"XXXXXXXXXXXXXX....XXXXXXXXXXXXXX",
-	".XXX........XX....XX........XXX.",
-	"..XX........XX....XX........XX..",
-	"...X........XX....XX........X...",
-	"............XX....XX............",
-	"............XX....XX............",
-	"............XX....XX............",
-	"............XX....XX............"
+    "............XX....XX............",
+    "............XX....XX............",
+    "............XX....XX............",
+    "............XX....XX............",
+    "............XX....XX............",
+    "...X........XX....XX........X...",
+    "..XX........XX....XX........XX..",
+    ".XXX........XX....XX........XXX.",
+    "XXXXXXXXXXXXXX....XXXXXXXXXXXXXX",
+    ".XXX........XX....XX........XXX.",
+    "..XX........XX....XX........XX..",
+    "...X........XX....XX........X...",
+    "............XX....XX............",
+    "............XX....XX............",
+    "............XX....XX............",
+    "............XX....XX............"
 };
 
 static const char* _gVertCursorImg[] = 
 {
-	"................X...............",
-	"...............XXX..............",
-	"..............XXXXX.............",
-	".............XXXXXXX............",
-	"................X...............",
-	"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	"................................",
-	"................................",
-	"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	"................X...............",
-	".............XXXXXXX............",
-	"..............XXXXX.............",
-	"...............XXX..............",
-	"................X..............."
+    "................X...............",
+    "...............XXX..............",
+    "..............XXXXX.............",
+    ".............XXXXXXX............",
+    "................X...............",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "................................",
+    "................................",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "................X...............",
+    ".............XXXXXXX............",
+    "..............XXXXX.............",
+    "...............XXX..............",
+    "................X..............."
 };
 
 // helper inline functions
 
 static inline bool rect_contains_point( const wxRect& rect, int x, int y )
 {
-	return ( x >= rect.x &&
-		     y >= rect.y &&
-			 x <  rect.x + rect.width  &&
-			 y <  rect.y + rect.height );
+    return ( x >= rect.x &&
+             y >= rect.y &&
+             x <  rect.x + rect.width  &&
+             y <  rect.y + rect.height );
 }
 
 static inline bool rect_hits_rect( const wxRect& r1, const wxRect& r2 )
 {
-	if ( ( r2.x >= r1.x && r2.x <= r1.x + r1.width ) ||
-		 ( r1.x >= r2.x && r1.x <= r2.x + r2.width ) )
+    if ( ( r2.x >= r1.x && r2.x <= r1.x + r1.width ) ||
+         ( r1.x >= r2.x && r1.x <= r2.x + r2.width ) )
 
-		if ( ( r2.y >= r1.y && r2.y <= r1.y + r1.height ) ||
-			 ( r1.y >= r2.y && r1.y <= r2.y + r2.height ) )
-			 
-			return 1;
+        if ( ( r2.y >= r1.y && r2.y <= r1.y + r1.height ) ||
+             ( r1.y >= r2.y && r1.y <= r2.y + r2.height ) )
+             
+            return 1;
 
-	return 0;
+    return 0;
 }
 
 static inline void hide_rect( wxRect& r )
 {
-	r.x = 32768;
-	r.y = 32768;
-	r.width  = 1;
-	r.height = 1;
+    r.x = 32768;
+    r.y = 32768;
+    r.width  = 1;
+    r.height = 1;
 }
 
 static inline void clip_rect_against_rect( wxRect& r1, const wxRect& r2 )
 {
-	if ( r1.x < r2.x			  || 
-		 r1.y < r2.y			  ||
-		 r1.x >= r2.x + r2.width  ||
-		 r1.y >= r2.y + r2.height 
-	   ) 
-	{
-		hide_rect( r1 );
-		return;
-	}
-	else
-	{
-		if ( r1.x + r1.width  > r2.x + r2.width )
+    if ( r1.x < r2.x              || 
+         r1.y < r2.y              ||
+         r1.x >= r2.x + r2.width  ||
+         r1.y >= r2.y + r2.height 
+       ) 
+    {
+        hide_rect( r1 );
+        return;
+    }
+    else
+    {
+        if ( r1.x + r1.width  > r2.x + r2.width )
 
-			r1.width = r2.x + r2.width - r1.x;
+            r1.width = r2.x + r2.width - r1.x;
 
-		if ( r1.y + r1.height > r2.y + r2.height )
+        if ( r1.y + r1.height > r2.y + r2.height )
 
-			r1.height = r2.y + r2.height - r1.y;
-	}
+            r1.height = r2.y + r2.height - r1.y;
+    }
 }
 
 /***** Implementation for class cbBarSpy *****/
@@ -188,55 +188,55 @@ static inline void clip_rect_against_rect( wxRect& r1, const wxRect& r2 )
 IMPLEMENT_DYNAMIC_CLASS( cbBarSpy, wxEvtHandler )
 
 cbBarSpy::cbBarSpy(void)
-	: mpLayout(0),
-	  mpBarWnd(0)
+    : mpLayout(0),
+      mpBarWnd(0)
 {}
 
 cbBarSpy::cbBarSpy( wxFrameLayout* pPanel ) 
 
-	: mpLayout(pPanel),
-	  mpBarWnd(0)
+    : mpLayout(pPanel),
+      mpBarWnd(0)
 {}
 
 void cbBarSpy::SetBarWindow( wxWindow* pWnd )
 {
-	mpBarWnd = pWnd;
+    mpBarWnd = pWnd;
 }
 
 bool cbBarSpy::ProcessEvent(wxEvent& event)
 {
-	bool handled = wxEvtHandler::ProcessEvent( event );
+    bool handled = wxEvtHandler::ProcessEvent( event );
 
-	int type = event.GetEventType();
+    int type = event.GetEventType();
 
-	if ( !handled && ( type == wxEVT_LEFT_DOWN ||
-				       type == wxEVT_LEFT_DCLICK ) )
-	{
-		wxMouseEvent& mevent = *((wxMouseEvent*)&event);
+    if ( !handled && ( type == wxEVT_LEFT_DOWN ||
+                       type == wxEVT_LEFT_DCLICK ) )
+    {
+        wxMouseEvent& mevent = *((wxMouseEvent*)&event);
 
-		int x = mevent.m_x;
-		int y = mevent.m_y;
+        int x = mevent.m_x;
+        int y = mevent.m_y;
 
-		mpBarWnd->ClientToScreen( &x, &y );
-		mpLayout->GetParentFrame().ScreenToClient( &x, &y );
+        mpBarWnd->ClientToScreen( &x, &y );
+        mpLayout->GetParentFrame().ScreenToClient( &x, &y );
 
-		mevent.m_x = x;
-		mevent.m_y = y;
+        mevent.m_x = x;
+        mevent.m_y = y;
 
-		// forwared not-handled event to frame-layout
+        // forwared not-handled event to frame-layout
 
-		if ( type == wxEVT_LEFT_DOWN )
-		{
-			//mpLayout->OnLButtonDown( mevent );
-			event.Skip();
-		}
-		else
-			mpLayout->OnLDblClick( mevent );
+        if ( type == wxEVT_LEFT_DOWN )
+        {
+            //mpLayout->OnLButtonDown( mevent );
+            event.Skip();
+        }
+        else
+            mpLayout->OnLDblClick( mevent );
 
-		//event.Skip(FALSE);
-	}
+        //event.Skip(FALSE);
+    }
 
-	return handled;
+    return handled;
 }
 
 /***** Implementation for class wxFrameLayout *****/
@@ -245,23 +245,23 @@ IMPLEMENT_DYNAMIC_CLASS( wxFrameLayout, wxEvtHandler )
 
 BEGIN_EVENT_TABLE( wxFrameLayout, wxEvtHandler )
 
-	EVT_PAINT      ( wxFrameLayout::OnPaint		  )
-	EVT_SIZE       ( wxFrameLayout::OnSize		  )
-	EVT_LEFT_DOWN  ( wxFrameLayout::OnLButtonDown )
-	EVT_LEFT_UP    ( wxFrameLayout::OnLButtonUp   )
-	EVT_RIGHT_DOWN ( wxFrameLayout::OnRButtonDown )
-	EVT_RIGHT_UP   ( wxFrameLayout::OnRButtonUp   )
-	EVT_MOTION     ( wxFrameLayout::OnMouseMove   )
+    EVT_PAINT      ( wxFrameLayout::OnPaint       )
+    EVT_SIZE       ( wxFrameLayout::OnSize        )
+    EVT_LEFT_DOWN  ( wxFrameLayout::OnLButtonDown )
+    EVT_LEFT_UP    ( wxFrameLayout::OnLButtonUp   )
+    EVT_RIGHT_DOWN ( wxFrameLayout::OnRButtonDown )
+    EVT_RIGHT_UP   ( wxFrameLayout::OnRButtonUp   )
+    EVT_MOTION     ( wxFrameLayout::OnMouseMove   )
 
-	EVT_LEFT_DCLICK( wxFrameLayout::OnLDblClick   )
+    EVT_LEFT_DCLICK( wxFrameLayout::OnLDblClick   )
 
-	EVT_IDLE       ( wxFrameLayout::OnIdle        )
-	EVT_SET_FOCUS  ( wxFrameLayout::OnSetFocus    )
-	EVT_KILL_FOCUS ( wxFrameLayout::OnKillFocus   )
+    EVT_IDLE       ( wxFrameLayout::OnIdle        )
+    EVT_SET_FOCUS  ( wxFrameLayout::OnSetFocus    )
+    EVT_KILL_FOCUS ( wxFrameLayout::OnKillFocus   )
 
-	EVT_ACTIVATE   ( wxFrameLayout::OnActivate    )
+    EVT_ACTIVATE   ( wxFrameLayout::OnActivate    )
 
-	EVT_ERASE_BACKGROUND( wxFrameLayout::OnEraseBackground )
+    EVT_ERASE_BACKGROUND( wxFrameLayout::OnEraseBackground )
 
 END_EVENT_TABLE()
 
@@ -269,82 +269,82 @@ END_EVENT_TABLE()
 
 wxFrameLayout::wxFrameLayout(void)
 
-	: mpFrame      ( NULL ),
-	  mpFrameClient( NULL ),
+    : mpFrame      ( NULL ),
+      mpFrameClient( NULL ),
 
-	  mDarkPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
-	  mLightPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT), 1, wxSOLID ),
-	  mGrayPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
-	  mBlackPen ( wxColour(  0,  0,  0), 1, wxSOLID ),
-	  mBorderPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
+      mDarkPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
+      mLightPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT), 1, wxSOLID ),
+      mGrayPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
+      mBlackPen ( wxColour(  0,  0,  0), 1, wxSOLID ),
+      mBorderPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
    
-	  mNullPen( wxColour(0,0,0), 1, wxTRANSPARENT ),
+      mNullPen( wxColour(0,0,0), 1, wxTRANSPARENT ),
 
-	  mpPaneInFocus( NULL ),
-	  mpLRUPane    ( NULL ),
+      mpPaneInFocus( NULL ),
+      mpLRUPane    ( NULL ),
 
 
-	  mpTopPlugin   ( NULL ),
-	  mpCaputesInput( NULL ),
+      mpTopPlugin   ( NULL ),
+      mpCaputesInput( NULL ),
 
-	  mClientWndRefreshPending( FALSE ),
-	  mRecalcPending( TRUE ),
-	  mCheckFocusWhenIdle( FALSE )
+      mClientWndRefreshPending( FALSE ),
+      mRecalcPending( TRUE ),
+      mCheckFocusWhenIdle( FALSE )
 {
-	CreateCursors();
+    CreateCursors();
 
-	for( int i = 0; i != MAX_PANES; ++i )
-	
-		mPanes[i]  = NULL;
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+        mPanes[i]  = NULL;
 
-	mFloatingOn = CanReparent();
+    mFloatingOn = CanReparent();
 }
 
 wxFrameLayout::wxFrameLayout( wxWindow* pParentFrame, wxWindow* pFrameClient, bool activateNow )
 
-	: mpFrame( pParentFrame ),
-	  mpFrameClient(pFrameClient),
+    : mpFrame( pParentFrame ),
+      mpFrameClient(pFrameClient),
 
-	  mDarkPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
-	  mLightPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT), 1, wxSOLID ),
-	  mGrayPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
-	  mBlackPen ( wxColour(  0,  0,  0), 1, wxSOLID ),
-	  mBorderPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
+      mDarkPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID ),
+      mLightPen ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT), 1, wxSOLID ),
+      mGrayPen  ( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
+      mBlackPen ( wxColour(  0,  0,  0), 1, wxSOLID ),
+      mBorderPen( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), 1, wxSOLID ),
       
-	  mNullPen( wxColour(0,0,0), 1, wxTRANSPARENT ),
+      mNullPen( wxColour(0,0,0), 1, wxTRANSPARENT ),
 
-	  mpPaneInFocus( NULL ),
-	  mpLRUPane    ( NULL ),
+      mpPaneInFocus( NULL ),
+      mpLRUPane    ( NULL ),
       
-	  mFloatingOn   ( TRUE ),
+      mFloatingOn   ( TRUE ),
                  
-	  mpTopPlugin   ( NULL ),
-	  mpCaputesInput( NULL ),
-	  
+      mpTopPlugin   ( NULL ),
+      mpCaputesInput( NULL ),
+      
       mClientWndRefreshPending( FALSE ),
       mRecalcPending( TRUE ),
-	  mCheckFocusWhenIdle( FALSE ),
-	  
+      mCheckFocusWhenIdle( FALSE ),
+      
       mpUpdatesMgr( NULL )
 {
-	CreateCursors();
+    CreateCursors();
 
-	for( int i = 0; i != MAX_PANES; ++i )
-	
-		mPanes[i]  = new cbDockPane( i, this );
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+        mPanes[i]  = new cbDockPane( i, this );
 
-	if ( activateNow )
-	{
-		HookUpToFrame();
+    if ( activateNow )
+    {
+        HookUpToFrame();
 
-		// FOR NOW::
-		// DBG:: set RED color of frame's background for the
-		//       prurpose of tracking engine bugs "visually"
+        // FOR NOW::
+        // DBG:: set RED color of frame's background for the
+        //       prurpose of tracking engine bugs "visually"
 
-		GetParentFrame().SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) );
-	}
+        GetParentFrame().SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) );
+    }
 
-	mFloatingOn = CanReparent();
+    mFloatingOn = CanReparent();
 }
 
 // NOTE:: below are the only plaftorm-check "ifdef"s in the docking system!
@@ -352,19 +352,19 @@ wxFrameLayout::wxFrameLayout( wxWindow* pParentFrame, wxWindow* pFrameClient, bo
 bool wxFrameLayout::CanReparent()
 {
 #ifdef __WXMSW__
-	return TRUE;
+    return TRUE;
 #elif defined (__WXGTK__)
-	//return TRUE;
-	return FALSE;
+    //return TRUE;
+    return FALSE;
 #else
 
-	return FALSE; // reparenting is not yet supported by Motif and others
+    return FALSE; // reparenting is not yet supported by Motif and others
 #endif
 }
 
 /*
 #ifdef __WXMSW__
-	#inlcude "windows.h"
+    #inlcude "windows.h"
 #endif
 */
 
@@ -373,201 +373,200 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 #ifdef __WXMSW__
 #if 0
 
-	if ( pChild->GetParent() )
-	{
-		bool success = pChild->GetParent()->GetChildren().DeleteObject( pChild );
+    if ( pChild->GetParent() )
+    {
+        bool success = pChild->GetParent()->GetChildren().DeleteObject( pChild );
 
-		wxASSERT( success ); // DBG::
-	}
+        wxASSERT( success ); // DBG::
+    }
 
-	::SetParent( (HWND)pChild->m_hWnd, (HWND)pNewParent->m_hWnd  );
+    ::SetParent( (HWND)pChild->m_hWnd, (HWND)pNewParent->m_hWnd  );
 
-	pNewParent->GetChildren().Append( pChild );
+    pNewParent->GetChildren().Append( pChild );
 
-	pChild->SetParent( pNewParent );
+    pChild->SetParent( pNewParent );
 #endif
     pChild->Reparent(pNewParent);
 
-	return;
+    return;
 #elif defined(__WXGTK__)
-	// FOR NOW:: floating with wxGtk still very buggy
+    // FOR NOW:: floating with wxGtk still very buggy
 
-	return;
+    return;
 
-	//pChild->ReParent( pNewParent );
+    //pChild->ReParent( pNewParent );
 
-	//return;
+    //return;
 #else
-	wxMessageBox( "Sorry, docking is not supported for ports other than MSW and wxGTK" );
+    wxMessageBox( "Sorry, docking is not supported for ports other than MSW and wxGTK" );
 #endif
 }
 
 void wxFrameLayout::DestroyBarWindows()
 {
-	wxNode* pSpy = mBarSpyList.First();
+    wxNode* pSpy = mBarSpyList.First();
 
-	while( pSpy )
-	{
-		cbBarSpy& spy = *((cbBarSpy*)pSpy->Data());
+    while( pSpy )
+    {
+        cbBarSpy& spy = *((cbBarSpy*)pSpy->Data());
 
-		if ( spy.mpBarWnd->GetEventHandler() == &spy )
+        if ( spy.mpBarWnd->GetEventHandler() == &spy )
 
-			spy.mpBarWnd->PopEventHandler();
+            spy.mpBarWnd->PopEventHandler();
 
-		delete &spy;
+        delete &spy;
 
-		pSpy = pSpy->Next();
-	}
+        pSpy = pSpy->Next();
+    }
 
-	mBarSpyList.Clear();
+    mBarSpyList.Clear();
 
-	for( size_t i = 0; i != mAllBars.Count(); ++i )
-	{
-		if ( mAllBars[i]->mpBarWnd )
-		{
-			mAllBars[i]->mpBarWnd->Destroy();
-			mAllBars[i]->mpBarWnd = NULL;
-		}
-	}
+    size_t i;
+    for ( i = 0; i != mAllBars.Count(); ++i )
+    {
+        if ( mAllBars[i]->mpBarWnd )
+        {
+            mAllBars[i]->mpBarWnd->Destroy();
+            mAllBars[i]->mpBarWnd = NULL;
+        }
+    }
 }
 
 void wxFrameLayout::ShowFloatedWindows( bool show )
 {
-	wxNode* pNode = mFloatedFrames.First();
+    wxNode* pNode = mFloatedFrames.First();
 
-	while( pNode )
-	{
-		cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
+    while( pNode )
+    {
+        cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
 
-		pFFrm->Show( show );
+        pFFrm->Show( show );
 
-		pNode = pNode->Next();
-	}
+        pNode = pNode->Next();
+    }
 }
 
 wxFrameLayout::~wxFrameLayout()
 {
-	UnhookFromFrame();
+    UnhookFromFrame();
 
-	if ( mpUpdatesMgr )
+    if ( mpUpdatesMgr )
         delete mpUpdatesMgr;
 
     PopAllPlugins();
 
-	// destoy the chain of plugins from left to right
+    // destoy the chain of plugins from left to right
 
-	wxEvtHandler* pCur = mpTopPlugin;
+    wxEvtHandler* pCur = mpTopPlugin;
 
-	if ( pCur )
+    if ( pCur )
 
-		while ( pCur->GetPreviousHandler() )
+        while ( pCur->GetPreviousHandler() )
 
-			pCur = pCur->GetPreviousHandler();
+            pCur = pCur->GetPreviousHandler();
 
-	while ( pCur )
-	{
-		wxEvtHandler* pNext = pCur->GetNextHandler();
+    while ( pCur )
+    {
+        wxEvtHandler* pNext = pCur->GetNextHandler();
 
-		delete pCur;
+        delete pCur;
 
-		pCur = pNext;
-	}
+        pCur = pNext;
+    }
 
-	// destroy contents of arrays and lists
+    // destroy contents of arrays and lists
 
-	size_t i = 0;
-
-	for( i = 0; i != MAX_PANES; ++i )
-   {
-		if ( mPanes[i] ) 
+    size_t i = 0;
+    for ( i = 0; i != MAX_PANES; ++i )
+    {
+        if ( mPanes[i] ) 
             delete mPanes[i];
-   }
-	if ( mpHorizCursor  ) 
+    }
+    if ( mpHorizCursor  ) 
         delete mpHorizCursor;
-	if ( mpVertCursor   ) 
+    if ( mpVertCursor   ) 
         delete mpVertCursor;
-	if ( mpNormalCursor ) 
+    if ( mpNormalCursor ) 
         delete mpNormalCursor;
-	if ( mpDragCursor   ) 
+    if ( mpDragCursor   ) 
         delete mpDragCursor;
-	if ( mpNECursor     ) 
+    if ( mpNECursor     ) 
         delete mpNECursor;
 
-	wxNode* pSpy = mBarSpyList.First();
+    wxNode* pSpy = mBarSpyList.First();
 
-	while( pSpy )
-	{
-		cbBarSpy& spy = *((cbBarSpy*)pSpy->Data());
+    while( pSpy )
+    {
+        cbBarSpy& spy = *((cbBarSpy*)pSpy->Data());
 
-		if ( spy.mpBarWnd->GetEventHandler() == &spy )
+        if ( spy.mpBarWnd->GetEventHandler() == &spy )
 
-			spy.mpBarWnd->PopEventHandler();
+            spy.mpBarWnd->PopEventHandler();
 
-		delete &spy;
+        delete &spy;
 
-		pSpy = pSpy->Next();
-	}
+        pSpy = pSpy->Next();
+    }
 
-	for( i = 0; i != mAllBars.Count(); ++i )
-	
-		delete mAllBars[i];
+    for ( i = 0; i != mAllBars.Count(); ++i )
+        delete mAllBars[i];
 }
 
 void wxFrameLayout::EnableFloating( bool enable )
 {
-	mFloatingOn = enable && CanReparent();
+    mFloatingOn = enable && CanReparent();
 }
 
 void wxFrameLayout::Activate()
 {
-	HookUpToFrame();
+    HookUpToFrame();
 
-	RefreshNow( TRUE );
+    RefreshNow( TRUE );
 
-	ShowFloatedWindows( TRUE );
+    ShowFloatedWindows( TRUE );
 }
 
 void wxFrameLayout::Deactivate()
 {
-	ShowFloatedWindows( FALSE );
+    ShowFloatedWindows( FALSE );
 
-	UnhookFromFrame();
+    UnhookFromFrame();
 
-	HideBarWindows();
+    HideBarWindows();
 }
 
 void wxFrameLayout::SetFrameClient( wxWindow* pFrameClient )
 {
-	mpFrameClient = pFrameClient;
+    mpFrameClient = pFrameClient;
 }
 
 wxWindow* wxFrameLayout::GetFrameClient()
 {
-	return mpFrameClient;
+    return mpFrameClient;
 }
 
 cbUpdatesManagerBase& wxFrameLayout::GetUpdatesManager()
 {
-	if ( !mpUpdatesMgr )
+    if ( !mpUpdatesMgr )
         mpUpdatesMgr = CreateUpdatesManager();
 
-	return *mpUpdatesMgr;
+    return *mpUpdatesMgr;
 }
 
 void wxFrameLayout::SetUpdatesManager( cbUpdatesManagerBase* pUMgr )
 {
-	if ( mpUpdatesMgr )
+    if ( mpUpdatesMgr )
         delete mpUpdatesMgr;
 
-	mpUpdatesMgr = pUMgr;
+    mpUpdatesMgr = pUMgr;
 
-	mpUpdatesMgr->SetLayout( this );
+    mpUpdatesMgr->SetLayout( this );
 }
 
 cbUpdatesManagerBase* wxFrameLayout::CreateUpdatesManager()
 {
-	return new cbGCUpdatesMgr( this );
-	//return new cbSimpleUpdatesMgr( this );
+    return new cbGCUpdatesMgr( this );
+    //return new cbSimpleUpdatesMgr( this );
 }
 
 void wxFrameLayout::AddBar( wxWindow*        pBarWnd, 
@@ -578,1238 +577,1216 @@ void wxFrameLayout::AddBar( wxWindow*        pBarWnd,
                             const wxString&  name,
                             bool             spyEvents,
                             int              state
-						  )
+                          )
 {
-	if ( pBarWnd && spyEvents )
-	{
-		// hook up spy to bar window
-		cbBarSpy* pSpy = new cbBarSpy( this );
+    if ( pBarWnd && spyEvents )
+    {
+        // hook up spy to bar window
+        cbBarSpy* pSpy = new cbBarSpy( this );
 
-		pSpy->SetBarWindow( pBarWnd );
-		pBarWnd->PushEventHandler( pSpy );
+        pSpy->SetBarWindow( pBarWnd );
+        pBarWnd->PushEventHandler( pSpy );
 
-		mBarSpyList.Append( pSpy );
-	}
+        mBarSpyList.Append( pSpy );
+    }
 
-	cbBarInfo* pInfo = new cbBarInfo();
+    cbBarInfo* pInfo = new cbBarInfo();
 
-	pInfo->mName      = name;
-	pInfo->mpBarWnd   = pBarWnd;
-	pInfo->mDimInfo   = dimInfo;
-	pInfo->mState     = state;
-	pInfo->mAlignment = alignment;
-	pInfo->mRowNo     = rowNo;
-	pInfo->mBounds.x  = columnPos;
+    pInfo->mName      = name;
+    pInfo->mpBarWnd   = pBarWnd;
+    pInfo->mDimInfo   = dimInfo;
+    pInfo->mState     = state;
+    pInfo->mAlignment = alignment;
+    pInfo->mRowNo     = rowNo;
+    pInfo->mBounds.x  = columnPos;
 
-	mAllBars.Add( pInfo );
+    mAllBars.Add( pInfo );
 
-	DoSetBarState( pInfo );
+    DoSetBarState( pInfo );
 }
 
 bool wxFrameLayout::RedockBar( cbBarInfo*    pBar, 
-							   const wxRect& shapeInParent,
-							   cbDockPane*   pToPane,
-							   bool          updateNow )
+                               const wxRect& shapeInParent,
+                               cbDockPane*   pToPane,
+                               bool          updateNow )
 {
-	if ( !pToPane )
-	
-		pToPane = HitTestPanes( shapeInParent, NULL );
+    if ( !pToPane )
+    
+        pToPane = HitTestPanes( shapeInParent, NULL );
 
-	if ( !pToPane ) 
-		
-		return FALSE; // bar's shape does not hit any pane 
-					 // - redocking is NOT possible
+    if ( !pToPane ) 
+        
+        return FALSE; // bar's shape does not hit any pane 
+                     // - redocking is NOT possible
 
-	cbDockPane* pBarPane = GetBarPane( pBar );
+    cbDockPane* pBarPane = GetBarPane( pBar );
 
-	if ( updateNow )
+    if ( updateNow )
 
-		GetUpdatesManager().OnStartChanges();
+        GetUpdatesManager().OnStartChanges();
 
-	pBarPane->RemoveBar( pBar );
+    pBarPane->RemoveBar( pBar );
 
-	// FIXME FIXME:: the below recalc. may be a *huge* performance
-	//               hit, it could be eliminated though...
-	//               but first the "pane-postion-changed" problem 
-	//               have to be fixed 
+    // FIXME FIXME:: the below recalc. may be a *huge* performance
+    //               hit, it could be eliminated though...
+    //               but first the "pane-postion-changed" problem 
+    //               have to be fixed 
 
-	RecalcLayout( FALSE );
+    RecalcLayout( FALSE );
 
-	pToPane->InsertBar( pBar, shapeInParent );
+    pToPane->InsertBar( pBar, shapeInParent );
 
-	RecalcLayout( FALSE );
+    RecalcLayout( FALSE );
 
-	// finish update "transaction"
+    // finish update "transaction"
 
-	if ( updateNow )
-	{
-		GetUpdatesManager().OnFinishChanges();
-		GetUpdatesManager().UpdateNow();
-	}
+    if ( updateNow )
+    {
+        GetUpdatesManager().OnFinishChanges();
+        GetUpdatesManager().UpdateNow();
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 cbBarInfo* wxFrameLayout::FindBarByName( const wxString& name )
 {
-	for( size_t i = 0; i != mAllBars.Count(); ++i )
+    size_t i;
+    for ( i = 0; i != mAllBars.Count(); ++i )
+        if ( mAllBars[i]->mName == name )
+            return mAllBars[i];
 
-		if ( mAllBars[i]->mName == name )
-
-			return mAllBars[i];
-
-	return NULL;
+    return NULL;
 }
 
 cbBarInfo* wxFrameLayout::FindBarByWindow( const wxWindow* pWnd )
 {
-	for( size_t i = 0; i != mAllBars.Count(); ++i )
+    size_t i;
+    for ( i = 0; i != mAllBars.Count(); ++i )
+        if ( mAllBars[i]->mpBarWnd == pWnd )
+            return mAllBars[i];
 
-		if ( mAllBars[i]->mpBarWnd == pWnd )
-
-			return mAllBars[i];
-
-	return NULL;
+    return NULL;
 }
 
 BarArrayT& wxFrameLayout::GetBars()
 {
-	return mAllBars;
+    return mAllBars;
 }
 
 void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
 {
-	if ( newState == wxCBAR_FLOATING && !mFloatingOn )
+    if ( newState == wxCBAR_FLOATING && !mFloatingOn )
 
-		return;
+        return;
 
-	if ( updateNow )
+    if ( updateNow )
 
-		GetUpdatesManager().OnStartChanges();
+        GetUpdatesManager().OnStartChanges();
 
-	pBar->mUMgrData.SetDirty(TRUE);
+    pBar->mUMgrData.SetDirty(TRUE);
 
-	// check bar's previous state
+    // check bar's previous state
 
-	if ( pBar->mState != wxCBAR_HIDDEN && pBar->mState != wxCBAR_FLOATING )
-	{
-		cbDockPane* pPane;
-		cbRowInfo*  pRow;
+    if ( pBar->mState != wxCBAR_HIDDEN && pBar->mState != wxCBAR_FLOATING )
+    {
+        cbDockPane* pPane;
+        cbRowInfo*  pRow;
 
-		bool success = LocateBar( pBar, &pRow, &pPane );
+        bool success = LocateBar( pBar, &pRow, &pPane );
 
-		wxASSERT( success ); // DBG::
+        wxASSERT( success ); // DBG::
 
-		// save LRU-dim info before removing bar
+        // save LRU-dim info before removing bar
 
-		pBar->mDimInfo.mLRUPane = pPane->GetAlignment();
-		pBar->mDimInfo.mBounds[ pPane->GetAlignment() ] = pBar->mBounds;
+        pBar->mDimInfo.mLRUPane = pPane->GetAlignment();
+        pBar->mDimInfo.mBounds[ pPane->GetAlignment() ] = pBar->mBounds;
 
-		// remove it from the pane it was docked on
+        // remove it from the pane it was docked on
 
-		pPane->RemoveBar( pBar );
+        pPane->RemoveBar( pBar );
 
-	}
+    }
 
-	if ( pBar->mState == wxCBAR_FLOATING && newState != wxCBAR_FLOATING )
-	{
-		// remove bar's window form the containing mini-frame
-		// and set it's parent to be layout's parent frame
+    if ( pBar->mState == wxCBAR_FLOATING && newState != wxCBAR_FLOATING )
+    {
+        // remove bar's window form the containing mini-frame
+        // and set it's parent to be layout's parent frame
 
-		if ( pBar->mpBarWnd )
-		{
-			pBar->mpBarWnd->Show(FALSE); // to avoid flicker upon reparenting
+        if ( pBar->mpBarWnd )
+        {
+            pBar->mpBarWnd->Show(FALSE); // to avoid flicker upon reparenting
 
-			wxNode* pNode = mFloatedFrames.First();
+            wxNode* pNode = mFloatedFrames.First();
 
-			while( pNode )
-			{
-				cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
+            while( pNode )
+            {
+                cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
 
-				if ( pFFrm->GetBar() == pBar )
-				{
-					pFFrm->Show( FALSE ); // reduces flicker sligthly 
+                if ( pFFrm->GetBar() == pBar )
+                {
+                    pFFrm->Show( FALSE ); // reduces flicker sligthly 
 
-					ReparentWindow( pBar->mpBarWnd, &GetParentFrame() );
+                    ReparentWindow( pBar->mpBarWnd, &GetParentFrame() );
 
-					pBar->mBounds = pBar->mDimInfo.mBounds[ pBar->mDimInfo.mLRUPane ];
+                    pBar->mBounds = pBar->mDimInfo.mBounds[ pBar->mDimInfo.mLRUPane ];
 
-					if ( newState != wxCBAR_HIDDEN )
+                    if ( newState != wxCBAR_HIDDEN )
 
-						pBar->mAlignment = pBar->mDimInfo.mLRUPane;
+                        pBar->mAlignment = pBar->mDimInfo.mLRUPane;
 
-					mFloatedFrames.DeleteNode( pNode );
+                    mFloatedFrames.DeleteNode( pNode );
 
-					pFFrm->Show( FALSE );
-					pFFrm->Destroy(); break;
-				}
+                    pFFrm->Show( FALSE );
+                    pFFrm->Destroy(); break;
+                }
 
-				pNode = pNode->Next();
-			}
+                pNode = pNode->Next();
+            }
 
-			// FOR NOW:: excessive!
-			//if ( mpFrameClient ) mpFrameClient->Refresh();
-			if ( mpFrameClient )
+            // FOR NOW:: excessive!
+            //if ( mpFrameClient ) mpFrameClient->Refresh();
+            if ( mpFrameClient )
                 mClientWndRefreshPending = TRUE;
-		}
-	}
+        }
+    }
 
-	pBar->mState = newState;
+    pBar->mState = newState;
 
-	DoSetBarState( pBar );
+    DoSetBarState( pBar );
 
-	if ( updateNow )
-	{
-		RecalcLayout(FALSE);
+    if ( updateNow )
+    {
+        RecalcLayout(FALSE);
 
-		GetUpdatesManager().OnFinishChanges();
-		GetUpdatesManager().UpdateNow();
-	}
+        GetUpdatesManager().OnFinishChanges();
+        GetUpdatesManager().UpdateNow();
+    }
 }
 
 void wxFrameLayout::InverseVisibility( cbBarInfo* pBar )
 {
-	wxASSERT( pBar ); // DBG::
+    wxASSERT( pBar ); // DBG::
 
-	// "inverse" bar-visibility of the selected bar
+    // "inverse" bar-visibility of the selected bar
 
-	int newState = 0;
+    int newState = 0;
 
-	if ( pBar->mState == wxCBAR_HIDDEN )
-	{
-		if ( pBar->mAlignment == -1 )
-		{
-			pBar->mAlignment = 0;       // just remove "-1" marking
-			newState = wxCBAR_FLOATING;
-		}
-		else
-		if ( pBar->mAlignment == FL_ALIGN_TOP ||
-			 pBar->mAlignment == FL_ALIGN_BOTTOM )
+    if ( pBar->mState == wxCBAR_HIDDEN )
+    {
+        if ( pBar->mAlignment == -1 )
+        {
+            pBar->mAlignment = 0;       // just remove "-1" marking
+            newState = wxCBAR_FLOATING;
+        }
+        else
+        if ( pBar->mAlignment == FL_ALIGN_TOP ||
+             pBar->mAlignment == FL_ALIGN_BOTTOM )
 
-			newState = wxCBAR_DOCKED_HORIZONTALLY;
-		else
-			newState = wxCBAR_DOCKED_VERTICALLY;
-	}
-	else
-	{
-		newState = wxCBAR_HIDDEN;
+            newState = wxCBAR_DOCKED_HORIZONTALLY;
+        else
+            newState = wxCBAR_DOCKED_VERTICALLY;
+    }
+    else
+    {
+        newState = wxCBAR_HIDDEN;
 
-		if ( pBar->mState == wxCBAR_FLOATING )
+        if ( pBar->mState == wxCBAR_FLOATING )
 
-			pBar->mAlignment = -1;
-	}
+            pBar->mAlignment = -1;
+    }
 
-	this->SetBarState( pBar, newState, TRUE );
+    this->SetBarState( pBar, newState, TRUE );
 
-	if ( newState == wxCBAR_FLOATING )
+    if ( newState == wxCBAR_FLOATING )
 
-		this->RepositionFloatedBar( pBar ); 
+        this->RepositionFloatedBar( pBar ); 
 }
 
 void wxFrameLayout::ApplyBarProperties( cbBarInfo* pBar )
 {
-	if ( pBar->mState == wxCBAR_FLOATING )
-	{
-		RepositionFloatedBar( pBar );
-	}
-	else
-	if ( pBar->mState == wxCBAR_DOCKED_HORIZONTALLY ||
-	     pBar->mState == wxCBAR_DOCKED_VERTICALLY
-	   )
-	{
-		// FOR NOW:: nothing
-	}
+    if ( pBar->mState == wxCBAR_FLOATING )
+    {
+        RepositionFloatedBar( pBar );
+    }
+    else
+    if ( pBar->mState == wxCBAR_DOCKED_HORIZONTALLY ||
+         pBar->mState == wxCBAR_DOCKED_VERTICALLY
+       )
+    {
+        // FOR NOW:: nothing
+    }
 
 }
 
 void wxFrameLayout::RepositionFloatedBar( cbBarInfo* pBar )
 {
-	if ( !mFloatingOn ) return;
+    if ( !mFloatingOn ) return;
 
-	wxNode* pNode = mFloatedFrames.First();
+    wxNode* pNode = mFloatedFrames.First();
 
-	while( pNode )
-	{
-		cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
+    while( pNode )
+    {
+        cbFloatedBarWindow* pFFrm = ((cbFloatedBarWindow*)pNode->Data());
 
-		if ( pFFrm->GetBar() == pBar )
-		{
-			wxRect& bounds = pBar->mDimInfo.mBounds[wxCBAR_FLOATING];
+        if ( pFFrm->GetBar() == pBar )
+        {
+            wxRect& bounds = pBar->mDimInfo.mBounds[wxCBAR_FLOATING];
 
-			int x = bounds.x,
-				y = bounds.y;
+            int x = bounds.x,
+                y = bounds.y;
 
-			GetParentFrame().ClientToScreen( &x, &y );
+            GetParentFrame().ClientToScreen( &x, &y );
 
-			pFFrm->PositionFloatedWnd( x,y, 
-									   bounds.width,
-									   bounds.height );
+            pFFrm->PositionFloatedWnd( x,y, 
+                                       bounds.width,
+                                       bounds.height );
 
-			break;
-		}
+            break;
+        }
 
-		pNode = pNode->Next();
-	}
+        pNode = pNode->Next();
+    }
 }
 
 void wxFrameLayout::DoSetBarState( cbBarInfo* pBar )
 {
-	if ( pBar->mState != wxCBAR_FLOATING &&
-		 pBar->mState != wxCBAR_HIDDEN )
-	
-		// dock it
+    if ( pBar->mState != wxCBAR_FLOATING &&
+         pBar->mState != wxCBAR_HIDDEN )
+    
+        // dock it
 
-		mPanes[pBar->mAlignment]->InsertBar( pBar );
-	else
-	if ( pBar->mState == wxCBAR_HIDDEN )
-	{
-		// hide it
+        mPanes[pBar->mAlignment]->InsertBar( pBar );
+    else
+    if ( pBar->mState == wxCBAR_HIDDEN )
+    {
+        // hide it
 
-		if ( pBar->mpBarWnd )
+        if ( pBar->mpBarWnd )
 
-			pBar->mpBarWnd->Show( FALSE );
-	}
-	else
-	{					
-		if ( !mFloatingOn ) return;
+            pBar->mpBarWnd->Show( FALSE );
+    }
+    else
+    {                   
+        if ( !mFloatingOn ) return;
 
-		// float it
+        // float it
 
-		if ( pBar->mpBarWnd == NULL || !CanReparent() )
-		{								
-			// FOR NOW:: just hide it
+        if ( pBar->mpBarWnd == NULL || !CanReparent() )
+        {                               
+            // FOR NOW:: just hide it
 
-			if ( pBar->mpBarWnd )
+            if ( pBar->mpBarWnd )
 
-				pBar->mpBarWnd->Show( FALSE );
+                pBar->mpBarWnd->Show( FALSE );
 
-			pBar->mState = wxCBAR_HIDDEN;
+            pBar->mState = wxCBAR_HIDDEN;
 
-			return;
-		}
+            return;
+        }
 
-		cbFloatedBarWindow* pMiniFrm = new cbFloatedBarWindow();
+        cbFloatedBarWindow* pMiniFrm = new cbFloatedBarWindow();
 
-		pMiniFrm->SetBar( pBar );
-		pMiniFrm->SetLayout( this );
+        pMiniFrm->SetBar( pBar );
+        pMiniFrm->SetLayout( this );
 
-		pMiniFrm->Create( &GetParentFrame(), -1, pBar->mName, 
-						  wxPoint( 50,50 ),
-						  wxSize ( 0, 0  ),
+        pMiniFrm->Create( &GetParentFrame(), -1, pBar->mName, 
+                          wxPoint( 50,50 ),
+                          wxSize ( 0, 0  ),
                           wxFRAME_FLOAT_ON_PARENT  |  wxFRAME_TOOL_WINDOW
-						);
+                        );
 
-		pMiniFrm->SetClient( pBar->mpBarWnd );
+        pMiniFrm->SetClient( pBar->mpBarWnd );
 
-		ReparentWindow( pBar->mpBarWnd, pMiniFrm );
+        ReparentWindow( pBar->mpBarWnd, pMiniFrm );
 
-		mFloatedFrames.Append( pMiniFrm );
+        mFloatedFrames.Append( pMiniFrm );
 
-		wxRect& bounds = pBar->mDimInfo.mBounds[wxCBAR_FLOATING];
+        wxRect& bounds = pBar->mDimInfo.mBounds[wxCBAR_FLOATING];
 
-		// check if it wasn't floated anytime before
+        // check if it wasn't floated anytime before
 
-		if ( bounds.width == -1 )
-		{
-			wxRect& clntRect = GetClientRect();
+        if ( bounds.width == -1 )
+        {
+            wxRect& clntRect = GetClientRect();
 
-			// adjust position into which the next floated bar will be placed
+            // adjust position into which the next floated bar will be placed
 
-			if ( mNextFloatedWndPos.x + bounds.width > clntRect.width )
+            if ( mNextFloatedWndPos.x + bounds.width > clntRect.width )
 
-				mNextFloatedWndPos.x = mFloatingPosStep.x;
+                mNextFloatedWndPos.x = mFloatingPosStep.x;
 
-			if ( mNextFloatedWndPos.y + bounds.height > clntRect.height )
+            if ( mNextFloatedWndPos.y + bounds.height > clntRect.height )
 
-				mNextFloatedWndPos.y = mFloatingPosStep.y;
+                mNextFloatedWndPos.y = mFloatingPosStep.y;
 
-			bounds.x = mNextFloatedWndPos.x + clntRect.x;
-			bounds.y = mNextFloatedWndPos.y + clntRect.y;
+            bounds.x = mNextFloatedWndPos.x + clntRect.x;
+            bounds.y = mNextFloatedWndPos.y + clntRect.y;
 
-			bounds.width  = pBar->mDimInfo.mSizes[wxCBAR_FLOATING].x;
-			bounds.height = pBar->mDimInfo.mSizes[wxCBAR_FLOATING].y;
+            bounds.width  = pBar->mDimInfo.mSizes[wxCBAR_FLOATING].x;
+            bounds.height = pBar->mDimInfo.mSizes[wxCBAR_FLOATING].y;
 
-			mNextFloatedWndPos.x += mFloatingPosStep.x;
-			mNextFloatedWndPos.y += mFloatingPosStep.y;
-		}
+            mNextFloatedWndPos.x += mFloatingPosStep.x;
+            mNextFloatedWndPos.y += mFloatingPosStep.y;
+        }
 
-		pMiniFrm->Show( TRUE );
+        pMiniFrm->Show( TRUE );
 
-		// FIXME:: this is excessive
-		pBar->mpBarWnd->Show(TRUE);
-	}
+        // FIXME:: this is excessive
+        pBar->mpBarWnd->Show(TRUE);
+    }
 }
 
 void wxFrameLayout::RemoveBar( cbBarInfo* pBarInfo )
 {
-	// first, try to "guess" what was the perviouse state of the bar
+    // first, try to "guess" what was the perviouse state of the bar
 
-	cbDockPane* pPane;
-	cbRowInfo*  pRow;
+    cbDockPane* pPane;
+    cbRowInfo*  pRow;
 
-	if ( LocateBar( pBarInfo, &pRow, &pPane ) )
-	{
-		// ...aha, bar was docked into one of the panes,
-		// remove it from there
+    if ( LocateBar( pBarInfo, &pRow, &pPane ) )
+    {
+        // ...aha, bar was docked into one of the panes,
+        // remove it from there
 
-		pPane->RemoveBar( pBarInfo );
-	}
+        pPane->RemoveBar( pBarInfo );
+    }
 
-	for( size_t i = 0; i != mAllBars.Count(); ++i )
-	{
-		if ( mAllBars[i] == pBarInfo )
-		{
+    size_t i;
+    for ( i = 0; i != mAllBars.Count(); ++i )
+    {
+        if ( mAllBars[i] == pBarInfo )
+        {
 #if wxCHECK_VERSION(2,3,2)
-			mAllBars.RemoveAt(i); 
+            mAllBars.RemoveAt(i); 
 #else
-			mAllBars.Remove(i); 
+            mAllBars.Remove(i); 
 #endif
-			if ( pBarInfo->mpBarWnd ) // hides it's window
+            if ( pBarInfo->mpBarWnd ) // hides it's window
 
-				pBarInfo->mpBarWnd->Show( FALSE );
+                pBarInfo->mpBarWnd->Show( FALSE );
 
-			delete pBarInfo;
+            delete pBarInfo;
 
-			return;
-		}
-	}
-	int avoidCompilerWarning = 0;
-	wxASSERT(avoidCompilerWarning); // DBG:: bar info should be present in the list of all bars of all panes
-
+            return;
+        }
+    }
+    wxFAIL_MSG("bar info should be present in the list of all bars of all panes");
 }
 
 bool wxFrameLayout::LocateBar( cbBarInfo* pBarInfo, 
-							   cbRowInfo**  ppRow,
-							   cbDockPane** ppPane )
+                               cbRowInfo**  ppRow,
+                               cbDockPane** ppPane )
 {
-	(*ppRow)  = NULL;
-	(*ppPane) = NULL;
+    (*ppRow)  = NULL;
+    (*ppPane) = NULL;
 
-	for( int n = 0; n != MAX_PANES; ++n )
-	{
-		wxBarIterator i( mPanes[n]->GetRowList() );
+    int n;
+    for ( n = 0; n != MAX_PANES; ++n )
+    {
+        wxBarIterator i( mPanes[n]->GetRowList() );
 
-		while( i.Next() )
-		
-			if ( &i.BarInfo() == pBarInfo )
-			{
-				(*ppPane) = mPanes[n];
-				(*ppRow ) = &i.RowInfo();
+        while ( i.Next() )
+        
+            if ( &i.BarInfo() == pBarInfo )
+            {
+                (*ppPane) = mPanes[n];
+                (*ppRow ) = &i.RowInfo();
 
-				return TRUE;
-			}
-	}
+                return TRUE;
+            }
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 void wxFrameLayout::RecalcLayout( bool repositionBarsNow )
 {
-	mRecalcPending = FALSE;
+    mRecalcPending = FALSE;
 
-	int frmWidth, frmHeight;
-	mpFrame->GetClientSize( &frmWidth, &frmHeight );
-	int paneHeight = 0;
+    int frmWidth, frmHeight;
+    mpFrame->GetClientSize( &frmWidth, &frmHeight );
+    int paneHeight = 0;
 
-	int curY = 0;
-	int curX = 0;
-	wxRect rect;
+    int curY = 0;
+    int curX = 0;
+    wxRect rect;
 
-	// pane positioning priorities in decreasing order:
-	// top, bottom, left, right
+    // pane positioning priorities in decreasing order:
+    // top, bottom, left, right
 
-	// setup TOP pane
+    // setup TOP pane
 
-	cbDockPane* pPane = mPanes[ FL_ALIGN_TOP ];
+    cbDockPane* pPane = mPanes[ FL_ALIGN_TOP ];
 
-	pPane->SetPaneWidth( frmWidth );
-	pPane->RecalcLayout();
+    pPane->SetPaneWidth( frmWidth );
+    pPane->RecalcLayout();
 
-	paneHeight = pPane->GetPaneHeight();
+    paneHeight = pPane->GetPaneHeight();
 
-	rect.x		= curX;
-	rect.y		= curY;
-	rect.width  = frmWidth;
-	rect.height	= wxMin( paneHeight, frmHeight - curY );
+    rect.x      = curX;
+    rect.y      = curY;
+    rect.width  = frmWidth;
+    rect.height = wxMin( paneHeight, frmHeight - curY );
 
-	pPane->SetBoundsInParent( rect );
+    pPane->SetBoundsInParent( rect );
 
-	curY += paneHeight;
+    curY += paneHeight;
 
-	// setup BOTTOM pane
+    // setup BOTTOM pane
 
-	pPane = mPanes[ FL_ALIGN_BOTTOM ];
+    pPane = mPanes[ FL_ALIGN_BOTTOM ];
 
-	pPane->SetPaneWidth( frmWidth );
-	pPane->RecalcLayout();
+    pPane->SetPaneWidth( frmWidth );
+    pPane->RecalcLayout();
 
-	paneHeight = pPane->GetPaneHeight();
+    paneHeight = pPane->GetPaneHeight();
 
-	rect.x		= curX;
-	rect.y		= wxMax( frmHeight - paneHeight, curY );
-	rect.width  = frmWidth;
-	rect.height = frmHeight - rect.y;
+    rect.x      = curX;
+    rect.y      = wxMax( frmHeight - paneHeight, curY );
+    rect.width  = frmWidth;
+    rect.height = frmHeight - rect.y;
 
-	pPane->SetBoundsInParent( rect );
+    pPane->SetBoundsInParent( rect );
 
-	// setup LEFT pane 
+    // setup LEFT pane 
 
-	pPane = mPanes[ FL_ALIGN_LEFT ];
+    pPane = mPanes[ FL_ALIGN_LEFT ];
 
-						 // bottom pane's y
-	pPane->SetPaneWidth( rect.y - curY );
+                         // bottom pane's y
+    pPane->SetPaneWidth( rect.y - curY );
 
-	pPane->RecalcLayout();
-	paneHeight = pPane->GetPaneHeight();
+    pPane->RecalcLayout();
+    paneHeight = pPane->GetPaneHeight();
 
-				  // bottom rect's y
-	rect.height = rect.y - curY;
-	rect.x = curX;
-	rect.y = curY;
-	rect.width  = wxMin( paneHeight, frmWidth );
+                  // bottom rect's y
+    rect.height = rect.y - curY;
+    rect.x = curX;
+    rect.y = curY;
+    rect.width  = wxMin( paneHeight, frmWidth );
 
-	pPane->SetBoundsInParent( rect );
+    pPane->SetBoundsInParent( rect );
 
-	curX += rect.width;
+    curX += rect.width;
 
-	// setup RIGHT pane
+    // setup RIGHT pane
 
-	pPane = mPanes[ FL_ALIGN_RIGHT ];
+    pPane = mPanes[ FL_ALIGN_RIGHT ];
 
-						 // left pane's height
-	pPane->SetPaneWidth( rect.height );
+                         // left pane's height
+    pPane->SetPaneWidth( rect.height );
 
-	pPane->RecalcLayout();
-	paneHeight = pPane->GetPaneHeight();
+    pPane->RecalcLayout();
+    paneHeight = pPane->GetPaneHeight();
 
-				  // left pane's height
-	rect.height = rect.height;
-	rect.x = wxMax( frmWidth - paneHeight, curX );
-	rect.y = curY;
-	rect.width  = frmWidth - rect.x;
+                  // left pane's height
+    rect.height = rect.height;
+    rect.x = wxMax( frmWidth - paneHeight, curX );
+    rect.y = curY;
+    rect.width  = frmWidth - rect.x;
 
-	pPane->SetBoundsInParent( rect );
+    pPane->SetBoundsInParent( rect );
 
-	// recalc bounds of the client-window
+    // recalc bounds of the client-window
 
-	mClntWndBounds.x = mPanes[FL_ALIGN_LEFT]->mBoundsInParent.x + 
-					   mPanes[FL_ALIGN_LEFT]->mBoundsInParent.width;
-	mClntWndBounds.y = mPanes[FL_ALIGN_TOP ]->mBoundsInParent.y + 
-					   mPanes[FL_ALIGN_TOP ]->mBoundsInParent.height;
+    mClntWndBounds.x = mPanes[FL_ALIGN_LEFT]->mBoundsInParent.x + 
+                       mPanes[FL_ALIGN_LEFT]->mBoundsInParent.width;
+    mClntWndBounds.y = mPanes[FL_ALIGN_TOP ]->mBoundsInParent.y + 
+                       mPanes[FL_ALIGN_TOP ]->mBoundsInParent.height;
 
-	mClntWndBounds.width  = mPanes[FL_ALIGN_RIGHT]->mBoundsInParent.x -
-					        mClntWndBounds.x;
-	mClntWndBounds.height = mPanes[FL_ALIGN_BOTTOM]->mBoundsInParent.y -
-					        mClntWndBounds.y;
+    mClntWndBounds.width  = mPanes[FL_ALIGN_RIGHT]->mBoundsInParent.x -
+                            mClntWndBounds.x;
+    mClntWndBounds.height = mPanes[FL_ALIGN_BOTTOM]->mBoundsInParent.y -
+                            mClntWndBounds.y;
 
-	if ( repositionBarsNow )
+    if ( repositionBarsNow )
 
-		PositionPanes();
+        PositionPanes();
 }
 
 int wxFrameLayout::GetClientHeight()
 {
-	// for better portablility wxWindow::GetSzie() is not used here
+    // for better portablility wxWindow::GetSzie() is not used here
 
-	return mClntWndBounds.height;
+    return mClntWndBounds.height;
 }
 
 int wxFrameLayout::GetClientWidth()
 {
-	// for better portablility wxWindow::GetSzie() is not used here
+    // for better portablility wxWindow::GetSzie() is not used here
 
-	return mClntWndBounds.width;
+    return mClntWndBounds.width;
 }
 
 void wxFrameLayout::PositionClientWindow()
 {
-	if ( mpFrameClient )
-	{
-		if ( mClntWndBounds.width >= 1 && mClntWndBounds.height >= 1 )
-		{
-			mpFrameClient->SetSize( mClntWndBounds.x,     mClntWndBounds.y, 
-									mClntWndBounds.width, mClntWndBounds.height, 0 );
+    if ( mpFrameClient )
+    {
+        if ( mClntWndBounds.width >= 1 && mClntWndBounds.height >= 1 )
+        {
+            mpFrameClient->SetSize( mClntWndBounds.x,     mClntWndBounds.y, 
+                                    mClntWndBounds.width, mClntWndBounds.height, 0 );
 
-			if ( !mpFrameClient->IsShown() )
+            if ( !mpFrameClient->IsShown() )
 
-				mpFrameClient->Show( TRUE );
-		}
-		else
-			mpFrameClient->Show( FALSE );
-	}
+                mpFrameClient->Show( TRUE );
+        }
+        else
+            mpFrameClient->Show( FALSE );
+    }
 }
 
 void wxFrameLayout::PositionPanes()
 {
-	PositionClientWindow();
+    PositionClientWindow();
 
-	// FOR NOW:: excessive updates!
-	// reposition bars within all panes
+    // FOR NOW:: excessive updates!
+    // reposition bars within all panes
 
-	for( int i = 0; i != MAX_PANES; ++i )
-		
-		mPanes[i]->SizePaneObjects();
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+        mPanes[i]->SizePaneObjects();
 }
 
 void wxFrameLayout::OnSize( wxSizeEvent& event )
 {
-	if ( event.GetEventObject() == (wxObject*) mpFrame )
-	
-		RecalcLayout(TRUE);
+    if ( event.GetEventObject() == (wxObject*) mpFrame )
+    
+        RecalcLayout(TRUE);
 }
 
 /*** protected members ***/
 
 void wxFrameLayout::HideBarWindows()
 {
-	for( size_t i = 0; i != mAllBars.Count(); ++i )
+    size_t i;
+    for ( i = 0; i != mAllBars.Count(); ++i )
+        if ( mAllBars[i]->mpBarWnd && mAllBars[i]->mState != wxCBAR_FLOATING )
+            mAllBars[i]->mpBarWnd->Show( FALSE );
 
-		if ( mAllBars[i]->mpBarWnd && mAllBars[i]->mState != wxCBAR_FLOATING )
-		
-			mAllBars[i]->mpBarWnd->Show( FALSE );
+    // then floated frames
 
-	// then floated frames
+    ShowFloatedWindows( FALSE );
 
-	ShowFloatedWindows( FALSE );
+    if ( mpFrameClient )
 
-	if ( mpFrameClient )
-
-		mpFrameClient->Show( FALSE );
+        mpFrameClient->Show( FALSE );
 }
 
 void wxFrameLayout::UnhookFromFrame()
 {
-	// NOTE:: the SetEvtHandlerEnabled() method is not used
-	//        here, since it is assumed, that unhooking layout
-	//        from window may result destroying of the layout itself
-	//       
-	//        BUG BUG BUG (wx):: this would not be a problem if 
-	//  						 wxEvtHandler's destructor would check if 
-	//							 this handler is currently the top-most 
-	//							 handler of some window, and additionally 
-	//							 to the reconnecting itself from the chain
-	//							 it would also re-setup current event handler 
-	//							 of the window using wxWindow::SetEventHandler()
+    // NOTE:: the SetEvtHandlerEnabled() method is not used
+    //        here, since it is assumed, that unhooking layout
+    //        from window may result destroying of the layout itself
+    //       
+    //        BUG BUG BUG (wx):: this would not be a problem if 
+    //                           wxEvtHandler's destructor would check if 
+    //                           this handler is currently the top-most 
+    //                           handler of some window, and additionally 
+    //                           to the reconnecting itself from the chain
+    //                           it would also re-setup current event handler 
+    //                           of the window using wxWindow::SetEventHandler()
 
-	// FOR NOW::
+    // FOR NOW::
 
-	if ( mpFrame->GetEventHandler() == this )
+    if ( mpFrame->GetEventHandler() == this )
     {
-		mpFrame->PopEventHandler();
-    	return;
+        mpFrame->PopEventHandler();
+        return;
     }
 
-	if ( mpFrame )
-	{
-		if ( this == mpFrame->GetEventHandler() )
+    if ( mpFrame )
+    {
+        if ( this == mpFrame->GetEventHandler() )
         {
-			mpFrame->SetEventHandler( this->GetNextHandler() );
+            mpFrame->SetEventHandler( this->GetNextHandler() );
         }
-		else
-		{
-			wxEvtHandler* pCur = mpFrame->GetEventHandler();
+        else
+        {
+            wxEvtHandler* pCur = mpFrame->GetEventHandler();
 
-			while ( pCur )
-			{
-				if ( pCur == this )
+            while ( pCur )
+            {
+                if ( pCur == this )
                     break;
 
-				pCur = pCur->GetNextHandler();
-			}
+                pCur = pCur->GetNextHandler();
+            }
 
-			// do not try to unhook ourselves if we're not hooked yet
-			if ( !pCur )
+            // do not try to unhook ourselves if we're not hooked yet
+            if ( !pCur )
                 return;
-		}
+        }
 
-		if ( GetPreviousHandler() )
-			GetPreviousHandler()->SetNextHandler( GetNextHandler() );
-		else
-		{
-			mpFrame->PopEventHandler();
-			return;
-		}
+        if ( GetPreviousHandler() )
+            GetPreviousHandler()->SetNextHandler( GetNextHandler() );
+        else
+        {
+            mpFrame->PopEventHandler();
+            return;
+        }
 
-		if ( GetNextHandler() )
-			GetNextHandler()->SetPreviousHandler( GetPreviousHandler() );
+        if ( GetNextHandler() )
+            GetNextHandler()->SetPreviousHandler( GetPreviousHandler() );
 
-		SetNextHandler( NULL );
-		SetPreviousHandler( NULL );
-	}
+        SetNextHandler( NULL );
+        SetPreviousHandler( NULL );
+    }
 }
 
 void wxFrameLayout::HookUpToFrame()
 {
-	// unhook us first, we're already hooked up
+    // unhook us first, we're already hooked up
 
-	UnhookFromFrame();
+    UnhookFromFrame();
 
-	// put ourselves on top
+    // put ourselves on top
 
-	mpFrame->PushEventHandler( this );
+    mpFrame->PushEventHandler( this );
 }
 
 cbDockPane* wxFrameLayout::GetBarPane( cbBarInfo* pBar )
 {
-	for( int i = 0; i != MAX_PANES; ++i )
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+        if ( mPanes[i]->BarPresent( pBar ) )
+            return mPanes[i];
 
-		if ( mPanes[i]->BarPresent( pBar ) ) return mPanes[i];
-
-	return NULL;
+    return NULL;
 }
 
 void wxFrameLayout::CreateCursors()
 {
-	/*
-	// FIXME:: The below code somehow doesn't work - cursors remain unchanged
-	char bits[64];
-	
-	set_cursor_bits( _gHorizCursorImg, bits, 32, 16 );
+    /*
+    // FIXME:: The below code somehow doesn't work - cursors remain unchanged
+    char bits[64];
+    
+    set_cursor_bits( _gHorizCursorImg, bits, 32, 16 );
 
-	mpHorizCursor = new wxCursor( bits, 32, 16 );
+    mpHorizCursor = new wxCursor( bits, 32, 16 );
 
-	set_cursor_bits( _gVertCursorImg, bits, 32, 16 );
+    set_cursor_bits( _gVertCursorImg, bits, 32, 16 );
 
-	mpVertCursor  = new wxCursor( bits, 32, 16 );
-	*/
+    mpVertCursor  = new wxCursor( bits, 32, 16 );
+    */
 
-	// FOR NOW:: use standard ones
+    // FOR NOW:: use standard ones
 
     mpHorizCursor  = new wxCursor(wxCURSOR_SIZEWE);
     mpVertCursor   = new wxCursor(wxCURSOR_SIZENS);
-	mpNormalCursor = new wxCursor(wxCURSOR_ARROW );
-	mpDragCursor   = new wxCursor(wxCURSOR_CROSS );
-	mpNECursor     = new wxCursor(wxCURSOR_NO_ENTRY);
+    mpNormalCursor = new wxCursor(wxCURSOR_ARROW );
+    mpDragCursor   = new wxCursor(wxCURSOR_CROSS );
+    mpNECursor     = new wxCursor(wxCURSOR_NO_ENTRY);
 
-	mFloatingPosStep.x = 25;
-	mFloatingPosStep.y = 25;
+    mFloatingPosStep.x = 25;
+    mFloatingPosStep.y = 25;
 
-	mNextFloatedWndPos.x = mFloatingPosStep.x;
-	mNextFloatedWndPos.y = mFloatingPosStep.y;
+    mNextFloatedWndPos.x = mFloatingPosStep.x;
+    mNextFloatedWndPos.y = mFloatingPosStep.y;
 }
 
 bool wxFrameLayout::HitTestPane( cbDockPane* pPane, int x, int y )
 {
-	return rect_contains_point( pPane->GetRealRect(), x, y );
+    return rect_contains_point( pPane->GetRealRect(), x, y );
 }
 
 cbDockPane* wxFrameLayout::HitTestPanes( const wxRect& rect,
-										 cbDockPane* pCurPane )
+                                         cbDockPane* pCurPane )
 {
-	// first, give the privilege to the current pane
+    // first, give the privilege to the current pane
 
-	if ( pCurPane && rect_hits_rect( pCurPane->GetRealRect(), rect ) ) 
-	
-		return pCurPane;
+    if ( pCurPane && rect_hits_rect( pCurPane->GetRealRect(), rect ) ) 
+    
+        return pCurPane;
 
-	for( int i = 0; i != MAX_PANES; ++i )
-	
-		if ( pCurPane != mPanes[i] &&
-		     rect_hits_rect( mPanes[i]->GetRealRect(), rect ) ) 
-
-			return mPanes[i];
-
-	return 0;
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+    {
+        if ( pCurPane != mPanes[i] &&
+             rect_hits_rect( mPanes[i]->GetRealRect(), rect ) ) 
+        {
+            return mPanes[i];
+        }
+    }
+    return 0;
 }
 
 void wxFrameLayout::ForwardMouseEvent( wxMouseEvent& event, 
-										   cbDockPane*   pToPane,
-										   int           eventType )
+                                           cbDockPane*   pToPane,
+                                           int           eventType )
 {
-	wxPoint pos( event.m_x, event.m_y );
-	pToPane->FrameToPane( &pos.x, &pos.y );
+    wxPoint pos( event.m_x, event.m_y );
+    pToPane->FrameToPane( &pos.x, &pos.y );
 
-#if wxCHECK_VERSION(2,3,0)
-	if ( eventType == cbEVT_PL_LEFT_DOWN )
-	{
-		cbLeftDownEvent evt( pos, pToPane );
-		FirePluginEvent( evt );
-	}
-	else if ( eventType == cbEVT_PL_LEFT_DCLICK )
-	{
-		cbLeftDClickEvent evt( pos, pToPane );
-		FirePluginEvent( evt );
-	}
-	else if ( eventType == cbEVT_PL_LEFT_UP )
-	{
-		cbLeftUpEvent evt( pos, pToPane );
-		FirePluginEvent( evt );
-	}
-	else if ( eventType == cbEVT_PL_RIGHT_DOWN )
-	{
-		cbRightDownEvent evt( pos, pToPane );
-		FirePluginEvent( evt );
-	}
-	else if ( eventType == cbEVT_PL_RIGHT_UP )
-	{
-		cbRightUpEvent evt( pos, pToPane );
-		FirePluginEvent( evt );
-	}
-	else if ( eventType == cbEVT_PL_MOTION )
-	{
-		cbMotionEvent evt( pos, pToPane );
-		FirePluginEvent( evt );
-	}
-	else 
-	{
-		int avoidCompilerWarning = 0;
-		wxASSERT(avoidCompilerWarning); // DBG::
-	}
-#else
-	switch ( eventType )
-	{
-		case cbEVT_PL_LEFT_DOWN : { cbLeftDownEvent evt( pos, pToPane );
-								    FirePluginEvent( evt ); break;
-								  }
-
-		case cbEVT_PL_LEFT_DCLICK:{ cbLeftDClickEvent evt( pos, pToPane );
-								    FirePluginEvent( evt ); break;
-								  }
-
-		case cbEVT_PL_LEFT_UP   : { cbLeftUpEvent evt( pos, pToPane );
-								    FirePluginEvent( evt ); break;
-								  }
-
-		case cbEVT_PL_RIGHT_DOWN: { cbRightDownEvent evt( pos, pToPane );
-								    FirePluginEvent( evt ); break;
-								  }
-
-		case cbEVT_PL_RIGHT_UP  : { cbRightUpEvent evt( pos, pToPane );
-								    FirePluginEvent( evt ); break;
-								  }
-
-		case cbEVT_PL_MOTION    : { cbMotionEvent evt( pos, pToPane );
-								    FirePluginEvent( evt ); break;
-								  }
-
-		default : wxASSERT(0); // DBG::
-	}
-#endif // #if wxCHECK_VERSION(2,3,0)
+    if ( eventType == cbEVT_PL_LEFT_DOWN )
+    {
+        cbLeftDownEvent evt( pos, pToPane );
+        FirePluginEvent( evt );
+    }
+    else if ( eventType == cbEVT_PL_LEFT_DCLICK )
+    {
+        cbLeftDClickEvent evt( pos, pToPane );
+        FirePluginEvent( evt );
+    }
+    else if ( eventType == cbEVT_PL_LEFT_UP )
+    {
+        cbLeftUpEvent evt( pos, pToPane );
+        FirePluginEvent( evt );
+    }
+    else if ( eventType == cbEVT_PL_RIGHT_DOWN )
+    {
+        cbRightDownEvent evt( pos, pToPane );
+        FirePluginEvent( evt );
+    }
+    else if ( eventType == cbEVT_PL_RIGHT_UP )
+    {
+        cbRightUpEvent evt( pos, pToPane );
+        FirePluginEvent( evt );
+    }
+    else if ( eventType == cbEVT_PL_MOTION )
+    {
+        cbMotionEvent evt( pos, pToPane );
+        FirePluginEvent( evt );
+    }
+    else 
+    {
+        int avoidCompilerWarning = 0;
+        wxASSERT(avoidCompilerWarning); // DBG::
+    }
 }  // wxFrameLayout::ForwardMouseEvent()
 
 
 void wxFrameLayout::RouteMouseEvent( wxMouseEvent& event, int pluginEvtType )
 {
-	if ( mpPaneInFocus )
+    if ( mpPaneInFocus )
 
-		ForwardMouseEvent( event, mpPaneInFocus, pluginEvtType );
-	else
-	for( int i = 0; i != MAX_PANES; ++i )
-	
-		if ( HitTestPane( mPanes[i], event.m_x, event.m_y ) )
-		{
-			ForwardMouseEvent( event, mPanes[i], pluginEvtType );
-
-			return;
-		}
+        ForwardMouseEvent( event, mpPaneInFocus, pluginEvtType );
+    else
+    {
+        int i;
+        for ( i = 0; i != MAX_PANES; ++i )
+        {
+            if ( HitTestPane( mPanes[i], event.m_x, event.m_y ) )
+            {
+                ForwardMouseEvent( event, mPanes[i], pluginEvtType );
+                return;
+            }
+        }
+    }
 }
 
 /*** event handlers ***/
 
 void wxFrameLayout::OnRButtonDown( wxMouseEvent& event )
 {
-	RouteMouseEvent( event, cbEVT_PL_RIGHT_DOWN );
+    RouteMouseEvent( event, cbEVT_PL_RIGHT_DOWN );
 }
 
 void wxFrameLayout::OnRButtonUp( wxMouseEvent& event )
 {
-	RouteMouseEvent( event, cbEVT_PL_RIGHT_UP );
+    RouteMouseEvent( event, cbEVT_PL_RIGHT_UP );
 }
 
 void wxFrameLayout::OnLButtonDown( wxMouseEvent& event )
 {
-	RouteMouseEvent( event, cbEVT_PL_LEFT_DOWN );
+    RouteMouseEvent( event, cbEVT_PL_LEFT_DOWN );
 }
 
 void wxFrameLayout::OnLDblClick( wxMouseEvent& event )
 {
-	RouteMouseEvent( event, cbEVT_PL_LEFT_DCLICK );
+    RouteMouseEvent( event, cbEVT_PL_LEFT_DCLICK );
 }
 
 void wxFrameLayout::OnLButtonUp( wxMouseEvent& event )
 {
-	RouteMouseEvent( event, cbEVT_PL_LEFT_UP );
+    RouteMouseEvent( event, cbEVT_PL_LEFT_UP );
 }
 
 void wxFrameLayout::OnMouseMove( wxMouseEvent& event )
 {
-	if ( mpPaneInFocus )
-	
-		ForwardMouseEvent( event, mpPaneInFocus, cbEVT_PL_MOTION );
-	else
-		for( int i = 0; i != MAX_PANES; ++i )
-		
-			if ( HitTestPane( mPanes[i], event.m_x, event.m_y ) )
-			{
-				if ( mpLRUPane && mpLRUPane != mPanes[i] )
-				{
-					// simulate "mouse-leave" event
-					ForwardMouseEvent( event, mpLRUPane, cbEVT_PL_MOTION );
-				}
+    if ( mpPaneInFocus )
+    
+        ForwardMouseEvent( event, mpPaneInFocus, cbEVT_PL_MOTION );
+    else
+    {
+        int i;
+        for ( i = 0; i != MAX_PANES; ++i )
+        {
+            if ( HitTestPane( mPanes[i], event.m_x, event.m_y ) )
+            {
+                if ( mpLRUPane && mpLRUPane != mPanes[i] )
+                {
+                    // simulate "mouse-leave" event
+                    ForwardMouseEvent( event, mpLRUPane, cbEVT_PL_MOTION );
+                }
 
-				ForwardMouseEvent( event, mPanes[i], cbEVT_PL_MOTION );
+                ForwardMouseEvent( event, mPanes[i], cbEVT_PL_MOTION );
 
-				mpLRUPane = mPanes[i];
+                mpLRUPane = mPanes[i];
 
-				return;
-			}
+                return;
+            }
+        }
+    }
 
-	if ( mpLRUPane )
-	{
-		// simulate "mouse-leave" event
-		ForwardMouseEvent( event, mpLRUPane, cbEVT_PL_MOTION );
-		mpLRUPane = 0;
-	}
+    if ( mpLRUPane )
+    {
+        // simulate "mouse-leave" event
+        ForwardMouseEvent( event, mpLRUPane, cbEVT_PL_MOTION );
+        mpLRUPane = 0;
+    }
 }
 
 void wxFrameLayout::OnPaint( wxPaintEvent& event )
 {
-	if ( mRecalcPending  )
-	
-		RecalcLayout( TRUE );
+    if ( mRecalcPending  )
+        RecalcLayout( TRUE );
 
-	wxPaintDC dc(mpFrame);
+    wxPaintDC dc(mpFrame);
 
-	for( int i = 0; i != MAX_PANES; ++i )
-	{
-		wxRect& rect = mPanes[i]->mBoundsInParent;
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+    {
+        wxRect& rect = mPanes[i]->mBoundsInParent;
 
-		dc.SetClippingRegion( rect.x, rect.y, rect.width, rect.height );
+        dc.SetClippingRegion( rect.x, rect.y, rect.width, rect.height );
 
-		mPanes[i]->PaintPane(dc);
+        mPanes[i]->PaintPane(dc);
 
-		dc.DestroyClippingRegion();
-	}
+        dc.DestroyClippingRegion();
+    }
 
-	event.Skip();
+    event.Skip();
 }
 
 void wxFrameLayout::OnEraseBackground( wxEraseEvent& event )
 {
-	// do nothing
+    // do nothing
 }
 
 void wxFrameLayout::OnIdle( wxIdleEvent& event )
 {
-	wxWindow* focus = wxWindow::FindFocus();
+    wxWindow* focus = wxWindow::FindFocus();
 
-	if ( !focus && mCheckFocusWhenIdle )
-	{
-		wxMessageBox( "Hi, no more focus in this app!" );
+    if ( !focus && mCheckFocusWhenIdle )
+    {
+        wxMessageBox( "Hi, no more focus in this app!" );
 
-		mCheckFocusWhenIdle = FALSE;
-		//ShowFloatedWindows( FALSE );
-	}
+        mCheckFocusWhenIdle = FALSE;
+        //ShowFloatedWindows( FALSE );
+    }
 
-	mCheckFocusWhenIdle = FALSE;
+    mCheckFocusWhenIdle = FALSE;
 
-	event.Skip();
+    event.Skip();
 }
 
 
 void wxFrameLayout::OnKillFocus( wxFocusEvent& event )
 {
-	//wxMessageBox( "wxFrameLayoutGot Kill Focus!" );
-	//ShowFloatedWindows( FALSE );
+    //wxMessageBox( "wxFrameLayoutGot Kill Focus!" );
+    //ShowFloatedWindows( FALSE );
 }
 
 void wxFrameLayout::OnSetFocus( wxFocusEvent& event )
 {
-	//ShowFloatedWindows( TRUE );
+    //ShowFloatedWindows( TRUE );
 }
 
 void wxFrameLayout::OnActivate( wxActivateEvent& event )
 {
 #if 0
-	if ( event.GetActive() == FALSE )				
-	{
-		wxWindow* focus = wxWindow::FindFocus();
+    if ( event.GetActive() == FALSE )               
+    {
+        wxWindow* focus = wxWindow::FindFocus();
 
-		if ( !focus || focus == &GetParentFrame() )
-		{
-			mCheckFocusWhenIdle = TRUE;
+        if ( !focus || focus == &GetParentFrame() )
+        {
+            mCheckFocusWhenIdle = TRUE;
 
-			if ( !focus )
+            if ( !focus )
 
-				wxMessageBox("Deactivated!" );
+                wxMessageBox("Deactivated!" );
 
-		}
-	}
+        }
+    }
 #endif
 }
 
 void wxFrameLayout::GetPaneProperties( cbCommonPaneProperties& props, int alignment )
 {
-	props = mPanes[alignment]->mProps;
+    props = mPanes[alignment]->mProps;
 }
 
 void wxFrameLayout::SetPaneProperties( const cbCommonPaneProperties& props, int paneMask )
 {
-	for( int i = 0; i != MAX_PANES; ++i )
-	
-		if ( mPanes[i]->MatchesMask( paneMask ) )
-
-			mPanes[i]->mProps = props;
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+    {
+        if ( mPanes[i]->MatchesMask( paneMask ) )
+            mPanes[i]->mProps = props;
+    }
 }
 
 void wxFrameLayout::SetMargins( int top, int bottom, int left, int right,
-		                        int paneMask )
+                                int paneMask )
 {
-	for( int i = 0; i != MAX_PANES; ++i )
-	{
-		cbDockPane& pane = *mPanes[i];
+    int i;
+    for ( i = 0; i != MAX_PANES; ++i )
+    {
+        cbDockPane& pane = *mPanes[i];
 
-		if ( pane.MatchesMask( paneMask ) )
-		{
-			pane.mTopMargin = top;
-			pane.mBottomMargin = bottom;
-			pane.mLeftMargin = left;
-			pane.mRightMargin = right;
-		}
-	}
+        if ( pane.MatchesMask( paneMask ) )
+        {
+            pane.mTopMargin = top;
+            pane.mBottomMargin = bottom;
+            pane.mLeftMargin = left;
+            pane.mRightMargin = right;
+        }
+    }
 }
 
 void wxFrameLayout::SetPaneBackground( const wxColour& colour )
 {
-	mBorderPen.SetColour( colour );
+    mBorderPen.SetColour( colour );
 }
 
 void wxFrameLayout::RefreshNow( bool recalcLayout )
 {
-	if ( recalcLayout ) RecalcLayout( TRUE );
+    if ( recalcLayout ) RecalcLayout( TRUE );
 
-	if ( mpFrame ) mpFrame->Refresh();
+    if ( mpFrame ) mpFrame->Refresh();
 }
 
 /*** plugin-related methods ***/
 
 void wxFrameLayout::FirePluginEvent( cbPluginEvent& event )
 {
-	// check state of input capture, before processing the event
+    // check state of input capture, before processing the event
 
-	if ( mpCaputesInput ) 
-	{
-		bool isInputEvt = TRUE;
+    if ( mpCaputesInput ) 
+    {
+        bool isInputEvt = TRUE;
 #if wxCHECK_VERSION(2,3,0)
-		if ( event.m_eventType != cbEVT_PL_LEFT_DOWN &&
-			 event.m_eventType != cbEVT_PL_LEFT_UP &&
-			 event.m_eventType != cbEVT_PL_RIGHT_DOWN &&
-			 event.m_eventType != cbEVT_PL_RIGHT_UP &&
-			 event.m_eventType != cbEVT_PL_MOTION )
-			isInputEvt = FALSE;
+        if ( event.m_eventType != cbEVT_PL_LEFT_DOWN &&
+             event.m_eventType != cbEVT_PL_LEFT_UP &&
+             event.m_eventType != cbEVT_PL_RIGHT_DOWN &&
+             event.m_eventType != cbEVT_PL_RIGHT_UP &&
+             event.m_eventType != cbEVT_PL_MOTION )
+            isInputEvt = FALSE;
 #else
-		switch ( event.m_eventType )
-		{
-			case cbEVT_PL_LEFT_DOWN  : break;
-			case cbEVT_PL_LEFT_UP    : break;
-			case cbEVT_PL_RIGHT_DOWN : break;
-			case cbEVT_PL_RIGHT_UP   : break;
-			case cbEVT_PL_MOTION     : break;
-			
-			default : isInputEvt = FALSE; break;
-		}
+        switch ( event.m_eventType )
+        {
+            case cbEVT_PL_LEFT_DOWN  : break;
+            case cbEVT_PL_LEFT_UP    : break;
+            case cbEVT_PL_RIGHT_DOWN : break;
+            case cbEVT_PL_RIGHT_UP   : break;
+            case cbEVT_PL_MOTION     : break;
+            
+            default : isInputEvt = FALSE; break;
+        }
 #endif  // #if wxCHECK_VERSION(2,3,0)
 
-		if ( isInputEvt )
-		{
-			mpCaputesInput->ProcessEvent( event );
-			return;
-		}
-	}
+        if ( isInputEvt )
+        {
+            mpCaputesInput->ProcessEvent( event );
+            return;
+        }
+    }
 
-	GetTopPlugin().ProcessEvent( event );
+    GetTopPlugin().ProcessEvent( event );
 }
 
 void wxFrameLayout::CaptureEventsForPlugin ( cbPluginBase* pPlugin )
 {
-	// cannot capture events for more than one plugin at a time
-	wxASSERT( mpCaputesInput == NULL );
+    // cannot capture events for more than one plugin at a time
+    wxASSERT( mpCaputesInput == NULL );
 
-	mpCaputesInput = pPlugin;
+    mpCaputesInput = pPlugin;
 
 }
 
 void wxFrameLayout::ReleaseEventsFromPlugin( cbPluginBase* pPlugin )
 {
-	// events should be captured first
-	wxASSERT( mpCaputesInput != NULL );
+    // events should be captured first
+    wxASSERT( mpCaputesInput != NULL );
 
-	mpCaputesInput = NULL;
+    mpCaputesInput = NULL;
 }
 
 void wxFrameLayout::CaptureEventsForPane( cbDockPane* toPane )
 {
-	// cannot capture events twice (without releasing)
-	wxASSERT( mpPaneInFocus == NULL );
+    // cannot capture events twice (without releasing)
+    wxASSERT( mpPaneInFocus == NULL );
 
-	mpFrame->CaptureMouse();
+    mpFrame->CaptureMouse();
 
-	mpPaneInFocus = toPane;
+    mpPaneInFocus = toPane;
 }
 
 void wxFrameLayout::ReleaseEventsFromPane( cbDockPane* fromPane )
 {
-	// cannot release events without capturing them
-	wxASSERT( mpPaneInFocus != NULL );
+    // cannot release events without capturing them
+    wxASSERT( mpPaneInFocus != NULL );
 
-	mpFrame->ReleaseMouse();
+    mpFrame->ReleaseMouse();
 
-	mpPaneInFocus = NULL;
+    mpPaneInFocus = NULL;
 }
 
 cbPluginBase& wxFrameLayout::GetTopPlugin()
 {
-	if ( !mpTopPlugin ) 
-	
-		PushDefaultPlugins(); // automatic configuration
+    if ( !mpTopPlugin ) 
+    
+        PushDefaultPlugins(); // automatic configuration
 
-	return *mpTopPlugin;
+    return *mpTopPlugin;
 }
 
 void wxFrameLayout::SetTopPlugin( cbPluginBase* pPlugin ) 
 { 
-	mpTopPlugin = pPlugin; 
+    mpTopPlugin = pPlugin; 
 }
 
 bool wxFrameLayout::HasTopPlugin() 
 { 
-	return ( mpTopPlugin != NULL ); 
+    return ( mpTopPlugin != NULL ); 
 }
 
 void wxFrameLayout::PushPlugin( cbPluginBase* pPlugin )
 {
-	if ( !mpTopPlugin ) 
-		
-		mpTopPlugin = pPlugin;
-	else
-	{
-		pPlugin->SetNextHandler( mpTopPlugin );
+    if ( !mpTopPlugin ) 
+        
+        mpTopPlugin = pPlugin;
+    else
+    {
+        pPlugin->SetNextHandler( mpTopPlugin );
 
-		mpTopPlugin->SetPreviousHandler( pPlugin );
+        mpTopPlugin->SetPreviousHandler( pPlugin );
 
-		mpTopPlugin = pPlugin;
-	}
+        mpTopPlugin = pPlugin;
+    }
 
-	mpTopPlugin->OnInitPlugin(); // notification
+    mpTopPlugin->OnInitPlugin(); // notification
 }
 
 void wxFrameLayout::PopPlugin()
 {
-	wxASSERT( mpTopPlugin ); // DBG:: at least one plugin should be present
+    wxASSERT( mpTopPlugin ); // DBG:: at least one plugin should be present
 
-	cbPluginBase* pPopped = mpTopPlugin;
+    cbPluginBase* pPopped = mpTopPlugin;
 
-	mpTopPlugin = (cbPluginBase*)mpTopPlugin->GetNextHandler();
+    mpTopPlugin = (cbPluginBase*)mpTopPlugin->GetNextHandler();
 
-	delete pPopped;
+    delete pPopped;
 }
 
 void wxFrameLayout::PopAllPlugins()
 {
-	while( mpTopPlugin ) PopPlugin();
+    while( mpTopPlugin ) PopPlugin();
 }
 
 void wxFrameLayout::PushDefaultPlugins()
 {
-	// FIXME:: to much of the stuff for the default...
+    // FIXME:: to much of the stuff for the default...
 
-	AddPlugin( CLASSINFO( cbRowLayoutPlugin       ) );
-	AddPlugin( CLASSINFO( cbBarDragPlugin         ) );
-	AddPlugin( CLASSINFO( cbPaneDrawPlugin ) );
+    AddPlugin( CLASSINFO( cbRowLayoutPlugin       ) );
+    AddPlugin( CLASSINFO( cbBarDragPlugin         ) );
+    AddPlugin( CLASSINFO( cbPaneDrawPlugin ) );
 }
 
 void wxFrameLayout::AddPlugin( wxClassInfo* pPlInfo, int paneMask )
 {
-	if ( FindPlugin ( pPlInfo ) ) return; // same type of plugin cannot be added twice
+    if ( FindPlugin ( pPlInfo ) ) return; // same type of plugin cannot be added twice
 
-	cbPluginBase* pObj = (cbPluginBase*)pPlInfo->CreateObject();
+    cbPluginBase* pObj = (cbPluginBase*)pPlInfo->CreateObject();
 
-	wxASSERT(pObj); // DBG:: plugin's class should be dynamic
+    wxASSERT(pObj); // DBG:: plugin's class should be dynamic
 
-	pObj->mPaneMask = paneMask;
-	pObj->mpLayout  = this;
+    pObj->mPaneMask = paneMask;
+    pObj->mpLayout  = this;
 
-	PushPlugin( pObj );
+    PushPlugin( pObj );
 }
 
 void wxFrameLayout::AddPluginBefore( wxClassInfo* pNextPlInfo, wxClassInfo* pPlInfo, 
-									   int paneMask )
+                                       int paneMask )
 {
-	wxASSERT( pNextPlInfo != pPlInfo ); // DBG:: no sence
+    wxASSERT( pNextPlInfo != pPlInfo ); // DBG:: no sense
 
-	cbPluginBase* pNextPl = FindPlugin( pNextPlInfo );
+    cbPluginBase* pNextPl = FindPlugin( pNextPlInfo );
 
-	if ( !pNextPl )
-	{
-		AddPlugin( pPlInfo, paneMask );
+    if ( !pNextPl )
+    {
+        AddPlugin( pPlInfo, paneMask );
 
-		return;
-	}
+        return;
+    }
 
-	// remove existing one if present
+    // remove existing one if present
 
-	cbPluginBase* pExistingPl = FindPlugin( pPlInfo );
-	
-	if ( pExistingPl ) RemovePlugin( pPlInfo );
+    cbPluginBase* pExistingPl = FindPlugin( pPlInfo );
+    
+    if ( pExistingPl ) RemovePlugin( pPlInfo );
 
-	// create an instance 
+    // create an instance 
 
-	cbPluginBase* pNewPl = (cbPluginBase*)pPlInfo->CreateObject();
+    cbPluginBase* pNewPl = (cbPluginBase*)pPlInfo->CreateObject();
 
-	wxASSERT(pNewPl); // DBG:: plugin's class should be dynamic
+    wxASSERT(pNewPl); // DBG:: plugin's class should be dynamic
 
-	// insert it to the chain
+    // insert it to the chain
 
-	if ( pNextPl->GetPreviousHandler() )
-	
-		pNextPl->GetPreviousHandler()->SetNextHandler( pNewPl );
-	else
-		mpTopPlugin = pNewPl;
+    if ( pNextPl->GetPreviousHandler() )
+    
+        pNextPl->GetPreviousHandler()->SetNextHandler( pNewPl );
+    else
+        mpTopPlugin = pNewPl;
 
-	pNewPl->SetNextHandler( pNextPl );
+    pNewPl->SetNextHandler( pNextPl );
 
-	pNewPl->SetPreviousHandler( pNextPl->GetPreviousHandler() );
+    pNewPl->SetPreviousHandler( pNextPl->GetPreviousHandler() );
 
-	pNextPl->SetPreviousHandler( pNewPl );
+    pNextPl->SetPreviousHandler( pNewPl );
 
-	// set it up
+    // set it up
 
-	pNewPl->mPaneMask = paneMask;
-	pNewPl->mpLayout  = this;
+    pNewPl->mPaneMask = paneMask;
+    pNewPl->mpLayout  = this;
 
-	pNewPl->OnInitPlugin();
+    pNewPl->OnInitPlugin();
 }
 
 void wxFrameLayout::RemovePlugin( wxClassInfo* pPlInfo )
 {
-	cbPluginBase* pPlugin = FindPlugin( pPlInfo );
+    cbPluginBase* pPlugin = FindPlugin( pPlInfo );
 
-	if ( !pPlugin ) return; // it's OK to remove not-existing plugin ;-)
+    if ( !pPlugin ) return; // it's OK to remove not-existing plugin ;-)
 
-	if ( pPlugin->GetPreviousHandler() == NULL )
+    if ( pPlugin->GetPreviousHandler() == NULL )
 
-		mpTopPlugin = (cbPluginBase*)pPlugin->GetNextHandler();
+        mpTopPlugin = (cbPluginBase*)pPlugin->GetNextHandler();
 
-	delete pPlugin;
+    delete pPlugin;
 }
 
 cbPluginBase* wxFrameLayout::FindPlugin( wxClassInfo* pPlInfo )
 {
-	cbPluginBase *pCur = mpTopPlugin;
+    cbPluginBase *pCur = mpTopPlugin;
 
-	while( pCur )
-	{
-		// NOTE:: it might appear useful matching plugin
-		//        classes "polymorphically":
+    while( pCur )
+    {
+        // NOTE:: it might appear useful matching plugin
+        //        classes "polymorphically":
 
-		if ( pCur->GetClassInfo()->IsKindOf( pPlInfo ) )
+        if ( pCur->GetClassInfo()->IsKindOf( pPlInfo ) )
 
-			return pCur;
+            return pCur;
 
-		pCur = (cbPluginBase*)pCur->GetNextHandler();
-	}
+        pCur = (cbPluginBase*)pCur->GetNextHandler();
+    }
 
-	return NULL;
+    return NULL;
 }
 
 /***** Implementation for class cbUpdateMgrData *****/
@@ -1818,85 +1795,85 @@ IMPLEMENT_DYNAMIC_CLASS( cbUpdateMgrData, wxObject )
 
 cbUpdateMgrData::cbUpdateMgrData() 
 
-	: mPrevBounds( -1,-1,0,0 ),
-	  mIsDirty( TRUE )           // inidicate initial change
+    : mPrevBounds( -1,-1,0,0 ),
+      mIsDirty( TRUE )           // inidicate initial change
 {}
 
 void cbUpdateMgrData::StoreItemState( const wxRect& boundsInParent )
 { 
-	mPrevBounds = boundsInParent; 
+    mPrevBounds = boundsInParent; 
 }
 
 void cbUpdateMgrData::SetDirty( bool isDirty )
 {
-	mIsDirty = isDirty;
+    mIsDirty = isDirty;
 }
 
 void cbUpdateMgrData::SetCustomData( wxObject* pCustomData )
 {
-	mpCustomData = pCustomData;
+    mpCustomData = pCustomData;
 }
 
 /***** Implementation for class cbDockPane *****/
 
 void wxBarIterator::Reset()
 {
-	mpRow = ( mpRows->Count() ) ? (*mpRows)[0] : NULL;
-	mpBar = NULL;
+    mpRow = ( mpRows->Count() ) ? (*mpRows)[0] : NULL;
+    mpBar = NULL;
 }
 
 wxBarIterator::wxBarIterator( RowArrayT& rows )
 
-	: mpRows( &rows ),
-	  mpRow ( NULL  ),
-	  mpBar ( NULL  )
+    : mpRows( &rows ),
+      mpRow ( NULL  ),
+      mpBar ( NULL  )
 {
-	Reset();
+    Reset();
 }
 
 bool wxBarIterator::Next()
-{	   
-	if ( mpRow )
-	{
-		if ( mpBar )
-			mpBar = mpBar->mpNext;
-		else
-		{
-			if ( mpRow->mBars.GetCount() == 0 )
-			{
-				return FALSE; 
-			}
+{      
+    if ( mpRow )
+    {
+        if ( mpBar )
+            mpBar = mpBar->mpNext;
+        else
+        {
+            if ( mpRow->mBars.GetCount() == 0 )
+            {
+                return FALSE; 
+            }
 
-			mpBar = mpRow->mBars[0];
-		}
-	
-		if ( !mpBar )
-		{	
-			// skip to the next row
+            mpBar = mpRow->mBars[0];
+        }
+    
+        if ( !mpBar )
+        {   
+            // skip to the next row
 
-			mpRow = mpRow->mpNext;
-	
-			if ( mpRow )
-	
-				mpBar = mpRow->mBars[0];
-			else
-				return FALSE;
-		}
-	
-		return TRUE;
-	}
-	else
-		return FALSE;
+            mpRow = mpRow->mpNext;
+    
+            if ( mpRow )
+    
+                mpBar = mpRow->mBars[0];
+            else
+                return FALSE;
+        }
+    
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 cbBarInfo& wxBarIterator::BarInfo()
 {
-	return *mpBar;
+    return *mpBar;
 }
 
 cbRowInfo& wxBarIterator::RowInfo()
 {
-	return *mpRow;
+    return *mpRow;
 }
 
 /***** Implementation for class cbBarDimHandlerBase *****/
@@ -1904,17 +1881,17 @@ cbRowInfo& wxBarIterator::RowInfo()
 IMPLEMENT_ABSTRACT_CLASS( cbBarDimHandlerBase, wxObject )
 
 cbBarDimHandlerBase::cbBarDimHandlerBase()
-	: mRefCount(0)
+    : mRefCount(0)
 {}
 
 void cbBarDimHandlerBase::AddRef()
 {
-	++mRefCount;
+    ++mRefCount;
 }
 
 void cbBarDimHandlerBase::RemoveRef()
 {
-	if ( --mRefCount <= 0 ) delete this;
+    if ( --mRefCount <= 0 ) delete this;
 }
 
 /***** Implementation for class cbDimInfo *****/
@@ -1923,76 +1900,79 @@ IMPLEMENT_DYNAMIC_CLASS( cbDimInfo, wxObject )
 
 cbDimInfo::cbDimInfo() 
 
-	: mVertGap ( 0 ), 
-	  mHorizGap( 0 ),
+    : mVertGap ( 0 ), 
+      mHorizGap( 0 ),
 
-	  mIsFixed(TRUE),
-	  mpHandler( NULL )
+      mIsFixed(TRUE),
+      mpHandler( NULL )
 {
-	for( size_t i = 0; i != MAX_BAR_STATES; ++i )
-	{
-		mSizes[i].x = 20;
-		mSizes[i].y = 20;
+    size_t i;
+    for ( i = 0; i != MAX_BAR_STATES; ++i )
+    {
+        mSizes[i].x = 20;
+        mSizes[i].y = 20;
 
-		mBounds[i] = wxRect( -1,-1,-1,-1 );
-	}
+        mBounds[i] = wxRect( -1,-1,-1,-1 );
+    }
 }
 
 cbDimInfo::cbDimInfo( cbBarDimHandlerBase* pDimHandler,
-					  bool                 isFixed	)
+                      bool                 isFixed  )
 
-	: mVertGap ( 0 ),
-	  mHorizGap( 0 ),
-	  mIsFixed ( isFixed  ),
+    : mVertGap ( 0 ),
+      mHorizGap( 0 ),
+      mIsFixed ( isFixed  ),
 
-	  mpHandler( pDimHandler )
+      mpHandler( pDimHandler )
 {
-	if ( mpHandler )
-	{
-		// int vtad = *((int*)mpHandler);
-		mpHandler->AddRef();
-	}
-	
-	for( size_t i = 0; i != MAX_BAR_STATES; ++i )
-	{
-		mSizes[i].x = -1;
-		mSizes[i].y = -1;
+    if ( mpHandler )
+    {
+        // int vtad = *((int*)mpHandler);
+        mpHandler->AddRef();
+    }
+    
+    size_t i;
+    for ( i = 0; i != MAX_BAR_STATES; ++i )
+    {
+        mSizes[i].x = -1;
+        mSizes[i].y = -1;
 
-		mBounds[i] = wxRect( -1,-1,-1,-1 );
-	}
+        mBounds[i] = wxRect( -1,-1,-1,-1 );
+    }
 }
 
 cbDimInfo::cbDimInfo( int dh_x, int dh_y,
-					  int dv_x, int dv_y,
-					  int f_x,  int f_y,
+                      int dv_x, int dv_y,
+                      int f_x,  int f_y,
 
-					  bool isFixed,
-					  int horizGap,
-					  int vertGap,
+                      bool isFixed,
+                      int horizGap,
+                      int vertGap,
 
-				      cbBarDimHandlerBase* pDimHandler
-				    )
-	: mVertGap  ( vertGap   ),
-	  mHorizGap ( horizGap  ),
-	  mIsFixed  ( isFixed   ),
-	  mpHandler( pDimHandler )
+                      cbBarDimHandlerBase* pDimHandler
+                    )
+    : mVertGap  ( vertGap   ),
+      mHorizGap ( horizGap  ),
+      mIsFixed  ( isFixed   ),
+      mpHandler( pDimHandler )
 {
-	if ( mpHandler )
-	{
-		// int vtad = *((int*)mpHandler);
-		mpHandler->AddRef();
-	}
+    if ( mpHandler )
+    {
+        // int vtad = *((int*)mpHandler);
+        mpHandler->AddRef();
+    }
 
-	mSizes[wxCBAR_DOCKED_HORIZONTALLY].x = dh_x;
-	mSizes[wxCBAR_DOCKED_HORIZONTALLY].y = dh_y;
-	mSizes[wxCBAR_DOCKED_VERTICALLY  ].x = dv_x;
-	mSizes[wxCBAR_DOCKED_VERTICALLY  ].y = dv_y;
-	mSizes[wxCBAR_FLOATING           ].x = f_x;
-	mSizes[wxCBAR_FLOATING           ].y = f_y;
+    mSizes[wxCBAR_DOCKED_HORIZONTALLY].x = dh_x;
+    mSizes[wxCBAR_DOCKED_HORIZONTALLY].y = dh_y;
+    mSizes[wxCBAR_DOCKED_VERTICALLY  ].x = dv_x;
+    mSizes[wxCBAR_DOCKED_VERTICALLY  ].y = dv_y;
+    mSizes[wxCBAR_FLOATING           ].x = f_x;
+    mSizes[wxCBAR_FLOATING           ].y = f_y;
 
-	for( size_t i = 0; i != MAX_BAR_STATES; ++i )
-		mBounds[i] = wxRect( -1,-1,-1,-1 );
-}	 
+    size_t i;
+    for ( i = 0; i != MAX_BAR_STATES; ++i )
+        mBounds[i] = wxRect( -1,-1,-1,-1 );
+}    
 
 cbDimInfo::cbDimInfo( int x, int y,  
                       bool isFixed, int gap, 
@@ -2014,37 +1994,39 @@ cbDimInfo::cbDimInfo( int x, int y,
     mSizes[wxCBAR_DOCKED_VERTICALLY  ].y = y;
     mSizes[wxCBAR_FLOATING           ].x = x;
     mSizes[wxCBAR_FLOATING           ].y = y;
-	
-    for( size_t i = 0; i != MAX_BAR_STATES; ++i )
+    
+    size_t i;
+    for ( i = 0; i != MAX_BAR_STATES; ++i )
         mBounds[i] = wxRect( -1,-1,-1,-1 );
 }
 
 cbDimInfo::~cbDimInfo()
 {
-	if ( mpHandler ) 
-		
-		mpHandler->RemoveRef();
+    if ( mpHandler ) 
+        
+        mpHandler->RemoveRef();
 }
 
 const cbDimInfo& cbDimInfo::operator=( const cbDimInfo& other )
 {
-	if ( this == &other ) return *this;
+    if ( this == &other )
+        return *this;
 
-	for( int i = 0; i != MAX_BAR_STATES; ++i )
+    int i;
+    for ( i = 0; i != MAX_BAR_STATES; ++i )
+        mSizes[i] = other.mSizes[i];
 
-		mSizes[i] = other.mSizes[i];
+    mIsFixed  = other.mIsFixed;
+    mpHandler = other.mpHandler;
 
-	mIsFixed  = other.mIsFixed;
-	mpHandler = other.mpHandler;
+    mVertGap  = other.mVertGap;
+    mHorizGap = other.mHorizGap;
 
-	mVertGap  = other.mVertGap;
-	mHorizGap = other.mHorizGap;
+    if ( mpHandler )
 
-	if ( mpHandler )
+        mpHandler->AddRef();
 
-		mpHandler->AddRef();
-
-	return *this;
+    return *this;
 }
 
 /***** Implementation for structure cbCommonPaneProperties *****/
@@ -2053,19 +2035,19 @@ IMPLEMENT_DYNAMIC_CLASS( cbCommonPaneProperties, wxObject )
 
 cbCommonPaneProperties::cbCommonPaneProperties(void)
 
-	: mRealTimeUpdatesOn    ( TRUE  ),
-	  mOutOfPaneDragOn      ( TRUE  ),
-	  mExactDockPredictionOn( FALSE ),
-	  mNonDestructFirctionOn( FALSE ),
-	  mShow3DPaneBorderOn   ( TRUE  ),
-	  mBarFloatingOn        ( FALSE ),
-	  mRowProportionsOn     ( FALSE ),
-	  mColProportionsOn     ( TRUE  ),
-	  mBarCollapseIconsOn   ( FALSE ),
-	  mBarDragHintsOn       ( FALSE ),
+    : mRealTimeUpdatesOn    ( TRUE  ),
+      mOutOfPaneDragOn      ( TRUE  ),
+      mExactDockPredictionOn( FALSE ),
+      mNonDestructFirctionOn( FALSE ),
+      mShow3DPaneBorderOn   ( TRUE  ),
+      mBarFloatingOn        ( FALSE ),
+      mRowProportionsOn     ( FALSE ),
+      mColProportionsOn     ( TRUE  ),
+      mBarCollapseIconsOn   ( FALSE ),
+      mBarDragHintsOn       ( FALSE ),
 
-	  mMinCBarDim( 16, 16 ),
-	  mResizeHandleSize( 4 )
+      mMinCBarDim( 16, 16 ),
+      mResizeHandleSize( 4 )
 {}
 
 /***** Implementation for class cbRowInfo *****/
@@ -2074,16 +2056,16 @@ IMPLEMENT_DYNAMIC_CLASS( cbRowInfo, wxObject )
 
 cbRowInfo::cbRowInfo(void)
 
-	: mNotFixedBarsCnt( FALSE ),
-	  mpNext          ( NULL ),
-	  mpPrev          ( NULL ),
-	  mpExpandedBar   ( NULL )
+    : mNotFixedBarsCnt( FALSE ),
+      mpNext          ( NULL ),
+      mpPrev          ( NULL ),
+      mpExpandedBar   ( NULL )
 {}
 
 cbRowInfo::~cbRowInfo()
 {
-	// nothing! all bars are removed using global bar
-	// list in wxFrameLayout class
+    // nothing! all bars are removed using global bar
+    // list in wxFrameLayout class
 }
 
 /***** Implementation for class cbBarInfo *****/
@@ -2092,15 +2074,15 @@ IMPLEMENT_DYNAMIC_CLASS( cbBarInfo, wxObject )
 
 cbBarInfo::cbBarInfo(void)
 
-	: mpRow( NULL ),
+    : mpRow( NULL ),
 
-	  mpNext( NULL ),
-	  mpPrev( NULL )
+      mpNext( NULL ),
+      mpPrev( NULL )
 {}
 
 cbBarInfo::~cbBarInfo()
 {
-	// nothing
+    // nothing
 }
 
 /***** Implementation for class cbDockPane *****/
@@ -2109,1263 +2091,1265 @@ IMPLEMENT_DYNAMIC_CLASS( cbDockPane, wxObject )
 
 // FIXME:: how to eliminate these cut&pasted constructors?
 
-cbDockPane::cbDockPane(void)							 
-	: mLeftMargin  ( 1 ),
-	  mRightMargin ( 1 ),
-	  mTopMargin   ( 1 ),
-	  mBottomMargin( 1 ),
-	  mPaneWidth ( 32768     ), // fake-up very large pane dims,
-	                            // since the real dimensions of the pane may not 
-						 	    // be known, while inserting bars initially
-	  mPaneHeight( 32768     ),
-	  mAlignment ( -1   ),
-	  mpLayout   ( 0 ),
-	  mpStoredRow( NULL )
+cbDockPane::cbDockPane(void)                             
+    : mLeftMargin  ( 1 ),
+      mRightMargin ( 1 ),
+      mTopMargin   ( 1 ),
+      mBottomMargin( 1 ),
+      mPaneWidth ( 32768     ), // fake-up very large pane dims,
+                                // since the real dimensions of the pane may not 
+                                // be known, while inserting bars initially
+      mPaneHeight( 32768     ),
+      mAlignment ( -1   ),
+      mpLayout   ( 0 ),
+      mpStoredRow( NULL )
 {}
 
 cbDockPane::cbDockPane( int alignment, wxFrameLayout* pPanel )
-							 
-	:  mLeftMargin  ( 1 ),
-	  mRightMargin ( 1 ),
-	  mTopMargin   ( 1 ),
-	  mBottomMargin( 1 ),
-	  mPaneWidth ( 32768     ), // fake-up very large pane dims,
-	                            // since the real dimensions of the pane may not 
-						 	    // be known, while inserting bars initially
-	  mPaneHeight( 32768     ),
-	  mAlignment ( alignment ),
-	  mpLayout   ( pPanel    ),
-      mpStoredRow( NULL )	 
+                             
+    :  mLeftMargin  ( 1 ),
+      mRightMargin ( 1 ),
+      mTopMargin   ( 1 ),
+      mBottomMargin( 1 ),
+      mPaneWidth ( 32768     ), // fake-up very large pane dims,
+                                // since the real dimensions of the pane may not 
+                                // be known, while inserting bars initially
+      mPaneHeight( 32768     ),
+      mAlignment ( alignment ),
+      mpLayout   ( pPanel    ),
+      mpStoredRow( NULL )    
 {}
 
 cbDockPane::~cbDockPane()
 {
-	for( size_t i = 0; i != mRows.Count(); ++i )
+    size_t i;
+    for ( i = 0; i != mRows.Count(); ++i )
+        delete mRows[i];
 
-		delete mRows[i];
-
-	mRowShapeData.DeleteContents( TRUE );
-	
-	// NOTE:: control bar infromation structures are cleaned-up
-	//        in wxFrameLayout's destructor, using global control-bar list
+    mRowShapeData.DeleteContents( TRUE );
+    
+    // NOTE:: control bar infromation structures are cleaned-up
+    //        in wxFrameLayout's destructor, using global control-bar list
 }
 
 void cbDockPane::SetMargins( int top, int bottom, int left, int right )
 {
-	mTopMargin    = top;
-	mBottomMargin = bottom;
-	mLeftMargin   = left;
-	mRightMargin  = right;
+    mTopMargin    = top;
+    mBottomMargin = bottom;
+    mLeftMargin   = left;
+    mRightMargin  = right;
 }
 
 /*** helpers of cbDockPane ***/
 
 void cbDockPane::PaintBarDecorations( cbBarInfo* pBar, wxDC& dc )
 {
-	cbDrawBarDecorEvent evt( pBar, dc, this );
+    cbDrawBarDecorEvent evt( pBar, dc, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 }
 
 void cbDockPane::PaintBarHandles( cbBarInfo* pBar, wxDC& dc )
 {
-	cbDrawBarHandlesEvent evt( pBar, dc, this );
+    cbDrawBarHandlesEvent evt( pBar, dc, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 }
 
 void cbDockPane::PaintBar( cbBarInfo* pBar, wxDC& dc )
 {
-	PaintBarDecorations( pBar, dc );
-	PaintBarHandles( pBar, dc );
+    PaintBarDecorations( pBar, dc );
+    PaintBarHandles( pBar, dc );
 }
 
 void cbDockPane::PaintRowHandles( cbRowInfo* pRow, wxDC& dc )
 {
-	cbDrawRowHandlesEvent evt( pRow, dc, this );
+    cbDrawRowHandlesEvent evt( pRow, dc, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 
-	cbDrawRowDecorEvent evt1( pRow, dc, this );
+    cbDrawRowDecorEvent evt1( pRow, dc, this );
 
-	mpLayout->FirePluginEvent( evt1 );
+    mpLayout->FirePluginEvent( evt1 );
 }
 
 void cbDockPane::PaintRowBackground ( cbRowInfo* pRow, wxDC& dc )
 {
-	cbDrawRowBkGroundEvent evt( pRow, dc, this );
+    cbDrawRowBkGroundEvent evt( pRow, dc, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 }
 
 void cbDockPane::PaintRowDecorations( cbRowInfo* pRow, wxDC& dc )
 {
-	size_t i = 0;
+    size_t i = 0;
 
-	// decorations first
-	for( i = 0; i != pRow->mBars.Count(); ++i )
-	
-		PaintBarDecorations( pRow->mBars[i], dc );
+    // decorations first
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    
+        PaintBarDecorations( pRow->mBars[i], dc );
 
-	// then handles if present
-	for( i = 0; i != pRow->mBars.Count(); ++i )
+    // then handles if present
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
 
-		PaintBarHandles( pRow->mBars[i], dc );
+        PaintBarHandles( pRow->mBars[i], dc );
 }
 
 void cbDockPane::PaintRow( cbRowInfo* pRow, wxDC& dc )
 {
-	PaintRowBackground ( pRow, dc );
-	PaintRowDecorations( pRow, dc );
-	PaintRowHandles    ( pRow, dc );
+    PaintRowBackground ( pRow, dc );
+    PaintRowDecorations( pRow, dc );
+    PaintRowHandles    ( pRow, dc );
 }
 
 void cbDockPane::PaintPaneBackground( wxDC& dc )
 {
-	cbDrawPaneBkGroundEvent evt( dc, this );
+    cbDrawPaneBkGroundEvent evt( dc, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 }
 
 void cbDockPane::PaintPaneDecorations( wxDC& dc )
 {
-	cbDrawPaneDecorEvent evt( dc, this );
+    cbDrawPaneDecorEvent evt( dc, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 }
 
 void cbDockPane::PaintPane( wxDC& dc )
 {
-	PaintPaneBackground( dc );
+    PaintPaneBackground( dc );
 
-	size_t i = 0;
+    size_t i = 0;
 
-	// first decorations
-	for( i = 0; i != mRows.Count(); ++i )
-	{
-		PaintRowBackground( mRows[i], dc );
-		PaintRowDecorations( mRows[i], dc );
-	}
+    // first decorations
+    for ( i = 0; i != mRows.Count(); ++i )
+    {
+        PaintRowBackground( mRows[i], dc );
+        PaintRowDecorations( mRows[i], dc );
+    }
 
-	// than handles
-	for( i = 0; i != mRows.Count(); ++i )
-	
-		PaintRowHandles( mRows[i], dc );
+    // than handles
+    for ( i = 0; i != mRows.Count(); ++i )
+        PaintRowHandles( mRows[i], dc );
 
-	// and finally
-	PaintPaneDecorations( dc );
+    // and finally
+    PaintPaneDecorations( dc );
 }
 
 void cbDockPane::SizeBar( cbBarInfo* pBar )
 {
-	cbSizeBarWndEvent evt( pBar, this );
+    cbSizeBarWndEvent evt( pBar, this );
 
-	mpLayout->FirePluginEvent( evt );
-	return;
+    mpLayout->FirePluginEvent( evt );
+    return;
 }
 
 void cbDockPane::SizeRowObjects( cbRowInfo* pRow )
 {
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
-
-		SizeBar( pRow->mBars[i] );
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+        SizeBar( pRow->mBars[i] );
 }
 
 void cbDockPane::SizePaneObjects()
 {
-	for( size_t i = 0; i != mRows.Count(); ++i )
-
-		SizeRowObjects( mRows[i] );
+    size_t i;
+    for ( i = 0; i != mRows.Count(); ++i )
+        SizeRowObjects( mRows[i] );
 }
 
 wxDC* cbDockPane::StartDrawInArea( const wxRect& area )
 {
-	wxDC* pDc = 0;
+    wxDC* pDc = 0;
 
-	cbStartDrawInAreaEvent evt( area, &pDc, this );
+    cbStartDrawInAreaEvent evt( area, &pDc, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 
-	return pDc;
+    return pDc;
 }
 
 void cbDockPane::FinishDrawInArea( const wxRect& area )
 {
-	cbFinishDrawInAreaEvent evt( area, this );
+    cbFinishDrawInAreaEvent evt( area, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 }
 
 bool cbDockPane::IsFixedSize( cbBarInfo* pInfo )
 {
-	return ( pInfo->mDimInfo.mIsFixed );
+    return ( pInfo->mDimInfo.mIsFixed );
 }
 
 int cbDockPane::GetNotFixedBarsCount( cbRowInfo* pRow )
 {
-	int cnt = 0;
+    int cnt = 0;
 
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        if ( !pRow->mBars[i]->IsFixed() )
+            ++cnt;
+    }
 
-		if ( !pRow->mBars[i]->IsFixed() )  ++cnt;
-
-	return cnt;
+    return cnt;
 }
 
 void cbDockPane::RemoveBar( cbBarInfo* pBar )
 {
-	bool needsRestoring = mProps.mNonDestructFirctionOn && 
-						  mpStoredRow == pBar->mpRow;
+    bool needsRestoring = mProps.mNonDestructFirctionOn && 
+                          mpStoredRow == pBar->mpRow;
 
-	cbRemoveBarEvent evt( pBar, this );
+    cbRemoveBarEvent evt( pBar, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 
-	if ( needsRestoring )
-	{
-		SetRowShapeData( mpStoredRow, &mRowShapeData );
+    if ( needsRestoring )
+    {
+        SetRowShapeData( mpStoredRow, &mRowShapeData );
 
-		mpStoredRow = NULL;
-	}
+        mpStoredRow = NULL;
+    }
 }
 
 void cbDockPane::SyncRowFlags( cbRowInfo* pRow )
 {
-	// setup mHasOnlyFixedBars flag for the row information
-	pRow->mHasOnlyFixedBars = TRUE;
+    // setup mHasOnlyFixedBars flag for the row information
+    pRow->mHasOnlyFixedBars = TRUE;
 
-	pRow->mNotFixedBarsCnt = 0;
+    pRow->mNotFixedBarsCnt = 0;
 
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
-	{
-		cbBarInfo& bar = *pRow->mBars[i];
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        cbBarInfo& bar = *pRow->mBars[i];
 
-		bar.mpRow = pRow;
+        bar.mpRow = pRow;
 
-		if ( !bar.IsFixed() )
-		{
-			pRow->mHasOnlyFixedBars = FALSE;
-			++pRow->mNotFixedBarsCnt;
-		}
-	}
+        if ( !bar.IsFixed() )
+        {
+            pRow->mHasOnlyFixedBars = FALSE;
+            ++pRow->mNotFixedBarsCnt;
+        }
+    }
 }
 
 void cbDockPane::FrameToPane( int* x, int* y )
 {
-	*x -= mLeftMargin;
-	*y -= mTopMargin;
+    *x -= mLeftMargin;
+    *y -= mTopMargin;
 
-	if ( mAlignment == FL_ALIGN_TOP ||
-		 mAlignment == FL_ALIGN_BOTTOM 
-	   )
-	{
-		*x -= mBoundsInParent.x;
-		*y -= mBoundsInParent.y;
-	}
-	else
-	{
-		int rx = *x, ry = *y;
+    if ( mAlignment == FL_ALIGN_TOP ||
+         mAlignment == FL_ALIGN_BOTTOM 
+       )
+    {
+        *x -= mBoundsInParent.x;
+        *y -= mBoundsInParent.y;
+    }
+    else
+    {
+        int rx = *x, ry = *y;
 
-		*x = ry - mBoundsInParent.y;
+        *x = ry - mBoundsInParent.y;
 
-		*y = rx - mBoundsInParent.x;
-	}
+        *y = rx - mBoundsInParent.x;
+    }
 }
 
 void cbDockPane::PaneToFrame( int* x, int* y )
 {
-	if ( mAlignment == FL_ALIGN_TOP ||
-		 mAlignment == FL_ALIGN_BOTTOM 
-	   )
-	{
-		*x += mBoundsInParent.x;
-		*y += mBoundsInParent.y;
-	}
-	else
-	{
-		int rx = *x, ry = *y;
+    if ( mAlignment == FL_ALIGN_TOP ||
+         mAlignment == FL_ALIGN_BOTTOM 
+       )
+    {
+        *x += mBoundsInParent.x;
+        *y += mBoundsInParent.y;
+    }
+    else
+    {
+        int rx = *x, ry = *y;
 
-		*x = ry + mBoundsInParent.x;
+        *x = ry + mBoundsInParent.x;
 
-		*y = mBoundsInParent.y + rx;
-	}
+        *y = mBoundsInParent.y + rx;
+    }
 
-	*x += mLeftMargin;
-	*y += mTopMargin;
+    *x += mLeftMargin;
+    *y += mTopMargin;
 }
 
 void cbDockPane::FrameToPane( wxRect* pRect )
 {
-	wxPoint upperLeft ( pRect->x, pRect->y );
-	wxPoint lowerRight( pRect->x + pRect->width,
-		                pRect->y + pRect->height );
+    wxPoint upperLeft ( pRect->x, pRect->y );
+    wxPoint lowerRight( pRect->x + pRect->width,
+                        pRect->y + pRect->height );
 
-	FrameToPane( &upperLeft.x,  &upperLeft.y  );
-	FrameToPane( &lowerRight.x, &lowerRight.y );
+    FrameToPane( &upperLeft.x,  &upperLeft.y  );
+    FrameToPane( &lowerRight.x, &lowerRight.y );
 
-	pRect->x = wxMin(upperLeft.x,lowerRight.x);
-	pRect->y = wxMin(upperLeft.y,lowerRight.y);
+    pRect->x = wxMin(upperLeft.x,lowerRight.x);
+    pRect->y = wxMin(upperLeft.y,lowerRight.y);
 
-	pRect->width  = abs( lowerRight.x - upperLeft.x );
-	pRect->height = abs( lowerRight.y - upperLeft.y );
+    pRect->width  = abs( lowerRight.x - upperLeft.x );
+    pRect->height = abs( lowerRight.y - upperLeft.y );
 }
 
 void cbDockPane::PaneToFrame( wxRect* pRect )
 {
-	wxPoint upperLeft ( pRect->x, pRect->y );
-	wxPoint lowerRight( pRect->x + pRect->width,
-		                pRect->y + pRect->height );
+    wxPoint upperLeft ( pRect->x, pRect->y );
+    wxPoint lowerRight( pRect->x + pRect->width,
+                        pRect->y + pRect->height );
 
-	PaneToFrame( &upperLeft.x,  &upperLeft.y  );
-	PaneToFrame( &lowerRight.x, &lowerRight.y );
+    PaneToFrame( &upperLeft.x,  &upperLeft.y  );
+    PaneToFrame( &lowerRight.x, &lowerRight.y );
 
-	//wxRect newRect = wxRect( upperLeft, lowerRight );
+    //wxRect newRect = wxRect( upperLeft, lowerRight );
 
-	pRect->x = wxMin(upperLeft.x,lowerRight.x);
-	pRect->y = wxMin(upperLeft.y,lowerRight.y);
+    pRect->x = wxMin(upperLeft.x,lowerRight.x);
+    pRect->y = wxMin(upperLeft.y,lowerRight.y);
 
-	pRect->width  = abs( lowerRight.x - upperLeft.x );
-	pRect->height = abs( lowerRight.y - upperLeft.y );
+    pRect->width  = abs( lowerRight.x - upperLeft.x );
+    pRect->height = abs( lowerRight.y - upperLeft.y );
 }
 
 int cbDockPane::GetRowAt( int paneY )
 {
-	if ( paneY < 0 ) return -1;
+    if ( paneY < 0 )
+        return -1;
 
-	int curY = 0;
+    int curY = 0;
 
-	size_t i = 0;
+    size_t i = 0;
 
-	for( ; i != mRows.Count(); ++i )
-	{
-		int rowHeight = mRows[i]->mRowHeight;
+    for ( ; i != mRows.Count(); ++i )
+    {
+        int rowHeight = mRows[i]->mRowHeight;
 
-		int third = rowHeight/3;
-		
-		if ( paneY >= curY && paneY < curY + third ) 
-			return i-1;
+        int third = rowHeight/3;
+        
+        if ( paneY >= curY && paneY < curY + third ) 
+            return i-1;
 
-		if ( paneY >= curY + third && paneY < curY + rowHeight - third ) 
-			return i;
+        if ( paneY >= curY + third && paneY < curY + rowHeight - third ) 
+            return i;
 
-		curY += rowHeight;
-	}
+        curY += rowHeight;
+    }
 
-	return i;
+    return i;
 }
 
 int cbDockPane::GetRowAt( int upperY, int lowerY )
 {
-	/*
-	// OLD STUFF::
-	int range    = lowerY - upperY;
-	int oneThird = range / 3;
+    /*
+    // OLD STUFF::
+    int range    = lowerY - upperY;
+    int oneThird = range / 3;
 
-	wxNode* pRow = mRows.First();
-	int row = 0;
-	int curY = 0;
+    wxNode* pRow = mRows.First();
+    int row = 0;
+    int curY = 0;
 
-	if ( lowerY <= 0 ) return -1;
+    if ( lowerY <= 0 ) return -1;
 
-	while( pRow )
-	{
-		int rowHeight = GetRowHeight( (wxList*)pRow->Data() );
+    while( pRow )
+    {
+        int rowHeight = GetRowHeight( (wxList*)pRow->Data() );
 
-		if ( upperY >= curY &&
-			 lowerY < curY ) return row;
+        if ( upperY >= curY &&
+             lowerY < curY ) return row;
 
-		if ( upperY <= curY && 
-			 lowerY >= curY &&
-			 curY - upperY >= oneThird ) return row-1;
+        if ( upperY <= curY && 
+             lowerY >= curY &&
+             curY - upperY >= oneThird ) return row-1;
 
-		if ( ( upperY <  curY + rowHeight && 
-			   lowerY >= curY + rowHeight &&
-			   curY + rowHeight - lowerY >= oneThird ) 
-		   )
-			return row+1;
+        if ( ( upperY <  curY + rowHeight && 
+               lowerY >= curY + rowHeight &&
+               curY + rowHeight - lowerY >= oneThird ) 
+           )
+            return row+1;
 
-		if ( lowerY <= curY + rowHeight ) return row;
+        if ( lowerY <= curY + rowHeight ) return row;
 
-		++row;
-		curY += rowHeight;
-		pRow = pRow->Next();
-	}
-	*/
+        ++row;
+        curY += rowHeight;
+        pRow = pRow->Next();
+    }
+    */
 
-	int mid = upperY + (lowerY - upperY)/2;
+    int mid = upperY + (lowerY - upperY)/2;
 
-	if ( mid < 0 ) return -1;
+    if ( mid < 0 )
+        return -1;
 
-	int curY = 0;
-	size_t i = 0;
+    int curY = 0;
+    size_t i = 0;
 
-	for( ; i != mRows.Count(); ++i )
-	{
-		int rowHeight = mRows[i]->mRowHeight;
+    for ( ; i != mRows.Count(); ++i )
+    {
+        int rowHeight = mRows[i]->mRowHeight;
 
-		if ( mid >= curY && mid < curY + rowHeight ) return i;
+        if ( mid >= curY && mid < curY + rowHeight ) return i;
 
-		curY += rowHeight;
-	}
+        curY += rowHeight;
+    }
 
-	return i;
+    return i;
 }
 
 int cbDockPane::GetRowY( cbRowInfo* pRow )
 {
-	int curY = 0;
+    int curY = 0;
 
-	for( size_t i = 0; i != mRows.Count(); ++i )
-	{
-		if ( mRows[i] == pRow ) break;
+    size_t i;
+    for ( i = 0; i != mRows.Count(); ++i )
+    {
+        if ( mRows[i] == pRow )
+            break;
 
-		curY += mRows[i]->mRowHeight;
-	}
+        curY += mRows[i]->mRowHeight;
+    }
 
-	return curY;
+    return curY;
 }
 
 bool cbDockPane::HasNotFixedRowsAbove( cbRowInfo* pRow )
 {
- 	while ( pRow->mpPrev )
-	{
-		pRow = pRow->mpPrev;
+    while ( pRow->mpPrev )
+    {
+        pRow = pRow->mpPrev;
 
-		if ( pRow->mHasOnlyFixedBars )
+        if ( pRow->mHasOnlyFixedBars )
 
-			return TRUE;
-	} 
+            return TRUE;
+    } 
 
-	return FALSE;
+    return FALSE;
 }
 
 bool cbDockPane::HasNotFixedRowsBelow( cbRowInfo* pRow )
 {
-	while( pRow->mpNext )
-	{
-		pRow = pRow->mpNext;
+    while( pRow->mpNext )
+    {
+        pRow = pRow->mpNext;
 
-		if ( pRow->mHasOnlyFixedBars )
+        if ( pRow->mHasOnlyFixedBars )
 
-			return TRUE;
-	}
+            return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 bool cbDockPane::HasNotFixedBarsLeft( cbBarInfo* pBar )
 {
-	while( pBar->mpPrev )
-	{
-		pBar = pBar->mpPrev;
+    while( pBar->mpPrev )
+    {
+        pBar = pBar->mpPrev;
 
-		if ( pBar->IsFixed() )
+        if ( pBar->IsFixed() )
 
-			return TRUE;
-	}
-		
-	return FALSE;
+            return TRUE;
+    }
+        
+    return FALSE;
 }
 
 bool cbDockPane::HasNotFixedBarsRight( cbBarInfo* pBar )
 {
-	while( pBar->mpNext )
-	{
-		pBar = pBar->mpNext;
+    while( pBar->mpNext )
+    {
+        pBar = pBar->mpNext;
 
-		if ( pBar->IsFixed() )
+        if ( pBar->IsFixed() )
 
-			return TRUE;
-	}
-		
-	return FALSE;
+            return TRUE;
+    }
+        
+    return FALSE;
 }
 
 void cbDockPane::CalcLengthRatios( cbRowInfo* pInRow )
 {
-	int totalWidth = 0;
+    int totalWidth = 0;
 
-	size_t i = 0;
+    size_t i = 0;
 
-	// clac current-maximal-total-length of all maximized bars
+    // clac current-maximal-total-length of all maximized bars
 
-	for( i = 0; i != pInRow->mBars.GetCount(); ++i )
-	{
-		cbBarInfo& bar = *pInRow->mBars[i];
+    for ( i = 0; i != pInRow->mBars.GetCount(); ++i )
+    {
+        cbBarInfo& bar = *pInRow->mBars[i];
 
-		if ( !bar.IsFixed() )
+        if ( !bar.IsFixed() )
+            totalWidth += bar.mBounds.width;
+    }
 
-			totalWidth += bar.mBounds.width;
-	}
+    // set up persentages of occupied space for each maximized bar
 
-	// set up persentages of occupied space for each maximized bar
+    for ( i = 0; i != pInRow->mBars.Count(); ++i )
+    {
+        cbBarInfo& bar = *pInRow->mBars[i];
 
-	for( i = 0; i != pInRow->mBars.Count(); ++i )
-	{
-		cbBarInfo& bar = *pInRow->mBars[i];
-
-		if ( !bar.IsFixed() )
-
-			bar.mLenRatio = double(bar.mBounds.width)/double(totalWidth);
-	}
+        if ( !bar.IsFixed() )
+            bar.mLenRatio = double(bar.mBounds.width)/double(totalWidth);
+    }
 }
 
 void cbDockPane::RecalcRowLayout( cbRowInfo* pRow )
 {
-	cbLayoutRowEvent evt( pRow, this );
-	
-	mpLayout->FirePluginEvent( evt );
+    cbLayoutRowEvent evt( pRow, this );
+    
+    mpLayout->FirePluginEvent( evt );
 }
 
 void cbDockPane::ExpandBar( cbBarInfo* pBar )
 {
-	mpLayout->GetUpdatesManager().OnStartChanges();
+    mpLayout->GetUpdatesManager().OnStartChanges();
 
-	if ( !pBar->mpRow->mpExpandedBar )
-	{
-		// save ratios only when there arent any bars expanded yet
+    if ( !pBar->mpRow->mpExpandedBar )
+    {
+        // save ratios only when there arent any bars expanded yet
 
-		cbArrayFloat& ratios = pBar->mpRow->mSavedRatios;
+        cbArrayFloat& ratios = pBar->mpRow->mSavedRatios;
 
-		ratios.Clear();
-		ratios.Alloc( pBar->mpRow->mNotFixedBarsCnt );
+        ratios.Clear();
+        ratios.Alloc( pBar->mpRow->mNotFixedBarsCnt );
 
-		cbBarInfo* pCur = pBar->mpRow->mBars[0];
+        cbBarInfo* pCur = pBar->mpRow->mBars[0];
 
-		while( pCur )
-		{
-			if ( !pCur->IsFixed() )
-			{
-				ratios.Add( 0.0 );
-				ratios[ ratios.GetCount() - 1 ] = pCur->mLenRatio; 
-			}
+        while( pCur )
+        {
+            if ( !pCur->IsFixed() )
+            {
+                ratios.Add( 0.0 );
+                ratios[ ratios.GetCount() - 1 ] = pCur->mLenRatio; 
+            }
 
-			pCur = pCur->mpNext;
-		}
-	}
+            pCur = pCur->mpNext;
+        }
+    }
 
-	cbBarInfo* pCur = pBar->mpRow->mBars[0];
+    cbBarInfo* pCur = pBar->mpRow->mBars[0];
 
-	while( pCur )
-	{
-		pCur->mLenRatio = 0.0; // minimize the rest
+    while( pCur )
+    {
+        pCur->mLenRatio = 0.0; // minimize the rest
 
-		pCur = pCur->mpNext;
-	}
+        pCur = pCur->mpNext;
+    }
 
-	pBar->mLenRatio     = 1.0; // 100%
-	pBar->mBounds.width = 0;
+    pBar->mLenRatio     = 1.0; // 100%
+    pBar->mBounds.width = 0;
 
-	pBar->mpRow->mpExpandedBar = pBar;
+    pBar->mpRow->mpExpandedBar = pBar;
 
-	mpLayout->RecalcLayout( FALSE );
+    mpLayout->RecalcLayout( FALSE );
 
-	mpLayout->GetUpdatesManager().OnFinishChanges();
-	mpLayout->GetUpdatesManager().UpdateNow();
+    mpLayout->GetUpdatesManager().OnFinishChanges();
+    mpLayout->GetUpdatesManager().UpdateNow();
 }
 
 void cbDockPane::ContractBar( cbBarInfo* pBar )
 {
-	mpLayout->GetUpdatesManager().OnStartChanges();
+    mpLayout->GetUpdatesManager().OnStartChanges();
 
     // FIXME: What's the purpose of this???
     // double ratio = 1.0/ double( pBar->mpRow->mNotFixedBarsCnt );
 
-	// restore ratios which were present before expansion
+    // restore ratios which were present before expansion
 
-	cbBarInfo* pCur = pBar->mpRow->mBars[0];
+    cbBarInfo* pCur = pBar->mpRow->mBars[0];
 
-	cbArrayFloat& ratios = pBar->mpRow->mSavedRatios;
+    cbArrayFloat& ratios = pBar->mpRow->mSavedRatios;
 
-	size_t i = 0;
+    size_t i = 0;
 
-	while( pCur )
-	{
-		if ( !pCur->IsFixed() )
-		{
-			pCur->mLenRatio = ratios[i];
-			++i;
-		}
+    while( pCur )
+    {
+        if ( !pCur->IsFixed() )
+        {
+            pCur->mLenRatio = ratios[i];
+            ++i;
+        }
 
-		pCur = pCur->mpNext;
-	}
+        pCur = pCur->mpNext;
+    }
 
-	ratios.Clear();
-	ratios.Shrink();
+    ratios.Clear();
+    ratios.Shrink();
 
-	pBar->mpRow->mpExpandedBar = NULL;
+    pBar->mpRow->mpExpandedBar = NULL;
 
-	mpLayout->RecalcLayout( FALSE );
+    mpLayout->RecalcLayout( FALSE );
 
-	mpLayout->GetUpdatesManager().OnFinishChanges();
-	mpLayout->GetUpdatesManager().UpdateNow();
+    mpLayout->GetUpdatesManager().OnFinishChanges();
+    mpLayout->GetUpdatesManager().UpdateNow();
 }
 
 void cbDockPane::InitLinksForRow( cbRowInfo* pRow )
 {
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
-	{
-		cbBarInfo& bar = *pRow->mBars[i];
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        cbBarInfo& bar = *pRow->mBars[i];
 
-		if ( i == 0 )
+        if ( i == 0 )
+            bar.mpPrev = NULL;
+        else
+            bar.mpPrev = pRow->mBars[i-1];
 
-			bar.mpPrev = NULL;
-		else
-			bar.mpPrev = pRow->mBars[i-1];
-
-		if ( i == pRow->mBars.Count() - 1 )
-
-			bar.mpNext = NULL;
-		else
-			bar.mpNext = pRow->mBars[i+1];
-	}
+        if ( i == pRow->mBars.Count() - 1 )
+            bar.mpNext = NULL;
+        else
+            bar.mpNext = pRow->mBars[i+1];
+    }
 }
 
 void cbDockPane::InitLinksForRows()
 {
-	for( size_t i = 0; i != mRows.Count(); ++i )
-	{
-		cbRowInfo& row = *mRows[i];
+    size_t i;
+    for ( i = 0; i != mRows.Count(); ++i )
+    {
+        cbRowInfo& row = *mRows[i];
 
-		if ( i == 0 )
+        if ( i == 0 )
+            row.mpPrev = NULL;
+        else
+            row.mpPrev = mRows[i-1];
 
-			row.mpPrev = NULL;
-		else
-			row.mpPrev = mRows[i-1];
-
-		if ( i == mRows.Count() - 1 )
-
-			row.mpNext = NULL;
-		else
-			row.mpNext = mRows[i+1];
-	}
+        if ( i == mRows.Count() - 1 )
+            row.mpNext = NULL;
+        else
+            row.mpNext = mRows[i+1];
+    }
 }
 
 void cbDockPane::DoInsertBar( cbBarInfo* pBar, int rowNo )
 {
-	cbRowInfo* pRow = NULL;
+    cbRowInfo* pRow = NULL;
 
-	if ( rowNo == -1 || rowNo >= (int)mRows.Count() )
-	{
-		pRow = new cbRowInfo();
+    if ( rowNo == -1 || rowNo >= (int)mRows.Count() )
+    {
+        pRow = new cbRowInfo();
 
-		if ( rowNo == -1 && mRows.Count() )
-		
-			mRows.Insert( pRow, 0 ); 
-		else
-			mRows.Add( pRow );
+        if ( rowNo == -1 && mRows.Count() )
+        
+            mRows.Insert( pRow, 0 ); 
+        else
+            mRows.Add( pRow );
 
-		InitLinksForRows();
-	}
-	else
-	{
-		pRow = mRows[rowNo];
+        InitLinksForRows();
+    }
+    else
+    {
+        pRow = mRows[rowNo];
 
-		if ( mProps.mNonDestructFirctionOn == TRUE )
-		{
-			// store original shape of the row (before the bar is inserted)
+        if ( mProps.mNonDestructFirctionOn == TRUE )
+        {
+            // store original shape of the row (before the bar is inserted)
 
-			mpStoredRow = pRow;
-			
-			GetRowShapeData( mpStoredRow, &mRowShapeData );
-		}
-	}
+            mpStoredRow = pRow;
+            
+            GetRowShapeData( mpStoredRow, &mRowShapeData );
+        }
+    }
 
-	if ( pRow->mBars.Count() )
+    if ( pRow->mBars.Count() )
 
-		pRow->mpExpandedBar = NULL;
+        pRow->mpExpandedBar = NULL;
 
-	cbInsertBarEvent insEvt( pBar, pRow, this );
+    cbInsertBarEvent insEvt( pBar, pRow, this );
 
-	mpLayout->FirePluginEvent( insEvt );
+    mpLayout->FirePluginEvent( insEvt );
 
-	mpLayout->GetUpdatesManager().OnRowWillChange( pRow, this );
+    mpLayout->GetUpdatesManager().OnRowWillChange( pRow, this );
 }
 
 void cbDockPane::InsertBar( cbBarInfo* pBarInfo, const wxRect& atRect )
 {
-	wxRect rect = atRect;
-	FrameToPane( &rect );
+    wxRect rect = atRect;
+    FrameToPane( &rect );
 
-	pBarInfo->mBounds.x      = rect.x;
-	pBarInfo->mBounds.width  = rect.width;
-	pBarInfo->mBounds.height = rect.height;
+    pBarInfo->mBounds.x      = rect.x;
+    pBarInfo->mBounds.width  = rect.width;
+    pBarInfo->mBounds.height = rect.height;
 
-	int row = GetRowAt( rect.y, rect.y + rect.height );
+    int row = GetRowAt( rect.y, rect.y + rect.height );
 
-	DoInsertBar( pBarInfo, row );
+    DoInsertBar( pBarInfo, row );
 }
 
 void cbDockPane::InsertBar( cbBarInfo* pBar, cbRowInfo* pIntoRow )
 {
-	cbInsertBarEvent insEvt( pBar, pIntoRow, this );
+    cbInsertBarEvent insEvt( pBar, pIntoRow, this );
 
-	mpLayout->FirePluginEvent( insEvt );
+    mpLayout->FirePluginEvent( insEvt );
 
-	mpLayout->GetUpdatesManager().OnRowWillChange( pIntoRow, this );
+    mpLayout->GetUpdatesManager().OnRowWillChange( pIntoRow, this );
 }
 
 void cbDockPane::InsertBar( cbBarInfo* pBarInfo )
 {
-	// set transient properties
+    // set transient properties
 
-	pBarInfo->mpRow           = NULL;
-	pBarInfo->mHasLeftHandle  = FALSE;
-	pBarInfo->mHasRightHandle = FALSE;
-	pBarInfo->mLenRatio       = 0.0;
+    pBarInfo->mpRow           = NULL;
+    pBarInfo->mHasLeftHandle  = FALSE;
+    pBarInfo->mHasRightHandle = FALSE;
+    pBarInfo->mLenRatio       = 0.0;
 
-	// set preferred bar dimensions, according to the state in which
-	// the bar is being inserted
+    // set preferred bar dimensions, according to the state in which
+    // the bar is being inserted
 
-	pBarInfo->mBounds.width   = pBarInfo->mDimInfo.mSizes[ pBarInfo->mState ].x;
-	pBarInfo->mBounds.height  = pBarInfo->mDimInfo.mSizes[ pBarInfo->mState ].y;
+    pBarInfo->mBounds.width   = pBarInfo->mDimInfo.mSizes[ pBarInfo->mState ].x;
+    pBarInfo->mBounds.height  = pBarInfo->mDimInfo.mSizes[ pBarInfo->mState ].y;
 
-	DoInsertBar( pBarInfo, pBarInfo->mRowNo );
+    DoInsertBar( pBarInfo, pBarInfo->mRowNo );
 }
 
 void cbDockPane::RemoveRow( cbRowInfo* pRow )
 {
-	// first, hide all bar-windows in the removed row
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
+    size_t i;
+    // first, hide all bar-windows in the removed row
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        if ( pRow->mBars[i]->mpBarWnd )
+            pRow->mBars[i]->mpBarWnd->Show( FALSE );
+    }
 
-		if ( pRow->mBars[i]->mpBarWnd )
+    mRows.Remove( pRow );
 
-			pRow->mBars[i]->mpBarWnd->Show( FALSE );
-
-	mRows.Remove( pRow );
-
-	pRow->mUMgrData.SetDirty(TRUE);
+    pRow->mUMgrData.SetDirty(TRUE);
 }
 
 void cbDockPane::InsertRow( cbRowInfo* pRow, cbRowInfo* pBeforeRow )
 {
-	if ( !pBeforeRow )
+    if ( !pBeforeRow )
 
-		mRows.Add( pRow );
-	else
-		mRows.Insert( pRow, mRows.Index( pBeforeRow ) );
+        mRows.Add( pRow );
+    else
+        mRows.Insert( pRow, mRows.Index( pBeforeRow ) );
 
-	InitLinksForRows();
+    InitLinksForRows();
 
-	pRow->mUMgrData.SetDirty(TRUE);
+    pRow->mUMgrData.SetDirty(TRUE);
 
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+        pRow->mBars[i]->mUMgrData.SetDirty( TRUE );
 
-			pRow->mBars[i]->mUMgrData.SetDirty( TRUE );
-
-	SyncRowFlags( pRow );
+    SyncRowFlags( pRow );
 }
 
 void cbDockPane::SetPaneWidth(int width)
 {
-	if ( IsHorizontal() )
-	
-		mPaneWidth = width - mLeftMargin - mRightMargin;
-	else
-		mPaneWidth = width - mTopMargin - mBottomMargin;
+    if ( IsHorizontal() )
+        mPaneWidth = width - mLeftMargin - mRightMargin;
+    else
+        mPaneWidth = width - mTopMargin - mBottomMargin;
 }
 
 
 void cbDockPane::SetBoundsInParent( const wxRect& rect )
 {
+    mBoundsInParent = rect;
 
-	mBoundsInParent = rect;
+    // set pane dimensions in local coordinates
 
-	// set pane dimensions in local coordinates
+    if ( IsHorizontal() )
+    {
+        mPaneWidth  = mBoundsInParent.width  - ( mRightMargin + mLeftMargin   );
+        mPaneHeight = mBoundsInParent.height - ( mTopMargin   + mBottomMargin );
+    }
+    else
+    {
+        mPaneWidth  = mBoundsInParent.height - ( mTopMargin   + mBottomMargin );
+        mPaneHeight = mBoundsInParent.width  - ( mRightMargin + mLeftMargin   );
+    }
 
-	if ( IsHorizontal() )
-	{
-		mPaneWidth  = mBoundsInParent.width  - ( mRightMargin + mLeftMargin   );
-		mPaneHeight = mBoundsInParent.height - ( mTopMargin   + mBottomMargin );
-	}
-	else
-	{
-		mPaneWidth  = mBoundsInParent.height - ( mTopMargin   + mBottomMargin );
-		mPaneHeight = mBoundsInParent.width  - ( mRightMargin + mLeftMargin   );
-	}
+    // convert bounding rectangles of all pane items into parent frame's coordinates
 
-	// convert bounding rectangles of all pane items into parent frame's coordinates
+    wxBarIterator i( mRows );
 
-	wxBarIterator i( mRows );
+    wxRect noMarginsRect = mBoundsInParent;
 
-	wxRect noMarginsRect = mBoundsInParent;
+    noMarginsRect.x      += mLeftMargin;
+    noMarginsRect.y      += mTopMargin;
+    noMarginsRect.width  -= ( mLeftMargin + mRightMargin  );
+    noMarginsRect.height -= ( mTopMargin  + mBottomMargin );
 
-	noMarginsRect.x      += mLeftMargin;
-	noMarginsRect.y      += mTopMargin;
-	noMarginsRect.width  -= ( mLeftMargin + mRightMargin  );
-	noMarginsRect.height -= ( mTopMargin  + mBottomMargin );
+    // hide the whole pane, if it's bounds became reverted (i.e. pane vanished)
 
-	// hide the whole pane, if it's bounds became reverted (i.e. pane vanished)
+    if ( mBoundsInParent.width < 0 ||
+         mBoundsInParent.height < 0 )
 
-	if ( mBoundsInParent.width < 0 ||
-		 mBoundsInParent.height < 0 )
+         hide_rect( mBoundsInParent );
 
-		 hide_rect( mBoundsInParent );
+    if ( noMarginsRect.width < 0 ||
+         noMarginsRect.height < 0 )
+    
+        hide_rect( noMarginsRect   );
 
-	if ( noMarginsRect.width < 0 ||
-		 noMarginsRect.height < 0 )
-	
-		hide_rect( noMarginsRect   );
+    // calculate mBoundsInParent for each item in the pane
 
-	// calculate mBoundsInParent for each item in the pane
+    while( i.Next() )
+    {
+        cbBarInfo& bar = i.BarInfo();
 
-	while( i.Next() )
-	{
-		cbBarInfo& bar = i.BarInfo();
+        cbRowInfo* pRowInfo = bar.mpRow;
 
-		cbRowInfo* pRowInfo = bar.mpRow;
+        // set up row info, if this is first bar in the row
 
-		// set up row info, if this is first bar in the row
+        if ( pRowInfo && bar.mpPrev == NULL )
+        {
+            pRowInfo->mBoundsInParent.y      = pRowInfo->mRowY;
+            pRowInfo->mBoundsInParent.x      = 0;
+            pRowInfo->mBoundsInParent.width  = mPaneWidth;
+            pRowInfo->mBoundsInParent.height = pRowInfo->mRowHeight;
 
-		if ( pRowInfo && bar.mpPrev == NULL )
-		{
-			pRowInfo->mBoundsInParent.y      = pRowInfo->mRowY;
-			pRowInfo->mBoundsInParent.x      = 0;
-			pRowInfo->mBoundsInParent.width  = mPaneWidth;
-			pRowInfo->mBoundsInParent.height = pRowInfo->mRowHeight;
+            PaneToFrame( &pRowInfo->mBoundsInParent );
 
-			PaneToFrame( &pRowInfo->mBoundsInParent );
+            clip_rect_against_rect( pRowInfo->mBoundsInParent, noMarginsRect );
+        }
 
-			clip_rect_against_rect( pRowInfo->mBoundsInParent, noMarginsRect );
-		}
+        wxRect bounds = bar.mBounds;
 
-		wxRect bounds = bar.mBounds;
+        // exclude dimensions of handles, when calculating
+        // bar's bounds in parent (i.e. "visual bounds")
 
-		// exclude dimensions of handles, when calculating
-		// bar's bounds in parent (i.e. "visual bounds")
+        if ( bar.mHasLeftHandle )
+        {
+            bounds.x     += mProps.mResizeHandleSize;
+            bounds.width -= mProps.mResizeHandleSize;
+        }
 
-		if ( bar.mHasLeftHandle )
-		{
-			bounds.x     += mProps.mResizeHandleSize;
-			bounds.width -= mProps.mResizeHandleSize;
-		}
+        if ( bar.mHasRightHandle )
+        
+            bounds.width -= mProps.mResizeHandleSize;
 
-		if ( bar.mHasRightHandle )
-		
-			bounds.width -= mProps.mResizeHandleSize;
+        PaneToFrame( &bounds );
 
-		PaneToFrame( &bounds );
+        clip_rect_against_rect( bounds, noMarginsRect );
 
-		clip_rect_against_rect( bounds, noMarginsRect );
-
-		bar.mBoundsInParent = bounds;
-	}
+        bar.mBoundsInParent = bounds;
+    }
 }
 
 bool cbDockPane::BarPresent( cbBarInfo* pBar )
 {
-	wxBarIterator iter( mRows );
+    wxBarIterator iter( mRows );
 
-	while( iter.Next() )
-	
-		if ( &iter.BarInfo() == pBar ) return TRUE;
+    while( iter.Next() )
+    
+        if ( &iter.BarInfo() == pBar ) return TRUE;
 
-	return FALSE;
+    return FALSE;
 }
 
 cbRowInfo* cbDockPane::GetRow( int row )
 {
-	if ( row >= (int)mRows.Count() ) return NULL;
+    if ( row >= (int)mRows.Count() ) return NULL;
 
-	return mRows[ row ];
+    return mRows[ row ];
 }
 
 int cbDockPane::GetRowIndex( cbRowInfo* pRow )
 {
-	for( size_t i = 0; i != mRows.Count(); ++i )
-	{
-		if ( mRows[i] == pRow ) 
-			return i;
-	}
+    size_t i;
+    for ( i = 0; i != mRows.Count(); ++i )
+    {
+        if ( mRows[i] == pRow ) 
+            return i;
+    }
 
-	int avoidCompilerWarning = 0;
-	wxASSERT(avoidCompilerWarning); // DBG:: row should be present
+    wxFAIL_MSG("Row must be present to call cbDockPane::GetRowIndex()");
 
-	return 0;
+    return 0;
 }
 
 int cbDockPane::GetPaneHeight()
 {
-	// first, recalculate row heights and the Y-positions
+    // first, recalculate row heights and the Y-positions
 
-	cbLayoutRowsEvent evt( this );
-	mpLayout->FirePluginEvent( evt );
+    cbLayoutRowsEvent evt( this );
+    mpLayout->FirePluginEvent( evt );
 
-	int height = 0;
+    int height = 0;
 
-	if ( IsHorizontal() )
-	
-		height += mTopMargin  + mBottomMargin;
-	else
-		height += mLeftMargin + mRightMargin;
+    if ( IsHorizontal() )
+    
+        height += mTopMargin  + mBottomMargin;
+    else
+        height += mLeftMargin + mRightMargin;
 
-	int count = mRows.Count();
+    int count = mRows.Count();
 
-	if ( count )
-	
-		height += mRows[count-1]->mRowY + mRows[count-1]->mRowHeight;
+    if ( count )
+    
+        height += mRows[count-1]->mRowY + mRows[count-1]->mRowHeight;
 
-	return height;
+    return height;
 }
 
 int cbDockPane::GetAlignment()
 {
-	return mAlignment;
+    return mAlignment;
 }
 
 bool cbDockPane::MatchesMask( int paneMask )
 {
-	int thisMask = 0;
+    int thisMask = 0;
 
-	// FIXME:: use array instead of switch()
+    // FIXME:: use array instead of switch()
 
-	switch (mAlignment)
-	{
-		case FL_ALIGN_TOP    : thisMask = FL_ALIGN_TOP_PANE;   break;
-		case FL_ALIGN_BOTTOM : thisMask = FL_ALIGN_BOTTOM_PANE;break;
-		case FL_ALIGN_LEFT   : thisMask = FL_ALIGN_LEFT_PANE;  break;
-		case FL_ALIGN_RIGHT  : thisMask = FL_ALIGN_RIGHT_PANE; break;
+    switch (mAlignment)
+    {
+        case FL_ALIGN_TOP    : thisMask = FL_ALIGN_TOP_PANE;   break;
+        case FL_ALIGN_BOTTOM : thisMask = FL_ALIGN_BOTTOM_PANE;break;
+        case FL_ALIGN_LEFT   : thisMask = FL_ALIGN_LEFT_PANE;  break;
+        case FL_ALIGN_RIGHT  : thisMask = FL_ALIGN_RIGHT_PANE; break;
 
-		default:
-			int avoidCompilerWarning = 0;
-			wxASSERT(avoidCompilerWarning); // DBG:: bogus alignment type
-	}
+        default:
+            wxFAIL_MSG("Bad FL alignment type detected in cbDockPane::MatchesMask()");
+    }
 
-	return ( thisMask & paneMask ) != 0;
+    return ( thisMask & paneMask ) != 0;
 }
 
 void cbDockPane::RecalcLayout()
 {
-	// first, reposition rows and items vertically
+    // first, reposition rows and items vertically
 
-	cbLayoutRowsEvent evt( this );
-	mpLayout->FirePluginEvent( evt );
+    cbLayoutRowsEvent evt( this );
+    mpLayout->FirePluginEvent( evt );
 
-	// then horizontally in each row 
+    // then horizontally in each row 
 
-	for( size_t i = 0; i != mRows.Count(); ++i )
-
-		RecalcRowLayout( mRows[i] );
+    size_t i;
+    for ( i = 0; i != mRows.Count(); ++i )
+        RecalcRowLayout( mRows[i] );
 }
 
 int cbDockPane::GetDockingState()
 {
-	if ( mAlignment == FL_ALIGN_TOP || 
-		 mAlignment == FL_ALIGN_BOTTOM )
-	{
-		return wxCBAR_DOCKED_HORIZONTALLY;
-	}
-	else
-		return wxCBAR_DOCKED_VERTICALLY;
+    if ( mAlignment == FL_ALIGN_TOP || 
+         mAlignment == FL_ALIGN_BOTTOM )
+    {
+        return wxCBAR_DOCKED_HORIZONTALLY;
+    }
+    else
+        return wxCBAR_DOCKED_VERTICALLY;
 }
 
 inline bool cbDockPane::HasPoint( const wxPoint& pos, int x, int y, 
-								  int width, int height )
+                                  int width, int height )
 {
-	return ( pos.x >= x && 
-			 pos.y >= y &&
-		     pos.x < x + width &&
-			 pos.y < y + height   );
+    return ( pos.x >= x && 
+             pos.y >= y &&
+             pos.x < x + width &&
+             pos.y < y + height   );
 }
 
 int cbDockPane::HitTestPaneItems( const wxPoint& pos,
-								  cbRowInfo**    ppRow,
-								  cbBarInfo**    ppBar
-							    )
+                                  cbRowInfo**    ppRow,
+                                  cbBarInfo**    ppBar
+                                )
 {
-	(*ppRow) = NULL;
-	(*ppBar) = NULL;
+    (*ppRow) = NULL;
+    (*ppBar) = NULL;
 
-	for( size_t i = 0; i != mRows.Count(); ++i )
-	{
-		cbRowInfo& row = *mRows[i];
+    size_t i;
+    for ( i = 0; i != mRows.Count(); ++i )
+    {
+        cbRowInfo& row = *mRows[i];
 
-		*ppRow = &row;
+        *ppRow = &row;
 
-		// hit-test handles of the row, if present
+        // hit-test handles of the row, if present
 
-		if ( row.mHasUpperHandle )
-		{
-			if ( HasPoint( pos, 0, row.mRowY,
-					       row.mRowWidth, mProps.mResizeHandleSize ) )
+        if ( row.mHasUpperHandle )
+        {
+            if ( HasPoint( pos, 0, row.mRowY,
+                           row.mRowWidth, mProps.mResizeHandleSize ) )
 
-				return CB_UPPER_ROW_HANDLE_HITTED;
-		}
-		else
-		if ( row.mHasLowerHandle )
-		{
-			if ( HasPoint( pos, 0, row.mRowY + row.mRowHeight - mProps.mResizeHandleSize, 
-				           row.mRowWidth, mProps.mResizeHandleSize ) )
+                return CB_UPPER_ROW_HANDLE_HITTED;
+        }
+        else
+        if ( row.mHasLowerHandle )
+        {
+            if ( HasPoint( pos, 0, row.mRowY + row.mRowHeight - mProps.mResizeHandleSize, 
+                           row.mRowWidth, mProps.mResizeHandleSize ) )
 
-					return CB_LOWER_ROW_HANDLE_HITTED;
-		}
+                    return CB_LOWER_ROW_HANDLE_HITTED;
+        }
 
-		// hit-test bar handles and bar content
+        // hit-test bar handles and bar content
 
-		for( size_t k = 0; k != row.mBars.Count(); ++k )
-		{
-			cbBarInfo& bar    = *row.mBars[k];
-			wxRect&    bounds = bar.mBounds;
+        size_t k;
+        for ( k = 0; k != row.mBars.Count(); ++k )
+        {
+            cbBarInfo& bar    = *row.mBars[k];
+            wxRect&    bounds = bar.mBounds;
 
-			*ppBar = &bar;
+            *ppBar = &bar;
 
-			if ( bar.mHasLeftHandle )
-			{
-				if ( HasPoint( pos, bounds.x, bounds.y,
-					           mProps.mResizeHandleSize, bounds.height ) )
+            if ( bar.mHasLeftHandle )
+            {
+                if ( HasPoint( pos, bounds.x, bounds.y,
+                               mProps.mResizeHandleSize, bounds.height ) )
 
-					return CB_LEFT_BAR_HANDLE_HITTED;
-			}
-			else
-			if ( bar.mHasRightHandle )
-			{
-				if ( HasPoint( pos, bounds.x + bounds.width - mProps.mResizeHandleSize, bounds.y,
-				               mProps.mResizeHandleSize, bounds.height ) )
-				
-					return CB_RIGHT_BAR_HANDLE_HITTED;
-			}
+                    return CB_LEFT_BAR_HANDLE_HITTED;
+            }
+            else
+            if ( bar.mHasRightHandle )
+            {
+                if ( HasPoint( pos, bounds.x + bounds.width - mProps.mResizeHandleSize, bounds.y,
+                               mProps.mResizeHandleSize, bounds.height ) )
+                
+                    return CB_RIGHT_BAR_HANDLE_HITTED;
+            }
 
-			if ( HasPoint( pos, bounds.x, bounds.y, bounds.width, bounds.height ) )
-			
-				return CB_BAR_CONTENT_HITTED;
+            if ( HasPoint( pos, bounds.x, bounds.y, bounds.width, bounds.height ) )
+                return CB_BAR_CONTENT_HITTED;
 
-		} // hit-test next bar
+        } // hit-test next bar
 
-	} // next row
+    } // next row
 
-	return CB_NO_ITEMS_HITTED;
+    return CB_NO_ITEMS_HITTED;
 }
 
 void cbDockPane::GetBarResizeRange( cbBarInfo* pBar, int* from, int *till,
-								    bool forLeftHandle )
+                                    bool forLeftHandle )
 {
-	cbBarInfo* pGivenBar = pBar;
+    cbBarInfo* pGivenBar = pBar;
 
-	int notFree = 0;
+    int notFree = 0;
 
-	// calc unavailable space from the left
+    // calc unavailable space from the left
 
-	while( pBar->mpPrev )
-	{
-		pBar = pBar->mpPrev;
+    while( pBar->mpPrev )
+    {
+        pBar = pBar->mpPrev;
 
-		if ( !pBar->IsFixed() ) notFree += mProps.mMinCBarDim.x;
-						        else notFree += pBar->mBounds.width;
-	}
+        if ( !pBar->IsFixed() ) notFree += mProps.mMinCBarDim.x;
+                                else notFree += pBar->mBounds.width;
+    }
 
-	*from = notFree;
+    *from = notFree;
 
-	pBar = pGivenBar;
+    pBar = pGivenBar;
 
-	notFree = 0;
+    notFree = 0;
 
-	// calc unavailable space from the right
+    // calc unavailable space from the right
 
-	while( pBar->mpNext )
-	{
-		pBar = pBar->mpNext;
+    while( pBar->mpNext )
+    {
+        pBar = pBar->mpNext;
 
-		if ( pBar->mBounds.x >= mPaneWidth ) break;
+        if ( pBar->mBounds.x >= mPaneWidth ) break;
 
-		// treat not-fixed bars as minimized
+        // treat not-fixed bars as minimized
 
-		if ( !pBar->IsFixed() ) 
-			
-			notFree += mProps.mMinCBarDim.x;
-		else 
-		{
-			if ( pBar->mBounds.x + pBar->mBounds.width >= mPaneWidth )
-			{
-				notFree += mPaneWidth - pBar->mBounds.x;
-				break;
-			}
-			else
-				notFree += pBar->mBounds.width;
-		}
+        if ( !pBar->IsFixed() ) 
+            
+            notFree += mProps.mMinCBarDim.x;
+        else 
+        {
+            if ( pBar->mBounds.x + pBar->mBounds.width >= mPaneWidth )
+            {
+                notFree += mPaneWidth - pBar->mBounds.x;
+                break;
+            }
+            else
+                notFree += pBar->mBounds.width;
+        }
 
-	} 
+    } 
 
-	*till = mPaneWidth - notFree;
+    *till = mPaneWidth - notFree;
 
-	// do not let resizing totally deform the bar itself
+    // do not let resizing totally deform the bar itself
 
-	if ( forLeftHandle )
-	
-		(*till) -= mProps.mMinCBarDim.x;
-	else
-	
-		(*from) += mProps.mMinCBarDim.x;
+    if ( forLeftHandle )
+    
+        (*till) -= mProps.mMinCBarDim.x;
+    else
+    
+        (*from) += mProps.mMinCBarDim.x;
 }
 
 int cbDockPane::GetMinimalRowHeight( cbRowInfo* pRow )
 {
-	int height = mProps.mMinCBarDim.y;
+    int height = mProps.mMinCBarDim.y;
 
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
-		
-		if ( pRow->mBars[i]->IsFixed() )
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        if ( pRow->mBars[i]->IsFixed() )
+            height = wxMax( height, pRow->mBars[i]->mBounds.height );
+    }
 
-			height = wxMax( height, pRow->mBars[i]->mBounds.height );
+    if ( pRow->mHasUpperHandle )
+        height += mProps.mResizeHandleSize;
 
-	if ( pRow->mHasUpperHandle )
-
-		height += mProps.mResizeHandleSize;
-
-	if ( pRow->mHasLowerHandle )
-
-		height += mProps.mResizeHandleSize;
-	
-	return height;
+    if ( pRow->mHasLowerHandle )
+        height += mProps.mResizeHandleSize;
+    
+    return height;
 }
 
 void cbDockPane::SetRowHeight( cbRowInfo* pRow, int newHeight )
 {
-	if ( pRow->mHasUpperHandle )
+    if ( pRow->mHasUpperHandle )
 
-		newHeight -= mProps.mResizeHandleSize;
+        newHeight -= mProps.mResizeHandleSize;
 
-	if ( pRow->mHasLowerHandle )
+    if ( pRow->mHasLowerHandle )
 
-		newHeight -= mProps.mResizeHandleSize;
+        newHeight -= mProps.mResizeHandleSize;
 
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
-
-		if ( !pRow->mBars[i]->IsFixed() )
-		
-			pRow->mBars[i]->mBounds.height = newHeight;
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        if ( !pRow->mBars[i]->IsFixed() )
+            pRow->mBars[i]->mBounds.height = newHeight;
+    }
 }
 
 void cbDockPane::GetRowResizeRange( cbRowInfo* pRow, int* from, int* till,
-								    bool forUpperHandle )
+                                    bool forUpperHandle )
 {
-	cbRowInfo* pGivenRow = pRow;
+    cbRowInfo* pGivenRow = pRow;
 
-	// calc unavailable space from above
+    // calc unavailable space from above
 
-	int notFree = 0;
+    int notFree = 0;
 
-	while( pRow->mpPrev )
-	{
-		pRow = pRow->mpPrev;
+    while( pRow->mpPrev )
+    {
+        pRow = pRow->mpPrev;
 
-		notFree += GetMinimalRowHeight( pRow );
+        notFree += GetMinimalRowHeight( pRow );
 
-	};
+    };
 
-	*from = notFree;	
+    *from = notFree;    
 
-	// allow accupy the client window space by resizing pane rows
-	if ( mAlignment == FL_ALIGN_BOTTOM )
+    // allow accupy the client window space by resizing pane rows
+    if ( mAlignment == FL_ALIGN_BOTTOM )
 
-		*from -= mpLayout->GetClientHeight();
-	else
-	if ( mAlignment == FL_ALIGN_RIGHT )
+        *from -= mpLayout->GetClientHeight();
+    else
+    if ( mAlignment == FL_ALIGN_RIGHT )
 
-		*from -= mpLayout->GetClientWidth();
+        *from -= mpLayout->GetClientWidth();
 
-	// calc unavailable space from below
+    // calc unavailable space from below
 
-	pRow = pGivenRow;
+    pRow = pGivenRow;
 
-	notFree = 0;
+    notFree = 0;
 
-	while( pRow->mpNext )
-	{
-		pRow = pRow->mpNext;
+    while( pRow->mpNext )
+    {
+        pRow = pRow->mpNext;
 
-		notFree += GetMinimalRowHeight( pRow );
+        notFree += GetMinimalRowHeight( pRow );
 
-	}
+    }
 
-	*till = mPaneHeight - notFree;	
+    *till = mPaneHeight - notFree;  
 
-	// allow adjustinig pane space vs. client window space by resizing pane row heights
+    // allow adjustinig pane space vs. client window space by resizing pane row heights
 
-	if ( mAlignment == FL_ALIGN_TOP )
+    if ( mAlignment == FL_ALIGN_TOP )
 
-		*till += mpLayout->GetClientHeight();
-	else
-	if ( mAlignment == FL_ALIGN_LEFT )
+        *till += mpLayout->GetClientHeight();
+    else
+    if ( mAlignment == FL_ALIGN_LEFT )
 
-		*till += mpLayout->GetClientWidth();
+        *till += mpLayout->GetClientWidth();
 
-	// do not let the resizing of the row totally squeeze the row itself
+    // do not let the resizing of the row totally squeeze the row itself
 
-	cbRowInfo& row = *pGivenRow;
+    cbRowInfo& row = *pGivenRow;
 
-	if ( forUpperHandle )
-	{	
-		*till = row.mRowY + row.mRowHeight - GetMinimalRowHeight( pGivenRow );
+    if ( forUpperHandle )
+    {   
+        *till = row.mRowY + row.mRowHeight - GetMinimalRowHeight( pGivenRow );
 
-		if ( row.mHasUpperHandle )
+        if ( row.mHasUpperHandle )
 
-			*till -= mProps.mResizeHandleSize;
-	}
-	else
-	{
-		*from += GetMinimalRowHeight( pGivenRow );
+            *till -= mProps.mResizeHandleSize;
+    }
+    else
+    {
+        *from += GetMinimalRowHeight( pGivenRow );
 
-		if ( row.mHasLowerHandle )
+        if ( row.mHasLowerHandle )
 
-			*from -= mProps.mResizeHandleSize;
-	}
+            *from -= mProps.mResizeHandleSize;
+    }
 }
 
 void cbDockPane::ResizeRow( cbRowInfo* pRow, int ofs, 
-							bool forUpperHandle )
+                            bool forUpperHandle )
 {
-	cbResizeRowEvent evt( pRow, ofs, forUpperHandle, this );
+    cbResizeRowEvent evt( pRow, ofs, forUpperHandle, this );
 
-	mpLayout->FirePluginEvent( evt );
+    mpLayout->FirePluginEvent( evt );
 }
 
 void cbDockPane::ResizeBar( cbBarInfo* pBar, int ofs, 
-						    bool forLeftHandle )
+                            bool forLeftHandle )
 {
-	pBar->mpRow->mpExpandedBar = NULL;
+    pBar->mpRow->mpExpandedBar = NULL;
 
-	mpLayout->GetUpdatesManager().OnStartChanges();
+    mpLayout->GetUpdatesManager().OnStartChanges();
 
-	wxRect&  bounds	= pBar->mBounds;
+    wxRect&  bounds = pBar->mBounds;
 
-	if ( forLeftHandle )
-	{
-		// do not allow bar width become less then minimal
-		if ( bounds.x + ofs > bounds.x + bounds.width - mProps.mMinCBarDim.x )
-		{
-			bounds.width = mProps.mMinCBarDim.x;
-			bounds.x += ofs;
-		}
-		else
-		{
-			bounds.x     += ofs;
-			bounds.width -= ofs;
-		}
-	}
-	else
-	{
-		// move bar left if necessary		
-		if ( bounds.width + ofs < mProps.mMinCBarDim.x )
-		{
-			bounds.x     = bounds.x + bounds.width + ofs - mProps.mMinCBarDim.x;
-			bounds.width = mProps.mMinCBarDim.x;
-		}
-		else
-			// resize right border only
-			bounds.width += ofs;
-	}
+    if ( forLeftHandle )
+    {
+        // do not allow bar width become less then minimal
+        if ( bounds.x + ofs > bounds.x + bounds.width - mProps.mMinCBarDim.x )
+        {
+            bounds.width = mProps.mMinCBarDim.x;
+            bounds.x += ofs;
+        }
+        else
+        {
+            bounds.x     += ofs;
+            bounds.width -= ofs;
+        }
+    }
+    else
+    {
+        // move bar left if necessary       
+        if ( bounds.width + ofs < mProps.mMinCBarDim.x )
+        {
+            bounds.x     = bounds.x + bounds.width + ofs - mProps.mMinCBarDim.x;
+            bounds.width = mProps.mMinCBarDim.x;
+        }
+        else
+            // resize right border only
+            bounds.width += ofs;
+    }
 
 
-	cbRowInfo* pToRow = pBar->mpRow;
+    cbRowInfo* pToRow = pBar->mpRow;
 
-	this->RemoveBar( pBar );
+    this->RemoveBar( pBar );
 
-	InsertBar( pBar, pToRow );
+    InsertBar( pBar, pToRow );
 
-	mpLayout->RecalcLayout(FALSE);
+    mpLayout->RecalcLayout(FALSE);
 
-	mpLayout->GetUpdatesManager().OnFinishChanges();
-	mpLayout->GetUpdatesManager().UpdateNow();
+    mpLayout->GetUpdatesManager().OnFinishChanges();
+    mpLayout->GetUpdatesManager().UpdateNow();
 }
 
 
@@ -3373,99 +3357,104 @@ void cbDockPane::ResizeBar( cbBarInfo* pBar, int ofs,
 
 void cbDockPane::DrawVertHandle( wxDC& dc, int x, int y, int height )
 {
-	int lower = y + height;
+    int lower = y + height;
 
-	dc.SetPen( mpLayout->mLightPen );
-	dc.DrawLine( x,y, x, lower );
+    dc.SetPen( mpLayout->mLightPen );
+    dc.DrawLine( x,y, x, lower );
 
-	dc.SetPen( mpLayout->mGrayPen );
-	for( int i = 0; i != mProps.mResizeHandleSize-1; ++i )
-	{
-		++x;
-		dc.DrawLine( x,y, x, lower );
-	}
+    dc.SetPen( mpLayout->mGrayPen );
+    int i;
+    for ( i = 0; i != mProps.mResizeHandleSize-1; ++i )
+    {
+        ++x;
+        dc.DrawLine( x,y, x, lower );
+    }
 
-	dc.SetPen( mpLayout->mDarkPen );
-	++x;
-	dc.DrawLine( x,y, x, lower );
+    dc.SetPen( mpLayout->mDarkPen );
+    ++x;
+    dc.DrawLine( x,y, x, lower );
 
-	dc.SetPen( mpLayout->mBlackPen );
-	++x;
-	dc.DrawLine( x,y, x, lower );
+    dc.SetPen( mpLayout->mBlackPen );
+    ++x;
+    dc.DrawLine( x,y, x, lower );
 }
 
 void cbDockPane::DrawHorizHandle( wxDC& dc, int x, int y, int width  )
 {
-	int right = x + width;
+    int right = x + width;
 
-	dc.SetPen( mpLayout->mLightPen );
-	dc.DrawLine( x,y, right, y );
+    dc.SetPen( mpLayout->mLightPen );
+    dc.DrawLine( x,y, right, y );
 
-	dc.SetPen( mpLayout->mGrayPen );
+    dc.SetPen( mpLayout->mGrayPen );
 
-	for( int i = 0; i != mProps.mResizeHandleSize-1; ++i )
-	{
-		++y;
-		dc.DrawLine( x,y, right, y );
-	}
+    int i;
+    for ( i = 0; i != mProps.mResizeHandleSize-1; ++i )
+    {
+        ++y;
+        dc.DrawLine( x,y, right, y );
+    }
 
-	dc.SetPen( mpLayout->mDarkPen );
-	dc.DrawLine( x,y, right, ++y );
+    dc.SetPen( mpLayout->mDarkPen );
+    dc.DrawLine( x,y, right, ++y );
 
-	dc.SetPen( mpLayout->mBlackPen );
-	dc.DrawLine( x,y, right, ++y );
+    dc.SetPen( mpLayout->mBlackPen );
+    dc.DrawLine( x,y, right, ++y );
 }
 
 cbBarInfo* cbDockPane::GetBarInfoByWindow( wxWindow* pBarWnd )
 {
-	wxBarIterator i( mRows );
+    wxBarIterator i( mRows );
 
-	while( i.Next() )
-	
-		if ( i.BarInfo().mpBarWnd == pBarWnd )
+    while( i.Next() )
+    
+        if ( i.BarInfo().mpBarWnd == pBarWnd )
 
-			return &i.BarInfo();
+            return &i.BarInfo();
 
-	return NULL;
+    return NULL;
 }
 
 void cbDockPane::GetRowShapeData( cbRowInfo* pRow, wxList* pLst )
 {
-	pLst->DeleteContents( TRUE );
-	pLst->Clear();
+    pLst->DeleteContents( TRUE );
+    pLst->Clear();
 
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
-	{
-		cbBarInfo& bar = *pRow->mBars[i];
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        cbBarInfo& bar = *pRow->mBars[i];
 
-		cbBarShapeData* pData = new cbBarShapeData();
+        cbBarShapeData* pData = new cbBarShapeData();
 
-		pLst->Append( (wxObject*)pData );
+        pLst->Append( (wxObject*)pData );
 
-		pData->mBounds   = bar.mBounds;
-		pData->mLenRatio = bar.mLenRatio;
-	}
+        pData->mBounds   = bar.mBounds;
+        pData->mLenRatio = bar.mLenRatio;
+    }
 }
 
 void cbDockPane::SetRowShapeData( cbRowInfo* pRow, wxList* pLst )
 {
-	if ( pLst->First() == NULL ) return;
+    if ( pLst->First() == NULL )
+        return;
 
-	wxNode* pData = pLst->First();
+    wxNode* pData = pLst->First();
 
-	for( size_t i = 0; i != pRow->mBars.Count(); ++i )
-	{
-		wxASSERT( pData ); // DBG::
+    size_t i;
+    for ( i = 0; i != pRow->mBars.Count(); ++i )
+    {
+        wxASSERT( pData ); // DBG::
 
-		cbBarInfo& bar = *pRow->mBars[i];;
+        cbBarInfo& bar = *pRow->mBars[i];;
 
-		cbBarShapeData& data = *((cbBarShapeData*)pData->Data());
+        cbBarShapeData& data = *((cbBarShapeData*)pData->Data());
 
-		bar.mBounds   = data.mBounds;
-		bar.mLenRatio = data.mLenRatio;
+        bar.mBounds   = data.mBounds;
+        bar.mLenRatio = data.mLenRatio;
 
-		pData = pData->Next();
-	}
+        pData = pData->Next();
+    }
 }
 
 /***** Implementation for class cbUpdatesManagerBase *****/
@@ -3478,46 +3467,46 @@ IMPLEMENT_ABSTRACT_CLASS( cbPluginBase, wxEvtHandler )
 
 cbPluginBase::~cbPluginBase()
 {
-	// nothing
+    // nothing
 }
 
 bool cbPluginBase::ProcessEvent(wxEvent& event)
 {
-	if ( mPaneMask == wxALL_PANES ) 
+    if ( mPaneMask == wxALL_PANES ) 
 
-		return wxEvtHandler::ProcessEvent( event );
+        return wxEvtHandler::ProcessEvent( event );
 
-	// extract mask info. from received event
+    // extract mask info. from received event
 
-	cbPluginEvent& evt = *( (cbPluginEvent*)&event );
+    cbPluginEvent& evt = *( (cbPluginEvent*)&event );
 
-	if ( evt.mpPane == 0 &&
-		 mPaneMask  == wxALL_PANES )
+    if ( evt.mpPane == 0 &&
+         mPaneMask  == wxALL_PANES )
 
-		 return wxEvtHandler::ProcessEvent( event );
+         return wxEvtHandler::ProcessEvent( event );
 
-	int mask = 0;
+    int mask = 0;
 
-	switch ( evt.mpPane->mAlignment )
-	{
-		case FL_ALIGN_TOP    : mask = FL_ALIGN_TOP_PANE;   break;
-		case FL_ALIGN_BOTTOM : mask = FL_ALIGN_BOTTOM_PANE;break;
-		case FL_ALIGN_LEFT   : mask = FL_ALIGN_LEFT_PANE;  break;
-		case FL_ALIGN_RIGHT  : mask = FL_ALIGN_RIGHT_PANE; break;
-	}
+    switch ( evt.mpPane->mAlignment )
+    {
+        case FL_ALIGN_TOP    : mask = FL_ALIGN_TOP_PANE;   break;
+        case FL_ALIGN_BOTTOM : mask = FL_ALIGN_BOTTOM_PANE;break;
+        case FL_ALIGN_LEFT   : mask = FL_ALIGN_LEFT_PANE;  break;
+        case FL_ALIGN_RIGHT  : mask = FL_ALIGN_RIGHT_PANE; break;
+    }
 
-	// if event's pane maks matches the plugin's mask
+    // if event's pane maks matches the plugin's mask
 
-	if ( mPaneMask & mask ) 
+    if ( mPaneMask & mask ) 
 
-		return wxEvtHandler::ProcessEvent( event );
+        return wxEvtHandler::ProcessEvent( event );
 
-	// otherwise pass to the next handler if present
+    // otherwise pass to the next handler if present
 
-	if ( GetNextHandler() && GetNextHandler()->ProcessEvent( event ) )
+    if ( GetNextHandler() && GetNextHandler()->ProcessEvent( event ) )
 
-		return TRUE;
-	else
-		return FALSE;
+        return TRUE;
+    else
+        return FALSE;
 }
 
