@@ -246,6 +246,28 @@ bool wxDropTarget::GetData()
 // drag request
 
 wxDropSource::wxDropSource(wxWindow *win,
+                           const wxCursor &cursorCopy,
+                           const wxCursor &cursorMove,
+                           const wxCursor &cursorStop)
+            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+{
+    wxMacEnsureTrackingHandlersInstalled() ;
+    m_window = win;
+}
+
+wxDropSource::wxDropSource(wxDataObject& data,
+                           wxWindow *win,
+                           const wxCursor &cursorCopy,
+                           const wxCursor &cursorMove,
+                           const wxCursor &cursorStop)
+            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+{
+    wxMacEnsureTrackingHandlersInstalled() ;
+    SetData( data );
+    m_window = win;
+}
+
+wxDropSource::wxDropSource(wxWindow *win,
                            const wxIcon &iconCopy,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
@@ -376,6 +398,21 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
     return wxDragCopy ;
 }
 
+bool wxDropSource::MacInstallDefaultCursor(wxDragResult effect)
+{
+    const wxCursor& cursor = GetCursor(effect);
+    if ( cursor.Ok() )
+    {
+        cursor.MacInstall() ;
+
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 bool gTrackingGlobalsInstalled = false ;
 
 // passing the globals via refcon is not needed by the CFM and later architectures anymore
@@ -457,11 +494,44 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                         // this window is entered
                         trackingGlobals->m_currentTargetWindow = win ;
                         trackingGlobals->m_currentTarget = win->GetDropTarget() ;
-                        if ( trackingGlobals->m_currentTarget )
                         {
-                          trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
-                           if ( trackingGlobals->m_currentTarget->OnEnter(
-                                localx , localy , wxDragCopy ) != wxDragNone )
+                        	wxDragResult result = wxDragNone ;
+                        	if ( trackingGlobals->m_currentTarget )
+                        	{
+                            	trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
+                            	result = trackingGlobals->m_currentTarget->OnEnter(
+                                	localx , localy , wxDragCopy ) ;
+                            }
+                                
+                            if ( trackingGlobals->m_currentSource && trackingGlobals->m_currentSource->GiveFeedback( result ) == FALSE )
+                            {
+                            	if ( trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) == FALSE )
+                            	{
+                            		switch( result )
+                            		{
+                            			case wxDragCopy :
+                            			{
+                            				wxCursor cursor(wxCURSOR_COPY_ARROW) ;
+                            				cursor.MacInstall() ;
+                            			}
+                            			break ;
+                            			case wxDragMove :
+                            			{
+                             				wxCursor cursor(wxCURSOR_ARROW) ;
+                            				cursor.MacInstall() ;
+                           			    }
+                            			break ;
+                            			case wxDragNone :
+                            			{
+                            				wxCursor cursor(wxCURSOR_NO_ENTRY) ;
+                            				cursor.MacInstall() ;
+                            			}
+                            			break ;
+                            		}
+                            	}
+                            }
+                           
+                            if ( result != wxDragNone )
                             {
                               int x , y ;
                               x = y = 0 ;
