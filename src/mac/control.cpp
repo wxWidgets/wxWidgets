@@ -360,7 +360,15 @@ void wxControl::MacSuperChangedPosition()
 	
 		if ( mac_x != former_mac_x || mac_y != former_mac_y )
 		{
+ 			{
+ 				Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
+ 				InvalWindowRect( rootwindow , &inval ) ;
+ 			}
 	  		UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y + m_macVerticalBorder ) ;
+ 			{
+ 				Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
+ 				InvalWindowRect( rootwindow , &inval ) ;
+ 			}
 		}
 		if ( wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
 		{
@@ -488,7 +496,15 @@ void  wxControl::DoSetSize(int x, int y,
 	
 	if ( mac_x != former_mac_x || mac_y != former_mac_y )
 	{
+ 		{
+ 			Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
+ 			InvalWindowRect( macrootwindow, &inval ) ;
+ 		}
   		UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y  + m_macVerticalBorder ) ;
+ 		{
+ 			Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
+ 			InvalWindowRect(macrootwindow, &inval ) ;
+ 		}
 	}
 
 	if ( actualX != former_x || actualY != former_y )
@@ -498,9 +514,9 @@ void  wxControl::DoSetSize(int x, int y,
 
 		MacRepositionScrollBars() ;
 		// To consider -> should the parameters be the effective or the virtual coordinates (AdjustForParent..)
-    wxMoveEvent event(wxPoint(m_x, m_y), m_windowId);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+        wxMoveEvent event(wxPoint(m_x, m_y), m_windowId);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
 	}		
 	if ( actualWidth != former_w || actualHeight != former_h )
 	{
@@ -518,9 +534,9 @@ void  wxControl::DoSetSize(int x, int y,
 		}
 
 		MacRepositionScrollBars() ;
-    wxSizeEvent event(wxSize(m_width, m_height), m_windowId);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+        wxSizeEvent event(wxSize(m_width, m_height), m_windowId);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
 	}
 	if ( wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
 	{

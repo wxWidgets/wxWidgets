@@ -643,7 +643,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 			if ( focus.Ok() )
 			{
 		  		Rect clientrect = { 0 , 0 , m_height , m_width } ;
-				// ClipRect( &clientrect ) ;
+				ClipRect( &clientrect ) ;
 		    	InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
 			}
 		}
@@ -678,7 +678,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 				if ( focus.Ok() )
 				{
 			  		Rect clientrect = { 0 , 0 , m_height , m_width } ;
-  					// ClipRect( &clientrect ) ;
+  					ClipRect( &clientrect ) ;
 			    	InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
 				}
 			}
@@ -916,7 +916,7 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 	if ( focus.Ok() )
 	{
 	  	Rect clientrect = { 0 , 0 , m_height , m_width } ;
-  		// ClipRect( &clientrect ) ;
+  		ClipRect( &clientrect ) ;
 
     	if ( rect )
     	{
@@ -1872,7 +1872,7 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 		  		RGBBackColor( &m_backgroundColour.GetPixel()) ;
 			}
             // subtract all non transparent children from updatergn
-
+            
     	    RgnHandle childarea = NewRgn() ;
         	for (wxNode *node = GetChildren().First(); node; node = node->Next())
         	{
@@ -1880,7 +1880,7 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
         		// eventually test for transparent windows
 		        if ( child->GetMacRootWindow() == window && child->IsShown() )
 		        {
-		            if ( !child->IsKindOf( CLASSINFO( wxControl ) ) && ((wxControl*)child)->GetMacControl() )
+		            if ( child->GetBackgroundColour() != m_backgroundColour && !child->IsKindOf( CLASSINFO( wxControl ) ) && ((wxControl*)child)->GetMacControl() )
 		            {
         		        SetRectRgn( childarea , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
         		        DiffRgn( ownUpdateRgn , childarea , ownUpdateRgn ) ;
