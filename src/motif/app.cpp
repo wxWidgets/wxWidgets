@@ -352,11 +352,13 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             // accelerator.
             return;
 	}
+#if 0 // this isn't necessary anymore ??? -michael
 	else if (CheckForKeyDown(_event))
 	{
             // We intercepted and processed the key down event
             return;
 	}
+#endif        
 	else
 	{
             XtDispatchEvent(event);
@@ -365,6 +367,8 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     }
     else if (event->type == KeyRelease)
     {
+        // TODO: work out why we still need this !  -michael
+        //
         if (CheckForKeyUp(_event))
 	{
 	    // We intercepted and processed the key up event
