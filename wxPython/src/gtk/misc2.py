@@ -900,6 +900,24 @@ class wxMimeTypesManager(wxMimeTypesManagerPtr):
 
 
 
+class wxArtProviderPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(misc2c.wxArtProvider__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxArtProvider instance at %s>" % (self.this,)
+class wxArtProvider(wxArtProviderPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxArtProvider,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxArtProvider)
+
+
+
+
 class wxFileHistoryPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -1172,6 +1190,24 @@ wxFileType_ExpandCommand = misc2c.wxFileType_ExpandCommand
 
 wxMimeTypesManager_IsOfType = misc2c.wxMimeTypesManager_IsOfType
 
+wxArtProvider_PushProvider = misc2c.wxArtProvider_PushProvider
+
+wxArtProvider_PopProvider = misc2c.wxArtProvider_PopProvider
+
+wxArtProvider_RemoveProvider = misc2c.wxArtProvider_RemoveProvider
+
+def wxArtProvider_GetBitmap(*_args, **_kwargs):
+    val = apply(misc2c.wxArtProvider_GetBitmap,_args,_kwargs)
+    if val: val = wxBitmapPtr(val); val.thisown = 1
+    return val
+
+def wxArtProvider_GetIcon(*_args, **_kwargs):
+    val = apply(misc2c.wxArtProvider_GetIcon,_args,_kwargs)
+    if val: val = wxIconPtr(val); val.thisown = 1
+    return val
+
+wxArtProvider_CleanUpProviders = misc2c.wxArtProvider_CleanUpProviders
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
@@ -1288,3 +1324,40 @@ wxMAILCAP_GNOME = misc2c.wxMAILCAP_GNOME
 wxMAILCAP_ALL = misc2c.wxMAILCAP_ALL
 cvar = misc2c.cvar
 wxTheMimeTypesManager = wxMimeTypesManagerPtr(misc2c.cvar.wxTheMimeTypesManager)
+wxART_TOOLBAR = misc2c.wxART_TOOLBAR
+wxART_MENU = misc2c.wxART_MENU
+wxART_FRAME_ICON = misc2c.wxART_FRAME_ICON
+wxART_CMN_DIALOG = misc2c.wxART_CMN_DIALOG
+wxART_HELP_BROWSER = misc2c.wxART_HELP_BROWSER
+wxART_MESSAGE_BOX = misc2c.wxART_MESSAGE_BOX
+wxART_OTHER = misc2c.wxART_OTHER
+wxART_ADD_BOOKMARK = misc2c.wxART_ADD_BOOKMARK
+wxART_DEL_BOOKMARK = misc2c.wxART_DEL_BOOKMARK
+wxART_HELP_SIDE_PANEL = misc2c.wxART_HELP_SIDE_PANEL
+wxART_HELP_SETTINGS = misc2c.wxART_HELP_SETTINGS
+wxART_HELP_BOOK = misc2c.wxART_HELP_BOOK
+wxART_HELP_FOLDER = misc2c.wxART_HELP_FOLDER
+wxART_HELP_PAGE = misc2c.wxART_HELP_PAGE
+wxART_GO_BACK = misc2c.wxART_GO_BACK
+wxART_GO_FORWARD = misc2c.wxART_GO_FORWARD
+wxART_GO_UP = misc2c.wxART_GO_UP
+wxART_GO_DOWN = misc2c.wxART_GO_DOWN
+wxART_GO_TO_PARENT = misc2c.wxART_GO_TO_PARENT
+wxART_GO_HOME = misc2c.wxART_GO_HOME
+wxART_FILE_OPEN = misc2c.wxART_FILE_OPEN
+wxART_PRINT = misc2c.wxART_PRINT
+wxART_HELP = misc2c.wxART_HELP
+wxART_TIP = misc2c.wxART_TIP
+wxART_REPORT_VIEW = misc2c.wxART_REPORT_VIEW
+wxART_LIST_VIEW = misc2c.wxART_LIST_VIEW
+wxART_NEW_DIR = misc2c.wxART_NEW_DIR
+wxART_FOLDER = misc2c.wxART_FOLDER
+wxART_GO_DIR_UP = misc2c.wxART_GO_DIR_UP
+wxART_EXECUTABLE_FILE = misc2c.wxART_EXECUTABLE_FILE
+wxART_NORMAL_FILE = misc2c.wxART_NORMAL_FILE
+wxART_TICK_MARK = misc2c.wxART_TICK_MARK
+wxART_CROSS_MARK = misc2c.wxART_CROSS_MARK
+wxART_ERROR = misc2c.wxART_ERROR
+wxART_QUESTION = misc2c.wxART_QUESTION
+wxART_WARNING = misc2c.wxART_WARNING
+wxART_INFORMATION = misc2c.wxART_INFORMATION

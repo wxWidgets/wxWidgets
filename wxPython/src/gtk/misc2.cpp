@@ -145,9 +145,11 @@ public:
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
         bool found;
         wxPyBeginBlockThreads();
-        if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level,
-                                                         wx2PyString(szString), t));
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLog"))) {
+            PyObject* s = wx2PyString(szString);
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level, s, t));
+            Py_DECREF(s);
+        }
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLog(level, szString, t);
@@ -156,9 +158,11 @@ public:
     virtual void DoLogString(const wxChar *szString, time_t t) {
         bool found;
         wxPyBeginBlockThreads();
-        if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)",
-                                                         wx2PyString(szString), t));
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString"))) {
+            PyObject* s = wx2PyString(szString);
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", s, t));
+            Py_DECREF(s);
+        }
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLogString(szString, t);
@@ -271,6 +275,43 @@ public:
 extern wxMimeTypesManager * wxTheMimeTypesManager; 
 
 #endif
+
+#include <wx/artprov.h>
+
+    DECLARE_DEF_STRING(ART_OTHER);
+
+  // Python aware wxArtProvider
+class wxPyArtProvider : public wxArtProvider  {
+public:
+
+    virtual wxBitmap CreateBitmap(const wxArtID& id,
+                                  const wxArtClient& client,
+                                  const wxSize& size) {
+        wxBitmap rval = wxNullBitmap;
+        wxPyBeginBlockThreads();
+        if ((wxPyCBH_findCallback(m_myInst, "CreateBitmap"))) {
+            PyObject* so = wxPyConstructObject((void*)&size, "wxSize", 0);
+            PyObject* ro;
+            wxBitmap* ptr;
+            PyObject* s1, *s2;
+            s1 = wx2PyString(id);
+            s2 = wx2PyString(client);
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOO)", s1, s2, so));
+            Py_DECREF(so);
+            Py_DECREF(s1);
+            Py_DECREF(s2);
+            if (ro) {
+                if (!SWIG_GetPtrObj(ro, (void**)&ptr, "_wxBitmap_p"))
+                    rval = *ptr;
+                Py_DECREF(ro);
+            }
+        }
+        wxPyEndBlockThreads();
+        return rval;
+    }
+
+    PYPRIVATE;
+};
 
 #include <wx/docview.h>
 #ifdef __cplusplus
@@ -9338,6 +9379,272 @@ static PyObject *_wrap_delete_wxMimeTypesManager(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+static void *SwigwxPyArtProviderTowxObject(void *ptr) {
+    wxPyArtProvider *src;
+    wxObject *dest;
+    src = (wxPyArtProvider *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxArtProvider() (new wxPyArtProvider())
+static PyObject *_wrap_new_wxArtProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyArtProvider * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxArtProvider",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyArtProvider *)new_wxArtProvider();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyArtProvider_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxArtProvider__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxArtProvider__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyArtProvider * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxArtProvider__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyArtProvider_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxArtProvider__setCallbackInfo. Expected _wxPyArtProvider_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxArtProvider__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxArtProvider_PushProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyArtProvider * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "provider", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxArtProvider_PushProvider",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyArtProvider_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxArtProvider_PushProvider. Expected _wxPyArtProvider_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyArtProvider::PushProvider(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxArtProvider_PopProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxArtProvider_PopProvider",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyArtProvider::PopProvider();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxArtProvider_RemoveProvider(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyArtProvider * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "provider", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxArtProvider_RemoveProvider",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyArtProvider_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxArtProvider_RemoveProvider. Expected _wxPyArtProvider_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyArtProvider::RemoveProvider(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxArtProvider_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxString * _arg0;
+    wxString * _arg1 = (wxString *) &wxPyART_OTHER;
+    wxSize * _arg2 = (wxSize *) &wxDefaultSize;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    wxSize  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "id","client","size", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OO:wxArtProvider_GetBitmap",_kwnames,&_obj0,&_obj1,&_obj2)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+    if (_obj1)
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxSize_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxBitmap (wxPyArtProvider::GetBitmap(*_arg0,*_arg1,*_arg2));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxArtProvider_GetIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _result;
+    wxString * _arg0;
+    wxString * _arg1 = (wxString *) &wxPyART_OTHER;
+    wxSize * _arg2 = (wxSize *) &wxDefaultSize;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    wxSize  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "id","client","size", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OO:wxArtProvider_GetIcon",_kwnames,&_obj0,&_obj1,&_obj2)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+    if (_obj1)
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxSize_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxIcon (wxPyArtProvider::GetIcon(*_arg0,*_arg1,*_arg2));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxArtProvider_CleanUpProviders(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxArtProvider_CleanUpProviders",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyArtProvider::CleanUpProviders();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxFileHistoryTowxObject(void *ptr) {
     wxFileHistory *src;
     wxObject *dest;
@@ -9819,6 +10126,14 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFileHistory_AddFileToHistory", (PyCFunction) _wrap_wxFileHistory_AddFileToHistory, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFileHistory", (PyCFunction) _wrap_delete_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFileHistory", (PyCFunction) _wrap_new_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
+	 { "wxArtProvider_CleanUpProviders", (PyCFunction) _wrap_wxArtProvider_CleanUpProviders, METH_VARARGS | METH_KEYWORDS },
+	 { "wxArtProvider_GetIcon", (PyCFunction) _wrap_wxArtProvider_GetIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxArtProvider_GetBitmap", (PyCFunction) _wrap_wxArtProvider_GetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxArtProvider_RemoveProvider", (PyCFunction) _wrap_wxArtProvider_RemoveProvider, METH_VARARGS | METH_KEYWORDS },
+	 { "wxArtProvider_PopProvider", (PyCFunction) _wrap_wxArtProvider_PopProvider, METH_VARARGS | METH_KEYWORDS },
+	 { "wxArtProvider_PushProvider", (PyCFunction) _wrap_wxArtProvider_PushProvider, METH_VARARGS | METH_KEYWORDS },
+	 { "wxArtProvider__setCallbackInfo", (PyCFunction) _wrap_wxArtProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxArtProvider", (PyCFunction) _wrap_new_wxArtProvider, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxMimeTypesManager", (PyCFunction) _wrap_delete_wxMimeTypesManager, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMimeTypesManager_Unassociate", (PyCFunction) _wrap_wxMimeTypesManager_Unassociate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMimeTypesManager_Associate", (PyCFunction) _wrap_wxMimeTypesManager_Associate, METH_VARARGS | METH_KEYWORDS },
@@ -10161,6 +10476,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
     { "_wxObject","_wxFileHistory",SwigwxFileHistoryTowxObject},
+    { "_wxObject","_wxPyArtProvider",SwigwxPyArtProviderTowxObject},
     { "_wxObject","_wxWave",SwigwxWaveTowxObject},
     { "_wxObject","_wxJoystick",SwigwxJoystickTowxObject},
     { "_wxObject","_wxPyProcess",SwigwxPyProcessTowxObject},
@@ -10343,9 +10659,47 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxMAILCAP_ALL", PyInt_FromLong((long) wxMAILCAP_ALL));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxTheMimeTypesManager",_wrap_wxTheMimeTypesManager_get, _wrap_wxTheMimeTypesManager_set);
+	 PyDict_SetItemString(d,"wxART_TOOLBAR", PyString_FromString("toolbar_C"));
+	 PyDict_SetItemString(d,"wxART_MENU", PyString_FromString("menu_C"));
+	 PyDict_SetItemString(d,"wxART_FRAME_ICON", PyString_FromString("frame_icon_C"));
+	 PyDict_SetItemString(d,"wxART_CMN_DIALOG", PyString_FromString("cmn_dialog_C"));
+	 PyDict_SetItemString(d,"wxART_HELP_BROWSER", PyString_FromString("help_browser_C"));
+	 PyDict_SetItemString(d,"wxART_MESSAGE_BOX", PyString_FromString("message_box_C"));
+	 PyDict_SetItemString(d,"wxART_OTHER", PyString_FromString("other_C"));
+	 PyDict_SetItemString(d,"wxART_ADD_BOOKMARK", PyString_FromString("add_bookmark"));
+	 PyDict_SetItemString(d,"wxART_DEL_BOOKMARK", PyString_FromString("del_bookmark"));
+	 PyDict_SetItemString(d,"wxART_HELP_SIDE_PANEL", PyString_FromString("help_side_panel"));
+	 PyDict_SetItemString(d,"wxART_HELP_SETTINGS", PyString_FromString("help_settings"));
+	 PyDict_SetItemString(d,"wxART_HELP_BOOK", PyString_FromString("help_book"));
+	 PyDict_SetItemString(d,"wxART_HELP_FOLDER", PyString_FromString("help_folder"));
+	 PyDict_SetItemString(d,"wxART_HELP_PAGE", PyString_FromString("help_page"));
+	 PyDict_SetItemString(d,"wxART_GO_BACK", PyString_FromString("go_back"));
+	 PyDict_SetItemString(d,"wxART_GO_FORWARD", PyString_FromString("go_forward"));
+	 PyDict_SetItemString(d,"wxART_GO_UP", PyString_FromString("go_up"));
+	 PyDict_SetItemString(d,"wxART_GO_DOWN", PyString_FromString("go_down"));
+	 PyDict_SetItemString(d,"wxART_GO_TO_PARENT", PyString_FromString("go_to_parent"));
+	 PyDict_SetItemString(d,"wxART_GO_HOME", PyString_FromString("go_home"));
+	 PyDict_SetItemString(d,"wxART_FILE_OPEN", PyString_FromString("file_open"));
+	 PyDict_SetItemString(d,"wxART_PRINT", PyString_FromString("print"));
+	 PyDict_SetItemString(d,"wxART_HELP", PyString_FromString("help"));
+	 PyDict_SetItemString(d,"wxART_TIP", PyString_FromString("tip"));
+	 PyDict_SetItemString(d,"wxART_REPORT_VIEW", PyString_FromString("report_view"));
+	 PyDict_SetItemString(d,"wxART_LIST_VIEW", PyString_FromString("list_view"));
+	 PyDict_SetItemString(d,"wxART_NEW_DIR", PyString_FromString("new_dir"));
+	 PyDict_SetItemString(d,"wxART_FOLDER", PyString_FromString("folder"));
+	 PyDict_SetItemString(d,"wxART_GO_DIR_UP", PyString_FromString("go_dir_up"));
+	 PyDict_SetItemString(d,"wxART_EXECUTABLE_FILE", PyString_FromString("executable_file"));
+	 PyDict_SetItemString(d,"wxART_NORMAL_FILE", PyString_FromString("normal_file"));
+	 PyDict_SetItemString(d,"wxART_TICK_MARK", PyString_FromString("tick"));
+	 PyDict_SetItemString(d,"wxART_CROSS_MARK", PyString_FromString("cross"));
+	 PyDict_SetItemString(d,"wxART_ERROR", PyString_FromString("error"));
+	 PyDict_SetItemString(d,"wxART_QUESTION", PyString_FromString("question"));
+	 PyDict_SetItemString(d,"wxART_WARNING", PyString_FromString("warning"));
+	 PyDict_SetItemString(d,"wxART_INFORMATION", PyString_FromString("information"));
 
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
+    wxPyPtrTypeMap_Add("wxArtProvider", "wxPyArtProvider");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
