@@ -559,9 +559,9 @@ get_legacy_mask()
 # Returns a list of configs installed by wx2.4 releases.
 find_legacy_configs()
 {
-    cd "$prefix/bin" 2> /dev/null &&            \
-        ls wx*-2.4-config | grep -v ^wxbase;    \
-        ls wx*-2.4-config | grep ^wxbase
+    cd "$prefix/bin" 2> /dev/null &&                        \
+        ls wx*-2.4-config 2> /dev/null | grep -v ^wxbase;   \
+        ls wx*-2.4-config 2> /dev/null | grep ^wxbase
 }
 
 # find_best_legacy_config
