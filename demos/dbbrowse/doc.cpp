@@ -33,7 +33,7 @@
 //----------------------------------------------------------------------------------------
 //-- Some Global Vars for all Files (extern in ?.h needed) -------------------------------
 // Global structure for holding ODBC connection information
-struct wxDbConnectInf DbConnectInf;
+wxDbConnectInf DbConnectInf;
 //----------------------------------------------------------------------------------------
 wxConfigBase   *p_ProgramCfg;       // All Config and Path information
 wxLogTextCtrl  *p_LogBook;          // All Log messages

@@ -20,7 +20,7 @@ class DSN
 };
 //----------------------------------------------------------------------------------------
  // Global structure for holding ODBC connection information
-extern struct wxDbConnectInf DbConnectInf;
+extern wxDbConnectInf DbConnectInf;
 //----------------------------------------------------------------------------------------
 extern wxConfigBase   *p_ProgramCfg;       // All Config and Path information
 extern wxLogTextCtrl  *p_LogBook;          // All Log messages

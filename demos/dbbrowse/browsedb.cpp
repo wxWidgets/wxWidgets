@@ -32,7 +32,7 @@
 //----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
 // - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
-struct wxDbConnectInf ConnectInf;      // Für DBase
+wxDbConnectInf ConnectInf;      // Für DBase
 //----------------------------------------------------------------------------------------
 extern wxDbList* WXDLLEXPORT PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 //----------------------------------------------------------------------------------------
