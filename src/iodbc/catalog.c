@@ -1,6 +1,6 @@
 /** Catalog functions of iODBC driver manager
 
-    Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+    Copyright (C) 1995 by Ke Jin <kejin@empress.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,1066 +27,1066 @@
 
 #include	<../iodbc/itrace.h>
 
-static RETCODE	_iodbcdm_cata_state_ok ( 
-				HSTMT	hstmt, 
-				int 	fidx )
+static RETCODE  _iodbcdm_cata_state_ok (
+                                HSTMT   hstmt,
+                                int     fidx )
 /* check state for executing catalog functions */
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	int		sqlstat	= en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        int             sqlstat = en_00000;
 
-	if( pstmt->asyn_on == en_NullProc )
-	{
-		switch( pstmt->state )
-		{
-			case en_stmt_needdata:
-			case en_stmt_mustput:
-			case en_stmt_canput:
-				sqlstat = en_S1010;
-				break;
+        if( pstmt->asyn_on == en_NullProc )
+        {
+                switch( pstmt->state )
+                {
+                        case en_stmt_needdata:
+                        case en_stmt_mustput:
+                        case en_stmt_canput:
+                                sqlstat = en_S1010;
+                                break;
 
-			case en_stmt_fetched:
-			case en_stmt_xfetched:
-				sqlstat = en_24000;
-				break;
+                        case en_stmt_fetched:
+                        case en_stmt_xfetched:
+                                sqlstat = en_24000;
+                                break;
 
-			default:
-				break;
-		}
-	}
-	else if( pstmt->asyn_on != fidx )
-	{
-		sqlstat = en_S1010;
-	}
+                        default:
+                                break;
+                }
+        }
+        else if( pstmt->asyn_on != fidx )
+        {
+                sqlstat = en_S1010;
+        }
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-		return SQL_ERROR;
-	}
+                return SQL_ERROR;
+        }
 
-	return SQL_SUCCESS;
+        return SQL_SUCCESS;
 }
 
-static RETCODE	_iodbcdm_cata_state_tr( 
-			HSTMT 		hstmt, 
-			int		fidx, 
-			RETCODE		result )
+static RETCODE  _iodbcdm_cata_state_tr(
+                        HSTMT           hstmt,
+                        int             fidx,
+                        RETCODE         result )
 /* state transition for catalog function */
 {
-	STMT_t FAR*	pstmt = (STMT_t FAR*)hstmt;
-	DBC_t  FAR*	pdbc;
+        STMT_t FAR*     pstmt = (STMT_t FAR*)hstmt;
+        DBC_t  FAR*     pdbc;
 
-	pdbc = (DBC_t FAR*)(pstmt->hdbc);
+        pdbc = (DBC_t FAR*)(pstmt->hdbc);
 
-	if( pstmt->asyn_on == fidx )
-	{
-		switch( result )
-		{
-			case SQL_SUCCESS:
-			case SQL_SUCCESS_WITH_INFO:
-			case SQL_ERROR:
-				pstmt->asyn_on = en_NullProc;
-				break;
+        if( pstmt->asyn_on == fidx )
+        {
+                switch( result )
+                {
+                        case SQL_SUCCESS:
+                        case SQL_SUCCESS_WITH_INFO:
+                        case SQL_ERROR:
+                                pstmt->asyn_on = en_NullProc;
+                                break;
 
-			case SQL_STILL_EXECUTING:
-			default:
-				return result;
-		}
-	}
+                        case SQL_STILL_EXECUTING:
+                        default:
+                                return result;
+                }
+        }
 
-	if( pstmt->state <= en_stmt_executed )
-	{
-		switch( result )
-		{
-			case SQL_SUCCESS:
-			case SQL_SUCCESS_WITH_INFO:
-				pstmt->state = en_stmt_cursoropen;
-				break;
+        if( pstmt->state <= en_stmt_executed )
+        {
+                switch( result )
+                {
+                        case SQL_SUCCESS:
+                        case SQL_SUCCESS_WITH_INFO:
+                                pstmt->state = en_stmt_cursoropen;
+                                break;
 
-			case SQL_ERROR:
-				pstmt->state = en_stmt_allocated;
-				pstmt->prep_state = 0;
-				break;
+                        case SQL_ERROR:
+                                pstmt->state = en_stmt_allocated;
+                                pstmt->prep_state = 0;
+                                break;
 
-			case SQL_STILL_EXECUTING:
-				pstmt->asyn_on = fidx;
-				break;
+                        case SQL_STILL_EXECUTING:
+                                pstmt->asyn_on = fidx;
+                                break;
 
-			default:
-				break;
-		}
-	}
+                        default:
+                                break;
+                }
+        }
 
-	return result;
+        return result;
 }
 
 RETCODE SQL_API SQLGetTypeInfo(
-			HSTMT		hstmt,
-			SWORD		fSqlType )
+                        HSTMT           hstmt,
+                        SWORD           fSqlType )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	int		sqlstat	= en_00000;
-	RETCODE		retcode;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        int             sqlstat = en_00000;
+        RETCODE         retcode;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( fSqlType > SQL_TYPE_MAX )
-		{
-			sqlstat = en_S1004;
-			break;
-		}
+        for(;;)
+        {
+                if( fSqlType > SQL_TYPE_MAX )
+                {
+                        sqlstat = en_S1004;
+                        break;
+                }
 
-		if( fSqlType < SQL_TYPE_MIN 
-	   	 && fSqlType > SQL_TYPE_DRIVER_START ) 
-		/* Note: SQL_TYPE_DRIVER_START is a nagtive 
-		 * number So, we use ">" */
-		{
-			sqlstat = en_S1004;
-			break;
-		}
+                if( fSqlType < SQL_TYPE_MIN
+                 && fSqlType > SQL_TYPE_DRIVER_START )
+                /* Note: SQL_TYPE_DRIVER_START is a nagtive
+                 * number So, we use ">" */
+                {
+                        sqlstat = en_S1004;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok( hstmt, en_GetTypeInfo );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok( hstmt, en_GetTypeInfo );
 
-		hproc = _iodbcdm_getproc ( pstmt->hdbc, en_GetTypeInfo );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc ( pstmt->hdbc, en_GetTypeInfo );
 
-		sqlstat = en_00000;
-		if( 1 )	/* turn off solaris warning message */
-			break;
-	}
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                sqlstat = en_00000;
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, 
-		en_GetTypeInfo, ( pstmt->dhstmt, fSqlType) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc,
+                en_GetTypeInfo, ( pstmt->dhstmt, fSqlType) )
 
 #if 0
-	retcode = hproc ( pstmt->dhstmt, fSqlType );
+        retcode = hproc ( pstmt->dhstmt, fSqlType );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_GetTypeInfo, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_GetTypeInfo, retcode );
 }
 
-RETCODE SQL_API	SQLSpecialColumns(
-			HSTMT		hstmt,
-			UWORD		fColType,
-			UCHAR FAR*	szTableQualifier,
-			SWORD		cbTableQualifier,
-			UCHAR FAR*	szTableOwner,
-			SWORD		cbTableOwner,
-			UCHAR FAR*	szTableName, 
-			SWORD		cbTableName, 
-			UWORD		fScope,
-			UWORD		fNullable )
+RETCODE SQL_API SQLSpecialColumns(
+                        HSTMT           hstmt,
+                        UWORD           fColType,
+                        UCHAR FAR*      szTableQualifier,
+                        SWORD           cbTableQualifier,
+                        UCHAR FAR*      szTableOwner,
+                        SWORD           cbTableOwner,
+                        UCHAR FAR*      szTableName,
+                        SWORD           cbTableName,
+                        UWORD           fScope,
+                        UWORD           fNullable )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
-		 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
-		 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
+                 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
+                 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		if( fColType != SQL_BEST_ROWID 
-		 && fColType != SQL_ROWVER )
-		{
-			sqlstat = en_S1097;
-			break;
-		}
+                if( fColType != SQL_BEST_ROWID
+                 && fColType != SQL_ROWVER )
+                {
+                        sqlstat = en_S1097;
+                        break;
+                }
 
-		if( fScope != SQL_SCOPE_CURROW 
-		 && fScope != SQL_SCOPE_TRANSACTION 
-		 && fScope != SQL_SCOPE_SESSION )
-		{
-			sqlstat = en_S1098;
-			break;
-		}
+                if( fScope != SQL_SCOPE_CURROW
+                 && fScope != SQL_SCOPE_TRANSACTION
+                 && fScope != SQL_SCOPE_SESSION )
+                {
+                        sqlstat = en_S1098;
+                        break;
+                }
 
-		if( fNullable != SQL_NO_NULLS
-		 && fNullable != SQL_NULLABLE )
-		{
-			sqlstat = en_S1099;
-			break;
-		}
+                if( fNullable != SQL_NO_NULLS
+                 && fNullable != SQL_NULLABLE )
+                {
+                        sqlstat = en_S1099;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_SpecialColumns );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_SpecialColumns );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_SpecialColumns );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_SpecialColumns );
 
-		sqlstat = en_00000;
-		if( 1 )	/* turn off solaris warning message */
-			break;
-	}
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                sqlstat = en_00000;
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_SpecialColumns, ( 
-			pstmt->dhstmt,
-			fColType,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			fScope,
-			fNullable ) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_SpecialColumns, (
+                        pstmt->dhstmt,
+                        fColType,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        fScope,
+                        fNullable ) )
 
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			fColType,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			fScope,
-			fNullable );
+        retcode = hproc(pstmt->dhstmt,
+                        fColType,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        fScope,
+                        fNullable );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_SpecialColumns, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_SpecialColumns, retcode );
 }
 
-RETCODE SQL_API	SQLStatistics(
-			HSTMT		hstmt,
-			UCHAR FAR*	szTableQualifier,
-			SWORD		cbTableQualifier,
-			UCHAR FAR*	szTableOwner,
-			SWORD		cbTableOwner, 
-			UCHAR FAR*	szTableName,
-			SWORD		cbTableName,
-			UWORD		fUnique, 
-			UWORD		fAccuracy )
+RETCODE SQL_API SQLStatistics(
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szTableQualifier,
+                        SWORD           cbTableQualifier,
+                        UCHAR FAR*      szTableOwner,
+                        SWORD           cbTableOwner,
+                        UCHAR FAR*      szTableName,
+                        SWORD           cbTableName,
+                        UWORD           fUnique,
+                        UWORD           fAccuracy )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
-		 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
-		 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
+                 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
+                 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		if( fUnique != SQL_INDEX_UNIQUE
-		 && fUnique != SQL_INDEX_ALL )
-		{
-			sqlstat = en_S1100;
-			break;
-		}
+                if( fUnique != SQL_INDEX_UNIQUE
+                 && fUnique != SQL_INDEX_ALL )
+                {
+                        sqlstat = en_S1100;
+                        break;
+                }
 
-		if( fAccuracy != SQL_ENSURE
-		 && fAccuracy != SQL_QUICK )
-		{
-			sqlstat = en_S1101;
-			break;
-		}
+                if( fAccuracy != SQL_ENSURE
+                 && fAccuracy != SQL_QUICK )
+                {
+                        sqlstat = en_S1101;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_Statistics );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_Statistics );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_Statistics );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_Statistics );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Statistics, (
-			pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			fUnique,
-			fAccuracy ) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Statistics, (
+                        pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        fUnique,
+                        fAccuracy ) )
 
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			fUnique,
-			fAccuracy );
+        retcode = hproc(pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        fUnique,
+                        fAccuracy );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_Statistics, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_Statistics, retcode );
 }
 
-RETCODE SQL_API	SQLTables(
-			HSTMT		hstmt, 
-			UCHAR FAR*	szTableQualifier,
-			SWORD		cbTableQualifier,
-			UCHAR FAR*	szTableOwner,
-			SWORD		cbTableOwner,
-			UCHAR FAR*	szTableName,
-			SWORD		cbTableName,
-			UCHAR FAR*	szTableType,
-			SWORD		cbTableType )
+RETCODE SQL_API SQLTables(
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szTableQualifier,
+                        SWORD           cbTableQualifier,
+                        UCHAR FAR*      szTableOwner,
+                        SWORD           cbTableOwner,
+                        UCHAR FAR*      szTableName,
+                        SWORD           cbTableName,
+                        UCHAR FAR*      szTableType,
+                        SWORD           cbTableType )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
-		 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
-		 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) 
-		 || ( cbTableType      < 0 && cbTableType      != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
+                 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
+                 || ( cbTableName      < 0 && cbTableName      != SQL_NTS )
+                 || ( cbTableType      < 0 && cbTableType      != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_Tables );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_Tables );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_Tables );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_Tables );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Tables, (
-			pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			szTableType,
-			cbTableType ) )
-	
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Tables, (
+                        pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        szTableType,
+                        cbTableType ) )
+
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			szTableType,
-			cbTableType );
+        retcode = hproc(pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        szTableType,
+                        cbTableType );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_Tables, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_Tables, retcode );
 }
 
 RETCODE SQL_API SQLColumnPrivileges(
-			HSTMT		hstmt,
-			UCHAR FAR*	szTableQualifier,
-			SWORD		cbTableQualifier,
-			UCHAR FAR*	szTableOwner,
-			SWORD		cbTableOwner,
-			UCHAR FAR*	szTableName,
-			SWORD		cbTableName,
-			UCHAR FAR*	szColumnName,
-			SWORD		cbColumnName )
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szTableQualifier,
+                        SWORD           cbTableQualifier,
+                        UCHAR FAR*      szTableOwner,
+                        SWORD           cbTableOwner,
+                        UCHAR FAR*      szTableName,
+                        SWORD           cbTableName,
+                        UCHAR FAR*      szColumnName,
+                        SWORD           cbColumnName )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
-		 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
-		 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) 
-		 || ( cbColumnName     < 0 && cbColumnName     != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
+                 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
+                 || ( cbTableName      < 0 && cbTableName      != SQL_NTS )
+                 || ( cbColumnName     < 0 && cbColumnName     != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_ColumnPrivileges );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_ColumnPrivileges );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_ColumnPrivileges );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_ColumnPrivileges );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_ColumnPrivileges, (
-			pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			szColumnName,
-			cbColumnName ) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_ColumnPrivileges, (
+                        pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        szColumnName,
+                        cbColumnName ) )
 
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			szColumnName,
-			cbColumnName );
+        retcode = hproc(pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        szColumnName,
+                        cbColumnName );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_ColumnPrivileges, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_ColumnPrivileges, retcode );
 }
 
 RETCODE SQL_API SQLColumns(
-			HSTMT		hstmt,
-			UCHAR FAR*	szTableQualifier,
-			SWORD 		cbTableQualifier,
-			UCHAR FAR*	szTableOwner,
-			SWORD		cbTableOwner, 
-			UCHAR FAR*	szTableName,
-			SWORD		cbTableName,
-			UCHAR FAR*	szColumnName,
-			SWORD		cbColumnName )
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szTableQualifier,
+                        SWORD           cbTableQualifier,
+                        UCHAR FAR*      szTableOwner,
+                        SWORD           cbTableOwner,
+                        UCHAR FAR*      szTableName,
+                        SWORD           cbTableName,
+                        UCHAR FAR*      szColumnName,
+                        SWORD           cbColumnName )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
-		 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
-		 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) 
-		 || ( cbColumnName     < 0 && cbColumnName     != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
+                 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
+                 || ( cbTableName      < 0 && cbTableName      != SQL_NTS )
+                 || ( cbColumnName     < 0 && cbColumnName     != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_Columns );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_Columns );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_Columns );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_Columns );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Columns, (
-			pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			szColumnName,
-			cbColumnName ) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Columns, (
+                        pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        szColumnName,
+                        cbColumnName ) )
 
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName,
-			szColumnName,
-			cbColumnName );
+        retcode = hproc(pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName,
+                        szColumnName,
+                        cbColumnName );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_Columns, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_Columns, retcode );
 }
 
 RETCODE SQL_API SQLForeignKeys(
-			HSTMT		hstmt,
-			UCHAR FAR*	szPkTableQualifier,
-			SWORD		cbPkTableQualifier, 
-			UCHAR FAR*	szPkTableOwner,
-			SWORD		cbPkTableOwner,
-			UCHAR FAR*	szPkTableName,
-			SWORD		cbPkTableName,
-			UCHAR FAR*	szFkTableQualifier,
-			SWORD		cbFkTableQualifier,
-			UCHAR FAR*	szFkTableOwner,
-			SWORD		cbFkTableOwner,
-			UCHAR FAR*	szFkTableName,
-			SWORD		cbFkTableName )
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szPkTableQualifier,
+                        SWORD           cbPkTableQualifier,
+                        UCHAR FAR*      szPkTableOwner,
+                        SWORD           cbPkTableOwner,
+                        UCHAR FAR*      szPkTableName,
+                        SWORD           cbPkTableName,
+                        UCHAR FAR*      szFkTableQualifier,
+                        SWORD           cbFkTableQualifier,
+                        UCHAR FAR*      szFkTableOwner,
+                        SWORD           cbFkTableOwner,
+                        UCHAR FAR*      szFkTableName,
+                        SWORD           cbFkTableName )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbPkTableQualifier < 0 && cbPkTableQualifier != SQL_NTS )
-		 || ( cbPkTableOwner     < 0 && cbPkTableOwner     != SQL_NTS )
-		 || ( cbPkTableName      < 0 && cbPkTableName      != SQL_NTS ) 
-		 || ( cbFkTableQualifier < 0 && cbFkTableQualifier != SQL_NTS )
-		 || ( cbFkTableOwner     < 0 && cbFkTableOwner     != SQL_NTS )
-		 || ( cbFkTableName      < 0 && cbFkTableName      != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbPkTableQualifier < 0 && cbPkTableQualifier != SQL_NTS )
+                 || ( cbPkTableOwner     < 0 && cbPkTableOwner     != SQL_NTS )
+                 || ( cbPkTableName      < 0 && cbPkTableName      != SQL_NTS )
+                 || ( cbFkTableQualifier < 0 && cbFkTableQualifier != SQL_NTS )
+                 || ( cbFkTableOwner     < 0 && cbFkTableOwner     != SQL_NTS )
+                 || ( cbFkTableName      < 0 && cbFkTableName      != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_ForeignKeys );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_ForeignKeys );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_ForeignKeys );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_ForeignKeys );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_ForeignKeys, (
-			pstmt->dhstmt,
-			szPkTableQualifier,
-			cbPkTableQualifier,
-			szPkTableOwner,
-			cbPkTableOwner,
-			szPkTableName,
-			cbPkTableName,
-			szFkTableQualifier,
-			cbFkTableQualifier,
-			szFkTableOwner,
-			cbFkTableOwner,
-			szFkTableName,
-			cbFkTableName ) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_ForeignKeys, (
+                        pstmt->dhstmt,
+                        szPkTableQualifier,
+                        cbPkTableQualifier,
+                        szPkTableOwner,
+                        cbPkTableOwner,
+                        szPkTableName,
+                        cbPkTableName,
+                        szFkTableQualifier,
+                        cbFkTableQualifier,
+                        szFkTableOwner,
+                        cbFkTableOwner,
+                        szFkTableName,
+                        cbFkTableName ) )
 
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			szPkTableQualifier,
-			cbPkTableQualifier,
-			szPkTableOwner,
-			cbPkTableOwner,
-			szPkTableName,
-			cbPkTableName,
-			szFkTableQualifier,
-			cbFkTableQualifier,
-			szFkTableOwner,
-			cbFkTableOwner,
-			szFkTableName,
-			cbFkTableName );
+        retcode = hproc(pstmt->dhstmt,
+                        szPkTableQualifier,
+                        cbPkTableQualifier,
+                        szPkTableOwner,
+                        cbPkTableOwner,
+                        szPkTableName,
+                        cbPkTableName,
+                        szFkTableQualifier,
+                        cbFkTableQualifier,
+                        szFkTableOwner,
+                        cbFkTableOwner,
+                        szFkTableName,
+                        cbFkTableName );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_ForeignKeys, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_ForeignKeys, retcode );
 }
 
 RETCODE SQL_API SQLPrimaryKeys(
-			HSTMT		hstmt,
-			UCHAR FAR*	szTableQualifier,
-			SWORD		cbTableQualifier,
-			UCHAR FAR*	szTableOwner,
-			SWORD		cbTableOwner,
-			UCHAR FAR*	szTableName, 
-			SWORD		cbTableName )
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szTableQualifier,
+                        SWORD           cbTableQualifier,
+                        UCHAR FAR*      szTableOwner,
+                        SWORD           cbTableOwner,
+                        UCHAR FAR*      szTableName,
+                        SWORD           cbTableName )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
-		 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
-		 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
+                 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
+                 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_PrimaryKeys );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_PrimaryKeys );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_PrimaryKeys );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_PrimaryKeys );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_PrimaryKeys, (
-			pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName ) )
+                return SQL_ERROR;
+        }
 
-#if 0 
-	retcode = hproc(pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName );
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_PrimaryKeys, (
+                        pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName ) )
+
+#if 0
+        retcode = hproc(pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_PrimaryKeys, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_PrimaryKeys, retcode );
 }
 
 RETCODE SQL_API SQLProcedureColumns(
-			HSTMT		hstmt,
-			UCHAR FAR*	szProcQualifier,
-			SWORD		cbProcQualifier, 
-			UCHAR FAR*	szProcOwner,
-			SWORD		cbProcOwner,
-			UCHAR FAR*	szProcName,
-			SWORD		cbProcName,
-			UCHAR FAR*	szColumnName,
-			SWORD		cbColumnName )
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szProcQualifier,
+                        SWORD           cbProcQualifier,
+                        UCHAR FAR*      szProcOwner,
+                        SWORD           cbProcOwner,
+                        UCHAR FAR*      szProcName,
+                        SWORD           cbProcName,
+                        UCHAR FAR*      szColumnName,
+                        SWORD           cbColumnName )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbProcQualifier < 0 && cbProcQualifier != SQL_NTS )
-		 || ( cbProcOwner     < 0 && cbProcOwner     != SQL_NTS )
-		 || ( cbProcName      < 0 && cbProcName      != SQL_NTS ) 
-		 || ( cbColumnName    < 0 && cbColumnName    != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbProcQualifier < 0 && cbProcQualifier != SQL_NTS )
+                 || ( cbProcOwner     < 0 && cbProcOwner     != SQL_NTS )
+                 || ( cbProcName      < 0 && cbProcName      != SQL_NTS )
+                 || ( cbColumnName    < 0 && cbColumnName    != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_ProcedureColumns );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_ProcedureColumns );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_ProcedureColumns );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_ProcedureColumns );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_ProcedureColumns, (
-			pstmt->dhstmt,
-			szProcQualifier,
-			cbProcQualifier,
-			szProcOwner,
-			cbProcOwner,
-			szProcName,
-			cbProcName,
-			szColumnName,
-			cbColumnName ) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_ProcedureColumns, (
+                        pstmt->dhstmt,
+                        szProcQualifier,
+                        cbProcQualifier,
+                        szProcOwner,
+                        cbProcOwner,
+                        szProcName,
+                        cbProcName,
+                        szColumnName,
+                        cbColumnName ) )
 
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			szProcQualifier,
-			cbProcQualifier,
-			szProcOwner,
-			cbProcOwner,
-			szProcName,
-			cbProcName,
-			szColumnName,
-			cbColumnName );
+        retcode = hproc(pstmt->dhstmt,
+                        szProcQualifier,
+                        cbProcQualifier,
+                        szProcOwner,
+                        cbProcOwner,
+                        szProcName,
+                        cbProcName,
+                        szColumnName,
+                        cbColumnName );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_ProcedureColumns, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_ProcedureColumns, retcode );
 }
 
-RETCODE SQL_API SQLProcedures( 
-			HSTMT		hstmt,
-			UCHAR FAR*	szProcQualifier,
-			SWORD		cbProcQualifier,
-			UCHAR FAR*	szProcOwner,
-			SWORD		cbProcOwner,
-			UCHAR FAR*	szProcName,
-			SWORD		cbProcName )
+RETCODE SQL_API SQLProcedures(
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szProcQualifier,
+                        SWORD           cbProcQualifier,
+                        UCHAR FAR*      szProcOwner,
+                        SWORD           cbProcOwner,
+                        UCHAR FAR*      szProcName,
+                        SWORD           cbProcName )
 {
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbProcQualifier < 0 && cbProcQualifier != SQL_NTS )
-		 || ( cbProcOwner     < 0 && cbProcOwner     != SQL_NTS )
-		 || ( cbProcName      < 0 && cbProcName      != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbProcQualifier < 0 && cbProcQualifier != SQL_NTS )
+                 || ( cbProcOwner     < 0 && cbProcOwner     != SQL_NTS )
+                 || ( cbProcName      < 0 && cbProcName      != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_Procedures );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_Procedures );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_Procedures );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_Procedures );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Procedures, (
-			pstmt->dhstmt,
-			szProcQualifier,
-			cbProcQualifier,
-			szProcOwner,
-			cbProcOwner,
-			szProcName,
-			cbProcName ) )
+                return SQL_ERROR;
+        }
 
-#if 0	
-	retcode = hproc(pstmt->dhstmt,
-			szProcQualifier,
-			cbProcQualifier,
-			szProcOwner,
-			cbProcOwner,
-			szProcName,
-			cbProcName );
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_Procedures, (
+                        pstmt->dhstmt,
+                        szProcQualifier,
+                        cbProcQualifier,
+                        szProcOwner,
+                        cbProcOwner,
+                        szProcName,
+                        cbProcName ) )
+
+#if 0
+        retcode = hproc(pstmt->dhstmt,
+                        szProcQualifier,
+                        cbProcQualifier,
+                        szProcOwner,
+                        cbProcOwner,
+                        szProcName,
+                        cbProcName );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_Procedures, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_Procedures, retcode );
 }
 
 RETCODE SQL_API SQLTablePrivileges(
-			HSTMT		hstmt,
-			UCHAR FAR*	szTableQualifier,
-			SWORD		cbTableQualifier,
-			UCHAR FAR*	szTableOwner,
-			SWORD		cbTableOwner,
-			UCHAR FAR*	szTableName,
-			SWORD		cbTableName )
+                        HSTMT           hstmt,
+                        UCHAR FAR*      szTableQualifier,
+                        SWORD           cbTableQualifier,
+                        UCHAR FAR*      szTableOwner,
+                        SWORD           cbTableOwner,
+                        UCHAR FAR*      szTableName,
+                        SWORD           cbTableName )
 {
 
-	STMT_t FAR*	pstmt	= (STMT_t FAR*)hstmt;
-	HPROC		hproc	= SQL_NULL_HPROC;
-	RETCODE		retcode;
-	int		sqlstat = en_00000;
+        STMT_t FAR*     pstmt   = (STMT_t FAR*)hstmt;
+        HPROC           hproc;
+        RETCODE         retcode;
+        int             sqlstat = en_00000;
 
-	if( hstmt == SQL_NULL_HSTMT
-	 || pstmt->hdbc == SQL_NULL_HDBC )
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( hstmt == SQL_NULL_HSTMT
+         || pstmt->hdbc == SQL_NULL_HDBC )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	for(;;)
-	{
-		if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
-		 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
-		 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
-		{
-			sqlstat = en_S1090;
-			break;
-		}
+        for(;;)
+        {
+                if( ( cbTableQualifier < 0 && cbTableQualifier != SQL_NTS )
+                 || ( cbTableOwner     < 0 && cbTableOwner     != SQL_NTS )
+                 || ( cbTableName      < 0 && cbTableName      != SQL_NTS ) )
+                {
+                        sqlstat = en_S1090;
+                        break;
+                }
 
-		retcode = _iodbcdm_cata_state_ok ( hstmt, en_TablePrivileges );
-		
-		if( retcode != SQL_SUCCESS )
-		{
-			return SQL_ERROR;
-		}
+                retcode = _iodbcdm_cata_state_ok ( hstmt, en_TablePrivileges );
 
-		hproc = _iodbcdm_getproc( pstmt->hdbc, en_TablePrivileges );
+                if( retcode != SQL_SUCCESS )
+                {
+                        return SQL_ERROR;
+                }
 
-		if( hproc == SQL_NULL_HPROC )
-		{
-			sqlstat = en_IM001;
-			break;
-		}
+                hproc = _iodbcdm_getproc( pstmt->hdbc, en_TablePrivileges );
 
-		sqlstat = en_00000;
+                if( hproc == SQL_NULL_HPROC )
+                {
+                        sqlstat = en_IM001;
+                        break;
+                }
 
-		if( 1 ) /* turn off solaris warning message */
-			break;
-	}
+                sqlstat = en_00000;
 
-	if( sqlstat != en_00000 )
-	{
-		PUSHSQLERR ( pstmt->herr, sqlstat );
+                if( 1 ) /* turn off solaris warning message */
+                        break;
+        }
 
-		return SQL_ERROR;
-	}
+        if( sqlstat != en_00000 )
+        {
+                PUSHSQLERR ( pstmt->herr, sqlstat );
 
-	CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_TablePrivileges, (
-			pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName ) )
+                return SQL_ERROR;
+        }
+
+        CALL_DRIVER ( pstmt->hdbc, retcode, hproc, en_TablePrivileges, (
+                        pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName ) )
 
 #if 0
-	retcode = hproc(pstmt->dhstmt,
-			szTableQualifier,
-			cbTableQualifier,
-			szTableOwner,
-			cbTableOwner,
-			szTableName,
-			cbTableName );
+        retcode = hproc(pstmt->dhstmt,
+                        szTableQualifier,
+                        cbTableQualifier,
+                        szTableOwner,
+                        cbTableOwner,
+                        szTableName,
+                        cbTableName );
 #endif
 
-	return _iodbcdm_cata_state_tr( hstmt, en_TablePrivileges, retcode );
+        return _iodbcdm_cata_state_tr( hstmt, en_TablePrivileges, retcode );
 }

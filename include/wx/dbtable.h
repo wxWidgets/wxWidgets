@@ -32,7 +32,7 @@
 
 #include "wx/db.h"
 
-const ROWID_LEN = 24;  // 18 is the max, 24 is in case it gets larger
+const int ROWID_LEN = 24;  // 18 is the max, 24 is in case it gets larger
 
 // The following class is used to define a column of a table.
 // The wxTable constructor will dynamically allocate as many of
@@ -116,7 +116,7 @@ public:
 
 	// Public member functions
 	wxTable(wxDB *pwxDB, const char *tblName, const int nCols, const char *qryTblName = 0);
-	~wxTable();
+	virtual ~wxTable();
 	bool	Open(void);
 	bool	CreateTable(void);
 	bool	CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs);

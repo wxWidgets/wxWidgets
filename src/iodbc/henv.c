@@ -1,6 +1,6 @@
 /** Environment object managment functions
- 
-    Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+
+    Copyright (C) 1995 by Ke Jin <kejin@empress.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,51 +25,51 @@
 
 #include	<../iodbc/itrace.h>
 
-RETCODE SQL_API	SQLAllocEnv( HENV FAR* phenv )
+RETCODE SQL_API SQLAllocEnv( HENV FAR* phenv )
 {
-	GENV_t FAR*	genv;
+        GENV_t FAR*     genv;
 
-	genv = (GENV_t*)MEM_ALLOC( sizeof(GENV_t) );
+        genv = (GENV_t*)MEM_ALLOC( sizeof(GENV_t) );
 
-	if( genv == NULL )
-	{
-		*phenv = SQL_NULL_HENV;
+        if( genv == NULL )
+        {
+                *phenv = SQL_NULL_HENV;
 
-		return SQL_ERROR;
-	}
+                return SQL_ERROR;
+        }
 
 #if (ODBCVER >= 0x0300 )
-	genv->type = SQL_HANDLE_ENV;
+        genv->type = SQL_HANDLE_ENV;
 #endif
 
-	genv->henv = SQL_NULL_HENV;	/* driver's env list */
-	genv->hdbc = SQL_NULL_HDBC;	/* driver's dbc list */
-	genv->herr = SQL_NULL_HERR;	/* err list	     */
+        genv->henv = SQL_NULL_HENV;     /* driver's env list */
+        genv->hdbc = SQL_NULL_HDBC;     /* driver's dbc list */
+        genv->herr = SQL_NULL_HERR;     /* err list          */
 
-	*phenv = (HENV)genv;
+        *phenv = (HENV)genv;
 
-	return SQL_SUCCESS;
+        return SQL_SUCCESS;
 }
 
-RETCODE SQL_API	SQLFreeEnv ( HENV henv )
+RETCODE SQL_API SQLFreeEnv ( HENV henv )
 {
-	GENV_t FAR*	genv = (GENV_t*)henv;
+        GENV_t FAR*     genv = (GENV_t*)henv;
 
-	if( henv == SQL_NULL_HENV ) 
-	{
-		return SQL_INVALID_HANDLE;
-	}
+        if( henv == SQL_NULL_HENV )
+        {
+                return SQL_INVALID_HANDLE;
+        }
 
-	if( genv->hdbc != SQL_NULL_HDBC )
-	{
-		PUSHSQLERR ( genv->herr, en_S1010 );
+        if( genv->hdbc != SQL_NULL_HDBC )
+        {
+                PUSHSQLERR ( genv->herr, en_S1010 );
 
-		return SQL_ERROR;
-	}
+                return SQL_ERROR;
+        }
 
-	_iodbcdm_freesqlerrlist( genv->herr );
+        _iodbcdm_freesqlerrlist( genv->herr );
 
-	MEM_FREE( henv );
+        MEM_FREE( henv );
 
-	return SQL_SUCCESS;
+        return SQL_SUCCESS;
 }

@@ -52,6 +52,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include "wx/db.h"
 
 DbList *PtrBegDbList = 0;
@@ -308,94 +310,94 @@ bool wxDB::getDbInfo(void)
 {
 	SWORD cb;
 
-	if (SQLGetInfo(hdbc, SQL_SERVER_NAME, dbInf.serverName, 40, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_SERVER_NAME, (UCHAR*) dbInf.serverName, 40, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DATABASE_NAME, dbInf.databaseName, 128, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DATABASE_NAME, (UCHAR*) dbInf.databaseName, 128, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DBMS_NAME, dbInf.dbmsName, 40, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DBMS_NAME, (UCHAR*) dbInf.dbmsName, 40, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DBMS_VER, dbInf.dbmsVer, 20, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DBMS_VER, (UCHAR*) dbInf.dbmsVer, 20, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ACTIVE_CONNECTIONS, &dbInf.maxConnections, sizeof(dbInf.maxConnections), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ACTIVE_CONNECTIONS, (UCHAR*) &dbInf.maxConnections, sizeof(dbInf.maxConnections), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ACTIVE_STATEMENTS, &dbInf.maxStmts, sizeof(dbInf.maxStmts), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ACTIVE_STATEMENTS, (UCHAR*) &dbInf.maxStmts, sizeof(dbInf.maxStmts), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DRIVER_NAME, dbInf.driverName, 40, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DRIVER_NAME, (UCHAR*) dbInf.driverName, 40, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DRIVER_ODBC_VER, dbInf.odbcVer, 20, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DRIVER_ODBC_VER, (UCHAR*) dbInf.odbcVer, 20, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ODBC_VER, dbInf.drvMgrOdbcVer, 20, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ODBC_VER, (UCHAR*) dbInf.drvMgrOdbcVer, 20, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DRIVER_VER, dbInf.driverVer, 40, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DRIVER_VER, (UCHAR*) dbInf.driverVer, 40, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ODBC_API_CONFORMANCE, &dbInf.apiConfLvl, sizeof(dbInf.apiConfLvl), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ODBC_API_CONFORMANCE, (UCHAR*) &dbInf.apiConfLvl, sizeof(dbInf.apiConfLvl), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ODBC_SAG_CLI_CONFORMANCE, &dbInf.cliConfLvl, sizeof(dbInf.cliConfLvl), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ODBC_SAG_CLI_CONFORMANCE, (UCHAR*) &dbInf.cliConfLvl, sizeof(dbInf.cliConfLvl), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ODBC_SQL_CONFORMANCE, &dbInf.sqlConfLvl, sizeof(dbInf.sqlConfLvl), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ODBC_SQL_CONFORMANCE, (UCHAR*) &dbInf.sqlConfLvl, sizeof(dbInf.sqlConfLvl), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_OUTER_JOINS, dbInf.outerJoins, 2, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_OUTER_JOINS, (UCHAR*) dbInf.outerJoins, 2, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_PROCEDURES, dbInf.procedureSupport, 2, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_PROCEDURES, (UCHAR*) dbInf.procedureSupport, 2, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_CURSOR_COMMIT_BEHAVIOR, &dbInf.cursorCommitBehavior, sizeof(dbInf.cursorCommitBehavior), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_CURSOR_COMMIT_BEHAVIOR, (UCHAR*) &dbInf.cursorCommitBehavior, sizeof(dbInf.cursorCommitBehavior), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_CURSOR_ROLLBACK_BEHAVIOR, &dbInf.cursorRollbackBehavior, sizeof(dbInf.cursorRollbackBehavior), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_CURSOR_ROLLBACK_BEHAVIOR, (UCHAR*) &dbInf.cursorRollbackBehavior, sizeof(dbInf.cursorRollbackBehavior), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_NON_NULLABLE_COLUMNS, &dbInf.supportNotNullClause, sizeof(dbInf.supportNotNullClause), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_NON_NULLABLE_COLUMNS, (UCHAR*) &dbInf.supportNotNullClause, sizeof(dbInf.supportNotNullClause), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_ODBC_SQL_OPT_IEF, dbInf.supportIEF, 2, &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_ODBC_SQL_OPT_IEF, (UCHAR*) dbInf.supportIEF, 2, &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_DEFAULT_TXN_ISOLATION, &dbInf.txnIsolation, sizeof(dbInf.txnIsolation), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_DEFAULT_TXN_ISOLATION, (UCHAR*) &dbInf.txnIsolation, sizeof(dbInf.txnIsolation), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_TXN_ISOLATION_OPTION, &dbInf.txnIsolationOptions, sizeof(dbInf.txnIsolationOptions), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_TXN_ISOLATION_OPTION, (UCHAR*) &dbInf.txnIsolationOptions, sizeof(dbInf.txnIsolationOptions), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_FETCH_DIRECTION, &dbInf.fetchDirections, sizeof(dbInf.fetchDirections), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_FETCH_DIRECTION, (UCHAR*) &dbInf.fetchDirections, sizeof(dbInf.fetchDirections), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_LOCK_TYPES, &dbInf.lockTypes, sizeof(dbInf.lockTypes), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_LOCK_TYPES, (UCHAR*) &dbInf.lockTypes, sizeof(dbInf.lockTypes), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_POS_OPERATIONS, &dbInf.posOperations, sizeof(dbInf.posOperations), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_POS_OPERATIONS, (UCHAR*) &dbInf.posOperations, sizeof(dbInf.posOperations), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_POSITIONED_STATEMENTS, &dbInf.posStmts, sizeof(dbInf.posStmts), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_POSITIONED_STATEMENTS, (UCHAR*) &dbInf.posStmts, sizeof(dbInf.posStmts), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_SCROLL_CONCURRENCY, &dbInf.scrollConcurrency, sizeof(dbInf.scrollConcurrency), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_SCROLL_CONCURRENCY, (UCHAR*) &dbInf.scrollConcurrency, sizeof(dbInf.scrollConcurrency), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_SCROLL_OPTIONS, &dbInf.scrollOptions, sizeof(dbInf.scrollOptions), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_SCROLL_OPTIONS, (UCHAR*) &dbInf.scrollOptions, sizeof(dbInf.scrollOptions), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_STATIC_SENSITIVITY, &dbInf.staticSensitivity, sizeof(dbInf.staticSensitivity), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_STATIC_SENSITIVITY, (UCHAR*) &dbInf.staticSensitivity, sizeof(dbInf.staticSensitivity), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_TXN_CAPABLE, &dbInf.txnCapable, sizeof(dbInf.txnCapable), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_TXN_CAPABLE, (UCHAR*) &dbInf.txnCapable, sizeof(dbInf.txnCapable), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
-	if (SQLGetInfo(hdbc, SQL_LOGIN_TIMEOUT, &dbInf.loginTimeout, sizeof(dbInf.loginTimeout), &cb) != SQL_SUCCESS)
+	if (SQLGetInfo(hdbc, SQL_LOGIN_TIMEOUT, (UCHAR*) &dbInf.loginTimeout, sizeof(dbInf.loginTimeout), &cb) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc));
 
 #ifdef DBDEBUG_CONSOLE
@@ -625,15 +627,15 @@ bool wxDB::getDataTypeInfo(SWORD fSqlType, SqlTypeInfo &structSQLTypeInfo)
 		return(FALSE);
 	}
 	// Obtain columns from the record
-	if (SQLGetData(hstmt, 1, SQL_C_CHAR, structSQLTypeInfo.TypeName, DB_TYPE_NAME_LEN, &cbRet) != SQL_SUCCESS)
+	if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) structSQLTypeInfo.TypeName, DB_TYPE_NAME_LEN, &cbRet) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc, hstmt));
-	if (SQLGetData(hstmt, 3, SQL_C_LONG, &structSQLTypeInfo.Precision, 0, &cbRet) != SQL_SUCCESS)
+	if (SQLGetData(hstmt, 3, SQL_C_LONG, (UCHAR*) &structSQLTypeInfo.Precision, 0, &cbRet) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc, hstmt));
-	if (SQLGetData(hstmt, 8, SQL_C_SHORT, &structSQLTypeInfo.CaseSensitive, 0, &cbRet) != SQL_SUCCESS)
+	if (SQLGetData(hstmt, 8, SQL_C_SHORT, (UCHAR*) &structSQLTypeInfo.CaseSensitive, 0, &cbRet) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc, hstmt));
-//	if (SQLGetData(hstmt, 14, SQL_C_SHORT, &structSQLTypeInfo.MinimumScale, 0, &cbRet) != SQL_SUCCESS)
+//	if (SQLGetData(hstmt, 14, SQL_C_SHORT, (UCHAR*) &structSQLTypeInfo.MinimumScale, 0, &cbRet) != SQL_SUCCESS)
 //		return(DispAllErrors(henv, hdbc, hstmt));
-	if (SQLGetData(hstmt, 15, SQL_C_SHORT, &structSQLTypeInfo.MaximumScale, 0, &cbRet) != SQL_SUCCESS)
+	if (SQLGetData(hstmt, 15, SQL_C_SHORT, (UCHAR*) &structSQLTypeInfo.MaximumScale, 0, &cbRet) != SQL_SUCCESS)
 		return(DispAllErrors(henv, hdbc, hstmt));
 
 	if (structSQLTypeInfo.MaximumScale < 0)
@@ -1144,9 +1146,9 @@ CcolInf *wxDB::GetColumns(char *tableName[])
 					delete [] colInf;
 				return(0);
 			}
-			SQLBindCol(hstmt, 3, SQL_C_CHAR,   tblName,      DB_MAX_TABLE_NAME_LEN+1,  &cb);
-			SQLBindCol(hstmt, 4, SQL_C_CHAR,   colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
-			SQLBindCol(hstmt, 5, SQL_C_SSHORT, &sqlDataType, 0,                        &cb);
+			SQLBindCol(hstmt, 3, SQL_C_CHAR,   (UCHAR*) tblName,      DB_MAX_TABLE_NAME_LEN+1,  &cb);
+			SQLBindCol(hstmt, 4, SQL_C_CHAR,   (UCHAR*) colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
+			SQLBindCol(hstmt, 5, SQL_C_SSHORT, (UCHAR*) &sqlDataType, 0,                        &cb);
 			while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
 			{
 				if (pass == 1)  // First pass, just add up the number of columns
@@ -1217,12 +1219,12 @@ bool wxDB::Catalog(char *userID, char *fileName)
 		return(FALSE);
 	}
 
-	SQLBindCol(hstmt, 3, SQL_C_CHAR,   tblName,      DB_MAX_TABLE_NAME_LEN+1,  &cb);
-	SQLBindCol(hstmt, 4, SQL_C_CHAR,   colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
-	SQLBindCol(hstmt, 5, SQL_C_SSHORT, &sqlDataType, 0,                        &cb);
-	SQLBindCol(hstmt, 6, SQL_C_CHAR,	  typeName,		 16,                       &cb);
-	SQLBindCol(hstmt, 7, SQL_C_SSHORT, &precision,	 0,                        &cb);
-	SQLBindCol(hstmt, 8, SQL_C_SSHORT, &length,   	 0,                        &cb);
+	SQLBindCol(hstmt, 3, SQL_C_CHAR,   (UCHAR*) tblName,      DB_MAX_TABLE_NAME_LEN+1,  &cb);
+	SQLBindCol(hstmt, 4, SQL_C_CHAR,   (UCHAR*) colName,      DB_MAX_COLUMN_NAME_LEN+1, &cb);
+	SQLBindCol(hstmt, 5, SQL_C_SSHORT, (UCHAR*) &sqlDataType, 0,                        &cb);
+	SQLBindCol(hstmt, 6, SQL_C_CHAR,   (UCHAR*) typeName,		 16,                       &cb);
+	SQLBindCol(hstmt, 7, SQL_C_SSHORT, (UCHAR*) &precision,	 0,                        &cb);
+	SQLBindCol(hstmt, 8, SQL_C_SSHORT, (UCHAR*) &length,   	 0,                        &cb);
 
 	char outStr[256];
 	strcpy(tblNameSave,"");

@@ -39,9 +39,28 @@
 #include <windows.h>
 #endif
 
+
+#ifdef __WXGTK__
+
+extern "C" {
+#include <../iodbc/isql.h>
+#include <../iodbc/isqlext.h>
+#include <../iodbc/odbc_funcs.h>
+#include <../iodbc/odbc_types.h>
+
+typedef float   SFLOAT;
+typedef double  SDOUBLE;
+#define ULONG UDWORD
+
+}
+
+#else
+
 #define ODBCVER 0x0250
 #include <sql.h>
 #include <sqlext.h>
+
+#endif
 
 enum		enumDummy		{enumDum1};
 
@@ -49,46 +68,46 @@ enum		enumDummy		{enumDum1};
 #define SQL_C_ENUM (sizeof(enumDummy) == 2 ? SQL_C_USHORT : SQL_C_ULONG)    //glt 2-21-97
 
 // Database Globals
-const DB_TYPE_NAME_LEN						= 40;
-const DB_MAX_STATEMENT_LEN					= 2048;
-const DB_MAX_WHERE_CLAUSE_LEN				= 1024;
-const DB_MAX_ERROR_MSG_LEN					= 512;
-const DB_MAX_ERROR_HISTORY					= 5;
-const DB_MAX_TABLE_NAME_LEN				= 128;
-const DB_MAX_COLUMN_NAME_LEN				= 128;
+const int DB_TYPE_NAME_LEN						= 40;
+const int DB_MAX_STATEMENT_LEN					= 2048;
+const int DB_MAX_WHERE_CLAUSE_LEN				= 1024;
+const int DB_MAX_ERROR_MSG_LEN					= 512;
+const int DB_MAX_ERROR_HISTORY					= 5;
+const int DB_MAX_TABLE_NAME_LEN				= 128;
+const int DB_MAX_COLUMN_NAME_LEN				= 128;
 
-const DB_DATA_TYPE_VARCHAR					= 1;
-const DB_DATA_TYPE_INTEGER					= 2;
-const DB_DATA_TYPE_FLOAT					= 3;
-const	DB_DATA_TYPE_DATE						= 4;
+const int DB_DATA_TYPE_VARCHAR					= 1;
+const int DB_DATA_TYPE_INTEGER					= 2;
+const int DB_DATA_TYPE_FLOAT					= 3;
+const int DB_DATA_TYPE_DATE						= 4;
 
-const DB_SELECT_KEYFIELDS					= 1;
-const DB_SELECT_WHERE						= 2;
-const DB_SELECT_MATCHING					= 3;
-const DB_SELECT_STATEMENT					= 4;
+const int DB_SELECT_KEYFIELDS					= 1;
+const int DB_SELECT_WHERE						= 2;
+const int DB_SELECT_MATCHING					= 3;
+const int DB_SELECT_STATEMENT					= 4;
 
-const DB_UPD_KEYFIELDS						= 1;
-const DB_UPD_WHERE							= 2;
+const int DB_UPD_KEYFIELDS						= 1;
+const int DB_UPD_WHERE							= 2;
 
-const DB_DEL_KEYFIELDS						= 1;
-const DB_DEL_WHERE							= 2;
-const DB_DEL_MATCHING						= 3;
+const int DB_DEL_KEYFIELDS						= 1;
+const int DB_DEL_WHERE							= 2;
+const int DB_DEL_MATCHING						= 3;
 
-const DB_WHERE_KEYFIELDS					= 1;
-const DB_WHERE_MATCHING						= 2;
+const int DB_WHERE_KEYFIELDS					= 1;
+const int DB_WHERE_MATCHING						= 2;
 
-const DB_CURSOR0								= 0;
-const DB_CURSOR1								= 1;
-const DB_CURSOR2								= 2;
-//const DB_CURSOR3							= 3;
-//const DB_CURSOR4							= 4;
-//const DB_CURSOR5							= 5;
+const int DB_CURSOR0								= 0;
+const int DB_CURSOR1								= 1;
+const int DB_CURSOR2								= 2;
+//const int DB_CURSOR3							= 3;
+//const int DB_CURSOR4							= 4;
+//const int DB_CURSOR5							= 5;
 
-const DB_GRANT_SELECT						= 1;
-const DB_GRANT_INSERT						= 2;
-const DB_GRANT_UPDATE						= 4;
-const DB_GRANT_DELETE						= 8;
-const DB_GRANT_ALL							= DB_GRANT_SELECT | DB_GRANT_INSERT | DB_GRANT_UPDATE | DB_GRANT_DELETE;
+const int DB_GRANT_SELECT						= 1;
+const int DB_GRANT_INSERT						= 2;
+const int DB_GRANT_UPDATE						= 4;
+const int DB_GRANT_DELETE						= 8;
+const int DB_GRANT_ALL							= DB_GRANT_SELECT | DB_GRANT_INSERT | DB_GRANT_UPDATE | DB_GRANT_DELETE;
 
 // ODBC Error codes (derived from ODBC SqlState codes)
 enum ODBC_ERRORS

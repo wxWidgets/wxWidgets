@@ -1,6 +1,6 @@
 /** trace functions
-       
-    Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+
+    Copyright (C) 1995 by Ke Jin <kejin@empress.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,75 +30,75 @@
 
 static  int printreturn(void FAR* istm, int ret )
 {
-	FILE FAR*	stm = (FILE FAR*)istm;
-	char FAR*	ptr = "Invalid return value";
+        FILE FAR*       stm = (FILE FAR*)istm;
+        char FAR*       ptr = "Invalid return value";
 
-	switch( ret )
-	{
-		case SQL_SUCCESS:
-			ptr = "SQL_SUCCESS";
-			break;
-		
-		case SQL_SUCCESS_WITH_INFO:
-			ptr = "SQL_SUCCESS_WITH_INFO";
-			break;
+        switch( ret )
+        {
+                case SQL_SUCCESS:
+                        ptr = "SQL_SUCCESS";
+                        break;
 
-		case SQL_NO_DATA_FOUND:
-			ptr = "SQL_NO_DATA_FOUND";
-			break;
+                case SQL_SUCCESS_WITH_INFO:
+                        ptr = "SQL_SUCCESS_WITH_INFO";
+                        break;
 
-		case SQL_NEED_DATA:
-			ptr = "SQL_NEED_DATA";
-			break;
+                case SQL_NO_DATA_FOUND:
+                        ptr = "SQL_NO_DATA_FOUND";
+                        break;
 
-		case SQL_INVALID_HANDLE:
-			ptr = "SQL_INVALID_HANDLE";
-			break;
+                case SQL_NEED_DATA:
+                        ptr = "SQL_NEED_DATA";
+                        break;
 
-		case SQL_ERROR:
-			ptr = "SQL_ERROR";
-			break;
+                case SQL_INVALID_HANDLE:
+                        ptr = "SQL_INVALID_HANDLE";
+                        break;
 
-		case SQL_STILL_EXECUTING:
-			ptr = "SQL_STILL_EXECUTING";
-			break;
+                case SQL_ERROR:
+                        ptr = "SQL_ERROR";
+                        break;
 
-		default:
-			break;
-	}
+                case SQL_STILL_EXECUTING:
+                        ptr = "SQL_STILL_EXECUTING";
+                        break;
 
-	fprintf( stm, "%s\n", ptr);
-	fflush( stm );
+                default:
+                        break;
+        }
 
-	return 0;
+        fprintf( stm, "%s\n", ptr);
+        fflush( stm );
+
+        return 0;
 }
 
-HPROC	_iodbcdm_gettrproc(void FAR* istm, int procid, int type)
+HPROC   _iodbcdm_gettrproc(void FAR* istm, int procid, int type)
 {
-	FILE FAR*	stm = (FILE FAR*)istm;
+        FILE FAR*       stm = (FILE FAR*)istm;
 
-	if( type == TRACE_TYPE_DM2DRV )
-	{
-		int i,j = 0;
+        if( type == TRACE_TYPE_DM2DRV )
+        {
+                int i,j = 0;
 
-		for(i=0;j != en_NullProc ;i++)
-		{
-			j = odbcapi_symtab[i].en_idx;
+                for(i=0;j != en_NullProc ;i++)
+                {
+                        j = odbcapi_symtab[i].en_idx;
 
-			if( j == procid )
-			{
-				fprintf( stm, "\n%s ( ... )\n",
-					odbcapi_symtab[i].symbol);
+                        if( j == procid )
+                        {
+                                fprintf( stm, "\n%s ( ... )\n",
+                                        odbcapi_symtab[i].symbol);
 
-				fflush( stm );
-			}
-		}
-	}
+                                fflush( stm );
+                        }
+                }
+        }
 
-	if( type == TRACE_TYPE_RETURN )
-	{
-		return (HPROC)printreturn;
-	}
+        if( type == TRACE_TYPE_RETURN )
+        {
+                return (HPROC)printreturn;
+        }
 
-	return SQL_NULL_HPROC;
+        return SQL_NULL_HPROC;
 }

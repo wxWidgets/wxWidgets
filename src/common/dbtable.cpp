@@ -132,7 +132,7 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols, const char *
 			// Datasource does not support static cursors.  Driver
 			// will substitute a cursor type.  Call SQLGetStmtOption()
 			// to determine which cursor type was selected.
-			if (SQLGetStmtOption(c1, SQL_CURSOR_TYPE, &cursorType) != SQL_SUCCESS)
+			if (SQLGetStmtOption(c1, SQL_CURSOR_TYPE, (UCHAR*) &cursorType) != SQL_SUCCESS)
 				pDb->DispAllErrors(henv, hdbc, c1);
 #ifdef _CONSOLE
 			cout << "Static cursor changed to: ";
@@ -494,7 +494,7 @@ UWORD wxTable::GetRowNum(void)
 {
 	UDWORD rowNum;
 
-	if (SQLGetStmtOption(hstmt, SQL_ROW_NUMBER, &rowNum) != SQL_SUCCESS)
+	if (SQLGetStmtOption(hstmt, SQL_ROW_NUMBER, (UCHAR*) &rowNum) != SQL_SUCCESS)
 	{
 		pDb->DispAllErrors(henv, hdbc, hstmt);
 		return(0);
@@ -550,7 +550,7 @@ bool wxTable::bindInsertParams(void)
 			break;
 		}
 		if (SQLBindParameter(hstmtInsert, i+1, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
-									fSqlType, precision, scale, colDefs[i].PtrDataObj, 
+									fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
 									precision+1,&colDefs[i].CbValue) != SQL_SUCCESS)
 			return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
 	}
@@ -605,7 +605,7 @@ bool wxTable::bindUpdateParams(void)
 			break;
 		}
 		if (SQLBindParameter(hstmtUpdate, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
-									fSqlType, precision, scale, colDefs[i].PtrDataObj, 
+									fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
 									precision+1, &colDefs[i].CbValue) != SQL_SUCCESS)
 			return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
 	}
@@ -623,7 +623,7 @@ bool wxTable::bindCols(HSTMT cursor)
 	// Bind each column of the table to a memory address for fetching data
 	for (int i = 0; i < noCols; i++)
 	{
-		if (SQLBindCol(cursor, i+1, colDefs[i].SqlCtype, colDefs[i].PtrDataObj,
+		if (SQLBindCol(cursor, i+1, colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
 							colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)
 			return(pDb->DispAllErrors(henv, hdbc, cursor));
 	}
@@ -1040,7 +1040,7 @@ void wxTable::GetUpdateStmt(char *pSqlStmt, int typeOfUpd, char *pWhereClause)
 			// Get the ROWID value.  If not successful retreiving the ROWID,
 			// simply fall down through the code and build the WHERE clause
 			// based on the key fields.
-			if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
+			if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
 			{
 				strcat(pSqlStmt, "ROWID = '");
 				strcat(pSqlStmt, rowid);
@@ -1092,7 +1092,7 @@ void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause)
 			// Get the ROWID value.  If not successful retreiving the ROWID,
 			// simply fall down through the code and build the WHERE clause
 			// based on the key fields.
-			if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
+			if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
 			{
 				strcat(pSqlStmt, "ROWID = '");
 				strcat(pSqlStmt, rowid);
@@ -1216,9 +1216,11 @@ bool wxTable::IsColNull(int colNo)
 
 bool wxTable::CanSelectForUpdate(void)
 {
+#ifndef __WXGTK__
 	if (pDb->dbInf.posStmts & SQL_PS_SELECT_FOR_UPDATE)
 		return(TRUE);
 	else
+#endif
 		return(FALSE);
 
 }  // wxTable::CanSelectForUpdate()
@@ -1327,7 +1329,7 @@ void wxTable::SetColDefs (int index, char *fieldName, int dataType, void *pData,
 								 int cType, int size, bool keyField, bool upd,
 								 bool insAllow, bool derivedCol)
 {
-	if (strlen(fieldName) > DB_MAX_COLUMN_NAME_LEN)  // glt 4/21/97
+	if (strlen(fieldName) > (uint)DB_MAX_COLUMN_NAME_LEN)  // glt 4/21/97
 	{
 		strncpy (colDefs[index].ColName, fieldName, DB_MAX_COLUMN_NAME_LEN);
 		colDefs[index].ColName[DB_MAX_COLUMN_NAME_LEN] = 0;  // glt 10/23/97
@@ -1439,7 +1441,7 @@ ULONG wxTable::Count(void)
 	}
 
 	// Obtain the result
-	if (SQLGetData(hstmtCount, 1, SQL_C_ULONG, &l, sizeof(l), &cb) != SQL_SUCCESS)
+	if (SQLGetData(hstmtCount, 1, SQL_C_ULONG, (UCHAR*) &l, sizeof(l), &cb) != SQL_SUCCESS)
 	{
 		pDb->DispAllErrors(henv, hdbc, hstmtCount);
 		return(0);
@@ -1480,7 +1482,7 @@ bool wxTable::Refresh(void)
 		// Get the ROWID value.  If not successful retreiving the ROWID,
 		// simply fall down through the code and build the WHERE clause
 		// based on the key fields.
-		if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
+		if (SQLGetData(hstmt, noCols+1, SQL_C_CHAR, (UCHAR*) rowid, ROWID_LEN, &cb) == SQL_SUCCESS)
 		{
 			strcat(whereClause, queryTableName);
 			strcat(whereClause, ".ROWID = '");

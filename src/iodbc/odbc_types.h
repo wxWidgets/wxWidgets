@@ -1,4 +1,5 @@
-#define SQL_SPEC_STRING         "02.00"         /* String constant for version */
+#define SQL_MAX_USER_NAME_LEN               107
+#define SQL_SPEC_STRING         "02.50"         /* String constant for version */
 #define SQL_ACTIVE_CONNECTIONS               0
 #define SQL_ACTIVE_STATEMENTS                1
 #define SQL_DATA_SOURCE_NAME                 2
@@ -45,23 +46,9 @@
 #define SQL_CONVERT_FUNCTIONS               48
 #define SQL_SYSTEM_FUNCTIONS                51
 #define SQL_NUMERIC_FUNCTIONS               49
-#define SQL_FN_NUM_ABS                      0x00000001L
-#define SQL_FN_NUM_FLOOR                    0x00000200L
-#define SQL_FN_NUM_MOD                      0x00000800L
-#define SQL_FN_NUM_SIGN                     0x00001000L
 #define SQL_STRING_FUNCTIONS                50
-#define SQL_FN_STR_CONCAT                   0x00000001L
-#define SQL_FN_STR_LEFT                     0x00000004L
-#define SQL_FN_STR_LENGTH                   0x00000010L
-#define SQL_FN_STR_LOCATE                   0x00000020L
-#define SQL_FN_STR_LOCATE_2                 0x00010000L
-#define SQL_FN_STR_RIGHT                    0x00000200L
-#define SQL_FN_STR_SUBSTRING                0x00000800L
-#define SQL_FN_STR_REPLACE                  0x00000100L
-#define SQL_FN_STR_LCASE                    0x00000040L
-#define SQL_FN_STR_UCASE                    0x00001000L
 #define SQL_TIMEDATE_FUNCTIONS              52
-#define SQL_FN_TD_CURDATE                   0x00000002L
+
 #define SQL_CONVERT_BIGINT                  53
 #define SQL_CONVERT_BIT                     55
 #define SQL_CONVERT_CHAR                    56
@@ -116,6 +103,8 @@
 #define SQL_MAX_COLUMNS_IN_INDEX            98
 #define SQL_MAX_INDEX_SIZE                  102
 #define SQL_MAX_STATEMENT_LEN               105
+#define SQL_MAX_OPTION_STRING_LENGTH	    256
+
 #define SQL_QL_START                        0x0001L
 #define SQL_SEARCHABLE                  3
 #define SQL_IDENTIFIER_CASE                 28
@@ -164,17 +153,10 @@
 #define SQL_KEYWORDS                        89
 #define SQL_SPECIAL_CHARACTERS              94
 #define SQL_TIMEDATE_ADD_INTERVALS          109
+#define SQL_IC_MIXED                        0x0004
 #define SQL_FN_SYS_DBNAME                   0x00000002L
 #define SQL_FN_SYS_IFNULL                   0x00000004L
 #define SQL_FN_SYS_USERNAME                 0x00000001L
-#define SQL_FN_NUM_CEILING                  0x00000020L
-#define SQL_FN_NUM_EXP                      0x00000100L
-#define SQL_FN_NUM_LOG                      0x00000400L
-#define SQL_FN_NUM_LOG10                    0x00080000L
-#define SQL_FN_NUM_LOG10                    0x00080000L
-#define SQL_FN_NUM_POWER                    0x00100000L
-#define SQL_FN_NUM_SQRT                     0x00004000L
-#define SQL_FN_NUM_ROUND                    0x00400000L
 #define SQL_FN_STR_INSERT                   0x00000002L
 #define SQL_FN_STR_LTRIM                    0x00000008L
 #define SQL_FN_STR_RTRIM                    0x00000400L
@@ -192,107 +174,110 @@
 #define SQL_COLUMN_TABLE_NAME             15
 #define SQL_LEN_DATA_AT_EXEC_OFFSET  (-100)
 #define SQL_CB_NULL                         0x0000
-#define SQL_FN_NUM_RAND                     0x00020000L
+#define SQL_TC_NONE                         0x0000
 #define SQL_NOSCAN_OFF                  0UL     
 #define SQL_ASYNC_ENABLE_OFF            0UL
-#define SQL_CURSOR_STATIC               3UL
 #define SQL_SC_NON_UNIQUE               0UL
 #define SQL_UB_OFF                      0UL
 #define SQL_PC_NOT_PSEUDO               1
 #define SQL_PC_NON_PSEUDO               SQL_PC_NOT_PSEUDO
 #define SQL_UNSEARCHABLE                0
+#define SQL_FD_FETCH_NEXT                   0x00000001L
+#define SQL_FD_FETCH_FIRST                  0x00000002L
+#define SQL_FD_FETCH_LAST                   0x00000004L
+#define SQL_FD_FETCH_PRIOR                  0x00000008L
+#define SQL_FD_FETCH_PREV               SQL_FD_FETCH_PRIOR
+#define SQL_FD_FETCH_ABSOLUTE               0x00000010L
+#define SQL_FD_FETCH_RELATIVE               0x00000020L
 
-/*
- * Following constants are missed in original odbc_types.h
- * Added by serg@informika.ru
- */
+#define SQL_FN_NUM_ABS                      0x00000001L
+#define SQL_FN_NUM_ACOS                     0x00000002L
+#define SQL_FN_NUM_ASIN                     0x00000004L
+#define SQL_FN_NUM_ATAN                     0x00000008L
+#define SQL_FN_NUM_ATAN2                    0x00000010L
+#define SQL_FN_NUM_CEILING                  0x00000020L
+#define SQL_FN_NUM_COS                      0x00000040L
+#define SQL_FN_NUM_COT                      0x00000080L
+#define SQL_FN_NUM_EXP                      0x00000100L
+#define SQL_FN_NUM_FLOOR                    0x00000200L
+#define SQL_FN_NUM_LOG                      0x00000400L
+#define SQL_FN_NUM_MOD                      0x00000800L
+#define SQL_FN_NUM_SIGN                     0x00001000L
+#define SQL_FN_NUM_SIN                      0x00002000L
+#define SQL_FN_NUM_SQRT                     0x00004000L
+#define SQL_FN_NUM_TAN                      0x00008000L
+#define SQL_FN_NUM_PI                       0x00010000L
+#define SQL_FN_NUM_RAND                     0x00020000L
+#define SQL_FN_NUM_DEGREES                  0x00040000L
+#define SQL_FN_NUM_LOG10                    0x00080000L
+#define SQL_FN_NUM_POWER                    0x00100000L
+#define SQL_FN_NUM_RADIANS                  0x00200000L
+#define SQL_FN_NUM_ROUND                    0x00400000L
+#define SQL_FN_NUM_TRUNCATE                 0x00800000L
 
-#define SQL_UNKNOWN_TYPE		0
+#define SQL_FN_STR_CONCAT                   0x00000001L
+#define SQL_FN_STR_INSERT                   0x00000002L
+#define SQL_FN_STR_LEFT                     0x00000004L
+#define SQL_FN_STR_LTRIM                    0x00000008L
+#define SQL_FN_STR_LENGTH                   0x00000010L
+#define SQL_FN_STR_LOCATE                   0x00000020L
+#define SQL_FN_STR_LCASE                    0x00000040L
+#define SQL_FN_STR_REPEAT                   0x00000080L
+#define SQL_FN_STR_REPLACE                  0x00000100L
+#define SQL_FN_STR_RIGHT                    0x00000200L
+#define SQL_FN_STR_RTRIM                    0x00000400L
+#define SQL_FN_STR_SUBSTRING                0x00000800L
+#define SQL_FN_STR_UCASE                    0x00001000L
+#define SQL_FN_STR_ASCII                    0x00002000L
+#define SQL_FN_STR_CHAR                     0x00004000L
+#define SQL_FN_STR_DIFFERENCE               0x00008000L
+#define SQL_FN_STR_LOCATE_2                 0x00010000L
+#define SQL_FN_STR_SOUNDEX                  0x00020000L
+#define SQL_FN_STR_SPACE                    0x00040000L
+#define SQL_FN_STR_BIT_LENGTH		    0x00080000L
+#define SQL_FN_STR_CHAR_LENGTH		    0x00100000L
+#define SQL_FN_STR_CHARACTER_LENGTH	    0x00200000L
+#define SQL_FN_STR_OCTET_LENGTH		    0x00400000L
+#define SQL_FN_STR_POSITION		    0x00800000L
 
-/* SQLColAttributes subdefines for SQL_COLUMN_SEARCHABLE */
-/* These are also used by SQLGetInfo                     */
-#define SQL_UNSEARCHABLE                0
-#define SQL_LIKE_ONLY                   1
-#define SQL_ALL_EXCEPT_LIKE             2
-#define SQL_SEARCHABLE                  3
-#define SQL_PRED_SEARCHABLE				SQL_SEARCHABLE
+#define SQL_FN_TD_NOW                       0x00000001L
+#define SQL_FN_TD_CURDATE                   0x00000002L
+#define SQL_FN_TD_DAYOFMONTH                0x00000004L
+#define SQL_FN_TD_DAYOFWEEK                 0x00000008L
+#define SQL_FN_TD_DAYOFYEAR                 0x00000010L
+#define SQL_FN_TD_MONTH                     0x00000020L
+#define SQL_FN_TD_QUARTER                   0x00000040L
+#define SQL_FN_TD_WEEK                      0x00000080L
+#define SQL_FN_TD_YEAR                      0x00000100L
+#define SQL_FN_TD_CURTIME                   0x00000200L
+#define SQL_FN_TD_HOUR                      0x00000400L
+#define SQL_FN_TD_MINUTE                    0x00000800L
+#define SQL_FN_TD_SECOND                    0x00001000L
+#define SQL_FN_TD_TIMESTAMPADD              0x00002000L
+#define SQL_FN_TD_TIMESTAMPDIFF             0x00004000L
+#define SQL_FN_TD_DAYNAME                   0x00008000L
+#define SQL_FN_TD_MONTHNAME                 0x00010000L
+#define SQL_FN_TD_CURRENT_DATE		    0x00020000L
+#define SQL_FN_TD_CURRENT_TIME		    0x00040000L
+#define SQL_FN_TD_CURRENT_TIMESTAMP	    0x00080000L
+#define SQL_FN_TD_EXTRACT		    0x00100000L
 
-/* Special return values for SQLGetData */
-#define SQL_NO_TOTAL                    (-4)
-
-/* SQL_CORRELATION_NAME values */
-
-#define SQL_CN_NONE                         0x0000
-#define SQL_CN_DIFFERENT                    0x0001
-#define SQL_CN_ANY                          0x0002
-
-/* SQL_NULL_COLLATION values */
-
-#define SQL_NC_HIGH                         0
-#define SQL_NC_LOW                          1
-#define SQL_NC_START                        0x0002
-#define SQL_NC_END                          0x0004
-
-/* SQL_GROUP_BY values */
-
-#define SQL_GB_NOT_SUPPORTED                0x0000
-#define SQL_GB_GROUP_BY_EQUALS_SELECT       0x0001
-#define SQL_GB_GROUP_BY_CONTAINS_SELECT     0x0002
+#define SQL_POS_POSITION                    0x00000001L
+#define SQL_AT_ADD_COLUMN                   0x00000001L
+#define SQL_AT_DROP_COLUMN                  0x00000002L
 #define SQL_GB_NO_RELATION                  0x0003
-
-/* SQL_IDENTIFIER_CASE values */
-#define SQL_IC_UPPER                        1
-#define SQL_IC_LOWER                        2
-#define SQL_IC_SENSITIVE                    3
-#define SQL_IC_MIXED                        4
-
-/* SQL_ODBC_SQL_CONFORMANCE values */
-
-#define SQL_OSC_MINIMUM                     0x0000
-#define SQL_OSC_CORE                        0x0001
-#define SQL_OSC_EXTENDED                    0x0002
-
-/* SQL_SCROLL_OPTIONS masks */
-
-#define SQL_SO_FORWARD_ONLY                 0x00000001L
-#define SQL_SO_KEYSET_DRIVEN                0x00000002L
-#define SQL_SO_DYNAMIC                      0x00000004L
-#define SQL_SO_MIXED                        0x00000008L
-#define SQL_SO_STATIC                       0x00000010L
-
-/* SQL_TXN_CAPABLE values */
-
-#define SQL_TC_NONE                         0
-#define SQL_TC_DML                          1
-#define SQL_TC_ALL                          2
-#define SQL_TC_DDL_COMMIT                   3
-#define SQL_TC_DDL_IGNORE                   4
-
-/* SQL_ALTER_TABLE bitmasks */
-
-#if (ODBCVER >= 0x0200)
-#define SQL_AT_ADD_COLUMN                   	0x00000001L
-#define SQL_AT_DROP_COLUMN                  	0x00000002L
-#endif /* ODBCVER >= 0x0200 */
-
-#define SQL_MAX_USER_NAME_LEN               107
-
-/* SQLColAttributes subdefines for SQL_COLUMN_UPDATABLE */
-
+#define SQL_BIND_BY_COLUMN              0UL
+#define SQL_BIND_TYPE_DEFAULT           SQL_BIND_BY_COLUMN  /* Default value */
 #define SQL_ATTR_READONLY               0
-#define SQL_ATTR_WRITE                  1
-#define SQL_ATTR_READWRITE_UNKNOWN      2
+#define SQL_FETCH_PREV                  SQL_FETCH_PRIOR
+#define SQL_ROW_SUCCESS                 0
+#define SQL_ROW_NOROW                   3
+#define SQL_NOSCAN			2
 
-/* SQLExtendedFetch "rgfRowStatus" element values */
+#define SQL_RD_OFF                      0UL
+#define SQL_RD_ON                       1UL
+#define SQL_RD_DEFAULT                  SQL_RD_ON
 
-#define SQL_ROW_SUCCESS                  0
-#define SQL_ROW_DELETED                  1
-#define SQL_ROW_UPDATED                  2
-#define SQL_ROW_NOROW                    3
-#define SQL_ROW_ADDED                    4
-#define SQL_ROW_ERROR                    5
-
-/* SQL_TIMEDATE_FUNCTIONS */
-
-#define SQL_FN_TD_NOW			0x00000001L
-#define SQL_FN_TD_CURTIME		0x00000200L
+#define SQL_NOSCAN_OFF                  0UL
+#define SQL_NOSCAN_ON                   1UL
+#define SQL_NOSCAN_DEFAULT              SQL_NOSCAN_OFF

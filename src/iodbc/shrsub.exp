@@ -41,7 +41,7 @@ SQLFetch
 SQLExtendedFetch
 SQLGetData
 SQLSetPos
-SQLMoreResults		
+SQLMoreResults
 SQLError
 
 SQLColumnPrivileges

@@ -37,6 +37,10 @@
 #include  <wx/wx.h>
 #endif //WX_PRECOMP
 
+#ifdef __WXGTK__
+#include "db.xpm"
+#endif
+
 #include <stdio.h>					// Included strictly for reading the text file with the database parameters
 
 #include	<wx/db.h>					// Required in the file which will get the data source connection

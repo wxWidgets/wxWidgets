@@ -14,12 +14,7 @@
 #endif
 
 /*
-/*
-// SYNOPSIS START
-
 	Contains dialog class for creating a data table lookup listbox
-
-// SYNOPSIS STOP
 */
 
 #ifndef LISTDB_DOT_H
