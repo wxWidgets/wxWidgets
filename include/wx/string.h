@@ -601,7 +601,7 @@ public:
     /** @name constructors */
     //@{
       /// take nLen chars starting at nPos
-      wxString(const wxString& str, size_t nPos, size_t nLen = npos)
+      wxString(const wxString& str, size_t nPos, size_t nLen)
       {
         wxASSERT( str.GetStringData()->IsValid() );
         InitWith(str.c_str(), nPos, nLen == npos ? 0 : nLen);
