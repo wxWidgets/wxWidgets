@@ -764,7 +764,7 @@ bool wxApp::ProcessMessage(
     // We must relay Timer events to wxTimer's processing function
     //
     if (pMsg->msg == WM_TIMER)
-        wxTimerProc(NULL, 0, pMsg->mp1, 0);
+        wxTimerProc(NULL, 0, (int)pMsg->mp1, 0);
 
     //
     // For some composite controls (like a combobox), wndThis might be NULL

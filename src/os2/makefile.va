@@ -1002,15 +1002,15 @@ $(WXDIR)\lib\wx.lib: \
 !else
 
 # Update the dynamic link library
-$(WXDIR)\lib\wx22.dll: $(OBJECTS)
+$(WXDIR)\lib\wx23.dll: $(OBJECTS)
     icc @<<
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(DUMMYOBJ)
     $(OBJECTS)
-    $(WXDIR)\lib\wx22.def
+    $(WXDIR)\lib\wx23.def
 <<
-    implib $(WXDIR)\lib\wx22.lib $(WXDIR)\lib\wx22.def
+    implib $(WXDIR)\lib\wx23.lib $(WXDIR)\lib\wx23.def
 
 !endif
 
@@ -1106,7 +1106,7 @@ clean:  $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_t
         rd      ..\os2\$D
         del      $(LIBTARGET)
 !if "$(WXMAKINGDLL)" == "1"
-        erase /N ..\..\lib\wx22.lib
+        erase /N ..\..\lib\wx23.lib
 !endif
 
 cleanall: clean
