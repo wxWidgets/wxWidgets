@@ -1087,6 +1087,7 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard classes], wxUSE_CLIPBOARD)
 WX_ARG_ENABLE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
+WX_ARG_ENABLE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
 
 dnl TODO: doesn't work yet
 WX_ARG_ENABLE(wxtree,      [  --enable-wxtree         make wxTree library], wxUSE_WXTREE)
@@ -3460,7 +3461,18 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
 	dnl this one does the right thing though
         if test "$ac_cv_header_ole2_h" = "yes" ; then
             if test "$GCC" = yes ; then
+                ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
+                ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
                 CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
+                LIBS="$LIBS -lole32 -luuid"
+
+                dnl metafiles need the ole code, right??  if not this
+                dnl doesn't need to be in here.
+                if test "$wxUSE_METAFILE" = "yes"; then
+                    AC_DEFINE(wxUSE_METAFILE)
+                    dnl this one should probably be made separately configurable
+                    AC_DEFINE(wxUSE_ENH_METAFILE)
+                fi
             fi
         else
             AC_MSG_WARN(Drag and drop disabled because OLE headers not found)
@@ -3661,10 +3673,6 @@ dnl TODO this is unused for now...
 dnl if test "$wxUSE_WXTREE" = "yes"; then
 dnl   AC_DEFINE(wxUSE_WXTREE)
 dnl fi
-
-if test "$wxUSE_METAFILE" = "yes"; then
-    AC_DEFINE(wxUSE_METAFILE)
-fi
 
 if test "$wxUSE_DIRDLG" = "yes"; then
     if test "$wxUSE_CONSTRAINTS" != "yes"; then

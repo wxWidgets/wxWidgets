@@ -567,6 +567,7 @@
  * Support for metafiles
  */
 #define wxUSE_METAFILE 0
+#define wxUSE_ENH_METAFILE 0
 
 /*
  * wxMiniFrame

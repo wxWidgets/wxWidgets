@@ -39,7 +39,7 @@
 
 #include "wx/msw/private.h"         // includes <windows.h>
 
-#ifdef wxUSE_NORLANDER_HEADERS
+#if wxUSE_NORLANDER_HEADERS
   #include <ole2.h>
 #endif
 #include <oleauto.h>

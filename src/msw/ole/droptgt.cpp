@@ -35,7 +35,7 @@
 #include "wx/log.h"
 
 #ifdef __WIN32__
-    #ifndef __GNUWIN32__
+    #if !defined(__GNUWIN32__) || wxUSE_NORLANDER_HEADERS
         #include <shlobj.h>            // for DROPFILES structure
     #endif
 #else
