@@ -41,6 +41,11 @@ class GridFrame : public wxFrame
     void SetColLabelHorizAlignment( wxCommandEvent& );
     void SetColLabelVertAlignment( wxCommandEvent& );
     void SetGridLineColour( wxCommandEvent& );
+
+    void InsertRow( wxCommandEvent& );    
+    void InsertCol( wxCommandEvent& );    
+    void DeleteRow( wxCommandEvent& );    
+    void DeleteCol( wxCommandEvent& );    
     void ClearGrid( wxCommandEvent& );
 
     void About( wxCommandEvent& );
@@ -72,6 +77,10 @@ class GridFrame : public wxFrame
            ID_COLLABELHORIZALIGN,
            ID_COLLABELVERTALIGN,
            ID_GRIDLINECOLOUR,
+           ID_INSERTROW,
+           ID_INSERTCOL,
+           ID_DELETEROW,
+           ID_DELETECOL,
            ID_CLEARGRID,
            ID_ABOUT,
 

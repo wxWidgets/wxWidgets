@@ -56,6 +56,10 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_COLLABELHORIZALIGN, GridFrame::SetColLabelHorizAlignment )    
     EVT_MENU( ID_COLLABELVERTALIGN, GridFrame::SetColLabelVertAlignment )    
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
+    EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
+    EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
+    EVT_MENU( ID_DELETEROW, GridFrame::DeleteRow )
+    EVT_MENU( ID_DELETECOL, GridFrame::DeleteCol )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
     EVT_MENU( ID_ABOUT, GridFrame::About )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
@@ -107,14 +111,21 @@ GridFrame::GridFrame()
     colLabelMenu->Append( ID_COLLABELVERTALIGN, "&Vertical" );
 
     viewMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour" );
-    viewMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
 
+    wxMenu *editMenu = new wxMenu;
+    editMenu->Append( ID_INSERTROW, "Insert &row" );
+    editMenu->Append( ID_INSERTCOL, "Insert &column" );
+    editMenu->Append( ID_DELETEROW, "Delete ro&w" );
+    editMenu->Append( ID_DELETECOL, "Delete co&l" );
+    editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
+    
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append( ID_ABOUT, "&About wxGrid demo" );
     
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( fileMenu, "&File" );
     menuBar->Append( viewMenu, "&View" );
+    menuBar->Append( editMenu, "&Edit" );
     menuBar->Append( helpMenu, "&Help" );
 
     SetMenuBar( menuBar );
@@ -362,6 +373,30 @@ void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
 }
 
 
+void GridFrame::InsertRow( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->InsertRows( 0, 1 );
+}
+
+
+void GridFrame::InsertCol( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->InsertCols( 0, 1 );
+}
+
+
+void GridFrame::DeleteRow( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->DeleteRows( 0, 1 );
+}
+
+
+void GridFrame::DeleteCol( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->DeleteCols( 0, 1 );
+}
+
+
 void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->ClearGrid();
@@ -432,7 +467,7 @@ void GridFrame::OnCellLeftClick( wxGridEvent& ev )
     logBuf << "Cell at row " << ev.GetRow()
            << " col " << ev.GetCol();
     wxLogMessage( "%s", logBuf.c_str() );
-    
+
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
     //
