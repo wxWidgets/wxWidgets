@@ -180,7 +180,7 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
     return wxNOT_FOUND;
 }
 
-wxMenuItem *wxMenuBar::FindItemForId(int itemId, wxMenu **menuForItem = NULL) const
+wxMenuItem *wxMenuBar::FindItemForId(int itemId, wxMenu **menuForItem ) const
 {
     if ( menuForItem )
     {
