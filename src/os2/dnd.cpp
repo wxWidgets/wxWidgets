@@ -13,10 +13,12 @@
 #pragma implementation "dnd.h"
 #endif
 
-#include "wx/dnd.h"
+#define INCL_PM
+#include <os2.h>
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
+#include "wx/dnd.h"
 
 // ----------------------------------------------------------------------------
 // global

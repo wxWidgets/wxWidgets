@@ -8,29 +8,29 @@
  *
  * Y2K compliance in libpng:
  * =========================
- *    
+ *
  *    January 13, 1999
- *    
+ *
  *    Since the PNG Development group is an ad-hoc body, we can't make
  *    an official declaration.
- *    
+ *
  *    This is your unofficial assurance that libpng from version 0.81 and
  *    upward are Y2K compliant.  It is my belief that earlier versions were
  *    also Y2K compliant.
- *    
+ *
  *    Libpng only has three year fields.  One is a 2-byte unsigned integer
  *    that will hold years up to 65535.  The other two hold the date in text
  *    format, and will hold years up to 9999.
- *    
+ *
  *    The integer is
  *        "png_uint_16 year" in png_time_struct.
- *    
+ *
  *    The strings are
  *        "png_charp time_buffer" in png_struct and
  *        "near_time_buffer", which is a local character string in png.c.
- *    
+ *
  *    There are seven time-related functions:
- *        png.c: png_convert_to_rfc_1123() in png.c 
+ *        png.c: png_convert_to_rfc_1123() in png.c
  *          (formerly png_convert_to_rfc_1152() in error)
  *        png_convert_from_struct_tm() in pngwrite.c, called in pngwrite.c
  *        png_convert_from_time_t() in pngwrite.c
@@ -38,8 +38,8 @@
  *        png_handle_tIME() in pngrutil.c, called in pngread.c
  *        png_set_tIME() in pngset.c
  *        png_write_tIME() in pngwutil.c, called in pngwrite.c
- *    
- *    All handle dates properly in a Y2K environment.  The 
+ *
+ *    All handle dates properly in a Y2K environment.  The
  *    png_convert_from_time_t() function calls gmtime() to convert from system
  *    clock time, which returns (year - 1900), which we properly convert to
  *    the full 4-digit year.  There is a possibility that applications using
@@ -49,17 +49,17 @@
  *    is not under our control.  The libpng documentation has always stated
  *    that it works with 4-digit years, and the APIs have been documented as
  *    such.
- *    
+ *
  *    The tIME chunk itself is also Y2K compliant.  It uses a 2-byte unsigned
  *    integer to hold the year, and can hold years as large as 65535.
- *    
- *    
+ *
+ *
  *       Glenn Randers-Pehrson
  *       libpng maintainer
  *       PNG Development Group
- * 
+ *
  * Note about libpng version numbers:
- * 
+ *
  *    Due to various miscommunications, unforeseen code incompatibilities
  *    and occasional factors outside the authors' control, version numbering
  *    on the library has not always been consistent and straightforward.

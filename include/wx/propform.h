@@ -89,7 +89,7 @@ public:
 
   wxWindow*         m_propertyWindow; // Panel that the controls will appear on
   wxWindow*         m_managedWindow; // Frame or dialog
-  
+
   wxButton*         m_windowCloseButton; // Or OK
   wxButton*         m_windowCancelButton;
   wxButton*         m_windowHelpButton;
@@ -97,7 +97,7 @@ public:
 DECLARE_EVENT_TABLE()
 
 };
- 
+
 /*
  * The type of validator used for forms (wxForm style but using an existing panel
  * or dialog box).
@@ -120,10 +120,10 @@ class WXDLLEXPORT wxPropertyFormValidator: public wxPropertyValidator
  public:
   wxPropertyFormValidator(long flags = 0): wxPropertyValidator(flags) { }
   ~wxPropertyFormValidator(void) {}
-  
+
    // Called to check value is OK (e.g. when OK is pressed)
    // Return FALSE if value didn't check out; signal to restore old value.
-   virtual bool OnCheckValue( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+   virtual bool OnCheckValue( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view),
      wxWindow *WXUNUSED(parentWindow) ) { return TRUE; }
 
    // Does the transferance from the property editing area to the property itself.
@@ -133,20 +133,27 @@ class WXDLLEXPORT wxPropertyFormValidator: public wxPropertyValidator
    // Called by the view to transfer the property to the window.
    virtual bool OnDisplayValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow) = 0;
 
-  virtual void OnDoubleClick( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
-     wxWindow *WXUNUSED(parentWindow) ) { } 
-  virtual void OnSetFocus( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+  virtual void OnDoubleClick( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view),
      wxWindow *WXUNUSED(parentWindow) ) { }
-  virtual void OnKillFocus( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+  virtual void OnSetFocus( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view),
      wxWindow *WXUNUSED(parentWindow) ) { }
-  virtual void OnCommand( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view), 
+  virtual void OnKillFocus( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view),
+     wxWindow *WXUNUSED(parentWindow) ) { }
+  virtual void OnCommand( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view),
      wxWindow *WXUNUSED(parentWindow), wxCommandEvent& WXUNUSED(event) ) {}
+private:
+// Virtual function hiding suppression
+#if WXWIN_COMPATIBILITY_2
+    virtual void OnCommand(wxWindow& win,
+                           wxCommandEvent& event)
+    { wxEvtHandler::OnCommand(win, event); }
+#endif
 };
 
 /*
  * Some default validators
  */
- 
+
 class WXDLLEXPORT wxRealFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxRealFormValidator)
@@ -226,7 +233,7 @@ class WXDLLEXPORT wxStringFormValidator: public wxPropertyFormValidator
 /*
  * A default dialog box class to use.
  */
- 
+
 class WXDLLEXPORT wxPropertyFormDialog: public wxDialog
 {
   DECLARE_CLASS(wxPropertyFormDialog)
@@ -251,7 +258,7 @@ DECLARE_EVENT_TABLE()
 /*
  * A default panel class to use.
  */
- 
+
 class WXDLLEXPORT wxPropertyFormPanel: public wxPanel
 {
   DECLARE_CLASS(wxPropertyFormPanel)
@@ -275,7 +282,7 @@ class WXDLLEXPORT wxPropertyFormPanel: public wxPanel
 /*
  * A default frame class to use.
  */
- 
+
 class WXDLLEXPORT wxPropertyFormFrame: public wxFrame
 {
   DECLARE_CLASS(wxPropertyFormFrame)

@@ -46,7 +46,7 @@
 #define ZYZGS_3D        0x8000L     /* control will be 3D       */
 
 /* public function prototypes */
-BOOL _Optlink gaugeInit(HINSTANCE hInstance);
+// BOOL _Optlink gaugeInit(HINSTANCE hInstance);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
@@ -64,8 +64,11 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 
     if ( !wxGaugeOS2Initialised )
     {
+//TODO:
+/*
       if (!gaugeInit((HINSTANCE) wxGetInstance()))
           wxFatalError("Cannot initalize Gauge library");
+*/
       wxGaugeOS2Initialised = TRUE;
     }
 

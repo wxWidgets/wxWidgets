@@ -16,7 +16,7 @@
 #elif defined(__WXMAC__)
 #include "wx/generic/listctrl.h"
 #elif defined(__WXPM__)
-#include "wx/os2/listctrl.h"
+#include "wx/generic/listctrl.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/listctrl.h"
 #endif

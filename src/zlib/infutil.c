@@ -1,6 +1,6 @@
 /* inflate_util.c -- data and routines common to blocks and codes
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #include "zutil.h"
@@ -20,10 +20,14 @@ uInt inflate_mask[17] = {
 
 
 /* copy as much as possible from the sliding window to the output area */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_flush(inflate_blocks_statef* s, z_streamp z, int r)
+#else
 int inflate_flush(s, z, r)
 inflate_blocks_statef *s;
 z_streamp z;
 int r;
+#endif
 {
   uInt n;
   Bytef *p;

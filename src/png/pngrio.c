@@ -39,8 +39,13 @@ png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
    read_data function and use it at run time with png_set_read_fn(), rather
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
+#ifdef __VISAGECPP__
+static void _Optlink
+png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+#else
 static void
 png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+#endif
 {
    png_size_t check;
 

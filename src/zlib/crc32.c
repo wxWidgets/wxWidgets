@@ -1,6 +1,6 @@
 /* crc32.c -- compute the CRC-32 of a data stream
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 /* @(#) $Id$ */
@@ -51,7 +51,7 @@ local void make_crc_table()
   poly = 0L;
   for (n = 0; n < sizeof(p)/sizeof(Byte); n++)
     poly |= 1L << (31 - p[n]);
- 
+
   for (n = 0; n < 256; n++)
   {
     c = (uLong)n;
@@ -139,10 +139,14 @@ const uLongf * ZEXPORT get_crc_table()
 #define DO8(buf)  DO4(buf); DO4(buf);
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+uLong ZEXPORT crc32(uLong crc, const Bytef* buf, uInt len)
+#else
 uLong ZEXPORT crc32(crc, buf, len)
     uLong crc;
     const Bytef *buf;
     uInt len;
+#endif
 {
     if (buf == Z_NULL) return 0L;
 #ifdef DYNAMIC_CRC_TABLE

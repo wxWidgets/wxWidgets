@@ -55,9 +55,6 @@ public:
 
     virtual bool Destroy();
 
-    virtual void ClientToScreen(int *x, int *y) const;
-    virtual void ScreenToClient(int *x, int *y) const;
-
     void OnSize(wxSizeEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
     void OnActivate(wxActivateEvent& event);
@@ -176,6 +173,9 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
 
     virtual void DoSetClientSize(int width, int height);
+
+    virtual void DoClientToScreen(int *x, int *y) const;
+    virtual void DoScreenToClient(int *x, int *y) const;
 
     // a plug in for MDI frame classes which need to do something special when
     // the menubar is set

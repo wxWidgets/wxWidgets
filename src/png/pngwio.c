@@ -39,8 +39,13 @@ png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    write_data function and use it at run time with png_set_write_fn(), rather
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
+#ifdef __VISAGECPP__
+static void _Optlink
+png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+#else
 static void
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+#endif
 {
    png_uint_32 check;
 
@@ -59,8 +64,13 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define NEAR_BUF_SIZE 1024
 #define MIN(a,b) (a <= b ? a : b)
 
+#ifdef __VISAGECPP__
+static void _Optlink
+png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+#else
 static void
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+#endif
 {
    png_uint_32 check;
    png_byte *near_data;  /* Needs to be "png_byte *" instead of "png_bytep" */
@@ -114,8 +124,13 @@ png_flush(png_structp png_ptr)
 }
 
 #if !defined(PNG_NO_STDIO)
+#ifdef __VISAGECPP__
+static void _Optlink
+png_default_flush(png_structp png_ptr)
+#else
 static void
 png_default_flush(png_structp png_ptr)
+#endif
 {
    FILE *io_ptr;
    io_ptr = (FILE *)CVT_PTR((png_ptr->io_ptr));

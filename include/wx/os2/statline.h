@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_STATLINE_H_
-#define _WX_MSW_STATLINE_H_
+#ifndef _WX_OS2_STATLINE_H_
+#define _WX_OS2_STATLINE_H_
 
 #ifdef __GNUG__
     #pragma interface
@@ -45,6 +45,6 @@ public:
                  const wxString &name = wxStaticTextNameStr );
 };
 
-#endif // _WX_MSW_STATLINE_H_
+#endif // _WX_OS2_STATLINE_H_
 
 

@@ -70,13 +70,13 @@ bool wxGetHostName(
     unsigned long                   ulBuffer;
     unsigned long*                  pulTotalAvail;
 
-    NetBios32GetInfo( (const unsigned char*)zServer
-                     ,(const unsigned char*)zComputer
-                     ,ulLevel
-                     ,zBuffer
-                     ,ulBuffer
-                     ,pulTotalAvail
-                    );
+    NetBiosGetInfo( (const unsigned char*)zServer
+                   ,(const unsigned char*)zComputer
+                   ,ulLevel
+                   ,zBuffer
+                   ,ulBuffer
+                   ,pulTotalAvail
+                  );
     strcpy(zBuf, zServer);
 #else
     wxChar*                         zSysname;

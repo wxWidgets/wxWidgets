@@ -1,6 +1,6 @@
 /* compress.c -- compress a memory buffer
  * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 /* @(#) $Id$ */
@@ -18,12 +18,16 @@
    memory, Z_BUF_ERROR if there was not enough room in the output buffer,
    Z_STREAM_ERROR if the level parameter is invalid.
 */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT compress2 (Bytef* dest, uLongf* destLen, const Bytef* source, uLong sourceLen, int level)
+#else
 int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     Bytef *dest;
     uLongf *destLen;
     const Bytef *source;
     uLong sourceLen;
     int level;
+#endif
 {
     z_stream stream;
     int err;
@@ -58,11 +62,15 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
 
 /* ===========================================================================
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT compress (Bytef* dest, uLongf* destLen, const Bytef* source, uLong sourceLen)
+#else
 int ZEXPORT compress (dest, destLen, source, sourceLen)
     Bytef *dest;
     uLongf *destLen;
     const Bytef *source;
     uLong sourceLen;
+#endif
 {
     return compress2(dest, destLen, source, sourceLen, Z_DEFAULT_COMPRESSION);
 }

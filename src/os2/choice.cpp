@@ -190,13 +190,12 @@ void* wxChoice::DoGetItemClientData( int n ) const
 
 void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
 {
-    DoSetClientData(n, clientData);
+    DoSetItemClientData(n, clientData);
 }
 
 wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 {
-    // TODO:    return (wxClientData *)DoGetClientData(n);
-    return NULL;
+    return (wxClientData *)DoGetItemClientData(n);
 }
 
 // ----------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 /* infcodes.c -- process literals and length/distance pairs
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #include "zutil.h"
@@ -55,12 +55,15 @@ struct inflate_codes_state {
 
 };
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+inflate_codes_statef* inflate_codes_new(uInt bl, uInt bd, inflate_huft* tl, inflate_huft* td, z_streamp z)
+#else
 inflate_codes_statef *inflate_codes_new(bl, bd, tl, td, z)
 uInt bl, bd;
 inflate_huft *tl;
 inflate_huft *td; /* need separate declaration for Borland C++ */
 z_streamp z;
+#endif
 {
   inflate_codes_statef *c;
 
@@ -77,11 +80,14 @@ z_streamp z;
   return c;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_codes(inflate_blocks_statef* s, z_streamp z, int r)
+#else
 int inflate_codes(s, z, r)
 inflate_blocks_statef *s;
 z_streamp z;
 int r;
+#endif
 {
   uInt j;               /* temporary storage */
   inflate_huft *t;      /* temporary pointer */
@@ -240,10 +246,13 @@ int r;
 #endif
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+void inflate_codes_free(inflate_codes_statef* c, z_streamp z)
+#else
 void inflate_codes_free(c, z)
 inflate_codes_statef *c;
 z_streamp z;
+#endif
 {
   ZFREE(z, c);
   Tracev((stderr, "inflate:       codes free\n"));

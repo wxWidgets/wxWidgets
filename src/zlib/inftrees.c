@@ -1,6 +1,6 @@
 /* inftrees.c -- generate Huffman trees for efficient decoding
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #include "zutil.h"
@@ -23,7 +23,6 @@ struct internal_state  {int dummy;}; /* for buggy compilers */
 /* simplify the use of the inflate_huft type with some defines */
 #define exop word.what.Exop
 #define bits word.what.Bits
-
 
 local int huft_build OF((
     uIntf *,            /* code lengths in bits */
@@ -90,6 +89,10 @@ local const uInt cpdext[30] = { /* Extra bits for distance codes */
 /* If BMAX needs to be larger than 16, then h and x[] should be uLong. */
 #define BMAX 15         /* maximum bit length of any code */
 
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local int huft_build(uIntf* b, uInt n, uInt s, const uIntf* d, const uIntf* e,
+                     inflate_huft* FAR *t, uIntf* m, inflate_huft* hp, uInt* hn, uIntf* v)
+#else
 local int huft_build(b, n, s, d, e, t, m, hp, hn, v)
 uIntf *b;               /* code lengths in bits (all assumed <= BMAX) */
 uInt n;                 /* number of codes (assumed <= 288) */
@@ -106,6 +109,7 @@ uIntf *v;               /* working area: values in order of bit length */
    if the given code set is incomplete (the tables are still built in this
    case), Z_DATA_ERROR if the input is invalid (an over-subscribed set of
    lengths), or Z_MEM_ERROR if not enough memory. */
+#endif
 {
 
   uInt a;                       /* counter for codes of length k */
@@ -290,13 +294,16 @@ uIntf *v;               /* working area: values in order of bit length */
   return y != 0 && g != 1 ? Z_BUF_ERROR : Z_OK;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_trees_bits(uIntf* c, uIntf* bb, inflate_huft* FAR *tb, inflate_huft* hp, z_streamp z)
+#else
 int inflate_trees_bits(c, bb, tb, hp, z)
 uIntf *c;               /* 19 code lengths */
 uIntf *bb;              /* bits tree desired/actual depth */
 inflate_huft * FAR *tb; /* bits tree result */
 inflate_huft *hp;       /* space for trees */
 z_streamp z;            /* for messages */
+#endif
 {
   int r;
   uInt hn = 0;          /* hufts used in space */
@@ -317,7 +324,10 @@ z_streamp z;            /* for messages */
   return r;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_trees_dynamic(uInt nl, uInt nd, uInt* c, uInt* bl, uInt *bd, inflate_huft* FAR *tl,
+                          inflate_huft* FAR *td, inflate_huft* hp, z_streamp z)
+#else
 int inflate_trees_dynamic(nl, nd, c, bl, bd, tl, td, hp, z)
 uInt nl;                /* number of literal/length codes */
 uInt nd;                /* number of distance codes */
@@ -328,6 +338,7 @@ inflate_huft * FAR *tl; /* literal/length tree result */
 inflate_huft * FAR *td; /* distance tree result */
 inflate_huft *hp;       /* space for trees */
 z_streamp z;            /* for messages */
+#endif
 {
   int r;
   uInt hn = 0;          /* hufts used in space */
@@ -381,7 +392,6 @@ z_streamp z;            /* for messages */
   return Z_OK;
 }
 
-
 /* build fixed tables only once--keep them here */
 #ifdef BUILDFIXED
 local int fixed_built = 0;
@@ -395,13 +405,17 @@ local inflate_huft *fixed_td;
 #include "inffixed.h"
 #endif
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_trees_fixed(uIntf* bl, uIntf *bd, inflate_huft* FAR *tl,
+                        inflate_huft* FAR *td, z_streamp z)
+#else
 int inflate_trees_fixed(bl, bd, tl, td, z)
 uIntf *bl;               /* literal desired/actual bit depth */
 uIntf *bd;               /* distance desired/actual bit depth */
 inflate_huft * FAR *tl;  /* literal/length tree result */
 inflate_huft * FAR *td;  /* distance tree result */
 z_streamp z;             /* for memory allocation */
+#endif
 {
 #ifdef BUILDFIXED
   /* build fixed tables if not already */

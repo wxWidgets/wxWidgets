@@ -1,6 +1,6 @@
 /* infblock.c -- interpret and process block types to last block
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #include "zutil.h"
@@ -65,10 +65,14 @@ local const uInt border[] = { /* Order of the bit length code lengths */
  */
 
 
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+void inflate_blocks_reset(inflate_blocks_statef* s, z_streamp z, uLongf* c)
+#else
 void inflate_blocks_reset(s, z, c)
 inflate_blocks_statef *s;
 z_streamp z;
 uLongf *c;
+#endif
 {
   if (c != Z_NULL)
     *c = s->check;
@@ -85,11 +89,14 @@ uLongf *c;
   Tracev((stderr, "inflate:   blocks reset\n"));
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+inflate_blocks_statef *inflate_blocks_new(z_streamp z, check_func c, uInt w)
+#else
 inflate_blocks_statef *inflate_blocks_new(z, c, w)
 z_streamp z;
 check_func c;
 uInt w;
+#endif
 {
   inflate_blocks_statef *s;
 
@@ -116,11 +123,14 @@ uInt w;
   return s;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_blocks(inflate_blocks_statef* s, z_streamp z, int r)
+#else
 int inflate_blocks(s, z, r)
 inflate_blocks_statef *s;
 z_streamp z;
 int r;
+#endif
 {
   uInt t;               /* temporary storage */
   uLong b;              /* bit buffer */
@@ -370,10 +380,13 @@ int r;
   }
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_blocks_free(inflate_blocks_statef* s, z_streamp z)
+#else
 int inflate_blocks_free(s, z)
 inflate_blocks_statef *s;
 z_streamp z;
+#endif
 {
   inflate_blocks_reset(s, z, Z_NULL);
   ZFREE(z, s->window);
@@ -383,23 +396,29 @@ z_streamp z;
   return Z_OK;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+void inflate_set_dictionary(inflate_blocks_statef* s, const Bytef* d, uInt n)
+#else
 void inflate_set_dictionary(s, d, n)
 inflate_blocks_statef *s;
 const Bytef *d;
 uInt  n;
+#endif
 {
   zmemcpy(s->window, d, n);
   s->read = s->write = s->window + n;
 }
 
-
 /* Returns true if inflate is currently at the end of a block generated
- * by Z_SYNC_FLUSH or Z_FULL_FLUSH. 
+ * by Z_SYNC_FLUSH or Z_FULL_FLUSH.
  * IN assertion: s != Z_NULL
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_blocks_sync_point(inflate_blocks_statef* s)
+#else
 int inflate_blocks_sync_point(s)
 inflate_blocks_statef *s;
+#endif
 {
   return s->mode == LENS;
 }

@@ -1,6 +1,6 @@
 /* inflate.c -- zlib interface to inflate modules
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #include "zutil.h"
@@ -44,14 +44,18 @@ struct internal_state {
   /* mode independent information */
   int  nowrap;          /* flag for no wrapper */
   uInt wbits;           /* log2(window size)  (8..15, defaults to 15) */
-  inflate_blocks_statef 
+  inflate_blocks_statef
     *blocks;            /* current inflate_blocks state */
 
 };
 
 
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflateReset(z_streamp z)
+#else
 int ZEXPORT inflateReset(z)
 z_streamp z;
+#endif
 {
   if (z == Z_NULL || z->state == Z_NULL)
     return Z_STREAM_ERROR;
@@ -64,8 +68,12 @@ z_streamp z;
 }
 
 
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflateEnd(z_streamp z)
+#else
 int ZEXPORT inflateEnd(z)
 z_streamp z;
+#endif
 {
   if (z == Z_NULL || z->state == Z_NULL || z->zfree == Z_NULL)
     return Z_STREAM_ERROR;
@@ -77,12 +85,15 @@ z_streamp z;
   return Z_OK;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflateInit2_(z_streamp z, int w, const char* version, int stream_size)
+#else
 int ZEXPORT inflateInit2_(z, w, version, stream_size)
 z_streamp z;
 int w;
 const char *version;
 int stream_size;
+#endif
 {
   if (version == Z_NULL || version[0] != ZLIB_VERSION[0] ||
       stream_size != sizeof(z_stream))
@@ -134,22 +145,28 @@ int stream_size;
   return Z_OK;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflateInit_(z_streamp z, const char* version, int stream_size)
+#else
 int ZEXPORT inflateInit_(z, version, stream_size)
 z_streamp z;
 const char *version;
 int stream_size;
+#endif
 {
   return inflateInit2_(z, DEF_WBITS, version, stream_size);
 }
 
-
 #define NEEDBYTE {if(z->avail_in==0)return r;r=f;}
 #define NEXTBYTE (z->avail_in--,z->total_in++,*z->next_in++)
 
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflate(z_streamp z, int f)
+#else
 int ZEXPORT inflate(z, f)
 z_streamp z;
 int f;
+#endif
 {
   int r;
   uInt b;
@@ -274,11 +291,14 @@ int f;
 #endif
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflateSetDictionary(z_streamp z, const Bytef* dictionary, uInt dictLength)
+#else
 int ZEXPORT inflateSetDictionary(z, dictionary, dictLength)
 z_streamp z;
 const Bytef *dictionary;
 uInt  dictLength;
+#endif
 {
   uInt length = dictLength;
 
@@ -298,9 +318,12 @@ uInt  dictLength;
   return Z_OK;
 }
 
-
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflateSync(z_streamp z)
+#else
 int ZEXPORT inflateSync(z)
 z_streamp z;
+#endif
 {
   uInt n;       /* number of bytes to look at */
   Bytef *p;     /* pointer to bytes */
@@ -349,7 +372,6 @@ z_streamp z;
   return Z_OK;
 }
 
-
 /* Returns true if inflate is currently at the end of a block generated
  * by Z_SYNC_FLUSH or Z_FULL_FLUSH. This function is used by one PPP
  * implementation to provide an additional safety check. PPP uses Z_SYNC_FLUSH
@@ -357,8 +379,12 @@ z_streamp z;
  * decompressing, PPP checks that at the end of input packet, inflate is
  * waiting for these length bytes.
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT inflateSyncPoint(z_streamp z)
+#else
 int ZEXPORT inflateSyncPoint(z)
 z_streamp z;
+#endif
 {
   if (z == Z_NULL || z->state == Z_NULL || z->state->blocks == Z_NULL)
     return Z_STREAM_ERROR;

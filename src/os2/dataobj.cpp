@@ -31,6 +31,8 @@
 
 #include "wx/log.h"
 #include "wx/dataobj.h"
+#include "wx/mstream.h"
+#include "wx/image.h"
 
 #define INCL_DOS
 #include <os2.h>
@@ -47,11 +49,8 @@
 // wxDataFormat
 // ----------------------------------------------------------------------------
 
-wxDataFormat::wxDataFormat(
-  wxDataFormatId                    vType
-)
+wxDataFormat::wxDataFormat()
 {
-    PrepareFormats();
     m_vType = wxDF_INVALID;
     m_vFormat = 0;
 }
@@ -184,7 +183,7 @@ bool wxDataObject::IsSupportedFormat(
     else
     {
         wxDataFormat*               pFormats = new wxDataFormat[nFormatCount];
-        GetAllFormats( rFormats
+        GetAllFormats( pFormats
                       ,vDir
                      );
 
@@ -192,11 +191,11 @@ bool wxDataObject::IsSupportedFormat(
 
         for (n = 0; n < nFormatCount; n++)
         {
-            if (rFormats[n] == rFormat)
+            if (pFormats[n] == rFormat)
                 break;
         }
 
-        delete [] rFormats;
+        delete [] pFormats;
 
         // found?
         return n < nFormatCount;
@@ -215,11 +214,11 @@ bool wxFileDataObject::GetDataHere(
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        filenames += m_filenames[i];
-        filenames += (wxChar)0;
+        sFilenames += m_filenames[i];
+        sFilenames += (wxChar)0;
     }
 
-    memcpy(pBuf, filenames.mbc_str(), filenames.Len() + 1);
+    memcpy(pBuf, sFilenames.mbc_str(), sFilenames.Len() + 1);
     return TRUE;
 }
 
@@ -336,12 +335,13 @@ void wxBitmapDataObject::DoConvertToPng()
     wxPNGHandler                    vHandler;
     wxCountingOutputStream          vCount;
 
-    vHandler.SaveFile(&rImage, vCount);
+    vHandler.SaveFile(&vImage, vCount);
 
     m_pngSize = vCount.GetSize() + 100; // sometimes the size seems to vary ???
     m_pngData = malloc(m_pngSize);
 
-    wxMemoryOutputStream mstream((char*) m_pngData, m_pngSize);
+    wxMemoryOutputStream            vMstream((char*) m_pngData, m_pngSize);
+
     vHandler.SaveFile(&vImage, vMstream );
 }
 

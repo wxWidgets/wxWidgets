@@ -33,7 +33,7 @@ public:
 
     /* constructor for setting one data object */
     wxDropSource( wxDataObject& rData,
-                  wxWindow*     pWin,
+                  wxWindow*     pWin
                 );
     virtual ~wxDropSource();
 

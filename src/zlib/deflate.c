@@ -1,6 +1,6 @@
 /* deflate.c -- compress data using the deflation algorithm
  * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 /*
@@ -187,11 +187,15 @@ struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
     zmemzero((Bytef *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head));
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflateInit_(z_streamp strm, int level, const char* version, int stream_size)
+#else
 int ZEXPORT deflateInit_(strm, level, version, stream_size)
     z_streamp strm;
     int level;
     const char *version;
     int stream_size;
+#endif
 {
     return deflateInit2_(strm, level, Z_DEFLATED, MAX_WBITS, DEF_MEM_LEVEL,
 			 Z_DEFAULT_STRATEGY, version, stream_size);
@@ -199,6 +203,10 @@ int ZEXPORT deflateInit_(strm, level, version, stream_size)
 }
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflateInit2_(z_streamp strm, int level, int method, int windowBits,
+                          int memLevel, int strategy, const char* version, int stream_size)
+#else
 int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 		  version, stream_size)
     z_streamp strm;
@@ -209,6 +217,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     int  strategy;
     const char *version;
     int stream_size;
+#endif
 {
     deflate_state *s;
     int noheader = 0;
@@ -288,10 +297,14 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 }
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflateSetDictionary (z_streamp strm, const Bytef* dictionary, uInt dictLength)
+#else
 int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
     z_streamp strm;
     const Bytef *dictionary;
     uInt  dictLength;
+#endif
 {
     deflate_state *s;
     uInt length = dictLength;
@@ -329,11 +342,15 @@ int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
 }
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflateReset (z_streamp strm)
+#else
 int ZEXPORT deflateReset (strm)
     z_streamp strm;
+#endif
 {
     deflate_state *s;
-    
+
     if (strm == Z_NULL || strm->state == Z_NULL ||
         strm->zalloc == Z_NULL || strm->zfree == Z_NULL) return Z_STREAM_ERROR;
 
@@ -359,10 +376,14 @@ int ZEXPORT deflateReset (strm)
 }
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflateParams(z_streamp strm, int level, int strategy)
+#else
 int ZEXPORT deflateParams(strm, level, strategy)
     z_streamp strm;
     int level;
     int strategy;
+#endif
 {
     deflate_state *s;
     compress_func func;
@@ -399,13 +420,17 @@ int ZEXPORT deflateParams(strm, level, strategy)
  * IN assertion: the stream state is correct and there is enough room in
  * pending_buf.
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local void putShortMSB (deflate_state* s, uInt b)
+#else
 local void putShortMSB (s, b)
     deflate_state *s;
     uInt b;
+#endif
 {
     put_byte(s, (Byte)(b >> 8));
     put_byte(s, (Byte)(b & 0xff));
-}   
+}
 
 /* =========================================================================
  * Flush as much pending output as possible. All deflate() output goes
@@ -413,8 +438,12 @@ local void putShortMSB (s, b)
  * to avoid allocating a large strm->next_out buffer and copying into it.
  * (See also read_buf()).
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local void flush_pending(z_streamp strm)
+#else
 local void flush_pending(strm)
     z_streamp strm;
+#endif
 {
     unsigned len = strm->state->pending;
 
@@ -433,9 +462,13 @@ local void flush_pending(strm)
 }
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflate (z_streamp strm, int flush)
+#else
 int ZEXPORT deflate (strm, flush)
     z_streamp strm;
     int flush;
+#endif
 {
     int old_flush; /* value of flush param for previous deflate call */
     deflate_state *s;
@@ -567,8 +600,12 @@ int ZEXPORT deflate (strm, flush)
 }
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflateEnd (z_streamp strm)
+#else
 int ZEXPORT deflateEnd (strm)
     z_streamp strm;
+#endif
 {
     int status;
 
@@ -597,9 +634,13 @@ int ZEXPORT deflateEnd (strm)
  * To simplify the source, this is not supported for 16-bit MSDOS (which
  * doesn't have enough memory anyway to duplicate compression states).
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int ZEXPORT deflateCopy (z_streamp dest, z_streamp source)
+#else
 int ZEXPORT deflateCopy (dest, source)
     z_streamp dest;
     z_streamp source;
+#endif
 {
 #ifdef MAXSEG_64K
     return Z_STREAM_ERROR;
@@ -657,10 +698,14 @@ int ZEXPORT deflateCopy (dest, source)
  * allocating a large strm->next_in buffer and copying from it.
  * (See also flush_pending()).
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local int read_buf(z_streamp strm, Bytef* buf, unsigned size)
+#else
 local int read_buf(strm, buf, size)
     z_streamp strm;
     Bytef *buf;
     unsigned size;
+#endif
 {
     unsigned len = strm->avail_in;
 
@@ -682,8 +727,12 @@ local int read_buf(strm, buf, size)
 /* ===========================================================================
  * Initialize the "longest match" routines for a new zlib stream
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local void lm_init (deflate_state* s)
+#else
 local void lm_init (s)
     deflate_state *s;
+#endif
 {
     s->window_size = (ulg)2L*s->w_size;
 
@@ -721,9 +770,13 @@ local void lm_init (s)
  * match.S. The code will be functionally equivalent.
  */
 #ifndef FASTEST
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local uInt longest_match(deflate_state* s, IPos cur_match)
+#else
 local uInt longest_match(s, cur_match)
     deflate_state *s;
     IPos cur_match;                             /* current match */
+#endif
 {
     unsigned chain_length = s->max_chain_length;/* max hash chain length */
     register Bytef *scan = s->window + s->strstart; /* current string */
@@ -863,9 +916,13 @@ local uInt longest_match(s, cur_match)
 /* ---------------------------------------------------------------------------
  * Optimized version for level == 1 only
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local uInt longest_match(deflate_state* s, IPos cur_match)
+#else
 local uInt longest_match(s, cur_match)
     deflate_state *s;
     IPos cur_match;                             /* current match */
+#endif
 {
     register Bytef *scan = s->window + s->strstart; /* current string */
     register Bytef *match;                       /* matched string */
@@ -922,10 +979,14 @@ local uInt longest_match(s, cur_match)
 /* ===========================================================================
  * Check that the match at match_start is indeed a match.
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local void check_match(deflate_state* s, IPos start, IPos match, int length)
+#else
 local void check_match(s, start, match, length)
     deflate_state *s;
     IPos start, match;
     int length;
+#endif
 {
     /* check that the match is indeed a match */
     if (zmemcmp(s->window + match,
@@ -956,8 +1017,12 @@ local void check_match(s, start, match, length)
  *    performed for at least two bytes (required for the zip translate_eol
  *    option -- not supported here).
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local void fill_window(deflate_state* s)
+#else
 local void fill_window(s)
     deflate_state *s;
+#endif
 {
     register unsigned n, m;
     register Posf *p;
@@ -1076,9 +1141,13 @@ local void fill_window(s)
  * NOTE: this function should be optimized to avoid extra copying from
  * window to pending_buf.
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local block_state deflate_stored(deflate_state* s, int flush)
+#else
 local block_state deflate_stored(s, flush)
     deflate_state *s;
     int flush;
+#endif
 {
     /* Stored blocks are limited to 0xffff bytes, pending_buf is limited
      * to pending_buf_size, and each stored block has a 5 byte header:
@@ -1134,9 +1203,13 @@ local block_state deflate_stored(s, flush)
  * new strings in the dictionary only for unmatched strings or for short
  * matches. It is used only for the fast compression options.
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local block_state deflate_fast(deflate_state* s, int flush)
+#else
 local block_state deflate_fast(s, flush)
     deflate_state *s;
     int flush;
+#endif
 {
     IPos hash_head = NIL; /* head of the hash chain */
     int bflush;           /* set if current block must be flushed */
@@ -1197,7 +1270,7 @@ local block_state deflate_fast(s, flush)
                      * always MIN_MATCH bytes ahead.
                      */
                 } while (--s->match_length != 0);
-                s->strstart++; 
+                s->strstart++;
             } else
 #endif
 	    {
@@ -1217,7 +1290,7 @@ local block_state deflate_fast(s, flush)
             Tracevv((stderr,"%c", s->window[s->strstart]));
             _tr_tally_lit (s, s->window[s->strstart], bflush);
             s->lookahead--;
-            s->strstart++; 
+            s->strstart++;
         }
         if (bflush) FLUSH_BLOCK(s, 0);
     }
@@ -1230,9 +1303,13 @@ local block_state deflate_fast(s, flush)
  * evaluation for matches: a match is finally adopted only if there is
  * no better match at the next window position.
  */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+local block_state deflate_slow(deflate_state* s, int flush)
+#else
 local block_state deflate_slow(s, flush)
     deflate_state *s;
     int flush;
+#endif
 {
     IPos hash_head = NIL;    /* head of hash chain */
     int bflush;              /* set if current block must be flushed */

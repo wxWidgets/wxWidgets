@@ -140,6 +140,11 @@ bool wxPen::FreeResource(bool force)
     else return FALSE;
 }
 
+bool wxPen::IsFree() const
+{
+  return (M_PENDATA && M_PENDATA->m_hPen == 0);
+}
+
 void wxPen::Unshare()
 {
     // Don't change shared data

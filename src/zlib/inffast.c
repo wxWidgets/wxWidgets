@@ -1,6 +1,6 @@
 /* inffast.c -- process literals and length/distance pairs fast
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #include "zutil.h"
@@ -25,12 +25,16 @@ struct inflate_codes_state {int dummy;}; /* for buggy compilers */
    at least ten.  The ten bytes are six bytes for the longest length/
    distance pair plus four bytes for overloading the bit buffer. */
 
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+int inflate_fast(uInt bl, uInt bd, inflate_huft* tl, inflate_huft* td, inflate_blocks_statef* s, z_streamp z)
+#else
 int inflate_fast(bl, bd, tl, td, s, z)
 uInt bl, bd;
 inflate_huft *tl;
 inflate_huft *td; /* need separate declaration for Borland C++ */
 inflate_blocks_statef *s;
 z_streamp z;
+#endif
 {
   inflate_huft *t;      /* temporary pointer */
   uInt e;               /* extra bits or operation */

@@ -1,6 +1,6 @@
 /* adler32.c -- compute the Adler-32 checksum of a data stream
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 /* @(#) $Id$ */
@@ -18,10 +18,14 @@
 #define DO16(buf)   DO8(buf,0); DO8(buf,8);
 
 /* ========================================================================= */
+#if defined(__VISAGECPP__) // Visual game can't handle this antiquated interface
+uLong ZEXPORT adler32 (uLong adler, const Bytef* buf, uInt len)
+#else
 uLong ZEXPORT adler32(adler, buf, len)
     uLong adler;
     const Bytef *buf;
     uInt len;
+#endif
 {
     unsigned long s1 = adler & 0xffff;
     unsigned long s2 = (adler >> 16) & 0xffff;

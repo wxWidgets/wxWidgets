@@ -701,7 +701,7 @@ WXHBRUSH wxListBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     backgroundBrush->RealizeResource();
     return (WXHBRUSH) backgroundBrush->GetResourceHandle();
 */
-    reutrn (WXBRUSH)0;
+    return (WXHBRUSH)0;
 }
 
 // ----------------------------------------------------------------------------
