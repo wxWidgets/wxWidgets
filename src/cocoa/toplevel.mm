@@ -29,6 +29,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/mbarman.h"
 
 #import <AppKit/NSView.h>
 #import <AppKit/NSWindow.h>
@@ -131,6 +132,7 @@ void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newVie
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeKey(void)
 {
     wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeKey",this);
+    wxMenuBarManager::GetInstance()->WindowDidBecomeKey(this);
     wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -142,6 +144,19 @@ void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey(void)
     wxActivateEvent event(wxEVT_ACTIVATE, FALSE, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
+    wxMenuBarManager::GetInstance()->WindowDidResignKey(this);
+}
+
+void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeMain(void)
+{
+    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeMain",this);
+    wxMenuBarManager::GetInstance()->WindowDidBecomeMain(this);
+}
+
+void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignMain(void)
+{
+    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidResignMain",this);
+    wxMenuBarManager::GetInstance()->WindowDidResignMain(this);
 }
 
 void wxTopLevelWindowCocoa::Cocoa_close(void)

@@ -15,6 +15,8 @@
 #include "wx/hashmap.h"
 #include "wx/cocoa/NSWindow.h"
 
+class WXDLLEXPORT wxMenuBar;
+
 // ========================================================================
 // wxTopLevelWindowCocoa
 // ========================================================================
@@ -63,6 +65,9 @@ public:
     virtual bool CocoaDelegate_windowShouldClose(void);
     virtual void CocoaDelegate_windowDidBecomeKey(void);
     virtual void CocoaDelegate_windowDidResignKey(void);
+    virtual void CocoaDelegate_windowDidBecomeMain(void);
+    virtual void CocoaDelegate_windowDidResignMain(void);
+    virtual wxMenuBar* GetAppMenuBar() { return NULL; }
 protected:
     void SetNSWindow(WX_NSWindow cocoaNSWindow);
     WX_NSWindow m_cocoaNSWindow;
