@@ -22,37 +22,46 @@
 \twocolitem{{\bf wxSOCKET\_WOULDBLOCK}}{The socket is non-blocking and the operation would block.}
 \twocolitem{{\bf wxSOCKET\_TIMEDOUT}}{The timeout for this operation expired.}
 \twocolitem{{\bf wxSOCKET\_MEMERR}}{Memory exhausted.}
-\end{twocollist}%
+\end{twocollist}
 
 \wxheading{wxSocket events}
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxSOCKET\_INPUT}}{Some data has arrived to the socket.}
+\twocolitem{{\bf wxSOCKET\_INPUT}}{There is data available for reading.}
 \twocolitem{{\bf wxSOCKET\_OUTPUT}}{The socket is ready to be written to.}
-\twocolitem{{\bf wxSOCKET\_CONNECTION}}{Incoming connection arrival (server), or connection establishment (client).}
+\twocolitem{{\bf wxSOCKET\_CONNECTION}}{Incoming connection (server), or connection establishment (client).}
 \twocolitem{{\bf wxSOCKET\_LOST}}{The connection has been closed.}
-\twocolitem{{\bf wxSOCKET\_MAX\_EVENT}}{This should never happen but the compiler may complain about it.}
-\end{twocollist}%
+\end{twocollist}
 
 A brief note on how to use these events:
 
-The {\bf wxSOCKET\_INPUT} event will be issued when the incoming queue
-was empty and new data arrives, but NOT if new data arrives when there
-was data waiting in the incoming queue.
+The {\bf wxSOCKET\_INPUT} event will be issued whenever there is data
+available for reading. This will be the case if the input queue was
+empty and new data arrives, or if the application has read some data
+yet there is still more data available. This means that the application
+does not need to read all available data in response to a
+{\bf wxSOCKET\_INPUT} event, as more events will be produced as
+necessary.
 
-The {\bf wxSOCKET\_OUTPUT} event is issued when a socket is first connected
-with Connect or accepted with Accept, and then, only after an output operation
-fails because the output buffer was full, and buffer space becomes available
-again.
+The {\bf wxSOCKET\_OUTPUT} event is issued when a socket is first
+connected with Connect or accepted with Accept. After that, new
+events will be generated only after an output operation fails
+with {\bf wxSOCKET\_WOULDBLOCK} and buffer space becomes available
+again. This means that the application should assume that it
+can write data to the socket until an {\bf wxSOCKET\_WOULDBLOCK}
+error occurs; after this, whenever the socket becomes writable
+again the application will be notified with another
+{\bf wxSOCKET\_OUTPUT} event.
 
-The {\bf wxSOCKET\_CONNECTION} event is issued when a connection request
-completes (client) or when a new connection arrives at the pending
-connections queue (server).
+The {\bf wxSOCKET\_CONNECTION} event is issued when a delayed connection
+request completes succesfully (client) or when a new connection arrives
+at the incoming queue (server).
 
 The {\bf wxSOCKET\_LOST} event is issued when a close indication is
 received for the socket. This means that the connection broke down or
-that it was closed by the peer.
+that it was closed by the peer. Also, this event will be issued if
+a delayed connection request fails.
 
 % ---------------------------------------------------------------------------
 % Event handling
@@ -65,7 +74,7 @@ input to member functions that take a \helpref{wxSocketEvent}{wxsocketevent} arg
 \twocolwidtha{7cm}%
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_SOCKET(id, func)}}{A socket event occured.}
-\end{twocollist}%
+\end{twocollist}
 
 % ---------------------------------------------------------------------------
 % See also ...
@@ -108,9 +117,9 @@ Destroys the wxSocketBase object.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxSOCKET\_NONE}}{Normal functionnality.}
-\twocolitem{{\bf wxSOCKET\_NOWAIT}}{Get the available data in the input queue and return immediately.}
-\twocolitem{{\bf wxSOCKET\_WAITALL}}{Wait for all required data unless an error occurs.}
+\twocolitem{{\bf wxSOCKET\_NONE}}{Normal functionality.}
+\twocolitem{{\bf wxSOCKET\_NOWAIT}}{Read/write as much data as possible and return immediately.}
+\twocolitem{{\bf wxSOCKET\_WAITALL}}{Wait for all required data to be read/written unless an error occurs.}
 \twocolitem{{\bf wxSOCKET\_BLOCK}}{Block the GUI (do not wxYield) while reading/writing data.}
 \end{twocollist}
 
@@ -144,7 +153,7 @@ extra care to avoid unwanted reentrance.
 
 So:
 
-{\bf wxSOCKET\_NONE} will try to read SOME data, no matter how much.
+{\bf wxSOCKET\_NONE} will try to read at least SOME data, no matter how much.
 
 {\bf wxSOCKET\_NOWAIT} will always return immediately, even if it cannot
 read or write ANY data.
@@ -172,7 +181,7 @@ following flags can be used:
 \twocolitem{{\bf wxSOCKET\_OUTPUT\_FLAG}}{to receive wxSOCKET\_OUTPUT}
 \twocolitem{{\bf wxSOCKET\_CONNECTION\_FLAG}}{to receive wxSOCKET\_CONNECTION}
 \twocolitem{{\bf wxSOCKET\_LOST\_FLAG}}{to receive wxSOCKET\_LOST}
-\end{twocollist}%
+\end{twocollist}
 
 For example:
 
@@ -193,8 +202,8 @@ For more information on socket events see \helpref{wxSocket events}{wxsocketbase
 \func{void}{SetTimeout}{\param{int }{seconds}}
 
 This function sets the default socket timeout in seconds. This
-timeout applies to IO calls and also to Wait functions if you
-don't specify a wait interval. If you never use SetTimeout, the
+timeout applies to IO calls, and also to Wait() functions if you
+don't specify a wait interval. If you never use SetTimeout(), the
 default timeout will be 10 minutes.
 
 %
@@ -268,7 +277,7 @@ Returns the last wxSocket error. See \helpref{wxSocket errors}{wxsocketbase}.
 
 Please note that this function merely returns the last error code,
 but it should not be used to determine if an error has occured (this
-is because successful operations do not change tha LastError value).
+is because successful operations do not change the LastError value).
 Use Error, instead of LastError, to determine if the last IO call
 failed. If Error returns TRUE, use LastError to discover the
 cause of the error.
@@ -283,8 +292,8 @@ cause of the error.
 
 \func{wxSocketBase\&}{Peek}{\param{char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
-This function peeks a buffer of {\it nbytes} bytes from the socket. Peeking a buffer
-doesn't delete it from the system socket in-queue.
+This function peeks a buffer of {\it nbytes} bytes from the socket.
+Peeking a buffer doesn't delete it from the socket input queue.
 
 Use LastCount to verify the number of bytes actually peeked.
 
@@ -390,10 +399,10 @@ of flags being used. For a detailed explanation, see \helpref{wxSocketBase::SetF
 \func{wxSocketBase\&}{WriteMsg}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function writes a buffer of {\it nbytes} bytes from the socket, but it
-writes a short header before so that ReadMsg can alloc the right size for
-the buffer. So, a buffer sent with WriteMsg {\bf must} be read with ReadMsg.
-This function always waits for the entire buffer to be sent, unless an
-error occurs.
+writes a short header before so that ReadMsg knows how much data should it
+actually read. So, a buffer sent with WriteMsg {\bf must} be read with
+ReadMsg. This function always waits for the entire buffer to be sent,
+unless an error occurs.
 
 Use LastCount to verify the number of bytes actually written.
 
@@ -411,9 +420,10 @@ Returns a reference to the current object.
 
 \wxheading{Remark/Warning}
 
-wxSocketBase::WriteMsg() will behave as if the wxSOCKET\_WAITALL flag was always set
-and it will always ignore the wxSOCKET\_NOWAIT flag. The exact behaviour of WriteMsg
-depends on the wxSOCKET\_BLOCK flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
+wxSocketBase::WriteMsg() will behave as if the {\bf wxSOCKET\_WAITALL} flag
+was always set and it will always ignore the {\bf wxSOCKET\_NOWAIT} flag.
+The exact behaviour of WriteMsg depends on the {\bf wxSOCKET\_BLOCK} flag.
+For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
@@ -450,9 +460,10 @@ Returns a reference to the current object.
 
 \wxheading{Remark/Warning}
 
-wxSocketBase::ReadMsg() will behave as if the wxSOCKET\_WAITALL flag was always set
-and it will always ignore the wxSOCKET\_NOWAIT flag. The exact behaviour of ReadMsg
-depends on the wxSOCKET\_BLOCK flag. For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
+wxSocketBase::ReadMsg() will behave as if the {\bf wxSOCKET\_WAITALL} flag
+was always set and it will always ignore the {\bf wxSOCKET\_NOWAIT} flag.
+The exact behaviour of ReadMsg depends on the {\bf wxSOCKET\_BLOCK} flag.
+For a detailed explanation, see \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}.
 
 \wxheading{See also}
 
@@ -500,8 +511,7 @@ Returns a reference to the current object.
 \func{wxSocketBase\&}{Discard}{\void}
 
 This function simply deletes all bytes in the incoming queue. This function
-doesn't wait. That is, it will behave as if the wxSOCKET\_NOWAIT flag was set. The
-wxSOCKET\_BLOCK and wxSOCKET\_WAITALL flags have no effect on this function.
+always returns immediately and its operation is not affected by IO flags.
 
 Use LastCount to see the number of bytes discarded.
 
@@ -518,6 +528,8 @@ This function waits until one of the following conditions is true: there
 is data available for reading; the output buffer is empty (you can send
 new data); the connection has been lost; an incoming connection arrived
 (only for servers); a connection request has completed (only for clients).
+It is usually better to use the individual Wait functions to wait for the
+required condition.
 
 \wxheading{Parameters}
 
@@ -689,8 +701,8 @@ Sets an event handler to be called when a socket event occurs. The handler
 will be called for those events for which notification is enabled with
 SetNotify and Notify.
 
-You can also specify a C callback to be called when an event occurs. See
-Callback and CallbackData.
+You can also specify a callback function to be called when an event occurs.
+See \helpref{Callback}{wxsocketbasecallback} and \helpref{CallbackData}{wxsocketbasecallbackdata}.
 
 \wxheading{Parameters}
 
@@ -711,12 +723,12 @@ Callback and CallbackData.
 
 \func{wxSocketBase::wxSockCbk}{Callback}{\param{wxSocketBase::wxSockCbk}{ callback}}
 
-You can setup a C callback to be called when an event occurs. The callback
+You can setup a callback function to be called when an event occurs. The function
 will be called only for those events for which notification has been enabled
 with Notify and SetNotify. The prototype of the callback must be as follows:
 
 \begin{verbatim}
-void SocketCallback(wxSocketBase& sock,wxSocketNotify evt,char *cdata);
+void SocketCallback(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
 \end{verbatim}
 
 The first parameter is a reference to the socket object in which the event
@@ -737,7 +749,8 @@ A pointer to the previous callback.
 
 \func{char *}{CallbackData}{\param{char *}{cdata}}
 
-This function sets the the user data which will be passed to a \helpref{C callback}{wxsocketbasecallback}.
+This function sets the the user data which will be passed to a
+callback function set via \helpref{Callback}{wxsocketbasecallback}.
 
 \wxheading{Return value}
 
@@ -794,22 +807,21 @@ Destroys a wxSocketClient object.
 
 Connects to a server using the specified address.
 
-If {\it wait} is TRUE, Connect will wait until the connection completes and
-the socket is ready to send or receive data, or until an event occurs.
-
-{\bf Warning !} This will block the GUI. 
+If {\it wait} is TRUE, Connect will wait until the connection completes
+successfully, or until an event occurs. {\bf Warning !} This will block the GUI. 
 
 If {\it wait} is FALSE, Connect will try to establish the connection and
 return immediately, without blocking the GUI. When used this way, even if
 Connect returns FALSE, the connection request can be completed later.
-To detect this, use WaitConnection, or watch "connection" events (for
-succesful establishment) and "lost" events (for connection failure).
+To detect this, use WaitConnection, or catch {\bf wxSOCKET\_CONNECTION}
+events (for successful establishment) and {\bf wxSOCKET\_LOST} events
+(for connection failure).
 
 \wxheading{Parameters}
 
 \docparam{address}{Address of the server.}
 
-\docparam{wait}{If true, waits for the connection to be ready.}
+\docparam{wait}{If TRUE, waits for the connection to be ready.}
 
 \wxheading{Return value}
 
@@ -820,7 +832,8 @@ and the connection failed.
 
 If {\it wait} was FALSE, and Connect returns FALSE, you should still
 be prepared to handle the completion of this connection request, either
-with WaitOnConnect or by watching "connection" and "lost" events.
+with WaitOnConnect or by watching {\bf wxSOCKET\_CONNECTION} and
+{\bf wxSOCKET\_LOST} events.
 
 \wxheading{See also}
 
@@ -958,8 +971,8 @@ If {\it wait} is FALSE, it will try to accept a pending connection
 if there is one, but it will always return immediately without
 blocking the GUI. If you want to use Accept in this way, you can
 either check for incoming connections with WaitForAccept or watch
-"connection" events, then call Accept once you know that there is
-an incoming connection waiting to be accepted.
+{\bf wxSOCKET\_CONNECTION} events, then call Accept once you know
+that there is an incoming connection waiting to be accepted.
 
 \wxheading{Return value}
 
@@ -982,7 +995,6 @@ connections.
 \func{bool}{AcceptWith}{\param{wxSocketBase\&}{ socket}, \param{bool}{ wait = TRUE}}
 
 Accept an incoming connection using the specified socket object.
-This is useful when someone wants to inherit wxSocketBase.
 
 \wxheading{Parameters}
 
