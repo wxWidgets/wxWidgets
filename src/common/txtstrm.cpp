@@ -189,9 +189,9 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& line)
   return *this;
 }
 
-wxTextInputStream& wxTextInputStream::operator>>(wxInt8& c)
+wxTextInputStream& wxTextInputStream::operator>>(char& c)
 {
-  c = (wxInt8)Read8();
+  m_input->Read(&c, 1);
   return *this;
 }
 
@@ -204,12 +204,6 @@ wxTextInputStream& wxTextInputStream::operator>>(wxInt16& i)
 wxTextInputStream& wxTextInputStream::operator>>(wxInt32& i)
 {
   i = (wxInt32)Read32();
-  return *this;
-}
-
-wxTextInputStream& wxTextInputStream::operator>>(wxUint8& c)
-{
-  c = Read8();
   return *this;
 }
 
@@ -300,9 +294,9 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
   return *this;
 }
 
-wxTextOutputStream& wxTextOutputStream::operator<<(wxInt8 c)
+wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 {
-  Write8((wxUint8)c);
+  m_output->Write(&c, 1);
   return *this;
 }
 
@@ -315,12 +309,6 @@ wxTextOutputStream& wxTextOutputStream::operator<<(wxInt16 c)
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt32 c)
 {
   Write32((wxUint32)c);
-  return *this;
-}
-
-wxTextOutputStream& wxTextOutputStream::operator<<(wxUint8 c)
-{
-  Write8(c);
   return *this;
 }
 
