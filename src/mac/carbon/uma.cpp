@@ -555,6 +555,7 @@ void UMAActivateControl( ControlHandle inControl )
 void UMADrawControl( ControlHandle inControl )
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
+    wxMacPortStateHelper help( (GrafPtr) GetWindowPort(theWindow) ) ;
     RgnHandle updateRgn = NewRgn() ;
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
     Point zero = { 0 , 0 } ;
@@ -646,6 +647,7 @@ OSErr UMASetKeyboardFocus                (WindowPtr                 inWindow,
 // events
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn )
 {
+    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) inWindow) ) ;
     RgnHandle updateRgn = NewRgn() ;
     GetWindowUpdateRgn( inWindow , updateRgn ) ;
 
@@ -746,6 +748,7 @@ void wxMacPortStateHelper::Setup( GrafPtr newport )
 {
     GetPort( &m_oldPort ) ;
     SetPort( newport ) ;
+    SetOrigin(0,0);
     wxASSERT_MSG( m_clip == NULL , wxT("Cannot call setup twice") ) ;
     m_clip = NewRgn() ;
     GetClip( m_clip );
