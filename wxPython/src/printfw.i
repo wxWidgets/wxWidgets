@@ -339,18 +339,28 @@ public:
 
 //----------------------------------------------------------------------
 
+enum wxPrinterError
+{
+    wxPRINTER_NO_ERROR = 0,
+    wxPRINTER_CANCELLED,
+    wxPRINTER_ERROR
+};
+
+
 class wxPrinter : public wxObject {
 public:
     wxPrinter(wxPrintDialogData* data = NULL);
     ~wxPrinter();
 
-//    bool Abort();
     void CreateAbortWindow(wxWindow* parent, wxPyPrintout* printout);
     wxPrintDialogData& GetPrintDialogData();
     bool Print(wxWindow *parent, wxPyPrintout *printout, int prompt=TRUE);
     wxDC* PrintDialog(wxWindow *parent);
     void ReportError(wxWindow *parent, wxPyPrintout *printout, const wxString& message);
     bool Setup(wxWindow *parent);
+    bool GetAbort();
+
+    static wxPrinterError GetLastError();
 };
 
 //----------------------------------------------------------------------
