@@ -114,8 +114,6 @@ private:
     wxMutex *m_mutex;
 };
 
-#ifdef __WXMSW__
-
 // ----------------------------------------------------------------------------
 // Critical section: this is the same as mutex but is only visible to the
 // threads of the same process. For the platforms which don't have native
@@ -125,25 +123,34 @@ private:
 
 // you should consider wxCriticalSectionLocker whenever possible instead of
 // directly working with wxCriticalSection class - it is safer
-class WXDLLEXPORT wxCriticalSectionInternal;
+#ifdef __WXMSW__
+    class WXDLLEXPORT wxCriticalSectionInternal;
+    #define WXCRITICAL_INLINE
+#else // !MSW
+    #define WXCRITICAL_INLINE   inline
+#endif // MSW/!MSW
 class WXDLLEXPORT wxCriticalSection
 {
 public:
     // ctor & dtor
-    wxCriticalSection();
-    ~wxCriticalSection();
+    WXCRITICAL_INLINE wxCriticalSection();
+    WXCRITICAL_INLINE ~wxCriticalSection();
 
     // enter the section (the same as locking a mutex)
-    void Enter();
+    void WXCRITICAL_INLINE Enter();
     // leave the critical section (same as unlocking a mutex)
-    void Leave();
+    void WXCRITICAL_INLINE Leave();
 
 private:
     // no assignment operator nor copy ctor
     wxCriticalSection(const wxCriticalSection&);
     wxCriticalSection& operator=(const wxCriticalSection&);
 
+#ifdef __WXMSW__
     wxCriticalSectionInternal *m_critsect;
+#else // !MSW
+    wxMutex m_mutex;
+#endif // MSW/!MSW
 };
 
 // wxCriticalSectionLocker is the same to critical sections as wxMutexLocker is
@@ -163,8 +170,6 @@ private:
 
     wxCriticalSection& m_critsect;
 };
-
-#endif
 
 // ----------------------------------------------------------------------------
 // Condition handler.
@@ -269,20 +274,6 @@ private:
 void WXDLLEXPORT wxMutexGuiEnter();
 void WXDLLEXPORT wxMutexGuiLeave();
 
-// implementation only
-#ifdef __WXMSW__
-    // unlock GUI if there are threads waiting for and lock it back when
-    // there are no more of them - should be called periodically by the main
-    // thread
-    void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
-
-    // returns TRUE if the main thread has GUI lock
-    inline bool WXDLLEXPORT wxGuiOwnedByMainThread();
-
-    // wakes up the main thread if it's sleeping inside ::GetMessage()
-    inline void WXDLLEXPORT wxWakeUpMainThread();
-#endif // MSW
-
 #else // !wxUSE_THREADS
 
 // no thread support
@@ -298,5 +289,30 @@ public:
     wxMutexGuiLocker() { wxMutexGuiEnter(); }
    ~wxMutexGuiLocker() { wxMutexGuiLeave(); }
 };
+
+// -----------------------------------------------------------------------------
+// implementation only until the end of file
+// -----------------------------------------------------------------------------
+#ifdef wxUSE_THREADS
+#ifdef __WXMSW__
+    // unlock GUI if there are threads waiting for and lock it back when
+    // there are no more of them - should be called periodically by the main
+    // thread
+    void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
+
+    // returns TRUE if the main thread has GUI lock
+    inline bool WXDLLEXPORT wxGuiOwnedByMainThread();
+
+    // wakes up the main thread if it's sleeping inside ::GetMessage()
+    inline void WXDLLEXPORT wxWakeUpMainThread();
+#else // !MSW
+    // implement wxCriticalSection using mutexes
+    inline wxCriticalSection::wxCriticalSection() { }
+    inline wxCriticalSection::~wxCriticalSection() { }
+
+    inline void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }
+    inline void wxCriticalSection::Leave() { (void)m_mutex.Unlock(); }
+#endif // MSW/!MSW
+#endif // wxUSE_THREADS
 
 #endif // __THREADH__
