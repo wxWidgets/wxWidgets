@@ -75,7 +75,7 @@ be no conversion problems later on.
 font sizes (for example, a 12-point font will appear bigger than before). Write your application
 to be flexible where fonts are concerned.
 Don't rely on fonts being similarly-sized across platforms, as they were (by chance) between
-Windows and X under wxWindows 1.66. Yes, this is not easy... but I think it's better to conform to the
+Windows and X under wxWindows 1.66. Yes, this is not easy... but I think it is better to conform to the
 standards of each platform, and currently the size difference makes it difficult to
 conform to Windows UI standards. You may eventually wish to build in a global 'fudge-factor' to compensate
 for size differences. The old font sizing will still be available via wx\_setup.h, so do not panic...
@@ -260,7 +260,7 @@ and simply assign the result to a wxString object. For example, replace this:
 
 {\small\begin{verbatim}
   char* s = wxFunctionThatReturnsString();
-  s = copystring(s); // Take a copy in case it's temporary
+  s = copystring(s); // Take a copy in case it is temporary
   .... // Do something with it
   delete[] s;
 \end{verbatim}
@@ -362,7 +362,7 @@ Add an OnCloseWindow event handler using an EVT\_CLOSE event table entry. For de
 about window destruction, see the Windows Deletion Overview in the manual. This is a subtle
 topic so please read it very carefully. Basically, OnCloseWindow is now responsible for
 destroying a window with Destroy(), but the default implementation (for example for wxDialog) may not
-destroy the window, so to be sure, always provide this event handler so it's obvious what's going on.
+destroy the window, so to be sure, always provide this event handler so it is obvious what's going on.
 
 \subsection{OnEvent}
 

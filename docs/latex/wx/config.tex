@@ -1,7 +1,7 @@
 \section{\class{wxConfigBase}}\label{wxconfigbase}
 
 wxConfigBase class defines the basic interface of all config classes. It can
-not be used by itself (it's an abstract base class) and you'll always use one
+not be used by itself (it is an abstract base class) and you will always use one
 of its derivations: wxIniConfig, wxFileConfig, wxRegConfig or any other.
 
 However, usually you don't even need to know the precise nature of the class
@@ -118,7 +118,7 @@ support a file system-like hierarchy of keys (files) and groups (directories).
 As in the file system case, to specify a key in the config class you must use
 a path to it. Config classes also support the notion of the current group,
 which makes it possible to use the relative paths. To clarify all this, here
-is an example (it's only for the sake of demonstration, it doesn't do anything
+is an example (it is only for the sake of demonstration, it doesn't do anything
 sensible!):
 
 \begin{verbatim}
@@ -139,11 +139,11 @@ sensible!):
 
   wxASSERT( conf->Read("Subgroup/SubgroupEntry", 0l) == 3 );
 
-  // use absolute path: it's allowed, too
+  // use absolute path: it is allowed, too
   wxASSERT( conf->Read("/RootEntry", 0l) == 1 );
 \end{verbatim}
 
-{\it Warning}: it's probably a good idea to always restore the path to its
+{\it Warning}: it is probably a good idea to always restore the path to its
 old value on function exit:
 
 \begin{verbatim}
@@ -175,7 +175,7 @@ doesn't save and restore the path):
 \end{verbatim}
 
 Finally, the path separator in wxConfigBase and derived classes is always '/',
-regardless of the platform (i.e. it's {\bf not} '$\backslash\backslash$' under Windows).
+regardless of the platform (i.e. it is {\bf not} '$\backslash\backslash$' under Windows).
 
 \helpref{SetPath}{wxconfigbasesetpath}\\
 \helpref{GetPath}{wxconfigbasegetpath}
@@ -186,9 +186,9 @@ The functions in this section allow to enumerate all entries and groups in the
 config file. All functions here return FALSE when there are no more items.
 
 You must pass the same index to GetNext and GetFirst (don't modify it).
-Please note that it's {\bf not} the index of the current item (you will have
+Please note that it is {\bf not} the index of the current item (you will have
 some great surprizes with wxRegConfig if you assume this) and you shouldn't
-even look at it: it's just a "cookie" which stores the state of the
+even look at it: it is just a "cookie" which stores the state of the
 enumeration. It can't be stored inside the class because it would prevent you
 from running several enumerations simultaneously, that's why you must pass it
 explicitly.
@@ -669,8 +669,8 @@ Determine whether we wish to expand environment variables in key values.
 
 \func{void}{SetPath}{\param{const wxString\& }{strPath}}
 
-Set current path: if the first character is '/', it's the absolute path,
-otherwise it's a relative path. '..' is supported. If the strPath doesn't
+Set current path: if the first character is '/', it is the absolute path,
+otherwise it is a relative path. '..' is supported. If the strPath doesn't
 exist it is created.
 
 \membersection{wxConfigBase::SetRecordDefaults}\label{wxconfigbasesetrecorddefaults}

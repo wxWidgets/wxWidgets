@@ -51,7 +51,7 @@ wxArrayDouble class is scheduled for the next release of wxWindows).
 wxSortedArray is a wxArray variant which should be used when searching in the
 array is a frequently used operation. It requires you to define an additional
 function for comparing two elements of the array element type and always stores
-its items in the sorted order (according to this function). Thus, it's 
+its items in the sorted order (according to this function). Thus, it is 
  \helpref{Index()}{wxarrayindex} function execution time is $O(log(N))$ instead of
 $O(N)$ for the usual arrays but the \helpref{Add()}{wxarrayadd} method is
 slower: it is $O(log(N))$ instead of constant time (neglecting time spent in
@@ -75,7 +75,7 @@ example:
 \begin{verbatim}
 #include <wx/dynarray.h>
 
-// we must forward declare the array because it's used inside the class
+// we must forward declare the array because it is used inside the class
 // declaration
 class MyDirectory;
 class MyFile;

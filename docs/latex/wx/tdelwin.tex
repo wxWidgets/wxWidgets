@@ -17,7 +17,7 @@ decide whether or not to destroy the window.
 If the application is for some reason forcing the application to close
 (\helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns FALSE), the window should always be destroyed, otherwise there is the option to
 ignore the request, or maybe wait until the user has answered a question
-before deciding whether it's safe to close. The handler for EVT\_CLOSE should
+before deciding whether it is safe to close. The handler for EVT\_CLOSE should
 signal to the calling code if it does not destroy the window, by calling 
 \helpref{wxCloseEvent::Veto}{wxcloseeventveto}. Calling this provides useful information
 to the calling code.

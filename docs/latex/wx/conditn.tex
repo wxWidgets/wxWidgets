@@ -5,7 +5,7 @@ objects. They may be used in a multithreaded application to wait until the
 given condition becomes true which happens when the condition becomes signaled.
 
 For example, if a worker thread is doing some long task and another thread has
-to wait until it's finished, the latter thread will wait on the condition
+to wait until it is finished, the latter thread will wait on the condition
 object and the worker thread will signal it on exit (this example is not
 perfect because in this particular case it would be much better to just 
 \helpref{Wait()}{wxthreadwait} for the worker thread, but if there are several

@@ -692,7 +692,7 @@ it can alert you to problems later on.
 Using wxString can be much safer and more convenient than using char *.
 Again, I haven't practiced what I'm preaching, but I'm now trying to use
 wxString wherever possible. You can reduce the possibility of memory
-leaks substantially, and it's much more convenient to use the overloaded
+leaks substantially, and it is much more convenient to use the overloaded
 operators than functions such as strcmp. wxString won't add a significant
 overhead to your program; the overhead is compensated for by easier
 manipulation (which means less code).
@@ -721,7 +721,7 @@ kinds of bitmap depending on platform (see the section on resource files).
 
 \subsection{Positive thinking}
 
-It's common to blow up the problem in one's imagination, so that it seems to threaten
+It is common to blow up the problem in one's imagination, so that it seems to threaten
 weeks, months or even years of work. The problem you face may seem insurmountable:
 but almost never is. Once you have been programming for some time, you will be able
 to remember similar incidents that threw you into the depths of despair. But
@@ -748,8 +748,8 @@ deallocation, this can still give totally spurious results!
 
 \subsection{Use a debugger}
 
-This sounds like facetious advice, but it's surprising how often people
-don't use a debugger. Often it's an overhead to install or learn how to
+This sounds like facetious advice, but it is surprising how often people
+don't use a debugger. Often it is an overhead to install or learn how to
 use a debugger, but it really is essential for anything but the most
 trivial programs.
 
@@ -778,13 +778,13 @@ See the \helpref{debugging overview}{debuggingoverview} for further information.
 
 \subsection{Check Windows debug messages}
 
-Under Windows, it's worth running your program with 
+Under Windows, it is worth running your program with 
 \urlref{DbgView}{http://www.sysinternals.com} running or
-some other program that shows Windows-generated debug messages. It's
-possible it'll show invalid handles being used. You may have fun seeing
+some other program that shows Windows-generated debug messages. It is
+possible it will show invalid handles being used. You may have fun seeing
 what commercial programs cause these normally hidden errors! Microsoft
 recommend using the debugging version of Windows, which shows up even
-more problems. However, I doubt it's worth the hassle for most
+more problems. However, I doubt it is worth the hassle for most
 applications. wxWindows is designed to minimize the possibility of such
 errors, but they can still happen occasionally, slipping through unnoticed
 because they are not severe enough to cause a crash.
