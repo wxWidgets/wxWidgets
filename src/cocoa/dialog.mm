@@ -18,6 +18,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <AppKit/NSPanel.h>
 #import <AppKit/NSApplication.h>
@@ -75,6 +76,8 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID winid,
     // above alloc and thus the retain count will be 1.
     [m_cocoaNSWindow release];
     wxLogDebug("wxDialog m_cocoaNSWindow retainCount=%d",[m_cocoaNSWindow retainCount]);
+    [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
+    [m_cocoaNSWindow setHidesOnDeactivate:NO];
 
     return true;
 }
