@@ -128,9 +128,6 @@ def EVT_STC_CALLTIP_CLICK(win, id, func):
 
 %init %{
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
 %}
 
 

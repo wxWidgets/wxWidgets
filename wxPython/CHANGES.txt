@@ -32,6 +32,8 @@ wxPython's setup.py script now expects to use existing libraries for
 the contribs (gizmos, stc, xrc, etc.) rather than building local
 copies of them.
 
+Added Python wrappers for the new wxVScrolledWindow, wxVListBox, and
+wxHtmlListBox classes.
 
 
 

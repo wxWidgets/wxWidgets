@@ -677,9 +677,6 @@ public:
 
 %init %{
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
     wxXmlInitResourceModule();
     wxXmlResource::Get()->InitAllHandlers();
 

@@ -991,7 +991,6 @@ public:
 };
 
 
-
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
@@ -1003,9 +1002,6 @@ public:
 %init %{
 
     inithtmlhelpc();
-
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
 
     wxPyPtrTypeMap_Add("wxHtmlTagHandler", "wxPyHtmlTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");

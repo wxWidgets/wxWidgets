@@ -2038,8 +2038,6 @@ def EVT_GRID_EDITOR_CREATED(win, fn):
 //---------------------------------------------------------------------------
 
 %init %{
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
 %}
 
 //---------------------------------------------------------------------------

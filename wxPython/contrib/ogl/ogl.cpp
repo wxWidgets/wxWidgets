@@ -463,9 +463,6 @@ SWIGEXPORT(void) initoglc() {
     initoglcanvasc();
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
     wxPyPtrTypeMap_Add("wxControlPoint", "wxPyControlPoint");
     wxPyPtrTypeMap_Add("wxShapeCanvas", "wxPyShapeCanvas");
     wxPyPtrTypeMap_Add("wxShapeEvtHandler", "wxPyShapeEvtHandler");

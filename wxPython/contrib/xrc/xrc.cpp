@@ -5308,9 +5308,6 @@ SWIGEXPORT(void) initxrcc() {
 	 PyDict_SetItemString(d,"wxXML_HTML_DOCUMENT_NODE", PyInt_FromLong((long) wxXML_HTML_DOCUMENT_NODE));
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
     wxXmlInitResourceModule();
     wxXmlResource::Get()->InitAllHandlers();
 

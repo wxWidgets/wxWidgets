@@ -384,7 +384,7 @@ void __wxPreStart(PyObject* moduleDict)
 #endif
 
     // Ensure that the build options in the DLL (or whatever) match this build
-    wxApp::CheckBuildOptions(wxBuildOptions());
+    wxApp::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "wxPython");
 
     // Create an exception object to use for wxASSERTions
     wxPyAssertionError = PyErr_NewException("wxPython.wxc.wxPyAssertionError",

@@ -6533,9 +6533,6 @@ SWIGEXPORT(void) initgizmosc() {
 	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMCOLUMN", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMCOLUMN));
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
-
     wxPyPtrTypeMap_Add("wxTreeCompanionWindow", "wxPyTreeCompanionWindow");
     wxPyPtrTypeMap_Add("wxTreeListCtrl", "wxPyTreeListCtrl");
 {

@@ -587,6 +587,8 @@ unsigned long wxGetProcessId();
 // When wxApp gets the virtual method magic then enable this.
 // bool wxHandleFatalExceptions(bool doIt = TRUE);
 
+void wxTrap();
+
 //----------------------------------------------------------------------
 
 enum wxEdge { wxLeft, wxTop, wxRight, wxBottom, wxWidth, wxHeight,

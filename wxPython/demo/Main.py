@@ -25,14 +25,7 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions', [
-        'wxScrolledPanel',
-        'ShapedWindow',
-        'NewNamespace',
-        'PopupMenu',
-        'AnalogClockWindow',
-        'MaskedEditControls',
-        'wxTreeListCtrl',
-        'wxGrid_MegaExample',
+        'wxVListBox',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -138,6 +131,7 @@ _treeList = [
         'wxStyledTextCtrl_2',
         'wxTimeCtrl',
         'wxTreeListCtrl',
+        'wxVListBox',
         ]),
 
     # How to lay out the controls in a frame/dialog
@@ -187,7 +181,9 @@ _treeList = [
         'DialogUnits',
         'DrawXXXList',
         'FontEnumerator',
+        'NewNamespace',
         'PrintFramework',
+        'ShapedWindow',
         'Throbber',
         'Unicode',
         'wxFileHistory',
@@ -394,9 +390,8 @@ class wxPythonDemo(wx.Frame):
         # Create a TreeCtrl
         tID = wx.NewId()
         self.treeMap = {}
-        self.tree = wx.TreeCtrl(splitter, tID,
-                                style=wx.TR_HAS_BUTTONS |
-                                wx.TR_HAS_VARIABLE_ROW_HEIGHT
+        self.tree = wx.TreeCtrl(splitter, tID, style =
+                                wx.TR_DEFAULT_STYLE #| wx.TR_HAS_VARIABLE_ROW_HEIGHT
                                )
 
         root = self.tree.AddRoot("wxPython Overview")

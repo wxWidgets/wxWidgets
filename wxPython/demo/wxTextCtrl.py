@@ -110,12 +110,24 @@ class TestPanel(wxPanel):
         text = self.tc.GetValue()
         if wxPlatform == "__WXMSW__":  # This is why GetStringSelection was added
             text = text.replace('\n', '\r\n')
-        self.log.write("GetSelection(): (%d, %d)\n"
+        self.log.write("multi-line GetSelection(): (%d, %d)\n"
                        "\tGetStringSelection(): %s\n"
                        "\tSelectedText: %s\n" %
                        (start, end,
                         self.tc.GetStringSelection(),
                         repr(text[start:end])))
+
+        start, end = self.tc1.GetSelection()
+        text = self.tc1.GetValue()
+        if wxPlatform == "__WXMSW__":  # This is why GetStringSelection was added
+            text = text.replace('\n', '\r\n')
+        self.log.write("single-line GetSelection(): (%d, %d)\n"
+                       "\tGetStringSelection(): %s\n"
+                       "\tSelectedText: %s\n" %
+                       (start, end,
+                        self.tc1.GetStringSelection(),
+                        repr(text[start:end])))
+
 
     def OnT5LeftDown(self, evt):
         evt.Skip()

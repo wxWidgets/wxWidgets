@@ -350,6 +350,200 @@ class wxTipWindow(wxTipWindowPtr):
 
 
 
+class wxVScrolledWindowPtr(wxPanelPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow__setCallbackInfo(self, *_args, **_kwargs)
+        return val
+    def Create(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_Create(self, *_args, **_kwargs)
+        return val
+    def SetLineCount(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_SetLineCount(self, *_args, **_kwargs)
+        return val
+    def ScrollToLine(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_ScrollToLine(self, *_args, **_kwargs)
+        return val
+    def ScrollLines(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_ScrollLines(self, *_args, **_kwargs)
+        return val
+    def ScrollPages(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_ScrollPages(self, *_args, **_kwargs)
+        return val
+    def RefreshLine(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_RefreshLine(self, *_args, **_kwargs)
+        return val
+    def RefreshLines(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_RefreshLines(self, *_args, **_kwargs)
+        return val
+    def HitTestXT(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_HitTestXT(self, *_args, **_kwargs)
+        return val
+    def HitTest(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_HitTest(self, *_args, **_kwargs)
+        return val
+    def RefreshAll(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_RefreshAll(self, *_args, **_kwargs)
+        return val
+    def GetLineCount(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_GetLineCount(self, *_args, **_kwargs)
+        return val
+    def GetFirstVisibleLine(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_GetFirstVisibleLine(self, *_args, **_kwargs)
+        return val
+    def GetLastVisibleLine(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_GetLastVisibleLine(self, *_args, **_kwargs)
+        return val
+    def IsVisible(self, *_args, **_kwargs):
+        val = windows3c.wxVScrolledWindow_IsVisible(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxVScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxVScrolledWindow(wxVScrolledWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = windows3c.new_wxVScrolledWindow(*_args,**_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxVScrolledWindow)
+        self._setOORInfo(self)
+
+
+
+def wxPreVScrolledWindow(*_args,**_kwargs):
+    val = wxVScrolledWindowPtr(windows3c.new_wxPreVScrolledWindow(*_args,**_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
+
+
+class wxVListBoxPtr(wxVScrolledWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox__setCallbackInfo(self, *_args, **_kwargs)
+        return val
+    def Create(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_Create(self, *_args, **_kwargs)
+        return val
+    def GetItemCount(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_GetItemCount(self, *_args, **_kwargs)
+        return val
+    def HasMultipleSelection(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_HasMultipleSelection(self, *_args, **_kwargs)
+        return val
+    def GetSelection(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_GetSelection(self, *_args, **_kwargs)
+        return val
+    def IsCurrent(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_IsCurrent(self, *_args, **_kwargs)
+        return val
+    def IsSelected(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_IsSelected(self, *_args, **_kwargs)
+        return val
+    def GetSelectedCount(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_GetSelectedCount(self, *_args, **_kwargs)
+        return val
+    def GetFirstSelected(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_GetFirstSelected(self, *_args, **_kwargs)
+        return val
+    def GetNextSelected(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_GetNextSelected(self, *_args, **_kwargs)
+        return val
+    def GetMargins(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_GetMargins(self, *_args, **_kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetSelectionBackground(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_GetSelectionBackground(self, *_args, **_kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def SetItemCount(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_SetItemCount(self, *_args, **_kwargs)
+        return val
+    def Clear(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_Clear(self, *_args, **_kwargs)
+        return val
+    def SetSelection(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_SetSelection(self, *_args, **_kwargs)
+        return val
+    def Select(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_Select(self, *_args, **_kwargs)
+        return val
+    def SelectRange(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_SelectRange(self, *_args, **_kwargs)
+        return val
+    def Toggle(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_Toggle(self, *_args, **_kwargs)
+        return val
+    def SelectAll(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_SelectAll(self, *_args, **_kwargs)
+        return val
+    def DeselectAll(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_DeselectAll(self, *_args, **_kwargs)
+        return val
+    def SetMargins(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_SetMargins(self, *_args, **_kwargs)
+        return val
+    def SetMarginsXY(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_SetMarginsXY(self, *_args, **_kwargs)
+        return val
+    def SetSelectionBackground(self, *_args, **_kwargs):
+        val = windows3c.wxVListBox_SetSelectionBackground(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxVListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxVListBox(wxVListBoxPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = windows3c.new_wxVListBox(*_args,**_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxVListBox)
+        self._setOORInfo(self)
+
+
+
+def wxPreVListBox(*_args,**_kwargs):
+    val = wxVListBoxPtr(windows3c.new_wxPreVListBox(*_args,**_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
+
+
+class wxHtmlListBoxPtr(wxVListBoxPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = windows3c.wxHtmlListBox__setCallbackInfo(self, *_args, **_kwargs)
+        return val
+    def Create(self, *_args, **_kwargs):
+        val = windows3c.wxHtmlListBox_Create(self, *_args, **_kwargs)
+        return val
+    def RefreshAll(self, *_args, **_kwargs):
+        val = windows3c.wxHtmlListBox_RefreshAll(self, *_args, **_kwargs)
+        return val
+    def SetItemCount(self, *_args, **_kwargs):
+        val = windows3c.wxHtmlListBox_SetItemCount(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxHtmlListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxHtmlListBox(wxHtmlListBoxPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = windows3c.new_wxHtmlListBox(*_args,**_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxHtmlListBox)
+        self._setOORInfo(self)
+
+
+
+def wxPreHtmlListBox(*_args,**_kwargs):
+    val = wxHtmlListBoxPtr(windows3c.new_wxPreHtmlListBox(*_args,**_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
