@@ -189,16 +189,64 @@ to provide your own (environment-dependent) main loop.
 
 Returns 0 under X, and the wParam of the WM\_QUIT message under Windows.
 
-\membersection{wxApp::OnActivate}\label{wxapponactivate}
+%% VZ: OnXXX() functions should *not* be documented
+%%
+%%\membersection{wxApp::OnActivate}\label{wxapponactivate}
+%%
+%%\func{void}{OnActivate}{\param{wxActivateEvent\& }{event}}
+%%
+%%Provide this member function to know whether the application is being
+%%activated or deactivated (Windows only).
+%%
+%%\wxheading{See also}
+%%
+%%\helpref{wxWindow::OnActivate}{wxwindowonactivate}, \helpref{wxActivateEvent}{wxactivateevent}
+%%
+%%\membersection{wxApp::OnCharHook}\label{wxapponcharhook}
+%%
+%%\func{void}{OnCharHook}{\param{wxKeyEvent\&}{ event}}
+%%
+%%This event handler function is called (under Windows only) to allow the window to intercept keyboard events
+%%before they are processed by child windows.
+%%
+%%\wxheading{Parameters}
+%%
+%%\docparam{event}{The keypress event.}
+%%
+%%\wxheading{Remarks}
+%%
+%%Use the wxEVT\_CHAR\_HOOK macro in your event table.
+%%
+%%If you use this member, you can selectively consume keypress events by calling\rtfsp
+%%\helpref{wxEvent::Skip}{wxeventskip} for characters the application is not interested in.
+%%
+%%\wxheading{See also}
+%%
+%%\helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnChar}{wxwindowonchar},\rtfsp
+%%\helpref{wxWindow::OnCharHook}{wxwindowoncharhook}, \helpref{wxDialog::OnCharHook}{wxdialogoncharhook}
 
-\func{void}{OnActivate}{\param{wxActivateEvent\& }{event}}
+\membersection{wxApp::OnAssert}\label{wxapponassert}
 
-Provide this member function to know whether the application is being
-activated or deactivated (Windows only).
+\func{void}{OnAssert}{\param{const wxChar }{*file}, \param{int }{line}, \param{const wxChar }{*msg}}
 
-\wxheading{See also}
+This function is called when an assert failure occurs, i.e. the condition
+specified in \helpref{wxASSERT}{wxassert} macro evaluated to {\tt FALSE}.
+It is only called in debug mode (when {\tt \_\_WXDEBUG\_\_| is defined) as
+asserts are not left in the release code at all.
 
-\helpref{wxWindow::OnActivate}{wxwindowonactivate}, \helpref{wxActivateEvent}{wxactivateevent}
+The base class version show the default assert failure dialog box proposing to
+the user to stop the program, continue or ignore all subsequent asserts.
+
+\wxheading{Parameters}
+
+\docparam{file}{the name of the source file where the assert occured}
+
+\docparam{line}{the line number in this file where the assert occured}
+
+\docparam{msg}{the message specified as argument to 
+\helpref{wxASSERT\_MSG}{wxassertmsg} or \helpref{wxFAIL\_MSG}{wxfailmsg}, will
+be {\tt NULL} if just \helpref{wxASSERT}{wxassert} or \helpref{wxFAIL}{wxfail} 
+was used}
 
 \membersection{wxApp::OnExit}\label{wxapponexit}
 
@@ -206,29 +254,6 @@ activated or deactivated (Windows only).
 
 Provide this member function for any processing which needs to be done as
 the application is about to exit.
-
-\membersection{wxApp::OnCharHook}\label{wxapponcharhook}
-
-\func{void}{OnCharHook}{\param{wxKeyEvent\&}{ event}}
-
-This event handler function is called (under Windows only) to allow the window to intercept keyboard events
-before they are processed by child windows.
-
-\wxheading{Parameters}
-
-\docparam{event}{The keypress event.}
-
-\wxheading{Remarks}
-
-Use the wxEVT\_CHAR\_HOOK macro in your event table.
-
-If you use this member, you can selectively consume keypress events by calling\rtfsp
-\helpref{wxEvent::Skip}{wxeventskip} for characters the application is not interested in.
-
-\wxheading{See also}
-
-\helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnChar}{wxwindowonchar},\rtfsp
-\helpref{wxWindow::OnCharHook}{wxwindowoncharhook}, \helpref{wxDialog::OnCharHook}{wxdialogoncharhook}
 
 \membersection{wxApp::OnCmdLineError}\label{wxapponcmdlineerror}
 

@@ -41,6 +41,8 @@ WXDLLEXPORT_DATA(extern const bool) wxTrue;
 WXDLLEXPORT_DATA(extern const bool) wxFalse;
 
 // Macros which are completely disabled in 'release' mode
+//
+// NB: these functions are implemented in src/common/appcmn.cpp
 #ifdef  __WXDEBUG__
   /*
     this function may be redefined to do something non trivial and is called

@@ -61,9 +61,11 @@ public:
     bool ProcessIdle();
     void DeletePendingObjects();
 
-    // This can be used to suppress the generation of Idle events.
-    void SuppressIdleEvents(bool arg = TRUE) { m_suppressIdleEvents = arg; }
-    bool GetSuppressIdleEvents() const { return m_suppressIdleEvents; }
+#ifdef __WXDEBUG__
+    virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
+
+    bool IsInAssert() const { return m_isInAssert; }
+#endif // __WXDEBUG__
 
     bool            m_initialized;
 
@@ -74,10 +76,11 @@ public:
     unsigned char  *m_colorCube;
 
 private:
-    // Set to TRUE while we are in wxYield().
-    bool m_suppressIdleEvents;
+    // true if we're inside an assert modal dialog
+#ifdef __WXDEBUG__
+    bool m_isInAssert;
+#endif // __WXDEBUG__
 
-private:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
 };

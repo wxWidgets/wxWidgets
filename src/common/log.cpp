@@ -39,7 +39,6 @@
         #ifdef __WXMSW__
             #include "wx/msw/private.h"
         #endif
-        #include "wx/msgdlg.h"
     #endif
 #endif //WX_PRECOMP
 
@@ -60,10 +59,6 @@
 #if defined(__WXMSW__)
   #include  "wx/msw/private.h"      // includes windows.h for OutputDebugString
 #endif
-
-#if !defined(__WXMSW__) || defined(__WXMICROWIN__)
-  #include  <signal.h>
-#endif  //Win/Unix
 
 // ----------------------------------------------------------------------------
 // non member functions
@@ -747,123 +742,5 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 #endif
 #endif  // Win/Unix
 }
-
-// ----------------------------------------------------------------------------
-// debug helper
-// ----------------------------------------------------------------------------
-
-#ifdef  __WXDEBUG__
-
-// wxASSERT() helper
-bool wxAssertIsEqual(int x, int y)
-{
-    return x == y;
-}
-
-// break into the debugger
-void wxTrap()
-{
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
-    DebugBreak();
-#elif defined(__WXMAC__)
-#if __powerc
-    Debugger();
-#else
-    SysBreak();
-#endif
-#elif defined(__UNIX__)
-    raise(SIGTRAP);
-#else
-    // TODO
-#endif // Win/Unix
-}
-
-// this function is called when an assert fails
-void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
-{
-    // this variable can be set to true to suppress "assert failure" messages
-    static bool s_bNoAsserts = FALSE;
-    static bool s_bInAssert = FALSE;        // FIXME MT-unsafe
-
-    if ( s_bInAssert ) {
-        // He-e-e-e-elp!! we're trapped in endless loop
-        wxTrap();
-
-        s_bInAssert = FALSE;
-
-        return;
-    }
-
-    s_bInAssert = TRUE;
-
-    wxChar szBuf[LOG_BUFFER_SIZE];
-
-    // make life easier for people using VC++ IDE: clicking on the message
-    // will take us immediately to the place of the failed assert
-    wxSnprintf(szBuf, WXSIZEOF(szBuf),
-#ifdef __VISUALC__
-               wxT("%s(%d): assert failed"),
-#else  // !VC++
-    // make the error message more clear for all the others
-               wxT("Assert failed in file %s at line %d"),
-#endif // VC/!VC
-               szFile, nLine);
-
-    if ( szMsg != NULL ) {
-        wxStrcat(szBuf, wxT(": "));
-        wxStrcat(szBuf, szMsg);
-    }
-    else {
-        wxStrcat(szBuf, wxT("."));
-    }
-
-    if ( !s_bNoAsserts ) {
-        // send it to the normal log destination
-        wxLogDebug(szBuf);
-
-#if (wxUSE_GUI && wxUSE_MSGDLG) || defined(__WXMSW__)
-        // this message is intentionally not translated - it is for
-        // developpers only
-        wxStrcat(szBuf, wxT("\nDo you want to stop the program?\nYou can also choose [Cancel] to suppress further warnings."));
-
-        // use the native message box if available: this is more robust than
-        // using our own
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
-        switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
-                              MB_YESNOCANCEL | MB_ICONSTOP ) ) {
-            case IDYES:
-                wxTrap();
-                break;
-
-            case IDCANCEL:
-                s_bNoAsserts = TRUE;
-                break;
-
-            //case IDNO: nothing to do
-        }
-#else // !MSW
-        switch ( wxMessageBox(szBuf, wxT("Debug"),
-                              wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
-            case wxYES:
-                wxTrap();
-                break;
-
-            case wxCANCEL:
-                s_bNoAsserts = TRUE;
-                break;
-
-            //case wxNO: nothing to do
-        }
-#endif // GUI or MSW
-
-#else // !GUI
-        wxTrap();
-#endif // GUI/!GUI
-    }
-
-    s_bInAssert = FALSE;
-}
-
-#endif  //WXDEBUG
 
 #endif //wxUSE_LOG

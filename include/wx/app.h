@@ -263,6 +263,16 @@ public:
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 #endif // wxUSE_GUI
 
+    // debugging support
+    // -----------------
+
+    // this function is called when an assert failure occurs, the base class
+    // version does the normal processing (i.e. shows the usual assert failure
+    // dialog box)
+#ifdef __WXDEBUG__
+    virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
+#endif // __WXDEBUG__
+
     // implementation only from now on
     // -------------------------------
 

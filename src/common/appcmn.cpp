@@ -32,11 +32,22 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/list.h"
+    #if wxUSE_GUI
+        #include "wx/msgdlg.h"
+    #endif // wxUSE_GUI
 #endif
 
 #include "wx/cmdline.h"
 #include "wx/thread.h"
 #include "wx/confbase.h"
+
+#if !defined(__WXMSW__) || defined(__WXMICROWIN__)
+  #include  <signal.h>      // for SIGTRAP used by wxTrap()
+#endif  //Win/Unix
+
+#if defined(__WXMSW__)
+  #include  "wx/msw/private.h"  // includes windows.h for MessageBox()
+#endif
 
 // ===========================================================================
 // implementation
@@ -257,4 +268,150 @@ bool wxAppBase::OnCmdLineError(wxCmdLineParser& parser)
 }
 
 #endif // wxUSE_CMDLINE_PARSER
+
+// ----------------------------------------------------------------------------
+// debugging support
+// ----------------------------------------------------------------------------
+
+#ifdef  __WXDEBUG__
+
+// wxASSERT() helper
+bool wxAssertIsEqual(int x, int y)
+{
+    return x == y;
+}
+
+// break into the debugger
+void wxTrap()
+{
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+    DebugBreak();
+#elif defined(__WXMAC__)
+#if __powerc
+    Debugger();
+#else
+    SysBreak();
+#endif
+#elif defined(__UNIX__)
+    raise(SIGTRAP);
+#else
+    // TODO
+#endif // Win/Unix
+}
+
+// show the assert modal dialog
+static
+void ShowAssertDialog(const wxChar *szFile, int nLine, const wxChar *szMsg)
+{
+    // this variable can be set to true to suppress "assert failure" messages
+    static bool s_bNoAsserts = FALSE;
+    static bool s_bInAssert = FALSE;        // FIXME MT-unsafe
+
+    if ( s_bInAssert )
+    {
+        // He-e-e-e-elp!! we're trapped in endless loop
+        wxTrap();
+
+        s_bInAssert = FALSE;
+
+        return;
+    }
+
+    s_bInAssert = TRUE;
+
+    wxChar szBuf[4096];
+
+    // make life easier for people using VC++ IDE: clicking on the message
+    // will take us immediately to the place of the failed assert
+    wxSnprintf(szBuf, WXSIZEOF(szBuf),
+#ifdef __VISUALC__
+               wxT("%s(%d): assert failed"),
+#else  // !VC++
+    // make the error message more clear for all the others
+               wxT("Assert failed in file %s at line %d"),
+#endif // VC/!VC
+               szFile, nLine);
+
+    if ( szMsg != NULL )
+    {
+        wxStrcat(szBuf, wxT(": "));
+        wxStrcat(szBuf, szMsg);
+    }
+    else // no message given
+    {
+        wxStrcat(szBuf, wxT("."));
+    }
+
+    if ( !s_bNoAsserts )
+    {
+        // send it to the normal log destination
+        wxLogDebug(szBuf);
+
+#if (wxUSE_GUI && wxUSE_MSGDLG) || defined(__WXMSW__)
+        // this message is intentionally not translated - it is for
+        // developpers only
+        wxStrcat(szBuf, wxT("\nDo you want to stop the program?\nYou can also choose [Cancel] to suppress further warnings."));
+
+        // use the native message box if available: this is more robust than
+        // using our own
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+        switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
+                              MB_YESNOCANCEL | MB_ICONSTOP ) )
+        {
+            case IDYES:
+                wxTrap();
+                break;
+
+            case IDCANCEL:
+                s_bNoAsserts = TRUE;
+                break;
+
+            //case IDNO: nothing to do
+        }
+#else // !MSW
+        switch ( wxMessageBox(szBuf, wxT("Debug"),
+                              wxYES_NO | wxCANCEL | wxICON_STOP ) )
+        {
+            case wxYES:
+                wxTrap();
+                break;
+
+            case wxCANCEL:
+                s_bNoAsserts = TRUE;
+                break;
+
+            //case wxNO: nothing to do
+        }
+#endif // GUI or MSW
+
+#else // !GUI
+        wxTrap();
+#endif // GUI/!GUI
+    }
+
+    s_bInAssert = FALSE;
+}
+
+// this function is called when an assert fails
+void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
+{
+    if ( !wxTheApp )
+    {
+        // by default, show the assert dialog box - we can't customize this
+        // behaviour
+        ShowAssertDialog(szFile, nLine, szMsg);
+    }
+    else
+    {
+        // let the app process it as it wants
+        wxTheApp->OnAssert(szFile, nLine, szMsg);
+    }
+}
+
+void wxAppBase::OnAssert(const wxChar *file, int line, const wxChar *msg)
+{
+    ShowAssertDialog(file, line, msg);
+}
+
+#endif  //WXDEBUG
 

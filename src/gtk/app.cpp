@@ -194,7 +194,18 @@ gint wxapp_pending_callback( gpointer WXUNUSED(data) )
 
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
-    if (!wxTheApp) return TRUE;
+    if (!wxTheApp)
+        return TRUE;
+
+#ifdef __WXDEBUG__
+    if ( wxTheApp->IsInAssert() )
+    {
+        // don't generate the idle events while the assert modal dialog is
+        // shown, this completely confuses the apps which don't expect to be
+        // reentered from some safely-looking functions
+        return FALSE;
+    }
+#endif // __WXDEBUG__
 
     // when getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
@@ -309,6 +320,11 @@ END_EVENT_TABLE()
 
 wxApp::wxApp()
 {
+    m_initialized = FALSE;
+#ifdef __WXDEBUG__
+    m_isInAssert = FALSE;
+#endif // __WXDEBUG__
+
     m_idleTag = 0;
     wxapp_install_idle_handler();
 
@@ -850,3 +866,17 @@ wxApp::GetStdIcon(int which) const
             return wxIcon(error_xpm);
     }
 }
+
+#ifdef __WXDEBUG__
+
+void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
+{
+    m_isInAssert = TRUE;
+
+    wxAppBase::OnAssert(file, line, msg);
+
+    m_isInAssert = FALSE;
+}
+
+#endif // __WXDEBUG__
+
