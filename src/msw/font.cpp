@@ -787,15 +787,15 @@ wxFont::wxFont(const wxString& fontdesc)
 /* Constructor for a font. Note that the real construction is done
  * in wxDC::SetFont, when information is available about scaling etc.
  */
-bool wxFont::Create(int pointSize,
-                    const wxSize& pixelSize,
-                    bool sizeUsingPixels,
-                    int family,
-                    int style,
-                    int weight,
-                    bool underlined,
-                    const wxString& faceName,
-                    wxFontEncoding encoding)
+bool wxFont::DoCreate(int pointSize,
+                      const wxSize& pixelSize,
+                      bool sizeUsingPixels,
+                      int family,
+                      int style,
+                      int weight,
+                      bool underlined,
+                      const wxString& faceName,
+                      wxFontEncoding encoding)
 {
     UnRef();
 

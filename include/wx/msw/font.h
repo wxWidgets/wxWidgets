@@ -39,8 +39,7 @@ public:
     {
         Init();
 
-        (void)Create(size, wxSize(0, 0), FALSE, family, style, weight,
-                     underlined, face, encoding);
+        (void)Create(size, family, style, weight, underlined, face, encoding);
     }
 
     wxFont(const wxSize& pixelSize,
@@ -53,8 +52,8 @@ public:
     {
         Init();
 
-        (void)Create(0, pixelSize, TRUE, family, style, weight, underlined,
-                     face, encoding);
+        (void)Create(pixelSize, family, style, weight,
+                     underlined, face, encoding);
     }
 
     wxFont(const wxNativeFontInfo& info, WXHFONT hFont = 0)
@@ -67,14 +66,28 @@ public:
     wxFont(const wxString& fontDesc);
 
     bool Create(int size,
-                const wxSize& pixelSize,
-                bool sizeUsingPixels,
                 int family,
                 int style,
                 int weight,
                 bool underlined = false,
                 const wxString& face = wxEmptyString,
-                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        return DoCreate(size, wxDefaultSize, false, family, style,
+                        weight, underlined, face, encoding);
+    }
+
+    bool Create(const wxSize& pixelSize,
+                int family,
+                int style,
+                int weight,
+                bool underlined = false,
+                const wxString& face = wxEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        return DoCreate(-1, pixelSize, true, family, style,
+                        weight, underlined, face, encoding);
+    }
 
     bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
 
@@ -123,6 +136,17 @@ public:
      */
 
 protected:
+    // real font creation function, used in all cases
+    bool DoCreate(int size,
+                  const wxSize& pixelSize,
+                  bool sizeUsingPixels,
+                  int family,
+                  int style,
+                  int weight,
+                  bool underlined = false,
+                  const wxString& face = wxEmptyString,
+                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
 
     // common part of all ctors
