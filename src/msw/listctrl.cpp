@@ -1539,7 +1539,10 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
     internalData.user_fn = fn;
     internalData.data = data;
 
-    if ( !ListView_SortItems(GetHwnd(), wxInternalDataCompareFunc, &internalData) )
+    // WPARAM cast is needed for mingw/cygwin
+    if ( !ListView_SortItems(GetHwnd(),
+                             wxInternalDataCompareFunc,
+                             (WPARAM) &internalData) )
     {
         wxLogDebug(_T("ListView_SortItems() failed"));
 
