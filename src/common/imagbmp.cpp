@@ -1198,6 +1198,7 @@ int wxICOHandler::GetImageCount(wxInputStream& stream)
 
 bool wxICOHandler::DoCanRead(wxInputStream& stream)
 {
+    stream.SeekI(0);   
     unsigned char hdr[4];
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return FALSE;
@@ -1216,6 +1217,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCURHandler, wxICOHandler)
 
 bool wxCURHandler::DoCanRead(wxInputStream& stream)
 {
+    stream.SeekI(0);
     unsigned char hdr[4];
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return FALSE;
@@ -1256,6 +1258,8 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
         // we always have a data size
         stream.Read(&datalen, 4);
         datalen = wxINT32_SWAP_ON_BE(datalen) ;
+        //data should be padded to make even number of bytes
+        if (datalen % 2 == 1) datalen ++ ;
         //now either data or a FCC
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
@@ -1293,6 +1297,7 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
     wxInt32 *list32 = (wxInt32 *) listtxt;
     wxInt32 *anih32 = (wxInt32 *) anihtxt;
 
+    stream.SeekI(0);
     if ( !stream.Read(&FCC1, 4) )
         return FALSE;
 
@@ -1307,6 +1312,8 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
         // we always have a data size:
         stream.Read(&datalen, 4);
         datalen = wxINT32_SWAP_ON_BE(datalen) ;
+        //data should be padded to make even number of bytes
+        if (datalen % 2 == 1) datalen ++ ;
         // now either data or a FCC:
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
@@ -1351,6 +1358,8 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
         // we always have a data size:
         stream.Read(&datalen, 4);
         datalen = wxINT32_SWAP_ON_BE(datalen) ;
+        //data should be padded to make even number of bytes
+        if (datalen % 2 == 1) datalen ++ ;
         // now either data or a FCC:
         if ( (FCC1 == *riff32) || (FCC1 == *list32) )
         {
