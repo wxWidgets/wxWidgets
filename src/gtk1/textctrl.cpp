@@ -552,9 +552,14 @@ void wxTextCtrl::WriteText( const wxString &text )
         wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) ) );
 #endif
         GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-        // TODO: call wahtever is needed to delete the selection
+        
+        // TODO: Call whatever is needed to delete the selection.
         gtk_text_buffer_insert_at_cursor( text_buffer, buffer, strlen(buffer) );
 
+        // Scroll to cursor.
+        GtkTextIter iter;
+        gtk_text_buffer_get_iter_at_mark( text_buffer, &iter,  gtk_text_buffer_get_insert( text_buffer ) );
+        gtk_text_view_scroll_to_iter( GTK_TEXT_VIEW(m_text), &iter, 0.0, FALSE, 0.0, 1.0 );
 #else // GTK 1.x
         // After cursor movements, gtk_text_get_point() is wrong by one.
         gtk_text_set_point( GTK_TEXT(m_text), GET_EDITABLE_POS(m_text) );
