@@ -2118,7 +2118,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(BASE_AND_GUI_MAC_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(BASE_AND_GUI_MAC_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
