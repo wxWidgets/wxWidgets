@@ -20,11 +20,8 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
-#endif
-
-#if (wxUSE_FILE && wxUSE_TEXTFILE) || defined(__WXMSW__)
+// Doesn't compile in WIN16 mode
+#ifndef __WIN16__
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
@@ -32,9 +29,6 @@
     #include "wx/icon.h"
   #endif
 #endif //WX_PRECOMP
-
-// Doesn't compile in WIN16 mode
-#ifndef __WIN16__
 
 #include "wx/log.h"
 #include "wx/file.h"
@@ -45,12 +39,6 @@
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
     #include "windows.h"
-#elif defined(__UNIX__)  || defined(__WXPM__)
-    #include "wx/ffile.h"
-    #include "wx/textfile.h"
-    #include "wx/dir.h"
-    #include "wx/utils.h"
-    #include "wx/tokenzr.h"
 #endif // OS
 
 #include "wx/msw/mimetype.h"
@@ -60,7 +48,6 @@
 
 // in case we're compiling in non-GUI mode
 class WXDLLEXPORT wxIcon;
-
 
 // These classes use Windows registry to retrieve the required information.
 //
@@ -85,9 +72,6 @@ class WXDLLEXPORT wxIcon;
 // although I don't know of any official documentation which mentions this
 // location, uses it, so it isn't likely to change
 static const wxChar *MIME_DATABASE_KEY = wxT("MIME\\Database\\Content Type\\");
-
-
-
 
 wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
 {
@@ -446,9 +430,6 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
     return mimetypes.GetCount();
 }
 
-
-#endif
-  // wxUSE_FILE && wxUSE_TEXTFILE
 
 #endif
   // __WIN16__

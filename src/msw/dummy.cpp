@@ -26,8 +26,6 @@
     #pragma hdrstop
 #endif
 
-#include <windows.h>
-
 #include "wx/msw/msvcrt.h"
 
 // Foils optimizations in Visual C++ (see also app.cpp). Without it,

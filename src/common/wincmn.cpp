@@ -922,27 +922,22 @@ void wxWindowBase::SetSizer(wxSizer *sizer)
 
 bool wxWindowBase::Layout()
 {
-    int w, h;
-    GetClientSize(&w, &h);
-
     // If there is a sizer, use it instead of the constraints
     if ( GetSizer() )
     {
-        GetSizer()->SetDimension( 0, 0, w, h );
-        return TRUE;
-    }
+        int w, h;
+        GetClientSize(&w, &h);
 
-    if ( GetConstraints() )
-    {
-        GetConstraints()->width.SetValue(w);
-        GetConstraints()->height.SetValue(h);
+        GetSizer()->SetDimension( 0, 0, w, h );
     }
-	
-    // Evaluate child constraints
-    ResetConstraints();   // Mark all constraints as unevaluated
-    DoPhase(1);           // Just one phase need if no sizers involved
-    DoPhase(2);
-    SetConstraintSizes(); // Recursively set the real window sizes
+    else
+    {
+        // Evaluate child constraints
+        ResetConstraints();   // Mark all constraints as unevaluated
+        DoPhase(1);           // Just one phase need if no sizers involved
+        DoPhase(2);
+        SetConstraintSizes(); // Recursively set the real window sizes
+    }
 
     return TRUE;
 }
@@ -1028,6 +1023,7 @@ void wxWindowBase::ResetConstraints()
         constr->centreX.SetDone(FALSE);
         constr->centreY.SetDone(FALSE);
     }
+
     wxWindowList::Node *node = GetChildren().GetFirst();
     while (node)
     {
@@ -1064,21 +1060,12 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
     }
     else if ( constr )
     {
-        wxChar *windowClass = GetClassInfo()->GetClassName();
-
-        wxString winName;
-        if ( GetName() == wxT("") )
+        wxString winName = GetName();
+        if ( !winName )
             winName = wxT("unnamed");
-        else
-            winName = GetName();
-        wxLogDebug( wxT("Constraint(s) not satisfied for window of type %s, name %s:\n"),
-                (const wxChar *)windowClass,
-                (const wxChar *)winName);
-        if ( !constr->left.GetDone()) wxLogDebug( wxT("  unsatisfied 'left' constraint.\n")  );
-        if ( !constr->right.GetDone()) wxLogDebug( wxT("  unsatisfied 'right' constraint.\n")  );
-        if ( !constr->width.GetDone()) wxLogDebug( wxT("  unsatisfied 'width' constraint.\n")  );
-        if ( !constr->height.GetDone())  wxLogDebug( wxT("  unsatisfied 'height' constraint.\n")  );
-        wxLogDebug( wxT("Please check constraints: try adding AsIs() constraints.\n") );
+        wxLogDebug(wxT("Constraint not satisfied for %s, name '%s'."),
+                   GetClassInfo()->GetClassName(),
+                   winName.c_str());
     }
 
     if ( recurse )

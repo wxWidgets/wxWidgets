@@ -99,7 +99,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     if (size.x < size.y*3/2)
     {
         size.x = size.y*3/2;
-	SetSize( size );
+        SetSize( size );
     }
 
     Centre( wxBOTH | wxCENTER_FRAME);

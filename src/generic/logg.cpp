@@ -38,8 +38,9 @@
     #include "wx/menu.h"
     #include "wx/frame.h"
     #include "wx/filedlg.h"
-    #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
+    #include "wx/sizer.h"
+    #include "wx/statbmp.h"
 #endif // WX_PRECOMP
 
 #include "wx/file.h"
@@ -49,6 +50,62 @@
   // for OutputDebugString()
   #include  "wx/msw/private.h"
 #endif // Windows
+
+// may be defined to 0 for old behavior (using wxMessageBox) - shouldn't be
+// changed normally (that's why it's here and not in setup.h)
+#define wxUSE_LOG_DIALOG 1
+
+#if wxUSE_LOG_DIALOG
+    #include "wx/datetime.h"
+    #include "wx/listctrl.h"
+    #include "wx/image.h"
+#else // !wxUSE_TEXTFILE
+    #include "wx/msgdlg.h"
+#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
+
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LOG_DIALOG
+
+class wxLogDialog : public wxDialog
+{
+public:
+    wxLogDialog(wxWindow *parent,
+                const wxArrayString& messages,
+                const wxArrayInt& severity,
+                const wxArrayLong& timess,
+                const wxString& caption,
+                long style);
+    virtual ~wxLogDialog();
+
+    // event handlers
+    void OnOk(wxCommandEvent& event);
+    void OnDetails(wxCommandEvent& event);
+
+private:
+    // the data for the listctrl
+    const wxArrayString& m_messages;
+    const wxArrayInt& m_severity;
+    const wxArrayLong& m_times;
+
+    // the "toggle" button and its state
+    wxButton *m_btnDetails;
+    bool      m_showingDetails;
+
+    // the listctrl (not shown initially)
+    wxListCtrl *m_listctrl;
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
+    EVT_BUTTON(wxID_OK,     wxLogDialog::OnOk)
+    EVT_BUTTON(wxID_MORE,   wxLogDialog::OnDetails)
+END_EVENT_TABLE()
+
+#endif // wxUSE_LOG_DIALOG
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -117,6 +174,7 @@ void wxLogGui::Clear()
 {
     m_bErrors = m_bWarnings = FALSE;
     m_aMessages.Empty();
+    m_aSeverity.Empty();
     m_aTimes.Empty();
 }
 
@@ -128,6 +186,34 @@ void wxLogGui::Flush()
     // do it right now to block any new calls to Flush() while we're here
     m_bHasMessages = FALSE;
 
+    wxString title = wxTheApp->GetAppName();
+    if ( !!title )
+    {
+        title[0u] = wxToupper(title[0u]);
+        title += _T(' ');
+    }
+
+    long style;
+    if ( m_bErrors ) {
+        title += _("Error");
+        style = wxICON_STOP;
+    }
+    else if ( m_bWarnings ) {
+        title += _("Warning");
+        style = wxICON_EXCLAMATION;
+    }
+    else {
+        title += _("Information");
+        style = wxICON_INFORMATION;
+    }
+
+#if wxUSE_LOG_DIALOG
+    wxLogDialog dlg(wxTheApp->GetTopWindow(),
+                    m_aMessages, m_aSeverity, m_aTimes,
+                    title, style);
+    (void)dlg.ShowModal();
+
+#else // !wxUSE_LOG_DIALOG
     // concatenate all strings (but not too many to not overfill the msg box)
     wxString str;
     size_t nLines = 0,
@@ -146,27 +232,12 @@ void wxLogGui::Flush()
         str << m_aMessages[n - 1] << wxT("\n");
     }
 
-    const wxChar *title;
-    long style;
-
-    if ( m_bErrors ) {
-        title = _("Error");
-        style = wxICON_STOP;
-    }
-    else if ( m_bWarnings ) {
-        title = _("Warning");
-        style = wxICON_EXCLAMATION;
-    }
-    else {
-        title = _("Information");
-        style = wxICON_INFORMATION;
-    }
-
     wxMessageBox(str, title, wxOK | style);
+#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
     // no undisplayed messages whatsoever
     Clear();
-    
+
     // do it here again
     m_bHasMessages = FALSE;
 }
@@ -179,80 +250,88 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
         case wxLOG_Info:
             if ( GetVerbose() )
         case wxLOG_Message:
+            {
                 if ( !m_bErrors ) {
                     m_aMessages.Add(szString);
+                    m_aSeverity.Add(wxLOG_Message);
                     m_aTimes.Add((long)t);
                     m_bHasMessages = TRUE;
                 }
-                break;
+            }
+            break;
 
         case wxLOG_Status:
 #if wxUSE_STATUSBAR
-                {
-                    // find the top window and set it's status text if it has any
-                    wxFrame *pFrame = gs_pFrame;
-                    if ( pFrame == NULL ) {
-                        wxWindow *pWin = wxTheApp->GetTopWindow();
-                        if ( pWin != NULL && pWin->IsKindOf(CLASSINFO(wxFrame)) ) {
-                            pFrame = (wxFrame *)pWin;
-                        }
+            {
+                // find the top window and set it's status text if it has any
+                wxFrame *pFrame = gs_pFrame;
+                if ( pFrame == NULL ) {
+                    wxWindow *pWin = wxTheApp->GetTopWindow();
+                    if ( pWin != NULL && pWin->IsKindOf(CLASSINFO(wxFrame)) ) {
+                        pFrame = (wxFrame *)pWin;
                     }
-
-                    if ( pFrame && pFrame->GetStatusBar() )
-                        pFrame->SetStatusText(szString);
                 }
+
+                if ( pFrame && pFrame->GetStatusBar() )
+                    pFrame->SetStatusText(szString);
+            }
 #endif // wxUSE_STATUSBAR
-                break;
+            break;
 
         case wxLOG_Trace:
         case wxLOG_Debug:
-                #ifdef __WXDEBUG__
-                {
-                    #ifdef __WXMSW__
-                        // don't prepend debug/trace here: it goes to the
-                        // debug window anyhow, but do put a timestamp
-                        wxString str;
-                        TimeStamp(&str);
-                        str << szString << wxT("\n\r");
-                        OutputDebugString(str);
-                    #else
-                        // send them to stderr
-                        wxFprintf(stderr, wxT("%s: %s\n"),
-                                  level == wxLOG_Trace ? wxT("Trace")
-                                                       : wxT("Debug"),
-                                  szString);
-                        fflush(stderr);
-                    #endif
-                }
-                #endif // __WXDEBUG__
+            #ifdef __WXDEBUG__
+            {
+                #ifdef __WXMSW__
+                    // don't prepend debug/trace here: it goes to the
+                    // debug window anyhow, but do put a timestamp
+                    wxString str;
+                    TimeStamp(&str);
+                    str << szString << wxT("\n\r");
+                    OutputDebugString(str);
+                #else
+                    // send them to stderr
+                    wxFprintf(stderr, wxT("%s: %s\n"),
+                              level == wxLOG_Trace ? wxT("Trace")
+                                                   : wxT("Debug"),
+                              szString);
+                    fflush(stderr);
+                #endif
+            }
+            #endif // __WXDEBUG__
 
-                break;
+            break;
 
         case wxLOG_FatalError:
-                // show this one immediately
-                wxMessageBox(szString, _("Fatal error"), wxICON_HAND);
-                break;
+            // show this one immediately
+            wxMessageBox(szString, _("Fatal error"), wxICON_HAND);
+            break;
 
         case wxLOG_Error:
+            if ( !m_bErrors ) {
+#if !wxUSE_LOG_DIALOG
                 // discard earlier informational messages if this is the 1st
-                // error because they might not make sense any more
-                if ( !m_bErrors ) {
-                    m_aMessages.Empty();
-                    m_aTimes.Empty();
-                    m_bErrors = TRUE;
-                }
-                // fall through
+                // error because they might not make sense any more and showing
+                // them in a message box might be confusing
+                m_aMessages.Empty();
+                m_aSeverity.Empty();
+                m_aTimes.Empty();
+#endif // wxUSE_LOG_DIALOG
+                m_bErrors = TRUE;
+            }
+            // fall through
 
         case wxLOG_Warning:
-                if ( !m_bErrors ) {
-                    // for the warning we don't discard the info messages
-                    m_bWarnings = TRUE;
-                }
+            if ( !m_bErrors ) {
+                // for the warning we don't discard the info messages
+                m_bWarnings = TRUE;
+            }
 
-                m_aMessages.Add(szString);
-                m_aTimes.Add((long)t);
-                m_bHasMessages = TRUE;
-                break;
+            m_aMessages.Add(szString);
+            m_aSeverity.Add(level);
+            m_aTimes.Add((long)t);
+            m_bHasMessages = TRUE;
+            break;
     }
 }
 
@@ -467,10 +546,7 @@ void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 {
     // first let the previous logger show it
     if ( m_pOldLog != NULL && m_bPassMessages ) {
-        // FIXME why can't we access protected wxLog method from here (we derive
-        //       from wxLog)? gcc gives "DoLog is protected in this context", what
-        //       does this mean? Anyhow, the cast is harmless and let's us do what
-        //       we want.
+        // bogus cast just to access protected DoLog
         ((wxLogWindow *)m_pOldLog)->DoLog(level, szString, t);
     }
 
@@ -545,3 +621,168 @@ wxLogWindow::~wxLogWindow()
     delete m_pLogFrame;
 }
 
+// ----------------------------------------------------------------------------
+// wxLogDialog
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LOG_DIALOG
+
+static const size_t MARGIN = 10;
+
+wxLogDialog::wxLogDialog(wxWindow *parent,
+                         const wxArrayString& messages,
+                         const wxArrayInt& severity,
+                         const wxArrayLong& times,
+                         const wxString& caption,
+                         long style)
+           : wxDialog(parent, -1, caption),
+             m_messages(messages), m_severity(severity), m_times(times)
+{
+    m_showingDetails = FALSE; // not initially
+    m_listctrl = (wxListCtrl *)NULL;
+
+    // create the controls which are always shown and layout them: we use
+    // sizers even though our window is not resizeable to calculate the size of
+    // the dialog properly
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
+
+    wxButton *btnOk = new wxButton(this, wxID_OK, _T("Ok"));
+    m_btnDetails = new wxButton(this, wxID_MORE, _T("&Details >>"));
+    sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
+    sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
+
+    wxIcon icon = wxTheApp->GetStdIcon(style & wxICON_MASK);
+    sizerAll->Add(new wxStaticBitmap(this, -1, icon), 0, wxCENTRE);
+    const wxString& message = messages.Last();
+    sizerAll->Add(CreateTextSizer(message), 0, wxCENTRE|wxLEFT|wxRIGHT, MARGIN);
+    sizerAll->Add(sizerButtons, 0, wxALIGN_RIGHT|wxLEFT, MARGIN);
+
+    sizerTop->Add(sizerAll, 0, wxCENTRE|wxALL, MARGIN);
+
+    SetAutoLayout(TRUE);
+    SetSizer(sizerTop);
+
+    sizerTop->SetSizeHints(this);
+    sizerTop->Fit(this);
+
+    btnOk->SetFocus();
+
+    Centre();
+}
+
+void wxLogDialog::OnOk(wxCommandEvent& WXUNUSED(event))
+{
+    EndModal(wxID_OK);
+}
+
+void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
+{
+    wxSizer *sizer = GetSizer();
+
+    if ( m_showingDetails )
+    {
+        m_btnDetails->SetLabel(_T("&Details >>"));
+
+        sizer->Remove(m_listctrl);
+    }
+    else // show details now
+    {
+        m_btnDetails->SetLabel(_T("<< &Details"));
+
+        if ( !m_listctrl )
+        {
+            // create it now
+            m_listctrl = new wxListCtrl(this, -1,
+                                        wxDefaultPosition, wxDefaultSize,
+                                        wxLC_REPORT | wxLC_NO_HEADER);
+            m_listctrl->InsertColumn(0, _("Message"));
+            m_listctrl->InsertColumn(1, _("Time"));
+
+            // prepare the imagelist
+            static const int ICON_SIZE = 16;
+            wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
+
+            // order should be the same as in the switch below!
+            static const int icons[] =
+            {
+                wxICON_ERROR,
+                wxICON_EXCLAMATION,
+                wxICON_INFORMATION
+            };
+
+            for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
+            {
+                wxBitmap bmp = wxTheApp->GetStdIcon(icons[icon]);
+                imageList->Add(wxImage(bmp).
+                                Rescale(ICON_SIZE, ICON_SIZE).
+                                 ConvertToBitmap());
+            }
+
+            m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
+
+            // and fill it
+            wxString fmt = wxLog::GetTimestamp();
+            if ( !fmt )
+            {
+                // default format
+                fmt = _T("%X");
+            }
+
+            size_t count = m_messages.GetCount();
+            for ( size_t n = 0; n < count; n++ )
+            {
+                int image;
+                switch ( m_severity[n] )
+                {
+                    case wxLOG_Error:
+                        image = 0;
+                        break;
+
+                    case wxLOG_Warning:
+                        image = 1;
+                        break;
+
+                    default:
+                        image = 2;
+                }
+
+                m_listctrl->InsertItem(n, m_messages[n], image);
+                m_listctrl->SetItem(n, 1,
+                                    wxDateTime((time_t)m_times[n]).Format(fmt));
+            }
+
+            // let the columns size themselves (TODO does this work under GTK?)
+            m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
+            m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
+
+            // get the approx height of the listctrl
+            wxFont font = GetFont();
+            if ( !font.Ok() )
+                font = *wxSWISS_FONT;
+
+            int y;
+            GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
+            int height = wxMin(y*(count + 3), 100);
+            m_listctrl->SetSize(-1, height);
+        }
+
+        sizer->Add(m_listctrl, 1, wxEXPAND|(wxALL & ~wxTOP), MARGIN);
+    }
+
+    m_showingDetails = !m_showingDetails;
+
+    // in any case, our size changed - update
+    sizer->Fit(this);
+}
+
+wxLogDialog::~wxLogDialog()
+{
+    if ( m_listctrl )
+    {
+        delete m_listctrl->GetImageList(wxIMAGE_LIST_SMALL);
+    }
+}
+
+#endif // wxUSE_LOG_DIALOG

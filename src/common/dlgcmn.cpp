@@ -47,9 +47,10 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
 
     // get line height for empty lines
     int y = 0;
-    wxFont new_font( GetFont() );
-    if (!new_font.Ok()) new_font = *wxSWISS_FONT;
-    GetTextExtent( "H", (int*)NULL, &y, (int*)NULL, (int*)NULL, &new_font );
+    wxFont font( GetFont() );
+    if (!font.Ok())
+        font = *wxSWISS_FONT;
+    GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
 
     wxString line;
     for (size_t pos = 0; pos < message.Len(); pos++)
@@ -59,13 +60,13 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
             if (!line.IsEmpty())
             {
                 wxStaticText *s1 = new wxStaticText( this, -1, line );
-		box->Add( s1 );
+                box->Add( s1 );
                 line = wxT("");
             }
-	    else
-	    {
-	        box->Add( 5, y );
-	    }
+            else
+            {
+                box->Add( 5, y );
+            }
         }
         else
         {
@@ -77,7 +78,7 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
     if (!line.IsEmpty())
     {
         wxStaticText *s2 = new wxStaticText( this, -1, line );
-	box->Add( s2 );
+        box->Add( s2 );
     }
 
     return box;
@@ -88,9 +89,9 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
     wxBoxSizer *box = new wxBoxSizer( wxHORIZONTAL );
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
-    int margin = 6;
+    static const int margin = 6;
 #else
-    int margin = 10;
+    static const int margin = 10;
 #endif
 
     wxButton *ok = (wxButton *) NULL;

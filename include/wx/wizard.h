@@ -38,14 +38,25 @@ class WXDLLEXPORT wxWizard;
 class WXDLLEXPORT wxWizardPage : public wxPanel
 {
 public:
-    // ctor: no other parameters are needed because the wizard will resize and
+    // ctor accepts an optional bitmap which will be used for this page instead
+    // of the default one for this wizard (should be of the same size). Notice
+    // that no other parameters are needed because the wizard will resize and
     // reposition the page anyhow
-    wxWizardPage(wxWizard *parent);
+    wxWizardPage(wxWizard *parent, const wxBitmap& bitmap = wxNullBitmap);
 
     // these functions are used by the wizard to show another page when the
     // user chooses "Back" or "Next" button
     virtual wxWizardPage *GetPrev() const = 0;
     virtual wxWizardPage *GetNext() const = 0;
+
+    // default GetBitmap() will just return m_bitmap which is ok in 99% of
+    // cases - override this method if you want to create the bitmap to be used
+    // dynamically or to do something even more fancy. It's ok to return
+    // wxNullBitmap from here - the default one will be used then.
+    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+
+protected:
+    wxBitmap m_bitmap;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxWizardPage)

@@ -1995,7 +1995,6 @@ wxDbInf *wxDB::GetCatalog(char *userID)
 {
 	wxDbInf *pDbInf = NULL; // Array of catalog entries
 	int      noTab = 0;     // Counter while filling table entries
-	int      i = 0;
 	int      pass;
 	RETCODE  retcode;
 	SDWORD   cb;

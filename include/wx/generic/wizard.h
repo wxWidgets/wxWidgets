@@ -13,7 +13,10 @@
 // wxWizard
 // ----------------------------------------------------------------------------
 
-class wxWizard : public wxWizardBase
+class WXDLLEXPORT wxButton;
+class WXDLLEXPORT wxStaticBitmap;
+
+class WXDLLEXPORT wxWizard : public wxWizardBase
 {
 public:
     // ctor
@@ -52,10 +55,12 @@ private:
 
     // wizard state
     wxWizardPage *m_page;       // the current page or NULL
+    wxBitmap      m_bitmap;     // the default bitmap to show
 
     // wizard controls
     wxButton    *m_btnPrev,     // the "<Back" button
                 *m_btnNext;     // the "Next>" or "Finish" button
+    wxStaticBitmap *m_statbmp;  // the control for the bitmap
 
     DECLARE_DYNAMIC_CLASS(wxWizard)
     DECLARE_EVENT_TABLE()

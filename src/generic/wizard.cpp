@@ -66,7 +66,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent)
 // wxWizardPage
 // ----------------------------------------------------------------------------
 
-wxWizardPage::wxWizardPage(wxWizard *parent) : wxPanel(parent)
+wxWizardPage::wxWizardPage(wxWizard *parent, const wxBitmap& bitmap)
+            : wxPanel(parent), m_bitmap(bitmap)
 {
     // initially the page is hidden, it's shown only when it becomes current
     Hide();
@@ -95,6 +96,7 @@ wxWizard::wxWizard(wxWindow *parent,
                    const wxBitmap& bitmap,
                    const wxPoint& pos,
                    const wxSize& size)
+        : m_bitmap(bitmap)
 {
     // constants defining the dialog layout
     // ------------------------------------
@@ -139,13 +141,15 @@ wxWizard::wxWizard(wxWindow *parent,
     m_y = Y_MARGIN;
     if ( bitmap.Ok() )
     {
-        (void)new wxStaticBitmap(this, -1, bitmap, wxPoint(m_x, m_y));
+        m_statbmp = new wxStaticBitmap(this, -1, bitmap, wxPoint(m_x, m_y));
 
         m_x += bitmap.GetWidth() + BITMAP_X_MARGIN;
         m_height = bitmap.GetHeight();
     }
     else
     {
+        m_statbmp = (wxStaticBitmap *)NULL;
+
         m_height = DEFAULT_PAGE_HEIGHT;
     }
 
@@ -193,6 +197,9 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     // button or not (initially the label is "Next")
     bool btnLabelWasNext = TRUE;
 
+    // and this tells us whether we already had the default bitmap before
+    bool bmpWasDefault = TRUE;
+
     if ( m_page )
     {
         // ask the current page first
@@ -214,6 +221,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         m_page->Hide();
 
         btnLabelWasNext = m_page->GetNext() != (wxWizardPage *)NULL;
+        bmpWasDefault = !m_page->GetBitmap().Ok();
     }
 
     // set the new one
@@ -236,6 +244,13 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     (void)m_page->TransferDataToWindow();
     m_page->SetSize(m_x, m_y, m_width, m_height);
     m_page->Show();
+
+    // change the bitmap if necessary (and if we have it at all)
+    bool bmpIsDefault = !m_page->GetBitmap().Ok();
+    if ( m_statbmp && (bmpIsDefault != bmpWasDefault) )
+    {
+        m_statbmp->SetBitmap(bmpIsDefault ? m_bitmap : m_page->GetBitmap());
+    }
 
     // and update the buttons state
     m_btnPrev->Enable(m_page->GetPrev() != (wxWizardPage *)NULL);

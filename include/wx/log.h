@@ -286,8 +286,9 @@ protected:
     // empty everything
     void Clear();
 
-    wxArrayString m_aMessages;
-    wxArrayLong   m_aTimes;
+    wxArrayString m_aMessages;      // the log message texts
+    wxArrayInt    m_aSeverity;      // one of wxLOG_XXX values
+    wxArrayLong   m_aTimes;         // the time of each message
     bool          m_bErrors,        // do we have any errors?
                   m_bWarnings;      // any warnings?
 };
