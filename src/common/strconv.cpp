@@ -1454,7 +1454,7 @@ void wxCSConv::CreateConvIfNeeded() const
         // encoding for this system
         if ( !m_name && m_encoding == wxFONTENCODING_SYSTEM )
         {
-            self->m_encoding = wxLocale::GetSystemEncoding();
+            self->m_name = wxStrdup(wxLocale::GetSystemEncodingName());
         }
 #endif // wxUSE_INTL
 
