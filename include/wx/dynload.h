@@ -109,7 +109,7 @@ public:
     static const wxString   &GetDllExt() { return ms_dllext; }
 
     wxDynamicLibrary() : m_handle(0) {}
-    wxDynamicLibrary(wxString libname, wxDLFlags flags = wxDL_DEFAULT)
+    wxDynamicLibrary(wxString libname, int flags = wxDL_DEFAULT)
         : m_handle(0)
     {
         Load(libname, flags);
@@ -123,7 +123,7 @@ public:
         // load the library with the given name
         // (full or not), return TRUE on success
 
-    bool Load(wxString libname, wxDLFlags flags = wxDL_DEFAULT);
+    bool Load(wxString libname, int flags = wxDL_DEFAULT);
 
         // unload the library, also done automatically in dtor
 
@@ -186,7 +186,7 @@ public:
 
     static wxDLImports ms_classes;  // Static hash of all imported classes.
 
-    wxPluginLibrary( const wxString &libname, wxDLFlags flags = wxDL_DEFAULT );
+    wxPluginLibrary( const wxString &libname, int flags = wxDL_DEFAULT );
     ~wxPluginLibrary();
 
     wxPluginLibrary  *RefLib() { ++m_linkcount; return this; }
@@ -241,7 +241,7 @@ public:
         // Static accessors.
 
     static wxPluginLibrary    *LoadLibrary( const wxString &libname,
-                                            wxDLFlags flags = wxDL_DEFAULT );
+                                            int flags = wxDL_DEFAULT );
     static bool                UnloadLibrary(const wxString &libname);
 
         // This is used by wxDllLoader.  It's wrapped in the compatibility
@@ -254,13 +254,13 @@ public:
         // Instance methods.
 
     wxPluginManager() : m_entry(0) {};
-    wxPluginManager(const wxString &libname, wxDLFlags flags = wxDL_DEFAULT)
+    wxPluginManager(const wxString &libname, int flags = wxDL_DEFAULT)
     {
         Load(libname, flags);
     }
     ~wxPluginManager() { Unload(); }
 
-    bool   Load(const wxString &libname, wxDLFlags flags = wxDL_DEFAULT);
+    bool   Load(const wxString &libname, int flags = wxDL_DEFAULT);
     void   Unload();
 
     bool   IsLoaded() const { return m_entry && m_entry->IsLoaded(); }

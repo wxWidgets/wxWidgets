@@ -71,7 +71,7 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 #endif
 }
 
-bool wxDynamicLibrary::Load(wxString libname, wxDLFlags flags)
+bool wxDynamicLibrary::Load(wxString libname, int flags)
 {
     wxASSERT_MSG(m_handle == 0, _T("Library already loaded."));
 
@@ -242,7 +242,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
         symbol = NSAddressOfSymbol( NSLookupAndBindSymbol( name.c_str() ) );
 
 #elif defined(__WINDOWS__)
-    symbol = ::GetProcAddress( m_handle, name.c_str() );
+    symbol = ::GetProcAddress( m_handle, name.mb_str() );
 
 #else
 #error  "runtime shared lib support not implemented"
@@ -278,7 +278,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
 
 wxDLImports  wxPluginLibrary::ms_classes(wxKEY_STRING);
 
-wxPluginLibrary::wxPluginLibrary(const wxString &libname, wxDLFlags flags)
+wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
         : m_linkcount(1)
         , m_objcount(0)
 {
@@ -459,7 +459,7 @@ wxDLManifest   wxPluginManager::ms_manifest(wxKEY_STRING);
 // Static accessors
 // ------------------------
 
-wxPluginLibrary *wxPluginManager::LoadLibrary(const wxString &libname, wxDLFlags flags)
+wxPluginLibrary *wxPluginManager::LoadLibrary(const wxString &libname, int flags)
 {
     wxString realname(libname);
 
@@ -522,7 +522,7 @@ wxPluginLibrary *wxPluginManager::GetObjectFromHandle(wxDllType handle)
 // Class implementation
 // ------------------------
 
-bool wxPluginManager::Load(const wxString &libname, wxDLFlags flags)
+bool wxPluginManager::Load(const wxString &libname, int flags)
 {
     m_entry = wxPluginManager::LoadLibrary(libname, flags);
     return IsLoaded();
