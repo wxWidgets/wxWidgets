@@ -176,11 +176,24 @@ class ListCtrlAutoWidthMixin:
     def __init__(self):
         """ Standard initialiser.
         """
-        self._lastColMinWidth = None
-
+        self._resizeColMinWidth = None
+        self._resizeColStyle = "LAST"
+        self._resizeCol = 0
         self.Bind(wx.EVT_SIZE, self._onResize)
         self.Bind(wx.EVT_LIST_COL_END_DRAG, self._onResize, self)
 
+
+    def setResizeColumn(self, col):
+        """
+        Specify which column that should be autosized.  Pass either
+        'LAST' or the column number.  Default is 'LAST'.
+        """
+        if col == "LAST":
+            self._resizeColStyle = "LAST"
+        else:
+            self._resizeColStyle = "COL"
+            self._resizeCol = col
+        
 
     def resizeLastColumn(self, minWidth):
         """ Resize the last column appropriately.
@@ -196,8 +209,13 @@ class ListCtrlAutoWidthMixin:
 
             'minWidth' is the preferred minimum width for the last column.
         """
-        self._lastColMinWidth = minWidth
+        self.resizeCloumn(self, minWidth)
+
+
+    def resizeColumn(self, minWidth):
+        self._resizeColMinWidth = minWidth
         self._doResize()
+        
 
     # =====================
     # == Private Methods ==
@@ -231,8 +249,13 @@ class ListCtrlAutoWidthMixin:
         numCols = self.GetColumnCount()
         if numCols == 0: return # Nothing to resize.
 
-        if self._lastColMinWidth == None:
-            self._lastColMinWidth = self.GetColumnWidth(numCols - 1)
+        if(self._resizeColStyle == "LAST"):
+            resizeCol = self.GetColumnCount()
+        else:
+            resizeCol = self._resizeCol
+
+        if self._resizeColMinWidth == None:
+            self._resizeColMinWidth = self.GetColumnWidth(resizeCol - 1)
 
         # We're showing the vertical scrollbar -> allow for scrollbar width
         # NOTE: on GTK, the scrollbar is included in the client size, but on
@@ -244,21 +267,23 @@ class ListCtrlAutoWidthMixin:
                 listWidth = listWidth - scrollWidth
 
         totColWidth = 0 # Width of all columns except last one.
-        for col in range(numCols-1):
-            totColWidth = totColWidth + self.GetColumnWidth(col)
+        for col in range(numCols):
+            if col != (resizeCol-1):
+                totColWidth = totColWidth + self.GetColumnWidth(col)
 
-        lastColWidth = self.GetColumnWidth(numCols - 1)
+        resizeColWidth = self.GetColumnWidth(resizeCol - 1)
 
-        if totColWidth + self._lastColMinWidth > listWidth:
+        if totColWidth + self._resizeColMinWidth > listWidth:
             # We haven't got the width to show the last column at its minimum
             # width -> set it to its minimum width and allow the horizontal
             # scrollbar to show.
-            self.SetColumnWidth(numCols-1, self._lastColMinWidth)
+            self.SetColumnWidth(resizeCol-1, self._resizeColMinWidth)
             return
 
         # Resize the last column to take up the remaining available space.
 
-        self.SetColumnWidth(numCols-1, listWidth - totColWidth)
+        self.SetColumnWidth(resizeCol-1, listWidth - totColWidth)
+
 
 
 
@@ -394,7 +419,10 @@ class TextEditMixin:
         editor = wx.PreTextCtrl()
         
         style =wx.TE_PROCESS_ENTER|wx.TE_PROCESS_TAB|wx.TE_RICH2
-        style |= {wx.LIST_FORMAT_LEFT: wx.TE_LEFT, wx.LIST_FORMAT_RIGHT: wx.TE_RIGHT, wx.LIST_FORMAT_CENTRE : wx.TE_CENTRE}[col_style]
+        style |= {wx.LIST_FORMAT_LEFT: wx.TE_LEFT,
+                  wx.LIST_FORMAT_RIGHT: wx.TE_RIGHT,
+                  wx.LIST_FORMAT_CENTRE : wx.TE_CENTRE
+                  }[col_style]
         
         editor.Create(self, -1, style=style)
         editor.SetBackgroundColour(wx.Colour(red=255,green=255,blue=175)) #Yellow
@@ -493,7 +521,7 @@ class TextEditMixin:
 
         scrolloffset = self.GetScrollPos(wx.HORIZONTAL)
 
-        # scroll foreward
+        # scroll forward
         if x0+x1-scrolloffset > self.GetSize()[0]:
             if wx.Platform == "__WXMSW__":
                 # don't start scrolling unless we really need to
@@ -512,6 +540,9 @@ class TextEditMixin:
                 # Since we can not programmatically scroll the ListCtrl
                 # close the editor so the user can scroll and open the editor
                 # again
+                self.editor.SetValue(self.GetItem(row, col).GetText())
+                self.curRow = row
+                self.curCol = col
                 self.CloseEditor()
                 return
 
