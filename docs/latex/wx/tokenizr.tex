@@ -10,7 +10,7 @@ string to tokenize and also the delimiters which separate tokens in the string
 
 Then \helpref{GetNextToken}{wxstringtokenizergetnexttoken} may be called
 repeatedly until it \helpref{HasMoreTokens}{wxstringtokenizerhasmoretokens} 
-returns false.
+returns \false.
 
 For example:
 
@@ -66,6 +66,7 @@ the standard {\tt strtok()} function. The empty tokens are never returned.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxStringTokenizer::wxStringTokenizer}\label{wxstringtokenizerwxstringtokenizer}
 
 \func{}{wxStringTokenizer}{\void}
@@ -79,23 +80,31 @@ methods.
 Constructor. Pass the string to tokenize, a string containing delimiters
 and the mode specifying how the string should be tokenized.
 
+
 \membersection{wxStringTokenizer::CountTokens}\label{wxstringtokenizercounttokens}
 
 \constfunc{int}{CountTokens}{\void}
 
-Returns the number of tokens in the input string.
+Returns the number of tokens remaining in the input string. The number of
+tokens returned by this function is decremented each time 
+\helpref{GetNextToken}{wxstringtokenizergetnexttoken} is called and when it
+reaches $0$ \helpref{HasMoreTokens}{wxstringtokenizerhasmoretokens} returns
+\false.
+
 
 \membersection{wxStringTokenizer::HasMoreTokens}\label{wxstringtokenizerhasmoretokens}
 
 \constfunc{bool}{HasMoreTokens}{\void}
 
-Returns true if the tokenizer has further tokens, false if none are left.
+Returns \true if the tokenizer has further tokens, \false if none are left.
+
 
 \membersection{wxStringTokenizer::GetNextToken}\label{wxstringtokenizergetnexttoken}
 
 \func{wxString}{GetNextToken}{\void}
 
 Returns the next token or empty string if the end of string was reached.
+
 
 \membersection{wxStringTokenizer::GetPosition}\label{wxstringtokenizergetposition}
 
@@ -105,11 +114,13 @@ Returns the current position (i.e. one index after the last returned
 token or 0 if GetNextToken() has never been called) in the original
 string.
 
+
 \membersection{wxStringTokenizer::GetString}\label{wxstringtokenizergetstring}
 
 \constfunc{wxString}{GetString}{\void}
 
 Returns the part of the starting string without all token already extracted.
+
 
 \membersection{wxStringTokenizer::SetString}\label{wxstringtokenizersetstring}
 
