@@ -1995,7 +1995,7 @@ if test "$ac_cv_prog_gcc" = "yes"; then
 fi
 EXTRA_CFLAGS="$WXDEBUG $PROFILE $OPTIMISE $INCLUDES"
 
-CPPFLAGS="-I\${top_srcdir}/include/wx $CPPFLAGS"
+CPPFLAGS="-I\${top_srcdir}/include $CPPFLAGS"
 CFLAGS="$CFLAGS $EXTRA_CFLAGS"
 CXXFLAGS="$CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS"
 
