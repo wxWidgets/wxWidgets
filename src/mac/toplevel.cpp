@@ -234,6 +234,8 @@ void wxTopLevelWindowMac::SetIcon(const wxIcon& icon)
 
 EventHandlerUPP wxMacWindowEventHandlerUPP = NULL ;
 
+extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
+
 pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
@@ -243,8 +245,18 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
         case kEventClassTextInput :
             if ( wxMacConvertEventToRecord( event , &rec ) )
             {
-                wxTheApp->MacHandleOneEvent( &rec ) ;
-                result = noErr ;
+                short keycode ;
+                short keychar ;
+                keychar = short(rec.message & charCodeMask);
+                keycode = short(rec.message & keyCodeMask) >> 8 ;
+                long keyval = wxMacTranslateKey(keychar, keycode) ;
+                wxWindow* focus = wxWindow::FindFocus() ;
+
+                if ( wxTheApp->MacSendKeyDownEvent( focus , keyval , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
+                {
+                    // was handled internally
+                    result = noErr ;
+                }
             }
             break ;
         default :

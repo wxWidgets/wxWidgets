@@ -1031,7 +1031,7 @@ bool wxApp::OnInit()
     if ( ! wxAppBase::OnInit() )
         return FALSE ;
     
-#if TARGET_CARBON
+#if 0 // TARGET_CARBON
 	static const EventTypeSpec eventList[] = 
 	{
 	    { kEventClassKeyboard, kEventRawKeyDown } ,
@@ -1718,7 +1718,7 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
     if ( HiWord( menuresult ) )
     {
         if ( !s_macIsInModalLoop )
-        MacHandleMenuSelect( HiWord( menuresult ) , LoWord( menuresult ) ) ;
+            MacHandleMenuSelect( HiWord( menuresult ) , LoWord( menuresult ) ) ;
     }
     else
     {
@@ -1726,96 +1726,102 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
         short keychar ;
         keychar = short(ev->message & charCodeMask);
         keycode = short(ev->message & keyCodeMask) >> 8 ;
-        // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
-        if ( ev->modifiers & controlKey && keychar >= 0 && keychar < 0x20 )
-        {
-            keychar += 0x40 ;
-        }
         long keyval = wxMacTranslateKey(keychar, keycode) ;
-        bool handled = false ;
         wxWindow* focus = wxWindow::FindFocus() ;
-        if ( focus )
-        {
 
-            wxKeyEvent event(wxEVT_KEY_DOWN);
-            event.m_shiftDown = ev->modifiers & shiftKey;
-            event.m_controlDown = ev->modifiers & controlKey;
-            event.m_altDown = ev->modifiers & optionKey;
-            event.m_metaDown = ev->modifiers & cmdKey;
-            event.m_keyCode = keyval;
-            event.m_x = ev->where.h;
-            event.m_y = ev->where.v;
-            event.m_timeStamp = ev->when;
-            event.SetEventObject(focus);
-            handled = focus->GetEventHandler()->ProcessEvent( event ) ;
-            if ( handled && event.GetSkipped() )
-                handled = false ;
-            if ( !handled )
+        if ( MacSendKeyDownEvent( focus , keyval , ev->modifiers , ev->when , ev->where.h , ev->where.v ) == false )
+        {
+            // has not been handled -> perform default
+            wxControl* control = wxDynamicCast( focus , wxControl ) ;
+            if ( control &&  control->GetMacControl() != NULL )
             {
+                ::HandleControlKey( (ControlHandle) control->GetMacControl() , keycode , keychar , ev->modifiers ) ;
+            }
+        }
+    }
+}
+
+bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey )
+{
+    bool handled = false ;
+    // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
+    if ( modifiers & controlKey && keyval >= 0 && keyval < 0x20 )
+    {
+        keyval += 0x40 ;
+    }
+    wxKeyEvent event(wxEVT_KEY_DOWN);
+    event.m_shiftDown = modifiers & shiftKey;
+    event.m_controlDown = modifiers & controlKey;
+    event.m_altDown = modifiers & optionKey;
+    event.m_metaDown = modifiers & cmdKey;
+    event.m_keyCode = keyval;
+
+    event.m_x = wherex;
+    event.m_y = wherey;
+    event.m_timeStamp = when;
+    event.SetEventObject(focus);
+    handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    if ( handled && event.GetSkipped() )
+        handled = false ;
+    if ( !handled )
+    {
 #if wxUSE_ACCEL
-                if (!handled)
-                {
-                    wxWindow *ancestor = focus;
-                    while (ancestor)
-                    {
-                        int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-                        if (command != -1)
-                        {
-                            wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                            handled = ancestor->GetEventHandler()->ProcessEvent( command_event );
-                            break;
-                        }
-                        if (ancestor->IsTopLevel())
-                            break;
-                        ancestor = ancestor->GetParent();
-                    }
-                }
-#endif // wxUSE_ACCEL
-            }
-            if (!handled)
+        if (!handled)
+        {
+            wxWindow *ancestor = focus;
+            while (ancestor)
             {
-                wxKeyEvent event(wxEVT_CHAR);
-                event.m_shiftDown = ev->modifiers & shiftKey;
-                event.m_controlDown = ev->modifiers & controlKey;
-                event.m_altDown = ev->modifiers & optionKey;
-                event.m_metaDown = ev->modifiers & cmdKey;
-                event.m_keyCode = keyval;
-                event.m_x = ev->where.h;
-                event.m_y = ev->where.v;
-                event.m_timeStamp = ev->when;
-                event.SetEventObject(focus);
-                handled = focus->GetEventHandler()->ProcessEvent( event ) ;
-                if ( handled && event.GetSkipped() )
-                    handled = false ;
+                int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+                if (command != -1)
+                {
+                    wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                    handled = ancestor->GetEventHandler()->ProcessEvent( command_event );
+                    break;
+                }
+                if (ancestor->IsTopLevel())
+                    break;
+                ancestor = ancestor->GetParent();
             }
-            if ( !handled &&
-                 (keyval == WXK_TAB) &&
+        }
+#endif // wxUSE_ACCEL
+    }
+    if (!handled)
+    {
+        event.Skip( FALSE ) ;
+        event.SetEventType( wxEVT_CHAR ) ;
+
+        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+        if ( handled && event.GetSkipped() )
+            handled = false ;
+    }
+    if ( !handled &&
+         (keyval == WXK_TAB) &&
 // CS: copied the change below from wxGTK
 // VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
 //     have this style, yet choose not to process this particular TAB in which
 //     case TAB must still work as a navigational character
 #if 0
-                 (!focus->HasFlag(wxTE_PROCESS_TAB)) &&
+         (!focus->HasFlag(wxTE_PROCESS_TAB)) &&
 #endif
-                 (focus->GetParent()) &&
-                 (focus->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
-            {
-                wxNavigationKeyEvent new_event;
-                new_event.SetEventObject( focus );
-                new_event.SetDirection( !event.ShiftDown() );
-                /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
-                new_event.SetWindowChange( event.ControlDown() );
-                new_event.SetCurrentFocus( focus );
-                handled = focus->GetEventHandler()->ProcessEvent( new_event );
-                if ( handled && new_event.GetSkipped() )
-                    handled = false ;
-            }
-        }
-        if ( !handled )
-        {
-            // if window is not having a focus still testing for default enter or cancel
-            // TODO add the UMA version for ActiveNonFloatingWindow
-          focus = wxFindWinFromMacWindow( FrontWindow() ) ;
+         (focus->GetParent()) &&
+         (focus->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+    {
+        wxNavigationKeyEvent new_event;
+        new_event.SetEventObject( focus );
+        new_event.SetDirection( !event.ShiftDown() );
+        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+        new_event.SetWindowChange( event.ControlDown() );
+        new_event.SetCurrentFocus( focus );
+        handled = focus->GetEventHandler()->ProcessEvent( new_event );
+        if ( handled && new_event.GetSkipped() )
+            handled = false ;
+    }
+    // backdoor handler for default return and command escape
+    if ( !handled && (!focus->IsKindOf(CLASSINFO(wxControl) ) || !focus->MacCanFocus() ) )
+    {
+          // if window is not having a focus still testing for default enter or cancel
+          // TODO add the UMA version for ActiveNonFloatingWindow
+          wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
           if ( focus )
           {
             if ( keyval == WXK_RETURN )
@@ -1827,20 +1833,21 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
                      wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
                      event.SetEventObject(def);
                      def->Command(event);
-                     return ;
+                     return true ;
                 }
             }
             /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
-            else if (keyval == WXK_ESCAPE || (keyval == '.' && ev->modifiers & cmdKey ) )
+            else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
             {
                   wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
                   new_event.SetEventObject( focus );
                   handled = focus->GetEventHandler()->ProcessEvent( new_event );
             }
           }
-        }
     }
+    return handled ;
 }
+
 
 void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
 {
@@ -1857,27 +1864,39 @@ void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
         short keychar ;
         keychar = short(ev->message & charCodeMask);
         keycode = short(ev->message & keyCodeMask) >> 8 ;
+        long keyval = wxMacTranslateKey(keychar, keycode) ;
 
         wxWindow* focus = wxWindow::FindFocus() ;
-        if ( focus )
-        {
-            long keyval = wxMacTranslateKey(keychar, keycode) ;
-
-            wxKeyEvent event(wxEVT_KEY_UP);
-            event.m_shiftDown = ev->modifiers & shiftKey;
-            event.m_controlDown = ev->modifiers & controlKey;
-            event.m_altDown = ev->modifiers & optionKey;
-            event.m_metaDown = ev->modifiers & cmdKey;
-            event.m_keyCode = keyval;
-            event.m_x = ev->where.h;
-            event.m_y = ev->where.v;
-            event.m_timeStamp = ev->when;
-            event.SetEventObject(focus);
-            bool handled = focus->GetEventHandler()->ProcessEvent( event ) ;
-        }
+        bool handled = MacSendKeyUpEvent( focus , keyval , ev->modifiers , ev->when , ev->where.h , ev->where.v ) ;
+        // we don't have to do anything under classic here
     }
 }
 
+bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey )
+{
+    bool handled = false ;
+    // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
+    if ( modifiers & controlKey && keyval >= 0 && keyval < 0x20 )
+    {
+        keyval += 0x40 ;
+    }
+    if ( focus )
+    {
+        wxKeyEvent event(wxEVT_KEY_UP);
+        event.m_shiftDown = modifiers & shiftKey;
+        event.m_controlDown = modifiers & controlKey;
+        event.m_altDown = modifiers & optionKey;
+        event.m_metaDown = modifiers & cmdKey;
+        event.m_keyCode = keyval;
+
+        event.m_x = wherex;
+        event.m_y = wherey;
+        event.m_timeStamp = when;
+        event.SetEventObject(focus);
+        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    }
+    return handled ;
+}
 void wxApp::MacHandleActivateEvent( WXEVENTREF evr )
 {
     EventRecord* ev = (EventRecord*) evr ;
