@@ -149,6 +149,14 @@ public:
     // dtor will save unsaved data
   virtual ~wxFileConfig();
 
+  // under Unix, set the umask to be used for the file creation, do nothing
+  // under other systems
+#ifdef __UNIX__
+  void SetUmask(int mode) { m_umask = mode; }
+#else // !__UNIX__
+  void SetUmask(int WXUNUSED(mode)) { }
+#endif // __UNIX__/!__UNIX__
+
   // implement inherited pure virtual functions
   virtual void SetPath(const wxString& strPath);
   virtual const wxString& GetPath() const { return m_strPath; }
@@ -243,6 +251,10 @@ private:
 
   ConfigGroup *m_pRootGroup,      // the top (unnamed) group
               *m_pCurrentGroup;   // the current group
+
+#ifdef __UNIX__
+  int m_umask;                    // the umask to use for file creation
+#endif // __UNIX__
 
 public:
   WX_DEFINE_SORTED_ARRAY(ConfigEntry *, ArrayEntries);

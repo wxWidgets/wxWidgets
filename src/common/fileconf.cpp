@@ -54,6 +54,12 @@
 #include  <stdlib.h>
 #include  <ctype.h>
 
+// headers needed for umask()
+#ifdef __UNIX__
+    #include <sys/types.h>
+    #include <sys/stat.h>
+#endif // __UNIX__
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -370,6 +376,8 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
           m_strGlobalFile << strGlobal;
       }
   }
+
+  SetUmask(-1);
 
   Init();
 }
@@ -767,6 +775,15 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() || !m_strLocalFile )
     return TRUE;
 
+#ifdef __UNIX__
+  // set the umask if needed
+  mode_t umaskOld = 0;
+  if ( m_umask != -1 )
+  {
+      umaskOld = umask((mode_t)m_umask);
+  }
+#endif // __UNIX__
+
   wxTempFile file(m_strLocalFile);
 
   if ( !file.IsOpened() ) {
@@ -782,10 +799,9 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
     }
   }
 
-#ifndef __WXMAC__
-  return file.Commit();
-#else
   bool ret = file.Commit();
+
+#ifdef __WXMAC__
   if ( ret )
   {
   	FSSpec spec ;
@@ -799,8 +815,17 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   		FSpSetFInfo( &spec , &finfo ) ;
   	}
   }
-  return ret ;
-#endif
+#endif // __WXMAC__
+
+#ifdef __UNIX__
+  // restore the old umask if we changed it
+  if ( m_umask != -1 )
+  {
+      (void)umask(umaskOld);
+  }
+#endif // __UNIX__
+
+  return ret;
 }
 
 // ----------------------------------------------------------------------------

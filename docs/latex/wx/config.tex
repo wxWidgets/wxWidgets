@@ -241,10 +241,11 @@ actually enumerating them, but you will probably never need them.
 \helpref{Exists}{wxconfigbaseexists}\\
 \helpref{GetEntryType}{wxconfigbasegetentrytype}
 
-\membersection{Miscellaneous accessors}
+\membersection{Miscellaneous functions}
 
 \helpref{GetAppName}{wxconfigbasegetappname}\\
-\helpref{GetVendorName}{wxconfigbasegetvendorname}
+\helpref{GetVendorName}{wxconfigbasegetvendorname}\\
+\helpref{SetUmask}{wxfileconfigsetumask}
 
 \membersection{Key access}
 
@@ -682,6 +683,19 @@ Sets whether defaults are written back to the config file.
 If on (default is off) all default values are written back to the config file.
 This allows the user to see what config options may be changed and is probably
 useful only for wxFileConfig.
+
+\membersection{wxFileConfig::SetUmask}{wxfileconfigsetumask}
+
+\func{void}{SetUmask}{\param{int }{mode}}
+
+{\bf NB:} this function is not in the base wxConfigBase class but is only
+implemented in wxFileConfig. Moreover, this function is Unix-specific and
+doesn't do anything on other platforms.
+
+SetUmask() allows to set the mode to be used for the config file creation.
+For example, to create a config file which is not readable by other users
+(useful if it stores some sensitive information, such as passwords), you
+should do {\tt SetUmask(0077)}.
 
 \membersection{wxConfigBase::Write}\label{wxconfigbasewrite}
 
