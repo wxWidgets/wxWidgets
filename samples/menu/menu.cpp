@@ -31,6 +31,7 @@
     #include "wx/msgdlg.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
+    #include "wx/textdlg.h"
 #endif
 
 #if !wxUSE_MENUS
@@ -251,7 +252,7 @@ bool MyApp::OnInit()
 // Define my frame constructor
 MyFrame::MyFrame()
        : wxFrame((wxFrame *)NULL, -1, "wxWindows menu sample",
-                 wxDefaultPosition, wxSize(300, 200))
+                 wxDefaultPosition, wxSize(400, 250))
 {
     m_textctrl = NULL;
     m_menu = NULL;
@@ -340,12 +341,14 @@ MyFrame::MyFrame()
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE);
     m_textctrl->SetEditable(FALSE);
+
+    wxLog::SetTimestamp(NULL);
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_textctrl));
 
-    wxLogMessage(_T("Brief explanations: the commands or the \"Menu\" menu\n")
+    wxLogMessage(_T("Brief explanations: the commands or the \"Menu\" menu ")
                  _T("append/insert/delete items to/from the last menu.\n")
-                 _T("The commands from \"Menubar\" menu work with the\n")
-                 _T("menubar itself.\n")
+                 _T("The commands from \"Menubar\" menu work with the ")
+                 _T("menubar itself.\n\n")
                  _T("Right click the band below to test popup menus.\n"));
 }
 
@@ -489,6 +492,8 @@ void MyFrame::OnGetLabelMenu(wxCommandEvent& WXUNUSED(event))
     wxMenuBar *mbar = GetMenuBar();
     size_t count = mbar->GetMenuCount();
 
+    wxCHECK_RET( count, _T("no last menu?") );
+
     wxLogMessage(wxT("The label of the last menu item is '%s'"),
                  mbar->GetLabelTop(count - 1).c_str());
 }
@@ -498,7 +503,20 @@ void MyFrame::OnSetLabelMenu(wxCommandEvent& WXUNUSED(event))
     wxMenuBar *mbar = GetMenuBar();
     size_t count = mbar->GetMenuCount();
 
-    mbar->SetLabelTop(count - 1, "Dummy label &0");
+    wxCHECK_RET( count, _T("no last menu?") );
+
+    wxString label = wxGetTextFromUser
+                     (
+                        _T("Enter new label: "),
+                        _T("Change last menu text"),
+                        mbar->GetLabelTop(count - 1),
+                        this
+                     );
+
+    if ( !label.empty() )
+    {
+        mbar->SetLabelTop(count - 1, label);
+    }
 }
 
 void MyFrame::OnDummy(wxCommandEvent& event)
@@ -595,7 +613,18 @@ void MyFrame::OnSetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
 
     if ( item )
     {
-        item->SetText("Dummy menu item text");
+        wxString label = wxGetTextFromUser
+                         (
+                            _T("Enter new label: "),
+                            _T("Change last menu item text"),
+                            item->GetLabel(),
+                            this
+                         );
+
+        if ( !label.empty() )
+        {
+            item->SetText(label);
+        }
     }
 }
 
