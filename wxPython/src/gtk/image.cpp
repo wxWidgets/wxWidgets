@@ -58,47 +58,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/image.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -2134,11 +2115,7 @@ static PyMethodDef imagecMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxAcceleratorTable","_class_wxAcceleratorTable",0},
     { "_signed_long","_long",0},
-    { "_class_wxJPEGHandler","_wxJPEGHandler",0},
-    { "_wxBMPHandler","_class_wxBMPHandler",0},
-    { "_wxImage","_class_wxImage",0},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -2148,10 +2125,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxRegionIterator","_wxRegionIterator",0},
-    { "_wxGIFHandler","_class_wxGIFHandler",0},
-    { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
-    { "_wxCursor","_class_wxCursor",0},
     { "_wxImageHandler","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
     { "_wxImageHandler","_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
     { "_wxImageHandler","_class_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
@@ -2166,18 +2139,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxImageHandler","_wxJPEGHandler",SwigwxJPEGHandlerTowxImageHandler},
     { "_wxImageHandler","_class_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
     { "_wxImageHandler","_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
-    { "_wxImageHandler","_class_wxImageHandler",0},
-    { "_wxMask","_class_wxMask",0},
-    { "_wxPNGHandler","_class_wxPNGHandler",0},
-    { "_wxPen","_class_wxPen",0},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_wxImageList","_class_wxImageList",0},
-    { "_class_wxTIFFHandler","_wxTIFFHandler",0},
-    { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
-    { "_wxDC","_class_wxDC",0},
-    { "_class_wxBMPHandler","_wxBMPHandler",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -2185,14 +2149,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_class_wxRealPoint","_wxRealPoint",0},
-    { "_wxPNMHandler","_class_wxPNMHandler",0},
-    { "_class_wxGIFHandler","_wxGIFHandler",0},
-    { "_class_wxPostScriptDC","_wxPostScriptDC",0},
-    { "_class_wxMask","_wxMask",0},
-    { "_class_wxPNGHandler","_wxPNGHandler",0},
-    { "_wxColour","_class_wxColour",0},
-    { "_wxBrush","_class_wxBrush",0},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -2201,51 +2157,25 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_wxRect","_class_wxRect",0},
-    { "_class_wxImage","_wxImage",0},
-    { "_wxPoint","_class_wxPoint",0},
-    { "_class_wxPNMHandler","_wxPNMHandler",0},
     { "_char","_wxChar",0},
-    { "_wxBitmap","_class_wxBitmap",0},
-    { "_wxWindowDC","_class_wxWindowDC",0},
-    { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
-    { "_class_wxRegion","_wxRegion",0},
-    { "_wxFont","_class_wxFont",0},
     { "_unsigned_long","_long",0},
-    { "_class_wxRect","_wxRect",0},
-    { "_class_wxDC","_wxDC",0},
-    { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
-    { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
-    { "_wxScreenDC","_class_wxScreenDC",0},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
-    { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxFont","_wxFont",0},
-    { "_wxBusyInfo","_class_wxBusyInfo",0},
-    { "_wxClientDC","_class_wxClientDC",0},
-    { "_class_wxPoint","_wxPoint",0},
-    { "_wxRealPoint","_class_wxRealPoint",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxMemoryDC","_class_wxMemoryDC",0},
-    { "_wxPaintDC","_class_wxPaintDC",0},
-    { "_class_wxWindowDC","_wxWindowDC",0},
-    { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
-    { "_class_wxCursor","_wxCursor",0},
-    { "_wxPostScriptDC","_class_wxPostScriptDC",0},
     { "_class_wxImageHandler","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
     { "_class_wxImageHandler","_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
     { "_class_wxImageHandler","_class_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
@@ -2260,7 +2190,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxImageHandler","_wxJPEGHandler",SwigwxJPEGHandlerTowxImageHandler},
     { "_class_wxImageHandler","_class_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
     { "_class_wxImageHandler","_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler},
-    { "_class_wxImageHandler","_wxImageHandler",0},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -2269,14 +2198,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
-    { "_wxIcon","_class_wxIcon",0},
-    { "_class_wxPen","_wxPen",0},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_class_wxImageList","_wxImageList",0},
-    { "_wxPCXHandler","_class_wxPCXHandler",0},
-    { "_wxJPEGHandler","_class_wxJPEGHandler",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_time_t",0},
@@ -2302,14 +2226,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_wxSize","_class_wxSize",0},
-    { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPaintDC","_wxPaintDC",0},
-    { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
-    { "_class_wxIcon","_wxIcon",0},
-    { "_class_wxColour","_wxColour",0},
-    { "_class_wxScreenDC","_wxScreenDC",0},
-    { "_wxPalette","_class_wxPalette",0},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -2319,15 +2235,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxRegion","_class_wxRegion",0},
-    { "_class_wxPCXHandler","_wxPCXHandler",0},
-    { "_wxTIFFHandler","_class_wxTIFFHandler",0},
-    { "_class_wxBusyInfo","_wxBusyInfo",0},
-    { "_class_wxClientDC","_wxClientDC",0},
-    { "_class_wxSize","_wxSize",0},
-    { "_class_wxBitmap","_wxBitmap",0},
-    { "_class_wxMemoryDC","_wxMemoryDC",0},
-    { "_class_wxPalette","_wxPalette",0},
 {0,0,0}};
 
 static PyObject *SWIG_globals;

@@ -60,47 +60,28 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/clipbrd.h>
 #include <wx/dnd.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {                         
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {                   
+    if (!target) {
         target = o;
-    } else if (target == Py_None) {  
+    } else if (target == Py_None) {
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
+    } else {
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
+        o3 = PyTuple_New(1);
+        PyTuple_SetItem(o3, 0, o);
 
         o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
+        target = PySequence_Concat(o2, o3);
+        Py_DECREF(o2);
         Py_DECREF(o3);
     }
     return target;
@@ -3369,12 +3350,9 @@ static PyMethodDef clip_dndcMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxAcceleratorTable","_class_wxAcceleratorTable",0},
     { "_signed_long","_long",0},
-    { "_wxPyBitmapDataObject","_class_wxPyBitmapDataObject",0},
     { "_wxBitmapDataObject","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
     { "_wxBitmapDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
-    { "_wxBitmapDataObject","_class_wxBitmapDataObject",0},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -3384,13 +3362,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxCustomDataObject","_wxCustomDataObject",0},
-    { "_class_wxRegionIterator","_wxRegionIterator",0},
-    { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
-    { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
-    { "_wxCursor","_class_wxCursor",0},
-    { "_wxMask","_class_wxMask",0},
-    { "_wxPen","_class_wxPen",0},
     { "_byte","_unsigned_char",0},
     { "_wxDataObject","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
     { "_wxDataObject","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
@@ -3410,12 +3381,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObject","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObject},
     { "_wxDataObject","_class_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
     { "_wxDataObject","_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
-    { "_wxDataObject","_class_wxDataObject",0},
-    { "_wxPyDataObjectSimple","_class_wxPyDataObjectSimple",0},
-    { "_wxPyDropSource","_class_wxPyDropSource",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_wxImageList","_class_wxImageList",0},
     { "_wxDataObjectSimple","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_class_wxFileDataObject",SwigwxFileDataObjectTowxDataObjectSimple},
@@ -3430,13 +3397,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObjectSimple","_wxTextDataObject",SwigwxTextDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_class_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
-    { "_wxDataObjectSimple","_class_wxDataObjectSimple",0},
-    { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
-    { "_class_wxClipboard","_wxClipboard",0},
-    { "_wxDC","_class_wxDC",0},
     { "_class_wxBitmapDataObject","_class_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
     { "_class_wxBitmapDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxBitmapDataObject},
-    { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -3444,14 +3406,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_class_wxRealPoint","_wxRealPoint",0},
-    { "_class_wxPostScriptDC","_wxPostScriptDC",0},
-    { "_class_wxMask","_wxMask",0},
     { "_wxTextDataObject","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
     { "_wxTextDataObject","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
-    { "_wxTextDataObject","_class_wxTextDataObject",0},
-    { "_wxColour","_class_wxColour",0},
-    { "_class_wxFileDataObject","_wxFileDataObject",0},
     { "_class_wxDataObject","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
     { "_class_wxDataObject","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
     { "_class_wxDataObject","_class_wxFileDataObject",SwigwxFileDataObjectTowxDataObject},
@@ -3470,9 +3426,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataObject","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObject},
     { "_class_wxDataObject","_class_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
     { "_class_wxDataObject","_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
-    { "_class_wxDataObject","_wxDataObject",0},
-    { "_wxBrush","_class_wxBrush",0},
-    { "_wxDataFormat","_class_wxDataFormat",0},
     { "_class_wxDataObjectSimple","_class_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
     { "_class_wxDataObjectSimple","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
     { "_class_wxDataObjectSimple","_class_wxFileDataObject",SwigwxFileDataObjectTowxDataObjectSimple},
@@ -3487,7 +3440,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataObjectSimple","_wxTextDataObject",SwigwxTextDataObjectTowxDataObjectSimple},
     { "_class_wxDataObjectSimple","_class_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
     { "_class_wxDataObjectSimple","_wxPyDataObjectSimple",SwigwxPyDataObjectSimpleTowxDataObjectSimple},
-    { "_class_wxDataObjectSimple","_wxDataObjectSimple",0},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -3496,46 +3448,30 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_wxRect","_class_wxRect",0},
-    { "_wxPoint","_class_wxPoint",0},
     { "_char","_wxChar",0},
-    { "_wxBitmap","_class_wxBitmap",0},
-    { "_wxWindowDC","_class_wxWindowDC",0},
-    { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_wxDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxDropTarget},
     { "_wxDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxDropTarget},
     { "_wxDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxDropTarget},
     { "_wxDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxDropTarget},
     { "_wxDropTarget","_class_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
     { "_wxDropTarget","_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
-    { "_wxDropTarget","_class_wxDropTarget",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
-    { "_class_wxRegion","_wxRegion",0},
-    { "_class_wxDataFormat","_wxDataFormat",0},
-    { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
     { "_class_wxPyDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
     { "_class_wxPyDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
     { "_class_wxPyDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
-    { "_class_wxPyDropTarget","_wxPyDropTarget",0},
     { "_unsigned_long","_long",0},
-    { "_class_wxRect","_wxRect",0},
-    { "_class_wxDC","_wxDC",0},
-    { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
-    { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
     { "_class_wxTextDataObject","_class_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
     { "_class_wxTextDataObject","_wxPyTextDataObject",SwigwxPyTextDataObjectTowxTextDataObject},
-    { "_class_wxTextDataObject","_wxTextDataObject",0},
-    { "_wxScreenDC","_class_wxScreenDC",0},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
@@ -3545,27 +3481,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxDropTarget},
     { "_class_wxDropTarget","_class_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
     { "_class_wxDropTarget","_wxPyDropTarget",SwigwxPyDropTargetTowxDropTarget},
-    { "_class_wxDropTarget","_wxDropTarget",0},
-    { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
-    { "_class_wxFont","_wxFont",0},
-    { "_wxClipboard","_class_wxClipboard",0},
-    { "_wxBusyInfo","_class_wxBusyInfo",0},
-    { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
-    { "_wxClientDC","_class_wxClientDC",0},
-    { "_class_wxPoint","_wxPoint",0},
-    { "_wxRealPoint","_class_wxRealPoint",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxMemoryDC","_class_wxMemoryDC",0},
-    { "_wxPyTextDataObject","_class_wxPyTextDataObject",0},
-    { "_wxPaintDC","_class_wxPaintDC",0},
-    { "_class_wxWindowDC","_wxWindowDC",0},
-    { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
-    { "_class_wxCursor","_wxCursor",0},
-    { "_wxPostScriptDC","_class_wxPostScriptDC",0},
-    { "_wxPyFileDropTarget","_class_wxPyFileDropTarget",0},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -3574,14 +3493,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
-    { "_wxIcon","_class_wxIcon",0},
-    { "_class_wxPen","_wxPen",0},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_class_wxPyDataObjectSimple","_wxPyDataObjectSimple",0},
-    { "_class_wxPyDropSource","_wxPyDropSource",0},
-    { "_class_wxImageList","_wxImageList",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_time_t",0},
@@ -3607,16 +3521,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_wxSize","_class_wxSize",0},
-    { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
-    { "_class_wxPaintDC","_wxPaintDC",0},
-    { "_class_wxPyFileDropTarget","_wxPyFileDropTarget",0},
-    { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
-    { "_class_wxIcon","_wxIcon",0},
-    { "_class_wxColour","_wxColour",0},
-    { "_class_wxScreenDC","_wxScreenDC",0},
-    { "_wxPalette","_class_wxPalette",0},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -3626,23 +3530,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
-    { "_wxRegion","_class_wxRegion",0},
     { "_wxPyDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
     { "_wxPyDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
     { "_wxPyDropTarget","_class_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
     { "_wxPyDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
-    { "_wxPyDropTarget","_class_wxPyDropTarget",0},
-    { "_class_wxBusyInfo","_wxBusyInfo",0},
-    { "_class_wxClientDC","_wxClientDC",0},
-    { "_wxCustomDataObject","_class_wxCustomDataObject",0},
-    { "_class_wxSize","_wxSize",0},
-    { "_class_wxBitmap","_wxBitmap",0},
-    { "_class_wxMemoryDC","_wxMemoryDC",0},
-    { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
-    { "_class_wxPalette","_wxPalette",0},
-    { "_wxFileDataObject","_class_wxFileDataObject",0},
-    { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
 {0,0,0}};
 
 static PyObject *SWIG_globals;

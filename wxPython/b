@@ -6,8 +6,12 @@ if [ "$1" = "15" ]; then
 elif [ "$1" = "20" ]; then
     PYVER=2.0
     shift
+elif [ "$1" = "21" ]; then
+    PYVER=2.1
+    shift
 fi
 
+python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 
 SETUP="python$PYVER -u setup.py"
 FLAGS="USE_SWIG=1 IN_CVS_TREE=1"
@@ -20,6 +24,16 @@ if [ "$1" =  "c" ]; then
     shift
     CMD="$SETUP $FLAGS $OTHERFLAGS clean"
     OTHERCMD="rm -f wxPython/*.so"
+
+# "d" --> clean extension modules only
+elif [ "$1" = "d" ]; then
+    shift
+    CMD="rm -f wxPython/*.so"
+
+# "t" --> touch *.i files
+elif [ "$1" = "t" ]; then
+    shift
+    CMD="set CMD=touch src\*.i; touch contrib\glcanvas\*.i; touch contrib\ogl\*.i; touch contrib\stc\*.i"
 
 # "i" --> install
 elif [ "$1" = "i" ]; then
