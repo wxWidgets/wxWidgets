@@ -70,7 +70,6 @@ gridsel.cpp	Generic
 helpext.cpp	Generic	Generic
 helphtml.cpp	Generic	Generic
 helpwxht.cpp	Generic	Generic
-helpxlp.cpp	Generic	Generic,NotGTK
 imaglist.cpp	Generic	NotWin32
 laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
@@ -678,7 +677,6 @@ cshelp.h	WXH
 helphtml.h	WXH
 helpchm.h	WXH
 helpwin.h	WXH
-helpxlp.h	WXH
 icon.h	WXH
 image.h	WXH
 imaggif.h	WXH
@@ -1163,7 +1161,6 @@ gridg.h	GenericH
 helpext.h	GenericH
 helpwxht.h	GenericH
 helphtml.h	GenericH
-helpxlp.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH
 listctrl.h	GenericH	NotWin32
