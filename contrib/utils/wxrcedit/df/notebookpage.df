@@ -1,7 +1,0 @@
-# don't delete this file!
-# it servers as helper df for notebook pages
-
-node notebookpage
-type notebookpage
-var label of text
-var selected of bool
