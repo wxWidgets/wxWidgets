@@ -221,6 +221,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dynload.h
     wx/encconv.h
     wx/event.h
+    wx/except.h
     wx/features.h
     wx/ffile.h
     wx/file.h
