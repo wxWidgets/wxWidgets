@@ -133,6 +133,7 @@ copy %src\docs\msw\readme.txt %dest\readme_msw-%version%.txt
 copy %src\docs\readme_vms.txt %dest\readme_vms-%version%.txt
 copy %src\docs\motif\makewxmotif %dest\makewxmotif-%version%
 copy %src\docs\gtk\makewxgtk %dest\makewxgtk-%version%
+copy %src\docs\base\install.txt %dest\install_base-%version%.txt
 
 Rem Skip Inno Setup if inno is 0.
 if "%inno" == "0" goto end

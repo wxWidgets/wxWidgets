@@ -977,7 +977,7 @@ void wxWindow::OnIdle(wxIdleEvent& event)
     {
         POINT pt;
         ::GetCursorPos(&pt);
-        if ( ::WindowFromPoint(pt) != GetHwnd() )
+        if ( ::WindowFromPoint(pt) != GetHwnd() && !m_winCaptured)
         {
             // Generate a LEAVE event
             m_mouseInWindow = FALSE;
