@@ -121,8 +121,8 @@ bool BrowserDB::OnStartDB(int Quite)
  //---------------------------------------------------------------------------------------
  // Connect to datasource
  //---------------------------------------------------------------------------------------
- DlgUser *p_Dlg = new DlgUser(pDoc->p_MainFrame, "Username and Password");
- p_Dlg->pDoc       = pDoc;
+ DlgUser *p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,"");
+ // p_Dlg->pDoc       = pDoc;
  p_Dlg->s_DSN      = ODBCSource;
  p_Dlg->s_User     = UserName;
  p_Dlg->s_Password = Password;

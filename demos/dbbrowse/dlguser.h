@@ -27,7 +27,7 @@ class DlgUser: public wxDialog
  wxButton *m_OK, *m_Cancel;
  mjDoc *pDoc;
  //---------------------------------------------------------------------------------------
- DlgUser(wxWindow *parent, const wxString& title);
+ DlgUser(wxWindow *parent,mjDoc *pDoc, const wxString& title);
  void OnInit();
  void OnOk(wxCommandEvent& event);
  //---------------------------------------------------------------------------------------

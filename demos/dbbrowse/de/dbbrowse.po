@@ -195,6 +195,10 @@ msgid   "OK"
 msgstr  ""
 
 #: ../BrowserDB.cpp:47
+msgid   "None"
+msgstr  "Keine"
+
+#: ../BrowserDB.cpp:47
 msgid   "Message"
 msgstr  "Nachricht"
 

@@ -107,7 +107,7 @@ DBTree::~DBTree()
 int  DBTree::OnPopulate()
 {
  wxTreeItemId Root, Folder, Docu, Funkt;
- int i,x,y, TableType;
+ int i,x,y,z=0, TableType;
  wxString SQL_TYPE, DB_TYPE;
  SetFont(* pDoc->ft_Doc);
  //---------------------------------------------------------------------------------------
@@ -154,7 +154,10 @@ int  DBTree::OnPopulate()
        if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkCol != 0)  // Primary Key
        {
         Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_KEY,TreeIc_KEY,new DBTreeData(Temp1));
-        Temp2.Printf(_("This Key is used in the following Tables : %s"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkTableName);
+        Temp2 = ((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkTableName;
+        if (Temp2 == "")
+         Temp2 = _("None");
+        Temp2.Printf(_("This Key is used in the following Tables : %s"),Temp2);
         Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEY"));
        }
        else
@@ -193,6 +196,12 @@ int  DBTree::OnPopulate()
      }   // if ((ct_BrowserDB->pTableInf+x)->pColInf)
      else
       Folder = AppendItem(Root,Temp0,TreeIc_FolderClosed,TreeIc_FolderOpen, new DBTreeData(Temp1));
+     z++;
+     if (z % 10 == 0)
+     {
+      Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - Table %6d has been read."),(ct_BrowserDB->pTableInf+x)->tableName,z);
+      pDoc->p_MainFrame->SetStatusText(Temp0, 0);
+     }
     }    // if ((ct_BrowserDB->pTableInf+x)->tableType == "TABLE" or VIEW)
     // else
     //  wxLogMessage(_("\n-I-> if ! TABLE or VIEW  >%s<"),(ct_BrowserDB->pTableInf+x)->tableType);
@@ -201,6 +210,8 @@ int  DBTree::OnPopulate()
   else
    wxLogMessage(_("\n-E-> DBTree::OnPopulate() : Invalid Catalog Pointer : Failed"));
   wxEndBusyCursor();
+  Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - Tables %6d have been read."),(ct_BrowserDB->pTableInf+x)->tableName,z);
+  pDoc->p_MainFrame->SetStatusText(Temp0, 0);
  }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))
  else
  {

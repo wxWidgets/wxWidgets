@@ -253,13 +253,14 @@ void PgmCtrl::OnUserPassword()
 {
  // wxMessageBox(SaveDSN);
  int i;
- //-------------------------------------------
- DlgUser *p_Dlg = new DlgUser(this, "Username and Password");
+ //--------------------------------------------
+ DlgUser *p_Dlg = new DlgUser(this,pDoc,"");
  //-------------------------------------------
  for (i=0;i<pDoc->i_DSN;i++)
  {
   if (SaveDSN == (pDoc->p_DSN+i)->Dsn)
   {
+   p_Dlg->pDoc       = pDoc;
    p_Dlg->s_DSN      = (pDoc->p_DSN+i)->Dsn;
    p_Dlg->s_User     = (pDoc->p_DSN+i)->Usr;
    p_Dlg->s_Password = (pDoc->p_DSN+i)->Pas;
