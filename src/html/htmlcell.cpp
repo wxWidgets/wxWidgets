@@ -65,7 +65,7 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
 
 
 
-bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
+bool wxHtmlCell::AdjustPagebreak(int *pagebreak) const
 {
     if ((!m_CanLiveOnPagebreak) && 
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak) {
@@ -100,15 +100,108 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     
     if (m_Word.Find(wxT('&')) != -1) 
     {
+#define ESCSEQ(escape, subst)  \
+                  { wxT("&"escape";"), wxT("&"escape" "), wxT(subst) } 
         static wxChar* substitutions[][3] = 
                 {
-                    { wxT("&nbsp;"), wxT("&nbsp "), wxT(" ") },
-                    { wxT("&copy;"), wxT("&copy "), wxT("(c)") },
-                    { wxT("&quot;"), wxT("&quot "), wxT("\"") },
-                    { wxT("&lt;"), wxT("&lt "), wxT("<") },
-                    { wxT("&gt;"), wxT("&gt "), wxT(">") },
-                    { wxT("&amp;"), wxT("&amp "), wxT("&")  /*this one should be last one*/ },
-                    { NULL, NULL, NULL }
+                ESCSEQ("quot", "\""),
+                ESCSEQ("lt", "<"),
+                ESCSEQ("gt", ">"),
+    
+                ESCSEQ("nbsp", " "),
+                ESCSEQ("iexcl", "!"),
+                ESCSEQ("cent", "¢"),
+    
+                ESCSEQ("yen", " "),
+                ESCSEQ("brkbar", " "),
+                ESCSEQ("sect", " "),
+                ESCSEQ("uml", " "),
+    
+                ESCSEQ("copy", "(c)"),
+                ESCSEQ("ordf", " "),
+                ESCSEQ("laquo", " "),
+                ESCSEQ("not", " "),
+    
+                ESCSEQ("reg", "(r)"),
+    
+                ESCSEQ("deg", " "),
+                ESCSEQ("plusm", " "),
+    
+                ESCSEQ("acute", " "),
+                ESCSEQ("micro", " "),
+                ESCSEQ("para", " "),
+    
+                ESCSEQ("ordm", " "),
+                ESCSEQ("raquo", " "),
+    
+                ESCSEQ("iquest", " "),
+                ESCSEQ("Agrave", "À"),
+    
+                ESCSEQ("Acirc", "Â"),
+                ESCSEQ("Atilde", "Ã"),
+                ESCSEQ("Auml", "Ä"),
+                ESCSEQ("Aring", " "),
+                ESCSEQ("AElig", " "),
+                ESCSEQ("Ccedil", "ç"),
+                ESCSEQ("Egrave", "È"),
+                ESCSEQ("Eacute", "É"),
+                ESCSEQ("Ecirc", "Ê"),
+                ESCSEQ("Euml", "Ë"),
+                ESCSEQ("Igrave", "Ì"),
+
+                ESCSEQ("Icirc", "Î"),
+                ESCSEQ("Iuml", "Ï"),
+    
+                ESCSEQ("Ntilde", "Ñ"),
+                ESCSEQ("Ograve", "Ò"),
+    
+                ESCSEQ("Ocirc", "Ô"),
+                ESCSEQ("Otilde", "Õ"),
+                ESCSEQ("Ouml", "Ö"),
+    
+                ESCSEQ("Oslash", " "),
+                ESCSEQ("Ugrave", "Ù"),
+    
+                ESCSEQ("Ucirc", " "),
+                ESCSEQ("Uuml", "Ü"),
+    
+                ESCSEQ("szlig", "§"),
+                ESCSEQ("agrave;","à"),
+                ESCSEQ("aacute", "á"),
+                ESCSEQ("acirc", "â"),
+                ESCSEQ("atilde", "ã"),
+                ESCSEQ("auml", "ä"),
+                ESCSEQ("aring", "a"),
+                ESCSEQ("aelig", "ae"),
+                ESCSEQ("ccedil", "ç"),
+                ESCSEQ("egrave", "è"),
+                ESCSEQ("eacute", "é"),
+                ESCSEQ("ecirc", "ê"),
+                ESCSEQ("euml", "ë"),
+                ESCSEQ("igrave", "ì"),
+                ESCSEQ("iacute", "í"),
+                ESCSEQ("icirc", " "),
+                ESCSEQ("iuml", "ï"),
+                ESCSEQ("eth", " "),
+                ESCSEQ("ntilde", "ñ"),
+                ESCSEQ("ograve", "ò"),
+                ESCSEQ("oacute", "ó"),
+                ESCSEQ("ocirc", "ô"),
+                ESCSEQ("otilde", "õ"),
+                ESCSEQ("ouml", "ö"),
+                ESCSEQ("divide", " "),
+                ESCSEQ("oslash", " "),
+                ESCSEQ("ugrave", "ù"),
+                ESCSEQ("uacute", "ú"),
+                ESCSEQ("ucirc", "û"),
+                ESCSEQ("uuml", "ü"),
+    
+                ESCSEQ("yuml", ""),
+
+                /* this one should ALWAYS stay the last one!!! */
+                ESCSEQ("amp", "&"),
+
+                { NULL, NULL, NULL }
                 };
 
         for (int i = 0; substitutions[i][0] != NULL; i++) 
@@ -150,6 +243,7 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_UseBorder = FALSE;
     m_MinHeight = m_MaxLineWidth = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
+    m_LastLayout = -1;
 }
 
 
@@ -161,6 +255,7 @@ void wxHtmlContainerCell::SetIndent(int i, int what, int units)
     if (what & wxHTML_INDENT_RIGHT) m_IndentRight = val;
     if (what & wxHTML_INDENT_TOP) m_IndentTop = val;
     if (what & wxHTML_INDENT_BOTTOM) m_IndentBottom = val;
+    m_LastLayout = -1;
 }
 
 
@@ -190,7 +285,7 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 
 
 
-bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak)
+bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
 {
     if (!m_CanLiveOnPagebreak) 
         return wxHtmlCell::AdjustPagebreak(pagebreak);
@@ -213,6 +308,11 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak)
 
 void wxHtmlContainerCell::Layout(int w)
 {
+    if (m_LastLayout == w) {
+        wxHtmlCell::Layout(w);
+        return;
+    } 
+
     wxHtmlCell *cell = m_Cells, *line = m_Cells;
     long xpos = 0, ypos = m_IndentTop;
     int xdelta = 0, ybasicpos = 0, ydiff;
@@ -313,6 +413,8 @@ void wxHtmlContainerCell::Layout(int w)
     m_MaxLineWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
     if (m_Width < m_MaxLineWidth) m_Width = m_MaxLineWidth;
 
+    m_LastLayout = w;
+
     wxHtmlCell::Layout(w);
 }
 
@@ -394,6 +496,7 @@ void wxHtmlContainerCell::InsertCell(wxHtmlCell *f)
         if (m_LastCell) while (m_LastCell -> GetNext()) m_LastCell = m_LastCell -> GetNext();
     }
     f -> SetParent(this);
+    m_LastLayout = -1;
 }
 
 
@@ -409,6 +512,7 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
             SetAlignHor(wxHTML_ALIGN_LEFT);
         else if (alg == wxT("RIGHT"))
             SetAlignHor(wxHTML_ALIGN_RIGHT);
+        m_LastLayout = -1;
     }
 }
 
@@ -428,6 +532,7 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale
             wxSscanf(wd.c_str(), wxT("%i"), &wdi);
             SetWidthFloat((int)(pixel_scale * (double)wdi), wxHTML_UNITS_PIXELS);
         }
+        m_LastLayout = -1;
     }
 }
 
