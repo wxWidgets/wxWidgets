@@ -2,7 +2,7 @@ PyCrust - The Flakiest Python Shell
 Half-baked by Patrick K. O'Brien (pobrien@orbtech.com)
 
 ==============================================================
-* Orbtech - "Your Source For Python Development Services"    *
+* Orbtech - "Your source for Python programming expertise."  *
 * Sample all our half-baked Python goods at www.orbtech.com. *
 ==============================================================
 

@@ -2,7 +2,7 @@
 commands to be sent to the interpreter. This particular shell is based on
 wxPython's wxStyledTextCtrl. The latest files are always available at the
 SourceForge project page at http://sourceforge.net/projects/pycrust/.
-Sponsored by Orbtech - Your Source For Python Development Services"""
+Sponsored by Orbtech - Your source for Python programming expertise."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -767,9 +767,9 @@ class Shell(wxStyledTextCtrl):
     
     def autoCompleteShow(self, command):
         """Display auto-completion popup list."""
-        list = self.interp.getAutoCompleteList(command, \
-                    includeMagic=self.autoCompleteIncludeMagic, \
-                    includeSingle=self.autoCompleteIncludeSingle, \
+        list = self.interp.getAutoCompleteList(command, 
+                    includeMagic=self.autoCompleteIncludeMagic, 
+                    includeSingle=self.autoCompleteIncludeSingle, 
                     includeDouble=self.autoCompleteIncludeDouble)
         if list:
             options = ' '.join(list)
@@ -1121,7 +1121,7 @@ class ShellFrame(wxFrame, ShellMenu):
         """Create a PyCrust ShellFrame instance."""
         wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
-        intro += '\nSponsored by Orbtech - Specializing in Python Application Development'
+        intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
         if wxPlatform == '__WXMSW__':
