@@ -187,7 +187,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             }
             else // replace with default colour
             {
-                int n = index - wxSYS_COLOUR_BTNHIGHLIGHT;
+                unsigned int n = index - wxSYS_COLOUR_BTNHIGHLIGHT;
 
                 wxASSERT_MSG( n < WXSIZEOF(s_defaultSysColors),
                               _T("forgot tp update the default colours array") );

@@ -2955,7 +2955,7 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
 
 WXHWND wxWindowMSW::MSWGetParent() const
 {
-    return m_parent ? m_parent->GetHWND() : NULL;
+    return m_parent ? m_parent->GetHWND() : WXHWND(NULL);
 }
 
 bool wxWindowMSW::MSWCreate(const wxChar *wclass,

@@ -244,7 +244,7 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
         parent = ms_hiddenParent;
     }
 
-    return parent ? parent->GetHWND() : NULL;
+    return parent ? parent->GetHWND() : WXHWND(NULL);
 }
 
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
