@@ -463,6 +463,11 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
             {
                 wxPoint point(localMouse.h , localMouse.v) ;
                 wxWindow *win = NULL ;
+                ControlPartCode controlPart ;
+                ControlRef control = wxMacFindControlUnderMouse( localMouse ,
+                    theWindow , &controlPart ) ;
+                if ( control )
+                    win = wxFindControlFromMacControl( control ) ;
                 // TODO toplevel->MacGetWindowFromPointSub( point , &win ) ;
                 int localx , localy ;
                 localx = localMouse.h ;
@@ -505,7 +510,8 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                                 x = y = 0 ;
                                 win->MacWindowToRootWindow( &x , &y ) ;
                                 RgnHandle hiliteRgn = NewRgn() ;
-                                SetRectRgn( hiliteRgn , x , y , x+win->GetSize().x ,y+win->GetSize().y) ;
+                                Rect r = { y , x , y+win->GetSize().y , x+win->GetSize().x } ;
+                                RectRgn( hiliteRgn , &r ) ;
                                 ShowDragHilite(theDrag, hiliteRgn, true);
                                 DisposeRgn( hiliteRgn ) ;
                             }
