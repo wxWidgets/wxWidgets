@@ -35,6 +35,7 @@
 #include "wx/tooltip.h"
 #include "wx/statusbr.h"
 #include "wx/menuitem.h"
+#include "wx/spinctrl.h"
 #include "wx/log.h"
 
 #if wxUSE_CARET
@@ -1397,7 +1398,7 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
         return FALSE;
     
 
-    if ( IsKindOf( CLASSINFO ( wxStaticBox ) ) )
+    if ( IsKindOf( CLASSINFO ( wxStaticBox ) ) || IsKindOf( CLASSINFO( wxSpinCtrl ) ))
         return FALSE ; 
     
     WindowRef window = (WindowRef) MacGetRootWindow() ;
