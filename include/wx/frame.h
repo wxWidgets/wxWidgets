@@ -112,7 +112,8 @@ public:
     virtual wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
 
     // sets the main status bar
-    void SetStatusBar(wxStatusBar *statBar) { m_frameStatusBar = statBar; }
+    void SetStatusBar(wxStatusBar *statBar)
+        { m_frameStatusBar = statBar; PositionStatusBar(); }
 
     // forward these to status bar
     virtual void SetStatusText(const wxString &text, int number = 0);
