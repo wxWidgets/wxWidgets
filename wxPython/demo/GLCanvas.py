@@ -266,7 +266,7 @@ overview = """\
 #----------------------------------------------------------------------
 
 def _test():
-    class MyApp(wxApp):
+    class MyApp(wx.App):
         def OnInit(self):
             frame = wx.Frame(None, -1, "GL Demos", wx.DefaultPosition, (600,300))
             #win = ConeCanvas(frame)
