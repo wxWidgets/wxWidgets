@@ -282,7 +282,7 @@ void wxUsleep(
   unsigned long                     ulMilliseconds
 )
 {
-    ::DosSleep(ulMilliseconds/1000l);
+    ::DosSleep(ulMilliseconds);
 }
 
 void wxSleep(

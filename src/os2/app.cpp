@@ -836,13 +836,13 @@ int wxApp::MainLoop()
         while (!Pending() && ProcessIdle())
         {
             HandleSockets();
-            wxUsleep(10000);
+            wxUsleep(10);
         }
         HandleSockets();
         if (Pending())
             DoMessage();
         else
-            wxUsleep(10000);
+            wxUsleep(10);
 
     }
     return (int)svCurrentMsg.mp1;
