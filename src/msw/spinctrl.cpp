@@ -378,7 +378,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( sizeText.y <= 0 )
     {
         int cx, cy;
-        wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+        wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
         sizeText.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
     }
@@ -526,7 +526,7 @@ wxSize wxSpinCtrl::DoGetBestSize() const
     sizeBtn.x += DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN;
 
     int y;
-    wxGetCharSize(GetHWND(), NULL, &y, &GetFont());
+    wxGetCharSize(GetHWND(), NULL, &y, GetFont());
     y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(y);
 
     // JACS: we should always use the height calculated

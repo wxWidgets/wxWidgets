@@ -469,7 +469,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int cy;
     int cyf;
 
-    wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, this->GetFont());
 
     if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
     {
@@ -633,7 +633,7 @@ wxSize wxSlider95::DoGetBestSize() const
     int min_len = 0;
     int max_len = 0;
     
-    wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, this->GetFont());
     
     if ( !HasFlag(wxSL_VERTICAL))
     {

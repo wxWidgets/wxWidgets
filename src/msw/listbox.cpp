@@ -682,7 +682,7 @@ wxSize wxListBox::DoGetBestSize() const
 
     // the listbox should be slightly larger than the widest string
     int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
     wListbox += 3*cx;
 

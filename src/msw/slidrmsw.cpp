@@ -349,7 +349,7 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
   int cy;
   int cyf;
 
-  wxGetCharSize(GetHWND(), &cx, &cy,& this->GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, this->GetFont());
 
   if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
   {

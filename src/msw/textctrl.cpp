@@ -1932,7 +1932,7 @@ bool wxTextCtrl::AcceptsFocus() const
 wxSize wxTextCtrl::DoGetBestSize() const
 {
     int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
     int wText = DEFAULT_ITEM_WIDTH;
 

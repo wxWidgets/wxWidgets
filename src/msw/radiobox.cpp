@@ -466,7 +466,7 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
 {
     // the radiobox should be big enough for its buttons
     int cx1, cy1;
-    wxGetCharSize(m_hWnd, &cx1, &cy1, &GetFont());
+    wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
 
     int extraHeight = cy1;
 
@@ -525,7 +525,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 #endif
 
     int cx1, cy1;
-    wxGetCharSize(m_hWnd, &cx1, &cy1, & GetFont());
+    wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
 
     // Attempt to have a look coherent with other platforms: We compute the
     // biggest toggle dim, then we align all items according this value.

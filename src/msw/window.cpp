@@ -4887,22 +4887,21 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
 // global functions
 // ===========================================================================
 
-void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font)
+void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
 {
     TEXTMETRIC tm;
     HDC dc = ::GetDC((HWND) wnd);
     HFONT fnt =0;
     HFONT was = 0;
-    if ( the_font )
-    {
-        //    the_font->UseResource();
-        //    the_font->RealizeResource();
-        fnt = (HFONT)((wxFont *)the_font)->GetResourceHandle(); // const_cast
-        if ( fnt )
-            was = (HFONT) SelectObject(dc,fnt);
-    }
+        
+    //    the_font.UseResource();
+    //    the_font.RealizeResource();
+    fnt = (HFONT)the_font.GetResourceHandle(); // const_cast
+    if ( fnt )
+        was = (HFONT) SelectObject(dc,fnt);
+    
     GetTextMetrics(dc, &tm);
-    if ( the_font && fnt && was )
+    if ( fnt && was )
     {
         SelectObject(dc,was);
     }
@@ -4913,8 +4912,7 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font)
     if ( y )
         *y = tm.tmHeight + tm.tmExternalLeading;
 
-    //  if ( the_font )
-    //    the_font->ReleaseResource();
+    //   the_font.ReleaseResource();
 }
 
 // Returns 0 if was a normal ASCII value, not a special key. This indicates that
