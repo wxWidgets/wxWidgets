@@ -1001,7 +1001,7 @@ wxCopyFile (const wxString& file1, const wxString& file2)
     wxStructStat fbuf;
 
     // get permissions of file1
-    if ( wxStat(file1, &fbuf) != 0 )
+    if ( wxStat(OS_FILENAME(file1), &fbuf) != 0 )
     {
         // the file probably doesn't exist or we haven't the rights to read
         // from it anyhow
@@ -1060,7 +1060,7 @@ wxCopyFile (const wxString& file1, const wxString& file2)
 
 #if !defined(__VISAGECPP__) && !defined(__WXMAC__)
 // no chmod in VA.  SHould be some permission API for HPFS386 partitions however
-    if ( chmod(file2, fbuf.st_mode) != 0 )
+    if ( chmod(OS_FILENAME(file2), fbuf.st_mode) != 0 )
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
                       file2.c_str());
@@ -1074,7 +1074,7 @@ bool
 wxRenameFile (const wxString& file1, const wxString& file2)
 {
   // Normal system call
-  if ( wxRename (OS_FILENAME(file1), OS_FILENAME(file2)) == 0 )
+  if ( wxRename (file1, file2) == 0 )
     return TRUE;
 
   // Try to copy
