@@ -1,6 +1,12 @@
 \section{\class{wxFocusEvent}}\label{wxfocusevent}
 
-A focus event is sent when a window's focus changes.
+A focus event is sent when a window's focus changes. The window losing focus
+receives a ``kill focus'' event while the window gaining it gets a ``set
+focus'' one.
+
+Notice that the set focus event happens both when the user gives focus to the
+window (whether using the mouse or keyboard) and when it is done from the
+program itself using \helpref{SetFocus}{wxwindowsetfocus}.
 
 \wxheading{Derived from}
 
@@ -24,8 +30,6 @@ function that takes a wxFocusEvent argument.
 
 \wxheading{See also}
 
-%\helpref{wxWindow::OnSetFocus}{wxwindowonsetfocus},\rtfsp
-%\helpref{wxWindow::OnKillFocus}{wxwindowonkillfocus},\rtfsp
 \helpref{Event handling overview}{eventhandlingoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
