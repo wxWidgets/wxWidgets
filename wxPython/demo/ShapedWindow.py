@@ -35,6 +35,7 @@ class TestFrame(wxFrame):
 
 
     def SetWindowShape(self, *evt):
+        # Use the bitmap's mask to determine the region
         r = wxRegionFromBitmap(self.bmp)
         self.hasShape = self.SetShape(r)
 
