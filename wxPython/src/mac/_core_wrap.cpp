@@ -47545,21 +47545,6 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"CENTER_ON_SCREEN", SWIG_From_int((int)(wxCENTER_ON_SCREEN))); 
     }
     {
-        PyDict_SetItemString(d,"ED_CLIENT_MARGIN", SWIG_From_int((int)(wxED_CLIENT_MARGIN))); 
-    }
-    {
-        PyDict_SetItemString(d,"ED_BUTTONS_BOTTOM", SWIG_From_int((int)(wxED_BUTTONS_BOTTOM))); 
-    }
-    {
-        PyDict_SetItemString(d,"ED_BUTTONS_RIGHT", SWIG_From_int((int)(wxED_BUTTONS_RIGHT))); 
-    }
-    {
-        PyDict_SetItemString(d,"ED_STATIC_LINE", SWIG_From_int((int)(wxED_STATIC_LINE))); 
-    }
-    {
-        PyDict_SetItemString(d,"EXT_DIALOG_STYLE", SWIG_From_int((int)(wxEXT_DIALOG_STYLE))); 
-    }
-    {
         PyDict_SetItemString(d,"CLIP_CHILDREN", SWIG_From_int((int)(wxCLIP_CHILDREN))); 
     }
     {

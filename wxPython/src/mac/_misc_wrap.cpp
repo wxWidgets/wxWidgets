@@ -3049,21 +3049,27 @@ static PyObject *_wrap_SystemSettings_GetFont(PyObject *, PyObject *args, PyObje
 static PyObject *_wrap_SystemSettings_GetMetric(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSystemMetric arg1 ;
+    wxWindow *arg2 = (wxWindow *) NULL ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "index", NULL 
+        (char *) "index",(char *) "win", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SystemSettings_GetMetric",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:SystemSettings_GetMetric",kwnames,&obj0,&obj1)) goto fail;
     {
         arg1 = (wxSystemMetric)(SWIG_As_int(obj0)); 
         if (SWIG_arg_fail(1)) SWIG_fail;
     }
+    if (obj1) {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)wxSystemSettings::GetMetric((wxSystemMetric )arg1);
+        result = (int)wxSystemSettings::GetMetric((wxSystemMetric )arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

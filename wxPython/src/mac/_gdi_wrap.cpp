@@ -17231,23 +17231,26 @@ static PyObject * MemoryDC_swigregister(PyObject *, PyObject *args) {
 static PyObject *_wrap_new_BufferedDC__SWIG_0(PyObject *, PyObject *args) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
-    wxBitmap *arg2 = 0 ;
+    wxBitmap const &arg2_defvalue = wxNullBitmap ;
+    wxBitmap *arg2 = (wxBitmap *) &arg2_defvalue ;
     int arg3 = (int) wxBUFFER_CLIENT_AREA ;
     wxBufferedDC *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_BufferedDC",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O|OO:new_BufferedDC",&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        if (arg2 == NULL) {
-            SWIG_null_ref("wxBitmap");
+    if (obj1) {
+        {
+            SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+            if (SWIG_arg_fail(2)) SWIG_fail;
+            if (arg2 == NULL) {
+                SWIG_null_ref("wxBitmap");
+            }
+            if (SWIG_arg_fail(2)) SWIG_fail;
         }
-        if (SWIG_arg_fail(2)) SWIG_fail;
     }
     if (obj2) {
         {
@@ -17318,7 +17321,7 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
     for (ii = 0; (ii < argc) && (ii < 3); ii++) {
         argv[ii] = PyTuple_GetItem(args,ii);
     }
-    if ((argc >= 2) && (argc <= 3)) {
+    if ((argc >= 1) && (argc <= 3)) {
         int _v;
         {
             void *ptr;
@@ -17330,6 +17333,9 @@ static PyObject *_wrap_new_BufferedDC(PyObject *self, PyObject *args) {
             }
         }
         if (_v) {
+            if (argc <= 1) {
+                return _wrap_new_BufferedDC__SWIG_0(self,args);
+            }
             {
                 void *ptr = 0;
                 if (SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_wxBitmap, 0) == -1) {
