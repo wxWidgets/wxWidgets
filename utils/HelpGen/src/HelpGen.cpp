@@ -54,12 +54,12 @@
 #ifndef WX_PRECOMP
     #include <wx/string.h>
     #include <wx/log.h>
-    #include <wx/regex.h>
     #include <wx/dynarray.h>
     #include <wx/wx.h>
 #endif // WX_PRECOMP
 
 #include <wx/file.h>
+#include <wx/regex.h>
 
 // C++ parsing classes
 #include "cjparser.h"
@@ -72,12 +72,6 @@
 #ifdef GetCurrentTime
 #undef GetCurrentTime
 #endif
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-#define VERSION_STRING "$Revision$"
 
 // -----------------------------------------------------------------------------
 // global vars
@@ -116,6 +110,9 @@ static wxString GetAllComments(const spContext& ctx);
 // get the string with current time (returns pointer to static buffer)
 // timeFormat is used for the call of strftime(3)
 static const char *GetCurrentTime(const char *timeFormat);
+
+// get the string containing the program version
+static const wxString GetVersionString();
 
 // -----------------------------------------------------------------------------
 // private classes
@@ -530,7 +527,7 @@ int HelpGenApp::OnRun()
                         // version requested
                         wxLogMessage("HelpGen version %s\n"
                                      "(c) 1999-2001 Vadim Zeitlin\n",
-                                     VERSION_STRING);
+                                     GetVersionString().c_str());
                         return 0;
 
                     case 'i':
@@ -851,7 +848,7 @@ void HelpGenVisitor::VisitClass( spClass& cl )
                   "\n"
                   "\n"
                   "\\section{\\class{%s}}\\label{%s}\n\n",
-                  VERSION_STRING,
+                  GetVersionString().c_str(),
                   m_fileHeader.c_str(),
                   GetCurrentTime("%d/%b/%y %H:%M:%S"),
                   name.c_str(),
@@ -1971,8 +1968,18 @@ static const char *GetCurrentTime(const char *timeFormat)
     return s_timeBuffer;
 }
 
+static const wxString GetVersionString()
+{
+    wxString version = "$Revision$";
+    wxRegEx("^\\$Revision$$").ReplaceFirst(&version, "\\1");
+    return version;
+}
+
 /*
    $Log$
+   Revision 1.14  2001/07/19 13:51:29  VZ
+   fixes to version string
+
    Revision 1.13  2001/07/19 13:44:57  VZ
    1. compilation fixes
    2. don't quote special characters inside verbatim environment
