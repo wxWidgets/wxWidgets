@@ -29,6 +29,7 @@
 #include "wx/defs.h"
 #include "wx/toplevel.h"
 #include "wx/app.h"
+#include "wx/mgl/private.h"
 
 // ----------------------------------------------------------------------------
 // idle system
@@ -159,16 +160,19 @@ bool wxTopLevelWindowMGL::Show(bool show)
 
 void wxTopLevelWindowMGL::Maximize(bool maximize)
 {
+    int x, y, w, h;
+    wxClientDisplayRect(&x, &y, &w, &h);
+
+    rect_t screenRect = MGL_defRect(x, y, w, h);
+    MGL_wmInvalidateRect(g_winMng, &screenRect);
+
     if ( maximize && !m_isMaximized )
     {
-        int x, y, w, h;
-        
         m_isMaximized = TRUE;
 
         GetPosition(&m_savedFrame.x, &m_savedFrame.y);
         GetSize(&m_savedFrame.width, &m_savedFrame.height);
 
-        wxClientDisplayRect(&x, &y, &w, &h);
         SetSize(x, y, w, h);
     }
     else if ( !maximize && m_isMaximized )
