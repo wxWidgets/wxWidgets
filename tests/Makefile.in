@@ -11,10 +11,13 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 INSTALL = @INSTALL@
 EXEEXT = @EXEEXT@
+RESCOMP = @RESCOMP@
 SETFILE = @SETFILE@
+NM = @NM@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = @top_builddir@
+LDFLAGS_GUI = @LDFLAGS_GUI@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
@@ -25,6 +28,7 @@ CPPUNIT_LIBS = @CPPUNIT_LIBS@
 TOOLKIT = @TOOLKIT@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
+TOOLCHAIN_NAME = @TOOLCHAIN_NAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -35,6 +39,7 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 
 DESTDIR = 
 WX_RELEASE = 2.5
+WX_VERSION = $(WX_RELEASE).3
 LIBDIRNAME = $(top_builddir)lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
@@ -68,6 +73,14 @@ TEST_OBJECTS =  \
 	test_zlibstream.o \
 	test_uris.o
 TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
+TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples \
+	$(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+TEST_GUI_OBJECTS =  \
+	$(__test_gui___win32rc) \
+	$(__test_gui_os2_lib_res) \
+	test_gui_test.o
+TEST_GUI_ODEP =  $(___pch_testprec_test_gui_testprec_h_gch___depname)
 
 ### Conditionally set variables: ###
 
@@ -82,16 +95,48 @@ TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 @COND_PLATFORM_MAC_1@__test___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL test$(EXEEXT)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 @COND_GCC_PCH_1@__test_PCH_INC = -I.pch/testprec_test
 @COND_GCC_PCH_1@___pch_testprec_test_testprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/testprec_test/testprec.h.gch
 COND_MONOLITHIC_0___WXLIB_NET_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
+@COND_USE_GUI_1@__test_gui___depname = test_gui$(EXEEXT)
+@COND_PLATFORM_MAC_1@__test_gui___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -a C test_gui$(EXEEXT)
+@COND_PLATFORM_MAC_1@__test_gui___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_4 = -d __WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_5 = --define __WXUNIVERSAL__
+@COND_SHARED_1@__DLLFLAG_p_4 = -d WXUSINGDLL
+@COND_SHARED_1@__DLLFLAG_p_5 = --define WXUSINGDLL
+COND_PLATFORM_OS2_1___test_gui___os2_emxbindcmd = $(NM) test_gui$(EXEEXT) | if \
+	grep -q pmwin.763 ; then emxbind -ep test_gui$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__test_gui___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___test_gui___os2_emxbindcmd)
+@COND_PLATFORM_WIN32_1@__test_gui___win32rc = test_gui_sample_rc.o
+@COND_PLATFORM_OS2_1@__test_gui_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__test_gui_bundle___depname = test_gui_bundle
+@COND_TOOLKIT_COCOA@____test_gui_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	test_gui.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@____test_gui_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	test_gui.app/Contents/PkgInfo
+@COND_GCC_PCH_1@__test_gui_PCH_INC = -I.pch/testprec_test_gui
+@COND_GCC_PCH_1@___pch_testprec_test_gui_testprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/testprec_test_gui/testprec.h.gch
+COND_MONOLITHIC_0___WXLIB_CORE_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
+COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
+	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) -i $(srcdir) $(__DLLFLAG_p_4) -i \
+	$(srcdir)/../samples -i $(top_srcdir)/include -o test_gui$(EXEEXT) Carbon.r \
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.r sample.r
+@COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
@@ -119,7 +164,7 @@ COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) data
+all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data
 
 install: all
 
@@ -131,6 +176,8 @@ clean:
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f test$(EXEEXT)
+	rm -f test_gui$(EXEEXT)
+	rm -rf test_gui.app
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -143,6 +190,39 @@ test$(EXEEXT): $(TEST_OBJECTS)
 
 @COND_GCC_PCH_1@.pch/testprec_test/testprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
+
+@COND_USE_GUI_1@test_gui$(EXEEXT): $(TEST_GUI_OBJECTS) $(__test_gui___win32rc)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
+@COND_USE_GUI_1@	$(__test_gui___mac_rezcmd)
+@COND_USE_GUI_1@	$(__test_gui___mac_setfilecmd)
+@COND_USE_GUI_1@	$(__test_gui___os2_emxbindcmd)
+@COND_USE_GUI_1@	$(SAMPLES_RPATH_POSTLINK)
+
+test_gui.app/Contents/PkgInfo: $(__test_gui___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+	mkdir -p test_gui.app/Contents
+	mkdir -p test_gui.app/Contents/MacOS
+	mkdir -p test_gui.app/Contents/Resources
+	
+	
+	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+	-e "s/EXECUTABLE/test_gui/" \
+	-e "s/VERSION/$(WX_VERSION)/" \
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >test_gui.app/Contents/Info.plist
+	
+	
+	echo -n "APPL????" >test_gui.app/Contents/PkgInfo
+	
+	
+	ln -f test_gui$(EXEEXT) test_gui.app/Contents/MacOS/test_gui
+	
+	
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc test_gui.app/Contents/Resources/test_gui.rsrc
+	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns test_gui.app/Contents/Resources/wxmac.icns
+
+@COND_PLATFORM_MACOSX_1@test_gui_bundle: $(____test_gui_BUNDLE_TGT_REF_DEP)
+
+@COND_GCC_PCH_1@.pch/testprec_test_gui/testprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/testprec_test_gui/testprec.h.gch testprec.h $(CXX) $(TEST_GUI_CXXFLAGS)
 
 data: 
 	@mkdir -p .
@@ -236,8 +316,14 @@ test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp $(TEST_ODEP)
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
+test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
+	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples --include-dir $(top_srcdir)/include
+
+test_gui_test.o: $(srcdir)/test.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $<
+
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean data
+.PHONY: all install uninstall clean distclean test_gui_bundle data

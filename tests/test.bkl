@@ -5,9 +5,10 @@
 
     <include file="../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="test" template="wx_test_console"
-                   template_append="wx_append_base">
-
+    <template id="wx_test">
+        <cppflags>$(CPPUNIT_CFLAGS)</cppflags>
+        <ldflags>$(CPPUNIT_LIBS)</ldflags>
+        
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
             <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">
                 <sources>dummy.cpp</sources>
@@ -17,7 +18,10 @@
             <precomp-headers>on</precomp-headers>
             <precomp-headers-file>testprec_$(id)</precomp-headers-file>
         </if>
+    </template>
 
+    <exe id="test" template="wx_sample_console,wx_test"
+                   template_append="wx_append_base">
         <sources>
             test.cpp
             archive/archivetest.cpp
@@ -51,6 +55,18 @@
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
+    
+
+    <exe id="test_gui" template="wx_sample,wx_test"
+                       template_append="wx_append"
+         cond="USE_GUI=='1'">
+        <sources>
+            test.cpp
+        </sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
 
     <wx-data id="data">
         <files>testdata.fc</files>

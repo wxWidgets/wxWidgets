@@ -17,10 +17,10 @@ OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H \
+TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I.\..\include -I$(SETUPHDIR) -Wall -I. $(__DLLFLAG_p) $(CPPUNIT_CFLAGS) \
-	$(__EXCEPTIONSFLAG_4) $(__EXCEPTIONSFLAG_5) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.o \
 	$(OBJS)\test_test.o \
@@ -51,6 +51,15 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_textstreamtest.o \
 	$(OBJS)\test_zlibstream.o \
 	$(OBJS)\test_uris.o
+TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\samples -DNOPCH $(CPPUNIT_CFLAGS) $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) $(CPPFLAGS) $(CXXFLAGS)
+TEST_GUI_OBJECTS =  \
+	$(OBJS)\test_gui_sample_rc.o \
+	$(OBJS)\test_gui_dummy.o \
+	$(OBJS)\test_gui_test.o
 
 ### Conditionally set variables: ###
 
@@ -86,23 +95,51 @@ endif
 ifeq ($(MONOLITHIC),1)
 EXTRALIBS_FOR_BASE =  
 endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_NET_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
+endif
+ifeq ($(USE_GUI),1)
+__test_gui___depname = $(OBJS)\test_gui.exe
+endif
+ifeq ($(WXUNIV),1)
+__WXUNIV_DEFINE_p_3 = --define __WXUNIVERSAL__
+endif
 ifeq ($(BUILD),debug)
-__OPTIMIZEFLAG_2 = -O0
+ifeq ($(DEBUG_FLAG),default)
+__DEBUG_DEFINE_p_3 = --define __WXDEBUG__
+endif
+endif
+ifeq ($(DEBUG_FLAG),1)
+__DEBUG_DEFINE_p_3 = --define __WXDEBUG__
+endif
+ifeq ($(UNICODE),1)
+__UNICODE_DEFINE_p_3 = --define _UNICODE
+endif
+ifeq ($(SHARED),1)
+__DLLFLAG_p_3 = --define WXUSINGDLL
+endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_CORE_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core
+endif
+ifeq ($(BUILD),debug)
+__OPTIMIZEFLAG = -O0
 endif
 ifeq ($(BUILD),release)
-__OPTIMIZEFLAG_2 = -O2
+__OPTIMIZEFLAG = -O2
 endif
 ifeq ($(USE_EXCEPTIONS),0)
-__EXCEPTIONSFLAG_4 = -fno-rtti
+__EXCEPTIONSFLAG = -fno-rtti
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG_4 = 
+__EXCEPTIONSFLAG = 
 endif
 ifeq ($(USE_EXCEPTIONS),0)
-__EXCEPTIONSFLAG_5 = -fno-exceptions
+__EXCEPTIONSFLAG_0 = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG_5 = 
+__EXCEPTIONSFLAG_0 = 
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -118,12 +155,14 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
 endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = .\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = .\..\lib\gcc_dll$(CFG)
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
-endif
-ifeq ($(MONOLITHIC),0)
-__WXLIB_NET_p = \
-	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = \
@@ -144,12 +183,6 @@ __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
 endif
 ifeq ($(MSLU),1)
 __UNICOWS_LIB_p = -lunicows
-endif
-ifeq ($(SHARED),0)
-LIBDIRNAME = .\..\lib\gcc_lib$(CFG)
-endif
-ifeq ($(SHARED),1)
-LIBDIRNAME = .\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_INFO),default)
@@ -175,14 +208,20 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe data
+all: $(OBJS)\test.exe $(__test_gui___depname) data
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\test.exe del $(OBJS)\test.exe
+	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
 
 $(OBJS)\test.exe: $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)  $(CPPUNIT_LIBS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o
+	$(CXX) -o $@ $(TEST_GUI_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(CPPUNIT_LIBS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+endif
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -274,5 +313,14 @@ $(OBJS)\test_zlibstream.o: ./streams/zlibstream.cpp
 
 $(OBJS)\test_uris.o: ./uris/uris.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_gui_sample_rc.o: ./../samples/sample.rc
+	windres --use-temp-file -i$< -o$@  --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) --include-dir ./../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../samples
+
+$(OBJS)\test_gui_dummy.o: ./dummy.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_test.o: ./test.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $<
 
 .PHONY: all clean data
