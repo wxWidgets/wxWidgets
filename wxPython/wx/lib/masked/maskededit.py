@@ -4928,7 +4928,7 @@ class MaskedEditMixin:
                     matched_str = newtext
                     newtext = self._ctrl_constraints._choices[match_index]
                     edit_end = self._ctrl_constraints._extent[1]
-                    new_select_to = min(edit_end, len(newvalue.rstrip()))
+                    new_select_to = min(edit_end, len(newtext.rstrip()))
                     match_field = self._ctrl_constraints
                     if self._ctrl_constraints._insertRight:
                         # adjust position to just after partial match in control:
