@@ -353,6 +353,11 @@ void wxListBox::SetSelection(int n, bool select)
 {
     if ( select )
     {
+        if ( !HasMultipleSelection() )
+        {
+            DeselectAll();
+        }
+
         if ( m_selections.Index(n) == wxNOT_FOUND )
         {
             m_selections.Add(n);
@@ -1052,7 +1057,6 @@ wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler,
                                                    bool toggleOnPressAlways)
                         : wxStdInputHandler(handler)
 {
-    m_winCapture = NULL;
     m_btnCapture = 0;
     m_toggleOnPressAlways = toggleOnPressAlways;
     m_actionMouse = wxACTION_NONE;
@@ -1079,6 +1083,73 @@ int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
     }
 
     return item;
+}
+
+wxControlAction
+wxStdListboxInputHandler::SetupCapture(wxListBox *lbox,
+                                       const wxMouseEvent& event,
+                                       int item)
+{
+    // we currently only allow selecting with the left mouse button, if we
+    // do need to allow using other buttons too we might use the code
+    // inside #if 0
+#if 0
+    m_btnCapture = event.LeftDown()
+                    ? 1
+                    : event.RightDown()
+                        ? 3
+                        : 2;
+#else
+    m_btnCapture = 1;
+#endif // 0/1
+
+    wxControlAction action;
+    if ( lbox->HasMultipleSelection() )
+    {
+        if ( lbox->GetWindowStyle() & wxLB_MULTIPLE )
+        {
+            if ( m_toggleOnPressAlways )
+            {
+                // toggle the item right now
+                action = wxACTION_LISTBOX_TOGGLE;
+            }
+            //else: later
+
+            m_actionMouse = wxACTION_LISTBOX_SETFOCUS;
+        }
+        else // wxLB_EXTENDED listbox
+        {
+            // simple click in an extended sel listbox clears the old
+            // selection and adds the clicked item to it then, ctrl-click
+            // toggles an item to it and shift-click adds a range between
+            // the old selection anchor and the clicked item
+            if ( event.ControlDown() )
+            {
+                lbox->PerformAction(wxACTION_LISTBOX_ANCHOR, item);
+
+                action = wxACTION_LISTBOX_TOGGLE;
+            }
+            else if ( event.ShiftDown() )
+            {
+                action = wxACTION_LISTBOX_EXTENDSEL;
+            }
+            else // simple click
+            {
+                lbox->PerformAction(wxACTION_LISTBOX_ANCHOR, item);
+
+                action = wxACTION_LISTBOX_SELECT;
+            }
+
+            m_actionMouse = wxACTION_LISTBOX_EXTENDSEL;
+        }
+    }
+    else // single selection
+    {
+        m_actionMouse =
+        action = wxACTION_LISTBOX_SELECT;
+    }
+
+    return action;
 }
 
 bool wxStdListboxInputHandler::HandleKey(wxControl *control,
@@ -1172,76 +1243,17 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
     if ( event.LeftDown() )
     {
         // capture the mouse to track the selected item
-        m_winCapture = lbox;
-        m_winCapture->CaptureMouse();
+        lbox->CaptureMouse();
 
-        // we currently only allow selecting with the left mouse button, if we
-        // do need to allow using other buttons too we might use the code
-        // inside #if 0
-#if 0
-        m_btnCapture = event.LeftDown()
-                        ? 1
-                        : event.RightDown()
-                            ? 3
-                            : 2;
-#else
-        m_btnCapture = 1;
-#endif // 0/1
-
-        if ( lbox->HasMultipleSelection() )
-        {
-            if ( lbox->GetWindowStyle() & wxLB_MULTIPLE )
-            {
-                if ( m_toggleOnPressAlways )
-                {
-                    // toggle the item right now
-                    action = wxACTION_LISTBOX_TOGGLE;
-                }
-                //else: later
-
-                m_actionMouse = wxACTION_LISTBOX_SETFOCUS;
-            }
-            else // wxLB_EXTENDED listbox
-            {
-                // simple click in an extended sel listbox clears the old
-                // selection and adds the clicked item to it then, ctrl-click
-                // toggles an item to it and shift-click adds a range between
-                // the old selection anchor and the clicked item
-                if ( event.ControlDown() )
-                {
-                    control->PerformAction(wxACTION_LISTBOX_ANCHOR,
-                                           item);
-
-                    action = wxACTION_LISTBOX_TOGGLE;
-                }
-                else if ( event.ShiftDown() )
-                {
-                    action = wxACTION_LISTBOX_EXTENDSEL;
-                }
-                else // simple click
-                {
-                    control->PerformAction(wxACTION_LISTBOX_ANCHOR,
-                                           item);
-
-                    action = wxACTION_LISTBOX_SELECT;
-                }
-
-                m_actionMouse = wxACTION_LISTBOX_EXTENDSEL;
-            }
-        }
-        else // single selection
-        {
-            m_actionMouse =
-            action = wxACTION_LISTBOX_SELECT;
-        }
+        action = SetupCapture(lbox, event, item);
     }
     else if ( m_btnCapture && event.ButtonUp(m_btnCapture) )
     {
         // when the left mouse button is released, release the mouse too
-        if ( m_winCapture )
+        wxWindow *winCapture = wxWindow::GetCapture();
+        if ( winCapture )
         {
-            m_winCapture->ReleaseMouse();
-            m_winCapture = NULL;
+            winCapture->ReleaseMouse();
             m_btnCapture = 0;
         }
         else
@@ -1273,10 +1285,19 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
 bool wxStdListboxInputHandler::HandleMouseMove(wxControl *control,
                                                const wxMouseEvent& event)
 {
-    if ( m_winCapture && (event.GetEventObject() == m_winCapture) )
+    wxWindow *winCapture = wxWindow::GetCapture();
+    if ( winCapture && (event.GetEventObject() == winCapture) )
     {
         wxListBox *lbox = wxStaticCast(control, wxListBox);
         int item = HitTest(lbox, event);
+
+        if ( !m_btnCapture )
+        {
+            // someone captured the mouse for us (we always set m_btnCapture
+            // when we do it ourselves) - live with it
+            SetupCapture(lbox, event, item);
+        }
+
         lbox->PerformAction(m_actionMouse, item);
     }
 

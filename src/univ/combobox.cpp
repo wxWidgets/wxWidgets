@@ -81,6 +81,7 @@ public:
     // implement wxComboPopup methods
     virtual bool SetSelection(const wxString& value);
     virtual wxControl *GetControl() { return this; }
+    virtual void OnShow();
 
 protected:
     // called whenever the user selects a listbox item
@@ -266,7 +267,7 @@ void wxComboControl::ShowPopup()
     wxControl *control = m_popup->GetControl();
 
     // position the control below the combo
-    wxPoint ptCombo = GetPosition();
+    wxPoint ptCombo = ClientToScreen(wxPoint(0, 0));
     wxSize sizeCombo = GetSize();
 
     // FIXME: should check that the combo doesn't popup beyond the screen
@@ -275,10 +276,10 @@ void wxComboControl::ShowPopup()
                      sizeCombo.x, m_heightPopup);
 
     // show it
-    m_popup->SetSelection(m_text->GetValue());
     control->Show();
     control->SetFocus();
     control->CaptureMouse();
+    m_popup->SetSelection(m_text->GetValue());
 }
 
 void wxComboControl::HidePopup()
@@ -373,6 +374,7 @@ bool wxComboListBox::SetSelection(const wxString& value)
         return FALSE;
 
     wxListBox::SetSelection(i);
+    wxListBox::EnsureVisible(i);
 
     return TRUE;
 }
@@ -380,6 +382,10 @@ bool wxComboListBox::SetSelection(const wxString& value)
 void wxComboListBox::OnSelect(wxCommandEvent& event)
 {
     m_combo->OnSelect(event.GetString());
+}
+
+void wxComboListBox::OnShow()
+{
 }
 
 // ----------------------------------------------------------------------------

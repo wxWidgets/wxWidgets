@@ -280,11 +280,12 @@ class WXDLLEXPORT wxStdListboxInputHandler : public wxStdInputHandler
 public:
     // if pressing the mouse button in a multiselection listbox should toggle
     // the item under mouse immediately, then specify TRUE as the second
-    // parameter (this is the standard behaviour, under GTK the item is toggles
+    // parameter (this is the standard behaviour, under GTK the item is toggled
     // only when the mouse is released in the multi selection listbox)
     wxStdListboxInputHandler(wxInputHandler *inphand,
                              bool toggleOnPressAlways = TRUE);
 
+    // base class methods
     virtual bool HandleKey(wxControl *control,
                            const wxKeyEvent& event,
                            bool pressed);
@@ -297,10 +298,12 @@ protected:
     // get the listbox item under mouse and return -1 if there is none
     int HitTest(const wxListBox *listbox, const wxMouseEvent& event);
 
-    wxRenderer *m_renderer;
+    // init m_btnCapture and m_actionMouse
+    wxControlAction SetupCapture(wxListBox *lbox,
+                                 const wxMouseEvent& event,
+                                 int item);
 
-    // the listbox which has currently the mouse captured or NULL
-    wxWindow *m_winCapture;
+    wxRenderer *m_renderer;
 
     // the button which initiated the mouse capture (currently 0 or 1)
     int m_btnCapture;

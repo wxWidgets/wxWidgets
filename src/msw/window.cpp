@@ -307,11 +307,12 @@ wxWindowMSW::~wxWindowMSW()
 }
 
 // real construction (Init() must have been called before!)
-bool wxWindowMSW::Create(wxWindow *parent, wxWindowID id,
-                      const wxPoint& pos,
-                      const wxSize& size,
-                      long style,
-                      const wxString& name)
+bool wxWindowMSW::Create(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
 {
     wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
 
@@ -327,13 +328,6 @@ bool wxWindowMSW::Create(wxWindow *parent, wxWindowID id,
     // no 3d effects, we draw them ourselves
     WXDWORD exStyle = 0;
 #else // !wxUniversal
-    if ( style & wxBORDER )
-        msflags |= WS_BORDER;
-/* Not appropriate for non-frame/dialog windows, and
-   may clash with other window styles.
-    if ( style & wxTHICK_FRAME )
-        msflags |= WS_THICKFRAME;
-*/
     if ( style & wxCLIP_CHILDREN )
         msflags |= WS_CLIPCHILDREN;
 
@@ -342,8 +336,12 @@ bool wxWindowMSW::Create(wxWindow *parent, wxWindowID id,
 
     // Even with extended styles, need to combine with WS_BORDER
     // for them to look right.
-    if ( want3D || (m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER ) ||
-        (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER))
+    if ( want3D ||
+        (m_windowStyle & (wxBORDER |
+                          wxSIMPLE_BORDER |
+                          wxRAISED_BORDER |
+                          wxSUNKEN_BORDER |
+                          wxDOUBLE_BORDER)) )
     {
         msflags |= WS_BORDER;
     }
@@ -2424,17 +2422,17 @@ void wxWindowMSW::MSWDetachWindowMenu()
 }
 
 bool wxWindowMSW::MSWCreate(int id,
-                         wxWindow *parent,
-                         const wxChar *wclass,
-                         wxWindow *wx_win,
-                         const wxChar *title,
-                         int x,
-                         int y,
-                         int width,
-                         int height,
-                         WXDWORD style,
-                         const wxChar *dialog_template,
-                         WXDWORD extendedStyle)
+                            wxWindow *parent,
+                            const wxChar *wclass,
+                            wxWindow *wx_win,
+                            const wxChar *title,
+                            int x,
+                            int y,
+                            int width,
+                            int height,
+                            WXDWORD style,
+                            const wxChar *dialog_template,
+                            WXDWORD extendedStyle)
 {
     int x1 = CW_USEDEFAULT;
     int y1 = 0;
@@ -2443,13 +2441,13 @@ bool wxWindowMSW::MSWCreate(int id,
 
     // Find parent's size, if it exists, to set up a possible default
     // panel size the size of the parent window
-    RECT parent_rect;
+    RECT rectParent;
     if ( parent )
     {
-        ::GetClientRect((HWND) parent->GetHWND(), &parent_rect);
+        ::GetClientRect(GetHwndOf(parent), &rectParent);
 
-        width1 = parent_rect.right - parent_rect.left;
-        height1 = parent_rect.bottom - parent_rect.top;
+        width1 = rectParent.right - rectParent.left;
+        height1 = rectParent.bottom - rectParent.top;
     }
 
     if ( x > -1 ) x1 = x;
@@ -2471,9 +2469,22 @@ bool wxWindowMSW::MSWCreate(int id,
     }
 #endif // 0
 
-    HWND hParent = (HWND)NULL;
-    if ( parent )
-        hParent = (HWND) parent->GetHWND();
+    HWND hParent;
+    if ( GetWindowStyleFlag() & wxPOPUP_WINDOW )
+    {
+        // popup windows should have desktop as parent because they shouldn't
+        // be limited to the parents client area as child windows usually are
+        hParent = ::GetDesktopWindow();
+    }
+    else if ( parent )
+    {
+        hParent = GetHwndOf(parent);
+    }
+    else
+    {
+        // top level window
+        hParent = NULL;
+    }
 
     wxWndHook = this;
 
@@ -2512,7 +2523,7 @@ bool wxWindowMSW::MSWCreate(int id,
     {
         int controlId = 0;
         if ( style & WS_CHILD )
-          {
+        {
             controlId = id;
 
 #if 0 // def __WXUNIVERSAL__
@@ -2523,7 +2534,7 @@ bool wxWindowMSW::MSWCreate(int id,
                 style |= WS_CLIPSIBLINGS;
             }
 #endif // __WXUNIVERSAL__
-          }
+        }
 
         wxString className(wclass);
         if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )

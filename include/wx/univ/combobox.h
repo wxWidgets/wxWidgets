@@ -77,6 +77,9 @@ public:
     // just return FALSE but not emit any errors
     virtual bool SetSelection(const wxString& value) = 0;
 
+    // called immediately after the control is shown
+    virtual void OnShow() = 0;
+
 protected:
     wxComboControl *m_combo;
 };
