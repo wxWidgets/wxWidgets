@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_FILEDLG && !defined(__SMARTPHONE__)
+#if wxUSE_FILEDLG && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -511,5 +511,5 @@ int wxFileDialog::ShowModal()
 
 }
 
-#endif // wxUSE_FILEDLG
+#endif // wxUSE_FILEDLG && !(__SMARTPHONE__ && __WXWINCE__)
 

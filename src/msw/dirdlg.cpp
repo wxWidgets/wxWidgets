@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_DIRDLG && !defined(__SMARTPHONE__)
+#if wxUSE_DIRDLG && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
 
 #if defined(__WIN95__) && !defined(__GNUWIN32_OLD__) && wxUSE_OLE
 
@@ -289,4 +289,4 @@ static void ItemListFree(LPITEMIDLIST pidl)
     #include "../generic/dirdlgg.cpp"
 #endif // compiler/platform on which the code here compiles
 
-#endif // wxUSE_DIRDLG && !defined(__SMARTPHONE__)
+#endif // wxUSE_DIRDLG && !(__SMARTPHONE__ && __WXWINCE__)

@@ -47,9 +47,9 @@
     #include <commdlg.h>
 #endif
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     #include "wx/msw/wince/resources.h"
-#endif // __SMARTPHONE__
+#endif // __SMARTPHONE__ && __WXWINCE__
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -186,7 +186,7 @@ bool wxDialog::Create(wxWindow *parent,
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetLeftMenu(wxID_OK, _("OK"));
 #endif
 

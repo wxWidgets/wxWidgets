@@ -194,7 +194,7 @@ bool wxFrame::Create(wxWindow *parent,
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetLeftMenu(wxID_EXIT, _("Done"));
 #endif
 
@@ -322,7 +322,7 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 {
-#if defined(__SMARTPHONE__)
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
     wxMenu *autoMenu = NULL;
 
@@ -872,13 +872,13 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
         }
 #endif // wxUSE_MENUS_NATIVE
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
         // handle here commands from Smartphone menu bar
         if ( wxTopLevelWindow::HandleCommand(id, cmd, control ) )
         {
             return true;
         }
-#endif // __SMARTPHONE__
+#endif // __SMARTPHONE__ && __WXWINCE__
 
         if ( ProcessCommand(id) )
         {

@@ -145,7 +145,7 @@ void wxTopLevelWindowMSW::Init()
 
     m_winLastFocused = (wxWindow *)NULL;
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     m_MenuBarHWND = 0;
 #endif
 }
@@ -174,7 +174,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     }
     //else: WS_OVERLAPPED is 0 anyhow, so it is on by default
 
-#ifndef __SMARTPHONE__
+#if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
         msflags |= WS_THICKFRAME;
@@ -529,7 +529,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     }
 #endif
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetRightMenu(); // to nothing for initialization
 #endif
 

@@ -42,7 +42,7 @@
     #include "wx/msgdlg.h"
 #endif
 
-#if wxUSE_COLOURDLG && !defined(__SMARTPHONE__)
+#if wxUSE_COLOURDLG && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
 
 #include "wx/msw/private.h"
 #include "wx/colordlg.h"
@@ -231,4 +231,4 @@ void wxColourDialog::DoGetClientSize(int *width, int *height) const
         *height = 299;
 }
 
-#endif
+#endif // wxUSE_COLOURDLG && !(__SMARTPHONE__ && __WXWINCE__)

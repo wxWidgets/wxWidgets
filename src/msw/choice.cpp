@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_CHOICE && !defined(__SMARTPHONE__)
+#if wxUSE_CHOICE && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
 
 #ifndef WX_PRECOMP
     #include "wx/choice.h"
@@ -620,4 +620,4 @@ WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(
     return (WXHBRUSH)brush->GetResourceHandle();
 }
 
-#endif // wxUSE_CHOICE && !__SMARTPHONE__
+#endif // wxUSE_CHOICE && !(__SMARTPHONE__ && __WXWINCE__)
