@@ -53,17 +53,6 @@
 
 #define wxID_LISTBOX 3000
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
-#define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \
-                                  wxDIALOG_MODAL |         \
-                                  wxTAB_TRAVERSAL)
-#else
-#define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \
-                                  wxDIALOG_MODAL |         \
-                                  wxRESIZE_BORDER |        \
-                                  wxTAB_TRAVERSAL)
-#endif
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -321,8 +310,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                const wxPoint& pos,
                                long styleLbox)
 {
-    if ( !wxDialog::Create(parent, -1, caption, pos, wxDefaultSize,
-                           wxCHOICEDLG_DIALOG_STYLE) )
+    if ( !wxDialog::Create(parent, -1, caption, pos, wxDefaultSize, styleDlg) )
         return FALSE;
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
