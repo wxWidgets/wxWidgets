@@ -706,6 +706,7 @@
 
 
 <set var="X11_LOWLEVEL_SRC">
+    $(XWIN_LOWLEVEL_SRC)
     src/x11/gsockx11.c
     src/x11/nanox.c
     src/x11/app.cpp
@@ -741,6 +742,7 @@
     src/generic/timer.cpp
 </set>
 <set var="X11_LOWLEVEL_HDR">
+    $(XWIN_LOWLEVEL_HDR)
     include/wx/x11/app.h
     include/wx/x11/bitmap.h
     include/wx/x11/brush.h
@@ -1540,6 +1542,17 @@
     src/univ/toolbar.cpp
     src/univ/theme.cpp
     src/univ/winuniv.cpp    
+    src/generic/imaglist.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/listctrl.cpp
+    src/generic/filedlgg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/prntdlgg.cpp
+    src/generic/accel.cpp
+    src/generic/msgdlgg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/fontdlgg.cpp
+    src/generic/tabg.cpp
 </set>
 <set var="UNIV_HDR">
     include/wx/univ/app.h
@@ -1580,6 +1593,12 @@
     include/wx/univ/theme.h
     include/wx/univ/toolbar.h
     include/wx/univ/window.h
+    include/wx/generic/fdrepdlg.h
+    include/wx/generic/fontdlgg.h
+    include/wx/generic/tabg.h
+    include/wx/generic/dirdlgg.h
+    include/wx/generic/statusbr.h
+    include/wx/generic/accel.h
 </set>
 
 
