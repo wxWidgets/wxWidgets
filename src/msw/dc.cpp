@@ -1009,9 +1009,10 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 #ifndef __WXMICROWIN__
     else
     {
-        // NB: don't take DEFAULT_GUI_FONT because it's not TrueType and so
-        //     can't have non zero orientation/escapement
-        wxFont font = m_font.Ok() ? m_font : *wxNORMAL_FONT;
+        // NB: don't take DEFAULT_GUI_FONT (a.k.a. wxSYS_DEFAULT_GUI_FONT)
+        //     because it's not TrueType and so can't have non zero
+        //     orientation/escapement under Win9x
+        wxFont font = m_font.Ok() ? m_font : *wxSWISS_FONT;
         HFONT hfont = (HFONT)font.GetResourceHandle();
         LOGFONT lf;
         if ( ::GetObject(hfont, sizeof(lf), &lf) == 0 )

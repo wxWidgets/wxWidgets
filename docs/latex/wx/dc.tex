@@ -364,6 +364,11 @@ for filling the shape.
 
 Draws the text rotated by {\it angle} degrees.
 
+{\bf NB:} Under Win9x only TrueType fonts can be drawn by this function. In
+particular, a font different from {\tt wxNORMAL\_FONT} should be used as the
+latter is not a TrueType font. {\tt wxSWISS\_FONT} is an example of a font
+which is.
+
 \wxheading{See also}
 
 \helpref{DrawText}{wxdcdrawtext}
