@@ -234,7 +234,7 @@ public:
     // signal the condition
         // wakes up one (and only one) of the waiting threads
     void Signal();
-        // wakes up all threads waiting onthis condition
+        // wakes up all threads waiting on this condition
     void Broadcast();
 
 private:
@@ -253,6 +253,13 @@ private:
 // NB: in the function descriptions the words "this thread" mean the thread
 //     created by the wxThread object while "main thread" is the thread created
 //     during the process initialization (a.k.a. the GUI thread)
+
+// On VMS thread pointers are 64 bits (also needed for other systems???
+#ifdef __VMS
+   typedef unsigned long long wxThreadIdType;
+#else
+   typedef unsigned long wxThreadIdType;
+#endif
 
 class wxThreadInternal;
 class WXDLLEXPORT wxThread
@@ -289,13 +296,8 @@ public:
         // Get the platform specific thread ID and return as a long.  This
         // can be used to uniquely identify threads, even if they are not
         // wxThreads.  This is used by wxPython.
-	// On VMS thread pointers are 64 bits (also needed for other systems???
-#ifdef __VMS
-   static unsigned long long GetCurrentId();
-#else
-   static unsigned long GetCurrentId();
-#endif
-   
+   static wxThreadIdType GetCurrentId();
+
         // sets the concurrency level: this is, roughly, the number of threads
         // the system tries to schedule to run in parallel. 0 means the
         // default value (usually acceptable, but may not yield the best
@@ -381,11 +383,7 @@ public:
 
     // Get the thread ID - a platform dependent number which uniquely
     // identifies a thread inside a process
-#ifdef __VMS
-   unsigned long long GetId() const;
-#else
-   unsigned long GetId() const;
-#endif
+    wxThreadIdType GetId() const;
 
     // called when the thread exits - in the context of this thread
     //
