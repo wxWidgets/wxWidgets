@@ -2,7 +2,8 @@
 // Name:        foldpanelbar.cpp
 // Purpose:
 // Author:      Jorgen Bodde
-// Modified by:
+// Modified by: ABX - 19/12/2004 : possibility of horizontal orientation
+//                               : wxWidgets coding standards
 // Created:     22/06/2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Jorgen Bodde
@@ -14,6 +15,10 @@
 
 #ifdef __BORLANDC__
     #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
 #endif
 
 #include "wx/foldbar/foldpanelbar.h"
@@ -40,9 +45,9 @@ wxFoldPanelBar::wxFoldPanelBar()
 
 wxFoldPanelBar::wxFoldPanelBar( wxWindow *parent, wxWindowID id, const wxPoint &position,
                                 const wxSize& size, long style, long extraStyle)
-    : _foldPanel(0)
-    , _bottomPanel(0)
-    , _controlCreated(false)
+    : m_foldPanel(NULL)
+    , m_bottomPanel(NULL)
+    , m_controlCreated(false)
 {
     Create( parent, id, position, size, style, extraStyle);
 }
@@ -51,7 +56,11 @@ void wxFoldPanelBar::Create( wxWindow *parent, wxWindowID id, const wxPoint &pos
                              const wxSize& size, long style, long extraStyle )
 {
 
-    _extraStyle = extraStyle;
+    m_extraStyle = extraStyle;
+
+    // make sure there is any orientation
+    if ( ( style & wxFPB_HORIZONTAL ) != wxFPB_HORIZONTAL )
+        style |= wxFPB_VERTICAL;
 
     // create the panel (duh!). This causes a size event, which we are going
     // to skip when we are not initialised
@@ -60,57 +69,57 @@ void wxFoldPanelBar::Create( wxWindow *parent, wxWindowID id, const wxPoint &pos
 
     // the fold panel area
 
-    _foldPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL);
+    m_foldPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL);
 
     // the extra area for some icons / context menu etc
 
 #if 0
-    _bottomPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultCoord,22), wxNO_BORDER|wxTAB_TRAVERSAL);
-    _bottomPanel->SetBackgroundColour(*wxWHITE);
+    m_bottomPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultCoord,22), wxNO_BORDER|wxTAB_TRAVERSAL);
+    m_bottomPanel->SetBackgroundColour(*wxWHITE);
 #endif
 
     // create the fold icons to be used in the captions
 
-    _images = new wxImageList(16, 16);
+    m_images = new wxImageList(16, 16);
 
     wxBitmap *bmp = new wxBitmap(icon_expanded);
-    _images->Add(*bmp);
+    m_images->Add(*bmp);
     delete bmp;
 
     bmp = new wxBitmap(icon_collapsed);
-    _images->Add(*bmp);
+    m_images->Add(*bmp);
     delete bmp;
 
-    _moreBmp = new wxBitmap(icon_theresmore);
+    m_moreBmp = new wxBitmap(icon_theresmore);
 
     // do this as last, to check if create is already called
 
-    _controlCreated = true;
+    m_controlCreated = true;
 }
 
 wxFoldPanelBar::~wxFoldPanelBar()
 {
-    delete _images;
-    delete _moreBmp;
+    delete m_images;
+    delete m_moreBmp;
 }
 
 wxFoldPanel wxFoldPanelBar::AddFoldPanel(const wxString &caption, bool collapsedInitially, const wxCaptionBarStyle &style)
 {
-    wxASSERT(_controlCreated);
+    wxASSERT(m_controlCreated);
 
     // create a fold panel item, which is first only the caption.
     // the user can now add a panel area which will be folded in
     // when pressed.
 
-    wxFoldPanelItem *item = new wxFoldPanelItem(_foldPanel, caption, _images, collapsedInitially, style);
+    wxFoldPanelItem *item = new wxFoldPanelItem(m_foldPanel, caption, m_images, collapsedInitially, style);
 
     // look at the last added one and reposition this one
-    int y = 0;
-    if(_panels.GetCount() > 0)
-        y = _panels.Last()->GetY() + _panels.Last()->GetPanelHeight();
+    int pos = 0;
+    if(m_panels.GetCount() > 0)
+        pos = m_panels.Last()->GetItemPos() + m_panels.Last()->GetPanelLength();
 
-    item->Reposition(y);
-    _panels.Add(item);
+    item->Reposition(pos);
+    m_panels.Add(item);
 
     //return wxFoldPanel(item);
     return wxFoldPanel(item);
@@ -142,7 +151,7 @@ void wxFoldPanelBar::OnSizePanel(wxSizeEvent &event)
 {
     // skip all stuff when we are not initialised yet
 
-    if(!_controlCreated)
+    if(!m_controlCreated)
     {
         event.Skip();
         return;
@@ -166,12 +175,13 @@ void wxFoldPanelBar::OnSizePanel(wxSizeEvent &event)
 
     foldrect.SetX(0);
     foldrect.SetY(0);
-    _foldPanel->SetSize(foldrect);
+    m_foldPanel->SetSize(foldrect);
 
-    if(_extraStyle & wxFPB_COLLAPSE_TO_BOTTOM)
+    if(m_extraStyle & wxFPB_COLLAPSE_TO_BOTTOM)
     {
         wxRect rect = RepositionCollapsedToBottom();
-        if(rect.GetHeight() > 0)
+        bool vertical = IsVertical();
+        if((vertical && rect.GetHeight() > 0) || (!vertical && rect.GetWidth() > 0))
             RefreshRect(rect);
     }
 
@@ -191,30 +201,30 @@ void wxFoldPanelBar::OnSizePanel(wxSizeEvent &event)
 
     bottomrect.SetHeight(22);
     bottomrect.SetX(0);
-    _bottomPanel->SetSize(bottomrect);
+    m_bottomPanel->SetSize(bottomrect);
 
     // TODO: redraw the bitmap properly
     // use the captionbar algorithm for that
 
-    _bottomPanel->Refresh();
+    m_bottomPanel->Refresh();
 #endif
 }
 
 void wxFoldPanelBar::OnPaint(wxPaintEvent &event)
 {
-    if(!_controlCreated)
+    if(!m_controlCreated)
         return;
 #if 0
     // paint the bottom panel only, where the
     // arrow is shown when there is more to show the user
     // just as informative icon
 
-    wxPaintDC dc(_bottomPanel);
+    wxPaintDC dc(m_bottomPanel);
 
-    wxSize size = _bottomPanel->GetSize();
-    int offset = (size.GetHeight() - _moreBmp->GetHeight()) / 2;
+    wxSize size = m_bottomPanel->GetSize();
+    int offset = (size.GetHeight() - m_moreBmp->GetHeight()) / 2;
 
-    dc.DrawBitmap(*_moreBmp, size.GetWidth() - _moreBmp->GetWidth() - 2, offset, true);
+    dc.DrawBitmap(*m_moreBmp, size.GetWidth() - m_moreBmp->GetWidth() - 2, offset, true);
 #endif
 
     event.Skip();
@@ -235,7 +245,7 @@ void wxFoldPanelBar::RefreshPanelsFrom(wxFoldPanelItem *item)
 {
     wxASSERT(item);
 
-    int i = _panels.Index(item);
+    int i = m_panels.Index(item);
     if(i != wxNOT_FOUND)
         RefreshPanelsFrom(i);
 }
@@ -248,14 +258,14 @@ void wxFoldPanelBar::RefreshPanelsFrom(size_t i)
     // should be drawn at the bottom. All panels that are expanded
     // are drawn on top. The last expanded panel gets all the extra space
 
-    if(_extraStyle & wxFPB_COLLAPSE_TO_BOTTOM)
+    if(m_extraStyle & wxFPB_COLLAPSE_TO_BOTTOM)
     {
         int offset = 0;
 
-        for(size_t j = 0; j < _panels.GetCount(); j++)
+        for(size_t j = 0; j < m_panels.GetCount(); j++)
         {
-            if(_panels.Item(j)->IsExpanded())
-                offset += _panels.Item(j)->Reposition(offset);
+            if(m_panels.Item(j)->IsExpanded())
+                offset += m_panels.Item(j)->Reposition(offset);
         }
 
         // put all non collapsed panels at the bottom where there is space, else
@@ -265,9 +275,9 @@ void wxFoldPanelBar::RefreshPanelsFrom(size_t i)
     }
     else
     {
-        int y = _panels.Item(i)->GetY() + _panels.Item(i)->GetPanelHeight();
-        for(i++; i < _panels.GetCount(); i++)
-            y += _panels.Item(i)->Reposition(y);
+        int pos = m_panels.Item(i)->GetItemPos() + m_panels.Item(i)->GetPanelLength();
+        for(i++; i < m_panels.GetCount(); i++)
+            pos += m_panels.Item(i)->Reposition(pos);
     }
     Thaw();
 }
@@ -277,9 +287,9 @@ void wxFoldPanelBar::RedisplayFoldPanelItems()
     // resize them all. No need to reposition
 
     wxFoldPanelItem *item;
-    for(size_t i = 0; i < _panels.GetCount(); i++)
+    for(size_t i = 0; i < m_panels.GetCount(); i++)
     {
-        item = _panels.Item(i);
+        item = m_panels.Item(i);
         wxASSERT(item);
 
         item->ResizePanel();
@@ -289,18 +299,19 @@ void wxFoldPanelBar::RedisplayFoldPanelItems()
 wxRect wxFoldPanelBar::RepositionCollapsedToBottom()
 {
     wxRect value(0,0,0,0);
+    bool vertical = IsVertical();
 
     // determine wether the number of panels left
     // times the size of their captions is enough
     // to be placed in the left over space
 
     int expanded = 0, collapsed = 0, offset;
-    GetPanelsHeight(collapsed, expanded);
+    GetPanelsLength(collapsed, expanded);
 
     // if no room stick them behind the normal ones, else
     // at the bottom
 
-    if((GetSize().GetHeight() - expanded - collapsed) < 0)
+    if(((vertical ? GetSize().GetHeight() : GetSize().GetWidth()) - expanded - collapsed) < 0)
         offset = expanded;
     else
     {
@@ -308,43 +319,50 @@ wxRect wxFoldPanelBar::RepositionCollapsedToBottom()
         // I will send it back as 'slack' so it does not need to
         // be recalulated.
 
-        value.SetX(0);
-        value.SetY(expanded);
-        value.SetHeight(GetSize().GetHeight() - expanded);
+        value.SetHeight(GetSize().GetHeight());
         value.SetWidth(GetSize().GetWidth());
 
-        offset = GetSize().GetHeight() - collapsed;
-    }
+        if(vertical)
+        {
+            value.SetY(expanded);
+            value.SetHeight(value.GetHeight() - expanded);
+        }
+        else
+        {
+            value.SetX(expanded);
+            value.SetWidth(value.GetWidth() - expanded);
+        }
 
+        offset = (vertical ? GetSize().GetHeight() : GetSize().GetWidth()) - collapsed;
+    }
 
     // go reposition
 
-    for(size_t i = 0; i < _panels.GetCount(); i++)
+    for(size_t i = 0; i < m_panels.GetCount(); i++)
     {
-        if(!_panels.Item(i)->IsExpanded())
-            offset += _panels.Item(i)->Reposition(offset);
+        if(!m_panels.Item(i)->IsExpanded())
+            offset += m_panels.Item(i)->Reposition(offset);
     }
 
     return value;
 }
 
-int wxFoldPanelBar::GetPanelsHeight(int &collapsed, int &expanded)
+int wxFoldPanelBar::GetPanelsLength(int &collapsed, int &expanded)
 {
     int value = 0;
 
     // assumed here that all the panels that are expanded
     // are positioned after eachother from 0,0 to end.
 
-    for(size_t j = 0; j < _panels.GetCount(); j++)
+    for(size_t j = 0; j < m_panels.GetCount(); j++)
     {
-        int offset = _panels.Item(j)->GetPanelHeight();
+        int offset = m_panels.Item(j)->GetPanelLength();
         value += offset;
-        if(_panels.Item(j)->IsExpanded())
+        if(m_panels.Item(j)->IsExpanded())
             expanded += offset;
         else
             collapsed += offset;
     }
 
     return value;
-
 }

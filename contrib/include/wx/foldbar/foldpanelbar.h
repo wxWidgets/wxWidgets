@@ -2,7 +2,8 @@
 // Name:        foldpanelbar.h
 // Purpose:     wxFoldPanel
 // Author:      Jorgen Bodde
-// Modified by:
+// Modified by: ABX - 19/12/2004 : possibility of horizontal orientation
+//                               : wxWidgets coding standards
 // Created:     22/06/2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Jorgen Bodde
@@ -12,12 +13,6 @@
 #ifndef __WXFOLDPANELBAR_H__
 #define __WXFOLDPANELBAR_H__
 
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
-#include "foldpanelitem.h"
-
 /** Not yet supported but added for future reference. Single fold forces other panels to close when
     they are open, and only opens the current panel. This will allow the open panel to gain the full
     size left in the client area */
@@ -26,6 +21,10 @@
 /** All panels are stacked to the bottom. When they are expanded again they show up at the top */
 #define wxFPB_COLLAPSE_TO_BOTTOM    0x0002
 
+/** Orientation flag **/
+#define wxFPB_HORIZONTAL            wxHORIZONTAL /*  0x0004 */
+#define wxFPB_VERTICAL              wxVERTICAL   /*  0x0008 */
+
 /** Not yet supported, but added for future reference. Single fold plus panels will be stacked at the bottom */
 #define wxFPB_EXCLUSIVE_FOLD        wxFPB_SINGLE_FOLD | wxFPB_COLLAPSE_TO_BOTTOM
 
@@ -33,6 +32,8 @@
 #define wxFPB_DEFAULT_EXTRASTYLE    0
 
 #define wxFPB_DEFAULT_STYLE         wxTAB_TRAVERSAL | wxNO_BORDER
+
+#include "wx/foldbar/foldpanelitem.h"
 
 /** \class wxFoldPanel
     This class is used to return a reference to the fold panel that is added by wxFoldPanelBar::AddFoldPanel(). Use
@@ -43,43 +44,43 @@
 class wxFoldPanel
 {
 private:
-    wxFoldPanelItem *_item;
+    wxFoldPanelItem *m_item;
 
 public:
     /** Constructor, usually not directly used by the developer. */
     wxFoldPanel(wxFoldPanelItem *item)
-        : _item(item)
+        : m_item(item)
     {
     }
 
     /** Returns true if this is a valid wxFoldPanelItem reference. */
     bool IsOk() const {
-        return (_item != 0);
+        return (m_item != 0);
     };
 
     /** Copy operator to assign one instance to the other, this is needed because these classes are passed
         as instance not by reference. */
     virtual void operator=(const wxFoldPanel &item) {
-        _item = item._item;
+        m_item = item.m_item;
     };
 
 #ifndef _NO_DOXYGEN_
     // not allowed to be seen by doxygen
     wxFoldPanelItem *GetItem() const {
-        return _item;
+        return m_item;
     };
 #endif
 
     /** Use this method to obtain the wxPanel derived class to which you need to add your components. For example;<br>
 
     \code
-        wxFoldPanel item = _pnl->AddFoldPanel(wxT("Test me"), false);
-        _pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), wxID_ANY, wxT("Press Me")));
+        wxFoldPanel item = m_pnl->AddFoldPanel(wxT("Test me"), false);
+        m_pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), wxID_ANY, wxT("Press Me")));
     \endcode
     */
     wxFoldPanelItem *GetParent() const {
-        wxASSERT(_item);
-        return _item;
+        wxASSERT(m_item);
+        return m_item;
     };
 
 
@@ -107,14 +108,14 @@ private:
     DECLARE_CLASS( wxFoldPanelBar )
     DECLARE_EVENT_TABLE()
 
-    wxImageList *_images;
-    wxFoldPanelItemArray _panels;
-    wxBoxSizer* _panelSizer;
-    wxPanel *_foldPanel, *_bottomPanel;
-    wxFlexGridSizer* _mainSizer;
-    bool _controlCreated;
-    wxBitmap *_moreBmp;
-    int _extraStyle;
+    wxImageList *m_images;
+    wxFoldPanelItemArray m_panels;
+    wxBoxSizer* m_panelSizer;
+    wxPanel *m_foldPanel, *m_bottomPanel;
+    wxFlexGridSizer* m_mainSizer;
+    bool m_controlCreated;
+    wxBitmap *m_moreBmp;
+    int m_extraStyle;
 
 private:
     /** Refreshes all the panels from given index down to last one */
@@ -123,10 +124,10 @@ private:
     /** Refreshes all the panels from given pointer down to last one in the list */
     void RefreshPanelsFrom(wxFoldPanelItem *item);
 
-    /** Returns the height of the panels that are expanded and collapsed. This is useful to determine
-        quickly what size is used to display, and what is left at the bottom to allign
+    /** Returns the length of the panels that are expanded and collapsed. This is useful to determine
+        quickly what size is used to display, and what is left at the bottom (right) to allign
         the collapsed panels. */
-    int GetPanelsHeight(int &collapsed, int &expanded);
+    int GetPanelsLength(int &collapsed, int &expanded);
 
     /** Reposition all the collapsed panels to the bottom. When it is not possible to
         allign them to the bottom, stick them behind the visible panels. The Rect holds the
@@ -182,41 +183,46 @@ public:
         \code
 
             // create the wxFoldPanelBar
-            _pnl = new wxFoldPanelBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFPB_DEFAULT_STYLE, wxFPB_COLLAPSE_TO_BOTTOM);
+            m_pnl = new wxFoldPanelBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFPB_DEFAULT_STYLE, wxFPB_COLLAPSE_TO_BOTTOM);
 
             // add a foldpanel to the control. "Test me" is the caption and it is initially not collapsed.
-            wxFoldPanel item = _pnl->AddFoldPanel(wxT("Test me"), false);
+            wxFoldPanel item = m_pnl->AddFoldPanel(wxT("Test me"), false);
 
             // now add a button to the fold panel. Mind that the button should be made child of the
             // wxFoldPanel and not of the main form.
-            _pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), ID_COLLAPSEME, wxT("Collapse Me")));
+            m_pnl->AddFoldPanelWindow(item, new wxButton(item.GetParent(), ID_COLLAPSEME, wxT("Collapse Me")));
 
             // add a separator between the two controls. This is purely a visual line that can have a certain
             // color and also the indents and width alligning like a control.
-            _pnl->AddFoldPanelSeperator(item);
+            m_pnl->AddFoldPanelSeperator(item);
 
             // now add a text ctrl. Also very easy. Allign this on width so that when the control gets wider
             // the text control also sizes along.
-            _pnl->AddFoldPanelWindow(item, new wxTextCtrl(item.GetParent(), wxID_ANY, wxT("Comment")), wxFPB_ALIGN_WIDTH, wxFPB_DEFAULT_YSPACING, 20);
+            m_pnl->AddFoldPanelWindow(item, new wxTextCtrl(item.GetParent(), wxID_ANY, wxT("Comment")), wxFPB_ALIGN_WIDTH, wxFPB_DEFAULT_SPACING, 20);
 
         \endcode
     */
     int AddFoldPanelWindow(const wxFoldPanel &panel, wxWindow *window, int flags = wxFPB_ALIGN_WIDTH,
-                           int ySpacing = wxFPB_DEFAULT_YSPACING, int leftSpacing = wxFPB_DEFAULT_LEFTSPACING,
+                           int Spacing = wxFPB_DEFAULT_SPACING, int leftSpacing = wxFPB_DEFAULT_LEFTSPACING,
                            int rightSpacing = wxFPB_DEFAULT_RIGHTSPACING);
 
     /** Adds a seperator line to the current wxFoldPanel. The seperator is a simple line which is drawn and is no
         real component. It can be used to seperate groups of controls which belong to eachother. The colour is
         adjustable, and it takes the same ySpacing, leftSpacing and rightSpacing as AddFoldPanelWindow(). */
     int AddFoldPanelSeperator(const wxFoldPanel &panel, const wxColour &color = wxColour(167,167,167),
-                           int ySpacing = wxFPB_DEFAULT_YSPACING, int leftSpacing = wxFPB_DEFAULT_LEFTLINESPACING,
+                           int Spacing = wxFPB_DEFAULT_SPACING, int leftSpacing = wxFPB_DEFAULT_LEFTLINESPACING,
                            int rightSpacing = wxFPB_DEFAULT_RIGHTLINESPACING);
 
     /** Returns the number of panels currently present in the wxFoldPanelBar. This is independent if they are
         visible or hidden. */
     size_t GetCount() const {
-        return _panels.GetCount();
+        return m_panels.GetCount();
     };
+
+    inline bool IsVertical() const
+        {
+            return HasFlag(wxFPB_VERTICAL);
+        }
 
     /** Returns the wxFoldPanel reference belonging to the current index. An empty panel is returned when the
         index is out of bounds. Use GetCount() to get the amount of panels present. Collapsing and folding the
@@ -224,7 +230,7 @@ public:
         to the panel by number. */
     wxFoldPanel Item(size_t i) {
         wxCHECK((int)i >= 0 && i < GetCount(), wxFoldPanel(0));
-        return wxFoldPanel(_panels.Item(i));
+        return wxFoldPanel(m_panels.Item(i));
     };
 
     /** Collapses the given wxFoldPanel reference, and updates the foldpanel bar. In the wxFPB_COLLAPSE_TO_BOTTOM
@@ -270,7 +276,6 @@ public:
         wxCHECK2(fp.IsOk(), return wxEmptyCaptionBarStyle);
         return fp.GetItem()->GetCaptionStyle();
     };
-
 
 private:
     void OnPressCaption(wxCaptionBarEvent &event);

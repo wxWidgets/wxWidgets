@@ -2,7 +2,8 @@
 // Name:        foldtestpanel.h
 // Purpose:
 // Author:      Jorgen Bodde
-// Modified by:
+// Modified by: ABX - 19/12/2004 : possibility of horizontal orientation
+//                               : wxWidgets coding standards
 // Created:     18/06/2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Jorgen Bodde
@@ -20,7 +21,7 @@
  * Includes
  */
 
-#include "wx/foldbar/captionbar.h"
+#include "wx/foldbar/foldpanelbar.h"
 
 ////@begin includes
 ////@end includes
@@ -72,8 +73,8 @@ class FoldTestPanel: public wxPanel
     DECLARE_EVENT_TABLE()
 
 private:
-    wxImageList *_images;
-    wxRect _oldsize;
+    wxImageList *m_images;
+    wxRect m_oldsize;
 
     void OnCaptionPanel(wxCaptionBarEvent &event);
 

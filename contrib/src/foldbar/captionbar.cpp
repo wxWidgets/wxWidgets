@@ -2,7 +2,8 @@
 // Name:        captionbar.cpp
 // Purpose:     wxCaptionBar class belonging to the wxFoldPanel (but can be used independent)
 // Author:      Jorgen Bodde
-// Modified by:
+// Modified by: ABX - 19/12/2004 : possibility of horizontal orientation
+//                               : wxWidgets coding standards
 // Created:     18/06/2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Jorgen Bodde
@@ -17,17 +18,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/dcmemory.h"
-#include "wx/dcclient.h"
+    #include "wx/wx.h"
 #endif
 
-#include <wx/app.h>
-
-#include "wx/foldbar/captionbar.h"
+#include "wx/foldbar/foldpanelbar.h"
 
 /*
  * wxCaptionBar
@@ -43,22 +41,22 @@ END_EVENT_TABLE()
 wxCaptionBar::wxCaptionBar(wxWindow* parent, const wxString &caption, wxImageList *images, wxWindowID id,
                            const wxCaptionBarStyle &cbstyle, const wxPoint& pos, const wxSize& size, long style)
     : wxWindow(parent, id, pos, size, style)
-    , _caption(caption)
-    , _foldIcons(images)
-    , _rightIndent(wxFPB_BMP_RIGHTSPACE)
-    , _iconWidth(16)
-    , _iconHeight(16)
-    , _collapsed(false)
+    , m_caption(caption)
+    , m_foldIcons(images)
+    , m_rightIndent(wxFPB_BMP_RIGHTSPACE)
+    , m_iconWidth(16)
+    , m_iconHeight(16)
+    , m_collapsed(false)
 {
     // do initialisy thingy stuff
 
     ApplyCaptionStyle(cbstyle, true);
 
     // set initial size
-    if(_foldIcons)
+    if(m_foldIcons)
     {
-        wxASSERT(_foldIcons->GetImageCount() > 1);
-        _foldIcons->GetSize(0, _iconWidth, _iconHeight);
+        wxASSERT(m_foldIcons->GetImageCount() > 1);
+        m_foldIcons->GetSize(0, m_iconWidth, m_iconHeight);
     }
 }
 
@@ -105,12 +103,14 @@ void wxCaptionBar::ApplyCaptionStyle(const wxCaptionBarStyle &cbstyle, bool appl
     }
 
     // apply the style
-    _style = newstyle;
+    m_captionStyle = newstyle;
 }
 
 void wxCaptionBar::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
+    wxRect wndRect = GetRect();
+    bool vertical = IsVertical();
 
     // TODO: Maybe first a memory DC should draw all, and then paint it on the
     // caption. This way a flickering arrow during resize is not visible
@@ -119,24 +119,36 @@ void wxCaptionBar::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     FillCaptionBackground(dc);
 
-    dc.SetFont(_style.GetCaptionFont());
-    dc.DrawText(_caption, 4, (wxFPB_EXTRA_Y / 2));
+    dc.SetFont(m_captionStyle.GetCaptionFont());
+    if(vertical)
+        dc.DrawText(m_caption, 4, (wxFPB_EXTRA_Y / 2));
+    else
+        dc.DrawRotatedText(m_caption, (wxFPB_EXTRA_Y / 2) , wndRect.GetBottom() - 4 , 90 );
 
     // draw small icon, either collapsed or expanded
     // based on the state of the bar. If we have
     // any bmp's
 
-    if(_foldIcons)
+    if(m_foldIcons)
     {
-        wxCHECK2(_foldIcons->GetImageCount() > 1, return);
+        wxCHECK2(m_foldIcons->GetImageCount() > 1, return);
 
         int index = 0;
-        if(_collapsed)
+        if(m_collapsed)
             index = 1;
 
-        wxRect wndRect = GetRect();
-        _foldIcons->Draw(index, dc, wndRect.GetRight() - _iconWidth - _rightIndent, (wndRect.GetHeight() - _iconHeight) / 2,
-                         wxIMAGELIST_DRAW_TRANSPARENT);
+        if(vertical)
+            m_foldIcons->Draw(index,
+                              dc,
+                              wndRect.GetRight() - m_iconWidth - m_rightIndent,
+                              (wndRect.GetHeight() - m_iconHeight) / 2,
+                              wxIMAGELIST_DRAW_TRANSPARENT);
+        else
+            m_foldIcons->Draw(index,
+                              dc,
+                              (wndRect.GetWidth() - m_iconWidth) / 2,
+                              m_rightIndent,
+                              wxIMAGELIST_DRAW_TRANSPARENT);
     }
 }
 
@@ -144,13 +156,19 @@ void wxCaptionBar::FillCaptionBackground(wxPaintDC &dc)
 {
     // dispatch right style for caption drawing
 
-    switch(_style.GetCaptionStyle())
+    switch(m_captionStyle.GetCaptionStyle())
     {
     case wxCAPTIONBAR_GRADIENT_V:
-        DrawVerticalGradient(dc, GetRect());
+        if (IsVertical())
+            DrawVerticalGradient(dc, GetRect());
+        else
+            DrawHorizontalGradient(dc, GetRect());
         break;
     case wxCAPTIONBAR_GRADIENT_H:
-        DrawHorizontalGradient(dc, GetRect());
+        if (IsVertical())
+            DrawHorizontalGradient(dc, GetRect());
+        else
+            DrawVerticalGradient(dc, GetRect());
         break;
     case wxCAPTIONBAR_SINGLE:
         DrawSingleColour(dc, GetRect());
@@ -172,12 +190,14 @@ void wxCaptionBar::OnMouseEvent(wxMouseEvent& event)
 
     bool send_event = false;
 
-    if (event.LeftDown() && _foldIcons)
+    if (event.LeftDown() && m_foldIcons)
     {
         wxPoint pt(event.GetPosition());
         wxRect rect = GetRect();
+        bool vertical = IsVertical();
 
-        if(pt.x > (rect.GetWidth() - _iconWidth - _rightIndent))
+        if((vertical && pt.x > (rect.GetWidth() - m_iconWidth - m_rightIndent))||
+           (!vertical && pt.y < m_iconHeight + m_rightIndent))
             send_event = true;
     }
     else if(event.LeftDClick())
@@ -188,7 +208,7 @@ void wxCaptionBar::OnMouseEvent(wxMouseEvent& event)
     if(send_event)
     {
         wxCaptionBarEvent event(wxEVT_CAPTIONBAR);
-        event.SetBar(this);
+        event.SetCaptionBar(this);
 
         ::wxPostEvent(this, event);
 
@@ -206,13 +226,16 @@ wxSize wxCaptionBar::DoGetBestSize() const
 {
     int x,y;
 
-    GetTextExtent(_caption, &x, &y);
+    if(IsVertical())
+        GetTextExtent(m_caption, &x, &y);
+    else
+        GetTextExtent(m_caption, &y, &x);
 
-    if(x < _iconWidth)
-        x = _iconWidth;
+    if(x < m_iconWidth)
+        x = m_iconWidth;
 
-    if(y < _iconHeight)
-        y = _iconHeight;
+    if(y < m_iconHeight)
+        y = m_iconHeight;
 
     // TODO: The extra wxFPB_EXTRA_X constants should be adjustable as well
 
@@ -227,19 +250,21 @@ void wxCaptionBar::DrawVerticalGradient(wxDC &dc, const wxRect &rect )
     if(rect.height < 1 || rect.width < 1)
         return;
 
+    int size = rect.height;
+
     dc.SetPen(*wxTRANSPARENT_PEN);
 
 
     // calculate gradient coefficients
-    wxColour col2 = _style.GetSecondColour(),
-             col1 = _style.GetFirstColour();
+    wxColour col2 = m_captionStyle.GetSecondColour(),
+             col1 = m_captionStyle.GetFirstColour();
 
-    double rstep = double((col2.Red() -   col1.Red())) / double(rect.height), rf = 0,
-           gstep = double((col2.Green() - col1.Green())) / double(rect.height), gf = 0,
-           bstep = double((col2.Blue() -  col1.Blue())) / double(rect.height), bf = 0;
+    double rstep = double((col2.Red() -   col1.Red())) / double(size), rf = 0,
+           gstep = double((col2.Green() - col1.Green())) / double(size), gf = 0,
+           bstep = double((col2.Blue() -  col1.Blue())) / double(size), bf = 0;
 
     wxColour currCol;
-    for(int y = rect.y; y < rect.y + rect.height; y++)
+    for(int y = rect.y; y < rect.y + size; y++)
     {
         currCol.Set(
             (unsigned char)(col1.Red() + rf),
@@ -247,7 +272,7 @@ void wxCaptionBar::DrawVerticalGradient(wxDC &dc, const wxRect &rect )
             (unsigned char)(col1.Blue() + bf)
         );
         dc.SetBrush( wxBrush( currCol, wxSOLID ) );
-        dc.DrawRectangle( rect.x, rect.y + (y - rect.y), rect.width, rect.height );
+        dc.DrawRectangle( rect.x, rect.y + (y - rect.y), rect.width, size );
         //currCol.Set(currCol.Red() + rstep, currCol.Green() + gstep, currCol.Blue() + bstep);
         rf += rstep; gf += gstep; bf += bstep;
     }
@@ -260,18 +285,20 @@ void wxCaptionBar::DrawHorizontalGradient(wxDC &dc, const wxRect &rect )
     if(rect.height < 1 || rect.width < 1)
         return;
 
+    int size = rect.width;
+
     dc.SetPen(*wxTRANSPARENT_PEN);
 
     // calculate gradient coefficients
-    wxColour col2 = _style.GetSecondColour(),
-             col1 = _style.GetFirstColour();
+    wxColour col2 = m_captionStyle.GetSecondColour(),
+             col1 = m_captionStyle.GetFirstColour();
 
-    double rstep = double((col2.Red() -   col1.Red())) / double(rect.width), rf = 0,
-           gstep = double((col2.Green() - col1.Green())) / double(rect.width), gf = 0,
-           bstep = double((col2.Blue() -  col1.Blue())) / double(rect.width), bf = 0;
+    double rstep = double((col2.Red() -   col1.Red())) / double(size), rf = 0,
+           gstep = double((col2.Green() - col1.Green())) / double(size), gf = 0,
+           bstep = double((col2.Blue() -  col1.Blue())) / double(size), bf = 0;
 
     wxColour currCol;
-    for(int x = rect.x; x < rect.x + rect.width; x++)
+    for(int x = rect.x; x < rect.x + size; x++)
     {
         currCol.Set(
             (unsigned char)(col1.Red() + rf),
@@ -294,7 +321,7 @@ void wxCaptionBar::DrawSingleColour(wxDC &dc, const wxRect &rect )
     dc.SetPen(*wxTRANSPARENT_PEN);
 
     // draw simple rectangle
-    dc.SetBrush( wxBrush( _style.GetFirstColour(), wxSOLID ) );
+    dc.SetBrush( wxBrush( m_captionStyle.GetFirstColour(), wxSOLID ) );
     dc.DrawRectangle( rect.x, rect.y, rect.width, rect.height );
 }
 
@@ -312,14 +339,14 @@ void wxCaptionBar::DrawSingleRectangle(wxDC &dc, const wxRect &rect )
     wxBrush br;
     br.SetStyle(wxSOLID);
 
-    if(_style.GetCaptionStyle() == wxCAPTIONBAR_RECTANGLE)
+    if(m_captionStyle.GetCaptionStyle() == wxCAPTIONBAR_RECTANGLE)
         br.SetColour(GetParent()->GetBackgroundColour());
     else
-        br.SetColour(_style.GetFirstColour());
+        br.SetColour(m_captionStyle.GetFirstColour());
 
     // setup the pen frame
 
-    wxPen pen(_style.GetSecondColour());
+    wxPen pen(m_captionStyle.GetSecondColour());
     dc.SetPen(pen);
 
     dc.SetBrush( br );
@@ -335,7 +362,7 @@ void wxCaptionBar::OnSize(wxSizeEvent &event)
 {
     wxSize size = event.GetSize();
 
-    if(_foldIcons)
+    if(m_foldIcons)
     {
         // What I am doing here is simply invalidating the part of the window exposed. So when I
         // make a rect with as width the newly exposed part, and the x,y of the old window size origin,
@@ -344,13 +371,13 @@ void wxCaptionBar::OnSize(wxSizeEvent &event)
 
         // set rect to redraw as old bitmap area which is entitled to redraw
 
-        wxRect rect(size.GetWidth() - _iconWidth - _rightIndent, 0, _iconWidth + _rightIndent,
-                    _iconWidth + _rightIndent);
+        wxRect rect(size.GetWidth() - m_iconWidth - m_rightIndent, 0, m_iconWidth + m_rightIndent,
+                    m_iconWidth + m_rightIndent);
 
         // adjust rectangle when more is slided so we need to redraw all
         // the old stuff but not all (ugly flickering)
 
-        int diffX = size.GetWidth() - _oldSize.GetWidth();
+        int diffX = size.GetWidth() - m_oldSize.GetWidth();
         if(diffX > 1)
         {
             // adjust the rect with all the crap to redraw
@@ -367,21 +394,30 @@ void wxCaptionBar::OnSize(wxSizeEvent &event)
         RefreshRect(rect);
     }
 
-    _oldSize = size;
+    m_oldSize = size;
 }
 
 void wxCaptionBar::RedrawIconBitmap()
 {
-    if(_foldIcons)
+    if(m_foldIcons)
     {
         // invalidate the bitmap area and force a redraw
 
         wxRect rect = GetRect();
 
-        rect.SetX(rect.GetWidth() - _iconWidth - _rightIndent);
-        rect.SetWidth(_iconWidth + _rightIndent);
+        rect.SetX(rect.GetWidth() - m_iconWidth - m_rightIndent);
+        rect.SetWidth(m_iconWidth + m_rightIndent);
         RefreshRect(rect);
     }
+}
+
+bool wxCaptionBar::IsVertical() const
+{
+    // parent of wxCaptionBar is wxFoldPanelItem
+    // default is vertical
+    wxFoldPanelItem *bar = wxDynamicCast(GetParent(), wxFoldPanelItem);
+    wxCHECK_MSG( bar, true, _T("wrong parent") );
+    return bar->IsVertical();
 }
 
 /*
@@ -393,7 +429,7 @@ DEFINE_EVENT_TYPE(wxEVT_CAPTIONBAR)
 wxCaptionBarEvent::wxCaptionBarEvent(const wxCaptionBarEvent &event)
     : wxCommandEvent(event)
 {
-    _bar = event._bar;
+    m_captionBar = event.m_captionBar;
 }
 
 //DEFINE_EVENT_TYPE(wxEVT_CAPTIONBAR)
