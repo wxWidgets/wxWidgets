@@ -1651,7 +1651,7 @@ void wxString::swap(wxString& str)
     // ref count always stays positive
     wxString tmp = str;
     str = *this;
-    *this = str;
+    *this = tmp;
 }
 
 wxString& wxString::insert(size_t nPos, const wxString& str)
