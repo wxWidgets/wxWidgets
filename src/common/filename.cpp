@@ -208,8 +208,8 @@ static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
 {
     // do the reverse of ConvertFileTimeToWx()
     wxLongLong ll = dt.GetValue();
-    ll *= 10000;
     ll += FILETIME_EPOCH_OFFSET;
+    ll *= 10000;
 
     ft->dwHighDateTime = ll.GetHi();
     ft->dwLowDateTime = ll.GetLo();
