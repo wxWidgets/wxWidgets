@@ -55,7 +55,7 @@
 #include "wx/msw/gsockmsw.h"
 #include "wx/gsocket.h"
 
-HINSTANCE wxGetInstance(void);
+extern "C" HINSTANCE wxGetInstance(void);
 #define INSTANCE wxGetInstance()
 
 #else
@@ -94,7 +94,7 @@ HINSTANCE wxGetInstance(void);
 #define CLASSNAME  TEXT("_GSocket_Internal_Window_Class")
 
 /* implemented in utils.cpp */
-extern WXDLLIMPEXP_BASE HWND
+extern "C" WXDLLIMPEXP_BASE HWND
 wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 /* Maximum number of different GSocket objects at a given time.

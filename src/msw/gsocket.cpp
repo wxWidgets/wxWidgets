@@ -3,7 +3,7 @@
  * Name:    gsocket.c
  * Author:  Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose: GSocket main MSW file
- * Licence: The wxWidgets licence
+ * Licence: The wxWindows licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */
@@ -863,7 +863,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
         socket->m_establishing = FALSE;
 
-        getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+        getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
 
         if (error)
         {
@@ -1010,7 +1010,7 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
                                 void *optval, int *optlen)
 {
-    if (getsockopt(socket->m_fd, level, optname, optval, optlen) == 0)
+    if (getsockopt(socket->m_fd, level, optname, (char*)optval, optlen) == 0)
     {
         return GSOCK_NOERROR;
     }
@@ -1020,7 +1020,7 @@ GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
 GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
                                 const void *optval, int optlen)
 {
-    if (setsockopt(socket->m_fd, level, optname, optval, optlen) == 0)
+    if (setsockopt(socket->m_fd, level, optname, (char*)optval, optlen) == 0)
     {
         return GSOCK_NOERROR;
     }
