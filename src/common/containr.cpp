@@ -247,10 +247,12 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             event.SetEventObject(m_winParent);
             if ( !child->GetEventHandler()->ProcessEvent(event) )
             {
+                // set it first in case SetFocusFromKbd() results in focus
+                // change too
+                m_winLastFocused = child;
+
                 // everything is simple: just give focus to it
                 child->SetFocusFromKbd();
-
-                m_winLastFocused = child;
             }
             //else: the child manages its focus itself
 
