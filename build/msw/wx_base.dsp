@@ -456,6 +456,10 @@ SOURCE=..\..\src\common\appbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\clntdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\cmdline.cpp
 # End Source File
 # Begin Source File
@@ -988,6 +992,10 @@ SOURCE=..\..\include\wx\build.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\clntdata.h
 # End Source File
 # Begin Source File
 
