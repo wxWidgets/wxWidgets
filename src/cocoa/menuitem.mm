@@ -65,7 +65,7 @@
     {
         wxFrame *frame = menubar->GetFrame();
         wxCHECK_RET(frame, "wxMenuBar MUST be attached to a wxFrame!");
-        frame->Command(item->GetId());
+        frame->ProcessCommand(item->GetId());
     }
 }
 
