@@ -1,3 +1,19 @@
+wxwidgets2.5 (2.5.2.3) experimental; urgency=low
+
+  * Greatly improved concurrent installs.  We can now install
+    a much wider range of builds without conflicting and select
+    between them without the need to go changing symlinks or
+    the suite of applications you have installed.
+  * Contrib is dead.  Long live contrib.
+    Better multi-library builds have made contrib more or less
+    obsolete.  This is the big crunch before the boom.  Everything
+    useful out of contrib has been moved back into the main package.
+    Later we will split many out again along the lines of shared
+    dependencies, so a minimal wx install really can remain minimal
+    without losing any future potential.
+
+ -- Ron Lee <ron@debian.org>  Sat, 18 Sep 2004 00:59:01 +0930
+
 wxwidgets2.5 (2.5.1.1) experimental; urgency=low
 
   * The s/ndow/dget/g release.

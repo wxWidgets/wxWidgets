@@ -30,9 +30,9 @@ AC_CANONICAL_TARGET
 
 dnl When making releases do:
 dnl
-dnl WX_RELEASE_NUMBER += 1
+dnl wx_release_number += 1
 dnl
-dnl ..and update WX_CURRENT, WX_RELEASE and WX_AGE according to the
+dnl ..and update WX_CURRENT, WX_REVISION and WX_AGE according to the
 dnl following rules:
 dnl
 dnl    If any changes have been made to the public interface, that is if any
@@ -53,15 +53,16 @@ dnl
 dnl The resulting library name will be of the form:
 dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 
-WX_MAJOR_VERSION_NUMBER=2
-WX_MINOR_VERSION_NUMBER=5
-WX_RELEASE_NUMBER=2
-WX_SUBRELEASE_NUMBER=3
+wx_major_version_number=2
+wx_minor_version_number=5
+wx_release_number=2
+wx_subrelease_number=3
 
-WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
-WX_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
+WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
+WX_VERSION=$WX_RELEASE.$wx_release_number
+WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 
-WX_MSW_VERSION=$WX_MAJOR_VERSION_NUMBER$WX_MINOR_VERSION_NUMBER$WX_RELEASE_NUMBER
+WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
 WX_CURRENT=2
 WX_REVISION=0
@@ -1142,6 +1143,15 @@ WX_ARG_ENABLE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR fo
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl flavour support
+dnl ---------------------------------------------------------------------------
+
+dnl Should this be --enable?  I flip-flopped a couple of times and this seems
+dnl in the spirit if not the letter, we have gtk-prefix and the like in this group.
+dnl It doesn't actually change anything but the output file names.
+AC_ARG_WITH(flavour,       [  --with-flavour=NAME     specify a name to identify this build], [WX_FLAVOUR="$withval"])
+
+dnl ---------------------------------------------------------------------------
 dnl some win32 settings
 dnl ---------------------------------------------------------------------------
 
@@ -1151,16 +1161,6 @@ if test "x$VENDOR" = "x"; then
     VENDOR="custom"
 fi
 
-dnl General settings (needed for GUI and non-GUI compilations alike).
-dnl Path separator; ':' for unix, ';' for OS/2
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-    PATH_IFS=';'
-  ;;
-  *)
-    PATH_IFS=':'
-  ;;
-esac
 
 dnl for GUI only
 
@@ -1323,8 +1323,6 @@ if test "$build" != "$host" ; then
         RANLIB=$host_alias-ranlib
         DLLTOOL=$host_alias-dlltool
         RESCOMP=$host_alias-windres
-        LD=$host_alias-ld
-        NM=$host_alias-nm
         STRIP=$host_alias-strip
     else
         AC_MSG_ERROR($build_alias -> $host_alias cross compilation not supported yet.)
@@ -2377,8 +2375,6 @@ if test "$wxUSE_GUI" = "yes"; then
         GUIDIST=MSW_DIST
 
         dnl -mwindows causes a heap of other default gui libs to be linked in.
-        dnl FIXME: If cygwin needs this, please push it above, if not, please
-        dnl        remove this comment :-)
         case "${host}" in
             *-*-mingw32* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
@@ -2457,6 +2453,11 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 PKG_CHECK_MODULES(PANGOFT2, pangoft2,
                     [
                         CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
+                        # FIXME: GTK_LIBS already has a lot of what this is
+                        #        about to add, but we go ahead and just add
+                        #        it all again anyway.
+                        # This is not a good way to manage things.  And simply
+                        # uniq'ing the list later is hardly better.
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
                     ],
                     [
@@ -2700,7 +2701,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11"
         fi
 
-        TOOLKIT_VPATH="\${top_srcdir}/src/x11"
         TOOLKIT=X11
         GUIDIST=X11_DIST
     fi
@@ -2836,7 +2836,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         CFLAGS=$save_CFLAGS
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
-        TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo${PATH_IFS}\${top_srcdir}/src/x11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
@@ -2932,17 +2931,17 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
         CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon"
 
-        TOOLKIT_VPATH="\${top_srcdir}/src/mac/carbon${PATH_IFS}\${top_srcdir}/src/mac/carbon/morefilex"
         TOOLKIT=MAC
         dnl we can't call this MAC_DIST or autoconf thinks its a macro
         GUIDIST=MACX_DIST
         dnl wxMac version of wxBase and wxCocoa or wxBase-only built on Darwin
         dnl are different, so they need different names:
-        WXBASEPORT="_carbon"
+        dnl FIXME: If we can do it like this, please do, and we can remove
+        dnl        BASEPORT from bakefiles and elsewhere
+        WX_FLAVOUR="carbon${WX_FLAVOUR:+_$WX_FLAVOUR}"
     fi
 
     if test "$wxUSE_COCOA" = 1; then
-        TOOLKIT_VPATH="\${top_srcdir}/src/cocoa"
         TOOLKIT=COCOA
         GUIDIST=COCOA_DIST
     fi
@@ -2979,50 +2978,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
     fi
 
-    dnl misc other files depending on the port
-    PORT_FILES="\${top_srcdir}/src/\$(TOOLKITDIR)/files.lst"
-
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        ALL_OBJECTS="\$(GUI_LOWLEVEL_OBJS) \${UNIVOBJS}"
-
-        dnl ALL_SOURCES and ALL_HEADERS shouldn't include really all sources
-        dnl and headers as some/most are not needed for wxUniv but I don't
-        dnl have time to add GUI_LOWLEVEL_SOURCES/HEADERS stuff now (TODO!)
-        ALL_SOURCES="\$(ALL_SOURCES) \${UNIV_SOURCES}"
-        ALL_HEADERS="\$(ALL_HEADERS) \${UNIV_HEADERS}"
-
-        PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
-        if test "$wxUSE_X11" = 1; then
-            TOOLKIT_VPATH="\${top_srcdir}/src/${TOOLKIT_DIR}${PATH_IFS}\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes"
-        else
-            TOOLKIT_VPATH="\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes${PATH_IFS}\${top_srcdir}/src/${TOOLKIT_DIR}"
-        fi
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
         WIDGET_SET=univ
-    else
-        ALL_OBJECTS="\$(GUIOBJS)"
-        ALL_SOURCES="\$(ALL_SOURCES)"
-        ALL_HEADERS="\$(ALL_HEADERS)"
-    fi
-
-    ALL_OBJECTS="${ALL_OBJECTS} \$(COMMONOBJS) \$(GENERICOBJS)"
-
-    if test "$TOOLKIT" != "MSW" -a "$USE_DOS" != 1; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(UNIXOBJS)"
-    fi
-
-    if test "$wxUSE_HTML" = "yes"; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(HTMLOBJS)"
-    fi
-
-    if test "$wxUSE_LIBJPEG" = "builtin" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(JPEGOBJS)"
-    fi
-    if test "$wxUSE_LIBTIFF" = "builtin" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(TIFFOBJS)"
-    fi
-    if test "$wxUSE_LIBPNG" = "builtin" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(PNGOBJS)"
     fi
 
     dnl distribute samples/demos/utils with GUI versions
@@ -3037,21 +2995,10 @@ else
 
     dnl the sources, their dependenices and the headers
     if test "$USE_WIN32" = 1 ; then
-        ALL_OBJECTS="\${BASE_OBJS} \${BASE_MSW_OBJS}"
-        TOOLKIT_VPATH="\${top_srcdir}/src/msw"
-
         dnl yes, the toolkit for wxBase on win32 is actually MSW
         dnl wxBase on unix does not need a 'TOOLKIT' defined.
         TOOLKIT="MSW"
-    else
-        ALL_OBJECTS="\${BASE_OBJS} \${BASE_UNIX_OBJS}"
-        TOOLKIT_VPATH="\${top_srcdir}/src/unix"
     fi
-
-    ALL_SOURCES="\$(ALL_SOURCES)"
-    ALL_HEADERS="\$(ALL_HEADERS)"
-
-    PORT_FILES="\${top_srcdir}/src/files.lst"
 
     dnl distribute only wxBase sources/headers
     GUIDIST="BASE_DIST"
@@ -3111,12 +3058,6 @@ if test "$TOOLKIT" != "MSW" ; then
     fi
 fi
 
-if test "$wxUSE_REGEX" = "builtin" ; then
-    ALL_OBJECTS="${ALL_OBJECTS} \$(REGEXOBJS)"
-fi
-if test "$wxUSE_ZLIB" = "builtin" ; then
-    ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl wxDisplay Sanity checks
@@ -3253,106 +3194,10 @@ if test "$wxUSE_OPENGL" = "yes"; then
     fi
 fi
 
-if test -z "$TOOLKIT_VPATH" ; then
-    TOOLKIT_VPATH="\${top_srcdir}/src/${TOOLKIT_DIR}"
-fi
 
 dnl the symbol which allows conditional compilation for the given toolkit
 if test -n "$TOOLKIT" ; then
     TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WX${TOOLKIT}__"
-fi
-
-UNICODE=0
-lib_unicode_suffix=
-wxconfig_filename_unicode="ansi"
-if test "$wxUSE_UNICODE" = "yes"; then
-    lib_unicode_suffix=u
-    wxconfig_filename_unicode="unicode"
-    UNICODE=1
-fi
-
-lib_debug_suffix=
-wxconfig_filename_debug="release"
-DEBUG_FLAG=0
-if test "$wxUSE_DEBUG_FLAG" = "yes"; then
-    lib_debug_suffix=d
-    wxconfig_filename_debug="debug"
-    DEBUG_FLAG=1
-fi
-
-DEBUG_INFO=0
-if test "$wxUSE_DEBUG_INFO" = "yes"; then
-    DEBUG_INFO=1
-fi
-
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
-
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
-TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
-
-WXCONFIG_DATA_FILE="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${wxconfig_filename_unicode}-${wxconfig_filename_debug}-${WX_RELEASE}"
-
-if test "$cross_compiling" = "yes"; then
-    TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${host_alias}"
-    TOOLCHAIN_NAME_GL="${TOOLCHAIN_NAME_GL}-${host_alias}"
-    WXCONFIG_DATA_FILE="${WXCONFIG_DATA_FILE}-${host_alias}"
-    HOST_SUFFIX="-${host_alias}"
-fi
-
-dnl library link name
-WX_LIBRARY="wx_${TOOLCHAIN_NAME}"
-WX_LIBRARY_GL="wx_${TOOLCHAIN_NAME_GL}"
-WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${lib_debug_suffix}"
-WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}"
-
-dnl the name of the shared library
-WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-
-dnl the name of the links to the shared library
-WX_LIBRARY_LINK1="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}"
-WX_LIBRARY_LINK2="lib${WX_LIBRARY}.${SO_SUFFIX}"
-WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}.${WX_CURRENT}"
-WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
-
-case "${host}" in
-    *-*-cygwin* | *-*-mingw32* )
-        WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}"
-        WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
-        ;;
-
-    *-*-darwin* )
-        dnl Under Mac OS X, the naming conventions for shared libraries
-        dnl are different: the number precedes the suffix.
-
-        WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
-        WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}.${SO_SUFFIX}"
-
-        WX_LIBRARY_LINK1="lib${WX_LIBRARY}.${WX_CURRENT}.${SO_SUFFIX}"
-        WX_LIBRARY_LINK2="lib${WX_LIBRARY}.${SO_SUFFIX}"
-        WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.${WX_CURRENT}.${SO_SUFFIX}"
-        WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
-
-        dnl base name of the resource file for wxMac must be the same
-        dnl as library installation base name (-install_name)
-        if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
-            WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.${WX_CURRENT}.r"
-            WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.${WX_CURRENT}.rsrc"
-        fi
-        ;;
-esac
-
-dnl the name of the static library
-WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
-WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
-
-dnl define which libs wx-config should link.
-WXCONFIG_LIBS="-l${WX_LIBRARY}"
-WXCONFIG_LIBS_STATIC="lib${WX_LIBRARY}.a"
-
-if test "$wxUSE_OPENGL" = "yes"; then
-    WXCONFIG_LIBS_GL="-l${WX_LIBRARY_GL} ${OPENGL_LIBS}"
-    WXCONFIG_LIBS_STATIC_GL="lib${WX_LIBRARY_GL}.a ${OPENGL_LIBS}"
 fi
 
 
@@ -3368,9 +3213,7 @@ if test "$wxUSE_SHARED" = "yes"; then
     esac
 fi
 
-SHARED=0
 if test "$wxUSE_SHARED" = "yes"; then
-    SHARED=1
 
     dnl use versioned symbols if available on the platform
     WX_VERSIONED_SYMBOLS([\$(top_builddir)version-script])
@@ -3412,8 +3255,6 @@ if test "$wxUSE_SHARED" = "yes"; then
                 ])
             LDFLAGS="$saveLdflags"
         else
-            SHARED_LD="${CXX} -G -o"
-            PIC_FLAG="-KPIC"
             SAMPLES_RPATH_FLAG="-R\$(top_builddir)lib"
         fi
       ;;
@@ -3437,56 +3278,71 @@ EOF
 	;;
       
     esac
-
-    dnl set target to shared if not explicitly chose static before
-    if test "x$WX_TARGET_LIBRARY" = "x"; then
-        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
-        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_SHARED_GL}"
-    fi
-
-    dnl do not alter the LIBRARY_TYPE strings "so" and "a", they are magic
-    WX_TARGET_LIBRARY_TYPE="so"
-    INSTALL_LIBRARY='$(INSTALL_PROGRAM)'
 fi
 
 dnl do not 'else' this, it may be changed in the above conditional.
 if test "$wxUSE_SHARED" = "no"; then
-
-    dnl give static wxBase and wxMSW build a working install target
-    if test "$wxUSE_GUI" = "no" -o "$USE_WIN32" = 1 ; then
-        dnl we're here because WX_ALL_INSTALLED is empty, but play safe anyway
-        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
-    fi
-
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
-        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
-    fi
-
-    if test "$wxUSE_OPENGL" = "yes"; then
-        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_gl"
-        WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_STATIC} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC_GL}"
-    else
-        WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_STATIC}"
-    fi
-
-    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-    WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
-
-    WX_TARGET_LIBRARY_TYPE="a"
-    INSTALL_LIBRARY='$(INSTALL_DATA)'
-
-    dnl wx-config should assume the --static flag by default if we don't have
-    dnl any shared libs anyhow
-    STATIC_FLAG="yes"
+    config_linkage_component="-static"
+    SHARED=0
 else
-    STATIC_FLAG="no"
+    SHARED=1
 fi
 
+
+UNICODE=0
+lib_unicode_suffix=
+WX_CHARTYPE="ansi"
+if test "$wxUSE_UNICODE" = "yes"; then
+    lib_unicode_suffix=u
+    WX_CHARTYPE="unicode"
+    UNICODE=1
+fi
+
+lib_debug_suffix=
+WX_DEBUGTYPE="release"
+DEBUG_FLAG=0
+if test "$wxUSE_DEBUG_FLAG" = "yes"; then
+    lib_debug_suffix=d
+    WX_DEBUGTYPE="debug"
+    DEBUG_FLAG=1
+fi
+
+WX_FLAVOUR=${WX_FLAVOUR:+-$WX_FLAVOUR}
+WX_LIB_FLAVOUR=`echo $WX_FLAVOUR | tr '-' '_'`
+
+DEBUG_INFO=0
+if test "$wxUSE_DEBUG_INFO" = "yes"; then
+    DEBUG_INFO=1
+fi
+
+WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
+
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}"
+
+TOOLCHAIN_FULLNAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}-${WX_DEBUGTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
+
+if test "$cross_compiling" = "yes"; then
+    HOST_SUFFIX="-$host_alias"
+    TOOLCHAIN_NAME="$TOOLCHAIN_NAME$HOST_SUFFIX"
+    TOOLCHAIN_FULLNAME="${host_alias}-$TOOLCHAIN_FULLNAME"
+fi
+
+dnl library link name
+dnl These just save us from exporting lib_{unicode,debug,flavour}_suffix.
+dnl If we ever need to do that, we won't need to keep these.
+WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+
+
+
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
+    dnl base name of the resource file for wxMac must be the same
+    dnl as library installation base name (-install_name)
+    WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${WX_CURRENT}.r"
+    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${WX_CURRENT}.rsrc"
+
     dnl add the resources target for wxMac
     LIBWXMACRES="\$(top_builddir)lib/${WX_RESOURCES_MACOSX_ASCII}"
-    WX_ALL="${WX_ALL} ${LIBWXMACRES}"
-    WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_res"
 
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
@@ -5230,7 +5086,6 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                            [AC_MSG_RESULT(yes)
                             CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"])
             AC_LANG_RESTORE
-            ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
             LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 AC_DEFINE(wxUSE_OLE)
@@ -5834,9 +5689,6 @@ fi
 
 AC_DEFINE_UNQUOTED(wxINSTALL_PREFIX, "$wxPREFIX")
 
-dnl define the variables used in wx-config
-top_builddir_wxconfig=`pwd`
-
 
 dnl ---------------------------------------------------------------------------
 dnl define variables with all built libraries for wx-config
@@ -5958,7 +5810,7 @@ dnl note that the order is somewhat important: wxWidgets headers should
 dnl come first and the one with setup.h should be before $(top_srcdir)/include
 dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
 dnl CodeWarrior):
-INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_NAME} \
+INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 -I\${top_srcdir}/include $TOOLKIT_INCLUDE"
 
 dnl C/C++ compiler options used to compile wxWidgets
@@ -6027,7 +5879,7 @@ if test "$wxUSE_ODBC" = "builtin" ; then
 fi
 
 for i in $wxconfig_3rdparty ; do
-    WXCONFIG_EXTRALIBS="$WXCONFIG_EXTRALIBS -lwx${i}${lib_debug_suffix}${HOST_SUFFIX}"
+    WXCONFIG_EXTRALIBS="$WXCONFIG_EXTRALIBS -lwx${i}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 done
 
 
@@ -6071,6 +5923,8 @@ fi
 
 AC_SUBST(VENDOR)
 AC_SUBST(OFFICIAL_BUILD)
+AC_SUBST(WX_FLAVOUR)
+AC_SUBST(WX_LIB_FLAVOUR)
 
 AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
@@ -6088,7 +5942,6 @@ AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
-AC_SUBST(SHARED)
 TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr "[[A-Z]]" "[[a-z]]"`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
@@ -6113,6 +5966,23 @@ esac
 
 AC_BAKEFILE
 
+if test "$wxUSE_SHARED" = "yes"; then
+
+    dnl We get the shared build linker from bakefile, since it
+    dnl moved all the logic for this out of this file and into
+    dnl its own macro.  But it can't decide on whether to return
+    dnl us $(VAR), ${VAR}, or the present expansion of VAR.
+    dnl So normalise and expand everything here now, because its
+    dnl not going to change inside wx-config anyway.
+    sanitised_bakefile_mess=`echo "$SHARED_LD_CXX" | tr -d '()'`
+    EXE_LINKER=`eval echo "$sanitised_bakefile_mess"`
+
+else
+
+    dnl No bakefile support for static builds, but this should be ok for most.
+    EXE_LINKER="$CXX -o"
+
+fi
 
 GCC_PRAGMA_FLAGS=""
 dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
@@ -6161,41 +6031,15 @@ dnl       tr ' ' '\n' introduces DOS-like line breaks, whereas tr '\n' ' '
 dnl       only removes the Unix-like part of the introduced line break.
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
 
-dnl makefile variables
-AC_SUBST(PATH_IFS)
+dnl subtle bakefile goop.
+dnl Used in wx-config now too, as its STATIC_FLAG with different makeup.
+dnl I wish we would have called it something less likely to clash with
+dnl things though.
+AC_SUBST(SHARED)
 
 dnl global options
-AC_SUBST(WX_MAJOR_VERSION_NUMBER)
-AC_SUBST(WX_MINOR_VERSION_NUMBER)
-AC_SUBST(WX_RELEASE_NUMBER)
-AC_SUBST(WX_SUBRELEASE_NUMBER)
-AC_SUBST(WX_LIBRARY_NAME_STATIC)
-AC_SUBST(WX_LIBRARY_NAME_SHARED)
 AC_SUBST(WX_LIBRARY_BASENAME_NOGUI)
 AC_SUBST(WX_LIBRARY_BASENAME_GUI)
-AC_SUBST(WX_LIBRARY_IMPORTLIB)
-AC_SUBST(WX_TARGET_LIBRARY)
-AC_SUBST(WX_LIBRARY_LINK1)
-AC_SUBST(WX_LIBRARY_LINK2)
-AC_SUBST(PROGRAM_EXT)
-
-dnl global gl options
-AC_SUBST(WX_LIBRARY_NAME_STATIC_GL)
-AC_SUBST(WX_LIBRARY_NAME_SHARED_GL)
-AC_SUBST(WX_TARGET_LIBRARY_GL)
-AC_SUBST(WX_LIBRARY_LINK1_GL)
-AC_SUBST(WX_LIBRARY_LINK2_GL)
-
-dnl are we supposed to create the links?
-AC_SUBST(WX_ALL)
-AC_SUBST(WX_ALL_INSTALLED)
-
-AC_SUBST(SHARED_LD)
-AC_SUBST(PIC_FLAG)
-
-AC_SUBST(WX_TARGET_LIBRARY_TYPE)
-
-AC_SUBST(STATIC_FLAG)
 
 dnl debugging options
 AC_SUBST(WXDEBUG_DEFINE)
@@ -6206,37 +6050,32 @@ AC_SUBST(AFMINSTALL)
 AC_SUBST(WIN32INSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
-AC_SUBST(TOOLKIT_VPATH)
 AC_SUBST(TOOLCHAIN_NAME)
+AC_SUBST(TOOLCHAIN_FULLNAME)
 AC_SUBST(TOOLCHAIN_DEFS)
 AC_SUBST(TOOLCHAIN_DLL_DEFS)
 
 dnl wx-config options
-AC_SUBST(top_builddir_wxconfig)
 AC_SUBST(host_alias)
 AC_SUBST(cross_compiling)
+AC_SUBST(WIDGET_SET)
+AC_SUBST(WX_RELEASE)
+AC_SUBST(WX_VERSION)
+AC_SUBST(WX_SUBVERSION)
+AC_SUBST(WX_CHARTYPE)
+AC_SUBST(WX_DEBUGTYPE)
 AC_SUBST(WXCONFIG_EXTRALIBS)
-AC_SUBST(WXCONFIG_LIBS)
-AC_SUBST(WXCONFIG_LIBS_GL)
-AC_SUBST(WXCONFIG_LIBS_STATIC)
-AC_SUBST(WXCONFIG_LIBS_STATIC_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
-AC_SUBST(WXCONFIG_DATA_FILE)
 AC_SUBST(WX_LARGEFILE_FLAGS)
 AC_SUBST(GCC_PRAGMA_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS_CXX)
-
-dnl the list of files to compile/install
-AC_SUBST(ALL_OBJECTS)
-AC_SUBST(ALL_HEADERS)
-AC_SUBST(ALL_SOURCES)
+AC_SUBST(EXE_LINKER)
 
 dnl distribution vars
 AC_SUBST(GUIDIST)
-AC_SUBST(PORT_FILES)
 AC_SUBST(DISTDIR)
 
 dnl additional subdirectories where we will build
@@ -6245,8 +6084,6 @@ AC_SUBST(SAMPLES_SUBDIRS)
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS)
 AC_SUBST(LDFLAGS_GL)
-AC_SUBST(LDFLAGS_VERSIONING)
-AC_SUBST(LDFLAGS_EXE)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)
 AC_SUBST(WX_VERSION_TAG)
@@ -6268,11 +6105,6 @@ AC_SUBST(MACRESWXCONFIG)
 dnl other tools
 AC_SUBST(GCC)
 AC_SUBST(DLLTOOL)
-AC_SUBST(AS)
-AC_SUBST(NM)
-AC_SUBST(LD)
-AC_SUBST(MAKEINFO)
-AC_SUBST(INSTALL_LIBRARY)
 
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
@@ -6280,77 +6112,27 @@ dnl itself (this macro is required if SUBDIRS variable is used in Makefile.am
 dnl - and we do use it)
 AC_PROG_MAKE_SET
 
-dnl move setup.h back if available
-if test -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h; then
-    mv -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h setup.h
-fi
 
-AC_CONFIG_HEADERS([setup.h])
+AC_CONFIG_HEADERS([lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in])
 
-dnl create each of the files in the space separated list from the file.in
-dnl (the original file name may be overriden by appending another name after a
-dnl colon)
-AC_CONFIG_FILES([
-            wx-config
-            wx-config-wrapper
-            version-script
-            Makefile
-          ])
+AC_CONFIG_FILES([ lib/wx/config/${TOOLCHAIN_FULLNAME}:wx-config.in ],
+                [ chmod +x lib/wx/config/${TOOLCHAIN_FULLNAME} ],
+                [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}" ])
 
-AC_CONFIG_COMMANDS([default],
-          [
-            if test ! -d lib; then
-              mkdir lib
-            fi
-            if test ! -d lib/wx; then
-              mkdir lib/wx
-            fi
-            if test ! -d lib/wx/config; then
-              mkdir lib/wx/config
-            fi
-            if test ! -d lib/wx/include; then
-              mkdir lib/wx/include
-            fi
-            if test ! -d lib/wx/include/${TOOLCHAIN_NAME}; then
-              mkdir lib/wx/include/${TOOLCHAIN_NAME}
-            fi
-            if test ! -d lib/wx/include/${TOOLCHAIN_NAME}/wx; then
-              mkdir lib/wx/include/${TOOLCHAIN_NAME}/wx
-            fi
-            if test -f setup.h; then
-              mv -f setup.h lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h
-            fi
-            
-            dnl This test is required to make the following idempotent.
-            dnl Otherwise running config.status or rerunning configure
-            dnl would stomp the wx-config link or try to move it onto
-            dnl itself.
-            dnl Use -h instead of -L to test for link (GD)
-            dnl   -h is documented as obsolete under Mac OS X but works
-            dnl   -L is obsolete under Solaris8
-            if test ! -h wx-config; then
-                chmod +x wx-config
-                mv -f wx-config lib/wx/config/${WXCONFIG_DATA_FILE}
-                ${LN_S} wx-config-${WX_RELEASE} wx-config
-            fi
-            ( cd lib/wx/config ; 
-              rm -f ${TOOLCHAIN_NAME}
-              ${LN_S} ${WXCONFIG_DATA_FILE} ${TOOLCHAIN_NAME} )
+AC_CONFIG_FILES([ lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}:wx-config-inplace.in ],
+                [ chmod +x lib/wx/config/inplace-${TOOLCHAIN_FULLNAME} ],
+                [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}" ])
 
-            if test -f wx-config-wrapper; then
-                chmod +x wx-config-wrapper
-                mv -f wx-config-wrapper wx-config-${WX_RELEASE}
-                rm -f wx${TOOLCHAIN_NAME}-config
-                ${LN_S} wx-config-${WX_RELEASE} wx${TOOLCHAIN_NAME}-config
-            fi
-          ],
-          [
-            TOOLCHAIN_NAME="${TOOLCHAIN_NAME}"
-            WXCONFIG_DATA_FILE="${WXCONFIG_DATA_FILE}"
-            WX_RELEASE="${WX_RELEASE}"
-            LN_S="${LN_S}"
-          ]
-         )
+AC_CONFIG_FILES([ version-script Makefile ])
+
+AC_CONFIG_COMMANDS([ wx-config
+                   ],
+                   [ rm -f wx-config
+                     ${LN_S} lib/wx/config/inplace-${TOOLCHAIN_FULLNAME} wx-config
+                   ],
+                   [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}"
+                     LN_S="${LN_S}"
+                   ])
 
 
 dnl Configure samples, contrib etc. directories, but only if they are present:

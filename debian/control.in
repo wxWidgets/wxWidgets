@@ -24,9 +24,6 @@ Architecture: any
 Section: libdevel
 Depends: wx=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libc6-dev
 Suggests: wxwin=V-doc, libstdc++-dev, gettext, xlibmesa-gl-dev | libgl-dev, xlibmesa-glu-dev | libglu-dev
-Conflicts: libwxgtk-dev, libwxbase-dev
-Replaces: libwxgtk-dev, libwxbase-dev, wxgtk2.1-dev
-Provides: libwxgtk-dev
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ development)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -41,9 +38,6 @@ Architecture: any
 Section: libdevel
 Priority: extra
 Depends: wx=V-headers (= ${Source-Version}), libc6-dev
-Conflicts: libwxgtk-dbg, libwxbase-dbg
-Replaces: libwxgtk-dbg, libwxbase-dbg
-Provides: libwxgtk-dbg
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ development)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -71,38 +65,9 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython binding)
  contrib libs.  If you wish to use xrced you'll also need the python-xml
  package installed.
 
-Package: libwxgtk=V-contrib
-Architecture: any
-Section: libs
-Depends: ${shlibs:Depends}
-Description: wxWidgets Cross-platform C++ GUI toolkit (runtime contrib libs)
- wxWidgets (formerly known as wxWindows) is a class library for C++ providing
- GUI components and other facilities on several popular platforms (and some
- unpopular ones as well).  For more information see http://wxwidgets.org
- .
- This package provides the contrib libs from the wxWidgets source tree
-
-Package: libwxgtk=V-contrib-dev
-Architecture: any
-Section: libdevel
-Depends: wx=V-headers (= ${Source-Version}), libwxgtk=V-dev (= ${Source-Version}), libwxgtk=V-contrib (= ${Source-Version}), libc6-dev
-Conflicts: libwxgtk-contrib-dev
-Replaces: libwxgtk-contrib-dev
-Provides: libwxgtk-contrib-dev
-Description: wxWidgets Cross-platform C++ GUI toolkit (development contrib libs)
- wxWidgets (formerly known as wxWindows) is a class library for C++ providing
- GUI components and other facilities on several popular platforms (and some
- unpopular ones as well).  For more information see http://wxwidgets.org
- .
- Install this package if you wish to compile applications that use the
- contrib libs from the wxWidgets source tree.
-
 Package: wx=V-headers
 Architecture: any
 Section: devel
-Conflicts: wx-headers, wxwin-headers
-Replaces: wx-headers, wxwin-headers, wxgtk2.1-dev, libwxgtk2.3
-Provides: wx-headers
 Description: wxWidgets Cross-platform C++ GUI toolkit (header files)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -127,8 +92,6 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (i18n support)
 Package: wx=V-doc
 Architecture: all
 Section: doc
-Conflicts: wx-doc, wxwin2.2-doc, wxwin-doc
-Replaces: wx-doc, wxwin-doc
 Provides: wx-doc
 Suggests: doc-base, www-browser
 Description: wxWidgets Cross-platform C++ GUI toolkit (documentation)
@@ -176,9 +139,6 @@ Package: libwxmsw=V-dev
 Architecture: i386
 Section: otherosfs
 Depends: wx=V-headers-msw (= ${Source-Version})
-Conflicts: libwxmsw-dev
-Replaces: libwxmsw-dev
-Provides: libwxmsw-dev
 Description: wxMSW mingw32msvc-cross
  mingw32msvc-cross wxMSW libs.
 
@@ -186,9 +146,6 @@ Package: libwxmsw=V-dbg
 Architecture: i386
 Section: otherosfs
 Depends: wx=V-headers-msw (= ${Source-Version})
-Conflicts: libwxmsw-dbg
-Replaces: libwxmsw-dbg
-Provides: libwxmsw-dbg
 Description: wxMSW mingw32msvc-cross (debug)
  mingw32msvc-cross wxMSW libs.
  __WXDEBUG__ version.
@@ -197,9 +154,6 @@ Package: wx=V-headers-msw
 Architecture: i386
 Section: otherosfs
 Depends: wx=V-headers (= ${Source-Version})
-Conflicts: wx-headers-msw, wxwin-headers-msw
-Replaces: wx-headers-msw, wxwin-headers-msw
-Provides: wx-headers-msw
 Description: Extra wxWidgets headers for mingw32msvc-cross
  Headers required by the wxWidgets mingw32msvc-cross libraries.
 

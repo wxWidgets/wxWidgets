@@ -53,11 +53,11 @@
 
         <data-files-tg id="install-afm" cond="USE_GUI=='1'">
             <files>misc/afm/*.afm</files>
-            <install-to>$(DATADIR)/wx/$(WXVER_MAJOR).$(WXVER_MINOR)/afm</install-to>
+            <install-to>$(DATADIR)/wx/$(WXVER_MAJOR).$(WXVER_MINOR)$(WX_FLAVOUR)/afm</install-to>
         </data-files-tg>
         <data-files-tg id="install-gsafm" cond="USE_GUI=='1'">
             <files>misc/gs_afm/*.afm</files>
-            <install-to>$(DATADIR)/wx/$(WXVER_MAJOR).$(WXVER_MINOR)/gs_afm</install-to>
+            <install-to>$(DATADIR)/wx/$(WXVER_MAJOR).$(WXVER_MINOR)$(WX_FLAVOUR)/gs_afm</install-to>
         </data-files-tg>
 
         <action id="install-wxconfig">
@@ -65,25 +65,22 @@
             <command>
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
-                $(INSTALL_PROGRAM) lib/wx/config/@WXCONFIG_DATA_FILE@ $(DESTDIR)$(LIBDIR)/wx/config
-                (cd $(DESTDIR)$(LIBDIR)/wx/config &amp;&amp; rm -f $(TOOLCHAIN_NAME) &amp;&amp; $(LN_S) @WXCONFIG_DATA_FILE@ $(TOOLCHAIN_NAME))
-                $(INSTALL_PROGRAM) wx-config-$(WXVER_MAJOR).$(WXVER_MINOR) $(DESTDIR)$(BINDIR)
-                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) wx-config-$(WXVER_MAJOR).$(WXVER_MINOR) wx-config)
-                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx$(TOOLCHAIN_NAME)-config &amp;&amp; $(LN_S) wx-config wx$(TOOLCHAIN_NAME)-config)
+                $(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
+                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
             </command>
         </action>
 
         <data-files>
             <srcdir>$(BUILDDIR)</srcdir>
-            <files>lib/wx/include/$(TOOLCHAIN_NAME)/wx/setup.h</files>
-            <install-to>$(LIBDIR)/wx/include/$(TOOLCHAIN_NAME)/wx</install-to>
+            <files>lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx/setup.h</files>
+            <install-to>$(LIBDIR)/wx/include/$(TOOLCHAIN_FULLNAME)/wx</install-to>
         </data-files>
 
         <headers>
             <srcdir>$(SRCDIR)/include</srcdir>
             <files>$(ALL_HEADERS)</files>
             <install-to>
-                $(INCLUDEDIR)/wx-$(WXVER_MAJOR).$(WXVER_MINOR)
+                $(INCLUDEDIR)/wx-$(WXVER_MAJOR).$(WXVER_MINOR)$(WX_FLAVOUR)
             </install-to>
         </headers>
 

@@ -13,7 +13,7 @@
     </if>
     <set var="LIB_TIFF">
         <if cond="wxUSE_LIBTIFF=='builtin' and USE_GUI=='1'">
-            wxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            wxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
         </if>
     </set>
     <set var="INC_TIFF">

@@ -14,7 +14,7 @@
         </set>
     </if>
     <set var="LIB_REGEX">
-        <if cond="wxUSE_REGEX=='builtin'">wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(HOST_SUFFIX)</if>
+        <if cond="wxUSE_REGEX=='builtin'">wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</if>
     </set>
     <set var="INC_REGEX">
         <if cond="wxUSE_REGEX=='builtin'">$(TOP_SRCDIR)src/regex</if>
@@ -22,7 +22,7 @@
 
     <lib id="wxregex" template="msvc_setup_h,3rdparty_lib"
          cond="wxUSE_REGEX=='builtin' and BUILDING_LIB=='1'">
-        <libname>$(id)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
+        <libname>$(id)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <define>__WX$(TOOLKIT)__</define>

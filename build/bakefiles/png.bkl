@@ -9,7 +9,7 @@
     </if>
     <set var="LIB_PNG">
         <if cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1'">
-            wxpng$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            wxpng$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
         </if>
     </set>
     <set var="INC_PNG">

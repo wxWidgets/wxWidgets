@@ -8,7 +8,7 @@
         <set var="wxUSE_EXPAT">builtin</set>
     </if>
     <set var="LIB_EXPAT">
-        <if cond="wxUSE_EXPAT=='builtin'">wxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)</if>
+        <if cond="wxUSE_EXPAT=='builtin'">wxexpat$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</if>
     </set>
     <set var="INC_EXPAT">
         <if cond="wxUSE_EXPAT=='builtin'">$(TOP_SRCDIR)src/expat/lib</if>

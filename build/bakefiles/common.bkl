@@ -25,6 +25,9 @@
     <set var="WX_VERSION" make_var="1">
         $(WXVER_MAJOR).$(WXVER_MINOR).$(WXVER_RELEASE)
     </set>
+    <set var="WX_RELEASE" make_var="1">
+        $(WXVER_MAJOR).$(WXVER_MINOR)
+    </set>
 
     <set var="WX_STABLE_BRANCH">$(int(int(WXVER_MINOR) % 2 == 0))</set>
 
@@ -74,7 +77,7 @@
         <if cond="UNICODE=='1' and FORMAT!='msevc4prj'">u</if>
     </set>
     <set var="WXNAMESUFFIX">
-        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+        $(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
     </set>
     
     <set var="WXUNIVNAME">
@@ -260,7 +263,7 @@
     </template>
 
     <template id="3rdparty_lib" template="common_settings,anylib">
-        <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
+        <libname>$(id)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
         <!--
         we want to install 3rd party libs system-wide only with static
         version of wxWidgets; otherwise they are embedded in shared libs:

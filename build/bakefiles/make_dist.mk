@@ -77,7 +77,7 @@ ALL_DIST: distrib_clean
 	cp $(WXDIR)/install-sh $(DISTDIR)
 	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
 	cp $(WXDIR)/wx-config.in $(DISTDIR)
-	cp $(WXDIR)/wx-config-wrapper.in $(DISTDIR)
+	cp $(WXDIR)/wx-config-inplace.in $(DISTDIR)
 	cp $(WXDIR)/version-script.in $(DISTDIR)
 	cp $(WXDIR)/setup.h.in $(DISTDIR)
 	cp $(WXDIR)/setup.h_vms $(DISTDIR)
@@ -165,7 +165,6 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(COMMDIR)/*.inc $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.h $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.mms $(DISTDIR)/src/common
-	cp $(UNIXDIR)/*.c $(DISTDIR)/src/unix
 	cp $(UNIXDIR)/*.cpp $(DISTDIR)/src/unix
 	cp $(UNIXDIR)/*.mms $(DISTDIR)/src/unix
 	cp $(GENDIR)/*.cpp $(DISTDIR)/src/generic
@@ -219,6 +218,7 @@ BASE_DIST: ALL_DIST
 GTK_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxGTK.spec $(DISTDIR)
 	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
+	cp $(GTKDIR)/*.h $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	cp $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
@@ -531,7 +531,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 
 	mkdir $(DISTDIR)/samples/except
 	cp $(SAMPDIR)/except/Makefile.in $(DISTDIR)/samples/except
-	cp $(SAMPDIR)/except/makefile.unx $(DISTDIR)/samples/except
 	cp $(SAMPDIR)/except/*.cpp $(DISTDIR)/samples/except
 
 	mkdir $(DISTDIR)/samples/exec
@@ -836,9 +835,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 
 	mkdir $(DISTDIR)/samples/splash
 	cp $(SAMPDIR)/splash/Makefile.in $(DISTDIR)/samples/splash
-	cp $(SAMPDIR)/splash/makefile.unx $(DISTDIR)/samples/splash
 	cp $(SAMPDIR)/splash/*.cpp $(DISTDIR)/samples/splash
-	cp $(SAMPDIR)/splash/*.h $(DISTDIR)/samples/splash
 	cp $(SAMPDIR)/splash/*.png $(DISTDIR)/samples/splash
 
 	mkdir $(DISTDIR)/samples/splitter
@@ -1079,6 +1076,7 @@ win-dist: MSW_ZIP_TEXT_DIST
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.ico
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.bmp
 
+debian-dist: DEBIAN_SOURCE_DIR = $(WXDIR)/../wxwidgets@WX_RELEASE@@WX_FLAVOUR@-@WX_SUBVERSION@
 debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	mkdir $(DISTDIR)/debian
 	-cp $(WXDIR)/debian/* $(DISTDIR)/debian
@@ -1107,16 +1105,8 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	rm -rf $(DISTDIR)/wxPython/contrib/iewin
 	find $(DISTDIR)/wxPython \( -name "mac" -o -name "msw" \) -print0 | xargs -0 rm -rf
 
-
-	@# We can't get at the individual components of the version here
-	@# anymore, so strip the major and minor version out of the blob.
-
-	(								\
-	wx_version=$(WX_VERSION);					\
-	wx_release=$${wx_version%.*};					\
-	rm -rf $(WXDIR)/../wxwidgets$${wx_release}-$${wx_version};	\
-	mv $(DISTDIR) $(WXDIR)/../wxwidgets$${wx_release}-$${wx_version};\
-	)
+	rm -rf $(DEBIAN_SOURCE_DIR)
+	mv $(DISTDIR) $(DEBIAN_SOURCE_DIR)
 
 
 debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST

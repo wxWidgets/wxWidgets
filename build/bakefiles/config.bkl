@@ -214,6 +214,7 @@ to run the tests, include CppUnit library here.
         <option name="TOOLKIT_LOWERCASE"/>
         <option name="TOOLKIT_VERSION"/>
         <option name="TOOLCHAIN_NAME"/>
+        <option name="TOOLCHAIN_FULLNAME"/>
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_XML"/>
         <option name="EXTRALIBS_HTML"/>
@@ -222,6 +223,8 @@ to run the tests, include CppUnit library here.
         <option name="EXTRALIBS_OPENGL"/>
         <option name="EXTRALIBS_SDL"/>
         <option name="HOST_SUFFIX"/>
+        <option name="WX_FLAVOUR"/>
+        <option name="WX_LIB_FLAVOUR"/>
         <option name="SAMPLES_RPATH_FLAG"/>
         <option name="SAMPLES_RPATH_POSTLINK"/>
         

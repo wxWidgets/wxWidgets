@@ -33,6 +33,6 @@
     
     <template id="wx_contrib_headers">
         <srcdir>$(CONTRIB_HDR_DIR)</srcdir>
-        <install-to>$(INCLUDEDIR)/wx-$(WXVER_MAJOR).$(WXVER_MINOR)</install-to>
+        <install-to>$(INCLUDEDIR)/wx-$(WXVER_MAJOR).$(WXVER_MINOR)$(WX_FLAVOUR)</install-to>
     </template>
 </makefile>

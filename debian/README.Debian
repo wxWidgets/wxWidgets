@@ -3,16 +3,14 @@ wxwidgets for Debian
 
 The following packages are built from the wxWidgets CVS source.
 
-libwxgtk		wxGTK runtime shared libraries
+libwxgtk		wxGTK runtime shared libraries, including selected
+			contrib libs.
 libwxgtk-dev		extra files and static libs for building wxGTK apps
 libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
 
 libwxgtk-python		Python binding to wxGTK  (from 2.2.3 onward, this
 			obsoletes the libwxgtk-python-contrib package as
 			all python modules are built into a single monolith)
-
-libwxgtk-contrib	wxWin contrib runtime shared libs (built with wxGTK)
-libwxgtk-contrib-dev	extra files and static contrib libs for building apps
 
 wx-headers		common header files for building wxWidgets apps
 wx-doc			HTML version of the wxWidgets manual

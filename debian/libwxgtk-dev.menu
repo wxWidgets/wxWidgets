@@ -1,0 +1,3 @@
+?package(libwxgtk=V-dev):needs="X11" section="Apps/Programming"\
+  title="wxrcedit" command="/usr/bin/wxrcedit"
+
