@@ -204,7 +204,7 @@ SOURCE=.\msw\dummy.cpp
 
 SOURCE=..\include\wx\univ\setup.h
 !IF  "$(CFG)" == "wxUniv - Win32 Release"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+# Begin Custom Build - Creating lib\univ\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\univ\setup.h
 
 "../lib/univ/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -212,7 +212,7 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxUniv - Win32 Debug"
-# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+# Begin Custom Build - Creating lib\univd\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\univ\setup.h
 
 "../lib/univd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
