@@ -99,7 +99,8 @@ OTHER CHANGES
 
 All:
 
-- Hindi translations added (Dhananjaya Sharma)
+- Hindi translation added (Dhananjaya Sharma)
+- Brazilian Portuguese translation added (E. A. Tacao)
 - wxDynamicCast() now uses static_cast<wxObject *> internally and so using it
   with anything not deriving from wxObject will fail at compile time (instead
   of run-time) now
