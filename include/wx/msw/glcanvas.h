@@ -96,7 +96,7 @@ public:
         const wxPalette& palette = wxNullPalette);
 
     wxGLCanvas(wxWindow *parent,
-        const wxGLContext *shared = (wxGLContext *) NULL,
+        const wxGLContext *shared,
         wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
@@ -106,7 +106,7 @@ public:
         const wxPalette& palette = wxNullPalette);
 
     wxGLCanvas(wxWindow *parent,
-        const wxGLCanvas *shared = (wxGLCanvas *)NULL,
+        const wxGLCanvas *shared,
         wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,

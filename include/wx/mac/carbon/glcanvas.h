@@ -89,12 +89,12 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
    wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = wxT("GLCanvas") , int *attribList = 0, const wxPalette& palette = wxNullPalette);
-   wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
+   wxGLCanvas( wxWindow *parent, const wxGLContext *shared,
         wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxT("GLCanvas"), 
           int *attribList = (int*) NULL, const wxPalette& palette = wxNullPalette );
 
-   wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL, wxWindowID id = -1,
+   wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, 
         const wxString& name = wxT("GLCanvas"), int *attribList = 0, const wxPalette& palette = wxNullPalette );
 

@@ -116,14 +116,14 @@ public:
         long style = 0, const wxString& name = wxGLCanvasName,
         int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
-   wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
+   wxGLCanvas( wxWindow *parent, const wxGLContext *shared,
         wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0, const wxString& name = wxGLCanvasName,
         int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
-   wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL,
+   wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared,
         wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
