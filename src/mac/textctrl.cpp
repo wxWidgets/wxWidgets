@@ -859,7 +859,7 @@ void wxTextCtrl::SetValue(const wxString& st)
     }
     else
     {
-        bool formerEditable = IsEditable() ;
+        bool formerEditable = m_editable ;
         if ( !formerEditable )
             SetEditable(true) ;
 #if wxUSE_UNICODE
@@ -887,7 +887,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
     if ( m_macUsesTXN )
     {
-        bool formerEditable = IsEditable() ;
+        bool formerEditable = m_editable ;
         if ( !formerEditable )
             SetEditable(true) ;
         TXNTypeAttributes typeAttr[4] ;
@@ -1150,7 +1150,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     }
     else
     {
-        bool formerEditable = IsEditable() ;
+        bool formerEditable = m_editable ;
         if ( !formerEditable )
             SetEditable(true) ;
         TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ;
@@ -1181,7 +1181,7 @@ void wxTextCtrl::Remove(long from, long to)
     }
     else
     {
-        bool formerEditable = IsEditable() ;
+        bool formerEditable = m_editable ;
         if ( !formerEditable )
             SetEditable(true) ;
         TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ;
@@ -1242,7 +1242,7 @@ void wxTextCtrl::WriteText(const wxString& st)
     }
     else
     {
-        bool formerEditable = IsEditable() ;
+        bool formerEditable = m_editable ;
         if ( !formerEditable )
             SetEditable(true) ;
         long start , end , dummy ;
