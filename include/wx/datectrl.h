@@ -35,7 +35,11 @@ enum
 
     // always show century in the default date display (otherwise it depends on
     // the system date format which may include the century or not)
-    wxDP_SHOWCENTURY = 4
+    wxDP_SHOWCENTURY = 4,
+
+    // allow not having any valid date in the control (by default it always has
+    // some date, today initially if no valid date specified in ctor)
+    wxDP_ALLOWNONE = 8
 };
 
 // ----------------------------------------------------------------------------

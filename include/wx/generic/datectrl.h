@@ -12,12 +12,14 @@
 #ifndef _WX_GENERIC_DATECTRL_H_
 #define _WX_GENERIC_DATECTRL_H_
 
-class WXDLLIMPEXP_CORE wxButton;
+class WXDLLIMPEXP_ADV wxButton;
 class WXDLLIMPEXP_ADV wxCalendarDateAttr;
 class WXDLLIMPEXP_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_ADV wxCalendarEvent;
-class WXDLLIMPEXP_CORE wxPopupWindow;
-class WXDLLIMPEXP_CORE wxTextCtrl;
+class WXDLLIMPEXP_ADV wxDatePopup;
+class WXDLLIMPEXP_ADV wxTextCtrl;
+
+class WXDLLIMPEXP_ADV wxDatePopupInternal;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric : public wxDatePickerCtrlBase
 {
@@ -68,8 +70,8 @@ public:
     // overridden base class methods
     virtual bool Destroy();
 
-    virtual bool Enable(bool enable = TRUE);
-    virtual bool Show(bool show = TRUE);
+    virtual bool Enable(bool enable = true);
+    virtual bool Show(bool show = true);
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -79,21 +81,22 @@ private:
     void Init();
     void DropDown(bool down = true);
 
-    void OnText(wxCommandEvent &ev);
+    void OnText(wxCommandEvent &event);
     void OnEditKey(wxKeyEvent & event);
     void OnCalKey(wxKeyEvent & event);
-    void OnClick(wxCommandEvent &ev);
-    void OnSelChange(wxCalendarEvent &ev);
-    void OnSetFocus(wxFocusEvent &ev);
-    void OnKillFocus(wxFocusEvent &ev);
-    void OnChildSetFocus(wxChildFocusEvent &ev);
+    void OnClick(wxCommandEvent &event);
+    void OnSelChange(wxCalendarEvent &event);
+    void OnSetFocus(wxFocusEvent &event);
+    void OnKillFocus(wxFocusEvent &event);
+    void OnChildSetFocus(wxChildFocusEvent &event);
 
 
-    wxPopupWindow *m_popup;
+    wxDatePopupInternal *m_popup;
     wxTextCtrl *m_txt;
     wxCalendarCtrl *m_cal;
     wxButton *m_btn;
     wxString m_format;
+    wxDateTime m_currentDate;
 
     bool m_dropped,
          m_ignoreDrop;
