@@ -294,8 +294,16 @@ public:
         return m_rowsWidth[row];
     }
 
+    // return the number of rows
+    size_t GetRowCount() const
+    {
+        wxASSERT_MSG( IsValid(), _T("this line hadn't been laid out") );
+
+        return m_rowsStart.GetCount() + 1;
+    }
+
     // return the number of additional (i.e. after the first one) rows
-    size_t GetExtraRowsCount() const
+    size_t GetExtraRowCount() const
     {
         wxASSERT_MSG( IsValid(), _T("this line hadn't been laid out") );
 
@@ -352,9 +360,6 @@ WX_DEFINE_OBJARRAY(wxArrayWrappedLinesData);
 
 struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
 {
-    // the total number of rows
-    wxTextCoord m_numRows;
-
     // the data for each line
     wxArrayWrappedLinesData m_linesData;
 
@@ -384,7 +389,6 @@ struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
     // def ctor
     wxTextWrappedData()
     {
-        m_numRows = 0;
         m_rowFirstInvalid = -1;
         m_timestamp = 0;
     }
@@ -617,7 +621,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
         if ( !(style & wxHSCROLL) )
         {
-            WData().m_numRows = 1;
             WData().m_linesData.Add(new wxWrappedLineData);
         }
 
@@ -650,6 +653,8 @@ wxTextCtrl::~wxTextCtrl()
     {
         if ( IsSingleLine() )
             delete m_data.sdata;
+        else if ( WrapLines() )
+            delete m_data.wdata;
         else
             delete m_data.mdata;
     }
@@ -721,9 +726,9 @@ void wxTextCtrl::ReplaceLine(wxTextCoord line, const wxString& text)
         if ( WData().IsValidLine(line) )
         {
             wxWrappedLineData& lineData = WData().m_linesData[line];
-            size_t rowsOld = lineData.GetExtraRowsCount();
+            size_t rowsOld = lineData.GetExtraRowCount();
             LayoutLine(line, lineData);
-            if ( lineData.GetExtraRowsCount() != rowsOld )
+            if ( lineData.GetExtraRowCount() != rowsOld )
             {
                 // number of rows changed shifting all lines below
                 WData().InvalidateLinesBelow(line + 1);
@@ -1560,7 +1565,7 @@ wxTextCoord wxTextCtrl::GetRowsPerLine(wxTextCoord line) const
     if ( WrapLines() )
     {
         // add the number of additional rows
-        numRows += WData().m_linesData[line].GetExtraRowsCount();
+        numRows += WData().m_linesData[line].GetExtraRowCount();
     }
 
     return numRows;
@@ -1568,7 +1573,14 @@ wxTextCoord wxTextCtrl::GetRowsPerLine(wxTextCoord line) const
 
 wxTextCoord wxTextCtrl::GetRowCount() const
 {
-    return WrapLines() ? WData().m_numRows : GetLineCount();
+    wxTextCoord count = GetLineCount();
+    if ( WrapLines() )
+    {
+        count = GetFirstRowOfLine(count - 1) +
+                    WData().m_linesData[count - 1].GetRowCount();
+    }
+
+    return count;
 }
 
 wxTextCoord wxTextCtrl::GetFirstRowOfLine(wxTextCoord line) const
@@ -2242,12 +2254,16 @@ wxTextCoord wxTextCtrl::GetRowInLine(wxTextCoord line,
     if ( !WData().IsValidLine(line) )
         LayoutLines(line);
 
-    size_t row = 0;
-    while ( col >= lineData.GetExtraRowStart(row++) )
+    size_t rowLast = lineData.GetExtraRowCount(),
+           row = 0;
+    while ( (row < rowLast) && (col >= lineData.GetExtraRowStart(row++)) )
         ;
 
     if ( colRowStart )
-        *colRowStart = lineData.GetRowStart(row);
+    {
+        // the first row always starts in the column 0
+        *colRowStart = row ? lineData.GetRowStart(row - 1) : 0;
+    }
 
     return row;
 }
@@ -2256,6 +2272,9 @@ void wxTextCtrl::LayoutLine(wxTextCoord line, wxWrappedLineData& lineData) const
 {
     // FIXME: this uses old GetPartOfWrappedLine() which is not used anywhere
     //        else now and has rather awkward interface for our needs here
+
+    lineData.m_rowsStart.Empty();
+    lineData.m_rowsWidth.Empty();
 
     const wxString& text = GetLineText(line);
     wxCoord widthRow;
@@ -2296,7 +2315,7 @@ void wxTextCtrl::LayoutLines(wxTextCoord lineLast) const
     {
         // start after the last known valid line
         const wxWrappedLineData& lineData = WData().m_linesData[lineFirst - 1];
-        rowCur = lineData.GetFirstRow() + lineData.GetExtraRowsCount() + 1;
+        rowCur = lineData.GetFirstRow() + lineData.GetRowCount();
     }
     else // no valid lines, start at row 0
     {
@@ -2320,7 +2339,7 @@ void wxTextCtrl::LayoutLines(wxTextCoord lineLast) const
             LayoutLine(line, lineData);
         }
 
-        rowCur += lineData.GetExtraRowsCount() + 1;
+        rowCur += lineData.GetRowCount();
     }
 }
 
@@ -2720,7 +2739,18 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
                 // have to test that it is before the first row of the next
                 // line
                 bool found = cur == linesData.GetCount() - 1;
-                if ( !found )
+                if ( found )
+                {
+                    // if the row is beyond the end of text, adjust it to be
+                    // the last one and set res accordingly
+                    if ( (size_t)(row - rowFirst) >= lineData.GetRowCount() )
+                    {
+                        res = wxTE_HT_BELOW;
+
+                        row = lineData.GetRowCount() + rowFirst - 1;
+                    }
+                }
+                else // not the last row
                 {
                     const wxWrappedLineData& lineNextData = linesData[cur + 1];
                     if ( !WData().IsValidLine(cur + 1) )
@@ -3269,9 +3299,11 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
         if ( !WData().IsValidLine(line) )
             LayoutLines(line);
 
-        wxCoord wLine;
-        size_t row = 0;
-        while ( rect.x >= (wLine = lineData.GetRowWidth(row++)) )
+        wxCoord wLine = 0; // suppress compiler warning about uninit var
+        size_t rowLast = lineData.GetRowCount(),
+               row = 0;
+        while ( (row < rowLast) &&
+                (rect.x >= (wLine = lineData.GetRowWidth(row++))) )
         {
             rect.x -= wLine;
             rect.y += h;
@@ -3280,7 +3312,7 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
         // (2) now refresh all lines except the last one: note that the first
         //     line is refreshed from the given start to the end, all the next
         //     ones - entirely
-        while ( width > wLine - rect.x )
+        while ( (row < rowLast) && (width > wLine - rect.x) )
         {
             rect.width = GetTotalWidth() - rect.x;
             RefreshTextRect(rect);
