@@ -198,11 +198,15 @@ long wxGetFreeMemory()
 
 void wxUsleep(unsigned long milliseconds)
 {
+    // TODO remove if we don't encounter any other problemsy
+    /*
     clock_t start = clock() ;
     do
     {
         YieldToAnyThread() ;
     } while( clock() - start < milliseconds /  1000.0 * CLOCKS_PER_SEC ) ;
+    */
+    wxThread::Sleep( milliseconds ) ;
 }
 
 void wxSleep(int nSecs)
