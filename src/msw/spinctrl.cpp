@@ -525,7 +525,12 @@ wxSize wxSpinCtrl::DoGetBestSize() const
     wxGetCharSize(GetHWND(), NULL, &y, &GetFont());
     y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(y);
 
-    if ( sizeBtn.y < y )
+    // JACS: we should always use the height calculated
+    // from above, because otherwise we'll get a spin control
+    // that's too big. So never use the height calculated
+    // from wxSpinButton::DoGetBestSize().
+    
+    // if ( sizeBtn.y < y )
     {
         // make the text tall enough
         sizeBtn.y = y;
