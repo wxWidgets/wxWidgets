@@ -17,15 +17,19 @@ class MyPrintout(wxPrintout):
 
     def OnEndDocument(self):
         self.log.WriteText("wxPrintout.OnEndDocument\n")
+        self.base_OnEndDocument()
 
     def OnBeginPrinting(self):
         self.log.WriteText("wxPrintout.OnBeginPrinting\n")
+        self.base_OnBeginPrinting()
 
     def OnEndPrinting(self):
         self.log.WriteText("wxPrintout.OnEndPrinting\n")
+        self.base_OnEndPrinting()
 
     def OnPreparePrinting(self):
         self.log.WriteText("wxPrintout.OnPreparePrinting\n")
+        self.base_OnPreparePrinting()
 
     def HasPage(self, page):
         self.log.WriteText("wxPrintout.HasPage\n")
