@@ -77,7 +77,7 @@ class wxDropSource: public wxDropSourceBase
 {
 public:
     /* constructor. set data later with SetData() */
-    wxDropSource( wxWindow *win,
+    wxDropSource( wxWindow *win = (wxWindow *)NULL,
                   const wxIcon &go = wxNullIcon );
 
     /* constructor for setting one data object */
