@@ -664,7 +664,11 @@ IC_CharSet::IC_CharSet(const wxChar *name)
             else
             {
                 ms_wcCharsetName = NULL;
-                wxLogError(_("Impossible to convert to/from charset '%s'."), name);
+                
+                // VS: we must not output an error here, since wxWindows will safely
+                //     fall back to using wxEncodingConverter.
+                wxLogTrace(wxT("strconv"), wxT("Impossible to convert to/from charset '%s' with iconv, falling back to wxEncodingConverter."), name);
+                //wxLogError(
             }
         }
         wxLogTrace(wxT("strconv"), wxT("wchar_t charset is '%s', needs swap: %i"), ms_wcCharsetName, ms_wcNeedsSwap);
@@ -1035,61 +1039,6 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
     return len;
 }
-
-// VZ: are the classes below used at all??
-#if 0
-
-#ifdef HAVE_ICONV_H
-
-class IC_CharSetConverter
-{
-public:
-    IC_CharSetConverter(IC_CharSet *from, IC_CharSet *to)
-    {
-        cnv = iconv_open(wxConvLibc.cWX2MB(to->cname),
-                         wxConvLibc.cWX2MB(from->cname));
-    }
-
-    ~IC_CharSetConverter()
-    {
-        if (cnv != (iconv_t)-1)
-            iconv_close(cnv);
-    }
-
-    size_t Convert(char *buf, const char *psz, size_t n)
-    {
-        size_t inbuf = strlen(psz);
-        size_t outbuf = n;
-        size_t res = iconv( cnv, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
-        if (res == (size_t)-1)
-            return (size_t)-1;
-        return (n - outbuf);
-    }
-
-public:
-    iconv_t cnv;
-};
-
-#endif // HAVE_ICONV_H
-
-class EC_CharSetConverter
-{
-public:
-    EC_CharSetConverter(EC_CharSet* from,EC_CharSet* to)
-        { cnv.Init(from->enc,to->enc); }
-
-    size_t Convert(char* buf, const char* psz, size_t n)
-    {
-        size_t inbuf = strlen(psz);
-        if (buf) cnv.Convert(psz,buf);
-        return inbuf;
-    }
-
-public:
-    wxEncodingConverter cnv;
-};
-
-#endif // 0
 
 #else // !wxUSE_WCHAR_T
 
