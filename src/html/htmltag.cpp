@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/html/htmltag.h"
+#include "wx/html/htmlpars.h"
 #include <stdio.h> // for vsscanf
 #include <stdarg.h>
 
@@ -121,15 +122,17 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     }
 }
 
-
-
 void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 {
     if (m_Cache == NULL) return;
     if (m_Cache[m_CachePos].Key != at) 
     {
         int delta = (at < m_Cache[m_CachePos].Key) ? -1 : 1;
-        do {m_CachePos += delta;} while (m_Cache[m_CachePos].Key != at);
+        do 
+        { 
+            m_CachePos += delta; 
+        }
+        while (m_Cache[m_CachePos].Key != at);
     }
     *end1 = m_Cache[m_CachePos].End1;
     *end2 = m_Cache[m_CachePos].End2;
@@ -144,64 +147,129 @@ void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 
 IMPLEMENT_CLASS(wxHtmlTag,wxObject)
 
-wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCache* cache) : wxObject()
+wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, 
+                     wxHtmlTagsCache *cache,
+                     wxHtmlEntitiesParser *entParser) : wxObject()
 {
     int i;
-    char c;
+    wxChar c;
 
     // fill-in name, params and begin pos:
-    m_Name = m_Params = wxEmptyString;
     i = pos+1;
-    if (source[i] == wxT('/')) { m_Ending = TRUE; i++; }
-    else m_Ending = FALSE;
+    if (source[i] == wxT('/')) 
+        { m_Ending = TRUE; i++; }
+    else 
+        m_Ending = FALSE;
 
     // find tag's name and convert it to uppercase:
     while ((i < end_pos) && 
-               ((c = source[i++]) != wxT(' ') && c != wxT('\r') && 
-                 c != wxT('\n') && c != wxT('\t') &&
-                 c != wxT('>'))) 
+           ((c = source[i++]) != wxT(' ') && c != wxT('\r') && 
+             c != wxT('\n') && c != wxT('\t') &&
+             c != wxT('>'))) 
     {
-        if ((c >= wxT('a')) && (c <= wxT('z'))) c -= (wxT('a') - wxT('A'));
-        m_Name += c;
+        if ((c >= wxT('a')) && (c <= wxT('z'))) 
+            c -= (wxT('a') - wxT('A'));
+        m_Name << c;
     }
 
     // if the tag has parameters, read them and "normalize" them,
     // i.e. convert to uppercase, replace whitespaces by spaces and 
     // remove whitespaces around '=':
     if (source[i-1] != wxT('>'))
-        while ((i < end_pos) && ((c = source[i++]) != wxT('>'))) 
+    {
+        #define IS_WHITE(c) (c == wxT(' ') || c == wxT('\r') || \
+                             c == wxT('\n') || c == wxT('\t'))
+        wxString pname, pvalue;
+        wxChar quote;
+        enum 
         {
-            if ((c >= wxT('a')) && (c <= wxT('z'))) 
-                c -= (wxT('a') - wxT('A'));
-            if (c == wxT('\r') || c == wxT('\n') || c == wxT('\t')) 
-                c = wxT(' '); // make future parsing a bit simpler
-            m_Params += c;
-            if (c == wxT('"')) 
+            ST_BEFORE_NAME = 1, 
+            ST_NAME,
+            ST_BEFORE_EQ,
+            ST_BEFORE_VALUE,
+            ST_VALUE
+        } state;
+    
+        quote = 0;
+        state = ST_BEFORE_NAME;
+        while (i < end_pos)
+        {
+            c = source[i++];
+
+            if (c == wxT('>') && !(state == ST_VALUE && quote != 0)) 
             {
-                // remove spaces around the '=' character:
-                if (m_Params.Length() > 1 && 
-                    m_Params[m_Params.Length()-2] == wxT(' '))
+                if (state == ST_BEFORE_EQ || state == ST_NAME)
                 {
-                    m_Params.RemoveLast();
-                    while (m_Params.Length() > 0 && m_Params.Last() == wxT(' ')) 
-                        m_Params.RemoveLast();
-                    m_Params += wxT('"');
+                    m_ParamNames.Add(pname);
+                    m_ParamValues.Add(wxEmptyString);
                 }
-                while ((i < end_pos) && (source[i++] == wxT(' '))) {}
-                if (i < end_pos) i--;
-            
-                // ...and copy the value to m_Params:
-                while ((i < end_pos) && ((c = source[i++]) != wxT('"'))) 
-                    m_Params += c;
-                m_Params += c;
+                else if (state == ST_VALUE && quote == 0)
+                {
+                    m_ParamNames.Add(pname);
+                    m_ParamValues.Add(entParser->Parse(pvalue));
+                }
+                break;
             }
-            else if (c == wxT('\'')) 
+            switch (state)
             {
-                while ((i < end_pos) && ((c = source[i++]) != wxT('\''))) 
-                    m_Params += c;
-                m_Params += c;
+                case ST_BEFORE_NAME:
+                    if (!IS_WHITE(c))
+                    {
+                        pname = c;
+                        state = ST_NAME;
+                    }
+                    break;
+                case ST_NAME:
+                    if (IS_WHITE(c))
+                        state = ST_BEFORE_EQ;
+                    else if (c == wxT('='))
+                        state = ST_BEFORE_VALUE;
+                    else
+                        pname << c;
+                    break;
+                case ST_BEFORE_EQ:
+                    if (c == wxT('='))
+                        state = ST_BEFORE_VALUE;
+                    else if (!IS_WHITE(c))
+                    {
+                        m_ParamNames.Add(pname);
+                        m_ParamValues.Add(wxEmptyString);
+                        pname = c;
+                        state = ST_NAME;
+                    }
+                    break;
+                case ST_BEFORE_VALUE:
+                    if (!IS_WHITE(c))
+                    {
+                        if (c == wxT('"') || c == wxT('\''))
+                            quote = c, pvalue = wxEmptyString;
+                        else
+                            quote = 0, pvalue = c;
+                        state = ST_VALUE;
+                    }
+                    break;
+                case ST_VALUE:
+                    if ((quote != 0 && c == quote) ||
+                        (quote == 0 && IS_WHITE(c)))
+                    {
+                        m_ParamNames.Add(pname);
+                        if (quote == 0)
+                        {
+                            // VS: backward compatibility, no real reason,
+                            //     but wxHTML code relies on this... :(
+                            pvalue.MakeUpper();
+                        }
+                        m_ParamValues.Add(entParser->Parse(pvalue));
+                        state = ST_BEFORE_NAME;
+                    }
+                    else
+                        pvalue << c;
+                    break;
             }
         }
+        
+        #undef IS_WHITE
+   }
    m_Begin = i;
 
    cache->QueryTag(pos, &m_End1, &m_End2);
@@ -209,113 +277,49 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
    if (m_End2 > end_pos) m_End2 = end_pos;
 }
 
-    
-
 bool wxHtmlTag::HasParam(const wxString& par) const
 {
-    const wxChar *st = m_Params, *p = par;
-    const wxChar *st2, *p2;
-    const wxChar invalid = wxT('\1');
-
-    if (*st == 0) return FALSE;
-    if (*p == 0) return FALSE;
-    for (st2 = st, p2 = p; ; st2++) 
-    {
-        if (*p2 == 0 && *st2 == wxT('=')) return TRUE;
-        if (*st2 == 0) return FALSE;
-        if (*p2 != *st2) p2 = &invalid;
-        if (*p2 == *st2) p2++;
-        if (*st2 == wxT(' ')) p2 = p;
-        else if (*st2 == wxT('=')) 
-        {
-            p2 = p;
-            while (*st2 != wxT(' ')) 
-            {
-                if (*st2 == wxT('"')) 
-                {
-                    st2++;
-                    while (*st2 != wxT('"')) st2++;
-                }
-                st2++;
-                if (*st2 == 0) return FALSE;
-            }
-        }
-    }
+    return (m_ParamNames.Index(par, FALSE) != wxNOT_FOUND);
 }
-
-
 
 wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 {
-    const wxChar *st = m_Params, *p = par;
-    const wxChar *st2, *p2;
-    const wxChar invalid = wxT('\1');
-    bool comma;
-    wxChar comma_char;
-
-    if (*st == 0) return wxEmptyString;
-    if (*p == 0) return wxEmptyString;
-    for (st2 = st, p2 = p; ; st2++) 
+    int index = m_ParamNames.Index(par, FALSE);
+    if (index == wxNOT_FOUND)
+        return wxEmptyString;
+    if (with_commas)
     {
-        if (*p2 == 0 && *st2 == wxT('='))  // found
-        {
-            wxString fnd = wxEmptyString;
-            st2++; // '=' character
-            comma = FALSE;
-            comma_char = wxT('\0');
-            if (!with_commas && (*(st2) == wxT('"'))) 
-            {
-                st2++;
-                comma = TRUE; 
-                comma_char = wxT('"');
-            }
-            else if (!with_commas && (*(st2) == wxT('\''))) 
-            {
-                st2++; 
-                comma = TRUE;
-                comma_char = wxT('\'');
-            }
-        
-            while (*st2 != 0) 
-            {
-                if (comma && *st2 == comma_char) comma = FALSE;
-                else if ((*st2 == wxT(' ')) && (!comma)) break;
-                fnd += (*(st2++));
-            }
-            if (!with_commas && (*(st2-1) == comma_char)) fnd.RemoveLast();
-            return fnd;
-        }
-        if (*st2 == 0) return wxEmptyString;
-        if (*p2 != *st2) p2 = &invalid;
-        if (*p2 == *st2) p2++;
-        if (*st2 == wxT(' ')) p2 = p;
-        else if (*st2 == wxT('=')) 
-        {
-            p2 = p;
-            while (*st2 != wxT(' ')) 
-            {
-                if (*st2 == wxT('"')) 
-                {
-                    st2++;
-                    while (*st2 != wxT('"')) st2++;
-                }
-                else if (*st2 == wxT('\''))
-                {
-                    st2++;
-                    while (*st2 != wxT('\'')) st2++;
-                }
-                st2++;
-            }
-        }
+        // VS: backward compatibility, seems to be never used by wxHTML...
+        wxString s;
+        s << wxT('"') << m_ParamValues[index] << wxT('"');
+        return s;
     }
+    else
+        return m_ParamValues[index];
 }
-
-
 
 int wxHtmlTag::ScanParam(const wxString& par, wxChar *format, void *param) const
 {
     wxString parval = GetParam(par);
     return wxSscanf(parval, format, param);
+}
+
+wxString wxHtmlTag::GetAllParams() const
+{
+    // VS: this function is for backward compatiblity only, 
+    //     never used by wxHTML
+    wxString s;
+    size_t cnt = m_ParamNames.GetCount();
+    for (size_t i = 0; i < cnt; i++)
+    {
+        s << m_ParamNames[i];
+        s << wxT('=');
+        if (m_ParamValues[i].Find(wxT('"')) != wxNOT_FOUND)
+            s << wxT('\'') << m_ParamValues[i] << wxT('\'');
+        else
+            s << wxT('"') << m_ParamValues[i] << wxT('"');
+    }
+    return s;
 }
 
 #endif
