@@ -727,7 +727,7 @@ public:
   size_t Index(wxChar ch)         const { return Find(ch);  }
     // use Truncate
   wxString& Remove(size_t pos) { return Truncate(pos); }
-  wxString& RemoveLast() { return Truncate(Len() - 1); }
+  wxString& RemoveLast(size_t n = 1) { return Truncate(Len() - n); }
 
   wxString& Remove(size_t nStart, size_t nLen) { return erase( nStart, nLen ); }
 
