@@ -46,7 +46,7 @@ bool WXDLLEXPORT wxGetLocalTime(long *timeZone, int *dstObserved);
 long WXDLLEXPORT wxGetCurrentTime();
 
 // Get number of milliseconds since 00:00:00 GMT, Jan 1st 1970.
-long WXDLLEXPORT wxGetCurrentUTime();
+long WXDLLEXPORT wxGetCurrentMTime();
 
 #endif
     // _WX_TIMER_H_BASE_

@@ -73,14 +73,14 @@ extern "C" int gettimeofday(struct timeval *tp, void *);
 long wxStartTime = 0;
 void wxStartTimer(void)
 {
-  wxStartTime=wxGetCurrentUTime();
+  wxStartTime=wxGetCurrentMTime();
 }
 
 // Returns elapsed time in milliseconds
 long wxGetElapsedTime(bool resetTimer)
 {
   long oldTime = wxStartTime;
-  long newTime=wxGetCurrentUTime();
+  long newTime=wxGetCurrentMTime();
 
   if (resetTimer) wxStartTime = newTime;
   return newTime - oldTime;
@@ -90,11 +90,11 @@ long wxGetElapsedTime(bool resetTimer)
 // Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
 long wxGetCurrentTime(void)
 {
-  return wxGetCurrentUTime()/1000;
+  return wxGetCurrentMTime()/1000;
 }
 
 // return GMT time in millisecond
-long wxGetCurrentUTime()
+long wxGetCurrentMTime()
 {
 #if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || \
     (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
@@ -132,25 +132,25 @@ wxChrono::wxChrono()
 
 void wxChrono::Start(long t)
 {
-  m_t0=wxGetCurrentUTime()-t;
+  m_t0=wxGetCurrentMTime()-t;
   m_pause=0;
 }
 
 void wxChrono::Pause()
 {
-  m_pause=wxGetCurrentUTime()-m_t0;
+  m_pause=wxGetCurrentMTime()-m_t0;
 }
 
 void wxChrono::Resume()
 {
-  m_t0=wxGetCurrentUTime()-m_pause;
+  m_t0=wxGetCurrentMTime()-m_pause;
   m_pause=0;
 }
 
 long wxChrono::Time()
 {
   if (m_pause) return m_pause;
-  return wxGetCurrentUTime()-m_t0;
+  return wxGetCurrentMTime()-m_t0;
 }
 
 
