@@ -186,6 +186,7 @@ COMMONOBJS = \
   ..\common\$D\docview.obj \
   ..\common\$D\dynarray.obj \
   ..\common\$D\dynlib.obj \
+  ..\common\$D\encconv.obj \
   ..\common\$D\event.obj \
   ..\common\$D\extended.obj \
   ..\common\$D\ffile.obj \
@@ -194,6 +195,7 @@ COMMONOBJS = \
   ..\common\$D\filefn.obj \
   ..\common\$D\filesys.obj \
   ..\common\$D\fontcmn.obj \
+  ..\common\$D\fontmap.obj \
   ..\common\$D\framecmn.obj \
   ..\common\$D\fs_inet.obj \
   ..\common\$D\fs_zip.obj \
@@ -281,6 +283,7 @@ COMLIBOBJS1 = \
   docview.obj \
   dynarray.obj \
   dynlib.obj \
+  encconv.obj \
   event.obj \
   extended.obj \
   ffile.obj \
@@ -289,6 +292,7 @@ COMLIBOBJS1 = \
   filefn.obj \
   filesys.obj \
   fontcmn.obj \
+  fontmap.obj \
   framecmn.obj \
   fs_inet.obj \
   fs_zip.obj \
@@ -304,11 +308,11 @@ COMLIBOBJS1 = \
   imaggif.obj \
   imagjpeg.obj \
   imagpcx.obj \
-  imagpng.obj \
-  imagpnm.obj \
-  intl.obj
+  imagpng.obj
 
 COMLIBOBJS2 = \
+  imagpnm.obj \
+  intl.obj \
   ipcbase.obj \
   layout.obj \
   lboxcmn.obj \
@@ -348,11 +352,11 @@ COMLIBOBJS2 = \
   url.obj \
   utilscmn.obj \
   valgen.obj \
-  validate.obj \
-  valtext.obj \
-  variant.obj
+  validate.obj
 
 COMLIBOBJS3 = \
+  valtext.obj \
+  variant.obj \
   wfstream.obj \
   wincmn.obj \
   wxchar.obj \
@@ -389,6 +393,8 @@ OS2OBJS = \
   ..\os2\$D\filedlg.obj \
   ..\os2\$D\font.obj \
   ..\os2\$D\fontdlg.obj \
+  ..\os2\$D\fontenum.obj \
+  ..\os2\$D\fontutil.obj \
   ..\os2\$D\frame.obj \
   ..\os2\$D\gauge.obj \
   ..\os2\$D\gdiobj.obj \
@@ -465,6 +471,8 @@ OS2LIBOBJS1 = \
   filedlg.obj \
   font.obj \
   fontdlg.obj \
+  fontenum.obj \
+  fontutil.obj \
   frame.obj \
   gauge.obj \
   gdiimage.obj \
@@ -480,11 +488,11 @@ OS2LIBOBJS1 = \
   menu.obj \
   menuitem.obj \
   metafile.obj \
-  minifram.obj \
-  msgdlg.obj \
-  nativdlg.obj
+  minifram.obj
 
 OS2LIBOBJS2 = \
+  msgdlg.obj \
+  nativdlg.obj \
   notebook.obj \
   ownerdrw.obj \
   palette.obj \
@@ -586,6 +594,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\docview.obj
   copy ..\common\$D\dynarray.obj
   copy ..\common\$D\dynlib.obj
+  copy ..\common\$D\encconv.obj
   copy ..\common\$D\event.obj
   copy ..\common\$D\extended.obj
   copy ..\common\$D\ffile.obj
@@ -594,6 +603,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\filefn.obj
   copy ..\common\$D\filesys.obj
   copy ..\common\$D\fontcmn.obj
+  copy ..\common\$D\fontmap.obj
   copy ..\common\$D\framecmn.obj
   copy ..\common\$D\fs_inet.obj
   copy ..\common\$D\fs_zip.obj
@@ -610,10 +620,10 @@ $(COMLIBOBJS1):
   copy ..\common\$D\imagjpeg.obj
   copy ..\common\$D\imagpcx.obj
   copy ..\common\$D\imagpng.obj
-  copy ..\common\$D\imagpnm.obj
-  copy ..\common\$D\intl.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\imagpnm.obj
+  copy ..\common\$D\intl.obj
   copy ..\common\$D\ipcbase.obj
   copy ..\common\$D\layout.obj
   copy ..\common\$D\lboxcmn.obj
@@ -654,10 +664,10 @@ $(COMLIBOBJS2):
   copy ..\common\$D\utilscmn.obj
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
-  copy ..\common\$D\valtext.obj
-  copy ..\common\$D\variant.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\valtext.obj
+  copy ..\common\$D\variant.obj
   copy ..\common\$D\wfstream.obj
   copy ..\common\$D\wincmn.obj
   copy ..\common\$D\wxchar.obj
@@ -746,6 +756,8 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\filedlg.obj
   copy ..\os2\$D\font.obj
   copy ..\os2\$D\fontdlg.obj
+  copy ..\os2\$D\fontenum.obj
+  copy ..\os2\$D\fontutil.obj
   copy ..\os2\$D\frame.obj
   copy ..\os2\$D\gauge.obj
   copy ..\os2\$D\gdiimage.obj
@@ -762,10 +774,10 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\menuitem.obj
   copy ..\os2\$D\metafile.obj
   copy ..\os2\$D\minifram.obj
-  copy ..\os2\$D\msgdlg.obj
-  copy ..\os2\$D\nativdlg.obj
 
 $(OS2LIBOBJS2):
+  copy ..\os2\$D\msgdlg.obj
+  copy ..\os2\$D\nativdlg.obj
   copy ..\os2\$D\notebook.obj
   copy ..\os2\$D\ownerdrw.obj
   copy ..\os2\$D\palette.obj

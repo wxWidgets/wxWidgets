@@ -510,6 +510,7 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
+#ifdef wxUSE_UNICODE
     // Delete command-line args
     int i;
     for (i = 0; i < argc; i++)
@@ -517,6 +518,7 @@ wxApp::~wxApp()
         delete[] argv[i];
     }
     delete[] argv;
+#endif
 }
 
 bool wxApp::Initialized()
