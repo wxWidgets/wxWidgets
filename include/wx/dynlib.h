@@ -49,8 +49,11 @@
 #endif // OS
 
 // defined in windows.h
+// This breaks app.cpp if RICHEDIT is included.
+#if 0
 #ifdef LoadLibrary
 #   undef LoadLibrary
+#endif
 #endif
 
 // ----------------------------------------------------------------------------
