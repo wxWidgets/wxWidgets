@@ -550,28 +550,32 @@ class wxPrinter(wxPrinterPtr):
 
 
 
+class wxPrintAbortDialogPtr(wxDialogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPrintAbortDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPrintAbortDialog(wxPrintAbortDialogPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = printfwc.new_wxPrintAbortDialog(*_args,**_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxPrintPreviewPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetCanvas(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_GetCanvas(self, *_args, **_kwargs)
+    def SetCurrentPage(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_SetCurrentPage(self, *_args, **_kwargs)
         return val
     def GetCurrentPage(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_GetCurrentPage(self, *_args, **_kwargs)
         return val
-    def GetFrame(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_GetFrame(self, *_args, **_kwargs)
-        return val
-    def GetMaxPage(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_GetMaxPage(self, *_args, **_kwargs)
-        return val
-    def GetMinPage(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_GetMinPage(self, *_args, **_kwargs)
-        return val
-    def GetPrintDialogData(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_GetPrintDialogData(self, *_args, **_kwargs)
-        if val: val = wxPrintDialogDataPtr(val) 
+    def SetPrintout(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_SetPrintout(self, *_args, **_kwargs)
         return val
     def GetPrintout(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_GetPrintout(self, *_args, **_kwargs)
@@ -579,29 +583,54 @@ class wxPrintPreviewPtr(wxObjectPtr):
     def GetPrintoutForPrinting(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_GetPrintoutForPrinting(self, *_args, **_kwargs)
         return val
-    def GetZoom(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_GetZoom(self, *_args, **_kwargs)
-        return val
-    def Ok(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_Ok(self, *_args, **_kwargs)
-        return val
-    def Print(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_Print(self, *_args, **_kwargs)
+    def SetFrame(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_SetFrame(self, *_args, **_kwargs)
         return val
     def SetCanvas(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_SetCanvas(self, *_args, **_kwargs)
         return val
-    def SetCurrentPage(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_SetCurrentPage(self, *_args, **_kwargs)
+    def GetFrame(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_GetFrame(self, *_args, **_kwargs)
         return val
-    def SetFrame(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_SetFrame(self, *_args, **_kwargs)
+    def GetCanvas(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_GetCanvas(self, *_args, **_kwargs)
         return val
-    def SetPrintout(self, *_args, **_kwargs):
-        val = printfwc.wxPrintPreview_SetPrintout(self, *_args, **_kwargs)
+    def PaintPage(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_PaintPage(self, *_args, **_kwargs)
+        return val
+    def DrawBlankPage(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_DrawBlankPage(self, *_args, **_kwargs)
+        return val
+    def RenderPage(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_RenderPage(self, *_args, **_kwargs)
+        return val
+    def GetPrintDialogData(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_GetPrintDialogData(self, *_args, **_kwargs)
+        if val: val = wxPrintDialogDataPtr(val) 
         return val
     def SetZoom(self, *_args, **_kwargs):
         val = printfwc.wxPrintPreview_SetZoom(self, *_args, **_kwargs)
+        return val
+    def GetZoom(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_GetZoom(self, *_args, **_kwargs)
+        return val
+    def GetMaxPage(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_GetMaxPage(self, *_args, **_kwargs)
+        return val
+    def GetMinPage(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_GetMinPage(self, *_args, **_kwargs)
+        return val
+    def Ok(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_Ok(self, *_args, **_kwargs)
+        return val
+    def SetOk(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_SetOk(self, *_args, **_kwargs)
+        return val
+    def Print(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_Print(self, *_args, **_kwargs)
+        return val
+    def DetermineScaling(self, *_args, **_kwargs):
+        val = printfwc.wxPrintPreview_DetermineScaling(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
@@ -621,12 +650,174 @@ class wxPreviewFramePtr(wxFramePtr):
     def Initialize(self, *_args, **_kwargs):
         val = printfwc.wxPreviewFrame_Initialize(self, *_args, **_kwargs)
         return val
+    def CreateControlBar(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewFrame_CreateControlBar(self, *_args, **_kwargs)
+        return val
+    def CreateCanvas(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewFrame_CreateCanvas(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPreviewFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPreviewFrame(wxPreviewFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = printfwc.new_wxPreviewFrame(*_args,**_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
+class wxPreviewCanvasPtr(wxScrolledWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPreviewCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPreviewCanvas(wxPreviewCanvasPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = printfwc.new_wxPreviewCanvas(*_args,**_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
+class wxPreviewControlBarPtr(wxPanelPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetZoomControl(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_GetZoomControl(self, *_args, **_kwargs)
+        return val
+    def SetZoomControl(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_SetZoomControl(self, *_args, **_kwargs)
+        return val
+    def GetPrintPreview(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_GetPrintPreview(self, *_args, **_kwargs)
+        if val: val = wxPrintPreviewPtr(val) 
+        return val
+    def OnNext(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_OnNext(self, *_args, **_kwargs)
+        return val
+    def OnPrevious(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_OnPrevious(self, *_args, **_kwargs)
+        return val
+    def OnFirst(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_OnFirst(self, *_args, **_kwargs)
+        return val
+    def OnLast(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_OnLast(self, *_args, **_kwargs)
+        return val
+    def OnGoto(self, *_args, **_kwargs):
+        val = printfwc.wxPreviewControlBar_OnGoto(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPreviewControlBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPreviewControlBar(wxPreviewControlBarPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = printfwc.new_wxPreviewControlBar(*_args,**_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
+class wxPyPrintPreviewPtr(wxPrintPreviewPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview__setCallbackInfo(self, *_args, **_kwargs)
+        return val
+    def base_SetCurrentPage(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview_base_SetCurrentPage(self, *_args, **_kwargs)
+        return val
+    def base_PaintPage(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview_base_PaintPage(self, *_args, **_kwargs)
+        return val
+    def base_DrawBlankPage(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview_base_DrawBlankPage(self, *_args, **_kwargs)
+        return val
+    def base_RenderPage(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview_base_RenderPage(self, *_args, **_kwargs)
+        return val
+    def base_SetZoom(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview_base_SetZoom(self, *_args, **_kwargs)
+        return val
+    def base_Print(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview_base_Print(self, *_args, **_kwargs)
+        return val
+    def base_DetermineScaling(self, *_args, **_kwargs):
+        val = printfwc.wxPyPrintPreview_base_DetermineScaling(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPyPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPyPrintPreview(wxPyPrintPreviewPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = printfwc.new_wxPyPrintPreview(*_args,**_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxPyPrintPreview)
+
+
+
+
+class wxPyPreviewFramePtr(wxPreviewFramePtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewFrame__setCallbackInfo(self, *_args, **_kwargs)
+        return val
+    def SetPreviewCanvas(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewFrame_SetPreviewCanvas(self, *_args, **_kwargs)
+        return val
+    def SetControlBar(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewFrame_SetControlBar(self, *_args, **_kwargs)
+        return val
+    def base_Initialize(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewFrame_base_Initialize(self, *_args, **_kwargs)
+        return val
+    def base_CreateCanvas(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewFrame_base_CreateCanvas(self, *_args, **_kwargs)
+        return val
+    def base_CreateControlBar(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewFrame_base_CreateControlBar(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPyPreviewFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPyPreviewFrame(wxPyPreviewFramePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = printfwc.new_wxPyPreviewFrame(*_args,**_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxPyPreviewFrame)
+        self._setOORInfo(self)
+
+
+
+
+class wxPyPreviewControlBarPtr(wxPreviewControlBarPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewControlBar__setCallbackInfo(self, *_args, **_kwargs)
+        return val
+    def SetPrintPreview(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewControlBar_SetPrintPreview(self, *_args, **_kwargs)
+        return val
+    def base_CreateButtons(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewControlBar_base_CreateButtons(self, *_args, **_kwargs)
+        return val
+    def base_SetZoomControl(self, *_args, **_kwargs):
+        val = printfwc.wxPyPreviewControlBar_base_SetZoomControl(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPyPreviewControlBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPyPreviewControlBar(wxPyPreviewControlBarPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = printfwc.new_wxPyPreviewControlBar(*_args,**_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxPyPreviewControlBar)
         self._setOORInfo(self)
 
 
@@ -653,3 +844,19 @@ wxPRINT_MODE_PRINTER = printfwc.wxPRINT_MODE_PRINTER
 wxPRINTER_NO_ERROR = printfwc.wxPRINTER_NO_ERROR
 wxPRINTER_CANCELLED = printfwc.wxPRINTER_CANCELLED
 wxPRINTER_ERROR = printfwc.wxPRINTER_ERROR
+wxPREVIEW_PRINT = printfwc.wxPREVIEW_PRINT
+wxPREVIEW_PREVIOUS = printfwc.wxPREVIEW_PREVIOUS
+wxPREVIEW_NEXT = printfwc.wxPREVIEW_NEXT
+wxPREVIEW_ZOOM = printfwc.wxPREVIEW_ZOOM
+wxPREVIEW_FIRST = printfwc.wxPREVIEW_FIRST
+wxPREVIEW_LAST = printfwc.wxPREVIEW_LAST
+wxPREVIEW_GOTO = printfwc.wxPREVIEW_GOTO
+wxPREVIEW_DEFAULT = printfwc.wxPREVIEW_DEFAULT
+wxID_PREVIEW_CLOSE = printfwc.wxID_PREVIEW_CLOSE
+wxID_PREVIEW_NEXT = printfwc.wxID_PREVIEW_NEXT
+wxID_PREVIEW_PREVIOUS = printfwc.wxID_PREVIEW_PREVIOUS
+wxID_PREVIEW_PRINT = printfwc.wxID_PREVIEW_PRINT
+wxID_PREVIEW_ZOOM = printfwc.wxID_PREVIEW_ZOOM
+wxID_PREVIEW_FIRST = printfwc.wxID_PREVIEW_FIRST
+wxID_PREVIEW_LAST = printfwc.wxID_PREVIEW_LAST
+wxID_PREVIEW_GOTO = printfwc.wxID_PREVIEW_GOTO
