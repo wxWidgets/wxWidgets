@@ -48,8 +48,8 @@ class wxHtmlListmarkCell : public wxHtmlCell
 
 wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCell(), m_Brush(clr, wxSOLID)
 {
-    m_Width = dc -> GetCharWidth();
-    m_Height = dc -> GetCharHeight();
+    m_Width = dc->GetCharWidth();
+    m_Height = dc->GetCharHeight();
     m_Descent = 0;
 }
 
@@ -86,28 +86,33 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
         wxHtmlContainerCell *c;
 
         // List Item:
-        if (tag.GetName() == wxT("LI")) {
-            if (!tag.IsEnding()) {
-                m_WParser -> CloseContainer();
-                m_WParser -> CloseContainer();
+        if (tag.GetName() == wxT("LI")) 
+	    {
+            if (!tag.IsEnding()) 
+	        {
+                m_WParser->GetContainer()->SetIndent(0, wxHTML_INDENT_TOP);
+                    // this is to prevent indetation in <li><p> case
+                m_WParser->CloseContainer();
+                m_WParser->CloseContainer();
 
-                c = m_WParser -> OpenContainer();
-                c -> SetWidthFloat(2 * m_WParser -> GetCharWidth(), wxHTML_UNITS_PIXELS);
-                c -> SetAlignHor(wxHTML_ALIGN_RIGHT);
+                c = m_WParser->OpenContainer();
+                c->SetWidthFloat(2 * m_WParser->GetCharWidth(), wxHTML_UNITS_PIXELS);
+                c->SetAlignHor(wxHTML_ALIGN_RIGHT);
                 if (m_Numbering == 0)
-                    c -> InsertCell(new wxHtmlListmarkCell(m_WParser -> GetDC(), m_WParser -> GetActualColor()));
-                else {
+                    c->InsertCell(new wxHtmlListmarkCell(m_WParser->GetDC(), m_WParser->GetActualColor()));
+                else 
+		        {
                     wxString mark;
                     mark.Printf(wxT("%i."), m_Numbering);
-                    c -> InsertCell(new wxHtmlWordCell(mark, *(m_WParser -> GetDC())));
+                    c->InsertCell(new wxHtmlWordCell(mark, *(m_WParser->GetDC())));
                 }
-                m_WParser -> CloseContainer();
+                m_WParser->CloseContainer();
 
-                c = m_WParser -> OpenContainer();
-                c -> SetIndent(m_WParser -> GetCharWidth() / 4, wxHTML_INDENT_LEFT);
-                c -> SetWidthFloat(-2 * m_WParser -> GetCharWidth(), wxHTML_UNITS_PIXELS);
+                c = m_WParser->OpenContainer();
+                c->SetIndent(m_WParser->GetCharWidth() / 4, wxHTML_INDENT_LEFT);
+                c->SetWidthFloat(-2 * m_WParser->GetCharWidth(), wxHTML_UNITS_PIXELS);
 
-                m_WParser -> OpenContainer();
+                m_WParser->OpenContainer();
 
                 if (m_Numbering != 0) m_Numbering++;
             }
@@ -115,31 +120,36 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
         }
 
         // Begin of List (not-numbered): "UL", "OL"
-        else {
+        else 
+	    {
             int oldnum = m_Numbering;
 
             if (tag.GetName() == wxT("UL")) m_Numbering = 0;
             else m_Numbering = 1;
 
-            c = m_WParser -> GetContainer();
-            if (c -> GetFirstCell() != NULL) {
-                m_WParser -> CloseContainer();
-                m_WParser -> OpenContainer();
-                c = m_WParser -> GetContainer();
+            c = m_WParser->GetContainer();
+            if (c->GetFirstCell() != NULL) 
+	        {
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer();
+                c = m_WParser->GetContainer();
             }
-            c -> SetAlignHor(wxHTML_ALIGN_LEFT);
-            c -> SetIndent(2 * m_WParser -> GetCharWidth(), wxHTML_INDENT_LEFT);
-            m_WParser -> OpenContainer() -> SetAlignVer(wxHTML_ALIGN_TOP);
+            c->SetAlignHor(wxHTML_ALIGN_LEFT);
+            c->SetIndent(2 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
+            m_WParser->OpenContainer()->SetAlignVer(wxHTML_ALIGN_TOP);
 
-            m_WParser -> OpenContainer();
-            m_WParser -> OpenContainer();
+            m_WParser->OpenContainer();
+            m_WParser->OpenContainer();
             ParseInner(tag);
-            m_WParser -> CloseContainer();
 
-            m_WParser -> CloseContainer();
-            m_WParser -> CloseContainer();
-            m_WParser -> CloseContainer();
-            m_WParser -> OpenContainer();
+            m_WParser->GetContainer()->SetIndent(0, wxHTML_INDENT_TOP);
+                // this is to prevent indetation in <li><p> case
+            m_WParser->CloseContainer();
+
+            m_WParser->CloseContainer();
+            m_WParser->CloseContainer();
+            m_WParser->CloseContainer();
+            m_WParser->OpenContainer();
 
             m_Numbering = oldnum;
             return TRUE;
