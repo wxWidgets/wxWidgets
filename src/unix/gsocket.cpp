@@ -1131,7 +1131,7 @@ void GSocket::UnsetCallback(GSocketEventFlags flags)
 GSocketError GSocket::GetSockOpt(int level, int optname,
                                 void *optval, int *optlen)
 {
-    if (getsockopt(m_fd, level, optname, optval, optlen) == 0)
+    if (getsockopt(m_fd, level, optname, optval, (SOCKLEN_T*)optlen) == 0)
     {
         return GSOCK_NOERROR;
     }
@@ -1149,7 +1149,7 @@ GSocketError GSocket::SetSockOpt(int level, int optname,
 }
 
 #define CALL_CALLBACK(socket, event) {                                  \
-  socket->Disable(event);                                      \
+  socket->Disable(event);                                               \
   if (socket->m_cbacks[event])                                          \
     socket->m_cbacks[event](socket, event, socket->m_data[event]);      \
 }
