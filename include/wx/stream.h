@@ -42,23 +42,23 @@ WXDLLEXPORT wxOutputStream& wxEndL(wxOutputStream& o_stream);
 #define wxStream_EOF        wxSTREAM_EOF
 #define wxStream_WRITE_ERR  wxSTREAM_WRITE_ERROR
 #define wxStream_READ_ERR   wxSTREAM_READ_ERROR
-  
+
 typedef enum {
   wxSTREAM_NO_ERROR = 0,
   wxSTREAM_NO_ERR = wxSTREAM_NO_ERROR,
   wxSTREAM_NOERROR = wxSTREAM_NO_ERROR,
-  
+
   wxSTREAM_EOF,
-  
+
   wxSTREAM_WRITE_ERROR,
   wxSTREAM_WRITE_ERR = wxSTREAM_WRITE_ERROR,
-  
+
   wxSTREAM_READ_ERROR,
-  wxSTREAM_READ_ERR = wxSTREAM_READ_ERROR,
-  
+  wxSTREAM_READ_ERR = wxSTREAM_READ_ERROR
+
 } wxStreamError;
 
-class WXDLLEXPORT wxStreamBase 
+class WXDLLEXPORT wxStreamBase
 {
 public:
     wxStreamBase();
@@ -81,7 +81,7 @@ protected:
     wxStreamError m_lasterror;
 };
 
-class WXDLLEXPORT wxInputStream: public wxStreamBase 
+class WXDLLEXPORT wxInputStream: public wxStreamBase
 {
 public:
     wxInputStream();
@@ -121,7 +121,7 @@ protected:
     size_t GetWBack(char *buf, size_t bsize);
 };
 
-class WXDLLEXPORT wxOutputStream: public wxStreamBase 
+class WXDLLEXPORT wxOutputStream: public wxStreamBase
 {
 public:
     wxOutputStream();
@@ -149,7 +149,7 @@ public:
 // A stream for measuring streamed output
 // ---------------------------------------------------------------------------
 
-class wxCountingOutputStream: public wxOutputStream 
+class wxCountingOutputStream: public wxOutputStream
 {
 public:
     wxCountingOutputStream();
@@ -170,7 +170,7 @@ protected:
 // "Filter" streams
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFilterInputStream: public wxInputStream 
+class WXDLLEXPORT wxFilterInputStream: public wxInputStream
 {
 public:
     wxFilterInputStream();
@@ -185,7 +185,7 @@ protected:
     wxInputStream *m_parent_i_stream;
 };
 
-class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream 
+class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream
 {
 public:
     wxFilterOutputStream();
@@ -202,7 +202,7 @@ protected:
 // Stream buffer
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStreamBuffer 
+class WXDLLEXPORT wxStreamBuffer
 {
 public:
     typedef enum {
@@ -265,7 +265,7 @@ protected:
 // wxBufferedStreams
 // ---------------------------------------------------------------------------
 
-class wxBufferedInputStream: public wxFilterInputStream 
+class wxBufferedInputStream: public wxFilterInputStream
 {
 public:
     wxBufferedInputStream(wxInputStream& stream);
@@ -273,7 +273,7 @@ public:
 
     char Peek();
     wxInputStream& Read(void *buffer, size_t size);
-  
+
     // Position functions
     off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
     off_t TellI() const;
@@ -283,19 +283,19 @@ public:
 protected:
     size_t OnSysRead(void *buffer, size_t bufsize);
     off_t OnSysSeek(off_t seek, wxSeekMode mode);
-    off_t OnSysTell() const;  
+    off_t OnSysTell() const;
 
     wxStreamBuffer *m_i_streambuf;
 };
 
-class wxBufferedOutputStream: public wxFilterOutputStream 
+class wxBufferedOutputStream: public wxFilterOutputStream
 {
 public:
     wxBufferedOutputStream(wxOutputStream& stream);
     ~wxBufferedOutputStream();
 
     wxOutputStream& Write(const void *buffer, size_t size);
-  
+
     // Position functions
     off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
     off_t TellO() const;
@@ -303,13 +303,13 @@ public:
     void Sync();
 
     size_t GetSize() const;
-  
+
     wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
 
 protected:
     size_t OnSysWrite(const void *buffer, size_t bufsize);
     off_t OnSysSeek(off_t seek, wxSeekMode mode);
-    off_t OnSysTell() const;  
+    off_t OnSysTell() const;
 
     wxStreamBuffer *m_o_streambuf;
 };
