@@ -7,11 +7,12 @@
 # Script configs
 PYVERSION=2.3a1
 PYVER=2.3
-BUILDNUM=2
+BUILDNUM=3
 DOCLEANUP=no
 
 PROGDIR="`dirname \"$0\"`"
 TMPDIR=/tmp/_py
+TMPDIR=/projects/_py
 
 BUILDROOT=$TMPDIR/build
 INSTALLROOT=$TMPDIR/install
@@ -31,6 +32,20 @@ mkdir -p $DMGDIR/root
 # Configure and build Python
 pushd $BUILDROOT
 
+# Check if we should build and install the docs, but only if it
+# doesn't appear to be done already.  TODO: fix this path to be version independent
+if [ ! -e "build/temp.darwin-6.3-Power Macintosh-2.3/build-html/build-html idx" ]; then
+    read -p "Build the Python docs? (y/N)? " builddocs
+fi
+
+# If the filesystem is case-sensitive then "python" will be built, but
+# some parts of the install expect "python.exe which is what is built
+# on a case-insensitive filesystem.  Make a link just in case it is
+# needed.
+if [ ! -e python.exe ]; then
+    ln -s python python.exe
+fi
+
 # Make a link to the waste dir so that lib can be found.  This allows
 # the PythonIDE to be built
 if [ ! -e waste ]; then
@@ -40,7 +55,17 @@ fi
 $PYTHONSRC/configure --enable-framework=$INSTALLROOT/Library/Frameworks LDFLAGS=-Wl,-x
 make
 make frameworkinstall
+
+if [ "$builddocs" = "y" -o "$builddocs" = "Y" ]; then
+    ./python.exe $PYTHONSRC/Mac/OSX/setupDocs.py build
+    echo ""
+    read -p "When the help indexer is done press Enter..." ans
+    ./python.exe $PYTHONSRC/Mac/OSX/setupDocs.py install \
+	--prefix=$INSTALLROOT/Library/Frameworks/Python.framework/Versions/$PYVER
+fi
+
 popd
+
 
 
 # Make the Installer package:
@@ -71,6 +96,7 @@ python $PROGDIR/../buildpkg.py \
     --NeedsAuthorization="YES" \
     --Relocatable="NO" \
     --InstallOnly="YES" \
+    --RootVolumeOnly="YES" \
     $INSTALLROOT \
     $RESOURCEDIR
 

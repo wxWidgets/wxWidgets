@@ -49,8 +49,10 @@ $TOOLDIR/python -Wi -tt -O \
     -x badsyntax $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER
 
 
-# Make the site-packages dir writable by the admin.  Should anything else
-# be writable too?
+# Make the site-packages and other dirs writable by the admin.
 
-chgrp admin $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/site-packages
-chmod g+w  $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/site-packages
+for d in lib/python$PYVER/site-packages bin; do
+    chgrp admin $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/$d
+    chmod g+w  $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/$d
+done
+
