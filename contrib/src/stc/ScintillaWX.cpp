@@ -85,7 +85,7 @@ public:
 
     bool AcceptsFocus() const { return FALSE; }
 
-    void OnPaint(wxPaintEvent& evt) {
+    void OnPaint(wxPaintEvent& WXUNUSED(evt)) {
         wxPaintDC dc(this);
         Surface* surfaceWindow = Surface::Allocate();
         surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
@@ -205,9 +205,11 @@ bool ScintillaWX::SetIdle(bool on) {
     if (idler.state != on) {
         // connect or disconnect the EVT_IDLE handler
         if (on) 
-            stc->Connect(-1, wxEVT_IDLE, (wxObjectEventFunction)&wxStyledTextCtrl::OnIdle);
+            stc->Connect(-1, wxEVT_IDLE,
+                         (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) &wxStyledTextCtrl::OnIdle);
         else
-            stc->Disconnect(-1, wxEVT_IDLE, (wxObjectEventFunction)&wxStyledTextCtrl::OnIdle);
+            stc->Disconnect(-1, wxEVT_IDLE,
+                            (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) &wxStyledTextCtrl::OnIdle);
         idler.state = on;
     }
     return idler.state;

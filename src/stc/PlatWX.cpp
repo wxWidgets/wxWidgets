@@ -713,7 +713,7 @@ public:
         event.Skip();
     }
 
-    void OnKillFocus(wxFocusEvent& event) {
+    void OnKillFocus(wxFocusEvent& WXUNUSED(event)) {
         // Do nothing.  Prevents base class from resetting the colors...
     }
 
@@ -799,7 +799,7 @@ public:
         event.Skip();
     }
 
-    void OnActivate(wxListEvent& event) {
+    void OnActivate(wxListEvent& WXUNUSED(event)) {
         doubleClickAction(doubleClickActionData);
     }
 
