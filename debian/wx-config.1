@@ -8,8 +8,12 @@ wx-config \- generate compile time requirements for wxWidgets applications
 .B wxgtk\-config
 .HP
 .B wx\-config
-[\-\-version] [\-\-libs\fI[=LIBS]\fP] [\-\-cflags] [\-\-cc] [\-\-cxx] [\-\-ld]
-[\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP] [\-\-release] [\-\-basename]
+[\-\-version]
+[\-\-libs\fI[=LIBS]\fP] [\-\-gl\-libs]
+[\-\-cppflags] [\-\-cflags] [\-\-cxxflags]
+[\-\-cc] [\-\-cxx] [\-\-ld]
+[\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP]
+[\-\-release] [\-\-basename]
 .SH DESCRIPTION
 \fIwx\-config\fP is a tool to determine the compiler and linker
 flags required for applications using the \fIwxWidgets\fP toolkit(s).
@@ -33,13 +37,22 @@ What to
 include in a bug report.
 .TP 15
 .B  \-\-libs[=LIBS]
-Generate linker flags for a \fIwxWidgets\fP program.
+Generate linker flags for a \fIwxWidgets\fP application.
 The optional argument is a comma separated list of the wxWidgets libraries
 to link with.  You may include contrib libs here too.  If no argument is
 given it will assume you wish to link all 'core' libraries.
 .TP 15
+.B  \-\-gl-libs
+Output linker parameters for a \fIwxWindows\fP application that uses the glcanvas.
+.TP 15
+.B  \-\-cppflags
+Output parameters required by the C preprocessor for wxWindows applications.
+.TP 15
 .B  \-\-cflags
-Generate compiler flags for the same.
+Output parameters required by the C compiler for wxWindows applications.
+.TP 15
+.B  \-\-cxxflags
+Output parameters required by the C++ compiler for wxWindows applications.
 .TP 15
 .B  \-\-cc
 Output the name of the C compiler \fB$(CC)\fP.
@@ -48,7 +61,7 @@ Output the name of the C compiler \fB$(CC)\fP.
 Output the name of the C++ compiler \fB$(CXX)\fP.
 .TP 15
 .B  \-\-ld
-Output the Linker command \fB$(LD)\fP.
+Output the linker command \fB$(LD)\fP.
 .TP 15
 .B  \-\-prefix=PREFIX
 If specified, use PREFIX instead of the installation prefix that \fIwxWidgets\fP

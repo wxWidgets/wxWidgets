@@ -9,8 +9,23 @@
 #export DH_VERBOSE=1
 export DH_OPTIONS
 
-release    := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p')
-python_ver := python$(shell python -c "import sys;print sys.version[:3]")
+ifdef DISTCC_HOSTS
+
+ #JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$(($$\# + $$\#)))
+ # Nearly as fast, but doesn't raise the room temperature
+ # or saturate the build machines quite so much.
+  JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$\#)
+  FAST_MAKE  = $(MAKE) -j $(JOB_COUNT)
+
+else
+
+  FAST_MAKE = $(MAKE)
+
+endif
+
+-include debian/python-version
+
+release := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p')
 
 cross_host  = i586-mingw32msvc
 cross_build = $(shell ./config.guess)
@@ -30,6 +45,7 @@ package_i18n            = wx$(release)-i18n
 package_doc             = wx$(release)-doc
 package_examples        = wx$(release)-examples
 
+package_gtk_dbg_py      = libwxgtk$(release)-dbg-python
 package_msw_dev         = libwxmsw$(release)-dev
 package_msw_dbg         = libwxmsw$(release)-dbg
 package_headers_msw     = wx$(release)-headers-msw
@@ -93,12 +109,19 @@ wxconfig := $(shell pwd)/$(objdir_gtk_shared)/wx-config          \
                 --prefix=$(shell pwd)                            \
                 --exec-prefix=$(shell pwd)/$(objdir_gtk_shared)
 
+wxconfig-dbg := $(shell pwd)/$(objdir_gtk_debug)/wx-config       \
+                --prefix=$(shell pwd)                            \
+                --exec-prefix=$(shell pwd)/$(objdir_gtk_debug)
+
 contrib_libs := $(subst CVS,,$(notdir $(wildcard contrib/include/wx/*)))
 
 
 # The Rules:
 
-debian/control: debian/control.in
+debian/python-version:
+	echo python_ver := python$(shell python -c "import sys;print sys.version[:3]") > $@
+
+debian/control: $(addprefix debian/,control.in python-version)
 	sed -e 's/=V/$(release)/g;s/=PY/$(python_ver)/g' < debian/control.in > debian/control
 
 control-files-stamp: debian/control
@@ -112,6 +135,11 @@ control-files-stamp: debian/control
 		echo "generating control file $(package_gtk_dbg).$$f";       \
 		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dbg.$$f         \
 			> debian/$(package_gtk_dbg).$$f;                     \
+	done;
+	@for f in menu; do \
+		echo "generating control file $(package_gtk_contrib_dev).$$f"; \
+		sed -e 's/=V/$(release)/g' < debian/libwxgtk-contrib-dev.$$f \
+			> debian/$(package_gtk_contrib_dev).$$f; \
 	done;
 	@for f in dirs docs menu postinst prerm; do                          \
 		echo "generating control file $(package_gtk_py).$$f";        \
@@ -127,6 +155,18 @@ control-files-stamp: debian/control
 	@for f in examples; do                                               \
 		echo "generating control file $(package_examples).$$f";      \
 		cp debian/wx-examples.$$f debian/$(package_examples).$$f;    \
+	done;
+	@for f in dirs docs postinst; do                                     \
+		echo "generating control file $(package_gtk_dbg_py).$$f";    \
+		sed -e 's/=PY/$(python_ver)/g;s/=V/$(release)/g'             \
+			< debian/libwxgtk-python.$$f                         \
+			> debian/$(package_gtk_dbg_py).$$f;                  \
+	done;
+	@for f in menu prerm; do                          		     \
+		echo "generating control file $(package_gtk_dbg_py).$$f";    \
+		sed -e 's/=PY/$(python_ver)/g;s/=V/$(release)/g'             \
+			< debian/libwxgtk-dbg-python.$$f                     \
+			> debian/$(package_gtk_dbg_py).$$f;                  \
 	done;
 	@for f in dirs links postinst prerm; do                              \
 		echo "generating control file $(package_msw_dev).$$f";       \
@@ -167,7 +207,6 @@ configure-gtk-shared-stamp:
 				--enable-gtk2			\
 				--enable-unicode		\
 				--with-opengl			\
-				--enable-soname			\
 				--with-zlib=sys			\
 				--with-libjpeg=sys		\
 				--with-libpng=sys		\
@@ -178,7 +217,7 @@ configure-gtk-shared-stamp:
 
 build-gtk-shared-stamp: configure-gtk-shared-stamp
 	dh_testdir
-	cd $(objdir_gtk_shared) && $(MAKE)
+	cd $(objdir_gtk_shared) && $(FAST_MAKE)
 	touch $@
 
 configure-gtk-static-stamp:
@@ -202,7 +241,7 @@ configure-gtk-static-stamp:
 
 build-gtk-static-stamp: configure-gtk-static-stamp
 	dh_testdir
-	cd $(objdir_gtk_static) && $(MAKE)
+	cd $(objdir_gtk_static) && $(FAST_MAKE)
 	touch $@
 
 configure-gtk-debug-stamp:
@@ -216,7 +255,6 @@ configure-gtk-debug-stamp:
 				--enable-unicode		\
 				--with-opengl			\
 				--enable-debug			\
-				--enable-soname			\
 				--with-zlib=sys			\
 				--with-libjpeg=sys		\
 				--with-libpng=sys		\
@@ -227,21 +265,29 @@ configure-gtk-debug-stamp:
 
 build-gtk-debug-stamp: configure-gtk-debug-stamp
 	dh_testdir
-	cd $(objdir_gtk_debug) && $(MAKE)
+	cd $(objdir_gtk_debug) && $(FAST_MAKE)
 	touch $@
 
 
 build-contrib-shared-stamp: build-gtk-shared-stamp
 	dh_testdir
-	cd $(objdir_gtk_shared)/contrib/src && $(MAKE)
+	cd $(objdir_gtk_shared)/contrib/src && $(FAST_MAKE)
+	cd $(objdir_gtk_shared)/contrib/utils/wxrc && $(FAST_MAKE)
+	cd $(objdir_gtk_shared)/contrib/utils/wxrcedit && $(FAST_MAKE)
 	touch $@
 
 build-contrib-static-stamp: build-gtk-static-stamp
 	dh_testdir
-	cd $(objdir_gtk_static)/contrib/src && $(MAKE)
+	cd $(objdir_gtk_static)/contrib/src && $(FAST_MAKE)
 	touch $@
 
-build-gtk-py-stamp: build-gtk-shared-stamp
+purge-dbg-py:
+	@if [ ! -e build-gtk-py-stamp ]; then				\
+		$(MAKE) -f debian/rules clean-py;			\
+	fi
+	$(RM) build-gtk-dbg-py-stamp
+
+build-gtk-py-stamp: build-gtk-shared-stamp purge-dbg-py
 	dh_testdir
 	touch docs/lgpl.txt
 	cd wxPython/include/wx						\
@@ -262,7 +308,7 @@ build-gtk-py-stamp: build-gtk-shared-stamp
 build-doc-stamp: build-gtk-shared-stamp
 	dh_testdir
 	cd $(objdir_gtk_shared)/utils/tex2rtf/src \
-		&& $(MAKE)
+		&& $(FAST_MAKE)
 	rm -rf $(objdir_doc)
 	rm -rf $(objdir_doc_cruft)
 	mkdir $(objdir_doc)
@@ -309,6 +355,30 @@ build-i18n-stamp: build-gtk-shared-stamp
 		&& $(MAKE) allmo
 	touch $@
 
+purge-release-py:
+	@if [ ! -e build-gtk-dbg-py-stamp ]; then			\
+		$(MAKE) -f debian/rules clean-py;			\
+	fi
+	$(RM) build-gtk-py-stamp
+
+build-gtk-dbg-py-stamp: build-gtk-debug-stamp purge-release-py
+	dh_testdir
+	touch docs/lgpl.txt
+	cd wxPython/include/wx						\
+		&& for f in $(contrib_libs); do				\
+			$(RM) $$f;					\
+			ln -s ../../../contrib/include/wx/$$f .;	\
+		done
+	cd wxPython \
+		&& $(python_ver) ./setup.py 	build			\
+						WX_CONFIG='$(wxconfig-dbg)' \
+						WXPORT=gtk2		\
+						UNICODE=1
+	cd wxPython/include/wx						\
+		&& for f in $(contrib_libs); do $(RM) $$f; done
+
+	touch $@
+
 
 configure-msw-shared-stamp:
 	dh_testdir
@@ -322,7 +392,7 @@ configure-msw-shared-stamp:
 
 build-msw-shared-stamp: configure-msw-shared-stamp
 	dh_testdir
-	cd $(objdir_msw_shared) && $(MAKE)
+	cd $(objdir_msw_shared) && $(FAST_MAKE)
 	touch $@
 
 configure-msw-static-stamp:
@@ -338,7 +408,7 @@ configure-msw-static-stamp:
 
 build-msw-static-stamp: configure-msw-static-stamp
 	dh_testdir
-	cd $(objdir_msw_static) && $(MAKE)
+	cd $(objdir_msw_static) && $(FAST_MAKE)
 	touch $@
 
 configure-msw-dbg-stamp:
@@ -354,27 +424,18 @@ configure-msw-dbg-stamp:
 
 build-msw-dbg-stamp: configure-msw-dbg-stamp
 	dh_testdir
-	cd $(objdir_msw_dbg) && $(MAKE)
+	cd $(objdir_msw_dbg) && $(FAST_MAKE)
 	touch $@
 
 
-clean: debian/control
-	dh_testdir
-	dh_testroot
-
-	rm -rf config_deb.cache config_deb_cross.cache *-stamp $(objdirs)
-	rm -f docs/lgpl.txt
-	rm -f docs/latex/wx/manual.bb
-	rm -f $(objdir_i18n)/*.mo
-
+clean-py:
 	cd wxPython \
 		&& rm -rf licence \
-		&& rm -rf build \
-		&& rm -rf contrib/gizmos/contrib \
-		&& rm -rf contrib/ogl/contrib \
-		&& rm -rf contrib/stc/contrib \
-		&& rm -rf contrib/xrc/contrib \
-		&& rm -rf *.pyc
+		&& rm -rf build* \
+		&& rm -rf docs/xml-raw \
+		&& rm -rf wx/*.py
+
+	# What to do about src/__version__.py ???
 
 	cd wxPython/include/wx						\
 		&& for f in $(contrib_libs); do $(RM) $$f; done
@@ -382,6 +443,14 @@ clean: debian/control
 # We do the equivalent of this above by removing build, unfortunately
 # its not enough by itself to get the tree properly clean again.
 #		&& ./setup.py clean
+
+clean: debian/control clean-py
+	dh_testdir
+	dh_testroot
+
+	rm -rf config_deb.cache config_deb_cross.cache *-stamp $(objdirs)
+	rm -f docs/lgpl.txt
+	rm -f $(objdir_i18n)/*.mo
 
 	dh_clean
 	rm -f debian/$(package_gtk_lib).*
@@ -394,6 +463,7 @@ clean: debian/control
 	rm -f debian/$(package_i18n).*
 	rm -f debian/$(package_doc).*
 	rm -f debian/$(package_examples).*
+	rm -f debian/$(package_gtk_dbg_py).*
 	rm -f debian/$(package_msw_dev).*
 	rm -f debian/$(package_msw_dbg).*
 	rm -f debian/$(package_headers_msw).*
@@ -465,6 +535,13 @@ install-gtk-contrib-dev: build-contrib-static-stamp install-gtk-contrib-stamp
 	dh_install -Xlibwx_gtk2u- -Xlibwx_gtk2u_gl- \
 		   $(objdir_gtk_static)/lib/*.a 		usr/lib
 
+	dh_install $(objdir_gtk_shared)/contrib/utils/wxrc/wxrc		usr/bin
+	dh_install $(objdir_gtk_shared)/contrib/utils/wxrcedit/wxrcedit	usr/bin
+
+	dh_installman debian/wxrc-tools.1
+	dh_link usr/share/man/man1/wxrc-tools.1 usr/share/man/man1/wxrc.1	\
+		usr/share/man/man1/wxrc-tools.1 usr/share/man/man1/wxrcedit.1
+
 install-gtk-py: DH_OPTIONS=-p$(package_gtk_py)
 install-gtk-py: build-gtk-py-stamp
 	dh_testdir
@@ -478,7 +555,7 @@ install-gtk-py: build-gtk-py-stamp
 			      WXPORT=gtk2					\
 			      UNICODE=1
 
-	find debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython \
+	find debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages	\
 		-name '*.py?' -exec rm '{}' ';'
 
 	dh_installman debian/wxPython-tools.1
@@ -538,6 +615,37 @@ install-examples: build-examples-stamp
 	dh_clean -k
 	dh_installdirs
 
+install-gtk-dbg-py: DH_OPTIONS=-p$(package_gtk_dbg_py)
+install-gtk-dbg-py: build-gtk-dbg-py-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	cd wxPython 								\
+		&& $(python_ver) ./setup.py install 				\
+			      --prefix=`pwd`/../debian/$(package_gtk_dbg_py)/usr \
+			      WX_CONFIG='$(wxconfig-dbg)'			\
+			      WXPORT=gtk2					\
+			      UNICODE=1
+
+	find debian/$(package_gtk_dbg_py)/usr/lib/$(python_ver)/site-packages	\
+		-name '*.py?' -exec rm '{}' ';'
+
+	dh_installman debian/wxPython-tools.1
+	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1     \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2png.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1    \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1      \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalacarte.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalamode.1  \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywrap.1
+
+	# This is rather bogus, its included in the main copyright file now though.
+	rm -f debian/$(package_gtk_dbg_py)/usr/lib/$(python_ver)/site-packages/wxPython/tools/XRCed/license.txt
+
 
 install-msw-dev: DH_OPTIONS=-p$(package_msw_dev)
 install-msw-dev: build-msw-shared-stamp build-msw-static-stamp
@@ -595,7 +703,14 @@ binary-common:
 
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -N$(package_gtk_py) -V
+
+	@# Don't do this for the dbg-py special build because dh_makeshlibs
+	@# will crap out if it is called with no packages to act on.
+	@if [ "x$(DH_OPTIONS)" != "-p$(package_gtk_dbg_py)" ]; then	\
+		echo "dh_makeshlibs -N$(package_gtk_py) -V";		\
+		dh_makeshlibs -N$(package_gtk_py) -V;			\
+	fi
+
 	dh_installdeb
 	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_dbg)/usr/lib:debian/$(package_gtk_contrib)/usr/lib
 	dh_gencontrol
@@ -607,13 +722,13 @@ binary-common:
 # building the arch specific package files needed to create them.
 binary-indep: build_all install
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-i -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-i -N$(package_gtk_dbg_py) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
 		binary-common
 
 # Build just the architecture-dependent files here.
 binary-arch: build_arch install_arch
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-a -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-a -N$(package_gtk_dbg_py) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
 		binary-common
 
 # Build all packages target.
@@ -628,6 +743,12 @@ binary-cross: control-files-stamp $(install_all_cross)
 	$(MAKE) -f debian/rules \
 		DH_OPTIONS="-p$(package_msw_dev) -p$(package_msw_dbg) -p$(package_headers_msw)" \
 		binary-common
+
+
+# Build wxPython against libwxgtk-dbg.  This package will conflict
+# with the release build one, but may be useful to some people.
+binary-dbg-py: control-files-stamp install-gtk-dbg-py
+	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_dbg_py)" binary-common
 
 
 ############################################################################
@@ -659,10 +780,13 @@ binary-fast:control-files-stamp install-gtk-dbg install-msw-dev install-headers 
 	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_dbg) -p$(package_msw_dev) -p$(package_headers) -p$(package_headers_msw)" binary-common
 
 
-.PHONY: build build_all build_arch clean binary-indep binary-arch binary binary-common \
+.PHONY: build build_all build_arch					\
+	clean clean-py purge-release-py purge-dbg-py			\
+	binary-indep binary-arch binary binary-common 			\
         binary-gtk binary-gtk-dev binary-gtk-dbg binary-doc binary-cross \
-	install install_arch install-gtk-lib install-gtk-dev \
-        install-gtk-dbg install-gtk-contrib install-gtk-contrib-dev \
-        install-gtk-py install-headers install-i18n install-doc install-examples \
+	install install_arch install-gtk-lib install-gtk-dev 		\
+        install-gtk-dbg install-gtk-contrib install-gtk-contrib-dev 	\
+	install-gtk-py install-gtk-dbg-py				\
+	install-headers install-i18n install-doc install-examples 	\
 	install-msw-dev install-msw-dbg install-headers-msw
 
