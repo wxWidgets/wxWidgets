@@ -9,3 +9,15 @@ linux.system.cache
 wx-config
 config.log
 linux-gnu.system.cache
+*.dsp
+*.dsw
+*.plg
+*.opt
+*.aps
+*.ncb
+*.pro
+*.opt
+Release
+Debug
+ReleaseDLL
+DebugDLL
