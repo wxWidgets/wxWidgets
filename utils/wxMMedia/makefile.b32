@@ -1,0 +1,91 @@
+#
+# File:		makefile.b32
+# Author:	Patrick Halke, modified by Guilhem Lavaux
+# Created:	1997
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds 32bit wxstring library for Windows 3.1
+# and Borland C++ 4.x
+
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makeb32.env
+
+WXLIBDIR = $(WXDIR)\lib
+WXLIB = $(WXDIR)\lib\wx32.lib
+WXINC = $(WXDIR)\include\msw
+WXBASESRC = $(WXDIR)\src\base
+WXBASEINC = $(WXDIR)\include\base
+LIBS=$(WXLIB) cw32 import32
+
+!ifndef DEBUG
+DEBUG=0
+!endif
+
+!if "$(FINAL)" == "0"
+LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS= -v -DDEBUG=$(DEBUG)
+!else
+LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -O2
+DEBUG_FLAGS = -DDEBUG=$(DEBUG)
+!endif
+
+CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+
+LIBTARGET= $(WXLIBDIR)\wxmmedia.lib
+
+.c.obj:
+	bcc32 $(CPPFLAGS) -P- -c {$< }
+
+OBJECTS = sndsnd.$(OBJSUFF) sndwav.$(OBJSUFF) vidbdrv.$(OBJSUFF) \
+          sndfile.$(OBJSUFF) sndwin.$(OBJSUFF) mmdata.$(OBJSUFF) \
+          mmfile.$(OBJSUFF) mmsolve.$(OBJSUFF) sndfrag.$(OBJSUFF) \
+          cdbase.$(OBJSUFF) cdwin.$(OBJSUFF) vidwin.$(OBJSUFF) \
+	  mmriff.$(OBJSUFF)
+
+all:    $(LIBTARGET)
+
+$(LIBTARGET):	$(OBJECTS)
+	erase $(LIBTARGET)
+	tlib $(LIBTARGET) /P32 @&&!
++$(OBJECTS:.obj =.obj +)
+!
+
+sndsnd.$(OBJSUFF): sndsnd.$(SRCSUFF) sndsnd.h
+
+sndwin.$(OBJSUFF): sndwin.$(SRCSUFF) sndwin.h
+
+sndfile.$(OBJSUFF): sndfile.$(SRCSUFF) sndfile.h
+
+sndwav.$(OBJSUFF): sndwav.$(SRCSUFF) sndwav.h
+
+sndfrag.$(OBJSUFF): sndfrag.$(SRCSUFF) sndfrag.h
+
+mmdata.$(OBJSUFF): mmdata.$(SRCSUFF)
+
+mmfile.$(OBJSUFF): mmfile.$(SRCSUFF) mmfile.h
+
+mmsolve.$(OBJSUFF): mmsolve.$(SRCSUFF) mmsolve.h
+
+vidbdrv.$(OBJSUFF): vidbdrv.$(SRCSUFF) vidbdrv.h
+
+cdbase.$(OBJSUFF): cdbase.$(SRCSUFF) cdbase.h
+
+cdwin.$(OBJSUFF): cdwin.$(SRCSUFF) cdwin.h
+
+vidwin.$(OBJSUFF): vidwin.$(SRCSUFF) vidwin.h
+
+mmriff.$(OBJSUFF): mmriff.$(SRCSUFF) mmriff.h
+
+clean:
+        -erase *.obj
+        -erase $(LIBTARGET)
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.rws

@@ -1,0 +1,92 @@
+#
+# File:		makefile.nt
+# Author:	Stefan Hammes (stefan.hammes@urz.uni-heidelberg.de) / Julian Smart / Petr Houser (1996)
+# Created:	1995
+# Updated:=09
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxSock library for Windows NT / Win95
+
+# Change WXDIR or WXWIN to wherever wxWindows is found
+#WXWIN = $(WX)
+WXDIR = $(WXWIN)
+!include $(WXWIN)\src\ntwxwin.mak
+
+WXMMEDDIR = $(WXDIR)\utils\wxmmedia
+WXMMEDINC = $(WXMMEDDIR)
+WXMMEDLIB = $(WXDIR)\lib\wxmmedia.lib
+INC=-I$(WXBASEINC) -I$(WXINC) -I$(WXMMEDINC)
+
+WXLIB = $(WXDIR)\lib\wx.lib
+
+LIBS=$(WXSOCKLIB) $(LIBS)
+#LIBS=$(WXLIB) $(WXSTRINGLIB) oldnames libw llibcew llibce commdlg shell
+
+OBJECTS = mmdata.obj mmfile.obj sndfile.obj sndsnd.obj sndwin.obj\
+	sndwav.obj sndfrag.obj vidbdrv.obj
+
+all: $(WXMMEDLIB)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt
+        cd $(ITSYDIR)
+
+demo:
+
+$(WXMMEDLIB): $(OBJECTS)
+        -erase $(WXSOCKLIB)
+        $(implib) @<<
+-out:$(WXSOCKLIB)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+MMD_data.obj: MMD_data.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+MMD_file.obj: MMD_file.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+SND_file.obj: SND_file.$(SRCSUFF) SND_file.h
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+SND_wav.obj: SND_wav.$(SRCSUFF) SCK_wav.h
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+SND_sound.obj: SND_sound.$(SRCSUFF) SND_sound.h
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+SND_sound.obj: SND_sound.$(SRCSUFF) SND_sound.h
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+SND_frag.obj: SND_frag.$(SRCSUFF) SND_frag.h
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+VID_bdrv.obj: VID_bdrv.$(SRCSUFF) VID_bdrv.h
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+<<
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.lib
+        -erase *.res
+        -erase *.sbr
+        -erase *.pdb
