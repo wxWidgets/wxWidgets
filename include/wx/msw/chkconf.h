@@ -36,13 +36,20 @@
 #endif
 
 /*
- * GCC does not have SEH (__try/__catch)
+ * All of the settings below require SEH support (__try/__catch) and can't work
+ * without it.
  */
-
-#if defined(__GNUG__)
+#if !defined(_MSC_VER) && \
+    (!defined(__BORLANDC__) || __BORLANDC__ < 0x0550)
     #undef wxUSE_ON_FATAL_EXCEPTION
     #define wxUSE_ON_FATAL_EXCEPTION 0
-#endif
+
+    #undef wxUSE_CRASHREPORT
+    #define wxUSE_CRASHREPORT 0
+
+    #undef wxUSE_STACKWALKER
+    #define wxUSE_STACKWALKER 0
+#endif // compiler doesn't support SEH
 
 /*
  * wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior

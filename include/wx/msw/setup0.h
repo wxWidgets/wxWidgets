@@ -117,7 +117,7 @@
 // This setting is for Win32 only and can only be enabled if your compiler
 // supports Win32 structured exception handling (currently only VC++ does)
 //
-// Default is 1
+// Default is 1 if supported by the compiler (VC++ and recent BC++ only).
 //
 // Recommended setting: 1 if your compiler supports it.
 #define wxUSE_ON_FATAL_EXCEPTION 1
@@ -126,7 +126,7 @@
 // machine-readable minidumop created by wxCrashReport::Generate()) stack back
 // trace when your program crashes using wxStackWalker
 //
-// Default is 1 if supported by the compiler.
+// Default is 1 if supported by the compiler (VC++ and recent BC++ only).
 //
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_STACKWALKER 1
@@ -1122,25 +1122,10 @@
 // Set this to 1 to be able to use wxCrashReport::Generate() to create mini
 // dumps of your program when it crashes (or at any other moment)
 //
-// Default is 1 if supported by the compiler.
+// Default is 1 if supported by the compiler (VC++ and recent BC++ only).
 //
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_CRASHREPORT 1
-
-
-// all of the settings below require SEH support (__try/__catch) and can't work
-// without it
-#if !defined(_MSC_VER) && \
-    (!defined(__BORLANDC__) || __BORLANDC__ < 0x0550)
-    #undef wxUSE_ON_FATAL_EXCEPTION
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-
-    #undef wxUSE_CRASHREPORT
-    #define wxUSE_CRASHREPORT 0
-
-    #undef wxUSE_STACKWALKER
-    #define wxUSE_STACKWALKER 0
-#endif // compiler doesn't support SEH
 
 // ----------------------------------------------------------------------------
 // obsolete settings
