@@ -55,7 +55,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
     wxFSFile *f;
     wxInputStream *str;
     static char buf[1024];
-    wxCharBuffer loc = location.ToAscii();
+    const wxWX2MBbuf loc = location.ToAscii();
 
     sprintf(buf, "<html><body><h2><i>You're in Node <u>%s</u></i></h2><p>"
                  "Where do you want to go?<br><blockquote>"
