@@ -280,7 +280,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_T("This sample shows wxHtmlListBox class.\n")
                  _T("\n")
-                 _T("© 2003 Vadim Zeitlin"),
+                 _T("(c) 2003 Vadim Zeitlin"),
                  _T("About HtmlLbox"),
                  wxOK | wxICON_INFORMATION,
                  this);
