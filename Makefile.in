@@ -73,11 +73,11 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_ZLIBBUILTIN@__LIB_ZLIB_p = -lwxzlib
 @COND_UNICODE1@WXUNICODEFLAG = u
 @COND_BUILDDEBUG@WXDEBUGFLAG = d
-@COND_WXUSE_REGEXBUILTIN@__LIB_REGEX_p_1 = -lwxregex
+@COND_WXUSE_REGEXBUILTIN@__LIB_REGEX_LIBR = $(top_builddir)/lib/libwxregex.a
 @COND_WXUSE_ZLIBBUILTIN@__LIB_ZLIB_LIBR = $(top_builddir)/lib/libwxzlib.a
-@COND_USE_SOSYMLINKS1@__monodll___so_symlinks_cmd = rm -f $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0; \
-@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0; \
-@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0 $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS1@__monodll___so_symlinks_cmd = rm -f $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2); \
+@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2); \
+@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2) $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_WXUSE_LIBJPEGBUILTIN@__LIB_JPEG_DEP = $(__wxjpeg___depname)
 @COND_WXUSE_LIBPNGBUILTIN@LIB_PNG = wxpng
 @COND_WXUSE_ODBCBUILTIN@__LIB_ODBC_p = -lwxodbc
@@ -102,13 +102,16 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_PLATFORM_WIN321@    wx/msw/mimetype.h \
 @COND_PLATFORM_WIN321@    wx/msw/winundef.h
 @COND_TOOLKITMAC@__macos_res___depname = lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
-@COND_USE_SOVERSION1_PLATFORM_MACOSX0@__monodll___targetnamesuf = .$(SO_SUFFIX).0.0.0
-@COND_USE_SOVERSION1_PLATFORM_MACOSX1@__monodll___targetnamesuf = .0.0.0.$(SO_SUFFIX)
+@COND_TOOLKITX11@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl6.o
+@COND_TOOLKITMGL@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl7.o
+@COND_TOOLKITGTK@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl7.o
+@COND_TOOLKITMSW@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl7.o
 @COND_WXUSE_LIBTIFFBUILTIN@__LIB_TIFF_LIBR = $(top_builddir)/lib/libwxtiff.a
 @COND_WXUSE_LIBPNGBUILTIN@__LIB_PNG_LIBR = $(top_builddir)/lib/libwxpng.a
-@COND_TOOLKITMAC@__macos_res_install___depname = macos-res-install
-@COND_PLATFORM_WIN321@__monodll___importlib = -Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
-@COND_PLATFORM_WIN321@__monodll___importlib = -Wl,--out-implib,$(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOVERSION1_PLATFORM_MACOSX0@__monodll___targetsuf3 = .$(SO_SUFFIX).0.0.0
+@COND_USE_SOVERSION1_PLATFORM_MACOSX1@__monodll___targetsuf3 = .0.0.0.$(SO_SUFFIX)
+@COND_USE_SOVERSION1_PLATFORM_MACOSX0@__monodll___targetsuf2 = .$(SO_SUFFIX).0
+@COND_USE_SOVERSION1_PLATFORM_MACOSX1@__monodll___targetsuf2 = .0.$(SO_SUFFIX)
 @COND_TOOLKITGTK@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-gsockgtk.o monolib-win_gtk.o monolib-app.o monolib-bitmap.o monolib-brush.o monolib-clipbrd.o monolib-colour.o monolib-cursor.o monolib-data.o monolib-dataobj.o monolib-dc.o monolib-dcclient.o monolib-dcmemory.o monolib-dcscreen.o monolib-dnd.o monolib-evtloop.o monolib-font.o monolib-toplevel.o monolib-gdiobj.o monolib-icon.o monolib-main1.o monolib-pen.o monolib-popupwin.o monolib-region.o monolib-settings.o monolib-timer.o monolib-tooltip.o monolib-utilsgtk.o monolib-window.o monolib-paletteg.o
 @COND_TOOLKITMOTIF@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-region1.o monolib-pen1.o monolib-brush1.o monolib-bitmap1.o monolib-utilsx.o
 @COND_TOOLKITMSW@__LOWLEVEL_SRC_OBJECTS_3 = monolib-app1.o monolib-bitmap2.o monolib-brush2.o monolib-caret.o monolib-clipbrd1.o monolib-colour1.o monolib-cursor1.o monolib-data1.o monolib-dc1.o monolib-dcclient1.o monolib-dcmemory1.o monolib-dcprint.o monolib-dcscreen1.o monolib-dialup1.o monolib-dib.o monolib-dirdlg.o monolib-display.o monolib-enhmeta.o monolib-helpbest.o monolib-evtloop1.o monolib-font1.o monolib-fontenum1.o monolib-fontutil1.o monolib-gdiimage.o monolib-gdiobj1.o monolib-glcanvas.o monolib-helpchm.o monolib-helpwin.o monolib-icon1.o monolib-joystick.o monolib-minifram.o monolib-palette.o monolib-pen2.o monolib-popupwin1.o monolib-region2.o monolib-settings1.o monolib-taskbarcmn.o monolib-taskbar.o monolib-timer1.o monolib-tooltip1.o monolib-toplevel1.o monolib-wave.o monolib-window1.o monolib-automtn.o monolib-dataobj1.o monolib-dropsrc.o monolib-droptgt.o monolib-oleutils.o monolib-uuid.o
@@ -124,10 +127,12 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKITMAC@__GUI_SRC_OBJECTS_1 = monolib-gsocket2.o monolib-accel3.o monolib-aga.o monolib-app5.o monolib-bitmap4.o monolib-bmpbuttn3.o monolib-brush4.o monolib-button3.o monolib-checkbox3.o monolib-checklst3.o monolib-choice3.o monolib-clipbrd5.o monolib-colordlg1.o monolib-colour5.o monolib-combobox3.o monolib-control3.o monolib-cursor5.o monolib-data5.o monolib-dataobj4.o monolib-dc5.o monolib-dcclient5.o monolib-dcmemory5.o monolib-dcprint1.o monolib-dcscreen5.o monolib-dialog3.o monolib-dirdlg1.o monolib-dirmac.o monolib-dnd1.o monolib-filedlg2.o monolib-font5.o monolib-fontdlg2.o monolib-fontenum3.o monolib-fontutil3.o monolib-frame3.o monolib-gauge2.o monolib-gdiobj5.o monolib-icon5.o monolib-joystick3.o monolib-listbox3.o monolib-macnotfy.o monolib-mdi3.o monolib-menu3.o monolib-menuitem2.o monolib-metafile1.o monolib-mimetmac.o monolib-minifram4.o monolib-msgdlg3.o monolib-notebmac.o monolib-palette4.o monolib-pen4.o monolib-pnghand.o monolib-printdlg1.o monolib-printmac.o monolib-radiobox3.o monolib-radiobut3.o monolib-region4.o monolib-scrolbar3.o monolib-settings5.o monolib-slider2.o monolib-spinbutt3.o monolib-statbmp3.o monolib-statbox3.o monolib-statbrma.o monolib-statlmac.o monolib-stattext3.o monolib-tabctrl1.o monolib-textctrl3.o monolib-thread1.o monolib-timer4.o monolib-toplevel5.o monolib-toolbar1.o monolib-tooltip2.o monolib-uma.o monolib-utils4.o monolib-utilsexc1.o monolib-wave2.o monolib-window5.o monolib-MoreFilesX.o monolib-statusbr.o monolib-imaglist.o monolib-listctrl.o monolib-fdrepdlg.o monolib-tabg.o monolib-fontdlgg.o monolib-snglinst.o monolib-utilsunx.o
 @COND_TOOLKITCOCOA@__GUI_SRC_OBJECTS_1 = monolib-NSBox.o monolib-NSButton.o monolib-NSControl.o monolib-NSMenu.o monolib-NSPanel.o monolib-NSTextField.o monolib-NSView.o monolib-NSWindow.o monolib-app6.o monolib-bmpbuttn4.o monolib-bitmap5.o monolib-brush5.o monolib-button4.o monolib-checkbox4.o monolib-checklst4.o monolib-choice4.o monolib-colour6.o monolib-control4.o monolib-cursor6.o monolib-data6.o monolib-dc6.o monolib-dcclient6.o monolib-dcmemory6.o monolib-dcscreen6.o monolib-dialog4.o monolib-font6.o monolib-fontutil4.o monolib-frame4.o monolib-gdiobj6.o monolib-icon6.o monolib-listbox4.o monolib-main4.o monolib-menu4.o monolib-menuitem3.o monolib-pen5.o monolib-radiobox4.o monolib-radiobut4.o monolib-region5.o monolib-settings6.o monolib-statbmp4.o monolib-statbox4.o monolib-statline21.o monolib-stattext4.o monolib-textctrl4.o monolib-toplevel6.o monolib-utils5.o monolib-utilsexc2.o monolib-window6.o
 @COND_TOOLKITOS2@__GUI_SRC_OBJECTS_1 = monolib-accel4.o monolib-app7.o monolib-bitmap6.o monolib-bmpbuttn5.o monolib-brush6.o monolib-button5.o monolib-checkbox5.o monolib-checklst5.o monolib-choice5.o monolib-clipbrd6.o monolib-colour7.o monolib-combobox4.o monolib-control5.o monolib-cursor7.o monolib-data7.o monolib-dataobj5.o monolib-dc7.o monolib-dcclient7.o monolib-dcmemory7.o monolib-dcprint2.o monolib-dcscreen7.o monolib-dialog5.o monolib-dnd2.o monolib-filedlg3.o monolib-font7.o monolib-fontdlg3.o monolib-fontenum4.o monolib-fontutil5.o monolib-frame5.o monolib-gauge3.o monolib-gdiimage1.o monolib-gdiobj7.o monolib-helpwin1.o monolib-icon7.o monolib-iniconf1.o monolib-joystick4.o monolib-listbox5.o monolib-main5.o monolib-menu5.o monolib-menuitem4.o monolib-metafile2.o monolib-mimetype2.o monolib-msgdlg4.o monolib-nativdlg1.o monolib-notebook3.o monolib-ownerdrw1.o monolib-palette5.o monolib-pen6.o monolib-print.o monolib-radiobox5.o monolib-radiobut5.o monolib-region6.o monolib-scrolbar4.o monolib-settings7.o monolib-slider3.o monolib-spinbutt4.o monolib-spinctrl2.o monolib-statbmp5.o monolib-statbox5.o monolib-statline3.o monolib-stattext5.o monolib-tabctrl2.o monolib-textctrl5.o monolib-timer5.o monolib-thread2.o monolib-toolbar2.o monolib-tooltip3.o monolib-toplevel7.o monolib-wave3.o monolib-window7.o monolib-gsocket3.o monolib-gsockpm.o
+@COND_WXUSE_REGEXBUILTIN@__LIB_REGEX_p_1 = -lwxregex
 @COND_PLATFORM_MACOSX1@__monodll___macver = -compatibility_version 2.5 -current_version 2.5.0
 @COND_PLATFORM_WIN321@DLLIMPEXT = .a
 @COND_PLATFORM_WIN320@DLLIMPEXT = .$(SO_SUFFIX)
-@COND_WXUSE_ZLIBBUILTIN@__wxzlib___depname = $(top_builddir)/lib/libwxzlib.a
+@COND_PLATFORM_WIN321@__monodll___importlib = -Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN321@__monodll___importlib = -Wl,--out-implib,$(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_MONOLITHIC1@WXLIB_MONO = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_WXUSE_LIBPNGBUILTIN@__LIB_PNG_DEP = $(__wxpng___depname)
 @COND_TOOLKITGTK@GUI_SRC = src/generic/imaglist.cpp \
@@ -529,11 +534,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKITOS2@__GUI_SRC_OBJECTS = monodll-accel3.o monodll-app6.o monodll-bitmap5.o monodll-bmpbuttn4.o monodll-brush5.o monodll-button4.o monodll-checkbox4.o monodll-checklst4.o monodll-choice4.o monodll-clipbrd5.o monodll-colour6.o monodll-combobox3.o monodll-control4.o monodll-cursor6.o monodll-data6.o monodll-dataobj4.o monodll-dc6.o monodll-dcclient6.o monodll-dcmemory6.o monodll-dcprint1.o monodll-dcscreen6.o monodll-dialog4.o monodll-dnd1.o monodll-filedlg2.o monodll-font6.o monodll-fontdlg2.o monodll-fontenum3.o monodll-fontutil4.o monodll-frame4.o monodll-gauge2.o monodll-gdiimage.o monodll-gdiobj6.o monodll-helpwin.o monodll-icon6.o monodll-iniconf.o monodll-joystick3.o monodll-listbox4.o monodll-main4.o monodll-menu4.o monodll-menuitem3.o monodll-metafile1.o monodll-mimetype1.o monodll-msgdlg3.o monodll-nativdlg.o monodll-notebook2.o monodll-ownerdrw.o monodll-palette4.o monodll-pen5.o print.o monodll-radiobox4.o monodll-radiobut4.o monodll-region5.o monodll-scrolbar3.o monodll-settings6.o monodll-slider2.o monodll-spinbutt3.o monodll-spinctrl1.o monodll-statbmp4.o monodll-statbox4.o monodll-statline2.o monodll-stattext4.o monodll-tabctrl1.o monodll-textctrl4.o monodll-timer4.o monodll-thread1.o monodll-toolbar1.o monodll-tooltip2.o monodll-toplevel6.o monodll-wave2.o monodll-window6.o monodll-gsocket2.o gsockpm.o
 @COND_MONOLITHIC0@WXLIB_CORE = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
 @COND_WXUSE_LIBJPEGBUILTIN@__LIB_JPEG_p_1 = -lwxjpeg
-@COND_PLATFORM_MACOSX1@__monodll___macinstname = -install_name $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf)
-@COND_TOOLKITX11@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl6.o
-@COND_TOOLKITMGL@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl7.o
-@COND_TOOLKITGTK@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl7.o
-@COND_TOOLKITMSW@__UNIV_TEXTCTRL_OBJECTS_1 = monolib-textctrl7.o
+@COND_PLATFORM_MACOSX1@__monodll___macinstname = -install_name $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3)
 @COND_WXUSE_LIBTIFFBUILTIN@__LIB_TIFF_p_1 = -lwxtiff
 @COND_TOOLKITX11@__UNIV_TEXTCTRL_OBJECTS = monodll-textctrl5.o
 @COND_TOOLKITMGL@__UNIV_TEXTCTRL_OBJECTS = monodll-textctrl6.o
@@ -568,7 +569,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKITMGL@UNIV_TEXTCTRL = src/univ/textctrl.cpp
 @COND_TOOLKITGTK@UNIV_TEXTCTRL = src/univ/textctrl.cpp
 @COND_TOOLKITMSW@UNIV_TEXTCTRL = src/univ/textctrl.cpp
-@COND_SHARED1_MONOLITHIC1@__monodll___depname = $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf)
+@COND_SHARED1_MONOLITHIC1@__monodll___depname = $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3)
 @COND_WXUSE_LIBJPEGBUILTIN@__LIB_JPEG_p = -lwxjpeg
 @COND_WXUSE_REGEXBUILTIN@__wxregex___depname = $(top_builddir)/lib/libwxregex.a
 @COND_WXUSE_ODBCBUILTIN@__LIB_ODBC_p_1 = -lwxodbc
@@ -1005,7 +1006,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_TOOLKITOS2@    wx/os2/toplevel.h
 @COND_WXUNIV1@WXUNIVNAME = univ
 @COND_USE_GUI1@__install_afm___depname = install-afm
-@COND_WXUSE_REGEXBUILTIN@__LIB_REGEX_LIBR = $(top_builddir)/lib/libwxregex.a
+@COND_WXUSE_ZLIBBUILTIN@__wxzlib___depname = $(top_builddir)/lib/libwxzlib.a
 @COND_PLATFORM_WIN321@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIBBUILTIN@__LIB_ZLIB_p_1 = -lwxzlib
 @COND_WXUSE_ZLIBBUILTIN@LIB_ZLIB = wxzlib
@@ -1094,9 +1095,9 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_SHARED0_MONOLITHIC1@__install_monolib___depname = install_monolib
 @COND_WXUSE_LIBTIFFBUILTIN@__wxtiff___depname = $(top_builddir)/lib/libwxtiff.a
 @COND_WXUSE_LIBTIFFBUILTIN@__LIB_TIFF_p = -lwxtiff
-@COND_USE_SOSYMLINKS1@__monodll___so_symlinks_inst_cmd = rm -f libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0; \
-@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0; \
-@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0 libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS1@__monodll___so_symlinks_inst_cmd = rm -f libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2); \
+@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2); \
+@COND_USE_SOSYMLINKS1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2) libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 @COND_WXUNIV1@__WXUNIV_DEFINE_p_1 = -D__WXUNIVERSAL__
 @COND_WXUSE_LIBJPEGBUILTIN@LIB_JPEG = wxjpeg
 @COND_USE_GUI0@__CORE_SRC_OBJECTS = init.o
@@ -1504,16 +1505,17 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_USE_GUI1_WXUNIV1@    src/common/valtext.cpp \
 @COND_USE_GUI1_WXUNIV1@    src/common/wincmn.cpp \
 @COND_USE_GUI1_WXUNIV1@    src/common/xpmdecod.cpp
+@COND_TOOLKITMAC@__macos_res_install___depname = macos-res-install
 @COND_WXUSE_REGEXBUILTIN@LIB_REGEX = wxregex
-@COND_USE_SOVERLINUX1@__monodll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0
-@COND_USE_SOVERSOLARIS1@__monodll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf)
+@COND_USE_SOVERLINUX1@__monodll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2)
+@COND_USE_SOVERSOLARIS1@__monodll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3)
 
 ### Targets: ###
 
 all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__monodll___depname) $(__monolib___depname) $(__macos_res___depname)
 
 install-strip: install
-	$(STRIP) $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf)
+	$(STRIP) $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3)
 
 cursor.o: $(srcdir)/src/gtk/cursor.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
@@ -2005,7 +2007,7 @@ monolib-gauge1.o: $(srcdir)/src/motif/gauge.cpp
 install_monodll: 
 	$(INSTALL_DIR) $(libdir)
 	$(INSTALL_DATA) $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(libdir)
-	$(INSTALL_PROGRAM) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf) $(libdir)
+	$(INSTALL_PROGRAM) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3) $(libdir)
 	(cd $(libdir) ; $(__monodll___so_symlinks_inst_cmd))
 
 monolib-rgncmn.o: $(srcdir)/src/common/rgncmn.cpp
@@ -3203,7 +3205,7 @@ monolib-cshelp.o: $(srcdir)/src/common/cshelp.cpp
 monolib-imagbmp.o: $(srcdir)/src/common/imagbmp.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
-$(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf): appcmn.o clntdata.o cmdline.o config.o datacmn.o datetime.o datstrm.o db.o dbtable.o dircmn.o dynarray.o dynlib.o dynload.o encconv.o event.o extended.o ffile.o file.o fileconf.o filefn.o filename.o filesys.o fontmap.o fs_inet.o fs_mem.o fs_zip.o ftp.o hash.o hashmap.o http.o intl.o ipcbase.o list.o log.o longlong.o memory.o mimecmn.o module.o msgout.o mstream.o object.o process.o protocol.o regex.o sckaddr.o sckfile.o sckipc.o sckstrm.o socket.o strconv.o stream.o string.o sysopt.o textbuf.o textfile.o timercmn.o tokenzr.o txtstrm.o unzip.o url.o utilscmn.o variant.o wfstream.o wxchar.o zipstrm.o zstream.o $(__BASE_PLATFORM_SRC_OBJECTS) $(__CORE_SRC_OBJECTS) helpdata.o helpfrm.o helpctrl.o htmlcell.o htmlfilt.o htmlpars.o htmltag.o htmlwin.o winpars.o m_fonts.o m_hline.o m_image.o m_layout.o m_links.o m_list.o m_dflist.o m_pre.o m_tables.o m_style.o htmprint.o $(__LIB_ZLIB_DEP) $(__LIB_REGEX_DEP) $(__LIB_PNG_DEP) $(__LIB_JPEG_DEP) $(__LIB_TIFF_DEP) $(__LIB_ODBC_DEP)
+$(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3): appcmn.o clntdata.o cmdline.o config.o datacmn.o datetime.o datstrm.o db.o dbtable.o dircmn.o dynarray.o dynlib.o dynload.o encconv.o event.o extended.o ffile.o file.o fileconf.o filefn.o filename.o filesys.o fontmap.o fs_inet.o fs_mem.o fs_zip.o ftp.o hash.o hashmap.o http.o intl.o ipcbase.o list.o log.o longlong.o memory.o mimecmn.o module.o msgout.o mstream.o object.o process.o protocol.o regex.o sckaddr.o sckfile.o sckipc.o sckstrm.o socket.o strconv.o stream.o string.o sysopt.o textbuf.o textfile.o timercmn.o tokenzr.o txtstrm.o unzip.o url.o utilscmn.o variant.o wfstream.o wxchar.o zipstrm.o zstream.o $(__BASE_PLATFORM_SRC_OBJECTS) $(__CORE_SRC_OBJECTS) helpdata.o helpfrm.o helpctrl.o htmlcell.o htmlfilt.o htmlpars.o htmltag.o htmlwin.o winpars.o m_fonts.o m_hline.o m_image.o m_layout.o m_links.o m_list.o m_dflist.o m_pre.o m_tables.o m_style.o htmprint.o $(__LIB_ZLIB_DEP) $(__LIB_REGEX_DEP) $(__LIB_PNG_DEP) $(__LIB_JPEG_DEP) $(__LIB_TIFF_DEP) $(__LIB_ODBC_DEP)
 	$(SHARED_LD_CXX) $@  appcmn.o clntdata.o cmdline.o config.o datacmn.o datetime.o datstrm.o db.o dbtable.o dircmn.o dynarray.o dynlib.o dynload.o encconv.o event.o extended.o ffile.o file.o fileconf.o filefn.o filename.o filesys.o fontmap.o fs_inet.o fs_mem.o fs_zip.o ftp.o hash.o hashmap.o http.o intl.o ipcbase.o list.o log.o longlong.o memory.o mimecmn.o module.o msgout.o mstream.o object.o process.o protocol.o regex.o sckaddr.o sckfile.o sckipc.o sckstrm.o socket.o strconv.o stream.o string.o sysopt.o textbuf.o textfile.o timercmn.o tokenzr.o txtstrm.o unzip.o url.o utilscmn.o variant.o wfstream.o wxchar.o zipstrm.o zstream.o $(__BASE_PLATFORM_SRC_OBJECTS) $(__CORE_SRC_OBJECTS) helpdata.o helpfrm.o helpctrl.o htmlcell.o htmlfilt.o htmlpars.o htmltag.o htmlwin.o winpars.o m_fonts.o m_hline.o m_image.o m_layout.o m_links.o m_list.o m_dflist.o m_pre.o m_tables.o m_style.o htmprint.o  $(__monodll___importlib) -L$(top_builddir)/lib $(__monodll___importlib) $(__monodll___macinstname) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__monodll___soname_flags) $(__monodll___macver) $(__LIB_ZLIB_LIBR) $(__LIB_REGEX_LIBR) $(__LIB_PNG_LIBR) $(__LIB_JPEG_LIBR) $(__LIB_TIFF_LIBR) $(__LIB_ODBC_LIBR)
 	$(__monodll___so_symlinks_cmd)
 
@@ -3815,8 +3817,8 @@ clean:
 	rm -f $(top_builddir)/lib/libwxjpeg.a
 	rm -f $(top_builddir)/lib/libwxtiff.a
 	rm -f $(top_builddir)/lib/libwxodbc.a
-	rm -f $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetnamesuf) $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5.$(SO_SUFFIX).0
+	rm -f $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3) $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+	rm -f $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)/lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2)
 	rm -f $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
 	rm -f lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 
