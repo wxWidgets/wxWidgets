@@ -4167,6 +4167,9 @@ void wxListMainWindow::DeleteColumn( int col )
 
     m_dirty = TRUE;
     m_columns.DeleteNode( node );
+
+    // invalidate it as it has to be recalculated
+    m_headerWidth = 0;
 }
 
 void wxListMainWindow::DoDeleteAllItems()
@@ -4361,6 +4364,9 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
         {
             m_columns.Append( column );
         }
+
+        // invalidate it as it has to be recalculated
+        m_headerWidth = 0;
     }
 }
 
