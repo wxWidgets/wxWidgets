@@ -15,7 +15,7 @@ class Interpreter(InteractiveInterpreter):
     
     revision = __revision__
     
-    def __init__(self, locals=None, rawin=None, \
+    def __init__(self, locals=None, rawin=None, 
                  stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr):
         """Create an interactive interpreter object."""
         InteractiveInterpreter.__init__(self, locals=locals)
@@ -27,7 +27,7 @@ class Interpreter(InteractiveInterpreter):
             __builtin__.raw_input = rawin
             del __builtin__
         copyright = \
-            'Type "copyright", "credits" or "license" for more information.'
+            'Type "help", "copyright", "credits" or "license" for more information.'
         self.introText = 'Python %s on %s%s%s' % \
                          (sys.version, sys.platform, os.linesep, copyright)
         try:
@@ -98,10 +98,10 @@ class Interpreter(InteractiveInterpreter):
 class InterpreterAlaCarte(Interpreter):
     """PyCrustAlaCarte Demo Interpreter."""
     
-    def __init__(self, locals, rawin, stdin, stdout, stderr, \
+    def __init__(self, locals, rawin, stdin, stdout, stderr, 
                  ps1='main prompt', ps2='continuation prompt'):
         """Create an interactive interpreter object."""
-        Interpreter.__init__(self, locals=locals, rawin=rawin, \
+        Interpreter.__init__(self, locals=locals, rawin=rawin, 
                              stdin=stdin, stdout=stdout, stderr=stderr)
         sys.ps1 = ps1
         sys.ps2 = ps2
