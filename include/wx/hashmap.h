@@ -295,7 +295,7 @@ protected: \
     } \
     static Node* CopyNode( Node* node ) { return new Node( *node ); } \
  \
-    Node* GetOrCreateNode( const value_type& value ) \
+    Node* GetOrCreateNode( const value_type& value, bool& created ) \
     { \
         const const_key_type& key = m_getKey( value ); \
         size_t bucket = m_hasher( key ) % m_tableBuckets; \
@@ -304,10 +304,14 @@ protected: \
         while( node ) \
         { \
             if( m_equals( m_getKey( node->m_value ), key ) ) \
+            { \
+                created = false; \
                 return node; \
+            } \
             node = node->m_next(); \
         } \
- 	return CreateNode( value  , bucket); \
+        created = true; \
+        return CreateNode( value, bucket); \
     }\
     Node * CreateNode( const value_type& value, size_t bucket ) \
     {\
@@ -570,6 +574,7 @@ CLASSEXP CLASSNAME:public CLASSNAME##_wxImplementation_HashTable \
 { \
 public: \
     typedef VALUE_T mapped_type; \
+    _WX_DECLARE_PAIR( iterator, bool, Insert_Result, CLASSEXP ) \
  \
     wxEXPLICIT CLASSNAME( size_type hint = 100, hasher hf = hasher(),        \
                           key_equal eq = key_equal() )                       \
@@ -578,7 +583,10 @@ public: \
  \
     mapped_type& operator[]( const const_key_type& key ) \
     { \
-        return GetOrCreateNode( CLASSNAME##_wxImplementation_Pair( key, mapped_type() ) )->m_value.second; \
+        bool created; \
+        return GetOrCreateNode( \
+                CLASSNAME##_wxImplementation_Pair( key, mapped_type() ), \
+                created)->m_value.second; \
     } \
  \
     const_iterator find( const const_key_type& key ) const \
@@ -591,7 +599,16 @@ public: \
         return iterator( GetNode( key ), this ); \
     } \
  \
-    void insert( const value_type& v ) { (*this)[v.first] = v.second; } \
+    Insert_Result insert( const value_type& v ) \
+    { \
+        bool created; \
+        Node *node = GetOrCreateNode( \
+                CLASSNAME##_wxImplementation_Pair( v.first, v.second ), \
+                created); \
+        if ( !created ) \
+            node->m_value.second = v.second; \
+        return Insert_Result(iterator(node, this), created); \
+    } \
  \
     size_type erase( const key_type& k ) \
         { return CLASSNAME##_wxImplementation_HashTable::erase( k ); } \
