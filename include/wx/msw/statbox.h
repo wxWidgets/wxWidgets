@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.h
+// Name:        wx/msw/statbox.h
 // Purpose:     wxStaticBox class
 // Author:      Julian Smart
 // Modified by:
@@ -43,7 +43,6 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-    virtual WXHBRUSH MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC);
 
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
