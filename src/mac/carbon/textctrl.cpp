@@ -2147,6 +2147,8 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         Rect oldBounds = m_txnControlBounds ;
         m_txnControlBounds = bounds ;
         wxMacWindowClipper cl(textctrl) ;
+        wxRect visRect = textctrl->MacGetClippedRect() ;
+        Rect visBounds = { visRect.y , visRect.x , visRect.y + visRect.height , visRect.x + visRect.width } ;
 
 #ifdef __WXMAC_OSX__
         bool isCompositing = textctrl->MacGetTopLevelWindow()->MacUsesCompositing() ;
@@ -2186,8 +2188,32 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
                 SetControlViewSize( m_sbVertical , h ) ;
             }
         }
+        int x , y ;
+        x = y = 0 ;
+        textctrl->MacWindowToRootWindow( &x , &y ) ;
+        OffsetRect( &visBounds , x , y ) ;
+        
+        Rect oldviewRect ;
+        TXNLongRect olddestRect ;
+        TXNGetRectBounds( m_txn , &oldviewRect , &olddestRect , NULL ) ;
+        
+        Rect viewRect = { m_txnControlBounds.top, m_txnControlBounds.left,
+            m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) , m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ) } ;
+        TXNLongRect destRect = { m_txnControlBounds.top, m_txnControlBounds.left,
+            m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) , m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ) } ;
+            
+        if ( olddestRect.right >= 10000 )
+            destRect.right = destRect.left + 32000 ;
+            
+        if ( olddestRect.bottom >= 0x20000000 )
+            destRect.bottom = destRect.top + 0x40000000 ;
+            
+        SectRect( &viewRect , &visBounds , &viewRect ) ; 
+        TXNSetRectBounds( m_txn , &viewRect , &destRect , false ) ;
+/*
         TXNSetFrameBounds( m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
             m_txnControlBounds.bottom - ( m_sbHorizontal ? 14 : 0 ) , m_txnControlBounds.right - ( m_sbVertical ? 14 : 0 ), m_txnFrameID);
+*/
 #else
         
         TXNSetFrameBounds( m_txn, m_txnControlBounds.top, m_txnControlBounds.left,
@@ -2607,7 +2633,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
                               kTXNTextensionFile,
                               kTXNSystemDefaultEncoding,
                               &m_txn, &m_txnFrameID, NULL ) );
-
+/*
     TXNCarbonEventInfo cInfo ;
     
     cInfo.useCarbonEvents = false ;
@@ -2629,7 +2655,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
     verify_noerr( TXNSetTXNObjectControls( m_txn, false , toptag,
                                         iControlTags, iControlData )) ;
 
-
+*/
 #ifdef __WXMAC_OSX__
     TXNRegisterScrollInfoProc( m_txn, gTXNScrollInfoProc, (SInt32) this);
 #endif
