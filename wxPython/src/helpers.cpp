@@ -906,11 +906,11 @@ void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* klass, int incref) {
 // Prior to Python 2.2 PyMethod_GetClass returned the class object
 // in which the method was defined.  Starting with 2.2 it returns
 // "class that asked for the method" which seems totally bogus to me
-// but apprently if fixes some obscure problem waiting to happen in
+// but apprently it fixes some obscure problem waiting to happen in
 // Python.  Since the API was not documented Guido and the gang felt
 // safe in changing it.  Needless to say that totally screwed up the
 // logic below in wxPyCallbackHelper::findCallback, hence this icky
-// code to find the class where the method is actuallt defined...
+// code to find the class where the method is actually defined...
 
 static
 PyObject* PyFindClassWithAttr(PyObject *klass, PyObject *name)
@@ -958,6 +958,7 @@ PyObject* PyFindClassWithAttr(PyObject *klass, PyObject *name)
         }
         return NULL;
     }
+    return NULL;
 }
 #endif
 

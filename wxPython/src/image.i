@@ -15,6 +15,7 @@
 
 %{
 #include "helpers.h"
+#include "pyistream.h"
 #include <wx/image.h>
 %}
 

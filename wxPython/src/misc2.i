@@ -16,6 +16,7 @@
 
 %{
 #include "helpers.h"
+#include "pyistream.h"
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>

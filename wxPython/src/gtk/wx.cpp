@@ -2561,10 +2561,9 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_ERASE_BACKGROUND", PyInt_FromLong((long) wxEVT_ERASE_BACKGROUND));
 	 PyDict_SetItemString(d,"wxEVT_NC_PAINT", PyInt_FromLong((long) wxEVT_NC_PAINT));
 	 PyDict_SetItemString(d,"wxEVT_PAINT_ICON", PyInt_FromLong((long) wxEVT_PAINT_ICON));
-	 PyDict_SetItemString(d,"wxEVT_MENU_CHAR", PyInt_FromLong((long) wxEVT_MENU_CHAR));
-	 PyDict_SetItemString(d,"wxEVT_MENU_INIT", PyInt_FromLong((long) wxEVT_MENU_INIT));
+	 PyDict_SetItemString(d,"wxEVT_MENU_OPEN", PyInt_FromLong((long) wxEVT_MENU_OPEN));
+	 PyDict_SetItemString(d,"wxEVT_MENU_CLOSE", PyInt_FromLong((long) wxEVT_MENU_CLOSE));
 	 PyDict_SetItemString(d,"wxEVT_MENU_HIGHLIGHT", PyInt_FromLong((long) wxEVT_MENU_HIGHLIGHT));
-	 PyDict_SetItemString(d,"wxEVT_POPUP_MENU_INIT", PyInt_FromLong((long) wxEVT_POPUP_MENU_INIT));
 	 PyDict_SetItemString(d,"wxEVT_SYS_COLOUR_CHANGED", PyInt_FromLong((long) wxEVT_SYS_COLOUR_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_DISPLAY_CHANGED", PyInt_FromLong((long) wxEVT_DISPLAY_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_SETTING_CHANGED", PyInt_FromLong((long) wxEVT_SETTING_CHANGED));

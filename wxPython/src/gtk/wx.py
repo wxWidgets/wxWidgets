@@ -848,10 +848,9 @@ wxEVT_PAINT = wxc.wxEVT_PAINT
 wxEVT_ERASE_BACKGROUND = wxc.wxEVT_ERASE_BACKGROUND
 wxEVT_NC_PAINT = wxc.wxEVT_NC_PAINT
 wxEVT_PAINT_ICON = wxc.wxEVT_PAINT_ICON
-wxEVT_MENU_CHAR = wxc.wxEVT_MENU_CHAR
-wxEVT_MENU_INIT = wxc.wxEVT_MENU_INIT
+wxEVT_MENU_OPEN = wxc.wxEVT_MENU_OPEN
+wxEVT_MENU_CLOSE = wxc.wxEVT_MENU_CLOSE
 wxEVT_MENU_HIGHLIGHT = wxc.wxEVT_MENU_HIGHLIGHT
-wxEVT_POPUP_MENU_INIT = wxc.wxEVT_POPUP_MENU_INIT
 wxEVT_SYS_COLOUR_CHANGED = wxc.wxEVT_SYS_COLOUR_CHANGED
 wxEVT_DISPLAY_CHANGED = wxc.wxEVT_DISPLAY_CHANGED
 wxEVT_SETTING_CHANGED = wxc.wxEVT_SETTING_CHANGED
@@ -948,6 +947,12 @@ def EVT_KEY_DOWN(win, func):
 
 def EVT_KEY_UP(win, func):
     win.Connect(-1, -1, wxEVT_KEY_UP, func)
+
+def EVT_MENU_OPEN(win, func):
+    win.Connect(-1, -1, wxEVT_MENU_OPEN, func)
+
+def EVT_MENU_CLOSE(win, func):
+    win.Connect(-1, -1, wxEVT_MENU_CLOSE, func)
 
 def EVT_MENU_HIGHLIGHT(win, id, func):
     win.Connect(id, -1, wxEVT_MENU_HIGHLIGHT, func)

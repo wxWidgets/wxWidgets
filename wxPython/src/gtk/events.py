@@ -629,6 +629,9 @@ class wxMenuEventPtr(wxEventPtr):
     def GetMenuId(self, *_args, **_kwargs):
         val = apply(eventsc.wxMenuEvent_GetMenuId,(self,) + _args, _kwargs)
         return val
+    def IsPopup(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMenuEvent_IsPopup,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxMenuEvent instance at %s>" % (self.this,)
 class wxMenuEvent(wxMenuEventPtr):
