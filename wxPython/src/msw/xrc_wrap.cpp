@@ -472,7 +472,7 @@ public:
     wxObject* GetParent()               { return m_parent; }
     wxObject* GetInstance()             { return m_instance; }
     wxWindow* GetParentAsWindow()       { return m_parentAsWindow; }
-    wxWindow* GetInstanceAsWindow()     { return m_instanceAsWindow; }
+//    wxWindow* GetInstanceAsWindow()     { return m_instanceAsWindow; }
 
 
     // turn some protected methods into public via delegation
@@ -4252,34 +4252,6 @@ static PyObject *_wrap_XmlResourceHandler_GetParentAsWindow(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetInstanceAsWindow(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
-    wxWindow *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:XmlResourceHandler_GetInstanceAsWindow",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyXmlResourceHandler,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxWindow *)(arg1)->GetInstanceAsWindow();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = wxPyMake_wxObject(result, 0); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
@@ -5482,7 +5454,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XmlResourceHandler_GetParent", (PyCFunction) _wrap_XmlResourceHandler_GetParent, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"XmlResourceHandler_GetInstance", (PyCFunction) _wrap_XmlResourceHandler_GetInstance, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"XmlResourceHandler_GetParentAsWindow", (PyCFunction) _wrap_XmlResourceHandler_GetParentAsWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetInstanceAsWindow", (PyCFunction) _wrap_XmlResourceHandler_GetInstanceAsWindow, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"XmlResourceHandler_IsOfClass", (PyCFunction) _wrap_XmlResourceHandler_IsOfClass, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"XmlResourceHandler_GetNodeContent", (PyCFunction) _wrap_XmlResourceHandler_GetNodeContent, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"XmlResourceHandler_HasParam", (PyCFunction) _wrap_XmlResourceHandler_HasParam, METH_VARARGS | METH_KEYWORDS, NULL },

@@ -246,7 +246,7 @@ class Palette(GDIObject):
         return _gdi_.Palette_GetPixel(*args, **kwargs)
 
     def GetRGB(*args, **kwargs):
-        """GetRGB(int pixel) -> (R,G,B)"""
+        """GetRGB(self, int pixel) -> (R,G,B)"""
         return _gdi_.Palette_GetRGB(*args, **kwargs)
 
     def Ok(*args, **kwargs):
@@ -491,10 +491,6 @@ class Bitmap(GDIObject):
             if self.thisown: destroy(self)
         except: pass
 
-    def SetPalette(*args, **kwargs):
-        """SetPalette(self, Palette palette)"""
-        return _gdi_.Bitmap_SetPalette(*args, **kwargs)
-
     def GetHandle(*args, **kwargs):
         """GetHandle(self) -> long"""
         return _gdi_.Bitmap_GetHandle(*args, **kwargs)
@@ -608,6 +604,14 @@ class Bitmap(GDIObject):
         ``type`` parameter.
         """
         return _gdi_.Bitmap_LoadFile(*args, **kwargs)
+
+    def GetPalette(*args, **kwargs):
+        """GetPalette(self) -> Palette"""
+        return _gdi_.Bitmap_GetPalette(*args, **kwargs)
+
+    def SetPalette(*args, **kwargs):
+        """SetPalette(self, Palette palette)"""
+        return _gdi_.Bitmap_SetPalette(*args, **kwargs)
 
     def CopyFromIcon(*args, **kwargs):
         """CopyFromIcon(self, Icon icon) -> bool"""

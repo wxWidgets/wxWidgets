@@ -1846,7 +1846,7 @@ void wxSizer__setOORInfo(wxSizer *self,PyObject *_self){
             if (!self->GetClientObject())
                 self->SetClientObject(new wxPyOORClientData(_self));
         }
-void wxSizer_Add(wxSizer *self,PyObject *item,int proportion,int flag,int border,PyObject *userData){
+wxSizerItem *wxSizer_Add(wxSizer *self,PyObject *item,int proportion,int flag,int border,PyObject *userData){
             
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -1857,14 +1857,16 @@ void wxSizer_Add(wxSizer *self,PyObject *item,int proportion,int flag,int border
             
             // Now call the real Add method if a valid item type was found
             if ( info.window )
-                self->Add(info.window, proportion, flag, border, data);
+                return self->Add(info.window, proportion, flag, border, data);
             else if ( info.sizer )
-                self->Add(info.sizer, proportion, flag, border, data);
+                return self->Add(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Add(info.size.GetWidth(), info.size.GetHeight(),
-                          proportion, flag, border, data);
+                return self->Add(info.size.GetWidth(), info.size.GetHeight(),
+                                 proportion, flag, border, data);
+            else
+                return NULL;
         }
-void wxSizer_Insert(wxSizer *self,int before,PyObject *item,int proportion,int flag,int border,PyObject *userData){
+wxSizerItem *wxSizer_Insert(wxSizer *self,int before,PyObject *item,int proportion,int flag,int border,PyObject *userData){
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -1875,14 +1877,16 @@ void wxSizer_Insert(wxSizer *self,int before,PyObject *item,int proportion,int f
             
             // Now call the real Insert method if a valid item type was found
             if ( info.window )
-                self->Insert(before, info.window, proportion, flag, border, data);
+                return self->Insert(before, info.window, proportion, flag, border, data);
             else if ( info.sizer )
-                self->Insert(before, info.sizer, proportion, flag, border, data);
+                return self->Insert(before, info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Insert(before, info.size.GetWidth(), info.size.GetHeight(),
-                             proportion, flag, border, data);
+                return self->Insert(before, info.size.GetWidth(), info.size.GetHeight(),
+                                    proportion, flag, border, data);
+            else
+                return NULL;
         }
-void wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion,int flag,int border,PyObject *userData){
+wxSizerItem *wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion,int flag,int border,PyObject *userData){
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -1893,12 +1897,14 @@ void wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion,int flag,int bo
             
             // Now call the real Prepend method if a valid item type was found
             if ( info.window )
-                self->Prepend(info.window, proportion, flag, border, data);
+                return self->Prepend(info.window, proportion, flag, border, data);
             else if ( info.sizer )
-                self->Prepend(info.sizer, proportion, flag, border, data);
+                return self->Prepend(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Prepend(info.size.GetWidth(), info.size.GetHeight(),
-                              proportion, flag, border, data);
+                return self->Prepend(info.size.GetWidth(), info.size.GetHeight(),
+                                     proportion, flag, border, data);
+            else
+                return NULL;
         }
 bool wxSizer_Remove(wxSizer *self,PyObject *item){
             bool blocked = wxPyBeginBlockThreads();
@@ -1925,6 +1931,19 @@ bool wxSizer_Detach(wxSizer *self,PyObject *item){
                 return self->Detach(info.pos);
             else 
                 return false;
+        }
+wxSizerItem *wxSizer_GetItem(wxSizer *self,PyObject *item){
+            bool blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
+            wxPyEndBlockThreads(blocked);
+            if ( info.window )
+                return self->GetItem(info.window);
+            else if ( info.sizer )
+                return self->GetItem(info.sizer);
+            else if ( info.gotPos )
+                return self->GetItem(info.pos);
+            else
+                return NULL;
         }
 void wxSizer__SetItemMinSize(wxSizer *self,PyObject *item,wxSize const &size){
             bool blocked = wxPyBeginBlockThreads();
@@ -2051,7 +2070,7 @@ wxGBPosition wxGBSizerItem_GetEndPos(wxGBSizerItem *self){
             self->GetEndPos(row, col);
             return wxGBPosition(row, col);
         }
-bool wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &pos,wxGBSpan const &span,int flag,int border,PyObject *userData){
+wxGBSizerItem *wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &pos,wxGBSpan const &span,int flag,int border,PyObject *userData){
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
@@ -2062,13 +2081,13 @@ bool wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &
             
             // Now call the real Add method if a valid item type was found
             if ( info.window )
-                return self->Add(info.window, pos, span, flag, border, data);
+                return (wxGBSizerItem*)self->Add(info.window, pos, span, flag, border, data);
             else if ( info.sizer )
-                return self->Add(info.sizer, pos, span, flag, border, data);
+                return (wxGBSizerItem*)self->Add(info.sizer, pos, span, flag, border, data);
             else if (info.gotSize)
-                return self->Add(info.size.GetWidth(), info.size.GetHeight(),
-                                 pos, span, flag, border, data);
-            return false;
+                return (wxGBSizerItem*)self->Add(info.size.GetWidth(), info.size.GetHeight(),
+                                                 pos, span, flag, border, data);
+            return NULL;
         }
 
 
@@ -3649,6 +3668,35 @@ static PyObject *_wrap_new_RectPS(PyObject *, PyObject *args, PyObject *kwargs) 
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxRect *)new wxRect((wxPoint const &)*arg1,(wxSize const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRect, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_RectS(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSize *arg1 = 0 ;
+    wxRect *result;
+    wxSize temp1 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_RectS",kwnames,&obj0)) goto fail;
+    {
+        arg1 = &temp1;
+        if ( ! wxSize_helper(obj0, &arg1)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxRect *)new wxRect((wxSize const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -35411,6 +35459,36 @@ static PyObject *_wrap_SizerItem_GetRatio(PyObject *, PyObject *args, PyObject *
 }
 
 
+static PyObject *_wrap_SizerItem_GetRect(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSizerItem *arg1 = (wxSizerItem *) 0 ;
+    wxRect result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SizerItem_GetRect",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSizerItem,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetRect();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_SizerItem_IsWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
@@ -35991,6 +36069,7 @@ static PyObject *_wrap_Sizer_Add(PyObject *, PyObject *args, PyObject *kwargs) {
     int arg4 = (int) 0 ;
     int arg5 = (int) 0 ;
     PyObject *arg6 = (PyObject *) NULL ;
+    wxSizerItem *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -36022,12 +36101,12 @@ static PyObject *_wrap_Sizer_Add(PyObject *, PyObject *args, PyObject *kwargs) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxSizer_Add(arg1,arg2,arg3,arg4,arg5,arg6);
+        result = (wxSizerItem *)wxSizer_Add(arg1,arg2,arg3,arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -36043,6 +36122,7 @@ static PyObject *_wrap_Sizer_Insert(PyObject *, PyObject *args, PyObject *kwargs
     int arg5 = (int) 0 ;
     int arg6 = (int) 0 ;
     PyObject *arg7 = (PyObject *) NULL ;
+    wxSizerItem *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -36077,12 +36157,12 @@ static PyObject *_wrap_Sizer_Insert(PyObject *, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxSizer_Insert(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+        result = (wxSizerItem *)wxSizer_Insert(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -36097,6 +36177,7 @@ static PyObject *_wrap_Sizer_Prepend(PyObject *, PyObject *args, PyObject *kwarg
     int arg4 = (int) 0 ;
     int arg5 = (int) 0 ;
     PyObject *arg6 = (PyObject *) NULL ;
+    wxSizerItem *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -36128,12 +36209,12 @@ static PyObject *_wrap_Sizer_Prepend(PyObject *, PyObject *args, PyObject *kwarg
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxSizer_Prepend(arg1,arg2,arg3,arg4,arg5,arg6);
+        result = (wxSizerItem *)wxSizer_Prepend(arg1,arg2,arg3,arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -36202,6 +36283,35 @@ static PyObject *_wrap_Sizer_Detach(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
+static PyObject *_wrap_Sizer_GetItem(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSizer *arg1 = (wxSizer *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    wxSizerItem *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Sizer_GetItem",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSizer,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxSizerItem *)wxSizer_GetItem(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSizerItem, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Sizer__SetItemMinSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
@@ -36241,6 +36351,7 @@ static PyObject *_wrap_Sizer_AddItem(PyObject *, PyObject *args, PyObject *kwarg
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSizerItem *arg2 = (wxSizerItem *) 0 ;
+    wxSizerItem *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -36254,12 +36365,12 @@ static PyObject *_wrap_Sizer_AddItem(PyObject *, PyObject *args, PyObject *kwarg
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Add(arg2);
+        result = (wxSizerItem *)(arg1)->Add(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -36271,6 +36382,7 @@ static PyObject *_wrap_Sizer_InsertItem(PyObject *, PyObject *args, PyObject *kw
     wxSizer *arg1 = (wxSizer *) 0 ;
     size_t arg2 ;
     wxSizerItem *arg3 = (wxSizerItem *) 0 ;
+    wxSizerItem *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -36287,12 +36399,12 @@ static PyObject *_wrap_Sizer_InsertItem(PyObject *, PyObject *args, PyObject *kw
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Insert(arg2,arg3);
+        result = (wxSizerItem *)(arg1)->Insert(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -36303,6 +36415,7 @@ static PyObject *_wrap_Sizer_PrependItem(PyObject *, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
     wxSizerItem *arg2 = (wxSizerItem *) 0 ;
+    wxSizerItem *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -36316,12 +36429,12 @@ static PyObject *_wrap_Sizer_PrependItem(PyObject *, PyObject *args, PyObject *k
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Prepend(arg2);
+        result = (wxSizerItem *)(arg1)->Prepend(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -38851,7 +38964,7 @@ static PyObject *_wrap_GridBagSizer_Add(PyObject *, PyObject *args, PyObject *kw
     int arg5 = (int) 0 ;
     int arg6 = (int) 0 ;
     PyObject *arg7 = (PyObject *) NULL ;
-    bool result;
+    wxGBSizerItem *result;
     wxGBPosition temp3 ;
     wxGBSpan temp4 ;
     PyObject * obj0 = 0 ;
@@ -38892,14 +39005,12 @@ static PyObject *_wrap_GridBagSizer_Add(PyObject *, PyObject *args, PyObject *kw
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxGridBagSizer_Add(arg1,arg2,(wxGBPosition const &)*arg3,(wxGBSpan const &)*arg4,arg5,arg6,arg7);
+        result = (wxGBSizerItem *)wxGridBagSizer_Add(arg1,arg2,(wxGBPosition const &)*arg3,(wxGBSpan const &)*arg4,arg5,arg6,arg7);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGBSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -38910,7 +39021,7 @@ static PyObject *_wrap_GridBagSizer_AddItem(PyObject *, PyObject *args, PyObject
     PyObject *resultobj;
     wxGridBagSizer *arg1 = (wxGridBagSizer *) 0 ;
     wxGBSizerItem *arg2 = (wxGBSizerItem *) 0 ;
-    bool result;
+    wxGBSizerItem *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -38924,14 +39035,12 @@ static PyObject *_wrap_GridBagSizer_AddItem(PyObject *, PyObject *args, PyObject
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Add(arg2);
+        result = (wxGBSizerItem *)(arg1)->Add(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxGBSizerItem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -41225,6 +41334,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Rect", (PyCFunction) _wrap_new_Rect, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_RectPP", (PyCFunction) _wrap_new_RectPP, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_RectPS", (PyCFunction) _wrap_new_RectPS, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"new_RectS", (PyCFunction) _wrap_new_RectS, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_Rect", (PyCFunction) _wrap_delete_Rect, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect_GetX", (PyCFunction) _wrap_Rect_GetX, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect_SetX", (PyCFunction) _wrap_Rect_SetX, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -42270,6 +42380,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SizerItem_SetRatioSize", (PyCFunction) _wrap_SizerItem_SetRatioSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SizerItem_SetRatio", (PyCFunction) _wrap_SizerItem_SetRatio, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SizerItem_GetRatio", (PyCFunction) _wrap_SizerItem_GetRatio, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"SizerItem_GetRect", (PyCFunction) _wrap_SizerItem_GetRect, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SizerItem_IsWindow", (PyCFunction) _wrap_SizerItem_IsWindow, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SizerItem_IsSizer", (PyCFunction) _wrap_SizerItem_IsSizer, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SizerItem_IsSpacer", (PyCFunction) _wrap_SizerItem_IsSpacer, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -42296,6 +42407,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Sizer_Prepend", (PyCFunction) _wrap_Sizer_Prepend, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Sizer_Remove", (PyCFunction) _wrap_Sizer_Remove, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Sizer_Detach", (PyCFunction) _wrap_Sizer_Detach, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Sizer_GetItem", (PyCFunction) _wrap_Sizer_GetItem, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Sizer__SetItemMinSize", (PyCFunction) _wrap_Sizer__SetItemMinSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Sizer_AddItem", (PyCFunction) _wrap_Sizer_AddItem, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Sizer_InsertItem", (PyCFunction) _wrap_Sizer_InsertItem, METH_VARARGS | METH_KEYWORDS, NULL },

@@ -2617,7 +2617,7 @@ class TextEntryDialog(Dialog):
         """
         __init__(self, Window parent, String message, String caption=GetTextFromUserPromptStr, 
             String defaultValue=EmptyString, 
-            long style=wxOK|wxCANCEL|wxCENTRE, Point pos=DefaultPosition) -> TextEntryDialog
+            long style=wxTextEntryDialogStyle, Point pos=DefaultPosition) -> TextEntryDialog
 
         Constructor.  Use ShowModal method to show the dialog.
         """
@@ -2651,6 +2651,28 @@ class TextEntryDialogPtr(TextEntryDialog):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TextEntryDialog
 _windows_.TextEntryDialog_swigregister(TextEntryDialogPtr)
+
+class PasswordEntryDialog(TextEntryDialog):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPasswordEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, String message, String caption=GetPasswordFromUserPromptStr, 
+            String value=EmptyString, 
+            long style=wxTextEntryDialogStyle, Point pos=DefaultPosition) -> PasswordEntryDialog
+        """
+        newobj = _windows_.new_PasswordEntryDialog(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+
+class PasswordEntryDialogPtr(PasswordEntryDialog):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PasswordEntryDialog
+_windows_.PasswordEntryDialog_swigregister(PasswordEntryDialogPtr)
+GetPasswordFromUserPromptStr = cvar.GetPasswordFromUserPromptStr
 
 class FontData(_core.Object):
     """
@@ -3791,6 +3813,10 @@ class PrintData(_core.Object):
         """GetBin(self) -> int"""
         return _windows_.PrintData_GetBin(*args, **kwargs)
 
+    def GetPrintMode(*args, **kwargs):
+        """GetPrintMode(self) -> int"""
+        return _windows_.PrintData_GetPrintMode(*args, **kwargs)
+
     def SetNoCopies(*args, **kwargs):
         """SetNoCopies(self, int v)"""
         return _windows_.PrintData_SetNoCopies(*args, **kwargs)
@@ -3831,6 +3857,19 @@ class PrintData(_core.Object):
         """SetBin(self, int bin)"""
         return _windows_.PrintData_SetBin(*args, **kwargs)
 
+    def SetPrintMode(*args, **kwargs):
+        """SetPrintMode(self, int printMode)"""
+        return _windows_.PrintData_SetPrintMode(*args, **kwargs)
+
+    def GetFilename(*args, **kwargs):
+        """GetFilename(self) -> String"""
+        return _windows_.PrintData_GetFilename(*args, **kwargs)
+
+    def SetFilename(*args, **kwargs):
+        """SetFilename(self, String filename)"""
+        return _windows_.PrintData_SetFilename(*args, **kwargs)
+
+    def __nonzero__(self): return self.Ok() 
     def GetPrinterCommand(*args, **kwargs):
         """GetPrinterCommand(self) -> String"""
         return _windows_.PrintData_GetPrinterCommand(*args, **kwargs)
@@ -3842,10 +3881,6 @@ class PrintData(_core.Object):
     def GetPreviewCommand(*args, **kwargs):
         """GetPreviewCommand(self) -> String"""
         return _windows_.PrintData_GetPreviewCommand(*args, **kwargs)
-
-    def GetFilename(*args, **kwargs):
-        """GetFilename(self) -> String"""
-        return _windows_.PrintData_GetFilename(*args, **kwargs)
 
     def GetFontMetricPath(*args, **kwargs):
         """GetFontMetricPath(self) -> String"""
@@ -3867,10 +3902,6 @@ class PrintData(_core.Object):
         """GetPrinterTranslateY(self) -> long"""
         return _windows_.PrintData_GetPrinterTranslateY(*args, **kwargs)
 
-    def GetPrintMode(*args, **kwargs):
-        """GetPrintMode(self) -> int"""
-        return _windows_.PrintData_GetPrintMode(*args, **kwargs)
-
     def SetPrinterCommand(*args, **kwargs):
         """SetPrinterCommand(self, String command)"""
         return _windows_.PrintData_SetPrinterCommand(*args, **kwargs)
@@ -3882,10 +3913,6 @@ class PrintData(_core.Object):
     def SetPreviewCommand(*args, **kwargs):
         """SetPreviewCommand(self, String command)"""
         return _windows_.PrintData_SetPreviewCommand(*args, **kwargs)
-
-    def SetFilename(*args, **kwargs):
-        """SetFilename(self, String filename)"""
-        return _windows_.PrintData_SetFilename(*args, **kwargs)
 
     def SetFontMetricPath(*args, **kwargs):
         """SetFontMetricPath(self, String path)"""
@@ -3915,19 +3942,6 @@ class PrintData(_core.Object):
         """SetPrinterTranslation(self, long x, long y)"""
         return _windows_.PrintData_SetPrinterTranslation(*args, **kwargs)
 
-    def SetPrintMode(*args, **kwargs):
-        """SetPrintMode(self, int printMode)"""
-        return _windows_.PrintData_SetPrintMode(*args, **kwargs)
-
-    def GetOutputStream(*args, **kwargs):
-        """GetOutputStream(self) -> OutputStream"""
-        return _windows_.PrintData_GetOutputStream(*args, **kwargs)
-
-    def SetOutputStream(*args, **kwargs):
-        """SetOutputStream(self, OutputStream outputstream)"""
-        return _windows_.PrintData_SetOutputStream(*args, **kwargs)
-
-    def __nonzero__(self): return self.Ok() 
 
 class PrintDataPtr(PrintData):
     def __init__(self, this):
@@ -4166,6 +4180,10 @@ class PrintDialogData(_core.Object):
         """GetSetupDialog(self) -> bool"""
         return _windows_.PrintDialogData_GetSetupDialog(*args, **kwargs)
 
+    def SetSetupDialog(*args, **kwargs):
+        """SetSetupDialog(self, bool flag)"""
+        return _windows_.PrintDialogData_SetSetupDialog(*args, **kwargs)
+
     def SetFromPage(*args, **kwargs):
         """SetFromPage(self, int v)"""
         return _windows_.PrintDialogData_SetFromPage(*args, **kwargs)
@@ -4201,10 +4219,6 @@ class PrintDialogData(_core.Object):
     def SetPrintToFile(*args, **kwargs):
         """SetPrintToFile(self, bool flag)"""
         return _windows_.PrintDialogData_SetPrintToFile(*args, **kwargs)
-
-    def SetSetupDialog(*args, **kwargs):
-        """SetSetupDialog(self, bool flag)"""
-        return _windows_.PrintDialogData_SetSetupDialog(*args, **kwargs)
 
     def EnablePrintToFile(*args, **kwargs):
         """EnablePrintToFile(self, bool flag)"""
@@ -4259,7 +4273,7 @@ class PrintDialogDataPtr(PrintDialogData):
         self.__class__ = PrintDialogData
 _windows_.PrintDialogData_swigregister(PrintDialogDataPtr)
 
-class PrintDialog(Dialog):
+class PrintDialog(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4268,19 +4282,21 @@ class PrintDialog(Dialog):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setOORInfo(self)
+    def ShowModal(*args, **kwargs):
+        """ShowModal(self) -> int"""
+        return _windows_.PrintDialog_ShowModal(*args, **kwargs)
 
     def GetPrintDialogData(*args, **kwargs):
         """GetPrintDialogData(self) -> PrintDialogData"""
         return _windows_.PrintDialog_GetPrintDialogData(*args, **kwargs)
 
+    def GetPrintData(*args, **kwargs):
+        """GetPrintData(self) -> PrintData"""
+        return _windows_.PrintDialog_GetPrintData(*args, **kwargs)
+
     def GetPrintDC(*args, **kwargs):
         """GetPrintDC(self) -> DC"""
         return _windows_.PrintDialog_GetPrintDC(*args, **kwargs)
-
-    def ShowModal(*args, **kwargs):
-        """ShowModal(self) -> int"""
-        return _windows_.PrintDialog_ShowModal(*args, **kwargs)
 
 
 class PrintDialogPtr(PrintDialog):
@@ -4309,20 +4325,8 @@ class Printer(_core.Object):
         except: pass
 
     def CreateAbortWindow(*args, **kwargs):
-        """CreateAbortWindow(self, Window parent, Printout printout)"""
+        """CreateAbortWindow(self, Window parent, Printout printout) -> Window"""
         return _windows_.Printer_CreateAbortWindow(*args, **kwargs)
-
-    def GetPrintDialogData(*args, **kwargs):
-        """GetPrintDialogData(self) -> PrintDialogData"""
-        return _windows_.Printer_GetPrintDialogData(*args, **kwargs)
-
-    def Print(*args, **kwargs):
-        """Print(self, Window parent, Printout printout, int prompt=True) -> bool"""
-        return _windows_.Printer_Print(*args, **kwargs)
-
-    def PrintDialog(*args, **kwargs):
-        """PrintDialog(self, Window parent) -> DC"""
-        return _windows_.Printer_PrintDialog(*args, **kwargs)
 
     def ReportError(*args, **kwargs):
         """ReportError(self, Window parent, Printout printout, String message)"""
@@ -4331,6 +4335,18 @@ class Printer(_core.Object):
     def Setup(*args, **kwargs):
         """Setup(self, Window parent) -> bool"""
         return _windows_.Printer_Setup(*args, **kwargs)
+
+    def Print(*args, **kwargs):
+        """Print(self, Window parent, Printout printout, bool prompt=True) -> bool"""
+        return _windows_.Printer_Print(*args, **kwargs)
+
+    def PrintDialog(*args, **kwargs):
+        """PrintDialog(self, Window parent) -> DC"""
+        return _windows_.Printer_PrintDialog(*args, **kwargs)
+
+    def GetPrintDialogData(*args, **kwargs):
+        """GetPrintDialogData(self) -> PrintDialogData"""
+        return _windows_.Printer_GetPrintDialogData(*args, **kwargs)
 
     def GetAbort(*args, **kwargs):
         """GetAbort(self) -> bool"""
