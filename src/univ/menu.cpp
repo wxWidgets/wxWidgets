@@ -1018,6 +1018,8 @@ void wxMenu::Init()
     m_geometry = NULL;
 
     m_popupMenu = NULL;
+
+    m_startRadioGroup = -1;
 }
 
 wxMenu::~wxMenu()
@@ -1081,8 +1083,53 @@ void wxMenu::OnItemAdded(wxMenuItem *item)
     }
 }
 
+void wxMenu::EndRadioGroup()
+{
+    // we're not inside a radio group any longer
+    m_startRadioGroup = -1;
+}
+
 bool wxMenu::DoAppend(wxMenuItem *item)
 {
+    bool check = FALSE;
+
+    if ( item->GetKind() == wxITEM_RADIO )
+    {
+        int count = GetMenuItemCount();
+
+        if ( m_startRadioGroup == -1 )
+        {
+            // start a new radio group
+            m_startRadioGroup = count;
+
+            // for now it has just one element
+            item->SetAsRadioGroupStart();
+            item->SetRadioGroupEnd(m_startRadioGroup);
+
+            // ensure that we have a checked item in the radio group
+            check = TRUE;
+        }
+        else // extend the current radio group
+        {
+            // we need to update its end item
+            item->SetRadioGroupStart(m_startRadioGroup);
+            wxMenuItemList::Node *node = GetMenuItems().Item(m_startRadioGroup);
+
+            if ( node )
+            {
+                node->GetData()->SetRadioGroupEnd(count);
+            }
+            else
+            {
+                wxFAIL_MSG( _T("where is the radio group start item?") );
+            }
+        }
+    }
+    else // not a radio item
+    {
+        EndRadioGroup();
+    }
+
     if ( !wxMenuBase::DoAppend(item) )
         return FALSE;
 
@@ -1410,6 +1457,9 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
     m_posY =
     m_height = -1;
 
+    m_radioGroup.start = -1;
+    m_isRadioGroupStart = FALSE;
+
     UpdateAccelInfo();
 }
 
@@ -1499,12 +1549,79 @@ void wxMenuItem::Enable(bool enable)
 
 void wxMenuItem::Check(bool check)
 {
-    if ( check != m_isChecked )
-    {
-        wxMenuItemBase::Check(check);
+    wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
 
-        NotifyMenu();
+    if ( m_isChecked == check )
+        return;
+
+    if ( GetKind() == wxITEM_RADIO )
+    {
+        // it doesn't make sense to uncheck a radio item - what would this do?
+        if ( !check )
+            return;
+
+        // get the index of this item in the menu
+        const wxMenuItemList& items = m_parentMenu->GetMenuItems();
+        int pos = items.IndexOf(this);
+        wxCHECK_RET( pos != wxNOT_FOUND,
+                     _T("menuitem not found in the menu items list?") );
+
+        // get the radio group range
+        int start,
+            end;
+
+        if ( m_isRadioGroupStart )
+        {
+            // we already have all information we need
+            start = pos;
+            end = m_radioGroup.end;
+        }
+        else // next radio group item
+        {
+            // get the radio group end from the start item
+            start = m_radioGroup.start;
+            end = items.Item(start)->GetData()->m_radioGroup.end;
+        }
+
+        // also uncheck all the other items in this radio group
+        wxMenuItemList::Node *node = items.Item(start);
+        for ( int n = start; n <= end && node; n++ )
+        {
+            if ( n != pos )
+            {
+                node->GetData()->m_isChecked = FALSE;
+            }
+            node = node->GetNext();
+        }
     }
+
+    wxMenuItemBase::Check(check);
+
+    NotifyMenu();
+}
+
+// radio group stuff
+// -----------------
+
+void wxMenuItem::SetAsRadioGroupStart()
+{
+    m_isRadioGroupStart = TRUE;
+}
+
+void wxMenuItem::SetRadioGroupStart(int start)
+{
+    wxASSERT_MSG( !m_isRadioGroupStart,
+                  _T("should only be called for the next radio items") );
+
+    m_radioGroup.start = start;
+}
+
+void wxMenuItem::SetRadioGroupEnd(int end)
+{
+    wxASSERT_MSG( m_isRadioGroupStart,
+                  _T("should only be called for the first radio item") );
+
+    m_radioGroup.end = end;
 }
 
 // ----------------------------------------------------------------------------

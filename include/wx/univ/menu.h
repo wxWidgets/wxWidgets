@@ -115,6 +115,9 @@ private:
     // common part of all ctors
     void Init();
 
+    // terminate the current radio group, if any
+    void EndRadioGroup();
+
     // the exact menu geometry is defined by a struct derived from this one
     // which is opaque and defined by the renderer
     wxMenuGeometryInfo *m_geometry;
@@ -126,6 +129,9 @@ private:
     // the accel table for this menu
     wxAcceleratorTable m_accelTable;
 #endif // wxUSE_ACCEL
+
+    // the position of the first item in the current radio group or -1
+    int m_startRadioGroup;
 
     // it calls out OnDismiss()
     friend class wxPopupMenuWindow;
