@@ -102,6 +102,25 @@ wxIcon::~wxIcon()
 {
 }
 
+wxObjectRefData *wxIcon::CloneRefData(const wxObjectRefData *dataOrig) const
+{
+    const wxIconRefData *
+        data = wx_static_cast(const wxIconRefData *, dataOrig);
+    if ( !data )
+        return NULL;
+
+    wxIcon *self = wx_const_cast(wxIcon *, this);
+    lf->UnRef();
+    lf->m_refData = new wxIconRefData(*data);
+
+    if ( data->m_hIcon )
+    {
+        ::CopyIcon(HICON(data->m_hIcon));
+    }
+
+    return m_refData;
+}
+
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 {
 #ifndef __WXMICROWIN__

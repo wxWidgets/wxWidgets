@@ -96,6 +96,8 @@ protected:
         return new wxIconRefData;
     }
 
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
     // create from XPM data
     void CreateIconFromXpm(const char **data);
 
