@@ -72,7 +72,7 @@ public:
                                         wxStretch *stretch = NULL) const;
 
     // scrollbars: we (re)implement it ourselves using our own scrollbars
-    // instead of the native ones 
+    // instead of the native ones
     // ------------------------------------------------------------------
 
     virtual void SetScrollbar(int orient,
@@ -80,10 +80,12 @@ public:
                               int page,
                               int range,
                               bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
-    virtual int GetScrollPos( int orient ) const;
-    virtual int GetScrollThumb( int orient ) const;
-    virtual int GetScrollRange( int orient ) const;
+    virtual void SetScrollPos(int orient, int pos, bool refresh = TRUE);
+    virtual int GetScrollPos(int orient) const;
+    virtual int GetScrollThumb(int orient) const;
+    virtual int GetScrollRange(int orient) const;
+    virtual void ScrollWindow(int dx, int dy,
+                               const wxRect* rect = (wxRect *) NULL);
 
     // miscellaneous other methods
     // ---------------------------

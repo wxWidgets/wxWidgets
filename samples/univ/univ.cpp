@@ -110,6 +110,23 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// Define a new canvas class: we will use it for drawing
+class MyUnivCanvas : public wxScrolledWindow
+{
+public:
+    MyUnivCanvas(wxWindow *parent,
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 long style = 0)
+        : wxScrolledWindow(parent, -1, pos, size, style) { }
+
+protected:
+    void OnPaint(wxPaintEvent& event);
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -120,6 +137,10 @@ BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_BUTTON(-1, MyUnivFrame::OnButton)
 
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyUnivCanvas, wxScrolledWindow)
+    EVT_PAINT(MyUnivCanvas::OnPaint)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -243,7 +264,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     sb->SetScrollbar(0, 10, 100, 10);
     sb = new wxScrollBar(this, -1, wxPoint(200, 330), wxSize(-1, 150), wxSB_VERTICAL);
     sb->SetScrollbar(50, 50, 100, 10);
-#elif 1
+#elif 0
     wxWindow *win = new wxWindow(this, -1,
                                  wxPoint(200, 300),
                                  wxSize(300, 150),
@@ -251,11 +272,12 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     win->SetScrollbar(wxHORIZONTAL, 0, 10, 30);
     win->SetScrollbar(wxVERTICAL, 0, 5, 30);
 #else
-    wxScrolledWindow *win = new wxScrolledWindow(this, -1,
-                                                 wxPoint(200, 300),
-                                                 wxSize(300, 150),
-                                                 wxSUNKEN_BORDER);
-    win->SetScrollbars(10, 5, 30, 30, 15, 15);
+    wxScrolledWindow *win = new MyUnivCanvas(this,
+                                             wxPoint(200, 300),
+                                             wxSize(300, 150),
+                                             wxSUNKEN_BORDER);
+    win->SetScrollbars(10, 10, 100, 100, 0, 0);
+    win->ScrollWindow(100, 0);
 #endif
 
     new wxButton(this, -1, wxBITMAP(open), _T("&Open..."), wxPoint(10, 420));
@@ -293,3 +315,16 @@ void MyUnivFrame::OnLeftUp(wxMouseEvent& event)
         Close();
     }
 }
+
+// ----------------------------------------------------------------------------
+// MyUnivCanvas
+// ----------------------------------------------------------------------------
+
+void MyUnivCanvas::OnPaint(wxPaintEvent& event)
+{
+    wxPaintDC dc(this);
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawLine(0, 0, 1000, 1000);
+    dc.DrawText(_T("This is a canvas"), 10, 10);
+}
+

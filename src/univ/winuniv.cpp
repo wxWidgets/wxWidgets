@@ -312,3 +312,82 @@ int wxWindow::GetScrollRange(int orient) const
     wxScrollBar *scrollbar = GetScrollbar(orient);
     return scrollbar ? scrollbar->GetRange() : 0;
 }
+
+void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
+{
+    wxASSERT_MSG( !rect, _T("scrolling only part of window not implemented") );
+
+    if ( !dx && !dy )
+    {
+        // nothing to do
+        return;
+    }
+
+    // calculate the part of the window which we can just redraw in the new
+    // location
+    wxSize sizeTotal = GetClientSize();
+    wxPoint ptSource, ptDest;
+    wxSize size;
+    size.x = sizeTotal.x - dx;
+    size.y = sizeTotal.y - dy;
+    if ( size.x < 0 || size.y < 0 )
+    {
+        // just redraw everything as nothing of the displayed image will stay
+        Refresh();
+    }
+    else // move the part which doesn't change to the new location
+    {
+        // positive values mean to scroll to thr right/down
+        if ( dx > 0 )
+        {
+            ptSource.x = 0;
+            ptDest.x = dx;
+        }
+        else
+        {
+            ptSource.x = dx;
+            ptDest.x = 0;
+        }
+
+        if ( dy > 0 )
+        {
+            ptSource.y = 0;
+            ptDest.y = dy;
+        }
+        else
+        {
+            ptSource.y = dy;
+            ptDest.y = 0;
+        }
+
+        // do move
+        wxClientDC dc(this);
+        dc.Blit(ptDest, size, &dc, ptSource);
+
+        // and now repaint the uncovered area
+
+        // FIXME: we repaint the intersection of these rectangles twice - is
+        //        it bad?
+
+        wxRect rect;
+        rect.x = ptSource.x;
+        rect.y = ptSource.y;
+
+        if ( dx )
+        {
+            rect.width = abs(ptDest.x - ptSource.x);
+            rect.height = sizeTotal.y;
+
+            Refresh(TRUE /* erase bkgnd */, &rect);
+        }
+
+        if ( dy )
+        {
+            rect.width = sizeTotal.x;
+            rect.height = abs(ptDest.y - ptSource.y);
+
+            Refresh(TRUE /* erase bkgnd */, &rect);
+        }
+    }
+}
+
