@@ -385,7 +385,6 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
              _T("The next pages will present you\nwith more useless controls."),
              wxPoint(5,5)
         );
-    wxSize size = text->GetBestSize();
 
     // ... or a derived class
     wxRadioboxPage *page3 = new wxRadioboxPage(wizard);
@@ -401,7 +400,7 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
     page1->SetNext(page2);
     page3->SetPrev(page2);
 
-    wizard->SetPageSize(size);
+    // allow the wizard to size itself around the pages
     wizard->GetPageAreaSizer()->Add(page1);
     
     if ( wizard->RunWizard(page1) )
