@@ -25,6 +25,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #include "wx/mac/uma.h"
 // Button
 
+static const int kMacOSXHorizontalBorder = 1 ;
+static const int kMacOSXVerticalBorder = 1 ;
 
 bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
@@ -34,6 +36,12 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 {
 	Rect bounds ;
 	Str255 title ;
+
+    if ( UMAHasAquaLayout() )
+    {
+        m_macHorizontalBorder = kMacOSXHorizontalBorder;
+        m_macVerticalBorder = kMacOSXVerticalBorder;
+    }
 	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
@@ -42,7 +50,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
 	
 	MacPostControlCreate() ;
-
+	
   return TRUE;
 }
 
@@ -76,19 +84,23 @@ wxSize wxButton::DoGetBestSize() const
 {
   wxSize sz = GetDefaultSize() ;
   
-    int wBtn = m_label.Length() * 8 + 12 ;
-	int hBtn = 20 ;
+  int wBtn = m_label.Length() * 8 + 12 + 2 * kMacOSXHorizontalBorder ;
 	
   if (wBtn > sz.x) sz.x = wBtn;
-  if (hBtn > sz.y) sz.y = hBtn;
   
   return sz ;
 }
 
 wxSize wxButton::GetDefaultSize()
 {
-    int wBtn = 70 /* + 2 * m_macHorizontalBorder */ ; 
-	int hBtn = 20 /* +  2 * m_macVerticalBorder */ ;
+    int wBtn = 70 ; 
+	int hBtn = 20 ;
+
+    if ( UMAHasAquaLayout() )
+    {
+        wBtn += 2 * kMacOSXHorizontalBorder ;
+        hBtn += 2 * kMacOSXVerticalBorder ;
+    }
 
     return wxSize(wBtn, hBtn);
 }
