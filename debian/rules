@@ -927,13 +927,13 @@ binary-common:
 # building the arch specific package files needed to create them.
 binary-indep: build_all install
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
+		DH_OPTIONS="-i -N$(package_gtk_dbg_py) -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
 		binary-common
 
 # Build just the architecture-dependent files here.
 binary-arch: build_arch install_arch
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
+		DH_OPTIONS="-a -N$(package_gtk_dbg_py) -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
 		binary-common
 
 # Build all packages target.

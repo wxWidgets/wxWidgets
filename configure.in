@@ -1307,11 +1307,14 @@ AC_CACHE_CHECK([if make is GNU make], wx_cv_prog_makeisgnu,
 
 if test "x$wx_cv_prog_makeisgnu" = "xyes"; then
     IF_GNU_MAKE=""
+    IF_NOT_GNU_MAKE="#"
 else
     IF_GNU_MAKE="#"
+    IF_NOT_GNU_MAKE=""
 fi
 
 AC_SUBST(IF_GNU_MAKE)
+AC_SUBST(IF_NOT_GNU_MAKE)
 
 dnl we don't need to check for VPATH support in GNU make - it does have it
 if test "x$wx_cv_prog_makeisgnu" != "xyes"; then
@@ -5585,6 +5588,7 @@ dnl idea could have been to use the cache but this wouldn't work when
 dnl configure doesn't use cache at all which is the default with autoconf 2.50)
 wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
 wx_cv_if_gnu_make=$IF_GNU_MAKE
+wx_cv_if_not_gnu_make=$IF_NOT_GNU_MAKE
 wx_cv_path_ifs=$PATH_IFS
 wx_cv_program_ext=$PROGRAM_EXT
 wx_cv_target_library=$WX_TARGET_LIBRARY
@@ -5595,7 +5599,7 @@ wx_cv_release=${WX_RELEASE}
 wx_cv_current=${WX_CURRENT}
 wx_cv_revision=${WX_REVISION}
 wx_cv_age=${WX_AGE}
-export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
+export wx_cv_path_samplesubdirs wx_cv_if_gnu_make wx_cv_if_not_gnu_make \
        wx_cv_path_ifs wx_cv_program_ext \
        wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype \
        wx_cv_library_basename wx_cv_release wx_cv_current wx_cv_revision wx_cv_age

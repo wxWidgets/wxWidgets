@@ -1,6 +1,30 @@
 wxwindows for Debian
 ----------------------
 
+Note:  After some eleven years, the wxWindows project has undergone a
+       change of name and is now formally known upstream as wxWidgets.
+       This will not be altered retroactively for the existing Debian
+       packages of 2.4, since forcing a recompile for every dependent
+       package just to change this is simply unwarranted.  The Debian
+       packages will adopt the name wxwidgets for use from 2.5 onward.
+
+       The name change itself will not cause source incompatibilities,
+       and the library api will not be altered because of it, however
+       other maintainers will need to update their build dependencies
+       to accomodate a name as well as a version change for this one.
+
+       wxwindows.org will continue to refer to the existing project
+       site probably until sometime in 2005.  You should update any
+       references to use wxwidgets.org before then.
+
+       Why have we done this?
+       The new owners of the wxwindows.org domain have requested it.
+
+       Why have they done this?
+       Who can say...  I see pat@sf is crowing about a project named
+       WiX that they just accepted.  Perhaps they can tell you more.
+
+
 The following packages are built from the wxWindows CVS source.
 
 libwxbase		wxBase runtime shared libraries

@@ -1616,8 +1616,10 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
-#debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
-debian-native-dist: $(filter-out DEMOS_DIST,@GUIDIST@) MANUAL_DIST PYTHON_DIST
+# This is to keep non-gnu make's happy.
+@IF_NOT_GNU_MAKE@debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
+
+@IF_GNU_MAKE@debian-native-dist: $(filter-out DEMOS_DIST,@GUIDIST@) MANUAL_DIST PYTHON_DIST
 	cp $(SRCDIR)/files.lst $(DISTDIR)/src
 
 debian-msw-dirs:
