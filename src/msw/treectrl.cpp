@@ -2397,20 +2397,34 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-        case TVN_SELCHANGED:
+        // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of 
+        //     TVN_SELCHANGEDW in Unicode mode under Win98. Therefore
+        //     we have to handle both messages:
+        case TVN_SELCHANGEDA:
+        case TVN_SELCHANGEDW:
             eventType = wxEVT_COMMAND_TREE_SEL_CHANGED;
             // fall through
 
-        case TVN_SELCHANGING:
+        case TVN_SELCHANGINGA:
+        case TVN_SELCHANGINGW:
             {
                 if ( eventType == wxEVT_NULL )
                     eventType = wxEVT_COMMAND_TREE_SEL_CHANGING;
                 //else: already set above
 
-                NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
-
-                event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
-                event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
+                if (hdr->code == TVN_SELCHANGINGW || 
+                    hdr->code == TVN_SELCHANGEDW)
+                {
+                    NM_TREEVIEWW* tv = (NM_TREEVIEWW *)lParam;
+                    event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
+                    event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
+                }
+                else
+                {
+                    NM_TREEVIEWA* tv = (NM_TREEVIEWA *)lParam;
+                    event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
+                    event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
+                }
             }
             break;
 
