@@ -27,12 +27,14 @@ OBJECTS = \
 		bitmap.obj,\
 		brush.obj,\
 		pen.obj,\
+		region.obj,\
 		utilsx.obj
 
 SOURCES = \
 		bitmap.cpp,\
 		brush.cpp,\
 		pen.cpp,\
+		region.cpp,\
 		utilsx.cpp
 
 all : $(SOURCES)
@@ -44,4 +46,5 @@ all : $(SOURCES)
 bitmap.obj : bitmap.cpp
 brush.obj : brush.cpp
 pen.obj : pen.cpp
+region.obj: region.cpp
 utilsx.obj : utilsx.cpp

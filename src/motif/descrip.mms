@@ -64,7 +64,6 @@ OBJECTS = \
 		palette.obj,\
 		radiobox.obj,\
 		radiobut.obj,\
-		region.obj,\
 		scrolbar.obj,\
 		settings.obj,\
 		slider.obj,\
@@ -119,7 +118,6 @@ SOURCES = \
 		palette.cpp,\
 		radiobox.cpp,\
 		radiobut.cpp,\
-		region.cpp,\
 		scrolbar.cpp,\
 		settings.cpp,\
 		slider.cpp,\
@@ -183,7 +181,6 @@ msgdlg.obj : msgdlg.cpp
 palette.obj : palette.cpp
 radiobox.obj : radiobox.cpp
 radiobut.obj : radiobut.cpp
-region.obj : region.cpp
 scrolbar.obj : scrolbar.cpp
 settings.obj : settings.cpp
 slider.obj : slider.cpp

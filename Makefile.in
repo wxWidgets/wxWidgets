@@ -740,9 +740,10 @@ MOTIF_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/x11
 	mkdir $(DISTDIR)/include/wx/x11
 	cp $(X11DIR)/pen.cpp $(X11DIR)/brush.cpp $(X11DIR)/utilsx.cpp \
-		$(X11DIR)/bitmap.cpp $(DISTDIR)/src/x11
+		$(X11DIR)/bitmap.cpp $(X11DIR)/region.cpp \
+		$(DISTDIR)/src/x11
 	cp $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
-		$(X11INC)/bitmap.h $(X11INC)/private.h \
+		$(X11INC)/bitmap.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
 
 MACX_DIST: ALL_GUI_DIST
