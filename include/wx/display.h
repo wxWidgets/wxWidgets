@@ -152,7 +152,7 @@ protected:
 #elif defined(__WXMOTIF__)
     #include "wx/motif/display.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk/display.h"
+    #include "wx/unix/displayx11.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/display.h"
 #elif defined(__WXPM__)
