@@ -274,8 +274,15 @@ public:
     ~wxDC();
 
     void BeginDrawing();
-    bool Blit(long xdest, long ydest, long width, long height,
-                wxDC *source, long xsrc, long ysrc, long logical_func);
+//  %name(BlitXY)
+    bool Blit(long xdest, long ydest,
+              long width, long height,
+              wxDC *source, long xsrc, long ysrc,
+              int logicalFunc = wxCOPY, int useMask = FALSE);
+//      bool Blit(const wxPoint& destPt, const wxSize& sz,
+//                wxDC *source, const wxPoint& srcPt,
+//                int logicalFunc = wxCOPY, int useMask = FALSE);
+
     void Clear();
     void CrossHair(long x, long y);
     void DestroyClippingRegion();
@@ -354,21 +361,26 @@ public:
     void StartPage();
 
 
-    %addmethods {
-            // This one is my own creation...
-        void DrawBitmap(wxBitmap& bitmap, long x, long y, bool swapPalette=TRUE) {
-            wxMemoryDC* memDC = new wxMemoryDC;
-            memDC->SelectObject(bitmap);
-#ifdef __WXMSW__
-            if (swapPalette)
-                self->SetPalette(*bitmap.GetPalette());
-#endif
-            self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
-                    0, 0, self->GetLogicalFunction());
-            memDC->SelectObject(wxNullBitmap);
-            delete memDC;
-        }
-    }
+//  Don't need this one anymore as wxWindows has one...
+//      %addmethods {
+//              // This one is my own creation...
+//          void DrawBitmap(wxBitmap& bitmap, long x, long y, bool swapPalette=TRUE) {
+//              wxMemoryDC* memDC = new wxMemoryDC;
+//              memDC->SelectObject(bitmap);
+//  #ifdef __WXMSW__
+//              if (swapPalette)
+//                  self->SetPalette(*bitmap.GetPalette());
+//  #endif
+//              self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
+//                      0, 0, self->GetLogicalFunction());
+//              memDC->SelectObject(wxNullBitmap);
+//              delete memDC;
+//          }
+//      }
+
+    void DrawBitmap(const wxBitmap& bitmap, long x, long y,
+                    int useMask = FALSE);
+
 };
 
 
@@ -498,6 +510,7 @@ extern wxCursor *wxHOURGLASS_CURSOR;
 extern wxCursor *wxCROSS_CURSOR;
 
 extern wxBitmap wxNullBitmap;
+//extern wxMask   wxNullMask;
 extern wxIcon   wxNullIcon;
 extern wxCursor wxNullCursor;
 extern wxPen    wxNullPen;

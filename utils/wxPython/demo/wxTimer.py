@@ -29,7 +29,7 @@ class TestTimerWin(wxPanel):
                                wxPoint(15, 30))
 
         wxButton(self, 11101, ' Start ', wxPoint(15, 75), wxDefaultSize)
-        wxButton(self, 11102, ' Stop ', wxPoint(77, 75), wxDefaultSize)
+        wxButton(self, 11102, ' Stop ', wxPoint(115, 75), wxDefaultSize)
         EVT_BUTTON(self, 11101, self.OnStart)
         EVT_BUTTON(self, 11102, self.OnStop)
 

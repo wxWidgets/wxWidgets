@@ -12,7 +12,7 @@
 
 
 #ifdef __WXGTK__
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
 #endif
 
 #undef DEBUG

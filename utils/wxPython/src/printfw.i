@@ -269,9 +269,7 @@ public:
     %pragma(python) addtomethod = "__init__:self._setSelf(self)"
 
     %addmethods {
-        void Destroy() {
-            delete self;
-        }
+        void Destroy() { delete self; }
     }
 
     wxDC* GetDC();

@@ -109,21 +109,20 @@ class wxPythonDemo(wxFrame):
         self.nb = wxNotebook(splitter2, -1)
 
         # Set up a TextCtrl on the Overview Notebook page
-        self.ovr = wxTextCtrl(self.nb, -1, '', wxDefaultPosition, wxDefaultSize,
-                              wxTE_MULTILINE|wxTE_READONLY)
+        self.ovr = wxTextCtrl(self.nb, -1, style = wxTE_MULTILINE|wxTE_READONLY)
         self.nb.AddPage(self.ovr, "Overview")
 
 
         # Set up a TextCtrl on the Demo Code Notebook page
-        self.txt = wxTextCtrl(self.nb, -1, '', wxDefaultPosition, wxDefaultSize,
-                              wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
+        self.txt = wxTextCtrl(self.nb, -1,
+                              style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
         self.txt.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, false))
         self.nb.AddPage(self.txt, "Demo Code")
 
 
         # Set up a log on the View Log Notebook page
-        self.log = wxTextCtrl(splitter2, -1, '', wxDefaultPosition, wxDefaultSize,
-                              wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
+        self.log = wxTextCtrl(splitter2, -1,
+                              style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
         (w, self.charHeight) = self.log.GetTextExtent('X')
         #self.WriteText('wxPython Demo Log:\n')
 
@@ -154,7 +153,7 @@ class wxPythonDemo(wxFrame):
         numLines = h/self.charHeight
         x, y = self.log.PositionToXY(self.log.GetLastPosition())
         self.log.ShowPosition(self.log.XYToPosition(x, y-numLines))
-##          self.log.ShowPosition(self.log.GetLastPosition())
+        ##self.log.ShowPosition(self.log.GetLastPosition())
         self.log.SetInsertionPointEnd()
 
     def write(self, txt):

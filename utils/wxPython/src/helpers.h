@@ -36,6 +36,14 @@ extern PyThreadState*   wxPyEventThreadState;
 extern bool             wxPyInEvent;
 #endif
 
+//---------------------------------------------------------------------------
+
+#if defined(__WXMSW__)
+#       define HELPEREXPORT __declspec(dllexport)
+#else
+#       define HELPEREXPORT
+#endif
+
 //----------------------------------------------------------------------
 
 class wxPyApp: public wxApp
@@ -59,7 +67,8 @@ extern PyObject* wxPython_dict;
 PyObject* __wxSetDictionary(PyObject*, PyObject* args);
 
 void wxPyEventThunker(wxObject*, wxEvent& event);
-PyObject* wxPyConstructObject(void* ptr, char* className);
+
+HELPEREXPORT PyObject* wxPyConstructObject(void* ptr, char* className);
 
 //----------------------------------------------------------------------
 
@@ -147,7 +156,7 @@ private:
 // wxPyCallbackHelper.
 //---------------------------------------------------------------------------
 
-class wxPyCallbackHelper {
+class HELPEREXPORT wxPyCallbackHelper {
 public:
     wxPyCallbackHelper();
     ~wxPyCallbackHelper();
@@ -169,6 +178,27 @@ private:
 // These macros are used to implement the virtual methods that should
 // redirect to a Python method if one exists.  The names designate the
 // return type, if any as well as any parameter types.
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__(PCLASS, CBNAME)                                    \
+    void CBNAME() {                                                     \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("()"));                 \
+        else                                                            \
+            PCLASS::CBNAME();                                           \
+    }                                                                   \
+    void base_##CBNAME() {                                              \
+        PCLASS::CBNAME();                                               \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYPRIVATE                               \
+    void _setSelf(PyObject* self) {             \
+        m_myInst.setSelf(self);                 \
+    }                                           \
+    private: wxPyCallbackHelper m_myInst;
+
 //---------------------------------------------------------------------------
 
 #define PYCALLBACK_BOOL_INTINT(PCLASS, CBNAME)                          \
@@ -195,6 +225,8 @@ private:
         return PCLASS::CBNAME(a);                                       \
     }
 
+//---------------------------------------------------------------------------
+
 #define PYCALLBACK_BOOL_INT_pure(PCLASS, CBNAME)                        \
     bool CBNAME(int a) {                                                \
         if (m_myInst.findCallback(#CBNAME))                             \
@@ -205,26 +237,214 @@ private:
 
 //---------------------------------------------------------------------------
 
-#define PYCALLBACK__(PCLASS, CBNAME)                                    \
-    void CBNAME() {                                                     \
+#define PYCALLBACK__DC(PCLASS, CBNAME)                                  \
+    void CBNAME(wxDC& a) {                                              \
         if (m_myInst.findCallback(#CBNAME))                             \
-            m_myInst.callCallback(Py_BuildValue("()"));                 \
+            m_myInst.callCallback(Py_BuildValue("(O)",                  \
+                            wxPyConstructObject(&a, "wxDC")));           \
         else                                                            \
-            PCLASS::CBNAME();                                           \
+            PCLASS::CBNAME(a);                                          \
     }                                                                   \
-    void base_##CBNAME() {                                              \
-        PCLASS::CBNAME();                                               \
+    void base_##CBNAME(wxDC& a) {                                       \
+        PCLASS::CBNAME(a);                                              \
+    }
+
+
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__DCBOOL(PCLASS, CBNAME)                              \
+    void CBNAME(wxDC& a, bool b) {                                      \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(Oi)",                 \
+                            wxPyConstructObject(&a, "wxDC"), (int)b));   \
+        else                                                            \
+            PCLASS::CBNAME(a, b);                                       \
+    }                                                                   \
+    void base_##CBNAME(wxDC& a, bool b) {                               \
+        PCLASS::CBNAME(a, b);                                           \
     }
 
 //---------------------------------------------------------------------------
 
-#define PYPRIVATE                               \
-    void _setSelf(PyObject* self) {             \
-        m_myInst.setSelf(self);                 \
-    }                                           \
-    private: wxPyCallbackHelper m_myInst;
+#define PYCALLBACK__DCBOOL(PCLASS, CBNAME)                              \
+    void CBNAME(wxDC& a, bool b) {                                      \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(Oi)",                 \
+                            wxPyConstructObject(&a, "wxDC"), (int)b));   \
+        else                                                            \
+            PCLASS::CBNAME(a, b);                                       \
+    }                                                                   \
+    void base_##CBNAME(wxDC& a, bool b) {                               \
+        PCLASS::CBNAME(a, b);                                           \
+    }
 
 //---------------------------------------------------------------------------
 
+#define PYCALLBACK__2DBL(PCLASS, CBNAME)                                \
+    void CBNAME(double a, double b) {                                   \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(dd)",a,b));           \
+        else                                                            \
+            PCLASS::CBNAME(a, b);                                       \
+    }                                                                   \
+    void base_##CBNAME(double a, double b) {                            \
+        PCLASS::CBNAME(a, b);                                           \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__2DBL2INT(PCLASS, CBNAME)                            \
+    void CBNAME(double a, double b, int c, int d) {                     \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(ddii)",               \
+                                                       a,b,c,d));       \
+        else                                                            \
+            PCLASS::CBNAME(a, b, c, d);                                 \
+    }                                                                   \
+    void base_##CBNAME(double a, double b, int c, int d) {              \
+        PCLASS::CBNAME(a, b, c, d);                                     \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__DC4DBLBOOL(PCLASS, CBNAME)                          \
+    void CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {\
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(Oddddi)",             \
+                                   wxPyConstructObject(&a, "wxDC"),      \
+                                              b, c, d, e, (int)f));     \
+        else                                                            \
+            PCLASS::CBNAME(a, b, c, d, e, f);                           \
+    }                                                                   \
+    void base_##CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {\
+        PCLASS::CBNAME(a, b, c, d, e, f);                               \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK_BOOL_DC4DBLBOOL(PCLASS, CBNAME)                      \
+    bool CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {\
+        if (m_myInst.findCallback(#CBNAME))                             \
+            return m_myInst.callCallback(Py_BuildValue("(Oddddi)",      \
+                                   wxPyConstructObject(&a, "wxDC"),      \
+                                              b, c, d, e, (int)f));     \
+        else                                                            \
+            return PCLASS::CBNAME(a, b, c, d, e, f);                    \
+    }                                                                   \
+    bool base_##CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {\
+        return PCLASS::CBNAME(a, b, c, d, e, f);                        \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__BOOL2DBL2INT(PCLASS, CBNAME)                        \
+    void CBNAME(bool a, double b, double c, int d, int e) {             \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(idii)",               \
+                                                (int)a,b,c,d,e));       \
+        else                                                            \
+            PCLASS::CBNAME(a, b, c, d, e);                              \
+    }                                                                   \
+    void base_##CBNAME(bool a, double b, double c, int d, int e) {      \
+        PCLASS::CBNAME(a, b, c, d, e);                                  \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__DC4DBL(PCLASS, CBNAME)                              \
+    void CBNAME(wxDC& a, double b, double c, double d, double e) {     \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(Odddd)",              \
+                                   wxPyConstructObject(&a, "wxDC"),      \
+                                                     b, c, d, e));      \
+        else                                                            \
+            PCLASS::CBNAME(a, b, c, d, e);                              \
+    }                                                                   \
+    void base_##CBNAME(wxDC& a, double b, double c, double d, double e) {\
+        PCLASS::CBNAME(a, b, c, d, e);                                  \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__DCBOOL(PCLASS, CBNAME)                              \
+    void CBNAME(wxDC& a, bool b) {                                      \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(Oi)",                 \
+                                   wxPyConstructObject(&a, "wxDC"),      \
+                                                     (int)b));          \
+        else                                                            \
+            PCLASS::CBNAME(a, b);                                       \
+    }                                                                   \
+    void base_##CBNAME(wxDC& a, bool b) {                               \
+        PCLASS::CBNAME(a, b);                                           \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__WXCPBOOL2DBL2INT(PCLASS, CBNAME)                    \
+    void CBNAME(wxControlPoint* a, bool b, double c, double d,          \
+                int e, int f) {                                         \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(Oiddii)",             \
+                                 wxPyConstructObject(a, "wxControlPoint"),\
+                                 (int)b, c, d, e, f));                  \
+        else                                                            \
+            PCLASS::CBNAME(a, b, c, d, e, f);                           \
+    }                                                                   \
+    void base_##CBNAME(wxControlPoint* a, bool b, double c, double d,   \
+                       int e, int f) {                                  \
+        PCLASS::CBNAME(a, b, c, d, e, f);                               \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__WXCP2DBL2INT(PCLASS, CBNAME)                        \
+    void CBNAME(wxControlPoint* a, double b, double c, int d, int e) {  \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(Oddii)",              \
+                                 wxPyConstructObject(a, "wxControlPoint"),\
+                                 b, c, d, e));                          \
+        else                                                            \
+            PCLASS::CBNAME(a, b, c, d, e);                              \
+    }                                                                   \
+    void base_##CBNAME(wxControlPoint* a, double b, double c,           \
+                       int d, int e) {                                  \
+        PCLASS::CBNAME(a, b, c, d, e);                                  \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__2DBLINT(PCLASS, CBNAME)                             \
+    void CBNAME(double a, double b, int c) {                            \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(ddi)", a,b,c));       \
+        else                                                            \
+            PCLASS::CBNAME(a, b, c);                                    \
+    }                                                                   \
+    void base_##CBNAME(double a, double b, int c) {                     \
+        PCLASS::CBNAME(a, b, c);                                        \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__BOOL2DBLINT(PCLASS, CBNAME)                         \
+    void CBNAME(bool a, double b, double c, int d) {                    \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("(iddi)", (int)a,b,c,d));\
+        else                                                            \
+            PCLASS::CBNAME(a, b, c, d);                                 \
+    }                                                                   \
+    void base_##CBNAME(bool a, double b, double c, int d) {             \
+        PCLASS::CBNAME(a, b, c, d);                                     \
+    }
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
 #endif
+
+
 

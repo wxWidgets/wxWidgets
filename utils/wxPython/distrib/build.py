@@ -220,7 +220,7 @@ class BuildConfig:
         self.VERSION = __version__
         self.MODULE = ''
         self.SWIGFILES = []
-        self.SWIGFLAGS = '-c++ -shadow -python -dnone -I$(WXPSRCDIR)'
+        self.SWIGFLAGS = '-c++ -shadow -python -keyword -dnone -I$(WXPSRCDIR)'
         self.SOURCES = []
         self.PYFILES = []
         self.LFLAGS = ''
@@ -230,6 +230,7 @@ class BuildConfig:
         self.OTHERLIBS = ''
         self.OTHERTARGETS = ''
         self.OTHERINSTALLTARGETS = ''
+        self.OTHERUNINSTALLTARGETS = ''
         self.OTHERRULES = ''
         self.DEFAULTRULE = 'default: $(GENCODEDIR) $(TARGET)'
         self.PYVERSION = sys.version[:3]
@@ -469,8 +470,8 @@ WXDIR = %(WXDIR)s
 VERSION = %(VERSION)s
 MODULE = %(MODULE)s
 SWIGFLAGS = %(SWIGFLAGS)s %(SWIGTOOLKITFLAG)s %(OTHERSWIGFLAGS)s
-CFLAGS = %(CFLAGS)s %(OTHERCFLAGS)s
-LFLAGS = %(LFLAGS)s %(OTHERLFLAGS)s
+CFLAGS = %(CFLAGS)s
+LFLAGS = %(LFLAGS)s
 PYVERSION = %(PYVERSION)s
 PYPREFIX = %(PYPREFIX)s
 EXECPREFIX = %(EXECPREFIX)s
@@ -505,8 +506,8 @@ THREAD=-DWXP_USE_THREAD=1
 
 
 NOPCH=1
-OVERRIDEFLAGS=%(OVERRIDEFLAGS)s %(OTHERCFLAGS)s
-EXTRAFLAGS = %(CFLAGS)s
+OVERRIDEFLAGS=%(OVERRIDEFLAGS)s
+EXTRAFLAGS = $(CFLAGS) %(OTHERCFLAGS)s
 
 LFLAGS = %(LFLAGS)s %(OTHERLFLAGS)s
 EXTRALIBS = %(LIBS)s %(OTHERLIBS)s
@@ -537,7 +538,7 @@ clean:
 	-erase $(TARGET)
 
 
-uninstall:
+uninstall: %(OTHERUNINSTALLTARGETS)s
 	-erase $(TARGETDIR)\\$(TARGET)
 %(PYCLEANUP)s
 
@@ -611,6 +612,13 @@ $(GENCODEDIR):
 
 #----------------------------------------------------------------------
 
+showflags:
+	@echo CPPFLAGS:
+	@echo $(CPPFLAGS)
+	@echo LFLAGS:
+	@echo $(LFLAGS)
+
+
 
 %(OTHERRULES)s
 '''
@@ -631,7 +639,7 @@ WXDIR = %(WXDIR)s
 VERSION = %(VERSION)s
 MODULE = %(MODULE)s
 SWIGFLAGS = %(SWIGFLAGS)s %(SWIGTOOLKITFLAG)s %(OTHERSWIGFLAGS)s
-CFLAGS = %(CFLAGS)s %(OTHERCFLAGS)s
+CFLAGS = %(CFLAGS)s $(OPT) %(OTHERCFLAGS)s
 LFLAGS = %(LFLAGS)s %(OTHERLFLAGS)s
 LIBS = %(LIBS)s %(OTHERLIBS)s
 PYVERSION = %(PYVERSION)s
@@ -679,7 +687,7 @@ clean:
 	-rm -f *.o *$(SO) *~
 	-rm -f $(TARGET)
 
-uninstall:
+uninstall: %(OTHERUNINSTALLTARGETS)s
 	-rm -f $(TARGETDIR)/$(TARGET)
 %(PYCLEANUP)s
 

@@ -48,13 +48,36 @@ Or you can send mail directly to the list using this address:
 What's new in 2.1b3
 --------------------
 
+This release is syncronized with release 2.1 snapshot 9 of wxWindows.
+
 Switched to using SWIG from CVS (see http://swig.cs.uchicago.edu/cvs.html)
 for some of the new features and such.  Also they have encorporated my
 patches so there is really no reason to stick with the current (very
-old) release...
+old) release...  This version of SWIG gives the following new
+features:
 
-New build system based on a Python program.  Now wxPython builds are
-the same on MSW or Unix systems.  See distrib/build.py for details.
+    1. Keyword arguments.  You no longer have to specify all the
+       parameters with defaults to a method just to specify a
+       non-default value on the end.  You can now do this instead:
+
+	  win = wxWindow(parent, -1, style = mystyle)
+
+    2. There is now an an equivalence between Python's None and C++'s
+       NULL.  This means that any methods that might return NULL will
+       now return None and you can use none where wxWindows might be
+       expecting NULL.  This makes things much more snake-ish.
+
+
+There is a new build system based on a new Python program instead of
+raw makefiles.  Now wxPython builds are virtually the same on MSW or
+Unix systems.  See the end of this file for new build instructions and
+see distrib/build.py for more details.
+
+wxDC.Bilt now includes the useMask parameter, and has been split into
+two different versions.  wxDC.BlitXY is like what was there before and
+takes raw coordinants and sizes, and the new wxDC.Blit is for the new
+interface using wxPoints and a wxSize.
+
 
 
 
@@ -337,6 +360,9 @@ below.)
 
    You can use whatever flags you want, but I know these work.
 
+   For Win32 systems I use Visual C++ 6.0, but 5.0 should work.  The
+   build utility currently does not support any other win32 compilers.
+
 2. At this point you may want to make an alias or symlink, script,
    batch file, whatever on the PATH that invokes
    $(WXWIN)/utils/wxPython/distrib/build.py to help simplify matters
@@ -353,7 +379,7 @@ below.)
    The build.py script actually generates a Makefile based on what it
    finds on your system and information found in the build.cfg file.
    If you have troubles building or you want it built or installed in
-   a different way, take a look at the docstring in build.py, you may
+   a different way, take a look at the docstring in build.py.  You may
    be able to override configuration options in a file named
    build.local.
 

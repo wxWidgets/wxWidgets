@@ -68,7 +68,23 @@ public:
     double y;
     wxRealPoint(double x=0.0, double y=0.0);
     ~wxRealPoint();
+
+    %addmethods {
+        void Set(double x, double y) {
+            self->x = x;
+            self->y = y;
+        }
+        PyObject* asTuple() {
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
+            PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
+            return tup;
+        }
+    }
+    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
 };
+
 
 class wxPoint {
 public:
