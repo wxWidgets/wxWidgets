@@ -250,6 +250,13 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnSize(wxSizeEvent& event)
 {
+    DoSize();
+
+    event.Skip();
+}
+
+void MyFrame::DoSize()
+{
     if ( !m_logWindow )
         return;
 
@@ -257,8 +264,6 @@ void MyFrame::OnSize(wxSizeEvent& event)
     wxCoord y = (2*size.y)/3;
     m_listCtrl->SetSize(0, 0, size.x, y);
     m_logWindow->SetSize(0, y + 1, size.x, size.y - y);
-
-    event.Skip();
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -365,9 +370,7 @@ void MyFrame::RecreateList(long flags, bool withText)
         }
     }
 
-#ifdef __WXMSW__
-        SendSizeEvent();
-#endif
+    DoSize();
 
     m_logWindow->Clear();
 }

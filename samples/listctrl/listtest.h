@@ -80,7 +80,9 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame(const wxChar *title, int x, int y, int w, int h);
-    ~MyFrame();
+    virtual ~MyFrame();
+
+    void DoSize();
 
 protected:
     void OnSize(wxSizeEvent& event);
