@@ -30,7 +30,7 @@
 #endif
 
 
-static wxUint16 *GetEncTable(wxFontEncoding enc)
+static wxUint16* LINKAGEMODE GetEncTable(wxFontEncoding enc)
 {
     for (int i = 0; encodings_list[i].table != NULL; i++)
     {
@@ -47,13 +47,13 @@ typedef struct {
 
 
 
-static int CompareCharsetItems(const void *i1, const void *i2)
+static int LINKAGEMODE CompareCharsetItems(const void *i1, const void *i2)
 {
     return ( ((CharsetItem*)i1) -> u - ((CharsetItem*)i2) -> u );
 }
 
 
-static CharsetItem* BuildReverseTable(wxUint16 *tbl)
+static CharsetItem* LINKAGEMODE BuildReverseTable(wxUint16 *tbl)
 {
     CharsetItem *rev = new CharsetItem[128];
     
