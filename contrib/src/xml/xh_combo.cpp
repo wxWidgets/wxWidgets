@@ -42,7 +42,8 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
 
         // need to build the list of strings from children
         m_InsideBox = TRUE;
-        CreateChildren( NULL, TRUE /* only this handler */);
+        CreateChildren( NULL, TRUE /* only this handler */,
+                        GetParamNode(_T("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
         {

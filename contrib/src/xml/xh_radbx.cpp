@@ -42,7 +42,7 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 
         // need to build the list of strings from children
         m_InsideBox = TRUE;
-        CreateChildren( NULL, TRUE /* only this handler */, GetParamNode(_T("buttons")));
+        CreateChildren( NULL, TRUE /* only this handler */, GetParamNode(_T("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
         {
