@@ -50,6 +50,10 @@ const int   wxDB_DEFAULT_CURSOR  = 0;
 const bool  wxDB_QUERY_ONLY      = TRUE;
 const bool  wxDB_DISABLE_VIEW    = TRUE;
 
+// Used to indicate end of a variable length list of
+// column numbers passed to member functions
+const int   wxDB_NO_MORE_COLUMN_NUMBERS = -1;
+
 // The following class is used to define a column of a table.
 // The wxDbTable constructor will dynamically allocate as many of
 // these as there are columns in the table.  The class derived
@@ -109,7 +113,7 @@ private:
     bool        getRec(UWORD fetchType);
     bool        execDelete(const char *pSqlStmt);
     bool        execUpdate(const char *pSqlStmt);
-    bool        query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt = 0);
+    bool        query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt = NULL);
 
 #if !wxODBC_BACKWARD_COMPATABILITY
 // these were public
@@ -181,7 +185,7 @@ public:
 #endif
     // Public member functions
     wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
-              const char *qryTblName = 0, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath="");
+              const char *qryTblName = NULL, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath="");
     virtual ~wxDbTable();
 
     bool            Open(bool checkPrivileges=FALSE);
@@ -215,6 +219,7 @@ public:
 #else
     void            SetFromClause(const wxString& From) { from = From; }
     void            SetOrderByClause(const wxString& OrderBy) { orderBy = OrderBy; }
+    bool            SetOrderByColNums(int first, ...);
     void            SetWhereClause(const wxString& Where) { where = Where; }
     void            From(const wxString& From) { from = From; }
     void            OrderBy(const wxString& OrderBy) { orderBy = OrderBy; }
@@ -249,19 +254,19 @@ public:
     UWORD           GetRowNum(void);
 
     void            BuildSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct);
-    void            BuildDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = 0);
-    void            BuildUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = 0);
-    void            BuildWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName = 0, bool useLikeComparison=FALSE);
+    void            BuildDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = NULL);
+    void            BuildUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = NULL);
+    void            BuildWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName = NULL, bool useLikeComparison=FALSE);
 #if wxODBC_BACKWARD_COMPATABILITY
 // The following member functions are deprecated.  You should use the BuildXxxxxStmt functions (above)
     void            GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
                            { BuildSelectStmt(pSqlStmt,typeOfSelect,distinct); }
-    void            GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = 0)
+    void            GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = NULL)
                            { BuildDeleteStmt(pSqlStmt,typeOfDel,pWhereClause); }
-    void            GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = 0)
+    void            GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = NULL)
                            { BuildUpdateStmt(pSqlStmt,typeOfUpd,pWhereClause); }
     void            GetWhereClause(char *pWhereClause, int typeOfWhere, 
-                                   const char *qualTableName = 0, bool useLikeComparison=FALSE)
+                                   const char *qualTableName = NULL, bool useLikeComparison=FALSE)
                            { BuildWhereClause(pWhereClause,typeOfWhere,qualTableName,useLikeComparison); }
 #endif
     bool            CanSelectForUpdate(void);
