@@ -3140,7 +3140,7 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
         {
             for ( n = 0;  n < numCols;  n++ )
             {
-                m_data[row].Remove( pos );
+                m_data[row].RemoveAt( pos );
             }
         }
     }
@@ -4010,8 +4010,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             {
                 for ( i = 0;  i < numRows;  i++ )
                 {
-                    m_rowHeights.Remove( pos );
-                    m_rowBottoms.Remove( pos );
+                    m_rowHeights.RemoveAt( pos );
+                    m_rowBottoms.RemoveAt( pos );
                 }
 
                 int h = 0;
@@ -4146,8 +4146,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             {
                 for ( i = 0;  i < numCols;  i++ )
                 {
-                    m_colWidths.Remove( pos );
-                    m_colRights.Remove( pos );
+                    m_colWidths.RemoveAt( pos );
+                    m_colRights.RemoveAt( pos );
                 }
 
                 int w = 0;
