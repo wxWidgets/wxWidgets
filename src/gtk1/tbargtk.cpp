@@ -136,14 +136,10 @@ public:
                                                : (GdkBitmap *)NULL;
 #ifdef __WXGTK20__
             if (bitmap.HasPixbuf())
-                gtk_image_set_from_pixbuf(GTK_IMAGE(m_pixmap),
-                                          bitmap.GetPixbuf());
+                gtk_image_set_from_pixbuf( GTK_IMAGE(m_pixmap), bitmap.GetPixbuf() );
             else
-                gtk_image_set_from_pixmap(GTK_IMAGE(m_pixmap),
-                                          bitmap.GetPixmap(), mask);
-#else
-            gtk_pixmap_set(GTK_PIXMAP(m_pixmap), bitmap.GetPixmap(), mask);
 #endif // !__WXGTK20__
+                gtk_pixmap_set( GTK_PIXMAP(m_pixmap), bitmap.GetPixmap(), mask );
         }
     }
 
@@ -396,19 +392,24 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
 
 #ifdef __WXGTK20__
-            tool_pixmap = gtk_image_new();
-            tool->m_pixmap = tool_pixmap;
-            tool->SetPixmap(bitmap);
-#else
-            GdkPixmap *pixmap = bitmap.GetPixmap();
-
-            GdkBitmap *mask = (GdkBitmap *)NULL;
-            if ( bitmap.GetMask() )
-              mask = bitmap.GetMask()->GetBitmap();
-            
-            tool_pixmap = gtk_pixmap_new( pixmap, mask );
-            gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
+            if (bitmap.HasPixbuf())
+            {
+                tool_pixmap = gtk_image_new();
+                tool->m_pixmap = tool_pixmap;
+                tool->SetPixmap(bitmap);
+            }
+            else
 #endif
+            {
+                GdkPixmap *pixmap = bitmap.GetPixmap();
+
+                GdkBitmap *mask = (GdkBitmap *)NULL;
+                if ( bitmap.GetMask() )
+                    mask = bitmap.GetMask()->GetBitmap();
+            
+                tool_pixmap = gtk_pixmap_new( pixmap, mask );
+                gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
+            }
 
             gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
