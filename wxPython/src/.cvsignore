@@ -43,3 +43,4 @@ wxpc.exp
 wxpc.lib
 wxpc.res
 wxpc.res.save
+*.dsp

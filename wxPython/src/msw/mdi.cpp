@@ -100,6 +100,14 @@ static void *SwigwxMDIParentFrameTowxFrame(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxMDIParentFrameTowxTopLevelWindow(void *ptr) {
+    wxMDIParentFrame *src;
+    wxTopLevelWindow *dest;
+    src = (wxMDIParentFrame *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxMDIParentFrameTowxWindow(void *ptr) {
     wxMDIParentFrame *src;
     wxWindow *dest;
@@ -646,6 +654,14 @@ static void *SwigwxMDIChildFrameTowxFrame(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxMDIChildFrameTowxTopLevelWindow(void *ptr) {
+    wxMDIChildFrame *src;
+    wxTopLevelWindow *dest;
+    src = (wxMDIChildFrame *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxMDIChildFrameTowxWindow(void *ptr) {
     wxMDIChildFrame *src;
     wxWindow *dest;
@@ -1122,6 +1138,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxTopLevelWindow","_wxMDIChildFrame",SwigwxMDIChildFrameTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxMDIParentFrame",SwigwxMDIParentFrameTowxTopLevelWindow},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},

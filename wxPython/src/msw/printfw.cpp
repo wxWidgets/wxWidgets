@@ -2641,11 +2641,11 @@ static void *SwigwxPageSetupDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxPageSetupDialogTowxPanel(void *ptr) {
+static void *SwigwxPageSetupDialogTowxTopLevelWindow(void *ptr) {
     wxPageSetupDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxPageSetupDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -3511,11 +3511,11 @@ static void *SwigwxPrintDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxPrintDialogTowxPanel(void *ptr) {
+static void *SwigwxPrintDialogTowxTopLevelWindow(void *ptr) {
     wxPrintDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxPrintDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -5145,6 +5145,14 @@ static void *SwigwxPreviewFrameTowxFrame(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxPreviewFrameTowxTopLevelWindow(void *ptr) {
+    wxPreviewFrame *src;
+    wxTopLevelWindow *dest;
+    src = (wxPreviewFrame *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxPreviewFrameTowxWindow(void *ptr) {
     wxPreviewFrame *src;
     wxWindow *dest;
@@ -5464,8 +5472,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPanel","_wxPrintDialog",SwigwxPrintDialogTowxPanel},
-    { "_wxPanel","_wxPageSetupDialog",SwigwxPageSetupDialogTowxPanel},
+    { "_wxTopLevelWindow","_wxPreviewFrame",SwigwxPreviewFrameTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxPrintDialog",SwigwxPrintDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxTopLevelWindow},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
