@@ -9,7 +9,7 @@
 // RCS_ID:     $Id$
 // License:    see wxWindows license
 ////////////////////////////////////////////////////////////////////////////////
-#ifdef __GNUG__     
+#ifdef __GNUG__
 #pragma implementation "socket.h"
 // #pragma interface
 // #pragma implementation "socket.cpp"
@@ -53,6 +53,10 @@
 
 #include <sys/time.h>
 #include <unistd.h>
+
+#ifdef sun
+#include <sys/filio.h>
+#endif
 
 #endif // __UNIX__
 
@@ -183,7 +187,7 @@ public:
   wxSockWakeUp *auto_wakeup;
   wxSocketBase::wxRequestNotify type;
 };
- 
+
 
 /////////////////////////////////////////////////////////////////////////////
 // Some internal define
@@ -269,7 +273,7 @@ bool wxSocketBase::Close()
       while (node) {
         SockRequest *req = (SockRequest *)node->Data();
         req->done = TRUE;
-        
+
         n = node->Next();
         delete node;
         node = n;
@@ -328,7 +332,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, size_t nbytes)
 {
   SockMsg msg;
   size_t len, len2, sig;
-  
+
   Read((char *)&msg, sizeof(msg));
   if (m_lcount != sizeof(msg))
     return *this;
@@ -371,7 +375,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, size_t nbytes)
 wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
 {
   SockMsg msg;
-  
+
   msg.sig[0] = (char) 0xad;
   msg.sig[1] = (char) 0xde;
   msg.sig[2] = (char) 0xed;
@@ -385,7 +389,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
   if (Write((char *)&msg, sizeof(msg)).LastCount() < sizeof(msg))
     return *this;
   if (Write(buffer, nbytes).LastCount() < nbytes)
-    return *this; 
+    return *this;
 
   msg.sig[0] = (char) 0xed;
   msg.sig[1] = (char) 0xfe;
@@ -432,7 +436,7 @@ void wxSocketBase::Discard()
 
   SaveState();
   SetFlags((wxSockFlags)(NOWAIT | SPEED));
-  
+
   while (recv_size == MAX_BUFSIZE) {
     recv_size = Read(my_data, MAX_BUFSIZE).LastCount();
   }
@@ -459,7 +463,7 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 #else
   if (getpeername(m_fd, (struct sockaddr *)&my_addr, (unsigned int *)&len_addr) < 0)
 #endif
-    return FALSE; 
+    return FALSE;
 
   addr_man.Disassemble(&my_addr, len_addr);
   return TRUE;
@@ -510,7 +514,7 @@ void wxSocketBase::RestoreState()
     return;
 
   wxSockState *state = (wxSockState *)node->Data();
- 
+
   SetFlags(state->flags);
   m_neededreq = state->cbk_set;
   m_cbk       = state->cbk;
@@ -542,7 +546,7 @@ bool wxSocketBase::_Wait(long seconds, long microseconds, int type)
 
   if (seconds != -1)
     wakeup.Start((int)(seconds*1000 + (microseconds / 1000)), TRUE);
-  
+
   m_waitflags = 0x80 | type;
   while (m_waitflags & 0x80)
     PROCESS_EVENTS();
@@ -1054,7 +1058,7 @@ void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,
 
   SockRequest *buf = new SockRequest;
   wxSockWakeUp s_wake(NULL, (int *)&buf_timed_out, (int)TRUE);
-  
+
   m_wantbuf++;
   req_list[evt].Append(buf);
 
@@ -1103,17 +1107,17 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
 
   if (m_fd == INVALID_SOCKET)
     return;
-  
+
   int flag = 1;
   setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (char*)&flag, sizeof(int));
-  
+
   struct sockaddr *myaddr;
   size_t len;
-  
+
   addr_man.Build(myaddr, len);
   if (bind(m_fd, myaddr, addr_man.SockAddrLen()) < 0)
     return;
-  
+
   if (listen(m_fd, 5) < 0) {
     m_fd = INVALID_SOCKET;
     return;
@@ -1126,24 +1130,24 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
 bool wxSocketServer::AcceptWith(wxSocketBase& sock)
 {
   int fd2;
-  
+
   if ((fd2 = accept(m_fd, 0, 0)) < 0)
     return FALSE;
 
   struct linger linger;
   linger.l_onoff = 0;
   linger.l_linger = 1;
-  
+
   setsockopt(fd2, SOL_SOCKET, SO_LINGER, (char*)&linger, sizeof(linger));
-  
+
   int flag = 0;
   setsockopt(fd2, SOL_SOCKET, SO_KEEPALIVE, (char*)&flag, sizeof(int));
-  
+
   if (!(sock.m_flags & SPEED)) {
     unsigned long flag2 = 1;
     ioctl(fd2, FIONBIO, &flag2);
   }
- 
+
   sock.m_type = SOCK_INTERNAL;
   sock.m_fd = fd2;
   sock.m_connected = TRUE;
@@ -1205,21 +1209,21 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
     Close();
 
   m_fd = socket(addr_man.GetFamily(), SOCK_STREAM, 0);
-  
+
   if (m_fd < 0)
     return FALSE;
-  
+
   m_connected = FALSE;
 
   linger.l_onoff = 1;
-  linger.l_linger = 5;  
+  linger.l_linger = 5;
   setsockopt(m_fd, SOL_SOCKET, SO_LINGER, (char*)&linger, sizeof(linger));
-  
+
   // Stay in touch with the state of things...
-  
+
   unsigned long flag = 1;
   setsockopt(m_fd, SOL_SOCKET, SO_KEEPALIVE, (char*)&flag, sizeof(int));
-  
+
   // Disable the nagle algorithm, which delays sends till the
   // buffer is full (or a certain time period has passed?)...
 
@@ -1227,7 +1231,7 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
   flag = 1;
   setsockopt(m_fd, IPPROTO_TCP, TCP_NODELAY, (char*)&flag, sizeof(int));
 #endif
-  
+
   struct sockaddr *remote;
   size_t len;
 
@@ -1240,7 +1244,7 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
     flag = 1;
     ioctl(m_fd, FIONBIO, &flag);
   }
-  
+
   Notify(TRUE);
 
   m_connected = TRUE;
@@ -1250,11 +1254,11 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
 bool wxSocketClient::WaitOnConnect(long seconds)
 {
   int ret = _Wait(seconds, 0, REQ_CONNECT | REQ_LOST);
-  
+
   if (ret)
     m_connected = TRUE;
-  
-  return m_connected; 
+
+  return m_connected;
 }
 
 void wxSocketClient::OnRequest(wxRequestEvent evt)
@@ -1265,7 +1269,7 @@ void wxSocketClient::OnRequest(wxRequestEvent evt)
       return;
     }
     m_waitflags = 0x40;
-    m_connected = TRUE; 
+    m_connected = TRUE;
     OldOnNotify(EVT_CONNECT);
     DestroyCallbacks();
     return;
@@ -1416,7 +1420,7 @@ void wxSocketHandler::UnRegister(wxSocketBase* sock)
 
   for (node = socks->First(); node; node = node->Next()) {
     wxSocketBase* s = (wxSocketBase*)node->Data();
-    
+
     if (s == sock) {
       delete node;
       sock->DestroyCallbacks();
