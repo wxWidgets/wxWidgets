@@ -73,16 +73,32 @@ private:
     // return the string containing the error message for the given err code
     wxString GetErrorMsg(int errorcode) const;
 
+    // init the members
+    void Init()
+    {
+        m_isCompiled = FALSE;
+        m_Matches = NULL;
+        m_nMatches = 0;
+    }
+
     // free the RE if compiled
     void Free()
     {
         if ( IsValid() )
         {
             regfree(&m_RegEx);
-
-            m_isCompiled = FALSE;
         }
+
+        delete [] m_Matches;
     }
+
+    // free the RE if any and reinit the members
+    void Reinit()
+    {
+        Free();
+        Init();
+    }
+
 
     // compiled RE
     regex_t     m_RegEx;
@@ -105,16 +121,12 @@ private:
 
 wxRegExImpl::wxRegExImpl()
 {
-    m_isCompiled = FALSE;
-    m_Matches = NULL;
-    m_nMatches = 0;
+    Init();
 }
 
 wxRegExImpl::~wxRegExImpl()
 {
     Free();
-
-    delete [] m_Matches;
 }
 
 wxString wxRegExImpl::GetErrorMsg(int errorcode) const
@@ -149,7 +161,7 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
 
 bool wxRegExImpl::Compile(const wxString& expr, int flags)
 {
-    Free();
+    Reinit();
 
     // translate our flags to regcomp() ones
     wxASSERT_MSG( !(flags &
