@@ -88,6 +88,7 @@ private:
     CPPUNIT_TEST_SUITE( FileNameTestCase );
         CPPUNIT_TEST( TestConstruction );
         CPPUNIT_TEST( TestSplit );
+        CPPUNIT_TEST( TestSetPath );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -132,5 +133,16 @@ void FileNameTestCase::TestSplit()
         CPPUNIT_ASSERT( name == fni.name );
         CPPUNIT_ASSERT( ext == fni.ext );
     }
+}
+
+void FileNameTestCase::TestSetPath()
+{
+    wxFileName fn(_T("d:\\test\\foo.bar"), wxPATH_DOS);
+    fn.SetPath(_T("c:\\temp"));
+    CPPUNIT_ASSERT( fn == _T("c:\\temp\\foo.bar") );
+
+    fn = _T("/usr/bin/ls");
+    fn.SetPath(_T("/usr/local/bin"));
+    CPPUNIT_ASSERT( fn == _T("/usr/local/bin/ls") );
 }
 
