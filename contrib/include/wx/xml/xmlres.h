@@ -45,7 +45,6 @@ class WXDLLEXPORT wxXmlResourceDataRecord
     
         wxString File;
         wxXmlDocument *Doc;
-        bool DocOwned;
         wxDateTime Time;
 };
 
@@ -110,7 +109,7 @@ class WXDLLEXPORT wxXmlResource : public wxObject
         wxPanel *LoadPanel(wxWindow *parent, const wxString& name);
         bool LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name);
 
-        // Load bitmap or icon resource from file:
+        // Loads bitmap or icon resource from file:
         wxBitmap LoadBitmap(const wxString& name);
         wxIcon LoadIcon(const wxString& name);
 

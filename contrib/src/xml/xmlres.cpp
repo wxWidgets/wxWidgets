@@ -54,12 +54,6 @@ wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale = TRUE)
 
 wxXmlResource::~wxXmlResource()
 {
-    for (size_t i = 0; i < m_Data.GetCount(); i++)
-    {
-        if (!m_Data[i].DocOwned) m_Data[i].Doc = NULL;
-        // we don't want it to be deleted
-    }
-    
     ClearHandlers();
 }
 
@@ -97,7 +91,6 @@ bool wxXmlResource::Load(const wxString& filemask)
                 drec = new wxXmlResourceDataRecord;
                 drec->File = fnd2;
                 m_Data.Add(drec);
-                drec->DocOwned = TRUE;
                 fnd2 = fs2.FindNext();
             }
         }
@@ -106,7 +99,6 @@ bool wxXmlResource::Load(const wxString& filemask)
         {
             drec = new wxXmlResourceDataRecord;
             drec->File = fnd;
-            drec->DocOwned = TRUE;
             m_Data.Add(drec);
         }
 
@@ -268,8 +260,6 @@ void wxXmlResource::UpdateResources()
 
     for (size_t i = 0; i < m_Data.GetCount(); i++)
     {
-        if (!m_Data[i].DocOwned) continue;
-    
         modif = (m_Data[i].Doc == NULL);
 
         if (!modif)
