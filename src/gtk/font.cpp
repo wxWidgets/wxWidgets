@@ -886,13 +886,13 @@ extern GdkFont *GtkGetDefaultGuiFont()
         GtkStyle *def = gtk_rc_get_style( widget );
         if (def)
         {
-            g_systemDefaultGuiFont = gdk_font_ref( GET_STYLE_FONT(def) );
+            g_systemDefaultGuiFont = gdk_font_ref( def->font );
         }
         else
         {
             def = gtk_widget_get_default_style();
             if (def)
-                g_systemDefaultGuiFont = gdk_font_ref( GET_STYLE_FONT(def) );
+                g_systemDefaultGuiFont = gdk_font_ref( def->font );
         }
         gtk_widget_destroy( widget );
     }
