@@ -1,6 +1,6 @@
 %define pref /usr
-%define ver 2.3.0
-%define rel 0
+%define ver 2.3.1
+%define rel 1
 
 Summary: wxBase library - non-GUI support classes of wxWindows toolkit
 Name: wxBase

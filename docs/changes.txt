@@ -1,6 +1,20 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.3.1
+-----
+
+All (GUI):
+
+- Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the
+  user code can get access to the edit control when it is created, (to
+  push on a custom event handler for example.)
+- Added wxTextAttr class and SetStyle, SetDefaultStyle and
+  GetDefaultStyle methods to wxTextCtrl.
+
+
+
+
 2.3.0
 -----
 

@@ -472,7 +472,7 @@ dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=3
-WX_RELEASE_NUMBER=0
+WX_RELEASE_NUMBER=1
 
 WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
 WX_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
@@ -3054,7 +3054,7 @@ fi
 TIFF_INCLUDE=
 if test "$wxUSE_LIBTIFF" = "yes" -o "$wxUSE_LIBTIFF" = "sys" ; then
   AC_DEFINE(wxUSE_LIBTIFF)
-  if test "$wxUSE_LIBTIFF" = "yes" ; then  
+  if test "$wxUSE_LIBTIFF" = "yes" ; then
     TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
   else
     TIFF_LINK=
@@ -4177,12 +4177,12 @@ if test -d include; then
     if test -d include/wx; then
         if test -d include/wx/${TOOLKIT_DIR}; then
             if test -f include/wx/${TOOLKIT_DIR}/setup.h; then
-                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h 
+                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h
             fi
         fi
     fi
 fi
-            
+
 AC_CONFIG_HEADER(setup.h:setup.h.in)
 
 dnl some more GUI only things
@@ -4212,10 +4212,10 @@ AC_OUTPUT([
             chmod +x wx-config
             mv wx-config wx${TOOLKIT_NAME}-config
             ${LN_S} wx${TOOLKIT_NAME}-config wx-config
-            
+
             dnl the debian build process wants setup.h in the lib subdir so we
             dnl can pretend wxWin is already installed, so we *copy* it there
-         
+
             if test ! -d lib; then
               mkdir lib
             fi
@@ -4249,7 +4249,7 @@ AC_OUTPUT([
             if test -f setup.h; then
                 cp -fp setup.h include/wx/${TOOLKIT_DIR}/setup.h
             fi
-            
+
           ],
           [
             TOOLKIT_DIR="${TOOLKIT_DIR}"

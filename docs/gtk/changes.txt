@@ -2,6 +2,8 @@ This file contains the detailed log of wxGTK-specific changes, please see
 doc/changes.txt for the concise log of important changes in all wxWindows
 ports.
 
+*** wxWindows 2.3.1 ***
+
 *** wxWindows 2.3.0 ***
 
 scaling for map modes other than wxMM_TEXT works correctly (Derry Bryson)
