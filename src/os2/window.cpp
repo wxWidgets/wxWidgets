@@ -2466,11 +2466,14 @@ MRESULT wxWindowOS2::OS2WindowProc(
             if (IsKindOf(CLASSINFO(wxDialog)))
             {
                 PSWP                pSwp = (PSWP)PVOIDFROMMP(wParam);
+                PSWP                pSwp2 = pSwp++;
 
-                bProcessed = HandleSize( pSwp->cx
-                                        ,pSwp->cy
-                                        ,(WXUINT)lParam
-                                       );
+                if (!(pSwp->cx == pSwp2->cx &&
+                      pSwp->cy == pSwp2->cy))
+                    bProcessed = HandleSize( pSwp->cx
+                                            ,pSwp->cy
+                                            ,(WXUINT)lParam
+                                           );
             }
             break;
 

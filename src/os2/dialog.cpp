@@ -200,7 +200,11 @@ void wxDialog::DoShowModal()
     //
     wxASSERT_MSG(!m_pWindowDisabler, _T("disabling windows twice?"));
 
-    m_pWindowDisabler = new wxWindowDisabler(this);
+    //
+    // Disables other app windows and window proc message processing
+    // until WinDismissDlg called
+    //
+    ::WinProcessDlg((HWND)GetHwnd());
 
     //
     // Enter the modal loop
@@ -243,7 +247,8 @@ bool wxDialog::Show(
         //
         // If we had disabled other app windows, reenable them back now because
         // if they stay disabled Windows will activate another window (one
-        // which is enabled, anyhow) and we will lose activation
+        // which is enabled, anyhow) and we will lose activation.  We really don't
+        // do this in OS/2 since PM does this for us.
         //
         if (m_pWindowDisabler)
         {
@@ -326,6 +331,7 @@ void wxDialog::EndModal(
 {
     SetReturnCode(nRetCode);
     Show(FALSE);
+    ::WinDismissDlg((HWND)GetHwnd(), nRetCode);
 } // end of wxDialog::EndModal
 
 // ----------------------------------------------------------------------------
