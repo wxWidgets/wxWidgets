@@ -108,7 +108,7 @@ public:
 
     // Associates the given window with window 2, drawing the appropriate sash
     // and changing the split mode.
-    // Does nothing and returns FALSE if the window is already split.
+    // Does nothing and returns false if the window is already split.
     // A sashPosition of 0 means choose a default sash position,
     // negative sashPosition specifies the size of right/lower pane as it's
     // absolute value rather than the size of left/upper pane.
@@ -145,7 +145,7 @@ public:
     int GetBorderSize() const;
 
     // Set the sash position
-    void SetSashPosition(int position, bool redraw = TRUE);
+    void SetSashPosition(int position, bool redraw = true);
 
     // Gets the sash position
     int GetSashPosition() const { return m_sashPosition; }
@@ -162,7 +162,7 @@ public:
     virtual int OnSashPositionChanging(int newSashPosition);
 
     // Called when the sash position is about to be changed, return
-    // FALSE from here to prevent the change from taking place.
+    // false from here to prevent the change from taking place.
     // Repositions sash to minimum position if pane would be too small.
     // newSashPosition here is always positive or zero.
     virtual bool OnSashPositionChange(int newSashPosition);
@@ -213,7 +213,7 @@ protected:
     void OnSetCursor(wxSetCursorEvent& event);
 #endif // wxMSW
 
-    // send the given event, return FALSE if the event was processed and vetoed
+    // send the given event, return false if the event was processed and vetoed
     // by the user code
     inline bool DoSendEvent(wxSplitterEvent& event);
 
@@ -239,7 +239,7 @@ protected:
 
     // set the real sash position, sashPos here must be positive
     //
-    // returns TRUE if the sash position has been changed, FALSE otherwise
+    // returns true if the sash position has been changed, false otherwise
     bool DoSetSashPosition(int sashPos);
 
     // set the sash position and send an event about it having been changed
@@ -272,10 +272,11 @@ protected:
     wxCursor    m_sashCursorNS;
     wxPen      *m_sashTrackerPen;
 
-    // when in live mode, set this to TRUE to resize children in idle
+    // when in live mode, set this to true to resize children in idle
     bool        m_needUpdating:1;
     bool        m_permitUnsplitAlways:1;
     bool        m_isHot:1;
+    bool        m_checkRequestedSashPosition:1;
 
 private:
     WX_DECLARE_CONTROL_CONTAINER();
