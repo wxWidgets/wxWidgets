@@ -135,6 +135,11 @@ public:
     // default ctor (default copy ctor is ok)
     wxNativeFontInfo() { Init(); }
 
+#if wxUSE_PANGO
+    wxNativeFontInfo(const wxNativeFontInfo& info);
+    ~wxNativeFontInfo();
+#endif
+
     // reset to the default state
     void Init();
 

@@ -204,7 +204,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     if ( style && style->font_desc )
     {  
         wxNativeFontInfo info;  
-        info.description = style->font_desc;  
+        info.description = pango_font_description_copy(style->font_desc);
         attr.font = wxFont(info);  
     }  
     else  

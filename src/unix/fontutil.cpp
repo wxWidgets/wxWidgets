@@ -57,6 +57,20 @@ void wxNativeFontInfo::Init()
     description = NULL;
 }
 
+wxNativeFontInfo::wxNativeFontInfo(const wxNativeFontInfo& info)
+{
+    if (info.description)
+        description = pango_font_description_copy(info.description);
+    else
+        description = NULL;            
+}
+
+wxNativeFontInfo::~wxNativeFontInfo()
+{
+    if (description)
+        pango_font_description_free(description);
+}
+
 int wxNativeFontInfo::GetPointSize() const
 {
     return pango_font_description_get_size( description ) / PANGO_SCALE;

@@ -308,7 +308,8 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 if ( def && def->font_desc )
                 {  
                     wxNativeFontInfo info;  
-                    info.description = def->font_desc;  
+                    info.description = 
+                        pango_font_description_copy(def->font_desc);
                     gs_objects.m_fontSystem = wxFont(info);  
                 }  
                 else  
