@@ -5225,6 +5225,10 @@ class TreeEvent(_core.NotifyEvent):
         """SetToolTip(self, String toolTip)"""
         return _controls_.TreeEvent_SetToolTip(*args, **kwargs)
 
+    def GetToolTip(*args, **kwargs):
+        """GetToolTip(self) -> String"""
+        return _controls_.TreeEvent_GetToolTip(*args, **kwargs)
+
 
 class TreeEventPtr(TreeEvent):
     def __init__(self, this):

@@ -27819,6 +27819,38 @@ static PyObject *_wrap_TreeEvent_SetToolTip(PyObject *, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_TreeEvent_GetToolTip(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTreeEvent *arg1 = (wxTreeEvent *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TreeEvent_GetToolTip",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxTreeEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetToolTip();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * TreeEvent_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -35475,6 +35507,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeEvent_IsEditCancelled", (PyCFunction) _wrap_TreeEvent_IsEditCancelled, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeEvent_SetEditCanceled", (PyCFunction) _wrap_TreeEvent_SetEditCanceled, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeEvent_SetToolTip", (PyCFunction) _wrap_TreeEvent_SetToolTip, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeEvent_GetToolTip", (PyCFunction) _wrap_TreeEvent_GetToolTip, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeEvent_swigregister", TreeEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_TreeCtrl", (PyCFunction) _wrap_new_TreeCtrl, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreTreeCtrl", (PyCFunction) _wrap_new_PreTreeCtrl, METH_VARARGS | METH_KEYWORDS, NULL},

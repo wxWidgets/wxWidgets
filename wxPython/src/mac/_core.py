@@ -7389,6 +7389,14 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetForegroundColour(*args, **kwargs)
 
+    def InheritsBackgroundColour(*args, **kwargs):
+        """InheritsBackgroundColour(self) -> bool"""
+        return _core_.Window_InheritsBackgroundColour(*args, **kwargs)
+
+    def UseBgCol(*args, **kwargs):
+        """UseBgCol(self) -> bool"""
+        return _core_.Window_UseBgCol(*args, **kwargs)
+
     def SetBackgroundStyle(*args, **kwargs):
         """
         SetBackgroundStyle(self, int style) -> bool
