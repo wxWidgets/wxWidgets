@@ -1,13 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        common/timercmn.cpp
 // Purpose:     Common timer implementation
-// Author:      Julian Smart (original version)
-// Modified by: Vadim Zeitlin on 12.11.99 to get rid of all ifdefs
-//              Sylvain Bougnoux to add wxStopWatch class
-//
-//              Completely rewritten from scratch on Dic/99 by
-//              Guillermo Rodriguez <guille@iies.es>
-//
+// Author:
+//    Original version by Julian Smart
+//    Vadim Zeitlin got rid of all ifdefs (11.12.99)
+//    Sylvain Bougnoux added wxStopWatch class
+//    Guillermo Rodriguez <guille@iies.es> rewrote from scratch (Dic/99)
+// Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
