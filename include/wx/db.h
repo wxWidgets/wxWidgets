@@ -371,7 +371,7 @@ private:
     bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const char *errMsg, const char *SQLState);
-
+#if !wxODBC_BACKWARD_COMPATABILITY
     // ODBC handles
     HENV  henv;        // ODBC Environment handle
     HDBC  hdbc;        // ODBC DB Connection handle
@@ -380,7 +380,35 @@ private:
     //Error reporting mode
     bool silent;
 
+    // Number of Ctable objects connected to this db object.  FOR INTERNAL USE ONLY!!!
+    unsigned int nTables;
+
+    // Information about logical data types VARCHAR, INTEGER, FLOAT and DATE.
+	 //
+    // This information is obtained from the ODBC driver by use of the
+    // SQLGetTypeInfo() function.  The key piece of information is the
+    // type name the data source uses for each logical data type.
+    // e.g. VARCHAR; Oracle calls it VARCHAR2.
+    wxDbSqlTypeInfo typeInfVarchar;
+    wxDbSqlTypeInfo typeInfInteger;
+    wxDbSqlTypeInfo typeInfFloat;
+    wxDbSqlTypeInfo typeInfDate;
+#endif
+
 public:
+#if wxODBC_BACKWARD_COMPATABILITY
+    // ODBC handles
+    HENV  henv;        // ODBC Environment handle
+    HDBC  hdbc;        // ODBC DB Connection handle
+    HSTMT hstmt;       // ODBC Statement handle
+
+    //Error reporting mode
+    bool silent;
+
+    // Number of Ctable objects connected to this db object.  FOR INTERNAL USE ONLY!!!
+    unsigned int nTables;
+#endif
+
     // The following structure contains database information gathered from the
     // datasource when the datasource is first opened.
     struct
@@ -425,16 +453,18 @@ public:
     SDWORD nativeError;
     wxChar sqlState[20];
 
-    // Number of Ctable objects connected to this db object.  FOR INTERNAL USE ONLY!!!
-    unsigned int nTables;
-
+#if wxODBC_BACKWARD_COMPATABILITY
     // Information about logical data types VARCHAR, INTEGER, FLOAT and DATE.
 	 //
     // This information is obtained from the ODBC driver by use of the
     // SQLGetTypeInfo() function.  The key piece of information is the
     // type name the data source uses for each logical data type.
     // e.g. VARCHAR; Oracle calls it VARCHAR2.
-    wxDbSqlTypeInfo typeInfVarchar, typeInfInteger, typeInfFloat, typeInfDate;
+    wxDbSqlTypeInfo typeInfVarchar;
+    wxDbSqlTypeInfo typeInfInteger;
+    wxDbSqlTypeInfo typeInfFloat;
+    wxDbSqlTypeInfo typeInfDate;
+#endif
 
     // Public member functions
     wxDb(HENV &aHenv, bool FwdOnlyCursors=(bool)TRUE);
@@ -466,12 +496,25 @@ public:
     HENV         GetHENV(void)         {return henv;}
     HDBC         GetHDBC(void)         {return hdbc;}
     HSTMT        GetHSTMT(void)        {return hstmt;}
+    int          GetTableCount()       {return nTables;};  // number of tables using this connection
+    wxDbSqlTypeInfo GetTypeInfVarchar(){return typeInfVarchar;}
+    wxDbSqlTypeInfo GetTypeInfInteger(){return typeInfInteger;}
+    wxDbSqlTypeInfo GetTypeInfFloat()  {return typeInfFloat;}
+    wxDbSqlTypeInfo GetTypeInfDate()   {return typeInfDate;}
+
     bool         TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
     void         LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
+    void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME, bool append = FALSE);
     bool         WriteSqlLog(const wxChar *logMsg);
     wxDBMS       Dbms(void);
-    bool         FwdOnlyCursors(void) {return fwdOnlyCursors;}
+    bool         FwdOnlyCursors(void)  {return fwdOnlyCursors;}
+
+    // These two functions are provided strictly for use by wxDbTable.
+    // DO NOT USE THESE FUNCTIONS, OR MEMORY LEAKS MAY OCCUR
+    void         incrementTableCount() { nTables++; return; }
+    void         decrementTableCount() { nTables--; return; }
+
 };  // wxDb
 
 
@@ -528,7 +571,7 @@ bool WXDLLEXPORT wxDbGetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsD
 
 
 // Change this to 0 to remove use of all deprecated functions
-#if 1
+#if wxODBC_BACKWARD_COMPATABILITY
 //#################################################################################
 //############### DEPRECATED functions for backward compatability #################
 //#################################################################################

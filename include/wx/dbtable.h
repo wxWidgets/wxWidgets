@@ -108,106 +108,189 @@ private:
     bool execUpdate(const char *pSqlStmt);
     bool query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt = 0);
 
-public:
-    // Pointer to the database object this table belongs to
-    wxDb     *pDb;
+#if !wxODBC_BACKWARD_COMPATABILITY
+// these were public
+    // Where, Order By and From clauses
+    wxString    where;               // Standard SQL where clause, minus the word WHERE
+    wxString    orderBy;             // Standard SQL order by clause, minus the ORDER BY
+    wxString    from;                // Allows for joins in a wxDbTable::Query().  Format: ",tbl,tbl..."
 
     // ODBC Handles
-    HENV      henv;           // ODBC Environment handle
-    HDBC      hdbc;           // ODBC DB Connection handle
-    HSTMT     hstmt;          // ODBC Statement handle
-    HSTMT    *hstmtDefault;   // Default cursor
-    HSTMT     hstmtInsert;    // ODBC Statement handle used specifically for inserts
-    HSTMT     hstmtDelete;    // ODBC Statement handle used specifically for deletes
-    HSTMT     hstmtUpdate;    // ODBC Statement handle used specifically for updates
-    HSTMT     hstmtInternal;  // ODBC Statement handle used internally only
-    HSTMT    *hstmtCount;     // ODBC Statement handle used by Count() function (No binding of columns)
+    HENV        henv;           // ODBC Environment handle
+    HDBC        hdbc;           // ODBC DB Connection handle
+    HSTMT       hstmt;          // ODBC Statement handle
+    HSTMT      *hstmtDefault;   // Default cursor
+    HSTMT       hstmtInsert;    // ODBC Statement handle used specifically for inserts
+    HSTMT       hstmtDelete;    // ODBC Statement handle used specifically for deletes
+    HSTMT       hstmtUpdate;    // ODBC Statement handle used specifically for updates
+    HSTMT       hstmtInternal;  // ODBC Statement handle used internally only
+    HSTMT      *hstmtCount;     // ODBC Statement handle used by Count() function (No binding of columns)
+
+    // Flags
+    bool        selectForUpdate;
+
+    // Pointer to the database object this table belongs to
+    wxDb       *pDb;
 
     // Table Inf.
-    char      tableName[DB_MAX_TABLE_NAME_LEN+1];        // Table name
-    char      queryTableName[DB_MAX_TABLE_NAME_LEN+1];   // Query Table Name
-    int       noCols;                                    // # of columns in the table
-    bool      queryOnly;                                 // Query Only, no inserts, updates or deletes
-
-    char      tablePath[wxDB_PATH_MAX];                  // needed for dBase tables
+    char        tablePath[wxDB_PATH_MAX];                  // needed for dBase tables
+    char        tableName[DB_MAX_TABLE_NAME_LEN+1];        // Table name
+    char        queryTableName[DB_MAX_TABLE_NAME_LEN+1];   // Query Table Name
+    int         noCols;                                    // # of columns in the table
+    bool        queryOnly;                                 // Query Only, no inserts, updates or deletes
 
     // Column Definitions
     wxDbColDef *colDefs;         // Array of wxDbColDef structures
-
+#endif
+public:
+#if wxODBC_BACKWARD_COMPATABILITY
     // Where, Order By and From clauses
-    char     *where;               // Standard SQL where clause, minus the word WHERE
-    char     *orderBy;             // Standard SQL order by clause, minus the ORDER BY
-    char     *from;                // Allows for joins in a wxDbTable::Query().  Format: ",tbl,tbl..."
+    char       *where;          // Standard SQL where clause, minus the word WHERE
+    char       *orderBy;        // Standard SQL order by clause, minus the ORDER BY
+    char       *from;           // Allows for joins in a wxDbTable::Query().  Format: ",tbl,tbl..."
+
+    // ODBC Handles
+    HENV        henv;           // ODBC Environment handle
+    HDBC        hdbc;           // ODBC DB Connection handle
+    HSTMT       hstmt;          // ODBC Statement handle
+    HSTMT      *hstmtDefault;   // Default cursor
+    HSTMT       hstmtInsert;    // ODBC Statement handle used specifically for inserts
+    HSTMT       hstmtDelete;    // ODBC Statement handle used specifically for deletes
+    HSTMT       hstmtUpdate;    // ODBC Statement handle used specifically for updates
+    HSTMT       hstmtInternal;  // ODBC Statement handle used internally only
+    HSTMT      *hstmtCount;     // ODBC Statement handle used by Count() function (No binding of columns)
 
     // Flags
-    bool      selectForUpdate;
+    bool        selectForUpdate;
 
+    // Pointer to the database object this table belongs to
+    wxDb       *pDb;
+
+    // Table Inf.
+    char        tablePath[wxDB_PATH_MAX];                  // needed for dBase tables
+    char        tableName[DB_MAX_TABLE_NAME_LEN+1];        // Table name
+    char        queryTableName[DB_MAX_TABLE_NAME_LEN+1];   // Query Table Name
+    int         noCols;                                    // # of columns in the table
+    bool        queryOnly;                                 // Query Only, no inserts, updates or deletes
+
+    // Column Definitions
+    wxDbColDef *colDefs;         // Array of wxDbColDef structures
+#endif
     // Public member functions
     wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
-            const char *qryTblName = 0, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath=NULL);
+              const char *qryTblName = 0, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath=NULL);
     virtual ~wxDbTable();
-    bool    Open(void);
-    bool    CreateTable(bool attemptDrop=TRUE);
-    bool    DropTable(void);
-    bool    CreateIndex(const char * idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
-    bool    DropIndex(const char * idxName);
-    bool    CloseCursor(HSTMT cursor);
-    int     Insert(void);
-    bool    Update(void);
-    bool    Update(const char *pSqlStmt);
-    bool    UpdateWhere(const char *pWhereClause);
-    bool    Delete(void);
-    bool    DeleteWhere(const char *pWhereClause);
-    bool    DeleteMatching(void);
-    virtual bool Query(bool forUpdate = FALSE, bool distinct = FALSE);
-    bool    QueryBySqlStmt(const char *pSqlStmt);
-    bool    QueryMatching(bool forUpdate = FALSE, bool distinct = FALSE);
-    bool    QueryOnKeyFields(bool forUpdate = FALSE, bool distinct = FALSE);
-    bool    GetNext(void)   { return(getRec(SQL_FETCH_NEXT));  }
-    bool    operator++(int) { return(getRec(SQL_FETCH_NEXT));  }
+
+    bool            Open(void);
+    bool            CreateTable(bool attemptDrop=TRUE);
+    bool            DropTable(void);
+    bool            CreateIndex(const char * idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
+    bool            DropIndex(const char * idxName);
+
+// Accessors
+
+    // The member variables returned by these accessors are all
+    // set when the wxDbTable instance is createand cannot be 
+    // changed, hence there is no corresponding SetXxxx function
+	 wxDb           *GetDb()              { return pDb; }
+	 const char     *GetTableName()       { return tableName; }
+	 const char     *GetQueryTableName()  { return queryTableName; }
+	 const char     *GetTablePath()       { return tablePath; }
+
+    int             GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
+
+	 const char     *GetFromClause()      { return from; }
+	 const char     *GetOrderByClause()   { return orderBy; }
+	 const char     *GetWhereClause()     { return where; }
+
+	 bool            IsQueryOnly()        { return queryOnly; }
+#if wxODBC_BACKWARD_COMPATABILITY
+    void            SetFromClause(const char *From) { from = (char *)From; }
+	 void            SetOrderByClause(const char *OrderBy) { orderBy = (char *)OrderBy; }
+	 void            SetWhereClause(const char *Where) { where = (char *)Where; }
+#else
+	 void            SetFromClause(const wxString& From) { from = From; }
+	 void            SetOrderByClause(const wxString& OrderBy) { orderBy = OrderBy; }
+	 void            SetWhereClause(const wxString& Where) { where = Where; }
+#endif
+    int             Insert(void);
+    bool            Update(void);
+    bool            Update(const char *pSqlStmt);
+    bool            UpdateWhere(const char *pWhereClause);
+    bool            Delete(void);
+    bool            DeleteWhere(const char *pWhereClause);
+    bool            DeleteMatching(void);
+    virtual bool    Query(bool forUpdate = FALSE, bool distinct = FALSE);
+    bool            QueryBySqlStmt(const char *pSqlStmt);
+    bool            QueryMatching(bool forUpdate = FALSE, bool distinct = FALSE);
+    bool            QueryOnKeyFields(bool forUpdate = FALSE, bool distinct = FALSE);
+    bool            Refresh(void);
+    bool            GetNext(void)   { return(getRec(SQL_FETCH_NEXT));  }
+    bool            operator++(int) { return(getRec(SQL_FETCH_NEXT));  }
 
     /***** These four functions only work with wxDb instances that are defined  *****
      ***** as not being FwdOnlyCursors                                          *****/
-    bool    GetPrev(void);
-    bool    operator--(int);
-    bool    GetFirst(void);
-    bool    GetLast(void);
+    bool            GetPrev(void);
+    bool            operator--(int);
+    bool            GetFirst(void);
+    bool            GetLast(void);
 
-    bool    IsCursorClosedOnCommit(void);
-    bool    IsColNull(int colNo);
-    UWORD   GetRowNum(void);
-    void    GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct);
-    void    GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = 0);
-    void    GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = 0);
-    void    GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName = 0, bool useLikeComparison=FALSE);
-    bool    CanSelectForUpdate(void);
-    bool    CanUpdByROWID(void);
-    void    ClearMemberVars(void);
-    bool    SetQueryTimeout(UDWORD nSeconds);
-    void    SetColDefs (int index, const char *fieldName, int dataType, void *pData, int cType,
-                        int size, bool keyField = FALSE, bool upd = TRUE,
-                        bool insAllow = TRUE, bool derivedCol = FALSE);
-    wxDbColDataPtr*   SetColDefs (wxDbColInf *colInfs, ULONG numCols);
+    bool            IsCursorClosedOnCommit(void);
+    UWORD           GetRowNum(void);
 
-    HSTMT  *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE);
-    bool    DeleteCursor(HSTMT *hstmtDel);
-    void    SetCursor(HSTMT *hstmtActivate = (void **) wxDB_DEFAULT_CURSOR);
-    HSTMT   GetCursor(void) { return(hstmt); }
-    ULONG   Count(const char *args="*");
-    int     DB_STATUS(void) { return(pDb->DB_STATUS); }
-    bool    Refresh(void);
-    bool    SetNull(int colNo);
-    bool    SetNull(const char *colName);
+    void            BuildSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct);
+    void            BuildDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = 0);
+    void            BuildUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = 0);
+    void            BuildWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName = 0, bool useLikeComparison=FALSE);
+#if wxODBC_BACKWARD_COMPATABILITY
+// The following member functions are deprecated.  You should use the BuildXxxxxStmt functions (above)
+    void            GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
+                           { BuildSelectStmt(pSqlStmt,typeOfSelect,distinct); }
+    void            GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = 0)
+                           { BuildDeleteStmt(pSqlStmt,typeOfDel,pWhereClause); }
+    void            GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = 0)
+                           { BuildUpdateStmt(pSqlStmt,typeOfUpd,pWhereClause); }
+    void            GetWhereClause(char *pWhereClause, int typeOfWhere, 
+                                   const char *qualTableName = 0, bool useLikeComparison=FALSE)
+                           { BuildWhereClause(pWhereClause,typeOfWhere,qualTableName,useLikeComparison); }
+#endif
+    bool            CanSelectForUpdate(void);
+    bool            CanUpdByROWID(void);
+    void            ClearMemberVars(void);
+    bool            SetQueryTimeout(UDWORD nSeconds);
+
+    wxDbColDef     *GetColDefs() { return colDefs; }
+    void            SetColDefs(int index, const char *fieldName, int dataType, void *pData, int cType,
+                               int size, bool keyField = FALSE, bool upd = TRUE,
+                               bool insAllow = TRUE, bool derivedCol = FALSE);
+    wxDbColDataPtr *SetColDefs(wxDbColInf *colInfs, ULONG numCols);
+
+    bool            CloseCursor(HSTMT cursor);
+    bool            DeleteCursor(HSTMT *hstmtDel);
+    void            SetCursor(HSTMT *hstmtActivate = (void **) wxDB_DEFAULT_CURSOR);
+    HSTMT           GetCursor(void) { return(hstmt); }
+    HSTMT          *GetNewCursor(bool setCursor = FALSE, bool bindColumns = TRUE);
+#if wxODBC_BACKWARD_COMPATABILITY
+// The following member function is deprecated.  You should use the GetNewCursor
+    HSTMT          *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE) {  return GetNewCursor(setCursor,bindColumns); }
+#endif
+
+    ULONG           Count(const char *args="*");
+    int             DB_STATUS(void) { return(pDb->DB_STATUS); }
+
+    bool            IsColNull(int colNo);
+    bool            SetNull(int colNo);
+    bool            SetNull(const char *colName);
 
 #ifdef __WXDEBUG__
-    ULONG   GetTableID() { return tableID; };
+    ULONG           GetTableID() { return tableID; }
 #endif
 
 };  // wxDbTable
 
 
 // Change this to 0 to remove use of all deprecated functions
-#if 1
+#if wxODBC_BACKWARD_COMPATABILITY
 //#################################################################################
 //############### DEPRECATED functions for backward compatability #################
 //#################################################################################
@@ -225,8 +308,6 @@ const int   ROWID           = wxDB_ROWID_LEN;
 const int   DEFAULT_CURSOR  = wxDB_DEFAULT_CURSOR;
 const bool  QUERY_ONLY      = wxDB_QUERY_ONLY;
 const bool  DISABLE_VIEW    = wxDB_DISABLE_VIEW;
-
-
 #endif
 
 #endif
