@@ -31,8 +31,9 @@ public:
         m_pos = 0;
     }
 
-protected:
     virtual size_t GetSize() const { return m_str.length(); }
+
+protected:
     virtual off_t OnSysSeek(off_t ofs, wxSeekMode mode);
     virtual off_t OnSysTell() const;
     virtual size_t OnSysRead(void *buffer, size_t size);
