@@ -44,7 +44,7 @@ public:
 
     virtual ~wxDrawObject() { }
 
-    void Draw(const wxDCBase& dc) const { }
+    virtual void Draw(wxDCBase& dc) const { }
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
