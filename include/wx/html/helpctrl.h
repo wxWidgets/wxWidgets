@@ -51,7 +51,7 @@ class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
         }
         bool KeywordSearch(const wxString& keyword)
         {
-            CreateHelpWindow(); return KeywordSearch(keyword);
+            CreateHelpWindow(); return m_helpFrame->KeywordSearch(keyword);
         }
         wxHtmlHelpFrame* GetFrame() { return m_helpFrame; }
         void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString)
