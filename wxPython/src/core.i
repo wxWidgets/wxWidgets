@@ -86,6 +86,7 @@ MAKE_CONST_WXSTRING(EmptyString);
 %include _evthandler.i
 %include _event.i
 %include _app.i
+%include _evtloop.i
 %include _accel.i
 %include _window.i
 %include _validator.i

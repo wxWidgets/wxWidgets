@@ -84,6 +84,33 @@ wx.Sizer.Show (and Hide) now take an optional parameter specifying if
 the item to be shown should be searched for recursivly in subsizers,
 and return a boolean value indicating if the item was found.
 
+wxMSW: fixed MaximizeEvent generation in wx.Frame
+
+wxMSW: fixed sending duplicate EVT_COMBOBOX events
+
+Smoother time estimation updates in wx.ProgressDialog (patch 992813)
+
+Made wx.Listbook events more consistent with wx.Notebook ones (patch
+1001271)
+
+Fixed rounding errors in variable status bar panes widths computation
+(patch 1030021)
+
+Added possibility to specify printer bin (patch 910272)
+
+wxMSW: fixed wx.ListCtrl's SetWindowStyleFlag() to not remove
+WS_VISIBLE; also refresh the control automatically (closes bug
+1019440)
+
+Added wx.Choicebook, yet another notebook-like control.
+
+wxMSW: Make radiobutton tab behaviour the same on MSW as in standard
+MSW app, i.e. tab into the activated, not necessarily the first radio
+button.
+
+Added limited support for wxEventLoop (you can't derive from a
+wx.PyEventLoop version yet...)  Updated and moved the sample showing
+how to replace the MainLoop to samples/mainloop/mainloop.py.
 
 
 
@@ -1741,6 +1768,7 @@ Fixes for the wxGLCanvas demo to work around a strange bug in gtk.
 
 SWIG support routines now compiled separately instead of being bundled
 in wx.cpp.
+
 
 
 

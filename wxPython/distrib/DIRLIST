@@ -64,6 +64,7 @@ wxPython/samples/doodle
 wxPython/samples/embedded
 wxPython/samples/frogedit
 wxPython/samples/hangman
+wxPython/samples/mainloop
 wxPython/samples/pySketch
 wxPython/samples/pySketch/images
 wxPython/samples/simple
