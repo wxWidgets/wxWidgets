@@ -914,6 +914,8 @@ wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
     , m_vgap( vgap )
     , m_hgap( hgap )
 {
+    if (m_rows == 0 && m_cols == 0)
+        m_rows = 1;
 }
 
 wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
@@ -922,6 +924,8 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
     , m_vgap( vgap )
     , m_hgap( hgap )
 {
+    if (m_rows == 0 && m_cols == 0)
+        m_rows = 1;
 }
 
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
