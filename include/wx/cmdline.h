@@ -17,6 +17,10 @@
     #pragma interface "cmdline.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_CMDLINE_PARSER
+
 #include "wx/string.h"
 
 class WXDLLEXPORT wxDateTime;
@@ -196,5 +200,7 @@ private:
 
     struct wxCmdLineParserData *m_data;
 };
+
+#endif // wxUSE_CMDLINE_PARSER
 
 #endif // _WX_CMDLINE_H_
