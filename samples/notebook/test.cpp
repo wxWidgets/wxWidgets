@@ -103,10 +103,10 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
                                         2, wxRA_SPECIFY_ROWS);
 
   c = new wxLayoutConstraints;
-  c->left.SameAs(panel2, wxLeft, 4);
-  c->top.SameAs(panel2, wxTop, 4);
+  c->left.SameAs(panel2, wxLeft, 10);
+  c->top.SameAs(panel2, wxTop, 5);
   c->height.PercentOf(panel2, wxHeight, 50);
-  c->right.SameAs(panel2, wxRight, 4);
+  c->right.SameAs(panel2, wxRight, 10);
   radiobox->SetConstraints(c);
 
   wxRadioBox *radiobox2 = new wxRadioBox(panel2, -1, "Choose one",
@@ -117,7 +117,7 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
   c = new wxLayoutConstraints;
   c->left.SameAs(radiobox, wxLeft);
   c->height.AsIs();
-  c->top.Below(radiobox, 4);
+  c->top.Below(radiobox, 5);
   c->right.SameAs(radiobox, wxRight);
   radiobox2->SetConstraints(c);
 

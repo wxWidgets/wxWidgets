@@ -23,6 +23,7 @@
 #include "wx/file.h"
 
 #include "smile.xbm"
+#include "smile.xpm"
 
 // derived classes
 
@@ -50,6 +51,10 @@ public:
     wxBitmap  *my_smile_xbm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
+
+protected:
+    wxBitmap m_bmpSmileXpm;
+    wxIcon   m_iconSmileXpm;
 
 private:
     DECLARE_DYNAMIC_CLASS(MyCanvas)
@@ -95,7 +100,8 @@ END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
-        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
+        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ),
+          m_bmpSmileXpm(smile_xpm), m_iconSmileXpm(smile_xpm)
 {
     my_horse_png = (wxBitmap*) NULL;
     my_horse_jpeg = (wxBitmap*) NULL;
@@ -132,6 +138,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     wxImage image( bitmap );
 
+#if wxUSE_LIBPNG
     if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ) )
         wxLogError("Can't save file");
 
@@ -139,11 +146,14 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         wxLogError("Can't load PNG image");
     else
         my_horse_png = new wxBitmap( image.ConvertToBitmap() );
+#endif // wxUSE_LIBPNG
 
+#if wxUSE_LIBJPEG
     if ( !image.LoadFile( dir + wxString("horse.jpg") ) )
         wxLogError("Can't load JPG image");
     else
         my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
+#endif // wxUSE_LIBJPEG
 
 #if wxUSE_GIF
     if ( !image.LoadFile( dir + wxString("horse.gif") ) )
@@ -291,7 +301,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextBackground( "GREEN" );
         dc.DrawBitmap( mono, 30, 1860 );
 
+        dc.SetTextForeground( "BLACK" );
         dc.DrawText( "After wxImage conversion", 150, 1845 );
+        dc.SetTextForeground( "RED" );
         wxImage i( mono );
         i.SetMaskColour( 255,255,255 );
         i.Replace( 0,0,0,
@@ -299,6 +311,19 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
         dc.DrawBitmap( i.ConvertToBitmap(), 150, 1860, TRUE );
+        dc.SetTextForeground( "BLACK" );
+    }
+
+    dc.DrawText("XPM bitmap", 30, 1950);
+    if ( m_bmpSmileXpm.Ok() )
+    {
+        dc.DrawBitmap(m_bmpSmileXpm, 30, 1975, TRUE);
+    }
+
+    dc.DrawText("XPM icon", 150, 1950);
+    if ( m_iconSmileXpm.Ok() )
+    {
+        dc.DrawIcon(m_iconSmileXpm, 150, 1975);
     }
 }
 
@@ -382,8 +407,8 @@ MyFrame::MyFrame()
 
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
-  // 500 width * 1900 height
-  m_canvas->SetScrollbars( 10, 10, 50, 200 );
+  // 500 width * 2100 height
+  m_canvas->SetScrollbars( 10, 10, 50, 210 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
