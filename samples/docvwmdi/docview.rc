@@ -1,6 +1,0 @@
-doc                 ICON    "doc.ico"
-chart               ICON    "chart.ico"
-notepad             ICON    "notepad.ico"
-
-#include "wx/msw/wx.rc"
-
