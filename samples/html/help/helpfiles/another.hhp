@@ -4,6 +4,3 @@ Contents file=another.hhc
 Display compile progress=No
 Title=Another book
 Default topic=another.htm
-Embarassment=extra line because project parsing is slightly buggy
-
-

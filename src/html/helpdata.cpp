@@ -95,15 +95,15 @@ class HP_TagHandler : public wxHtmlTagHandler
     private:
         wxString m_Name, m_Page;
         int m_Level;
-	int m_ID;
+        int m_ID;
         int m_Index;
         wxHtmlContentsItem *m_Items;
         int m_ItemsCnt;
         wxHtmlBookRecord *m_Book;
 
     public:
-        HP_TagHandler(wxHtmlBookRecord *b) : wxHtmlTagHandler() {m_Book = b; m_Items = NULL; m_ItemsCnt = 0; m_Name = m_Page = wxEmptyString; m_Level = 0;}
-        wxString GetSupportedTags() {return "UL,OBJECT,PARAM";}
+        HP_TagHandler(wxHtmlBookRecord *b) : wxHtmlTagHandler() {m_Book = b; m_Items = NULL; m_ItemsCnt = 0; m_Name = m_Page = wxEmptyString; m_Level = 0; }
+        wxString GetSupportedTags() { return "UL,OBJECT,PARAM"; }
         bool HandleTag(const wxHtmlTag& tag);
         void WriteOut(wxHtmlContentsItem*& array, int& size);
         void ReadIn(wxHtmlContentsItem* array, int size);
@@ -118,7 +118,6 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         m_Level--;
         return TRUE;
     }
-
     else if (tag.GetName() == "OBJECT") {
         m_Name = m_Page = wxEmptyString;
         ParseInner(tag);
@@ -136,7 +135,6 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         }
         return TRUE;
     }
-
     else { // "PARAM"
         if (m_Name == wxEmptyString && tag.GetParam("NAME") == "Name") m_Name = tag.GetParam("VALUE");
         if (tag.GetParam("NAME") == "Local") m_Page = tag.GetParam("VALUE");
@@ -160,6 +158,9 @@ void HP_TagHandler::ReadIn(wxHtmlContentsItem* array, int size)
     m_Items = array;
     m_ItemsCnt = size;
 }
+
+
+
 
 //-----------------------------------------------------------------------------
 // wxHtmlHelpData
@@ -212,7 +213,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     f = ( contentsfile.IsEmpty() ? 0 : fsys.OpenFile(contentsfile) );
     if (f) {
         sz = f -> GetStream() -> GetSize();
-        buf = new char[sz+1];
+        buf = new char[sz + 1];
         buf[sz] = 0;
         f -> GetStream() -> Read(buf, sz);
         delete f;
@@ -225,7 +226,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     f = ( indexfile.IsEmpty() ? 0 : fsys.OpenFile(indexfile) );
     if (f) {
         sz = f -> GetStream() -> GetSize();
-        buf = new  char[sz+1];
+        buf = new char[sz + 1];
         buf[sz] = 0;
         f -> GetStream() -> Read(buf, sz);
         delete f;
@@ -328,18 +329,18 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
 {
     if (path == wxEmptyString) m_TempPath = path;
     else {
-	if (wxIsAbsolutePath(path)) m_TempPath = path;
-	else m_TempPath = wxGetCwd() + "/" + path;
+        if (wxIsAbsolutePath(path)) m_TempPath = path;
+        else m_TempPath = wxGetCwd() + "/" + path;
 
-	if (m_TempPath[m_TempPath.Length() - 1] != '/')
+        if (m_TempPath[m_TempPath.Length() - 1] != '/')
             m_TempPath << "/";
     }
 }
 
 
 bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfile,
-				  const wxString& indexfile, const wxString& deftopic,
-				  const wxString& path)
+                                  const wxString& indexfile, const wxString& deftopic,
+                                  const wxString& path)
 {
     wxFileSystem fsys;
     wxFSFile *fi;
@@ -347,10 +348,9 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
     wxString safetitle;
 
     if (! path.IsEmpty())
-	    // workaround for bug in ChangePathTo(name, TRUE)
-	    fsys.ChangePathTo(path+"/gaga");
+        fsys.ChangePathTo(path, TRUE);
 
-    bookr = new wxHtmlBookRecord(path+'/', title, deftopic);
+    bookr = new wxHtmlBookRecord(path + '/', title, deftopic);
 
     if (m_ContentsCnt % wxHTML_REALLOC_STEP == 0)
         m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
@@ -372,12 +372,11 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
     if ((fi == NULL) || (m_TempPath == wxEmptyString)) {
         LoadMSProject(bookr, fsys, indexfile, contfile);
         if (m_TempPath != wxEmptyString) {
-	        wxFileOutputStream *outs = new wxFileOutputStream(m_TempPath + safetitle + ".cached");
+            wxFileOutputStream *outs = new wxFileOutputStream(m_TempPath + safetitle + ".cached");
             SaveCachedBook(bookr, outs);
             delete outs;
-	}
-    }
-    else {
+        }
+    } else {
         LoadCachedBook(bookr, fi -> GetStream());
         delete fi;
     }
@@ -405,9 +404,9 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
     char linebuf[300];
 
     wxString title = _("noname"),
-             safetitle,
-             start = wxEmptyString,
-             contents = wxEmptyString, index = wxEmptyString;
+                     safetitle,
+                     start = wxEmptyString,
+                             contents = wxEmptyString, index = wxEmptyString;
 
     if (wxIsAbsolutePath(book)) bookFull = book;
     else bookFull = wxGetCwd() + "/" + book;
@@ -417,13 +416,15 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
     fsys.ChangePathTo(bookFull);
     s = fi -> GetStream();
     sz = s -> GetSize();
-    buff = new char[sz+1];
+    buff = new char[sz + 1];
     buff[sz] = 0;
     s -> Read(buff, sz);
     lineptr = buff;
     delete fi;
 
-    while ((lineptr = ReadLine(lineptr, linebuf)) != NULL) {
+    do {
+        lineptr = ReadLine(lineptr, linebuf);
+
         if (strstr(linebuf, "Title=") == linebuf)
             title = linebuf + strlen("Title=");
         if (strstr(linebuf, "Default topic=") == linebuf)
@@ -432,7 +433,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
             index = linebuf + strlen("Index file=");
         if (strstr(linebuf, "Contents file=") == linebuf)
             contents = linebuf + strlen("Contents file=");
-    }
+    } while (lineptr != NULL);
     delete[] buff;
 
     return AddBookParam(title, contents, index, start, fsys.GetPath());
@@ -512,28 +513,28 @@ wxString wxHtmlHelpData::FindPageById(int id)
 //----------------------------------------------------------------------------------
 
 wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& keyword,
-				       const wxString& book)
+                                       const wxString& book)
 {
     m_Data = data;
     m_Keyword = keyword;
     wxHtmlBookRecord* bookr = NULL;
     if (book != wxEmptyString) {
-	// we have to search in a specific book. Find it first
-	int i,cnt = data->m_BookRecords.GetCount();
-	for (i=0; i<cnt; i++)
-	    if (data->m_BookRecords[i].GetTitle() == book) {
-		bookr = &(data->m_BookRecords[i]);
-		m_CurIndex = bookr->GetContentsStart();
-		m_MaxIndex = bookr->GetContentsEnd();
-		break;
-	    }
-	// check; we won't crash if the book doesn't exist, but it's Bad Anyway.
-	wxASSERT(bookr);
+        // we have to search in a specific book. Find it first
+        int i, cnt = data->m_BookRecords.GetCount();
+        for (i = 0; i < cnt; i++)
+            if (data->m_BookRecords[i].GetTitle() == book) {
+                bookr = &(data->m_BookRecords[i]);
+                m_CurIndex = bookr->GetContentsStart();
+                m_MaxIndex = bookr->GetContentsEnd();
+                break;
+            }
+        // check; we won't crash if the book doesn't exist, but it's Bad Anyway.
+        wxASSERT(bookr);
     }
     if (! bookr) {
-	// no book specified; search all books
-	m_CurIndex = 0;
-	m_MaxIndex = m_Data->m_ContentsCnt;
+        // no book specified; search all books
+        m_CurIndex = 0;
+        m_MaxIndex = m_Data->m_ContentsCnt;
     }
     m_Engine.LookFor(keyword);
     m_Active = (m_CurIndex < m_MaxIndex);
@@ -544,7 +545,7 @@ bool wxHtmlSearchStatus::Search()
 {
     wxFileSystem fsys;
     wxFSFile *file;
-    int i = m_CurIndex; // shortcut
+    int i = m_CurIndex;  // shortcut
     bool found = FALSE;
 
     if (! m_Active) {
@@ -561,20 +562,71 @@ wxASSERT(m_Active);
     m_Name = wxEmptyString;
 
     file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() +
-			 m_Data->m_Contents[i].m_Page);
+                         m_Data->m_Contents[i].m_Page);
     if (file) {
-	if (m_LastPage != file->GetLocation()) {
-	    m_LastPage = file->GetLocation();
-	    if (m_Engine.Scan(file -> GetStream())) {
-		m_Name = m_Data->m_Contents[i].m_Name;
-		m_ContentsItem = m_Data->m_Contents + i;
-		found = TRUE;
-	    }
-	}
-	delete file;
+        if (m_LastPage != file->GetLocation()) {
+            m_LastPage = file->GetLocation();
+            if (m_Engine.Scan(file -> GetStream())) {
+                m_Name = m_Data->m_Contents[i].m_Name;
+                m_ContentsItem = m_Data->m_Contents + i;
+                found = TRUE;
+            }
+        }
+        delete file;
     }
     m_Active = (++m_CurIndex < m_MaxIndex);
     return found;
 }
+
+
+
+
+
+
+
+
+//--------------------------------------------------------------------------------
+// wxSearchEngine
+//--------------------------------------------------------------------------------
+
+void wxSearchEngine::LookFor(const wxString& keyword)
+{
+    if (m_Keyword) delete[] m_Keyword;
+    m_Keyword = new char[keyword.Length() + 1];
+    strcpy(m_Keyword, keyword.c_str());
+    for (int i = strlen(m_Keyword) - 1; i >= 0; i--)
+        if ((m_Keyword[i] >= 'A') && (m_Keyword[i] <= 'Z'))
+            m_Keyword[i] += 'a' - 'A';
+}
+
+
+
+bool wxSearchEngine::Scan(wxInputStream *stream)
+{
+    wxASSERT_MSG(m_Keyword != NULL, _("wxSearchEngine::LookFor must be called before scanning!"));
+
+    int i, j;
+    int lng = stream ->GetSize();
+    int wrd = strlen(m_Keyword);
+    bool found = FALSE;
+    char *buf = new char[lng + 1];
+    stream -> Read(buf, lng);
+    buf[lng] = 0;
+
+    for (i = 0; i < lng; i++)
+        if ((buf[i] >= 'A') && (buf[i] <= 'Z')) buf[i] += 'a' - 'A';
+
+    for (i = 0; i < lng - wrd; i++) {
+        j = 0;
+        while ((j < wrd) && (buf[i + j] == m_Keyword[j])) j++;
+    if (j == wrd) {found = TRUE; break; }
+    }
+
+    delete[] buf;
+    return found;
+}
+
+
+
 
 #endif

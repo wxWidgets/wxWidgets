@@ -31,30 +31,32 @@
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxHtmlHelpController, wxEvtHandler)
-    EVT_CLOSE(wxHtmlHelpController::OnCloseFrame)
+EVT_CLOSE(wxHtmlHelpController::OnCloseFrame)
 END_EVENT_TABLE()
 
-wxHtmlHelpController::wxHtmlHelpController()
+wxHtmlHelpController::wxHtmlHelpController(int style)
 {
     m_helpFrame = NULL;
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
     m_titleFormat = _("Help: %s");
+    m_FrameStyle = style;
 }
 
 wxHtmlHelpController::~wxHtmlHelpController()
 {
     WriteCustomization(m_Config, m_ConfigRoot);
     if (m_helpFrame)
-	m_helpFrame->Close();
+        m_helpFrame->Close();
 }
 
 void wxHtmlHelpController::SetTitleFormat(const wxString& title)
 {
     m_titleFormat = title;
     if (m_helpFrame)
-	m_helpFrame->SetTitleFormat(title);
+        m_helpFrame->SetTitleFormat(title);
 }
+
 
 bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
 {
@@ -63,29 +65,30 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     wxBusyInfo* busy = NULL;
     wxString info;
     if (show_wait_msg) {
-	info.Printf(_("Adding book %s"), book.c_str());
-	busy = new wxBusyInfo(info);
+        info.Printf(_("Adding book %s"), book.c_str());
+        busy = new wxBusyInfo(info);
     }
 #endif
     bool retval = m_helpData.AddBook(book);
 #if wxUSE_BUSYINFO
     if (show_wait_msg)
-	delete busy;
-#endif
+        delete busy;
+#endif 
     return retval;
 }
 
 void wxHtmlHelpController::CreateHelpWindow(bool show_progress)
 {
     if (m_helpFrame) {
-	m_helpFrame->Raise();
-	return;
+        m_helpFrame->Raise();
+        return ;
     }
     m_helpFrame = new wxHtmlHelpFrame(&m_helpData);
+
     m_helpFrame->PushEventHandler(this);
     if (m_Config)
-	m_helpFrame->UseConfig(m_Config, m_ConfigRoot);
-    m_helpFrame->Create(NULL, wxID_HTML_HELPFRAME);
+        m_helpFrame->UseConfig(m_Config, m_ConfigRoot);
+    m_helpFrame->Create(NULL, wxID_HTML_HELPFRAME, wxEmptyString, m_FrameStyle);
     m_helpFrame->RefreshLists(show_progress);
     m_helpFrame->SetTitleFormat(m_titleFormat);
     m_helpFrame->Show(TRUE);
@@ -96,14 +99,14 @@ void wxHtmlHelpController::ReadCustomization(wxConfigBase* cfg, const wxString& 
     /* should not be called by the user; call UseConfig, and the controller
      * will do the rest */
     if (m_helpFrame)
-	m_helpFrame->ReadCustomization(cfg, path);
+        m_helpFrame->ReadCustomization(cfg, path);
 }
 
 void wxHtmlHelpController::WriteCustomization(wxConfigBase* cfg, const wxString& path)
 {
     /* typically called by the controllers OnCloseFrame handler */
     if (m_helpFrame)
-	m_helpFrame->WriteCustomization(cfg, path);
+        m_helpFrame->WriteCustomization(cfg, path);
 }
 
 #endif
