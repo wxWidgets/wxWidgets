@@ -87,8 +87,6 @@ public:
     virtual void GetSelection(long* from, long* to) const;
     virtual bool IsEditable() const ;
     
-    virtual bool LoadFile(const wxString& file);
-    virtual bool SaveFile(const wxString& file);
     virtual void WriteText(const wxString& text);
     virtual void AppendText(const wxString& text);
     virtual void DiscardEdits();

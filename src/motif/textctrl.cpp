@@ -208,7 +208,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
 WXWidget wxTextCtrl::GetTopWidget() const
 {
-    return ((m_windowStyle & wxTE_MULTILINE) ? (WXWidget) XtParent((Widget) m_mainWidget) : m_mainWidget);
+    return IsMultiLine() ? (WXWidget)XtParent((Widget)m_mainWidget)
+                         : m_mainWidget;
 }
 
 wxString wxTextCtrl::GetValue() const
@@ -249,9 +250,15 @@ void wxTextCtrl::SetValue(const wxString& value)
 
     // do this instead... MB
     //
+    // with (at least) OpenMotif 2.1 this causes a lot of flicker
+#if 0
     XtVaSetValues( (Widget) m_mainWidget,
                    XmNvalue, wxConstCast(value.c_str(), char),
                    NULL);
+#endif
+
+    Clear();
+    AppendText( value );
 
     m_inSetValue = FALSE;
 }
@@ -379,85 +386,6 @@ void wxTextCtrl::SetSelection(long from, long to)
 
     XmTextSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
                       (Time) 0);
-}
-
-bool wxTextCtrl::LoadFile(const wxString& file)
-{
-    if (!wxFileExists(file))
-        return FALSE;
-
-    m_fileName = file;
-
-    Clear();
-
-    Widget textWidget = (Widget) m_mainWidget;
-    FILE *fp = 0;
-
-    struct stat statb;
-    if ((stat (wxConstCast(file.c_str(), char), &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
-        !(fp = fopen (wxConstCast(file.c_str(), char), "r")))
-    {
-        return FALSE;
-    }
-    else
-    {
-        long len = statb.st_size;
-        char *text;
-        if (!(text = XtMalloc ((unsigned) (len + 1))))
-        {
-            fclose (fp);
-            return FALSE;
-        }
-        if (fread (text, sizeof (char), len, fp) != (size_t) len)
-        {
-        }
-        fclose (fp);
-
-        text[len] = 0;
-        XmTextSetString (textWidget, text);
-        //      m_textPosition = len;
-        XtFree (text);
-        m_modified = FALSE;
-        return TRUE;
-    }
-}
-
-// If file is null, try saved file name first
-// Returns TRUE if succeeds.
-bool wxTextCtrl::SaveFile(const wxString& file)
-{
-    wxString theFile(file);
-    if (theFile == "")
-        theFile = m_fileName;
-    if (theFile == "")
-        return FALSE;
-    m_fileName = theFile;
-
-    Widget textWidget = (Widget) m_mainWidget;
-    FILE *fp;
-
-    if (!(fp = fopen (wxConstCast(theFile.c_str(), char), "w")))
-    {
-        return FALSE;
-    }
-    else
-    {
-        char *text = XmTextGetString (textWidget);
-        long len = XmTextGetLastPosition (textWidget);
-
-        if (fwrite (text, sizeof (char), len, fp) != (size_t) len)
-        {
-            // Did not write whole file
-        }
-        // Make sure newline terminates the file
-        if (text[len - 1] != '\n')
-            fputc ('\n', fp);
-
-        fclose (fp);
-        XtFree (text);
-        m_modified = FALSE;
-        return TRUE;
-    }
 }
 
 void wxTextCtrl::WriteText(const wxString& text)
@@ -847,6 +775,9 @@ wxTextWindowModifyProc (Widget WXUNUSED(w), XtPointer clientData, XmTextVerifyCa
             cbs->text->ptr[i] = '\0';
         }
     }
+
+    if(tw->InSetValue())
+        return;
 
     // If we're already within an OnChar, return: probably a programmatic
     // insertion.
