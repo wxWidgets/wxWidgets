@@ -1060,6 +1060,12 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     {
         if ( wnd->MSWTranslateMessage(wxmsg) )
             return TRUE;
+
+        // stop at first top level window, i.e. don't try to process the key
+        // strokes originating in a dialog using the accelerators of the parent
+        // frame - this doesn't make much sense
+        if ( wnd->IsTopLevel() )
+            break;
     }
 
     // Anyone for a non-translation message? Try youngest descendants first.

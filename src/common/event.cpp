@@ -943,15 +943,21 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     }
 
 #if wxUSE_GUI
-    // Carry on up the parent-child hierarchy,
-    // but only if event is a command event: it wouldn't
-    // make sense for a parent to receive a child's size event, for example
+    // Carry on up the parent-child hierarchy, but only if event is a command
+    // event: it wouldn't make sense for a parent to receive a child's size
+    // event, for example
     if ( m_isWindow && event.IsCommandEvent() )
     {
         wxWindow *win = (wxWindow *)this;
-        wxWindow *parent = win->GetParent();
-        if (parent && !parent->IsBeingDeleted())
-            return parent->GetEventHandler()->ProcessEvent(event);
+
+        // also, don't propagate events beyond the first top level window: it
+        // doesn't make sense to process dialogs events in the parent frame
+        if ( !win->IsTopLevel() )
+        {
+            wxWindow *parent = win->GetParent();
+            if (parent && !parent->IsBeingDeleted())
+                return parent->GetEventHandler()->ProcessEvent(event);
+        }
     }
 #endif // wxUSE_GUI
 
