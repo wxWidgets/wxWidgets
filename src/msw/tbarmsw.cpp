@@ -83,14 +83,14 @@ class WXDLLEXPORT wxToolBarTool : public wxToolBarToolBase
 public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
-                  const wxBitmap& bitmap1,
-                  const wxBitmap& bitmap2,
+                  const wxBitmap& bmpNormal,
+                  const wxBitmap& bmpDisabled,
                   bool toggle,
                   wxObject *clientData,
-                  const wxString& shortHelpString,
-                  const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
-                            clientData, shortHelpString, longHelpString)
+                  const wxString& shortHelp,
+                  const wxString& longHelp)
+        : wxToolBarToolBase(tbar, id, bmpNormal, bmpDisabled, toggle,
+                            clientData, shortHelp, longHelp)
     {
     }
 
@@ -136,15 +136,16 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
-                                         const wxBitmap& bitmap1,
-                                         const wxBitmap& bitmap2,
-                                         bool toggle,
+                                         const wxString& label,
+                                         const wxBitmap& bmpNormal,
+                                         const wxBitmap& bmpDisabled,
+                                         wxItemKind kind,
                                          wxObject *clientData,
-                                         const wxString& shortHelpString,
-                                         const wxString& longHelpString)
+                                         const wxString& shortHelp,
+                                         const wxString& longHelp)
 {
-    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
-                             clientData, shortHelpString, longHelpString);
+    return new wxToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
+                             clientData, shortHelp, longHelp);
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
@@ -490,7 +491,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
     // TODO: use the mapping code from wxToolBar95 to get it right in this class
 #if !defined(__WIN32__) && !defined(__WIN386__)
-    wxBitmap bitmap2;
+    wxBitmap bmpDisabled;
     if (tool->CanBeToggled())
     {
         HBITMAP hbmp = CreateMappedBitmap((WXHINSTANCE)wxGetInstance(),
@@ -784,7 +785,7 @@ void wxToolBar::DrawButton(WXHDC hdc, int x, int y, int dx, int dy,
     dxFace -= 3;		
     dyFace -= 3;
 
-    // Using bitmap2 can cause problems (don't know why!)
+    // Using bmpDisabled can cause problems (don't know why!)
 #if !defined(__WIN32__) && !defined(__WIN386__)
     HBITMAP bitmapOld;
     if (tool->GetBitmap2().Ok())

@@ -101,6 +101,10 @@
     #define TBSTYLE_TRANSPARENT     0x8000
 #endif
 
+#ifndef TBSTYLE_TOOLTIPS
+    #define TBSTYLE_TOOLTIPS        0x0100
+#endif
+
 // Messages
 #ifndef TB_GETSTYLE
     #define TB_SETSTYLE             (WM_USER + 56)
@@ -138,14 +142,15 @@ class wxToolBarTool : public wxToolBarToolBase
 public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
-                  const wxBitmap& bitmap1,
-                  const wxBitmap& bitmap2,
-                  bool toggle,
+                  const wxString& label,
+                  const wxBitmap& bmpNormal,
+                  const wxBitmap& bmpDisabled,
+                  wxItemKind kind,
                   wxObject *clientData,
-                  const wxString& shortHelpString,
-                  const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
-                            clientData, shortHelpString, longHelpString)
+                  const wxString& shortHelp,
+                  const wxString& longHelp)
+        : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
+                            clientData, shortHelp, longHelp)
     {
         m_nSepCount = 0;
     }
@@ -175,15 +180,16 @@ private:
 // ----------------------------------------------------------------------------
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
-                                         const wxBitmap& bitmap1,
-                                         const wxBitmap& bitmap2,
-                                         bool toggle,
+                                         const wxString& label,
+                                         const wxBitmap& bmpNormal,
+                                         const wxBitmap& bmpDisabled,
+                                         wxItemKind kind,
                                          wxObject *clientData,
-                                         const wxString& shortHelpString,
-                                         const wxString& longHelpString)
+                                         const wxString& shortHelp,
+                                         const wxString& longHelp)
 {
-    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
-                             clientData, shortHelpString, longHelpString);
+    return new wxToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
+                             clientData, shortHelp, longHelp);
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
@@ -224,16 +230,12 @@ bool wxToolBar::Create(wxWindow *parent,
         return FALSE;
 
     // prepare flags
-    DWORD msflags = 0;      // WS_VISIBLE | WS_CHILD always included
+    DWORD msflags = TBSTYLE_TOOLTIPS;  // WS_VISIBLE | WS_CHILD always included
 
    if ( style & wxCLIP_SIBLINGS )
         msflags |= WS_CLIPSIBLINGS;
 
-#ifdef TBSTYLE_TOOLTIPS
-    msflags |= TBSTYLE_TOOLTIPS;
-#endif
-
-    if (style & wxTB_FLAT)
+    if ( style & wxTB_FLAT )
     {
         // static as it doesn't change during the program lifetime
         static int s_verComCtl = wxTheApp->GetComCtl32Version();
@@ -607,8 +609,7 @@ bool wxToolBar::Realize()
         i++;
     }
 
-    if ( !::SendMessage(GetHwnd(), TB_ADDBUTTONS,
-                        (WPARAM)i, (LPARAM)buttons) )
+    if ( !::SendMessage(GetHwnd(), TB_ADDBUTTONS, (WPARAM)i, (LPARAM)buttons) )
     {
         wxLogLastError(wxT("TB_ADDBUTTONS"));
     }
