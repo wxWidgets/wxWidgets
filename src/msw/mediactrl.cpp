@@ -83,9 +83,6 @@ public:
 //  wxDXMediaCtrlImpl
 //---------------------------------------------------------------------------
 
-#undef wxUSE_DIRECTSHOW
-#define wxUSE_DIRECTSHOW 0
-
 #if wxUSE_DIRECTSHOW
 
 #include <dshow.h>
@@ -152,7 +149,6 @@ public:
 //---------------------------------------------------------------------------
 
 #include <mmsystem.h>
-#include <digitalv.h>
 
 class wxWMMEMediaCtrlImpl : public wxMediaCtrlImpl
 {
@@ -646,6 +642,51 @@ void wxDXMediaCtrlImpl::DoMoveWindow(int x, int y, int w, int h)
 //
 //---------------------------------------------------------------------------
 
+//
+// Cruft to simulate digitalv.h
+//
+
+typedef struct {
+    DWORD_PTR   dwCallback;
+#ifdef MCI_USE_OFFEXT
+    POINT   ptOffset;
+    POINT   ptExtent;
+#else	
+    RECT    rc;
+#endif
+} MCI_DGV_RECT_PARMS;
+
+typedef struct {
+    DWORD_PTR   dwCallback;
+    HWND    hWnd;
+#ifndef _WIN32
+    WORD    wReserved1;
+#endif
+    UINT    nCmdShow;
+#ifndef _WIN32
+    WORD    wReserved2;
+#endif
+    LPSTR   lpstrText;
+} MCI_DGV_WINDOW_PARMSA;
+
+typedef struct {
+    DWORD_PTR   dwCallback;
+    HWND    hWnd;
+#ifndef _WIN32
+    WORD    wReserved1;
+#endif
+    UINT    nCmdShow;
+#ifndef _WIN32
+    WORD    wReserved2;
+#endif
+    LPWSTR  lpstrText;
+} MCI_DGV_WINDOW_PARMSW;
+#ifdef UNICODE
+typedef MCI_DGV_WINDOW_PARMSW MCI_DGV_WINDOW_PARMS;
+#else
+typedef MCI_DGV_WINDOW_PARMSA MCI_DGV_WINDOW_PARMS;
+#endif // UNICODE
+
 wxWMMEMediaCtrlImpl::wxWMMEMediaCtrlImpl() : m_bVideo(false)
 {
 /*        TCHAR sz[5000];
@@ -695,7 +736,9 @@ bool wxWMMEMediaCtrlImpl::Load(const wxString& fileName)
 
     windowParms.hWnd = (HWND)m_ctrl->GetHandle();
     m_bVideo = (mciSendCommand(m_hDev, MCI_WINDOW,
-                        MCI_DGV_WINDOW_HWND, (DWORD)(LPVOID)&windowParms) == 0);
+                         0x00010000L //MCI_DGV_WINDOW_HWND
+                         , 
+                         (DWORD)(LPVOID)&windowParms) == 0);
     m_bLoaded = true;
 
     //work around refresh issues
@@ -800,7 +843,9 @@ wxSize wxWMMEMediaCtrlImpl::DoGetBestSize() const
     {
         MCI_DGV_RECT_PARMS rect; 
 
-        mciSendCommand(m_hDev, MCI_WHERE, MCI_DGV_WHERE_SOURCE, (DWORD)(LPSTR)&rect);
+        mciSendCommand(m_hDev, MCI_WHERE, 0x00020000L//MCI_DGV_WHERE_SOURCE
+            , 
+            (DWORD)(LPSTR)&rect);
         return wxSize(rect.rc.right, rect.rc.bottom);
     }
     return wxSize(0,0);
