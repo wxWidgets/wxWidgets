@@ -74,3 +74,16 @@ utils/emulator/src/*.jpg
 utils/emulator/docs/*.txt
 utils/emulator/docs/*.jpg
 
+utils/helpview/src/*.h
+utils/helpview/src/*.cpp
+utils/helpview/src/*.def
+utils/helpview/src/*.rc
+utils/helpview/src/makefile*
+utils/helpview/src/*.xbm
+utils/helpview/src/*.xpm
+utils/helpview/src/*.txt
+utils/helpview/src/*.htb
+utils/helpview/src/*.ico
+utils/helpview/src/*.xml
+utils/helpview/src/bitmaps/*.xpm
+
