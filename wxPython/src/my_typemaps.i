@@ -271,6 +271,22 @@
 %typemap(out) bool "$result = $1 ? Py_True : Py_False; Py_INCREF($result);"
 
 
+
+//---------------------------------------------------------------------------
+// Typemap for when GDI objects are returned by reference.  This will cause a
+// copy to be made instead of returning a reference to the same instance.  The
+// GDI object's internal refcounting scheme will do a copy-on-write of the
+// internal data as needed.
+
+// These too?
+//, wxRegion&, wxPalette&
+
+%typemap(out) wxBrush&, wxPen&, wxFont&, wxBitmap&, wxIcon&, wxCursor& {
+    $*1_ltype* resultptr = new $*1_ltype(*$1);
+    $result = SWIG_NewPointerObj((void*)(resultptr), $1_descriptor, 1);
+}
+
+
 //---------------------------------------------------------------------------
 // Typemaps to convert return values that are base class pointers
 // to the real derived type, if possible.  See wxPyMake_wxObject in
