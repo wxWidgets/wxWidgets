@@ -340,6 +340,8 @@ bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
 void wxSoundSyncOnlyAdaptor::Stop()
 {
     wxLogTrace(_T("sound"), _T("asking audio to stop"));
+    
+#if wxUSE_THREADS
     // tell the player thread (if running) to stop playback ASAP:
     m_status.m_stopRequested = true;
     
@@ -350,11 +352,16 @@ void wxSoundSyncOnlyAdaptor::Stop()
     m_mutexRightToPlay.Lock();
     m_mutexRightToPlay.Unlock();
     wxLogTrace(_T("sound"), _T("audio was stopped"));
+#endif
 }
 
 bool wxSoundSyncOnlyAdaptor::IsPlaying() const
 {
+#if wxUSE_THREADS
     return m_status.m_playing;
+#else
+    return FALSE;
+#endif
 }
 
 
