@@ -81,7 +81,7 @@ public:
     wxPen();
     wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
     wxPen(const wxBitmap& stipple, int width);
-    wxPen(const wxPen& pen) { Ref(pen); }
+    wxPen(const wxPen& pen) : wxGDIObject(pen) { Ref(pen); }
     virtual ~wxPen();
 
     wxPen& operator=(const wxPen& pen)

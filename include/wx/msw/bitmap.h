@@ -46,7 +46,7 @@ public:
     wxBitmap() { Init(); }
 
     // Copy constructors
-    wxBitmap(const wxBitmap& bitmap) { Init(); Ref(bitmap); }
+    wxBitmap(const wxBitmap& bitmap) : wxGDIImage(bitmap) { Init(); Ref(bitmap); }
 
     // Initialize with raw data
     wxBitmap(const char bits[], int width, int height, int depth = 1);

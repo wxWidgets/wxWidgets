@@ -49,7 +49,7 @@ public:
     wxIcon() { }
 
         // copy
-    wxIcon(const wxIcon& icon) { Ref(icon); }
+    wxIcon(const wxIcon& icon) : wxGDIImage(icon) { Ref(icon); }
 
         // from raw data
     wxIcon(const char bits[], int width, int height);

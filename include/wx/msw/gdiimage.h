@@ -44,7 +44,7 @@ public:
         m_handle = 0;
     }
 
-    wxGDIImageRefData(const wxGDIImageRefData& data)
+    wxGDIImageRefData(const wxGDIImageRefData& data) : wxGDIRefData(data)
     {
         m_width = data.m_width;
         m_height = data.m_height;

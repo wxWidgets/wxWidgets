@@ -32,7 +32,7 @@ public:
     wxBrush();
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
-    wxBrush(const wxBrush& brush) { Ref(brush); }
+    wxBrush(const wxBrush& brush) : wxGDIObject(brush) { Ref(brush); }
     virtual ~wxBrush();
 
     virtual void SetColour(const wxColour& col);

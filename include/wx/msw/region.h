@@ -61,7 +61,7 @@ public:
     virtual ~wxRegion();
 
     // Copying
-    wxRegion(const wxRegion& r)
+    wxRegion(const wxRegion& r) : wxGDIObject(r)
         { Ref(r); }
     wxRegion& operator = (const wxRegion& r)
         { Ref(r); return (*this); }
@@ -152,7 +152,7 @@ class WXDLLEXPORT wxRegionIterator : public wxObject
 public:
     wxRegionIterator() { Init(); }
     wxRegionIterator(const wxRegion& region);
-    wxRegionIterator(const wxRegionIterator& ri) { Init(); *this = ri; }
+    wxRegionIterator(const wxRegionIterator& ri) : wxObject(ri) { Init(); *this = ri; }
 
     wxRegionIterator& operator=(const wxRegionIterator& ri);
 

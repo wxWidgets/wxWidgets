@@ -25,7 +25,7 @@ class WXDLLEXPORT wxFont : public wxFontBase
 public:
     // ctors and such
     wxFont() { Init(); }
-    wxFont(const wxFont& font) { Init(); Ref(font); }
+    wxFont(const wxFont& font) : wxFontBase(font) { Init(); Ref(font); }
 
     wxFont(int size,
            int family,

@@ -26,7 +26,7 @@ class WXDLLEXPORT wxCursor : public wxGDIImage
 public:
     // constructors
     wxCursor();
-    wxCursor(const wxCursor& cursor) { Ref(cursor); }
+    wxCursor(const wxCursor& cursor) : wxGDIImage(cursor) { Ref(cursor); }
     wxCursor(const wxImage& image);
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,

@@ -27,7 +27,7 @@ public:
     wxAcceleratorTable();
 
     // copy ctor
-    wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
+    wxAcceleratorTable(const wxAcceleratorTable& accel) : wxObject(accel) { Ref(accel); }
 
     // load from .rc resource (Windows specific)
     wxAcceleratorTable(const wxString& resource);

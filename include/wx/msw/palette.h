@@ -38,7 +38,7 @@ class WXDLLEXPORT wxPalette: public wxGDIObject
 
 public:
   wxPalette(void);
-  inline wxPalette(const wxPalette& palette) { Ref(palette); }
+  inline wxPalette(const wxPalette& palette) : wxGDIObject(palette) { Ref(palette); }
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   ~wxPalette(void);
