@@ -59,6 +59,8 @@ private:
         CPPUNIT_TEST( DeleteAll );
         CPPUNIT_TEST( RenameEntry );
         CPPUNIT_TEST( RenameGroup );
+        CPPUNIT_TEST( CreateEntriesAndSubgroup );
+        CPPUNIT_TEST( CreateSubgroupAndEntries );
         CPPUNIT_TEST( DeleteLastGroup );
     CPPUNIT_TEST_SUITE_END();
 
@@ -74,6 +76,8 @@ private:
     void DeleteAll();
     void RenameEntry();
     void RenameGroup();
+    void CreateEntriesAndSubgroup();
+    void CreateSubgroupAndEntries();
     void DeleteLastGroup();
 
     static wxString ChangePath(wxFileConfig& fc, const wxChar *path)
@@ -353,6 +357,29 @@ void FileConfigTestCase::RenameGroup()
                                 _T("[foot/group2]\n") );
 }
 
+void FileConfigTestCase::CreateSubgroupAndEntries()
+{
+    wxFileConfig fc;
+    fc.Write(_T("sub/sub_first"), _T("sub_one"));
+    fc.Write(_T("first"), _T("one"));
+
+    CPPUNIT_ASSERT( Dump(fc) == _T("first=one\n")
+                                _T("[sub]\n")
+                                _T("sub_first=sub_one\n"));
+}
+
+void FileConfigTestCase::CreateEntriesAndSubgroup()
+{
+    wxFileConfig fc;
+    fc.Write(_T("first"), _T("one"));
+    fc.Write(_T("second"), _T("two"));
+    fc.Write(_T("sub/sub_first"), _T("sub_one"));
+
+    CPPUNIT_ASSERT( Dump(fc) == _T("first=one\n")
+                                _T("second=two\n")
+                                _T("[sub]\n")
+                                _T("sub_first=sub_one\n"));
+}
 
 static void EmptyConfigAndWriteKey()
 {
@@ -360,7 +387,7 @@ static void EmptyConfigAndWriteKey()
 
     const wxString groupPath = _T("/root");
 
-    if (fc.Exists(groupPath))
+    if ( fc.Exists(groupPath) )
     {
         // using DeleteGroup exposes the problem, using DeleteAll doesn't
         CPPUNIT_ASSERT( fc.DeleteGroup(groupPath) );
@@ -392,8 +419,7 @@ void FileConfigTestCase::DeleteLastGroup()
 
     // clean up
     wxLogNull noLogging;
-    (void) ::wxRemoveFile(
-        wxFileConfig::GetLocalFileName(_T("deleteconftest")) );
+    (void) ::wxRemoveFile(wxFileConfig::GetLocalFileName(_T("deleteconftest")));
 }
 
 #endif // wxUSE_FILECONFIG
