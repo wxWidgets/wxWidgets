@@ -184,38 +184,53 @@ wxDbTable::wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
 
     // Set the cursor type for the statement handles
     cursorType = SQL_CURSOR_STATIC;
+    //cursorType = SQL_CURSOR_FORWARD_ONLY;
     if (SQLSetStmtOption(hstmtInternal, SQL_CURSOR_TYPE, cursorType) != SQL_SUCCESS)
-    {
+      {	
         // Check to see if cursor type is supported
         pDb->GetNextError(henv, hdbc, hstmtInternal);
         if (! wxStrcmp(pDb->sqlState, "01S02"))  // Option Value Changed
-        {
+	  {
+	    
             // Datasource does not support static cursors.  Driver
             // will substitute a cursor type.  Call SQLGetStmtOption()
             // to determine which cursor type was selected.
             if (SQLGetStmtOption(hstmtInternal, SQL_CURSOR_TYPE, &cursorType) != SQL_SUCCESS)
-                pDb->DispAllErrors(henv, hdbc, hstmtInternal);
+	      pDb->DispAllErrors(henv, hdbc, hstmtInternal);
 #ifdef DBDEBUG_CONSOLE
             cout << "Static cursor changed to: ";
             switch(cursorType)
-            {
-            case SQL_CURSOR_FORWARD_ONLY:
+	      {
+	      case SQL_CURSOR_FORWARD_ONLY:
                 cout << "Forward Only";     break;
-            case SQL_CURSOR_STATIC:
+	      case SQL_CURSOR_STATIC:
                 cout << "Static";           break;
-            case SQL_CURSOR_KEYSET_DRIVEN:
+	      case SQL_CURSOR_KEYSET_DRIVEN:
                 cout << "Keyset Driven";    break;
-            case SQL_CURSOR_DYNAMIC:
+	      case SQL_CURSOR_DYNAMIC:
                 cout << "Dynamic";          break;
-            }
+	      }
             cout << endl << endl;
 #endif
-        }
-        else
-        {
+
+	    // BJO20000425
+	    if (pDb->FwdOnlyCursors() && cursorType != SQL_CURSOR_FORWARD_ONLY)
+	      {
+		// Force the use of a forward only cursor...
+		cursorType = SQL_CURSOR_FORWARD_ONLY;
+		if (SQLSetStmtOption(hstmtInternal, SQL_CURSOR_TYPE, cursorType) != SQL_SUCCESS)
+		  {
+		    // Should never happen
+		    pDb->GetNextError(henv, hdbc, hstmtInternal);
+		    return;
+		  }
+	      }
+	  }
+	else
+	  {
             pDb->DispNextError();
             pDb->DispAllErrors(henv, hdbc, hstmtInternal);
-        }
+	  }
     }
 #ifdef DBDEBUG_CONSOLE
     else
@@ -538,6 +553,20 @@ bool wxDbTable::execUpdate(const char *pSqlStmt)
 /********** wxDbTable::query() **********/
 bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *pSqlStmt)
 {
+
+
+
+/*  SQLFreeStmt(hstmt, SQL_CLOSE);
+  if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) == SQL_SUCCESS)
+    return(TRUE);
+  else
+    {
+      pDb->DispAllErrors(henv, hdbc, hstmt);
+      return(FALSE);
+    }
+*/
+
+
     char sqlStmt[DB_MAX_STATEMENT_LEN];
 
     // Set the selectForUpdate member variable
@@ -554,15 +583,24 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
         pDb->WriteSqlLog(sqlStmt);
     }
 
+    SQLFreeStmt(hstmt, SQL_CLOSE);
+    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) == SQL_SUCCESS)
+      return(TRUE);
+    else
+      {
+        pDb->DispAllErrors(henv, hdbc, hstmt);
+        return(FALSE);
+      }
+
     // Make sure the cursor is closed first
     if (! CloseCursor(hstmt))
-        return(FALSE);
+      return(FALSE);
 
     // Execute the SQL SELECT statement
-    int retcode;   
-    retcode = SQLExecDirect(hstmt, (UCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt : sqlStmt), SQL_NTS);
+    int retcode;     
+    retcode = SQLExecDirect(hstmt, (UCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt : sqlStmt), SQL_NTS);      
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
-        return(pDb->DispAllErrors(henv, hdbc, hstmt));
+      return(pDb->DispAllErrors(henv, hdbc, hstmt));
 
     // Completed successfully
     return(TRUE);
@@ -1081,7 +1119,7 @@ bool wxDbTable::DropTable()
         {
             // Check for product specific error codes
             if (!((pDb->Dbms() == dbmsSYBASE_ASA && !wxStrcmp(pDb->sqlState,"42000"))   ||  // 5.x (and lower?)
-		  (pDb->Dbms() == dbmsSYBASE_ASA && !wxStrcmp(pDb->sqlState,"37000"))   ||
+		  (pDb->Dbms() == dbmsSYBASE_ASE && !wxStrcmp(pDb->sqlState,"37000"))   ||
                   (pDb->Dbms() == dbmsMY_SQL     && !wxStrcmp(pDb->sqlState,"S1000"))   ||  // untested
                   (pDb->Dbms() == dbmsPOSTGRES   && !wxStrcmp(pDb->sqlState,"08S01"))))     // untested
             {

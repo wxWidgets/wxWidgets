@@ -2490,7 +2490,7 @@ wxDBMS wxDb::Dbms(void)
     if (!wxStricmp(dbInf.dbmsName,"MySQL"))
         return(dbmsMY_SQL);
     if (!wxStricmp(baseName,"Sybase"))             
-      return(dbmsSYBASE_ASA);
+      return(dbmsSYBASE_ASE);
 
     baseName[5] = 0;
     if (!wxStricmp(baseName,"DBASE"))
