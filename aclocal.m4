@@ -408,7 +408,7 @@ size_t iconv();
     )
 
     iconv_const=
-    if test "x$wx_cv_func_iconv_const" != "xyes"; then
+    if test "x$wx_cv_func_iconv_const" = "xyes"; then
         iconv_const="const"
     fi
 
