@@ -90,7 +90,6 @@ public:
 
 private:
   wxSocketClient *m_sock;
-  wxPanel        *m_panel;
   wxTextCtrl     *m_text;
   wxMenu         *m_menuFile;
   wxMenu         *m_menuSocket;
@@ -209,16 +208,17 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
   // Status bar
   CreateStatusBar(2);
 
-  // Make a panel with a textctrl in it
-  m_panel = new wxPanel(this, -1);
-  m_text  = new wxTextCtrl(m_panel, -1,
+  // Make a textctrl for logging
+  m_text  = new wxTextCtrl(this, -1,
                            _("Welcome to wxSocket demo: Client\n"
                              "Client ready\n"),
-                           wxPoint(0, 0), m_panel->GetClientSize(),
+                           wxDefaultPosition, wxDefaultSize,
                            wxTE_MULTILINE | wxTE_READONLY);
 
   // Create the socket
   m_sock = new wxSocketClient();
+
+  // Setup the event handler and subscribe to most events
   m_sock->SetEventHandler(*this, SOCKET_ID);
   m_sock->SetNotify(wxSOCKET_CONNECTION_FLAG |
                     wxSOCKET_INPUT_FLAG |
@@ -231,6 +231,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
 
 MyFrame::~MyFrame()
 {
+  // No delayed deletion here, as the frame is dying anyway
   delete m_sock;
 }
 
@@ -286,10 +287,13 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
   //
   // WaitOnConnect() itself never blocks the GUI (this might change
   // in the future to honour the wxSOCKET_BLOCK flag). This call will
-  // return TRUE if the connection request completed succesfully, or
-  // FALSE otherwise, which in turn might mean:
-  //   a) that the specified timeout ellapsed, or
-  //   b) that the connection request failed.
+  // return FALSE on timeout, or TRUE if the connection request
+  // completes, which in turn might mean:
+  //
+  //   a) That the connection was successfully established
+  //   b) That the connection request failed (for example, because
+  //      it was refused by the peer.
+  //
   // Use IsConnected() to distinguish between these two.
   //
   // So, in a brief, you should do one of the following things:
@@ -301,7 +305,13 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
   // For nonblocking Connect:
   //
   //   Connect(addr, FALSE);
-  //   WaitOnConnect(seconds, millis);
+  //
+  //   bool waitmore;
+  //   while (!WaitOnConnect(seconds, millis) && waitmore)
+  //   {
+  //     // possibly give some feedback to the user,
+  //     // update waitmore if needed.
+  //   }
   //   bool success = IsConnected();
   // 
   // And that's all :-)

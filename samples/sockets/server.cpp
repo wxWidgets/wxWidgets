@@ -78,7 +78,6 @@ public:
 
 private:
   wxSocketServer *m_server;
-  wxPanel        *m_panel;
   wxTextCtrl     *m_text;
   wxMenu         *m_menuFile;
   wxMenuBar      *m_menuBar;
@@ -119,10 +118,6 @@ END_EVENT_TABLE()
 IMPLEMENT_APP(MyApp)
 
 
-// To append sockets for delayed deletion [XXX: this should be removed]
-extern WXDLLEXPORT wxList wxPendingDelete;
-
-
 // ==========================================================================
 // implementation
 // ==========================================================================
@@ -140,7 +135,7 @@ bool MyApp::OnInit()
   frame->Show(TRUE);
   SetTopWindow(frame);
 
-  // success
+  // Success
   return TRUE;
 }
 
@@ -149,8 +144,9 @@ bool MyApp::OnInit()
 // --------------------------------------------------------------------------
 
 // frame constructor
+
 MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
-                             _T("wxSocket demo: Server"),
+                             _("wxSocket demo: Server"),
                              wxDefaultPosition, wxSize(300, 200))
 {
   // Give the frame an icon
@@ -158,39 +154,46 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
 
   // Make menus
   m_menuFile = new wxMenu();
-  m_menuFile->Append(SERVER_ABOUT, _T("&About...\tCtrl-A"), _T("Show about dialog"));
+  m_menuFile->Append(SERVER_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
   m_menuFile->AppendSeparator();
-  m_menuFile->Append(SERVER_QUIT, _T("E&xit\tAlt-X"), _T("Quit server"));
+  m_menuFile->Append(SERVER_QUIT, _("E&xit\tAlt-X"), _("Quit server"));
 
   // Append menus to the menubar
   m_menuBar = new wxMenuBar();
-  m_menuBar->Append(m_menuFile, _T("&File"));
+  m_menuBar->Append(m_menuFile, _("&File"));
   SetMenuBar(m_menuBar);
 
   // Status bar
   CreateStatusBar(2);
 
-  // Make a panel with a textctrl in it
-  m_panel = new wxPanel(this, -1);
-  m_text  = new wxTextCtrl(m_panel, -1,
-                           _T("Welcome to wxSocket demo: Server\n"),
-                           wxPoint(0, 0), m_panel->GetClientSize(),
+  // Make a textctrl for logging
+  m_text  = new wxTextCtrl(this, -1,
+                           _("Welcome to wxSocket demo: Server\n"),
+                           wxDefaultPosition, wxDefaultSize,
                            wxTE_MULTILINE | wxTE_READONLY);
 
-  // Create the socket - defaults to localhost:0
+  // Create the address - defaults to localhost:0 initially
   wxIPV4address addr;
   addr.Service(3000);
 
+  // Create the socket
   m_server = new wxSocketServer(addr);
+
+  // We use Ok() here to see if the server is really listening
+  if (! m_server->Ok())
+  {
+    m_text->AppendText(_("Could not listen at the specified port !\n\n"));
+    return;
+  }
+  else
+  {
+    m_text->AppendText(_("Server listening.\n\n"));
+  }
+
+  // Setup the event handler and subscribe to connection events
   m_server->SetEventHandler(*this, SERVER_ID);
   m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
   m_server->Notify(TRUE);
-
-  // We use Ok() here to see if the server is really listening
-  if (m_server->Ok())
-    m_text->AppendText(_T("Server listening.\n\n"));
-  else
-    m_text->AppendText(_T("Could not listen at the specified port !\n\n"));
 
   m_busy = FALSE;
   m_numClients = 0;
@@ -199,6 +202,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
 
 MyFrame::~MyFrame()
 {
+  // No delayed deletion here, as the frame is dying anyway
   delete m_server;
 }
 
@@ -212,9 +216,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageBox(_T("wxSocket demo: Server\n")
-               _T("(c) 1999 Guillermo Rodriguez Garcia\n"),
-               _T("About Server"),
+  wxMessageBox(_("wxSocket demo: Server\n" 
+                 "(c) 1999 Guillermo Rodriguez Garcia\n"),
+               _("About Server"),
                wxOK | wxICON_INFORMATION, this);
 }
 
@@ -223,7 +227,7 @@ void MyFrame::Test1(wxSocketBase *sock)
   unsigned char len;
   char *buf;
 
-  m_text->AppendText(_T("Test 1 begins\n"));
+  m_text->AppendText(_("Test 1 begins\n"));
 
   // Receive data from socket and send it back. We will first
   // get a byte with the buffer size, so we can specify the
@@ -240,7 +244,7 @@ void MyFrame::Test1(wxSocketBase *sock)
   sock->Write(buf, len);
   delete[] buf;
 
-  m_text->AppendText(_T("Test 1 ends\n"));
+  m_text->AppendText(_("Test 1 ends\n"));
 }
 
 void MyFrame::Test2(wxSocketBase *sock)
@@ -251,20 +255,21 @@ void MyFrame::Test2(wxSocketBase *sock)
   char *buf = new char[MAX_MSG_SIZE];
   wxUint32 len;
 
-  m_text->AppendText(_T("Test 2 begins\n"));
+  m_text->AppendText(_("Test 2 begins\n"));
 
   // We don't need to set flags because ReadMsg and WriteMsg
   // are not affected by them anyway.
 
   len = sock->ReadMsg(buf, MAX_MSG_SIZE).LastCount();
 
-  s.Printf(_T("Client says: %s\n"), buf);
+  s.Printf(_("Client says: %s\n"), buf);
   m_text->AppendText(s);
+  m_text->AppendText(_("Sending the data back"));
 
   sock->WriteMsg(buf, len);
   delete[] buf;
 
-  m_text->AppendText(_T("Test 2 ends\n"));
+  m_text->AppendText(_("Test 2 ends\n"));
 
 #undef MAX_MSG_SIZE
 }
@@ -274,7 +279,7 @@ void MyFrame::Test3(wxSocketBase *sock)
   unsigned char len;
   char *buf;
 
-  m_text->AppendText(_T("Test 3 begins\n"));
+  m_text->AppendText(_("Test 3 begins\n"));
 
   // This test is similar to the first one, but the len is   
   // expressed in kbytes - this tests large data transfers.
@@ -287,18 +292,18 @@ void MyFrame::Test3(wxSocketBase *sock)
   sock->Write(buf, len * 1024);
   delete[] buf;
 
-  m_text->AppendText(_T("Test 3 ends\n"));
+  m_text->AppendText(_("Test 3 ends\n"));
 }
 
 void MyFrame::OnServerEvent(wxSocketEvent& event)
 {
-  wxString s = _T("OnServerEvent: ");
+  wxString s = _("OnServerEvent: ");
   wxSocketBase *sock;
 
   switch(event.SocketEvent())
   {
-    case wxSOCKET_CONNECTION : s.Append(_T("wxSOCKET_CONNECTION\n")); break;
-    default                  : s.Append(_T("Unexpected event !\n")); break;
+    case wxSOCKET_CONNECTION : s.Append(_("wxSOCKET_CONNECTION\n")); break;
+    default                  : s.Append(_("Unexpected event !\n")); break;
   }
 
   m_text->AppendText(s);
@@ -312,11 +317,11 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
   if (sock)
   {
-    m_text->AppendText(_T("New client connection accepted\n"));
+    m_text->AppendText(_("New client connection accepted\n"));
   }
   else
   {
-    m_text->AppendText(_T("Error: couldn't accept a new connection"));
+    m_text->AppendText(_("Error: couldn't accept a new connection"));
     return;
   }
 
@@ -331,14 +336,14 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
   wxSocketBase *sock = event.Socket();
-  wxString s = _T("OnSocketEvent: ");
+  wxString s = _("OnSocketEvent: ");
 
   // We first print a msg
   switch(event.SocketEvent())
   {
-    case wxSOCKET_INPUT: s.Append(_T("wxSOCKET_INPUT\n")); break;
-    case wxSOCKET_LOST:  s.Append(_T("wxSOCKET_LOST\n")); break;
-    default:             s.Append(_T("unexpected event !\n"));
+    case wxSOCKET_INPUT: s.Append(_("wxSOCKET_INPUT\n")); break;
+    case wxSOCKET_LOST:  s.Append(_("wxSOCKET_LOST\n")); break;
+    default:             s.Append(_("unexpected event !\n"));
   }
 
   m_text->AppendText(s);
@@ -361,7 +366,7 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
         case 0xBE: Test1(sock); break;
         case 0xCE: Test2(sock); break;
         case 0xDE: Test3(sock); break;
-        default: s.Append(_T("Unknown test id received from client\n"));
+        default: s.Append(_("Unknown test id received from client\n"));
       }
 
       // Enable input events again.
@@ -372,12 +377,19 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
     {
       m_numClients--;
 
-      // We cannot delete the socket right now because we can
-      // be in the middle of a test or something. So we append
-      // it to the list of objects to be deleted.
+      // Destroy() should be used instead of delete wherever possible,
+      // due to the fact that wxSocket uses 'delayed events' (see the
+      // documentation for wxPostEvent) and we don't want an event to
+      // arrive to the event handler (the frame, here) after the socket
+      // has been deleted. Also, we might be doing some other thing with
+      // the socket at the same time; for example, we might be in the
+      // middle of a test or something. Destroy() takes care of all
+      // this for us. The only case where delete should be used instead
+      // is when the event handler itself is also being destroyed; for
+      // example, see the frame dtor above.
 
-      m_text->AppendText(_T("Deleting socket.\n"));
-      wxPendingDelete.Append(sock);
+      m_text->AppendText(_("Deleting socket.\n"));
+      sock->Destroy();
       break;
     }
     default: ;
@@ -391,6 +403,6 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
 void MyFrame::UpdateStatusBar()
 {
   wxString s;
-  s.Printf(_T("%d clients connected"), m_numClients);
+  s.Printf(_("%d clients connected"), m_numClients);
   SetStatusText(s, 1);
 }
