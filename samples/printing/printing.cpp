@@ -25,7 +25,7 @@
 #endif
 
 #if !wxUSE_PRINTING_ARCHITECTURE
-#error You must set wxUSE_PRINTING_ARCHITECTURE to 1 in setup.h to compile this demo.
+#error "You must set wxUSE_PRINTING_ARCHITECTURE to 1 in setup.h, and recompile the library."
 #endif
 
 // Set this to 1 if you want to test PostScript printing under MSW.
@@ -74,28 +74,28 @@ MyApp::MyApp()
 // main frame
 bool MyApp::OnInit(void)
 {
-    m_testFont = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL);
-    
+    m_testFont.Create(10, wxSWISS, wxNORMAL, wxNORMAL);
+
     g_printData = new wxPrintData;
     g_pageSetupData = new wxPageSetupDialogData;
-    
+
     // Create the main frame window
     frame = new MyFrame((wxFrame *) NULL, _T("wxWindows Printing Demo"), wxPoint(0, 0), wxSize(400, 400));
-    
+
     // Give it a status line
     frame->CreateStatusBar(2);
-    
+
     // Load icon and bitmap
     frame->SetIcon( wxICON( mondrian) );
-    
+
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
-    
+
     file_menu->Append(WXPRINT_PRINT, _T("&Print..."),              _T("Print"));
     file_menu->Append(WXPRINT_PRINT_SETUP, _T("Print &Setup..."),              _T("Setup printer properties"));
     file_menu->Append(WXPRINT_PAGE_SETUP, _T("Page Set&up..."),              _T("Page setup"));
     file_menu->Append(WXPRINT_PREVIEW, _T("Print Pre&view"),              _T("Preview"));
-    
+
 #if wxUSE_ACCEL
     // Accelerators
     wxAcceleratorEntry entries[1];
@@ -113,38 +113,37 @@ bool MyApp::OnInit(void)
 #endif
     file_menu->AppendSeparator();
     file_menu->Append(WXPRINT_QUIT, _T("E&xit"),                _T("Exit program"));
-    
+
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(WXPRINT_ABOUT, _T("&About"),              _T("About this demo"));
-    
+
     wxMenuBar *menu_bar = new wxMenuBar;
-    
+
     menu_bar->Append(file_menu, _T("&File"));
     menu_bar->Append(help_menu, _T("&Help"));
-    
+
     // Associate the menu bar with the frame
     frame->SetMenuBar(menu_bar);
-    
+
     MyCanvas *canvas = new MyCanvas(frame, wxPoint(0, 0), wxSize(100, 100), wxRETAINED|wxHSCROLL|wxVSCROLL);
-    
+
     // Give it scrollbars: the virtual canvas is 20 * 50 = 1000 pixels in each direction
     canvas->SetScrollbars(20, 20, 50, 50);
-    
+
     frame->canvas = canvas;
-    
+
     frame->Centre(wxBOTH);
-    frame->Show(TRUE);
-    
+    frame->Show();
+
     frame->SetStatusText(_T("Printing demo"));
-    
+
     SetTopWindow(frame);
-    
-    return TRUE;
+
+    return true;
 }
 
 int MyApp::OnExit()
 {
-    delete wxGetApp().m_testFont;
     delete g_printData;
     delete g_pageSetupData;
     return 1;
@@ -167,14 +166,14 @@ END_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
-wxFrame(frame, -1, title, pos, size)
+wxFrame(frame, wxID_ANY, title, pos, size)
 {
-    canvas = (MyCanvas *) NULL;
+    canvas = NULL;
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true /*force closing*/);
 }
 
 void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
@@ -183,7 +182,7 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 
     wxPrinter printer(& printDialogData);
     MyPrintout printout(_T("My printout"));
-    if (!printer.Print(this, &printout, TRUE))
+    if (!printer.Print(this, &printout, true /*prompt*/))
     {
         if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
             wxMessageBox(_T("There was a problem printing.\nPerhaps your current printer is not set correctly?"), _T("Printing"), wxOK);
@@ -207,19 +206,19 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
         wxMessageBox(_T("There was a problem previewing.\nPerhaps your current printer is not set correctly?"), _T("Previewing"), wxOK);
         return;
     }
-    
+
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this, _T("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
     frame->Initialize();
-    frame->Show(TRUE);
+    frame->Show();
 }
 
 void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 {
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintDialog printerDialog(this, & printDialogData);
-    
-    printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
+
+    printerDialog.GetPrintDialogData().SetSetupDialog(true /*show print setup dialog*/);
     printerDialog.ShowModal();
 
     (*g_printData) = printerDialog.GetPrintDialogData().GetPrintData();
@@ -231,7 +230,7 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 
     wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
     pageSetupDialog.ShowModal();
-    
+
     (*g_printData) = pageSetupDialog.GetPageSetupData().GetPrintData();
     (*g_pageSetupData) = pageSetupDialog.GetPageSetupData();
 }
@@ -241,7 +240,7 @@ void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 {
     wxPostScriptPrinter printer(g_printData);
     MyPrintout printout(_T("My printout"));
-    printer.Print(this, &printout, TRUE);
+    printer.Print(this, &printout, true/*prompt*/);
 
     (*g_printData) = printer.GetPrintData();
 }
@@ -254,7 +253,7 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this, _T("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
     frame->Initialize();
-    frame->Show(TRUE);
+    frame->Show();
 }
 
 void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
@@ -262,7 +261,7 @@ void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
     wxGenericPrintDialog printerDialog(this, & printDialogData);
 
-    printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
+    printerDialog.GetPrintDialogData().SetSetupDialog(true /*show print setup dialog*/);
     printerDialog.ShowModal();
 
     (*g_printData) = printerDialog.GetPrintDialogData().GetPrintData();
@@ -291,33 +290,33 @@ void MyFrame::Draw(wxDC& dc)
 {
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
-    dc.SetFont(* wxGetApp().m_testFont);
-    
+    dc.SetFont(wxGetApp().m_testFont);
+
     dc.SetBackgroundMode(wxTRANSPARENT);
-    
+
     dc.SetBrush(* wxCYAN_BRUSH);
     dc.SetPen(* wxRED_PEN);
-    
+
     dc.DrawRectangle(0, 30, 200, 100);
-    
+
     dc.DrawText( wxT("Rectangle 200 by 100"), 40, 40);
-    
+
     dc.DrawEllipse(50, 140, 100, 50);
-    
+
     dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
-    
+
 #if wxUSE_UNICODE
     char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
-    dc.DrawText( tmp, 10, 200 ); 
+    dc.DrawText( tmp, 10, 200 );
 #endif
-    
+
     dc.SetPen(* wxBLACK_PEN);
     dc.DrawLine(0, 0, 200, 200);
     dc.DrawLine(200, 0, 0, 200);
-    
+
     wxIcon my_icon = wxICON(mondrian) ;
-    
+
     dc.DrawIcon( my_icon, 100, 100);
 }
 
@@ -332,7 +331,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxFrame *frame, const wxPoint& pos, const wxSize& size, long style):
-    wxScrolledWindow(frame, -1, pos, size, style)
+    wxScrolledWindow(frame, wxID_ANY, pos, size, style)
 {
     SetBackgroundColour(* wxWHITE);
 }
@@ -360,26 +359,26 @@ bool MyPrintout::OnPrintPage(int page)
             DrawPageOne(dc);
         else if (page == 2)
             DrawPageTwo(dc);
-        
+
         dc->SetDeviceOrigin(0, 0);
         dc->SetUserScale(1.0, 1.0);
-        
+
         wxChar buf[200];
         wxSprintf(buf, wxT("PAGE %d"), page);
         dc->DrawText(buf, 10, 10);
-        
-        return TRUE;
+
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 bool MyPrintout::OnBeginDocument(int startPage, int endPage)
 {
     if (!wxPrintout::OnBeginDocument(startPage, endPage))
-        return FALSE;
-    
-    return TRUE;
+        return false;
+
+    return true;
 }
 
 void MyPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
@@ -399,39 +398,39 @@ void MyPrintout::DrawPageOne(wxDC *dc)
 {
     // You might use THIS code if you were scaling
     // graphics of known size to fit on the page.
-    
+
     // We know the graphic is 200x200. If we didn't know this,
     // we'd need to calculate it.
     float maxX = 200;
     float maxY = 200;
-    
+
     // Let's have at least 50 device units margin
     float marginX = 50;
     float marginY = 50;
-    
+
     // Add the margin to the graphic size
     maxX += (2*marginX);
     maxY += (2*marginY);
-    
+
     // Get the size of the DC in pixels
     int w, h;
     dc->GetSize(&w, &h);
-    
+
     // Calculate a suitable scaling factor
     float scaleX=(float)(w/maxX);
     float scaleY=(float)(h/maxY);
-    
+
     // Use x or y scaling factor, whichever fits on the DC
     float actualScale = wxMin(scaleX,scaleY);
-    
+
     // Calculate the position on the DC for centring the graphic
     float posX = (float)((w - (200*actualScale))/2.0);
     float posY = (float)((h - (200*actualScale))/2.0);
-    
+
     // Set the scale and origin
     dc->SetUserScale(actualScale, actualScale);
     dc->SetDeviceOrigin( (long)posX, (long)posY );
-    
+
     frame->Draw(*dc);
 }
 
@@ -440,32 +439,32 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     // You might use THIS code to set the printer DC to ROUGHLY reflect
     // the screen text size. This page also draws lines of actual length
     // 5cm on the page.
-   
+
     // Get the logical pixels per inch of screen and printer
     int ppiScreenX, ppiScreenY;
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
     int ppiPrinterX, ppiPrinterY;
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
-    
+
     // This scales the DC so that the printout roughly represents the
     // the screen scaling. The text point size _should_ be the right size
     // but in fact is too small for some reason. This is a detail that will
     // need to be addressed at some point but can be fudged for the
     // moment.
     float scale = (float)((float)ppiPrinterX/(float)ppiScreenX);
-    
+
     // Now we have to check in case our real page size is reduced
     // (e.g. because we're drawing to a print preview memory DC)
     int pageWidth, pageHeight;
     int w, h;
     dc->GetSize(&w, &h);
     GetPageSizePixels(&pageWidth, &pageHeight);
-    
+
     // If printer pageWidth == current DC width, then this doesn't
     // change. But w might be the preview bitmap width, so scale down.
     float overallScale = scale * (float)(w/(float)pageWidth);
     dc->SetUserScale(overallScale, overallScale);
-    
+
     // Calculate conversion factor for converting millimetres into
     // logical units.
     // There are approx. 25.1 mm to the inch. There are ppi
@@ -473,25 +472,25 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     // ppi/25.1 device units. We also divide by the
     // screen-to-printer scaling factor, because we need to
     // unscale to pass logical units to DrawLine.
-    
+
     // Draw 50 mm by 50 mm L shape
     float logUnitsFactor = (float)(ppiPrinterX/(scale*25.1));
     float logUnits = (float)(50*logUnitsFactor);
     dc->SetPen(* wxBLACK_PEN);
     dc->DrawLine(50, 250, (long)(50.0 + logUnits), 250);
     dc->DrawLine(50, 250, 50, (long)(250.0 + logUnits));
-    
-    dc->SetFont(* wxGetApp().m_testFont);
+
     dc->SetBackgroundMode(wxTRANSPARENT);
-    
-    
+
+
     { // GetTextExtent demo:
         wxString words[7] = {_T("This "), _T("is "), _T("GetTextExtent "), _T("testing "), _T("string. "), _T("Enjoy "), _T("it!")};
         long w, h;
         long x = 200, y= 250;
         wxFont fnt(15, wxSWISS, wxNORMAL, wxNORMAL);
-        
+
         dc->SetFont(fnt);
+
         for (int i = 0; i < 7; i++)
         {
             wxString word = words[i];
@@ -502,32 +501,34 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
             dc->DrawText(words[i], x, y);
             x += w;
         }
-        dc->SetFont(* wxGetApp().m_testFont);
+
     }
-    
+
+    dc->SetFont(wxGetApp().m_testFont);
+
     dc->DrawText(_T("Some test text"), 200, 300 );
 
     // TESTING
-    
+
     int leftMargin = 20;
     int rightMargin = 20;
     int topMargin = 20;
     int bottomMargin = 20;
-    
+
     int pageWidthMM, pageHeightMM;
     GetPageSizeMM(&pageWidthMM, &pageHeightMM);
-    
+
     float leftMarginLogical = (float)(logUnitsFactor*leftMargin);
     float topMarginLogical = (float)(logUnitsFactor*topMargin);
     float bottomMarginLogical = (float)(logUnitsFactor*(pageHeightMM - bottomMargin));
     float rightMarginLogical = (float)(logUnitsFactor*(pageWidthMM - rightMargin));
-    
+
     dc->SetPen(* wxRED_PEN);
-    dc->DrawLine( (long)leftMarginLogical, (long)topMarginLogical, 
+    dc->DrawLine( (long)leftMarginLogical, (long)topMarginLogical,
         (long)rightMarginLogical, (long)topMarginLogical);
-    dc->DrawLine( (long)leftMarginLogical, (long)bottomMarginLogical, 
+    dc->DrawLine( (long)leftMarginLogical, (long)bottomMarginLogical,
         (long)rightMarginLogical,  (long)bottomMarginLogical);
-    
+
     WritePageHeader(this, dc, _T("A header"), logUnitsFactor);
 }
 
@@ -542,27 +543,27 @@ headerFont = wxTheFontList->FindOrCreateFont(16, wxSWISS, wxNORMAL, wxBOLD);
 }
 dc->SetFont(headerFont);
     */
-    
+
     int pageWidthMM, pageHeightMM;
-    
+
     printout->GetPageSizeMM(&pageWidthMM, &pageHeightMM);
-    
+
     int leftMargin = 10;
     int topMargin = 10;
     int rightMargin = 10;
-    
+
     float leftMarginLogical = (float)(mmToLogical*leftMargin);
     float topMarginLogical = (float)(mmToLogical*topMargin);
     float rightMarginLogical = (float)(mmToLogical*(pageWidthMM - rightMargin));
-    
+
     long xExtent, yExtent;
     dc->GetTextExtent(text, &xExtent, &yExtent);
     float xPos = (float)(((((pageWidthMM - leftMargin - rightMargin)/2.0)+leftMargin)*mmToLogical) - (xExtent/2.0));
     dc->DrawText(text, (long)xPos, (long)topMarginLogical);
-    
+
     dc->SetPen(* wxBLACK_PEN);
-    dc->DrawLine( (long)leftMarginLogical, (long)(topMarginLogical+yExtent), 
+    dc->DrawLine( (long)leftMarginLogical, (long)(topMarginLogical+yExtent),
         (long)rightMarginLogical, (long)topMarginLogical+yExtent );
-    
-    return TRUE;
+
+    return true;
 }

@@ -21,7 +21,7 @@ class MyApp: public wxApp
     bool OnInit();
     int OnExit();
 
-    wxFont* m_testFont;
+    wxFont m_testFont;
 };
 
 DECLARE_APP(MyApp)
