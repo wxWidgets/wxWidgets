@@ -61,12 +61,7 @@ extern bool g_isIdle;
 // substitute for missing GtkPixmapMenuItem
 //-----------------------------------------------------------------------------
 
-// FIXME: I can't make this compile with GTK+ 2.0, disabling for now (VZ)
 #ifndef __WXGTK20__
-    #define USE_MENU_BITMAPS
-#endif
-
-#ifdef USE_MENU_BITMAPS
 
 #define GTK_TYPE_PIXMAP_MENU_ITEM            (gtk_pixmap_menu_item_get_type ())
 #define GTK_PIXMAP_MENU_ITEM(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItem))
@@ -99,12 +94,11 @@ struct _GtkPixmapMenuItemClass
 };
 
 
-GtkType           gtk_pixmap_menu_item_get_type       (void);
+GtkType    gtk_pixmap_menu_item_get_type       (void);
 GtkWidget* gtk_pixmap_menu_item_new            (void);
 void       gtk_pixmap_menu_item_set_pixmap     (GtkPixmapMenuItem *menu_item,
                                                                     GtkWidget *pixmap);
-
-#endif // USE_MENU_BITMAPS
+#endif // GTK 2.0
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -1138,10 +1132,6 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 {
     GtkWidget *menuItem;
 
-#if defined(USE_MENU_BITMAPS) || !GTK_CHECK_VERSION(1, 2, 0)
-    bool appended = FALSE;
-#endif
-
     // does this item terminate the current radio group?
     bool endOfRadioGroup = TRUE;
 
@@ -1192,9 +1182,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         if ( m_invokingWindow )
             wxMenubarSetInvokingWindow(mitem->GetSubMenu(), m_invokingWindow);
     }
-#ifdef USE_MENU_BITMAPS
-    else if (mitem->GetBitmap().Ok()) // An item with bitmap
+#ifndef __WXGTK20__
+    else if (mitem->GetBitmap().Ok())
     {
+        // Our extra code for Bitmaps in GTK 1.2
         wxString text( mitem->GetText() );
         const wxBitmap *bitmap = &mitem->GetBitmap();
 
@@ -1202,14 +1193,15 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         GtkWidget *label = gtk_accel_label_new ( wxGTK_CONV( text ) );
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         gtk_container_add (GTK_CONTAINER (menuItem), label);
+
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
         guint accel_key;
         GdkModifierType accel_mods;
 
         // accelerator for the item, as specified by its label
         // (ex. Ctrl+O for open)
-        gtk_accelerator_parse(GetHotKey(*mitem).c_str(),
-                              &accel_key, &accel_mods);
+        gtk_accelerator_parse(GetHotKey(*mitem).c_str(), &accel_key,
+                              &accel_mods);
         if (accel_key != GDK_VoidSymbol)
         {
             gtk_widget_add_accelerator (menuItem,
@@ -1228,7 +1220,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                                         "activate_item",
                                         gtk_menu_ensure_uline_accel_group (
                                             GTK_MENU (m_menu)),
-                                        accel_key, 0,
+                                        accel_key, (GdkModifierType) 0,
                                         GTK_ACCEL_LOCKED);
         }
 
@@ -1245,12 +1237,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                             (gpointer)this );
 
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
-
         gtk_widget_show( menuItem );
-
-        appended = TRUE; // We've done this, don't do it again
     }
-#endif // USE_MENU_BITMAPS
+#endif
     else // a normal item
     {
         // text has "_" instead of "&" after mitem->SetText() so don't use it
@@ -1307,6 +1296,63 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
             case wxITEM_NORMAL:
                 item_type = "<Item>";
+#if defined(__WXGTK20__) && wxUSE_IMAGE
+                if (mitem->GetBitmap().Ok())
+                {
+                    item_type = "<ImageItem>";
+                    // GTK2's image factory know about image items, but they need to
+                    // get a GdkPixbuf structure, which we need to create on the fly.
+                    // This Pixbuf structure needs to be static so we create it and
+                    // just make it a memory leak...
+                    wxImage image( mitem->GetBitmap().ConvertToImage() );
+                    size_t size = 4 +   // magic
+                                  20 +  // header
+                                  image.GetHeight() * image.GetWidth() * 4; // RGBA
+
+                    unsigned char *dest = new unsigned char[size];
+                    entry.extra_data = dest;
+
+                    unsigned char *source = image.GetData();
+                    bool has_mask = image.HasMask();
+                    unsigned char mask_r = image.GetMaskRed();
+                    unsigned char mask_b = image.GetMaskBlue();
+                    unsigned char mask_g = image.GetMaskGreen();
+                    wxUint32 tmp;
+
+                    // Magic
+                    *dest = 'G'; dest++; *dest = 'd'; dest++; *dest = 'k'; dest++; *dest = 'P'; dest++;
+                    // Data size
+                    tmp = size;
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+                    // Pixdata type
+                    *dest = 1; dest++; *dest = 1; dest++; *dest = 0; dest++; *dest = 2; dest++;
+                    // Rowstride
+                    tmp = image.GetWidth()*4;
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+                    // Width
+                    tmp = image.GetWidth();
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+                    // Height
+                    tmp = image.GetHeight();
+                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
+
+                    for (int i = 0; i < image.GetWidth()*image.GetHeight(); i++)
+                    {
+                        unsigned char r = *source; source++;
+                        unsigned char g = *source; source++;
+                        unsigned char b = *source; source++;
+                        *dest = r; dest++;
+                        *dest = g; dest++;
+                        *dest = b; dest++;
+                        if (has_mask && (r == mask_r)  && (g == mask_g)  && (b == mask_b))
+                             *dest = 0;
+                        else
+                             *dest = 255;
+                        dest++;
+                    }
+                    break;
+                }
+#endif // GTK 2.0+
                 break;
         }
 
@@ -1530,7 +1576,7 @@ static wxString GetHotKey( const wxMenuItem& item )
 // substitute for missing GtkPixmapMenuItem
 //-----------------------------------------------------------------------------
 
-#ifdef USE_MENU_BITMAPS
+#ifndef __WXGTK20__
 
 /*
  * Copyright (C) 1998, 1999, 2000 Free Software Foundation
@@ -1902,5 +1948,5 @@ changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
     gtk_widget_queue_resize(GTK_WIDGET(menu_item));
 }
 
-#endif // USE_MENU_BITMAPS
+#endif
 
