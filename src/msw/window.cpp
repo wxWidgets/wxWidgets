@@ -95,7 +95,7 @@
 
 #include <string.h>
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)) || defined(__CYGWIN10__)
     #include <shellapi.h>
     #include <mmsystem.h>
 #endif
@@ -104,16 +104,20 @@
     #include <windowsx.h>
 #endif
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)) || defined(__CYGWIN10__)
     #ifdef __WIN95__
         #include <commctrl.h>
     #endif
-#elif !defined(__WXMICROWIN__) // broken compiler
+#elif !defined(__WXMICROWIN__) && !defined(__WXWINCE__) // broken compiler
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
 #if defined(__GNUG__)
 #include "wx/msw/missing.h"
+#endif
+
+#if defined(__WXWINCE__)
+#include "wx/msw/wince/missing.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -448,7 +452,7 @@ void wxWindowMSW::SetFocus()
     HWND hWnd = GetHwnd();
     wxCHECK_RET( hWnd, _T("can't set focus to invalid window") );
 
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     ::SetLastError(0);
 #endif
 
@@ -744,7 +748,16 @@ inline int GetScrollPosition(HWND hWnd, int wOrient)
 #ifdef __WXMICROWIN__
     return ::GetScrollPosWX(hWnd, wOrient);
 #else
-    return ::GetScrollPos(hWnd, wOrient);
+    SCROLLINFO scrollInfo;
+    scrollInfo.fMask = SIF_POS;
+    if ( !::GetScrollInfo(hWnd,
+                                  wOrient,
+                                  &scrollInfo) )
+    {
+        wxLogLastError(_T("GetScrollInfo"));
+    }
+    return scrollInfo.nPos;
+//    return ::GetScrollPos(hWnd, wOrient);
 #endif
 }
 
@@ -760,13 +773,23 @@ int wxWindowMSW::GetScrollPos(int orient) const
 // of positions that we can scroll.
 int wxWindowMSW::GetScrollRange(int orient) const
 {
-    int minPos, maxPos;
+    int maxPos;
     HWND hWnd = GetHwnd();
     if ( !hWnd )
         return 0;
-
+#if 0
     ::GetScrollRange(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
                      &minPos, &maxPos);
+#endif
+    SCROLLINFO scrollInfo;
+    scrollInfo.fMask = SIF_RANGE;
+    if ( !::GetScrollInfo(hWnd,
+                                  orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
+                                  &scrollInfo) )
+    {
+        wxLogLastError(_T("GetScrollInfo"));
+    }
+    maxPos = scrollInfo.nMax;
 
     // undo "range - 1" done in SetScrollbar()
     return maxPos + 1;
@@ -843,7 +866,12 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
         pr = NULL;
     }
 
+#ifdef __WXWINCE__
+    // FIXME: is this the exact equivalent of the line below?
+    ::ScrollWindowEx(GetHwnd(), dx, dy, pr, pr, 0, 0, SW_ERASE|SW_INVALIDATE);
+#else
     ::ScrollWindow(GetHwnd(), dx, dy, pr, pr);
+#endif
 }
 
 static bool ScrollVertically(HWND hwnd, int kind, int count)
@@ -1046,8 +1074,10 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     {
         *exstyle = 0;
 
+#ifndef __WXWINCE__
         if ( flags & wxTRANSPARENT_WINDOW )
             *exstyle |= WS_EX_TRANSPARENT;
+#endif
 
         switch ( border )
         {
@@ -1079,7 +1109,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         }
 
         // wxUniv doesn't use Windows dialog navigation functions at all
-#ifndef __WXUNIVERSAL__
+#if !defined(__WXUNIVERSAL__) && !defined(__WXWINCE__)
         // to make the dialog navigation work with the nested panels we must
         // use this style (top level windows such as dialogs don't need it)
         if ( (flags & wxTAB_TRAVERSAL) && !IsTopLevel() )
@@ -1265,7 +1295,7 @@ void wxWindowMSW::Update()
         wxLogLastError(_T("UpdateWindow"));
     }
 
-#if !defined(__WXMICROWIN__)
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
     (void)::GdiFlush();
@@ -1295,9 +1325,11 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 // DragAcceptFiles in parallel with SetDropTarget.
 void wxWindowMSW::DragAcceptFiles(bool accept)
 {
+#if !defined(__WXWINCE__)
     HWND hWnd = GetHwnd();
     if ( hWnd )
         ::DragAcceptFiles(hWnd, (BOOL)accept);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1701,7 +1733,11 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     point.y = y;
     ::ClientToScreen(hWnd, &point);
     wxCurrentPopupMenu = menu;
-    ::TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
+    UINT flags = 0;
+#if !defined(__WXWINCE__)
+    flags = TPM_RIGHTBUTTON;
+#endif
+    ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
 
     // we need to do it righ now as otherwise the events are never going to be
     // sent to wxCurrentPopupMenu from HandleCommand()
@@ -1942,6 +1978,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             // style has the focus, it can happen. One such possibility is if
             // all windows are either toplevel, wxDialog, wxPanel or static
             // controls and no window can actually accept keyboard input.
+#if !defined(__WXWINCE__)
             if ( ::GetWindowLong(hwndFocus, GWL_EXSTYLE) & WS_EX_CONTROLPARENT )
             {
                 // passimistic by default
@@ -1959,6 +1996,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                     }
                 }
             }
+#endif
 
             if ( canSafelyCallIsDlgMsg )
             {
@@ -2169,6 +2207,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             processed = HandleMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             break;
 
+#if !defined(__WXWINCE__)
         case WM_MOVING:
             {
                 LPRECT pRect = (LPRECT)lParam;
@@ -2186,6 +2225,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 }
             }
             break;
+#endif
 
         case WM_SIZE:
             switch ( wParam )
@@ -2215,6 +2255,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
+#if !defined(__WXWINCE__)
         case WM_SIZING:
             {
                 LPRECT pRect = (LPRECT)lParam;
@@ -2232,8 +2273,9 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 }
             }
             break;
+#endif
 
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_ACTIVATEAPP:
             wxTheApp->SetActive(wParam != 0, FindFocus());
             break;
@@ -2389,11 +2431,9 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
-#ifdef __WIN95__
         case WM_NOTIFY:
             processed = HandleNotify((int)wParam, lParam, &rc.result);
             break;
-#endif  // Win95
 
             // for these messages we must return TRUE if process the message
 #ifdef WM_DRAWITEM
@@ -2600,9 +2640,11 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             processed = HandleSysColorChange();
             break;
 
+#if !defined(__WXWINCE__)
         case WM_DISPLAYCHANGE:
             processed = HandleDisplayChange();
             break;
+#endif
 
         case WM_PALETTECHANGED:
             processed = HandlePaletteChanged((WXHWND) (HWND) wParam);
@@ -2625,9 +2667,11 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
+#if !defined(__WXWINCE__)
         case WM_DROPFILES:
             processed = HandleDropFiles(wParam);
             break;
+#endif
 
         case WM_INITDIALOG:
             processed = HandleInitDialog((WXHWND)(HWND)wParam);
@@ -2639,6 +2683,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
+#if !defined(__WXWINCE__)
         case WM_QUERYENDSESSION:
             processed = HandleQueryEndSession(lParam, &rc.allow);
             break;
@@ -2650,6 +2695,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_GETMINMAXINFO:
             processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
             break;
+#endif
 
         case WM_SETCURSOR:
             processed = HandleSetCursor((WXHWND)(HWND)wParam,
@@ -2682,18 +2728,26 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 #if defined(WM_HELP)
         case WM_HELP:
             {
+                // HELPINFO doesn't seem to be supported on WinCE.
+#ifndef __WXWINCE__
                 HELPINFO* info = (HELPINFO*) lParam;
                 // Don't yet process menu help events, just windows
                 if (info->iContextType == HELPINFO_WINDOW)
                 {
+#endif
                     wxWindowMSW* subjectOfHelp = this;
                     bool eventProcessed = FALSE;
                     while (subjectOfHelp && !eventProcessed)
                     {
                         wxHelpEvent helpEvent(wxEVT_HELP,
                                               subjectOfHelp->GetId(),
-                                              wxPoint(info->MousePos.x,
-                                              info->MousePos.y) );
+#ifdef __WXWINCE__
+                                              wxPoint(0, 0)
+#else
+                                              wxPoint(info->MousePos.x, info->MousePos.y)
+#endif
+                                              );
+
                         helpEvent.SetEventObject(this);
                         eventProcessed =
                             GetEventHandler()->ProcessEvent(helpEvent);
@@ -2704,6 +2758,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     }
 
                     processed = eventProcessed;
+#ifndef __WXWINCE__
                 }
                 else if (info->iContextType == HELPINFO_MENUITEM)
                 {
@@ -2713,9 +2768,12 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
                 }
                 //else: processed is already FALSE
+#endif
             }
             break;
+#endif
 
+#if !defined(__WXWINCE__)
         case WM_CONTEXTMENU:
             {
                 // we don't convert from screen to client coordinates as
@@ -2726,6 +2784,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 processed = GetEventHandler()->ProcessEvent(evtCtx);
             }
             break;
+#endif
 
         case WM_MENUCHAR:
             // we're only interested in our own menus, not MF_SYSMENU
@@ -2740,7 +2799,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 }
             }
             break;
-#endif
     }
 
     if ( !processed )
@@ -2986,12 +3044,13 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
     // this message is supposed to be sent to Unicode programs only) -- hence
     // we need to handle it as well, otherwise no tooltips will be shown in
     // this case
-
+#ifndef __WXWINCE__
     if ( !(code == (WXUINT) TTN_NEEDTEXTA || code == (WXUINT) TTN_NEEDTEXTW) || ttip.empty() )
     {
         // not a tooltip message or no tooltip to show anyhow
         return FALSE;
     }
+#endif
 
     LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
 
@@ -3046,6 +3105,7 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
 
 bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 {
+#ifndef __WXWINCE__
     wxCloseEvent event(wxEVT_QUERY_END_SESSION, -1);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(TRUE);
@@ -3061,10 +3121,14 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
     }
 
     return rc;
+#else
+    return FALSE;
+#endif
 }
 
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 {
+#ifndef __WXWINCE__
     // do nothing if the session isn't ending
     if ( !endSession )
         return FALSE;
@@ -3079,6 +3143,9 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
     event.SetLoggingOff( (logOff == (long)ENDSESSION_LOGOFF) );
 
     return wxTheApp->ProcessEvent(event);
+#else
+    return FALSE;
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -3094,6 +3161,7 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
     // all of them iterate over all the controls starting from the focus and
     // stop iterating when they get back to the focus but unless all parents
     // have WS_EX_CONTROLPARENT bit set, they would never get back to focus
+#ifndef __WXWINCE__
     if ( ((CREATESTRUCT *)cs)->dwExStyle & WS_EX_CONTROLPARENT )
     {
         // there is no need to do anything for the top level windows
@@ -3111,6 +3179,7 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
             parent = parent->GetParent();
         }
     }
+#endif
 
     // TODO: should generate this event from WM_NCCREATE
     wxWindowCreateEvent event((wxWindow *)this);
@@ -3247,7 +3316,7 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
-#if defined (__WXMICROWIN__)
+#if defined (__WXMICROWIN__) || defined(__WXWINCE__)
     return FALSE;
 #else // __WXMICROWIN__
     HDROP hFilesInfo = (HDROP) wParam;
@@ -3486,7 +3555,11 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
 #ifndef __WXMICROWIN__
     WXHBRUSH hBrush = 0;
 
+#ifdef __WXWINCE__
+    if (FALSE)
+#else
     if ( nCtlColor == CTLCOLOR_DLG )
+#endif
     {
         hBrush = OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
     }
@@ -3817,11 +3890,16 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 
     HDC hdc = (HDC)event.GetDC()->GetHDC();
 
+#ifndef __WXWINCE__
     int mode = ::SetMapMode(hdc, MM_TEXT);
+#endif
 
     ::FillRect(hdc, &rect, hBrush);
     ::DeleteObject(hBrush);
+
+#ifndef __WXWINCE__
     ::SetMapMode(hdc, mode);
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -3888,6 +3966,9 @@ bool wxWindowMSW::HandleSizing(wxRect& rect)
 
 bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
 {
+#ifdef __WXWINCE__
+    return FALSE;
+#else
     MINMAXINFO *info = (MINMAXINFO *)mmInfo;
 
     bool rc = FALSE;
@@ -3922,6 +4003,7 @@ bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
     }
 
     return rc;
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -3994,6 +4076,7 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
 bool wxWindowMSW::HandleSysCommand(WXWPARAM wParam, WXLPARAM WXUNUSED(lParam))
 {
+#ifndef __WXWINCE__
     // 4 bits are reserved
     switch ( wParam & 0xFFFFFFF0 )
     {
@@ -4003,6 +4086,7 @@ bool wxWindowMSW::HandleSysCommand(WXWPARAM wParam, WXLPARAM WXUNUSED(lParam))
         case SC_MINIMIZE:
             return HandleMinimize();
     }
+#endif
 
     return FALSE;
 }
@@ -4061,6 +4145,13 @@ static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y) //
     HWND hwnd = GetHwndOf(win),
          hwndUnderMouse;
 
+#ifdef __WXWINCE__
+    hwndUnderMouse = ::ChildWindowFromPoint
+                       (
+                        hwnd,
+                        pt
+                       );
+#else
     hwndUnderMouse = ::ChildWindowFromPointEx
                        (
                         hwnd,
@@ -4069,6 +4160,7 @@ static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y) //
                         CWP_SKIPDISABLED    |
                         CWP_SKIPTRANSPARENT
                        );
+#endif
 
     if ( !hwndUnderMouse || hwndUnderMouse == hwnd )
     {
@@ -4344,6 +4436,9 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
 
 int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
 {
+    // FIXME: implement GetMenuItemCount for WinCE, possibly
+    // in terms of GetMenuItemInfo
+#ifndef __WXWINCE__
     const HMENU hmenu = (HMENU)lParam;
 
     MENUITEMINFO mii;
@@ -4397,7 +4492,7 @@ int wxWindowMSW::HandleMenuChar(int chAccel, WXLPARAM lParam)
             wxLogLastError(_T("GetMenuItemInfo"));
         }
     }
-
+#endif
     return wxNOT_FOUND;
 }
 
@@ -4849,7 +4944,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
     return win;
 }
 
-#ifndef __WXMICROWIN__
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.

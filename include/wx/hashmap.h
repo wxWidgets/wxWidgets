@@ -20,6 +20,10 @@
 
 #include <stddef.h>             // for ptrdiff_t
 
+#ifdef __WXWINCE__
+typedef int ptrdiff_t;
+#endif
+
 // private
 struct WXDLLIMPEXP_BASE _wxHashTable_NodeBase
 {
@@ -70,7 +74,11 @@ protected:
 
     static void** AllocTable( size_t sz )
     {
+#ifdef __WXWINCE__
+        return (void **)malloc(sz * sizeof(void*));
+#else
         return (void **)calloc(sz, sizeof(void*));
+#endif
     }
 };
 

@@ -12,14 +12,29 @@
 #ifndef _WX_CE_MISSING_H_
 #define _WX_CE_MISSING_H_
 
+BOOL IsIconic( HWND hWnd )
+{
+    // Probably not right...
+#if 0
+    long style = GetWindowLong(hWnd, GWL_STYLE);
+    return ((style & WS_MINIMIZE) == 0);
+#endif
+    return FALSE;
+}
 
-#include "wx/msw/private.h"
 
 /*
 Most of these are in MSVC++6.0   <wx\wince\winuser.h>
 see also                         <wx\msw\gnuwin32\winresrc.h>
 */
 ////////////////////////////////////////////////////////
+
+// JACS: I've commented these out in order to start from
+// scratch. I don't think we should simply add styles,
+// classes etc. when we don't know if they're supported
+// by WinCE libraries.
+
+#if 0
 
 /*
  * Extended Window Styles
@@ -133,6 +148,8 @@ CallWindowProcW(
 #else
 #define CallWindowProc  CallWindowProcA
 #endif // !UNICODE
+
+#endif
 
 ////////////////////////////////////////////////////////
 

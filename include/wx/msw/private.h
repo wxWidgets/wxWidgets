@@ -80,7 +80,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-#if defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS
+#if defined(__WXWINCE__) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
 #ifndef ZeroMemory
     inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
 #endif
@@ -88,9 +88,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
 // window proc
-#if defined(__WXWINCE__)
-    typedef FARPROC WndProcCast;
-#elif defined(STRICT) || defined(__GNUC__)
+#if defined(STRICT) || defined(__GNUC__)
     typedef WNDPROC WndProcCast;
 #else
     typedef FARPROC WndProcCast;
@@ -402,6 +400,7 @@ private:
    DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
+#ifndef __WXWINCE__
 // when working with global pointers (which is unfortunately still necessary
 // sometimes, e.g. for clipboard) it is important to unlock them exactly as
 // many times as we lock them which just asks for using a "smart lock" class
@@ -440,6 +439,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(GlobalPtr)
 };
+#endif
 
 // ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
