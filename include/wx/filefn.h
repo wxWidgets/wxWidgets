@@ -210,7 +210,7 @@ enum wxSeekMode
             #define wxWrite        _write(fd, (const char *)buf, nCount)
         #endif
     #else
-        #ifdef __DMC__
+        #if defined(__DMC__) || defined(__WATCOMC__)
             #define wxRead        ::read
             #define wxWrite       ::write
         #else
@@ -228,7 +228,11 @@ enum wxSeekMode
         #define   wxTell       _tell
     #endif
     #define   wxFsync      _commit
-    #define   wxEof        _eof
+    #if defined(__WATCOMC__)
+        #define   wxEof        ::eof
+    #else
+        #define   wxEof        _eof
+    #endif
 
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
