@@ -5315,17 +5315,16 @@ dnl report on what we decided to do
 echo
 echo "Configured wxWindows ${WX_VERSION} for \`${host}'"
 echo ""
-echo "  Should wxWindows use a graphic toolkit?                 ${wxUSE_GUI}"
-echo "  Which toolkit should wxWindows use?                     ${TOOLKIT}"
+echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base only}"
 
-echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG}"
+echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG-no}"
 echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED}"
 
 echo "  Which libraries should wxWindows use?"
-echo "                                       jpeg               ${wxUSE_LIBJPEG}"
-echo "                                       png                ${wxUSE_LIBPNG}"
+echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"
+echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
-echo "                                       tiff               ${wxUSE_LIBTIFF}"
+echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 
 echo ""
