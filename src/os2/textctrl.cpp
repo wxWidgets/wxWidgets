@@ -340,7 +340,6 @@ wxString wxTextCtrl::GetValue() const
         if (*zStr == '\r')
             *zStr = '\n';
     }
-    sStr = zStr;
     return sStr;
 } // end of wxTextCtrl::GetValue
 
