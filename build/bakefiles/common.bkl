@@ -365,8 +365,6 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                 <sys-lib>uuid</sys-lib>
                 <sys-lib>commctrl</sys-lib>
                 <sys-lib>commdlg</sys-lib>
-                <sys-lib>ceshell</sys-lib>
-                <sys-lib>aygshell</sys-lib>
                 <sys-lib>winsock</sys-lib>
                 <sys-lib>wininet</sys-lib>
             </if>
