@@ -19,6 +19,7 @@
 #include "wx/string.h"
 #include "wx/gdicmn.h"
 #include "wx/bitmap.h"
+#include "wx/hashmap.h"
 
 #if wxUSE_STREAMS
 #  include "wx/stream.h"
@@ -76,15 +77,24 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxImage
+// wxImageHistogram
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHNode
+class WXDLLEXPORT wxImageHistogramEntry
 {
 public:
+    wxImageHistogramEntry() : index(0), value(0) {}
     unsigned long index;
     unsigned long value;
 };
+
+WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
+                             wxIntegerHash, wxIntegerEqual,
+                             wxImageHistogram);
+
+//-----------------------------------------------------------------------------
+// wxImage
+//-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxImage: public wxObject
 {
@@ -214,7 +224,14 @@ public:
     bool HasOption(const wxString& name) const;
 
     unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
-    unsigned long ComputeHistogram( wxHashTable &h );
+
+    // Computes the histogram of the image and fills a hash table, indexed
+    // with integer keys built as 0xRRGGBB, containing wxImageHistogramEntry
+    // objects. Each of them contains an 'index' (useful to build a palette 
+    // with the image colours) and a 'value', which is the number of pixels 
+    // in the image with that colour.
+    // Returned value: # of entries in the histogram
+    unsigned long ComputeHistogram( wxImageHistogram &h );
 
     wxImage& operator = (const wxImage& image)
     {

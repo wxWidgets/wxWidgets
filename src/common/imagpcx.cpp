@@ -311,7 +311,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     unsigned int bytesperline;      // bytes per line (each plane)
     int nplanes = 3;                // number of planes
     int format = wxPCX_24BIT;       // image format (8 bit, 24 bit)
-    wxHashTable h(wxKEY_INTEGER);   // image histogram
+    wxImageHistogram histogram;     // image histogram
     unsigned long key;              // key in the hashtable
     unsigned int i;
 
@@ -319,7 +319,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
 
     if (image->CountColours(256) <= 256)
     {
-        image->ComputeHistogram(h);
+        image->ComputeHistogram(histogram);
         format = wxPCX_8BIT;
         nplanes = 1;
     }
@@ -371,7 +371,6 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
             case wxPCX_8BIT:
             {
                 unsigned char r, g, b;
-                wxHNode *hnode;
 
                 for (i = 0; i < width; i++)
                 {
@@ -380,8 +379,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
                     b = *(src++);
                     key = (r << 16) | (g << 8) | b;
 
-                    hnode = (wxHNode *) h.Get(key);
-                    p[i] = (unsigned char)hnode->index;
+                    p[i] = (unsigned char)histogram[key].index;
                 }
                 break;
             }
@@ -402,26 +400,22 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
 
     free(p);
 
-    // For 8 bit images, build the palette and write it to the stream
-
+    // For 8 bit images, build the palette and write it to the stream:
     if (format == wxPCX_8BIT)
     {
-        wxNode *node;
-        wxHNode *hnode;
-
         // zero unused colours
         memset(pal, 0, sizeof(pal));
 
-        h.BeginFind();
-        while ((node = h.Next()) != NULL)
+        unsigned long index;
+        
+        for (wxImageHistogram::iterator entry = histogram.begin();
+             entry != histogram.end(); entry++ )
         {
-            key = node->GetKeyInteger();
-            hnode = (wxHNode *) node->GetData();
-
-            pal[3 * hnode->index]     = (unsigned char)(key >> 16);
-            pal[3 * hnode->index + 1] = (unsigned char)(key >> 8);
-            pal[3 * hnode->index + 2] = (unsigned char)(key);
-            delete hnode;
+            key = entry->first;
+            index = entry->second.index;
+            pal[3 * index]     = (unsigned char)(key >> 16);
+            pal[3 * index + 1] = (unsigned char)(key >> 8);
+            pal[3 * index + 2] = (unsigned char)(key);
         }
 
         stream.PutC(12);

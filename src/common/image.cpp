@@ -725,10 +725,10 @@ bool wxImage::FindFirstUnusedColour(
             unsigned char *r, unsigned char *g, unsigned char *b,
             unsigned char startR, unsigned char startG, unsigned char startB)
 {
-    wxHashTable hTable;
+    wxImageHistogram histogram;
     unsigned long key;
    
-    ComputeHistogram( hTable );
+    ComputeHistogram(histogram);
     
     unsigned char r2 = startR;
     unsigned char g2 = startG;
@@ -736,7 +736,7 @@ bool wxImage::FindFirstUnusedColour(
     
     key = (r2 << 16) | (g2 << 8) | b2;
 
-    while ( (wxHNode *) hTable.Get(key) )
+    while ( histogram.find(key) != histogram.end() )
     {
         // color already used
         r2++;
@@ -1352,19 +1352,13 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
 }
 
 
-// GRG, Dic/99
-// Computes the histogram of the image and fills a hash table, indexed
-// with integer keys built as 0xRRGGBB, containing wxHNode objects. Each
-// wxHNode contains an 'index' (useful to build a palette with the image
-// colours) and a 'value', which is the number of pixels in the image with
-// that colour.
-//
-unsigned long wxImage::ComputeHistogram( wxHashTable &h )
+unsigned long wxImage::ComputeHistogram( wxImageHistogram &h )
 {
     unsigned char r, g, b;
     unsigned char *p;
     unsigned long size, nentries, key;
-    wxHNode *hnode;
+
+    h.clear();
 
     p = GetData();
     size = GetWidth() * GetHeight();
@@ -1377,18 +1371,9 @@ unsigned long wxImage::ComputeHistogram( wxHashTable &h )
         b = *(p++);
         key = (r << 16) | (g << 8) | b;
 
-        hnode = (wxHNode *) h.Get(key);
-
-        if (hnode)
-            hnode->value++;
-        else
-        {
-            hnode = new wxHNode();
-            hnode->index = nentries++;
-            hnode->value = 1;
-
-            h.Put(key, (wxObject *)hnode);
-        }
+        wxImageHistogramEntry& entry = h[key];
+        if ( entry.value++ == 0 )
+            entry.index = nentries++;
     }
 
     return nentries;

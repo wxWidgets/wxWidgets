@@ -205,41 +205,41 @@ wxCursor::wxCursor( const wxImage & image )
     //it seems a waste of effort to copy the image
     //but otherwise we need to remove the const modifier ??
     wxImage tmpImage = image.Copy();
-    wxHashTable hTable;
+    wxImageHistogram histogram;
 
     //colors as rrggbb
     unsigned long key;
+    unsigned long value;
     unsigned long keyMaskColor = 0;
-    if (bHasMask) keyMaskColor = (r << 16) | (g << 8) | b;
+    if (bHasMask) 
+        keyMaskColor = (r << 16) | (g << 8) | b;
 
-    tmpImage.ComputeHistogram( hTable );
+    tmpImage.ComputeHistogram(histogram);
 
-    long MostFreqCol = 0 ; long nMost = 0;
-    long NextFreqCol = 0 ; long nNext = 0;
-    long value ;
-    hTable.BeginFind();
-    wxNode *node = NULL;
-    while ((node = hTable.Next()) != NULL)
+    long MostFreqCol = 0;
+    unsigned long nMost = 0;
+    long NextFreqCol = 0;
+    unsigned long nNext = 0;
+    wxImageHistogram::iterator entry = histogram.begin();
+
+    while ( entry != histogram.end() )
     {
-        wxHNode *hnode = (wxHNode*) node->GetData();
-        value = hnode->value;
-        key = node->GetKeyInteger() ;
-        if (!bHasMask || (key != keyMaskColor) )
+        value = entry->second.value;
+        key = entry->first;
+        if ( !bHasMask || (key != keyMaskColor) )
         {
-        if (value > nMost)
+            if (value > nMost)
             {
-            nMost = value;
-            MostFreqCol = key;
+                nMost = value;
+                MostFreqCol = key;
             }
-        else
-            if (value > nNext)
+            else if (value > nNext)
             {
-            nNext = value ;
-            NextFreqCol = key;
+                nNext = value;
+                NextFreqCol = key;
             }
         }
     }
-
 
     wxColour fg = wxColour ( (unsigned char)(MostFreqCol >> 16),
                              (unsigned char)(MostFreqCol >> 8),
@@ -249,20 +249,18 @@ wxCursor::wxCursor( const wxImage & image )
                              (unsigned char)(NextFreqCol >> 8),
                              (unsigned char)(NextFreqCol) ) ;
 
-
-
     int hotSpotX=0; 
     int hotSpotY=0;
 
     if (image.HasOption(wxCUR_HOTSPOT_X))
-       hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
+        hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
     if (image.HasOption(wxCUR_HOTSPOT_Y))
-       hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+        hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
    
     if (hotSpotX < 0 || hotSpotX >= w)
-            hotSpotX = 0;
+        hotSpotX = 0;
     if (hotSpotY < 0 || hotSpotY >= h)
-            hotSpotY = 0;
+        hotSpotY = 0;
 
     GdkBitmap *data = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) bits,
         w, h );
@@ -278,7 +276,6 @@ wxCursor::wxCursor( const wxImage & image )
     gdk_bitmap_unref( mask );
     delete [] bits ;
     delete [] maskBits;
-
 }
 #endif
 

@@ -140,25 +140,23 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     stream.Write(tmpbuf, strlen(tmpbuf));
 
     // 3. create color symbols table:
-    wxHashTable table(wxKEY_INTEGER);
-    image->ComputeHistogram(table);
+    wxImageHistogram histogram;
+    image->ComputeHistogram(histogram);
 
     char *symbols_data = new char[cols * (chars_per_pixel+1)];
     char **symbols = new char*[cols];
 
     // 2a. find mask colour:
-    long mask_key = -1;
+    unsigned long mask_key = 0x1000000 /*invalid RGB value*/;
     if (image->HasMask())
         mask_key = (image->GetMaskRed() << 16) |
                    (image->GetMaskGreen() << 8) | image->GetMaskBlue();
 
     // 2b. generate colour table:
-    table.BeginFind();
-    wxNode *node = NULL;
-    while ((node = table.Next()) != NULL)
+    for (wxImageHistogram::iterator entry = histogram.begin();
+         entry != histogram.end(); entry++ )
     {
-        wxHNode *hnode = (wxHNode*) node->GetData();
-        long index = hnode->index;
+        unsigned long index = entry->second.index;
         symbols[index] = symbols_data + index * (chars_per_pixel+1);
         char *sym = symbols[index];
 
@@ -171,7 +169,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         }
         sym[j] = '\0';
 
-        long key = node->GetKeyInteger();
+        unsigned long key = entry->first;
 
         if (key == 0)
             tmp.Printf(wxT("\"%s c Black\",\n"), sym);
@@ -195,8 +193,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         for (i = 0; i < image->GetWidth(); i++, data += 3)
         {
             unsigned long key = (data[0] << 16) | (data[1] << 8) | (data[2]);
-            wxHNode *hnode = (wxHNode*) table.Get(key);
-            stream.Write(symbols[hnode->index], chars_per_pixel);
+            stream.Write(symbols[histogram[key].index], chars_per_pixel);
         }
         tmp_c = '\"'; stream.Write(&tmp_c, 1);
         if ( j + 1 < image->GetHeight() )
@@ -211,13 +208,6 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     // Clean up:
     delete[] symbols;
     delete[] symbols_data;
-
-    // FIXME: it will be better to use macros-based wxHashTable & DeleteContents(TRUE)
-    table.BeginFind();
-    while ((node = table.Next()) != NULL)
-    {
-        delete (wxHNode *) node->GetData();
-    }
 
     return TRUE;
 }
