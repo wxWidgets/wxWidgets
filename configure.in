@@ -1354,13 +1354,18 @@ if test "$wxUSE_SOCKETS" = "1"; then
     AC_MSG_CHECKING(the type of the third argument of getsockname)
     AC_TRY_COMPILE(
         [#include <sys/socket.h>],
-        [size_t len; getsockname(0, NULL, &len);],
-        AC_DEFINE(SOCKLEN_T, size_t) AC_MSG_RESULT(size_t),
-        AC_TRY_COMPILE(
-            [#include <sys/socket.h>],
-            [int len; getsockname(0, NULL, &len);],
-            AC_DEFINE(SOCKLEN_T, int) AC_MSG_RESULT(int),
-            AC_MSG_RESULT(unknown)
+        [socklen_t len; getsockname(0, NULL, &len);],
+        AC_DEFINE(SOCKLEN_T, socklen_t) AC_MSG_RESULT(socklen_t),
+       	AC_TRY_COMPILE(
+	        [#include <sys/socket.h>],
+        	[size_t len; getsockname(0, NULL, &len);],
+	        AC_DEFINE(SOCKLEN_T, size_t) AC_MSG_RESULT(size_t),
+        	AC_TRY_COMPILE(
+	            [#include <sys/socket.h>],
+	            [int len; getsockname(0, NULL, &len);],
+        	    AC_DEFINE(SOCKLEN_T, int) AC_MSG_RESULT(int),
+		    AC_MSG_RESULT(unknown)
+		)
         )
     )
 fi
