@@ -47,7 +47,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID winid,
 
 wxStaticBox::~wxStaticBox()
 {
-    DisassociateNSBox(m_cocoaNSView);
+    DisassociateNSBox(GetNSBox());
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const

@@ -47,7 +47,7 @@ WX_IMPLEMENT_POSER(wxPoserNSButton);
 @implementation wxPoserNSButton :  NSButton
 - (void)wxNSButtonAction: (id)sender
 {
-    wxASSERT_MSG(self==sender,"Received wxNSButtonAction from another object");
+    wxASSERT_MSG((id)self==sender,"Received wxNSButtonAction from another object");
     wxCocoaNSButton *button = wxCocoaNSButton::GetFromCocoa(self);
     wxCHECK_RET(button,"wxNSButtonAction received without associated wx object");
     button->Cocoa_wxNSButtonAction();

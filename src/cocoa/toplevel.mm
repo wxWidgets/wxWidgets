@@ -124,7 +124,7 @@ void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
 
 void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
 {
-    if([m_cocoaNSWindow contentView] == oldView)
+    if([m_cocoaNSWindow contentView] == (id)oldView)
         [m_cocoaNSWindow setContentView:newView];
 }
 

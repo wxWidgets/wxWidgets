@@ -53,7 +53,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID winid,
 
 wxCheckBox::~wxCheckBox()
 {
-    DisassociateNSButton(m_cocoaNSView);
+    DisassociateNSButton(GetNSButton());
 }
 
 void wxCheckBox::SetValue(bool value)

@@ -120,7 +120,7 @@ wxRadioButton::~wxRadioButton()
         m_radioMaster = NULL;
     }
     // normal stuff
-    DisassociateNSButton(m_cocoaNSView);
+    DisassociateNSButton(GetNSButton());
 }
 
 void wxRadioButton::SetValue(bool value)

@@ -55,7 +55,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID winid,
 
 wxBitmapButton::~wxBitmapButton()
 {
-    DisassociateNSButton(m_cocoaNSView);
+    DisassociateNSButton(GetNSButton());
 }
 
 void wxBitmapButton::Cocoa_wxNSButtonAction(void)

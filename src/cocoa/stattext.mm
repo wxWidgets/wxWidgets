@@ -60,7 +60,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
 
 wxStaticText::~wxStaticText()
 {
-    DisassociateNSTextField(m_cocoaNSView);
+    DisassociateNSTextField(GetNSTextField());
 }
 
 void wxStaticText::SetLabel(const wxString& label)

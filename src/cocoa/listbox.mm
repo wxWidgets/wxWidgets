@@ -81,7 +81,7 @@ wxListBox::~wxListBox()
     [GetNSTableView() setDataSource: nil];
     [m_cocoaDataSource release];
     [m_cocoaItems release];
-    DisassociateNSTableView(m_cocoaNSView);
+    DisassociateNSTableView(GetNSTableView());
 }
 
 int wxListBox::CocoaDataSource_numberOfRows()

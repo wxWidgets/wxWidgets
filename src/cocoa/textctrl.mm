@@ -57,7 +57,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
 
 wxTextCtrl::~wxTextCtrl()
 {
-    DisassociateNSTextField(m_cocoaNSView);
+    DisassociateNSTextField(GetNSTextField());
 }
 
 void wxTextCtrl::Cocoa_didChangeText(void)

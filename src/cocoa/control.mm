@@ -50,7 +50,7 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
 
 wxControl::~wxControl()
 {
-    DisassociateNSControl(m_cocoaNSView);
+    DisassociateNSControl(GetNSControl());
 }
 
 wxSize wxControl::DoGetBestSize() const
