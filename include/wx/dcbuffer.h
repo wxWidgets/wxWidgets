@@ -12,26 +12,9 @@
 #ifndef _WX_DCBUFFER_H_
 #define _WX_DCBUFFER_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dcbuffer.h"
-#endif
-
 #include "wx/dcmemory.h"
 #include "wx/dcclient.h"
 
-// flags for wxBufferedDC ctor/Init()
-enum
-{
-    // this is more efficient and hence default
-    wxBUFFER_DC_OVERWRITE_BG = 0,
-
-    // preserve the old background: more time consuming
-    wxBUFFER_DC_PRESERVE_BG = 1,
-
-
-    // flags used by default
-    wxBUFFER_DC_DEFAULT = wxBUFFER_DC_OVERWRITE_BG
-};
 
 // ----------------------------------------------------------------------------
 // Double buffering helper.
@@ -46,22 +29,46 @@ public:
     }
 
     // Construct a wxBufferedDC using a user supplied buffer.
-    wxBufferedDC(wxDC *dc, const wxBitmap &buffer);
+    wxBufferedDC(wxDC *dc, const wxBitmap &buffer)
+        : m_dc( dc ),
+          m_buffer( buffer )
+    {
+        UseBuffer();
+    }
 
     // Construct a wxBufferedDC with an internal buffer of 'area'
     // (where area is usually something like the size of the window
     // being buffered)
-    wxBufferedDC(wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT);
+    wxBufferedDC(wxDC *dc, const wxSize &area)
+        : m_dc( dc ),
+          m_buffer( area.GetWidth(), area.GetHeight() )
+    {
+        UseBuffer();
+    }
 
     // default copy ctor ok.
 
     // The usually desired  action in the dtor is to blit the buffer.
-    virtual ~wxBufferedDC() { if ( m_dc ) UnMask(); }
+    virtual ~wxBufferedDC()
+    {
+        if ( m_dc ) UnMask();
+    }
 
     // These reimplement the actions of the ctors for two stage creation, but
     // are not used by the ctors themselves to save a few cpu cycles.
-    void Init(wxDC *dc, const wxBitmap &bitmap);
-    void Init(wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT);
+    void Init(wxDC *dc, const wxBitmap &buffer)
+    {
+        wxASSERT_MSG( m_dc == 0 && m_buffer == wxNullBitmap,
+                      _T("wxBufferedDC already initialised") );
+        m_dc = dc;
+        m_buffer = buffer;
+        UseBuffer();
+    }
+
+    void Init(wxDC *dc, const wxSize &area)
+    {
+        Init(dc, wxBitmap(area.GetWidth(), area.GetHeight()));
+    }
 
     // Blits the buffer to the dc, and detaches the dc from the buffer (so it
     // can be effectively used once only).
@@ -69,7 +76,16 @@ public:
     // Usually called in the dtor or by the dtor of derived classes if the
     // BufferedDC must blit before the derived class (which may own the dc it's
     // blitting to) is destroyed.
-    void UnMask();
+    void UnMask()
+    {
+        wxASSERT_MSG( m_dc != 0,
+                      _T("No underlying DC associated with wxBufferedDC (anymore)") );
+
+        m_dc->Blit( m_dc->DeviceToLogicalX(0), m_dc->DeviceToLogicalY(0),
+                    m_buffer.GetWidth(), m_buffer.GetHeight(), this,
+                    DeviceToLogicalX(0), DeviceToLogicalY(0) );
+        m_dc = NULL;
+    }
 
 private:
     // check that the bitmap is valid and use it
@@ -78,15 +94,6 @@ private:
         wxASSERT_MSG( m_buffer.Ok(), _T("invalid bitmap in wxBufferedDC") );
 
         SelectObject(m_buffer);
-    }
-
-    // preserve the background if necessary
-    void SaveBg(const wxSize& area, int flags)
-    {
-        if ( flags & wxBUFFER_DC_PRESERVE_BG )
-        {
-            Blit(0, 0, area.GetWidth(), area.GetHeight(), m_dc, 0, 0);
-        }
     }
 
     // the underlying DC to which we copy everything drawn on this one in
@@ -112,22 +119,14 @@ private:
 class WXDLLIMPEXP_ADV wxBufferedPaintDC : public wxBufferedDC
 {
 public:
-    // this ctor creates a bitmap of the size of the window for buffering
-    wxBufferedPaintDC(wxWindow *window, int flags = wxBUFFER_DC_DEFAULT)
+    // If no bitmap is supplied by the user, a temporary one wil; be created.
+    wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer = wxNullBitmap)
         : m_paintdc(window)
     {
-        Init(&m_paintdc, window->GetClientSize(), flags);
-
-        Prepare(window);
-    }
-
-    // the bitmap must be valid here
-    wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer)
-        : m_paintdc(window)
-    {
-        Init(&m_paintdc, buffer);
-
-        Prepare(window);
+        if( buffer != wxNullBitmap )
+            Init(&m_paintdc, buffer);
+        else
+            Init(&m_paintdc, window->GetClientSize());
     }
 
     // default copy ctor ok.
@@ -140,12 +139,6 @@ public:
     }
 
 private:
-    // prepare the underlying DC
-    void Prepare(wxWindow *window)
-    {
-        window->PrepareDC(m_paintdc);
-    }
-
     wxPaintDC m_paintdc;
 
     DECLARE_NO_COPY_CLASS(wxBufferedPaintDC)
