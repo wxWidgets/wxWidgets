@@ -249,6 +249,7 @@ public:
 
     // override this to take into account our scrollbar-less scrolling
     virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
+    virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const;
 
     // set the right colours and border
     virtual bool IsContainerWindow() const { return TRUE; }

@@ -234,6 +234,11 @@ struct WXDLLEXPORT wxTextMultiLineData
     // the index of the line which has the length of m_widthMax
     wxTextCoord m_lineLongest;
 
+    // the rect in which text appears: it is even less than m_rectText because
+    // only the last _complete_ line is shown, hence there is an unoccupied
+    // horizontal band at the bottom of it
+    wxRect m_rectTextReal;
+
     // the def ctor
     wxTextMultiLineData()
     {
@@ -334,7 +339,13 @@ public:
         return m_rowsStart[row];
     }
 
-    bool IsValid() const { return m_rowFirst != -1; }
+    // the line is valid if it had been laid out correctly: note that just
+    // shiwting the line (because one of previous lines changed) doesn't make
+    // it invalid
+    bool IsValid() const { return !m_rowsWidth.IsEmpty(); }
+
+    // invalidating line will relayout it
+    void Invalidate() { m_rowsWidth.Empty(); }
 
 private:
     // for each line we remember the starting columns of all its rows after the
@@ -383,7 +394,8 @@ struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
     // check if this line is valid: i.e. before the first invalid one
     bool IsValidLine(wxTextCoord line) const
     {
-        return (m_rowFirstInvalid == -1) || (line < m_rowFirstInvalid);
+        return ((m_rowFirstInvalid == -1) || (line < m_rowFirstInvalid)) &&
+                    m_linesData[line].IsValid();
     }
 
     // def ctor
@@ -721,17 +733,20 @@ void wxTextCtrl::ReplaceLine(wxTextCoord line, const wxString& text)
     MData().m_lines[line] = text;
     if ( WrapLines() )
     {
-        // as line text has been replaced we have to recalculate its rows
-        if ( WData().IsValidLine(line) )
+        // first, we have to relayout the line entirely
+        //
+        // OPT: we might try not to recalc the unchanged part of line
+        wxWrappedLineData& lineData = WData().m_linesData[line];
+        size_t rowsOld = lineData.GetExtraRowCount();
+        LayoutLine(line, lineData);
+
+        // next, if this is not the last line and if the number of rows in it
+        // changed, we need to shift all the lines below it
+        if ( ((size_t)line < WData().m_linesData.GetCount()) &&
+                (lineData.GetExtraRowCount() != rowsOld) )
         {
-            wxWrappedLineData& lineData = WData().m_linesData[line];
-            size_t rowsOld = lineData.GetExtraRowCount();
-            LayoutLine(line, lineData);
-            if ( lineData.GetExtraRowCount() != rowsOld )
-            {
-                // number of rows changed shifting all lines below
-                WData().InvalidateLinesBelow(line + 1);
-            }
+            // number of rows changed shifting all lines below
+            WData().InvalidateLinesBelow(line + 1);
         }
     }
 }
@@ -1624,10 +1639,12 @@ bool wxTextCtrl::PositionToLogicalXY(wxTextPos pos,
     }
     else // difficult case: multline control with line wrap
     {
-        y = GetFirstRowOfLine(line)*hLine;
+        y = GetFirstRowOfLine(line);
 
         wxTextCoord colRowStart;
-        GetRowInLine(line, col, &colRowStart);
+        y += GetRowInLine(line, col, &colRowStart);
+
+        y *= hLine;
 
         // x is the width of the text before this position in this row
         x = GetTextWidth(textLine.Mid(colRowStart, col - colRowStart));
@@ -1651,9 +1668,6 @@ bool wxTextCtrl::PositionToDeviceXY(wxTextPos pos,
 
     // finally translate the logical text rect coords into physical client
     // coords
-    if ( IsSingleLine() )
-        x -= SData().m_ofsHorz;
-
     CalcScrolledPosition(m_rectText.x + x, m_rectText.y + y, xOut, yOut);
 
     return TRUE;
@@ -2132,18 +2146,25 @@ void wxTextCtrl::UpdateTextRect()
                     GetTextClientArea(this,
                                       wxRect(wxPoint(0, 0), GetClientSize()));
 
-    // only scroll this rect when the window is scrolled
-    SetTargetRect(GetRealTextArea());
-
-    // relayout all lines
-    if ( WrapLines() )
+    if ( !IsSingleLine() )
     {
-        WData().m_rowFirstInvalid = 0;
+        // invalidate it so that GetRealTextArea() will recalc it
+        MData().m_rectTextReal.width = 0;
 
-        // increase timestamp: this means that the lines which had been laid
-        // out before will be relayd out the next time LayoutLines() is called
-        // because their timestamp will be smaller than the current one
-        WData().m_timestamp++;
+        // only scroll this rect when the window is scrolled
+        SetTargetRect(GetRealTextArea());
+
+        // relayout all lines
+        if ( WrapLines() )
+        {
+            WData().m_rowFirstInvalid = 0;
+
+            // increase timestamp: this means that the lines which had been
+            // laid out before will be relayd out the next time LayoutLines()
+            // is called because their timestamp will be smaller than the
+            // current one
+            WData().m_timestamp++;
+        }
     }
 
     UpdateLastVisible();
@@ -2243,11 +2264,26 @@ wxCoord wxTextCtrl::GetTextWidth(const wxString& text) const
 
 wxRect wxTextCtrl::GetRealTextArea() const
 {
+    // for single line text control it's just the same as text rect
+    if ( IsSingleLine() )
+        return m_rectText;
+
     // the real text area always holds an entire number of lines, so the only
     // difference with the text area is a narrow strip along the bottom border
-    wxRect rectText = m_rectText;
-    int hLine = GetLineHeight();
-    rectText.height = (m_rectText.height / hLine) * hLine;
+    wxRect rectText = MData().m_rectTextReal;
+    if ( !rectText.width )
+    {
+        // recalculate it
+        rectText = m_rectText;
+
+        // when we're called for the very first time, the line height might not
+        // had been calculated yet, so do get it now
+        wxConstCast(this, wxTextCtrl)->RecalcFontMetrics();
+
+        int hLine = GetLineHeight();
+        rectText.height = (m_rectText.height / hLine) * hLine;
+    }
+
     return rectText;
 }
 
@@ -2262,15 +2298,28 @@ wxTextCoord wxTextCtrl::GetRowInLine(wxTextCoord line,
     if ( !WData().IsValidLine(line) )
         LayoutLines(line);
 
-    size_t rowLast = lineData.GetExtraRowCount(),
-           row = 0;
-    while ( (row < rowLast) && (col >= lineData.GetExtraRowStart(row++)) )
-        ;
+    // row is here counted a bit specially: 0 is the 2nd row of the line (1st
+    // extra row)
+    size_t row = 0,
+           rowMax = lineData.GetExtraRowCount();
+    if ( rowMax )
+    {
+        row = 0;
+        while ( (row < rowMax) && (col >= lineData.GetExtraRowStart(row)) )
+            row++;
+
+        // it's ok here that row is 1 greater than needed: like this, it is
+        // counted as a normal (and not extra) row
+    }
+    //else: only one row anyhow
 
     if ( colRowStart )
     {
-        // the first row always starts in the column 0
-        *colRowStart = row ? lineData.GetRowStart(row - 1) : 0;
+        // +1 because we need a real row number, not the extra row one
+        *colRowStart = lineData.GetRowStart(row);
+
+        // this can't happen, of course
+        wxASSERT_MSG( *colRowStart <= col, _T("GetRowInLine() is broken") );
     }
 
     return row;
@@ -2340,7 +2389,7 @@ void wxTextCtrl::LayoutLines(wxTextCoord lineLast) const
         //
         // if so, compare its timestamp with the current one: if nothing has
         // been changed, don't relayout it
-        if ( lineData.m_rowsWidth.IsEmpty() ||
+        if ( !lineData.IsValid() ||
                 (lineData.m_timestamp < WData().m_timestamp) )
         {
             // now do break it in rows
@@ -2349,6 +2398,15 @@ void wxTextCtrl::LayoutLines(wxTextCoord lineLast) const
 
         rowCur += lineData.GetRowCount();
     }
+
+    // we are now valid at least up to this line, but if it is the last one we
+    // just don't have any more invalid rows at all
+    if ( (size_t)lineLast == WData().m_linesData.GetCount() -1 )
+    {
+        lineLast = -1;
+    }
+
+    wxConstCast(this, wxTextCtrl)->WData().m_rowFirstInvalid = lineLast;
 }
 
 size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
@@ -3010,9 +3068,35 @@ void wxTextCtrl::ScrollText(wxTextCoord col)
 void wxTextCtrl::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 {
     if ( IsSingleLine() )
-        x += SData().m_ofsHorz;
+    {
+        // we don't use wxScrollHelper
+        if ( xx )
+            *xx = x + SData().m_ofsHorz;
+        if ( yy )
+            *yy = y;
+    }
+    else
+    {
+        // let the base class do it
+        wxScrollHelper::CalcUnscrolledPosition(x, y, xx, yy);
+    }
+}
 
-    wxScrollHelper::CalcUnscrolledPosition(x, y, xx, yy);
+void wxTextCtrl::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
+{
+    if ( IsSingleLine() )
+    {
+        // we don't use wxScrollHelper
+        if ( xx )
+            *xx = x - SData().m_ofsHorz;
+        if ( yy )
+            *yy = y;
+    }
+    else
+    {
+        // let the base class do it
+        wxScrollHelper::CalcScrolledPosition(x, y, xx, yy);
+    }
 }
 
 void wxTextCtrl::DoPrepareDC(wxDC& dc)
@@ -3114,6 +3198,8 @@ wxCoord wxTextCtrl::GetMaxWidth() const
 
 void wxTextCtrl::UpdateScrollbars()
 {
+    wxASSERT_MSG( !IsSingleLine(), _T("only used for multiline") );
+
     wxSize size = GetRealTextArea().GetSize();
 
     // is our height enough to show all items?
@@ -3188,7 +3274,22 @@ void wxTextCtrl::RefreshLineRange(wxTextCoord lineFirst, wxTextCoord lineLast)
     wxCoord h = GetLineHeight();
     rect.y = GetFirstRowOfLine(lineFirst)*h;
 
-    wxCoord bottom = GetFirstRowOfLine(lineLast + 1)*h;
+    wxTextCoord rowLast;
+    if ( WrapLines() )
+    {
+        const wxWrappedLineData& lineData = WData().m_linesData[lineLast];
+        rowLast = lineData.GetFirstRow() + lineData.GetRowCount();
+    }
+    else // !wrap lines
+    {
+        rowLast = lineLast + 1;
+    }
+
+    wxCoord bottom = rowLast*h;
+
+    wxCoord yLastVisible = GetRealTextArea().GetBottom() - rect.y;
+    if ( bottom > yLastVisible )
+        bottom = yLastVisible;
     rect.SetBottom(bottom);
 
     RefreshTextRect(rect);
@@ -3311,7 +3412,7 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
         size_t rowLast = lineData.GetRowCount(),
                row = 0;
         while ( (row < rowLast) &&
-                (rect.x >= (wLine = lineData.GetRowWidth(row++))) )
+                (rect.x > (wLine = lineData.GetRowWidth(row++))) )
         {
             rect.x -= wLine;
             rect.y += h;
@@ -3342,16 +3443,10 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
 
 void wxTextCtrl::RefreshTextRect(const wxRect& rectClient)
 {
-    wxRect rect = rectClient;
-    if ( IsSingleLine() )
-    {
-        // account for horz scrolling
-        rect.x -= SData().m_ofsHorz;
-    }
-    else // multiline
-    {
-        CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
-    }
+    wxRect rect;
+    CalcScrolledPosition(rectClient.x, rectClient.y, &rect.x, &rect.y);
+    rect.width = rectClient.width;
+    rect.height = rectClient.height;
 
     // account for the text area offset
     rect.Offset(m_rectText.GetPosition());
@@ -3594,6 +3689,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         }
 
         // calculate the text coords on screen
+        wxASSERT_MSG( colStart >= colRowStart, _T("invalid string part") );
         wxCoord ofsStart = GetTextWidth(
                                     textLine.Mid(colRowStart,
                                                  colStart - colRowStart));
