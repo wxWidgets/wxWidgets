@@ -91,11 +91,11 @@ class TestFrame(wx.Frame):
             self.gbs.SetItemPosition(btn, self.lastPos)
             btn.SetLabel("Move this to (3,6)")
         else:
-            if self.gbs.CheckForIntersection( (3,6), (1,1) ):
+            if self.gbs.CheckForIntersectionPos( (3,6), (1,1) ):
                 wx.MessageBox("""\
 wx.GridBagSizer will not allow items to be in the same cell as
-another item, so this operation will fail.  You will also get an assert
-when compiled in debug mode.""",
+another item, so this operation will fail.  You will also get an
+assert when compiled in debug mode.""",
                               "Warning", wx.OK | wx.ICON_INFORMATION)
 
             try:
