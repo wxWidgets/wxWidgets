@@ -678,6 +678,9 @@ typedef wxUint16 wxWord;
         typedef int wxInt32;
         typedef unsigned int wxUint32;
 
+		#if defined (__MWERKS__) && defined(__MACH__)
+			#define SIZEOF_WCHAR_T 4
+		#endif
         #if wxUSE_WCHAR_T && !defined(SIZEOF_WCHAR_T)
             // also assume that sizeof(wchar_t) == 2 (under Unix the most
             // common case is 4 but there configure would have defined
