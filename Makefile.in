@@ -342,6 +342,7 @@ WX_HEADERS = \
 		wave.h \
 		wfstream.h \
 		window.h \
+		wizard.cpp \
 		wx.h \
 		wx_cw.h \
 		wx_cw_cm.h \

@@ -602,6 +602,7 @@ version.h	W	B
 wave.h	W
 wfstream.h	W
 window.h	W
+wizard.cpp	W
 wx.h	W	B
 wx_cw.h	W
 wx_cw_cm.h	W
