@@ -375,7 +375,9 @@ void wxDialog::DoShowModal()
     // for a modal dialog that has been destroyed before calling EndModal).
     if ( oldFocus && (oldFocus != this) && ::IsWindow(hwndOldFocus))
     {
-        oldFocus->SetFocus();
+        // This is likely to prove that the object still exists
+        if (wxFindWinFromHandle((WXHWND) hwndOldFocus) == oldFocus)
+            oldFocus->SetFocus();
     }
 }
 

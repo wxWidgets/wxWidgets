@@ -137,6 +137,10 @@ public:
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
 
+    // For efficiency, tell wxGenericDragImage to use a bitmap that's already
+    // created (e.g. from last drag)
+    void SetBackingBitmap(wxBitmap* bitmap) { m_pBackingBitmap = bitmap; }
+
     // Operations
     ////////////////////////////////////////////////////////////////////////////
 
@@ -191,6 +195,14 @@ public:
     // Override this if you are using a virtual image (drawing your own image)
     virtual bool DoDrawImage(wxDC& dc, const wxPoint& pos) const;
 
+    // Override this if you wish to draw the window contents to the backing bitmap
+    // yourself. This can be desirable if you wish to avoid flicker by not having to
+    // redraw the window itself before dragging in order to be graphic-minus-dragged-objects.
+    // Instead, paint the drag image's backing bitmap to be correct, and leave the window
+    // to be updated only when dragging the objects away (thus giving a smoother appearance).
+    virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
+        const wxRect& sourceRect, const wxRect& destRect) const;
+
     // Erase and redraw simultaneously if possible
     virtual bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos, bool eraseOld, bool drawNew);
 
@@ -209,6 +221,8 @@ protected:
 
     // Stores the window contents while we're dragging the image around
     wxBitmap        m_backingBitmap;
+    wxBitmap*       m_pBackingBitmap; // Pointer to existing backing bitmap
+                                      // (pass to wxGenericDragImage as an efficiency measure)
     // A temporary bitmap for repairing/redrawing
     wxBitmap        m_repairBitmap;
 

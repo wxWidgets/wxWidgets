@@ -83,6 +83,7 @@ void wxGenericDragImage::Init()
     m_windowDC = (wxDC*) NULL;
     m_window = (wxWindow*) NULL;
     m_fullScreen = FALSE;
+    m_pBackingBitmap = (wxBitmap*) NULL;
 }
 
 // Attributes
@@ -244,8 +245,10 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
         }
     }
 
-    if (!m_backingBitmap.Ok() || (m_backingBitmap.GetWidth() < clientSize.x || m_backingBitmap.GetHeight() < clientSize.y))
-        m_backingBitmap = wxBitmap(clientSize.x, clientSize.y);
+    wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
+
+    if (!backing->Ok() || (backing->GetWidth() < clientSize.x || backing->GetHeight() < clientSize.y))
+        (*backing) = wxBitmap(clientSize.x, clientSize.y);
 
     if (!m_fullScreen)
         m_windowDC = new wxClientDC(window);
@@ -343,9 +346,13 @@ bool wxGenericDragImage::Show()
         // This is where we restore the backing bitmap, in case
         // something has changed on the window.
 
+        wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
         wxMemoryDC memDC;
-        memDC.SelectObject(m_backingBitmap);
-        memDC.Blit(0, 0, m_boundingRect.width, m_boundingRect.height, m_windowDC, m_boundingRect.x, m_boundingRect.y);
+        memDC.SelectObject(* backing);
+
+        UpdateBackingFromWindow(* m_windowDC, memDC, m_boundingRect, wxRect(0, 0, m_boundingRect.width, m_boundingRect.height));
+
+        //memDC.Blit(0, 0, m_boundingRect.width, m_boundingRect.height, m_windowDC, m_boundingRect.x, m_boundingRect.y);
         memDC.SelectObject(wxNullBitmap);
 
         RedrawImage(m_position - m_offset, m_position - m_offset, FALSE, TRUE);
@@ -355,6 +362,12 @@ bool wxGenericDragImage::Show()
     m_isDirty = TRUE;
 
     return TRUE;
+}
+
+bool wxGenericDragImage::UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
+    const wxRect& sourceRect, const wxRect& destRect) const
+{
+    return destDC.Blit(destRect.x, destRect.y, destRect.width, destRect.height, & windowDC, sourceRect.x, sourceRect.y);
 }
 
 bool wxGenericDragImage::Hide()
@@ -381,7 +394,8 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
     if (!m_windowDC)
         return FALSE;
 
-    if (!m_backingBitmap.Ok())
+    wxBitmap* backing = (m_pBackingBitmap ? m_pBackingBitmap : (wxBitmap*) & m_backingBitmap);
+    if (!backing->Ok())
         return FALSE;
 
     wxRect oldRect(GetImageRect(oldPos));
@@ -419,7 +433,7 @@ bool wxGenericDragImage::RedrawImage(const wxPoint& oldPos, const wxPoint& newPo
     }
 
     wxMemoryDC memDC;
-    memDC.SelectObject(m_backingBitmap);
+    memDC.SelectObject(* backing);
 
     wxMemoryDC memDCTemp;
     memDCTemp.SelectObject(m_repairBitmap);

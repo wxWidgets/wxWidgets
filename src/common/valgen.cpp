@@ -258,11 +258,18 @@ bool wxGenericValidator::TransferToWindow(void)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
     {
         wxTextCtrl* pControl = (wxTextCtrl*) m_validatorWindow;
-	if (m_pString)
-	{
-	    pControl->SetValue(*m_pString) ;
-	    return TRUE;
-	}
+        if (m_pString)
+        {
+            pControl->SetValue(*m_pString) ;
+            return TRUE;
+        }
+        else if (m_pInt)
+        {
+            wxString str;
+            str.Printf("%d", *m_pInt);
+            pControl->SetValue(str);
+            return TRUE;
+        }
     } else
 #if wxUSE_CHECKLISTBOX
 #ifndef __WIN16__
@@ -473,6 +480,11 @@ bool wxGenericValidator::TransferFromWindow(void)
     {
       *m_pString = pControl->GetValue() ;
       return TRUE;
+    }
+    else if (m_pInt)
+    {
+        *m_pInt = atoi(pControl->GetValue());
+        return TRUE;
     }
   } else
 #if wxUSE_CHECKLISTBOX
