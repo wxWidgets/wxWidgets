@@ -63,7 +63,9 @@ WinMain(HINSTANCE hInstance,
         LPSTR m_lpCmdLine,
         int nCmdShow )
 {
+#if !WXUSINGDLL
     wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+#endif
 
     return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance,
                    m_lpCmdLine, nCmdShow);
