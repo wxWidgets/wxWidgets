@@ -1433,7 +1433,6 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     dc.SetBrush(*wxBLACK_BRUSH);
     dc.Clear();
     dc.DrawText(text, 0, 0);
-    dc.SetFont(wxNullFont);
     dc.SelectObject(wxNullBitmap);
 
     // Calculate the size of the rotated bounding box.
