@@ -394,6 +394,10 @@ wxID_YES = wxc.wxID_YES
 wxID_NO = wxc.wxID_NO
 wxID_STATIC = wxc.wxID_STATIC
 wxID_SEPARATOR = wxc.wxID_SEPARATOR
+wxID_FORWARD = wxc.wxID_FORWARD
+wxID_BACKWARD = wxc.wxID_BACKWARD
+wxID_SETUP = wxc.wxID_SETUP
+wxID_MORE = wxc.wxID_MORE
 wxBITMAP_TYPE_BMP = wxc.wxBITMAP_TYPE_BMP
 wxBITMAP_TYPE_BMP_RESOURCE = wxc.wxBITMAP_TYPE_BMP_RESOURCE
 wxBITMAP_TYPE_ICO = wxc.wxBITMAP_TYPE_ICO
@@ -1529,10 +1533,8 @@ class wxPyOnDemandOutputWindow:
         self.title  = title
         self.parent = None
 
-
     def SetParent(self, parent):
         self.parent = parent
-
 
     def OnCloseWindow(self, event):
         if self.frame != None:
@@ -1540,9 +1542,13 @@ class wxPyOnDemandOutputWindow:
         self.frame = None
         self.text  = None
 
-
-    # this provides the file-like output behaviour
+    # These methods provide the file-like output behaviour.
     def write(self, str):
+        if not wxThread_IsMain():
+            # Aquire the GUI mutex before making GUI calls.  Mutex is released
+            # when locker is deleted a the end of this function.
+            locker = wxMutexGuiLocker()
+
         if not self.frame:
             self.frame = wxFrame(self.parent, -1, self.title)
             self.text  = wxTextCtrl(self.frame, -1, "",
@@ -1552,11 +1558,11 @@ class wxPyOnDemandOutputWindow:
             EVT_CLOSE(self.frame, self.OnCloseWindow)
         self.text.AppendText(str)
 
-
     def close(self):
         if self.frame != None:
+            if not wxThread_IsMain():
+                locker = wxMutexGuiLocker()
             self.frame.Close()
-
 
 
 _defRedirect = (wxPlatform == '__WXMSW__')
