@@ -108,7 +108,7 @@ void wxToolTip::SetTip( const wxString &tip )
 
 void wxToolTip::SetWindow( wxWindow *win )
 {
-    m_window = win;
+    m_window = win ;
 }
 
 void wxToolTip::Enable( bool flag )
@@ -185,14 +185,14 @@ wxMacToolTip::wxMacToolTip()
     m_timer = NULL ;
 }
 
-void wxMacToolTip::Setup( WindowRef window  , wxString text , wxPoint localPosition ) 
+void wxMacToolTip::Setup( WindowRef win  , wxString text , wxPoint localPosition ) 
 {
 	m_mark++ ;
 	Clear() ;
 	m_position = localPosition ;
 	m_label = wxMacMakeMacStringFromPC( text ) ;
-	m_window = window ;
-	s_ToolTipWindowRef = window ;
+    m_window =win;
+	s_ToolTipWindowRef = m_window ;
 	m_backpict = NULL ;
 	if ( m_timer )
 	    delete m_timer ;
@@ -229,11 +229,20 @@ void wxMacToolTip::Draw()
 	  {
    		wxMacPortStateHelper help( (GrafPtr) GetWindowPort( m_window ) );
  
+  		bool useDrawThemeText =  ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
+  		
   		m_shown = true ;
 
-  		TextFont( kFontIDGeneva ) ;
-  		TextSize( 10 ) ;
-  		TextFace( 0 ) ;
+        FontFamilyID fontId ;
+        Str255 fontName ;
+        SInt16 fontSize ;
+        Style fontStyle ;
+        GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+        GetFNum( fontName, &fontId );
+
+  		TextFont( fontId ) ;
+  		TextSize( fontSize ) ;
+  		TextFace( fontStyle ) ;
   		FontInfo fontInfo;
   		::GetFontInfo(&fontInfo);
   		short lineh = fontInfo.ascent + fontInfo.descent + fontInfo.leading;
@@ -271,6 +280,8 @@ void wxMacToolTip::Draw()
   		m_rect.left = m_position.x + kTipOffset;
   		m_rect.top = m_position.y + kTipOffset;
   		m_rect.right = m_rect.left + width + 2 * kTipBorder;
+  		if ( useDrawThemeText )
+  		    m_rect.right += kTipBorder ;
   		m_rect.bottom = m_rect.top + height + 2 * kTipBorder;
   		ClipRect( &m_rect ) ;
   		BackColor( whiteColor ) ;
@@ -285,32 +296,77 @@ void wxMacToolTip::Draw()
   				   NULL);
 
   		ClosePicture();
-      PenNormal() ;
-  		SetThemeBackground(kThemeBrushNotificationWindowBackground,32,true) ;
-  		SetThemeTextColor(kThemeTextColorNotification,32,true) ;
-  		EraseRect( &m_rect ) ;
+        PenNormal() ;
+
+  		RGBColor tooltipbackground = { 0xFFFF , 0xFFFF , 0xC000 } ;
+  		BackColor( whiteColor ) ;
+        RGBForeColor( &tooltipbackground ) ;
+
+  		PaintRect( &m_rect ) ;
+  		ForeColor(blackColor ) ;
   		FrameRect( &m_rect ) ;
+  		SetThemeTextColor(kThemeTextColorNotification,wxDisplayDepth(),true) ;
   		::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder);
 
   		i = 0 ;
   		laststop = 0 ;
   		height = 0 ;
+  		
   		while( i < length )
   		{
   			if( text[i] == 13 || text[i] == 10)
   			{
-  				::DrawText( text , laststop , i - laststop ) ;
-  				height += lineh ;
-  				::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder + height );
+            	if ( useDrawThemeText )
+            	{
+    	            Rect frame ;
+    	            frame.top = m_rect.top + kTipBorder + height ;
+    	            frame.left = m_rect.left + kTipBorder ;
+    	            frame.bottom = frame.top + 1000 ;
+    	            frame.right = frame.left + 1000 ;
+                    CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+            		::DrawThemeTextBox( mString,
+            							kThemeCurrentPortFont,
+            							kThemeStateActive,
+            							true,
+            							&frame,
+            							teJustLeft,
+            							nil );
+            	    CFRelease( mString ) ;
+   				    height += lineh ;
+               }
+                else
+                {
+  				    ::DrawText( text , laststop , i - laststop ) ;
+  				    height += lineh ;
+  				    ::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder + height );
+  				}
   				laststop = i+1 ;
   			}
   			i++ ;
   		}
-  					
-  		::DrawText( text , laststop , i - laststop ) ;
+        if ( useDrawThemeText )
+        {
+            Rect frame ;
+            frame.top = m_rect.top + kTipBorder + height ;
+            frame.left = m_rect.left + kTipBorder ;
+            frame.bottom = frame.top + 1000 ;
+            frame.right = frame.left + 1000 ;
+            CFStringRef mString = CFStringCreateWithCString( NULL , text + laststop , kCFStringEncodingMacRoman ) ;
+        	::DrawThemeTextBox( mString,
+        						kThemeCurrentPortFont,
+        						kThemeStateActive,
+        						true,
+        						&frame,
+        						teJustLeft,
+        						nil );
+            CFRelease( mString ) ;
+        }
+        else
+        {
+  		    ::DrawText( text , laststop , i - laststop ) ;
+  		}
   		::TextMode( srcOr ) ;		
-  	//	DrawText( m_label , 0 , m_label.Length() ) ;
-  	}
+  	 }
 	}
 }
 
