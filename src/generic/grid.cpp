@@ -1262,7 +1262,7 @@ void wxGrid::OnPaint( wxPaintEvent& ev )
 
 void wxGrid::OnSize( wxSizeEvent& ev )
 {
-    CalcDimensions();
+    if ( m_created ) CalcDimensions();
 }
 
 
