@@ -46,6 +46,21 @@ BSC32=bscmake.exe
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
+# Begin Custom Build
+InputPath=.\Release\Wxwin.lib
+SOURCE=$(InputPath)
+
+BuildCmds= \
+	copy src\common\doslex.c src\common\lex_yy.c \
+	copy src\common\dosyacc.c src\common\y_tab.c \
+	
+
+"src\common\lex_yy.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"src\common\y_tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
 
@@ -67,6 +82,21 @@ BSC32=bscmake.exe
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
+# Begin Custom Build
+InputPath=.\Debug\Wxwin.lib
+SOURCE=$(InputPath)
+
+BuildCmds= \
+	copy src\common\doslex.c src\common\lex_yy.c \
+	copy src\common\dosyacc.c src\common\y_tab.c \
+	
+
+"src\common\lex_yy.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"src\common\y_tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
 
 !ENDIF 
 
@@ -1165,6 +1195,10 @@ SOURCE=.\src\msw\window.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\include\wx\msw\accel.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\include\wx\msw\app.h
 # End Source File
 # Begin Source File
@@ -1313,6 +1347,10 @@ SOURCE=.\include\wx\msw\imaglist.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\include\wx\msw\iniconf.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\include\wx\msw\joystick.h
 # End Source File
 # Begin Source File
@@ -1330,6 +1368,10 @@ SOURCE=.\include\wx\msw\mdi.h
 # Begin Source File
 
 SOURCE=.\include\wx\msw\menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\msw\menuitem.h
 # End Source File
 # Begin Source File
 
@@ -1949,6 +1991,470 @@ SOURCE=.\src\zlib\uncompr.c
 # Begin Source File
 
 SOURCE=.\src\zlib\zutil.c
+# End Source File
+# End Group
+# Begin Group "ole-header"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\include\wx\msw\ole\dataobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\msw\ole\dropsrc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\msw\ole\droptgt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\msw\ole\oleutils.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\msw\ole\uuid.h
+# End Source File
+# End Group
+# Begin Group "common-header"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\include\wx\app.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\bitmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\bmpbuttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\brush.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\checkbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\choicdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\choice.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\clipbrd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\cmndata.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\colour.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\combobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\confbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\config.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\control.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\cursor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\date.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dcclient.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dcmemory.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dcprint.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dcscreen.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\debug.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\defs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dirdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\docmdi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\docview.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dynarray.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\dynlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\event.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\expr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\file.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\fileconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\filedlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\filefn.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\font.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\fontdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\gauge.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\gdicmn.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\gdiobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\common\glob.inc
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\hash.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\helpbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\icon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\imaglist.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\intl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\ipcbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\layout.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\list.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\listbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\listctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\log.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\matrix.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\mdi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\menuitem.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\metafile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\minifram.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\module.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\msgdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\object.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\ownerdrw.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\palette.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\pen.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\postscrp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\print.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\printdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\prntbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\radiobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\radiobut.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\region.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\scrolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\scrolwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\serbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\settings.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\setup.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\slider.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\spinbutt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\splitter.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\statbmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\statbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\stattext.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\statusbr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\stream.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\tab.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\tbar95.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\tbarbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\tbarmsw.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\tbarsmpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\textctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\textdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\textfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\thread.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\timer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\toolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\treectrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\utils.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\validate.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\valtext.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\version.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\window.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\wx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\wxexpr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\wx\wxprec.h
 # End Source File
 # End Group
 # End Target
