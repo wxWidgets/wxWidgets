@@ -204,7 +204,8 @@ public:
           m_attr(NULL)
     {
         // copy list item attributes
-        m_attr = new wxListItemAttr(*item.GetAttributes());
+        if( item.HasAttributes() )
+            m_attr = new wxListItemAttr(*item.GetAttributes());
     }
     virtual ~wxListItem() { delete m_attr; }
 
