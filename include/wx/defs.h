@@ -1128,12 +1128,6 @@ enum wxBorder
 #define wxPD_REMAINING_TIME     0x0040
 
 /*
- * wxHtmlWindow flags
- */
-#define wxHW_SCROLLBAR_NEVER    0x0002
-#define wxHW_SCROLLBAR_AUTO     0x0004
-
-/*
  * extended dialog specifiers. these values are stored in a different
  * flag and thus do not overlap with other style flags. note that these
  * values do not correspond to the return values of the dialogs (for
