@@ -206,3 +206,22 @@ p,i
   return(instanceID);
 #endif
 }
+
+// DUMMIES TO SATISFY THE LINKER UNTIL GUILHEM FINISHES THE CODE
+wxProcess::wxProcess(wxEvtHandler *parent, int id)
+{
+}
+
+wxProcess::~wxProcess()
+{
+}
+
+void wxProcess::OnTerminate(int pid)
+{
+}
+
+wxProcessEvent::wxProcessEvent(int id, int pid)
+{
+}
+  
+
