@@ -70,11 +70,11 @@
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
-    #if wxUSE_OWNER_DRAWN
-        IMPLEMENT_DYNAMIC_CLASS2(wxMenuItem, wxMenuItemBase, wxOwnerDrawn)
-    #else   //!USE_OWNER_DRAWN
-        IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxMenuItemBase)
-    #endif  //USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
+    IMPLEMENT_DYNAMIC_CLASS2(wxMenuItem, wxMenuItemBase, wxOwnerDrawn)
+#else   //!USE_OWNER_DRAWN
+    IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxMenuItemBase)
+#endif  //USE_OWNER_DRAWN
 
 // ----------------------------------------------------------------------------
 // wxMenuItem
@@ -90,7 +90,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        bool bCheckable,
                        wxMenu *pSubMenu)
 #if wxUSE_OWNER_DRAWN
-                       : wxOwnerDrawn(text, bCheckable)
+                       : wxOwnerDrawn(GetLabelFromText(text), bCheckable)
 #endif // owner drawn
 {
     wxASSERT_MSG( pParentMenu != NULL, wxT("a menu item should have a parent") );
@@ -102,10 +102,13 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     SetTextColour(SYS_COLOR(MENUTEXT));
     SetBackgroundColour(SYS_COLOR(MENU));
 
+    #undef  SYS_COLOR
+
     // we don't want normal items be owner-drawn
     ResetOwnerDrawn();
 
-    #undef  SYS_COLOR
+    // tell the owner drawing code to to show the accel string as well
+    SetAccelString(text.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
 
     m_parentMenu  = pParentMenu;

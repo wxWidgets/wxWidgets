@@ -29,7 +29,22 @@
     #include <wx/log.h>
 #endif
 
+#if !wxUSE_MENUS
+    // nice try...
+    #error "menu sample requires wxUSE_MENUS=1"
+#endif // wxUSE_MENUS
+
 #include "copy.xpm"
+
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+
+    WX_USE_THEME(win32);
+    WX_USE_THEME(gtk);
+
+    // not implemented yet
+    #define wxMessageBox
+#endif // __WXUNIVERSAL__
 
 // ----------------------------------------------------------------------------
 // classes
@@ -209,7 +224,9 @@ bool MyApp::OnInit()
 
     frame->Show(TRUE);
 
+#if wxUSE_STATUSBAR
     frame->SetStatusText("Hello, wxWindows");
+#endif // wxUSE_STATUSBAR
 
     SetTopWindow(frame);
 
@@ -228,15 +245,21 @@ MyFrame::MyFrame()
     m_menu = NULL;
     m_countDummy = 0;
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     // create the menubar
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit toolbar sample" );
-    
-    wxMenuItem *bitmap_menu_item = new wxMenuItem( fileMenu, Menu_File_Quit, "Quit with &bitmap\tAlt-Q" );
-    bitmap_menu_item->SetBitmap( wxBitmap( copy_xpm ) );
-    fileMenu->Append( bitmap_menu_item ); 
+    fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit toolbar sample");
+
+    // not supported just yet
+#ifndef __WXUNIVERSAL__
+    wxMenuItem *itemBitmap = new wxMenuItem(fileMenu, Menu_File_Quit,
+                                            "Quit with &bitmap\tAlt-Q");
+    itemBitmap->SetBitmap(wxBitmap(copy_xpm));
+    fileMenu->Append(itemBitmap);
+#endif // __WXUNIVERSAL__
 
     wxMenu *menubarMenu = new wxMenu;
     menubarMenu->Append(Menu_MenuBar_Append, "&Append menu\tCtrl-A",
@@ -355,7 +378,9 @@ void MyFrame::LogMenuEvent(const wxCommandEvent& event)
                                 event.IsChecked() ? "" : "not ");
     }
 
+#if wxUSE_STATUSBAR
     SetStatusText(msg, 1);
+#endif // wxUSE_STATUSBAR
 }
 
 // ----------------------------------------------------------------------------

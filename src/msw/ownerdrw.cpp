@@ -127,7 +127,10 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 #endif
 
 // draw the item
-bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus st)
+bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
+                              const wxRect& rc,
+                              wxODAction act,
+                              wxODStatus st)
 {
   // we do nothing on focus change
   if ( act == wxODFocusChanged )
@@ -188,9 +191,21 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
 
     HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
     DrawState(hdc, NULL, NULL,
-              (LPARAM)(const wxChar *)m_strName, m_strName.Length(),
+              (LPARAM)m_strName.c_str(), m_strName.length(),
               x, rc.y, rc.GetWidth(), rc.GetHeight(),
-              DST_PREFIXTEXT | ( st & wxODDisabled ? DSS_DISABLED : 0) );
+              DST_PREFIXTEXT | (st & wxODDisabled ? DSS_DISABLED : 0));
+
+    if ( !m_strAccel.empty() )
+    {
+        RECT r;
+        r.top = rc.GetTop();
+        r.left = rc.GetLeft();
+        r.right = rc.GetRight() - GetMarginWidth();
+        r.bottom = rc.GetBottom();
+
+        DrawText(hdc, m_strAccel, m_strAccel.length(), &r,
+                 DT_SINGLELINE | DT_RIGHT | DT_VCENTER);
+    }
 
     (void)SelectObject(hdc, hPrevBrush);
     (void)SelectObject(hdc, hPrevFont);
