@@ -394,6 +394,14 @@ void wxWindowDC::SetUpDC()
         m_bgGC = wxGetPoolGC( m_window, wxBG_COLOUR );
     }
 
+#ifdef __WXGTK20__
+    if (m_isMemDC)
+    {
+        m_context = gdk_pango_context_get();
+        m_fontdesc = pango_context_get_font_description(m_context);
+    }
+#endif
+
     /* background colour */
     m_backgroundBrush = *wxWHITE_BRUSH;
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
