@@ -2571,8 +2571,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         AC_MSG_WARN([OS/2 PM requires old resource format, re-enabled])
         wxUSE_PROLOGIO="yes"
         wxUSE_RESOURCES="yes"
-        AC_MSG_WARN([OS/2 threads are not yet supported... disabled])
-        wxUSE_THREADS="no"
     fi
 
     dnl the name of the directory where the files for this toolkit live
