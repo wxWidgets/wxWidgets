@@ -2016,22 +2016,22 @@ typedef unsigned short  WXWORD;
 typedef void*       WXWidget;
 typedef void*       WXWindow;
 typedef void*       WXDisplay;
-/*
-typedef WindowPtr       WXHWND;
-typedef Handle          WXHANDLE;
-typedef CIconHandle     WXHICON;
-// typedef unsigned long   WXHFONT; */
-typedef MenuHandle      WXHMENU;
+
+/* typedef WindowPtr       WXHWND; */
+/* typedef Handle          WXHANDLE; */
+/* typedef CIconHandle     WXHICON; */
+/* typedef unsigned long   WXHFONT; */
+/* typedef MenuHandle      WXHMENU; */
 /* typedef unsigned long   WXHPEN; */
 /* typedef unsigned long   WXHBRUSH; */
 /* typedef unsigned long   WXHPALETTE; */
-typedef CursHandle      WXHCURSOR;
-typedef RgnHandle       WXHRGN;
+/* typedef CursHandle      WXHCURSOR; */
+/* typedef RgnHandle       WXHRGN; */
 /* typedef unsigned long   WXHACCEL; */
 /* typedef unsigned long   WXHINSTANCE; */
 /* typedef unsigned long   WXHIMAGELIST; */
 /* typedef unsigned long   WXHGLOBAL; */
-typedef GrafPtr         WXHDC;
+/* typedef GrafPtr         WXHDC; */
 /* typedef unsigned int    WXWPARAM; */
 /* typedef long            WXLPARAM; */
 /* typedef void *          WXRGNDATA; */
@@ -2041,11 +2041,11 @@ typedef GrafPtr         WXHDC;
 /* typedef void *          WXDRAWITEMSTRUCT; */
 /* typedef void *          WXMEASUREITEMSTRUCT; */
 /* typedef void *          WXLPCREATESTRUCT; */
-typedef int (*WXFARPROC)();
+/* typedef int (*WXFARPROC)(); */
 
-typedef WindowPtr       WXWindow;
-typedef ControlHandle   WXWidget;
-*/
+/* typedef WindowPtr       WXWindow; */
+/* typedef ControlHandle   WXWidget; */
+
 #endif
 
 #ifdef __WXCOCOA__
