@@ -1073,9 +1073,9 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     wxPyBeginBlockThreads();
     wxString className = event.GetClassInfo()->GetClassName();
 
-    if (className == "wxPyEvent")
+    if (className == wxT("wxPyEvent"))
         arg = ((wxPyEvent*)&event)->GetSelf();
-    else if (className == "wxPyCommandEvent")
+    else if (className == wxT("wxPyCommandEvent"))
         arg = ((wxPyCommandEvent*)&event)->GetSelf();
     else {
         arg = wxPyConstructObject((void*)&event, className);
