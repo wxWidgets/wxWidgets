@@ -2342,17 +2342,12 @@ wxPaintDC::wxPaintDC( wxWindow *win )
     GdkRegion *region = m_paintClippingRegion.GetRegion();
     if ( region )
     {
-        m_paintClippingRegion = win->GetUpdateRegion();
-        GdkRegion *region = m_paintClippingRegion.GetRegion();
-        if ( region )
-        {
-            m_currentClippingRegion.Union( m_paintClippingRegion );
+        m_currentClippingRegion.Union( m_paintClippingRegion );
 
-            gdk_gc_set_clip_region( m_penGC, region );
-            gdk_gc_set_clip_region( m_brushGC, region );
-            gdk_gc_set_clip_region( m_textGC, region );
-            gdk_gc_set_clip_region( m_bgGC, region );
-        }
+        gdk_gc_set_clip_region( m_penGC, region );
+        gdk_gc_set_clip_region( m_brushGC, region );
+        gdk_gc_set_clip_region( m_textGC, region );
+        gdk_gc_set_clip_region( m_bgGC, region );
     }
 #endif // USE_PAINT_REGION
 }
