@@ -222,11 +222,13 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
         case CBN_EDITCHANGE:
             {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
                 // if sel != -1, value was initialized above (and we can't use
                 // GetValue() here as it would return the old selection and we
                 // want the new one)
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
-                event.SetString(sel == -1 ? GetValue() : value);
+                if ( sel == -1 )
+                    value = GetValue();
+                event.SetString(value);
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }
