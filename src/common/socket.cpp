@@ -863,7 +863,8 @@ char *wxSocketBase::CallbackData(char *data)
 // wxSocketBase automatic notifier
 // --------------------------------------------------------------
 
-static void LINKAGEMODE wx_socket_callback(GSocket *socket, GSocketEvent event, char *cdata)
+static void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
+                                           GSocketEvent event, char *cdata)
 {
   wxSocketBase *sckobj = (wxSocketBase *)cdata;
 
@@ -940,7 +941,7 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
   }
 }
 
-void wxSocketBase::OldOnNotify(wxSocketNotify evt)
+void wxSocketBase::OldOnNotify(wxSocketNotify WXUNUSED(evt))
 {
 }
 

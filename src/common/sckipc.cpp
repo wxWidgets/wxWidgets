@@ -70,12 +70,12 @@ void Client_OnRequest(wxSocketBase& sock,
 // wxTCPClient
 // ---------------------------------------------------------------------------
 
-wxTCPClient::wxTCPClient (void)
+wxTCPClient::wxTCPClient ()
   : wxClientBase()
 {
 }
 
-wxTCPClient::~wxTCPClient (void)
+wxTCPClient::~wxTCPClient ()
 {
 }
 
@@ -147,7 +147,7 @@ wxConnectionBase *wxTCPClient::OnMakeConnection()
 // wxTCPServer
 // ---------------------------------------------------------------------------
 
-wxTCPServer::wxTCPServer (void)
+wxTCPServer::wxTCPServer ()
   : wxServerBase()
 {
 }
@@ -169,7 +169,7 @@ bool wxTCPServer::Create(const wxString& server_name)
   return TRUE;
 }
 
-wxTCPServer::~wxTCPServer(void)
+wxTCPServer::~wxTCPServer()
 {
 }
 
@@ -182,17 +182,17 @@ wxConnectionBase *wxTCPServer::OnAcceptConnection( const wxString& WXUNUSED(topi
 // wxTCPConnection
 // ---------------------------------------------------------------------------
 
-wxTCPConnection::wxTCPConnection (void)
+wxTCPConnection::wxTCPConnection ()
   : wxConnectionBase(),
     m_sock(NULL), m_sockstrm(NULL), m_codeci(NULL), m_codeco(NULL)
 {
 }
 
-wxTCPConnection::wxTCPConnection(char *buffer, int size)
+wxTCPConnection::wxTCPConnection(char * WXUNUSED(buffer), int WXUNUSED(size))
 {
 }
 
-wxTCPConnection::~wxTCPConnection (void)
+wxTCPConnection::~wxTCPConnection ()
 {
   wxDELETE(m_sock);
   wxDELETE(m_codeci);
@@ -206,7 +206,7 @@ void wxTCPConnection::Compress(bool WXUNUSED(on))
 }
 
 // Calls that CLIENT can make.
-bool wxTCPConnection::Disconnect (void)
+bool wxTCPConnection::Disconnect ()
 {
   // Send the the disconnect message to the peer.
   m_codeco->Write8(IPC_DISCONNECT);

@@ -52,16 +52,18 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
     public:
         wxHtmlCell() : wxObject() {m_Next = NULL; m_Parent = NULL; m_Width = m_Height = m_Descent = 0;};
         virtual ~wxHtmlCell() {if (m_Next) delete m_Next;};
-    
+
         void SetParent(wxHtmlContainerCell *p) {m_Parent = p;}
         wxHtmlContainerCell *GetParent() const {return m_Parent;}
-            
+
         int GetPosX() const {return m_PosX;}
         int GetPosY() const {return m_PosY;}
         int GetWidth() const {return m_Width;}
         int GetHeight() const {return m_Height;}
         int GetDescent() const {return m_Descent;}
-        virtual wxString GetLink(int x = 0, int y = 0) const {return m_Link;}
+        virtual wxString GetLink(int WXUNUSED(x) = 0,
+                                 int WXUNUSED(y) = 0) const
+            { return m_Link; }
                 // returns the link associated with this cell. The position is position within
                 // the cell so it varies from 0 to m_Width, from 0 to m_Height
         wxHtmlCell *GetNext() const {return m_Next;}
@@ -84,7 +86,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
         virtual void DrawInvisible(wxDC& dc, int x, int y) {if (m_Next) m_Next -> DrawInvisible(dc, x, y);};
                 // proceed drawing actions in case the cell is not visible (scrolled out of screen).
                 // This is needed to change fonts, colors and so on
-        
+
         virtual const wxHtmlCell* Find(int condition, const void* param) const {if (m_Next) return m_Next -> Find(condition, param); else return NULL;}
                 // This method returns pointer to the FIRST cell for that
                 // the condition
@@ -170,7 +172,7 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
         virtual void Layout(int w);
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
-        
+
         void InsertCell(wxHtmlCell *cell);
                 // insert cell at the end of m_Cells list
         void SetAlignHor(int al) {m_AlignHor = al;}

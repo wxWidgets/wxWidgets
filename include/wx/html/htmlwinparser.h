@@ -100,7 +100,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         void SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, int *sizes);
                 // sets fonts to be used when displaying HTML page.
                 // *_italic_mode can be either wxSLANT or wxITALIC
-    
+
         virtual wxList* GetTempData();
 
         static void AddModule(wxHtmlTagsModule *module);
@@ -175,7 +175,7 @@ class WXDLLEXPORT wxHtmlWinTagHandler : public wxHtmlTagHandler
 
     public:
         wxHtmlWinTagHandler() : wxHtmlTagHandler() {};
-        
+
         virtual void SetParser(wxHtmlParser *parser) {wxHtmlTagHandler::SetParser(parser); m_WParser = (wxHtmlWinParser*) parser;};
 };
 
@@ -202,7 +202,7 @@ class WXDLLEXPORT wxHtmlTagsModule : public wxModule
         virtual bool OnInit();
         virtual void OnExit();
 
-        virtual void FillHandlersTable(wxHtmlWinParser *parser) {}
+        virtual void FillHandlersTable(wxHtmlWinParser * WXUNUSED(parser)) { }
                 // This is called by wxHtmlWinParser.
                 // The method must simply call parser->AddTagHandler(new <handler_class_name>);
                 // for each handler

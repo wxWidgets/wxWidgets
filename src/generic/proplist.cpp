@@ -449,11 +449,11 @@ bool wxPropertyListView::CreateControls()
         else
         {
             m_confirmButton = new wxButton(panel, wxID_PROP_CHECK, ":-)", wxPoint(-1, -1), smallButtonSize );
-	    m_cancelButton = new wxButton(panel, wxID_PROP_CROSS, "X", wxPoint(-1, -1), smallButtonSize );
+            m_cancelButton = new wxButton(panel, wxID_PROP_CROSS, "X", wxPoint(-1, -1), smallButtonSize );
         }
-	
-	topsizer->Add( m_confirmButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
-	topsizer->Add( m_cancelButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
+
+        topsizer->Add( m_confirmButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
+        topsizer->Add( m_cancelButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
     }
 
     m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, "",
@@ -465,7 +465,7 @@ bool wxPropertyListView::CreateControls()
     {
         m_editButton = new wxButton(panel, wxID_PROP_EDIT, "...",  wxPoint(-1, -1), smallButtonSize);
         m_editButton->Enable(FALSE);
-	topsizer->Add( m_editButton, 0, wxRIGHT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
+        topsizer->Add( m_editButton, 0, wxRIGHT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
     }
 
     mainsizer->Add( topsizer, 0, wxEXPAND );
@@ -487,8 +487,8 @@ bool wxPropertyListView::CreateControls()
 
     if ((m_buttonFlags & wxPROP_BUTTON_OK) ||
         (m_buttonFlags & wxPROP_BUTTON_CLOSE) ||
-	(m_buttonFlags & wxPROP_BUTTON_CANCEL) ||
-	(m_buttonFlags & wxPROP_BUTTON_HELP))
+        (m_buttonFlags & wxPROP_BUTTON_CANCEL) ||
+        (m_buttonFlags & wxPROP_BUTTON_HELP))
     {
         wxBoxSizer *bottomsizer = new wxBoxSizer( wxHORIZONTAL );
         buttonborder = 5;
@@ -515,7 +515,7 @@ bool wxPropertyListView::CreateControls()
             m_windowHelpButton = new wxButton(panel, wxID_HELP, _("Help"), wxPoint(-1, -1), largeButtonSize );
             bottomsizer->Add( m_windowHelpButton, 0, wxALL, buttonborder );
         }
-	
+
         mainsizer->Add( bottomsizer, 1, wxALIGN_RIGHT | wxEXPAND );
     }
 
@@ -539,9 +539,9 @@ void wxPropertyListView::ShowListBoxControl(bool show)
     if (m_buttonFlags & wxPROP_DYNAMIC_VALUE_FIELD)
     {
         if (show)
-	    m_middleSizer->Prepend( m_valueList, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 3 );
-	else
-	    m_middleSizer->Remove( 0 );
+            m_middleSizer->Prepend( m_valueList, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 3 );
+        else
+            m_middleSizer->Remove( 0 );
 
         m_propertyWindow->Layout();
     }
@@ -1786,10 +1786,12 @@ void wxPropertyStringListEditorDialog::OnText(wxCommandEvent& event)
   }
 }
 
-void wxPropertyStringListEditorDialog::OnCloseWindow(wxCloseEvent& event)
+void
+wxPropertyStringListEditorDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
-  this->Destroy();
+
+  Destroy();
 }
 
 void wxPropertyStringListEditorDialog::SaveCurrentSelection(void)
@@ -1850,9 +1852,9 @@ bool wxPropertyModule::OnInit()
     if (!gs_tickBitmap || !gs_crossBitmap || !gs_tickBitmap->Ok() || !gs_crossBitmap->Ok())
     {
         if (gs_tickBitmap) delete gs_tickBitmap;
-	if (gs_crossBitmap) delete gs_crossBitmap;
-	gs_tickBitmap = (wxBitmap*) NULL;
-	gs_crossBitmap = (wxBitmap*) NULL;
+        if (gs_crossBitmap) delete gs_crossBitmap;
+        gs_tickBitmap = (wxBitmap*) NULL;
+        gs_crossBitmap = (wxBitmap*) NULL;
     }
 
     return TRUE;
