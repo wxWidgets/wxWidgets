@@ -25,8 +25,8 @@
 // Classes to represent a position in the grid and a size of an item in the
 // grid, IOW, the number of rows and columns it occupies.  I chose to use these
 // instead of wxPoint and wxSize because they are (x,y) and usually pixel
-// oriented whild grids and tables are usually thought of as (row,col) so some
-// confusion would definitly result in using wxPoint...
+// oriented while grids and tables are usually thought of as (row,col) so some
+// confusion would definitely result in using wxPoint...
 // 
 // NOTE: This should probably be refactored to a common RowCol data type which
 // is used for this and also for wxGridCellCoords.
@@ -240,6 +240,13 @@ public:
     // Return the sizer item for the given grid cell, or NULL if there is no
     // item at that position. (non-recursive)
     wxGBSizerItem* FindItemAtPosition(const wxGBPosition& pos);
+
+    
+    // Return the sizer item located at the point given in pt, or NULL if
+    // there is no item at that point. The (x,y) coordinates in pt correspond
+    // to the client coordinates of the window using the sizer for
+    // layout. (non-recursive)
+    wxGBSizerItem* FindItemAtPoint(const wxPoint& pt);
 
     
     // Return the sizer item that has a matching user data (it only compares

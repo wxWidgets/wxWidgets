@@ -406,6 +406,24 @@ wxGBSizerItem* wxGridBagSizer::FindItemAtPosition(const wxGBPosition& pos)
 
 
 
+wxGBSizerItem* wxGridBagSizer::FindItemAtPoint(const wxPoint& pt)
+{
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
+        wxRect rect(item->GetPosition(), item->GetSize());
+        rect.Inflate(m_hgap, m_vgap);
+        if ( rect.Inside(pt) )
+            return item;
+        node = node->GetNext();
+    }
+    return NULL;
+}
+
+
+
+
 wxGBSizerItem* wxGridBagSizer::FindItemWithData(const wxObject* userData)
 {
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();

@@ -10,7 +10,11 @@ more than one row and/or column using \helpref{wxGBSpan}{wxgbspan}.
 
 \wxheading{Derived from}
 
-\helpref{wxFlexGridSizer}{wxflexgridsizer}
+\helpref{wxFlexGridSizer}{wxflexgridsizer}\\
+\helpref{wxGridSizer}{wxgridsizer}\\
+\helpref{wxSizer}{wxsizer}\\
+\helpref{wxObject}{wxobject}
+
 
 \wxheading{Include files}
 
@@ -73,6 +77,17 @@ example it may be the item we are checking the position of.
 
 Find the sizer item for the given window or subsizer, returns NULL if
 not found. (non-recursive)
+
+
+
+\membersection{wxGridBagSizer::FindItemAtPoint}\label{wxgridbagsizerfinditematpoint}
+
+\func{wxGBSizerItem*}{FindItemAtPoint}{\param{const wxPoint\& }{pt}}
+
+Return the sizer item located at the point given in pt, or NULL if
+there is no item at that point. The (x,y) coordinates in pt correspond
+to the client coordinates of the window using the sizer for
+layout. (non-recursive)
 
 
 
