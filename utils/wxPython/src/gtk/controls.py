@@ -185,7 +185,7 @@ class wxChoice(wxChoicePtr):
 
 
 
-class wxComboBoxPtr(wxControlPtr):
+class wxComboBoxPtr(wxChoicePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -242,9 +242,6 @@ class wxComboBoxPtr(wxControlPtr):
         return val
     def SetInsertionPointEnd(self):
         val = controlsc.wxComboBox_SetInsertionPointEnd(self.this)
-        return val
-    def SetSelection(self,arg0,*args):
-        val = apply(controlsc.wxComboBox_SetSelection,(self.this,arg0,)+args)
         return val
     def SetMark(self,arg0,arg1):
         val = controlsc.wxComboBox_SetMark(self.this,arg0,arg1)
@@ -329,6 +326,26 @@ class wxStaticBox(wxStaticBoxPtr):
         except: pass
         args = tuple(argl)
         self.this = apply(controlsc.new_wxStaticBox,(arg0.this,arg1,arg2,)+args)
+        self.thisown = 1
+
+
+
+
+class wxStaticLinePtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxStaticLine instance>"
+class wxStaticLine(wxStaticLinePtr):
+    def __init__(self,arg0,arg1,*args) :
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        try: argl[1] = argl[1].this
+        except: pass
+        args = tuple(argl)
+        self.this = apply(controlsc.new_wxStaticLine,(arg0.this,arg1,)+args)
         self.thisown = 1
 
 
@@ -712,9 +729,6 @@ class wxRadioBoxPtr(wxControlPtr):
         return val
     def Number(self):
         val = controlsc.wxRadioBox_Number(self.this)
-        return val
-    def SetLabel(self,arg0):
-        val = controlsc.wxRadioBox_SetLabel(self.this,arg0)
         return val
     def SetItemLabel(self,arg0,arg1):
         val = controlsc.wxRadioBox_SetItemLabel(self.this,arg0,arg1)

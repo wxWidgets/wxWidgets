@@ -3158,6 +3158,34 @@ static PyObject *_wrap_wxDC_DrawArc(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxDC_DrawCircle(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DrawCircle(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxDC_DrawCircle(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    long  _arg1;
+    long  _arg2;
+    long  _arg3;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"slll:wxDC_DrawCircle",&_argc0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_DrawCircle. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_DrawCircle(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxDC_DrawEllipse(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawEllipse(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxDC_DrawEllipse(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -3997,8 +4025,8 @@ static PyObject *_wrap_wxDC_GetPixel(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxDC_GetSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSize(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxDC_GetSize(PyObject *self, PyObject *args) {
+#define wxDC_GetSizeTuple(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxDC_GetSizeTuple(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxDC * _arg0;
     int * _arg1;
@@ -4014,17 +4042,17 @@ static PyObject *_wrap_wxDC_GetSize(PyObject *self, PyObject *args) {
 {
   _arg2 = &temp0;
 }
-    if(!PyArg_ParseTuple(args,"s:wxDC_GetSize",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxDC_GetSizeTuple",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDC_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_GetSize. Expected _wxDC_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_GetSizeTuple. Expected _wxDC_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxDC_GetSize(_arg0,_arg1,_arg2);
+        wxDC_GetSizeTuple(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4039,6 +4067,33 @@ static PyObject *_wrap_wxDC_GetSize(PyObject *self, PyObject *args) {
     o = PyInt_FromLong((long) (*_arg2));
     _resultobj = t_output_helper(_resultobj, o);
 }
+    return _resultobj;
+}
+
+#define wxDC_GetSize(_swigobj)  (_swigobj->GetSize())
+static PyObject *_wrap_wxDC_GetSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxDC * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxDC_GetSize",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_GetSize. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxDC_GetSize(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -5813,6 +5868,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_GetTextExtent", _wrap_wxDC_GetTextExtent, 1 },
 	 { "wxDC_GetTextBackground", _wrap_wxDC_GetTextBackground, 1 },
 	 { "wxDC_GetSize", _wrap_wxDC_GetSize, 1 },
+	 { "wxDC_GetSizeTuple", _wrap_wxDC_GetSizeTuple, 1 },
 	 { "wxDC_GetPixel", _wrap_wxDC_GetPixel, 1 },
 	 { "wxDC_GetPen", _wrap_wxDC_GetPen, 1 },
 	 { "wxDC_GetOptimization", _wrap_wxDC_GetOptimization, 1 },
@@ -5839,6 +5895,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_DrawIcon", _wrap_wxDC_DrawIcon, 1 },
 	 { "wxDC_DrawEllipticArc", _wrap_wxDC_DrawEllipticArc, 1 },
 	 { "wxDC_DrawEllipse", _wrap_wxDC_DrawEllipse, 1 },
+	 { "wxDC_DrawCircle", _wrap_wxDC_DrawCircle, 1 },
 	 { "wxDC_DrawArc", _wrap_wxDC_DrawArc, 1 },
 	 { "wxDC_DeviceToLogicalYRel", _wrap_wxDC_DeviceToLogicalYRel, 1 },
 	 { "wxDC_DeviceToLogicalY", _wrap_wxDC_DeviceToLogicalY, 1 },
@@ -5991,10 +6048,16 @@ SWIGEXPORT(void,initgdic)() {
  */
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_signed_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_unsigned_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_wxWindowID",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_uint",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
-	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
@@ -6016,16 +6079,17 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_wxDC","_class_wxMemoryDC",SwigwxMemoryDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_wxMemoryDC",SwigwxMemoryDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
+	 SWIG_RegisterMapping("_size_t","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
 	 SWIG_RegisterMapping("_size_t","_int",0);
 	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
 	 SWIG_RegisterMapping("_size_t","_uint",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
-	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
+	 SWIG_RegisterMapping("_uint","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
@@ -6040,6 +6104,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
@@ -6063,6 +6128,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_class_wxDC","_wxDC",0);
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
+	 SWIG_RegisterMapping("_signed_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
@@ -6087,6 +6153,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
+	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -6097,12 +6164,14 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
 	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
+	 SWIG_RegisterMapping("_wxWindowID","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);

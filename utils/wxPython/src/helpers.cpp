@@ -394,6 +394,7 @@ void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
     PyEval_SaveThread();
     wxPyInEvent = false;
 #endif
+    return;
 }
 
 

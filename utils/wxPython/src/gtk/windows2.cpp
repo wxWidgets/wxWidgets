@@ -2856,6 +2856,14 @@ static PyObject *_wrap_wxGridEvent_m_cell_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static void *SwigwxNotebookEventTowxNotifyEvent(void *ptr) {
+    wxNotebookEvent *src;
+    wxNotifyEvent *dest;
+    src = (wxNotebookEvent *) ptr;
+    dest = (wxNotifyEvent *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxNotebookEventTowxCommandEvent(void *ptr) {
     wxNotebookEvent *src;
     wxCommandEvent *dest;
@@ -2919,6 +2927,58 @@ static PyObject *_wrap_wxNotebookEvent_GetOldSelection(PyObject *self, PyObject 
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxNotebookEvent_SetOldSelection(_swigobj,_swigarg0)  (_swigobj->SetOldSelection(_swigarg0))
+static PyObject *_wrap_wxNotebookEvent_SetOldSelection(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxNotebookEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxNotebookEvent_SetOldSelection",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxNotebookEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotebookEvent_SetOldSelection. Expected _wxNotebookEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxNotebookEvent_SetOldSelection(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxNotebookEvent_SetSelection(_swigobj,_swigarg0)  (_swigobj->SetSelection(_swigarg0))
+static PyObject *_wrap_wxNotebookEvent_SetSelection(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxNotebookEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxNotebookEvent_SetSelection",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxNotebookEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotebookEvent_SetSelection. Expected _wxNotebookEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxNotebookEvent_SetSelection(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -3432,7 +3492,7 @@ static PyObject *_wrap_wxNotebook_AddPage(PyObject *self, PyObject *args) {
 #define wxNotebook_GetPage(_swigobj,_swigarg0)  (_swigobj->GetPage(_swigarg0))
 static PyObject *_wrap_wxNotebook_GetPage(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    wxNotebookPage * _result;
+    wxWindow * _result;
     wxNotebook * _arg0;
     int  _arg1;
     char * _argc0 = 0;
@@ -3449,10 +3509,10 @@ static PyObject *_wrap_wxNotebook_GetPage(PyObject *self, PyObject *args) {
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxNotebookPage *)wxNotebook_GetPage(_arg0,_arg1);
+        _result = (wxWindow *)wxNotebook_GetPage(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxNotebookPage_p");
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3478,6 +3538,150 @@ static PyObject *_wrap_wxNotebook_ResizeChildren(PyObject *self, PyObject *args)
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxNotebook_ResizeChildren(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxSplitterEventTowxCommandEvent(void *ptr) {
+    wxSplitterEvent *src;
+    wxCommandEvent *dest;
+    src = (wxSplitterEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplitterEventTowxEvent(void *ptr) {
+    wxSplitterEvent *src;
+    wxEvent *dest;
+    src = (wxSplitterEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define wxSplitterEvent_GetSashPosition(_swigobj)  (_swigobj->GetSashPosition())
+static PyObject *_wrap_wxSplitterEvent_GetSashPosition(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSplitterEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSplitterEvent_GetSashPosition",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterEvent_GetSashPosition. Expected _wxSplitterEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSplitterEvent_GetSashPosition(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSplitterEvent_GetX(_swigobj)  (_swigobj->GetX())
+static PyObject *_wrap_wxSplitterEvent_GetX(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSplitterEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSplitterEvent_GetX",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterEvent_GetX. Expected _wxSplitterEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSplitterEvent_GetX(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSplitterEvent_GetY(_swigobj)  (_swigobj->GetY())
+static PyObject *_wrap_wxSplitterEvent_GetY(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSplitterEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSplitterEvent_GetY",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterEvent_GetY. Expected _wxSplitterEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSplitterEvent_GetY(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSplitterEvent_GetWindowBeingRemoved(_swigobj)  (_swigobj->GetWindowBeingRemoved())
+static PyObject *_wrap_wxSplitterEvent_GetWindowBeingRemoved(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    wxSplitterEvent * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSplitterEvent_GetWindowBeingRemoved",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterEvent_GetWindowBeingRemoved. Expected _wxSplitterEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxWindow *)wxSplitterEvent_GetWindowBeingRemoved(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxSplitterEvent_SetSashPosition(_swigobj,_swigarg0)  (_swigobj->SetSashPosition(_swigarg0))
+static PyObject *_wrap_wxSplitterEvent_SetSashPosition(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSplitterEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxSplitterEvent_SetSashPosition",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterEvent_SetSashPosition. Expected _wxSplitterEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSplitterEvent_SetSashPosition(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4051,6 +4255,11 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxSplitterWindow_GetMinimumPaneSize", _wrap_wxSplitterWindow_GetMinimumPaneSize, 1 },
 	 { "wxSplitterWindow_GetBorderSize", _wrap_wxSplitterWindow_GetBorderSize, 1 },
 	 { "new_wxSplitterWindow", _wrap_new_wxSplitterWindow, 1 },
+	 { "wxSplitterEvent_SetSashPosition", _wrap_wxSplitterEvent_SetSashPosition, 1 },
+	 { "wxSplitterEvent_GetWindowBeingRemoved", _wrap_wxSplitterEvent_GetWindowBeingRemoved, 1 },
+	 { "wxSplitterEvent_GetY", _wrap_wxSplitterEvent_GetY, 1 },
+	 { "wxSplitterEvent_GetX", _wrap_wxSplitterEvent_GetX, 1 },
+	 { "wxSplitterEvent_GetSashPosition", _wrap_wxSplitterEvent_GetSashPosition, 1 },
 	 { "wxNotebook_ResizeChildren", _wrap_wxNotebook_ResizeChildren, 1 },
 	 { "wxNotebook_GetPage", _wrap_wxNotebook_GetPage, 1 },
 	 { "wxNotebook_AddPage", _wrap_wxNotebook_AddPage, 1 },
@@ -4069,6 +4278,8 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxNotebook_SetSelection", _wrap_wxNotebook_SetSelection, 1 },
 	 { "wxNotebook_GetPageCount", _wrap_wxNotebook_GetPageCount, 1 },
 	 { "new_wxNotebook", _wrap_new_wxNotebook, 1 },
+	 { "wxNotebookEvent_SetSelection", _wrap_wxNotebookEvent_SetSelection, 1 },
+	 { "wxNotebookEvent_SetOldSelection", _wrap_wxNotebookEvent_SetOldSelection, 1 },
 	 { "wxNotebookEvent_GetOldSelection", _wrap_wxNotebookEvent_GetOldSelection, 1 },
 	 { "wxNotebookEvent_GetSelection", _wrap_wxNotebookEvent_GetSelection, 1 },
 	 { "wxGridEvent_m_cell_get", _wrap_wxGridEvent_m_cell_get, 1 },
@@ -4193,6 +4404,8 @@ SWIGEXPORT(void,initwindows2c)() {
  * (Used by the SWIG pointer type-checker).
  */
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
+	 SWIG_RegisterMapping("_wxEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxEvent);
+	 SWIG_RegisterMapping("_wxEvent","_wxSplitterEvent",SwigwxSplitterEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent);
@@ -4201,6 +4414,13 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_signed_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_unsigned_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_wxWindowID",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_uint",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler);
@@ -4213,7 +4433,9 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
-	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
@@ -4234,6 +4456,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_size_t","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
 	 SWIG_RegisterMapping("_size_t","_int",0);
 	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
@@ -4250,7 +4473,6 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxPyEvent","_class_wxPyEvent",0);
 	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
-	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_class_wxKeyEvent","_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_class_wxGrid","_wxGrid",0);
@@ -4258,21 +4480,28 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxDialog","_wxDialog",0);
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
+	 SWIG_RegisterMapping("_wxStaticLine","_class_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_class_wxNotebookEvent","_wxNotebookEvent",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxEvent);
+	 SWIG_RegisterMapping("_class_wxEvent","_wxSplitterEvent",SwigwxSplitterEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
 	 SWIG_RegisterMapping("_wxCheckListBox","_class_wxCheckListBox",0);
+	 SWIG_RegisterMapping("_wxSplitterEvent","_class_wxSplitterEvent",0);
 	 SWIG_RegisterMapping("_wxGridEvent","_class_wxGridEvent",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
+	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent);
+	 SWIG_RegisterMapping("_wxCommandEvent","_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxCommandEvent",0);
@@ -4286,10 +4515,15 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
+	 SWIG_RegisterMapping("_class_wxStaticLine","_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
+	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
@@ -4298,6 +4532,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxStaticText","_class_wxStaticText",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
 	 SWIG_RegisterMapping("_wxCloseEvent","_class_wxCloseEvent",0);
+	 SWIG_RegisterMapping("_class_wxSplitterEvent","_wxSplitterEvent",0);
 	 SWIG_RegisterMapping("_wxNotebook","_class_wxNotebook",0);
 	 SWIG_RegisterMapping("_unsigned_long","_wxDash",0);
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
@@ -4314,6 +4549,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxComboBox","_class_wxComboBox",0);
 	 SWIG_RegisterMapping("_wxRadioButton","_class_wxRadioButton",0);
+	 SWIG_RegisterMapping("_signed_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
@@ -4364,6 +4600,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxControl","_wxNotebook",SwigwxNotebookTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -4383,12 +4620,14 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_class_wxNotebook","_wxNotebook",0);
+	 SWIG_RegisterMapping("_wxWindowID","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
@@ -4425,6 +4664,8 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
 	 SWIG_RegisterMapping("_class_wxCheckListBox","_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_class_wxGridEvent","_wxGridEvent",0);
+	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent);
+	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxCommandEvent",0);

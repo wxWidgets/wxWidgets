@@ -156,6 +156,7 @@ wxString wxGetTextFromUser(const wxString& message,
                            int x = -1, int y = -1,
                            bool centre = TRUE);
 
+
 // TODO: Need to custom wrap this one...
 // int wxGetMultipleChoice(char* message, char* caption,
 //                         int LCOUNT, char** LIST,

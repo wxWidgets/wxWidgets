@@ -361,7 +361,7 @@ class wxGridEvent(wxGridEventPtr):
 
 
 
-class wxNotebookEventPtr(wxCommandEventPtr):
+class wxNotebookEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -370,6 +370,12 @@ class wxNotebookEventPtr(wxCommandEventPtr):
         return val
     def GetOldSelection(self):
         val = windows2c.wxNotebookEvent_GetOldSelection(self.this)
+        return val
+    def SetOldSelection(self,arg0):
+        val = windows2c.wxNotebookEvent_SetOldSelection(self.this,arg0)
+        return val
+    def SetSelection(self,arg0):
+        val = windows2c.wxNotebookEvent_SetSelection(self.this,arg0)
         return val
     def __repr__(self):
         return "<C wxNotebookEvent instance>"
@@ -432,6 +438,7 @@ class wxNotebookPtr(wxControlPtr):
         return val
     def GetPage(self,arg0):
         val = windows2c.wxNotebook_GetPage(self.this,arg0)
+        val = wxWindowPtr(val)
         return val
     def ResizeChildren(self):
         val = windows2c.wxNotebook_ResizeChildren(self.this)
@@ -449,6 +456,35 @@ class wxNotebook(wxNotebookPtr):
         self.this = apply(windows2c.new_wxNotebook,(arg0.this,arg1,)+args)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
+
+
+
+
+class wxSplitterEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetSashPosition(self):
+        val = windows2c.wxSplitterEvent_GetSashPosition(self.this)
+        return val
+    def GetX(self):
+        val = windows2c.wxSplitterEvent_GetX(self.this)
+        return val
+    def GetY(self):
+        val = windows2c.wxSplitterEvent_GetY(self.this)
+        return val
+    def GetWindowBeingRemoved(self):
+        val = windows2c.wxSplitterEvent_GetWindowBeingRemoved(self.this)
+        val = wxWindowPtr(val)
+        return val
+    def SetSashPosition(self,arg0):
+        val = windows2c.wxSplitterEvent_SetSashPosition(self.this,arg0)
+        return val
+    def __repr__(self):
+        return "<C wxSplitterEvent instance>"
+class wxSplitterEvent(wxSplitterEventPtr):
+    def __init__(self,this):
+        self.this = this
 
 
 

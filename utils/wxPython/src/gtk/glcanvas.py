@@ -3,6 +3,8 @@ import glcanvasc
 
 from misc import *
 
+from misc2 import *
+
 from windows import *
 
 from gdi import *
@@ -26,6 +28,8 @@ from cmndlgs import *
 from windows3 import *
 
 from image import *
+
+from printfw import *
 import wx
 class wxGLContextPtr :
     def __init__(self,this):
@@ -42,21 +46,6 @@ class wxGLContextPtr :
         return val
     def SwapBuffers(self):
         val = glcanvasc.wxGLContext_SwapBuffers(self.this)
-        return val
-    def SetupPixelFormat(self):
-        val = glcanvasc.wxGLContext_SetupPixelFormat(self.this)
-        return val
-    def SetupPalette(self,arg0):
-        val = glcanvasc.wxGLContext_SetupPalette(self.this,arg0.this)
-        return val
-    def CreateDefaultPalette(self):
-        val = glcanvasc.wxGLContext_CreateDefaultPalette(self.this)
-        val = wxPalettePtr(val)
-        val.thisown = 1
-        return val
-    def GetPalette(self):
-        val = glcanvasc.wxGLContext_GetPalette(self.this)
-        val = wxPalettePtr(val)
         return val
     def GetWindow(self):
         val = glcanvasc.wxGLContext_GetWindow(self.this)

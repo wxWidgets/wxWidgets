@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.12  1999/05/15 00:56:11  RD
- * fixes for GetReturnCode/SetReturnCode
+ * Revision 1.13  1999/06/22 17:45:34  RD
+ * wxPython 2.1b1:  Very minor changes needed for wxGTK
  *
  ************************************************************************/
 
@@ -622,6 +622,7 @@ extern "C" SWIGEXPORT(void,initwindowsc)();
 extern "C" SWIGEXPORT(void,initwindows2c)();
 extern "C" SWIGEXPORT(void,initeventsc)();
 extern "C" SWIGEXPORT(void,initmiscc)();
+extern "C" SWIGEXPORT(void,initmisc2c)();
 extern "C" SWIGEXPORT(void,initgdic)();
 extern "C" SWIGEXPORT(void,initmdic)();
 extern "C" SWIGEXPORT(void,initcontrolsc)();
@@ -631,6 +632,7 @@ extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
 extern "C" SWIGEXPORT(void,initwindows3c)();
 extern "C" SWIGEXPORT(void,initimagec)();
+extern "C" SWIGEXPORT(void,initprintfwc)();
 #ifndef SEPARATE
 extern "C" SWIGEXPORT(void,initutilsc)();
 extern "C" SWIGEXPORT(void,initglcanvasc)();
@@ -1312,6 +1314,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxDEFAULT_FRAME_STYLE", PyInt_FromLong((long) wxDEFAULT_FRAME_STYLE));
 	 PyDict_SetItemString(d,"wxDEFAULT_DIALOG_STYLE", PyInt_FromLong((long) wxDEFAULT_DIALOG_STYLE));
 	 PyDict_SetItemString(d,"wxFRAME_TOOL_WINDOW", PyInt_FromLong((long) wxFRAME_TOOL_WINDOW));
+	 PyDict_SetItemString(d,"wxFRAME_FLOAT_ON_PARENT", PyInt_FromLong((long) wxFRAME_FLOAT_ON_PARENT));
 	 PyDict_SetItemString(d,"wxCLIP_CHILDREN", PyInt_FromLong((long) wxCLIP_CHILDREN));
 	 PyDict_SetItemString(d,"wxRETAINED", PyInt_FromLong((long) wxRETAINED));
 	 PyDict_SetItemString(d,"wxBACKINGSTORE", PyInt_FromLong((long) wxBACKINGSTORE));
@@ -1351,6 +1354,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxGA_PROGRESSBAR", PyInt_FromLong((long) wxGA_PROGRESSBAR));
 	 PyDict_SetItemString(d,"wxGA_HORIZONTAL", PyInt_FromLong((long) wxGA_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxGA_VERTICAL", PyInt_FromLong((long) wxGA_VERTICAL));
+	 PyDict_SetItemString(d,"wxGA_SMOOTH", PyInt_FromLong((long) wxGA_SMOOTH));
 	 PyDict_SetItemString(d,"wxSL_HORIZONTAL", PyInt_FromLong((long) wxSL_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxSL_VERTICAL", PyInt_FromLong((long) wxSL_VERTICAL));
 	 PyDict_SetItemString(d,"wxSL_AUTOTICKS", PyInt_FromLong((long) wxSL_AUTOTICKS));
@@ -1422,6 +1426,10 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxSIZE_ALLOW_MINUS_ONE", PyInt_FromLong((long) wxSIZE_ALLOW_MINUS_ONE));
 	 PyDict_SetItemString(d,"wxPORTRAIT", PyInt_FromLong((long) wxPORTRAIT));
 	 PyDict_SetItemString(d,"wxLANDSCAPE", PyInt_FromLong((long) wxLANDSCAPE));
+	 PyDict_SetItemString(d,"wxPRINT_QUALITY_HIGH", PyInt_FromLong((long) wxPRINT_QUALITY_HIGH));
+	 PyDict_SetItemString(d,"wxPRINT_QUALITY_MEDIUM", PyInt_FromLong((long) wxPRINT_QUALITY_MEDIUM));
+	 PyDict_SetItemString(d,"wxPRINT_QUALITY_LOW", PyInt_FromLong((long) wxPRINT_QUALITY_LOW));
+	 PyDict_SetItemString(d,"wxPRINT_QUALITY_DRAFT", PyInt_FromLong((long) wxPRINT_QUALITY_DRAFT));
 	 PyDict_SetItemString(d,"wxID_OPEN", PyInt_FromLong((long) wxID_OPEN));
 	 PyDict_SetItemString(d,"wxID_CLOSE", PyInt_FromLong((long) wxID_CLOSE));
 	 PyDict_SetItemString(d,"wxID_NEW", PyInt_FromLong((long) wxID_NEW));
@@ -1486,6 +1494,10 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxACCEL_ALT", PyInt_FromLong((long) wxACCEL_ALT));
 	 PyDict_SetItemString(d,"wxACCEL_CTRL", PyInt_FromLong((long) wxACCEL_CTRL));
 	 PyDict_SetItemString(d,"wxACCEL_SHIFT", PyInt_FromLong((long) wxACCEL_SHIFT));
+	 PyDict_SetItemString(d,"wxPD_AUTO_HIDE", PyInt_FromLong((long) wxPD_AUTO_HIDE));
+	 PyDict_SetItemString(d,"wxPD_APP_MODAL", PyInt_FromLong((long) wxPD_APP_MODAL));
+	 PyDict_SetItemString(d,"wxPD_CAN_ABORT", PyInt_FromLong((long) wxPD_CAN_ABORT));
+	 PyDict_SetItemString(d,"wxNO_DEFAULT", PyInt_FromLong((long) wxNO_DEFAULT));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));
 	 PyDict_SetItemString(d,"wxROMAN", PyInt_FromLong((long) wxROMAN));
@@ -1706,6 +1718,9 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxPAPER_A2", PyInt_FromLong((long) wxPAPER_A2));
 	 PyDict_SetItemString(d,"wxPAPER_A3_TRANSVERSE", PyInt_FromLong((long) wxPAPER_A3_TRANSVERSE));
 	 PyDict_SetItemString(d,"wxPAPER_A3_EXTRA_TRANSVERSE", PyInt_FromLong((long) wxPAPER_A3_EXTRA_TRANSVERSE));
+	 PyDict_SetItemString(d,"wxDUPLEX_SIMPLEX", PyInt_FromLong((long) wxDUPLEX_SIMPLEX));
+	 PyDict_SetItemString(d,"wxDUPLEX_HORIZONTAL", PyInt_FromLong((long) wxDUPLEX_HORIZONTAL));
+	 PyDict_SetItemString(d,"wxDUPLEX_VERTICAL", PyInt_FromLong((long) wxDUPLEX_VERTICAL));
 	 PyDict_SetItemString(d,"FALSE", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"false", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"TRUE", PyInt_FromLong((long) 1));
@@ -1765,6 +1780,13 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_PAGEUP", PyInt_FromLong((long) wxEVT_SCROLL_PAGEUP));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_PAGEDOWN", PyInt_FromLong((long) wxEVT_SCROLL_PAGEDOWN));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_THUMBTRACK", PyInt_FromLong((long) wxEVT_SCROLL_THUMBTRACK));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_TOP", PyInt_FromLong((long) wxEVT_SCROLLWIN_TOP));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_BOTTOM", PyInt_FromLong((long) wxEVT_SCROLLWIN_BOTTOM));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_LINEUP", PyInt_FromLong((long) wxEVT_SCROLLWIN_LINEUP));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_LINEDOWN", PyInt_FromLong((long) wxEVT_SCROLLWIN_LINEDOWN));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_PAGEUP", PyInt_FromLong((long) wxEVT_SCROLLWIN_PAGEUP));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_PAGEDOWN", PyInt_FromLong((long) wxEVT_SCROLLWIN_PAGEDOWN));
+	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_THUMBTRACK", PyInt_FromLong((long) wxEVT_SCROLLWIN_THUMBTRACK));
 	 PyDict_SetItemString(d,"wxEVT_SIZE", PyInt_FromLong((long) wxEVT_SIZE));
 	 PyDict_SetItemString(d,"wxEVT_MOVE", PyInt_FromLong((long) wxEVT_MOVE));
 	 PyDict_SetItemString(d,"wxEVT_CLOSE_WINDOW", PyInt_FromLong((long) wxEVT_CLOSE_WINDOW));
@@ -1839,11 +1861,16 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_KEY_DOWN", PyInt_FromLong((long) wxEVT_COMMAND_LIST_KEY_DOWN));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_INSERT_ITEM", PyInt_FromLong((long) wxEVT_COMMAND_LIST_INSERT_ITEM));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_COL_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_LIST_COL_CLICK));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_ITEM_ACTIVATED", PyInt_FromLong((long) wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("2.0b9"));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_UNSPLIT", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_UNSPLIT));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_DOUBLECLICKED));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("2.1b1"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
@@ -1860,6 +1887,7 @@ SWIGEXPORT(void,initwxc)() {
     initwindows2c();
     initeventsc();
     initmiscc();
+    initmisc2c();
     initgdic();
     initmdic();
     initcontrolsc();
@@ -1869,6 +1897,7 @@ SWIGEXPORT(void,initwxc)() {
     initframesc();
     initwindows3c();
     initimagec();
+    initprintfwc();
 #ifndef SEPARATE
     initutilsc();
 #ifdef WITH_GLCANVAS
@@ -1887,6 +1916,13 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxJPEGHandler","_wxJPEGHandler",0);
 	 SWIG_RegisterMapping("_wxBMPHandler","_class_wxBMPHandler",0);
 	 SWIG_RegisterMapping("_wxImage","_class_wxImage",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_signed_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_unsigned_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_wxWindowID",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_uint",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_wxFontData","_class_wxFontData",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
@@ -1898,15 +1934,17 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxGIFHandler","_class_wxGIFHandler",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxImageHandler","_class_wxImageHandler",0);
 	 SWIG_RegisterMapping("_class_wxTreeCtrl","_wxTreeCtrl",0);
-	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
+	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
 	 SWIG_RegisterMapping("_wxPNGHandler","_class_wxPNGHandler",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxColourData","_wxColourData",0);
 	 SWIG_RegisterMapping("_class_wxPageSetupDialogData","_wxPageSetupDialogData",0);
+	 SWIG_RegisterMapping("_wxPrinter","_class_wxPrinter",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
@@ -1914,6 +1952,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxChoice","_class_wxChoice",0);
 	 SWIG_RegisterMapping("_wxSlider","_class_wxSlider",0);
 	 SWIG_RegisterMapping("_wxNotebookEvent","_class_wxNotebookEvent",0);
+	 SWIG_RegisterMapping("_wxPyPrintout","_class_wxPyPrintout",0);
 	 SWIG_RegisterMapping("_long","_wxDash",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
@@ -1928,9 +1967,12 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxListEvent","_class_wxListEvent",0);
 	 SWIG_RegisterMapping("_class_wxSingleChoiceDialog","_wxSingleChoiceDialog",0);
+	 SWIG_RegisterMapping("_wxProgressDialog","_class_wxProgressDialog",0);
 	 SWIG_RegisterMapping("_class_wxBMPHandler","_wxBMPHandler",0);
+	 SWIG_RegisterMapping("_wxPrintPreview","_class_wxPrintPreview",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxSashLayoutWindow","_class_wxSashLayoutWindow",0);
+	 SWIG_RegisterMapping("_size_t","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
 	 SWIG_RegisterMapping("_size_t","_int",0);
 	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
@@ -1947,29 +1989,34 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxPyEvent","_class_wxPyEvent",0);
 	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
-	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
+	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxKeyEvent","_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_class_wxGrid","_wxGrid",0);
 	 SWIG_RegisterMapping("_class_wxPNGHandler","_wxPNGHandler",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxDialog",0);
 	 SWIG_RegisterMapping("_wxPageSetupDialog","_class_wxPageSetupDialog",0);
+	 SWIG_RegisterMapping("_class_wxPrinter","_wxPrinter",0);
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxToolBar","_class_wxToolBar",0);
+	 SWIG_RegisterMapping("_wxStaticLine","_class_wxStaticLine",0);
 	 SWIG_RegisterMapping("_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
 	 SWIG_RegisterMapping("_class_wxNotebookEvent","_wxNotebookEvent",0);
+	 SWIG_RegisterMapping("_class_wxPyPrintout","_wxPyPrintout",0);
 	 SWIG_RegisterMapping("_class_wxSashWindow","_wxSashWindow",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
 	 SWIG_RegisterMapping("_wxCheckListBox","_class_wxCheckListBox",0);
+	 SWIG_RegisterMapping("_wxSplitterEvent","_class_wxSplitterEvent",0);
 	 SWIG_RegisterMapping("_wxGridEvent","_class_wxGridEvent",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxCommandEvent",0);
@@ -1988,7 +2035,9 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_wxToolBarTool","_class_wxToolBarTool",0);
 	 SWIG_RegisterMapping("_wxColourDialog","_class_wxColourDialog",0);
+	 SWIG_RegisterMapping("_wxPrintData","_class_wxPrintData",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxMessageDialog","_class_wxMessageDialog",0);
 	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_wxTextEntryDialog","_class_wxTextEntryDialog",0);
@@ -1997,21 +2046,26 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxMDIChildFrame","_class_wxMDIChildFrame",0);
 	 SWIG_RegisterMapping("_wxListItem","_class_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
+	 SWIG_RegisterMapping("_class_wxStaticLine","_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_wxCalculateLayoutEvent","_class_wxCalculateLayoutEvent",0);
+	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
 	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxDropFilesEvent","_wxDropFilesEvent",0);
+	 SWIG_RegisterMapping("_class_wxPreviewFrame","_wxPreviewFrame",0);
 	 SWIG_RegisterMapping("_wxStaticText","_class_wxStaticText",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
 	 SWIG_RegisterMapping("_wxCloseEvent","_class_wxCloseEvent",0);
+	 SWIG_RegisterMapping("_class_wxSplitterEvent","_wxSplitterEvent",0);
 	 SWIG_RegisterMapping("_wxNotebook","_class_wxNotebook",0);
 	 SWIG_RegisterMapping("_unsigned_long","_wxDash",0);
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
 	 SWIG_RegisterMapping("_class_wxRect","_wxRect",0);
 	 SWIG_RegisterMapping("_class_wxDC","_wxDC",0);
+	 SWIG_RegisterMapping("_class_wxProgressDialog","_wxProgressDialog",0);
 	 SWIG_RegisterMapping("_wxPyApp","_class_wxPyApp",0);
 	 SWIG_RegisterMapping("_wxMDIParentFrame","_class_wxMDIParentFrame",0);
 	 SWIG_RegisterMapping("_class_wxTreeEvent","_wxTreeEvent",0);
@@ -2026,6 +2080,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxComboBox","_class_wxComboBox",0);
 	 SWIG_RegisterMapping("_wxRadioButton","_class_wxRadioButton",0);
 	 SWIG_RegisterMapping("_class_wxMessageDialog","_wxMessageDialog",0);
+	 SWIG_RegisterMapping("_signed_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
@@ -2080,6 +2135,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxMenu","_wxMenu",0);
 	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -2106,12 +2162,14 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_class_wxNotebook","_wxNotebook",0);
 	 SWIG_RegisterMapping("_wxJPEGHandler","_class_wxJPEGHandler",0);
+	 SWIG_RegisterMapping("_wxWindowID","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
@@ -2120,6 +2178,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
 	 SWIG_RegisterMapping("_class_wxListEvent","_wxListEvent",0);
+	 SWIG_RegisterMapping("_class_wxPrintPreview","_wxPrintPreview",0);
 	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
 	 SWIG_RegisterMapping("_class_wxPyApp","_wxPyApp",0);
@@ -2150,6 +2209,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxFontDialog","_class_wxFontDialog",0);
 	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxSplitterWindow","_wxSplitterWindow",0);
+	 SWIG_RegisterMapping("_wxPreviewFrame","_class_wxPreviewFrame",0);
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
@@ -2172,6 +2232,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxMenuItem","_class_wxMenuItem",0);
 	 SWIG_RegisterMapping("_class_wxScrollBar","_wxScrollBar",0);
 	 SWIG_RegisterMapping("_class_wxColourDialog","_wxColourDialog",0);
+	 SWIG_RegisterMapping("_class_wxPrintData","_wxPrintData",0);
 	 SWIG_RegisterMapping("_wxDash","_unsigned_long",0);
 	 SWIG_RegisterMapping("_wxDash","_long",0);
 	 SWIG_RegisterMapping("_class_wxScrolledWindow","_wxScrolledWindow",0);

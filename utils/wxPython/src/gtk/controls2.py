@@ -469,6 +469,9 @@ class wxTreeCtrlPtr(wxControlPtr):
         val = wxTreeItemIdPtr(val)
         val.thisown = 1
         return val
+    def GetChildrenCount(self,arg0,*args):
+        val = apply(controls2c.wxTreeCtrl_GetChildrenCount,(self.this,arg0.this,)+args)
+        return val
     def GetFirstChild(self,arg0,arg1):
         val = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
         return val
@@ -601,7 +604,7 @@ class wxTreeCtrlPtr(wxControlPtr):
         val1.thisown = 1
         return (val1,val2)
     def GetNextChild(self,arg0,arg1):
-        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+        val1, val2 = controls2c.wxTreeCtrl_GetNextChild(self.this,arg0.this,arg1)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
@@ -634,6 +637,7 @@ wxLIST_MASK_IMAGE = controls2c.wxLIST_MASK_IMAGE
 wxLIST_MASK_DATA = controls2c.wxLIST_MASK_DATA
 wxLIST_MASK_WIDTH = controls2c.wxLIST_MASK_WIDTH
 wxLIST_MASK_FORMAT = controls2c.wxLIST_MASK_FORMAT
+wxLIST_MASK_STATE = controls2c.wxLIST_MASK_STATE
 wxLIST_STATE_DONTCARE = controls2c.wxLIST_STATE_DONTCARE
 wxLIST_STATE_DROPHILITED = controls2c.wxLIST_STATE_DROPHILITED
 wxLIST_STATE_FOCUSED = controls2c.wxLIST_STATE_FOCUSED

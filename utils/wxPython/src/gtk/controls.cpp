@@ -66,7 +66,9 @@ extern PyObject *SWIG_newvarlink(void);
 
 #ifdef __WXGTK__
 #include <wx/checklst.h>
+#include <wx/statline.h>
 #endif
+
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -1270,6 +1272,14 @@ static PyObject *_wrap_wxChoice_SetStringSelection(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+static void *SwigwxComboBoxTowxChoice(void *ptr) {
+    wxComboBox *src;
+    wxChoice *dest;
+    src = (wxComboBox *) ptr;
+    dest = (wxChoice *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxComboBoxTowxControl(void *ptr) {
     wxComboBox *src;
     wxControl *dest;
@@ -1881,35 +1891,6 @@ static PyObject *_wrap_wxComboBox_SetInsertionPointEnd(PyObject *self, PyObject 
     return _resultobj;
 }
 
-#define wxComboBox_SetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelection(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxComboBox_SetSelection(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxComboBox * _arg0;
-    int  _arg1;
-    bool  _arg2 = (1);
-    char * _argc0 = 0;
-    int tempbool2;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si|i:wxComboBox_SetSelection",&_argc0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxComboBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_SetSelection. Expected _wxComboBox_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxComboBox_SetSelection(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxComboBox_SetMark(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSelection(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxComboBox_SetMark(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2338,6 +2319,76 @@ static PyObject *_wrap_new_wxStaticBox(PyObject *self, PyObject *args) {
     if (_obj2)
         delete _arg2;
 }
+    return _resultobj;
+}
+
+static void *SwigwxStaticLineTowxControl(void *ptr) {
+    wxStaticLine *src;
+    wxControl *dest;
+    src = (wxStaticLine *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxStaticLineTowxWindow(void *ptr) {
+    wxStaticLine *src;
+    wxWindow *dest;
+    src = (wxStaticLine *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxStaticLineTowxEvtHandler(void *ptr) {
+    wxStaticLine *src;
+    wxEvtHandler *dest;
+    src = (wxStaticLine *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxStaticLine(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxStaticLine(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxStaticLine(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxStaticLine * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxPoint * _arg2 = &wxPyDefaultPosition;
+    wxSize * _arg3 = &wxPyDefaultSize;
+    long  _arg4 = wxLI_HORIZONTAL;
+    char * _arg5 = "staticLine";
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    char * _argc3 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si|ssls:new_wxStaticLine",&_argc0,&_arg1,&_argc2,&_argc3,&_arg4,&_arg5)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxStaticLine. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxStaticLine. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxStaticLine. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxStaticLine *)new_wxStaticLine(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxStaticLine_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -5293,44 +5344,6 @@ static PyObject *_wrap_wxRadioBox_Number(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxRadioBox_SetLabel(_swigobj,_swigarg0)  (_swigobj->SetLabel(_swigarg0))
-static PyObject *_wrap_wxRadioBox_SetLabel(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxRadioBox * _arg0;
-    wxString * _arg1;
-    char * _argc0 = 0;
-    PyObject * _obj1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sO:wxRadioBox_SetLabel",&_argc0,&_obj1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_SetLabel. Expected _wxRadioBox_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxRadioBox_SetLabel(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
 #define wxRadioBox_SetItemLabel(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLabel(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxRadioBox_SetItemLabel(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -6231,7 +6244,6 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxRadioBox_SetStringSelection", _wrap_wxRadioBox_SetStringSelection, 1 },
 	 { "wxRadioBox_SetSelection", _wrap_wxRadioBox_SetSelection, 1 },
 	 { "wxRadioBox_SetItemLabel", _wrap_wxRadioBox_SetItemLabel, 1 },
-	 { "wxRadioBox_SetLabel", _wrap_wxRadioBox_SetLabel, 1 },
 	 { "wxRadioBox_Number", _wrap_wxRadioBox_Number, 1 },
 	 { "wxRadioBox_GetStringSelection", _wrap_wxRadioBox_GetStringSelection, 1 },
 	 { "wxRadioBox_GetString", _wrap_wxRadioBox_GetString, 1 },
@@ -6316,6 +6328,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxStaticText_SetLabel", _wrap_wxStaticText_SetLabel, 1 },
 	 { "wxStaticText_GetLabel", _wrap_wxStaticText_GetLabel, 1 },
 	 { "new_wxStaticText", _wrap_new_wxStaticText, 1 },
+	 { "new_wxStaticLine", _wrap_new_wxStaticLine, 1 },
 	 { "new_wxStaticBox", _wrap_new_wxStaticBox, 1 },
 	 { "wxGauge_SetValue", _wrap_wxGauge_SetValue, 1 },
 	 { "wxGauge_SetShadowWidth", _wrap_wxGauge_SetShadowWidth, 1 },
@@ -6328,7 +6341,6 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxGauge", _wrap_new_wxGauge, 1 },
 	 { "wxComboBox_SetValue", _wrap_wxComboBox_SetValue, 1 },
 	 { "wxComboBox_SetMark", _wrap_wxComboBox_SetMark, 1 },
-	 { "wxComboBox_SetSelection", _wrap_wxComboBox_SetSelection, 1 },
 	 { "wxComboBox_SetInsertionPointEnd", _wrap_wxComboBox_SetInsertionPointEnd, 1 },
 	 { "wxComboBox_SetInsertionPoint", _wrap_wxComboBox_SetInsertionPoint, 1 },
 	 { "wxComboBox_Remove", _wrap_wxComboBox_Remove, 1 },
@@ -6397,6 +6409,13 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_signed_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_unsigned_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_wxWindowID",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_uint",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxSlider",SwigwxSliderTowxEvtHandler);
@@ -6419,6 +6438,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxListBox",SwigwxListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxStaticText",SwigwxStaticTextTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxStaticText",SwigwxStaticTextTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxStaticLine",SwigwxStaticLineTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxStaticLine",SwigwxStaticLineTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxStaticBox",SwigwxStaticBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxStaticBox",SwigwxStaticBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxGauge",SwigwxGaugeTowxEvtHandler);
@@ -6439,13 +6460,15 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
-	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
 	 SWIG_RegisterMapping("_wxStaticBox","_class_wxStaticBox",0);
+	 SWIG_RegisterMapping("_wxChoice","_class_wxComboBox",SwigwxComboBoxTowxChoice);
+	 SWIG_RegisterMapping("_wxChoice","_wxComboBox",SwigwxComboBoxTowxChoice);
 	 SWIG_RegisterMapping("_wxChoice","_class_wxChoice",0);
 	 SWIG_RegisterMapping("_wxSlider","_class_wxSlider",0);
 	 SWIG_RegisterMapping("_long","_wxDash",0);
@@ -6458,6 +6481,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_size_t","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
 	 SWIG_RegisterMapping("_size_t","_int",0);
 	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
@@ -6472,15 +6496,16 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxPyEvent","_class_wxPyEvent",0);
 	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
-	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_class_wxKeyEvent","_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxDialog",0);
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
+	 SWIG_RegisterMapping("_wxStaticLine","_class_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
@@ -6501,10 +6526,13 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
+	 SWIG_RegisterMapping("_class_wxStaticLine","_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
+	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
@@ -6526,6 +6554,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxComboBox","_class_wxComboBox",0);
 	 SWIG_RegisterMapping("_wxRadioButton","_class_wxRadioButton",0);
+	 SWIG_RegisterMapping("_signed_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
@@ -6563,6 +6592,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxWindow","_wxListBox",SwigwxListBoxTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxStaticText",SwigwxStaticTextTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxStaticText",SwigwxStaticTextTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_class_wxStaticLine",SwigwxStaticLineTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_wxStaticLine",SwigwxStaticLineTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxStaticBox",SwigwxStaticBoxTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxStaticBox",SwigwxStaticBoxTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxGauge",SwigwxGaugeTowxWindow);
@@ -6622,6 +6653,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxControl","_wxListBox",SwigwxListBoxTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxStaticText",SwigwxStaticTextTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_wxStaticText",SwigwxStaticTextTowxControl);
+	 SWIG_RegisterMapping("_wxControl","_class_wxStaticLine",SwigwxStaticLineTowxControl);
+	 SWIG_RegisterMapping("_wxControl","_wxStaticLine",SwigwxStaticLineTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxStaticBox",SwigwxStaticBoxTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_wxStaticBox",SwigwxStaticBoxTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxGauge",SwigwxGaugeTowxControl);
@@ -6640,6 +6673,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxListBox","_class_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -6654,16 +6688,20 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxStaticBox","_wxStaticBox",0);
 	 SWIG_RegisterMapping("_class_wxScrollEvent","_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_wxJoystickEvent","_class_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_class_wxChoice","_class_wxComboBox",SwigwxComboBoxTowxChoice);
+	 SWIG_RegisterMapping("_class_wxChoice","_wxComboBox",SwigwxComboBoxTowxChoice);
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_wxWindowID","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
@@ -6704,6 +6742,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxControl","_wxListBox",SwigwxListBoxTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxStaticText",SwigwxStaticTextTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_wxStaticText",SwigwxStaticTextTowxControl);
+	 SWIG_RegisterMapping("_class_wxControl","_class_wxStaticLine",SwigwxStaticLineTowxControl);
+	 SWIG_RegisterMapping("_class_wxControl","_wxStaticLine",SwigwxStaticLineTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxStaticBox",SwigwxStaticBoxTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_wxStaticBox",SwigwxStaticBoxTowxControl);
 	 SWIG_RegisterMapping("_class_wxControl","_class_wxGauge",SwigwxGaugeTowxControl);
@@ -6759,6 +6799,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxListBox",SwigwxListBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxStaticText",SwigwxStaticTextTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxStaticText",SwigwxStaticTextTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxStaticLine",SwigwxStaticLineTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_wxStaticLine",SwigwxStaticLineTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxStaticBox",SwigwxStaticBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxStaticBox",SwigwxStaticBoxTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxGauge",SwigwxGaugeTowxEvtHandler);
@@ -6805,6 +6847,8 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxWindow","_wxListBox",SwigwxListBoxTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxStaticText",SwigwxStaticTextTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxStaticText",SwigwxStaticTextTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_class_wxStaticLine",SwigwxStaticLineTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_wxStaticLine",SwigwxStaticLineTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxStaticBox",SwigwxStaticBoxTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxStaticBox",SwigwxStaticBoxTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxGauge",SwigwxGaugeTowxWindow);

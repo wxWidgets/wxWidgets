@@ -6,11 +6,17 @@ from misc import *
 from gdi import *
 import wx
 
-def wxDLG_PNT(win, point):
-    return win.ConvertDialogPointToPixels(point)
+def wxDLG_PNT(win, point_or_x, y=None):
+    if y is None:
+        return win.ConvertDialogPointToPixels(point_or_x)
+    else:
+        return win.ConvertDialogPointToPixels(wxPoint(point_or_x, y))
 
-def wxDLG_SZE(win, size):
-    return win.ConvertDialogSizeToPixels(size)
+def wxDLG_SZE(win, size_width, height=None):
+    if height is None:
+        return win.ConvertDialogSizeToPixels(size_width)
+    else:
+        return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
 
 class wxEvtHandlerPtr :
     def __init__(self,this):
@@ -44,8 +50,19 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Centre(self,*args):
         val = apply(windowsc.wxWindow_Centre,(self.this,)+args)
         return val
+    def CentreOnParent(self,*args):
+        val = apply(windowsc.wxWindow_CentreOnParent,(self.this,)+args)
+        return val
+    def CenterOnParent(self,*args):
+        val = apply(windowsc.wxWindow_CenterOnParent,(self.this,)+args)
+        return val
     def ClientToScreenXY(self,arg0,arg1):
         val = windowsc.wxWindow_ClientToScreenXY(self.this,arg0,arg1)
+        return val
+    def ClientToScreen(self,arg0):
+        val = windowsc.wxWindow_ClientToScreen(self.this,arg0.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
         return val
     def Close(self,*args):
         val = apply(windowsc.wxWindow_Close,(self.this,)+args)
@@ -112,6 +129,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetLabel(self):
         val = windowsc.wxWindow_GetLabel(self.this)
         return val
+    def SetLabel(self,arg0):
+        val = windowsc.wxWindow_SetLabel(self.this,arg0)
+        return val
     def GetName(self):
         val = windowsc.wxWindow_GetName(self.this)
         return val
@@ -165,6 +185,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetWindowStyleFlag(self):
         val = windowsc.wxWindow_GetWindowStyleFlag(self.this)
         return val
+    def Hide(self):
+        val = windowsc.wxWindow_Hide(self.this)
+        return val
     def InitDialog(self):
         val = windowsc.wxWindow_InitDialog(self.this)
         return val
@@ -176,6 +199,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def IsShown(self):
         val = windowsc.wxWindow_IsShown(self.this)
+        return val
+    def IsTopLevel(self):
+        val = windowsc.wxWindow_IsTopLevel(self.this)
         return val
     def Layout(self):
         val = windowsc.wxWindow_Layout(self.this)
@@ -211,8 +237,16 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def ReleaseMouse(self):
         val = windowsc.wxWindow_ReleaseMouse(self.this)
         return val
+    def Reparent(self,arg0):
+        val = windowsc.wxWindow_Reparent(self.this,arg0.this)
+        return val
     def ScreenToClientXY(self,arg0,arg1):
         val = windowsc.wxWindow_ScreenToClientXY(self.this,arg0,arg1)
+        return val
+    def ScreenToClient(self,arg0):
+        val = windowsc.wxWindow_ScreenToClient(self.this,arg0.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
         return val
     def ScrollWindow(self,arg0,arg1,*args):
         argl = map(None,args)
@@ -357,8 +391,22 @@ class wxPanelPtr(wxWindowPtr):
     def InitDialog(self):
         val = windowsc.wxPanel_InitDialog(self.this)
         return val
+    def GetDefaultItem(self):
+        val = windowsc.wxPanel_GetDefaultItem(self.this)
+        val = wxButtonPtr(val)
+        return val
+    def SetDefaultItem(self,arg0):
+        val = windowsc.wxPanel_SetDefaultItem(self.this,arg0.this)
+        return val
     def __repr__(self):
         return "<C wxPanel instance>"
+    
+    def GetDefaultItem(self):
+        import controls
+        val = windowsc.wxPanel_GetDefaultItem(self.this)
+        val = controls.wxButtonPtr(val)
+        return val
+
 class wxPanel(wxPanelPtr):
     def __init__(self,arg0,arg1,*args) :
         argl = map(None,args)
@@ -431,7 +479,7 @@ class wxDialog(wxDialogPtr):
 
 
 
-class wxScrolledWindowPtr(wxWindowPtr):
+class wxScrolledWindowPtr(wxPanelPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

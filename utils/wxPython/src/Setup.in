@@ -35,11 +35,11 @@ TARGETDIR=$(BINLIBDEST)/site-packages/wxPython
 
 wxc	wx.cpp helpers.cpp windows.cpp events.cpp misc.cpp misc2.cpp gdi.cpp \
 	mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
-	frames.cpp stattool.cpp windows3.cpp image.cpp \
+	frames.cpp stattool.cpp windows3.cpp image.cpp printfw.cpp \
 	utils.cpp \
 	## comment out the next line to disable wxGLCanvas
 	_glcanvas.cpp glcanvas.cpp -DWITH_GLCANVAS -lGL -lGLU \
 	-I. $(WX_CONFIG_CFLAGS) -I/usr/local/lib/glib/include \
-	-DSWIG_GLOBAL -DWXP_WITH_THREAD $(SEPARATE) -Xlinker $(WX_CONFIG_LIBS)
+	-DSWIG_GLOBAL -DWXP_USE_THREAD $(SEPARATE) -Xlinker $(WX_CONFIG_LIBS)
 
 ##-Xlinker -Bstatic

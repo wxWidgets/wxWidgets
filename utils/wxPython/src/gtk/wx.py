@@ -3,6 +3,8 @@ import wxc
 
 from misc import *
 
+from misc2 import *
+
 from windows import *
 
 from gdi import *
@@ -26,6 +28,8 @@ from cmndlgs import *
 from windows3 import *
 
 from image import *
+
+from printfw import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -146,6 +150,7 @@ wxDIALOG_MODELESS = wxc.wxDIALOG_MODELESS
 wxDEFAULT_FRAME_STYLE = wxc.wxDEFAULT_FRAME_STYLE
 wxDEFAULT_DIALOG_STYLE = wxc.wxDEFAULT_DIALOG_STYLE
 wxFRAME_TOOL_WINDOW = wxc.wxFRAME_TOOL_WINDOW
+wxFRAME_FLOAT_ON_PARENT = wxc.wxFRAME_FLOAT_ON_PARENT
 wxCLIP_CHILDREN = wxc.wxCLIP_CHILDREN
 wxRETAINED = wxc.wxRETAINED
 wxBACKINGSTORE = wxc.wxBACKINGSTORE
@@ -185,6 +190,7 @@ wxRB_GROUP = wxc.wxRB_GROUP
 wxGA_PROGRESSBAR = wxc.wxGA_PROGRESSBAR
 wxGA_HORIZONTAL = wxc.wxGA_HORIZONTAL
 wxGA_VERTICAL = wxc.wxGA_VERTICAL
+wxGA_SMOOTH = wxc.wxGA_SMOOTH
 wxSL_HORIZONTAL = wxc.wxSL_HORIZONTAL
 wxSL_VERTICAL = wxc.wxSL_VERTICAL
 wxSL_AUTOTICKS = wxc.wxSL_AUTOTICKS
@@ -256,6 +262,10 @@ wxSIZE_USE_EXISTING = wxc.wxSIZE_USE_EXISTING
 wxSIZE_ALLOW_MINUS_ONE = wxc.wxSIZE_ALLOW_MINUS_ONE
 wxPORTRAIT = wxc.wxPORTRAIT
 wxLANDSCAPE = wxc.wxLANDSCAPE
+wxPRINT_QUALITY_HIGH = wxc.wxPRINT_QUALITY_HIGH
+wxPRINT_QUALITY_MEDIUM = wxc.wxPRINT_QUALITY_MEDIUM
+wxPRINT_QUALITY_LOW = wxc.wxPRINT_QUALITY_LOW
+wxPRINT_QUALITY_DRAFT = wxc.wxPRINT_QUALITY_DRAFT
 wxID_OPEN = wxc.wxID_OPEN
 wxID_CLOSE = wxc.wxID_CLOSE
 wxID_NEW = wxc.wxID_NEW
@@ -320,6 +330,10 @@ wxOVERWRITE_PROMPT = wxc.wxOVERWRITE_PROMPT
 wxACCEL_ALT = wxc.wxACCEL_ALT
 wxACCEL_CTRL = wxc.wxACCEL_CTRL
 wxACCEL_SHIFT = wxc.wxACCEL_SHIFT
+wxPD_AUTO_HIDE = wxc.wxPD_AUTO_HIDE
+wxPD_APP_MODAL = wxc.wxPD_APP_MODAL
+wxPD_CAN_ABORT = wxc.wxPD_CAN_ABORT
+wxNO_DEFAULT = wxc.wxNO_DEFAULT
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -540,6 +554,9 @@ wxPAPER_B5_EXTRA = wxc.wxPAPER_B5_EXTRA
 wxPAPER_A2 = wxc.wxPAPER_A2
 wxPAPER_A3_TRANSVERSE = wxc.wxPAPER_A3_TRANSVERSE
 wxPAPER_A3_EXTRA_TRANSVERSE = wxc.wxPAPER_A3_EXTRA_TRANSVERSE
+wxDUPLEX_SIMPLEX = wxc.wxDUPLEX_SIMPLEX
+wxDUPLEX_HORIZONTAL = wxc.wxDUPLEX_HORIZONTAL
+wxDUPLEX_VERTICAL = wxc.wxDUPLEX_VERTICAL
 FALSE = wxc.FALSE
 false = wxc.false
 TRUE = wxc.TRUE
@@ -599,6 +616,13 @@ wxEVT_SCROLL_LINEDOWN = wxc.wxEVT_SCROLL_LINEDOWN
 wxEVT_SCROLL_PAGEUP = wxc.wxEVT_SCROLL_PAGEUP
 wxEVT_SCROLL_PAGEDOWN = wxc.wxEVT_SCROLL_PAGEDOWN
 wxEVT_SCROLL_THUMBTRACK = wxc.wxEVT_SCROLL_THUMBTRACK
+wxEVT_SCROLLWIN_TOP = wxc.wxEVT_SCROLLWIN_TOP
+wxEVT_SCROLLWIN_BOTTOM = wxc.wxEVT_SCROLLWIN_BOTTOM
+wxEVT_SCROLLWIN_LINEUP = wxc.wxEVT_SCROLLWIN_LINEUP
+wxEVT_SCROLLWIN_LINEDOWN = wxc.wxEVT_SCROLLWIN_LINEDOWN
+wxEVT_SCROLLWIN_PAGEUP = wxc.wxEVT_SCROLLWIN_PAGEUP
+wxEVT_SCROLLWIN_PAGEDOWN = wxc.wxEVT_SCROLLWIN_PAGEDOWN
+wxEVT_SCROLLWIN_THUMBTRACK = wxc.wxEVT_SCROLLWIN_THUMBTRACK
 wxEVT_SIZE = wxc.wxEVT_SIZE
 wxEVT_MOVE = wxc.wxEVT_MOVE
 wxEVT_CLOSE_WINDOW = wxc.wxEVT_CLOSE_WINDOW
@@ -673,10 +697,15 @@ wxEVT_COMMAND_LIST_ITEM_DESELECTED = wxc.wxEVT_COMMAND_LIST_ITEM_DESELECTED
 wxEVT_COMMAND_LIST_KEY_DOWN = wxc.wxEVT_COMMAND_LIST_KEY_DOWN
 wxEVT_COMMAND_LIST_INSERT_ITEM = wxc.wxEVT_COMMAND_LIST_INSERT_ITEM
 wxEVT_COMMAND_LIST_COL_CLICK = wxc.wxEVT_COMMAND_LIST_COL_CLICK
+wxEVT_COMMAND_LIST_ITEM_ACTIVATED = wxc.wxEVT_COMMAND_LIST_ITEM_ACTIVATED
 wxEVT_COMMAND_TAB_SEL_CHANGED = wxc.wxEVT_COMMAND_TAB_SEL_CHANGED
 wxEVT_COMMAND_TAB_SEL_CHANGING = wxc.wxEVT_COMMAND_TAB_SEL_CHANGING
 wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = wxc.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
 wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING = wxc.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = wxc.wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING
+wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxc.wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
+wxEVT_COMMAND_SPLITTER_UNSPLIT = wxc.wxEVT_COMMAND_SPLITTER_UNSPLIT
+wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxc.wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
 __version__ = wxc.__version__
 cvar = wxc.cvar
 wxPyDefaultPosition = wxPointPtr(wxc.cvar.wxPyDefaultPosition)
@@ -715,6 +744,12 @@ def _checkForCallback(obj, name, event, theID=-1):
     try:    cb = getattr(obj, name)
     except: pass
     else:   obj.Connect(theID, -1, event, cb)
+
+##  def _checkClassCallback(obj, name):
+##      try:    cb = getattr(obj, name)
+##      except: pass
+##      else:   obj._addCallback(name, cb)
+
 
 def _StdWindowCallbacks(win):
     _checkForCallback(win, "OnChar",               wxEVT_CHAR)
@@ -823,6 +858,9 @@ def EVT_NAVIGATION_KEY(win, func):
 
 def EVT_IDLE(win, func):
     win.Connect(-1, -1, wxEVT_IDLE, func)
+
+def EVT_UPDATE_UI(win, id, func):
+    win.Connect(id, -1, wxEVT_UPDATE_UI, func)
 
 
 # Mouse Events
@@ -1195,6 +1233,9 @@ def EVT_LIST_SET_INFO(win, id, func):
 def EVT_LIST_ITEM_SELECTED(win, id, func):
     win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
 
+def EVT_LIST_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
+
 def EVT_LIST_ITEM_DESELECTED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_DESELECTED, func)
 
@@ -1206,6 +1247,19 @@ def EVT_LIST_INSERT_ITEM(win, id, func):
 
 def EVT_LIST_COL_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
+
+#wxSplitterWindow
+def EVT_SPLITTER_SASH_POS_CHANGING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, func)
+
+def EVT_SPLITTER_SASH_POS_CHANGED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, func)
+
+def EVT_SPLITTER_UNSPLIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_UNSPLIT, func)
+
+def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, func)
 
 
 #----------------------------------------------------------------------
@@ -1316,85 +1370,3 @@ class wxApp(wxPyApp):
 
 
 #----------------------------------------------------------------------------
-#
-# $Log$
-# Revision 1.11  1999/05/15 00:56:11  RD
-# fixes for GetReturnCode/SetReturnCode
-#
-# Revision 1.12  1999/04/30 03:29:18  RD
-#
-# wxPython 2.0b9, first phase (win32)
-# Added gobs of stuff, see wxPython/README.txt for details
-#
-# Revision 1.11.4.2  1999/03/28 06:35:01  RD
-#
-# wxPython 2.0b8
-#     Python thread support
-#     various minor additions
-#     various minor fixes
-#
-# Revision 1.11.4.1  1999/03/27 23:29:13  RD
-#
-# wxPython 2.0b8
-#     Python thread support
-#     various minor additions
-#     various minor fixes
-#
-# Revision 1.11  1999/02/20 09:02:55  RD
-# Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-# window handle.  If you can get the window handle into the python code,
-# it should just work...  More news on this later.
-#
-# Added wxImageList, wxToolTip.
-#
-# Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-# wxRegConfig class.
-#
-# As usual, some bug fixes, tweaks, etc.
-#
-# Revision 1.10  1999/02/01 00:10:39  RD
-#
-# Added the missing EVT_LIST_ITEM_SELECTED and friends.
-#
-# Revision 1.9  1999/01/30 07:30:09  RD
-#
-# Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-#
-# Various cleanup, tweaks, minor additions, etc. to maintain
-# compatibility with the current wxWindows.
-#
-# Revision 1.8  1999/01/29 21:13:42  HH
-# Added aliases for wxDefaultPosition and wxDefaultSize (from wxPy..) in _extras,
-# so that C++ documentation applies.
-#
-# Revision 1.7  1998/11/25 08:45:21  RD
-#
-# Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-# Added events for wxGrid
-# Other various fixes and additions
-#
-# Revision 1.6  1998/11/16 00:00:52  RD
-# Generic treectrl for wxPython/GTK compiles...
-#
-# Revision 1.5  1998/10/20 07:38:02  RD
-# bug fix
-#
-# Revision 1.4  1998/10/20 06:43:54  RD
-# New wxTreeCtrl wrappers (untested)
-# some changes in helpers
-# etc.
-#
-# Revision 1.3  1998/10/02 06:40:33  RD
-#
-# Version 0.4 of wxPython for MSW.
-#
-# Revision 1.2  1998/08/18 19:48:12  RD
-# more wxGTK compatibility things.
-#
-# It builds now but there are serious runtime problems...
-#
-# Revision 1.1  1998/08/09 08:25:49  RD
-# Initial version
-#
-#
-

@@ -329,16 +329,16 @@ WXP_VERSION=2.1b1
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__ $(SEPARATE)
 
 
-PYMODULES = $(TARGETDIR)\wx.py        $(TARGETDIR)\events.py    \
-	    $(TARGETDIR)\windows.py   $(TARGETDIR)\misc.py      \
-	    $(TARGETDIR)\gdi.py       $(TARGETDIR)\mdi.py       \
-	    $(TARGETDIR)\controls.py  $(TARGETDIR)\controls2.py \
-            $(TARGETDIR)\windows2.py  $(TARGETDIR)\cmndlgs.py   \
-	    $(TARGETDIR)\stattool.py  $(TARGETDIR)\frames.py    \
-	    $(TARGETDIR)\windows3.py  $(TARGETDIR)\__init__.py  \
-	    $(TARGETDIR)\utils.py     $(TARGETDIR)\image.py     \
-	    $(TARGETDIR)\printfw.py   $(TARGETDIR)\misc2.py     \
-            $(TARGETDIR)\glcanvas.py
+PYMODULES = $(GENCODEDIR)/wx.py        $(GENCODEDIR)/events.py    \
+	    $(GENCODEDIR)/windows.py   $(GENCODEDIR)/misc.py      \
+	    $(GENCODEDIR)/gdi.py       $(GENCODEDIR)/mdi.py       \
+	    $(GENCODEDIR)/controls.py  $(GENCODEDIR)/controls2.py \
+            $(GENCODEDIR)/windows2.py  $(GENCODEDIR)/cmndlgs.py   \
+	    $(GENCODEDIR)/stattool.py  $(GENCODEDIR)/frames.py    \
+	    $(GENCODEDIR)/windows3.py  __init__.py                \
+	    $(GENCODEDIR)/utils.py     $(GENCODEDIR)/image.py     \
+	    $(GENCODEDIR)/printfw.py   $(GENCODEDIR)/misc2.py     \
+            $(GENCODEDIR)/glcanvas.py
 
 
 # Implicit rules to run SWIG
@@ -370,6 +370,7 @@ $(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py    : frames.i     my_typemap
 $(GENCODEDIR)/stattool.cpp  $(GENCODEDIR)/stattool.py  : stattool.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/image.cpp     $(GENCODEDIR)/image.py     : image.i      my_typemaps.i _defs.i
 $(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py     : utils.i      my_typemaps.i _defs.i
+$(GENCODEDIR)/printfw.cpp   $(GENCODEDIR)/printfw.py   : printfw.i    my_typemaps.i _defs.i
 $(GENCODEDIR)/glcanvas.cpp  $(GENCODEDIR)/glcanvas.py  : glcanvas.i   my_typemaps.i _defs.i
 
 $(GENCODEDIR)/helpers.cpp:

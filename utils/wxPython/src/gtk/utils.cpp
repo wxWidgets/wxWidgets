@@ -1233,6 +1233,11 @@ SWIGEXPORT(void,initutilsc)() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("utilsc", utilscMethods);
 	 d = PyModule_GetDict(m);
+
+
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
+
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).

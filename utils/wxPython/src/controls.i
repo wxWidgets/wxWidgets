@@ -229,7 +229,7 @@ public:
                   const wxPoint &pos = wxPyDefaultPosition,
                   const wxSize &size = wxPyDefaultSize,
                   long style = wxLI_HORIZONTAL,
-                  const char* name = wxStaticTextNameStr );
+                  const char* name = "staticLine" );
 };
 #endif
 
@@ -521,7 +521,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.15  1999/06/22 17:45:18  RD
+// wxPython 2.1b1:  Very minor changes needed for wxGTK
+//
 // Revision 1.14  1999/06/22 07:03:02  RD
+//
 // wxPython 2.1b1 for wxMSW  (wxGTK coming soon)
 // Lots of changes, see the README.txt for details...
 //
