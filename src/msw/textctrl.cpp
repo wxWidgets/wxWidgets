@@ -1564,8 +1564,10 @@ bool wxTextCtrl::AdjustSpaceLimit()
 
 bool wxTextCtrl::AcceptsFocus() const
 {
-    // we don't want focus if we can't be edited
-    return IsEditable() && wxControl::AcceptsFocus();
+    // we don't want focus if we can't be edited unless we're a multiline
+    // control because then it might be still nice to get focus from keyboard
+    // to be able to scroll it without mouse
+    return (IsEditable() || IsMultiLine()) && wxControl::AcceptsFocus();
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const
