@@ -321,15 +321,25 @@ samples/ipc/*.xpm
 samples/ipc/*.ico
 samples/ipc/*.rc
 
-samples/types/*.cpp
-samples/types/*.h
-samples/types/*.def
-samples/types/*.rc
-samples/types/*.txt
-samples/types/makefile*
-samples/types/*.xbm
-samples/types/*.xpm
-samples/types/*.ico
+samples/typetest/*.cpp
+samples/typetest/*.h
+samples/typetest/*.def
+samples/typetest/*.rc
+samples/typetest/*.txt
+samples/typetest/makefile*
+samples/typetest/*.xbm
+samples/typetest/*.xpm
+samples/typetest/*.ico
+
+samples/sashtest/*.cpp
+samples/sashtest/*.h
+samples/sashtest/*.def
+samples/sashtest/*.rc
+samples/sashtest/*.txt
+samples/sashtest/makefile*
+samples/sashtest/*.xbm
+samples/sashtest/*.xpm
+samples/sashtest/*.ico
 
 samples/resource/*.cpp
 samples/resource/*.h

@@ -1371,3 +1371,160 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
       pstrExt->Empty();
   }
 }
+
+//------------------------------------------------------------------------
+// wild character routines
+//------------------------------------------------------------------------
+
+bool wxIsWild( const wxString& pattern )
+{
+  wxString tmp = pattern;
+  char *pat = WXSTRINGCAST(tmp);
+    while (*pat) {
+	switch (*pat++) {
+	case '?': case '*': case '[': case '{':
+	    return TRUE;
+	case '\\':
+	    if (!*pat++)
+		return FALSE;
+	}
+    }
+    return FALSE;
+};
+
+
+bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
+{
+  wxString tmp1 = pat;
+  char *pattern = WXSTRINGCAST(tmp1);
+  wxString tmp2 = text;
+  char *str = WXSTRINGCAST(tmp2);
+    char c;
+    char *cp;
+    bool done = FALSE, ret_code, ok;
+    // Below is for vi fans
+    const char OB = '{', CB = '}';
+
+    // dot_special means '.' only matches '.'
+    if (dot_special && *str == '.' && *pattern != *str)
+	return FALSE;
+
+    while ((*pattern != '\0') && (!done)
+    && (((*str=='\0')&&((*pattern==OB)||(*pattern=='*')))||(*str!='\0'))) {
+	switch (*pattern) {
+	case '\\':
+	    pattern++;
+	    if (*pattern != '\0')
+		pattern++;
+	    break;
+	case '*':
+	    pattern++;
+	    ret_code = FALSE;
+	    while ((*str!='\0')
+	    && (!(ret_code=wxMatchWild(pattern, str++, FALSE))))
+		/*loop*/;
+	    if (ret_code) {
+		while (*str != '\0')
+		    str++;
+		while (*pattern != '\0')
+		    pattern++;
+	    }
+	    break;
+	case '[':
+	    pattern++;
+	  repeat:
+	    if ((*pattern == '\0') || (*pattern == ']')) {
+		done = TRUE;
+		break;
+	    }
+	    if (*pattern == '\\') {
+		pattern++;
+		if (*pattern == '\0') {
+		    done = TRUE;
+		    break;
+		}
+	    }
+	    if (*(pattern + 1) == '-') {
+		c = *pattern;
+		pattern += 2;
+		if (*pattern == ']') {
+		    done = TRUE;
+		    break;
+		}
+		if (*pattern == '\\') {
+		    pattern++;
+		    if (*pattern == '\0') {
+			done = TRUE;
+			break;
+		    }
+		}
+		if ((*str < c) || (*str > *pattern)) {
+		    pattern++;
+		    goto repeat;
+		}
+	    } else if (*pattern != *str) {
+		pattern++;
+		goto repeat;
+	    }
+	    pattern++;
+	    while ((*pattern != ']') && (*pattern != '\0')) {
+		if ((*pattern == '\\') && (*(pattern + 1) != '\0'))
+		    pattern++;
+		pattern++;
+	    }
+	    if (*pattern != '\0') {
+		pattern++, str++;
+	    }
+	    break;
+	case '?':
+	    pattern++;
+	    str++;
+	    break;
+	case OB:
+	    pattern++;
+	    while ((*pattern != CB) && (*pattern != '\0')) {
+		cp = str;
+		ok = TRUE;
+		while (ok && (*cp != '\0') && (*pattern != '\0')
+		&&  (*pattern != ',') && (*pattern != CB)) {
+		    if (*pattern == '\\')
+			pattern++;
+		    ok = (*pattern++ == *cp++);
+		}
+		if (*pattern == '\0') {
+		    ok = FALSE;
+		    done = TRUE;
+		    break;
+		} else if (ok) {
+		    str = cp;
+		    while ((*pattern != CB) && (*pattern != '\0')) {
+			if (*++pattern == '\\') {
+			    if (*++pattern == CB)
+				pattern++;
+			}
+		    }
+		} else {
+		    while (*pattern!=CB && *pattern!=',' && *pattern!='\0') {
+			if (*++pattern == '\\') {
+                            if (*++pattern == CB || *pattern == ',')
+				pattern++;
+			}
+		    }
+		}
+		if (*pattern != '\0')
+		    pattern++;
+	    }
+	    break;
+	default:
+	    if (*str == *pattern) {
+		str++, pattern++;
+	    } else {
+		done = TRUE;
+	    }
+	}
+    }
+    while (*pattern == '*')
+	pattern++;
+    return ((*str == '\0') && (*pattern == '\0'));
+};
+

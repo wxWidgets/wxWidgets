@@ -71,9 +71,9 @@ class WXDLLEXPORT wxMetaFileDC: public wxDC
   // Should be called at end of drawing
   virtual wxMetaFile *Close(void);
   virtual void SetMapMode(int mode);
-  virtual void GetTextExtent(const wxString& string, float *x, float *y,
-                     float *descent = NULL, float *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16bit = FALSE);
+  virtual void GetTextExtent(const wxString& string, long *x, long *y,
+                     long *descent = NULL, long *externalLeading = NULL,
+                     wxFont *theFont = NULL, bool use16bit = FALSE) const;
 
   // Implementation
   inline wxMetaFile *GetMetaFile(void) { return m_metaFile; }

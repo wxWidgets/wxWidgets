@@ -59,7 +59,7 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   virtual bool Pending() ;
   virtual void Dispatch() ;
 
-  virtual void OnIdle(wxIdleEvent& event);
+  void OnIdle(wxIdleEvent& event);
 
 // Generic
   virtual bool OnInit() { return FALSE; };

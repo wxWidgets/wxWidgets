@@ -12,7 +12,7 @@ and \helpref{wxDocTemplate}{wxdoctemplate} classes.
 \wxheading{See also}
 
 \helpref{wxDocManager overview}{wxdocmanageroverview}, \helpref{wxDocument}{wxdocument},\rtfsp
-\helpref{wxView}{wxview}, \helpref{wxDocTemplate}{wxdoctemplate}
+\helpref{wxView}{wxview}, \helpref{wxDocTemplate}{wxdoctemplate}, \helpref{wxFileHistory}{wxfilehistory}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -139,27 +139,53 @@ of view is presented to the user.
 
 Removes the template from the list of templates.
 
-\membersection{wxDocManager::FileHistoryLoad}
+\membersection{wxDocManager::FileHistoryAddFilesToMenu}\label{wxdocmanagerfilehistoryaddfilestomenu}
 
-\func{void}{FileHistoryLoad}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+\func{void}{FileHistoryAddFilesToMenu}{\void}
 
-Loads the file history from a resource file, using the given section. This must be called
+Appends the files in the history list, to all menus managed by the file history object.
+
+\func{void}{FileHistoryAddFilesToMenu}{\param{wxMenu*}{ menu}}
+
+Appends the files in the history list, to the given menu only.
+
+\membersection{wxDocManager::FileHistoryLoad}\label{wxdocmanagerfilehistoryload}
+
+\func{void}{FileHistoryLoad}{\param{wxConfigBase\& }{config}}
+
+Loads the file history from a config object.
+
+\wxheading{See also}
+
+\helpref{wxConfig}{wxconfigbase}
+
+\membersection{wxDocManager::FileHistoryRemoveMenu}\label{wxdocmanagerfilehistoryremovemenu}
+
+\func{void}{FileHistoryRemoveMenu}{\param{wxMenu*}{ menu}}
+
+Removes the given menu from the list of menus managed by the file history object.
+
+\membersection{wxDocManager::FileHistorySave}\label{wxdocmanagerfilehistorysave}
+
+\func{void}{FileHistorySave}{\param{wxConfigBase\& }{resourceFile}}
+
+Saves the file history into a config object. This must be called
 explicitly by the application.
 
-\membersection{wxDocManager::FileHistorySave}
+\wxheading{See also}
 
-\func{void}{FileHistorySave}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+\helpref{wxConfig}{wxconfigbase}
 
-Saves the file history into a resource file, using the given section. This must be called
-explicitly by the application.
+\membersection{wxDocManager::FileHistoryUseMenu}\label{wxdocmanagerfilehistoryusemenu}
 
-\membersection{wxDocManager::FileHistoryUseMenu}
-
-\func{void}{FileHistoryUseMenu}{\param{wxMenu *}{menu}}
+\func{void}{FileHistoryUseMenu}{\param{wxMenu*}{ menu}}
 
 Use this menu for appending recently-visited document filenames, for convenient
 access. Calling this function with a valid menu pointer enables the history
 list functionality.
+
+Note that you can add multiple menus using this function, to be managed by the
+file history object.
 
 \membersection{wxDocManager::FindTemplateForPath}
 

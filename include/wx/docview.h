@@ -34,6 +34,7 @@ class WXDLLEXPORT wxPrintInfo;
 class WXDLLEXPORT wxCommand;
 class WXDLLEXPORT wxCommandProcessor;
 class WXDLLEXPORT wxFileHistory;
+class WXDLLEXPORT wxConfigBase;
 
 class WXDLLIMPORT ostream;
 class WXDLLIMPORT istream;
@@ -332,8 +333,11 @@ class WXDLLEXPORT wxDocManager: public wxEvtHandler
   virtual int GetNoHistoryFiles(void) const;
   virtual wxString GetHistoryFile(int i) const;
   virtual void FileHistoryUseMenu(wxMenu *menu);
-  virtual void FileHistoryLoad(const wxString& resourceFile, const wxString& section);
-  virtual void FileHistorySave(const wxString& resourceFile, const wxString& section);
+  virtual void FileHistoryRemoveMenu(wxMenu *menu);
+  virtual void FileHistoryLoad(wxConfigBase& config);
+  virtual void FileHistorySave(wxConfigBase& config);
+  virtual void FileHistoryAddFilesToMenu();
+  virtual void FileHistoryAddFilesToMenu(wxMenu* menu);
  protected:
   long              m_flags;
   int               m_defaultDocumentNameCounter;
@@ -465,7 +469,8 @@ class WXDLLEXPORT wxCommandProcessor: public wxObject
   virtual bool Submit(wxCommand *command, bool storeIt = TRUE);
   virtual bool Undo(void);
   virtual bool Redo(void);
-  virtual bool CanUndo(void);
+  virtual bool CanUndo(void) const;
+  virtual bool CanRedo(void) const;
 
   // Call this to manage an edit menu.
   inline void SetEditMenu(wxMenu *menu) { m_commandEditMenu = menu; }
@@ -484,6 +489,8 @@ class WXDLLEXPORT wxCommandProcessor: public wxObject
   wxMenu*       m_commandEditMenu;
 };
 
+// File history management
+
 class WXDLLEXPORT wxFileHistory: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxFileHistory)
@@ -491,21 +498,36 @@ class WXDLLEXPORT wxFileHistory: public wxObject
   wxFileHistory(int maxFiles = 9);
   ~wxFileHistory(void);
 
-  // File history management
+// Operations
   virtual void AddFileToHistory(const wxString& file);
-  inline virtual int GetNoHistoryFiles(void) const { return m_fileHistoryN; }
-  virtual wxString GetHistoryFile(int i) const;
   virtual int GetMaxFiles(void) const { return m_fileMaxFiles; }
-  virtual void FileHistoryUseMenu(wxMenu *menu);
-  virtual void FileHistoryLoad(const wxString& resourceFile, const wxString& section);
-  virtual void FileHistorySave(const wxString& resourceFile, const wxString& section);
+  virtual void UseMenu(wxMenu *menu);
+
+  // Remove menu from the list (MDI child may be closing)
+  virtual void RemoveMenu(wxMenu *menu);
+
+  virtual void Load(wxConfigBase& config);
+  virtual void Save(wxConfigBase& config);
+
+  virtual void AddFilesToMenu();
+  virtual void AddFilesToMenu(wxMenu* menu); // Single menu
+
+// Accessors
+  virtual wxString GetHistoryFile(int i) const;
+
+  // A synonym for GetNoHistoryFiles
+  virtual int GetCount() const { return m_fileHistoryN; }
+  inline int GetNoHistoryFiles(void) const { return m_fileHistoryN; }
+
+  inline wxList& GetMenus() const { return (wxList&) m_fileMenus; }
+
  protected:
   // Last n files
   char**            m_fileHistory;
   // Number of files saved
   int               m_fileHistoryN;
-  // Menu to maintain
-  wxMenu*           m_fileMenu;
+  // Menus to maintain (may need several for an MDI app)
+  wxList            m_fileMenus;
   // Max files to maintain
   int               m_fileMaxFiles;
 };

@@ -31,6 +31,9 @@
 #include <wx/timer.h>
 #include <wx/utils.h>
 
+// Not enough OS behaviour defined for wxStubs
+#ifndef __WXSTUBS__
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -1537,3 +1540,6 @@ HWND wxSocketHandler::GetHWND() const
 }
 
 #endif
+
+#endif
+  // __WXSTUBS__

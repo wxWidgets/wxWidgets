@@ -108,9 +108,6 @@ wxDocMDIChildFrame::~wxDocMDIChildFrame(void)
 // Extend event processing to search the view's event table
 bool wxDocMDIChildFrame::ProcessEvent(wxEvent& event)
 {
-    if (m_childView)
-        m_childView->Activate(TRUE);
-
 	if ( !m_childView || ! m_childView->ProcessEvent(event) )
     {
         // Only hand up to the parent if it's a menu command
@@ -127,7 +124,7 @@ void wxDocMDIChildFrame::OnActivate(wxActivateEvent& event)
 {
   wxMDIChildFrame::OnActivate(event);
 
-  if (m_childView)
+  if (event.GetActive() && m_childView)
     m_childView->Activate(event.GetActive());
 }
 

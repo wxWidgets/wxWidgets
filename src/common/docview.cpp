@@ -48,6 +48,7 @@
 #include "wx/printdlg.h"
 #include "wx/generic/prntdlgg.h"
 #include "wx/generic/printps.h"
+#include "wx/confbase.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -290,6 +291,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
   }
   SetFilename(file, TRUE);
   Modify(FALSE);
+  m_savedYet = TRUE;
 
   UpdateAllViews();
   
@@ -1059,19 +1061,37 @@ wxString wxDocManager::GetHistoryFile(int i) const
 void wxDocManager::FileHistoryUseMenu(wxMenu *menu)
 {
   if (m_fileHistory)
-    m_fileHistory->FileHistoryUseMenu(menu);
+    m_fileHistory->UseMenu(menu);
 }
 
-void wxDocManager::FileHistoryLoad(const wxString& resourceFile, const wxString& section)
+void wxDocManager::FileHistoryRemoveMenu(wxMenu *menu)
 {
   if (m_fileHistory)
-    m_fileHistory->FileHistoryLoad(resourceFile, section);
+    m_fileHistory->RemoveMenu(menu);
 }
 
-void wxDocManager::FileHistorySave(const wxString& resourceFile, const wxString& section)
+void wxDocManager::FileHistoryLoad(wxConfigBase& config)
 {
   if (m_fileHistory)
-    m_fileHistory->FileHistorySave(resourceFile, section);
+    m_fileHistory->Load(config);
+}
+
+void wxDocManager::FileHistorySave(wxConfigBase& config)
+{
+  if (m_fileHistory)
+    m_fileHistory->Save(config);
+}
+
+void wxDocManager::FileHistoryAddFilesToMenu(wxMenu* menu)
+{
+  if (m_fileHistory)
+    m_fileHistory->AddFilesToMenu(menu);
+}
+
+void wxDocManager::FileHistoryAddFilesToMenu()
+{
+  if (m_fileHistory)
+    m_fileHistory->AddFilesToMenu();
 }
 
 int wxDocManager::GetNoHistoryFiles(void) const
@@ -1610,11 +1630,16 @@ bool wxCommandProcessor::Redo(void)
   return FALSE;
 }
 
-bool wxCommandProcessor::CanUndo(void)
+bool wxCommandProcessor::CanUndo(void) const
 {
   if (m_currentCommand)
     return ((wxCommand *)m_currentCommand->Data())->CanUndo();
   return FALSE;
+}
+
+bool wxCommandProcessor::CanRedo(void) const
+{
+  return ((m_currentCommand && m_currentCommand->Next()));
 }
 
 void wxCommandProcessor::Initialize(void)
@@ -1704,7 +1729,6 @@ void wxCommandProcessor::ClearCommands(void)
 wxFileHistory::wxFileHistory(int maxFiles)
 {
   m_fileMaxFiles = maxFiles;
-  m_fileMenu = (wxMenu *) NULL;
   m_fileHistoryN = 0;
   m_fileHistory = new char *[m_fileMaxFiles];
 }
@@ -1720,18 +1744,14 @@ wxFileHistory::~wxFileHistory(void)
 // File history management
 void wxFileHistory::AddFileToHistory(const wxString& file)
 {
-  if (!m_fileMenu)
-    return;
-    
   int i;
-
   // Check we don't already have this file
   for (i = 0; i < m_fileHistoryN; i++)
   {
-    if (m_fileHistory[i] && wxString(m_fileHistory[i]) == file)
-      return;
+      if (m_fileHistory[i] && wxString(m_fileHistory[i]) == file)
+          return;
   }
-  
+
   // Add to the project file history:
   // Move existing files (if any) down so we can insert file at beginning.
   
@@ -1743,9 +1763,15 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
   }
   if (m_fileHistoryN < m_fileMaxFiles)
   {
-    if (m_fileHistoryN == 0)
-      m_fileMenu->AppendSeparator();
-    m_fileMenu->Append(wxID_FILE1+m_fileHistoryN, _("[EMPTY]"));
+    wxNode* node = m_fileMenus.First();
+    while (node)
+    {
+        wxMenu* menu = (wxMenu*) node->Data();
+        if (m_fileHistoryN == 0)
+            menu->AppendSeparator();
+        menu->Append(wxID_FILE1+m_fileHistoryN, _("[EMPTY]"));
+        node = node->Next();
+    }
     m_fileHistoryN ++;
   }
   // Shuffle filenames down
@@ -1760,7 +1786,13 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     {
       char buf[400];
       sprintf(buf, "&%d %s", i+1, m_fileHistory[i]);
-      m_fileMenu->SetLabel(wxID_FILE1+i, buf);
+      wxNode* node = m_fileMenus.First();
+      while (node)
+      {
+        wxMenu* menu = (wxMenu*) node->Data();
+        menu->SetLabel(wxID_FILE1+i, buf);
+        node = node->Next();
+      }
     }
 }
 
@@ -1772,40 +1804,84 @@ wxString wxFileHistory::GetHistoryFile(int i) const
     return wxString("");
 }
 
-void wxFileHistory::FileHistoryUseMenu(wxMenu *menu)
+void wxFileHistory::UseMenu(wxMenu *menu)
 {
-  m_fileMenu = menu;
+  if (!m_fileMenus.Member(menu))
+    m_fileMenus.Append(menu);
 }
 
-void wxFileHistory::FileHistoryLoad(const wxString& resourceFile, const wxString& section)
+void wxFileHistory::RemoveMenu(wxMenu *menu)
 {
-#if USE_RESOURCES
+  m_fileMenus.DeleteObject(menu);
+}
+
+void wxFileHistory::Load(wxConfigBase& config)
+{
   m_fileHistoryN = 0;
   char buf[400];
   sprintf(buf, "file%d", m_fileHistoryN+1);
-  char *historyFile = (char *) NULL;
-  while ((m_fileHistoryN <= m_fileMaxFiles) && wxGetResource(section, buf, &historyFile, resourceFile) && historyFile)
+  wxString historyFile("");
+  while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != ""))
   {
-    // wxGetResource allocates memory so this is o.k.
-    m_fileHistory[m_fileHistoryN] = historyFile;
+    m_fileHistory[m_fileHistoryN] = copystring((const char*) historyFile);
     m_fileHistoryN ++;
     sprintf(buf, "file%d", m_fileHistoryN+1);
-    historyFile = (char *) NULL;
+    historyFile = "";
   }
-#endif
+  AddFilesToMenu();
 }
 
-void wxFileHistory::FileHistorySave(const wxString& resourceFile, const wxString& section)
+void wxFileHistory::Save(wxConfigBase& config)
 {
-#if USE_RESOURCES
-  char buf[400];
   int i;
   for (i = 0; i < m_fileHistoryN; i++)
   {
-    sprintf(buf, "file%d", i+1);
-    wxWriteResource(section, buf, m_fileHistory[i], resourceFile);
+    wxString buf;
+    buf.Printf("file%d", i+1);
+    config.Write(buf, wxString(m_fileHistory[i]));
   }
-#endif
+}
+
+void wxFileHistory::AddFilesToMenu()
+{
+    if (m_fileHistoryN > 0)
+    {
+        wxNode* node = m_fileMenus.First();
+        while (node)
+        {
+            wxMenu* menu = (wxMenu*) node->Data();
+            menu->AppendSeparator();
+            int i;
+            for (i = 0; i < m_fileHistoryN; i++)
+            {
+                if (m_fileHistory[i])
+                {
+                    wxString buf;
+                    buf.Printf("&%d %s", i+1, m_fileHistory[i]);
+                    menu->Append(wxID_FILE1+i, buf);
+                }
+            }
+            node = node->Next();
+        }
+    }
+}
+
+void wxFileHistory::AddFilesToMenu(wxMenu* menu)
+{
+    if (m_fileHistoryN > 0)
+    {
+        menu->AppendSeparator();
+        int i;
+        for (i = 0; i < m_fileHistoryN; i++)
+        {
+            if (m_fileHistory[i])
+            {
+                wxString buf;
+                buf.Printf("&%d %s", i+1, m_fileHistory[i]);
+                menu->Append(wxID_FILE1+i, buf);
+            }
+        }
+    }
 }
 
 #if 0

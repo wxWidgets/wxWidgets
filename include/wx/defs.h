@@ -824,6 +824,7 @@ enum {
 #define wxID_PASTE              5032
 #define wxID_CLEAR              5033
 #define wxID_FIND               5034
+#define wxID_DUPLICATE          5035
 
 #define wxID_FILE1              5050
 #define wxID_FILE2              5051

@@ -3,13 +3,17 @@
 The wxFileHistory encapsulates a user interface convenience, the
 list of most recently visited files as shown on a menu (usually the File menu).
 
+wxFileHistory can manage one or more file menus. More than one menu may be required
+in an MDI application, where the file history should appear on each MDI child menu
+as well as the MDI parent frame.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
 
 \wxheading{See also}
 
-\overview{wxFileHistory overview}{wxfilehistoryoverview}
+\helpref{wxFileHistory overview}{wxfilehistoryoverview}, \helpref{wxDocManager}{wxdocmanager}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -56,38 +60,65 @@ Destructor.
 
 Adds a file to the file history list, if the object has a pointer to an appropriate file menu.
 
-\membersection{wxFileHistory::FileHistoryLoad}
+\membersection{wxFileHistory::AddFilesToMenu}\label{wxfilehistoryaddfilestomenu}
 
-\func{void}{FileHistoryLoad}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+\func{void}{AddFilesToMenu}{\void}
 
-Loads the file history from a resource file, using the given section. This must be called
-explicitly by the application.
+Appends the files in the history list, to all menus managed by the file history object.
 
-\membersection{wxFileHistory::FileHistorySave}
+\func{void}{AddFilesToMenu}{\param{wxMenu*}{ menu}}
 
-\func{void}{FileHistorySave}{\param{const wxString\& }{resourceFile}, \param{const wxString\& }{sectionName}}
+Appends the files in the history list, to the given menu only.
 
-Saves the file history into a resource file, using the given section. This must be called
-explicitly by the application.
+\membersection{wxFileHistory::GetHistoryFile}\label{wxfilehistorygethistoryfile}
 
-\membersection{wxFileHistory::FileHistoryUseMenu}
+\constfunc{wxString}{GetHistoryFile}{\param{int}{ index}}
 
-\func{void}{FileHistoryUseMenu}{\param{wxMenu* }{menu}}
-
-Use this menu for appending recently-visited document filenames, for convenient
-access. Calling this function with a valid menu pointer enables the history
-list functionality.
+Returns the file at this index (zero-based).
 
 \membersection{wxFileHistory::GetMaxFiles}
 
-\func{int}{GetMaxFiles}{\void}
+\constfunc{int}{GetMaxFiles}{\void}
 
 Returns the maximum number of files that can be stored.
 
 \membersection{wxFileHistory::GetNoHistoryFiles}
 
-\func{int}{GetNoHistoryFiles}{\void}
+\constfunc{int}{GetNoHistoryFiles}{\void}
 
 Returns the number of files currently stored in the file history.
+
+\membersection{wxFileHistory::Load}
+
+\func{void}{Load}{\param{wxConfigBase\& }{config}}
+
+Loads the file history from the given config object. This function should be called explicitly by the application.
+
+\wxheading{See also}
+
+\helpref{wxConfig}{wxconfigbase}
+
+\membersection{wxFileHistory::RemoveMenu}
+
+\func{void}{RemoveMenu}{\param{wxMenu* }{menu}}
+
+Removes this menu from the list of those managed by this object.
+
+\membersection{wxFileHistory::Save}
+
+\func{void}{Save}{\param{wxConfigBase\& }{config}}
+
+Saves the file history into the given config object. This must be called
+explicitly by the application.
+
+\wxheading{See also}
+
+\helpref{wxConfig}{wxconfigbase}
+
+\membersection{wxFileHistory::UseMenu}
+
+\func{void}{UseMenu}{\param{wxMenu* }{menu}}
+
+Adds this menu to the list of those managed by this object.
 
 

@@ -41,7 +41,7 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream& stream)
 
   m_inflate.zalloc = (alloc_func)0;
   m_inflate.zfree = (free_func)0;
-  m_inflate.opaque = (voidpf)0;
+  m_inflate.opaque = (void*)0;
 
   err = inflateInit(&m_inflate);
   if (err != Z_OK) {
@@ -107,7 +107,7 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream)
 
   m_deflate.zalloc = (alloc_func)0;
   m_deflate.zfree = (free_func)0;
-  m_deflate.opaque = (voidpf)0;
+  m_deflate.opaque = (void*)0;
 
   err = deflateInit(&m_deflate, Z_DEFAULT_COMPRESSION);
   if (err != Z_OK) {

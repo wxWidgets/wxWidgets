@@ -99,21 +99,21 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 wxDropSource::wxDropSource( wxWindow *win )
 {
     // TODO
-    m_window = win;
+  //    m_window = win;
     m_data = NULL;
 
-    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    //    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    //    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 };
 
 wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
 {
     // TODO
-    m_window = win;
+  //    m_window = win;
     m_data = &data;
 
-    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    //    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    //    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 };
 
 void wxDropSource::SetData( wxDataObject &data )

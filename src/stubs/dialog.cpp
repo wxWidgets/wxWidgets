@@ -289,3 +289,6 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
   Refresh();
 }
 
+void wxDialog::Fit()
+{
+}

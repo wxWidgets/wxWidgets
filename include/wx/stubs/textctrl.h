@@ -122,8 +122,8 @@ public:
   // callbacks
   // ---------
   void OnDropFiles(wxDropFilesEvent& event);
-  void OnChar(wxKeyEvent& event); // Process 'enter' if required
-  void OnEraseBackground(wxEraseEvent& event);
+//  void OnChar(wxKeyEvent& event); // Process 'enter' if required
+//  void OnEraseBackground(wxEraseEvent& event);
   
   // Implementation
   // --------------

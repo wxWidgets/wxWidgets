@@ -277,8 +277,8 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     int w, h;
     GetSize(&w, &h);
 
-    uint nCount = m_aPages.Count();
-    for ( uint nPage = 0; nPage < nCount; nPage++ ) {
+    unsigned int nCount = m_aPages.Count();
+    for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
         wxNotebookPage *pPage = m_aPages[nPage];
         pPage->SetSize(0, 0, w, h);
         if ( pPage->GetAutoLayout() )

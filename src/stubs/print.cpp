@@ -42,13 +42,13 @@ bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
 bool wxPrinter::PrintDialog(wxWindow *parent)
 {
-    wxPrintDialog dialog(parent, & printData);
+    wxPrintDialog dialog(parent, & m_printData);
     return (dialog.ShowModal() == wxID_OK);
 }
 
 bool wxPrinter::Setup(wxWindow *parent)
 {
-    wxPrintDialog dialog(parent, & printData);
+    wxPrintDialog dialog(parent, & m_printData);
     dialog.GetPrintData().SetSetupDialog(TRUE);
     return (dialog.ShowModal() == wxID_OK);
 }
@@ -69,10 +69,10 @@ wxPrintPreview::~wxPrintPreview()
 
 bool wxPrintPreview::Print(bool interactive)
 {
-    if (!printPrintout)
+    if (!m_printPrintout)
         return FALSE;
-    wxPrinter printer(&printData);
-    return printer.Print(previewFrame, printPrintout, interactive);
+    wxPrinter printer(&m_printData);
+    return printer.Print(m_previewFrame, m_printPrintout, interactive);
 }
 
 void wxPrintPreview::DetermineScaling()

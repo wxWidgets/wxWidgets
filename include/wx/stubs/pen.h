@@ -85,10 +85,10 @@ public:
   inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
   inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
   inline int GetDashes(wxDash **ptr) const {
-     *ptr = (M_PENDATA ? M_PENDATA->m_dash : NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
+     *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
   }
 
-  inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : NULL); };
+  inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
 
 // Implementation
 

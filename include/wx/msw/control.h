@@ -28,7 +28,7 @@ public:
    wxControl(void);
    ~wxControl(void);
 
-   virtual void Command(wxCommandEvent& WXUNUSED(event)) = 0;        // Simulates an event
+   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};        // Simulates an event
    virtual void ProcessCommand(wxCommandEvent& event); // Calls the callback and
                                                                  // appropriate event handlers
    virtual void SetClientSize(int width, int height);

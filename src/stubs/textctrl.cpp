@@ -34,9 +34,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
-	EVT_CHAR(wxTextCtrl::OnChar)
 	EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
-	EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
 #endif
 

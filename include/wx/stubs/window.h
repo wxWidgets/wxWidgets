@@ -334,12 +334,6 @@ public:
   virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = NULL);
 #endif
 
-  // Native resource loading
-  virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID& id);
-  virtual bool LoadNativeDialog(wxWindow* parent, const wxString& name);
-  virtual wxWindow* GetWindowChild1(wxWindowID& id);
-  virtual wxWindow* GetWindowChild(wxWindowID& id);
-
   virtual void GetTextExtent(const wxString& string, int *x, int *y,
                              int *descent = NULL,
                              int *externalLeading = NULL,
@@ -375,6 +369,9 @@ public:
 
   // Does this window want to accept keyboard focus?
   virtual bool AcceptsFocus() const;
+
+  virtual void PrepareDC( wxDC &dc ) {};
+
 
 public:
   ////////////////////////////////////////////////////////////////////////
@@ -501,7 +498,7 @@ inline int wxWindow::GetId() const { return m_windowId; }
 inline void wxWindow::SetId(int id) { m_windowId = id; }
 inline wxWindow *wxWindow::GetParent() const { return m_windowParent; }
 inline void wxWindow::SetParent(wxWindow *p) { m_windowParent = p; }
-inline wxWindow *wxWindow::GetGrandParent() const { return (m_windowParent ? m_windowParent->m_windowParent : NULL); }
+inline wxWindow *wxWindow::GetGrandParent() const { return (m_windowParent ? m_windowParent->m_windowParent : (wxWindow*) NULL); }
 inline wxList *wxWindow::GetChildren() const { return m_children; }
 inline wxFont *wxWindow::GetFont() const { return (wxFont *) & m_windowFont; }
 inline wxString wxWindow::GetName() const { return m_windowName; }

@@ -403,6 +403,7 @@ public:
   // Does this window want to accept keyboard focus?
   virtual bool AcceptsFocus() const;
 
+  virtual void PrepareDC( wxDC &dc ) {};
 public:
   ////////////////////////////////////////////////////////////////////////
   //// IMPLEMENTATION

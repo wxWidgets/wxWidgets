@@ -108,9 +108,13 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file)
 
   if (!file.IsNull() && wxFileExists(file))
     wxRemoveFile(file);
-  m_hDC = (WXHDC) CreateMetaFile(file);
 
-  m_ok = TRUE;
+  if (!file.IsNull() && (file != ""))
+    m_hDC = (WXHDC) CreateMetaFile(file);
+  else
+    m_hDC = (WXHDC) CreateMetaFile(NULL);
+
+  m_ok = (m_hDC != (WXHDC) 0) ;
 
   // Actual Windows mapping mode, for future reference.
   m_windowsMappingMode = MM_TEXT;
@@ -145,12 +149,12 @@ wxMetaFileDC::~wxMetaFileDC(void)
   m_hDC = 0;
 }
 
-void wxMetaFileDC::GetTextExtent(const wxString& string, float *x, float *y,
-                                 float *descent, float *externalLeading, wxFont *theFont, bool use16bit)
+void wxMetaFileDC::GetTextExtent(const wxString& string, long *x, long *y,
+                                 long *descent, long *externalLeading, wxFont *theFont, bool use16bit) const
 {
   wxFont *fontToUse = theFont;
   if (!fontToUse)
-    fontToUse = &m_font;
+    fontToUse = (wxFont*) &m_font;
 
   HDC dc = GetDC(NULL);
 
@@ -161,10 +165,10 @@ void wxMetaFileDC::GetTextExtent(const wxString& string, float *x, float *y,
 
   ReleaseDC(NULL, dc);
 
-  *x = (float)XDEV2LOGREL(sizeRect.cx);
-  *y = (float)YDEV2LOGREL(sizeRect.cy);
-  if (descent) *descent = (float)tm.tmDescent;
-  if (externalLeading) *externalLeading = (float)tm.tmExternalLeading;
+  *x = XDEV2LOGREL(sizeRect.cx);
+  *y = YDEV2LOGREL(sizeRect.cy);
+  if (descent) *descent = tm.tmDescent;
+  if (externalLeading) *externalLeading = tm.tmExternalLeading;
 }
 
 wxMetaFile *wxMetaFileDC::Close(void)

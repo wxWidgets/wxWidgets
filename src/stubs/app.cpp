@@ -95,6 +95,7 @@ void wxApp::CommonCleanUp()
   wxDeleteStockObjects() ;
 
   // Destroy all GDI lists, etc.
+
   delete wxTheBrushList;
   wxTheBrushList = NULL;
 
@@ -121,6 +122,10 @@ void wxApp::CommonCleanUp()
   delete[] wxBuffer;
   wxBuffer = NULL;
 
+  wxClassInfo::CleanUpClasses();
+
+  // do it as the very last thing because everything else can log messages
+  wxLog::DontCreateOnDemand();
   // do it as the very last thing because everything else can log messages
   delete wxLog::SetActiveTarget(NULL);
 }
@@ -177,12 +182,21 @@ int wxEntry( int argc, char *argv[] )
   int retValue = 0;
   
   if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
+
+  if (wxTheApp->GetTopWindow())
+  {
+    delete wxTheApp->GetTopWindow();
+    wxTheApp->SetTopWindow(NULL);
+  }
   
   wxTheApp->DeletePendingObjects();  
   
   wxTheApp->OnExit();
   
   wxApp::CommonCleanUp();
+
+  delete wxTheApp;
+  wxTheApp = NULL;
   
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory

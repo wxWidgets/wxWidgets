@@ -67,7 +67,7 @@ BEGIN
     BEGIN
         MENUITEM "&Cascade",                    4002
         MENUITEM "&Tile",                       4001
-        MENUITEM "&Arrange icons",              4003
+        MENUITEM "&Arrange Icons",              4003
         MENUITEM "&Next",                       4004
     END
 END

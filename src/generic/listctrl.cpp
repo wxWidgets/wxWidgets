@@ -542,7 +542,7 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
 	if (hilight)
 	  dc->SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	else
-          dc->SetTextForeground( info->GetColour() );
+          dc->SetTextForeground( * info->GetColour() );
       dc->DrawText( s, info->GetX()+2, info->GetY() );
       dc->DestroyClippingRegion();
       node = node->Next();
@@ -565,7 +565,7 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
 	if (hilight)
 	  dc->SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	else
-          dc->SetTextForeground( item->GetColour() );
+          dc->SetTextForeground( * item->GetColour() );
         dc->DrawText( s, m_bound_label.x, m_bound_label.y );
       }
     }
@@ -978,9 +978,9 @@ void wxListMainWindow::HilightAll( bool on )
 
 void wxListMainWindow::ActivateLine( wxListLineData *line )
 {
-  if (!m_parent) return;
-  wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, m_parent->GetId() );
-  le.SetEventObject( m_parent );
+  if (!GetParent()) return;
+  wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
+  le.SetEventObject( GetParent() );
   le.m_code = 0;
   le.m_itemIndex = GetIndexOfLine( line );
   le.m_col = 0;
@@ -990,9 +990,9 @@ void wxListMainWindow::ActivateLine( wxListLineData *line )
 
 void wxListMainWindow::SendNotify( wxListLineData *line, wxEventType command )
 {
-  if (!m_parent) return;
-  wxListEvent le( command, m_parent->GetId() );
-  le.SetEventObject( m_parent );
+  if (!GetParent()) return;
+  wxListEvent le( command, GetParent()->GetId() );
+  le.SetEventObject( GetParent() );
   le.m_code = 0;
   le.m_itemIndex = GetIndexOfLine( line );
   le.m_col = 0;
@@ -1032,10 +1032,10 @@ void wxListMainWindow::StartLabelEdit( wxListLineData *line )
 
 void wxListMainWindow::RenameLine( wxListLineData *line, const wxString &newName )
 {
-  if (!m_parent) return;
+  if (!GetParent()) return;
   
-  wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, m_parent->GetId() );
-  le.SetEventObject( m_parent );
+  wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
+  le.SetEventObject( GetParent() );
   le.m_code = 0;
   le.m_itemIndex = GetIndexOfLine( line );
   le.m_col = 0;
@@ -1087,7 +1087,7 @@ void wxListMainWindow::OnRenameAccept()
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
-  if (m_parent->ProcessEvent( event)) return;
+  if (GetParent()->ProcessEvent( event)) return;
 
   if (!m_current) return;
   if (m_dirty) return;
@@ -1117,7 +1117,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
   if (event.Dragging() && (m_dragCount > 3))
   {
     m_dragCount = 0;
-    wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_DRAG, m_parent->GetId() );
+    wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_DRAG, GetParent()->GetId() );
     le.SetEventObject( this );
     le.m_code = 0;
     le.m_itemIndex = 0;
@@ -1398,11 +1398,11 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
   m_hasFocus = TRUE;
   RefreshLine( m_current );
   
-  if (!m_parent) return;
+  if (!GetParent()) return;
   
-  wxFocusEvent event( wxEVT_SET_FOCUS, m_parent->GetId() );
-  event.SetEventObject( m_parent );
-  m_parent->ProcessEvent( event );
+  wxFocusEvent event( wxEVT_SET_FOCUS, GetParent()->GetId() );
+  event.SetEventObject( GetParent() );
+  GetParent()->ProcessEvent( event );
 }
 
 void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
@@ -2054,7 +2054,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 bool wxListMainWindow::OnListNotify( wxListEvent &event )
 {
-  if (m_parent) m_parent->ProcessEvent( event );
+  if (GetParent()) GetParent()->ProcessEvent( event );
   return FALSE;
 }
 

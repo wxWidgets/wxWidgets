@@ -17,6 +17,8 @@
  *
  */
 
+#define USE_CONSTRAINTS       1
+                                // Use constraints mechanism
 #define USE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
 #define _WX_GOODCOMPILER__
@@ -92,7 +94,7 @@
 #define USE_C_MAIN 0
                                   // Set to 1 to use main.c instead of main.cpp (UNIX only)
 
-#define USE_ODBC                   1
+#define USE_ODBC                   0
                                     // Define 1 to use ODBC classes
 
 #define USE_IOSTREAMH     1

@@ -1,0 +1,16 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for minimal example (UNIX).
+
+include ../../src/makeprog.env
+
+PROGRAM=minimal
+
+OBJECTS=$(PROGRAM).o
