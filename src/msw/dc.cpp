@@ -1159,10 +1159,16 @@ void wxDC::SetBrush(const wxBrush& brush)
         wxBitmap *stipple = m_brush.GetStipple();
         if ( stipple && stipple->Ok() )
         {
+#ifdef __WIN32__
 	        ::SetBrushOrgEx(GetHdc(),
                             m_deviceOriginX % stipple->GetWidth(),
                             m_deviceOriginY % stipple->GetHeight(),
                             NULL);  // don't need previous brush origin
+#else
+	        ::SetBrushOrg(GetHdc(),
+                            m_deviceOriginX % stipple->GetWidth(),
+                            m_deviceOriginY % stipple->GetHeight());
+#endif
         }
 
         if ( m_brush.GetResourceHandle() )
