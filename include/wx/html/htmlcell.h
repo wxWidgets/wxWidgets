@@ -247,7 +247,7 @@ class WXDLLEXPORT wxHtmlColourCell : public wxHtmlCell
         wxColour m_Colour;
         unsigned m_Flags;
 
-        wxHtmlColourCell(wxColour clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
+        wxHtmlColourCell(wxColour& clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
 };
