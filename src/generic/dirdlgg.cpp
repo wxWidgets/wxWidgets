@@ -127,7 +127,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 #endif
 
     m_dirCtrl = new wxGenericDirCtrl(this, ID_DIRCTRL,
-                                     m_path, wxPoint(5, 5),
+                                     m_path, wxDefaultPosition,
                                      wxSize(300, 200),
                                      dirStyle);
 
@@ -135,7 +135,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     // Make the an option depending on a flag?
     wxCheckBox* check = new wxCheckBox( this, ID_SHOW_HIDDEN, _("Show hidden directories") );
-    topsizer->Add( check, 0, wxLEFT|wxTOP | wxALIGN_RIGHT, 5 );
+    topsizer->Add( check, 0, wxLEFT|wxRIGHT|wxTOP | wxALIGN_RIGHT, 10 );
 
     // 2) text ctrl
     m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
@@ -155,7 +155,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     wxButton* cancelButton = new wxButton(this, wxID_CANCEL, _("Cancel"));
     buttonsizer->Add( cancelButton, 0, wxLEFT|wxRIGHT, 10 );
 
-    topsizer->Add( buttonsizer, 0, wxALL | wxALIGN_RIGHT, 10 );
+    topsizer->Add( buttonsizer, 0, wxLEFT|wxTOP|wxBOTTOM | wxALIGN_RIGHT, 10 );
 
     okButton->SetDefault();
     m_dirCtrl->SetFocus();
