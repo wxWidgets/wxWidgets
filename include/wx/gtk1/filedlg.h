@@ -40,7 +40,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition);
 
     void SetMessage(const wxString& message) { m_message = message; }
-    void SetPath(const wxString& path) { m_path = path; }
+    void SetPath(const wxString& path);
     void SetDirectory(const wxString& dir) { m_dir = dir; }
     void SetFilename(const wxString& name) { m_fileName = name; }
     void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }

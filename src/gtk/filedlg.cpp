@@ -122,7 +122,8 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
     gtk_file_selection_hide_fileop_buttons( sel ); // they don't work anyway
 
     m_path.Append(m_dir);
-    if(! m_path.IsEmpty() && m_path.Last()!='/') m_path.Append('/');
+    if( ! m_path.IsEmpty() && m_path.Last()!='/' )
+        m_path.Append('/');
     m_path.Append(m_fileName);
 
     if(m_path.Length()>1) gtk_file_selection_set_filename(sel,m_path);
@@ -143,12 +144,28 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
         GTK_SIGNAL_FUNC(gtk_filedialog_delete_callback), (gpointer)this );
 }
 
+void wxFileDialog::SetPath(const wxString& path)
+{
+    // not only set the full path but also update filename and dir
+    m_path = path;
+    if ( !!path )
+    {
+        wxString ext;
+        wxSplitPath(path, &m_dir, &m_fileName, &ext);
+        m_fileName += ext;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
 wxString wxFileSelector( const char *title,
                       const char *defaultDir, const char *defaultFileName,
                       const char *defaultExtension, const char *filter, int flags,
                       wxWindow *parent, int x, int y )
 {
-    wxString filter2("");
+    wxString filter2;
     if ( defaultExtension && !filter )
         filter2 = wxString("*.") + wxString(defaultExtension) ;
     else if ( filter )
@@ -157,14 +174,10 @@ wxString wxFileSelector( const char *title,
     wxString defaultDirString;
     if (defaultDir)
         defaultDirString = defaultDir;
-    else
-        defaultDirString = "";
 
     wxString defaultFilenameString;
     if (defaultFileName)
         defaultFilenameString = defaultFileName;
-    else
-        defaultFilenameString = "";
 
     wxFileDialog fileDialog( parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y) );
 
