@@ -91,7 +91,7 @@ LifeShape g_shapes[] =
                ".......**....." ),
     LifeShape( _("Phoenix"),
                _("A phoenix is a pattern whose cells all die in every "
-                 "generatio, and yet lives forever. For example, this is "
+                 "generation, and yet lives forever. For example, this is "
                  "a phoenix with period two."),
                8, 8,
                "....*..."
@@ -116,9 +116,9 @@ LifeShape g_shapes[] =
     LifeShape( _("Thunderbird"),
                _("The thunderbird is another popular methuselah, which "
                  "doesn't stabilize until the 243th generation. Note that "
-                 "because the initial configuration is simmetrical with "
+                 "because the initial configuration is symmetrical with "
                  "respect to the vertical axis, all generations must be "
-                 "simmetrical as well."),
+                 "symmetrical as well."),
                3, 5,
                "***"
                "..."
