@@ -13,6 +13,7 @@ All:
 - Added wxTempFileOutputStream by Stas Sergeev.
 - Fixed wxDateTime::SetToWeekDayInSameWeek(Sun, Monday_First).
 - Added WXK_SPECIAL keycodes for special hardware buttons.
+- Fixed bug with wxFile::Seek(-1, wxFromCurrent)
 
 All (GUI):
 

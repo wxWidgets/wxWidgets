@@ -356,7 +356,10 @@ bool wxFile::Flush()
 // seek
 wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
 {
-    wxASSERT( IsOpened() );
+    wxASSERT_MSG( IsOpened(), _T("can't seek on closed file") );
+    wxCHECK_MSG( ofs != wxInvalidOffset || mode != wxFromStart,
+                 wxInvalidOffset,
+                 _T("invalid absolute file offset") );
 
     int origin;
     switch ( mode ) {
@@ -376,11 +379,6 @@ wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
             break;
     }
 
-    if (ofs == wxInvalidOffset)
-    {
-        wxLogSysError(_("can't seek on file descriptor %d, large files support is not enabled."), m_fd);
-        return wxInvalidOffset;
-    }
     wxFileOffset iRc = wxSeek(m_fd, ofs, origin);
     if ( iRc == wxInvalidOffset )
     {
