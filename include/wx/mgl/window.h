@@ -103,11 +103,14 @@ public:
 
     virtual WXWidget GetHandle() const { return m_wnd; }
 
+    virtual void SetTitle(const wxString& title) { m_title = title; }
+    virtual wxString GetTitle() const { return m_title; }
 
     // implementation from now on
     // --------------------------
 
 protected:
+    wxString              m_title;
     // the window handle
     struct window_t      *m_wnd;
     // whether there should be wxEraseEvent before wxPaintEvent or not
