@@ -12067,7 +12067,7 @@ if test "$wxUSE_SCROLLBAR" = "yes"; then
 #define wxUSE_SCROLLBAR 1
 EOF
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll scrollsub"
 fi
 
 if test "$wxUSE_SLIDER" = "yes"; then
@@ -12289,7 +12289,7 @@ CXXFLAGS=`echo $CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
 if test "$wxUSE_GUI" = "yes"; then
         
             SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
-                     forty fractal image wxpoem"
+                     font forty fractal image minimal richedit wxpoem"
 else
     SAMPLES_SUBDIRS=""
 fi
