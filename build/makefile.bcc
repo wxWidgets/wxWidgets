@@ -38,7 +38,11 @@ ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_sashwin.obj \
 	$(OBJS)\advdll_splash.obj \
 	$(OBJS)\advdll_tipdlg.obj \
-	$(OBJS)\advdll_wizard.obj
+	$(OBJS)\advdll_wizard.obj \
+	$(OBJS)\advdll_taskbarcmn.obj \
+	$(OBJS)\advdll_joystick.obj \
+	$(OBJS)\advdll_taskbar.obj \
+	$(OBJS)\advdll_wave.obj
 ADVLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
@@ -57,7 +61,11 @@ ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_sashwin.obj \
 	$(OBJS)\advlib_splash.obj \
 	$(OBJS)\advlib_tipdlg.obj \
-	$(OBJS)\advlib_wizard.obj
+	$(OBJS)\advlib_wizard.obj \
+	$(OBJS)\advlib_taskbarcmn.obj \
+	$(OBJS)\advlib_joystick.obj \
+	$(OBJS)\advlib_taskbar.obj \
+	$(OBJS)\advlib_wave.obj
 BASEDLL_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	-tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\include -I$(LIBDIRNAME) -I..\src\tiff \
@@ -818,7 +826,6 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
-	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_app.obj \
 	$(OBJS)\monolib_bitmap.obj \
 	$(OBJS)\monolib_brush.obj \
@@ -846,7 +853,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_helpchm.obj \
 	$(OBJS)\monolib_helpwin.obj \
 	$(OBJS)\monolib_icon.obj \
-	$(OBJS)\monolib_joystick.obj \
 	$(OBJS)\monolib_minifram.obj \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_dataobj.obj \
@@ -860,13 +866,11 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.obj \
 	$(OBJS)\monolib_renderer.obj \
 	$(OBJS)\monolib_settings.obj \
-	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_timer.obj \
 	$(OBJS)\monolib_tooltip.obj \
 	$(OBJS)\monolib_toplevel.obj \
 	$(OBJS)\monolib_utilsgui.obj \
 	$(OBJS)\monolib_uxtheme.obj \
-	$(OBJS)\monolib_wave.obj \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_statusbr.obj \
 	$(OBJS)\monolib_accel.obj \
@@ -1011,7 +1015,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
-	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_app.obj \
 	$(OBJS)\monolib_bitmap.obj \
 	$(OBJS)\monolib_brush.obj \
@@ -1039,7 +1042,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_helpchm.obj \
 	$(OBJS)\monolib_helpwin.obj \
 	$(OBJS)\monolib_icon.obj \
-	$(OBJS)\monolib_joystick.obj \
 	$(OBJS)\monolib_minifram.obj \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_dataobj.obj \
@@ -1053,13 +1055,11 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.obj \
 	$(OBJS)\monolib_renderer.obj \
 	$(OBJS)\monolib_settings.obj \
-	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_timer.obj \
 	$(OBJS)\monolib_tooltip.obj \
 	$(OBJS)\monolib_toplevel.obj \
 	$(OBJS)\monolib_utilsgui.obj \
 	$(OBJS)\monolib_uxtheme.obj \
-	$(OBJS)\monolib_wave.obj \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_textctrl.obj \
 	$(OBJS)\monolib_accel.obj \
@@ -1204,7 +1204,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
-	$(OBJS)\coredll_taskbarcmn.obj \
 	$(OBJS)\coredll_app.obj \
 	$(OBJS)\coredll_bitmap.obj \
 	$(OBJS)\coredll_brush.obj \
@@ -1232,7 +1231,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_helpchm.obj \
 	$(OBJS)\coredll_helpwin.obj \
 	$(OBJS)\coredll_icon.obj \
-	$(OBJS)\coredll_joystick.obj \
 	$(OBJS)\coredll_minifram.obj \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_dataobj.obj \
@@ -1246,13 +1244,11 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.obj \
 	$(OBJS)\coredll_renderer.obj \
 	$(OBJS)\coredll_settings.obj \
-	$(OBJS)\coredll_taskbar.obj \
 	$(OBJS)\coredll_timer.obj \
 	$(OBJS)\coredll_tooltip.obj \
 	$(OBJS)\coredll_toplevel.obj \
 	$(OBJS)\coredll_utilsgui.obj \
 	$(OBJS)\coredll_uxtheme.obj \
-	$(OBJS)\coredll_wave.obj \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_statusbr.obj \
 	$(OBJS)\coredll_accel.obj \
@@ -1397,7 +1393,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
-	$(OBJS)\coredll_taskbarcmn.obj \
 	$(OBJS)\coredll_app.obj \
 	$(OBJS)\coredll_bitmap.obj \
 	$(OBJS)\coredll_brush.obj \
@@ -1425,7 +1420,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_helpchm.obj \
 	$(OBJS)\coredll_helpwin.obj \
 	$(OBJS)\coredll_icon.obj \
-	$(OBJS)\coredll_joystick.obj \
 	$(OBJS)\coredll_minifram.obj \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_dataobj.obj \
@@ -1439,13 +1433,11 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.obj \
 	$(OBJS)\coredll_renderer.obj \
 	$(OBJS)\coredll_settings.obj \
-	$(OBJS)\coredll_taskbar.obj \
 	$(OBJS)\coredll_timer.obj \
 	$(OBJS)\coredll_tooltip.obj \
 	$(OBJS)\coredll_toplevel.obj \
 	$(OBJS)\coredll_utilsgui.obj \
 	$(OBJS)\coredll_uxtheme.obj \
-	$(OBJS)\coredll_wave.obj \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_textctrl.obj \
 	$(OBJS)\coredll_accel.obj \
@@ -1590,7 +1582,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
-	$(OBJS)\corelib_taskbarcmn.obj \
 	$(OBJS)\corelib_app.obj \
 	$(OBJS)\corelib_bitmap.obj \
 	$(OBJS)\corelib_brush.obj \
@@ -1618,7 +1609,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_helpchm.obj \
 	$(OBJS)\corelib_helpwin.obj \
 	$(OBJS)\corelib_icon.obj \
-	$(OBJS)\corelib_joystick.obj \
 	$(OBJS)\corelib_minifram.obj \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_dataobj.obj \
@@ -1632,13 +1622,11 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.obj \
 	$(OBJS)\corelib_renderer.obj \
 	$(OBJS)\corelib_settings.obj \
-	$(OBJS)\corelib_taskbar.obj \
 	$(OBJS)\corelib_timer.obj \
 	$(OBJS)\corelib_tooltip.obj \
 	$(OBJS)\corelib_toplevel.obj \
 	$(OBJS)\corelib_utilsgui.obj \
 	$(OBJS)\corelib_uxtheme.obj \
-	$(OBJS)\corelib_wave.obj \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_statusbr.obj \
 	$(OBJS)\corelib_accel.obj \
@@ -1783,7 +1771,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
-	$(OBJS)\corelib_taskbarcmn.obj \
 	$(OBJS)\corelib_app.obj \
 	$(OBJS)\corelib_bitmap.obj \
 	$(OBJS)\corelib_brush.obj \
@@ -1811,7 +1798,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_helpchm.obj \
 	$(OBJS)\corelib_helpwin.obj \
 	$(OBJS)\corelib_icon.obj \
-	$(OBJS)\corelib_joystick.obj \
 	$(OBJS)\corelib_minifram.obj \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_dataobj.obj \
@@ -1825,13 +1811,11 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.obj \
 	$(OBJS)\corelib_renderer.obj \
 	$(OBJS)\corelib_settings.obj \
-	$(OBJS)\corelib_taskbar.obj \
 	$(OBJS)\corelib_timer.obj \
 	$(OBJS)\corelib_tooltip.obj \
 	$(OBJS)\corelib_toplevel.obj \
 	$(OBJS)\corelib_utilsgui.obj \
 	$(OBJS)\corelib_uxtheme.obj \
-	$(OBJS)\corelib_wave.obj \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_textctrl.obj \
 	$(OBJS)\corelib_accel.obj \
@@ -1976,7 +1960,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
-	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_app.obj \
 	$(OBJS)\monodll_bitmap.obj \
 	$(OBJS)\monodll_brush.obj \
@@ -2004,7 +1987,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_helpchm.obj \
 	$(OBJS)\monodll_helpwin.obj \
 	$(OBJS)\monodll_icon.obj \
-	$(OBJS)\monodll_joystick.obj \
 	$(OBJS)\monodll_minifram.obj \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_dataobj.obj \
@@ -2018,13 +2000,11 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.obj \
 	$(OBJS)\monodll_renderer.obj \
 	$(OBJS)\monodll_settings.obj \
-	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_timer.obj \
 	$(OBJS)\monodll_tooltip.obj \
 	$(OBJS)\monodll_toplevel.obj \
 	$(OBJS)\monodll_utilsgui.obj \
 	$(OBJS)\monodll_uxtheme.obj \
-	$(OBJS)\monodll_wave.obj \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_statusbr.obj \
 	$(OBJS)\monodll_accel.obj \
@@ -2169,7 +2149,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
-	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_app.obj \
 	$(OBJS)\monodll_bitmap.obj \
 	$(OBJS)\monodll_brush.obj \
@@ -2197,7 +2176,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_helpchm.obj \
 	$(OBJS)\monodll_helpwin.obj \
 	$(OBJS)\monodll_icon.obj \
-	$(OBJS)\monodll_joystick.obj \
 	$(OBJS)\monodll_minifram.obj \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_dataobj.obj \
@@ -2211,13 +2189,11 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.obj \
 	$(OBJS)\monodll_renderer.obj \
 	$(OBJS)\monodll_settings.obj \
-	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_timer.obj \
 	$(OBJS)\monodll_tooltip.obj \
 	$(OBJS)\monodll_toplevel.obj \
 	$(OBJS)\monodll_utilsgui.obj \
 	$(OBJS)\monodll_uxtheme.obj \
-	$(OBJS)\monodll_wave.obj \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_textctrl.obj \
 	$(OBJS)\monodll_accel.obj \
@@ -2375,6 +2351,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_tipdlg.obj \
 	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_taskbarcmn.obj \
+	$(OBJS)\monolib_joystick.obj \
+	$(OBJS)\monolib_taskbar.obj \
+	$(OBJS)\monolib_wave.obj \
 	$(OBJS)\monolib_helpbest.obj \
 	$(OBJS)\monolib_helpctrl.obj \
 	$(OBJS)\monolib_helpdata.obj \
@@ -2413,6 +2393,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_tipdlg.obj \
 	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_taskbarcmn.obj \
+	$(OBJS)\monodll_joystick.obj \
+	$(OBJS)\monodll_taskbar.obj \
+	$(OBJS)\monodll_wave.obj \
 	$(OBJS)\monodll_helpbest.obj \
 	$(OBJS)\monodll_helpctrl.obj \
 	$(OBJS)\monodll_helpdata.obj \
@@ -2543,6 +2527,9 @@ $(OBJS)\advdll_gridsel.obj: ..\src\generic\gridsel.cpp
 $(OBJS)\advdll_helpext.obj: ..\src\generic\helpext.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_joystick.obj: ..\src\msw\joystick.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_laywin.obj: ..\src\generic\laywin.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -2552,7 +2539,16 @@ $(OBJS)\advdll_sashwin.obj: ..\src\generic\sashwin.cpp
 $(OBJS)\advdll_splash.obj: ..\src\generic\splash.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_taskbar.obj: ..\src\msw\taskbar.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+
+$(OBJS)\advdll_taskbarcmn.obj: ..\src\common\taskbarcmn.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_tipdlg.obj: ..\src\generic\tipdlg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+
+$(OBJS)\advdll_wave.obj: ..\src\msw\wave.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
 $(OBJS)\advdll_wizard.obj: ..\src\generic\wizard.cpp
@@ -2582,6 +2578,9 @@ $(OBJS)\advlib_gridsel.obj: ..\src\generic\gridsel.cpp
 $(OBJS)\advlib_helpext.obj: ..\src\generic\helpext.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
+$(OBJS)\advlib_joystick.obj: ..\src\msw\joystick.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+
 $(OBJS)\advlib_laywin.obj: ..\src\generic\laywin.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
@@ -2591,7 +2590,16 @@ $(OBJS)\advlib_sashwin.obj: ..\src\generic\sashwin.cpp
 $(OBJS)\advlib_splash.obj: ..\src\generic\splash.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
+$(OBJS)\advlib_taskbar.obj: ..\src\msw\taskbar.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_taskbarcmn.obj: ..\src\common\taskbarcmn.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+
 $(OBJS)\advlib_tipdlg.obj: ..\src\generic\tipdlg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_wave.obj: ..\src\msw\wave.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_wizard.obj: ..\src\generic\wizard.cpp
@@ -3610,11 +3618,6 @@ $(OBJS)\coredll_inphand.obj: ..\src\univ\inphand.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_joystick.obj: ..\src\msw\joystick.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_layout.obj: ..\src\common\layout.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -3976,16 +3979,6 @@ $(OBJS)\coredll_tabctrl.obj: ..\src\msw\tabctrl.cpp
 $(OBJS)\coredll_tabg.obj: ..\src\generic\tabg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 
-!if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_taskbar.obj: ..\src\msw\taskbar.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_taskbarcmn.obj: ..\src\common\taskbarcmn.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
-!endif
-
 $(OBJS)\coredll_tbar95.obj: ..\src\msw\tbar95.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 
@@ -4117,11 +4110,6 @@ $(OBJS)\coredll_volume.obj: ..\src\msw\volume.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_vscroll.obj: ..\src\generic\vscroll.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_wave.obj: ..\src\msw\wave.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
@@ -4733,11 +4721,6 @@ $(OBJS)\corelib_inphand.obj: ..\src\univ\inphand.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_joystick.obj: ..\src\msw\joystick.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_layout.obj: ..\src\common\layout.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
@@ -5099,16 +5082,6 @@ $(OBJS)\corelib_tabctrl.obj: ..\src\msw\tabctrl.cpp
 $(OBJS)\corelib_tabg.obj: ..\src\generic\tabg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_taskbar.obj: ..\src\msw\taskbar.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_taskbarcmn.obj: ..\src\common\taskbarcmn.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
-!endif
-
 $(OBJS)\corelib_tbar95.obj: ..\src\msw\tbar95.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 
@@ -5240,11 +5213,6 @@ $(OBJS)\corelib_volume.obj: ..\src\msw\volume.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_vscroll.obj: ..\src\generic\vscroll.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_wave.obj: ..\src\msw\wave.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
@@ -6167,10 +6135,8 @@ $(OBJS)\monodll_intl.obj: ..\src\common\intl.cpp
 $(OBJS)\monodll_ipcbase.obj: ..\src\common\ipcbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_joystick.obj: ..\src\msw\joystick.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_layout.obj: ..\src\common\layout.cpp
@@ -6648,15 +6614,11 @@ $(OBJS)\monodll_tabctrl.obj: ..\src\msw\tabctrl.cpp
 $(OBJS)\monodll_tabg.obj: ..\src\generic\tabg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_taskbar.obj: ..\src\msw\taskbar.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_taskbarcmn.obj: ..\src\common\taskbarcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
 
 $(OBJS)\monodll_tbar95.obj: ..\src\msw\tbar95.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
@@ -6825,10 +6787,8 @@ $(OBJS)\monodll_vscroll.obj: ..\src\generic\vscroll.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_wave.obj: ..\src\msw\wave.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
-!endif
 
 $(OBJS)\monodll_wfstream.obj: ..\src\common\wfstream.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
@@ -7620,10 +7580,8 @@ $(OBJS)\monolib_intl.obj: ..\src\common\intl.cpp
 $(OBJS)\monolib_ipcbase.obj: ..\src\common\ipcbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_joystick.obj: ..\src\msw\joystick.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_layout.obj: ..\src\common\layout.cpp
@@ -8101,15 +8059,11 @@ $(OBJS)\monolib_tabctrl.obj: ..\src\msw\tabctrl.cpp
 $(OBJS)\monolib_tabg.obj: ..\src\generic\tabg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_taskbar.obj: ..\src\msw\taskbar.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_taskbarcmn.obj: ..\src\common\taskbarcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
 
 $(OBJS)\monolib_tbar95.obj: ..\src\msw\tbar95.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
@@ -8278,10 +8232,8 @@ $(OBJS)\monolib_vscroll.obj: ..\src\generic\vscroll.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_wave.obj: ..\src\msw\wave.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
-!endif
 
 $(OBJS)\monolib_wfstream.obj: ..\src\common\wfstream.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
