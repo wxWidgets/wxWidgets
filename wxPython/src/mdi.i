@@ -55,10 +55,10 @@ public:
     // TODO:  This isn't handled by the standard event-table system...
     //wxMDIClientWindow* OnCreateClient();
 
-    wxMenu* GetWindowMenu();
-    void SetWindowMenu(wxMenu* menu);
 
 #ifdef __WXMSW__
+    wxMenu* GetWindowMenu();
+    void SetWindowMenu(wxMenu* menu);
     void SetToolBar(wxToolBar* toolbar);
 #endif
     void Tile();

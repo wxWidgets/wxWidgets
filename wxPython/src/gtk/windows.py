@@ -139,6 +139,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def CenterOnParent(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_CenterOnParent,(self,) + _args, _kwargs)
         return val
+    def CentreOnScreen(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_CentreOnScreen,(self,) + _args, _kwargs)
+        return val
+    def CenterOnScreen(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_CenterOnScreen,(self,) + _args, _kwargs)
+        return val
     def ClientToScreenXY(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_ClientToScreenXY,(self,) + _args, _kwargs)
         return val

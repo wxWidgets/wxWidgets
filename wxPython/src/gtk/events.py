@@ -105,6 +105,9 @@ class wxCommandEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def IsChecked(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_IsChecked,(self,) + _args, _kwargs)
+        return val
     def Checked(self, *_args, **_kwargs):
         val = apply(eventsc.wxCommandEvent_Checked,(self,) + _args, _kwargs)
         return val

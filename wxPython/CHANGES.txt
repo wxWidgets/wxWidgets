@@ -2,6 +2,13 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+New in 2.2.1
+------------
+
+Various tweaks, fixes, missing methods, etc.
+
+
+
 New in 2.2.0
 ------------
 
