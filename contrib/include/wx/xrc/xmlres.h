@@ -239,8 +239,11 @@ protected:
     // Helper function: finds a resource (calls UpdateResources) and returns a node containing it.
     wxXmlNode *DoFindResource(wxXmlNode *parent, const wxString& name, const wxString& classname, bool recursive);
 
-    // Creates a resource from information in the given node.
-    wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent, wxObject *instance = NULL);
+    // Creates a resource from information in the given node
+    // (Uses only 'handlerToUse' if != NULL)
+    wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent,
+                                wxObject *instance = NULL,
+                                wxXmlResourceHandler *handlerToUse = NULL);
 
 private:
     long m_version;
