@@ -1181,7 +1181,7 @@ bool wxBitmap::GetRawData(wxRawBitmapData *data)
 
     // we only support raw access to the DIBs, so check if we have one
     DIBSECTION ds;
-    if ( !::GetObject(GetHbitmap(), sizeof(ds), &ds) )
+    if ( ::GetObject(GetHbitmap(), sizeof(ds), &ds) != sizeof(DIBSECTION) )
     {
         return FALSE;
     }
