@@ -1855,6 +1855,27 @@ void wxWindowMac::Freeze()
 #endif
 }
 
+#if TARGET_API_MAC_OSX
+static void InvalidateControlAndChildren( HIViewRef control )
+{
+    HIViewSetNeedsDisplay( control , true ) ;
+    UInt16 childrenCount = 0 ;
+    OSStatus err = CountSubControls( control , &childrenCount ) ; 
+    if ( err == errControlIsNotEmbedder )
+        return ;
+    wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
+
+    for ( UInt16 i = childrenCount ; i >=1  ; --i )
+    {
+        HIViewRef child ;
+        err = GetIndexedSubControl( control , i , & child ) ;
+        if ( err == errControlIsNotEmbedder )
+            return ;
+        InvalidateControlAndChildren( child ) ;
+    }
+}
+#endif
+
 void wxWindowMac::Thaw()
 {
 #if TARGET_API_MAC_OSX
@@ -1863,7 +1884,8 @@ void wxWindowMac::Thaw()
     if ( !--m_frozenness )
     {
         HIViewSetDrawingEnabled( (HIViewRef) m_macControl , true ) ;
-        HIViewSetNeedsDisplay( (HIViewRef) m_macControl , true ) ;
+        InvalidateControlAndChildren( (HIViewRef) m_macControl )  ;
+        // HIViewSetNeedsDisplay( (HIViewRef) m_macControl , true ) ;
     }
 #endif
 }
