@@ -671,17 +671,15 @@ int wxListCtrl::GetColumnWidth(int col) const
 // Sets the column width
 bool wxListCtrl::SetColumnWidth(int col, int width)
 {
-    int col2 = col;
     if ( m_windowStyle & wxLC_LIST )
-        col2 = -1;
+        col = 0;
 
-    int width2 = width;
-    if ( width2 == wxLIST_AUTOSIZE)
-        width2 = LVSCW_AUTOSIZE;
-    else if ( width2 == wxLIST_AUTOSIZE_USEHEADER)
-        width2 = LVSCW_AUTOSIZE_USEHEADER;
+    if ( width == wxLIST_AUTOSIZE)
+        width = LVSCW_AUTOSIZE;
+    else if ( width == wxLIST_AUTOSIZE_USEHEADER)
+        width = LVSCW_AUTOSIZE_USEHEADER;
 
-    return ListView_SetColumnWidth(GetHwnd(), col2, width2) != 0;
+    return ListView_SetColumnWidth(GetHwnd(), col, width) != 0;
 }
 
 // Gets the number of items that can fit vertically in the
