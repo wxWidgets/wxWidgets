@@ -376,7 +376,9 @@ protected:
 
     wxGenericTreeItem   *m_anchor;
     wxGenericTreeItem   *m_current,
-                        *m_key_current;
+                        *m_key_current,
+                        // A hint to select a parent item after deleting a child
+                        *m_select_me;
     unsigned short       m_indent;
     unsigned short       m_spacing;
     int                  m_lineHeight;

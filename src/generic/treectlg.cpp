@@ -734,7 +734,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxGenericTreeCtrl)
 
 void wxGenericTreeCtrl::Init()
 {
-    m_current = m_key_current = m_anchor = (wxGenericTreeItem *) NULL;
+    m_current = m_key_current = m_anchor = m_select_me = (wxGenericTreeItem *) NULL;
     m_hasFocus = FALSE;
     m_dirty = FALSE;
 
@@ -1487,12 +1487,30 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
     // don't keep stale pointers around!
     if ( IsDescendantOf(item, m_key_current) )
     {
-        m_key_current = parent;
+        // Don't silently change the selection:
+        // do it properly in idle time, so event
+        // handlers get called.
+        
+        // m_key_current = parent;
+        m_key_current = NULL;
+    }
+
+    // m_select_me records whether we need to select
+    // a different item, in idle time.
+    if ( m_select_me && IsDescendantOf(item, m_select_me) )
+    {
+        m_select_me = parent;
     }
 
     if ( IsDescendantOf(item, m_current) )
     {
-        m_current = parent;
+        // Don't silently change the selection:
+        // do it properly in idle time, so event
+        // handlers get called.
+        
+        // m_current = parent;
+        m_current = NULL;
+        m_select_me = parent;
     }
 
     // remove the item from the tree
@@ -1634,6 +1652,7 @@ void wxGenericTreeCtrl::Unselect()
         RefreshLine( m_current );
 
         m_current = NULL;
+        m_select_me = NULL;
     }
 }
 
@@ -1719,6 +1738,7 @@ void wxGenericTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeI
 {
     // item2 is not necessary after item1
     wxGenericTreeItem *first=NULL, *last=NULL;
+    m_select_me = NULL;
 
     // choice first' and 'last' between item1 and item2
     if (item1->GetY()<item2->GetY())
@@ -1746,6 +1766,8 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 {
     wxCHECK_RET( itemId.IsOk(), wxT("invalid tree item") );
 
+    m_select_me = NULL;
+    
     bool is_single=!(GetWindowStyleFlag() & wxTR_MULTIPLE);
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
@@ -3138,6 +3160,18 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
 void wxGenericTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 {
+    // Check if we need to select the root item
+    // because nothing else has been selected.
+    // Delaying it means that we can invoke event handlers
+    // as required, when a first item is selected.
+    if (!HasFlag(wxTR_MULTIPLE) && !GetSelection().IsOk())
+    {
+        if (m_select_me)
+            SelectItem(m_select_me);
+        else if (GetRootItem().IsOk())
+            SelectItem(GetRootItem());
+    }
+
     /* after all changes have been done to the tree control,
      * we actually redraw the tree when everything is over */
 
