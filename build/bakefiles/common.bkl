@@ -11,6 +11,11 @@
     <!-- load python module with wxwindows helpers: -->
     <using module="wxwin"/>
 
+    <!-- DFE: Add a platform meaning regular MacOS (not OS X) -->
+    <!-- FIXME: This will be handled in Bakefile but for now I wanted to
+         get my changes to the wx bakefiles in the tree -->
+    <option name="PLATFORM_MACOS"/>
+
     <include file="config.bkl"/>
 
     <include file="plugins_deps.bkl"/>
