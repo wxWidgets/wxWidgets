@@ -105,7 +105,6 @@ can delete a window only when it is safe to do so, in idle time.
 \wxheading{See also}
 
 \helpref{Window deletion overview}{windowdeletionoverview},\rtfsp
-\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
 \helpref{wxWindow::Destroy}{wxwindowdestroy},\rtfsp
 \helpref{wxCloseEvent}{wxcloseevent}
 
@@ -287,7 +286,6 @@ To guarantee that the window will be destroyed, call \helpref{wxWindow::Destroy}
 \wxheading{See also}
 
 \helpref{Window deletion overview}{windowdeletionoverview},\rtfsp
-\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
 \helpref{wxWindow::Destroy}{wxwindowdestroy},\rtfsp
 \helpref{wxCloseEvent}{wxcloseevent}
 
@@ -414,10 +412,6 @@ will not accept drop file events.}
 
 Windows only.
 
-\wxheading{See also}
-
-\helpref{wxWindow::OnDropFiles}{wxwindowondropfiles}
-
 \membersection{wxWindow::Enable}\label{wxwindowenable}
 
 \func{virtual void}{Enable}{\param{bool}{ enable = TRUE}}
@@ -496,8 +490,7 @@ Returns the background colour of the window.
 
 \helpref{wxWindow::SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
 \helpref{wxWindow::SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
-\helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
-\helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}
+\helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour}
 
 \membersection{wxWindow::GetBestSize}\label{wxwindowgetbestsize}
 
@@ -868,7 +861,8 @@ only be called within an \helpref{OnPaint}{wxwindowonpaint} event handler.
 
 \wxheading{See also}
 
-\helpref{wxRegion}{wxregion}, \helpref{wxRegionIterator}{wxregioniterator}, \helpref{wxWindow::OnPaint}{wxwindowonpaint}
+\helpref{wxRegion}{wxregion},\rtfsp
+\helpref{wxRegionIterator}{wxregioniterator}
 
 \membersection{wxWindow::GetValidator}\label{wxwindowgetvalidator}
 
@@ -887,12 +881,8 @@ method. {\bf GetWindowStyle()} is another name for the same function.
 
 \func{void}{InitDialog}{\void}
 
-Sends an \helpref{wxWindow::OnInitDialog}{wxwindowoninitdialog} event, which
-in turn transfers data to the dialog via validators.
-
-\wxheading{See also}
-
-\helpref{wxWindow::OnInitDialog}{wxwindowoninitdialog}
+Sends an {\tt wxEVT\_INIT\_DIALOG} event, whose handler usually transfers data
+to the dialog via validators.
 
 \membersection{wxWindow::IsEnabled}\label{wxwindowisenabled}
 
@@ -1038,616 +1028,620 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
-\membersection{wxWindow::OnActivate}\label{wxwindowonactivate}
-
-\func{void}{OnActivate}{\param{wxActivateEvent\&}{ event}}
-
-Called when a window is activated or deactivated.
-
-\wxheading{Parameters}
-
-\docparam{event}{Object containing activation information.}
-
-\wxheading{Remarks}
-
-If the window is being activated, \helpref{wxActivateEvent::GetActive}{wxactivateeventgetactive} returns TRUE,
-otherwise it returns FALSE (it is being deactivated).
-
-\wxheading{See also}
-
-\helpref{wxActivateEvent}{wxactivateevent},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnChar}\label{wxwindowonchar}
-
-\func{void}{OnChar}{\param{wxKeyEvent\&}{ event}}
-
-Called when the user has pressed a key that is not a modifier (SHIFT, CONTROL or ALT).
-
-\wxheading{Parameters}
-
-\docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
-details about this class.}
-
-\wxheading{Remarks}
-
-This member function is called in response to a keypress. To intercept this event,
-use the EVT\_CHAR macro in an event table definition. Your {\bf OnChar} handler may call this
-default function to achieve default keypress functionality.
-
-Note that the ASCII values do not have explicit key codes: they are passed as ASCII
-values.
-
-Note that not all keypresses can be intercepted this way. If you wish to intercept modifier
-keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
-\helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
-
-Most, but not all, windows allow keypresses to be intercepted.
-
-{\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in this function,
-otherwise menu shortcuts may cease to work under Windows.
-
-\wxheading{See also}
-
-\helpref{wxWindow::OnKeyDown}{wxwindowonkeydown}, \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup},\rtfsp
-\helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnCharHook}\label{wxwindowoncharhook}
-
-\func{void}{OnCharHook}{\param{wxKeyEvent\&}{ event}}
-
-This member is called to allow the window to intercept keyboard events
-before they are processed by child windows.
-
-\wxheading{Parameters}
-
-\docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
-details about this class.}
-
-\wxheading{Remarks}
-
-This member function is called in response to a keypress, if the window is active. To intercept this event,
-use the EVT\_CHAR\_HOOK macro in an event table definition. If you do not process a particular
-keypress, call \helpref{wxEvent::Skip}{wxeventskip} to allow default processing.
-
-An example of using this function is in the implementation of escape-character processing for wxDialog,
-where pressing ESC dismisses the dialog by {\bf OnCharHook} 'forging' a cancel button press event.
-
-Note that the ASCII values do not have explicit key codes: they are passed as ASCII
-values.
-
-This function is only relevant to top-level windows (frames and dialogs), and under
-Windows only. Under GTK the normal EVT\_CHAR\_ event has the functionality, i.e.
-you can intercepts it and if you don't call \helpref{wxEvent::Skip}{wxeventskip}
-the window won't get the event.
-
-\wxheading{See also}
-
-\helpref{wxKeyEvent}{wxkeyevent},\rtfsp
-\helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
-%% GD: OnXXX functions are not documented
-%%\helpref{wxApp::OnCharHook}{wxapponcharhook},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnCommand}\label{wxwindowoncommand}
-
-\func{virtual void}{OnCommand}{\param{wxEvtHandler\& }{object}, \param{wxCommandEvent\& }{event}}
-
-This virtual member function is called if the control does not handle the command event.
-
-\wxheading{Parameters}
-
-\docparam{object}{Object receiving the command event.}
-
-\docparam{event}{Command event}
-
-\wxheading{Remarks}
-
-This virtual function is provided mainly for backward compatibility. You can also intercept commands
-from child controls by using an event table, with identifiers or identifier ranges to identify
-the control(s) in question.
-
-\wxheading{See also}
-
-\helpref{wxCommandEvent}{wxcommandevent},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnClose}\label{wxwindowonclose}
-
-\func{virtual bool}{OnClose}{\void}
-
-Called when the user has tried to close a a frame
-or dialog box using the window manager (X) or system menu (Windows).
-
-{\bf Note:} This is an obsolete function.
-It is superceded by the \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow} event
-handler.
-
-\wxheading{Return value}
-
-If TRUE is returned by OnClose, the window will be deleted by the system, otherwise the
-attempt will be ignored. Do not delete the window from within this handler, although
-you may delete other windows.
-
-\wxheading{See also}
-
-\helpref{Window deletion overview}{windowdeletionoverview},\rtfsp
-\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
-\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
-\helpref{wxCloseEvent}{wxcloseevent}
-
-\membersection{wxWindow::OnCloseWindow}\label{wxwindowonclosewindow}
-
-\func{void}{OnCloseWindow}{\param{wxCloseEvent\& }{event}}
-
-This is an event handler function called when the user has tried to close a a frame
-or dialog box using the window manager (X) or system menu (Windows). It is
-called via the \helpref{wxWindow::Close}{wxwindowclose} function, so
-that the application can also invoke the handler programmatically.
-
-Use the EVT\_CLOSE event table macro to handle close events.
-
-You should check whether the application is forcing the deletion of the window
-using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is TRUE,
-destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
-If not, it is up to you whether you respond by destroying the window.
-
-(Note: GetForce is now superceded by CanVeto. So to test whether forced destruction of
-the window is required, test for the negative of CanVeto. If CanVeto returns FALSE,
-it is not possible to skip window deletion.)
-
-If you don't destroy the window, you should call \helpref{wxCloseEvent::Veto}{wxcloseeventveto} to
-let the calling code know that you did not destroy the window. This allows the \helpref{wxWindow::Close}{wxwindowclose} function
-to return TRUE or FALSE depending on whether the close instruction was honoured or not.
-
-\wxheading{Remarks}
-
-The \helpref{wxWindow::OnClose}{wxwindowonclose} virtual function remains
-for backward compatibility with earlier versions of wxWindows. The
-default {\bf OnCloseWindow} handler for wxFrame and wxDialog will call {\bf OnClose},
-destroying the window if it returns TRUE or if the close is being forced.
-
-\wxheading{See also}
-
-\helpref{Window deletion overview}{windowdeletionoverview},\rtfsp
-\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
-\helpref{wxWindow::OnClose}{wxwindowonclose},\rtfsp
-\helpref{wxWindow::Destroy}{wxwindowdestroy},\rtfsp
-\helpref{wxCloseEvent}{wxcloseevent},\rtfsp
-\helpref{wxApp::OnQueryEndSession}{wxapponqueryendsession}
-%% GD: OnXXX functions are not documented
-%%\helpref{wxApp::OnEndSession}{wxapponendsession}
-
-\membersection{wxWindow::OnDropFiles}\label{wxwindowondropfiles}
-
-\func{void}{OnDropFiles}{\param{wxDropFilesEvent\&}{ event}}
-
-Called when files have been dragged from the file manager to the window.
-
-\wxheading{Parameters}
-
-\docparam{event}{Drop files event. For more information, see \helpref{wxDropFilesEvent}{wxdropfilesevent}.}
-
-\wxheading{Remarks}
-
-The window must have previously been enabled for dropping by calling
-\rtfsp\helpref{wxWindow::DragAcceptFiles}{wxwindowdragacceptfiles}.
-
-This event is only generated under Windows.
-
-To intercept this event, use the EVT\_DROP\_FILES macro in an event table definition.
-
-\wxheading{See also}
-
-\helpref{wxDropFilesEvent}{wxdropfilesevent}, \helpref{wxWindow::DragAcceptFiles}{wxwindowdragacceptfiles},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnEraseBackground}\label{wxwindowonerasebackground}
-
-\func{void}{OnEraseBackground}{\param{wxEraseEvent\&}{ event}}
-
-Called when the background of the window needs to be erased.
-
-\wxheading{Parameters}
-
-\docparam{event}{Erase background event. For more information, see \helpref{wxEraseEvent}{wxeraseevent}.}
-
-\wxheading{Remarks}
-
-Under non-Windows platforms, this event is simulated (simply generated just before the
-paint event) and may cause flicker. It is therefore recommended that
-you set the text background colour explicitly in order to prevent flicker.
-The default background colour under GTK is grey.
-
-To intercept this event, use the EVT\_ERASE\_BACKGROUND macro in an event table definition.
-
-\wxheading{See also}
-
-\helpref{wxEraseEvent}{wxeraseevent}, \helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnKeyDown}\label{wxwindowonkeydown}
-
-\func{void}{OnKeyDown}{\param{wxKeyEvent\&}{ event}}
-
-Called when the user has pressed a key, before it is translated into an ASCII value using other
-modifier keys that might be pressed at the same time.
-
-\wxheading{Parameters}
-
-\docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
-details about this class.}
-
-\wxheading{Remarks}
-
-This member function is called in response to a key down event. To intercept this event,
-use the EVT\_KEY\_DOWN macro in an event table definition. Your {\bf OnKeyDown} handler may call this
-default function to achieve default keypress functionality.
-
-Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
-\helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
-
-Most, but not all, windows allow keypresses to be intercepted.
-
-{\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in this function,
-otherwise menu shortcuts may cease to work under Windows.
-
-\wxheading{See also}
-
-\helpref{wxWindow::OnChar}{wxwindowonchar}, \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup},\rtfsp
-\helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnKeyUp}\label{wxwindowonkeyup}
-
-\func{void}{OnKeyUp}{\param{wxKeyEvent\&}{ event}}
-
-Called when the user has released a key.
-
-\wxheading{Parameters}
-
-\docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
-details about this class.}
-
-\wxheading{Remarks}
-
-This member function is called in response to a key up event. To intercept this event,
-use the EVT\_KEY\_UP macro in an event table definition. Your {\bf OnKeyUp} handler may call this
-default function to achieve default keypress functionality.
-
-Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
-\helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
-
-Most, but not all, windows allow key up events to be intercepted.
-
-\wxheading{See also}
-
-\helpref{wxWindow::OnChar}{wxwindowonchar}, \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown},\rtfsp
-\helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnKillFocus}\label{wxwindowonkillfocus}
-
-\func{void}{OnKillFocus}{\param{wxFocusEvent\& }{event}}
-
-Called when a window's focus is being killed.
-
-\wxheading{Parameters}
-
-\docparam{event}{The focus event. For more information, see \helpref{wxFocusEvent}{wxfocusevent}.}
-
-\wxheading{Remarks}
-
-To intercept this event, use the macro EVT\_KILL\_FOCUS in an event table definition.
-
-Most, but not all, windows respond to this event.
-
-\wxheading{See also}
-
-\helpref{wxFocusEvent}{wxfocusevent}, \helpref{wxWindow::OnSetFocus}{wxwindowonsetfocus},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnIdle}\label{wxwindowonidle}
-
-\func{void}{OnIdle}{\param{wxIdleEvent\& }{event}}
-
-Provide this member function for any processing which needs to be done
-when the application is idle.
-
-\wxheading{See also}
-
-%% GD: OnXXX functions are not documented
-%%\helpref{wxApp::OnIdle}{wxapponidle}
-\helpref{wxIdleEvent}{wxidleevent}
-
-\membersection{wxWindow::OnInitDialog}\label{wxwindowoninitdialog}
-
-\func{void}{OnInitDialog}{\param{wxInitDialogEvent\&}{ event}}
-
-Default handler for the wxEVT\_INIT\_DIALOG event. Calls \helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow}.
-
-\wxheading{Parameters}
-
-\docparam{event}{Dialog initialisation event.}
-
-\wxheading{Remarks}
-
-Gives the window the default behaviour of transferring data to child controls via
-the validator that each control has.
-
-\wxheading{See also}
-
-\helpref{wxValidator}{wxvalidator}, \helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow}
-
-\membersection{wxWindow::OnMenuCommand}\label{wxwindowonmenucommand}
-
-\func{void}{OnMenuCommand}{\param{wxCommandEvent\& }{event}}
-
-Called when a menu command is received from a menu bar.
-
-\wxheading{Parameters}
-
-\docparam{event}{The menu command event. For more information, see \helpref{wxCommandEvent}{wxcommandevent}.}
-
-\wxheading{Remarks}
-
-A function with this name doesn't actually exist; you can choose any member function to receive
-menu command events, using the EVT\_COMMAND macro for individual commands or EVT\_COMMAND\_RANGE for
-a range of commands.
-
-\wxheading{See also}
-
-\helpref{wxCommandEvent}{wxcommandevent},\rtfsp
-\helpref{wxWindow::OnMenuHighlight}{wxwindowonmenuhighlight},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnMenuHighlight}\label{wxwindowonmenuhighlight}
-
-\func{void}{OnMenuHighlight}{\param{wxMenuEvent\& }{event}}
-
-Called when a menu select is received from a menu bar: that is, the
-mouse cursor is over a menu item, but the left mouse button has not been
-pressed.
-
-\wxheading{Parameters}
-
-\docparam{event}{The menu highlight event. For more information, see \helpref{wxMenuEvent}{wxmenuevent}.}
-
-\wxheading{Remarks}
-
-You can choose any member function to receive
-menu select events, using the EVT\_MENU\_HIGHLIGHT macro for individual menu items or EVT\_MENU\_HIGHLIGHT\_ALL macro
-for all menu items.
-
-The default implementation for \helpref{wxFrame::OnMenuHighlight}{wxframeonmenuhighlight} displays help
-text in the first field of the status bar.
-
-This function was known as {\bf OnMenuSelect} in earlier versions of wxWindows, but this was confusing
-since a selection is normally a left-click action.
-
-\wxheading{See also}
-
-\helpref{wxMenuEvent}{wxmenuevent},\rtfsp
-\helpref{wxWindow::OnMenuCommand}{wxwindowonmenucommand},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-
-\membersection{wxWindow::OnMouseEvent}\label{wxwindowonmouseevent}
-
-\func{void}{OnMouseEvent}{\param{wxMouseEvent\&}{ event}}
-
-Called when the user has initiated an event with the
-mouse.
-
-\wxheading{Parameters}
-
-\docparam{event}{The mouse event. See \helpref{wxMouseEvent}{wxmouseevent} for
-more details.}
-
-\wxheading{Remarks}
-
-Most, but not all, windows respond to this event.
-
-To intercept this event, use the EVT\_MOUSE\_EVENTS macro in an event table definition, or individual
-mouse event macros such as EVT\_LEFT\_DOWN.
-
-\wxheading{See also}
-
-\helpref{wxMouseEvent}{wxmouseevent},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnMove}\label{wxwindowonmove}
-
-\func{void}{OnMove}{\param{wxMoveEvent\& }{event}}
-
-Called when a window is moved.
-
-\wxheading{Parameters}
-
-\docparam{event}{The move event. For more information, see \helpref{wxMoveEvent}{wxmoveevent}.}
-
-\wxheading{Remarks}
-
-Use the EVT\_MOVE macro to intercept move events.
-
-\wxheading{Remarks}
-
-Not currently implemented.
-
-\wxheading{See also}
-
-\helpref{wxMoveEvent}{wxmoveevent},\rtfsp
-\helpref{wxFrame::OnSize}{wxframeonsize},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnPaint}\label{wxwindowonpaint}
-
-\func{void}{OnPaint}{\param{wxPaintEvent\& }{event}}
-
-Sent to the event handler when the window must be refreshed.
-
-\wxheading{Parameters}
-
-\docparam{event}{Paint event. For more information, see \helpref{wxPaintEvent}{wxpaintevent}.}
-
-\wxheading{Remarks}
-
-Use the EVT\_PAINT macro in an event table definition to intercept paint events.
-
-Note that In a paint event handler, the application must {\it always} create a \helpref{wxPaintDC}{wxpaintdc} object,
-even if you do not use it. Otherwise, under MS Windows, refreshing for this and other windows will go wrong.
-
-For example:
-
-\small{%
-\begin{verbatim}
-  void MyWindow::OnPaint(wxPaintEvent\& event)
-  {
-      wxPaintDC dc(this);
-
-      DrawMyDocument(dc);
-  }
-\end{verbatim}
-}%
-
-You can optimize painting by retrieving the rectangles
-that have been damaged and only repainting these. The rectangles are in
-terms of the client area, and are unscrolled, so you will need to do
-some calculations using the current view position to obtain logical,
-scrolled units.
-
-Here is an example of using the \helpref{wxRegionIterator}{wxregioniterator} class:
-
-{\small%
-\begin{verbatim}
-// Called when window needs to be repainted.
-void MyWindow::OnPaint(wxPaintEvent\& event)
-{
-  wxPaintDC dc(this);
-
-  // Find Out where the window is scrolled to
-  int vbX,vbY;                     // Top left corner of client
-  GetViewStart(&vbX,&vbY);
-
-  int vX,vY,vW,vH;                 // Dimensions of client area in pixels
-  wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
-
-  while (upd)
-  {
-    vX = upd.GetX();
-    vY = upd.GetY();
-    vW = upd.GetW();
-    vH = upd.GetH();
-
-    // Alternatively we can do this:
-    // wxRect rect;
-    // upd.GetRect(&rect);
-
-    // Repaint this rectangle
-    ...some code...
-
-    upd ++ ;
-  }
-}
-\end{verbatim}
-}%
-
-\wxheading{See also}
-
-\helpref{wxPaintEvent}{wxpaintevent},\rtfsp
-\helpref{wxPaintDC}{wxpaintdc},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnScroll}\label{wxwindowonscroll}
-
-\func{void}{OnScroll}{\param{wxScrollWinEvent\& }{event}}
-
-Called when a scroll window event is received from one of the window's built-in scrollbars.
-
-\wxheading{Parameters}
-
-\docparam{event}{Command event. Retrieve the new scroll position by
-calling \helpref{wxScrollEvent::GetPosition}{wxscrolleventgetposition}, and the
-scrollbar orientation by calling \helpref{wxScrollEvent::GetOrientation}{wxscrolleventgetorientation}.}
-
-\wxheading{Remarks}
-
-Note that it is not possible to distinguish between horizontal and vertical scrollbars
-until the function is executing (you can't have one function for vertical, another
-for horizontal events).
-
-\wxheading{See also}
-
-\helpref{wxScrollWinEvent}{wxscrollwinevent},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnSetFocus}\label{wxwindowonsetfocus}
-
-\func{void}{OnSetFocus}{\param{wxFocusEvent\& }{event}}
-
-Called when a window's focus is being set.
-
-\wxheading{Parameters}
-
-\docparam{event}{The focus event. For more information, see \helpref{wxFocusEvent}{wxfocusevent}.}
-
-\wxheading{Remarks}
-
-To intercept this event, use the macro EVT\_SET\_FOCUS in an event table definition.
-
-Most, but not all, windows respond to this event.
-
-\wxheading{See also}
-
-\helpref{wxFocusEvent}{wxfocusevent}, \helpref{wxWindow::OnKillFocus}{wxwindowonkillfocus},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnSize}\label{wxwindowonsize}
-
-\func{void}{OnSize}{\param{wxSizeEvent\& }{event}}
-
-Called when the window has been resized. This is not a virtual function; you should
-provide your own non-virtual OnSize function and direct size events to it using EVT\_SIZE
-in an event table definition.
-
-\wxheading{Parameters}
-
-\docparam{event}{Size event. For more information, see \helpref{wxSizeEvent}{wxsizeevent}.}
-
-\wxheading{Remarks}
-
-You may wish to use this for frames to resize their child windows as appropriate.
-
-Note that the size passed is of
-the whole window: call \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize} for the area which may be
-used by the application.
-
-When a window is resized, usually only a small part of the window is damaged and you
-may only need to repaint that area. However, if your drawing depends on the size of the window,
-you may need to clear the DC explicitly and repaint the whole window. In which case, you
-may need to call \helpref{wxWindow::Refresh}{wxwindowrefresh} to invalidate the entire window.
-
-\wxheading{See also}
-
-\helpref{wxSizeEvent}{wxsizeevent},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
-
-\membersection{wxWindow::OnSysColourChanged}\label{wxwindowonsyscolourchanged}
-
-\func{void}{OnSysColourChanged}{\param{wxOnSysColourChangedEvent\& }{event}}
-
-Called when the user has changed the system colours. Windows only.
-
-\wxheading{Parameters}
-
-\docparam{event}{System colour change event. For more information, see \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}.}
-
-\wxheading{See also}
-
-\helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent},\rtfsp
-\helpref{Event handling overview}{eventhandlingoverview}
+%% VZ: wxWindow::OnXXX() functions should not be documented but I'm leaving
+%%     the old docs here in case we want to move any still needed bits to
+%%     the right location (i.e. probably the corresponding events docs)
+%%
+%% \membersection{wxWindow::OnActivate}\label{wxwindowonactivate}
+%%
+%% \func{void}{OnActivate}{\param{wxActivateEvent\&}{ event}}
+%%
+%% Called when a window is activated or deactivated.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Object containing activation information.}
+%%
+%% \wxheading{Remarks}
+%%
+%% If the window is being activated, \helpref{wxActivateEvent::GetActive}{wxactivateeventgetactive} returns TRUE,
+%% otherwise it returns FALSE (it is being deactivated).
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxActivateEvent}{wxactivateevent},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnChar}\label{wxwindowonchar}
+%%
+%% \func{void}{OnChar}{\param{wxKeyEvent\&}{ event}}
+%%
+%% Called when the user has pressed a key that is not a modifier (SHIFT, CONTROL or ALT).
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
+%% details about this class.}
+%%
+%% \wxheading{Remarks}
+%%
+%% This member function is called in response to a keypress. To intercept this event,
+%% use the EVT\_CHAR macro in an event table definition. Your {\bf OnChar} handler may call this
+%% default function to achieve default keypress functionality.
+%%
+%% Note that the ASCII values do not have explicit key codes: they are passed as ASCII
+%% values.
+%%
+%% Note that not all keypresses can be intercepted this way. If you wish to intercept modifier
+%% keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
+%% \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
+%%
+%% Most, but not all, windows allow keypresses to be intercepted.
+%%
+%% {\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in this function,
+%% otherwise menu shortcuts may cease to work under Windows.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown}, \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup},\rtfsp
+%% \helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnCharHook}\label{wxwindowoncharhook}
+%%
+%% \func{void}{OnCharHook}{\param{wxKeyEvent\&}{ event}}
+%%
+%% This member is called to allow the window to intercept keyboard events
+%% before they are processed by child windows.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
+%% details about this class.}
+%%
+%% \wxheading{Remarks}
+%%
+%% This member function is called in response to a keypress, if the window is active. To intercept this event,
+%% use the EVT\_CHAR\_HOOK macro in an event table definition. If you do not process a particular
+%% keypress, call \helpref{wxEvent::Skip}{wxeventskip} to allow default processing.
+%%
+%% An example of using this function is in the implementation of escape-character processing for wxDialog,
+%% where pressing ESC dismisses the dialog by {\bf OnCharHook} 'forging' a cancel button press event.
+%%
+%% Note that the ASCII values do not have explicit key codes: they are passed as ASCII
+%% values.
+%%
+%% This function is only relevant to top-level windows (frames and dialogs), and under
+%% Windows only. Under GTK the normal EVT\_CHAR\_ event has the functionality, i.e.
+%% you can intercepts it and if you don't call \helpref{wxEvent::Skip}{wxeventskip}
+%% the window won't get the event.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxKeyEvent}{wxkeyevent},\rtfsp
+%% \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
+%% %% GD: OnXXX functions are not documented
+%% %%\helpref{wxApp::OnCharHook}{wxapponcharhook},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnCommand}\label{wxwindowoncommand}
+%%
+%% \func{virtual void}{OnCommand}{\param{wxEvtHandler\& }{object}, \param{wxCommandEvent\& }{event}}
+%%
+%% This virtual member function is called if the control does not handle the command event.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{object}{Object receiving the command event.}
+%%
+%% \docparam{event}{Command event}
+%%
+%% \wxheading{Remarks}
+%%
+%% This virtual function is provided mainly for backward compatibility. You can also intercept commands
+%% from child controls by using an event table, with identifiers or identifier ranges to identify
+%% the control(s) in question.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxCommandEvent}{wxcommandevent},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnClose}\label{wxwindowonclose}
+%%
+%% \func{virtual bool}{OnClose}{\void}
+%%
+%% Called when the user has tried to close a a frame
+%% or dialog box using the window manager (X) or system menu (Windows).
+%%
+%% {\bf Note:} This is an obsolete function.
+%% It is superceded by the \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow} event
+%% handler.
+%%
+%% \wxheading{Return value}
+%%
+%% If TRUE is returned by OnClose, the window will be deleted by the system, otherwise the
+%% attempt will be ignored. Do not delete the window from within this handler, although
+%% you may delete other windows.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{Window deletion overview}{windowdeletionoverview},\rtfsp
+%% \helpref{wxWindow::Close}{wxwindowclose},\rtfsp
+%% \helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
+%% \helpref{wxCloseEvent}{wxcloseevent}
+%%
+%% \membersection{wxWindow::OnCloseWindow}\label{wxwindowonclosewindow}
+%%
+%% \func{void}{OnCloseWindow}{\param{wxCloseEvent\& }{event}}
+%%
+%% This is an event handler function called when the user has tried to close a a frame
+%% or dialog box using the window manager (X) or system menu (Windows). It is
+%% called via the \helpref{wxWindow::Close}{wxwindowclose} function, so
+%% that the application can also invoke the handler programmatically.
+%%
+%% Use the EVT\_CLOSE event table macro to handle close events.
+%%
+%% You should check whether the application is forcing the deletion of the window
+%% using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is TRUE,
+%% destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
+%% If not, it is up to you whether you respond by destroying the window.
+%%
+%% (Note: GetForce is now superceded by CanVeto. So to test whether forced destruction of
+%% the window is required, test for the negative of CanVeto. If CanVeto returns FALSE,
+%% it is not possible to skip window deletion.)
+%%
+%% If you don't destroy the window, you should call \helpref{wxCloseEvent::Veto}{wxcloseeventveto} to
+%% let the calling code know that you did not destroy the window. This allows the \helpref{wxWindow::Close}{wxwindowclose} function
+%% to return TRUE or FALSE depending on whether the close instruction was honoured or not.
+%%
+%% \wxheading{Remarks}
+%%
+%% The \helpref{wxWindow::OnClose}{wxwindowonclose} virtual function remains
+%% for backward compatibility with earlier versions of wxWindows. The
+%% default {\bf OnCloseWindow} handler for wxFrame and wxDialog will call {\bf OnClose},
+%% destroying the window if it returns TRUE or if the close is being forced.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{Window deletion overview}{windowdeletionoverview},\rtfsp
+%% \helpref{wxWindow::Close}{wxwindowclose},\rtfsp
+%% \helpref{wxWindow::OnClose}{wxwindowonclose},\rtfsp
+%% \helpref{wxWindow::Destroy}{wxwindowdestroy},\rtfsp
+%% \helpref{wxCloseEvent}{wxcloseevent},\rtfsp
+%% \helpref{wxApp::OnQueryEndSession}{wxapponqueryendsession}
+%% %% GD: OnXXX functions are not documented
+%% %%\helpref{wxApp::OnEndSession}{wxapponendsession}
+%%
+%% \membersection{wxWindow::OnDropFiles}\label{wxwindowondropfiles}
+%%
+%% \func{void}{OnDropFiles}{\param{wxDropFilesEvent\&}{ event}}
+%%
+%% Called when files have been dragged from the file manager to the window.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Drop files event. For more information, see \helpref{wxDropFilesEvent}{wxdropfilesevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% The window must have previously been enabled for dropping by calling
+%% \rtfsp\helpref{wxWindow::DragAcceptFiles}{wxwindowdragacceptfiles}.
+%%
+%% This event is only generated under Windows.
+%%
+%% To intercept this event, use the EVT\_DROP\_FILES macro in an event table definition.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxDropFilesEvent}{wxdropfilesevent}, \helpref{wxWindow::DragAcceptFiles}{wxwindowdragacceptfiles},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnEraseBackground}\label{wxwindowonerasebackground}
+%%
+%% \func{void}{OnEraseBackground}{\param{wxEraseEvent\&}{ event}}
+%%
+%% Called when the background of the window needs to be erased.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Erase background event. For more information, see \helpref{wxEraseEvent}{wxeraseevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% Under non-Windows platforms, this event is simulated (simply generated just before the
+%% paint event) and may cause flicker. It is therefore recommended that
+%% you set the text background colour explicitly in order to prevent flicker.
+%% The default background colour under GTK is grey.
+%%
+%% To intercept this event, use the EVT\_ERASE\_BACKGROUND macro in an event table definition.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxEraseEvent}{wxeraseevent}, \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnKeyDown}\label{wxwindowonkeydown}
+%%
+%% \func{void}{OnKeyDown}{\param{wxKeyEvent\&}{ event}}
+%%
+%% Called when the user has pressed a key, before it is translated into an ASCII value using other
+%% modifier keys that might be pressed at the same time.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
+%% details about this class.}
+%%
+%% \wxheading{Remarks}
+%%
+%% This member function is called in response to a key down event. To intercept this event,
+%% use the EVT\_KEY\_DOWN macro in an event table definition. Your {\bf OnKeyDown} handler may call this
+%% default function to achieve default keypress functionality.
+%%
+%% Note that not all keypresses can be intercepted this way. If you wish to intercept special
+%% keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
+%% \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
+%%
+%% Most, but not all, windows allow keypresses to be intercepted.
+%%
+%% {\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in this function,
+%% otherwise menu shortcuts may cease to work under Windows.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxWindow::OnChar}{wxwindowonchar}, \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup},\rtfsp
+%% \helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnKeyUp}\label{wxwindowonkeyup}
+%%
+%% \func{void}{OnKeyUp}{\param{wxKeyEvent\&}{ event}}
+%%
+%% Called when the user has released a key.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
+%% details about this class.}
+%%
+%% \wxheading{Remarks}
+%%
+%% This member function is called in response to a key up event. To intercept this event,
+%% use the EVT\_KEY\_UP macro in an event table definition. Your {\bf OnKeyUp} handler may call this
+%% default function to achieve default keypress functionality.
+%%
+%% Note that not all keypresses can be intercepted this way. If you wish to intercept special
+%% keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or
+%% \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
+%%
+%% Most, but not all, windows allow key up events to be intercepted.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxWindow::OnChar}{wxwindowonchar}, \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown},\rtfsp
+%% \helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnKillFocus}\label{wxwindowonkillfocus}
+%%
+%% \func{void}{OnKillFocus}{\param{wxFocusEvent\& }{event}}
+%%
+%% Called when a window's focus is being killed.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{The focus event. For more information, see \helpref{wxFocusEvent}{wxfocusevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% To intercept this event, use the macro EVT\_KILL\_FOCUS in an event table definition.
+%%
+%% Most, but not all, windows respond to this event.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxFocusEvent}{wxfocusevent}, \helpref{wxWindow::OnSetFocus}{wxwindowonsetfocus},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnIdle}\label{wxwindowonidle}
+%%
+%% \func{void}{OnIdle}{\param{wxIdleEvent\& }{event}}
+%%
+%% Provide this member function for any processing which needs to be done
+%% when the application is idle.
+%%
+%% \wxheading{See also}
+%%
+%% %% GD: OnXXX functions are not documented
+%% %%\helpref{wxApp::OnIdle}{wxapponidle}
+%% \helpref{wxIdleEvent}{wxidleevent}
+%%
+%% \membersection{wxWindow::OnInitDialog}\label{wxwindowoninitdialog}
+%%
+%% \func{void}{OnInitDialog}{\param{wxInitDialogEvent\&}{ event}}
+%%
+%% Default handler for the wxEVT\_INIT\_DIALOG event. Calls \helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow}.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Dialog initialisation event.}
+%%
+%% \wxheading{Remarks}
+%%
+%% Gives the window the default behaviour of transferring data to child controls via
+%% the validator that each control has.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxValidator}{wxvalidator}, \helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow}
+%%
+%% \membersection{wxWindow::OnMenuCommand}\label{wxwindowonmenucommand}
+%%
+%% \func{void}{OnMenuCommand}{\param{wxCommandEvent\& }{event}}
+%%
+%% Called when a menu command is received from a menu bar.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{The menu command event. For more information, see \helpref{wxCommandEvent}{wxcommandevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% A function with this name doesn't actually exist; you can choose any member function to receive
+%% menu command events, using the EVT\_COMMAND macro for individual commands or EVT\_COMMAND\_RANGE for
+%% a range of commands.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxCommandEvent}{wxcommandevent},\rtfsp
+%% \helpref{wxWindow::OnMenuHighlight}{wxwindowonmenuhighlight},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnMenuHighlight}\label{wxwindowonmenuhighlight}
+%%
+%% \func{void}{OnMenuHighlight}{\param{wxMenuEvent\& }{event}}
+%%
+%% Called when a menu select is received from a menu bar: that is, the
+%% mouse cursor is over a menu item, but the left mouse button has not been
+%% pressed.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{The menu highlight event. For more information, see \helpref{wxMenuEvent}{wxmenuevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% You can choose any member function to receive
+%% menu select events, using the EVT\_MENU\_HIGHLIGHT macro for individual menu items or EVT\_MENU\_HIGHLIGHT\_ALL macro
+%% for all menu items.
+%%
+%% The default implementation for \helpref{wxFrame::OnMenuHighlight}{wxframeonmenuhighlight} displays help
+%% text in the first field of the status bar.
+%%
+%% This function was known as {\bf OnMenuSelect} in earlier versions of wxWindows, but this was confusing
+%% since a selection is normally a left-click action.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxMenuEvent}{wxmenuevent},\rtfsp
+%% \helpref{wxWindow::OnMenuCommand}{wxwindowonmenucommand},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%%
+%% \membersection{wxWindow::OnMouseEvent}\label{wxwindowonmouseevent}
+%%
+%% \func{void}{OnMouseEvent}{\param{wxMouseEvent\&}{ event}}
+%%
+%% Called when the user has initiated an event with the
+%% mouse.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{The mouse event. See \helpref{wxMouseEvent}{wxmouseevent} for
+%% more details.}
+%%
+%% \wxheading{Remarks}
+%%
+%% Most, but not all, windows respond to this event.
+%%
+%% To intercept this event, use the EVT\_MOUSE\_EVENTS macro in an event table definition, or individual
+%% mouse event macros such as EVT\_LEFT\_DOWN.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxMouseEvent}{wxmouseevent},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnMove}\label{wxwindowonmove}
+%%
+%% \func{void}{OnMove}{\param{wxMoveEvent\& }{event}}
+%%
+%% Called when a window is moved.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{The move event. For more information, see \helpref{wxMoveEvent}{wxmoveevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% Use the EVT\_MOVE macro to intercept move events.
+%%
+%% \wxheading{Remarks}
+%%
+%% Not currently implemented.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxMoveEvent}{wxmoveevent},\rtfsp
+%% \helpref{wxFrame::OnSize}{wxframeonsize},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnPaint}\label{wxwindowonpaint}
+%%
+%% \func{void}{OnPaint}{\param{wxPaintEvent\& }{event}}
+%%
+%% Sent to the event handler when the window must be refreshed.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Paint event. For more information, see \helpref{wxPaintEvent}{wxpaintevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% Use the EVT\_PAINT macro in an event table definition to intercept paint events.
+%%
+%% Note that In a paint event handler, the application must {\it always} create a \helpref{wxPaintDC}{wxpaintdc} object,
+%% even if you do not use it. Otherwise, under MS Windows, refreshing for this and other windows will go wrong.
+%%
+%% For example:
+%%
+%% \small{%
+%% \begin{verbatim}
+%%   void MyWindow::OnPaint(wxPaintEvent\& event)
+%%   {
+%%       wxPaintDC dc(this);
+%%
+%%       DrawMyDocument(dc);
+%%   }
+%% \end{verbatim}
+%% }%
+%%
+%% You can optimize painting by retrieving the rectangles
+%% that have been damaged and only repainting these. The rectangles are in
+%% terms of the client area, and are unscrolled, so you will need to do
+%% some calculations using the current view position to obtain logical,
+%% scrolled units.
+%%
+%% Here is an example of using the \helpref{wxRegionIterator}{wxregioniterator} class:
+%%
+%% {\small%
+%% \begin{verbatim}
+%% // Called when window needs to be repainted.
+%% void MyWindow::OnPaint(wxPaintEvent\& event)
+%% {
+%%   wxPaintDC dc(this);
+%%
+%%   // Find Out where the window is scrolled to
+%%   int vbX,vbY;                     // Top left corner of client
+%%   GetViewStart(&vbX,&vbY);
+%%
+%%   int vX,vY,vW,vH;                 // Dimensions of client area in pixels
+%%   wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
+%%
+%%   while (upd)
+%%   {
+%%     vX = upd.GetX();
+%%     vY = upd.GetY();
+%%     vW = upd.GetW();
+%%     vH = upd.GetH();
+%%
+%%     // Alternatively we can do this:
+%%     // wxRect rect;
+%%     // upd.GetRect(&rect);
+%%
+%%     // Repaint this rectangle
+%%     ...some code...
+%%
+%%     upd ++ ;
+%%   }
+%% }
+%% \end{verbatim}
+%% }%
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxPaintEvent}{wxpaintevent},\rtfsp
+%% \helpref{wxPaintDC}{wxpaintdc},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnScroll}\label{wxwindowonscroll}
+%%
+%% \func{void}{OnScroll}{\param{wxScrollWinEvent\& }{event}}
+%%
+%% Called when a scroll window event is received from one of the window's built-in scrollbars.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Command event. Retrieve the new scroll position by
+%% calling \helpref{wxScrollEvent::GetPosition}{wxscrolleventgetposition}, and the
+%% scrollbar orientation by calling \helpref{wxScrollEvent::GetOrientation}{wxscrolleventgetorientation}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% Note that it is not possible to distinguish between horizontal and vertical scrollbars
+%% until the function is executing (you can't have one function for vertical, another
+%% for horizontal events).
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxScrollWinEvent}{wxscrollwinevent},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnSetFocus}\label{wxwindowonsetfocus}
+%%
+%% \func{void}{OnSetFocus}{\param{wxFocusEvent\& }{event}}
+%%
+%% Called when a window's focus is being set.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{The focus event. For more information, see \helpref{wxFocusEvent}{wxfocusevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% To intercept this event, use the macro EVT\_SET\_FOCUS in an event table definition.
+%%
+%% Most, but not all, windows respond to this event.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxFocusEvent}{wxfocusevent}, \helpref{wxWindow::OnKillFocus}{wxwindowonkillfocus},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnSize}\label{wxwindowonsize}
+%%
+%% \func{void}{OnSize}{\param{wxSizeEvent\& }{event}}
+%%
+%% Called when the window has been resized. This is not a virtual function; you should
+%% provide your own non-virtual OnSize function and direct size events to it using EVT\_SIZE
+%% in an event table definition.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{Size event. For more information, see \helpref{wxSizeEvent}{wxsizeevent}.}
+%%
+%% \wxheading{Remarks}
+%%
+%% You may wish to use this for frames to resize their child windows as appropriate.
+%%
+%% Note that the size passed is of
+%% the whole window: call \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize} for the area which may be
+%% used by the application.
+%%
+%% When a window is resized, usually only a small part of the window is damaged and you
+%% may only need to repaint that area. However, if your drawing depends on the size of the window,
+%% you may need to clear the DC explicitly and repaint the whole window. In which case, you
+%% may need to call \helpref{wxWindow::Refresh}{wxwindowrefresh} to invalidate the entire window.
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxSizeEvent}{wxsizeevent},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
+%%
+%% \membersection{wxWindow::OnSysColourChanged}\label{wxwindowonsyscolourchanged}
+%%
+%% \func{void}{OnSysColourChanged}{\param{wxOnSysColourChangedEvent\& }{event}}
+%%
+%% Called when the user has changed the system colours. Windows only.
+%%
+%% \wxheading{Parameters}
+%%
+%% \docparam{event}{System colour change event. For more information, see \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}.}
+%%
+%% \wxheading{See also}
+%%
+%% \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent},\rtfsp
+%% \helpref{Event handling overview}{eventhandlingoverview}
 
 \membersection{wxWindow::PopEventHandler}\label{wxwindowpopeventhandler}
 
