@@ -61,7 +61,8 @@
     </set>
 
     <set var="WXDEBUGFLAG">
-        <if cond="BUILD=='debug'">d</if>
+        <if cond="BUILD=='debug' and DEBUG_FLAG=='default'">d</if>
+        <if cond="DEBUG_FLAG=='1'">d</if>
     </set>
     <set var="WXUNICODEFLAG">
         <if cond="UNICODE=='1'">u</if>
@@ -161,9 +162,16 @@
     <!--                        Templates for libs:                      -->
     <!-- =============================================================== -->
 
-    <set var="DEBUGFLAG">
-        <if cond="BUILD=='debug'">on</if>
-        <if cond="BUILD=='release'">off</if>
+    <set var="DEBUGINFO">
+        <if cond="BUILD=='debug' and DEBUG_INFO=='default'">on</if>
+        <if cond="DEBUG_INFO=='1'">on</if>
+        <if cond="BUILD=='release' and DEBUG_INFO=='default'">off</if>
+        <if cond="DEBUG_INFO=='0'">off</if>
+    </set>
+    <set var="DEBUGRUNTIME">
+        <if cond="DEBUG_RUNTIME_LIBS=='default'">$(DEBUGINFO)</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='0'">off</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='1'">on</if>
     </set>
     <set var="OPTIMIZEFLAG">
         <if cond="BUILD=='debug'">off</if>
@@ -171,14 +179,16 @@
     </set>
 
     <set var="DEBUG_DEFINE">
-        <if cond="FORMAT!='autoconf' and BUILD=='debug'">__WXDEBUG__</if>
+        <if cond="FORMAT!='autoconf' and BUILD=='debug' and DEBUG_FLAG=='default'">__WXDEBUG__</if>
+        <if cond="FORMAT!='autoconf' and DEBUG_FLAG=='1'">__WXDEBUG__</if>
     </set>
     <set var="UNICODE_DEFINE">
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">wxUSE_UNICODE=1</if>
     </set>
 
     <template id="common_settings">
-        <debug-info>$(DEBUGFLAG)</debug-info>
+        <debug-info>$(DEBUGINFO)</debug-info>
+        <debug-runtime-libs>$(DEBUGRUNTIME)</debug-runtime-libs>
         <optimize>$(OPTIMIZEFLAG)</optimize>
         <threading>multi</threading>
         <runtime-libs>$(RUNTIME_LIBS)</runtime-libs>

@@ -5,6 +5,47 @@
     
     <set var="BUILDING_LIB" overwrite="0">0</set>
 
+    <option name="BUILD">
+        <values>debug release</values>
+        <values-description>Debug Release</values-description>
+        <default-value>release</default-value>
+        <description>
+            Type of compiled binaries
+        </description>
+    </option>
+    
+    <option name="DEBUG_INFO">
+        <values>0 1 default</values>
+        <default-value>default</default-value>
+        <description>
+Should debugging info be included in the executables? The default value
+"default" means that debug info will be included if BUILD=debug
+and not included if BUILD=release.
+        </description>
+    </option>
+    
+    <option name="DEBUG_FLAG">
+        <values>0 1 default</values>
+        <default-value>default</default-value>
+        <description>
+Should __WXDEBUG__ be defined? The default value "default" means that it will
+be defined if BUILD=debug and not defined if BUILD=release.
+        </description>
+    </option>
+
+    <if cond="FORMAT=='msvc'">
+        <option name="DEBUG_RUNTIME_LIBS">
+            <values>0 1 default</values>
+            <default-value>default</default-value>
+            <description>
+Should link against debug RTL (msvcrtd.dll) or release (msvcrt.dll)?
+Acts according to DEBUG_INFO by default.
+            </description>
+        </option>
+    </if>
+    <if cond="FORMAT!='msvc'">
+        <set var="DEBUG_RUNTIME_LIBS">default</set>
+    </if>
 
     <option name="UNICODE">
         <values>0 1</values>
@@ -84,9 +125,9 @@
     <option name="CFG">
         <default-value></default-value>
         <description>
-            Name of your custom configuration. This affects directory
-            where object files are stored as well as the location of
-            compiled .lib files and setup.h under the lib/ toplevel directory.
+Name of your custom configuration. This affects directory
+where object files are stored as well as the location of
+compiled .lib files and setup.h under the lib/ toplevel directory.
         </description>
     </option>
 
@@ -122,9 +163,9 @@
             <values>dynamic static</values>
             <default-value>dynamic</default-value>
             <description>
-                Version of C runtime library to use. You can change this to
-                static if SHARED=0, but it is highly recommended to not do
-                it if SHARED=1 unless you know what you are doing.
+Version of C runtime library to use. You can change this to
+static if SHARED=0, but it is highly recommended to not do
+it if SHARED=1 unless you know what you are doing.
             </description>
         </option>
         
@@ -152,9 +193,9 @@
             <values>3 2.95</values>
             <default-value>3</default-value>
             <description>
-                Set the version of your Mingw installation here.
-                "3" ...... this is for Mingw 2.0 or newer that cames with gcc3
-                "2.95" ... for Mingw 1.1 or any of the older versions
+Set the version of your Mingw installation here.
+    "3" ...... this is for Mingw 2.0 or newer (comes with gcc3)
+    "2.95" ... for Mingw 1.1 or any of the older versions
             </description>
         </option>
         <set var="GCCFLAGS">
