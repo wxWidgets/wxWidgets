@@ -897,9 +897,6 @@ enum wxStretch
 // descend into all subwindows
 #define wxWS_EX_VALIDATE_RECURSIVELY    0x00000001
 
-// Don't automatically set the focus when left-clicking on the window
-#define wxWS_EX_NO_AUTOFOCUS     0x10000000
-
 /*
  * wxFrame/wxDialog style flags
  */
