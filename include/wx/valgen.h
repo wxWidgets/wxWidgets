@@ -4,7 +4,7 @@
 // Author:      Kevin Smith
 // Modified by:
 // Created:     Jan 22 1999
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) 1999 Kevin Smith
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ public:
   // if you're passing a reference to a validator.
   // Another possibility is to always pass a pointer to a new validator
   // (so the calling code can use a copy constructor of the relevant class).
-  virtual wxValidator *Clone(void) const { return new wxGenericValidator(*this); }
+  virtual wxObject *Clone(void) const { return new wxGenericValidator(*this); }
   bool Copy(const wxGenericValidator& val);
 
   // Called when the value in the window must be validated.

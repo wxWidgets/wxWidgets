@@ -2080,7 +2080,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
             bool bForward = TRUE,
                  bWindowChange = FALSE;
 
-            switch ( msg->wParam ) 
+            switch ( msg->wParam )
             {
                 case VK_TAB:
                     if ( lDlgCode & DLGC_WANTTAB ) {
@@ -4449,7 +4449,7 @@ void wxWindow::SetValidator(const wxValidator& validator)
 {
     if ( m_windowValidator )
         delete m_windowValidator;
-    m_windowValidator = validator.Clone();
+    m_windowValidator = (wxValidator*)validator.Clone();
 
     if ( m_windowValidator )
         m_windowValidator->SetWindow(this) ;
