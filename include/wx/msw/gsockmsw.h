@@ -36,6 +36,7 @@ struct _GSocket
   GAddress *m_peer;
   GSocketError m_error;
 
+  /* Attributes */
   bool m_non_blocking;
   bool m_server;
   bool m_stream;
@@ -43,6 +44,7 @@ struct _GSocket
   struct timeval m_timeout;
 
   /* Callbacks */
+  GSocketEventFlags m_detected;
   GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
   char *m_data[GSOCK_MAX_EVENT];
   int m_msgnumber;
@@ -72,7 +74,8 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
 
 /* Callbacks */
 
-void _GSocket_Configure_Callbacks(GSocket *socket);
+void _GSocket_Enable_Events(GSocket *socket);
+void _GSocket_Disable_Events(GSocket *socket);
 LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 
 /* GAddress */

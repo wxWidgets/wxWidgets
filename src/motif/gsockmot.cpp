@@ -11,9 +11,9 @@
 
 #include <stdlib.h>
 #include <X11/Intrinsic.h>
-#include <wx/gsocket.h>
-#include <wx/app.h>
-#include <wx/unix/gsockunx.h>
+#include "wx/gsocket.h"
+#include "wx/app.h"
+#include "wx/unix/gsockunx.h"
 
 #define wxAPP_CONTEXT ((XtAppContext)wxTheApp->GetAppContext())
 
@@ -38,70 +38,66 @@ void _GSocket_GUI_Init(GSocket *socket)
   int i;
   int *m_id;
 
-  socket->m_gui_dependent = (char *)malloc(sizeof(int)*3);
+  socket->m_gui_dependent = (char *)malloc(sizeof(int)*2);
   m_id = (int *)(socket->m_gui_dependent);
 
-  for (i=0;i<3;i++)
-    m_id[i] = -1;
+  m_id[0] = -1;
+  m_id[1] = -1;
 }
 
 void _GSocket_GUI_Destroy(GSocket *socket)
 {
-  int i;
-  int *m_id;
-
-  m_id = (int *)(socket->m_gui_dependent);
-
-  for (i=0;i<3;i++)
-    if (m_id[i] == -1)
-      XtRemoveInput(m_id[i]);
-
   free(socket->m_gui_dependent);
 }
 
 void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
 {
-  int *m_id;
+  int *m_id = (int *)(socket->m_gui_dependent);
+  int c;
 
-  m_id = (int *)(socket->m_gui_dependent);
+  if (socket->m_fd == -1)
+    return;
 
-  switch (event) {
-  case GSOCK_CONNECTION:
-  case GSOCK_LOST:
-  case GSOCK_INPUT: 
-     if (m_id[0] != -1)
-       XtRemoveInput(m_id[0]);
+  switch (event)
+  {
+    case GSOCK_LOST:       /* fall-through */
+    case GSOCK_INPUT:      c = 0; break; 
+    case GSOCK_OUTPUT:     c = 1; break;
+    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
+    default: return;
+  }
+
+  if (m_id[c] != -1)
+    XtRemoveInput(m_id[c]);
+
+  if (c == 0)
+  {
      m_id[0] = XtAppAddInput(wxAPP_CONTEXT, socket->m_fd,
                              (XtPointer *)XtInputReadMask,
                              (XtInputCallbackProc) _GSocket_Motif_Input,
                              (XtPointer) socket);
-     break;
-  case GSOCK_OUTPUT:
-     if (m_id[1] != -1)
-       XtRemoveInput(m_id[1]);
+  }
+  else
+  {
      m_id[1] = XtAppAddInput(wxAPP_CONTEXT, socket->m_fd,
                              (XtPointer *)XtInputWriteMask,
                              (XtInputCallbackProc) _GSocket_Motif_Output,
                              (XtPointer) socket);
-     break;
-  default: return;
   }
 }
 
 void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
 {
+  int *m_id = (int *)(socket->m_gui_dependent);
   int c;
-  int *m_id;
 
-  m_id = (int *)(socket->m_gui_dependent);
-
-  switch (event) {
-  case GSOCK_CONNECTION: 
-  case GSOCK_LOST:
-  case GSOCK_INPUT: c = 0; break;
-  case GSOCK_OUTPUT: c = 1; break;
-     break;
-  default: return;
+  switch (event)
+  {
+    case GSOCK_LOST:       /* fall-through */
+    case GSOCK_INPUT:      c = 0; break; 
+    case GSOCK_OUTPUT:     c = 1; break;
+    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
+    default: return;
   }
 
   if (m_id[c] != -1)
@@ -110,13 +106,16 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
   m_id[c] = -1;
 }
 
-unsigned long GSocket_GetEventID(GSocket *socket)
+void _GSocket_Enable_Events(GSocket *socket)
 {
-  return 0;
+  _GSocket_Install_Callback(socket, GSOCK_INPUT);
+  _GSocket_Install_Callback(socket, GSOCK_OUTPUT);
 }
 
-void GSocket_DoEvent(unsigned long evt_id)
+void _GSocket_Disable_Events(GSocket *socket)
 {
+  _GSocket_Uninstall_Callback(socket, GSOCK_INPUT);
+  _GSocket_Uninstall_Callback(socket, GSOCK_OUTPUT);
 }
 
 #endif // wxUSE_SOCKETS
