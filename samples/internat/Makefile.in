@@ -17,7 +17,7 @@ DATAFILES=fr/internat.po fr/internat.mo \
 	de/internat.po de/internat.mo \
 	ru/internat.po ru/internat.mo
 
-DATADIRS=fr de
+DATADIRS=fr de ru
 
 PROGRAM=internat
 
