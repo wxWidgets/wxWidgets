@@ -519,7 +519,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     return TRUE;
 }
 
-bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
+bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
@@ -533,7 +533,11 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             gtk_widget_destroy( tool->m_item );
             break;
 
-        //case wxTOOL_STYLE_SEPARATOR: -- nothing to do
+#ifdef __WXGTK20__
+        case wxTOOL_STYLE_SEPARATOR:
+            gtk_toolbar_remove_space( m_toolbar, pos );
+            break;
+#endif
     }
 
     InvalidateBestSize();
