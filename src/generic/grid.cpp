@@ -5945,6 +5945,23 @@ bool wxGrid::IsCellEditControlEnabled() const
     return m_cellEditCtrlEnabled ? !IsCurrentCellReadOnly() : FALSE;
 }
 
+bool wxGrid::IsCellEditControlDisplayed() const
+{
+    if (m_cellEditCtrlEnabled)
+    {
+        int row = m_currentCellCoords.GetRow();
+        int col = m_currentCellCoords.GetCol();
+        wxGridCellAttr* attr = GetCellAttr(row, col);
+        wxGridCellEditor* editor = attr->GetEditor(this, row, col);
+        if ( editor && editor->IsCreated() )
+        {
+            wxWindow *control = editor->GetControl(); 
+            return control->IsShown();
+        }
+    }
+    return FALSE;
+}
+
 void wxGrid::ShowCellEditControl()
 {
     if ( IsCellEditControlEnabled() )
@@ -7693,7 +7710,10 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
 
         if ( m_currentCellCoords.GetRow() == row &&
              m_currentCellCoords.GetCol() == col &&
-             IsCellEditControlEnabled())
+             IsCellEditControlDisplayed())
+             // Note: If we are using IsCellEditControlEnabled,
+             // this interacts badly with calling SetCellValue from
+             // an EVT_GRID_CELL_CHANGE handler.
         {
             HideCellEditControl();
             ShowCellEditControl(); // will reread data from table
