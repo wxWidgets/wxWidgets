@@ -61,7 +61,7 @@ extern "C"
 // we can't use METHODDEF here as it includes static yet the functions must be
 // extern "C" and these can't be used together!
 #undef METHODDEF
-#define METHODDEF(type) extern "C" wxC_CALLING_CONV type
+#define METHODDEF(type) extern "C" type wxC_CALLING_CONV
 
 //-----------------------------------------------------------------------------
 // wxJPEGHandler
