@@ -11,6 +11,9 @@ if __name__ == '__main__':
     basePath = os.path.dirname(sys.argv[0])
 else:
     basePath = os.path.dirname(__file__)
+if not basePath:
+    basePath = '.'
+
 
 # test for write access
 if os.access(basePath, os.W_OK):
