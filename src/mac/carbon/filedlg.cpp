@@ -519,7 +519,3 @@ wxSaveFileSelector(const char *what, const char *extension, const char *default_
 {
   return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
 }
-
-TTFH	Monaco.
-È€.
-È€º`\9t9tTTFSORT:€FMPSRMWBBíÿÿðÿÿ
