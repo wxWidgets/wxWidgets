@@ -350,10 +350,16 @@ public:                                                               \
     typedef value_type& reference;                                    \
     typedef value_type* pointer;                                      \
     typedef reverse_iterator itor;                                    \
-    friend itor operator+(int o, const itor& it);                     \
-    friend itor operator+(const itor& it, int o);                     \
-    friend itor operator-(const itor& it, int o);                     \
-    friend difference_type operator -(const itor& i1, const itor& i2);\
+    friend inline itor operator+(int o, const itor& it)               \
+        { return it.m_ptr - o; }                                      \
+    friend inline itor operator+(const itor& it, int o)               \
+        { return it.m_ptr - o; }                                      \
+    friend inline itor operator-(const itor& it, int o)               \
+        { return it.m_ptr + o; }                                      \
+    friend inline difference_type operator-(const itor& i1,           \
+                                            const itor& i2)           \
+        { return i1.m_ptr - i2.m_ptr; }                               \
+                                                                      \
   public:                                                             \
     pointer m_ptr;                                                    \
     reverse_iterator() : m_ptr(NULL) { }                              \
@@ -376,10 +382,16 @@ public:                                                               \
     typedef const value_type& reference;                              \
     typedef const value_type* pointer;                                \
     typedef const_reverse_iterator itor;                              \
-    friend itor operator+(int o, const itor& it);                     \
-    friend itor operator+(const itor& it, int o);                     \
-    friend itor operator-(const itor& it, int o);                     \
-    friend difference_type operator -(const itor& i1, const itor& i2);\
+    friend inline itor operator+(int o, const itor& it)               \
+        { return it.m_ptr - o; }                                      \
+    friend inline itor operator+(const itor& it, int o)               \
+        { return it.m_ptr - o; }                                      \
+    friend inline itor operator-(const itor& it, int o)               \
+        { return it.m_ptr + o; }                                      \
+    friend inline difference_type operator-(const itor& i1,           \
+                                            const itor& i2)           \
+        { return i1.m_ptr - i2.m_ptr; }                               \
+                                                                      \
   public:                                                             \
     pointer m_ptr;                                                    \
     const_reverse_iterator() : m_ptr(NULL) { }                        \
@@ -434,21 +446,8 @@ public:                                                               \
   void reserve(size_type n) { base::reserve(n); };                    \
   void resize(size_type n, value_type v = value_type());              \
   size_type size() const { return base::size(); }                     \
-};                                                                    \
-                                                                      \
-inline name::reverse_iterator operator+(int o, const name::reverse_iterator& it) { return it.m_ptr - o; } \
-inline name::reverse_iterator operator+(const name::reverse_iterator& it, int o) { return it.m_ptr - o; } \
-inline name::reverse_iterator operator-(const name::reverse_iterator& it, int o) { return it.m_ptr + o; } \
-inline name::difference_type operator -(const name::reverse_iterator& i1, \
-                             const name::reverse_iterator& i2)            \
-    { return i1.m_ptr - i2.m_ptr; }                                       \
-                                                                      \
-inline name::const_reverse_iterator operator+(int o, const name::const_reverse_iterator& it) { return it.m_ptr - o; } \
-inline name::const_reverse_iterator operator+(const name::const_reverse_iterator& it, int o) { return it.m_ptr - o; } \
-inline name::const_reverse_iterator operator-(const name::const_reverse_iterator& it, int o) { return it.m_ptr + o; } \
-inline name::difference_type operator -(const name::const_reverse_iterator& i1,\
-                             const name::const_reverse_iterator& i2)      \
-    { return i1.m_ptr - i2.m_ptr; }                                       \
+}
+
 
 #endif // !wxUSE_STL
 
