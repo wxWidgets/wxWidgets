@@ -359,7 +359,6 @@ HTMLOBJS = $(MSWDIR)\helpctrl.obj \
 		$(MSWDIR)\m_layout.obj \
 		$(MSWDIR)\m_links.obj \
 		$(MSWDIR)\m_list.obj \
-		$(MSWDIR)\m_meta.obj \
 		$(MSWDIR)\m_pre.obj \
 		$(MSWDIR)\m_style.obj \
 		$(MSWDIR)\m_tables.obj \
@@ -1443,8 +1442,6 @@ $(MSWDIR)\m_layout.obj: $(HTMLDIR)\m_layout.$(SRCSUFF)
 $(MSWDIR)\m_links.obj: $(HTMLDIR)\m_links.$(SRCSUFF)
 
 $(MSWDIR)\m_list.obj: $(HTMLDIR)\m_list.$(SRCSUFF)
-
-$(MSWDIR)\m_meta.obj: $(HTMLDIR)\m_meta.$(SRCSUFF)
 
 $(MSWDIR)\m_pre.obj: $(HTMLDIR)\m_pre.$(SRCSUFF)
 

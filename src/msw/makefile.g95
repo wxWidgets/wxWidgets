@@ -266,7 +266,6 @@ HTMLOBJS = \
 		$(HTMLDIR)/m_layout.$(OBJSUFF) \
 		$(HTMLDIR)/m_links.$(OBJSUFF) \
 		$(HTMLDIR)/m_list.$(OBJSUFF) \
-		$(HTMLDIR)/m_meta.$(OBJSUFF) \
 		$(HTMLDIR)/m_pre.$(OBJSUFF) \
 		$(HTMLDIR)/m_style.$(OBJSUFF) \
 		$(HTMLDIR)/m_tables.$(OBJSUFF) \
