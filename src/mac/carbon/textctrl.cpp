@@ -1996,21 +1996,36 @@ static void TPCalculateBounds(STPTextPaneVars *varsp, const Rect& bounds)
 OSStatus MLTESetObjectVisibility( STPTextPaneVars *varsp, Boolean vis , long wxStyle)
 {
     OSStatus err = noErr ;
-#if TARGET_API_MAC_OSX
-    TXNControlTag iControlTags[1] = { kTXNVisibilityTag };
-    TXNControlData iControlData[1] = {{ vis }};
-    err = ::TXNSetTXNObjectControls( varsp->fTXNRec, false, 1, iControlTags, iControlData );
-#endif
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference(varsp->fUserPaneRec);
-    if ( vis && textctrl )
+    if ( textctrl )
     {
+#if TARGET_API_MAC_OSX
+    	TXNControlTag iControlTags[1] = { kTXNVisibilityTag };
+    	TXNControlData iControlData[1] = {{ vis }};
+    	err = ::TXNSetTXNObjectControls( varsp->fTXNRec, false, 1, iControlTags, iControlData );
+#endif
         Rect bounds ;
         UMAGetControlBoundsInWindowCoords( varsp->fUserPaneRec, &bounds);
         TPCalculateBounds( varsp , bounds ) ;
-        wxMacWindowClipper cl(textctrl) ;
-        TXNSetFrameBounds( varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
-                           varsp->fRTextArea.bottom, varsp->fRTextArea.right, varsp->fTXNFrame);
-        TXNShowSelection( varsp->fTXNRec, kTXNShowStart);
+	    if ( vis )
+	    {
+			wxMacWindowClipper cl(textctrl) ;
+	        TXNSetFrameBounds( varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
+	                           varsp->fRTextArea.bottom, varsp->fRTextArea.right, varsp->fTXNFrame);
+	        TXNShowSelection( varsp->fTXNRec, kTXNShowStart);
+	    }
+	    else
+	    {
+#if TARGET_API_MAC_OSX
+			// in 10.2 the scrollbars are still actively redrawn when using only the code above
+			if ( UMAGetSystemVersion() < 0x1030 )
+			{
+	       		TXNSetFrameBounds( varsp->fTXNRec, varsp->fRTextArea.top + 20000 , varsp->fRTextArea.left + 20000 ,
+	           		varsp->fRTextArea.bottom + 20000 , varsp->fRTextArea.right + 20000 , varsp->fTXNFrame);
+				
+			}
+#endif
+	    }
     }
     return err ;
 }
