@@ -723,6 +723,7 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
     if ( !(GetExtraStyle() & wxWS_EX_BLOCK_EVENTS) )
     {
         // the event will be propagated anyhow
+        event.Skip();
         return;
     }
 
