@@ -1,9 +1,9 @@
-// -------------------------------------------------------------------------
-// Project: GSocket (Generic Socket) for WX
-// Name:    gsockmot.cpp
-// Purpose: GSocket: Motif part
-// CVSID:   $Id$
-// -------------------------------------------------------------------------
+/* -------------------------------------------------------------------------
+ * Project: GSocket (Generic Socket) for WX
+ * Name:    gsockmot.c
+ * Purpose: GSocket: Motif part
+ * CVSID:   $Id$
+ * ------------------------------------------------------------------------- */
 
 #include "wx/setup.h"
 
@@ -12,10 +12,9 @@
 #include <stdlib.h>
 #include <X11/Intrinsic.h>
 #include "wx/gsocket.h"
-#include "wx/app.h"
 #include "wx/unix/gsockunx.h"
 
-#define wxAPP_CONTEXT ((XtAppContext)wxTheApp->GetAppContext())
+extern XtAppContext wxGetAppContext();
 
 static void _GSocket_Motif_Input(XtPointer data, int *fid,
                                  XtInputId *id)
@@ -61,7 +60,7 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
   switch (event)
   {
     case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break; 
+    case GSOCK_INPUT:      c = 0; break;
     case GSOCK_OUTPUT:     c = 1; break;
     case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
     default: return;
@@ -72,14 +71,14 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
 
   if (c == 0)
   {
-     m_id[0] = XtAppAddInput(wxAPP_CONTEXT, socket->m_fd,
+     m_id[0] = XtAppAddInput(wxGetAppContext(), socket->m_fd,
                              (XtPointer *)XtInputReadMask,
                              (XtInputCallbackProc) _GSocket_Motif_Input,
                              (XtPointer) socket);
   }
   else
   {
-     m_id[1] = XtAppAddInput(wxAPP_CONTEXT, socket->m_fd,
+     m_id[1] = XtAppAddInput(wxGetAppContext(), socket->m_fd,
                              (XtPointer *)XtInputWriteMask,
                              (XtInputCallbackProc) _GSocket_Motif_Output,
                              (XtPointer) socket);
@@ -94,7 +93,7 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
   switch (event)
   {
     case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break; 
+    case GSOCK_INPUT:      c = 0; break;
     case GSOCK_OUTPUT:     c = 1; break;
     case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
     default: return;
@@ -118,4 +117,4 @@ void _GSocket_Disable_Events(GSocket *socket)
   _GSocket_Uninstall_Callback(socket, GSOCK_OUTPUT);
 }
 
-#endif // wxUSE_SOCKETS
+#endif /* wxUSE_SOCKETS */

@@ -110,5 +110,11 @@ private:
 // argument is of type "wxWindow *"
 #define GetWidget(w)    ((Widget)(w)->GetHandle())
 
+// ----------------------------------------------------------------------------
+// accessors for C modules
+// ----------------------------------------------------------------------------
+
+extern "C" XtAppContext wxGetAppContext();
+
 #endif
     // _WX_PRIVATE_H_

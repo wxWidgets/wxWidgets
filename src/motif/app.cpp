@@ -763,3 +763,12 @@ wxApp::GetStdIcon(int which) const
             return wxIcon(error_xpm);
     }
 }
+
+// ----------------------------------------------------------------------------
+// accessors for C modules
+// ----------------------------------------------------------------------------
+
+extern "C" XtAppContext wxGetAppContext()
+{
+    return (XtAppContext)wxTheApp->GetAppContext();
+}
