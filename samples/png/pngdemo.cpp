@@ -20,12 +20,7 @@
 #pragma hdrstop
 #endif
 
-#ifdef __WXMSW__
-#include "wx/pnghand.h"
-#endif
-#ifdef __WXGTK__
 #include "wx/image.h"
-#endif
 
 #include "pngdemo.h"
 
