@@ -530,7 +530,7 @@ int wxIFFDecoder::ReadIFF()
             } else if (fmt == ILBM_HAM8) {
                 int c = (col & 0x3f);
                 switch(col & 0xc0) {
-                case 0x00: if (c >= 0 & c < colors) {
+                case 0x00: if (c >= 0 && c < colors) {
                            rval = pal[3*c + 0];
                            gval = pal[3*c + 1];
                            bval = pal[3*c + 2];
