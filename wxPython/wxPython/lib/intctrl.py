@@ -400,11 +400,11 @@ class wxIntCtrl(wxTextCtrl):
     """
 
     def __init__ (
-                self, parent, id=-1,
+                self, parent, id=-1, value = 0,
                 pos = wxDefaultPosition, size = wxDefaultSize,
                 style = 0, validator = wxDefaultValidator,
                 name = "integer",
-                value = 0, min=None, max=None,
+                min=None, max=None,
                 limited = 0, allow_none = 0, allow_long = 0,
                 default_color = wxBLACK, oob_color = wxRED,
         ):
