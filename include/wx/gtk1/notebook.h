@@ -153,7 +153,7 @@ private:
 
   wxImageList*    m_imageList;
   wxList          m_pages;
-  uint            m_idHandler; // the change page handler id
+  size_t            m_idHandler; // the change page handler id
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
 };

@@ -135,10 +135,10 @@ NAMESPACE istream& operator>>(NAMESPACE istream& is, wxString& WXUNUSED(str))
    ~Averager() 
    { printf("wxString: average %s = %f\n", m_sz, ((float)m_nTotal)/m_nCount); }
 
-    void Add(uint n) { m_nTotal += n; m_nCount++; }
+    void Add(size_t n) { m_nTotal += n; m_nCount++; }
 
   private:
-    uint m_nCount, m_nTotal;
+    size_t m_nCount, m_nTotal;
     const char *m_sz;
   } g_averageLength("allocation size"),
     g_averageSummandLength("summand length"),
@@ -255,7 +255,7 @@ void wxString::CopyBeforeWrite()
 
   if ( pData->IsShared() ) {
     pData->Unlock();                // memory not freed because shared
-    uint nLen = pData->nDataLength;
+    size_t nLen = pData->nDataLength;
     AllocBuffer(nLen);
     memcpy(m_pchData, pData->data(), nLen*sizeof(char));
   }
@@ -280,7 +280,7 @@ void wxString::AllocBeforeWrite(size_t nLen)
 }
 
 // allocate enough memory for nLen characters
-void wxString::Alloc(uint nLen)
+void wxString::Alloc(size_t nLen)
 {
   wxStringData *pData = GetStringData();
   if ( pData->nAllocLength <= nLen ) {
@@ -297,7 +297,7 @@ void wxString::Alloc(uint nLen)
     }
     else if ( pData->IsShared() ) {
       pData->Unlock();                // memory not freed because shared
-      uint nOldLen = pData->nDataLength;
+      size_t nOldLen = pData->nDataLength;
       AllocBuffer(nLen);
       memcpy(m_pchData, pData->data(), nOldLen*sizeof(char));
     }
@@ -338,7 +338,7 @@ void wxString::Shrink()
 }
 
 // get the pointer to writable buffer of (at least) nLen bytes
-char *wxString::GetWriteBuf(uint nLen)
+char *wxString::GetWriteBuf(size_t nLen)
 {
   AllocBeforeWrite(nLen);
 
@@ -441,8 +441,8 @@ void wxString::ConcatSelf(int nSrcLen, const char *pszSrcData)
   // so we don't waste our time checking for it
   // if ( nSrcLen > 0 )
   wxStringData *pData = GetStringData();
-  uint nLen = pData->nDataLength;
-  uint nNewLen = nLen + nSrcLen;
+  size_t nLen = pData->nDataLength;
+  size_t nNewLen = nLen + nSrcLen;
 
   // alloc new buffer if current is too small
   if ( pData->IsShared() ) {
@@ -648,11 +648,11 @@ wxString wxString::After(char ch) const
 }
 
 // replace first (or all) occurences of some substring with another one
-uint wxString::Replace(const char *szOld, const char *szNew, bool bReplaceAll)
+size_t wxString::Replace(const char *szOld, const char *szNew, bool bReplaceAll)
 {
-  uint uiCount = 0;   // count of replacements made
+  size_t uiCount = 0;   // count of replacements made
 
-  uint uiOldLen = Strlen(szOld);
+  size_t uiOldLen = Strlen(szOld);
 
   wxString strTemp;
   const char *pCurrent = m_pchData;
@@ -886,7 +886,7 @@ bool wxString::Matches(const char *pszMask) const
             return TRUE;
 
           // are there any other metacharacters in the mask?
-          uint uiLenMask;
+          size_t uiLenMask;
           const char *pEndMask = strpbrk(pszMask, "*?");
 
           if ( pEndMask != NULL ) {
@@ -1099,7 +1099,7 @@ wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 
   // we can't just copy the pointers here because otherwise we would share
   // the strings with another array
-  for ( uint n = 0; n < src.m_nCount; n++ )
+  for ( size_t n = 0; n < src.m_nCount; n++ )
     Add(src[n]);
 
   if ( m_nCount != 0 )
@@ -1197,7 +1197,7 @@ int wxArrayString::Index(const char *sz, bool bCase, bool bFromEnd) const
 {
   if ( bFromEnd ) {
     if ( m_nCount > 0 ) {
-      uint ui = m_nCount;
+      size_t ui = m_nCount;
       do {
         if ( STRING(m_pItems[--ui])->IsSameAs(sz, bCase) )
           return ui;
@@ -1206,7 +1206,7 @@ int wxArrayString::Index(const char *sz, bool bCase, bool bFromEnd) const
     }
   }
   else {
-    for( uint ui = 0; ui < m_nCount; ui++ ) {
+    for( size_t ui = 0; ui < m_nCount; ui++ ) {
       if( STRING(m_pItems[ui])->IsSameAs(sz, bCase) )
         return ui;
     }
@@ -1266,7 +1266,7 @@ void wxArrayString::Remove(const char *sz)
   wxCHECK_RET( iIndex != NOT_FOUND,
                _("removing inexistent element in wxArrayString::Remove") );
 
-  Remove((size_t)iIndex);
+  Remove(iIndex);
 }
 
 // sort array elements using passed comparaison function

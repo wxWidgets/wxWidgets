@@ -1349,16 +1349,16 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
   const char *pSepDos = strrchr(pszFileName, FILE_SEP_PATH_DOS);
 
   // take the last of the two
-  uint nPosUnix = pSepUnix ? pSepUnix - pszFileName : 0;
-  uint nPosDos = pSepDos ? pSepDos - pszFileName : 0;
+  size_t nPosUnix = pSepUnix ? pSepUnix - pszFileName : 0;
+  size_t nPosDos = pSepDos ? pSepDos - pszFileName : 0;
   if ( nPosDos > nPosUnix )
     nPosUnix = nPosDos;
-//  uint nLen = Strlen(pszFileName);
+//  size_t nLen = Strlen(pszFileName);
 
   if ( pstrPath )
     *pstrPath = wxString(pszFileName, nPosUnix);
   if ( pDot ) {
-    uint nPosDot = pDot - pszFileName;
+    size_t nPosDot = pDot - pszFileName;
     if ( pstrName )
       *pstrName = wxString(pszFileName + nPosUnix + 1, nPosDot - nPosUnix);
     if ( pstrExt )

@@ -363,8 +363,8 @@ void wxNotebook::OnSize(wxSizeEvent& event)
   GetSize((int *)&rc.right, (int *)&rc.bottom);
 
   TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
-  uint nCount = m_aPages.Count();
-  for ( uint nPage = 0; nPage < nCount; nPage++ ) {
+  size_t nCount = m_aPages.Count();
+  for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
     wxNotebookPage *pPage = m_aPages[nPage];
     pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
     if ( pPage->GetAutoLayout() )

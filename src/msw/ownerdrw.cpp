@@ -46,18 +46,18 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
 }
 
 #if defined(__WXMSW__) && defined(__WIN32__)
-  uint wxOwnerDrawn::ms_nDefaultMarginWidth = GetSystemMetrics(SM_CXMENUCHECK);
+  size_t wxOwnerDrawn::ms_nDefaultMarginWidth = GetSystemMetrics(SM_CXMENUCHECK);
 #else   // # what is the reasonable default?
-  uint wxOwnerDrawn::ms_nDefaultMarginWidth = 15;
+  size_t wxOwnerDrawn::ms_nDefaultMarginWidth = 15;
 #endif
 
-uint wxOwnerDrawn::ms_nLastMarginWidth = ms_nDefaultMarginWidth;
+size_t wxOwnerDrawn::ms_nLastMarginWidth = ms_nDefaultMarginWidth;
 
 // drawing
 // -------
 
 // get size of the item
-bool wxOwnerDrawn::OnMeasureItem(uint *pwidth, uint *pheight)
+bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 {
   wxMemoryDC dc;
   dc.SetFont(GetFont());

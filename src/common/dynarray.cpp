@@ -101,7 +101,7 @@ void wxBaseArray::Grow()
     else
     {
       // add 50% but not too much
-      uint uiIncrement = m_uiSize < WX_ARRAY_DEFAULT_INITIAL_SIZE 
+      size_t uiIncrement = m_uiSize < WX_ARRAY_DEFAULT_INITIAL_SIZE 
                          ? WX_ARRAY_DEFAULT_INITIAL_SIZE : m_uiSize >> 1;
       if ( uiIncrement > ARRAY_MAXSIZE_INCREMENT )
         uiIncrement = ARRAY_MAXSIZE_INCREMENT;
@@ -132,7 +132,7 @@ void wxBaseArray::Clear()
 }
 
 // pre-allocates memory (frees the previous data!)
-void wxBaseArray::Alloc(uint uiSize)
+void wxBaseArray::Alloc(size_t uiSize)
 {
   wxASSERT( uiSize > 0 );
 
@@ -151,7 +151,7 @@ int wxBaseArray::Index(long lItem, bool bFromEnd) const
 {
   if ( bFromEnd ) {
     if ( m_uiCount > 0 ) {
-      uint ui = m_uiCount;
+      size_t ui = m_uiCount;
       do {
         if ( m_pItems[--ui] == lItem )
           return ui;
@@ -160,7 +160,7 @@ int wxBaseArray::Index(long lItem, bool bFromEnd) const
     }
   }
   else {
-    for( uint ui = 0; ui < m_uiCount; ui++ ) {
+    for( size_t ui = 0; ui < m_uiCount; ui++ ) {
       if( m_pItems[ui] == lItem )
         return ui;
     }
@@ -172,7 +172,7 @@ int wxBaseArray::Index(long lItem, bool bFromEnd) const
 // search for an item in a sorted array (binary search)
 int wxBaseArray::Index(long lItem, CMPFUNC fnCompare) const
 {
-  uint i,
+  size_t i,
        lo = 0,
        hi = m_uiCount;
   int res;
@@ -201,7 +201,7 @@ void wxBaseArray::Add(long lItem)
 // add item assuming the array is sorted with fnCompare function
 void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
 {
-  uint i,
+  size_t i,
        lo = 0,
        hi = m_uiCount;
   int res;
@@ -226,7 +226,7 @@ void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
 }
 
 // add item at the given position
-void wxBaseArray::Insert(long lItem, uint uiIndex)
+void wxBaseArray::Insert(long lItem, size_t uiIndex)
 {
   wxCHECK_RET( uiIndex <= m_uiCount, _("bad index in wxArray::Insert") );
 
@@ -239,7 +239,7 @@ void wxBaseArray::Insert(long lItem, uint uiIndex)
 }
 
 // removes item from array (by index)
-void wxBaseArray::Remove(uint uiIndex)
+void wxBaseArray::Remove(size_t uiIndex)
 {
   wxCHECK_RET( uiIndex <= m_uiCount, _("bad index in wxArray::Remove") );
 
@@ -256,7 +256,7 @@ void wxBaseArray::Remove(long lItem)
   wxCHECK_RET( iIndex != NOT_FOUND,
                _("removing inexistent item in wxArray::Remove") );
 
-  Remove((uint)iIndex);
+  Remove((size_t)iIndex);
 }
 
 // sort array elements using passed comparaison function

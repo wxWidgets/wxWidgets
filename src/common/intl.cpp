@@ -46,8 +46,8 @@
 // ----------------------------------------------------------------------------
 
 // magic number identifying the .mo format file
-const uint32 MSGCATALOG_MAGIC    = 0x950412de;
-const uint32 MSGCATALOG_MAGIC_SW = 0xde120495;
+const size_t32 MSGCATALOG_MAGIC    = 0x950412de;
+const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 
 // extension of ".mo" files
 #define MSGCATALOG_EXTENSION  ".mo"
@@ -104,40 +104,40 @@ private:
   // an entry in the string table
   struct wxMsgTableEntry
   {
-    uint32   nLen;           // length of the string
-    uint32   ofsString;      // pointer to the string
+    size_t32   nLen;           // length of the string
+    size_t32   ofsString;      // pointer to the string
   };
 
   // header of a .mo file
   struct wxMsgCatalogHeader
   {
-    uint32  magic,          // offset +00:  magic id
+    size_t32  magic,          // offset +00:  magic id
             revision,       //        +04:  revision
             numStrings;     //        +08:  number of strings in the file
-    uint32  ofsOrigTable,   //        +0C:  start of original string table
+    size_t32  ofsOrigTable,   //        +0C:  start of original string table
             ofsTransTable;  //        +10:  start of translated string table
-    uint32  nHashSize,      //        +14:  hash table size
+    size_t32  nHashSize,      //        +14:  hash table size
             ofsHashTable;   //        +18:  offset of hash table start
   };                     
   
   // all data is stored here, NULL if no data loaded
-  uint8 *m_pData;
+  size_t8 *m_pData;
   
   // data description
-  uint32            m_numStrings,   // number of strings in this domain
+  size_t32            m_numStrings,   // number of strings in this domain
                     m_nHashSize;    // number of entries in hash table
-  uint32           *m_pHashTable;   // pointer to hash table
+  size_t32           *m_pHashTable;   // pointer to hash table
   wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
                    *m_pTransTable;  //            translated
 
-  const char *StringAtOfs(wxMsgTableEntry *pTable, uint32 index) const
+  const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 index) const
     { return (const char *)(m_pData + Swap(pTable[index].ofsString)); }
 
   // utility functions
     // calculate the hash value of given string
-  static inline uint32 GetHash(const char *sz);
+  static inline size_t32 GetHash(const char *sz);
     // big<->little endian
-  inline uint32 Swap(uint32 ui) const;
+  inline size_t32 Swap(size_t32 ui) const;
 
   // internal state
   bool HasHashTable() const // true if hash table is present
@@ -158,16 +158,16 @@ private:
 
 // calculate hash value using the so called hashpjw function by P.J. Weinberger
 // [see Aho/Sethi/Ullman, COMPILERS: Principles, Techniques and Tools]
-uint32 wxMsgCatalog::GetHash(const char *sz)
+size_t32 wxMsgCatalog::GetHash(const char *sz)
 {
-  #define HASHWORDBITS 32     // the length of uint32
+  #define HASHWORDBITS 32     // the length of size_t32
 
-  uint32 hval = 0;
-  uint32 g;
+  size_t32 hval = 0;
+  size_t32 g;
   while ( *sz != '\0' ) {
     hval <<= 4;
-    hval += (uint32)*sz++;
-    g = hval & ((uint32)0xf << (HASHWORDBITS - 4));
+    hval += (size_t32)*sz++;
+    g = hval & ((size_t32)0xf << (HASHWORDBITS - 4));
     if ( g != 0 ) {
       hval ^= g >> (HASHWORDBITS - 8);
       hval ^= g;
@@ -178,7 +178,7 @@ uint32 wxMsgCatalog::GetHash(const char *sz)
 }
 
 // swap the 2 halves of 32 bit integer if needed
-uint32 wxMsgCatalog::Swap(uint32 ui) const
+size_t32 wxMsgCatalog::Swap(size_t32 ui) const
 {
   return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) | 
                       ((ui >> 8) & 0xff00) | (ui >> 24)
@@ -266,7 +266,7 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
     return FALSE;
 
   // read the whole file in memory
-  m_pData = new uint8[nSize];
+  m_pData = new size_t8[nSize];
   if ( fileMsg.Read(m_pData, nSize) != nSize ) {
     wxDELETEA(m_pData);
     return FALSE;
@@ -302,7 +302,7 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
                    Swap(pHeader->ofsTransTable));
 
   m_nHashSize   = Swap(pHeader->nHashSize);
-  m_pHashTable  = (uint32 *)(m_pData + Swap(pHeader->ofsHashTable));
+  m_pHashTable  = (size_t32 *)(m_pData + Swap(pHeader->ofsHashTable));
 
   m_pszName = new char[strlen(szName) + 1];
   strcpy(m_pszName, szName);
@@ -318,13 +318,13 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
     return NULL;
 
   if ( HasHashTable() ) {   // use hash table for lookup if possible
-    uint32 nHashVal = GetHash(szOrig); 
-    uint32 nIndex   = nHashVal % m_nHashSize;
+    size_t32 nHashVal = GetHash(szOrig); 
+    size_t32 nIndex   = nHashVal % m_nHashSize;
 
-    uint32 nIncr = 1 + (nHashVal % (m_nHashSize - 2));
+    size_t32 nIncr = 1 + (nHashVal % (m_nHashSize - 2));
     
     while ( TRUE ) {
-      uint32 nStr = Swap(m_pHashTable[nIndex]);
+      size_t32 nStr = Swap(m_pHashTable[nIndex]);
       if ( nStr == 0 )
         return NULL;
       
@@ -338,7 +338,7 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
     }
   }
   else {                    // no hash table: use default binary search
-    uint32 bottom = 0,
+    size_t32 bottom = 0,
            top    = m_numStrings,
            current;
     while ( bottom < top ) {

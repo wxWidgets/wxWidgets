@@ -28,8 +28,8 @@
 // ----------------------------------------------------------------------------
 
 // # adjust if necessary
-typedef unsigned char uint8;
-typedef unsigned long uint32;
+typedef unsigned char size_t8;
+typedef unsigned long size_t32;
 
 // ----------------------------------------------------------------------------
 // macros

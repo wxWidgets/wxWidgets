@@ -101,13 +101,13 @@ wxTextFile::Type wxTextFile::GuessType() const
   wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
 
   // scan the file lines
-  uint nUnix = 0,     // number of '\n's alone
+  size_t nUnix = 0,     // number of '\n's alone
        nDos  = 0,     // number of '\r\n'
        nMac  = 0;     // number of '\r's
 
   // we take MAX_LINES_SCAN in the beginning, middle and the end of file
   #define MAX_LINES_SCAN    (10)
-  uint nCount = m_aLines.Count() / 3,
+  size_t nCount = m_aLines.Count() / 3,
        nScan =  nCount > 3*MAX_LINES_SCAN ? MAX_LINES_SCAN : nCount / 3;
 
   #define   AnalyseLine(n)              \
@@ -118,7 +118,7 @@ wxTextFile::Type wxTextFile::GuessType() const
       default: wxFAIL_MSG(_("unknown line terminator")); \
     }
 
-  uint n;
+  size_t n;
   for ( n = 0; n < nScan; n++ )     // the beginning
     AnalyseLine(n);
   for ( n = (nCount - nScan)/2; n < (nCount + nScan)/2; n++ )
@@ -228,8 +228,8 @@ bool wxTextFile::Write(Type typeNew)
     return FALSE;
   }
 
-  uint nCount = m_aLines.Count();
-  for ( uint n = 0; n < nCount; n++ ) {
+  size_t nCount = m_aLines.Count();
+  for ( size_t n = 0; n < nCount; n++ ) {
     fileTmp.Write(m_aLines[n] +
                   GetEOL(typeNew == Type_None ? m_aTypes[n] : typeNew));
   }

@@ -164,8 +164,8 @@ wxString wxExpandEnvVars(const wxString& str)
 #endif
   };
 
-  uint m;
-  for ( uint n = 0; n < str.Len(); n++ ) {
+  size_t m;
+  for ( size_t n = 0; n < str.Len(); n++ ) {
     switch ( str[n] ) {
 #ifdef  __WXMSW__
       case '%':

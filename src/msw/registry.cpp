@@ -86,6 +86,10 @@ aStdKeys[] =
 // the registry name separator (perhaps one day MS will change it to '/' ;-)
 #define   REG_SEPARATOR     '\\'
 
+// useful for Windows programmers: makes somewhat more clear all these zeroes
+// being passed to Windows APIs
+#define   RESERVED        (NULL)
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -122,7 +126,7 @@ const size_t wxRegKey::nStdKeys = WXSIZEOF(aStdKeys);
 
 // @@ should take a `StdKey key', but as it's often going to be used in loops
 //    it would require casts in user code.  
-const char *wxRegKey::GetStdKeyName(uint key)
+const char *wxRegKey::GetStdKeyName(size_t key)
 {
   // return empty string if key is invalid
   wxCHECK_MSG( key < nStdKeys, "", "invalid key in wxRegKey::GetStdKeyName" );
@@ -130,7 +134,7 @@ const char *wxRegKey::GetStdKeyName(uint key)
   return aStdKeys[key].szName;
 }
 
-const char *wxRegKey::GetStdKeyShortName(uint key)
+const char *wxRegKey::GetStdKeyShortName(size_t key)
 {
   // return empty string if key is invalid
   wxCHECK( key < nStdKeys, "" );
@@ -143,7 +147,7 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
   wxString strRoot = strKey.Left(REG_SEPARATOR);
 
   HKEY hRootKey;
-  uint ui;
+  size_t ui;
   for ( ui = 0; ui < nStdKeys; ui++ ) {
     if ( strRoot.CmpNoCase(aStdKeys[ui].szName) == 0 || 
          strRoot.CmpNoCase(aStdKeys[ui].szShortName) == 0 ) {
@@ -168,7 +172,7 @@ wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
 
 wxRegKey::StdKey wxRegKey::GetStdKeyFromHkey(HKEY hkey)
 {
-  for ( uint ui = 0; ui < nStdKeys; ui++ ) {
+  for ( size_t ui = 0; ui < nStdKeys; ui++ ) {
     if ( aStdKeys[ui].hkey == hkey )
       return (StdKey)ui;
   }
@@ -298,10 +302,10 @@ wxString wxRegKey::GetName(bool bShortPrefix) const
 }
 
 #ifdef __GNUWIN32__
-bool wxRegKey::GetKeyInfo(uint* pnSubKeys,
-                          uint* pnMaxKeyLen,
-                          uint* pnValues,
-                          uint* pnMaxValueLen) const
+bool wxRegKey::GetKeyInfo(size_t* pnSubKeys,
+                          size_t* pnMaxKeyLen,
+                          size_t* pnValues,
+                          size_t* pnMaxValueLen) const
 #else
 bool wxRegKey::GetKeyInfo(ulong *pnSubKeys,
                           ulong *pnMaxKeyLen,
@@ -427,8 +431,8 @@ bool wxRegKey::DeleteSelf()
     bCont = GetNextKey(strKey, lIndex);
   }
 
-  uint nKeyCount = astrSubkeys.Count();
-  for ( uint nKey = 0; nKey < nKeyCount; nKey++ ) {
+  size_t nKeyCount = astrSubkeys.Count();
+  for ( size_t nKey = 0; nKey < nKeyCount; nKey++ ) {
     wxRegKey key(*this, astrSubkeys[nKey]);
     if ( !key.DeleteSelf() )
       return FALSE;

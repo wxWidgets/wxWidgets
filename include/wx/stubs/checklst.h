@@ -19,7 +19,7 @@
 
 #include "wx/listbox.h"
 
-typedef   unsigned int  uint;
+typedef   unsigned int  size_t;
 
 class wxCheckListBox : public wxListBox
 {
@@ -37,8 +37,8 @@ public:
                  const wxString& name = wxListBoxNameStr);
 
   // items may be checked
-  bool  IsChecked(uint uiIndex) const;
-  void  Check(uint uiIndex, bool bCheck = TRUE);
+  bool  IsChecked(size_t uiIndex) const;
+  void  Check(size_t uiIndex, bool bCheck = TRUE);
 
   DECLARE_EVENT_TABLE()
 };

@@ -252,11 +252,11 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
     return wxInvalidOffset;
   }
   else
-    return (uint)iRc;
+    return (size_t)iRc;
 }
 
 // write
-uint wxFile::Write(const void *pBuf, uint nCount)
+size_t wxFile::Write(const void *pBuf, size_t nCount)
 {
   wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 

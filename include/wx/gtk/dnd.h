@@ -80,7 +80,7 @@ public:
     // StdFormat enumerations or a user-defined format)
   virtual bool IsSupportedFormat(wxDataFormat format) const = 0;
     // get the (total) size of data
-  virtual uint GetDataSize() const = 0;
+  virtual size_t GetDataSize() const = 0;
     // copy raw data to provided pointer
   virtual void GetDataHere(void *pBuf) const = 0;
 
@@ -103,7 +103,7 @@ public:
     { return wxDF_TEXT; }
   virtual bool IsSupportedFormat(wxDataFormat format) const
     { return format == wxDF_TEXT; }
-  virtual uint GetDataSize() const
+  virtual size_t GetDataSize() const
     { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
   virtual void GetDataHere(void *pBuf) const
     { memcpy(pBuf, m_strText.c_str(), GetDataSize()); }
@@ -130,7 +130,7 @@ public:
     { return wxDF_FILENAME; }
   virtual bool IsSupportedFormat(wxDataFormat format) const
     { return format == wxDF_FILENAME; }
-  virtual uint GetDataSize() const
+  virtual size_t GetDataSize() const
     { return m_files.Len() + 1; } // +1 for trailing '\0'of course
   virtual void GetDataHere(void *pBuf) const
     { memcpy(pBuf, m_files.c_str(), GetDataSize()); }

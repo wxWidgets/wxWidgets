@@ -63,10 +63,10 @@ public:
     // get the number of lines in the file
   size_t    GetLineCount() const { return m_aLines.Count(); }
     // the returned line may be modified (but don't add CR/LF at the end!)
-  wxString& GetLine(uint n)    const { return m_aLines[n]; }
-  wxString& operator[](uint n) const { return m_aLines[n]; }
+  wxString& GetLine(size_t n)    const { return m_aLines[n]; }
+  wxString& operator[](size_t n) const { return m_aLines[n]; }
     // get the type of the line (see also GetEOL)
-  Type GetLineType(uint n) const { return m_aTypes[n]; }
+  Type GetLineType(size_t n) const { return m_aTypes[n]; }
     // guess the type of file (m_file is supposed to be opened)
   Type GuessType() const;
     // get the name of the file
@@ -77,10 +77,10 @@ public:
   void AddLine(const wxString& str, Type type = typeDefault) 
     { m_aLines.Add(str); m_aTypes.Add(type); }
     // insert a line before the line number n
-  void InsertLine(const wxString& str, uint n, Type type = typeDefault) 
+  void InsertLine(const wxString& str, size_t n, Type type = typeDefault) 
     { m_aLines.Insert(str, n); m_aTypes.Insert(type, n); }
     // delete one line
-  void RemoveLine(uint n) { m_aLines.Remove(n); m_aTypes.Remove(n); }
+  void RemoveLine(size_t n) { m_aLines.Remove(n); m_aTypes.Remove(n); }
 
   // change the file on disk (default argument means "don't change type")
   // possibly in another format

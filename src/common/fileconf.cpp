@@ -267,8 +267,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
   const char *pEnd;
   wxString strLine;
 
-  uint nLineCount = file.GetLineCount();
-  for ( uint n = 0; n < nLineCount; n++ ) {
+  size_t nLineCount = file.GetLineCount();
+  for ( size_t n = 0; n < nLineCount; n++ ) {
     strLine = file[n];
 
     // add the line to linked list
@@ -419,7 +419,7 @@ void wxFileConfig::SetPath(const wxString& strPath)
   }
 
   // change current group
-  uint n;
+  size_t n;
   m_pCurrentGroup = m_pRootGroup;
   for ( n = 0; n < aParts.Count(); n++ ) {
     ConfigGroup *pNextGroup = m_pCurrentGroup->FindSubgroup(aParts[n]);
@@ -447,7 +447,7 @@ bool wxFileConfig::GetFirstGroup(wxString& str, long& lIndex) const
 
 bool wxFileConfig::GetNextGroup (wxString& str, long& lIndex) const
 {
-  if ( uint(lIndex) < m_pCurrentGroup->Groups().Count() ) {
+  if ( size_t(lIndex) < m_pCurrentGroup->Groups().Count() ) {
     str = m_pCurrentGroup->Groups()[lIndex++]->Name();
     return TRUE;
   }
@@ -463,7 +463,7 @@ bool wxFileConfig::GetFirstEntry(wxString& str, long& lIndex) const
 
 bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex) const
 {
-  if ( uint(lIndex) < m_pCurrentGroup->Entries().Count() ) {
+  if ( size_t(lIndex) < m_pCurrentGroup->Entries().Count() ) {
     str = m_pCurrentGroup->Entries()[lIndex++]->Name();
     return TRUE;
   }
@@ -471,13 +471,13 @@ bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex) const
     return FALSE;
 }
 
-uint wxFileConfig::GetNumberOfEntries(bool bRecursive) const
+size_t wxFileConfig::GetNumberOfEntries(bool bRecursive) const
 {
-  uint n = m_pCurrentGroup->Entries().Count();
+  size_t n = m_pCurrentGroup->Entries().Count();
   if ( bRecursive ) {
     ConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
-    uint nSubgroups = m_pCurrentGroup->Groups().Count();
-    for ( uint nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
+    size_t nSubgroups = m_pCurrentGroup->Groups().Count();
+    for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
       CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
       n += GetNumberOfEntries(TRUE);
       CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
@@ -487,13 +487,13 @@ uint wxFileConfig::GetNumberOfEntries(bool bRecursive) const
   return n;
 }
 
-uint wxFileConfig::GetNumberOfGroups(bool bRecursive) const
+size_t wxFileConfig::GetNumberOfGroups(bool bRecursive) const
 {
-  uint n = m_pCurrentGroup->Groups().Count();
+  size_t n = m_pCurrentGroup->Groups().Count();
   if ( bRecursive ) {
     ConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
-    uint nSubgroups = m_pCurrentGroup->Groups().Count();
-    for ( uint nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
+    size_t nSubgroups = m_pCurrentGroup->Groups().Count();
+    for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
       CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
       n += GetNumberOfGroups(TRUE);
       CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
@@ -790,7 +790,7 @@ wxFileConfig::ConfigGroup::ConfigGroup(wxFileConfig::ConfigGroup *pParent,
 wxFileConfig::ConfigGroup::~ConfigGroup()
 {
   // entries
-  uint n, nCount = m_aEntries.Count();
+  size_t n, nCount = m_aEntries.Count();
   for ( n = 0; n < nCount; n++ )
     delete m_aEntries[n];
 
@@ -921,7 +921,7 @@ wxString wxFileConfig::ConfigGroup::GetFullName() const
 wxFileConfig::ConfigEntry *
 wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
 {
-  uint i,
+  size_t i,
        lo = 0,
        hi = m_aEntries.Count();
   int res;
@@ -951,7 +951,7 @@ wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
 wxFileConfig::ConfigGroup *
 wxFileConfig::ConfigGroup::FindSubgroup(const char *szName) const
 {
-  uint i,
+  size_t i,
        lo = 0,
        hi = m_aSubgroups.Count();
   int res;
@@ -1030,8 +1030,8 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
   wxCHECK( pGroup != NULL, FALSE ); // deleting non existing group?
 
   // delete all entries
-  uint nCount = pGroup->m_aEntries.Count();
-  for ( uint nEntry = 0; nEntry < nCount; nEntry++ ) {
+  size_t nCount = pGroup->m_aEntries.Count();
+  for ( size_t nEntry = 0; nEntry < nCount; nEntry++ ) {
     LineList *pLine = pGroup->m_aEntries[nEntry]->GetLine();
     if ( pLine != NULL )
       m_pConfig->LineListRemove(pLine);
@@ -1039,7 +1039,7 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
 
   // and subgroups of this sungroup
   nCount = pGroup->m_aSubgroups.Count();
-  for ( uint nGroup = 0; nGroup < nCount; nGroup++ ) {
+  for ( size_t nGroup = 0; nGroup < nCount; nGroup++ ) {
     pGroup->DeleteSubgroup(pGroup->m_aSubgroups[nGroup]);
   }
 
@@ -1053,7 +1053,7 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
 
       // go back until we find a subgroup or reach the group's line
       ConfigGroup *pNewLast = NULL;
-      uint n, nSubgroups = m_aSubgroups.Count();
+      size_t n, nSubgroups = m_aSubgroups.Count();
       LineList *pl;
       for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
         // is it our subgroup?
@@ -1104,7 +1104,7 @@ bool wxFileConfig::ConfigGroup::DeleteEntry(const char *szName)
 
       // go back until we find another entry or reach the group's line
       ConfigEntry *pNewLast = NULL;
-      uint n, nEntries = m_aEntries.Count();
+      size_t n, nEntries = m_aEntries.Count();
       LineList *pl;
       for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
         // is it our subgroup?
@@ -1273,7 +1273,7 @@ wxString FilterIn(const wxString& str)
 
   bool bQuoted = !str.IsEmpty() && str[0] == '"';
 
-  for ( uint n = bQuoted ? 1 : 0; n < str.Len(); n++ ) {
+  for ( size_t n = bQuoted ? 1 : 0; n < str.Len(); n++ ) {
     if ( str[n] == '\\' ) {
       switch ( str[++n] ) {
         case 'n':
@@ -1327,7 +1327,7 @@ wxString FilterOut(const wxString& str)
     strResult += '"';
 
   char c;
-  for ( uint n = 0; n < str.Len(); n++ ) {
+  for ( size_t n = 0; n < str.Len(); n++ ) {
     switch ( str[n] ) {
       case '\n':
         c = 'n';

@@ -428,13 +428,13 @@ void wxLogGui::Flush()
 
   // concatenate all strings (but not too many to not overfill the msg box)
   wxString str;
-  uint nLines    = 0,
+  size_t nLines    = 0,
        nMsgCount = m_aMessages.Count();
 
   // start from the most recent message
-  for ( uint n = nMsgCount; n > 0; n-- ) {
+  for ( size_t n = nMsgCount; n > 0; n-- ) {
     // for Windows strings longer than this value are wrapped (NT 4.0)
-    const uint nMsgLineWidth = 156;
+    const size_t nMsgLineWidth = 156;
 
     nLines += (m_aMessages[n - 1].Len() + nMsgLineWidth - 1) / nMsgLineWidth;
 

@@ -17,7 +17,7 @@
 #endif
 
 typedef   wxColour      wxColor;
-typedef   unsigned int  uint;
+typedef   unsigned int  size_t;
 
 // ----------------------------------------------------------------------------
 // wxOwnerDrawn - a mix-in base class, derive from it to implement owner-drawn
@@ -69,8 +69,8 @@ public:
   //
   // NB: default is too small for bitmaps, but ok for checkmarks.
   inline void SetMarginWidth(int nWidth)
-  { ms_nLastMarginWidth = m_nMarginWidth = (uint) nWidth;
-    if ( ((uint) nWidth) != ms_nDefaultMarginWidth ) m_bOwnerDrawn = TRUE; }
+  { ms_nLastMarginWidth = m_nMarginWidth = (size_t) nWidth;
+    if ( ((size_t) nWidth) != ms_nDefaultMarginWidth ) m_bOwnerDrawn = TRUE; }
 
   inline int GetMarginWidth() const { return (int) m_nMarginWidth; }
   inline static int GetDefaultMarginWidth() { return (int) ms_nDefaultMarginWidth; }
@@ -109,15 +109,15 @@ public:
   };
 
   // virtual functions to implement drawing (return TRUE if processed)
-  virtual bool OnMeasureItem(uint *pwidth, uint *pheight);
+  virtual bool OnMeasureItem(size_t *pwidth, size_t *pheight);
   virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
 
 protected:
   wxString  m_strName;      // label for a manu item
 
 private:
-  static uint ms_nDefaultMarginWidth; // menu check mark width
-  static uint ms_nLastMarginWidth;    // handy for aligning all items
+  static size_t ms_nDefaultMarginWidth; // menu check mark width
+  static size_t ms_nLastMarginWidth;    // handy for aligning all items
 
   bool      m_bCheckable,   // used only for menu or check listbox items
             m_bOwnerDrawn;  // true if something is non standard
@@ -128,7 +128,7 @@ private:
   wxBitmap  m_bmpChecked,   // bitmap to put near the item
             m_bmpUnchecked; // (checked is used also for 'uncheckable' items)
 
-  uint      m_nHeight,      // font height
+  size_t      m_nHeight,      // font height
             m_nMarginWidth; // space occupied by bitmap to the left of the item
 };
 

@@ -100,7 +100,7 @@ static PAINTSTRUCT g_paintStruct;
 // for example, if calling a base class OnPaint.
 
 WXHDC wxPaintDC::ms_PaintHDC = 0;
-uint  wxPaintDC::ms_PaintCount = 0; // count of ms_PaintHDC usage
+size_t  wxPaintDC::ms_PaintCount = 0; // count of ms_PaintHDC usage
 
 wxPaintDC::wxPaintDC(wxWindow *canvas)
 {

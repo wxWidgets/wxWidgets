@@ -166,7 +166,7 @@ wxClassLibrary::wxClassLibrary(void)
 
 wxClassLibrary::~wxClassLibrary(void)
 {
-  uint i;
+  size_t i;
 
   for (i=0;i<m_list.Count();i++)
     delete (m_list[i]);
@@ -184,7 +184,7 @@ void wxClassLibrary::RegisterClass(wxClassInfo *class_info,
 
 void wxClassLibrary::UnregisterClass(wxClassInfo *class_info)
 {
-  uint i = 0;
+  size_t i = 0;
 
   while (i < m_list.Count()) {
     if (m_list[i]->class_info == class_info) {
@@ -200,7 +200,7 @@ bool wxClassLibrary::CreateObjects(const wxString& path,
                                    wxArrayClassInfo& objs)
 {
   wxClassLibInfo *info;
-  uint i = 0;
+  size_t i = 0;
 
   while (i < m_list.Count()) {
     info = m_list[i];
@@ -215,7 +215,7 @@ bool wxClassLibrary::FetchInfos(const wxString& path,
                                 wxArrayClassLibInfo& infos)
 {
   wxClassLibInfo *info;
-  uint i = 0;
+  size_t i = 0;
 
   while (i < m_list.Count()) {
     info = m_list[i];
@@ -232,7 +232,7 @@ bool wxClassLibrary::FetchInfos(const wxString& path,
 wxObject *wxClassLibrary::CreateObject(const wxString& path)
 {
   wxClassLibInfo *info;
-  uint i = 0;
+  size_t i = 0;
 
   while (i < m_list.Count()) {
     info = m_list[i];

@@ -111,7 +111,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
   // recombine path parts in one variable
   wxString strRegPath;
   m_strPath.Empty();
-  for ( uint n = 0; n < aParts.Count(); n++ ) {
+  for ( size_t n = 0; n < aParts.Count(); n++ ) {
     strRegPath << '\\' << aParts[n];
     m_strPath << wxCONFIG_PATH_SEPARATOR << aParts[n];
   }
@@ -198,9 +198,9 @@ bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
   return bOk;
 }
 
-uint wxRegConfig::GetNumberOfEntries(bool bRecursive) const
+size_t wxRegConfig::GetNumberOfEntries(bool bRecursive) const
 {
-  uint nEntries = 0;
+  size_t nEntries = 0;
 
   // dummy vars
   wxString str;
@@ -215,9 +215,9 @@ uint wxRegConfig::GetNumberOfEntries(bool bRecursive) const
   return nEntries;
 }
 
-uint wxRegConfig::GetNumberOfGroups(bool bRecursive) const
+size_t wxRegConfig::GetNumberOfGroups(bool bRecursive) const
 {
-  uint nGroups = 0;
+  size_t nGroups = 0;
 
   // dummy vars
   wxString str;

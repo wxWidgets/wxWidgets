@@ -159,7 +159,7 @@ const char *GetIidName(REFIID riid)
   #undef ADD_KNOWN_IID
 
   // try to find the interface in the table
-  for ( uint ui = 0; ui < WXSIZEOF(aKnownIids); ui++ ) {
+  for ( size_t ui = 0; ui < WXSIZEOF(aKnownIids); ui++ ) {
     if ( riid == *aKnownIids[ui].pIid ) {
       return aKnownIids[ui].szName;
     }

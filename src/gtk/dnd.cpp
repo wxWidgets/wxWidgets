@@ -57,7 +57,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
   wxString formats;
   int valid = 0;
   
-  for ( uint i = 0; i < GetFormatCount(); i++ )
+  for ( size_t i = 0; i < GetFormatCount(); i++ )
   {
     wxDataFormat df = GetFormat( i );
     switch (df) 
@@ -150,7 +150,7 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source
   
   wxDataObject *data = source->m_data;
   
-  uint size = data->GetDataSize();
+  size_t size = data->GetDataSize();
   char *ptr = new char[size];
   data->GetDataHere( ptr );
   

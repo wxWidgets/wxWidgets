@@ -169,22 +169,9 @@ typedef int wxWindowID;
 class WXDLLEXPORT wxObject;
 class WXDLLEXPORT wxEvent;
 
-// Vadim's types - check whether we need them all
-
-/// the type for various indexes (string, arrays, ...)
-typedef unsigned int    uint;
-
-/// extended boolean type: { yes, no, may be }
-typedef signed   int    EBool;
-
-/// with TRUE and FALSE is a possible value for a "3-state" boolean var
-#define UNKNOWN         (-1)
-  /** symbolic constant used by all Find()-like functions returning positive
+ /** symbolic constant used by all Find()-like functions returning positive
       integer on success as failure indicator */
 #define NOT_FOUND       (-1)
-  /** useful for Windows programmers: makes somewhat more clear all these 
-      zeroes being passed to Windows APIs */
-#define RESERVED        (NULL)
 
 // ----------------------------------------------------------------------------
 // Error codes
@@ -243,14 +230,6 @@ enum  ErrCode
   #endif  // compiler
 
 #endif  // OS
-
-#if     defined(__UNIX__)
-  #define FILE_PATH_SEPARATOR   ('/')
-#elif   defined(__WXMSW__)
-  #define FILE_PATH_SEPARATOR   ('\\')
-#else
-  #define FILE_PATH_SEPARATOR   ('/')
-#endif
 
 // ----------------------------------------------------------------------------
 // compiler specific settings

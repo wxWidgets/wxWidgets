@@ -95,7 +95,7 @@ public:
     // returns number of bytes read or ofsInvalid on error
   off_t Read(void *pBuf, off_t nCount);
     // returns true on success
-  uint Write(const void *pBuf, uint nCount);
+  size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
   bool Write(const wxString& s) { return Write(s.c_str(), s.Len()) != 0; }
     // flush data not yet written
@@ -156,7 +156,7 @@ public:
   bool IsOpened() const { return m_file.IsOpened(); }
 
   // I/O (both functions return true on success, false on failure)
-  bool Write(const void *p, uint n) { return m_file.Write(p, n) != 0; }
+  bool Write(const void *p, size_t n) { return m_file.Write(p, n) != 0; }
   bool Write(const wxString& str)   { return m_file.Write(str); }
 
   // different ways to close the file

@@ -97,7 +97,7 @@ void wxIniConfig::SetPath(const wxString& strPath)
     wxSplitPath(aParts, strFullPath);
   }
 
-  uint nPartsCount = aParts.Count();
+  size_t nPartsCount = aParts.Count();
   m_strPath.Empty();
   if ( nPartsCount == 0 ) {
     // go to the root
@@ -106,7 +106,7 @@ void wxIniConfig::SetPath(const wxString& strPath)
   else {
     // translate
     m_strGroup = aParts[0u];
-    for ( uint nPart = 1; nPart < nPartsCount; nPart++ ) {
+    for ( size_t nPart = 1; nPart < nPartsCount; nPart++ ) {
       if ( nPart > 1 )
         m_strPath << PATH_SEP_REPLACE;
       m_strPath << aParts[nPart];
@@ -206,18 +206,18 @@ bool wxIniConfig::GetNextEntry (wxString& str, long& lIndex) const
 // ----------------------------------------------------------------------------
 
 // not implemented
-uint wxIniConfig::GetNumberOfEntries(bool bRecursive) const
+size_t wxIniConfig::GetNumberOfEntries(bool bRecursive) const
 {
   wxFAIL_MSG("not implemented");
 
-  return (uint)-1;
+  return (size_t)-1;
 }
 
-uint wxIniConfig::GetNumberOfGroups(bool bRecursive) const
+size_t wxIniConfig::GetNumberOfGroups(bool bRecursive) const
 {
   wxFAIL_MSG("not implemented");
 
-  return (uint)-1;
+  return (size_t)-1;
 }
 
 bool wxIniConfig::HasGroup(const wxString& strName) const
@@ -408,7 +408,7 @@ bool wxIniConfig::DeleteAll()
 
   // then delete our own ini file
   char szBuf[MAX_PATH];
-  uint nRc = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
+  size_t nRc = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
   if ( nRc == 0 )
     wxLogLastError("GetWindowsDirectory");
   else if ( nRc > WXSIZEOF(szBuf) )

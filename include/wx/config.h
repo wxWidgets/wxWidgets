@@ -123,8 +123,8 @@ public:
   virtual bool GetNextEntry (wxString& str, long& lIndex) const = 0;
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups
-  virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const = 0;
-  virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const = 0;
+  virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const = 0;
+  virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const = 0;
 
   // tests of existence
     // returns TRUE if the group by this name exists

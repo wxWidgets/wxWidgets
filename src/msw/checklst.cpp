@@ -47,7 +47,7 @@ class wxCheckListBoxItem : public wxOwnerDrawn
 {
 public:
   // ctor
-  wxCheckListBoxItem(wxCheckListBox *pParent, uint nIndex);
+  wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
 
   // drawing functions
   virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
@@ -60,10 +60,10 @@ public:
 private:
   bool            m_bChecked;
   wxCheckListBox *m_pParent;
-  uint            m_nIndex;
+  size_t            m_nIndex;
 };
 
-wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, uint nIndex)
+wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
                   : wxOwnerDrawn("", TRUE)   // checkable
 {
   m_bChecked = FALSE;
@@ -95,7 +95,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
   if ( wxOwnerDrawn::OnDrawItem(dc, rc, act, stat) ) {
     // ## using native API for performance and precision
-    uint nCheckWidth  = GetDefaultMarginWidth(),
+    size_t nCheckWidth  = GetDefaultMarginWidth(),
          nCheckHeight = m_pParent->GetItemHeight();
           
     int x = rc.GetX(), 
@@ -188,8 +188,8 @@ void wxCheckListBoxItem::Toggle()
 { 
   m_bChecked = !m_bChecked;
 
-  uint nHeight = m_pParent->GetItemHeight();
-  uint y = m_nIndex * nHeight;
+  size_t nHeight = m_pParent->GetItemHeight();
+  size_t y = m_nIndex * nHeight;
   RECT rcUpdate = { 0, y, GetDefaultMarginWidth(), y + nHeight};
   InvalidateRect((HWND)m_pParent->GetHWND(), &rcUpdate, FALSE);
 
@@ -236,7 +236,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 // --------------------
 
 // create a check list box item
-wxOwnerDrawn *wxCheckListBox::CreateItem(uint nIndex)
+wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
 {
   wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
   if ( m_windowFont.Ok() )
@@ -270,12 +270,12 @@ bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 // check items
 // -----------
 
-bool wxCheckListBox::IsChecked(uint uiIndex) const
+bool wxCheckListBox::IsChecked(size_t uiIndex) const
 {
   return GetItem(uiIndex)->IsChecked();
 }
 
-void wxCheckListBox::Check(uint uiIndex, bool bCheck)
+void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
 {
   GetItem(uiIndex)->Check(bCheck);
 }
@@ -296,8 +296,8 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
   // clicking on the item selects it, clicking on the checkmark toggles
   if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
     // # better use LB_ITEMFROMPOINT perhaps?
-    uint nItem = ((uint)event.GetY()) / m_nItemHeight;
-    if ( nItem < (uint)m_noItems )
+    size_t nItem = ((size_t)event.GetY()) / m_nItemHeight;
+    if ( nItem < (size_t)m_noItems )
       GetItem(nItem)->Toggle();
     //else: it's not an error, just click outside of client zone
   }

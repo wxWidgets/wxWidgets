@@ -183,8 +183,8 @@ private:
     return m_childlist.Number();
   }
 
-  guint expand_handler;
-  guint collapse_handler;
+  guit expand_handler;
+  guit collapse_handler;
 
   DECLARE_DYNAMIC_CLASS(wxTreeItem)
 };

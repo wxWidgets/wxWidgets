@@ -125,7 +125,7 @@ inline const wxString& wxGetEmptyString() { return *(wxString *)&g_szNul; }
 struct WXDLLEXPORT wxStringData
 {
   int     nRefs;        // reference count
-  uint    nDataLength,  // actual string length
+  size_t    nDataLength,  // actual string length
           nAllocLength; // allocated memory size
 
   // mimics declaration 'char data[nAllocLength]'
@@ -254,7 +254,7 @@ public:
   /** @name generic attributes & operations */
   //@{
     /// as standard strlen()
-  uint Len() const { return GetStringData()->nDataLength; }
+  size_t Len() const { return GetStringData()->nDataLength; }
     /// string contains any characters?
   bool IsEmpty() const { return Len() == 0; }
     /// reinitialize string (and free data!)
@@ -452,7 +452,7 @@ public:
       @param  bReplaceAll: global replace (default) or only the first occurence
       @return the number of replacements made
       */
-  uint Replace(const char *szOld, const char *szNew, bool bReplaceAll = TRUE);
+  size_t Replace(const char *szOld, const char *szNew, bool bReplaceAll = TRUE);
     //@}
 
     /// check if the string contents matches a mask containing '*' and '?'
@@ -471,7 +471,7 @@ public:
   //@{
     /// ensure that string has space for at least nLen characters
     // only works if the data of this string is not shared
-  void Alloc(uint nLen);
+  void Alloc(size_t nLen);
     /// minimize the string's memory
     // only works if the data of this string is not shared
   void Shrink();
@@ -480,7 +480,7 @@ public:
         Unget() *must* be called a.s.a.p. to put string back in a reasonable
         state!
      */
-  char *GetWriteBuf(uint nLen);
+  char *GetWriteBuf(size_t nLen);
     /// call this immediately after GetWriteBuf() has been used
   void UngetWriteBuf();
   //@}
@@ -818,7 +818,7 @@ public:
   /** @name simple accessors */
   //@{
     /// number of elements in the array
-  uint  Count() const   { return m_nCount;      }
+  size_t  Count() const   { return m_nCount;      }
     /// is it empty?
   bool  IsEmpty() const { return m_nCount == 0; }
   //@}
@@ -847,7 +847,7 @@ public:
     /// add new element at the end
   void Add   (const wxString& str);
     /// add new element at given position
-  void Insert(const wxString& str, uint uiIndex);
+  void Insert(const wxString& str, size_t uiIndex);
     /// remove first item matching this value
   void Remove(const char *sz);
     /// remove item by index
@@ -861,7 +861,7 @@ private:
   void    Grow();     // makes array bigger if needed
   void    Free();     // free the string stored
 
-  size_t  m_nSize,    // current size of the array
+  size_t    m_nSize,    // current size of the array
           m_nCount;   // current number of elements
 
   char  **m_pItems;   // pointer to data

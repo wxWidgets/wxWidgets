@@ -67,7 +67,7 @@ wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
   SetMarginWidth(0);
 }
 
-wxOwnerDrawn *wxListBox::CreateItem(uint n)
+wxOwnerDrawn *wxListBox::CreateItem(size_t n)
 {
   return new wxListBoxItem();
 }
@@ -224,14 +224,14 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
   // Subclass again to catch messages
   SubclassWin((WXHWND)wx_list);
 
-  uint ui;
-  for (ui = 0; ui < (uint)n; ui++) {
+  size_t ui;
+  for (ui = 0; ui < (size_t)n; ui++) {
     SendMessage(wx_list, LB_ADDSTRING, 0, (LPARAM)(const char *)choices[ui]);
   }
 
 #if USE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
-      for (ui = 0; ui < (uint)n; ui++) {
+      for (ui = 0; ui < (size_t)n; ui++) {
         // create new item which will process WM_{DRAW|MEASURE}ITEM messages
         wxOwnerDrawn *pNewItem = CreateItem(ui);
         pNewItem->SetName(choices[ui]);
@@ -256,7 +256,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 wxListBox::~wxListBox(void)
 {
 #if USE_OWNER_DRAWN
-    uint uiCount = m_aItems.Count();
+    size_t uiCount = m_aItems.Count();
     while ( uiCount-- != 0 ) {
       delete m_aItems[uiCount];
     }
@@ -340,14 +340,14 @@ void wxListBox::Set(int n, const wxString *choices, char** clientData)
 #if USE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       // first delete old items
-      uint ui = m_aItems.Count();
+      size_t ui = m_aItems.Count();
       while ( ui-- != 0 ) {
         delete m_aItems[ui];
       }
       m_aItems.Empty();
 
       // then create new ones
-      for (ui = 0; ui < (uint)n; ui++) {
+      for (ui = 0; ui < (size_t)n; ui++) {
         wxOwnerDrawn *pNewItem = CreateItem(ui);
         pNewItem->SetName(choices[ui]);
         m_aItems.Add(pNewItem);
@@ -595,9 +595,9 @@ wxListBox::InsertItems(int nItems, const wxString items[], int pos)
   #if USE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       for ( i = 0; i < nItems; i++ ) {
-        wxOwnerDrawn *pNewItem = CreateItem((uint)(pos + i));
+        wxOwnerDrawn *pNewItem = CreateItem((size_t)(pos + i));
         pNewItem->SetName(items[i]);
-        m_aItems.Insert(pNewItem, (uint)(pos + i));
+        m_aItems.Insert(pNewItem, (size_t)(pos + i));
         ListBox_SetItemData(hwnd, i, pNewItem);
       }
     }

@@ -135,8 +135,8 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex) const;
   virtual bool GetNextEntry (wxString& str, long& lIndex) const;
 
-  virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const;
-  virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const;
+  virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const;
+  virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
 
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
