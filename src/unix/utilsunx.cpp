@@ -605,7 +605,7 @@ long wxExecute(wxChar **argv,
             }
         }
 
-#ifndef __VMS
+#if !defined(__VMS) && !defined(__EMX__)
         if ( flags & wxEXEC_MAKE_GROUP_LEADER )
         {
             // Set process group to child process' pid.  Then killing -pid
