@@ -344,6 +344,9 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def HistoryClear(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_HistoryClear,(self,) + _args, _kwargs)
         return val
+    def GetInternalRepresentation(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_GetInternalRepresentation,(self,) + _args, _kwargs)
+        return val
     def base_OnLinkClicked(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_base_OnLinkClicked,(self,) + _args, _kwargs)
         return val

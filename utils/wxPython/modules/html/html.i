@@ -457,7 +457,7 @@ public:
     void HistoryClear();
                 // Resets history
 
-    // wxHtmlContainerCell* GetInternalRepresentation() const;
+    wxHtmlContainerCell* GetInternalRepresentation();
                 // Returns pointer to conteiners/cells structure.
                 // It should be used ONLY when printing
 
