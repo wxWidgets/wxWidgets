@@ -37,16 +37,17 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-#define TEST_DATETIME
+//#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
 //#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_HASH
+//#define TEST_LIST
 //#define TEST_LOG
 //#define TEST_LONGLONG
-//#define TEST_MIME
+#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
 //#define TEST_STRINGS
@@ -54,6 +55,32 @@
 //#define TEST_TIMER
 //#define TEST_VCARD
 //#define TEST_WCHAR
+
+// ----------------------------------------------------------------------------
+// test class for container objects
+// ----------------------------------------------------------------------------
+
+#if defined(TEST_ARRAYS) || defined(TEST_LIST)
+
+class Bar // Foo is already taken in the hash test
+{
+public:
+    Bar(const wxString& name) : m_name(name) { ms_bars++; }
+   ~Bar() { ms_bars--; }
+
+   static size_t GetNumber() { return ms_bars; }
+
+   const char *GetName() const { return m_name; }
+
+private:
+   wxString m_name;
+
+   static size_t ms_bars;
+};
+
+size_t Bar::ms_bars = 0;
+
+#endif // defined(TEST_ARRAYS) || defined(TEST_LIST)
 
 // ============================================================================
 // implementation
@@ -534,6 +561,44 @@ static void TestHash()
 #endif // TEST_HASH
 
 // ----------------------------------------------------------------------------
+// wxList
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_LIST
+
+#include <wx/list.h>
+
+WX_DECLARE_LIST(Bar, wxListBars);
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxListBars);
+
+static void TestListCtor()
+{
+    puts("*** Testing wxList construction ***\n");
+
+    {
+        wxListBars list1;
+        list1.Append(new Bar(_T("first")));
+        list1.Append(new Bar(_T("second")));
+
+        printf("After 1st list creation: %u objects in the list, %u objects total.\n",
+               list1.GetCount(), Bar::GetNumber());
+
+        wxListBars list2;
+        list2 = list1;
+
+        printf("After 2nd list creation: %u and %u objects in the lists, %u objects total.\n",
+               list1.GetCount(), list2.GetCount(), Bar::GetNumber());
+
+        list1.DeleteContents(TRUE);
+    }
+
+    printf("After list destruction: %u objects left.\n", Bar::GetNumber());
+}
+
+#endif // TEST_LIST
+
+// ----------------------------------------------------------------------------
 // MIME types
 // ----------------------------------------------------------------------------
 
@@ -541,12 +606,13 @@ static void TestHash()
 
 #include <wx/mimetype.h>
 
+static wxMimeTypesManager g_mimeManager;
+
 static void TestMimeEnum()
 {
-    wxMimeTypesManager mimeTM;
     wxArrayString mimetypes;
 
-    size_t count = mimeTM.EnumAllFileTypes(mimetypes);
+    size_t count = g_mimeManager.EnumAllFileTypes(mimetypes);
 
     printf("*** All %u known filetypes: ***\n", count);
 
@@ -555,7 +621,7 @@ static void TestMimeEnum()
 
     for ( size_t n = 0; n < count; n++ )
     {
-        wxFileType *filetype = mimeTM.GetFileTypeFromMimeType(mimetypes[n]);
+        wxFileType *filetype = g_mimeManager.GetFileTypeFromMimeType(mimetypes[n]);
         if ( !filetype )
         {
             printf("nothing known about the filetype '%s'!\n",
@@ -578,6 +644,60 @@ static void TestMimeEnum()
 
         printf("\t%s: %s (%s)\n",
                mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
+    }
+}
+
+static void TestMimeOverride()
+{
+    wxPuts(_T("*** Testing wxMimeTypesManager additional files loading ***\n"));
+
+    wxString mailcap = _T("/tmp/mailcap"),
+             mimetypes = _T("/tmp/mime.types");
+
+    wxPrintf(_T("Loading mailcap from '%s': %s\n"),
+             mailcap.c_str(),
+             g_mimeManager.ReadMailcap(mailcap) ? _T("ok") : _T("ERROR"));
+    wxPrintf(_T("Loading mime.types from '%s': %s\n"),
+             mimetypes.c_str(),
+             g_mimeManager.ReadMimeTypes(mimetypes) ? _T("ok") : _T("ERROR"));
+}
+
+static void TestMimeFilename()
+{
+    wxPuts(_T("*** Testing MIME type from filename query ***\n"));
+
+    static const wxChar *filenames[] =
+    {
+        _T("readme.txt"),
+        _T("document.pdf"),
+        _T("image.gif"),
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
+    {
+        const wxString fname = filenames[n];
+        wxString ext = fname.AfterLast(_T('.'));
+        wxFileType *ft = g_mimeManager.GetFileTypeFromExtension(ext);
+        if ( !ft )
+        {
+            wxPrintf(_T("WARNING: extension '%s' is unknown.\n"), ext.c_str());
+        }
+        else
+        {
+            wxString desc;
+            if ( !ft->GetDescription(&desc) )
+                desc = _T("<no description>");
+
+            wxString cmd;
+            if ( !ft->GetOpenCommand(&cmd,
+                                     wxFileType::MessageParameters(fname, _T(""))) )
+                cmd = _T("<no command available>");
+
+            wxPrintf(_T("To open %s (%s) do '%s'.\n"),
+                     fname.c_str(), desc.c_str(), cmd.c_str());
+
+            delete ft;
+        }
     }
 }
 
@@ -2690,22 +2810,6 @@ static int StringLenCompare(const wxString& first, const wxString& second)
 
 #include "wx/dynarray.h"
 
-class Bar // Foo is already taken in the hash test
-{
-public:
-    Bar(const wxString& name) : m_name(name) { ms_bars++; }
-   ~Bar() { ms_bars--; }
-
-   static size_t GetNumber() { return ms_bars; }
-
-private:
-   wxString m_name;
-
-   static size_t ms_bars;
-};
-
-size_t Bar::ms_bars = 0;
-
 WX_DECLARE_OBJARRAY(Bar, ArrayBars);
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(ArrayBars);
@@ -3220,6 +3324,10 @@ int main(int argc, char **argv)
     TestFileConfRead();
 #endif // TEST_FILECONF
 
+#ifdef TEST_LIST
+    TestListCtor();
+#endif // TEST_LIST
+
 #ifdef TEST_LOG
     wxString s;
     for ( size_t n = 0; n < 8000; n++ )
@@ -3287,7 +3395,11 @@ int main(int argc, char **argv)
 #endif // TEST_HASH
 
 #ifdef TEST_MIME
-    TestMimeEnum();
+    wxLog::AddTraceMask(_T("mime"));
+    if ( 0 )
+        TestMimeEnum();
+    TestMimeOverride();
+    TestMimeFilename();
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
