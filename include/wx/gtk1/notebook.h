@@ -139,9 +139,6 @@ public:
 
   // implementation
   // --------------
-    // callbacks
-  void OnSize(wxSizeEvent&);
-
     // base class virtuals
   virtual void AddChild(wxWindow *child);
   virtual void SetConstraintSizes(bool recurse);
