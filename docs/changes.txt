@@ -83,6 +83,7 @@ All GUI ports:
 - Added BLOB support to wxDB (John Skiff)
 - Wizard now validates as well as doing data transfer when
   pressing Back or Next
+- Implemented wxNotebook::DoGetBestSize so Fit now works
 
 Unix:
 
