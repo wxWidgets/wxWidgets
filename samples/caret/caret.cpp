@@ -122,13 +122,13 @@ private:
 enum
 {
     // menu items
-    Minimal_Quit = 1,
-    Minimal_About,
-    Minimal_Test1,
-    Minimal_Test2,
+    Caret_Quit = 1,
+    Caret_About,
+    Caret_Test1,
+    Caret_Test2,
 
     // controls start here (the numbers are, of course, arbitrary)
-    Minimal_Text = 1000
+    Caret_Text = 1000
 };
 
 // ----------------------------------------------------------------------------
@@ -139,8 +139,8 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
-    EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_MENU(Caret_Quit,  MyFrame::OnQuit)
+    EVT_MENU(Caret_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -162,7 +162,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWindows App",
+    MyFrame *frame = new MyFrame("Caret wxWindows sample",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
@@ -190,9 +190,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(Caret_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Caret_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -219,19 +219,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxString msg;
-    msg.Printf( _T("This is the about dialog of minimal sample.\n")
-                _T("Welcome to %s")
-#ifdef wxBETA_NUMBER
-               _T(" (beta %d)!")
-#endif // wxBETA_NUMBER
-               , wxVERSION_STRING
-#ifdef wxBETA_NUMBER
-               , wxBETA_NUMBER
-#endif // wxBETA_NUMBER
-              );
-
-    wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(_T("This is the about dialog of caret sample."), "About Caret", wxOK | wxICON_INFORMATION, this);
 }
 
 
@@ -361,13 +349,15 @@ void MyCanvas::OnChar( wxKeyEvent &event )
             break;
 
         default:
-            if ( wxIsprint(event.KeyCode()) )
+            if ( !event.AltDown() && wxIsprint(event.KeyCode()) )
             {
                 CharAt(m_xCaret, m_yCaret) = (wxChar)event.KeyCode();
                 NextChar();
             }
             else
             {
+                event.Skip();
+
                 // don't refresh
                 return;
             }
