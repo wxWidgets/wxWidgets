@@ -3201,10 +3201,12 @@ dnl ---------------------------------------------------------------------------
 dnl ---------------------------------------------------------------------------
 dnl DirectDraw  / Multimon for MSW
 dnl ---------------------------------------------------------------------------
-        AC_CHECK_HEADERS([multimon.h ddraw.h], [], [
-            wxUSE_DISPLAY="no"
-            AC_MSG_WARN([ddraw.h or multimon.h not found; disabling wxDisplay])
-          ] )
+        AC_CHECK_HEADERS([multimon.h ddraw.h], [],
+            [
+                wxUSE_DISPLAY="no"
+                AC_MSG_WARN([ddraw.h or multimon.h not found; disabling wxDisplay])
+            ],
+            [#include <windows.h>])
     fi
 fi
 
@@ -3218,17 +3220,19 @@ dnl ---------------------------------------------------------------------------
 dnl DirectShow MSW
 dnl ---------------------------------------------------------------------------
         wxUSE_DIRECTSHOW="yes"
-        AC_CHECK_HEADERS([dshow.h], [], [
-            wxUSE_DIRECTSHOW="no"
-            AC_MSG_WARN([DirectShow not installed; consider installing the DirectX7 SDK or higher])
-          ] )
+        AC_CHECK_HEADERS([dshow.h], [],
+            [
+                wxUSE_DIRECTSHOW="no"
+                AC_MSG_WARN([DirectShow not installed; consider installing the DirectX7 SDK or higher])
+            ],
+            [#include <windows.h>])
 
        if test "$wxUSE_DIRECTSHOW" = "yes"; then
-          AC_DEFINE(wxUSE_DIRECTSHOW)
-	    LIBS="$LIBS -lstrmiids"          
+            AC_DEFINE(wxUSE_DIRECTSHOW)
+            LIBS="$LIBS -lstrmiids"
        fi
     fi
-    
+
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
     AC_DEFINE(wxUSE_MEDIACTRL)
 fi
