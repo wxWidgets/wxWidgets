@@ -32,7 +32,7 @@ CC = @CC@
 datadir = @datadir@
 PLATFORM_MSDOS = @PLATFORM_MSDOS@
 SETFILE = @SETFILE@
-UNICODE = @UNICODE@
+LDFLAGS = @LDFLAGS@
 STRIP = @STRIP@
 USE_SOVERSOLARIS = @USE_SOVERSOLARIS@
 srcdir = @srcdir@
@@ -41,24 +41,28 @@ wxUSE_REGEX = @wxUSE_REGEX@
 bindir = @bindir@
 PIC_FLAG = @PIC_FLAG@
 USE_SOSYMLINKS = @USE_SOSYMLINKS@
-wxUSE_LIBJPEG = @wxUSE_LIBJPEG@
+LDFLAGS_GUI = @LDFLAGS_GUI@
 INSTALL_DATA = @INSTALL_DATA@
 USE_GUI = @USE_GUI@
 PLATFORM_UNIX = @PLATFORM_UNIX@
 RANLIB = @RANLIB@
 SO_SUFFIX = @SO_SUFFIX@
 top_srcdir = @top_srcdir@
+wxUSE_LIBJPEG = @wxUSE_LIBJPEG@
 AR = @AR@
 BUILD = @BUILD@
 PLATFORM_WIN32 = @PLATFORM_WIN32@
 USE_MACVERSION = @USE_MACVERSION@
 PLATFORM_MACOSX = @PLATFORM_MACOSX@
 DEPS_TRACKING = @DEPS_TRACKING@
-TOOLKIT_VERSION = @TOOLKIT_VERSION@
+OFFICIAL_BUILD = @OFFICIAL_BUILD@
+UNICODE = @UNICODE@
 WXUNIV = @WXUNIV@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 CXX = @CXX@
 SHARED_LD_CXX = @SHARED_LD_CXX@
+VENDOR = @VENDOR@
+TOOLKIT_VERSION = @TOOLKIT_VERSION@
 includedir = @includedir@
 LN_S = @LN_S@
 CFLAGS = @CFLAGS@
@@ -68,100 +72,162 @@ USE_SOVERLINUX = @USE_SOVERLINUX@
 top_builddir = @top_builddir@
 SHARED_LD_CC = @SHARED_LD_CC@
 
+### Variables: ###
+
+GIZMOSLIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__DEBUGFLAG_5) $(__OPTIMIZEFLAG_7)   -I$(srcdir)/../../include $(CFLAGS)
+GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__DEBUGFLAG_5) $(__OPTIMIZEFLAG_7)   -I$(srcdir)/../../include $(CXXFLAGS)
+GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2)   -I$(srcdir)/../../include -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG)
+GIZMOSDLL_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2)   -I$(srcdir)/../../include -DWXMAKINGDLL $(CFLAGS) $(PIC_FLAG)
+
 ### Conditionally set variables: ###
 
-@COND_USE_SOVERLINUX_1@__gizmosdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2)
-@COND_USE_SOVERSOLARIS_1@__gizmosdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3)
+@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
-@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib
-@COND_USE_SOSYMLINKS_1@__gizmosdll___so_symlinks_inst_cmd = rm -f libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2) libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
-@COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_SHARED_1@__install_gizmosdll___depname = install_gizmosdll
-@COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@__gizmosdll___targetsuf3 = .$(SO_SUFFIX).0.0.0
-@COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__gizmosdll___targetsuf3 = .0.0.0.$(SO_SUFFIX)
-@COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@__gizmosdll___targetsuf2 = .$(SO_SUFFIX).0
-@COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__gizmosdll___targetsuf2 = .0.$(SO_SUFFIX)
-@COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
-@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
-@COND_PLATFORM_WIN32_1@__gizmosdll___importlib = -Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
-@COND_PLATFORM_WIN32_1@__gizmosdll___importlib = -Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
-@COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
+@COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
+@COND_USE_SOSYMLINKS_1@__gizmosdll___so_symlinks_inst_cmd = rm -f libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3) $(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2) libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(srcdir)/src/jpeg
+@COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng$(WXDEBUGFLAG)
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(srcdir)/src/zlib
+@COND_WXUSE_LIBJPEG_BUILTIN@INC_JPEG = $(srcdir)/src/jpeg
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_WXUSE_ODBC_BUILTIN@LIB_ODBC = wxodbc
-@COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
+@COND_WXUSE_ZLIB_BUILTIN@INC_ZLIB = $(srcdir)/src/zlib
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
-@COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
+@COND_BUILD_DEBUG@OPTIMIZEFLAG = off
+@COND_BUILD_RELEASE@OPTIMIZEFLAG = speed
 @COND_SHARED_0@__gizmoslib___depname = $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5.a
-@COND_SHARED_1@__gizmosdll___depname = $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3)
+@COND_SHARED_1@__gizmosdll___depname = $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3)
 @COND_PLATFORM_MACOSX_1@__gizmosdll___macver = -compatibility_version 2.5 -current_version 2.5.0
-@COND_USE_SOSYMLINKS_1@__gizmosdll___so_symlinks_cmd = rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2); \
-@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
+@COND_BUILD_DEBUG@__OPTIMIZEFLAG_2 = 
+@COND_BUILD_RELEASE@__OPTIMIZEFLAG_2 = 
 @COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
 @COND_DEPS_TRACKING_0@CCC = $(CC)
-@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
+@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
 @COND_SHARED_0@__install_gizmoslib___depname = install_gizmoslib
 @COND_MONOLITHIC_0@WXLIB_BASE = wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
 @COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
 @COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
-@COND_WXUNIV_1@WXUNIV_DEFINE = __WXUNIVERSAL__
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_1 = --include-dir $(srcdir)/src/zlib
 @COND_MONOLITHIC_1@WXLIB_MONO = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
-@COND_PLATFORM_MACOSX_1@__gizmosdll___macinstnamecmd = -install_name $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2)
-@COND_WXUSE_LIBJPEG_BUILTIN@LIB_JPEG = wxjpeg
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = -D__WXUNIVERSAL__
-@COND_MONOLITHIC_0@WXLIB_HTML = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5
+@COND_WXUSE_ODBC_BUILTIN@LIB_ODBC = wxodbc$(WXDEBUGFLAG)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_MONOLITHIC_0@WXLIB_CORE = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_2 = -I$(srcdir)/src/tiff
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_2 = -I$(srcdir)/src/png
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_1 = --include-dir $(srcdir)/src/png
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_1 = --include-dir $(srcdir)/src/tiff
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_2 = -I$(srcdir)/src/zlib
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_1 = --include-dir $(srcdir)/src/jpeg
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_2 = -I$(srcdir)/src/jpeg
+@COND_BUILD_DEBUG@__OPTIMIZEFLAG_7 = 
+@COND_BUILD_RELEASE@__OPTIMIZEFLAG_7 = 
+@COND_USE_SOVERLINUX_1@__gizmosdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2)
+@COND_USE_SOVERSOLARIS_1@__gizmosdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3)
+@COND_WXUSE_REGEX_BUILTIN@INC_REGEX = $(srcdir)/src/regex
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
+@COND_PLATFORM_UNIX_1@TIFF_PLATFORM_SRC = src/tiff/tif_unix.c
+@COND_PLATFORM_MACOSX_1@TIFF_PLATFORM_SRC = src/tiff/tif_unix.c
+@COND_PLATFORM_WIN32_1@TIFF_PLATFORM_SRC = src/tiff/tif_win32.c
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__gizmosdll___targetsuf3 = .$(SO_SUFFIX).0.0.0
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__gizmosdll___targetsuf3 = .0.0.0.$(SO_SUFFIX)
+@COND_USE_SOVERSION_0@__gizmosdll___targetsuf3 = .$(SO_SUFFIX)
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)25
+@COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
+@COND_WXUSE_LIBPNG_BUILTIN@INC_PNG = $(srcdir)/src/png
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(srcdir)/src/odbc
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_1 = --include-dir $(srcdir)/src/odbc
+@COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_PLATFORM_WIN32_1@__gizmosdll___importlib = -Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@__gizmosdll___importlib = -Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
+@COND_WXUSE_ODBC_BUILTIN@INC_ODBC = $(srcdir)/src/odbc
+@COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__gizmosdll___targetsuf2 = .$(SO_SUFFIX).0
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__gizmosdll___targetsuf2 = .0.$(SO_SUFFIX)
+@COND_USE_SOVERSION_0@__gizmosdll___targetsuf2 = .$(SO_SUFFIX)
+@COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib$(WXDEBUGFLAG)
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(srcdir)/src/regex
+@COND_USE_SOSYMLINKS_1@__gizmosdll___so_symlinks_cmd = rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2); \
+@COND_USE_SOSYMLINKS_1@                $(LN_S) $(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = wx25
+@COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIX = wx
+@COND_BUILD_DEBUG@__DEBUGFLAG_1 = 
+@COND_BUILD_RELEASE@__DEBUGFLAG_1 = 
+@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(srcdir)/src/tiff
+@COND_WXUSE_LIBTIFF_BUILTIN@INC_TIFF = $(srcdir)/src/tiff
+@COND_MONOLITHIC_0@WXLIB_HTML = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5
+@COND_WXUNIV_1@WXUNIV_DEFINE = __WXUNIVERSAL__
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_2 = -I$(srcdir)/src/odbc
+@COND_SHARED_1@__install_gizmosdll___depname = install_gizmosdll
+@COND_PLATFORM_MACOSX_1@__gizmosdll___macinstnamecmd = -install_name $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2)
+@COND_OFFICIAL_BUILD_1@VENDORTAG = 
+@COND_OFFICIAL_BUILD_0@VENDORTAG = _$(VENDOR)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
-@COND_WXUSE_LIBTIFF_BUILTIN@LIB_TIFF = wxtiff
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = -D__WXUNIVERSAL__
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_1 = --include-dir $(srcdir)/src/regex
+@COND_BUILD_DEBUG@__DEBUGFLAG_0 = 
+@COND_BUILD_RELEASE@__DEBUGFLAG_0 = 
+@COND_WXUSE_LIBJPEG_BUILTIN@LIB_JPEG = wxjpeg$(WXDEBUGFLAG)
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_2 = -I$(srcdir)/src/regex
+@COND_BUILD_DEBUG@__DEBUGFLAG_5 = 
+@COND_BUILD_RELEASE@__DEBUGFLAG_5 = 
+@COND_WXUSE_LIBTIFF_BUILTIN@LIB_TIFF = wxtiff$(WXDEBUGFLAG)
+@COND_BUILD_DEBUG@__DEBUGFLAG_6 = 
+@COND_BUILD_RELEASE@__DEBUGFLAG_6 = 
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
-@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
-@COND_WXUSE_REGEX_BUILTIN@LIB_REGEX = wxregex
-@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff
-@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
+@COND_BUILD_DEBUG@DEBUGFLAG = on
+@COND_BUILD_RELEASE@DEBUGFLAG = off
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(srcdir)/src/png
+@COND_WXUSE_REGEX_BUILTIN@LIB_REGEX = wxregex$(WXDEBUGFLAG)
+@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
 
 ### Targets: ###
 
 all: $(__gizmosdll___depname) $(__gizmoslib___depname)
 
 install-strip: install
-	$(STRIP) $(libdir)/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3)
+	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3)
 
-$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5.a: gizmoslib-dynamicsash.o gizmoslib-editlbox.o gizmoslib-ledctrl.o gizmoslib-multicell.o gizmoslib-splittree.o gizmoslib-statpict.o
-	rm -f $@
-	$(AR) rcu $@  gizmoslib-dynamicsash.o gizmoslib-editlbox.o gizmoslib-ledctrl.o gizmoslib-multicell.o gizmoslib-splittree.o gizmoslib-statpict.o
-	$(RANLIB) $@
+@COND_SHARED_0@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5.a: gizmoslib-dynamicsash.o gizmoslib-editlbox.o gizmoslib-ledctrl.o gizmoslib-multicell.o gizmoslib-splittree.o gizmoslib-statpict.o
+@COND_SHARED_0@	rm -f $@
+@COND_SHARED_0@	$(AR) rcu $@  gizmoslib-dynamicsash.o gizmoslib-editlbox.o gizmoslib-ledctrl.o gizmoslib-multicell.o gizmoslib-splittree.o gizmoslib-statpict.o
+@COND_SHARED_0@	$(RANLIB) $@
 
 gizmoslib-editlbox.o: $(srcdir)/editlbox.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+gizmosdll-multicell.o: $(srcdir)/multicell.cpp
+	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-install_gizmosdll: 
-	$(INSTALL_DIR) $(libdir)
-	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(libdir)
-	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3) $(libdir)
-	(cd $(libdir) ; $(__gizmosdll___so_symlinks_inst_cmd))
+gizmosdll-statpict.o: $(srcdir)/statpict.cpp
+	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
+
+gizmosdll-dynamicsash.o: $(srcdir)/dynamicsash.cpp
+	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
+
+@COND_SHARED_1@install_gizmosdll: 
+@COND_SHARED_1@	$(INSTALL_DIR) $(libdir)
+@COND_SHARED_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(libdir)
+@COND_SHARED_1@	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3) $(libdir)
+@COND_SHARED_1@	(cd $(libdir) ; $(__gizmosdll___so_symlinks_inst_cmd))
 
 gizmoslib-ledctrl.o: $(srcdir)/ledctrl.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-editlbox.o: $(srcdir)/editlbox.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
+gizmosdll-editlbox.o: $(srcdir)/editlbox.cpp
+	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3): dynamicsash.o editlbox.o ledctrl.o multicell.o splittree.o statpict.o
-	$(SHARED_LD_CXX) $@  dynamicsash.o editlbox.o ledctrl.o multicell.o splittree.o statpict.o  $(__gizmosdll___importlib) -L$(top_builddir)lib $(__gizmosdll___importlib) $(__gizmosdll___macinstnamecmd) $(__gizmosdll___soname_flags) $(__gizmosdll___macver) $(__WXLIB_MONO_p) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__WXLIB_CORE_p)
-	$(__gizmosdll___so_symlinks_cmd)
-
-gizmoslib-splittree.o: $(srcdir)/splittree.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include $(CXXFLAGS) $<
+@COND_SHARED_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3): gizmosdll-dynamicsash.o gizmosdll-editlbox.o gizmosdll-ledctrl.o gizmosdll-multicell.o gizmosdll-splittree.o gizmosdll-statpict.o
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@  gizmosdll-dynamicsash.o gizmosdll-editlbox.o gizmosdll-ledctrl.o gizmosdll-multicell.o gizmosdll-splittree.o gizmosdll-statpict.o $(LDFLAGS) $(__gizmosdll___importlib) -L$(top_builddir)lib $(__gizmosdll___macinstnamecmd) $(__DEBUGFLAG_1)  $(__gizmosdll___importlib) $(__gizmosdll___soname_flags) $(__gizmosdll___macver)  $(__WXLIB_MONO_p) $(EXTRALIBS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__WXLIB_CORE_p)
+@COND_SHARED_1@	$(__gizmosdll___so_symlinks_cmd)
 
 install: all $(__install_gizmosdll___depname) $(__install_gizmoslib___depname)
 	$(INSTALL_DIR) $(includedir)
@@ -172,39 +238,39 @@ install: all $(__install_gizmosdll___depname) $(__install_gizmoslib___depname)
 	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
 	done
 
-ledctrl.o: $(srcdir)/ledctrl.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
+gizmosdll-ledctrl.o: $(srcdir)/ledctrl.cpp
+	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
+
+gizmoslib-splittree.o: $(srcdir)/splittree.cpp
+	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
 gizmoslib-multicell.o: $(srcdir)/multicell.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-dynamicsash.o: $(srcdir)/dynamicsash.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
-
-multicell.o: $(srcdir)/multicell.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
+gizmosdll-splittree.o: $(srcdir)/splittree.cpp
+	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
 clean: 
-	rm -f ./*.o ./.deps/*
-	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf3) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)-2.5$(__gizmosdll___targetsuf2)
+	rm -rf ./.deps
+	rm -f -f ./*.o
+	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf2)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5.a
 
-statpict.o: $(srcdir)/statpict.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
-
 gizmoslib-statpict.o: $(srcdir)/statpict.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
 gizmoslib-dynamicsash.o: $(srcdir)/dynamicsash.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include $(CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-splittree.o: $(srcdir)/splittree.cpp
-	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../../include -I$(srcdir)/../../include -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
+distclean: clean
+	rm -f configure config.cache config.log config.status
+	rm -f bk-deps shared-ld-sh
 
-install_gizmoslib: 
-	$(INSTALL_DIR) $(libdir)
-	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5.a $(libdir)
+@COND_SHARED_0@install_gizmoslib: 
+@COND_SHARED_0@	$(INSTALL_DIR) $(libdir)
+@COND_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos-2.5.a $(libdir)
 
 uninstall: 
 

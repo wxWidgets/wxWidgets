@@ -29,13 +29,14 @@ CC = @CC@
 datadir = @datadir@
 PLATFORM_MSDOS = @PLATFORM_MSDOS@
 SETFILE = @SETFILE@
-UNICODE = @UNICODE@
+LDFLAGS = @LDFLAGS@
 STRIP = @STRIP@
 USE_SOVERSOLARIS = @USE_SOVERSOLARIS@
 srcdir = @srcdir@
 bindir = @bindir@
 PIC_FLAG = @PIC_FLAG@
 USE_SOSYMLINKS = @USE_SOSYMLINKS@
+LDFLAGS_GUI = @LDFLAGS_GUI@
 INSTALL_DATA = @INSTALL_DATA@
 USE_GUI = @USE_GUI@
 PLATFORM_UNIX = @PLATFORM_UNIX@
@@ -47,12 +48,15 @@ BUILD = @BUILD@
 PLATFORM_WIN32 = @PLATFORM_WIN32@
 USE_MACVERSION = @USE_MACVERSION@
 PLATFORM_MACOSX = @PLATFORM_MACOSX@
-TOOLKIT_VERSION = @TOOLKIT_VERSION@
+DEPS_TRACKING = @DEPS_TRACKING@
+OFFICIAL_BUILD = @OFFICIAL_BUILD@
+UNICODE = @UNICODE@
 WXUNIV = @WXUNIV@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
-DEPS_TYPE = @DEPS_TYPE@
-SHARED_LD_CXX = @SHARED_LD_CXX@
 CXX = @CXX@
+SHARED_LD_CXX = @SHARED_LD_CXX@
+VENDOR = @VENDOR@
+TOOLKIT_VERSION = @TOOLKIT_VERSION@
 includedir = @includedir@
 LN_S = @LN_S@
 CFLAGS = @CFLAGS@
@@ -62,12 +66,18 @@ USE_SOVERLINUX = @USE_SOVERLINUX@
 top_builddir = @top_builddir@
 SHARED_LD_CC = @SHARED_LD_CC@
 
+### Variables: ###
+
+
 ### Conditionally set variables: ###
 
 @COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
 @COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
 @COND_USE_GUI_0@__console___depname = console
-@COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
+@COND_DEPS_TRACKING_0@CCC = $(CC)
 
 ### Targets: ###
 
@@ -83,14 +93,6 @@ install-strip: install
 dialogs: 
 	(cd dialogs && $(MAKE) all)
 
-clean: 
-	rm -f ./*.o ./*.d
-	(cd artprov && $(MAKE) clean)
-	(cd console && $(MAKE) clean)
-	(cd dialogs && $(MAKE) clean)
-	(cd image && $(MAKE) clean)
-	(cd minimal && $(MAKE) clean)
-
 install: all
 	(cd artprov && $(MAKE) install)
 	(cd console && $(MAKE) install)
@@ -98,14 +100,27 @@ install: all
 	(cd image && $(MAKE) install)
 	(cd minimal && $(MAKE) install)
 
+image: 
+	(cd image && $(MAKE) all)
+
+@COND_USE_GUI_0@console: 
+@COND_USE_GUI_0@	(cd console && $(MAKE) all)
+
+clean: 
+	rm -rf ./.deps
+	rm -f -f ./*.o
+	(cd artprov && $(MAKE) clean)
+	(cd console && $(MAKE) clean)
+	(cd dialogs && $(MAKE) clean)
+	(cd image && $(MAKE) clean)
+	(cd minimal && $(MAKE) clean)
+
 artprov: 
 	(cd artprov && $(MAKE) all)
 
-console: 
-	(cd console && $(MAKE) all)
-
-image: 
-	(cd image && $(MAKE) all)
+distclean: clean
+	rm -f configure config.cache config.log config.status
+	rm -f bk-deps shared-ld-sh
 
 minimal: 
 	(cd minimal && $(MAKE) all)
@@ -114,6 +129,6 @@ uninstall:
 
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include *.d
+@IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all dialogs artprov console image minimal
+.PHONY: all dialogs image console artprov minimal
