@@ -76,7 +76,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_DEPS_TRACKING_1@CCC = $(top_builddir)bk-deps $(CC)
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
 @COND_DEPS_TRACKING_0@CCC = $(CC)
 @COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@__xrcdll___targetsuf2 = .$(SO_SUFFIX).0
 @COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__xrcdll___targetsuf2 = .0.$(SO_SUFFIX)
@@ -98,7 +98,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_USE_SOVERLINUX_1@__xrcdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__xrcdll___soname_flags = $(SONAME_FLAG)$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3)
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_PLATFORM_MACOSX_1@__xrcdll___macver = -compatibility_version 2.5 -current_version 2.5.0
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
@@ -400,7 +400,7 @@ xrclib-xh_dlg.o: $(srcdir)/xh_dlg.cpp
 	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/../../../include -I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS) $<
 
 clean: 
-	rm -f ./*.o
+	rm -f ./*.o ./.deps/*
 	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf3) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)-2.5$(__xrcdll___targetsuf2)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5.a

@@ -75,7 +75,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng
 @COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
@@ -87,7 +87,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_DEPS_TRACKING_1@CCC = $(top_builddir)bk-deps $(CC)
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
 @COND_DEPS_TRACKING_0@CCC = $(CC)
 @COND_TOOLKIT_MAC@MACOSX_RESOURCES = Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_MONOLITHIC_0@WXLIB_BASE = wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5
@@ -122,7 +122,7 @@ notebook$(EXEEXT): notebook.o $(__notebook___win32rc)
 	$(__notebook___mac_setfilecmd)
 
 clean: 
-	rm -f ./*.o
+	rm -f ./*.o ./.deps/*
 	rm -f notebook$(EXEEXT)
 
 install: all

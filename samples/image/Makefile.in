@@ -74,7 +74,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_BUILD_DEBUG@WXDEBUGFLAG = d
 @COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_PLATFORM_WIN32_1@__image___win32rc = image_rc.o
 @COND_WXUSE_LIBPNG_BUILTIN@LIB_PNG = wxpng
@@ -85,7 +85,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_ODBC_BUILTIN@LIB_ODBC = wxodbc
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
-@COND_DEPS_TRACKING_1@CCC = $(top_builddir)bk-deps $(CC)
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
 @COND_DEPS_TRACKING_0@CCC = $(CC)
 @COND_TOOLKIT_MAC@MACOSX_RESOURCES = Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_MONOLITHIC_0@WXLIB_HTML = wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5
@@ -117,7 +117,7 @@ all: image$(EXEEXT) data
 install-strip: install
 
 clean: 
-	rm -f ./*.o
+	rm -f ./*.o ./.deps/*
 	rm -f image$(EXEEXT)
 	rm -f ./horse.png ./horse.jpg ./horse.bmp ./horse.gif ./horse.pcx ./horse.pnm ./horse.tif ./horse.xpm ./horse.cur ./horse.ico ./horse3.ani ./smile.xbm
 
