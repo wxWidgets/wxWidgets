@@ -134,9 +134,6 @@ bool wxStaticBox::Create(wxWindow *parent,
                            ) )
         return false;
 
-    // to be transparent we should have the same colour as the parent as well
-    SetBackgroundColour(GetParent()->GetBackgroundColour());
-
     return true;
 }
 
@@ -152,40 +149,6 @@ wxSize wxStaticBox::DoGetBestSize() const
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
     return wxSize(wBox, hBox);
-}
-
-WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    switch ( nMsg )
-    {
-#ifndef __WXWINCE__
-        case WM_NCHITTEST:
-            // FIXME: this hack is specific to dialog ed, shouldn't it be
-            //        somehow disabled during normal operation?
-            {
-                int xPos = LOWORD(lParam);  // horizontal position of cursor
-                int yPos = HIWORD(lParam);  // vertical position of cursor
-
-                ScreenToClient(&xPos, &yPos);
-
-                // Make sure you can drag by the top of the groupbox, but let
-                // other (enclosed) controls get mouse events also
-                if ( yPos < 10 )
-                    return (long)HTCLIENT;
-            }
-            break;
-#endif
-        case WM_ERASEBKGND:
-            // prevent wxControl from processing this message because it will
-            // erase the background incorrectly and there is no way for us to
-            // override this at wxWin event level (if we do process the event,
-            // we don't know how to do it properly - paint the background
-            // without painting over other controls - and if we don't,
-            // wxControl still gets it)
-            return MSWDefWindowProc(nMsg, wParam, lParam);
-    }
-
-    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 #endif // wxUSE_STATBOX

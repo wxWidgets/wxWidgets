@@ -39,14 +39,6 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
 
-    // implementation from now on
-    // --------------------------
-
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
-    // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return false; }
-
 protected:
     virtual wxSize DoGetBestSize() const;
 
