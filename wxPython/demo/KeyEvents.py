@@ -234,6 +234,8 @@ class KeyLog(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                     keyname = "Ctrl-%s" % chr(ord('A') + keycode-1)
                 else:
                     keyname = "\"%s\"" % chr(keycode)
+            elif "unicode" in wx.PlatformInfo:
+                keyname = "\"" + unichr(keycode) + "\""
             else:
                 keyname = "unknown (%s)" % keycode
 
