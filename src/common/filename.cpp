@@ -1742,8 +1742,9 @@ bool wxFileName::MacSetDefaultTypeAndCreator()
     if ( wxFileName::MacFindDefaultTypeAndCreator(GetExt() , &type ,
       &creator ) )
     {
-      MacSetTypeAndCreator( type , creator ) ;
-    }  
+        return MacSetTypeAndCreator( type , creator ) ;
+    }
+    return false;
 }
 
 bool wxFileName::MacFindDefaultTypeAndCreator( const wxString& ext , wxUint32 *type , wxUint32 *creator ) 
