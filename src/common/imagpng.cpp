@@ -529,8 +529,6 @@ wxPNGHandler::LoadFile(wxImage *image,
     if (!png_ptr)
         goto error;
 
-    png_set_error_fn(png_ptr, (png_voidp)NULL, wx_png_error, wx_png_warning);
-
     // NB: please see the comment near wxPNGInfoStruct declaration for
     //     explanation why this line is mandatory
     png_set_read_fn( png_ptr, &wxinfo, wx_PNG_stream_reader);
@@ -644,8 +642,6 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
            wxLogError(_("Couldn't save PNG image."));
         return false;
     }
-
-    png_set_error_fn(png_ptr, (png_voidp)NULL, wx_png_error, wx_png_warning);
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
