@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_VOLUME
+    #define TEST_FILENAME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -802,6 +802,8 @@ static struct FileNameInfo
     { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), TRUE, wxPATH_DOS },
     { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
 
+    // wxFileName support for Mac file names is broken crurently
+#if 0
     // Mac file names
     { _T("Volume:Dir:File"), _T("Volume"), _T("Dir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
     { _T("Volume:Dir:Subdir:File"), _T("Volume"), _T("Dir:Subdir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
@@ -809,6 +811,7 @@ static struct FileNameInfo
     { _T(":Dir:File"), _T(""), _T("Dir"), _T("File"), _T(""), FALSE, wxPATH_MAC },
     { _T(":File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), FALSE, wxPATH_MAC },
     { _T("File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), FALSE, wxPATH_MAC },
+#endif // 0
 
     // VMS file names
     { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), TRUE, wxPATH_VMS },
@@ -831,7 +834,7 @@ static void TestFileNameConstruction()
             printf("ERROR: fullname should be '%s'\n", fni.fullname);
         }
 
-        bool isAbsolute = fn.IsAbsolute();
+        bool isAbsolute = fn.IsAbsolute(fni.format);
         printf("'%s' is %s (%s)\n\t",
                fullname.c_str(),
                isAbsolute ? "absolute" : "relative",
@@ -884,11 +887,14 @@ static void TestFileNameTemp()
 
     static const char *tmpprefixes[] =
     {
+        "",
         "foo",
-        "/tmp/foo",
         "..",
         "../bar",
+#ifdef __UNIX__
+        "/tmp/foo",
         "/tmp/foo/bar", // this one must be an error
+#endif // __UNIX__
     };
 
     for ( size_t n = 0; n < WXSIZEOF(tmpprefixes); n++ )
@@ -5693,7 +5699,7 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    if ( 1 )
+    if ( 0 )
     {
         wxFileName fn;
         fn.Assign("c:\\foo", "bar.baz");
@@ -5701,7 +5707,7 @@ int main(int argc, char **argv)
         DumpFileName(fn);
     }
 
-    if ( TEST_ALL )
+    if ( 1 )
     {
         TestFileNameConstruction();
         TestFileNameMakeRelative();

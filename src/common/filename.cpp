@@ -252,7 +252,7 @@ void wxFileName::Assign( const wxFileName &filepath )
     m_dirs = filepath.GetDirs();
     m_name = filepath.GetName();
     m_ext = filepath.GetExt();
-    m_relative = filepath.IsRelative();
+    m_relative = filepath.m_relative;
 }
 
 void wxFileName::Assign(const wxString& volume,
@@ -270,19 +270,21 @@ void wxFileName::Assign(const wxString& volume,
 
 void wxFileName::SetPath( const wxString &path, wxPathFormat format )
 {
-    wxPathFormat my_format = GetFormat( format );
-    wxString my_path = path;
-
     m_dirs.Clear();
 
-    if (!my_path.empty())
+    if ( !path.empty() )
     {
+        wxPathFormat my_format = GetFormat( format );
+        wxString my_path = path;
+
         // 1) Determine if the path is relative or absolute.
+        wxChar leadingChar = my_path[0u];
 
         switch (my_format)
         {
             case wxPATH_MAC:
-                m_relative = ( my_path[0u] == wxT(':') );
+                m_relative = leadingChar == wxT(':');
+
                 // We then remove a leading ":". The reason is in our
                 // storage form for relative paths:
                 // ":dir:file.txt" actually means "./dir/file.txt" in
@@ -294,18 +296,23 @@ void wxFileName::SetPath( const wxString &path, wxPathFormat format )
                 // actually means <UP>, whereas under DOS, double
                 // slashes can be ignored: "\\\\" is the same as "\\".
                 if (m_relative)
-                    my_path.Remove( 0, 1 );
+                    my_path.erase( 0, 1 );
                 break;
+
             case wxPATH_VMS:
                 // TODO: what is the relative path format here?
                 m_relative = FALSE;
                 break;
+
             case wxPATH_UNIX:
-                m_relative = ( my_path[0u] != wxT('/') );
+                // the paths of the form "~" or "~username" are absolute
+                m_relative = leadingChar != wxT('/') && leadingChar != _T('~');
                 break;
+
             case wxPATH_DOS:
-                m_relative = ( (my_path[0u] != wxT('/')) && (my_path[0u] != wxT('\\')) );
+                m_relative = !IsPathSeparator(leadingChar, my_format);
                 break;
+
             default:
                 wxFAIL_MSG( wxT("error") );
                 break;
@@ -335,7 +342,7 @@ void wxFileName::SetPath( const wxString &path, wxPathFormat format )
             }
         }
     }
-    else
+    else // no path at all
     {
         m_relative = TRUE;
     }
@@ -530,6 +537,12 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
             // GetTempFileName() fails if we pass it an empty string
             dir = _T('.');
         }
+    }
+    else // we have a dir to create the file in
+    {
+        // ensure we use only the back slashes as GetTempFileName(), unlike all
+        // the other APIs, is picky and doesn't accept the forward ones
+        dir.Replace(_T("/"), _T("\\"));
     }
 
     if ( !::GetTempFileName(dir, name, 0, wxStringBuffer(path, MAX_PATH + 1)) )
@@ -766,7 +779,7 @@ bool wxFileName::Normalize(int flags,
     format = GetFormat(format);
 
     // make the path absolute
-    if ( (flags & wxPATH_NORM_ABSOLUTE) && m_relative )
+    if ( (flags & wxPATH_NORM_ABSOLUTE) && !IsAbsolute(format) )
     {
         if ( cwd.empty() )
         {
@@ -777,7 +790,6 @@ bool wxFileName::Normalize(int flags,
             curDir.AssignDir(cwd);
         }
 
-#if 0
         // the path may be not absolute because it doesn't have the volume name
         // but in this case we shouldn't modify the directory components of it
         // but just set the current volume
@@ -785,14 +797,12 @@ bool wxFileName::Normalize(int flags,
         {
             SetVolume(curDir.GetVolume());
 
-            if ( IsAbsolute() )
+            if ( !m_relative )
             {
                 // yes, it was the case - we don't need curDir then
                 curDir.Clear();
             }
         }
-#endif
-        m_relative = FALSE;
     }
 
     // handle ~ stuff under Unix only
@@ -879,6 +889,31 @@ bool wxFileName::Normalize(int flags,
         Assign(GetLongPath());
     }
 #endif // Win32
+
+    // we do have the path now
+    m_relative = FALSE;
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// absolute/relative paths
+// ----------------------------------------------------------------------------
+
+bool wxFileName::IsAbsolute(wxPathFormat format) const
+{
+    // if our path doesn't start with a path separator, it's not an absolute
+    // path
+    if ( m_relative )
+        return FALSE;
+
+    if ( !GetVolumeSeparator(format).empty() )
+    {
+        // this format has volumes and an absolute path must have one, it's not
+        // enough to have the full path to bean absolute file under Windows
+        if ( GetVolume().empty() )
+            return FALSE;
+    }
 
     return TRUE;
 }
@@ -1012,11 +1047,10 @@ bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
     return GetPathSeparators(format).Find(ch) != wxNOT_FOUND;
 }
 
-bool wxFileName::IsWild( wxPathFormat format )
+bool wxFileName::IsWild( wxPathFormat WXUNUSED(format) )
 {
     // FIXME: this is probably false for Mac and this is surely wrong for most
     //        of Unix shells (think about "[...]")
-    (void)format;
     return m_name.find_first_of(_T("*?")) != wxString::npos;
 }
 
@@ -1064,10 +1098,8 @@ wxString wxFileName::GetFullName() const
     return fullname;
 }
 
-wxString wxFileName::GetPath( bool, wxPathFormat format ) const
+wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
 {
-    // Should add_seperator parameter be used?
-
     format = GetFormat( format );
 
     wxString fullpath;
@@ -1143,7 +1175,10 @@ wxString wxFileName::GetPath( bool, wxPathFormat format ) const
         }
     }
 
-
+    if ( add_separator && !fullpath.empty() )
+    {
+        fullpath += GetPathSeparators(format)[0u];
+    }
 
     return fullpath;
 }
@@ -1175,19 +1210,27 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
     }
 
     // the leading character
-    if ( format == wxPATH_MAC && m_relative )
+    if ( format == wxPATH_MAC )
     {
-         fullpath += wxFILE_SEP_PATH_MAC;
+        if ( m_relative )
+            fullpath += wxFILE_SEP_PATH_MAC;
     }
     else if ( format == wxPATH_DOS )
     {
-         if (!m_relative)
-             fullpath += wxFILE_SEP_PATH_DOS;
+        if ( !m_relative )
+            fullpath += wxFILE_SEP_PATH_DOS;
     }
     else if ( format == wxPATH_UNIX )
     {
-         if (!m_relative)
-             fullpath += wxFILE_SEP_PATH_UNIX;
+        if ( !m_relative )
+        {
+            // normally the absolute file names starts with a slash with one
+            // exception: file names like "~/foo.bar" don't have it
+            if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
+            {
+                fullpath += wxFILE_SEP_PATH_UNIX;
+            }
+        }
     }
 
     // then concatenate all the path components using the path separator
@@ -1287,7 +1330,7 @@ wxString wxFileName::GetLongPath() const
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     bool success = FALSE;
 
-    // VZ: this code was disabled, why?
+    // VZ: why was this code disabled?
 #if 0 // wxUSE_DYNAMIC_LOADER
     typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
