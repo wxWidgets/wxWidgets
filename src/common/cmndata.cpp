@@ -185,6 +185,7 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
     : wxObject()
 {
     m_nativeData = NULL;
+    m_privData = NULL;
     (*this) = printData;
 }
 
