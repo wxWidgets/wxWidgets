@@ -84,10 +84,14 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-  wxString langs[] = {"(System default)","French","German"};
+  wxString langs[] = {_T("(System default)"),
+                      _T("French"),
+                      _T("German"),
+                      _T("English"),
+                      _T("English (U.S.)")};
   SetExitOnFrameDelete(FALSE);
-  int lng = wxGetSingleChoiceIndex("Please choose language:", "Language", 
-                                   3, langs);
+  int lng = wxGetSingleChoiceIndex(_T("Please choose language:"), _T("Language"), 
+                                   5, langs);
   SetExitOnFrameDelete(TRUE);
 
   switch (lng)
@@ -95,6 +99,8 @@ bool MyApp::OnInit()
       case 0 : m_locale.Init(wxLANGUAGE_DEFAULT); break;
       case 1 : m_locale.Init(wxLANGUAGE_FRENCH); break;
       case 2 : m_locale.Init(wxLANGUAGE_GERMAN); break;
+      case 3 : m_locale.Init(wxLANGUAGE_ENGLISH); break;
+      case 4 : m_locale.Init(wxLANGUAGE_ENGLISH_US); break;
       default:
           return FALSE;
   }
