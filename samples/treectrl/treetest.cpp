@@ -380,7 +380,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        long style)
           : wxTreeCtrl(parent, id, pos, size, style)
 {
-#if USE_TR_HAS_VARIABLE_ROW_HIGHT
+#if (USE_TR_HAS_VARIABLE_ROW_HIGHT && wxUSE_LIBJPEG)
     wxImage::AddHandler(new wxJPEGHandler); 
     wxImage image;
 
