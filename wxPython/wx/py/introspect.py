@@ -55,6 +55,10 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1,
     for item in attributes:
         dict[item] = None
     attributes = dict.keys()
+    # new-style swig wrappings can result in non-string attributes
+    # e.g. ITK http://www.itk.org/
+    attributes = [attribute for attribute in attributes \
+                  if type(attribute) == str]
     attributes.sort(lambda x, y: cmp(x.upper(), y.upper()))
     if not includeSingle:
         attributes = filter(lambda item: item[0]!='_' \
