@@ -46,17 +46,18 @@ class wxImageList: public wxObject
    
   public:
 
-    wxImageList(void);
-    ~wxImageList(void);
-    bool Create(void);
-    int GetImageCount(void) const;
+    wxImageList::wxImageList() { }
+    wxImageList(int width, int height, bool mask = TRUE, int initialCount = 1);
+    ~wxImageList();
+    bool Create();
+    int GetImageCount() const;
     int Add( const wxBitmap &bitmap );
-    bool Replace( const int index, const wxBitmap &bitmap );
-    bool Remove( const int index );
-    bool RemoveAll(void);
-    bool GetSize( const int index, int &width, int &height ) const;
-    bool Draw(const int index, wxDC& dc, const int x, const int y,
-      const int flags = wxIMAGELIST_DRAW_NORMAL, const bool solidBackground = FALSE );
+    bool Replace( int index, const wxBitmap &bitmap );
+    bool Remove( int index );
+    bool RemoveAll();
+    bool GetSize( int index, int &width, int &height ) const;
+    bool Draw(int index, wxDC& dc, int x, int y,
+      int flags = wxIMAGELIST_DRAW_NORMAL, const bool solidBackground = FALSE );
     
   private:
 

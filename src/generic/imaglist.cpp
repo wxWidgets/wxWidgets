@@ -20,21 +20,21 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
 
-wxImageList::wxImageList(void)
+wxImageList::wxImageList(int width, int height, bool mask, int initialCount)
 {
   Create();
 };
 
-wxImageList::~wxImageList(void)
+wxImageList::~wxImageList()
 {
 };
 
-int wxImageList::GetImageCount(void) const
+int wxImageList::GetImageCount() const
 {
   return m_images.Number();
 };
 
-bool wxImageList::Create(void)
+bool wxImageList::Create()
 {
   m_images.DeleteContents( TRUE );
   return TRUE;
@@ -46,7 +46,7 @@ int wxImageList::Add( const wxBitmap &bitmap )
   return m_images.Number();
 };
 
-bool wxImageList::Replace( const int index, const wxBitmap &bitmap )
+bool wxImageList::Replace( int index, const wxBitmap &bitmap )
 {
   wxNode *node = m_images.Nth( index );
   if (!node) return FALSE;
@@ -66,20 +66,20 @@ bool wxImageList::Replace( const int index, const wxBitmap &bitmap )
   return TRUE;
 };
 
-bool wxImageList::Remove( const int index )
+bool wxImageList::Remove( int index )
 {
   wxNode *node = m_images.Nth( index );
   if (node) m_images.DeleteNode( node );
   return (node != NULL);
 };
 
-bool wxImageList::RemoveAll(void)
+bool wxImageList::RemoveAll()
 {
   m_images.Clear();
   return TRUE;
 };
 
-bool wxImageList::GetSize( const int index, int &width, int &height ) const
+bool wxImageList::GetSize( int index, int &width, int &height ) const
 {
   wxNode *node = m_images.Nth( index );
   if (node)
@@ -97,9 +97,9 @@ bool wxImageList::GetSize( const int index, int &width, int &height ) const
   };
 };
 
-bool wxImageList::Draw( const int index, wxDC &dc, 
-                        const int x, const int y,
-                        const int WXUNUSED(flags), const bool WXUNUSED(solidBackground) )
+bool wxImageList::Draw( int index, wxDC &dc, 
+                        int x, int y,
+                        int WXUNUSED(flags), const bool WXUNUSED(solidBackground) )
 {
   wxNode *node = m_images.Nth( index );
   if (!node) return FALSE;
