@@ -165,6 +165,9 @@ In addition to wxCOMPATIBILITY code:
 - samples/resource
 - Dialog Editor
 - generic/src/htmlhelp.cpp
+- all code that uses layout constraints,
+  so constraints can be compiled out of the
+  core library
 
 
 wxMiscellaneous
@@ -181,6 +184,13 @@ wxMiscellaneous
 - In headers, don't silently omit contents if the features for this
   header is switched off. Instead, emit an error message.
 - Implement native tree view and colour dialog in wxGTK.
+- Better way to specify About, Preferences menu ids under wxMac.
+- Must be able to portably specify relaying out a frame after the toolbar
+  has been destroyed or recreated. On wxMSW, this is done in
+  ~wxToolBar. On wxGTK, in SetToolBar. In wxMac, not at all,
+  but sending a wxSizeEvent will do it.
+- wxMac font selector dialog is the generic font selector -
+  horrible.
 
 
 Version:      $Id$
