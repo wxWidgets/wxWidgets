@@ -166,7 +166,7 @@ protected:
 
     // returns the size of the arrow for the scrollbar (depends on
     // orientation)
-    wxSize GetScrollbarArrowSize(const wxScrollBar *scrollbar)
+    wxSize GetScrollbarArrowSize(const wxScrollBar *scrollbar) const
     {
         wxSize size;
         if ( scrollbar->IsVertical() )
@@ -371,8 +371,8 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col,
         case CONTROL_TEXT:      return *wxBLACK;
         case SCROLLBAR:         return wxColour(0xc3c3c3);
 
-        case HIGHLIGHT:         return wxColour(0x0000ff);
-        case HIGHLIGHT_TEXT:    return wxColour(0x00ffff);
+        case HIGHLIGHT:         return wxColour(0x9c0000);
+        case HIGHLIGHT_TEXT:    return wxColour(0xffffff);
 
         case MAX:
         default:
@@ -705,24 +705,36 @@ void wxGTKRenderer::DrawItem(wxDC& dc,
                              const wxRect& rect,
                              int flags)
 {
+    wxLogTrace(_T("listbox"), _T("drawing item '%s' at (%d, %d)-(%d, %d)"),
+               label.c_str(),
+               rect.x, rect.y,
+               rect.x + rect.width, rect.y + rect.height);
+
+    wxColour colFg;
     if ( flags & wxCONTROL_SELECTED )
     {
-        dc.SetTextBackground(m_scheme->Get(wxColourScheme::HIGHLIGHT));
+        dc.SetBrush(wxBrush(m_scheme->Get(wxColourScheme::HIGHLIGHT), wxSOLID));
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawRectangle(rect);
+
+        colFg = dc.GetTextForeground();
         dc.SetTextForeground(m_scheme->Get(wxColourScheme::HIGHLIGHT_TEXT));
-        dc.SetBackgroundMode(wxSOLID);
     }
 
-    dc.DrawLabel(label, wxNullBitmap, rect);
+    wxRect rectText = rect;
+    rectText.x += 2;
+    rectText.y++;
+    dc.DrawLabel(label, wxNullBitmap, rectText);
 
     if ( flags & wxCONTROL_SELECTED )
     {
         dc.SetBackgroundMode(wxTRANSPARENT);
     }
 
-    if ( flags & wxCONTROL_FOCUSED )
+    // restore the text colour
+    if ( colFg.Ok() )
     {
-        wxRect rectFocus = rect;
-        DrawRect(dc, &rectFocus, m_penBlack);
+        dc.SetTextForeground(colFg);
     }
 }
 
@@ -1206,6 +1218,12 @@ bool wxGTKInputHandler::HandleMouseMove(wxControl *control,
     else
     {
         return FALSE;
+    }
+
+    // don't refresh static controls uselessly - they never react to this
+    if ( control->AcceptsFocus() )
+    {
+        control->Refresh();
     }
 
     return TRUE;

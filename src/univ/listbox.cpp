@@ -264,6 +264,15 @@ int wxListBox::GetSelections(wxArrayInt& selections) const
 // added/deleted/changed subsequently
 // ----------------------------------------------------------------------------
 
+void wxListBox::Refresh(bool eraseBackground, const wxRect *rect)
+{
+    // do nothing here if we didn't call it ourselves
+    if ( m_updateCount )
+    {
+        wxControl::Refresh(eraseBackground, rect);
+    }
+}
+
 void wxListBox::RefreshItems(int from, int count)
 {
     switch ( m_updateCount )
@@ -342,14 +351,16 @@ void wxListBox::OnIdle(wxIdleEvent& event)
         }
         else
         {
-            wxLogTrace(_T("listbox"), _T("Refreshing items %d..%d"),
-                       m_updateFrom, m_updateFrom + m_updateCount);
-
             wxRect rect;
             rect.x = 0;
             rect.y = m_updateFrom*GetLineHeight();
             rect.width = 32767; // larger than our size
             rect.height = m_updateCount*GetLineHeight();
+
+            wxLogTrace(_T("listbox"), _T("Refreshing items %d..%d (%d-%d)"),
+                       m_updateFrom, m_updateFrom + m_updateCount,
+                       rect.GetTop(), rect.GetBottom());
+
             Refresh(TRUE, &rect);
         }
 
@@ -376,7 +387,8 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     GetViewStart(NULL, &y);
 #endif
     wxCoord lineHeight = GetLineHeight();
-    wxRect rectUpdate = GetUpdateRegion().GetBox();
+    wxRegion rgnUpdate = GetUpdateRegion();
+    wxRect rectUpdate = rgnUpdate.GetBox();
     size_t itemFirst = rectUpdate.GetTop() / lineHeight,
            itemLast = (rectUpdate.GetBottom() + lineHeight - 1) / lineHeight,
            itemMax = m_strings.GetCount();
@@ -390,6 +402,7 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     // do draw them
     wxLogTrace(_T("listbox"), _T("Repainting items %d..%d"),
                itemFirst, itemLast);
+    dc.SetClippingRegion(rgnUpdate);
     renderer->DrawItems(this, itemFirst, itemLast);
 }
 
@@ -411,7 +424,7 @@ bool wxListBox::SetFont(const wxFont& font)
 
 void wxListBox::CalcItemsPerPage()
 {
-    m_lineHeight = wxClientDC(this).GetCharHeight();
+    m_lineHeight = wxClientDC(this).GetCharHeight() + 2;
     m_itemsPerPage = GetClientSize().y / m_lineHeight;
 }
 
@@ -671,7 +684,8 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
 bool wxStdListboxInputHandler::HandleMouseMove(wxControl *control,
                                            const wxMouseEvent& event)
 {
-    return wxStdInputHandler::HandleMouseMove(control, event);
+    // we don't react to this at all
+    return FALSE;
 }
 
 #endif // wxUSE_LISTBOX
