@@ -1181,10 +1181,9 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
-#ifdef 0
-  //__WXGTK20__
+#ifdef __WXGTK20__
 
-    PangoContext *context = pango_ft2_get_context (150, 150);
+    PangoContext *context = pango_ft2_get_context (300, 300);
 
     // What are these for?
     pango_context_set_language (context, pango_language_from_string ("en_US"));
@@ -1209,6 +1208,8 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     pango_layout_get_extents (layout, NULL, &logical_rect);
     height = PANGO_PIXELS (logical_rect.height);
     width = PANGO_PIXELS (logical_rect.width);
+    
+    // printf( "h %d w %d lh %d lw %d\n", height, width, logical_rect.height, logical_rect.width );
 
     // Allocate FreeType 2 bitmap
     int byte_width = (width + 7)/8 * 8;
@@ -1240,8 +1241,8 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     fprintf(m_pstream, "/picstr img_width 8 idiv string def\n");
 
     fprintf(m_pstream,
-	  "  img_width 72 150 div mul\n"
-          "  img_height 72 150 div mul scale\n"
+	  "  img_width 72 15 div mul\n"
+          "  img_height 72 15 div mul scale\n"
 	  "  0 setgray\n"
 	  "  img_width img_height\n"
 	  "  true\n"
@@ -1262,7 +1263,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
       
       for (bit_idx = 0; bit_idx < 8; bit_idx++)
 	{
-	  guchar this_bit = bitmap.buffer[b_idx * 8+bit_idx]>128;
+	  guchar this_bit = bitmap.buffer[b_idx * 8+bit_idx]<128;
 	  packed_b = (packed_b << 1) + this_bit;
 	}
     
