@@ -414,6 +414,7 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(50, 50))
 
     // tool bar
     wxBitmap tbBitmaps[3];
+
     tbBitmaps[0] = wxBITMAP(reset);
     tbBitmaps[1] = wxBITMAP(play);
     tbBitmaps[2] = wxBITMAP(stop);
@@ -521,17 +522,15 @@ void LifeFrame::OnNewGame(wxCommandEvent& WXUNUSED(event))
 {
     int w = m_life->GetWidth();
     int h = m_life->GetHeight();
-    int result;
 
     // stop if it was running
     OnStop();
 
-    // show dialog box
+    // dialog box
     LifeNewGameDialog dialog(this, &w, &h);
-    result = dialog.ShowModal();
 
     // new game?
-    if (result == wxID_OK)
+    if (dialog.ShowModal() == wxID_OK)
     {
         // check dimensions
         if (w >= LIFE_MIN && w <= LIFE_MAX &&
@@ -562,7 +561,7 @@ void LifeFrame::OnSamples(wxCommandEvent& WXUNUSED(event))
     // stop if it was running
     OnStop();
 
-    // show dialog box
+    // dialog box
     LifeSamplesDialog dialog(this);
 
     // new game?
@@ -719,8 +718,8 @@ void LifeCanvas::DrawEverything(bool force)
     dc.BeginDrawing();
 
     // draw cells
-    for (int j = 0; j < m_life->GetWidth(); j++)
-        for (int i = 0; i < m_life->GetHeight(); i++)
+    for (int j = 0; j < m_life->GetHeight(); j++)
+        for (int i = 0; i < m_life->GetWidth(); i++)
             if (force || m_life->HasChanged(i, j))
                 DrawCell(i, j, dc);
 
@@ -888,12 +887,14 @@ LifeNewGameDialog::LifeNewGameDialog(wxWindow *parent, int *w, int *h)
     m_w = w;
     m_h = h;
 
-    // prompts and text controls
-    wxString strw, strh;
-    strw.Printf(_("%u"), *m_w);
-    strh.Printf(_("%u"), *m_h);
-    m_spinctrlw = new wxSpinCtrl( this, -1, strw );
-    m_spinctrlh = new wxSpinCtrl( this, -1, strh );
+    // spin ctrls
+    m_spinctrlw = new wxSpinCtrl( this, -1 );
+    m_spinctrlw->SetValue(*m_w);
+    m_spinctrlw->SetRange(LIFE_MIN, LIFE_MAX);
+
+    m_spinctrlh = new wxSpinCtrl( this, -1 );
+    m_spinctrlh->SetValue(*m_h);
+    m_spinctrlh->SetRange(LIFE_MIN, LIFE_MAX);
 
     // component layout
     wxBoxSizer *inputsizer1 = new wxBoxSizer( wxHORIZONTAL );
