@@ -292,7 +292,7 @@ void wxControl::MacPostControlCreate()
     {
         // no font
     }
-    else if ( IsKindOf( CLASSINFO( wxStaticBox ) ) || IsKindOf( CLASSINFO( wxRadioBox ) ) || IsKindOf( CLASSINFO( wxButton ) ) )
+    else if ( !UMAHasAquaLayout() && (IsKindOf( CLASSINFO( wxStaticBox ) ) || IsKindOf( CLASSINFO( wxRadioBox ) ) || IsKindOf( CLASSINFO( wxButton ) ) ) )
     {
         ControlFontStyleRec     controlstyle ;
         controlstyle.flags = kControlUseFontMask ;
