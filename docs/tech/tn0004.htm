@@ -15,10 +15,11 @@ This document is available online <a href="http://biolpc22.york.ac.uk/wx/bc/ide.
 
 <h2>
 Before you begin</h2>
-This refers to the 2.1.15 wxWindows distribution. It is my account of trying
-to compile the samples so I can use the Borland IDE to edit/compile/debug.
-I have used CBuilder 1.00 (2 patches, nice and fast) CBuilder 3 (slower)
-and CBuilder 4 (only occasionally)
+This refers to the <b>2.1.16</b> and 2.1.15 wxWindows distribution. It
+is my account of trying to compile the samples so I can use the Borland
+IDE to edit/compile/debug. I have used CBuilder 1.00 (2 patches, nice and
+fast), CBuilder 3 (slower), and CBuilder 4 (more recently).
+
 <p>Make sure that the wx distribution is extracted to a path with no spaces
 in it, and preferably on the root of your drive. Borland's compilers sometimes
 have problems with spaces and with the long paths which occur if you try
@@ -30,15 +31,15 @@ Build the <b>wx\wx32.lib</b> and related files using the command line compiler
 <p><tt>set wxwin=pathtowx</tt>
 <br><tt>set bccdir=pathtobc4</tt>
 <br><tt>make -f makefile.b32</tt>
-<p>In my case this I extracted the wx distribution in <b>c:\ </b>and the
-compiler is in <b>w:\borland\cb\bin </b>so this looks:
+<p>In my case this I extracted the wx distribution in <b>c:\</b> and the
+compiler is in <b>w:\borland\cb\bin</b> so this looks:
 <p><tt>set wxwin=c:\wx</tt>
 <br><tt>set bccdir=w:\borland\cb</tt>
 <br><tt>make -f makefile.b32</tt>
 <p>If this doesn't <b>compile</b>,
 <ul>
 <li>
-you've probably got the <b><tt>set wxwin </tt></b>command wrong,</li>
+you've probably got the <b><tt>set wxwin</tt></b> command wrong,</li>
 
 <li>
 or the path was not set by the Borland setup</li>
@@ -46,7 +47,7 @@ or the path was not set by the Borland setup</li>
 If this doesn't <b>link</b>,
 <ul>
 <li>
-you've probably got the <b><tt>set bccdir </tt></b>command wrong</li>
+you've probably got the <b><tt>set bccdir</tt></b> command wrong</li>
 </ul>
 
 <hr WIDTH="100%">
@@ -56,18 +57,17 @@ To make the samples</h2>
 <h3>
 Solution 1</h3>
 
-<h4>
 <a href="http://biolpc22.york.ac.uk/wx/bc/download.html">Download</a> a zip file which contains modified
-cpp, mak and bpr files - it will overwrite your wx distribution cpp files!</h4>
+cpp, mak and bpr files - it will overwrite your wx distribution cpp files!
 
-<h4>
-Solution 2</h4>
-Creating the files by hand . This is for the calendar sample; you will
+<h3>
+Solution 2</h3>
+Creating the files by hand. This is for the calendar sample; you will
 have to change the names for the other samples
 <ul>
 <li>
 Create a calendar.mak file [must have the same name as the cpp file] in
-a plain text editor with <a href="http://biolpc22.york.ac.uk/wx/bc/calendar.mak">this contents</a></li>
+a plain text editor with <a href="http://biolpc22.york.ac.uk/wx/bc/calendar.mak">these contents</a></li>:
 </ul>
 <tt>#-----------------------------------------------------------------------------</tt>
 <br><tt>#this is for Borland CBuilder IDE v1 and 3</tt>
@@ -112,8 +112,9 @@ jpeg.lib for image samples</tt>
 <br>&nbsp;
 <ul>
 <li>
-&nbsp;modify the .cpp file to include these<a href="http://biolpc22.york.ac.uk/wx/bc/calendar_include.cpp">
-lines </a>near the top</li>
+&nbsp;modify the .cpp file to include
+<a href="http://biolpc22.york.ac.uk/wx/bc/calendar_include.cpp">these lines</a>
+near the top</li>
 </ul>
 <tt>#ifdef __BIDE__</tt>
 <br><tt>#define _NO_VCL</tt>
@@ -126,7 +127,7 @@ if you have more than one .cpp file</tt>
 <br>&nbsp;
 <p>In CBuilder 1 you can use <b>Open Project</b> to open the mak file and
 edit/compile/debug.
-<br>In CBuilder 3 and 4, then you can use <b>Open Project </b>and choose
+<p>In CBuilder 3 and 4, then you can use <b>Open Project</b> and choose
 the Open Borland CBuilder 1 Project from the drop down file types. The
 system will modify the mak file and update it for you.
 <p>Now try compiling it in the ide.
@@ -135,7 +136,7 @@ Hints:</h4>
 
 <ul>
 <li>
-You can set it up for normal and debug modes (change the -v switch in CFLAG1&nbsp;
+You can set it up for normal and debug modes (change the -v switch in CFLAG1
 and LFLAG)</li>
 
 <li>
@@ -144,12 +145,12 @@ a simple editor like notepad to the file minimal.mak (I have had problems
 in CBuilder 1.00 with Unix style line endings)</li>
 
 <li>
-If you want to avoid the warnings about hiding virtual methods add <b><tt>-w-hid
-</tt></b>to the CFLAGS1 line</li>
+If you want to avoid the warnings about hiding virtual methods add
+<b><tt>-w-hid</tt></b> to the CFLAG1 line</li>
 
 <li>
 the #define WinMain WinMain line allows CBuilder to think it has a non-VCL
-<tt>main </tt>function</li>
+<tt>main</tt> function</li>
 
 <li>
 the USEUNIT macros tell CBuilder which other source files to include, without
@@ -168,19 +169,19 @@ Solution 3</h3>
 
 <ul>
 <li>
-download the wxWindows-2.1.15-bcb.zip file,</li>
+download the wxWindows-2.1.16-bcb.zip file,</li>
 
 <li>
 extract it</li>
 
 <li>
-use the <b><tt>idetomak</tt></b> (CBuilder 1) or&nbsp; <b><tt>idetobpr</tt></b>
+use the <b><tt>idetomak</tt></b> (CBuilder 1) or <b><tt>idetobpr</tt></b>
 (CBuilder 3/4) utility on the <b><tt>.ide</tt></b> file in the samples
-directory. This modifies the cpp source and makes a "suitable" bpr file
+directory. This modifies the cpp source and makes a "suitable" mak or bpr file
 (at least in CBuilder 1/3/4).</li>
 
 <li>
-add the location of the wx/include files in the&nbsp; project | options
+add the location of the wx/include files in the project | options
 | directory dialog</li>
 </ul>
 I found in CBuilder 1 that the <tt>idetomak</tt> utility did not manage
@@ -190,13 +191,13 @@ are correct
 <h2>
 Error with ODBC32</h2>
 Sometimes you get an error saying that there are unresolved externals in
-ODBC. The solution is to run a command prompt in your <b><tt>wx\lib </tt></b>directory
-and use the <b><tt>implib </tt></b>command:
-<p><tt>C:\wx\lib><b>implib odbc32 c:\windows\system\odbc32.dll</b></tt>
+ODBC. The solution is to run a command prompt in your <b><tt>wx\lib</tt></b> directory
+and use the <b><tt>implib</tt></b> command:
+<p><tt>C:\wx\lib&gt;<b>implib odbc32 c:\windows\system\odbc32.dll</b></tt>
 <p>This creates the necessary library, odbc32.lib
 <h2>
 Unresolved Problem</h2>
-<tt>In Borland CBuilder 1.00 (with linker service patch)&nbsp; I frequently
+<tt>In Borland CBuilder 1.00 (with linker service patch) I frequently
 get an error</tt>
 <p><tt>Turbo Incremental Link&nbsp; Version 1.0 Copyright (c) 1997 Borland
 International</tt>
@@ -209,8 +210,7 @@ line 2060</tt>
 <br><tt>Fatal: Access violation.&nbsp; Program terminated.</tt>
 <p><tt>** error 2 ** deleting minimal.exe</tt>
 <p>I have not been able to track down why sometimes this error occurs and
-other times it is OK
-<br>I have not seen this in Cbuilder 3 or 4
+other times it is OK. I have not seen this in Cbuilder 3 or 4.
 <p>
 <hr WIDTH="100%">
 <p>Page updated on 31 May 2000 by Chris Elliott

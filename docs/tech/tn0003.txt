@@ -14,7 +14,7 @@ If adding to the existing manual in docs/latex/wx, you need to
 create a new .tex file, e.g. myclass.tex, and add it to the
 list of classes in classes.tex (in strict alphabetical order).
 You may also want to write a separate topic file, e.g. tmyclass.tex,
-and add the entry to topics.tex.  Also, if applicable, and an entry
+and add the entry to topics.tex.  If applicable, also add an entry
 to category.tex.
 
 If compiling a separate manual, copy an existing set of files from the
