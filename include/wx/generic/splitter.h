@@ -25,7 +25,7 @@ class WXDLLEXPORT wxSplitterEvent;
 // splitter constants
 // ---------------------------------------------------------------------------
 
-enum
+enum wxSplitMode
 {
     wxSPLIT_HORIZONTAL = 1,
     wxSPLIT_VERTICAL
@@ -92,10 +92,16 @@ public:
     wxWindow *GetWindow2() const { return m_windowTwo; }
 
     // Sets the split mode
-    void SetSplitMode(int mode) { m_splitMode = mode; }
+    void SetSplitMode(int mode)
+    {
+        wxASSERT_MSG( mode == wxSPLIT_VERTICAL || mode == wxSPLIT_HORIZONTAL,
+                      _T("invalid split mode") );
+
+        m_splitMode = (wxSplitMode)mode;
+    }
 
     // Gets the split mode
-    int GetSplitMode() const { return m_splitMode; };
+    wxSplitMode GetSplitMode() const { return m_splitMode; };
 
     // Initialize with one window
     void Initialize(wxWindow *window);
@@ -108,10 +114,12 @@ public:
     // absolute value rather than the size of left/upper pane.
     virtual bool SplitVertically(wxWindow *window1,
                                  wxWindow *window2,
-                                 int sashPosition = 0);
+                                 int sashPosition = 0)
+        { return DoSplit(wxSPLIT_VERTICAL, window1, window2, sashPosition); }
     virtual bool SplitHorizontally(wxWindow *window1,
                                    wxWindow *window2,
-                                   int sashPosition = 0);
+                                   int sashPosition = 0)
+        { return DoSplit(wxSPLIT_HORIZONTAL, window1, window2, sashPosition); }
 
     // Removes the specified (or second) window from the view
     // Doesn't actually delete the window.
@@ -212,11 +220,19 @@ protected:
 protected:
     // common part of all ctors
     void Init();
-    
-    // adjusts sash position with respect to min. pane and window sizes
-    void AdjustSashPosition(int &sashPos);
 
-    int         m_splitMode;
+    // common part of SplitVertically() and SplitHorizontally()
+    bool DoSplit(wxSplitMode mode,
+                 wxWindow *window1, wxWindow *window2,
+                 int sashPosition);
+
+    // adjusts sash position with respect to min. pane and window sizes
+    int AdjustSashPosition(int sashPos) const;
+
+    // get either width or height depending on the split mode
+    int GetWindowSize() const;
+
+    wxSplitMode m_splitMode;
     bool        m_permitUnsplitAlways;
     bool        m_needUpdating; // when in live mode, set this to TRUE to resize children in idle
     wxWindow*   m_windowOne;
