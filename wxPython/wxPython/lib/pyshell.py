@@ -198,7 +198,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
 
             # if not on the last line, duplicate the current line
             if self.GetLineCount()-1 !=  self.GetCurrentLine():
-                text, col = self.GetCurrentLineText()
+                text, col = self.GetCurLine()
                 prompt = self.props['ps1']
                 lp = len(prompt)
                 if text[:lp] == prompt:
