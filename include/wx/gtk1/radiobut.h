@@ -22,36 +22,44 @@
 class wxRadioButton: public wxControl
 {
 public:
-    inline wxRadioButton() {}
-    inline wxRadioButton( wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr )
+    wxRadioButton() { }
+    wxRadioButton( wxWindow *parent,
+                   wxWindowID id,
+                   const wxString& label,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxRadioButtonNameStr )
     {
         Create( parent, id, label, pos, size, style, validator, name );
     }
-    bool Create(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr );
+
+    bool Create( wxWindow *parent,
+                 wxWindowID id,
+                 const wxString& label,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxRadioButtonNameStr );
+
     virtual void SetLabel(const wxString& label);
     virtual void SetValue(bool val);
     virtual bool GetValue() const;
-    bool Enable( bool enable );
-    
-  // implementation
-    
+    virtual bool Enable( bool enable );
+
+    // implementation
+
+    virtual bool IsRadioButton() const { return TRUE; }
+
     GSList *m_radioButtonGroup;
     void ApplyWidgetStyle();
     bool IsOwnGtkWindow( GdkWindow *window );
     void OnInternalIdle();
-    
+
     bool m_blockEvent;
-    
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

@@ -64,13 +64,17 @@ void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *r
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton,wxControl)
   
-bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& label,
-  const wxPoint& pos,  const wxSize& size, long style,
-  const wxValidator& validator, const wxString& name )
+bool wxRadioButton::Create( wxWindow *parent,
+                            wxWindowID id,
+                            const wxString& label,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxValidator& validator,
+                            const wxString& name )
 {
     m_acceptsFocus = TRUE;
     m_needParent = TRUE;
-    m_isRadioButton = TRUE;
     
     m_blockEvent = FALSE;
 
@@ -94,10 +98,11 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
         while (node)
         {
             wxWindow *child = node->GetData();
-            if (child->m_isRadioButton)
+            if (child->IsRadioButton())
             {
                 chief = (wxRadioButton*) child;
-                if (child->HasFlag(wxRB_GROUP)) break;
+                if (child->HasFlag(wxRB_GROUP))
+                    break;
             }
             node = node->GetPrevious();
         }
