@@ -65,13 +65,15 @@
 #include <string.h> //strstr
 
 #include "wx/log.h"
-#include "wx/msgdlg.h"
 
 #ifdef __WXGTK__
     //for <gdk/gdkx.h>/related for GDK_WINDOW_XWINDOW
 #    include "wx/gtk/win_gtk.h"
 #    include <gtk/gtksignal.h>
-//#    include <gst/gconf/gconf.h> //gstreamer gnome interface
+#    if wxUSE_DYNLIB_CLASS
+#        include "wx/dynlib.h"
+#    endif
+//#    include <gst/gconf/gconf.h> //gstreamer gnome interface - needs deps
 #endif
 
 
@@ -205,9 +207,11 @@ gint wxGStreamerMediaBackend::OnGTKRealize(GtkWidget* theWidget,
     GstElement* videosink;
     g_object_get (G_OBJECT (be->m_player), "video-sink", &videosink, NULL);
     
-    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(videosink),
-                                  GDK_WINDOW_XWINDOW( window )
-                                  );
+    GstElement* overlay = gst_bin_get_by_interface (GST_BIN (videosink),
+                                    GST_TYPE_X_OVERLAY);
+    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(overlay),
+                                GDK_WINDOW_XWINDOW( window )
+                                );
     
     return 0;
 }
@@ -349,7 +353,13 @@ void wxGStreamerMediaBackend::OnError(GstElement *play,
     gchar      *debug,
     gpointer    data)
 {
-    wxMessageBox(wxString::Format(wxT("Error in wxMediaCtrl!\nError Message:%s"), wxString(err->message, wxConvLocal).c_str()));
+    wxLogSysError(
+        wxString::Format(
+            wxT("Error in wxMediaCtrl!\nError Message:%s\nDebug:%s\n"), 
+            (const wxChar*)wxConvUTF8.cMB2WX(err->message),
+            (const wxChar*)wxConvUTF8.cMB2WX(debug)
+                        )
+                 );
 }
 
 
@@ -381,10 +391,10 @@ void wxGStreamerMediaBackend::OnVideoCapsReady(GstPad* pad, GParamSpec* pspec, g
 // wxGStreamerMediaBackend::Load (URI version)
 //
 // 1) Stops/Cleanups the previous instance if there is any
-// 2) Creates the gstreamer interfaces - playbin and xvimagesink for video
+// 2) Creates the gstreamer playbin
 // 3) If there is no playbin bail out
 // 4) Set up the error and end-of-stream callbacks for our player
-// 5) Make sure our video sink can support the x overlay interface
+// 5) Make our video sink and make sure it supports the x overlay interface
 // 6) Make sure the passed URI is valid and tell playbin to load it
 // 7) Use the xoverlay extension to tell gstreamer to play in our window
 // 8) Get the video size - pause required to set the stream in action
@@ -402,33 +412,65 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
         return false;
         
     //4
-    g_signal_connect (m_player, "eos", G_CALLBACK (OnError), this);
-    g_signal_connect (m_player, "error", G_CALLBACK (OnFinish), this);
+    g_signal_connect (m_player, "eos", G_CALLBACK (OnFinish), this);
+    g_signal_connect (m_player, "error", G_CALLBACK (OnError), this);
 
     //5
-//#ifdef __WXGTK__
+    GstElement* overlay = NULL;
+    GstElement* videosink;
+
+#if defined(__WXGTK__) && wxUSE_DYNLIB_CLASS
+
     //use gnome-specific gstreamer extensions
-//    GstElement* videosink = gst_gconf_get_default_video_sink();
-//#else
-    GstElement* videosink = gst_element_factory_make ("xvimagesink", "videosink");
-    if ( !GST_IS_OBJECT(videosink) )
-        videosink = gst_element_factory_make ("ximagesink", "videosink");
-//#endif
-    wxASSERT( GST_IS_X_OVERLAY(videosink) );
-    if ( ! GST_IS_X_OVERLAY(videosink) )
-        return false;
+    //if synthisis (?) file not found, it 
+    //spits out a warning and uses ximagesink
+    wxDynamicLibrary gstgconf;
+    if(gstgconf.Load(gstgconf.CanonicalizeName(wxT("gstgconf-0.8"))))
+    {
+        typedef GstElement* (*LPgst_gconf_get_default_video_sink) (void);
+        LPgst_gconf_get_default_video_sink pGst_gconf_get_default_video_sink = 
+        (LPgst_gconf_get_default_video_sink)
+            gstgconf.GetSymbol(wxT("gst_gconf_get_default_video_sink"));
+
+        if (pGst_gconf_get_default_video_sink)        
+        {
+            videosink = (*pGst_gconf_get_default_video_sink) ();
+            wxASSERT( GST_IS_BIN(videosink) );
+            overlay = gst_bin_get_by_interface (GST_BIN (videosink),
+                                            GST_TYPE_X_OVERLAY);
+        }
+        
+        gstgconf.Detach();
+    }
+        
+        if ( ! GST_IS_X_OVERLAY(overlay) )
+        {
+#endif
+            videosink = gst_element_factory_make ("xvimagesink", "videosink");
+            if ( !GST_IS_OBJECT(videosink) )
+                videosink = gst_element_factory_make ("ximagesink", "videosink");
+            
+            overlay = videosink;
+        
+            wxASSERT( GST_IS_X_OVERLAY(overlay) );
+            if ( ! GST_IS_X_OVERLAY(overlay) )
+                return false;
+#if defined(__WXGTK__) && wxUSE_DYNLIB_CLASS
+        }
+#endif
 
     g_object_set (G_OBJECT (m_player),
                     "video-sink", videosink,
 //                    "audio-sink", m_audiosink,
                     NULL);    
+
     //6
     wxString locstring = location.BuildUnescapedURI();
     wxASSERT(gst_uri_protocol_is_valid("file"));
     wxASSERT(gst_uri_is_valid(locstring.mb_str()));
 
     g_object_set (G_OBJECT (m_player), "uri", (const char*)locstring.mb_str(), NULL);
-    
+        
     //7    
 #ifdef __WXGTK__
     if(!GTK_WIDGET_REALIZED(m_ctrl->m_wxwindow))
@@ -447,7 +489,7 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
 #endif
 
  
-    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(videosink),
+    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(overlay),
 #ifdef __WXGTK__
                         GDK_WINDOW_XWINDOW( window )
 #else
@@ -458,11 +500,12 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
 #ifdef __WXGTK__                                  
     } //end else block
 #endif 
- 
-    //8
-    wxASSERT(gst_element_set_state (m_player,
-                    GST_STATE_PAUSED)    == GST_STATE_SUCCESS);            
     
+    //8
+    
+    wxASSERT(gst_element_set_state (m_player,
+                GST_STATE_PAUSED)    == GST_STATE_SUCCESS);            
+
     const GList *list = NULL;
     g_object_get (G_OBJECT (m_player), "stream-info", &list, NULL);
 
