@@ -370,9 +370,6 @@ protected:
     long              m_baseStyle;  // Basic Windows style flags, for recreation purposes
     int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                     // keep track of inserted/deleted columns
-    long              m_count;      // Keep track of item count to save calls to
-                                    // ListView_GetItemCount
-    bool              m_ignoreChangeMessages;
 
     // TRUE if we have any internal data (user data & attributes)
     bool m_AnyInternalData;
