@@ -537,7 +537,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 
 	if ( !isEnabled ){
 	
-#ifdef __WXMSW // This is currently MSW specific
+#ifdef __WXMSW__ // This is currently MSW specific
 		greay_out_image_on_dc( destDc, destDim.x, destDim.y );
 #else
 		wxBrush checkerBrush( wxBitmap( (const char*)_gDisableImage,8,8) );
