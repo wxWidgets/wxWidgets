@@ -635,7 +635,20 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
     RgnHandle       diffRgn = NewRgn() ;
     if ( updateRgn && diffRgn )
     {
+#if 1
+        // macos internal control redraws clean up areas we'd like to redraw ourselves
+        // therefore we pick the boundary rect and make sure we can redraw it
+        RgnHandle trueUpdateRgn = NewRgn() ;
+        Rect trueUpdateRgnBoundary ;
+        GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), trueUpdateRgn );
+        GetRegionBounds( trueUpdateRgn , &trueUpdateRgnBoundary ) ;
+        RectRgn( (RgnHandle) updateRgn , &trueUpdateRgnBoundary ) ;
+        if ( trueUpdateRgn )
+            DisposeRgn( trueUpdateRgn ) ;
+        SetPortVisibleRegion(  GetWindowPort( (WindowRef)m_macWindow ), updateRgn ) ;
+#else
         GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), updateRgn );
+#endif
         DiffRgn( updateRgn , (RgnHandle) m_macNoEraseUpdateRgn , diffRgn ) ;
         if ( !EmptyRgn( updateRgn ) )
         {
@@ -815,9 +828,15 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
     // so refresh the whole window on activation and deactivation.
     long osVersion = UMAGetSystemVersion();
     if (osVersion >= 0x1000 && osVersion < 0x1020)
+    {
         Refresh(TRUE);
+    }
     else
-        MacSuperEnabled( inIsActivating ) ;
+    {
+        // for the moment we have to resolve some redrawing issues like this
+        // the OS is stealing some redrawing areas as soon as it draws a control
+        Refresh(TRUE);
+    }
 }
 
 #if !TARGET_CARBON
