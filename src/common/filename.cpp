@@ -1265,18 +1265,16 @@ wxString wxFileName::GetLongPath() const
     if ( !s_triedToLoad )
     {
         s_triedToLoad = TRUE;
-        wxDllType dllKernel = wxDllLoader::LoadLibrary(_T("kernel32"));
-        if ( dllKernel )
+        wxDynamicLibrary dllKernel(_T("kernel32"));
+        if ( dllKernel.IsLoaded() )
         {
             // may succeed or fail depending on the Windows version
             static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
 #ifdef _UNICODE
-            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathNameW"));
+            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) dllKernel.GetSymbol(_T("GetLongPathNameW"));
 #else
-            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathNameA"));
+            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) dllKernel.GetSymbol(_T("GetLongPathNameA"));
 #endif
-
-            wxDllLoader::UnloadLibrary(dllKernel);
 
             if ( s_pfnGetLongPathName )
             {

@@ -13,7 +13,7 @@
 #define _WX_DEFS_H_
 
 #ifdef __GNUG__
-    #pragma interface "defs.h"
+#pragma interface "defs.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -24,15 +24,15 @@
 
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
-    #error "Target can't be both X and Windows"
+#error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
       !defined(__WXMGL__) && wxUSE_GUI
-    #ifdef __UNIX__
-        #error "No Target! You should use wx-config program for compilation flags!"
-    #else // !Unix
-        #error "No Target! You should use supplied makefiles for compilation!"
-    #endif // Unix/!Unix
+#ifdef __UNIX__
+#error "No Target! You should use wx-config program for compilation flags!"
+#else // !Unix
+#error "No Target! You should use supplied makefiles for compilation!"
+#endif // Unix/!Unix
 #endif
 
 // suppress some Visual C++ warnings
@@ -77,11 +77,11 @@
 // possibility to build non GUI apps is new, so don't burden ourselves with
 // compatibility code
 #if !wxUSE_GUI
-    #undef WXWIN_COMPATIBILITY_2
-    #undef WXWIN_COMPATIBILITY_2_2
+#undef WXWIN_COMPATIBILITY_2
+#undef WXWIN_COMPATIBILITY_2_2
 
-    #define WXWIN_COMPATIBILITY_2 0
-    #define WXWIN_COMPATIBILITY_2_2 0
+#define WXWIN_COMPATIBILITY_2 0
+#define WXWIN_COMPATIBILITY_2_2 0
 #endif // !GUI
 
 // ============================================================================
@@ -94,24 +94,30 @@
 
 #if defined(__VISUALC__) && !defined(WIN32)
     // VC1.5 does not have LPTSTR type
-    #define LPTSTR LPSTR
-    #define LPCTSTR LPCSTR
-#endif // VC++ 1.5
+#define LPTSTR  LPSTR
+#define LPCTSTR LPCSTR
+#elif defined(__BORLANDC__) && !defined(__WIN32__)
+#ifndef LPTSTR
+#define LPTSTR  LPSTR
+#endif
+#ifndef LPCTSTR
+#define LPCTSTR LPSTR
+#endif
+#endif
+
 
 /*
    Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
    so define it ourselves (newer versions do it for all files, though, and
    don't allow it to be redefined)
  */
-#ifdef __DECCXX
-    #if !defined(__VMS) && !defined(__cplusplus)
-        #define __cplusplus
-    #endif
+#if defined(__DECCXX) && !defined(__VMS) && !defined(__cplusplus)
+#define __cplusplus
 #endif /* __DECCXX */
 
 // Resolves linking problems under HP-UX when compiling with gcc/g++
 #if defined(__HPUX__) && defined(__GNUG__)
-    #define va_list __gnuc_va_list
+#define va_list __gnuc_va_list
 #endif // HP-UX
 
 // ----------------------------------------------------------------------------
@@ -1722,17 +1728,7 @@ typedef unsigned long   WXHDC;
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
-#ifdef __WXMSW__
-typedef unsigned int    WXWPARAM;
-typedef long            WXLPARAM;
-#else
-#  define WXWPARAM      MPARAM
-#  define WXLPARAM      MPARAM
-#  define RECT          RECTL
-#  define LOGFONT       FATTRS
-#  define LOWORD        SHORT1FROMMP
-#  define HIWORD        SHORT2FROMMP
-#endif // __WXMSW__
+
 typedef unsigned long   WXCOLORREF;
 typedef void *          WXRGNDATA;
 typedef void *          WXMSG;
@@ -1744,7 +1740,31 @@ typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
 
+typedef WXHWND          WXWidget;
+
+#endif // MSW or OS2
+
+
+#ifdef __WXMSW__
+typedef unsigned int    WXWPARAM;
+typedef long            WXLPARAM;
+
+#if !defined(__WIN32__) || defined(__GNUWIN32__) || defined(__WXWINE__) || defined(__WXMICROWIN__)
+typedef int             (*WXFARPROC)();
+#else
+typedef int             (__stdcall *WXFARPROC)();
+#endif
+#endif // __WXMSW__
+
+
 #if defined(__WXPM__)
+#define WXWPARAM        MPARAM
+#define WXLPARAM        MPARAM
+#define RECT            RECTL
+#define LOGFONT         FATTRS
+#define LOWORD          SHORT1FROMMP
+#define HIWORD          SHORT2FROMMP
+
 typedef unsigned long   WXMPARAM;
 typedef unsigned long   WXMSGID;
 typedef void*           WXRESULT;
@@ -1792,35 +1812,16 @@ typedef struct tagLOGPALETTE
     WORD palNumentries;
     WORD PALETTEENTRY[1];
 } LOGPALETTE;
+
+#if (defined(__VISAGECPP__) && (__IBMCPP__ < 400)) || defined (__WATCOMC__)
+    // VA 3.0 for some reason needs base data types when typedefing a proc proto???
+typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
+#else
+typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
+#endif
+
 #endif //__WXPM__
 
-#if defined(__GNUWIN32__) || defined(__WXWINE__) || defined(__WXMICROWIN__)
-    typedef int (*WXFARPROC)();
-#elif defined(__WIN32__)
-    typedef int (__stdcall *WXFARPROC)();
-#elif defined(__WXPM__)
-#  if (defined(__VISAGECPP__) && (__IBMCPP__ < 400)) || defined (__WATCOMC__)
-    // VA 3.0 for some reason needs base data types when typedefing a proc proto???
-    typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
-#  else
-    typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
-#  endif
-#else
-    typedef int (*WXFARPROC)();
-#endif
-
-typedef WXHWND WXWidget;
-
-#if defined(__BORLANDC__) && !defined(__WIN32__)
-#  ifndef LPTSTR
-#    define LPTSTR LPSTR
-#  endif
-#  ifndef LPCTSTR
-#    define LPCTSTR LPSTR
-#  endif
-#endif
-
-#endif // MSW or OS2
 
 #ifdef __WXMOTIF__
 /* Stand-ins for X/Xt/Motif types */
@@ -1860,13 +1861,13 @@ typedef struct _GdkColormap     GdkColormap;
 typedef struct _GdkFont         GdkFont;
 typedef struct _GdkGC           GdkGC;
 #ifdef __WXGTK20__
-    typedef struct _GdkDrawable     GdkWindow;
-    typedef struct _GdkDrawable     GdkBitmap;
-    typedef struct _GdkDrawable     GdkPixmap;
+typedef struct _GdkDrawable     GdkWindow;
+typedef struct _GdkDrawable     GdkBitmap;
+typedef struct _GdkDrawable     GdkPixmap;
 #else
-    typedef struct _GdkWindow       GdkWindow;
-    typedef struct _GdkWindow       GdkBitmap;
-    typedef struct _GdkWindow       GdkPixmap;
+typedef struct _GdkWindow       GdkWindow;
+typedef struct _GdkWindow       GdkBitmap;
+typedef struct _GdkWindow       GdkPixmap;
 #endif
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkRegion       GdkRegion;

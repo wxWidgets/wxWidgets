@@ -6,7 +6,7 @@
 // Created:     16/04/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -56,41 +56,29 @@ typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCSTR, UINT, DWORD );
 typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, DWORD );
 #define HTMLHELP_NAME "HtmlHelpW"
 #endif
-// dll handle/reference count
+// dll symbol handle
 static HTMLHELP gs_htmlHelp = 0;
-static wxDllType gs_dllHandle = 0;
-static int gs_dllCount = 0;
 
 static bool LoadHtmlHelpLibrary()
 {
-    if( !gs_dllCount )
+    wxPluginLibrary *lib = wxPluginManager::LoadLibrary( _T("HHCTRL.OCX"), wxDL_DEFAULT | wxDL_VERBATIM );
+
+    if( !lib->IsLoaded() )
     {
-        gs_dllHandle = wxDllLoader::LoadLibrary( "hhctrl.ocx" );
-        if( !gs_dllHandle )
-        {
-            wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
-            return FALSE;
-        }
-        else
-        {
-            gs_dllCount = 1;
-            gs_htmlHelp = (HTMLHELP)wxDllLoader::GetSymbol( gs_dllHandle, HTMLHELP_NAME );
-
-            if( !gs_htmlHelp )
-            {
-                wxLogError(_("Failed to initialize MS HTML Help."));
-
-                wxDllLoader::UnloadLibrary(gs_dllHandle);
-                gs_dllHandle = 0;
-                gs_dllCount = 0;
-
-                return FALSE ;
-            }
-        }
+        wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
+        return FALSE;
     }
     else
     {
-        ++gs_dllCount;
+        gs_htmlHelp = (HTMLHELP)lib->GetSymbol( HTMLHELP_NAME );
+
+        if( !gs_htmlHelp )
+        {
+            wxLogError(_("Failed to initialize MS HTML Help."));
+
+            lib->UnrefLib();
+            return FALSE ;
+        }
     }
 
     return TRUE;
@@ -98,10 +86,9 @@ static bool LoadHtmlHelpLibrary()
 
 static void UnloadHtmlHelpLibrary()
 {
-    if( gs_dllCount != 0 && !--gs_dllCount )
+    if( gs_htmlHelp )
     {
-        wxDllLoader::UnloadLibrary( gs_dllHandle );
-        gs_dllHandle = 0;
+        wxPluginManager::UnloadLibrary( _T("HHCTRL.OCX") );
         gs_htmlHelp = 0;
     }
 }
@@ -263,3 +250,5 @@ wxString wxCHMHelpController::GetValidFilename(const wxString& file) const
 }
 
 #endif // wxUSE_HELP
+
+// vi:sts=4:sw=4:et

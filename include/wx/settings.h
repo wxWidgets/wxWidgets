@@ -131,6 +131,8 @@ enum wxSystemFeature
 // also note that the methods are implemented in the platform-specific source
 // files (i.e. this is not a real base class as we can't override its virtual
 // functions because it doesn't have any)
+
+#if 0
 class WXDLLEXPORT wxSystemSettingsBase
 {
 public:
@@ -158,6 +160,7 @@ public:
     static bool GetCapability(int index)
         { return HasFeature((wxSystemFeature)index); }
 };
+#endif
 
 // ----------------------------------------------------------------------------
 // include the declaration of the real platform-dependent class

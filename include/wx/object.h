@@ -208,11 +208,11 @@ name##PluginSentinel  m_pluginsentinel;
 #define _IMPLEMENT_DL_SENTINEL(name)                                \
  const wxString name::name##PluginSentinel::sm_className(#name);    \
  name::name##PluginSentinel::name##PluginSentinel() {               \
-    wxDLManifestEntry *e = (wxDLManifestEntry*) wxDLManifestEntry::ms_classes.Get(#name);   \
+    wxPluginLibrary *e = (wxPluginLibrary*) wxPluginLibrary::ms_classes.Get(#name);   \
     if( e != 0 ) { e->RefObj(); }                                      \
  }                                                                  \
  name::name##PluginSentinel::~##name##PluginSentinel() {            \
-    wxDLManifestEntry *e = (wxDLManifestEntry*) wxDLManifestEntry::ms_classes.Get(#name);   \
+    wxPluginLibrary *e = (wxPluginLibrary*) wxPluginLibrary::ms_classes.Get(#name);   \
     if( e != 0 ) { e->UnrefObj(); }                                 \
  }
 #else
