@@ -594,6 +594,9 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         m_width = actualWidth ;
         m_height = actualHeight ;
 
+		// update any low-level frame-relative positions
+
+		MacUpdateDimensions() ;
         // erase new position
 
         Refresh() ;
@@ -1195,6 +1198,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         if (child == m_vScrollBar) continue;
         if (child == m_hScrollBar) continue;
         if (child->IsTopLevel()) continue;
+        
         int x,y;
         child->GetPosition( &x, &y );
         int w,h;
@@ -1437,7 +1441,7 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
         return FALSE;
 
 
-    if ( IsKindOf( CLASSINFO ( wxStaticBox ) ) || IsKindOf( CLASSINFO( wxSpinCtrl ) ))
+    if ( IsKindOf( CLASSINFO ( wxStaticBox ) ) /* || IsKindOf( CLASSINFO( wxSpinCtrl ) ) */)
         return FALSE ;
 
     WindowRef window = (WindowRef) MacGetRootWindow() ;

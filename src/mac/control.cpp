@@ -118,7 +118,13 @@ bool wxControl::Create(wxWindow *parent, wxWindowID id,
     m_macControl = NULL ;
     m_macHorizontalBorder = 0 ; // additional pixels around the real control
     m_macVerticalBorder = 0 ;
+    
     bool rval = wxWindow::Create(parent, id, pos, size, style, name);
+    if ( parent )
+    {
+        m_backgroundColour = parent->GetBackgroundColour() ;
+        m_foregroundColour = parent->GetForegroundColour() ;
+    }
     if (rval) {
 #if wxUSE_VALIDATORS
         SetValidator(validator);
@@ -410,7 +416,7 @@ void wxControl::MacAdjustControlRect()
             else
                 m_width = bestsize.right - bestsize.left ;
             
-            m_width += 2 * m_macHorizontalBorder ;
+            m_width += 2 * m_macHorizontalBorder + MacGetLeftBorderSize() + MacGetRightBorderSize() ;
         }
         if ( m_height == -1 )
         {
@@ -418,10 +424,10 @@ void wxControl::MacAdjustControlRect()
             if ( m_height < 10 )
                 m_height = 13 ;
 
-            m_height += 2 * m_macVerticalBorder;
+            m_height += 2 * m_macVerticalBorder + MacGetTopBorderSize() + MacGetBottomBorderSize() ;
         }
-        
-        UMASizeControl( (ControlHandle) m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
+  		MacUpdateDimensions() ;      
+//        UMASizeControl( (ControlHandle) m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
     }
 }
 
@@ -433,35 +439,49 @@ WXWidget wxControl::MacGetContainerForEmbedding()
     return wxWindow::MacGetContainerForEmbedding() ;
 }
 
+void wxControl::MacUpdateDimensions() 
+{
+	// actually in the current systems this should never be possible, but later reparenting
+	// may become a reality
+	
+	if ( (ControlHandle) m_macControl == NULL )
+		return ;
+		
+	if ( GetParent() == NULL )
+		return ;
+		
+    WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
+    if ( rootwindow == NULL )
+    	return ;
+    	
+    Rect oldBounds ;       
+    GetControlBounds( (ControlHandle) m_macControl , &oldBounds ) ; 
+    
+    int new_x = m_x + MacGetLeftBorderSize() + m_macHorizontalBorder ;
+    int new_y = m_y + MacGetTopBorderSize() + m_macVerticalBorder ;
+    int new_width = m_width - MacGetLeftBorderSize() - MacGetRightBorderSize() - 2 * m_macHorizontalBorder ;
+    int new_height = m_height - MacGetTopBorderSize() - MacGetBottomBorderSize() - 2 * m_macVerticalBorder ;
+    
+    GetParent()->MacWindowToRootWindow( & new_x , & new_y ) ;
+    bool doMove = new_x != oldBounds.left || new_y != oldBounds.top ;
+    bool doResize =  ( oldBounds.right - oldBounds.left ) != new_width || (oldBounds.bottom - oldBounds.top ) != new_height ;
+	if ( doMove || doResize )
+	{
+		InvalWindowRect( rootwindow, &oldBounds ) ;
+		if ( doMove )
+		{
+			UMAMoveControl( (ControlHandle) m_macControl , new_x , new_y ) ;
+		}
+		if ( doResize )
+		{
+			UMASizeControl( (ControlHandle) m_macControl , new_width , new_height ) ;
+		}
+	}
+}
+
 void wxControl::MacSuperChangedPosition() 
 {
-    if ( (ControlHandle) m_macControl )
-    {
-        Rect contrlRect ;       
-        GetControlBounds( (ControlHandle) m_macControl , &contrlRect ) ; 
-        int former_mac_x = contrlRect.left ;
-        int former_mac_y = contrlRect.top ;
-        int mac_x = m_x ;
-        int mac_y = m_y ;
-        GetParent()->MacWindowToRootWindow( & mac_x , & mac_y ) ;
-        
-        WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
-
-        if ( mac_x + m_macHorizontalBorder != former_mac_x || 
-            mac_y + m_macVerticalBorder != former_mac_y )
-        {
-            {
-                Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
-                InvalWindowRect( rootwindow , &inval ) ;
-            }
-            UMAMoveControl( (ControlHandle) m_macControl , mac_x + m_macHorizontalBorder , mac_y + m_macVerticalBorder ) ;
-            {
-                Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
-                InvalWindowRect( rootwindow , &inval ) ;
-            }
-        }
-    }
-
+ 	MacUpdateDimensions() ;
     wxWindow::MacSuperChangedPosition() ;
 }
 
@@ -500,6 +520,10 @@ void  wxControl::DoSetSize(int x, int y,
             int width, int height,
             int sizeFlags )
 {
+    wxWindow::DoSetSize( x , y ,width , height ,sizeFlags ) ;
+    return ;
+/*
+
     if ( (ControlHandle) m_macControl == NULL )
     {
         wxWindow::DoSetSize( x , y ,width , height ,sizeFlags ) ;
@@ -614,6 +638,7 @@ void  wxControl::DoSetSize(int x, int y,
  
           Refresh() ;
      }
+*/
 }
 
 bool  wxControl::Show(bool show) 

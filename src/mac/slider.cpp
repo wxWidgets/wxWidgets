@@ -327,119 +327,30 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
  
  void wxSlider::DoSetSize(int x, int y, int width, int height, int sizeFlags)
  {
-     Rect oldbounds, newbounds;
-     int new_x, new_y, new_width, new_height;
-     int mac_x, mac_y;
- 
-     new_x = m_x;
-     new_y = m_y;
-     new_width  = m_width;
-     new_height = m_height;
- 
-     if (sizeFlags & wxSIZE_ALLOW_MINUS_ONE)
-     {
-         new_x      = x;
-         new_y      = y;
-         new_width  = width;
-         new_height = height;
-     }
-     else
-     {
-         if (x != -1)      new_x      = x;
-         if (y != -1)      new_y      = y;
-         if (width != -1)  new_width  = width;
-         if (height != -1) new_height = height;
-     }
- 
-     if(sizeFlags & wxSIZE_AUTO)
-     {
-         wxSize size = GetBestSize();
-         if (sizeFlags & wxSIZE_AUTO_WIDTH)
-         {
-             if (width == -1)   new_width = size.x;
-         }
-         if (sizeFlags & wxSIZE_AUTO_HEIGHT)
-         {
-             if (height == -1)   new_height = size.y;
-         }
-     }
- 
-     AdjustForParentClientOrigin(new_x, new_y, sizeFlags);
- 
-     mac_x = new_x;
-     mac_y = new_y;
-     if(GetParent()) {
-         GetParent()->MacClientToRootWindow(&mac_x, &mac_y);
-     }
- 
-     GetControlBounds( (ControlHandle) m_macControl, &oldbounds);
-     oldbounds.right = oldbounds.left + m_width;
-     oldbounds.bottom = oldbounds.top + m_height;
- 
-     bool doMove = false;
-     bool doResize = false;
- 
-     if ( mac_x != oldbounds.left || mac_y != oldbounds.top )
-     {
-         doMove = true ;
-     }
-     if ( new_width != m_width || new_height != m_height )
-     {
-         doResize = true ;
-     }
- 
-     if ( doMove || doResize )
-     {
-         // Ensure resize is within constraints
-         if ((m_minWidth != -1) && (new_width < m_minWidth)) {
-             new_width = m_minWidth;
-         }
-         if ((m_minHeight != -1) && (new_height < m_minHeight)) {
-             new_height = m_minHeight;
-         }
-         if ((m_maxWidth != -1) && (new_width > m_maxWidth)) {
-             new_width = m_maxWidth;
-         }
-         if ((m_maxHeight != -1) && (new_height > m_maxHeight)) {
-             new_height = m_maxHeight;
-         }
- 
-         DoMoveWindow(new_x, new_y, new_width, new_height);
- 
-         // Update window at old and new positions
-         SetRect(&newbounds, m_x, m_y, m_x + m_width, m_y + m_height);
-         WindowRef rootwindow = (WindowRef) MacGetRootWindow();
-         InvalWindowRect( rootwindow , &oldbounds );
-         InvalWindowRect( rootwindow , &newbounds );
- 
-         if ( doMove )
-         {
-             wxMoveEvent event(wxPoint(m_x, m_y), m_windowId);
-             event.SetEventObject(this);
-             GetEventHandler()->ProcessEvent(event) ;
-         }
-         if ( doResize )
-         {
-             wxSizeEvent event(wxSize(m_width, m_height), m_windowId);
-             event.SetEventObject(this);
-             GetEventHandler()->ProcessEvent(event);
-         }
-     }
+    wxControl::DoSetSize( x, y , width , height ,sizeFlags ) ;
  }
  
- void wxSlider::DoMoveWindow(int x, int y, int width, int height)
- {
-     m_x = x;
-     m_y = y;
-     m_width  = width;
-     m_height = height;
- 
+ void wxSlider::MacUpdateDimensions() 
+{
+	// actually in the current systems this should never be possible, but later reparenting
+	// may become a reality
+	
+	if ( (ControlHandle) m_macControl == NULL )
+		return ;
+		
+	if ( GetParent() == NULL )
+		return ;
+		
+    WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
+    if ( rootwindow == NULL )
+    	return ;
+    	
      int  xborder, yborder;
      int  minValWidth, maxValWidth, textwidth, textheight;
      int  sliderBreadth;
  
      xborder = yborder = 0;
- 
+
      if (GetWindowStyle() & wxSL_LABELS)
      {
          wxString text;
@@ -469,22 +380,45 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
          if(GetWindowStyle() & wxSL_VERTICAL)
          {
              m_macMinimumStatic->Move(sliderBreadth + wxSLIDER_BORDERTEXT,
-                                      height - yborder - textheight);
+                                      m_height - yborder - textheight);
              m_macMaximumStatic->Move(sliderBreadth + wxSLIDER_BORDERTEXT, 0);
-             m_macValueStatic->Move(0, height - textheight);
+             m_macValueStatic->Move(0, m_height - textheight);
          }
          else
          {
              m_macMinimumStatic->Move(0, sliderBreadth + wxSLIDER_BORDERTEXT);
-             m_macMaximumStatic->Move(width - xborder - maxValWidth / 2,
+             m_macMaximumStatic->Move(m_width - xborder - maxValWidth / 2,
                                       sliderBreadth + wxSLIDER_BORDERTEXT);
-             m_macValueStatic->Move(width - textwidth, 0);
+             m_macValueStatic->Move(m_width - textwidth, 0);
          }
      }
- 
-     if(GetParent()) {
-         GetParent()->MacClientToRootWindow(&x, &y);
-     }
-     UMAMoveControl( (ControlHandle) m_macControl, x, y);
-     UMASizeControl( (ControlHandle) m_macControl, width - xborder, height - yborder);
+
+    Rect oldBounds ;       
+    GetControlBounds( (ControlHandle) m_macControl , &oldBounds ) ; 
+    
+    int new_x = m_x + MacGetLeftBorderSize() + m_macHorizontalBorder ;
+    int new_y = m_y + MacGetTopBorderSize() + m_macVerticalBorder ;
+    int new_width = m_width - MacGetLeftBorderSize() - MacGetRightBorderSize() - 2 * m_macHorizontalBorder - xborder ;
+    int new_height = m_height - MacGetTopBorderSize() - MacGetBottomBorderSize() - 2 * m_macVerticalBorder - yborder ;
+    
+    GetParent()->MacWindowToRootWindow( & new_x , & new_y ) ;
+    bool doMove = new_x != oldBounds.left || new_y != oldBounds.top ;
+    bool doResize =  ( oldBounds.right - oldBounds.left ) != new_width || (oldBounds.bottom - oldBounds.top ) != new_height ;
+	if ( doMove || doResize )
+	{
+		InvalWindowRect( rootwindow, &oldBounds ) ;
+		if ( doMove )
+		{
+			UMAMoveControl( (ControlHandle) m_macControl , new_x , new_y ) ;
+		}
+		if ( doResize )
+		{
+			UMASizeControl( (ControlHandle) m_macControl , new_width , new_height ) ;
+		}
+	}
+}
+
+ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
+ {
+    wxControl::DoMoveWindow(x,y,width,height) ;
 }

@@ -51,7 +51,7 @@ class wxComboBoxText : public wxTextCtrl
 {
 public:
     wxComboBoxText( wxComboBox * cb )
-        : wxTextCtrl( cb->GetParent(), 1 )
+        : wxTextCtrl( cb , 1 )
     {
         m_cb = cb;
     }
@@ -81,7 +81,7 @@ class wxComboBoxChoice : public wxChoice
 {
 public:
     wxComboBoxChoice(wxComboBox *cb, int style)
-        : wxChoice( cb->GetParent(), 1 )
+        : wxChoice( cb , 1 )
     {
         m_cb = cb;
     }
@@ -145,13 +145,13 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
 
     if ( m_text == 0 )
     {
-        m_choice->SetSize(x, y, width, -1);
+        m_choice->SetSize(0, 0 , width, -1);
     }
     else
     {
         wxCoord wText = width - POPUPWIDTH;
-        m_text->SetSize(x, y, wText, height);
-        m_choice->SetSize(x + wText + MARGIN, y, POPUPWIDTH, -1);
+        m_text->SetSize(0, 0, wText, height);
+        m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, -1);
     }    
 }
 
@@ -166,13 +166,6 @@ bool wxComboBox::Enable(bool enable)
     if ( !wxControl::Enable(enable) )
         return FALSE;
 
-    m_choice->Enable(enable);
-    
-    if ( m_text != 0 )
-    {
-        m_text->Enable(enable);
-    }
-
     return TRUE;
 }
 
@@ -180,17 +173,6 @@ bool wxComboBox::Show(bool show)
 {
     if ( !wxControl::Show(show) )
         return FALSE;
-
-    // under GTK Show() is called the first time before we are fully
-    // constructed
-    if ( m_choice )
-    {
-        m_choice->Show(show);
-        if ( m_text != 0 )
-        {
-            m_text->Show(show);
-        }
-    }
 
     return TRUE;
 }
@@ -224,13 +206,13 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     Rect bounds ;
     Str255 title ;
 
-    if ( !wxControl::Create(parent, id, pos, size, style,
+    if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
                             wxDefaultValidator, name) )
     {
         return FALSE;
     }
 
-    m_choice = new wxComboBoxChoice(this, style);
+    m_choice = new wxComboBoxChoice(this, style );
 
     wxSize csize = size;
     if ( style & wxCB_READONLY )
@@ -246,20 +228,11 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     }
     
     DoSetSize(pos.x, pos.y, csize.x, csize.y);
+    
     for ( int i = 0 ; i < n ; i++ )
     {
         m_choice->DoAppend( choices[ i ] );
     }
-
-    // have to disable this window to avoid interfering it with message
-    // processing to the text and the button... but pretend it is enabled to
-    // make IsEnabled() return TRUE
-    wxControl::Enable(FALSE); // don't use non virtual Disable() here!
-    m_isEnabled = TRUE;
-
-    // we don't even need to show this window itself - and not doing it avoids
-    // that it overwrites the text control
-    wxControl::Show(FALSE);
 
     return TRUE;
 }
