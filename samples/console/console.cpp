@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_TIMER
+    #define TEST_FILENAME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -768,8 +768,20 @@ static void DumpFileName(const wxFileName& fn)
     wxString vol, path, name, ext;
     wxFileName::SplitPath(full, &vol, &path, &name, &ext);
 
-    wxPrintf(_T("Filename '%s' -> vol '%s', path '%s', name '%s', ext '%s'\n"),
+    wxPrintf(_T("'%s'-> vol '%s', path '%s', name '%s', ext '%s'\n"),
              full.c_str(), vol.c_str(), path.c_str(), name.c_str(), ext.c_str());
+
+    wxFileName::SplitPath(full, &path, &name, &ext);
+    wxPrintf(_T("or\t\t-> path '%s', name '%s', ext '%s'\n"),
+             path.c_str(), name.c_str(), ext.c_str());
+
+    wxPrintf(_T("path is also:\t'%s'\n"), fn.GetPath().c_str());
+    wxPrintf(_T("with volume: \t'%s'\n"),
+             fn.GetPath(wxPATH_GET_VOLUME).c_str());
+    wxPrintf(_T("with separator:\t'%s'\n"),
+             fn.GetPath(wxPATH_GET_SEPARATOR).c_str());
+    wxPrintf(_T("with both:   \t'%s'\n"),
+             fn.GetPath(wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME).c_str());
 }
 
 static struct FileNameInfo
@@ -5824,7 +5836,7 @@ int main(int argc, char **argv)
         DumpFileName(fn);
     }
 
-    if ( 1 )
+    if ( TEST_ALL )
     {
         TestFileNameConstruction();
         TestFileNameMakeRelative();
