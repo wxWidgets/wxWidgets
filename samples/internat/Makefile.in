@@ -105,7 +105,15 @@ COND_PLATFORM_OS2_1___internat___os2_emxbindcmd = $(NM) internat$(EXEEXT) | if \
 
 ### Targets: ###
 
-all: internat$(EXEEXT) $(__internat_bundle___depname)
+all: internat$(EXEEXT) $(__internat_bundle___depname) bg cs de fr ja ka ru
+
+bg: 
+	@mkdir -p ./bg
+	@for f in internat.po internat.mo; do \
+	if test \( ! -s ./bg/$$f \) -o \( $(srcdir)/bg/$$f -nt ./bg/$$f  \) ; then \
+	cp -pRf $(srcdir)/bg/$$f ./bg ; \
+	fi; \
+	done
 
 clean: 
 	rm -rf ./.deps ./.pch
@@ -113,8 +121,32 @@ clean:
 	rm -f internat$(EXEEXT)
 	rm -rf internat.app
 
+cs: 
+	@mkdir -p ./cs
+	@for f in internat.po internat.mo; do \
+	if test \( ! -s ./cs/$$f \) -o \( $(srcdir)/cs/$$f -nt ./cs/$$f  \) ; then \
+	cp -pRf $(srcdir)/cs/$$f ./cs ; \
+	fi; \
+	done
+
+de: 
+	@mkdir -p ./de
+	@for f in internat.po internat.mo; do \
+	if test \( ! -s ./de/$$f \) -o \( $(srcdir)/de/$$f -nt ./de/$$f  \) ; then \
+	cp -pRf $(srcdir)/de/$$f ./de ; \
+	fi; \
+	done
+
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
+
+fr: 
+	@mkdir -p ./fr
+	@for f in internat.po internat.mo; do \
+	if test \( ! -s ./fr/$$f \) -o \( $(srcdir)/fr/$$f -nt ./fr/$$f  \) ; then \
+	cp -pRf $(srcdir)/fr/$$f ./fr ; \
+	fi; \
+	done
 
 install: all
 
@@ -156,10 +188,34 @@ internat_internat.o: $(srcdir)/internat.cpp
 internat_internat_rc.o: $(srcdir)/internat.rc
 	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
 
+ja: 
+	@mkdir -p ./ja
+	@for f in internat.po internat.mo; do \
+	if test \( ! -s ./ja/$$f \) -o \( $(srcdir)/ja/$$f -nt ./ja/$$f  \) ; then \
+	cp -pRf $(srcdir)/ja/$$f ./ja ; \
+	fi; \
+	done
+
+ka: 
+	@mkdir -p ./ka
+	@for f in internat.po internat.mo; do \
+	if test \( ! -s ./ka/$$f \) -o \( $(srcdir)/ka/$$f -nt ./ka/$$f  \) ; then \
+	cp -pRf $(srcdir)/ka/$$f ./ka ; \
+	fi; \
+	done
+
+ru: 
+	@mkdir -p ./ru
+	@for f in internat.po internat.mo; do \
+	if test \( ! -s ./ru/$$f \) -o \( $(srcdir)/ru/$$f -nt ./ru/$$f  \) ; then \
+	cp -pRf $(srcdir)/ru/$$f ./ru ; \
+	fi; \
+	done
+
 uninstall: 
 
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install internat_bundle uninstall
+.PHONY: all bg clean cs de distclean fr install internat_bundle ja ka ru uninstall

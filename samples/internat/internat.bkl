@@ -10,4 +10,18 @@
         <win32-res>internat.rc</win32-res>
     </exe>
 
+    <template id="catalog">
+        <dstdir>$(BUILDDIR)/$(id)</dstdir>
+        <srcdir>$(SRCDIR)/$(id)</srcdir>
+        <files>internat.po internat.mo</files>
+    </template>
+
+    <wx-data id="bg" template="catalog"/>
+    <wx-data id="cs" template="catalog"/>
+    <wx-data id="de" template="catalog"/>
+    <wx-data id="fr" template="catalog"/>
+    <wx-data id="ja" template="catalog"/>
+    <wx-data id="ka" template="catalog"/>
+    <wx-data id="ru" template="catalog"/>
+
 </makefile>

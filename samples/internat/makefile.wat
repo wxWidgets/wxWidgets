@@ -185,7 +185,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\internat.exe
+all : .SYMBOLIC $(OBJS)\internat.exe bg cs de fr ja ka ru
 
 $(OBJS)\internat_internat.obj :  .AUTODEPEND .\internat.cpp
 	$(CXX) -zq -fo=$^@ $(INTERNAT_CXXFLAGS) $<
@@ -193,12 +193,28 @@ $(OBJS)\internat_internat.obj :  .AUTODEPEND .\internat.cpp
 $(OBJS)\internat_internat.res :  .AUTODEPEND .\internat.rc
 	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
+bg : .SYMBOLIC 
+	if not exist $(OBJS)\bg mkdir $(OBJS)\bg
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\bg\%f copy .\bg\%f $(OBJS)\bg
+
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\internat.exe del $(OBJS)\internat.exe
+
+cs : .SYMBOLIC 
+	if not exist $(OBJS)\cs mkdir $(OBJS)\cs
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\cs\%f copy .\cs\%f $(OBJS)\cs
+
+de : .SYMBOLIC 
+	if not exist $(OBJS)\de mkdir $(OBJS)\de
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\de\%f copy .\de\%f $(OBJS)\de
+
+fr : .SYMBOLIC 
+	if not exist $(OBJS)\fr mkdir $(OBJS)\fr
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\fr\%f copy .\fr\%f $(OBJS)\fr
 
 $(OBJS)\internat.exe :  $(INTERNAT_OBJECTS) $(OBJS)\internat_internat.res
 	@%create $(OBJS)\internat.lbc
@@ -210,3 +226,15 @@ $(OBJS)\internat.exe :  $(INTERNAT_OBJECTS) $(OBJS)\internat_internat.res
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\internat.lbc library %i
 	@%append $(OBJS)\internat.lbc option resource=$(OBJS)\internat_internat.res
 	wlink @$(OBJS)\internat.lbc
+
+ja : .SYMBOLIC 
+	if not exist $(OBJS)\ja mkdir $(OBJS)\ja
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\ja\%f copy .\ja\%f $(OBJS)\ja
+
+ka : .SYMBOLIC 
+	if not exist $(OBJS)\ka mkdir $(OBJS)\ka
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\ka\%f copy .\ka\%f $(OBJS)\ka
+
+ru : .SYMBOLIC 
+	if not exist $(OBJS)\ru mkdir $(OBJS)\ru
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\ru\%f copy .\ru\%f $(OBJS)\ru
