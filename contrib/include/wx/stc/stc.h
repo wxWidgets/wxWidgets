@@ -640,7 +640,14 @@
 //----------------------------------------------------------------------
 // Others
 
-#define wxSTC_MASK_FOLDERS ((1 << wxSTC_MARKNUM_FOLDER) | (1 << wxSTC_MARKNUM_FOLDEROPEN))
+#define wxSTC_MASK_FOLDERS     ((1 << wxSTC_MARKNUM_FOLDER) | \
+                                (1 << wxSTC_MARKNUM_FOLDEROPEN) | \
+                                (1 << wxSTC_MARKNUM_FOLDERSUB) | \
+                                (1 << wxSTC_MARKNUM_FOLDERTAIL) | \
+                                (1 << wxSTC_MARKNUM_FOLDERMIDTAIL) | \
+                                (1 << wxSTC_MARKNUM_FOLDEROPENMID) | \
+                                (1 << wxSTC_MARKNUM_FOLDEREND))
+
 
 
 
