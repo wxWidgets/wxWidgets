@@ -13,6 +13,8 @@
 #include "wx/choice.h"
 #include "wx/log.h"
 
+#import <AppKit/NSPopUpButton.h>
+
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 BEGIN_EVENT_TABLE(wxChoice, wxChoiceBase)
 END_EVENT_TABLE()
@@ -29,8 +31,14 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
 
+    SetNSView([[NSPopUpButton alloc] initWithFrame:MakeDefaultNSRect(size)
+        pullsDown: NO]);
+
+    [m_cocoaNSView sizeToFit];
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    SetInitialFrameRect(pos,size);
+
     return true;
 }
 
