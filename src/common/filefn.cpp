@@ -283,7 +283,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
   wxStrcpy(buf, wxFileFunctionsBuffer);
 
   wxChar *filename = (wxChar*) NULL; /* shut up buggy egcs warning */
-  filename = IsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (wxChar *)buf;
+  filename = wxIsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (wxChar *)buf;
 
   for (wxNode * node = First (); node; node = node->Next ())
     {
@@ -464,7 +464,7 @@ wxChar *wxCopyAbsolutePath(const wxString& filename)
   if (filename == wxT(""))
     return (wxChar *) NULL;
 
-  if (! IsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename))) {
+  if (! wxIsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename))) {
     wxChar  buf[_MAXPATHLEN];
     buf[0] = wxT('\0');
     wxGetWorkingDirectory(buf, WXSIZEOF(buf));
@@ -1626,7 +1626,7 @@ bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const wxChar *pszFi
             strFile += wxFILE_SEP_PATH;
         strFile += pszFile;
 
-        if ( FileExists(strFile) ) {
+        if ( wxFileExists(strFile) ) {
             *pStr = strFile;
             break;
         }
