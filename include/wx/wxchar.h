@@ -363,6 +363,8 @@ wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale);
 
 #ifdef wxNEED_WX_STDIO_H
 #include <stdarg.h>
+int      WXDLLEXPORT wxPrintf(const wxChar *fmt, ...);
+int      WXDLLEXPORT wxVprintf(const wxChar *fmt, va_list argptr);
 int      WXDLLEXPORT wxSprintf(wxChar *buf, const wxChar *fmt, ...);
 int      WXDLLEXPORT wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr);
 #endif
