@@ -544,9 +544,11 @@ void wxSocketBase::Discard()
 // switch lines below.
 
 #if wxHAVE_GLIBC2
-#   define wxSOCKET_INT socklen_t
+#   typedef socklen_t wxSOCKET_INT;
+#elif defined(__AIX__)
+#   typedef size_t wxSOCKET_INT;
 #else
-#   define wxSOCKET_INT int
+#   typedef int wxSOCKET_INT;
 #endif
 
 // --------------------------------------------------------------

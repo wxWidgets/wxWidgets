@@ -26,6 +26,10 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#ifdef __AIX__
+    #include <strings.h>    // for strcasecmp()
+#endif // AIX
+
 #ifndef  WX_PRECOMP
   #include "wx/defs.h"
 
@@ -316,9 +320,8 @@ public:
     char& Last()
       { wxASSERT( !IsEmpty() ); CopyBeforeWrite(); return m_pchData[Len()-1]; }
 
-    // on alpha-linux this gives overload problems:
-    // Also on Solaris, so removing for now (JACS)
-#if ! defined(__ALPHA__)
+    // on Linux-Alpha and AIX this gives overload problems
+#if !(defined(__ALPHA__) || defined(__AIX__))
     // operator version of GetChar
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }

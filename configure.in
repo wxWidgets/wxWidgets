@@ -1577,7 +1577,7 @@ case "${canonical}" in
     if test "$GCC" != "yes" ; then
       PICFLAGS="-bM\:SRE"
     else
-      PICFLAGS="-fPIC"
+      PICFLAGS="-fPIC -D__SYSV__"
     fi
     CREATE_SHARED=sharedAIX
     AC_DEFINE(SYSV)
