@@ -47,8 +47,9 @@
 
 #if wxUSE_CONSTRAINTS
     #include "wx/layout.h"
-    #include "wx/sizer.h"
 #endif // wxUSE_CONSTRAINTS
+
+#include "wx/sizer.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -151,10 +152,11 @@ void wxWindowBase::InitBase()
     // no constraints whatsoever
     m_constraints = (wxLayoutConstraints *) NULL;
     m_constraintsInvolvedIn = (wxWindowList *) NULL;
+#endif // wxUSE_CONSTRAINTS
+
     m_windowSizer = (wxSizer *) NULL;
     m_containingSizer = (wxSizer *) NULL;
     m_autoLayout = FALSE;
-#endif // wxUSE_CONSTRAINTS
 
 #if wxUSE_DRAG_AND_DROP
     m_dropTarget = (wxDropTarget *)NULL;
@@ -258,13 +260,13 @@ wxWindowBase::~wxWindowBase()
         m_constraints = NULL;
     }
 
+#endif // wxUSE_CONSTRAINTS
+
     if ( m_containingSizer )
         m_containingSizer->Remove((wxWindow*)this);
 
     if ( m_windowSizer )
         delete m_windowSizer;
-
-#endif // wxUSE_CONSTRAINTS
 
 #if wxUSE_DRAG_AND_DROP
     if ( m_dropTarget )
@@ -1181,6 +1183,7 @@ void wxWindowBase::DeleteRelatedConstraints()
         m_constraintsInvolvedIn = (wxWindowList *) NULL;
     }
 }
+#endif
 
 void wxWindowBase::SetSizer(wxSizer *sizer)
 {
@@ -1199,6 +1202,7 @@ bool wxWindowBase::Layout()
 
         GetSizer()->SetDimension( 0, 0, w, h );
     }
+#if wxUSE_CONSTRAINTS
     else
     {
         wxLayoutConstraints *constr = GetConstraints();
@@ -1222,11 +1226,12 @@ bool wxWindowBase::Layout()
         DoPhase(2);           // Layout grand children
         SetConstraintSizes(); // Recursively set the real window sizes
     }
+#endif
 
     return TRUE;
 }
 
-
+#if wxUSE_CONSTRAINTS
 // Do a phase of evaluating constraints: the default behaviour. wxSizers may
 // do a similar thing, but also impose their own 'constraints' and order the
 // evaluation differently.
@@ -1432,6 +1437,20 @@ void wxWindowBase::GetClientSizeConstraint(int *w, int *h) const
         GetClientSize(w, h);
 }
 
+void wxWindowBase::GetPositionConstraint(int *x, int *y) const
+{
+    wxLayoutConstraints *constr = GetConstraints();
+    if ( constr )
+    {
+        *x = constr->left.GetValue();
+        *y = constr->top.GetValue();
+    }
+    else
+        GetPosition(x, y);
+}
+
+#endif // wxUSE_CONSTRAINTS
+
 void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 {
     // don't do it for the dialogs/frames - they float independently of their
@@ -1447,21 +1466,6 @@ void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
         }
     }
 }
-
-
-void wxWindowBase::GetPositionConstraint(int *x, int *y) const
-{
-    wxLayoutConstraints *constr = GetConstraints();
-    if ( constr )
-    {
-        *x = constr->left.GetValue();
-        *y = constr->top.GetValue();
-    }
-    else
-        GetPosition(x, y);
-}
-
-#endif // wxUSE_CONSTRAINTS
 
 // ----------------------------------------------------------------------------
 // do Update UI processing for child controls

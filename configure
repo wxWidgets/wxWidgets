@@ -12248,7 +12248,7 @@ rm -f conftest*
         if test "$wxUSE_NANOX" = "yes"; then
             TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox -I\$(MICROWIN)/src/include $TOOLKIT_INCLUDE"
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__ -DMWPIXEL_FORMAT=MWPF_TRUECOLOR0888 -DHAVE_FILEIO -DHAVE_BMP_SUPPORT=1 -DHAVE_GIF_SUPPORT=1 -DHAVE_PNM_SUPPORT=1 -DHAVE_XPM_SUPPORT=1 -DLINUX=1 -DUNIX=1 -O -DUSE_EXPOSURE -DSCREEN_HEIGHT=480 -DSCREEN_WIDTH=640 -DSCREEN_DEPTH=4 -DX11=1"
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$MICROWIN/src/lib/libnano-X.a \$MICROWIN/src/lib/libmwengine.a \$MICROWIN/src/lib/libmwfonts.a \$MICROWIN/src/lib/libmwdrivers.a"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$(MICROWIN)/src/lib/libnano-X.a"
         else
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11$xpm_link"
         fi

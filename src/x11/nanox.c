@@ -8,8 +8,13 @@
 
 #if wxUSE_NANOX
 
+#ifdef __GNUG__
+#pragma implementation "Xlib.h"
+#endif
+
 #include <ctype.h>
 #include <malloc.h>
+#include <string.h>
 #include "wx/defs.h"
 #include "wx/x11/nanox/X11/Xlib.h"
 
@@ -71,7 +76,7 @@ int XGrabPointer(Display* display, Window grab_window,
     return Success;
 }
 
-int XUngrabPointer(Display display, Time time)
+int XUngrabPointer(Display* display, Time time)
 {
     return Success;
 }
@@ -235,10 +240,60 @@ int XAllocColor(Display* display, Colormap cmap,
     return 1;
 }
 
+typedef struct {
+    const char* name;
+    unsigned int red;
+    unsigned int green;
+    unsigned int blue;
+} _wxColourEntry;
+
+static _wxColourEntry _wxColourDatabase[] =
+{
+    { "WHITE", 255, 255, 255 },
+    { "BLACK", 0, 0, 0 },
+    { "RED", 255, 0, 0 },
+    { "GREEN", 0, 255, 0 },
+    { "BLUE", 0, 255, 255 },
+    { "GREY", 128, 128, 128 },
+    { "GRAY", 128, 128, 128 },
+    { "LIGHT GREY", 192, 192, 192 },
+    { "LIGHT GRAY", 192, 192, 192 },
+    { "DARK GREY", 32, 32, 32 },
+    { "DARK GRAY", 32, 32, 32 },
+    { "CYAN", 0, 255, 255 },
+    { "MAGENTA", 255, 255, 0 },
+
+    /* TODO: the rest */
+    { NULL, 0, 0, 0 }
+};
+
 int XParseColor(Display* display, Colormap cmap,
                 const char* cname, XColor* color)
 {
-    /* TODO */
+    int i = 0;
+    for (;;)
+    {
+        if (!_wxColourDatabase[i].name)
+            break;
+        else
+        {
+            if (strcmp(cname, _wxColourDatabase[i].name) == 0)
+            {
+                color->red = _wxColourDatabase[i].red;
+                color->green = _wxColourDatabase[i].green;
+                color->blue = _wxColourDatabase[i].blue;
+
+                return 1;
+            }
+            i ++;
+        }
+    }
+
+    /* Not found: use black */
+    color->red = 0;
+    color->green = 0;
+    color->blue = 0;
+    
     return 0;
 }
 
@@ -318,6 +373,64 @@ int XQueryColor(Display* display, Colormap cmap, XColor* color)
     }
     else
         return 0;
+}
+
+int XConfigureWindow(Display* display, Window w, int mask, XWindowChanges* changes)
+{
+    if ((mask & CWX) && (mask & CWY))
+        GrMoveWindow(w, changes->x, changes->y);
+    if ((mask & CWWidth) && (mask & CWHeight))
+        GrResizeWindow(w, changes->width, changes->height);
+    if (mask & CWBorderWidth)
+    {
+        /* TODO */
+    }
+    if (mask & CWSibling)
+    {
+        /* TODO */
+    }
+    if (mask & CWStackMode)
+    {
+        /* TODO */
+    }
+    return 1;
+}
+
+int XTranslateCoordinates(Display* display, Window srcWindow, Window destWindow, int srcX, int srcY, int* destX, int* destY, Window* childReturn)
+{
+    int offx = 0;
+    int offy = 0;
+
+    Window w = srcWindow;
+    while (w != GR_ROOT_WINDOW_ID)
+    {
+        GR_WINDOW_INFO info;
+        GrGetWindowInfo(w, & info);
+        w = info.parent;
+
+        offx += info.x ;
+        offy += info.y ;
+    }
+
+    w = destWindow;
+
+    while (w != GR_ROOT_WINDOW_ID)
+    {
+        GR_WINDOW_INFO info;
+        GrGetWindowInfo(w, & info);
+        w = info.parent;
+
+        offx -= info.x ;
+        offy -= info.y ;
+    }
+
+    *destX = srcX + offx;
+    *destY = srcY + offy;
+
+    if (childReturn)
+        *childReturn = 0;
+
+    return 1;
 }
 
 #endif

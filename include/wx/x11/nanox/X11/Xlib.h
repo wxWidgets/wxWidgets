@@ -5,6 +5,10 @@
 #ifndef _DUMMY_XLIBH_
 #define _DUMMY_XLIBH_
 
+#ifdef __GNUG__
+    #pragma interface "Xlib.h"
+#endif
+
 /* Move away the typedef in XtoNX.h */
 #define XFontStruct XFontStruct1
 #include <XtoNX.h>
@@ -19,7 +23,8 @@ typedef int Status;
 typedef unsigned long VisualID;
 typedef int Bool;
 typedef long XID;
-typedef XID KeySym;
+typedef GR_SCANCODE KeySym;
+typedef GR_EVENT_KEYSTROKE XKeyEvent;
 typedef struct {
     GR_FONT_INFO info;
     GR_FONT_ID fid;
@@ -33,6 +38,24 @@ typedef struct {
     unsigned short attributes;	/* per char flags (not predefined) */
 } XCharStruct;
 
+/* Configure window value mask bits */
+#define   CWX                         (1<<0)
+#define   CWY                         (1<<1)
+#define   CWWidth                     (1<<2)
+#define   CWHeight                    (1<<3)
+#define   CWBorderWidth               (1<<4)
+#define   CWSibling                   (1<<5)
+#define   CWStackMode                 (1<<6)
+
+/* Values */
+ 
+typedef struct {
+        int x, y;
+        int width, height;
+        int border_width;
+        Window sibling;
+        int stack_mode;
+} XWindowChanges;
 
 /* typedef unsigned long Time; */
 
@@ -64,6 +87,10 @@ typedef struct {
 #define DoRed 0
 #define DoGreen 0
 #define DoBlue 0
+#define NoEventMask GR_EVENT_MASK_NONE
+#define RevertToParent 0
+#define CurrentTime 0
+#define GrabModeAsync 0
 
 #define GXcopy GR_MODE_COPY
 #define GXclear GR_MODE_CLEAR
@@ -88,12 +115,14 @@ inline void wxNoop() { /* Do nothing */ }
 
 #define XSynchronize(display,sync)
 #define XDefaultRootWindow(d) GR_ROOT_WINDOW_ID
+#define RootWindowOfScreen(s) GR_ROOT_WINDOW_ID
 #define XFreePixmap(d, p) GrDestroyWindow(p)
 #define XFreeCursor(d, c) GrDestroyCursor(c)
 #define XFreeGC(d, gc) GrDestroyGC(gc)
 #define XSetBackground(d, gc, c) GrSetGCBackground(gc, c)
 #define DefaultVisual(d, s) ((Visual*) NULL)
 #define DefaultColormap(d, s) DefaultColormapOfScreen((Screen*) NULL)
+#define DefaultScreenOfDisplay(d) 0
 #define XSetFillStyle(d, gc, s) wxNoop()
 #define XSetLineAttributes(d, gc, a, b, c, e) wxNoop()
 #define XSetClipMask(d, gc, m) wxNoop()
@@ -118,7 +147,14 @@ inline void wxNoop() { /* Do nothing */ }
 #define XClipBox(r, rect) GrGetRegionBox(r, rect)
 #define XPointInRegion(r, x, y) GrPointInRegion(r, x, y)
 #define XXorRegion(sr1, sr2, r) GrXorRegion(r, sr1, sr2)
-
+/* TODO: Cannot find equivalent for this. */
+#define XIconifyWindow(d, w, s) 0
+#define XCreateWindowWithColor(d,p,x,y,w,h,bw,depth,cl,vis,backColor,foreColor) \
+			GrNewWindow(p,x,y,w,h,bw,backColor,foreColor)
+#define XLookupString(event, buf, len, sym, status) (*sym = (event)->scancode)
+#define XBell(a, b) GrBell()
+#define DisplayWidthMM(d, s) 100
+#define DisplayHeightMM(d, s) 100
 
 /* These defines are wrongly defined in XtoNX.h, IMHO,
  * since they reference a static global.
@@ -258,10 +294,11 @@ typedef int (*XErrorHandler) (	    /* WARNING, this type not in Xlib spec */
 
 /* Fuunctions */
 
-#ifdef __cpluplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
+Display *XOpenDisplay(char *name);
 Colormap DefaultColormapOfScreen(Screen* /* screen */) ;
 int XSetGraphicsExposures( Display* /* display */, GC /* gc */, Bool /* graphics_exposures */) ;
 int XWarpPointer( Display* /* display */, Window /* srcW */, Window /* destW */,
@@ -275,7 +312,7 @@ int XGrabPointer(Display* /* display */, Window /* grab_window */,
                  Bool /* owner_events */, unsigned int /* event_mask */,
                  int /* pointer_mode */, int /* keyboard_mode */,
                  Window /* confine_to */, Cursor /* cursor */, Time /* time */) ;
-int XUngrabPointer(Display /* display */, Time /* time */) ;
+int XUngrabPointer(Display* /* display */, Time /* time */) ;
 int XCopyArea(Display* /* display */, Drawable src, Drawable dest, GC gc,
               int src_x, int src_y, unsigned int width, unsigned int height,
               int dest_x, int dest_y) ;
@@ -284,7 +321,6 @@ int XCopyPlane(Display* /* display */, Drawable src, Drawable dest, GC gc,
               int dest_x, int dest_y, unsigned long /* plane */) ;
 
 XErrorHandler XSetErrorHandler (XErrorHandler /* handler */);
-Display *XOpenDisplay(char *name);
 Screen *XScreenOfDisplay(Display* /* display */,
                          int /* screen_number */);
 int DisplayWidth(Display* /* display */, int /* screen */);
@@ -302,8 +338,13 @@ int XPending(Display *d);
 XFontStruct* XLoadQueryFont(Display* display, const char* fontSpec);
 int XFreeFont(Display* display, XFontStruct* fontStruct);
 int XQueryColor(Display* display, Colormap cmap, XColor* color);
+Status XGetWindowAttributes(Display* display, Window w,
+                            XWindowAttributes* window_attributes);
 
-#ifdef __cpluplus
+int XConfigureWindow(Display* display, Window w, int mask, XWindowChanges* changes);
+int XTranslateCoordinates(Display* display, Window srcWindow, Window destWindow, int srcX, int srcY, int* destX, int* destY, Window* childReturn);
+
+#ifdef __cplusplus
 }
 #endif
 

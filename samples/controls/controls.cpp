@@ -483,8 +483,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) ),
          m_text(NULL), m_notebook(NULL)
 {
-    wxLayoutConstraints *c;
-
     m_text = new wxTextCtrl(this, -1, "This is the log window.\n",
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
     m_text->SetBackgroundColour(wxT("wheat"));
@@ -779,6 +777,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_notebook->AddPage(panel, "wxBitmapXXX");
 
     // layout constraints
+#if wxUSE_CONSTRAINTS
+    wxLayoutConstraints *c;
 
     panel = new wxPanel(m_notebook);
     panel->SetAutoLayout( TRUE );
@@ -802,7 +802,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     pMyButton2->SetConstraints( c );
 
     m_notebook->AddPage(panel, "wxLayoutConstraint");
-
+#endif
+    
     // sizer
 
     panel = new wxPanel(m_notebook);

@@ -702,15 +702,6 @@ public:
     void SetConstraints( wxLayoutConstraints *constraints );
     wxLayoutConstraints *GetConstraints() const { return m_constraints; }
 
-        // when using constraints, it makes sense to update children positions
-        // automatically whenever the window is resized - this is done if
-        // autoLayout is on
-    void SetAutoLayout( bool autoLayout ) { m_autoLayout = autoLayout; }
-    bool GetAutoLayout() const { return m_autoLayout; }
-
-        // do layout the window and its children
-    virtual bool Layout();
-
         // implementation only
     void UnsetConstraints(wxLayoutConstraints *c);
     wxWindowList *GetConstraintsInvolvedIn() const
@@ -733,6 +724,17 @@ public:
     virtual void GetClientSizeConstraint(int *w, int *h) const ;
     virtual void GetPositionConstraint(int *x, int *y) const ;
 
+#endif // wxUSE_CONSTRAINTS
+
+        // when using constraints or sizers, it makes sense to update
+        // children positions automatically whenever the window is resized
+        // - this is done if autoLayout is on
+    void SetAutoLayout( bool autoLayout ) { m_autoLayout = autoLayout; }
+    bool GetAutoLayout() const { return m_autoLayout; }
+
+        // lay out the window and its children
+    virtual bool Layout();
+
         // sizers
     void SetSizer( wxSizer *sizer );
     wxSizer *GetSizer() const { return m_windowSizer; }
@@ -740,8 +742,6 @@ public:
     // Track if this window is a member of a sizer
     void SetContainingSizer(wxSizer* sizer) { m_containingSizer = sizer; }
     wxSizer *GetContainingSizer() const { return m_containingSizer; }
-
-#endif // wxUSE_CONSTRAINTS
 
     // backward compatibility
     // ----------------------
@@ -843,6 +843,7 @@ protected:
 
     // constraints this window is involved in
     wxWindowList        *m_constraintsInvolvedIn;
+#endif // wxUSE_CONSTRAINTS
 
     // this window's sizer
     wxSizer             *m_windowSizer;
@@ -852,7 +853,6 @@ protected:
 
     // Layout() window automatically when its size changes?
     bool                 m_autoLayout:1;
-#endif // wxUSE_CONSTRAINTS
 
     // window state
     bool                 m_isShown:1;

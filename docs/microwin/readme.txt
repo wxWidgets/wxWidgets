@@ -8,15 +8,21 @@ Widgets are supplied by the wxUniversal project, while the
 underlying port uses the Windows ports with small modifications
 for the MicroWindows API.
 
+=== NOTE: ===
+
+  Current efforts are being concentrated on a port to Nano-X,
+  which potentially offers greater flexibility than the WIN32
+  API of MicroWindows, such as the ability to run multiple
+  Nano-X processes simultaneously. Please see
+  ../docs/x11/readme-nanox.txt for information.
+
 There are many things missing from MicroWindows that will
-make the port quite limited for the time being. I haven't
-worked out how to create bitmaps, though there is a BMP to C
-converter. There are no common dialogs (we will use generic ones),
-and only one WIN32 app may be run at a time.
+make the port quite limited for the time being.
+In particular, only one WIN32 app may be run at a time.
 
 Note that you can gain confidence in the WIN32/wxUniversal
 combination by compiling wxUniversal under Windows using VC++,
-using src/wxvc_universal.dsp. You can compile the minimal
+using src/wxUniv.dsp. You can compile the minimal
 and widgets samples in wxUniversal mode using the
 UnivDebug and UnivRelease targets. Most of the code is shared
 between this combination, and the wxMicroWindows port.

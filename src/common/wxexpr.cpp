@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_PROLOGIO
+
 #include <stdarg.h>
 #include <ctype.h>
 #include <string.h>
@@ -1272,3 +1274,5 @@ WXDLLEXPORT char *strdup(const char *s)
 #endif
 #endif
 
+#endif
+  // wxUSE_PROLOGIO

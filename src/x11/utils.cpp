@@ -568,6 +568,11 @@ wxSetDefaultResources (const Widget w, const char **resourceSpec, const char *na
 
 void wxGetMousePosition( int* x, int* y )
 {
+#if wxUSE_NANOX
+    // TODO
+    *x = 0;
+    *y = 0;
+#else
     XMotionEvent xev;
     Window root, child;
     XQueryPointer((Display*) wxGetDisplay(),
@@ -578,6 +583,7 @@ void wxGetMousePosition( int* x, int* y )
                   &(xev.state));
     *x = xev.x_root;
     *y = xev.y_root;
+#endif
 };
 
 // Return TRUE if we have a colour display
@@ -683,7 +689,7 @@ bool wxSetDisplay(const wxString& display_name)
             return FALSE;
 #endif
 #ifdef __WXX11__
-        Display* display = XOpenDisplay((const char*) display_name);
+        Display* display = XOpenDisplay((char*) display_name.c_str());
 
         if (display)
         {
@@ -1015,6 +1021,7 @@ void wxXColorToHSV(wxHSV *hsv,XColor *rgb)
 
 void wxAllocNearestColor(Display *d,Colormap cmp,XColor *xc)
 {
+#if !wxUSE_NANOX
     int llp;
 
     int screen = DefaultScreen(d);
@@ -1051,6 +1058,7 @@ void wxAllocNearestColor(Display *d,Colormap cmp,XColor *xc)
 */
 
     delete[] color_defs;
+#endif
 }
 
 void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
@@ -1065,6 +1073,10 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
 #ifdef __WXDEBUG__
 wxString wxGetXEventName(XEvent& event)
 {
+#if wxUSE_NANOX
+    wxString str(wxT("(some event)"));
+    return str;
+#else
     int type = event.xany.type;
 	    static char* event_name[] = {
 		"", "unknown(-)",                                         // 0-1
@@ -1082,7 +1094,8 @@ wxString wxGetXEventName(XEvent& event)
 	    type = wxMin(35, type); type = wxMax(1, type);
         wxString str(event_name[type]);
         return str;
-	}
+#endif
+}
 #endif
 
 #ifdef __WXMOTIF__

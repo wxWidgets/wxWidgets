@@ -450,6 +450,16 @@ void wxRIRefData::CreateRects( const wxRegion& region )
     Region r = (Region) region.GetX11Region();
     if (r)
     {
+#if wxUSE_NANOX
+        GR_RECT rect;
+        GrGetRegionBox(r, & rect);
+        m_numRects = 1;
+        m_rects = new wxRect[1];
+        m_rects[0].x = rect.x;
+        m_rects[0].y = rect.y;
+        m_rects[0].width = rect.width;
+        m_rects[0].height = rect.height;
+#else
         m_numRects = r->numRects;
         if (m_numRects)
         {
@@ -464,6 +474,7 @@ void wxRIRefData::CreateRects( const wxRegion& region )
                 wr.height = xr.y2-xr.y1;
             }
         }
+#endif
     }
 }
 

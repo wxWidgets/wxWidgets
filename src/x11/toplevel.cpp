@@ -101,13 +101,14 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     m_backgroundColour.CalcPixel( (WXColormap) cm );
     m_hasBgCol = TRUE;
 	
+#if !wxUSE_NANOX
     XSetWindowAttributes xattributes;
     XSizeHints size_hints;
-    XWMHints wm_hints;
     
     long xattributes_mask =
         CWOverrideRedirect |
         CWBorderPixel | CWBackPixel;
+
     xattributes.background_pixel = m_backgroundColour.GetPixel();
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
 
@@ -115,6 +116,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     // I think we set this to True to remove decorations
     // No. RR.
     xattributes.override_redirect = False;
+#endif
     
     wxSize size2(size);
     if (size2.x == -1)
@@ -128,15 +130,26 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     if (pos2.y == -1)
 	pos2.y = 100;
     
+#if wxUSE_NANOX
+    long backColor, foreColor;
+    backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
+    foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
+    
+    Window xwindow = XCreateWindowWithColor( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+                                    0, 0, InputOutput, xvisual, backColor, foreColor);
+#else
     Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
-       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+                                    0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+#endif
     m_mainWidget = (WXWindow) xwindow;
 
-    XSelectInput( xdisplay, xwindow,
+    int extraFlags = 0;
 #if wxUSE_NANOX
-        GR_EVENT_MASK_CLOSE_REQ |
+    extraFlags |= GR_EVENT_MASK_CLOSE_REQ;
 #endif
-        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+
+    XSelectInput( xdisplay, xwindow,
+        extraFlags | ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask );
@@ -147,6 +160,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     // background completely.
     XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
 
+#if !wxUSE_NANOX
     if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
     {
         if (GetParent() && GetParent()->GetMainWindow())
@@ -163,15 +177,17 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     size_hints.height = size2.y;
     XSetWMNormalHints( xdisplay, xwindow, &size_hints);
     
+    XWMHints wm_hints;
     wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
     wm_hints.input = True;
     wm_hints.initial_state = NormalState;
     XSetWMHints( xdisplay, xwindow, &wm_hints);
-    
+
     Atom wm_protocols[2];
     wm_protocols[0] = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False );
     wm_protocols[1] = XInternAtom( xdisplay, "WM_TAKE_FOCUS", False );
     XSetWMProtocols( xdisplay, xwindow, wm_protocols, 2);
+#endif
     
     wxSetWMDecorations( xwindow, style);
 
@@ -287,6 +303,8 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
 
     if (icon.Ok() && GetMainWindow())
     {
+#if wxUSE_NANOX
+#else
         XWMHints *wmHints = XAllocWMHints();
         wmHints->icon_pixmap = (Pixmap) icon.GetPixmap();
 
@@ -300,6 +318,7 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
 
         XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(), wmHints);
         XFree(wmHints);
+#endif
     }
 }
 
@@ -361,6 +380,63 @@ struct MwmHints {
 // given wxWindows style
 bool wxSetWMDecorations(Window w, long style)
 {
+#if wxUSE_NANOX
+    GR_WM_PROPERTIES wmProp;
+
+    wmProp.flags = 0;
+
+    if (style & wxRESIZE_BORDER)
+    {
+        wmProp.props |= GR_WM_PROPS_APPFRAME ;
+        wmProp.flags |= GR_WM_FLAGS_PROPS ;
+    }
+
+    if (style & wxSYSTEM_MENU)
+    {
+        wmProp.props |= GR_WM_PROPS_CLOSEBOX ;
+        wmProp.flags |= GR_WM_FLAGS_PROPS ;
+    }
+
+    if ((style & wxCAPTION) ||
+        (style & wxTINY_CAPTION_HORIZ) ||
+        (style & wxTINY_CAPTION_VERT))
+    {
+        wmProp.props |= GR_WM_PROPS_CAPTION ;
+        wmProp.flags |= GR_WM_FLAGS_PROPS ;
+    }
+
+    if (style & wxTHICK_FRAME)
+    {
+        wmProp.props |= GR_WM_PROPS_APPFRAME ;
+        wmProp.flags |= GR_WM_FLAGS_PROPS ;
+    }
+
+    if (style & wxSIMPLE_BORDER)
+    {
+        wmProp.props |= GR_WM_PROPS_BORDER ;
+        wmProp.flags |= GR_WM_FLAGS_PROPS ;
+    }
+
+    if (style & wxMINIMIZE_BOX)
+    {
+    }
+
+    if (style & wxMAXIMIZE_BOX)
+    {
+        wmProp.props |= GR_WM_PROPS_MAXIMIZE ;
+        wmProp.flags |= GR_WM_FLAGS_PROPS ;
+    }
+
+    if (((style & wxBORDER) != wxBORDER) && ((style & wxTHICK_FRAME) != wxTHICK_FRAME)
+        && ((style & wxRESIZE_BORDER) != wxRESIZE_BORDER))
+    {
+        wmProp.props |= GR_WM_PROPS_NODECORATE ;
+        wmProp.flags |= GR_WM_FLAGS_PROPS ;
+    }
+
+    GrSetWMProperties(w, & wmProp);
+    
+#else
     if (!wxMWMIsRunning(w))
         return FALSE;
 
@@ -419,11 +495,15 @@ bool wxSetWMDecorations(Window w, long style)
 		    32, PropModeReplace,
 		    (unsigned char *) &hints, PROP_MOTIF_WM_HINTS_ELEMENTS);
 
+#endif
     return TRUE;
 }
 
 bool wxMWMIsRunning(Window w)
 {
+#if wxUSE_NANOX
+    return FALSE;
+#else
     Display *dpy = (Display*)wxGetDisplay();
     Atom motifWmInfo = XInternAtom(dpy, "_MOTIF_WM_INFO", False);
 
@@ -441,6 +521,7 @@ bool wxMWMIsRunning(Window w)
 	    &type, &format, &length, &bytesafter, &ptr);
 
     return (ret == Success);
+#endif
 }
     
 // For implementation purposes - sometimes decorations make the client area
@@ -568,6 +649,7 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
 	int offsetX = 0;
 	int offsetY = 0;
 	
+#if !wxUSE_NANOX
         wxLogDebug("Translating...");
         Window childWindow;
         XTranslateCoordinates(wxGlobalDisplay(), window, XDefaultRootWindow(wxGlobalDisplay()),
@@ -576,6 +658,7 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
 	wxString msg;
 	msg.Printf("Offset: %d, %d", offsetX, offsetY);
 	wxLogDebug(msg);
+#endif
 	
         XWindowAttributes attr;
         Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);

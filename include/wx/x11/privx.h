@@ -67,21 +67,65 @@ bool wxWindowIsVisible(Window win);
 
 #if wxUSE_NANOX
 #define XEventGetWindow(event) event->general.wid
+#define XEventGetType(event) event->general.type
 #define XConfigureEventGetWidth(event) ((int) event->update.width)
 #define XConfigureEventGetHeight(event) ((int) event->update.height)
 #define XExposeEventGetX(event) event->exposure.x
 #define XExposeEventGetY(event) event->exposure.y
 #define XExposeEventGetWidth(event) event->exposure.width
 #define XExposeEventGetHeight(event) event->exposure.height
+#define XButtonEventGetTime(event) (wxGetLocalTime())
+#define XButtonEventLChanged(event) (event->button.changebuttons & GR_BUTTON_L)
+#define XButtonEventMChanged(event) (event->button.changebuttons & GR_BUTTON_M)
+#define XButtonEventRChanged(event) (event->button.changebuttons & GR_BUTTON_R)
+#define XButtonEventLIsDown(x) ((x)->button.buttons & GR_BUTTON_L)
+#define XButtonEventMIsDown(x) ((x)->button.buttons & GR_BUTTON_M)
+#define XButtonEventRIsDown(x) ((x)->button.buttons & GR_BUTTON_R)
+#define XButtonEventShiftIsDown(x) (x->button.modifiers & MWKMOD_SHIFT)
+#define XButtonEventCtrlIsDown(x) (x->button.modifiers & MWKMOD_CTRL)
+#define XButtonEventAltIsDown(x) (x->button.modifiers & MWKMOD_ALT)
+#define XButtonEventMetaIsDown(x) (x->button.modifiers & MWKMOD_META)
+#define XButtonEventGetX(event) (event->button.x)
+#define XButtonEventGetY(event) (event->button.y)
+#define XKeyEventGetTime(event) (wxGetLocalTime())
+#define XKeyEventGetX(event) (event->keystroke.x)
+#define XKeyEventGetY(event) (event->keystroke.y)
+#define XKeyEventShiftIsDown(x) (x->keystroke.modifiers & MWKMOD_SHIFT)
+#define XKeyEventCtrlIsDown(x) (x->keystroke.modifiers & MWKMOD_CTRL)
+#define XKeyEventAltIsDown(x) (x->keystroke.modifiers & MWKMOD_ALT)
+#define XKeyEventMetaIsDown(x) (x->keystroke.modifiers & MWKMOD_META)
 #define XFontStructGetAscent(f) f->info.baseline
+
 #else
+
 #define XEventGetWindow(event) event->xany.window
+#define XEventGetType(event) event->xany.type
 #define XConfigureEventGetWidth(event) event->xconfigure.width
 #define XConfigureEventGetHeight(event) event->xconfigure.height
 #define XExposeEventGetX(event) event->xexpose.x
 #define XExposeEventGetY(event) event->xexpose.y
 #define XExposeEventGetWidth(event) event->xexpose.width
 #define XExposeEventGetHeight(event) event->xexpose.height
+#define XButtonEventGetTime(event) (event->xbutton.time)
+#define XButtonEventLChanged(event) (event->xbutton.button == Button1)
+#define XButtonEventMChanged(event) (event->xbutton.button == Button2)
+#define XButtonEventRChanged(event) (event->xbutton.button == Button3)
+#define XButtonEventLIsDown(x) ((x)->xbutton.state & Button1Mask)
+#define XButtonEventMIsDown(x) ((x)->xbutton.state & Button2Mask)
+#define XButtonEventRIsDown(x) ((x)->xbutton.state & Button3Mask)
+#define XButtonEventShiftIsDown(x) (x->xbutton.state & ShiftMask)
+#define XButtonEventCtrlIsDown(x) (x->xbutton.state & ControlMask)
+#define XButtonEventAltIsDown(x) (x->xbutton.state & Mod3Mask)
+#define XButtonEventMetaIsDown(x) (x->xbutton.state & Mod1Mask)
+#define XButtonEventGetX(event) (event->xbutton.x)
+#define XButtonEventGetY(event) (event->xbutton.y)
+#define XKeyEventGetTime(event) (event->xkey.time)
+#define XKeyEventShiftIsDown(x) (x->xkey.state & ShiftMask)
+#define XKeyEventCtrlIsDown(x) (x->xkey.state & ControlMask)
+#define XKeyEventAltIsDown(x) (x->xkey.state & Mod3Mask)
+#define XKeyEventMetaIsDown(x) (x->xkey.state & Mod1Mask)
+#define XKeyEventGetX(event) (event->xkey.x)
+#define XKeyEventGetY(event) (event->xkey.y)
 #define XFontStructGetAscent(f) f->ascent
 #endif
 

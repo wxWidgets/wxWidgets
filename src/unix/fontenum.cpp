@@ -67,6 +67,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 // helpers
 // ----------------------------------------------------------------------------
 
+#if !wxUSE_NANOX
 static char **CreateFontList(wxChar spacing,
                              wxFontEncoding encoding,
                              int *nFonts)
@@ -136,6 +137,8 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 
     return TRUE;
 }
+#endif
+  // wxUSE_NANOX
 
 // ----------------------------------------------------------------------------
 // wxFontEnumerator
@@ -144,6 +147,9 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+#if wxUSE_NANOX
+    return FALSE;
+#else
     int nFonts;
     char **fonts;
 
@@ -187,12 +193,16 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     (void)ProcessFamiliesFromFontList(this, fonts, nFonts);
 
     XFreeFontNames(fonts);
-
     return TRUE;
+#endif
+    // wxUSE_NANOX
 }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
+#if wxUSE_NANOX
+    return FALSE;
+#else
     wxString pattern;
     pattern.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-*-*"),
                    family.IsEmpty() ? wxT("*") : family.c_str());
@@ -257,4 +267,6 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
     XFreeFontNames(fonts);
 
     return TRUE;
+#endif
+    // wxUSE_NANOX
 }

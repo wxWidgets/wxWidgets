@@ -47,6 +47,11 @@
 #include "wx/x11/private.h"
 #include "X11/Xutil.h"
 
+#if wxUSE_NANOX
+// For wxGetLocalTime, used by XButtonEventGetTime
+#include "wx/timer.h"
+#endif
+
 #include <string.h>
 
 // ----------------------------------------------------------------------------
@@ -136,6 +141,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     Window xparent = (Window) parent->GetMainWindow();
 
+#if !wxUSE_NANOX
     XSetWindowAttributes xattributes;
     
     long xattributes_mask =
@@ -150,6 +156,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask;
+#endif
     
     wxSize size2(size);
     if (size2.x == -1)
@@ -163,9 +170,28 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     if (pos2.y == -1)
 	pos2.y = 0;
     
+#if wxUSE_NANOX
+    int extraFlags = GR_EVENT_MASK_CLOSE_REQ;
+
+    long backColor, foreColor;
+    backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
+    foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
+    
+    Window xwindow = XCreateWindowWithColor( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+                                    0, 0, InputOutput, xvisual, backColor, foreColor);
+    XSelectInput( xdisplay, xwindow,
+        extraFlags | ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+        PropertyChangeMask );
+
+#else
+
     Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
-        
+
+#endif
+    
     m_mainWidget = (WXWindow) xwindow;
 
     wxAddWindowToTable( xwindow, (wxWindow*) this );
@@ -786,6 +812,7 @@ void wxWindowX11::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW,
     m_maxWidth = maxW;
     m_maxHeight = maxH;
 
+#if !wxUSE_NANOX
     XSizeHints sizeHints;
     sizeHints.flags = 0;
     
@@ -809,6 +836,7 @@ void wxWindowX11::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW,
     }
 
     XSetWMNormalHints(wxGlobalDisplay(), (Window) GetMainWindow(), & sizeHints);
+#endif
 }
 
 void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
@@ -883,7 +911,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
         &ascent, &descent2, &overall);
 #endif
 
-    XTextExtents((XFontStruct*) pFontStruct, string.c_str(), slen,
+    XTextExtents((XFontStruct*) pFontStruct, (char*) string.c_str(), slen,
                  &direction, &ascent, &descent2, &overall);
 
     if ( x )
@@ -1109,7 +1137,7 @@ WXWindow wxWindowX11::GetMainWindow() const
 
 bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, XEvent *xevent)
 {
-    switch (xevent->xany.type)
+    switch (XEventGetType(xevent))
     {
         case EnterNotify:
         case LeaveNotify:
@@ -1119,39 +1147,39 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
         {
             wxEventType eventType = wxEVT_NULL;
 
-            if (xevent->xany.type == EnterNotify)
+            if (XEventGetType(xevent) == EnterNotify)
             {
                 //if (local_event.xcrossing.mode!=NotifyNormal)
                 //  return ; // Ignore grab events
                 eventType = wxEVT_ENTER_WINDOW;
                 //            canvas->GetEventHandler()->OnSetFocus();
             }
-            else if (xevent->xany.type == LeaveNotify)
+            else if (XEventGetType(xevent) == LeaveNotify)
             {
                 //if (local_event.xcrossingr.mode!=NotifyNormal)
                 //  return ; // Ignore grab events
                 eventType = wxEVT_LEAVE_WINDOW;
                 //            canvas->GetEventHandler()->OnKillFocus();
             }
-            else if (xevent->xany.type == MotionNotify)
+            else if (XEventGetType(xevent) == MotionNotify)
             {
                 eventType = wxEVT_MOTION;
             }
-            else if (xevent->xany.type == ButtonPress)
+            else if (XEventGetType(xevent) == ButtonPress)
             {
-                wxevent.SetTimestamp(xevent->xbutton.time);
+                wxevent.SetTimestamp(XButtonEventGetTime(xevent));
                 int button = 0;
-                if (xevent->xbutton.button == Button1)
+                if (XButtonEventLChanged(xevent))
                 {
                     eventType = wxEVT_LEFT_DOWN;
                     button = 1;
                 }
-                else if (xevent->xbutton.button == Button2)
+                else if (XButtonEventMChanged(xevent))
                 {
                     eventType = wxEVT_MIDDLE_DOWN;
                     button = 2;
                 }
-                else if (xevent->xbutton.button == Button3)
+                else if (XButtonEventRChanged(xevent))
                 {
                     eventType = wxEVT_RIGHT_DOWN;
                     button = 3;
@@ -1182,17 +1210,17 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
                     win->SetLastClick(button, ts);
                 }
             }
-            else if (xevent->xany.type == ButtonRelease)
+            else if (XEventGetType(xevent) == ButtonRelease)
             {
-                if (xevent->xbutton.button == Button1)
+                if (XButtonEventLChanged(xevent))
                 {
                     eventType = wxEVT_LEFT_UP;
                 }
-                else if (xevent->xbutton.button == Button2)
+                else if (XButtonEventMChanged(xevent))
                 {
                     eventType = wxEVT_MIDDLE_UP;
                 }
-                else if (xevent->xbutton.button == Button3)
+                else if (XButtonEventRChanged(xevent))
                 {
                     eventType = wxEVT_RIGHT_UP;
                 }
@@ -1205,23 +1233,23 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
 
             wxevent.SetEventType(eventType);
 
-            wxevent.m_x = xevent->xbutton.x;
-            wxevent.m_y = xevent->xbutton.y;
+            wxevent.m_x = XButtonEventGetX(xevent);
+            wxevent.m_y = XButtonEventGetY(xevent);
 
             wxevent.m_leftDown = ((eventType == wxEVT_LEFT_DOWN)
-                || (event_left_is_down (xevent)
+                || (XButtonEventLIsDown(xevent)
                 && (eventType != wxEVT_LEFT_UP)));
             wxevent.m_middleDown = ((eventType == wxEVT_MIDDLE_DOWN)
-                || (event_middle_is_down (xevent)
+                || (XButtonEventMIsDown(xevent)
                 && (eventType != wxEVT_MIDDLE_UP)));
             wxevent.m_rightDown = ((eventType == wxEVT_RIGHT_DOWN)
-                || (event_right_is_down (xevent)
+                || (XButtonEventRIsDown (xevent)
                 && (eventType != wxEVT_RIGHT_UP)));
 
-            wxevent.m_shiftDown = xevent->xbutton.state & ShiftMask;
-            wxevent.m_controlDown = xevent->xbutton.state & ControlMask;
-            wxevent.m_altDown = xevent->xbutton.state & Mod3Mask;
-            wxevent.m_metaDown = xevent->xbutton.state & Mod1Mask;
+            wxevent.m_shiftDown = XButtonEventShiftIsDown(xevent);
+            wxevent.m_controlDown = XButtonEventCtrlIsDown(xevent);
+            wxevent.m_altDown = XButtonEventAltIsDown(xevent);
+            wxevent.m_metaDown = XButtonEventMetaIsDown(xevent);
 
             wxevent.SetId(win->GetId());
             wxevent.SetEventObject(win);
@@ -1234,7 +1262,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
 
 bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win), XEvent *xevent)
 {
-    switch (xevent->xany.type)
+    switch (XEventGetType(xevent))
     {
     case KeyPress:
     case KeyRelease:
@@ -1245,20 +1273,16 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
 
-            if (xevent->xkey.state & ShiftMask)
-                wxevent.m_shiftDown = TRUE;
-            if (xevent->xkey.state & ControlMask)
-                wxevent.m_controlDown = TRUE;
-            if (xevent->xkey.state & Mod3Mask)
-                wxevent.m_altDown = TRUE;
-            if (xevent->xkey.state & Mod1Mask)
-                wxevent.m_metaDown = TRUE;
+            wxevent.m_shiftDown = XKeyEventShiftIsDown(xevent);
+            wxevent.m_controlDown = XKeyEventCtrlIsDown(xevent);
+            wxevent.m_altDown = XKeyEventAltIsDown(xevent);
+            wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
             wxevent.m_keyCode = id;
-            wxevent.SetTimestamp(xevent->xkey.time);
+            wxevent.SetTimestamp(XKeyEventGetTime(xevent));
 
-            wxevent.m_x = xevent->xbutton.x;
-            wxevent.m_y = xevent->xbutton.y;
+            wxevent.m_x = XKeyEventGetX(xevent);
+            wxevent.m_y = XKeyEventGetY(xevent);
 
             if (id > -1)
                 return TRUE;
@@ -1338,6 +1362,10 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 // Get the current mouse position.
 wxPoint wxGetMousePosition()
 {
+#if wxUSE_NANOX
+    /* TODO */
+    return wxPoint(0, 0);
+#else
     Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));
     Window rootReturn, childReturn;
@@ -1350,6 +1378,7 @@ wxPoint wxGetMousePosition()
                    &childReturn,
                    &rootX, &rootY, &winX, &winY, &maskReturn);
     return wxPoint(rootX, rootY);
+#endif
 }
 
 

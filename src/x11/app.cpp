@@ -237,7 +237,7 @@ int wxEntryStart( int& argc, char *argv[] )
     if (displayName.IsEmpty())
         xdisplay = XOpenDisplay(NULL);
     else
-        xdisplay = XOpenDisplay(displayName.c_str());
+        xdisplay = XOpenDisplay((char*) displayName.c_str());
 
     if (!xdisplay)
     {
