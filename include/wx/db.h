@@ -460,7 +460,8 @@ enum wxDBMS
     dbmsDB2,
     dbmsINTERBASE,
     dbmsPERVASIVE_SQL,
-    dbmsXBASE_SEQUITER
+    dbmsXBASE_SEQUITER,
+    dbmsFIREBIRD
 };
 
 

@@ -170,6 +170,11 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const UWORD num
         return false;
 
     tableName = tblName;                        // Table Name
+    if ((pDb->Dbms() == dbmsORACLE) ||
+        (pDb->Dbms() == dbmsFIREBIRD) ||
+        (pDb->Dbms() == dbmsINTERBASE))
+        tableName = tableName.Upper();
+
     if (tblPath.Length())
         tablePath = tblPath;                    // Table Path - used for dBase files
     else
@@ -179,6 +184,11 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const UWORD num
         queryTableName = qryTblName;
     else
         queryTableName = tblName;
+
+    if ((pDb->Dbms() == dbmsORACLE) ||
+        (pDb->Dbms() == dbmsFIREBIRD) ||
+        (pDb->Dbms() == dbmsINTERBASE))
+        queryTableName = queryTableName.Upper();
 
     pDb->incrementTableCount();
 
@@ -778,7 +788,7 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
         // Unfortunately this optimization doesn't seem to be
         // reliable!
         if (// *(pDb->dbInf.accessibleTables) == 'N' &&
-            !pDb->TablePrivileges(tableName,wxT("SELECT"), pDb->GetUsername(), pDb->GetUsername(), tablePath))
+            !pDb->TablePrivileges(tableName, wxT("SELECT"), pDb->GetUsername(), pDb->GetUsername(), tablePath))
             s = wxT("Connecting user does not have sufficient privileges to access this table.\n");
     }
 
@@ -1469,6 +1479,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             pDb->Dbms() == dbmsMY_SQL ||
             pDb->Dbms() == dbmsSYBASE_ASE  ||
             pDb->Dbms() == dbmsINTERBASE  ||
+            pDb->Dbms() == dbmsFIREBIRD  ||
             pDb->Dbms() == dbmsMS_SQL_SERVER)
         {
             if (colDefs[i].KeyField)
@@ -1498,6 +1509,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             case dbmsSYBASE_ASA:
             case dbmsSYBASE_ASE:
             case dbmsMY_SQL:
+            case dbmsFIREBIRD:
             {
                 // MySQL goes out on this one. We also declare the relevant key NON NULL above
                 sqlStmt += wxT(",PRIMARY KEY (");
@@ -1746,6 +1758,7 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
 
         // Postgres and SQL Server 7 do not support the ASC/DESC keywords for index columns
         if (!((pDb->Dbms() == dbmsMS_SQL_SERVER) && (wxStrncmp(pDb->dbInf.dbmsVer,_T("07"),2)==0)) &&
+            !(pDb->Dbms() == dbmsFIREBIRD) &&
             !(pDb->Dbms() == dbmsPOSTGRES))
         {
             if (pIdxDefs[i].Ascending)
@@ -1770,7 +1783,8 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
 #endif
 
     // Execute the CREATE INDEX statement
-    if (SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    RETCODE retcode = SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
+    if (retcode != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc, hstmt);
         pDb->RollbackTrans();
@@ -1820,8 +1834,8 @@ bool wxDbTable::DropIndex(const wxString &idxName)
 #ifdef DBDEBUG_CONSOLE
     cout << endl << sqlStmt.c_str() << endl;
 #endif
-
-    if (SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    RETCODE retcode = SQLExecDirect(hstmt, (SQLTCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
+    if (retcode != SQL_SUCCESS)
     {
         // Check for "Index not found" error and ignore
         pDb->GetNextError(henv, hdbc, hstmt);
@@ -1831,7 +1845,8 @@ bool wxDbTable::DropIndex(const wxString &idxName)
             if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,wxT("42000"))) ||  // v5.x (and lower?)
                   (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("37000"))) ||
                   (pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
-                  (pDb->Dbms() == dbmsINTERBASE      && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
+                  (pDb->Dbms() == dbmsINTERBASE     && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
+                  (pDb->Dbms() == dbmsFIREBIRD      && !wxStrcmp(pDb->sqlState,wxT("HY000"))) ||
                   (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("S0002"))) ||  // Base table not found
                   (pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,wxT("42S12"))) ||  // tested by Christopher Ludwik Marino-Cebulski using v3.23.21beta
                   (pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,wxT("08S01")))
@@ -1903,7 +1918,7 @@ int wxDbTable::Insert(void)
 
     // Insert the record by executing the already prepared insert statement
     RETCODE retcode;
-    retcode=SQLExecute(hstmtInsert);
+    retcode = SQLExecute(hstmtInsert);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO &&
         retcode != SQL_NEED_DATA)
     {

@@ -2493,6 +2493,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
             // Oracle and Interbase table names are uppercase only, so force
             // the name to uppercase just in case programmer forgot to do this
             if ((Dbms() == dbmsORACLE) ||
+                (Dbms() == dbmsFIREBIRD) ||
                 (Dbms() == dbmsINTERBASE))
                 TableName = TableName.Upper();
 
@@ -2648,6 +2649,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
         // Oracle and Interbase table names are uppercase only, so force
         // the name to uppercase just in case programmer forgot to do this
         if ((Dbms() == dbmsORACLE) ||
+            (Dbms() == dbmsFIREBIRD) ||
             (Dbms() == dbmsINTERBASE))
             TableName = TableName.Upper();
 
@@ -2903,6 +2905,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
         // Oracle and Interbase table names are uppercase only, so force
         // the name to uppercase just in case programmer forgot to do this
         if ((Dbms() == dbmsORACLE) ||
+            (Dbms() == dbmsFIREBIRD) ||
             (Dbms() == dbmsINTERBASE))
             TableName = TableName.Upper();
 
@@ -3142,6 +3145,7 @@ int wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
     // Oracle and Interbase table names are uppercase only, so force
     // the name to uppercase just in case programmer forgot to do this
     if ((Dbms() == dbmsORACLE) ||
+        (Dbms() == dbmsFIREBIRD) ||
         (Dbms() == dbmsINTERBASE))
         TableName = TableName.Upper();
 
@@ -3350,6 +3354,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     if (!UserID.empty() &&
         Dbms() != dbmsMY_SQL &&
         Dbms() != dbmsACCESS &&
+        Dbms() != dbmsFIREBIRD &&
         Dbms() != dbmsINTERBASE &&
         Dbms() != dbmsMS_SQL_SERVER)
     {
@@ -3470,6 +3475,7 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
     // Oracle and Interbase table names are uppercase only, so force
     // the name to uppercase just in case programmer forgot to do this
     if ((Dbms() == dbmsORACLE) ||
+        (Dbms() == dbmsFIREBIRD) ||
         (Dbms() == dbmsINTERBASE))
         TableName = TableName.Upper();
 
@@ -3483,6 +3489,7 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
         Dbms() != dbmsACCESS &&
         Dbms() != dbmsMS_SQL_SERVER &&
         Dbms() != dbmsDB2 &&
+        Dbms() != dbmsFIREBIRD &&
         Dbms() != dbmsINTERBASE &&
         Dbms() != dbmsPERVASIVE_SQL)
     {
@@ -3541,6 +3548,7 @@ bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, cons
     // Oracle and Interbase table names are uppercase only, so force
     // the name to uppercase just in case programmer forgot to do this
     if ((Dbms() == dbmsORACLE) ||
+        (Dbms() == dbmsFIREBIRD) ||
         (Dbms() == dbmsINTERBASE))
         TableName = TableName.Upper();
 
@@ -3785,8 +3793,18 @@ wxDBMS wxDb::Dbms(void)
     if (dbmsType != dbmsUNIDENTIFIED)
         return(dbmsType);
 
+#ifdef DBDEBUG_CONSOLE
+               // When run in console mode, use standard out to display errors.
+               cout << "Database connecting to: " << dbInf.dbmsName << endl;
+               cout << wxT("Press any key to continue...") << endl;
+               getchar();
+#endif  // DBDEBUG_CONSOLE
+
+    wxLogDebug(wxT("Database connecting to: "));
+    wxLogDebug(dbInf.dbmsName);
+
     wxChar baseName[25+1];
-    wxStrncpy(baseName,dbInf.dbmsName,25);
+    wxStrncpy(baseName, dbInf.dbmsName, 25);
     baseName[25] = 0;
 
     // RGG 20001025 : add support for Interbase
@@ -3828,6 +3846,9 @@ wxDBMS wxDb::Dbms(void)
     baseName[8] = 0;
     if (!wxStricmp(baseName,wxT("Informix")))
         return((wxDBMS)(dbmsType = dbmsINFORMIX));
+
+    if (!wxStricmp(baseName,wxT("Firebird")))
+        return((wxDBMS)(dbmsType = dbmsFIREBIRD));
 
     baseName[6] = 0;
     if (!wxStricmp(baseName,wxT("Oracle")))
