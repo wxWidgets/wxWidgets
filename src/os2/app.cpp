@@ -747,7 +747,7 @@ bool wxApp::ProcessMessage(
        if(!(CHARMSG(pChmsg)->fs & KC_KEYUP))
        {
            if((CHARMSG(pChmsg)->fs & (KC_ALT | KC_CTRL)) && CHARMSG(pChmsg)->chr != 0)
-                CHARMSG(pChmsg)->chr = (USHORT)wxToupper((UCHAR)usch);
+                CHARMSG(pChmsg)->chr = (USHORT)wxToupper((UCHAR)uSch);
 
             for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
             {
