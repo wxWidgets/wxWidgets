@@ -226,14 +226,20 @@ void RegExTestCase::doTest(int flavor)
 
     // 'e' - test that the pattern fails to compile
     if (m_mode == 'e')
-        return failIf(re.IsValid(), _T("compile suceeded (should fail)"));
+    {
+        failIf(re.IsValid(), _T("compile suceeded (should fail)"));
+        return;
+    }
     failIf(!re.IsValid(), _T("compile failed"));
 
     bool matches = re.Matches(m_data, m_matchFlags);
 
     // 'f' or 'p' - test that the pattern does not match
     if (m_mode == 'f' || m_mode == 'p')
-        return failIf(matches, _T("match suceeded (should fail)"));
+    {
+        failIf(matches, _T("match suceeded (should fail)"));
+        return;
+    }
 
     // otherwise 'm' or 'i' - test the pattern does match
     failIf(!matches, _T("match failed"));
