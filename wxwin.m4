@@ -52,13 +52,22 @@ AC_DEFUN(AM_OPTIONS_WXCONFIG,
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl AM_PATH_WXCONFIG(VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl AM_PATH_WXCONFIG(VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl                  [, WX-LIBS]]])
 dnl
 dnl Test for wxWindows, and define WX_C*FLAGS, WX_LIBS and WX_LIBS_STATIC
 dnl (the latter is for static linking against wxWindows). Set WX_CONFIG_NAME
 dnl environment variable to override the default name of the wx-config script
 dnl to use. Set WX_CONFIG_PATH to specify the full path to wx-config - in this
 dnl case the macro won't even waste time on tests for its existence.
+dnl
+dnl Optional WX-LIBS argument contains comma-separated list of wxWindows
+dnl libraries to link against (it may include contrib libraries). If it is not
+dnl specified then WX_LIBS and WX_LIBS_STATIC will contain flags to link
+dnl with all of the core wxWindows libraries.
+dnl
+dnl Example use:
+dnl   AM_PATH_WXCONFIG([2.6.0], [wxWin=1], [wxWin=0], [html,core,net])
 dnl ---------------------------------------------------------------------------
 
 dnl
@@ -138,8 +147,13 @@ AC_DEFUN(AM_PATH_WXCONFIG,
     if test "x$wx_ver_ok" = x ; then
       no_wx=yes
     else
-      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs`
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs`
+      if test "x$4" = "x" ; then
+        wx_libs_arg="--libs"
+      else
+        wx_libs_arg="--libs=$4"
+      fi
+      WX_LIBS=`$WX_CONFIG_WITH_ARGS $wx_libs_arg`
+      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static $wx_libs_arg`
 
       dnl starting with version 2.2.6 wx-config has --cppflags argument
       wx_has_cppflags=""
