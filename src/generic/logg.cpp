@@ -776,7 +776,8 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
         default:
             wxFAIL_MSG(_T("incorrect log style"));
     }
-    sizerAll->Add(new wxStaticBitmap(this, wxID_ANY, bitmap), 0);
+    sizerAll->Add(new wxStaticBitmap(this, wxID_ANY, bitmap), 0,
+                  wxALIGN_CENTRE_VERTICAL);
 
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 1,
