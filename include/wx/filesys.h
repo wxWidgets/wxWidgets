@@ -160,7 +160,8 @@ protected:
 class WXDLLIMPEXP_BASE wxFileSystem : public wxObject
 {
 public:
-    wxFileSystem() : wxObject() {m_Path = m_LastName = wxEmptyString; m_Handlers.DeleteContents(TRUE); m_FindFileHandler = NULL;}
+    wxFileSystem() : wxObject() {m_Path = m_LastName = wxEmptyString; m_FindFileHandler = NULL;}
+    ~wxFileSystem() { WX_CLEAR_LIST(wxList, m_Handlers); }
 
     // sets the current location. Every call to OpenFile is
     // relative to this location.

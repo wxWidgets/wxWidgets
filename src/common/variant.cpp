@@ -94,7 +94,7 @@ wxVariantDataList::~wxVariantDataList()
 void wxVariantDataList::SetValue(const wxList& value)
 {
     Clear();
-    wxNode* node = value.GetFirst();
+    wxList::compatibility_iterator node = value.GetFirst();
     while (node)
     {
         wxVariant* var = (wxVariant*) node->GetData();
@@ -105,7 +105,7 @@ void wxVariantDataList::SetValue(const wxList& value)
 
 void wxVariantDataList::Clear()
 {
-    wxNode* node = m_value.GetFirst();
+    wxList::compatibility_iterator node = m_value.GetFirst();
     while (node)
     {
         wxVariant* var = (wxVariant*) node->GetData();
@@ -122,7 +122,7 @@ void wxVariantDataList::Copy(wxVariantData& data)
     wxVariantDataList& listData = (wxVariantDataList&) data;
 
     listData.Clear();
-    wxNode* node = m_value.GetFirst();
+    wxList::compatibility_iterator node = m_value.GetFirst();
     while (node)
     {
         wxVariant* var = (wxVariant*) node->GetData();
@@ -136,8 +136,8 @@ bool wxVariantDataList::Eq(wxVariantData& data) const
     wxASSERT_MSG( (data.GetType() == wxT("list")), wxT("wxVariantDataList::Eq: argument mismatch") );
 
     wxVariantDataList& listData = (wxVariantDataList&) data;
-    wxNode* node1 = m_value.GetFirst();
-    wxNode* node2 = listData.GetValue().GetFirst();
+    wxList::compatibility_iterator node1 = m_value.GetFirst();
+    wxList::compatibility_iterator node2 = listData.GetValue().GetFirst();
     while (node1 && node2)
     {
         wxVariant* var1 = (wxVariant*) node1->GetData();
@@ -164,7 +164,7 @@ bool wxVariantDataList::Write(wxSTD ostream& str) const
 bool wxVariantDataList::Write(wxString& str) const
 {
     str = wxT("");
-    wxNode* node = m_value.GetFirst();
+    wxList::compatibility_iterator node = m_value.GetFirst();
     while (node)
     {
         wxVariant* var = (wxVariant*) node->GetData();
@@ -245,8 +245,8 @@ bool wxVariantDataStringList::Eq(wxVariantData& data) const
     wxASSERT_MSG( (data.GetType() == wxT("stringlist")), wxT("wxVariantDataStringList::Eq: argument mismatch") );
 
     wxVariantDataStringList& listData = (wxVariantDataStringList&) data;
-    wxStringList::Node  *node1 = m_value.GetFirst();
-    wxStringList::Node  *node2 = listData.GetValue().GetFirst();
+    wxStringList::compatibility_iterator node1 = m_value.GetFirst();
+    wxStringList::compatibility_iterator node2 = listData.GetValue().GetFirst();
     while (node1 && node2)
     {
         wxString str1 ( node1->GetData() );
@@ -273,10 +273,10 @@ bool wxVariantDataStringList::Write(wxSTD ostream& str) const
 bool wxVariantDataStringList::Write(wxString& str) const
 {
     str.Empty();
-    wxStringList::Node  *node = m_value.GetFirst();
+    wxStringList::compatibility_iterator node = m_value.GetFirst();
     while (node)
     {
-        wxChar* s = node->GetData();
+        const wxChar* s = node->GetData();
         if (node != m_value.GetFirst())
           str += wxT(" ");
         str += s;
@@ -1735,7 +1735,7 @@ wxVariant wxVariant::operator[] (size_t idx) const
         wxVariantDataStringList* data = (wxVariantDataStringList*) m_data;
         wxASSERT_MSG( (idx < (size_t) data->GetValue().GetCount()), wxT("Invalid index for array") );
 
-        wxVariant variant( wxString( (wxChar*) (data->GetValue().Item(idx)->GetData()) ));
+        wxVariant variant( wxString( (const wxChar*) (data->GetValue().Item(idx)->GetData()) ));
         return variant;
     }
     return wxNullVariant;
@@ -1942,7 +1942,7 @@ bool wxVariant::Member(const wxVariant& value) const
 {
     wxList& list = GetList();
 
-    wxNode* node = list.GetFirst();
+    wxList::compatibility_iterator node = list.GetFirst();
     while (node)
     {
         wxVariant* other = (wxVariant*) node->GetData();
@@ -1959,10 +1959,10 @@ bool wxVariant::Delete(int item)
     wxList& list = GetList();
 
     wxASSERT_MSG( (item < (int) list.GetCount()), wxT("Invalid index to Delete") );
-    wxNode* node = list.Item(item);
+    wxList::compatibility_iterator node = list.Item(item);
     wxVariant* variant = (wxVariant*) node->GetData();
     delete variant;
-    delete node;
+    list.Erase(node);
     return TRUE;
 }
 

@@ -12,11 +12,22 @@
 #ifndef   _DYNARRAY_H
 #define   _DYNARRAY_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(__APPLE__) && \
+    !(defined(__MINGW32__) && __GNUC__ == 3 && __GNUC_MINOR__ == 2)
 #pragma interface "dynarray.h"
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_STL
+    #include "wx/beforestd.h"
+    #include <vector>
+    #include <algorithm>
+    #include "wx/afterstd.h"
+    #if defined(__WXMSW__) && defined(__MINGW32__)
+        #include "wx/msw/winundef.h"
+    #endif
+#endif
 
 /*
   This header defines the dynamic arrays and object arrays (i.e. arrays which
@@ -76,6 +87,59 @@ typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 //     you cast "SomeArray *" as "BaseArray *" and then delete it)
 // ----------------------------------------------------------------------------
 
+#if wxUSE_STL
+
+#define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
+classexp name : public std::vector<T>                               \
+{                                                                   \
+public:                                                             \
+  void Empty() { clear(); }                                         \
+  void Clear() { clear(); }                                         \
+  void Alloc(size_t uiSize) { reserve(uiSize); }                    \
+  void Shrink();                                                    \
+                                                                    \
+  size_t GetCount() const { return size(); }                        \
+  void SetCount(size_t n, T v = T()) { resize(n, v); }              \
+  bool IsEmpty() const { return empty(); }                          \
+  size_t Count() const { return size(); }                           \
+                                                                    \
+  typedef T base_type;                                              \
+                                                                    \
+protected:                                                          \
+  T& Item(size_t uiIndex) const                                     \
+    { wxASSERT( uiIndex < size() ); return (T&)operator[](uiIndex); }   \
+                                                                    \
+  int Index(T e, bool bFromEnd = FALSE) const;                      \
+  int Index(T lItem, CMPFUNC fnCompare) const;                      \
+  size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
+  void Add(T lItem, size_t nInsert = 1)                             \
+    { insert(end(), nInsert, lItem); }                              \
+  void Add(T lItem, CMPFUNC fnCompare);                             \
+  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)          \
+    { insert(begin() + uiIndex, nInsert, lItem); }                  \
+  void Remove(T lItem);                                             \
+  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                 \
+    { erase(begin() + uiIndex, begin() + uiIndex + nRemove); }      \
+                                                                    \
+  void Sort(CMPFUNC fCmp)                                           \
+  {                                                                 \
+    Predicate p(fCmp);                                              \
+    std::sort(begin(), end(), p);                                   \
+  }                                                                 \
+private:                                                            \
+  class Predicate                                                   \
+  {                                                                 \
+    typedef CMPFUNC fnc;                                            \
+    fnc m_f;                                                        \
+  public:                                                           \
+    Predicate(fnc f) : m_f(f) { }                                   \
+    bool operator()(const T& i1, const T& i2)                       \
+      { return m_f((T*)&i1, (T*)&i2) < 0; /* const cast */ }        \
+  };                                                                \
+}
+
+#else // if !wxUSE_STL
+
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
 classexp name                                                       \
 {                                                                   \
@@ -113,6 +177,47 @@ protected:                                                          \
                                                                     \
   void Sort(CMPFUNC fnCompare);                                     \
                                                                     \
+  /* *minimal* STL-ish interface, for derived classes */            \
+  typedef T value_type;                                             \
+  typedef value_type* iterator;                                     \
+  typedef const value_type* const_iterator;                         \
+  typedef value_type& reference;                                    \
+  typedef const value_type& const_reference;                        \
+  typedef int difference_type;                                      \
+  typedef size_t size_type;                                         \
+                                                                    \
+  void assign(const_iterator first, const_iterator last);           \
+  void assign(size_type n, const_reference v);                      \
+  size_type capacity() const { return m_nSize; }                    \
+  void clear() { Clear(); }                                         \
+  bool empty() const { return IsEmpty(); }                          \
+  iterator erase(iterator first, iterator last)                     \
+  {                                                                 \
+    size_type idx = first - begin();                                \
+    RemoveAt(idx, last - first);                                    \
+    return begin() + idx;                                           \
+  }                                                                 \
+  iterator erase(iterator it) { return erase(it, it + 1); }         \
+  void insert(iterator it, size_type n, const value_type& v)        \
+    { Insert(v, it - begin(), n); }                                 \
+  iterator insert(iterator it, const value_type& v = value_type())  \
+  {                                                                 \
+    size_type idx = it - begin();                                   \
+    Insert(v, idx);                                                 \
+    return begin() + idx;                                           \
+  }                                                                 \
+  void insert(iterator it, const_iterator first, const_iterator last);\
+  size_type max_size() const { return INT_MAX; }                    \
+  void pop_back() { RemoveAt(size() - 1); }                         \
+  void push_back(const value_type& v) { Add(v); }                   \
+  void reserve(size_type n) { if(n > m_nSize) Realloc(n); }         \
+  void resize(size_type n, value_type v = value_type());            \
+  size_type size() const { return GetCount(); }                     \
+                                                                    \
+  iterator begin() { return m_pItems; }                             \
+  iterator end() { return m_pItems + m_nCount; }                    \
+  const_iterator begin() const { return m_pItems; }                 \
+  const_iterator end() const { return m_pItems + m_nCount; }        \
 private:                                                            \
   void Grow(size_t nIncrement = 0);                                 \
   bool Realloc(size_t nSize);                                       \
@@ -122,6 +227,8 @@ private:                                                            \
                                                                     \
   T      *m_pItems;                                                 \
 }
+
+#endif // !wxUSE_STL
 
 // ============================================================================
 // The private helper macros containing the core of the array classes
@@ -144,6 +251,41 @@ private:                                                            \
 // _WX_DEFINE_TYPEARRAY: array for simple types
 // ----------------------------------------------------------------------------
 
+#if wxUSE_STL
+
+#define  _WX_DEFINE_TYPEARRAY(T, name, base, classexp)                \
+typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
+classexp name : public base                                           \
+{                                                                     \
+public:                                                               \
+  T& operator[](size_t uiIndex) const                                 \
+    { return (T&)(base::operator[](uiIndex)); }                       \
+  T& Item(size_t uiIndex) const                                       \
+    { return (T&)/*const cast*/base::operator[](uiIndex); }           \
+  T& Last() const                                                     \
+    { return Item(Count() - 1); }                                     \
+                                                                      \
+  int Index(T e, bool bFromEnd = FALSE) const                         \
+    { return base::Index(e, bFromEnd); }                              \
+                                                                      \
+  void Add(T Item, size_t nInsert = 1)                                \
+    { insert(end(), nInsert, Item); }                                 \
+  void Insert(T Item, size_t uiIndex, size_t nInsert = 1)             \
+    { insert(begin() + uiIndex, nInsert, Item); }                     \
+                                                                      \
+  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
+    { base::RemoveAt(uiIndex, nRemove); }                             \
+  void Remove(T Item)                                                 \
+    { int iIndex = Index(Item);                                       \
+      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
+         _WX_ERROR_REMOVE);                                           \
+      RemoveAt((size_t)iIndex); }                                     \
+                                                                      \
+  void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
+}
+
+#else // if !wxUSE_STL
+
 #define  _WX_DEFINE_TYPEARRAY(T, name, base, classexp)                \
 wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
                        TypeTooBigToBeStoredIn##base,                  \
@@ -161,11 +303,11 @@ public:                                                               \
       return *this; }                                                 \
                                                                       \
   T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::Item(uiIndex)); }                             \
+    { return (T&)(base::operator[](uiIndex)); }                       \
   T& Item(size_t uiIndex) const                                       \
-    { return (T&)(base::Item(uiIndex)); }                             \
+    { return (T&)(base::operator[](uiIndex)); }                       \
   T& Last() const                                                     \
-    { return (T&)(base::Item(Count() - 1)); }                         \
+    { return (T&)(base::operator[](Count() - 1)); }                   \
                                                                       \
   int Index(T Item, bool bFromEnd = FALSE) const                      \
     { return base::Index((base_type)Item, bFromEnd); }                \
@@ -184,7 +326,129 @@ public:                                                               \
       base::RemoveAt((size_t)iIndex); }                               \
                                                                       \
   void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
-}
+                                                                      \
+  /* STL-like interface */                                            \
+private:                                                              \
+  typedef base::iterator biterator;                                   \
+  typedef base::const_iterator bconst_iterator;                       \
+  typedef base::value_type bvalue_type;                               \
+  typedef base::const_reference bconst_reference;                     \
+public:                                                               \
+  typedef T value_type;                                               \
+  typedef value_type* pointer;                                        \
+  typedef const value_type* const_pointer;                            \
+  typedef value_type* iterator;                                       \
+  typedef const value_type* const_iterator;                           \
+  typedef value_type& reference;                                      \
+  typedef const value_type& const_reference;                          \
+  typedef base::difference_type difference_type;                      \
+  typedef base::size_type size_type;                                  \
+                                                                      \
+  class reverse_iterator                                              \
+  {                                                                   \
+    typedef name::reference reference;                                \
+    typedef name::pointer pointer;                                    \
+    typedef reverse_iterator itor;                                    \
+    friend itor operator+(int o, const itor& it);                     \
+    friend itor operator+(const itor& it, int o);                     \
+    friend itor operator-(const itor& it, int o);                     \
+    friend difference_type operator -(const itor& i1, const itor& i2);\
+  public:                                                             \
+    pointer m_ptr;                                                    \
+    reverse_iterator() : m_ptr(NULL) { }                              \
+    reverse_iterator(pointer ptr) : m_ptr(ptr) { }                    \
+    reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }            \
+    reference operator*() const { return *m_ptr; }                    \
+    pointer operator->() const { return m_ptr; }                      \
+    itor operator++() { --m_ptr; return *this; }                      \
+    itor operator++(int)                                              \
+      { reverse_iterator tmp = *this; --m_ptr; return tmp; }          \
+    itor operator--() { ++m_ptr; return *this; }                      \
+    itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }   \
+    bool operator ==(const itor& it) { return m_ptr == it.m_ptr; }    \
+    bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }    \
+  };                                                                  \
+                                                                      \
+  class const_reverse_iterator                                        \
+  {                                                                   \
+    typedef name::const_reference reference;                          \
+    typedef name::const_pointer pointer;                              \
+    typedef const_reverse_iterator itor;                              \
+    friend itor operator+(int o, const itor& it);                     \
+    friend itor operator+(const itor& it, int o);                     \
+    friend itor operator-(const itor& it, int o);                     \
+    friend difference_type operator -(const itor& i1, const itor& i2);\
+  public:                                                             \
+    pointer m_ptr;                                                    \
+    const_reverse_iterator() : m_ptr(NULL) { }                        \
+    const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }              \
+    const_reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }      \
+    const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }\
+    reference operator*() const { return *m_ptr; }                    \
+    pointer operator->() const { return m_ptr; }                      \
+    itor operator++() { --m_ptr; return *this; }                      \
+    itor operator++(int)                                              \
+      { itor tmp = *this; --m_ptr; return tmp; }                      \
+    itor operator--() { ++m_ptr; return *this; }                      \
+    itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }   \
+    bool operator ==(const itor& it) { return m_ptr == it.m_ptr; }    \
+    bool operator !=(const itor& it) { return m_ptr != it.m_ptr; }    \
+  };                                                                  \
+                                                                      \
+  void assign(const_iterator first, const_iterator last)              \
+    { base::assign((bconst_iterator)first, (bconst_iterator)last); }  \
+  void assign(size_type n, const_reference v)                         \
+    { base::assign(n, (bconst_reference)v); }                         \
+  reference back() { return *(end() - 1); }                           \
+  const_reference back() const { return *(end() - 1); }               \
+  iterator begin() { return (iterator)base::begin(); }                \
+  const_iterator begin() const { return (const_iterator)base::begin(); }\
+  size_type capacity() const { return base::capacity(); }             \
+  void clear() { base::clear(); }                                     \
+  bool empty() const { return base::empty(); }                        \
+  iterator end() { return (iterator)base::end(); }                    \
+  const_iterator end() const { return (const_iterator)base::end(); }  \
+  iterator erase(iterator first, iterator last)                       \
+    { return (iterator)base::erase((biterator)first, (biterator)last); }\
+  iterator erase(iterator it)                                         \
+    { return (iterator)base::erase((biterator)it); }                  \
+  reference front() { return *begin(); }                              \
+  const_reference front() const { return *begin(); }                  \
+  void insert(iterator it, size_type n, const_reference v)            \
+    { base::insert((biterator)it, n, (bconst_reference)v); }          \
+  iterator insert(iterator it, const_reference v = value_type())      \
+    { return (iterator)base::insert((biterator)it, (bconst_reference)v); }\
+  void insert(iterator it, const_iterator first, const_iterator last) \
+    { base::insert((biterator)it, (bconst_iterator)first,             \
+                   (bconst_iterator)last); }                          \
+  size_type max_size() const { return base::max_size(); }             \
+  void pop_back() { base::pop_back(); }                               \
+  void push_back(const_reference v)                                   \
+    { base::push_back((bconst_reference)v); }                         \
+  reverse_iterator rbegin() { return reverse_iterator(end() - 1); }   \
+  const_reverse_iterator rbegin() const;                              \
+  reverse_iterator rend() { return reverse_iterator(begin() - 1); }   \
+  const_reverse_iterator rend() const;                                \
+  void reserve(size_type n) { base::reserve(n); };                    \
+  void resize(size_type n, value_type v = value_type());              \
+  size_type size() const { return base::size(); }                     \
+};                                                                    \
+                                                                      \
+inline name::reverse_iterator operator+(int o, const name::reverse_iterator& it) { return it.m_ptr - o; } \
+inline name::reverse_iterator operator+(const name::reverse_iterator& it, int o) { return it.m_ptr - o; } \
+inline name::reverse_iterator operator-(const name::reverse_iterator& it, int o) { return it.m_ptr + o; } \
+inline name::difference_type operator -(const name::reverse_iterator& i1, \
+                             const name::reverse_iterator& i2)            \
+    { return i1.m_ptr - i2.m_ptr; }                                       \
+                                                                      \
+inline name::const_reverse_iterator operator+(int o, const name::const_reverse_iterator& it) { return it.m_ptr - o; } \
+inline name::const_reverse_iterator operator+(const name::const_reverse_iterator& it, int o) { return it.m_ptr - o; } \
+inline name::const_reverse_iterator operator-(const name::const_reverse_iterator& it, int o) { return it.m_ptr + o; } \
+inline name::difference_type operator -(const name::const_reverse_iterator& i1,\
+                             const name::const_reverse_iterator& i2)      \
+    { return i1.m_ptr - i2.m_ptr; }                                       \
+
+#endif // !wxUSE_STL
 
 // ----------------------------------------------------------------------------
 // _WX_DEFINE_SORTED_TYPEARRAY: sorted array for simple data types
@@ -192,14 +456,17 @@ public:                                                               \
 // ----------------------------------------------------------------------------
 
 #define _WX_DEFINE_SORTED_TYPEARRAY(T, name, base, defcomp, classexp) \
+typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);          \
+_WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, SCMPFUNC##T)
+
+#define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, comptype)\
 wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(void *),                   \
                        TypeTooBigToBeStoredInSorted##base,            \
                        name);                                         \
-typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);          \
 classexp name : public base                                           \
 {                                                                     \
 public:                                                               \
-  name(SCMPFUNC##T fn defcomp) { m_fnCompare = fn; }                  \
+  name(comptype fn defcomp) { m_fnCompare = fn; }                     \
                                                                       \
   name& operator=(const name& src)                                    \
     { base* temp = (base*) this;                                      \
@@ -208,11 +475,11 @@ public:                                                               \
       return *this; }                                                 \
                                                                       \
   T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::Item(uiIndex)); }                             \
+    { return (T&)(base::operator[](uiIndex)); }                       \
   T& Item(size_t uiIndex) const                                       \
-    { return (T&)(base::Item(uiIndex)); }                             \
+    { return (T&)(base::operator[](uiIndex)); }                       \
   T& Last() const                                                     \
-    { return (T&)(base::Item(Count() - 1)); }                         \
+    { return (T&)(base::operator[](size() - 1)); }                    \
                                                                       \
   int Index(T Item) const                                             \
     { return base::Index(Item, (CMPFUNC)m_fnCompare); }               \
@@ -221,22 +488,23 @@ public:                                                               \
     { return base::IndexForInsert(Item, (CMPFUNC)m_fnCompare); }      \
                                                                       \
   void AddAt(T item, size_t index)                                    \
-    { base::Insert(item, index); }                                    \
+    { base::insert(begin() + index, item); }                          \
                                                                       \
   void Add(T Item)                                                    \
     { base::Add(Item, (CMPFUNC)m_fnCompare); }                        \
                                                                       \
   void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
-    { base::RemoveAt(uiIndex, nRemove); }                             \
+    { base::erase(begin() + uiIndex, begin() + uiIndex + nRemove); }  \
   void Remove(T Item)                                                 \
     { int iIndex = Index(Item);                                       \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
         _WX_ERROR_REMOVE );                                           \
-      base::RemoveAt((size_t)iIndex); }                               \
+      base::erase(begin() + iIndex); }                                \
                                                                       \
 private:                                                              \
-  SCMPFUNC##T m_fnCompare;                                            \
+  comptype m_fnCompare;                                               \
 }
+
 
 // ----------------------------------------------------------------------------
 // _WX_DECLARE_OBJARRAY: an array for pointers to type T with owning semantics
@@ -244,9 +512,10 @@ private:                                                              \
 
 #define _WX_DECLARE_OBJARRAY(T, name, base, classexp)                    \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T **pItem1, T **pItem2);          \
-classexp name : public base                                              \
+classexp name : protected base                                           \
 {                                                                        \
 typedef int (CMPFUNC_CONV *CMPFUNC##base)(void **pItem1, void **pItem2); \
+typedef base base_array;                                                 \
 public:                                                                  \
   name() { }                                                             \
   name(const name& src);                                                 \
@@ -254,29 +523,40 @@ public:                                                                  \
                                                                          \
   ~name();                                                               \
                                                                          \
+  void Alloc(size_t count) { reserve(count); }                           \
+  size_t GetCount() const { return base_array::size(); }                 \
+  size_t size() const { return base_array::size(); }                     \
+  bool IsEmpty() const { return base_array::empty(); }                   \
+  size_t Count() const { return base_array::size(); }                    \
+  void Shrink() { base::Shrink(); }                                      \
+                                                                         \
   T& operator[](size_t uiIndex) const                                    \
-    { return *(T*)base::Item(uiIndex); }                                 \
+    { return *(T*)base::operator[](uiIndex); }                           \
   T& Item(size_t uiIndex) const                                          \
-    { return *(T*)base::Item(uiIndex); }                                 \
+    { return *(T*)base::operator[](uiIndex); }                           \
   T& Last() const                                                        \
-    { return *(T*)(base::Item(Count() - 1)); }                           \
+    { return *(T*)(base::operator[](size() - 1)); }                      \
                                                                          \
   int Index(const T& Item, bool bFromEnd = FALSE) const;                 \
                                                                          \
   void Add(const T& Item, size_t nInsert = 1);                           \
   void Add(const T* pItem)                                               \
-    { base::Add((T*)pItem); }                                            \
+    { base::push_back((T*)pItem); }                                      \
+  void push_back(const T* pItem)                                         \
+    { base::push_back((T*)pItem); }                                      \
+  void push_back(const T& Item)                                          \
+    { Add(Item); }                                                       \
                                                                          \
   void Insert(const T& Item,  size_t uiIndex, size_t nInsert = 1);       \
   void Insert(const T* pItem, size_t uiIndex)                            \
-    { base::Insert((T*)pItem, uiIndex); }                                \
+    { base::insert(begin() + uiIndex, (T*)pItem); }                      \
                                                                          \
-  void Empty() { DoEmpty(); base::Empty(); }                             \
-  void Clear() { DoEmpty(); base::Clear(); }                             \
+  void Empty() { DoEmpty(); base::clear(); }                             \
+  void Clear() { DoEmpty(); base::clear(); }                             \
                                                                          \
   T* Detach(size_t uiIndex)                                              \
-    { T* p = (T*)base::Item(uiIndex);                                    \
-      base::RemoveAt(uiIndex); return p; }                               \
+    { T* p = (T*)base::operator[](uiIndex);                              \
+      base::erase(begin() + uiIndex); return p; }                        \
   void RemoveAt(size_t uiIndex, size_t nRemove = 1);                     \
                                                                          \
   void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC##base)fCmp); }        \
@@ -337,7 +617,7 @@ private:                                                                 \
     WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class expdecl)
 
 #define WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, classdecl) \
-    typedef T _wxArray##name;                                     \
+    typedef T _wxArray##name;                                   \
     _WX_DEFINE_TYPEARRAY(_wxArray##name, name, base, classdecl)
 
 // ----------------------------------------------------------------------------
@@ -608,10 +888,10 @@ WX_DEFINE_USER_EXPORTED_ARRAY       (void *, wxArrayPtrVoid, class WXDLLIMPEXP_B
 // append all element of one array to another one
 #define WX_APPEND_ARRAY(array, other)                                         \
     {                                                                         \
-        size_t count = (other).Count();                                       \
+        size_t count = (other).size();                                        \
         for ( size_t n = 0; n < count; n++ )                                  \
         {                                                                     \
-            (array).Add((other)[n]);                                          \
+            (array).push_back((other)[n]);                                    \
         }                                                                     \
     }
 
@@ -623,13 +903,13 @@ WX_DEFINE_USER_EXPORTED_ARRAY       (void *, wxArrayPtrVoid, class WXDLLIMPEXP_B
 //     count on it)!
 #define WX_CLEAR_ARRAY(array)                                                 \
     {                                                                         \
-        size_t count = (array).Count();                                       \
+        size_t count = (array).size();                                        \
         for ( size_t n = 0; n < count; n++ )                                  \
         {                                                                     \
             delete (array)[n];                                                \
         }                                                                     \
                                                                               \
-        (array).Empty();                                                      \
+        (array).clear();                                                      \
     }
 
 #endif // _DYNARRAY_H

@@ -78,6 +78,7 @@
     #define TEST_REGCONF
     #define TEST_REGEX
     #define TEST_REGISTRY
+    #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
     #define TEST_SOCKETS
     #define TEST_STREAMS
@@ -95,7 +96,10 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_LOG
+    #define TEST_ARRAYS
+    #define TEST_HASH
+    #define TEST_LIST
+    #define TEST_SCOPEGUARD
 
     static const bool TEST_ALL = false;
 #endif
@@ -1149,6 +1153,41 @@ static void TestHash()
     wxPuts(_T("*** Testing wxHashTable ***\n"));
 
     {
+        wxHashTable hash(wxKEY_INTEGER), hash2(wxKEY_STRING);
+        int i;
+
+        for ( i = 0; i < 100; ++i )
+            hash.Put(i, (wxObject*)&i + i);
+
+        hash.BeginFind();
+        wxHashTable::compatibility_iterator it = hash.Next();
+        i = 0;
+
+        while (it)
+        {
+            ++i;
+            it = hash.Next();
+        }
+
+        if (i != 100)
+            wxPuts(_T("Error in wxHashTable::compatibility_iterator\n"));
+
+        for ( i = 99; i >= 0; --i )
+            if( hash.Get(i) != (wxObject*)&i + i )
+                wxPuts(_T("Error in wxHashTable::Get/Put\n"));
+
+        hash2.Put("foo", (wxObject*)&i + 1);
+        hash2.Put("bar", (wxObject*)&i + 2);
+        hash2.Put("baz", (wxObject*)&i + 3);
+
+        if (hash2.Get("moo") != NULL)
+            wxPuts(_T("Error in wxHashTable::Get\n"));
+
+        if (hash2.Get("bar") != (wxObject*)&i + 2)
+            wxPuts(_T("Error in wxHashTable::Get/Put\n"));
+    }
+#if !wxUSE_STL
+    {
         wxHashFoos hash;
         hash.DeleteContents(true);
 
@@ -1197,8 +1236,10 @@ static void TestHash()
             wxPuts(_T("ok (not found)"));
         }
     }
+#endif
 
     wxPrintf(_T("Hash destroyed: %u foos left\n"), Foo::count);
+    wxPuts(_T("*** Testing wxHashTable finished ***\n"));
 }
 
 #endif // TEST_HASH
@@ -1361,6 +1402,104 @@ WX_DECLARE_LIST(Bar, wxListBars);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListBars);
 
+WX_DECLARE_LIST(int, wxListInt);
+WX_DEFINE_LIST(wxListInt);
+
+static void TestList()
+{
+    wxPuts(_T("*** Testing wxList operations ***\n"));
+    {
+        wxListInt list1;
+        int dummy[5];
+        int i;
+
+        for ( i = 0; i < 5; ++i )
+            list1.Append(dummy + i);
+
+        if ( list1.GetCount() != 5 )
+            wxPuts(_T("Wrong number of items in list\n"));
+
+        if ( list1.Item(3)->GetData() != dummy + 3 )
+            wxPuts(_T("Error in Item()\n"));
+
+        if ( !list1.Find(dummy + 4) )
+            wxPuts(_T("Error in Find()\n"));
+
+        wxListInt::compatibility_iterator node = list1.GetFirst();
+        i = 0;
+
+        while (node)
+        {
+            if ( node->GetData() != dummy + i )
+                wxPuts(_T("Error in compatibility_iterator\n"));
+            node = node->GetNext();
+            ++i;
+        }
+
+        if ( size_t(i) != list1.GetCount() )
+            wxPuts(_T("Error in compatibility_iterator\n"));
+
+        list1.Insert(dummy + 0);
+        list1.Insert(1, dummy + 1);
+        list1.Insert(list1.GetFirst()->GetNext()->GetNext(), dummy + 2);
+
+        node = list1.GetFirst();
+        i = 0;
+
+        while (i < 3)
+        {
+            int* t = node->GetData();
+            if ( t != dummy + i )
+                wxPuts(_T("Error in Insert\n"));
+            node = node->GetNext();
+            ++i;
+        }
+    }
+
+    wxPuts(_T("*** Testing wxList operations finished ***\n"));
+
+    wxPuts(_T("*** Testing std::list operations ***\n"));
+
+    {
+        wxListInt list1;
+        wxListInt::iterator it, en;
+        wxListInt::reverse_iterator rit, ren;
+        int i;
+        for ( i = 0; i < 5; ++i )
+            list1.push_back(i + &i);
+
+        for ( it = list1.begin(), en = list1.end(), i = 0;
+              it != en; ++it, ++i )
+            if ( *it != i + &i )
+                wxPuts(_T("Error in iterator\n"));
+
+        for ( rit = list1.rbegin(), ren = list1.rend(), i = 4;
+              rit != ren; ++rit, --i )
+            if ( *rit != i + &i )
+                wxPuts(_T("Error in reverse_iterator\n"));
+
+        if ( *list1.rbegin() != *--list1.end() ||
+             *list1.begin() != *--list1.rend() )
+            wxPuts(_T("Error in iterator/reverse_iterator\n"));
+        if ( *list1.begin() != *--++list1.begin() ||
+             *list1.rbegin() != *--++list1.rbegin() )
+            wxPuts(_T("Error in iterator/reverse_iterator\n"));
+
+        if ( list1.front() != &i || list1.back() != &i + 4 )
+            wxPuts(_T("Error in front()/back()\n"));
+
+        list1.erase(list1.begin());
+        list1.erase(--list1.end());
+
+        for ( it = list1.begin(), en = list1.end(), i = 1;
+              it != en; ++it, ++i )
+            if ( *it != i + &i )
+                wxPuts(_T("Error in erase()\n"));
+    }
+    
+    wxPuts(_T("*** Testing std::list operations finished ***\n"));
+}
+
 static void TestListCtor()
 {
     wxPuts(_T("*** Testing wxList construction ***\n"));
@@ -1379,7 +1518,11 @@ static void TestListCtor()
         wxPrintf(_T("After 2nd list creation: %u and %u objects in the lists, %u objects total.\n"),
                list1.GetCount(), list2.GetCount(), Bar::GetNumber());
 
+#if !wxUSE_STL
         list1.DeleteContents(true);
+#else
+        WX_CLEAR_LIST(wxListBars, list1);
+#endif
     }
 
     wxPrintf(_T("After list destruction: %u objects left.\n"), Bar::GetNumber());
@@ -2989,6 +3132,8 @@ static void TestRegistryAssociation()
 // scope guard
 // ----------------------------------------------------------------------------
 
+#ifdef TEST_SCOPEGUARD
+
 #include "wx/scopeguard.h"
 
 static void function0() { puts("function0()"); }
@@ -3009,13 +3154,15 @@ static void TestScopeGuard()
     ON_BLOCK_EXIT2(function2, 3.14, 'p');
 
     Object obj;
-    ON_BLOCK_EXIT_OBJ0(obj, Object::method0);
-    ON_BLOCK_EXIT_OBJ1(obj, Object::method1, 7);
-    ON_BLOCK_EXIT_OBJ2(obj, Object::method2, 2.71, 'e');
+    ON_BLOCK_EXIT_OBJ0(obj, &Object::method0);
+    ON_BLOCK_EXIT_OBJ1(obj, &Object::method1, 7);
+    ON_BLOCK_EXIT_OBJ2(obj, &Object::method2, 2.71, 'e');
 
     wxScopeGuard dismissed = wxMakeGuard(function0);
     dismissed.Dismiss();
 }
+
+#endif
 
 // ----------------------------------------------------------------------------
 // sockets
@@ -5715,6 +5862,17 @@ static void PrintArray(const wxChar* name, const wxArrayString& array)
     }
 }
 
+static void PrintArray(const wxChar* name, const wxSortedArrayString& array)
+{
+    wxPrintf(_T("Dump of the array '%s'\n"), name);
+
+    size_t nCount = array.GetCount();
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        wxPrintf(_T("\t%s[%u] = '%s'\n"), name, n, array[n].c_str());
+    }
+}
+
 int wxCMPFUNC_CONV StringLenCompare(const wxString& first,
                                     const wxString& second)
 {
@@ -5778,6 +5936,53 @@ static void TestArrayOf ## name ## s()                                        \
 
 TestArrayOf(UShort);
 TestArrayOf(Int);
+
+static void TestStlArray()
+{
+    wxPuts(_T("*** Testing std::vector operations ***\n"));
+
+    {
+        wxArrayInt list1;
+        wxArrayInt::iterator it, en;
+        wxArrayInt::reverse_iterator rit, ren;
+        int i;
+        for ( i = 0; i < 5; ++i )
+            list1.push_back(i);
+
+        for ( it = list1.begin(), en = list1.end(), i = 0;
+              it != en; ++it, ++i )
+            if ( *it != i )
+                wxPuts(_T("Error in iterator\n"));
+
+        for ( rit = list1.rbegin(), ren = list1.rend(), i = 4;
+              rit != ren; ++rit, --i )
+            if ( *rit != i )
+                wxPuts(_T("Error in reverse_iterator\n"));
+
+        if ( *list1.rbegin() != *(list1.end()-1) ||
+             *list1.begin() != *(list1.rend()-1) )
+            wxPuts(_T("Error in iterator/reverse_iterator\n"));
+
+        it = list1.begin()+1;
+        rit = list1.rbegin()+1;
+        if ( *list1.begin() != *(it-1) ||
+             *list1.rbegin() != *(rit-1) )
+            wxPuts(_T("Error in iterator/reverse_iterator\n"));
+
+        if ( list1.front() != 0 || list1.back() != 4 )
+            wxPuts(_T("Error in front()/back()\n"));
+
+        list1.erase(list1.begin());
+        list1.erase(list1.end()-1);
+
+        for ( it = list1.begin(), en = list1.end(), i = 1;
+              it != en; ++it, ++i )
+            if ( *it != i )
+                wxPuts(_T("Error in erase()\n"));
+    }
+    
+    wxPuts(_T("*** Testing std::vector operations finished ***\n"));
+}
 
 static void TestArrayOfObjects()
 {
@@ -6211,6 +6416,16 @@ static void TestStringMatch()
     #include "wx/snglinst.h"
 #endif // TEST_SNGLINST
 
+static int MyStringCompare(wxString* s1, wxString* s2)
+{
+    return wxStrcmp(s1->c_str(), s2->c_str());
+}
+
+static int MyStringReverseCompare(wxString* s1, wxString* s2)
+{
+    return -wxStrcmp(s1->c_str(), s2->c_str());
+}
+
 int main(int argc, char **argv)
 {
     wxApp::CheckBuildOptions(wxBuildOptions());
@@ -6340,7 +6555,7 @@ int main(int argc, char **argv)
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
-    if ( TEST_ALL )
+    if ( 1 || TEST_ALL )
     {
         wxArrayString a1;
         a1.Add(_T("tiger"));
@@ -6357,38 +6572,50 @@ int main(int argc, char **argv)
         wxArrayString a2(a1);
         PrintArray(_T("a2"), a2);
 
+#if !wxUSE_STL
         wxSortedArrayString a3(a1);
+#else
+        wxSortedArrayString a3;
+        for (wxArrayString::iterator it = a1.begin(), en = a1.end();
+             it != en; ++it)
+            a3.Add(*it);
+#endif
         PrintArray(_T("a3"), a3);
 
         wxPuts(_T("*** After deleting three strings from a1"));
-        a1.Remove(2,3);
+        a1.RemoveAt(2,3);
 
         PrintArray(_T("a1"), a1);
         PrintArray(_T("a2"), a2);
         PrintArray(_T("a3"), a3);
 
+#if !wxUSE_STL
         wxPuts(_T("*** After reassigning a1 to a2 and a3"));
         a3 = a2 = a1;
         PrintArray(_T("a2"), a2);
         PrintArray(_T("a3"), a3);
+#endif
 
         wxPuts(_T("*** After sorting a1"));
-        a1.Sort();
+        a1.Sort(&MyStringCompare);
         PrintArray(_T("a1"), a1);
 
         wxPuts(_T("*** After sorting a1 in reverse order"));
-        a1.Sort(true);
+        a1.Sort(&MyStringReverseCompare);
         PrintArray(_T("a1"), a1);
 
+#if !wxUSE_STL
         wxPuts(_T("*** After sorting a1 by the string length"));
-        a1.Sort(StringLenCompare);
+        a1.Sort(&StringLenCompare);
         PrintArray(_T("a1"), a1);
+#endif
 
         TestArrayOfObjects();
         TestArrayOfUShorts();
     }
 
     TestArrayOfInts();
+    TestStlArray();
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
@@ -6418,6 +6645,7 @@ int main(int argc, char **argv)
 
 #ifdef TEST_LIST
     TestListCtor();
+    TestList();
 #endif // TEST_LIST
 
 #ifdef TEST_LOCALE
@@ -6662,6 +6890,10 @@ int main(int argc, char **argv)
     if ( TEST_INTERACTIVE )
         TestDateTimeInteractive();
 #endif // TEST_DATETIME
+
+#ifdef TEST_SCOPEGUARD
+    TestScopeGuard();
+#endif
 
 #ifdef TEST_USLEEP
     wxPuts(_T("Sleeping for 3 seconds... z-z-z-z-z..."));

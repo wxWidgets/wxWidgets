@@ -15,15 +15,17 @@
 
 #if wxUSE_PROTOCOL_HTTP
 
-#include "wx/list.h"
+#include "wx/hashmap.h"
 #include "wx/protocol/protocol.h"
+
+WX_DECLARE_EXPORTED_STRING_HASH_MAP( wxString, wxStringToStringHashMap );
 
 class WXDLLIMPEXP_BASE wxHTTP : public wxProtocol {
   DECLARE_DYNAMIC_CLASS(wxHTTP)
   DECLARE_PROTOCOL(wxHTTP)
 protected:
   wxProtocolError m_perr;
-  wxList m_headers;
+  wxStringToStringHashMap m_headers;
   bool m_read, m_proxy_mode;
   wxSockAddress *m_addr;
 public:

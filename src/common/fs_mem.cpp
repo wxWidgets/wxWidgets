@@ -101,6 +101,7 @@ wxMemoryFSHandlerBase::~wxMemoryFSHandlerBase()
 
     if (m_Hash)
     {
+        WX_CLEAR_HASH_TABLE(*m_Hash);
         delete m_Hash;
         m_Hash = NULL;
     }
@@ -160,7 +161,6 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
     if (m_Hash == NULL)
     {
         m_Hash = new wxHashTable(wxKEY_STRING);
-        m_Hash -> DeleteContents(TRUE);
     }
 
     if (m_Hash -> Get(filename) != NULL)

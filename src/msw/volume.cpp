@@ -30,7 +30,9 @@
 #if wxUSE_FSVOLUME
 
 #ifndef WX_PRECOMP
-    #include "wx/icon.h"
+    #if wxUSE_GUI
+        #include "wx/icon.h"
+    #endif
     #include "wx/intl.h"
 #endif // WX_PRECOMP
 
@@ -287,9 +289,9 @@ static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
 // Function: CompareFcn
 // Purpose: Used to sort the NN list alphabetically, case insensitive.
 //=============================================================================
-static int CompareFcn(const wxString& first, const wxString& second)
+static int CompareFcn(wxString* first, wxString* second)
 {
-    return wxStricmp(first.c_str(), second.c_str());
+    return wxStricmp(first->c_str(), second->c_str());
 } // CompareFcn
 
 //=============================================================================

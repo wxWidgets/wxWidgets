@@ -158,6 +158,10 @@
 #undef HAVE_CONST_CAST
 
 /*
+ * use STL for containers and wxString
+ */
+#define wxUSE_STL 0
+/*
  * Use regex support
  */
 #define wxUSE_REGEX 0

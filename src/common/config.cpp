@@ -395,7 +395,7 @@ wxString wxExpandEnvVars(const wxString& str)
 // this function is used to properly interpret '..' in path
 void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
 {
-  aParts.Empty();
+  aParts.clear();
 
   wxString strCurrent;
   const wxChar *pc = sz;
@@ -406,15 +406,15 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
       }
       else if ( strCurrent == wxT("..") ) {
         // go up one level
-        if ( aParts.IsEmpty() )
+        if ( aParts.size() == 0 )
           wxLogWarning(_("'%s' has extra '..', ignored."), sz);
         else
-          aParts.RemoveAt(aParts.Count() - 1);
+          aParts.erase(aParts.end() - 1);
 
         strCurrent.Empty();
       }
       else if ( !strCurrent.IsEmpty() ) {
-        aParts.Add(strCurrent);
+        aParts.push_back(strCurrent);
         strCurrent.Empty();
       }
       //else:

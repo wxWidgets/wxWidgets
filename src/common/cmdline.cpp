@@ -216,19 +216,19 @@ wxCmdLineParserData::wxCmdLineParserData()
 
 void wxCmdLineParserData::SetArguments(int argc, wxChar **argv)
 {
-    m_arguments.Empty();
+    m_arguments.clear();
 
     for ( int n = 0; n < argc; n++ )
     {
-        m_arguments.Add(argv[n]);
+        m_arguments.push_back(argv[n]);
     }
 }
 
 void wxCmdLineParserData::SetArguments(const wxString& cmdLine)
 {
-    m_arguments.Empty();
+    m_arguments.clear();
 
-    m_arguments.Add(wxTheApp->GetAppName());
+    m_arguments.push_back(wxTheApp->GetAppName());
 
     wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
 
@@ -488,7 +488,7 @@ bool wxCmdLineParser::Found(const wxString& name, wxDateTime *value) const
 
 size_t wxCmdLineParser::GetParamCount() const
 {
-    return m_data->m_parameters.GetCount();
+    return m_data->m_parameters.size();
 }
 
 wxString wxCmdLineParser::GetParam(size_t n) const
@@ -529,7 +529,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
     // parse everything
     wxString arg;
-    size_t count = m_data->m_arguments.GetCount();
+    size_t count = m_data->m_arguments.size();
     for ( size_t n = 1; ok && (n < count); n++ )    // 0 is program name
     {
         arg = m_data->m_arguments[n];
@@ -632,7 +632,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                         wxString arg2 = arg[0u];
                         arg2 += arg.Mid(len + 1); // +1 for leading '-'
 
-                        m_data->m_arguments.Insert(arg2, n + 1);
+                        m_data->m_arguments.insert
+                            (m_data->m_arguments.begin() + n + 1, arg2);
                         count++;
                     }
                     //else: it's our value, we'll deal with it below
@@ -779,7 +780,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
                 // TODO check the param type
 
-                m_data->m_parameters.Add(arg);
+                m_data->m_parameters.push_back(arg);
 
                 if ( !(param.flags & wxCMD_LINE_PARAM_MULTIPLE) )
                 {
@@ -905,7 +906,7 @@ wxString wxCmdLineParser::GetUsageString()
     wxString appname = wxTheApp->GetAppName();
     if ( !appname )
     {
-        wxCHECK_MSG( !m_data->m_arguments.IsEmpty(), wxEmptyString,
+        wxCHECK_MSG( m_data->m_arguments.size() != 0, wxEmptyString,
                      _T("no program name") );
 
         appname = wxFileNameFromPath(m_data->m_arguments[0]);
@@ -989,8 +990,8 @@ wxString wxCmdLineParser::GetUsageString()
             usage << _T(']');
         }
 
-        namesOptions.Add(option);
-        descOptions.Add(opt.description);
+        namesOptions.push_back(option);
+        descOptions.push_back(opt.description);
     }
 
     count = m_data->m_paramDesc.GetCount();
@@ -1021,7 +1022,7 @@ wxString wxCmdLineParser::GetUsageString()
 
     // now construct the detailed help message
     size_t len, lenMax = 0;
-    count = namesOptions.GetCount();
+    count = namesOptions.size();
     for ( n = 0; n < count; n++ )
     {
         len = namesOptions[n].length();
@@ -1236,7 +1237,7 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
             }
         }
 
-        args.Add(arg);
+        args.push_back(arg);
     }
 
     return args;

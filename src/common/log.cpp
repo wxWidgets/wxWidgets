@@ -33,6 +33,7 @@
 // wxWindows
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/arrstr.h"
     #include "wx/intl.h"
     #include "wx/string.h"
 #endif //WX_PRECOMP
@@ -495,6 +496,16 @@ void wxLog::DoLogString(const wxChar *WXUNUSED(szString), time_t WXUNUSED(t))
 void wxLog::Flush()
 {
     // nothing to do here
+}
+
+/*static*/ bool wxLog::IsAllowedTraceMask(const wxChar *mask)
+{
+    for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
+                                  en = ms_aTraceMasks.end();
+         it != en; ++it )
+        if ( *it == mask)
+            return true;
+    return false;
 }
 
 // ----------------------------------------------------------------------------

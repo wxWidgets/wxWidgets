@@ -37,6 +37,7 @@
 #include "wx/string.h"
 #include "wx/sysopt.h"
 #include "wx/module.h"
+#include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
 // private classes

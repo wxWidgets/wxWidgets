@@ -28,7 +28,6 @@
 #include "wx/log.h"
 
 
-
 //--------------------------------------------------------------------------------
 // wxFileSystemHandler
 //--------------------------------------------------------------------------------
@@ -323,7 +322,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
     unsigned i, ln;
     char meta;
     wxFSFile *s = NULL;
-    wxNode *node;
+    wxList::compatibility_iterator node;
 
     ln = loc.Length();
     meta = 0;
@@ -377,7 +376,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
 
 wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
 {
-    wxNode *node;
+    wxList::compatibility_iterator node;
     wxString spec2(spec);
 
     m_FindFileHandler = NULL;
@@ -424,8 +423,7 @@ void wxFileSystem::AddHandler(wxFileSystemHandler *handler)
 
 void wxFileSystem::CleanUpHandlers()
 {
-    m_Handlers.DeleteContents(TRUE);
-    m_Handlers.Clear();
+    WX_CLEAR_LIST(wxList, m_Handlers);
 }
 
 const static wxString g_unixPathString(wxT("/"));

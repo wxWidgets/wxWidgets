@@ -383,7 +383,14 @@ static wxFontEncoding
 };
 
 
-
+static bool FindEncoding(const wxFontEncodingArray& arr, wxFontEncoding f)
+{
+    for (wxFontEncodingArray::const_iterator it = arr.begin(), en = arr.end();
+         it != en; ++it)
+        if (*it == f)
+            return true;
+    return false;
+}
 
 wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding enc, int platform)
 {
@@ -412,9 +419,9 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
                 if (EquivalentEncodings[clas][i][e] == enc)
                 {
                     for (f = EquivalentEncodings[clas][platform]; *f != STOP; f++)
-                        if (*f == enc) arr.Add(enc);
+                        if (*f == enc) arr.push_back(enc);
                     for (f = EquivalentEncodings[clas][platform]; *f != STOP; f++)
-                        if (arr.Index(*f) == wxNOT_FOUND) arr.Add(*f);
+                        if (!FindEncoding(arr, *f)) arr.push_back(*f);
                     i = NUM_OF_PLATFORMS/*hack*/; break;
                 }
         clas++;
@@ -442,7 +449,7 @@ wxFontEncodingArray wxEncodingConverter::GetAllEquivalents(wxFontEncoding enc)
                 {
                     for (j = 0; j < NUM_OF_PLATFORMS; j++)
                         for (f = EquivalentEncodings[clas][j]; *f != STOP; f++)
-                            if (arr.Index(*f) == wxNOT_FOUND) arr.Add(*f);
+                            if (!FindEncoding(arr, *f)) arr.push_back(*f);
                     i = NUM_OF_PLATFORMS/*hack*/; break;
                 }
         clas++;

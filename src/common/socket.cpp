@@ -828,7 +828,7 @@ void wxSocketBase::SaveState()
 
 void wxSocketBase::RestoreState()
 {
-  wxNode *node;
+  wxList::compatibility_iterator node;
   wxSocketState *state;
 
   node = m_states.GetLast();
@@ -846,7 +846,7 @@ void wxSocketBase::RestoreState()
   m_cdata      = state->m_cdata;
 #endif // WXWIN_COMPATIBILITY
 
-  delete node;
+  m_states.Erase(node);
   delete state;
 }
 

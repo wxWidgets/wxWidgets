@@ -18,9 +18,11 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/string.h"
 
 #if wxUSE_CMDLINE_PARSER
+
+#include "wx/string.h"
+#include "wx/arrstr.h"
 
 class WXDLLIMPEXP_BASE wxDateTime;
 

@@ -22,7 +22,8 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/hash.h"
+    #include "wx/hash.h"
+    #include "wx/object.h"
 #endif
 
 #include <string.h>

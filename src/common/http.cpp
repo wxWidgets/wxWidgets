@@ -38,8 +38,7 @@ IMPLEMENT_PROTOCOL(wxHTTP, wxT("http"), wxT("80"), TRUE)
 #define HTTP_BSIZE 2048
 
 wxHTTP::wxHTTP()
-  : wxProtocol(),
-    m_headers(wxKEY_STRING)
+  : wxProtocol()
 {
   m_addr = NULL;
   m_read = FALSE;
@@ -57,17 +56,7 @@ wxHTTP::~wxHTTP()
 
 void wxHTTP::ClearHeaders()
 {
-  // wxString isn't a wxObject
-  wxNode *node = m_headers.GetFirst();
-  wxString *string;
-
-  while (node) {
-    string = (wxString *)node->GetData();
-    delete string;
-    node = node->GetNext();
-  }
-
-  m_headers.Clear();
+  m_headers.clear();
 }
 
 wxString wxHTTP::GetContentType()
@@ -87,45 +76,34 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
     m_read = FALSE;
   }
 
-  wxNode *node = m_headers.Find(header);
-
-  if (!node)
-    m_headers.Append(header.Upper(), (wxObject *)(new wxString(h_data)));
-  else {
-    wxString *str = (wxString *)node->GetData();
-    (*str) = h_data;
-  }
+  wxStringToStringHashMap::iterator it = m_headers.find(header);
+  if (it != m_headers.end())
+    it->second = h_data;  
+  else
+    m_headers[header.Upper()] = h_data;
 }
 
 wxString wxHTTP::GetHeader(const wxString& header)
 {
-  wxNode *node;
-  wxString upper_header;
+  wxStringToStringHashMap::iterator it = m_headers.find(header.Upper());
 
-  upper_header = header.Upper();
-
-  node = m_headers.Find(upper_header);
-  if (!node)
+  if (it == m_headers.end())
     return wxEmptyString;
 
-  return *((wxString *)node->GetData());
+  return it->second;
 }
 
 void wxHTTP::SendHeaders()
 {
-  wxNode *head = m_headers.GetFirst();
+  typedef wxStringToStringHashMap::iterator iterator;
+  wxString buf;
 
-  while (head)
+  for (iterator it = m_headers.begin(), en = m_headers.end(); it != en; ++it )
   {
-    wxString *str = (wxString *)head->GetData();
-
-    wxString buf;
-    buf.Printf(wxT("%s: %s\r\n"), head->GetKeyString(), str->GetData());
+    buf.Printf(wxT("%s: %s\r\n"), it->first.c_str(), it->second.c_str());
 
     const wxWX2MBbuf cbuf = buf.mb_str();
     Write(cbuf, strlen(cbuf));
-
-    head = head->GetNext();
   }
 }
 
@@ -152,10 +130,9 @@ bool wxHTTP::ParseHeaders()
       break;
 
     wxString left_str = line.BeforeFirst(':');
-    wxString *str = new wxString(line.AfterFirst(':').Strip(wxString::both));
     left_str.MakeUpper();
 
-    m_headers.Append(left_str, (wxObject *) str);
+    m_headers[left_str] = line.AfterFirst(':').Strip(wxString::both);
   }
   return TRUE;
 }

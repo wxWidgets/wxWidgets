@@ -34,6 +34,8 @@
 
 #include "wx/hash.h"
 
+#if !wxUSE_STL
+
 #include <string.h>
 #include <stdarg.h>
 
@@ -722,3 +724,4 @@ void wxHashTable::Clear ()
   m_count = 0;
 }
 
+#endif // !wxUSE_STL

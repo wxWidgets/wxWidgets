@@ -156,11 +156,11 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
 
 wxInternetFSHandler::~wxInternetFSHandler()
 {
-    wxNode *n;
+    wxHashTable::compatibility_iterator n;
     wxInetCacheNode *n2;
 
     m_Cache.BeginFind();
-    while ((n = m_Cache.Next()) != NULL)
+    while ((n = m_Cache.Next()))
     {
         n2 = (wxInetCacheNode*) n->GetData();
         wxRemoveFile(n2->GetTemp());

@@ -75,8 +75,6 @@
 #include "wx/tokenzr.h"
 #include "wx/module.h"
 
-#define wxDEFINE_TIME_CONSTANTS // before including datetime.h
-
 #include <ctype.h>
 
 #include "wx/datetime.h"
@@ -162,7 +160,7 @@ public:
     virtual void OnExit()
     {
         wxDateTimeHolidayAuthority::ClearAllAuthorities();
-        wxDateTimeHolidayAuthority::ms_authorities.Clear();
+        wxDateTimeHolidayAuthority::ms_authorities.clear();
     }
 
 private:
@@ -3816,7 +3814,7 @@ wxHolidayAuthoritiesArray wxDateTimeHolidayAuthority::ms_authorities;
 /* static */
 bool wxDateTimeHolidayAuthority::IsHoliday(const wxDateTime& dt)
 {
-    size_t count = ms_authorities.GetCount();
+    size_t count = ms_authorities.size();
     for ( size_t n = 0; n < count; n++ )
     {
         if ( ms_authorities[n]->DoIsHoliday(dt) )
@@ -3836,9 +3834,9 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
 {
     wxDateTimeArray hol;
 
-    holidays.Empty();
+    holidays.Clear();
 
-    size_t count = ms_authorities.GetCount();
+    size_t count = ms_authorities.size();
     for ( size_t nAuth = 0; nAuth < count; nAuth++ )
     {
         ms_authorities[nAuth]->DoGetHolidaysInRange(dtStart, dtEnd, hol);
@@ -3848,7 +3846,7 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
 
     holidays.Sort(wxDateTimeCompareFunc);
 
-    return holidays.GetCount();
+    return holidays.size();
 }
 
 /* static */
@@ -3860,7 +3858,7 @@ void wxDateTimeHolidayAuthority::ClearAllAuthorities()
 /* static */
 void wxDateTimeHolidayAuthority::AddAuthority(wxDateTimeHolidayAuthority *auth)
 {
-    ms_authorities.Add(auth);
+    ms_authorities.push_back(auth);
 }
 
 wxDateTimeHolidayAuthority::~wxDateTimeHolidayAuthority()

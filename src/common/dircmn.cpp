@@ -206,7 +206,7 @@ public:
 
     virtual wxDirTraverseResult OnFile(const wxString& filename)
     {
-        m_files.Add(filename);
+        m_files.push_back(filename);
         return wxDIR_CONTINUE;
     }
 

@@ -23,6 +23,7 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"
+#include "wx/arrstr.h"
 
 // need this for wxGetDiskSpace() as we can't, unfortunately, forward declare
 // wxLongLong

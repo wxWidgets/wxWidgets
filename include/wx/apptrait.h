@@ -19,6 +19,7 @@ class WXDLLEXPORT wxAppTraits;
 #endif // wxUSE_FONTMAP
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxMessageOutput;
+class WXDLLEXPORT wxString;
 
 // ----------------------------------------------------------------------------
 // wxAppTraits: this class defines various configurable aspects of wxApp

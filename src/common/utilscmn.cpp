@@ -673,7 +673,7 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
     }
 #endif
 
-    wxWindowList::Node  *node = win->GetChildren().GetLast();
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetLast();
     while (node)
     {
         wxWindow* child = node->GetData();
@@ -702,7 +702,7 @@ wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
     // Go backwards through the list since windows
     // on top are likely to have been appended most
     // recently.
-    wxWindowList::Node  *node = wxTopLevelWindows.GetLast();
+    wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetLast();
     while (node)
     {
         wxWindow* win = node->GetData();
@@ -837,7 +837,7 @@ wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit)
 
 void wxEnableTopLevelWindows(bool enable)
 {
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
         node->GetData()->Enable(enable);
 }
@@ -848,7 +848,7 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
     // don't reenable them later
     m_winDisabled = NULL;
 
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();
@@ -874,7 +874,7 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
 
 wxWindowDisabler::~wxWindowDisabler()
 {
-    wxWindowList::Node *node;
+    wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();

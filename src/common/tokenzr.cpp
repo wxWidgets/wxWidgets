@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/tokenzr.h"
+#include "wx/arrstr.h"
 
 // Required for wxIs... functions
 #include <ctype.h>

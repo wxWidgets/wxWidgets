@@ -475,18 +475,18 @@ void wxPluginLibrary::RegisterModules()
 
             wxASSERT_MSG( m, _T("wxDynamicCast of wxModule failed") );
 
-            m_wxmodules.Append(m);
+            m_wxmodules.push_back(m);
             wxModule::RegisterModule(m);
         }
     }
 
     // FIXME: Likewise this is (well was) very similar to InitializeModules()
 
-    for ( wxModuleList::Node *node = m_wxmodules.GetFirst();
-          node;
-          node = node->GetNext())
+    for ( wxModuleList::iterator it = m_wxmodules.begin();
+          it != m_wxmodules.end();
+          ++it)
     {
-        if( !node->GetData()->Init() )
+        if( !(*it)->Init() )
         {
             wxLogDebug(_T("wxModule::Init() failed for wxPluginLibrary"));
 
@@ -497,13 +497,14 @@ void wxPluginLibrary::RegisterModules()
             // let the dtor Exit the rest on shutdown, (which we'll initiate
             // shortly).
 
-            wxModuleList::Node *oldNode = 0;
+            wxModuleList::iterator oldNode = m_wxmodules.end();
             do {
-                node = node->GetNext();
-                delete oldNode;
-                wxModule::UnregisterModule( node->GetData() );
-                oldNode = node;
-            } while( node );
+                ++it;
+                if( oldNode != m_wxmodules.end() )
+                    m_wxmodules.erase(oldNode);
+                wxModule::UnregisterModule( *it );
+                oldNode = it;
+            } while( it != m_wxmodules.end() );
 
             --m_linkcount;     // Flag us for deletion
             break;
@@ -513,15 +514,15 @@ void wxPluginLibrary::RegisterModules()
 
 void wxPluginLibrary::UnregisterModules()
 {
-    wxModuleList::Node  *node;
+    wxModuleList::iterator it;
 
-    for ( node = m_wxmodules.GetFirst(); node; node = node->GetNext() )
-        node->GetData()->Exit();
+    for ( it = m_wxmodules.begin(); it != m_wxmodules.end(); ++it )
+        (*it)->Exit();
 
-    for ( node = m_wxmodules.GetFirst(); node; node = node->GetNext() )
-        wxModule::UnregisterModule( node->GetData() );
+    for ( it = m_wxmodules.begin(); it != m_wxmodules.end(); ++it )
+        wxModule::UnregisterModule( *it );
 
-    m_wxmodules.DeleteContents(TRUE);
+    WX_CLEAR_LIST(wxModuleList, m_wxmodules);
 }
 
 

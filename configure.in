@@ -330,6 +330,7 @@ dnl usage
 DEBUG_CONFIGURE=0
 if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_UNIVERSAL=no
+  DEFAULT_wxUSE_STL=no
 
   DEFAULT_wxUSE_NANOX=no
 
@@ -504,6 +505,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MONOLITHIC=yes
 else
   DEFAULT_wxUSE_UNIVERSAL=no
+  DEFAULT_wxUSE_STL=no
 
   DEFAULT_wxUSE_NANOX=no
 
@@ -744,6 +746,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code], wxUSE_SHARED)
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
+WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
 
 dnl allow the precompiled header option to be disabled under Mac OS X/Darwin
 WX_ARG_ENABLE(precomp,     [  --enable-precomp        enable use of precompiled headers (Mac OS X/Darwin)], wxUSE_PRECOMP)
@@ -4147,6 +4150,10 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl Register non-GUI class options for makefiles and setup.h
 dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_STL" = "yes"; then
+  AC_DEFINE(wxUSE_STL)
+fi
 
 if test "$wxUSE_APPLE_IEEE" = "yes"; then
   AC_DEFINE(wxUSE_APPLE_IEEE)

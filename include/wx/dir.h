@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include  "wx/string.h"
+    #include "wx/arrstr.h"
 #endif
 
 // ----------------------------------------------------------------------------

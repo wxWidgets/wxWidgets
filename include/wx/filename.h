@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include  "wx/string.h"
+    #include  "wx/arrstr.h"
 #endif
 
 /*
@@ -172,7 +173,7 @@ public:
     // file tests
 
         // is the filename valid at all?
-    bool IsOk() const { return !m_dirs.IsEmpty() || !m_name.IsEmpty(); }
+    bool IsOk() const { return m_dirs.size() != 0 || !m_name.IsEmpty(); }
 
         // does the file with this name exists?
     bool FileExists() const;
@@ -330,7 +331,7 @@ public:
     void PrependDir( const wxString &dir );
     void InsertDir( int before, const wxString &dir );
     void RemoveDir( int pos );
-    size_t GetDirCount() const { return m_dirs.GetCount(); }
+    size_t GetDirCount() const { return m_dirs.size(); }
 
     // Other accessors
     void SetExt( const wxString &ext )          { m_ext = ext; }

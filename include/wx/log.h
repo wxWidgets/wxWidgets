@@ -16,9 +16,12 @@
     #pragma interface "log.h"
 #endif
 
-#include "wx/string.h"
+#include "wx/defs.h"
 
 #if wxUSE_LOG
+
+#include "wx/string.h"
+#include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -185,7 +188,8 @@ public:
         // trace mask (see wxTraceXXX constants for details)
     static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
         // add string trace mask
-    static void AddTraceMask(const wxString& str) { ms_aTraceMasks.Add(str); }
+    static void AddTraceMask(const wxString& str)
+        { ms_aTraceMasks.push_back(str); }
         // add string trace mask
     static void RemoveTraceMask(const wxString& str);
         // remove all string trace masks
@@ -205,8 +209,7 @@ public:
         // get trace mask
     static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
         // is this trace mask in the list?
-    static bool IsAllowedTraceMask(const wxChar *mask)
-        { return ms_aTraceMasks.Index(mask) != wxNOT_FOUND; }
+    static bool IsAllowedTraceMask(const wxChar *mask);
         // return the current loglevel limit
     static wxLogLevel GetLogLevel() { return ms_logLevel; }
 

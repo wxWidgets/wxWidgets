@@ -37,6 +37,8 @@
     #include "wx/list.h"
 #endif
 
+#if !wxUSE_STL
+
 // =============================================================================
 // implementation
 // =============================================================================
@@ -44,7 +46,6 @@
 // -----------------------------------------------------------------------------
 // wxListKey
 // -----------------------------------------------------------------------------
-
 wxListKey wxDefaultListKey;
 
 bool wxListKey::operator==(wxListKeyValue value) const
@@ -531,6 +532,38 @@ void wxListBase::Sort(const wxSortCompareFunction compfunc)
     delete[] objArray;
 }
 
+void wxListBase::Reverse()
+{
+    wxNodeBase* node = m_nodeFirst;
+    wxNodeBase* tmp;
+
+    while (node)
+    {
+        // swap prev and next pointers
+        tmp = node->m_next;
+        node->m_next = node->m_previous;
+        node->m_previous = tmp;
+
+        // this is the node that was next before swapping
+        node = tmp;
+    }
+
+    // swap first and last node
+    tmp = m_nodeFirst; m_nodeFirst = m_nodeLast; m_nodeLast = tmp;
+}
+
+void wxListBase::DeleteNodes(wxNodeBase* first, wxNodeBase* last)
+{
+    wxNodeBase* node = first;
+
+    while (node != last)
+    {
+        wxNodeBase* next = node->GetNext();
+        DeleteNode(node);
+        node = next;
+    }
+}
+
 // ============================================================================
 // compatibility section from now on
 // ============================================================================
@@ -732,3 +765,4 @@ wxNode *wxStringList::Prepend(const wxChar *s)
 
 #endif // wxLIST_COMPATIBILITY
 
+#endif // !wxUSE_STL

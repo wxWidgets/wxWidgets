@@ -1753,6 +1753,8 @@ wxString& wxString::replace(size_t nStart, size_t nLen,
 // ArrayString
 // ============================================================================
 
+#if !wxUSE_STL
+
 // size increment = min(50% of current size, ARRAY_MAXSIZE_INCREMENT)
 #define   ARRAY_MAXSIZE_INCREMENT       4096
 
@@ -2180,6 +2182,8 @@ bool wxArrayString::operator==(const wxArrayString& a) const
 
     return TRUE;
 }
+
+#endif // !wxUSE_STL
 
 int wxStringSortAscending(wxString* s1, wxString* s2)
 {

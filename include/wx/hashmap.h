@@ -563,5 +563,19 @@ public: \
     _WX_DECLARE_HASH_MAP( void*, VALUE_T, wxPointerHash, wxPointerEqual, \
                           CLASSNAME, class WXDLLEXPORT )
 
+// delete all hash elements
+//
+// NB: the class declaration of the hash elements must be visible from the
+//     place where you use this macro, otherwise the proper destructor may not
+//     be called (a decent compiler should give a warning about it, but don't
+//     count on it)!
+#define WX_CLEAR_HASH_MAP(type, hashmap)                                     \
+    {                                                                        \
+        type##::iterator it, en;                                             \
+        for( it = (hashmap).begin(), en = (hashmap).end(); it != en; ++it )  \
+            delete it->second;                                               \
+        (hashmap).clear();                                                   \
+    }
+
 #endif // _WX_HASHMAP_H_
 

@@ -262,11 +262,11 @@ void wxAppConsole::ProcessPendingEvents()
     }
 
     // iterate until the list becomes empty
-    wxNode *node = wxPendingEvents->GetFirst();
+    wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
     while (node)
     {
         wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
-        delete node;
+        wxPendingEvents->Erase(node);
 
         // In ProcessPendingEvents(), new handlers might be add
         // and we can safely leave the critical section here.

@@ -235,7 +235,9 @@ struct WXDLLIMPEXP_BASE wxStringData
 
 class WXDLLIMPEXP_BASE wxString
 {
+#if !wxUSE_STL
 friend class WXDLLIMPEXP_BASE wxArrayString;
+#endif
 
   // NB: special care was taken in arranging the member functions in such order
   //     that all inline functions can be effectively inlined, verify that all
@@ -1012,165 +1014,10 @@ public:
 #endif // wxSTD_STRING_COMPATIBILITY
 };
 
-// ----------------------------------------------------------------------------
-// The string array uses it's knowledge of internal structure of the wxString
-// class to optimize string storage. Normally, we would store pointers to
-// string, but as wxString is, in fact, itself a pointer (sizeof(wxString) is
-// sizeof(char *)) we store these pointers instead. The cast to "wxString *" is
-// really all we need to turn such pointer into a string!
-//
-// Of course, it can be called a dirty hack, but we use twice less memory and
-// this approach is also more speed efficient, so it's probably worth it.
-//
-// Usage notes: when a string is added/inserted, a new copy of it is created,
-// so the original string may be safely deleted. When a string is retrieved
-// from the array (operator[] or Item() method), a reference is returned.
-// ----------------------------------------------------------------------------
-
-int WXDLLIMPEXP_BASE wxStringSortAscending(wxString*, wxString*);
-int WXDLLIMPEXP_BASE wxStringSortDescending(wxString*, wxString*);
-
-class WXDLLIMPEXP_BASE wxArrayString
-{
-public:
-  // type of function used by wxArrayString::Sort()
-  typedef int (*CompareFunction)(const wxString& first,
-                                 const wxString& second);
-  // type of function used by wxArrayString::Sort(), for compatibility with
-  // wxArray
-  typedef int (*CompareFunction2)(wxString* first,
-                                  wxString* second);
-
-  // constructors and destructor
-    // default ctor
-  wxArrayString()
-      : m_nSize(0), m_nCount(0), m_pItems(NULL), m_autoSort(FALSE)
-      { Init(FALSE); }
-    // if autoSort is TRUE, the array is always sorted (in alphabetical order)
-    //
-    // NB: the reason for using int and not bool is that like this we can avoid
-    //     using this ctor for implicit conversions from "const char *" (which
-    //     we'd like to be implicitly converted to wxString instead!)
-    //
-    //     of course, using explicit would be even better - if all compilers
-    //     supported it...
-  wxArrayString(int autoSort)
-      : m_nSize(0), m_nCount(0), m_pItems(NULL), m_autoSort(FALSE)
-      { Init(autoSort != 0); }
-    // copy ctor
-  wxArrayString(const wxArrayString& array);
-    // assignment operator
-  wxArrayString& operator=(const wxArrayString& src);
-    // not virtual, this class should not be derived from
- ~wxArrayString();
-
-  // memory management
-    // empties the list, but doesn't release memory
-  void Empty();
-    // empties the list and releases memory
-  void Clear();
-    // preallocates memory for given number of items
-  void Alloc(size_t nCount);
-    // minimzes the memory usage (by freeing all extra memory)
-  void Shrink();
-
-  // simple accessors
-    // number of elements in the array
-  size_t GetCount() const { return m_nCount; }
-    // is it empty?
-  bool IsEmpty() const { return m_nCount == 0; }
-    // number of elements in the array (GetCount is preferred API)
-  size_t Count() const { return m_nCount; }
-
-  // items access (range checking is done in debug version)
-    // get item at position uiIndex
-  wxString& Item(size_t nIndex) const
-    {
-        wxASSERT_MSG( nIndex < m_nCount,
-                      _T("wxArrayString: index out of bounds") );
-
-        return *(wxString *)&(m_pItems[nIndex]);
-    }
-
-    // same as Item()
-  wxString& operator[](size_t nIndex) const { return Item(nIndex); }
-    // get last item
-  wxString& Last() const
-  {
-      wxASSERT_MSG( !IsEmpty(),
-                    _T("wxArrayString: index out of bounds") );
-      return Item(Count() - 1);
-  }
-
-#if WXWIN_COMPATIBILITY_2_4
-    // return a wxString[], useful for the controls which
-    // take one in their ctor.  You must delete[] it yourself
-    // once you are done with it.  Will return NULL if the
-    // ArrayString was empty.
-  wxString* GetStringArray() const;
+// define wxArrayString, for compatibility
+#if WXWIN_COMPATIBILITY_2_4 && !wxUSE_STL
+    #include "wx/arrstr.h"
 #endif
-
-  // item management
-    // Search the element in the array, starting from the beginning if
-    // bFromEnd is FALSE or from end otherwise. If bCase, comparison is case
-    // sensitive (default). Returns index of the first item matched or
-    // wxNOT_FOUND
-  int  Index (const wxChar *sz, bool bCase = TRUE, bool bFromEnd = FALSE) const;
-    // add new element at the end (if the array is not sorted), return its
-    // index
-  size_t Add(const wxString& str, size_t nInsert = 1);
-    // add new element at given position
-  void Insert(const wxString& str, size_t uiIndex, size_t nInsert = 1);
-    // expand the array to have count elements
-  void SetCount(size_t count);
-    // remove first item matching this value
-  void Remove(const wxChar *sz);
-    // remove item by index
-#if WXWIN_COMPATIBILITY_2_4
-  void Remove(size_t nIndex, size_t nRemove = 1) { RemoveAt(nIndex, nRemove); }
-#endif
-  void RemoveAt(size_t nIndex, size_t nRemove = 1);
-
-  // sorting
-    // sort array elements in alphabetical order (or reversed alphabetical
-    // order if reverseOrder parameter is TRUE)
-  void Sort(bool reverseOrder = FALSE);
-    // sort array elements using specified comparaison function
-  void Sort(CompareFunction compareFunction);
-  void Sort(CompareFunction2 compareFunction);
-
-  // comparison
-    // compare two arrays case sensitively
-  bool operator==(const wxArrayString& a) const;
-    // compare two arrays case sensitively
-  bool operator!=(const wxArrayString& a) const { return !(*this == a); }
-
-protected:
-  void Init(bool autoSort);             // common part of all ctors
-  void Copy(const wxArrayString& src);  // copies the contents of another array
-
-private:
-  void Grow(size_t nIncrement = 0);     // makes array bigger if needed
-  void Free();                          // free all the strings stored
-
-  void DoSort();                        // common part of all Sort() variants
-
-  size_t  m_nSize,    // current size of the array
-          m_nCount;   // current number of elements
-
-  wxChar  **m_pItems; // pointer to data
-
-  bool    m_autoSort; // if TRUE, keep the array always sorted
-};
-
-class WXDLLIMPEXP_BASE wxSortedArrayString : public wxArrayString
-{
-public:
-  wxSortedArrayString() : wxArrayString(TRUE)
-    { }
-  wxSortedArrayString(const wxArrayString& array) : wxArrayString(TRUE)
-    { Copy(array); }
-};
 
 // ----------------------------------------------------------------------------
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string

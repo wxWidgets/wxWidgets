@@ -232,7 +232,7 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
 // wxPathList
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
+// IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
 
 static inline wxChar* MYcopystring(const wxString& s)
 {
@@ -248,7 +248,7 @@ static inline wxChar* MYcopystring(const wxChar* s)
 
 void wxPathList::Add (const wxString& path)
 {
-    wxStringList::Add (WXSTRINGCAST path);
+    wxStringList::Append (WXSTRINGCAST path);
 }
 
 // Add paths e.g. from the PATH environment variable
@@ -309,7 +309,7 @@ void wxPathList::EnsureFileAccessible (const wxString& path)
 
 bool wxPathList::Member (const wxString& path)
 {
-  for (wxStringList::Node *node = GetFirst(); node; node = node->GetNext())
+  for (wxStringList::compatibility_iterator node = GetFirst(); node; node = node->GetNext())
   {
       wxString path2( node->GetData() );
       if (
@@ -337,9 +337,9 @@ wxString wxPathList::FindValidPath (const wxString& file)
   wxChar *filename = (wxChar*) NULL; /* shut up buggy egcs warning */
   filename = wxIsAbsolutePath (buf) ? wxFileNameFromPath (buf) : (wxChar *)buf;
 
-  for (wxStringList::Node *node = GetFirst(); node; node = node->GetNext())
+  for (wxStringList::compatibility_iterator node = GetFirst(); node; node = node->GetNext())
     {
-      wxChar *path = node->GetData();
+      const wxChar *path = node->GetData();
       wxStrcpy (wxFileFunctionsBuffer, path);
       wxChar ch = wxFileFunctionsBuffer[wxStrlen(wxFileFunctionsBuffer)-1];
       if (ch != wxT('\\') && ch != wxT('/'))

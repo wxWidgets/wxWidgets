@@ -367,12 +367,13 @@ WXDLLIMPEXP_BASE time_t wxFileModificationTime(const wxString& filename);
 class WXDLLIMPEXP_BASE wxPathList : public wxStringList
 {
 public:
+    // avoid GCC warning about virtual functions w/o virtual dtor
+    virtual ~wxPathList() {}
+
     // Adds all paths in environment variable
     void AddEnvList(const wxString& envVariable);
 
     void Add(const wxString& path);
-    // Avoid compiler warning
-    wxNode *Add(const wxChar *s) { return wxStringList::Add(s); }
     // Find the first full path for which the file exists
     wxString FindValidPath(const wxString& filename);
     // Find the first full path for which the file exists; ensure it's an
@@ -384,7 +385,7 @@ public:
     bool Member(const wxString& path);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPathList)
+    // DECLARE_DYNAMIC_CLASS(wxPathList)
 };
 
 #endif

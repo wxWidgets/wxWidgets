@@ -712,19 +712,19 @@ wxEvtHandler::~wxEvtHandler()
 
     if (m_dynamicEvents)
     {
-        wxNode *node = m_dynamicEvents->GetFirst();
-        while (node)
+        wxList::iterator it = m_dynamicEvents->begin(),
+                         en = m_dynamicEvents->end();
+        for (;it != en; ++it)
         {
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
-            wxEventTableEntry *entry = (wxEventTableEntry*)node->GetData();
+            wxEventTableEntry *entry = (wxEventTableEntry*)*it;
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
-            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)*it;
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
             if (entry->m_callbackUserData)
                 delete entry->m_callbackUserData;
             delete entry;
-            node = node->GetNext();
         }
         delete m_dynamicEvents;
     };
@@ -818,11 +818,11 @@ void wxEvtHandler::ProcessPendingEvents()
     wxENTER_CRIT_SECT( *m_eventsLocker);
 #endif
 
-    wxNode *node = m_pendingEvents->GetFirst();
+    wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
     while ( node )
     {
         wxEvent *event = (wxEvent *)node->GetData();
-        delete node;
+        m_pendingEvents->Erase(node);
 
         // In ProcessEvent, new events might get added and
         // we can safely leave the crtical section here.
@@ -1000,7 +1000,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
     if (!m_dynamicEvents)
         return FALSE;
 
-    wxNode *node = m_dynamicEvents->GetFirst();
+    wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
     {
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
@@ -1018,7 +1018,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
         {
             if (entry->m_callbackUserData)
                 delete entry->m_callbackUserData;
-            m_dynamicEvents->DeleteNode( node );
+            m_dynamicEvents->Erase( node );
             delete entry;
             return TRUE;
         }
@@ -1034,7 +1034,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 
     int commandId = event.GetId();
 
-    wxNode *node = m_dynamicEvents->GetFirst();
+    wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
     {
 #if WXWIN_COMPATIBILITY_EVENT_TYPES

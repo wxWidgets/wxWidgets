@@ -20,6 +20,7 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
 // constants
