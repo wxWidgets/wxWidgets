@@ -181,7 +181,7 @@ public:
 #endif
     // Public member functions
     wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
-              const char *qryTblName = 0, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath=NULL);
+              const char *qryTblName = 0, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath="");
     virtual ~wxDbTable();
 
     bool            Open(void);
@@ -216,6 +216,12 @@ public:
     void            SetFromClause(const wxString& From) { from = From; }
     void            SetOrderByClause(const wxString& OrderBy) { orderBy = OrderBy; }
     void            SetWhereClause(const wxString& Where) { where = Where; }
+    void            From(const wxString& From) { from = From; }
+    void            OrderBy(const wxString& OrderBy) { orderBy = OrderBy; }
+    void            Where(const wxString& Where) { where = Where; }
+    const char *    Where()   { return (const char *)where.c_str(); }
+    const char *    OrderBy() { return (const char *)orderBy.c_str(); }
+    const char *    From()    { return (const char *)from.c_str(); }
 #endif
     int             Insert(void);
     bool            Update(void);
