@@ -59,12 +59,11 @@ bool MyApp::OnInit(void)
   // Create the main frame window
   MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWidgets App"), 50, 50, 450, 340);
 
-  frame->Connect( DYNAMIC_QUIT,  wxID_ANY, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                  &MyFrame::OnQuit );
-  frame->Connect( DYNAMIC_ABOUT, wxID_ANY, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                  &MyFrame::OnAbout );
+  // You used to have to do some casting for param 4, but now there are type-safe handlers
+  frame->Connect( DYNAMIC_QUIT,  wxID_ANY, 
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnQuit) );
+  frame->Connect( DYNAMIC_ABOUT, wxID_ANY, 
+                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout) );
 
   // Give it an icon
 #ifdef __WXMSW__
