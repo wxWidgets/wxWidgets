@@ -201,7 +201,7 @@ def main():
         sys.exit()
         
     for i, inst in enumerate(installed):
-        print "  %d.  %s \t%s" % (i+1, inst.mdata["Title"], inst.mdata["Version"])
+        print " %2d.  %-40s    %s" % (i+1, inst.mdata["Title"], inst.mdata["Version"])
         
     print 
     ans = raw_input("Enter the number of the install to examine or 'Q' to quit: ")
