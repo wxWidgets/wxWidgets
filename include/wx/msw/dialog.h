@@ -114,7 +114,8 @@ protected:
     void Init();
 
 private:
-    wxWindow *m_oldFocus;
+    wxWindow*   m_oldFocus;
+    bool        m_endModalCalled; // allow for closing within InitDialog
 
     // this pointer is non-NULL only while the modal event loop is running
     wxDialogModalData *m_modalData;

@@ -170,11 +170,10 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData);
 void wxDialog::Init()
 {
     m_oldFocus = (wxWindow *)NULL;
-
     m_isShown = FALSE;
-
     m_modalData = NULL;
-
+    m_endModalCalled = FALSE;
+    
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
 
@@ -369,7 +368,10 @@ bool wxDialog::Show(bool show)
         InitDialog();
     }
 
-    if ( show && IsModal() )
+    // EndModal may have been called from InitDialog handler,
+    // which would cause an infinite loop if we didn't take it
+    // into account
+    if ( show && IsModal() && !m_endModalCalled )
     {
         // modal dialog needs a parent window, so try to find one
         if ( !GetParent() )
@@ -391,6 +393,7 @@ void wxDialog::Raise()
 // a special version for Show(TRUE) for modal dialogs which returns return code
 int wxDialog::ShowModal()
 {
+    m_endModalCalled = FALSE;
     if ( !IsModal() )
     {
         SetModal(TRUE);
@@ -405,6 +408,7 @@ int wxDialog::ShowModal()
 //     dialogs and should work for both of them
 void wxDialog::EndModal(int retCode)
 {
+    m_endModalCalled = TRUE;
     SetReturnCode(retCode);
 
     Show(FALSE);
