@@ -122,7 +122,7 @@ bool Style::EquivalentFontTo(const Style *other) const {
 	return strcmp(fontName, other->fontName) == 0;
 }
 
-void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle) {
+void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle, bool extraFontFlag) {
 	sizeZoomed = size + zoomLevel;
 	if (sizeZoomed <= 2)	// Hangs if sizeZoomed <= 1
 		sizeZoomed = 2;
@@ -137,7 +137,7 @@ void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle) {
 	if (aliasOfDefaultFont) {
 		font.SetID(defaultStyle->font.GetID());
 	} else if (fontName) {
-		font.Create(fontName, characterSet, deviceHeight, bold, italic);
+		font.Create(fontName, characterSet, deviceHeight, bold, italic, extraFontFlag);
 	} else {
 		font.SetID(0);
 	}
