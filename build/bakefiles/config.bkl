@@ -354,6 +354,9 @@ Set the version of your Mingw installation here.
         <set var="SHARED">0</set>
         <set var="WXUNIV">0</set>
         <set var="UNICODE">0</set>
+        <!-- Free version does not distribute OpenGL,
+             in commercial distribution better use dmars_smake format -->
+        <set var="USE_OPENGL">0</set>
     </if>
 
     <!-- No need for wxUniv on embedded devices (yet): -->
