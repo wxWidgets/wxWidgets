@@ -1979,6 +1979,20 @@ This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}
 
 <wx/memory.h>
 
+\membersection{::wxTrap}\label{wxtrap}
+
+\func{void}{wxTrap}{\void}
+
+In debug mode (when {\tt \_\_WXDEBUG\_\_} is defined) this function generates a
+debugger exception meaning that the control is passed to the debugger if one is
+attached to the process. Otherwise the program just terminates abnormally.
+
+In release mode this function does nothing.
+
+\wxheading{Include files}
+
+<wx/debug.h>
+
 \membersection{::wxUsleep}\label{wxusleep}
 
 \func{void}{wxUsleep}{\param{unsigned long}{ milliseconds}}

@@ -51,7 +51,13 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
        szFile and nLine - file name and line number of the ASSERT
        szMsg            - optional message explaining the reason
   */
-  void WXDLLEXPORT wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg = (const wxChar *) NULL);
+  extern void WXDLLEXPORT wxOnAssert(const wxChar *szFile,
+                                     int nLine,
+                                     const wxChar *szMsg = NULL);
+
+  // call this function to break into the debugger uncodnitionally (assuming
+  // the program is running under debugger, of course)
+  extern void WXDLLEXPORT wxTrap();
 
   /*
     notice the usage of else at the end of wxASSERT macro: this ensures that
@@ -72,7 +78,15 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
   // assert with additional message explaining it's cause
   #define wxASSERT_MSG(cond, msg) \
                     if ( !(cond) ) wxOnAssert(__TFILE__, __LINE__, msg); else
+
+  // an assert helper used to avoid warning when testing constant expressions,
+  // i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about
+  // expression being always true, but not using
+  // wxASSERT( wxAssertIsEqual(sizeof(int), 4) )
+  extern bool WXDLLEXPORT wxAssertIsEqual(int x, int y);
 #else
+  #define wxTrap()
+
   // nothing to do in release modes (hopefully at this moment there are
   // no more bugs ;-)
   #define wxASSERT(cond)
@@ -107,10 +121,11 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 #define wxCHECK2_MSG(x, op, msg)  if (!(x)) {wxFAIL_MSG(msg); op; }
 
 // special form of wxCHECK2: as wxCHECK, but for use in void functions
-//  NB: there is only one form (with msg parameter) and it's intentional:
-//      there is no other way to tell the caller what exactly went wrong
-//      from the void function (of course, the function shouldn't be void
-//      to begin with...)
+//
+// NB: there is only one form (with msg parameter) and it's intentional:
+//     there is no other way to tell the caller what exactly went wrong
+//     from the void function (of course, the function shouldn't be void
+//     to begin with...)
 #define wxCHECK_RET(x, msg)       if (!(x)) {wxFAIL_MSG(msg); return; }
 
 #endif  // _WX_DEBUG_H_
