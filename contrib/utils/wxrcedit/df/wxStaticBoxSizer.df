@@ -1,4 +1,0 @@
-node wxStaticBoxSizer
-derived from wxBoxSizer
-var label of text
-var minsize of coord
