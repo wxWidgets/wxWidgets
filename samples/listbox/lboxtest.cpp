@@ -226,6 +226,7 @@ bool LboxTestApp::OnInit()
     frame->Show();
 
     //wxLog::AddTraceMask(_T("listbox"));
+    wxLog::AddTraceMask(_T("scrollbar"));
 
     return TRUE;
 }

@@ -275,8 +275,8 @@ wxHitTest wxRenderer::StandardHitTestScrollbar(const wxScrollBar *scrollbar,
         int range = scrollbar->GetRange();
         if ( !range )
         {
-            thumbStart =
-            thumbEnd = 0;
+            // clicking the scrollbar without range has no effect
+            return wxHT_NOWHERE;
         }
         else
         {

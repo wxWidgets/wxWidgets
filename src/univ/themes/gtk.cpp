@@ -158,10 +158,10 @@ public:
 
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
                                     const wxRect& rect)
-        { wxRect rectTotal = rect; rectTotal.Inflate(10); return rectTotal; }
+        { wxRect rectTotal = rect; rectTotal.Inflate(2); return rectTotal; }
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect)
-        { wxRect rectText = rect; rectText.Inflate(-10); return rectText; }
+        { wxRect rectText = rect; rectText.Inflate(-2); return rectText; }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);

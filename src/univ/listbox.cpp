@@ -276,6 +276,19 @@ void wxListBox::Delete(int n)
 
     m_itemsClientData.RemoveAt(n);
 
+    // when the item disappears we must not keep using its index
+    if ( n == m_current )
+    {
+        m_current = -1;
+    }
+    else if ( n < m_current )
+    {
+        m_current--;
+    }
+    //else: current item may stay
+
+    m_selections.Remove(n);
+
     m_updateScrollbarY = TRUE;
 }
 
@@ -340,9 +353,16 @@ int wxListBox::GetSelection() const
     return m_selections.IsEmpty() ? -1 : m_selections[0];
 }
 
+int wxCMPFUNC_CONV wxCompareInts(int *n, int *m)
+{
+    return *n - *m;
+}
+
 int wxListBox::GetSelections(wxArrayInt& selections) const
 {
+    // always return sorted array to the user
     selections = m_selections;
+    selections.Sort(wxCompareInts);
 
     return m_selections.GetCount();
 }
@@ -393,9 +413,10 @@ void wxListBox::RefreshItems(int from, int count)
             }
             else // m_updateFrom >= from
             {
-                m_updateCount = wxMax(m_updateCount,
-                                      from + count - m_updateFrom);
+                int updateLast = wxMax(m_updateFrom + m_updateCount,
+                                       from + count);
                 m_updateFrom = from;
+                m_updateCount = updateLast - m_updateFrom;
             }
     }
 }
