@@ -502,7 +502,7 @@ void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
     wxCHECK_RET(superview,"NSView does not have a superview");
-    NSRect parentRect = [superview frame];
+    NSRect parentRect = [superview bounds];
 
     NSRect cocoaRect = NSMakeRect(x,parentRect.size.height-(y+height),width,height);
     [nsview setFrame: cocoaRect];
@@ -515,7 +515,7 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
     wxCHECK_RET(superview,"NSView does not have a superview");
-    NSRect parentRect = [superview frame];
+    NSRect parentRect = [superview bounds];
     NSRect frameRect = [nsview frame];
     if(size.x!=-1)
         frameRect.size.width = size.x;
@@ -548,7 +548,7 @@ void wxWindow::DoGetPosition(int *x, int *y) const
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
     wxCHECK_RET(superview,"NSView does not have a superview");
-    NSRect parentRect = [superview frame];
+    NSRect parentRect = [superview bounds];
 
     NSRect cocoaRect = [nsview frame];
     if(x)
