@@ -494,8 +494,8 @@ PRectangle ListBox::GetDesiredRect() {
     rc.left = 0;
     if (sz.x > 400)
         sz.x = 400;
-//      if (sz.y > 150)  // TODO:  Use desiredVisibleRows??
-//          sz.y = 150;  // For now just use the default from GetBestSize
+    if (sz.y > 160)  // TODO:  Use desiredVisibleRows??
+        sz.y = 160;
     rc.right = sz.x;
     rc.bottom = sz.y;
     return rc;
