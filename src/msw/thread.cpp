@@ -877,7 +877,7 @@ wxThreadInternal::WaitForTerminate(bool shouldCancel,
     // we don't need the thread handle any more
     Free();
 
-    wxCriticalSectionLocker lock(critsect);
+    wxCriticalSectionLocker lock(cs);
     SetState(STATE_EXITED);
 
     return rc == (wxThread::ExitCode)-1 ? wxTHREAD_MISC_ERROR
