@@ -994,6 +994,30 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   return true;
 }
 
+#if wxUSE_STREAMS
+
+bool wxFileConfig::Save(wxOutputStream& os, wxMBConv& conv)
+{
+    // save unconditionally, even if not dirty
+    for ( wxFileConfigLineList *p = m_linesHead; p != NULL; p = p->Next() )
+    {
+        wxString line = p->Text();
+        line += wxTextFile::GetEOL();
+        if ( !os.Write(line.mb_str(conv), line.length()) )
+        {
+            wxLogError(_("Error saving user configuration data."));
+
+            return false;
+        }
+    }
+
+    ResetDirty();
+
+    return true;
+}
+
+#endif // wxUSE_STREAMS
+
 // ----------------------------------------------------------------------------
 // renaming groups/entries
 // ----------------------------------------------------------------------------

@@ -2,7 +2,8 @@
 
 wxConfigBase class defines the basic interface of all config classes. It can
 not be used by itself (it is an abstract base class) and you will always use one
-of its derivations: wxIniConfig, wxFileConfig, wxRegConfig or any other.
+of its derivations: wxIniConfig, \helpref{wxFileConfig}{wxfileconfig},
+wxRegConfig or any other.
 
 However, usually you don't even need to know the precise nature of the class
 you're working with but you would just use the wxConfigBase methods. This
@@ -78,6 +79,7 @@ physical storage where a wxConfigBase-derived class stores its data.
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
+
 \membersection{Static functions}\label{wxconfigstaticfunctions}
 
 These functions deal with the "default" config object. Although its usage is
@@ -105,10 +107,12 @@ of \helpref{wxFileDialog}{wxfiledialog} have ability to use wxConfig class.
 \helpref{Create}{wxconfigbasecreate}\\
 \helpref{DontCreateOnDemand}{wxconfigbasedontcreateondemand}
 
+
 \membersection{Constructor and destructor}
 
 \helpref{wxConfigBase}{wxconfigbasector}\\
 \helpref{\destruct{wxConfigBase}}{wxconfigbasedtor}
+
 
 \membersection{Path management}
 
@@ -179,6 +183,7 @@ regardless of the platform (i.e. it is {\bf not} '$\backslash\backslash$' under 
 \helpref{SetPath}{wxconfigbasesetpath}\\
 \helpref{GetPath}{wxconfigbasegetpath}
 
+
 \membersection{Enumeration}
 
 The functions in this section allow to enumerate all entries and groups in the
@@ -233,6 +238,7 @@ actually enumerating them, but you will probably never need them.
 \helpref{GetNumberOfEntries}{wxconfigbasegetnumberofentries}\\
 \helpref{GetNumberOfGroups}{wxconfigbasegetnumberofgroups}
 
+
 \membersection{Tests of existence}
 
 \helpref{HasGroup}{wxconfigbasehasgroup}\\
@@ -240,11 +246,13 @@ actually enumerating them, but you will probably never need them.
 \helpref{Exists}{wxconfigbaseexists}\\
 \helpref{GetEntryType}{wxconfigbasegetentrytype}
 
+
 \membersection{Miscellaneous functions}
 
 \helpref{GetAppName}{wxconfigbasegetappname}\\
 \helpref{GetVendorName}{wxconfigbasegetvendorname}\\
 \helpref{SetUmask}{wxfileconfigsetumask}
+
 
 \membersection{Key access}
 
@@ -272,6 +280,7 @@ arbitrary path (either relative or absolute), not just the key name.
 \helpref{Write}{wxconfigbasewrite}\\
 \helpref{Flush}{wxconfigbaseflush}
 
+
 \membersection{Rename entries/groups}
 
 The functions in this section allow to rename entries or subgroups of the
@@ -283,6 +292,7 @@ wxConfig implementation.
 \helpref{RenameEntry}{wxconfigbaserenameentry}\\
 \helpref{RenameGroup}{wxconfigbaserenamegroup}
 
+
 \membersection{Delete entries/groups}
 
 The functions in this section delete entries and/or groups of entries from the
@@ -292,6 +302,7 @@ traces of your program presence: for example, when you uninstall it.
 \helpref{DeleteEntry}{wxconfigbasedeleteentry}\\
 \helpref{DeleteGroup}{wxconfigbasedeletegroup}\\
 \helpref{DeleteAll}{wxconfigbasedeleteall}
+
 
 \membersection{Options}
 
@@ -331,6 +342,7 @@ The following functions control this option:
 \wxheading{Members}
 
 }}
+
 
 \membersection{wxConfigBase::wxConfigBase}\label{wxconfigbasector}
 
@@ -392,11 +404,13 @@ is written.}
 By default, environment variable expansion is on and recording defaults is
 off.
 
+
 \membersection{wxConfigBase::\destruct{wxConfigBase}}\label{wxconfigbasedtor}
 
 \func{}{\destruct{wxConfigBase}}{\void}
 
 Empty but ensures that dtor of all derived classes is virtual.
+
 
 \membersection{wxConfigBase::Create}\label{wxconfigbasecreate}
 
@@ -407,6 +421,7 @@ implementation of wxConfig available for the current platform, see comments
 near the definition of wxCONFIG\_WIN32\_NATIVE for details. It returns the
 created object and also sets it as the current one.
 
+
 \membersection{wxConfigBase::DontCreateOnDemand}\label{wxconfigbasedontcreateondemand}
 
 \func{void}{DontCreateOnDemand}{\void}
@@ -415,12 +430,14 @@ Calling this function will prevent {\it Get()} from automatically creating a
 new config object if the current one is NULL. It might be useful to call it
 near the program end to prevent new config object "accidental" creation.
 
+
 \membersection{wxConfigBase::DeleteAll}\label{wxconfigbasedeleteall}
 
 \func{bool}{DeleteAll}{\void}
 
 Delete the whole underlying object (disk file, registry key, ...). Primarly
 for use by desinstallation routine.
+
 
 \membersection{wxConfigBase::DeleteEntry}\label{wxconfigbasedeleteentry}
 
@@ -429,11 +446,13 @@ for use by desinstallation routine.
 Deletes the specified entry and the group it belongs to if it was the last key
 in it and the second parameter is true.
 
+
 \membersection{wxConfigBase::DeleteGroup}\label{wxconfigbasedeletegroup}
 
 \func{bool}{DeleteGroup}{\param{const wxString\& }{ key}}
 
 Delete the group (with all subgroups)
+
 
 \membersection{wxConfigBase::Exists}\label{wxconfigbaseexists}
 
@@ -441,12 +460,14 @@ Delete the group (with all subgroups)
 
 returns true if either a group or an entry with a given name exists
 
+
 \membersection{wxConfigBase::Flush}\label{wxconfigbaseflush}
 
 \func{bool}{Flush}{\param{bool }{bCurrentOnly = false}}
 
 permanently writes all changes (otherwise, they're only written from object's
 destructor)
+
 
 \membersection{wxConfigBase::Get}\label{wxconfigbaseget}
 
@@ -456,11 +477,13 @@ Get the current config object. If there is no current object and
 {\it CreateOnDemand} is true, creates one
 (using {\it Create}) unless DontCreateOnDemand was called previously.
 
+
 \membersection{wxConfigBase::GetAppName}\label{wxconfigbasegetappname}
 
 \constfunc{wxString}{GetAppName}{\void}
 
 Returns the application name.
+
 
 \membersection{wxConfigBase::GetEntryType}\label{wxconfigbasegetentrytype}
 
@@ -485,6 +508,7 @@ The result is an element of enum EntryType:
   };
 \end{verbatim}
 
+
 \membersection{wxConfigBase::GetFirstGroup}\label{wxconfigbasegetfirstgroup}
 
 \constfunc{bool}{GetFirstGroup}{\param{wxString\& }{str}, \param{long\&}{ index}}
@@ -497,6 +521,7 @@ the next call.}
 
 \perlnote{In wxPerl this method takes no arguments and returns a 3-element
 list {\tt ( continue, str, index )}.}
+
 
 \membersection{wxConfigBase::GetFirstEntry}\label{wxconfigbasegetfirstentry}
 
@@ -511,6 +536,7 @@ the next call.}
 \perlnote{In wxPerl this method takes no arguments and returns a 3-element
 list {\tt ( continue, str, index )}.}
 
+
 \membersection{wxConfigBase::GetNextGroup}\label{wxconfigbasegetnextgroup}
 
 \constfunc{bool}{GetNextGroup}{\param{wxString\& }{str}, \param{long\&}{ index}}
@@ -523,6 +549,7 @@ the next call.}
 
 \perlnote{In wxPerl this method only takes the {\tt index} parameter
 and returns a 3-element list {\tt ( continue, str, index )}.}
+
 
 \membersection{wxConfigBase::GetNextEntry}\label{wxconfigbasegetnextentry}
 
@@ -537,9 +564,11 @@ the next call.}
 \perlnote{In wxPerl this method only takes the {\tt index} parameter
 and returns a 3-element list {\tt ( continue, str, index )}.}
 
+
 \membersection{wxConfigBase::GetNumberOfEntries}\label{wxconfigbasegetnumberofentries}
 
 \constfunc{uint }{GetNumberOfEntries}{\param{bool }{bRecursive = false}}
+
 
 \membersection{wxConfigBase::GetNumberOfGroups}\label{wxconfigbasegetnumberofgroups}
 
@@ -548,11 +577,13 @@ and returns a 3-element list {\tt ( continue, str, index )}.}
 Get number of entries/subgroups in the current group, with or without its
 subgroups.
 
+
 \membersection{wxConfigBase::GetPath}\label{wxconfigbasegetpath}
 
 \constfunc{const wxString\&}{GetPath}{\void}
 
 Retrieve the current path (always as absolute path).
+
 
 \membersection{wxConfigBase::GetVendorName}\label{wxconfigbasegetvendorname}
 
@@ -560,11 +591,13 @@ Retrieve the current path (always as absolute path).
 
 Returns the vendor name.
 
+
 \membersection{wxConfigBase::HasEntry}\label{wxconfigbasehasentry}
 
 \constfunc{bool}{HasEntry}{\param{wxString\& }{strName}}
 
 returns true if the entry by this name exists
+
 
 \membersection{wxConfigBase::HasGroup}\label{wxconfigbasehasgroup}
 
@@ -572,17 +605,20 @@ returns true if the entry by this name exists
 
 returns true if the group by this name exists
 
+
 \membersection{wxConfigBase::IsExpandingEnvVars}\label{wxconfigbaseisexpandingenvvars}
 
 \constfunc{bool}{IsExpandingEnvVars}{\void}
 
 Returns true if we are expanding environment variables in key values.
 
+
 \membersection{wxConfigBase::IsRecordingDefaults}\label{wxconfigbaseisrecordingdefaults}
 
 \constfunc{bool}{IsRecordingDefaults}{\void}
 
 Returns true if we are writing defaults back to the config file.
+
 
 \membersection{wxConfigBase::Read}\label{wxconfigbaseread}
 
@@ -676,6 +712,7 @@ implements the following methods:\par
 \end{twocollist}
 }}
 
+
 \membersection{wxConfigBase::RenameEntry}\label{wxconfigbaserenameentry}
 
 \func{bool}{RenameEntry}{\param{const wxString\& }{ oldName}, \param{const wxString\& }{ newName}}
@@ -686,6 +723,7 @@ arbitrary paths are accepted by this function.
 
 Returns false if the {\it oldName} doesn't exist or if {\it newName} already
 exists.
+
 
 \membersection{wxConfigBase::RenameGroup}\label{wxconfigbaserenamegroup}
 
@@ -698,6 +736,7 @@ arbitrary paths are accepted by this function.
 Returns false if the {\it oldName} doesn't exist or if {\it newName} already
 exists.
 
+
 \membersection{wxConfigBase::Set}\label{wxconfigbaseset}
 
 \func{static wxConfigBase *}{Set}{\param{wxConfigBase *}{pConfig}}
@@ -705,11 +744,13 @@ exists.
 Sets the config object as the current one, returns the pointer to the previous
 current object (both the parameter and returned value may be NULL)
 
+
 \membersection{wxConfigBase::SetExpandEnvVars}\label{wxconfigbasesetexpandenvvars}
 
 \func{void}{SetExpandEnvVars }{\param{bool }{bDoIt = true}}
 
 Determine whether we wish to expand environment variables in key values.
+
 
 \membersection{wxConfigBase::SetPath}\label{wxconfigbasesetpath}
 
@@ -718,6 +759,7 @@ Determine whether we wish to expand environment variables in key values.
 Set current path: if the first character is '/', it is the absolute path,
 otherwise it is a relative path. '..' is supported. If the strPath doesn't
 exist it is created.
+
 
 \membersection{wxConfigBase::SetRecordDefaults}\label{wxconfigbasesetrecorddefaults}
 
@@ -730,18 +772,6 @@ If on (default is off) all default values for the settings used by the program
 are written back to the config file. This allows the user to see what config
 options may be changed and is probably useful only for wxFileConfig.
 
-\membersection{wxConfigBase::SetUmask}\label{wxfileconfigsetumask}
-
-\func{void}{SetUmask}{\param{int }{mode}}
-
-{\bf NB:} this function is not in the base wxConfigBase class but is only
-implemented in wxFileConfig. Moreover, this function is Unix-specific and
-doesn't do anything on other platforms.
-
-SetUmask() allows to set the mode to be used for the config file creation.
-For example, to create a config file which is not readable by other users
-(useful if it stores some sensitive information, such as passwords), you
-should do {\tt SetUmask(0077)}.
 
 \membersection{wxConfigBase::Write}\label{wxconfigbasewrite}
 

@@ -164,6 +164,14 @@ public:
   virtual bool DeleteGroup(const wxString& szKey);
   virtual bool DeleteAll();
 
+  // additional, wxFileConfig-specific, functionality
+#if wxUSE_STREAMS
+  // save the entire config file text to the given stream, note that the text
+  // won't be saved again in dtor when Flush() is called if you use this method
+  // as it won't be "changed" any more
+  virtual bool Save(wxOutputStream& os, wxMBConv& conv = wxConvUTF8);
+#endif // wxUSE_STREAMS
+
 public:
   // functions to work with this list
   wxFileConfigLineList *LineListAppend(const wxString& str);
