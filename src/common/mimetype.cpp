@@ -1170,9 +1170,9 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
                                     // programmer
                                     wxLogDebug
                                     (
-                                      _("Mailcap file %s, line %d: unknown "
-                                        "field '%s' for the MIME type "
-                                        "'%s' ignored."),
+                                      "Mailcap file %s, line %d: unknown "
+                                      "field '%s' for the MIME type "
+                                      "'%s' ignored.",
                                       strFileName.c_str(),
                                       nLine + 1,
                                       curField.c_str(),

@@ -479,7 +479,8 @@ wxLocale::~wxLocale()
 const char *wxLocale::GetString(const char *szOrigString,
                                 const char *szDomain) const
 {
-  wxASSERT( szOrigString != NULL ); // would be pretty silly
+  if ( IsEmpty(szOrigString) )
+      return szDomain;
 
   const char *pszTrans = NULL;
 
