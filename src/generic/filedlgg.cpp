@@ -202,9 +202,6 @@ int wxFileIconsTable::GetIconID(const wxString& extension)
 
 
 
-
-
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -476,11 +473,19 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
 
 void wxFileCtrl::Update()
 {
-    ClearAll();
     long my_style = GetWindowStyleFlag();
+    int name_col_width = 0;
     if (my_style & wxLC_REPORT)
     {
-        InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, 130 );
+        if (GetColumnCount() > 0)
+            name_col_width = GetColumnWidth( 0 );
+    }
+    
+    ClearAll();
+    if (my_style & wxLC_REPORT)
+    {
+        if (name_col_width < 140) name_col_width = 140;
+        InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, name_col_width );
         InsertColumn( 1, _("Size"), wxLIST_FORMAT_LEFT, 60 );
         InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 65 );
         InsertColumn( 3, _("Time"), wxLIST_FORMAT_LEFT, 50 );
