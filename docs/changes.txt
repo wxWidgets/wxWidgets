@@ -5,11 +5,14 @@ wxWindows 2.5/2.6 Change Log
 INCOMPATIBLE CHANGES SINCE 2.4.x
 ================================
 
+- no initialization/cleanup can be done in wxApp/~wxApp because they are
+  now called much earlier/later than before; please move any exiting code
+  from there to wxApp::OnInit()/OnExit()
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
 
 
-DEPRECATED METHOD SINCE 2.4.x
-=============================
+DEPRECATED METHODS SINCE 2.4.x
+==============================
 
 Deprecated methods may still be used but will disappear in future wxWindows
 versions, please update your code to not use them.
