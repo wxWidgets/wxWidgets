@@ -72,6 +72,7 @@
     #define TEST_LONGLONG
     #define TEST_MIME
     #define TEST_PATHLIST
+    #define TEST_ODBC
     #define TEST_REGCONF
     #define TEST_REGEX
     #define TEST_REGISTRY
@@ -2341,6 +2342,22 @@ static void TestRegExInteractive()
 }
 
 #endif // TEST_REGEX
+
+// ----------------------------------------------------------------------------
+// database
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_ODBC
+
+#include <wx/db.h>
+
+static void TestDbOpen()
+{
+    HENV henv;
+    wxDb db(henv);
+}
+
+#endif // TEST_ODBC
 
 // ----------------------------------------------------------------------------
 // registry and related stuff
@@ -4731,9 +4748,6 @@ static void TestThreadDelete()
     puts("");
 }
 
-// wxCondition test code
-// ----------------------------------------------------------------------------
-
 class MyWaitingThread : public wxThread
 {
 public:
@@ -4746,7 +4760,7 @@ public:
 
     virtual ExitCode Entry()
     {
-        printf("Thread %lu has started running.", GetId());
+        printf("Thread %lu has started running.\n", GetId());
         fflush(stdout);
 
         gs_cond.Signal();
@@ -4770,8 +4784,13 @@ static void TestThreadConditions()
 {
     wxCondition condition;
 
+    // otherwise its difficult to understand which log messages pertain to
+    // which condition
+    wxLogTrace("thread", "Local condition var is %08x, gs_cond = %08x",
+               condition.GetId(), gs_cond.GetId());
+
     // create and launch threads
-    MyWaitingThread *threads[2];
+    MyWaitingThread *threads[5];
 
     size_t n;
     for ( n = 0; n < WXSIZEOF(threads); n++ )
@@ -4785,7 +4804,7 @@ static void TestThreadConditions()
     }
 
     // wait until all threads run
-    printf("Main thread is waiting for the threads to start: ");
+    puts("Main thread is waiting for the other threads to start");
     fflush(stdout);
 
     size_t nRunning = 0;
@@ -4793,28 +4812,31 @@ static void TestThreadConditions()
     {
         gs_cond.Wait();
 
-        putchar('.');
-        fflush(stdout);
-
         nRunning++;
+
+        printf("Main thread: %u already running\n", nRunning);
+        fflush(stdout);
     }
 
-    puts("\nMain thread: all threads started up.");
+    puts("Main thread: all threads started up.");
     fflush(stdout);
 
-    // now wake them up
+    wxThread::Sleep(500);
+
 #if 0
+    // now wake one of them up
     printf("Main thread: about to signal the condition.\n");
     fflush(stdout);
     condition.Signal();
-#endif // 0
+#endif
 
+    // wake all the (remaining) threads up, so that they can exit
     printf("Main thread: about to broadcast the condition.\n");
     fflush(stdout);
     condition.Broadcast();
 
-    // give them time to terminate (dirty)
-    wxThread::Sleep(300);
+    // give them time to terminate (dirty!)
+    wxThread::Sleep(500);
 }
 
 #endif // TEST_THREADS
@@ -5581,23 +5603,6 @@ int main(int argc, char **argv)
         TestFtpWuFtpd();
 #endif // TEST_FTP
 
-#ifdef TEST_THREADS
-    int nCPUs = wxThread::GetCPUCount();
-    printf("This system has %d CPUs\n", nCPUs);
-    if ( nCPUs != -1 )
-        wxThread::SetConcurrency(nCPUs);
-
-    if ( 0 )
-    {
-        TestDetachedThreads();
-        TestJoinableThreads();
-        TestThreadSuspend();
-        TestThreadDelete();
-    }
-
-    TestThreadConditions();
-#endif // TEST_THREADS
-
 #ifdef TEST_LONGLONG
     // seed pseudo random generator
     srand((unsigned)time(NULL));
@@ -5629,14 +5634,14 @@ int main(int argc, char **argv)
 
 #ifdef TEST_MIME
     wxLog::AddTraceMask(_T("mime"));
-    if ( 1 )
+    if ( TEST_ALL )
     {
         TestMimeEnum();
         TestMimeOverride();
         TestMimeFilename();
     }
-    else
-        TestMimeAssociate();
+
+    TestMimeAssociate();
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
@@ -5651,6 +5656,10 @@ int main(int argc, char **argv)
 #ifdef TEST_PATHLIST
     TestPathList();
 #endif // TEST_PATHLIST
+
+#ifdef TEST_ODBC
+    TestDbOpen();
+#endif // TEST_ODBC
 
 #ifdef TEST_REGCONF
     TestRegConfWrite();
@@ -5684,6 +5693,23 @@ int main(int argc, char **argv)
     TestFileStream();
     TestMemoryStream();
 #endif // TEST_STREAMS
+
+#ifdef TEST_THREADS
+    int nCPUs = wxThread::GetCPUCount();
+    printf("This system has %d CPUs\n", nCPUs);
+    if ( nCPUs != -1 )
+        wxThread::SetConcurrency(nCPUs);
+
+    if ( TEST_ALL )
+    {
+        TestDetachedThreads();
+        TestJoinableThreads();
+        TestThreadSuspend();
+        TestThreadDelete();
+    }
+
+    TestThreadConditions();
+#endif // TEST_THREADS
 
 #ifdef TEST_TIMER
     TestStopWatch();

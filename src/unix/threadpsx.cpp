@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Wolfram Gloger (1996, 1997)
 //                  Guilhem Lavaux (1998)
-//                  Vadim Zeitlin (1999)
+//                  Vadim Zeitlin (1999-2002)
 //                  Robert Roebling (1999)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,6 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
-#include "wx/listimpl.cpp"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -72,6 +71,15 @@ static const wxThread::ExitCode EXITCODE_CANCELLED = (wxThread::ExitCode)-1;
 
 // our trace mask
 #define TRACE_THREADS   _T("thread")
+
+// ----------------------------------------------------------------------------
+// pseudo template types
+// ----------------------------------------------------------------------------
+
+WX_DECLARE_LIST(pthread_mutex_t, wxMutexList);
+
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxMutexList);
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -147,23 +155,29 @@ static wxCondition *gs_condAllDeleted = (wxCondition *)NULL;
 #endif // wxUSE_GUI
 
 // ============================================================================
-// implementation
+// wxMutex implementation
 // ============================================================================
 
-//--------------------------------------------------------------------
-// wxMutex (Posix implementation)
-//--------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxMutexInternal
+// ----------------------------------------------------------------------------
 
 class wxMutexInternal
 {
 public:
+    wxMutexInternal();
+    ~wxMutexInternal();
+
+    wxMutexError Lock();
+    wxMutexError TryLock();
+    wxMutexError Unlock();
+
+private:
     pthread_mutex_t m_mutex;
 };
 
-wxMutex::wxMutex()
+wxMutexInternal::wxMutexInternal()
 {
-    m_internal = new wxMutexInternal;
-
     // support recursive locks like Win32, i.e. a thread can lock a mutex which
     // it had itself already locked
     //
@@ -174,64 +188,147 @@ wxMutex::wxMutex()
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 
-    pthread_mutex_init(&(m_internal->m_mutex), &attr);
+    pthread_mutex_init(&m_mutex, &attr);
 #elif defined(HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
     // we can use this only as initializer so we have to assign it first to a
     // temp var - assigning directly to m_mutex wouldn't even compile
     pthread_mutex_t mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
-    m_internal->m_mutex = mutex;
+    m_mutex = mutex;
 #else // no recursive mutexes
-    pthread_mutex_init(&(m_internal->m_mutex), NULL);
+    pthread_mutex_init(&m_mutex, NULL);
+
+    // used by TryLock() below
+    #define NO_RECURSIVE_MUTEXES
 #endif // HAVE_PTHREAD_MUTEXATTR_T/...
+}
+
+wxMutexInternal::~wxMutexInternal()
+{
+    pthread_mutex_destroy(&m_mutex);
+}
+
+wxMutexError wxMutexInternal::Lock()
+{
+    int err = pthread_mutex_lock(&m_mutex);
+    switch ( err )
+    {
+        case EDEADLK:
+            wxLogDebug(wxT("Locking this mutex would lead to deadlock!"));
+            return wxMUTEX_DEAD_LOCK;
+
+        default:
+            wxFAIL_MSG( _T("unexpected pthread_mutex_lock() return") );
+            // fall through
+
+        case EINVAL:
+            wxLogDebug(_T("Failed to lock the mutex."));
+            return wxMUTEX_MISC_ERROR;
+
+        case 0:
+            return wxMUTEX_NO_ERROR;
+    }
+}
+
+wxMutexError wxMutexInternal::TryLock()
+{
+    int err = pthread_mutex_trylock(&m_mutex);
+    switch ( err )
+    {
+        case EBUSY:
+            return wxMUTEX_BUSY;
+
+        default:
+            wxFAIL_MSG( _T("unexpected pthread_mutex_trylock() return") );
+            // fall through
+
+        case EINVAL:
+            wxLogDebug(_T("Failed to try to lock the mutex."));
+            return wxMUTEX_MISC_ERROR;
+
+        case 0:
+            return wxMUTEX_NO_ERROR;
+    }
+}
+
+wxMutexError wxMutexInternal::Unlock()
+{
+    int err = pthread_mutex_unlock(&m_mutex);
+    switch ( err )
+    {
+        case EPERM:
+            // we don't own the mutex
+            return wxMUTEX_UNLOCKED;
+
+        default:
+            wxFAIL_MSG( _T("unexpected pthread_mutex_unlock() return") );
+            // fall through
+
+        case EINVAL:
+            wxLogDebug(_T("Failed to unlock the mutex."));
+            return wxMUTEX_MISC_ERROR;
+
+        case 0:
+            return wxMUTEX_NO_ERROR;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxMutex
+// ----------------------------------------------------------------------------
+
+// TODO: this is completely generic, move it to common code?
+
+wxMutex::wxMutex()
+{
+    m_internal = new wxMutexInternal;
 
     m_locked = 0;
 }
 
 wxMutex::~wxMutex()
 {
-    if (m_locked > 0)
+    if ( m_locked > 0 )
         wxLogDebug(wxT("Freeing a locked mutex (%d locks)"), m_locked);
 
-    pthread_mutex_destroy( &(m_internal->m_mutex) );
     delete m_internal;
 }
 
 wxMutexError wxMutex::Lock()
 {
-    int err = pthread_mutex_lock( &(m_internal->m_mutex) );
-    if (err == EDEADLK)
-    {
-        wxLogDebug(wxT("Locking this mutex would lead to deadlock!"));
+    wxMutexError err = m_internal->Lock();
 
-        return wxMUTEX_DEAD_LOCK;
+    if ( !err )
+    {
+        m_locked++;
     }
 
-    m_locked++;
-
-    return wxMUTEX_NO_ERROR;
+    return err;
 }
 
 wxMutexError wxMutex::TryLock()
 {
-    if (m_locked)
+    if ( m_locked )
     {
-        return wxMUTEX_BUSY;
+#ifdef NO_RECURSIVE_MUTEXES
+        return wxMUTEX_DEAD_LOCK;
+#else // have recursive mutexes on this platform
+        // we will succeed in locking it when we have it already locked
+        return wxMUTEX_NO_ERROR;
+#endif // recursive/non-recursive mutexes
     }
 
-    int err = pthread_mutex_trylock( &(m_internal->m_mutex) );
-    switch (err)
+    wxMutexError err = m_internal->TryLock();
+    if ( !err )
     {
-        case EBUSY: return wxMUTEX_BUSY;
+        m_locked++;
     }
 
-    m_locked++;
-
-    return wxMUTEX_NO_ERROR;
+    return err;
 }
 
 wxMutexError wxMutex::Unlock()
 {
-    if (m_locked > 0)
+    if ( m_locked > 0 )
     {
         m_locked--;
     }
@@ -242,61 +339,67 @@ wxMutexError wxMutex::Unlock()
         return wxMUTEX_UNLOCKED;
     }
 
-    pthread_mutex_unlock( &(m_internal->m_mutex) );
-
-    return wxMUTEX_NO_ERROR;
+    return m_internal->Unlock();
 }
 
-//--------------------------------------------------------------------
-// wxCondition (Posix implementation)
-//--------------------------------------------------------------------
+// ============================================================================
+// wxCondition implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxConditionInternal
+// ----------------------------------------------------------------------------
 
 // The native POSIX condition variables are dumb: if the condition is signaled
 // before another thread starts to wait on it, the signal is lost and so this
 // other thread will be never woken up. It's much more convenient to us to
 // remember that the condition was signaled and to return from Wait()
 // immediately in this case (this is more like Win32 automatic event objects)
-
-WX_DECLARE_LIST(pthread_mutex_t, wxMutexList);
-
 class wxConditionInternal
 {
 public:
     wxConditionInternal();
     ~wxConditionInternal();
 
-    void Wait();
-    bool WaitWithTimeout(const timespec* ts);
+    // wait with the given timeout or indefinitely if NULL
+    bool Wait(const timespec* ts = NULL);
 
-    void Signal();
-    void Broadcast();
-
-    void WaitDone(wxMutexList::Node *mutexnode);
-    wxMutexList::Node *ShouldWait();
-    bool HasWaiters();
+    void Signal(bool all = FALSE);
 
 private:
-    void LockAllMutexes();          // locks all mutexes on the list
-    void UnlockAllMutexes();       // unlocks mutexes after signaling / broadcasting
+    // the number of Signal() calls queued
+    //
+    // changed by Signal(), accessed by Wait()
+    //
+    // protected by m_mutexSignalCount
+    size_t m_nSignalsMissed;
 
-    // TRUE if condition was signaled while nobody waited for it
-    bool m_wasSignaled;
+    // protects access to m_nSignalsMissed
+    pthread_mutex_t m_mutexSignalCount;
 
-    // protects access to vars above
-    pthread_mutex_t m_mutexProtect;
+    // serializes Broadcast() and/or Signal() calls
+    //
+    // TODO: I'm not sure if this is really needed but it shouldn't harm
+    //       neither (except for efficiency condierations). However MSW doesn't
+    //       do this so maybe we shouldn't do it here neither? (VZ)
+    pthread_mutex_t m_mutexSignal;
 
-    // the mutexes which are used for the condition variable
+    // a condition variable must be always used with a mutex and so we maintain
+    // a list of mutexes - one for each thread that calls Wait().
+    //
+    // access to this list must be protected by m_mutexListContents
     wxMutexList m_mutexes;
 
     // the condition itself
     pthread_cond_t m_condition;
-};
 
-WX_DEFINE_LIST(wxMutexList);
+    // protects all accesses to m_mutexes list
+    pthread_mutex_t m_mutexListContents;
+};
 
 wxConditionInternal::wxConditionInternal()
 {
-    m_wasSignaled = FALSE;
+    m_nSignalsMissed = 0;
 
     if ( pthread_cond_init(&m_condition, (pthread_condattr_t *)NULL) != 0 )
     {
@@ -304,12 +407,13 @@ wxConditionInternal::wxConditionInternal()
         wxFAIL_MSG( _T("pthread_cond_init() failed") );
     }
 
-    if ( pthread_mutex_init(&m_mutexProtect, NULL) != 0 )
+    if ( pthread_mutex_init(&m_mutexSignalCount, NULL) != 0 ||
+         pthread_mutex_init(&m_mutexListContents, NULL) != 0 ||
+         pthread_mutex_init(&m_mutexSignal, NULL) != 0 )
     {
         // neither this
         wxFAIL_MSG( _T("wxCondition: pthread_mutex_init() failed") );
     }
-
 }
 
 wxConditionInternal::~wxConditionInternal()
@@ -320,191 +424,170 @@ wxConditionInternal::~wxConditionInternal()
                       "threads are probably still waiting on it?)"));
     }
 
-    for ( wxMutexList::Node *node = m_mutexes.GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        pthread_mutex_t *currentmutex = node->GetData();
-        if ( pthread_mutex_unlock( currentmutex ) != 0 )
-        {
-            wxLogDebug(_T("wxCondition: failed to unlock the mutex"));
-        } else {
-            delete currentmutex;
-        }
-    }
+    // the list of waiters mutexes must be empty by now
+    wxASSERT_MSG( !m_mutexes.GetFirst(),
+                  _T("deleting condition someone is still waiting on?") );
 
-    m_mutexes.DeleteContents(TRUE);
-
-    if ( pthread_mutex_destroy( &m_mutexProtect ) != 0 )
+    if ( pthread_mutex_destroy( &m_mutexSignalCount ) != 0 || 
+         pthread_mutex_destroy( &m_mutexListContents ) != 0 ||
+         pthread_mutex_destroy( &m_mutexSignal ) != 0 )
     {
         wxLogDebug(_T("Failed to destroy mutex (it is probably locked)"));
     }
 }
 
-void wxConditionInternal::WaitDone(wxMutexList::Node *mutexnode)
+bool wxConditionInternal::Wait(const timespec* ts)
 {
-    MutexLock lock(m_mutexProtect);
-
-    pthread_mutex_unlock(mutexnode->GetData());
-    pthread_mutex_destroy(mutexnode->GetData());
-    delete mutexnode->GetData();
-
-    m_mutexes.DeleteNode(mutexnode);
-
-}
-
-wxMutexList::Node *wxConditionInternal::ShouldWait()
-{
-    MutexLock lock(m_mutexProtect);
-
-    if ( m_wasSignaled )
     {
-        // the condition was signaled before we started to wait, reset the
-        // flag and return
-        m_wasSignaled = FALSE;
+        wxLogTrace(TRACE_THREADS,
+                   _T("wxCondition(%08x)::Wait: about to lock missed signal counter"),
+                   this);
 
-        return NULL;
-    }
+        MutexLock lock(m_mutexSignalCount);
 
-    // we start to wait for it
-
-    pthread_mutex_t *waitmutex = new pthread_mutex_t;
-    if ( pthread_mutex_init(waitmutex, (pthread_mutexattr_t *)NULL) != 0 )
-    {
-        // neither this
-        wxFAIL_MSG( _T("wxCondition: pthread_mutex_init() failed when starting waiting") );
-    }
-
-    pthread_mutex_lock(waitmutex);
-
-    return ( m_mutexes.Append(waitmutex) );
-}
-
-bool wxConditionInternal::HasWaiters()
-{
-    if ( m_mutexes.GetCount() )
-    {
-        // someone waits for us, signal the condition normally
-        return TRUE;
-    }
-
-    // nobody waits for us and may be never will - so just remember that the
-    // condition was signaled and don't do anything else
-    m_wasSignaled = TRUE;
-
-    return FALSE;
-}
-
-void wxConditionInternal::Wait()
-{
-    wxMutexList::Node *ownmutexnode = ShouldWait();
-
-    if ( ownmutexnode )
-    {
-        if ( pthread_cond_wait( &m_condition, ownmutexnode->GetData() ) != 0 )
+        if ( m_nSignalsMissed )
         {
-            // not supposed to ever happen
-            wxFAIL_MSG( _T("pthread_cond_wait() failed") );
-        }
+            // the condition was signaled before we started to wait, just
+            // decrease the number of queued signals and return
+            m_nSignalsMissed--;
 
-        WaitDone(ownmutexnode);
+            wxLogTrace(TRACE_THREADS,
+                       _T("wxCondition(%08x)::Wait: not waiting at all, count = %u"),
+                       this, m_nSignalsMissed);
+
+            return TRUE;
+        }
     }
+
+    // we need to really wait, create a new mutex for this
+    pthread_mutex_t *mutex = new pthread_mutex_t;
+    if ( pthread_mutex_init(mutex, (pthread_mutexattr_t *)NULL) != 0 )
+    {
+        // not supposed to happen
+        wxFAIL_MSG( _T("pthread_mutex_init() failed when starting waiting") );
+    }
+
+    // lock the mutex before starting to wait on it
+    pthread_mutex_lock(mutex);
+
+    // lock the list before modifying it
+    wxMutexList::Node *mutexNode;
+    {
+        MutexLock lockList(m_mutexListContents);
+
+        mutexNode = m_mutexes.Append(mutex);
+    }
+
+    // calling wait function below unlocks the mutex and Signal() or
+    // Broadcast() will be able to continue to run now if they were
+    // blocking for it in the loop locking all mutexes)
+    wxLogTrace(TRACE_THREADS,
+               _T("wxCondition(%08x)::Wait(): starting to wait"), this);
+    int err = ts ? pthread_cond_timedwait(&m_condition, mutex, ts)
+                 : pthread_cond_wait(&m_condition, mutex);
+    switch ( err )
+    {
+        case 0:
+            // condition was signaled
+            wxLogTrace(TRACE_THREADS,
+                       _T("wxCondition(%08x)::Wait(): ok"), this);
+            break;
+
+        default:
+            wxLogDebug(_T("unexpected pthread_cond_[timed]wait() return"));
+            // fall through
+
+        case ETIMEDOUT:
+        case EINTR:
+            // wait interrupted or timeout elapsed
+            wxLogTrace(TRACE_THREADS,
+                       _T("wxCondition(%08x)::Wait(): timeout/intr"), this);
+    }
+
+    // delete the mutex we had used for waiting
+    {
+        MutexLock lock(m_mutexListContents);
+
+        pthread_mutex_t *m = mutexNode->GetData();
+        pthread_mutex_unlock(m);
+        pthread_mutex_destroy(m);
+        delete m;
+
+        m_mutexes.DeleteNode(mutexNode);
+    }
+
+    return err == 0;
 }
 
-bool wxConditionInternal::WaitWithTimeout(const timespec* ts)
+void wxConditionInternal::Signal(bool all)
 {
-    bool ok;
+    // make sure that only one Signal() or Broadcast() is in progress
+    MutexLock lock(m_mutexSignal);
 
-    wxMutexList::Node *ownmutexnode = ShouldWait();
+    // this mutex has to be locked as well, so that during the entire Signal()
+    // call, no new Wait() is going to wreak havoc (it will block in the very
+    // beginning on this mutex instead)
+    MutexLock lockSignalCount(m_mutexSignalCount);
 
-    if ( ownmutexnode )
+    wxLogTrace(TRACE_THREADS,
+               _T("wxCondition(%08x)::Signal(): got signal count mutex"),
+               this);
+
     {
-        switch ( pthread_cond_timedwait( &m_condition, ownmutexnode->GetData(), ts ) )
+        MutexLock lockList(m_mutexListContents);
+
+        if ( !m_mutexes.GetFirst() )
         {
-            case 0:
-                // condition signaled
-                ok = TRUE;
-                break;
+            // nobody is waiting for us, just remember that the condition was
+            // signaled and don't do anything else for now
+            m_nSignalsMissed++;
 
-            default:
-                wxLogDebug(_T("pthread_cond_timedwait() failed"));
+            wxLogTrace(TRACE_THREADS,
+                       _T("wxCondition(%08x)::Signal(): no waiters, count = %u"),
+                       this, m_nSignalsMissed);
 
-                // fall through
-
-            case ETIMEDOUT:
-            case EINTR:
-                // wait interrupted or timeout elapsed
-                ok = FALSE;
+            return;
         }
-        WaitDone(ownmutexnode);
     }
-    else
+
+    wxLogTrace(TRACE_THREADS,
+               _T("wxCondition(%08x)::Signal(): acquiring all mutexes"), this);
+
+    // All mutexes on the list have to be locked. This means that execution of
+    // Signal() goes on as soon as all pending Wait() calls have called
+    // pthread_cond_wait() (where the mutex gets unlocked internally)
+    wxMutexList::Node *node;
+    for ( node = m_mutexes.GetFirst(); node; node = node->GetNext() )
     {
-        // the condition had already been signaled before
-        ok = TRUE;
+        pthread_mutex_lock(node->GetData());
     }
 
+    // now we can finally signal it
+    wxLogTrace(TRACE_THREADS, _T("wxCondition(%08x)::Signal(): preparing to %s"),
+               this, all ? _T("broadcast") : _T("signal"));
 
-    return ok;
+    int err = all ? pthread_cond_broadcast(&m_condition)
+                  : pthread_cond_signal(&m_condition);
+    if ( err )
+    {
+        // shouldn't ever happen
+        wxFAIL_MSG(_T("pthread_cond_{broadcast|signal}() failed"));
+    }
+
+    // unlock all mutexes so that the threads blocking in their Wait()s could
+    // continue running
+    for ( node = m_mutexes.GetFirst(); node; node = node->GetNext() )
+    {
+        pthread_mutex_unlock(node->GetData());
+    }
+
+    wxLogTrace(TRACE_THREADS,
+               _T("wxCondition(%08x)::Signal(): exiting"), this);
 }
 
-void wxConditionInternal::LockAllMutexes()
-{
-    wxMutexList::Node *mutexnode = m_mutexes.GetFirst();
-    while ( mutexnode )
-    {
-        pthread_mutex_lock(mutexnode->GetData());
-        mutexnode = mutexnode->GetNext();
-    }
-}
-
-void wxConditionInternal::UnlockAllMutexes()
-{
-    wxMutexList::Node *mutexnode = m_mutexes.GetFirst();
-    while ( mutexnode )
-    {
-        pthread_mutex_unlock(mutexnode->GetData());
-        mutexnode = mutexnode->GetNext();
-    }
-}
-
-void wxConditionInternal::Signal()
-{
-    // calls to HasWaiters() must be serialized
-    MutexLock lock(m_mutexProtect);
-
-    if ( HasWaiters() )
-    {
-        // wait 
-        LockAllMutexes();
-
-        if ( pthread_cond_signal( &m_condition ) != 0 )
-        {
-            // shouldn't ever happen
-            wxFAIL_MSG(_T("pthread_cond_signal() failed"));
-        }
-
-        UnlockAllMutexes();
-    }
-}
-
-void wxConditionInternal::Broadcast()
-{
-    MutexLock lock(m_mutexProtect);
-
-    if ( HasWaiters() )
-    {
-        LockAllMutexes();
-
-        if ( pthread_cond_broadcast( &m_condition ) != 0 )
-        {
-            // shouldn't ever happen
-            wxFAIL_MSG(_T("pthread_cond_broadcast() failed"));
-        }
-
-        UnlockAllMutexes();
-    }
-}
+// ----------------------------------------------------------------------------
+// wxCondition
+// ----------------------------------------------------------------------------
 
 wxCondition::wxCondition()
 {
@@ -518,7 +601,7 @@ wxCondition::~wxCondition()
 
 void wxCondition::Wait()
 {
-    m_internal->Wait();
+    (void)m_internal->Wait();
 }
 
 bool wxCondition::Wait(unsigned long sec, unsigned long nsec)
@@ -528,7 +611,7 @@ bool wxCondition::Wait(unsigned long sec, unsigned long nsec)
     tspec.tv_sec = time(0L) + sec;  // FIXME is time(0) correct here?
     tspec.tv_nsec = nsec;
 
-    return m_internal->WaitWithTimeout(&tspec);
+    return m_internal->Wait(&tspec);
 }
 
 void wxCondition::Signal()
@@ -538,12 +621,12 @@ void wxCondition::Signal()
 
 void wxCondition::Broadcast()
 {
-    m_internal->Broadcast();
+    m_internal->Signal(TRUE /* all */);
 }
 
-//--------------------------------------------------------------------
-// wxThread (Posix implementation)
-//--------------------------------------------------------------------
+// ============================================================================
+// wxThread implementation
+// ============================================================================
 
 // the thread callback functions must have the C linkage
 extern "C"
@@ -557,6 +640,10 @@ extern "C"
 void *wxPthreadStart(void *ptr);
 
 } // extern "C"
+
+// ----------------------------------------------------------------------------
+// wxThreadInternal
+// ----------------------------------------------------------------------------
 
 class wxThreadInternal
 {
@@ -669,6 +756,8 @@ void *wxPthreadStart(void *ptr)
 void *wxThreadInternal::PthreadStart(wxThread *thread)
 {
     wxThreadInternal *pthread = thread->m_internal;
+
+    wxLogTrace(TRACE_THREADS, _T("Thread %ld started."), pthread->GetId());
 
     // associate the thread pointer with the newly created thread so that
     // wxThread::This() will work

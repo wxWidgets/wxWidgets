@@ -99,8 +99,6 @@ public:
     bool IsLocked() const { return (m_locked > 0); }
 
 protected:
-    friend class wxCondition;
-
     // no assignment operator nor copy ctor
     wxMutex(const wxMutex&);
     wxMutex& operator=(const wxMutex&);
@@ -236,6 +234,11 @@ public:
     void Signal();
         // wakes up all threads waiting on this condition
     void Broadcast();
+
+#ifdef __WXDEBUG__
+    // for debugging purposes only
+    void *GetId() const { return m_internal; }
+#endif // __WXDEBUG__
 
 private:
     wxConditionInternal *m_internal;
