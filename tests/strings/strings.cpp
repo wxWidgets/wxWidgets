@@ -157,7 +157,7 @@ void StringTestCase::ConstructorsWithConversion()
     const char utf8[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
     const wchar_t wchar[] = {0x44,0xE9,0x6A,0xE0,0};
     const char utf8sub[] = {0x44,0xC3,0xA9,0x6A,0}; // "Dej"
-    
+
     wxString s1(utf8, wxConvUTF8);
     wxString s2(wchar, wxConvUTF8);
 
@@ -174,7 +174,7 @@ void StringTestCase::ConstructorsWithConversion()
     wxString s4(wchar, wxConvUTF8, 3);
 
     CPPUNIT_ASSERT( s3 == sub );
-    CPPUNIT_ASSERT( s4 == sub );    
+    CPPUNIT_ASSERT( s4 == sub );
 }
 #endif
 
@@ -183,25 +183,25 @@ void StringTestCase::Conversion()
 #if wxUSE_UNICODE
         wxString szTheString(L"The\0String", wxConvLibc, 10);
         wxCharBuffer theBuffer = szTheString.mb_str();
-        
-        CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String", 11) == 0 );     
+
+        CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String", 11) == 0 );
 
         wxString szTheString2("The\0String", wxConvLocal, 10);
-        CPPUNIT_ASSERT( wxMemcmp(szTheString2.c_str(), L"The\0String", 11) == 0 );     
+        CPPUNIT_ASSERT( wxMemcmp(szTheString2.c_str(), L"The\0String", 11) == 0 );
 #else
-#	if wxUSE_WCHAR_T
+#   if wxUSE_WCHAR_T
         wxString szTheString(wxT("TheString"));
         szTheString.insert(3, 1, '\0');
         wxWCharBuffer theBuffer = szTheString.wc_str(wxConvLibc);
-        
-        CPPUNIT_ASSERT( memcmp(theBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 ); 
+
+        CPPUNIT_ASSERT( memcmp(theBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
 
         wxString szLocalTheString(wxT("TheString"));
         szLocalTheString.insert(3, 1, '\0');
         wxWCharBuffer theLocalBuffer = szLocalTheString.wc_str(wxConvLocal);
-        
-        CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 ); 
-#	endif
+
+        CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
+#   endif
 #endif
 }
 
@@ -256,33 +256,33 @@ void StringTestCase::SingleTokenizerTest( wxChar *str, wxChar *delims, size_t co
     wxChar *buf, *s = NULL, *last;
 
     if ( tkz.GetMode() == wxTOKEN_STRTOK )
-    {                                             
-        buf = new wxChar[wxStrlen(str) + 1];      
-        wxStrcpy(buf, str);                       
-        s = wxStrtok(buf, delims, &last);         
-    }                                             
-    else                                          
-    {                                             
-        buf = NULL;                               
-    }                                             
-                                                  
-    size_t count2 = 0;                            
-    while ( tkz.HasMoreTokens() )                 
-    {                                             
-        wxString token = tkz.GetNextToken();      
-        if ( buf )                                
-        {                                         
-            CPPUNIT_ASSERT( token == s );         
-            s = wxStrtok(NULL, delims, &last);    
-        }                                         
-        count2++;                                 
-    }                                             
-                                                  
-    CPPUNIT_ASSERT( count2 == count );            
-    if ( buf )                                    
-    {                                             
-        delete [] buf;                            
-    }                                             
+    {
+        buf = new wxChar[wxStrlen(str) + 1];
+        wxStrcpy(buf, str);
+        s = wxStrtok(buf, delims, &last);
+    }
+    else
+    {
+        buf = NULL;
+    }
+
+    size_t count2 = 0;
+    while ( tkz.HasMoreTokens() )
+    {
+        wxString token = tkz.GetNextToken();
+        if ( buf )
+        {
+            CPPUNIT_ASSERT( token == s );
+            s = wxStrtok(NULL, delims, &last);
+        }
+        count2++;
+    }
+
+    CPPUNIT_ASSERT( count2 == count );
+    if ( buf )
+    {
+        delete [] buf;
+    }
 }
 
 void StringTestCase::Tokenizer()
@@ -379,7 +379,7 @@ void StringTestCase::Compare()
     wxString neq2 = wxT("AH");
     wxString neq3 = wxT("AHHH");
     wxString neq4 = wxT("AhH");
-    
+
     CPPUNIT_ASSERT( s1 == eq );
     CPPUNIT_ASSERT( s1 != neq1 );
     CPPUNIT_ASSERT( s1 != neq2 );
@@ -398,7 +398,7 @@ void StringTestCase::Compare()
     neq2.insert(1,1,'\0');
     neq3.insert(1,1,'\0');
     neq4.insert(1,1,'\0');
-    
+
     CPPUNIT_ASSERT( s1 == eq );
     CPPUNIT_ASSERT( s1 != neq1 );
     CPPUNIT_ASSERT( s1 != neq2 );
@@ -415,7 +415,7 @@ void StringTestCase::CompareNoCase()
     wxString neq = wxT("HAH");
     wxString neq2 = wxT("AH");
     wxString neq3 = wxT("AHHH");
-    
+
     #define CPPUNIT_CNCEQ_ASSERT(s1, s2) CPPUNIT_ASSERT( s1.CmpNoCase(s2) == 0)
     #define CPPUNIT_CNCNEQ_ASSERT(s1, s2) CPPUNIT_ASSERT( s1.CmpNoCase(s2) != 0)
 
@@ -435,7 +435,7 @@ void StringTestCase::CompareNoCase()
 //    wxString _neq = wxT("H\0AH");
 //    wxString _neq2 = wxT("A\0H");
 //    wxString _neq3 = wxT("A\0HHH");
-    
+
     s1.insert(1,1,'\0');
     eq.insert(1,1,'\0');
     eq2.insert(1,1,'\0');
@@ -452,3 +452,4 @@ void StringTestCase::CompareNoCase()
     CPPUNIT_CNCNEQ_ASSERT( s1, neq2 );
     CPPUNIT_CNCNEQ_ASSERT( s1, neq3 );
 }
+
