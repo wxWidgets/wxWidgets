@@ -107,7 +107,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     }
 
     // 2) text
-    icon_text->Add( CreateTextSizer( message ), 0, wxCENTER | wxLEFT, 10 );
+    icon_text->Add( CreateTextSizer( message ), 0, wxALIGN_CENTER | wxLEFT, 10 );
 
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 
@@ -117,8 +117,10 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 #endif // wxUSE_STATLINE
 
     // 4) buttons
+    int center_flag = wxEXPAND;
+    if (style & wxYES_NO) center_flag = wxALIGN_CENTRE;
     topsizer->Add( CreateButtonSizer( style & (wxOK|wxCANCEL|wxYES_NO|wxYES_DEFAULT|wxNO_DEFAULT) ),
-                   0, wxEXPAND | wxALL, 10 );
+                   0, center_flag | wxALL, 10 );
 
     SetAutoLayout( true );
     SetSizer( topsizer );
