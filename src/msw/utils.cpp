@@ -151,7 +151,10 @@ bool wxGetHostName(char *buf, int maxSize)
 // Get user ID e.g. jacs
 bool wxGetUserId(char *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__win32s__) && 0
+#if defined(__WIN32__) && !defined(__win32s__)
+
+    // VZ: why should it be so complicated??
+#if 0
   // Gets the current user's full name according to the MS article PSS ID
   // Number: Q119670
   // Seems to be the same as the login name for me?
@@ -195,11 +198,19 @@ bool wxGetUserId(char *buf, int maxSize)
      -1, buf, 256, NULL, NULL );
   }
   return( TRUE );
-/*
-  DWORD nSize = maxSize;
-  return ::GetUserName(buf, &nSize);
-*/
-#else
+#else   // 1
+    DWORD nSize = maxSize;
+    if ( ::GetUserName(buf, &nSize) == 0 )
+    {
+        wxLogSysError("Can not get user name");
+
+        return FALSE;
+    }
+
+    return TRUE;
+#endif  // 0/1
+
+#else   // Win16 or Win32s
   char *user;
   const char *default_id = "anonymous";
 
@@ -218,22 +229,7 @@ bool wxGetUserId(char *buf, int maxSize)
 // Get user name e.g. Julian Smart
 bool wxGetUserName(char *buf, int maxSize)
 {
-  const char *default_name = "Unknown User";
-#if defined(__WIN32__)
-/*
-  DWORD nSize = maxSize;
-  In VC++ 4.0, results in unresolved symbol __imp__GetUserNameA
-  if (GetUserName(buf, &nSize))
-    return TRUE;
-  else
-*/
-    // Could use NIS, MS-Mail or other site specific programs
-    // Use wxWindows configuration data
-    GetProfileString(WX_SECTION, eUSERNAME, default_name, buf, maxSize - 1);
-    return *buf ? TRUE : FALSE;
-//  }
-#else
-#if !defined(__WATCOMC__) && !defined(__GNUWIN32__) && wxUSE_PENWINDOWS
+#if wxUSE_PENWINDOWS && !defined(__WATCOMC__) && !defined(__GNUWIN32__)
   extern HANDLE g_hPenWin; // PenWindows Running?
   if (g_hPenWin)
   {
@@ -247,10 +243,19 @@ bool wxGetUserName(char *buf, int maxSize)
   {
     // Could use NIS, MS-Mail or other site specific programs
     // Use wxWindows configuration data
-    GetProfileString(WX_SECTION, eUSERNAME, default_name, buf, maxSize - 1);
+    bool ok = GetProfileString(WX_SECTION, eUSERNAME, "", buf, maxSize - 1) != 0;
+    if ( !ok )
+    {
+        ok = wxGetUserId(buf, maxSize);
+    }
+
+    if ( !ok )
+    {
+        strncpy(buf, "Unknown User", maxSize);
+    }
   }
-  return *buf ? TRUE : FALSE;
-#endif
+
+  return TRUE;
 }
 
 int wxKill(long pid, int sig)
