@@ -986,6 +986,7 @@ GUI_LOWLEVEL_OBJS = \
 		dcprint.o \
 		dcscreen.o \
 		dde.o \
+		dialup.o \
 		dib.o \
 		evtloop.o \
 		font.o \
@@ -993,8 +994,14 @@ GUI_LOWLEVEL_OBJS = \
 		fontutil.o \
 		gdiimage.o \
 		gdiobj.o \
+		glcanvas.o \
+		helpbest.o \
+		helpchm.o \
+		helpwin.o \
 		icon.o \
+		joystick.o \
 		main.o \
+		minifram.o \
 		palette.o \
 		pen.o \
 		popupwin.o \
@@ -1003,11 +1010,14 @@ GUI_LOWLEVEL_OBJS = \
 		registry.o \
 		settings.o \
 		snglinst.o \
+		taskbar.o \
 		thread.o \
 		timer.o \
+		tooltip.o \
 		toplevel.o \
 		utils.o \
 		utilsexc.o \
+		wave.o \
 		window.o
 
 HTMLOBJS = \

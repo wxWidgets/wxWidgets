@@ -275,6 +275,7 @@ MSWUNIVOBJS = $(MSWDIR)\app.obj \
 		$(MSWDIR)\dcprint.obj \
 		$(MSWDIR)\dcscreen.obj \
 		$(MSWDIR)\dde.obj \
+		$(MSWDIR)\dialup.obj \
 		$(MSWDIR)\dib.obj \
 		$(MSWDIR)\dir.obj \
 		$(MSWDIR)\evtloop.obj \
@@ -283,11 +284,17 @@ MSWUNIVOBJS = $(MSWDIR)\app.obj \
 		$(MSWDIR)\fontutil.obj \
 		$(MSWDIR)\gdiimage.obj \
 		$(MSWDIR)\gdiobj.obj \
+		$(MSWDIR)\glcanvas.obj \
 		$(MSWDIR)\gsocket.obj \
 		$(MSWDIR)\gsockmsw.obj \
+		$(MSWDIR)\helpbest.obj \
+		$(MSWDIR)\helpchm.obj \
+		$(MSWDIR)\helpwin.obj \
 		$(MSWDIR)\icon.obj \
+		$(MSWDIR)\joystick.obj \
 		$(MSWDIR)\main.obj \
 		$(MSWDIR)\mimetype.obj \
+		$(MSWDIR)\minifram.obj \
 		$(MSWDIR)\palette.obj \
 		$(MSWDIR)\pen.obj \
 		$(MSWDIR)\popupwin.obj \
@@ -296,12 +303,15 @@ MSWUNIVOBJS = $(MSWDIR)\app.obj \
 		$(MSWDIR)\registry.obj \
 		$(MSWDIR)\settings.obj \
 		$(MSWDIR)\snglinst.obj \
+		$(MSWDIR)\taskbar.obj \
 		$(MSWDIR)\thread.obj \
 		$(MSWDIR)\timer.obj \
+		$(MSWDIR)\tooltip.obj \
 		$(MSWDIR)\toplevel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
 		$(MSWDIR)\volume.obj \
+		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj
 
 UNIVOBJS = $(MSWDIR)\bmpbuttn.obj \
@@ -600,6 +610,8 @@ $(MSWDIR)\dcscreen.obj: $(MSWDIR)\dcscreen.$(SRCSUFF)
 
 $(MSWDIR)\dde.obj: $(MSWDIR)\dde.$(SRCSUFF)
 
+$(MSWDIR)\dialup.obj: $(MSWDIR)\dialup.$(SRCSUFF)
+
 $(MSWDIR)\dib.obj: $(MSWDIR)\dib.$(SRCSUFF)
 
 $(MSWDIR)\dir.obj: $(MSWDIR)\dir.$(SRCSUFF)
@@ -616,15 +628,27 @@ $(MSWDIR)\gdiimage.obj: $(MSWDIR)\gdiimage.$(SRCSUFF)
 
 $(MSWDIR)\gdiobj.obj: $(MSWDIR)\gdiobj.$(SRCSUFF)
 
+$(MSWDIR)\glcanvas.obj: $(MSWDIR)\glcanvas.$(SRCSUFF)
+
 $(MSWDIR)\gsocket.obj: $(MSWDIR)\gsocket.c
 
 $(MSWDIR)\gsockmsw.obj: $(MSWDIR)\gsockmsw.c
 
+$(MSWDIR)\helpbest.obj: $(MSWDIR)\helpbest.$(SRCSUFF)
+
+$(MSWDIR)\helpchm.obj: $(MSWDIR)\helpchm.$(SRCSUFF)
+
+$(MSWDIR)\helpwin.obj: $(MSWDIR)\helpwin.$(SRCSUFF)
+
 $(MSWDIR)\icon.obj: $(MSWDIR)\icon.$(SRCSUFF)
+
+$(MSWDIR)\joystick.obj: $(MSWDIR)\joystick.$(SRCSUFF)
 
 $(MSWDIR)\main.obj: $(MSWDIR)\main.$(SRCSUFF)
 
 $(MSWDIR)\mimetype.obj: $(MSWDIR)\mimetype.$(SRCSUFF)
+
+$(MSWDIR)\minifram.obj: $(MSWDIR)\minifram.$(SRCSUFF)
 
 $(MSWDIR)\palette.obj: $(MSWDIR)\palette.$(SRCSUFF)
 
@@ -642,9 +666,13 @@ $(MSWDIR)\settings.obj: $(MSWDIR)\settings.$(SRCSUFF)
 
 $(MSWDIR)\snglinst.obj: $(MSWDIR)\snglinst.$(SRCSUFF)
 
+$(MSWDIR)\taskbar.obj: $(MSWDIR)\taskbar.$(SRCSUFF)
+
 $(MSWDIR)\thread.obj: $(MSWDIR)\thread.$(SRCSUFF)
 
 $(MSWDIR)\timer.obj: $(MSWDIR)\timer.$(SRCSUFF)
+
+$(MSWDIR)\tooltip.obj: $(MSWDIR)\tooltip.$(SRCSUFF)
 
 $(MSWDIR)\toplevel.obj: $(MSWDIR)\toplevel.$(SRCSUFF)
 
@@ -653,6 +681,8 @@ $(MSWDIR)\utils.obj: $(MSWDIR)\utils.$(SRCSUFF)
 $(MSWDIR)\utilsexc.obj: $(MSWDIR)\utilsexc.$(SRCSUFF)
 
 $(MSWDIR)\volume.obj: $(MSWDIR)\volume.$(SRCSUFF)
+
+$(MSWDIR)\wave.obj: $(MSWDIR)\wave.$(SRCSUFF)
 
 $(MSWDIR)\window.obj: $(MSWDIR)\window.$(SRCSUFF)
 
