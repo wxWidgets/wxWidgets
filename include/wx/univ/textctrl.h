@@ -266,6 +266,9 @@ protected:
     // client coords) which contains the text
     void UpdateTextRect();
 
+    // calculate the last visible position
+    void UpdateLastVisible();
+
     // event handlers
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
@@ -291,11 +294,16 @@ private:
     // the rectangle (in client coordinates) to draw text inside
     wxRect m_rectText;
 
-    // for the controls without horz scrollbar only: the position of the first
-    // and last visible pixels and the first visible column
-    wxCoord m_ofsHorz,
-            m_posLastVisible;
+    // this section is for the controls without horz scrollbar only
+
+    // the position of the first visible pixel and the first visible column
+    wxCoord m_ofsHorz;
     long m_colStart;
+
+    // and the last ones (m_posLastVisible is the width but m_colLastVisible
+    // is an absolute value)
+    wxCoord m_posLastVisible;
+    long m_colLastVisible;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)

@@ -9,6 +9,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+   Search for "OPT" for possible optimizations
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -46,6 +50,9 @@
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
 
+// turn extra wxTextCtrl-specific debugging on/off
+#define WXDEBUG_TEXT
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -72,7 +79,9 @@ void wxTextCtrl::Init()
 
     m_colStart = 0;
     m_ofsHorz = 0;
-    m_posLastVisible = 0;
+
+    m_colLastVisible = -1;
+    m_posLastVisible = -1;
 
     m_curPos =
     m_curRow =
@@ -146,6 +155,9 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         valueNew += m_value.c_str() + (size_t)to;
     }
     m_value = valueNew;
+
+    // force m_colLastVisible update
+    m_colLastVisible = -1;
 
     // update the current position
     SetInsertionPoint(from + text.length());
@@ -689,9 +701,40 @@ void wxTextCtrl::UpdateTextRect()
                     GetTextClientArea(this,
                                       wxRect(wxPoint(0, 0), GetClientSize()));
 
-    // it will be updated the next time we're redrawn, don't redo the (rather
-    // complex and time consuming) calculation of it here
-    m_posLastVisible = m_rectText.width;
+    UpdateLastVisible();
+}
+
+void wxTextCtrl::UpdateLastVisible()
+{
+    // OPT: estimate the correct value first, just adjust it later
+
+    wxString text;
+    wxCoord w, wOld;
+
+    w =
+    wOld = 0;
+
+    m_colLastVisible = m_colStart;
+
+    const wxChar *pc = m_value.c_str() + (size_t)m_colStart;
+    for ( ; *pc; pc++ )
+    {
+        text += *pc;
+        wOld = w;
+        w = GetTextWidth(text);
+        if ( w > m_rectText.width )
+        {
+            // this char is too much
+            break;
+        }
+
+        m_colLastVisible++;
+    }
+
+    m_posLastVisible = wOld;
+
+    wxLogTrace(_T("text"), _T("Last visible column/position is %d/%ld"),
+               m_colLastVisible, m_posLastVisible);
 }
 
 void wxTextCtrl::OnSize(wxSizeEvent& event)
@@ -770,7 +813,9 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
                 if ( matchDir == 1 )
                 {
                     // we were going to the right and, finally, moved beyond
-                    // the original position - stop here
+                    // the original position - stop on the previous one
+                    //col--;
+
                     break;
                 }
 
@@ -806,6 +851,30 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
                 col--;
         }
     }
+
+    // check that we calculated it correctly
+#ifdef WXDEBUG_TEXT
+    if ( res == wxTE_HT_ON_TEXT )
+    {
+        wxCoord width1;
+        wxString text = line.Left(col);
+        dc.GetTextExtent(text, &width1, NULL);
+        if ( (size_t)col < line.length() )
+        {
+            wxCoord width2;
+
+            text += line[col];
+            dc.GetTextExtent(text, &width2, NULL);
+
+            wxASSERT_MSG( (width1 <= x) && (x <= width2),
+                          _T("incorrect HitTestLine() result") );
+        }
+        else // we return last char
+        {
+            wxASSERT_MSG( x > width1, _T("incorrect HitTestLine() result") );
+        }
+    }
+#endif // WXDEBUG_TEXT
 
     if ( colOut )
         *colOut = col;
@@ -926,10 +995,18 @@ void wxTextCtrl::ScrollText(long col)
     if ( col < 0 )
         col = 0;
 
+    // OPT: could only get the extent of the part of the string between col
+    //      and m_colStart
     wxCoord ofsHorz = GetTextWidth(GetLineText(0).Left(col));
 
     if ( ofsHorz != m_ofsHorz )
     {
+        // what is currently shown?
+        if ( m_colLastVisible == -1 )
+        {
+            UpdateLastVisible();
+        }
+
         // NB1: to scroll to the right, offset must be negative, hence the
         //      order of operands
         int dx = m_ofsHorz - ofsHorz;
@@ -939,10 +1016,26 @@ void wxTextCtrl::ScrollText(long col)
         m_ofsHorz = ofsHorz;
         m_colStart = col;
 
-        // NB3: scroll only the text shown, not the entire text area (there may
-        //      be blank area at the end)
+        // scroll only the rectangle inside which there is the text
+        if ( dx > 0 )
+        {
+            // scrolling to the right: we need to recalc the last visible
+            // position beore scrolling
+            UpdateLastVisible();
+        }
+        else
+        {
+            // when scrolling to the left, we don't need to worry about the
+            // last visible position, it will be updated later when we draw
+            // the text - but do force update
+            m_colLastVisible = -1;
+
+            m_posLastVisible++;
+        }
+
         wxRect rectText = m_rectText;
         rectText.width = m_posLastVisible;
+
         ScrollWindow(dx, 0, &rectText);
     }
 }
@@ -1122,10 +1215,28 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         }
 
         // don't show the columns which are scrolled out to the left
-        if ( colStart > m_colStart )
+        if ( colStart < m_colStart )
             colStart = m_colStart;
 
         (void)HitTest(pt2, &colEnd, NULL);
+
+        // colEnd may be less than colStart if colStart was changed by the
+        // assignment above
+        if ( colEnd < colStart )
+            colEnd = colStart;
+
+        // don't draw the chars beyond the rightmost one
+        if ( m_colLastVisible == -1 )
+        {
+            // recalculate this rightmost column
+            UpdateLastVisible();
+        }
+
+        wxASSERT_MSG( colStart <= m_colLastVisible,
+                      _T("incorrect m_colLastVisible value") );
+
+        if ( colEnd > m_colLastVisible )
+            colEnd = m_colLastVisible;
 
         // extract the part of line we need to redraw
         wxString textLine = GetLineText(line);
@@ -1147,23 +1258,6 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         // calculate the logical text coords
         rectText.x = m_rectText.x + GetTextWidth(textLine.Left(colStart));
         rectText.width = GetTextWidth(text);
-
-        // check that the string that we draw fits entirely into the text area,
-        // we don't want to draw just a part of characters
-        while ( rectText.GetRight() > m_ofsHorz + m_rectText.GetRight() )
-        {
-            rectText.width -= GetTextWidth(text.Last());
-            text.RemoveLast();
-
-            // remember the position of the last pixel shown
-            m_posLastVisible = rectText.GetRight() - m_rectText.GetLeft();
-
-            if ( !text )
-            {
-                // string became empty, nothing to draw finally
-                return;
-            }
-        }
 
         // do draw the text
         DrawTextLine(dc, rectText, text, selStart, selEnd);
@@ -1214,7 +1308,14 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     wxRegionIterator iter(rgnUpdate);
     for ( ; iter.HaveRects(); iter++ )
     {
-        DoDrawTextInRect(dc, iter.GetRect());
+        wxRect r = iter.GetRect();
+        if ( !r.width || !r.height )
+        {
+            // this happens under wxGTK
+            continue;
+        }
+
+        DoDrawTextInRect(dc, r);
     }
 }
 
