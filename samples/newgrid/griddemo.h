@@ -114,25 +114,35 @@ public:
                       bool isSelected);
 };
 
+// ----------------------------------------------------------------------------
+// demonstration of virtual table which doesn't store all of its data in
+// memory
+// ----------------------------------------------------------------------------
 
-class BigGridTable : public wxGridTableBase {
+class BigGridTable : public wxGridTableBase
+{
 public:
-    long GetNumberRows() { return 10000; }
-    long GetNumberCols() { return 10000; }
+    BigGridTable(long sizeGrid) { m_sizeGrid = sizeGrid; }
 
-    wxString GetValue( int row, int col ) {
-        wxString str;
-        str.Printf("(%d, %d)", row, col);
-        return str;
+    long GetNumberRows() { return m_sizeGrid; }
+    long GetNumberCols() { return m_sizeGrid; }
+
+    wxString GetValue( int row, int col )
+    {
+        return wxString::Format("(%d, %d)", row, col);
     }
 
-    void SetValue( int , int , const wxString&  ) {}
+    void SetValue( int , int , const wxString&  ) { /* ignore */ }
     bool IsEmptyCell( int , int  ) { return FALSE; }
+
+private:
+    long m_sizeGrid;
 };
 
-class BigGridFrame : public wxFrame {
+class BigGridFrame : public wxFrame
+{
 public:
-    BigGridFrame();
+    BigGridFrame(long sizeGrid);
 
 private:
     wxGrid*       m_grid;
@@ -140,5 +150,5 @@ private:
 };
 
 
-#endif
+#endif // griddemo_h
 

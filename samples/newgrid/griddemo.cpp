@@ -612,8 +612,18 @@ void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::OnVTable(wxCommandEvent& )
 {
-    BigGridFrame* win = new BigGridFrame();
-    win->Show(TRUE);
+    static long s_sizeGrid = 10000;
+
+    s_sizeGrid = wxGetNumberFromUser("Size of the table to create",
+                                     "Size: ",
+                                     "wxGridDemo question",
+                                     s_sizeGrid,
+                                     0, 32000, this);
+    if ( s_sizeGrid != -1 )
+    {
+        BigGridFrame* win = new BigGridFrame(s_sizeGrid);
+        win->Show(TRUE);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -642,11 +652,11 @@ void MyGridCellRenderer::Draw(wxGrid& grid,
 // BigGridFrame and BigGridTable:  Sample of a non-standard table
 // ----------------------------------------------------------------------------
 
-BigGridFrame::BigGridFrame()
-    : wxFrame(NULL, -1, "Plugin Virtual Table", wxDefaultPosition,
-              wxSize(500, 450))
+BigGridFrame::BigGridFrame(long sizeGrid)
+            : wxFrame(NULL, -1, "Plugin Virtual Table",
+                      wxDefaultPosition, wxSize(500, 450))
 {
     m_grid = new wxGrid(this, -1, wxDefaultPosition, wxDefaultSize);
-    m_table = new BigGridTable;
+    m_table = new BigGridTable(sizeGrid);
     m_grid->SetTable(m_table, TRUE);
 }
