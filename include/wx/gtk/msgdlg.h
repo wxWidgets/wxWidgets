@@ -38,7 +38,6 @@ private:
     wxString m_caption;
     wxString m_message;
     long m_dialogStyle;
-    wxWindow *m_parent;
 
     DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 };
