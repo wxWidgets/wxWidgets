@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __APPH__
@@ -24,10 +24,6 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxApp ;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
-
-#if USE_WXCONFIG
-  class WXDLLEXPORT wxConfig;
-#endif //USE_WXCONFIG 
 
 #define wxPRINT_WINDOWS         1
 #define wxPRINT_POSTSCRIPT      2
@@ -71,7 +67,8 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
 
   // Called to set off the main loop
   virtual int OnRun() { return MainLoop(); };
-  virtual int OnExit() { return 0; };
+  virtual int OnExit() { return 0; }
+
   inline void SetPrintMode(int mode) { m_printMode = mode; }
   inline int GetPrintMode() const { return m_printMode; }
 
@@ -87,6 +84,10 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   inline void SetAppName(const wxString& name) { m_appName = name; };
   inline wxString GetClassName() const { return m_className; }
   inline void SetClassName(const wxString& name) { m_className = name; }
+
+  void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
+  const wxString& GetVendorName() const { return m_vendorName; }
+
   wxWindow *GetTopWindow() const ;
   inline void SetTopWindow(wxWindow *win) { m_topWindow = win; }
 
@@ -107,12 +108,6 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // Creates a log object
   virtual wxLog* CreateLogTarget();
 
-#if USE_WXCONFIG
-  // override this function to create a global wxConfig object of different
-  // than default type (right now the default implementation returns NULL)
-  virtual wxConfig* CreateConfig() { return NULL; }
-#endif //USE_WXCONFIG 
-
 public:
 //  void (*work_proc)(wxApp*app); // work procedure;
   int               argc;
@@ -121,7 +116,8 @@ public:
 protected:
   bool              m_wantDebugOutput ;
   wxString          m_className;
-  wxString          m_appName;
+  wxString          m_appName,
+                    m_vendorName;
   wxWindow *        m_topWindow;
   bool              m_exitOnFrameDelete;
   bool              m_showOnInit;
