@@ -588,9 +588,10 @@ class Mask(core.Object):
         return "<%s.%s; proxy of C++ wxMask instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Bitmap bitmap) -> Mask
+        __init__(Bitmap bitmap, Colour colour=NullColour) -> Mask
 
-        Constructs a mask from a monochrome bitmap.
+        Constructs a mask from a bitmap and a colour in that bitmap that indicates
+        the transparent portions of the mask, by default BLACK is used.
         """
         newobj = _gdi.new_Mask(*args, **kwargs)
         self.this = newobj.this
@@ -604,17 +605,7 @@ class MaskPtr(Mask):
         self.__class__ = Mask
 _gdi.Mask_swigregister(MaskPtr)
 
-def MaskColour(*args, **kwargs):
-    """
-    MaskColour(Bitmap bitmap, Colour colour) -> Mask
-
-    Constructs a mask from a bitmap and a colour in that bitmap that indicates the
-    background.
-    """
-    val = _gdi.new_MaskColour(*args, **kwargs)
-    val.thisown = 1
-    return val
-
+MaskColour = Mask 
 class Icon(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

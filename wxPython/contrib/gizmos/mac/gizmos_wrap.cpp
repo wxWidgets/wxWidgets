@@ -1036,6 +1036,7 @@ static PyObject *_wrap_EditableListBox_SetStrings(PyObject *self, PyObject *args
     PyObject *resultobj;
     wxEditableListBox *arg1 = (wxEditableListBox *) 0 ;
     wxArrayString *arg2 = 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1050,6 +1051,7 @@ static PyObject *_wrap_EditableListBox_SetStrings(PyObject *self, PyObject *args
             SWIG_fail;
         }
         arg2 = new wxArrayString;
+        temp2 = True;
         int i, len=PySequence_Length(obj1);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj1, i);
@@ -1072,12 +1074,12 @@ static PyObject *_wrap_EditableListBox_SetStrings(PyObject *self, PyObject *args
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }

@@ -357,7 +357,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_STCNameStr_set(PyObject *_val) {
+static int _wrap_STCNameStr_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable STCNameStr is read-only.");
     return 1;
 }

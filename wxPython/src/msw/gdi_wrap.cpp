@@ -484,6 +484,12 @@ void wxBitmap_SetMaskColour(wxBitmap *self,wxColour const &colour){
             wxMask *mask = new wxMask(*self, colour);
             self->SetMask(mask);
         }
+wxMask *new_wxMask(wxBitmap const &bitmap,wxColour const &colour){
+            if ( !colour.Ok() )
+                return new wxMask(bitmap, *wxBLACK);
+            else
+                return new wxMask(bitmap, colour);
+        }
 
 #include <wx/iconbndl.h>
 
@@ -3294,35 +3300,8 @@ static PyObject * Bitmap_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Mask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBitmap *arg1 = 0 ;
-    wxMask *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "bitmap", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_Mask",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg1 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxMask *)new wxMask((wxBitmap const &)*arg1);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxMask, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_MaskColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxBitmap *arg1 = 0 ;
-    wxColour *arg2 = 0 ;
+    wxColour const &arg2_defvalue = wxNullColour ;
+    wxColour *arg2 = (wxColour *) &arg2_defvalue ;
     wxMask *result;
     wxColour temp2 ;
     PyObject * obj0 = 0 ;
@@ -3331,18 +3310,20 @@ static PyObject *_wrap_new_MaskColour(PyObject *self, PyObject *args, PyObject *
         (char *) "bitmap",(char *) "colour", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:new_MaskColour",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_Mask",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg1 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
     }
-    {
-        arg2 = &temp2;
-        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = &temp2;
+            if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxMask *)new wxMask((wxBitmap const &)*arg1,(wxColour const &)*arg2);
+        result = (wxMask *)new_wxMask((wxBitmap const &)*arg1,(wxColour const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18589,7 +18570,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap_SetQuality", (PyCFunction) _wrap_Bitmap_SetQuality, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bitmap_swigregister", Bitmap_swigregister, METH_VARARGS },
 	 { (char *)"new_Mask", (PyCFunction) _wrap_new_Mask, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_MaskColour", (PyCFunction) _wrap_new_MaskColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Mask_swigregister", Mask_swigregister, METH_VARARGS },
 	 { (char *)"new_Icon", (PyCFunction) _wrap_new_Icon, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Icon", (PyCFunction) _wrap_delete_Icon, METH_VARARGS | METH_KEYWORDS },

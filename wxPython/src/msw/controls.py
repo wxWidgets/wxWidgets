@@ -802,6 +802,18 @@ class ListBox(core.ControlWithItems):
         """IsSorted() -> bool"""
         return _controls.ListBox_IsSorted(*args, **kwargs)
 
+    def SetItemForegroundColour(*args, **kwargs):
+        """SetItemForegroundColour(int item, Colour c)"""
+        return _controls.ListBox_SetItemForegroundColour(*args, **kwargs)
+
+    def SetItemBackgroundColour(*args, **kwargs):
+        """SetItemBackgroundColour(int item, Colour c)"""
+        return _controls.ListBox_SetItemBackgroundColour(*args, **kwargs)
+
+    def SetItemFont(*args, **kwargs):
+        """SetItemFont(int item, Font f)"""
+        return _controls.ListBox_SetItemFont(*args, **kwargs)
+
 
 class ListBoxPtr(ListBox):
     def __init__(self, this):

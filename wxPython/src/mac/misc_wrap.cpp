@@ -11672,6 +11672,7 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     wxArrayString *arg1 = 0 ;
     wxFileTypeInfo *result;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "sArray", NULL 
@@ -11684,6 +11685,7 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *self, PyObject *args, 
             SWIG_fail;
         }
         arg1 = new wxArrayString;
+        temp1 = True;
         int i, len=PySequence_Length(obj0);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj0, i);
@@ -11706,12 +11708,12 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *self, PyObject *args, 
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxFileTypeInfo, 1);
     {
-        if (arg1) delete arg1;
+        if (temp1) delete arg1;
     }
     return resultobj;
     fail:
     {
-        if (arg1) delete arg1;
+        if (temp1) delete arg1;
     }
     return NULL;
 }
@@ -23460,12 +23462,12 @@ static PyObject *_wrap_DataFormat___eq____SWIG_0(PyObject *self, PyObject *args)
     if(!PyArg_ParseTuple(args,(char *)"OO:DataFormat___eq__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        arg2 = (wxDataFormatId) SWIG_PyObj_AsInt(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxDataFormat const *)arg1)->operator ==(arg2);
+        result = (bool)((wxDataFormat const *)arg1)->operator ==((wxDataFormatId )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -23488,12 +23490,12 @@ static PyObject *_wrap_DataFormat___ne____SWIG_0(PyObject *self, PyObject *args)
     if(!PyArg_ParseTuple(args,(char *)"OO:DataFormat___ne__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        arg2 = (wxDataFormatId) SWIG_PyObj_AsInt(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxDataFormat const *)arg1)->operator !=(arg2);
+        result = (bool)((wxDataFormat const *)arg1)->operator !=((wxDataFormatId )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

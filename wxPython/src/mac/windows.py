@@ -2601,6 +2601,7 @@ PRINT_MODE_NONE = _windows.PRINT_MODE_NONE
 PRINT_MODE_PREVIEW = _windows.PRINT_MODE_PREVIEW
 PRINT_MODE_FILE = _windows.PRINT_MODE_FILE
 PRINT_MODE_PRINTER = _windows.PRINT_MODE_PRINTER
+PRINT_MODE_STREAM = _windows.PRINT_MODE_STREAM
 class PrintData(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2779,6 +2780,14 @@ class PrintData(core.Object):
     def SetPrintMode(*args, **kwargs):
         """SetPrintMode(int printMode)"""
         return _windows.PrintData_SetPrintMode(*args, **kwargs)
+
+    def GetOutputStream(*args, **kwargs):
+        """GetOutputStream() -> OutputStream"""
+        return _windows.PrintData_GetOutputStream(*args, **kwargs)
+
+    def SetOutputStream(*args, **kwargs):
+        """SetOutputStream(OutputStream outputstream)"""
+        return _windows.PrintData_SetOutputStream(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
 
