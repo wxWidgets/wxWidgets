@@ -109,14 +109,7 @@ public:
     virtual void SetRange( int minVal, int maxVal );
     virtual int GetMin() const;
     virtual int GetMax() const;
-#ifdef __WXGTK__
-    %extend {
-        void SetSelection(long from, long to) {
-        }
-    }
-#else
     void SetSelection(long from, long to);
-#endif
 };
 
 
