@@ -1122,6 +1122,8 @@ void wxHtmlHelpFrame::OnActivate(wxActivateEvent& event)
     // wxHTML for context sensitive help systems
     if (event.GetActive() && m_HtmlWin)
         m_HtmlWin->SetFocus();
+
+    event.Skip();
 }
 
 void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
