@@ -35,6 +35,10 @@ class TestPanel(wx.Panel):
         self.clock.SetValue(st)
 
 
+    def ShutdownDemo(self):
+        self.timer.Stop()
+        del self.timer
+
 
 #----------------------------------------------------------------------
 
