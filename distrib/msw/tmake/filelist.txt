@@ -101,6 +101,7 @@ numdlgg.cpp	G
 tbarsmpl.cpp	G
 textdlgg.cpp	G
 tipdlg.cpp	G
+tipwin.cpp	G
 treectlg.cpp	G
 treelay.cpp	G
 wizard.cpp	G
@@ -722,6 +723,7 @@ thread.h	W	B
 time.h	W	B
 timer.h	W	B
 tipdlg.h	W
+tipwin.h	W
 tokenzr.h	W	B
 toolbar.h	W
 tooltip.h	W

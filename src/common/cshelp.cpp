@@ -31,10 +31,7 @@
 #if wxUSE_HELP
 
 #ifndef WX_PRECOMP
-    // FIXME: temporary needed for wxSimpleHelpProvider compilation, to be
-    //        removed later
-    #include "wx/intl.h"
-    #include "wx/msgdlg.h"
+    #include "wx/tipwin.h"
 #endif
 
 #include "wx/app.h"
@@ -307,8 +304,7 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
     wxString text = GetHelp(window);
     if ( !text.empty() )
     {
-        wxMessageBox(text, _("Help"), wxICON_INFORMATION | wxOK,
-                     (wxWindow *)window);
+        new wxTipWindow((wxWindow *)window, text);
 
         return TRUE;
     }
