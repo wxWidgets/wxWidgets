@@ -24,6 +24,13 @@
 #if defined(__VISUALC__) && __VISUALC__ <= 1200
     // MSVC 5 does not have this
     #if __VISUALC__ > 1100
+        // we have to disable (and reenable in afterstd.h) this one because,
+        // even though it is of level 4, it is not disabled by warning(push, 1)
+        // below for VC7.1!
+
+        // unreachable code
+        #pragma warning(disable:4702)
+
         #pragma warning(push, 1)
     #else // VC 5
         // 'expression' : signed/unsigned mismatch

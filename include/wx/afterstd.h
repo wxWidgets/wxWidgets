@@ -20,6 +20,13 @@
 #if defined(__VISUALC__) && __VISUALC__ <= 1200
     // MSVC 5 does not have this
     #if _MSC_VER > 1100
+        // don't restore this one for VC6, it gives it in each try/catch which is a
+        // bit annoying to say the least
+        #if _MSC_VER >= 0x1300
+            // unreachable code
+            #pragma warning(default:4702)
+        #endif // VC++ >= 7
+
         #pragma warning(pop)
     #else
         // 'expression' : signed/unsigned mismatch
