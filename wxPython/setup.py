@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.2b7"
+VERSION          = "2.3.2b7+"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -31,9 +31,10 @@ on.
 BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
-BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
 BUILD_XRC = 1      # XML based resource system
 BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
+
+BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
 
 
 CORE_ONLY = 0      # if true, don't build any of the above

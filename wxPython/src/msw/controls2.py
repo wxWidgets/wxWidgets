@@ -780,6 +780,7 @@ class wxTreeItemIdPtr :
         return val
     def __repr__(self):
         return "<C wxTreeItemId instance at %s>" % (self.this,)
+    Ok = IsOk
 class wxTreeItemId(wxTreeItemIdPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxTreeItemId,_args,_kwargs)

@@ -2177,6 +2177,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
 	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
 	 PyDict_SetItemString(d,"wxWS_EX_BLOCK_EVENTS", PyInt_FromLong((long) wxWS_EX_BLOCK_EVENTS));
+	 PyDict_SetItemString(d,"wxWS_EX_TRANSIENT", PyInt_FromLong((long) wxWS_EX_TRANSIENT));
 	 PyDict_SetItemString(d,"wxMM_TEXT", PyInt_FromLong((long) wxMM_TEXT));
 	 PyDict_SetItemString(d,"wxMM_LOMETRIC", PyInt_FromLong((long) wxMM_LOMETRIC));
 	 PyDict_SetItemString(d,"wxMM_HIMETRIC", PyInt_FromLong((long) wxMM_HIMETRIC));

@@ -400,6 +400,9 @@ public:
 
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
     wxAcceleratorTable *GetAcceleratorTable();
+
+
+    %name(base_OnPaint)void OnPaint(wxPaintEvent& event);
 };
 
 

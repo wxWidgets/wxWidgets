@@ -475,6 +475,7 @@ enum {
 
     wxWS_EX_VALIDATE_RECURSIVELY,
     wxWS_EX_BLOCK_EVENTS,
+    wxWS_EX_TRANSIENT,
 
     // Mapping modes (as per Windows)
     wxMM_TEXT,

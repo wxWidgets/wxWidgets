@@ -4355,81 +4355,6 @@ static PyObject *_wrap_wxPyShape_SetBrush(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-static void  wxPyShape_SetClientData(wxPyShape *self,PyObject * userData) {
-            wxPyUserData* data = NULL;
-            if (userData)
-                data = new wxPyUserData(userData);
-            self->SetClientData(data);
-        }
-static PyObject *_wrap_wxPyShape_SetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyShape * _arg0;
-    PyObject * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","userData", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyShape_SetClientData",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShape_SetClientData. Expected _wxPyShape_p.");
-        return NULL;
-        }
-    }
-{
-  _arg1 = _obj1;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyShape_SetClientData(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject * wxPyShape_GetClientData(wxPyShape *self) {
-            wxPyUserData* data = (wxPyUserData*)self->GetClientData();
-            if (data) {
-                Py_INCREF(data->m_obj);
-                return data->m_obj;
-            } else {
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-static PyObject *_wrap_wxPyShape_GetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    wxPyShape * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyShape_GetClientData",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShape_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShape_GetClientData. Expected _wxPyShape_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (PyObject *)wxPyShape_GetClientData(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
-
 #define wxPyShape_Show(_swigobj,_swigarg0)  (_swigobj->Show(_swigarg0))
 static PyObject *_wrap_wxPyShape_Show(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8280,8 +8205,6 @@ static PyMethodDef oglbasiccMethods[] = {
 	 { "wxPyShape_Move", (PyCFunction) _wrap_wxPyShape_Move, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_IsShown", (PyCFunction) _wrap_wxPyShape_IsShown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_Show", (PyCFunction) _wrap_wxPyShape_Show, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyShape_GetClientData", (PyCFunction) _wrap_wxPyShape_GetClientData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyShape_SetClientData", (PyCFunction) _wrap_wxPyShape_SetClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_SetBrush", (PyCFunction) _wrap_wxPyShape_SetBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_SetPen", (PyCFunction) _wrap_wxPyShape_SetPen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyShape_GetId", (PyCFunction) _wrap_wxPyShape_GetId, METH_VARARGS | METH_KEYWORDS },

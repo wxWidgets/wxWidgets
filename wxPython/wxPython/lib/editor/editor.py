@@ -13,7 +13,7 @@
 #   syntax coloring and outliner collapse mode.  Adam and Steve
 #   inherited the code, and added a lot of basic editor
 #   functionality that had not been there before, such as cut-and-paste.
-#   
+#
 #
 # Created:     15-Dec-1999
 # RCS-ID:      $Id$
@@ -31,7 +31,7 @@ import images
 
 #----------------------------
 
-def ForceBetween(min, val, max):                            
+def ForceBetween(min, val, max):
     if val  > max:
         return max
     if val < min:
@@ -103,6 +103,7 @@ class wxEditor(wxScrolledWindow):
         EVT_PAINT(self, self.OnPaint)
         EVT_SIZE(self, self.OnSize)
         EVT_WINDOW_DESTROY(self, self.OnDestroy)
+        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
 
 ##------------------- Platform-specific stuff
 
@@ -111,7 +112,7 @@ class wxEditor(wxScrolledWindow):
             return wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
         else:
             return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, false)
-          
+
     def UnixKeyHack(self, key):
         # this will be obsolete when we get the new wxWindows patch
         if key <= 26:
@@ -151,11 +152,14 @@ class wxEditor(wxScrolledWindow):
         self.KeepCursorOnScreen()
         self.DrawSimpleCursor(0,0,dc, true)
         self.Draw(dc)
-        
+
     def OnPaint(self, event):
         dc = wxPaintDC(self)
         self.UpdateView(dc)
         self.AdjustScrollbars()
+
+    def OnEraseBackground(self, evt):
+        pass
 
 ##-------------------- Drawing code
 
@@ -272,7 +276,7 @@ class wxEditor(wxScrolledWindow):
         self.sy = ForceBetween(max(0, self.cy-self.sh), self.sy, self.cy)
         self.sx = ForceBetween(max(0, self.cx-self.sw), self.sx, self.cx)
         self.AdjustScrollbars()
-            
+
     def HorizBoundaries(self):
         self.SetCharDimensions()
         maxLineLen = self.CalcMaxLineLen()
@@ -283,11 +287,11 @@ class wxEditor(wxScrolledWindow):
         self.SetCharDimensions()
         self.sy = ForceBetween(0, self.sy, max(self.sh, self.LinesInFile() - self.sh + 1))
         self.cy = ForceBetween(self.sy, self.cy, self.sy + self.sh - 1)
-       
+
     def cVert(self, num):
         self.cy = self.cy + num
         self.cy = ForceBetween(0, self.cy, self.LinesInFile() - 1)
-        self.sy = ForceBetween(self.cy - self.sh + 1, self.sy, self.cy) 
+        self.sy = ForceBetween(self.cy - self.sh + 1, self.sy, self.cy)
         self.cx = min(self.cx, self.CurrentLineLength())
 
     def cHoriz(self, num):
@@ -346,7 +350,7 @@ class wxEditor(wxScrolledWindow):
 
     def TouchBuffer(self):
         self.bufferTouched = TRUE
-        
+
 
 ##-------------------------- Mouse scroll timing functions
 
@@ -393,7 +397,7 @@ class wxEditor(wxScrolledWindow):
             row = self.sy + self.sh
             row  = min(row, self.LinesInFile() - 1)
             self.cy = row
-        
+
     def HandleLeftOfScreen(self, col):
         self.SetScrollTimer()
         if self.CanScroll():
@@ -407,7 +411,7 @@ class wxEditor(wxScrolledWindow):
             col = self.sx + self.sw
             col = min(col, self.CurrentLineLength())
             self.cx = col
-        
+
 ##------------------------ mousing functions
 
     def MouseToRow(self, mouseY):
@@ -430,14 +434,14 @@ class wxEditor(wxScrolledWindow):
 
     def MouseToCursor(self, event):
         self.MouseToRow(event.GetY())
-        self.MouseToCol(event.GetX())            
+        self.MouseToCol(event.GetX())
 
     def OnMotion(self, event):
         if event.LeftIsDown():
             self.Selecting = true
             self.MouseToCursor(event)
             self.SelectUpdate()
-            
+
     def OnLeftDown(self, event):
         self.MouseToCursor(event)
         self.SelectBegin = (self.cy, self.cx)
@@ -454,7 +458,7 @@ class wxEditor(wxScrolledWindow):
 
         self.ReleaseMouse()
         self.scrollTimer.Stop()
-            
+
 
 #------------------------- Scrolling
 
@@ -495,7 +499,7 @@ class wxEditor(wxScrolledWindow):
             self.cy = self.LinesInFile()
         else:
             self.sy = event.GetPosition()
-            
+
         self.VertBoundaries()
 
     def OnScroll(self, event):
@@ -514,7 +518,7 @@ class wxEditor(wxScrolledWindow):
             self.scroller.SetScrollbars(
                 self.fw, self.fh,
                 self.CalcMaxLineLen()+3, max(self.LinesInFile()+1, self.sh),
-                self.sx, self.sy) 
+                self.sx, self.sy)
 
 #------------ backspace, delete, return
 
@@ -540,11 +544,11 @@ class wxEditor(wxScrolledWindow):
         self.cx = len(t1)
         self.lines = self.lines[:self.cy] + [t1 + t2] + self.lines[self.cy+2:]
         self.TouchBuffer()
-        
+
 
     def DeleteChar(self,x,y,oldtext):
         newtext = oldtext[:x] + oldtext[x+1:]
-        self.SetTextLine(y, newtext)        
+        self.SetTextLine(y, newtext)
         self.TouchBuffer()
 
 
@@ -561,7 +565,7 @@ class wxEditor(wxScrolledWindow):
                 self.TouchBuffer()
             else:
                 wxBell()
-            
+
     def Delete(self, event):
         t = self.GetTextLine(self.cy)
         if self.cx<len(t):
@@ -577,7 +581,7 @@ class wxEditor(wxScrolledWindow):
 
     def TabKey(self, event):
         numSpaces = self.SpacesPerTab - (self.cx % self.SpacesPerTab)
-        self.SingleLineInsert(' ' * numSpaces)       
+        self.SingleLineInsert(' ' * numSpaces)
 
 ##----------- selection routines
 
@@ -599,7 +603,7 @@ class wxEditor(wxScrolledWindow):
                 return (begin, end)
             else:
                 return (end, begin)
-                
+
     def FindSelection(self):
         if self.SelectEnd is None or self.SelectBegin is None:
             wxBell()
@@ -620,12 +624,12 @@ class wxEditor(wxScrolledWindow):
         if selection is None:
             return
         (bRow, bCol, eRow, eCol) = selection
-        
+
         if bRow == eRow:
             self.SingleLineCopy(bRow, bCol, eCol)
         else:
             self.MultipleLineCopy(bRow, bCol, eRow, eCol)
-        
+
     def OnCopySelection(self, event):
         self.CopySelection(event)
         self.SelectOff()
@@ -636,7 +640,7 @@ class wxEditor(wxScrolledWindow):
     def SingleLineCopy(self, Row, bCol, eCol):
         Line = self.GetTextLine(Row)
         self.CopyData([Line[bCol:eCol]])
-            
+
     def MultipleLineCopy(self, bRow, bCol, eRow, eCol):
         bLine = self.GetTextLine(bRow)[bCol:]
         eLine = self.GetTextLine(eRow)[:eCol]
@@ -647,7 +651,7 @@ class wxEditor(wxScrolledWindow):
         if selection is None:
             return
         (bRow, bCol, eRow, eCol) = selection
-        
+
         if bRow == eRow:
             self.SingleLineDelete(bRow, bCol, eCol)
         else:
@@ -684,7 +688,7 @@ class wxEditor(wxScrolledWindow):
         else:
             self.MultipleLinePaste()
 
-    def SingleLineInsert(self, newText): 
+    def SingleLineInsert(self, newText):
         ModLine = self.GetTextLine(self.cy)
         ModLine = ModLine[:self.cx] + newText + ModLine[self.cx:]
         self.SetTextLine(self.cy, ModLine)
@@ -710,7 +714,7 @@ class wxEditor(wxScrolledWindow):
     def OnCutSelection(self,event):
         self.CopySelection(event)
         self.OnDeleteSelection(event)
-        
+
 #-------------- Keyboard movement implementations
 
     def MoveDown(self, event):
@@ -739,7 +743,7 @@ class wxEditor(wxScrolledWindow):
                 self.cVert(1)
         else:
             self.cx += 1
-           
+
 
     def MovePageDown(self, event):
         self.cVert(self.sh)
@@ -810,7 +814,7 @@ class wxEditor(wxScrolledWindow):
 
         if not action.has_key(key):
             return false
-       
+
         if event.ShiftDown():
             if not self.Selecting:
                 self.Selecting = true
@@ -821,7 +825,7 @@ class wxEditor(wxScrolledWindow):
             action[key](event)
             if self.Selecting:
                 self.Selecting = false
-                
+
         self.SelectNotify(self.Selecting, self.SelectBegin, self.SelectEnd)
         self.UpdateView()
         return true
@@ -861,7 +865,7 @@ class wxEditor(wxScrolledWindow):
 
     def AltKey(self, event, key):
         return self.ModifierKey(key, event, event.AltDown(), self.SetAltFuncs)
-    
+
     def SpecialControlKey(self, event, key):
         if not event.ControlDown():
             return false
@@ -917,7 +921,7 @@ class wxEditor(wxScrolledWindow):
 
     def OnClick(self):
         pass
-        
+
     def SelectNotify(self, Selecting, SelectionBegin, SelectionEnd):
         pass
 

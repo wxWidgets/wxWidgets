@@ -51,9 +51,11 @@ command_lines = [
     "-a -n SmallUpArrow  -m #0000FF bmp_source/sm_up.bmp images.py",
     "-a -n SmallDnArrow  -m #0000FF bmp_source/sm_down.bmp images.py",
 
-    "-a -n Folder1 bmp_source/folder1.ico images.py",
-    "-a -n Folder2 bmp_source/folder2.ico images.py",
-    "-a -n File1   bmp_source/file1.ico   images.py",
+    "-a -n Folder1 -m #FFFFFF bmp_source/folder1.bmp images.py",
+    "-a -n Folder2 -m #FFFFFF bmp_source/folder2.bmp images.py",
+    "-a -n Folder3 -m #FFFFFF bmp_source/folder3.bmp images.py",
+    "-a -n File1   -m #FFFFFF bmp_source/file1.bmp   images.py",
+    "-a -n File2   -m #FFFFFF bmp_source/file2.bmp   images.py",
 
     ]
 

@@ -919,6 +919,7 @@ public:
     wxTreeItemId();
     ~wxTreeItemId();
     bool IsOk();
+    %pragma(python) addtoclass = "Ok = IsOk"
 
     %addmethods {
         int __cmp__(wxTreeItemId* other) {

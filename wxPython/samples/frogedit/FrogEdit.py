@@ -36,7 +36,7 @@ class OutlinerPanel(wxPanel):
         wxPanel.Close(self)
 
 ##----------------------------------------------------------------------
-    
+
 
 class FrogEditFrame(wxFrame):
     def __init__(self, parent, ID, title, pos=wxDefaultPosition,
@@ -48,7 +48,7 @@ class FrogEditFrame(wxFrame):
         win = OutlinerPanel(splitter, -1, style=wxCLIP_CHILDREN)
         win.parent = self
         log = self.MakeLogWindow(splitter)
-        
+
         self.MakeStatusbar()
         self.MakeEditorWindow(win, log)
         self.SetUpSplitter(splitter, win, log)
@@ -56,6 +56,8 @@ class FrogEditFrame(wxFrame):
         self.MakeMainWindow(win)
         self.RegisterEventHandlers()
         self.InitVariables()
+
+        win.Layout()
 
 
 ##------------- Init Misc
@@ -66,7 +68,7 @@ class FrogEditFrame(wxFrame):
     def InitVariables(self):
         self.fileName = None
         self.edl.UnTouchBuffer()
-        
+
     def MakeMenus(self):
         self.MainMenu = wxMenuBar()
         self.AddMenus(self.MainMenu)
@@ -172,7 +174,7 @@ class FrogEditFrame(wxFrame):
         messageDialog = wxMessageDialog(self, text, title, wxOK | wxICON_INFORMATION)
         messageDialog.ShowModal()
         messageDialog.Destroy()
-    
+
     def OkCancelDialog(self, text, title):
         dialog = wxMessageDialog(self, text, title, wxOK | wxCANCEL | wxICON_INFORMATION)
         result = dialog.ShowModal()
@@ -191,11 +193,11 @@ class FrogEditFrame(wxFrame):
             wildCard = "*.*"
         fileName = None
         fileDialog = wxFileDialog(self, "Choose a file", defaultDir, defaultFile, wildCard, wxOPEN|wxMULTIPLE)
-        result = fileDialog.ShowModal() 
+        result = fileDialog.ShowModal()
         if result == wxID_OK:
             fileName = fileDialog.GetPath()
             wxLogMessage('You selected: %s\n' % fileName)
-        fileDialog.Destroy()       
+        fileDialog.Destroy()
         return fileName
 
     def OpenFileError(self, fileName):
@@ -220,13 +222,13 @@ class FrogEditFrame(wxFrame):
 
     def SetAltFuncs(self, action):
         FrogEditor.SetAltFuncs(self.edl, action)
-        action['x'] = self.OnFileExit 
+        action['x'] = self.OnFileExit
 
     def GetCurrentDir(self):
         if self.fileName is not None:
             return os.path.split(self.fileName)[0]
         return "."
-            
+
     def GetFileName(self):
         if self.fileName is not None:
             return os.path.split(self.fileName)[1]
@@ -263,7 +265,7 @@ class FrogEditFrame(wxFrame):
             return TRUE
         except:
             return FALSE
-        
+
 
 
 ##---------------- Event handlers
@@ -279,7 +281,7 @@ class FrogEditFrame(wxFrame):
                 return
         self.NewFile()
         self.edl.SetFocus()
-    
+
     def OnOpenFile(self, event):
         if self.edl.BufferWasTouched():
             if not self.OkCancelDialog("Open file - abandon changes?", "Open File"):
@@ -289,7 +291,7 @@ class FrogEditFrame(wxFrame):
             if self.OpenFile(fileName) is FALSE:
                 self.OpenFileError(fileName)
         self.edl.SetFocus()
-    
+
     def OnSaveFile(self, event):
         if self.fileName is None:
             return self.OnSaveFileAs(event)
@@ -297,7 +299,7 @@ class FrogEditFrame(wxFrame):
         if self.SaveFile(self.fileName) is not TRUE:
             self.SaveFileError(self.fileName)
         self.edl.SetFocus()
-    
+
     def OnSaveFileAs(self, event):
         fileName = self.SelectFileDialog(self.GetCurrentDir(),self.GetFileName())
         if fileName is not None:
@@ -306,8 +308,8 @@ class FrogEditFrame(wxFrame):
             if self.SaveFile(self.fileName) is not TRUE:
                 self.SaveFileError(self.fileName)
         self.edl.SetFocus()
-    
-    def OnFileExit(self, event):        
+
+    def OnFileExit(self, event):
         if self.edl.BufferWasTouched():
             if not self.OkCancelDialog("Exit program - abandon changes?", "Exit"):
                 return
@@ -316,11 +318,11 @@ class FrogEditFrame(wxFrame):
     def OnEditPreferences(self, event):
         self.MessageDialog("Edit preferences is not implemented yet.", "Not implemented.")
         pass
-    
+
     def OnHelpAbout(self, event):
         self.MessageDialog(ABOUT_TEXT, "About FrogEdit")
         pass
-    
+
     def Show(self, show):
         wxFrame.Show(self, show)
         self.edl.SetFocus()
@@ -330,7 +332,7 @@ class FrogEditFrame(wxFrame):
     def LoadInitialFile(self, fileName):
         if fileName is not None:
             if self.OpenFile(fileName) is FALSE:
-                self.OpenFileError(fileName)        
+                self.OpenFileError(fileName)
 
 
 
@@ -341,7 +343,8 @@ class FrogEditLauncher:
 
     def MakeAppFrame(self):
         return FrogEditFrame(None, -1, "FrogEdit", size=(640, 480),
-                             style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)    
+                             style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
+
     def GetArgvFilename(self):
         if len(sys.argv) > 1:
             return sys.argv[1]
@@ -349,8 +352,8 @@ class FrogEditLauncher:
             return None
 
     def Main(self):
-        win = self.MakeAppFrame()
         app = wxPySimpleApp()
+        win = self.MakeAppFrame()
         win.Show(true)
         win.LoadInitialFile(self.GetArgvFilename())
         app.MainLoop()

@@ -451,12 +451,6 @@ class wxPyShapePtr(wxPyShapeEvtHandlerPtr):
     def SetBrush(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_SetBrush,(self,) + _args, _kwargs)
         return val
-    def SetClientData(self, *_args, **_kwargs):
-        val = apply(oglbasicc.wxPyShape_SetClientData,(self,) + _args, _kwargs)
-        return val
-    def GetClientData(self, *_args, **_kwargs):
-        val = apply(oglbasicc.wxPyShape_GetClientData,(self,) + _args, _kwargs)
-        return val
     def Show(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_Show,(self,) + _args, _kwargs)
         return val
@@ -781,6 +775,15 @@ class wxPyShapePtr(wxPyShapeEvtHandlerPtr):
         return val
     def __repr__(self):
         return "<C wxPyShape instance at %s>" % (self.this,)
+    
+    def SetClientData(self, data):
+        self.clientData = data
+    def GetClientData(self):
+        if hasattr(self, 'clientData'):
+            return self.clientData
+        else:
+            return None
+
 class wxPyShape(wxPyShapePtr):
     def __init__(self,this):
         self.this = this

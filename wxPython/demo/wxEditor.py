@@ -8,7 +8,7 @@ def runTest(frame, nb, log):
     win = wxPanel(nb, -1)
     ed = wxEditor(win, -1, style=wxSUNKEN_BORDER)
     box = wxBoxSizer(wxVERTICAL)
-    box.Add(ed, 1, wxALL|wxGROW, 5)
+    box.Add(ed, 1, wxALL|wxGROW, 1)
     win.SetSizer(box)
     win.SetAutoLayout(true)
 
@@ -38,7 +38,7 @@ def runTest(frame, nb, log):
 overview = """
 The wxEditor class implements a simple text editor using wxPython.  You
 can create a custom editor by subclassing wxEditor.  Even though much of
-the editor is implemented in Python, it runs surprisingly smoothly on  
+the editor is implemented in Python, it runs surprisingly smoothly on
 normal hardware with small files.
 
 How to use it

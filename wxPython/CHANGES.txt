@@ -95,7 +95,15 @@ same document.
 
 Added wxEditableListBox gizmo.
 
-Added a greatly enhanced wxEditor from Steve Howell and Adam Feuer.
+Updated wxEditor with lots of enhancements from Steve Howell and Adam
+Feuer.
+
+Added the "SplitTree gizmos" which are a collection of classes that
+were designed to operate together and provide a tree control with
+additional columns for each item.  The classes are
+wxRemotelyScrolledTreeCtrl, wxTreeCompanionWindow,
+wxThinSplitterWindow, and wxSplitterScrolledWindow, some of which may
+also be useful by themselves.
 
 
 

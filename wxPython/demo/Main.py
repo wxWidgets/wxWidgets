@@ -38,6 +38,7 @@ _treeList = [
                                 'wxPopupWindow',
                                 'wxDynamicSashWindow',
                                 'wxEditableListBox',
+                                'SplitTree',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -74,6 +75,7 @@ _treeList = [
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
                         'wxJoystick', 'DrawXXXList', 'ErrorDialogs', 'wxMimeTypesManager',
+                        'SplitTree',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
