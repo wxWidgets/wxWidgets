@@ -1238,6 +1238,7 @@ font.cpp	MGL	LowLevel
 data.cpp	MGL	LowLevel
 #fontenum.cpp	MGL	LowLevel
 #fontutil.cpp	MGL	LowLevel
+evtloop.cpp	MGL	LowLevel
 app.cpp	MGL	LowLevel
 bitmap.cpp	MGL	LowLevel
 clipbrd.cpp	MGL	LowLevel
