@@ -12,6 +12,10 @@
 #ifndef _WX_DATECTRL_H_
 #define _WX_DATECTRL_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_DATEPICKCTRL
+
 #include "wx/control.h"         // the base class
 #include "wx/datetime.h"
 
@@ -93,6 +97,8 @@ public:
         DECLARE_NO_COPY_CLASS(wxDatePickerCtrl)
     };
 #endif
+
+#endif // wxUSE_DATEPICKCTRL
 
 #endif // _WX_DATECTRL_H_
 

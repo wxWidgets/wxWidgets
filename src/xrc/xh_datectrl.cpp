@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_DATEPICKCTRL
 
 #include "wx/xrc/xh_datectrl.h"
 #include "wx/datectrl.h"
@@ -57,4 +57,4 @@ bool wxDateCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxDatePickerCtrl"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_DATEPICKCTRL
