@@ -32,6 +32,7 @@ public:
     void DoStreamDemo(wxCommandEvent& event);
     void DoStreamDemo2(wxCommandEvent& event);
     void DoStreamDemo3(wxCommandEvent& event);
+    void DoStreamDemo4(wxCommandEvent& event);
 #if wxUSE_UNICODE
     void DoUnicodeDemo(wxCommandEvent& event);
 #endif
@@ -78,6 +79,7 @@ enum
     TYPES_STREAM,
     TYPES_STREAM2,
     TYPES_STREAM3,
+    TYPES_STREAM4,
     TYPES_MIME
 };
 

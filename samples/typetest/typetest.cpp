@@ -63,6 +63,7 @@ BEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
     EVT_MENU(TYPES_STREAM2, MyApp::DoStreamDemo2)
     EVT_MENU(TYPES_STREAM3, MyApp::DoStreamDemo3)
+    EVT_MENU(TYPES_STREAM4, MyApp::DoStreamDemo4)
     EVT_MENU(TYPES_MIME, MyApp::DoMIMEDemo)
 END_EVENT_TABLE()
 
@@ -93,6 +94,7 @@ bool MyApp::OnInit()
     test_menu->Append(TYPES_STREAM, "&Stream test");
     test_menu->Append(TYPES_STREAM2, "&Stream seek test");
     test_menu->Append(TYPES_STREAM3, "&Stream error test");
+    test_menu->Append(TYPES_STREAM4, "&Stream buffer test");
     test_menu->AppendSeparator();
     test_menu->Append(TYPES_MIME, "&MIME database test");
 
@@ -491,7 +493,145 @@ void MyApp::DoStreamDemo3(wxCommandEvent& WXUNUSED(event))
 	case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
 	default: textCtrl.WriteText( "Huh?\n" ); break;
     }
+}
 
+void MyApp::DoStreamDemo4(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextCtrl& textCtrl = * GetTextCtrl();
+
+    wxString msg;
+    
+    textCtrl.Clear();
+    textCtrl << "\nTesting wxStreamBuffer:\n\n";
+
+    // bigger than buffer
+    textCtrl.WriteText( "Writing 2000x 1 to wxFileOutputStream.\n\n" );
+
+    wxFileOutputStream file_output( "test_wx.dat" );
+    for (int i = 0; i < 2000; i++)
+    {
+        char ch = 1;
+        file_output.Write( &ch, 1 );
+    }
+
+    textCtrl.WriteText( "Opening with a buffered wxFileInputStream:\n\n" );
+
+    wxFileInputStream file_input( "test_wx.dat" );
+    wxBufferedInputStream buf_input( file_input );
+    
+    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
+    switch (buf_input.LastError())
+    {
+        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+	case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
+	case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
+	case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
+	default: textCtrl.WriteText( "Huh?\n" ); break;
+    }
+    msg.Printf( "wxBufferedInputStream.LastRead() returns: %d\n", (int)buf_input.LastRead() );
+    textCtrl.WriteText( msg );
+    msg.Printf( "wxBufferedInputStream.TellI() returns: %d\n", (int)buf_input.TellI() );
+    textCtrl.WriteText( msg );
+    textCtrl.WriteText( "\n\n" );
+    
+
+    textCtrl.WriteText( "Seeking to position 300:\n\n" );
+
+    buf_input.SeekI( 300 );
+    
+    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
+    switch (buf_input.LastError())
+    {
+        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+	case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
+	case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
+	case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
+	default: textCtrl.WriteText( "Huh?\n" ); break;
+    }
+    msg.Printf( "wxBufferedInputStream.LastRead() returns: %d\n", (int)buf_input.LastRead() );
+    textCtrl.WriteText( msg );
+    msg.Printf( "wxBufferedInputStream.TellI() returns: %d\n", (int)buf_input.TellI() );
+    textCtrl.WriteText( msg );
+    textCtrl.WriteText( "\n\n" );
+    
+
+    char buf[2000];
+
+    textCtrl.WriteText( "Reading 500 bytes:\n\n" );
+
+    buf_input.Read( buf, 500 );
+    
+    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
+    switch (buf_input.LastError())
+    {
+        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+	case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
+	case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
+	case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
+	default: textCtrl.WriteText( "Huh?\n" ); break;
+    }
+    msg.Printf( "wxBufferedInputStream.LastRead() returns: %d\n", (int)buf_input.LastRead() );
+    textCtrl.WriteText( msg );
+    msg.Printf( "wxBufferedInputStream.TellI() returns: %d\n", (int)buf_input.TellI() );
+    textCtrl.WriteText( msg );
+    textCtrl.WriteText( "\n\n" );
+    
+    textCtrl.WriteText( "Reading another 500 bytes:\n\n" );
+
+    buf_input.Read( buf, 500 );
+    
+    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
+    switch (buf_input.LastError())
+    {
+        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+	case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
+	case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
+	case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
+	default: textCtrl.WriteText( "Huh?\n" ); break;
+    }
+    msg.Printf( "wxBufferedInputStream.LastRead() returns: %d\n", (int)buf_input.LastRead() );
+    textCtrl.WriteText( msg );
+    msg.Printf( "wxBufferedInputStream.TellI() returns: %d\n", (int)buf_input.TellI() );
+    textCtrl.WriteText( msg );
+    textCtrl.WriteText( "\n\n" );
+
+    textCtrl.WriteText( "Reading another 500 bytes:\n\n" );
+
+    buf_input.Read( buf, 500 );
+    
+    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
+    switch (buf_input.LastError())
+    {
+        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+	case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
+	case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
+	case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
+	default: textCtrl.WriteText( "Huh?\n" ); break;
+    }
+    msg.Printf( "wxBufferedInputStream.LastRead() returns: %d\n", (int)buf_input.LastRead() );
+    textCtrl.WriteText( msg );
+    msg.Printf( "wxBufferedInputStream.TellI() returns: %d\n", (int)buf_input.TellI() );
+    textCtrl.WriteText( msg );
+    textCtrl.WriteText( "\n\n" );
+
+    textCtrl.WriteText( "Reading another 500 bytes:\n\n" );
+
+    buf_input.Read( buf, 500 );
+    
+    textCtrl.WriteText( "wxBufferedInputStream.LastError() returns: " );
+    switch (buf_input.LastError())
+    {
+        case wxSTREAM_NOERROR:      textCtrl.WriteText( "wxSTREAM_NOERROR\n" ); break;
+	case wxSTREAM_EOF:          textCtrl.WriteText( "wxSTREAM_EOF\n" ); break;
+	case wxSTREAM_READ_ERROR:   textCtrl.WriteText( "wxSTREAM_READ_ERROR\n" ); break;
+	case wxSTREAM_WRITE_ERROR:  textCtrl.WriteText( "wxSTREAM_WRITE_ERROR\n" ); break;
+	default: textCtrl.WriteText( "Huh?\n" ); break;
+    }
+    msg.Printf( "wxBufferedInputStream.LastRead() returns: %d\n", (int)buf_input.LastRead() );
+    textCtrl.WriteText( msg );
+    msg.Printf( "wxBufferedInputStream.TellI() returns: %d\n", (int)buf_input.TellI() );
+    textCtrl.WriteText( msg );
+    textCtrl.WriteText( "\n\n" );
 }
 
 #if wxUSE_UNICODE

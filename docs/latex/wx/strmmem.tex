@@ -13,7 +13,7 @@
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreamBuffer}
+\helpref{wxStreamBuffer}{wxstreambuffer}
 
 % ----------
 % Members
@@ -25,7 +25,8 @@
 \func{}{wxMemoryInputStream}{\param{const char *}{ data}, \param{size\_t}{ len}}
 
 Initializes a new read-only memory stream which will use the specified buffer
-\it{data} of length \it{len}.
+{\it data} of length {\it len}. The stream does not take ownership of the 
+buffer, i.e. that it will not delete in its constructor.
 
 \membersection{wxMemoryInputStream::\destruct{wxMemoryInputStream}}
 
@@ -48,7 +49,7 @@ Destructor.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer}{wxstreamBuffer}
+\helpref{wxStreamBuffer}{wxstreambuffer}
 
 % ----------
 % Members
@@ -60,7 +61,7 @@ Destructor.
 \func{}{wxMemoryOutputStream}{\param{char *}{ data = NULL}, \param{size\_t}{ length = 0}}
 
 If \it{data} is NULL, then it will initialize a new empty buffer which will
-grow when it needs.
+grow if required.
 
 \wxheading{Warning}
 

@@ -253,9 +253,6 @@ class WXDLLEXPORT wxStreamBuffer {
   char *m_buffer_start, *m_buffer_end, *m_buffer_pos;
   size_t m_buffer_size;
 
-  char *m_wback;
-  size_t m_wbacksize, m_wbackcur;
-
   bool m_fixed, m_flushable;
 
   wxStreamBase *m_stream;

@@ -27,24 +27,25 @@ None
 Constructor, creates a new stream buffer using \it{stream} as a parent stream
 and \it{mode} as the IO mode. \it{mode} can be: wxStreamBuffer::read,
 wxStreamBuffer::write, wxStreamBuffer::read\_write.
+
+
 One stream can have many stream buffers but only one is used internally to
-pass IO call (e.g. wxInputStream::Read() -> wxStreamBuffer::Read()). But you
-can call directly wxStreamBuffer::Read without any problems.
-
-\wxheading{Warning}
-
-All errors and messages linked to the stream are stored in the stream object.
+pass IO call (e.g. wxInputStream::Read() -> wxStreamBuffer::Read()), but you
+can call directly wxStreamBuffer::Read without any problems. Note that
+all errors and messages linked to the stream are stored in the stream, not
+the stream buffers:
 
 \begin{verbatim}
   streambuffer.Read(...);
-  streambuffer2.Read(...); /* This one erases previous error messages set by 
+  streambuffer2.Read(...); /* This call erases previous error messages set by 
                               ``streambuffer'' */
 \end{verbatim}
 
 \func{}{wxStreamBuffer}{\param{BufMode}{ mode}}
 
 Constructor, creates a new empty stream buffer which won't flush any data
-to a stream. \it{mode} specifies the type of the buffer (read, write, read\_write). This stream buffer has the advantage to be stream independent and to
+to a stream. \it{mode} specifies the type of the buffer (read, write, read\_write).
+This stream buffer has the advantage to be stream independent and to
 work only on memory buffers but it is still compatible with the rest of the
 wxStream classes. You can write, read to this special stream and it will
 grow (if it is allowed by the user) its internal buffer. Briefly, it has all
@@ -53,32 +54,15 @@ functionality of a ``normal'' stream.
 \wxheading{Warning}
 
 The "read\_write" mode may not work: it isn't completely finished.
-You can create "memory" streams by this way:
-
-\begin{verbatim}
-  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read)
-  wxInputStream *input = new wxInputStream(sb);
-
-  sb->Fixed(FALSE); // It can change the size of the buffer.
-
-  // input is now a read-only memory stream.
-\end{verbatim}
-
-But you should take care when destroying the stream buffer yourself.
 
 \func{}{wxStreamBuffer}{\param{const wxStreamBuffer\&}{buffer}}
 
 Constructor. It initializes the stream buffer with the data of the specified
-stream buffer. The new stream buffer is nearly exactly the same as the
-original: it has the same attributes, the same size, the same position, shares
-the same internal buffer. The interresting point is that they can differ
-in the future but the root is the same.
-
-\wxheading{Warning}
-
-The fact that the two stream buffers shared the same buffer could generate
-segmentation violation if the parent is destroyed and the children continues
-operating. It is advised to use this feature only in very local area of the
+stream buffer. The new stream buffer has the same attributes, size, position
+and they share the same buffer. This will cause problems if the stream to
+which the stream buffer belong is destroyed and the newly cloned stream
+buffer continues to be used, trying to call functions in the (destroyed)
+stream. It is advised to use this feature only in very local area of the
 program.
 
 \wxheading{See also}
@@ -90,9 +74,7 @@ program.
 \func{}{wxStreamBuffer}{\destruct{wxStreamBuffer}}
 
 Destructor. It finalizes all IO calls and frees all internal buffers if
-necessary. In the case of a children stream buffer, the internal buffer isn't
-freed, this is the job of the parent.
-The "Write-Back" buffer is freed.
+necessary.
 
 % -----------
 % Filtered IO
@@ -101,26 +83,25 @@ The "Write-Back" buffer is freed.
 
 \func{size\_t}{Read}{\param{void *}{buffer}, \param{size\_t }{size}}
 
-Reads a block of the specified \it{size} and stores datas in \it{buffer}.
-This function uses also the "Write-Back" buffer: in the case there are datas
-waiting in this buffer, they are used before anything else. After that, if there
-are still datas to be read, the stream is read and the stream buffer position
-is incremented.
+Reads a block of the specified {\it size} and stores the data in {\it buffer}.
+This function tries to read from the buffer first and if more data has been
+requested, reads more data from the associated stream and updates the buffer
+accordingly until all requested data is read.
 
 \wxheading{Return value}
 
-It returns the real read size. If returned size is different of the specified 
-\it{size}, an error occured and should be tested using 
+It returns the size of the data read. If thereturned size is different of the specified 
+{\it size}, an error has occured and should be tested using 
 \helpref{LastError}{wxstreambaselasterror}.
+
+\func{size\_t}{Read}{\param{wxStreamBuffer *}{buffer}}
+
+Reads a \it{buffer}. The function returns when \it{buffer} is full or when there isn't
+data anymore in the current buffer.
 
 \wxheading{See also}
 
 \helpref{wxStreamBuffer::Write}{wxstreambufferwrite}
-
-\func{size\_t}{Read}{\param{wxStreamBuffer *}{buffer}}
-
-Reads a \it{buffer}. The function returns when \it{buffer} is full or
-when there aren't datas anymore in the current buffer.
 
 \membersection{wxStreamBuffer::Write}\label{wxstreambufferwrite}
 
