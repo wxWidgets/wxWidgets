@@ -36,11 +36,9 @@ BaseDebugDLL
 robert
 stamp-h.in
 Makefile
-configure
 setup.h
 stamp-h
 libtool
-aclocal.m4
 base
 gtk
 gtk2
