@@ -14,6 +14,9 @@ be deprecated in the future) wxSWIG will use spam(*args, **kw) syntax
 instead.  Also changed the generated __repr__ methods to be a bit more
 informative.
 
+Made the version number information more robust and uh, informative.
+Also added asserts to check that the major.minor versions of wxPython
+and wxWindows match.
 
 
 

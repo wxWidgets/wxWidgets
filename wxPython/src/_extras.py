@@ -654,15 +654,17 @@ if wxPlatform == "__WXMSW__":
     del os
 
 #----------------------------------------------------------------------
-# wxWindows version numbers.  wxPython version is in __version__.
+# Load version numbers from __version__...  Ensure that major and minor
+# versions are the same for both wxPython and wxWindows.
 
-wxMAJOR_VERSION   = wxc.wxMAJOR_VERSION
-wxMINOR_VERSION   = wxc.wxMINOR_VERSION
-wxRELEASE_NUMBER  = wxc.wxRELEASE_NUMBER
-wxVERSION_STRING  = wxc.wxVERSION_STRING
-wxVERSION_NUMBER  = wxc.wxVERSION_NUMBER
+from wxPython.__version__ import *
+__version__ = wxVERSION_STRING
 
-wxVERSION = (wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+assert wxMAJOR_VERSION == wxc.wxMAJOR_VERSION, "wxPython/wxWindows version mismatch"
+assert wxMINOR_VERSION == wxc.wxMINOR_VERSION, "wxPython/wxWindows version mismatch"
+if wxRELEASE_VERSION != wxc.wxRELEASE_VERSION:
+    import warnings
+    warnings.warn("wxPython/wxWindows release number mismatch")
 
 
 #----------------------------------------------------------------------
