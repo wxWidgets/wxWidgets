@@ -644,20 +644,17 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
 
     int yPixelsPerCM = screenInfo.ydpcm;
 
-    // A point is 1/20 of an inch.
+    // A point is 1/72 of an inch.
     // An inch is 2.541 cm.
-    // So pixelHeight = (pointSize / 20) (inches) * 2.541 (for cm) * yPixelsPerCM (for pixels)
+    // So pixelHeight = (pointSize / 72) (inches) * 2.541 (for cm) * yPixelsPerCM (for pixels)
     // In fact pointSize is 10 * the normal point size so
     // divide by 10.
 
-    // I don't know why this is necessary, but otherwise fonts
-    // are just too big.
-    float fudgeFactor = 0.6 ;
-    int pixelHeight = (int) ( (((float)pointSize) / 200.0) * 2.541 * (float) yPixelsPerCM * fudgeFactor) ;
+    int pixelHeight = (int) ( (((float)pointSize) / 720.0) * 2.541 * (float) yPixelsPerCM * fudgeFactor) ;
 
     // An alternative: assume that the screen is 72 dpi.
-    // This gets a similar result to above (pre-fudge factor)
-    //int pixelHeight = (int) (((float)pointSize / 200.0) * 72.0) ;
+    //int pixelHeight = (int) (((float)pointSize / 720.0) * 72.0) ;
+    //int pixelHeight = (int) ((float)pointSize / 10.0) ;
     
     GR_LOGFONT logFont;
     logFont.lfHeight = pixelHeight;
