@@ -2069,7 +2069,7 @@ void wxWindow::OnInternalIdle()
             wxCursor cursor = m_cursor;
             if (g_globalCursor.Ok()) cursor = g_globalCursor;
 	
-	    if (m_currentGdkCursor != cursor)
+	    if (cursor.Ok() && m_currentGdkCursor != cursor)
 	    {
 	        gdk_window_set_cursor( window, cursor.GetCursor() );
 	        m_currentGdkCursor = cursor;

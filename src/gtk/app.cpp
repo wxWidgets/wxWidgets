@@ -577,7 +577,8 @@ bool wxApp::Initialize()
 
     wxImage::InitStandardHandlers();
 
-    g_globalCursor = wxCursor(wxCURSOR_DEFAULT);
+    // Not needed, leave it as  default. (KB)
+    // g_globalCursor = wxCursor(wxCURSOR_DEFAULT);
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
