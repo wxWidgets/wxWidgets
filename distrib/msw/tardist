@@ -33,19 +33,19 @@ rm -f $2/glcanvas.tar.gz
 echo Tarring...
 
 ### Generic
-ls `cat $1/distrib/msw/generic.rsp` > /tmp/wxgen.txt
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgen.txt
 tar cvf $2/wx200gen.tar -T /tmp/wxgen.txt
 gzip $2/wx200gen.tar
 mv $2/wx200gen.tar.gz $2/wx200gen.tgz
 
 ### wxGTK
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/gtk.rsp` > /tmp/wxgtk.txt
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxgtk.txt
 tar cvf $2/wx200gtk.tar -T /tmp/wxgtk.txt
 gzip $2/wx200gtk.tar
 mv $2/wx200gtk.tar.gz $2/wx200gtk.tgz
 
 ### wxMotif
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp` > /tmp/wxmotif.txt
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/makefile.rsp` > /tmp/wxmotif.txt
 tar cvf $2/wx200mot.tar -T /tmp/wxmotif.txt
 gzip $2/wx200mot.tar
 mv $2/wx200mot.tar.gz $2/wx200mot.tgz

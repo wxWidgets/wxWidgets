@@ -72,6 +72,9 @@ COMPILING USING CONFIGURE
   either edit the makefile to hard-wire the flags, or place wx-config
   where it will be found by the makefile.
 
+- If switching between wxMotif and wxGTK, you should remove the
+  config.cache file manually before running configure again.
+
 COMPILING USING MAKEFILES
 =========================
 

@@ -140,7 +140,8 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_windowId = (id == -1) ? NewControlId() : id;
 
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | TVS_HASLINES;
+    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | TVS_HASLINES | TVS_SHOWSELALWAYS ;
+
 
     bool want3D;
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;

@@ -351,9 +351,9 @@ the front when the dialog box is popped up.
 
 \membersection{::wxFileSelector}\label{wxfileselector}
 
-\func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = NULL},\\
-  \param{const wxString\& }{default\_filename = NULL}, \param{const wxString\& }{default\_extension = NULL},\\
-  \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = NULL},\\
+\func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = ""},\\
+  \param{const wxString\& }{default\_filename = ""}, \param{const wxString\& }{default\_extension = ""},\\
+  \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = ""},\\
   \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 Pops up a file selector box. In Windows, this is the common file selector
@@ -384,7 +384,7 @@ The application must check for a NULL return value (the user pressed
 Cancel). For example:
 
 \begin{verbatim}
-const wxString\& s = wxFileSelector("Choose a file to open");
+const wxString& s = wxFileSelector("Choose a file to open");
 if (s)
 {
   ...
