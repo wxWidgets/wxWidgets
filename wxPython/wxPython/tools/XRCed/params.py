@@ -670,12 +670,15 @@ class ParamFile(PPanel):
         if self.textModified:           # text has newer value
             self.value = self.text.GetValue()
         dlg = wxFileDialog(self,
-                           defaultDir = os.path.dirname(self.value),
+                           defaultDir = os.path.abspath(os.path.dirname(self.value)),
                            defaultFile = os.path.basename(self.value))
         if dlg.ShowModal() == wxID_OK:
-            # Make relative
-            common = os.path.commonprefix([os.path.abspath(g.frame.dataFile),
-                                           dlg.GetPath()])
+            # Get common part of selected path and current
+            if g.frame.dataFile:
+                curpath = os.path.abspath(g.frame.dataFile)
+            else:
+                curpath = os.path.join(os.getcwd(), '')
+            common = os.path.commonprefix([curpath, dlg.GetPath()])
             self.SetValue(dlg.GetPath()[len(common):])
             self.SetModified()
             self.textModified = false
