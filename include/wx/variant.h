@@ -95,7 +95,9 @@ public:
     wxVariant(char val, const wxString& name = wxEmptyString);
     wxVariant(const wxString& val, const wxString& name = wxEmptyString);
     wxVariant(const wxChar* val, const wxString& name = wxEmptyString); // Necessary or VC++ assumes bool!
-    wxVariant(const wxStringList& val, const wxString& name = wxEmptyString);
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( wxVariant(const wxStringList& val, const wxString& name = wxEmptyString) );
+#endif
     wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
     wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
     wxVariant(wxObject* ptr, const wxString& name = wxEmptyString); //wxObject
@@ -157,9 +159,11 @@ public:
     bool operator!= (const wxString& value) const;
     void operator= (const wxString& value) ;
     void operator= (const wxChar* value) ; // Necessary or VC++ assumes bool!
-    bool operator== (const wxStringList& value) const;
-    bool operator!= (const wxStringList& value) const;
-    void operator= (const wxStringList& value) ;
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( bool operator== (const wxStringList& value) const );
+    wxDEPRECATED( bool operator!= (const wxStringList& value) const );
+    wxDEPRECATED( void operator= (const wxStringList& value) );
+#endif
     bool operator== (const wxList& value) const;
     bool operator!= (const wxList& value) const;
     void operator= (const wxList& value) ;
@@ -218,8 +222,9 @@ public:
     bool GetBool() const ;
     wxString GetString() const ;
     wxList& GetList() const ;
-    wxStringList& GetStringList() const ;
-
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( wxStringList& GetStringList() const );
+#endif
     void* GetVoidPtr() const ;
     wxObject* GetWxObjectPtr()  ;
 #if wxUSE_DATETIME
