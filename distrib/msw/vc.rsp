@@ -64,6 +64,9 @@ samples/mfc/MfcVC.dsw
 samples/minimal/MinimalVC.dsp
 samples/minimal/MinimalVC.dsw
 
+samples/minimal/MiniframVC.dsp
+samples/minimal/MiniframVC.dsw
+
 samples/nativdlg/NativdlgVC.dsp
 samples/nativdlg/NativdlgVC.dsw
 

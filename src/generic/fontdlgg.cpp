@@ -226,7 +226,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   weightChoice = new wxChoice(this, wxID_FONT_WEIGHT, wxPoint(310, 10), wxSize(120, -1), 3, weights);
 
   colourChoice = new wxChoice(this, wxID_FONT_COLOUR, wxPoint(10, 40), wxSize(190, -1), NUM_COLS, wxColourDialogNames);
-#ifdef __MOTIF__
+#if 0 // def __WXMOTIF__ // TODO: This necessary now?
   // We want the pointSizeText to line up on the y axis with the colourChoice
   colourChoice->GetPosition(&fontRect.x, &y); //NL mod
   y+=3;	//NL mod

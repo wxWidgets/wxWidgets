@@ -560,18 +560,15 @@ bool wxResourceManager::DisassociateResource(wxItemResource *resource)
     return FALSE;
 
   // Disassociate children of window
-  if (win->GetChildren())
+  wxNode *node = win->GetChildren().First();
+  while (node)
   {
-    wxNode *node = win->GetChildren()->First();
-    while (node)
-    {
-      wxWindow *child = (wxWindow *)node->Data();
-      if (child->IsKindOf(CLASSINFO(wxControl)))
-      	DisassociateResource(child);
-      node = node->Next();
-    }
+    wxWindow *child = (wxWindow *)node->Data();
+    if (child->IsKindOf(CLASSINFO(wxControl)))
+  	    DisassociateResource(child);
+    node = node->Next();
   }
-  
+
   RemoveSelection(win);
   m_resourceAssociations.Delete((long)resource);
   return TRUE;
@@ -599,7 +596,7 @@ bool wxResourceManager::SaveInfoAndDeleteHandler(wxWindow* win)
         win->PopEventHandler();
 
         // Now reset all child event handlers
-        wxNode *node = win->GetChildren()->First();
+        wxNode *node = win->GetChildren().First();
         while ( node )
         {
 	        wxWindow *child = (wxWindow *)node->Data();
@@ -790,47 +787,47 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
 #endif
   int currentX = gap;
   toolbar->AddSeparator();
-  toolbar->AddTool(TOOLBAR_NEW, ToolbarNewBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_NEW, ToolbarNewBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "New dialog");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_LOAD_FILE, ToolbarLoadBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_LOAD_FILE, ToolbarLoadBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Load");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_SAVE_FILE, ToolbarSaveBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_SAVE_FILE, ToolbarSaveBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Save");
   currentX += width + dx + gap;
   toolbar->AddSeparator();
-  toolbar->AddTool(TOOLBAR_FORMAT_HORIZ, ToolbarVertBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_FORMAT_HORIZ, ToolbarVertBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Horizontal align");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_FORMAT_VERT_TOP_ALIGN, ToolbarAlignTBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_FORMAT_VERT_TOP_ALIGN, ToolbarAlignTBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Top align");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_FORMAT_VERT_BOT_ALIGN, ToolbarAlignBBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_FORMAT_VERT_BOT_ALIGN, ToolbarAlignBBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Bottom align");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_FORMAT_VERT, ToolbarHorizBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_FORMAT_VERT, ToolbarHorizBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Vertical align");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_FORMAT_HORIZ_LEFT_ALIGN, ToolbarAlignLBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_FORMAT_HORIZ_LEFT_ALIGN, ToolbarAlignLBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Left align");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_FORMAT_HORIZ_RIGHT_ALIGN, ToolbarAlignRBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_FORMAT_HORIZ_RIGHT_ALIGN, ToolbarAlignRBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Right align");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_COPY_SIZE, ToolbarCopySizeBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_COPY_SIZE, ToolbarCopySizeBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Copy size");
   currentX += width + dx + gap;
   toolbar->AddSeparator();
-  toolbar->AddTool(TOOLBAR_TO_FRONT, ToolbarToFrontBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_TO_FRONT, ToolbarToFrontBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "To front");
   currentX += width + dx;
-  toolbar->AddTool(TOOLBAR_TO_BACK, ToolbarToBackBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_TO_BACK, ToolbarToBackBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "To back");
   currentX += width + dx + gap;
 
   toolbar->AddSeparator();
-  toolbar->AddTool(TOOLBAR_HELP, ToolbarHelpBitmap, (wxBitmap *)NULL,
+  toolbar->AddTool(TOOLBAR_HELP, ToolbarHelpBitmap, wxNullBitmap,
                    FALSE, (float)currentX, -1, NULL, "Help");
   currentX += width + dx;
   
@@ -1037,7 +1034,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       MakeUniqueName("button", buf);
       res->SetName(buf);
       if (isBitmap)
-        newItem = new wxBitmapButton(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
+        newItem = new wxBitmapButton(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
       else
         newItem = new wxButton(panel, -1, "Button", wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
     }
@@ -1046,7 +1043,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       prefix = "ID_BITMAPBUTTON";
       MakeUniqueName("button", buf);
       res->SetName(buf);
-      newItem = new wxBitmapButton(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
+      newItem = new wxBitmapButton(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
     }
   else if (itemType == "wxMessage" || itemType == "wxStaticText")
     {
@@ -1054,7 +1051,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       MakeUniqueName("statictext", buf);
       res->SetName(buf);
       if (isBitmap)
-        newItem = new wxStaticBitmap(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(0, 0), 0, buf);
+        newItem = new wxStaticBitmap(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(0, 0), 0, buf);
       else
         newItem = new wxStaticText(panel, -1, "Static", wxPoint(x, y), wxSize(-1, -1), 0, buf);
     }
@@ -1063,7 +1060,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       prefix = "ID_STATICBITMAP";
       MakeUniqueName("static", buf);
       res->SetName(buf);
-      newItem = new wxStaticBitmap(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, buf);
+      newItem = new wxStaticBitmap(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, buf);
     }
   else if (itemType == "wxCheckBox")
     {
@@ -1235,7 +1232,7 @@ wxWindow *wxResourceManager::FindParentOfSelection()
     wxWindow *win = FindWindowForResource(res);
     if (win)
     {
-      wxNode *node1 = win->GetChildren()->First();
+      wxNode *node1 = win->GetChildren().First();
       while (node1)
       {
         wxControl *item = (wxControl *)node1->Data();
@@ -1374,18 +1371,18 @@ void wxResourceManager::ToBackOrFront(bool toBack)
     wxItemResource *itemResource = FindResourceForWindow(item);
     if (item->GetParent() == win)
     {
-      win->GetChildren()->DeleteObject(item);
+      win->GetChildren().DeleteObject(item);
       if (winResource)
         winResource->GetChildren().DeleteObject(itemResource);
       if (toBack)
       {
-        win->GetChildren()->Insert(item);
+        win->GetChildren().Insert(item);
         if (winResource)
           winResource->GetChildren().Insert(itemResource);
       }
       else
       {
-        win->GetChildren()->Append(item);
+        win->GetChildren().Append(item);
         if (winResource)
           winResource->GetChildren().Append(itemResource);
       }

@@ -104,7 +104,7 @@ void wxResourceEditorDialogHandler::OnPaint(wxPaintEvent& WXUNUSED(event))
 // Add event handlers for all children
 void wxResourceEditorDialogHandler::AddChildHandlers(void)
 {
-  wxNode *node = handlerDialog->GetChildren()->First();
+  wxNode *node = handlerDialog->GetChildren().First();
   while ( node )
   {
 	wxControl *child = (wxControl *)node->Data();
@@ -127,7 +127,7 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
   if (wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->GetSelection() == RESED_POINTER)
   {
     int needsRefresh = 0;
-    wxNode *node = handlerDialog->GetChildren()->First();
+    wxNode *node = handlerDialog->GetChildren().First();
     while (node)
     {
       wxControl *item = (wxControl *)node->Data();
@@ -256,7 +256,7 @@ void wxResourceEditorDialogHandler::OnItemLeftClick(wxControl *item, int WXUNUSE
     int needsRefresh = 0;
     if (!(keys & wxKEY_SHIFT))
     {
-      wxNode *node = item->GetParent()->GetChildren()->First();
+      wxNode *node = item->GetParent()->GetChildren().First();
       while (node)
       {
         wxControl *child = (wxControl *)node->Data();
@@ -331,7 +331,7 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
     event.Position(&x, &y);
 
     // Find which selection handle we're on, if any
-    wxNode *node = handlerDialog->GetChildren()->First();
+    wxNode *node = handlerDialog->GetChildren().First();
     while (node)
     {
       wxWindow *win = (wxWindow *)node->Data();
@@ -601,7 +601,7 @@ void wxResourceEditorDialogHandler::PaintSelectionHandles(wxDC& dc)
 
   dc.BeginDrawing();
 
-  wxNode *node = handlerDialog->GetChildren()->First();
+  wxNode *node = handlerDialog->GetChildren().First();
   while (node)
   {
     wxWindow *win = (wxWindow *)node->Data();
@@ -730,8 +730,8 @@ void wxResourceEditorControlHandler::DrawSelectionHandles(wxDC& dc, bool WXUNUSE
   dc.SetOptimization(FALSE);
 
   dc.SetLogicalFunction(wxCOPY);
-  dc.SetPen(wxBLACK_PEN);
-  dc.SetBrush(wxBLACK_BRUSH);
+  dc.SetPen(* wxBLACK_PEN);
+  dc.SetBrush(* wxBLACK_BRUSH);
 
   dc.SetOptimization(TRUE);
 
@@ -774,7 +774,7 @@ void wxResourceEditorControlHandler::OnDragBegin(int x, int y, int WXUNUSED(keys
 
   wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(pen);
-  dc.SetBrush(wxTRANSPARENT_BRUSH);
+  dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
   dc.SetOptimization(TRUE);
 
@@ -794,7 +794,7 @@ void wxResourceEditorControlHandler::OnDragBegin(int x, int y, int WXUNUSED(keys
       DrawBoundingBox(dc, xpos, ypos, width, height);
 
       // Also draw bounding boxes for other selected items
-      wxNode *node = panel->GetChildren()->First();
+      wxNode *node = panel->GetChildren().First();
       while (node)
       {
         wxWindow *win = (wxWindow *)node->Data();
@@ -891,7 +891,7 @@ void wxResourceEditorControlHandler::OnDragContinue(bool WXUNUSED(paintIt), int 
     dc.SetLogicalFunction(wxXOR);
     wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
     dc.SetPen(pen);
-    dc.SetBrush(wxTRANSPARENT_BRUSH);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     DrawBoundingBox(dc, x1, y1, width1, height1);
 
@@ -903,12 +903,12 @@ void wxResourceEditorControlHandler::OnDragContinue(bool WXUNUSED(paintIt), int 
       dc.SetLogicalFunction(wxXOR);
       wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
       dc.SetPen(pen);
-      dc.SetBrush(wxTRANSPARENT_BRUSH);
+      dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
       DrawBoundingBox(dc, (int)(x - dragOffsetX), (int)(y - dragOffsetY), width, height);
 
       // Also draw bounding boxes for other selected items
-      wxNode *node = panel->GetChildren()->First();
+      wxNode *node = panel->GetChildren().First();
       while (node)
       {
         wxWindow *win = (wxWindow *)node->Data();
@@ -1030,7 +1030,7 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
     resource->SetSize(newX, newY, resource->GetWidth(), resource->GetHeight());
 
     // Also move other selected items
-    wxNode *node = panel->GetChildren()->First();
+    wxNode *node = panel->GetChildren().First();
     while (node)
     {
       wxWindow *win = (wxWindow *)node->Data();
@@ -1065,8 +1065,8 @@ void wxResourceEditorControlHandler::OnDragEnd(int x, int y, int WXUNUSED(keys),
   dc.SetOptimization(FALSE);
 
   dc.SetLogicalFunction(wxCOPY);
-  dc.SetPen(wxBLACK_PEN);
-  dc.SetBrush(wxBLACK_BRUSH);
+  dc.SetPen(* wxBLACK_PEN);
+  dc.SetBrush(* wxBLACK_BRUSH);
 
   dc.SetOptimization(TRUE);
 

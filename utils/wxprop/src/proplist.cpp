@@ -624,7 +624,7 @@ bool wxPropertyListView::CreateControls(void)
 
   m_propertyScrollingList = new wxListBox(panel, wxID_PROP_SELECT,
     wxPoint(-1, -1), wxSize(300, 300));
-  m_propertyScrollingList->SetFont(boringFont);
+  m_propertyScrollingList->SetFont(* boringFont);
 
   c = new wxLayoutConstraints;
 

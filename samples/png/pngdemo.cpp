@@ -168,7 +168,7 @@ MyCanvas::~MyCanvas(void)
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
   wxPaintDC dc(this);
-  dc.SetPen(wxRED_PEN);
+  dc.SetPen(* wxRED_PEN);
 
   int i;
   for ( i = 0; i < 500; i += 10)
@@ -180,10 +180,10 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxMemoryDC memDC;
     if ( g_TestBitmap->GetColourMap() )
     {
-        memDC.SetColourMap(g_TestBitmap->GetColourMap());
-        dc.SetColourMap(g_TestBitmap->GetColourMap());
+        memDC.SetPalette(* g_TestBitmap->GetColourMap());
+        dc.SetPalette(* g_TestBitmap->GetColourMap());
     }
-    memDC.SelectObject(g_TestBitmap);
+    memDC.SelectObject(* g_TestBitmap);
 
     // Normal, non-transparent blitting
     dc.Blit(20, 20, g_TestBitmap->GetWidth(), g_TestBitmap->GetHeight(), & memDC, 0, 0, wxCOPY, FALSE);
@@ -194,7 +194,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
   if ( g_TestBitmap && g_TestBitmap->Ok() )
   {
     wxMemoryDC memDC;
-    memDC.SelectObject(g_TestBitmap);
+    memDC.SelectObject(* g_TestBitmap);
 
     // Transparent blitting if there's a mask in the bitmap
     dc.Blit(20 + g_TestBitmap->GetWidth() + 20, 20, g_TestBitmap->GetWidth(), g_TestBitmap->GetHeight(), & memDC,

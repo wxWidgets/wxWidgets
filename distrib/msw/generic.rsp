@@ -478,6 +478,19 @@ samples/docvwmdi/*.txt
 samples/docvwmdi/*.ico
 samples/docvwmdi/*.bmp
 
+samples/minifram/*.h
+samples/minifram/*.cpp
+samples/minifram/*.def
+samples/minifram/*.rc
+samples/minifram/makefile*
+samples/minifram/*.xbm
+samples/minifram/*.xpm
+samples/minifram/*.txt
+samples/minifram/*.ico
+samples/minifram/*.bmp
+samples/minifram/bitmaps/*.bmp
+samples/minifram/bitmaps/*.xpm
+
 samples/memcheck/*.h
 samples/memcheck/*.cpp
 samples/memcheck/*.def

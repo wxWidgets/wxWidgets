@@ -272,6 +272,11 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 #ifdef __WXMSW__
 WXDLLEXPORT extern const char* wxUserResourceStr;
 WXDLLEXPORT char* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
+
+// Implemented in utils.cpp: VC++, Win95 only. Sets up a console for standard
+// input/output
+WXDLLEXPORT void wxRedirectIOToConsole();
+
 #endif
 
 // X only

@@ -286,7 +286,7 @@ wxProperty *wxWindowPropertyInfo::GetProperty(wxString& name)
 {
   wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
 
-  wxFont *font = m_propertyWindow->GetFont();
+  wxFont *font = & m_propertyWindow->GetFont();
   if (name == "fontPoints" || name == "fontFamily" || name == "fontStyle" || name == "fontWeight" ||
       name == "fontUnderlined")
     return GetFontProperty(name, font);
@@ -353,12 +353,12 @@ wxProperty *wxWindowPropertyInfo::GetProperty(wxString& name)
 
 bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
-  wxFont *font = m_propertyWindow->GetFont();
+  wxFont *font = & m_propertyWindow->GetFont();
   if (font && (name == "fontPoints" || name == "fontFamily" || name == "fontStyle" || name == "fontWeight" || name == "fontUnderlined" ))
   {
     wxFont *newFont = SetFontProperty(name, property, font);
     if (newFont)
-      m_propertyWindow->SetFont(newFont);
+      m_propertyWindow->SetFont(* newFont);
     return TRUE;
   }
   else if (name == "name")
@@ -721,7 +721,7 @@ void wxWindowPropertyInfo::SetWindowStyle(wxWindow* win, long style, bool set)
 wxProperty *wxItemPropertyInfo::GetProperty(wxString& name)
 {
   wxControl *itemWindow = (wxControl *)m_propertyWindow; 
-  wxFont *font = itemWindow->GetFont();
+  wxFont *font = & itemWindow->GetFont();
 
   if (name == "fontPoints" || name == "fontFamily" || name == "fontStyle" || name == "fontWeight" ||
       name == "fontUnderlined")
@@ -735,13 +735,13 @@ wxProperty *wxItemPropertyInfo::GetProperty(wxString& name)
 bool wxItemPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxControl *itemWindow = (wxControl *)m_propertyWindow; 
-  wxFont *font = itemWindow->GetFont();
+  wxFont *font = & itemWindow->GetFont();
 
   if (font && (name == "fontPoints" || name == "fontFamily" || name == "fontStyle" || name == "fontWeight" || name == "fontUnderlined" ))
   {
     wxFont *newFont = SetFontProperty(name, property, font);
     if (newFont)
-      itemWindow->SetLabelFont(newFont);
+      itemWindow->SetLabelFont(* newFont);
     return TRUE;
   }
   else if (name == "label")
@@ -771,10 +771,10 @@ bool wxItemPropertyInfo::InstantiateResource(wxItemResource *resource)
   wxControl *item = (wxControl *)m_propertyWindow;
   wxString str(item->GetLabel());
   resource->SetTitle(str);
-  if (item->GetFont() && item->GetFont()->Ok())
-    resource->SetFont(wxTheFontList->FindOrCreateFont(item->GetFont()->GetPointSize(),
-		item->GetFont()->GetFamily(), item->GetFont()->GetStyle(), item->GetFont()->GetWeight(),
-		item->GetFont()->GetUnderlined(), item->GetFont()->GetFaceName()));
+  if (item->GetFont().Ok())
+    resource->SetFont(* wxTheFontList->FindOrCreateFont(item->GetFont().GetPointSize(),
+		item->GetFont().GetFamily(), item->GetFont().GetStyle(), item->GetFont().GetWeight(),
+		item->GetFont().GetUnderlined(), item->GetFont().GetFaceName()));
   return TRUE;
 }
 
@@ -854,7 +854,7 @@ bool wxBitmapButtonPropertyInfo::SetProperty(wxString& name, wxProperty *propert
             wxResourceManager::GetCurrentResourceManager()->PossiblyDeleteBitmapResource(oldResource);
         }
 
-        button->SetLabel(bitmap);
+        button->SetLabel(* bitmap);
         delete[] s;
         return TRUE;
       }
@@ -953,7 +953,7 @@ bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *propert
             wxResourceManager::GetCurrentResourceManager()->PossiblyDeleteBitmapResource(oldResource);
         }
 
-        message->SetBitmap(bitmap);
+        message->SetBitmap(* bitmap);
         delete[] s;
         return TRUE;
       }
@@ -1875,6 +1875,8 @@ bool wxScrollBarPropertyInfo::InstantiateResource(wxItemResource *resource)
 wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
 {
   wxPanel *panelWindow = (wxPanel *)m_propertyWindow; 
+
+/*
   wxFont *labelFont = panelWindow->GetLabelFont();
   wxFont *buttonFont = panelWindow->GetButtonFont();
   
@@ -1884,7 +1886,9 @@ wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
   else if (name == "buttonFontPoints" || name == "buttonFontFamily" || name == "buttonFontStyle" || name == "buttonFontWeight" ||
       name == "buttonFontUnderlined")
     return GetFontProperty(name, buttonFont);
-  else if (name == "no3D")
+*/
+
+  if (name == "no3D")
   {
     bool userColours;
     if (panelWindow->GetWindowStyleFlag() & wxNO_3D)
@@ -1946,24 +1950,27 @@ wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
 bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxPanel *panelWindow = (wxPanel *)m_propertyWindow; 
+/*
   wxFont *labelFont = panelWindow->GetLabelFont();
   wxFont *buttonFont = panelWindow->GetButtonFont();
-  
+
   if (labelFont && (name == "labelFontPoints" || name == "labelFontFamily" || name == "labelFontStyle" || name == "labelFontWeight" || name == "labelFontUnderlined" ))
   {
     wxFont *newFont = SetFontProperty(name, property, labelFont);
     if (newFont)
-      panelWindow->SetLabelFont(newFont);
+      panelWindow->SetLabelFont(* newFont);
     return TRUE;
   }
   else if (buttonFont && (name == "buttonFontPoints" || name == "buttonFontFamily" || name == "buttonFontStyle" || name == "buttonFontWeight" || name == "buttonFontUnderlined" ))
   {
     wxFont *newFont = SetFontProperty(name, property, buttonFont);
     if (newFont)
-      panelWindow->SetButtonFont(newFont);
+      panelWindow->SetButtonFont(* newFont);
     return TRUE;
   }
-  else if (name == "no3D")
+*/
+
+  if (name == "no3D")
   {
     bool userColours = property->GetValue().BoolValue();
     
@@ -2096,10 +2103,10 @@ void wxPanelPropertyInfo::GetPropertyNames(wxStringList& names)
 bool wxPanelPropertyInfo::InstantiateResource(wxItemResource *resource)
 {
   wxPanel *panel = (wxPanel *)m_propertyWindow;
-  if (panel->GetFont() && panel->GetFont()->Ok())
-    resource->SetFont(wxTheFontList->FindOrCreateFont(panel->GetFont()->GetPointSize(),
-		panel->GetFont()->GetFamily(), panel->GetFont()->GetStyle(), panel->GetFont()->GetWeight(),
-		panel->GetFont()->GetUnderlined(), panel->GetFont()->GetFaceName()));
+  if (panel->GetFont().Ok())
+    resource->SetFont(* wxTheFontList->FindOrCreateFont(panel->GetFont().GetPointSize(),
+		panel->GetFont().GetFamily(), panel->GetFont().GetStyle(), panel->GetFont().GetWeight(),
+		panel->GetFont().GetUnderlined(), panel->GetFont().GetFaceName()));
 
   resource->SetBackgroundColour(wxColour(panel->GetBackgroundColour()));
 
@@ -2125,7 +2132,7 @@ void wxPanelPropertyInfo::ConvertDialogUnits(bool toDialogUnits)
     }
     resource->SetSize(pt.x, pt.y, sz.x, sz.y);
 
-    wxNode* node = m_propertyWindow->GetChildren()->First();
+    wxNode* node = m_propertyWindow->GetChildren().First();
     while (node)
     {
         wxWindow* child = (wxWindow*) node->Data();

@@ -72,6 +72,8 @@ all:
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\checklst
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\minifram
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\samples\regtest
 #        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\samples\hello
@@ -145,6 +147,8 @@ clean:
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\minifram
         nmake -f makefile.nt clean
 #        cd $(WXDIR)\samples\hello
 #        nmake -f makefile.nt clean

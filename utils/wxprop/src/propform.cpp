@@ -158,7 +158,7 @@ bool wxPropertyFormView::AssociateNames(void)
   if (!m_propertySheet || !m_propertyWindow)
     return FALSE;
 
-  wxNode *node = m_propertyWindow->GetChildren()->First();
+  wxNode *node = m_propertyWindow->GetChildren().First();
   while (node)
   {
     wxWindow *win = (wxWindow *)node->Data();

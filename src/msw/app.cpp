@@ -64,7 +64,17 @@
     #define _DEBUG
   #endif
 
+  /* Need to undef new if including crtdbg.h */
+  #ifdef new
+  #undef new
+  #endif
+
   #include <crtdbg.h>
+
+  #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
+  #define new new(__FILE__,__LINE__)
+  #endif
+
 #endif
 
 extern char *wxBuffer;
@@ -117,6 +127,12 @@ long wxApp::sm_lastMessageTime = 0;
 
 bool wxApp::Initialize()
 {
+    // Some people may wish to use this, but
+    // probably it shouldn't be here by default.
+#ifdef __WXDEBUG__
+//    wxRedirectIOToConsole();
+#endif
+
     wxBuffer = new char[1500];
 
 #ifdef wxUSE_VC_CRTDBG

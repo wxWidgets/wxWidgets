@@ -30,6 +30,8 @@
 #include "wx/msw/private.h"
 #include "wx/timer.h"
 
+#include <windows.h>
+
 #include <ctype.h>
 
 #ifndef __GNUWIN32__
@@ -67,6 +69,52 @@
 #endif
 #endif
 #include <stdarg.h>
+
+//// BEGIN for console support: VC++ only
+
+#if defined(__WXDEBUG__) && defined(_MSC_VER) && !defined(__NO_VC_CRTDBG__)
+    #define wxUSE_VC_CRTDBG
+#else
+    #undef wxUSE_VC_CRTDBG
+#endif
+
+#ifdef wxUSE_VC_CRTDBG
+  // VC++ uses this macro as debug/release mode indicator
+  #ifndef _DEBUG
+    #define _DEBUG
+  #endif
+
+  #include <fcntl.h>
+
+#if wxUSE_IOSTREAMH
+// N.B. BC++ doesn't have istream.h, ostream.h
+#  include <iostream.h>
+#  include <io.h>
+#  include <fstream.h>
+
+#else
+#  include <istream>
+#  include <ostream>
+#  include <fstream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
+
+/* Need to undef new if including crtdbg.h */
+#  ifdef new
+#  undef new
+#  endif
+
+#  include <crtdbg.h>
+
+#  if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
+#  define new new(__FILE__,__LINE__)
+#  endif
+
+#endif
+
+/// END for console support
 
 // In the WIN.INI file
 static const char WX_SECTION[] = "wxWindows";
@@ -1022,4 +1070,71 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
 
 
 #endif
+
+
+#ifdef wxUSE_VC_CRTDBG
+
+// maximum mumber of lines the output console should have
+static const WORD MAX_CONSOLE_LINES = 500;
+
+BOOL WINAPI MyConsoleHandler( DWORD dwCtrlType ) {   //  control signal type
+	FreeConsole();
+	return TRUE;
+}
+
+void wxRedirectIOToConsole()
+{
+    int                        hConHandle;
+    long                       lStdHandle;
+    CONSOLE_SCREEN_BUFFER_INFO coninfo;
+    FILE                       *fp;
+
+    // allocate a console for this app
+    AllocConsole();
+
+    // set the screen buffer to be big enough to let us scroll text
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), 
+                               &coninfo);
+    coninfo.dwSize.Y = MAX_CONSOLE_LINES;
+    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), 
+                               coninfo.dwSize);
+
+    // redirect unbuffered STDOUT to the console
+    lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+    if(hConHandle <= 0) return;
+    fp = _fdopen( hConHandle, "w" );
+    *stdout = *fp;
+    setvbuf( stdout, NULL, _IONBF, 0 );
+
+    // redirect unbuffered STDIN to the console
+    lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+    if(hConHandle <= 0) return;
+    fp = _fdopen( hConHandle, "r" );
+    *stdin = *fp;
+    setvbuf( stdin, NULL, _IONBF, 0 );
+
+    // redirect unbuffered STDERR to the console
+    lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+    if(hConHandle <= 0) return;
+    fp = _fdopen( hConHandle, "w" );
+    *stderr = *fp;
+    setvbuf( stderr, NULL, _IONBF, 0 );
+    
+    // make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog 
+    // point to console as well
+    ios::sync_with_stdio();
+
+	SetConsoleCtrlHandler(MyConsoleHandler, TRUE);
+
+}
+#else
+// Not supported
+void wxRedirectIOToConsole()
+{
+}
+#endif
+
 
