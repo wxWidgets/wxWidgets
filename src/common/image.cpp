@@ -2303,12 +2303,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
 
 // GRG, Dic/99
 // Counts and returns the number of different colours. Optionally stops
-// when it reaches 'stopat' different colours. This is useful, for example,
-// to see if the image can be saved as 8-bit (256 colour or less, in this
-// case it would be invoked as CountColours(257)). Default value for stopat
-// is -1 (don't care).
+// when it exceeds 'stopafter' different colours. This is useful, for
+// example, to see if the image can be saved as 8-bit (256 colour or
+// less, in this case it would be invoked as CountColours(256)). Default
+// value for stopafter is -1 (don't care).
 //
-unsigned long wxImage::CountColours( unsigned long stopat )
+unsigned long wxImage::CountColours( unsigned long stopafter )
 {
     wxHashTable h;
     wxNode *node;
@@ -2320,7 +2320,7 @@ unsigned long wxImage::CountColours( unsigned long stopat )
     size = GetWidth() * GetHeight();
     nentries = 0;
 
-    for (unsigned long j = 0; (j < size) && (nentries < stopat) ; j++)
+    for (unsigned long j = 0; (j < size) && (nentries <= stopafter) ; j++)
     {
         r = *(p++);
         g = *(p++);
