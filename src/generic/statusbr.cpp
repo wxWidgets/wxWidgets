@@ -53,7 +53,6 @@ END_EVENT_TABLE()
 
 wxStatusBarGeneric::wxStatusBarGeneric()
 {
-  m_statusStrings = (wxString *) NULL;
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
 }
@@ -63,17 +62,17 @@ wxStatusBarGeneric::~wxStatusBarGeneric()
 #   ifdef __WXMSW__
         SetFont(wxNullFont);
 #   endif // MSW
-
-    if ( m_statusStrings )
-        delete[] m_statusStrings;
 }
 
 bool wxStatusBarGeneric::Create(wxWindow *parent,
-                         wxWindowID id,
-                         long style,
-                         const wxString& name)
+                                wxWindowID id,
+                                long style,
+                                const wxString& name)
 {
-  m_statusStrings = (wxString *) NULL;
+    // If create is ever meant to be re-entrant over the life of
+    // an object we should:
+    // m_statusStrings.Empty();
+
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
 
@@ -108,13 +107,23 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
 void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
-    if ( number != m_nFields )
-    {
-        m_nFields = number;
+    wxASSERT_MSG( number >= 0,
+                  _T("Yes, number should be a size_t and less than no fields is silly.") );
 
-        delete[] m_statusStrings;
-        m_statusStrings = new wxString[number];
-    }
+    // if( number > m_nFields )
+
+    for( int i = m_nFields; i < number; ++i )
+        m_statusStrings.Add( wxEmptyString );
+
+    // if( number < m_nFields )
+
+    for (int i = m_nFields - 1; i >= number; --i)
+        m_statusStrings.Remove(i);
+
+    m_nFields = number;
+
+    wxASSERT_MSG( m_nFields == (int)m_statusStrings.GetCount(),
+                  _T("This really should never happen, can we do away with m_nFields here?") );
 
     SetStatusWidths(number, widths);
 }
@@ -396,3 +405,5 @@ void wxStatusBarGeneric::SetMinHeight(int height)
 }
 
 #endif // wxUSE_STATUSBAR
+
+// vi:sts=4:sw=4:et

@@ -96,7 +96,7 @@ public:
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
-  wxString *        m_statusStrings;
+  wxArrayString     m_statusStrings;
   int               m_borderX;
   int               m_borderY;
   wxFont            m_defaultStatusBarFont;
@@ -110,3 +110,5 @@ private:
 
 #endif
     // _WX_GENERIC_STATUSBR_H_
+
+// vi:sts=4:sw=4:et
