@@ -14,7 +14,7 @@
 #define   _WX_STATBAR_H_
 
 #ifdef __GNUG__
-#pragma interface "statbar.h"
+#pragma interface "statbrma.h"
 #endif
 
 class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
