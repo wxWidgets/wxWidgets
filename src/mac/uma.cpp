@@ -834,6 +834,7 @@ OSErr UMASetKeyboardFocus				(WindowPtr 				inWindow,
 	}
 #endif
 	SetPort( port ) ;
+	wxDC::MacInvalidateSetup() ;
 	return err ;
 }
 

@@ -2619,6 +2619,7 @@ AGAPortHelper::~AGAPortHelper()
 		TextMode( mode );
 		SetOrigin( 0 , 0 ) ;
 		SetPort( port ) ;
+		wxDC::MacInvalidateSetup() ;
 	}
 }
 

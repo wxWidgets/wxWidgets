@@ -295,6 +295,7 @@ void wxMacToolTip::Draw()
 					
 		::DrawText( text , laststop , i - laststop ) ;
 		::TextMode( srcOr ) ;
+		wxDC::MacInvalidateSetup() ;
 		
 	//	DrawText( m_label , 0 , m_label.Length() ) ;
 	}
@@ -329,6 +330,7 @@ void wxMacToolTip::Clear()
 		DrawPicture(m_backpict, &m_rect);
 		KillPicture(m_backpict);
 		m_backpict = NULL ;
+		wxDC::MacInvalidateSetup() ;
 	}
 }
 

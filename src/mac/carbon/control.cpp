@@ -623,6 +623,7 @@ void wxControl::MacRedrawControl()
 				
 				UMADrawControl( m_macControl ) ;
 				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+				wxDC::MacInvalidateSetup() ;
 			}
 		}
 	}
@@ -664,6 +665,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 				
 				UMADrawControl( m_macControl ) ;
 				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+				wxDC::MacInvalidateSetup() ;
 			}
 		}
 	}

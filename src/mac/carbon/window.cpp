@@ -2271,37 +2271,8 @@ long wxWindow::MacRemoveBordersFromStyle( long style )
 {
 	return style & ~( wxDOUBLE_BORDER | wxSUNKEN_BORDER | wxRAISED_BORDER | wxBORDER | wxSTATIC_BORDER ) ;
 }
-/*
-wxMacFocusHelper::wxMacFocusHelper( wxWindow * theWindow ) 
-{
-	m_ok = false ;
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *rootwin ;
-	m_currentPort = NULL ;
-	GetPort( &m_formerPort ) ;
-	if ( theWindow )
-	{
-	
-		theWindow->MacGetPortParams( &localOrigin , &clipRect , &window , &rootwin) ;
-		m_currentPort = UMAGetWindowPort( window ) ;
-		theWindow->MacSetPortFocusParams( localOrigin, clipRect, window , rootwin ) ; 
-		m_ok = true ;
-	}
-}
-	
-wxMacFocusHelper::~wxMacFocusHelper() 
-{
-	if ( m_ok )
-	{
-		SetPort( m_currentPort ) ;
-		SetOrigin( 0 , 0 ) ;
-	}
-	if ( m_formerPort != m_currentPort )
-		SetPort( m_formerPort ) ;
-}
-*/
+
+
 wxMacDrawingHelper::wxMacDrawingHelper( wxWindow * theWindow ) 
 {
 	m_ok = false ;
@@ -2334,43 +2305,12 @@ wxMacDrawingHelper::~wxMacDrawingHelper()
 		Rect portRect ;
 		GetPortBounds( m_currentPort , &portRect ) ;
 		ClipRect( &portRect ) ;
+		wxDC::MacInvalidateSetup() ;	
 	}
 		
 	if ( m_formerPort != m_currentPort )
 		SetPort( m_formerPort ) ;
 }
-/*
-wxMacFocusClientHelper::wxMacFocusClientHelper( wxWindow * theWindow ) 
-{
-	m_ok = false ;
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *rootwin ;
-	m_currentPort = NULL ;
-	
-	GetPort( &m_formerPort ) ;
-
-	if ( theWindow )
-	{
-		theWindow->MacGetPortClientParams( &localOrigin , &clipRect , &window , &rootwin) ;
-		m_currentPort = UMAGetWindowPort( window ) ;
-		theWindow->MacSetPortFocusParams( localOrigin, clipRect, window , rootwin ) ; 
-		m_ok = true ;
-	}
-}
-	
-wxMacFocusClientHelper::~wxMacFocusClientHelper() 
-{
-	if ( m_ok )
-	{
-		SetPort( m_currentPort ) ;
-		SetOrigin( 0 , 0 ) ;
-	}
-	if ( m_formerPort != m_currentPort )
-		SetPort( m_formerPort ) ;
-}
-*/
 
 wxMacDrawingClientHelper::wxMacDrawingClientHelper( wxWindow * theWindow ) 
 {

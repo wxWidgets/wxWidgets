@@ -536,6 +536,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 				}
 			}
 			UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+			wxDC::MacInvalidateSetup() ;
 		}
 	}
 }
