@@ -50,8 +50,10 @@ void wxDisplaySize(int *width, int *height)
 void wxDisplaySizeMM(int *width, int *height)
 {
     wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
-    if (width) *width = g_displayDC->sizex() * 25/72;
-    if (height) *height = g_displayDC->sizey() * 25/72;
+    if ( width ) 
+        *width = g_displayDC->sizex() * 25/72;
+    if ( height ) 
+        *height = g_displayDC->sizey() * 25/72;
     // FIXME_MGL -- what about returning *real* monitor dimensions?
 }
 
@@ -64,6 +66,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     if (x) *x = 0;
     if (y) *y = 0;
     wxDisplaySize(width, height);
+    // FIXME_MGL -- make it use wxDesktop class when there's one
 }
 
 bool wxColourDisplay()
@@ -82,12 +85,17 @@ int wxDisplayDepth()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-#if 0 // FIXME_MGL
-        // FIXME_MGL : fix wxGetOsVersion, too
-  if (majorVsn) *majorVsn = GTK_MAJOR_VERSION;
-  if (minorVsn) *minorVsn = GTK_MINOR_VERSION;
+  if ( majorVsn )
+      *majorVsn = MGL_RELEASE_MAJOR;
+  if ( minorVsn )
+      *minorVsn = MGL_RELEASE_MINOR;
 
-  return wxGTK;
+#if defined(__UNIX__)
+  return wxMGL_UNIX;
+#elif defined(__OS2__)
+  return wxMGL_OS2;
+#elif defined(__WIN32__)
+  return wxMGL_WIN32;
 #endif
 }
 
@@ -110,6 +118,8 @@ wxPoint wxGetMousePosition()
 
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
+    wxFAIL_MSG(wxT("wxAddProcessCallback not implemented in wxMGL!"));
+    return 0;
 #if 0 // FIXME_MGL -do we need it at all?
     int tag = gdk_input_add(fd,
                             GDK_INPUT_READ,
