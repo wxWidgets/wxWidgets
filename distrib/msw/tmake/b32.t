@@ -38,10 +38,16 @@
             next;
         }
 
-        my $isOle = $wxMSW{$file} =~ /\bO\b/;
+        my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXMSWOBJS"} .= ($isOle ? "\$(OLEDIR)\\" : "\$(MSWDIR)\\")
-                                 . $file . " "
+        my $obj = "\$(MSWDIR)\\" . $file . " ";
+
+        $project{"WXMSWOBJS"} .= $obj;
+        if ( $isOleObj ) {
+            #! remember that this file is in ole subdir
+            $project{"WXOLEOBJS"} .= $obj;
+        }
+
     }
 #$}
 
@@ -194,6 +200,7 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
+        if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/MSWDIR/OLEDIR/; }
         s/obj$/\$(SRCSUFF)/;
         $text .= $_ . "\n\n";
     }
