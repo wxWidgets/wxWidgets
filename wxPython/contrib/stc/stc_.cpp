@@ -7839,6 +7839,8 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_LEX_ERRORLIST", PyInt_FromLong((long) wxSTC_LEX_ERRORLIST));
 	 PyDict_SetItemString(d,"wxSTC_LEX_MAKEFILE", PyInt_FromLong((long) wxSTC_LEX_MAKEFILE));
 	 PyDict_SetItemString(d,"wxSTC_LEX_BATCH", PyInt_FromLong((long) wxSTC_LEX_BATCH));
+	 PyDict_SetItemString(d,"wxSTC_LEX_XCODE", PyInt_FromLong((long) wxSTC_LEX_XCODE));
+	 PyDict_SetItemString(d,"wxSTC_LEX_LATEX", PyInt_FromLong((long) wxSTC_LEX_LATEX));
 	 PyDict_SetItemString(d,"wxSTC_CARET_SLOP", PyInt_FromLong((long) 0x01));
 	 PyDict_SetItemString(d,"WXSTC_CARET_CENTER", PyInt_FromLong((long) 0x02));
 	 PyDict_SetItemString(d,"wxSTC_CARET_STRICT", PyInt_FromLong((long) 0x04));
