@@ -443,7 +443,9 @@ public:
 
 enum wxLanguage
 {
+    // user's default/preffered language as got from OS:
     wxLANGUAGE_DEFAULT,
+    // unknown language, if wxLocale::GetSystemLanguage fails:
     wxLANGUAGE_UNKNOWN,
 
     wxLANGUAGE_ABKHAZIAN,
@@ -722,15 +724,18 @@ public:
     wxLocale(int language = wxLANGUAGE_DEFAULT,
              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
 
-        // the same as a function (returns TRUE on success)
     bool Init(const wxString& szName,
               const wxString& szShort = wxPyEmptyString,
               const wxString& szLocale = wxPyEmptyString,
               bool bLoadDefault = TRUE,
               bool bConvertEncoding = FALSE);
 
+    %name(InitLang) bool Init(int language = wxLANGUAGE_DEFAULT,
+                              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+
         // restores old locale
     ~wxLocale();
+
 
     // Try to get user's (or OS's) prefered language setting.
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
