@@ -33,8 +33,6 @@
 // idle system
 // ----------------------------------------------------------------------------
 
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
 extern int g_openDialogs;
 
 // ----------------------------------------------------------------------------
@@ -44,12 +42,6 @@ extern int g_openDialogs;
 #ifndef __WXUNIVERSAL__
     IMPLEMENT_DYNAMIC_CLASS(wxTopLevelWindow, wxWindow)
 #endif
-
-// ----------------------------------------------------------------------------
-// data
-// ----------------------------------------------------------------------------
-
-extern wxList wxPendingDelete;
 
 
 // ============================================================================
@@ -124,7 +116,7 @@ bool wxTopLevelWindowMGL::ShowFullScreen(bool show, long style)
         GetSize(&m_fsSaveFrame.width, &m_fsSaveFrame.height);
 
         if ( style & wxFULLSCREEN_NOCAPTION )
-            m_windowStyle &= !wxCAPTION;
+            m_windowStyle &= ~wxCAPTION;
         if ( style & wxFULLSCREEN_NOBORDER )
             m_windowStyle = wxSIMPLE_BORDER;
 
