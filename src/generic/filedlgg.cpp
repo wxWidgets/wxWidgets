@@ -140,6 +140,7 @@ class wxFileCtrl : public wxListCtrl
 public:
     wxFileCtrl();
     wxFileCtrl( wxWindow *win,
+                wxStaticText *labelDir,
                 wxWindowID id,
                 const wxString &wild,
                 bool showHidden,
@@ -182,6 +183,9 @@ private:
 
     wxWindow     *m_goToParentControl;
     wxWindow     *m_newDirControl;
+
+    // the label showing the current directory
+    wxStaticText *m_labelDir;
 
     DECLARE_DYNAMIC_CLASS(wxFileCtrl);
     DECLARE_EVENT_TABLE()
@@ -605,6 +609,7 @@ wxFileCtrl::wxFileCtrl()
 }
 
 wxFileCtrl::wxFileCtrl(wxWindow *win,
+                       wxStaticText *labelDir,
                        wxWindowID id,
                        const wxString& wild,
                        bool showHidden,
@@ -624,6 +629,8 @@ wxFileCtrl::wxFileCtrl(wxWindow *win,
 
     m_goToParentControl =
     m_newDirControl = NULL;
+
+    m_labelDir = labelDir;
 
     m_showHidden = showHidden;
 }
@@ -886,6 +893,8 @@ void wxFileCtrl::GoToDir( const wxString &dir )
     UpdateFiles();
     SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
     EnsureVisible( 0 );
+
+    m_labelDir->SetLabel(dir);
 }
 
 void wxFileCtrl::GetDir( wxString &dir )
@@ -1065,7 +1074,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     }
     if ( firstWild.Left( 2 ) == wxT("*.") )
         m_filterExtension = firstWild.Mid( 1 );
-    if ( m_filterExtension == ".*" ) m_filterExtension = wxEmptyString;
+    if ( m_filterExtension == ".*" )
+        m_filterExtension = wxEmptyString;
 
     // layout
     
@@ -1136,7 +1146,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     if ( !(m_dialogStyle & wxMULTIPLE) )
         style2 |= wxLC_SINGLE_SEL;
 
-    m_list = new wxFileCtrl( this, ID_LIST_CTRL, firstWild, ms_lastShowHidden,
+    m_list = new wxFileCtrl( this, m_static, ID_LIST_CTRL,
+                             firstWild, ms_lastShowHidden,
                              wxDefaultPosition, wxSize(540,200),
                              style2);
 
@@ -1221,6 +1232,7 @@ wxFileDialog::~wxFileDialog()
 int wxFileDialog::ShowModal()
 {
     m_list->GoToDir(m_dir);
+    m_text->SetValue(m_fileName);
 
     return wxDialog::ShowModal();
 }
@@ -1298,8 +1310,6 @@ void wxFileDialog::HandleAction( const wxString &fn )
     {
         m_list->GoToParentDir();
         m_list->SetFocus();
-        m_list->GetDir( dir );
-        m_static->SetLabel( dir );
         return;
     }
 
@@ -1308,8 +1318,6 @@ void wxFileDialog::HandleAction( const wxString &fn )
     {
         m_list->GoToHomeDir();
         m_list->SetFocus();
-        m_list->GetDir( dir );
-        m_static->SetLabel( dir );
         return;
     }
 
@@ -1346,42 +1354,43 @@ void wxFileDialog::HandleAction( const wxString &fn )
     if (wxDirExists(filename))
     {
         m_list->GoToDir( filename );
-        m_list->GetDir( dir );
-        m_static->SetLabel( dir );
         return;
     }
 
-
-    if ( (m_dialogStyle & wxSAVE) && (m_dialogStyle & wxOVERWRITE_PROMPT) )
+    // append the default extension to the filename if it doesn't have any
+    //
+    // VZ: the logic of testing for !wxFileExists() only for the open file
+    //     dialog is not entirely clear to me, why don't we allow saving to a
+    //     file without extension as well?
+    if ( !(m_dialogStyle & wxOPEN) || !wxFileExists(filename) )
     {
-        if (filename.Find( wxT('.') ) == wxNOT_FOUND ||
-                filename.AfterLast( wxT('.') ).Find( wxFILE_SEP_PATH ) != wxNOT_FOUND)
-            filename << m_filterExtension;
-        if (wxFileExists( filename ))
+        wxString ext;
+        wxSplitPath(filename, NULL, NULL, &ext);
+        if ( ext.empty() )
         {
-            wxString msg;
-            msg.Printf( _("File '%s' already exists, do you really want to "
-                         "overwrite it?"), filename.c_str() );
-
-            if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
-                return;
+            // append the first extension of the filter string
+            filename += m_filterExtension.BeforeFirst(_T(';'));
         }
     }
-    else if ( m_dialogStyle & wxOPEN )
-    {
-        if ( !wxFileExists( filename ) )
-            if (filename.Find( wxT('.') ) == wxNOT_FOUND ||
-                  filename.AfterLast( wxT('.') ).Find( wxFILE_SEP_PATH ) != wxNOT_FOUND)
-                filename << m_filterExtension;
 
-        if ( m_dialogStyle & wxFILE_MUST_EXIST )
-        {
-            if ( !wxFileExists( filename ) )
-            {
-                wxMessageBox(_("Please choose an existing file."), _("Error"), wxOK | wxICON_ERROR );
-                return;
-            }
-        }
+    // check that the file [doesn't] exist if necessary
+    if ( (m_dialogStyle & wxSAVE) &&
+            (m_dialogStyle & wxOVERWRITE_PROMPT) &&
+                wxFileExists( filename ) )
+    {
+        wxString msg;
+        msg.Printf( _("File '%s' already exists, do you really want to "
+                     "overwrite it?"), filename.c_str() );
+
+        if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
+            return;
+    }
+    else if ( (m_dialogStyle & wxOPEN) &&
+                (m_dialogStyle & wxFILE_MUST_EXIST) &&
+                    !wxFileExists(filename) )
+    {
+        wxMessageBox(_("Please choose an existing file."), _("Error"),
+                     wxOK | wxICON_ERROR );
     }
 
     SetPath( filename );
@@ -1425,20 +1434,12 @@ void wxFileDialog::OnUp( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->GoToParentDir();
     m_list->SetFocus();
-    wxString dir;
-    m_list->GetDir( dir );
-    m_static->SetLabel( dir );
 }
 
 void wxFileDialog::OnHome( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->GoToHomeDir();
     m_list->SetFocus();
-    wxString dir;
-    m_list->GetDir( dir );
-    m_static->SetLabel( dir );
-
-    m_text->SetFocus();
 }
 
 void wxFileDialog::OnNew( wxCommandEvent &WXUNUSED(event) )
