@@ -1330,7 +1330,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                                     ? (int)kTextEncodingWindowsLatin1
                                     : (int)kTextEncodingMacRoman,
                                 kTextEncodingUnicodeDefault);
-    	
+        
     wxASSERT_MSG( status == noErr , wxT("couldn't start converter") ) ;
     ByteCount byteOutLen ;
     ByteCount byteInLen = str.Length() ;
@@ -1440,7 +1440,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
         {
             if( strtext[i] == 13 || strtext[i] == 10)
             {
-            	wxString linetext = strtext.Mid( laststop , i - laststop ) ;
+                wxString linetext = strtext.Mid( laststop , i - laststop ) ;
 #if TARGET_CARBON
                 if ( useDrawThemeText )
                 {
@@ -1473,7 +1473,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                 else
 #endif
                 {
-					wxCharBuffer text = wxMacStringToCString(linetext) ; 
+                    wxCharBuffer text = wxMacStringToCString(linetext) ; 
                     ::DrawText( text , 0 , strlen(text) ) ;
                     line++ ;
                     ::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
@@ -1515,7 +1515,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
         else
 #endif
         {
-			wxCharBuffer text = wxMacStringToCString(linetext) ; 
+            wxCharBuffer text = wxMacStringToCString(linetext) ; 
             ::DrawText( text , 0 , strlen(text) ) ;
          }
     }
@@ -1545,7 +1545,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
     ::GetFontInfo( &fi ) ;
 #if TARGET_CARBON    
     bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-	if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
+    if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
         useGetThemeText = false ;
 #endif
     if ( height )
@@ -1580,7 +1580,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         {
             if( strtext[i] == 13 || strtext[i] == 10)
             {
-            	wxString linetext = strtext.Mid( laststop , i - laststop ) ;
+                wxString linetext = strtext.Mid( laststop , i - laststop ) ;
                 if ( height )
                     *height += YDEV2LOGREL( fi.descent + fi.ascent + fi.leading ) ;
 #if TARGET_CARBON
@@ -1600,8 +1600,8 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
                 else
 #endif
                 {
-					wxCharBuffer text = wxMacStringToCString(linetext) ; 
-                	curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
+                    wxCharBuffer text = wxMacStringToCString(linetext) ; 
+                    curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
                 }
                 if ( curwidth > *width )
                     *width = XDEV2LOGREL( curwidth ) ;
@@ -1628,7 +1628,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         else
 #endif
         {
-			wxCharBuffer text = wxMacStringToCString(linetext) ; 
+            wxCharBuffer text = wxMacStringToCString(linetext) ; 
             curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
         }
         if ( curwidth > *width )
@@ -1835,45 +1835,41 @@ void wxDC::MacInstallFont() const
     wxASSERT_MSG( status == noErr , wxT("couldn't set create ATSU style") ) ;
 }
 
-Pattern gHatchPatterns[] =
-{
-    { { 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF } },
-    { { 0x01 , 0x02 , 0x04 , 0x08 , 0x10 , 0x20 , 0x40 , 0x80 } },
-    { { 0x80 , 0x40 , 0x20 , 0x10 , 0x08 , 0x04 , 0x02 , 0x01 } },
-    { { 0x10 , 0x10 , 0x10 , 0xFF , 0x10 , 0x10 , 0x10 , 0x10 } },
-    { { 0x00 , 0x00 , 0x00 , 0xFF , 0x00 , 0x00 , 0x00 , 0x00 } },
-    { { 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 } },
-    { { 0x81 , 0x42 , 0x24 , 0x18 , 0x18 , 0x24 , 0x42 , 0x81 } } 
+Pattern gPatterns[] =
+{   // hatch patterns
+    { 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF } ,
+    { 0x01 , 0x02 , 0x04 , 0x08 , 0x10 , 0x20 , 0x40 , 0x80 } ,
+    { 0x80 , 0x40 , 0x20 , 0x10 , 0x08 , 0x04 , 0x02 , 0x01 } ,
+    { 0x10 , 0x10 , 0x10 , 0xFF , 0x10 , 0x10 , 0x10 , 0x10 } ,
+    { 0x00 , 0x00 , 0x00 , 0xFF , 0x00 , 0x00 , 0x00 , 0x00 } ,
+    { 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 , 0x10 } ,
+    { 0x81 , 0x42 , 0x24 , 0x18 , 0x18 , 0x24 , 0x42 , 0x81 } ,
+    // dash patterns
+    { 0xCC , 0x99 , 0x33 , 0x66 , 0xCC , 0x99 , 0x33 , 0x66 } , // DOT
+    { 0xFE , 0xFD , 0xFB , 0xF7 , 0xEF , 0xDF , 0xBF , 0x7F } , // LONG_DASH
+    { 0xEE , 0xDD , 0xBB , 0x77 , 0xEE , 0xDD , 0xBB , 0x77 } , // SHORT_DASH
+    { 0xDE , 0xBD , 0x7B , 0xF6 , 0xED , 0xDB , 0xB7 , 0x6F } , // DOT_DASH
 } ;
 
-static void wxMacGetHatchPattern(int hatchStyle, Pattern *pattern)
+static void wxMacGetPattern(int penStyle, Pattern *pattern)
 {
-    int theIndex = 1 ;
-    switch(hatchStyle)
-    {
-    case wxBDIAGONAL_HATCH:
-        theIndex = 2;
-        break;
-    case wxFDIAGONAL_HATCH:
-        theIndex = 3;
-        break;
-    case wxCROSS_HATCH:
-        theIndex = 4;
-        break;
-    case wxHORIZONTAL_HATCH:
-        theIndex = 5;
-        break;
-    case wxVERTICAL_HATCH:
-        theIndex = 6;
-        break;
-    case wxCROSSDIAG_HATCH:
-        theIndex = 7;
-        break;
-    default:
-        theIndex = 1; // solid pattern
-        break;
+    int index = 0;  // solid pattern by default
+    switch(penStyle)
+    {   
+        // hatches
+        case wxBDIAGONAL_HATCH:     index = 1; break;
+        case wxFDIAGONAL_HATCH:     index = 2; break;
+        case wxCROSS_HATCH:         index = 3; break;
+        case wxHORIZONTAL_HATCH:    index = 4; break;
+        case wxVERTICAL_HATCH:      index = 5; break;
+        case wxCROSSDIAG_HATCH:     index = 6; break;
+        // dashes
+        case wxDOT:                 index = 7; break;
+        case wxLONG_DASH:           index = 8; break;
+        case wxSHORT_DASH:          index = 9; break;
+        case wxDOT_DASH:            index = 10; break;
     }
-    *pattern = gHatchPatterns[theIndex-1] ;
+    *pattern = gPatterns[index];    
 }
 
 void wxDC::MacInstallPen() const
@@ -1892,62 +1888,28 @@ void wxDC::MacInstallPen() const
     if ( penWidth == 0 )
         penWidth = 1 ;
     ::PenSize(penWidth, penWidth);
+    
     int penStyle = m_pen.GetStyle();
-    if (penStyle == wxSOLID)
-    {
-        ::PenPat(GetQDGlobalsBlack(&blackColor));
-    }
-    else if (IS_HATCH(penStyle))
-    {
-        Pattern pat ;
-        wxMacGetHatchPattern(penStyle, &pat);
-        ::PenPat(&pat);
+    Pattern pat;
+    if (penStyle == wxUSER_DASH)
+    {   
+        // FIXME: there should be exactly 8 items in the dash
+        wxDash* dash ;
+        int number = m_pen.GetDashes(&dash) ;
+        int index = 0;
+        for ( int i = 0 ; i < 8 ; ++i )
+        {
+            pat.pat[i] = dash[index] ;
+            if (index < number - 1)
+                index++;
+        }
     }
     else
     {
-        Pattern pat = *GetQDGlobalsBlack(&blackColor) ;
-        switch( penStyle )
-        {
-        case wxDOT :
-            for ( int i = 0 ; i < 8 ; ++i )
-            {
-                pat.pat[i] = 0xCC ;
-            }
-            break ;
-        case wxLONG_DASH :
-            for ( int i = 0 ; i < 8 ; ++i )
-            {
-                pat.pat[i] = 0xFE ;
-            }
-            break ;
-        case wxSHORT_DASH :
-            for ( int i = 0 ; i < 8 ; ++i )
-            {
-                pat.pat[i] = 0xEE ;
-            }
-            break ;
-        case wxDOT_DASH :
-            for ( int i = 0 ; i < 8 ; ++i )
-            {
-                pat.pat[i] = 0x6F ;
-            }
-            break ;
-        case wxUSER_DASH :
-            {
-                wxDash* dash ;
-                m_pen.GetDashes(&dash) ;
-                // right now we don't allocate larger pixmaps
-                // int number = 
-                m_pen.GetDashes(&dash) ;
-                for ( int i = 0 ; i < 8 ; ++i )
-                {
-                    pat.pat[i] = dash[0] ;
-                }
-            }
-            break ;
-        }
-        ::PenPat(&pat);
+        wxMacGetPattern(penStyle, &pat);
     }
+    ::PenPat(&pat);
+
     short mode = patCopy ;
     // todo :
     switch( m_logicalFunction )
@@ -1997,28 +1959,28 @@ void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
     Pattern whiteColor ;
     switch( background.MacGetBrushKind() )
     {
-    case kwxMacBrushTheme :
+        case kwxMacBrushTheme :
         {
             ::SetThemeBackground( background.GetMacTheme() , wxDisplayDepth() , true ) ;
             break ;
         }
-    case kwxMacBrushThemeBackground :
+        case kwxMacBrushThemeBackground :
         {
             Rect extent ;
             ThemeBackgroundKind bg = background.GetMacThemeBackground( &extent ) ;
             ::ApplyThemeBackground( bg , &extent ,kThemeStateActive , wxDisplayDepth() , true ) ;
             break ;
         }
-    case kwxMacBrushColour :
+        case kwxMacBrushColour :
         {
-               ::RGBBackColor( &MAC_WXCOLORREF( background.GetColour().GetPixel()) );
+            ::RGBBackColor( &MAC_WXCOLORREF( background.GetColour().GetPixel()) );
             int brushStyle = background.GetStyle();
             if (brushStyle == wxSOLID)
                 ::BackPat(GetQDGlobalsWhite(&whiteColor));
             else if (IS_HATCH(brushStyle))
             {
                 Pattern pat ;
-                wxMacGetHatchPattern(brushStyle, &pat);
+                wxMacGetPattern(brushStyle, &pat);
                 ::BackPat(&pat);
             }
             else
@@ -2048,7 +2010,7 @@ void wxDC::MacInstallBrush() const
     else if (IS_HATCH(brushStyle))
     {
         Pattern pat ;
-        wxMacGetHatchPattern(brushStyle, &pat);
+        wxMacGetPattern(brushStyle, &pat);
         ::PenPat(&pat);
     }
     else if ( m_brush.GetStyle() == wxSTIPPLE || m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
