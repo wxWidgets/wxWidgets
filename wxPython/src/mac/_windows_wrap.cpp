@@ -17051,17 +17051,25 @@ static PyObject *_wrap_MDIParentFrame_GetToolBar(PyObject *, PyObject *args, PyO
 static PyObject *_wrap_MDIParentFrame_Tile(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMDIParentFrame *arg1 = (wxMDIParentFrame *) 0 ;
+    wxOrientation arg2 = (wxOrientation) wxHORIZONTAL ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self", NULL 
+        (char *) "self",(char *) "orient", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MDIParentFrame_Tile",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:MDIParentFrame_Tile",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxMDIParentFrame, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxOrientation)(SWIG_As_int(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Tile();
+        (arg1)->Tile((wxOrientation )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
