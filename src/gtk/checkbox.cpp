@@ -121,9 +121,6 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     PostCreation();
 
-    gtk_widget_realize( m_widgetLabel );
-    gtk_widget_realize( m_widgetCheckbox );
-
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
     SetFont( parent->GetFont() );

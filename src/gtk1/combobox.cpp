@@ -113,9 +113,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
         gtk_container_add( GTK_CONTAINER(list), list_item );
 
-        gtk_widget_realize( list_item );
-        gtk_widget_realize( GTK_BIN(list_item)->child );
-
         gtk_widget_show( list_item );
 
         gtk_signal_connect( GTK_OBJECT(list_item), "select",
@@ -131,10 +128,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     ConnectWidget( GTK_COMBO(m_widget)->button );
 
     if (!value.IsNull()) SetValue( value );
-
-    gtk_widget_realize( GTK_COMBO(m_widget)->list );
-    gtk_widget_realize( GTK_COMBO(m_widget)->entry );
-    gtk_widget_realize( GTK_COMBO(m_widget)->button );
 
     if (style & wxCB_READONLY)
         gtk_entry_set_editable( GTK_ENTRY( GTK_COMBO(m_widget)->entry ), FALSE );
@@ -176,7 +169,13 @@ void wxComboBox::AppendCommon( const wxString &item )
 
     gtk_container_add( GTK_CONTAINER(list), list_item );
 
-    if (m_widgetStyle) ApplyWidgetStyle();
+    if (GTK_WIDGET_REALIZED(m_widget))
+    {
+        gtk_widget_realize( list_item );
+        gtk_widget_realize( GTK_BIN(list_item)->child );
+
+        if (m_widgetStyle) ApplyWidgetStyle();
+    }
 
     gtk_widget_show( list_item );
 }

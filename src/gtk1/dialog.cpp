@@ -83,6 +83,48 @@ static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEvent
 }
 
 //-----------------------------------------------------------------------------
+// "realize" from m_widget
+//-----------------------------------------------------------------------------
+
+/* we cannot MWM hints before the widget has been realized, 
+   so we do this directly after realization */
+
+static gint 
+gtk_dialog_realized_callback( GtkWidget *widget, wxWindow *win )
+{
+    /* all this is for Motif Window Manager "hints" and is supposed to be
+       recognized by other WM as well. not tested. */
+    long decor = (long) GDK_DECOR_ALL;
+    long func = (long) GDK_FUNC_ALL;
+    
+    if ((win->m_windowStyle & wxCAPTION) == 0)
+	decor |= GDK_DECOR_TITLE;
+/*  if ((win->m_windowStyle & wxMINIMIZE) == 0)
+	func |= GDK_FUNC_MINIMIZE;
+    if ((win->m_windowStyle & wxMAXIMIZE) == 0)
+	func |= GDK_FUNC_MAXIMIZE;            */
+    if ((win->m_windowStyle & wxSYSTEM_MENU) == 0)
+	decor |= GDK_DECOR_MENU;
+    if ((win->m_windowStyle & wxMINIMIZE_BOX) == 0)
+	decor |= GDK_DECOR_MINIMIZE;
+    if ((win->m_windowStyle & wxMAXIMIZE_BOX) == 0)
+	decor |= GDK_DECOR_MAXIMIZE;
+    if ((win->m_windowStyle & wxRESIZE_BORDER) == 0)
+	func |= GDK_FUNC_RESIZE;
+	
+    gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
+    gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
+      
+    /* GTK's shrinking/growing policy */
+    if ((win->m_windowStyle & wxRESIZE_BORDER) == 0)
+        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
+    else
+        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+    
+    return FALSE;
+}
+    
+//-----------------------------------------------------------------------------
 // wxDialog
 //-----------------------------------------------------------------------------
 
@@ -143,37 +185,12 @@ bool wxDialog::Create( wxWindow *parent,
 
     PostCreation();
 
-    gtk_widget_realize( m_widget );
-
-    /* all this is for Motif Window Manager "hints" and is supposed to be
-       recognized by other WM as well. not tested. */
-    long decor = (long) GDK_DECOR_ALL;
-    long func = (long) GDK_FUNC_ALL;
+    /*  we cannot set MWM hints  before the widget has
+        been realized, so we do this directly after realization */
+    gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
+			GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
     
-    if ((m_windowStyle & wxCAPTION) == 0)
-	decor |= GDK_DECOR_TITLE;
-/*  if ((m_windowStyle & wxMINIMIZE) == 0)
-	func |= GDK_FUNC_MINIMIZE;
-    if ((m_windowStyle & wxMAXIMIZE) == 0)
-	func |= GDK_FUNC_MAXIMIZE; */
-    if ((m_windowStyle & wxSYSTEM_MENU) == 0)
-	decor |= GDK_DECOR_MENU;
-    if ((m_windowStyle & wxMINIMIZE_BOX) == 0)
-	decor |= GDK_DECOR_MINIMIZE;
-    if ((m_windowStyle & wxMAXIMIZE_BOX) == 0)
-	decor |= GDK_DECOR_MAXIMIZE;
-    if ((m_windowStyle & wxRESIZE_BORDER) == 0)
-	func |= GDK_FUNC_RESIZE;
-	
-    gdk_window_set_decorations(m_widget->window, (GdkWMDecoration)decor);
-    gdk_window_set_functions(m_widget->window, (GdkWMFunction)func);
-    
-    /* GTK's shrinking/growing policy */
-    if ((m_windowStyle & wxRESIZE_BORDER) == 0)
-        gtk_window_set_policy(GTK_WINDOW(m_widget), 0, 0, 1);
-    else
-        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
-
+    /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
 

@@ -109,9 +109,9 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
         (win->m_width == alloc->width) &&
         (win->m_height == alloc->height))
     {
-        return;
+//        return;
     }
-
+    
     win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
 
     if (win->GetAutoLayout()) win->Layout();

@@ -274,8 +274,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
-    gtk_widget_realize( GTK_WIDGET(m_list) );
-
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
     SetFont( parent->GetFont() );
@@ -411,8 +409,6 @@ void wxListBox::AppendCommon( const wxString &item )
         gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
           GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
-    if (m_widgetStyle) ApplyWidgetStyle();
-
     gtk_signal_connect( GTK_OBJECT(list_item),
                         "button_press_event",
                         (GtkSignalFunc)gtk_listbox_button_press_callback,
@@ -430,15 +426,23 @@ void wxListBox::AppendCommon( const wxString &item )
 
     ConnectWidget( list_item );
 
+    if (GTK_WIDGET_REALIZED(m_widget))
+    {
+        gtk_widget_realize( list_item );
+        gtk_widget_realize( GTK_BIN(list_item)->child );
+	
+        if (m_widgetStyle) ApplyWidgetStyle();
+
 #if wxUSE_DRAG_AND_DROP
 #ifndef NEW_GTK_DND_CODE
-    if (m_dropTarget) m_dropTarget->RegisterWidget( list_item );
+        if (m_dropTarget) m_dropTarget->RegisterWidget( list_item );
 #endif
 #endif
 
 #if wxUSE_TOOLTIPS
-    if (m_toolTip) m_toolTip->Apply( this );
+        if (m_toolTip) m_toolTip->Apply( this );
 #endif
+    }
 }
 
 void wxListBox::Append( const wxString &item )

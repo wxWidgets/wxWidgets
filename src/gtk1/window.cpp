@@ -1295,6 +1295,40 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 }
 
 //-----------------------------------------------------------------------------
+// "realize" from m_widget
+//-----------------------------------------------------------------------------
+
+/* we cannot set colours, fonts and cursors before the widget has
+   been realized, so we do this directly after realization */
+
+static gint 
+gtk_window_realized_callback( GtkWidget *widget, wxWindow *win )
+{
+    if (win->m_font != *wxSWISS_FONT)
+    {
+        wxFont font( win->m_font );
+        win->m_font = wxNullFont;
+	win->SetFont( font );
+    }
+    
+    if (win->m_backgroundColour != wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ))
+    {
+        wxColour bg( win->m_backgroundColour );
+	win->m_backgroundColour = wxNullColour;
+	win->SetBackgroundColour( bg );
+    }
+    
+    if (win->m_foregroundColour != *wxBLACK)
+    {
+        wxColour fg( win->m_foregroundColour );
+	win->m_foregroundColour = wxNullColour;
+	win->SetForegroundColour( fg );
+    }
+    
+    return FALSE;
+}
+    
+//-----------------------------------------------------------------------------
 // InsertChild for wxWindow.
 //-----------------------------------------------------------------------------
 
@@ -1750,13 +1784,12 @@ void wxWindow::PostCreation()
 
     ConnectWidget( GetConnectWidget() );
 
-    /* we force the creation of wxFrame and wxDialog in the respective code */
-    if (m_parent) gtk_widget_realize( m_widget );
-
-    if (m_wxwindow) gtk_widget_realize( m_wxwindow );
-
-    SetCursor( *wxSTANDARD_CURSOR );
-
+/*  we cannot set colours, fonts and cursors before the widget has
+    been realized, so we do this directly after realization */
+   
+    gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
+			    GTK_SIGNAL_FUNC(gtk_window_realized_callback), (gpointer) this );
+			    
     m_hasVMT = TRUE;
 }
 
@@ -2071,6 +2104,8 @@ void wxWindow::ClientToScreen( int *x, int *y )
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
 
+    if (!m_widget->window) return;
+
     GdkWindow *source = (GdkWindow *) NULL;
     if (m_wxwindow)
         source = m_wxwindow->window;
@@ -2097,6 +2132,8 @@ void wxWindow::ClientToScreen( int *x, int *y )
 void wxWindow::ScreenToClient( int *x, int *y )
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
+
+    if (!m_widget->window) return;
 
     GdkWindow *source = (GdkWindow *) NULL;
     if (m_wxwindow)
@@ -2351,12 +2388,16 @@ void wxWindow::Raise()
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
 
+    if (!m_widget->window) return;
+
     if (m_widget) gdk_window_raise( m_widget->window );
 }
 
 void wxWindow::Lower()
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
+
+    if (!m_widget->window) return;
 
     if (m_widget) gdk_window_lower( m_widget->window );
 }
@@ -2459,8 +2500,9 @@ void wxWindow::SetCursor( const wxCursor &cursor )
         *m_cursor = *wxSTANDARD_CURSOR;
     }
 
-    if ((m_widget) && (m_widget->window))
-         gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );
+    if (!m_widget->window) return;
+
+    gdk_window_set_cursor( m_widget->window, m_cursor->GetCursor() );
 
     if ((m_wxwindow) && (m_wxwindow->window))
          gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
@@ -2474,6 +2516,8 @@ void wxWindow::WarpPointer( int WXUNUSED(x), int WXUNUSED(y) )
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
 {
     wxCHECK_RET( (m_widget != NULL), _T("invalid window") );
+
+    if (!m_widget->window) return;
 
     if (eraseBackground && m_wxwindow && m_wxwindow->window)
     {
@@ -2540,6 +2584,8 @@ void wxWindow::Clear()
 {
     wxCHECK_RET( m_widget != NULL, _T("invalid window") );
 
+    if (!m_widget->window) return;
+
     if (m_wxwindow && m_wxwindow->window)
     {
         gdk_window_clear( m_wxwindow->window );
@@ -2596,6 +2642,8 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
     m_backgroundColour = colour;
     if (!m_backgroundColour.Ok()) return;
 
+    if (!m_widget->window) return;
+
     if (m_wxwindow && m_wxwindow->window)
     {
 	/* wxMSW doesn't clear the window here. I don't do that
@@ -2635,6 +2683,8 @@ void wxWindow::SetForegroundColour( const wxColour &colour )
 
     m_foregroundColour = colour;
     if (!m_foregroundColour.Ok()) return;
+
+    if (!m_widget->window) return;
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
     if (sysbg.Red() == colour.Red() &&
@@ -2896,6 +2946,8 @@ void wxWindow::CaptureMouse()
 
     wxCHECK_RET( g_capturing == FALSE, _T("CaptureMouse called twice") );
 
+    if (!m_widget->window) return;
+
     GtkWidget *connect_widget = GetConnectWidget();
     gtk_grab_add( connect_widget );
     gdk_pointer_grab( connect_widget->window, FALSE,
@@ -2914,6 +2966,8 @@ void wxWindow::ReleaseMouse()
     wxCHECK_RET( m_widget != NULL, _T("invalid window") );
 
     wxCHECK_RET( g_capturing == TRUE, _T("ReleaseMouse called twice") );
+
+    if (!m_widget->window) return;
 
     GtkWidget *connect_widget = GetConnectWidget();
     gtk_grab_remove( connect_widget );

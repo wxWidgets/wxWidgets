@@ -85,9 +85,6 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         GtkWidget *item = gtk_menu_item_new_with_label( choices[i].mbc_str() );
         gtk_menu_append( GTK_MENU(menu), item );
 
-        gtk_widget_realize( item );
-        gtk_widget_realize( GTK_BIN(item)->child );
-
         gtk_widget_show( item );
 
         gtk_signal_connect( GTK_OBJECT( item ), "activate",
@@ -124,10 +121,13 @@ void wxChoice::AppendCommon( const wxString &item )
 
     gtk_menu_append( GTK_MENU(menu), menu_item );
 
-    gtk_widget_realize( menu_item );
-    gtk_widget_realize( GTK_BIN(menu_item)->child );
+    if (GTK_WIDGET_REALIZED(m_widget))
+    {
+        gtk_widget_realize( menu_item );
+        gtk_widget_realize( GTK_BIN(menu_item)->child );
 
-    if (m_widgetStyle) ApplyWidgetStyle();
+        if (m_widgetStyle) ApplyWidgetStyle();
+    }
 
     gtk_signal_connect( GTK_OBJECT( menu_item ), "activate",
       GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );

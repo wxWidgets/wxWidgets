@@ -825,8 +825,6 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
                      long *descent, long *externalLeading,
                      wxFont *theFont, bool WXUNUSED(use16) )
 {
-    wxCHECK_RET( Ok(), _T("invalid window dc") );
-  
     wxFont fontToUse = m_font;
     if (theFont) fontToUse = *theFont;
   
@@ -839,16 +837,12 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
 
 long wxWindowDC::GetCharWidth()
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid window dc") );
-  
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     return long(gdk_string_width( font, "H" ) / m_scaleX);
 }
 
 long wxWindowDC::GetCharHeight()
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid window dc") );
-  
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
     return long((font->ascent + font->descent) / m_scaleY);
 }
@@ -883,8 +877,6 @@ void wxWindowDC::Clear()
 
 void wxWindowDC::SetFont( const wxFont &font )
 {
-    wxCHECK_RET( Ok(), _T("invalid window dc") );
-  
     m_font = font;
 }
 
