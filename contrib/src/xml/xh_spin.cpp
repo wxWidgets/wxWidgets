@@ -74,7 +74,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
 { 
     wxSpinCtrl *control = new wxSpinCtrl(m_ParentAsWindow,
                                     GetID(),
-                                    GetText(_T("label")),
+                                    GetText(_T("value")),
                                     GetPosition(), GetSize(),
                                     GetStyle( _T("style"), wxSP_ARROW_KEYS ),
                                     GetLong( _T("min"), wxSP_DEFAULT_MIN),
