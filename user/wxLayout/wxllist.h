@@ -790,6 +790,7 @@ public:
       @return the default settings of the list
    */
    wxLayoutStyleInfo *GetDefaults(void) { return m_DefaultSetting ; }
+   wxLayoutStyleInfo *GetStyleInfo(void) { return &m_CurrentSetting ; }
    //@}
 
    /**@name Drawing */
