@@ -330,9 +330,9 @@ wxWindowMSW::~wxWindowMSW()
         wxFrame *frame = wxDynamicCast(win, wxFrame);
         if ( frame )
         {
-            if ( frameMSW->GetLastFocus() == this )
+            if ( frame->GetLastFocus() == this )
             {
-                frameMSW->SetLastFocus((wxWindow*)NULL);
+                frame->SetLastFocus((wxWindow*)NULL);
             }
             break;
         }
