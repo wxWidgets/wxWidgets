@@ -860,7 +860,7 @@
 /*
  * MS Icons and Cursors format support
  */
-#define wxUSE_ICO_CUR 0
+#define wxUSE_ICO_CUR 1
 
 /*
  * Disable this if your compiler can't cope

@@ -825,7 +825,7 @@ void wxThreadInternal::Wait()
         wxMutexGuiLeave();
 
     bool isDetached = m_isDetached;
-    wxThreadIdType id = GetId();
+    wxThreadIdType id = (wxThreadIdType) GetId();
 
     wxLogTrace(TRACE_THREADS,
                _T("Starting to wait for thread %ld to exit."), id);
@@ -1203,7 +1203,7 @@ unsigned int wxThread::GetPriority() const
 
 wxThreadIdType wxThread::GetId() const
 {
-    return m_internal->GetId();
+    return (wxThreadIdType) m_internal->GetId();
 }
 
 // -----------------------------------------------------------------------------

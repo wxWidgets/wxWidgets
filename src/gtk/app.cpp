@@ -11,6 +11,10 @@
     #pragma implementation "app.h"
 #endif
 
+#ifdef __VMS
+#include <vms_jackets.h>
+#endif
+
 #include "wx/app.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
@@ -38,7 +42,11 @@
 #endif
 
 #include <unistd.h>
-#include <sys/poll.h>
+#ifdef __VMS
+# include <poll.h>
+#else
+# include <sys/poll.h>
+#endif
 #include "wx/gtk/win_gtk.h"
 
 #include <gtk/gtk.h>
