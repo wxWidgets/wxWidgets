@@ -56,6 +56,8 @@ public:
 #if defined(wxUSE_DC_OLD_METHODS)
 
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
+    %name(FloodFillPoint) bool FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE);
+
     //bool GetPixel(wxCoord x, wxCoord y, wxColour *col) const;
     %extend {
         wxColour GetPixel(wxCoord x, wxCoord y) {
@@ -63,26 +65,66 @@ public:
             self->GetPixel(x, y, &col);
             return col;
         }
+        wxColour GetPixelPoint(const wxPoint& pt) {
+            wxColour col;
+            self->GetPixel(pt, &col);
+            return col;
+        }
     }
+    
     void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+    %name(DrawLinePoint) void DrawLine(const wxPoint& pt1, const wxPoint& pt2);
+
     void CrossHair(wxCoord x, wxCoord y);
+    %name(CrossHairPoint) void CrossHair(const wxPoint& pt);
+
     void DrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc);
+    %name(DrawArcPoint) void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre);
+
     void DrawCheckMark(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    %name(DrawCheckMarkRect) void DrawCheckMark(const wxRect& rect);
+
     void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h, double sa, double ea);
+    %name(DrawEllipticArcPtSz) void DrawEllipticArc(const wxPoint& pt, const wxSize& sz, double sa, double ea);
+
     void DrawPoint(wxCoord x, wxCoord y);
+    %name(DrawPointPoint) void DrawPoint(const wxPoint& pt);
+
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(DrawRectangleRect)void DrawRectangle(const wxRect& rect);
+    %name(DrawRectanglePtSz) void DrawRectangle(const wxPoint& pt, const wxSize& sz);
+
     void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius);
+    %name(DrawRoundedRectangleRect) void DrawRoundedRectangle(const wxRect& r, double radius);
+    %name(DrawRoundedRectanglePtSz) void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius);
+
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
+    %name(DrawCirclePoint) void DrawCircle(const wxPoint& pt, wxCoord radius);
+
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    %name(DrawEllipseRect) void DrawEllipse(const wxRect& rect);
+    %name(DrawEllipsePtSz) void DrawEllipse(const wxPoint& pt, const wxSize& sz);
+
     void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
+    %name(DrawIconPoint) void DrawIcon(const wxIcon& icon, const wxPoint& pt);
+
     void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = False);
+    %name(DrawBitmapPoint) void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = False);
+
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
+    %name(DrawTextPoint) void DrawText(const wxString& text, const wxPoint& pt);
+
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
+    %name(DrawRotatedTextPoint) void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
+
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
               int rop = wxCOPY, bool useMask = False,
               wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+    %name(BlitPtSz) bool Blit(const wxPoint& destPt, const wxSize& sz,
+                      wxDC *source, const wxPoint& srcPt,
+                      int rop = wxCOPY, bool useMask = False,
+                      const wxPoint& srcPtMask = wxDefaultPosition);
 
 
 
@@ -105,6 +147,7 @@ public:
             return col;
         }
     }
+    
     %name(DrawLineXY) void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
     void DrawLine(const wxPoint& pt1, const wxPoint& pt2);
 

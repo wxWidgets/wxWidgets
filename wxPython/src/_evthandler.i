@@ -113,7 +113,7 @@ public:
             """
             if source is not None:
                 id  = source.GetId()
-            event.Unbind(self, id, id2)              
+            return event.Unbind(self, id, id2)              
     }
 
     

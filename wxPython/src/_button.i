@@ -31,21 +31,31 @@ enum {
 //---------------------------------------------------------------------------
 
 DocStr(wxButton,
-       "A button is a control that contains a text string, and is one of the most\n"
-       "common elements of a GUI.  It may be placed on a dialog box or panel, or\n"
-       "indeed almost any other window.");
+"A button is a control that contains a text string, and is one of the most
+common elements of a GUI.  It may be placed on a dialog box or panel, or
+indeed almost any other window.
 
-RefDoc(wxButton,  "
- Styles
-    wx.BU_LEFT:     Left-justifies the label. WIN32 only.
-    wx.BU_TOP:      Aligns the label to the top of the button. WIN32 only.
-    wx.BU_RIGHT:    Right-justifies the bitmap label. WIN32 only.
-    wx.BU_BOTTOM:   Aligns the label to the bottom of the button. WIN32 only.
-    wx.BU_EXACTFIT: Creates the button as small as possible instead of making
-                    it of the standard size (which is the default behaviour.)
+Window Styles
+-------------
+    ==============   ==========================================
+    wx.BU_LEFT       Left-justifies the label. WIN32 only.
+    wx.BU_TOP        Aligns the label to the top of the button.
+                     WIN32 only.
+    wx.BU_RIGHT      Right-justifies the bitmap label. WIN32 only.
+    wx.BU_BOTTOM     Aligns the label to the bottom of the button.
+                     WIN32 only.
+    wx.BU_EXACTFIT   Creates the button as small as possible
+                     instead of making it of the standard size
+                     (which is the default behaviour.)
+    ==============   ==========================================
 
- Events
-     EVT_BUTTON:    Sent when the button is clicked.
+Events
+------
+    ============     ==========================================
+    EVT_BUTTON       Sent when the button is clicked.
+    ============     ==========================================
+
+:see: `wx.BitmapButton`
 ");
 
 class wxButton : public wxControl
@@ -55,41 +65,40 @@ public:
     %pythonAppend wxButton()       ""
 
 
-    DocStr(wxButton, "Create and show a button.");
     RefDoc(wxButton, "");
-    wxButton(wxWindow* parent, wxWindowID id, const wxString& label,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxPyButtonNameStr);
+    DocCtorStr(
+        wxButton(wxWindow* parent, wxWindowID id, const wxString& label,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxPyButtonNameStr),
+        "Create and show a button.");
 
-    DocStr(wxButton(), "Precreate a Button for 2-phase creation.");
-    %name(PreButton)wxButton();
+    DocCtorStrName(
+        wxButton(),
+        "Precreate a Button for 2-phase creation.",
+        PreButton);
 
-    DocStr(Create, "Acutally create the GUI Button for 2-phase creation.");
-    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxPyButtonNameStr);
+    DocDeclStr(
+        bool , Create(wxWindow* parent, wxWindowID id, const wxString& label,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = 0,
+                      const wxValidator& validator = wxDefaultValidator,
+                      const wxString& name = wxPyButtonNameStr),
+        "Acutally create the GUI Button for 2-phase creation.");
+    
 
 
-    DocStr(SetDefault, "This sets the button to be the default item for the panel or dialog box.");
-    void SetDefault();
+    DocDeclStr(
+        void , SetDefault(),
+        "This sets the button to be the default item for the panel or dialog box.");
+    
 
-
-// #ifdef __WXMSW__
-//     // show the image in the button in addition to the label
-//     void SetImageLabel(const wxBitmap& bitmap);
-
-//     // set the margins around the image
-//     void SetImageMargins(wxCoord x, wxCoord y);
-// #endif
-
-    DocStr(GetDefaultButtonSize, "Returns the default button size for this platform.");
-    static wxSize GetDefaultSize();
+    DocDeclStr(
+        static wxSize , GetDefaultSize(),
+        "Returns the default button size for this platform.");   
 };
 
 
@@ -99,27 +108,37 @@ public:
 
 DocStr(wxBitmapButton,
 "A Button that contains a bitmap.  A bitmap button can be supplied with a
-single bitmap, and wxWindows will draw all button states using this bitmap. If
+single bitmap, and wxWidgets will draw all button states using this bitmap. If
 the application needs more control, additional bitmaps for the selected state,
 unpressed focused state, and greyed-out state may be supplied.
-");
 
-RefDoc(wxBitmapButton,  "
- Styles
-    wx.BU_AUTODRAW: If this is specified, the button will be drawn
-                    automatically using the label bitmap only, providing a
-                    3D-look border. If this style is not specified, the button
-                    will be drawn without borders and using all provided
+Window Styles
+-------------
+    ==============  =============================================
+    wx.BU_AUTODRAW  If this is specified, the button will be drawn
+                    automatically using the label bitmap only,
+                    providing a 3D-look border. If this style is
+                    not specified, the button will be drawn
+                    without borders and using all provided
                     bitmaps. WIN32 only.
-    wx.BU_LEFT:     Left-justifies the label. WIN32 only.
-    wx.BU_TOP:      Aligns the label to the top of the button. WIN32 only.
-    wx.BU_RIGHT:    Right-justifies the bitmap label. WIN32 only.
-    wx.BU_BOTTOM:   Aligns the label to the bottom of the button. WIN32 only.
-    wx.BU_EXACTFIT: Creates the button as small as possible instead of making
-                    it of the standard size (which is the default behaviour.)
+    wx.BU_LEFT      Left-justifies the label. WIN32 only.
+    wx.BU_TOP       Aligns the label to the top of the button. WIN32
+                    only.
+    wx.BU_RIGHT     Right-justifies the bitmap label. WIN32 only.
+    wx.BU_BOTTOM    Aligns the label to the bottom of the
+                    button. WIN32 only.
+    wx.BU_EXACTFIT  Creates the button as small as possible
+                    instead of making it of the standard size
+                    (which is the default behaviour.)
+    ==============  =============================================
 
- Events
-     EVT_BUTTON:    Sent when the button is clicked.
+Events
+------
+     ===========   ==================================
+     EVT_BUTTON    Sent when the button is clicked.
+     ===========   ==================================
+
+:see: `wx.Button`, `wx.Bitmap`
 ");
 
 class wxBitmapButton : public wxButton
@@ -128,52 +147,70 @@ public:
     %pythonAppend wxBitmapButton         "self._setOORInfo(self)"
     %pythonAppend wxBitmapButton()       ""
 
-    DocStr(wxBitmapButton, "Create and show a button with a bitmap for the label.")
     RefDoc(wxBitmapButton, ""); // turn it off for the ctors
-    
-    wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxBU_AUTODRAW,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxPyButtonNameStr);
 
-    DocStr(wxBitmapButton(), "Precreate a BitmapButton for 2-phase creation.");
-    %name(PreBitmapButton)wxBitmapButton();
+    DocCtorStr(
+        wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxBU_AUTODRAW,
+                       const wxValidator& validator = wxDefaultValidator,
+                       const wxString& name = wxPyButtonNameStr),
+        "Create and show a button with a bitmap for the label.");
 
-    DocStr(Create, "Acutally create the GUI BitmapButton for 2-phase creation.");
-    bool Create(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
+    DocCtorStrName(
+        wxBitmapButton(),
+        "Precreate a BitmapButton for 2-phase creation.",
+        PreBitmapButton);
+
+    DocDeclStr(
+        bool , Create(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxBU_AUTODRAW,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxPyButtonNameStr);
+                      const wxString& name = wxPyButtonNameStr),
+        "Acutally create the GUI BitmapButton for 2-phase creation.");
+    
 
-    DocStr(GetBitmapLabel, "Returns the label bitmap (the one passed to the constructor).");
-    wxBitmap GetBitmapLabel();
+    DocDeclStr(
+        wxBitmap , GetBitmapLabel(),
+        "Returns the label bitmap (the one passed to the constructor).");
+    
+    DocDeclStr(
+        wxBitmap , GetBitmapDisabled(),
+        "Returns the bitmap for the disabled state.");
+    
+    DocDeclStr(
+        wxBitmap , GetBitmapFocus(),
+        "Returns the bitmap for the focused state.");
+    
 
-    DocStr(GetBitmapDisabled, "Returns the bitmap for the disabled state.");
-    wxBitmap GetBitmapDisabled();
+    DocDeclStr(
+        wxBitmap , GetBitmapSelected(),
+        "Returns the bitmap for the selected state.");
+    
 
-    DocStr(GetBitmapFocus, "Returns the bitmap for the focused state.");
-    wxBitmap GetBitmapFocus();
+    DocDeclStr(
+        void , SetBitmapDisabled(const wxBitmap& bitmap),
+        "Sets the bitmap for the disabled button appearance.");
+    
 
-    DocStr(GetBitmapSelected, "Returns the bitmap for the selected state.");
-    wxBitmap GetBitmapSelected();
+    DocDeclStr(
+        void , SetBitmapFocus(const wxBitmap& bitmap),
+        "Sets the bitmap for the button appearance when it has the keyboard focus.");
+    
 
-    DocStr(SetBitmapDisabled, "Sets the bitmap for the disabled button appearance.");
-    void SetBitmapDisabled(const wxBitmap& bitmap);
+    DocDeclStr(
+        void , SetBitmapSelected(const wxBitmap& bitmap),
+        "Sets the bitmap for the selected (depressed) button appearance.");
+    
 
-    DocStr(SetBitmapFocus, "Sets the bitmap for the button appearance when it has the keyboard focus.");
-    void SetBitmapFocus(const wxBitmap& bitmap);
-
-    DocStr(SetBitmapSelected, "Sets the bitmap for the selected (depressed) button appearance.");
-    void SetBitmapSelected(const wxBitmap& bitmap);
-
-    DocStr(SetBitmapLabel,
-           "Sets the bitmap label for the button.  This is the bitmap used for the\n"
-           "unselected state, and for all other states if no other bitmaps are provided.");
-    void SetBitmapLabel(const wxBitmap& bitmap);
+    DocDeclStr(
+        void , SetBitmapLabel(const wxBitmap& bitmap),
+        "Sets the bitmap label for the button.  This is the bitmap used for the
+unselected state, and for all other states if no other bitmaps are provided.");
+    
 
     void SetMargins(int x, int y);
     int GetMarginX() const;

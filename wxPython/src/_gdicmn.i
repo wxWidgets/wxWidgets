@@ -130,6 +130,7 @@ public:
 
     ~wxSize();
 
+// None/NULL is now handled properly by the typemap, so these are not needed.
 //     %extend {
 //         bool __eq__(const wxSize* other) { return other ? (*self == *other) : False; }
 //         bool __ne__(const wxSize* other) { return other ? (*self != *other) : True;  }

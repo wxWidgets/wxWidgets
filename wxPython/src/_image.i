@@ -83,24 +83,14 @@ public:
     %name(ImageFromMime) wxImage(const wxString& name, const wxString& mimetype, int index = -1);
     %name(ImageFromStream) wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);
     %name(ImageFromStreamMime) wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1 );
-
-
-    
     %extend {
-
-        %nokwargs wxImage(int width=0, int height=0, bool clear = True);
-        %nokwargs wxImage(const wxSize& size, bool clear = True);
         %name(EmptyImage) wxImage(int width=0, int height=0, bool clear = True) {
             if (width > 0 && height > 0)
                 return new wxImage(width, height, clear);
             else
                 return new wxImage;
         }   
-        %name(EmptyImage) wxImage(const wxSize& size, bool clear = True) {
-            return new wxImage(size.x, size.y, clear);
-        }   
-
-        
+           
         %name(ImageFromBitmap) wxImage(const wxBitmap &bitmap) {
             return new wxImage(bitmap.ConvertToImage());
         }

@@ -67,12 +67,56 @@ _defRedirect = (wx.Platform == '__WXMSW__' or wx.Platform == '__WXMAC__')
 
 class App(wx.PyApp):
     """
-    The main application class.  Derive from this and implement an OnInit
-    method that creates a frame and then calls self.SetTopWindow(frame)
+    The ``wx.App`` class represents the application and is used to:
+
+      * bootstrap the wxPython system and initialize the underlying
+        gui toolkit
+      * set and get application-wide properties
+      * implement the windowing system main message or event loop,
+        and to dispatch events to window instances
+      * etc.
+
+    Every application must have a ``wx.App`` instance, and all
+    creation of UI objects should be delayed until after the
+    ``wx.App`` object has been created in order to ensure that the
+    gui platform and wxWidgets have been fully initialized.
+
+    Normally you would derive from this class and implement an
+    ``OnInit`` method that creates a frame and then calls
+    ``self.SetTopWindow(frame)``.
+
+    :see: `wx.PySimpleApp` for a simpler app class that can be used directly.
     """
+    
     outputWindowClass = PyOnDemandOutputWindow
 
     def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
+        """
+        Construct a ``wx.App`` object.  
+
+        :param redirect: Should ``sys.stdout`` and ``sys.stderr``
+            be redirected?  Defaults to True on Windows and Mac,
+            False otherwise.  If `filename` is None then output
+            will be redirected to a window that pops up as
+            needed.  (You can control what kind of window is
+            created for the output by resetting the class
+            variable ``outputWindowClass`` to a class of your
+            choosing.)
+
+        :param filename: The name of a file to redirect output
+            to, if redirect is True.
+
+        :param useBestVisual: Should the app try to use the best
+            available visual provided by the system (only
+            relevant on systems that have more than one visual.)
+            This parameter must be used instead of calling
+            `SetUseBestVisual` later on because it must be set
+            before the underlying GUI toolkit is initialized.
+
+        :note: You should override OnInit to do applicaition
+            initialization to ensure that the system, toolkit and
+            wxWidgets are fully initialized.
+        """
         wx.PyApp.__init__(self)
 
         if wx.Platform == "__WXMAC__":
@@ -147,7 +191,7 @@ your Mac."""
 
 
 
-# change from wxPyApp_ to wxApp_
+# change from wx.PyApp_XX to wx.App_XX
 App_GetMacSupportPCMenuShortcuts = _core_.PyApp_GetMacSupportPCMenuShortcuts
 App_GetMacAboutMenuItemId        = _core_.PyApp_GetMacAboutMenuItemId
 App_GetMacPreferencesMenuItemId  = _core_.PyApp_GetMacPreferencesMenuItemId
@@ -166,14 +210,26 @@ class PySimpleApp(wx.App):
     """
     A simple application class.  You can just create one of these and
     then then make your top level windows later, and not have to worry
-    about OnInit."""
+    about OnInit.  For example::
+
+        app = wx.PySimpleApp()
+        frame = wx.Frame(None, title='Hello World')
+        frame.Show()
+        app.MainLoop()
+
+    :see: `wx.App` 
+    """
 
     def __init__(self, redirect=False, filename=None, useBestVisual=False):
+        """
+        :see: `wx.App.__init__`
+        """
         wx.App.__init__(self, redirect, filename, useBestVisual)
         
     def OnInit(self):
         wx.InitAllImageHandlers()
         return True
+
 
 
 # Is anybody using this one?
@@ -187,15 +243,15 @@ class PyWidgetTester(wx.App):
         self.SetTopWindow(self.frame)
         return True
 
-    def SetWidget(self, widgetClass, *args):
-        w = widgetClass(self.frame, *args)
+    def SetWidget(self, widgetClass, *args, **kwargs):
+        w = widgetClass(self.frame, *args, **kwargs)
         self.frame.Show(True)
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we
-# know when to cleanup system resources that wxWin is holding.  When
+# know when to cleanup system resources that wxWidgets is holding.  When
 # the sys module is unloaded, the refcount on sys.__wxPythonCleanup
-# goes to zero and it calls the wxApp_CleanUp function.
+# goes to zero and it calls the wx.App_CleanUp function.
 
 class __wxPyCleanup:
     def __init__(self):
@@ -206,11 +262,8 @@ class __wxPyCleanup:
 _sys.__wxPythonCleanup = __wxPyCleanup()
 
 ## # another possible solution, but it gets called too early...
-## if sys.version[0] == '2':
-##     import atexit
-##     atexit.register(_core_.wxApp_CleanUp)
-## else:
-##     sys.exitfunc = _core_.wxApp_CleanUp
+## import atexit
+## atexit.register(_core_.wxApp_CleanUp)
 
 
 #----------------------------------------------------------------------------

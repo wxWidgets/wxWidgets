@@ -40,6 +40,9 @@ enum
 
 
 
+DocStr(wxPyApp,
+"The ``wx.PyApp`` class is an *implementation detail*, please use the
+`wx.App` class (or some other derived class) instead.");
 
 class wxPyApp : public wxEvtHandler {
 public:
@@ -67,73 +70,81 @@ public:
         "Get the application name.");
     DocDeclStr(
         void, SetAppName(const wxString& name),
-        "Set the application name. This value may be used automatically\n"
-        "by wx.Config and such.");
+        "Set the application name. This value may be used automatically by
+`wx.Config` and such.");
 
     DocDeclStr(
         wxString, GetClassName() const,
         "Get the application's class name.");
     DocDeclStr(
         void, SetClassName(const wxString& name),
-        "Set the application's class name. This value may be used for X-resources if\n"
-        "applicable for the platform");
+        "Set the application's class name. This value may be used for
+X-resources if applicable for the platform");
 
     DocDeclStr(
         const wxString&, GetVendorName() const,
         "Get the application's vendor name.");
     DocDeclStr(
         void, SetVendorName(const wxString& name),
-        "Set the application's vendor name. This value may be used automatically\n"
-        "by wx.Config and such.");
+        "Set the application's vendor name. This value may be used
+automatically by `wx.Config` and such.");
 
 
     DocDeclStr(
         wxAppTraits*, GetTraits(),
-        "Create the app traits object to which we delegate for everything which either\n"
-        "should be configurable by the user (then he can change the default behaviour\n"
-        "simply by overriding CreateTraits() and returning his own traits object) or\n"
-        "which is GUI/console dependent as then wx.AppTraits allows us to abstract the\n"
-        "differences behind the common facade");
+        "Return (and create if necessary) the app traits object to which we
+delegate for everything which either should be configurable by the
+user (then he can change the default behaviour simply by overriding
+CreateTraits() and returning his own traits object) or which is
+GUI/console dependent as then wx.AppTraits allows us to abstract the
+differences behind the common facade.
+
+:todo: Add support for overriding CreateAppTraits in wxPython.");
 
 
     DocDeclStr(
         virtual void, ProcessPendingEvents(),
-        "Process all events in the Pending Events list -- it is necessary to call this\n"
-        "function to process posted events. This happens during each event loop\n"
-        "iteration.");
+        "Process all events in the Pending Events list -- it is necessary to
+call this function to process posted events. This normally happens
+during each event loop iteration.");
 
 
     DocDeclStr(
         virtual bool, Yield(bool onlyIfNeeded = False),
-        "Process all currently pending events right now, instead of waiting until\n"
-        "return to the event loop.  It is an error to call Yield() recursively unless\n"
-        "the value of onlyIfNeeded is True.\n"
-        "\n"
-        "WARNING: This function is dangerous as it can lead to unexpected\n"
-        "         reentrancies (i.e. when called from an event handler it\n"
-        "         may result in calling the same event handler again), use\n"
-        "         with _extreme_ care or, better, don't use at all!\n");
+        "Process all currently pending events right now, instead of waiting
+until return to the event loop.  It is an error to call ``Yield``
+recursively unless the value of ``onlyIfNeeded`` is True.
+
+:warning: This function is dangerous as it can lead to unexpected
+          reentrancies (i.e. when called from an event handler it may
+          result in calling the same event handler again), use with
+          _extreme_ care or, better, don't use at all!
+
+:see: `wx.Yield`, `wx.YieldIfNeeded`, `wx.SafeYield`");
 
     
     DocDeclStr(
         virtual void, WakeUpIdle(),
-        "Make sure that idle events are sent again");
+        "Make sure that idle events are sent again.
+:see: `wx.WakeUpIdle`");
 
 
     DocDeclStr(
         virtual int, MainLoop(),
-        "Execute the main GUI loop, the function returns when the loop ends.");
+        "Execute the main GUI loop, the function doesn't normally return until
+all top level windows have been closed and destroyed.");
 
     
     DocDeclStr(
         virtual void, Exit(),
-        "Exit the main loop thus terminating the application.");
+        "Exit the main loop thus terminating the application.
+:see: `wx.Exit`");
 
     
     DocDeclStr(
         virtual void, ExitMainLoop(),
-        "Exit the main GUI loop during the next iteration (i.e. it does not\n"
-        "stop the program immediately!)");
+        "Exit the main GUI loop during the next iteration of the main
+loop, (i.e. it does not stop the program immediately!)");
 
     
     DocDeclStr(
@@ -143,21 +154,21 @@ public:
     
     DocDeclStr(
         virtual bool, Dispatch(),
-        "Process the first event in the event queue (blocks until an event\n"
-        "appears if there are none currently)");
+        "Process the first event in the event queue (blocks until an event
+appears if there are none currently)");
 
 
     DocDeclStr(
         virtual bool, ProcessIdle(),
-        "Called from the MainLoop when the application becomes idle and sends an\n"
-        "IdleEvent to all interested parties.  Returns True is more idle events are\n"
-        "needed, False if not.");
+        "Called from the MainLoop when the application becomes idle (there are
+no pending events) and sends a `wx.IdleEvent` to all interested
+parties.  Returns True if more idle events are needed, False if not.");
 
     
     DocDeclStr(
         virtual bool, SendIdleEvents(wxWindow* win, wxIdleEvent& event),
-        "Send idle event to window and all subwindows.  Returns True if more idle time\n"
-        "is requested.");
+        "Send idle event to window and all subwindows.  Returns True if more
+idle time is requested.");
 
 
     DocDeclStr(
@@ -167,22 +178,22 @@ public:
     
     DocDeclStr(
         void, SetTopWindow(wxWindow *win),
-        "Set the \"main\" top level window");
+        "Set the *main* top level window");
 
     DocDeclStr(
         virtual wxWindow*, GetTopWindow() const,
-        "Return the \"main\" top level window (if it hadn't been set previously with\n"
-        "SetTopWindow(), will return just some top level window and, if there not any,\n"
-        "will return None)");        
+        "Return the *main* top level window (if it hadn't been set previously
+with SetTopWindow(), will return just some top level window and, if
+there not any, will return None)");        
 
 
     DocDeclStr(
         void, SetExitOnFrameDelete(bool flag),
-        "Control the exit behaviour: by default, the program will exit the main loop\n"
-        "(and so, usually, terminate) when the last top-level program window is\n"
-        "deleted.  Beware that if you disable this behaviour (with\n"
-        "SetExitOnFrameDelete(False)), you'll have to call ExitMainLoop() explicitly\n"
-        "from somewhere.\n");
+        "Control the exit behaviour: by default, the program will exit the main
+loop (and so, usually, terminate) when the last top-level program
+window is deleted.  Beware that if you disable this behaviour (with
+SetExitOnFrameDelete(False)), you'll have to call ExitMainLoop()
+explicitly from somewhere.");
 
     
     DocDeclStr(
@@ -203,8 +214,8 @@ public:
     
     DocDeclStr(
         void, SetUseBestVisual( bool flag ),
-        "Set whether the app should try to use the best available visual on systems\n"
-        "where more than one is available, (Sun, SGI, XFree86 4, etc.)");
+        "Set whether the app should try to use the best available visual on
+systems where more than one is available, (Sun, SGI, XFree86 4, etc.)");
     
     DocDeclStr(
         bool, GetUseBestVisual() const,
@@ -221,13 +232,18 @@ public:
 
     DocDeclStr(
         void, SetAssertMode(int mode),
-        "Set the OnAssert behaviour for debug and hybrid builds.  The following flags\n"
-        "may be or'd together:\n"
-        "\n"
-        " wx.PYAPP_ASSERT_SUPPRESS         Don't do anything\n"
-        " wx.PYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)\n"
-        " wx.PYAPP_ASSERT_DIALOG           Display a message dialog\n"
-        " wx.PYAPP_ASSERT_LOG              Write the assertion info to the wx.Log\n");
+        "Set the OnAssert behaviour for debug and hybrid builds.  The following
+flags may be or'd together:
+
+   =========================   =======================================
+   wx.PYAPP_ASSERT_SUPPRESS    Don't do anything
+   wx.PYAPP_ASSERT_EXCEPTION   Turn it into a Python exception if possible
+                               (default)
+   wx.PYAPP_ASSERT_DIALOG      Display a message dialog
+   wx.PYAPP_ASSERT_LOG         Write the assertion info to the wx.Log
+   =========================   =======================================
+
+");
     
     DocDeclStr(
         int,  GetAssertMode(),
@@ -252,9 +268,8 @@ public:
         "For internal use only");
 
     DocStr(GetComCtl32Version,
-           "Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or
-0 if it wasn't found at all.  Raises an exception on non-Windows
-platforms.");
+           "Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or 0 if
+it wasn't found at all.  Raises an exception on non-Windows platforms.");
 #ifdef __WXMSW__
     static int GetComCtl32Version();
 #else
@@ -287,26 +302,30 @@ DocDeclStr(
 
 DocDeclStr(
     bool, wxSafeYield(wxWindow* win=NULL, bool onlyIfNeeded=False),
-    "This function is similar to wx.Yield, except that it disables the user input\n"
-    "to all program windows before calling wx.Yield and re-enables it again\n"
-    "afterwards. If win is not None, this window will remain enabled, allowing the\n"
-    "implementation of some limited user interaction.\n"
-    "\n"
-    "Returns the result of the call to wx.Yield.");
+    "This function is similar to `wx.Yield`, except that it disables the
+user input to all program windows before calling `wx.Yield` and
+re-enables it again afterwards. If ``win`` is not None, this window
+will remain enabled, allowing the implementation of some limited user
+interaction.
+
+:Returns: the result of the call to `wx.Yield`.");
 
 
 DocDeclStr(
     void,  wxWakeUpIdle(),
-    "Cause the message queue to become empty again, so idle events will be sent.");
+    "Cause the message queue to become empty again, so idle events will be
+sent.");
 
 
 DocDeclStr(
     void, wxPostEvent(wxEvtHandler *dest, wxEvent& event),
-    "Send an event to a window or other wx.EvtHandler to be processed later.");
+    "Send an event to a window or other wx.EvtHandler to be processed
+later.");
 
 
 DocStr(wxApp_CleanUp,
-       "For internal use only, it is used to cleanup after wxWindows when Python shuts down.");
+       "For internal use only, it is used to cleanup after wxWindows when
+Python shuts down.");
 %inline %{
     void wxApp_CleanUp() {
         __wxPyCleanup();

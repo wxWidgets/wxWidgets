@@ -22,12 +22,15 @@ MAKE_CONST_WXSTRING(ChoiceNameStr);
 
 
 DocStr(wxChoice,       
-"A Choice control is used to select one of a list of strings. Unlike a ListBox,
-only the selection is visible until the user pulls down the menu of choices.");
+"A Choice control is used to select one of a list of strings.
+Unlike a `wx.ListBox`, only the selection is visible until the
+user pulls down the menu of choices.
 
-RefDoc(wxChoice, "
- Events
-    EVT_CHOICE:         Sent when an item in the list is selected.
+Events
+------
+    ================    ==========================================
+    EVT_CHOICE          Sent when an item in the list is selected.
+    ================    ==========================================
 ");
        
 
@@ -47,9 +50,9 @@ public:
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyChoiceNameStr),
-        "__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,\n" 
-        "    List choices=[], long style=0, Validator validator=DefaultValidator,\n"
-        "    String name=ChoiceNameStr) -> Choice",
+        "__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
+    List choices=[], long style=0, Validator validator=DefaultValidator,
+    String name=ChoiceNameStr) -> Choice",
         "Create and show a Choice control");
 
     DocCtorStrName(
@@ -66,9 +69,9 @@ public:
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxPyChoiceNameStr),
-        "Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,\n" 
-        "    List choices=[], long style=0, Validator validator=DefaultValidator,\n"
-        "    String name=ChoiceNameStr) -> bool",
+        "Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
+    List choices=[], long style=0, Validator validator=DefaultValidator,
+    String name=ChoiceNameStr) -> bool",
         "Actually create the GUI Choice control for 2-phase creation");
     
 

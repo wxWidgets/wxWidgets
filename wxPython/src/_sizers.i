@@ -271,16 +271,30 @@ public:
 
     %pythoncode {
     def AddMany(self, widgets):
+        """
+        AddMany is a convenience method for adding several items
+        to a sizer at one time.  Simply pass it a list of tuples,
+        where each tuple consists of the parameters that you
+        would normally pass to the `Add` method.
+        """
         for childinfo in widgets:
             if type(childinfo) != type(()) or (len(childinfo) == 2 and type(childinfo[0]) == type(1)):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
 
     %# for backwards compatibility only, please do not use in new code
-    AddWindow = AddSizer = AddSpacer = Add
-    PrependWindow = PrependSizer = PrependSpacer = Prepend
-    InsertWindow = InsertSizer = InsertSpacer = Insert
-    RemoveWindow = RemoveSizer = RemovePos = Remove
+    AddWindow     = wx._deprecated(Add, "AddWindow is deprecated, use `Add` instead.")
+    AddSizer      = wx._deprecated(Add, "AddSizer is deprecated, use `Add` instead.")
+    AddSpacer     = wx._deprecated(Add, "AddSpacer is deprecated, use `Add` instead.")
+    PrependWindow = wx._deprecated(Prepend, "PrependWindow is deprecated, use `Prepend` instead.")
+    PrependSizer  = wx._deprecated(Prepend, "PrependSizer is deprecated, use `Prepend` instead.")
+    PrependSpacer = wx._deprecated(Prepend, "PrependSpacer is deprecated, use `Prepend` instead.")
+    InsertWindow  = wx._deprecated(Insert, "InsertWindow is deprecated, use `Insert` instead.")
+    InsertSizer   = wx._deprecated(Insert, "InsertSizer is deprecated, use `Insert` instead.")
+    InsertSpacer  = wx._deprecated(Insert, "InsertSpacer is deprecated, use `Insert` instead.")
+    RemoveWindow  = wx._deprecated(Remove, "RemoveWindow is deprecated, use `Remove` instead.")
+    RemoveSizer   = wx._deprecated(Remove, "RemoveSizer is deprecated, use `Remove` instead.")
+    RemovePos     = wx._deprecated(Remove, "RemovePos is deprecated, use `Remove` instead.")
 
 
     def SetItemMinSize(self, item, *args):

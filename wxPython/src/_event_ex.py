@@ -23,12 +23,14 @@ class PyEventBinder(object):
         for et in self.evtType:
             target.Connect(id1, id2, et, function)
 
+
     def Unbind(self, target, id1, id2):
         """Remove an event binding."""
         success = 0
         for et in self.evtType:
             success += target.Disconnect(id1, id2, et)
         return success != 0
+
     
     def __call__(self, *args):
         """

@@ -27,7 +27,9 @@ MAKE_CONST_WXSTRING(MessageBoxCaptionStr);
 
 
 DocStr(wxColourData,
-       "This class holds a variety of information related to colour dialogs.");
+"This class holds a variety of information related to the colour
+chooser dialog, used to transfer settings and results to and from the
+`wx.ColourDialog`.");
     
 class wxColourData : public wxObject {
 public:
@@ -40,9 +42,9 @@ public:
     
     DocDeclStr(
         bool , GetChooseFull(),
-        "Under Windows, determines whether the Windows colour dialog will display\n"
-        "the full dialog with custom colour selection controls. Has no meaning\n"
-        "under other platforms.  The default value is true.");
+        "Under Windows, determines whether the Windows colour dialog will
+display the full dialog with custom colour selection controls. Has no
+meaning under other platforms.  The default value is true.");
     
     DocDeclStr(
         wxColour , GetColour(),
@@ -50,25 +52,29 @@ public:
     
     DocDeclStr(
         wxColour , GetCustomColour(int i),
-        "Gets the i'th custom colour associated with the colour dialog. i should\n"
-        "be an integer between 0 and 15. The default custom colours are all white.");
+        "Gets the i'th custom colour associated with the colour dialog. i
+should be an integer between 0 and 15. The default custom colours are
+all white.");
     
     DocDeclStr(
         void , SetChooseFull(int flag),
-        "Under Windows, tells the Windows colour dialog to display the full dialog\n"
-        "with custom colour selection controls. Under other platforms, has no effect.\n"
-        "The default value is true.");
+        "Under Windows, tells the Windows colour dialog to display the full
+dialog with custom colour selection controls. Under other platforms,
+has no effect.  The default value is true.");
     
     DocDeclStr(
         void , SetColour(const wxColour& colour),
-        "Sets the default colour for the colour dialog.  The default colour is black.");
+        "Sets the default colour for the colour dialog.  The default colour is
+black.");
     
     DocDeclStr(
         void , SetCustomColour(int i, const wxColour& colour),
-        "Sets the i'th custom colour for the colour dialog. i should be an integer\n"
-        "between 0 and 15. The default custom colours are all white.");
+        "Sets the i'th custom colour for the colour dialog. i should be an
+integer between 0 and 15. The default custom colours are all white.");
     
 };
+
+
 
 
 DocStr(wxColourDialog,
@@ -80,12 +86,13 @@ public:
 
    DocCtorStr(
        wxColourDialog(wxWindow* parent, wxColourData* data = NULL),
-       "Constructor. Pass a parent window, and optionally a ColourData, which\n"
-       "will be copied to the colour dialog's internal ColourData instance.");
+       "Constructor. Pass a parent window, and optionally a `wx.ColourData`,
+which will be copied to the colour dialog's internal ColourData
+instance.");
 
     DocDeclStr(
         wxColourData& , GetColourData(),
-        "Returns a reference to the ColourData used by the dialog.");
+        "Returns a reference to the `wx.ColourData` used by the dialog.");
 };
 
 
@@ -93,14 +100,19 @@ public:
 
 
 DocStr(wxDirDialog,
-       "This class represents the directory chooser dialog.");
+       "wx.DirDialog allows the user to select a directory by browising the
+file system.
 
-RefDoc(wxDirDialog, "
- Styles
-    wxDD_NEW_DIR_BUTTON     Add \"Create new directory\" button and allow
-                            directory names to be editable. On Windows the new
-                            directory button is only available with recent
-                            versions of the common dialogs.");
+
+Window  Styles
+--------------
+    ====================  ==========================================
+    wx.DD_NEW_DIR_BUTTON  Add 'Create new directory' button and allow
+                          directory names to be editable. On Windows
+                          the new directory button is only available
+                          with recent versions of the common dialogs.
+    ====================  ==========================================
+");
 
 class wxDirDialog : public wxDialog {
 public:
@@ -145,40 +157,46 @@ public:
 //---------------------------------------------------------------------------
 
 DocStr(wxFileDialog,
-       "This class represents the file chooser dialog.");
+"wx.FileDialog allows the user to select one or more files from the
+filesystem.
 
-RefDoc(wxFileDialog, "
-In Windows, this is the common file selector dialog. In X, this is a file
-selector box with somewhat less functionality. The path and filename are
-distinct elements of a full file pathname. If path is \"\", the current
-directory will be used. If filename is \"\", no default filename will be
-supplied. The wildcard determines what files are displayed in the file
-selector, and file extension supplies a type extension for the required
-filename.
+In Windows, this is the common file selector dialog. On X based
+platforms a generic alternative is used.  The path and filename are
+distinct elements of a full file pathname. If path is \"\", the
+current directory will be used. If filename is \"\", no default
+filename will be supplied. The wildcard determines what files are
+displayed in the file selector, and file extension supplies a type
+extension for the required filename.
 
-Both the X and Windows versions implement a wildcard filter. Typing a filename
-containing wildcards (*, ?) in the filename text item, and clicking on Ok,
-will result in only those files matching the pattern being displayed. The
-wildcard may be a specification for multiple types of file with a description
-for each, such as:
+Both the X and Windows versions implement a wildcard filter. Typing a
+filename containing wildcards (*, ?) in the filename text item, and
+clicking on Ok, will result in only those files matching the pattern
+being displayed. The wildcard may be a specification for multiple
+types of file with a description for each, such as::
 
    \"BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif\"
 
- Styles
+
+Window  Styles
+--------------
+    ==================   ==========================================
     wx.OPEN              This is an open dialog.
 
     wx.SAVE              This is a save dialog.
 
-    wx.HIDE_READONLY     For open dialog only: hide the checkbox allowing to
-                         open the file in read-only mode.
+    wx.HIDE_READONLY     For open dialog only: hide the checkbox
+                         allowing to open the file in read-only mode.
 
-    wx.OVERWRITE_PROMPT  For save dialog only: prompt for a confirmation if a
-                         file will be overwritten.
+    wx.OVERWRITE_PROMPT  For save dialog only: prompt for a confirmation
+                         if a file will be overwritten.
 
-    wx.MULTIPLE          For open dialog only: allows selecting multiple files.
+    wx.MULTIPLE          For open dialog only: allows selecting multiple
+                         files.
 
-    wx.CHANGE_DIR        Change the current working directory to the directory
-                         where the file(s) chosen by the user are.
+    wx.CHANGE_DIR        Change the current working directory to the
+                         directory  where the file(s) chosen by the user
+                         are.
+    ==================   ==========================================
 ");
 
 
@@ -206,8 +224,8 @@ public:
     
     DocDeclStr(
         void , SetPath(const wxString& path),
-        "Sets the path (the combined directory and filename that will\n"
-        "be returned when the dialog is dismissed).");
+        "Sets the path (the combined directory and filename that will be
+returned when the dialog is dismissed).");
     
     DocDeclStr(
         void , SetDirectory(const wxString& dir),
@@ -219,8 +237,11 @@ public:
     
     DocDeclStr(
         void , SetWildcard(const wxString& wildCard),
-        "Sets the wildcard, which can contain multiple file types, for example:\n"
-        "    \"BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif\"");
+        "Sets the wildcard, which can contain multiple file types, for
+example::
+
+    \"BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif\"
+");
     
     DocDeclStr(
         void , SetStyle(long style),
@@ -257,21 +278,21 @@ public:
     
     DocDeclStr(
         int , GetFilterIndex() const,
-        "Returns the index into the list of filters supplied, optionally, in\n"
-        "the wildcard parameter. Before the dialog is shown, this is the index\n"
-        "which will be used when the dialog is first displayed. After the dialog\n"
-        "is shown, this is the index selected by the user.");
+        "Returns the index into the list of filters supplied, optionally, in
+the wildcard parameter. Before the dialog is shown, this is the index
+which will be used when the dialog is first displayed. After the
+dialog is shown, this is the index selected by the user.");
 
 
     DocStr(GetFilenames,
-        "Returns a list of filenames chosen in the dialog.  This function should\n"
-        "only be used with the dialogs which have wx.MULTIPLE style, use\n"
-        "GetFilename for the others.");
+        "Returns a list of filenames chosen in the dialog.  This function
+should only be used with the dialogs which have wx.MULTIPLE style, use
+GetFilename for the others.");
 
     DocStr(GetPaths,
-        "Fills the array paths with the full paths of the files chosen. This\n"
-        "function should only be used with the dialogs which have wx.MULTIPLE style,\n"
-        "use GetPath for the others.");   
+        "Fills the array paths with the full paths of the files chosen. This
+function should only be used with the dialogs which have wx.MULTIPLE
+style, use GetPath for the others.");   
     
     %extend {
         PyObject* GetFilenames() {
@@ -330,16 +351,17 @@ public:
                             int choices=0, wxString* choices_array,
                             long style = wxCHOICEDLG_STYLE,
                             const wxPoint& pos = wxDefaultPosition),
-        "__init__(Window parent, String message, String caption,\n"
-        "    List choices=[], long style=CHOICEDLG_STYLE,\n"
-        "    Point pos=DefaultPosition) -> MultiChoiceDialog",
+        "__init__(Window parent, String message, String caption,
+    List choices=[], long style=CHOICEDLG_STYLE,
+    Point pos=DefaultPosition) -> MultiChoiceDialog",
         "Constructor.  Use ShowModal method to show the dialog.");
 
     
     DocDeclAStr(
         void, SetSelections(const wxArrayInt& selections),
         "SetSelections(List selections)",
-        "Specify the items in the list that shoudl be selected, using a list of integers.");
+        "Specify the items in the list that should be selected, using a list of
+integers.");
 
     DocAStr(GetSelections,
             "GetSelections() -> [selections]",
@@ -362,9 +384,9 @@ public:
     %pythonAppend wxSingleChoiceDialog   "self._setOORInfo(self)"
 
     DocAStr(wxSingleChoiceDialog,
-            "__init__(Window parent, String message, String caption,\n"
-            "    List choices=[], long style=CHOICEDLG_STYLE,\n"
-            "    Point pos=DefaultPosition) -> SingleChoiceDialog",
+            "__init__(Window parent, String message, String caption,
+    List choices=[], long style=CHOICEDLG_STYLE,
+    Point pos=DefaultPosition) -> SingleChoiceDialog",
             "Constructor.  Use ShowModal method to show the dialog.");
 
     %extend {
@@ -416,8 +438,8 @@ public:
 
     DocDeclStr(
         wxString , GetValue(),
-        "Returns the text that the user has entered if the user has pressed OK,\n"
-        "or the original value if the user has pressed Cancel.");
+        "Returns the text that the user has entered if the user has pressed OK,
+or the original value if the user has pressed Cancel.");
     
     DocDeclStr(
         void , SetValue(const wxString& value),
@@ -428,7 +450,8 @@ public:
 
 
 DocStr(wxFontData,
-       "This class holds a variety of information related to font dialogs.");
+       "This class holds a variety of information related to font dialogs and
+is used to transfer settings to and results from a `wx.FontDialog`.");
 
 
 class wxFontData : public wxObject {
@@ -438,18 +461,20 @@ public:
 
     DocDeclStr(
         void , EnableEffects(bool enable),
-        "Enables or disables 'effects' under MS Windows only. This refers\n"
-        "to the controls for manipulating colour, strikeout and underline\n"
-        "properties.  The default value is true.");
+        "Enables or disables 'effects' under MS Windows only. This refers to
+the controls for manipulating colour, strikeout and underline
+properties.  The default value is true.");
     
     DocDeclStr(
         bool , GetAllowSymbols(),
-        "Under MS Windows, returns a flag determining whether symbol fonts can be\n"
-        "selected. Has no effect on other platforms. The default value is true.");
+        "Under MS Windows, returns a flag determining whether symbol fonts can
+be selected. Has no effect on other platforms. The default value is
+true.");
     
     DocDeclStr(
         wxColour , GetColour(),
-        "Gets the colour associated with the font dialog. The default value is black.");
+        "Gets the colour associated with the font dialog. The default value is
+black.");
     
     DocDeclStr(
         wxFont , GetChosenFont(),
@@ -461,27 +486,28 @@ public:
     
     DocDeclStr(
         wxFont , GetInitialFont(),
-        "Gets the font that will be initially used by the font dialog. This should have\n"
-        "previously been set by the application.");
+        "Gets the font that will be initially used by the font dialog. This
+should have previously been set by the application.");
     
     DocDeclStr(
         bool , GetShowHelp(),
-        "Returns true if the Help button will be shown (Windows only).  The default\n"
-        "value is false.");
+        "Returns true if the Help button will be shown (Windows only).  The
+default value is false.");
     
     DocDeclStr(
         void , SetAllowSymbols(bool allowSymbols),
-        "Under MS Windows, determines whether symbol fonts can be selected. Has no\n"
-        "effect on other platforms.  The default value is true.");
+        "Under MS Windows, determines whether symbol fonts can be selected. Has
+no effect on other platforms.  The default value is true.");
     
     DocDeclStr(
         void , SetChosenFont(const wxFont& font),
-        "Sets the font that will be returned to the user (for internal use only).");
+        "Sets the font that will be returned to the user (normally for internal
+use only).");
     
     DocDeclStr(
         void , SetColour(const wxColour& colour),
-        "Sets the colour that will be used for the font foreground colour.  The default\n"
-        "colour is black.");
+        "Sets the colour that will be used for the font foreground colour.  The
+default colour is black.");
     
     DocDeclStr(
         void , SetInitialFont(const wxFont& font),
@@ -489,34 +515,40 @@ public:
     
     DocDeclStr(
         void , SetRange(int min, int max),
-        "Sets the valid range for the font point size (Windows only).  The default is\n"
-        "0, 0 (unrestricted range).");
+        "Sets the valid range for the font point size (Windows only).  The
+default is 0, 0 (unrestricted range).");
     
     DocDeclStr(
         void , SetShowHelp(bool showHelp),
-        "Determines whether the Help button will be displayed in the font dialog\n"
-        "(Windows only).  The default value is false.");
+        "Determines whether the Help button will be displayed in the font
+dialog (Windows only).  The default value is false.");
 };
 
 
 
 
 DocStr(wxFontDialog,
-       "This class represents the font chooser dialog.");
+       "wx.FontDialog allows the user to select a system font and its attributes.
+
+:see: `wx.FontData`
+");
 
 class wxFontDialog : public wxDialog {
 public:
     %pythonAppend wxFontDialog   "self._setOORInfo(self)"
 
     DocStr(wxFontDialog,
-           "Constructor. Pass a parent window and the FontData object to be\n"
-           "used to initialize the dialog controls.");
+           "Constructor. Pass a parent window and the `wx.FontData` object to be
+used to initialize the dialog controls.  Call `ShowModal` to display
+the dialog.  If ShowModal returns ``wx.ID_OK`` then you can fetch the
+results with via the `wx.FontData` returned by `GetFontData`.");
     wxFontDialog(wxWindow* parent, const wxFontData& data);
 
     
     DocDeclStr(
         wxFontData& , GetFontData(),
-        "Returns a reference to the internal FontData used by the FontDialog.");    
+        "Returns a reference to the internal `wx.FontData` used by the
+wx.FontDialog.");    
 };
 
 
@@ -524,32 +556,28 @@ public:
 
 
 DocStr(wxMessageDialog,
-       "This class provides a dialog that shows a single or multi-line message, with\n"
-       "a choice of OK, Yes, No and Cancel buttons.");
+"This class provides a simple dialog that shows a single or multi-line
+message, with a choice of OK, Yes, No and/or Cancel buttons.
 
-RefDoc(wxMessageDialog, "
-  Styles
-    wx.OK:                Show an OK button.
 
-    wx.CANCEL:            Show a Cancel button.
-
-    wx.YES_NO:            Show Yes and No buttons.
-
-    wx.YES_DEFAULT:       Used with wxYES_NO, makes Yes button the default - which is the default behaviour.
-
-    wx.NO_DEFAULT:        Used with wxYES_NO, makes No button the default.
-
-    wx.ICON_EXCLAMATION:  Shows an exclamation mark icon.
-
-    wx.ICON_HAND:         Shows an error icon.
-
-    wx.ICON_ERROR:        Shows an error icon - the same as wxICON_HAND.
-
-    wx.ICON_QUESTION:     Shows a question mark icon.
-
-    wx.ICON_INFORMATION:  Shows an information (i) icon.
-
-    wx.STAY_ON_TOP:       The message box stays on top of all other window, even those of the other applications (Windows only).
+Window Styles
+--------------
+    =================    =============================================
+    wx.OK                Show an OK button.
+    wx.CANCEL            Show a Cancel button.
+    wx.YES_NO            Show Yes and No buttons.
+    wx.YES_DEFAULT       Used with wxYES_NO, makes Yes button the
+                         default - which is the default behaviour.
+    wx.NO_DEFAULT        Used with wxYES_NO, makes No button the default.
+    wx.ICON_EXCLAMATION  Shows an exclamation mark icon.
+    wx.ICON_HAND         Shows an error icon.
+    wx.ICON_ERROR        Shows an error icon - the same as wxICON_HAND.
+    wx.ICON_QUESTION     Shows a question mark icon.
+    wx.ICON_INFORMATION  Shows an information (i) icon.
+    wx.STAY_ON_TOP       The message box stays on top of all other
+                         window, even those of the other applications
+                         (Windows only).
+    =================    =============================================
 ");
 
 
@@ -558,12 +586,14 @@ public:
     %pythonAppend wxMessageDialog   "self._setOORInfo(self)"
     
     RefDoc(wxMessageDialog, ""); // turn it off for the ctors
-    
-    wxMessageDialog(wxWindow* parent,
-                    const wxString& message,
-                    const wxString& caption = wxPyMessageBoxCaptionStr,
-                    long style = wxOK | wxCANCEL | wxCENTRE,
-                    const wxPoint& pos = wxDefaultPosition);
+
+    DocCtorStr(
+        wxMessageDialog(wxWindow* parent,
+                        const wxString& message,
+                        const wxString& caption = wxPyMessageBoxCaptionStr,
+                        long style = wxOK | wxCANCEL | wxCENTRE,
+                        const wxPoint& pos = wxDefaultPosition),
+        "Constructor, use `ShowModal` to display the dialog.");
 
 };
 
@@ -571,34 +601,35 @@ public:
 
 
 DocStr(wxProgressDialog,
-       "A dialog that shows a short message and a progress bar. Optionally, it can\n"
-       "display an ABORT button.");
+"A dialog that shows a short message and a progress bar. Optionally, it
+can display an ABORT button.
 
-RefDoc(wxProgressDialog, "
-  Styles
+Window Styles
+--------------
+    =================     =============================================
+    wx.PD_APP_MODAL       Make the progress dialog modal. If this flag is
+                          not given, it is only \"locally\" modal -
+                          that is the input to the parent window is
+                          disabled, but not to the other ones.
 
-    wx.PD_APP_MODAL:            Make the progress dialog modal. If this flag is
-                                not given, it is only \"locally\" modal - that is
-                                the input to the parent window is disabled,
-                                but not to the other ones.
+    wx.PD_AUTO_HIDE       Causes the progress dialog to disappear from
+                          screen as soon as the maximum value of the
+                          progress meter has been reached.
 
-    wx.PD_AUTO_HIDE:            Causes the progress dialog to disappear from screen 
-                                as soon as the maximum value of the progress
-                                meter has been reached.
+    wx.PD_CAN_ABORT       This flag tells the dialog that it should have
+                          a \"Cancel\" button which the user may press. If
+                          this happens, the next call to Update() will
+                          return false.
 
-    wx.PD_CAN_ABORT:            This flag tells the dialog that it should have
-                                a \"Cancel\" button which the user may press. If
-                                this happens, the next call to Update() will
-                                return false.
+    wx.PD_ELAPSED_TIME    This flag tells the dialog that it should show
+                          elapsed time (since creating the dialog).
 
-    wx.PD_ELAPSED_TIME:         This flag tells the dialog that it should show
-                                elapsed time (since creating the dialog).
+    wx.PD_ESTIMATED_TIME  This flag tells the dialog that it should show
+                          estimated time.
 
-    wx.PD_ESTIMATED_TIME: 	This flag tells the dialog that it should show
-                                estimated time.
-
-    wx.PD_REMAINING_TIME: 	This flag tells the dialog that it should show
-                                remaining time.
+    wx.PD_REMAINING_TIME  This flag tells the dialog that it should show
+                          remaining time.
+    =================     =============================================
 ");
 
 
@@ -614,21 +645,24 @@ public:
                          int maximum = 100,
                          wxWindow* parent = NULL,
                          int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL ),
-        "Constructor. Creates the dialog, displays it and disables user input for other\n"
-        "windows, or, if wxPD_APP_MODAL flag is not given, for its parent window only.");
+        "Constructor. Creates the dialog, displays it and disables user input
+for other windows, or, if wx.PD_APP_MODAL flag is not given, for its
+parent window only.");
 
     DocDeclStr(
         virtual bool , Update(int value, const wxString& newmsg = wxPyEmptyString),
-        "Updates the dialog, setting the progress bar to the new value and, if given\n"
-        "changes the message above it. Returns true unless the Cancel button has been\n"
-        "pressed.\n\n"
-        "If false is returned, the application can either immediately destroy the\n"
-        "dialog or ask the user for the confirmation and if the abort is not confirmed\n"
-        "the dialog may be resumed with Resume function.");
+        "Updates the dialog, setting the progress bar to the new value and, if
+given changes the message above it. Returns true unless the Cancel
+button has been pressed.
+
+If false is returned, the application can either immediately destroy
+the dialog or ask the user for the confirmation and if the abort is
+not confirmed the dialog may be resumed with Resume function.");
     
     DocDeclStr(
         void , Resume(),
-        "Can be used to continue with the dialog, after the user had chosen to abort.");
+        "Can be used to continue with the dialog, after the user had chosen to
+abort.");
     
 };
 
@@ -697,8 +731,8 @@ public:
     
     DocDeclStr(
         int , GetFlags(),
-        "Get the currently selected flags: this is the combination of\n"
-        "wx.FR_DOWN, wx.FR_WHOLEWORD and wx.FR_MATCHCASE flags.");
+        "Get the currently selected flags: this is the combination of
+wx.FR_DOWN, wx.FR_WHOLEWORD and wx.FR_MATCHCASE flags.");
     
     DocDeclStr(
         const wxString& , GetFindString(),
@@ -706,8 +740,8 @@ public:
     
     DocDeclStr(
         const wxString& , GetReplaceString(),
-        "Return the string to replace the search string with (only\n"
-        "for replace and replace all events).");
+        "Return the string to replace the search string with (only for replace
+and replace all events).");
     
     DocDeclStr(
         wxFindReplaceDialog *, GetDialog(),
@@ -729,22 +763,26 @@ public:
 
 
 DocStr(wxFindReplaceData, 
-"FindReplaceData holds the data for FindReplaceDialog. It is used to initialize
-the dialog with the default values and will keep the last values from the
-dialog when it is closed. It is also updated each time a wxFindDialogEvent is
-generated so instead of using the wxFindDialogEvent methods you can also
-directly query this object.
+"wx.FindReplaceData holds the data for wx.FindReplaceDialog. It is used
+to initialize the dialog with the default values and will keep the
+last values from the dialog when it is closed. It is also updated each
+time a `wx.FindDialogEvent` is generated so instead of using the
+`wx.FindDialogEvent` methods you can also directly query this object.
 
-Note that all SetXXX() methods may only be called before showing the dialog
-and calling them has no effect later.
+Note that all SetXXX() methods may only be called before showing the
+dialog and calling them has no effect later.
 
- Flags
-    wxFR_DOWN:          downward search/replace selected (otherwise, upwards)
+Flags
+-----
+    ================   ===============================================  
+    wx.FR_DOWN         Downward search/replace selected (otherwise,
+                       upwards)
 
-    wxFR_WHOLEWORD:     whole word search/replace selected
+    wx.FR_WHOLEWORD    Whole word search/replace selected
 
-    wxFR_MATCHCASE:     case sensitive search/replace selected (otherwise,
-                        case insensitive)
+    wx.FR_MATCHCASE    Case sensitive search/replace selected
+                       (otherwise, case insensitive)
+    ================   ===============================================  
 ");
 
 
@@ -790,23 +828,27 @@ public:
 
 
 DocStr(wxFindReplaceDialog,
-"FindReplaceDialog is a standard modeless dialog which is used to allow the
-user to search for some text (and possibly replace it with something
-else). The actual searching is supposed to be done in the owner window which
-is the parent of this dialog. Note that it means that unlike for the other
-standard dialogs this one must have a parent window. Also note that there is
-no way to use this dialog in a modal way; it is always, by design and
-implementation, modeless.");
+"wx.FindReplaceDialog is a standard modeless dialog which is used to
+allow the user to search for some text (and possibly replace it with
+something else). The actual searching is supposed to be done in the
+owner window which is the parent of this dialog. Note that it means
+that unlike for the other standard dialogs this one must have a parent
+window. Also note that there is no way to use this dialog in a modal
+way; it is always, by design and implementation, modeless.
 
-RefDoc(wxFindReplaceDialog, "
- Styles
-    wx.FR_REPLACEDIALOG:        replace dialog (otherwise find dialog)
 
-    wx.FR_NOUPDOWN:             don't allow changing the search direction
+Window Styles
+-------------
 
-    wx.FR_NOMATCHCASE:          don't allow case sensitive searching
+    =====================  =========================================
+    wx.FR_REPLACEDIALOG    replace dialog (otherwise find dialog)
 
-    wx.FR_NOWHOLEWORD:          don't allow whole word searching
+    wx.FR_NOUPDOWN         don't allow changing the search direction
+
+    wx.FR_NOMATCHCASE      don't allow case sensitive searching
+
+    wx.FR_NOWHOLEWORD      don't allow whole word searching
+    =====================  =========================================
 ");
 
 class wxFindReplaceDialog : public wxDialog {
@@ -821,8 +863,8 @@ public:
                             wxFindReplaceData *data,
                             const wxString &title,
                             int style = 0),
-        "Create a FindReplaceDialog.  The parent and data parameters must be\n"
-        "non-None.  Use Show to display the dialog.");
+        "Create a FindReplaceDialog.  The parent and data parameters must be
+non-None.  Use Show to display the dialog.");
 
     DocCtorStrName(
         wxFindReplaceDialog(),
@@ -831,10 +873,8 @@ public:
 
     
     DocDeclStr(
-        bool , Create(wxWindow *parent,
-                      wxFindReplaceData *data,
-                      const wxString &title,
-                      int style = 0),
+        bool , Create(wxWindow *parent, wxFindReplaceData *data,
+                      const wxString &title, int style = 0),
         "Create the dialog, for 2-phase create.");
     
 

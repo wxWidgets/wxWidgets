@@ -39,10 +39,31 @@ _core_._wxPySetDictionary(vars())
 %#// be used here.
 import sys as _sys
 wx = _sys.modules[__name__]
-}
 
+}
 #endif
 
+
+%pythoncode {
+%#----------------------------------------------------------------------------
+
+def _deprecated(callable, msg=None):
+    """
+    Create a wrapper function that will raise a DeprecationWarning
+    before calling the callable.
+    """
+    if msg is None:
+        msg = "%s is deprecated" % callable
+    def deprecatedWrapper(*args, **kwargs):
+        import warnings
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        return callable(*args, **kwargs)
+    deprecatedWrapper.__doc__ = msg
+    return deprecatedWrapper
+    
+                   
+%#----------------------------------------------------------------------------
+}
 
 
 //---------------------------------------------------------------------------

@@ -102,6 +102,90 @@ public:
 %}
 
 // The one for SWIG to see
+
+
+
+DocStr(wxPyArtProvider,
+"The wx.ArtProvider class is used to customize the look of wxWidgets
+application. When wxWidgets needs to display an icon or a bitmap (e.g.
+in the standard file dialog), it does not use hard-coded resource but
+asks wx.ArtProvider for it instead. This way the users can plug in
+their own wx.ArtProvider class and easily replace standard art with
+his/her own version. It is easy thing to do: all that is needed is
+to derive a class from wx.ArtProvider, override it's CreateBitmap
+method and register the provider with wx.ArtProvider.PushProvider::
+
+    class MyArtProvider(wx.ArtProvider):
+        def __init__(self):
+            wx.ArtProvider.__init__(self)
+
+        def CreateBitmap(self, artid, client, size):
+            ...
+            return bmp
+
+
+Identifying art resources
+-------------------------
+
+Every bitmap is known to wx.ArtProvider under an unique ID that is
+used when requesting a resource from it. The IDs can have one of these
+predefined values:
+
+    * wx.ART_ADD_BOOKMARK
+    * wx.ART_DEL_BOOKMARK
+    * wx.ART_HELP_SIDE_PANEL
+    * wx.ART_HELP_SETTINGS
+    * wx.ART_HELP_BOOK
+    * wx.ART_HELP_FOLDER
+    * wx.ART_HELP_PAGE
+    * wx.ART_GO_BACK
+    * wx.ART_GO_FORWARD
+    * wx.ART_GO_UP
+    * wx.ART_GO_DOWN
+    * wx.ART_GO_TO_PARENT
+    * wx.ART_GO_HOME
+    * wx.ART_FILE_OPEN
+    * wx.ART_PRINT
+    * wx.ART_HELP
+    * wx.ART_TIP
+    * wx.ART_REPORT_VIEW
+    * wx.ART_LIST_VIEW
+    * wx.ART_NEW_DIR
+    * wx.ART_FOLDER
+    * wx.ART_GO_DIR_UP
+    * wx.ART_EXECUTABLE_FILE
+    * wx.ART_NORMAL_FILE
+    * wx.ART_TICK_MARK
+    * wx.ART_CROSS_MARK
+    * wx.ART_ERROR
+    * wx.ART_QUESTION
+    * wx.ART_WARNING
+    * wx.ART_INFORMATION
+    * wx.ART_MISSING_IMAGE 
+
+
+Clients
+-------
+
+The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
+`GetIcon` function.  Client IDs server as a hint to wx.ArtProvider
+that is supposed to help it to choose the best looking bitmap. For
+example it is often desirable to use slightly different icons in menus
+and toolbars even though they represent the same action (e.g.
+wx.ART_FILE_OPEN). Remember that this is really only a hint for
+wx.ArtProvider -- it is common that `wx.ArtProvider.GetBitmap` returns
+identical bitmap for different client values!
+
+    * wx.ART_TOOLBAR
+    * wx.ART_MENU
+    * wx.ART_FRAME_ICON
+    * wx.ART_CMN_DIALOG
+    * wx.ART_HELP_BROWSER
+    * wx.ART_MESSAGE_BOX
+    * wx.ART_OTHER (used for all requests that don't fit into any
+      of the categories above)
+");
+
 %name(ArtProvider) class wxPyArtProvider /*: public wxObject*/
 {
 public:
@@ -111,30 +195,37 @@ public:
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    DocStr(PushProvider, "Add new provider to the top of providers stack.");
-    static void PushProvider(wxPyArtProvider *provider);
+    DocDeclStr(
+        static void , PushProvider(wxPyArtProvider *provider),
+        "Add new provider to the top of providers stack.");
+    
 
-    DocStr(PopProvider, "Remove latest added provider and delete it.");
-    static bool PopProvider();
+    DocDeclStr(
+        static bool , PopProvider(),
+        "Remove latest added provider and delete it.");
+    
 
-    DocStr(RemoveProvider,
-           "Remove provider. The provider must have been added previously!\n"
-           "The provider is _not_ deleted.");
-    static bool RemoveProvider(wxPyArtProvider *provider);
+    DocDeclStr(
+        static bool , RemoveProvider(wxPyArtProvider *provider),
+        "Remove provider. The provider must have been added previously!  The
+provider is _not_ deleted.");
+    
 
-    DocStr(GetBitmap,
-           "Query the providers for bitmap with given ID and return it. Return\n"
-           "wx.NullBitmap if no provider provides it.");
-    static wxBitmap GetBitmap(const wxString& id,
-                              const wxString& client = wxPyART_OTHER,
-                              const wxSize& size = wxDefaultSize);
+    DocDeclStr(
+        static wxBitmap , GetBitmap(const wxString& id,
+                                    const wxString& client = wxPyART_OTHER,
+                                    const wxSize& size = wxDefaultSize),
+        "Query the providers for bitmap with given ID and return it. Return
+wx.NullBitmap if no provider provides it.");
+    
 
-    DocStr(GetIcon,
-           "Query the providers for icon with given ID and return it. Return\n"
-           "wx.NullIcon if no provider provides it.");
-    static wxIcon GetIcon(const wxString& id,
+    DocDeclStr(
+        static wxIcon , GetIcon(const wxString& id,
                           const wxString& client = wxPyART_OTHER,
-                          const wxSize& size = wxDefaultSize);
+                                const wxSize& size = wxDefaultSize),
+        "Query the providers for icon with given ID and return it.  Return
+wx.NullIcon if no provider provides it.");
+    
 
     %extend { void Destroy() { delete self; }}
 };

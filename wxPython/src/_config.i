@@ -313,7 +313,7 @@ public:
     DocDeclStr(
         virtual bool , DeleteAll(),
         "Delete the whole underlying object (disk file, registry key, ...)\n"
-        "primarly intended for use by desinstallation routine.");
+        "primarly intended for use by deinstallation routine.");
     
 
 

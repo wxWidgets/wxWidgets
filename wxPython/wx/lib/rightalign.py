@@ -37,7 +37,7 @@ left-aligned if it has focus.
 Hope this can help someone, as much as this list helps me.
 
 Josu Oyanguren
-Ubera Servicios Informáticos.
+Ubera Servicios Informaticos.
 
 
 P.S.  This only works well on wxMSW.
