@@ -39,7 +39,7 @@
 // resources
 // ----------------------------------------------------------------------------
 // the application icon
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
     #include "mondrian.xpm"
 #endif
 
@@ -181,8 +181,13 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
     wxPaintDC dc(this);
     PrepareDC( dc );
     
+    wxRegion region( 110, 110, 80, 80 );
+    wxRegion hole( 130, 130, 40, 1 );
+    region.Intersect( hole );
+    dc.SetClippingRegion( region );
+    
     dc.SetBrush( *wxRED_BRUSH );
-    dc.DrawRectangle( 100, 100, 300, 500 );
+    dc.DrawRectangle( 100, 100, 200, 200 );
 }
 
 void MyCanvas::OnEraseBackground( wxEraseEvent &event )
