@@ -85,7 +85,7 @@ msgstr "&Zavřít"
 
 #: ../src/generic/logg.cpp:681
 msgid "&Details"
-msgstr ""
+msgstr "&Detaily"
 
 #: ../src/generic/wizard.cpp:268
 msgid "&Finish"
@@ -245,7 +245,8 @@ msgid ""
 "+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
 "+4</font></tt></body></html>"
 msgstr ""
-"<html><body>Obyčejné písmo<br>(a <u>podtržené</u>. <i>Kurziva.</i> "
+"<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso8859-2\">"
+"<body>Obyčejné písmo<br>(a <u>podtržené</u>. <i>Kurziva.</i> "
 "<b>Tučné.</b> <b><i>Tučná kurziva.</i></b><br><font size=-2>velikost "
 "-2</font><br><font size=-1>velikost -1</font><br><font size=+0>velikost "
 "+0</font><br><font size=+1>velikost +1</font><br><font size=+2>velikost "
