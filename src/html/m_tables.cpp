@@ -291,7 +291,19 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     {
         tag.GetParamAsInt(wxT("COLSPAN"), &m_CellInfo[r][c].colspan);
         tag.GetParamAsInt(wxT("ROWSPAN"), &m_CellInfo[r][c].rowspan);
-        if ((m_CellInfo[r][c].colspan != 1) || (m_CellInfo[r][c].rowspan != 1))
+
+        // VS: the standard says this about col/rowspan:
+        //     "This attribute specifies the number of rows spanned by the 
+        //     current cell. The default value of this attribute is one ("1"). 
+        //     The value zero ("0") means that the cell spans all rows from the 
+        //     current row to the last row of the table." All mainstream 
+        //     browsers act as if 0==1, though, and so does wxHTML.
+        if (m_CellInfo[r][c].colspan < 1) 
+            m_CellInfo[r][c].colspan = 1;
+        if (m_CellInfo[r][c].rowspan < 1) 
+            m_CellInfo[r][c].rowspan = 1;
+
+        if ((m_CellInfo[r][c].colspan > 1) || (m_CellInfo[r][c].rowspan > 1))
         {
             int i, j;
 
@@ -334,8 +346,6 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
     cell->SetIndent(m_Padding, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
 }
-
-
 
 void wxHtmlTableCell::ComputeMinMaxWidths()
 {
@@ -549,6 +559,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_WParser->SetAlign(m_OldAlign);
             m_WParser->SetContainer(oldcont);
             m_WParser->CloseContainer();
+            
             m_Table = oldt;
             return TRUE;
         }
