@@ -140,15 +140,6 @@ bool wxControl::OS2CreateControl(
         zClass = WC_BUTTON;
     dwStyle |= WS_VISIBLE;
 
-    //
-    // If the parent is a scrolled window the controls must
-    // have this style or they will overlap the scrollbars
-    //
-    if (pParent)
-        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
-            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
-            dwStyle |= WS_CLIPSIBLINGS;
-
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,(PSZ)zClass              // Window class
                                        ,(PSZ)rsLabel.c_str()     // Initial Text

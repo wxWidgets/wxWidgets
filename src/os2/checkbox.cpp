@@ -97,15 +97,6 @@ bool wxCheckBox::Create(
     if (lStyle & wxCLIP_SIBLINGS )
         lSstyle |= WS_CLIPSIBLINGS;
 
-    //
-    // If the parent is a scrolled window the controls must
-    // have this style or they will overlap the scrollbars
-    //
-    if (pParent)
-        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
-            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
-            lSstyle |= WS_CLIPSIBLINGS;
-
     m_hWnd = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
                                         ,WC_BUTTON
                                         ,rsLabel.c_str()
@@ -131,13 +122,18 @@ bool wxCheckBox::Create(
                       ,(PVOID)&lColor
                      );
 
-    SetFont(*wxSMALL_FONT);
-
+    wxFont*                          pTextFont = new wxFont( 10
+                                                            ,wxMODERN
+                                                            ,wxNORMAL
+                                                            ,wxNORMAL
+                                                           );
+    SetFont(*pTextFont);
     SetSize( nX
             ,nY
             ,nWidth
             ,nHeight
            );
+    delete pTextFont;
     return TRUE;
 } // end of wxCheckBox::Create
 

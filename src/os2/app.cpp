@@ -901,7 +901,8 @@ bool wxApp::ProcessMessage(
     if (pMsg->msg == WM_TIMER &&
         (SHORT1FROMMP(pMsg->mp1) != TID_CURSOR &&
          SHORT1FROMMP(pMsg->mp1) != TID_FLASHWINDOW &&
-         SHORT1FROMMP(pMsg->mp1) != TID_SCROLL
+         SHORT1FROMMP(pMsg->mp1) != TID_SCROLL &&
+         SHORT1FROMMP(pMsg->mp1) != 0x0000
         ))
         wxTimerProc(NULL, 0, (int)pMsg->mp1, 0);
 

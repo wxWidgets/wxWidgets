@@ -399,7 +399,6 @@ bool wxOwnerDrawn::OnDrawItem(
                               ,&vLine
                              );
                 ::GpiMove(hPS, &vPnt1);
-                char   zMsg[128];
                 ::GpiBox( hPS
                          ,DRO_OUTLINE
                          ,&vPnt2

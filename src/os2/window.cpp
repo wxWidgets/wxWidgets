@@ -766,6 +766,7 @@ void wxWindowOS2::SetScrollbar(
     HWND                            hWnd = GetHwnd();
     ULONG                           ulStyle = WS_VISIBLE;
     RECTL                           vRect;
+    SWP                             vSwp;
 
     ::WinQueryWindowRect(hWnd, &vRect);
     if (nPageSize > 1 && nRange > 0)
@@ -783,18 +784,13 @@ void wxWindowOS2::SetScrollbar(
         ulStyle |= SBS_HORZ;
         if (m_hWndScrollBarHorz == 0L)
         {
-            //
-            // We create the scrollbars with the desktop so that they are not
-            // registered as child windows of the window in order that child
-            // windows may be scrolled without scrolling the scrollbars themselves!
-            //
             m_hWndScrollBarHorz = ::WinCreateWindow( hWnd
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
                                                     ,ulStyle
                                                     ,vRect.xLeft
                                                     ,vRect.yBottom
-                                                    ,vRect.xRight - vRect.xLeft
+                                                    ,vRect.xRight - vRect.xLeft - 20
                                                     ,20
                                                     ,hWnd
                                                     ,HWND_TOP
@@ -824,7 +820,7 @@ void wxWindowOS2::SetScrollbar(
                                   ,HWND_TOP
                                   ,vRect.xLeft
                                   ,vRect.yBottom
-                                  ,vRect.xRight - vRect.xLeft
+                                  ,vRect.xRight - vRect.xLeft - 20
                                   ,20
                                   ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
                                  );
@@ -894,25 +890,24 @@ void wxWindowOS2::ScrollWindow(
 {
     nDy *= -1; // flip the sign of Dy as OS/2 is opposite Windows.
     RECTL                           vRect;
-    RECTL                           vRect2;
     RECTL                           vRectHorz;
     RECTL                           vRectVert;
     RECTL                           vRectChild;
 
     if (pRect)
     {
-        vRect2.xLeft   = pRect->x;
-        vRect2.yTop    = pRect->y + pRect->height;
-        vRect2.xRight  = pRect->x + pRect->width;
-        vRect2.yBottom = pRect->y;
+        vRect.xLeft   = pRect->x;
+        vRect.yTop    = pRect->y + pRect->height;
+        vRect.xRight  = pRect->x + pRect->width;
+        vRect.yBottom = pRect->y;
     }
     else
     {
         ::WinQueryWindowRect(GetHwnd(), &vRect);
         ::WinQueryWindowRect(m_hWndScrollBarHorz, &vRectHorz);
-        vRect2.yBottom += vRect.yTop - vRect.yBottom;
+        vRect.yBottom += vRectHorz.yTop - vRectHorz.yBottom;
         ::WinQueryWindowRect(m_hWndScrollBarVert, &vRectVert);
-        vRect2.xRight -= vRect.xRight - vRect.xLeft;
+        vRect.xRight -= vRectVert.xRight - vRectVert.xLeft;
 
     }
     ::WinScrollWindow( GetHwnd()
@@ -924,9 +919,6 @@ void wxWindowOS2::ScrollWindow(
                       ,NULL
                       ,SW_INVALIDATERGN
                      );
-    ::WinInvalidateRect(m_hWndScrollBarHorz, &vRectHorz, FALSE);
-    ::WinInvalidateRect(m_hWndScrollBarVert, &vRectVert, FALSE);
-
     //
     // Move the children
     //
@@ -940,7 +932,7 @@ void wxWindowOS2::ScrollWindow(
         if (pChildWin->GetHWND() != NULLHANDLE)
         {
             ::WinQueryWindowPos(pChildWin->GetHWND(), &vSwp);
-            ::WinQueryWindowRect(pChildWin->GetHWND(), &vRectChild);
+            ::WinQueryWindowRect(pChildWin->GetHWND(), &vRect);
             if (pChildWin->IsKindOf(CLASSINFO(wxControl)))
             {
                 wxControl*          pCtrl;
@@ -960,7 +952,7 @@ void wxWindowOS2::ScrollWindow(
                               ,vSwp.y + nDy
                               ,0
                               ,0
-                              ,SWP_MOVE | SWP_ZORDER
+                              ,SWP_MOVE
                              );
             if (pChildWin->IsKindOf(CLASSINFO(wxRadioBox)))
             {
@@ -990,6 +982,38 @@ void wxWindowOS2::ScrollWindow(
         }
         pCurrent = pCurrent->GetNext();
     }
+    if (GetChildren().GetCount() > 0)
+    {
+        //
+        // Clean up child window slop
+        //
+        ::WinQueryWindowRect(GetHwnd(), &vRect);
+        vRect.xRight -= 20;
+        vRect.yBottom += 20;
+        ::WinInvalidateRect(GetHwnd(), &vRect, TRUE);
+    }
+
+    //
+    // Takes a lot to keep the scrollbars on top of everything
+    //
+    ::WinSetWindowPos( m_hWndScrollBarHorz
+                      ,HWND_TOP
+                      ,0
+                      ,0
+                      ,0
+                      ,0
+                      ,SWP_ZORDER
+                     );
+    ::WinSetWindowPos( m_hWndScrollBarVert
+                      ,HWND_TOP
+                      ,0
+                      ,0
+                      ,0
+                      ,0
+                      ,SWP_ZORDER
+                     );
+    ::WinInvalidateRect(m_hWndScrollBarHorz, &vRectHorz, FALSE);
+    ::WinInvalidateRect(m_hWndScrollBarVert, &vRectVert, FALSE);
 } // end of wxWindowOS2::ScrollWindow
 
 // ---------------------------------------------------------------------------
@@ -4063,12 +4087,12 @@ void wxWindowOS2::MoveChildren(
             vSwp.x -= pCtrl->GetXComp();
         }
         ::WinSetWindowPos( GetHwndOf(pWin)
-                          ,HWND_TOP
+                          ,HWND_BOTTOM
                           ,vSwp.x
                           ,vSwp.y - nDiff
                           ,vSwp.cx
                           ,vSwp.cy
-                          ,SWP_MOVE
+                          ,SWP_MOVE | SWP_ZORDER
                          );
         if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
         {
@@ -4093,6 +4117,68 @@ void wxWindowOS2::MoveChildren(
                                        ,(int)vSwp.cy
                                        ,(int)pSlider->GetSizeFlags()
                                       );
+        }
+        //
+        // Originally created before Panel was properly sized, most likely.
+        // So now the the panel is sized correctly, resize the scrollbars
+        // and bring them to the top of all the other panel children
+        //
+        if (m_hWndScrollBarVert != NULLHANDLE ||
+            m_hWndScrollBarHorz != NULLHANDLE)
+        {
+            RECTL                   vRect;
+
+            ::WinQueryWindowRect(GetHwnd(), &vRect);
+            ::WinQueryWindowPos(m_hWndScrollBarHorz, &vSwp);
+            if ( (vRect.xRight - vRect.xLeft) - vSwp.cx != 20)
+            {
+                ::WinSetWindowPos( m_hWndScrollBarHorz
+                                  ,HWND_TOP
+                                  ,0
+                                  ,0
+                                  ,(vRect.xRight - vRect.xLeft) - 20
+                                  ,vSwp.cy
+                                  ,SWP_ZORDER | SWP_SIZE
+                                 );
+            }
+            else
+            {
+                ::WinSetWindowPos( m_hWndScrollBarHorz
+                                  ,HWND_TOP
+                                  ,0
+                                  ,0
+                                  ,0
+                                  ,0
+                                  ,SWP_ZORDER
+                                 );
+            }
+            ::WinQueryWindowPos(m_hWndScrollBarVert, &vSwp);
+            if ( (vRect.yTop - vRect.yBottom) - vSwp.cy != 20)
+            {
+                ::WinSetWindowPos( m_hWndScrollBarVert
+                                  ,HWND_TOP
+                                  ,vSwp.x
+                                  ,vSwp.y + 20
+                                  ,vSwp.cx
+                                  ,(vRect.yTop - vRect.yBottom) - 20
+                                  ,SWP_ZORDER | SWP_SIZE | SWP_MOVE
+                                 );
+            }
+            else
+            {
+                ::WinSetWindowPos( m_hWndScrollBarVert
+                                  ,HWND_TOP
+                                  ,0
+                                  ,0
+                                  ,0
+                                  ,0
+                                  ,SWP_ZORDER
+                                 );
+            }
+            ::WinQueryWindowRect(m_hWndScrollBarHorz, &vRect);
+            ::WinInvalidateRect(m_hWndScrollBarHorz, &vRect, FALSE);
+            ::WinQueryWindowRect(m_hWndScrollBarVert, &vRect);
+            ::WinInvalidateRect(m_hWndScrollBarVert, &vRect, FALSE);
         }
     }
 } // end of wxWindowOS2::MoveChildren

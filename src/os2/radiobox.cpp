@@ -264,7 +264,11 @@ bool wxRadioBox::Create(
     // System fonts are too big in OS/2 and they are blue
     // We want smaller fonts and black by default.
     //
-    wxFont&                         rFont = *wxSMALL_FONT;
+    wxFont*                          pTextFont = new wxFont( 10
+                                                            ,wxMODERN
+                                                            ,wxNORMAL
+                                                            ,wxNORMAL
+                                                           );
     wxColour                        vColour;
     LONG                            lColor;
 
@@ -319,9 +323,9 @@ bool wxRadioBox::Create(
     m_pnRadioWidth   = new int[nNum];
     m_pnRadioHeight  = new int[nNum];
 
-    if (rFont.Ok())
+    if (pTextFont->Ok())
     {
-        hFont = rFont.GetResourceHandle();
+        hFont = pTextFont->GetResourceHandle();
     }
 
     for (int i = 0; i < nNum; i++)
@@ -365,7 +369,7 @@ bool wxRadioBox::Create(
         m_ahRadioButtons[i] = (WXHWND)hWndBtn;
         SubclassRadioButton((WXHWND)hWndBtn);
         wxOS2SetFont( hWndBtn
-                     ,rFont
+                     ,*pTextFont
                     );
         ::WinSetWindowULong(hWndBtn, QWL_USER, (ULONG)this);
         m_aSubControls.Add(nNewId);
@@ -385,7 +389,7 @@ bool wxRadioBox::Create(
                              ,NULL
                              ,NULL
                             );
-     SetFont(*wxSMALL_FONT);
+    SetFont(*pTextFont);
     lColor = (LONG)vColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_FOREGROUNDCOLOR
@@ -405,6 +409,7 @@ bool wxRadioBox::Create(
             ,rSize.x
             ,rSize.y
            );
+    delete pTextFont;
     return TRUE;
 } // end of wxRadioBox::Create
 

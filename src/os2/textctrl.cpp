@@ -154,14 +154,6 @@ bool wxTextCtrl::Create(
         if (m_windowStyle & wxTE_PASSWORD) // hidden input
             lSstyle |= ES_UNREADABLE;
     }
-    //
-    // If the parent is a scrolled window the controls must
-    // have this style or they will overlap the scrollbars
-    //
-    if (pParent)
-        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
-            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
-            lSstyle |= WS_CLIPSIBLINGS;
 
     if (m_bIsMLE)
     {
@@ -231,6 +223,7 @@ bool wxTextCtrl::Create(
             ,rSize.x
             ,rSize.y
            );
+    delete pTextFont;
     return TRUE;
 } // end of wxTextCtrl::Create
 
@@ -320,7 +313,10 @@ void wxTextCtrl::WriteText(
   const wxString&                   rsValue
 )
 {
-    ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM((PCHAR)rsValue.c_str()), MPARAM(0));
+    if (m_bIsMLE)
+        ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM((PCHAR)rsValue.c_str()), MPARAM(0));
+    else
+        ::WinSetWindowText(GetHwnd(), rsValue.c_str());
     AdjustSpaceLimit();
 } // end of wxTextCtrl::WriteText
 

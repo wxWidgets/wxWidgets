@@ -77,12 +77,18 @@ bool wxChoice::Create(
     {
         Append(asChoices[i]);
     }
+    wxFont*                          pTextFont = new wxFont( 10
+                                                            ,wxMODERN
+                                                            ,wxNORMAL
+                                                            ,wxNORMAL
+                                                           );
+    SetFont(*pTextFont);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
             ,rSize.y
            );
-
+    delete pTextFont;
     return TRUE;
 } // end of wxChoice::Create
 

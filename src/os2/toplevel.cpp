@@ -281,6 +281,7 @@ bool wxTopLevelWindowOS2::CreateDialog(
     {
         return FALSE;
     }
+
     ::WinSetWindowPos( GetHwnd()
                       ,HWND_TOP
                       ,nX
@@ -289,9 +290,6 @@ bool wxTopLevelWindowOS2::CreateDialog(
                       ,nHeight
                       ,SWP_MOVE | SWP_SIZE | SWP_ZORDER | SWP_SHOW
                      );
-    //
-    // Set the m_hFrame to m_hWnd for Dialogs
-    //
     m_hFrame = m_hWnd;
     SubclassWin(m_hWnd);
     return TRUE;

@@ -85,12 +85,18 @@ bool wxRadioButton::Create(
     if (HasFlag(wxRB_GROUP))
         SetValue(TRUE);
 
-    SetFont(*wxSMALL_FONT);
+    wxFont*                          pTextFont = new wxFont( 10
+                                                            ,wxMODERN
+                                                            ,wxNORMAL
+                                                            ,wxNORMAL
+                                                           );
+    SetFont(*pTextFont);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
             ,rSize.y
            );
+    delete pTextFont;
     return TRUE;
 } // end of wxRadioButton::Create
 

@@ -143,10 +143,14 @@ bool wxComboBox::Create(
     //
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-    SetFont(*wxSMALL_FONT);
+    wxFont*                          pTextFont = new wxFont( 10
+                                                            ,wxMODERN
+                                                            ,wxNORMAL
+                                                            ,wxNORMAL
+                                                           );
+    SetFont(*pTextFont);
 
     int                             i;
-
     for (i = 0; i < n; i++)
     {
         Append(asChoices[i]);
@@ -165,6 +169,7 @@ bool wxComboBox::Create(
                                                     ,(PFNWP)wxComboEditWndProc
                                                    );
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (ULONG)this);
+    delete pTextFont;
     return TRUE;
 } // end of wxComboBox::Create
 

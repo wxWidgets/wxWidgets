@@ -102,15 +102,6 @@ bool wxSpinButton::Create(
     if (m_windowStyle & wxCLIP_SIBLINGS )
         lSstyle |= WS_CLIPSIBLINGS;
 
-    //
-    // If the parent is a scrolled window the controls must
-    // have this style or they will overlap the scrollbars
-    //
-    if (pParent)
-        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
-            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
-            lSstyle |= WS_CLIPSIBLINGS;
-
     SPBCDATA                        vCtrlData;
 
     vCtrlData.cbSize = sizeof(SPBCDATA);
@@ -141,7 +132,12 @@ bool wxSpinButton::Create(
     ::WinQueryWindowPos(m_hWnd, &vSwp);
     SetXComp(vSwp.x);
     SetYComp(vSwp.y);
-    SetFont(*wxSMALL_FONT);
+    wxFont*                          pTextFont = new wxFont( 10
+                                                            ,wxMODERN
+                                                            ,wxNORMAL
+                                                            ,wxNORMAL
+                                                           );
+    SetFont(*pTextFont);
     //
     // For OS/2 we want to hide the text portion so we can substitute an
     // independent text ctrl in its place.  10 device units does this
@@ -156,6 +152,7 @@ bool wxSpinButton::Create(
                             );
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (LONG)this);
     fnWndProcSpinCtrl = (WXFARPROC)::WinSubclassWindow(m_hWnd, (PFNWP)wxSpinCtrlWndProc);
+    delete pTextFont;
     return TRUE;
 } // end of wxSpinButton::Create
 
