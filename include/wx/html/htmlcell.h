@@ -266,7 +266,7 @@ public:
 
     // Returns true for simple == terminal cells, i.e. not composite ones.
     // This if for internal usage only and may disappear in future versions!
-    virtual bool IsTerminalCell() const { return TRUE; }
+    virtual bool IsTerminalCell() const { return true; }
 
     // Find a cell inside this cell positioned at the given coordinates
     // (relative to this's positions). Returns NULL if no such cell exists.
@@ -405,11 +405,11 @@ public:
     // sets minimal height of this container.
     void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP) {m_MinHeight = h; m_MinHeightAlign = align; m_LastLayout = -1;}
 
-    void SetBackgroundColour(const wxColour& clr) {m_UseBkColour = TRUE; m_BkColour = clr;}
+    void SetBackgroundColour(const wxColour& clr) {m_UseBkColour = true; m_BkColour = clr;}
     // returns background colour (of wxNullColour if none set), so that widgets can
     // adapt to it:
     wxColour GetBackgroundColour();
-    void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = TRUE; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
+    void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = true; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
     virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
     virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
@@ -420,7 +420,7 @@ public:
 #endif
 
     // see comment in wxHtmlCell about this method
-    virtual bool IsTerminalCell() const { return FALSE; }
+    virtual bool IsTerminalCell() const { return false; }
 
     virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
                                   unsigned flags = wxHTML_FIND_EXACT) const;
