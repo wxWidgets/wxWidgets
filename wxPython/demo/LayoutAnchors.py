@@ -88,7 +88,7 @@ class AnchorsDemoFrame(wx.Frame):
         self.leftCheckBox = wx.CheckBox(
                                 label='Left', id=ID_ANCHORSDEMOFRAMELEFTCHECKBOX, 
                                 parent=self.mainPanel, name='leftCheckBox', 
-                                size=(40, 16), style=0, pos=(8, 8)
+                                style=0, pos=(8, 8)
                                 )
 
         self.leftCheckBox.SetConstraints(
@@ -103,7 +103,7 @@ class AnchorsDemoFrame(wx.Frame):
         self.topCheckBox = wx.CheckBox(
                             label='Top', id=ID_ANCHORSDEMOFRAMETOPCHECKBOX, 
                             parent=self.mainPanel, name='topCheckBox', 
-                            size=(40, 16), style=0, pos=(88, 8)
+                            style=0, pos=(88, 8)
                             )
 
         self.topCheckBox.SetConstraints(
@@ -118,7 +118,7 @@ class AnchorsDemoFrame(wx.Frame):
         self.rightCheckBox = wx.CheckBox(
                             label='Right', id=ID_ANCHORSDEMOFRAMERIGHTCHECKBOX, 
                             parent=self.mainPanel, name='rightCheckBox', 
-                            size=(48, 16), style=0, pos=(168, 8)
+                            style=0, pos=(168, 8)
                             )
 
         self.rightCheckBox.SetConstraints(
@@ -133,7 +133,7 @@ class AnchorsDemoFrame(wx.Frame):
         self.bottomCheckBox = wx.CheckBox(
                                 label='Bottom', id=ID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX, 
                                 parent=self.mainPanel, name='bottomCheckBox', 
-                                size=(56, 16), style=0, pos=(248, 8)
+                                style=0, pos=(248, 8)
                                 )
 
         self.bottomCheckBox.SetConstraints(

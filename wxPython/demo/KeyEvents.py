@@ -226,15 +226,16 @@ class KeyLog(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         keycode = evt.GetKeyCode()
         keyname = keyMap.get(keycode, None)
         if keyname is None:
-            if keycode < 256:
+            if "unicode" in wx.PlatformInfo and keycode < 128:
+                keyname = "\"" + unichr(evt.GetUnicodeKey()) + "\""
+                
+            elif keycode < 256:
                 if keycode == 0:
                     keyname = "NUL"
                 elif keycode < 27:
                     keyname = "Ctrl-%s" % chr(ord('A') + keycode-1)
                 else:
                     keyname = "\"%s\"" % chr(keycode)
-            elif "unicode" in wx.PlatformInfo:
-                keyname = "\"" + unichr(keycode) + "\""
             else:
                 keyname = "unknown (%s)" % keycode
 

@@ -197,6 +197,7 @@ def runTest(frame, nb, log):
 
     # make some styles
     ed.StyleSetSpec(stc.STC_STYLE_DEFAULT, "size:%d,face:%s" % (pb, face3))
+    ed.StyleClearAll()
     ed.StyleSetSpec(1, "size:%d,bold,face:%s,fore:#0000FF" % (pb+2, face1))
     ed.StyleSetSpec(2, "face:%s,italic,fore:#FF0000,size:%d" % (face2, pb))
     ed.StyleSetSpec(3, "face:%s,bold,size:%d" % (face2, pb+2))
