@@ -714,8 +714,10 @@ void wxLogWindow::DoLog(wxLogLevel level, const char *szString)
     ((wxLogWindow *)m_pOldLog)->DoLog(level, szString);
   }
 
-  // and this will format it nicely and call our DoLogString()
-  wxLog::DoLog(level, szString);
+  if ( m_pLogFrame ) {
+    // and this will format it nicely and call our DoLogString()
+    wxLog::DoLog(level, szString);
+  }
 
   m_bHasMessages = TRUE;
 }
@@ -756,9 +758,6 @@ wxLogWindow::~wxLogWindow()
 {
   // may be NULL if log frame already auto destroyed itself
   delete m_pLogFrame;
-
-  // delete the old log
-  delete m_pOldLog;
 }
 
 #endif  //WX_TEST_MINIMAL
