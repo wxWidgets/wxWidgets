@@ -89,7 +89,17 @@ wxThreadError wxThread::Create()
 
 wxThreadError wxThread::Destroy()
 {
-  return THREAD_RUNNING;
+  return THREAD_NOT_RUNNING;
+}
+
+wxThreadError wxThread::Pause()
+{
+  return THREAD_NOT_RUNNING;
+}
+
+wxThreadError wxThread::Resume()
+{
+  return THREAD_NOT_RUNNING;
 }
 
 void wxThread::DeferDestroy( bool WXUNUSED(on) )
@@ -113,6 +123,11 @@ unsigned long wxThread::GetID() const
 bool wxThread::IsMain()
 {
   return TRUE;
+}
+
+bool wxThread::IsRunning() const
+{
+  return FALSE;
 }
 
 bool wxThread::IsAlive() const

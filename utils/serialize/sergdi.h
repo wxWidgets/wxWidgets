@@ -25,6 +25,7 @@ DECLARE_SERIAL_CLASS(wxColour, wxGDIObject)
 DECLARE_SERIAL_CLASS(wxFont, wxGDIObject)
 DECLARE_SERIAL_CLASS(wxPen, wxGDIObject)
 DECLARE_SERIAL_CLASS(wxBrush, wxGDIObject)
+DECLARE_SERIAL_CLASS(wxImageList, wxObject)
 
 //DECLARE_SERIAL_CLASS(wxSize, wxObject)
 //DECLARE_SERIAL_CLASS(wxRealPoint, wxObject)

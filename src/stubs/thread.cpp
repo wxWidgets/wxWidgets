@@ -143,6 +143,18 @@ wxThreadError wxThread::Destroy()
     return THREAD_NO_ERROR;
 }
 
+wxThreadError wxThread::Pause()
+{
+    // TODO
+    return THREAD_NO_ERROR;
+}
+
+wxThreadError wxThread::Resume()
+{
+    // TODO
+    return THREAD_NO_ERROR;
+}
+
 void wxThread::Exit(void *status)
 {
     // TODO
@@ -179,6 +191,24 @@ unsigned long wxThread::GetID() const
 {
     // TODO
     return 0;
+}
+
+wxThread *wxThread::GetThreadFromID(unsigned long id)
+{
+    // TODO
+    return NULL;
+}
+
+bool wxThread::IsAlive() const
+{
+    // TODO
+    return FALSE;
+}
+
+bool wxThread::IsRunning() const
+{
+    // TODO
+    return FALSE;
 }
 
 bool wxThread::IsMain()

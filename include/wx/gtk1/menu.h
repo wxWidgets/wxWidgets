@@ -127,6 +127,9 @@ public:
   wxMenu( const wxString& title = wxEmptyString, const wxFunction func = NULL );
 
   // operations
+    // title
+  void SetTitle(const wxString& label);
+  const wxString GetTitle() const;
     // menu creation
   void AppendSeparator();
   void Append(int id, const wxString &item,

@@ -48,6 +48,9 @@ class WXDLLEXPORT wxIndividualLayoutConstraint: public wxObject
   DECLARE_DYNAMIC_CLASS(wxIndividualLayoutConstraint)
 
  protected:
+   // To be allowed to modify the internal variables
+   friend class wxIndividualLayoutConstraint_Serialize;
+
    // 'This' window is the parent or sibling of otherWin
    wxWindow *otherWin;
 

@@ -23,6 +23,8 @@
 enum thread_state {
   STATE_IDLE = 0,
   STATE_RUNNING,
+  STATE_PAUSING,
+  STATE_PAUSED,
   STATE_CANCELED,
   STATE_EXITED
 };
@@ -32,6 +34,9 @@ enum thread_state {
 /////////////////////////////////////////////////////////////////////////////
 
 static pthread_t p_mainid;
+static wxMutex p_list_mutex;
+static wxList p_threads_list;
+
 wxMutex wxMainMutex; // controls access to all GUI functions
 
 /////////////////////////////////////////////////////////////////////////////
@@ -157,14 +162,29 @@ public:
   pthread_t thread_id;
   int state;
   int prio;
+  int defer_destroy;
+  int id;
 };
 
 void *wxThreadInternal::PthreadStart(void *ptr)
 {
   wxThread *thread = (wxThread *)ptr;
 
+  // Add the current thread to the list
+  p_list_mutex.Lock();
+  thread->p_internal->id = p_threads_list.Number();
+  p_threads_list.Append((wxObject *)thread);
+  p_list_mutex.Unlock();
+
+  // Call the main entry
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
   void* status = thread->Entry();
+
+  // Delete the current thread from the list
+  p_list_mutex.Lock();
+  delete node_thread;
+  p_list_mutex.Unlock();
+
   thread->Exit(status);
 
   return NULL;
@@ -200,6 +220,7 @@ wxThreadError wxThread::Create()
     return THREAD_NO_RESOURCE;
   }
   pthread_attr_destroy(&a);
+
   return THREAD_NO_ERROR;
 }
 
@@ -237,6 +258,27 @@ wxThreadError wxThread::Destroy()
     if (res == 0)
       p_internal->state = STATE_CANCELED;
   }
+
+  return THREAD_NO_ERROR;
+}
+
+wxThreadError wxThread::Pause()
+{
+  if (p_internal->state != STATE_RUNNING)
+    return THREAD_NOT_RUNNING;
+
+  if (!p_internal->defer_destroy)
+    return THREAD_MISC_ERROR;
+
+  p_internal->state = STATE_PAUSING;
+  return THREAD_NO_ERROR;
+}
+
+wxThreadError wxThread::Resume()
+{
+  if (p_internal->state == STATE_PAUSING || p_internal->state == STATE_PAUSED)
+    p_internal->state = STATE_RUNNING;
+
   return THREAD_NO_ERROR;
 }
 
@@ -255,6 +297,11 @@ void *wxThread::Join()
     pthread_join(p_internal->thread_id, &status);
     if (do_unlock)
       wxMainMutex.Lock();
+
+    p_list_mutex.Lock();
+    delete p_threads_list.Nth(p_internal->id);
+    p_list_mutex.Unlock();
+
     p_internal->state = STATE_IDLE;
   }
   return status;
@@ -262,7 +309,16 @@ void *wxThread::Join()
 
 unsigned long wxThread::GetID() const
 {
-  return (unsigned long)p_internal->thread_id;
+  return p_internal->id;
+}
+
+wxThread *wxThread::GetThreadFromID(unsigned long id)
+{
+  wxNode *node = p_threads_list.Nth(id);
+
+  if (!node)
+    return NULL;
+  return (wxThread *)node->Data();
 }
 
 void wxThread::Exit(void *status)
@@ -276,12 +332,31 @@ void wxThread::Exit(void *status)
 
 void wxThread::TestDestroy()
 {
+  if (p_internal->state == STATE_PAUSING) {
+    p_internal->state = STATE_PAUSED;
+    while (p_internal->state == STATE_PAUSED) {
+      pthread_testcancel();
+      usleep(1);
+    }
+  }
   pthread_testcancel();
 }
 
 bool wxThread::IsMain()
 {
   return (bool)pthread_equal(pthread_self(), p_mainid);
+}
+
+bool wxThread::IsRunning() const
+{
+  return (p_internal->state == STATE_RUNNING);
+}
+
+bool wxThread::IsAlive() const
+{
+  return (p_internal->state == STATE_RUNNING) ||
+         (p_internal->state == STATE_PAUSING) ||
+         (p_internal->state == STATE_PAUSED);
 }
 
 wxThread::wxThread()
@@ -299,6 +374,7 @@ wxThread::~wxThread()
 // The default callback just joins the thread and throws away the result.
 void wxThread::OnExit()
 {
+  Join();
 }
 
 // Automatic initialization
@@ -308,6 +384,7 @@ public:
   virtual bool OnInit() {
     wxThreadGuiInit();
     p_mainid = pthread_self();
+    p_threads_list = wxList(wxKEY_INTEGER);
     wxMainMutex.Lock();
 
     return TRUE;

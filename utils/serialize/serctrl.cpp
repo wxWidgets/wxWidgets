@@ -25,6 +25,7 @@
 #include <wx/radiobox.h>
 #include <wx/stattext.h>
 #include <wx/combobox.h>
+#include <wx/imaglist.h>
 #include <wx/objstrm.h>
 #include <wx/datstrm.h>
 #include <wx/serbase.h>
@@ -57,7 +58,7 @@ void WXSERIAL(wxButton)::LoadObject(wxObjectInputStream& s)
 
   printf("label = %s\n", WXSTRINGCAST m_label);
   button->Create(m_parent, m_id, m_label, wxPoint(m_x, m_y), wxSize(m_w, m_h),
-                 m_style, m_name);
+                 m_style, *m_validator, m_name);
 }
 
 void WXSERIAL(wxCheckBox)::StoreObject(wxObjectOutputStream& s)
@@ -79,7 +80,7 @@ void WXSERIAL(wxCheckBox)::LoadObject(wxObjectInputStream& s)
   wxCheckBox *chkbox = (wxCheckBox *)Object();
 
   chkbox->Create(m_parent, m_id, m_label, wxPoint(m_x, m_y), wxSize(m_w, m_h),
-                 m_style, m_name);
+                 m_style, *m_validator, m_name);
 
   chkbox->SetValue(data_s.Read8());
 }
@@ -118,7 +119,7 @@ void WXSERIAL(wxSlider)::LoadObject(wxObjectInputStream& s)
   value = data_s.Read32();
 
   slider->Create(m_parent, m_id, value, min, max, wxPoint(m_x, m_y),
-                 wxSize(m_w, m_h), m_style, m_name);
+                 wxSize(m_w, m_h), m_style, *m_validator, m_name);
 
   slider->SetTickFreq( 0, data_s.Read32() );
   slider->SetPageSize( data_s.Read32() );
@@ -155,7 +156,7 @@ void WXSERIAL(wxGauge)::LoadObject(wxObjectInputStream& s)
 
   range = data_s.Read32();
   gauge->Create(m_parent, m_id, range, wxPoint(m_x, m_y), wxSize(m_w, m_h),
-                m_style, m_name);
+                m_style, *m_validator, m_name);
 
   gauge->SetShadowWidth( data_s.Read8() );
   gauge->SetBezelFace( data_s.Read8() );
@@ -187,7 +188,7 @@ void WXSERIAL(wxChoice)::LoadObject(wxObjectInputStream& s)
   int i,num = data_s.Read32();
 
   choice->Create(m_parent, m_id, wxPoint(m_x, m_y), wxSize(m_w, m_h), 0, NULL,
-                 m_style, m_name);
+                 m_style, *m_validator, m_name);
 
   for (i=0;i<num;i++)
     choice->Append( data_s.ReadString() );
@@ -224,26 +225,33 @@ void WXSERIAL(wxListBox)::LoadObject(wxObjectInputStream& s)
 void WXSERIAL(wxNotebook)::StoreObject(wxObjectOutputStream& s)
 {
   wxNotebook *notebook = (wxNotebook *)Object();
+  wxImageList *imaglist = notebook->GetImageList();
   int i, pcount = notebook->GetPageCount();
 
-  WXSERIAL(wxControl)::StoreObject(s);
-
   if (s.FirstStage()) {
-    // Don't know how to retrieve images from wxImageList (copy to a DC ?)
+    s.AddChild(imaglist);
+    WXSERIAL(wxControl)::StoreObject(s);
     return;
   }
 
   wxDataOutputStream data_s(s);
 
   data_s.Write8( pcount );
+  WXSERIAL(wxControl)::StoreObject(s);
+
   for (i=0;i<pcount;i++)
     data_s.WriteString( notebook->GetPageText(i) );
+
 }
 
 void WXSERIAL(wxNotebook)::LoadObject(wxObjectInputStream& s)
 {
   wxNotebook *notebook = (wxNotebook *)Object();
   int i, pcount;
+  wxImageList *imaglist;
+
+  imaglist = (wxImageList *)s.GetChild(0);
+  s.RemoveChildren(1);
 
   WXSERIAL(wxControl)::LoadObject(s);
 
@@ -293,7 +301,7 @@ void WXSERIAL(wxRadioBox)::LoadObject(wxObjectInputStream& s)
     items[i] = data_s.ReadString();
 
   box->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y), wxSize(m_w, m_h),
-              n_items, items, 0, m_style, m_name);
+              n_items, items, 0, m_style, *m_validator, m_name);
 }
 
 void WXSERIAL(wxComboBox)::StoreObject(wxObjectOutputStream& s)
@@ -326,7 +334,7 @@ void WXSERIAL(wxComboBox)::LoadObject(wxObjectInputStream& s)
   int i, num, selection;
 
   box->Create(m_parent, m_id, wxEmptyString, wxPoint(m_x, m_y), wxSize(m_w, m_h),
-              0, NULL, m_style, m_name);
+              0, NULL, m_style, *m_validator, m_name);
 
   num       = data_s.Read8();
   selection = data_s.Read8();

@@ -20,6 +20,7 @@
 #include <wx/pen.h>
 #include <wx/brush.h>
 #include <wx/serbase.h>
+#include <wx/imaglist.h>
 #include "sergdi.h"
 
 IMPLEMENT_SERIAL_CLASS(wxBitmap, wxObject)
@@ -28,6 +29,7 @@ IMPLEMENT_SERIAL_CLASS(wxColour, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxFont, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxPen, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxBrush, wxGDIObject)
+IMPLEMENT_SERIAL_CLASS(wxImageList, wxObject)
 
 IMPLEMENT_ALIAS_SERIAL_CLASS(wxPenList, wxList)
 IMPLEMENT_ALIAS_SERIAL_CLASS(wxBrushList, wxList)
@@ -199,4 +201,30 @@ void WXSERIAL(wxFont)::LoadObject(wxObjectInputStream& s)
   underlined = data_s.Read8();
 
   *font = wxFont(psize, face_name, family, style, weight, underlined);
+}
+
+void WXSERIAL(wxImageList)::StoreObject(wxObjectOutputStream& s)
+{
+  wxImageList *list = (wxImageList *)Object();
+  int i;
+
+  if (s.FirstStage()) {
+    for (i=0;i<list->GetImageCount();i++)
+      s.AddChild(list->GetBitmap(i));
+  }
+
+  wxDataOutputStream data_s(s);
+
+  data_s.Write32(list->GetImageCount());
+}
+
+void WXSERIAL(wxImageList)::LoadObject(wxObjectInputStream& s)
+{
+  int i, count;
+  wxImageList *list = (wxImageList *)Object();
+  wxDataInputStream data_s(s);
+
+  count = data_s.Read32();
+  for (i=0;i<count;i++)
+    list->Add(*((wxBitmap *)s.GetChild(i)));
 }

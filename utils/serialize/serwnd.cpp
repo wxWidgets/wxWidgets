@@ -22,18 +22,25 @@
 #include <wx/frame.h>
 #include <wx/panel.h>
 #include <wx/menu.h>
+#include <wx/dialog.h>
 #include <wx/serbase.h>
+#include <wx/statusbr.h>
+#include <wx/mdi.h>
 #include "serwnd.h"
+
 
 IMPLEMENT_SERIAL_CLASS(wxWindow, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxIndividualLayoutConstraint, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxLayoutConstraints, wxObject)
+IMPLEMENT_ALIAS_SERIAL_CLASS(wxValidator, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxFrame, wxWindow)
 IMPLEMENT_SERIAL_CLASS(wxPanel, wxWindow)
-//IMPLEMENT_SERIAL_CLASS(wxDialog, wxWindow)
+IMPLEMENT_SERIAL_CLASS(wxDialog, wxWindow)
 IMPLEMENT_SERIAL_CLASS(wxMenuBar, wxWindow)
 IMPLEMENT_SERIAL_CLASS(wxMenuItem, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxMenu, wxObject)
+
+/////////////////////////////////////////////////////////////////////////////
 
 void WXSERIAL(wxWindow)::StoreObject(wxObjectOutputStream& s)
 {
@@ -42,8 +49,13 @@ void WXSERIAL(wxWindow)::StoreObject(wxObjectOutputStream& s)
 
   if (s.FirstStage()) {
     s.AddChild(win_object->GetConstraints());
-//    s.AddChild(&(win_object->GetDefaultBackgroundColour()));
-//    s.AddChild(&(win_object->GetDefaultForegroundColour()));
+    s.AddChild(win_object->GetValidator());
+
+    // BAD HACK, but I don't have access to the internal variable of wxWindow.
+    m_bg_colour = win_object->GetDefaultBackgroundColour();
+    m_fg_colour = win_object->GetDefaultForegroundColour();
+    s.AddChild(&m_bg_colour);
+    s.AddChild(&m_fg_colour);
     s.AddChild(win_object->GetFont());
     while (node) {
       s.AddChild(node->Data());
@@ -95,14 +107,15 @@ void WXSERIAL(wxWindow)::LoadObject(wxObjectInputStream& s)
 
   /* I assume we will never create raw wxWindow object */
 
-  // This will be done by wxLayoutConstraints, as we need an initialized object.
-//  win_object->SetConstraints((wxLayoutConstraints *)s.GetChild(0));
-//  win_object->SetDefaultBackgroundColour(*((wxColour *)s.GetChild(1)));
-//  win_object->SetDefaultForegroundColour(*((wxColour *)s.GetChild(2)));
-  win_object->SetFont(*((wxFont *)s.GetChild(1)));
+  m_validator = (wxValidator *)s.GetChild(1);
+  win_object->SetDefaultBackgroundColour(*((wxColour *)s.GetChild(2)));
+  win_object->SetDefaultForegroundColour(*((wxColour *)s.GetChild(3)));
+  win_object->SetFont(*((wxFont *)s.GetChild(4)));
 
   return;
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 void WXSERIAL(wxIndividualLayoutConstraint)::StoreObject
                                            (wxObjectOutputStream& s)
@@ -140,6 +153,8 @@ void WXSERIAL(wxIndividualLayoutConstraint)::
   lay_object->percent      = data_s.Read8();
   lay_object->otherEdge    = (wxEdge)data_s.Read8();
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 void WXSERIAL(wxLayoutConstraints)::StoreObject(wxObjectOutputStream& s)
 {
@@ -188,6 +203,8 @@ void WXSERIAL(wxLayoutConstraints)::LoadObject(wxObjectInputStream& s)
   ((wxWindow *)s.GetParent())->SetConstraints(lay_object);
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 void WXSERIAL(wxFrame)::StoreObject(wxObjectOutputStream& s)
 {
   wxFrame *frame = (wxFrame *)Object();
@@ -222,11 +239,14 @@ void WXSERIAL(wxFrame)::LoadObject(wxObjectInputStream& s)
   wxDataInputStream data_s(s);
 
   frame->SetMenuBar(mbar);
-  frame->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y), wxSize(m_w, m_h),
-                m_style, m_name);
+  if (frame->GetClassInfo() == CLASSINFO(wxFrame))
+    frame->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y),
+                  wxSize(m_w, m_h), m_style, m_name);
 
   frame->CreateStatusBar(data_s.Read8());
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 void WXSERIAL(wxMenuBar)::StoreObject(wxObjectOutputStream& s)
 {
@@ -263,6 +283,8 @@ void WXSERIAL(wxMenuBar)::LoadObject(wxObjectInputStream& s)
   // WXSERIAL(wxWindow)::LoadObject(s);
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 void WXSERIAL(wxMenu)::StoreObject(wxObjectOutputStream& s)
 {
   wxMenu *menu = (wxMenu *)Object();
@@ -292,6 +314,8 @@ void WXSERIAL(wxMenu)::LoadObject(wxObjectInputStream& s)
     node = node->Next();
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 void WXSERIAL(wxMenuItem)::StoreObject(wxObjectOutputStream& s)
 {
@@ -324,6 +348,8 @@ void WXSERIAL(wxMenuItem)::LoadObject(wxObjectInputStream& s)
   item->SetSubMenu( (wxMenu *)s.GetChild(0) );
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 void WXSERIAL(wxPanel)::StoreObject(wxObjectOutputStream& s)
 {
   WXSERIAL(wxWindow)::StoreObject(s);
@@ -335,4 +361,49 @@ void WXSERIAL(wxPanel)::LoadObject(wxObjectInputStream& s)
 
   ((wxPanel *)Object())->Create(m_parent, m_id, wxPoint(m_x, m_y),
                                 wxSize(m_w, m_h), m_style, m_name);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+void WXSERIAL(wxDialog)::StoreObject(wxObjectOutputStream& s)
+{
+  WXSERIAL(wxWindow)::StoreObject(s);
+}
+
+void WXSERIAL(wxDialog)::LoadObject(wxObjectInputStream& s)
+{
+  WXSERIAL(wxWindow)::LoadObject(s);
+
+  ((wxDialog *)Object())->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y),
+                                 wxSize(m_w, m_h), m_style, m_name);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+void WXSERIAL(wxMDIParentFrame)::StoreObject(wxObjectOutputStream& s)
+{
+  wxMDIParentFrame *frame = (wxMDIParentFrame *)Object();
+
+  if (s.FirstStage()) {
+    s.AddChild(frame->GetClientWindow());
+    WXSERIAL(wxMDIParentFrame)::StoreObject(s);
+    return;
+  }
+
+  WXSERIAL(wxMDIParentFrame)::StoreObject(s);
+}
+
+void WXSERIAL(wxMDIParentFrame)::LoadObject(wxObjectInputStream& s)
+{
+  wxMDIParentFrame *frame = (wxMDIParentFrame *)Object();
+  wxMDIClientWindow *client;
+
+  client = (wxMDIClientWindow *) s.GetChild(0);
+  s.RemoveChildren(1);
+
+  frame->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y),
+                wxSize(m_w, m_h), m_style, m_name);
+//  client->CreateClient(this, style_client);
+
+  WXSERIAL(wxFrame)::LoadObject(s);
 }

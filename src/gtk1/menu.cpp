@@ -243,6 +243,17 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
   }
 }
 
+void wxMenu::SetTitle( const wxString& title )
+{
+  // Waiting for something better.
+  m_title = title;
+}
+
+const wxString wxMenu::GetTitle() const
+{
+  return m_title;
+}
+
 void wxMenu::AppendSeparator()
 {
   wxMenuItem *mitem = new wxMenuItem();

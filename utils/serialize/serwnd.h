@@ -35,16 +35,20 @@ class WXSERIAL(wxWindow) : public WXSERIAL(wxObject)
   wxWindowID m_id;
   wxString m_name, m_title, m_label;
   wxWindow *m_parent;
+  wxValidator *m_validator;
+  wxColour m_bg_colour, m_fg_colour;
   long m_style;
 };
 
 DECLARE_SERIAL_CLASS(wxIndividualLayoutConstraint, wxObject)
 DECLARE_SERIAL_CLASS(wxLayoutConstraints, wxObject)
+DECLARE_ALIAS_SERIAL_CLASS(wxValidator, wxObject)
 DECLARE_SERIAL_CLASS(wxFrame, wxWindow)
 DECLARE_SERIAL_CLASS(wxPanel, wxWindow)
-//DECLARE_SERIAL_CLASS(wxDialog, wxWindow)
+DECLARE_SERIAL_CLASS(wxDialog, wxWindow)
 DECLARE_SERIAL_CLASS(wxMenuBar, wxWindow)
 DECLARE_SERIAL_CLASS(wxMenuItem, wxObject)
 DECLARE_SERIAL_CLASS(wxMenu, wxObject)
+DECLARE_SERIAL_CLASS(wxMDIParentFrame, wxFrame)
 
 #endif

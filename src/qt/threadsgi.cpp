@@ -141,10 +141,22 @@ wxThreadError wxThread::Create()
   return THREAD_NO_ERROR;
 }
 
-void wxThread::Destroy()
+wxThreadError wxThread::Destroy()
 {
   if (p_internal->state == STATE_RUNNING)
     p_internal->state = STATE_CANCELED;
+
+  return THREAD_NO_ERROR;
+}
+
+wxThreadError wxThread::Pause()
+{
+  return THREAD_NO_ERROR;
+}
+
+wxThreadError wxThread::Resume()
+{
+  return THREAD_NO_ERROR;
 }
 
 void *wxThread::Join()
@@ -188,9 +200,19 @@ int wxThread::GetPriority() const
     return 0;
 }
 
-bool wxThreadIsMain()
+bool wxThread::IsMain()
 {
   return (int)getpid() == main_id;
+}
+
+bool wxThread::IsAlive() const
+{
+  return (p_internal->state == STATE_RUNNING);
+}
+
+bool wxThread::IsRunning() const
+{
+  return (p_internal->state == STATE_RUNNING);
 }
 
 wxThread::wxThread()

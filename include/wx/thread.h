@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_THREADH__
-#define _WX_THREADH__
+#ifndef __THREADH__
+#define __THREADH__
 
 #ifdef __GNUG__
 #pragma interface "thread.h"
@@ -30,7 +30,8 @@ typedef enum {
   THREAD_NO_ERROR=0,		// No error
   THREAD_NO_RESOURCE,		// No resource left to create a new thread
   THREAD_RUNNING,		// The thread is already running
-  THREAD_NOT_RUNNING		// The thread isn't running
+  THREAD_NOT_RUNNING,		// The thread isn't running
+  THREAD_MISC_ERROR             // Some other error
 } wxThreadError;
 
 // defines the interval of priority.
@@ -40,7 +41,7 @@ typedef enum {
 
 // ---------------------------------------------------------------------------
 // Mutex handler
-class wxMutexInternal;
+class WXDLLEXPORT wxMutexInternal;
 class WXDLLEXPORT wxMutex {
 public:
   // constructor & destructor 
@@ -100,6 +101,12 @@ public:
   // Destroys the thread immediately if the defer flag isn't true.
   wxThreadError Destroy();
 
+  // Pause a running thread
+  wxThreadError Pause();
+
+  // Resume a paused thread
+  wxThreadError Resume();
+
   // Switches on the defer flag.
   void DeferDestroy(bool on);
 
@@ -117,11 +124,16 @@ public:
 
   // Returns true if the thread is alive.
   bool IsAlive() const;
+  // Returns true if the thread is running (not paused, not killed).
+  bool IsRunning() const;
   // Returns true if the thread is the main thread (aka the GUI thread).
   static bool IsMain();
 
   // Called when thread exits.
   virtual void OnExit();
+
+  // Returns the wxThread object which corresponds to the ID.
+  static wxThread *GetThreadFromID(unsigned long id);
 protected:
   // In case, the DIFFER flag is true, enables another thread to kill this one.
   void TestDestroy();
