@@ -37,10 +37,18 @@ MicroWindows:
   DEBUG=Y
   VERBOSE=Y
 
+  Note: these are already applied by the patch below.
+
 - apply microwindows.patches (from wxWindows:
   docs/microwin/microwindows.patches) to fix PeekMessage
   and other issues. If the patch doesn't apply automatically,
-  you may need to apply it by hand
+  you may need to apply it by hand, and the relevant changed
+  functions are given at the end of this file for convenience.
+
+  Example patch command:
+
+  % cd microwindows-0.89pre8.orig
+  % patch -p0 < ~/wx2/docs/microwin/microwindows.patches
 
 - compile by typing 'make' from within the MicroWindows src directory
 
@@ -114,3 +122,139 @@ No ::GetObject so we can't get LOGFONT from an HFONT
 in wxSystemSettings (worked around by passing HFONT to
 the wxFont constructor).
 
+
+Applying patches by hand
+========================
+
+The full altered functions are given below in case you have
+to apply them by hand.
+
+src/mwin/winevent.c
+-------------------
+
+A second test has been added to this line:
+
+	if(hittest == HTCLIENT || hwnd == GetCapture()) {
+
+in MwTranslateMouseMessage below. This corrects a mouse message
+bug.
+
+/*
+ * Translate and deliver hardware mouse message to proper window.
+ */
+void
+MwTranslateMouseMessage(HWND hwnd,UINT msg,int hittest)
+{
+	POINT		pt;
+	DWORD		tick;
+	static UINT	lastmsg = 0;
+	static HWND	lasthwnd;
+	static DWORD	lasttick;
+	static int	lastx, lasty;
+
+	/* determine double click eligibility*/
+	if(msg == WM_LBUTTONDOWN || msg == WM_RBUTTONDOWN) {
+		tick = GetTickCount();
+		if((hwnd->pClass->style & CS_DBLCLKS) &&
+		    msg == lastmsg && hwnd == lasthwnd &&
+		    tick - lasttick < DBLCLICKSPEED &&
+		    abs(cursorx-lastx) < mwSYSMETRICS_CXDOUBLECLK &&
+		    abs(cursory-lasty) < mwSYSMETRICS_CYDOUBLECLK)
+			msg += (WM_LBUTTONDBLCLK - WM_LBUTTONDOWN);
+		lastmsg = msg;
+		lasthwnd = hwnd;
+		lasttick = tick;
+		lastx = cursorx;
+		lasty = cursory;
+	}
+
+	/*
+	 * We always send nc mouse message
+	 * unlike Windows, for HTCLIENT default processing
+	 */
+	PostMessage(hwnd, msg + (WM_NCMOUSEMOVE-WM_MOUSEMOVE), hittest,
+		MAKELONG(cursorx, cursory));
+
+	/* then possibly send user mouse message*/
+	if(hittest == HTCLIENT || hwnd == GetCapture()) {
+		pt.x = cursorx;
+		pt.y = cursory;
+		ScreenToClient(hwnd, &pt);
+		PostMessage(hwnd, msg, 0, MAKELONG(pt.x, pt.y));
+	}
+}
+
+winuser.c
+---------
+
+Part of PeekMessage has been factored out into PeekMessageHelper,
+and used in PeekMessage and GetMessage. The three relevant functions
+are:
+
+/*
+ * A helper function for sharing code between PeekMessage and GetMessage
+ */
+
+BOOL WINAPI
+PeekMessageHelper(LPMSG lpMsg, HWND hwnd, UINT uMsgFilterMin, UINT uMsgFilterMax,
+	UINT wRemoveMsg, BOOL returnIfEmptyQueue)
+{
+	HWND	wp;
+	PMSG	pNxtMsg;
+
+	/* check if no messages in queue*/
+	if(mwMsgHead.head == NULL) {
+                /* Added by JACS so it doesn't reach MwSelect */
+                if (returnIfEmptyQueue)
+                    return FALSE;
+
+#if PAINTONCE
+		/* check all windows for pending paint messages*/
+		for(wp=listwp; wp; wp=wp->next) {
+			if(!(wp->style & WS_CHILD)) {
+				if(chkPaintMsg(wp, lpMsg))
+					return TRUE;
+			}
+		}
+		for(wp=listwp; wp; wp=wp->next) {
+			if(wp->style & WS_CHILD) {
+				if(chkPaintMsg(wp, lpMsg))
+					return TRUE;
+			}
+		}
+#endif
+		MwSelect();
+	}
+
+	if(mwMsgHead.head == NULL)
+		return FALSE;
+
+	pNxtMsg = (PMSG)mwMsgHead.head;
+	if(wRemoveMsg & PM_REMOVE)
+		GdListRemove(&mwMsgHead, &pNxtMsg->link);
+	*lpMsg = *pNxtMsg;
+	if(wRemoveMsg & PM_REMOVE)
+		GdItemFree(pNxtMsg);
+	return TRUE;
+}
+
+BOOL WINAPI
+PeekMessage(LPMSG lpMsg, HWND hwnd, UINT uMsgFilterMin, UINT uMsgFilterMax,
+	UINT wRemoveMsg)
+{
+        /* Never wait in MwSelect: pass TRUE */
+        return PeekMessageHelper(lpMsg, hwnd, uMsgFilterMin, uMsgFilterMax, wRemoveMsg, TRUE);
+}
+
+BOOL WINAPI
+GetMessage(LPMSG lpMsg,HWND hwnd,UINT wMsgFilterMin,UINT wMsgFilterMax)
+{
+	/*
+	 * currently MwSelect() must poll for VT switch reasons,
+	 * so this code will work
+	 */
+        /* Always wait in MwSelect if there are messages: pass FALSE */
+	while(!PeekMessageHelper(lpMsg, hwnd, wMsgFilterMin, wMsgFilterMax,PM_REMOVE, FALSE))
+		continue;
+	return lpMsg->message != WM_QUIT;
+}
