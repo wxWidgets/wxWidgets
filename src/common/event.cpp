@@ -78,6 +78,12 @@
 
 #endif // !USE_SHARED_LIBRARY
 
+#if wxUSE_THREADS
+/* To put pending event handlers */
+extern wxList wxPendingEvents;
+extern wxCriticalSection wxPendingEventsLocker;
+#endif
+
 /*
  * General wxWindows events, covering
  * all interesting things that might happen (button clicking, resizing,
@@ -283,6 +289,10 @@ wxEvtHandler::wxEvtHandler()
     m_enabled = TRUE;
     m_dynamicEvents = (wxList *) NULL;
     m_isWindow = FALSE;
+#if wxUSE_THREADS
+    m_eventsLocker = new wxCriticalSection();
+#endif
+    m_pendingEvents = (wxList *) NULL;
 }
 
 wxEvtHandler::~wxEvtHandler()
@@ -306,7 +316,53 @@ wxEvtHandler::~wxEvtHandler()
         }
         delete m_dynamicEvents;
     };
+
+    if (m_pendingEvents)
+      delete m_pendingEvents;
+
+#if wxUSE_THREADS
+    delete m_eventsLocker;
+#endif
 }
+
+#if wxUSE_THREADS
+bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
+{
+    wxEvent *event_main;
+    wxCriticalSectionLocker locker(*m_eventsLocker);
+
+    // check that we are really in a child thread
+    wxASSERT( !wxThread::IsMain() );
+
+    if (m_pendingEvents == NULL)
+      m_pendingEvents = new wxList();
+
+    event_main = (wxEvent *)event.GetClassInfo()->CreateObject();
+    *event_main = event;
+
+    m_pendingEvents->Append(event_main);
+
+    wxPendingEventsLocker.Enter();
+    wxPendingEvents.Append(this);
+    wxPendingEventsLocker.Leave();
+
+    return TRUE;
+}
+
+void wxEvtHandler::ProcessPendingEvents()
+{
+    wxCriticalSectionLocker locker(*m_eventsLocker);
+    wxNode *node = m_pendingEvents->First();
+    wxEvent *event;
+
+    while (node != NULL) {
+      event = (wxEvent *)node->Data();
+      ProcessEvent(*event);
+      delete node;
+      node = m_pendingEvents->First();
+    }
+}
+#endif
 
 /*
  * Event table stuff
@@ -320,6 +376,11 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
+#if wxUSE_THREADS
+	// Check whether we are in a child thread.
+        if (!wxThread::IsMain())
+          return ProcessThreadEvent(event);
+#endif
         // Handle per-instance dynamic event tables first
 
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )

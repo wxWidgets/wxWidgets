@@ -19,6 +19,9 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/gdicmn.h"
+#if wxUSE_THREADS
+#include "wx/thread.h"
+#endif
 
 /*
  * Event types
@@ -347,7 +350,7 @@ public:
 
     // Set/Get listbox/choice selection string
     void SetString(const wxString& s) { m_commandString = s; }
-    const wxString& GetString() const { return m_commandString; }
+    wxString GetString() const { return m_commandString; }
 
     // Get checkbox value
     bool Checked() const { return (m_commandInt != 0); }
@@ -1170,6 +1173,10 @@ public:
     virtual bool OnClose();
 #endif
 
+#if wxUSE_THREADS
+    bool ProcessThreadEvent(wxEvent& event);
+    void ProcessPendingEvents();
+#endif
     virtual bool ProcessEvent(wxEvent& event);
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
 
@@ -1196,10 +1203,14 @@ protected:
     virtual const wxEventTable *GetEventTable() const;
 
 protected:
-    wxEvtHandler*     m_nextHandler;
-    wxEvtHandler*     m_previousHandler;
-    bool              m_enabled;           // Is event handler enabled?
-    wxList*           m_dynamicEvents;
+    wxEvtHandler*      m_nextHandler;
+    wxEvtHandler*      m_previousHandler;
+    bool               m_enabled;           // Is event handler enabled?
+    wxList*            m_dynamicEvents;
+    wxList*	       m_pendingEvents;
+#if wxUSE_THREADS
+    wxCriticalSection* m_eventsLocker;
+#endif
 
     // optimization: instead of using costly IsKindOf() to decide whether we're
     // a window (which is true in 99% of cases), use this flag

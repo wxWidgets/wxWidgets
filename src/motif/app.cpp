@@ -49,6 +49,10 @@
 
 extern char *wxBuffer;
 extern wxList wxPendingDelete;
+#if wxUSE_THREADS
+extern wxList wxPendingEvents;
+extern wxList wxPendingEventsLocker;
+#endif
 
 wxApp *wxTheApp = NULL;
 
@@ -411,6 +415,11 @@ void wxApp::OnIdle(wxIdleEvent& event)
     // 'Garbage' collection of windows deleted with Close().
     DeletePendingObjects();
 
+#if wxUSE_THREADS
+    // Flush pending events.
+    ProcessPendingEvents();
+#endif
+
     // flush the logged messages if any
     wxLog *pLog = wxLog::GetActiveTarget();
     if ( pLog != NULL && pLog->HasPendingMessages() )
@@ -482,6 +491,24 @@ void wxApp::DeletePendingObjects()
         node = wxPendingDelete.First();
     }
 }
+
+#if wxUSE_THREADS
+void wxApp::ProcessPendingEvents()
+
+    wxNode *node = wxPendingEvents.First();
+    wxCriticalSectionLocker locker(wxPendingEventsLocker);
+
+    while (node)
+    {
+        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
+
+        handler->ProcessPendingEvents();
+
+        delete node;
+        node = wxPendingEvents.First();
+    }
+
+#endif
 
 wxLog* wxApp::CreateLogTarget()
 {

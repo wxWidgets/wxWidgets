@@ -46,6 +46,10 @@ wxApp *wxTheApp = (wxApp *)  NULL;
 wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 extern wxList wxPendingDelete;
+#if wxUSE_THREADS
+extern wxList wxPendingEvents;
+extern wxCriticalSection wxPendingEventsLocker;
+#endif
 extern wxResourceCache *wxTheResourceCache;
 
 unsigned char g_palette[64*3] =
@@ -283,6 +287,10 @@ void wxApp::OnIdle( wxIdleEvent &event )
 
     inOnIdle = TRUE;
 
+    /* Resend in the main thread events which have been prepared in other
+       threads */
+    ProcessPendingEvents();
+
     /* 'Garbage' collection of windows deleted with Close(). */
     DeletePendingObjects();
 
@@ -365,6 +373,25 @@ bool wxApp::Pending()
 void wxApp::Dispatch()
 {
 }
+
+#if wxUSE_THREADS
+void wxApp::ProcessPendingEvents()
+{
+    wxNode *node = wxPendingEvents.First();
+    wxCriticalSectionLocker locker(wxPendingEventsLocker);
+
+    while (node)
+    {
+        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
+
+        handler->ProcessPendingEvents();
+       
+        delete node;
+
+        node = wxPendingEvents.First();
+    }
+}
+#endif
 
 void wxApp::DeletePendingObjects()
 {

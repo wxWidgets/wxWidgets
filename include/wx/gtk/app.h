@@ -115,6 +115,9 @@ class wxApp: public wxEvtHandler
     static void CleanUp();
 
     bool ProcessIdle();
+#if wxUSE_THREADS
+    void ProcessPendingEvents();
+#endif
     void DeletePendingObjects();
 
     bool            m_initialized;

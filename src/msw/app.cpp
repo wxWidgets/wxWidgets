@@ -92,6 +92,10 @@ extern char *wxBuffer;
 extern char *wxOsVersion;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
+#if wxUSE_THREADS
+extern wxList wxPendingEvents;
+extern wxCriticalSection wxPendingEventsLocker;
+#endif
 extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor *g_globalCursor;
 
@@ -893,7 +897,13 @@ int wxApp::MainLoop()
         {
         }
 
+
         DoMessage();
+
+	// If they are pending events, we must process them.
+#if wxUSE_THREADS
+	ProcessPendingEvents();
+#endif
     }
 
     return s_currentMsg.wParam;
@@ -908,6 +918,25 @@ bool wxApp::ProcessIdle()
 
     return event.MoreRequested();
 }
+
+#if wxUSE_THREADS
+void wxApp::ProcessPendingEvents()
+
+    wxNode *node = wxPendingEvents.First();
+    wxCriticalSectionLocker locker(wxPendingEventsLocker);
+
+    while (node)
+    {
+        wxEvtHandler *handler = (wxEvtHandler *)node->Data();
+
+        handler->ProcessPendingEvents();
+
+        delete node;
+        node = wxPendingEvents.First();
+    }
+}
+#endif
+
 
 void wxApp::ExitMainLoop()
 {

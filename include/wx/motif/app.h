@@ -141,6 +141,9 @@ public:
 
   void DeletePendingObjects();
   bool ProcessIdle();
+#if wxUSE_THREADS
+  void ProcessPendingEvents();
+#endif
 
   // Motif-specific
   inline WXAppContext   GetAppContext() const { return m_appContext; }
