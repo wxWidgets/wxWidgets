@@ -175,10 +175,8 @@ private:
 class WXDLLEXPORT wxCriticalSectionLocker
 {
 public:
-    wxCriticalSectionLocker(wxCriticalSection& critsect) : m_critsect(critsect)
-        { m_critsect.Enter(); }
-    ~wxCriticalSectionLocker()
-        { m_critsect.Leave(); }
+    inline wxCriticalSectionLocker(wxCriticalSection& critsect);
+    inline ~wxCriticalSectionLocker();
 
 private:
     // no assignment operator nor copy ctor
@@ -383,7 +381,9 @@ public:
 // -----------------------------------------------------------------------------
 // implementation only until the end of file
 // -----------------------------------------------------------------------------
+
 #if wxUSE_THREADS
+
 #if defined(__WXMSW__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
@@ -415,6 +415,14 @@ public:
     inline void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }
     inline void wxCriticalSection::Leave() { (void)m_mutex.Unlock(); }
 #endif // MSW/!MSW
+
+    // we can define these inline functions now (they should be defined after
+    // wxCriticalSection::Enter/Leave)
+    inline
+    wxCriticalSectionLocker:: wxCriticalSectionLocker(wxCriticalSection& cs)
+        : m_critsect(cs) { m_critsect.Enter(); }
+    inline
+    wxCriticalSectionLocker::~wxCriticalSectionLocker() { m_critsect.Leave(); }
 #endif // wxUSE_THREADS
 
 #endif // __THREADH__

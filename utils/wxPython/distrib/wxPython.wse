@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.1.5.exe
+  EXE Filename=wxPython-2.1.11.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -1122,6 +1122,13 @@ end
 item: Create Shortcut
   Source=%MAINDIR%\wxPython\docs\ogl.chm
   Destination=%CGROUPDIR%\%CGROUP_SAVE%\wxOGL User Guide.lnk
+  Icon Number=0
+  Key Type=1536
+  Flags=00000001
+end
+item: Create Shortcut
+  Source=%MAINDIR%\wxPython\docs\licence.txt
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\License.lnk
   Icon Number=0
   Key Type=1536
   Flags=00000001

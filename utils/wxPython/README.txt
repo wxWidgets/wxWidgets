@@ -45,8 +45,12 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
+
 What's new in 2.1.11
 --------------------
+Skipped a few version numbers so wxMSW, wxGTK and wxPython are all
+syncronized.
+
 wxImage.SetData now makes a copy of the image data before giving it to
 wxImage.  I mistakenly thought that wxImage would copy the data
 itself.
@@ -83,8 +87,14 @@ Added wxFontEnumerator.
 Many updates to wxMenu, wxMenuBar.
 
 wxPyEvent and wxPyCommandEvent derived classes now give you the actual
-Python object in the event handler.
+Python object in the event handler instead of a new shadow.
 
+Added a Calendar widget from Lorne White to the library.
+
+Made some fixes to the wxFloatbar.  It still has some troubles on
+wxGTK...
+
+Added an MVC tree control from Bryn Keller to the library.
 
 
 

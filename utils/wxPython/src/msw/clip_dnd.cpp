@@ -212,12 +212,17 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 
 class wxPyDropSource : public wxDropSource {
 public:
+#ifdef __WXMSW__
     wxPyDropSource(wxWindow *win = NULL,
                    const wxCursor &cursorCopy = wxNullCursor,
                    const wxCursor &cursorMove = wxNullCursor,
                    const wxCursor &cursorStop = wxNullCursor)
         : wxDropSource(win, cursorCopy, cursorMove, cursorStop) {}
-
+#else
+    wxPyDropSource(wxWindow *win = NULL,
+                   const wxIcon &go = wxNullIcon)
+        : wxDropSource(win, go) {}
+#endif
     DEC_PYCALLBACK_BOOL_DR(GiveFeedback);
     PYPRIVATE;
 };
