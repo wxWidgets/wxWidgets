@@ -6131,6 +6131,10 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetRow() > 0 )
     {
+        if ( expandSelection )
+            m_selection->SelectCell( m_currentCellCoords.GetRow(),
+                                     m_currentCellCoords.GetCol() );
+        
         MakeCellVisible( m_currentCellCoords.GetRow() - 1,
                         m_currentCellCoords.GetCol() );
 
@@ -6149,11 +6153,13 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
 
 bool wxGrid::MoveCursorDown( bool expandSelection )
 {
-    // TODO: allow for scrolling
-    //
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetRow() < m_numRows-1 )
     {
+        if ( expandSelection )
+            m_selection->SelectCell( m_currentCellCoords.GetRow(),
+                                     m_currentCellCoords.GetCol() );
+
         MakeCellVisible( m_currentCellCoords.GetRow() + 1,
                         m_currentCellCoords.GetCol() );
 
@@ -6175,6 +6181,10 @@ bool wxGrid::MoveCursorLeft( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetCol() > 0 )
     {
+        if ( expandSelection )
+            m_selection->SelectCell( m_currentCellCoords.GetRow(),
+                                     m_currentCellCoords.GetCol() );
+
         MakeCellVisible( m_currentCellCoords.GetRow(),
                         m_currentCellCoords.GetCol() - 1 );
 
@@ -6196,6 +6206,10 @@ bool wxGrid::MoveCursorRight( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetCol() < m_numCols - 1 )
     {
+        if ( expandSelection )
+            m_selection->SelectCell( m_currentCellCoords.GetRow(),
+                                     m_currentCellCoords.GetCol() );
+
         MakeCellVisible( m_currentCellCoords.GetRow(),
                         m_currentCellCoords.GetCol() + 1 );
 
