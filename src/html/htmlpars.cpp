@@ -856,7 +856,8 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
 wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType WXUNUSED(type), 
                                 const wxString& url) const
 {
-    return GetFS()->OpenFile(url);
+    return m_FS ? m_FS->OpenFile(url) : NULL;
+    
 }
 
 
