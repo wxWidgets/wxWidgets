@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_OWNER_DRAWN || !defined(__WXMSW__)
+
 #include "wx/xrc/xh_chckl.h"
 #include "wx/checklst.h"
 #include "wx/intl.h"
@@ -105,4 +107,4 @@ bool wxCheckListXmlHandler::CanHandle(wxXmlNode *node)
            (m_insideBox && node->GetName() == wxT("item")));
 }
 
-
+#endif
