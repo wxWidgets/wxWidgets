@@ -81,6 +81,14 @@ UINT CALLBACK wxColourDialogHookProc(HWND hwnd,
         wxColourDialog *dialog = (wxColourDialog *)pCC->lCustData;
 
         ::SetWindowText(hwnd, dialog->GetTitle());
+
+        wxPoint pos = dialog->GetPosition();
+        if ( pos != wxDefaultPosition )
+        {
+            ::SetWindowPos(hwnd, NULL /* Z-order: ignored */,
+                           pos.x, pos.y, -1, -1,
+                           SWP_NOSIZE | SWP_NOZORDER);
+        }
     }
 
     return 0;
@@ -92,10 +100,13 @@ UINT CALLBACK wxColourDialogHookProc(HWND hwnd,
 
 wxColourDialog::wxColourDialog()
 {
+    m_pos = wxDefaultPosition;
 }
 
 wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
 {
+    m_pos = wxDefaultPosition;
+
     Create(parent, data);
 }
 
@@ -173,11 +184,25 @@ wxString wxColourDialog::GetTitle()
 // position/size
 // ----------------------------------------------------------------------------
 
-void wxColourDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
+void wxColourDialog::DoGetPosition(int *x, int *y) const
+{
+    if ( x )
+        *x = m_pos.x;
+    if ( y )
+        *y = m_pos.y;
+}
+
+void wxColourDialog::DoSetSize(int x, int y,
                                int WXUNUSED(width), int WXUNUSED(height),
                                int WXUNUSED(sizeFlags))
 {
-    // ignore - we can't change the size of this standard dialog
+    if ( x != -1 )
+        m_pos.x = x;
+
+    if ( y != -1 )
+        m_pos.y = y;
+
+    // ignore the size params - we can't change the size of a standard dialog
     return;
 }
 
@@ -200,3 +225,4 @@ void wxColourDialog::DoGetClientSize(int *width, int *height) const
     if ( height )
         *height = 299;
 }
+

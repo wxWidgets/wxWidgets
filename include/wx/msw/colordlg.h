@@ -40,6 +40,8 @@ public:
 
     virtual int ShowModal();
 
+    virtual void DoGetPosition( int *x, int *y ) const;
+
 protected:
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetClientSize(int *width, int *height) const;
@@ -49,6 +51,8 @@ protected:
 
     wxColourData        m_colourData;
     wxString            m_title;
+
+    wxPoint             m_pos;
 
     DECLARE_DYNAMIC_CLASS(wxColourDialog)
 };
