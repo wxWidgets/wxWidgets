@@ -35,7 +35,7 @@
    public:
     // override base class virtuals
     // ----------------------------
-   
+
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
@@ -48,7 +48,7 @@
    public:
     // ctor(s)
       MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
-   
+
     // event handlers (these functions should _not_ be virtual)
       void OnQuit(wxCommandEvent& event);
       void OnAbout(wxCommandEvent& event);
@@ -70,7 +70,7 @@
    Minimal_About,
    Minimal_Back,
    Minimal_Forward,
-   
+
     // controls start here (the numbers are, of course, arbitrary)
    Minimal_Text = 1000,
    };
@@ -86,18 +86,18 @@
    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
    EVT_MENU(Minimal_About, MyFrame::OnAbout)
    END_EVENT_TABLE()
-   
+
    // Create a new application object: this macro will allow wxWindows to create
    // the application object during program execution (it's better than using a
    // static object for many reasons) and also declares the accessor function
    // wxGetApp() which will return the reference of the right type (i.e. MyApp and
    // not wxApp)
    IMPLEMENT_APP(MyApp)
-   
+
    // ============================================================================
    // implementation
    // ============================================================================
-   
+
    // ----------------------------------------------------------------------------
    // the application class
    // ----------------------------------------------------------------------------
@@ -108,7 +108,7 @@
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(150, 50));
-   
+
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
       frame->Show(TRUE);
@@ -162,7 +162,7 @@
         wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 230), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
 #endif
 
-        html = new wxHtmlWindow(&dlg, -1, wxPoint(10, 10), wxSize(380, 160), "htmlWindow", FALSE);
+        html = new wxHtmlWindow(&dlg, -1, wxPoint(10, 10), wxSize(380, 160));//, "htmlWindow", FALSE);
         html -> SetBorders(0);
         html -> LoadPage("data/about.htm");
         wxButton *bu1 = new wxButton(&dlg, wxID_OK, "OK", wxPoint(250, 185), wxSize(100, 30));
