@@ -389,9 +389,11 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   }
   else if (name == "x")
   {
+    wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
     int x, y;
     m_propertyWindow->GetPosition(&x, &y);
     int newX = (int)property->GetValue().IntegerValue();
+    int pixelX = newX;
 
     // We need to convert to pixels if this is not a dialog or panel, but
     // the parent resource specifies dialog units.
@@ -401,7 +403,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxPoint pt = m_propertyWindow->GetParent()->ConvertDialogToPixels(wxPoint(newX, y));
-            newX = pt.x;
+            pixelX = pt.x;
         }
     }
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxPanel)))
@@ -410,19 +412,24 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxPoint pt = m_propertyWindow->ConvertDialogToPixels(wxPoint(newX, y));
-            newX = pt.x;
+            pixelX = pt.x;
         }
     }
 
     if (x != newX)
-      m_propertyWindow->Move(newX, y);
+    {
+      m_propertyWindow->Move(pixelX, y);
+      resource->SetSize(newX, resource->GetY(), resource->GetWidth(), resource->GetHeight());
+    }
     return TRUE;
   }
   else if (name == "y")
   {
+    wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
     int x, y;
     m_propertyWindow->GetPosition(&x, &y);
     int newY = (int)property->GetValue().IntegerValue();
+    int pixelY = newY;
 
     // We need to convert to pixels if this is not a dialog or panel, but
     // the parent resource specifies dialog units.
@@ -432,7 +439,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxPoint pt = m_propertyWindow->GetParent()->ConvertDialogToPixels(wxPoint(x, newY));
-            newY = pt.y;
+            pixelY = pt.y;
         }
     }
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxPanel)))
@@ -441,19 +448,24 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxPoint pt = m_propertyWindow->ConvertDialogToPixels(wxPoint(x, newY));
-            newY = pt.y;
+            pixelY = pt.y;
         }
     }
 
     if (y != newY)
-      m_propertyWindow->Move(x, newY);
+    {
+      m_propertyWindow->Move(x, pixelY);
+      resource->SetSize(resource->GetX(), newY, resource->GetWidth(), resource->GetHeight());
+    }
     return TRUE;
   }
   else if (name == "width")
   {
+    wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
     int width, height;
     m_propertyWindow->GetSize(&width, &height);
     int newWidth = (int)property->GetValue().IntegerValue();
+    int pixelWidth = newWidth;
 
     // We need to convert to pixels if this is not a dialog or panel, but
     // the parent resource specifies dialog units.
@@ -463,7 +475,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxSize sz = m_propertyWindow->GetParent()->ConvertDialogToPixels(wxSize(newWidth, height));
-            newWidth = sz.x;
+            pixelWidth = sz.x;
         }
     }
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxPanel)))
@@ -472,21 +484,24 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxSize sz = m_propertyWindow->ConvertDialogToPixels(wxSize(newWidth, height));
-            newWidth = sz.x;
+            pixelWidth = sz.x;
         }
     }
 
     if (width != newWidth)
     {
-      m_propertyWindow->SetSize(newWidth, height);
+      m_propertyWindow->SetSize(pixelWidth, height);
+      resource->SetSize(resource->GetX(), resource->GetY(), newWidth, resource->GetHeight());
     }
     return TRUE;
   }
   else if (name == "height")
   {
+    wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
     int width, height;
     m_propertyWindow->GetSize(&width, &height);
     int newHeight = (int)property->GetValue().IntegerValue();
+    int pixelHeight = newHeight;
 
     // We need to convert to pixels if this is not a dialog or panel, but
     // the parent resource specifies dialog units.
@@ -496,7 +511,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxSize sz = m_propertyWindow->GetParent()->ConvertDialogToPixels(wxSize(width, newHeight));
-            newHeight = sz.y;
+            pixelHeight = sz.y;
         }
     }
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxPanel)))
@@ -505,13 +520,14 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         if (resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
         {
             wxSize sz = m_propertyWindow->ConvertDialogToPixels(wxSize(width, newHeight));
-            newHeight = sz.y;
+            pixelHeight = sz.y;
         }
     }
 
     if (height != newHeight)
     {
       m_propertyWindow->SetSize(width, newHeight);
+      resource->SetSize(resource->GetX(), resource->GetY(), resource->GetWidth(), newHeight);
     }
     return TRUE;
   }
