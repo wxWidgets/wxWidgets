@@ -95,6 +95,9 @@
 
     <set var="LIBDIRNAME">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
+        <if cond="FORMAT!='autoconf'">
+            $(WXTOPDIR)$(DIRSEP)lib$(DIRSEP)$(COMPILER)
+        </if>
     </set>
 
     <!-- =============================================================== -->

@@ -21,7 +21,7 @@
     
     <option name="MONOLITHIC">
         <values>0 1</values>
-        <default-value>0</default-value>
+        <default-value>1</default-value>
         <description>
             Multiple libraries or single huge monolithic one?
         </description>
@@ -43,7 +43,11 @@
         </description>
     </option>
 
-    <!-- Autoconf options: -->
+
+    <!-- ================================================================== -->
+    <!--                             Autoconf                               -->
+    <!-- ================================================================== -->
+    
     <if cond="FORMAT=='autoconf'"> 
         <option name="DEREZ"/>
         <option name="TOOLKIT"/>
@@ -53,8 +57,20 @@
         <option name="SAMPLES_RPATH_FLAG"/>
     </if>
 
+    
+    <!-- ================================================================== -->
+    <!--                         Windows compilers                          -->
+    <!-- ================================================================== -->
+
     <if cond="FORMAT!='autoconf'">
-        <set var="TOOLKIT_VERSION"></set>
+        <set var="TOOLKIT">MSW</set>
+        <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
+        <set var="TOOLKIT_VERSION"/>
+        <set var="SAMPLES_RPATH_FLAG"/>
+        <option name="EXTRALIBS"/>
+
+        <set var="SRCDIR">..</set>
+        <set var="BUILDDIR">objs_$(COMPILER)</set>
     </if>
 
 </makefile>
