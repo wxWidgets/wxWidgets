@@ -88,6 +88,7 @@ public:
     virtual bool Show( bool show = TRUE );
     virtual void DoMoveWindow(int x, int y, int width, int height);
     void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
+    short MacGetWindowBackgroundTheme() const { return m_macWindowBackgroundTheme ; }
 protected:
     // common part of all ctors
     void Init();
