@@ -21,7 +21,7 @@
 WXDLLEXPORT_DATA(extern const char*) wxSliderNameStr;
 
 // Slider
-class WXDLLEXPORT wxSlider: public wxControl
+class WXDLLEXPORT wxSlider: public wxSliderBase
 {
     DECLARE_DYNAMIC_CLASS(wxSlider)
         
@@ -52,42 +52,26 @@ public:
     virtual int GetValue() const ;
     virtual void SetValue(int);
     
-    void GetSize(int *x, int *y) const ;
-    
     void SetRange(int minValue, int maxValue);
     
     inline int GetMin() const { return m_rangeMin; }
     inline int GetMax() const { return m_rangeMax; }
     
     // For trackbars only
-    void SetTickFreq(int n, int pos);
-    inline int GetTickFreq() const { return m_tickFreq; }
     void SetPageSize(int pageSize);
     int GetPageSize() const ;
-    void ClearSel() ;
-    void ClearTicks() ;
     void SetLineSize(int lineSize);
     int GetLineSize() const ;
-    int GetSelEnd() const ;
-    int GetSelStart() const ;
-    void SetSelection(int minPos, int maxPos);
     void SetThumbLength(int len) ;
     int GetThumbLength() const ;
-    void SetTick(int tickPos) ;
     
     void Command(wxCommandEvent& event);
-    
-    // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
-    virtual void ChangeBackgroundColour();
-    virtual void ChangeForegroundColour();
     
 protected:
     int           m_rangeMin;
     int           m_rangeMax;
     int           m_pageSize;
     int           m_lineSize;
-    int           m_tickFreq;
     
     virtual void DoSetSize(int x, int y,
         int width, int height,

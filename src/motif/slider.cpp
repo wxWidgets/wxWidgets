@@ -46,7 +46,6 @@ wxSlider::wxSlider()
     m_lineSize = 1;
     m_rangeMax = 0;
     m_rangeMin = 0;
-    m_tickFreq = 0;
 }
 
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
@@ -55,25 +54,15 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
                       const wxSize& size, long style,
                       const wxValidator& validator,
                       const wxString& name)
-{    
+{
     if ( !((style & wxSL_HORIZONTAL) || (style & wxSL_VERTICAL)) )
          style |= wxSL_HORIZONTAL;
-    
-    SetName(name);
-    SetValidator(validator);
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
 
-    if (parent) parent->AddChild(this);
+    if( !CreateControl( parent, id, pos, size, style, validator, name ) )
+        return false;
 
     m_lineSize = 1;
     m_windowStyle = style;
-    m_tickFreq = 0;
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
 
     m_rangeMax = maxValue;
     m_rangeMin = minValue;
@@ -114,8 +103,6 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
 
-    m_font = parent->GetFont();
-
     ChangeFont(FALSE);
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
@@ -139,11 +126,6 @@ int wxSlider::GetValue() const
 void wxSlider::SetValue(int value)
 {
     XtVaSetValues ((Widget) m_mainWidget, XmNvalue, value, NULL);
-}
-
-void wxSlider::GetSize(int *width, int *height) const
-{
-    wxControl::GetSize(width, height);
 }
 
 void wxSlider::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -186,12 +168,6 @@ void wxSlider::SetRange(int minValue, int maxValue)
 }
 
 // For trackbars only
-void wxSlider::SetTickFreq(int n, int WXUNUSED(pos))
-{
-    // Not implemented in Motif
-    m_tickFreq = n;
-}
-
 void wxSlider::SetPageSize(int pageSize)
 {
     // Not implemented in Motif
@@ -201,16 +177,6 @@ void wxSlider::SetPageSize(int pageSize)
 int wxSlider::GetPageSize() const
 {
     return m_pageSize;
-}
-
-void wxSlider::ClearSel()
-{
-    // Not implemented in Motif
-}
-
-void wxSlider::ClearTicks()
-{
-    // Not implemented in Motif
 }
 
 void wxSlider::SetLineSize(int lineSize)
@@ -225,23 +191,6 @@ int wxSlider::GetLineSize() const
     return m_lineSize;
 }
 
-int wxSlider::GetSelEnd() const
-{
-    // Not implemented in Motif
-    return 0;
-}
-
-int wxSlider::GetSelStart() const
-{
-    // Not implemented in Motif
-    return 0;
-}
-
-void wxSlider::SetSelection(int WXUNUSED(minPos), int WXUNUSED(maxPos))
-{
-    // Not implemented in Motif
-}
-
 void wxSlider::SetThumbLength(int WXUNUSED(len))
 {
     // Not implemented in Motif (?)
@@ -253,57 +202,41 @@ int wxSlider::GetThumbLength() const
     return 0;
 }
 
-void wxSlider::SetTick(int WXUNUSED(tickPos))
-{
-    // Not implemented in Motif
-}
-
 void wxSlider::Command (wxCommandEvent & event)
 {
     SetValue (event.GetInt());
     ProcessCommand (event);
 }
 
-void wxSlider::ChangeFont(bool keepOriginalSize)
-{
-    wxWindow::ChangeFont(keepOriginalSize);
-}
-
-void wxSlider::ChangeBackgroundColour()
-{
-    wxWindow::ChangeBackgroundColour();
-}
-
-void wxSlider::ChangeForegroundColour()
-{
-    wxWindow::ChangeForegroundColour();
-}
-
-void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruct * cbs)
+void wxSliderCallback (Widget widget, XtPointer clientData,
+                       XmScaleCallbackStruct * cbs)
 {
     wxSlider *slider = (wxSlider *) clientData;
+    wxEventType scrollEvent;
+
     switch (cbs->reason)
     {
     case XmCR_VALUE_CHANGED:
+        scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+        break;
+
     case XmCR_DRAG:
+        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+        break;
+
     default:
-        {
-            // TODO: the XmCR_VALUE_CHANGED case should be handled
-            // differently (it's not sent continually as the slider moves).
-            // In which case we need a similar behaviour for other platforms.
-
-            wxScrollEvent event(wxEVT_SCROLL_THUMBTRACK, slider->GetId());
-            XtVaGetValues (widget, XmNvalue, &event.m_commandInt, NULL);
-            event.SetEventObject(slider);
-            slider->ProcessCommand(event);
-
-            // Also send a wxCommandEvent for compatibility.
-            wxCommandEvent event2(wxEVT_COMMAND_SLIDER_UPDATED, slider->GetId());
-            event2.SetEventObject(slider);
-            event2.SetInt( event.GetInt() );
-            slider->ProcessCommand(event2);
-            break;
-        }
+        return;
     }
+
+    wxScrollEvent event(scrollEvent, slider->GetId());
+    XtVaGetValues (widget, XmNvalue, &event.m_commandInt, NULL);
+    event.SetEventObject(slider);
+    slider->GetEventHandler()->ProcessEvent(event);
+
+    // Also send a wxCommandEvent for compatibility.
+    wxCommandEvent event2(wxEVT_COMMAND_SLIDER_UPDATED, slider->GetId());
+    event2.SetEventObject(slider);
+    event2.SetInt( event.GetInt() );
+    slider->GetEventHandler()->ProcessEvent(event2);
 }
 

@@ -14,10 +14,9 @@
 #endif
 
 #include "wx/cursor.h"
-#include "wx/gdicmn.h"
-#include "wx/icon.h"
 #include "wx/app.h"
 #include "wx/utils.h"
+#include "wx/list.h"
 #if wxUSE_IMAGE
 #include "wx/image.h"
 #endif									     
@@ -33,23 +32,47 @@
 
 #include "wx/motif/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
-IMPLEMENT_DYNAMIC_CLASS(wxXCursor, wxObject)
+// Cursor for one display, so we can choose the correct one for
+// the current display.
+class wxXCursor
+{
+public:
+    WXDisplay*  m_display;
+    WXCursor    m_cursor;
+};
+
+WX_DECLARE_LIST(wxXCursor, wxXCursorList);
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxXCursorList);
+
+class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
+{
+    friend class WXDLLEXPORT wxCursor;
+public:
+    wxCursorRefData();
+    ~wxCursorRefData();
+    
+    wxXCursorList m_cursors;  // wxXCursor objects, one per display
+    wxStockCursor m_cursorId; // wxWindows standard cursor id
+};
+
+#define M_CURSORDATA ((wxCursorRefData *)m_refData)
+#define M_CURSORHANDLERDATA ((wxCursorRefData *)bitmap->m_refData)
+
+IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxObject)
 
 wxCursorRefData::wxCursorRefData()
 {
-    m_width = 32; m_height = 32;
     m_cursorId = wxCURSOR_NONE;
 }
 
 wxCursorRefData::~wxCursorRefData()
 {
-    wxList::Node* node = m_cursors.GetFirst();
+    wxXCursorList::Node* node = m_cursors.GetFirst();
     while (node)
     {
-        wxXCursor* c = (wxXCursor*) node->GetData();
-        // TODO: how to delete cursor?
-        // XDestroyCursor((Display*) c->m_display, (Cursor) c->m_cursor); // ??
+        wxXCursor* c = node->GetData();
+        XFreeCursor((Display*) c->m_display, (Cursor) c->m_cursor);
         delete c;
         node = node->GetNext();
     }
@@ -89,7 +112,6 @@ wxCursor::wxCursor(const wxImage & image)
         }
     }
 
-    unsigned long keyMaskColor;
     if (bHasMask)
     {
         unsigned char
@@ -110,60 +132,13 @@ wxCursor::wxCursor(const wxImage & image)
                 cMask = cMask * 2;
             }
         }
-
-        keyMaskColor = (r << 16) | (g << 8) | b;
     }
     else // no mask
     {
         for (i=0; i<imagebitcount; i++)
             maskBits[i] = 0xFF;
-
-        // init it to avoid compiler warnings
-        keyMaskColor = 0;
-    }
-/*
-    // find the most frequent color(s)
-    wxImageHistogram histogram;
-    image.ComputeHistogram(histogram);
-
-    // colors as rrggbb
-    unsigned long key;
-    unsigned long value;
-
-    long colMostFreq = 0;
-    unsigned long nMost = 0;
-    long colNextMostFreq = 0;
-    unsigned long nNext = 0;
-    for ( wxImageHistogram::iterator entry = histogram.begin();
-          entry != histogram.end();
-          ++entry )
-    {
-        value = entry->second.value;
-        key = entry->first;
-        if ( !bHasMask || (key != keyMaskColor) )
-        {
-            if (value > nMost)
-            {
-                nMost = value;
-                colMostFreq = key;
-            }
-            else if (value > nNext)
-            {
-                nNext = value;
-                colNextMostFreq = key;
-            }
-        }
     }
 
-    wxColour fg = wxColour ( (unsigned char)(colMostFreq >> 16),
-                             (unsigned char)(colMostFreq >> 8),
-                             (unsigned char)(colMostFreq) );
-
-    wxColour bg = wxColour ( (unsigned char)(colNextMostFreq >> 16),
-                             (unsigned char)(colNextMostFreq >> 8),
-                             (unsigned char)(colNextMostFreq) );
-end of color code
- */
     int hotSpotX;
     int hotSpotY;
 
@@ -230,13 +205,7 @@ end of color code
         c->m_cursor = (WXCursor) cursor;
         c->m_display = (WXDisplay*) dpy;
         M_CURSORDATA->m_cursors.Append(c);
-        M_CURSORDATA->m_ok = TRUE;
     }
-    else
-    {
-        M_CURSORDATA->m_ok = TRUE;
-    }
-    
 }
 #endif
 
@@ -291,11 +260,6 @@ wxCursor::wxCursor(const char bits[], int width, int height,
         c->m_cursor = (WXCursor) cursor;
         c->m_display = (WXDisplay*) dpy;
         M_CURSORDATA->m_cursors.Append(c);
-        M_CURSORDATA->m_ok = TRUE;
-    }
-    else
-    {
-        M_CURSORDATA->m_ok = TRUE;
     }
 }
 
@@ -317,10 +281,6 @@ wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
     int value = XReadBitmapFile (dpy, RootWindow (dpy, DefaultScreen (dpy)),
                                  wxConstCast(name.c_str(), char),
                                  &w, &h, &pixmap, &hotX, &hotY);
-
-    M_BITMAPDATA->m_width = w;
-    M_BITMAPDATA->m_height = h;
-    M_BITMAPDATA->m_depth = 1;
 
     if ((value == BitmapFileInvalid) ||
         (value == BitmapOpenFailed) ||
@@ -366,7 +326,6 @@ wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
             c->m_cursor = (WXCursor) cursor;
             c->m_display = (WXDisplay*) dpy;
             M_CURSORDATA->m_cursors.Append(c);
-            M_CURSORDATA->m_ok = TRUE;
         }
     }
 
@@ -377,25 +336,21 @@ wxCursor::wxCursor(wxStockCursor id)
 {
     m_refData = new wxCursorRefData;
     M_CURSORDATA->m_cursorId = id;
-    M_CURSORDATA->m_ok = TRUE;
 
     WXDisplay* display = wxGetDisplay();
     if (!display)
       return;
 
     WXCursor cursor = GetXCursor(display);
-    if (cursor)
-    {
-        wxXCursor* c = new wxXCursor;
-        c->m_cursor = cursor;
-        c->m_display = wxGetDisplay();
-        M_CURSORDATA->m_cursors.Append(c);
-        M_CURSORDATA->m_ok = TRUE;
-    }
 }
 
 wxCursor::~wxCursor()
 {
+}
+
+bool wxCursor::Ok() const
+{
+    return m_refData != NULL;
 }
 
 // Motif-specific: create/get a cursor for the current display
@@ -403,10 +358,10 @@ WXCursor wxCursor::GetXCursor(WXDisplay* display)
 {
     if (!M_CURSORDATA)
         return (WXCursor) 0;
-    wxList::Node* node = M_CURSORDATA->m_cursors.GetFirst();
+    wxXCursorList::Node* node = M_CURSORDATA->m_cursors.GetFirst();
     while (node)
     {
-        wxXCursor* c = (wxXCursor*) node->GetData();
+        wxXCursor* c = node->GetData();
         if (c->m_display == display)
             return c->m_cursor;
         node = node->GetNext();
@@ -438,181 +393,79 @@ WXCursor wxCursor::MakeCursor(WXDisplay* display, wxStockCursor id)
 {
     Display* dpy = (Display*) display;
     Cursor cursor = (Cursor) 0;
+    int x_cur = -1;
 
     switch (id)
     {
-        case wxCURSOR_WAIT:
-        {
-            cursor = XCreateFontCursor (dpy, XC_watch);
-            break;
-        }
-        case wxCURSOR_CROSS:
-        {
-            cursor = XCreateFontCursor (dpy, XC_crosshair);
-            break;
-        }
-        case wxCURSOR_CHAR:
-        {
-            // Nothing
-            break;
-        }
-        case wxCURSOR_HAND:
-        {
-            cursor = XCreateFontCursor (dpy, XC_hand1);
-            break;
-        }
-        case wxCURSOR_BULLSEYE:
-        {
-            cursor = XCreateFontCursor (dpy, XC_target);
-            break;
-        }
-        case wxCURSOR_PENCIL:
-       {
-            cursor = XCreateFontCursor (dpy, XC_pencil);
-            break;
-        }
-        case wxCURSOR_MAGNIFIER:
-        {
-            cursor = XCreateFontCursor (dpy, XC_sizing);
-            break;
-        }
-        case wxCURSOR_IBEAM:
-        {
-            cursor = XCreateFontCursor (dpy, XC_xterm);
-            break;
-        }
-        case wxCURSOR_NO_ENTRY:
-        {
-            cursor = XCreateFontCursor (dpy, XC_pirate);
-            break;
-        }
-        case wxCURSOR_LEFT_BUTTON:
-        {
-            cursor = XCreateFontCursor (dpy, XC_leftbutton);
-            break;
-        }
-        case wxCURSOR_RIGHT_BUTTON:
-        {
-            cursor = XCreateFontCursor (dpy, XC_rightbutton);
-            break;
-        }
-        case wxCURSOR_MIDDLE_BUTTON:
-        {
-            cursor = XCreateFontCursor (dpy, XC_middlebutton);
-            break;
-        }
-        case wxCURSOR_QUESTION_ARROW:
-        {
-            cursor = XCreateFontCursor (dpy, XC_question_arrow);
-            break;
-        }
-        case wxCURSOR_SIZING:
-        {
-            cursor = XCreateFontCursor (dpy, XC_sizing);
-            break;
-        }
-        case wxCURSOR_WATCH:
-        {
-            cursor = XCreateFontCursor (dpy, XC_watch);
-            break;
-        }
-        case wxCURSOR_SPRAYCAN:
-        {
-            cursor = XCreateFontCursor (dpy, XC_spraycan);
-            break;
-        }
-        case wxCURSOR_PAINT_BRUSH:
-        {
-            cursor = XCreateFontCursor (dpy, XC_spraycan);
-            break;
-        }
-        case wxCURSOR_SIZENWSE:
-        case wxCURSOR_SIZENESW:
-        {
-            // Not available in X
-            cursor = XCreateFontCursor (dpy, XC_crosshair);
-            break;
-        }
-        case wxCURSOR_SIZEWE:
-        {
-            cursor = XCreateFontCursor (dpy, XC_sb_h_double_arrow);
-            break;
-        }
-        case wxCURSOR_SIZENS:
-        {
-            cursor = XCreateFontCursor (dpy, XC_sb_v_double_arrow);
-            break;
-        }
-        case wxCURSOR_POINT_LEFT:
-        {
-            cursor = XCreateFontCursor (dpy, XC_sb_left_arrow);
-            break;
-        }
-        case wxCURSOR_POINT_RIGHT:
-        {
-            cursor = XCreateFontCursor (dpy, XC_sb_right_arrow);
-            break;
-        }
+    case wxCURSOR_WAIT:             x_cur = XC_watch; break;
+    case wxCURSOR_CROSS:            x_cur = XC_crosshair; break; 
+    case wxCURSOR_CHAR:                       return (WXCursor)cursor; break;
+    case wxCURSOR_HAND:             x_cur = XC_hand1; break;
+    case wxCURSOR_BULLSEYE:         x_cur = XC_target; break;
+    case wxCURSOR_PENCIL:           x_cur = XC_pencil; break; 
+    case wxCURSOR_MAGNIFIER:        x_cur = XC_sizing; break; 
+    case wxCURSOR_IBEAM:            x_cur = XC_xterm; break; 
+    case wxCURSOR_NO_ENTRY:         x_cur = XC_pirate; break;
+    case wxCURSOR_LEFT_BUTTON:      x_cur = XC_leftbutton; break; 
+    case wxCURSOR_RIGHT_BUTTON:     x_cur = XC_rightbutton; break; 
+    case wxCURSOR_MIDDLE_BUTTON:    x_cur =  XC_middlebutton; break;
+    case wxCURSOR_QUESTION_ARROW:   x_cur = XC_question_arrow; break;
+    case wxCURSOR_SIZING:           x_cur = XC_sizing; break;
+    case wxCURSOR_WATCH:            x_cur = XC_watch; break;
+    case wxCURSOR_SPRAYCAN:         x_cur = XC_spraycan; break;
+    case wxCURSOR_PAINT_BRUSH:      x_cur = XC_spraycan; break;
+    case wxCURSOR_SIZENWSE:
+    case wxCURSOR_SIZENESW:         x_cur = XC_crosshair; break;
+    case wxCURSOR_SIZEWE:           x_cur = XC_sb_h_double_arrow; break;
+    case wxCURSOR_SIZENS:           x_cur = XC_sb_v_double_arrow; break;
+    case wxCURSOR_POINT_LEFT:       x_cur = XC_sb_left_arrow; break;
+    case wxCURSOR_POINT_RIGHT:      x_cur = XC_sb_right_arrow; break;
         // (JD Huggins) added more stock cursors for X
         // X-only cursors BEGIN
-        case wxCURSOR_CROSS_REVERSE:
-        {
-            cursor = XCreateFontCursor(dpy, XC_cross_reverse);
-            break;
-        }
-        case wxCURSOR_DOUBLE_ARROW:
-        {
-            cursor = XCreateFontCursor(dpy, XC_double_arrow);
-            break;
-        }
-        case wxCURSOR_BASED_ARROW_UP:
-        {
-            cursor = XCreateFontCursor(dpy, XC_based_arrow_up);
-            break;
-        }
-        case wxCURSOR_BASED_ARROW_DOWN:
-        {
-            cursor = XCreateFontCursor(dpy, XC_based_arrow_down);
-            break;
-        }
-        default:
-        case wxCURSOR_ARROW:
-        {
-            cursor = XCreateFontCursor (dpy, XC_top_left_arrow);
-            break;
-        }
-        case wxCURSOR_BLANK:
-        {
-            GC gc;
-            XGCValues gcv;
-            Pixmap empty_pixmap;
-            XColor blank_color;
+    case wxCURSOR_CROSS_REVERSE:    x_cur = XC_cross_reverse; break;
+    case wxCURSOR_DOUBLE_ARROW:     x_cur = XC_double_arrow; break;
+    case wxCURSOR_BASED_ARROW_UP:   x_cur = XC_based_arrow_up; break;
+    case wxCURSOR_BASED_ARROW_DOWN: x_cur = XC_based_arrow_down; break;
+    case wxCURSOR_BLANK:
+    {
+        GC gc;
+        XGCValues gcv;
+        Pixmap empty_pixmap;
+        XColor blank_color;
 
-            empty_pixmap = XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-                              16, 16, 1);
-            gcv.function = GXxor;
-            gc = XCreateGC (dpy,
-                    empty_pixmap,
-                    GCFunction,
-                    &gcv);
-            XCopyArea (dpy,
+        empty_pixmap =
+            XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+                           16, 16, 1);
+        gcv.function = GXxor;
+        gc = XCreateGC (dpy,
+                        empty_pixmap,
+                        GCFunction,
+                        &gcv);
+        XCopyArea (dpy,
                    empty_pixmap,
                    empty_pixmap,
                    gc,
                    0, 0,
                    16, 16,
                    0, 0);
-            XFreeGC (dpy, gc);
-            cursor = XCreatePixmapCursor (dpy,
-                            empty_pixmap,
-                            empty_pixmap,
-                            &blank_color,
-                            &blank_color,
-                            8, 8);
+        XFreeGC (dpy, gc);
+        cursor = XCreatePixmapCursor (dpy,
+                                      empty_pixmap,
+                                      empty_pixmap,
+                                      &blank_color,
+                                      &blank_color,
+                                      8, 8);
 
-            break;
-        }
+        break;
     }
+    case wxCURSOR_ARROW:
+    default:       x_cur =  XC_top_left_arrow; break;
+    }
+
+    if( x_cur == -1 )
+        return (WXCursor)cursor;
+
+    cursor = XCreateFontCursor (dpy, x_cur);
     return (WXCursor) cursor;
 }
 
