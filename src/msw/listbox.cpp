@@ -572,10 +572,6 @@ void wxListBox::SetString(int N, const wxString& s)
     else if ( oldObjData )
         SetClientObject(N, oldObjData);
 
-    // we may have lost the selection
-    if ( wasSelected )
-        Select(N);
-
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW )
     {
@@ -586,6 +582,10 @@ void wxListBox::SetString(int N, const wxString& s)
         ListBox_SetItemData(GetHwnd(), N, m_aItems[N]);
     }
 #endif  //USE_OWNER_DRAWN
+
+    // we may have lost the selection
+    if ( wasSelected )
+        Select(N);
 }
 
 int wxListBox::GetCount() const
