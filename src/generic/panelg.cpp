@@ -86,7 +86,7 @@ WX_END_PROPERTIES_TABLE()
 WX_BEGIN_HANDLERS_TABLE(wxPanel)
 WX_END_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_4( wxPanel , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+WX_CONSTRUCTOR_5( wxPanel , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
