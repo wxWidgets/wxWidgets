@@ -30,12 +30,14 @@ the corresponding topic.
 \helpref{wxBITMAP}{wxbitmapmacro}\\
 \helpref{wxBeginBusyCursor}{wxbeginbusycursor}\\
 \helpref{wxBell}{wxbell}\\
+\helpref{wxCHECK}{wxcheck}\\
 \helpref{wxCHECK2\_MSG}{wxcheck2msg}\\
 \helpref{wxCHECK2}{wxcheck2}\\
+\helpref{wxCHECK\_GCC\_VERSION}{wxcheckgccversion}\\
 \helpref{wxCHECK\_MSG}{wxcheckmsg}\\
 \helpref{wxCHECK\_RET}{wxcheckret}\\
 \helpref{wxCHECK\_VERSION}{wxcheckversion}\\
-\helpref{wxCHECK}{wxcheck}\\
+\helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}\\
 \helpref{wxClientDisplayRect}{wxclientdisplayrect}\\
 \helpref{wxClipboardOpen}{functionwxclipboardopen}\\
 \helpref{wxCloseClipboard}{wxcloseclipboard}\\
@@ -273,6 +275,22 @@ the following can be done:
         ...
     }
 \end{verbatim}
+
+\membersection{wxCHECK\_GCC\_VERSION}\label{wxcheckgccversion}
+
+\func{bool}{wxCHECK\_GCC\_VERSION}{\param{}{major, minor, release}}
+
+Returns $1$ if the compiler being used to compile the code is GNU C++
+compiler (g++) version major.minor.release or greater. Otherwise, and also if
+the compiler is not GNU C++ at all, returns $0$.
+
+\membersection{wxCHECK\_W32API\_VERSION}\label{wxcheckw32apiversion}
+
+\func{bool}{wxCHECK\_GCC\_VERSION}{\param{}{major, minor, release}}
+
+Returns $1$ if the version of w32api headers used is major.minor.release or
+greater. Otherwise, and also if we are not compiling with mingw32/cygwin under
+Win32 at all, returns $0$.
 
 \section{Application initialization and termination}\label{appinifunctions}
 
