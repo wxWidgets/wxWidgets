@@ -43,6 +43,7 @@ wxHTTP::wxHTTP()
   m_addr = NULL;
   m_read = FALSE;
   m_proxy_mode = FALSE;
+  m_post_buf = wxEmptyString;
 
   SetNotify(wxSOCKET_LOST_FLAG);
 }
@@ -93,6 +94,11 @@ wxString wxHTTP::GetHeader(const wxString& header)
   return it->second;
 }
 
+void wxHTTP::SetPostBuffer(const wxString& post_buf)
+{
+  m_post_buf = post_buf;
+}
+
 void wxHTTP::SendHeaders()
 {
   typedef wxStringToStringHashMap::iterator iterator;
@@ -137,7 +143,7 @@ bool wxHTTP::ParseHeaders()
   return TRUE;
 }
 
-bool wxHTTP::Connect(const wxString& host)
+bool wxHTTP::Connect(const wxString& host, unsigned short port)
 {
   wxIPV4address *addr;
 
@@ -156,7 +162,8 @@ bool wxHTTP::Connect(const wxString& host)
     return FALSE;
   }
 
-  if (!addr->Service(wxT("http")))
+  if ( port ) addr->Service(port);
+  else if (!addr->Service(wxT("http")))
     addr->Service(80);
 
   SetHeader(wxT("Host"), host);
@@ -188,6 +195,9 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   case wxHTTP_GET:
     request = wxT("GET");
     break;
+  case wxHTTP_POST:
+    tmp_buf = wxT("POST");
+    break;
   default:
     return FALSE;
   }
@@ -206,6 +216,11 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   Write(pathbuf, strlen(wxMBSTRINGCAST pathbuf));
   SendHeaders();
   Write("\r\n", 2);
+
+  if ( req == wxHTTP_POST ) {
+    Write(m_post_buf, m_post_buf.Len());
+    m_post_buf = wxEmptyString;
+  }
 
   wxString tmp_str;
   m_perr = GetLine(this, tmp_str);
@@ -309,7 +324,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
     return NULL;
 #endif
 
-  if (!BuildRequest(path, wxHTTP_GET))
+  if (!BuildRequest(path, m_post_buf.IsEmpty() ? wxHTTP_GET : wxHTTP_POST))
     return NULL;
 
   inp_stream = new wxHTTPStream(this);

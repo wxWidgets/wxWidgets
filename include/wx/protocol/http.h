@@ -28,11 +28,12 @@ protected:
   wxStringToStringHashMap m_headers;
   bool m_read, m_proxy_mode;
   wxSockAddress *m_addr;
+  wxString m_post_buf;
 public:
   wxHTTP();
   ~wxHTTP();
 
-  bool Connect(const wxString& host);
+  bool Connect(const wxString& host, unsigned short port = 0);
   bool Connect(wxSockAddress& addr, bool wait);
   bool Abort();
   wxInputStream *GetInputStream(const wxString& path);
@@ -41,12 +42,14 @@ public:
 
   void SetHeader(const wxString& header, const wxString& h_data);
   wxString GetHeader(const wxString& header);
+  void SetPostBuffer(const wxString& post_buf);
 
   void SetProxyMode(bool on);
 
 protected:
   typedef enum {
     wxHTTP_GET,
+    wxHTTP_POST,
     wxHTTP_HEAD
   } wxHTTP_Req;
   bool BuildRequest(const wxString& path, wxHTTP_Req req);
