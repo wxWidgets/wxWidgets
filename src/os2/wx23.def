@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\DEV\WX24\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1965,7 +1965,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX24\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6261,7 +6261,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX24\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -14881,14 +14881,23 @@ EXPORTS
       __vft19wxTopLevelWindowOS28wxObject
       ;wxTopLevelWindowOS2::CreateFrame(const wxString&,const wxPoint&,const wxSize&)
       CreateFrame__19wxTopLevelWindowOS2FRC8wxStringRC7wxPointRC6wxSize
+      ;wxTLWHiddenParentModule::m_shWnd
+      m_shWnd__23wxTLWHiddenParentModule
       ;wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
       __dt__19wxTopLevelWindowOS2Fv
       ;wxTopLevelWindowOS2::sm_eventTableEntries
       sm_eventTableEntries__19wxTopLevelWindowOS2
+      ;wxTLWHiddenParentModule::OnInit()
+      OnInit__23wxTLWHiddenParentModuleFv
+      ;wxTLWHiddenParentModule::GetHWND()
+      GetHWND__23wxTLWHiddenParentModuleFv
       ;wxTopLevelWindowOS2::ShowFullScreen(unsigned long,long)
       ShowFullScreen__19wxTopLevelWindowOS2FUll
+      __vft23wxTLWHiddenParentModule8wxObject
       ;wxTopLevelWindowOS2::CreateDialog(unsigned long,const wxString&,const wxPoint&,const wxSize&)
       CreateDialog__19wxTopLevelWindowOS2FUlRC8wxStringRC7wxPointRC6wxSize
+      ;wxTLWHiddenParentModule::sm_classwxTLWHiddenParentModule
+      sm_classwxTLWHiddenParentModule__23wxTLWHiddenParentModule
       ;wxTopLevelWindowOS2::DoShowWindow(int)
       DoShowWindow__19wxTopLevelWindowOS2Fi
       ;wxTopLevelWindowOS2::Init()
@@ -14903,6 +14912,8 @@ EXPORTS
       Iconize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::DoSetClientSize(int,int)
       DoSetClientSize__19wxTopLevelWindowOS2FiT1
+      ;wxTLWHiddenParentModule::m_szClassName
+      m_szClassName__23wxTLWHiddenParentModule
       ;wxTopLevelWindowOS2::IsMaximized() const
       IsMaximized__19wxTopLevelWindowOS2CFv
       ;wxTopLevelWindowOS2::m_spHiddenParent
@@ -14911,6 +14922,8 @@ EXPORTS
       SetIcon__19wxTopLevelWindowOS2FRC6wxIcon
       ;wxTopLevelWindowOS2::Restore()
       Restore__19wxTopLevelWindowOS2Fv
+      ;wxTLWHiddenParentModule::OnExit()
+      OnExit__23wxTLWHiddenParentModuleFv
       ;wxTopLevelWindowOS2::OnActivate(wxActivateEvent&)
       OnActivate__19wxTopLevelWindowOS2FR15wxActivateEvent
       ;wxTopLevelWindowOS2::Maximize(unsigned long)
@@ -14919,6 +14932,8 @@ EXPORTS
       EnableCloseButton__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::DoGetClientSize(int*,int*) const
       DoGetClientSize__19wxTopLevelWindowOS2CFPiT1
+      ;wxConstructorForwxTLWHiddenParentModule()
+      wxConstructorForwxTLWHiddenParentModule__Fv
       ;wxTopLevelWindowOS2::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
       Create__19wxTopLevelWindowOS2FP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
       ;wxTopLevelWindowOS2::Show(unsigned long)

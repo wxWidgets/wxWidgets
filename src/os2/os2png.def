@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\os2png.lib
+;From library:  H:\DEV\WX24\WXWINDOWS\LIB\os2png.lib
   ;From object file:  ..\png\png.c
     ;PUBDEFs (Symbols available from object file):
       png_free_data

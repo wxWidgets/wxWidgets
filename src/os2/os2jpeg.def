@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\os2jpeg.lib
+;From library:  H:\DEV\WX24\WXWINDOWS\LIB\os2jpeg.lib
   ;From object file:  ..\jpeg\jcomapi.c
     ;PUBDEFs (Symbols available from object file):
       jpeg_destroy
@@ -219,7 +219,7 @@ EXPORTS
   ;From object file:  ..\jpeg\jdinput.c
     ;PUBDEFs (Symbols available from object file):
       reset_input_controller
-      start_input_pass
+      start_input_pass2
       jinit_input_controller
       finish_input_pass
       consume_markers
@@ -261,8 +261,8 @@ EXPORTS
   ;From object file:  ..\jpeg\jdcoefct.c
     ;PUBDEFs (Symbols available from object file):
       decompress_data
+      start_input_pass
       decompress_smooth_data
-      start_input_pass2
       decompress_onepass
       dummy_consume_data
       consume_data
