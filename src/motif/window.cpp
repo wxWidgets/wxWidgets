@@ -3199,9 +3199,12 @@ void wxWindow::ChangeFont(bool keepOriginalSize)
         int width, height, width1, height1;
         GetSize(& width, & height);
 
+// lesstif 0.87 hangs here
+#ifndef LESSTIF_VERSION	
         XtVaSetValues (w,
 		   XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(w)),
 		   NULL);
+#endif
 
         GetSize(& width1, & height1);
         if (keepOriginalSize && (width != width1 || height != height1))
