@@ -648,7 +648,7 @@ HBITMAP wxLoadBMP(const wxString& filename)
       pBmpInfo->bmiHeader.biClrUsed : 1 << pBmpInfo->bmiHeader.biBitCount;
     if (nColors < 1
       || file.Read(pBmpInfo->bmiColors, nColors * sizeof(RGBQUAD))
-        == nColors * sizeof(RGBQUAD)) {
+        == (ssize_t)(nColors * sizeof(RGBQUAD))) {
 
       // So how big the bitmap surface is.
       int nBitsSize = BmpFileHdr.bfSize - BmpFileHdr.bfOffBits;
