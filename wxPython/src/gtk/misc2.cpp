@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -963,6 +961,62 @@ static PyObject *_wrap_wxGetDisplaySize(PyObject *self, PyObject *args, PyObject
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = new wxSize (wxGetDisplaySize());
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxDisplaySizeMM(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int * _arg0;
+    int  temp;
+    int * _arg1;
+    int  temp0;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+{
+  _arg0 = &temp;
+}
+{
+  _arg1 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxDisplaySizeMM",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDisplaySizeMM(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg0));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetDisplaySizeMM(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetDisplaySizeMM",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxGetDisplaySizeMM());
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
@@ -5411,6 +5465,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFindWindowByName", (PyCFunction) _wrap_wxFindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFindWindowByLabel", (PyCFunction) _wrap_wxFindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSetCursor", (PyCFunction) _wrap_wxSetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetDisplaySizeMM", (PyCFunction) _wrap_wxGetDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDisplaySizeMM", (PyCFunction) _wrap_wxDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetDisplaySize", (PyCFunction) _wrap_wxGetDisplaySize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDisplaySize", (PyCFunction) _wrap_wxDisplaySize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetDisplayDepth", (PyCFunction) _wrap_wxGetDisplayDepth, METH_VARARGS | METH_KEYWORDS },
@@ -5873,6 +5929,7 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxLOG_Trace", PyInt_FromLong((long) wxLOG_Trace));
 	 PyDict_SetItemString(d,"wxLOG_Progress", PyInt_FromLong((long) wxLOG_Progress));
 	 PyDict_SetItemString(d,"wxLOG_User", PyInt_FromLong((long) wxLOG_User));
+	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

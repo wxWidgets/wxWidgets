@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -9400,7 +9398,54 @@ static PyObject *_wrap_wxMenuItem_SetAccel(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+static PyObject *_wrap_wxMenuItem_GetLabelFromText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "text", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuItem_GetLabelFromText",_kwnames,&_obj0)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxMenuItem::GetLabelFromText(*_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static PyMethodDef windowscMethods[] = {
+	 { "wxMenuItem_GetLabelFromText", (PyCFunction) _wrap_wxMenuItem_GetLabelFromText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetAccel", (PyCFunction) _wrap_wxMenuItem_SetAccel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetAccel", (PyCFunction) _wrap_wxMenuItem_GetAccel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetHelp", (PyCFunction) _wrap_wxMenuItem_GetHelp, METH_VARARGS | METH_KEYWORDS },

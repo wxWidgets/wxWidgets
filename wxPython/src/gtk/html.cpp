@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);

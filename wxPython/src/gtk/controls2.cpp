@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -2930,6 +2928,43 @@ static PyObject *_wrap_wxListCtrl_Arrange(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxListCtrl_AssignImageList(_swigobj,_swigarg0,_swigarg1)  (_swigobj->AssignImageList(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxListCtrl_AssignImageList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxListCtrl * _arg0;
+    wxImageList * _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","imageList","which", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxListCtrl_AssignImageList",_kwnames,&_argo0,&_argo1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_AssignImageList. Expected _wxListCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListCtrl_AssignImageList. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListCtrl_AssignImageList(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxListCtrl_DeleteItem(_swigobj,_swigarg0)  (_swigobj->DeleteItem(_swigarg0))
 static PyObject *_wrap_wxListCtrl_DeleteItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5127,6 +5162,42 @@ static PyObject *_wrap_wxTreeCtrl__setSelf(PyObject *self, PyObject *args, PyObj
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxTreeCtrl__setSelf(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeCtrl_AssignImageList(_swigobj,_swigarg0)  (_swigobj->AssignImageList(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_AssignImageList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeCtrl * _arg0;
+    wxImageList * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","imageList", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_AssignImageList",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_AssignImageList. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_AssignImageList. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTreeCtrl_AssignImageList(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7692,6 +7763,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_SetIndent", (PyCFunction) _wrap_wxTreeCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetIndent", (PyCFunction) _wrap_wxTreeCtrl_GetIndent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetCount", (PyCFunction) _wrap_wxTreeCtrl_GetCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_AssignImageList", (PyCFunction) _wrap_wxTreeCtrl_AssignImageList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl__setSelf", (PyCFunction) _wrap_wxTreeCtrl__setSelf, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeCtrl", (PyCFunction) _wrap_new_wxTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetLabel", (PyCFunction) _wrap_wxTreeEvent_GetLabel, METH_VARARGS | METH_KEYWORDS },
@@ -7755,6 +7827,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_DeleteColumn", (PyCFunction) _wrap_wxListCtrl_DeleteColumn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_DeleteAllItems", (PyCFunction) _wrap_wxListCtrl_DeleteAllItems, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_DeleteItem", (PyCFunction) _wrap_wxListCtrl_DeleteItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_AssignImageList", (PyCFunction) _wrap_wxListCtrl_AssignImageList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_Arrange", (PyCFunction) _wrap_wxListCtrl_Arrange, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxListCtrl", (PyCFunction) _wrap_new_wxListCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListEvent_GetItem", (PyCFunction) _wrap_wxListEvent_GetItem, METH_VARARGS | METH_KEYWORDS },
@@ -8280,6 +8353,22 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxLIST_FORMAT_RIGHT", PyInt_FromLong((long) wxLIST_FORMAT_RIGHT));
 	 PyDict_SetItemString(d,"wxLIST_FORMAT_CENTRE", PyInt_FromLong((long) wxLIST_FORMAT_CENTRE));
 	 PyDict_SetItemString(d,"wxLIST_FORMAT_CENTER", PyInt_FromLong((long) wxLIST_FORMAT_CENTER));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_BEGIN_DRAG", PyInt_FromLong((long) wxEVT_COMMAND_LIST_BEGIN_DRAG));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_BEGIN_RDRAG", PyInt_FromLong((long) wxEVT_COMMAND_LIST_BEGIN_RDRAG));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT", PyInt_FromLong((long) wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_END_LABEL_EDIT", PyInt_FromLong((long) wxEVT_COMMAND_LIST_END_LABEL_EDIT));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_DELETE_ITEM", PyInt_FromLong((long) wxEVT_COMMAND_LIST_DELETE_ITEM));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS", PyInt_FromLong((long) wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_GET_INFO", PyInt_FromLong((long) wxEVT_COMMAND_LIST_GET_INFO));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_SET_INFO", PyInt_FromLong((long) wxEVT_COMMAND_LIST_SET_INFO));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_ITEM_SELECTED", PyInt_FromLong((long) wxEVT_COMMAND_LIST_ITEM_SELECTED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_ITEM_DESELECTED", PyInt_FromLong((long) wxEVT_COMMAND_LIST_ITEM_DESELECTED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_KEY_DOWN", PyInt_FromLong((long) wxEVT_COMMAND_LIST_KEY_DOWN));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_INSERT_ITEM", PyInt_FromLong((long) wxEVT_COMMAND_LIST_INSERT_ITEM));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_COL_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_LIST_COL_CLICK));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_ITEM_ACTIVATED", PyInt_FromLong((long) wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK));
 	 PyDict_SetItemString(d,"wxTreeItemIcon_Normal", PyInt_FromLong((long) wxTreeItemIcon_Normal));
 	 PyDict_SetItemString(d,"wxTreeItemIcon_Selected", PyInt_FromLong((long) wxTreeItemIcon_Selected));
 	 PyDict_SetItemString(d,"wxTreeItemIcon_Expanded", PyInt_FromLong((long) wxTreeItemIcon_Expanded));
@@ -8299,6 +8388,23 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMUPPERPART", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMUPPERPART));
 	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMLOWERPART", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMLOWERPART));
 	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEM", PyInt_FromLong((long) wxTREE_HITTEST_ONITEM));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_BEGIN_DRAG", PyInt_FromLong((long) wxEVT_COMMAND_TREE_BEGIN_DRAG));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_BEGIN_RDRAG", PyInt_FromLong((long) wxEVT_COMMAND_TREE_BEGIN_RDRAG));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT", PyInt_FromLong((long) wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_END_LABEL_EDIT", PyInt_FromLong((long) wxEVT_COMMAND_TREE_END_LABEL_EDIT));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_DELETE_ITEM", PyInt_FromLong((long) wxEVT_COMMAND_TREE_DELETE_ITEM));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_GET_INFO", PyInt_FromLong((long) wxEVT_COMMAND_TREE_GET_INFO));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SET_INFO", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SET_INFO));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_EXPANDED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_EXPANDED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_EXPANDING", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_EXPANDING));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_COLLAPSED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_COLLAPSED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_COLLAPSING", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_COLLAPSING));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SEL_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SEL_CHANGED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TREE_SEL_CHANGING));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_KEY_DOWN", PyInt_FromLong((long) wxEVT_COMMAND_TREE_KEY_DOWN));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_ACTIVATED", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_ACTIVATED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

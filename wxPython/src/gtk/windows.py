@@ -992,6 +992,8 @@ wxWindow_NextControlId = windowsc.wxWindow_NextControlId
 
 wxWindow_PrevControlId = windowsc.wxWindow_PrevControlId
 
+wxMenuItem_GetLabelFromText = windowsc.wxMenuItem_GetLabelFromText
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
