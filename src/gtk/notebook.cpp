@@ -37,6 +37,16 @@ extern bool g_isIdle;
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
+// debug
+//-----------------------------------------------------------------------------
+
+#ifdef __WXDEBUG__
+
+extern void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window );
+
+#endif
+
+//-----------------------------------------------------------------------------
 // wxNotebookPage
 //-----------------------------------------------------------------------------
 
@@ -245,6 +255,10 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     PreCreation( parent, id, pos, size, style, name );
 
     m_widget = gtk_notebook_new();
+
+#ifdef __WXDEBUG__
+    debug_focus_in( m_widget, _T("wxNotebook::m_widget"), name );
+#endif
 
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 

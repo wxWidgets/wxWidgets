@@ -122,6 +122,39 @@
 */
 
 //-----------------------------------------------------------------------------
+// debug
+//-----------------------------------------------------------------------------
+
+#ifdef __WXDEBUG__
+
+static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
+                                         GdkEvent *WXUNUSED(event),
+                                         const wxChar *name )
+{
+    wxPrintf( _T("FOCUS NOW AT: ") );
+    wxPrintf( name );
+    wxPrintf( _T("\n") );
+
+    return FALSE;
+}
+
+void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window )
+{
+    wxString tmp = name;
+    tmp += _T(" FROM ");
+    tmp += window;
+
+    wxChar *s = new wxChar[tmp.Length()+1];
+
+    wxStrcpy( s, tmp );
+
+    gtk_signal_connect( GTK_OBJECT(widget), "focus_in_event",
+      GTK_SIGNAL_FUNC(gtk_debug_focus_in_callback), (gpointer)s );
+}
+
+#endif
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -1542,7 +1575,16 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
+#ifdef __WXDEBUG__
+    debug_focus_in( m_widget, _T("wxWindow::m_widget"), name );
+#endif
+
     GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(m_widget);
+
+#ifdef __WXDEBUG__
+    debug_focus_in( s_window->hscrollbar, _T("wxWindow::hsrcollbar"), name );
+    debug_focus_in( s_window->vscrollbar, _T("wxWindow::vsrcollbar"), name );
+#endif
 
     GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
     scroll_class->scrollbar_spacing = 0;
@@ -1557,6 +1599,10 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     m_wxwindow = gtk_myfixed_new();
     gtk_widget_show( m_wxwindow );
+
+#ifdef __WXDEBUG__
+    debug_focus_in( m_wxwindow, _T("wxWindow::m_wxwindow"), name );
+#endif
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
@@ -1606,7 +1652,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     }
     
     /* grab the actual focus */
-    gtk_widget_grab_focus( m_wxwindow );
+//    gtk_widget_grab_focus( m_wxwindow );
 
 #if (GTK_MINOR_VERSION == 0)
     // shut the viewport up
@@ -2284,6 +2330,9 @@ void wxWindow::SetSizeHints( int minW, int minH, int maxW, int maxH, int WXUNUSE
 
 void wxWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
+   /* this is commented because it also is commented
+      in wxMSW. before I get even more questions about
+      this. */
 //  if (GetAutoLayout()) Layout();
 }
 

@@ -47,6 +47,16 @@ extern bool g_isIdle;
 extern wxList wxPendingDelete;
 
 //-----------------------------------------------------------------------------
+// debug
+//-----------------------------------------------------------------------------
+
+#ifdef __WXDEBUG__
+
+extern void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window );
+
+#endif
+
+//-----------------------------------------------------------------------------
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
@@ -216,6 +226,21 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 	win->SetIcon( icon );
     }
     
+    /* we set the focus to the child that accepts the focus. this
+       doesn't really have to be done in "realize" but why not? */
+    wxNode *node = win->m_children.First();
+    while (node)
+    {
+        wxWindow *child = (wxWindow*) node->Data();
+	if (child->AcceptsFocus())
+	{
+	    child->SetFocus();
+	    break;
+	}
+	
+        node = node->Next();
+    }
+    
     return FALSE;
 }
     
@@ -336,6 +361,10 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     m_widget = gtk_window_new( win_type );
 
+#ifdef __WXDEBUG__
+    debug_focus_in( m_widget, _T("wxFrame::m_widget"), name );
+#endif
+
     gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
@@ -348,17 +377,22 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
     
+#ifdef __WXDEBUG__
+    debug_focus_in( m_mainWidget, _T("wxFrame::m_mainWidget"), name );
+#endif
+
     /* m_wxwindow only represents the client area without toolbar and menubar */
     m_wxwindow = gtk_myfixed_new();
     gtk_widget_show( m_wxwindow );
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
     
-    /* we allow the frame to get the focus as otherwise no
-       key events will get sent to it. the point with this is
-       that the menu's key accelerators work by interceting
-       key events here */
-    GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-    gtk_widget_grab_focus( m_wxwindow );
+#ifdef __WXDEBUG__
+    debug_focus_in( m_wxwindow, _T("wxFrame::m_wxwindow"), name );
+#endif
+
+    /* we donm't allow the frame to get the focus as otherwise
+       the frame will grabit at arbitrary fcous changes. */
+    GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
 
     if (m_parent) m_parent->AddChild( this );
 
