@@ -28,6 +28,13 @@
         $file =~ s/cp?p?$/obj/;
         $project{$tag} .= $file . " "
     }
+    
+    foreach $file (sort keys %wxHTML) {
+        next if $wxHTML{$file} =~ /\b16\b/;
+
+        $file =~ s/cp?p?$/obj/;
+        $project{"WXHTMLOBJS"} .= $file . " "
+    }
 
     foreach $file (sort keys %wxCommon) {
         $isCFile = $file =~ /\.c$/;
@@ -91,6 +98,7 @@ JPEGDIR=$(WXDIR)\src\jpeg
 TIFFDIR=$(WXDIR)\src\tiff
 MSWDIR=$(WXDIR)\src\msw
 OLEDIR=$(MSWDIR)\ole
+HTMLDIR=$(WXDIR)\src\html
 
 DOCDIR = $(WXDIR)\docs
 
@@ -106,10 +114,12 @@ COMMONOBJS = &
 
 MSWOBJS = #$ ExpandGlue("WXMSWOBJS", "", " &\n\t")
 
-# Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+HTMLOBJS = #$ ExpandGlue("WXHTMLOBJS", "", " &\n\t")
 
-all:        $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS)
+# Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
+
+all:        $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS) .SYMBOLIC
 
 $(LIBTARGET) : $(OBJECTS)
     %create tmp.lbc
@@ -206,6 +216,23 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
                  '  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<' . "\n\n";
     }
 #$}
+
+
+########################################################
+# HTML objects (always compiled)
+
+#${
+    $_ = $project{"WXHTMLOBJS"};
+    my @objs = split;
+    foreach (@objs) {
+        $text .= $_;
+        s/\.obj$//;
+        $text .= ':     $(HTMLDIR)\\';
+        $text .= $_ . ".cpp\n" .
+                 '  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<' . "\n\n";
+    }
+#$}
+
 
 crbuffri.obj: $(XPMDIR)\crbuffri.c
   *$(CC) $(CPPFLAGS) $(IFLAGS) $<
