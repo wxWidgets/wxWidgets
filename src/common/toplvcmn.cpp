@@ -187,7 +187,7 @@ void wxTopLevelWindowBase::DoClientToScreen(int *x, int *y) const
 
 // default resizing behaviour - if only ONE subwindow, resize to fill the
 // whole client area
-void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxTopLevelWindowBase::DoLayout()
 {
     // if we're using constraints or sizers - do use them
     if ( GetAutoLayout() )

@@ -194,7 +194,7 @@ public:
 
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);
-    void OnSize(wxSizeEvent& event);
+    void OnSize(wxSizeEvent& WXUNUSED(event)) { DoLayout(); }
 
     // this should go away, but for now it's called from docview.cpp,
     // so should be there for all platforms
@@ -220,6 +220,10 @@ protected:
 
     // send the iconize event, return true if processed
     bool SendIconizeEvent(bool iconized = true);
+
+    // do TLW-specific layout: we resize our unique child to fill the entire
+    // client area
+    void DoLayout();
 
     // Get the default size for the new window if no explicit size given. If
     // there are better default sizes then these can be changed, just as long
