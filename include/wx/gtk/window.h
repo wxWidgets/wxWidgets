@@ -112,6 +112,10 @@ public:
     // OnInternalIdle
     virtual void OnInternalIdle();
 
+    // For delayed background 
+    void GtkSetBackgroundColour( const wxColour &colour );
+    void GtkSetForegroundColour( const wxColour &colour );
+    
     // For compatibility across platforms (not in event table)
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
 
