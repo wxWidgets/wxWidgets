@@ -36,13 +36,11 @@
 #include "palette.h"
 
 // Include pixmaps
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/arrow.xpm"
 #include "bitmaps/tool1.xpm"
 #include "bitmaps/tool2.xpm"
 #include "bitmaps/tool3.xpm"
 #include "bitmaps/tool4.xpm"
-#endif
 
 /*
  * Object editor tool palette
@@ -53,11 +51,7 @@ EditorToolPalette::EditorToolPalette(wxWindow* parent, const wxPoint& pos, const
             long style):
   TOOLPALETTECLASS(parent, -1, pos, size, style)
 {
-  currentlySelected = -1;
-
-#if 1 // ndef __WXGTK__
-  SetMaxRowsCols(1000, 1);
-#endif
+    currentlySelected = -1;
 }
 
 bool EditorToolPalette::OnLeftClick(int toolIndex, bool toggled)
@@ -86,14 +80,15 @@ void EditorToolPalette::SetSize(int x, int y, int width, int height, int sizeFla
 
 EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
 {
-  // Load palette bitmaps
-#ifdef __WXMSW__
+  // Load palette bitmaps. MSW-specific bitmaps no
+  // longer needed.
+#if 0
   wxBitmap PaletteTool1(_T("TOOL1"));
   wxBitmap PaletteTool2(_T("TOOL2"));
   wxBitmap PaletteTool3(_T("TOOL3"));
   wxBitmap PaletteTool4(_T("TOOL4"));
   wxBitmap PaletteArrow(_T("ARROWTOOL"));
-#elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#else
   wxBitmap PaletteTool1(tool1_xpm);
   wxBitmap PaletteTool2(tool2_xpm);
   wxBitmap PaletteTool3(tool3_xpm);
@@ -101,7 +96,8 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
   wxBitmap PaletteArrow(arrow_xpm);
 #endif
 
-  EditorToolPalette *palette = new EditorToolPalette(parent, wxPoint(0, 0), wxSize(-1, -1), wxTB_HORIZONTAL);
+  EditorToolPalette *palette = new EditorToolPalette(parent, wxPoint(0, 0), wxSize(-1, -1),
+      wxTB_VERTICAL);
 
   palette->SetMargins(2, 2);
   palette->SetToolBitmapSize(wxSize(22, 22));
