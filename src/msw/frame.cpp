@@ -63,10 +63,8 @@
 // globals
 // ----------------------------------------------------------------------------
 
-extern const wxChar *wxFrameClassName;
-
 #if wxUSE_MENUS_NATIVE
-extern wxMenu *wxCurrentPopupMenu;
+    extern wxMenu *wxCurrentPopupMenu;
 #endif // wxUSE_MENUS_NATIVE
 
 // ----------------------------------------------------------------------------

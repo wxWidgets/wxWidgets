@@ -136,16 +136,12 @@ wxApp *wxTheApp = NULL;
 
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
-const wxChar *wxFrameClassName         = wxT("wxFrameClass");
-const wxChar *wxFrameClassNameNoRedraw = wxT("wxFrameClassNR");
+const wxChar *wxCanvasClassName        = wxT("wxWindowClass");
+const wxChar *wxCanvasClassNameNR      = wxT("wxWindowClassNR");
 const wxChar *wxMDIFrameClassName      = wxT("wxMDIFrameClass");
 const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
 const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
 const wxChar *wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
-const wxChar *wxPanelClassName         = wxT("wxPanelClass");
-const wxChar *wxPanelClassNameNR       = wxT("wxPanelClassNR");
-const wxChar *wxCanvasClassName        = wxT("wxCanvasClass");
-const wxChar *wxCanvasClassNameNR      = wxT("wxCanvasClassNR");
 
 HICON wxSTD_FRAME_ICON = (HICON) NULL;
 HICON wxSTD_MDICHILDFRAME_ICON = (HICON) NULL;
@@ -322,6 +318,7 @@ bool wxApp::Initialize()
 bool wxApp::RegisterWindowClasses()
 {
     WNDCLASS wndclass;
+    wxZeroMemory(wndclass);
 
     // for each class we register one with CS_(V|H)REDRAW style and one
     // without for windows created with wxNO_FULL_REDRAW_ON_REPAINT flag
@@ -330,16 +327,12 @@ bool wxApp::RegisterWindowClasses()
 
     // the fields which are common to all classes
     wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = sizeof( DWORD ); // VZ: what is this DWORD used for?
     wndclass.hInstance     = wxhInstance;
-    wndclass.hIcon         = (HICON) NULL;
     wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
-    wndclass.lpszMenuName  = NULL;
 
     // Register the frame window class.
     wndclass.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
-    wndclass.lpszClassName = wxFrameClassName;
+    wndclass.lpszClassName = wxCanvasClassName;
     wndclass.style         = styleNormal;
 
     if ( !RegisterClass(&wndclass) )
@@ -350,7 +343,7 @@ bool wxApp::RegisterWindowClasses()
     }
 
     // "no redraw" frame
-    wndclass.lpszClassName = wxFrameClassNameNoRedraw;
+    wndclass.lpszClassName = wxCanvasClassNameNR;
     wndclass.style         = styleNoRedraw;
 
     if ( !RegisterClass(&wndclass) )
@@ -406,49 +399,6 @@ bool wxApp::RegisterWindowClasses()
         return FALSE;
     }
 
-    // Register the panel window class.
-    wndclass.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
-    wndclass.lpszClassName = wxPanelClassName;
-    wndclass.style         = styleNormal;
-
-    if ( !RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(panel)"));
-
-        return FALSE;
-    }
-
-    // Register the no redraw panel window class.
-    wndclass.lpszClassName = wxPanelClassNameNR;
-    wndclass.style         = styleNoRedraw;
-
-    if ( !RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(no redraw panel)"));
-
-        return FALSE;
-    }
-
-    // Register the canvas and textsubwindow class name
-    wndclass.hbrBackground = (HBRUSH)NULL;
-    wndclass.lpszClassName = wxCanvasClassName;
-
-    if ( !RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(canvas)"));
-
-        return FALSE;
-    }
-
-    wndclass.lpszClassName = wxCanvasClassNameNR;
-    wndclass.style         = styleNoRedraw;
-    if ( !RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(no redraw canvas)"));
-
-        return FALSE;
-    }
-
     return TRUE;
 }
 
@@ -461,24 +411,8 @@ bool wxApp::UnregisterWindowClasses()
     bool retval = TRUE;
 
 #ifndef __WXMICROWIN__
-    // frame window class.
-    if ( !UnregisterClass(wxFrameClassName, wxhInstance) )
-    {
-        wxLogLastError(wxT("UnregisterClass(frame)"));
-
-        retval = FALSE;
-    }
-
-    // "no redraw" frame
-    if ( !UnregisterClass(wxFrameClassNameNoRedraw, wxhInstance) )
-    {
-        wxLogLastError(wxT("UnregisterClass(no redraw frame)"));
-
-        return FALSE;
-    }
-
     // MDI frame window class.
-    if ( !UnregisterClass(wxMDIFrameClassName, wxhInstance) )
+    if ( !::UnregisterClass(wxMDIFrameClassName, wxhInstance) )
     {
         wxLogLastError(wxT("UnregisterClass(MDI parent)"));
 
@@ -486,7 +420,7 @@ bool wxApp::UnregisterWindowClasses()
     }
 
     // "no redraw" MDI frame
-    if ( !UnregisterClass(wxMDIFrameClassNameNoRedraw, wxhInstance) )
+    if ( !::UnregisterClass(wxMDIFrameClassNameNoRedraw, wxhInstance) )
     {
         wxLogLastError(wxT("UnregisterClass(no redraw MDI parent frame)"));
 
@@ -494,7 +428,7 @@ bool wxApp::UnregisterWindowClasses()
     }
 
     // MDI child frame window class.
-    if ( !UnregisterClass(wxMDIChildFrameClassName, wxhInstance) )
+    if ( !::UnregisterClass(wxMDIChildFrameClassName, wxhInstance) )
     {
         wxLogLastError(wxT("UnregisterClass(MDI child)"));
 
@@ -502,45 +436,29 @@ bool wxApp::UnregisterWindowClasses()
     }
 
     // "no redraw" MDI child frame
-    if ( !UnregisterClass(wxMDIChildFrameClassNameNoRedraw, wxhInstance) )
+    if ( !::UnregisterClass(wxMDIChildFrameClassNameNoRedraw, wxhInstance) )
     {
         wxLogLastError(wxT("UnregisterClass(no redraw MDI child)"));
 
         retval = FALSE;
     }
 
-    // panel window class.
-    if ( !UnregisterClass(wxPanelClassName, wxhInstance) )
-    {
-        wxLogLastError(wxT("UnregisterClass(panel)"));
-
-        retval = FALSE;
-    }
-
-    // no redraw panel window class.
-    if ( !UnregisterClass(wxPanelClassNameNR, wxhInstance) )
-    {
-        wxLogLastError(wxT("UnregisterClass(no redraw panel)"));
-
-        retval = FALSE;
-    }
-
-    // canvas and textsubwindow class name
-    if ( !UnregisterClass(wxCanvasClassName, wxhInstance) )
+    // canvas class name
+    if ( !::UnregisterClass(wxCanvasClassName, wxhInstance) )
     {
         wxLogLastError(wxT("UnregisterClass(canvas)"));
 
         retval = FALSE;
     }
 
-    if ( !UnregisterClass(wxCanvasClassNameNR, wxhInstance) )
+    if ( !::UnregisterClass(wxCanvasClassNameNR, wxhInstance) )
     {
         wxLogLastError(wxT("UnregisterClass(no redraw canvas)"));
 
         retval = FALSE;
     }
-#endif
-    // __WXMICROWIN__
+#endif // __WXMICROWIN__
+
     return retval;
 }
 
