@@ -57,13 +57,12 @@ Rem Copy setup0.h files to setup.h
 copy %src%\include\wx\os2\setup0.h %src%\include\wx\os2\setup.h
 copy %src%\include\wx\msw\setup0.h %src%\include\wx\msw\setup.h
 
-cd %src
+cd %src%
 echo Zipping...
 
 Rem Zip up the complete wxOS2-xxx.zip file
 zip32 -@ %dest\wxOS2-%version%.zip < %src\distrib\msw\generic.rsp
 zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\os2.rsp
-zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\wx_chm.rsp
 zip32 -@ -u %dest%\wxOS2-%version%.zip  < %src\distrib\msw\jpeg.rsp
 zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\tiff.rsp
 zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tiff.rsp
@@ -77,9 +76,27 @@ zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\contrib.rsp
 zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 Rem Rearchive under wxWindows-%version%
-call %WXWIN%\distrib\msw\rearchive wxOS2-%version%.zip wxWindows-%version% %dest%
+if direxist %dest%\wxWindows-%version% erase /sxyz %dirname%\wxWindows-%version%
 
-zip32 -d %dest%\wxOS2-%version%.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
+mkdir %dest%\wxWindows-%version%
+cd %dest%\wxWindows-%version%
+unzip32 ..\wxOS2-%version%.zip
+erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
+erase /Y src\tiff\*.mcp src\jpeg\*.mcp src\png\*.mcp src\zlib\*.mcp
+erase /SXY docs\html\dialoged docs\html\tex2rtf
+
+echo Making files lower case...
+cd src\os2
+call %src%\distrib\msw\lower.bat
+cd ..\..\include\wx\os2
+call %src%\distrib\msw\lower.bat
+
+cd %dest%
+
+erase wxOS2-%version%.zip
+zip32 -r wxOS2-%version%.zip wxWindows-%version%/*
+
+cd %src%
 
 echo Zipping wxMac distribution
 
@@ -101,9 +118,20 @@ zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 erase /Y %src%\include\wx\setup.h
 
-call %WXWIN%\distrib\msw\rearchive wxMac-%version%.zip wxWindows-%version% %dest%
+if direxist %dest%\wxWindows-%version% erase /sxyz %dirname%\wxWindows-%version%
 
-zip32 -d %dest%\wxMac-%version%.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
+mkdir %dest%\wxWindows-%version%
+cd %dest%\wxWindows-%version%
+unzip32 ..\wxMac-%version%.zip
+erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
+erase /SXY docs\html\dialoged docs\html\tex2rtf docs\htmlhelp
+
+cd %dest%
+
+erase wxMac-%version%.zip
+zip32 -r wxMac-%version%.zip wxWindows-%version%/*
+
+cd %src%
 
 Rem Create wxWindows-%version%-win.zip which is used to create wxMSW
 echo Zipping individual components

@@ -8,6 +8,8 @@ docs/mac/*.applescript
 
 distrib/mac/*-sh
 
+src/wxWindows.pbproj/project.pbxproj
+
 src/common/dosyacc.c
 src/common/doslex.c
 src/common/y_tab.c

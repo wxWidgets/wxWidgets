@@ -36,7 +36,13 @@ class WXDLLEXPORT wxDropTarget;
 
 class WXDLLEXPORT wxListItem;
 class WXDLLEXPORT wxListEvent;
+
+#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
 class WXDLLEXPORT wxListCtrl;
+#define wxImageListType wxImageList
+#else
+#define wxImageListType wxGenericImageList
+#endif
 
 //-----------------------------------------------------------------------------
 // internal classes
@@ -116,9 +122,9 @@ public:
     void SetWindowStyleFlag( long style );
     void RecreateWindow() {}
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
-    wxGenericImageList *GetImageList( int which ) const;
-    void SetImageList( wxGenericImageList *imageList, int which );
-    void AssignImageList( wxGenericImageList *imageList, int which );
+    wxImageListType *GetImageList( int which ) const;
+    void SetImageList( wxImageListType *imageList, int which );
+    void AssignImageList( wxImageListType *imageList, int which );
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
 
     void ClearAll();
@@ -185,9 +191,9 @@ public:
     // implementation
     // --------------
 
-    wxGenericImageList         *m_imageListNormal;
-    wxGenericImageList         *m_imageListSmall;
-    wxGenericImageList         *m_imageListState;  // what's that ?
+    wxImageListType         *m_imageListNormal;
+    wxImageListType         *m_imageListSmall;
+    wxImageListType         *m_imageListState;  // what's that ?
     bool                 m_ownsImageListNormal,
                          m_ownsImageListSmall,
                          m_ownsImageListState;

@@ -53,12 +53,12 @@ mkdir %dest%\wxWindows-%version%
 cd %dest%\wxWindows-%version%
 unzip32 ..\wxMac-%version%.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
-erase /SXY docs\html\dialoged
+erase /SXY docs\html\dialoged docs\html\tex2rtf
 
-cd ..
+cd %dest%
 
-erase ..\wxMac-%version%.zip
-zip32 -r ..\wxMac-%version%.zip %dest%/wxWindows-%version%/*
+erase wxMac-%version%.zip
+zip32 -r wxMac-%version%.zip wxWindows-%version%/*
 
 Rem echo Making StuffIt archive...
 Rem set stuffitcmd=%stuffit% -stuff -create wxMac-%version%.sit wxWindows-%version%\*

@@ -54,8 +54,12 @@
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/generic/listctrl.h"
+
+    #define wxImageListType wxGenericImageList
 #else
     #include "wx/listctrl.h"
+    
+    #define wxImageListType wxImageList
 #endif
 
 #if defined(__WXGTK__)
