@@ -145,10 +145,14 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             }
             else
             {
+                // MacOS counts menu items from 1 and inserts after, therefore having the
+                // same effect as wx 0 based and inserting before, we must correct pos
+                // after however for updates to be correct
                 UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), wxT("a") , pos);
+                pos += 1 ;
             }
 
-            SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos+1 , pItem->GetId() ) ;
+            SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , pItem->GetId() ) ;
             pItem->UpdateItemText() ;
             pItem->UpdateItemBitmap() ;
             pItem->UpdateItemStatus() ;
