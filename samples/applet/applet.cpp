@@ -1,12 +1,12 @@
 /****************************************************************************
 *
-*						wxWindows HTML Applet Package
+*                       wxWindows HTML Applet Package
 *
 *  ========================================================================
 *
 *    The contents of this file are subject to the wxWindows licence; you
 *    may not use this file except in compliance with the License. You may
-*	 obtain a copy of the License at http://www.wxwindows.org/licence.htm
+*    obtain a copy of the License at http://www.wxwindows.org/licence.htm
 *
 *    Software distributed under the License is distributed on an
 *    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
@@ -20,8 +20,8 @@
 *
 *  ========================================================================
 *
-* Language:		ANSI C++
-* Environment:	Any
+* Language:     ANSI C++
+* Environment:  Any
 *
 * Description:  Main wxApplet sample program
 *
@@ -39,10 +39,10 @@
 
 // Define the event tables for handling application frame events
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(Minimal_Quit,  	MyFrame::OnQuit)
-	EVT_MENU(Minimal_About, 	MyFrame::OnAbout)
-	EVT_MENU(Minimal_Back, 		MyFrame::OnBack)
-	EVT_MENU(Minimal_Forward, 	MyFrame::OnForward)
+    EVT_MENU(Minimal_Quit,      MyFrame::OnQuit)
+    EVT_MENU(Minimal_About,     MyFrame::OnAbout)
+    EVT_MENU(Minimal_Back,      MyFrame::OnBack)
+    EVT_MENU(Minimal_Forward,   MyFrame::OnForward)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -56,40 +56,40 @@ IMPLEMENT_APP(MyApp)
 
 /****************************************************************************
 PARAMETERS:
-title	- Title for the frame window
-pos		- Position to place to frame window
-size	- Size of the frame window
+title   - Title for the frame window
+pos     - Position to place to frame window
+size    - Size of the frame window
 
 REMARKS:
 Application frame window constructor
 ****************************************************************************/
 MyFrame::MyFrame(
-	const wxString& title,
-	const wxPoint& pos,
-	const wxSize& size)
-	: wxFrame(NULL, -1, title, pos, size)
+    const wxString& title,
+    const wxPoint& pos,
+    const wxSize& size)
+    : wxFrame(NULL, -1, title, pos, size)
 {
-	// Create a menu bar
-	wxMenu *menuFile = new wxMenu;
-	wxMenu *menuNav = new wxMenu;
-	menuFile->Append(Minimal_Quit, "E&xit");
-	menuNav->Append(Minimal_Back, "Go &back");
-	menuNav->Append(Minimal_Forward, "Go &forward");
-	
-	// Now append the freshly created menu to the menu bar...
-	wxMenuBar *menuBar = new wxMenuBar;
-	menuBar->Append(menuFile, "&File");
-	menuBar->Append(menuNav, "&Navigate");
-	
-	// ... and attach this menu bar to the frame
-	SetMenuBar(menuBar);
-	CreateStatusBar(2);
+    // Create a menu bar
+    wxMenu *menuFile = new wxMenu;
+    wxMenu *menuNav = new wxMenu;
+    menuFile->Append(Minimal_Quit, "E&xit");
+    menuNav->Append(Minimal_Back, "Go &back");
+    menuNav->Append(Minimal_Forward, "Go &forward");
+    
+    // Now append the freshly created menu to the menu bar...
+    wxMenuBar *menuBar = new wxMenuBar;
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuNav, "&Navigate");
+    
+    // ... and attach this menu bar to the frame
+    SetMenuBar(menuBar);
+    CreateStatusBar(2);
 
-	// Create the HTML window	
-	html = new wxHtmlAppletWindow(this);
-	html->SetRelatedFrame(this, "wxApplet Demo: '%s'");
-	html->SetRelatedStatusBar(1);
-	html->LoadPage("index.html");
+    // Create the HTML window   
+    html = new wxHtmlAppletWindow(this);
+    html->SetRelatedFrame(this, "wxApplet Demo: '%s'");
+    html->SetRelatedStatusBar(1);
+    html->LoadPage("index.html");
 }
 
 /****************************************************************************
@@ -97,10 +97,10 @@ REMARKS:
 Event handler for the 'Exit' menu item
 ****************************************************************************/
 void MyFrame::OnQuit(
-	wxCommandEvent&)
+    wxCommandEvent&)
 {
-	// TRUE is to force the frame to close
-	Close(TRUE);
+    // TRUE is to force the frame to close
+    Close(TRUE);
 }
 
 /****************************************************************************
@@ -108,9 +108,9 @@ REMARKS:
 Event handler for the 'About' menu item
 ****************************************************************************/
 void MyFrame::OnAbout(
-	wxCommandEvent&)
+    wxCommandEvent&)
 {
-	// TODO: Bring up and about html page!
+    // TODO: Bring up and about html page!
 }
 
 /****************************************************************************
@@ -118,10 +118,10 @@ REMARKS:
 Event handler for the 'Go back' menu item
 ****************************************************************************/
 void MyFrame::OnBack(
-	wxCommandEvent&)
+    wxCommandEvent&)
 {
-	if (!html -> HistoryBack())
-		wxMessageBox("You reached prehistory era!");
+    if (!html -> HistoryBack())
+        wxMessageBox("You reached prehistory era!");
 }
 
 /****************************************************************************
@@ -129,10 +129,10 @@ REMARKS:
 Event handler for the 'Go forward' menu item
 ****************************************************************************/
 void MyFrame::OnForward(
-	wxCommandEvent&)
+    wxCommandEvent&)
 {
-	if (!html -> HistoryForward())
-		wxMessageBox("No more items in history!");
+    if (!html -> HistoryForward())
+        wxMessageBox("No more items in history!");
 }
 
 /****************************************************************************
@@ -141,15 +141,15 @@ REMARKS:
 ****************************************************************************/
 bool MyApp::OnInit()
 {
-	// Create the main application window
-	MyFrame *frame = new MyFrame("wxApplet testing application",
-		wxPoint(50, 50), wxSize(640, 480));
+    // Create the main application window
+    MyFrame *frame = new MyFrame("wxApplet testing application",
+        wxPoint(50, 50), wxSize(640, 480));
 
-	// Show it and tell the application that it's our main window
-	frame->Show(TRUE);
-	SetTopWindow(frame);
+    // Show it and tell the application that it's our main window
+    frame->Show(TRUE);
+    SetTopWindow(frame);
 
-	// Success: wxApp::OnRun() will be called to run the application
-	return TRUE;
+    // Success: wxApp::OnRun() will be called to run the application
+    return TRUE;
 }
 

@@ -1,12 +1,12 @@
 /****************************************************************************
 *
-*						wxWindows HTML Applet Package
+*                       wxWindows HTML Applet Package
 *
 *  ========================================================================
 *
 *    The contents of this file are subject to the wxWindows licence; you
 *    may not use this file except in compliance with the License. You may
-*	 obtain a copy of the License at http://www.wxwindows.org/licence.htm
+*    obtain a copy of the License at http://www.wxwindows.org/licence.htm
 *
 *    Software distributed under the License is distributed on an
 *    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
@@ -20,8 +20,8 @@
 *
 *  ========================================================================
 *
-* Language:		ANSI C++
-* Environment:	Any
+* Language:     ANSI C++
+* Environment:  Any
 *
 * Description:  Main wxApplet sample program header file
 *
@@ -32,15 +32,15 @@
 /*------------------------------ Constants --------------------------------*/
 
 enum {
-	// Menu items
-	Minimal_Quit = 1,
-	Minimal_About,
-	Minimal_Back,
-	Minimal_Forward,
-	
-	// Controls start here (the numbers are, of course, arbitrary)
-	Minimal_Text = 1000,
-	};
+    // Menu items
+    Minimal_Quit = 1,
+    Minimal_About,
+    Minimal_Back,
+    Minimal_Forward,
+    
+    // Controls start here (the numbers are, of course, arbitrary)
+    Minimal_Text = 1000,
+    };
 
 /*--------------------------- Class Definitions ---------------------------*/
 
@@ -50,9 +50,9 @@ Define a new application type, each program should derive a class from wxApp
 ****************************************************************************/
 class MyApp : public wxApp {
 public:
-	// Initialise the application on startup
-	virtual bool OnInit();
-	};
+    // Initialise the application on startup
+    virtual bool OnInit();
+    };
 
 /****************************************************************************
 REMARKS:
@@ -60,19 +60,19 @@ Define a new frame type: this is going to be our main frame
 ****************************************************************************/
 class MyFrame : public wxFrame {
 private:
-	DECLARE_EVENT_TABLE()		// Declare event table
-	wxHtmlAppletWindow *html;	// Pointer to the html applet window
+    DECLARE_EVENT_TABLE()       // Declare event table
+    wxHtmlAppletWindow *html;   // Pointer to the html applet window
 
 public:
-			// Constructor
-			MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+            // Constructor
+            MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
-			// Event handlers
-			void OnQuit(wxCommandEvent& event);
-			void OnAbout(wxCommandEvent& event);
-			void OnBack(wxCommandEvent& event);
-			void OnForward(wxCommandEvent& event);
-	};
+            // Event handlers
+            void OnQuit(wxCommandEvent& event);
+            void OnAbout(wxCommandEvent& event);
+            void OnBack(wxCommandEvent& event);
+            void OnForward(wxCommandEvent& event);
+    };
 
-#endif	// __SAMPLE_H
+#endif  // __SAMPLE_H
 
