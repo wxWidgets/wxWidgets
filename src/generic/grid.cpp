@@ -3906,6 +3906,10 @@ wxGrid::~wxGrid()
 // be removed as well as the #else cases below.
 #define _USE_VISATTR 0
 
+#if _USE_VISATTR
+#include "wx/listbox.h"
+#endif
+
 void wxGrid::Create()
 {
     m_created = FALSE;    // set to TRUE by CreateGrid

@@ -5250,7 +5250,9 @@ bool wxGenericListCtrl::SetFont( const wxFont &font )
 
 
 
+#if _USE_VISATTR
 #include "wx/listbox.h"
+#endif
 
 //static
 wxVisualAttributes

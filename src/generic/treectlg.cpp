@@ -3446,7 +3446,9 @@ void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
 // be removed, as well as the #else case below.
 #define _USE_VISATTR 0
 
+#if _USE_VISATTR
 #include "wx/listbox.h"
+#endif
 
 //static
 wxVisualAttributes
