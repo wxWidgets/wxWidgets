@@ -485,16 +485,16 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
 
 void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
-    if ( m_finished )
+    if ( !m_finished )
     {
-        event.Skip();
-        return;
-    }
-
-    if ( AcceptChanges() )
-    {
+        // We must finish regardless of success, otherwise we'll get focus problems
         Finish();
+    
+        if ( !AcceptChanges() )
+            m_owner->OnRenameCancelled( m_itemEdited );
     }
+        
+    event.Skip();
 }
 
 // -----------------------------------------------------------------------------
@@ -2900,13 +2900,10 @@ void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
     le.m_item = (long) item;
     le.SetEventObject( this );
     le.m_label = wxEmptyString;
-    le.m_editCancelled = FALSE;
+    le.m_editCancelled = TRUE;
 
     GetEventHandler()->ProcessEvent( le );
 }
-
-
-
 
 void wxGenericTreeCtrl::OnRenameTimer()
 {
