@@ -27,18 +27,18 @@ samples/ with demos/ where needed).
       You may also use "bakefile_gen -b ../../samples/foo/foo.bkl" to
       regenerate only the makefiles for this sample (path must be relative!)
       or even add a "-f<compiler>" to generate just the makefiles for the given
-      compiler (run 'bakefile --help' to get the list of possible values)
+      compiler (run 'bakefile --help' to get the list of possible values).
+      See Technote #16 for more information.
 
-4. Modify configure.in and samples/configure.in for Unix compilation:
+4. Modify configure.in Unix compilation:
    a) if the sample should only be built if "wxUSE_FOO" is enabled, locate
       the test for "wxUSE_FOO = yes" in configure.in and add a line
       SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS foo" under it
    b) if it should be always built, locate the line "if test $wxUSE_GUI = yes"
       near the end of configure.in and modify the assignment to
       SAMPLES_SUBDIRS to include "foo" (put in alphabetical order)
-   c) add foo/Makefile to AC_OUTPUT in samples/configure.in
 
-   After this, regenerate configure and samples/configure from configure.in
+   After this, regenerate configure from configure.in
    by running "autoconf" on a Unix system in the corresponding directory.
 
 5. Add a short description of what the sample does and how does it work
