@@ -62,9 +62,6 @@ public:
         : wxTextCtrl( cb , 1 )
     {
         m_cb = cb;
-
-        // remove the default minsize, the combobox will have one instead
-        SetSizeHints(-1,-1);
     }
 
 protected:
@@ -145,9 +142,6 @@ public:
         : wxChoice( cb , 1 )
     {
         m_cb = cb;
-
-        // remove the default minsize, the combobox will have one instead
-        SetSizeHints(-1,-1);
     }
 
 protected:
@@ -205,7 +199,7 @@ wxComboBox::~wxComboBox()
 
 wxSize wxComboBox::DoGetBestSize() const
 {
-    if (!m_choice || !m_text)
+    if (!m_choice && !m_text)
         return GetSize();
     wxSize size = m_choice->GetBestSize();
     
@@ -325,7 +319,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     }
 
     m_choice = new wxComboBoxChoice(this, style );
-    m_choice->SetSizeHints( wxSize( POPUPWIDTH , POPUPHEIGHT ) ) ;
     wxSize csize = size;
     if ( style & wxCB_READONLY )
     {
@@ -346,7 +339,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         m_choice->DoAppend( choices[ i ] );
     }
 
-    SetBestSize(csize);   // Needed because it is a wxControlWithItems
+    SetBestSize(size);   // Needed because it is a wxControlWithItems
 
     return TRUE;
 }
