@@ -26,6 +26,8 @@ class WXDLLEXPORT wxRadioButton: public wxControl
 protected:
 public:
     wxRadioButton();
+    ~wxRadioButton() { RemoveFromCycle(); }
+
     inline wxRadioButton(wxWindow *parent, wxWindowID id,
         const wxString& label,
         const wxPoint& pos = wxDefaultPosition,
@@ -52,6 +54,17 @@ public:
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
+
+    // *this function is an implementation detail*
+    // clears the selection in the readiobuttons in the cycle
+    // and returns the old selection (if any)
+    wxRadioButton* ClearSelections();
+private:
+    wxRadioButton* AddInCycle(wxRadioButton* cycle);
+    void RemoveFromCycle();
+    wxRadioButton* NextInCycle() { return m_cycle; }
+
+    wxRadioButton *m_cycle;
 };
 
 // Not implemented

@@ -101,14 +101,43 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     ChangeBackgroundColour();
 
+    //copied from mac/radiobut.cpp (from here till "return TRUE;")
+    m_cycle = this ;
+  
+    if (HasFlag(wxRB_GROUP))
+    {
+        AddInCycle( NULL ) ;
+    }
+    else
+    {
+        /* search backward for last group start */
+        wxRadioButton *chief = (wxRadioButton*) NULL;
+        wxWindowList::Node *node = parent->GetChildren().GetLast();
+        while (node)
+        {
+            wxWindow *child = node->GetData();
+            if (child->IsKindOf( CLASSINFO( wxRadioButton ) ) )
+            {
+                chief = (wxRadioButton*) child;
+                if (child->HasFlag(wxRB_GROUP)) break;
+            }
+            node = node->GetPrevious();
+        }
+        AddInCycle( chief ) ;
+    }
     return TRUE;
 }
 
 void wxRadioButton::SetValue(bool value)
 {
+    if (GetValue() == value)
+        return;
+
     m_inSetValue = TRUE;
     XmToggleButtonSetState ((Widget) m_mainWidget, (Boolean) value, FALSE);
     m_inSetValue = FALSE;
+
+    ClearSelections();
 }
 
 // Get single selection, for single choice list items
@@ -155,9 +184,78 @@ void wxRadioButtonCallback (Widget w, XtPointer clientData,
     if (item->InSetValue())
         return;
 
-    wxCommandEvent event (wxEVT_COMMAND_RADIOBUTTON_SELECTED, item->GetId());
-    event.SetEventObject(item);
+    //based on mac/radiobut.cpp
+    wxRadioButton* old = item->ClearSelections();
+    item->SetValue(TRUE);
 
-    item->ProcessCommand (event);
+    if ( old )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED,
+                             old->GetId() );
+        event.SetEventObject(old);
+        event.SetInt( FALSE );
+        old->ProcessCommand(event);
+    }
+    wxCommandEvent event2(wxEVT_COMMAND_RADIOBUTTON_SELECTED, item->GetId() );
+    event2.SetEventObject(item);
+    event2.SetInt( TRUE );
+    item->ProcessCommand(event2);
 }
 
+wxRadioButton* wxRadioButton::AddInCycle(wxRadioButton *cycle)
+{
+    wxRadioButton* next;
+    wxRadioButton* current;
+	
+    if (cycle == NULL)
+    {
+        m_cycle = this;
+        return this;
+    }
+    else
+    {
+        current = cycle;
+        while ((next = current->m_cycle) != cycle) 
+            current = current->m_cycle;
+        m_cycle = cycle;
+        current->m_cycle = this;
+        return cycle;
+    }
+}
+
+wxRadioButton* wxRadioButton::ClearSelections()
+{
+    wxRadioButton* cycle = NextInCycle();
+    wxRadioButton* old = 0;
+
+    if (cycle)
+    {
+        while (cycle != this)
+        {
+            if ( cycle->GetValue() )
+            {
+                old = cycle;
+                cycle->SetValue(FALSE);
+            }
+            cycle = cycle->NextInCycle();
+        }
+    }
+
+    return old;
+}
+
+void wxRadioButton::RemoveFromCycle()
+{
+    wxRadioButton* curr = NextInCycle();
+
+    while( curr )
+    {
+        if( curr->NextInCycle() == this )
+        {
+            curr->m_cycle = this->m_cycle;
+            return;
+        }
+
+        curr = curr->NextInCycle();
+    }
+}
