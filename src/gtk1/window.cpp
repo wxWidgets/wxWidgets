@@ -116,7 +116,7 @@
 extern wxList wxPendingDelete;
 extern wxList wxTopLevelWindows;
 extern bool   g_blockEventsOnDrag;
-wxWindow     *g_captureWindow = (wxWindow*)NULL;
+       bool   g_capturing = FALSE;
 
 //-----------------------------------------------------------------------------
 // "expose_event" (of m_wxwindow, not of m_widget)
@@ -300,8 +300,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 {
   if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
   
-  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
-  
   if (g_blockEventsOnDrag) return TRUE;
 
   if (win->m_wxwindow)
@@ -374,21 +372,24 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
   // Some control don't have their own X window and thus cannot get
   // any events. 
   
-  wxNode *node = win->GetChildren()->First();
-  while (node)
+  if (!g_capturing)
   {
-    wxWindow *child = (wxWindow*)node->Data();
-    if ((child->m_x <= event.m_x) &&
-        (child->m_y <= event.m_y) &&
-	(child->m_x+child->m_width  >= event.m_x) &&
-	(child->m_y+child->m_height >= event.m_y))
+    wxNode *node = win->GetChildren()->First();
+    while (node)
     {
-      win = child;
-      event.m_x -= child->m_x;
-      event.m_y -= child->m_y;
-      break;
+      wxWindow *child = (wxWindow*)node->Data();
+      if ((child->m_x <= event.m_x) &&
+          (child->m_y <= event.m_y) &&
+	  (child->m_x+child->m_width  >= event.m_x) &&
+	  (child->m_y+child->m_height >= event.m_y))
+      {
+        win = child;
+        event.m_x -= child->m_x;
+        event.m_y -= child->m_y;
+        break;
+      }
+      node = node->Next();
     }
-    node = node->Next();
   }
   
   event.SetEventObject( win );
@@ -406,8 +407,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 { 
   if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
-  
-  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
   
   if (g_blockEventsOnDrag) return TRUE;
 
@@ -443,21 +442,24 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
   // Some control don't have their own X window and thus cannot get
   // any events. 
   
-  wxNode *node = win->GetChildren()->First();
-  while (node)
+  if (!g_capturing)
   {
-    wxWindow *child = (wxWindow*)node->Data();
-    if ((child->m_x <= event.m_x) &&
-        (child->m_y <= event.m_y) &&
-	(child->m_x+child->m_width  >= event.m_x) &&
-	(child->m_y+child->m_height >= event.m_y))
+    wxNode *node = win->GetChildren()->First();
+    while (node)
     {
-      win = child;
-      event.m_x -= child->m_x;
-      event.m_y -= child->m_y;
-      break;
+      wxWindow *child = (wxWindow*)node->Data();
+      if ((child->m_x <= event.m_x) &&
+          (child->m_y <= event.m_y) &&
+	  (child->m_x+child->m_width  >= event.m_x) &&
+	  (child->m_y+child->m_height >= event.m_y))
+      {
+        win = child;
+        event.m_x -= child->m_x;
+        event.m_y -= child->m_y;
+        break;
+      }
+      node = node->Next();
     }
-    node = node->Next();
   }
   
   event.SetEventObject( win );
@@ -475,8 +477,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
 { 
   if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
-  
-  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
   
   if (g_blockEventsOnDrag) return TRUE;
 
@@ -504,21 +504,24 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
   // Some control don't have their own X window and thus cannot get
   // any events. 
   
-  wxNode *node = win->GetChildren()->First();
-  while (node)
+  if (!g_capturing)
   {
-    wxWindow *child = (wxWindow*)node->Data();
-    if ((child->m_x <= event.m_x) &&
-        (child->m_y <= event.m_y) &&
-	(child->m_x+child->m_width  >= event.m_x) &&
-	(child->m_y+child->m_height >= event.m_y))
+    wxNode *node = win->GetChildren()->First();
+    while (node)
     {
-      win = child;
-      event.m_x -= child->m_x;
-      event.m_y -= child->m_y;
-      break;
+      wxWindow *child = (wxWindow*)node->Data();
+      if ((child->m_x <= event.m_x) &&
+          (child->m_y <= event.m_y) &&
+	  (child->m_x+child->m_width  >= event.m_x) &&
+	  (child->m_y+child->m_height >= event.m_y))
+      {
+        win = child;
+        event.m_x -= child->m_x;
+        event.m_y -= child->m_y;
+        break;
+      }
+      node = node->Next();
     }
-    node = node->Next();
   }
   
   event.SetEventObject( win );
@@ -609,8 +612,6 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 {
   if (widget->window != gdk_event->window) return TRUE;
   
-  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
-  
   if (g_blockEventsOnDrag) return TRUE;
   
   if (!win->HasVMT()) return TRUE;
@@ -634,8 +635,6 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
   if (widget->window != gdk_event->window) return TRUE;
-  
-  if ((g_captureWindow) && (win != g_captureWindow)) return TRUE;
   
   if (g_blockEventsOnDrag) return TRUE;
   
@@ -1998,7 +1997,7 @@ void wxWindow::CaptureMouse(void)
         GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_MASK), 
         (GdkWindow *) NULL, (GdkCursor *) NULL, GDK_CURRENT_TIME );
-  g_captureWindow = this;
+  g_capturing = TRUE;
 }
 
 void wxWindow::ReleaseMouse(void)
@@ -2006,7 +2005,7 @@ void wxWindow::ReleaseMouse(void)
   GtkWidget *connect_widget = GetConnectWidget();
   gtk_grab_remove( connect_widget );
   gdk_pointer_ungrab ( GDK_CURRENT_TIME );
-  g_captureWindow = (wxWindow*) NULL;;
+  g_capturing = FALSE;
 }
 
 void wxWindow::SetTitle( const wxString &WXUNUSED(title) )
