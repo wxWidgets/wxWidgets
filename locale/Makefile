@@ -3,7 +3,7 @@
 
 # this makefile may be invoked to build either wxstd.po or any lang.mo
 
-WX_LANGUAGES = cs.po de.po dk.po fi.po fr.po
+WX_LANGUAGES = cs.po da.po de.po fi.po fr.po
 
 # the programs we use (TODO: use configure to detect them)
 MSGFMT=msgfmt
