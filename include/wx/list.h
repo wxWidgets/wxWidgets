@@ -98,6 +98,8 @@ enum wxKeyType
 #define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
     WX_DECLARE_LIST_XO(elT*, liT, decl)
 
+#if !defined( __VISUALC__ )
+
 template<class T>
 class WXDLLIMPEXP_BASE wxList_SortFunction
 {
@@ -109,7 +111,37 @@ private:
     wxSortCompareFunction m_f;
 };
 
+#define WX_LIST_SORTFUNCTION( elT, f ) wxList_SortFunction<elT>(f)
+#define VC6_WORKAROUND(elT, liT, decl)
+
+#else // if defined( __VISUALC__ )
+
+#define WX_LIST_SORTFUNCTION( elT, f ) std::greater<elT>( f ) )
+#define VC6_WORKAROUND(elT, liT, decl)                                        \
+    decl liT;                                                                 \
+                                                                              \
+    /* Workaround for broken VC6 STL incorrectly requires a std::greater<> */ \
+    /* to be passed into std::list::sort() */                                 \
+    template <>                                                               \
+    struct std::greater<elT>                                                  \
+    {                                                                         \
+        private:                                                              \
+            wxSortCompareFunction m_CompFunc;                                 \
+        public:                                                               \
+            greater( wxSortCompareFunction compfunc = NULL )                  \
+                : m_CompFunc( compfunc ) {}                                   \
+            bool operator()(const elT X, const elT Y) const                   \
+                {                                                             \
+                    return m_CompFunc ?                                       \
+                        ( m_CompFunc( X, Y ) < 0 ) :                          \
+                        ( X > Y );                                            \
+                }                                                             \
+    };
+
+#endif // defined( __VISUALC__ )
+
 #define WX_DECLARE_LIST_XO(elT, liT, decl)                                    \
+    VC6_WORKAROUND(elT, liT, decl)                                            \
     decl liT : public std::list<elT>                                          \
     {                                                                         \
     private:                                                                  \
@@ -262,7 +294,7 @@ private:
         }                                                                     \
         /* Workaround for broken VC6 std::list::sort() see above */           \
         void Sort( wxSortCompareFunction compfunc )                           \
-            { sort( wxList_SortFunction<elT>( compfunc ) ); }                 \
+            { sort( WX_LIST_SORTFUNCTION( elT, compfunc ) ); }                \
         ~liT() { Clear(); }                                                   \
     }
 
