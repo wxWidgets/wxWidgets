@@ -8,21 +8,21 @@
 CFG=stcVC - Win32 Release DLL
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "StcVC.mak".
-!MESSAGE
+!MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "StcVC.mak" CFG="stcVC - Win32 Release DLL"
-!MESSAGE
+!MESSAGE 
 !MESSAGE Possible choices for configuration are:
-!MESSAGE
+!MESSAGE 
 !MESSAGE "stcVC - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "stcVC - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "stcVC - Win32 Debug DLL" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "stcVC - Win32 Release DLL" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE
+!MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -149,7 +149,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib wxmsw250.lib /nologo /version:1.0 /dll /machine:IX86 /out:"../../../lib/stcdll.dll" /libpath:"../../../lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no /debug
 
-!ENDIF
+!ENDIF 
 
 # Begin Target
 
@@ -254,6 +254,14 @@ SOURCE=.\scintilla\src\Editor.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\ExternalLexer.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\ExternalLexer.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\Indicator.cxx
 # End Source File
 # Begin Source File
@@ -318,6 +326,10 @@ SOURCE=.\scintilla\src\LexEiffel.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\LexEScript.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\LexFortran.cxx
 # End Source File
 # Begin Source File
@@ -327,6 +339,10 @@ SOURCE=.\scintilla\src\LexHTML.cxx
 # Begin Source File
 
 SOURCE=.\scintilla\src\LexLisp.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexLout.cxx
 # End Source File
 # Begin Source File
 
@@ -342,15 +358,15 @@ SOURCE=.\scintilla\src\LexOthers.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\scintilla\src\LexPOV.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=.\scintilla\src\LexPascal.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=.\scintilla\src\LexPerl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexPOV.cxx
 # End Source File
 # Begin Source File
 
@@ -462,11 +478,11 @@ SOURCE=.\scintilla\src\WindowAccessor.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\scintilla\src\XPM.cxx
+SOURCE=.\scintilla\include\WindowAccessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\scintilla\include\WindowAccessor.h
+SOURCE=.\scintilla\src\XPM.cxx
 # End Source File
 # End Group
 # End Target
