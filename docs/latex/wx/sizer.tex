@@ -214,6 +214,21 @@ windows which manage it.
 \helpref{wxSizer::SetVirtualSizeHints}{wxsizersetvirtualsizehints}
 
 
+\membersection{wxSizer::GetItem}\label{wxsizergetitem}
+
+\func{wxSizerItem *}{GetItem}{\param{wxWindow* }{window}, \param{bool }{recursive = false}}
+
+\func{wxSizerItem *}{GetItem}{\param{wxSizer* }{sizer}, \param{bool }{recursive = false}}
+
+\func{wxSizerItem *}{GetItem}{\param{size\_t }{index}}
+
+Finds item of the sizer which holds given {\it window}, {\it sizer} or is located
+in sizer at position {\it index}.
+Use parameter {\it recursive} to search in subsizers too.
+
+Returns pointer to item or NULL.
+
+
 \membersection{wxSizer::GetSize}\label{wxsizergetsize}
 
 \func{wxSize}{GetSize}{\void}

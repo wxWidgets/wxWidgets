@@ -760,9 +760,9 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
     return true;
 }
 
-bool wxSizer::Show( wxWindow *window, bool show, bool recursive )
+wxSizerItem* wxSizer::GetItem( wxWindow *window, bool recursive )
 {
-    wxASSERT_MSG( window, _T("Show for NULL window") );
+    wxASSERT_MSG( window, _T("GetItem for NULL window") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -771,17 +771,64 @@ bool wxSizer::Show( wxWindow *window, bool show, bool recursive )
 
         if (item->GetWindow() == window)
         {
-            item->Show( show );
-
-            return true;
+            return item;
         }
         else if (recursive && item->IsSizer())
         {
-            if (item->GetSizer()->Show(window, show, recursive))
-                return true;
+            wxSizerItem *subitem = item->GetSizer()->GetItem( window, true );
+            if (subitem)
+                return subitem;
         }
 
         node = node->GetNext();
+    }
+
+    return NULL;
+}
+
+wxSizerItem* wxSizer::GetItem( wxSizer *sizer, bool recursive )
+{
+    wxASSERT_MSG( sizer, _T("GetItem for NULL sizer") );
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem *item = node->GetData();
+
+        if (item->GetSizer() == sizer)
+        {
+            return item;
+        }
+        else if (recursive && item->IsSizer())
+        {
+            wxSizerItem *subitem = item->GetSizer()->GetItem( sizer, true );
+            if (subitem)
+                return subitem;
+        }
+
+        node = node->GetNext();
+    }
+
+    return NULL;
+}
+
+wxSizerItem* wxSizer::GetItem( size_t index )
+{
+    wxCHECK_MSG( index < m_children.GetCount(),
+                 NULL,
+                 _T("GetItem index is out of range") );
+
+    return m_children.Item( index )->GetData();
+}
+
+bool wxSizer::Show( wxWindow *window, bool show, bool recursive )
+{
+    wxSizerItem *item = GetItem( window, recursive );
+
+    if ( item )
+    {
+         item->Show( show );
+         return true;
     }
 
     return false;
@@ -789,26 +836,12 @@ bool wxSizer::Show( wxWindow *window, bool show, bool recursive )
 
 bool wxSizer::Show( wxSizer *sizer, bool show, bool recursive )
 {
-    wxASSERT_MSG( sizer, _T("Show for NULL sizer") );
+    wxSizerItem *item = GetItem( sizer, recursive );
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    if ( item )
     {
-        wxSizerItem     *item = node->GetData();
-
-        if (item->GetSizer() == sizer)
-        {
-            item->Show( show );
-
-            return true;
-        }
-        else if (recursive && item->IsSizer())
-        {
-            if (item->GetSizer()->Show(sizer, show, recursive))
-                return true;
-        }
-
-        node = node->GetNext();
+         item->Show( show );
+         return true;
     }
 
     return false;
@@ -816,13 +849,15 @@ bool wxSizer::Show( wxSizer *sizer, bool show, bool recursive )
 
 bool wxSizer::Show( size_t index, bool show)
 {
-    wxCHECK_MSG( index < m_children.GetCount(),
-                 false,
-                 _T("Show index is out of range") );
+    wxSizerItem *item = GetItem( index );
 
-    m_children.Item( index )->GetData()->Show( show );
+    if ( item )
+    {
+         item->Show( show );
+         return true;
+    }
 
-    return true;
+    return false;
 }
 
 void wxSizer::ShowItems( bool show )

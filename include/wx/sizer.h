@@ -408,6 +408,10 @@ public:
 
     void SetDimension( int x, int y, int width, int height );
 
+    wxSizerItem* GetItem( wxWindow *window, bool recursive = false );
+    wxSizerItem* GetItem( wxSizer *sizer, bool recursive = false );
+    wxSizerItem* GetItem( size_t index );
+
     // Manage whether individual scene items are considered
     // in the layout calculations or not.
     bool Show( wxWindow *window, bool show = true, bool recursive = false );
