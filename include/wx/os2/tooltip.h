@@ -25,6 +25,12 @@ public:
            void            SetTip(const wxString& rsTip);
     inline void            SetWindow(wxWindow* pWin) { m_pWindow = pWin; }
 
+    // controlling tooltip behaviour: globally change tooltip parameters
+        // enable or disable the tooltips globally
+    static void Enable(bool flag) {}
+        // set the delay after which the tooltip appears
+    static void SetDelay(long milliseconds) {}
+
     //
     // Implementation
     //
