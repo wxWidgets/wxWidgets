@@ -43,6 +43,7 @@
 #include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/artprov.h"
+#include "wx/settings.h"
 #include "wx/file.h"        // for wxS_IXXX constants only
 #include "wx/filedlg.h"     // wxOPEN, wxSAVE...
 #include "wx/generic/filedlgg.h"
