@@ -352,8 +352,11 @@ wxMenu *wxMenuBar::Remove(size_t pos)
         return (wxMenu*) NULL;
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
+/*
+
     printf( "factory entries before %d\n", (int)g_slist_length(m_factory->items) );
     printf( "menu shell entries before %d\n", (int)g_list_length( menu_shell->children ) );
+*/
     
     // unparent calls unref() and that would delete the widget so we raise
     // the ref count to 2 artificially before invoking unparent.
@@ -362,8 +365,10 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     
     gtk_widget_destroy( menu->m_owner );
     
+/*
     printf( "factory entries after %d\n", (int)g_slist_length(m_factory->items) );
     printf( "menu shell entries after %d\n", (int)g_list_length( menu_shell->children ) );
+*/
     
     return menu;
 }
