@@ -1291,18 +1291,21 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
 
     wxDATETIME_CHECK( tm, _T("localtime() failed") );
 
+    // make a copy so it isn't clobbered by the call to mktime() below
+    struct tm tm1(*tm);
+
     // adjust the time
-    tm->tm_hour = hour;
-    tm->tm_min = minute;
-    tm->tm_sec = second;
+    tm1.tm_hour = hour;
+    tm1.tm_min = minute;
+    tm1.tm_sec = second;
 
     // and the DST in case it changes on this date
-    struct tm tm2(*tm);
+    struct tm tm2(tm1);
     mktime(&tm2);
-    if ( tm2.tm_isdst != tm->tm_isdst )
-        tm->tm_isdst = tm2.tm_isdst;
+    if ( tm2.tm_isdst != tm1.tm_isdst )
+        tm1.tm_isdst = tm2.tm_isdst;
 
-    (void)Set(*tm);
+    (void)Set(tm1);
 
     // and finally adjust milliseconds
     return SetMillisecond(millisec);
