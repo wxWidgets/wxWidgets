@@ -388,7 +388,7 @@ static void TestDllLoad()
     #error "don't know how to test wxDllLoader on this platform"
 #endif
 
-    wxPuts(_T("*** testing wxDllLoader ***\n"));
+    wxPuts(_T("*** testing basic wxDynamicLibrary functions ***\n"));
 
     wxDynamicLibrary lib(LIB_NAME);
     if ( !lib.IsLoaded() )
@@ -420,6 +420,34 @@ static void TestDllLoad()
         }
     }
 }
+
+#if defined(__WXMSW__) || defined(__UNIX__)
+
+static void TestDllListLoaded()
+{
+    wxPuts(_T("*** testing wxDynamicLibrary::ListLoaded() ***\n"));
+
+    puts("\nLoaded modules:");
+    wxDynamicLibraryDetailsArray dlls = wxDynamicLibrary::ListLoaded();
+    const size_t count = dlls.GetCount();
+    for ( size_t n = 0; n < count; ++n )
+    {
+        const wxDynamicLibraryDetails& details = dlls[n];
+        printf("%-45s", details.GetPath().c_str());
+
+        void *addr;
+        size_t len;
+        if ( details.GetAddress(&addr, &len) )
+        {
+            printf(" %08lx:%08lx",
+                   (unsigned long)addr, (unsigned long)((char *)addr + len));
+        }
+
+        printf(" %s\n", details.GetVersion().c_str());
+    }
+}
+
+#endif
 
 #endif // TEST_DLLLOADER
 
@@ -4096,6 +4124,7 @@ int main(int argc, char **argv)
 
 #ifdef TEST_DLLLOADER
     TestDllLoad();
+    TestDllListLoaded();
 #endif // TEST_DLLLOADER
 
 #ifdef TEST_ENVIRON

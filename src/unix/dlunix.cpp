@@ -26,6 +26,7 @@
 #if wxUSE_DYNLIB_CLASS
 
 #include "wx/dynlib.h"
+#include "wx/ffile.h"
 
 #if defined(HAVE_DLOPEN) || defined(__DARWIN__)
     #define USE_POSIX_DL_FUNCS
@@ -243,6 +244,10 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
     return symbol;
 }
 
+// ----------------------------------------------------------------------------
+// error handling
+// ----------------------------------------------------------------------------
+
 #ifdef wxHAVE_DYNLIB_ERROR
 
 /* static */
@@ -259,6 +264,119 @@ void wxDynamicLibrary::Error()
 }
 
 #endif // wxHAVE_DYNLIB_ERROR
+
+// ----------------------------------------------------------------------------
+// listing loaded modules
+// ----------------------------------------------------------------------------
+
+// wxDynamicLibraryDetails declares this class as its friend, so put the code
+// initializing new details objects here
+class wxDynamicLibraryDetailsCreator
+{
+public:
+    // create a new wxDynamicLibraryDetails from the given data
+    static wxDynamicLibraryDetails *
+    New(unsigned long start, unsigned long end, const wxString& path)
+    {
+        wxDynamicLibraryDetails *details = new wxDynamicLibraryDetails;
+        details->m_path = path;
+        details->m_name = path.AfterLast(_T('/'));
+        details->m_address = wx_reinterpret_cast(void *, start);
+        details->m_length = end - start;
+
+        // try to extract the library version from its name
+        const size_t posExt = path.rfind(_T(".so"));
+        if ( posExt != wxString::npos )
+        {
+            if ( path.c_str()[posExt + 3] == _T('.') )
+            {
+                // assume "libfoo.so.x.y.z" case
+                details->m_version.assign(path, posExt + 4, wxString::npos);
+            }
+            else
+            {
+                size_t posDash = path.find_last_of(_T('-'), posExt);
+                if ( posDash != wxString::npos )
+                {
+                    // assume "libbar-x.y.z.so" case
+                    posDash++;
+                    details->m_version.assign(path, posDash, posExt - posDash);
+                }
+            }
+        }
+
+        return details;
+    }
+};
+
+/* static */
+wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
+{
+    wxDynamicLibraryDetailsArray dlls;
+
+#ifdef __LINUX__
+    // examine /proc/self/maps to find out what is loaded in our address space
+    wxFFile file("/proc/self/maps");
+    if ( file.IsOpened() )
+    {
+        // details of the module currently being parsed
+        wxString pathCur;
+        unsigned long startCur,
+                      endCur;
+
+        char path[1024];
+        char buf[1024];
+        while ( fgets(buf, WXSIZEOF(buf), file.fp()) )
+        {
+            // format is: start-end perm something? maj:min inode path
+            unsigned long start, end;
+            switch ( sscanf(buf, "%08lx-%08lx %*4s %*08x %*02d:%*02d %*d %1024s\n",
+                            &start, &end, path) )
+            {
+                case 2:
+                    // there may be no path column
+                    path[0] = '\0';
+                    break;
+
+                case 3:
+                    // nothing to do, read everything we wanted
+                    break;
+
+                default:
+                    // chop '\n'
+                    buf[strlen(buf) - 1] = '\0';
+                    wxLogDebug(_T("Failed to parse line \"%s\" in /proc/self/maps."),
+                               buf);
+                    continue;
+            }
+
+            wxString pathNew = wxString::FromAscii(path);
+            if ( pathCur.empty() )
+            {
+                // new module start
+                pathCur = pathNew;
+                startCur = start;
+                endCur = end;
+            }
+            else if ( pathCur == pathNew )
+            {
+                // continuation of the same module
+                wxASSERT_MSG( start == endCur, _T("hole in /proc/self/maps?") );
+                endCur = end;
+            }
+            else // end of the current module
+            {
+                dlls.Add(wxDynamicLibraryDetailsCreator::New(startCur,
+                                                             endCur,
+                                                             pathCur));
+                pathCur.clear();
+            }
+        }
+    }
+#endif // __LINUX__
+
+    return dlls;
+}
 
 #endif // wxUSE_DYNLIB_CLASS
 
