@@ -86,7 +86,9 @@ void wxDataFormat::SetType(  wxDataFormatId  Type )
     {
        wxFAIL_MSG( wxT("invalid dataformat") );
 
-       m_format = '????';
+       // this is '????' but it can't be used in the code because ??' is
+       // parsed as a trigraph!
+       m_format = 0x3f3f3f3f;
     }
 }
 
