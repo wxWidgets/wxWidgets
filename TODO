@@ -8,8 +8,11 @@ samples:
 
 wxTextCtrl
 
-*   display corrupted when typing text in quickly
-*   text ctrl display pb when text is truncated
+*   display corrupted when typing text in quickly (single line)
+?   text ctrl display pb when text is truncated
+*   too much is refreshed when double clicking (word select)
+
+!!  own ScrollWindow() for horz scrolling as we must always scroll by char!
 
 All
 

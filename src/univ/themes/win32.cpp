@@ -1736,7 +1736,7 @@ wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
 {
     // this is what Windows does
     wxRect rectTotal = rect;
-    rectTotal.Inflate(1);
+    rectTotal.Inflate(10);
     rectTotal.height++;
 
     return rectTotal;
@@ -1748,7 +1748,7 @@ wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
     // undo GetTextTotalArea()
     wxRect rectText = rect;
     rectText.height--;
-    rectText.Inflate(-1);
+    rectText.Inflate(-10);
 
     return rectText;
 }

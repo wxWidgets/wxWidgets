@@ -80,25 +80,22 @@ public:
             case wxEVT_SCROLLWIN_THUMBTRACK:
             case wxEVT_SCROLLWIN_THUMBRELEASE:
                 m_scrollHelper->HandleOnScroll((wxScrollWinEvent&)event);
-                break;
+                return TRUE;
 
             case wxEVT_PAINT:
                 m_scrollHelper->HandleOnPaint((wxPaintEvent&)event);
-                break;
+                return TRUE;
 
             case wxEVT_SIZE:
                 m_scrollHelper->HandleOnSize((wxSizeEvent&)event);
-                break;
+                return FALSE;
 
             case wxEVT_CHAR:
                 m_scrollHelper->HandleOnChar((wxKeyEvent&)event);
-                break;
-
-            default:
-                return FALSE;
+                return !event.GetSkipped();
         }
 
-        return TRUE;
+        return FALSE;
     }
 
 private:

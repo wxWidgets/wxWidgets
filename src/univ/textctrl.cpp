@@ -356,7 +356,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
                      _T("can't have more than one line in this wxTextCtrl"));
 
         // update the current position
-        SetInsertionPoint(from + text.length());
+        DoSetInsertionPoint(from + text.length());
 
         // and the selection (do it after setting the cursor to have correct value
         // for selection anchor)
@@ -631,7 +631,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
 
     // update the current position: note that we always put the cursor at the
     // end of the replacement text
-    SetInsertionPoint(from + text.length());
+    DoSetInsertionPoint(from + text.length());
 
     // and the selection (do it after setting the cursor to have correct value
     // for selection anchor)
@@ -681,16 +681,24 @@ void wxTextCtrl::SetInsertionPoint(long pos)
     {
         DoSetInsertionPoint(pos);
     }
+
+    ClearSelection();
 }
 
 void wxTextCtrl::InitInsertionPoint()
 {
     // so far always put it in the beginning
     DoSetInsertionPoint(0);
+
+    // this will also set the selection anchor correctly
+    ClearSelection();
 }
 
 void wxTextCtrl::DoSetInsertionPoint(long pos)
 {
+    wxASSERT_MSG( pos >= 0 && pos <= GetLastPosition(),
+                 _T("DoSetInsertionPoint() can only be called with valid pos") );
+
     m_curPos = pos;
     PositionToXY(m_curPos, &m_curCol, &m_curRow);
 
@@ -1133,7 +1141,7 @@ void wxTextCtrl::ShowPosition(long pos)
                 {
                     // scroll down: the current item should appear at the
                     // bottom of the view
-                    Scroll(0, m_curRow - (yEnd - yStart));
+                    Scroll(0, m_curRow - (yEnd - yStart) + 1);
                 }
             }
         }
@@ -1329,7 +1337,7 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
     int wChar = GetCharWidth(),
         hChar = GetCharHeight();
 
-    int widthMin = wxMin(10*wChar, 100);
+    int widthMin = wxMax(10*wChar, 100);
     if ( w < widthMin )
         w = widthMin;
     if ( h < hChar )
@@ -2222,14 +2230,12 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     rectTextArea.y += pt.y;
     rgnUpdate.Intersect(rectTextArea);
 
-#if 0
     // even though the drawing is already clipped to the update region, we must
     // explicitly clip it to the rect we will use as otherwise parts of letters
     // might be drawn outside of it (if even a small part of a charater is
     // inside, HitTest() will return its column and DrawText() can't draw only
     // the part of the character, of course)
     dc.SetClippingRegion(m_rectText);
-#endif // 0
 
     // adjust for scrolling
     DoPrepareDC(dc);
@@ -2315,9 +2321,13 @@ void wxTextCtrl::ShowCaret(bool show)
     wxCaret *caret = GetCaret();
     if ( caret )
     {
-        // position it correctly
-        caret->Move(m_rectText.x + GetCaretPosition() - m_ofsHorz,
-                    m_rectText.y + m_curRow*GetCharHeight());
+        // position it correctly (taking scrolling into account)
+        wxCoord xCaret, yCaret;
+        CalcUnscrolledPosition(m_rectText.x + GetCaretPosition() - m_ofsHorz,
+                               m_rectText.y + m_curRow*GetCharHeight(),
+                               &xCaret,
+                               &yCaret);
+        caret->Move(xCaret, yCaret);
 
         // and show it there
         caret->Show(show);
@@ -2468,7 +2478,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         else // cursor movement command
         {
             // just go there
-            SetInsertionPoint(newPos);
+            DoSetInsertionPoint(newPos);
 
             if ( sel )
             {
