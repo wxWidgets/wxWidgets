@@ -9,6 +9,6 @@ __doc__ =  wx.lib.mixins.listctrl.__doc__
 ListCtrlSelectionManagerMix = wx.lib.mixins.listctrl.ListCtrlSelectionManagerMix
 getListCtrlSelection = wx.lib.mixins.listctrl.getListCtrlSelection
 selectBeforePopup = wx.lib.mixins.listctrl.selectBeforePopup
-wxColumnSorterMixin = wx.lib.mixins.listctrl.wxColumnSorterMixin
-wxListCtrlAutoWidthMixin = wx.lib.mixins.listctrl.wxListCtrlAutoWidthMixin
+wxColumnSorterMixin = wx.lib.mixins.listctrl.ColumnSorterMixin
+wxListCtrlAutoWidthMixin = wx.lib.mixins.listctrl.ListCtrlAutoWidthMixin
 

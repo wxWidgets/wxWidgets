@@ -1,3 +1,9 @@
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxPyInformationalMessagesFrame -> PyInformationalMessagesFrame
+# o dummy_wxPyInformationalMessagesFrame -> dummy_PyInformationalMessagesFrame
+#
+
 """
 infoframe.py
 Released under wxWindows license etc.
@@ -30,7 +36,7 @@ Typical usage:
     from wxPython.lib.infoframe import *
     ... # ... modify your wxApp as follows:
     class myApp(wxApp):
-        outputWindowClass = wxPyInformationalMessagesFrame
+        outputWindowClass = PyInformationalMessagesFrame
         ...
 If you're running on Linux, you'll also have to supply an argument 1 to your
 constructor of myApp to redirect stdout/stderr to this window (it's done
@@ -39,7 +45,7 @@ automatically for you on Windows).
 If you don't want to redirect stdout/stderr, but use the class directly: do
 it this way:
 
- InformationalMessagesFrame = wxPyInformationalMessagesFrame\
+ InformationalMessagesFrame = PyInformationalMessagesFrame\
                                          ([options from progname (default ""),
                                            txt (default "informational
                                                          messages"])
@@ -192,7 +198,7 @@ class _MyStatusBar(wx.StatusBar):
 
 
 
-class wxPyInformationalMessagesFrame:
+class PyInformationalMessagesFrame:
     def __init__(self,
                  progname="",
                  text="informational messages",
@@ -456,7 +462,7 @@ class wxPyInformationalMessagesFrame:
 
 
 
-class Dummy_wxPyInformationalMessagesFrame:
+class Dummy_PyInformationalMessagesFrame:
     def __init__(self,progname=""):
         self.softspace = 1
     def __call__(self,*args):

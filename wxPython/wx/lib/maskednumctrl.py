@@ -9,10 +9,10 @@
 # NOTE:
 #   This was written to provide a numeric edit control for wxPython that
 #   does things like right-insert (like a calculator), and does grouping, etc.
-#   (ie. the features of wxMaskedTextCtrl), but allows Get/Set of numeric
+#   (ie. the features of MaskedTextCtrl), but allows Get/Set of numeric
 #   values, rather than text.
 #
-#   wxMaskedNumCtrl permits integer, and floating point values to be set
+#   MaskedNumCtrl permits integer, and floating point values to be set
 #   retrieved or set via .GetValue() and .SetValue() (type chosen based on
 #   fraction width, and provides an EVT_MASKEDNUM() event function for trapping
 #   changes to the control.
@@ -24,38 +24,45 @@
 #   Similarly, replacing the contents of the control with '-' will result in
 #   a selected (absolute) value of -1.
 #
-#   wxMaskedNumCtrl also supports range limits, with the option of either
+#   MaskedNumCtrl also supports range limits, with the option of either
 #   enforcing them or simply coloring the text of the control if the limits
 #   are exceeded.
 #
-#   wxMaskedNumCtrl is intended to support fixed-point numeric entry, and
-#   is derived from  wxMaskedTextCtrl.  As such, it supports a limited range
+#   MaskedNumCtrl is intended to support fixed-point numeric entry, and
+#   is derived from  MaskedTextCtrl.  As such, it supports a limited range
 #   of values to comply with a fixed-width entry mask.
 #----------------------------------------------------------------------------
 # 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o Updated for wx namespace
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMaskedEditMixin -> MaskedEditMixin
+# o wxMaskedTextCtrl -> MaskedTextCtrl
+# o wxMaskedNumNumberUpdatedEvent -> MaskedNumNumberUpdatedEvent
+# o wxMaskedNumCtrl -> MaskedNumCtrl
+#
 
 """<html><body>
 <P>
-<B>wxMaskedNumCtrl:</B>
+<B>MaskedNumCtrl:</B>
 <UL>
 <LI>allows you to get and set integer or floating point numbers as value,</LI>
 <LI>provides bounds support and optional value limiting,</LI>
-<LI>has the right-insert input style that wxMaskedTextCtrl supports,</LI>
+<LI>has the right-insert input style that MaskedTextCtrl supports,</LI>
 <LI>provides optional automatic grouping, sign control and format, grouping and decimal
 character selection, etc. etc.</LI>
 </UL>
 <P>
-Being derived from wxMaskedTextCtrl, the control only allows
+Being derived from MaskedTextCtrl, the control only allows
 fixed-point  notation.  That is, it has a fixed (though reconfigurable)
 maximum width for the integer portion and optional fixed width
 fractional portion.
 <P>
 Here's the API:
 <DL><PRE>
-    <B>wxMaskedNumCtrl</B>(
+    <B>MaskedNumCtrl</B>(
          parent, id = -1,
          <B>value</B> = 0,
          pos = wxDefaultPosition,
@@ -361,7 +368,7 @@ MAXINT = maxint     # (constants should be in upper case)
 MININT = -maxint-1
 
 from wx.tools.dbg import Logger
-from wx.lib.maskededit import wxMaskedEditMixin, wxMaskedTextCtrl, Field
+from wx.lib.maskededit import MaskedEditMixin, MaskedTextCtrl, Field
 
 dbg = Logger()
 dbg(enable=0)
@@ -373,7 +380,7 @@ EVT_MASKEDNUM = wx.PyEventBinder(wxEVT_COMMAND_MASKED_NUMBER_UPDATED, 1)
 
 #----------------------------------------------------------------------------
 
-class wxMaskedNumNumberUpdatedEvent(wx.PyCommandEvent):
+class MaskedNumNumberUpdatedEvent(wx.PyCommandEvent):
     def __init__(self, id, value = 0, object=None):
         wx.PyCommandEvent.__init__(self, wxEVT_COMMAND_MASKED_NUMBER_UPDATED, id)
 
@@ -388,7 +395,7 @@ class wxMaskedNumNumberUpdatedEvent(wx.PyCommandEvent):
 
 #----------------------------------------------------------------------------
 
-class wxMaskedNumCtrl(wxMaskedTextCtrl):
+class MaskedNumCtrl(MaskedTextCtrl):
 
     valid_ctrl_params = {
         'integerWidth': 10,                 # by default allow all 32-bit integers
@@ -419,21 +426,21 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                 name = "maskednum",
                 **kwargs ):
 
-        dbg('wxMaskedNumCtrl::__init__', indent=1)
+        dbg('MaskedNumCtrl::__init__', indent=1)
 
         # Set defaults for control:
         dbg('setting defaults:')
-        for key, param_value in wxMaskedNumCtrl.valid_ctrl_params.items():
+        for key, param_value in MaskedNumCtrl.valid_ctrl_params.items():
             # This is done this way to make setattr behave consistently with
             # "private attribute" name mangling
             setattr(self, '_' + key, copy.copy(param_value))
 
         # Assign defaults for all attributes:
-        init_args = copy.deepcopy(wxMaskedNumCtrl.valid_ctrl_params)
+        init_args = copy.deepcopy(MaskedNumCtrl.valid_ctrl_params)
         dbg('kwargs:', kwargs)
         for key, param_value in kwargs.items():
             key = key.replace('Color', 'Colour')
-            if key not in wxMaskedNumCtrl.valid_ctrl_params.keys():
+            if key not in MaskedNumCtrl.valid_ctrl_params.keys():
                 raise AttributeError('invalid keyword argument "%s"' % key)
             else:
                 init_args[key] = param_value
@@ -490,7 +497,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         self._typedSign = False
 
         # Construct the base control:
-        wxMaskedTextCtrl.__init__(
+        MaskedTextCtrl.__init__(
                 self, parent, id, '',
                 pos, size, style, validator, name,
                 mask = mask,
@@ -517,14 +524,14 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
         # Ensure proper coloring:
         self.Refresh()
-        dbg('finished wxMaskedNumCtrl::__init__', indent=0)
+        dbg('finished MaskedNumCtrl::__init__', indent=0)
 
 
     def SetParameters(self, **kwargs):
         """
         This routine is used to initialize and reconfigure the control:
         """
-        dbg('wxMaskedNumCtrl::SetParameters', indent=1)
+        dbg('MaskedNumCtrl::SetParameters', indent=1)
         maskededit_kwargs = {}
         reset_fraction_width = False
 
@@ -596,9 +603,9 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         # for all other parameters, assign keyword args as appropriate:
         for key, param_value in kwargs.items():
             key = key.replace('Color', 'Colour')
-            if key not in wxMaskedNumCtrl.valid_ctrl_params.keys():
+            if key not in MaskedNumCtrl.valid_ctrl_params.keys():
                 raise AttributeError('invalid keyword argument "%s"' % key)
-            elif key not in wxMaskedEditMixin.valid_ctrl_params.keys():
+            elif key not in MaskedEditMixin.valid_ctrl_params.keys():
                 setattr(self, '_' + key, param_value)
             elif key in ('mask', 'autoformat'): # disallow explicit setting of mask
                 raise AttributeError('invalid keyword argument "%s"' % key)
@@ -726,7 +733,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             dbg('abs(value):', value)
             self._isNeg = False
 
-        elif not self._allowNone and wxMaskedTextCtrl.GetValue(self) == '':
+        elif not self._allowNone and MaskedTextCtrl.GetValue(self) == '':
             if self._min > 0:
                 value = self._min
             else:
@@ -746,7 +753,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             sel_start, sel_to = self.GetSelection()
             self._SetValue(self._toGUI(value))
         self.Refresh() # recolor as appropriate
-        dbg('finished wxMaskedNumCtrl::SetParameters', indent=0)
+        dbg('finished MaskedNumCtrl::SetParameters', indent=0)
 
 
 
@@ -768,7 +775,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         else:
             fracstart, fracend = self._fields[1]._extent
             if candidate is None:
-                value = self._toGUI(wxMaskedTextCtrl.GetValue(self))
+                value = self._toGUI(MaskedTextCtrl.GetValue(self))
             else:
                 value = self._toGUI(candidate)
             fracstring = value[fracstart:fracend].strip()
@@ -778,14 +785,14 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                 return string.atof(fracstring)
 
     def _OnChangeSign(self, event):
-        dbg('wxMaskedNumCtrl::_OnChangeSign', indent=1)
+        dbg('MaskedNumCtrl::_OnChangeSign', indent=1)
         self._typedSign = True
-        wxMaskedEditMixin._OnChangeSign(self, event)
+        MaskedEditMixin._OnChangeSign(self, event)
         dbg(indent=0)
 
 
     def _disallowValue(self):
-        dbg('wxMaskedNumCtrl::_disallowValue')
+        dbg('MaskedNumCtrl::_disallowValue')
         # limited and -1 is out of bounds
         if self._typedSign:
             self._isNeg = False
@@ -805,7 +812,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         by the user.
         """
 
-        dbg('wxMaskedNumCtrl::_SetValue("%s")' % value, indent=1)
+        dbg('MaskedNumCtrl::_SetValue("%s")' % value, indent=1)
 
         if( (self._fractionWidth and value.find(self._decimalChar) == -1) or
             (self._fractionWidth == 0 and value.find(self._decimalChar) != -1) ) :
@@ -817,8 +824,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
         if numvalue == "":
             if self._allowNone:
-                dbg('calling base wxMaskedTextCtrl._SetValue(self, "%s")' % value)
-                wxMaskedTextCtrl._SetValue(self, value)
+                dbg('calling base MaskedTextCtrl._SetValue(self, "%s")' % value)
+                MaskedTextCtrl._SetValue(self, value)
                 self.Refresh()
                 return
             elif self._min > 0 and self.IsLimited():
@@ -918,7 +925,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             # reasonable instead:
             dbg('setting replacement value:', replacement)
             self._SetValue(self._toGUI(replacement))
-            sel_start = wxMaskedTextCtrl.GetValue(self).find(str(abs(replacement)))   # find where it put the 1, so we can select it
+            sel_start = MaskedTextCtrl.GetValue(self).find(str(abs(replacement)))   # find where it put the 1, so we can select it
             sel_to = sel_start + len(str(abs(replacement)))
             dbg('queuing selection of (%d, %d)' %(sel_start, sel_to))
             wx.CallAfter(self.SetInsertionPoint, sel_start)
@@ -944,18 +951,18 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
 
         sel_start, sel_to = self._GetSelection()     # record current insertion point
-        dbg('calling base wxMaskedTextCtrl._SetValue(self, "%s")' % adjvalue)
-        wxMaskedTextCtrl._SetValue(self, adjvalue)
+        dbg('calling base MaskedTextCtrl._SetValue(self, "%s")' % adjvalue)
+        MaskedTextCtrl._SetValue(self, adjvalue)
         # After all actions so far scheduled, check that resulting cursor
         # position is appropriate, and move if not:
         wx.CallAfter(self._CheckInsertionPoint)
 
-        dbg('finished wxMaskedNumCtrl::_SetValue', indent=0)
+        dbg('finished MaskedNumCtrl::_SetValue', indent=0)
 
     def _CheckInsertionPoint(self):
         # If current insertion point is before the end of the integer and
         # its before the 1st digit, place it just after the sign position:
-        dbg('wxMaskedNumCtrl::CheckInsertionPoint', indent=1)
+        dbg('MaskedNumCtrl::CheckInsertionPoint', indent=1)
         sel_start, sel_to = self._GetSelection()
         text = self._GetValue()
         if sel_to < self._fields[0]._extent[1] and text[sel_to] in (' ', '-', '('):
@@ -972,13 +979,13 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         grouping characters auto selects the digit before or after the
         grouping character, so that the erasure does the right thing.
         """
-        dbg('wxMaskedNumCtrl::_OnErase', indent=1)
+        dbg('MaskedNumCtrl::_OnErase', indent=1)
 
         #if grouping digits, make sure deletes next to group char always
         # delete next digit to appropriate side:
         if self._groupDigits:
             key = event.GetKeyCode()
-            value = wxMaskedTextCtrl.GetValue(self)
+            value = MaskedTextCtrl.GetValue(self)
             sel_start, sel_to = self._GetSelection()
 
             if key == wx.WXK_BACK:
@@ -1004,7 +1011,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                     self.SetInsertionPoint(sel_start)
                     self.SetSelection(sel_start, sel_to+1)
 
-        wxMaskedTextCtrl._OnErase(self, event)
+        MaskedTextCtrl._OnErase(self, event)
         dbg(indent=0)
 
 
@@ -1017,8 +1024,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         text events.  So we check for actual changes to the text
         before passing the events on.
         """
-        dbg('wxMaskedNumCtrl::OnTextChange', indent=1)
-        if not wxMaskedTextCtrl._OnTextChange(self, event):
+        dbg('MaskedNumCtrl::OnTextChange', indent=1)
+        if not MaskedTextCtrl._OnTextChange(self, event):
             dbg(indent=0)
             return
 
@@ -1028,7 +1035,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         if value != self._oldvalue:
             try:
                 self.GetEventHandler().ProcessEvent(
-                    wxMaskedNumNumberUpdatedEvent( self.GetId(), self.GetValue(), self ) )
+                    MaskedNumNumberUpdatedEvent( self.GetId(), self.GetValue(), self ) )
             except ValueError:
                 dbg(indent=0)
                 return
@@ -1039,7 +1046,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
     def _GetValue(self):
         """
-        Override of wxMaskedTextCtrl to allow amixin to get the raw text value of the
+        Override of MaskedTextCtrl to allow amixin to get the raw text value of the
         control with this function.
         """
         return wx.TextCtrl.GetValue(self)
@@ -1049,7 +1056,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         """
         Returns the current numeric value of the control.
         """
-        return self._fromGUI( wxMaskedTextCtrl.GetValue(self) )
+        return self._fromGUI( MaskedTextCtrl.GetValue(self) )
 
     def SetValue(self, value):
         """
@@ -1060,7 +1067,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         A ValueError exception will be raised if an invalid value
         is specified.
         """
-        wxMaskedTextCtrl.SetValue( self, self._toGUI(value) )
+        MaskedTextCtrl.SetValue( self, self._toGUI(value) )
 
 
     def SetIntegerWidth(self, value):
@@ -1091,7 +1098,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         If min > the max value allowed by the width of the control,
         the function will return False, and the min will not be set.
         """
-        dbg('wxMaskedNumCtrl::SetMin(%s)' % repr(min), indent=1)
+        dbg('MaskedNumCtrl::SetMin(%s)' % repr(min), indent=1)
         if( self._max is None
             or min is None
             or (self._max is not None and self._max >= min) ):
@@ -1296,7 +1303,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         type and bounds checking and raises ValueError if argument is
         not a valid value.
         """
-        dbg('wxMaskedNumCtrl::_toGUI(%s)' % repr(value), indent=1)
+        dbg('MaskedNumCtrl::_toGUI(%s)' % repr(value), indent=1)
         if value is None and self.IsNoneAllowed():
             dbg(indent=0)
             return self._template
@@ -1311,12 +1318,12 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                     value = long(value)
             except Exception, e:
                 dbg('exception raised:', e, indent=0)
-                raise ValueError ('wxMaskedNumCtrl requires numeric value, passed %s'% repr(value) )
+                raise ValueError ('MaskedNumCtrl requires numeric value, passed %s'% repr(value) )
 
         elif type(value) not in (types.IntType, types.LongType, types.FloatType):
             dbg(indent=0)
             raise ValueError (
-                'wxMaskedNumCtrl requires numeric value, passed %s'% repr(value) )
+                'MaskedNumCtrl requires numeric value, passed %s'% repr(value) )
 
         if not self._allowNegative and value < 0:
             raise ValueError (
@@ -1366,7 +1373,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         Conversion function used in getting the value of the control.
         """
         dbg(suspend=0)
-        dbg('wxMaskedNumCtrl::_fromGUI(%s)' % value, indent=1)
+        dbg('MaskedNumCtrl::_fromGUI(%s)' % value, indent=1)
         # One or more of the underlying text control implementations
         # issue an intermediate EVT_TEXT when replacing the control's
         # value, where the intermediate value is an empty string.
@@ -1419,7 +1426,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         Preprocessor for base control paste; if value needs to be right-justified
         to fit in control, do so prior to paste:
         """
-        dbg('wxMaskedNumCtrl::_Paste (value = "%s")' % value)
+        dbg('MaskedNumCtrl::_Paste (value = "%s")' % value)
         if value is None:
             paste_text = self._getClipboardContents()
         else:
@@ -1431,7 +1438,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
             paste_text = self._toGUI(paste_text)
             self._SetSelection(0, len(self._mask))
 
-        return wxMaskedEditMixin._Paste(self,
+        return MaskedEditMixin._Paste(self,
                                         paste_text,
                                         raise_on_invalid=raise_on_invalid,
                                         just_return_value=just_return_value)
@@ -1450,7 +1457,7 @@ if __name__ == '__main__':
             style = wx.DEFAULT_DIALOG_STYLE ):
             wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-            self.int_ctrl = wxMaskedNumCtrl(self, wx.NewId(), size=(55,20))
+            self.int_ctrl = MaskedNumCtrl(self, wx.NewId(), size=(55,20))
             self.OK = wx.Button( self, wx.ID_OK, "OK")
             self.Cancel = wx.Button( self, wx.ID_CANCEL, "Cancel")
 
@@ -1483,7 +1490,7 @@ if __name__ == '__main__':
             return True
 
         def OnClick(self, event):
-            dlg = myDialog(self.panel, -1, "test wxMaskedNumCtrl")
+            dlg = myDialog(self.panel, -1, "test MaskedNumCtrl")
             dlg.int_ctrl.SetValue(501)
             dlg.int_ctrl.SetInsertionPoint(1)
             dlg.int_ctrl.SetSelection(1,2)

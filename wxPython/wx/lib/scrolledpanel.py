@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:         wxScrolledPanel.py
+# Name:         scrolledpanel.py
 # Author:       Will Sadkin
 # Created:      03/21/2003
 # Copyright:    (c) 2003 by Will Sadkin
@@ -10,13 +10,17 @@
 #
 # o 2.5 compatability update.
 #
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxScrolledPanel -> ScrolledPanel
+#
 
 import  wx
 
 
-class wxScrolledPanel( wx.ScrolledWindow ):
+class ScrolledPanel( wx.ScrolledWindow ):
     """\
-wxScrolledPanel fills a "hole" in the implementation of wxScrolledWindow,
+ScrolledPanel fills a "hole" in the implementation of wx.ScrolledWindow,
 providing automatic scrollbar and scrolling behavior and the tab traversal
 management that wxScrolledWindow lacks.  This code was based on the original
 demo code showing how to do this, but is now available for general use
@@ -37,7 +41,7 @@ as a proper class (and the demo is now converted to just use it.)
         """
         This function sets up the event handling necessary to handle
         scrolling properly. It should be called within the __init__
-        function of any class that is derived from wxScrolledPanel,
+        function of any class that is derived from ScrolledPanel,
         once the controls on the panel have been constructed and
         thus the size of the scrolling area can be determined.
 

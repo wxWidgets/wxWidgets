@@ -6,6 +6,11 @@
 #
 # o Updated URL for SF link in overview.
 # 
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxPyColorChooser -> PyColorChooser
+# o wxPyColourChooser -> PyColourChooser
+#
 
 import  wx
 import  wx.lib.colourchooser    as  cc
@@ -17,7 +22,7 @@ class TestColourChooser(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        chooser = cc.wxPyColourChooser(self, -1)
+        chooser = cc.PyColourChooser(self, -1)
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(chooser, 0, wx.ALL, 25)
 
@@ -33,7 +38,7 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------
 
 overview = """
-The wxPyColourChooser component creates a colour chooser window
+The PyColourChooser component creates a colour chooser window
 that is similar to the Microsoft Windows colour chooser dialog.
 This dialog component is drawn in a panel, and thus can be
 embedded inside any widget (although it cannot be resized).
@@ -43,17 +48,17 @@ chooser on any platform that might have an ugly one :)
 How to use it
 ------------------------------
 
-The demo (demo/wxPyColourChooser.py code shows how to display
+The demo (demo/PyColourChooser.py code shows how to display
 a colour chooser and retrieve its options.
 
 Contact and Author Info
 ------------------------------
 
-wxPyColourChooser was written and is maintained by:
+PyColourChooser was written and is maintained by:
 
     Michael Gilfix <mgilfix@eecs.tufts.edu>
 
-You can find the latest wxPyColourChooser code at
+You can find the latest PyColourChooser code at
 http://sourceforge.net/projects/wxcolourchooser/. If you have
 any suggestions or want to submit a patch, please send
 it my way at: mgilfix@eecs.tufts.edu

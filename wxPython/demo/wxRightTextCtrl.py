@@ -10,7 +10,10 @@
 #
 # o All issues resolved.
 # 
-
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxRightTextCtrl -> RightTextCtrl
+#
 
 ############################################################################\
 # Note: this demo has been converted, but the control is deprecated because |
@@ -37,19 +40,19 @@ class TestPanel(wx.Panel):
                 )
 
         fgs.Add(txt)
-        fgs.Add(right.wxRightTextCtrl(self, -1, "", size=(75, -1)))
+        fgs.Add(right.RightTextCtrl(self, -1, "", size=(75, -1)))
 
         fgs.Add((10,10))
-        fgs.Add(right.wxRightTextCtrl(self, -1, "123.45", size=(75, -1)))
+        fgs.Add(right.RightTextCtrl(self, -1, "123.45", size=(75, -1)))
 
         fgs.Add((10,10))
-        fgs.Add(right.wxRightTextCtrl(self, -1, "234.56", size=(75, -1)))
+        fgs.Add(right.RightTextCtrl(self, -1, "234.56", size=(75, -1)))
 
         fgs.Add((10,10))
-        fgs.Add(right.wxRightTextCtrl(self, -1, "345.67", size=(75, -1)))
+        fgs.Add(right.RightTextCtrl(self, -1, "345.67", size=(75, -1)))
 
         fgs.Add((10,10))
-        fgs.Add(right.wxRightTextCtrl(self, -1, "456.78", size=(75, -1)))
+        fgs.Add(right.RightTextCtrl(self, -1, "456.78", size=(75, -1)))
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(fgs, 0, wx.ALL, 25)

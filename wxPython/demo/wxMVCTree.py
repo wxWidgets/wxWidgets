@@ -6,6 +6,10 @@
 #
 # o Library must be updated for this to run.
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMVCTree -> MVCTree
+#
 
 import  os
 import  sys
@@ -32,12 +36,12 @@ def delitem(evt):
     logger.write("Delete\n")
 
 def runTest(frame, nb, log):
-    #f = wx.Frame(frame, -1, "wxMVCTree", (0,0), (200,500))
+    #f = wx.Frame(frame, -1, "MVCTree", (0,0), (200,500))
     global logger
     logger = log
-    p = tree.wxMVCTree(nb, -1)
-    #f = wx.Frame(frame, -1, "wxMVCTree")
-    #p = tree.wxMVCTree(f, -1)
+    p = tree.MVCTree(nb, -1)
+    #f = wx.Frame(frame, -1, "MVCTree")
+    #p = tree.MVCTree(f, -1)
     p.SetAssumeChildren(True)
     p.SetModel(tree.LateFSTreeModel(os.path.normpath(os.getcwd() + os.sep +'..')))
 
@@ -61,7 +65,7 @@ def runTest(frame, nb, log):
 
 overview = """\
 
-wxMVCTree is a control which handles hierarchical data. It is
+MVCTree is a control which handles hierarchical data. It is
 constructed in model-view-controller architecture, so the display of
 that data, and the content of the data can be changed greatly without
 affecting the other parts.

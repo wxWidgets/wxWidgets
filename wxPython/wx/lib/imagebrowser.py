@@ -124,7 +124,7 @@ class ImageDialog(wx.Dialog):
         self.y_pos = 20
         self.delta = 20
 
-        size = wxSize(80, 25)
+        size = wx.Size(80, 25)
 
         self.set_dir = os.getcwd()
         self.set_file = None

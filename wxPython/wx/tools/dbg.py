@@ -7,6 +7,10 @@
 # Copyright:    (c) 2002 by Will Sadkin, 2002
 # License:      wxWindows license
 #----------------------------------------------------------------------------
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o V2.5 compatability update 
+#
 
 """
 This module provides a useful debugging framework that supports
@@ -217,20 +221,22 @@ class Logger:
 #------------------------------------------------------------
 
 if __name__ == "__main__":
-    from wxPython.wx import *
-    wxLog_SetActiveTarget( wxLogStderr() )
+    import  sys
+    import  wx
+    
+    wx.Log_SetActiveTarget( wx.LogStderr() )
     logger = Logger('module')
     dbg = logger.dbg
     dbg(enable=1)
     logger('test __call__ interface')
     dbg('testing wxLog output to stderr:', wxlog=1, indent=1)
     dbg('1,2,3...')
-    dbg('testing wxLogNull:')
-    devnull = wxLogNull()
+    dbg('testing wx.LogNull:')
+    devnull = wx.LogNull()
     dbg('4,5,6...') # shouldn't print, according to doc...
     del devnull
-    dbg('(resuming to wxLogStdErr)', '7,8,9...', indent=0)
-    dbg('disabling wxLog output, switching to stderr:')
+    dbg('(resuming to wx.LogStdErr)', '7,8,9...', indent=0)
+    dbg('disabling wx.Log output, switching to stderr:')
     dbg(wxlog=0, stream=sys.stderr)
     dbg(logger._outstream, 'switching back to stdout:')
     dbg(stream=None)

@@ -11,6 +11,11 @@
 #
 # o New binders applied. Issues still exist.
 #
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxTimeCtrl -> TimeCtrl
+# o wxScrolledPanel -> ScrolledPanel
+#
 
 import  wx
 import  wx.lib.timectrl         as  timectl
@@ -18,27 +23,27 @@ import  wx.lib.scrolledpanel    as  scrolled
 
 #----------------------------------------------------------------------
 
-class TestPanel( scrolled.wxScrolledPanel ):
+class TestPanel( scrolled.ScrolledPanel ):
     def __init__( self, parent, log ):
 
-        scrolled.wxScrolledPanel.__init__( self, parent, -1 )
+        scrolled.ScrolledPanel.__init__( self, parent, -1 )
         self.log = log
 
 
         text1 = wx.StaticText( self, -1, "12-hour format:")
-        self.time12 = timectl.wxTimeCtrl( self, -1, name="12 hour control" )
+        self.time12 = timectl.TimeCtrl( self, -1, name="12 hour control" )
         spin1 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
         self.time12.BindSpinButton( spin1 )
 
         text2 = wx.StaticText( self, -1, "24-hour format:")
         spin2 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
-        self.time24 = timectl.wxTimeCtrl(
+        self.time24 = timectl.TimeCtrl(
                         self, -1, name="24 hour control", fmt24hr=True, 
                         spinButton = spin2 
                         )
 
         text3 = wx.StaticText( self, -1, "No seconds\nor spin button:")
-        self.spinless_ctrl = timectl.wxTimeCtrl(
+        self.spinless_ctrl = timectl.TimeCtrl(
                                 self, -1, name="spinless control", 
                                 display_seconds = False 
                                 )
@@ -94,17 +99,17 @@ class TestPanel( scrolled.wxScrolledPanel ):
         self.set_bounds = wx.CheckBox( self, -1, "Set time bounds:" )
 
         minlabel = wx.StaticText( self, -1, "minimum time:" )
-        self.min = timectl.wxTimeCtrl( self, -1, name="min", display_seconds = False )
+        self.min = timectl.TimeCtrl( self, -1, name="min", display_seconds = False )
         self.min.Enable( False )
 
         maxlabel = wx.StaticText( self, -1, "maximum time:" )
-        self.max = timectl.wxTimeCtrl( self, -1, name="max", display_seconds = False )
+        self.max = timectl.TimeCtrl( self, -1, name="max", display_seconds = False )
         self.max.Enable( False )
 
         self.limit_check = wx.CheckBox( self, -1, "Limit control" )
 
         label = wx.StaticText( self, -1, "Resulting time control:" )
-        self.target_ctrl = timectl.wxTimeCtrl( self, -1, name="new" )
+        self.target_ctrl = timectl.TimeCtrl( self, -1, name="new" )
 
         grid2 = wx.FlexGridSizer( 0, 2, 0, 0 )
         grid2.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )

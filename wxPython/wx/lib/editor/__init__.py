@@ -13,9 +13,13 @@
 #
 # o 2.5 compatability update.
 #
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxEditor -> Editor
+#
 
 # This file makes this directory into a Python package
 
 
 # import the main classes into the package namespace.
-from editor    import wxEditor
+from editor    import Editor

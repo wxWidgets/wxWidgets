@@ -6,4 +6,4 @@ import wx.lib.rightalign
 
 __doc__ =  wx.lib.rightalign.__doc__
 
-wxRightTextCtrl = wx.lib.rightalign.wxRightTextCtrl
+wxRightTextCtrl = wx.lib.rightalign.RightTextCtrl

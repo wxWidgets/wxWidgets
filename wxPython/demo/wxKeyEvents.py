@@ -6,6 +6,10 @@
 #
 # o lib.mixins.listctrl needs wx renamer applied.
 # 
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxListCtrlAutoWidthMixin -> ListCtrlAutoWidthMixin 
+#
 
 import  wx
 import  wx.lib.mixins.listctrl  as  listmix
@@ -204,12 +208,12 @@ class KeySink(wx.Window):
 
 #----------------------------------------------------------------------
 
-class KeyLog(wx.ListCtrl, listmix.wxListCtrlAutoWidthMixin):
+class KeyLog(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
 
     def __init__(self, parent):
         wx.ListCtrl.__init__(self, parent, -1,
                             style = wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
-        listmix.wxListCtrlAutoWidthMixin.__init__(self)
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
 
         self.InsertColumn(0, "Event Type")
         self.InsertColumn(1, "Key Name")

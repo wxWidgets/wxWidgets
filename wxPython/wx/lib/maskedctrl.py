@@ -10,21 +10,25 @@
 #
 # o Updated for wx namespace (minor)
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Removed wx prefix
+# 
 
 """<html><body>
 <P>
-<B>wxMaskedCtrl</B> is actually a factory function for several types of
+<B>MaskedCtrl</B> is actually a factory function for several types of
 masked edit controls:
 <P>
 <UL>
-    <LI><b>wxMaskedTextCtrl</b> - standard masked edit text box</LI>
-    <LI><b>wxMaskedComboBox</b> - adds combobox capabilities</LI>
-    <LI><b>wxIpAddrCtrl</b> - adds logical input semantics for IP address entry</LI>
-    <LI><b>wxTimeCtrl</b> - special subclass handling lots of time formats as values</LI>
-    <LI><b>wxMaskedNumCtrl</b> - special subclass handling numeric values</LI>
+    <LI><b>MaskedTextCtrl</b> - standard masked edit text box</LI>
+    <LI><b>MaskedComboBox</b> - adds combobox capabilities</LI>
+    <LI><b>IpAddrCtrl</b> - adds logical input semantics for IP address entry</LI>
+    <LI><b>TimeCtrl</b> - special subclass handling lots of time formats as values</LI>
+    <LI><b>MaskedNumCtrl</b> - special subclass handling numeric values</LI>
 </UL>
 <P>
-<B>wxMaskedCtrl</B> works by looking for a special <b><i>controlType</i></b>
+<B>MaskedCtrl</B> works by looking for a special <b><i>controlType</i></b>
 parameter in the variable arguments of the control, to determine
 what kind of instance to return.
 controlType can be one of:
@@ -38,22 +42,22 @@ controlType can be one of:
 These constants are also available individually, ie, you can
 use either of the following:
 <PRE><FONT SIZE=-1>
-    from wxPython.wx.lib.maskedctrl import wxMaskedCtrl, MASKEDCOMBO, MASKEDTEXT, NUMBER
-    from wxPython.wx.lib.maskedctrl import wxMaskedCtrl, controlTypes
+    from wxPython.wx.lib.maskedctrl import MaskedCtrl, MASKEDCOMBO, MASKEDTEXT, NUMBER
+    from wxPython.wx.lib.maskedctrl import MaskedCtrl, controlTypes
 </FONT></PRE>
 If not specified as a keyword argument, the default controlType is
 controlTypes.MASKEDTEXT.
 <P>
-Each of the above classes has its own unique arguments, but wxMaskedCtrl
-provides a single "unified" interface for masked controls.  wxMaskedTextCtrl,
-wxMaskedComboBox and wxIpAddrCtrl are all documented below; the others have
+Each of the above classes has its own unique arguments, but MaskedCtrl
+provides a single "unified" interface for masked controls.  MaskedTextCtrl,
+MaskedComboBox and IpAddrCtrl are all documented below; the others have
 their own demo pages and interface descriptions.
 </body></html>
 """
 
-from wx.lib.maskededit      import wxMaskedTextCtrl, wxMaskedComboBox, wxIpAddrCtrl
-from wx.lib.maskednumctrl   import wxMaskedNumCtrl
-from wx.lib.timectrl        import wxTimeCtrl
+from wx.lib.maskededit      import MaskedTextCtrl, MaskedComboBox, IpAddrCtrl
+from wx.lib.maskednumctrl   import MaskedNumCtrl
+from wx.lib.timectrl        import TimeCtrl
 
 
 # "type" enumeration for class instance factory function
@@ -72,7 +76,7 @@ class controlTypes:
     NUMBER      = NUMBER
 
 
-def wxMaskedCtrl( *args, **kwargs):
+def MaskedCtrl( *args, **kwargs):
     """
     Actually a factory function providing a unifying
     interface for generating masked controls.
@@ -84,19 +88,19 @@ def wxMaskedCtrl( *args, **kwargs):
         del kwargs['controlType']
 
     if controlType == MASKEDTEXT:
-        return wxMaskedTextCtrl(*args, **kwargs)
+        return MaskedTextCtrl(*args, **kwargs)
 
     elif controlType == MASKEDCOMBO:
-        return wxMaskedComboBox(*args, **kwargs)
+        return MaskedComboBox(*args, **kwargs)
 
     elif controlType == IPADDR:
-        return wxIpAddrCtrl(*args, **kwargs)
+        return IpAddrCtrl(*args, **kwargs)
 
     elif controlType == TIME:
-        return wxTimeCtrl(*args, **kwargs)
+        return TimeCtrl(*args, **kwargs)
 
     elif controlType == NUMBER:
-        return wxMaskedNumCtrl(*args, **kwargs)
+        return MaskedNumCtrl(*args, **kwargs)
 
     else:
         raise AttributeError(

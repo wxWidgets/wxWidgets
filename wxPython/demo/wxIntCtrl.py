@@ -11,9 +11,13 @@
 #
 # o All issues corrected
 #
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxIntCtrl -> IntCtrl 
+#
 
 import  wx
-import  wx.lib.intctrl  as  intctrl
+import  wx.lib.intctrl
 
 #----------------------------------------------------------------------
 
@@ -25,11 +29,11 @@ class TestPanel( wx.Panel ):
         panel = wx.Panel( self, -1 )
 
         self.set_min = wx.CheckBox( panel, -1, "Set minimum value:" )
-        self.min = intctrl.wxIntCtrl( panel, size=( 50, -1 ) )
+        self.min = wx.lib.intctrl.IntCtrl( panel, size=( 50, -1 ) )
         self.min.Enable( False )
 
         self.set_max = wx.CheckBox( panel, -1, "Set maximum value:" )
-        self.max = intctrl.wxIntCtrl( panel, size=( 50, -1 ) )
+        self.max = wx.lib.intctrl.IntCtrl( panel, size=( 50, -1 ) )
         self.max.Enable( False )
 
         self.limit_target = wx.CheckBox( panel, -1, "Limit control" )
@@ -37,7 +41,7 @@ class TestPanel( wx.Panel ):
         self.allow_long = wx.CheckBox( panel, -1, "Allow long integers" )
 
         label = wx.StaticText( panel, -1, "Resulting integer control:" )
-        self.target_ctl = intctrl.wxIntCtrl( panel )
+        self.target_ctl = wx.lib.intctrl.IntCtrl( panel )
 
         grid = wx.FlexGridSizer( 0, 2, 0, 0 )
         grid.Add( self.set_min, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
@@ -74,9 +78,9 @@ class TestPanel( wx.Panel ):
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNone, self.allow_none)
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowLong, self.allow_long)
 
-        self.Bind(intctrl.EVT_INT, self.SetTargetMinMax, self.min)
-        self.Bind(intctrl.EVT_INT, self.SetTargetMinMax, self.max)
-        self.Bind(intctrl.EVT_INT, self.OnTargetChange, self.target_ctl)
+        self.Bind(wx.lib.intctrl.EVT_INT, self.SetTargetMinMax, self.min)
+        self.Bind(wx.lib.intctrl.EVT_INT, self.SetTargetMinMax, self.max)
+        self.Bind(wx.lib.intctrl.EVT_INT, self.OnTargetChange, self.target_ctl)
 
 
     def OnSetMin( self, event ):
@@ -146,13 +150,13 @@ def runTest( frame, nb, log ):
 
 overview = """<html><body>
 <P>
-<B>wxIntCtrl</B> provides a control that takes and returns integers as
+<B>IntCtrl</B> provides a control that takes and returns integers as
 value, and provides bounds support and optional value limiting.
 <P>
 <P>
-Here's the API for wxIntCtrl:
+Here's the API for IntCtrl:
 <DL><PRE>
-    <B>wxIntCtrl</B>(
+    <B>IntCtrl</B>(
          parent, id = -1,
          <B>value</B> = 0,
          <B>min</B> = None,

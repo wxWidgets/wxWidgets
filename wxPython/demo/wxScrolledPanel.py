@@ -10,6 +10,10 @@
 #
 # o lib updated, all is well.
 # 
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxScrolledPanel -> ScrolledPanel
+#
 
 import  wx
 import  wx.lib.scrolledpanel    as  scrolled
@@ -19,14 +23,14 @@ import  wx.lib.scrolledpanel    as  scrolled
 text = "one two buckle my shoe three four shut the door five six pick up sticks seven eight lay them straight nine ten big fat hen"
 
 
-class TestPanel(scrolled.wxScrolledPanel):
+class TestPanel(scrolled.ScrolledPanel):
     def __init__(self, parent, log):
         self.log = log
-        scrolled.wxScrolledPanel.__init__(self, parent, -1)
+        scrolled.ScrolledPanel.__init__(self, parent, -1)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         desc = wx.StaticText(self, -1,
-                            "wxScrolledPanel extends wxScrolledWindow, adding all "
+                            "ScrolledPanel extends wxScrolledWindow, adding all "
                             "the necessary bits to set up scroll handling for you.\n\n"
                             "Here are three fixed size examples of its use. The "
                             "demo panel for this sample is also using it -- the \nwxStaticLine"
@@ -40,7 +44,7 @@ class TestPanel(scrolled.wxScrolledPanel):
 
         words = text.split()
 
-        panel1 = scrolled.wxScrolledPanel(self, -1, size=(120,300),
+        panel1 = scrolled.ScrolledPanel(self, -1, size=(120,300),
                                  style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER )
         fgs1 = wx.FlexGridSizer(cols=2, vgap=4, hgap=4)
 
@@ -54,9 +58,9 @@ class TestPanel(scrolled.wxScrolledPanel):
         panel1.SetAutoLayout(1)
         panel1.SetupScrolling( scroll_x=False )
 
-        panel2 = scrolled.wxScrolledPanel(self, -1, size=(350, 40),
+        panel2 = scrolled.ScrolledPanel(self, -1, size=(350, 40),
                                  style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        panel3 = scrolled.wxScrolledPanel(self, -1, size=(200,100),
+        panel3 = scrolled.ScrolledPanel(self, -1, size=(200,100),
                                  style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
 
         fgs2 = wx.FlexGridSizer(cols=25, vgap=4, hgap=4)
@@ -114,7 +118,7 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-wxScrolledPanel fills a "hole" in the implementation of wxScrolledWindow,
+ScrolledPanel fills a "hole" in the implementation of wxScrolledWindow,
 providing automatic scrollbar and scrolling behavior and the tab traversal
 mangement that wxScrolledWindow lacks.
 </body></html>

@@ -14,13 +14,18 @@
 # o 2.5 compatability update.
 # o ListCtrlSelectionManagerMix untested.
 #
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxColumnSorterMixin -> ColumnSorterMixin 
+# o wxListCtrlAutoWidthMixin -> ListCtrlAutoWidthMixin 
+#
 
 import  locale
 import  wx
 
 #----------------------------------------------------------------------------
 
-class wxColumnSorterMixin:
+class ColumnSorterMixin:
     """
     A mixin class that handles sorting of a wx.ListCtrl in REPORT mode when
     the column header is clicked on.
@@ -144,7 +149,7 @@ class wxColumnSorterMixin:
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
-class wxListCtrlAutoWidthMixin:
+class ListCtrlAutoWidthMixin:
     """ A mix-in class that automatically resizes the last column to take up
         the remaining width of the wx.ListCtrl.
 

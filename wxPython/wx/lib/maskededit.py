@@ -12,12 +12,12 @@
 #   This was written way it is because of the lack of masked edit controls
 #   in wxWindows/wxPython.
 #
-#   wxMaskedEdit controls are based on a suggestion made on [wxPython-Users] by
+#   MaskedEdit controls are based on a suggestion made on [wxPython-Users] by
 #   Jason Hihn, and borrows liberally from Will Sadkin's original masked edit
-#   control for time entry, wxTimeCtrl (which is now rewritten using this
+#   control for time entry, TimeCtrl (which is now rewritten using this
 #   control!).
 #
-#   wxMaskedEdit controls do not normally use validators, because they do
+#   MaskedEdit controls do not normally use validators, because they do
 #   careful manipulation of the cursor in the text window on each keystroke,
 #   and validation is cursor-position specific, so the control intercepts the
 #   key codes before the validator would fire.  However, validators can be
@@ -33,21 +33,30 @@
 #
 # o Missed wx.DateTime stuff earlier.
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMaskedEditMixin -> MaskedEditMixin
+# o wxMaskedTextCtrl -> MaskedTextCtrl
+# o wxMaskedComboBoxSelectEvent -> MaskedComboBoxSelectEvent
+# o wxMaskedComboBox -> MaskedComboBox
+# o wxIpAddrCtrl -> IpAddrCtrl
+# o wxTimeCtrl -> TimeCtrl
+#
 
 """\
 <b>Masked Edit Overview:
 =====================</b>
-<b>wxMaskedTextCtrl</b>
+<b>MaskedTextCtrl</b>
     is a sublassed text control that can carefully control the user's input
     based on a mask string you provide.
 
     General usage example:
-        control = wxMaskedTextCtrl( win, -1, '', mask = '(###) ###-####')
+        control = MaskedTextCtrl( win, -1, '', mask = '(###) ###-####')
 
     The example above will create a text control that allows only numbers to be
     entered and then only in the positions indicated in the mask by the # sign.
 
-<b>wxMaskedComboBox</b>
+<b>MaskedComboBox</b>
     is a similar subclass of wxComboBox that allows the same sort of masking,
     but also can do auto-complete of values, and can require the value typed
     to be in the list of choices to be colored appropriately.
@@ -55,20 +64,20 @@
 <b>wxMaskedCtrl</b>
     is actually a factory function for several types of masked edit controls:
 
-    <b>wxMaskedTextCtrl</b>   - standard masked edit text box
-    <b>wxMaskedComboBox</b>   - adds combobox capabilities
-    <b>wxIpAddrCtrl</b>       - adds special semantics for IP address entry
-    <b>wxTimeCtrl</b>         - special subclass handling lots of types as values
+    <b>MaskedTextCtrl</b>   - standard masked edit text box
+    <b>MaskedComboBox</b>   - adds combobox capabilities
+    <b>IpAddrCtrl</b>       - adds special semantics for IP address entry
+    <b>TimeCtrl</b>         - special subclass handling lots of types as values
     <b>wxMaskedNumCtrl</b>    - special subclass handling numeric values
 
     It works by looking for a <b><i>controlType</i></b> parameter in the keyword
     arguments of the control, to determine what kind of instance to return.
     If not specified as a keyword argument, the default control type returned
-    will be wxMaskedTextCtrl.
+    will be MaskedTextCtrl.
 
     Each of the above classes has its own set of arguments, but wxMaskedCtrl
     provides a single "unified" interface for masked controls.  Those for
-    wxMaskedTextCtrl, wxMaskedComboBox and wxIpAddrCtrl are all documented
+    MaskedTextCtrl, MaskedComboBox and IpAddrCtrl are all documented
     below; the others have their own demo pages and interface descriptions.
     (See end of following discussion for how to configure the wxMaskedCtrl()
     to select the above control types.)
@@ -252,7 +261,7 @@ decimalChar=</b>
         choices=        A list of strings that are allowed choices for the control.
         choiceRequired= value must be member of choices list
         compareNoCase=  Perform case-insensitive matching when validating against list
-                        <i>Note: for wxMaskedComboBox, this defaults to True.</i>
+                        <i>Note: for MaskedComboBox, this defaults to True.</i>
         emptyInvalid=   Boolean indicating whether an empty value should be considered invalid
 
         validFunc=      A function to call of the form: bool = func(candidate_value)
@@ -406,7 +415,7 @@ decimalChar=</b>
                     after construction; it takes a list of key/value pairs as arguments,
                     where the keys can be any of the mask-specific parameters in the constructor.
                     Eg:
-                        ctl = wxMaskedTextCtrl( self, -1 )
+                        ctl = MaskedTextCtrl( self, -1 )
                         ctl.SetCtrlParameters( mask='###-####',
                                                defaultValue='555-1212',
                                                formatcodes='F')
@@ -487,7 +496,7 @@ Naming Conventions
 
   The following methods must be used and/or defined when deriving a control
   from wxMaskedEditMixin.  NOTE: if deriving from a *masked edit* control
-  (eg. class wxIpAddrCtrl(wxMaskedTextCtrl) ), then this is NOT necessary,
+  (eg. class IpAddrCtrl(MaskedTextCtrl) ), then this is NOT necessary,
   as it's already been done for you in the base class.
 
         ._SetInitialValue()
@@ -517,8 +526,8 @@ Naming Conventions
                         Similarly to _GetSelection, each class derived from
                         wxMaskedEditMixin must define the function for setting
                         the start and end of the current text selection.
-                        (eg. .SetSelection() for wxMaskedTextCtrl, and .SetMark() for
-                        wxMaskedComboBox.
+                        (eg. .SetSelection() for MaskedTextCtrl, and .SetMark() for
+                        MaskedComboBox.
 
         ._GetInsertionPoint()
         ._SetInsertionPoint()
@@ -565,7 +574,7 @@ Naming Conventions
         ._IsEditable()  REQUIRED
                         Each class derived from wxMaskedEditMixin must define
                         the function used to determine if the base control is
-                        editable or not.  (For wxMaskedComboBox, this has to
+                        editable or not.  (For MaskedComboBox, this has to
                         be done with code, rather than specifying the proper
                         function in the base control, as there isn't one...)
         ._CalcSize()    REQUIRED
@@ -600,7 +609,7 @@ Event Handling
 
   These 5 handlers must be "wired up" for the wxMaskedEdit
   control to provide default behavior.  (The setupEventHandling
-  is an argument to wxMaskedTextCtrl and wxMaskedComboBox, so
+  is an argument to MaskedTextCtrl and MaskedComboBox, so
   that controls derived from *them* may replace one of these
   handlers if they so choose.)
 
@@ -628,7 +637,7 @@ Event Handling
         ._AddNavKeycode(keycode, handler=None)
         ._AddNavKey(char, handler=None)
                         Allows controls to specify other keys (and optional handlers)
-                        to be treated as navigational characters. (eg. '.' in wxIpAddrCtrl)
+                        to be treated as navigational characters. (eg. '.' in IpAddrCtrl)
 
         ._GetNavKeycodes()  Returns the current list of navigational keycodes.
 
@@ -657,7 +666,7 @@ Event Handling
                         By default, it adjusts the year in date fields if mask is a date,
                         It can be overridden by a derived class to
                         adjust the value of the control at that time.
-                        (eg. wxIpAddrCtrl reformats the address in this way.)
+                        (eg. IpAddrCtrl reformats the address in this way.)
 
         ._Change()      Called by internal EVT_TEXT handler. Return False to force
                         skip of the normal class change event.
@@ -685,7 +694,7 @@ Event Handling
         _OnCtrl_Z(event)        'undo'  - resets value to previous value (if any)
 
         _OnChangeField(event)   primarily used for tab events, but can be
-                                used for other keys (eg. '.' in wxIpAddrCtrl)
+                                used for other keys (eg. '.' in IpAddrCtrl)
 
         _OnErase(event)         used for backspace and delete
         _OnHome(event)
@@ -1043,26 +1052,26 @@ masktags = {
            'excludeChars': am_pm_exclude,
            'formatcodes': 'TF!',
            'validRegex': '^' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',
-           'description': "HH:MM:SS (A|P)M\n(see wxTimeCtrl)"
+           'description': "HH:MM:SS (A|P)M\n(see TimeCtrl)"
            },
        "TIMEHHMM": {
            'mask': "##:## AM",
            'excludeChars': am_pm_exclude,
            'formatcodes': 'TF!',
            'validRegex': '^' + hours + ':' + minutes + ' (A|P)M',
-           'description': "HH:MM (A|P)M\n(see wxTimeCtrl)"
+           'description': "HH:MM (A|P)M\n(see TimeCtrl)"
            },
        "MILTIMEHHMMSS": {
            'mask': "##:##:##",
            'formatcodes': 'TF',
            'validRegex': '^' + milhours + ':' + minutes + ':' + seconds,
-           'description': "Military HH:MM:SS\n(see wxTimeCtrl)"
+           'description': "Military HH:MM:SS\n(see TimeCtrl)"
            },
        "MILTIMEHHMM": {
            'mask': "##:##",
            'formatcodes': 'TF',
            'validRegex': '^' + milhours + ':' + minutes,
-           'description': "Military HH:MM\n(see wxTimeCtrl)"
+           'description': "Military HH:MM\n(see TimeCtrl)"
            },
        "USSOCIALSEC": {
            'mask': "###-##-####",
@@ -1117,7 +1126,7 @@ masktags = {
            'mask': "###.###.###.###",
            'formatcodes': 'F_Sr',
            'validRegex': "(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))(\.(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))){3}",
-           'description': "IP Address\n(see wxIpAddrCtrl)"
+           'description': "IP Address\n(see IpAddrCtrl)"
            }
        }
 
@@ -1525,7 +1534,7 @@ class Field:
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
-class wxMaskedEditMixin:
+class MaskedEditMixin:
     """
     This class allows us to abstract the masked edit functionality that could
     be associated with any text entry control. (eg. wxTextCtrl, wxComboBox, etc.)
@@ -1566,7 +1575,7 @@ class wxMaskedEditMixin:
 
         # Validate legitimate set of parameters:
         for key in kwargs.keys():
-            if key.replace('Color', 'Colour') not in wxMaskedEditMixin.valid_ctrl_params.keys() + Field.valid_params.keys():
+            if key.replace('Color', 'Colour') not in MaskedEditMixin.valid_ctrl_params.keys() + Field.valid_params.keys():
                 raise TypeError('%s: invalid parameter "%s"' % (name, key))
 
         ## Set up dictionary that can be used by subclasses to override or add to default
@@ -1620,7 +1629,7 @@ class wxMaskedEditMixin:
             '&': string.punctuation
         }
 
-        ## self._ignoreChange is used by wxMaskedComboBox, because
+        ## self._ignoreChange is used by MaskedComboBox, because
         ## of the hack necessary to determine the selection; it causes
         ## EVT_TEXT messages from the combobox to be ignored if set.
         self._ignoreChange = False
@@ -1633,7 +1642,7 @@ class wxMaskedEditMixin:
 
         # Set defaults for each parameter for this instance, and fully
         # populate initial parameter list for configuration:
-        for key, value in wxMaskedEditMixin.valid_ctrl_params.items():
+        for key, value in MaskedEditMixin.valid_ctrl_params.items():
             setattr(self, '_' + key, copy.copy(value))
             if not kwargs.has_key(key):
 ##                dbg('%s: "%s"' % (key, repr(value)))
@@ -1651,7 +1660,7 @@ class wxMaskedEditMixin:
         parameters after construction.
         """
         dbg(suspend=1)
-        dbg('wxMaskedEditMixin::SetCtrlParameters', indent=1)
+        dbg('MaskedEditMixin::SetCtrlParameters', indent=1)
 ##        dbg('kwargs:', indent=1)
 ##        for key, value in kwargs.items():
 ##            dbg(key, '=', value)
@@ -1662,7 +1671,7 @@ class wxMaskedEditMixin:
         ctrl_kwargs = {}
         for key, value in kwargs.items():
             key = key.replace('Color', 'Colour')    # for b-c, and standard wxPython spelling
-            if key not in wxMaskedEditMixin.valid_ctrl_params.keys() + Field.valid_params.keys():
+            if key not in MaskedEditMixin.valid_ctrl_params.keys() + Field.valid_params.keys():
                 dbg(indent=0, suspend=0)
                 raise TypeError('Invalid keyword argument "%s" for control "%s"' % (key, self.name))
             elif key in Field.valid_params.keys():
@@ -1737,7 +1746,7 @@ class wxMaskedEditMixin:
 ##        dbg(indent=0)
 
         # determine if changing parameters that should affect the entire control:
-        for key in wxMaskedEditMixin.valid_ctrl_params.keys():
+        for key in MaskedEditMixin.valid_ctrl_params.keys():
             if key in ( 'mask', 'fields' ): continue    # (processed separately)
             if ctrl_kwargs.has_key(key):
                 setattr(self, '_' + key, ctrl_kwargs[key])
@@ -1870,7 +1879,7 @@ class wxMaskedEditMixin:
         """
         Routine for retrieving the value of any given parameter
         """
-        if wxMaskedEditMixin.valid_ctrl_params.has_key(paramname.replace('Color','Colour')):
+        if MaskedEditMixin.valid_ctrl_params.has_key(paramname.replace('Color','Colour')):
             return getattr(self, '_' + paramname.replace('Color', 'Colour'))
         elif Field.valid_params.has_key(paramname):
             return self._ctrl_constraints._GetParameter(paramname)
@@ -2393,7 +2402,7 @@ class wxMaskedEditMixin:
 
         """
         dbg(suspend=1)
-        dbg('wxMaskedEditMixin::_configure("%s")' % mask, indent=1)
+        dbg('MaskedEditMixin::_configure("%s")' % mask, indent=1)
 
         # Preprocess specified mask to expand {n} syntax, handle escaped
         # mask characters, etc and build the resulting positionally keyed
@@ -2534,7 +2543,7 @@ class wxMaskedEditMixin:
         It will also set/reset the font if necessary and apply
         formatting to the control at this time.
         """
-        dbg('wxMaskedEditMixin::_SetInitialValue("%s")' % value, indent=1)
+        dbg('MaskedEditMixin::_SetInitialValue("%s")' % value, indent=1)
         if not value:
             self._prevValue = self._curValue = self._template
             # don't apply external validation rules in this case, as template may
@@ -2562,7 +2571,7 @@ class wxMaskedEditMixin:
 
     def _calcSize(self, size=None):
         """ Calculate automatic size if allowed; must be called after the base control is instantiated"""
-##        dbg('wxMaskedEditMixin::_calcSize', indent=1)
+##        dbg('MaskedEditMixin::_calcSize', indent=1)
         cont = (size is None or size == wx.DefaultSize)
 
         if cont and self._autofit:
@@ -2580,7 +2589,7 @@ class wxMaskedEditMixin:
 
     def _setFont(self):
         """ Set the control's font typeface -- pass the font name as str."""
-##        dbg('wxMaskedEditMixin::_setFont', indent=1)
+##        dbg('MaskedEditMixin::_setFont', indent=1)
         if not self._useFixedWidthFont:
             self._font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         else:
@@ -2607,7 +2616,7 @@ class wxMaskedEditMixin:
         EVT_TEXT events for the same change.)
         """
         newvalue = self._GetValue()
-        dbg('wxMaskedEditMixin::_OnTextChange: value: "%s"' % newvalue, indent=1)
+        dbg('MaskedEditMixin::_OnTextChange: value: "%s"' % newvalue, indent=1)
         bValid = False
         if self._ignoreChange:      # ie. if an "intermediate text change event"
             dbg(indent=0)
@@ -2645,7 +2654,7 @@ class wxMaskedEditMixin:
         if key in self._nav and event.ControlDown():
             # then this is the only place we will likely see these events;
             # process them now:
-            dbg('wxMaskedEditMixin::OnKeyDown: calling _OnChar')
+            dbg('MaskedEditMixin::OnKeyDown: calling _OnChar')
             self._OnChar(event)
             return
         # else allow regular EVT_CHAR key processing
@@ -2657,7 +2666,7 @@ class wxMaskedEditMixin:
         This is the engine of wxMaskedEdit controls.  It examines each keystroke,
         decides if it's allowed, where it should go or what action to take.
         """
-        dbg('wxMaskedEditMixin::_OnChar', indent=1)
+        dbg('MaskedEditMixin::_OnChar', indent=1)
 
         # Get keypress value, adjusted by control options (e.g. convert to upper etc)
         key = event.GetKeyCode()
@@ -2837,7 +2846,7 @@ class wxMaskedEditMixin:
         10, 14
         etc.
         """
-        dbg('wxMaskedEditMixin::_FindFieldExtent(pos=%s, getslice=%s)' % (
+        dbg('MaskedEditMixin::_FindFieldExtent(pos=%s, getslice=%s)' % (
                 str(pos), str(getslice)) ,indent=1)
 
         field = self._FindField(pos)
@@ -2867,7 +2876,7 @@ class wxMaskedEditMixin:
         when calculating the current field.
 
         """
-##        dbg('wxMaskedEditMixin::_FindField(pos=%s)' % str(pos) ,indent=1)
+##        dbg('MaskedEditMixin::_FindField(pos=%s)' % str(pos) ,indent=1)
         if pos is None: pos = self._GetInsertionPoint()
         elif pos < 0 or pos > self._masklength:
             raise IndexError('position %s out of range of control' % str(pos))
@@ -2883,7 +2892,7 @@ class wxMaskedEditMixin:
 
     def ClearValue(self):
         """ Blanks the current control value by replacing it with the default value."""
-        dbg("wxMaskedEditMixin::ClearValue - value reset to default value (template)")
+        dbg("MaskedEditMixin::ClearValue - value reset to default value (template)")
         self._SetValue( self._template )
         self._SetInsertionPoint(0)
         self.Refresh()
@@ -2902,7 +2911,7 @@ class wxMaskedEditMixin:
         Makes up-arrow act like shift-tab should; ie. take you to start of
         previous field.
         """
-        dbg('wxMaskedEditMixin::_OnUpNumeric', indent=1)
+        dbg('MaskedEditMixin::_OnUpNumeric', indent=1)
         event.m_shiftDown = 1
         dbg('event.ShiftDown()?', event.ShiftDown())
         self._OnChangeField(event)
@@ -2914,7 +2923,7 @@ class wxMaskedEditMixin:
         Used in response to left/right navigation keys; makes these actions skip
         over mask template chars.
         """
-        dbg("wxMaskedEditMixin::_OnArrow", indent=1)
+        dbg("MaskedEditMixin::_OnArrow", indent=1)
         pos = self._GetInsertionPoint()
         keycode = event.GetKeyCode()
         sel_start, sel_to = self._GetSelection()
@@ -2978,9 +2987,9 @@ class wxMaskedEditMixin:
 
     def _OnCtrl_S(self, event):
         """ Default Ctrl-S handler; prints value information if demo enabled. """
-        dbg("wxMaskedEditMixin::_OnCtrl_S")
+        dbg("MaskedEditMixin::_OnCtrl_S")
         if self._demo:
-            print 'wxMaskedEditMixin.GetValue()       = "%s"\nwxMaskedEditMixin.GetPlainValue() = "%s"' % (self.GetValue(), self.GetPlainValue())
+            print 'MaskedEditMixin.GetValue()       = "%s"\nMaskedEditMixin.GetPlainValue() = "%s"' % (self.GetValue(), self.GetPlainValue())
             print "Valid? => " + str(self.IsValid())
             print "Current field, start, end, value =", str( self._FindFieldExtent(getslice=True))
         return False
@@ -2989,7 +2998,7 @@ class wxMaskedEditMixin:
     def _OnCtrl_X(self, event=None):
         """ Handles ctrl-x keypress in control and Cut operation on context menu.
             Should return False to skip other processing. """
-        dbg("wxMaskedEditMixin::_OnCtrl_X", indent=1)
+        dbg("MaskedEditMixin::_OnCtrl_X", indent=1)
         self.Cut()
         dbg(indent=0)
         return False
@@ -3003,7 +3012,7 @@ class wxMaskedEditMixin:
     def _OnCtrl_V(self, event=None):
         """ Handles ctrl-V keypress in control and Paste operation on context menu.
             Should return False to skip other processing. """
-        dbg("wxMaskedEditMixin::_OnCtrl_V", indent=1)
+        dbg("MaskedEditMixin::_OnCtrl_V", indent=1)
         self.Paste()
         dbg(indent=0)
         return False
@@ -3011,7 +3020,7 @@ class wxMaskedEditMixin:
     def _OnCtrl_Z(self, event=None):
         """ Handles ctrl-Z keypress in control and Undo operation on context menu.
             Should return False to skip other processing. """
-        dbg("wxMaskedEditMixin::_OnCtrl_Z", indent=1)
+        dbg("MaskedEditMixin::_OnCtrl_Z", indent=1)
         self.Undo()
         dbg(indent=0)
         return False
@@ -3030,7 +3039,7 @@ class wxMaskedEditMixin:
 
     def _OnErase(self, event=None):
         """ Handles backspace and delete keypress in control. Should return False to skip other processing."""
-        dbg("wxMaskedEditMixin::_OnErase", indent=1)
+        dbg("MaskedEditMixin::_OnErase", indent=1)
         sel_start, sel_to = self._GetSelection()                   ## check for a range of selected text
 
         if event is None:   # called as action routine from Cut() operation.
@@ -3256,7 +3265,7 @@ class wxMaskedEditMixin:
 
     def _OnEnd(self,event):
         """ Handles End keypress in control. Should return False to skip other processing. """
-        dbg("wxMaskedEditMixin::_OnEnd", indent=1)
+        dbg("MaskedEditMixin::_OnEnd", indent=1)
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
         if not event.ControlDown():
             end = self._masklength  # go to end of control
@@ -3323,14 +3332,14 @@ class wxMaskedEditMixin:
          Changes the event to look like a tab event, so we can then call
          event.Skip() on it, and have the parent form "do the right thing."
          """
-         dbg('wxMaskedEditMixin::OnReturn')
+         dbg('MaskedEditMixin::OnReturn')
          event.m_keyCode = wx.WXK_TAB
          event.Skip()
 
 
     def _OnHome(self,event):
         """ Handles Home keypress in control. Should return False to skip other processing."""
-        dbg("wxMaskedEditMixin::_OnHome", indent=1)
+        dbg("MaskedEditMixin::_OnHome", indent=1)
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
         sel_start, sel_to = self._GetSelection()
 
@@ -3410,7 +3419,7 @@ class wxMaskedEditMixin:
         control-shift-TAB, these events are not sent to the controls
         by the framework.
         """
-        dbg('wxMaskedEditMixin::_OnChangeField', indent = 1)
+        dbg('MaskedEditMixin::_OnChangeField', indent = 1)
         # determine end of current field:
         pos = self._GetInsertionPoint()
         dbg('current pos:', pos)
@@ -3432,7 +3441,7 @@ class wxMaskedEditMixin:
 
             # NOTE: doesn't yet work with SHIFT-tab under wx; the control
             # never sees this event! (But I've coded for it should it ever work,
-            # and it *does* work for '.' in wxIpAddrCtrl.)
+            # and it *does* work for '.' in IpAddrCtrl.)
             field = self._FindField(pos)
             index = field._index
             field_start = field._extent[0]
@@ -3540,7 +3549,7 @@ class wxMaskedEditMixin:
 
 
     def _OnDecimalPoint(self, event):
-        dbg('wxMaskedEditMixin::_OnDecimalPoint', indent=1)
+        dbg('MaskedEditMixin::_OnDecimalPoint', indent=1)
 
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
 
@@ -3579,7 +3588,7 @@ class wxMaskedEditMixin:
 
 
     def _OnChangeSign(self, event):
-        dbg('wxMaskedEditMixin::_OnChangeSign', indent=1)
+        dbg('MaskedEditMixin::_OnChangeSign', indent=1)
         key = event.GetKeyCode()
         pos = self._adjustPos(self._GetInsertionPoint(), key)
         value = self._eraseSelection()
@@ -3635,7 +3644,7 @@ class wxMaskedEditMixin:
         This handler is only registered if the mask is a numeric mask.
         It allows the insertion of ',' or '.' if appropriate.
         """
-        dbg('wxMaskedEditMixin::_OnGroupChar', indent=1)
+        dbg('MaskedEditMixin::_OnGroupChar', indent=1)
         keep_processing = True
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
         sel_start, sel_to = self._GetSelection()
@@ -3691,7 +3700,7 @@ class wxMaskedEditMixin:
 
 
     def _OnAutoCompleteField(self, event):
-        dbg('wxMaskedEditMixin::_OnAutoCompleteField', indent =1)
+        dbg('MaskedEditMixin::_OnAutoCompleteField', indent =1)
         pos = self._GetInsertionPoint()
         field = self._FindField(pos)
         edit_start, edit_end, slice = self._FindFieldExtent(pos, getslice=True)
@@ -3757,7 +3766,7 @@ class wxMaskedEditMixin:
         Function called if autoselect feature is enabled and entire control
         is selected:
         """
-        dbg('wxMaskedEditMixin::OnAutoSelect', field._index)
+        dbg('MaskedEditMixin::OnAutoSelect', field._index)
         if match_index is not None:
             field._autoCompleteIndex = match_index
 
@@ -3966,7 +3975,7 @@ class wxMaskedEditMixin:
         """
         'Fixes' an floating point control. Collapses spaces, right-justifies, etc.
         """
-        dbg('wxMaskedEditMixin::_adjustFloat, candidate = "%s"' % candidate, indent=1)
+        dbg('MaskedEditMixin::_adjustFloat, candidate = "%s"' % candidate, indent=1)
         lenInt,lenFraction  = [len(s) for s in self._mask.split('.')]  ## Get integer, fraction lengths
 
         if candidate is None: value = self._GetValue()
@@ -4014,7 +4023,7 @@ class wxMaskedEditMixin:
 
     def _adjustInt(self, candidate=None):
         """ 'Fixes' an integer control. Collapses spaces, right or left-justifies."""
-        dbg("wxMaskedEditMixin::_adjustInt", candidate)
+        dbg("MaskedEditMixin::_adjustInt", candidate)
         lenInt = self._masklength
         if candidate is None: value = self._GetValue()
         else: value = candidate
@@ -4056,7 +4065,7 @@ class wxMaskedEditMixin:
         'Fixes' a date control, expanding the year if it can.
         Applies various self-formatting options.
         """
-        dbg("wxMaskedEditMixin::_adjustDate", indent=1)
+        dbg("MaskedEditMixin::_adjustDate", indent=1)
         if candidate is None: text    = self._GetValue()
         else: text = candidate
         dbg('text=', text)
@@ -4116,7 +4125,7 @@ class wxMaskedEditMixin:
 
     def _goEnd(self, getPosOnly=False):
         """ Moves the insertion point to the end of user-entry """
-        dbg("wxMaskedEditMixin::_goEnd; getPosOnly:", getPosOnly, indent=1)
+        dbg("MaskedEditMixin::_goEnd; getPosOnly:", getPosOnly, indent=1)
         text = self._GetValue()
 ##        dbg('text: "%s"' % text)
         i = 0
@@ -4149,7 +4158,7 @@ class wxMaskedEditMixin:
 
     def _goHome(self, getPosOnly=False):
         """ Moves the insertion point to the beginning of user-entry """
-        dbg("wxMaskedEditMixin::_goHome; getPosOnly:", getPosOnly, indent=1)
+        dbg("MaskedEditMixin::_goHome; getPosOnly:", getPosOnly, indent=1)
         text = self._GetValue()
         for i in range(self._masklength):
             if self._isMaskChar(i):
@@ -4298,7 +4307,7 @@ class wxMaskedEditMixin:
             value has been changed or set programatically.
         """
         dbg(suspend=1)
-        dbg('wxMaskedEditMixin::_applyFormatting', indent=1)
+        dbg('MaskedEditMixin::_applyFormatting', indent=1)
 
         # Handle negative numbers
         if self._signOk:
@@ -4348,7 +4357,7 @@ class wxMaskedEditMixin:
     def _getAbsValue(self, candidate=None):
         """ Return an unsigned value (i.e. strip the '-' prefix if any), and sign position(s).
         """
-        dbg('wxMaskedEditMixin::_getAbsValue; candidate="%s"' % candidate, indent=1)
+        dbg('MaskedEditMixin::_getAbsValue; candidate="%s"' % candidate, indent=1)
         if candidate is None: text = self._GetValue()
         else: text = candidate
         right_signpos = text.find(')')
@@ -4466,7 +4475,7 @@ class wxMaskedEditMixin:
         """ Return a signed value by adding a "-" prefix if the value
             is set to negative, or a space if positive.
         """
-        dbg('wxMaskedEditMixin::_getSignedValue; candidate="%s"' % candidate, indent=1)
+        dbg('MaskedEditMixin::_getSignedValue; candidate="%s"' % candidate, indent=1)
         if candidate is None: text = self._GetValue()
         else: text = candidate
 
@@ -4501,9 +4510,9 @@ class wxMaskedEditMixin:
 
     def GetPlainValue(self, candidate=None):
         """ Returns control's value stripped of the template text.
-            plainvalue = wxMaskedEditMixin.GetPlainValue()
+            plainvalue = MaskedEditMixin.GetPlainValue()
         """
-        dbg('wxMaskedEditMixin::GetPlainValue; candidate="%s"' % candidate, indent=1)
+        dbg('MaskedEditMixin::GetPlainValue; candidate="%s"' % candidate, indent=1)
 
         if candidate is None: text = self._GetValue()
         else: text = candidate
@@ -4572,7 +4581,7 @@ class wxMaskedEditMixin:
     def IsValid(self, value=None):
         """ Indicates whether the value specified (or the current value of the control
         if not specified) is considered valid."""
-##        dbg('wxMaskedEditMixin::IsValid("%s")' % value, indent=1)
+##        dbg('MaskedEditMixin::IsValid("%s")' % value, indent=1)
         if value is None: value = self._GetValue()
         ret = self._CheckValid(value)
 ##        dbg(indent=0)
@@ -4581,7 +4590,7 @@ class wxMaskedEditMixin:
 
     def _eraseSelection(self, value=None, sel_start=None, sel_to=None):
         """ Used to blank the selection when inserting a new character. """
-        dbg("wxMaskedEditMixin::_eraseSelection", indent=1)
+        dbg("MaskedEditMixin::_eraseSelection", indent=1)
         if value is None: value = self._GetValue()
         if sel_start is None or sel_to is None:
             sel_start, sel_to = self._GetSelection()                   ## check for a range of selected text
@@ -4621,7 +4630,7 @@ class wxMaskedEditMixin:
 
     def _insertKey(self, char, pos, sel_start, sel_to, value, allowAutoSelect=False):
         """ Handles replacement of the character at the current insertion point."""
-        dbg('wxMaskedEditMixin::_insertKey', "\'" + char + "\'", pos, sel_start, sel_to, '"%s"' % value, indent=1)
+        dbg('MaskedEditMixin::_insertKey', "\'" + char + "\'", pos, sel_start, sel_to, '"%s"' % value, indent=1)
 
         text = self._eraseSelection(value)
         field = self._FindField(pos)
@@ -4813,7 +4822,7 @@ class wxMaskedEditMixin:
         preserve the correct selection when the focus event is not due to tab,
         we need to pull the following trick:
         """
-        dbg('wxMaskedEditMixin::_OnFocus')
+        dbg('MaskedEditMixin::_OnFocus')
         wx.CallAfter(self._fixSelection)
         event.Skip()
         self.Refresh()
@@ -4826,7 +4835,7 @@ class wxMaskedEditMixin:
         effect of coloring the control appropriately.
         """
         dbg(suspend=1)
-        dbg('wxMaskedEditMixin::_CheckValid: candidate="%s"' % candidate, indent=1)
+        dbg('MaskedEditMixin::_CheckValid: candidate="%s"' % candidate, indent=1)
         oldValid = self._valid
         if candidate is None: value = self._GetValue()
         else: value = candidate
@@ -4947,7 +4956,7 @@ class wxMaskedEditMixin:
         """ Validate the current date value using the provided Regex filter.
             Generally used for character types.BufferType
         """
-        dbg('wxMaskedEditMixin::_validateDate', indent=1)
+        dbg('MaskedEditMixin::_validateDate', indent=1)
         if candidate is None: value = self._GetValue()
         else: value = candidate
         dbg('value = "%s"' % value)
@@ -5023,7 +5032,7 @@ class wxMaskedEditMixin:
         """ Validate the current time value using the provided Regex filter.
             Generally used for character types.BufferType
         """
-        dbg('wxMaskedEditMixin::_validateTime', indent=1)
+        dbg('MaskedEditMixin::_validateTime', indent=1)
         # wxDateTime doesn't take kindly to leading/trailing spaces when parsing,
         # so we eliminate them here:
         if candidate is None: value = self._GetValue().strip()
@@ -5049,7 +5058,7 @@ class wxMaskedEditMixin:
     def _OnKillFocus(self,event):
         """ Handler for EVT_KILL_FOCUS event.
         """
-        dbg('wxMaskedEditMixin::_OnKillFocus', 'isDate=',self._isDate, indent=1)
+        dbg('MaskedEditMixin::_OnKillFocus', 'isDate=',self._isDate, indent=1)
         if self._mask and self._IsEditable():
             self._AdjustField(self._GetInsertionPoint())
             self._CheckValid()   ## Call valid handler
@@ -5073,7 +5082,7 @@ class wxMaskedEditMixin:
         we can assume the cause, change the insertion point to the start of
         the control, and deselect.
         """
-        dbg('wxMaskedEditMixin::_fixSelection', indent=1)
+        dbg('MaskedEditMixin::_fixSelection', indent=1)
         if not self._mask or not self._IsEditable():
             dbg(indent=0)
             return
@@ -5166,7 +5175,7 @@ class wxMaskedEditMixin:
         derived control because the mixin functions can't override a method of
         a sibling class.
         """
-        dbg("wxMaskedEditMixin::_Cut", indent=1)
+        dbg("MaskedEditMixin::_Cut", indent=1)
         value = self._GetValue()
         dbg('current value: "%s"' % value)
         sel_start, sel_to = self._GetSelection()                   ## check for a range of selected text
@@ -5224,7 +5233,7 @@ class wxMaskedEditMixin:
         template.
         """
         dbg(suspend=1)
-        dbg('wxMaskedEditMixin::_validatePaste("%(paste_text)s", %(sel_start)d, %(sel_to)d), raise_on_invalid? %(raise_on_invalid)d' % locals(), indent=1)
+        dbg('MaskedEditMixin::_validatePaste("%(paste_text)s", %(sel_start)d, %(sel_to)d), raise_on_invalid? %(raise_on_invalid)d' % locals(), indent=1)
         select_length = sel_to - sel_start
         maxlength = select_length
         dbg('sel_to - sel_start:', maxlength)
@@ -5320,7 +5329,7 @@ class wxMaskedEditMixin:
         derived control because the mixin functions can't override a
         method of a sibling class.
         """
-        dbg('wxMaskedEditMixin::_Paste (value = "%s")' % value, indent=1)
+        dbg('MaskedEditMixin::_Paste (value = "%s")' % value, indent=1)
         if value is None:
             paste_text = self._getClipboardContents()
         else:
@@ -5440,7 +5449,7 @@ class wxMaskedEditMixin:
 
     def _Undo(self):
         """ Provides an Undo() method in base controls. """
-        dbg("wxMaskedEditMixin::_Undo", indent=1)
+        dbg("MaskedEditMixin::_Undo", indent=1)
         value = self._GetValue()
         prev = self._prevValue
         dbg('current value:  "%s"' % value)
@@ -5681,7 +5690,7 @@ class wxMaskedEditMixin:
 
 
     def _OnContextMenu(self, event):
-        dbg('wxMaskedEditMixin::OnContextMenu()', indent=1)
+        dbg('MaskedEditMixin::OnContextMenu()', indent=1)
         menu = wxMenu()
         menu.Append(wxID_UNDO, "Undo", "")
         menu.AppendSeparator()
@@ -5723,9 +5732,9 @@ class wxMaskedEditMixin:
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
-class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
+class MaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
     """
-    This is the primary derivation from wxMaskedEditMixin.  It provides
+    This is the primary derivation from MaskedEditMixin.  It provides
     a general masked text control that can be configured with different
     masks.
     """
@@ -5745,7 +5754,7 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
                             name=name)
 
         self.controlInitialized = True
-        wxMaskedEditMixin.__init__( self, name, **kwargs )
+        MaskedEditMixin.__init__( self, name, **kwargs )
         self._SetInitialValue(value)
 
         if setupEventHandling:
@@ -5761,29 +5770,29 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
 
 
     def __repr__(self):
-        return "<wxMaskedTextCtrl: %s>" % self.GetValue()
+        return "<MaskedTextCtrl: %s>" % self.GetValue()
 
 
     def _GetSelection(self):
         """
         Allow mixin to get the text selection of this control.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         return self.GetSelection()
 
     def _SetSelection(self, sel_start, sel_to):
         """
         Allow mixin to set the text selection of this control.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
-##        dbg("wxMaskedTextCtrl::_SetSelection(%(sel_start)d, %(sel_to)d)" % locals())
+##        dbg("MaskedTextCtrl::_SetSelection(%(sel_start)d, %(sel_to)d)" % locals())
         return self.SetSelection( sel_start, sel_to )
 
     def SetSelection(self, sel_start, sel_to):
         """
         This is just for debugging...
         """
-        dbg("wxMaskedTextCtrl::SetSelection(%(sel_start)d, %(sel_to)d)" % locals())
+        dbg("MaskedTextCtrl::SetSelection(%(sel_start)d, %(sel_to)d)" % locals())
         wx.TextCtrl.SetSelection(self, sel_start, sel_to)
 
 
@@ -5791,30 +5800,30 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
         return self.GetInsertionPoint()
 
     def _SetInsertionPoint(self, pos):
-##        dbg("wxMaskedTextCtrl::_SetInsertionPoint(%(pos)d)" % locals())
+##        dbg("MaskedTextCtrl::_SetInsertionPoint(%(pos)d)" % locals())
         self.SetInsertionPoint(pos)
 
     def SetInsertionPoint(self, pos):
         """
         This is just for debugging...
         """
-        dbg("wxMaskedTextCtrl::SetInsertionPoint(%(pos)d)" % locals())
+        dbg("MaskedTextCtrl::SetInsertionPoint(%(pos)d)" % locals())
         wx.TextCtrl.SetInsertionPoint(self, pos)
 
 
     def _GetValue(self):
         """
         Allow mixin to get the raw value of the control with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         return self.GetValue()
 
     def _SetValue(self, value):
         """
         Allow mixin to set the raw value of the control with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
-        dbg('wxMaskedTextCtrl::_SetValue("%(value)s")' % locals(), indent=1)
+        dbg('MaskedTextCtrl::_SetValue("%(value)s")' % locals(), indent=1)
         # Record current selection and insertion point, for undo
         self._prevSelection = self._GetSelection()
         self._prevInsertionPoint = self._GetInsertionPoint()
@@ -5828,7 +5837,7 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
         masked control.  NOTE: this must be done in the class derived
         from the base wx control.
         """
-        dbg('wxMaskedTextCtrl::SetValue = "%s"' % value, indent=1)
+        dbg('MaskedTextCtrl::SetValue = "%s"' % value, indent=1)
 
         if not self._mask:
             wx.TextCtrl.SetValue(self, value)    # revert to base control behavior
@@ -5887,7 +5896,7 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
 
     def Clear(self):
         """ Blanks the current control value by replacing it with the default value."""
-        dbg("wxMaskedTextCtrl::Clear - value reset to default value (template)")
+        dbg("MaskedTextCtrl::Clear - value reset to default value (template)")
         if self._mask:
             self.ClearValue()
         else:
@@ -5897,9 +5906,9 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
     def _Refresh(self):
         """
         Allow mixin to refresh the base control with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
-        dbg('wxMaskedTextCtrl::_Refresh', indent=1)
+        dbg('MaskedTextCtrl::_Refresh', indent=1)
         wx.TextCtrl.Refresh(self)
         dbg(indent=0)
 
@@ -5910,7 +5919,7 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
         validate the contents of the masked control as it refreshes.
         NOTE: this must be done in the class derived from the base wx control.
         """
-        dbg('wxMaskedTextCtrl::Refresh', indent=1)
+        dbg('MaskedTextCtrl::Refresh', indent=1)
         self._CheckValid()
         self._Refresh()
         dbg(indent=0)
@@ -5919,7 +5928,7 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
     def _IsEditable(self):
         """
         Allow mixin to determine if the base control is editable with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         return wx.TextCtrl.IsEditable(self)
 
@@ -5982,7 +5991,7 @@ class wxMaskedTextCtrl( wx.TextCtrl, wxMaskedEditMixin ):
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 ## Because calling SetSelection programmatically does not fire EVT_COMBOBOX
 ## events, we have to do it ourselves when we auto-complete.
-class wxMaskedComboBoxSelectEvent(wx.PyCommandEvent):
+class MaskedComboBoxSelectEvent(wx.PyCommandEvent):
     def __init__(self, id, selection = 0, object=None):
         wx.PyCommandEvent.__init__(self, wx.EVT_COMMAND_COMBOBOX_SELECTED, id)
 
@@ -5995,7 +6004,7 @@ class wxMaskedComboBoxSelectEvent(wx.PyCommandEvent):
         return self.__selection
 
 
-class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
+class MaskedComboBox( wx.ComboBox, MaskedEditMixin ):
     """
     This masked edit control adds the ability to use a masked input
     on a combobox, and do auto-complete of such values.
@@ -6022,7 +6031,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
         if not kwargs.has_key('compareNoCase'):
             kwargs['compareNoCase'] = True
 
-        wxMaskedEditMixin.__init__( self, name, **kwargs )
+        MaskedEditMixin.__init__( self, name, **kwargs )
         self._choices = self._ctrl_constraints._choices
         dbg('self._choices:', self._choices)
 
@@ -6077,7 +6086,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
 
 
     def __repr__(self):
-        return "<wxMaskedComboBox: %s>" % self.GetValue()
+        return "<MaskedComboBox: %s>" % self.GetValue()
 
 
     def _CalcSize(self, size=None):
@@ -6092,14 +6101,14 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
     def _GetSelection(self):
         """
         Allow mixin to get the text selection of this control.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         return self.GetMark()
 
     def _SetSelection(self, sel_start, sel_to):
         """
         Allow mixin to set the text selection of this control.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         return self.SetMark( sel_start, sel_to )
 
@@ -6114,14 +6123,14 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
     def _GetValue(self):
         """
         Allow mixin to get the raw value of the control with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         return self.GetValue()
 
     def _SetValue(self, value):
         """
         Allow mixin to set the raw value of the control with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         # For wxComboBox, ensure that values are properly padded so that
         # if varying length choices are supplied, they always show up
@@ -6203,7 +6212,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
     def _Refresh(self):
         """
         Allow mixin to refresh the base control with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         wx.ComboBox.Refresh(self)
 
@@ -6220,7 +6229,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
     def _IsEditable(self):
         """
         Allow mixin to determine if the base control is editable with this function.
-        REQUIRED by any class derived from wxMaskedEditMixin.
+        REQUIRED by any class derived from MaskedEditMixin.
         """
         return not self.__readonly
 
@@ -6326,7 +6335,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
         Override mixin's default SetCtrlParameters to detect changes in choice list, so
         we can update the base control:
         """
-        wxMaskedEditMixin.SetCtrlParameters(self, **kwargs )
+        MaskedEditMixin.SetCtrlParameters(self, **kwargs )
         if( self.controlInitialized
             and (kwargs.has_key('choices') or self._choices != self._ctrl_constraints._choices) ):
             wx.ComboBox.Clear(self)
@@ -6343,7 +6352,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
         events.
         """
         dbg(suspend=1)  # turn off debugging around this function
-        dbg('wxMaskedComboBox::GetMark', indent=1)
+        dbg('MaskedComboBox::GetMark', indent=1)
         if self.__readonly:
             dbg(indent=0)
             return 0, 0 # no selection possible for editing
@@ -6377,7 +6386,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
         Necessary for bookkeeping on choice selection, to keep current value
         current.
         """
-        dbg('wxMaskedComboBox::SetSelection(%d)' % index)
+        dbg('MaskedComboBox::SetSelection(%d)' % index)
         if self._mask:
             self._prevValue = self._curValue
             self._curValue = self._choices[index]
@@ -6405,7 +6414,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
         on the text of the control somehow interferes with the combobox's
         selection mechanism for the arrow keys.
         """
-        dbg('wxMaskedComboBox::OnSelectChoice', indent=1)
+        dbg('MaskedComboBox::OnSelectChoice', indent=1)
 
         if not self._mask:
             event.Skip()
@@ -6453,13 +6462,13 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
         Override mixin (empty) autocomplete handler, so that autocompletion causes
         combobox to update appropriately.
         """
-        dbg('wxMaskedComboBox::OnAutoSelect', field._index, indent=1)
+        dbg('MaskedComboBox::OnAutoSelect', field._index, indent=1)
 ##        field._autoCompleteIndex = match_index
         if field == self._ctrl_constraints:
             self.SetSelection(match_index)
             dbg('issuing combo selection event')
             self.GetEventHandler().ProcessEvent(
-                wxMaskedComboBoxSelectEvent( self.GetId(), match_index, self ) )
+                MaskedComboBoxSelectEvent( self.GetId(), match_index, self ) )
         self._CheckValid()
         dbg('field._autoCompleteIndex:', match_index)
         dbg('self.GetSelection():', self.GetSelection())
@@ -6476,7 +6485,7 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
         programmatic wxComboBox.SetSelection() call to pick the appropriate
         item in the list. (and then do the usual OnReturn bit.)
         """
-        dbg('wxMaskedComboBox::OnReturn', indent=1)
+        dbg('MaskedComboBox::OnReturn', indent=1)
         dbg('current value: "%s"' % self.GetValue(), 'current index:', self.GetSelection())
         if self.GetSelection() == -1 and self.GetValue().lower().strip() in self._ctrl_constraints._compareChoices:
             wx.CallAfter(self.SetSelection, self._ctrl_constraints._autoCompleteIndex)
@@ -6488,9 +6497,9 @@ class wxMaskedComboBox( wx.ComboBox, wxMaskedEditMixin ):
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
-class wxIpAddrCtrl( wxMaskedTextCtrl ):
+class IpAddrCtrl( MaskedTextCtrl ):
     """
-    This class is a particular type of wxMaskedTextCtrl that accepts
+    This class is a particular type of MaskedTextCtrl that accepts
     and understands the semantics of IP addresses, reformats input
     as you move from field to field, and accepts '.' as a navigation
     character, so that typing an IP address can be done naturally.
@@ -6500,7 +6509,7 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
                   size = wx.DefaultSize,
                   style = wx.TE_PROCESS_TAB,
                   validator = wx.DefaultValidator,
-                  name = 'wxIpAddrCtrl',
+                  name = 'IpAddrCtrl',
                   setupEventHandling = True,        ## setup event handling by default
                   **kwargs):
 
@@ -6512,7 +6521,7 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
             kwargs['validRegex'] = "(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))(\.(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))){3}"
 
 
-        wxMaskedTextCtrl.__init__(
+        MaskedTextCtrl.__init__(
                 self, parent, id=id, value = value,
                 pos=pos, size=size,
                 style = style,
@@ -6539,7 +6548,7 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
 
 
     def OnDot(self, event):
-        dbg('wxIpAddrCtrl::OnDot', indent=1)
+        dbg('IpAddrCtrl::OnDot', indent=1)
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
         oldvalue = self.GetValue()
         edit_start, edit_end, slice = self._FindFieldExtent(pos, getslice=True)
@@ -6556,18 +6565,18 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
 
 
     def GetAddress(self):
-        value = wxMaskedTextCtrl.GetValue(self)
+        value = MaskedTextCtrl.GetValue(self)
         return value.replace(' ','')    # remove spaces from the value
 
 
     def _OnCtrl_S(self, event):
-        dbg("wxIpAddrCtrl::_OnCtrl_S")
+        dbg("IpAddrCtrl::_OnCtrl_S")
         if self._demo:
             print "value:", self.GetAddress()
         return False
 
     def SetValue(self, value):
-        dbg('wxIpAddrCtrl::SetValue(%s)' % str(value), indent=1)
+        dbg('IpAddrCtrl::SetValue(%s)' % str(value), indent=1)
         if type(value) not in (types.StringType, types.UnicodeType):
             dbg(indent=0)
             raise ValueError('%s must be a string', str(value))
@@ -6604,7 +6613,7 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
         else:
             dbg('parts:', parts)
             value = string.join(parts, '.')
-            wxMaskedTextCtrl.SetValue(self, value)
+            MaskedTextCtrl.SetValue(self, value)
         dbg(indent=0)
 
 
@@ -6723,7 +6732,7 @@ def getDay(dateStr,dateFmt):
 class test(wx.PySimpleApp):
         def OnInit(self):
             from wx.lib.rcsizer import RowColSizer
-            self.frame = wx.Frame( None, -1, "wxMaskedEditMixin 0.0.7 Demo Page #1", size = (700,600))
+            self.frame = wx.Frame( None, -1, "MaskedEditMixin 0.0.7 Demo Page #1", size = (700,600))
             self.panel = wx.Panel( self.frame, -1)
             self.sizer = RowColSizer()
             self.labels = []
@@ -6803,7 +6812,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
                 self.sizer.Add( wx.StaticText( self.panel, -1, control[4][:20]),row=rowcount, col=3,border=5, flag=wx.ALL)
 
                 if control in controls[:]:#-2]:
-                    newControl  = wxMaskedTextCtrl( self.panel, -1, "",
+                    newControl  = MaskedTextCtrl( self.panel, -1, "",
                                                     mask         = control[1],
                                                     excludeChars = control[2],
                                                     formatcodes  = control[3],
@@ -6815,7 +6824,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
                                                     demo         = True)
                     if control[6]: newControl.SetCtrlParameters(choiceRequired = True)
                 else:
-                    newControl = wxMaskedComboBox(  self.panel, -1, "",
+                    newControl = MaskedComboBox(  self.panel, -1, "",
                                                     choices = control[7],
                                                     choiceRequired  = True,
                                                     mask         = control[1],
@@ -6928,19 +6937,19 @@ To see a great example of validations in action, try entering a bad email addres
            ("US Zip Code","USZIP"),
            ("US Zip+4","USZIPPLUS4"),
            ("Email Address","EMAIL"),
-           ("IP Address", "(derived control wxIpAddrCtrl)")
+           ("IP Address", "(derived control IpAddrCtrl)")
            ]
 
             for control in controls:
                 self.sizer.Add( wx.StaticText( self.panel, -1, control[0]),row=rowcount, col=0,border=5,flag=wx.ALL)
                 self.sizer.Add( wx.StaticText( self.panel, -1, control[1]),row=rowcount, col=1,border=5, flag=wx.ALL)
                 if control in controls[:-1]:
-                    self.sizer.Add( wxMaskedTextCtrl( self.panel, -1, "",
+                    self.sizer.Add( MaskedTextCtrl( self.panel, -1, "",
                                                       autoformat  = control[1],
                                                       demo        = True),
                                 row=rowcount,col=2,flag=wx.ALL,border=5)
                 else:
-                    self.sizer.Add( wxIpAddrCtrl( self.panel, -1, "", demo=True ),
+                    self.sizer.Add( IpAddrCtrl( self.panel, -1, "", demo=True ),
                                     row=rowcount,col=2,flag=wx.ALL,border=5)
                 rowcount += 1
 
@@ -6976,14 +6985,14 @@ i=1
 ##      control in the EVT_TEXT handler, and if *different*, call event.Skip()
 ##      to propagate it down the event chain, and let the application see it.
 ##
-## 2. WS: wxMaskedComboBox is deficient in several areas, all having to do with the
+## 2. WS: MaskedComboBox is deficient in several areas, all having to do with the
 ##      behavior of the underlying control that I can't fix.  The problems are:
 ##      a) The background coloring doesn't work in the text field of the control;
 ##         instead, there's a only border around it that assumes the correct color.
 ##      b) The control will not pass WXK_TAB to the event handler, no matter what
 ##         I do, and there's no style wxCB_PROCESS_TAB like wxTE_PROCESS_TAB to
-##         indicate that we want these events.  As a result, wxMaskedComboBox
-##         doesn't do the nice field-tabbing that wxMaskedTextCtrl does.
+##         indicate that we want these events.  As a result, MaskedComboBox
+##         doesn't do the nice field-tabbing that MaskedTextCtrl does.
 ##      c) Auto-complete had to be reimplemented for the control because programmatic
 ##         setting of the value of the text field does not set up the auto complete
 ##         the way that the control processing keystrokes does.  (But I think I've
@@ -6994,7 +7003,7 @@ i=1
 ##         implemented has its flaws, not the least of which is that due to the
 ##         strategy that I'm using, the paste buffer is always replaced by the
 ##         contents of the control's selection when in focus, on each keystroke;
-##         this makes it impossible to paste anything into a wxMaskedComboBox
+##         this makes it impossible to paste anything into a MaskedComboBox
 ##         at the moment... :-(
 ##      e) The other deficient behavior, likely induced by the workaround for (d),
 ##         is that you can can't shift-left to select more than one character
@@ -7004,7 +7013,7 @@ i=1
 ## 3. WS: Controls on wxPanels don't seem to pass Shift-WXK_TAB to their
 ##      EVT_KEY_DOWN or EVT_CHAR event handlers.  Until this is fixed in
 ##      wxWindows, shift-tab won't take you backwards through the fields of
-##      a wxMaskedTextCtrl like it should.  Until then Shifted arrow keys will
+##      a MaskedTextCtrl like it should.  Until then Shifted arrow keys will
 ##      work like shift-tab and tab ought to.
 ##
 
@@ -7014,7 +7023,7 @@ i=1
 ##     fields.  Example: City validates against list of cities, or zip vs zip code list.
 ##  2. Allow optional monetary symbols (eg. $, pounds, etc.) at front of a "decimal"
 ##     control.
-##  3. Fix shift-left selection for wxMaskedComboBox.
+##  3. Fix shift-left selection for MaskedComboBox.
 ##  5. Transform notion of "decimal control" to be less "entire control"-centric,
 ##     so that monetary symbols can be included and still have the appropriate
 ##     semantics.  (Big job, as currently written, but would make control even
@@ -7027,15 +7036,15 @@ i=1
 ##  (Reported) bugs fixed:
 ##   1. Right-click menu allowed "cut" operation that destroyed mask
 ##      (was implemented by base control)
-##   2. wxMaskedComboBox didn't allow .Append() of mixed-case values; all
+##   2. MaskedComboBox didn't allow .Append() of mixed-case values; all
 ##      got converted to lower case.
-##   3. wxMaskedComboBox selection didn't deal with spaces in values
+##   3. MaskedComboBox selection didn't deal with spaces in values
 ##      properly when autocompleting, and didn't have a concept of "next"
 ##      match for handling choice list duplicates.
-##   4. Size of wxMaskedComboBox was always default.
+##   4. Size of MaskedComboBox was always default.
 ##   5. Email address regexp allowed some "non-standard" things, and wasn't
 ##      general enough.
-##   6. Couldn't easily reset wxMaskedComboBox contents programmatically.
+##   6. Couldn't easily reset MaskedComboBox contents programmatically.
 ##   7. Couldn't set emptyInvalid during construction.
 ##   8. Under some versions of wxPython, readonly comboboxes can apparently
 ##      return a GetInsertionPoint() result (655535), causing masked control
@@ -7110,7 +7119,7 @@ i=1
 ##  13. Fixed a couple of coding bugs being flagged by Python2.1.
 ##  14. Fixed several issues with sign positioning, erasure and validity
 ##      checking for "numeric" masked controls.
-##  15. Added validation to wxIpAddrCtrl.SetValue().
+##  15. Added validation to IpAddrCtrl.SetValue().
 ##
 ##  Version 1.1
 ##   1. Changed calling interface to use boolean "useFixedWidthFont" (True by default)
@@ -7134,7 +7143,7 @@ i=1
 ##      fixed failure to obey case conversion codes when pasting.
 ##  11. Implemented '0' (zero-pad) formatting code, as it wasn't being done anywhere...
 ##  12. Removed condition from OnDecimalPoint, so that it always truncates right on '.'
-##  13. Enhanced wxIpAddrCtrl to use right-insert fields, selection on field traversal,
+##  13. Enhanced IpAddrCtrl to use right-insert fields, selection on field traversal,
 ##      individual field validation to prevent field values > 255, and require explicit
 ##      tab/. to change fields.
 ##  14. Added handler for left double-click to select field under cursor.
@@ -7143,7 +7152,7 @@ i=1
 ##      attribute, for more consistent and controllable coloring.
 ##  17. Added retainFieldValidation parameter, allowing top-level constraints
 ##      such as "validRequired" to be set independently of field-level equivalent.
-##      (needed in wxTimeCtrl for bounds constraints.)
+##      (needed in TimeCtrl for bounds constraints.)
 ##  18. Refactored code a bit, cleaned up and commented code more heavily, fixed
 ##      some of the logic for setting/resetting parameters, eg. fillChar, defaultValue,
 ##      etc.
@@ -7180,9 +7189,9 @@ i=1
 ##      than making assumptions about character width.
 ##   7. Fixed GetMaskParameter(), which was non-functional in previous version.
 ##   8. Fixed exceptions raised to provide info on which control had the error.
-##   9. Fixed bug in choice management of wxMaskedComboBox.
-##  10. Fixed bug in wxIpAddrCtrl causing traceback if field value was of
-##     the form '# #'.  Modified control code for wxIpAddrCtrl so that '.'
+##   9. Fixed bug in choice management of MaskedComboBox.
+##  10. Fixed bug in IpAddrCtrl causing traceback if field value was of
+##     the form '# #'.  Modified control code for IpAddrCtrl so that '.'
 ##     in the middle of a field clips the rest of that field, similar to
 ##     decimal and integer controls.
 ##
@@ -7210,14 +7219,14 @@ i=1
 ##      is not desired in every position.  Added IsDefault() function to mean "does the value
 ##      equal the template?" and modified .IsEmpty() to mean "do all of the editable
 ##      positions in the template == the fillChar?"
-##  10. Extracted mask logic into mixin, so we can have both wxMaskedTextCtrl and wxMaskedComboBox,
+##  10. Extracted mask logic into mixin, so we can have both MaskedTextCtrl and MaskedComboBox,
 ##      now included.
-##  11. wxMaskedComboBox now adds the capability to validate from list of valid values.
+##  11. MaskedComboBox now adds the capability to validate from list of valid values.
 ##      Example: City validates against list of cities, or zip vs zip code list.
 ##  12. Fixed oversight in EVT_TEXT handler that prevented the events from being
 ##      passed to the next handler in the event chain, causing updates to the
 ##      control to be invisible to the parent code.
-##  13. Added IPADDR autoformat code, and subclass wxIpAddrCtrl for controlling tabbing within
+##  13. Added IPADDR autoformat code, and subclass IpAddrCtrl for controlling tabbing within
 ##      the control, that auto-reformats as you move between cells.
 ##  14. Mask characters [A,a,X,#] can now appear in the format string as literals, by using '\'.
 ##  15. It is now possible to specify repeating masks, e.g. #{3}-#{3}-#{14}
@@ -7238,7 +7247,7 @@ i=1
 ##  19. Enhanced tabbing logic so that tab takes you to the next field if the
 ##      control is a multi-field control.
 ##  20. Added stub method called whenever the control "changes fields", that
-##      can be overridden by subclasses (eg. wxIpAddrCtrl.)
+##      can be overridden by subclasses (eg. IpAddrCtrl.)
 ##  21. Changed a lot of code to be more functionally-oriented so side-effects
 ##      aren't as problematic when maintaining code and/or adding features.
 ##      Eg: IsValid() now does not have side-effects; it merely reflects the
@@ -7367,7 +7376,7 @@ i=1
 ##   4. Home and End keys now supported to move cursor to beginning or end of field.
 ##   5. Un-signed integers and decimals now supported.
 ##   6. Cosmetic improvements to the demo.
-##   7. Class renamed to wxMaskedTextCtrl.
+##   7. Class renamed to MaskedTextCtrl.
 ##   8. Can now specify include characters that will override the basic
 ##      controls: for example, includeChars = "@." for email addresses
 ##   9. Added mask character 'C' -> allow any upper or lowercase character

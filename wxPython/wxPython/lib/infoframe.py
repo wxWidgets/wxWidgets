@@ -6,6 +6,6 @@ import wx.lib.infoframe
 
 __doc__ =  wx.lib.infoframe.__doc__
 
-Dummy_wxPyInformationalMessagesFrame = wx.lib.infoframe.Dummy_wxPyInformationalMessagesFrame
+Dummy_wxPyInformationalMessagesFrame = wx.lib.infoframe.Dummy_PyInformationalMessagesFrame
 _MyStatusBar = wx.lib.infoframe._MyStatusBar
-wxPyInformationalMessagesFrame = wx.lib.infoframe.wxPyInformationalMessagesFrame
+wxPyInformationalMessagesFrame = wx.lib.infoframe.PyInformationalMessagesFrame

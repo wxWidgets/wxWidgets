@@ -1,10 +1,10 @@
 """
-wxPyColourChooser
+PyColourChooser
 Copyright (C) 2002 Michael Gilfix <mgilfix@eecs.tufts.edu>
 
-This file is part of wxPyColourChooser.
+This file is part of PyColourChooser.
 
-This version of wxPyColourChooser is open source; you can redistribute it
+This version of PyColourChooser is open source; you can redistribute it
 and/or modify it under the licensed terms.
 
 This program is distributed in the hope that it will be useful,
@@ -15,6 +15,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o 2.5 compatability update.
+#
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxPyColorChooser -> PyColorChooser
+# o wxPyColourChooser -> PyColourChooser
+# o Added wx.InitAllImageHandlers() to test code since
+#   that's where it belongs.
 #
 
 import  wx
@@ -27,7 +34,7 @@ import  intl
 
 from intl import _ # _
 
-class wxPyColourChooser(wx.Panel):
+class PyColourChooser(wx.Panel):
     """A Pure-Python implementation of the colour chooser dialog.
 
     The PyColourChooser is a pure python implementation of the colour
@@ -383,7 +390,13 @@ def main():
         def OnInit(self):
             frame = wx.Frame(None, -1, 'PyColourChooser Test')
 
-            chooser = wxPyColourChooser(frame, -1)
+            # Added here because that's where it's supposed to be,
+            # not embedded in the library. If it's embedded in the
+            # library, debug messages will be generated for duplicate
+            # handlers.
+            wx.InitAllImageHandlers()
+
+            chooser = PyColourChooser(frame, -1)
             sizer = wx.BoxSizer(wx.VERTICAL)
             sizer.Add(chooser, 0, 0)
             frame.SetAutoLayout(True)

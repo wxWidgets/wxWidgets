@@ -6,4 +6,4 @@ import wx.lib.mixins.grid
 
 __doc__ =  wx.lib.mixins.grid.__doc__
 
-wxGridAutoEditMixin = wx.lib.mixins.grid.wxGridAutoEditMixin
+wxGridAutoEditMixin = wx.lib.mixins.grid.GridAutoEditMixin

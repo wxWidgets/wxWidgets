@@ -7,4 +7,4 @@ import wx.lib.maskedctrl
 __doc__ =  wx.lib.maskedctrl.__doc__
 
 controlTypes = wx.lib.maskedctrl.controlTypes
-wxMaskedCtrl = wx.lib.maskedctrl.wxMaskedCtrl
+wxMaskedCtrl = wx.lib.maskedctrl.MaskedCtrl

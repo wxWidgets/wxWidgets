@@ -8,25 +8,31 @@
 # Copyright:   (c) 2002 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o V2.5 compatability update 
+#
 
+import  getopt
+import  glob
+import  os
+import  sys
 
-import sys, os, glob, getopt
-from wxPython.wx import *
-
+import  wx
 
 def convert(file, maskClr, outputDir, outputName, outType, outExt):
     if os.path.splitext(file)[1].lower() == ".ico":
-        icon = wxIcon(file, wxBITMAP_TYPE_ICO)
-        img = wxBitmapFromIcon(icon)
+        icon = wx.Icon(file, wx.BITMAP_TYPE_ICO)
+        img = wx.BitmapFromIcon(icon)
     else:
-        img = wxBitmap(file, wxBITMAP_TYPE_ANY)
+        img = wx.Bitmap(file, wx.BITMAP_TYPE_ANY)
 
     if not img.Ok():
         return 0, file + " failed to load!"
     else:
         if maskClr:
             om = img.GetMask()
-            mask = wxMaskColour(img, maskClr)
+            mask = wx.MaskColour(img, maskClr)
             img.SetMask(mask)
             if om is not None:
                 om.Destroy()
@@ -38,7 +44,7 @@ def convert(file, maskClr, outputDir, outputName, outType, outExt):
         if img.SaveFile(newname, outType):
             return 1, file + " converted to " + newname
         else:
-            img = wxImageFromBitmap(img)
+            img = wx.ImageFromBitmap(img)
             if img.SaveFile(newname, outType):
                 return 1, "ok"
             else:

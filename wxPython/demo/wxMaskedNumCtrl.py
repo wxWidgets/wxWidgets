@@ -10,6 +10,10 @@
 #
 # o Issues with lib corrected.
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMaskedNumCtrl -> MaskedNumCtrl
+# 
 
 import  string
 import  sys
@@ -27,40 +31,40 @@ class TestPanel( wx.Panel ):
         panel = wx.Panel( self, -1 )
 
         header = wx.StaticText(panel, -1, """\
-This shows the various options for wxMaskedNumCtrl.
+This shows the various options for MaskedNumCtrl.
 The controls at the top reconfigure the resulting control at the bottom.
 """)
         header.SetForegroundColour( "Blue" )
 
         intlabel = wx.StaticText( panel, -1, "Integer width:" )
-        self.integerwidth = mnum.wxMaskedNumCtrl(
+        self.integerwidth = mnum.MaskedNumCtrl(
                                 panel, value=10, integerWidth=2, allowNegative=False
                                 )
 
         fraclabel = wx.StaticText( panel, -1, "Fraction width:" )
-        self.fractionwidth = mnum.wxMaskedNumCtrl(
+        self.fractionwidth = mnum.MaskedNumCtrl(
                                 panel, value=0, integerWidth=2, allowNegative=False 
                                 )
 
         groupcharlabel = wx.StaticText( panel,-1, "Grouping char:" )
-        self.groupchar = mnum.wxMaskedTextCtrl( 
+        self.groupchar = mnum.MaskedTextCtrl( 
                                 panel, -1, value=',', mask='&', excludeChars = '-()',
                                 formatcodes='F', emptyInvalid=True, validRequired=True
                                 )
 
         decimalcharlabel = wx.StaticText( panel,-1, "Decimal char:" )
-        self.decimalchar = mnum.wxMaskedTextCtrl( 
+        self.decimalchar = mnum.MaskedTextCtrl( 
                                 panel, -1, value='.', mask='&', excludeChars = '-()',
                                 formatcodes='F', emptyInvalid=True, validRequired=True
                                 )
 
         self.set_min = wx.CheckBox( panel, -1, "Set minimum value:" )
         # Create this MaskedNumCtrl using factory, to show how:
-        self.min = mnum.wxMaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
+        self.min = mnum.MaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
         self.min.Enable( False )
 
         self.set_max = wx.CheckBox( panel, -1, "Set maximum value:" )
-        self.max = mnum.wxMaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
+        self.max = mnum.MaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
         self.max.Enable( False )
 
 
@@ -79,7 +83,7 @@ The controls at the top reconfigure the resulting control at the bottom.
         font.SetWeight(wx.BOLD)
         label.SetFont(font)
 
-        self.target_ctl = mnum.wxMaskedNumCtrl( panel, -1, name="target control" )
+        self.target_ctl = mnum.MaskedNumCtrl( panel, -1, name="target control" )
 
         label_numselect = wx.StaticText( panel, -1, """\
 Programmatically set the above

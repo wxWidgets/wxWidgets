@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:         wxTimeCtrl.py
+# Name:         timectrl.py
 # Author:       Will Sadkin
 # Created:      09/19/2002
 # Copyright:    (c) 2002 by Will Sadkin, 2002
@@ -13,12 +13,12 @@
 #   component of that control is inaccessible through the interface exposed in
 #   wxPython.
 #
-#   wxTimeCtrl does not use validators, because it does careful manipulation
+#   TimeCtrl does not use validators, because it does careful manipulation
 #   of the cursor in the text window on each keystroke, and validation is
 #   cursor-position specific, so the control intercepts the key codes before the
 #   validator would fire.
 #
-#   wxTimeCtrl now also supports .SetValue() with either strings or wxDateTime
+#   TimeCtrl now also supports .SetValue() with either strings or wxDateTime
 #   values, as well as range limits, with the option of either enforcing them
 #   or simply coloring the text of the control if the limits are exceeded.
 #
@@ -37,22 +37,27 @@
 #   lock up. Noted in other places using it too, it's not this module
 #   that's at fault.
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMaskedTextCtrl -> MaskedTextCtrl
+# o wxTimeCtrl -> TimeCtrl
+#
 
 """<html><body>
 <P>
-<B>wxTimeCtrl</B> provides a multi-cell control that allows manipulation of a time
+<B>TimeCtrl</B> provides a multi-cell control that allows manipulation of a time
 value.  It supports 12 or 24 hour format, and you can use wxDateTime or mxDateTime
 to get/set values from the control.
 <P>
-Left/right/tab keys to switch cells within a wxTimeCtrl, and the up/down arrows act
-like a spin control.  wxTimeCtrl also allows for an actual spin button to be attached
+Left/right/tab keys to switch cells within a TimeCtrl, and the up/down arrows act
+like a spin control.  TimeCtrl also allows for an actual spin button to be attached
 to the control, so that it acts like the up/down arrow keys.
 <P>
 The <B>!</B> or <B>c</B> key sets the value of the control to the current time.
 <P>
-Here's the API for wxTimeCtrl:
+Here's the API for TimeCtrl:
 <DL><PRE>
-    <B>wxTimeCtrl</B>(
+    <B>TimeCtrl</B>(
          parent, id = -1,
          <B>value</B> = '12:00:00 AM',
          pos = wxDefaultPosition,
@@ -77,10 +82,10 @@ Here's the API for wxTimeCtrl:
     <DD>The size of the control will be automatically adjusted for 12/24 hour format
     if wxDefaultSize is specified.
     <DT><B>style</B>
-    <DD>By default, wxTimeCtrl will process TAB events, by allowing tab to the
+    <DD>By default, TimeCtrl will process TAB events, by allowing tab to the
     different cells within the control.
     <DT><B>validator</B>
-    <DD>By default, wxTimeCtrl just uses the default (empty) validator, as all
+    <DD>By default, TimeCtrl just uses the default (empty) validator, as all
     of its validation for entry control is handled internally.  However, a validator
     can be supplied to provide data transfer capability to the control.
     <BR>
@@ -91,11 +96,11 @@ Here's the API for wxTimeCtrl:
     <BR>
     <DT><B>spinButton</B>
     <DD>If specified, this button's events will be bound to the behavior of the
-    wxTimeCtrl, working like up/down cursor key events.  (See BindSpinButton.)
+    TimeCtrl, working like up/down cursor key events.  (See BindSpinButton.)
     <BR>
     <DT><B>min</B>
     <DD>Defines the lower bound for "valid" selections in the control.
-    By default, wxTimeCtrl doesn't have bounds.  You must set both upper and lower
+    By default, TimeCtrl doesn't have bounds.  You must set both upper and lower
     bounds to make the control pay attention to them, (as only one bound makes no sense
     with times.) "Valid" times will fall between the min and max "pie wedge" of the
     clock.
@@ -253,7 +258,7 @@ import  types
 import  wx
 
 from wx.tools.dbg import Logger
-from wx.lib.maskededit import wxMaskedTextCtrl, Field
+from wx.lib.maskededit import MaskedTextCtrl, Field
 
 dbg = Logger()
 dbg(enable=0)
@@ -277,7 +282,7 @@ class TimeUpdatedEvent(wx.PyCommandEvent):
         return self.value
 
 
-class wxTimeCtrl(wxMaskedTextCtrl):
+class TimeCtrl(MaskedTextCtrl):
 
     valid_ctrl_params = {
         'display_seconds' : True,   # by default, shows seconds
@@ -285,7 +290,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         'max': None,
         'limited': False,           # by default, no limiting even if bounds set
         'useFixedWidthFont': True,  # by default, use a fixed-width font
-        'oob_color': "Yellow"       # by default, the default wxMaskedTextCtrl "invalid" color
+        'oob_color': "Yellow"       # by default, the default MaskedTextCtrl "invalid" color
         }
 
     def __init__ (
@@ -300,10 +305,10 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
         # set defaults for control:
         dbg('setting defaults:')
-        for key, param_value in wxTimeCtrl.valid_ctrl_params.items():
+        for key, param_value in TimeCtrl.valid_ctrl_params.items():
             # This is done this way to make setattr behave consistently with
             # "private attribute" name mangling
-            setattr(self, "_wxTimeCtrl__" + key, copy.copy(param_value))
+            setattr(self, "_TimeCtrl__" + key, copy.copy(param_value))
 
         # create locals from current defaults, so we can override if
         # specified in kwargs, and handle uniformly:
@@ -320,7 +325,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
         # assign keyword args as appropriate:
         for key, param_value in kwargs.items():
-            if key not in wxTimeCtrl.valid_ctrl_params.keys():
+            if key not in TimeCtrl.valid_ctrl_params.keys():
                 raise AttributeError('invalid keyword argument "%s"' % key)
 
             if key == "display_seconds":
@@ -383,7 +388,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             maskededit_kwargs['formatcodes'] = 'T!'
 
         # Now we can initialize the base control:
-        wxMaskedTextCtrl.__init__(
+        MaskedTextCtrl.__init__(
                 self, parent, id=id,
                 pos=pos, size=size,
                 style = style,
@@ -420,7 +425,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick ) ## select field under cursor on dclick
         self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## capture control events not normally seen, eg ctrl-tab.
         self.Bind(wx.EVT_CHAR, self.__OnChar )              ## remove "shift" attribute from colon key event,
-                                                            ## then call wxMaskedTextCtrl._OnChar with
+                                                            ## then call MaskedTextCtrl._OnChar with
                                                             ## the possibly modified event.
         self.Bind(wx.EVT_TEXT, self.__OnTextChange, self )  ## color control appropriately and EVT_TIMEUPDATE events
 
@@ -443,7 +448,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         This function binds an externally created spin button to the control, so that
         up/down events from the button automatically change the control.
         """
-        dbg('wxTimeCtrl::BindSpinButton')
+        dbg('TimeCtrl::BindSpinButton')
         self.__spinButton = sb
         if self.__spinButton:
             # bind event handlers to spin ctrl
@@ -452,7 +457,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
 
     def __repr__(self):
-        return "<wxTimeCtrl: %s>" % self.GetValue()
+        return "<TimeCtrl: %s>" % self.GetValue()
 
 
     def SetValue(self, value):
@@ -462,7 +467,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         and convert wxDateTime, mxDateTime, or 12/24 format time string
         into the appropriate format string for the control.
         """
-        dbg('wxTimeCtrl::SetValue(%s)' % repr(value), indent=1)
+        dbg('TimeCtrl::SetValue(%s)' % repr(value), indent=1)
         try:
             strtime = self._toGUI(self.__validateValue(value))
         except:
@@ -491,7 +496,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             elif as_mxDateTimeDelta:
                 value = DateTime.DateTimeDelta(0, value.GetHour(), value.GetMinute(), value.GetSecond())
         else:
-            value = wxMaskedTextCtrl.GetValue(self)
+            value = MaskedTextCtrl.GetValue(self)
         return value
 
 
@@ -504,7 +509,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
     def GetWxDateTime(self, value=None):
         """
-        This function is the conversion engine for wxTimeCtrl; it takes
+        This function is the conversion engine for TimeCtrl; it takes
         one of the following types:
             time string
             wxDateTime
@@ -520,7 +525,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         """
         global accept_mx
         dbg(suspend=1)
-        dbg('wxTimeCtrl::GetWxDateTime(%s)' % repr(value), indent=1)
+        dbg('TimeCtrl::GetWxDateTime(%s)' % repr(value), indent=1)
         if value is None:
             dbg('getting control value')
             value = self.GetValue()
@@ -608,7 +613,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         adjusted to the new minimum value; if not limited, the value in the
         control will be colored as invalid.
         """
-        dbg('wxTimeCtrl::SetMin(%s)'% repr(min), indent=1)
+        dbg('TimeCtrl::SetMin(%s)'% repr(min), indent=1)
         if min is not None:
             try:
                 min = self.GetWxDateTime(min)
@@ -636,7 +641,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         by default, or as a string if as_string argument is True.
         """
         dbg(suspend=1)
-        dbg('wxTimeCtrl::GetMin, as_string?', as_string, indent=1)
+        dbg('TimeCtrl::GetMin, as_string?', as_string, indent=1)
         if self.__min is None:
             dbg('(min == None)')
             ret = self.__min
@@ -667,7 +672,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         adjusted to this maximum value; if not limited, the value in the
         control will be colored as invalid.
         """
-        dbg('wxTimeCtrl::SetMax(%s)' % repr(max), indent=1)
+        dbg('TimeCtrl::SetMax(%s)' % repr(max), indent=1)
         if max is not None:
             try:
                 max = self.GetWxDateTime(max)
@@ -695,7 +700,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         by default, or as a string if as_string argument is True.
         """
         dbg(suspend=1)
-        dbg('wxTimeCtrl::GetMin, as_string?', as_string, indent=1)
+        dbg('TimeCtrl::GetMin, as_string?', as_string, indent=1)
         if self.__max is None:
             dbg('(max == None)')
             ret = self.__max
@@ -746,7 +751,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         limiting, but coloring of out-of-bounds values will still take
         place if bounds have been set for the control.
         """
-        dbg('wxTimeCtrl::SetLimited(%d)' % limited, indent=1)
+        dbg('TimeCtrl::SetLimited(%d)' % limited, indent=1)
         self.__limited = limited
 
         if not limited:
@@ -842,7 +847,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
                 dbg('ValueError getting wxDateTime for %s' % repr(value), indent=0)
                 raise
 
-        dbg('wxTimeCtrl::IsInBounds(%s)' % repr(value), indent=1)
+        dbg('TimeCtrl::IsInBounds(%s)' % repr(value), indent=1)
         if self.__min is None or self.__max is None:
             dbg(indent=0)
             return True
@@ -889,7 +894,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
 
     def __OnTextChange(self, event=None):
-        dbg('wxTimeCtrl::OnTextChange', indent=1)
+        dbg('TimeCtrl::OnTextChange', indent=1)
 
         # Allow wxMaskedtext base control to color as appropriate,
         # and Skip the EVT_TEXT event (if appropriate.)
@@ -900,7 +905,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         ## event iff the value has actually changed.  The masked edit
         ## OnTextChange routine does this, and returns True on a valid event,
         ## False otherwise.
-        if not wxMaskedTextCtrl._OnTextChange(self, event):
+        if not MaskedTextCtrl._OnTextChange(self, event):
             return
 
         dbg('firing TimeUpdatedEvent...')
@@ -916,14 +921,14 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         This is necessary to handle the optional spin button, because the insertion
         point is lost when the focus shifts to the spin button.
         """
-        dbg('wxTimeCtrl::SetInsertionPoint', pos, indent=1)
-        wxMaskedTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
+        dbg('TimeCtrl::SetInsertionPoint', pos, indent=1)
+        MaskedTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
         self.__posCurrent = self.GetInsertionPoint()
         dbg(indent=0)
 
 
     def SetSelection(self, sel_start, sel_to):
-        dbg('wxTimeCtrl::SetSelection', sel_start, sel_to, indent=1)
+        dbg('TimeCtrl::SetSelection', sel_start, sel_to, indent=1)
 
         # Adjust selection range to legal extent if not already
         if sel_start < 0:
@@ -936,7 +941,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             sel_to = cell_end
 
         self.__bSelection = sel_start != sel_to
-        wxMaskedTextCtrl.SetSelection(self, sel_start, sel_to)
+        MaskedTextCtrl.SetSelection(self, sel_start, sel_to)
         dbg(indent=0)
 
 
@@ -961,7 +966,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         Event handler for any bound spin button on EVT_SPIN_UP;
         causes control to behave as if up arrow was pressed.
         """
-        dbg('wxTimeCtrl::OnSpinUp', indent=1)
+        dbg('TimeCtrl::OnSpinUp', indent=1)
         self.__OnSpin(WXK_UP)
         keep_processing = False
         dbg(indent=0)
@@ -973,7 +978,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         Event handler for any bound spin button on EVT_SPIN_DOWN;
         causes control to behave as if down arrow was pressed.
         """
-        dbg('wxTimeCtrl::OnSpinDown', indent=1)
+        dbg('TimeCtrl::OnSpinDown', indent=1)
         self.__OnSpin(WXK_DOWN)
         keep_processing = False
         dbg(indent=0)
@@ -987,13 +992,13 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         It then calls the base control's _OnChar routine with the modified
         event instance.
         """
-        dbg('wxTimeCtrl::OnChar', indent=1)
+        dbg('TimeCtrl::OnChar', indent=1)
         keycode = event.GetKeyCode()
         dbg('keycode:', keycode)
         if keycode == ord(':'):
             dbg('colon seen! removing shift attribute')
             event.m_shiftDown = False
-        wxMaskedTextCtrl._OnChar(self, event )              ## handle each keypress
+        MaskedTextCtrl._OnChar(self, event )              ## handle each keypress
         dbg(indent=0)
 
 
@@ -1012,7 +1017,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         Event handler for motion events; this handler
         changes limits the selection to the new cell boundaries.
         """
-        dbg('wxTimeCtrl::LimitSelection', indent=1)
+        dbg('TimeCtrl::LimitSelection', indent=1)
         pos = self.GetInsertionPoint()
         self.__posCurrent = pos
         sel_start, sel_to = self.GetSelection()
@@ -1031,7 +1036,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
 
     def __IncrementValue(self, key, pos):
-        dbg('wxTimeCtrl::IncrementValue', key, pos, indent=1)
+        dbg('TimeCtrl::IncrementValue', key, pos, indent=1)
         text = self.GetValue()
         field = self._FindField(pos)
         dbg('field: ', field._index)
@@ -1095,7 +1100,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         not a valid value for the control as currently specified.
         It is used by both the SetValue() and the IsValid() methods.
         """
-        dbg('wxTimeCtrl::__validateValue(%s)' % repr(value), indent=1)
+        dbg('TimeCtrl::__validateValue(%s)' % repr(value), indent=1)
         if not value:
             dbg(indent=0)
             raise ValueError('%s not a valid time value' % repr(value))
@@ -1115,7 +1120,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
         return value
 
 #----------------------------------------------------------------------------
-# Test jig for wxTimeCtrl:
+# Test jig for TimeCtrl:
 
 if __name__ == '__main__':
     import traceback
@@ -1130,7 +1135,7 @@ if __name__ == '__main__':
 
             self.test_mx = test_mx
 
-            self.tc = wxTimeCtrl(self, 10, fmt24hr = fmt24hr)
+            self.tc = TimeCtrl(self, 10, fmt24hr = fmt24hr)
             sb = wx.SpinButton( self, 20, wx.DefaultPosition, (-1,20), 0 )
             self.tc.BindSpinButton(sb)
 
@@ -1160,7 +1165,7 @@ if __name__ == '__main__':
             fmt24hr = '24' in sys.argv
             test_mx = 'mx' in sys.argv
             try:
-                frame = wx.Frame(None, -1, "wxTimeCtrl Test", (20,20), (100,100) )
+                frame = wx.Frame(None, -1, "TimeCtrl Test", (20,20), (100,100) )
                 panel = TestPanel(frame, -1, (-1,-1), fmt24hr=fmt24hr, test_mx = test_mx)
                 frame.Show(True)
             except:

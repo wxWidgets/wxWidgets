@@ -12,6 +12,10 @@
 #
 # o renamer issue shelved.
 #
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMultiSash -> MultiSash
+#
 
 import  wx
 import  wx.lib.multisash    as  sash
@@ -76,7 +80,7 @@ class TestWindow(stc.StyledTextCtrl):
 
 
 def runTest(frame, nb, log):
-    multi = sash.wxMultiSash(nb, -1, pos = (0,0), size = (640,480))
+    multi = sash.MultiSash(nb, -1, pos = (0,0), size = (640,480))
 
     # Use this method to set the default class that will be created when
     # a new sash is created. The class's constructor needs 1 parameter
@@ -90,9 +94,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>wxMultiSash</center></h2>
+<h2><center>MultiSash</center></h2>
 
-wxMultiSash allows the user to split a window any number of times
+MultiSash allows the user to split a window any number of times
 either horizontally or vertically, and to close the split off windows
 when desired.
 

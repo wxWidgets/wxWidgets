@@ -6,5 +6,5 @@ import wx.lib.grids
 
 __doc__ =  wx.lib.grids.__doc__
 
-wxFlexGridSizer = wx.lib.grids.wxFlexGridSizer
-wxGridSizer = wx.lib.grids.wxGridSizer
+wxFlexGridSizer = wx.lib.grids.PyFlexGridSizer
+wxGridSizer = wx.lib.grids.PyGridSizer

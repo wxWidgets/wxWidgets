@@ -9,7 +9,7 @@
 # NOTE:
 #   This was written to provide a standard integer edit control for wxPython.
 #
-#   wxIntCtrl permits integer (long) values to be retrieved or  set via
+#   IntCtrl permits integer (long) values to be retrieved or  set via
 #   .GetValue() and .SetValue(), and provides an EVT_INT() event function
 #   for trapping changes to the control.
 #
@@ -21,13 +21,19 @@
 #   contents of the control with '-' will result in a selected (absolute)
 #   value of -1.
 #
-#   wxIntCtrl also supports range limits, with the option of either
+#   IntCtrl also supports range limits, with the option of either
 #   enforcing them or simply coloring the text of the control if the limits
 #   are exceeded.
 #----------------------------------------------------------------------------
 # 12/08/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o 2.5 Compatability changes
+#
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxIntUpdateEvent -> IntUpdateEvent
+# o wxIntValidator -> IntValidator
+# o wxIntCtrl -> IntCtrl 
 #
 
 import  string
@@ -59,7 +65,7 @@ EVT_INT = wx.PyEventBinder(wxEVT_COMMAND_INT_UPDATED, 1)
 WXK_CTRL_X = (ord('X')+1) - ord('A')
 WXK_CTRL_V = (ord('V')+1) - ord('A')
 
-class wxIntUpdatedEvent(wx.PyCommandEvent):
+class IntUpdatedEvent(wx.PyCommandEvent):
     def __init__(self, id, value = 0, object=None):
         wx.PyCommandEvent.__init__(self, wxEVT_COMMAND_INT_UPDATED, id)
 
@@ -74,9 +80,9 @@ class wxIntUpdatedEvent(wx.PyCommandEvent):
 
 #----------------------------------------------------------------------------
 
-class wxIntValidator( wx.PyValidator ):
+class IntValidator( wx.PyValidator ):
     """
-    Validator class used with wxIntCtrl; handles all validation of input
+    Validator class used with IntCtrl; handles all validation of input
     prior to changing the value of the underlying wx.TextCtrl.
     """
     def __init__(self):
@@ -341,12 +347,12 @@ class wxIntValidator( wx.PyValidator ):
 
 #----------------------------------------------------------------------------
 
-class wxIntCtrl(wx.TextCtrl):
+class IntCtrl(wx.TextCtrl):
     """
     This class provides a control that takes and returns integers as
     value, and provides bounds support and optional value limiting.
 
-    wxIntCtrl(
+    IntCtrl(
          parent, id = -1,
          value = 0,
          pos = wxDefaultPosition,
@@ -404,10 +410,10 @@ class wxIntCtrl(wx.TextCtrl):
         when the bounds are set but the control is not limited.
 
     validator
-        Normally None, wxIntCtrl uses its own validator to do value
+        Normally None, IntCtrl uses its own validator to do value
         validation and input control.  However, a validator derived
-        from wxIntValidator can be supplied to override the data
-        transfer methods for the wxIntValidator class.
+        from IntValidator can be supplied to override the data
+        transfer methods for the IntValidator class.
     """
 
     def __init__ (
@@ -431,7 +437,7 @@ class wxIntCtrl(wx.TextCtrl):
         self.__oldvalue = None
 
         if validator == wx.DefaultValidator:
-            validator = wxIntValidator()
+            validator = IntValidator()
 
         wx.TextCtrl.__init__(
                 self, parent, id, self._toGUI(0),
@@ -464,7 +470,7 @@ class wxIntCtrl(wx.TextCtrl):
         if value != self.__oldvalue:
             try:
                 self.GetEventHandler().ProcessEvent(
-                    wxIntUpdatedEvent( self.GetId(), self.GetValue(), self ) )
+                    IntUpdatedEvent( self.GetId(), self.GetValue(), self ) )
             except ValueError:
                 return
             # let normal processing of the text continue
@@ -632,7 +638,7 @@ class wxIntCtrl(wx.TextCtrl):
         if( not (value is None and self.IsNoneAllowed())
             and type(value) not in (types.IntType, types.LongType) ):
             raise ValueError (
-                'wxIntCtrl requires integer values, passed %s'% repr(value) )
+                'IntCtrl requires integer values, passed %s'% repr(value) )
 
         min = self.GetMin()
         max = self.GetMax()
@@ -729,10 +735,10 @@ class wxIntCtrl(wx.TextCtrl):
             return ''
         elif type(value) == types.LongType and not self.IsLongAllowed():
             raise ValueError (
-                'wxIntCtrl requires integer value, passed long' )
+                'IntCtrl requires integer value, passed long' )
         elif type(value) not in (types.IntType, types.LongType):
             raise ValueError (
-                'wxIntCtrl requires integer value, passed %s'% repr(value) )
+                'IntCtrl requires integer value, passed %s'% repr(value) )
 
         elif self.IsLimited():
             min = self.GetMin()
@@ -850,7 +856,7 @@ if __name__ == '__main__':
             style = wx.DEFAULT_DIALOG_STYLE ):
             wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-            self.int_ctrl = wxIntCtrl(self, wx.NewId(), size=(55,20))
+            self.int_ctrl = IntCtrl(self, wx.NewId(), size=(55,20))
             self.OK = wx.Button( self, wx.ID_OK, "OK")
             self.Cancel = wx.Button( self, wx.ID_CANCEL, "Cancel")
 
@@ -883,7 +889,7 @@ if __name__ == '__main__':
             return True
 
         def OnClick(self, event):
-            dlg = myDialog(self.panel, -1, "test wxIntCtrl")
+            dlg = myDialog(self.panel, -1, "test IntCtrl")
             dlg.int_ctrl.SetValue(501)
             dlg.int_ctrl.SetInsertionPoint(1)
             dlg.int_ctrl.SetSelection(1,2)

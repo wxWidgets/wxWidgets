@@ -13,6 +13,11 @@
 #
 # o 2.5 compatability update.
 #
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxPopupDialog -> PopupDialog
+# o wxPopupControl -> PopupControl
+#
 
 import  wx
 from wx.lib.buttons import GenButtonEvent
@@ -142,7 +147,7 @@ class PopButton(wx.PyControl):
 
 
 # Tried to use wxPopupWindow but the control misbehaves on MSW
-class wxPopupDialog(wx.Dialog):
+class PopupDialog(wx.Dialog):
     def __init__(self,parent,content = None):
         wx.Dialog.__init__(self,parent,-1,'', style = wx.BORDER_SIMPLE|wx.STAY_ON_TOP)
 
@@ -187,7 +192,7 @@ class wxPopupDialog(wx.Dialog):
 #---------------------------------------------------------------------------
 
 
-class wxPopupControl(wx.PyControl):
+class PopupControl(wx.PyControl):
     def __init__(self,*_args,**_kwargs):
         if _kwargs.has_key('value'):
             del _kwargs['value']
@@ -216,7 +221,7 @@ class wxPopupControl(wx.PyControl):
     def OnButton(self,evt):
         if not self.pop:
             if self.content:
-                self.pop = wxPopupDialog(self,self.content)
+                self.pop = PopupDialog(self,self.content)
                 del self.content
             else:
                 print 'No Content to pop'
@@ -250,4 +255,4 @@ class wxPopupControl(wx.PyControl):
 
 
 # an alias
-wxPopupCtrl = wxPopupControl
+PopupCtrl = PopupControl

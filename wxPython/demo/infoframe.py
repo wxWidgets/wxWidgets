@@ -12,7 +12,7 @@
 import  sys
 
 import  wx
-import  wx.lib.infoframe as infoframe
+import  wx.lib.infoframe
 
 #----------------------------------------------------------------------
 
@@ -82,14 +82,14 @@ class MyFrame(wx.Frame):
 
 #----------------------------------------------------------------------
 
-overview = infoframe.__doc__
+overview = wx.lib.infoframe.__doc__
 
 def runTest(frame, nb, log):
     """
     This method is used by the wxPython Demo Framework for integrating
     this demo with the rest.
     """
-    win = MyFrame(infoframe.wxPyInformationalMessagesFrame())
+    win = MyFrame(wx.lib.infoframe.PyInformationalMessagesFrame())
     frame.otherWin = win
     win.Show(1)
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 ##             output.SetOtherMenuBar(menubar,menuname="Output")
 
 ##         def OnClose(self,event):
-##             if isinstance(sys.stdout,wxPyInformationalMessagesFrame):
+##             if isinstance(sys.stdout,wx.lib.infoframe.PyInformationalMessagesFrame):
 ##                 sys.stdout.close()
 ##             self.Destroy()
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
         
         # Override the default output window and point it to the
         # custom class.
-        outputWindowClass = infoframe.wxPyInformationalMessagesFrame
+        outputWindowClass = wx.lib.infoframe.PyInformationalMessagesFrame
         
         def OnInit(self):
             
@@ -142,7 +142,7 @@ if __name__ == "__main__":
             self.SetTopWindow(frame)
             
             # Associate the frame with stdout.
-            if isinstance(sys.stdout, infoframe.wxPyInformationalMessagesFrame):
+            if isinstance(sys.stdout, wx.lib.infoframe.PyInformationalMessagesFrame):
                 sys.stdout.SetParent(frame)
 
             print "Starting.\n",

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.lib.editor.wxEditor
+# Name:        wxPython.lib.editor.Editor
 # Purpose:     An intelligent text editor with colorization capabilities.
 #
 # Original
@@ -23,6 +23,10 @@
 # 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o 2.5 compatability update.
+#
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxEditor -> Editor
 #
 
 import  os
@@ -75,7 +79,7 @@ class Scroller:
 
 #----------------------------------------------------------------------
 
-class wxEditor(wx.ScrolledWindow):
+class Editor(wx.ScrolledWindow):
 
     def __init__(self, parent, id,
                  pos=wx.DefaultPosition, size=wx.DefaultSize, style=0):

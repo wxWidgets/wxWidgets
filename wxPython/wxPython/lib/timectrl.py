@@ -8,4 +8,4 @@ __doc__ =  wx.lib.timectrl.__doc__
 
 EVT_TIMEUPDATE = wx.lib.timectrl.EVT_TIMEUPDATE
 TimeUpdatedEvent = wx.lib.timectrl.TimeUpdatedEvent
-wxTimeCtrl = wx.lib.timectrl.wxTimeCtrl
+wxTimeCtrl = wx.lib.timectrl.TimeCtrl

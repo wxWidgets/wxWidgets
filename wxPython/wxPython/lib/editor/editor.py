@@ -10,4 +10,4 @@ ForceBetween = wx.lib.editor.editor.ForceBetween
 LineSplitter = wx.lib.editor.editor.LineSplitter
 LineTrimmer = wx.lib.editor.editor.LineTrimmer
 Scroller = wx.lib.editor.editor.Scroller
-wxEditor = wx.lib.editor.editor.wxEditor
+wxEditor = wx.lib.editor.editor.Editor

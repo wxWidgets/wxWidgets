@@ -16,6 +16,10 @@
 # o 2.5 compatability update.
 # o Added deprecation warning.
 #
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxRightTextCtrl -> RightTextCtrl
+#
 
 """
 Some time ago, I asked about how to right-align
@@ -60,7 +64,7 @@ warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
 
 #----------------------------------------------------------------------
 
-class wxRightTextCtrl(wx.TextCtrl):
+class RightTextCtrl(wx.TextCtrl):
     def __init__(self, parent, id, *args, **kwargs):
         wx.TextCtrl.__init__(self, parent, id, *args, **kwargs)
         self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)

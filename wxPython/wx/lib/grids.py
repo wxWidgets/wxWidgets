@@ -14,15 +14,26 @@
 #
 # o 2.5 Compatability changes
 #
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o In keeping with the common idiom, the sizers in this module
+#   have been given the 'Py' prefix to avoid confusion with the
+#   native sizers of the same name. However, the reverse renamer
+#   still has the old wx*Sizer since the whole point of the
+#   reverse renamer is backward compatability.
+# o wxGridSizer -> PyGridSizer
+# o wxFlexGridSizer -> PyFlexGridSizer
+# o Deprecation warning added.
+#
 
 """
-In this module you will find wxGridSizer and wxFlexGridSizer.  Please
-note that these sizers have since been ported to C++ and those
-versions are now exposed in the regular wxPython wrappers.  However I
-am also leaving them here in the library so they can serve as an
-example of how to implement sizers in Python.
+In this module you will find PyGridSizer and PyFlexGridSizer.  Please
+note that these sizers have since been ported to C++ (as wx.GridSizer
+and wx.FlexGridSizer) and those versions are now exposed in the regular 
+wxPython wrappers.  However I am also leaving them here in the library 
+so they can serve as an example of how to implement sizers in Python.
 
-wxGridSizer: Sizes and positions items such that all rows are the same
+PyGridSizer: Sizes and positions items such that all rows are the same
 height and all columns are the same width.  You can specify a gap in
 pixels to be used between the rows and/or the columns.  When you
 create the sizer you specify the number of rows or the number of
@@ -33,7 +44,7 @@ center of the space.  When the sizer is resized, all the items are
 resized the same amount so all rows and all columns remain the same
 size.
 
-wxFlexGridSizer: Derives from wxGridSizer and adds the ability for
+PyFlexGridSizer: Derives from PyGridSizer and adds the ability for
 particular rows and/or columns to be marked as growable.  This means
 that when the sizer changes size, the growable rows and colums are the
 ones that stretch.  The others remain at their initial size.
@@ -41,11 +52,28 @@ ones that stretch.  The others remain at their initial size.
 
 
 import  operator
+import  warnings
 import  wx
+
+warningmsg = r"""\
+
+################################################\
+# THIS MODULE IS DEPRECATED                     |
+#                                               |
+# You should use the native wx.GridSizer and    |
+# wx.FlexGridSizer unless there is a compelling |
+# need to use this module.                      |
+################################################/
+
+
+"""
+
+warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
+    
 
 #----------------------------------------------------------------------
 
-class wxGridSizer(wx.PySizer):
+class PyGridSizer(wx.PySizer):
     def __init__(self, rows=0, cols=0, hgap=0, vgap=0):
         wx.PySizer.__init__(self)
         if rows == 0 and cols == 0:
@@ -171,7 +199,7 @@ class wxGridSizer(wx.PySizer):
 
 
 
-class wxFlexGridSizer(wxGridSizer):
+class PyFlexGridSizer(wxGridSizer):
     def __init__(self, rows=0, cols=0, hgap=0, vgap=0):
         wxGridSizer.__init__(self, rows, cols, hgap, vgap)
         self.rowHeights = []

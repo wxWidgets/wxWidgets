@@ -3,15 +3,22 @@
 # o 2.5 compatability update.
 # o I'm a little nervous about some of it though.
 #
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxTreeModel -> TreeModel
+# o wxMVCTree -> MVCTree
+# o wxMVCTreeEvent -> MVCTreeEvent
+# o wxMVCTreeNotifyEvent -> MVCTreeNotifyEvent
+#
 
 """
-wxMVCTree is a control which handles hierarchical data. It is constructed
+MVCTree is a control which handles hierarchical data. It is constructed
 in model-view-controller architecture, so the display of that data, and
 the content of the data can be changed greatly without affecting the other parts.
 
-wxMVCTree actually is even more configurable than MVC normally implies, because
+MVCTree actually is even more configurable than MVC normally implies, because
 almost every aspect of it is pluggable:
-    wxMVCTree - Overall controller, and the window that actually gets placed
+    MVCTree - Overall controller, and the window that actually gets placed
     in the GUI.
         Painter - Paints the control. The 'view' part of MVC.
            NodePainter - Paints just the nodes
@@ -57,7 +64,7 @@ warnings.warn(warningmsg, DeprecationWarning, stacklevel=2)
 
 class MVCTreeNode:
     """
-    Used internally by wxMVCTree to manage its data. Contains information about
+    Used internally by MVCTree to manage its data. Contains information about
     screen placement, the actual data associated with it, and more. These are
     the nodes passed to all the other helper parts to do their work with.
     """
@@ -151,7 +158,7 @@ class Transform:
 
 class Painter:
     """
-    This is the interface that wxMVCTree expects from painters. All painters should
+    This is the interface that MVCTree expects from painters. All painters should
     be Painter subclasses.
     """
     def __init__(self, tree):
@@ -236,7 +243,7 @@ class Painter:
         evt.Skip()
 
 
-class wxTreeModel:
+class TreeModel:
     """
     Interface for tree models
     """
@@ -305,7 +312,7 @@ class TextConverter:
         raise NotImplementedError
 
 
-class BasicTreeModel(wxTreeModel):
+class BasicTreeModel(TreeModel):
     """
     A very simple treemodel implementation, but flexible enough for many needs.
     """
@@ -333,21 +340,21 @@ class BasicTreeModel(wxTreeModel):
         if not self.children.has_key(parent):
             self.children[parent]=[]
         self.children[parent].append(child)
-        wxTreeModel.AddChild(self, parent, child)
+        TreeModel.AddChild(self, parent, child)
         return child
 
     def RemoveNode(self, node):
         parent = self.parents[node]
         del self.parents[node]
         self.children[parent].remove(node)
-        wxTreeModel.RemoveNode(self, node)
+        TreeModel.RemoveNode(self, node)
 
     def InsertChild(self, parent, child, index):
         self.parents[child]=parent
         if not self.children.has_key(parent):
             self.children[parent]=[]
         self.children[parent].insert(child, index)
-        wxTreeModel.InsertChild(self, parent, child, index)
+        TreeModel.InsertChild(self, parent, child, index)
         return child
 
     def IsLeaf(self, node):
@@ -728,7 +735,7 @@ EVT_MVCTREE_ADD_ITEM = wx.PyEventBinder(wxEVT_MVCTREE_ADD_ITEM, 1)
 EVT_MVCTREE_DELETE_ITEM = wx.PyEventBinder(wxEVT_MVCTREE_DELETE_ITEM, 1)
 EVT_MVCTREE_KEY_DOWN = wx.PyEventBinder(wxEVT_MVCTREE_KEY_DOWN, 1)
 
-class wxMVCTreeEvent(wx.PyCommandEvent):
+class MVCTreeEvent(wx.PyCommandEvent):
     def __init__(self, type, id, node = None, nodes = None, keyEvent = None, **kwargs):
         apply(wx.PyCommandEvent.__init__, (self, type, id), kwargs)
         self.node = node
@@ -741,14 +748,14 @@ class wxMVCTreeEvent(wx.PyCommandEvent):
     def getKeyEvent(self):
         return self.keyEvent
 
-class wxMVCTreeNotifyEvent(wxMVCTreeEvent):
+class MVCTreeNotifyEvent(MVCTreeEvent):
     def __init__(self, type, id, node = None, nodes = None, **kwargs):
-        apply(wxMVCTreeEvent.__init__, (self, type, id, node, nodes), kwargs)
+        apply(MVCTreeEvent.__init__, (self, type, id, node, nodes), kwargs)
         self.notify = wx.NotifyEvent(type, id)
     def getNotifyEvent(self):
         return self.notify
 
-class wxMVCTree(wx.ScrolledWindow):
+class MVCTree(wx.ScrolledWindow):
     """
     The main mvc tree class.
     """
@@ -801,28 +808,28 @@ class wxMVCTree(wx.ScrolledWindow):
         return self.transform
 
     def __repr__(self):
-        return "<wxMVCTree instance at %s>" % str(hex(id(self)))
+        return "<MVCTree instance at %s>" % str(hex(id(self)))
 
     def __str__(self):
         return self.__repr__()
 
     def NodeAdded(self, parent, child):
-        e = wxMVCTreeEvent(wxEVT_MVCTREE_ADD_ITEM, self.GetId(), node = child, nodes = [parent, child])
+        e = MVCTreeEvent(wxEVT_MVCTREE_ADD_ITEM, self.GetId(), node = child, nodes = [parent, child])
         self.GetEventHandler().ProcessEvent(e)
         self.painter.ClearBuffer()
 
     def NodeInserted(self, parent, child, index):
-        e = wxMVCTreeEvent(wxEVT_MVCTREE_ADD_ITEM, self.GetId(), node = child, nodes = [parent, child])
+        e = MVCTreeEvent(wxEVT_MVCTREE_ADD_ITEM, self.GetId(), node = child, nodes = [parent, child])
         self.GetEventHandler().ProcessEvent(e)
         self.painter.ClearBuffer()
 
     def NodeRemoved(self, node):
-        e = wxMVCTreeEvent(wxEVT_MVCTREE_DELETE_ITEM, self.GetId(), node = child, nodes = [parent, child])
+        e = MVCTreeEvent(wxEVT_MVCTREE_DELETE_ITEM, self.GetId(), node = child, nodes = [parent, child])
         self.GetEventHandler().ProcessEvent(e)
         self.painter.ClearBuffer()
 
     def OnKeyDown(self, evt):
-        e = wxMVCTreeEvent(wxEVT_MVCTREE_KEY_DOWN, self.GetId(), keyEvent = evt)
+        e = MVCTreeEvent(wxEVT_MVCTREE_KEY_DOWN, self.GetId(), keyEvent = evt)
         self.GetEventHandler().ProcessEvent(e)
 
     def SetFont(self, font):
@@ -862,7 +869,7 @@ class wxMVCTree(wx.ScrolledWindow):
 
     def SetDoubleBuffered(self, bool):
         """
-        By default wxMVCTree is double-buffered.
+        By default MVCTree is double-buffered.
         """
         self.doubleBuffered = bool
 
@@ -923,7 +930,7 @@ class wxMVCTree(wx.ScrolledWindow):
     def SetSelection(self, nodeTuple):
         if type(nodeTuple) != type(()):
             nodeTuple = (nodeTuple,)
-        e = wxMVCTreeNotifyEvent(wxEVT_MVCTREE_SEL_CHANGING, self.GetId(), nodeTuple[0], nodes = nodeTuple)
+        e = MVCTreeNotifyEvent(wxEVT_MVCTREE_SEL_CHANGING, self.GetId(), nodeTuple[0], nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
         if not e.notify.IsAllowed():
             return
@@ -934,7 +941,7 @@ class wxMVCTree(wx.ScrolledWindow):
             treenode = self.nodemap[node]
             node.selected = False
         self._selections = list(nodeTuple)
-        e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), nodeTuple[0], nodes = nodeTuple)
+        e = MVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), nodeTuple[0], nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
 
     def IsMultiSelect(self):
@@ -951,7 +958,7 @@ class wxMVCTree(wx.ScrolledWindow):
             return
         for ed in self._editors:
             if ed.CanEdit(node):
-                e = wxMVCTreeNotifyEvent(wxEVT_MVCTREE_BEGIN_EDIT, self.GetId(), node)
+                e = MVCTreeNotifyEvent(wxEVT_MVCTREE_BEGIN_EDIT, self.GetId(), node)
                 self.GetEventHandler().ProcessEvent(e)
                 if not e.notify.IsAllowed():
                     return
@@ -965,7 +972,7 @@ class wxMVCTree(wx.ScrolledWindow):
             self._currentEditor = None
 
     def _EditEnding(self, node):
-        e = wxMVCTreeNotifyEvent(wxEVT_MVCTREE_END_EDIT, self.GetId(), node)
+        e = MVCTreeNotifyEvent(wxEVT_MVCTREE_END_EDIT, self.GetId(), node)
         self.GetEventHandler().ProcessEvent(e)
         if not e.notify.IsAllowed():
             return False
@@ -976,23 +983,23 @@ class wxMVCTree(wx.ScrolledWindow):
     def SetExpanded(self, node, bool):
         treenode = self.nodemap[node]
         if bool:
-            e = wxMVCTreeNotifyEvent(wxEVT_MVCTREE_ITEM_EXPANDING, self.GetId(), node)
+            e = MVCTreeNotifyEvent(wxEVT_MVCTREE_ITEM_EXPANDING, self.GetId(), node)
             self.GetEventHandler().ProcessEvent(e)
             if not e.notify.IsAllowed():
                 return
             if not treenode.built:
                 self.LoadChildren(treenode)
         else:
-            e = wxMVCTreeNotifyEvent(wxEVT_MVCTREE_ITEM_COLLAPSING, self.GetId(), node)
+            e = MVCTreeNotifyEvent(wxEVT_MVCTREE_ITEM_COLLAPSING, self.GetId(), node)
             self.GetEventHandler().ProcessEvent(e)
             if not e.notify.IsAllowed():
                 return
         treenode.expanded = bool
         e = None
         if treenode.expanded:
-            e = wxMVCTreeEvent(wxEVT_MVCTREE_ITEM_EXPANDED, self.GetId(), node)
+            e = MVCTreeEvent(wxEVT_MVCTREE_ITEM_EXPANDED, self.GetId(), node)
         else:
-            e = wxMVCTreeEvent(wxEVT_MVCTREE_ITEM_COLLAPSED, self.GetId(), node)
+            e = MVCTreeEvent(wxEVT_MVCTREE_ITEM_COLLAPSED, self.GetId(), node)
         self.GetEventHandler().ProcessEvent(e)
         self.layout.Layout(self.currentRoot)
         self.transform.Transform(self.currentRoot, self.offset, self.rotation)
@@ -1005,7 +1012,7 @@ class wxMVCTree(wx.ScrolledWindow):
         nodeTuple = nodeOrTuple
         if type(nodeOrTuple)!= type(()):
             nodeTuple = (nodeOrTuple,)
-        e = wxMVCTreeNotifyEvent(wxEVT_MVCTREE_SEL_CHANGING, self.GetId(), nodeTuple[0], nodes = nodeTuple)
+        e = MVCTreeNotifyEvent(wxEVT_MVCTREE_SEL_CHANGING, self.GetId(), nodeTuple[0], nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
         if not e.notify.IsAllowed():
             return
@@ -1046,7 +1053,7 @@ class wxMVCTree(wx.ScrolledWindow):
                         treenode = self.nodemap[node]
                         treenode.selected = True
                         changeparents.append(treenode)
-        e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), nodeTuple[0], nodes = nodeTuple)
+        e = MVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), nodeTuple[0], nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
         dc = wx.ClientDC(self)
         self.PrepareDC(dc)
@@ -1064,7 +1071,7 @@ class wxMVCTree(wx.ScrolledWindow):
             treenode = self.nodemap[node]
             changeparents.append(treenode)
             treenode.selected = False
-        e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), node, nodes = nodeTuple)
+        e = MVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), node, nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
         dc = wx.ClientDC(self)
         self.PrepareDC(dc)

@@ -6,14 +6,18 @@
 #
 # o Is it just me or are the graphics for the control not lining up right?
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxPopupControl -> PopupControl
+#
 
 import  wx
 import  wx.lib.popupctl as  pop
 import  wx.calendar     as  cal
 
-class TestDateControl(pop.wxPopupControl):
+class TestDateControl(pop.PopupControl):
     def __init__(self,*_args,**_kwargs):
-        apply(pop.wxPopupControl.__init__,(self,) + _args,_kwargs)
+        apply(pop.PopupControl.__init__,(self,) + _args,_kwargs)
 
         self.win = wx.Window(self,-1,pos = (0,0),style = 0)
         self.cal = cal.CalendarCtrl(self.win,-1,pos = (0,0))
@@ -39,7 +43,7 @@ class TestDateControl(pop.wxPopupControl):
                                           date.GetYear()))
         evt.Skip()
 
-    # Method overridden from wxPopupControl
+    # Method overridden from PopupControl
     # This method is called just before the popup is displayed
     # Use this method to format any controls in the popup
     def FormatContent(self):
@@ -82,9 +86,9 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 overview = """<html><body>
-<h2><center>wxPopupControl</center></h2>
+<h2><center>PopupControl</center></h2>
 
-wxPopupControl is a class that can display a value and has a button
+PopupControl is a class that can display a value and has a button
 that will popup another window similar to how a wxComboBox works.  The
 popup window can contain whatever is needed to edit the value.  This
 example uses a wxCalendarCtrl.

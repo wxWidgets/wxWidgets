@@ -7,6 +7,6 @@ import wx.lib.intctrl
 __doc__ =  wx.lib.intctrl.__doc__
 
 EVT_INT = wx.lib.intctrl.EVT_INT
-wxIntCtrl = wx.lib.intctrl.wxIntCtrl
-wxIntUpdatedEvent = wx.lib.intctrl.wxIntUpdatedEvent
-wxIntValidator = wx.lib.intctrl.wxIntValidator
+wxIntCtrl = wx.lib.intctrl.IntCtrl
+wxIntUpdatedEvent = wx.lib.intctrl.IntUpdatedEvent
+wxIntValidator = wx.lib.intctrl.IntValidator

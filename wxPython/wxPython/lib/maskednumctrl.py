@@ -7,5 +7,5 @@ import wx.lib.maskednumctrl
 __doc__ =  wx.lib.maskednumctrl.__doc__
 
 EVT_MASKEDNUM = wx.lib.maskednumctrl.EVT_MASKEDNUM
-wxMaskedNumCtrl = wx.lib.maskednumctrl.wxMaskedNumCtrl
-wxMaskedNumNumberUpdatedEvent = wx.lib.maskednumctrl.wxMaskedNumNumberUpdatedEvent
+wxMaskedNumCtrl = wx.lib.maskednumctrl.MaskedNumCtrl
+wxMaskedNumNumberUpdatedEvent = wx.lib.maskednumctrl.MaskedNumNumberUpdatedEvent

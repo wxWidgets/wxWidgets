@@ -1,14 +1,14 @@
 """
-wxPyColourChooser
+PyColourChooser
 Copyright (C) 2002 Michael Gilfix
 
-This file is part of wxPyColourChooser.
+This file is part of PyColourChooser.
 
 You should have received a file COPYING containing license terms
 along with this program; if not, write to Michael Gilfix
 (mgilfix@eecs.tufts.edu) for a copy.
 
-This version of wxPyColourChooser is open source; you can redistribute it and/or
+This version of PyColourChooser is open source; you can redistribute it and/or
 modify it under the terms listed in the file COPYING.
 
 This program is distributed in the hope that it will be useful,
@@ -18,6 +18,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # 12/14/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o 2.5 compatability update.
+#
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxPyColorChooser -> PyColorChooser
+# o wxPyColourChooser -> PyColourChooser
+# o Commented out wx.InitAllImageHandlers() (see comments at that
+#   point for explanation
 #
 
 import  cStringIO
@@ -164,7 +171,12 @@ class PyPalette(canvas.Canvas):
     def __init__(self, parent, id):
         """Creates a palette object."""
         # Load the pre-generated palette XPM
-        wx.InitAllImageHandlers()
+        
+        # Leaving this in causes warning messages in some cases.
+        # It is the responsibility of the app to init the image
+        # handlers, IAW RD
+        #wx.InitAllImageHandlers()
+        
         self.palette = getBitmap ()
         canvas.Canvas.__init__ (self, parent, id, size=(200, 192))
 

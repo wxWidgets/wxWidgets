@@ -8,6 +8,10 @@
 # Copyright:   (c) 2002 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o V2.5 compatability update 
+#
 
 """
 img2png.py  -- convert several image formats to PNG format
@@ -32,15 +36,16 @@ Options:
 """
 
 
-import sys
-import img2img
-from wxPython import wx
+import  sys
+import  wx
+import  img2img
+
 
 def main():
     # some bitmap related things need to have a wxApp initialized...
-    if wx.wxGetApp() is None:
-        app = wx.wxPySimpleApp()
-    img2img.main(sys.argv[1:], wx.wxBITMAP_TYPE_PNG, ".png", __doc__)
+    if wx.GetApp() is None:
+        app = wx.PySimpleApp()
+    img2img.main(sys.argv[1:], wx.BITMAP_TYPE_PNG, ".png", __doc__)
 
 if __name__ == '__main__':
     main()

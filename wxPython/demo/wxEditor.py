@@ -6,6 +6,10 @@
 #
 # o editor lib hasn't been hit by the renamer yet.
 #
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxEditor -> Editor
+#
 
 import  wx
 import  wx.lib.editor    as  editor
@@ -14,7 +18,7 @@ import  wx.lib.editor    as  editor
 
 def runTest(frame, nb, log):
     win = wx.Panel(nb, -1)
-    ed = editor.wxEditor(win, -1, style=wx.SUNKEN_BORDER)
+    ed = editor.Editor(win, -1, style=wx.SUNKEN_BORDER)
     box = wx.BoxSizer(wx.VERTICAL)
     box.Add(ed, 1, wx.ALL|wx.GROW, 1)
     win.SetSizer(box)
@@ -22,7 +26,7 @@ def runTest(frame, nb, log):
 
     ed.SetText(["",
                 "This is a simple text editor, the class name is",
-                "wxEditor.  Type a few lines and try it out.",
+                "Editor.  Type a few lines and try it out.",
                 "",
                 "It uses Windows-style key commands that can be overridden by subclassing.",
                 "Mouse select works. Here are the key commands:",
@@ -44,19 +48,19 @@ def runTest(frame, nb, log):
 
 
 overview = """
-The wxEditor class implements a simple text editor using wxPython.  You
-can create a custom editor by subclassing wxEditor.  Even though much of
+The Editor class implements a simple text editor using wxPython.  You
+can create a custom editor by subclassing Editor.  Even though much of
 the editor is implemented in Python, it runs surprisingly smoothly on
 normal hardware with small files.
 
 How to use it
 -------------
-The demo code (demo/wxEditor.py) shows how to use wxEditor as a simple text
+The demo code (demo/Editor.py) shows how to use Editor as a simple text
 box. Use the SetText() and GetText() methods to set or get text from
 the component; these both use a list of strings.
 
 The samples/FrogEdit directory has an example of a simple text editor
-application that uses the wxEditor component.
+application that uses the Editor component.
 
 Subclassing
 -----------

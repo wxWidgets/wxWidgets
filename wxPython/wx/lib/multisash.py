@@ -7,11 +7,17 @@
 # Created:      2002/11/20
 # Version:      0.1
 # RCS-ID:       $Id$
-# License:      wxWindows licensie
+# License:      wxWindows license
 #----------------------------------------------------------------------
 # 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o 2.5 compatability update.
+#
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMultiSash -> MultiSash
+# o wxMultiSplit -> MultiSplit wxMultiViewLeaf
+# o wxMultiViewLeaf -> MultiViewLeaf
 #
 
 import wx
@@ -24,11 +30,11 @@ CR_SIZE = SH_SIZE * 3
 
 #----------------------------------------------------------------------
 
-class wxMultiSash(wx.Window):
+class MultiSash(wx.Window):
     def __init__(self, *_args,**_kwargs):
         apply(wx.Window.__init__,(self,) + _args,_kwargs)
         self._defChild = EmptyChild
-        self.child = wxMultiSplit(self,self,(0,0),self.GetSize())
+        self.child = MultiSplit(self,self,(0,0),self.GetSize())
         self.Bind(wx.EVT_SIZE,self.OnMultiSize)
 
     def SetDefaultChildClass(self,childCls):
@@ -43,7 +49,7 @@ class wxMultiSash(wx.Window):
 
     def Clear(self):
         old = self.child
-        self.child = wxMultiSplit(self,self,(0,0),self.GetSize())
+        self.child = MultiSplit(self,self,(0,0),self.GetSize())
         old.Destroy()
         self.child.OnSize(None)
 
@@ -59,7 +65,7 @@ class wxMultiSash(wx.Window):
         exec 'import %s' % mod
         self._defChild = eval(dChild)
         old = self.child
-        self.child = wxMultiSplit(self,self,wxPoint(0,0),self.GetSize())
+        self.child = MultiSplit(self,self,wxPoint(0,0),self.GetSize())
         self.child.SetSaveData(data['child'])
         old.Destroy()
         self.OnMultiSize(None)
@@ -69,7 +75,7 @@ class wxMultiSash(wx.Window):
 #----------------------------------------------------------------------
 
 
-class wxMultiSplit(wx.Window):
+class MultiSplit(wx.Window):
     def __init__(self,multiView,parent,pos,size,view1 = None):
         wx.Window.__init__(self,id = -1,parent = parent,pos = pos,size = size,
                           style = wx.CLIP_CHILDREN)
@@ -80,7 +86,7 @@ class wxMultiSplit(wx.Window):
             self.view1.Reparent(self)
             self.view1.MoveXY(0,0)
         else:
-            self.view1 = wxMultiViewLeaf(self.multiView,self,
+            self.view1 = MultiViewLeaf(self.multiView,self,
                                          (0,0),self.GetSize())
         self.direction = None
 
@@ -90,11 +96,11 @@ class wxMultiSplit(wx.Window):
         saveData = {}
         if self.view1:
             saveData['view1'] = self.view1.GetSaveData()
-            if isinstance(self.view1,wxMultiSplit):
+            if isinstance(self.view1,MultiSplit):
                 saveData['view1IsSplit'] = 1
         if self.view2:
             saveData['view2'] = self.view2.GetSaveData()
-            if isinstance(self.view2,wxMultiSplit):
+            if isinstance(self.view2,MultiSplit):
                 saveData['view2IsSplit'] = 1
         saveData['direction'] = self.direction
         v1,v2 = self.GetPosition()
@@ -113,10 +119,10 @@ class wxMultiSplit(wx.Window):
             isSplit = data.get('view1IsSplit',None)
             old = self.view1
             if isSplit:
-                self.view1 = wxMultiSplit(self.multiView,self,
+                self.view1 = MultiSplit(self.multiView,self,
                                           (0,0),self.GetSize())
             else:
-                self.view1 = wxMultiViewLeaf(self.multiView,self,
+                self.view1 = MultiViewLeaf(self.multiView,self,
                                              (0,0),self.GetSize())
             self.view1.SetSaveData(v1Data)
             if old:
@@ -126,10 +132,10 @@ class wxMultiSplit(wx.Window):
             isSplit = data.get('view2IsSplit',None)
             old = self.view2
             if isSplit:
-                self.view2 = wxMultiSplit(self.multiView,self,
+                self.view2 = MultiSplit(self.multiView,self,
                                           (0,0),self.GetSize())
             else:
-                self.view2 = wxMultiViewLeaf(self.multiView,self,
+                self.view2 = MultiViewLeaf(self.multiView,self,
                                              (0,0),self.GetSize())
             self.view2.SetSaveData(v2Data)
             if old:
@@ -152,13 +158,13 @@ class wxMultiSplit(wx.Window):
     def AddLeaf(self,direction,caller,pos):
         if self.view2:
             if caller == self.view1:
-                self.view1 = wxMultiSplit(self.multiView,self,
+                self.view1 = MultiSplit(self.multiView,self,
                                           caller.GetPosition(),
                                           caller.GetSize(),
                                           caller)
                 self.view1.AddLeaf(direction,caller,pos)
             else:
-                self.view2 = wxMultiSplit(self.multiView,self,
+                self.view2 = MultiSplit(self.multiView,self,
                                           caller.GetPosition(),
                                           caller.GetSize(),
                                           caller)
@@ -174,7 +180,7 @@ class wxMultiSplit(wx.Window):
                 x,y = (0,pos)
                 w1,h1 = (w,h-pos)
                 w2,h2 = (w,pos)
-            self.view2 = wxMultiViewLeaf(self.multiView, self, (x,y), (w1,h1))
+            self.view2 = MultiViewLeaf(self.multiView, self, (x,y), (w1,h1))
             self.view1.SetSize((w2,h2))
             self.view2.OnSize(None)
 
@@ -281,7 +287,7 @@ class wxMultiSplit(wx.Window):
 #----------------------------------------------------------------------
 
 
-class wxMultiViewLeaf(wx.Window):
+class MultiViewLeaf(wx.Window):
     def __init__(self,multiView,parent,pos,size):
         wx.Window.__init__(self,id = -1,parent = parent,pos = pos,size = size,
                           style = wx.CLIP_CHILDREN)

@@ -1,10 +1,10 @@
 """
-wxPyColourChooser
+PyColourChooser
 Copyright (C) 2002 Michael Gilfix <mgilfix@eecs.tufts.edu>
 
-This file is part of wxPyColourChooser.
+This file is part of PyColourChooser.
 
-This version of wxPyColourChooser is open source; you can redistribute it
+This version of PyColourChooser is open source; you can redistribute it
 and/or modify it under the licensed terms.
 
 This program is distributed in the hope that it will be useful,
@@ -15,8 +15,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 try:
     import gettext
 
-    gettext.bindtextdomain('wxpycolourchooser')
-    gettext.textdomain('wxpycolourchooser')
+    gettext.bindtextdomain('pycolourchooser')
+    gettext.textdomain('pycolourchooser')
     _ = gettext.gettext
 except Exception, strerror:
     print "Warning: Couldn't import translation function: %(str)s" %{ 'str' : strerror }

@@ -6,4 +6,4 @@ import wx.lib.scrolledpanel
 
 __doc__ =  wx.lib.scrolledpanel.__doc__
 
-wxScrolledPanel = wx.lib.scrolledpanel.wxScrolledPanel
+wxScrolledPanel = wx.lib.scrolledpanel.ScrolledPanel

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Name:        wxPython.lib.mixins.grid
-# Purpose:     Helpful mix-in classes for wxGrid
+# Purpose:     Helpful mix-in classes for wx.Grid
 #
 # Author:      Robin Dunn
 #
@@ -14,6 +14,10 @@
 # o 2.5 compatability update.
 # o Untested
 #
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxGridAutoEditMixin -> GridAutoEditMixin
+#
 
 import  wx
 import  wx.grid
@@ -21,7 +25,7 @@ import  wx.grid
 #----------------------------------------------------------------------------
 
 
-class wxGridAutoEditMixin:
+class GridAutoEditMixin:
     """A mix-in class that automatically enables the grid edit control when
     a cell is selected.
 

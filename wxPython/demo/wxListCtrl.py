@@ -24,6 +24,11 @@
 # o ColumnSorterMixin implementation was broke - added event.Skip()
 #   to column click event to allow event to fall through to mixin.
 #
+# 12/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxColumnSorterMixin -> ColumnSorterMixin
+# o wxListCtrlAutoWidthMixin -> ListCtrlAutoWidthMixin 
+#
 
 import  wx
 import  wx.lib.mixins.listctrl  as  listmix
@@ -91,14 +96,14 @@ musicdata = {
 
 #---------------------------------------------------------------------------
 
-class TestListCtrl(wx.ListCtrl, listmix.wxListCtrlAutoWidthMixin):
+class TestListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, ID, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0):
         wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
-        listmix.wxListCtrlAutoWidthMixin.__init__(self)
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
 
 
-class TestListCtrlPanel(wx.Panel, listmix.wxColumnSorterMixin):
+class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
     def __init__(self, parent, log):
         wx.Panel.__init__(self, parent, -1, style=wx.WANTS_CHARS)
 
@@ -126,7 +131,7 @@ class TestListCtrlPanel(wx.Panel, listmix.wxColumnSorterMixin):
         # Now that the list exists we can init the other base class,
         # see wxPython/lib/mixins/listctrl.py
         self.itemDataMap = musicdata
-        listmix.wxColumnSorterMixin.__init__(self, 3)
+        listmix.ColumnSorterMixin.__init__(self, 3)
         #self.SortListItems(0, True)
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
@@ -201,11 +206,11 @@ class TestListCtrlPanel(wx.Panel, listmix.wxColumnSorterMixin):
         self.currentItem = 0
 
 
-    # Used by the wxColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
+    # Used by the ColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
     def GetListCtrl(self):
         return self.list
 
-    # Used by the wxColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
+    # Used by the ColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
     def GetSortImages(self):
         return (self.sm_dn, self.sm_up)
 
@@ -441,7 +446,7 @@ item data values.
 
 <h4>ListCtrlAutoWidthMixin</h4>
 
-<code><b>wxListCtrlAutoWidthMixin()</b></code>
+<code><b>ListCtrlAutoWidthMixin()</b></code>
 
 <p>A mix-in class that automatically resizes the last column to take up the 
 remaining width of the ListCtrl.

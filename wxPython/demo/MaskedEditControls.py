@@ -11,6 +11,15 @@
 #
 # o A few changes to correct my own mistakes earlier :-).
 # 
+# 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wxMaskedTextCtrl -> MaskedTextCtrl
+# o wxMaskedComboBox -> MaskedComboBox
+# o wxIpAddrCtrl -> IpAddrCtrl
+# o wxMaskedNumCtrl -> MaskedNumCtrl
+# o wxTimeCtrl -> TimeCtrl
+# o wxScrolledPanel -> ScrolledPanel
+#
 
 import  string
 import  sys
@@ -31,7 +40,7 @@ class demoMixin:
         mask        = wx.StaticText( self, -1, "Mask Value" )
         formatcode  = wx.StaticText( self, -1, "Format" )
         regex       = wx.StaticText( self, -1, "Regexp Validator(opt.)" )
-        ctrl        = wx.StaticText( self, -1, "wxMaskedTextCtrl" )
+        ctrl        = wx.StaticText( self, -1, "MaskedTextCtrl" )
 
         description.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
         mask.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
@@ -54,7 +63,7 @@ class demoMixin:
             sizer.Add( wx.StaticText( self, -1, control[4]) )
 
             if control in controls:
-                newControl  = med.wxMaskedTextCtrl( self, -1, "",
+                newControl  = med.MaskedTextCtrl( self, -1, "",
                                                 mask         = control[1],
                                                 excludeChars = control[2],
                                                 formatcodes  = control[3],
@@ -85,9 +94,9 @@ class demoMixin:
 
 
 #----------------------------------------------------------------------------
-class demoPage1(scroll.wxScrolledPanel, demoMixin):
+class demoPage1(scroll.ScrolledPanel, demoMixin):
     def __init__(self, parent, log):
-        scroll.wxScrolledPanel.__init__(self, parent, -1)
+        scroll.ScrolledPanel.__init__(self, parent, -1)
         self.sizer = wx.BoxSizer( wx.VERTICAL )
         self.editList  = []
 
@@ -157,10 +166,10 @@ Smith, Jones, Williams).  Signs on numbers can be toggled with the minus key.
         self.changeControlParams( event, "fillChar", '?', ' ' )
 
 
-class demoPage2(scroll.wxScrolledPanel, demoMixin):
+class demoPage2(scroll.ScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
-        scroll.wxScrolledPanel.__init__( self, parent, -1 )
+        scroll.ScrolledPanel.__init__( self, parent, -1 )
         self.sizer = wx.BoxSizer( wx.VERTICAL )
 
         label = wx.StaticText( self, -1, """\
@@ -202,15 +211,15 @@ Many of these already do complicated validation; To see some examples, try
         self.SetupScrolling()
 
 
-class demoPage3(scroll.wxScrolledPanel, demoMixin):
+class demoPage3(scroll.ScrolledPanel, demoMixin):
     def __init__(self, parent, log):
         self.log = log
-        scroll.wxScrolledPanel.__init__(self, parent, -1)
+        scroll.ScrolledPanel.__init__(self, parent, -1)
         self.sizer = wx.BoxSizer( wx.VERTICAL )
         self.editList  = []
 
         label = wx.StaticText( self, -1, """\
-Here wxMaskedTextCtrls that have default values.  The states
+Here MaskedTextCtrls that have default values.  The states
 control has a list of valid values, and the unsigned integer
 has a legal range specified.
 """)
@@ -248,10 +257,10 @@ has a legal range specified.
         self.changeControlParams( event, "validRequired", True, False )
 
 
-class demoPage4(scroll.wxScrolledPanel, demoMixin):
+class demoPage4(scroll.ScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
-        scroll.wxScrolledPanel.__init__( self, parent, -1 )
+        scroll.ScrolledPanel.__init__( self, parent, -1 )
         self.sizer = wx.BoxSizer( wx.VERTICAL )
 
         label = wx.StaticText( self, -1, """\
@@ -269,7 +278,7 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         description  = wx.StaticText( self, -1, "Description" )
         autofmt      = wx.StaticText( self, -1, "AutoFormat Code" )
         fields       = wx.StaticText( self, -1, "Field Objects" )
-        ctrl         = wx.StaticText( self, -1, "wxMaskedTextCtrl" )
+        ctrl         = wx.StaticText( self, -1, "MaskedTextCtrl" )
 
         description.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
         autofmt.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
@@ -292,7 +301,7 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         grid.Add( wx.StaticText( self, -1, "Restricted Area Code"), 0, wx.ALIGN_LEFT )
         grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
         grid.Add( wx.StaticText( self, -1, fieldsLabel), 0, wx.ALIGN_LEFT )
-        grid.Add( med.wxMaskedTextCtrl( self, -1, "",
+        grid.Add( med.MaskedTextCtrl( self, -1, "",
                                     autoformat       = autoformat,
                                     fields           = fieldsDict,
                                     demo             = True,
@@ -305,7 +314,7 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
 {1: Field(choices=[
             "03", "04", "05"],
           choiceRequired=True)}"""
-        exp =  med.wxMaskedTextCtrl( self, -1, "",
+        exp =  med.MaskedTextCtrl( self, -1, "",
                                  autoformat       = autoformat,
                                  fields           = fieldsDict,
                                  demo             = True,
@@ -324,7 +333,7 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
  1: Field(choices=["1234", "5678"],
           choiceRequired=False)}"""
         autoformat = "USZIPPLUS4"
-        zip =  med.wxMaskedTextCtrl( self, -1, "",
+        zip =  med.MaskedTextCtrl( self, -1, "",
                                  autoformat       = autoformat,
                                  fields           = fieldsDict,
                                  demo             = True,
@@ -341,15 +350,15 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         self.SetupScrolling()
 
 
-class demoPage5(scroll.wxScrolledPanel, demoMixin):
+class demoPage5(scroll.ScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
-        scroll.wxScrolledPanel.__init__( self, parent, -1 )
+        scroll.ScrolledPanel.__init__( self, parent, -1 )
         self.sizer = wx.BoxSizer( wx.VERTICAL )
 
 
         labelMaskedCombos = wx.StaticText( self, -1, """\
-These are some examples of wxMaskedComboBox:""")
+These are some examples of MaskedComboBox:""")
         labelMaskedCombos.SetForegroundColour( "Blue" )
 
 
@@ -357,7 +366,7 @@ These are some examples of wxMaskedComboBox:""")
 A state selector; only
 "legal" values can be
 entered:""")
-        statecode = med.wxMaskedComboBox( self, -1, med.states[0],
+        statecode = med.MaskedComboBox( self, -1, med.states[0],
                                   choices = med.states,
                                   autoformat="USSTATE")
 
@@ -405,7 +414,7 @@ A masked ComboBox to validate
 text from a list of numeric codes:""")
 
         choices = ["91", "136", "305", "4579"]
-        code = med.wxMaskedComboBox( self, -1, choices[0],
+        code = med.MaskedComboBox( self, -1, choices[0],
                                  choices = choices,
                                  choiceRequired = True,
                                  formatcodes = "F_r",
@@ -428,16 +437,16 @@ choice sets:""")
 
 
         labelIpAddrs = wx.StaticText( self, -1, """\
-Here are some examples of wxIpAddrCtrl, a control derived from wxMaskedTextCtrl:""")
+Here are some examples of IpAddrCtrl, a control derived from MaskedTextCtrl:""")
         labelIpAddrs.SetForegroundColour( "Blue" )
 
 
         label_ipaddr1 = wx.StaticText( self, -1, "An empty control:")
-        ipaddr1 = med.wxIpAddrCtrl( self, -1, style = wx.TE_PROCESS_TAB )
+        ipaddr1 = med.IpAddrCtrl( self, -1, style = wx.TE_PROCESS_TAB )
 
 
         label_ipaddr2 = wx.StaticText( self, -1, "A restricted mask:")
-        ipaddr2 = med.wxIpAddrCtrl( self, -1, mask=" 10.  1.109.###" )
+        ipaddr2 = med.IpAddrCtrl( self, -1, mask=" 10.  1.109.###" )
 
 
         label_ipaddr3 = wx.StaticText( self, -1, """\
@@ -454,22 +463,22 @@ A control with restricted legal values:
 
 
         labelNumerics = wx.StaticText( self, -1, """\
-Here are some useful configurations of a wxMaskedTextCtrl for integer and floating point input that still treat
-the control as a text control.  (For a true numeric control, check out the wxMaskedNumCtrl class!)""")
+Here are some useful configurations of a MaskedTextCtrl for integer and floating point input that still treat
+the control as a text control.  (For a true numeric control, check out the MaskedNumCtrl class!)""")
         labelNumerics.SetForegroundColour( "Blue" )
 
         label_intctrl1 = wx.StaticText( self, -1, """\
 An integer entry control with
 shifting insert enabled:""")
-        self.intctrl1 = med.wxMaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,F>')
+        self.intctrl1 = med.MaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,F>')
         label_intctrl2 = wx.StaticText( self, -1, """\
      Right-insert integer entry:""")
-        self.intctrl2 = med.wxMaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,Fr')
+        self.intctrl2 = med.MaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,Fr')
 
         label_floatctrl = wx.StaticText( self, -1, """\
 A floating point entry control
 with right-insert for ordinal:""")
-        self.floatctrl = med.wxMaskedTextCtrl(self, -1, name='floatctrl', mask="#{9}.#{2}", formatcodes="F,_-R", useParensForNegatives=False)
+        self.floatctrl = med.MaskedTextCtrl(self, -1, name='floatctrl', mask="#{9}.#{2}", formatcodes="F,_-R", useParensForNegatives=False)
         self.floatctrl.SetFieldParameters(0, formatcodes='r<', validRequired=True)  # right-insert, require explicit cursor movement to change fields
         self.floatctrl.SetFieldParameters(1, defaultValue='00')                     # don't allow blank fraction
 

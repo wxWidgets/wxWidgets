@@ -7,4 +7,4 @@ import wx.lib.colourchooser.pycolourchooser
 __doc__ =  wx.lib.colourchooser.pycolourchooser.__doc__
 
 main = wx.lib.colourchooser.pycolourchooser.main
-wxPyColourChooser = wx.lib.colourchooser.pycolourchooser.wxPyColourChooser
+wxPyColourChooser = wx.lib.colourchooser.pycolourchooser.PyColourChooser
