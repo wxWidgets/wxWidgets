@@ -2228,7 +2228,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 PKG_CHECK_MODULES(PANGOFT2, pangoft2,
                     [
                         CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
-                        LIBS="$LIBS $PANGOFT2_LIBS"
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
                     ],
                     [
                         AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
@@ -2250,7 +2250,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         fi
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
-        GUI_TK_LIBRARY="$wx_cv_libs_gtk"
+        GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
 
         AFMINSTALL=afminstall
         TOOLKIT=GTK
@@ -2419,7 +2419,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 PKG_CHECK_MODULES(PANGOX, pangox,
                     [
                         CXXFLAGS="$CXXFLAGS $PANGOX_CFLAGS"
-                        LIBS="$LIBS $PANGOX_LIBS"
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
                     ],
                     [
                         AC_MSG_ERROR([pangox library not found, library cannot be compiled in Unicode mode])
@@ -2428,7 +2428,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 PKG_CHECK_MODULES(PANGOFT2, pangoft2,
                     [
                         CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
-                        LIBS="$LIBS $PANGOFT2_LIBS"
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
                     ],
                     [
                         AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
@@ -2438,7 +2438,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 PKG_CHECK_MODULES(PANGOXFT, pangoxft,
                     [
                         CXXFLAGS="$CXXFLAGS $PANGOXFT_CFLAGS"
-                        LIBS="$LIBS $PANGOXFT_LIBS"
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
                     ],
                     [
                         AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
@@ -5199,7 +5199,7 @@ fi
 
 if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html htlbox"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
 fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
@@ -5408,8 +5408,6 @@ fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
-    LIBS="$GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LIBS"
-
     dnl TODO add checks that these samples will really compile (i.e. all the
     dnl      library features they need are present)
 
@@ -5453,8 +5451,14 @@ dnl remove the extra white space from the cc/c++/ld options
 CPPFLAGS=`echo $INCLUDES $CPPFLAGS | sed 's/ \\+/ /g'`
 CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
 CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
-LIBS=`echo $LIBS | sed 's/ \+/ /g'`
+    
 
+LIBS=`echo $LIBS | sed 's/ \+/ /g'`
+EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
+if test "$wxUSE_GUI" = "yes"; then
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
+fi
+    
 LDFLAGS="$LDFLAGS $PROFILE"
 
 dnl wxGTK does not need TOOLKIT includes in wx-config
@@ -5477,8 +5481,6 @@ AC_SUBST(wxUSE_LIBJPEG)
 AC_SUBST(wxUSE_LIBPNG)
 AC_SUBST(wxUSE_LIBTIFF)
 
-EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
-
 if test $wxUSE_MONOLITHIC = "yes" ; then
     MONOLITHIC=1
 else
@@ -5494,6 +5496,7 @@ AC_SUBST(OFFICIAL_BUILD)
 AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
 AC_SUBST(EXTRALIBS)
+AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(SHARED)

@@ -166,7 +166,7 @@ while test $# -gt 0; do
       fi
 
       if test $static_flag = yes ; then
-          echo "$libs @LDFLAGS@ @WXCONFIG_RPATH@ @libdir@/@WXCONFIG_LIBS_STATIC@ @LIBS@ @DMALLOC_LIBS@"
+          echo "$libs @LDFLAGS@ @WXCONFIG_RPATH@ @libdir@/@WXCONFIG_LIBS_STATIC@ @EXTRALIBS_GUI@ @LIBS@ @DMALLOC_LIBS@"
       else
           echo $libs @LDFLAGS@ @WXCONFIG_RPATH@ @WXCONFIG_LIBS@ @DMALLOC_LIBS@
       fi

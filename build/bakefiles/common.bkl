@@ -221,7 +221,8 @@
         <include>$(INC_REGEX)</include>
     </template>
 
-    <template id="wx_append">
+    <!-- for both GUI and wxBase libs/samples: -->
+    <template id="wx_append_base">
         <!-- link against builtin 3rd party libs, if needed: -->
         <sys-lib>$(LIB_TIFF)</sys-lib>
         <sys-lib>$(LIB_JPEG)</sys-lib>
@@ -258,6 +259,11 @@
         </if>        
     </template>
 
+    <!-- for GUI libs/samples: -->
+    <template id="wx_append" template="wx_append_base">
+        <ldlibs>$(EXTRALIBS_GUI)</ldlibs>
+    </template>
+
     <template id="wx_lib_b" template="wx,anylib">
         <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
         <libname>$(WXLIBNAME)</libname>
@@ -282,12 +288,18 @@
     </template>
 
     <template id="wx_lib" template="wx_lib_b"/>
+    <template id="wx_base_lib" template="wx_lib_b"/>
     <template id="wx_dll" template="wx_dll_b" template_append="wx_append">
         <depends>wxtiff</depends>
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
         <depends>wxzlib</depends>
         <depends cond="FORMAT=='autoconf'">wxodbc</depends>
+        <depends>wxregex</depends>
+    </template>
+    <template id="wx_base_dll" template="wx_dll_b"
+                               template_append="wx_append_base">
+        <depends>wxzlib</depends>
         <depends>wxregex</depends>
     </template>
     

@@ -82,6 +82,7 @@
         <option name="TOOLKIT_LOWERCASE"/>
         <option name="TOOLKIT_VERSION"/>
         <option name="EXTRALIBS"/>
+        <option name="EXTRALIBS_GUI"/>
         <option name="SAMPLES_RPATH_FLAG"/>
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
     </if>
@@ -99,6 +100,7 @@
         <set var="TOOLKIT_VERSION"/>
         <set var="SAMPLES_RPATH_FLAG"/>
         <set var="EXTRALIBS"/>
+        <set var="EXTRALIBS_GUI"/>
         <set var="EXTRACFLAGS"/>
 
         <set var="SRCDIR">
