@@ -385,11 +385,12 @@ public:
     wxTextCtrl *TextCtrl() const { return m_pTextCtrl; }
 
 private:
+    // use standard ids for our commands!
     enum
     {
-        Menu_Close = 100,
-        Menu_Save,
-        Menu_Clear
+        Menu_Close = wxID_CLOSE,
+        Menu_Save  = wxID_SAVE,
+        Menu_Clear = wxID_CLEAR
     };
 
     // instead of closing just hide the window to be able to Show() it later
