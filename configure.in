@@ -2954,6 +2954,28 @@ if test "$wxUSE_ZLIB" = "builtin" ; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl Xinerama (for unix wxDisplay) - Brian Victor
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_DISPLAY" = "yes"; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1; then
+        AC_MSG_CHECKING([for Xinerama])
+        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xinerama)
+        if test "$ac_find_libraries" != "" ; then
+            WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
+            if test "$ac_path_to_link" != " -L/usr/lib" ; then
+                LDFLAGS="$LDFLAGS $ac_path_to_link"
+            fi
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+            AC_MSG_WARN("*** Xinerama not found; disabling wxDisplay")
+            wxUSE_DISPLAY="no"
+        fi
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl OpenGL libraries
 dnl ---------------------------------------------------------------------------
 
