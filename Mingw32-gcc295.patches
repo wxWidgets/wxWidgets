@@ -129,3 +129,16 @@ PURE;
  int    fwprintf (FILE* filePrintTo, const wchar_t* wsFormat, ...);
 
 
+
+--- i386-mingw32\include\winbase.h  Sat Jul 31 17:48:48 1999
++++ winbase.h   Fri Feb 25 01:49:08 2000
+@@ -989,7 +989,7 @@
+ BOOL WINAPI CopyFileExW(LPCWSTR,LPCWSTR,LPPROGRESS_ROUTINE,LPVOID,LPBOOL,DWORD);
+ #define RtlMoveMemory memmove
+ #define RtlCopyMemory memcpy
+-#define RtlFillMemory memset
++#define RtlFillMemory(d,l,f) memset ((d),(f),(l))
+ #define RtlZeroMemory(d,l) memset((d),0,(l))
+ #define MoveMemory RtlMoveMemory
+ #define CopyMemory RtlCopyMemory
+
