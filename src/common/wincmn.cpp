@@ -57,7 +57,7 @@
 // static data
 // ----------------------------------------------------------------------------
 
-int wxWindowBase::ms_lastControlId = 0;
+int wxWindowBase::ms_lastControlId = -2;
 
 IMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler)
 
@@ -152,8 +152,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     wxASSERT_MSG( m_isWindow, _T("Init() must have been called before!") );
 
     // generate a new id if the user doesn't care about it
-      // No, we keep the -1 from now on. RR.
-//    m_windowId = id == -1 ? NewControlId() : id;
+    m_windowId = id == -1 ? NewControlId() : id;
 
     SetName(name);
     SetWindowStyleFlag(style);

@@ -170,7 +170,7 @@ public:
 
         // generate a control id for the controls which were not given one by
         // user
-    static int NewControlId() { return ++ms_lastControlId; }
+    static int NewControlId() { return --ms_lastControlId; }
 
     // moving/resizing
     // ---------------
