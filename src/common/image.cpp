@@ -258,7 +258,6 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
     
     for (long y = 0; y < height; y++)
     {
- 
         for (long x = 0; x < width; x++)
         {
             unsigned long avgRed = 0 ;
