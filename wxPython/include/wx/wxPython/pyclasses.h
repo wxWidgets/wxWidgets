@@ -141,6 +141,7 @@ class wxPyPrintout;
 class wxPopupWindow;
 class wxTaskBarIconEvent;
 class wxTaskBarIcon;
+class wxToggleButton;
 #endif
 
 //---------------------------------------------------------------------------

@@ -19,6 +19,7 @@ import wx.html
 import images
 
 ##wx.Trap()
+##print os.getpid()
 ##raw_input("Press a key...")
 
 
@@ -811,7 +812,7 @@ def main():
         os.chdir(demoPath)
     except:
         pass
-    app = MyApp(wx.Platform == "__WXMAC__")
+    app = MyApp(0) #wx.Platform == "__WXMAC__")
     app.MainLoop()
 
 
