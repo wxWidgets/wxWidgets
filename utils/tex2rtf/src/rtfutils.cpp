@@ -454,7 +454,7 @@ void WriteRTFHeader(FILE *fd)
 {
   wxFprintf(fd, _T("{\\rtf1\\%s \\deff0\n"), RTFCharset);
   wxFprintf(fd, _T("{\\fonttbl{\\f0\\froman Times New Roman;}{\\f1\\ftech Symbol;}{\\f2\\fswiss Arial;}\n"));
-  wxFprintf(fd, _T("{\\f3\\fmodern Courier;}{\\f4\\ftech Wingdings;}{\\f5\\ftech Monotype Sorts;}\n}"));
+  wxFprintf(fd, _T("{\\f3\\fmodern Courier New;}{\\f4\\ftech Wingdings;}{\\f5\\ftech Monotype Sorts;}\n}"));
   /*
    * Style sheet
    */
