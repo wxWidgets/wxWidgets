@@ -25,9 +25,7 @@
 
 class wxCursor: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxCursor)
-
-  public:
+public:
 
     wxCursor();
     wxCursor( int cursorId );
@@ -38,9 +36,12 @@ class wxCursor: public wxObject
     bool operator != ( const wxCursor& cursor ) const;
     bool Ok() const;
 
+    // implementation
+
     GdkCursor *GetCursor() const;
 
-    // no data :-)
+private:
+    DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
 #endif // __GTKCURSORH__

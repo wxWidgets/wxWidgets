@@ -19,18 +19,18 @@
 
 class wxGDIObject : public wxObject
 {
-DECLARE_DYNAMIC_CLASS(wxGDIObject)
-
 public:
-  inline wxGDIObject() { m_visible = FALSE; };
-  inline ~wxGDIObject() {};
+    inline wxGDIObject() { m_visible = FALSE; };
+    inline ~wxGDIObject() {}
 
-  virtual bool GetVisible() { return m_visible; }
-  virtual void SetVisible( bool visible ) { m_visible = visible; }
+    virtual bool GetVisible() { return m_visible; }
+    virtual void SetVisible( bool visible ) { m_visible = visible; }
 
 protected:
-  bool m_visible; /* can a pointer to this object be safely taken?
-                   * - only if created within FindOrCreate... */
+    bool m_visible; /* can a pointer to this object be safely taken?
+                     * - only if created within FindOrCreate... */
+private:
+    DECLARE_DYNAMIC_CLASS(wxGDIObject)
 };
 
 #endif

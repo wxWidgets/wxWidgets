@@ -55,15 +55,10 @@ public:
     wxString GetString( int n ) const;
     void SetString( int n, const wxString& string );
 
-    // implementation
+protected:
     wxList m_clientList;    // contains the client data for the items
 
-    void DisableEvents();
-    void EnableEvents();
-    void AppendCommon( const wxString &item );
     void ApplyWidgetStyle();
-
-protected:
     virtual int DoAppend(const wxString& item);
 
     virtual void DoSetItemClientData( int n, void* clientData );
@@ -75,7 +70,7 @@ protected:
 
 private:
     // common part of Create() and DoAppend()
-    size_t AppendHelper(GtkWidget *menu, const wxString& item);
+    size_t GtkAppendHelper(GtkWidget *menu, const wxString& item);
 
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)

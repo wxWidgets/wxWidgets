@@ -1277,12 +1277,12 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
 #ifdef __WXGTK__
 
-#include "gtk/gtk.h"
-#include "gdk/gdk.h"
-#include "gdk/gdkx.h"
+#include <gtk/gtk.h>
+#include <gdk/gdk.h>
+#include <gdk/gdkx.h>
 
 #if (GTK_MINOR_VERSION > 0)
-#include "gdk/gdkrgb.h"
+#include <gdk/gdkrgb.h>
 #endif
 
 wxBitmap wxImage::ConvertToBitmap() const

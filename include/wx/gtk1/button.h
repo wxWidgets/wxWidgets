@@ -59,7 +59,8 @@ public:
 
     static wxSize GetDefaultSize();
     
-  // implementation        
+    // implementation
+    // --------------
   
     void ApplyWidgetStyle();    
     

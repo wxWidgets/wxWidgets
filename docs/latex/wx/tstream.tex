@@ -1,4 +1,4 @@
-\section{Streams in wxWindows overview}\label{wxstreamoverview}
+\section{wxStreams overview}\label{wxstreamoverview}
 
 Classes: \helpref{wxStreamBase}{wxstreambase},
  \helpref{wxStreamBuffer}{wxstreambuffer}, \helpref{wxInputStream}{wxinputstream},
@@ -62,13 +62,13 @@ code:
 
  // Ok, read some bytes ... nb_datas is expressed in bytes.
  in_stream.Read(data, nb_datas);
- if (in_stream.LastError() != wxStream_NOERROR) {
+ if (in_stream.LastError() != wxSTREAM_NOERROR) {
    // Oh oh, something bad happens.
    // For a complete list, look into the documentation at wxStreamBase.
  }
 
  // You can also inline all like this.
- if (in_stream.Read(data, nb_datas).LastError() != wxStream_NOERROR) {
+ if (in_stream.Read(data, nb_datas).LastError() != wxSTREAM_NOERROR) {
    // Do something.
  }
 

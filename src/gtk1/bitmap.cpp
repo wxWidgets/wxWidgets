@@ -16,9 +16,9 @@
 #include "wx/filefn.h"
 #include "wx/image.h"
 
-#include "gdk/gdk.h"
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkx.h"
+#include <gdk/gdk.h>
+#include <gdk/gdkprivate.h>
+#include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
 // wxMask

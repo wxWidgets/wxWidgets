@@ -30,18 +30,18 @@ class wxMemoryDC;
 
 class wxMemoryDC : public wxWindowDC
 {
-  DECLARE_DYNAMIC_CLASS(wxMemoryDC)
-
 public:
-  wxMemoryDC();
-  wxMemoryDC( wxDC *dc ); // Create compatible DC
-  ~wxMemoryDC();
-  virtual void SelectObject( const wxBitmap& bitmap );
-  void DoGetSize( int *width, int *height ) const;
+    wxMemoryDC();
+    wxMemoryDC( wxDC *dc ); // Create compatible DC
+    ~wxMemoryDC();
+    virtual void SelectObject( const wxBitmap& bitmap );
+    void DoGetSize( int *width, int *height ) const;
 
-  // implementation
+    // implementation
+    wxBitmap  m_selected;
 
-  wxBitmap  m_selected;
+private:
+    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };
 
 #endif

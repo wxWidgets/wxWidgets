@@ -37,8 +37,6 @@ extern const wxChar *wxDialogNameStr;
 
 class wxDialog: public wxDialogBase
 {
-    DECLARE_DYNAMIC_CLASS(wxDialog)
-
 public:
     wxDialog() { Init(); }
     wxDialog( wxWindow *parent, wxWindowID id,
@@ -106,6 +104,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxDialog)
 };
 
 #endif // __GTKDIALOGH__

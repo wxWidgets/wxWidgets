@@ -26,8 +26,6 @@ extern const wxChar *wxFileSelectorDefaultWildcardStr;
 
 class wxFileDialog: public wxDialog
 {
-DECLARE_DYNAMIC_CLASS(wxFileDialog)
-
 public:
     wxFileDialog() { }
 
@@ -56,7 +54,6 @@ public:
     int GetFilterIndex() const { return m_filterIndex ; }
     
 protected:    
-    
     wxString    m_message;
     long        m_dialogStyle;
     wxWindow *  m_parent;
@@ -65,6 +62,9 @@ protected:
     wxString    m_fileName;
     wxString    m_wildCard;
     int         m_filterIndex;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };
 
 #define wxOPEN 1

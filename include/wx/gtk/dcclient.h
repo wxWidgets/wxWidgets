@@ -31,8 +31,6 @@ class wxClientDC;
 
 class wxWindowDC : public wxDC
 {
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
-
 public:
     wxWindowDC();
     wxWindowDC( wxWindow *win );
@@ -121,6 +119,9 @@ public:
     void ComputeScaleAndOrigin();
 
     GdkWindow *GetWindow() { return m_window; }
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxWindowDC)
 };
 
 //-----------------------------------------------------------------------------
@@ -129,11 +130,12 @@ public:
 
 class wxPaintDC : public wxWindowDC
 {
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
-
 public:
     wxPaintDC();
     wxPaintDC( wxWindow *win );
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 };
 
 //-----------------------------------------------------------------------------
@@ -142,12 +144,12 @@ public:
 
 class wxClientDC : public wxWindowDC
 {
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
-
 public:
     wxClientDC();
     wxClientDC( wxWindow *win );
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxClientDC)
 };
-
 
 #endif // __GTKDCCLIENTH__

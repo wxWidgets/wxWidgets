@@ -40,10 +40,7 @@ extern const char *wxScrollBarNameStr;
 
 class wxScrollBar: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxScrollBar)
-
-  public:
-  
+public:
     wxScrollBar(void) { m_adjust = (GtkAdjustment *) NULL; m_oldPos = 0.0; };
     inline wxScrollBar( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -69,7 +66,8 @@ class wxScrollBar: public wxControl
     virtual void SetScrollbar( int position, int thumbSize, int range, int pageSize,
       bool refresh = TRUE );
 
-  // Backward compatibility
+    // Backward compatibility
+    // ----------------------
     
     int GetValue(void) const;
     void SetValue( int viewStart );
@@ -80,13 +78,17 @@ class wxScrollBar: public wxControl
     void SetObjectLength( int objectLength );
     void SetViewLength( int viewLength );
 
-  // implementation    
+    // implementation
+    // --------------
     
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
   
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };
 
 #endif

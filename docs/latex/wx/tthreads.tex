@@ -34,10 +34,10 @@ more robust and will undoubtedly save you countless problems (example: under
 Win32 a thread can only access GDI objects such as pens, brushes, \&c created by
 itself and not by the other threads).
 
-Final note: in the current release of wxWindows, there are no specific
-facilities for communicating between the threads. However, the usual 
-\helpref{ProcessEvent()}{wxevthandlerprocessevent} function may be used for
-thread communication too - but you should provide your own synchronisation
-mechanism if you use it (e.g. just use a critical section before sending a
-message) because there is no built-in synchronisation.
+For communication between threads, use 
+\helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingprocessevent}
+or its short version \helpref{wxPostEvent}{wxpostevent}. These functions
+have thread safe implementation so that they can be used as they are for
+sending event from one thread to another.
+
 

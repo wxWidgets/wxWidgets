@@ -40,8 +40,6 @@ class wxDC;
 
 class wxDC : public wxDCBase
 {
-    DECLARE_ABSTRACT_CLASS(wxDC)
-
 public:
     wxDC();
     ~wxDC() { }
@@ -151,6 +149,9 @@ public:
                  m_needComputeScaleY; // not yet used
 
     float        m_scaleFactor;  // wxPSDC wants to have this. Will disappear.
+    
+private:
+    DECLARE_ABSTRACT_CLASS(wxDC)
 };
 
 #endif // __GTKDCH__

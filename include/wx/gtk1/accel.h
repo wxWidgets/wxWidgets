@@ -96,8 +96,9 @@ public:
 
     bool Ok() const;
     
-//  implementation
-  
+    // implementation
+    // --------------
+ 
     int GetCommand( wxKeyEvent &event );
     
 private:

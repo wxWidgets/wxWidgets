@@ -35,10 +35,7 @@ typedef    char wxDash;
 
 class wxPen: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxPen)
-
-  public:
-
+public:
     wxPen();
     wxPen( const wxColour &colour, int width, int style );
     wxPen( const wxPen& pen );
@@ -68,7 +65,8 @@ class wxPen: public wxGDIObject
 
     void Unshare();
 
-    // no data :-)
+private:    
+    DECLARE_DYNAMIC_CLASS(wxPen)
 };
 
 #endif // __GTKPENH__

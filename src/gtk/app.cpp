@@ -32,11 +32,11 @@
 #include "wx/thread.h"
 #endif
 
-#include "unistd.h"
+#include <unistd.h>
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 #include "wx/gtk/win_gtk.h"
 

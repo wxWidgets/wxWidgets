@@ -41,9 +41,7 @@ extern const char* wxGaugeNameStr;
 
 class wxGauge: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxGauge)
-  
-  public:
+public:
     inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; m_useProgressBar = TRUE; }
 
     inline wxGauge( wxWindow *parent, wxWindowID id, int range,
@@ -73,13 +71,16 @@ class wxGauge: public wxControl
     // Are we a Win95/GTK progress bar, or a normal gauge?
     inline bool GetProgressBar() const { return m_useProgressBar; }
     
-  // implementation
+    // implementation
+    // -------------
     
     void ApplyWidgetStyle();
-  
-   int      m_rangeMax;
-   int      m_gaugePos;
-   bool     m_useProgressBar;
+    int      m_rangeMax;
+    int      m_gaugePos;
+    bool     m_useProgressBar;
+   
+private:
+    DECLARE_DYNAMIC_CLASS(wxGauge)
 };
 
 #endif

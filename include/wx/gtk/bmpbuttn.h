@@ -76,8 +76,9 @@ public:
     
     virtual bool Enable(bool enable);
   
-// implementation
-
+    // implementation
+    // --------------
+  
     void HasFocus();
     void NotFocus();
     void StartSelect();

@@ -45,6 +45,10 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuItemBase : public wxObject
 {
 public:
+    // some compilers need a default constructor here, do not use
+    wxMenuItemBase() 
+        { wxFAIL_MSG( wxT("illegal call") ); }
+
     // creation
     static wxMenuItem *New(wxMenu *parentMenu = (wxMenu *)NULL,
                            int id = wxID_SEPARATOR,

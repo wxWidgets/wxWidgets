@@ -66,6 +66,8 @@ public:
     bool Enable( bool enable );
 
     // implementation
+    // --------------
+
     void ApplyWidgetStyle();
     bool IsOwnGtkWindow( GdkWindow *window );
     void OnInternalIdle();

@@ -131,7 +131,7 @@ void MyThread::WriteText(const wxString& text)
 
     wxMutexGuiEnter();
 
-    msg << wxTime().FormatTime() << ": " << text;
+    msg << text;
 
     m_frame->WriteText(msg);
 

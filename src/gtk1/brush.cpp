@@ -13,7 +13,7 @@
 
 #include "wx/brush.h"
 
-#include "gdk/gdk.h"
+#include <gdk/gdk.h>
 
 //-----------------------------------------------------------------------------
 // wxBrush

@@ -88,6 +88,7 @@ public:
     { return GetPalette(); };
 
     // implementation
+    // --------------
 
     void SetHeight( int height );
     void SetWidth( int width );
@@ -96,8 +97,6 @@ public:
 
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
-
-    // no data :-)
     
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)

@@ -24,21 +24,22 @@ class wxScreenDC;
 
 class wxScreenDC: public wxPaintDC
 {
-  DECLARE_DYNAMIC_CLASS(wxScreenDC)
-
 public:
-  wxScreenDC();
-  ~wxScreenDC();
+    wxScreenDC();
+    ~wxScreenDC();
 
-  static bool StartDrawingOnTop( wxWindow *window );
-  static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL );
-  static bool EndDrawingOnTop();
+    static bool StartDrawingOnTop( wxWindow *window );
+    static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL );
+    static bool EndDrawingOnTop();
 
-  // implementation
-
-  static GdkWindow  *sm_overlayWindow;
-  static int         sm_overlayWindowX;
-  static int         sm_overlayWindowY;
+    // implementation
+    
+    static GdkWindow  *sm_overlayWindow;
+    static int         sm_overlayWindowX;
+    static int         sm_overlayWindowY;
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxScreenDC)
 };
 
 #endif
