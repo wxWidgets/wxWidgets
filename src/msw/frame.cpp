@@ -878,21 +878,16 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
 {
   if (GetStatusBar())
   {
-    if (event.GetMenuId() == -1)
-      SetStatusText("");
-    else
+    int menuId = event.GetMenuId();
+    if ( menuId != -1 )
     {
       wxMenuBar *menuBar = GetMenuBar();
       if (menuBar)
       {
-// #ifndef __SALFORDC__
-        int menuId = event.GetMenuId();
-        wxString helpString;
-        // This causes a spurious access violation with Salford C++
-        helpString = menuBar->GetHelpString(menuId);
-        if (helpString != "")
-            SetStatusText(helpString);
-// #endif
+        // set status text even if the string is empty - this will at
+        // least remove the string from the item which was previously
+        // selected
+        SetStatusText(menuBar->GetHelpString(menuId));
       }
     }
   }
