@@ -43,7 +43,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#if !defined( __WXMSW__ ) && !defined( __WXMAC__) && !defined(__WXPM__)
+#if (!defined( __WXMSW__ ) && !defined( __WXMAC__) && !defined(__WXPM__)) || defined(__WXUNIVERSAL__)
 #define wxMessageDialog wxGenericMessageDialog
 #endif
 

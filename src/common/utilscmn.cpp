@@ -1295,3 +1295,5 @@ long wxExecute(const wxString& command,
 {
     return wxDoExecuteWithCapture(command, output, &error);
 }
+
+

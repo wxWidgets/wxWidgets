@@ -28,14 +28,14 @@
     #pragma hdrstop
 #endif
 
-#if defined(__WIN32__) && !defined(__GNUWIN32_OLD__)
-
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif
 
 #include "wx/dataobj.h"
+
+#if wxUSE_OLE && defined(__WIN32__) && !defined(__GNUWIN32_OLD__)
 
 #include "wx/msw/private.h"         // includes <windows.h>
 
@@ -1186,5 +1186,27 @@ static const wxChar *GetTymedName(DWORD tymed)
 
 #endif // Debug
 
-#endif // not using OLE at all
+#else // not using OLE at all
+// ----------------------------------------------------------------------------
+// wxDataObject
+// ----------------------------------------------------------------------------
+
+wxDataObject::wxDataObject()
+{
+}
+
+wxDataObject::~wxDataObject()
+{
+}
+
+void wxDataObject::SetAutoDelete()
+{
+}
+
+const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
+{
+    return NULL;
+}
+
+#endif
 

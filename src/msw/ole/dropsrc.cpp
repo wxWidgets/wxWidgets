@@ -33,7 +33,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
 #include "wx/log.h"
 #include "wx/dnd.h"

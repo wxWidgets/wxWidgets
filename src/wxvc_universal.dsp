@@ -253,6 +253,10 @@ SOURCE=.\common\ftp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\gaugecmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\gdicmn.cpp
 # End Source File
 # Begin Source File
@@ -657,6 +661,10 @@ SOURCE=.\generic\sashwin.cpp
 # Begin Source File
 
 SOURCE=.\generic\scrolwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\spinctlg.cpp
 # End Source File
 # Begin Source File
 
@@ -1123,6 +1131,10 @@ SOURCE=.\univ\gauge.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\univ\themes\gtk.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\univ\inphand.cpp
 # End Source File
 # Begin Source File
@@ -1192,6 +1204,10 @@ SOURCE=.\univ\textctrl.cpp
 # Begin Source File
 
 SOURCE=.\univ\theme.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\themes\win32.cpp
 # End Source File
 # Begin Source File
 

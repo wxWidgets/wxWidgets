@@ -3,7 +3,9 @@
 
 #if wxUSE_MSGDLG
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+#include "wx/generic/msgdlgg.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/msgdlg.h"

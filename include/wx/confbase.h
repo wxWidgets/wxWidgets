@@ -20,10 +20,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_CONFIG
-
-#include "wx/string.h"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -43,6 +39,10 @@
 #ifndef wxCONFIG_IMMUTABLE_PREFIX
   #define   wxCONFIG_IMMUTABLE_PREFIX   _T('!')
 #endif
+
+#if wxUSE_CONFIG
+
+#include "wx/string.h"
 
 /// should we use registry instead of configuration files under Windows?
 // (i.e. whether wxConfigBase::Create() will create a wxFileConfig (if it's
@@ -302,21 +302,18 @@ private:
 
 #endif // wxUSE_CONFIG
 
-// ----------------------------------------------------------------------------
-// various helper global functions (defined even if !wxUSE_CONFIG)
-// ----------------------------------------------------------------------------
-
 /*
   Replace environment variables ($SOMETHING) with their values. The format is
   $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
  */
-extern WXDLLEXPORT wxString wxExpandEnvVars(const wxString &sz);
+WXDLLEXPORT wxString wxExpandEnvVars(const wxString &sz);
 
 /*
   Split path into parts removing '..' in progress
  */
-extern WXDLLEXPORT void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
+WXDLLEXPORT void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
+
 
 #endif
   // _WX_CONFIG_H_

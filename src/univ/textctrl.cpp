@@ -138,6 +138,7 @@
 #endif
 
 #include "wx/clipbrd.h"
+
 #include "wx/textfile.h"
 
 #include "wx/caret.h"

@@ -136,7 +136,7 @@
 #define wxUSE_RESOURCES   0
 #define wxUSE_CONSTRAINTS 1
 #define wxUSE_CLIPBOARD   1
-#define wxUSE_DATAOBJ 1
+#define wxUSE_DATAOBJ     1
 #define wxUSE_SPLINES     0
 #define wxUSE_DRAG_AND_DROP 0
 #define wxUSE_XPM_IN_MSW   1

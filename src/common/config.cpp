@@ -27,6 +27,8 @@
     #define wxUSE_CONFIG_NATIVE 1
 #endif
 
+#include "wx/config.h"
+
 #if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 
 #include "wx/app.h"
@@ -37,8 +39,6 @@
 #include "wx/log.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
-
-#include "wx/config.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -266,6 +266,8 @@ wxConfigPathChanger::~wxConfigPathChanger()
   }
 }
 
+#endif // wxUSE_CONFIG
+
 // ----------------------------------------------------------------------------
 // static & global functions
 // ----------------------------------------------------------------------------
@@ -381,6 +383,8 @@ wxString wxExpandEnvVars(const wxString& str)
 }
 
 // this function is used to properly interpret '..' in path
+/// separates group and entry names (probably shouldn't be changed)
+
 void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
 {
   aParts.Empty();
@@ -418,5 +422,4 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
   }
 }
 
-#endif // wxUSE_CONFIG
 
