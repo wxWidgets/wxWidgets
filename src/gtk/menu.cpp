@@ -567,7 +567,8 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
     wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, id );
     event.SetEventObject( menu );
-    event.SetInt(id );
+    if (item->IsCheckable())
+        event.SetInt( item->IsChecked() );
 
 #if wxUSE_MENU_CALLBACK
     if (menu->GetCallback())

@@ -1,4 +1,25 @@
-10th July 2000: wxWindows 2.2 released
+
+22nd July 2000: wxWindows 2.2.1 released
+
+Minor build fixes.
+
+Corrected guffow-scrolling so that no surplus expose
+events are generated.
+
+Corrected bug in wxMask creation on 16-bit displays.
+
+Minor correction to wxDC::DrawRoundedRectangle.
+
+Added support for <INSERT> and <DELETE> menu accelerators.
+
+Use the wxCommmandEvent::IsChecked() function for checkable
+menu items.
+
+Made wxComboBox case-sensitive.
+
+Minor correction to doc-view architecture.
+
+10th July 2000: wxWindows 2.2.0 released
 
 Added code for writing BMP images.
 
