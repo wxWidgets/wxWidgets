@@ -2691,16 +2691,14 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         {
             if (x != -1) m_x = x + pizza->xoffset;
             if (y != -1) m_y = y + pizza->yoffset;
-            if (width != -1) m_width = width;
-            if (height != -1) m_height = height;
         }
         else
         {
             m_x = x + pizza->xoffset;
             m_y = y + pizza->yoffset;
-            m_width = width;
-            m_height = height;
         }
+        if (width != -1) m_width = width;
+        if (height != -1) m_height = height;
 
         if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
         {
