@@ -337,34 +337,30 @@ WXHBRUSH wxControl::MSWControlColorSolid(WXHDC pDC, wxColour colBg)
     if ( m_hasFgCol )
     {
         ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-        if ( !colBg.Ok() )
-            colBg = GetBackgroundColour();
     }
 
+    // use the background colour override if a valid colour is given
+    WXHBRUSH hbr;
     if ( colBg.Ok() )
     {
-        ::SetBkColor(hdc, wxColourToRGB(colBg));
-
+        // draw children with the same colour as the parent
         wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg, wxSOLID);
 
-        return (WXHBRUSH)brush->GetResourceHandle();
+        hbr = (WXHBRUSH)brush->GetResourceHandle();
+    }
+    else // use our own background colour and recurse upwards if necessary
+    {
+        hbr = MSWGetBgBrush(pDC);
     }
 
-    return 0;
+    return hbr;
 }
 
 WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
 {
-    WXHBRUSH hbr = MSWControlColorSolid(pDC, m_hasBgCol ? m_backgroundColour
-                                                        : wxNullColour);
-    if ( hbr )
-        return hbr;
-
     ::SetBkMode((HDC)pDC, TRANSPARENT);
 
-    hbr = MSWGetBgBrush(pDC);
-
-    return hbr ? hbr : MSWGetDefaultBgBrush();
+    return MSWControlColorSolid(pDC);
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)

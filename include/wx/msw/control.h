@@ -120,18 +120,12 @@ protected:
     virtual WXHBRUSH MSWControlColor(WXHDC pDC);
 
     // call this from the derived class MSWControlColor() if you want to show
-    // the control greyed out
+    // the control greyed out (and opaque)
     WXHBRUSH MSWControlColorDisabled(WXHDC pDC);
 
     // call this from the derived class MSWControlColor() if you want to always
     // paint the background (as all opaque controls do)
-    WXHBRUSH MSWControlColorSolid(WXHDC pDC)
-    {
-        return MSWControlColorSolid(pDC, GetBackgroundColour());
-    }
-
-    // common part of the 3 methods above
-    WXHBRUSH MSWControlColorSolid(WXHDC pDC, wxColour colBg);
+    WXHBRUSH MSWControlColorSolid(WXHDC pDC, wxColour colBg = wxNullColour);
 
     // another WM_CTLCOLOR-related function: override this to return the brush
     // which should be used to paint the control background by default
