@@ -112,6 +112,7 @@ GENERICOBJS= \
   ..\generic\$D\logg.obj \
   ..\generic\$D\numdlgg.obj \
   ..\generic\$D\panelg.obj \
+  ..\generic\$D\plot.obj \
   ..\generic\$D\printps.obj \
   ..\generic\$D\prntdlgg.obj \
   ..\generic\$D\progdlgg.obj \
@@ -148,6 +149,7 @@ GENLIBOBJS= \
   logg.obj \
   numdlgg.obj \
   panelg.obj \
+  plot.obj \
   printps.obj \
   prntdlgg.obj \
   progdlgg.obj \
@@ -225,7 +227,7 @@ COMMONOBJS = \
   ..\common\$D\matrix.obj \
   ..\common\$D\memory.obj \
   ..\common\$D\menucmn.obj \
-  ..\common\$D\mimetype.obj \
+  ..\common\$D\mimecmn.obj \
   ..\common\$D\module.obj \
   ..\common\$D\mstream.obj \
   ..\common\$D\object.obj \
@@ -324,7 +326,7 @@ COMLIBOBJS2 = \
   matrix.obj \
   memory.obj \
   menucmn.obj \
-  mimetype.obj \
+  mimecmn.obj \
   module.obj \
   mstream.obj \
   object.obj \
@@ -412,6 +414,7 @@ OS2OBJS = \
   ..\os2\$D\menu.obj \
   ..\os2\$D\menuitem.obj \
   ..\os2\$D\metafile.obj \
+  ..\os2\$D\mimetype.obj \
   ..\os2\$D\minifram.obj \
   ..\os2\$D\msgdlg.obj \
   ..\os2\$D\nativdlg.obj \
@@ -490,9 +493,10 @@ OS2LIBOBJS1 = \
   menu.obj \
   menuitem.obj \
   metafile.obj \
-  minifram.obj
+  mimetype.obj
 
 OS2LIBOBJS2 = \
+  minifram.obj \
   msgdlg.obj \
   nativdlg.obj \
   notebook.obj \
@@ -577,6 +581,14 @@ dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
 test:   $(OS2DIR)\$D\wave.obj
 test2:  ..\common\Debug\config.obj
 
+$D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
+        icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /Tp dummy.cpp
+
+$D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
+        icc @<<
+$(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
+<<
+
 $(COMLIBOBJS1):
   copy ..\common\$D\appcmn.obj
   copy ..\common\$D\choiccmn.obj
@@ -635,7 +647,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\matrix.obj
   copy ..\common\$D\memory.obj
   copy ..\common\$D\menucmn.obj
-  copy ..\common\$D\mimetype.obj
+  copy ..\common\$D\mimecmn.obj
   copy ..\common\$D\module.obj
   copy ..\common\$D\mstream.obj
   copy ..\common\$D\object.obj
@@ -696,6 +708,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\logg.obj
   copy ..\generic\$D\numdlgg.obj
   copy ..\generic\$D\panelg.obj
+  copy ..\generic\$D\plot.obj
   copy ..\generic\$D\printps.obj
   copy ..\generic\$D\prntdlgg.obj
   copy ..\generic\$D\progdlgg.obj
@@ -776,9 +789,10 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\menu.obj
   copy ..\os2\$D\menuitem.obj
   copy ..\os2\$D\metafile.obj
-  copy ..\os2\$D\minifram.obj
+  copy ..\os2\$D\mimetype.obj
 
 $(OS2LIBOBJS2):
+  copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj
   copy ..\os2\$D\nativdlg.obj
   copy ..\os2\$D\notebook.obj
@@ -944,14 +958,6 @@ $(WXDIR)\lib\wx200.dll: $(OBJECTS) $(WXDIR)\lib\wx210.lib
 <<
 
 !endif
-
-$D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
-        icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /Tp dummy.cpp
-
-$D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
-        icc @<<
-$(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
-<<
 
 # If taking wxWindows from CVS, setup.h doesn't exist yet.
 $(WXDIR)\include\wx\os2\setup.h: $(WXDIR)\include\wx\os2\setup0.h

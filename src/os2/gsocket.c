@@ -7,6 +7,7 @@
  */
 
 #include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_SOCKETS
 
