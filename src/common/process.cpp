@@ -127,17 +127,17 @@ void wxProcess::SetPipeStreams(wxInputStream *inputSstream,
 
 bool wxProcess::IsInputOpened() const
 {
-    return TRUE;
+    return m_inputStream != NULL;
 }
 
 bool wxProcess::IsInputAvailable() const
 {
-    return FALSE;
+    return m_inputStream && !m_inputStream->Eof();
 }
 
 bool wxProcess::IsErrorAvailable() const
 {
-    return FALSE;
+    return m_errorStream && !m_errorStream->Eof();
 }
 
 #endif // !Win32 && !Unix
