@@ -146,6 +146,8 @@ bool wxEventLoopImpl::SendIdleMessage()
 // wxEventLoop implementation
 // ============================================================================
 
+wxEventLoop *wxEventLoop::ms_activeLoop = NULL;
+
 // ----------------------------------------------------------------------------
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
@@ -166,6 +168,9 @@ int wxEventLoop::Run()
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
 
     m_impl = new wxEventLoopImpl;
+    
+    wxEventLoop *oldLoop = ms_activeLoop;
+    ms_activeLoop = this;
 
     for ( ;; )
     {
@@ -190,6 +195,8 @@ int wxEventLoop::Run()
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;
+
+    ms_activeLoop = oldLoop;
 
     return exitcode;
 }

@@ -43,10 +43,15 @@ public:
 
     // is the event loop running now?
     virtual bool IsRunning() const;
+    
+    // return currently active (running) event loop, may be NULL
+    static wxEventLoop *GetActive() { return ms_activeLoop; }
 
 protected:
     // the pointer to the port specific implementation class
     class WXDLLEXPORT wxEventLoopImpl *m_impl;
+    // the pointer to currently active loop
+    static wxEventLoop *ms_activeLoop;
 };
 
 #endif // _WX_EVTLOOP_H_

@@ -62,6 +62,8 @@ private:
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
+wxEventLoop *wxEventLoop::ms_activeLoop = NULL;
+
 wxEventLoop::~wxEventLoop()
 {
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
@@ -77,6 +79,9 @@ int wxEventLoop::Run()
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
 
+    wxEventLoop *oldLoop = ms_activeLoop;
+    ms_activeLoop = this;
+
     m_impl = new wxEventLoopImpl;
 
     gtk_main();
@@ -84,6 +89,8 @@ int wxEventLoop::Run()
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;
+
+    ms_activeLoop = oldLoop;
 
     return exitcode;
 }
