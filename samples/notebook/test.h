@@ -20,7 +20,7 @@ public:
 
     wxButton*   m_okButton;
     wxButton*   m_cancelButton;
-    wxButton*   m_helpButton;
+    wxButton*   m_addPageButton;
 };
 
 DECLARE_APP(MyApp)
@@ -49,6 +49,7 @@ public:
 
     void OnOK(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
+    void OnAddPage(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);
     void Init(void);
 protected:
@@ -76,4 +77,5 @@ DECLARE_EVENT_TABLE()
 #define TEST_TAB_AARDVARK   12
 
 #define ID_NOTEBOOK         1000
+#define ID_ADD_PAGE         1200
 

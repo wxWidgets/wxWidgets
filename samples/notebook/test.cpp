@@ -59,7 +59,7 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
 {
   m_okButton = new wxButton(window, wxID_OK, "Close", wxPoint(-1, -1), wxSize(80, 25));
   m_cancelButton = new wxButton(window, wxID_CANCEL, "Cancel", wxPoint(-1, -1), wxSize(80, 25));
-  m_helpButton = new wxButton(window, wxID_HELP, "Help", wxPoint(-1, -1), wxSize(80, 25));
+  m_addPageButton = new wxButton(window, ID_ADD_PAGE, "Add page", wxPoint(-1, -1), wxSize(80, 25));
   m_okButton->SetDefault();
 
   wxLayoutConstraints* c = new wxLayoutConstraints;
@@ -67,10 +67,10 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
   c->bottom.SameAs(window, wxBottom, 4);
   c->height.AsIs();
   c->width.AsIs();
-  m_helpButton->SetConstraints(c);
+  m_addPageButton->SetConstraints(c);
 
   c = new wxLayoutConstraints;
-  c->right.SameAs(m_helpButton, wxLeft, 4);
+  c->right.SameAs(m_addPageButton, wxLeft, 4);
   c->bottom.SameAs(window, wxBottom, 4);
   c->height.AsIs();
   c->width.AsIs();
@@ -101,7 +101,6 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
     wxTE_MULTILINE);
 
   notebook->AddPage(panel2, "Dog");
-
   wxPanel *panel3 = new wxPanel(notebook, -1);
   panel3->SetBackgroundColour(wxColour("WHITE"));
   notebook->AddPage(panel3, "Goat");
@@ -156,6 +155,7 @@ void MyDialog::Init(void)
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_OK, MyFrame::OnOK)
     EVT_BUTTON(wxID_CANCEL, MyFrame::OnOK)
+    EVT_BUTTON(ID_ADD_PAGE, MyFrame::OnAddPage)
     EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
 
@@ -166,6 +166,14 @@ MyFrame::MyFrame(wxFrame* parent, const wxWindowID id, const wxString& title,
     m_panel = (wxPanel*) NULL;
     m_notebook = (wxNotebook*) NULL;
     Init();
+}
+
+void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
+{
+  wxPanel *panel = new wxPanel( m_notebook, -1 );
+  (void)new wxButton( panel, -1, "Button", wxPoint( 10,10 ), wxSize(-1,-1) );
+  m_notebook->AddPage( panel, "Added" );
+  m_notebook->SetSelection( m_notebook->GetPageCount()-1 );
 }
 
 void MyFrame::OnOK(wxCommandEvent& WXUNUSED(event) )

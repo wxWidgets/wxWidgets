@@ -789,7 +789,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
         {
             /* yes: set it's size to fill all the frame */
             int client_x, client_y;
-            GetClientSize( &client_x, &client_y );
+            DoGetClientSize( &client_x, &client_y );
             child->SetSize( 1, 1, client_x-2, client_y-2 );
         }
     }
