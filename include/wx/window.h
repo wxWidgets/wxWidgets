@@ -958,18 +958,21 @@ protected:
     // set the best size for the control if the default size was given:
     // replaces the fields of size == -1 with the best values for them and
     // calls SetSize() if needed
+    //
+    // This function is rather unfortunately named..  it's really just a
+    // smarter SetSize / convenience function for expanding wxDefaultSize.
+    // Note that it does not influence the value returned by GetBestSize
+    // at all.
+    //
+    // FIXME: Can't we just make this the behaviour of SetSize when
+    //        wxSIZE_AUTO_* is in play and do away with this (undocumented)
+    //        method altogether?
+
     void SetBestSize(const wxSize& size)
     {
-        if ( size.x == -1 || size.y == -1 )
-        {
-            wxSize sizeBest = DoGetBestSize();
-            if ( size.x != -1 )
-                sizeBest.x = size.x;
-            if ( size.y != -1 )
-                sizeBest.y = size.y;
+        wxSize  best( DoGetBestSize() );
 
-            SetSize(sizeBest);
-        }
+        SetSize( wxMax( size.x, best.x ), wxMax( size.y, best.y ) );
     }
 
     // more pure virtual functions
