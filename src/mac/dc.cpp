@@ -783,32 +783,13 @@ void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
  * TO
  * the Mac style:
  * Angles start on the +ve y axis and go clockwise.
- * To achive this I work out which quadrant the angle lies in then map this to
- * the equivalent quadrant on the Mac.  (Sin and Cos values reveal which
- * quadrant you are in).
  */
 static double wxConvertWXangleToMACangle(double angle)
 {
-    double sin_a, cos_a;
-
-    sin_a = sin(angle / RAD2DEG);
-    cos_a = cos(angle / RAD2DEG);
-
-    if( (sin_a >= 0.0) && (cos_a >= 0.0) ) {
-        angle = acos(sin_a) * RAD2DEG;
-    }
-    else if( (sin_a >= 0.0) && (cos_a <= 0.0) ) {
-        sin_a *= -1;
-        angle = acos(sin_a) * RAD2DEG + 180;
-    }
-    else if( (sin_a <= 0.0) && (cos_a >=  0.0) ) {
-        angle = acos(sin_a) * RAD2DEG + 180;
-    }
-    else if( (sin_a <  0.0) && (cos_a <  0.0) ) {
-        sin_a *= -1;
-        angle = acos(sin_a) * RAD2DEG + 180;
-    }
-    return angle;
+    double newAngle = 90 - angle ;
+    if ( newAngle < 0 )
+        newAngle += 360 ;
+    return newAngle ;
 }
 
 void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
@@ -874,6 +855,9 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 
     Rect r;
     double angle = sa - ea;  // Order important Mac in opposite direction to wx
+    // we have to make sure that the filling is always counter-clockwise
+    if ( angle > 0 )
+        angle -= 360 ;
 
     wxCoord xx = XLOG2DEVMAC(x);
     wxCoord yy = YLOG2DEVMAC(y);
@@ -1407,6 +1391,11 @@ inline Fixed	IntToFixed( int inInt )
 		return (((SInt32) inInt) << 16);
 	}
 
+inline int	FixedToInt( Fixed inFixed )
+	{
+		return (((SInt32) inFixed) >> 16);
+	}
+
 
 void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
@@ -1468,21 +1457,49 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 	wxASSERT_MSG( status == noErr , "couldn't create the layout of the rotated text" );
 
     int iAngle = int( angle );
+    int drawX = XLOG2DEVMAC(x) ;
+    int drawY = YLOG2DEVMAC(y) ;
+    
+    ATSUTextMeasurement textBefore ;
+    ATSUTextMeasurement textAfter ;
+    ATSUTextMeasurement ascent ;
+    ATSUTextMeasurement descent ;
+    
+    
     if ( abs(iAngle) > 0 )
     {
         Fixed atsuAngle = IntToFixed( iAngle ) ;
-    	ByteCount angleSize = sizeof(Fixed) ;
-    	ATSUAttributeTag rotationTag = kATSULineRotationTag ;
-    	ATSUAttributeValuePtr	angleValue = &atsuAngle ;
-    	status = ::ATSUSetLayoutControls(atsuLayout , 1 , &rotationTag , &angleSize , &angleValue ) ;
+
+		ATSUAttributeTag atsuTags[] =
+		{
+		    kATSULineRotationTag ,
+		} ;
+
+	    ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+	    {
+	        sizeof( Fixed ) ,
+	    } ;
+
+		ATSUAttributeValuePtr	atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+		{
+		    &atsuAngle ,
+		} ;
+
+    	status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag),
+		    atsuTags, atsuSizes, atsuValues ) ;
     }
 
+	status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+					&textBefore , &textAfter, &ascent , &descent );
+    
+    drawX += sin(angle/RAD2DEG) * FixedToInt(ascent) ;
+    drawY += cos(angle/RAD2DEG) * FixedToInt(ascent) ;
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-				IntToFixed(XLOG2DEVMAC(x) ) , IntToFixed(YLOG2DEVMAC(y) ) );
+				IntToFixed(drawX) , IntToFixed(drawY) );
 	wxASSERT_MSG( status == noErr , "couldn't draw the rotated text" );
     Rect rect ;
 	status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-					IntToFixed(XLOG2DEVMAC(x) ) , IntToFixed(YLOG2DEVMAC(y) ) , &rect );
+					IntToFixed(drawX) , IntToFixed(drawY) , &rect );
 	wxASSERT_MSG( status == noErr , "couldn't measure the rotated text" );
 
     OffsetRect( &rect , -m_macLocalOrigin.x , -m_macLocalOrigin.y ) ;
@@ -1501,7 +1518,8 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 	long yy = YLOG2DEVMAC(y);
 #if TARGET_CARBON
 	bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-	useDrawThemeText = false ;
+	if ( m_font.GetNoAntiAliasing() )
+		useDrawThemeText = false ;
 #endif
 	MacInstallFont() ;
     if ( 0 )
@@ -1558,7 +1576,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 #if TARGET_CARBON
             	if ( useDrawThemeText )
             	{
-    	            Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 1000 } ;
+    	            Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
                     CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
             		::DrawThemeTextBox( mString,
             							kThemeCurrentPortFont,
@@ -1584,7 +1602,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 #if TARGET_CARBON
         if ( useDrawThemeText )
     	{
-    	    Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 1000 } ;
+    	    Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
             CFStringRef mString = CFStringCreateWithCString( NULL , text + laststop , kCFStringEncodingMacRoman ) ;
     		::DrawThemeTextBox( mString,
     							kThemeCurrentPortFont,
@@ -1632,7 +1650,8 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 	::GetFontInfo( &fi ) ;
 #if TARGET_CARBON	
 	bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-	useGetThemeText = false ;
+	if ( ((wxFont*)&m_font)->GetNoAntiAliasing() )
+		useGetThemeText = false ;
 #endif
 
 	if ( height )
@@ -1737,7 +1756,34 @@ wxCoord   wxDC::GetCharWidth(void) const
 
 	MacInstallFont() ;
 
-    int width = ::TextWidth( "n" , 0 , 1 ) ;
+    int width = 0 ;
+#if TARGET_CARBON
+	bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
+	if ( ((wxFont*)&m_font)->GetNoAntiAliasing() )
+		useGetThemeText = false ;
+#endif
+
+	char text[] = "H" ;
+#if TARGET_CARBON
+    if ( useGetThemeText )
+    {
+        Point bounds={0,0} ;
+        SInt16 baseline ;
+        CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text , 1 , CFStringGetSystemEncoding(), false ) ;
+		::GetThemeTextDimensions( mString,
+							kThemeCurrentPortFont,
+							kThemeStateActive,
+							false,
+							&bounds,
+							&baseline );
+	    CFRelease( mString ) ;
+	    width = bounds.h ;
+    }
+    else
+#endif
+    {
+	    width = ::TextWidth( text , 0 , 1 ) ;
+	}
 
 	return YDEV2LOGREL(width) ;
 }
@@ -1879,7 +1925,7 @@ void wxDC::MacInstallFont() const
 	    kATSUFontTag ,
 	    kATSUSizeTag ,
 //	    kATSUColorTag ,
-	    kATSUBaselineClassTag ,
+//	    kATSUBaselineClassTag ,
 	    kATSUVerticalCharacterTag,
 
 	    kATSUQDBoldfaceTag ,
@@ -1895,7 +1941,7 @@ void wxDC::MacInstallFont() const
         sizeof( ATSUFontID ) ,
         sizeof( Fixed ) ,
 //        sizeof( RGBColor ) ,
-        sizeof( BslnBaselineClass ) ,
+//        sizeof( BslnBaselineClass ) ,
         sizeof( ATSUVerticalCharacterType),
 
         sizeof( Boolean ) ,
@@ -1917,7 +1963,7 @@ void wxDC::MacInstallFont() const
 	    &atsuFont ,
 	    &atsuSize ,
 //	    &MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ,
-	    &kBaselineDefault ,
+//	    &kBaselineDefault ,
 	    &kHorizontal,
 
 	    (qdStyle & bold) ? &kTrue : &kFalse ,
