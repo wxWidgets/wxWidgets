@@ -31,9 +31,9 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/log.h"
-    #include "wx/textfile.h"
 #endif
 
+#include "wx/textfile.h"
 #include "wx/generic/grid.h"
 
 // ----------------------------------------------------------------------------
@@ -3226,7 +3226,8 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
 {
     int startPos = 0;
     int pos;
-    wxString eol = wxTextFile::GetEOL( wxTextFileType_Unix );
+    wxTextFile tf;
+    wxString eol =  wxTextFile::GetEOL( wxTextFileType_Unix );
     wxString tVal = wxTextFile::Translate( value, wxTextFileType_Unix );
     
     while ( startPos < (int)tVal.Length() )
