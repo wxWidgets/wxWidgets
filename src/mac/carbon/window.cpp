@@ -1417,7 +1417,7 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     // ... and don't do anything (avoiding flicker) if it's already ok
     if ( x == currentX && y == currentY &&
-        width == currentW && height == currentH )
+        width == currentW && height == currentH && ( height != -1 && width != -1 ) )
     {
         // TODO REMOVE
         MacRepositionScrollBars() ; // we might have a real position shift
