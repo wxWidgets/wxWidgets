@@ -159,6 +159,7 @@ wxZlibOutputStream::~wxZlibOutputStream()
   }
 
   deflateEnd(m_deflate);
+  delete m_deflate;
 
   delete[] m_z_buffer;
 }
