@@ -251,7 +251,7 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
             event1.SetPosition( (int)floor(x/m_owner->GetZoom()) );
             m_owner->GetEventHandler()->ProcessEvent( event1 );
             
-            if (curve != m_owner->GetCurrent())
+            if (curve != m_owner->GetCurrentCurve())
             {
                 wxPlotEvent event2( wxEVT_PLOT_SEL_CHANGING, m_owner->GetId() );
                 event2.SetEventObject( m_owner );
@@ -259,7 +259,7 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
                 event2.SetCurve( curve );
                 if (!m_owner->GetEventHandler()->ProcessEvent( event2 ) || event2.IsAllowed())
                 {
-                    m_owner->SetCurrent( curve );
+                    m_owner->SetCurrentCurve( curve );
                 }
             }
             return;
@@ -418,7 +418,7 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             wxPlotCurve *curve = (wxPlotCurve*) node->GetData();
             
-            if (curve == m_owner->GetCurrent())
+            if (curve == m_owner->GetCurrentCurve())
                 dc.SetPen( *wxBLACK_PEN );
             else
                 dc.SetPen( *wxGREY_PEN );
@@ -606,7 +606,7 @@ void wxPlotYAxisArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc( this );
     
-    wxPlotCurve *curve = m_owner->GetCurrent();
+    wxPlotCurve *curve = m_owner->GetCurrentCurve();
     
     if (!curve) return;
     
@@ -817,7 +817,7 @@ wxPlotCurve *wxPlotWindow::GetAt( size_t n )
     return (wxPlotCurve*) node->GetData();
 }
 
-void wxPlotWindow::SetCurrent( wxPlotCurve* current )
+void wxPlotWindow::SetCurrentCurve( wxPlotCurve* current )
 {
     m_current = current;
     m_area->Refresh( FALSE );
@@ -844,7 +844,7 @@ void wxPlotWindow::Delete( wxPlotCurve* curve )
     if (curve == m_current) m_current = (wxPlotCurve *) NULL;
 }
 
-wxPlotCurve *wxPlotWindow::GetCurrent()
+wxPlotCurve *wxPlotWindow::GetCurrentCurve()
 {
     return m_current;
 }

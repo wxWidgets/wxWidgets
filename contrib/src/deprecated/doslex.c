@@ -680,10 +680,10 @@ do_action:	/* this label is used only to access EOF actions */
         {
           loop:
             #ifdef __cplusplus
-                          while (yyinput() != '*');
+                          while (yyinput() != '*') ;
                           switch (yyinput())
             #else
-                          while (input() != '*');
+                          while (input() != '*') ;
                           switch (input())
             #endif
               {

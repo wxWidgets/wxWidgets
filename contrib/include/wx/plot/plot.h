@@ -293,8 +293,8 @@ public:
     size_t GetCount();
     wxPlotCurve *GetAt( size_t n );
 
-    void SetCurrent( wxPlotCurve* current );
-    wxPlotCurve *GetCurrent();
+    void SetCurrentCurve( wxPlotCurve* current );
+    wxPlotCurve *GetCurrentCurve();
 
     // mark list accessors
     // -------------------
