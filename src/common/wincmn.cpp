@@ -123,12 +123,12 @@ void wxWindowBase::InitBase()
     // m_foregroundColour = *wxBLACK;  // TODO take this from sys settings too?
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
 
-#if !defined(__WXMAC__) && !defined(__WXGTK__)
+    // GRG, changed Mar/2000
+#if 0 // !defined(__WXMAC__) && !defined(__WXGTK__)
     m_font = *wxSWISS_FONT;         //      and this?
 #else
     m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 #endif
-
     // no style bits
     m_exStyle =
     m_windowStyle = 0;
