@@ -662,11 +662,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#if defined(__WIN32__)
-    #define wxUSE_TOOLTIPS 0 //? error 'SetWindow' cannot convert parameter 1 ...
-#else
-    #define wxUSE_TOOLTIPS 0
-#endif
+#define wxUSE_TOOLTIPS 1
 
 // wxValidator class and related methods
 #define wxUSE_VALIDATORS 1
