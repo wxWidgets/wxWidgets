@@ -54,8 +54,7 @@ public:
 // Implementation
 protected:
     friend class wxTaskBarIconWindow;
-    long WindowProc(WXHWND hWnd, unsigned int msg,
-                    unsigned int wParam, long lParam);
+    long WindowProc(unsigned int msg, unsigned int wParam, long lParam);
     void RegisterWindowMessages();
 
 // Data members

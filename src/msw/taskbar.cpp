@@ -91,7 +91,7 @@ public:
     {
         if (msg == gs_msgRestartTaskbar || msg == gs_msgTaskbar)
         {
-            return m_icon->WindowProc(GetHWND(), msg, wParam, lParam);
+            return m_icon->WindowProc(msg, wParam, lParam);
         }
         else
         {
@@ -268,9 +268,8 @@ void wxTaskBarIcon::RegisterWindowMessages()
 // wxTaskBarIcon window proc
 // ----------------------------------------------------------------------------
 
-long wxTaskBarIcon::WindowProc(WXHWND hWnd,
-                               unsigned int msg,
-                               unsigned int wParam,
+long wxTaskBarIcon::WindowProc(unsigned int msg,
+                               unsigned int WXUNUSED(wParam),
                                long lParam)
 {
     wxEventType eventType = 0;
