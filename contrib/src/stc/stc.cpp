@@ -93,8 +93,9 @@ DEFINE_EVENT_TYPE( wxEVT_STC_USERLISTSELECTION )
 DEFINE_EVENT_TYPE( wxEVT_STC_URIDROPPED )
 DEFINE_EVENT_TYPE( wxEVT_STC_DWELLSTART )
 DEFINE_EVENT_TYPE( wxEVT_STC_DWELLEND )
-
-
+DEFINE_EVENT_TYPE( wxEVT_STC_START_DRAG )
+DEFINE_EVENT_TYPE( wxEVT_STC_DRAG_OVER )
+DEFINE_EVENT_TYPE( wxEVT_STC_DO_DROP )
 
 
 BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -1914,6 +1915,7 @@ void wxStyledTextCtrl::OnListBox(wxCommandEvent& evt) {
 
 void wxStyledTextCtrl::NotifyChange() {
     wxStyledTextEvent evt(wxEVT_STC_CHANGE, GetId());
+    evt.SetEventObject(this);
     GetEventHandler()->ProcessEvent(evt);
 }
 
@@ -1921,6 +1923,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     SCNotification& scn = *_scn;
     wxStyledTextEvent evt(0, GetId());
 
+    evt.SetEventObject(this);
     evt.SetPosition(scn.position);
     evt.SetKey(scn.ch);
     evt.SetModifiers(scn.modifiers);
@@ -2026,7 +2029,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 }
 
 
-
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
@@ -2050,6 +2052,8 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_listType = 0;
     m_x = 0;
     m_y = 0;
+    m_dragAllowMove = FALSE;
+    m_dragResult = wxDragNone;
 }
 
 bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0; }
@@ -2081,8 +2085,14 @@ void wxStyledTextEvent::CopyObject(wxObject& obj) const {
     o->m_x =            m_x;
     o->m_y =            m_y;
 
+    o->m_dragText =     m_dragText;
+    o->m_dragAllowMove =m_dragAllowMove;
+    o->m_dragResult =   m_dragResult;
 }
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
+
+
+
 

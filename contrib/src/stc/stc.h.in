@@ -22,6 +22,7 @@
 
 
 #include <wx/wx.h>
+#include <wx/dnd.h>
 
 //----------------------------------------------------------------------
 // BEGIN generated section.  The following code is automatically generated
@@ -175,6 +176,7 @@ private:
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxStyledTextCtrl)
@@ -196,23 +198,26 @@ public:
     wxStyledTextEvent(wxEventType commandType=0, int id=0);
     ~wxStyledTextEvent() {}
 
-    void SetPosition(int pos)        { m_position = pos; }
-    void SetKey(int k)               { m_key = k; }
-    void SetModifiers(int m)         { m_modifiers = m; }
-    void SetModificationType(int t)  { m_modificationType = t; }
-    void SetText(const char* t)      { m_text = t; }
-    void SetLength(int len)          { m_length = len; }
-    void SetLinesAdded(int num)      { m_linesAdded = num; }
-    void SetLine(int val)            { m_line = val; }
-    void SetFoldLevelNow(int val)    { m_foldLevelNow = val; }
-    void SetFoldLevelPrev(int val)   { m_foldLevelPrev = val; }
-    void SetMargin(int val)          { m_margin = val; }
-    void SetMessage(int val)         { m_message = val; }
-    void SetWParam(int val)          { m_wParam = val; }
-    void SetLParam(int val)          { m_lParam = val; }
-    void SetListType(int val)        { m_listType = val; }
-    void SetX(int val)               { m_x = val; }
-    void SetY(int val)               { m_y = val; }
+    void SetPosition(int pos)             { m_position = pos; }
+    void SetKey(int k)                    { m_key = k; }
+    void SetModifiers(int m)              { m_modifiers = m; }
+    void SetModificationType(int t)       { m_modificationType = t; }
+    void SetText(const char* t)           { m_text = t; }
+    void SetLength(int len)               { m_length = len; }
+    void SetLinesAdded(int num)           { m_linesAdded = num; }
+    void SetLine(int val)                 { m_line = val; }
+    void SetFoldLevelNow(int val)         { m_foldLevelNow = val; }
+    void SetFoldLevelPrev(int val)        { m_foldLevelPrev = val; }
+    void SetMargin(int val)               { m_margin = val; }
+    void SetMessage(int val)              { m_message = val; }
+    void SetWParam(int val)               { m_wParam = val; }
+    void SetLParam(int val)               { m_lParam = val; }
+    void SetListType(int val)             { m_listType = val; }
+    void SetX(int val)                    { m_x = val; }
+    void SetY(int val)                    { m_y = val; }
+    void SetDragText(const wxString& val) { m_dragText = val; }
+    void SetDragAllowMove(bool val)       { m_dragAllowMove = val; }
+    void SetDragResult(wxDragResult val)  { m_dragResult = val; }
 
     int  GetPosition() const         { return m_position; }
     int  GetKey()  const             { return m_key; }
@@ -231,6 +236,9 @@ public:
     int  GetListType() const         { return m_listType; }
     int  GetX() const                { return m_x; }
     int  GetY() const                { return m_y; }
+    wxString GetDragText()           { return m_dragText; }
+    bool GetDragAllowMove()          { return m_dragAllowMove; }
+    wxDragResult GetDragResult()     { return m_dragResult; }
 
     bool GetShift() const;
     bool GetControl() const;
@@ -263,6 +271,11 @@ private:
     int m_listType;
     int m_x;
     int m_y;
+
+    wxString m_dragText;        // wxEVT_STC_START_DRAG, wxEVT_STC_DO_DROP
+    bool     m_dragAllowMove;   // wxEVT_STC_START_DRAG
+
+    wxDragResult m_dragResult; // wxEVT_STC_DRAG_OVER,wxEVT_STC_DO_DROP
 #endif
 };
 
@@ -287,6 +300,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_URIDROPPED,              1666)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DWELLSTART,              1667)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DWELLEND,                1668)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_START_DRAG,              1669)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DRAG_OVER,               1670)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DO_DROP,                 1671)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -309,6 +325,9 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_URIDROPPED,
         wxEVT_STC_DWELLSTART,
         wxEVT_STC_DWELLEND,
+        wxEVT_STC_START_DRAG,
+        wxEVT_STC_DRAG_OVER,
+        wxEVT_STC_DO_DROP,
     };
 #endif
 
@@ -336,7 +355,9 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_URIDROPPED(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_URIDROPPED,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DWELLSTART(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLSTART,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DWELLEND(id, fn)                DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLEND,              id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
-
+#define EVT_STC_START_DRAG(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_START_DRAG,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_DRAG_OVER(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_DO_DROP(id, fn)                 DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 
 #endif
 

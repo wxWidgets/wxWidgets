@@ -98,6 +98,14 @@ def EVT_STC_DWELLSTART(win, id, func):
 def EVT_STC_DWELLEND(win, id, func):
     win.Connect(id, -1, wxEVT_STC_DWELLEND, func)
 
+def EVT_STC_START_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_START_DRAG, func)
+
+def EVT_STC_DRAG_OVER(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_DRAG_OVER, func)
+
+def EVT_STC_DO_DROP(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_DO_DROP, func)
 
 
 class wxStyledTextCtrlPtr(wxControlPtr):
@@ -994,6 +1002,15 @@ class wxStyledTextEventPtr(wxCommandEventPtr):
     def SetY(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextEvent_SetY,(self,) + _args, _kwargs)
         return val
+    def SetDragText(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextEvent_SetDragText,(self,) + _args, _kwargs)
+        return val
+    def SetDragAllowMove(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextEvent_SetDragAllowMove,(self,) + _args, _kwargs)
+        return val
+    def SetDragResult(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextEvent_SetDragResult,(self,) + _args, _kwargs)
+        return val
     def GetPosition(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextEvent_GetPosition,(self,) + _args, _kwargs)
         return val
@@ -1044,6 +1061,15 @@ class wxStyledTextEventPtr(wxCommandEventPtr):
         return val
     def GetY(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextEvent_GetY,(self,) + _args, _kwargs)
+        return val
+    def GetDragText(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextEvent_GetDragText,(self,) + _args, _kwargs)
+        return val
+    def GetDragAllowMove(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextEvent_GetDragAllowMove,(self,) + _args, _kwargs)
+        return val
+    def GetDragResult(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextEvent_GetDragResult,(self,) + _args, _kwargs)
         return val
     def GetShift(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextEvent_GetShift,(self,) + _args, _kwargs)
@@ -1593,6 +1619,9 @@ wxEVT_STC_USERLISTSELECTION = stc_c.wxEVT_STC_USERLISTSELECTION
 wxEVT_STC_URIDROPPED = stc_c.wxEVT_STC_URIDROPPED
 wxEVT_STC_DWELLSTART = stc_c.wxEVT_STC_DWELLSTART
 wxEVT_STC_DWELLEND = stc_c.wxEVT_STC_DWELLEND
+wxEVT_STC_START_DRAG = stc_c.wxEVT_STC_START_DRAG
+wxEVT_STC_DRAG_OVER = stc_c.wxEVT_STC_DRAG_OVER
+wxEVT_STC_DO_DROP = stc_c.wxEVT_STC_DO_DROP
 
 
 #-------------- USER INCLUDE -----------------------

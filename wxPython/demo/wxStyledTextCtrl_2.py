@@ -116,7 +116,7 @@ class PythonSTC(wxStyledTextCtrl):
 
         self.SetCaretForeground("BLUE")
 
-        EVT_KEY_UP(self, self.OnKeyPressed)
+        EVT_KEY_DOWN(self, self.OnKeyPressed)
 
 
     def OnKeyPressed(self, event):

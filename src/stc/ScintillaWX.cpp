@@ -121,17 +121,31 @@ void ScintillaWX::Finalise() {
 
 
 void ScintillaWX::StartDrag() {
-    wxDropSource        source(wMain.GetID());
-    wxTextDataObject    data(wxString(drag.s, drag.len));
-    wxDragResult        result;
+    wxString dragText(drag.s, drag.len);
 
-    dropWentOutside = true;
-    source.SetData(data);
-    result = source.DoDragDrop(TRUE);
-    if (result == wxDragMove && dropWentOutside)
-        ClearSelection();
-    inDragDrop = FALSE;
-    SetDragPosition(invalidPosition);
+    // Send an event to allow the drag text to be changed
+    wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
+    evt.SetEventObject(stc);
+    evt.SetDragText(dragText);
+    evt.SetDragAllowMove(TRUE);
+    evt.SetPosition(wxMin(stc->GetSelectionStart(),
+                          stc->GetSelectionEnd()));
+    stc->GetEventHandler()->ProcessEvent(evt);
+    dragText = evt.GetDragText();
+
+    if (dragText.Length()) {
+        wxDropSource        source(wMain.GetID());
+        wxTextDataObject    data(dragText);
+        wxDragResult        result;
+
+        source.SetData(data);
+        dropWentOutside = TRUE;
+        result = source.DoDragDrop(evt.GetDragAllowMove());
+        if (result == wxDragMove && dropWentOutside)
+            ClearSelection();
+        inDragDrop = FALSE;
+        SetDragPosition(invalidPosition);
+    }
 }
 
 
@@ -489,9 +503,26 @@ void ScintillaWX::DoOnListBox() {
 
 bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     SetDragPosition(invalidPosition);
-    int movePos = PositionFromLocation(Point(x,y));
-    DropAt(movePos, data, dragResult == wxDragMove, FALSE); // TODO: rectangular?
-    return TRUE;
+
+    // Send an event to allow the drag details to be changed
+    wxStyledTextEvent evt(wxEVT_STC_DO_DROP, stc->GetId());
+    evt.SetEventObject(stc);
+    evt.SetDragResult(dragResult);
+    evt.SetX(x);
+    evt.SetY(y);
+    evt.SetPosition(PositionFromLocation(Point(x,y)));
+    evt.SetDragText(data);
+    stc->GetEventHandler()->ProcessEvent(evt);
+
+    dragResult = evt.GetDragResult();
+    if (dragResult == wxDragMove || dragResult == wxDragCopy) {
+        DropAt(evt.GetPosition(),
+               evt.GetDragText(),
+               dragResult == wxDragMove,
+               FALSE); // TODO: rectangular?
+        return TRUE;
+    }
+    return FALSE;
 }
 
 
@@ -503,7 +534,17 @@ wxDragResult ScintillaWX::DoDragEnter(wxCoord x, wxCoord y, wxDragResult def) {
 
 wxDragResult ScintillaWX::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
     SetDragPosition(PositionFromLocation(Point(x, y)));
-    dragResult = def;
+
+    // Send an event to allow the drag result to be changed
+    wxStyledTextEvent evt(wxEVT_STC_DRAG_OVER, stc->GetId());
+    evt.SetEventObject(stc);
+    evt.SetDragResult(def);
+    evt.SetX(x);
+    evt.SetY(y);
+    evt.SetPosition(PositionFromLocation(Point(x,y)));
+    stc->GetEventHandler()->ProcessEvent(evt);
+
+    dragResult = evt.GetDragResult();
     return dragResult;
 }
 

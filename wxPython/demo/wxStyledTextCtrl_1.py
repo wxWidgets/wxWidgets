@@ -4,6 +4,9 @@ from wxPython.stc import *
 
 #----------------------------------------------------------------------
 
+debug = 1
+
+
 demoText = """\
 
 This editor is provided by a class named wxStyledTextCtrl.  As
@@ -52,7 +55,46 @@ class MySTC(wxStyledTextCtrl):
         wxStyledTextCtrl.__init__(self, parent, ID)
         self.log = log
 
+        EVT_STC_DO_DROP(self, ID, self.OnDoDrop)
+        EVT_STC_DRAG_OVER(self, ID, self.OnDragOver)
+        EVT_STC_START_DRAG(self, ID, self.OnStartDrag)
         EVT_STC_MODIFIED(self, ID, self.OnModified)
+
+
+    def OnStartDrag(self, evt):
+        self.log.write("OnStartDrag: %d, %s\n"
+                       % (evt.GetDragAllowMove(), evt.GetDragText()))
+
+        if debug and evt.GetPosition() < 250:
+            evt.SetDragAllowMove(false)     # you can prevent moving of text (only copy)
+            evt.SetDragText("DRAGGED TEXT") # you can change what is dragged
+            #evt.SetDragText("")             # or prevent the drag with empty text
+
+
+    def OnDragOver(self, evt):
+        self.log.write("OnDragOver: x,y=(%d, %d)  pos: %d  DragResult: %d\n"
+                       % (evt.GetX(), evt.GetY(), evt.GetPosition(), evt.GetDragResult()))
+
+        if debug and evt.GetPosition() < 250:
+            evt.SetDragResult(wxDragNone)   # prevent dropping at the begining of the buffer
+
+
+    def OnDoDrop(self, evt):
+        self.log.write("OnDoDrop: x,y=(%d, %d)  pos: %d  DragResult: %d\n"
+                       "\ttext: %s\n"
+                       % (evt.GetX(), evt.GetY(), evt.GetPosition(), evt.GetDragResult(),
+                          evt.GetDragText()))
+
+        if debug and evt.GetPosition() < 500:
+            evt.SetDragText("DROPPED TEXT")  # Can change text if needed
+            ##evt.SetDragResult(wxDragNone)  # Can also change the drag operation, but it
+                                             # is probably better to do it in OnDragOver so
+                                             # there is visual feedback
+
+            ##evt.SetPosition(25)            # Can also change position, but I'm not sure why
+                                             # you would want to...
+
+
 
 
     def OnModified(self, evt):
@@ -66,6 +108,7 @@ class MySTC(wxStyledTextCtrl):
                                   evt.GetLinesAdded(),
                                   evt.GetLength(),
                                   evt.GetText() ))
+
 
     def transModType(self, modType):
         st = ""
@@ -90,6 +133,7 @@ class MySTC(wxStyledTextCtrl):
             st = 'UNKNOWN'
 
         return st
+
 
 
 
@@ -168,7 +212,7 @@ def runTest(frame, nb, log):
     ed.SetStyling(10, wxSTC_INDIC2_MASK | wxSTC_INDIC1_MASK)
 
     # some test stuff...
-    if 1:
+    if debug:
         print "GetTextLength(): ", ed.GetTextLength(), len(ed.GetText())
         print "GetText(): ", repr(ed.GetText())
         print

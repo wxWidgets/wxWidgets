@@ -96,6 +96,14 @@ def EVT_STC_DWELLSTART(win, id, func):
 def EVT_STC_DWELLEND(win, id, func):
     win.Connect(id, -1, wxEVT_STC_DWELLEND, func)
 
+def EVT_STC_START_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_START_DRAG, func)
+
+def EVT_STC_DRAG_OVER(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_DRAG_OVER, func)
+
+def EVT_STC_DO_DROP(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_DO_DROP, func)
 
 "
 
