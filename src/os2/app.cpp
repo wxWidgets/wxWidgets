@@ -76,7 +76,7 @@ wxApp *wxTheApp = NULL;
 // FIXME why not const? and not static?
 
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
-//     with NR suffix - wxWindow::MSWCreate() supposes this
+//     with NR suffix - wxWindow::OS2Create() supposes this
 wxChar wxFrameClassName[]         = wxT("wxFrameClass");
 wxChar wxFrameClassNameNoRedraw[] = wxT("wxFrameClassNR");
 wxChar wxMDIFrameClassName[]      = wxT("wxMDIFrameClass");
@@ -125,7 +125,7 @@ bool wxApp::Initialize()
     //    wxRedirectIOToConsole();
 #endif
 
-    wxBuffer = new wxChar[1500]; // FIXME
+    wxBuffer = new wxChar[1500]; // FIXME; why?
 
     wxClassInfo::InitializeClasses();
 
