@@ -34,8 +34,7 @@ public:
 protected:
     void Init();
 
-    long m_id;
-    WXHWND m_hwnd;
+    unsigned long m_id;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTimer)

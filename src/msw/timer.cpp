@@ -32,7 +32,6 @@
 #endif
 
 #include "wx/hashmap.h"
-#include "wx/module.h"
 
 #include "wx/timer.h"
 
@@ -43,46 +42,19 @@ extern "C" HWND
 wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 // ----------------------------------------------------------------------------
-// private functions
+// private globals
 // ----------------------------------------------------------------------------
 
-// define a hash containing all the timers: it is indexed by HWND and timer id
-struct wxTimerKey
-{
-    wxTimerKey(WXHWND hwnd, int id) : m_hwnd(hwnd), m_id(id) { }
-    wxTimerKey(HWND hwnd, int id) : m_hwnd((WXHWND)hwnd), m_id(id) { }
-
-    WXHWND m_hwnd;
-    int m_id;
-};
-
-static inline bool operator==(const wxTimerKey& tk1, const wxTimerKey& tk2)
-{
-    return tk1.m_hwnd == tk2.m_hwnd && tk1.m_id == tk2.m_id;
-}
-
-struct wxTimerKeyHash
-{
-    wxTimerKeyHash() { }
-    unsigned long operator()(const wxTimerKey& tk) const
-        { return (unsigned long)tk.m_hwnd + tk.m_id; }
-
-    wxTimerKeyHash& operator=(const wxTimerKeyHash&) { return *this; }
-};
-
-struct wxTimerKeyEqual
-{
-    wxTimerKeyEqual() { }
-    bool operator()(const wxTimerKey& tk1, const wxTimerKey& tk2) const
-        { return tk1 == tk2; }
-
-    wxTimerKeyEqual& operator=(const wxTimerKeyEqual&) { return *this; }
-};
-
-WX_DECLARE_HASH_MAP(wxTimerKey, wxTimer *, wxTimerKeyHash, wxTimerKeyEqual,
+// define a hash containing all the timers: it is indexed by timer id and
+// contains the corresponding timer
+WX_DECLARE_HASH_MAP(unsigned long, wxTimer *, wxIntegerHash, wxIntegerEqual,
                     wxTimerMap);
 
 static wxTimerMap g_timerMap;
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
 
 void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
@@ -91,43 +63,6 @@ void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
-
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-// these variables are for timer shared hwnd management
-static const wxChar *wxMSWTIMER_WNDCLASSNAME = wxT("_wxTimer_Internal_Class");
-static LPCTSTR s_classnameTimerWnd = NULL;
-static HWND s_hwndTimer = NULL;
-
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-class wxTimerModule : public wxModule
-{
-public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit()
-    {
-        if ( s_hwndTimer )
-        {
-            ::DestroyWindow(s_hwndTimer);
-            s_hwndTimer = NULL;
-
-            if ( !::UnregisterClass(wxMSWTIMER_WNDCLASSNAME, wxGetInstance()) )
-            {
-                wxLogLastError(_T("UnregisterClass(wxTimerClass)"));
-            }
-
-            s_classnameTimerWnd = NULL;
-        }
-    }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxTimerModule)
-};
 
 // ============================================================================
 // implementation
@@ -140,7 +75,6 @@ private:
 void wxTimer::Init()
 {
     m_id = 0;
-    m_hwnd = NULL;
 }
 
 wxTimer::~wxTimer()
@@ -154,50 +88,12 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
 
     wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeour") );
 
-    // find a window for SetTimer(): it should be a valid HWND owned by this
-    // thread (even if we had a non NULL m_hwnd before, reset it in case the
-    // owner has changed)
-    m_hwnd = NULL;
-
-    // first try the owner window
-    if ( m_owner )
-    {
-        wxWindow *win = wxDynamicCast(m_owner, wxWindow);
-        if ( win )
-        {
-            m_hwnd = win->GetHWND();
-        }
-    }
-
-    // if not, use a shared hidden window
-    if ( !m_hwnd )
-    {
-        if ( !s_hwndTimer )
-        {
-            s_hwndTimer = wxCreateHiddenWindow
-                          (
-                            &s_classnameTimerWnd,
-                            wxMSWTIMER_WNDCLASSNAME,
-                            ::DefWindowProc
-                          );
-
-            if ( !s_hwndTimer )
-            {
-                wxASSERT_MSG( s_hwndTimer, wxT("can't create a HWND for wxTimer") );
-                return false;
-            }
-        }
-
-        m_hwnd = (WXHWND)s_hwndTimer;
-
-    }
-
     m_id = ::SetTimer
              (
-                (HWND)m_hwnd,
-                (UINT)(m_id ? m_id : 1),
-                (UINT)m_milli,
-                (TIMERPROC)wxTimerProc
+                NULL,                       // don't use window
+                1,                          // id ignored with NULL hwnd anyhow
+                (UINT)m_milli,              // delay
+                (TIMERPROC)wxTimerProc      // timer proc to call
              );
 
     if ( !m_id )
@@ -207,7 +103,20 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
         return false;
     }
 
-    g_timerMap[wxTimerKey(m_hwnd, m_id)] = this;
+    // check that SetTimer() didn't reuse an existing id: according to the MSDN
+    // this can happen and this would be catastrophic to us as we rely on ids
+    // uniquely identifying the timers because we use them as keys in the hash
+    if ( g_timerMap.find(m_id) != g_timerMap.end() )
+    {
+        wxLogError(_("Timer creation failed."));
+
+        ::KillTimer(NULL, m_id);
+        m_id = 0;
+
+        return false;
+    }
+
+    g_timerMap[m_id] = this;
 
     return true;
 }
@@ -216,10 +125,9 @@ void wxTimer::Stop()
 {
     if ( m_id )
     {
-        ::KillTimer((HWND)m_hwnd, (UINT)m_id);
-        m_hwnd = NULL;
+        ::KillTimer(NULL, m_id);
 
-        g_timerMap.erase(wxTimerKey(m_hwnd, m_id));
+        g_timerMap.erase(m_id);
     }
 
     m_id = 0;
@@ -239,9 +147,9 @@ void wxProcessTimer(wxTimer& timer)
     timer.Notify();
 }
 
-void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD)
+void WINAPI wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 {
-    wxTimerMap::iterator node = g_timerMap.find(wxTimerKey(hwnd, idTimer));
+    wxTimerMap::iterator node = g_timerMap.find(idTimer);
 
     wxCHECK_RET( node != g_timerMap.end(), wxT("bogus timer id in wxTimerProc") );
 

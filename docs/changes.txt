@@ -77,7 +77,6 @@ wxMSW:
 - wxRadioButtons are now checked when they get focus (standard behaviour)
 - several fixes to owner drawn menu items (Christian Sturmlechner)
 - wxGauge now supports full 32 bit range (Miroslav Rajcic)
-- use proper window with wxTimer (Jaakko Salli)
 
 wxGTK:
 
