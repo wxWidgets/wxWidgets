@@ -16,6 +16,8 @@ class WXDLLIMPEXP_ADV wxCalendarDateAttr;
 class WXDLLIMPEXP_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_ADV wxCalendarEvent;
 
+#include <wx/popupwin.h>
+
 class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlBase
 {
 public:
@@ -66,7 +68,7 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
 private:
-    wxDialog *m_dlg;
+    wxPopupWindow *m_popup;
     wxTextCtrl *m_txt;
     wxCalendarCtrl *m_cal;
     wxButton *m_btn;

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/datectrl.cpp
+// Name:        generic/datectlg.cpp
 // Purpose:     generic wxDatePickerCtrl implementation
 // Author:      Andreas Pflug
 // Modified by:
@@ -94,10 +94,6 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
     wxASSERT_MSG( !(style & wxDP_SPIN),
                   _T("wxDP_SPIN style not supported, use wxDP_DEFAULT") );
 
-    wxString txt;
-    if (date.IsValid())
-        txt = date.FormatDate();
-
     if ( !wxControl::Create(parent, id, pos, size,
                             style | wxCLIP_CHILDREN | wxWANTS_CHARS,
                             wxDefaultValidator, name) )
@@ -125,23 +121,20 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
         dc.SelectObject(wxNullBitmap);
     }
 
-    m_txt=new wxTextCtrl(this, CTRLID_TXT, txt);
+    m_txt=new wxTextCtrl(this, CTRLID_TXT);
     m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN,
                    (wxObjectEventFunction)&wxDatePickerCtrl::OnEditKey,
                    0, this);
     m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KILL_FOCUS,
                    (wxObjectEventFunction)&wxDatePickerCtrl::OnKillFocus,
                    0, this);
-    SetFormat(wxT("%x"));
 
     m_btn = new wxBitmapButton(this, CTRLID_BTN, bmp);
 
-    m_dlg = new wxDialog(this, CTRLID_CAL, wxEmptyString,
-                         wxDefaultPosition, wxDefaultSize,
-                         wxSIMPLE_BORDER);
-    m_dlg->SetFont(GetFont());
+    m_popup = new wxPopupWindow(this);
+    m_popup->SetFont(GetFont());
 
-    wxPanel *panel=new wxPanel(m_dlg, CTRLID_PAN,
+    wxPanel *panel=new wxPanel(m_popup, CTRLID_PAN,
                                wxPoint(0, 0), wxDefaultSize,
                                wxSUNKEN_BORDER);
     m_cal = new wxCalendarCtrl(panel, CTRLID_CAL, wxDefaultDateTime,
@@ -183,6 +176,12 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 
     wxPoint yearPosition = yearControl->GetPosition();
 
+    SetFormat(wxT("%x"));
+
+    if (date.IsValid())
+        m_txt->SetValue(date.Format(m_format));
+
+
 #ifdef __WXMSW__
 #define CALBORDER   0
 #else
@@ -207,7 +206,8 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 
 
     panel->SetClientSize(width+CALBORDER/2, calSize.y-2+CALBORDER);
-    m_dlg->SetClientSize(panel->GetSize());
+    m_popup->SetClientSize(panel->GetSize());
+    m_popup->Hide();
 
     return TRUE;
 }
@@ -215,7 +215,7 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 
 void wxDatePickerCtrl::Init()
 {
-    m_dlg = NULL;
+    m_popup = NULL;
     m_txt = NULL;
     m_cal = NULL;
     m_btn = NULL;
@@ -229,14 +229,14 @@ bool wxDatePickerCtrl::Destroy()
 {
     if (m_cal)
         m_cal->Destroy();
-    if (m_dlg)
-        m_dlg->Destroy();
+    if (m_popup)
+        m_popup->Destroy();
     if (m_txt)
         m_txt->Destroy();
     if (m_btn)
         m_btn->Destroy();
 
-    m_dlg = NULL;
+    m_popup = NULL;
     m_txt = NULL;
     m_cal = NULL;
     m_btn = NULL;
@@ -278,9 +278,9 @@ bool wxDatePickerCtrl::Show(bool show)
 
     if (!show)
     {
-        if (m_dlg)
+        if (m_popup)
         {
-            m_dlg->Hide();
+            m_popup->Hide();
             m_dropped = false;
         }
     }
@@ -319,6 +319,14 @@ wxDatePickerCtrl::SetDateRange(const wxDateTime& lowerdate,
 
 bool wxDatePickerCtrl::SetFormat(const wxChar *fmt)
 {
+    wxString currentText;
+    wxDateTime currentDate;
+    if (m_txt)
+    {
+        currentText = m_txt->GetValue();
+        if (!currentText.IsEmpty())
+            currentDate.ParseFormat(currentText, m_format);
+    }
     wxDateTime dt;
     dt.ParseFormat(wxT("2003-10-13"), wxT("%Y-%m-%d"));
     wxString str=dt.Format(fmt);
@@ -344,6 +352,11 @@ bool wxDatePickerCtrl::SetFormat(const wxChar *fmt)
             m_format.Append(wxT("%Y"));
             p += 4;
         }
+        else if (n == (dt.GetYear() % 100))
+        {
+            m_format.Append(wxT("%y"));
+            p += 2;
+        }
         else
             m_format.Append(*p++);
     }
@@ -366,6 +379,9 @@ bool wxDatePickerCtrl::SetFormat(const wxChar *fmt)
         tv.SetIncludeList(valList);
 
         m_txt->SetValidator(tv);
+
+        if (!currentText.IsEmpty())
+            m_txt->SetValue(currentDate.Format(m_format));
     }
     return true;
 }
@@ -388,7 +404,7 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& date)
     if (m_cal)
     {
         if (date.IsValid())
-            m_txt->SetValue(date.FormatDate());
+            m_txt->SetValue(date.Format(m_format));
         else
             m_txt->SetValue(wxEmptyString);
     }
@@ -416,28 +432,28 @@ void wxDatePickerCtrl::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
 
 void wxDatePickerCtrl::DropDown(bool down)
 {
-    if (m_dlg)
+    if (m_popup)
     {
         if (down)
         {
-            if (m_txt->GetValue().IsEmpty())
-                m_cal->SetDate(wxDateTime::Today());
-            else
-            {
-                wxDateTime dt;
+            wxDateTime dt;
+            if (!m_txt->GetValue().IsEmpty())
                 dt.ParseFormat(m_txt->GetValue(), m_format);
-                m_cal->SetDate(dt);
-            }
-            wxPoint pos=GetParent()->ClientToScreen(GetPosition());
 
-            m_dlg->Move(pos.x, pos.y + GetSize().y);
-            m_dlg->Show();
+            if (dt.IsValid())
+                m_cal->SetDate(dt);
+            else
+                m_cal->SetDate(wxDateTime::Today());
+
+            wxPoint pos=GetParent()->ClientToScreen(GetPosition());
+            m_popup->Move(pos.x, pos.y + GetSize().y);
+            m_popup->Show();
             m_dropped = true;
         }
         else
         {
             if (m_dropped)
-                m_dlg->Hide();
+                m_popup->Hide();
             m_dropped = false;
         }
     }
@@ -452,7 +468,7 @@ void wxDatePickerCtrl::OnChildSetFocus(wxChildFocusEvent &ev)
     wxWindow  *w=(wxWindow*)ev.GetEventObject();
     while (w)
     {
-        if (w == m_dlg)
+        if (w == m_popup)
             return;
         w = w->GetParent();
     }
@@ -508,7 +524,7 @@ void wxDatePickerCtrl::OnSelChange(wxCalendarEvent &ev)
 {
     if (m_cal)
     {
-        m_txt->SetValue(m_cal->GetDate().FormatDate());
+        m_txt->SetValue(m_cal->GetDate().Format(m_format));
         if (ev.GetEventType() == wxEVT_CALENDAR_DOUBLECLICKED)
         {
             DropDown(false);
