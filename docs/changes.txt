@@ -137,6 +137,9 @@ wxMotif:
 - implemented wxToggleButton
 - wxRadioBox and wxStaticBox now use the default shadow (border) style
   instead of a sunken border
+- implemented wxBitmapDataObject
+- finished wxClipboard implementation (it still unconditionally
+  copies the data)
 
 wxUniv:
 

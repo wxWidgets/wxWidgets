@@ -521,6 +521,7 @@ ALL_HEADERS = \
 		motif/cursor.h \
 		motif/dataform.h \
 		motif/dataobj.h \
+		motif/dataobj2.h \
 		motif/dc.h \
 		motif/dcclient.h \
 		motif/dcmemory.h \
@@ -625,7 +626,8 @@ ALL_HEADERS = \
 		protocol/protocol.h \
 		x11/bitmap.h \
 		x11/brush.h \
-		x11/pen.h
+		x11/pen.h \
+		x11/privx.h
 
 COMMONOBJS = \
 		accesscmn.o \

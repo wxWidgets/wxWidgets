@@ -9,8 +9,6 @@ See also: todo.txt.
 
 - No wxToolTip (but see wxToolBar for a way of implementing it).
 
-- Limited clipboard support (text only) and no drag and drop.
-
 - Need a way of specifying default settings for colour/font/etc.
 
 - More optimisation could be done to reduce X server traffic, etc.

@@ -1250,6 +1250,7 @@ control.h	MotifH
 cursor.h	MotifH
 dataform.h	MotifH
 dataobj.h	MotifH
+dataobj2.h	MotifH
 dc.h	MotifH
 dcclient.h	MotifH
 dcmemory.h	MotifH

@@ -375,6 +375,46 @@ bool wxBitmap::Create(void *data, wxBitmapType type,
     return handler->Create(this, data, type, width, height, depth);
 }
 
+bool wxBitmap::Create(WXPixmap pixmap)
+{
+    UnRef();
+    Pixmap xpixmap = (Pixmap)pixmap;
+    Display* xdisplay = wxGlobalDisplay();
+    int xscreen = DefaultScreen( xdisplay );
+    Window xroot = RootWindow( xdisplay, xscreen );
+
+    // make a copy of the Pixmap
+    Window root;
+    Pixmap copy;
+    int x, y;
+    unsigned width, height, border, depth;
+
+    XGetGeometry( xdisplay, (Drawable)xpixmap, &root, &x, &y,
+                  &width, &height, &border, &depth );
+    copy = XCreatePixmap( xdisplay, xroot, width, height, depth );
+
+    GC gc = XCreateGC( xdisplay, copy, 0, NULL );
+    XCopyArea( xdisplay, xpixmap, copy, gc, 0, 0, width, height, 0, 0 );
+    XFreeGC( xdisplay, gc );
+
+    // fill in ref data
+    wxBitmapRefData* ref = new wxBitmapRefData();
+
+    if( depth == 1 )
+        ref->m_bitmap = (WXPixmap)copy;
+    else
+        ref->m_pixmap = (WXPixmap)copy;
+
+    ref->m_display = (WXDisplay*)xdisplay;
+    ref->m_width = width;
+    ref->m_height = height;
+    ref->m_bpp = depth;
+
+    m_refData = ref;
+
+    return true;
+}
+
 bool wxBitmap::CreateFromXpm( const char **bits )
 {
     wxCHECK_MSG( bits, FALSE, _T("NULL pointer in wxBitmap::CreateFromXpm") );

@@ -96,6 +96,8 @@ public:
     bool Create(int width, int height, int depth = -1);
     bool Create(void* data, wxBitmapType type,
                 int width, int height, int depth = -1);
+    // create the wxBitmap using a _copy_ of the pixmap
+    bool Create(WXPixmap pixmap);
 
     int GetHeight() const;
     int GetWidth() const;

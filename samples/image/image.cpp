@@ -125,7 +125,7 @@ public:
 #endif // wxHAVE_RAW_BITMAP
     void OnQuit( wxCommandEvent &event );
 
-#if wxUSE_CLIPBOARD && !defined(__WXMOTIF_)
+#if wxUSE_CLIPBOARD
     void OnCopy(wxCommandEvent& event);
     void OnPaste(wxCommandEvent& event);
 #endif // wxUSE_CLIPBOARD
@@ -817,7 +817,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (ID_SHOWRAW,  MyFrame::OnTestRawBitmap)
 #endif
 
-#if wxUSE_CLIPBOARD && !defined(__WXMOTIF__)
+#if wxUSE_CLIPBOARD
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
 #endif // wxUSE_CLIPBOARD
@@ -841,7 +841,7 @@ MyFrame::MyFrame()
   menuImage->Append( ID_QUIT, _T("E&xit\tCtrl-Q"));
   menu_bar->Append(menuImage, _T("&Image"));
 
-#if wxUSE_CLIPBOARD && !defined(__WXMOTIF__)
+#if wxUSE_CLIPBOARD
   wxMenu *menuClipboard = new wxMenu;
   menuClipboard->Append(wxID_COPY, _T("&Copy test image\tCtrl-C"));
   menuClipboard->Append(wxID_PASTE, _T("&Paste image\tCtrl-V"));
@@ -898,22 +898,28 @@ void MyFrame::OnTestRawBitmap( wxCommandEvent &event )
 
 #endif // wxHAVE_RAW_BITMAP
 
-#if wxUSE_CLIPBOARD && !defined(__WXMOTIF__)
+#if wxUSE_CLIPBOARD
 
 void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     wxBitmapDataObject *dobjBmp = new wxBitmapDataObject;
     dobjBmp->SetBitmap(*m_canvas->my_horse_png);
 
+    wxTheClipboard->Open();
+
     if ( !wxTheClipboard->SetData(dobjBmp) )
     {
         wxLogError(_T("Failed to copy bitmap to clipboard"));
     }
+
+    wxTheClipboard->Close();
 }
 
 void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 {
     wxBitmapDataObject dobjBmp;
+
+    wxTheClipboard->Open();
     if ( !wxTheClipboard->GetData(dobjBmp) )
     {
         wxLogMessage(_T("No bitmap data in the clipboard"));
@@ -922,6 +928,7 @@ void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     {
         (new MyImageFrame(this, dobjBmp.GetBitmap()))->Show();
     }
+    wxTheClipboard->Close();
 }
 
 #endif // wxUSE_CLIPBOARD

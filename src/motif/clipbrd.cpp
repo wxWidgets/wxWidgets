@@ -2,7 +2,7 @@
 // Name:        clipbrd.cpp
 // Purpose:     Clipboard functionality
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Mattia Barbon (added support for generic wxDataObjects)
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -19,12 +19,11 @@
 #if wxUSE_CLIPBOARD
 
 #include "wx/app.h"
-#include "wx/frame.h"
 #include "wx/bitmap.h"
 #include "wx/utils.h"
-#include "wx/metafile.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
+#include "wx/ptr_scpd.h"
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxDataObjectList);
@@ -38,180 +37,94 @@ WX_DEFINE_LIST(wxDataObjectList);
 #pragma message enable nosimpint
 #endif
 
-#include <string.h>
-
-// IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
-// IMPLEMENT_ABSTRACT_CLASS(wxClipboardClient, wxObject)
-
-static bool gs_clipboardIsOpen = FALSE;
+#include "wx/motif/private.h"
 
 bool wxOpenClipboard()
 {
-    if (!gs_clipboardIsOpen)
-    {
-        gs_clipboardIsOpen = TRUE;
-        return TRUE;
-    }
-    else
-        return FALSE;
+    return wxTheClipboard->Open();
 }
 
 bool wxCloseClipboard()
 {
-    if (gs_clipboardIsOpen)
-    {
-        gs_clipboardIsOpen = FALSE;
-        return TRUE;
-    }
-    else
-        return FALSE;
+    wxTheClipboard->Close();
+
+    return true;
 }
 
 bool wxEmptyClipboard()
 {
-    // No equivalent in Motif
-    return TRUE;
+    wxTheClipboard->Clear();
+    return true;
 }
 
 bool wxClipboardOpen()
 {
-    return gs_clipboardIsOpen;
+    return wxTheClipboard->IsOpened();
 }
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
-    // Only text is supported.
-    if (dataFormat != wxDF_TEXT)
-        return FALSE;
-
-    unsigned long numBytes = 0;
-    long privateId = 0;
-    
-    Window window = (Window) 0;
-    if (wxTheApp->GetTopWindow())
-        window = XtWindow( (Widget) wxTheApp->GetTopWindow()->GetTopWidget() );
-
-    int success = XmClipboardRetrieve((Display*) wxGetDisplay(),
-      window, "TEXT", (XtPointer) 0, 0, & numBytes, & privateId) ;
-
-    // Assume only text is supported. If we have anything at all,
-    // or the clipboard is locked so we're not sure, we say we support it.
-    if (success == ClipboardNoData)
-        return FALSE;
-    else
-        return TRUE;
+    return wxTheClipboard->IsSupported( dataFormat );
 }
 
-bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int WXUNUSED(width), int WXUNUSED(height))
+bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj,
+                        int WXUNUSED(width), int WXUNUSED(height))
 {
-    if (dataFormat != wxDF_TEXT)
-        return FALSE;
+    wxDataObject* dobj = NULL;
 
-    char* data = (char*) obj;
+    if( dataFormat == wxDF_TEXT )
+    {
+        wxChar* data = (wxChar*)obj;
+        dobj = new wxTextDataObject( data );
+    }
+    else if( dataFormat = wxDF_BITMAP )
+    {
+        wxBitmap* data = (wxBitmap*)obj;
+        dobj = new wxBitmapDataObject( *data );
+    }
 
-    XmString text = XmStringCreateSimple ("CLIPBOARD");
-    Window window = (Window) 0;
-    if (wxTheApp->GetTopWindow())
-        window = XtWindow( (Widget) wxTheApp->GetTopWindow()->GetTopWidget() );
+    if( !dobj )
+        return false;
 
-    long itemId = 0;
-    int result = 0;
-
-    while ((result =
-      XmClipboardStartCopy((Display*) wxGetDisplay(),
-       window, 
-       text,
-       XtLastTimestampProcessed((Display*) wxGetDisplay()),
-       (Widget) 0,
-       (XmCutPasteProc) 0,
-       & itemId)) != ClipboardSuccess)
-
-       ;
-
-    XmStringFree (text);
-
-    long dataId = 0;
-    while ((result =
-      XmClipboardCopy((Display*) wxGetDisplay(),
-       window, 
-       itemId,
-       "TEXT",
-       (XtPointer) data,
-       strlen(data) + 1,
-       0,
-       & dataId)) != ClipboardSuccess)
-
-       ;
-
-    while (( result =
-       XmClipboardEndCopy((Display*) wxGetDisplay(),
-         window, itemId) ) != ClipboardSuccess)
-
-       ;
-    
-    return TRUE;
+    return wxTheClipboard->SetData( dobj );
 }
 
 wxObject *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 {
-    if (dataFormat != wxDF_TEXT)
-        return (wxObject*) NULL;
+    wxDataObject* dobj = NULL;
+    wxTextDataObject* tobj = NULL;
+    wxBitmapDataObject* bobj = NULL;
 
-    bool done = FALSE;
-    long id = 0;
-    unsigned long numBytes = 0;
-    int result = 0;
-    Window window = (Window) 0;
-    if (wxTheApp->GetTopWindow())
-        window = XtWindow( (Widget) wxTheApp->GetTopWindow()->GetTopWidget() );
-
-    int currentDataSize = 256;
-    char* data = new char[currentDataSize];
-
-    while (!done)
+    if( dataFormat == wxDF_TEXT )
     {
-        if (result == ClipboardTruncate)
-        {
-            delete[] data;
-            currentDataSize = 2*currentDataSize;
-            data = new char[currentDataSize];
-	}
-        result = XmClipboardRetrieve((Display*) wxGetDisplay(),
-          window,
-          "TEXT",
-          (XtPointer) data,
-          currentDataSize,
-          &numBytes,
-          &id);
-
-        switch (result)
-	  {
-	  case ClipboardSuccess:
-	    {
-              if (len)
-                *len = strlen(data) + 1;
-              return (wxObject*) data;
-              break;
-	    }
-	  case ClipboardTruncate:
-	  case ClipboardLocked:
-	    {
-              break;
-	    }
-          default:
-	  case ClipboardNoData:
-	    {
-              return (wxObject*) NULL;
-              break;
-	    }
-	  }
-          
+        dobj = tobj = new wxTextDataObject;
+    }
+    else if( dataFormat = wxDF_BITMAP )
+    {
+        dobj = bobj = new wxBitmapDataObject;
     }
 
-    return NULL;
+    if( !dobj || !wxTheClipboard->GetData( *dobj ) )
+        return NULL;
+
+    if( tobj )
+    {
+        wxString text = tobj->GetText();
+        wxChar* buf = new wxChar[text.length() + 1];
+
+        if( len ) *len = text.length();
+        return (wxObject*)wxStrcpy( buf, text.c_str() );
+    }
+    else if( bobj )
+    {
+        if( len ) *len = 0;
+        return new wxBitmap( bobj->GetBitmap() );
+    }
+
+    return NULL; // just in case...
 }
 
-wxDataFormat  wxEnumClipboardFormats(wxDataFormat dataFormat)
+wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat)
 {
     // Only wxDF_TEXT supported
     if (dataFormat == wxDF_TEXT)
@@ -220,22 +133,18 @@ wxDataFormat  wxEnumClipboardFormats(wxDataFormat dataFormat)
        return wxDF_INVALID;
 }
 
-wxDataFormat  wxRegisterClipboardFormat(char *WXUNUSED(formatName))
+wxDataFormat wxRegisterClipboardFormat(char *WXUNUSED(formatName))
 {
     // Not supported
-    return (wxDataFormat) wxDF_INVALID;
+    return wxDF_INVALID;
 }
 
-bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int WXUNUSED(maxCount))
+bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName,
+                              int maxCount)
 {
-    // Only wxDF_TEXT supported
-    if (dataFormat == wxDF_TEXT)
-    {
-       strcpy(formatName, "TEXT");
-       return TRUE;
-    }
-    else
-       return FALSE;
+    wxStrncpy( formatName, dataFormat.GetId().c_str(), maxCount );
+
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -246,7 +155,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
 wxClipboard::wxClipboard()
 {
-    m_open = FALSE;
+    m_open = false;
 }
 
 wxClipboard::~wxClipboard()
@@ -268,265 +177,231 @@ void wxClipboard::Clear()
 
 bool wxClipboard::Open()
 {
-    wxCHECK_MSG( !m_open, FALSE, "clipboard already open" );
+    wxCHECK_MSG( !m_open, false, "clipboard already open" );
   
-    m_open = TRUE;
+    m_open = true;
 
-    return wxOpenClipboard();
+    return true;
 }
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
-    wxCHECK_MSG( data, FALSE, "data is invalid" );
-    wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
+    wxCHECK_MSG( data, false, "data is invalid" );
+    wxCHECK_MSG( m_open, false, "clipboard not open" );
 
     Clear();
 
     return AddData( data );
 }
 
+wxDECLARE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
+wxDEFINE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
+
 bool wxClipboard::AddData( wxDataObject *data )
 {
-    wxCHECK_MSG( data, FALSE, "data is invalid" );
-    wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
+    wxCHECK_MSG( data, false, "data is invalid" );
+    wxCHECK_MSG( m_open, false, "clipboard not open" );
 
-    wxDataFormat::NativeFormat format = data->GetPreferredFormat().GetType();
-    switch ( format )
+    m_data.Append( data );
+
+    Display* xdisplay = wxGlobalDisplay();
+    Window xwindow = XtWindow( (Widget)wxTheApp->GetTopLevelWidget() );
+    wxXmString label( wxTheApp->GetAppName() );
+    Time timestamp = XtLastTimestampProcessed( xdisplay );
+    long itemId;
+
+    int retval;
+
+    while( ( retval = XmClipboardStartCopy( xdisplay, xwindow, label(),
+                                            timestamp, (Widget)NULL,
+                                            (XmCutPasteProc)NULL,
+                                            &itemId ) )
+           == XmClipboardLocked );
+    if( retval != XmClipboardSuccess )
+        return false;
+
+    size_t count = data->GetFormatCount( wxDataObject::Get );
+    wxDataFormatScopedArray dfarr( new wxDataFormat[count] );
+    data->GetAllFormats( dfarr.get(), wxDataObject::Get );
+
+    for( size_t i = 0; i < count; ++i )
     {
-        case wxDF_TEXT:
-        case wxDF_OEMTEXT:
-        {
-            wxTextDataObject* textDataObject = (wxTextDataObject*) data;
-            wxString str(textDataObject->GetText());
-            return wxSetClipboardData(format, (wxObject*) (const char*) str);
-        }
-#if 0
-        case wxDF_BITMAP:
-        case wxDF_DIB:
-        {
-            wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
-            wxBitmap bitmap(bitmapDataObject->GetBitmap());
-            return wxSetClipboardData(data->GetType(), & bitmap);
-            break;
-        }
-#endif // 0
+        size_t size = data->GetDataSize( dfarr[i] );
+        wxCharBuffer buffer(size);
+
+        if( !data->GetDataHere( dfarr[i], buffer.data() ) )
+            continue;
+
+        wxString id = dfarr[i].GetId();
+
+        while( ( retval = XmClipboardCopy( xdisplay, xwindow, itemId,
+                                           wxConstCast(id.c_str(), char),
+                                           buffer.data(), size, 0, NULL ) )
+               == XmClipboardLocked );
     }
-  
-    return FALSE;
+
+    while( XmClipboardEndCopy( xdisplay, xwindow, itemId )
+           == XmClipboardLocked );
+
+    return true;
 }
 
 void wxClipboard::Close()
 {
     wxCHECK_RET( m_open, "clipboard not open" );
     
-    m_open = FALSE;
-    wxCloseClipboard();
+    m_open = false;
 }
 
-bool wxClipboard::IsSupported( const wxDataFormat& format)
+bool wxClipboard::IsSupported(const wxDataFormat& format)
 {
-    return wxIsClipboardFormatAvailable(format);
-}
+    Display* xdisplay = wxGlobalDisplay();
+    Window xwindow = XtWindow( (Widget)wxTheApp->GetTopLevelWidget() );
+    bool isSupported = false;
+    int retval, count;
+    unsigned long  max_name_length;
+    wxString id = format.GetId();
 
-bool wxClipboard::GetData( wxDataObject& data )
-{
-    wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
-    
-    wxDataFormat::NativeFormat format = data.GetPreferredFormat().GetType();
-    switch ( format )
+    while( ( retval = XmClipboardLock( xdisplay, xwindow ) )
+           == XmClipboardLocked );
+    if( retval != XmClipboardSuccess )
+        return false;
+
+    if( XmClipboardInquireCount( xdisplay, xwindow, &count, &max_name_length )
+        == XmClipboardSuccess )
     {
-        case wxDF_TEXT:
-        case wxDF_OEMTEXT:
+        wxCharBuffer buf( max_name_length + 1 );
+        unsigned long copied;
+
+        for( int i = 0; i < count; ++i )
         {
-            wxTextDataObject& textDataObject = (wxTextDataObject &) data;
-            char* s = (char*) wxGetClipboardData(format);
-            if (s)
+            if( XmClipboardInquireFormat( xdisplay, xwindow, i + 1,
+                                          (XtPointer)buf.data(),
+                                          max_name_length, &copied )
+                != XmClipboardSuccess )
+                continue;
+
+            buf.data()[copied] = '\0';
+
+            if( buf == id )
             {
-                textDataObject.SetText(s);
-                delete[] s;
-                return TRUE;
-            }
-            else
-                return FALSE;
-            break;
-        }
-/*
-        case wxDF_BITMAP:
-        case wxDF_DIB:
-        {
-            wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
-            wxBitmap* bitmap = (wxBitmap*) wxGetClipboardData(data->GetType());
-            if (bitmap)
-            {
-                bitmapDataObject->SetBitmap(* bitmap);
-                delete bitmap;
-                return TRUE;
-            }
-            else
-                return FALSE;
-            break;
-        }
-*/
-        default:
-        {
-#ifndef __VMS
-	   // VMS complains that this statement is/causes unreachability
-	   return FALSE;
-#endif
-        }
-    }
-   
-   return FALSE;
-}
-
-#if 0
-
-/*
-* Old clipboard implementation by Matthew Flatt
-*/
-
-wxClipboard *wxTheClipboard = NULL;
-
-void wxInitClipboard()
-{
-    if (!wxTheClipboard)
-        wxTheClipboard = new wxClipboard;
-}
-
-wxClipboard::wxClipboard()
-{
-    clipOwner = NULL;
-    cbString = NULL;
-}
-
-wxClipboard::~wxClipboard()
-{
-    if (clipOwner)
-        clipOwner->BeingReplaced();
-    if (cbString)
-        delete[] cbString;
-}
-
-static int FormatStringToID(char *str)
-{
-    if (!strcmp(str, "TEXT"))
-        return wxDF_TEXT;
-    
-    return wxRegisterClipboardFormat(str);
-}
-
-void wxClipboard::SetClipboardClient(wxClipboardClient *client, long time)
-{
-    bool got_selection;
-    
-    if (clipOwner)
-        clipOwner->BeingReplaced();
-    clipOwner = client;
-    if (cbString) {
-        delete[] cbString;
-        cbString = NULL;
-    }
-    
-    if (wxOpenClipboard()) {
-        char **formats, *data;
-        int i;
-        int ftype;
-        long size;
-        
-        formats = clipOwner->formats.ListToArray(FALSE);
-        for (i = clipOwner->formats.Number(); i--; ) {
-            ftype = FormatStringToID(formats[i]);
-            data = clipOwner->GetData(formats[i], &size);
-            if (!wxSetClipboardData(ftype, (wxObject *)data, size, 1)) {
-                got_selection = FALSE;
+                isSupported = true;
                 break;
             }
         }
-        
-        if (i < 0)
-            got_selection = wxCloseClipboard();
-    } else
-        got_selection = FALSE;
-    
-    got_selection = FALSE; // Assume another process takes over
-    
-    if (!got_selection) {
-        clipOwner->BeingReplaced();
-        clipOwner = NULL;
     }
+
+    XmClipboardUnlock( xdisplay, xwindow, False );
+
+    return isSupported;
 }
 
-wxClipboardClient *wxClipboard::GetClipboardClient()
+class wxClipboardEndRetrieve
 {
-    return clipOwner;
-}
+public:
+    wxClipboardEndRetrieve( Display* display, Window window )
+        : m_display( display ), m_window( window ) { }
+    ~wxClipboardEndRetrieve()
+    {
+        while( XmClipboardEndRetrieve( m_display, m_window )
+               == XmClipboardLocked );
+    }
+private:
+    Display* m_display;
+    Window m_window;
+};
 
-void wxClipboard::SetClipboardString(char *str, long time)
+bool wxClipboard::GetData( wxDataObject& data )
 {
-    bool got_selection;
-    
-    if (clipOwner) {
-        clipOwner->BeingReplaced();
-        clipOwner = NULL;
-    }
-    if (cbString)
-        delete[] cbString;
-    
-    cbString = str;
-    
-    if (wxOpenClipboard()) {
-        if (!wxSetClipboardData(wxDF_TEXT, (wxObject *)str))
-            got_selection = FALSE;
-        else
-            got_selection = wxCloseClipboard();
-    } else
-        got_selection = FALSE;
-    
-    got_selection = FALSE; // Assume another process takes over
-    
-    if (!got_selection) {
-        delete[] cbString;
-        cbString = NULL;
-    }
-}
+    wxCHECK_MSG( m_open, false, "clipboard not open" );
 
-char *wxClipboard::GetClipboardString(long time)
-{
-    char *str;
-    long length;
-    
-    str = GetClipboardData("TEXT", &length, time);
-    if (!str) {
-        str = new char[1];
-        *str = 0;
-    }
-    
-    return str;
-}
+    Display* xdisplay = wxGlobalDisplay();
+    Window xwindow = XtWindow( (Widget)wxTheApp->GetTopLevelWidget() );
+    Time timestamp = XtLastTimestampProcessed( xdisplay );
 
-char *wxClipboard::GetClipboardData(char *format, long *length, long time)
-{
-    if (clipOwner)  {
-        if (clipOwner->formats.Member(format))
-            return clipOwner->GetData(format, length);
-        else
-            return NULL;
-    } else if (cbString) {
-        if (!strcmp(format, "TEXT"))
-            return copystring(cbString);
-        else
-            return NULL;
-    } else {
-        if (wxOpenClipboard()) {
-            receivedString = (char *)wxGetClipboardData(FormatStringToID(format), 
-                length);
-            wxCloseClipboard();
-        } else
-            receivedString = NULL;
-        
-        return receivedString;
+    wxDataFormat chosenFormat;
+    int retval;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // determine if the cliboard holds any format we like
+    ///////////////////////////////////////////////////////////////////////////
+    while( ( retval = XmClipboardStartRetrieve( xdisplay, xwindow,
+                                                timestamp ) )
+           == XmClipboardLocked );
+    if( retval != XmClipboardSuccess )
+        return false;
+
+    wxClipboardEndRetrieve endRetrieve( xdisplay, xwindow );
+
+    int count;
+    unsigned long max_name_length;
+    size_t dfcount = data.GetFormatCount( wxDataObject::Set );
+    wxDataFormatScopedArray dfarr( new wxDataFormat[dfcount] );
+    data.GetAllFormats( dfarr.get(), wxDataObject::Set );
+    
+    if( XmClipboardInquireCount( xdisplay, xwindow, &count, &max_name_length )
+        == XmClipboardSuccess )
+    {
+        wxCharBuffer buf( max_name_length + 1 );
+        unsigned long copied;
+
+        for( int i = 0; i < count; ++i )
+        {
+            if( XmClipboardInquireFormat( xdisplay, xwindow, i + 1,
+                                          (XtPointer)buf.data(),
+                                          max_name_length, &copied )
+                != XmClipboardSuccess )
+                continue;
+
+            buf.data()[copied] = '\0';
+
+            // try preferred format
+            if( buf == data.GetPreferredFormat( wxDataObject::Set ).GetId() )
+            {
+                chosenFormat = data.GetPreferredFormat( wxDataObject::Set );
+                break;
+            }
+
+            // try all other formats
+            for( size_t i = 0; i < dfcount; ++i )
+            {
+                if( buf == dfarr[i].GetId() )
+                    chosenFormat = dfarr[i];
+            }
+        }
     }
+
+    if( chosenFormat == wxDF_INVALID )
+        return false;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // now retrieve the data
+    ///////////////////////////////////////////////////////////////////////////
+    unsigned long length, dummy1;
+    long dummy2;
+    wxString id = chosenFormat.GetId();
+
+    while( ( retval = XmClipboardInquireLength( xdisplay, xwindow,
+                                                wxConstCast(id.c_str(), char),
+                                                &length ) )
+           == XmClipboardLocked );
+    if( retval != XmClipboardSuccess )
+        return false;
+
+    wxCharBuffer buf(length);
+
+    while( ( retval = XmClipboardRetrieve( xdisplay, xwindow,
+                                           wxConstCast(id.c_str(), char),
+                                           (XtPointer)buf.data(),
+                                           length, &dummy1, &dummy2 ) )
+           == XmClipboardLocked );
+    if( retval != XmClipboardSuccess )
+        return false;
+
+    if( !data.SetData( chosenFormat, length, buf.data() ) )
+        return false;
+
+    return true;
 }
-#endif
 
 #endif // wxUSE_CLIPBOARD

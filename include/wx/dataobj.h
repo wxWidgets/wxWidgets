@@ -462,6 +462,8 @@ private:
         #include "wx/gtk/dataobj2.h"
     #elif defined(__WXX11__)
         #include "wx/x11/dataobj2.h"
+    #elif defined(__WXMOTIF__)
+        #include "wx/motif/dataobj2.h"
     #elif defined(__WXMAC__)
         #include "wx/mac/dataobj2.h"
     #elif defined(__WXPM__)

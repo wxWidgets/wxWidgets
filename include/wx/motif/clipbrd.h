@@ -68,7 +68,7 @@ public:
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
     
-    virtual void UsePrimarySelection(bool primary = TRUE)
+    virtual void UsePrimarySelection(bool primary = true)
     { m_usePrimary = primary; }
     
     // implementation from now on
