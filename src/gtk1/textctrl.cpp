@@ -60,7 +60,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   PreCreation( parent, id, pos, size, style, name );
 
   bool bMultiLine = (style & wxTE_MULTILINE) != 0;
-  if ( bMultiLine ) 
+  if ( bMultiLine )
   {
     // a multi-line edit control: create a vertical scrollbar by default and
     // horizontal if requested
@@ -123,7 +123,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
   };
 
-  if (style & wxREADONLY)
+  if (style & wxTE_READONLY)
   {
   }
   else
@@ -394,4 +394,4 @@ GtkWidget* wxTextCtrl::GetConnectWidget(void)
 
 
 
-  
+
