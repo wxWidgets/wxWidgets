@@ -42,13 +42,10 @@ on ImportProjects(inFolder)
 	
 	tell application "Finder" to update inFolder
 	
-	try
-		tell application "Finder" to set theXml to ((the first file of inFolder whose name ends with gXmlSuffix) as string)
-	on error
-		set theXml to ""
-	end try
+	tell application "Finder" to set theXmlList to (every file of inFolder whose name ends with gXmlSuffix)
 	
-	if theXml is not "" then
+	repeat with theXml in theXmlList
+		set theXml to theXml as string
 		set theXmlCount to theXmlCount + 1
 		
 		-- save the current text delimiters
@@ -78,7 +75,7 @@ on ImportProjects(inFolder)
 				tell me to display dialog "Error " & errnum & " importing " & theXml & " to " & theImport
 			end try
 		end tell
-	end if
+	end repeat
 	
 	tell application "Finder" to set theSubFolders to every folder of inFolder whose name does not end with " Data"
 	repeat with theFolder in theSubFolders
