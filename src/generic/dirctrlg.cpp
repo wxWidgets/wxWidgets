@@ -316,10 +316,24 @@ static char * icon8_xpm[] = {
 #define wxID_FILTERLISTCTRL    7001
 
 #if defined(__DOS__)
-  #ifdef __DJGPP__
-    #define setdrive(drive) setdisk(drive)
-  #endif
-#elif defined(__WXMSW__) || defined(__WXPM__)
+
+static bool wxIsDriveAvailable(const wxString dirName)
+{
+    if ( dirName.Len() == 3 && dirName[1u] == wxT(':') )
+    {
+        wxString dirNameLower(dirName.Lower());
+        // VS: always return TRUE for removable media, since Win95 doesn't
+        //     like it when MS-DOS app accesses empty floppy drive
+        return (dirNameLower[0u] == wxT('a') ||
+                dirNameLower[0u] == wxT('b') ||
+                wxPathExists(dirNameLower));
+    }
+    else
+        return TRUE;
+}
+
+#elif defined(__WINDOWS__) || defined(__WXPM__)
+
 int setdrive(int drive)
 {
 #if defined(__GNUWIN32__) && \
@@ -382,7 +396,7 @@ static bool wxIsDriveAvailable(const wxString dirName)
 
     return success;
 }
-#endif
+#endif // __WINDOWS__ || __WXPM__
 
 // Function which is called by quick sort. We want to override the default wxArrayString behaviour,
 // and sort regardless of case.
@@ -484,7 +498,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return FALSE;
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     Init();
 
@@ -525,7 +539,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__DOS__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -569,7 +583,7 @@ void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, in
 
 void wxGenericDirCtrl::SetupSections()
 {
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
 
 #ifdef __WIN32__
     wxChar driveBuffer[256];
@@ -613,24 +627,23 @@ void wxGenericDirCtrl::SetupSections()
         if (driveBuffer[i] == wxT('\0'))
             break;
     }
-# else
+#else // !__WIN32__
     int drive;
-    int currentDrive;
 
     /* If we can switch to the drive, it exists. */
     for( drive = 1; drive <= 26; drive++ )
     {
         wxString path, name;
         path.Printf(wxT("%c:\\"), (char) (drive + 'a' - 1));
-        name.Printf(wxT("(%c:)"), (char) (drive + 'a' - 1));
+        name.Printf(wxT("(%c:)"), (char) (drive + 'A' - 1));
 
         if (wxIsDriveAvailable(path))
         {
-
-            AddSection(path, name);
+            AddSection(path, name, (drive <= 2) ? 6/*floppy*/ : 4/*disk*/);
         }
     }
-# endif
+#endif // __WIN32__/!__WIN32__
+
 #elif defined(__WXMAC__)
     FSSpec volume ;
     short index = 1 ;
@@ -642,8 +655,10 @@ void wxGenericDirCtrl::SetupSections()
       wxString name = wxMacFSSpec2MacFilename( &volume ) ;
       AddSection(name + wxFILE_SEP_PATH, name, 0);
     }
-#else
+#elif defined(__UNIX__)
     AddSection(wxT("/"), wxT("/"), 3/*computer icon*/);
+#else
+    #error "Unsupported platform in wxGenericDirCtrl!"
 #endif
 }
 
@@ -761,7 +776,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
     // Check if this is a root directory and if so,
     // whether the drive is avaiable.
     if (!wxIsDriveAvailable(dirName))
@@ -775,7 +790,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -887,7 +902,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     path2 += wxString(wxFILE_SEP_PATH);
 
     // In MSW or PM, case is not significant
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
     path2.MakeLower();
 #endif
 
@@ -904,7 +919,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
                 childPath += wxString(wxFILE_SEP_PATH);
 
             // In MSW and PM, case is not significant
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXPM__)
             childPath.MakeLower();
 #endif
 
@@ -1223,6 +1238,5 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
         SetSelection(defaultFilter);
     }
 }
-
 
 #endif // wxUSE_DIRDLG
