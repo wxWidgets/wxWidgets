@@ -183,15 +183,15 @@ class wxMetaRecord: public wxObject
 class wxXMetaFile: public wxObject
 {
  public:
-  float lastX;
-  float lastY;
+  double lastX;
+  double lastY;
   bool ok;
 
-  float left;
-  float top;
-  float right;
-  float bottom;
-  
+  double left;
+  double top;
+  double right;
+  double bottom;
+
   wxList metaRecords;
   wxList gdiObjects; // List of wxMetaRecord objects created with Create...,
                      // referenced by position in list by SelectObject

@@ -59,7 +59,7 @@
 #define CONTROL_POINT_ENDPOINT_FROM 5
 #define CONTROL_POINT_LINE       6
 
-extern wxCursor *GraphicsBullseyeCursor;
+extern wxCursor *g_oglBullseyeCursor;
 
 IMPLEMENT_DYNAMIC_CLASS(wxShapeCanvas, wxScrolledWindow)
 
@@ -105,9 +105,9 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
 
   wxPoint logPos(event.GetLogicalPosition(dc));
 
-  float x, y;
-  x = (float) logPos.x;
-  y = (float) logPos.y;
+  double x, y;
+  x = (double) logPos.x;
+  y = (double) logPos.y;
 
   int keys = 0;
   if (event.ShiftDown())
@@ -144,11 +144,11 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
 
     // If the object isn't m_draggable, transfer message to canvas
     if (m_draggedShape->Draggable())
-      m_draggedShape->GetEventHandler()->OnBeginDragLeft((float)x, (float)y, keys, m_draggedAttachment);
+      m_draggedShape->GetEventHandler()->OnBeginDragLeft((double)x, (double)y, keys, m_draggedAttachment);
     else
     {
       m_draggedShape = NULL;
-      OnBeginDragLeft((float)x, (float)y, keys);
+      OnBeginDragLeft((double)x, (double)y, keys);
     }
 
     m_oldDragX = x; m_oldDragY = y;
@@ -157,7 +157,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   {
     // Continue dragging
     m_draggedShape->GetEventHandler()->OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
-    m_draggedShape->GetEventHandler()->OnDragLeft(TRUE, (float)x, (float)y, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragLeft(TRUE, (double)x, (double)y, keys, m_draggedAttachment);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.LeftUp() && m_draggedShape && m_dragState == ContinueDraggingLeft)
@@ -167,7 +167,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
 
     m_draggedShape->GetEventHandler()->OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
 
-    m_draggedShape->GetEventHandler()->OnEndDragLeft((float)x, (float)y, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnEndDragLeft((double)x, (double)y, keys, m_draggedAttachment);
     m_draggedShape = NULL;
   }
   else if (dragging && m_draggedShape && m_dragState == StartDraggingRight)
@@ -175,11 +175,11 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
     m_dragState = ContinueDraggingRight;
 
     if (m_draggedShape->Draggable())
-      m_draggedShape->GetEventHandler()->OnBeginDragRight((float)x, (float)y, keys, m_draggedAttachment);
+      m_draggedShape->GetEventHandler()->OnBeginDragRight((double)x, (double)y, keys, m_draggedAttachment);
     else
     {
       m_draggedShape = NULL;
-      OnBeginDragRight((float)x, (float)y, keys);
+      OnBeginDragRight((double)x, (double)y, keys);
     }
     m_oldDragX = x; m_oldDragY = y;
   }
@@ -187,7 +187,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   {
     // Continue dragging
     m_draggedShape->GetEventHandler()->OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
-    m_draggedShape->GetEventHandler()->OnDragRight(TRUE, (float)x, (float)y, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnDragRight(TRUE, (double)x, (double)y, keys, m_draggedAttachment);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.RightUp() && m_draggedShape && m_dragState == ContinueDraggingRight)
@@ -197,7 +197,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
 
     m_draggedShape->GetEventHandler()->OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys, m_draggedAttachment);
 
-    m_draggedShape->GetEventHandler()->OnEndDragRight((float)x, (float)y, keys, m_draggedAttachment);
+    m_draggedShape->GetEventHandler()->OnEndDragRight((double)x, (double)y, keys, m_draggedAttachment);
     m_draggedShape = NULL;
   }
 
@@ -205,14 +205,14 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
   else if (dragging && !m_draggedShape && m_dragState == StartDraggingLeft)
   {
     m_dragState = ContinueDraggingLeft;
-    OnBeginDragLeft((float)x, (float)y, keys);
+    OnBeginDragLeft((double)x, (double)y, keys);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (dragging && !m_draggedShape && m_dragState == ContinueDraggingLeft)
   {
     // Continue dragging
     OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys);
-    OnDragLeft(TRUE, (float)x, (float)y, keys);
+    OnDragLeft(TRUE, (double)x, (double)y, keys);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.LeftUp() && !m_draggedShape && m_dragState == ContinueDraggingLeft)
@@ -221,20 +221,20 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
     m_checkTolerance = TRUE;
 
     OnDragLeft(FALSE, m_oldDragX, m_oldDragY, keys);
-    OnEndDragLeft((float)x, (float)y, keys);
+    OnEndDragLeft((double)x, (double)y, keys);
     m_draggedShape = NULL;
   }
   else if (dragging && !m_draggedShape && m_dragState == StartDraggingRight)
   {
     m_dragState = ContinueDraggingRight;
-    OnBeginDragRight((float)x, (float)y, keys);
+    OnBeginDragRight((double)x, (double)y, keys);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (dragging && !m_draggedShape && m_dragState == ContinueDraggingRight)
   {
     // Continue dragging
     OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys);
-    OnDragRight(TRUE, (float)x, (float)y, keys);
+    OnDragRight(TRUE, (double)x, (double)y, keys);
     m_oldDragX = x; m_oldDragY = y;
   }
   else if (event.RightUp() && !m_draggedShape && m_dragState == ContinueDraggingRight)
@@ -243,7 +243,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
     m_checkTolerance = TRUE;
 
     OnDragRight(FALSE, m_oldDragX, m_oldDragY, keys);
-    OnEndDragRight((float)x, (float)y, keys);
+    OnEndDragRight((double)x, (double)y, keys);
     m_draggedShape = NULL;
   }
 
@@ -270,7 +270,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
         // N.B. Only register a click if the same object was
         // identified for down *and* up.
         if (nearest_object == m_draggedShape)
-          nearest_object->GetEventHandler()->OnLeftClick((float)x, (float)y, keys, attachment);
+          nearest_object->GetEventHandler()->OnLeftClick((double)x, (double)y, keys, attachment);
 
         m_draggedShape = NULL;
         m_dragState = NoDragging;
@@ -286,7 +286,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
       else if (event.RightUp())
       {
         if (nearest_object == m_draggedShape)
-          nearest_object->GetEventHandler()->OnRightClick((float)x, (float)y, keys, attachment);
+          nearest_object->GetEventHandler()->OnRightClick((double)x, (double)y, keys, attachment);
 
         m_draggedShape = NULL;
         m_dragState = NoDragging;
@@ -303,7 +303,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
       }
       else if (event.LeftUp())
       {
-        OnLeftClick((float)x, (float)y, keys);
+        OnLeftClick((double)x, (double)y, keys);
 
         m_draggedShape = NULL;
         m_dragState = NoDragging;
@@ -317,7 +317,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
       }
       else if (event.RightUp())
       {
-        OnRightClick((float)x, (float)y, keys);
+        OnRightClick((double)x, (double)y, keys);
 
         m_draggedShape = NULL;
         m_dragState = NoDragging;
@@ -330,7 +330,7 @@ void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
  * Try to find a sensitive object, working up the hierarchy of composites.
  *
  */
-wxShape *wxShapeCanvas::FindFirstSensitiveShape(float x, float y, int *new_attachment, int op)
+wxShape *wxShapeCanvas::FindFirstSensitiveShape(double x, double y, int *new_attachment, int op)
 {
   wxShape *image = FindShape(x, y, new_attachment);
   if (!image) return NULL;
@@ -338,7 +338,7 @@ wxShape *wxShapeCanvas::FindFirstSensitiveShape(float x, float y, int *new_attac
   wxShape *actualImage = FindFirstSensitiveShape1(image, op);
   if (actualImage)
   {
-    float dist;
+    double dist;
     // Find actual attachment
     actualImage->HitTest(x, y, new_attachment, &dist);
   }
@@ -357,30 +357,30 @@ wxShape *wxShapeCanvas::FindFirstSensitiveShape1(wxShape *image, int op)
 // Helper function: TRUE if 'contains' wholly contains 'contained'.
 static bool WhollyContains(wxShape *contains, wxShape *contained)
 {
-  float xp1, yp1, xp2, yp2;
-  float w1, h1, w2, h2;
-  float left1, top1, right1, bottom1, left2, top2, right2, bottom2;
+  double xp1, yp1, xp2, yp2;
+  double w1, h1, w2, h2;
+  double left1, top1, right1, bottom1, left2, top2, right2, bottom2;
 
   xp1 = contains->GetX(); yp1 = contains->GetY(); xp2 = contained->GetX(); yp2 = contained->GetY();
   contains->GetBoundingBoxMax(&w1, &h1);
   contained->GetBoundingBoxMax(&w2, &h2);
 
-  left1 = (float)(xp1 - (w1 / 2.0));
-  top1 = (float)(yp1 - (h1 / 2.0));
-  right1 = (float)(xp1 + (w1 / 2.0));
-  bottom1 = (float)(yp1 + (h1 / 2.0));
+  left1 = (double)(xp1 - (w1 / 2.0));
+  top1 = (double)(yp1 - (h1 / 2.0));
+  right1 = (double)(xp1 + (w1 / 2.0));
+  bottom1 = (double)(yp1 + (h1 / 2.0));
 
-  left2 = (float)(xp2 - (w2 / 2.0));
-  top2 = (float)(yp2 - (h2 / 2.0));
-  right2 = (float)(xp2 + (w2 / 2.0));
-  bottom2 = (float)(yp2 + (h2 / 2.0));
+  left2 = (double)(xp2 - (w2 / 2.0));
+  top2 = (double)(yp2 - (h2 / 2.0));
+  right2 = (double)(xp2 + (w2 / 2.0));
+  bottom2 = (double)(yp2 + (h2 / 2.0));
 
   return ((left1 <= left2) && (top1 <= top2) && (right1 >= right2) && (bottom1 >= bottom2));
 }
 
-wxShape *wxShapeCanvas::FindShape(float x, float y, int *attachment, wxClassInfo *info, wxShape *notObject)
+wxShape *wxShapeCanvas::FindShape(double x, double y, int *attachment, wxClassInfo *info, wxShape *notObject)
 {
-  float nearest = 100000.0;
+  double nearest = 100000.0;
   int nearest_attachment = 0;
   wxShape *nearest_object = NULL;
 
@@ -394,7 +394,7 @@ wxShape *wxShapeCanvas::FindShape(float x, float y, int *attachment, wxClassInfo
   {
     wxShape *object = (wxShape *)current->Data();
 
-    float dist;
+    double dist;
     int temp_attachment;
 
     // First pass for lines, which might be inside a container, so we
@@ -429,7 +429,7 @@ wxShape *wxShapeCanvas::FindShape(float x, float y, int *attachment, wxClassInfo
   while (current)
   {
     wxShape *object = (wxShape *)current->Data();
-    float dist;
+    double dist;
     int temp_attachment;
 
     // On second pass, only ever consider non-composites or divisions. If children want to pass
@@ -465,35 +465,35 @@ wxShape *wxShapeCanvas::FindShape(float x, float y, int *attachment, wxClassInfo
  *
  */
 
-void wxShapeCanvas::OnLeftClick(float x, float y, int keys)
+void wxShapeCanvas::OnLeftClick(double x, double y, int keys)
 {
 }
 
-void wxShapeCanvas::OnRightClick(float x, float y, int keys)
+void wxShapeCanvas::OnRightClick(double x, double y, int keys)
 {
 }
 
-void wxShapeCanvas::OnDragLeft(bool draw, float x, float y, int keys)
+void wxShapeCanvas::OnDragLeft(bool draw, double x, double y, int keys)
 {
 }
 
-void wxShapeCanvas::OnBeginDragLeft(float x, float y, int keys)
+void wxShapeCanvas::OnBeginDragLeft(double x, double y, int keys)
 {
 }
 
-void wxShapeCanvas::OnEndDragLeft(float x, float y, int keys)
+void wxShapeCanvas::OnEndDragLeft(double x, double y, int keys)
 {
 }
 
-void wxShapeCanvas::OnDragRight(bool draw, float x, float y, int keys)
+void wxShapeCanvas::OnDragRight(bool draw, double x, double y, int keys)
 {
 }
 
-void wxShapeCanvas::OnBeginDragRight(float x, float y, int keys)
+void wxShapeCanvas::OnBeginDragRight(double x, double y, int keys)
 {
 }
 
-void wxShapeCanvas::OnEndDragRight(float x, float y, int keys)
+void wxShapeCanvas::OnEndDragRight(double x, double y, int keys)
 {
 }
 
@@ -507,5 +507,5 @@ bool wxShapeCanvas::GetQuickEditMode()
  { return GetDiagram()->GetQuickEditMode(); }
 void wxShapeCanvas::Redraw(wxDC& dc)
  { GetDiagram()->Redraw(dc); }
-void wxShapeCanvas::Snap(float *x, float *y)
+void wxShapeCanvas::Snap(double *x, double *y)
  { GetDiagram()->Snap(x, y); }

@@ -48,6 +48,7 @@
 #define  DRAWOP_DRAW_ARC            27
 #define  DRAWOP_DRAW_TEXT           28
 #define  DRAWOP_DRAW_SPLINE         29
+#define  DRAWOP_DRAW_ELLIPTIC_ARC   30
 
 /*
  * Base, virtual class
@@ -59,18 +60,30 @@ class wxDrawOp: public wxObject
 public:
   inline wxDrawOp(int theOp) { m_op = theOp; }
   inline ~wxDrawOp() {}
-  inline virtual void Scale(float xScale, float yScale) {};
-  inline virtual void Translate(float x, float y) {};
-  inline virtual void Rotate(float x, float y, float sinTheta, float cosTheta) {};
-  virtual void Do(wxDC& dc, float xoffset, float yoffset) = 0;
+  inline virtual void Scale(double xScale, double yScale) {};
+  inline virtual void Translate(double x, double y) {};
+  inline virtual void Rotate(double x, double y, double theta, double sinTheta, double cosTheta) {};
+  virtual void Do(wxDC& dc, double xoffset, double yoffset) = 0;
   virtual wxDrawOp *Copy(wxPseudoMetaFile *newImage) = 0;
   virtual wxExpr *WriteExpr(wxPseudoMetaFile *image) = 0;
   virtual void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr) = 0;
 
-  int GetOp() const { return m_op; }
+  inline int GetOp() const { return m_op; }
+
+  // Draw an outline using the current operation. By default, return FALSE (not drawn)
+  virtual bool OnDrawOutline(wxDC& dc, double x, double y, double w, double h,
+    double oldW, double oldH) { return FALSE; }
+
+  // Get the perimeter point using this data
+  virtual bool GetPerimeterPoint(double x1, double y1,
+                                     double x2, double y2,
+                                     double *x3, double *y3,
+                                     double xOffset, double yOffset,
+                                     bool attachmentMode)
+  { return FALSE; }
 
 protected:
-  int m_op;
+  int           m_op;
 
 };
 
@@ -83,7 +96,7 @@ class wxOpSetGDI: public wxDrawOp
 {
  public:
   wxOpSetGDI(int theOp, wxPseudoMetaFile *theImage, int theGdiIndex, int theMode = 0);
-  void Do(wxDC& dc, float xoffset, float yoffset);
+  void Do(wxDC& dc, double xoffset, double yoffset);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
   wxExpr *WriteExpr(wxPseudoMetaFile *image);
   void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
@@ -105,19 +118,19 @@ public:
 class wxOpSetClipping: public wxDrawOp
 {
 public:
-  wxOpSetClipping(int theOp, float theX1, float theY1, float theX2, float theY2);
-  void Do(wxDC& dc, float xoffset, float yoffset);
-  void Scale(float xScale, float yScale);
-  void Translate(float x, float y);
+  wxOpSetClipping(int theOp, double theX1, double theY1, double theX2, double theY2);
+  void Do(wxDC& dc, double xoffset, double yoffset);
+  void Scale(double xScale, double yScale);
+  void Translate(double x, double y);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
   wxExpr *WriteExpr(wxPseudoMetaFile *image);
   void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
 
 public:
-  float     m_x1;
-  float     m_y1;
-  float     m_x2;
-  float     m_y2;
+  double     m_x1;
+  double     m_y1;
+  double     m_x2;
+  double     m_y2;
 };
 
 /*
@@ -128,24 +141,25 @@ public:
 class wxOpDraw: public wxDrawOp
 {
  public:
-  wxOpDraw(int theOp, float theX1, float theY1, float theX2, float theY2,
-         float radius = 0.0, char *s = NULL);
+  wxOpDraw(int theOp, double theX1, double theY1, double theX2, double theY2,
+         double radius = 0.0, char *s = NULL);
   ~wxOpDraw();
-  void Do(wxDC& dc, float xoffset, float yoffset);
-  void Scale(float scaleX, float scaleY);
-  void Translate(float x, float y);
-  void Rotate(float x, float y, float sinTheta, float cosTheta);
+  void Do(wxDC& dc, double xoffset, double yoffset);
+  void Scale(double scaleX, double scaleY);
+  void Translate(double x, double y);
+  void Rotate(double x, double y, double theta, double sinTheta, double cosTheta);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
   wxExpr *WriteExpr(wxPseudoMetaFile *image);
   void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
 
 public:
-  float     m_x1;
-  float     m_y1;
-  float     m_x2;
-  float     m_y2;
-  float     m_x3;
-  float     m_radius;
+  double     m_x1;
+  double     m_y1;
+  double     m_x2;
+  double     m_y2;
+  double     m_x3;
+  double     m_y3;
+  double     m_radius;
   char*     m_textString;
 
 };
@@ -160,13 +174,24 @@ class wxOpPolyDraw: public wxDrawOp
 public:
   wxOpPolyDraw(int theOp, int n, wxRealPoint *thePoints);
   ~wxOpPolyDraw();
-  void Do(wxDC& dc, float xoffset, float yoffset);
-  void Scale(float scaleX, float scaleY);
-  void Translate(float x, float y);
-  void Rotate(float x, float y, float sinTheta, float cosTheta);
+  void Do(wxDC& dc, double xoffset, double yoffset);
+  void Scale(double scaleX, double scaleY);
+  void Translate(double x, double y);
+  void Rotate(double x, double y, double theta, double sinTheta, double cosTheta);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
   wxExpr *WriteExpr(wxPseudoMetaFile *image);
   void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
+
+  // Draw an outline using the current operation.
+  virtual bool OnDrawOutline(wxDC& dc, double x, double y, double w, double h,
+    double oldW, double oldH);
+
+  // Get the perimeter point using this data
+  bool GetPerimeterPoint(double x1, double y1,
+                                     double x2, double y2,
+                                     double *x3, double *y3,
+                                     double xOffset, double yOffset,
+                                     bool attachmentMode);
 
 public:
   wxRealPoint*  m_points;

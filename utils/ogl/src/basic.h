@@ -106,6 +106,9 @@ class WXDLLEXPORT wxExpr;
 class WXDLLEXPORT wxExprDatabase;
 #endif
 
+// Round up
+#define WXROUND(x) ( (long) (x + 0.5) )
+
 class wxShapeEvtHandler: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxShapeEvtHandler)
@@ -128,31 +131,34 @@ class wxShapeEvtHandler: public wxObject
   virtual void OnErase(wxDC& dc);
   virtual void OnEraseContents(wxDC& dc);
   virtual void OnHighlight(wxDC& dc);
-  virtual void OnLeftClick(float x, float y, int keys = 0, int attachment = 0);
-  virtual void OnRightClick(float x, float y, int keys = 0, int attachment = 0);
-  virtual void OnSize(float x, float y);
-  virtual bool OnMovePre(wxDC& dc, float x, float y, float old_x, float old_y, bool display = TRUE);
-  virtual void OnMovePost(wxDC& dc, float x, float y, float old_x, float old_y, bool display = TRUE);
+  virtual void OnLeftClick(double x, double y, int keys = 0, int attachment = 0);
+  virtual void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
+  virtual void OnSize(double x, double y);
+  virtual bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
+  virtual void OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
 
-  virtual void OnDragLeft(bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
-  virtual void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnDragRight(bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
-  virtual void OnBeginDragRight(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnEndDragRight(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnDrawOutline(wxDC& dc, float x, float y, float w, float h);
+  virtual void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnDragRight(bool draw, double x, double y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnBeginDragRight(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnEndDragRight(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
   virtual void OnDrawControlPoints(wxDC& dc);
   virtual void OnEraseControlPoints(wxDC& dc);
   virtual void OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
 
   // Control points ('handles') redirect control to the actual shape, to make it easier
   // to override sizing behaviour.
-  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
-  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
-  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
 
-  virtual void OnBeginSize(float WXUNUSED(w), float WXUNUSED(h)) { }
-  virtual void OnEndSize(float WXUNUSED(w), float WXUNUSED(h)) { }
+  virtual void OnBeginSize(double WXUNUSED(w), double WXUNUSED(h)) { }
+  virtual void OnEndSize(double WXUNUSED(w), double WXUNUSED(h)) { }
+
+  // Can override this to prevent or intercept line reordering.
+  virtual void OnChangeAttachment(int attachment, wxLineShape* line, wxList& ordering);
 
   // Creates a copy of this event handler.
   wxShapeEvtHandler *CreateNewCopy();
@@ -174,21 +180,21 @@ class wxShape: public wxShapeEvtHandler
 
   wxShape(wxShapeCanvas *can = NULL);
   virtual ~wxShape();
-  virtual void GetBoundingBoxMax(float *width, float *height);
-  virtual void GetBoundingBoxMin(float *width, float *height) = 0;
-  virtual bool GetPerimeterPoint(float x1, float y1,
-                                 float x2, float y2,
-                                 float *x3, float *y3);
+  virtual void GetBoundingBoxMax(double *width, double *height);
+  virtual void GetBoundingBoxMin(double *width, double *height) = 0;
+  virtual bool GetPerimeterPoint(double x1, double y1,
+                                 double x2, double y2,
+                                 double *x3, double *y3);
   inline wxShapeCanvas *GetCanvas() { return m_canvas; }
   void SetCanvas(wxShapeCanvas *the_canvas);
   virtual void AddToCanvas(wxShapeCanvas *the_canvas, wxShape *addAfter = NULL);
   virtual void InsertInCanvas(wxShapeCanvas *the_canvas);
 
   virtual void RemoveFromCanvas(wxShapeCanvas *the_canvas);
-  inline float GetX() const { return m_xpos; }
-  inline float GetY() const { return m_ypos; }
-  inline void SetX(float x) { m_xpos = x; }
-  inline void SetY(float y) { m_ypos = y; }
+  inline double GetX() const { return m_xpos; }
+  inline double GetY() const { return m_ypos; }
+  inline void SetX(double x) { m_xpos = x; }
+  inline void SetY(double y) { m_ypos = y; }
 
   inline wxShape *GetParent() const { return m_parent; }
   inline void SetParent(wxShape *p) { m_parent = p; }
@@ -204,30 +210,30 @@ class wxShape: public wxShapeEvtHandler
   virtual void OnErase(wxDC& dc);
   virtual void OnEraseContents(wxDC& dc);
   virtual void OnHighlight(wxDC& dc);
-  virtual void OnLeftClick(float x, float y, int keys = 0, int attachment = 0);
-  virtual void OnRightClick(float x, float y, int keys = 0, int attachment = 0);
-  virtual void OnSize(float x, float y);
-  virtual bool OnMovePre(wxDC& dc, float x, float y, float old_x, float old_y, bool display = TRUE);
-  virtual void OnMovePost(wxDC& dc, float x, float y, float old_x, float old_y, bool display = TRUE);
+  virtual void OnLeftClick(double x, double y, int keys = 0, int attachment = 0);
+  virtual void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
+  virtual void OnSize(double x, double y);
+  virtual bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
+  virtual void OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
 
-  virtual void OnDragLeft(bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
-  virtual void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnDragRight(bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
-  virtual void OnBeginDragRight(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnEndDragRight(float x, float y, int keys=0, int attachment = 0);
-  virtual void OnDrawOutline(wxDC& dc, float x, float y, float w, float h);
+  virtual void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnDragRight(bool draw, double x, double y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnBeginDragRight(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnEndDragRight(double x, double y, int keys=0, int attachment = 0);
+  virtual void OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
   virtual void OnDrawControlPoints(wxDC& dc);
   virtual void OnEraseControlPoints(wxDC& dc);
 
-  virtual void OnBeginSize(float WXUNUSED(w), float WXUNUSED(h)) { }
-  virtual void OnEndSize(float WXUNUSED(w), float WXUNUSED(h)) { }
+  virtual void OnBeginSize(double WXUNUSED(w), double WXUNUSED(h)) { }
+  virtual void OnEndSize(double WXUNUSED(w), double WXUNUSED(h)) { }
 
   // Control points ('handles') redirect control to the actual shape, to make it easier
   // to override sizing behaviour.
-  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0); // Erase if draw false
-  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
-  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0); // Erase if draw false
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
 
   virtual void MakeControlPoints();
   virtual void DeleteControlPoints(wxDC *dc = NULL);
@@ -260,7 +266,7 @@ class wxShape: public wxShapeEvtHandler
   inline  bool GetSpaceAttachments() const { return m_spaceAttachments; };
   void SetShadowMode(int mode, bool redraw = FALSE);
   inline int GetShadowMode() const { return m_shadowMode; }
-  virtual bool HitTest(float x, float y, int *attachment, float *distance);
+  virtual bool HitTest(double x, double y, int *attachment, double *distance);
   inline void SetCentreResize(bool cr) { m_centreResize = cr; }
   inline bool GetCentreResize() const { return m_centreResize; }
   inline wxList& GetLines() { return m_lines; }
@@ -278,22 +284,28 @@ class wxShape: public wxShapeEvtHandler
 
   virtual void Show(bool show);
   virtual bool IsShown() const { return m_visible; }
-  virtual void Move(wxDC& dc, float x1, float y1, bool display = TRUE);
+  virtual void Move(wxDC& dc, double x1, double y1, bool display = TRUE);
   virtual void Erase(wxDC& dc);
   virtual void EraseContents(wxDC& dc);
   virtual void Draw(wxDC& dc);
   virtual void Flash();
   virtual void MoveLinks(wxDC& dc);
   virtual void DrawContents(wxDC& dc);  // E.g. for drawing text label
-  virtual void SetSize(float x, float y, bool recursive = TRUE);
-  virtual void SetAttachmentSize(float x, float y);
+  virtual void SetSize(double x, double y, bool recursive = TRUE);
+  virtual void SetAttachmentSize(double x, double y);
   void Attach(wxShapeCanvas *can);
   void Detach();
 
   inline virtual bool Constrain() { return FALSE; } ;
 
   void AddLine(wxLineShape *line, wxShape *other,
-               int attachFrom = 0, int attachTo = 0);
+               int attachFrom = 0, int attachTo = 0,
+               // The line ordering
+               int positionFrom = -1, int positionTo = -1);
+
+  // Return the zero-based position in m_lines of line.
+  int GetLinePosition(wxLineShape* line);
+
   void AddText(const wxString& string);
 
   inline wxPen *GetPen() const { return m_pen; }
@@ -364,20 +376,36 @@ class wxShape: public wxShapeEvtHandler
 #endif
 
   // Attachment code
-  virtual bool GetAttachmentPosition(int attachment, float *x, float *y,
+  virtual bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   virtual int GetNumberOfAttachments();
   virtual bool AttachmentIsValid(int attachment);
+
+  // Assuming the attachment lies along a vertical or horizontal line,
+  // calculate the position on that point.
+  wxRealPoint CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
+    int nth, int noArcs, wxLineShape* line);
+
+  // Returns TRUE if pt1 <= pt2 in the sense that one point comes before another on an
+  // edge of the shape.
+  // attachmentPoint is the attachment point (= side) in question.
+  bool AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, const wxRealPoint& pt2);
 
   virtual void EraseLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
   virtual void DrawLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
 
   virtual void MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
-                                       float x, float y);
+                                       double x, double y);
 
   // Reorders the lines coming into the node image at this attachment
   // position, in the order in which they appear in linesToSort.
   virtual void SortLines(int attachment, wxList& linesToSort);
+
+  // Apply an attachment ordering change
+  void ApplyAttachmentOrdering(wxList& ordering);
+
+  // Can override this to prevent or intercept line reordering.
+  virtual void OnChangeAttachment(int attachment, wxLineShape* line, wxList& ordering);
 
   // This is really to distinguish between lines and other images.
   // For lines, want to pass drag to canvas, since lines tend to prevent
@@ -401,8 +429,8 @@ class wxShape: public wxShapeEvtHandler
   // (does nothing for most objects)
   // But even non-rotating objects should record their notional
   // rotation in case it's important (e.g. in dog-leg code).
-  virtual inline void Rotate(float WXUNUSED(x), float WXUNUSED(y), float theta) { m_rotation = theta; }
-  virtual inline float GetRotation() const { return m_rotation; }
+  virtual inline void Rotate(double WXUNUSED(x), double WXUNUSED(y), double theta) { m_rotation = theta; }
+  virtual inline double GetRotation() const { return m_rotation; }
 
   void ClearAttachments();
 
@@ -418,7 +446,7 @@ class wxShape: public wxShapeEvtHandler
  protected:
   wxShapeEvtHandler*    m_eventHandler;
   bool                  m_formatted;
-  float                 m_xpos, m_ypos;
+  double                 m_xpos, m_ypos;
   wxPen*                m_pen;
   wxBrush*              m_brush;
   wxFont*               m_font;
@@ -436,7 +464,7 @@ class wxShape: public wxShapeEvtHandler
   bool                  m_selected;
   bool                  m_highlighted;      // Different from selected: user-defined highlighting,
                                             // e.g. thick border.
-  float                 m_rotation;
+  double                 m_rotation;
   int                   m_sensitivity;
   bool                  m_draggable;
   bool                  m_attachmentMode;   // TRUE if using attachments, FALSE otherwise
@@ -469,21 +497,21 @@ class wxPolygonShape: public wxShape
   virtual void Create(wxList *points);
   virtual void ClearPoints();
 
-  void GetBoundingBoxMin(float *w, float *h);
+  void GetBoundingBoxMin(double *w, double *h);
   void CalculateBoundingBox();
-  bool GetPerimeterPoint(float x1, float y1,
-                                 float x2, float y2,
-                                 float *x3, float *y3);
-  bool HitTest(float x, float y, int *attachment, float *distance);
-  void SetSize(float x, float y, bool recursive = TRUE);
+  bool GetPerimeterPoint(double x1, double y1,
+                                 double x2, double y2,
+                                 double *x3, double *y3);
+  bool HitTest(double x, double y, int *attachment, double *distance);
+  void SetSize(double x, double y, bool recursive = TRUE);
   void OnDraw(wxDC& dc);
-  void OnDrawOutline(wxDC& dc, float x, float y, float w, float h);
+  void OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
 
   // Control points ('handles') redirect control to the actual shape, to make it easier
   // to override sizing behaviour.
-  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0);
-  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
-  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
 
   // A polygon should have a control point at each vertex,
   // with the option of moving the control points individually
@@ -511,7 +539,7 @@ class wxPolygonShape: public wxShape
 #endif
 
   int GetNumberOfAttachments();
-  bool GetAttachmentPosition(int attachment, float *x, float *y,
+  bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   bool AttachmentIsValid(int attachment);
   // Does the copying for this object
@@ -522,24 +550,24 @@ class wxPolygonShape: public wxShape
  private:
   wxList*       m_points;
   wxList*       m_originalPoints;
-  float         m_boundWidth;
-  float         m_boundHeight;
-  float         m_originalWidth;
-  float         m_originalHeight;
+  double         m_boundWidth;
+  double         m_boundHeight;
+  double         m_originalWidth;
+  double         m_originalHeight;
 };
 
 class wxRectangleShape: public wxShape
 {
  DECLARE_DYNAMIC_CLASS(wxRectangleShape)
  public:
-  wxRectangleShape(float w = 0.0, float h = 0.0);
-  void GetBoundingBoxMin(float *w, float *h);
-  bool GetPerimeterPoint(float x1, float y1,
-                                 float x2, float y2,
-                                 float *x3, float *y3);
+  wxRectangleShape(double w = 0.0, double h = 0.0);
+  void GetBoundingBoxMin(double *w, double *h);
+  bool GetPerimeterPoint(double x1, double y1,
+                                 double x2, double y2,
+                                 double *x3, double *y3);
   void OnDraw(wxDC& dc);
-  void SetSize(float x, float y, bool recursive = TRUE);
-  void SetCornerRadius(float rad); // If > 0, rounded corners
+  void SetSize(double x, double y, bool recursive = TRUE);
+  void SetCornerRadius(double rad); // If > 0, rounded corners
 
 #ifdef PROLOGIO
   // Prolog database stuff
@@ -548,27 +576,27 @@ class wxRectangleShape: public wxShape
 #endif
 
   int GetNumberOfAttachments();
-  bool GetAttachmentPosition(int attachment, float *x, float *y,
+  bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   // Does the copying for this object
   void Copy(wxShape& copy);
 
-  inline float GetWidth() const { return m_width; }
-  inline float GetHeight() const { return m_height; }
-  inline void SetWidth(float w) { m_width = w; }
-  inline void SetHeight(float h) { m_height = h; }
+  inline double GetWidth() const { return m_width; }
+  inline double GetHeight() const { return m_height; }
+  inline void SetWidth(double w) { m_width = w; }
+  inline void SetHeight(double h) { m_height = h; }
 
 protected:
-  float m_width;
-  float m_height;
-  float m_cornerRadius;
+  double m_width;
+  double m_height;
+  double m_cornerRadius;
 };
 
 class wxTextShape: public wxRectangleShape
 {
  DECLARE_DYNAMIC_CLASS(wxTextShape)
  public:
-  wxTextShape(float width = 0.0, float height = 0.0);
+  wxTextShape(double width = 0.0, double height = 0.0);
 
   void OnDraw(wxDC& dc);
 
@@ -584,15 +612,15 @@ class wxEllipseShape: public wxShape
 {
  DECLARE_DYNAMIC_CLASS(wxEllipseShape)
  public:
-  wxEllipseShape(float w = 0.0, float h = 0.0);
+  wxEllipseShape(double w = 0.0, double h = 0.0);
 
-  void GetBoundingBoxMin(float *w, float *h);
-  bool GetPerimeterPoint(float x1, float y1,
-                                 float x2, float y2,
-                                 float *x3, float *y3);
+  void GetBoundingBoxMin(double *w, double *h);
+  bool GetPerimeterPoint(double x1, double y1,
+                                 double x2, double y2,
+                                 double *x3, double *y3);
 
   void OnDraw(wxDC& dc);
-  void SetSize(float x, float y, bool recursive = TRUE);
+  void SetSize(double x, double y, bool recursive = TRUE);
 
 #ifdef PROLOGIO
   // Prolog database stuff
@@ -601,29 +629,29 @@ class wxEllipseShape: public wxShape
 #endif
 
   int GetNumberOfAttachments();
-  bool GetAttachmentPosition(int attachment, float *x, float *y,
+  bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
 
   // Does the copying for this object
   void Copy(wxShape& copy);
 
-  inline float GetWidth() const { return m_width; }
-  inline float GetHeight() const { return m_height; }
+  inline double GetWidth() const { return m_width; }
+  inline double GetHeight() const { return m_height; }
 
 protected:
-  float m_width;
-  float m_height;
+  double m_width;
+  double m_height;
 };
 
 class wxCircleShape: public wxEllipseShape
 {
  DECLARE_DYNAMIC_CLASS(wxCircleShape)
  public:
-  wxCircleShape(float w = 0.0);
+  wxCircleShape(double w = 0.0);
 
-  bool GetPerimeterPoint(float x1, float y1,
-                                 float x2, float y2,
-                                 float *x3, float *y3);
+  bool GetPerimeterPoint(double x1, double y1,
+                                 double x2, double y2,
+                                 double *x3, double *y3);
   // Does the copying for this object
   void Copy(wxShape& copy);
 };

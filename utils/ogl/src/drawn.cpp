@@ -38,7 +38,7 @@
 
 static void IntToHex(unsigned int dec, char *buf);
 static unsigned long HexToInt(char *buf);
-extern char *GraphicsBuffer;
+extern char *oglBuffer;
 
 #define gyTYPE_PEN   40
 #define gyTYPE_BRUSH 41
@@ -54,6 +54,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDrawnShape, wxRectangleShape)
 wxDrawnShape::wxDrawnShape():wxRectangleShape(100.0, 50.0)
 {
   m_saveToFile = TRUE;
+  m_currentAngle = oglDRAWN_ANGLE_0;
 }
 
 wxDrawnShape::~wxDrawnShape()
@@ -67,22 +68,22 @@ void wxDrawnShape::OnDraw(wxDC& dc)
   if (m_shadowMode != SHADOW_NONE)
   {
     if (m_shadowBrush)
-      m_metafile.m_fillBrush = m_shadowBrush;
-    m_metafile.m_outlinePen = transparent_pen;
-    m_metafile.Draw(dc, m_xpos + m_shadowOffsetX, m_ypos + m_shadowOffsetY);
+      m_metafiles[m_currentAngle].m_fillBrush = m_shadowBrush;
+    m_metafiles[m_currentAngle].m_outlinePen = g_oglTransparentPen;
+    m_metafiles[m_currentAngle].Draw(dc, m_xpos + m_shadowOffsetX, m_ypos + m_shadowOffsetY);
   }
     
-  m_metafile.m_outlinePen = m_pen;
-  m_metafile.m_fillBrush = m_brush;
-  m_metafile.Draw(dc, m_xpos, m_ypos);
+  m_metafiles[m_currentAngle].m_outlinePen = m_pen;
+  m_metafiles[m_currentAngle].m_fillBrush = m_brush;
+  m_metafiles[m_currentAngle].Draw(dc, m_xpos, m_ypos);
 }
 
-void wxDrawnShape::SetSize(float w, float h, bool recursive)
+void wxDrawnShape::SetSize(double w, double h, bool recursive)
 {
   SetAttachmentSize(w, h);
 
-  float scaleX;
-  float scaleY;
+  double scaleX;
+  double scaleY;
   if (GetWidth() == 0.0)
     scaleX = 1.0;
   else scaleX = w/GetWidth();
@@ -90,50 +91,148 @@ void wxDrawnShape::SetSize(float w, float h, bool recursive)
     scaleY = 1.0;
   else scaleY = h/GetHeight();
 
-  m_metafile.Scale(scaleX, scaleY);
+  int i = 0;
+  for (i = 0; i < 4; i++)
+  {
+    if (m_metafiles[i].IsValid())
+        m_metafiles[i].Scale(scaleX, scaleY);
+  }
   m_width = w;
   m_height = h;
   SetDefaultRegionSize();
 }
 
-void wxDrawnShape::Scale(float sx, float sy)
+void wxDrawnShape::Scale(double sx, double sy)
 {
-  m_metafile.Scale(sx, sy);
-  m_metafile.CalculateSize(this);
+    int i;
+    for (i = 0; i < 4; i++)
+    {
+        if (m_metafiles[i].IsValid())
+        {
+            m_metafiles[i].Scale(sx, sy);
+            m_metafiles[i].CalculateSize(this);
+        }
+    }
 }
 
-void wxDrawnShape::Translate(float x, float y)
+void wxDrawnShape::Translate(double x, double y)
 {
-  m_metafile.Translate(x, y);
-  m_metafile.CalculateSize(this);
+    int i;
+    for (i = 0; i < 4; i++)
+    {
+        if (m_metafiles[i].IsValid())
+        {
+            m_metafiles[i].Translate(x, y);
+            m_metafiles[i].CalculateSize(this);
+        }
+    }
 }
 
-void wxDrawnShape::Rotate(float x, float y, float theta)
+// theta is absolute rotation from the zero position
+void wxDrawnShape::Rotate(double x, double y, double theta)
 {
-  if (!m_metafile.GetRotateable())
-    return;
+  m_currentAngle = DetermineMetaFile(theta);
+
+  if (m_currentAngle == 0)
+  {
+    // Rotate metafile
+    if (!m_metafiles[0].GetRotateable())
+      return;
     
-  float actualTheta = theta-m_metafile.m_currentRotation;
+    m_metafiles[0].Rotate(x, y, theta);
+  }
 
-  // Rotate metafile
-  m_metafile.Rotate(x, y, theta);
+  double actualTheta = theta-m_rotation;
 
   // Rotate attachment points
-  float sinTheta = (float)sin(actualTheta);
-  float cosTheta = (float)cos(actualTheta);
+  double sinTheta = (double)sin(actualTheta);
+  double cosTheta = (double)cos(actualTheta);
   wxNode *node = m_attachmentPoints.First();
   while (node)
   {
     wxAttachmentPoint *point = (wxAttachmentPoint *)node->Data();
-    float x1 = point->m_x;
-    float y1 = point->m_y;
-    point->m_x = x1*cosTheta - y1*sinTheta + x*(1 - cosTheta) + y*sinTheta;
-    point->m_y = x1*sinTheta + y1*cosTheta + y*(1 - cosTheta) + x*sinTheta;
+    double x1 = point->m_x;
+    double y1 = point->m_y;
+    point->m_x = x1*cosTheta - y1*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
+    point->m_y = x1*sinTheta + y1*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
     node = node->Next();
   }
   m_rotation = theta;
 
-  m_metafile.CalculateSize(this);
+  m_metafiles[m_currentAngle].CalculateSize(this);
+}
+
+// Which metafile do we use now? Based on current rotation and validity
+// of metafiles.
+
+int wxDrawnShape::DetermineMetaFile(double rotation)
+{
+    double tolerance = 0.0001;
+    const double pi = 3.1415926535897932384626433832795 ;
+    double angle1 = 0.0;
+    double angle2 = pi/2.0;
+    double angle3 = pi;
+    double angle4 = 3.0*pi/2.0;
+
+    int whichMetafile = 0;
+
+    if (oglRoughlyEqual(rotation, angle1, tolerance))
+    {
+        whichMetafile = 0;
+    }
+    else if (oglRoughlyEqual(rotation, angle2, tolerance))
+    {
+        whichMetafile = 1;
+    }
+    else if (oglRoughlyEqual(rotation, angle3, tolerance))
+    {
+        whichMetafile = 2;
+    }
+    else if (oglRoughlyEqual(rotation, angle4, tolerance))
+    {
+        whichMetafile = 3;
+    }
+
+    if ((whichMetafile > 0) && !m_metafiles[whichMetafile].IsValid())
+        whichMetafile = 0;
+
+    return whichMetafile;
+}
+
+void wxDrawnShape::OnDrawOutline(wxDC& dc, double x, double y, double w, double h)
+{
+    if (m_metafiles[m_currentAngle].GetOutlineOp() != -1)
+    {
+        wxNode* node = m_metafiles[m_currentAngle].GetOps().Nth(m_metafiles[m_currentAngle].GetOutlineOp());
+        wxASSERT (node != NULL);
+        wxDrawOp* op = (wxDrawOp*) node->Data();
+
+        if (op->OnDrawOutline(dc, x, y, w, h, m_width, m_height))
+            return;
+    }
+
+    // Default... just use a rectangle
+    wxRectangleShape::OnDrawOutline(dc, x, y, w, h);
+}
+
+// Get the perimeter point using the special outline op, if there is one,
+// otherwise use default wxRectangleShape scheme
+bool wxDrawnShape::GetPerimeterPoint(double x1, double y1,
+                                     double x2, double y2,
+                                     double *x3, double *y3)
+{
+    if (m_metafiles[m_currentAngle].GetOutlineOp() != -1)
+    {
+        wxNode* node = m_metafiles[m_currentAngle].GetOps().Nth(m_metafiles[m_currentAngle].GetOutlineOp());
+        wxASSERT (node != NULL);
+        wxDrawOp* op = (wxDrawOp*) node->Data();
+
+        if (op->GetPerimeterPoint(x1, y1, x2, y2, x3, y3, GetX(), GetY(), GetAttachmentMode()))
+            return TRUE;
+    }
+
+    // Default... just use a rectangle
+    return wxRectangleShape::GetPerimeterPoint(x1, y1, x2, y2, x3, y3);
 }
 
 #ifdef PROLOGIO
@@ -149,7 +248,14 @@ void wxDrawnShape::WritePrologAttributes(wxExpr *clause)
 
   clause->AddAttributeValue("save_metafile", (long)m_saveToFile);
   if (m_saveToFile)
-    m_metafile.WritePrologAttributes(clause);
+  {
+    int i = 0;
+    for (i = 0; i < 4; i++)
+    {
+        if (m_metafiles[i].IsValid())
+            m_metafiles[i].WritePrologAttributes(clause, i);
+    }
+  }
 }
 
 void wxDrawnShape::ReadPrologAttributes(wxExpr *clause)
@@ -161,7 +267,13 @@ void wxDrawnShape::ReadPrologAttributes(wxExpr *clause)
   m_saveToFile = (iVal != 0);
 
   if (m_saveToFile)
-    m_metafile.ReadPrologAttributes(clause);
+  {
+    int i = 0;
+    for (i = 0; i < 4; i++)
+    {
+      m_metafiles[i].ReadPrologAttributes(clause, i);
+    }
+  }
 }
 #endif
 
@@ -174,13 +286,18 @@ void wxDrawnShape::Copy(wxShape& copy)
 
   wxDrawnShape& drawnCopy = (wxDrawnShape&) copy;
 
-  m_metafile.Copy(drawnCopy.m_metafile);
+  int i = 0;
+  for (i = 0; i < 4; i++)
+  {
+    m_metafiles[i].Copy(drawnCopy.m_metafiles[i]);
+  }
   drawnCopy.m_saveToFile = m_saveToFile;
+  drawnCopy.m_currentAngle = m_currentAngle;
 }
 
 bool wxDrawnShape::LoadFromMetaFile(char *filename)
 {
-  return m_metafile.LoadFromMetaFile(filename, &m_width, &m_height);
+  return m_metafiles[0].LoadFromMetaFile(filename, &m_width, &m_height);
 }
 
 // Set of functions for drawing into a pseudo metafile.
@@ -189,87 +306,104 @@ bool wxDrawnShape::LoadFromMetaFile(char *filename)
 
 void wxDrawnShape::DrawLine(const wxPoint& pt1, const wxPoint& pt2)
 {
-    m_metafile.DrawLine(pt1, pt2);
+    m_metafiles[m_currentAngle].DrawLine(pt1, pt2);
 }
 
 void wxDrawnShape::DrawRectangle(const wxRect& rect)
 {
-    m_metafile.DrawRectangle(rect);
+    m_metafiles[m_currentAngle].DrawRectangle(rect);
 }
 
 void wxDrawnShape::DrawRoundedRectangle(const wxRect& rect, double radius)
 {
-    m_metafile.DrawRoundedRectangle(rect, radius);
+    m_metafiles[m_currentAngle].DrawRoundedRectangle(rect, radius);
 }
 
 void wxDrawnShape::DrawEllipse(const wxRect& rect)
 {
-    m_metafile.DrawEllipse(rect);
+    m_metafiles[m_currentAngle].DrawEllipse(rect);
+}
+
+void wxDrawnShape::DrawArc(const wxPoint& centrePt, const wxPoint& startPt, const wxPoint& endPt)
+{
+    m_metafiles[m_currentAngle].DrawArc(centrePt, startPt, endPt);
+}
+
+void wxDrawnShape::DrawEllipticArc(const wxRect& rect, double startAngle, double endAngle)
+{
+    m_metafiles[m_currentAngle].DrawEllipticArc(rect, startAngle, endAngle);
 }
 
 void wxDrawnShape::DrawPoint(const wxPoint& pt)
 {
-    m_metafile.DrawPoint(pt);
+    m_metafiles[m_currentAngle].DrawPoint(pt);
 }
 
 void wxDrawnShape::DrawText(const wxString& text, const wxPoint& pt)
 {
-    m_metafile.DrawText(text, pt);
+    m_metafiles[m_currentAngle].DrawText(text, pt);
 }
 
 void wxDrawnShape::DrawLines(int n, wxPoint pts[])
 {
-    m_metafile.DrawLines(n, pts);
+    m_metafiles[m_currentAngle].DrawLines(n, pts);
 }
 
-void wxDrawnShape::DrawPolygon(int n, wxPoint pts[])
+void wxDrawnShape::DrawPolygon(int n, wxPoint pts[], int flags)
 {
-    m_metafile.DrawPolygon(n, pts);
+    if (flags & oglMETAFLAGS_ATTACHMENTS)
+    {
+        ClearAttachments();
+        int i;
+        for (i = 0; i < n; i++)
+            m_attachmentPoints.Append(new wxAttachmentPoint(i, pts[i].x, pts[i].y));
+    }
+    m_metafiles[m_currentAngle].DrawPolygon(n, pts, flags);
 }
 
 void wxDrawnShape::DrawSpline(int n, wxPoint pts[])
 {
-    m_metafile.DrawSpline(n, pts);
+    m_metafiles[m_currentAngle].DrawSpline(n, pts);
 }
 
 void wxDrawnShape::SetClippingRect(const wxRect& rect)
 {
-    m_metafile.SetClippingRect(rect);
+    m_metafiles[m_currentAngle].SetClippingRect(rect);
 }
 
 void wxDrawnShape::DestroyClippingRect()
 {
-    m_metafile.DestroyClippingRect();
+    m_metafiles[m_currentAngle].DestroyClippingRect();
 }
 
 void wxDrawnShape::SetPen(wxPen* pen, bool isOutline)
 {
-    m_metafile.SetPen(pen, isOutline);
+    m_metafiles[m_currentAngle].SetPen(pen, isOutline);
 }
 
 void wxDrawnShape::SetBrush(wxBrush* brush, bool isFill)
 {
-    m_metafile.SetBrush(brush, isFill);
+    m_metafiles[m_currentAngle].SetBrush(brush, isFill);
 }
 
 void wxDrawnShape::SetFont(wxFont* font)
 {
-    m_metafile.SetFont(font);
+    m_metafiles[m_currentAngle].SetFont(font);
 }
 
 void wxDrawnShape::SetTextColour(const wxColour& colour)
 {
-    m_metafile.SetTextColour(colour);
+    m_metafiles[m_currentAngle].SetTextColour(colour);
 }
 
 void wxDrawnShape::SetBackgroundColour(const wxColour& colour)
 {
-    m_metafile.SetBackgroundColour(colour);
+    m_metafiles[m_currentAngle].SetBackgroundColour(colour);
 }
 
 void wxDrawnShape::SetBackgroundMode(int mode)
 {
-    m_metafile.SetBackgroundMode(mode);
+    m_metafiles[m_currentAngle].SetBackgroundMode(mode);
 }
 
 
@@ -291,7 +425,7 @@ wxOpSetGDI::wxOpSetGDI(int theOp, wxPseudoMetaFile *theImage, int theGdiIndex, i
   m_mode = theMode;
 }
 
-void wxOpSetGDI::Do(wxDC& dc, float xoffset, float yoffset)
+void wxOpSetGDI::Do(wxDC& dc, double xoffset, double yoffset)
 {
   switch (m_op)
   {
@@ -457,8 +591,8 @@ void wxOpSetGDI::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
  *
  */
  
-wxOpSetClipping::wxOpSetClipping(int theOp, float theX1, float theY1,
-    float theX2, float theY2):wxDrawOp(theOp)
+wxOpSetClipping::wxOpSetClipping(int theOp, double theX1, double theY1,
+    double theX2, double theY2):wxDrawOp(theOp)
 {
   m_x1 = theX1;
   m_y1 = theY1;
@@ -472,7 +606,7 @@ wxDrawOp *wxOpSetClipping::Copy(wxPseudoMetaFile *newImage)
   return newOp;
 }
     
-void wxOpSetClipping::Do(wxDC& dc, float xoffset, float yoffset)
+void wxOpSetClipping::Do(wxDC& dc, double xoffset, double yoffset)
 {
   switch (m_op)
   {
@@ -491,7 +625,7 @@ void wxOpSetClipping::Do(wxDC& dc, float xoffset, float yoffset)
   }
 }
 
-void wxOpSetClipping::Scale(float xScale, float yScale)
+void wxOpSetClipping::Scale(double xScale, double yScale)
 {
   m_x1 *= xScale;
   m_y1 *= yScale;
@@ -499,7 +633,7 @@ void wxOpSetClipping::Scale(float xScale, float yScale)
   m_y2 *= yScale;
 }
 
-void wxOpSetClipping::Translate(float x, float y)
+void wxOpSetClipping::Translate(double x, double y)
 {
   m_x1 += x;
   m_y1 += y;
@@ -547,13 +681,15 @@ void wxOpSetClipping::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
  *
  */
  
-wxOpDraw::wxOpDraw(int theOp, float theX1, float theY1, float theX2, float theY2,
-         float theRadius, char *s):wxDrawOp(theOp)
+wxOpDraw::wxOpDraw(int theOp, double theX1, double theY1, double theX2, double theY2,
+         double theRadius, char *s):wxDrawOp(theOp)
 {
   m_x1 = theX1;
   m_y1 = theY1;
   m_x2 = theX2;
   m_y2 = theY2;
+  m_x3 = 0.0;
+  m_y3 = 0.0;
   m_radius = theRadius;
   if (s) m_textString = copystring(s);
   else m_textString = NULL;
@@ -567,41 +703,61 @@ wxOpDraw::~wxOpDraw()
 wxDrawOp *wxOpDraw::Copy(wxPseudoMetaFile *newImage)
 {
   wxOpDraw *newOp = new wxOpDraw(m_op, m_x1, m_y1, m_x2, m_y2, m_radius, m_textString);
+  newOp->m_x3 = m_x3;
+  newOp->m_y3 = m_y3;
   return newOp;
 }
 
-void wxOpDraw::Do(wxDC& dc, float xoffset, float yoffset)
+void wxOpDraw::Do(wxDC& dc, double xoffset, double yoffset)
 {
   switch (m_op)
   {
     case DRAWOP_DRAW_LINE:
     {
-      dc.DrawLine(m_x1+xoffset, m_y1+yoffset, m_x2+xoffset, m_y2+yoffset);
+      dc.DrawLine(WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset), WXROUND(m_x2+xoffset), WXROUND(m_y2+yoffset));
       break;
     }
     case DRAWOP_DRAW_RECT:
     {
-      dc.DrawRectangle(m_x1+xoffset, m_y1+yoffset, m_x2, m_y2);
+      dc.DrawRectangle(WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset), WXROUND(m_x2), WXROUND(m_y2));
       break;
     }
     case DRAWOP_DRAW_ROUNDED_RECT:
     {
-      dc.DrawRoundedRectangle(m_x1+xoffset, m_y1+yoffset, m_x2, m_y2, m_radius);
+      dc.DrawRoundedRectangle(WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset), WXROUND(m_x2), WXROUND(m_y2), m_radius);
       break;
     }
     case DRAWOP_DRAW_ELLIPSE:
     {
-      dc.DrawEllipse(m_x1+xoffset, m_y1+yoffset, m_x2, m_y2);
+      dc.DrawEllipse(WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset), WXROUND(m_x2), WXROUND(m_y2));
+      break;
+    }
+    case DRAWOP_DRAW_ARC:
+    {
+      dc.DrawArc(WXROUND(m_x2+xoffset), WXROUND(m_y2+yoffset),
+                 WXROUND(m_x3+xoffset), WXROUND(m_y3+yoffset),
+                 WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset));
+      break;
+    }
+    case DRAWOP_DRAW_ELLIPTIC_ARC:
+    {
+      const double pi = 3.1415926535897932384626433832795 ;
+
+      // Convert back to degrees
+      dc.DrawEllipticArc(
+                 WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset),
+                 WXROUND(m_x2), WXROUND(m_y2),
+                 WXROUND(m_x3*(360.0/(2.0*pi))), WXROUND(m_y3*(360.0/(2.0*pi))));
       break;
     }
     case DRAWOP_DRAW_POINT:
     {
-      dc.DrawPoint(m_x1+xoffset, m_y1+yoffset);
+      dc.DrawPoint(WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset));
       break;
     }
     case DRAWOP_DRAW_TEXT:
     {
-      dc.DrawText(m_textString, m_x1+xoffset, m_y1+yoffset);
+      dc.DrawText(m_textString, WXROUND(m_x1+xoffset), WXROUND(m_y1+yoffset));
       break;
     }
     default:
@@ -609,32 +765,117 @@ void wxOpDraw::Do(wxDC& dc, float xoffset, float yoffset)
   }
 }
 
-void wxOpDraw::Scale(float scaleX, float scaleY)
+void wxOpDraw::Scale(double scaleX, double scaleY)
 {
   m_x1 *= scaleX;
   m_y1 *= scaleY;
   m_x2 *= scaleX;
   m_y2 *= scaleY;
+
+  if (m_op != DRAWOP_DRAW_ELLIPTIC_ARC)
+  {
+    m_x3 *= scaleX;
+    m_y3 *= scaleY;
+  }
+
   m_radius *= scaleX;
 }
 
-void wxOpDraw::Translate(float x, float y)
+void wxOpDraw::Translate(double x, double y)
 {
   m_x1 += x;
   m_y1 += y;
-}
-
-void wxOpDraw::Rotate(float x, float y, float sinTheta, float cosTheta)
-{
-  m_x1 = m_x1*cosTheta - m_y1*sinTheta + x*(1 - cosTheta) + y*sinTheta;
-  m_y1 = m_x1*sinTheta + m_y1*cosTheta + y*(1 - cosTheta) + x*sinTheta;
 
   switch (m_op)
   {
     case DRAWOP_DRAW_LINE:
     {
-      m_x2 = m_x2*cosTheta - m_y2*sinTheta + x*(1 - cosTheta) + y*sinTheta;
-      m_y2 = m_x2*sinTheta + m_y2*cosTheta + y*(1 - cosTheta) + x*sinTheta;
+      m_x2 += x;
+      m_y2 += y;
+      break;
+    }
+    case DRAWOP_DRAW_ARC:
+    {
+      m_x2 += x;
+      m_y2 += y;
+      m_x3 += x;
+      m_y3 += y;
+      break;
+    }
+    case DRAWOP_DRAW_ELLIPTIC_ARC:
+    {
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+void wxOpDraw::Rotate(double x, double y, double theta, double sinTheta, double cosTheta)
+{
+  double newX1 = m_x1*cosTheta - m_y1*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
+  double newY1 = m_x1*sinTheta + m_y1*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
+
+  switch (m_op)
+  {
+    case DRAWOP_DRAW_LINE:
+    {
+      double newX2 = m_x2*cosTheta - m_y2*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
+      double newY2 = m_x2*sinTheta + m_y2*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
+
+	  m_x1 = newX1;
+	  m_y1 = newY1;
+	  m_x2 = newX2;
+	  m_y2 = newY2;
+      break;
+    }
+    case DRAWOP_DRAW_RECT:
+    case DRAWOP_DRAW_ROUNDED_RECT:
+    case DRAWOP_DRAW_ELLIPTIC_ARC:
+    {
+      // Assume only 0, 90, 180, 270 degree rotations.
+      // oldX1, oldY1 represents the top left corner. Find the
+      // bottom right, and rotate that. Then the width/height is the difference
+      // between x/y values.
+      double oldBottomRightX = m_x1 + m_x2;
+      double oldBottomRightY = m_y1 + m_y2;
+      double newBottomRightX = oldBottomRightX*cosTheta - oldBottomRightY*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
+      double newBottomRightY = oldBottomRightX*sinTheta + oldBottomRightY*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
+
+      // Now find the new top-left, bottom-right coordinates.
+      double minX = wxMin(newX1, newBottomRightX);
+      double minY = wxMin(newY1, newBottomRightY);
+      double maxX = wxMax(newX1, newBottomRightX);
+      double maxY = wxMax(newY1, newBottomRightY);
+
+      m_x1 = minX;
+      m_y1 = minY;
+      m_x2 = maxX - minX; // width
+      m_y2 = maxY - minY; // height
+
+      if (m_op == DRAWOP_DRAW_ELLIPTIC_ARC)
+      {
+        // Add rotation to angles
+        m_x3 += theta;
+        m_y3 += theta;
+      }
+
+      break;
+    }
+    case DRAWOP_DRAW_ARC:
+    {
+      double newX2 = m_x2*cosTheta - m_y2*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
+      double newY2 = m_x2*sinTheta + m_y2*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
+      double newX3 = m_x3*cosTheta - m_y3*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
+      double newY3 = m_x3*sinTheta + m_y3*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
+
+	  m_x1 = newX1;
+	  m_y1 = newY1;
+	  m_x2 = newX2;
+	  m_y2 = newY2;
+	  m_x3 = newX3;
+	  m_y3 = newY3;
+
       break;
     }
     default:
@@ -681,6 +922,16 @@ wxExpr *wxOpDraw::WriteExpr(wxPseudoMetaFile *image)
       break;
     }
     case DRAWOP_DRAW_ARC:
+    case DRAWOP_DRAW_ELLIPTIC_ARC:
+    {
+      expr->Append(new wxExpr(m_x1));
+      expr->Append(new wxExpr(m_y1));
+      expr->Append(new wxExpr(m_x2));
+      expr->Append(new wxExpr(m_y2));
+      expr->Append(new wxExpr(m_x3));
+      expr->Append(new wxExpr(m_y3));
+      break;
+    }
     default:
     {
       break;
@@ -722,10 +973,21 @@ void wxOpDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     {
       m_x1 = expr->Nth(1)->RealValue();
       m_y1 = expr->Nth(2)->RealValue();
-      m_textString = copystring(expr->Nth(3)->StringValue());
+      wxString str(expr->Nth(3)->StringValue());
+      m_textString = copystring((const char*) str);
       break;
     }
     case DRAWOP_DRAW_ARC:
+    case DRAWOP_DRAW_ELLIPTIC_ARC:
+    {
+      m_x1 = expr->Nth(1)->RealValue();
+      m_y1 = expr->Nth(2)->RealValue();
+      m_x2 = expr->Nth(3)->RealValue();
+      m_y2 = expr->Nth(4)->RealValue();
+      m_x3 = expr->Nth(5)->RealValue();
+      m_y3 = expr->Nth(6)->RealValue();
+      break;
+    }
     default:
     {
       break;
@@ -761,7 +1023,7 @@ wxDrawOp *wxOpPolyDraw::Copy(wxPseudoMetaFile *newImage)
   return newOp;
 }
 
-void wxOpPolyDraw::Do(wxDC& dc, float xoffset, float yoffset)
+void wxOpPolyDraw::Do(wxDC& dc, double xoffset, double yoffset)
 {
   switch (m_op)
   {
@@ -771,11 +1033,11 @@ void wxOpPolyDraw::Do(wxDC& dc, float xoffset, float yoffset)
         int i;
         for (i = 0; i < m_noPoints; i++)
         {
-            actualPoints[i].x = (long) m_points[i].x;
-            actualPoints[i].y = (long) m_points[i].y;
+            actualPoints[i].x = WXROUND(m_points[i].x);
+            actualPoints[i].y = WXROUND(m_points[i].y);
         }
 
-        dc.DrawLines(m_noPoints, actualPoints, xoffset, yoffset);
+        dc.DrawLines(m_noPoints, actualPoints, WXROUND(xoffset), WXROUND(yoffset));
 
         delete[] actualPoints;
         break;
@@ -786,11 +1048,11 @@ void wxOpPolyDraw::Do(wxDC& dc, float xoffset, float yoffset)
         int i;
         for (i = 0; i < m_noPoints; i++)
         {
-            actualPoints[i].x = (long) m_points[i].x;
-            actualPoints[i].y = (long) m_points[i].y;
+            actualPoints[i].x = WXROUND(m_points[i].x);
+            actualPoints[i].y = WXROUND(m_points[i].y);
         }
 
-        dc.DrawPolygon(m_noPoints, actualPoints, xoffset, yoffset);
+        dc.DrawPolygon(m_noPoints, actualPoints, WXROUND(xoffset), WXROUND(yoffset));
 
         delete[] actualPoints;
         break;
@@ -801,8 +1063,8 @@ void wxOpPolyDraw::Do(wxDC& dc, float xoffset, float yoffset)
         int i;
         for (i = 0; i < m_noPoints; i++)
         {
-            actualPoints[i].x = (long) m_points[i].x;
-            actualPoints[i].y = (long) m_points[i].y;
+            actualPoints[i].x = WXROUND(m_points[i].x);
+            actualPoints[i].y = WXROUND(m_points[i].y);
         }
 
         dc.DrawSpline(m_noPoints, actualPoints); // no offsets in DrawSpline // , xoffset, yoffset);
@@ -816,7 +1078,7 @@ void wxOpPolyDraw::Do(wxDC& dc, float xoffset, float yoffset)
   }
 }
 
-void wxOpPolyDraw::Scale(float scaleX, float scaleY)
+void wxOpPolyDraw::Scale(double scaleX, double scaleY)
 {
   for (int i = 0; i < m_noPoints; i++)
   {
@@ -825,7 +1087,7 @@ void wxOpPolyDraw::Scale(float scaleX, float scaleY)
   }
 }
 
-void wxOpPolyDraw::Translate(float x, float y)
+void wxOpPolyDraw::Translate(double x, double y)
 {
   for (int i = 0; i < m_noPoints; i++)
   {
@@ -834,14 +1096,14 @@ void wxOpPolyDraw::Translate(float x, float y)
   }
 }
 
-void wxOpPolyDraw::Rotate(float x, float y, float sinTheta, float cosTheta)
+void wxOpPolyDraw::Rotate(double x, double y, double theta, double sinTheta, double cosTheta)
 {
   for (int i = 0; i < m_noPoints; i++)
   {
-    float x1 = m_points[i].x;
-    float y1 = m_points[i].y;
-    m_points[i].x = x1*cosTheta - y1*sinTheta + x*(1 - cosTheta) + y*sinTheta;
-    m_points[i].y = x1*sinTheta + y1*cosTheta + y*(1 - cosTheta) + x*sinTheta;
+    double x1 = m_points[i].x;
+    double y1 = m_points[i].y;
+    m_points[i].x = x1*cosTheta - y1*sinTheta + x*(1.0 - cosTheta) + y*sinTheta;
+    m_points[i].y = x1*sinTheta + y1*cosTheta + y*(1.0 - cosTheta) + x*sinTheta;
   }
 }
 
@@ -855,8 +1117,8 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
   char buf2[5];
   char buf3[5];
 
-  GraphicsBuffer[0] = 0;
-  
+  oglBuffer[0] = 0;
+
   /*
    * Store each coordinate pair in a hex string to save space.
    * E.g. "1B9080CD". 4 hex digits per coordinate pair.
@@ -880,11 +1142,11 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
     // Don't overrun the buffer
     if ((i*8) < 3000)
     {
-      strcat(GraphicsBuffer, buf2);
-      strcat(GraphicsBuffer, buf3);
+      strcat(oglBuffer, buf2);
+      strcat(oglBuffer, buf3);
     }
   }
-  expr->Append(new wxExpr(PrologString, GraphicsBuffer));
+  expr->Append(new wxExpr(PrologString, oglBuffer));
   return expr;
 }
 
@@ -927,11 +1189,92 @@ void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     int testY = (signed int)unSignedY;
 #endif
 
-    m_points[i].x = (float)(signedX / 100.0);
-    m_points[i].y = (float)(signedY / 100.0);
+    m_points[i].x = (double)(signedX / 100.0);
+    m_points[i].y = (double)(signedY / 100.0);
 
     i ++;
   }
+}
+
+// Draw an outline using the current operation.
+bool wxOpPolyDraw::OnDrawOutline(wxDC& dc, double x, double y, double w, double h, double oldW, double oldH)
+{
+    dc.SetBrush(wxTRANSPARENT_BRUSH);
+
+    // Multiply all points by proportion of new size to old size
+    double x_proportion = (double)(fabs(w/oldW));
+    double y_proportion = (double)(fabs(h/oldH));
+
+    int n = m_noPoints;
+    wxPoint *intPoints = new wxPoint[n];
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        intPoints[i].x = WXROUND (x_proportion * m_points[i].x);
+        intPoints[i].y = WXROUND (y_proportion * m_points[i].y);
+    }
+    dc.DrawPolygon(n, intPoints, x, y);
+    delete[] intPoints;
+    return TRUE;
+}
+
+// Assume (x1, y1) is centre of box (most generally, line end at box)
+bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
+                                     double x2, double y2,
+                                     double *x3, double *y3,
+                                     double xOffset, double yOffset,
+                                     bool attachmentMode)
+{
+  int n = m_noPoints;
+
+  // First check for situation where the line is vertical,
+  // and we would want to connect to a point on that vertical --
+  // oglFindEndForPolyline can't cope with this (the arrow
+  // gets drawn to the wrong place).
+  if ((!attachmentMode) && (x1 == x2))
+  {
+    // Look for the point we'd be connecting to. This is
+    // a heuristic...
+    int i;
+    for (i = 0; i < n; i++)
+    {
+      wxRealPoint *point = & (m_points[i]);
+      if (point->x == 0.0)
+      {
+        if ((y2 > y1) && (point->y > 0.0))
+        {
+          *x3 = point->x + xOffset;
+          *y3 = point->y + yOffset;
+          return TRUE;
+        }
+        else if ((y2 < y1) && (point->y < 0.0))
+        {
+          *x3 = point->x + xOffset;
+          *y3 = point->y + yOffset;
+          return TRUE;
+        }
+      }
+    }
+  }
+  
+  double *xpoints = new double[n];
+  double *ypoints = new double[n];
+
+  int i = 0;
+  for (i = 0; i < n; i++)
+  {
+    wxRealPoint *point = & (m_points[i]);
+    xpoints[i] = point->x + xOffset;
+    ypoints[i] = point->y + yOffset;
+  }
+
+  oglFindEndForPolyline(n, xpoints, ypoints, 
+                        x1, y1, x2, y2, x3, y3);
+
+  delete[] xpoints;
+  delete[] ypoints;
+
+  return TRUE;
 }
 
 
@@ -1027,6 +1370,7 @@ wxPseudoMetaFile::wxPseudoMetaFile()
   m_height = 0.0;
   m_outlinePen = NULL;
   m_fillBrush = NULL;
+  m_outlineOp = -1;
 }
 
 wxPseudoMetaFile::wxPseudoMetaFile(wxPseudoMetaFile& mf)
@@ -1052,9 +1396,10 @@ void wxPseudoMetaFile::Clear()
   m_gdiObjects.Clear();
   m_outlineColours.Clear();
   m_fillColours.Clear();
+  m_outlineOp = -1;
 }
 
-void wxPseudoMetaFile::Draw(wxDC& dc, float xoffset, float yoffset)
+void wxPseudoMetaFile::Draw(wxDC& dc, double xoffset, double yoffset)
 {
   wxNode *node = m_ops.First();
   while (node)
@@ -1065,7 +1410,7 @@ void wxPseudoMetaFile::Draw(wxDC& dc, float xoffset, float yoffset)
   }
 }
 
-void wxPseudoMetaFile::Scale(float sx, float sy)
+void wxPseudoMetaFile::Scale(double sx, double sy)
 {
   wxNode *node = m_ops.First();
   while (node)
@@ -1078,7 +1423,7 @@ void wxPseudoMetaFile::Scale(float sx, float sy)
   m_height *= sy;
 }
 
-void wxPseudoMetaFile::Translate(float x, float y)
+void wxPseudoMetaFile::Translate(double x, double y)
 {
   wxNode *node = m_ops.First();
   while (node)
@@ -1089,30 +1434,43 @@ void wxPseudoMetaFile::Translate(float x, float y)
   }
 }
 
-void wxPseudoMetaFile::Rotate(float x, float y, float theta)
+void wxPseudoMetaFile::Rotate(double x, double y, double theta)
 {
-  float theta1 = theta-m_currentRotation;
+  double theta1 = theta-m_currentRotation;
   if (theta1 == 0.0) return;
-  float cosTheta = (float)cos(theta1);
-  float sinTheta = (float)sin(theta1);
+  double cosTheta = (double)cos(theta1);
+  double sinTheta = (double)sin(theta1);
 
   wxNode *node = m_ops.First();
   while (node)
   {
     wxDrawOp *op = (wxDrawOp *)node->Data();
-    op->Rotate(x, y, sinTheta, cosTheta);
+    op->Rotate(x, y, theta, sinTheta, cosTheta);
     node = node->Next();
   }
   m_currentRotation = theta;
 }
 
 #ifdef PROLOGIO
-void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause)
+void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause, int whichAngle)
 {
+  wxString widthStr;
+  widthStr.Printf("meta_width%d", whichAngle);
+
+  wxString heightStr;
+  heightStr.Printf("meta_height%d", whichAngle);
+
+  wxString outlineStr;
+  outlineStr.Printf("outline_op%d", whichAngle);
+
+  wxString rotateableStr;
+  rotateableStr.Printf("meta_rotateable%d", whichAngle);
+
   // Write width and height
-  clause->AddAttributeValue("meta_width", m_width);
-  clause->AddAttributeValue("meta_height", m_height);
-  clause->AddAttributeValue("meta_rotateable", (long)m_rotateable);
+  clause->AddAttributeValue(widthStr, m_width);
+  clause->AddAttributeValue(heightStr, m_height);
+  clause->AddAttributeValue(rotateableStr, (long)m_rotateable);
+  clause->AddAttributeValue(outlineStr, (long)m_outlineOp);
 
   // Write GDI objects
   char buf[50];
@@ -1120,7 +1478,7 @@ void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause)
   wxNode *node = m_gdiObjects.First();
   while (node)
   {
-    sprintf(buf, "gdi%d", i);
+    sprintf(buf, "gdi%d_%d", whichAngle, i);
     wxObject *obj = (wxObject *)node->Data();
     wxExpr *expr = NULL;
     if (obj)
@@ -1178,7 +1536,7 @@ void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause)
   node = m_ops.First();
   while (node)
   {
-    sprintf(buf, "op%d", i);
+    sprintf(buf, "op%d_%d", whichAngle, i);
     wxDrawOp *op = (wxDrawOp *)node->Data();
     wxExpr *expr = op->WriteExpr(this);
     if (expr)
@@ -1199,7 +1557,10 @@ void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause)
       outlineExpr->Append(new wxExpr((long)node->Data()));
       node = node->Next();
     }
-    clause->AddAttributeValue("outline_objects", outlineExpr);
+    wxString outlineObjectsStr;
+    outlineObjectsStr.Printf("outline_objects%d", whichAngle);
+
+    clause->AddAttributeValue(outlineObjectsStr, outlineExpr);
   }
   if (m_fillColours.Number() > 0)
   {
@@ -1210,18 +1571,34 @@ void wxPseudoMetaFile::WritePrologAttributes(wxExpr *clause)
       fillExpr->Append(new wxExpr((long)node->Data()));
       node = node->Next();
     }
-    clause->AddAttributeValue("fill_objects", fillExpr);
+    wxString fillObjectsStr;
+    fillObjectsStr.Printf("fill_objects%d", whichAngle);
+
+    clause->AddAttributeValue(fillObjectsStr, fillExpr);
   }
     
 }
 
-void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause)
+void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause, int whichAngle)
 {
-  clause->AssignAttributeValue("meta_width", &m_width);
-  clause->AssignAttributeValue("meta_height", &m_height);
+  wxString widthStr;
+  widthStr.Printf("meta_width%d", whichAngle);
+
+  wxString heightStr;
+  heightStr.Printf("meta_height%d", whichAngle);
+
+  wxString outlineStr;
+  outlineStr.Printf("outline_op%d", whichAngle);
+
+  wxString rotateableStr;
+  rotateableStr.Printf("meta_rotateable%d", whichAngle);
+
+  clause->GetAttributeValue(widthStr, m_width);
+  clause->GetAttributeValue(heightStr, m_height);
+  clause->GetAttributeValue(outlineStr, m_outlineOp);
 
   int iVal = (int) m_rotateable;
-  clause->AssignAttributeValue("meta_rotateable", &iVal);
+  clause->GetAttributeValue(rotateableStr, iVal);
   m_rotateable = (iVal != 0);
 
   // Read GDI objects
@@ -1230,9 +1607,9 @@ void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause)
   bool keepGoing = TRUE;
   while (keepGoing)
   {
-    sprintf(buf, "gdi%d", i);
+    sprintf(buf, "gdi%d_%d", whichAngle, i);
     wxExpr *expr = NULL;
-    clause->AssignAttributeValue(buf, &expr);
+    clause->GetAttributeValue(buf, &expr);
     if (!expr)
     {
       keepGoing = FALSE;
@@ -1296,9 +1673,9 @@ void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause)
   i = 1;
   while (keepGoing)
   {
-    sprintf(buf, "op%d", i);
+    sprintf(buf, "op%d_%d", whichAngle, i);
     wxExpr *expr = NULL;
-    clause->AssignAttributeValue(buf, &expr);
+    clause->GetAttributeValue(buf, &expr);
     if (!expr)
     {
       keepGoing = FALSE;
@@ -1360,8 +1737,11 @@ void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause)
     i ++;
   }
 
+  wxString outlineObjectsStr;
+  outlineObjectsStr.Printf("outline_objects%d", whichAngle);
+
   // Now read in the list of outline and fill operations, if any
-  wxExpr *expr1 = clause->AttributeValue("outline_objects");
+  wxExpr *expr1 = clause->AttributeValue(outlineObjectsStr);
   if (expr1)
   {
     wxExpr *eachExpr = expr1->GetFirst();
@@ -1371,7 +1751,11 @@ void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause)
       eachExpr = eachExpr->GetNext();
     }
   }
-  expr1 = clause->AttributeValue("fill_objects");
+
+  wxString fillObjectsStr;
+  fillObjectsStr.Printf("fill_objects%d", whichAngle);
+
+  expr1 = clause->AttributeValue(fillObjectsStr);
   if (expr1)
   {
     wxExpr *eachExpr = expr1->GetFirst();
@@ -1387,14 +1771,15 @@ void wxPseudoMetaFile::ReadPrologAttributes(wxExpr *clause)
 // Does the copying for this object
 void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
 {
+  copy.Clear();
+
   copy.m_currentRotation = m_currentRotation;
   copy.m_width = m_width;
   copy.m_height = m_height;
   copy.m_rotateable = m_rotateable;
   copy.m_fillBrush = m_fillBrush;
   copy.m_outlinePen = m_outlinePen;
-
-  copy.Clear();
+  copy.m_outlineOp = m_outlineOp;
 
   // Copy the GDI objects
   wxNode *node = m_gdiObjects.First();
@@ -1435,7 +1820,7 @@ void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
  *
  */
  
-bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rheight)
+bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, double *rwidth, double *rheight)
 {
   if (!FileExists(filename))
     return NULL;
@@ -1448,8 +1833,8 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
     return FALSE;
   }
 
-  float lastX = 0.0;
-  float lastY = 0.0;
+  double lastX = 0.0;
+  double lastY = 0.0;
 
   // Convert from metafile records to wxDrawnShape records
   wxNode *node = metaFile->metaRecords.First();
@@ -1502,15 +1887,15 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
 //      case META_SCALEVIEWPORTEXT:
       case META_LINETO:
       {
-        wxOpDraw *op = new wxOpDraw(DRAWOP_DRAW_LINE, (float)lastX, (float)lastY,
-                               (float)record->param1, (float)record->param2);
+        wxOpDraw *op = new wxOpDraw(DRAWOP_DRAW_LINE, (double)lastX, (double)lastY,
+                               (double)record->param1, (double)record->param2);
         m_ops.Append(op);
         break;
       }
       case META_MOVETO:
       {
-        lastX = (float)record->param1;
-        lastY = (float)record->param2;
+        lastX = (double)record->param1;
+        lastY = (double)record->param2;
         break;
       }
       case META_EXCLUDECLIPRECT:
@@ -1538,9 +1923,9 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
       case META_ELLIPSE:
       {
         wxOpDraw *op = new wxOpDraw(DRAWOP_DRAW_ELLIPSE,
-                               (float)record->param1, (float)record->param2,
-                               (float)(record->param3 - record->param1),
-                               (float)(record->param4 - record->param2));
+                               (double)record->param1, (double)record->param2,
+                               (double)(record->param3 - record->param1),
+                               (double)(record->param4 - record->param2));
         m_ops.Append(op);
         break;
       }
@@ -1549,18 +1934,18 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
       case META_RECTANGLE:
       {
         wxOpDraw *op = new wxOpDraw(DRAWOP_DRAW_RECT,
-                               (float)record->param1, (float)record->param2,
-                               (float)(record->param3 - record->param1),
-                               (float)(record->param4 - record->param2));
+                               (double)record->param1, (double)record->param2,
+                               (double)(record->param3 - record->param1),
+                               (double)(record->param4 - record->param2));
         m_ops.Append(op);
         break;
       }
       case META_ROUNDRECT:
       {
         wxOpDraw *op = new wxOpDraw(DRAWOP_DRAW_ROUNDED_RECT,
-              (float)record->param1, (float)record->param2,
-              (float)(record->param3 - record->param1),
-              (float)(record->param4 - record->param2), (float)record->param5);
+              (double)record->param1, (double)record->param2,
+              (double)(record->param3 - record->param1),
+              (double)(record->param4 - record->param2), (double)record->param5);
         m_ops.Append(op);
         break;
       }
@@ -1569,7 +1954,7 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
       case META_SETPIXEL:
       {
         wxOpDraw *op = new wxOpDraw(DRAWOP_DRAW_POINT,
-              (float)record->param1, (float)record->param2,
+              (double)record->param1, (double)record->param2,
               0.0, 0.0);
 
 //        SHOULD SET THE COLOUR - SET PEN?
@@ -1581,7 +1966,7 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
       case META_TEXTOUT:
       {
         wxOpDraw *op = new wxOpDraw(DRAWOP_DRAW_TEXT,
-              (float)record->param1, (float)record->param2,
+              (double)record->param1, (double)record->param2,
               0.0, 0.0, 0.0, record->stringParam);
         m_ops.Append(op);
         break;
@@ -1747,24 +2132,24 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
     }
     node = node->Next();
   }
-  float actualWidth = (float)fabs(metaFile->right - metaFile->left);
-  float actualHeight = (float)fabs(metaFile->bottom - metaFile->top);
-  
-  float initialScaleX = 1.0;
-  float initialScaleY = 1.0;
+  double actualWidth = (double)fabs(metaFile->right - metaFile->left);
+  double actualHeight = (double)fabs(metaFile->bottom - metaFile->top);
 
-  float xoffset, yoffset;
+  double initialScaleX = 1.0;
+  double initialScaleY = 1.0;
+
+  double xoffset, yoffset;
 
   // Translate so origin is at centre of rectangle
   if (metaFile->bottom > metaFile->top)
-    yoffset = - (float)((metaFile->bottom - metaFile->top)/2.0);
+    yoffset = - (double)((metaFile->bottom - metaFile->top)/2.0);
   else
-    yoffset = - (float)((metaFile->top - metaFile->bottom)/2.0);
+    yoffset = - (double)((metaFile->top - metaFile->bottom)/2.0);
 
   if (metaFile->right > metaFile->left)
-    xoffset = - (float)((metaFile->right - metaFile->left)/2.0);
+    xoffset = - (double)((metaFile->right - metaFile->left)/2.0);
   else
-    xoffset = - (float)((metaFile->left - metaFile->right)/2.0);
+    xoffset = - (double)((metaFile->left - metaFile->right)/2.0);
 
   Translate(xoffset, yoffset);
 
@@ -1772,7 +2157,7 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
   // as a guide)
   if (actualWidth != 0.0)
   {
-    initialScaleX = (float)((*rwidth) / actualWidth);
+    initialScaleX = (double)((*rwidth) / actualWidth);
     initialScaleY = initialScaleX;
     (*rheight) = initialScaleY*actualHeight;
   }
@@ -1786,21 +2171,21 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, float *rwidth, float *rh
 }
 
 // Scale to fit size
-void wxPseudoMetaFile::ScaleTo(float w, float h)
+void wxPseudoMetaFile::ScaleTo(double w, double h)
 {
-  float scaleX = (float)(w/m_width);
-  float scaleY = (float)(h/m_height);
+  double scaleX = (double)(w/m_width);
+  double scaleY = (double)(h/m_height);
 
   // Do the scaling
   Scale(scaleX, scaleY);
 }
 
-void wxPseudoMetaFile::GetBounds(float *boundMinX, float *boundMinY, float *boundMaxX, float *boundMaxY)
+void wxPseudoMetaFile::GetBounds(double *boundMinX, double *boundMinY, double *boundMaxX, double *boundMaxY)
 {
-  float maxX = (float) -99999.9;
-  float maxY = (float) -99999.9;
-  float minX = (float) 99999.9;
-  float minY = (float) 99999.9;
+  double maxX = (double) -99999.9;
+  double maxY = (double) -99999.9;
+  double minX = (double) 99999.9;
+  double minY = (double) 99999.9;
 
   wxNode *node = m_ops.First();
   while (node)
@@ -1813,7 +2198,6 @@ void wxPseudoMetaFile::GetBounds(float *boundMinX, float *boundMinY, float *boun
       case DRAWOP_DRAW_ROUNDED_RECT:
       case DRAWOP_DRAW_ELLIPSE:
       case DRAWOP_DRAW_POINT:
-      case DRAWOP_DRAW_ARC:
       case DRAWOP_DRAW_TEXT:
       {
         wxOpDraw *opDraw = (wxOpDraw *)op;
@@ -1837,6 +2221,23 @@ void wxPseudoMetaFile::GetBounds(float *boundMinX, float *boundMinY, float *boun
           if ((opDraw->m_y1 + opDraw->m_y2) < minY) minY = (opDraw->m_y1 + opDraw->m_y2);
           if ((opDraw->m_y1 + opDraw->m_y2) > maxY) maxY = (opDraw->m_y1 + opDraw->m_y2);
         }
+        break;
+      }
+      case DRAWOP_DRAW_ARC:
+      {
+        // TODO: don't yet know how to calculate the bounding box
+        // for an arc. So pretend it's a line; to get a correct
+        // bounding box, draw a blank rectangle first, of the correct
+        // size.
+        wxOpDraw *opDraw = (wxOpDraw *)op;
+        if (opDraw->m_x1 < minX) minX = opDraw->m_x1;
+        if (opDraw->m_x1 > maxX) maxX = opDraw->m_x1;
+        if (opDraw->m_y1 < minY) minY = opDraw->m_y1;
+        if (opDraw->m_y1 > maxY) maxY = opDraw->m_y1;
+        if (opDraw->m_x2 < minX) minX = opDraw->m_x2;
+        if (opDraw->m_x2 > maxX) maxX = opDraw->m_x2;
+        if (opDraw->m_y2 < minY) minY = opDraw->m_y2;
+        if (opDraw->m_y2 > maxY) maxY = opDraw->m_y2;
         break;
       }
       case DRAWOP_DRAW_POLYLINE:
@@ -1864,15 +2265,15 @@ void wxPseudoMetaFile::GetBounds(float *boundMinX, float *boundMinY, float *boun
   *boundMaxX = maxX;
   *boundMaxY = maxY;
 /*
-  *w = (float)fabs(maxX - minX);
-  *h = (float)fabs(maxY - minY);
+  *w = (double)fabs(maxX - minX);
+  *h = (double)fabs(maxY - minY);
 */
 }
 
 // Calculate size from current operations
 void wxPseudoMetaFile::CalculateSize(wxDrawnShape* shape)
 {
-  float boundMinX, boundMinY, boundMaxX, boundMaxY;
+  double boundMinX, boundMinY, boundMaxX, boundMaxY;
 
   GetBounds(& boundMinX, & boundMinY, & boundMaxX, & boundMaxY);
 
@@ -1923,6 +2324,33 @@ void wxPseudoMetaFile::DrawEllipse(const wxRect& rect)
     m_ops.Append(theOp);
 }
 
+void wxPseudoMetaFile::DrawArc(const wxPoint& centrePt, const wxPoint& startPt, const wxPoint& endPt)
+{
+    wxOpDraw *theOp = new wxOpDraw(DRAWOP_DRAW_ARC,
+          (double) centrePt.x, (double) centrePt.y, (double) startPt.x, (double) startPt.y);
+
+    theOp->m_x3 = (double) endPt.x;
+    theOp->m_y3 = (double) endPt.y;
+
+    m_ops.Append(theOp);
+}
+
+void wxPseudoMetaFile::DrawEllipticArc(const wxRect& rect, double startAngle, double endAngle)
+{
+    const double pi = 3.1415926535897932384626433832795 ;
+
+    double startAngleRadians = startAngle* (pi*2.0/360.0);
+    double endAngleRadians = endAngle* (pi*2.0/360.0);
+
+    wxOpDraw *theOp = new wxOpDraw(DRAWOP_DRAW_ELLIPTIC_ARC,
+          (double) rect.x, (double) rect.y, (double) rect.width, (double) rect.height);
+
+    theOp->m_x3 = startAngleRadians;
+    theOp->m_y3 = endAngleRadians;
+
+    m_ops.Append(theOp);
+}
+
 void wxPseudoMetaFile::DrawPoint(const wxPoint& pt)
 {
     wxOpDraw *theOp = new wxOpDraw(DRAWOP_DRAW_POINT,
@@ -1954,7 +2382,7 @@ void wxPseudoMetaFile::DrawLines(int n, wxPoint pts[])
     m_ops.Append(theOp);
 }
 
-void wxPseudoMetaFile::DrawPolygon(int n, wxPoint pts[])
+void wxPseudoMetaFile::DrawPolygon(int n, wxPoint pts[], int flags)
 {
     wxRealPoint* realPoints = new wxRealPoint[n];
     int i;
@@ -1965,6 +2393,9 @@ void wxPseudoMetaFile::DrawPolygon(int n, wxPoint pts[])
     }
     wxOpPolyDraw* theOp = new wxOpPolyDraw(DRAWOP_DRAW_POLYGON, n, realPoints);
     m_ops.Append(theOp);
+
+    if (flags & oglMETAFLAGS_OUTLINE)
+        m_outlineOp = (m_ops.Number() - 1);
 }
 
 void wxPseudoMetaFile::DrawSpline(int n, wxPoint pts[])

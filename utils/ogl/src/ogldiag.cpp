@@ -71,12 +71,12 @@ void wxDiagram::SetSnapToGrid(bool snap)
   m_snapToGrid = snap;
 }
 
-void wxDiagram::SetGridSpacing(float spacing)
+void wxDiagram::SetGridSpacing(double spacing)
 {
   m_gridSpacing = spacing;
 }
 
-void wxDiagram::Snap(float *x, float *y)
+void wxDiagram::Snap(double *x, double *y)
 {
   if (m_snapToGrid)
   {
@@ -181,7 +181,7 @@ void wxDiagram::ShowAll(bool show)
   }
 }
 
-void wxDiagram::DrawOutline(wxDC& dc, float x1, float y1, float x2, float y2)
+void wxDiagram::DrawOutline(wxDC& dc, double x1, double y1, double x2, double y2)
 {
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);

@@ -153,9 +153,9 @@ OGLConstraint::~OGLConstraint()
 {
 }
 
-bool OGLConstraint::Equals(float a, float b)
+bool OGLConstraint::Equals(double a, double b)
 {
-  float marg = 0.5;
+  double marg = 0.5;
 
   bool eq = ((b <= a + marg) && (b >= a - marg));
   return eq;
@@ -164,7 +164,7 @@ bool OGLConstraint::Equals(float a, float b)
 // Return TRUE if anything changed
 bool OGLConstraint::Evaluate()
 {
-  float maxWidth, maxHeight, minWidth, minHeight, x, y;
+  double maxWidth, maxHeight, minWidth, minHeight, x, y;
   m_constrainingObject->GetBoundingBoxMax(&maxWidth, &maxHeight);
   m_constrainingObject->GetBoundingBoxMin(&minWidth, &minHeight);
   x = m_constrainingObject->GetX();
@@ -178,30 +178,30 @@ bool OGLConstraint::Evaluate()
     case gyCONSTRAINT_CENTRED_VERTICALLY:
     {
       int n = m_constrainedObjects.Number();
-      float totalObjectHeight = 0.0;
+      double totalObjectHeight = 0.0;
       wxNode *node = m_constrainedObjects.First();
       while (node)
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
         totalObjectHeight += height2;
         node = node->Next();
       }
-      float startY;
-      float spacingY;
+      double startY;
+      double spacingY;
       // Check if within the constraining object...
       if ((totalObjectHeight + (n + 1)*m_ySpacing) <= minHeight)
       {
-        spacingY = (float)((minHeight - totalObjectHeight)/(n + 1));
-        startY = (float)(y - (minHeight/2.0));
+        spacingY = (double)((minHeight - totalObjectHeight)/(n + 1));
+        startY = (double)(y - (minHeight/2.0));
       }
       // Otherwise, use default spacing
       else
       {
         spacingY = m_ySpacing;
-        startY = (float)(y - ((totalObjectHeight + (n+1)*spacingY)/2.0));
+        startY = (double)(y - ((totalObjectHeight + (n+1)*spacingY)/2.0));
       }
 
       // Now position the objects
@@ -210,15 +210,15 @@ bool OGLConstraint::Evaluate()
       while (node)
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
-        startY += (float)(spacingY + (height2/2.0));
+        startY += (double)(spacingY + (height2/2.0));
         if (!Equals(startY, constrainedObject->GetY()))
         {
           constrainedObject->Move(dc, constrainedObject->GetX(), startY, FALSE);
           changed = TRUE;
         }
-        startY += (float)(height2/2.0);
+        startY += (double)(height2/2.0);
         node = node->Next();
       }
       return changed;
@@ -226,30 +226,30 @@ bool OGLConstraint::Evaluate()
     case gyCONSTRAINT_CENTRED_HORIZONTALLY:
     {
       int n = m_constrainedObjects.Number();
-      float totalObjectWidth = 0.0;
+      double totalObjectWidth = 0.0;
       wxNode *node = m_constrainedObjects.First();
       while (node)
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
         totalObjectWidth += width2;
         node = node->Next();
       }
-      float startX;
-      float spacingX;
+      double startX;
+      double spacingX;
       // Check if within the constraining object...
       if ((totalObjectWidth + (n + 1)*m_xSpacing) <= minWidth)
       {
-        spacingX = (float)((minWidth - totalObjectWidth)/(n + 1));
-        startX = (float)(x - (minWidth/2.0));
+        spacingX = (double)((minWidth - totalObjectWidth)/(n + 1));
+        startX = (double)(x - (minWidth/2.0));
       }
       // Otherwise, use default spacing
       else
       {
         spacingX = m_xSpacing;
-        startX = (float)(x - ((totalObjectWidth + (n+1)*spacingX)/2.0));
+        startX = (double)(x - ((totalObjectWidth + (n+1)*spacingX)/2.0));
       }
 
       // Now position the objects
@@ -258,15 +258,15 @@ bool OGLConstraint::Evaluate()
       while (node)
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
-        startX += (float)(spacingX + (width2/2.0));
+        startX += (double)(spacingX + (width2/2.0));
         if (!Equals(startX, constrainedObject->GetX()))
         {
           constrainedObject->Move(dc, startX, constrainedObject->GetY(), FALSE);
           changed = TRUE;
         }
-        startX += (float)(width2/2.0);
+        startX += (double)(width2/2.0);
         node = node->Next();
       }
       return changed;
@@ -274,48 +274,48 @@ bool OGLConstraint::Evaluate()
     case gyCONSTRAINT_CENTRED_BOTH:
     {
       int n = m_constrainedObjects.Number();
-      float totalObjectWidth = 0.0;
-      float totalObjectHeight = 0.0;
+      double totalObjectWidth = 0.0;
+      double totalObjectHeight = 0.0;
       wxNode *node = m_constrainedObjects.First();
       while (node)
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
         totalObjectWidth += width2;
         totalObjectHeight += height2;
         node = node->Next();
       }
-      float startX;
-      float spacingX;
-      float startY;
-      float spacingY;
+      double startX;
+      double spacingX;
+      double startY;
+      double spacingY;
 
       // Check if within the constraining object...
       if ((totalObjectWidth + (n + 1)*m_xSpacing) <= minWidth)
       {
-        spacingX = (float)((minWidth - totalObjectWidth)/(n + 1));
-        startX = (float)(x - (minWidth/2.0));
+        spacingX = (double)((minWidth - totalObjectWidth)/(n + 1));
+        startX = (double)(x - (minWidth/2.0));
       }
       // Otherwise, use default spacing
       else
       {
         spacingX = m_xSpacing;
-        startX = (float)(x - ((totalObjectWidth + (n+1)*spacingX)/2.0));
+        startX = (double)(x - ((totalObjectWidth + (n+1)*spacingX)/2.0));
       }
 
       // Check if within the constraining object...
       if ((totalObjectHeight + (n + 1)*m_ySpacing) <= minHeight)
       {
-        spacingY = (float)((minHeight - totalObjectHeight)/(n + 1));
-        startY = (float)(y - (minHeight/2.0));
+        spacingY = (double)((minHeight - totalObjectHeight)/(n + 1));
+        startY = (double)(y - (minHeight/2.0));
       }
       // Otherwise, use default spacing
       else
       {
         spacingY = m_ySpacing;
-        startY = (float)(y - ((totalObjectHeight + (n+1)*spacingY)/2.0));
+        startY = (double)(y - ((totalObjectHeight + (n+1)*spacingY)/2.0));
       }
 
       // Now position the objects
@@ -324,10 +324,10 @@ bool OGLConstraint::Evaluate()
       while (node)
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
-        startX += (float)(spacingX + (width2/2.0));
-        startY += (float)(spacingY + (height2/2.0));
+        startX += (double)(spacingX + (width2/2.0));
+        startY += (double)(spacingY + (height2/2.0));
 
         if ((!Equals(startX, constrainedObject->GetX())) || (!Equals(startY, constrainedObject->GetY())))
 	    {
@@ -335,8 +335,8 @@ bool OGLConstraint::Evaluate()
           changed = TRUE;
 	    }
 
-        startX += (float)(width2/2.0);
-        startY += (float)(height2/2.0);
+        startX += (double)(width2/2.0);
+        startY += (double)(height2/2.0);
 
         node = node->Next();
       }
@@ -351,10 +351,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float x3 = (float)(x - (minWidth/2.0) - (width2/2.0) - m_xSpacing);
+        double x3 = (double)(x - (minWidth/2.0) - (width2/2.0) - m_xSpacing);
         if (!Equals(x3, constrainedObject->GetX()))
 	    {
           changed = TRUE;
@@ -374,10 +374,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float x3 = (float)(x + (minWidth/2.0) + (width2/2.0) + m_xSpacing);
+        double x3 = (double)(x + (minWidth/2.0) + (width2/2.0) + m_xSpacing);
         if (!Equals(x3, constrainedObject->GetX()))
 	    {
           changed = TRUE;
@@ -399,10 +399,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float y3 = (float)(y - (minHeight/2.0) - (height2/2.0) - m_ySpacing);
+        double y3 = (double)(y - (minHeight/2.0) - (height2/2.0) - m_ySpacing);
         if (!Equals(y3, constrainedObject->GetY()))
 	    {
           changed = TRUE;
@@ -422,10 +422,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float y3 = (float)(y + (minHeight/2.0) + (height2/2.0) + m_ySpacing);
+        double y3 = (double)(y + (minHeight/2.0) + (height2/2.0) + m_ySpacing);
         if (!Equals(y3, constrainedObject->GetY()))
 	    {
           changed = TRUE;
@@ -445,10 +445,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float x3 = (float)(x - (minWidth/2.0) + (width2/2.0) + m_xSpacing);
+        double x3 = (double)(x - (minWidth/2.0) + (width2/2.0) + m_xSpacing);
         if (!Equals(x3, constrainedObject->GetX()))
 	    {
           changed = TRUE;
@@ -468,10 +468,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float x3 = (float)(x + (minWidth/2.0) - (width2/2.0) - m_xSpacing);
+        double x3 = (double)(x + (minWidth/2.0) - (width2/2.0) - m_xSpacing);
         if (!Equals(x3, constrainedObject->GetX()))
 	    {
           changed = TRUE;
@@ -493,10 +493,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float y3 = (float)(y - (minHeight/2.0) + (height2/2.0) + m_ySpacing);
+        double y3 = (double)(y - (minHeight/2.0) + (height2/2.0) + m_ySpacing);
         if (!Equals(y3, constrainedObject->GetY()))
 	    {
           changed = TRUE;
@@ -516,10 +516,10 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float width2, height2;
+        double width2, height2;
         constrainedObject->GetBoundingBoxMax(&width2, &height2);
 
-        float y3 = (float)(y + (minHeight/2.0) - (height2/2.0) - m_ySpacing);
+        double y3 = (double)(y + (minHeight/2.0) - (height2/2.0) - m_ySpacing);
         if (!Equals(y3, constrainedObject->GetY()))
 	    {
           changed = TRUE;
@@ -539,7 +539,7 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float x3 = (float)(x - (minWidth/2.0));
+        double x3 = (double)(x - (minWidth/2.0));
         if (!Equals(x3, constrainedObject->GetX()))
 	    {
           changed = TRUE;
@@ -559,7 +559,7 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float x3 = (float)(x + (minWidth/2.0));
+        double x3 = (double)(x + (minWidth/2.0));
         if (!Equals(x3, constrainedObject->GetX()))
 	    {
           changed = TRUE;
@@ -581,7 +581,7 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float y3 = (float)(y - (minHeight/2.0));
+        double y3 = (double)(y - (minHeight/2.0));
         if (!Equals(y3, constrainedObject->GetY()))
 	    {
           changed = TRUE;
@@ -601,7 +601,7 @@ bool OGLConstraint::Evaluate()
       {
         wxShape *constrainedObject = (wxShape *)node->Data();
 
-        float y3 = (float)(y + (minHeight/2.0));
+        double y3 = (double)(y + (minHeight/2.0));
         if (!Equals(y3, constrainedObject->GetY()))
 	    {
           changed = TRUE;

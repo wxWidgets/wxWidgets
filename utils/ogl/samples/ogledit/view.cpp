@@ -188,7 +188,7 @@ MyCanvas::~MyCanvas(void)
 {
 }
 
-void MyCanvas::OnLeftClick(float x, float y, int keys)
+void MyCanvas::OnLeftClick(double x, double y, int keys)
 {
   EditorToolPalette *palette = wxGetApp().frame->palette;
   wxClassInfo *info = NULL;
@@ -224,31 +224,31 @@ void MyCanvas::OnLeftClick(float x, float y, int keys)
   }
 }
 
-void MyCanvas::OnRightClick(float x, float y, int keys)
+void MyCanvas::OnRightClick(double x, double y, int keys)
 {
 }
 
-void MyCanvas::OnDragLeft(bool draw, float x, float y, int keys)
+void MyCanvas::OnDragLeft(bool draw, double x, double y, int keys)
 {
 }
 
-void MyCanvas::OnBeginDragLeft(float x, float y, int keys)
+void MyCanvas::OnBeginDragLeft(double x, double y, int keys)
 {
 }
 
-void MyCanvas::OnEndDragLeft(float x, float y, int keys)
+void MyCanvas::OnEndDragLeft(double x, double y, int keys)
 {
 }
 
-void MyCanvas::OnDragRight(bool draw, float x, float y, int keys)
+void MyCanvas::OnDragRight(bool draw, double x, double y, int keys)
 {
 }
 
-void MyCanvas::OnBeginDragRight(float x, float y, int keys)
+void MyCanvas::OnBeginDragRight(double x, double y, int keys)
 {
 }
 
-void MyCanvas::OnEndDragRight(float x, float y, int keys)
+void MyCanvas::OnEndDragRight(double x, double y, int keys)
 {
 }
 

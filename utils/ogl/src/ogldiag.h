@@ -33,7 +33,7 @@ public:
 
   virtual void Redraw(wxDC& dc);
   virtual void Clear(wxDC& dc);
-  virtual void DrawOutline(wxDC& dc, float x1, float y1, float x2, float y2);
+  virtual void DrawOutline(wxDC& dc, double x1, double y1, double x2, double y2);
 
   // Add object to end of object list (if addAfter is NULL)
   // or just after addAfter.
@@ -43,10 +43,10 @@ public:
   virtual void InsertShape(wxShape *object);
 
   void SetSnapToGrid(bool snap);
-  void SetGridSpacing(float spacing);
-  inline float GetGridSpacing() { return m_gridSpacing; }
+  void SetGridSpacing(double spacing);
+  inline double GetGridSpacing() { return m_gridSpacing; }
   inline bool GetSnapToGrid() const { return m_snapToGrid; }
-  void Snap(float *x, float *y);
+  void Snap(double *x, double *y);
 
   inline void SetQuickEditMode(bool qem) { m_quickEditMode = qem; }
   inline bool GetQuickEditMode() const { return m_quickEditMode; }
@@ -85,7 +85,7 @@ protected:
   wxShapeCanvas*        m_diagramCanvas;
   bool                  m_quickEditMode;
   bool                  m_snapToGrid;
-  float                 m_gridSpacing;
+  double                 m_gridSpacing;
   int                   m_mouseTolerance;
   wxList*               m_shapeList;
 };

@@ -43,12 +43,12 @@ class wxDividedShapeControlPoint: public wxControlPoint
  public:
   wxDividedShapeControlPoint() { regionId = 0; }
   wxDividedShapeControlPoint(wxShapeCanvas *the_canvas, wxShape *object, int region,
-                            float size, float the_xoffset, float the_yoffset, int the_type);
+                            double size, double the_xoffset, double the_yoffset, int the_type);
   ~wxDividedShapeControlPoint();
 
-  void OnDragLeft(bool draw, float x, float y, int keys=0, int attachment = 0);
-  void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
-  void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
+  void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
+  void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+  void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxDividedShapeControlPoint, wxControlPoint)
@@ -60,7 +60,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDividedShapeControlPoint, wxControlPoint)
 
 IMPLEMENT_DYNAMIC_CLASS(wxDividedShape, wxRectangleShape)
 
-wxDividedShape::wxDividedShape(float w, float h): wxRectangleShape(w, h)
+wxDividedShape::wxDividedShape(double w, double h): wxRectangleShape(w, h)
 {
   ClearRegions();
 }
@@ -76,12 +76,12 @@ void wxDividedShape::OnDraw(wxDC& dc)
 
 void wxDividedShape::OnDrawContents(wxDC& dc)
 {
-  float defaultProportion = (float)(GetRegions().Number() > 0 ? (1.0/((float)(GetRegions().Number()))) : 0.0);
-  float currentY = (float)(m_ypos - (m_height / 2.0));
-  float maxY = (float)(m_ypos + (m_height / 2.0));
+  double defaultProportion = (double)(GetRegions().Number() > 0 ? (1.0/((double)(GetRegions().Number()))) : 0.0);
+  double currentY = (double)(m_ypos - (m_height / 2.0));
+  double maxY = (double)(m_ypos + (m_height / 2.0));
 
-  float leftX = (float)(m_xpos - (m_width / 2.0));
-  float rightX = (float)(m_xpos + (m_width / 2.0));
+  double leftX = (double)(m_xpos - (m_width / 2.0));
+  double rightX = (double)(m_xpos + (m_width / 2.0));
 
   if (m_pen) dc.SetPen(m_pen);
 
@@ -102,8 +102,8 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
 */
   if (GetDisableLabel()) return;
 
-  float xMargin = 2;
-  float yMargin = 2;
+  double xMargin = 2;
+  double yMargin = 2;
   dc.SetBackgroundMode(wxTRANSPARENT);
 
   wxNode *node = GetRegions().First();
@@ -113,17 +113,17 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
     dc.SetFont(region->GetFont());
     dc.SetTextForeground(* region->GetActualColourObject());
 
-    float proportion =
+    double proportion =
       region->m_regionProportionY < 0.0 ? defaultProportion : region->m_regionProportionY;
 
-    float y = currentY + m_height*proportion;
-    float actualY = maxY < y ? maxY : y;
+    double y = currentY + m_height*proportion;
+    double actualY = maxY < y ? maxY : y;
 
-    float centreX = m_xpos;
-    float centreY = (float)(currentY + (actualY - currentY)/2.0);
+    double centreX = m_xpos;
+    double centreY = (double)(currentY + (actualY - currentY)/2.0);
 
-    DrawFormattedText(dc, &region->m_formattedText,
-             (float)(centreX), (float)(centreY), (float)(m_width-2*xMargin), (float)(actualY - currentY - 2*yMargin),
+    oglDrawFormattedText(dc, &region->m_formattedText,
+             (double)(centreX), (double)(centreY), (double)(m_width-2*xMargin), (double)(actualY - currentY - 2*yMargin),
              region->m_formatMode);
     if ((y <= maxY) && (node->Next()))
     {
@@ -131,7 +131,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
       if (regionPen)
       {
         dc.SetPen(regionPen);
-        dc.DrawLine(leftX, y, rightX, y);
+        dc.DrawLine(WXROUND(leftX), WXROUND(y), WXROUND(rightX), WXROUND(y));
       }
     }
 
@@ -141,7 +141,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
   }
 }
 
-void wxDividedShape::SetSize(float w, float h, bool recursive)
+void wxDividedShape::SetSize(double w, double h, bool recursive)
 {
   SetAttachmentSize(w, h);
   m_width = w;
@@ -154,35 +154,35 @@ void wxDividedShape::SetRegionSizes()
   if (GetRegions().Number() == 0)
     return;
     
-  float defaultProportion = (float)(GetRegions().Number() > 0 ? (1.0/((float)(GetRegions().Number()))) : 0.0);
-  float currentY = (float)(m_ypos - (m_height / 2.0));
-  float maxY = (float)(m_ypos + (m_height / 2.0));
+  double defaultProportion = (double)(GetRegions().Number() > 0 ? (1.0/((double)(GetRegions().Number()))) : 0.0);
+  double currentY = (double)(m_ypos - (m_height / 2.0));
+  double maxY = (double)(m_ypos + (m_height / 2.0));
 
-//  float leftX = (float)(m_xpos - (m_width / 2.0));
-//  float rightX = (float)(m_xpos + (m_width / 2.0));
+//  double leftX = (double)(m_xpos - (m_width / 2.0));
+//  double rightX = (double)(m_xpos + (m_width / 2.0));
 
   wxNode *node = GetRegions().First();
   while (node)
   {
     wxShapeRegion *region = (wxShapeRegion *)node->Data();
-    float proportion =
+    double proportion =
       region->m_regionProportionY <= 0.0 ? defaultProportion : region->m_regionProportionY;
 
-    float sizeY = (float)proportion*m_height;
-    float y = currentY + sizeY;
-    float actualY = maxY < y ? maxY : y;
+    double sizeY = (double)proportion*m_height;
+    double y = currentY + sizeY;
+    double actualY = maxY < y ? maxY : y;
 
-    float centreY = (float)(currentY + (actualY - currentY)/2.0);
+    double centreY = (double)(currentY + (actualY - currentY)/2.0);
 
     region->SetSize(m_width, sizeY);
-    region->SetPosition(0.0, (float)(centreY - m_ypos));
+    region->SetPosition(0.0, (double)(centreY - m_ypos));
     currentY = actualY;
     node = node->Next();
   }
 }
 
 // Attachment points correspond to regions in the divided box
-bool wxDividedShape::GetAttachmentPosition(int attachment, float *x, float *y, int nth, int no_arcs,
+bool wxDividedShape::GetAttachmentPosition(int attachment, double *x, double *y, int nth, int no_arcs,
   wxLineShape *line)
 {
   int totalNumberAttachments = (GetRegions().Number() * 2) + 2;
@@ -194,10 +194,10 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, float *x, float *y, i
   int n = GetRegions().Number();
   bool isEnd = (line && line->IsEnd(this));
 
-  float left = (float)(m_xpos - m_width/2.0);
-  float right = (float)(m_xpos + m_width/2.0);
-  float top = (float)(m_ypos - m_height/2.0);
-  float bottom = (float)(m_ypos + m_height/2.0);
+  double left = (double)(m_xpos - m_width/2.0);
+  double right = (double)(m_xpos + m_width/2.0);
+  double top = (double)(m_ypos - m_height/2.0);
+  double bottom = (double)(m_ypos + m_height/2.0);
 
   // Zero is top, n+1 is bottom.
   if (attachment == 0)
@@ -270,8 +270,8 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, float *x, float *y, i
         *x = right;
 
       // Calculate top and bottom of region
-      top = (float)((m_ypos + region->m_y) - (region->m_height/2.0));
-      bottom = (float)((m_ypos + region->m_y) + (region->m_height/2.0));
+      top = (double)((m_ypos + region->m_y) - (region->m_height/2.0));
+      bottom = (double)((m_ypos + region->m_y) + (region->m_height/2.0));
 
       // Assuming we can trust the absolute size and
       // position of these regions...
@@ -289,11 +289,11 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, float *x, float *y, i
             *y = point->y;
         }
         else
-//          *y = (float)(((m_ypos + region->m_y) - (region->m_height/2.0)) + (nth + 1)*region->m_height/(no_arcs+1));
-          *y = (float)(top + (nth + 1)*region->m_height/(no_arcs+1));
+//          *y = (double)(((m_ypos + region->m_y) - (region->m_height/2.0)) + (nth + 1)*region->m_height/(no_arcs+1));
+          *y = (double)(top + (nth + 1)*region->m_height/(no_arcs+1));
       }
       else
-        *y = (float)(m_ypos + region->m_y);
+        *y = (double)(m_ypos + region->m_y);
     }
     else
     {
@@ -352,8 +352,8 @@ void wxDividedShape::MakeControlPoints()
 
 void wxDividedShape::MakeMandatoryControlPoints()
 {
-  float currentY = (float)(GetY() - (m_height / 2.0));
-  float maxY = (float)(GetY() + (m_height / 2.0));
+  double currentY = (double)(GetY() - (m_height / 2.0));
+  double maxY = (double)(GetY() + (m_height / 2.0));
 
   wxNode *node = GetRegions().First();
   int i = 0;
@@ -361,15 +361,15 @@ void wxDividedShape::MakeMandatoryControlPoints()
   {
     wxShapeRegion *region = (wxShapeRegion *)node->Data();
 
-    float proportion = region->m_regionProportionY;
+    double proportion = region->m_regionProportionY;
 
-    float y = currentY + m_height*proportion;
-    float actualY = (float)(maxY < y ? maxY : y);
+    double y = currentY + m_height*proportion;
+    double actualY = (double)(maxY < y ? maxY : y);
 
     if (node->Next())
     {
       wxDividedShapeControlPoint *controlPoint =
-        new wxDividedShapeControlPoint(m_canvas, this, i, CONTROL_POINT_SIZE, 0.0, (float)(actualY - GetY()), 0);
+        new wxDividedShapeControlPoint(m_canvas, this, i, CONTROL_POINT_SIZE, 0.0, (double)(actualY - GetY()), 0);
       m_canvas->AddShape(controlPoint);
       m_controlPoints.Append(controlPoint);
     }
@@ -390,8 +390,8 @@ void wxDividedShape::ResetControlPoints()
 
 void wxDividedShape::ResetMandatoryControlPoints()
 {
-  float currentY = (float)(GetY() - (m_height / 2.0));
-  float maxY = (float)(GetY() + (m_height / 2.0));
+  double currentY = (double)(GetY() - (m_height / 2.0));
+  double maxY = (double)(GetY() + (m_height / 2.0));
 
   wxNode *node = m_controlPoints.First();
   int i = 0;
@@ -403,13 +403,13 @@ void wxDividedShape::ResetMandatoryControlPoints()
       wxNode *node1 = GetRegions().Nth(i);
       wxShapeRegion *region = (wxShapeRegion *)node1->Data();
 
-      float proportion = region->m_regionProportionY;
+      double proportion = region->m_regionProportionY;
 
-      float y = currentY + m_height*proportion;
-      float actualY = (float)(maxY < y ? maxY : y);
+      double y = currentY + m_height*proportion;
+      double actualY = (double)(maxY < y ? maxY : y);
 
       controlPoint->m_xoffset = 0.0;
-      controlPoint->m_yoffset = (float)(actualY - GetY());
+      controlPoint->m_yoffset = (double)(actualY - GetY());
       currentY = actualY;
       i ++;
     }
@@ -569,7 +569,7 @@ void wxDividedShape::EditRegions()
 #endif
 }
 
-void wxDividedShape::OnRightClick(float x, float y, int keys, int attachment)
+void wxDividedShape::OnRightClick(double x, double y, int keys, int attachment)
 {
   if (keys & KEY_CTRL)
   {
@@ -582,7 +582,7 @@ void wxDividedShape::OnRightClick(float x, float y, int keys, int attachment)
 }
 
 wxDividedShapeControlPoint::wxDividedShapeControlPoint(wxShapeCanvas *the_canvas, wxShape *object,
-  int region, float size, float the_m_xoffset, float the_m_yoffset, int the_type):
+  int region, double size, double the_m_xoffset, double the_m_yoffset, int the_type):
     wxControlPoint(the_canvas, object, size, the_m_xoffset, the_m_yoffset, the_type)
 {
   regionId = region;
@@ -593,7 +593,7 @@ wxDividedShapeControlPoint::~wxDividedShapeControlPoint()
 }
 
 // Implement resizing of divided object division
-void wxDividedShapeControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxDividedShapeControlPoint::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
     wxClientDC dc(GetCanvas());
     GetCanvas()->PrepareDC(dc);
@@ -604,14 +604,14 @@ void wxDividedShapeControlPoint::OnDragLeft(bool draw, float x, float y, int key
     dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
     wxDividedShape *dividedObject = (wxDividedShape *)m_shape;
-    float x1 = (float)(dividedObject->GetX() - (dividedObject->GetWidth()/2.0));
-    float y1 = y;
-    float x2 = (float)(dividedObject->GetX() + (dividedObject->GetWidth()/2.0));
-    float y2 = y;
-    dc.DrawLine(x1, y1, x2, y2);
+    double x1 = (double)(dividedObject->GetX() - (dividedObject->GetWidth()/2.0));
+    double y1 = y;
+    double x2 = (double)(dividedObject->GetX() + (dividedObject->GetWidth()/2.0));
+    double y2 = y;
+    dc.DrawLine(WXROUND(x1), WXROUND(y1), WXROUND(x2), WXROUND(y2));
 }
 
-void wxDividedShapeControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxDividedShapeControlPoint::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
     wxClientDC dc(GetCanvas());
     GetCanvas()->PrepareDC(dc);
@@ -622,15 +622,15 @@ void wxDividedShapeControlPoint::OnBeginDragLeft(float x, float y, int keys, int
     dc.SetPen(dottedPen);
     dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
-    float x1 = (float)(dividedObject->GetX() - (dividedObject->GetWidth()/2.0));
-    float y1 = y;
-    float x2 = (float)(dividedObject->GetX() + (dividedObject->GetWidth()/2.0));
-    float y2 = y;
-    dc.DrawLine(x1, y1, x2, y2);
+    double x1 = (double)(dividedObject->GetX() - (dividedObject->GetWidth()/2.0));
+    double y1 = y;
+    double x2 = (double)(dividedObject->GetX() + (dividedObject->GetWidth()/2.0));
+    double y2 = y;
+    dc.DrawLine(WXROUND(x1), WXROUND(y1), WXROUND(x2), WXROUND(y2));
     m_canvas->CaptureMouse();
 }
 
-void wxDividedShapeControlPoint::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxDividedShapeControlPoint::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
     wxClientDC dc(GetCanvas());
     GetCanvas()->PrepareDC(dc);
@@ -651,22 +651,22 @@ void wxDividedShapeControlPoint::OnEndDragLeft(float x, float y, int keys, int a
     // and calculate the new proportion for this region
     // if legal.
   
-    float currentY = (float)(dividedObject->GetY() - (dividedObject->GetHeight() / 2.0));
-    float maxY = (float)(dividedObject->GetY() + (dividedObject->GetHeight() / 2.0));
+    double currentY = (double)(dividedObject->GetY() - (dividedObject->GetHeight() / 2.0));
+    double maxY = (double)(dividedObject->GetY() + (dividedObject->GetHeight() / 2.0));
 
     // Save values
-    float thisRegionTop = 0.0;
-    float thisRegionBottom = 0.0;
-    float nextRegionBottom = 0.0;
+    double thisRegionTop = 0.0;
+    double thisRegionBottom = 0.0;
+    double nextRegionBottom = 0.0;
 
     node = dividedObject->GetRegions().First();
     while (node)
     {
       wxShapeRegion *region = (wxShapeRegion *)node->Data();
 
-      float proportion = region->m_regionProportionY;
-      float yy = currentY + (dividedObject->GetHeight()*proportion);
-      float actualY = (float)(maxY < yy ? maxY : yy);
+      double proportion = region->m_regionProportionY;
+      double yy = currentY + (dividedObject->GetHeight()*proportion);
+      double actualY = (double)(maxY < yy ? maxY : yy);
 
       if (region == thisRegion)
       {
@@ -694,11 +694,11 @@ void wxDividedShapeControlPoint::OnEndDragLeft(float x, float y, int keys, int a
     dividedObject->EraseLinks(dc);
 
     // Now calculate the new proportions of this region and the next region.
-    float thisProportion = (float)((y - thisRegionTop)/dividedObject->GetHeight());
-    float nextProportion = (float)((nextRegionBottom - y)/dividedObject->GetHeight());
+    double thisProportion = (double)((y - thisRegionTop)/dividedObject->GetHeight());
+    double nextProportion = (double)((nextRegionBottom - y)/dividedObject->GetHeight());
     thisRegion->SetProportions(0.0, thisProportion);
     nextRegion->SetProportions(0.0, nextProportion);
-    m_yoffset = (float)(y - dividedObject->GetY());
+    m_yoffset = (double)(y - dividedObject->GetY());
 
     // Now reformat text
     int i = 0;

@@ -67,11 +67,11 @@ class OGLConstraint: public wxObject
 
   // Returns TRUE if anything changed
   bool Evaluate();
-  inline void SetSpacing(float x, float y) { m_xSpacing = x; m_ySpacing = y; };
-  bool Equals(float a, float b);
+  inline void SetSpacing(double x, double y) { m_xSpacing = x; m_ySpacing = y; };
+  bool Equals(double a, double b);
 
-  float         m_xSpacing;
-  float         m_ySpacing;
+  double         m_xSpacing;
+  double         m_ySpacing;
   int           m_constraintType;
   wxString      m_constraintName;
   long          m_constraintId;

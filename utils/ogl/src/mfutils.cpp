@@ -179,17 +179,17 @@ bool wxXMetaFile::ReadFile(char *file)
     iRight = getsignedshort(handle);
     iBottom = getsignedshort(handle);
 
-    left = (float)iLeft;
-    top = (float)iTop;
-    right = (float)iRight;
-    bottom = (float)iBottom;
+    left = (double)iLeft;
+    top = (double)iTop;
+    right = (double)iRight;
+    bottom = (double)iBottom;
 
     int inch = getshort(handle);
     long reserved = getint(handle);
     int checksum = getshort(handle);
 /*
-      float widthInUnits = (float)right - left;
-      float heightInUnits = (float)bottom - top;
+      double widthInUnits = (double)right - left;
+      double heightInUnits = (double)bottom - top;
       *width = (int)((widthInUnits*1440.0)/inch);
       *height = (int)((heightInUnits*1440.0)/inch);
 */
@@ -792,13 +792,13 @@ bool wxXMetaFile::Play(wxDC *dc)
       {
         long x1 = rec->param1;
         long y1 = rec->param2;
-        dc->DrawLine(lastX, lastY, (float)x1, (float)y1);
+        dc->DrawLine(lastX, lastY, (double)x1, (double)y1);
         break;
       }
       case META_MOVETO:
       {
-        lastX = (float)rec->param1;
-        lastY = (float)rec->param2;
+        lastX = (double)rec->param1;
+        lastY = (double)rec->param2;
         break;
       }
       case META_EXCLUDECLIPRECT:
@@ -818,17 +818,17 @@ bool wxXMetaFile::Play(wxDC *dc)
 //      case META_PIE: // DO!!!
       case META_RECTANGLE:
       {
-        dc->DrawRectangle((float)rec->param1, (float)rec->param2,
-                          (float)rec->param3 - rec->param1,
-                          (float)rec->param4 - rec->param2);
+        dc->DrawRectangle((double)rec->param1, (double)rec->param2,
+                          (double)rec->param3 - rec->param1,
+                          (double)rec->param4 - rec->param2);
         break;
       }
       case META_ROUNDRECT:
       {
-        dc->DrawRoundedRectangle((float)rec->param1, (float)rec->param2,
-                          (float)rec->param3 - rec->param1,
-                          (float)rec->param4 - rec->param2,
-                          (float)rec->param5);
+        dc->DrawRoundedRectangle((double)rec->param1, (double)rec->param2,
+                          (double)rec->param3 - rec->param1,
+                          (double)rec->param4 - rec->param2,
+                          (double)rec->param5);
         break;
       }
 //      case META_PATBLT:

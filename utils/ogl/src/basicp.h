@@ -22,22 +22,22 @@ class wxShapeTextLine: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxShapeTextLine)
 public:
-   wxShapeTextLine(float the_x = 0.0, float the_y = 0.0, const wxString& the_line = "");
+   wxShapeTextLine(double the_x = 0.0, double the_y = 0.0, const wxString& the_line = "");
    ~wxShapeTextLine();
 
-   inline float GetX() const { return m_x; }
-   inline float GetY() const { return m_y; }
+   inline double GetX() const { return m_x; }
+   inline double GetY() const { return m_y; }
 
-   inline void SetX(float x) { m_x = x; }
-   inline void SetY(float y) { m_y = y; }
+   inline void SetX(double x) { m_x = x; }
+   inline void SetY(double y) { m_y = y; }
 
    inline void SetText(const wxString& text) { m_line = text; }
    inline wxString GetText() const { return m_line; }
 
 protected:
    wxString     m_line;
-   float        m_x;
-   float        m_y;
+   double        m_x;
+   double        m_y;
 };
 
 class wxShape;
@@ -49,18 +49,18 @@ class wxControlPoint: public wxRectangleShape
  friend class wxShape;
 
  public:
-  wxControlPoint(wxShapeCanvas *the_canvas = NULL, wxShape *object = NULL, float size = 0.0, float the_xoffset = 0.0,
-    float the_yoffset = 0.0, int the_type = 0);
+  wxControlPoint(wxShapeCanvas *the_canvas = NULL, wxShape *object = NULL, double size = 0.0, double the_xoffset = 0.0,
+    double the_yoffset = 0.0, int the_type = 0);
   ~wxControlPoint();
 
   void OnDraw(wxDC& dc);
   void OnErase(wxDC& dc);
   void OnDrawContents(wxDC& dc);
-  void OnDragLeft(bool draw, float x, float y, int keys=0, int attachment = 0);
-  void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
-  void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
+  void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
+  void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+  void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
 
-  bool GetAttachmentPosition(int attachment, float *x, float *y,
+  bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   int GetNumberOfAttachments();
 
@@ -68,8 +68,8 @@ class wxControlPoint: public wxRectangleShape
 
 public:
   int           m_type;
-  float         m_xoffset;
-  float         m_yoffset;
+  double         m_xoffset;
+  double         m_yoffset;
   wxShape*      m_shape;
   wxCursor*     m_oldCursor;
   bool          m_eraseObject; // If TRUE, erases object before dragging handle.
@@ -78,14 +78,14 @@ public:
  * Store original top-left, bottom-right coordinates
  * in case we're doing non-vertical resizing.
  */
-  static float controlPointDragStartX;
-  static float controlPointDragStartY;
-  static float controlPointDragStartWidth;
-  static float controlPointDragStartHeight;
-  static float controlPointDragEndWidth;
-  static float controlPointDragEndHeight;
-  static float controlPointDragPosX;
-  static float controlPointDragPosY;
+  static double controlPointDragStartX;
+  static double controlPointDragStartY;
+  static double controlPointDragStartWidth;
+  static double controlPointDragStartHeight;
+  static double controlPointDragEndWidth;
+  static double controlPointDragEndHeight;
+  static double controlPointDragPosX;
+  static double controlPointDragPosY;
 };
 
 class wxPolygonShape;
@@ -94,16 +94,16 @@ class wxPolygonControlPoint: public wxControlPoint
  DECLARE_DYNAMIC_CLASS(wxPolygonControlPoint)
   friend class wxPolygonShape;
  public:
-  wxPolygonControlPoint(wxShapeCanvas *the_canvas = NULL, wxShape *object = NULL, float size = 0.0, wxRealPoint *vertex = NULL,
-    float the_xoffset = 0.0, float the_yoffset = 0.0);
+  wxPolygonControlPoint(wxShapeCanvas *the_canvas = NULL, wxShape *object = NULL, double size = 0.0, wxRealPoint *vertex = NULL,
+    double the_xoffset = 0.0, double the_yoffset = 0.0);
   ~wxPolygonControlPoint();
 
-  void OnDragLeft(bool draw, float x, float y, int keys=0, int attachment = 0);
-  void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
-  void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
+  void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
+  void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+  void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
 
   // Calculate what new size would be, at end of resize
-  virtual void CalculateNewSize(float x, float y);
+  virtual void CalculateNewSize(double x, double y);
 
   // Get new size
   inline wxRealPoint GetNewSize() const { return m_newSize; };
@@ -111,7 +111,7 @@ class wxPolygonControlPoint: public wxControlPoint
 public:
   wxRealPoint*      m_polygonVertex;
   wxRealPoint       m_originalSize;
-  float             m_originalDistance;
+  double             m_originalDistance;
   wxRealPoint       m_newSize;
 };
 
@@ -138,20 +138,20 @@ class wxShapeRegion: public wxObject
   // Accessors
   inline void SetText(const wxString& s) { m_regionText = s; }
   void SetFont(wxFont *f);
-  void SetMinSize(float w, float h);
-  void SetSize(float w, float h);
-  void SetPosition(float x, float y);
-  void SetProportions(float x, float y);
+  void SetMinSize(double w, double h);
+  void SetSize(double w, double h);
+  void SetPosition(double x, double y);
+  void SetProportions(double x, double y);
   void SetFormatMode(int mode);
   inline void SetName(const wxString& s) { m_regionName = s; };
   void SetColour(const wxString& col); // Text colour
 
   inline wxString GetText() const { return m_regionText; }
   inline wxFont *GetFont() const { return m_font; }
-  inline void GetMinSize(float *x, float *y) const { *x = m_minWidth; *y = m_minHeight; }
-  inline void GetProportion(float *x, float *y) const { *x = m_regionProportionX; *y = m_regionProportionY; }
-  inline void GetSize(float *x, float *y) const { *x = m_width; *y = m_height; }
-  inline void GetPosition(float *xp, float *yp) const { *xp = m_x; *yp = m_y; }
+  inline void GetMinSize(double *x, double *y) const { *x = m_minWidth; *y = m_minHeight; }
+  inline void GetProportion(double *x, double *y) const { *x = m_regionProportionX; *y = m_regionProportionY; }
+  inline void GetSize(double *x, double *y) const { *x = m_width; *y = m_height; }
+  inline void GetPosition(double *xp, double *yp) const { *xp = m_x; *yp = m_y; }
   inline int GetFormatMode() const { return m_formatMode; }
   inline wxString GetName() const { return m_regionName; }
   inline wxString GetColour() const { return m_textColour; }
@@ -162,8 +162,8 @@ class wxShapeRegion: public wxObject
   inline void SetPenStyle(int style) { m_penStyle = style; m_actualPenObject = NULL; }
   void SetPenColour(const wxString& col);
   wxPen *GetActualPen();
-  inline float GetWidth() const { return m_width; }
-  inline float GetHeight() const { return m_height; }
+  inline double GetWidth() const { return m_width; }
+  inline double GetHeight() const { return m_height; }
 
   void ClearText();
 
@@ -171,16 +171,16 @@ public:
   wxString              m_regionText;
   wxList                m_formattedText;   // List of wxShapeTextLines
   wxFont*               m_font;
-  float                 m_minHeight;        // If zero, hide region.
-  float                 m_minWidth;        // If zero, hide region.
-  float                 m_width;
-  float                 m_height;
-  float                 m_x;
-  float                 m_y;
+  double                 m_minHeight;        // If zero, hide region.
+  double                 m_minWidth;        // If zero, hide region.
+  double                 m_width;
+  double                 m_height;
+  double                 m_x;
+  double                 m_y;
 
-  float                 m_regionProportionX; // Proportion of total object size;
+  double                 m_regionProportionX; // Proportion of total object size;
                                              // -1.0 indicates equal proportion
-  float                 m_regionProportionY; // Proportion of total object size;
+  double                 m_regionProportionY; // Proportion of total object size;
                                              // -1.0 indicates equal proportion
 
   int                   m_formatMode;        // FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT | FORMAT_NONE
@@ -208,11 +208,15 @@ public:
   {
     m_id = 0; m_x = 0.0; m_y = 0.0;
   }
+  inline wxAttachmentPoint(int id, double x, double y)
+  {
+    m_id = id; m_x = x; m_y = y;
+  }
 
 public:
-  int           m_id;           // Identifier
-  float         m_x;            // x offset from centre of object
-  float         m_y;            // y offset from centre of object
+  int            m_id;           // Identifier
+  double         m_x;            // x offset from centre of object
+  double         m_y;            // y offset from centre of object
 };
 
 #endif

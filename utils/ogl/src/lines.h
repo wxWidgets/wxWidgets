@@ -51,7 +51,7 @@ class wxArrowHead: public wxObject
  DECLARE_DYNAMIC_CLASS(wxArrowHead)
 
  public:
-  wxArrowHead(WXTYPE type = 0, int end = 0, float size = 0.0, float dist = 0.0, const wxString& name = "", wxPseudoMetaFile *mf = NULL,
+  wxArrowHead(WXTYPE type = 0, int end = 0, double size = 0.0, double dist = 0.0, const wxString& name = "", wxPseudoMetaFile *mf = NULL,
             long arrowId = -1);
   ~wxArrowHead();
   wxArrowHead(wxArrowHead& toCopy);
@@ -59,28 +59,28 @@ class wxArrowHead: public wxObject
   inline WXTYPE _GetType() const { return m_arrowType; }
   inline int GetPosition() const { return m_arrowEnd; }
   inline void SetPosition(int pos) { m_arrowEnd = pos; }
-  inline float GetXOffset() const { return m_xOffset; }
-  inline float GetYOffset() const { return m_yOffset; }
-  inline float GetSpacing() const { return m_spacing; }
-  inline float GetSize() const { return m_arrowSize; }
+  inline double GetXOffset() const { return m_xOffset; }
+  inline double GetYOffset() const { return m_yOffset; }
+  inline double GetSpacing() const { return m_spacing; }
+  inline double GetSize() const { return m_arrowSize; }
   inline wxString GetName() const { return m_arrowName; }
-  inline void SetXOffset(float x) { m_xOffset = x; }
-  inline void SetYOffset(float y) { m_yOffset = y; }
+  inline void SetXOffset(double x) { m_xOffset = x; }
+  inline void SetYOffset(double y) { m_yOffset = y; }
   inline wxPseudoMetaFile *GetMetaFile() const { return m_metaFile; }
   inline long GetId() const { return m_id; }
   inline int GetArrowEnd() const { return m_arrowEnd; }
-  inline float GetArrowSize() const { return m_arrowSize; }
-  void SetSize(float size);
-  inline void SetSpacing(float sp) { m_spacing = sp; }
+  inline double GetArrowSize() const { return m_arrowSize; }
+  void SetSize(double size);
+  inline void SetSpacing(double sp) { m_spacing = sp; }
 
  protected:
   WXTYPE            m_arrowType;
   int               m_arrowEnd;         // Position on line
-  float             m_xOffset;          // Distance from arc start or end, w.r.t. point on arrowhead
+  double             m_xOffset;          // Distance from arc start or end, w.r.t. point on arrowhead
                                         // nearest start or end. If zero, use default spacing.
-  float             m_yOffset;          // vertical offset (w.r.t. a horizontal line). Normally zero.
-  float             m_spacing;          // Spacing from the last arrowhead
-  float             m_arrowSize;        // Length of arrowhead
+  double             m_yOffset;          // vertical offset (w.r.t. a horizontal line). Normally zero.
+  double             m_spacing;          // Spacing from the last arrowhead
+  double             m_arrowSize;        // Length of arrowhead
   wxString          m_arrowName;        // Name of arrow
   bool              m_saveToFile;       // TRUE if we want to save custom arrowheads to file.
   wxPseudoMetaFile* m_metaFile;         // Pseudo metafile if this is a custom arrowhead
@@ -101,18 +101,18 @@ class wxLineShape: public wxShape
   // moveControlPoints must be disabled when a control point is being
   // dragged.
   void OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-  bool OnMovePre(wxDC& dc, float x, float y, float old_x, float old_y, bool display = TRUE);
+  bool OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
   void OnDraw(wxDC& dc);
   void OnDrawContents(wxDC& dc);
   void OnDrawControlPoints(wxDC& dc);
   void OnEraseControlPoints(wxDC& dc);
   void OnErase(wxDC& dc);
-  virtual inline void OnMoveControlPoint(int WXUNUSED(which), float WXUNUSED(x), float WXUNUSED(y)) {}
-  void OnDrawOutline(wxDC& dc, float x, float y, float w, float h);
-  void GetBoundingBoxMin(float *w, float *h);
+  virtual inline void OnMoveControlPoint(int WXUNUSED(which), double WXUNUSED(x), double WXUNUSED(y)) {}
+  void OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
+  void GetBoundingBoxMin(double *w, double *h);
   void FormatText(wxDC& dc, const wxString& s, int regionId = 0);
-  virtual void SetEnds(float x1, float y1, float x2, float y2);
-  virtual void GetEnds(float *x1, float *y1, float *x2, float *y2);
+  virtual void SetEnds(double x1, double y1, double x2, double y2);
+  virtual void GetEnds(double *x1, double *y1, double *x2, double *y2);
   inline virtual wxShape *GetFrom() { return m_from; }
   inline virtual wxShape *GetTo() { return m_to; }
   inline virtual int GetAttachmentFrom() { return m_attachmentFrom; }
@@ -126,18 +126,18 @@ class wxLineShape: public wxShape
   // This function can be used by e.g. line-routing routines to
   // get the actual points on the two node images where the lines will be drawn
   // to/from.
-  void FindLineEndPoints(float *fromX, float *fromY, float *toX, float *toY);
+  void FindLineEndPoints(double *fromX, double *fromY, double *toX, double *toY);
 
   // Format one region at this position
-  void DrawRegion(wxDC& dc, wxShapeRegion *region, float x, float y);
+  void DrawRegion(wxDC& dc, wxShapeRegion *region, double x, double y);
 
   // Erase one region at this position
-  void EraseRegion(wxDC& dc, wxShapeRegion *region, float x, float y);
+  void EraseRegion(wxDC& dc, wxShapeRegion *region, double x, double y);
 
   // Get the reference point for a label. Region x and y
   // are offsets from this.
   // position is 0 (middle), 1 (start), 2 (end)
-  void GetLabelPosition(int position, float *x, float *y);
+  void GetLabelPosition(int position, double *x, double *y);
 
   // Straighten verticals and horizontals
   virtual void Straighten(wxDC& dc);
@@ -158,15 +158,15 @@ class wxLineShape: public wxShape
   inline wxList *GetLineControlPoints() { return m_lineControlPoints; }
 
   // Override dragging behaviour - don't want to be able to drag lines!
-  void OnDragLeft(bool draw, float x, float y, int keys=0, int attachment = 0);
-  void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
-  void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
+  void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
+  void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+  void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
 
   // Control points ('handles') redirect control to the actual shape, to make it easier
   // to override sizing behaviour.
-  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys=0, int attachment = 0);
-  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
-  virtual void OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys=0, int attachment = 0);
+  virtual void OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+  virtual void OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+  virtual void OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
 
   // Override select, to create/delete temporary label-moving objects
   void Select(bool select = TRUE, wxDC* dc = NULL);
@@ -177,8 +177,10 @@ class wxLineShape: public wxShape
 
   void Unlink();
   void SetAttachments(int from_attach, int to_attach);
+  inline void SetAttachmentFrom(int attach) { m_attachmentFrom = attach; }
+  inline void SetAttachmentTo(int attach) { m_attachmentTo = attach; }
 
-  bool HitTest(float x, float y, int *attachment, float *distance);
+  bool HitTest(double x, double y, int *attachment, double *distance);
 
 #ifdef PROLOGIO
   // Prolog database stuff
@@ -191,7 +193,7 @@ class wxLineShape: public wxShape
 
   // Find which position we're talking about at this (x, y).
   // Returns ARROW_POSITION_START, ARROW_POSITION_MIDDLE, ARROW_POSITION_END
-  int FindLinePosition(float x, float y);
+  int FindLinePosition(double x, double y);
 
   // This is really to distinguish between lines and other images.
   // For lines, want to pass drag to canvas, since lines tend to prevent
@@ -203,7 +205,7 @@ class wxLineShape: public wxShape
 
   // Add an arrowhead.
   wxArrowHead *AddArrow(WXTYPE type, int end = ARROW_POSITION_END,
-                float arrowSize = 10.0, float xOffset = 0.0, const wxString& name = "",
+                double arrowSize = 10.0, double xOffset = 0.0, const wxString& name = "",
                 wxPseudoMetaFile *mf = NULL, long arrowId = -1);
 
   // Add an arrowhead in the position indicated by the reference
@@ -225,14 +227,14 @@ class wxLineShape: public wxShape
   wxArrowHead *FindArrowHead(long arrowId);
   bool DeleteArrowHead(int position, const wxString& name);
   bool DeleteArrowHead(long arrowId);
-  void DrawArrow(wxDC& dc, wxArrowHead *arrow, float xOffset, bool proportionalOffset);
+  void DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool proportionalOffset);
   inline void SetIgnoreOffsets(bool ignore) { m_ignoreArrowOffsets = ignore; }
   inline wxList& GetArrows() const { return (wxList&) m_arcArrows; }
 
   // Find horizontal width for drawing a line with
   // arrows in minimum space. Assume arrows at
   // END only
-  float FindMinimumWidth();
+  double FindMinimumWidth();
 
   // Set alignment flags. ALIGNMENT NOT IMPLEMENTED.
   void SetAlignmentOrientation(bool isEnd, bool isHoriz);
@@ -269,14 +271,14 @@ protected:
   // probably be the same)
   wxList*           m_lineControlPoints;
 
-  float             m_arrowSpacing; // Separation between adjacent arrows
+  double             m_arrowSpacing; // Separation between adjacent arrows
 
   wxShape*          m_to;
   wxShape*          m_from;
 
 /*
-  float             m_actualTextWidth;  // Space the text takes up
-  float             m_actualTextHeight; // (depends on text content unlike nodes)
+  double             m_actualTextWidth;  // Space the text takes up
+  double             m_actualTextHeight; // (depends on text content unlike nodes)
 */
   int               m_attachmentTo;   // Attachment point at one end
   int               m_attachmentFrom; // Attachment point at other end

@@ -60,7 +60,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxShapeTextLine, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxAttachmentPoint, wxObject)
 
-wxShapeTextLine::wxShapeTextLine(float the_x, float the_y, const wxString& the_line)
+wxShapeTextLine::wxShapeTextLine(double the_x, double the_y, const wxString& the_line)
 {
   m_x = the_x; m_y = the_y; m_line = the_line;
 }
@@ -127,13 +127,13 @@ void wxShapeEvtHandler::OnDrawContents(wxDC& dc)
     m_previousHandler->OnDrawContents(dc);
 }
 
-void wxShapeEvtHandler::OnSize(float x, float y)
+void wxShapeEvtHandler::OnSize(double x, double y)
 {
   if (m_previousHandler)
     m_previousHandler->OnSize(x, y);
 }
 
-bool wxShapeEvtHandler::OnMovePre(wxDC& dc, float x, float y, float old_x, float old_y, bool display)
+bool wxShapeEvtHandler::OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display)
 {
   if (m_previousHandler)
     return m_previousHandler->OnMovePre(dc, x, y, old_x, old_y, display);
@@ -141,7 +141,7 @@ bool wxShapeEvtHandler::OnMovePre(wxDC& dc, float x, float y, float old_x, float
     return TRUE;
 }
 
-void wxShapeEvtHandler::OnMovePost(wxDC& dc, float x, float y, float old_x, float old_y, bool display)
+void wxShapeEvtHandler::OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display)
 {
   if (m_previousHandler)
     m_previousHandler->OnMovePost(dc, x, y, old_x, old_y, display);
@@ -165,49 +165,49 @@ void wxShapeEvtHandler::OnHighlight(wxDC& dc)
     m_previousHandler->OnHighlight(dc);
 }
 
-void wxShapeEvtHandler::OnLeftClick(float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnLeftClick(double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnLeftClick(x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnRightClick(float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnRightClick(double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnRightClick(x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnDragLeft(draw, x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnBeginDragLeft(x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnEndDragLeft(x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnDragRight(bool draw, float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnDragRight(bool draw, double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnDragRight(draw, x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnBeginDragRight(float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnBeginDragRight(double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnBeginDragRight(x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnEndDragRight(float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnEndDragRight(double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnEndDragRight(x, y, keys, attachment);
@@ -215,25 +215,25 @@ void wxShapeEvtHandler::OnEndDragRight(float x, float y, int keys, int attachmen
 
 // Control points ('handles') redirect control to the actual shape, to make it easier
 // to override sizing behaviour.
-void wxShapeEvtHandler::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnSizingDragLeft(pt, draw, x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnSizingBeginDragLeft(pt, x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+void wxShapeEvtHandler::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
 {
   if (m_previousHandler)
     m_previousHandler->OnSizingEndDragLeft(pt, x, y, keys, attachment);
 }
 
-void wxShapeEvtHandler::OnDrawOutline(wxDC& dc, float x, float y, float w, float h)
+void wxShapeEvtHandler::OnDrawOutline(wxDC& dc, double x, double y, double w, double h)
 {
   if (m_previousHandler)
     m_previousHandler->OnDrawOutline(dc, x, y, w, h);
@@ -251,6 +251,13 @@ void wxShapeEvtHandler::OnEraseControlPoints(wxDC& dc)
     m_previousHandler->OnEraseControlPoints(dc);
 }
 
+// Can override this to prevent or intercept line reordering.
+void wxShapeEvtHandler::OnChangeAttachment(int attachment, wxLineShape* line, wxList& ordering)
+{
+  if (m_previousHandler)
+    m_previousHandler->OnChangeAttachment(attachment, line, ordering);
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxShape, wxShapeEvtHandler)
 
 wxShape::wxShape(wxShapeCanvas *can)
@@ -261,7 +268,7 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_formatted = FALSE;
   m_canvas = can;
   m_xpos = 0.0; m_ypos = 0.0;
-  m_pen = black_pen;
+  m_pen = g_oglBlackPen;
   m_brush = wxWHITE_BRUSH;
   m_font = g_oglNormalFont;
   m_textColour = wxBLACK;
@@ -509,27 +516,27 @@ void wxShape::SetDefaultRegionSize()
   wxNode *node = m_regions.First();
   if (!node) return;
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
-  float w, h;
+  double w, h;
   GetBoundingBoxMin(&w, &h);
   region->SetSize(w, h);
 }
 
-bool wxShape::HitTest(float x, float y, int *attachment, float *distance)
+bool wxShape::HitTest(double x, double y, int *attachment, double *distance)
 {
 //  if (!sensitive)
 //    return FALSE;
 
-  float width = 0.0, height = 0.0;
+  double width = 0.0, height = 0.0;
   GetBoundingBoxMin(&width, &height);
   if (fabs(width) < 4.0) width = 4.0;
   if (fabs(height) < 4.0) height = 4.0;
 
-  width += (float)4.0; height += (float)4.0; // Allowance for inaccurate mousing
+  width += (double)4.0; height += (double)4.0; // Allowance for inaccurate mousing
 
-  float left = (float)(m_xpos - (width/2.0));
-  float top = (float)(m_ypos - (height/2.0));
-  float right = (float)(m_xpos + (width/2.0));
-  float bottom = (float)(m_ypos + (height/2.0));
+  double left = (double)(m_xpos - (width/2.0));
+  double top = (double)(m_ypos - (height/2.0));
+  double right = (double)(m_xpos + (width/2.0));
+  double bottom = (double)(m_ypos + (height/2.0));
 
   int nearest_attachment = 0;
 
@@ -540,14 +547,14 @@ bool wxShape::HitTest(float x, float y, int *attachment, float *distance)
   if (x >= left && x <= right && y >= top && y <= bottom)
   {
     int n = GetNumberOfAttachments();
-    float nearest = 999999.0;
+    double nearest = 999999.0;
 
     for (int i = 0; i < n; i++)
     {
-      float xp, yp;
+      double xp, yp;
       if (GetAttachmentPosition(i, &xp, &yp))
       {
-        float l = (float)sqrt(((xp - x) * (xp - x)) +
+        double l = (double)sqrt(((xp - x) * (xp - x)) +
                    ((yp - y) * (yp - y)));
 
         if (l < nearest)
@@ -570,7 +577,7 @@ bool wxShape::HitTest(float x, float y, int *attachment, float *distance)
 static bool GraphicsInSizeToContents = FALSE; // Infinite recursion elimination
 void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
 {
-  float w, h;
+  double w, h;
   ClearText(i);
 
   if (m_regions.Number() < 1)
@@ -585,26 +592,25 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
 
   region->GetSize(&w, &h);
 
-  wxList *string_list = ::FormatText(dc, s, (w-5), (h-5), region->GetFormatMode());
-  node = string_list->First();
+  wxStringList *stringList = oglFormatText(dc, s, (w-5), (h-5), region->GetFormatMode());
+  node = stringList->First();
   while (node)
   {
     char *s = (char *)node->Data();
     wxShapeTextLine *line = new wxShapeTextLine(0.0, 0.0, s);
     region->GetFormattedText().Append((wxObject *)line);
-    delete node;
-    node = string_list->First();
+    node = node->Next();
   }
-  delete string_list;
-  float actualW = w;
-  float actualH = h;
+  delete stringList;
+  double actualW = w;
+  double actualH = h;
   // Don't try to resize an object with more than one image (this case should be dealt
   // with by overriden handlers)
   if ((region->GetFormatMode() & FORMAT_SIZE_TO_CONTENTS) &&
       (region->GetFormattedText().Number() > 0) &&
       (m_regions.Number() == 1) && !GraphicsInSizeToContents)
   {
-    GetCentredTextExtent(dc, &(region->GetFormattedText()), m_xpos, m_ypos, w, h, &actualW, &actualH);
+    oglGetCentredTextExtent(dc, &(region->GetFormattedText()), m_xpos, m_ypos, w, h, &actualW, &actualH);
     if ((actualW+m_textMarginX != w ) || (actualH+m_textMarginY != h))
     {
       // If we are a descendant of a composite, must make sure the composite gets
@@ -643,13 +649,13 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
       EraseContents(dc);
     }
   }
-  CentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, actualW, actualH, region->GetFormatMode());
+  oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, actualW, actualH, region->GetFormatMode());
   m_formatted = TRUE;
 }
 
 void wxShape::Recentre(wxDC& dc)
 {
-  float w, h;
+  double w, h;
   GetBoundingBoxMin(&w, &h);
 
   int noRegions = m_regions.Number();
@@ -659,14 +665,14 @@ void wxShape::Recentre(wxDC& dc)
     if (node)
     {
       wxShapeRegion *region = (wxShapeRegion *)node->Data();
-      CentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, w, h, region->GetFormatMode());
+      oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, w, h, region->GetFormatMode());
     }
   }
 }
 
-bool wxShape::GetPerimeterPoint(float x1, float y1,
-                                     float x2, float y2,
-                                     float *x3, float *y3)
+bool wxShape::GetPerimeterPoint(double x1, double y1,
+                                     double x2, double y2,
+                                     double *x3, double *y3)
 {
   return FALSE;
 }
@@ -892,7 +898,7 @@ void wxShape::OnMoveLinks(wxDC& dc)
 
 void wxShape::OnDrawContents(wxDC& dc)
 {
-  float bound_x, bound_y;
+  double bound_x, bound_y;
   GetBoundingBoxMin(&bound_x, &bound_y);
     if (m_regions.Number() < 1) return;
 
@@ -905,12 +911,12 @@ void wxShape::OnDrawContents(wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     if (!m_formatted)
     {
-      CentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x, bound_y, region->GetFormatMode());
+      oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x, bound_y, region->GetFormatMode());
       m_formatted = TRUE;
     }
     if (!GetDisableLabel())
     {
-      DrawFormattedText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x, bound_y, region->GetFormatMode());
+      oglDrawFormattedText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x, bound_y, region->GetFormatMode());
     }
 }
 
@@ -919,16 +925,16 @@ void wxShape::DrawContents(wxDC& dc)
   GetEventHandler()->OnDrawContents(dc);
 }
 
-void wxShape::OnSize(float x, float y)
+void wxShape::OnSize(double x, double y)
 {
 }
 
-bool wxShape::OnMovePre(wxDC& dc, float x, float y, float old_x, float old_y, bool display)
+bool wxShape::OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display)
 {
   return TRUE;
 }
 
-void wxShape::OnMovePost(wxDC& dc, float x, float y, float old_x, float old_y, bool display)
+void wxShape::OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display)
 {
 }
 
@@ -953,22 +959,22 @@ void wxShape::OnEraseContents(wxDC& dc)
   if (!m_visible)
     return;
 
-  float maxX, maxY, minX, minY;
-  float xp = GetX();
-  float yp = GetY();
+  double maxX, maxY, minX, minY;
+  double xp = GetX();
+  double yp = GetY();
   GetBoundingBoxMin(&minX, &minY);
   GetBoundingBoxMax(&maxX, &maxY);
-  float topLeftX = (float)(xp - (maxX / 2.0) - 2.0);
-  float topLeftY = (float)(yp - (maxY / 2.0) - 2.0);
+  double topLeftX = (double)(xp - (maxX / 2.0) - 2.0);
+  double topLeftY = (double)(yp - (maxY / 2.0) - 2.0);
 
     int penWidth = 0;
     if (m_pen)
       penWidth = m_pen->GetWidth();
 
-    dc.SetPen(white_background_pen);
-    dc.SetBrush(white_background_brush);
-    dc.DrawRectangle((float)(topLeftX - penWidth), (float)(topLeftY - penWidth),
-                      (float)(maxX + penWidth*2.0 + 4.0), (float)(maxY + penWidth*2.0 + 4.0));
+    dc.SetPen(g_oglWhiteBackgroundPen);
+    dc.SetBrush(g_oglWhiteBackgroundBrush);
+    dc.DrawRectangle(WXROUND(topLeftX - penWidth), WXROUND(topLeftY - penWidth),
+                      WXROUND(maxX + penWidth*2.0 + 4.0), WXROUND(maxY + penWidth*2.0 + 4.0));
 }
 
 void wxShape::EraseLinks(wxDC& dc, int attachment, bool recurse)
@@ -1024,89 +1030,170 @@ void wxShape::DrawLinks(wxDC& dc, int attachment, bool recurse)
   }
 }
 
-void wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
-                                       float x, float y)
+// Returns TRUE if pt1 <= pt2 in the sense that one point comes before another on an
+// edge of the shape.
+// attachmentPoint is the attachment point (= side) in question.
+
+// This is the default, rectangular implementation.
+bool wxShape::AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, const wxRealPoint& pt2)
 {
-  int new_point;
-  float distance;
-
-  // Is (x, y) on this object? If so, find the new attachment point
-  // the user has moved the point to
-  bool hit = HitTest(x, y, &new_point, &distance);
-  if (!hit)
-    return;
-
-  EraseLinks(dc);
-
-  int old_attachment;
-  if (to_move->GetTo() == this)
-    old_attachment = to_move->GetAttachmentTo();
-  else
-    old_attachment = to_move->GetAttachmentFrom();
-
-  // Delete the line object from the list of links; we're going to move
-  // it to another position in the list
-  m_lines.DeleteObject(to_move);
-
-  float old_x = (float) -9999.9;
-  float old_y = (float) -9999.9;
-
-  wxNode *node = m_lines.First();
-  bool found = FALSE;
-
-  while (node && !found)
-  {
-    wxLineShape *line = (wxLineShape *)node->Data();
-    if ((line->GetTo() == this && old_attachment == line->GetAttachmentTo()) ||
-        (line->GetFrom() == this && old_attachment == line->GetAttachmentFrom()))
+    switch (attachmentPoint)
     {
-      float startX, startY, endX, endY;
-      float xp, yp;
-      line->GetEnds(&startX, &startY, &endX, &endY);
-      if (line->GetTo() == this)
-      {
-//        xp = line->m_xpos2 + line->m_xpos;
-//        yp = line->m_ypos2 + line->m_ypos;
-        xp = startX;
-        yp = startY;
-      } else
-      {
-//        xp = line->m_xpos1 + line->m_xpos;
-//        yp = line->m_ypos1 + line->m_ypos;
-        xp = endX;
-        yp = endY;
-      }
-
-      switch (old_attachment)
-      {
         case 0:
         case 2:
         {
-          if (x > old_x && x <= xp)
-          {
-            found = TRUE;
-            m_lines.Insert(node, to_move);
-          }
+          return (pt1.x <= pt2.x) ;
           break;
         }
         case 1:
         case 3:
         {
-          if (y > old_y && y <= yp)
-          {
-            found = TRUE;
-            m_lines.Insert(node, to_move);
-          }
+          return (pt1.y <= pt2.y) ;
           break;
         }
+    }
+
+    return FALSE;
+}
+
+void wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
+                                       double x, double y)
+{
+  if (!GetAttachmentMode())
+      return;
+
+  int newAttachment, oldAttachment;
+  double distance;
+
+  // Is (x, y) on this object? If so, find the new attachment point
+  // the user has moved the point to
+  bool hit = HitTest(x, y, &newAttachment, &distance);
+  if (!hit)
+    return;
+
+  EraseLinks(dc);
+
+  if (to_move->GetTo() == this)
+    oldAttachment = to_move->GetAttachmentTo();
+  else
+    oldAttachment = to_move->GetAttachmentFrom();
+
+  // The links in a new ordering.
+  wxList newOrdering;
+
+  // First, add all links to the new list.
+  wxNode *node = m_lines.First();
+  while (node)
+  {
+    newOrdering.Append(node->Data());
+    node = node->Next();
+  }
+
+  // Delete the line object from the list of links; we're going to move
+  // it to another position in the list
+  newOrdering.DeleteObject(to_move);
+
+  double old_x = (double) -99999.9;
+  double old_y = (double) -99999.9;
+
+  node = newOrdering.First();
+  bool found = FALSE;
+
+  while (!found && node)
+  {
+    wxLineShape *line = (wxLineShape *)node->Data();
+    if ((line->GetTo() == this && oldAttachment == line->GetAttachmentTo()) ||
+        (line->GetFrom() == this && oldAttachment == line->GetAttachmentFrom()))
+    {
+      double startX, startY, endX, endY;
+      double xp, yp;
+      line->GetEnds(&startX, &startY, &endX, &endY);
+      if (line->GetTo() == this)
+      {
+        xp = endX;
+        yp = endY;
+      } else
+      {
+        xp = startX;
+        yp = startY;
       }
+
+      wxRealPoint thisPoint(xp, yp);
+      wxRealPoint lastPoint(old_x, old_y);
+      wxRealPoint newPoint(x, y);
+
+      if (AttachmentSortTest(newAttachment, newPoint, thisPoint) && AttachmentSortTest(newAttachment, lastPoint, newPoint))
+      {
+        found = TRUE;
+        newOrdering.Insert(node, to_move);
+      }
+
       old_x = xp;
       old_y = yp;
     }
     node = node->Next();
   }
+
   if (!found)
-    m_lines.Append(to_move);
+    newOrdering.Append(to_move);
+
+  GetEventHandler()->OnChangeAttachment(newAttachment, to_move, newOrdering);
+}
+
+void wxShape::OnChangeAttachment(int attachment, wxLineShape* line, wxList& ordering)
+{
+    if (line->GetTo() == this)
+        line->SetAttachmentTo(attachment);
+    else
+        line->SetAttachmentFrom(attachment);
+
+    ApplyAttachmentOrdering(ordering);
+
+    wxClientDC dc(GetCanvas());
+    GetCanvas()->PrepareDC(dc);
+
+    MoveLinks(dc);
+
+    if (!GetCanvas()->GetQuickEditMode()) GetCanvas()->Redraw(dc);
+}
+
+// Reorders the lines according to the given list.
+void wxShape::ApplyAttachmentOrdering(wxList& linesToSort)
+{
+  // This is a temporary store of all the lines.
+  wxList linesStore;
+  
+  wxNode *node = m_lines.First();
+  while (node)
+  {
+    wxLineShape *line = (wxLineShape *)node->Data();
+    linesStore.Append(line);
+    node = node->Next();;
+  }
+
+  m_lines.Clear();
+
+  node = linesToSort.First();
+  while (node)
+  {
+    wxLineShape *line = (wxLineShape *)node->Data();
+    if (linesStore.Member(line))
+    {
+      // Done this one
+      linesStore.DeleteObject(line);
+      m_lines.Append(line);
+    }
+    node = node->Next();
+  }
+
+  // Now add any lines that haven't been listed in linesToSort.
+  node = linesStore.First();
+  while (node)
+  {
+    wxLineShape *line = (wxLineShape *)node->Data();
+    m_lines.Append(line);
+    node = node->Next();
+  }
 }
 
 // Reorders the lines coming into the node image at this attachment
@@ -1160,12 +1247,12 @@ void wxShape::OnHighlight(wxDC& dc)
 {
 }
 
-void wxShape::OnLeftClick(float x, float y, int keys, int attachment)
+void wxShape::OnLeftClick(double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_CLICK_LEFT) != OP_CLICK_LEFT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1175,12 +1262,12 @@ void wxShape::OnLeftClick(float x, float y, int keys, int attachment)
   }
 }
 
-void wxShape::OnRightClick(float x, float y, int keys, int attachment)
+void wxShape::OnRightClick(double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_CLICK_RIGHT) != OP_CLICK_RIGHT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1190,15 +1277,15 @@ void wxShape::OnRightClick(float x, float y, int keys, int attachment)
   }
 }
 
-float DragOffsetX = 0.0;
-float DragOffsetY = 0.0;
+double DragOffsetX = 0.0;
+double DragOffsetY = 0.0;
 
-void wxShape::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_DRAG_LEFT) != OP_DRAG_LEFT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1216,23 +1303,23 @@ void wxShape::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
   dc.SetPen(dottedPen);
   dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
-  float xx, yy;
+  double xx, yy;
   xx = x + DragOffsetX;
   yy = y + DragOffsetY;
 
   m_canvas->Snap(&xx, &yy);
 //  m_xpos = xx; m_ypos = yy;
-  float w, h;
+  double w, h;
   GetBoundingBoxMax(&w, &h);
   GetEventHandler()->OnDrawOutline(dc, xx, yy, w, h);
 }
 
-void wxShape::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_DRAG_LEFT) != OP_DRAG_LEFT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1247,8 +1334,10 @@ void wxShape::OnBeginDragLeft(float x, float y, int keys, int attachment)
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  Erase(dc);
-  float xx, yy;
+  // New policy: don't erase shape until end of drag.
+//  Erase(dc);
+
+  double xx, yy;
   xx = x + DragOffsetX;
   yy = y + DragOffsetY;
   m_canvas->Snap(&xx, &yy);
@@ -1259,19 +1348,19 @@ void wxShape::OnBeginDragLeft(float x, float y, int keys, int attachment)
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
-  float w, h;
+  double w, h;
   GetBoundingBoxMax(&w, &h);
   GetEventHandler()->OnDrawOutline(dc, xx, yy, w, h);
   m_canvas->CaptureMouse();
 }
 
-void wxShape::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxShape::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
   m_canvas->ReleaseMouse();
   if ((m_sensitivity & OP_DRAG_LEFT) != OP_DRAG_LEFT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1285,20 +1374,24 @@ void wxShape::OnEndDragLeft(float x, float y, int keys, int attachment)
 
   dc.SetLogicalFunction(wxCOPY);
 
-  float xx = x + DragOffsetX;
-  float yy = y + DragOffsetY;
+  double xx = x + DragOffsetX;
+  double yy = y + DragOffsetY;
   m_canvas->Snap(&xx, &yy);
 //  canvas->Snap(&m_xpos, &m_ypos);
+
+  // New policy: erase shape at end of drag.
+  Erase(dc);
+
   Move(dc, xx, yy);
   if (m_canvas && !m_canvas->GetQuickEditMode()) m_canvas->Redraw(dc);
 }
 
-void wxShape::OnDragRight(bool draw, float x, float y, int keys, int attachment)
+void wxShape::OnDragRight(bool draw, double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_DRAG_RIGHT) != OP_DRAG_RIGHT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1308,12 +1401,12 @@ void wxShape::OnDragRight(bool draw, float x, float y, int keys, int attachment)
   }
 }
 
-void wxShape::OnBeginDragRight(float x, float y, int keys, int attachment)
+void wxShape::OnBeginDragRight(double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_DRAG_RIGHT) != OP_DRAG_RIGHT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1323,12 +1416,12 @@ void wxShape::OnBeginDragRight(float x, float y, int keys, int attachment)
   }
 }
 
-void wxShape::OnEndDragRight(float x, float y, int keys, int attachment)
+void wxShape::OnEndDragRight(double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_DRAG_RIGHT) != OP_DRAG_RIGHT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1338,23 +1431,23 @@ void wxShape::OnEndDragRight(float x, float y, int keys, int attachment)
   }
 }
 
-void wxShape::OnDrawOutline(wxDC& dc, float x, float y, float w, float h)
+void wxShape::OnDrawOutline(wxDC& dc, double x, double y, double w, double h)
 {
-  float top_left_x = (float)(x - w/2.0);
-  float top_left_y = (float)(y - h/2.0);
-  float top_right_x = (float)(top_left_x + w);
-  float top_right_y = (float)top_left_y;
-  float bottom_left_x = (float)top_left_x;
-  float bottom_left_y = (float)(top_left_y + h);
-  float bottom_right_x = (float)top_right_x;
-  float bottom_right_y = (float)bottom_left_y;
+  double top_left_x = (double)(x - w/2.0);
+  double top_left_y = (double)(y - h/2.0);
+  double top_right_x = (double)(top_left_x + w);
+  double top_right_y = (double)top_left_y;
+  double bottom_left_x = (double)top_left_x;
+  double bottom_left_y = (double)(top_left_y + h);
+  double bottom_right_x = (double)top_right_x;
+  double bottom_right_y = (double)bottom_left_y;
 
   wxPoint points[5];
-  points[0].x = top_left_x; points[0].y = top_left_y;
-  points[1].x = top_right_x; points[1].y = top_right_y;
-  points[2].x = bottom_right_x; points[2].y = bottom_right_y;
-  points[3].x = bottom_left_x; points[3].y = bottom_left_y;
-  points[4].x = top_left_x; points[4].y = top_left_y;
+  points[0].x = WXROUND(top_left_x); points[0].y = WXROUND(top_left_y);
+  points[1].x = WXROUND(top_right_x); points[1].y = WXROUND(top_right_y);
+  points[2].x = WXROUND(bottom_right_x); points[2].y = WXROUND(bottom_right_y);
+  points[3].x = WXROUND(bottom_left_x); points[3].y = WXROUND(bottom_left_y);
+  points[4].x = WXROUND(top_left_x); points[4].y = WXROUND(top_left_y);
 
   dc.DrawLines(5, points);
 }
@@ -1369,10 +1462,10 @@ void wxShape::Detach()
   m_canvas = NULL;
 }
 
-void wxShape::Move(wxDC& dc, float x, float y, bool display)
+void wxShape::Move(wxDC& dc, double x, double y, bool display)
 {
-  float old_x = m_xpos;
-  float old_y = m_ypos;
+  double old_x = m_xpos;
+  double old_y = m_ypos;
 
   m_xpos = x; m_ypos = y;
 
@@ -1460,17 +1553,17 @@ void wxShape::AddText(const wxString& string)
   m_formatted = FALSE;
 }
 
-void wxShape::SetSize(float x, float y, bool recursive)
+void wxShape::SetSize(double x, double y, bool recursive)
 {
   SetAttachmentSize(x, y);
   SetDefaultRegionSize();
 }
 
-void wxShape::SetAttachmentSize(float w, float h)
+void wxShape::SetAttachmentSize(double w, double h)
 {
-  float scaleX;
-  float scaleY;
-  float width, height;
+  double scaleX;
+  double scaleY;
+  double width, height;
   GetBoundingBoxMin(&width, &height);
   if (width == 0.0)
     scaleX = 1.0;
@@ -1483,25 +1576,50 @@ void wxShape::SetAttachmentSize(float w, float h)
   while (node)
   {
     wxAttachmentPoint *point = (wxAttachmentPoint *)node->Data();
-    point->m_x = (float)(point->m_x * scaleX);
-    point->m_y = (float)(point->m_y * scaleY);
+    point->m_x = (double)(point->m_x * scaleX);
+    point->m_y = (double)(point->m_y * scaleY);
     node = node->Next();
   }
 }
 
 // Add line FROM this object
 void wxShape::AddLine(wxLineShape *line, wxShape *other,
-                           int attachFrom, int attachTo)
+                            int attachFrom, int attachTo,
+                            // The line ordering
+                            int positionFrom, int positionTo)
 {
-  if (!m_lines.Member(line))
-    m_lines.Append(line);
+    m_lines.DeleteObject(line);
+    other->m_lines.DeleteObject(line);
 
-  if (!other->m_lines.Member(line))
-    other->m_lines.Append(line);
+    if (positionFrom == -1)
+        m_lines.Append(line);
+    else
+    {
+        if (positionFrom < m_lines.Number())
+        {
+            wxNode* node = m_lines.Nth(positionFrom);
+            m_lines.Insert(node, line);
+        }
+        else
+            m_lines.Append(line);
+    }
 
-  line->SetFrom(this);
-  line->SetTo(other);
-  line->SetAttachments(attachFrom, attachTo);
+    if (positionTo == -1)
+        other->m_lines.Append(line);
+    else
+    {
+        if (positionTo < other->m_lines.Number())
+        {
+            wxNode* node = other->m_lines.Nth(positionTo);
+            other->m_lines.Insert(node, line);
+        }
+        else
+            other->m_lines.Append(line);
+    }
+
+    line->SetFrom(this);
+    line->SetTo(other);
+    line->SetAttachments(attachFrom, attachTo);
 }
 
 void wxShape::RemoveLine(wxLineShape *line)
@@ -1711,8 +1829,8 @@ void wxShape::ReadPrologAttributes(wxExpr *clause)
     while (node)
     {
       wxExpr *string_expr = node;
-      float the_x = 0.0;
-      float the_y = 0.0;
+      double the_x = 0.0;
+      double the_y = 0.0;
       wxString the_string("");
 
       // string_expr can either be a string, or a list of
@@ -1735,11 +1853,11 @@ void wxShape::ReadPrologAttributes(wxExpr *clause)
           {
             if (first->Type() == PrologReal)
               the_x = first->RealValue();
-            else the_x = (float)first->IntegerValue();
+            else the_x = (double)first->IntegerValue();
 
             if (second->Type() == PrologReal)
               the_y = second->RealValue();
-            else the_y = (float)second->IntegerValue();
+            else the_y = (double)second->IntegerValue();
 
             the_string = third->StringValue();
           }
@@ -1831,7 +1949,7 @@ void wxShape::ReadPrologAttributes(wxExpr *clause)
 
   int point_size = 10;
   clause->GetAttributeValue("point_size", point_size);
-  SetFont(MatchFont(point_size));
+  SetFont(oglMatchFont(point_size));
 
   // Read user-defined attachment points, if any
   wxExpr *attachmentList = clause->AttributeValue("user_attachments");
@@ -1885,14 +2003,14 @@ void wxShape::ReadRegions(wxExpr *clause)
 
     wxString regionName("");
     wxString regionText("");
-    float x = 0.0;
-    float y = 0.0;
-    float width = 0.0;
-    float height = 0.0;
-    float minWidth = 5.0;
-    float minHeight = 5.0;
-    float m_regionProportionX = -1.0;
-    float m_regionProportionY = -1.0;
+    double x = 0.0;
+    double y = 0.0;
+    double width = 0.0;
+    double height = 0.0;
+    double minWidth = 5.0;
+    double minHeight = 5.0;
+    double m_regionProportionX = -1.0;
+    double m_regionProportionY = -1.0;
     int formatMode = FORMAT_NONE;
     int fontSize = 10;
     int fontFamily = wxSWISS;
@@ -1986,8 +2104,8 @@ void wxShape::ReadRegions(wxExpr *clause)
       while (node)
       {
         wxExpr *string_expr = node;
-        float the_x = 0.0;
-        float the_y = 0.0;
+        double the_x = 0.0;
+        double the_y = 0.0;
         wxString the_string("");
 
         // string_expr can either be a string, or a list of
@@ -2010,11 +2128,11 @@ void wxShape::ReadRegions(wxExpr *clause)
           {
             if (first->Type() == PrologReal)
               the_x = first->RealValue();
-            else the_x = (float)first->IntegerValue();
+            else the_x = (double)first->IntegerValue();
 
             if (second->Type() == PrologReal)
               the_y = second->RealValue();
-            else the_y = (float)second->IntegerValue();
+            else the_y = (double)second->IntegerValue();
 
             the_string = third->StringValue();
           }
@@ -2115,13 +2233,23 @@ void wxShape::Copy(wxShape& copy)
     copy.m_attachmentPoints.Append((wxObject *)newPoint);
     node = node->Next();
   }
+
+  // Copy lines
+  copy.m_lines.Clear();
+  node = m_lines.First();
+  while (node)
+  {
+    wxLineShape* line = (wxLineShape*) node->Data();
+    copy.m_lines.Append(line);
+    node = node->Next();
+  }
 }
 
 // Create and return a new, fully copied object.
 wxShape *wxShape::CreateNewCopy(bool resetMapping, bool recompute)
 {
   if (resetMapping)
-    wxObjectCopyMapping.Clear();
+    oglObjectCopyMapping.Clear();
 
   wxShape* newObject = (wxShape*) GetClassInfo()->CreateObject();
 
@@ -2163,19 +2291,19 @@ void wxShape::CopyWithHandler(wxShape& copy)
 // Default - make 6 control points
 void wxShape::MakeControlPoints()
 {
-  float maxX, maxY, minX, minY;
+  double maxX, maxY, minX, minY;
 
   GetBoundingBoxMax(&maxX, &maxY);
   GetBoundingBoxMin(&minX, &minY);
 
-  float widthMin = (float)(minX + CONTROL_POINT_SIZE + 2);
-  float heightMin = (float)(minY + CONTROL_POINT_SIZE + 2);
+  double widthMin = (double)(minX + CONTROL_POINT_SIZE + 2);
+  double heightMin = (double)(minY + CONTROL_POINT_SIZE + 2);
 
   // Offsets from main object
-  float top = (float)(- (heightMin / 2.0));
-  float bottom = (float)(heightMin / 2.0 + (maxY - minY));
-  float left = (float)(- (widthMin / 2.0));
-  float right = (float)(widthMin / 2.0 + (maxX - minX));
+  double top = (double)(- (heightMin / 2.0));
+  double bottom = (double)(heightMin / 2.0 + (maxY - minY));
+  double left = (double)(- (widthMin / 2.0));
+  double right = (double)(widthMin / 2.0 + (maxX - minX));
 
   wxControlPoint *control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, top, 
                                            CONTROL_POINT_DIAGONAL);
@@ -2248,19 +2376,19 @@ void wxShape::ResetControlPoints()
   if (m_controlPoints.Number() < 1)
     return;
 
-  float maxX, maxY, minX, minY;
+  double maxX, maxY, minX, minY;
 
   GetBoundingBoxMax(&maxX, &maxY);
   GetBoundingBoxMin(&minX, &minY);
 
-  float widthMin = (float)(minX + CONTROL_POINT_SIZE + 2);
-  float heightMin = (float)(minY + CONTROL_POINT_SIZE + 2);
+  double widthMin = (double)(minX + CONTROL_POINT_SIZE + 2);
+  double heightMin = (double)(minY + CONTROL_POINT_SIZE + 2);
 
   // Offsets from main object
-  float top = (float)(- (heightMin / 2.0));
-  float bottom = (float)(heightMin / 2.0 + (maxY - minY));
-  float left = (float)(- (widthMin / 2.0));
-  float right = (float)(widthMin / 2.0 + (maxX - minX));
+  double top = (double)(- (heightMin / 2.0));
+  double bottom = (double)(heightMin / 2.0 + (maxY - minY));
+  double left = (double)(- (widthMin / 2.0));
+  double right = (double)(widthMin / 2.0 + (maxX - minX));
 
   wxNode *node = m_controlPoints.First();
   wxControlPoint *control = (wxControlPoint *)node->Data();
@@ -2456,7 +2584,7 @@ bool wxShape::AttachmentIsValid(int attachment)
   return FALSE;
 }
 
-bool wxShape::GetAttachmentPosition(int attachment, float *x, float *y, 
+bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y, 
                                          int nth, int no_arcs, wxLineShape *line)
 {
   if (!m_attachmentMode)
@@ -2472,8 +2600,8 @@ bool wxShape::GetAttachmentPosition(int attachment, float *x, float *y,
       wxAttachmentPoint *point = (wxAttachmentPoint *)node->Data();
       if (point->m_id == attachment)
       {
-        *x = (float)(m_xpos + point->m_x);
-        *y = (float)(m_ypos + point->m_y);
+        *x = (double)(m_xpos + point->m_x);
+        *y = (double)(m_ypos + point->m_y);
         return TRUE;
       }
       node = node->Next();
@@ -2483,9 +2611,9 @@ bool wxShape::GetAttachmentPosition(int attachment, float *x, float *y,
   }
 }
 
-void wxShape::GetBoundingBoxMax(float *w, float *h)
+void wxShape::GetBoundingBoxMax(double *w, double *h)
 {
-  float ww, hh;
+  double ww, hh;
   GetBoundingBoxMin(&ww, &hh);
   if (m_shadowMode != SHADOW_NONE)
   {
@@ -2525,5 +2653,102 @@ void wxShape::ClearPointList(wxList& list)
         node = node->Next();
     }
     list.Clear();
+}
+
+// Assuming the attachment lies along a vertical or horizontal line,
+// calculate the position on that point.
+wxRealPoint wxShape::CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
+    int nth, int noArcs, wxLineShape* line)
+{
+    bool isEnd = (line && line->IsEnd(this));
+
+    // Are we horizontal or vertical?
+    bool isHorizontal = (oglRoughlyEqual(pt1.y, pt2.y) == TRUE);
+
+    double x, y;
+
+    if (isHorizontal)
+    {
+        wxRealPoint firstPoint, secondPoint;
+        if (pt1.x > pt2.x)
+        {
+            firstPoint = pt2;
+            secondPoint = pt1;
+        }
+        else
+        {
+            firstPoint = pt1;
+            secondPoint = pt2;
+        }
+
+        if (m_spaceAttachments)
+        {
+          if (line && (line->GetAlignmentType(isEnd) == LINE_ALIGNMENT_TO_NEXT_HANDLE))
+          {
+            // Align line according to the next handle along
+            wxRealPoint *point = line->GetNextControlPoint(this);
+            if (point->x < firstPoint.x)
+              x = firstPoint.x;
+            else if (point->x > secondPoint.x)
+              x = secondPoint.x;
+            else
+              x = point->x;
+          }
+          else
+            x = firstPoint.x + (nth + 1)*(secondPoint.x - firstPoint.x)/(noArcs + 1);
+        }
+        else x = (secondPoint.x - firstPoint.x)/2.0; // Midpoint
+
+        y = pt1.y;
+    }
+    else
+    {
+        wxASSERT( oglRoughlyEqual(pt1.x, pt2.x) == TRUE );
+
+        wxRealPoint firstPoint, secondPoint;
+        if (pt1.y > pt2.y)
+        {
+            firstPoint = pt2;
+            secondPoint = pt1;
+        }
+        else
+        {
+            firstPoint = pt1;
+            secondPoint = pt2;
+        }
+
+        if (m_spaceAttachments)
+        {
+          if (line && (line->GetAlignmentType(isEnd) == LINE_ALIGNMENT_TO_NEXT_HANDLE))
+          {
+            // Align line according to the next handle along
+            wxRealPoint *point = line->GetNextControlPoint(this);
+            if (point->y < firstPoint.y)
+              y = firstPoint.y;
+            else if (point->y > secondPoint.y)
+              y = secondPoint.y;
+            else
+              y = point->y;
+          }
+          else
+            y = firstPoint.y + (nth + 1)*(secondPoint.y - firstPoint.y)/(noArcs + 1);
+        }
+        else y = (secondPoint.y - firstPoint.y)/2.0; // Midpoint
+
+        x = pt1.x;
+    }
+
+    return wxRealPoint(x, y);
+}
+
+// Return the zero-based position in m_lines of line.
+int wxShape::GetLinePosition(wxLineShape* line)
+{
+    int i = 0;
+    for (i = 0; i < m_lines.Number(); i++)
+        if ((wxLineShape*) (m_lines.Nth(i)->Data()) == line)
+            return i;
+
+    return 0;
 }
 

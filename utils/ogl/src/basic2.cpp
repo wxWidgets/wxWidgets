@@ -125,7 +125,7 @@ void wxPolygonShape::ClearPoints()
 
 
 // Width and height. Centre of object is centre of box.
-void wxPolygonShape::GetBoundingBoxMin(float *width, float *height)
+void wxPolygonShape::GetBoundingBoxMin(double *width, double *height)
 {
   *width = m_boundWidth;
   *height = m_boundHeight;
@@ -134,10 +134,10 @@ void wxPolygonShape::GetBoundingBoxMin(float *width, float *height)
 void wxPolygonShape::CalculateBoundingBox()
 {
   // Calculate bounding box at construction (and presumably resize) time
-  float left = 10000;
-  float right = -10000;
-  float top = 10000;
-  float bottom = -10000;
+  double left = 10000;
+  double right = -10000;
+  double top = 10000;
+  double bottom = -10000;
 
   wxNode *node = m_points->First();
   while (node)
@@ -162,10 +162,10 @@ void wxPolygonShape::CalculateBoundingBox()
 // box.
 void wxPolygonShape::CalculatePolygonCentre()
 {
-  float left = 10000;
-  float right = -10000;
-  float top = 10000;
-  float bottom = -10000;
+  double left = 10000;
+  double right = -10000;
+  double top = 10000;
+  double bottom = -10000;
 
   wxNode *node = m_points->First();
   while (node)
@@ -179,11 +179,11 @@ void wxPolygonShape::CalculatePolygonCentre()
 
     node = node->Next();
   }
-  float bwidth = right - left;
-  float bheight = bottom - top;
-  
-  float newCentreX = (float)(left + (bwidth/2.0));
-  float newCentreY = (float)(top + (bheight/2.0));
+  double bwidth = right - left;
+  double bheight = bottom - top;
+
+  double newCentreX = (double)(left + (bwidth/2.0));
+  double newCentreY = (double)(top + (bheight/2.0));
 
   node = m_points->First();
   while (node)
@@ -197,22 +197,22 @@ void wxPolygonShape::CalculatePolygonCentre()
   m_ypos += newCentreY;
 }
 
-bool PolylineHitTest(float n, float xvec[], float yvec[],
-                           float x1, float y1, float x2, float y2)
+bool PolylineHitTest(double n, double xvec[], double yvec[],
+                           double x1, double y1, double x2, double y2)
 {
   bool isAHit = FALSE;
   int i;
-  float lastx = xvec[0];
-  float lasty = yvec[0];
+  double lastx = xvec[0];
+  double lasty = yvec[0];
 
-  float min_ratio = 1.0;
-  float line_ratio;
-  float other_ratio;
+  double min_ratio = 1.0;
+  double line_ratio;
+  double other_ratio;
 
 //  char buf[300];
   for (i = 1; i < n; i++)
   {
-    check_line_intersection(x1, y1, x2, y2, lastx, lasty, xvec[i], yvec[i],
+    oglCheckLineIntersection(x1, y1, x2, y2, lastx, lasty, xvec[i], yvec[i],
                             &line_ratio, &other_ratio);
     if (line_ratio != 1.0)
       isAHit = TRUE;
@@ -225,10 +225,10 @@ bool PolylineHitTest(float n, float xvec[], float yvec[],
       min_ratio = line_ratio;
   }
 
-  // Do last (implicit) line if last and first floats are not identical
+  // Do last (implicit) line if last and first doubles are not identical
   if (!(xvec[0] == lastx && yvec[0] == lasty))
   {
-    check_line_intersection(x1, y1, x2, y2, lastx, lasty, xvec[0], yvec[0],
+    oglCheckLineIntersection(x1, y1, x2, y2, lastx, lasty, xvec[0], yvec[0],
                             &line_ratio, &other_ratio);
     if (line_ratio != 1.0)
       isAHit = TRUE;
@@ -242,30 +242,30 @@ bool PolylineHitTest(float n, float xvec[], float yvec[],
   return isAHit;
 }
 
-bool wxPolygonShape::HitTest(float x, float y, int *attachment, float *distance)
+bool wxPolygonShape::HitTest(double x, double y, int *attachment, double *distance)
 {
   // Imagine four lines radiating from this point. If all of these lines hit the polygon,
   // we're inside it, otherwise we're not. Obviously we'd need more radiating lines
   // to be sure of correct results for very strange (concave) shapes.
-  float endPointsX[4];
-  float endPointsY[4];
+  double endPointsX[4];
+  double endPointsY[4];
   // North
   endPointsX[0] = x;
-  endPointsY[0] = (float)(y - 1000.0);
+  endPointsY[0] = (double)(y - 1000.0);
   // East
-  endPointsX[1] = (float)(x + 1000.0);
+  endPointsX[1] = (double)(x + 1000.0);
   endPointsY[1] = y;
   // South
   endPointsX[2] = x;
-  endPointsY[2] = (float)(y + 1000.0);
+  endPointsY[2] = (double)(y + 1000.0);
   // West
-  endPointsX[3] = (float)(x - 1000.0);
+  endPointsX[3] = (double)(x - 1000.0);
   endPointsY[3] = y;
 
   // Store polygon points in an array
   int np = m_points->Number();
-  float *xpoints = new float[np];
-  float *ypoints = new float[np];
+  double *xpoints = new double[np];
+  double *ypoints = new double[np];
   wxNode *node = m_points->First();
   int i = 0;
   while (node)
@@ -303,14 +303,14 @@ bool wxPolygonShape::HitTest(float x, float y, int *attachment, float *distance)
 
   // If a hit, check the attachment points within the object.
   int n = GetNumberOfAttachments();
-  float nearest = 999999.0;
+  double nearest = 999999.0;
 
   for (i = 0; i < n; i++)
   {
-    float xp, yp;
+    double xp, yp;
     if (GetAttachmentPosition(i, &xp, &yp))
     {
-      float l = (float)sqrt(((xp - x) * (xp - x)) +
+      double l = (double)sqrt(((xp - x) * (xp - x)) +
                  ((yp - y) * (yp - y)));
       if (l < nearest)
       {
@@ -326,13 +326,13 @@ bool wxPolygonShape::HitTest(float x, float y, int *attachment, float *distance)
 
 // Really need to be able to reset the shape! Otherwise, if the
 // points ever go to zero, we've lost it, and can't resize.
-void wxPolygonShape::SetSize(float new_width, float new_height, bool recursive)
+void wxPolygonShape::SetSize(double new_width, double new_height, bool recursive)
 {
   SetAttachmentSize(new_width, new_height);
   
   // Multiply all points by proportion of new size to old size
-  float x_proportion = (float)(fabs(new_width/m_originalWidth));
-  float y_proportion = (float)(fabs(new_height/m_originalHeight));
+  double x_proportion = (double)(fabs(new_width/m_originalWidth));
+  double y_proportion = (double)(fabs(new_height/m_originalHeight));
 
   wxNode *node = m_points->First();
   wxNode *original_node = m_originalPoints->First();
@@ -349,8 +349,8 @@ void wxPolygonShape::SetSize(float new_width, float new_height, bool recursive)
   }
 
 //  CalculateBoundingBox();
-  m_boundWidth = (float)fabs(new_width);
-  m_boundHeight = (float)fabs(new_height);
+  m_boundWidth = (double)fabs(new_width);
+  m_boundHeight = (double)fabs(new_height);
   SetDefaultRegionSize();
 }
 
@@ -393,8 +393,8 @@ void wxPolygonShape::AddPolygonPoint(int pos)
   if (!node2) node2 = m_points->First();
   wxRealPoint *secondPoint = (wxRealPoint *)node2->Data();
 
-  float x = (float)((secondPoint->x - firstPoint->x)/2.0 + firstPoint->x);
-  float y = (float)((secondPoint->y - firstPoint->y)/2.0 + firstPoint->y);
+  double x = (double)((secondPoint->x - firstPoint->x)/2.0 + firstPoint->x);
+  double y = (double)((secondPoint->y - firstPoint->y)/2.0 + firstPoint->y);
   wxRealPoint *point = new wxRealPoint(x, y);
 
   if (pos >= (m_points->Number() - 1))
@@ -429,15 +429,15 @@ void wxPolygonShape::DeletePolygonPoint(int pos)
 }
 
 // Assume (x1, y1) is centre of box (most generally, line end at box)
-bool wxPolygonShape::GetPerimeterPoint(float x1, float y1,
-                                     float x2, float y2,
-                                     float *x3, float *y3)
+bool wxPolygonShape::GetPerimeterPoint(double x1, double y1,
+                                     double x2, double y2,
+                                     double *x3, double *y3)
 {
   int n = m_points->Number();
 
   // First check for situation where the line is vertical,
   // and we would want to connect to a point on that vertical --
-  // find_end_for_polyline can't cope with this (the arrow
+  // oglFindEndForPolyline can't cope with this (the arrow
   // gets drawn to the wrong place).
   if ((!m_attachmentMode) && (x1 == x2))
   {
@@ -466,8 +466,8 @@ bool wxPolygonShape::GetPerimeterPoint(float x1, float y1,
     }
   }
   
-  float *xpoints = new float[n];
-  float *ypoints = new float[n];
+  double *xpoints = new double[n];
+  double *ypoints = new double[n];
 
   wxNode *node = m_points->First();
   int i = 0;
@@ -479,17 +479,12 @@ bool wxPolygonShape::GetPerimeterPoint(float x1, float y1,
     node = node->Next();
     i ++;
   }
-/*
-  wxRealPoint *point = (wxRealPoint *)m_points->First()->Data();
-  xpoints[i] = point->x + m_xpos;
-  ypoints[i] = point->y + m_ypos;
-*/
 
-  find_end_for_polyline(n, xpoints, ypoints, 
+  oglFindEndForPolyline(n, xpoints, ypoints, 
                         x1, y1, x2, y2, x3, y3);
 
-  delete xpoints;
-  delete ypoints;
+  delete[] xpoints;
+  delete[] ypoints;
 
   return TRUE;
 }
@@ -502,39 +497,39 @@ void wxPolygonShape::OnDraw(wxDC& dc)
     for (i = 0; i < n; i++)
     {
       wxRealPoint* point = (wxRealPoint*) m_points->Nth(i)->Data();
-      intPoints[i].x = (int) point->x;
-      intPoints[i].y = (int) point->y;
+      intPoints[i].x = WXROUND(point->x);
+      intPoints[i].y = WXROUND(point->y);
     }
 
     if (m_shadowMode != SHADOW_NONE)
     {
       if (m_shadowBrush)
         dc.SetBrush(m_shadowBrush);
-      dc.SetPen(transparent_pen);
+      dc.SetPen(g_oglTransparentPen);
 
-      dc.DrawPolygon(n, intPoints, m_xpos + m_shadowOffsetX, m_ypos + m_shadowOffsetY);
+      dc.DrawPolygon(n, intPoints, WXROUND(m_xpos + m_shadowOffsetX), WXROUND(m_ypos + m_shadowOffsetY));
     }
 
     if (m_pen)
     {
       if (m_pen->GetWidth() == 0)
-        dc.SetPen(transparent_pen);
+        dc.SetPen(g_oglTransparentPen);
       else
         dc.SetPen(m_pen);
     }
     if (m_brush)
       dc.SetBrush(m_brush);
-    dc.DrawPolygon(n, intPoints, m_xpos, m_ypos);
+    dc.DrawPolygon(n, intPoints, WXROUND(m_xpos), WXROUND(m_ypos));
 
     delete[] intPoints;
 }
 
-void wxPolygonShape::OnDrawOutline(wxDC& dc, float x, float y, float w, float h)
+void wxPolygonShape::OnDrawOutline(wxDC& dc, double x, double y, double w, double h)
 {
   dc.SetBrush(wxTRANSPARENT_BRUSH);
   // Multiply all points by proportion of new size to old size
-  float x_proportion = (float)(fabs(w/m_originalWidth));
-  float y_proportion = (float)(fabs(h/m_originalHeight));
+  double x_proportion = (double)(fabs(w/m_originalWidth));
+  double y_proportion = (double)(fabs(h/m_originalHeight));
 
   int n = m_originalPoints->Number();
   wxPoint *intPoints = new wxPoint[n];
@@ -542,10 +537,10 @@ void wxPolygonShape::OnDrawOutline(wxDC& dc, float x, float y, float w, float h)
   for (i = 0; i < n; i++)
   {
     wxRealPoint* point = (wxRealPoint*) m_originalPoints->Nth(i)->Data();
-    intPoints[i].x = (int) (x_proportion * point->x);
-    intPoints[i].y = (int) (y_proportion * point->y);
+    intPoints[i].x = WXROUND(x_proportion * point->x);
+    intPoints[i].y = WXROUND(y_proportion * point->y);
   }
-  dc.DrawPolygon(n, intPoints, x, y);
+  dc.DrawPolygon(n, intPoints, WXROUND(x), WXROUND(y));
   delete[] intPoints;
 }
 
@@ -564,19 +559,19 @@ void wxPolygonShape::MakeControlPoints()
   }
 
 /*
-  float maxX, maxY, minX, minY;
+  double maxX, maxY, minX, minY;
 
   GetBoundingBoxMax(&maxX, &maxY);
   GetBoundingBoxMin(&minX, &minY);
 
-  float widthMin = (float)(minX + CONTROL_POINT_SIZE + 2);
-  float heightMin = (float)(minY + CONTROL_POINT_SIZE + 2);
+  double widthMin = (double)(minX + CONTROL_POINT_SIZE + 2);
+  double heightMin = (double)(minY + CONTROL_POINT_SIZE + 2);
 
   // Offsets from main object
-  float top = (float)(- (heightMin / 2.0));
-  float bottom = (float)(heightMin / 2.0 + (maxY - minY));
-  float left = (float)(- (widthMin / 2.0));
-  float right = (float)(widthMin / 2.0 + (maxX - minX));
+  double top = (double)(- (heightMin / 2.0));
+  double bottom = (double)(heightMin / 2.0 + (maxY - minY));
+  double left = (double)(- (widthMin / 2.0));
+  double right = (double)(widthMin / 2.0 + (maxX - minX));
 
   wxControlPoint *control = new wxControlPoint(m_canvas, this, CONTROL_POINT_SIZE, left, top, 
                                            CONTROL_POINT_DIAGONAL);
@@ -641,19 +636,19 @@ void wxPolygonShape::ResetControlPoints()
   if (m_controlPoints.Number() < 1)
     return;
 
-  float maxX, maxY, minX, minY;
+  double maxX, maxY, minX, minY;
 
   GetBoundingBoxMax(&maxX, &maxY);
   GetBoundingBoxMin(&minX, &minY);
 
-  float widthMin = (float)(minX + CONTROL_POINT_SIZE + 2);
-  float heightMin = (float)(minY + CONTROL_POINT_SIZE + 2);
+  double widthMin = (double)(minX + CONTROL_POINT_SIZE + 2);
+  double heightMin = (double)(minY + CONTROL_POINT_SIZE + 2);
 
   // Offsets from main object
-  float top = (float)(- (heightMin / 2.0));
-  float bottom = (float)(heightMin / 2.0 + (maxY - minY));
-  float left = (float)(- (widthMin / 2.0));
-  float right = (float)(widthMin / 2.0 + (maxX - minX));
+  double top = (double)(- (heightMin / 2.0));
+  double bottom = (double)(heightMin / 2.0 + (maxY - minY));
+  double left = (double)(- (widthMin / 2.0));
+  double right = (double)(widthMin / 2.0 + (maxX - minX));
 
   wxNode *node = m_controlPoints.First();
   wxControlPoint *control = (wxControlPoint *)node->Data();
@@ -698,8 +693,8 @@ void wxPolygonShape::WritePrologAttributes(wxExpr *clause)
   {
     wxRealPoint *point = (wxRealPoint *)node->Data();
     wxExpr *point_list = new wxExpr(PrologList);
-    wxExpr *x_expr = new wxExpr((float)point->x);
-    wxExpr *y_expr = new wxExpr((float)point->y);
+    wxExpr *x_expr = new wxExpr((double)point->x);
+    wxExpr *y_expr = new wxExpr((double)point->y);
 
     point_list->Append(x_expr);
     point_list->Append(y_expr);
@@ -716,8 +711,8 @@ void wxPolygonShape::WritePrologAttributes(wxExpr *clause)
   {
     wxRealPoint *point = (wxRealPoint *)node->Data();
     wxExpr *point_list = new wxExpr(PrologList);
-    wxExpr *x_expr = new wxExpr((float) point->x);
-    wxExpr *y_expr = new wxExpr((float) point->y);
+    wxExpr *x_expr = new wxExpr((double) point->x);
+    wxExpr *y_expr = new wxExpr((double) point->y);
     point_list->Append(x_expr);
     point_list->Append(y_expr);
     list->Append(point_list);
@@ -739,8 +734,8 @@ void wxPolygonShape::ReadPrologAttributes(wxExpr *clause)
   clause->AssignAttributeValue("points", &points_list);
 
   // If no points_list, don't crash!! Assume a diamond instead.
-  float the_height = 100.0;
-  float the_width = 100.0;
+  double the_height = 100.0;
+  double the_width = 100.0;
   if (!points_list)
   {
     wxRealPoint *point = new wxRealPoint(0.0, (-the_height/2));
@@ -770,7 +765,7 @@ void wxPolygonShape::ReadPrologAttributes(wxExpr *clause)
       wxExpr *yexpr = xexpr->next;
       long y = yexpr->IntegerValue();
 
-      wxRealPoint *point = new wxRealPoint((float)x, (float)y);
+      wxRealPoint *point = new wxRealPoint((double)x, (double)y);
       m_points->Append((wxObject*) point);
 
       node = node->next;
@@ -804,10 +799,10 @@ void wxPolygonShape::ReadPrologAttributes(wxExpr *clause)
   else
   {
     wxExpr *node = points_list->value.first;
-    float min_x = 1000;
-    float min_y = 1000;
-    float max_x = -1000;
-    float max_y = -1000;
+    double min_x = 1000;
+    double min_y = 1000;
+    double max_x = -1000;
+    double max_y = -1000;
     while (node)
     {
       wxExpr *xexpr = node->value.first;
@@ -816,17 +811,17 @@ void wxPolygonShape::ReadPrologAttributes(wxExpr *clause)
       wxExpr *yexpr = xexpr->next;
       long y = yexpr->IntegerValue();
 
-      wxRealPoint *point = new wxRealPoint((float)x, (float)y);
+      wxRealPoint *point = new wxRealPoint((double)x, (double)y);
       m_originalPoints->Append((wxObject*) point);
 
       if (x < min_x)
-        min_x = (float)x;
+        min_x = (double)x;
       if (y < min_y)
-        min_y = (float)y;
+        min_y = (double)y;
       if (x > max_x)
-        max_x = (float)x;
+        max_x = (double)x;
       if (y > max_y)
-        max_y = (float)y;
+        max_y = (double)y;
 
       node = node->next;
     }
@@ -887,7 +882,7 @@ int wxPolygonShape::GetNumberOfAttachments()
   return maxN+1;;
 }
 
-bool wxPolygonShape::GetAttachmentPosition(int attachment, float *x, float *y,
+bool wxPolygonShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
   if (m_attachmentMode && m_points && attachment < m_points->Number())
@@ -924,7 +919,7 @@ bool wxPolygonShape::AttachmentIsValid(int attachment)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRectangleShape, wxShape)
 
-wxRectangleShape::wxRectangleShape(float w, float h)
+wxRectangleShape::wxRectangleShape(double w, double h)
 {
   m_width = w; m_height = h; m_cornerRadius = 0.0;
   SetDefaultRegionSize();
@@ -932,26 +927,26 @@ wxRectangleShape::wxRectangleShape(float w, float h)
 
 void wxRectangleShape::OnDraw(wxDC& dc)
 {
-    float x1 = (float)(m_xpos - m_width/2.0);
-    float y1 = (float)(m_ypos - m_height/2.0);
+    double x1 = (double)(m_xpos - m_width/2.0);
+    double y1 = (double)(m_ypos - m_height/2.0);
 
     if (m_shadowMode != SHADOW_NONE)
     {
       if (m_shadowBrush)
         dc.SetBrush(m_shadowBrush);
-      dc.SetPen(transparent_pen);
+      dc.SetPen(g_oglTransparentPen);
 
       if (m_cornerRadius != 0.0)
-        dc.DrawRoundedRectangle(x1 + m_shadowOffsetX, y1 + m_shadowOffsetY,
-                                 m_width, m_height, m_cornerRadius);
+        dc.DrawRoundedRectangle(WXROUND(x1 + m_shadowOffsetX), WXROUND(y1 + m_shadowOffsetY),
+                                 WXROUND(m_width), WXROUND(m_height), m_cornerRadius);
       else
-        dc.DrawRectangle(x1 + m_shadowOffsetX, y1 + m_shadowOffsetY, m_width, m_height);
+        dc.DrawRectangle(WXROUND(x1 + m_shadowOffsetX), WXROUND(y1 + m_shadowOffsetY), WXROUND(m_width), WXROUND(m_height));
     }
 
     if (m_pen)
     {
       if (m_pen->GetWidth() == 0)
-        dc.SetPen(transparent_pen);
+        dc.SetPen(g_oglTransparentPen);
       else
         dc.SetPen(m_pen);
     }
@@ -959,38 +954,38 @@ void wxRectangleShape::OnDraw(wxDC& dc)
       dc.SetBrush(m_brush);
 
     if (m_cornerRadius != 0.0)
-      dc.DrawRoundedRectangle(x1, y1, m_width, m_height, m_cornerRadius);
+      dc.DrawRoundedRectangle(WXROUND(x1), WXROUND(y1), WXROUND(m_width), WXROUND(m_height), m_cornerRadius);
     else
-      dc.DrawRectangle(x1, y1, m_width, m_height);
+      dc.DrawRectangle(WXROUND(x1), WXROUND(y1), WXROUND(m_width), WXROUND(m_height));
 }
 
-void wxRectangleShape::GetBoundingBoxMin(float *the_width, float *the_height)
+void wxRectangleShape::GetBoundingBoxMin(double *the_width, double *the_height)
 {
   *the_width = m_width;
   *the_height = m_height;
 }
 
-void wxRectangleShape::SetSize(float x, float y, bool recursive)
+void wxRectangleShape::SetSize(double x, double y, bool recursive)
 {
   SetAttachmentSize(x, y);
-  m_width = (float)wxMax(x, 1.0);
-  m_height = (float)wxMax(y, 1.0);
+  m_width = (double)wxMax(x, 1.0);
+  m_height = (double)wxMax(y, 1.0);
   SetDefaultRegionSize();
 }
 
-void wxRectangleShape::SetCornerRadius(float rad)
+void wxRectangleShape::SetCornerRadius(double rad)
 {
   m_cornerRadius = rad;
 }
 
 // Assume (x1, y1) is centre of box (most generally, line end at box)
-bool wxRectangleShape::GetPerimeterPoint(float x1, float y1,
-                                     float x2, float y2,
-                                     float *x3, float *y3)
+bool wxRectangleShape::GetPerimeterPoint(double x1, double y1,
+                                     double x2, double y2,
+                                     double *x3, double *y3)
 {
-  float bound_x, bound_y;
+  double bound_x, bound_y;
   GetBoundingBoxMax(&bound_x, &bound_y);
-  find_end_for_box(bound_x, bound_y, m_xpos, m_ypos, x2, y2, x3, y3);
+  oglFindEndForBox(bound_x, bound_y, m_xpos, m_ypos, x2, y2, x3, y3);
 
   return TRUE;
 }
@@ -1041,20 +1036,65 @@ int wxRectangleShape::GetNumberOfAttachments()
   return wxShape::GetNumberOfAttachments();
 }
 
+
 // There are 4 attachment points on a rectangle - 0 = top, 1 = right, 2 = bottom,
 // 3 = left.
-bool wxRectangleShape::GetAttachmentPosition(int attachment, float *x, float *y,
+bool wxRectangleShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
   if (m_attachmentMode)
   {
-    float top = (float)(m_ypos + m_height/2.0);
-    float bottom = (float)(m_ypos - m_height/2.0);
-    float left = (float)(m_xpos - m_width/2.0);
-    float right = (float)(m_xpos + m_width/2.0);
+    double top = (double)(m_ypos + m_height/2.0);
+    double bottom = (double)(m_ypos - m_height/2.0);
+    double left = (double)(m_xpos - m_width/2.0);
+    double right = (double)(m_xpos + m_width/2.0);
 
     bool isEnd = (line && line->IsEnd(this));
 
+    // Simplified code
+    switch (attachment)
+    {
+      case 0:
+      {
+        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, bottom), wxRealPoint(right, bottom),
+            nth, no_arcs, line);
+
+        *x = pt.x; *y = pt.y;
+        break;
+      }
+      case 1:
+      {
+        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(right, bottom), wxRealPoint(right, top),
+            nth, no_arcs, line);
+
+        *x = pt.x; *y = pt.y;
+        break;
+      }
+      case 2:
+      {
+        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, top), wxRealPoint(right, top),
+            nth, no_arcs, line);
+
+        *x = pt.x; *y = pt.y;
+        break;
+      }
+      case 3:
+      {
+        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, bottom), wxRealPoint(left, top),
+            nth, no_arcs, line);
+
+        *x = pt.x; *y = pt.y;
+        break;
+      }
+      default:
+      {
+        return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
+        break;
+      }
+    }
+
+    // Old code
+#if 0
     switch (attachment)
     {
       case 0:
@@ -1152,6 +1192,7 @@ bool wxRectangleShape::GetAttachmentPosition(int attachment, float *x, float *y,
         break;
       }
     }
+#endif
     return TRUE;
   }
   else
@@ -1162,7 +1203,7 @@ bool wxRectangleShape::GetAttachmentPosition(int attachment, float *x, float *y,
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextShape, wxRectangleShape)
 
-wxTextShape::wxTextShape(float width, float height):
+wxTextShape::wxTextShape(double width, double height):
   wxRectangleShape(width, height)
 {
 }
@@ -1187,26 +1228,26 @@ void wxTextShape::WritePrologAttributes(wxExpr *clause)
 
 IMPLEMENT_DYNAMIC_CLASS(wxEllipseShape, wxShape)
 
-wxEllipseShape::wxEllipseShape(float w, float h)
+wxEllipseShape::wxEllipseShape(double w, double h)
 {
   m_width = w; m_height = h;
   SetDefaultRegionSize();
 }
 
-void wxEllipseShape::GetBoundingBoxMin(float *w, float *h)
+void wxEllipseShape::GetBoundingBoxMin(double *w, double *h)
 {
   *w = m_width; *h = m_height;
 }
 
-bool wxEllipseShape::GetPerimeterPoint(float x1, float y1,
-                                      float x2, float y2,
-                                      float *x3, float *y3)
+bool wxEllipseShape::GetPerimeterPoint(double x1, double y1,
+                                      double x2, double y2,
+                                      double *x3, double *y3)
 {
-  float bound_x, bound_y;
+  double bound_x, bound_y;
   GetBoundingBoxMax(&bound_x, &bound_y);
 
-//  find_end_for_box(bound_x, bound_y, m_xpos, m_ypos, x2, y2, x3, y3);
-  draw_arc_to_ellipse(m_xpos, m_ypos, bound_x, bound_y, x2, y2, x1, y1, x3, y3);
+//  oglFindEndForBox(bound_x, bound_y, m_xpos, m_ypos, x2, y2, x3, y3);
+  oglDrawArcToEllipse(m_xpos, m_ypos, bound_x, bound_y, x2, y2, x1, y1, x3, y3);
 
   return TRUE;
 }
@@ -1217,7 +1258,7 @@ void wxEllipseShape::OnDraw(wxDC& dc)
     {
       if (m_shadowBrush)
         dc.SetBrush(m_shadowBrush);
-      dc.SetPen(transparent_pen);
+      dc.SetPen(g_oglTransparentPen);
       dc.DrawEllipse((m_xpos - GetWidth()/2) + m_shadowOffsetX,
                       (m_ypos - GetHeight()/2) + m_shadowOffsetY,
                       GetWidth(), GetHeight());
@@ -1226,7 +1267,7 @@ void wxEllipseShape::OnDraw(wxDC& dc)
     if (m_pen)
     {
       if (m_pen->GetWidth() == 0)
-        dc.SetPen(transparent_pen);
+        dc.SetPen(g_oglTransparentPen);
       else
         dc.SetPen(m_pen);
     }
@@ -1235,7 +1276,7 @@ void wxEllipseShape::OnDraw(wxDC& dc)
     dc.DrawEllipse((m_xpos - GetWidth()/2), (m_ypos - GetHeight()/2), GetWidth(), GetHeight());
 }
 
-void wxEllipseShape::SetSize(float x, float y, bool recursive)
+void wxEllipseShape::SetSize(double x, double y, bool recursive)
 {
   SetAttachmentSize(x, y);
   m_width = x;
@@ -1288,15 +1329,15 @@ int wxEllipseShape::GetNumberOfAttachments()
 
 // There are 4 attachment points on an ellipse - 0 = top, 1 = right, 2 = bottom,
 // 3 = left.
-bool wxEllipseShape::GetAttachmentPosition(int attachment, float *x, float *y,
+bool wxEllipseShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
   if (m_attachmentMode)
   {
-    float top = (float)(m_ypos + m_height/2.0);
-    float bottom = (float)(m_ypos - m_height/2.0);
-    float left = (float)(m_xpos - m_width/2.0);
-    float right = (float)(m_xpos + m_width/2.0);
+    double top = (double)(m_ypos + m_height/2.0);
+    double bottom = (double)(m_ypos - m_height/2.0);
+    double left = (double)(m_xpos - m_width/2.0);
+    double right = (double)(m_xpos + m_width/2.0);
     switch (attachment)
     {
       case 0:
@@ -1308,7 +1349,7 @@ bool wxEllipseShape::GetAttachmentPosition(int attachment, float *x, float *y,
         // We now have the point on the bounding box: but get the point on the ellipse
         // by imagining a vertical line from (*x, m_ypos - m_height- 500) to (*x, m_ypos) intersecting
         // the ellipse.
-        draw_arc_to_ellipse(m_xpos, m_ypos, m_width, m_height, *x, (float)(m_ypos-m_height-500), *x, m_ypos, x, y);
+        oglDrawArcToEllipse(m_xpos, m_ypos, m_width, m_height, *x, (double)(m_ypos-m_height-500), *x, m_ypos, x, y);
         break;
       }
       case 1:
@@ -1317,7 +1358,7 @@ bool wxEllipseShape::GetAttachmentPosition(int attachment, float *x, float *y,
         if (m_spaceAttachments)
           *y = bottom + (nth + 1)*m_height/(no_arcs + 1);
         else *y = m_ypos;
-        draw_arc_to_ellipse(m_xpos, m_ypos, m_width, m_height, (float)(m_xpos+m_width+500), *y, m_xpos, *y, x, y);
+        oglDrawArcToEllipse(m_xpos, m_ypos, m_width, m_height, (double)(m_xpos+m_width+500), *y, m_xpos, *y, x, y);
         break;
       }
       case 2:
@@ -1326,7 +1367,7 @@ bool wxEllipseShape::GetAttachmentPosition(int attachment, float *x, float *y,
           *x = left + (nth + 1)*m_width/(no_arcs + 1);
         else *x = m_xpos;
         *y = bottom;
-        draw_arc_to_ellipse(m_xpos, m_ypos, m_width, m_height, *x, (float)(m_ypos+m_height+500), *x, m_ypos, x, y);
+        oglDrawArcToEllipse(m_xpos, m_ypos, m_width, m_height, *x, (double)(m_ypos+m_height+500), *x, m_ypos, x, y);
         break;
       }
       case 3:
@@ -1335,7 +1376,7 @@ bool wxEllipseShape::GetAttachmentPosition(int attachment, float *x, float *y,
         if (m_spaceAttachments)
           *y = bottom + (nth + 1)*m_height/(no_arcs + 1);
         else *y = m_ypos;
-        draw_arc_to_ellipse(m_xpos, m_ypos, m_width, m_height, (float)(m_xpos-m_width-500), *y, m_xpos, *y, x, y);
+        oglDrawArcToEllipse(m_xpos, m_ypos, m_width, m_height, (double)(m_xpos-m_width-500), *y, m_xpos, *y, x, y);
         break;
       }
       default:
@@ -1354,7 +1395,7 @@ bool wxEllipseShape::GetAttachmentPosition(int attachment, float *x, float *y,
 // Circle object
 IMPLEMENT_DYNAMIC_CLASS(wxCircleShape, wxEllipseShape)
 
-wxCircleShape::wxCircleShape(float diameter):wxEllipseShape(diameter, diameter)
+wxCircleShape::wxCircleShape(double diameter):wxEllipseShape(diameter, diameter)
 {
 }
 
@@ -1363,11 +1404,11 @@ void wxCircleShape::Copy(wxShape& copy)
   wxEllipseShape::Copy(copy);
 }
 
-bool wxCircleShape::GetPerimeterPoint(float x1, float y1,
-                                      float x2, float y2,
-                                      float *x3, float *y3)
+bool wxCircleShape::GetPerimeterPoint(double x1, double y1,
+                                      double x2, double y2,
+                                      double *x3, double *y3)
 {
-  find_end_for_circle(m_width/2, 
+  oglFindEndForCircle(m_width/2, 
                       m_xpos, m_ypos,  // Centre of circle
                       x2, y2,  // Other end of line
                       x3, y3);
@@ -1377,25 +1418,25 @@ bool wxCircleShape::GetPerimeterPoint(float x1, float y1,
 
 // Control points
 
-float wxControlPoint::controlPointDragStartX = 0.0;
-float wxControlPoint::controlPointDragStartY = 0.0;
-float wxControlPoint::controlPointDragStartWidth = 0.0;
-float wxControlPoint::controlPointDragStartHeight = 0.0;
-float wxControlPoint::controlPointDragEndWidth = 0.0;
-float wxControlPoint::controlPointDragEndHeight = 0.0;
-float wxControlPoint::controlPointDragPosX = 0.0;
-float wxControlPoint::controlPointDragPosY = 0.0;
+double wxControlPoint::controlPointDragStartX = 0.0;
+double wxControlPoint::controlPointDragStartY = 0.0;
+double wxControlPoint::controlPointDragStartWidth = 0.0;
+double wxControlPoint::controlPointDragStartHeight = 0.0;
+double wxControlPoint::controlPointDragEndWidth = 0.0;
+double wxControlPoint::controlPointDragEndHeight = 0.0;
+double wxControlPoint::controlPointDragPosX = 0.0;
+double wxControlPoint::controlPointDragPosY = 0.0;
 
 IMPLEMENT_DYNAMIC_CLASS(wxControlPoint, wxRectangleShape)
 
-wxControlPoint::wxControlPoint(wxShapeCanvas *theCanvas, wxShape *object, float size, float the_xoffset, float the_yoffset, int the_type):wxRectangleShape(size, size)
+wxControlPoint::wxControlPoint(wxShapeCanvas *theCanvas, wxShape *object, double size, double the_xoffset, double the_yoffset, int the_type):wxRectangleShape(size, size)
 {
   m_canvas = theCanvas;
   m_shape = object;
   m_xoffset = the_xoffset;
   m_yoffset = the_yoffset;
   m_type = the_type;
-  SetPen(black_foreground_pen);
+  SetPen(g_oglBlackForegroundPen);
   SetBrush(wxBLACK_BRUSH);
   m_oldCursor = NULL;
   m_visible = TRUE;
@@ -1424,17 +1465,17 @@ void wxControlPoint::OnErase(wxDC& dc)
 }
 
 // Implement resizing of canvas object
-void wxControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxControlPoint::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
     m_shape->GetEventHandler()->OnSizingDragLeft(this, draw, x, y, keys, attachment);
 }
 
-void wxControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxControlPoint::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
     m_shape->GetEventHandler()->OnSizingBeginDragLeft(this, x, y, keys, attachment);
 }
 
-void wxControlPoint::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxControlPoint::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
     m_shape->GetEventHandler()->OnSizingEndDragLeft(this, x, y, keys, attachment);
 }
@@ -1444,7 +1485,7 @@ int wxControlPoint::GetNumberOfAttachments()
   return 1;
 }
 
-bool wxControlPoint::GetAttachmentPosition(int attachment, float *x, float *y,
+bool wxControlPoint::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
   *x = m_xpos; *y = m_ypos;
@@ -1453,10 +1494,10 @@ bool wxControlPoint::GetAttachmentPosition(int attachment, float *x, float *y,
 
 // Control points ('handles') redirect control to the actual shape, to make it easier
 // to override sizing behaviour.
-void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys, int attachment)
+void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys, int attachment)
 {
-  float bound_x;
-  float bound_y;
+  double bound_x;
+  double bound_y;
   this->GetBoundingBoxMin(&bound_x, &bound_y);
 
   wxClientDC dc(GetCanvas());
@@ -1471,8 +1512,8 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, 
   if (this->GetCentreResize())
   {
     // Maintain the same centre point.
-    float new_width = (float)(2.0*fabs(x - this->GetX()));
-    float new_height = (float)(2.0*fabs(y - this->GetY()));
+    double new_width = (double)(2.0*fabs(x - this->GetX()));
+    double new_height = (double)(2.0*fabs(y - this->GetY()));
 
     // Constrain sizing according to what control point you're dragging
     if (pt->m_type == CONTROL_POINT_HORIZONTAL)
@@ -1497,10 +1538,10 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, 
   else
   {
     // Don't maintain the same centre point!
-    float newX1 = wxMin(pt->controlPointDragStartX, x);
-    float newY1 = wxMin(pt->controlPointDragStartY, y);
-    float newX2 = wxMax(pt->controlPointDragStartX, x);
-    float newY2 = wxMax(pt->controlPointDragStartY, y);
+    double newX1 = wxMin(pt->controlPointDragStartX, x);
+    double newY1 = wxMin(pt->controlPointDragStartY, y);
+    double newX2 = wxMax(pt->controlPointDragStartX, x);
+    double newY2 = wxMax(pt->controlPointDragStartY, y);
     if (pt->m_type == CONTROL_POINT_HORIZONTAL)
     {
       newY1 = pt->controlPointDragStartY;
@@ -1513,17 +1554,17 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, 
     }
     else if (pt->m_type == CONTROL_POINT_DIAGONAL && (keys & KEY_SHIFT))
     {
-      float newH = (float)((newX2 - newX1)*(pt->controlPointDragStartHeight/pt->controlPointDragStartWidth));
+      double newH = (double)((newX2 - newX1)*(pt->controlPointDragStartHeight/pt->controlPointDragStartWidth));
       if (GetY() > pt->controlPointDragStartY)
-        newY2 = (float)(newY1 + newH);
+        newY2 = (double)(newY1 + newH);
       else
-        newY1 = (float)(newY2 - newH);
+        newY1 = (double)(newY2 - newH);
     }
-    float newWidth = (float)(newX2 - newX1);
-    float newHeight = (float)(newY2 - newY1);
+    double newWidth = (double)(newX2 - newX1);
+    double newHeight = (double)(newY2 - newY1);
 
-    pt->controlPointDragPosX = (float)(newX1 + (newWidth/2.0));
-    pt->controlPointDragPosY = (float)(newY1 + (newHeight/2.0));
+    pt->controlPointDragPosX = (double)(newX1 + (newWidth/2.0));
+    pt->controlPointDragPosY = (double)(newY1 + (newHeight/2.0));
     if (this->GetFixedWidth())
       newWidth = bound_x;
      
@@ -1536,7 +1577,7 @@ void wxShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, 
   }
 }
 
-void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
 {
   m_canvas->CaptureMouse();
 
@@ -1548,26 +1589,26 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int ke
 
   dc.SetLogicalFunction(wxXOR);
 
-  float bound_x;
-  float bound_y;
+  double bound_x;
+  double bound_y;
   this->GetBoundingBoxMin(&bound_x, &bound_y);
 
   // Choose the 'opposite corner' of the object as the stationary
   // point in case this is non-centring resizing.
   if (pt->GetX() < this->GetX())
-    pt->controlPointDragStartX = (float)(this->GetX() + (bound_x/2.0));
+    pt->controlPointDragStartX = (double)(this->GetX() + (bound_x/2.0));
   else
-    pt->controlPointDragStartX = (float)(this->GetX() - (bound_x/2.0));
+    pt->controlPointDragStartX = (double)(this->GetX() - (bound_x/2.0));
 
   if (pt->GetY() < this->GetY())
-    pt->controlPointDragStartY = (float)(this->GetY() + (bound_y/2.0));
+    pt->controlPointDragStartY = (double)(this->GetY() + (bound_y/2.0));
   else
-    pt->controlPointDragStartY = (float)(this->GetY() - (bound_y/2.0));
+    pt->controlPointDragStartY = (double)(this->GetY() - (bound_y/2.0));
 
   if (pt->m_type == CONTROL_POINT_HORIZONTAL)
-    pt->controlPointDragStartY = (float)(this->GetY() - (bound_y/2.0));
+    pt->controlPointDragStartY = (double)(this->GetY() - (bound_y/2.0));
   else if (pt->m_type == CONTROL_POINT_VERTICAL)
-    pt->controlPointDragStartX = (float)(this->GetX() - (bound_x/2.0));
+    pt->controlPointDragStartX = (double)(this->GetX() - (bound_x/2.0));
 
   // We may require the old width and height.
   pt->controlPointDragStartWidth = bound_x;
@@ -1579,8 +1620,8 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int ke
 
   if (this->GetCentreResize())
   {
-    float new_width = (float)(2.0*fabs(x - this->GetX()));
-    float new_height = (float)(2.0*fabs(y - this->GetY()));
+    double new_width = (double)(2.0*fabs(x - this->GetX()));
+    double new_height = (double)(2.0*fabs(y - this->GetY()));
 
     // Constrain sizing according to what control point you're dragging
     if (pt->m_type == CONTROL_POINT_HORIZONTAL)
@@ -1604,10 +1645,10 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int ke
   else
   {
     // Don't maintain the same centre point!
-    float newX1 = wxMin(pt->controlPointDragStartX, x);
-    float newY1 = wxMin(pt->controlPointDragStartY, y);
-    float newX2 = wxMax(pt->controlPointDragStartX, x);
-    float newY2 = wxMax(pt->controlPointDragStartY, y);
+    double newX1 = wxMin(pt->controlPointDragStartX, x);
+    double newY1 = wxMin(pt->controlPointDragStartY, y);
+    double newX2 = wxMax(pt->controlPointDragStartX, x);
+    double newY2 = wxMax(pt->controlPointDragStartY, y);
     if (pt->m_type == CONTROL_POINT_HORIZONTAL)
     {
       newY1 = pt->controlPointDragStartY;
@@ -1620,17 +1661,17 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int ke
     }
     else if (pt->m_type == CONTROL_POINT_DIAGONAL && (keys & KEY_SHIFT))
     {
-      float newH = (float)((newX2 - newX1)*(pt->controlPointDragStartHeight/pt->controlPointDragStartWidth));
+      double newH = (double)((newX2 - newX1)*(pt->controlPointDragStartHeight/pt->controlPointDragStartWidth));
       if (pt->GetY() > pt->controlPointDragStartY)
-        newY2 = (float)(newY1 + newH);
+        newY2 = (double)(newY1 + newH);
       else
-        newY1 = (float)(newY2 - newH);
+        newY1 = (double)(newY2 - newH);
     }
-    float newWidth = (float)(newX2 - newX1);
-    float newHeight = (float)(newY2 - newY1);
+    double newWidth = (double)(newX2 - newX1);
+    double newHeight = (double)(newY2 - newY1);
 
-    pt->controlPointDragPosX = (float)(newX1 + (newWidth/2.0));
-    pt->controlPointDragPosY = (float)(newY1 + (newHeight/2.0));
+    pt->controlPointDragPosX = (double)(newX1 + (newWidth/2.0));
+    pt->controlPointDragPosY = (double)(newY1 + (newHeight/2.0));
     if (this->GetFixedWidth())
       newWidth = bound_x;
 
@@ -1643,7 +1684,7 @@ void wxShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int ke
   }
 }
 
-void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
 {
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
@@ -1677,7 +1718,7 @@ void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys
   if (theObject->GetChildren().Number() > 0)
     theObject->DrawLinks(dc, -1, TRUE);
     
-  float width, height;
+  double width, height;
   theObject->GetBoundingBoxMax(&width, &height);
   theObject->GetEventHandler()->OnEndSize(width, height);
 
@@ -1690,8 +1731,8 @@ void wxShape::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys
 
 IMPLEMENT_DYNAMIC_CLASS(wxPolygonControlPoint, wxControlPoint)
 
-wxPolygonControlPoint::wxPolygonControlPoint(wxShapeCanvas *theCanvas, wxShape *object, float size,
-  wxRealPoint *vertex, float the_xoffset, float the_yoffset):
+wxPolygonControlPoint::wxPolygonControlPoint(wxShapeCanvas *theCanvas, wxShape *object, double size,
+  wxRealPoint *vertex, double the_xoffset, double the_yoffset):
   wxControlPoint(theCanvas, object, size, the_xoffset, the_yoffset, 0)
 {
   m_polygonVertex = vertex;
@@ -1703,39 +1744,39 @@ wxPolygonControlPoint::~wxPolygonControlPoint()
 }
 
 // Calculate what new size would be, at end of resize
-void wxPolygonControlPoint::CalculateNewSize(float x, float y)
+void wxPolygonControlPoint::CalculateNewSize(double x, double y)
 {
-  float bound_x;
-  float bound_y;
+  double bound_x;
+  double bound_y;
   GetShape()->GetBoundingBoxMin(&bound_x, &bound_y);
 
-  float dist = (float)sqrt((x - m_shape->GetX())*(x - m_shape->GetX()) +
+  double dist = (double)sqrt((x - m_shape->GetX())*(x - m_shape->GetX()) +
                     (y - m_shape->GetY())*(y - m_shape->GetY()));
 
-  m_newSize.x = (float)(dist/this->m_originalDistance)*this->m_originalSize.x;
-  m_newSize.y = (float)(dist/this->m_originalDistance)*this->m_originalSize.y;
+  m_newSize.x = (double)(dist/this->m_originalDistance)*this->m_originalSize.x;
+  m_newSize.y = (double)(dist/this->m_originalDistance)*this->m_originalSize.y;
 }
 
 
 // Implement resizing polygon or moving the vertex.
-void wxPolygonControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxPolygonControlPoint::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
     m_shape->GetEventHandler()->OnSizingDragLeft(this, draw, x, y, keys, attachment);
 }
 
-void wxPolygonControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxPolygonControlPoint::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
     m_shape->GetEventHandler()->OnSizingBeginDragLeft(this, x, y, keys, attachment);
 }
 
-void wxPolygonControlPoint::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxPolygonControlPoint::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
     m_shape->GetEventHandler()->OnSizingEndDragLeft(this, x, y, keys, attachment);
 }
 
 // Control points ('handles') redirect control to the actual shape, to make it easier
 // to override sizing behaviour.
-void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, float y, int keys, int attachment)
+void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys, int attachment)
 {
   wxPolygonControlPoint* ppt = (wxPolygonControlPoint*) pt;
 
@@ -1772,7 +1813,7 @@ void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, fl
        ppt->GetNewSize().x, ppt->GetNewSize().y);
 }
 
-void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
 {
   wxPolygonControlPoint* ppt = (wxPolygonControlPoint*) pt;
 
@@ -1783,17 +1824,17 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y,
 
   dc.SetLogicalFunction(wxXOR);
 
-  float bound_x;
-  float bound_y;
+  double bound_x;
+  double bound_y;
   this->GetBoundingBoxMin(&bound_x, &bound_y);
 
-  float dist = (float)sqrt((x - this->GetX())*(x - this->GetX()) +
+  double dist = (double)sqrt((x - this->GetX())*(x - this->GetX()) +
                     (y - this->GetY())*(y - this->GetY()));
   ppt->m_originalDistance = dist;
   ppt->m_originalSize.x = bound_x;
   ppt->m_originalSize.y = bound_y;
 
-  if (ppt->m_originalDistance == 0.0) ppt->m_originalDistance = (float) 0.0001;
+  if (ppt->m_originalDistance == 0.0) ppt->m_originalDistance = (double) 0.0001;
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -1825,7 +1866,7 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y,
   m_canvas->CaptureMouse();
 }
 
-void wxPolygonShape::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
+void wxPolygonShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys, int attachment)
 {
   wxPolygonControlPoint* ppt = (wxPolygonControlPoint*) pt;
 
@@ -1940,25 +1981,25 @@ void wxShapeRegion::SetFont(wxFont *f)
   m_font = f;
 }
 
-void wxShapeRegion::SetMinSize(float w, float h)
+void wxShapeRegion::SetMinSize(double w, double h)
 {
   m_minWidth = w;
   m_minHeight = h;
 }
 
-void wxShapeRegion::SetSize(float w, float h)
+void wxShapeRegion::SetSize(double w, double h)
 {
   m_width = w;
   m_height = h;
 }
 
-void wxShapeRegion::SetPosition(float xp, float yp)
+void wxShapeRegion::SetPosition(double xp, double yp)
 {
   m_x = xp;
   m_y = yp;
 }
 
-void wxShapeRegion::SetProportions(float xp, float yp)
+void wxShapeRegion::SetProportions(double xp, double yp)
 {
   m_regionProportionX = xp;
   m_regionProportionY = yp;

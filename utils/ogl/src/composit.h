@@ -35,14 +35,14 @@ public:
   void OnDraw(wxDC& dc);
   void OnDrawContents(wxDC& dc);
   void OnErase(wxDC& dc);
-  bool OnMovePre(wxDC& dc, float x, float y, float oldX, float oldY, bool display = TRUE);
-  void OnDragLeft(bool draw, float x, float y, int keys, int attachment = 0);
-  void OnBeginDragLeft(float x, float y, int keys, int attachment = 0);
-  void OnEndDragLeft(float x, float y, int keys, int attachment = 0);
+  bool OnMovePre(wxDC& dc, double x, double y, double oldX, double oldY, bool display = TRUE);
+  void OnDragLeft(bool draw, double x, double y, int keys, int attachment = 0);
+  void OnBeginDragLeft(double x, double y, int keys, int attachment = 0);
+  void OnEndDragLeft(double x, double y, int keys, int attachment = 0);
 
-  void OnRightClick(float x, float y, int keys, int attachment = 0);
+  void OnRightClick(double x, double y, int keys, int attachment = 0);
 
-  void SetSize(float w, float h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = TRUE);
 
   // Returns TRUE if it settled down
   bool Recompute();
@@ -100,8 +100,8 @@ public:
   inline wxList& GetConstraints() const { return (wxList&) m_constraints; }
 
 protected:
-  float             m_oldX;
-  float             m_oldY;
+  double             m_oldX;
+  double             m_oldY;
   wxList            m_constraints;
   wxList            m_divisions; // In case it's a container
 };
@@ -133,16 +133,16 @@ class wxDivisionShape: public wxCompositeShape
 
   void OnDraw(wxDC& dc);
   void OnDrawContents(wxDC& dc);
-  bool OnMovePre(wxDC& dc, float x, float y, float oldX, float oldY, bool display = TRUE);
-  void OnDragLeft(bool draw, float x, float y, int keys, int attachment = 0);
-  void OnBeginDragLeft(float x, float y, int keys, int attachment = 0);
-  void OnEndDragLeft(float x, float y, int keys, int attachment = 0);
+  bool OnMovePre(wxDC& dc, double x, double y, double oldX, double oldY, bool display = TRUE);
+  void OnDragLeft(bool draw, double x, double y, int keys, int attachment = 0);
+  void OnBeginDragLeft(double x, double y, int keys, int attachment = 0);
+  void OnEndDragLeft(double x, double y, int keys, int attachment = 0);
 
-  void OnRightClick(float x, float y, int keys = 0, int attachment = 0);
+  void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
 
   // Don't want this kind of composite to resize its subdiagrams, so
   // override composite's SetSize.
-  void SetSize(float w, float h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = TRUE);
 
   // Similarly for calculating size: it's fixed at whatever SetSize
   // set it to, not in terms of children.
@@ -167,20 +167,20 @@ class wxDivisionShape: public wxCompositeShape
   // Resize adjoining divisions at the given side. If test is TRUE,
   // just see whether it's possible for each adjoining region,
   // returning FALSE if it's not.
-  bool ResizeAdjoining(int side, float newPos, bool test);
+  bool ResizeAdjoining(int side, double newPos, bool test);
 
   // Adjust a side, returning FALSE if it's not physically possible.
-  bool AdjustLeft(float left, bool test);
-  bool AdjustTop(float top, bool test);
-  bool AdjustRight(float right, bool test);
-  bool AdjustBottom(float bottom, bool test);
+  bool AdjustLeft(double left, bool test);
+  bool AdjustTop(double top, bool test);
+  bool AdjustRight(double right, bool test);
+  bool AdjustBottom(double bottom, bool test);
 
   // Edit style of left or top side
   void EditEdge(int side);
 
   // Popup menu
-  void PopupMenu(float x, float y);
-  
+  void PopupMenu(double x, double y);
+
   inline void SetLeftSide(wxDivisionShape *shape) { m_leftSide = shape; }
   inline void SetTopSide(wxDivisionShape *shape) { m_topSide = shape; }
   inline void SetRightSide(wxDivisionShape *shape) { m_rightSide = shape; }

@@ -51,12 +51,12 @@ class wxDivisionControlPoint: public wxControlPoint
  DECLARE_DYNAMIC_CLASS(wxDivisionControlPoint)
  public:
   wxDivisionControlPoint() {}
-  wxDivisionControlPoint(wxShapeCanvas *the_canvas, wxShape *object, float size, float the_xoffset, float the_yoffset, int the_type);
+  wxDivisionControlPoint(wxShapeCanvas *the_canvas, wxShape *object, double size, double the_xoffset, double the_yoffset, int the_type);
   ~wxDivisionControlPoint();
 
-  void OnDragLeft(bool draw, float x, float y, int keys=0, int attachment = 0);
-  void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
-  void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
+  void OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
+  void OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+  void OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxDivisionControlPoint, wxControlPoint)
@@ -97,20 +97,20 @@ wxCompositeShape::~wxCompositeShape()
 
 void wxCompositeShape::OnDraw(wxDC& dc)
 {
-  float x1 = (float)(m_xpos - m_width/2.0);
-  float y1 = (float)(m_ypos - m_height/2.0);
+  double x1 = (double)(m_xpos - m_width/2.0);
+  double y1 = (double)(m_ypos - m_height/2.0);
 
   if (m_shadowMode != SHADOW_NONE)
   {
     if (m_shadowBrush)
       dc.SetBrush(m_shadowBrush);
-    dc.SetPen(transparent_pen);
+    dc.SetPen(g_oglTransparentPen);
 
     if (m_cornerRadius != 0.0)
-      dc.DrawRoundedRectangle(x1 + m_shadowOffsetX, y1 + m_shadowOffsetY,
-                               m_width, m_height, m_cornerRadius);
+      dc.DrawRoundedRectangle(WXROUND(x1 + m_shadowOffsetX), WXROUND(y1 + m_shadowOffsetY),
+                               WXROUND(m_width), WXROUND(m_height), m_cornerRadius);
     else
-      dc.DrawRectangle(x1 + m_shadowOffsetX, y1 + m_shadowOffsetY, m_width, m_height);
+      dc.DrawRectangle(WXROUND(x1 + m_shadowOffsetX), WXROUND(y1 + m_shadowOffsetY), WXROUND(m_width), WXROUND(m_height));
   }
 }
 
@@ -127,10 +127,10 @@ void wxCompositeShape::OnDrawContents(wxDC& dc)
   wxShape::OnDrawContents(dc);
 }
 
-bool wxCompositeShape::OnMovePre(wxDC& dc, float x, float y, float oldx, float oldy, bool display)
+bool wxCompositeShape::OnMovePre(wxDC& dc, double x, double y, double oldx, double oldy, bool display)
 {
-  float diffX = x - oldx;
-  float diffY = y - oldy;
+  double diffX = x - oldx;
+  double diffY = y - oldy;
   wxNode *node = m_children.First();
   while (node)
   {
@@ -156,16 +156,16 @@ void wxCompositeShape::OnErase(wxDC& dc)
   }
 }
 
-static float objectStartX = 0.0;
-static float objectStartY = 0.0;
+static double objectStartX = 0.0;
+static double objectStartY = 0.0;
 
-void wxCompositeShape::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxCompositeShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
-  float xx = x;
-  float yy = y;
+  double xx = x;
+  double yy = y;
   m_canvas->Snap(&xx, &yy);
-  float offsetX = xx - objectStartX;
-  float offsetY = yy - objectStartY;
+  double offsetX = xx - objectStartX;
+  double offsetY = yy - objectStartY;
 
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
@@ -179,7 +179,7 @@ void wxCompositeShape::OnDragLeft(bool draw, float x, float y, int keys, int att
 //  wxShape::OnDragLeft(draw, x, y, keys, attachment);
 }
 
-void wxCompositeShape::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxCompositeShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
   objectStartX = x;
   objectStartY = y;
@@ -196,18 +196,18 @@ void wxCompositeShape::OnBeginDragLeft(float x, float y, int keys, int attachmen
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
   m_canvas->CaptureMouse();
 
-  float xx = x;
-  float yy = y;
+  double xx = x;
+  double yy = y;
   m_canvas->Snap(&xx, &yy);
-  float offsetX = xx - objectStartX;
-  float offsetY = yy - objectStartY;
+  double offsetX = xx - objectStartX;
+  double offsetY = yy - objectStartY;
 
   GetEventHandler()->OnDrawOutline(dc, GetX() + offsetX, GetY() + offsetY, GetWidth(), GetHeight());
 
 //  wxShape::OnBeginDragLeft(x, y, keys, attachment);
 }
 
-void wxCompositeShape::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxCompositeShape::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
 //  wxShape::OnEndDragLeft(x, y, keys, attachment);
 
@@ -223,18 +223,18 @@ void wxCompositeShape::OnEndDragLeft(float x, float y, int keys, int attachment)
   }
 
   dc.SetLogicalFunction(wxCOPY);
-  float xx = x;
-  float yy = y;
+  double xx = x;
+  double yy = y;
   m_canvas->Snap(&xx, &yy);
-  float offsetX = xx - objectStartX;
-  float offsetY = yy - objectStartY;
+  double offsetX = xx - objectStartX;
+  double offsetY = yy - objectStartY;
 
   Move(dc, GetX() + offsetX, GetY() + offsetY);
   
   if (m_canvas && !m_canvas->GetQuickEditMode()) m_canvas->Redraw(dc);
 }
 
-void wxCompositeShape::OnRightClick(float x, float y, int keys, int attachment)
+void wxCompositeShape::OnRightClick(double x, double y, int keys, int attachment)
 {
   // If we get a ctrl-right click, this means send the message to
   // the division, so we can invoke a user interface for dealing with regions.
@@ -246,7 +246,7 @@ void wxCompositeShape::OnRightClick(float x, float y, int keys, int attachment)
       wxDivisionShape *division = (wxDivisionShape *)node->Data();
       wxNode *next = node->Next();
       int attach = 0;
-      float dist = 0.0;
+      double dist = 0.0;
       if (division->HitTest(x, y, &attach, &dist))
       {
         division->GetEventHandler()->OnRightClick(x, y, keys, attach);
@@ -258,12 +258,12 @@ void wxCompositeShape::OnRightClick(float x, float y, int keys, int attachment)
   }
 }
 
-void wxCompositeShape::SetSize(float w, float h, bool recursive)
+void wxCompositeShape::SetSize(double w, double h, bool recursive)
 {
   SetAttachmentSize(w, h);
 
-  float xScale = (float)(w/(wxMax(1.0, GetWidth())));
-  float yScale = (float)(h/(wxMax(1.0, GetHeight())));
+  double xScale = (double)(w/(wxMax(1.0, GetWidth())));
+  double yScale = (double)(h/(wxMax(1.0, GetHeight())));
 
   m_width = w;
   m_height = h;
@@ -275,14 +275,14 @@ void wxCompositeShape::SetSize(float w, float h, bool recursive)
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  float xBound, yBound;
+  double xBound, yBound;
   while (node)
   {
     wxShape *object = (wxShape *)node->Data();
 
     // Scale the position first
-    float newX = (float)(((object->GetX() - GetX())*xScale) + GetX());
-    float newY = (float)(((object->GetY() - GetY())*yScale) + GetY());
+    double newX = (double)(((object->GetX() - GetX())*xScale) + GetX());
+    double newY = (double)(((object->GetY() - GetY())*yScale) + GetY());
     object->Show(FALSE);
     object->Move(dc, newX, newY);
     object->Show(TRUE);
@@ -369,7 +369,7 @@ void wxCompositeShape::Copy(wxShape& copy)
   wxCompositeShape& compositeCopy = (wxCompositeShape&) copy;
 
   // Associate old and new copies for compositeCopying constraints and division geometry
-  wxObjectCopyMapping.Append((long)this, &compositeCopy);
+  oglObjectCopyMapping.Append((long)this, &compositeCopy);
 
   // Copy the children
   wxNode *node = m_children.First();
@@ -387,7 +387,7 @@ void wxCompositeShape::Copy(wxShape& copy)
     if (m_divisions.Member(object))
       compositeCopy.m_divisions.Append(newObject);
 
-    wxObjectCopyMapping.Append((long)object, newObject);
+    oglObjectCopyMapping.Append((long)object, newObject);
 
     node = node->Next();
   }
@@ -398,14 +398,14 @@ void wxCompositeShape::Copy(wxShape& copy)
   {
     OGLConstraint *constraint = (OGLConstraint *)node->Data();
 
-    wxShape *newConstraining = (wxShape *)(wxObjectCopyMapping.Find((long)constraint->m_constrainingObject)->Data());
+    wxShape *newConstraining = (wxShape *)(oglObjectCopyMapping.Find((long)constraint->m_constrainingObject)->Data());
 
     wxList newConstrainedList;
     wxNode *node2 = constraint->m_constrainedObjects.First();
     while (node2)
     {
       wxShape *constrainedObject = (wxShape *)node2->Data();
-      wxShape *newConstrained = (wxShape *)(wxObjectCopyMapping.Find((long)constrainedObject)->Data());
+      wxShape *newConstrained = (wxShape *)(oglObjectCopyMapping.Find((long)constrainedObject)->Data());
       newConstrainedList.Append(newConstrained);
       node2 = node2->Next(); 
     }
@@ -428,19 +428,19 @@ void wxCompositeShape::Copy(wxShape& copy)
   while (node)
   {
     wxDivisionShape *division = (wxDivisionShape *)node->Data();
-    wxNode *node1 = wxObjectCopyMapping.Find((long)division);
+    wxNode *node1 = oglObjectCopyMapping.Find((long)division);
     wxNode *leftNode = NULL;
     wxNode *topNode = NULL;
     wxNode *rightNode = NULL;
     wxNode *bottomNode = NULL;
     if (division->GetLeftSide())
-      leftNode = wxObjectCopyMapping.Find((long)division->GetLeftSide());
+      leftNode = oglObjectCopyMapping.Find((long)division->GetLeftSide());
     if (division->GetTopSide())
-      topNode = wxObjectCopyMapping.Find((long)division->GetTopSide());
+      topNode = oglObjectCopyMapping.Find((long)division->GetTopSide());
     if (division->GetRightSide())
-      rightNode = wxObjectCopyMapping.Find((long)division->GetRightSide());
+      rightNode = oglObjectCopyMapping.Find((long)division->GetRightSide());
     if (division->GetBottomSide())
-      bottomNode = wxObjectCopyMapping.Find((long)division->GetBottomSide());
+      bottomNode = oglObjectCopyMapping.Find((long)division->GetBottomSide());
     if (node1)
     {
       wxDivisionShape *newDivision = (wxDivisionShape *)node1->Data();
@@ -527,12 +527,12 @@ void wxCompositeShape::DeleteConstraint(OGLConstraint *constraint)
 
 void wxCompositeShape::CalculateSize()
 {
-  float maxX = (float) -999999.9;
-  float maxY = (float) -999999.9;
-  float minX = (float)  999999.9;
-  float minY = (float)  999999.9;
+  double maxX = (double) -999999.9;
+  double maxY = (double) -999999.9;
+  double minX = (double)  999999.9;
+  double minY = (double)  999999.9;
 
-  float w, h;
+  double w, h;
   wxNode *node = m_children.First();
   while (node)
   {
@@ -544,20 +544,20 @@ void wxCompositeShape::CalculateSize()
 
     object->GetBoundingBoxMax(&w, &h);
     if ((object->GetX() + (w/2.0)) > maxX)
-      maxX = (float)(object->GetX() + (w/2.0));
+      maxX = (double)(object->GetX() + (w/2.0));
     if ((object->GetX() - (w/2.0)) < minX)
-      minX = (float)(object->GetX() - (w/2.0));
+      minX = (double)(object->GetX() - (w/2.0));
     if ((object->GetY() + (h/2.0)) > maxY)
-      maxY = (float)(object->GetY() + (h/2.0));
+      maxY = (double)(object->GetY() + (h/2.0));
     if ((object->GetY() - (h/2.0)) < minY)
-      minY = (float)(object->GetY() - (h/2.0));
+      minY = (double)(object->GetY() - (h/2.0));
 
     node = node->Next();
   }
   m_width = maxX - minX;
   m_height = maxY - minY;
-  m_xpos = (float)(m_width/2.0 + minX);
-  m_ypos = (float)(m_height/2.0 + minY);
+  m_xpos = (double)(m_width/2.0 + minX);
+  m_ypos = (double)(m_height/2.0 + minY);
 }
 
 bool wxCompositeShape::Recompute()
@@ -699,8 +699,8 @@ void wxCompositeShape::ReadConstraints(wxExpr *clause, wxExprDatabase *database)
       break;
     }
     int cType = 0;
-    float cXSpacing = 0.0;
-    float cYSpacing = 0.0;
+    double cXSpacing = 0.0;
+    double cYSpacing = 0.0;
     wxString cName("");
     long cId = 0;
     wxShape *m_constrainingObject = NULL;
@@ -846,25 +846,25 @@ void wxDivisionShape::OnDraw(wxDC& dc)
     dc.SetBrush(wxTRANSPARENT_BRUSH);
     dc.SetBackgroundMode(wxTRANSPARENT);
 
-    float x1 = (float)(GetX() - (GetWidth()/2.0));
-    float y1 = (float)(GetY() - (GetHeight()/2.0));
-    float x2 = (float)(GetX() + (GetWidth()/2.0));
-    float y2 = (float)(GetY() + (GetHeight()/2.0));
+    double x1 = (double)(GetX() - (GetWidth()/2.0));
+    double y1 = (double)(GetY() - (GetHeight()/2.0));
+    double x2 = (double)(GetX() + (GetWidth()/2.0));
+    double y2 = (double)(GetY() + (GetHeight()/2.0));
 
     // Should subtract 1 pixel if drawing under Windows
 #ifdef __WXMSW__
-    y2 -= (float)1.0;
+    y2 -= (double)1.0;
 #endif
 
     if (m_leftSide)
     {
       dc.SetPen(m_leftSidePen);
-      dc.DrawLine(x1, y2, x1, y1);
+      dc.DrawLine(WXROUND(x1), WXROUND(y2), WXROUND(x1), WXROUND(y1));
     }
     if (m_topSide)
     {
       dc.SetPen(m_topSidePen);
-      dc.DrawLine(x1, y1, x2, y1);
+      dc.DrawLine(WXROUND(x1), WXROUND(y1), WXROUND(x2), WXROUND(y1));
     }
 
     // For testing purposes, draw a rectangle so we know
@@ -878,10 +878,10 @@ void wxDivisionShape::OnDrawContents(wxDC& dc)
   wxCompositeShape::OnDrawContents(dc);
 }
 
-bool wxDivisionShape::OnMovePre(wxDC& dc, float x, float y, float oldx, float oldy, bool display)
+bool wxDivisionShape::OnMovePre(wxDC& dc, double x, double y, double oldx, double oldy, bool display)
 {
-  float diffX = x - oldx;
-  float diffY = y - oldy;
+  double diffX = x - oldx;
+  double diffY = y - oldy;
   wxNode *node = m_children.First();
   while (node)
   {
@@ -893,12 +893,12 @@ bool wxDivisionShape::OnMovePre(wxDC& dc, float x, float y, float oldx, float ol
   return TRUE;
 }
 
-void wxDivisionShape::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxDivisionShape::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_DRAG_LEFT) != OP_DRAG_LEFT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -909,12 +909,12 @@ void wxDivisionShape::OnDragLeft(bool draw, float x, float y, int keys, int atta
   wxShape::OnDragLeft(draw, x, y, keys, attachment);
 }
 
-void wxDivisionShape::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxDivisionShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
   if ((m_sensitivity & OP_DRAG_LEFT) != OP_DRAG_LEFT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -926,13 +926,13 @@ void wxDivisionShape::OnBeginDragLeft(float x, float y, int keys, int attachment
   wxShape::OnBeginDragLeft(x, y, keys, attachment);
 }
 
-void wxDivisionShape::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxDivisionShape::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
   m_canvas->ReleaseMouse();
   if ((m_sensitivity & OP_DRAG_LEFT) != OP_DRAG_LEFT)
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -957,7 +957,7 @@ void wxDivisionShape::OnEndDragLeft(float x, float y, int keys, int attachment)
   if (m_canvas && !m_canvas->GetQuickEditMode()) m_canvas->Redraw(dc);
 }
 
-void wxDivisionShape::SetSize(float w, float h, bool recursive)
+void wxDivisionShape::SetSize(double w, double h, bool recursive)
 {
   m_width = w;
   m_height = h;
@@ -1022,7 +1022,7 @@ void wxDivisionShape::ReadPrologAttributes(wxExpr *clause)
 #endif
 
 // Experimental
-void wxDivisionShape::OnRightClick(float x, float y, int keys, int attachment)
+void wxDivisionShape::OnRightClick(double x, double y, int keys, int attachment)
 {
   if (keys & KEY_CTRL)
   {
@@ -1046,7 +1046,7 @@ void wxDivisionShape::OnRightClick(float x, float y, int keys, int attachment)
   else
   {
     attachment = 0;
-    float dist;
+    double dist;
     if (m_parent)
     {
       m_parent->HitTest(x, y, &attachment, &dist);
@@ -1061,11 +1061,11 @@ void wxDivisionShape::OnRightClick(float x, float y, int keys, int attachment)
 bool wxDivisionShape::Divide(int direction)
 {
   // Calculate existing top-left, bottom-right
-  float x1 = (float)(GetX() - (GetWidth()/2.0));
-  float y1 = (float)(GetY() - (GetHeight()/2.0));
+  double x1 = (double)(GetX() - (GetWidth()/2.0));
+  double y1 = (double)(GetY() - (GetHeight()/2.0));
   wxCompositeShape *compositeParent = (wxCompositeShape *)GetParent();
-  float oldWidth = GetWidth();
-  float oldHeight = GetHeight();
+  double oldWidth = GetWidth();
+  double oldHeight = GetHeight();
   if (Selected())
     Select(FALSE);
 
@@ -1076,10 +1076,10 @@ bool wxDivisionShape::Divide(int direction)
   {
     // Dividing vertically means notionally putting a horizontal line through it.
     // Break existing piece into two.
-    float newXPos1 = GetX();
-    float newYPos1 = (float)(y1 + (GetHeight()/4.0));
-    float newXPos2 = GetX();
-    float newYPos2 = (float)(y1 + (3.0*GetHeight()/4.0));
+    double newXPos1 = GetX();
+    double newYPos1 = (double)(y1 + (GetHeight()/4.0));
+    double newXPos2 = GetX();
+    double newYPos2 = (double)(y1 + (3.0*GetHeight()/4.0));
     wxDivisionShape *newDivision = compositeParent->OnCreateDivision();
     newDivision->Show(TRUE);
     
@@ -1117,20 +1117,20 @@ bool wxDivisionShape::Divide(int direction)
     m_handleSide = DIVISION_SIDE_BOTTOM;
     newDivision->SetHandleSide(DIVISION_SIDE_TOP);
 
-    SetSize(oldWidth, (float)(oldHeight/2.0));
+    SetSize(oldWidth, (double)(oldHeight/2.0));
     Move(dc, newXPos1, newYPos1);
 
-    newDivision->SetSize(oldWidth, (float)(oldHeight/2.0));
+    newDivision->SetSize(oldWidth, (double)(oldHeight/2.0));
     newDivision->Move(dc, newXPos2, newYPos2);
   }
   else
   {
     // Dividing horizontally means notionally putting a vertical line through it.
     // Break existing piece into two.
-    float newXPos1 = (float)(x1 + (GetWidth()/4.0));
-    float newYPos1 = GetY();
-    float newXPos2 = (float)(x1 + (3.0*GetWidth()/4.0));
-    float newYPos2 = GetY();
+    double newXPos1 = (double)(x1 + (GetWidth()/4.0));
+    double newYPos1 = GetY();
+    double newXPos2 = (double)(x1 + (3.0*GetWidth()/4.0));
+    double newYPos2 = GetY();
     wxDivisionShape *newDivision = compositeParent->OnCreateDivision();
     newDivision->Show(TRUE);
     
@@ -1158,10 +1158,10 @@ bool wxDivisionShape::Divide(int direction)
     m_handleSide = DIVISION_SIDE_RIGHT;
     newDivision->SetHandleSide(DIVISION_SIDE_LEFT);
 
-    SetSize((float)(oldWidth/2.0), oldHeight);
+    SetSize((double)(oldWidth/2.0), oldHeight);
     Move(dc, newXPos1, newYPos1);
 
-    newDivision->SetSize((float)(oldWidth/2.0), oldHeight);
+    newDivision->SetSize((double)(oldWidth/2.0), oldHeight);
     newDivision->Move(dc, newXPos2, newYPos2);
   }
   if (compositeParent->Selected())
@@ -1182,15 +1182,15 @@ void wxDivisionShape::MakeControlPoints()
 
 void wxDivisionShape::MakeMandatoryControlPoints()
 {
-  float maxX, maxY;
+  double maxX, maxY;
 
   GetBoundingBoxMax(&maxX, &maxY);
-  float x, y;
+  double x, y;
   int direction;
 /*
   if (m_leftSide)
   {
-    x = (float)(-maxX/2.0);
+    x = (double)(-maxX/2.0);
     y = 0.0;
     wxDivisionControlPoint *control = new wxDivisionControlPoint(m_canvas, this, CONTROL_POINT_SIZE, x, y,
                                              CONTROL_POINT_HORIZONTAL);
@@ -1200,7 +1200,7 @@ void wxDivisionShape::MakeMandatoryControlPoints()
   if (m_topSide)
   {
     x = 0.0;
-    y = (float)(-maxY/2.0);
+    y = (double)(-maxY/2.0);
     wxDivisionControlPoint *control = new wxDivisionControlPoint(m_canvas, this, CONTROL_POINT_SIZE, x, y,
                                              CONTROL_POINT_VERTICAL);
     m_canvas->AddShape(control);
@@ -1211,7 +1211,7 @@ void wxDivisionShape::MakeMandatoryControlPoints()
   {
     case DIVISION_SIDE_LEFT:
     {
-      x = (float)(-maxX/2.0);
+      x = (double)(-maxX/2.0);
       y = 0.0;
       direction = CONTROL_POINT_HORIZONTAL;
       break;
@@ -1219,13 +1219,13 @@ void wxDivisionShape::MakeMandatoryControlPoints()
     case DIVISION_SIDE_TOP:
     {
       x = 0.0;
-      y = (float)(-maxY/2.0);
+      y = (double)(-maxY/2.0);
       direction = CONTROL_POINT_VERTICAL;
       break;
     }
     case DIVISION_SIDE_RIGHT:
     {
-      x = (float)(maxX/2.0);
+      x = (double)(maxX/2.0);
       y = 0.0;
       direction = CONTROL_POINT_HORIZONTAL;
       break;
@@ -1233,7 +1233,7 @@ void wxDivisionShape::MakeMandatoryControlPoints()
     case DIVISION_SIDE_BOTTOM:
     {
       x = 0.0;
-      y = (float)(maxY/2.0);
+      y = (double)(maxY/2.0);
       direction = CONTROL_POINT_VERTICAL;
       break;
     }
@@ -1259,7 +1259,7 @@ void wxDivisionShape::ResetMandatoryControlPoints()
   if (m_controlPoints.Number() < 1)
     return;
 
-  float maxX, maxY;
+  double maxX, maxY;
 
   GetBoundingBoxMax(&maxX, &maxY);
 /*
@@ -1269,11 +1269,11 @@ void wxDivisionShape::ResetMandatoryControlPoints()
     wxDivisionControlPoint *control = (wxDivisionControlPoint *)node->Data();
     if (control->type == CONTROL_POINT_HORIZONTAL)
     {
-      control->xoffset = (float)(-maxX/2.0); control->m_yoffset = 0.0;
+      control->xoffset = (double)(-maxX/2.0); control->m_yoffset = 0.0;
     }
     else if (control->type == CONTROL_POINT_VERTICAL)
     {
-      control->xoffset = 0.0; control->m_yoffset = (float)(-maxY/2.0);
+      control->xoffset = 0.0; control->m_yoffset = (double)(-maxY/2.0);
     }
     node = node->Next();
   }
@@ -1282,40 +1282,40 @@ void wxDivisionShape::ResetMandatoryControlPoints()
   if ((m_handleSide == DIVISION_SIDE_LEFT) && node)
   {
     wxDivisionControlPoint *control = (wxDivisionControlPoint *)node->Data();
-    control->m_xoffset = (float)(-maxX/2.0); control->m_yoffset = 0.0;
+    control->m_xoffset = (double)(-maxX/2.0); control->m_yoffset = 0.0;
   }
 
   if ((m_handleSide == DIVISION_SIDE_TOP) && node)
   {
     wxDivisionControlPoint *control = (wxDivisionControlPoint *)node->Data();
-    control->m_xoffset = 0.0; control->m_yoffset = (float)(-maxY/2.0);
+    control->m_xoffset = 0.0; control->m_yoffset = (double)(-maxY/2.0);
   }
 
   if ((m_handleSide == DIVISION_SIDE_RIGHT) && node)
   {
     wxDivisionControlPoint *control = (wxDivisionControlPoint *)node->Data();
-    control->m_xoffset = (float)(maxX/2.0); control->m_yoffset = 0.0;
+    control->m_xoffset = (double)(maxX/2.0); control->m_yoffset = 0.0;
   }
 
   if ((m_handleSide == DIVISION_SIDE_BOTTOM) && node)
   {
     wxDivisionControlPoint *control = (wxDivisionControlPoint *)node->Data();
-    control->m_xoffset = 0.0; control->m_yoffset = (float)(maxY/2.0);
+    control->m_xoffset = 0.0; control->m_yoffset = (double)(maxY/2.0);
   }
 }
 
 // Adjust a side, returning FALSE if it's not physically possible.
-bool wxDivisionShape::AdjustLeft(float left, bool test)
+bool wxDivisionShape::AdjustLeft(double left, bool test)
 {
-  float x2 = (float)(GetX() + (GetWidth()/2.0));
+  double x2 = (double)(GetX() + (GetWidth()/2.0));
 
   if (left >= x2)
     return FALSE;
   if (test)
     return TRUE;
 
-  float newW = x2 - left;
-  float newX = (float)(left + newW/2.0);
+  double newW = x2 - left;
+  double newX = (double)(left + newW/2.0);
   SetSize(newW, GetHeight());
 
   wxClientDC dc(GetCanvas());
@@ -1326,17 +1326,17 @@ bool wxDivisionShape::AdjustLeft(float left, bool test)
   return TRUE;
 }
 
-bool wxDivisionShape::AdjustTop(float top, bool test)
+bool wxDivisionShape::AdjustTop(double top, bool test)
 {
-  float y2 = (float)(GetY() + (GetHeight()/2.0));
+  double y2 = (double)(GetY() + (GetHeight()/2.0));
 
   if (top >= y2)
     return FALSE;
   if (test)
     return TRUE;
 
-  float newH = y2 - top;
-  float newY = (float)(top + newH/2.0);
+  double newH = y2 - top;
+  double newY = (double)(top + newH/2.0);
   SetSize(GetWidth(), newH);
 
   wxClientDC dc(GetCanvas());
@@ -1347,17 +1347,17 @@ bool wxDivisionShape::AdjustTop(float top, bool test)
   return TRUE;
 }
 
-bool wxDivisionShape::AdjustRight(float right, bool test)
+bool wxDivisionShape::AdjustRight(double right, bool test)
 {
-  float x1 = (float)(GetX() - (GetWidth()/2.0));
+  double x1 = (double)(GetX() - (GetWidth()/2.0));
 
   if (right <= x1)
     return FALSE;
   if (test)
     return TRUE;
 
-  float newW = right - x1;
-  float newX = (float)(x1 + newW/2.0);
+  double newW = right - x1;
+  double newX = (double)(x1 + newW/2.0);
   SetSize(newW, GetHeight());
 
   wxClientDC dc(GetCanvas());
@@ -1368,17 +1368,17 @@ bool wxDivisionShape::AdjustRight(float right, bool test)
   return TRUE;
 }
 
-bool wxDivisionShape::AdjustBottom(float bottom, bool test)
+bool wxDivisionShape::AdjustBottom(double bottom, bool test)
 {
-  float y1 = (float)(GetY() - (GetHeight()/2.0));
+  double y1 = (double)(GetY() - (GetHeight()/2.0));
 
   if (bottom <= y1)
     return FALSE;
   if (test)
     return TRUE;
 
-  float newH = bottom - y1;
-  float newY = (float)(y1 + newH/2.0);
+  double newH = bottom - y1;
+  double newY = (double)(y1 + newH/2.0);
   SetSize(GetWidth(), newH);
 
   wxClientDC dc(GetCanvas());
@@ -1389,7 +1389,7 @@ bool wxDivisionShape::AdjustBottom(float bottom, bool test)
   return TRUE;
 }
 
-wxDivisionControlPoint::wxDivisionControlPoint(wxShapeCanvas *the_canvas, wxShape *object, float size, float the_xoffset, float the_yoffset, int the_type):
+wxDivisionControlPoint::wxDivisionControlPoint(wxShapeCanvas *the_canvas, wxShape *object, double size, double the_xoffset, double the_yoffset, int the_type):
   wxControlPoint(the_canvas, object, size, the_xoffset, the_yoffset, the_type)
 {
   SetEraseObject(FALSE);
@@ -1399,18 +1399,18 @@ wxDivisionControlPoint::~wxDivisionControlPoint()
 {
 }
 
-static float originalX = 0.0;
-static float originalY = 0.0;
-static float originalW = 0.0;
-static float originalH = 0.0;
+static double originalX = 0.0;
+static double originalY = 0.0;
+static double originalW = 0.0;
+static double originalH = 0.0;
 
 // Implement resizing of canvas object
-void wxDivisionControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
+void wxDivisionControlPoint::OnDragLeft(bool draw, double x, double y, int keys, int attachment)
 {
   wxControlPoint::OnDragLeft(draw, x, y, keys, attachment);
 }
 
-void wxDivisionControlPoint::OnBeginDragLeft(float x, float y, int keys, int attachment)
+void wxDivisionControlPoint::OnBeginDragLeft(double x, double y, int keys, int attachment)
 {
   wxDivisionShape *division = (wxDivisionShape *)m_shape;
   originalX = division->GetX();
@@ -1421,7 +1421,7 @@ void wxDivisionControlPoint::OnBeginDragLeft(float x, float y, int keys, int att
   wxControlPoint::OnBeginDragLeft(x, y, keys, attachment);
 }
 
-void wxDivisionControlPoint::OnEndDragLeft(float x, float y, int keys, int attachment)
+void wxDivisionControlPoint::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
   wxControlPoint::OnEndDragLeft(x, y, keys, attachment);
 
@@ -1432,16 +1432,16 @@ void wxDivisionControlPoint::OnEndDragLeft(float x, float y, int keys, int attac
   wxCompositeShape *divisionParent = (wxCompositeShape *)division->GetParent();
 
   // Need to check it's within the bounds of the parent composite.
-  float x1 = (float)(divisionParent->GetX() - (divisionParent->GetWidth()/2.0));
-  float y1 = (float)(divisionParent->GetY() - (divisionParent->GetHeight()/2.0));
-  float x2 = (float)(divisionParent->GetX() + (divisionParent->GetWidth()/2.0));
-  float y2 = (float)(divisionParent->GetY() + (divisionParent->GetHeight()/2.0));
+  double x1 = (double)(divisionParent->GetX() - (divisionParent->GetWidth()/2.0));
+  double y1 = (double)(divisionParent->GetY() - (divisionParent->GetHeight()/2.0));
+  double x2 = (double)(divisionParent->GetX() + (divisionParent->GetWidth()/2.0));
+  double y2 = (double)(divisionParent->GetY() + (divisionParent->GetHeight()/2.0));
 
   // Need to check it has not made the division zero or negative width/height
-  float dx1 = (float)(division->GetX() - (division->GetWidth()/2.0));
-  float dy1 = (float)(division->GetY() - (division->GetHeight()/2.0));
-  float dx2 = (float)(division->GetX() + (division->GetWidth()/2.0));
-  float dy2 = (float)(division->GetY() + (division->GetHeight()/2.0));
+  double dx1 = (double)(division->GetX() - (division->GetWidth()/2.0));
+  double dy1 = (double)(division->GetY() - (division->GetHeight()/2.0));
+  double dx2 = (double)(division->GetX() + (division->GetWidth()/2.0));
+  double dy2 = (double)(division->GetY() + (division->GetHeight()/2.0));
 
   bool success = TRUE;
   switch (division->GetHandleSide())
@@ -1512,7 +1512,7 @@ void wxDivisionControlPoint::OnEndDragLeft(float x, float y, int keys, int attac
    If size goes to zero or end position is other side of start position,
    resize to original size and return.
  */
-bool wxDivisionShape::ResizeAdjoining(int side, float newPos, bool test)
+bool wxDivisionShape::ResizeAdjoining(int side, double newPos, bool test)
 {
   wxCompositeShape *divisionParent = (wxCompositeShape *)GetParent();
   wxNode *node = divisionParent->GetDivisions().First();
@@ -1714,7 +1714,7 @@ void wxDivisionShape::EditEdge(int side)
 }
 
 // Popup menu
-void wxDivisionShape::PopupMenu(float x, float y)
+void wxDivisionShape::PopupMenu(double x, double y)
 {
   oglPopupDivisionMenu->SetClientData((char *)this);
   if (m_leftSide)

@@ -84,7 +84,7 @@ istream& DiagramDocument::LoadObject(istream& stream)
  * Implementation of drawing command
  */
 
-DiagramCommand::DiagramCommand(char *name, int command, DiagramDocument *ddoc, wxClassInfo *info, float xx, float yy,
+DiagramCommand::DiagramCommand(char *name, int command, DiagramDocument *ddoc, wxClassInfo *info, double xx, double yy,
   bool sel, wxShape *theShape, wxShape *fs, wxShape *ts):
   wxCommand(TRUE, name)
 {
@@ -394,7 +394,7 @@ void DiagramCommand::RemoveLines(wxShape *shape)
  * MyEvtHandler: an event handler class for all shapes
  */
  
-void MyEvtHandler::OnLeftClick(float x, float y, int keys, int attachment)
+void MyEvtHandler::OnLeftClick(double x, double y, int keys, int attachment)
 {
   wxClientDC dc(GetShape()->GetCanvas());
   GetShape()->GetCanvas()->PrepareDC(dc);
@@ -444,7 +444,7 @@ void MyEvtHandler::OnLeftClick(float x, float y, int keys, int attachment)
  * Implement connection of two shapes by right-dragging between them.
  */
 
-void MyEvtHandler::OnBeginDragRight(float x, float y, int keys, int attachment)
+void MyEvtHandler::OnBeginDragRight(double x, double y, int keys, int attachment)
 {
   // Force attachment to be zero for now. Eventually we can deal with
   // the actual attachment point, e.g. a rectangle side if attachment mode is on.
@@ -456,13 +456,13 @@ void MyEvtHandler::OnBeginDragRight(float x, float y, int keys, int attachment)
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetLogicalFunction(wxXOR);
   dc.SetPen(dottedPen);
-  float xp, yp;
+  double xp, yp;
   GetShape()->GetAttachmentPosition(attachment, &xp, &yp);
   dc.DrawLine(xp, yp, x, y);
   GetShape()->GetCanvas()->CaptureMouse();
 }
 
-void MyEvtHandler::OnDragRight(bool draw, float x, float y, int keys, int attachment)
+void MyEvtHandler::OnDragRight(bool draw, double x, double y, int keys, int attachment)
 {
   // Force attachment to be zero for now
   attachment = 0;
@@ -473,12 +473,12 @@ void MyEvtHandler::OnDragRight(bool draw, float x, float y, int keys, int attach
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetLogicalFunction(wxXOR);
   dc.SetPen(dottedPen);
-  float xp, yp;
+  double xp, yp;
   GetShape()->GetAttachmentPosition(attachment, &xp, &yp);
   dc.DrawLine(xp, yp, x, y);
 }
 
-void MyEvtHandler::OnEndDragRight(float x, float y, int keys, int attachment)
+void MyEvtHandler::OnEndDragRight(double x, double y, int keys, int attachment)
 {
   GetShape()->GetCanvas()->ReleaseMouse();
   MyCanvas *canvas = (MyCanvas *)GetShape()->GetCanvas();
@@ -495,7 +495,7 @@ void MyEvtHandler::OnEndDragRight(float x, float y, int keys, int attachment)
   }
 }
 
-void MyEvtHandler::OnEndSize(float x, float y)
+void MyEvtHandler::OnEndSize(double x, double y)
 {
   wxClientDC dc(GetShape()->GetCanvas());
   GetShape()->GetCanvas()->PrepareDC(dc);
@@ -534,16 +534,16 @@ bool MyDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRoundedRectangleShape, wxRectangleShape)
 
-wxRoundedRectangleShape::wxRoundedRectangleShape(float w, float h):
+wxRoundedRectangleShape::wxRoundedRectangleShape(double w, double h):
  wxRectangleShape(w, h)
 {
   // 0.3 of the smaller rectangle dimension
-  SetCornerRadius((float) -0.3);
+  SetCornerRadius((double) -0.3);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxDiamondShape, wxPolygonShape)
 
-wxDiamondShape::wxDiamondShape(float w, float h):
+wxDiamondShape::wxDiamondShape(double w, double h):
   wxPolygonShape()
 {
   // wxPolygonShape::SetSize relies on the shape having non-zero

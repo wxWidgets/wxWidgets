@@ -38,21 +38,21 @@ class wxShapeCanvas: public wxScrolledWindow
   inline void SetDiagram(wxDiagram *diag) { m_shapeDiagram = diag; }
   inline wxDiagram *GetDiagram() const { return m_shapeDiagram; }
 
-  virtual void OnLeftClick(float x, float y, int keys = 0);
-  virtual void OnRightClick(float x, float y, int keys = 0);
+  virtual void OnLeftClick(double x, double y, int keys = 0);
+  virtual void OnRightClick(double x, double y, int keys = 0);
 
-  virtual void OnDragLeft(bool draw, float x, float y, int keys=0); // Erase if draw false
-  virtual void OnBeginDragLeft(float x, float y, int keys=0);
-  virtual void OnEndDragLeft(float x, float y, int keys=0);
+  virtual void OnDragLeft(bool draw, double x, double y, int keys=0); // Erase if draw false
+  virtual void OnBeginDragLeft(double x, double y, int keys=0);
+  virtual void OnEndDragLeft(double x, double y, int keys=0);
 
-  virtual void OnDragRight(bool draw, float x, float y, int keys=0); // Erase if draw false
-  virtual void OnBeginDragRight(float x, float y, int keys=0);
-  virtual void OnEndDragRight(float x, float y, int keys=0);
+  virtual void OnDragRight(bool draw, double x, double y, int keys=0); // Erase if draw false
+  virtual void OnBeginDragRight(double x, double y, int keys=0);
+  virtual void OnEndDragRight(double x, double y, int keys=0);
 
   // Find object for mouse click, of given wxClassInfo (NULL for any type).
   // If notImage is non-NULL, don't find an object that is equal to or a descendant of notImage
-  virtual wxShape *FindShape(float x, float y, int *attachment, wxClassInfo *info = NULL, wxShape *notImage = NULL);
-  wxShape *FindFirstSensitiveShape(float x, float y, int *new_attachment, int op);
+  virtual wxShape *FindShape(double x, double y, int *attachment, wxClassInfo *info = NULL, wxShape *notImage = NULL);
+  wxShape *FindFirstSensitiveShape(double x, double y, int *new_attachment, int op);
   wxShape *FindFirstSensitiveShape1(wxShape *image, int op);
   
   // Redirect to wxDiagram object
@@ -61,7 +61,7 @@ class wxShapeCanvas: public wxScrolledWindow
   virtual void RemoveShape(wxShape *object);
   virtual bool GetQuickEditMode();
   virtual void Redraw(wxDC& dc);
-  void Snap(float *x, float *y);
+  void Snap(double *x, double *y);
 
   // Events
   void OnPaint(wxPaintEvent& event);
@@ -70,8 +70,8 @@ class wxShapeCanvas: public wxScrolledWindow
  protected:
   wxDiagram*        m_shapeDiagram;
   int               m_dragState;
-  float             m_oldDragX, m_oldDragY;     // Previous drag coordinates
-  float             m_firstDragX, m_firstDragY; // INITIAL drag coordinates
+  double             m_oldDragX, m_oldDragY;     // Previous drag coordinates
+  double             m_firstDragX, m_firstDragY; // INITIAL drag coordinates
   bool              m_checkTolerance;           // Whether to check drag tolerance
   wxShape*          m_draggedShape;
   int               m_draggedAttachment;

@@ -44,7 +44,7 @@ class wxRoundedRectangleShape: public wxRectangleShape
   DECLARE_DYNAMIC_CLASS(wxRoundedRectangleShape)
  private:
  public:
-  wxRoundedRectangleShape(float w = 0.0, float h = 0.0);
+  wxRoundedRectangleShape(double w = 0.0, double h = 0.0);
 };
 
 class wxDiamondShape: public wxPolygonShape
@@ -52,7 +52,7 @@ class wxDiamondShape: public wxPolygonShape
   DECLARE_DYNAMIC_CLASS(wxDiamondShape)
  private:
  public:
-  wxDiamondShape(float w = 0.0, float h = 0.0);
+  wxDiamondShape(double w = 0.0, double h = 0.0);
 };
 
 /*
@@ -71,11 +71,11 @@ class MyEvtHandler: public wxShapeEvtHandler
   ~MyEvtHandler(void)
   {
   }
-  void OnLeftClick(float x, float y, int keys = 0, int attachment = 0);
-  void OnBeginDragRight(float x, float y, int keys = 0, int attachment = 0);
-  void OnDragRight(bool draw, float x, float y, int keys = 0, int attachment = 0);
-  void OnEndDragRight(float x, float y, int keys = 0, int attachment = 0);
-  void OnEndSize(float x, float y);
+  void OnLeftClick(double x, double y, int keys = 0, int attachment = 0);
+  void OnBeginDragRight(double x, double y, int keys = 0, int attachment = 0);
+  void OnDragRight(bool draw, double x, double y, int keys = 0, int attachment = 0);
+  void OnEndDragRight(double x, double y, int keys = 0, int attachment = 0);
+  void OnEndSize(double x, double y);
 };
 
 /*
@@ -135,8 +135,8 @@ class DiagramCommand: public wxCommand
   wxShape *fromShape;
   wxShape *toShape;
   wxClassInfo *shapeInfo;
-  float x;
-  float y;
+  double x;
+  double y;
   bool selected;
   bool deleteShape;
 
@@ -147,7 +147,7 @@ class DiagramCommand: public wxCommand
  public:
   // Multi-purpose constructor for creating, deleting shapes
   DiagramCommand(char *name, int cmd, DiagramDocument *ddoc, wxClassInfo *shapeInfo = NULL,
-     float x = 0.0, float y = 0.0, bool sel = FALSE, wxShape *theShape = NULL, wxShape *fs = NULL, wxShape *ts = NULL);
+     double x = 0.0, double y = 0.0, bool sel = FALSE, wxShape *theShape = NULL, wxShape *fs = NULL, wxShape *ts = NULL);
 
   // Property-changing command constructors
   DiagramCommand(char *name, int cmd, DiagramDocument *ddoc, wxBrush *backgroundColour, wxShape *theShape);

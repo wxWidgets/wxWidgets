@@ -37,7 +37,7 @@ class wxBitmapShape: public wxRectangleShape
   // Does the copying for this object
   void Copy(wxShape& copy);
 
-  void SetSize(float w, float h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = TRUE);
   inline wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
   void SetBitmap(const wxBitmap& bm);
   inline void SetFilename(const wxString& f) { m_filename = f; };

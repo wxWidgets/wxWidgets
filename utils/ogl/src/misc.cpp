@@ -45,36 +45,35 @@
 #include "constrnt.h"
 #include "composit.h"
 
-wxFont *g_oglNormalFont;
+wxFont*         g_oglNormalFont;
+wxPen*          g_oglBlackPen;
+wxPen*          g_oglWhiteBackgroundPen;
+wxPen*          g_oglTransparentPen;
+wxBrush*        g_oglWhiteBackgroundBrush;
+wxPen*          g_oglBlackForegroundPen;
+wxCursor*       g_oglBullseyeCursor = NULL;
 
-wxPen *black_pen;
-wxPen *white_background_pen;
-wxPen *transparent_pen;
-wxBrush *white_background_brush;
-wxPen *black_foreground_pen;
+char*           oglBuffer = NULL;
 
-char *GraphicsBuffer = NULL;
-wxCursor *GraphicsBullseyeCursor = NULL;
-
-wxList wxObjectCopyMapping(wxKEY_INTEGER);
+wxList          oglObjectCopyMapping(wxKEY_INTEGER);
 
 void wxOGLInitialize()
 {
-  GraphicsBullseyeCursor = new wxCursor(wxCURSOR_BULLSEYE);
+  g_oglBullseyeCursor = new wxCursor(wxCURSOR_BULLSEYE);
 
   g_oglNormalFont = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 
-  black_pen = new wxPen("BLACK", 1, wxSOLID);
+  g_oglBlackPen = new wxPen("BLACK", 1, wxSOLID);
 
-  white_background_pen = new wxPen("WHITE", 1, wxSOLID);
-  transparent_pen = new wxPen("WHITE", 1, wxTRANSPARENT);
-  white_background_brush = new wxBrush("WHITE", wxSOLID);
-  black_foreground_pen = new wxPen("BLACK", 1, wxSOLID);
+  g_oglWhiteBackgroundPen = new wxPen("WHITE", 1, wxSOLID);
+  g_oglTransparentPen = new wxPen("WHITE", 1, wxTRANSPARENT);
+  g_oglWhiteBackgroundBrush = new wxBrush("WHITE", wxSOLID);
+  g_oglBlackForegroundPen = new wxPen("BLACK", 1, wxSOLID);
 
   OGLInitializeConstraintTypes();
 
   // Initialize big buffer used when writing images
-  GraphicsBuffer = new char[3000];
+  oglBuffer = new char[3000];
 
   if (!oglPopupDivisionMenu)
   {
@@ -89,52 +88,58 @@ void wxOGLInitialize()
 
 void wxOGLCleanUp()
 {
-    if (GraphicsBuffer)
+    if (oglBuffer)
     {
-        delete[] GraphicsBuffer;
-        GraphicsBuffer = NULL;
+        delete[] oglBuffer;
+        oglBuffer = NULL;
     }
-    GraphicsBuffer = NULL;
+    oglBuffer = NULL;
     if (oglPopupDivisionMenu)
     {
         delete oglPopupDivisionMenu;
         oglPopupDivisionMenu = NULL;
     }
+    if (g_oglBullseyeCursor)
+    {
+        delete g_oglBullseyeCursor;
+        g_oglBullseyeCursor = NULL;
+    }
+
     if (g_oglNormalFont)
     {
         delete g_oglNormalFont;
         g_oglNormalFont = NULL;
     }
-    if (black_pen)
+    if (g_oglBlackPen)
     {
-        delete black_pen;
-        black_pen = NULL;
+        delete g_oglBlackPen;
+        g_oglBlackPen = NULL;
     }
-    if (white_background_pen)
+    if (g_oglWhiteBackgroundPen)
     {
-        delete white_background_pen;
-        white_background_pen = NULL;
+        delete g_oglWhiteBackgroundPen;
+        g_oglWhiteBackgroundPen = NULL;
     }
-    if (transparent_pen)
+    if (g_oglTransparentPen)
     {
-        delete transparent_pen;
-        transparent_pen = NULL;
+        delete g_oglTransparentPen;
+        g_oglTransparentPen = NULL;
     }
-    if (white_background_brush)
+    if (g_oglWhiteBackgroundBrush)
     {
-        delete white_background_brush;
-        white_background_brush = NULL;
+        delete g_oglWhiteBackgroundBrush;
+        g_oglWhiteBackgroundBrush = NULL;
     }
-    if (black_foreground_pen)
+    if (g_oglBlackForegroundPen)
     {
-        delete black_foreground_pen;
-        black_foreground_pen = NULL;
+        delete g_oglBlackForegroundPen;
+        g_oglBlackForegroundPen = NULL;
     }
 
     OGLCleanUpConstraintTypes();
 }
 
-wxFont *MatchFont(int point_size)
+wxFont *oglMatchFont(int point_size)
 {
   wxFont *font = wxTheFontList->FindOrCreateFont(point_size, wxSWISS, wxNORMAL, wxNORMAL);
 #if 0
@@ -202,7 +207,7 @@ int FontSizeDialog(wxFrame *parent, int old_size)
   {
     int size;
     sscanf(ans, "%d", &size);
-    return MatchFont(size);
+    return oglMatchFont(size);
   }
   else return NULL;
 */
@@ -211,8 +216,8 @@ int FontSizeDialog(wxFrame *parent, int old_size)
 // Centre a list of strings in the given box. xOffset and yOffset are the
 // the positions that these lines should be relative to, and this might be
 // the same as m_xpos, m_ypos, but might be zero if formatting from left-justifying.
-void CentreText(wxDC& dc, wxList *text_list,
-                float m_xpos, float m_ypos, float width, float height,
+void oglCentreText(wxDC& dc, wxList *text_list,
+                double m_xpos, double m_ypos, double width, double height,
                 int formatMode)
 {
   int n = text_list->Number();
@@ -222,12 +227,12 @@ void CentreText(wxDC& dc, wxList *text_list,
 
   // First, get maximum dimensions of box enclosing text
 
-  float char_height = 0;
-  float max_width = 0;
-  float current_width = 0;
+  long char_height = 0;
+  long max_width = 0;
+  long current_width = 0;
 
   // Store text extents for speed
-  float *widths = new float[n];
+  double *widths = new double[n];
 
   wxNode *current = text_list->First();
   int i = 0;
@@ -243,16 +248,16 @@ void CentreText(wxDC& dc, wxList *text_list,
     i ++;
   }
 
-  float max_height = n*char_height;
+  double max_height = n*char_height;
 
-  float xoffset, yoffset, xOffset, yOffset;
+  double xoffset, yoffset, xOffset, yOffset;
 
   if (formatMode & FORMAT_CENTRE_VERT)
   {
     if (max_height < height)
-      yoffset = (float)(m_ypos - (height/2.0) + (height - max_height)/2.0);
+      yoffset = (double)(m_ypos - (height/2.0) + (height - max_height)/2.0);
     else
-      yoffset = (float)(m_ypos - (height/2.0));
+      yoffset = (double)(m_ypos - (height/2.0));
     yOffset = m_ypos;
   }
   else
@@ -263,7 +268,7 @@ void CentreText(wxDC& dc, wxList *text_list,
 
   if (formatMode & FORMAT_CENTRE_HORIZ)
   {
-    xoffset = (float)(m_xpos - width/2.0);
+    xoffset = (double)(m_xpos - width/2.0);
     xOffset = m_xpos;
   }
   else
@@ -279,12 +284,12 @@ void CentreText(wxDC& dc, wxList *text_list,
   {
     wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
 
-    float x;
+    double x;
     if ((formatMode & FORMAT_CENTRE_HORIZ) && (widths[i] < width))
-      x = (float)((width - widths[i])/2.0 + xoffset);
+      x = (double)((width - widths[i])/2.0 + xoffset);
     else
       x = xoffset;
-    float y = (float)(i*char_height + yoffset);
+    double y = (double)(i*char_height + yoffset);
 
     line->SetX( x - xOffset ); line->SetY( y - yOffset );
     current = current->Next();
@@ -295,8 +300,8 @@ void CentreText(wxDC& dc, wxList *text_list,
 }
 
 // Centre a list of strings in the given box
-void CentreTextNoClipping(wxDC& dc, wxList *text_list,
-                              float m_xpos, float m_ypos, float width, float height)
+void oglCentreTextNoClipping(wxDC& dc, wxList *text_list,
+                              double m_xpos, double m_ypos, double width, double height)
 {
   int n = text_list->Number();
 
@@ -305,12 +310,12 @@ void CentreTextNoClipping(wxDC& dc, wxList *text_list,
 
   // First, get maximum dimensions of box enclosing text
 
-  float char_height = 0;
-  float max_width = 0;
-  float current_width = 0;
+  long char_height = 0;
+  long max_width = 0;
+  long current_width = 0;
 
   // Store text extents for speed
-  float *widths = new float[n];
+  double *widths = new double[n];
 
   wxNode *current = text_list->First();
   int i = 0;
@@ -326,11 +331,11 @@ void CentreTextNoClipping(wxDC& dc, wxList *text_list,
     i ++;
   }
 
-  float max_height = n*char_height;
+  double max_height = n*char_height;
 
-  float yoffset = (float)(m_ypos - (height/2.0) + (height - max_height)/2.0);
+  double yoffset = (double)(m_ypos - (height/2.0) + (height - max_height)/2.0);
 
-  float xoffset = (float)(m_xpos - width/2.0);
+  double xoffset = (double)(m_xpos - width/2.0);
 
   current = text_list->First();
   i = 0;
@@ -339,8 +344,8 @@ void CentreTextNoClipping(wxDC& dc, wxList *text_list,
   {
     wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
 
-    float x = (float)((width - widths[i])/2.0 + xoffset);
-    float y = (float)(i*char_height + yoffset);
+    double x = (double)((width - widths[i])/2.0 + xoffset);
+    double y = (double)(i*char_height + yoffset);
 
     line->SetX( x - m_xpos ); line->SetY( y - m_ypos );
     current = current->Next();
@@ -349,9 +354,9 @@ void CentreTextNoClipping(wxDC& dc, wxList *text_list,
   delete widths;
 }
 
-void GetCentredTextExtent(wxDC& dc, wxList *text_list,
-                              float m_xpos, float m_ypos, float width, float height,
-                              float *actual_width, float *actual_height)
+void oglGetCentredTextExtent(wxDC& dc, wxList *text_list,
+                              double m_xpos, double m_ypos, double width, double height,
+                              double *actual_width, double *actual_height)
 {
   int n = text_list->Number();
 
@@ -364,9 +369,9 @@ void GetCentredTextExtent(wxDC& dc, wxList *text_list,
 
   // First, get maximum dimensions of box enclosing text
 
-  float char_height = 0;
-  float max_width = 0;
-  float current_width = 0;
+  long char_height = 0;
+  long max_width = 0;
+  long current_width = 0;
 
   wxNode *current = text_list->First();
   int i = 0;
@@ -387,10 +392,10 @@ void GetCentredTextExtent(wxDC& dc, wxList *text_list,
 
 // Format a string to a list of strings that fit in the given box.
 // Interpret %n and 10 or 13 as a new line.
-wxList *FormatText(wxDC& dc, const wxString& text, float width, float height, int formatMode)
+wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double height, int formatMode)
 {
   // First, parse the string into a list of words
-  wxList word_list;
+  wxStringList word_list;
 
   // Make new lines into NULL strings at this point
   int i = 0; int j = 0; int len = strlen(text);
@@ -451,25 +456,23 @@ wxList *FormatText(wxDC& dc, const wxString& text, float width, float height, in
     }
   }
   // Now, make a list of strings which can fit in the box
-  wxList *string_list = new wxList;
+  wxStringList *string_list = new wxStringList;
 
   char buffer[400];
   buffer[0] = 0;
   wxNode *node = word_list.First();
-  float x, y;
+  long x, y;
 
   while (node)
   {
-    char *keep_string = copystring(buffer);
+    wxString oldBuffer(buffer);
 
     char *s = (char *)node->Data();
     if (!s)
     {
       // FORCE NEW LINE
-      if (strlen(keep_string) > 0)
-        string_list->Append((wxObject *)keep_string);
-      else
-        delete[] keep_string;
+      if (strlen(buffer) > 0)
+        string_list->Add(buffer);
 
       buffer[0] = 0;
     }
@@ -485,52 +488,47 @@ wxList *FormatText(wxDC& dc, const wxString& text, float width, float height, in
       if ((x > width) && !(formatMode & FORMAT_SIZE_TO_CONTENTS))
       {
         // Deal with first word being wider than box
-        if (strlen(keep_string) > 0)
-          string_list->Append((wxObject *)keep_string);
-        else
-          delete[] keep_string;
+        if (oldBuffer.Length() > 0)
+          string_list->Add(oldBuffer);
 
         buffer[0] = 0;
         strcat(buffer, s);
-        delete[] s;
       }
-      else
-        delete[] keep_string;
     }
 
     node = node->Next();
   }
   if (buffer[0] != 0)
-    string_list->Append((wxObject *)copystring(buffer));
+    string_list->Add(buffer);
 
   return string_list;
 }
 
-void DrawFormattedText(wxDC& dc, wxList *text_list,
-                       float m_xpos, float m_ypos, float width, float height,
+void oglDrawFormattedText(wxDC& dc, wxList *text_list,
+                       double m_xpos, double m_ypos, double width, double height,
                        int formatMode)
 {
-  float xoffset, yoffset;
+  double xoffset, yoffset;
   if (formatMode & FORMAT_CENTRE_HORIZ)
     xoffset = m_xpos;
   else
-    xoffset = (float)(m_xpos - (width / 2.0));
+    xoffset = (double)(m_xpos - (width / 2.0));
 
   if (formatMode & FORMAT_CENTRE_VERT)
     yoffset = m_ypos;
   else
-    yoffset = (float)(m_ypos - (height / 2.0));
+    yoffset = (double)(m_ypos - (height / 2.0));
 
   dc.SetClippingRegion(
-                    (float)(m_xpos - width/2.0), (float)(m_ypos - height/2.0),
-                    (float)width, (float)height);
+                    (double)(m_xpos - width/2.0), (double)(m_ypos - height/2.0),
+                    (double)width, (double)height);
 
   wxNode *current = text_list->First();
   while (current)
   {
     wxShapeTextLine *line = (wxShapeTextLine *)current->Data();
 
-    dc.DrawText(line->GetText(), xoffset + line->GetX(), yoffset + line->GetY());
+    dc.DrawText(line->GetText(), WXROUND(xoffset + line->GetX()), WXROUND(yoffset + line->GetY()));
     current = current->Next();
   }
 
@@ -542,10 +540,10 @@ void DrawFormattedText(wxDC& dc, wxList *text_list,
  *
  */
 
-void find_polyline_centroid(wxList *points, float *x, float *y)
+void oglFindPolylineCentroid(wxList *points, double *x, double *y)
 {
-  float xcount = 0;
-  float ycount = 0;
+  double xcount = 0;
+  double ycount = 0;
 
   wxNode *node = points->First();
   while (node)
@@ -567,16 +565,16 @@ void find_polyline_centroid(wxList *points, float *x, float *y)
  * Used by functions below.
  *
  */
-void check_line_intersection(float x1, float y1, float x2, float y2, 
-                             float x3, float y3, float x4, float y4,
-                             float *ratio1, float *ratio2)
+void oglCheckLineIntersection(double x1, double y1, double x2, double y2, 
+                             double x3, double y3, double x4, double y4,
+                             double *ratio1, double *ratio2)
 {
-  float denominator_term = (y4 - y3)*(x2 - x1) - (y2 - y1)*(x4 - x3);
-  float numerator_term = (x3 - x1)*(y4 - y3) + (x4 - x3)*(y1 - y3);
+  double denominator_term = (y4 - y3)*(x2 - x1) - (y2 - y1)*(x4 - x3);
+  double numerator_term = (x3 - x1)*(y4 - y3) + (x4 - x3)*(y1 - y3);
 
-  float line_constant;
-  float length_ratio = 1.0;
-  float k_line = 1.0;
+  double line_constant;
+  double length_ratio = 1.0;
+  double k_line = 1.0;
 
   // Check for parallel lines
   if ((denominator_term < 0.005) && (denominator_term > -0.005))
@@ -607,20 +605,20 @@ void check_line_intersection(float x1, float y1, float x2, float y2,
  * (*x3, *y3) is the point where it hits.
  *
  */
-void find_end_for_polyline(float n, float xvec[], float yvec[], 
-                           float x1, float y1, float x2, float y2, float *x3, float *y3)
+void oglFindEndForPolyline(double n, double xvec[], double yvec[], 
+                           double x1, double y1, double x2, double y2, double *x3, double *y3)
 {
   int i;
-  float lastx = xvec[0];
-  float lasty = yvec[0];
+  double lastx = xvec[0];
+  double lasty = yvec[0];
 
-  float min_ratio = 1.0;
-  float line_ratio;
-  float other_ratio;
+  double min_ratio = 1.0;
+  double line_ratio;
+  double other_ratio;
 
   for (i = 1; i < n; i++)
   {
-    check_line_intersection(x1, y1, x2, y2, lastx, lasty, xvec[i], yvec[i],
+    oglCheckLineIntersection(x1, y1, x2, y2, lastx, lasty, xvec[i], yvec[i],
                             &line_ratio, &other_ratio);
     lastx = xvec[i];
     lasty = yvec[i];
@@ -629,10 +627,10 @@ void find_end_for_polyline(float n, float xvec[], float yvec[],
       min_ratio = line_ratio;
   }
 
-  // Do last (implicit) line if last and first floats are not identical
+  // Do last (implicit) line if last and first doubles are not identical
   if (!(xvec[0] == lastx && yvec[0] == lasty))
   {
-    check_line_intersection(x1, y1, x2, y2, lastx, lasty, xvec[0], yvec[0],
+    oglCheckLineIntersection(x1, y1, x2, y2, lastx, lasty, xvec[0], yvec[0],
                             &line_ratio, &other_ratio);
 
     if (line_ratio < min_ratio)
@@ -649,26 +647,26 @@ void find_end_for_polyline(float n, float xvec[], float yvec[],
  *
  */
 
-void find_end_for_box(float width, float height, 
-                      float x1, float y1,         // Centre of box (possibly)
-                      float x2, float y2,         // other end of line
-                      float *x3, float *y3)       // End on box edge
+void oglFindEndForBox(double width, double height, 
+                      double x1, double y1,         // Centre of box (possibly)
+                      double x2, double y2,         // other end of line
+                      double *x3, double *y3)       // End on box edge
 {
-  float xvec[5];
-  float yvec[5];
+  double xvec[5];
+  double yvec[5];
 
-  xvec[0] = (float)(x1 - width/2.0);
-  yvec[0] = (float)(y1 - height/2.0);
-  xvec[1] = (float)(x1 - width/2.0);
-  yvec[1] = (float)(y1 + height/2.0);
-  xvec[2] = (float)(x1 + width/2.0);
-  yvec[2] = (float)(y1 + height/2.0);
-  xvec[3] = (float)(x1 + width/2.0);
-  yvec[3] = (float)(y1 - height/2.0);
-  xvec[4] = (float)(x1 - width/2.0);
-  yvec[4] = (float)(y1 - height/2.0);
+  xvec[0] = (double)(x1 - width/2.0);
+  yvec[0] = (double)(y1 - height/2.0);
+  xvec[1] = (double)(x1 - width/2.0);
+  yvec[1] = (double)(y1 + height/2.0);
+  xvec[2] = (double)(x1 + width/2.0);
+  yvec[2] = (double)(y1 + height/2.0);
+  xvec[3] = (double)(x1 + width/2.0);
+  yvec[3] = (double)(y1 - height/2.0);
+  xvec[4] = (double)(x1 - width/2.0);
+  yvec[4] = (double)(y1 - height/2.0);
 
-  find_end_for_polyline(5, xvec, yvec, x2, y2, x1, y1, x3, y3);
+  oglFindEndForPolyline(5, xvec, yvec, x2, y2, x1, y1, x3, y3);
 }
 
 /*
@@ -676,12 +674,12 @@ void find_end_for_box(float width, float height,
  *
  */
 
-void find_end_for_circle(float radius, 
-                         float x1, float y1,  // Centre of circle
-                         float x2, float y2,  // Other end of line
-                         float *x3, float *y3)
+void oglFindEndForCircle(double radius, 
+                         double x1, double y1,  // Centre of circle
+                         double x2, double y2,  // Other end of line
+                         double *x3, double *y3)
 {
-  float H = (float)sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+  double H = (double)sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 
   if (H == 0.0)
   {
@@ -701,22 +699,22 @@ void find_end_for_circle(float radius,
  *
  */
 
-void get_arrow_points(float x1, float y1, float x2, float y2,
-                      float length, float width,
-                      float *tip_x, float *tip_y,
-                      float *side1_x, float *side1_y,
-                      float *side2_x, float *side2_y)
+void oglGetArrowPoints(double x1, double y1, double x2, double y2,
+                      double length, double width,
+                      double *tip_x, double *tip_y,
+                      double *side1_x, double *side1_y,
+                      double *side2_x, double *side2_y)
 {
-  float l = (float)sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+  double l = (double)sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 
   if (l < 0.01)
-    l = (float) 0.01;
+    l = (double) 0.01;
 
-  float i_bar = (x2 - x1)/l;
-  float j_bar = (y2 - y1)/l;
+  double i_bar = (x2 - x1)/l;
+  double j_bar = (y2 - y1)/l;
 
-  float x3 = (- length*i_bar) + x2;
-  float y3 = (- length*j_bar) + y2;
+  double x3 = (- length*i_bar) + x2;
+  double y3 = (- length*j_bar) + y2;
 
   *side1_x = width*(-j_bar) + x3;
   *side1_y = width*i_bar + y3;
@@ -738,24 +736,24 @@ void get_arrow_points(float x1, float y1, float x2, float y2,
  * Author: Ian Harrison
  */
 
-void draw_arc_to_ellipse(float x1, float y1, float width1, float height1, float x2, float y2, float x3, float y3,
-  float *x4, float *y4)
+void oglDrawArcToEllipse(double x1, double y1, double width1, double height1, double x2, double y2, double x3, double y3,
+  double *x4, double *y4)
 {
-  float a1 = (float)(width1/2.0);
-  float b1 = (float)(height1/2.0);
+  double a1 = (double)(width1/2.0);
+  double b1 = (double)(height1/2.0);
 
   // These are required to give top left x and y coordinates for DrawEllipse
-//  float top_left_x1 = (float)(x1 - a1);
-//  float top_left_y1 = (float)(y1 - b1);
+//  double top_left_x1 = (double)(x1 - a1);
+//  double top_left_y1 = (double)(y1 - b1);
 /*
   // Check for vertical line
   if (fabs(x2 - x3) < 0.05)
   {
     *x4 = x3;
     if (y2 < y3)
-      *y4 = (float)(y1 - b1);
+      *y4 = (double)(y1 - b1);
     else
-      *y4 = (float)(y1 + b1);
+      *y4 = (double)(y1 + b1);
     return;
   }
 */  
@@ -764,39 +762,39 @@ void draw_arc_to_ellipse(float x1, float y1, float width1, float height1, float 
   {
     *x4 = x2;
     if (y3 > y2)
-      *y4 = (float)(y1 - sqrt((b1*b1 - (((x2-x1)*(x2-x1))*(b1*b1)/(a1*a1)))));
+      *y4 = (double)(y1 - sqrt((b1*b1 - (((x2-x1)*(x2-x1))*(b1*b1)/(a1*a1)))));
     else
-      *y4 = (float)(y1 + sqrt((b1*b1 - (((x2-x1)*(x2-x1))*(b1*b1)/(a1*a1)))));
+      *y4 = (double)(y1 + sqrt((b1*b1 - (((x2-x1)*(x2-x1))*(b1*b1)/(a1*a1)))));
     return;
   }
 
   // Calculate the x and y coordinates of the point where arc intersects ellipse
 
-  float A, B, C, D, E, F, G, H, K;
-  float ellipse1_x, ellipse1_y;
+  double A, B, C, D, E, F, G, H, K;
+  double ellipse1_x, ellipse1_y;
 
-  A = (float)(1/(a1 * a1));
-  B = (float)((y3 - y2) * (y3 - y2)) / ((x3 - x2) * (x3 - x2) * b1 * b1);
-  C = (float)(2 * (y3 - y2) * (y2 - y1)) / ((x3 - x2) * b1 * b1);
-  D = (float)((y2 - y1) * (y2 - y1)) / (b1 * b1);
-  E = (float)(A + B);
-  F = (float)(C - (2 * A * x1) - (2 * B * x2));
-  G = (float)((A * x1 * x1) + (B * x2 * x2) - (C * x2) + D - 1);
-  H = (float)((y3 - y2) / (x3 - x2));
-  K = (float)((F * F) - (4 * E * G));
+  A = (double)(1/(a1 * a1));
+  B = (double)((y3 - y2) * (y3 - y2)) / ((x3 - x2) * (x3 - x2) * b1 * b1);
+  C = (double)(2 * (y3 - y2) * (y2 - y1)) / ((x3 - x2) * b1 * b1);
+  D = (double)((y2 - y1) * (y2 - y1)) / (b1 * b1);
+  E = (double)(A + B);
+  F = (double)(C - (2 * A * x1) - (2 * B * x2));
+  G = (double)((A * x1 * x1) + (B * x2 * x2) - (C * x2) + D - 1);
+  H = (double)((y3 - y2) / (x3 - x2));
+  K = (double)((F * F) - (4 * E * G));
 
   if (K >= 0)
   // In this case the line intersects the ellipse, so calculate intersection
   { 
     if(x2 >= x1)
     {
-      ellipse1_x = (float)(((F * -1) + sqrt(K)) / (2 * E));
-      ellipse1_y = (float)((H * (ellipse1_x - x2)) + y2);
+      ellipse1_x = (double)(((F * -1) + sqrt(K)) / (2 * E));
+      ellipse1_y = (double)((H * (ellipse1_x - x2)) + y2);
     }
     else
     {
-      ellipse1_x = (float)(((F * -1) -  sqrt(K)) / (2 * E));
-      ellipse1_y = (float)((H * (ellipse1_x - x2)) + y2);
+      ellipse1_x = (double)(((F * -1) -  sqrt(K)) / (2 * E));
+      ellipse1_y = (double)((H * (ellipse1_x - x2)) + y2);
     }
   }
   else
@@ -812,8 +810,8 @@ void draw_arc_to_ellipse(float x1, float y1, float width1, float height1, float 
   // Draw a little circle (radius = 2) at the end of the arc where it hits
   // the ellipse .
 
-  float circle_x = ellipse1_x - 2.0;
-  float circle_y = ellipse1_y - 2.0;
+  double circle_x = ellipse1_x - 2.0;
+  double circle_y = ellipse1_y - 2.0;
   m_canvas->DrawEllipse(circle_x, circle_y, 4.0, 4.0);
 */
 }
@@ -832,6 +830,12 @@ void UpdateListBox(wxListBox *item, wxList *list)
     item->Append(s);
     node = node->Next();
   }
+}
+
+bool oglRoughlyEqual(double val1, double val2, double tol)
+{
+    return ( (val1 < (val2 + tol)) && (val1 > (val2 - tol)) &&
+             (val2 < (val1 + tol)) && (val2 > (val1 - tol)));
 }
 
 /*

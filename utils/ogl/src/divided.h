@@ -32,13 +32,13 @@ class wxDividedShape: public wxRectangleShape
  DECLARE_DYNAMIC_CLASS(wxDividedShape)
 
  public:
-  wxDividedShape(float w = 0.0, float h = 0.0);
+  wxDividedShape(double w = 0.0, double h = 0.0);
   ~wxDividedShape();
 
   void OnDraw(wxDC& dc);
   void OnDrawContents(wxDC& dc);
 
-  void SetSize(float w, float h, bool recursive = TRUE);
+  void SetSize(double w, double h, bool recursive = TRUE);
 
   void MakeControlPoints();
   void ResetControlPoints();
@@ -62,13 +62,13 @@ class wxDividedShape: public wxRectangleShape
   void EditRegions();
 
   // Attachment points correspond to regions in the divided box
-  bool GetAttachmentPosition(int attachment, float *x, float *y,
+  bool GetAttachmentPosition(int attachment, double *x, double *y,
                                      int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
   bool AttachmentIsValid(int attachment);
   int GetNumberOfAttachments();
 
   // Invoke editor on CTRL-right click
-  void OnRightClick(float x, float y, int keys = 0, int attachment = 0);
+  void OnRightClick(double x, double y, int keys = 0, int attachment = 0);
 };
 
 #endif

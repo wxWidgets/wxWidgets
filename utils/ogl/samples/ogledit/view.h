@@ -34,16 +34,16 @@ class MyCanvas: public wxShapeCanvas
   void OnMouseEvent(wxMouseEvent& event);
   void OnPaint(wxPaintEvent& event);
 
-  virtual void OnLeftClick(float x, float y, int keys = 0);
-  virtual void OnRightClick(float x, float y, int keys = 0);
+  virtual void OnLeftClick(double x, double y, int keys = 0);
+  virtual void OnRightClick(double x, double y, int keys = 0);
 
-  virtual void OnDragLeft(bool draw, float x, float y, int keys=0); // Erase if draw false
-  virtual void OnBeginDragLeft(float x, float y, int keys=0);
-  virtual void OnEndDragLeft(float x, float y, int keys=0);
+  virtual void OnDragLeft(bool draw, double x, double y, int keys=0); // Erase if draw false
+  virtual void OnBeginDragLeft(double x, double y, int keys=0);
+  virtual void OnEndDragLeft(double x, double y, int keys=0);
 
-  virtual void OnDragRight(bool draw, float x, float y, int keys=0); // Erase if draw false
-  virtual void OnBeginDragRight(float x, float y, int keys=0);
-  virtual void OnEndDragRight(float x, float y, int keys=0);
+  virtual void OnDragRight(bool draw, double x, double y, int keys=0); // Erase if draw false
+  virtual void OnBeginDragRight(double x, double y, int keys=0);
+  virtual void OnEndDragRight(double x, double y, int keys=0);
 
 DECLARE_EVENT_TABLE()
 };
