@@ -1841,7 +1841,8 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         }
 
 #ifdef __UNIX__
-        if (afmFile==NULL)
+#ifndef __VMS__
+       if (afmFile==NULL)
         /* please do NOT change the line above to "else if (afmFile==NULL)" -
            - afmFile = fopen() may fail and in that case the next if branch
            MUST be executed - and it would not if there was "else" */
@@ -1854,6 +1855,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                    << name << ".afm";
            afmFile = fopen(afmName,"r");
         }
+#endif
 #endif
         
         if (afmFile==NULL)
