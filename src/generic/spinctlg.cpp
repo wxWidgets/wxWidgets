@@ -118,8 +118,8 @@ protected:
 
       m_spin->GetEventHandler()->ProcessEvent(event);
 #else
-        m_spin->SetTextValue(event.GetPosition());
-        event.Skip();
+        m_spin->SetTextValue(eventSpin.GetPosition());
+        eventSpin.Skip();
 #endif
     }
 
