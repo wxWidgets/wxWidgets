@@ -68,6 +68,7 @@ public:
     bool Compile(const wxString& expr, int flags = 0);
     bool Matches(const wxChar *str, int flags = 0) const;
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
+    size_t GetMatchCount() const;
     int Replace(wxString *pattern, const wxString& replacement,
                 size_t maxMatches = 0) const;
 
@@ -242,9 +243,12 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
                 {
                     // we know that the previous character is not an unquoted
                     // backslash because it would have been eaten above, so we
-                    // have a bar '(' and this indicates a group start for the
-                    // extended syntax
-                    m_nMatches++;
+                    // have a bare '(' and this indicates a group start for the
+                    // extended syntax. '(?' is used for extensions by perl-
+                    // like REs (e.g. advanced), and is not valid for POSIX
+                    // extended, so ignore them always.
+                    if ( cptr[1] != _T('?') )
+                        m_nMatches++;
                 }
             }
         }
@@ -306,7 +310,8 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
 bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
 {
     wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
-    wxCHECK_MSG( m_Matches, FALSE, _T("can't use with wxRE_NOSUB") );
+    wxCHECK_MSG( m_nMatches, FALSE, _T("can't use with wxRE_NOSUB") );
+    wxCHECK_MSG( m_Matches, FALSE, _T("must call Matches() first") );
     wxCHECK_MSG( index < m_nMatches, FALSE, _T("invalid match index") );
 
     const regmatch_t& match = m_Matches[index];
@@ -317,6 +322,14 @@ bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
         *len = match.rm_eo - match.rm_so;
 
     return TRUE;
+}
+
+size_t wxRegExImpl::GetMatchCount() const
+{
+    wxCHECK_MSG( IsValid(), 0, _T("must successfully Compile() first") );
+    wxCHECK_MSG( m_nMatches, 0, _T("can't use with wxRE_NOSUB") );
+
+    return m_nMatches;
 }
 
 int wxRegExImpl::Replace(wxString *text,
@@ -485,6 +498,13 @@ wxString wxRegEx::GetMatch(const wxString& text, size_t index) const
         return wxEmptyString;
 
     return text.Mid(start, len);
+}
+
+size_t wxRegEx::GetMatchCount() const
+{
+    wxCHECK_MSG( IsValid(), 0, _T("must successfully Compile() first") );
+
+    return m_impl->GetMatchCount();
 }
 
 int wxRegEx::Replace(wxString *pattern,

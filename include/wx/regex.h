@@ -116,6 +116,12 @@ public:
     // may only be called after successful call to Matches()
     wxString GetMatch(const wxString& text, size_t index = 0) const;
 
+    // return the size of the array of matches, i.e. the number of bracketed
+    // subexpressions plus one for the expression itself, or 0 on error.
+    //
+    // may only be called after successful call to Compile()
+    size_t GetMatchCount() const;
+
     // replaces the current regular expression in the string pointed to by
     // pattern, with the text in replacement and return number of matches
     // replaced (maybe 0 if none found) or -1 on error

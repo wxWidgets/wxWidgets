@@ -170,6 +170,16 @@ May only be called after successful call to \helpref{Matches()}{wxregexmatches}
 and only if {\tt wxRE\_NOSUB} was {\bf not} used in 
 \helpref{Compile()}{wxregexcompile}.
 
+\membersection{wxRegEx::GetMatchCount}\label{wxregexgetmatchcount}
+
+\constfunc{size\_t}{GetMatchCount}{\void}
+
+Returns the size of the array of matches, i.e. the number of bracketed
+subexpressions plus one for the expression itself, or $0$ on error.
+
+May only be called after successful call to \helpref{Compile()}{wxregexcompile}.
+and only if {\tt wxRE\_NOSUB} was {\bf not} used.
+
 \membersection{wxRegEx::Matches}\label{wxregexmatches}
 
 \constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags = 0}}
