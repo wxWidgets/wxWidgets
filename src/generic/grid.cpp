@@ -5310,6 +5310,14 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         // Clear the old current cell highlight
         wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
 
+	if ( !m_gridLinesEnabled )
+	{
+	    r.x--;
+	    r.y--;
+	    r.width++;
+	    r.height++;
+	}
+
         // Otherwise refresh redraws the highlight!
         m_currentCellCoords = coords;
 
