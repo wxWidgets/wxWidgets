@@ -678,7 +678,10 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
     {
         if ( !selectionOnly )
         {
-            SetSelection(-1, -1);
+            //SetSelection(-1, -1);
+            // This eliminates an annoying flashing effect
+            // when replacing all text.
+            Clear();
         }
 
         ::SendMessage(GetHwnd(), EM_REPLACESEL, 0, (LPARAM)valueDos.c_str());
