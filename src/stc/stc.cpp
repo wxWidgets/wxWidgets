@@ -128,9 +128,10 @@ long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
 wxString wxStyledTextCtrl::GetText() {
     wxString text;
     int   len  = GetTextLength();
-    char* buff = text.GetWriteBuf(len);
+    char* buff = text.GetWriteBuf(len+1);
 
     SendMsg(WM_GETTEXT, len, (long)buff);
+    buff[len] = 0;
     text.UngetWriteBuf();
     return text;
 }
