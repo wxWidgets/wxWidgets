@@ -4032,7 +4032,9 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
         {
             m_lineFrom = GetScrollPos(wxVERTICAL);
 
-            wxASSERT_MSG( m_lineFrom < count, _T("invalid scroll position?") );
+            // this may happen if SetScrollbars() hadn't been called yet
+            if ( m_lineFrom >= count )
+                m_lineFrom = count;
 
             // we redraw one extra line but this is needed to make the redrawing
             // logic work when there is a fractional number of lines on screen
