@@ -117,11 +117,15 @@ public:
 
   // base class virtuals
   // -------------------
+
   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
   virtual bool MSWOnScroll(int orientation, WXWORD nSBCode,
                            WXWORD pos, WXHWND control);
+
+#if wxUSE_CONSTRAINTS
   virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool DoPhase(int nPhase);
+#endif // wxUSE_CONSTRAINTS
 
 protected:
   // common part of all ctors

@@ -603,6 +603,8 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 // wxNotebook base class virtuals
 // ----------------------------------------------------------------------------
 
+#if wxUSE_CONSTRAINTS
+
 // override these 2 functions to do nothing: everything is done in OnSize
 
 void wxNotebook::SetConstraintSizes(bool WXUNUSED(recurse))
@@ -615,6 +617,8 @@ bool wxNotebook::DoPhase(int WXUNUSED(nPhase))
 {
   return TRUE;
 }
+
+#endif // wxUSE_CONSTRAINTS
 
 // ----------------------------------------------------------------------------
 // wxNotebook Windows message handlers
