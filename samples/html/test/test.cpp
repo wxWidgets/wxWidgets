@@ -23,6 +23,7 @@
 
 #include <wx/image.h>
 #include <wx/html/htmlwin.h>
+#include <wx/fs_inet.h>
 
 // ----------------------------------------------------------------------------
 // private classes
