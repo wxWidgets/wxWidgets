@@ -95,7 +95,7 @@ void wxStaticText::SetLabel(const wxString& st )
         InvalidateBestSize();
         SetSize( GetBestSize() ) ;
     }
-
+    Refresh() ;
     Update() ;
 }
 
@@ -106,10 +106,10 @@ bool wxStaticText::SetFont(const wxFont& font)
 	if ( ret )
 	{
 	    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-            {
-                InvalidateBestSize();
-	        SetSize( GetBestSize() );
-            }
+        {
+            InvalidateBestSize();
+            SetSize( GetBestSize() );
+        }
 	}
 
     return ret;
