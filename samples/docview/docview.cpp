@@ -62,7 +62,7 @@ bool MyApp::OnInit(void)
   ///   single window : (one document at a time, only one frame, as in Windows Write)
   if (argc > 1)
   {
-    if (strcmp(argv[1], "-single") == 0)
+    if (wxStrcmp(argv[1], _T("-single")) == 0)
     {
       singleWindowMode = TRUE;
     }

@@ -372,18 +372,18 @@ void DnDFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     if ( !wxTheClipboard->Open() )
     {
-        wxLogError("Can't open clipboard.");
+        wxLogError(_T("Can't open clipboard."));
 
         return;
     }
 
     if ( !wxTheClipboard->AddData(new wxTextDataObject(m_strText)) )
     {
-        wxLogError("Can't copy data to the clipboard");
+        wxLogError(_T("Can't copy data to the clipboard"));
     }
     else
     {
-        wxLogMessage("Text '%s' put on the clipboard", m_strText.c_str());
+        wxLogMessage(_T("Text '%s' put on the clipboard"), m_strText.c_str());
     }
 
     wxTheClipboard->Close();
@@ -393,14 +393,14 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 {
     if ( !wxTheClipboard->Open() )
     {
-        wxLogError("Can't open clipboard.");
+        wxLogError(_T("Can't open clipboard."));
 
         return;
     }
 
     if ( !wxTheClipboard->IsSupported(wxDF_TEXT) )
     {
-        wxLogWarning("No text data on clipboard");
+        wxLogWarning(_T("No text data on clipboard"));
 
         return;
     }
@@ -408,11 +408,11 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     wxTextDataObject text;
     if ( !wxTheClipboard->GetData(&text) )
     {
-        wxLogError("Can't paste data from the clipboard");
+        wxLogError(_T("Can't paste data from the clipboard"));
     }
     else
     {
-        wxLogMessage("Text '%s' pasted from the clipboard",
+        wxLogMessage(_T("Text '%s' pasted from the clipboard"),
                      text.GetText().c_str());
     }
 
