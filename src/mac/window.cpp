@@ -694,11 +694,17 @@ bool wxWindowMac::Show(bool show)
     if ( !wxWindowBase::Show(show) )
         return FALSE;
 
+/*
+    WindowRef window = (WindowRef) MacGetRootWindow() ;
+    wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
+    if ( win == NULL && win->m_isBeingDeleted )
+        return FALSE ;
+*/       
     MacSuperShown( show ) ;
+    Refresh() ; 
+/*      
     if ( !show )
     {
-        WindowRef window = (WindowRef) MacGetRootWindow() ;
-        wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
         if ( win && !win->m_isBeingDeleted )
             Refresh() ; 
     }
@@ -706,7 +712,7 @@ bool wxWindowMac::Show(bool show)
     {
         Refresh() ; 
     }
-
+*/
     return TRUE;
 }
 
@@ -911,7 +917,7 @@ const wxBrush& wxWindowMac::MacGetBackgroundBrush()
                         Rect extent = { 0 , 0 , 0 , 0 } ;
                         int x , y ;
                         x = y = 0 ;
-                        wxSize size = GetSize() ;
+                        wxSize size = parent->GetSize() ;
                         parent->MacClientToRootWindow( &x , &y ) ;
                         extent.left = x ;
                         extent.top = y ;
