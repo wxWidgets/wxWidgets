@@ -145,7 +145,7 @@ Deletes all pages.
 
 \membersection{wxNotebook::DeletePage}\label{wxnotebookdeletepage}
 
-\func{bool}{DeletePage}{\param{int}{ page}}
+\func{bool}{DeletePage}{\param{size\_t}{ page}}
 
 Deletes the specified page, and the associated window.
 
@@ -163,25 +163,25 @@ Returns the associated image list.
 
 \membersection{wxNotebook::GetPage}\label{wxnotebookgetpage}
 
-\func{wxNotebookPage*}{GetPage}{\param{int}{ page}}
+\func{wxNotebookPage*}{GetPage}{\param{size\_t}{ page}}
 
 Returns the window at the given page position.
 
 \membersection{wxNotebook::GetPageCount}\label{wxnotebookgetpagecount}
 
-\constfunc{int}{GetPageCount}{\void}
+\constfunc{size\_t}{GetPageCount}{\void}
 
 Returns the number of pages in the notebook control.
 
 \membersection{wxNotebook::GetPageImage}\label{wxnotebookgetpageimage}
 
-\constfunc{int}{GetPageImage}{\param{int }{nPage}}
+\constfunc{int}{GetPageImage}{\param{size\_t }{nPage}}
 
 Returns the image index for the given page.
 
 \membersection{wxNotebook::GetPageText}\label{wxnotebookgetpagetext}
 
-\constfunc{wxString}{GetPageText}{\param{int }{nPage}}
+\constfunc{wxString}{GetPageText}{\param{size\_t }{nPage}}
 
 Returns the string for the given page.
 
@@ -235,7 +235,7 @@ the specified position.
 
 \membersection{wxNotebook::InsertPage}\label{wxnotebookinsertpage}
 
-\func{bool}{InsertPage}{\param{int}{ index}, \param{wxNotebookPage*}{ page},
+\func{bool}{InsertPage}{\param{size\_t}{ index}, \param{wxNotebookPage*}{ page},
  \param{const wxString\&}{ text},
  \param{bool}{ select = false},
  \param{int}{ imageId = -1}}
@@ -278,7 +278,7 @@ An event handler function, called when the page selection is changed.
 
 \membersection{wxNotebook::RemovePage}\label{wxnotebookremovepage}
 
-\func{bool}{RemovePage}{\param{int}{ page}}
+\func{bool}{RemovePage}{\param{size\_t}{ page}}
 
 Deletes the specified page, without deleting the associated window.
 
@@ -312,20 +312,20 @@ Sets the width and height of the pages.
 
 \membersection{wxNotebook::SetPageImage}\label{wxnotebooksetpageimage}
 
-\func{bool}{SetPageImage}{\param{int}{ page}, \param{int }{image}}
+\func{bool}{SetPageImage}{\param{size\_t}{ page}, \param{int }{image}}
 
 Sets the image index for the given page. {\it image} is an index into
 the image list which was set with \helpref{wxNotebook::SetImageList}{wxnotebooksetimagelist}.
 
 \membersection{wxNotebook::SetPageText}\label{wxnotebooksetpagetext}
 
-\func{bool}{SetPageText}{\param{int}{ page}, \param{const wxString\& }{text}}
+\func{bool}{SetPageText}{\param{size\_t}{ page}, \param{const wxString\& }{text}}
 
 Sets the text for the given page.
 
 \membersection{wxNotebook::SetSelection}\label{wxnotebooksetselection}
 
-\func{int}{SetSelection}{\param{int}{ page}}
+\func{int}{SetSelection}{\param{size\_t}{ page}}
 
 Sets the selection for the given page, returning the previous selection.
 
