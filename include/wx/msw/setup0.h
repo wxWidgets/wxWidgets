@@ -325,7 +325,7 @@
                                 // Use PCX bitmap/image code
 #define wxUSE_SERIAL        0
                                 // Use serialization (requires utils/serialize)
-#define wxUSE_DYNLIB_CLASS  0
+#define wxUSE_DYNLIB_CLASS  1
                                 // Compile in wxLibrary class for run-time
                                 // DLL loading and function calling
 #define wxUSE_TOOLTIPS      1
