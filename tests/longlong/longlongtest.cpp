@@ -303,6 +303,9 @@ void LongLongTestCase::ToString()
     a.Negate();
     CPPUNIT_ASSERT( a.ToString() == _T("-1311768467139281697") );
 
+    wxLongLong llMin(LONG_MIN, 0);
+    CPPUNIT_ASSERT( a.ToString() == _T("-9223372036854775808") );
+
 #if wxUSE_LONGLONG_WX
     wxLongLongWx a1(a.GetHi(), a.GetLo());
     CPPUNIT_ASSERT( a1.ToString() == _T("-1311768467139281697") );

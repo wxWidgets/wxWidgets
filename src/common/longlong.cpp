@@ -1105,7 +1105,10 @@ void *wxULongLongWx::asArray(void) const
                                                                      \
         while ( ll != 0 )                                            \
         {                                                            \
-            result.Prepend((wxChar)(_T('0') + (ll % 10).ToLong()));  \
+            long digit = (ll % 10).ToLong();                         \
+            if ( neg )                                               \
+                digit = -digit;                                      \
+            result.Prepend((wxChar)(_T('0') + digit));               \
             ll /= 10;                                                \
         }                                                            \
                                                                      \
