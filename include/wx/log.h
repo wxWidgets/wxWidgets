@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        log.h
+// Name:        wx/log.h
 // Purpose:     Assorted wxLogXXX functions, and wxLog (sink for logs)
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -264,30 +264,6 @@ protected:
 
 #endif // wxUSE_STD_IOSTREAM
 
-// the following log targets are only compiled in if the we're compiling the
-// GUI part (andnot just the base one) of the library, they're implemented in
-// src/generic/logg.cpp *and not src/common/log.cpp unlike all the rest)
-
-#if wxUSE_GUI
-
-#if wxUSE_TEXTCTRL
-
-// log everything to a text window (GUI only of course)
-class WXDLLEXPORT wxLogTextCtrl : public wxLog
-{
-public:
-    wxLogTextCtrl(wxTextCtrl *pTextCtrl);
-
-private:
-    // implement sink function
-    virtual void DoLogString(const wxChar *szString, time_t t);
-
-    // the control we use
-    wxTextCtrl *m_pTextCtrl;
-};
-
-#endif // wxUSE_TEXTCTRL
-
 // ----------------------------------------------------------------------------
 // /dev/null log target: suppress logging until this object goes out of scope
 // ----------------------------------------------------------------------------
@@ -370,6 +346,32 @@ class WXDLLEXPORT wxLogPassThrough : public wxLogChain
 public:
     wxLogPassThrough();
 };
+
+// ----------------------------------------------------------------------------
+// the following log targets are only compiled in if the we're compiling the
+// GUI part (andnot just the base one) of the library, they're implemented in
+// src/generic/logg.cpp *and not src/common/log.cpp unlike all the rest)
+// ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
+
+#if wxUSE_TEXTCTRL
+
+// log everything to a text window (GUI only of course)
+class WXDLLEXPORT wxLogTextCtrl : public wxLog
+{
+public:
+    wxLogTextCtrl(wxTextCtrl *pTextCtrl);
+
+private:
+    // implement sink function
+    virtual void DoLogString(const wxChar *szString, time_t t);
+
+    // the control we use
+    wxTextCtrl *m_pTextCtrl;
+};
+
+#endif // wxUSE_TEXTCTRL
 
 // ----------------------------------------------------------------------------
 // GUI log target, the default one for wxWindows programs
