@@ -488,6 +488,7 @@ static rgbRecord theRGBRecords[] =
     {"seagreen", myRGB(82, 149, 132)},
     {"seashell", myRGB(255, 245, 238)},
     {"sienna", myRGB(150, 82, 45)},
+    {"silver", myRGB(192, 192, 192)},
     {"skyblue", myRGB(114, 159, 255)},
     {"slateblue", myRGB(126, 136, 171)},
     {"slategray", myRGB(112, 128, 144)},
@@ -508,7 +509,7 @@ static rgbRecord theRGBRecords[] =
     {"yellowgreen", myRGB(50, 216, 56)},
     {NULL, myRGB(0, 0, 0)}
 };
-static int numTheRGBRecords = 234;
+static int numTheRGBRecords = 235;
 
 static unsigned char ParseHexadecimal(char digit1, char digit2)
 {
