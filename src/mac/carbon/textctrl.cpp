@@ -354,8 +354,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     m_macIsUserPane = FALSE ;
     m_editable = true ;
 
-    if ( !HasFlag(wxNO_BORDER) )
-        style |= wxSUNKEN_BORDER ;
+    if ( ! ( style & wxNO_BORDER) )
+        style = ( style & ~wxBORDER_MASK) | wxSUNKEN_BORDER ;
     
     if ( !wxTextCtrlBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
         return FALSE;
