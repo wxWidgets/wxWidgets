@@ -48,7 +48,7 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
   int value = (int)(win->m_adjust->value+0.5);
       
   int orient = wxHORIZONTAL;
-  if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxHORIZONTAL;
+  if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxVERTICAL;
   
   wxScrollEvent event( command, win->GetId(), value, orient );
   event.SetEventObject( win );
@@ -180,14 +180,14 @@ void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int page
     SetPosition( position );
     return;
   }
-      
+  
   m_oldPos = fpos;
   
   m_adjust->lower = 0.0;
   m_adjust->upper = frange;
   m_adjust->value = fpos;
   m_adjust->step_increment = 1.0;
-  m_adjust->page_increment = (float)(wxMax(fpage-2,0));
+  m_adjust->page_increment = (float)(wxMax(fpage,0));
   m_adjust->page_size = fthumb;
 
   gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );

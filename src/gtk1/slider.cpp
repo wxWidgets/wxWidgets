@@ -48,7 +48,7 @@ static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
   int value = (int)(win->m_adjust->value+0.5);
       
   int orient = wxHORIZONTAL;
-  if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxHORIZONTAL;
+  if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxVERTICAL;
   
   wxScrollEvent event( command, win->GetId(), value, orient );
   event.SetEventObject( win );

@@ -806,7 +806,7 @@ static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 static gint gtk_scrollbar_button_press_callback( GtkRange *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
   if (gdk_event->window != widget->slider) return FALSE;
-    
+
   win->m_isScrolling = TRUE;
   
   return FALSE;
@@ -929,6 +929,12 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
  
   gtk_signal_connect( GTK_OBJECT(s_window->vscrollbar), "button_press_event",
           (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
+
+  gtk_signal_connect( GTK_OBJECT(s_window->hscrollbar), "button_press_event",
+          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
+
+  gtk_signal_connect( GTK_OBJECT(s_window->vscrollbar), "button_release_event",
+          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
 
   gtk_signal_connect( GTK_OBJECT(s_window->hscrollbar), "button_release_event",
           (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
@@ -2264,7 +2270,7 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     m_hAdjust->upper = frange;
     m_hAdjust->value = fpos;
     m_hAdjust->step_increment = 1.0;
-    m_hAdjust->page_increment = (float)(wxMax(fthumb-2,0));
+    m_hAdjust->page_increment = (float)(wxMax(fthumb,0));
     m_hAdjust->page_size = fthumb;
   }
   else
@@ -2286,7 +2292,7 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     m_vAdjust->upper = frange;
     m_vAdjust->value = fpos;
     m_vAdjust->step_increment = 1.0;
-    m_vAdjust->page_increment = (float)(wxMax(fthumb-2,0));
+    m_vAdjust->page_increment = (float)(wxMax(fthumb,0));
     m_vAdjust->page_size = fthumb;
   }
   
