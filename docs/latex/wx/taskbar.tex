@@ -61,6 +61,13 @@ Returns true if \helpref{SetIcon}{wxtaskbariconseticon} was called with no subse
 
 Returns true if the object initialized successfully.
 
+\membersection{wxTaskBarIcon::PopupMenu}\label{wxtaskbariconpopupmenu}
+
+\func{bool}{PopupMenu}{\param{wxMenu*}{ menu}}
+
+Pops up a menu at the current mouse position. The events can be handled by
+a class derived from wxTaskBarIcon.
+
 \membersection{wxTaskBarIcon::RemoveIcon}\label{wxtaskbariconremoveicon}
 
 \func{bool}{RemoveIcon}{\void}
