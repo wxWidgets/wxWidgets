@@ -131,6 +131,7 @@ COMMONOBJS = \
 		$(COMMDIR)\odbc.obj \
 		$(COMMDIR)\paper.obj \
 		$(COMMDIR)\prntbase.obj \
+		$(COMMDIR)\process.obj \
 		$(COMMDIR)\resource.obj \
 		$(COMMDIR)\sizer.obj \
 		$(COMMDIR)\strconv.obj \
@@ -906,6 +907,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/prntbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/process.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

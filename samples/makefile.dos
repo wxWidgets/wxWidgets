@@ -16,145 +16,283 @@ WXDIR = $(WXWIN)
 
 THISDIR=$(WXDIR)\samples
 
+#
+# Indicates kind of pb with samples
+#
+# No makefile.dos file
+NOMAKE=1
+# No 16 bit version
+ONLY32=1
+# PNG unresolved
+PNGSETUP=1
+# DND not set in setup.h
+DNDSETUP=1
+# Misc. compilation errors
+COMPIL=1
+
 !include $(WXDIR)\src\makemsc.env
 
+#
+# Please keep samples list up-to-date, in alphabetical order
+#
 all:
-        cd $(WXDIR)\samples\splitter
+        cd $(WXDIR)\samples\bombs
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\resource
+        cd $(WXDIR)\samples\caret
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\checklst
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\config
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\controls
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\listctrl
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\db
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\treectrl
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\validate
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\mdi
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\minimal
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\layout
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\printing
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\toolbar
+!endif
+        cd $(WXDIR)\samples\dde
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(DNDSETUP)"==""
+        cd $(WXDIR)\samples\dnd
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
         cd $(WXDIR)\samples\docview
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\docvwmdi
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\controls
+        cd $(WXDIR)\samples\drawing
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\nativdlg
+        cd $(WXDIR)\samples\dynamic
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\forty
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\fractal
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\grid
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\internat
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\help
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\dnd
+        cd $(WXDIR)\samples\html
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+!if "$(PNGSETUP)"==""
+        cd $(WXDIR)\samples\image
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\internat
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\joytest
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\taskbar
+        cd $(WXDIR)\samples\layout
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\sashtest
+        cd $(WXDIR)\samples\listctrl
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\mdi
         nmake -f makefile.dos FINAL=$(FINAL)
 !if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.dos FINAL=$(FINAL)
 !endif
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\mfc
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\ownerdrw
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\checklst
-        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
         cd $(WXDIR)\samples\minifram
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\bombs
+        cd $(WXDIR)\samples\minimal
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\fractal
+!if "$(ONLY32)"==""
+        cd $(WXDIR)\samples\nativdlg
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\wxpoem
+!endif
+        cd $(WXDIR)\samples\notebook
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\typetest
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\oleauto
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\png
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\printing
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\proplist
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\image
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\regtest
         nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(WXDIR)\samples\dde
+!endif
+        cd $(WXDIR)\samples\resource
         nmake -f makefile.dos FINAL=$(FINAL)
-#        cd $(WXDIR)\samples\regtest
-#        nmake -f makefile.dos FINAL=$(FINAL)
-
-clean:
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\richedit
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\sashtest
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+!if "$(PNGSETUP)"==""
+        cd $(WXDIR)\samples\scroll
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
         cd $(WXDIR)\samples\splitter
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\mdi
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\minimal
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\layout
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\printing
-        nmake -f makefile.dos clean
+        nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\tab
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\text
+        nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(ONLY32)"==""
+        cd $(WXDIR)\samples\thread
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
         cd $(WXDIR)\samples\toolbar
+        nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(PNGSETUP)"==""
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\typetest
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\wizard
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\wxpoem
+        nmake -f makefile.dos FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\wxsocket
+        nmake -f makefile.dos FINAL=$(FINAL)
+!endif
+clean:
+        cd $(WXDIR)\samples\bombs
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\caret
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\checklst
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\config
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\controls
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\db
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\dde
         nmake -f makefile.dos clean
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\resource
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\listctrl
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\treectrl
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\validate
+        cd $(WXDIR)\samples\dnd
         nmake -f makefile.dos clean
         cd $(WXDIR)\samples\docview
         nmake -f makefile.dos clean
         cd $(WXDIR)\samples\docvwmdi
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\controls
+        cd $(WXDIR)\samples\drawing
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\nativdlg
+        cd $(WXDIR)\samples\dynamic
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\grid
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\internat
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\checklst
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\ownerdrw
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\dnd
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\joytest
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\regtest
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\taskbar
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\sashtest
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\memcheck
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\minifram
-        nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\bombs
+        cd $(WXDIR)\samples\forty
         nmake -f makefile.dos clean
         cd $(WXDIR)\samples\fractal
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\wxpoem
+        cd $(WXDIR)\samples\grid
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\typetest
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\help
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\html
+        nmake -f makefile.dos clean
+!endif
+        cd $(WXDIR)\samples\image
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\internat
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\joytest
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\layout
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\listctrl
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\mdi
+        nmake -f makefile.dos clean
+!if "$(FINAL)" == "0"
+        cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.dos clean
+!endif
+        cd $(WXDIR)\samples\mfc
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\minifram
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\minimal
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\notebook
+        nmake -f makefile.dos clean
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\oleauto
+        nmake -f makefile.dos clean
+!endif
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.dos clean
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\png
+        nmake -f makefile.dos clean
+!endif
+        cd $(WXDIR)\samples\printing
         nmake -f makefile.dos clean
         cd $(WXDIR)\samples\proplist
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\image
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\regtest
         nmake -f makefile.dos clean
-        cd $(WXDIR)\samples\dde
+!endif
+        cd $(WXDIR)\samples\resource
+        nmake -f makefile.dos clean
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\richedit
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\sashtest
+        nmake -f makefile.dos clean
+!endif
+        cd $(WXDIR)\samples\scroll
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\splitter
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\tab
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\text
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\thread
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\toolbar
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\typetest
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.dos clean
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\wizard
+        nmake -f makefile.dos clean
+!endif
+        cd $(WXDIR)\samples\wxpoem
+        nmake -f makefile.dos clean
+        cd $(WXDIR)\samples\wxsocket
         nmake -f makefile.dos clean
 

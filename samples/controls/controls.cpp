@@ -23,7 +23,9 @@
     #include "wx/wx.h"
 #endif
 
+#if !defined( __WXMSW__ ) || defined( __WIN95__ )
 #include "wx/spinbutt.h"
+#endif
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 

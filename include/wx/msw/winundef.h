@@ -187,6 +187,16 @@
     }
 #endif
 
+// IsMaximized
+
+#ifdef IsMaximized
+    #undef IsMaximized
+    inline BOOL IsMaximized(HWND hwnd)
+    {
+        return IsZoomed(hwnd);
+    }
+#endif
+
 // For WINE
 
 #if defined(GetWindowStyle) || defined(__WXWINE__)

@@ -1,4 +1,4 @@
-NAME         Dynamic
+NAME         Dynamik
 DESCRIPTION  'Dynamic event handler test'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'
@@ -6,3 +6,4 @@ CODE         PRELOAD MOVEABLE DISCARDABLE
 DATA         PRELOAD MOVEABLE MULTIPLE
 HEAPSIZE     4048
 STACKSIZE    16000
+

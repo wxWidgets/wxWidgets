@@ -34,7 +34,9 @@
     #include "wx/wx.h"
 #endif
 
+#if defined(__WIN95__) && !defined(__TWIN32__)
 #include "wx/spinbutt.h"
+#endif
 #include "wx/msw/private.h"
 
 // ---------------------------------------------------------------------------

@@ -11,8 +11,7 @@
 WXDIR = $(WXWIN)
 
 TARGET=bombs
-OBJECTS=dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj\
-  winprop.obj edtree.obj edlist.obj symbtabl.obj winstyle.obj
+OBJECTS = $(TARGET).obj bombs1.obj game.obj
 
 !include $(WXDIR)\src\makeprog.msc
 
