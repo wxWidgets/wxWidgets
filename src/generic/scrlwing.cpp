@@ -573,23 +573,28 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
     }
     else
     {
-        if (m_yScrollPixelsPerLine > 0)
+        if ( m_yScrollPixelsPerLine > 0 )
         {
-            int w, h;
-            GetTargetSize(&w, &h);
-
-            int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
-            int noPositions = (int) ( ((nMaxHeight - h)/(double)m_yScrollPixelsPerLine) + 0.5 );
-            if (noPositions < 0)
-                noPositions = 0;
-
-            if ( (m_yScrollPosition + nScrollInc) < 0 )
-                nScrollInc = -m_yScrollPosition; // As -ve as we can go
-            else if ( (m_yScrollPosition + nScrollInc) > noPositions )
-                nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
+            if ( m_yScrollPosition + nScrollInc < 0 )
+            {
+                // As -ve as we can go
+                nScrollInc = -m_yScrollPosition;
+            }
+            else // check for the other bound
+            {
+                const int posMax = m_yScrollLines - m_yScrollLinesPerPage;
+                if ( m_yScrollPosition + nScrollInc > posMax )
+                {
+                    // As +ve as we can go
+                    nScrollInc = posMax - m_yScrollPosition;
+                }
+            }
         }
         else
+        {
+            // VZ: why do we do this? (FIXME)
             m_targetWindow->Refresh(TRUE, GetRect());
+        }
     }
 
     return nScrollInc;
@@ -608,7 +613,14 @@ void wxScrollHelper::AdjustScrollbars()
     int oldXScroll = m_xScrollPosition;
     int oldYScroll = m_yScrollPosition;
 
-    do {
+    // VZ: at least under Windows this loop is useless because when scrollbars
+    //     [dis]appear we get a WM_SIZE resulting in another call to
+    //     AdjustScrollbars() anyhow. As it doesn't seem to do any harm I leave
+    //     it here for now but it would be better to ensure that all ports
+    //     generate EVT_SIZE when scrollbars [dis]appear, emulating it if
+    //     necessary, and remove it later
+    do
+    {
         GetTargetSize(&w, 0);
 
         if (m_xScrollPixelsPerLine == 0)
@@ -640,35 +652,54 @@ void wxScrollHelper::AdjustScrollbars()
 
         GetTargetSize(0, &h);
 
-        if (m_yScrollPixelsPerLine == 0)
+        // scroll lines per page: if 0, no scrolling is needed
+        int linesPerPage;
+
+        if ( m_yScrollPixelsPerLine == 0 )
         {
+            // scrolling is disabled
             m_yScrollLines = 0;
             m_yScrollPosition = 0;
-            m_win->SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE);
+            linesPerPage = 0;
         }
-        else
+        else // might need scrolling
         {
-            m_yScrollLines = m_targetWindow->GetVirtualSize().GetHeight() / m_yScrollPixelsPerLine;
+            int hVirt = m_targetWindow->GetVirtualSize().GetHeight();
+            m_yScrollLines = hVirt / m_yScrollPixelsPerLine;
 
             // Calculate page size i.e. number of scroll units you get on the
             // current client window
-            int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
-            if (noPagePositions < 1) noPagePositions = 1;
-            if ( noPagePositions > m_yScrollLines )
-                noPagePositions = m_yScrollLines;
+            linesPerPage = h / m_yScrollPixelsPerLine;
+            if ( linesPerPage >= m_yScrollLines )
+            {
+                // we're big enough to not need scrolling
+                linesPerPage =
+                m_yScrollLines =
+                m_yScrollPosition = 0;
+            }
+            else // we do need a scrollbar
+            {
+                if ( linesPerPage < 1 )
+                    linesPerPage = 1;
 
-            // Correct position if greater than extent of canvas minus
-            // the visible portion of it or if below zero
-            m_yScrollPosition = wxMin( m_yScrollLines - noPagePositions, m_yScrollPosition );
-            m_yScrollPosition = wxMax( 0, m_yScrollPosition );
-
-            m_win->SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
-            // The amount by which we scroll when paging
-            SetScrollPageSize(wxVERTICAL, noPagePositions);
+                // Correct position if greater than extent of canvas minus
+                // the visible portion of it or if below zero
+                const int posMax = m_yScrollLines - linesPerPage;
+                if ( m_yScrollPosition > posMax )
+                    m_yScrollPosition = posMax;
+                else if ( m_yScrollPosition < 0 )
+                    m_yScrollPosition = 0;
+            }
         }
 
-        // If a scrollbar (dis)appeared as a result of this, adjust them again.
+        m_win->SetScrollbar(wxVERTICAL, m_yScrollPosition,
+                            linesPerPage, m_yScrollLines);
 
+        // The amount by which we scroll when paging
+        SetScrollPageSize(wxVERTICAL, linesPerPage);
+
+
+        // If a scrollbar (dis)appeared as a result of this, adjust them again.
         oldw = w;
         oldh = h;
 
