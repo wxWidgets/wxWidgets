@@ -75,6 +75,7 @@ const wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED =          wxEVT_FIRST + 18;
 
 /* Sockets send events, too */
 const wxEventType wxEVT_SOCKET =                            wxEVT_FIRST + 50;
+const wxEventType wxEVT_TIMER  =                            wxEVT_FIRST + 80;
 
 /* Mouse event types */
 const wxEventType wxEVT_LEFT_DOWN =                         wxEVT_FIRST + 100;

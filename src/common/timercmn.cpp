@@ -245,6 +245,10 @@ wxLongLong wxGetLocalTimeMillis()
     SYSTEMTIME st;
     ::GetLocalTime(&st);
     return (val + st.wMilliseconds);
+#elif defined(__VISAGECPP__)
+    DATETIME    dt;
+    ::DosGetDateTime(&dt);
+    return (val + dt.hundredths*10);
 #elif defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )

@@ -7,8 +7,8 @@
  *  iODBC defines (ext)
  *
  *  The iODBC driver manager.
- *  
- *  Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+ *
+ *  Copyright (C) 1995 by Ke Jin <kejin@empress.com>
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 #ifndef	_ISQLEXT_H
 # define _ISQLEXT_H
 
-#include "isql.h"
+#include "wx/isql.h"
 
 /*
  *  Generic constants
@@ -1111,8 +1111,8 @@ RETCODE SQL_API SQLTables (HSTMT hstmt, UCHAR FAR * szTableQualifier,
 /*
  *  Level 2 function prototypes
  */
-RETCODE SQL_API SQLBrowseConnect (HDBC hdbc, 
-    UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut, 
+RETCODE SQL_API SQLBrowseConnect (HDBC hdbc,
+    UCHAR FAR * szConnStrIn, SWORD cbConnStrIn, UCHAR FAR * szConnStrOut,
     SWORD cbConnStrOutMax, SWORD FAR * pcbConnStrOut);
 RETCODE SQL_API SQLColumnPrivileges (HSTMT hstmt,
     UCHAR FAR * szTableQualifier, SWORD cbTableQualifier,
