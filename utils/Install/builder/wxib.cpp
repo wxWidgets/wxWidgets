@@ -157,7 +157,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
 
-    EVT_LISTBOX_DCLICK(ID_LISTBOX,          MyFrame::OnListBoxDoubleClick)
+    EVT_LISTBOX_DCLICK(ID_LISTBOX, MyFrame::OnListBoxDoubleClick)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -418,212 +418,230 @@ void MyFrame::OnSaveProject(wxCommandEvent& event)
 
 void MyFrame::OnListBoxDoubleClick( wxCommandEvent &event )
 {
-	wxString str = event.GetString();
-	if(strcmp(str, "closeold")==0)
-	{
-		m_textWindow->WriteText("closeold\n");
-	}
-	else if(strcmp(str, "system")==0)
-	{
-		wxTextEntryDialog dialog2(this,
-								 "Please enter the command to execute",
-								 appName,
-								 "",
-								 wxOK | wxCANCEL);
+	int item;
 
-		if (dialog2.ShowModal() == wxID_OK)
+	item = m_listBox->GetSelection();
+
+	switch(item)
+	{
+	case 0:
 		{
-            m_textWindow->WriteText("system,");
-			m_textWindow->WriteText(dialog2.GetValue());
-            m_textWindow->WriteText("\n");
+			wxFileDialog dialog2(this, "Choose wxr filename", "", "", "*.wxr", 0);
+
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				char tempbuf[1024] = "DialogEd ";
+				wxString tmp = dialog2.GetFilename();
+
+				m_textWindow->WriteText("loadwxr,");
+				m_textWindow->WriteText(tmp);
+				m_textWindow->WriteText("\n");
+
+				strcat(tempbuf, tmp);
+				wxExecute(tempbuf);
+			}
 		}
-	}
-	else if(strcmp(str, "grabfile")==0)
-	{
-		wxFileDialog dialog2(this, "Choose file to grab", "", "", "*", 0);
-
-		if (dialog2.ShowModal() == wxID_OK)
+		break;
+	case 1:
 		{
-            m_textWindow->WriteText("grabfile,");
-			m_textWindow->WriteText(dialog2.GetFilename());
-            m_textWindow->WriteText("\n");
+			m_textWindow->WriteText("closeold\n");
 		}
-	}
-	else if(strcmp(str, "loadwxr")==0)
-	{
-		wxFileDialog dialog2(this, "Choose wxr filename", "", "", "*.wxr", 0);
-
-		if (dialog2.ShowModal() == wxID_OK)
+		break;
+	case 2:
 		{
-			char tempbuf[1024] = "DialogEd ";
-			wxString tmp = dialog2.GetFilename();
+			wxFileDialog dialog2(this, "Choose filename to view", "", "", "*.txt", 0);
 
-			m_textWindow->WriteText("loadwxr,");
-			m_textWindow->WriteText(tmp);
-			m_textWindow->WriteText("\n");
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				wxTextEntryDialog dialog3(this,
+										  "Please enter name of the MLE widget",
+										  appName,
+										  "",
+										  wxOK | wxCANCEL);
 
-			strcat(tempbuf, tmp);
-            wxExecute(tempbuf);
+				if (dialog3.ShowModal() == wxID_OK)
+				{
+					m_textWindow->WriteText("mleview,");
+					m_textWindow->WriteText(dialog3.GetValue());
+					m_textWindow->WriteText(",");
+					m_textWindow->WriteText(dialog2.GetFilename());
+					m_textWindow->WriteText("\n");
+				}
+			}
 		}
-	}
-	else if(strcmp(str, "mleview")==0)
-	{
-		wxFileDialog dialog2(this, "Choose filename to view", "", "", "*.txt", 0);
-
-		if (dialog2.ShowModal() == wxID_OK)
+		break;
+	case 3:
 		{
-			wxTextEntryDialog dialog3(this,
-									  "Please enter name of the MLE widget",
+			wxFileDialog dialog2(this, "Choose script to attach to button", "", "", "*.ini", 0);
+
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				wxTextEntryDialog dialog3(this,
+										  "Please enter ID of the button",
+										  appName,
+										  "",
+										  wxOK | wxCANCEL);
+
+				if (dialog3.ShowModal() == wxID_OK)
+				{
+					m_textWindow->WriteText("setbutton,");
+					m_textWindow->WriteText(dialog3.GetValue());
+					m_textWindow->WriteText(",");
+					m_textWindow->WriteText(dialog2.GetFilename());
+					m_textWindow->WriteText("\n");
+				}
+			}
+		}
+		break;
+	case 4:
+		{
+			wxFileDialog dialog2(this, "Choose script to run if not checked", "", "", "*.ini", 0);
+
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				wxTextEntryDialog dialog3(this,
+										  "Please enter name of the checkbox widget",
+										  appName,
+										  "",
+										  wxOK | wxCANCEL);
+
+				if (dialog3.ShowModal() == wxID_OK)
+				{
+					m_textWindow->WriteText("getcheck,");
+					m_textWindow->WriteText(dialog3.GetValue());
+					m_textWindow->WriteText(",");
+					m_textWindow->WriteText(dialog2.GetFilename());
+					m_textWindow->WriteText("\n");
+				}
+			}
+		}
+		break;
+	case 5:
+		{
+			wxTextEntryDialog dialog2(this,
+									  "Please enter the message to display to the user",
 									  appName,
 									  "",
 									  wxOK | wxCANCEL);
 
-			if (dialog3.ShowModal() == wxID_OK)
+			if (dialog2.ShowModal() == wxID_OK)
 			{
-				m_textWindow->WriteText("mleview,");
-				m_textWindow->WriteText(dialog3.GetValue());
-				m_textWindow->WriteText(",");
-				m_textWindow->WriteText(dialog2.GetFilename());
-				m_textWindow->WriteText("\n");
+				m_textWindow->WriteText("message,\"");
+				m_textWindow->WriteText(dialog2.GetValue());
+				m_textWindow->WriteText("\"\n");
 			}
 		}
-	}
-	else if(strcmp(str, "setbutton")==0)
-	{
-		wxFileDialog dialog2(this, "Choose script to attach to button", "", "", "*.ini", 0);
-
-		if (dialog2.ShowModal() == wxID_OK)
+		break;
+	case 6:
 		{
-			wxTextEntryDialog dialog3(this,
-									  "Please enter ID of the button",
+			wxTextEntryDialog dialog2(this,
+									  "Please enter the widget name to disable",
 									  appName,
 									  "",
 									  wxOK | wxCANCEL);
 
-			if (dialog3.ShowModal() == wxID_OK)
+			if (dialog2.ShowModal() == wxID_OK)
 			{
-				m_textWindow->WriteText("setbutton,");
-				m_textWindow->WriteText(dialog3.GetValue());
-				m_textWindow->WriteText(",");
-				m_textWindow->WriteText(dialog2.GetFilename());
+				m_textWindow->WriteText("disable,");
+				m_textWindow->WriteText(dialog2.GetValue());
 				m_textWindow->WriteText("\n");
 			}
 		}
-	}
-	else if(strcmp(str, "startinst")==0)
-	{
-		wxFileDialog dialog2(this, "Choose script to run at installation completion", "", "", "*.ini", 0);
-
-		if (dialog2.ShowModal() == wxID_OK)
+		break;
+	case 7:
 		{
-			wxTextEntryDialog dialog3(this,
-									  "Please enter name of the gauge widget",
+			wxTextEntryDialog dialog2(this,
+									  "Please enter text widget name to set from",
 									  appName,
 									  "",
 									  wxOK | wxCANCEL);
 
-			if (dialog3.ShowModal() == wxID_OK)
+			if (dialog2.ShowModal() == wxID_OK)
 			{
-				m_textWindow->WriteText("startinst,");
-				m_textWindow->WriteText(dialog3.GetValue());
-				m_textWindow->WriteText(",");
-				m_textWindow->WriteText(dialog2.GetFilename());
+				m_textWindow->WriteText("settext,");
+				m_textWindow->WriteText(dialog2.GetValue());
 				m_textWindow->WriteText("\n");
 			}
 		}
-	}
-	else if(strcmp(str, "remove")==0)
-	{
-		wxFileDialog dialog2(this, "Choose file to remove", "", "", "*", 0);
-
-		if (dialog2.ShowModal() == wxID_OK)
+		break;
+	case 8:
 		{
-            m_textWindow->WriteText("remove,");
-			m_textWindow->WriteText(dialog2.GetFilename());
-            m_textWindow->WriteText("\n");
-		}
-	}
-	else if(strcmp(str, "message")==0)
-	{
-		wxTextEntryDialog dialog2(this,
-								 "Please enter the message to display to the user",
-								 appName,
-								 "",
-								 wxOK | wxCANCEL);
-
-		if (dialog2.ShowModal() == wxID_OK)
-		{
-            m_textWindow->WriteText("message,\"");
-			m_textWindow->WriteText(dialog2.GetValue());
-            m_textWindow->WriteText("\"\n");
-		}
-	}
-	else if(strcmp(str, "gettext")==0)
-	{
-		wxTextEntryDialog dialog2(this,
-								 "Please enter text widget name to get from",
-								 appName,
-								 "",
-								 wxOK | wxCANCEL);
-
-		if (dialog2.ShowModal() == wxID_OK)
-		{
-            m_textWindow->WriteText("gettext,");
-			m_textWindow->WriteText(dialog2.GetValue());
-            m_textWindow->WriteText("\n");
-		}
-	}
-	else if(strcmp(str, "settext")==0)
-	{
-		wxTextEntryDialog dialog2(this,
-								 "Please enter text widget name to set from",
-								 appName,
-								 "",
-								 wxOK | wxCANCEL);
-
-		if (dialog2.ShowModal() == wxID_OK)
-		{
-            m_textWindow->WriteText("settext,");
-			m_textWindow->WriteText(dialog2.GetValue());
-            m_textWindow->WriteText("\n");
-		}
-	}
-	else if(strcmp(str, "getcheck")==0)
-	{
-		wxFileDialog dialog2(this, "Choose script to run if not checked", "", "", "*.ini", 0);
-
-		if (dialog2.ShowModal() == wxID_OK)
-		{
-			wxTextEntryDialog dialog3(this,
-									  "Please enter name of the checkbox widget",
+			wxTextEntryDialog dialog2(this,
+									  "Please enter text widget name to get from",
 									  appName,
 									  "",
 									  wxOK | wxCANCEL);
 
-			if (dialog3.ShowModal() == wxID_OK)
+			if (dialog2.ShowModal() == wxID_OK)
 			{
-				m_textWindow->WriteText("getcheck,");
-				m_textWindow->WriteText(dialog3.GetValue());
-				m_textWindow->WriteText(",");
+				m_textWindow->WriteText("gettext,");
+				m_textWindow->WriteText(dialog2.GetValue());
+				m_textWindow->WriteText("\n");
+			}
+		}
+		break;
+	case 9:
+		{
+			wxFileDialog dialog2(this, "Choose file to grab", "", "", "*", 0);
+
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				m_textWindow->WriteText("grabfile,");
 				m_textWindow->WriteText(dialog2.GetFilename());
 				m_textWindow->WriteText("\n");
 			}
 		}
-	}
-	else if(strcmp(str, "disable")==0)
-	{
-		wxTextEntryDialog dialog2(this,
-								 "Please enter the widget name to disable",
-								 appName,
-								 "",
-								 wxOK | wxCANCEL);
-
-		if (dialog2.ShowModal() == wxID_OK)
+		break;
+	case 10:
 		{
-            m_textWindow->WriteText("disable,");
-			m_textWindow->WriteText(dialog2.GetValue());
-            m_textWindow->WriteText("\n");
-		}
-	}
+			wxFileDialog dialog2(this, "Choose file to remove", "", "", "*", 0);
 
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				m_textWindow->WriteText("remove,");
+				m_textWindow->WriteText(dialog2.GetFilename());
+				m_textWindow->WriteText("\n");
+			}
+		}
+		break;
+	case 11:
+		{
+			wxTextEntryDialog dialog2(this,
+									  "Please enter the command to execute",
+									  appName,
+									  "",
+									  wxOK | wxCANCEL);
+
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				m_textWindow->WriteText("system,");
+				m_textWindow->WriteText(dialog2.GetValue());
+				m_textWindow->WriteText("\n");
+			}
+		}
+		break;
+	case 12:
+		{
+			wxFileDialog dialog2(this, "Choose script to run at installation completion", "", "", "*.ini", 0);
+
+			if (dialog2.ShowModal() == wxID_OK)
+			{
+				wxTextEntryDialog dialog3(this,
+										  "Please enter name of the gauge widget",
+										  appName,
+										  "",
+										  wxOK | wxCANCEL);
+
+				if (dialog3.ShowModal() == wxID_OK)
+				{
+					m_textWindow->WriteText("startinst,");
+					m_textWindow->WriteText(dialog3.GetValue());
+					m_textWindow->WriteText(",");
+					m_textWindow->WriteText(dialog2.GetFilename());
+					m_textWindow->WriteText("\n");
+				}
+			}
+		}
+		break;
+	}
 }
