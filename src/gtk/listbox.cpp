@@ -12,6 +12,12 @@
 #pragma implementation "listbox.h"
 #endif
 
+#ifdef __VMS
+#define gtk_scrolled_window_add_with_viewport gtk_scrolled_window_add_with_vi
+#define gtk_container_set_focus_vadjustment gtk_container_set_focus_vadjust
+#define gtk_scrolled_window_get_vadjustment gtk_scrolled_window_get_vadjust
+#endif
+
 #include "wx/listbox.h"
 
 #if wxUSE_LISTBOX
@@ -26,7 +32,7 @@
 #include "wx/tooltip.h"
 #endif
 
-# include <gdk/gdk.h>
+#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -74,6 +80,33 @@ extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
 
 static bool       g_hasDoubleClicked = FALSE;
+
+//-----------------------------------------------------------------------------
+// idle callback for SetFirstItem
+//-----------------------------------------------------------------------------
+
+struct wxlistbox_idle_struct
+{
+    wxListBox   *m_listbox;
+    int          m_item;
+    gint         m_tag;
+};
+
+static gint wxlistbox_idle_callback( gpointer gdata )
+{
+    wxlistbox_idle_struct* data = (wxlistbox_idle_struct*) gdata;
+    gdk_threads_enter();
+
+    gtk_idle_remove( data->m_tag );
+    
+    data->m_listbox->SetFirstItem( data->m_item );
+    
+    delete data;
+    
+    gdk_threads_leave();
+
+    return TRUE;
+}
 
 //-----------------------------------------------------------------------------
 // "button_release_event"
@@ -189,6 +222,12 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
         ret = listbox->GetEventHandler()->ProcessEvent( new_event );
     }
 
+    if ((gdk_event->keyval == GDK_Return) && (!ret))
+    {
+        // eat return in all modes
+        ret = TRUE;
+    }
+        
 #if wxUSE_CHECKLISTBOX
     if ((gdk_event->keyval == ' ') && (listbox->m_hasCheckBoxes) && (!ret))
     {
@@ -305,11 +344,21 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     m_list = GTK_LIST( gtk_list_new() );
 
-    GtkSelectionMode mode = GTK_SELECTION_BROWSE;
+    GtkSelectionMode mode;
     if (style & wxLB_MULTIPLE)
+    {
         mode = GTK_SELECTION_MULTIPLE;
+    }
     else if (style & wxLB_EXTENDED)
+    {
         mode = GTK_SELECTION_EXTENDED;
+    }
+    else
+    {
+        // if style was 0 set single mode
+        m_windowStyle |= wxLB_SINGLE;
+        mode = GTK_SELECTION_BROWSE;
+    }
 
     gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
 
@@ -360,7 +409,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
+    m_hasVMT = FALSE;
+
     Clear();
+    
     if (m_strings)
       delete m_strings;
 }
@@ -784,12 +836,12 @@ void wxListBox::DoSetFirstItem( int n )
 
     if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_list))
         return;
-
-    // terribly efficient
+    
+    // terribly efficient    
     const gchar *vadjustment_key = "gtk-vadjustment";
     guint vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
-
-    GtkAdjustment *adjustment =
+    
+    GtkAdjustment *adjustment = 
        (GtkAdjustment*) gtk_object_get_data_by_id (GTK_OBJECT (m_list), vadjustment_key_id);
     wxCHECK_RET( adjustment, wxT("invalid listbox code") );
 
@@ -799,23 +851,20 @@ void wxListBox::DoSetFirstItem( int n )
     GtkWidget *item = GTK_WIDGET(target->data);
     wxCHECK_RET( item, wxT("invalid listbox code") );
 
-    // find the last item before this one which is already realized
-    size_t nItemsBefore;
-    for ( nItemsBefore = 0; item && (item->allocation.y == -1); nItemsBefore++ )
+    if (item->allocation.y == -1)
     {
-        target = target->prev;
-        if ( !target )
-        {
-            // nothing we can do if there are no allocated items yet
-            return;
-        }
-
-        item = GTK_WIDGET(target->data);
+        wxlistbox_idle_struct* data = new wxlistbox_idle_struct;
+        data->m_listbox = this;
+        data->m_item = n;
+        data->m_tag = gtk_idle_add_priority( 800, wxlistbox_idle_callback, (gpointer) data );
+        
+        return;
     }
 
-    gtk_adjustment_set_value(adjustment,
-                             item->allocation.y +
-                                nItemsBefore*item->allocation.height);
+    float y = item->allocation.y;
+    if (y > adjustment->upper - adjustment->page_size)
+        y = adjustment->upper - adjustment->page_size;
+	gtk_adjustment_set_value( adjustment, y );
 }
 
 // ----------------------------------------------------------------------------
