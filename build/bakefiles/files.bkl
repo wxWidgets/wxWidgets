@@ -1775,6 +1775,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
     src/generic/timer.cpp
+    <!-- wxMac stuff used by wxCocoa: -->
+    src/mac/gsockosx.c
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSBox.h

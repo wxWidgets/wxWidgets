@@ -4610,10 +4610,6 @@ if test "$wxUSE_SOCKETS" = "yes"; then
         AC_MSG_WARN([wxSocket not yet supported under MGL... disabled])
         wxUSE_SOCKETS="no"
     fi
-    if test "$wxUSE_COCOA" = "1"; then
-        AC_MSG_WARN([wxSocket not yet supported under Cocoa... disabled])
-        wxUSE_SOCKETS="no"
-    fi
 fi
 
 if test "$wxUSE_SOCKETS" = "yes"; then
