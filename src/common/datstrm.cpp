@@ -82,37 +82,6 @@ double wxDataInputStream::ReadDouble()
 #endif
 }
 
-wxString wxDataInputStream::ReadLine()
-{
-  char c, last_endl = 0;
-  bool end_line = FALSE;
-  wxString line;
-
-  while (!end_line) {
-    c = GetC();
-    if (LastError() != wxStream_NOERROR)
-      break;
-
-    switch (c) {
-    case '\n':
-      end_line = TRUE;
-      break;
-    case '\r':
-      last_endl = '\r';
-      break;
-    default:
-      if (last_endl == '\r') {
-        end_line = TRUE;
-        InputStreamBuffer()->WriteBack(c);
-        break;
-      }
-      line += c;
-      break;
-    } 
-  }
-  return line;
-}
-
 wxString wxDataInputStream::ReadString()
 {
   wxString wx_string;
@@ -167,17 +136,6 @@ void wxDataOutputStream::Write16(wxUint16 i)
 void wxDataOutputStream::Write8(wxUint8 i)
 {
   Write(&i, 1);
-}
-
-void wxDataOutputStream::WriteLine(const wxString& line)
-{
-#ifdef __WXMSW__
-  wxString tmp_string = line + _T("\r\n");
-#else
-  wxString tmp_string = line + _T('\n');
-#endif
-
-  Write((const wxChar *) tmp_string, tmp_string.Length()*sizeof(wxChar));
 }
 
 void wxDataOutputStream::WriteString(const wxString& string)

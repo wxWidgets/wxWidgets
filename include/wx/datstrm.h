@@ -29,7 +29,6 @@ public:
   wxUint16 Read16();
   wxUint8 Read8();
   double ReadDouble();
-  wxString ReadLine();
   wxString ReadString();
 };
 
@@ -42,7 +41,6 @@ class WXDLLEXPORT wxDataOutputStream: public wxFilterOutputStream {
   void Write16(wxUint16 i);
   void Write8(wxUint8 i);
   void WriteDouble(double d);
-  void WriteLine(const wxString& line);
   void WriteString(const wxString& string);
 };
 

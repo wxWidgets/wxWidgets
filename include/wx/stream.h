@@ -161,6 +161,7 @@ class WXDLLEXPORT wxInputStream: public wxStreamBase {
   char GetC();
   virtual wxInputStream& Read(void *buffer, size_t size);
   wxInputStream& Read(wxOutputStream& stream_out);
+  wxString ReadLine();
 
   // Position functions
   off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
@@ -201,6 +202,7 @@ class WXDLLEXPORT wxOutputStream: public wxStreamBase {
 
   virtual wxOutputStream& Write(const void *buffer, size_t size);
   wxOutputStream& Write(wxInputStream& stream_in);
+  void WriteLine(const wxString& line);
 
   off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
   off_t TellO() const;

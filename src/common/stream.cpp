@@ -549,6 +549,38 @@ char wxInputStream::GetC()
   return c;
 }
 
+
+wxString wxInputStream::ReadLine()
+{
+  char c, last_endl = 0;
+  bool end_line = FALSE;
+  wxString line;
+
+  while (!end_line) {
+    c = GetC();
+    if (LastError() != wxStream_NOERROR)
+      break;
+
+    switch (c) {
+    case '\n':
+      end_line = TRUE;
+      break;
+    case '\r':
+      last_endl = '\r';
+      break;
+    default:
+      if (last_endl == '\r') {
+        end_line = TRUE;
+        InputStreamBuffer()->WriteBack(c);
+        break;
+      }
+      line += c;
+      break;
+    } 
+  }
+  return line;
+}
+
 wxInputStream& wxInputStream::Read(void *buffer, size_t size)
 {
   m_i_streambuf->Read(buffer, size);
@@ -592,9 +624,7 @@ off_t wxInputStream::TellI() const
 
 wxInputStream& wxInputStream::operator>>(wxString& line)
 {
-  wxDataInputStream s(*this);
-
-  line = s.ReadLine();
+  line = ReadLine();
   return *this;
 }
 
@@ -802,6 +832,21 @@ void wxOutputStream::Sync()
   m_o_streambuf->FlushBuffer();
 }
 
+void wxOutputStream::WriteLine(const wxString& line)
+{
+#ifdef __WXMSW__
+  wxString tmp_string = line + _T("\r\n");
+#else
+#ifdef __WXMAC__
+  wxString tmp_string = line + _T('\r');
+#else
+  wxString tmp_string = line + _T('\n');
+#endif
+#endif
+
+  Write((const wxChar *) tmp_string, tmp_string.Length()*sizeof(wxChar));
+}
+
 wxOutputStream& wxOutputStream::operator<<(const char *string)
 {
   return Write(string, strlen(string));
@@ -923,7 +968,11 @@ wxOutputStream& wxEndL(wxOutputStream& stream)
 #ifdef __MSW__
   return stream.Write("\r\n", 2);
 #else
+#ifdef __WXMAC__
+  return stream.Write("\r", 1);
+#else
   return stream.Write("\n", 1);
+#endif
 #endif
 }
 
