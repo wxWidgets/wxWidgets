@@ -217,7 +217,11 @@ wxHTMLHelpControllerBase::DisplayContents()
    }
 
    bool rc = FALSE;
-   if(contents.Length() && wxFileExists(contents.BeforeLast('#')))
+   wxString file;
+   file << m_MapFile << WXEXTHELP_SEPARATOR << contents;
+   if(file.Contains('#'))
+      file = file.BeforeLast('#');
+   if(contents.Length() && wxFileExists(file))
       rc = DisplaySection(CONTENTS_ID);
    
    // if not found, open homemade toc:
