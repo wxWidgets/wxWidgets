@@ -542,8 +542,9 @@ void BibReadValue(wxSTD istream& istr, char *buffer, bool ignoreBraces = TRUE,
     if (i >= 4000)
     {
       char buf[100];
-      sprintf(buf, "Sorry, value > 4000 chars in bib file at line %ld, terminating.", BibLine);
-      wxFatalError(buf, "Tex2RTF Fatal Error");
+      sprintf(buf, "Sorry, value > 4000 chars in bib file at line %ld.", BibLine);
+      wxLogError(buf, "Tex2RTF Fatal Error");
+      return;
     }
     istr.get(ch);
     

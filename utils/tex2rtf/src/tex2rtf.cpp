@@ -1086,7 +1086,7 @@ void OnError(const char *msg)
 #endif
 
 #ifdef __WXMSW__
-    wxError(msg);
+    wxLogError(msg);
 #endif
   Tex2RTFYield(TRUE);
 #endif // NO_GUI
