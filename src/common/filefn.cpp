@@ -500,7 +500,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
       }
       else
 #else
-    while ((*d++ = *s) != NULL) {
+    while ((*d++ = *s) != 0) {
 #  ifndef __WXMSW__
         if (*s == wxT('\\')) {
             if ((*(d - 1) = *++s)) {
@@ -520,7 +520,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             register wxChar  *start = d;
             register int     braces = (*s == wxT('{') || *s == wxT('('));
             register wxChar  *value;
-            while ((*d++ = *s) != NULL)
+            while ((*d++ = *s) != 0)
                 if (braces ? (*s == wxT('}') || *s == wxT(')')) : !(wxIsalnum(*s) || *s == wxT('_')) )
                     break;
                 else
@@ -528,7 +528,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             *--d = 0;
             value = wxGetenv(braces ? start + 1 : start);
             if (value) {
-                for ((d = start - 1); (*d++ = *value++) != NULL;);
+                for ((d = start - 1); (*d++ = *value++) != 0;);
                 d--;
                 if (braces && *s)
                     s++;
@@ -580,7 +580,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
           *(d - 1) = SEP;
     }
     s = nm;
-    while ((*d++ = *s++) != NULL);
+    while ((*d++ = *s++) != 0);
     delete[] nm_tmp; // clean up alloc
     /* Now clean up the buffer */
     return wxRealPath(buf);
