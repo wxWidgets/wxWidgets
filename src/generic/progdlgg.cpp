@@ -86,6 +86,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    int style)
                 : wxDialog(parent, -1, title)
 {
+    m_windowStyle = style;
+
     bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
     m_state = hasAbortButton ? Continue : Uncancelable;
     m_maximum = maximum;
