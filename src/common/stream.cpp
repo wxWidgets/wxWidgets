@@ -81,22 +81,24 @@ void wxStreamBuffer::Init()
 
 wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
 {
+    Init();
+
     m_stream = &stream;
     m_mode = mode;
 
     m_flushable = TRUE;
     m_destroystream = FALSE;
-    m_destroybuf = FALSE;
 }
 
 wxStreamBuffer::wxStreamBuffer(BufMode mode)
 {
+    Init();
+
     m_stream = new wxStreamBase;
     m_mode = mode;
 
     m_flushable = FALSE;
     m_destroystream = TRUE;
-    m_destroybuf = FALSE;
 }
 
 wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
