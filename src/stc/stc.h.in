@@ -186,11 +186,11 @@ public:
 
 
     // Set the vertical scrollbar to use instead of the ont that's built-in.
-    void SetVScrollBar(wxScrollBar* bar) { m_vScrollBar = bar; }
+    void SetVScrollBar(wxScrollBar* bar);
 
 
     // Set the horizontal scrollbar to use instead of the ont that's built-in.
-    void SetHScrollBar(wxScrollBar* bar) { m_hScrollBar = bar; }
+    void SetHScrollBar(wxScrollBar* bar);
 
     // Can be used to prevent the EVT_CHAR handler from adding the char
     bool GetLastKeydownProcessed() { return m_lastKeyDownConsumed; }

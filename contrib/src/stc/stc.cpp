@@ -190,7 +190,26 @@ long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
     return m_swx->WndProc(msg, wp, lp);
 }
 
+//----------------------------------------------------------------------
 
+// Set the vertical scrollbar to use instead of the ont that's built-in.
+void wxStyledTextCtrl::SetVScrollBar(wxScrollBar* bar)  {
+    m_vScrollBar = bar;
+    if (bar != NULL) {
+        // ensure that the built-in scrollbar is not visible
+        SetScrollbar(wxVERTICAL, 0, 0, 0);
+    }
+}
+
+
+// Set the horizontal scrollbar to use instead of the ont that's built-in.
+void wxStyledTextCtrl::SetHScrollBar(wxScrollBar* bar)  {
+    m_hScrollBar = bar;
+    if (bar != NULL) {
+        // ensure that the built-in scrollbar is not visible
+        SetScrollbar(wxHORIZONTAL, 0, 0, 0);
+    }
+}
 
 //----------------------------------------------------------------------
 // BEGIN generated section.  The following code is automatically generated
@@ -2590,7 +2609,7 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
 #if wxUSE_UNICODE
             wxMemoryBuffer buffer(len+1);
             success = (file.Read(buffer.GetData(), len) == len);
-	    if (success) {
+            if (success) {
                 ((char*)buffer.GetData())[len] = 0;
                 contents = wxString(buffer, *wxConvCurrent, len);
             }
