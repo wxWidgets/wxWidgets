@@ -95,3 +95,4 @@ private:
 #endif
 
 // _WX_COLOUR_H_
+

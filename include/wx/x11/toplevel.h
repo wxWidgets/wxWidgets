@@ -72,6 +72,13 @@ protected:
     // common part of all ctors
     void Init();
 
+    // For implementation purposes - sometimes decorations make the client area
+    // smaller
+    virtual wxPoint GetClientAreaOrigin() const;
+
+    virtual void DoGetClientSize( int *width, int *height ) const;
+    virtual void DoSetClientSize(int width, int height);
+    
     // is the frame currently iconized?
     bool m_iconized;
 

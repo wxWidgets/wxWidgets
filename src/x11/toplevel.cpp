@@ -35,10 +35,11 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
+    #include "wx/menu.h"
+    #include "wx/statusbr.h"
 #endif //WX_PRECOMP
 
 #include "wx/x11/private.h"
-
 
 bool wxMWMIsRunning(Window w);
 
@@ -396,3 +397,54 @@ bool wxMWMIsRunning(Window w)
     return (ret == Success);
 }
     
+// For implementation purposes - sometimes decorations make the client area
+// smaller
+wxPoint wxTopLevelWindowX11::GetClientAreaOrigin() const
+{
+    if (this->IsKindOf(CLASSINFO(wxFrame)))
+    {
+	wxFrame* frame = (wxFrame*) this;
+	if (frame->GetMenuBar())
+	    return wxPoint(0, frame->GetMenuBar()->GetSize().y);
+    }
+    return wxPoint(0, 0);
+}
+
+void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
+{
+    wxWindowX11::DoGetClientSize(width, height);
+    if (this->IsKindOf(CLASSINFO(wxFrame)))
+    {
+	wxFrame* frame = (wxFrame*) this;
+	if (frame->GetMenuBar())
+	    (*height) -= frame->GetMenuBar()->GetSize().y;
+	if (frame->GetStatusBar())
+	    (*height) -= frame->GetStatusBar()->GetSize().y;
+    }
+}
+
+void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
+{
+    // TODO - take menubar and status line into account
+    wxWindowX11::DoSetClientSize(width, height);
+#if 0
+    if (!GetMainWindow())
+        return;
+
+    XWindowChanges windowChanges;
+    int valueMask = 0;
+
+    if (width != -1)
+    {
+        windowChanges.width = width ;
+        valueMask |= CWWidth;
+    }
+    if (height != -1)
+    {
+        windowChanges.height = height ;
+        valueMask |= CWHeight;
+    }
+    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
+        valueMask, & windowChanges);
+#endif
+}

@@ -719,11 +719,15 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
+	int yy = 0;
+        AdjustForParentClientOrigin( x, yy, sizeFlags);
         windowChanges.x = x;
         valueMask |= CWX;
     }
     if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
+	int xx = 0;
+        AdjustForParentClientOrigin( xx, y, sizeFlags);
         windowChanges.y = y;
         valueMask |= CWY;
     }
@@ -737,7 +741,6 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         windowChanges.height = height /* -m_borderSize*2*/;
         valueMask |= CWHeight;
     }
-    AdjustForParentClientOrigin( x, y, sizeFlags);
 
     XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
         valueMask, & windowChanges);

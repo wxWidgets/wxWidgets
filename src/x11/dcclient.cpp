@@ -342,6 +342,8 @@ void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 
         CalcBoundingBox(x1, y1);
         CalcBoundingBox(x2, y2);
+
+	wxLogDebug("Drawing line at %d, %d -> %d, %d", XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
     }
 }
 
@@ -749,6 +751,7 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
+    wxLogDebug("Drawing rectangle at %d, %d (%dx%d)", x, y, width, height);
 }
 
 void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -1246,6 +1249,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 	{
         XDrawString( (Display*) m_display, (Window) m_window, 
             (GC) m_textGC, x, y, text.c_str(), text.Len() );
+	wxLogDebug("Drawing text %s at %d, %d", text.c_str(), x, y);
 	}
 
 #if 0
