@@ -155,7 +155,7 @@
 
       help.UseConfig(wxConfig::Get());
       bool ret;
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__DARWIN__)
       ret = help.AddBook(":helpfiles:testing.hhp");
 #else
       help.SetTempDir(".");
@@ -163,7 +163,7 @@
 #endif
       if (! ret)
         wxMessageBox("Failed adding book helpfiles/testing.hhp");
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__DARWIN__)
       ret = help.AddBook(":helpfiles:another.hhp");
 #else
       ret = help.AddBook("helpfiles/another.hhp");
