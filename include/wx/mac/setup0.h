@@ -428,11 +428,6 @@
 // wxSound class
 #define wxUSE_SOUND      1
 
-// wxMovieCtrl class
-//
-// Recommended setting: 0 (Nice to have)
-#define wxUSE_MOVIECTRL 0
-
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
 // Default is 1
