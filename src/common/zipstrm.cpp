@@ -1746,7 +1746,12 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
 //
 wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 {
-    if (!m_ffile || AtHeader())
+    if (!m_ffile)
+        return wxInvalidOffset;
+    if (!IsOpened())
+        if ((AtHeader() && !DoOpen()) || !OpenDecompressor())
+            m_lasterror = wxSTREAM_READ_ERROR;
+    if (!IsOk())
         return wxInvalidOffset;
 
     // NB: since ZIP files don't natively support seeking, we have to
@@ -1761,7 +1766,7 @@ wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
     {
         case wxFromCurrent : nextpos = seek + pos; break;
         case wxFromStart : nextpos = seek; break;
-        case wxFromEnd : nextpos = GetLength() - 1 + seek; break;
+        case wxFromEnd : nextpos = GetLength() + seek; break;
         default : nextpos = pos; break; /* just to fool compiler, never happens */
     }
 
