@@ -14,7 +14,7 @@ is_monolithic="@MONOLITHIC@"
 cross_compiling="@cross_compiling@"
 target="@host_alias@"
 static_flag="@STATIC_FLAG@"
-
+inplace_flag="no"
 
 # Misc configuration variables:
 
@@ -232,6 +232,13 @@ cppflags()
 
     includes="-I${libdir}/wx/include/${TOOLCHAIN_NAME}$includes"
 
+    # in inplace case we need to also add path to contrib headers -- do it
+    # unconditionnally as they might be used and we have no way of knowing if
+    # they really are
+    if test $inplace_flag = yes ; then
+        includes="$includes -I${prefix}/contrib/include"
+    fi
+
     if test $static_flag = yes ; then
         echo $includes ${WXDEBUG_DEFINE} ${TOOLCHAIN_DEFS} ${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS}
     else
@@ -254,6 +261,7 @@ while test $# -gt 0; do
       prefix=`makeabs $srcdir`
       exec_prefix=`makeabs $builddir`
       exec_prefix_set=yes
+      inplace_flag=yes
       update_prefixes
       ;;
     --prefix=*)
