@@ -1662,6 +1662,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="MAC_LOWLEVEL_HDR" hints="files">
 </set>
 
+<set var="MAC_OSX_SRC" hints="files">
+<if cond="PLATFORM_MACOSX=='1'">
+    <!-- Unix files used by wxMac: -->
+    src/unix/snglinst.cpp
+    <!-- wxWebKit files -->
+    src/html/htmlctrl/webkit/webkit.mm
+</if>
+</set>
+
 <set var="MAC_SRC" hints="files">
     src/mac/carbon/accel.cpp
     src/mac/carbon/aga.cpp
@@ -1744,10 +1753,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
-    <!-- Unix files used by wxMac: -->
-    src/unix/snglinst.cpp
-    <!-- wxWebKit files -->
-    src/html/htmlctrl/webkit/webkit.mm
 </set>
 
 <!-- Header files like wx/mac/foo.h which include wx/mac/carbon/foo.h -->
@@ -2714,7 +2719,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_ONLY_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_SRC) $(WINCE_SRC)</if>
-        <if cond="TOOLKIT=='MAC'">$(MAC_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(MAC_SRC) $(MAC_OSX_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(OS2_SRC)</if>
     </set>
