@@ -59,15 +59,16 @@ public:
                                     int flags = 0);
 #endif // GTK 2.0
 
-    // draw a (vertical) sash
-    //
-    // VZ: doesn't work -- nothing is shown on screen, why?
-#if 0
+    virtual void DrawSplitterBorder(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect) ;
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
-                                  wxCoord position);
-#endif // 0
+                                  wxCoord position,
+                                  wxOrientation orient);
+
+    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win);
 };
 
 // ============================================================================
@@ -81,6 +82,10 @@ wxRendererNative& wxRendererNative::Get()
 
     return s_rendererGTK;
 }
+
+// ----------------------------------------------------------------------------
+// list/tree controls drawing
+// ----------------------------------------------------------------------------
 
 void
 wxRendererGTK::DrawHeaderButton(wxWindow *win,
@@ -142,14 +147,38 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED(win),
 
 #endif // GTK 2.0
 
-#if 0
+// ----------------------------------------------------------------------------
+// splitter sash drawing
+// ----------------------------------------------------------------------------
 
-// draw a (vertical) sash
+// the full sash width (should be even)
+static const wxCoord SASH_SIZE = 10;
+
+// margin around the sash
+static const wxCoord SASH_MARGIN = 5;
+
+wxPoint
+wxRendererGTK::GetSplitterSashAndBorder(const wxWindow * WXUNUSED(win))
+{
+    // we don't draw any border, hence 0 for the second field, but we must
+    // leave some margin around the sash
+    return wxPoint(SASH_SIZE + SASH_MARGIN, 0);
+}
+
+void
+wxRendererGTK::DrawSplitterBorder(wxWindow * WXUNUSED(win),
+                                  wxDC& WXUNUSED(dc),
+                                  const wxRect& WXUNUSED(rect))
+{
+    // nothing to do
+}
+
 void
 wxRendererGTK::DrawSplitterSash(wxWindow *win,
                                 wxDC& dc,
                                 const wxSize& size,
-                                wxCoord position)
+                                wxCoord position,
+                                wxOrientation orient)
 {
     if ( !win->m_wxwindow->window )
     {
@@ -157,29 +186,76 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         return;
     }
 
-    gtk_paint_vline
+    // are we drawing vertical or horizontal splitter?
+    const bool isVert = orient == wxVERTICAL;
+
+    // we must erase everything first, otherwise the garbage from the old sash
+    // is left when dragging it
+    //
+    // TODO: is this the right way to draw themed background?
+    GdkRectangle rect;
+    if ( isVert )
+    {
+        rect.x = position;
+        rect.y = 0;
+        rect.width = SASH_SIZE + SASH_MARGIN;
+        rect.height = size.y;
+    }
+    else // horz
+    {
+        rect.x = 0;
+        rect.y = position;
+        rect.height = SASH_SIZE + SASH_MARGIN;
+        rect.width = size.x;
+    }
+
+    gtk_paint_flat_box
     (
         win->m_wxwindow->style,
-        win->m_wxwindow->window,
+        GTK_PIZZA(win->m_wxwindow)->bin_window,
         GTK_STATE_NORMAL,
-        (GdkRectangle *)NULL,
+        GTK_SHADOW_NONE,
+        &rect,
         win->m_wxwindow,
-        (char *)"vpaned", // const_cast
-        0, size.y, position + 3
+        (char *)"base", // const_cast
+        0, 0, -1, -1
+    );
+
+
+    // leave some margin before sash itself
+    position += SASH_MARGIN / 2;
+
+    // and finally draw it using GTK paint functions
+    typedef void (*GtkPaintLineFunc)(GtkStyle *, GdkWindow *,
+                                                GtkStateType,
+                                                GdkRectangle *, GtkWidget *,
+                                                gchar *, gint, gint, gint);
+
+    GtkPaintLineFunc func = isVert ? gtk_paint_vline : gtk_paint_hline;
+
+    (*func)
+    (
+        win->m_wxwindow->style,
+        GTK_PIZZA(win->m_wxwindow)->bin_window,
+        GTK_STATE_NORMAL,
+        NULL,
+        win->m_wxwindow,
+        (char *)"paned", // const_cast
+        0, isVert ? size.y : size.x, position + SASH_SIZE / 2 - 1
     );
 
     gtk_paint_box
     (
         win->m_wxwindow->style,
-        win->m_wxwindow->window,
+        GTK_PIZZA(win->m_wxwindow)->bin_window,
         GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
-        (GdkRectangle *)NULL,
+        (GdkRectangle*) NULL,
         win->m_wxwindow,
         (char *)"paned", // const_cast
-        position, 5, 10, 10
+        isVert ? position : size.x - 2*SASH_SIZE,
+        isVert ? size.y - 2*SASH_SIZE : position,
+        SASH_SIZE, SASH_SIZE
     );
 }
-
-#endif // 0
 
