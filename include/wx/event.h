@@ -2105,7 +2105,10 @@ private:
 // event handler and related classes
 // ============================================================================
 
-typedef void (wxEvtHandler::*wxObjectEventFunction)(wxEvent&);
+// for backwards compatibility and to prevent eVC 4 for ARM from crashing with
+// internal compiler error when compiling wx, we define wxObjectEventFunction
+// as a wxObject method even though it can only be a wxEvtHandler one
+typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
 // we can't have ctors nor base struct in backwards compatibility mode or
 // otherwise we won't be able to initialize the objects with an agregate, so
