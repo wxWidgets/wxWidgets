@@ -141,7 +141,7 @@ wxApp::~wxApp()
 
     delete m_perDisplayData;
 
-    wxTheApp = NULL;
+    wxApp::SetInstance(NULL);
 }
 
 bool wxApp::Initialized()
