@@ -30,13 +30,13 @@ files.
 
 \membersection{wxFileHistory::m\_fileHistoryN}
 
-\member{int}{m\_fileHistoryN}
+\member{size_t}{m\_fileHistoryN}
 
 The number of files stored in the history array.
 
 \membersection{wxFileHistory::m\_fileMaxFiles}
 
-\member{int}{m\_fileMaxFiles}
+\member{size_t}{m\_fileMaxFiles}
 
 The maximum number of files to be stored and displayed on the menu.
 
@@ -48,9 +48,14 @@ The file menu used to display the file history list (if enabled).
 
 \membersection{wxFileHistory::wxFileHistory}
 
-\func{}{wxFileHistory}{\param{int}{ maxFiles = 9}}
+\func{}{wxFileHistory}{\param{size_t}{ maxFiles = 9}, \param{wxWindowID}{ idBase = wxID_FILE1}}
 
 Constructor. Pass the maximum number of files that should be stored and displayed.
+
+idBase defaults to wxID_FILE1 and represents the id given to the first history menu item.
+Since menu items can't share the same ID you should change idBase (To one of your own
+defined IDs) when using more than one wxFileHistory in your application.
+
 
 \membersection{wxFileHistory::\destruct{wxFileHistory}}
 
@@ -76,19 +81,19 @@ Appends the files in the history list, to the given menu only.
 
 \membersection{wxFileHistory::GetHistoryFile}\label{wxfilehistorygethistoryfile}
 
-\constfunc{wxString}{GetHistoryFile}{\param{int}{ index}}
+\constfunc{wxString}{GetHistoryFile}{\param{size_t}{ index}}
 
 Returns the file at this index (zero-based).
 
 \membersection{wxFileHistory::GetMaxFiles}
 
-\constfunc{int}{GetMaxFiles}{\void}
+\constfunc{size_t}{GetMaxFiles}{\void}
 
 Returns the maximum number of files that can be stored.
 
 \membersection{wxFileHistory::GetNoHistoryFiles}
 
-\constfunc{int}{GetNoHistoryFiles}{\void}
+\constfunc{size_t}{GetNoHistoryFiles}{\void}
 
 Returns the number of files currently stored in the file history.
 

@@ -39,6 +39,9 @@ All GUI ports:
 - support wxListCtrl columns alignment for all platforms and not just MSW
 - added wxToolBar Add/InsertTool(tool) (Janusz Piwowarski)
 - WXR resources can now be used in Unicode builds
+- it is now possible to use several wxFileHistory objects in the same menu
+  by giving them different base IDs (Dimitri Schoolwerth)
+
 - changed to type-safe wxSizerItemList for wxSizer child items
     Deprecated:
         wxSizer::Remove( wxWindow* )

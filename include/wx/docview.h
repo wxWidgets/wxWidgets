@@ -395,9 +395,9 @@ public:
 
     // File history management
     virtual void AddFileToHistory(const wxString& file);
-    virtual void RemoveFileFromHistory(int i);
-    virtual int GetNoHistoryFiles() const;
-    virtual wxString GetHistoryFile(int i) const;
+    virtual void RemoveFileFromHistory(size_t i);
+    virtual size_t GetNoHistoryFiles() const;
+    virtual wxString GetHistoryFile(size_t i) const;
     virtual void FileHistoryUseMenu(wxMenu *menu);
     virtual void FileHistoryRemoveMenu(wxMenu *menu);
 #if wxUSE_CONFIG
@@ -535,12 +535,12 @@ private:
 class WXDLLEXPORT wxFileHistory : public wxObject
 {
 public:
-    wxFileHistory(int maxFiles = 9);
+    wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
     ~wxFileHistory();
 
     // Operations
     virtual void AddFileToHistory(const wxString& file);
-    virtual void RemoveFileFromHistory(int i);
+    virtual void RemoveFileFromHistory(size_t i);
     virtual int GetMaxFiles() const { return m_fileMaxFiles; }
     virtual void UseMenu(wxMenu *menu);
 
@@ -556,11 +556,11 @@ public:
     virtual void AddFilesToMenu(wxMenu* menu); // Single menu
 
     // Accessors
-    virtual wxString GetHistoryFile(int i) const;
+    virtual wxString GetHistoryFile(size_t i) const;
 
     // A synonym for GetNoHistoryFiles
-    virtual int GetCount() const { return m_fileHistoryN; }
-    int GetNoHistoryFiles() const { return m_fileHistoryN; }
+    virtual size_t GetCount() const { return m_fileHistoryN; }
+    size_t GetNoHistoryFiles() const { return m_fileHistoryN; }
 
     wxList& GetMenus() const { return (wxList&) m_fileMenus; }
 
@@ -568,13 +568,16 @@ protected:
     // Last n files
     wxChar**          m_fileHistory;
     // Number of files saved
-    int               m_fileHistoryN;
+    size_t            m_fileHistoryN;
     // Menus to maintain (may need several for an MDI app)
     wxList            m_fileMenus;
     // Max files to maintain
-    int               m_fileMaxFiles;
+    size_t            m_fileMaxFiles;
     
 private:
+    // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
+    wxWindowID m_idBase;
+
     DECLARE_DYNAMIC_CLASS(wxFileHistory)
     DECLARE_NO_COPY_CLASS(wxFileHistory)
 };
