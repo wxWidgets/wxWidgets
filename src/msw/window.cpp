@@ -1995,9 +1995,23 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                                 return TRUE;
                             }
-                            //else: no default button
+                            else // no default button
+                            {
 #endif // wxUSE_BUTTON
-                            // treat Enter as TAB: pass to the next control
+                                // this is a quick and dirty test for a text
+                                // control
+                                if ( !(lDlgCode & DLGC_HASSETSEL) )
+                                {
+                                    // don't process Enter, the control might
+                                    // need it for itself and don't let
+                                    // ::IsDialogMessage() have it as it can
+                                    // eat the Enter events sometimes
+                                    return FALSE;
+                                }
+                                //else: treat Enter as TAB: pass to the next
+                                //      control as this is the best thing to do
+                                //      if the text doesn't handle Enter itself
+                            }
                         }
                     }
                     break;
