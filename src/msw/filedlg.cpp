@@ -480,20 +480,23 @@ wxString wxDefaultFileSelector(bool load,
                                const wxChar *default_name,
                                wxWindow *parent)
 {
-  wxString prompt;
-  wxString str;
-  if (load) str = _("Load %s file");
-  else str = _("Save %s file");
-  prompt.Printf(str, what);
+    wxString prompt;
+    wxString str;
+    if (load)
+        str = _("Load %s file");
+    else
+        str = _("Save %s file");
+    prompt.Printf(str, what);
 
-  const wxChar *ext = extension;
-  if (*ext == wxT('.'))
-      ext++;
+    const wxChar *ext = extension;
+    if (*ext == wxT('.'))
+        ext++;
 
-  wxString wild;
-  wild.Printf(wxT("*.%s"), ext);
+    wxString wild;
+    wild.Printf(wxT("*.%s"), ext);
 
-  return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
+    return wxFileSelector(prompt, NULL, default_name, ext, wild,
+                          load ? wxOPEN : wxSAVE, parent);
 }
 
 // Generic file load dialog
