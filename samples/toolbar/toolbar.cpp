@@ -103,6 +103,7 @@ public:
 
     void OnToggleToolbar(wxCommandEvent& event);
     void OnToggleAnotherToolbar(wxCommandEvent& event);
+    void OnToggleHorizontalText(wxCommandEvent& WXUNUSED(event));
 
     void OnToggleToolbarSize(wxCommandEvent& event);
     void OnToggleToolbarOrient(wxCommandEvent& event);
@@ -122,6 +123,7 @@ public:
     void OnCombo(wxCommandEvent& event);
 
     void OnUpdateCopyAndCut(wxUpdateUIEvent& event);
+    void OnUpdateToggleHorzText(wxUpdateUIEvent& event);
 
 #if USE_GENERIC_TBAR
     virtual wxToolBar *OnCreateToolBar(long style,
@@ -137,7 +139,8 @@ private:
     void LayoutChildren();
 
     bool                m_smallToolbar,
-                        m_horzToolbar;
+                        m_horzToolbar,
+                        m_horzText;
     size_t              m_rows;             // 1 or 2 only
 
     // the number of print buttons we have (they're added/removed dynamically)
@@ -168,6 +171,7 @@ enum
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
     IDM_TOOLBAR_TOGGLE_TOOLBAR,
+    IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
     IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
     IDM_TOOLBAR_CHANGE_TOOLTIP,
     IDM_TOOLBAR_SHOW_TEXT,
@@ -192,6 +196,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLE_TOOLBAR, MyFrame::OnToggleToolbar)
     EVT_MENU(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR, MyFrame::OnToggleAnotherToolbar)
+    EVT_MENU(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT, MyFrame::OnToggleHorizontalText)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARORIENT, MyFrame::OnToggleToolbarOrient)
@@ -214,6 +219,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(wxID_COPY, MyFrame::OnUpdateCopyAndCut)
     EVT_UPDATE_UI(wxID_CUT, MyFrame::OnUpdateCopyAndCut)
+
+    EVT_UPDATE_UI(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
+                  MyFrame::OnUpdateToggleHorzText)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -265,9 +273,11 @@ void MyFrame::RecreateToolbar()
 
     SetToolBar(NULL);
 
-    style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL);
+    style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL | wxTB_HORZ_LAYOUT);
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
-    style |= wxNO_FULL_REPAINT_ON_RESIZE ;
+
+    if ( style & wxTB_TEXT && !(style & wxTB_NOICONS) && m_horzText )
+        style |= wxTB_HORZ_LAYOUT;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
 #endif
@@ -359,6 +369,7 @@ MyFrame::MyFrame(wxFrame* parent,
 
     m_smallToolbar = TRUE;
     m_horzToolbar = TRUE;
+    m_horzText = FALSE;
     m_rows = 1;
     m_nPrint = 1;
 
@@ -379,6 +390,10 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
                               _T("Toggle &another toolbar\tCtrl-A"),
                               _T("Show/hide another test toolbar"));
+
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
+                              _T("Toggle hori&zontal text\tCtrl-H"),
+                              _T("Show text under/alongside the icon"));
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARSIZE,
                               _T("&Toggle toolbar size\tCtrl-S"),
@@ -485,6 +500,13 @@ void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
 
         SetToolBar(NULL);
     }
+}
+
+void MyFrame::OnToggleHorizontalText(wxCommandEvent& WXUNUSED(event))
+{
+    m_horzText = !m_horzText;
+
+    RecreateToolbar();
 }
 
 void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
@@ -612,8 +634,15 @@ void MyFrame::DoToggleHelp()
 
 void MyFrame::OnUpdateCopyAndCut(wxUpdateUIEvent& event)
 {
-    if (m_textWindow)
-        event.Enable( m_textWindow->CanCopy() );
+    event.Enable( m_textWindow->CanCopy() );
+}
+
+void MyFrame::OnUpdateToggleHorzText(wxUpdateUIEvent& event)
+{
+    wxToolBar *tbar = GetToolBar();
+    event.Enable( tbar &&
+                    tbar->HasFlag(wxTB_TEXT) &&
+                        !tbar->HasFlag(wxTB_NOICONS) );
 }
 
 void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))
