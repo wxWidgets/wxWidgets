@@ -73,9 +73,12 @@ Format-specific notes:
         </error>
     </if>
     
-    <template id="wx">
+    <template id="wx-lib">
         <cxxflags>$(WX_CXXFLAGS)</cxxflags>
         <cflags>$(WX_CFLAGS)</cflags>
+    </template>
+
+    <template id="wx" template="wx-lib">
         <ldlibs>$(WX_LIBS)</ldlibs>
     </template>
 

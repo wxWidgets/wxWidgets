@@ -167,7 +167,8 @@ FIXME: this template has (at least) the following bugs:
               position="before:__wx-libs-point"/>
     
 
-    <template id="wx">
+    <!-- template for static wx libraries: -->
+    <template id="wx-lib">
         <!--                    MISCELLANEOUS                       -->
         <if cond="FORMAT=='mingw'">                    
             <define>HAVE_W32API_H</define>
@@ -180,7 +181,11 @@ FIXME: this template has (at least) the following bugs:
 
         <include>$(WX_DIR)$(WXLIBINCLUDE)</include>
         <include>$(WX_DIR)/include</include>
-
+    </template>
+    
+   
+    <!-- template for wx executables/dlls: -->
+    <template id="wx" template="wx-lib">
         <lib-path>$(WX_DIR)$(WXLIBPATH)</lib-path>
 
         <!-- wx libs must come before 3rd party and sys libs, this is
