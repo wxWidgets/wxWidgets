@@ -273,6 +273,12 @@ public:
 
     wxPoint& operator+=(const wxPoint& p) { x += p.x; y += p.y; return *this; }
     wxPoint& operator-=(const wxPoint& p) { x -= p.x; y -= p.y; return *this; }
+
+    wxPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
+    wxPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
+
+    wxPoint operator+(const wxSize& s) const { return wxPoint(x + s.GetWidth(), y + s.GetHeight()); }
+    wxPoint operator-(const wxSize& s) const { return wxPoint(x - s.GetWidth(), y - s.GetHeight()); }
 };
 
 // ---------------------------------------------------------------------------
