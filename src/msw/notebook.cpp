@@ -33,7 +33,6 @@
 #include  "wx/event.h"
 #include  "wx/control.h"
 #include  "wx/notebook.h"
-#include  "wx/sysopt.h"
 #include  "wx/app.h"
 
 #include  "wx/msw/private.h"
@@ -244,21 +243,18 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-    // some versions of comctl32.dll 6.0 included with Windows XP don't
-    // support non-top tabs (the control is simply not rendered correctly) but
-    // we can't detect which ones, so be pessimistic by default and disable non
-    // top tabs under XP but allow the user to override this by using a special
-    // system option
-    bool nonTopTabsOk = wxSystemOptions::GetOptionInt(_T("msw.xp-tab-ok")) != 0;
-    if ( !nonTopTabsOk )
+    // comctl32.dll 6.0 doesn't support non-top tabs with visual styles (the
+    // control is simply not rendered correctly), so disable them in this case
+    const int verComCtl32 = wxApp::GetComCtl32Version();
+    if ( verComCtl32 == 600 )
     {
-        int verComCtl32 = wxApp::GetComCtl32Version();
-        nonTopTabsOk = verComCtl32 < 470 || verComCtl32 >= 600;
-    }
-
-    if ( !nonTopTabsOk )
-    {
-        style &= ~(wxNB_BOTTOM | wxNB_LEFT | wxNB_RIGHT);
+        // check if we use themes at all -- if we don't, we're still ok
+#if wxUSE_UXTHEME
+        if ( wxUxThemeEngine::GetIfActive() )
+#endif
+        {
+            style &= ~(wxNB_BOTTOM | wxNB_LEFT | wxNB_RIGHT);
+        }
     }
 
     if ( !CreateControl(parent, id, pos, size, style | wxTAB_TRAVERSAL,

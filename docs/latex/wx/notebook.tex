@@ -24,13 +24,16 @@ managed by wxNotebook.
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 
-\twocolitem{\windowstyle{wxNB\_LEFT}}{Place tabs on the left side. Not supported under Windows XP.}
-\twocolitem{\windowstyle{wxNB\_RIGHT}}{Place tabs on the right side. Not supported under Windows XP.}
-\twocolitem{\windowstyle{wxNB\_BOTTOM}}{Place tabs under instead of above the notebook pages. Not supported under Windows XP.}
+\twocolitem{\windowstyle{wxNB\_LEFT}}{Place tabs on the left side.}
+\twocolitem{\windowstyle{wxNB\_RIGHT}}{Place tabs on the right side.}
+\twocolitem{\windowstyle{wxNB\_BOTTOM}}{Place tabs under instead of above the notebook pages.}
 \twocolitem{\windowstyle{wxNB\_FIXEDWIDTH}}{(Windows only) All tabs will have same width.}
 \twocolitem{\windowstyle{wxNB\_MULTILINE}}{(Windows only) There can be several rows of tabs.}
 
 \end{twocollist}
+
+The styles \texttt{wxNB\_LEFT}, \texttt{RIGHT} and \texttt{BOTTOM} are not
+supported under Microsoft Windows XP when using visual themes.
 
 See also \helpref{window styles overview}{windowstyles}.
 
