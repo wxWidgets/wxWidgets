@@ -1686,8 +1686,10 @@ bool wxVariant::Convert(long* value) const
         *value = (long) (((wxVariantDataReal*)GetData())->GetValue());
     else if (type == "long")
         *value = ((wxVariantDataLong*)GetData())->GetValue();
+#ifdef HAVE_BOOL
     else if (type == "bool")
         *value = (long) (((wxVariantDataBool*)GetData())->GetValue());
+#endif
     else if (type == "string")
         *value = atol((const char*) ((wxVariantDataString*)GetData())->GetValue());
     else
@@ -1703,8 +1705,10 @@ bool wxVariant::Convert(bool* value) const
         *value = ((int) (((wxVariantDataReal*)GetData())->GetValue()) != 0);
     else if (type == "long")
         *value = (((wxVariantDataLong*)GetData())->GetValue() != 0);
+#ifdef HAVE_BOOL
     else if (type == "bool")
         *value = ((wxVariantDataBool*)GetData())->GetValue();
+#endif
     else if (type == "string")
     {
         wxString val(((wxVariantDataString*)GetData())->GetValue());
@@ -1729,8 +1733,10 @@ bool wxVariant::Convert(double* value) const
         *value = ((wxVariantDataReal*)GetData())->GetValue();
     else if (type == "long")
         *value = (double) (((wxVariantDataLong*)GetData())->GetValue());
+#ifdef HAVE_BOOL
     else if (type == "bool")
         *value = (double) (((wxVariantDataBool*)GetData())->GetValue());
+#endif
     else if (type == "string")
         *value = (double) atof((const char*) ((wxVariantDataString*)GetData())->GetValue());
     else
@@ -1746,8 +1752,10 @@ bool wxVariant::Convert(char* value) const
         *value = ((wxVariantDataChar*)GetData())->GetValue();
     else if (type == "long")
         *value = (char) (((wxVariantDataLong*)GetData())->GetValue());
+#ifdef HAVE_BOOL
     else if (type == "bool")
         *value = (char) (((wxVariantDataBool*)GetData())->GetValue());
+#endif
     else
         return FALSE;
 
