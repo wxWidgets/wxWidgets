@@ -87,8 +87,6 @@ enum
     ID_NEWSYBNODE = ID_NEWNODE + 2000
 };
 
-#ifdef __UNIX__
-#endif
 
 
 
@@ -106,7 +104,7 @@ END_EVENT_TABLE()
 
 
 
-#if defined(__UNIX__) || wxUSE_XPM_IN_MSW
+#if defined(__UNIX__)
 #include "bitmaps/preview.xpm"
 #include "bitmaps/close.xpm"
 #include "bitmaps/save.xpm"
@@ -123,12 +121,6 @@ END_EVENT_TABLE()
 #include "bitmaps/used.xpm"
 #endif
 
-#if defined(__WXMSW__) && defined(wxUSE_XPM_IN_MSW)
-#undef wxBITMAP
-#define wxBITMAP(arg) wxBitmap(arg##_xpm)
-#undef wxICON
-#define wxICON(arg) wxIcon(arg##_xpm)
-#endif
 
 
 EditorFrame *EditorFrame::ms_Instance = NULL;
@@ -408,6 +400,7 @@ void EditorFrame::RefreshPreview(wxXmlNode *node)
             dlg->Show(TRUE);
             if (m_Preview) m_Preview->Close(TRUE);
             m_Preview = dlg;
+            m_Preview->SetFocus();
         }
         else
         {
