@@ -60,6 +60,32 @@ static size_t gs_nInitCount = 0;
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// stubs for some GUI functions
+// ----------------------------------------------------------------------------
+
+void WXDLLEXPORT wxExit()
+{
+    abort();
+}
+
+// Yield to other apps/messages
+bool WXDLLEXPORT wxYield()
+{
+    // do nothing
+    return TRUE;
+}
+
+// Yield to other apps/messages
+void WXDLLEXPORT wxWakeUpIdle()
+{
+    // do nothing
+}
+
+// ----------------------------------------------------------------------------
+// wxBase-specific functions
+// ----------------------------------------------------------------------------
+
 bool WXDLLEXPORT wxInitialize()
 {
     if ( gs_nInitCount )

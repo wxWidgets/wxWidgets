@@ -302,8 +302,6 @@ WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 // event loop related functions only work in GUI programs
 // ------------------------------------------------------
 
-#if wxUSE_GUI
-
 // Force an exit from main loop
 extern void WXDLLEXPORT wxExit();
 
@@ -312,6 +310,8 @@ extern bool WXDLLEXPORT wxYield();
 
 // Yield to other apps/messages
 extern void WXDLLEXPORT wxWakeUpIdle();
+
+#if wxUSE_GUI
 
 // Post a message to the given eventhandler which will be processed during the
 // next event loop iteration
@@ -322,7 +322,7 @@ inline void WXDLLEXPORT wxPostEvent(wxEvtHandler *dest, wxEvent& event)
     dest->AddPendingEvent(event);
 }
 
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 // console applications may avoid using DECLARE_APP and IMPLEMENT_APP macros
 // and call these functions instead at the program startup and termination
