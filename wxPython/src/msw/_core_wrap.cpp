@@ -26118,7 +26118,7 @@ static PyObject *_wrap_Window_SetBackgroundColour(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_Window_SetDefaultBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetOwnBackroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour *arg2 = 0 ;
@@ -26129,7 +26129,7 @@ static PyObject *_wrap_Window_SetDefaultBackgroundColour(PyObject *self, PyObjec
         (char *) "self",(char *) "colour", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDefaultBackgroundColour",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetOwnBackroundColour",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
@@ -26138,7 +26138,7 @@ static PyObject *_wrap_Window_SetDefaultBackgroundColour(PyObject *self, PyObjec
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetDefaultBackgroundColour((wxColour const &)*arg2);
+        (arg1)->SetOwnBackroundColour((wxColour const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26185,7 +26185,7 @@ static PyObject *_wrap_Window_SetForegroundColour(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_Window_SetDefaultForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetOwnForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxColour *arg2 = 0 ;
@@ -26196,7 +26196,7 @@ static PyObject *_wrap_Window_SetDefaultForegroundColour(PyObject *self, PyObjec
         (char *) "self",(char *) "colour", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDefaultForegroundColour",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetOwnForegroundColour",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
@@ -26205,7 +26205,7 @@ static PyObject *_wrap_Window_SetDefaultForegroundColour(PyObject *self, PyObjec
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetDefaultForegroundColour((wxColour const &)*arg2);
+        (arg1)->SetOwnForegroundColour((wxColour const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -26381,7 +26381,7 @@ static PyObject *_wrap_Window_SetFont(PyObject *self, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_Window_SetDefaultFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetOwnFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxFont *arg2 = 0 ;
@@ -26391,7 +26391,7 @@ static PyObject *_wrap_Window_SetDefaultFont(PyObject *self, PyObject *args, PyO
         (char *) "self",(char *) "font", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDefaultFont",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetOwnFont",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxFont,
@@ -26403,7 +26403,7 @@ static PyObject *_wrap_Window_SetDefaultFont(PyObject *self, PyObject *args, PyO
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetDefaultFont((wxFont const &)*arg2);
+        (arg1)->SetOwnFont((wxFont const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -41316,15 +41316,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetDefaultAttributes", (PyCFunction) _wrap_Window_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetClassDefaultAttributes", (PyCFunction) _wrap_Window_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetBackgroundColour", (PyCFunction) _wrap_Window_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Window_SetDefaultBackgroundColour", (PyCFunction) _wrap_Window_SetDefaultBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetOwnBackroundColour", (PyCFunction) _wrap_Window_SetOwnBackroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetForegroundColour", (PyCFunction) _wrap_Window_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Window_SetDefaultForegroundColour", (PyCFunction) _wrap_Window_SetDefaultForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetOwnForegroundColour", (PyCFunction) _wrap_Window_SetOwnForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetForegroundColour", (PyCFunction) _wrap_Window_GetForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetCursor", (PyCFunction) _wrap_Window_SetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetCursor", (PyCFunction) _wrap_Window_GetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetFont", (PyCFunction) _wrap_Window_SetFont, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Window_SetDefaultFont", (PyCFunction) _wrap_Window_SetDefaultFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetOwnFont", (PyCFunction) _wrap_Window_SetOwnFont, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetFont", (PyCFunction) _wrap_Window_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetCaret", (PyCFunction) _wrap_Window_SetCaret, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetCaret", (PyCFunction) _wrap_Window_GetCaret, METH_VARARGS | METH_KEYWORDS },

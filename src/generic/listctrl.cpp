@@ -1666,13 +1666,13 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
 
 #if _USE_VISATTR
     wxVisualAttributes attr = wxPanel::GetClassDefaultAttributes();
-    SetDefaultForegroundColour( attr.colFg );
-    SetDefaultBackgroundColour( attr.colBg );
-    SetDefaultFont( attr.font );
+    SetOwnForegroundColour( attr.colFg );
+    SetOwnBackgroundColour( attr.colBg );
+    SetOwnFont( attr.font );
 #else
-    SetDefaultForegroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    SetDefaultBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-    SetDefaultFont( wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
+    SetOwnForegroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    SetOwnBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    SetOwnFont( wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
 #endif
 }
 
@@ -2212,9 +2212,9 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
     SetScrollbars( 0, 0, 0, 0, 0, 0 );
 
     wxVisualAttributes attr = wxGenericListCtrl::GetClassDefaultAttributes();
-    SetDefaultForegroundColour( attr.colFg );
-    SetDefaultBackgroundColour( attr.colBg );
-    SetDefaultFont( attr.font );
+    SetOwnForegroundColour( attr.colFg );
+    SetOwnBackgroundColour( attr.colBg );
+    SetOwnFont( attr.font );
 }
 
 wxListMainWindow::~wxListMainWindow()

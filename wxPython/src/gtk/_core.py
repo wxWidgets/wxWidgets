@@ -6820,9 +6820,9 @@ class Window(EvtHandler):
         """
         return _core_.Window_SetBackgroundColour(*args, **kwargs)
 
-    def SetDefaultBackgroundColour(*args, **kwargs):
-        """SetDefaultBackgroundColour(self, Colour colour)"""
-        return _core_.Window_SetDefaultBackgroundColour(*args, **kwargs)
+    def SetOwnBackroundColour(*args, **kwargs):
+        """SetOwnBackroundColour(self, Colour colour)"""
+        return _core_.Window_SetOwnBackroundColour(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
         """
@@ -6835,9 +6835,9 @@ class Window(EvtHandler):
         """
         return _core_.Window_SetForegroundColour(*args, **kwargs)
 
-    def SetDefaultForegroundColour(*args, **kwargs):
-        """SetDefaultForegroundColour(self, Colour colour)"""
-        return _core_.Window_SetDefaultForegroundColour(*args, **kwargs)
+    def SetOwnForegroundColour(*args, **kwargs):
+        """SetOwnForegroundColour(self, Colour colour)"""
+        return _core_.Window_SetOwnForegroundColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
         """
@@ -6885,9 +6885,9 @@ class Window(EvtHandler):
         """
         return _core_.Window_SetFont(*args, **kwargs)
 
-    def SetDefaultFont(*args, **kwargs):
-        """SetDefaultFont(self, Font font)"""
-        return _core_.Window_SetDefaultFont(*args, **kwargs)
+    def SetOwnFont(*args, **kwargs):
+        """SetOwnFont(self, Font font)"""
+        return _core_.Window_SetOwnFont(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
         """
@@ -7356,7 +7356,7 @@ class Window(EvtHandler):
         By 'intelligently' the following is meant: by default, all windows use
         their own default attributes. However if some of the parent's
         attributes are explicitly changed (that is, using SetFont and not
-        SetDefaultFont) and if the corresponding attribute hadn't been
+        SetOwnFont) and if the corresponding attribute hadn't been
         explicitly set for this window itself, then this window takes the same
         value as used by the parent. In addition, if the window overrides
         ShouldInheritColours to return false, the colours will not be changed

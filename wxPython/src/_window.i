@@ -1302,7 +1302,7 @@ themes represent the appearance chosen by the user to be used for all
 applications on the system.", "");
 
     DocDeclStr(
-        void , SetDefaultBackgroundColour(const wxColour& colour),
+        void , SetOwnBackroundColour(const wxColour& colour),
         "", "");
     
 
@@ -1315,7 +1315,7 @@ the window class; it may be the text colour or other colour, or it may
 not be used at all.", "");
 
     DocDeclStr(
-        void , SetDefaultForegroundColour(const wxColour& colour),
+        void , SetOwnForegroundColour(const wxColour& colour),
         "", "");
     
 
@@ -1352,7 +1352,7 @@ be reset back to default.", "");
         "Sets the font for this window.", "");
     
     DocDeclStr(
-        void , SetDefaultFont(const wxFont& font),
+        void , SetOwnFont(const wxFont& font),
         "", "");
     
 
@@ -1810,7 +1810,7 @@ colours.
 By 'intelligently' the following is meant: by default, all windows use
 their own default attributes. However if some of the parent's
 attributes are explicitly changed (that is, using SetFont and not
-SetDefaultFont) and if the corresponding attribute hadn't been
+SetOwnFont) and if the corresponding attribute hadn't been
 explicitly set for this window itself, then this window takes the same
 value as used by the parent. In addition, if the window overrides
 ShouldInheritColours to return false, the colours will not be changed

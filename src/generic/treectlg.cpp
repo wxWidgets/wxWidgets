@@ -791,9 +791,9 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 #endif
 
     wxVisualAttributes attr = GetDefaultAttributes();
-    SetDefaultForegroundColour( attr.colFg );
-    SetDefaultBackgroundColour( attr.colBg );
-    SetDefaultFont(attr.font);
+    SetOwnForegroundColour( attr.colFg );
+    SetOwnBackgroundColour( attr.colBg );
+    SetOwnFont(attr.font);
 
 //  m_dottedPen = wxPen( "grey", 0, wxDOT );  too slow under XFree86
     m_dottedPen = wxPen( wxT("grey"), 0, 0 );

@@ -50,10 +50,10 @@ class LayoutTestFrame(wx.Frame):
 
         bottomPanel = wx.Panel(p, style=wx.SUNKEN_BORDER, name="bottomPanel")
         bottomPanel.SetMinSize((640,240))
-        bottomPanel.SetDefaultBackgroundColour("light blue")
+        bottomPanel.SetOwnBackroundColour("light blue")
 
         self.testPanel = wx.Panel(bottomPanel, name="testPanel")
-        self.testPanel.SetDefaultBackgroundColour((205, 183, 181)) # mistyrose3
+        self.testPanel.SetOwnBackroundColour((205, 183, 181)) # mistyrose3
         self.testWidget = None
 
         self.infoPane = InfoPane(p)

@@ -728,7 +728,7 @@ public:
         // SetDefaultXXX() reset the "m_inheritXXX" flag after setting the
         // value to prevent it from being inherited by our children
     virtual bool SetBackgroundColour(const wxColour& colour);
-    void SetDefaultBackgroundColour(const wxColour& colour)
+    void SetOwnBackgroundColour(const wxColour& colour)
     {
         if ( SetBackgroundColour(colour) )
             m_inheritBgCol = false;
@@ -736,7 +736,7 @@ public:
     wxColour GetBackgroundColour() const;
 
     virtual bool SetForegroundColour(const wxColour& colour);
-    void SetDefaultForegroundColour(const wxColour& colour)
+    void SetOwnForegroundColour(const wxColour& colour)
     {
         if ( SetForegroundColour(colour) )
             m_inheritFgCol = false;
@@ -746,7 +746,7 @@ public:
         // set/retrieve the font for the window (SetFont() returns true if the
         // font really changed)
     virtual bool SetFont(const wxFont& font) = 0;
-    void SetDefaultFont(const wxFont& font)
+    void SetOwnFont(const wxFont& font)
     {
         if ( SetFont(font) )
             m_inheritFont = false;

@@ -3990,15 +3990,15 @@ void wxGrid::Create()
     wxColour lfg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     wxColour lbg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 #endif
-    m_cornerLabelWin->SetDefaultForegroundColour(lfg);
-    m_cornerLabelWin->SetDefaultBackgroundColour(lbg);
-    m_rowLabelWin->SetDefaultForegroundColour(lfg);
-    m_rowLabelWin->SetDefaultBackgroundColour(lbg);
-    m_colLabelWin->SetDefaultForegroundColour(lfg);
-    m_colLabelWin->SetDefaultBackgroundColour(lbg);
+    m_cornerLabelWin->SetOwnForegroundColour(lfg);
+    m_cornerLabelWin->SetOwnBackgroundColour(lbg);
+    m_rowLabelWin->SetOwnForegroundColour(lfg);
+    m_rowLabelWin->SetOwnBackgroundColour(lbg);
+    m_colLabelWin->SetOwnForegroundColour(lfg);
+    m_colLabelWin->SetOwnBackgroundColour(lbg);
 
-    m_gridWin->SetDefaultForegroundColour(gfg);
-    m_gridWin->SetDefaultBackgroundColour(gbg);
+    m_gridWin->SetOwnForegroundColour(gfg);
+    m_gridWin->SetOwnBackgroundColour(gbg);
 
     Init();
 }

@@ -4832,8 +4832,8 @@ modules.</docstring>
           <param name="colour" type="wxColour" default=""/>
         </paramlist>
       </method>
-      <method name="SetDefaultBackgroundColour" type="" overloaded="no">
-        <autodoc>SetDefaultBackgroundColour(self, Colour colour)</autodoc>
+      <method name="SetOwnBackroundColour" type="" overloaded="no">
+        <autodoc>SetOwnBackroundColour(self, Colour colour)</autodoc>
         <paramlist>
           <param name="colour" type="wxColour" default=""/>
         </paramlist>
@@ -4848,8 +4848,8 @@ not be used at all.</docstring>
           <param name="colour" type="wxColour" default=""/>
         </paramlist>
       </method>
-      <method name="SetDefaultForegroundColour" type="" overloaded="no">
-        <autodoc>SetDefaultForegroundColour(self, Colour colour)</autodoc>
+      <method name="SetOwnForegroundColour" type="" overloaded="no">
+        <autodoc>SetOwnForegroundColour(self, Colour colour)</autodoc>
         <paramlist>
           <param name="colour" type="wxColour" default=""/>
         </paramlist>
@@ -4886,8 +4886,8 @@ be reset back to default.</docstring>
           <param name="font" type="wxFont" default=""/>
         </paramlist>
       </method>
-      <method name="SetDefaultFont" type="" overloaded="no">
-        <autodoc>SetDefaultFont(self, Font font)</autodoc>
+      <method name="SetOwnFont" type="" overloaded="no">
+        <autodoc>SetOwnFont(self, Font font)</autodoc>
         <paramlist>
           <param name="font" type="wxFont" default=""/>
         </paramlist>
@@ -5284,7 +5284,7 @@ colours.
 By 'intelligently' the following is meant: by default, all windows use
 their own default attributes. However if some of the parent's
 attributes are explicitly changed (that is, using SetFont and not
-SetDefaultFont) and if the corresponding attribute hadn't been
+SetOwnFont) and if the corresponding attribute hadn't been
 explicitly set for this window itself, then this window takes the same
 value as used by the parent. In addition, if the window overrides
 ShouldInheritColours to return false, the colours will not be changed

@@ -1295,7 +1295,7 @@ By ``intelligently'' the following is meant: by default, all windows use their
 own \helpref{default}{wxwindowgetclassdefaultattributes} attributes. However
 if some of the parents attributes are explicitly (that is, using 
 \helpref{SetFont}{wxwindowsetfont} and not 
-\helpref{SetDefaultFont}{wxwindowsetdefaultfont}) changed \emph{and} if the
+\helpref{SetOwnFont}{wxwindowsetownfont}) changed \emph{and} if the
 corresponding attribute hadn't been explicitly set for this window itself,
 then this window takes the same value as used by the parent. In addition, if
 the window overrides \helpref{ShouldInheritColours}{wxwindowshouldinheritcolours} 
@@ -2371,7 +2371,7 @@ Sets the background colour of the window.
 
 Please see \helpref{InheritAttributes}{wxwindowinheritattributes} for
 explanation of the difference between this method and 
-\helpref{SetDefaultBackgroundColour}{wxwindowsetdefaultbackgroundcolour}.
+\helpref{SetOwnBackgroundColour}{wxwindowsetownbackgroundcolour}.
 
 \wxheading{Parameters}
 
@@ -2510,9 +2510,9 @@ explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsi
 sizer will have effect.
 
 
-\membersection{wxWindow::SetDefaultBackgroundColour}\label{wxwindowsetdefaultbackgroundcolour}
+\membersection{wxWindow::SetOwnBackgroundColour}\label{wxwindowsetownbackgroundcolour}
 
-\func{void}{SetDefaultBackgroundColour}{\param{const wxColour\& }{colour}}
+\func{void}{SetOwnBackgroundColour}{\param{const wxColour\& }{colour}}
 
 Sets the background colour of the window but prevents it from being inherited
 by the children of this window.
@@ -2523,9 +2523,9 @@ by the children of this window.
 \helpref{InheritAttributes}{wxwindowinheritattributes}
 
 
-\membersection{wxWindow::SetDefaultFont}\label{wxwindowsetdefaultfont}
+\membersection{wxWindow::SetOwnFont}\label{wxwindowsetownfont}
 
-\func{void}{SetDefaultBackgroundColour}{\param{const wxColour\& }{colour}}
+\func{void}{SetOwnBackgroundColour}{\param{const wxColour\& }{colour}}
 
 Sets the font of the window but prevents it from being inherited by the
 children of this window.
@@ -2536,9 +2536,9 @@ children of this window.
 \helpref{InheritAttributes}{wxwindowinheritattributes}
 
 
-\membersection{wxWindow::SetDefaultForegroundColour}\label{wxwindowsetdefaultforegroundcolour}
+\membersection{wxWindow::SetOwnForegroundColour}\label{wxwindowsetownforegroundcolour}
 
-\func{void}{SetDefaultForegroundColour}{\param{const wxColour\& }{colour}}
+\func{void}{SetOwnForegroundColour}{\param{const wxColour\& }{colour}}
 
 Sets the foreground colour of the window but prevents it from being inherited
 by the children of this window.
@@ -2659,7 +2659,7 @@ can be overridden to do something in addition to this in the derived classes.
 
 Sets the font for this window. This function should not be called for the
 parent window if you don't want its font to be inherited by its children,
-use \helpref{SetDefaultFont}{wxwindowsetdefaultfont} instead in this case and
+use \helpref{SetOwnFont}{wxwindowsetownfont} instead in this case and
 see \helpref{InheritAttributes}{wxwindowinheritattributes} for more
 explanations.
 
@@ -2682,7 +2682,7 @@ Sets the foreground colour of the window.
 
 Please see \helpref{InheritAttributes}{wxwindowinheritattributes} for
 explanation of the difference between this method and 
-\helpref{SetDefaultForegroundColour}{wxwindowsetdefaultforegroundcolour}.
+\helpref{SetOwnForegroundColour}{wxwindowsetownforegroundcolour}.
 
 \wxheading{Parameters}
 
