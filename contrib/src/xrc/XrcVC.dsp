@@ -200,6 +200,10 @@ SOURCE=.\xh_spin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_split.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_stbmp.cpp
 # End Source File
 # Begin Source File

@@ -95,4 +95,5 @@ void wxXmlResource::InitAllHandlers()
 #endif
     AddHandler(new wxFrameXmlHandler);
     AddHandler(new wxScrolledWindowXmlHandler);
+    AddHandler(new wxSplitterWindowXmlHandler);
 }

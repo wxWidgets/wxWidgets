@@ -381,6 +381,34 @@
                     </object>
                 </object>
                 <object class="notebookpage">
+                    <label>wxSplitterWindow</label>
+                    <object class="wxPanel" name="panel">
+                        <object class="wxFlexGridSizer">
+                            <cols>1</cols>
+                            <rows>0</rows>
+                            <vgap>0</vgap>
+                            <hgap>0</hgap>
+                            <growablecols>0</growablecols>
+                            <growablerows>0</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxSplitterWindow">
+                                    <minsize>50</minsize>
+                                    <sashpos>100</sashpos>
+                                    <size>400,200</size>
+                                    <object class="wxPanel" name="controls_panel">
+                                        <bg>#0000FF</bg>
+                                    </object>
+                                    <object class="wxPanel" name="controls_panel">
+                                        <bg>#00FF00</bg>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="notebookpage">
                     <label>wxRadioButton</label>
                     <object class="wxPanel" name="radiobutton">
                         <object class="wxFlexGridSizer">
