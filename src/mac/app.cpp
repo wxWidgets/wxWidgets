@@ -609,6 +609,28 @@ void wxApp::CleanUp()
     #endif
 }
 
+//----------------------------------------------------------------------
+// wxEntry
+//----------------------------------------------------------------------
+
+int wxEntryStart( int argc, char *argv[] )
+{
+    return wxApp::Initialize();
+}
+
+
+int wxEntryInitGui()
+{
+    return wxTheApp->OnInitGui();
+}
+
+
+void wxEntryCleanup()
+{
+    wxApp::CleanUp();
+}
+
+
 int wxEntry( int argc, char *argv[] , bool enterLoop )
 {
 #ifdef __MWERKS__
@@ -622,7 +644,7 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     wxDebugContext::SetCheckpoint();
 #endif
 #endif
-    if (!wxApp::Initialize()) {
+    if (!wxEntryStart(argc, argv)) {
         return 0;
     }
    // create the application object or ensure that one already exists
@@ -647,7 +669,7 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
   wxTheApp->argv = argv;
 
   // GUI-specific initialization, such as creating an app context.
-  wxTheApp->OnInitGui();
+  wxEntryInitGui();
 
   // we could try to get the open apple events here to adjust argc and argv better
 
@@ -689,7 +711,7 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
 
     wxTheApp->OnExit();
 
-    wxApp::CleanUp();
+    wxEntryCleanup();
 
     return retValue;
 }
