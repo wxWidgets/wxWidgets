@@ -803,19 +803,29 @@ void wxMacConvertNewlines10To13( char * data )
 
 void wxMacConvertNewlines13To10( wxString * data ) 
 {        
-    if ( data->Length() == 0 )
+    size_t len = data->Length() ;
+
+    if ( len == 0 || wxStrchr(data->c_str(),0x0d)==NULL)
         return ;
         
-	wxMacConvertNewlines13To10( data->GetWriteBuf( data->Length() ) ) ;
-    data->UngetWriteBuf() ;
+    wxString temp(*data) ;
+    wxStringBuffer buf(*data,len ) ;
+    memcpy( buf , temp.c_str() , (len+1)*sizeof(wxChar) ) ; 
+
+	wxMacConvertNewlines13To10( buf ) ;
 }
 
 void wxMacConvertNewlines10To13( wxString * data )
 {        
-    if ( data->Length() == 0 )
+    size_t len = data->Length() ;
+
+    if ( data->Length() == 0 || wxStrchr(data->c_str(),0x0a)==NULL)
         return ;
-	wxMacConvertNewlines10To13( data->GetWriteBuf( data->Length() ) ) ;
-    data->UngetWriteBuf() ;
+
+    wxString temp(*data) ;
+    wxStringBuffer buf(*data,len ) ;
+    memcpy( buf , temp.c_str() , (len+1)*sizeof(wxChar) ) ; 
+	wxMacConvertNewlines10To13( buf ) ;
 }
 
 
