@@ -54,7 +54,9 @@ because required global initialization may not have been performed at applicatio
 construction time.
 
 You can also use DECLARE\_APP(appClass) in a header file to declare the wxGetApp function which returns
-a reference to the application object.
+a reference to the application object. Otherwise you can only use the global 
+\texttt{wxTheApp} pointer which is of type \texttt{wxApp *}.
+
 
 \subsection{Application shutdown}\label{wxappshutdownoverview}
 
