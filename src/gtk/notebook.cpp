@@ -204,6 +204,13 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
+	if(m_windowStyle & wxNB_RIGHT)
+		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_RIGHT );
+	if(m_windowStyle & wxNB_LEFT)
+		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_LEFT );
+	if(m_windowStyle & wxNB_BOTTOM)
+		gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
+
     PostCreation();
 
     Show( TRUE );
