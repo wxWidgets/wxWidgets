@@ -73,9 +73,9 @@
 #  define   TypeString(t)      g_aTypeStrings[t]
 #  define   WXLO_DEBUG(x)      wxLogDebug x
 
-   static const char *g_aTypeStrings[] =
+   static const wxChar *g_aTypeStrings[] =
    {
-      "invalid", "text", "cmd", "icon"
+      _T("invalid"), _T("text"), _T("cmd"), _T("icon")
    };
    wxString
    wxLayoutObject::DebugDump(void) const
@@ -333,7 +333,7 @@ wxLayoutObjectText::GetOffsetScreen(wxDC &dc, CoordType xpos) const
 }
 
 void
-wxLayoutObjectText::Layout(wxDC &dc, class wxLayoutList *llist)
+wxLayoutObjectText::Layout(wxDC &dc, class wxLayoutList *WXUNUSED(llist))
 {
    long descent = 0l;
 
@@ -346,12 +346,12 @@ wxLayoutObjectText::Layout(wxDC &dc, class wxLayoutList *llist)
 
 #ifdef __WXDEBUG__
    CoordType a,b,c,d,e,f;
-   dc.GetTextExtent("test ", &a, &b, &c);
-   dc.GetTextExtent("test", &d, &e, &f);
+   dc.GetTextExtent(_T("test "), &a, &b, &c);
+   dc.GetTextExtent(_T("test"), &d, &e, &f);
    wxASSERT(a != d);
    wxASSERT(b == e);
    wxASSERT(c == f);
-   dc.GetTextExtent(" ", &d, &e, &f);
+   dc.GetTextExtent(_T(" "), &d, &e, &f);
    wxASSERT(a > 0);
 #endif
    dc.GetTextExtent(m_Text, &m_Width, &m_Height, &descent);
@@ -428,7 +428,7 @@ wxLayoutObjectIcon::Write(wxString &ostr)
 {
    /* Exports icon through a temporary file. */
 
-   wxString file = wxGetTempFileName("wxloexport");
+   wxString file = wxGetTempFileName(_T("wxloexport"));
 
    ostr << (int) WXLO_TYPE_ICON << '\n'
         << file << '\n';
@@ -472,8 +472,8 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap *icon)
 
 void
 wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &coords,
-                         wxLayoutList *wxllist,
-                         CoordType begin, CoordType /* len */)
+                         wxLayoutList *WXUNUSED(wxllist),
+                         CoordType WXUNUSED(begin), CoordType WXUNUSED(len) )
 {
    dc.DrawBitmap(*m_Icon, coords.x, coords.y-m_Icon->GetHeight(),
                  (m_Icon->GetMask() == NULL) ? FALSE : TRUE);
@@ -681,9 +681,9 @@ wxLayoutObjectCmd::GetStyle(void) const
 }
 
 void
-wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */,
+wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & WXUNUSED(coords),
                         wxLayoutList *wxllist,
-                        CoordType begin, CoordType /* len */)
+                        CoordType WXUNUSED(begin), CoordType WXUNUSED(len))
 {
    wxASSERT(m_StyleInfo);
    wxllist->ApplyStyle(*m_StyleInfo, dc);
@@ -1061,7 +1061,9 @@ wxLayoutLine::DeleteWord(CoordType xpos)
         }
     }
 
+    #if 0
     wxFAIL_MSG(wxT("unreachable"));
+    #endif
 }
 
 wxLayoutLine *
@@ -1102,7 +1104,7 @@ wxLayoutLine::Draw(wxDC &dc,
 
    CoordType xpos = 0; // cursorpos, lenght of line
 
-   CoordType from, to, tempto;
+   CoordType from, to;
 
    int highlight = llist->IsSelected(this, &from, &to);
 //   WXLO_DEBUG(("highlight=%d",  highlight ));
@@ -1116,7 +1118,7 @@ wxLayoutLine::Draw(wxDC &dc,
       if(highlight == -1) // partially highlight line
       {
          // parts of the line need highlighting
-         tempto = xpos+(**i).GetLength();
+         xpos+(**i).GetLength();
          (**i).Draw(dc, pos, llist, from-xpos, to-xpos);
       }
       else
@@ -1138,7 +1140,7 @@ wxLayoutLine::Layout(wxDC &dc,
                      wxPoint *cursorSize,
                      wxLayoutStyleInfo *cursorStyle,
                      int cx,
-                     bool suppressSIupdate)
+                     bool WXUNUSED(suppressSIupdate))
 {
    wxLayoutObjectList::iterator i;
 
@@ -1199,7 +1201,7 @@ wxLayoutLine::Layout(wxDC &dc,
                if(len < obj->GetLength())
                   str = (*(wxLayoutObjectText*)*i).GetText().substr(len,1);
                else
-                  str = WXLO_CURSORCHAR;
+                  str = _T(WXLO_CURSORCHAR);
                dc.GetTextExtent(str, &width, &height, &descent);
 
                if(cursorStyle) // set style info
@@ -1272,7 +1274,7 @@ wxLayoutLine::Layout(wxDC &dc,
    if(m_Height == 0)
    {
       CoordType width, height, descent;
-      dc.GetTextExtent(WXLO_CURSORCHAR, &width, &height, &descent);
+      dc.GetTextExtent(_T(WXLO_CURSORCHAR), &width, &height, &descent);
       m_Height = height;
       m_BaseLine = m_Height - descent;
    }
@@ -1291,7 +1293,7 @@ wxLayoutLine::Layout(wxDC &dc,
       if(cursorSize->x < WXLO_MINIMUM_CURSOR_WIDTH)
       {
          CoordType width, height, descent;
-         dc.GetTextExtent(WXLO_CURSORCHAR, &width, &height, &descent);
+         dc.GetTextExtent(_T(WXLO_CURSORCHAR), &width, &height, &descent);
          cursorSize->x = width;
          cursorSize->y = height;
       }
@@ -1368,7 +1370,7 @@ wxLayoutLine::Wrap(CoordType wrapmargin, wxLayoutList *llist)
    wxLOiterator copyObject = NULLIT;
    // if we split a text-object, we must pre-pend some text to the
    // next line later on, remember it here:
-   wxString prependText = "";
+   wxString prependText = _T("");
    // we might need to adjust the cursor position later, so remember it
    size_t xpos = llist->GetCursorPos().x;
    // by how much did we shorten the current line:
@@ -1470,7 +1472,10 @@ wxLayoutLine::Wrap(CoordType wrapmargin, wxLayoutList *llist)
    {
       xpos = objectCursorPos + (xpos - objectCursorPos - breakpos -
                                 ((xpos > breakpos) ? 1 : 0 ));
+      #if 0
+      // this assert is useless when xpos has unsigned type
       wxASSERT(xpos >= 0);
+      #endif
       llist->MoveCursorTo( wxPoint( xpos, m_Next->GetLineNumber()) );
    }
    return TRUE; // we wrapped the line
@@ -1813,7 +1818,7 @@ wxLayoutList::SetFont(int family, int size, int style, int weight,
 
 void
 wxLayoutList::SetFont(int family, int size, int style, int weight,
-                      int underline, char const *fg, char const *bg)
+                      int underline, wxChar const *fg, wxChar const *bg)
 
 {
    wxColour
@@ -2684,7 +2689,19 @@ wxLayoutList::GetSize(void) const
 
 
 void
-wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
+wxLayoutList::DrawCursor(wxDC &
+                               #ifdef WXLAYOUT_USE_CARET
+                               WXUNUSED(dc)
+                               #else
+                               dc
+                               #endif
+                               , bool 
+                                      #ifdef WXLAYOUT_USE_CARET
+                                      WXUNUSED(active)
+                                      #else
+                                      active
+                                      #endif
+                                      , wxPoint const &translate)
 {
    if ( m_movedCursor )
       m_movedCursor = false;
@@ -3244,7 +3261,7 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
       determine the correct paper size and scaling. We don't actually
       print anything on it. */
 #if defined(__WXMSW__)
-   wxPrinterDC *psdc = new wxPrinterDC("","",WXLLIST_TEMPFILE,false);
+   wxPrinterDC *psdc = new wxPrinterDC(wxEmptyString,wxEmptyString,_T(WXLLIST_TEMPFILE),false);
 #else
    wxPostScriptDC *psdc = new wxPostScriptDC(WXLLIST_TEMPFILE,false);
 #endif
@@ -3275,7 +3292,7 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    *selPageTo = m_NumOfPages;
    psdc->EndDoc();
    delete psdc;
-   wxRemoveFile(WXLLIST_TEMPFILE);
+   wxRemoveFile(_T(WXLLIST_TEMPFILE));
 }
 
 bool wxLayoutPrintout::HasPage(int pageNum)

@@ -107,7 +107,7 @@ public:
    /// find string in buffer
    bool Find(const wxString &needle,
              wxPoint * fromWhere = NULL,
-             const wxString &configPath = "MsgViewFindString");
+             const wxString &configPath = _T("MsgViewFindString"));
    /// find the same string again
    bool FindAgain(void);
 

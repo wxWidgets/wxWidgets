@@ -261,7 +261,7 @@ typedef wxLayoutObjectList::iterator wxLOiterator;
 class wxLayoutObjectText : public wxLayoutObject
 {
 public:
-   wxLayoutObjectText(const wxString &txt = "");
+   wxLayoutObjectText(const wxString &txt = wxEmptyString);
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_TEXT; }
    virtual void Layout(wxDC &dc, wxLayoutList *llist);
@@ -948,8 +948,8 @@ public:
    /// sets font parameters, colours by name
    void SetFont(int family=-1, int size = -1, int style=-1,
                 int weight=-1, int underline = -1,
-                char const *fg = NULL,
-                char const *bg = NULL);
+                wxChar const *fg = NULL,
+                wxChar const *bg = NULL);
    /// changes to the next larger font size
    inline void SetFontLarger(void)
       { SetFont(-1,(12*m_CurrentStyleInfo.size)/10); }
@@ -968,7 +968,7 @@ public:
    /// toggle underline flag
    inline void SetFontUnderline(bool ul) { SetFont(-1,-1,-1,-1,(int)ul); }
    /// set font colours by name
-   inline void SetFontColour(char const *fg, char const *bg = NULL)
+   inline void SetFontColour(wxChar const *fg, wxChar const *bg = NULL)
       { SetFont(-1,-1,-1,-1,-1,fg,bg); }
    /// set font colours by colour
    inline void SetFontColour(wxColour *fg, wxColour *bg = NULL)
@@ -1279,7 +1279,7 @@ public:
    // type safe wrappers
    void SetLayoutData(const wxString& text)
       { SetData(text.length() + 1, text.c_str()); }
-   const char *GetLayoutData() const { return (const char *)GetData(); }
+   const wxChar *GetLayoutData() const { return (const wxChar *)GetData(); }
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -1300,7 +1300,7 @@ public:
    */
    wxLayoutPrintout(wxLayoutList *llist,
                     wxString const & title =
-                    "wxLayout Printout");
+                    _T("wxLayout Printout"));
    /// Destructor.
    ~wxLayoutPrintout();
 
