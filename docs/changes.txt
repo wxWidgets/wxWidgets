@@ -197,6 +197,7 @@ wxBase
 - compilation with wxUSE_ODBC=1 fixed (dbkeyg.h file was missing in the archive)
 - bug in wxDateTime with timezones on systems with tm_gmtoff in struct tm fixed
 - fixed bug in wxArray::Shrink() (Seth Manley)
+- fixed bug with searching in sorted arrays (Jürgen Palm)
 
 wxGTK:
 
