@@ -171,6 +171,7 @@ wxPrintData::wxPrintData()
     m_nativePrintData = wxNativePrintData::Create() ;
 #endif
     m_bin = wxPRINTBIN_DEFAULT;
+    m_printMode = wxPRINT_MODE_PRINTER;
     m_printOrientation = wxPORTRAIT;
     m_printNoCopies = 1;
     m_printCollate = false;
@@ -228,6 +229,7 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_paperId = data.m_paperId;
     m_paperSize = data.m_paperSize;
     m_bin = data.m_bin;
+    m_printMode = data.m_printMode;
     
     m_nativeData = data.GetNativeData();
     m_nativeData->m_ref++;

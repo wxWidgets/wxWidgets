@@ -98,7 +98,6 @@ public:
     double GetPrinterScaleY() const { return m_printerScaleY; }
     long GetPrinterTranslateX() const { return m_printerTranslateX; }
     long GetPrinterTranslateY() const { return m_printerTranslateY; }
-    wxPrintMode GetPrintMode() const { return m_printMode; }
 
     void SetPrinterCommand(const wxString& command) { m_printerCommand = command; }
     void SetPrinterOptions(const wxString& options) { m_printerOptions = options; }
@@ -110,7 +109,6 @@ public:
     void SetPrinterTranslateX(long x) { m_printerTranslateX = x; }
     void SetPrinterTranslateY(long y) { m_printerTranslateY = y; }
     void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; }
-    void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
 
 #if wxUSE_STREAMS
     wxOutputStream *GetOutputStream() { return m_outputStream; }
@@ -126,7 +124,6 @@ private:
     double          m_printerScaleY;
     long            m_printerTranslateX;
     long            m_printerTranslateY;
-    wxPrintMode     m_printMode;
 #if wxUSE_STREAMS
     wxOutputStream *m_outputStream;
 #endif
@@ -201,7 +198,7 @@ public:
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 
-    wxComboBox *CreatePaperTypeChoice(int* x, int* y);
+    virtual wxComboBox *CreatePaperTypeChoice();
 
 public:
     wxRadioBox*         m_orientationRadioBox;

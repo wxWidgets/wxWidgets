@@ -62,9 +62,6 @@ public:
     wxPrintFactory() {}
     virtual ~wxPrintFactory() {}
     
-    virtual bool HasPageSetupDialog() = 0;
-    virtual bool HasPrintSetupDialog() = 0;
-    
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData* data ) = 0;
     
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
@@ -79,6 +76,20 @@ public:
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data ) = 0;
                                                   
+    // What to do and what to show in the wxPrintDialog
+    // a) Use the generic print setup dialog or a native one?
+    virtual bool HasPrintSetupDialog() = 0;
+    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data ) = 0;
+    // b) Provide the "print to file" option ourselves or via print setup?
+    virtual bool HasOwnPrintToFile() = 0;
+    // c) Show current printer
+    virtual bool HasPrinterLine() = 0;
+    virtual wxString CreatePrinterLine() = 0;
+    // d) Show Status line for current printer?
+    virtual bool HasStatusLine() = 0;
+    virtual wxString CreateStatusLine() = 0;
+
+                                                  
     virtual wxPrintNativeDataBase *CreatePrintNativeData() = 0;
     
     static void SetPrintFactory( wxPrintFactory *factory );
@@ -89,11 +100,6 @@ public:
 class WXDLLEXPORT wxNativePrintFactory: public wxPrintFactory
 {
 public:
-    virtual bool HasPageSetupDialog() 
-        { return true; }
-    virtual bool HasPrintSetupDialog() 
-        { return true; }
-    
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data );
     
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
@@ -108,6 +114,14 @@ public:
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data );
                                                   
+    virtual bool HasPrintSetupDialog();
+    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
+    virtual bool HasOwnPrintToFile();
+    virtual bool HasPrinterLine();
+    virtual wxString CreatePrinterLine();
+    virtual bool HasStatusLine();
+    virtual wxString CreateStatusLine();
+    
     virtual wxPrintNativeDataBase *CreatePrintNativeData();
 };
 

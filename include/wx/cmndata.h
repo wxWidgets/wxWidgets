@@ -197,6 +197,7 @@ public:
                                                                       // in wxPageSetupDialogData
     wxPrintQuality GetQuality() const { return m_printQuality; }
     wxPrintBin GetBin() const { return m_bin; }
+    wxPrintMode GetPrintMode() const { return m_printMode; }
 
     void SetNoCopies(int v) { m_printNoCopies = v; };
     void SetCollate(bool flag) { m_printCollate = flag; };
@@ -209,6 +210,7 @@ public:
     void SetPaperSize(const wxSize& sz) { m_paperSize = sz; }
     void SetQuality(wxPrintQuality quality) { m_printQuality = quality; }
     void SetBin(wxPrintBin bin) { m_bin = bin; }
+    void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
 
     wxString GetFilename() const { return m_filename; }
     void SetFilename( const wxString &filename ) { m_filename = filename; }
@@ -229,6 +231,7 @@ public:
 
 private:
     wxPrintBin      m_bin;
+    wxPrintMode     m_printMode;
 
     int             m_printNoCopies;
     int             m_printOrientation;

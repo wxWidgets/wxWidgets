@@ -1801,10 +1801,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, false, wxT("invalid postscript dc") );
     
-    wxPostScriptPrintNativeData *data = 
-        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
-
-    if (data->GetPrintMode() != wxPRINT_MODE_STREAM )
+    if (m_printData.GetPrintMode() != wxPRINT_MODE_STREAM )
     {
         if (m_printData.GetFilename() == wxEmptyString)
         {
@@ -1971,7 +1968,7 @@ void wxPostScriptDC::EndDoc ()
     wxPostScriptPrintNativeData *data = 
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
-    if (m_ok && (data->GetPrintMode() == wxPRINT_MODE_PRINTER))
+    if (m_ok && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))
     {
         wxString command;
         command += data->GetPrinterCommand();
@@ -2480,8 +2477,8 @@ void wxPostScriptDC::PsPrint( const char* psdata )
 {
     wxPostScriptPrintNativeData *data = 
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
-
-    switch(data->GetPrintMode())
+        
+    switch (m_printData.GetPrintMode())
     {
 #if wxUSE_STREAMS
         // append to output stream
@@ -2505,8 +2502,8 @@ void wxPostScriptDC::PsPrint( int ch )
 {
     wxPostScriptPrintNativeData *data = 
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
-
-    switch (data->GetPrintMode())
+        
+    switch (m_printData.GetPrintMode())
     {
 #if wxUSE_STREAMS
         // append to output stream

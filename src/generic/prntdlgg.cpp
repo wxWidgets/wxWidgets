@@ -61,9 +61,6 @@
 #include "wx/paper.h"
 #include "wx/filename.h"
 
-// For print paper things
-#include "wx/prntbase.h"
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -106,7 +103,6 @@ wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
     m_printerScaleY = 1.0;
     m_printerTranslateX = 0;
     m_printerTranslateY = 0;
-    m_printMode = wxPRINT_MODE_FILE;
 }
 
 wxPostScriptPrintNativeData::~wxPostScriptPrintNativeData()
@@ -167,20 +163,46 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
   //                     wxDEFAULT_DIALOG_STYLE | wxTAB_TRAVERSAL);
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
-
+    
     // 1) top row
+
+    wxPrintFactory* factory = wxPrintFactory::GetFactory();
 
     wxStaticBoxSizer *topsizer = new wxStaticBoxSizer(
         new wxStaticBox( this, wxID_ANY, _( "Printer options" ) ), wxHORIZONTAL );
+    wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
+    flex->AddGrowableCol( 1 );
+    topsizer->Add( flex, 1, wxGROW );
+        
     m_printToFileCheckBox = new wxCheckBox( this, wxPRINTID_PRINTTOFILE, _("Print to File") );
-    topsizer->Add( m_printToFileCheckBox, 0, wxCENTER|wxALL, 5 );
-
-    topsizer->Add( 60,2,1 );
+    flex->Add( m_printToFileCheckBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    
+    if (factory->HasOwnPrintToFile())
+        m_printToFileCheckBox->Enable( false );
 
     m_setupButton = new wxButton(this, wxPRINTID_SETUP, _("Setup...") );
-    topsizer->Add( m_setupButton, 0, wxCENTER|wxALL, 5 );
+    flex->Add( m_setupButton, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+    
+    if (!factory->HasPrintSetupDialog())
+        m_setupButton->Enable( false );
+        
+    if (factory->HasPrinterLine())
+    {
+        flex->Add( new wxStaticText( this, -1, _("Printer:") ), 
+            0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+        flex->Add( new wxStaticText( this, -1, factory->CreatePrinterLine() ), 
+            0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    }
 
-    mainsizer->Add( topsizer, 0, wxLEFT|wxTOP|wxRIGHT, 10 );
+    if (factory->HasStatusLine())
+    {
+        flex->Add( new wxStaticText( this, -1, _("Status:") ), 
+            0, wxALIGN_CENTER_VERTICAL|wxALL-wxTOP, 5 );
+        flex->Add( new wxStaticText( this, -1, factory->CreateStatusLine() ), 
+            0, wxALIGN_CENTER_VERTICAL|wxALL-wxTOP, 5 );
+    }
+
+    mainsizer->Add( topsizer, 0, wxLEFT|wxTOP|wxRIGHT|wxGROW, 10 );
 
     // 2) middle row with radio box
 
@@ -246,31 +268,7 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 
 int wxGenericPrintDialog::ShowModal()
 {
-    if ( m_printDialogData.GetSetupDialog() )
-    {
-        // Make sure wxPrintData object reflects the settings now, in case the setup dialog
-        // changes it. In fact there aren't any common settings at
-        // present, but there might be in future.
-        // TransferDataFromWindow();
-
-        wxGenericPrintSetupDialog genericPrintSetupDialog( this, &m_printDialogData.GetPrintData() );
-        int ret = genericPrintSetupDialog.ShowModal();
-        if (ret != wxID_CANCEL)
-        {
-            // Transfer settings to  the print dialog's print data.
-            m_printDialogData.GetPrintData() = genericPrintSetupDialog.GetPrintData();
-        }
-
-        // Restore the wxPrintData settings again (uncomment if any settings become
-        // common to both dialogs)
-        // TransferDataToWindow();
-
-        return ret;
-    }
-    else
-    {
-        return wxDialog::ShowModal();
-    }
+    return wxDialog::ShowModal();
 }
 
 wxGenericPrintDialog::~wxGenericPrintDialog()
@@ -286,16 +284,13 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     if (m_printDialogData.GetToPage() < 1)
         m_printDialogData.SetToPage(m_printDialogData.GetFromPage());
 
-    wxPostScriptPrintNativeData *data = 
-        (wxPostScriptPrintNativeData *) m_printDialogData.GetPrintData().GetNativeData();
-
     // There are some interactions between the global setup data
     // and the standard print dialog. The global printing 'mode'
     // is determined by whether the user checks Print to file
     // or not.
     if (m_printDialogData.GetPrintToFile())
     {
-        data->SetPrintMode(wxPRINT_MODE_FILE);
+        m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_FILE);
 
         wxFileName fname( m_printDialogData.GetPrintData().GetFilename() );
 
@@ -307,7 +302,7 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        data->SetPrintMode(wxPRINT_MODE_PRINTER);
+        m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_PRINTER);
     }
 
     EndModal(wxID_OK);
@@ -331,10 +326,15 @@ void wxGenericPrintDialog::OnRange(wxCommandEvent& event)
 
 void wxGenericPrintDialog::OnSetup(wxCommandEvent& WXUNUSED(event))
 {
-    wxGenericPrintSetupDialog dialog( this, &m_printDialogData.GetPrintData() );
-    if (dialog.ShowModal() != wxID_CANCEL)
+    wxPrintFactory* factory = wxPrintFactory::GetFactory();
+
+    if (factory->HasPrintSetupDialog())
     {
-        m_printDialogData = dialog.GetPrintData();
+        // The print setup dialog should change the
+        // print data in-place if not cancelled.
+        wxDialog *dialog = factory->CreatePrintSetupDialog( this, &m_printDialogData.GetPrintData() );
+        dialog->ShowModal();
+        dialog->Destroy();
     }
 }
 
@@ -428,8 +428,7 @@ TODO: collate and noCopies should be duplicated across dialog data and print dat
 
 wxDC *wxGenericPrintDialog::GetPrintDC()
 {
-  //    return new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), false, (wxWindow *) NULL);
-  return new wxPostScriptDC(GetPrintDialogData().GetPrintData());
+    return new wxPostScriptDC(GetPrintDialogData().GetPrintData());
 }
 
 // ----------------------------------------------------------------------------
@@ -449,53 +448,94 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
     if ( data )
         m_printData = *data;
 
-    int staticBoxWidth = 300;
 
-    (void) new wxStaticBox(this, wxPRINTID_STATIC, _("Paper size"), wxPoint(10, 10), wxSize(staticBoxWidth, 60) );
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
 
-    int xPos = 20;
-    int yPos = 30;
-    m_paperTypeChoice = CreatePaperTypeChoice(&xPos, &yPos);
+    wxBoxSizer *item1 = new wxBoxSizer( wxHORIZONTAL );
+    main_sizer->Add( item1, 0, wxALL, 5 );
 
-    wxString *choices =  new wxString[2];
-    choices[0] = _("Portrait");
-    choices[1] = _("Landscape");
+    // printer options (on the left)
 
-    m_orientationRadioBox = new wxRadioBox(this, wxPRINTID_ORIENTATION, _("Orientation"),
-        wxPoint(10, 80), wxDefaultSize, 2, choices, 1, wxRA_VERTICAL );
-    m_orientationRadioBox->SetSelection(0);
+    wxBoxSizer *item2 = new wxBoxSizer( wxVERTICAL );
 
-    (void) new wxStaticBox(this, wxPRINTID_STATIC, _("Options"), wxPoint(10, 130), wxSize(staticBoxWidth, 50) );
+    wxStaticBox *item4 = new wxStaticBox( this, wxPRINTID_STATIC, _("Paper size") );
+    wxStaticBoxSizer *item3 = new wxStaticBoxSizer( item4, wxVERTICAL );
 
-    int colourYPos = 145;
+    m_paperTypeChoice = CreatePaperTypeChoice();
+    item3->Add( m_paperTypeChoice, 0, wxALIGN_CENTER|wxALL, 5 );
 
-#ifdef __WXMOTIF__
-    colourYPos = 150;
+    item2->Add( item3, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    wxString strs6[] = 
+    {
+        _("Portrait"), 
+        _("Landscape")
+    };
+    m_orientationRadioBox= new wxRadioBox( this, wxPRINTID_ORIENTATION, _("Orientation"), wxDefaultPosition, wxDefaultSize, 2, strs6, 1, wxRA_SPECIFY_ROWS );
+    item2->Add( m_orientationRadioBox, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    wxStaticBox *item8 = new wxStaticBox( this, -1, _("Options") );
+    wxStaticBoxSizer *item7 = new wxStaticBoxSizer( item8, wxHORIZONTAL );
+
+    m_colourCheckBox = new wxCheckBox( this, wxPRINTID_PRINTCOLOUR, _("Print in colour") );
+    item7->Add( m_colourCheckBox, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item2->Add( item7, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    item1->Add( item2, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+
+    // spooling options (on the right)
+
+    wxStaticBox *item11 = new wxStaticBox( this, -1, _("Print spooling") );
+    wxStaticBoxSizer *item10 = new wxStaticBoxSizer( item11, wxVERTICAL );
+
+    wxStaticText *item12 = new wxStaticText( this, -1, _("Printer command:") );
+    item10->Add( item12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    wxBoxSizer *item13 = new wxBoxSizer( wxHORIZONTAL );
+
+    item13->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    m_printerCommandText = new wxTextCtrl( this, wxPRINTID_COMMAND, wxT(""), wxDefaultPosition, wxSize(160,-1) );
+    item13->Add( m_printerCommandText, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item10->Add( item13, 0, wxALIGN_CENTER|wxALL, 0 );
+
+    wxStaticText *item15 = new wxStaticText( this, -1, _("Printer options:") );
+    item10->Add( item15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+    wxBoxSizer *item16 = new wxBoxSizer( wxHORIZONTAL );
+
+    item16->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    m_printerOptionsText = new wxTextCtrl( this, wxPRINTID_OPTIONS, wxT(""), wxDefaultPosition, wxSize(160,-1) );
+    item16->Add( m_printerOptionsText, 0, wxALIGN_CENTER|wxALL, 5 );
+
+    item10->Add( item16, 0, wxALIGN_CENTER|wxALL, 0 );
+
+    item1->Add( item10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+
+
+#if wxUSE_STATLINE
+    // static line
+    main_sizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
-    m_colourCheckBox = new wxCheckBox(this, wxPRINTID_PRINTCOLOUR, _("Print in colour"), wxPoint(15, colourYPos));
+    // buttons
 
-    (void) new wxStaticBox(this, wxPRINTID_STATIC, _("Print spooling"), wxPoint(330, 10), wxSize(200,170) );
+    main_sizer->Add( CreateButtonSizer( wxOK|wxCANCEL), 0, wxCENTER|wxALL, 10 );
 
-    (void) new wxStaticText(this, wxPRINTID_STATIC, _("Printer command:"), wxPoint(340, 30));
+    SetAutoLayout( true );
+    SetSizer( main_sizer );
 
-    m_printerCommandText = new wxTextCtrl(this, wxPRINTID_COMMAND, wxEmptyString, wxPoint(360, 55), wxSize(150, wxDefaultCoord));
+    main_sizer->Fit( this );
+    Centre(wxBOTH);
 
-    (void) new wxStaticText(this, wxPRINTID_STATIC, _("Printer options:"), wxPoint(340, 110));
-
-    m_printerOptionsText = new wxTextCtrl(this, wxPRINTID_OPTIONS, wxEmptyString, wxPoint(360, 135), wxSize(150, wxDefaultCoord));
-
-    wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(130, 200), wxSize(80, wxDefaultCoord));
-    (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(320, 200), wxSize(80, wxDefaultCoord));
-
-    okButton->SetDefault();
-    okButton->SetFocus();
 
     Fit();
     Centre(wxBOTH);
 
     InitDialog();
-    delete[] choices;
 }
 
 wxGenericPrintSetupDialog::~wxGenericPrintSetupDialog()
@@ -557,18 +597,11 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
     return true;
 }
 
-wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
+wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice()
 {
-/* Should not be necessary
-    if (!wxThePrintPaperDatabase)
-    {
-        wxThePrintPaperDatabase = new wxPrintPaperDatabase;
-        wxThePrintPaperDatabase->CreateDatabase();
-    }
-*/
-    size_t      n = wxThePrintPaperDatabase->GetCount();
-    wxString   *choices = new wxString [n];
-    size_t      sel = 0;
+    size_t n = wxThePrintPaperDatabase->GetCount();
+    wxString *choices = new wxString [n];
+    size_t sel = 0;
 
     for (size_t i = 0; i < n; i++)
     {
@@ -583,17 +616,16 @@ wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
     wxComboBox *choice = new wxComboBox( this,
                                          wxPRINTID_PAPERSIZE,
                                          _("Paper Size"),
-                                         wxPoint(*x, *y),
+                                         wxDefaultPosition,
                                          wxSize(width, wxDefaultCoord),
                                          n, choices );
-
-    //    SetFont(thisFont);
 
     delete[] choices;
 
     choice->SetSelection(sel);
     return choice;
 }
+
 #endif // wxUSE_POSTSCRIPT
 
 // ----------------------------------------------------------------------------

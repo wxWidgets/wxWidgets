@@ -152,6 +152,74 @@ wxPrintDialogBase *wxNativePrintFactory::CreatePrintDialog( wxWindow *parent,
 #endif
 }
 
+bool wxNativePrintFactory::HasPrintSetupDialog()
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return false;
+#elif defined(__WXMAC__)
+    return false;
+#else
+    // Only here do we need to provide the print setup
+    // dialog ourselves, the other platforms either have
+    // none, don't make it accessible or let you configure
+    // the printer from the wxPrintDialog anyway.
+    return true;
+#endif
+    
+}
+
+wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data )
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return NULL;
+#elif defined(__WXMAC__)
+    return NULL;
+#else
+    // Only here do we need to provide the print setup
+    // dialog ourselves, the other platforms either have
+    // none, don't make it accessible or let you configure
+    // the printer from the wxPrintDialog anyway.
+    return new wxGenericPrintSetupDialog( parent, data );
+#endif
+}
+
+bool wxNativePrintFactory::HasOwnPrintToFile()
+{
+    // Only relevant for PostScript and here the
+    // setup dialog provides no "print to file" 
+    // option. In the GNOME setup dialog, the
+    // setup dialog has its own print to file.
+    return false;
+}
+
+bool wxNativePrintFactory::HasPrinterLine()
+{
+    // Only relevant for PostScript for now
+    return true;
+}
+
+wxString wxNativePrintFactory::CreatePrinterLine()
+{
+    // Only relevant for PostScript for now
+    
+    // We should query "lpstat -d" here
+    return _("Generic PostScript");
+}
+
+bool wxNativePrintFactory::HasStatusLine()
+{
+    // Only relevant for PostScript for now
+    return true;    
+}
+
+wxString wxNativePrintFactory::CreateStatusLine()
+{
+    // Only relevant for PostScript for now
+    
+    // We should query "lpstat -r" or "lpstat -p" here
+    return _("Ready");
+}
+
 wxPrintNativeDataBase *wxNativePrintFactory::CreatePrintNativeData()
 {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
