@@ -223,18 +223,21 @@ static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
 
 void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window )
 {
-/*
-    wxString tmp = name;
-    tmp += wxT(" FROM ");
-    tmp += window;
+    // suppress warnings about gtk_debug_focus_in_callback being unused with
+    // this "if ( 0 )"
+    if ( 0 )
+    {
+        wxString tmp = name;
+        tmp += wxT(" FROM ");
+        tmp += window;
 
-    wxChar *s = new wxChar[tmp.Length()+1];
+        wxChar *s = new wxChar[tmp.Length()+1];
 
-    wxStrcpy( s, tmp );
+        wxStrcpy( s, tmp );
 
-    gtk_signal_connect( GTK_OBJECT(widget), "focus_in_event",
-      GTK_SIGNAL_FUNC(gtk_debug_focus_in_callback), (gpointer)s );
-*/
+        gtk_signal_connect( GTK_OBJECT(widget), "focus_in_event",
+          GTK_SIGNAL_FUNC(gtk_debug_focus_in_callback), (gpointer)s );
+    }
 }
 
 #endif // Debug
@@ -1658,10 +1661,10 @@ static void gtk_wxwindow_size_callback( GtkWidget *widget, GtkAllocation* alloc,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
+#ifdef HAVE_XIM
     if (!win->m_ic)
         return;
 
-#ifdef HAVE_XIM
     if  (gdk_ic_get_style (win->m_ic) & GDK_IM_PREEDIT_POSITION)
     {
         gint width, height;
@@ -1671,7 +1674,7 @@ static void gtk_wxwindow_size_callback( GtkWidget *widget, GtkAllocation* alloc,
         win->m_icattr->preedit_area.height = height;
         gdk_ic_set_attr (win->m_ic, win->m_icattr, GDK_IC_PREEDIT_AREA);
     }
-#endif
+#endif // HAVE_XIM
 }
 
 //-----------------------------------------------------------------------------

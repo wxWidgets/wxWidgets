@@ -734,7 +734,6 @@ void wxDC::DoDrawRotatedText(const wxString& text,
         // "upper left" and "upper right"
         CalcBoundingBox(x, y);
         CalcBoundingBox(x + w*cos(rad), y - h*sin(rad));
-        CalcBoundingBox(x + h*sin(rad), y + h*cos(rad));
 
         // "bottom left" and "bottom right"
         x += (wxCoord)(h*sin(rad));

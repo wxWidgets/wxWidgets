@@ -212,7 +212,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.SetBrush( *wxRED_BRUSH );
-    dc.DrawRectangle( x+10, y+10, 110, 190 );
+    dc.DrawRectangle( x+10, y+10, 100, 190 );
     
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
@@ -276,10 +276,15 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     dc.FloodFill(0, 0, wxColour(255, 0, 0));
 #endif //
 
+    // set underlined font for testing
+    dc.SetFont( wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, TRUE) );
     dc.DrawText( "This is text", 110, 10 );
+    dc.DrawRotatedText( "That is text", 60, 30, -45 );
+
+    dc.SetFont( *wxNORMAL_FONT );
 
     wxString text;
-    dc. SetBackgroundMode(wxSOLID);
+    dc. SetBackgroundMode(wxTRANSPARENT);
 
     for ( int n = -180; n < 180; n += 30 )
     {

@@ -26,6 +26,8 @@ all (GUI):
 - wxDC::DrawRotatedText() (contributed by Hans-Joachim Baader, limited to
   +/-90 degrees for now - contributions to improve it are welcome!)
 
+- TIFF support added (libtiff required and included in the distribution)
+
 wxMSW:
 
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)

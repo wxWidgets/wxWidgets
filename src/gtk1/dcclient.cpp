@@ -41,6 +41,15 @@ static GdkPixmap **hatch_bitmap = (GdkPixmap **) NULL;
 
 const double RAD2DEG  = 180.0 / M_PI;
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static inline double dmax(double a, double b) { return a > b ? a : b; }
+static inline double dmin(double a, double b) { return a < b ? a : b; }
+
+static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+
 //-----------------------------------------------------------------------------
 // temporary implementation of the missing GDK function
 //-----------------------------------------------------------------------------
@@ -84,25 +93,6 @@ void gdk_draw_bitmap     (GdkDrawable  *drawable,
                 xdest, ydest,
                 1 );
 }
-
-/*
- * compare two doubles and return the larger rounded
- * to the nearest int
- */
-static int roundmax(double a, double b)
-{
-    return (int)((a > b ? a : b) + 0.5);
-}
-
-/*
- * compare two doubles and return the smaller rounded
- * to the nearest int
- */
-static int roundmin(double a, double b)
-{
-    return (int)((a < b ? a : b) - 0.5);
-}
-
 
 //-----------------------------------------------------------------------------
 // wxWindowDC
@@ -830,13 +820,12 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     wxCHECK_RET( font, wxT("invalid font") );
 
-//    x = XLOG2DEV(x);
-//    y = YLOG2DEV(y);
+    // the size of the text
+    int w = gdk_string_width( font, text.mbc_str() );
+    int h = font->ascent + font->descent;
 
-    int cx = gdk_string_width( font, text.mbc_str() );
-    int cy = font->ascent + font->descent;
-
-    wxBitmap src(cx, cy);
+    // draw the string normally
+    wxBitmap src(w, h);
     wxMemoryDC dc;
     dc.SelectObject(src);
     dc.SetFont(GetFont());
@@ -845,52 +834,87 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     dc.Clear();
     dc.DrawText(text, 0, 0);
     dc.SetFont(wxNullFont);
+    dc.SelectObject(wxNullBitmap);
 
     // Calculate the size of the rotated bounding box.
-    double dx = cos(angle / 180.0 * M_PI);
-    double dy = sin(angle / 180.0 * M_PI);
-    double x4 = -cy * dy;
-    double y4 = cy * dx;
-    double x3 = cx * dx;
-    double y3 = cx * dy;
-    double x2 = x3 + x4;
-    double y2 = y3 + y4;
-    double x1 = x;
-    double y1 = y;
+    double rad = DegToRad(angle);
+    double dx = cos(rad),
+           dy = sin(rad);
 
-    // Create image from the source bitmap after writing the text into it.
-    wxImage  image(src);
+    // the rectngle vertices are counted clockwise with the first one being at
+    // (0, 0) (or, rather, at (x, y))
+    double x2 = w*dx,
+           y2 = -w*dy;      // y axis points to the bottom, hence minus
+    double x4 = h*dy,
+           y4 = h*dx;
+    double x3 = x4 + x2,
+           y3 = y4 + y2;
 
-    int minx = roundmin(0, roundmin(x4, roundmin(x2, x3)));
-    int miny = roundmin(0, roundmin(y4, roundmin(y2, y3)));
-    int maxx = roundmax(0, roundmax(x4, roundmax(x2, x3)));
-    int maxy = roundmax(0, roundmax(y4, roundmax(y2, y3)));
+    // calc max and min 
+    wxCoord maxX = (wxCoord)(dmax(x2, dmax(x3, x4)) + 0.5),
+            maxY = (wxCoord)(dmax(y2, dmax(y3, y4)) + 0.5),
+            minX = (wxCoord)(dmin(x2, dmin(x3, x4)) - 0.5),
+            minY = (wxCoord)(dmin(y2, dmin(y3, y4)) - 0.5);
 
-    // This rotates counterclockwise around the top left corner.
-    for (int rx = minx; rx < maxx; rx++)
+    // prepare to blit-with-rotate the bitmap to the DC
+    wxImage image(src);
+
+    GdkColor *colText = m_textForegroundColour.GetColor(),
+             *colBack = m_textBackgroundColour.GetColor();
+    
+    bool textColSet = TRUE;
+
+    unsigned char *data = image.GetData();
+
+    // paint pixel by pixel
+    for ( wxCoord srcX = 0; srcX < w; srcX++ )
     {
-        for (int ry = miny; ry < maxy; ry++)
+        for ( wxCoord srcY = 0; srcY < h; srcY++ )
         {
-            // transform dest coords to source coords
-            int sx = (int) (rx * dx + ry * dy + 0.5);
-            int sy = (int) (ry * dx - rx * dy + 0.5);
-            if (sx >= 0 && sx < cx && sy >= 0 && sy < cy)
+            // transform source coords to dest coords
+            double r = sqrt(srcX*srcX + srcY*srcY);
+            double angleOrig = atan2(srcY, srcX) - rad;
+            wxCoord dstX = (wxCoord)(r*cos(angleOrig) + 0.5),
+                    dstY = (wxCoord)(r*sin(angleOrig) + 0.5);
+
+            // black pixel?
+            bool textPixel = data[(srcY*w + srcX)*3] == 0;
+            if ( textPixel || (m_backgroundMode == wxSOLID) )
             {
-                // draw black pixels, ignore white ones (i.e. transparent b/g)
-                if (image.GetRed(sx, sy) == 0)
+                // change colour if needed
+                if ( textPixel != textColSet )
                 {
-                    DrawPoint(x1 + maxx - rx, cy + y1 - ry);
+                    gdk_gc_set_foreground( m_textGC, textPixel ? colText
+                                                               : colBack );
+
+                    textColSet = textPixel;
                 }
-                else
-                {
-                    // Background
-                    //DrawPoint(x1 + maxx - rx, cy + y1 + maxy - ry);
-                }
+
+                // don't use DrawPoint() because it uses the current pen
+                // colour, and we don't need it here
+                gdk_draw_point( m_window, m_textGC,
+                                XLOG2DEV(x + dstX), YLOG2DEV(y + dstY) );
             }
         }
     }
 
-    // TODO call CalcBoundingBox()
+    // it would be better to draw with non underlined font and draw the line
+    // manually here (it would be more straight...)
+#if 0
+    if ( m_font.GetUnderlined() )
+    {
+        gdk_draw_line( m_window, m_textGC,
+                       XLOG2DEV(x + x4), YLOG2DEV(y + y4 + font->descent),
+                       XLOG2DEV(x + x3), YLOG2DEV(y + y3 + font->descent));
+    }
+#endif // 0
+
+    // restore the font colour
+    gdk_gc_set_foreground( m_textGC, colText );
+
+    // update the bounding box
+    CalcBoundingBox(x + minX, y + minY);
+    CalcBoundingBox(x + maxX, y + maxY);
 }
 
 void wxWindowDC::DoGetTextExtent(const wxString &string,
