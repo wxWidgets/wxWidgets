@@ -193,19 +193,27 @@ void wxFontRefData::Init(int pointSize,
     m_nativeFontInfo.description = pango_font_description_new();
 
     // And set its values
-    switch (m_family)
+    if (!m_faceName.empty())
     {
-        case wxFONTFAMILY_MODERN:
-        case wxFONTFAMILY_TELETYPE:
-           pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
-           break;
-        case wxFONTFAMILY_SWISS:
-           pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
-           break;
-        default:
-           pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
-           break;
+       pango_font_description_set_family( m_nativeFontInfo.description, wxGTK_CONV(m_faceName) );
     }
+    else
+    {
+        switch (m_family)
+        {
+            case wxFONTFAMILY_MODERN:
+            case wxFONTFAMILY_TELETYPE:
+               pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
+               break;
+            case wxFONTFAMILY_SWISS:
+               pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
+               break;
+            default:
+               pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
+               break;
+        }
+    }
+    
     SetStyle( m_style );
     SetPointSize( m_pointSize );
     SetWeight( m_weight );
@@ -525,7 +533,27 @@ void wxFontRefData::SetWeight(int weight)
 {
     m_weight = weight;
 
-#ifndef __WXGTK20__
+#ifdef __WXGTK20__
+    PangoFontDescription *desc = m_nativeFontInfo.description;
+    switch ( weight )
+    {
+        case wxFONTWEIGHT_BOLD:
+            pango_font_description_set_weight(desc, PANGO_WEIGHT_BOLD);
+            break;
+
+        case wxFONTWEIGHT_LIGHT:
+            pango_font_description_set_weight(desc, PANGO_WEIGHT_LIGHT);
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown font weight") );
+            // fall through
+
+        case wxFONTWEIGHT_NORMAL:
+            // unspecified
+            pango_font_description_set_weight(desc, PANGO_WEIGHT_NORMAL);
+    }
+#else //!__WXGTK20__
     if ( HasNativeFont() )
     {
         wxString boldness;
