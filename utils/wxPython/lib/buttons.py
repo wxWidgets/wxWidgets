@@ -35,12 +35,19 @@ class wxGenButtonEvent(wxPyCommandEvent):
     def __init__(self, eventType, ID):
         wxPyCommandEvent.__init__(self, eventType, ID)
         self.isDown = false
+        self.theButton = None
 
     def SetIsDown(self, isDown):
         self.isDown = isDown
 
     def GetIsDown(self):
         return self.isDown
+
+    def SetButtonObj(self, btn):
+        self.theButton = btn
+
+    def GetButtonObj(self):
+        return self.theButton
 
 
 #----------------------------------------------------------------------
@@ -60,21 +67,11 @@ class wxGenButton(wxWindow):
 
         self.SetLabel(label)
         self.SetPosition(pos)
-        if type(size) == type(()):
-            size = wxSize(size[0], size[1])
-        w = size.width
-        h = size.height
-        dsize = wxSize(75,23)  ### wxButton_GetDefaultSize()
-        if self.bezelWidth > 2:
-            dsize.width = dsize.width + self.bezelWidth - 2
-            dsize.height = dsize.height + self.bezelWidth - 2
-        if w == -1: w = dsize.width
-        if h == -1: h = dsize.height
-        self.SetSize(wxSize(w,h))
         font = parent.GetFont()
         if not font.Ok():
             font = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
         self.SetFont(font)
+        self.SetBestSize(size)
         self.InitColours()
 
         EVT_LEFT_DOWN(self,  self.OnLeftDown)
@@ -86,6 +83,34 @@ class wxGenButton(wxWindow):
         EVT_KEY_UP(self,     self.OnKeyUp)
 
 
+    def SetBestSize(self, size=None):
+        """
+        Given the current font and bezel width settings, calculate
+        and set a good size.
+        """
+        if size is None:
+            size = wxSize(-1,-1)
+        if type(size) == type(()):
+            size = wxSize(size[0], size[1])
+
+        # make a new size so we don't mess with the one passed in
+        size = wxSize(size.width, size.height)
+
+        w, h, useMin = self._GetLabelSize()
+        defSize = wxButton_GetDefaultSize()
+        if size.width == -1:
+            size.width = 12 + w
+            if useMin and size.width < defSize.width:
+                size.width = defSize.width
+        if size.height == -1:
+            size.height = 11 + h
+            if useMin and size.height < defSize.height:
+                size.height = defSize.height
+
+        size.width = size.width + self.bezelWidth - 1
+        size.height = size.height + self.bezelWidth - 1
+
+        self.SetSize(size)
 
 
     def SetBezelWidth(self, width):
@@ -108,6 +133,7 @@ class wxGenButton(wxWindow):
     def InitColours(self):
         faceClr      = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNFACE)
         textClr      = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNTEXT)
+        self.faceDnClr = faceClr
         self.SetBackgroundColour(faceClr)
         self.SetForegroundColour(textClr)
 
@@ -115,13 +141,33 @@ class wxGenButton(wxWindow):
         highlightClr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNHIGHLIGHT)
         self.shadowPen    = wxPen(shadowClr, 1, wxSOLID)
         self.highlightPen = wxPen(highlightClr, 1, wxSOLID)
-
         self.focusIndPen  = wxPen(textClr, 1, wxUSER_DASH)
+
+
+    def SetBackgroundColour(self, colour):
+        wxWindow.SetBackgroundColour(self, colour)
+
+        # Calculate a new set of highlight and shadow colours based on
+        # the new background colour.  Works okay if the colour is dark...
+        r, g, b = colour.Get()
+        fr, fg, fb = min(255,r+32), min(255,g+32), min(255,b+32)
+        self.faceDnClr = wxColour(fr, fg, fb)
+        sr, sg, sb = max(0,r-32), max(0,g-32), max(0,b-32)
+        self.shadowPen = wxPen(wxColour(sr,sg,sb), 1, wxSOLID)
+        hr, hg, hb = min(255,r+64), min(255,g+64), min(255,b+64)
+        self.highlightPen = wxPen(wxColour(hr,hg,hb), 1, wxSOLID)
+
+
+    def _GetLabelSize(self):
+        """ used internally """
+        w, h = self.GetTextExtent(self.GetLabel())
+        return w, h, true
 
 
     def Notify(self):
         evt = wxGenButtonEvent(wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
         evt.SetIsDown(not self.up)
+        evt.SetButtonObj(self)
         self.GetEventHandler().ProcessEvent(evt)
 
 
@@ -174,7 +220,10 @@ class wxGenButton(wxWindow):
         x2 = width-1
         y2 = height-1
         dc = wxPaintDC(self)
-        dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
+        if self.up:
+            dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
+        else:
+            dc.SetBackground(wxBrush(self.faceDnClr, wxSOLID))
         dc.Clear()
         self.DrawBezel(dc, x1, y1, x2, y2)
         self.DrawLabel(dc, width, height)
@@ -257,12 +306,12 @@ class wxGenBitmapButton(wxGenButton):
                  pos = wxDefaultPosition, size = wxDefaultSize,
                  style = 0, validator = wxDefaultValidator,
                  name = "genbutton"):
-        wxGenButton.__init__(self, parent, ID, "", pos, size, style, validator, name)
-
         self.bmpLabel = bitmap
         self.bmpDisabled = None
         self.bmpFocus = None
         self.bmpSelected = None
+        wxGenButton.__init__(self, parent, ID, "", pos, size, style, validator, name)
+
 
     def GetBitmapLabel(self):
         return self.bmpLabel
@@ -273,15 +322,30 @@ class wxGenBitmapButton(wxGenButton):
     def GetBitmapSelected(self):
         return self.bmpSelected
 
+
     def SetBitmapDisabled(self, bitmap):
+        """Set bitmap to display when the button is disabled"""
         self.bmpDisabled = bitmap
+
     def SetBitmapFocus(self, bitmap):
+        """Set bitmap to display when the button has the focus"""
         self.bmpFocus = bitmap
         self.SetUseFocusIndicator(false)
+
     def SetBitmapSelected(self, bitmap):
+        """Set bitmap to display when the button is selected (pressed down)"""
         self.bmpSelected = bitmap
+
     def SetBitmapLabel(self, bitmap):
+        """Set the bitmap to display normally.  This is the only one that is required."""
         self.bmpLabel = bitmap
+
+
+    def _GetLabelSize(self):
+        """ used internally """
+        if not self.bmpLabel:
+            return -1, -1, false
+        return self.bmpLabel.GetWidth()+2, self.bmpLabel.GetHeight()+2, false
 
 
     def DrawLabel(self, dc, width, height, dw=0, dy=0):

@@ -24,21 +24,21 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         b.Enable(false)
 
-        b = wxGenButton(self, -1, 'bigger', (195,50), (120, 55))
+        b = wxGenButton(self, -1, 'bigger', (195,50))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, false))
         b.SetBezelWidth(5)
-        b.SetBackgroundColour(wxBLUE)
+        b.SetBestSize()
+        b.SetBackgroundColour(wxNamedColour("Navy"))
         b.SetForegroundColour(wxWHITE)
         #b.SetUseFocusIndicator(false)
 
         bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
-        b = wxGenBitmapButton(self, -1, bmp, (10, 130),
-                              (bmp.GetWidth()+16, bmp.GetHeight()+16))
+        b = wxGenBitmapButton(self, -1, bmp, (10, 130))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
 
 
-        b = wxGenBitmapButton(self, -1, None, (100, 130), (48,48))
+        b = wxGenBitmapButton(self, -1, None, (100, 130))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         bmp = wxBitmap('bitmaps/lb1.bmp', wxBITMAP_TYPE_BMP)
         mask = wxMaskColour(bmp, wxBLUE)
@@ -48,13 +48,13 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
+        b.SetBestSize()
 
-
-        b = wxGenToggleButton(self, -1, "Toggle Button", (10, 230), (85, 26))
+        b = wxGenToggleButton(self, -1, "Toggle Button", (10, 230))
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
 
 
-        b = wxGenBitmapToggleButton(self, -1, None, (100, 230), (48,48))
+        b = wxGenBitmapToggleButton(self, -1, None, (100, 230))
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
         bmp = wxBitmap('bitmaps/lb1.bmp', wxBITMAP_TYPE_BMP)
         mask = wxMaskColour(bmp, wxBLUE)
@@ -65,6 +65,7 @@ class TestPanel(wxPanel):
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetToggle(true)
+        b.SetBestSize()
 
 
     def OnButton(self, event):
