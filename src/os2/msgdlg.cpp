@@ -21,6 +21,7 @@
 #include "wx/defs.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
+#include "wx/app.h"
 #include "wx/msgdlg.h"
 #endif
 
