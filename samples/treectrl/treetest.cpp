@@ -35,7 +35,11 @@
 
 #include "treetest.h"
 
+#ifdef wxTR_HAS_VARIABLE_ROW_HIGHT
 #define USE_TR_HAS_VARIABLE_ROW_HIGHT 1
+#else
+#define USE_TR_HAS_VARIABLE_ROW_HIGHT 0
+#endif
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__
@@ -155,7 +159,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_Dump, "&Dump item children");
+#ifdef wxTR_MULTIPLE
     item_menu->Append(TreeTest_Dump_Selected, "Dump selected items\tAlt-S");
+#endif
     item_menu->Append(TreeTest_Rename, "&Rename item...");
 
     item_menu->AppendSeparator();
@@ -171,7 +177,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTR_HAS_BUTTONS | 
+#ifdef wxTR_MULTIPLE
 				wxTR_MULTIPLE |
+#endif
 #if USE_TR_HAS_VARIABLE_ROW_HIGHT
 				wxTR_HAS_VARIABLE_ROW_HIGHT |
 #endif
@@ -264,7 +272,8 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 {
-    wxArrayTreeItemIds array;
+#ifdef wxTR_MULTIPLE 
+   wxArrayTreeItemIds array;
 
     m_treeCtrl->GetSelections(array);
     size_t nos=array.Count();
@@ -272,6 +281,7 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 
     for (size_t n=0; n<nos; ++n)
       wxLogMessage(m_treeCtrl->GetItemText(array.Item(n)));
+#endif
 }
 
 void MyFrame::DoSetBold(bool bold)
