@@ -325,7 +325,7 @@ void wxListBox::Append(const wxString& item)
     SetHorizontalExtent(item);
 }
 
-void wxListBox::Append(const wxString& item, char *Client_data)
+void wxListBox::Append(const wxString& item, void *Client_data)
 {
     int index = ListBox_AddString(GetHwnd(), item);
     m_noItems ++;
@@ -344,7 +344,7 @@ void wxListBox::Append(const wxString& item, char *Client_data)
     SetHorizontalExtent(item);
 }
 
-void wxListBox::Set(int n, const wxString *choices, char** clientData)
+void wxListBox::Set(int n, const wxString *choices, void** clientData)
 {
     ShowWindow(GetHwnd(), SW_HIDE);
     ListBox_ResetContent(GetHwnd());
@@ -442,7 +442,7 @@ void wxListBox::Deselect(int N)
         SendMessage(GetHwnd(), LB_SETSEL, FALSE, N);
 }
 
-char *wxListBox::GetClientData(int N) const
+void *wxListBox::GetClientData(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, NULL,
                  "invalid index in wxListBox::GetClientData" );
@@ -450,7 +450,7 @@ char *wxListBox::GetClientData(int N) const
     return (char *)SendMessage(GetHwnd(), LB_GETITEMDATA, N, 0);
 }
 
-void wxListBox::SetClientData(int N, char *Client_data)
+void wxListBox::SetClientData(int N, void *Client_data)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
                  "invalid index in wxListBox::SetClientData" );
@@ -657,7 +657,7 @@ void wxListBox::SetString(int N, const wxString& s)
     if (!(m_windowStyle & wxLB_MULTIPLE) && !(m_windowStyle & wxLB_EXTENDED))
         sel = GetSelection();
 
-    char *oldData = (char *)wxListBox::GetClientData(N);
+    void *oldData = wxListBox::GetClientData(N);
 
     SendMessage(GetHwnd(), LB_DELETESTRING, N, 0);
 
