@@ -116,6 +116,8 @@
                                     // Define 1 to compile check listbox
 #define wxUSE_CARET       1
                                     // Define 1 to use wxCaret class
+#define wxUSE_TREECTRL    1
+                                    // Define 1 to use wxTree* classes
 #define wxUSE_XPM_IN_OS2  1
                                     // Define 1 to support the XPM package in wxBitmap.
 #define wxUSE_IMAGE_LOADING_IN_OS2        1
