@@ -267,6 +267,103 @@ public:
 
 //----------------------------------------------------------------------
 
+// wxGTK's wxComboBox doesn't derive from wxChoice like wxMSW, or
+// even wxControlWithItems, so we have to duplicate the methods
+// here... <blech!>
+
+#ifdef __WXGTK__
+class wxComboBox : public wxControl
+{
+public:
+    wxComboBox(wxWindow* parent, wxWindowID id, char* value = "",
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int LCOUNT=0, wxString* choices=NULL,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               char* name = "comboBox");
+    %name(wxPreComboBox)wxComboBox();
+
+    bool Create(wxWindow* parent, wxWindowID id, char* value = "",
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int LCOUNT=0, wxString* choices=NULL,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               char* name = "comboBox");
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreComboBox:val._setOORInfo(val)"
+
+    void Copy();
+    void Cut();
+    long GetInsertionPoint();
+    long GetLastPosition();
+    wxString GetValue();
+    void Paste();
+    void Replace(long from, long to, const wxString& text);
+    void Remove(long from, long to);
+    void SetInsertionPoint(long pos);
+    void SetInsertionPointEnd();
+    void SetSelection(int n);
+    %name(SetMark)void SetSelection(long from, long to);
+    void SetValue(const wxString& text);
+    void SetEditable(bool editable);
+
+
+    void Clear();
+    void Delete(int n);
+
+    int GetCount();
+    %pragma(python) addtoclass = "Number = GetCount"
+    wxString GetString(int n);
+    int FindString(const wxString& s);
+
+    //void SetString(int n, const wxString& s);  *** No equivalent for wxGTK!!!
+
+    // void Select(int n);
+    %pragma(python) addtoclass = "Select = SetSelection"
+
+    int GetSelection();
+    wxString GetStringSelection() const;
+
+    //   void Append(const wxString& item);
+    //   void Append(const wxString& item, char* clientData);
+    //   char* GetClientData(const int n);
+    //   void SetClientData(const int n, char* data);
+    %addmethods {
+        void Append(const wxString& item, PyObject* clientData=NULL) {
+            if (clientData) {
+                wxPyClientData* data = new wxPyClientData(clientData);
+                self->Append(item, data);
+            } else
+                self->Append(item);
+        }
+
+        PyObject* GetClientData(int n) {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+
+        void SetClientData(int n, PyObject* clientData) {
+            wxPyClientData* data = new wxPyClientData(clientData);
+            self->SetClientObject(n, data);
+        }
+    }
+
+};
+
+
+
+#else  // For all but wxGTK
+
+
 class wxComboBox : public wxChoice {
 public:
     wxComboBox(wxWindow* parent, wxWindowID id, char* value = "",
@@ -304,6 +401,8 @@ public:
     void SetValue(const wxString& text);
     void SetEditable(bool editable);
 };
+#endif
+
 
 //----------------------------------------------------------------------
 

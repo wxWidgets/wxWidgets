@@ -29,6 +29,7 @@ class TestComboBox(wxPanel):
         EVT_SET_FOCUS(cb, self.OnSetFocus)
         EVT_KILL_FOCUS(cb, self.OnKillFocus)
 
+        cb.Append("foo")
 
         wxComboBox(self, 501, "default value", wxPoint(80, 80), wxSize(95, -1),
                         sampleList, wxCB_SIMPLE)
