@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -191,6 +191,11 @@ bool wxComboBox::Show(bool show)
     return TRUE;
 }
 
+ void wxComboBox::SetFocus()
+ {
+    m_text->SetFocus();
+ }
+
 
 void wxComboBox::DelegateTextChanged( const wxString& value ) {
 }
@@ -206,8 +211,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
            const wxPoint& pos,
            const wxSize& size,
-		   int n, const wxString choices[],
-		   long style,
+           int n, const wxString choices[],
+           long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -239,7 +244,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     DoSetSize(pos.x, pos.y, csize.x, csize.y);
     for ( int i = 0 ; i < n ; i++ )
     {
-    	m_choice->DoAppend( choices[ i ] );
+        m_choice->DoAppend( choices[ i ] );
     }
 
     // have to disable this window to avoid interfering it with message
@@ -423,7 +428,7 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
 void wxComboBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
-	event.SetInt(GetSelection());
+    event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
     ProcessCommand(event);
