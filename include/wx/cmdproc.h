@@ -87,6 +87,13 @@ public:
     int GetMaxCommands() const { return m_maxNoCommands; }
     virtual void ClearCommands();
 
+    // By default, the accelerators are "\tCtrl+Z" and "\tCtrl+Y"
+    const wxString& GetUndoAccelerator() const { return m_undoAccelerator; }
+    const wxString& GetRedoAccelerator() const { return m_redoAccelerator; }
+
+    void SetUndoAccelerator(const wxString& accel) { m_undoAccelerator = accel; }
+    void SetRedoAccelerator(const wxString& accel) { m_redoAccelerator = accel; }
+
 protected:
     // for further flexibility, command processor doesn't call wxCommand::Do()
     // and Undo() directly but uses these functions which can be overridden in
@@ -101,6 +108,9 @@ protected:
 #if wxUSE_MENUS
     wxMenu*       m_commandEditMenu;
 #endif // wxUSE_MENUS
+
+    wxString      m_undoAccelerator;
+    wxString      m_redoAccelerator;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxCommandProcessor)
