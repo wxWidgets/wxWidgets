@@ -78,19 +78,19 @@ __init__ as a plain old wx.Control is not very useful.", "");
         "Sets the item's text.", "");
 
 
-    DocDeclStr(
-        bool , GetAdjustMinSizeFlag(),
-        "Returns whether the minsize should be adjusted for this control when
-`SetLabel` or `SetFont` are called.", "");
+//     DocDeclStr(
+//         bool , GetAdjustMinSizeFlag(),
+//         "Returns whether the minsize should be adjusted for this control when
+// `SetLabel` or `SetFont` are called.", "");
     
-    DocDeclStr(
-        void , SetAdjustMinSizeFlag(bool adjust),
-        "By default controls will readjust their size and minsize when
-`SetLabel` or `SetFont` are called.  This flag will allow you to
-control this behavior.", "
+//     DocDeclStr(
+//         void , SetAdjustMinSizeFlag(bool adjust),
+//         "By default controls will readjust their size and minsize when
+// `SetLabel` or `SetFont` are called.  This flag will allow you to
+// control this behavior.", "
 
-:see: `GetAdjustMinSizeFlag`
-");
+// :see: `GetAdjustMinSizeFlag`
+// ");
     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
