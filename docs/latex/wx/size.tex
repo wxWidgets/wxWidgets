@@ -1,12 +1,15 @@
 \section{\class{wxSize}}\label{wxsize}
 
 A {\bf wxSize} is a useful data structure for graphics operations.
-It simply contains integer {\it x} and {\it y} members.
+It simply contains integer {\it width} and {\it height} members.
+
+wxSize is used throughout wxWindows as well as wxPoint which, although almost
+equivalent to wxSize, has a different meaning: wxPoint represents a position
+while wxSize - the size.
 
 \pythonnote{wxPython defines aliases for the \tt{x} and \tt{y} members
 named \tt{width} and \tt{height} since it makes much more sense for
-sizes.  There is also coresponding aliases for the  \tt{GetWidth} and
-\tt{GetHeight} methods.
+sizes.
 }
 
 \wxheading{Derived from}
@@ -27,39 +30,39 @@ None
 
 \func{}{wxSize}{\void}
 
-\func{}{wxSize}{\param{int}{ x}, \param{int}{ y}}
+\func{}{wxSize}{\param{int}{ width}, \param{int}{ height}}
 
 Creates a size object.
 
-\membersection{wxSize::x}
+\membersection{wxSize::GetWidth}\label{wxsizegetwidth}
 
-\member{int}{x}
+\constfunc{int}{GetWidth}{\void}
 
-x member.
+Gets the width member.
 
-\membersection{wxSize::y}
+\membersection{wxSize::GetHeight}\label{wxsizegetheight}
 
-\member{int}{ y}
+\constfunc{int}{GetHeight}{\void}
 
-y member.
-
-\membersection{wxSize::GetX}\label{wxsizegetx}
-
-\constfunc{int}{GetX}{\void}
-
-Gets the x member.
-
-\membersection{wxSize::GetY}\label{wxsizegety}
-
-\constfunc{int}{GetY}{\void}
-
-Gets the y member.
+Gets the height member.
 
 \membersection{wxSize::Set}\label{wxsizeset}
 
-\func{void}{Set}{\param{int}{ x}, \param{int}{ y}}
+\func{void}{Set}{\param{int}{ width}, \param{int}{ height}}
 
-Sets the x and y members.
+Sets the width and height members.
+
+\membersection{wxSize::SetHeight}\label{wxsizesetheight}
+
+\func{void}{SetHeight}{\param{int}{ height}}
+
+Sets the height.
+
+\membersection{wxSize::SetWidth}\label{wxsizesetwidth}
+
+\func{void}{SetWidth}{\param{int}{ width}}
+
+Sets the width.
 
 \membersection{wxSize::operator $=$}
 
