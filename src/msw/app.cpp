@@ -1047,15 +1047,23 @@ void wxApp::Dispatch()
 bool wxApp::ProcessMessage(WXMSG *wxmsg)
 {
     MSG *msg = (MSG *)wxmsg;
-    HWND hWnd = msg->hwnd;
-    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hWnd);
+    HWND hwnd = msg->hwnd;
+    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
 
     // this may happen if the event occured in a standard modeless dialog (the
     // only example of which I know of is the find/replace dialog) - then call
     // IsDialogMessage() to make TAB navigation in it work
     if ( !wndThis )
     {
-        return ::IsDialogMessage(hWnd, msg) != 0;
+        // we need to find the dialog containing this control as
+        // IsDialogMessage() just eats all the messages (i.e. returns TRUE for
+        // them) if we call it for the control itself
+        while ( ::GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD )
+        {
+            hwnd = ::GetParent(hwnd);
+        }
+
+        return ::IsDialogMessage(hwnd, msg) != 0;
     }
 
 #if wxUSE_TOOLTIPS
@@ -1071,23 +1079,26 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     }
 #endif // wxUSE_TOOLTIPS
 
-    // Try translations first; find the youngest window with
-    // a translation table.
+    // try translations first: the accelerators override everything
     wxWindow *wnd;
 
-    bool pastTopLevelWindow = FALSE;
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
-        if ( !pastTopLevelWindow && wnd->MSWTranslateMessage(wxmsg))
-            return TRUE;
-        if ( wnd->MSWProcessMessage(wxmsg) )
+        if ( wnd->MSWTranslateMessage(wxmsg))
             return TRUE;
 
         // stop at first top level window, i.e. don't try to process the key
         // strokes originating in a dialog using the accelerators of the parent
         // frame - this doesn't make much sense
         if ( wnd->IsTopLevel() )
-            pastTopLevelWindow = TRUE;
+            break;
+    }
+
+    // now try the other hooks (kbd navigation is handled here)
+    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+    {
+        if ( wnd->MSWProcessMessage(wxmsg) )
+            return TRUE;
     }
 
     return FALSE;
