@@ -3778,6 +3778,13 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect ) const
     wxCHECK_RET( index >= 0 && (size_t)index < GetItemCount(),
                  _T("invalid index in GetItemRect") );
 
+    // ensure that we're laid out, otherwise we could return nonsense
+    if ( m_dirty )
+    {
+        wxConstCast(this, wxListMainWindow)->
+            RecalculatePositions(TRUE /* no refresh */);
+    }
+
     rect = GetLineRect((size_t)index);
 
     CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
