@@ -35,28 +35,28 @@
 
 // what to test (in alphabetic order)?
 
-//#define TEST_ARRAYS
-//#define TEST_CMDLINE
-//#define TEST_DATETIME
-//#define TEST_DIR
-//#define TEST_DLLLOADER
-//#define TEST_EXECUTE
+#define TEST_ARRAYS
+#define TEST_CMDLINE
+#define TEST_DATETIME
+#define TEST_DIR
+#define TEST_DLLLOADER
+#define TEST_EXECUTE
 #define TEST_FILE
-//#define TEST_FILECONF
-//#define TEST_HASH
-//#define TEST_LIST
-//#define TEST_LOG
-//#define TEST_LONGLONG
-//#define TEST_MIME
-//#define TEST_INFO_FUNCTIONS
-//#define TEST_SOCKETS
-//#define TEST_STRINGS
-//#define TEST_THREADS
-//#define TEST_TIMER
+#define TEST_FILECONF
+#define TEST_HASH
+#define TEST_LIST
+#define TEST_LOG
+#define TEST_LONGLONG
+#define TEST_MIME
+#define TEST_INFO_FUNCTIONS
+#define TEST_SOCKETS
+#define TEST_STRINGS
+#define TEST_THREADS
+#define TEST_TIMER
 //#define TEST_VCARD            -- don't enable this (VZ)
-//#define TEST_WCHAR
-//#define TEST_ZIP
-//#define TEST_ZLIB
+#define TEST_WCHAR
+#define TEST_ZIP
+#define TEST_ZLIB
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -1020,7 +1020,7 @@ static void TestLongLongComparison()
        -0x1234,
     };
 
-    wxLongLongWx lls[2];
+    wxLongLong lls[2];
     lls[0] = ls[0];
     lls[1] = ls[1]; 
 
@@ -1613,6 +1613,7 @@ static void TestUtf8()
 "ont à cœur de pouvoir utiliser tous leurs caractères ! :)";
 #endif
 
+#if wxUSE_WCHAR_T
     wxWCharBuffer wchBuf = testString.wc_str(wxConvUTF8);
     const wchar_t *pwz = (const wchar_t *)wchBuf;
     wxString testString2(pwz, wxConvLocal);
@@ -1631,6 +1632,9 @@ static void TestUtf8()
     delete [] pwz2;
 
     printf("Encoding '%s' -> '%s'\n", psz, testString3.c_str());
+#else
+    puts("WARNING: not compiled in.");
+#endif // wxUSE_WCHAR_T
 }
 
 #endif // TEST_WCHAR
@@ -3618,7 +3622,7 @@ int main(int argc, char **argv)
 
         TestTimeZoneBug();
     }
-    if ( 0 )
+    if ( 1 )
         TestInteractive();
 #endif // TEST_DATETIME
 
