@@ -15,6 +15,7 @@
             regex/wxregex.cpp
             filesys/filesys.cpp
             arrays/arrays.cpp
+            hashes/hashes.cpp
             longlong/longlong.cpp
             strings/strings.cpp
             strings/stdstrings.cpp

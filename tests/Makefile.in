@@ -43,6 +43,7 @@ TEST_OBJECTS =  \
 	test_wxregex.o \
 	test_filesys.o \
 	test_arrays.o \
+	test_hashes.o \
 	test_longlong.o \
 	test_strings.o \
 	test_stdstrings.o \
@@ -141,6 +142,9 @@ test_filesys.o: $(srcdir)/filesys/filesys.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_arrays.o: $(srcdir)/arrays/arrays.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_hashes.o: $(srcdir)/hashes/hashes.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_longlong.o: $(srcdir)/longlong/longlong.cpp

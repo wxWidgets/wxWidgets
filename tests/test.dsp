@@ -459,6 +459,10 @@ SOURCE=.\formatconverter\formatconverter.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\hashes\hashes.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\longlong\longlong.cpp
 # End Source File
 # Begin Source File

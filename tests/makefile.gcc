@@ -28,6 +28,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_wxregex.o \
 	$(OBJS)\test_filesys.o \
 	$(OBJS)\test_arrays.o \
+	$(OBJS)\test_hashes.o \
 	$(OBJS)\test_longlong.o \
 	$(OBJS)\test_strings.o \
 	$(OBJS)\test_stdstrings.o \
@@ -182,6 +183,9 @@ $(OBJS)\test_filesys.o: ./filesys/filesys.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_arrays.o: ./arrays/arrays.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_hashes.o: ./hashes/hashes.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_longlong.o: ./longlong/longlong.cpp
