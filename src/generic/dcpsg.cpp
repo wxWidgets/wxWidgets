@@ -1839,7 +1839,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
 #ifdef __UNIX__
 	     if (afmFile==NULL)
 	     {
-	         strcpy( afmName, "/usr/local/share/wx/gs_afm/" );
+	         strcpy( afmName, "/usr/local/share/wx/afm/" );
              strcat(afmName,name);
              strcat(afmName,".afm");
              afmFile = fopen(afmName,"r");
@@ -1847,7 +1847,7 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
 
 	     if (afmFile==NULL)
 	     {
-	         strcpy( afmName, "/usr/share/wx/gs_afm/" );
+	         strcpy( afmName, "/usr/share/wx/afm/" );
              strcat(afmName,name);
              strcat(afmName,".afm");
              afmFile = fopen(afmName,"r");
