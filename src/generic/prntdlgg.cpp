@@ -61,6 +61,7 @@
 #include "wx/paper.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
+#include "wx/imaglist.h"
 
 #include <stdlib.h>
 #include <string.h>
