@@ -1126,6 +1126,7 @@ public:
         { m_eventType = wxEVT_MOVING; m_id = id; }
 
     wxPoint GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint& pos) { m_pos = pos; }
     wxRect GetRect() const { return m_rect; }
     void SetRect(wxRect rect) { m_rect = rect; }
 
