@@ -9,7 +9,9 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   now called much earlier/later than before; please move any exiting code
   from there to wxApp::OnInit()/OnExit()
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
-
+- the values of many colours have been updated to match their official
+  definitions which unfortunately means that "orange" colour in wxWindows
+  2.5 is not the same colour as in 2.4 series.
 
 DEPRECATED METHODS SINCE 2.4.x
 ==============================
