@@ -19,28 +19,6 @@ import  images
 
 #----------------------------------------------------------------------------
 
-# A convenient wrapper around wx.TextCtrl to give it a spiffy label.
-class ExtStr(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent, -1)
-        sizer = wx.StaticBoxSizer(wx.StaticBox(self, -1, 'Extension'), wx.HORIZONTAL)
-        self.ctl = wx.TextCtrl(self, -1, value="wav", style = wx.TE_PROCESS_ENTER )
-        sizer.Add(self.ctl, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 3)
-        self.Enable(True)
-
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-
-    def Enable(self, value):
-        self.ctl.Enable(value)
-        
-    def SetValue(self, value):
-        self.ctl.SetValue(value)
-    
-    def GetValue(self):
-        return(self.ctl.GetValue())
-        
- 
 class MimeTypesDemoPanel(wx.Panel):
     def __init__(self, parent, log):
         
@@ -48,28 +26,40 @@ class MimeTypesDemoPanel(wx.Panel):
         
         wx.Panel.__init__(self, parent, -1)
 
+        # This will be used for all of the labels that follow (bold label)
+        bfont = wx.Font(
+                    self.GetFont().GetPointSize(), 
+                    self.GetFont().GetFamily(),
+                    self.GetFont().GetStyle(),
+                    wx.BOLD
+                    )
+        
         # Contains everything
         tsizer = wx.BoxSizer(wx.VERTICAL)
         
         # Contains upper controls
         usizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        # A little fancy stuff to make things align right.
-        self.ext = ExtStr(self)
+        # Text control for ext / type entry plus label.
+        t = wx.StaticText(self, -1, 'Extension / MIME type: ', style = wx.ALIGN_RIGHT )
+        t.SetFont(bfont)
+        usizer.Add(t, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL, 2)
+
+        self.ext = wx.TextCtrl(self, -1, value="wav", style = wx.TE_PROCESS_ENTER )
         usizer.Add(self.ext, 0, wx.ALL | wx.ALIGN_TOP, 4)
-        self.ext.Bind(wx.EVT_TEXT_ENTER, self.OnLookup)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnLookup, self.ext)
 
         # Select how to look it up
-        self.how = wx.RadioBox(
-                    self, -1, "Lookup method", choices=['By extension', 'By MIME type'], 
-                    majorDimension=2, style=wx.RA_SPECIFY_COLS
-                    )
-        usizer.Add(self.how, 0, wx.ALL | wx.ALIGN_TOP, 4)
-        self.how.SetSelection(0)
+        self.useExt = wx.RadioButton(self, -1, "By extension", style = wx.RB_GROUP)
+        self.useMime = wx.RadioButton(self, -1, "By MIME type")
+
+        usizer.Add(self.useExt, 0, wx.ALL | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL, 4)
+        usizer.Add(self.useMime, 0, wx.ALL | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL, 4)
+        self.useExt.SetValue(1)
 
         # Trigger a lookup (hitting ENTER in the text ctrl will do the same thing)
         self.go = wx.Button(self, -1, "Go get it!")
-        usizer.Add(self.go, 0, wx.ALL | wx.ALIGN_CENTER, 4)
+        usizer.Add(self.go, 0, wx.ALL | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL, 4)
         self.Bind(wx.EVT_BUTTON, self.OnLookup, self.go)
 
         # StaticBox with larger label than usual
@@ -88,14 +78,6 @@ class MimeTypesDemoPanel(wx.Panel):
         llsizer = wx.GridBagSizer(2, 2)
         llsizer.AddGrowableCol(2)
 
-        # This will be used for all of the labels that follow (bold label)
-        bfont = wx.Font(
-                    self.GetFont().GetPointSize(), 
-                    self.GetFont().GetFamily(),
-                    self.GetFont().GetStyle(),
-                    wx.BOLD
-                    )
-        
         #------- Icon info
 
         t = wx.StaticText(self, -1, 'GetIconInfo: ', style = wx.ALIGN_RIGHT )
@@ -185,11 +167,16 @@ class MimeTypesDemoPanel(wx.Panel):
         
         #----------------------------------------------------------------------------
 
-        lrsizer = wx.StaticBoxSizer(wx.StaticBox(self, -1, 'Known MIME types'), wx.HORIZONTAL)
+        lrsizer = wx.BoxSizer(wx.VERTICAL)
         
         #------- List box with known MIME types
+
+        t = wx.StaticText(self, -1, 'Known MIME types')
+        t.SetFont(bfont)
+        lrsizer.Add(t, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+
         self.mimelist = wx.ListBox(self, -1, choices=[], style = wx.LB_SINGLE | wx.LB_SORT)
-        lrsizer.Add(self.mimelist, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+        lrsizer.Add(self.mimelist, 1, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
         self.Bind(wx.EVT_LISTBOX, self.OnListbox, self.mimelist)
 
         #----------------------------------------------------------------------------
@@ -220,7 +207,7 @@ class MimeTypesDemoPanel(wx.Panel):
     def OnListbox(self, event):
         mimetype = event.GetString()
         self.ext.SetValue(mimetype)
-        self.how.SetSelection(1)
+        self.useMime.SetValue(1)
         self.OnLookup()
 
     # Look up a given file extension or MIME type.
@@ -228,7 +215,7 @@ class MimeTypesDemoPanel(wx.Panel):
         txt = self.ext.GetValue()
 
         # For MIME lookups
-        if self.how.GetSelection() == 1:
+        if self.useMime.GetValue() == 1:
             fileType = wx.TheMimeTypesManager.GetFileTypeFromMimeType(txt)
             msg = "Mime type"
 
