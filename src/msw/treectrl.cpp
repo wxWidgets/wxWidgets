@@ -1921,6 +1921,13 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                                  bool textOnly) const
 {
     RECT rc;
+
+    // Virtual root items have no bounding rectangle
+    if ( IS_VIRTUAL_ROOT(item) )
+    {
+        return false;
+    }
+
     if ( TreeView_GetItemRect(GetHwnd(), HITEM(item),
                               &rc, textOnly) )
     {
