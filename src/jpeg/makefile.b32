@@ -2,77 +2,171 @@
 # File:		makefile.b32
 # Author:	Julian Smart
 # Created:	1993
-# Updated:	
+# Updated:
 # Copyright:
 #
 # "%W% %G%"
 #
 # Makefile : Builds JPEG library (BC++ 32-bit)
 
-# WXWIN and BCCDIR are set by parent make
+LIBTARGET=jpeg
+WXWIN=..\..
 
-LIBTARGET =..\..\lib\jpeg.lib
+!include ..\makeb32.env
 
-SYSDEPMEM= jmemnobs.obj
+SYSDEPMEM= \
+	$(OBJ_PATH)\jmemnobs.obj
 
-# source files: JPEG library proper
-LIBSOURCES= jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c \
-        jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c \
-        jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c \
-        jdatadst.c jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c \
-        jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c \
-        jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c \
-        jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
-        jquant2.c jutils.c jmemmgr.c
-# memmgr back ends: compile only one of these into a working library
-SYSDEPSOURCES= jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
-# source files: cjpeg/djpeg/jpegtran applications, also rdjpgcom/wrjpgcom
-APPSOURCES= cjpeg.c djpeg.c jpegtran.c rdjpgcom.c wrjpgcom.c cdjpeg.c \
-        rdcolmap.c rdswitch.c transupp.c rdppm.c wrppm.c rdgif.c wrgif.c \
-        rdtarga.c wrtarga.c rdbmp.c wrbmp.c rdrle.c wrrle.c
-SOURCES= $(LIBSOURCES) $(SYSDEPSOURCES) $(APPSOURCES)
-# files included by source files
-INCLUDES= jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h \
-        jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h transupp.h
-# documentation, test, and support files
-DOCS= README install.doc usage.doc cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 \
-        wrjpgcom.1 wizard.doc example.c libjpeg.doc structure.doc \
-        coderules.doc filelist.doc change.log
-MKFILES= configure makefile.cfg makefile.ansi makefile.unix makefile.bcc \
-        makefile.mc6 makefile.dj makefile.wat makefile.vc makelib.ds \
-        makeapps.ds makeproj.mac makcjpeg.st makdjpeg.st makljpeg.st \
-        maktjpeg.st makefile.manx makefile.sas makefile.mms makefile.vms \
-        makvms.opt
-CONFIGFILES= jconfig.cfg jconfig.bcc jconfig.mc6 jconfig.dj jconfig.wat \
-        jconfig.vc jconfig.mac jconfig.st jconfig.manx jconfig.sas \
-        jconfig.vms
-CONFIGUREFILES= config.guess config.sub install-sh ltconfig ltmain.sh
-OTHERFILES= jconfig.doc ckconfig.c ansi2knr.c ansi2knr.1 jmemdosa.asm
-TESTFILES= testorig.jpg testimg.ppm testimg.bmp testimg.jpg testprog.jpg \
-        testimgp.jpg
-DISTFILES= $(DOCS) $(MKFILES) $(CONFIGFILES) $(SOURCES) $(INCLUDES) \
-        $(CONFIGUREFILES) $(OTHERFILES) $(TESTFILES)
 # library object files common to compression and decompression
-COMOBJECTS= jcomapi.obj jutils.obj jerror.obj jmemmgr.obj $(SYSDEPMEM)
+COMOBJECTS= \
+	$(OBJ_PATH)\jcomapi.obj \
+	$(OBJ_PATH)\jutils.obj \
+	$(OBJ_PATH)\jerror.obj \
+	$(OBJ_PATH)\jmemmgr.obj \
+	$(SYSDEPMEM)
+
 # compression library object files
-CLIBOBJECTS= jcapimin.obj jcapistd.obj jctrans.obj jcparam.obj jdatadst.obj \
-        jcinit.obj jcmaster.obj jcmarker.obj jcmainct.obj jcprepct.obj \
-        jccoefct.obj jccolor.obj jcsample.obj jchuff.obj jcphuff.obj \
-        jcdctmgr.obj jfdctfst.obj jfdctflt.obj jfdctint.obj
+CLIBOBJECTS= \
+	$(OBJ_PATH)\jcapimin.obj \
+	$(OBJ_PATH)\jcapistd.obj \
+	$(OBJ_PATH)\jctrans.obj \
+	$(OBJ_PATH)\jcparam.obj \
+	$(OBJ_PATH)\jdatadst.obj \
+	$(OBJ_PATH)\jcinit.obj \
+	$(OBJ_PATH)\jcmaster.obj \
+	$(OBJ_PATH)\jcmarker.obj \
+	$(OBJ_PATH)\jcmainct.obj \
+	$(OBJ_PATH)\jcprepct.obj \
+	$(OBJ_PATH)\jccoefct.obj \
+	$(OBJ_PATH)\jccolor.obj \
+	$(OBJ_PATH)\jcsample.obj \
+	$(OBJ_PATH)\jchuff.obj \
+	$(OBJ_PATH)\jcphuff.obj \
+	$(OBJ_PATH)\jcdctmgr.obj \
+	$(OBJ_PATH)\jfdctfst.obj \
+	$(OBJ_PATH)\jfdctflt.obj \
+	$(OBJ_PATH)\jfdctint.obj
+
 # decompression library object files
-DLIBOBJECTS= jdapimin.obj jdapistd.obj jdtrans.obj jdatasrc.obj \
-        jdmaster.obj jdinput.obj jdmarker.obj jdhuff.obj jdphuff.obj \
-        jdmainct.obj jdcoefct.obj jdpostct.obj jddctmgr.obj jidctfst.obj \
-        jidctflt.obj jidctint.obj jidctred.obj jdsample.obj jdcolor.obj \
-        jquant1.obj jquant2.obj jdmerge.obj
+DLIBOBJECTS= \
+	$(OBJ_PATH)\jdapimin.obj \
+	$(OBJ_PATH)\jdapistd.obj \
+	$(OBJ_PATH)\jdtrans.obj \
+	$(OBJ_PATH)\jdatasrc.obj \
+	$(OBJ_PATH)\jdmaster.obj \
+	$(OBJ_PATH)\jdinput.obj \
+	$(OBJ_PATH)\jdmarker.obj \
+	$(OBJ_PATH)\jdhuff.obj \
+	$(OBJ_PATH)\jdphuff.obj \
+	$(OBJ_PATH)\jdmainct.obj \
+	$(OBJ_PATH)\jdcoefct.obj \
+	$(OBJ_PATH)\jdpostct.obj \
+	$(OBJ_PATH)\jddctmgr.obj \
+	$(OBJ_PATH)\jidctfst.obj \
+	$(OBJ_PATH)\jidctflt.obj \
+	$(OBJ_PATH)\jidctint.obj \
+	$(OBJ_PATH)\jidctred.obj \
+	$(OBJ_PATH)\jdsample.obj \
+	$(OBJ_PATH)\jdcolor.obj \
+	$(OBJ_PATH)\jquant1.obj \
+	$(OBJ_PATH)\jquant2.obj \
+	$(OBJ_PATH)\jdmerge.obj
+
 # These objectfiles are included in libjpeg.lib
 OBJECTS= $(CLIBOBJECTS) $(DLIBOBJECTS) $(COMOBJECTS)
-# object files for sample applications (excluding library files)
-COBJECTS= cjpeg.obj rdppm.obj rdgif.obj rdtarga.obj rdrle.obj rdbmp.obj \
-        rdswitch.obj cdjpeg.obj
-DOBJECTS= djpeg.obj wrppm.obj wrgif.obj wrtarga.obj wrrle.obj wrbmp.obj \
-        rdcolmap.obj cdjpeg.obj
-TROBJECTS= jpegtran.obj rdswitch.obj cdjpeg.obj transupp.obj
 
-!include $(WXWIN)\src\makelib.b32
+$(OBJ_PATH)\jmemnobs.obj: jmemnobs.c
 
+$(OBJ_PATH)\jcomapi.obj: jcomapi.c
+
+$(OBJ_PATH)\jutils.obj: jutils.c
+
+$(OBJ_PATH)\jerror.obj: jerror.c
+
+$(OBJ_PATH)\jmemmgr.obj: jmemmgr.c
+
+$(OBJ_PATH)\jcapimin.obj: jcapimin.c
+
+$(OBJ_PATH)\jcapistd.obj: jcapistd.c
+
+$(OBJ_PATH)\jctrans.obj: jctrans.c
+
+$(OBJ_PATH)\jcparam.obj: jcparam.c
+
+$(OBJ_PATH)\jdatadst.obj: jdatadst.c
+
+$(OBJ_PATH)\jcinit.obj: jcinit.c
+
+$(OBJ_PATH)\jcmaster.obj: jcmaster.c
+
+$(OBJ_PATH)\jcmarker.obj: jcmarker.c
+
+$(OBJ_PATH)\jcmainct.obj: jcmainct.c
+
+$(OBJ_PATH)\jcprepct.obj: jcprepct.c
+
+$(OBJ_PATH)\jccoefct.obj: jccoefct.c
+
+$(OBJ_PATH)\jccolor.obj: jccolor.c
+
+$(OBJ_PATH)\jcsample.obj: jcsample.c
+
+$(OBJ_PATH)\jchuff.obj: jchuff.c
+
+$(OBJ_PATH)\jcphuff.obj: jcphuff.c
+
+$(OBJ_PATH)\jcdctmgr.obj: jcdctmgr.c
+
+$(OBJ_PATH)\jfdctfst.obj: jfdctfst.c
+
+$(OBJ_PATH)\jfdctflt.obj: jfdctflt.c
+
+$(OBJ_PATH)\jfdctint.obj: jfdctint.c
+
+$(OBJ_PATH)\jdapimin.obj: jdapimin.c
+
+$(OBJ_PATH)\jdapistd.obj: jdapistd.c
+
+$(OBJ_PATH)\jdtrans.obj: jdtrans.c
+
+$(OBJ_PATH)\jdatasrc.obj: jdatasrc.c
+
+$(OBJ_PATH)\jdmaster.obj: jdmaster.c
+
+$(OBJ_PATH)\jdinput.obj: jdinput.c
+
+$(OBJ_PATH)\jdmarker.obj: jdmarker.c
+
+$(OBJ_PATH)\jdhuff.obj: jdhuff.c
+
+$(OBJ_PATH)\jdphuff.obj: jdphuff.c
+
+$(OBJ_PATH)\jdmainct.obj: jdmainct.c
+
+$(OBJ_PATH)\jdcoefct.obj: jdcoefct.c
+
+$(OBJ_PATH)\jdpostct.obj: jdpostct.c
+
+$(OBJ_PATH)\jddctmgr.obj: jddctmgr.c
+
+$(OBJ_PATH)\jidctfst.obj: jidctfst.c
+
+$(OBJ_PATH)\jidctflt.obj: jidctflt.c
+
+$(OBJ_PATH)\jidctint.obj: jidctint.c
+
+$(OBJ_PATH)\jidctred.obj: jidctred.c
+
+$(OBJ_PATH)\jdsample.obj: jdsample.c
+
+$(OBJ_PATH)\jdcolor.obj: jdcolor.c
+
+$(OBJ_PATH)\jquant1.obj: jquant1.c
+
+$(OBJ_PATH)\jquant2.obj: jquant2.c
+
+$(OBJ_PATH)\jdmerge.obj: jdmerge.c
+
+
+
+!include ..\makelib.b32

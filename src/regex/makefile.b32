@@ -1,13 +1,38 @@
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1993
+# Updated:
+# Copyright:
+#
+# "%W% %G%"
+#
+# Makefile : Builds TIFF library (BC++ 32-bit)
 
-LIBTARGET=$(WXDIR)\lib\regex.lib
+# WXWIN and BCCDIR are set by parent make
+
+
+WXWIN=..\..
+LIBTARGET=regex
+
+!include ..\makeb32.env
+
 
 OBJECTS= \
-		regcomp.obj \
-		regexec.obj \
-		regerror.obj \
-		regfree.obj
+		$(OBJ_PATH)\regcomp.obj \
+		$(OBJ_PATH)\regexec.obj \
+		$(OBJ_PATH)\regerror.obj \
+		$(OBJ_PATH)\regfree.obj
 
 # Pull in standard variable definitions
+
+
+$(OBJ_PATH)\regcomp.obj: regcomp.c
+
+$(OBJ_PATH)\regexec.obj: regexec.c
+
+$(OBJ_PATH)\regerror.obj: regerror.c
+
+$(OBJ_PATH)\regfree.obj: regfree.c
 
 !include ..\makelib.b32
 

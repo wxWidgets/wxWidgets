@@ -18,7 +18,7 @@
 
         $file =~ s/cp?p?$/obj/;
         $obj = "\$(UNIVDIR)\\" . $file . " ";
-        $project{"WXUNIVOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $project{"WXUNIVOBJS"} .= "\$(OBJ_PATH)\\" . $file . " "
     }
 
     foreach $file (sort keys %wxUNIV) {
@@ -26,14 +26,14 @@
 
         $file =~ s/cp?p?$/obj/;
         $obj = "\$(UNIVTHEMEDIR)\\" . $file . " ";
-        $project{"WXUNIVTHEMEOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $project{"WXUNIVTHEMEOBJS"} .= "\$(OBJ_PATH)\\" . $file . " "
     }
 
     foreach $file (sort keys %wxHTML) {
         next if $wxHTML{$file} =~ /\b16\b/;
 
         $file =~ s/cp?p?$/obj/;
-        $project{"WXHTMLOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $project{"WXHTMLOBJS"} .= "\$(OBJ_PATH)\\" . $file . " "
     }
 
     foreach $file (sort keys %wxCommon) {
@@ -41,7 +41,7 @@
 
         $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
-        $obj = "\$(MSWDIR)\\" . $file . " ";
+        $obj = "\$(OBJ_PATH)\\" . $file . " ";
         $project{"WXCOMMONOBJS"} .= $obj;
         $project{"WXCOBJS"} .= $obj if $isCFile;
     }
@@ -50,18 +50,11 @@
     foreach $file (sort keys %wxMSW) {
         next if $wxMSW{$file} =~ /\b16\b/;
 
-#!        if ( $file =~ /^automtn/ ) {
-#!            #! comment in old makefile.b32 seems to imply that this file can not
-#!            #! be compiled with Borland (leads to crash in oleauto sample)
-#!            No longer true, at least for BC++ 5.2
-#!            next;
-#!        }
-
         $isCFile = $file =~ /\.c$/;
 
         my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
-        my $obj = "\$(MSWDIR)\\" . $file . " ";
+        my $obj = "\$(OBJ_PATH)\\" . $file . " ";
 
         $project{"WXMSWOBJS"} .= $obj;
         if ( $isOleObj ) {
@@ -75,18 +68,11 @@
     foreach $file (sort keys %wxMSW) {
         next unless $wxMSW{$file} =~ /\b(L|B)\b/;
 
-#!        if ( $file =~ /^automtn/ ) {
-#!            #! comment in old makefile.b32 seems to imply that this file can not
-#!            #! be compiled with Borland (leads to crash in oleauto sample)
-#!            No longer true, at least for BC++ 5.2
-#!            next;
-#!        }
-
         $isCFile = $file =~ /\.c$/;
 
         my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
-        my $obj = "\$(MSWDIR)\\" . $file . " ";
+        my $obj = "\$(OBJ_PATH)\\" . $file . " ";
 
         $project{"WXMSWUNIVOBJS"} .= $obj;
         if ( $isOleObj ) {
@@ -102,7 +88,7 @@
         next if $wxGeneric{$file} =~ /\b(PS|G|16|U)\b/;
 
         $file =~ s/cp?p?$/obj/;
-        $project{"WXGENERICOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $project{"WXGENERICOBJS"} .= "\$(OBJ_PATH)\\" . $file . " "
     }
 
 #! Generic Dir for UNIV Port
@@ -118,7 +104,7 @@
 		$project{"WXUNIVOBJS"} =~ /\b$filereal\b/;
 
         
-        $project{"WXGENERICUNIVOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $project{"WXGENERICUNIVOBJS"} .= "\$(OBJ_PATH)\\" . $file . " "
     }
 
 #$}
@@ -171,7 +157,6 @@ PERIPH_TARGET=ctl3d $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_ctl3d $(PERIPH_CLEAN_TARGET)
 !endif
 
-#PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(WXDIR)\lib\tiff.lib $(PERIPH_LIBS)
 PERIPH_LIBS=
 PERIPH_TARGET=zlib png jpeg tiff regex $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff clean_regex $(PERIPH_CLEAN_TARGET)
@@ -180,7 +165,7 @@ PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff clean_regex $(PER
 DUMMY=dummy
 !else
 DUMMY=dummydll
-LIBS= cw32mti import32 ole2w32 odbc32 zlib winpng jpeg tiff regex
+LIBS= cw32mti import32 ole2w32 odbc32 zlib_$(DEBUG_SUFFIX) png_$(DEBUG_SUFFIX) jpeg_$(DEBUG_SUFFIX) tiff_$(DEBUG_SUFFIX) regex_$(DEBUG_SUFFIX)
 !endif
 
 LIBTARGET=$(WXLIB)
@@ -220,7 +205,7 @@ OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 default:    wx
 
-wx:    $(ARCHINCDIR)\wx makesetuph makearchsetuph $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+wx:    $(ARCHINCDIR)\wx makeoutdir makesetuph makearchsetuph $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:    wx
 
@@ -235,15 +220,18 @@ makearchsetuph:
      copy $(SETUPSRCDIR)\setup.h $(ARCHSETUPH)
      cd $(WXDIR)\src\msw
 
+makeoutdir:
+    -mkdir $(OBJ_PATH)
+
 $(ARCHINCDIR)\wx:
     -mkdir $(ARCHINCDIR)
     -mkdir $(ARCHINCDIR)\wx
-    -erase $(CFG)
+    -if exist $(CFG) $(RM) $(CFG)
 
 !if "$(DLL)" == "0"
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-        -erase $(LIBTARGET)
+    -if exist $(LIBTARGET) $(RM) $(LIBTARGET)
     tlib "$(LIBTARGET)" /P1024 $(LINKDEBUGFLAGS) @&&!
 +$(OBJECTS:.obj =.obj +) +$(PERIPH_LIBS:.lib =.lib +)
 !
@@ -279,10 +267,11 @@ version.res:
     $_ = $project{"WXMSWUNIVOBJS"};
     my @objs = split;
     foreach (@objs) {
-        $text .= $_ . ": ";
-        if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/MSWDIR/OLEDIR/; }
+        $text .= $_ . ": ";        
+        if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/OBJ_PATH/OLEDIR/; }
         $suffix = $project{"WXCUNIVOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
         s/obj$/$suffix/;
+	s/OBJ_PATH/MSWDIR/;
         $text .= $_ . "\n\n";
     }
 #$}
@@ -296,10 +285,11 @@ version.res:
     $_ = $project{"WXMSWOBJS"};
     my @objs = split;
     foreach (@objs) {
-        $text .= $_ . ": ";
-        if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/MSWDIR/OLEDIR/; }
+        $text .= $_ . ": ";	
+        if ( $project{"WXOLEOBJS"} =~ /\Q$_/ ) { s/OBJ_PATH/OLEDIR/; }
         $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
         s/obj$/$suffix/;
+ 	s/OBJ_PATH/MSWDIR/;
         $text .= $_ . "\n\n";
     }
 #$}
@@ -313,7 +303,7 @@ version.res:
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
-        s/MSWDIR/UNIVDIR/;
+        s/OBJ_PATH/UNIVDIR/;
         s/obj$/\$(SRCSUFF)/;
         $text .= $_ . "\n\n";
     }
@@ -328,7 +318,7 @@ version.res:
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
-        s/MSWDIR/UNIVTHEMEDIR/;
+        s/OBJ_PATH/UNIVTHEMEDIR/;
         s/obj$/\$(SRCSUFF)/;
         $text .= $_ . "\n\n";
     }
@@ -345,7 +335,7 @@ version.res:
     foreach (@objs) {
         $text .= $_ . ": ";
         $suffix = $project{"WXCOBJS"} =~ /\Q$_/ ? "c" : '$(SRCSUFF)';
-        s/MSWDIR/COMMDIR/;
+        s/OBJ_PATH/COMMDIR/;
         s/obj$/$suffix/;
         $text .= $_ . "\n\n";
     }
@@ -363,7 +353,7 @@ version.res:
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
-        s/MSWDIR/GENDIR/;
+        s/OBJ_PATH/GENDIR/;
         s/obj$/\$(SRCSUFF)/;
         $text .= $_ . "\n\n";
     }
@@ -380,7 +370,7 @@ version.res:
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
-        s/MSWDIR/GENDIR/;
+        s/OBJ_PATH/GENDIR/;
         s/obj$/\$(SRCSUFF)/;
         $text .= $_ . "\n\n";
     }
@@ -395,7 +385,7 @@ version.res:
     my @objs = split;
     foreach (@objs) {
         $text .= $_ . ": ";
-        s/MSWDIR/HTMLDIR/;
+        s/OBJ_PATH/HTMLDIR/;
         s/obj$/\$(SRCSUFF)/;
         $text .= $_ . "\n\n";
     }
@@ -419,58 +409,58 @@ all_execs:
 
 png:    $(CFG)
         cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 FINAL=$(FINAL)
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_png:
         cd $(WXDIR)\src\png
-        ${MAKE} -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
         cd $(WXDIR)\src\msw
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
-        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_zlib:
         cd $(WXDIR)\src\zlib
-        ${MAKE} -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
         cd $(WXDIR)\src\msw
 
 jpeg:    $(CFG)
         cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 FINAL=$(FINAL)
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_jpeg:
         cd $(WXDIR)\src\jpeg
-        ${MAKE} -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
         cd $(WXDIR)\src\msw
 
 regex:   $(CFG)
         cd $(WXDIR)\src\regex
-        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_regex:
         cd $(WXDIR)\src\regex
-        ${MAKE} -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
         cd $(WXDIR)\src\msw
 
 tiff:   $(CFG)
         cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 FINAL=$(FINAL) lib
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) lib
         cd $(WXDIR)\src\msw
 
 clean_tiff:
         cd $(WXDIR)\src\tiff
-        ${MAKE} -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 OUTPUTDIR=$(OUTPUTDIR) FINAL=$(FINAL) clean
         cd $(WXDIR)\src\msw
 
 $(CFG): makefile.b32
     copy &&!
 -Hc
--H=$(WXDIR)\src\msw\wx32.csm
+-H=$(OBJ_PATH)\wx32.csm
 -3
 -d
 -a1 # byte alignment
@@ -494,15 +484,21 @@ $(DEBUG_FLAGS)
 $(WIN95FLAG)
 ! $(CFG)
 
-clean: $(PERIPH_CLEAN_TARGET)
-    -erase $(WXLIBDIR)\wx.tds
-    -erase $(WXLIBDIR)\wx.il?
-    -erase *.obj
-    -erase *.pch
-    -erase *.csm
-    -erase "wx32.#??"
+cleancfg:
+    -if exist $(OBJ_PATH)\*.cfg $(RM) $(OBJ_PATH)\*.cfg    
 
-cleanall: clean
+clean: $(PERIPH_CLEAN_TARGET)
+    -if exist $(WXLIBDIR)\wx.il? $(RM) $(WXLIBDIR)\wx.tds
+    -if exist $(WXLIBDIR)\wx.il? $(RM) $(WXLIBDIR)\wx.il?
+    -if exist $(OBJ_PATH)\*.obj $(RM) $(OBJ_PATH)\*.obj    
+    -if exist $(OBJ_PATH)\*.csm $(RM) $(OBJ_PATH)\*.csm    
+    -if exist "$(OBJ_PATH)\wx32.#??" $(RM) "$(OBJ_PATH)\wx32.#??"
+    -if exist *.pch $(RM) *.pch
+    -if exist *.csm $(RM) *.csm
+    -if exist *.obj $(RM) *.obj
+    -if exist "wx32.#??" $(RM) "wx32.#??"
+
+cleanall: clean cleancfg
 
 
 # Making documents
@@ -592,7 +588,7 @@ allpdfrtf: pdfrtf portingpdfrtf
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
         cd $(DOCDIR)/latex/wx
-        -erase wx.ph
+        -if exist wx.ph $(RM)  wx.ph
         hc wx
         move wx.hlp $(DOCDIR)\winhelp\wx.hlp
         move wx.cnt $(DOCDIR)\winhelp\wx.cnt
@@ -600,7 +596,7 @@ $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/w
 
 $(DOCDIR)/winhelp/porting.hlp:         $(DOCDIR)/latex/porting/porting.rtf $(DOCDIR)/latex/porting/porting.hpj
         cd $(DOCDIR)/latex/porting
-        -erase porting.ph
+        -if exist porting.ph $(RM)  porting.ph
         hc porting
         move porting.hlp $(DOCDIR)\winhelp\porting.hlp
         move porting.cnt $(DOCDIR)\winhelp\porting.cnt
@@ -608,7 +604,7 @@ $(DOCDIR)/winhelp/porting.hlp:         $(DOCDIR)/latex/porting/porting.rtf $(DOC
 
 $(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOCDIR)/latex/techref/techref.hpj
         cd $(DOCDIR)/latex/techref
-        -erase techref.ph
+        -if exist techref.ph $(RM)  techref.ph
         hc techref
         move techref.hlp $(DOCDIR)\winhelp\techref.hlp
         move techref.cnt $(DOCDIR)\winhelp\techref.cnt
@@ -654,10 +650,10 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
         cd $(DOCDIR)\latex\wx
         -mkdir $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
-        -erase $(DOCDIR)\html\wx\*.con
-        -erase $(DOCDIR)\html\wx\*.ref
-        -erase $(DOCDIR)\latex\wx\*.con
-        -erase $(DOCDIR)\latex\wx\*.ref
+        -if exist $(DOCDIR)\html\wx\*.con $(RM)  $(DOCDIR)\html\wx\*.con
+        -if exist $(DOCDIR)\html\wx\*.ref $(RM)  $(DOCDIR)\html\wx\*.ref
+        -if exist $(DOCDIR)\latex\wx\*.con $(RM)  $(DOCDIR)\latex\wx\*.con
+        -if exist $(DOCDIR)\latex\wx\*.ref $(RM)  $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
 
 $(DOCDIR)\html\wx\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
@@ -670,10 +666,10 @@ $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
         cd $(DOCDIR)\latex\porting
         -mkdir $(DOCDIR)\html\porting
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\porting\porting.tex $(DOCDIR)\html\porting\port.htm -twice -html
-        -erase $(DOCDIR)\html\porting\*.con
-        -erase $(DOCDIR)\html\porting\*.ref
-        -erase $(DOCDIR)\latex\porting\*.con
-        -erase $(DOCDIR)\latex\porting\*.ref
+        -if exist $(DOCDIR)\html\porting\*.con $(RM)  $(DOCDIR)\html\porting\*.con
+        -if exist $(DOCDIR)\html\porting\*.ref $(RM)  $(DOCDIR)\html\porting\*.ref
+        -if exist $(DOCDIR)\latex\porting\*.con $(RM)  $(DOCDIR)\latex\porting\*.con
+        -if exist $(DOCDIR)\latex\porting\*.ref $(RM)  $(DOCDIR)\latex\porting\*.ref
         cd $(THISDIR)
 
 $(WXDIR)\docs\latex\wx\manual.dvi:  $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
@@ -741,6 +737,12 @@ MFTYPE=b32
 # makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
 
 self:
+!if "$(TM)"=="" 
+	@echo Error in Environment!
+	@echo Please set TM in the environment to the directory containing tmake binaries
+	@echo eg set TM=c:\wx\tmake\bin
+!else
     cd $(WXWIN)\distrib\msw\tmake
-    tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
+    perl $(TM)\tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
     copy makefile.$(MFTYPE) $(WXWIN)\src\msw
+!endif

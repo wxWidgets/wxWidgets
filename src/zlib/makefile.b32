@@ -1,5 +1,5 @@
 # Makefile for zlib
-# Borland C++   
+# Borland C++
 
 # This version of the zlib makefile was adapted by Chris Young for use
 # with Borland C 4.5x with the Dos Power Pack for a 32-bit protected mode
@@ -8,17 +8,61 @@
 # switches -WX and -DMSDOS are required.
 # -- Chris Young 76702.1655@compuserve.com
 
+## modified further for 32 bit windows
+
 # To use, do "make -fmakefile.b32"
 
 # See zconf.h for details about the memory requirements.
 
 # ------------- Borland C++ -------------
 
-LIBTARGET=..\..\lib\zlib.lib
 
-OBJECTS = adler32.obj compress.obj crc32.obj gzio.obj uncompr.obj deflate.obj \
-          trees.obj zutil.obj inflate.obj infblock.obj inftrees.obj infcodes.obj \
-          infutil.obj inffast.obj
+WXWIN=..\..
+LIBTARGET=zlib
 
-!include $(WXWIN)\src\makelib.b32
+!include ..\makeb32.env
 
+OBJECTS = $(OBJ_PATH)\adler32.obj \
+	$(OBJ_PATH)\compress.obj \
+	$(OBJ_PATH)\crc32.obj \
+	$(OBJ_PATH)\gzio.obj \
+	$(OBJ_PATH)\uncompr.obj \
+	$(OBJ_PATH)\deflate.obj \
+	$(OBJ_PATH)\trees.obj \
+	$(OBJ_PATH)\zutil.obj \
+	$(OBJ_PATH)\inflate.obj \
+	$(OBJ_PATH)\infblock.obj \
+	$(OBJ_PATH)\inftrees.obj \
+	$(OBJ_PATH)\infcodes.obj \
+	$(OBJ_PATH)\infutil.obj \
+	$(OBJ_PATH)\inffast.obj
+
+$(OBJ_PATH)\adler32.obj: adler32.c
+
+$(OBJ_PATH)\compress.obj: compress.c
+
+$(OBJ_PATH)\crc32.obj: crc32.c
+
+$(OBJ_PATH)\gzio.obj: gzio.c
+
+$(OBJ_PATH)\uncompr.obj: uncompr.c
+
+$(OBJ_PATH)\deflate.obj: deflate.c
+
+$(OBJ_PATH)\trees.obj: trees.c
+
+$(OBJ_PATH)\zutil.obj: zutil.c
+
+$(OBJ_PATH)\inflate.obj: inflate.c
+
+$(OBJ_PATH)\infblock.obj: infblock.c
+
+$(OBJ_PATH)\inftrees.obj: inftrees.c
+
+$(OBJ_PATH)\infcodes.obj: infcodes.c
+
+$(OBJ_PATH)\infutil.obj: infutil.c
+
+$(OBJ_PATH)\inffast.obj: inffast.c
+
+!include ..\makelib.b32

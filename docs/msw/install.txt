@@ -239,12 +239,16 @@ Compiling using the makefiles (updated 24 Sept 02):
    You may like to use the short form as shown by a dos directory listing ;
    eg instead of c:\wxwindows-2.5.0 use c:\wxwind~1.4
    Reboot if needed for the changes to autoexec.bat to take effect.
+
 2. Change directory to src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the compiler warnings.
    This produces a library in the wxwindows\lib directory called
    wx32ds.lib
+
 3. Change directory to a sample or demo such as samples\minimal, and type
-  'make -f makefile.b32'. This produces a windows exe file
+  'make -f makefile.b32'. This produces a windows exe file - by default 
+   in the BORL subdirectory (see note 9)
+
 4. For release versions, recompile wxWindows and samples using
    'make -f makefile.b32 clean'
    'make -f makefile.b32 FINAL=1'
@@ -290,6 +294,14 @@ Compiling using the makefiles (updated 24 Sept 02):
    'make -f makebase.b32'
    There is a sample\console directory and in this type
    'make -f makefile.b32 wxUSE_GUI=0'
+
+9. OUTPUTDIR may be set to the name of the directory where you want all the
+   object files to be generated (the library files are always created in
+   %WXWIN%\lib). Compilation will fail if you set it to an empty string 
+   to create them in the same directory as the source. If you change OUTPUTDIR, 
+   make sure that it does not have a trailing backslash!
+   In the samples, you may use EXEDIR=adir to build the samples in adir. Setting
+   EXEDIR=. will build in the current directory,
 
 Note (0): This provides the ability to produce separate wxwindows libraries
    for different purposes, and only have to rebuild the applications
@@ -397,7 +409,7 @@ There are several makefile variables which may be modified:
 
 - OUTPUTDIR may be set to the name of the directory where you want all the
   object files to be generated (the library files are always created in
-  %WXWIN\lib). Compilation will fail if you set it to an empty string 
+  %WXWIN%\lib). Compilation will fail if you set it to an empty string 
   to create them in the same directory as the source. If you change OUTPUTDIR, 
   make sure that it does not have a trailing backslash!
 
