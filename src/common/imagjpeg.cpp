@@ -29,6 +29,9 @@
 #include "wx/app.h"
 extern "C"
 {
+#ifdef __WATCOMC__
+    #define HAVE_BOOLEAN
+#endif
     #include "jpeglib.h"
 }
 #include "wx/filefn.h"

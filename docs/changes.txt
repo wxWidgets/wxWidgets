@@ -1,7 +1,7 @@
 wxWindows 2 Change Log
 ----------------------
 
-2.1.14
+2.1.15
 ------
 
 Documentation:

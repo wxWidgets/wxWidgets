@@ -3,19 +3,29 @@ include/wx/sckipc.h
 include/wx/ipcbase.h
 include/wx/gtk/pen.h
 include/wx/defs.h
+include/wx/version.h
+include/wx/generic/grid.h
 src/msw/treectrl.cpp
 src/common/sckipc.cpp
 src/common/intl.cpp
+src/gtk/frame.cpp
+src/gtk/mdi.cpp
+src/motif/dialog.cpp
 src/generic/scrolwin.cpp
+src/generic/listctrl.cpp
+src/generic/grid.cpp
 src/gtk/settings.cpp
 samples/treectrl/TreectrlVC.dsp
+samples/treectrl/treectrl.cpp
 samples/sockets/client.g95
 samples/sockets/server.g95
 samples/ipc/client.g95
 samples/ipc/server.g95
+samples/wizard/WizardVC.dsp
 
 src/xpm/makefile.b32
 configure
 configure.in
 docs/msw/install.txt
+src/makewat.env
 

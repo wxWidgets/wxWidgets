@@ -1509,7 +1509,7 @@ bool wxVariant::operator== (void* value) const
 
 bool wxVariant::operator!= (void* value) const
 {
-    return (!((*this) == value));
+    return (!((*this) == (void*) value));
 }
 
 void wxVariant::operator= (void* value)

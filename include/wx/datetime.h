@@ -30,7 +30,8 @@ class WXDLLEXPORT wxDateSpan;
 // performances and this only leads to increased rebuild time (because every
 // time an inline method is changed, all files including the header must be
 // rebuilt)
-#ifdef __WXDEBUG__
+// For Mingw32, causes a link error.
+#if defined( __WXDEBUG__) && !defined(__MINGW32__)
     #define inline
 #endif // Debug
 

@@ -644,6 +644,7 @@ samples/image/*.pnm
 samples/image/*.pcx
 samples/image/*.jpg
 samples/image/*.gif
+samples/image/*.tif
 samples/image/*.ico
 samples/image/*.txt
 

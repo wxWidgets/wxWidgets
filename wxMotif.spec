@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.1.14
+%define ver 2.1.15
 %define rel 0
 
 Summary: The Motif port of the wxWindows library
@@ -9,8 +9,8 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxMotif-2.1.0-b8.tgz
-URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
+Source: wxMotif-%{ver}.tgz
+URL: http://www.wxwindows.org
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 BuildRoot: /tmp/wxmotif_root
 

@@ -91,7 +91,11 @@ bool wxButton::Create(wxWindow *parent,
     if (m_hWnd == 0)
     {
         wxString msg;
+#ifdef __WIN16__
+        msg.Printf(wxT("CreateWindowEx failed"));
+#else
         msg.Printf(wxT("CreateWindowEx failed with error number %ld"), (long) GetLastError());
+#endif
         wxFAIL_MSG(msg);
     }
 

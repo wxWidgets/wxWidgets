@@ -1,4 +1,4 @@
-wxWindows 2.1.14
+wxWindows 2.1.15
 ----------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
