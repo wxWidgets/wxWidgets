@@ -528,9 +528,18 @@ bool wxMenuBase::SendEvent(int id, int checked)
     // hierarchy)
     if ( !processed )
     {
-        wxWindow *win = GetInvokingWindow();
-        if ( win )
-            processed = win->GetEventHandler()->ProcessEvent(event);
+        const wxMenuBase *menu = this;
+        while ( menu )
+        {
+            wxWindow *win = menu->GetInvokingWindow();
+            if ( win )
+            {
+                processed = win->GetEventHandler()->ProcessEvent(event);
+                break;
+            }
+
+            menu = menu->GetParent();
+        }
     }
 
     return processed;

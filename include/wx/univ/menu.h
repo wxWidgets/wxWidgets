@@ -97,6 +97,9 @@ protected:
     virtual bool DoInsert(size_t pos, wxMenuItem *item);
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
 
+    // common part of DoAppend and DoInsert
+    void OnItemAdded(wxMenuItem *item);
+
     // called by wxPopupMenuWindow when the window is hidden
     void OnDismiss(bool dismissParent);
 

@@ -843,21 +843,18 @@ void wxWindowMSW::SetScrollbar(int orient, int pos, int thumbVisible,
     }
 }
 
-void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *rect)
+void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
 {
-    RECT rect2;
-    if ( rect )
+    RECT rect;
+    if ( prect )
     {
-        rect2.left = rect->x;
-        rect2.top = rect->y;
-        rect2.right = rect->x + rect->width;
-        rect2.bottom = rect->y + rect->height;
+        rect.left = prect->x;
+        rect.top = prect->y;
+        rect.right = prect->x + prect->width;
+        rect.bottom = prect->y + prect->height;
     }
 
-    if ( rect )
-        ::ScrollWindow(GetHwnd(), dx, dy, &rect2, NULL);
-    else
-        ::ScrollWindow(GetHwnd(), dx, dy, NULL, NULL);
+    ::ScrollWindow(GetHwnd(), dx, dy, prect ? &rect : NULL, NULL);
 }
 
 // ---------------------------------------------------------------------------
@@ -1430,7 +1427,8 @@ void wxWindowMSW::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
         if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
         {
             wxPoint pt(parent->GetClientAreaOrigin());
-            x += pt.x; y += pt.y;
+            x += pt.x;
+            y += pt.y;
         }
     }
 }
@@ -2035,13 +2033,10 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 
         case WM_MOUSEMOVE:
-           {
-                short x = LOWORD(lParam);
-                short y = HIWORD(lParam);
-
-                processed = HandleMouseMove(x, y, wParam);
-           }
-           break;
+            processed = HandleMouseMove(GET_X_LPARAM(lParam),
+                                        GET_Y_LPARAM(lParam),
+                                        wParam);
+            break;
 
         case WM_LBUTTONDOWN:
            // set focus to this window
@@ -2057,12 +2052,10 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
-            {
-                short x = LOWORD(lParam);
-                short y = HIWORD(lParam);
-
-                processed = HandleMouseEvent(message, x, y, wParam);
-            }
+            processed = HandleMouseEvent(message,
+                                         GET_X_LPARAM(lParam),
+                                         GET_Y_LPARAM(lParam),
+                                         wParam);
             break;
 
         case MM_JOY1MOVE:
@@ -2073,12 +2066,10 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         case MM_JOY2BUTTONDOWN:
         case MM_JOY1BUTTONUP:
         case MM_JOY2BUTTONUP:
-            {
-                int x = LOWORD(lParam);
-                int y = HIWORD(lParam);
-
-                processed = HandleJoystickEvent(message, x, y, wParam);
-            }
+            processed = HandleJoystickEvent(message,
+                                            GET_X_LPARAM(lParam),
+                                            GET_Y_LPARAM(lParam),
+                                            wParam);
             break;
 
         case WM_SYSCOMMAND:
@@ -3361,15 +3352,20 @@ bool wxWindowMSW::HandleSysCommand(WXWPARAM wParam, WXLPARAM lParam)
 // mouse events
 // ---------------------------------------------------------------------------
 
-void wxWindowMSW::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
+void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
+                                 int x, int y,
+                                 WXUINT flags)
 {
-    event.m_x = x;
-    event.m_y = y;
-    event.m_shiftDown = ((flags & MK_SHIFT) != 0);
-    event.m_controlDown = ((flags & MK_CONTROL) != 0);
-    event.m_leftDown = ((flags & MK_LBUTTON) != 0);
-    event.m_middleDown = ((flags & MK_MBUTTON) != 0);
-    event.m_rightDown = ((flags & MK_RBUTTON) != 0);
+    // our client coords are not quite the same as Windows ones
+    wxPoint pt = GetClientAreaOrigin();
+    event.m_x = x - pt.x;
+    event.m_y = y - pt.y;
+
+    event.m_shiftDown = (flags & MK_SHIFT) != 0;
+    event.m_controlDown = (flags & MK_CONTROL) != 0;
+    event.m_leftDown = (flags & MK_LBUTTON) != 0;
+    event.m_middleDown = (flags & MK_MBUTTON) != 0;
+    event.m_rightDown = (flags & MK_RBUTTON) != 0;
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;
 

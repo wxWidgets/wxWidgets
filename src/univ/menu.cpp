@@ -1022,16 +1022,28 @@ void wxMenu::InvalidateGeometryInfo()
 // wxMenu adding/removing items
 // ----------------------------------------------------------------------------
 
-bool wxMenu::DoAppend(wxMenuItem *item)
+void wxMenu::OnItemAdded(wxMenuItem *item)
 {
-    if ( !wxMenuBase::DoAppend(item) )
-        return FALSE;
-
     InvalidateGeometryInfo();
 
 #if wxUSE_ACCEL
     AddAccelFor(item);
 #endif // wxUSE_ACCEL
+
+    // the submenus of a popup menu should have the same invoking window as it
+    // has
+    if ( m_invokingWindow && item->IsSubMenu() )
+    {
+        item->GetSubMenu()->SetInvokingWindow(m_invokingWindow);
+    }
+}
+
+bool wxMenu::DoAppend(wxMenuItem *item)
+{
+    if ( !wxMenuBase::DoAppend(item) )
+        return FALSE;
+
+    OnItemAdded(item);
 
     return TRUE;
 }
@@ -1041,11 +1053,7 @@ bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     if ( !wxMenuBase::DoInsert(pos, item) )
         return FALSE;
 
-    InvalidateGeometryInfo();
-
-#if wxUSE_ACCEL
-    AddAccelFor(item);
-#endif // wxUSE_ACCEL
+    OnItemAdded(item);
 
     return TRUE;
 }
@@ -1098,11 +1106,41 @@ void wxMenu::Detach()
 
 wxWindow *wxMenu::GetRootWindow() const
 {
-    // only the top level menu has invoking window set, so we have to call
-    // GetRootWindow() recursively
-    return m_menuBar ? (wxWindow *)m_menuBar
-                     : m_menuParent ? m_menuParent->GetRootWindow()
-                                    : m_invokingWindow;
+    if ( m_menuBar )
+    {
+        // simple case - a normal menu attached to the menubar
+        return m_menuBar;
+    }
+
+    // we're a popup menu but the trouble is that only the top level popup menu
+    // has a pointer to the invoking window, so we must walk up the menu chain
+    // if needed
+    wxWindow *win = GetInvokingWindow();
+    if ( win )
+    {
+        // we already have it
+        return win;
+    }
+
+    wxMenu *menu = GetParent();
+    while ( menu )
+    {
+        win = menu->GetInvokingWindow();
+        if ( win )
+            break;
+
+        menu = menu->GetParent();
+    }
+
+    // we're probably going to crash in the caller anyhow, but try to detect
+    // this error as soon as possible
+    wxASSERT_MSG( win, _T("menu without any associated window?") );
+
+    // also remember it in this menu so that we don't have to search for it the
+    // next time
+    wxConstCast(this, wxMenu)->m_invokingWindow = win;
+
+    return win;
 }
 
 wxRenderer *wxMenu::GetRenderer() const
@@ -2218,6 +2256,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     SetCursor(wxCURSOR_ARROW);
 #endif // __WXMSW__
 
+#if 0
     // flash any delayed log messages before showing the menu, otherwise it
     // could be dismissed (because it would lose focus) immediately after being
     // shown
@@ -2232,9 +2271,16 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     // logic breaks then as it scrolls part of the menu which hadn't been there
     // when the update event was generated into view
     Update();
+#endif // 0
 
     menu->SetInvokingWindow(this);
     menu->Popup(ClientToScreen(wxPoint(x, y)), wxSize(0, 0));
+
+    // this is not very useful if the menu was popped up because of the mouse
+    // click but I think it is nice to do when it appears because of a key
+    // press (i.e. Windows menu key)
+    //
+    // Windows itself doesn't do it, but IMHO this is nice
     WarpPointer(x, y);
 
     // we have to redirect all keyboard input to the menu temporarily

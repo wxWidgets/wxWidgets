@@ -744,7 +744,7 @@ int wxWindow::GetScrollRange(int orient) const
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
     // before scrolling it, ensure that we don't have any unpainted areas
-    //Update();
+    Update();
 
     wxRect r;
 
