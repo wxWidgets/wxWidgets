@@ -141,6 +141,9 @@ if CORE_ONLY:
     BUILD_OGL = 0
     BUILD_STC = 0
     BUILD_XRC = 0
+    BUILD_GIZMOS = 0
+    BUILD_DLLWIDGET = 0
+
 
 #----------------------------------------------------------------------
 # Setup some platform specific stuff
