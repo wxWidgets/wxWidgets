@@ -94,6 +94,7 @@ wizard.cpp	G
 appcmn.cpp	C	B
 choiccmn.cpp	C
 cmndata.cpp	C
+clipcmn.cpp	C
 config.cpp	C	B
 ctrlcmn.cpp	C
 date.cpp	C	B

@@ -46,7 +46,6 @@ protected:
     void Clear() { free(m_pngData); }
     void ClearAll() { Clear(); Init(); }
 
-private:
     size_t      m_pngSize;
     void       *m_pngData;
 
@@ -62,6 +61,8 @@ class wxFileDataObject : public wxFileDataObjectBase
 public:
     // implement base class pure virtuals
     // ----------------------------------
+
+    void AddFile( const wxString &filename );
 
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;

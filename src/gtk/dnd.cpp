@@ -349,35 +349,27 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 // wxDropTarget
 //----------------------------------------------------------------------------
 
-wxDropTarget::wxDropTarget( wxDataObject *data )
+wxDropTarget::wxDropTarget( wxDataObject *data ) 
+  : wxDropTargetBase( data )
 {
     m_firstMotion = TRUE;
     m_dragContext = (GdkDragContext*) NULL;
     m_dragWidget = (GtkWidget*) NULL;
     m_dragData = (GtkSelectionData*) NULL;
     m_dragTime = 0;
-    m_data = data;
-}
-
-wxDropTarget::~wxDropTarget()
-{
 }
 
 bool wxDropTarget::OnEnter( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    if (!m_data)
+    if (!m_dataObject)
         return FALSE;
 	
     return (GetMatchingPair() != (GdkAtom) 0);
 }
 
-void wxDropTarget::OnLeave()
-{
-}
-
 bool wxDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    if (!m_data)
+    if (!m_dataObject)
         return FALSE;
 	
     return (GetMatchingPair() != (GdkAtom) 0);
@@ -385,7 +377,7 @@ bool wxDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 
 bool wxDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    if (!m_data)
+    if (!m_dataObject)
         return FALSE;
 	
     return (GetMatchingPair() != (GdkAtom) 0);
@@ -393,7 +385,7 @@ bool wxDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
 
 bool wxDropTarget::OnData( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    if (!m_data)
+    if (!m_dataObject)
         return FALSE;
 	
     if (GetMatchingPair() == (GdkAtom) 0)
@@ -404,7 +396,7 @@ bool wxDropTarget::OnData( int WXUNUSED(x), int WXUNUSED(y) )
 
 GdkAtom wxDropTarget::GetMatchingPair()
 {
-    if (!m_data) 
+    if (!m_dataObject) 
         return (GdkAtom) 0;
 
     if (!m_dragContext) 
@@ -420,7 +412,7 @@ GdkAtom wxDropTarget::GetMatchingPair()
         char *name = gdk_atom_name( formatAtom );
         if (name) wxLogDebug( "Drop target: drag has format: %s", name );
 #endif
-        if (m_data->IsSupportedFormat( format ))
+        if (m_dataObject->IsSupportedFormat( format ))
 	    return formatAtom;
 
         child = child->next;
@@ -434,25 +426,25 @@ bool wxDropTarget::GetData()
     if (!m_dragData) 
         return FALSE;
 
-    if (!m_data) 
+    if (!m_dataObject) 
         return FALSE;
 
     wxDataFormat dragFormat( m_dragData->target );
     
-    if (!m_data->IsSupportedFormat( dragFormat ))
+    if (!m_dataObject->IsSupportedFormat( dragFormat ))
         return FALSE;
 
     if (dragFormat.GetType() == wxDF_TEXT)
     {
-        wxTextDataObject *text_object = (wxTextDataObject*)m_data;
+        wxTextDataObject *text_object = (wxTextDataObject*)m_dataObject;
         text_object->SetText( (const char*)m_dragData->data );
 	return TRUE;
     }
 
     if (dragFormat.GetType() == wxDF_FILENAME)
     {
-        wxFileDataObject *file_object = (wxFileDataObject*)m_data;
-        file_object->SetFiles( (const char*)m_dragData->data );
+        wxFileDataObject *file_object = (wxFileDataObject*)m_dataObject;
+        file_object->SetData( 0, (const char*)m_dragData->data );
 	return TRUE;
     }
 
@@ -633,7 +625,6 @@ wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop 
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
 
-    m_data = (wxDataObject*) NULL;
     m_retValue = wxDragCancel;
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
@@ -649,13 +640,13 @@ wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win,
                             const wxIcon &go, const wxIcon &stop )
 {
     m_waiting = TRUE;
+    
+    SetData( data );
 
     m_window = win;
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
     m_retValue = wxDragCancel;
-
-    m_data = &data;
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
@@ -666,19 +657,8 @@ wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win,
     if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
 }
 
-void wxDropSource::SetData( wxDataObject& data )
-{
-    if (m_data)
-        delete m_data;
-
-    m_data = &data;
-}
-
 wxDropSource::~wxDropSource()
 {
-    if (m_data) 
-//        delete m_data;
-
     g_blockEventsOnDrag = FALSE;
 }
 
@@ -701,7 +681,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     GtkTargetList *target_list = gtk_target_list_new( (GtkTargetEntry*) NULL, 0 );
     
     wxDataFormat *array = new wxDataFormat[ m_data->GetFormatCount() ];
-    m_data->GetAllFormats( array, TRUE );
+    m_data->GetAllFormats( array );
     for (size_t i = 0; i < m_data->GetFormatCount(); i++)
     {
         GdkAtom atom = array[i];

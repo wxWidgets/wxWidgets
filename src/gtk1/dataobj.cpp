@@ -128,25 +128,19 @@ void wxDataFormat::PrepareFormats()
 // wxDataObject
 //-------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS( wxDataObject, wxObject )
-
 wxDataObject::wxDataObject()
 {
 }
 
-wxDataObject::~wxDataObject()
+bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
 {
-}
-
-bool wxDataObject::IsSupportedFormat(const wxDataFormat& format) const
-{
-    size_t nFormatCount = GetFormatCount();
+    size_t nFormatCount = GetFormatCount(dir);
     if ( nFormatCount == 1 ) {
         return format == GetPreferredFormat();
     }
     else {
         wxDataFormat *formats = new wxDataFormat[nFormatCount];
-        GetAllFormats(formats);
+        GetAllFormats(formats,dir);
 
         size_t n;
         for ( n = 0; n < nFormatCount; n++ ) {
@@ -167,7 +161,14 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format) const
 
 bool wxFileDataObject::GetDataHere(void *buf) const
 {
-    const wxString& filenames = GetFilenames();
+    wxString filenames;
+    
+    for (size_t i = 0; i < m_filenames.GetCount(); i++)
+    {
+        filenames += m_filenames[i];
+	filenames += (wxChar) 0;
+    }
+    
     memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
 
     return TRUE;
@@ -175,14 +176,31 @@ bool wxFileDataObject::GetDataHere(void *buf) const
 
 size_t wxFileDataObject::GetDataSize() const
 {
-    return GetFilenames().Len() + 1;
+    size_t res = 0;
+    
+    for (size_t i = 0; i < m_filenames.GetCount(); i++)
+    {
+        res += m_filenames[i].Len();
+	res += 1;
+    }
+    
+    return res + 1;
 }
 
-bool wxFileDataObject::SetData(const void *buf)
+bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
 {
-    SetFilenames((const wxChar *)buf);
+    /* TODO */
+    
+    wxString file( (const char *)buf );  /* char, not wxChar */
+
+    AddFile( file );
 
     return TRUE;
+}
+
+void wxFileDataObject::AddFile( const wxString &filename )
+{
+   m_filenames.Add( filename );
 }
 
 // ----------------------------------------------------------------------------
@@ -248,6 +266,8 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
     }
 
     m_bitmap = image.ConvertToBitmap();
+    
+    return m_bitmap.Ok();
 }
 
 void wxBitmapDataObject::DoConvertToPng()
@@ -268,51 +288,4 @@ void wxBitmapDataObject::DoConvertToPng()
     handler.SaveFile( &image, mstream );
 }
 
-// ----------------------------------------------------------------------------
-// wxPrivateDataObject
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_CLASS( wxPrivateDataObject, wxDataObject )
-
-void wxPrivateDataObject::Free()
-{
-    if ( m_data )
-        free(m_data);
-}
-
-wxPrivateDataObject::wxPrivateDataObject()
-{
-    wxString id = wxT("application/");
-    id += wxTheApp->GetAppName();
-
-    m_format.SetId( id );
-
-    m_size = 0;
-    m_data = (void *)NULL;
-}
-
-void wxPrivateDataObject::SetData( const void *data, size_t size )
-{
-    Free();
-
-    m_size = size;
-    m_data = malloc(size);
-
-    memcpy( m_data, data, size );
-}
-
-void wxPrivateDataObject::WriteData( void *dest ) const
-{
-    WriteData( m_data, dest );
-}
-
-size_t wxPrivateDataObject::GetSize() const
-{
-    return m_size;
-}
-
-void wxPrivateDataObject::WriteData( const void *data, void *dest ) const
-{
-    memcpy( dest, data, GetSize() );
-}
 

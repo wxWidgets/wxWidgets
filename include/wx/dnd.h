@@ -44,7 +44,9 @@ public:
     virtual ~wxDropSourceBase() { }
 
     // set the data which is transfered by drag and drop
-    void SetData(wxDataObject& data) { delete m_data; m_data = &data; }
+    void SetData(wxDataObject& data) 
+      { if (m_data) delete m_data; 
+        m_data = &data; }
 
     // start drag action, see enum wxDragResult for return value description
     //
@@ -80,7 +82,7 @@ public:
     // ctor takes a pointer to heap-allocated wxDataObject which will be owned
     // by wxDropTarget and deleted by it automatically. If you don't give it
     // here, you can use SetDataObject() later.
-    wxDropTargetBase(wxDataObject *dataObject = NULL)
+    wxDropTargetBase(wxDataObject *dataObject = (wxDataObject*)NULL)
         { m_dataObject = dataObject; }
     // dtor deletes our data object
     virtual ~wxDropTargetBase()
@@ -90,13 +92,23 @@ public:
     wxDataObject *GetDataObject() const
         { return m_dataObject; }
     void SetDataObject(wxDataObject *dataObject)
-        { delete m_dataObject; m_dataObject = dataObject; }
+        { if (m_dataObject) delete m_dataObject; 
+	  m_dataObject = dataObject; }
 
     // called when mouse enters/leaves the window: might be used to give
     // some visual feedback to the user
-    virtual void OnEnter() { }
     virtual void OnLeave() { }
+    
+    // this function is called when data enters over position (x, y) - if it
+    // returns TRUE, the dragging icon can indicate that the window would
+    // accept a drop here
+    virtual bool OnEnter(wxCoord x, wxCoord y) = 0;
 
+    // this function is called when data is move over position (x, y) - if it
+    // returns TRUE, the dragging icon can indicate that the window would
+    // accept a drop here
+    virtual bool OnMove(wxCoord x, wxCoord y) = 0;
+    
     // this function is called when data is dropped at position (x, y) - if it
     // returns TRUE, OnData() will be called immediately afterwards which will
     // allow to retrieve the data dropped.

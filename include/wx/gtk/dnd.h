@@ -41,135 +41,40 @@ class wxDropSource;
 // wxDropTarget
 //-------------------------------------------------------------------------
 
-class wxDropTarget: public wxObject
+class wxDropTarget: public wxDropTargetBase
 {
 public:
+    wxDropTarget(wxDataObject *dataObject = (wxDataObject*) NULL );
+    
+    virtual bool OnEnter(wxCoord x, wxCoord y) ;
+    virtual bool OnMove(wxCoord x, wxCoord y);
+    virtual bool OnDrop(wxCoord x, wxCoord y);
+    virtual bool OnData(wxCoord x, wxCoord y);
+    virtual bool GetData();
 
-  wxDropTarget();
-  ~wxDropTarget();
+  // implementation
 
-  /* may be overridden to react to events */
-  virtual void OnEnter();
-  virtual void OnLeave();
+    GdkAtom GetMatchingPair();
+    void RegisterWidget( GtkWidget *widget );
+    void UnregisterWidget( GtkWidget *widget );
 
-  /* may be overridden to reject certain formats or drops
-     on certain areas. always returns TRUE by default
-     indicating that you'd accept the data from the drag. */
-  virtual bool OnMove( long x, long y );
+    GdkDragContext     *m_dragContext;
+    GtkWidget          *m_dragWidget;
+    GtkSelectionData   *m_dragData;
+    guint               m_dragTime;
+    bool                m_firstMotion;     /* gdk has no "gdk_drag_enter" event */
 
-  /* has to be overridden to accept a drop event. call
-     IsSupported() to ask which formats are available
-     and then call RequestData() to indicate the format
-     you request. */
-  virtual bool OnDrop( long x, long y );
-
-  /* this gets called once the data has actually arrived. get
-     it with GetData(). this has to be overridden. */
-  virtual bool OnData( long x, long y );
-
-  /* called from within OnDrop() to request a certain format
-     from the drop event. */
-  bool RequestData( wxDataFormat format );
-
-  /* called to query what formats are available */
-  bool IsSupported( wxDataFormat format );
-
-  /* fill data with data from the dragging source */
-  bool GetData( wxDataObject *data );
-
-  virtual size_t GetFormatCount() const = 0;
-  virtual wxDataFormat GetFormat(size_t n) const = 0;
-  
-// implementation
-
-  void RegisterWidget( GtkWidget *widget );
-  void UnregisterWidget( GtkWidget *widget );
-
-  GdkDragContext     *m_dragContext;
-  GtkWidget          *m_dragWidget;
-  GtkSelectionData   *m_dragData;
-  guint               m_dragTime;
-  bool                m_firstMotion;     /* gdk has no "gdk_drag_enter" event */
-
-  void SetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
-  void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
-  void SetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
-  void SetDragTime( guint time ) { m_dragTime = time; }
-};
-
-//-------------------------------------------------------------------------
-// wxTextDropTarget
-//-------------------------------------------------------------------------
-
-class wxTextDropTarget: public wxDropTarget
-{
-public:
-
-  wxTextDropTarget() {}
-
-  virtual bool OnData( long x, long y );
-
-  /* you have to override OnDropData to get at the text */
-  virtual bool OnDropText( long x, long y, const wxChar *text ) = 0;
-
-  virtual size_t GetFormatCount() const
-    { return 1; }
-  virtual wxDataFormat GetFormat(size_t n) const
-    { return wxDF_TEXT; }
-};
-
-//-------------------------------------------------------------------------
-// wxPrivateDropTarget
-//-------------------------------------------------------------------------
-
-/*
-class wxPrivateDropTarget: public wxDropTarget
-{
-public:
-
-  wxPrivateDropTarget();
-  wxPrivateDropTarget( const wxString &id );
-
-  virtual bool OnMove( long x, long y );
-  virtual bool OnDrop( long x, long y );
-  virtual bool OnData( long x, long y );
-
-  virtual bool OnDropData( long x, long y, void *data, size_t size ) = 0;
-
-  void SetId( const wxString& id ) { m_id = id; }
-  wxString GetId() { return m_id; }
-
-private:
-
-    wxString   m_id;
-};
-*/
-
-//----------------------------------------------------------------------------
-// A drop target which accepts files (dragged from File Manager or Explorer)
-//----------------------------------------------------------------------------
-
-class wxFileDropTarget: public wxDropTarget
-{
-public:
-
-  wxFileDropTarget() {}
-
-  virtual bool OnData( long x, long y );
-
-  virtual bool OnDropFiles( long x, long y, size_t nFiles, const wxChar * const aszFiles[] ) = 0;
-  
-  virtual size_t GetFormatCount() const
-    { return 1; }
-  virtual wxDataFormat GetFormat(size_t n) const
-    { return wxDF_FILENAME; }
+    void SetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
+    void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
+    void SetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
+    void SetDragTime( guint time ) { m_dragTime = time; }
 };
 
 //-------------------------------------------------------------------------
 // wxDropSource
 //-------------------------------------------------------------------------
 
-class wxDropSource: public wxObject
+class wxDropSource: public wxDropSourceBase
 {
 public:
     /* constructor. set data later with SetData() */

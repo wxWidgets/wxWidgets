@@ -12,9 +12,14 @@
 #ifndef _WX_CLIPBRD_H_BASE_
 #define _WX_CLIPBRD_H_BASE_
 
+#ifdef __GNUG__
+    #pragma interface "clipboardbase.h"
+#endif
+
 #include "wx/defs.h"
 
 #if wxUSE_CLIPBOARD
+
 
 #include "wx/object.h"
 #include "wx/wxchar.h"
@@ -33,30 +38,32 @@ class WXDLLEXPORT wxDataObject;
 class WXDLLEXPORT wxClipboardBase : public wxObject
 {
 public:
+    wxClipboardBase();
+
     // open the clipboard before Add/SetData() and GetData()
-    virtual bool Open();
+    virtual bool Open() = 0;
 
     // close the clipboard after Add/SetData() and GetData()
-    virtual void Close();
+    virtual void Close() = 0;
 
     // add to the clipboard data
     //
     // NB: the clipboard owns the pointer and will delete it, so data must be
     //     allocated on the heap
-    virtual bool AddData( wxDataObject *data );
+    virtual bool AddData( wxDataObject *data ) = 0;
 
     // set the clipboard data, this is the same as Clear() followed by
     // AddData()
-    virtual bool SetData( wxDataObject *data );
+    virtual bool SetData( wxDataObject *data ) = 0;
 
     // ask if data in correct format is available
-    virtual bool IsSupported( const wxDataFormat& format );
+    virtual bool IsSupported( const wxDataFormat& format ) = 0;
 
     // fill data with data on the clipboard (if available)
-    virtual bool GetData( wxDataObject& data );
-
+    virtual bool GetData( wxDataObject& data ) = 0;
+    
     // clears wxTheClipboard and the system's clipboard if possible
-    virtual void Clear();
+    virtual void Clear() = 0;
 
     // flushes the clipboard: this means that the data which is currently on
     // clipboard will stay available even after the application exits (possibly
@@ -103,25 +110,6 @@ public:
 
 // The global clipboard object
 WXDLLEXPORT_DATA(extern wxClipboard *) wxTheClipboard;
-
-// ----------------------------------------------------------------------------
-// wxClipboardModule: module responsible for initializing the global clipboard
-// object
-//
-// NB: IMPLEMENT_DYNAMIC_CLASS() for it is in common/appcmn.cpp
-// ----------------------------------------------------------------------------
-
-class wxClipboardModule : public wxModule
-{
-public:
-    bool OnInit()
-        { wxTheClipboard = new wxClipboard; return TRUE; }
-    void OnExit()
-        { delete wxTheClipboard; wxTheClipboard = (wxClipboard *)NULL; }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxClipboardModule)
-};
 
 #endif // wxUSE_CLIPBOARD
 

@@ -331,7 +331,7 @@ public:
     virtual wxBitmap GetBitmap() const { return m_bitmap; }
     virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
 
-private:
+protected:
     wxBitmap m_bitmap;
 };
 
@@ -349,7 +349,7 @@ public:
     wxFileDataObjectBase() : wxDataObjectSimple(wxDF_FILENAME) { }
 
     // get a reference to our array
-    const wxArrayString& GetFilenames() { return m_filenames; }
+    const wxArrayString& GetFilenames() const { return m_filenames; }
 
     // the Get() functions do nothing for us
     virtual size_t GetDataSize() const { return 0; }

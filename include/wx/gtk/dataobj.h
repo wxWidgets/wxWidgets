@@ -20,6 +20,10 @@
 
 class wxDataObject : public wxDataObjectBase
 {
+public:
+    wxDataObject();
+
+    virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
 };
 
 #endif // _WX_GTK_DATAOBJ_H_
