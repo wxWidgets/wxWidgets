@@ -119,7 +119,7 @@ import sys, os, string, getopt
 # This is really the wxPython version number, and will be placed in the
 # Makefiles for use with the distribution related targets.
 
-__version__ = '2.1.4'
+__version__ = '2.1.5'
 
 #----------------------------------------------------------------------------
 
