@@ -32,6 +32,9 @@
 #endif
 
 #include <wx/mimetype.h>
+#include <wx/snglinst.h>
+#include <wx/effects.h>
+//#include <wx/spawnbrowser.h>
 %}
 
 //----------------------------------------------------------------------
@@ -174,6 +177,8 @@ void wxFlushEvents();
 #endif
 
 wxWindow* wxGetTopLevelParent(wxWindow *win);
+
+//bool wxSpawnBrowser(wxWindow *parent, wxString href);
 
 //---------------------------------------------------------------------------
 // Resource System
@@ -443,7 +448,7 @@ public:
 
     virtual wxString GetTip() = 0;
     size_t GetCurrentTip();
-
+    virtual wxString PreprocessTip(const wxString& tip);
 };
 
 
@@ -455,12 +460,12 @@ public:
         : wxTipProvider(currentTip) {}
 
     DEC_PYCALLBACK_STRING__pure(GetTip);
-
+    DEC_PYCALLBACK_STRING_STRING(PreprocessTip);
     PYPRIVATE;
 };
 
 IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
-
+IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 %}
 
 
@@ -614,6 +619,7 @@ public:
     static void AddTraceMask(const wxString& str);
     static void RemoveTraceMask(const wxString& str);
     static void ClearTraceMasks();
+    static const wxArrayString &GetTraceMasks();
 
     static void SetTimestamp(const wxString& ts);
     static const wxString& GetTimestamp();
@@ -1616,7 +1622,69 @@ public:
 };
 
 //----------------------------------------------------------------------
+
+class wxEffects: public wxObject
+{
+public:
+    // Assume system colours
+    wxEffects();
+
+    wxColour GetHighlightColour() const;
+    wxColour GetLightShadow() const;
+    wxColour GetFaceColour() const;
+    wxColour GetMediumShadow() const;
+    wxColour GetDarkShadow() const;
+
+    void SetHighlightColour(const wxColour& c);
+    void SetLightShadow(const wxColour& c);
+    void SetFaceColour(const wxColour& c);
+    void SetMediumShadow(const wxColour& c);
+    void SetDarkShadow(const wxColour& c);
+
+    void Set(const wxColour& highlightColour, const wxColour& lightShadow,
+             const wxColour& faceColour, const wxColour& mediumShadow,
+             const wxColour& darkShadow);
+
+    // Draw a sunken edge
+    void DrawSunkenEdge(wxDC& dc, const wxRect& rect, int borderSize = 1);
+
+    // Tile a bitmap
+    bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
+
+};
+
 //----------------------------------------------------------------------
+
+class wxSingleInstanceChecker
+{
+public:
+    // like Create() but no error checking (dangerous!)
+    wxSingleInstanceChecker(const wxString& name,
+                            const wxString& path = wxPyEmptyString);
+
+    // default ctor, use Create() after it
+    %name(wxPreSingleInstanceChecker) wxSingleInstanceChecker();
+
+    ~wxSingleInstanceChecker();
+
+
+    // name must be given and be as unique as possible, it is used as the mutex
+    // name under Win32 and the lock file name under Unix -
+    // wxTheApp->GetAppName() may be a good value for this parameter
+    //
+    // path is optional and is ignored under Win32 and used as the directory to
+    // create the lock file in under Unix (default is wxGetHomeDir())
+    //
+    // returns FALSE if initialization failed, it doesn't mean that another
+    // instance is running - use IsAnotherRunning() to check it
+    bool Create(const wxString& name, const wxString& path = wxPyEmptyString);
+
+    // is another copy of this program already running?
+    bool IsAnotherRunning() const;
+};
+
+//----------------------------------------------------------------------
+
 
 // %{
 // #if wxUSE_UNICODE

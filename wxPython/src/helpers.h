@@ -1068,6 +1068,33 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_STRING_STRING(CBNAME)                                    \
+    wxString CBNAME(const wxString& a);                                         \
+    wxString base_##CBNAME(const wxString& a);
+
+#define IMP_PYCALLBACK_STRING_STRING(CLASS, PCLASS, CBNAME)                     \
+    wxString CLASS::CBNAME(const wxString& a)  {                                \
+        wxString rval;                                                          \
+        bool found;                                                             \
+        wxPyBeginBlockThreads();                                                \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* ro;                                                       \
+            PyObject* s = wx2PyString(a);                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", s));    \
+            Py_DECREF(s);                                                       \
+            if (ro) {                                                           \
+                rval = Py2wxString(ro);                                         \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        if (! found)                                                            \
+            rval = PCLASS::CBNAME(a);                                           \
+        wxPyEndBlockThreads();                                                  \
+        return rval;                                                            \
+    }                                                                           \
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK_STRING_STRINGINT_pure(CBNAME)                            \
     wxString CBNAME(const wxString& a,int b);                                   \
 

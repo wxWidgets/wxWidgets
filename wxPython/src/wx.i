@@ -93,6 +93,7 @@ public:
     int  MainLoop();
     bool Pending();
     bool ProcessIdle();
+    bool Yield(bool onlyIfNeeded = FALSE);
 
     void SetAppName(const wxString& name);
 #ifdef __WXMSW__

@@ -217,7 +217,6 @@ void __wxPreStart()
 }
 
 
-
 // Start the user application, user App's OnInit method is a parameter here
 PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 {

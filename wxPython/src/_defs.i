@@ -284,6 +284,10 @@ enum {
     wxTE_DONTWRAP,
     wxTE_LINEWRAP,
     wxTE_WORDWRAP,
+    wxTE_LEFT,
+    wxTE_RIGHT,
+    wxTE_CENTER,
+    wxTE_CENTRE,
 
     wxCB_SIMPLE,
     wxCB_DROPDOWN,

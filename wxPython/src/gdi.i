@@ -689,6 +689,8 @@ public:
         // Draw a point for every set of coordinants in pyPoints, optionally
         // setting a new pen for each
         PyObject* _DrawPointList(PyObject* pyPoints, PyObject* pyPens) {
+            wxPyBeginBlockThreads();
+
             bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
             bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
             int       numObjs = 0;
@@ -697,6 +699,7 @@ public:
             PyObject* obj;
             int       x1, y1;
             int       i = 0;
+            PyObject* retval;
 
             if (!PySequence_Check(pyPoints)) {
                 goto err0;
@@ -739,6 +742,13 @@ public:
                         Py_DECREF(obj);
                     goto err0;
                 }
+                if (PyErr_Occurred()) {
+                    retval = NULL;
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                    goto exit;
+                }
+
 
                 // Now draw the point
                 self->DrawPoint(x1, y1);
@@ -748,20 +758,29 @@ public:
             }
 
             Py_INCREF(Py_None);
-            return Py_None;
+            retval = Py_None;
+            goto exit;
 
         err1:
             PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
-            return NULL;
+            retval = NULL;
+            goto exit;
         err0:
             PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y) sequences.");
-            return NULL;
+            retval = NULL;
+            goto exit;
+
+        exit:
+            wxPyEndBlockThreads();
+            return retval;
         }
 
 
         // Draw a line for every set of coordinants in pyLines, optionally
         // setting a new pen for each
         PyObject* _DrawLineList(PyObject* pyLines, PyObject* pyPens) {
+            wxPyBeginBlockThreads();
+
             bool      isFastSeq  = PyList_Check(pyLines) || PyTuple_Check(pyLines);
             bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
             int       numObjs = 0;
@@ -770,6 +789,7 @@ public:
             PyObject* obj;
             int       x1, y1, x2, y2;
             int       i = 0;
+            PyObject* retval;
 
             if (!PySequence_Check(pyLines)) {
                 goto err0;
@@ -812,6 +832,12 @@ public:
                         Py_DECREF(obj);
                     goto err0;
                 }
+                if (PyErr_Occurred()) {
+                    retval = NULL;
+                    if (!isFastPens)
+                        Py_DECREF(obj);
+                    goto exit;
+                }
 
                 // Now draw the line
                 self->DrawLine(x1, y1, x2, y2);
@@ -821,14 +847,22 @@ public:
             }
 
             Py_INCREF(Py_None);
-            return Py_None;
+            retval = Py_None;
+            goto exit;
 
         err1:
             PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
-            return NULL;
+            retval = NULL;
+            goto exit;
+
         err0:
             PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x1,y1, x2,y2) sequences.");
-            return NULL;
+            retval = NULL;
+            goto exit;
+
+        exit:
+            wxPyEndBlockThreads();
+            return retval;
         }
     }
 

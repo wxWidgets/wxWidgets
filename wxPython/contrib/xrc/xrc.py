@@ -132,6 +132,9 @@ class wxXmlResourcePtr(wxObjectPtr):
     def CompareVersion(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_CompareVersion,(self,) + _args, _kwargs)
         return val
+    def GetFlags(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlResource_GetFlags,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxXmlResource instance at %s>" % (self.this,)
 class wxXmlResource(wxXmlResourcePtr):

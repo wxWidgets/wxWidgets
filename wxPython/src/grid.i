@@ -1010,6 +1010,8 @@ public:
     void SetBackgroundColour(const wxColour& colBack);
     void SetFont(const wxFont& font);
     void SetAlignment(int hAlign, int vAlign);
+    void SetSize(int num_rows, int num_cols);
+    void SetOverflow( bool allow );
     void SetReadOnly(bool isReadOnly = TRUE);
 
     void SetRenderer(wxGridCellRenderer *renderer);
@@ -1028,6 +1030,8 @@ public:
     wxColour GetBackgroundColour() const;
     wxFont GetFont() const;
     void GetAlignment(int *OUTPUT, int *OUTPUT) const;
+    void GetSize(int *num_rows, int *num_cols) const;
+    bool GetOverflow() const;
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
 
@@ -1525,11 +1529,12 @@ public:
     void     EndBatch();
     int      GetBatchCount();
     void     ForceRefresh();
+    void     Refresh(bool eraseb=TRUE, wxRect* rect= NULL);
 
 
     // ------ edit control functions
     //
-    bool IsEditable() { return m_editable; }
+    bool IsEditable();
     void EnableEditing( bool edit );
 
     void EnableCellEditControl( bool enable = TRUE );
@@ -1640,6 +1645,7 @@ public:
     bool     CanDragGridSize();
 
     // this sets the specified attribute for all cells in this row/col
+    void     SetAttr(int row, int col, wxGridCellAttr *attr);
     void     SetRowAttr(int row, wxGridCellAttr *attr);
     void     SetColAttr(int col, wxGridCellAttr *attr);
 
@@ -1668,6 +1674,9 @@ public:
     wxFont   GetCellFont( int row, int col );
     void     GetDefaultCellAlignment( int *horiz, int *vert );
     void     GetCellAlignment( int row, int col, int *horiz, int *vert );
+    bool     GetDefaultCellOverflow();
+    bool     GetCellOverflow( int row, int col );
+    void     GetCellSize( int row, int col, int *OUTPUT, int *OUTPUT );
 
     void     SetDefaultRowSize( int height, bool resizeExistingRows = FALSE );
     void     SetRowSize( int row, int height );
@@ -1705,6 +1714,9 @@ public:
     void     SetCellFont( int row, int col, const wxFont& );
     void     SetDefaultCellAlignment( int horiz, int vert );
     void     SetCellAlignment( int row, int col, int horiz, int vert );
+    void     SetDefaultCellOverflow( bool allow );
+    void     SetCellOverflow( int row, int col, bool allow );
+    void     SetCellSize( int row, int col, int num_rows, int num_cols );
 
     // takes ownership of the pointer
     void SetDefaultRenderer(wxGridCellRenderer *renderer);

@@ -196,6 +196,9 @@ public:
     // Sets global resources object and returns pointer to previous one (may be NULL).
     static wxXmlResource *Set(wxXmlResource *res);
 
+    // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
+    int GetFlags();
+
 };
 
 //----------------------------------------------------------------------

@@ -1493,6 +1493,34 @@ static PyObject *_wrap_wxXmlResource_Set(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxXmlResource_GetFlags(_swigobj)  (_swigobj->GetFlags())
+static PyObject *_wrap_wxXmlResource_GetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxXmlResource * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxXmlResource_GetFlags",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxXmlResource_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlResource_GetFlags. Expected _wxXmlResource_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxXmlResource_GetFlags(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define new_wxXmlProperty(_swigarg0,_swigarg1,_swigarg2) (new wxXmlProperty(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_new_wxXmlProperty(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4962,6 +4990,7 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlProperty_GetValue", (PyCFunction) _wrap_wxXmlProperty_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlProperty_GetName", (PyCFunction) _wrap_wxXmlProperty_GetName, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxXmlProperty", (PyCFunction) _wrap_new_wxXmlProperty, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_GetFlags", (PyCFunction) _wrap_wxXmlResource_GetFlags, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Set", (PyCFunction) _wrap_wxXmlResource_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Get", (PyCFunction) _wrap_wxXmlResource_Get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_CompareVersion", (PyCFunction) _wrap_wxXmlResource_CompareVersion, METH_VARARGS | METH_KEYWORDS },
