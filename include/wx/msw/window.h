@@ -110,7 +110,7 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const;
 
-    virtual bool PopupMenu( wxMenu *menu, int x, int y );
+    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = TRUE );

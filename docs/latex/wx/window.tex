@@ -1492,17 +1492,20 @@ default value is FALSE.}
 
 \membersection{wxWindow::PopupMenu}\label{wxwindowpopupmenu}
 
-\func{virtual bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{int }{x}, \param{int }{y}}
+\func{bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{const wxPoint& }{pos}}
+
+\func{bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{int }{x}, \param{int }{y}}
 
 Pops up the given menu at the specified coordinates, relative to this
 window, and returns control when the user has dismissed the menu. If a
-menu item is selected, the callback defined for the menu is called with
-wxMenu and wxCommandEvent reference arguments. The callback should access
-the commandInt member of the event to check the selected menu identifier.
+menu item is selected, the corresponding menu event is generated and will be
+processed as usually.
 
 \wxheading{Parameters}
 
 \docparam{menu}{Menu to pop up.}
+
+\docparam{pos}{The position where the menu will appear.}
 
 \docparam{x}{Required x position for the menu to appear.}
 

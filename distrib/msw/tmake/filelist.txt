@@ -173,7 +173,7 @@ gdiobj.cpp	M
 helpwin.cpp	M
 icon.cpp	M
 imaglist.cpp	M	32
-iniconf.cpp	M
+iniconf.cpp	M	16
 joystick.cpp	M
 listbox.cpp	M
 listctrl.cpp	M	32

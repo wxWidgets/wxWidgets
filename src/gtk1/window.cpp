@@ -2869,7 +2869,7 @@ static void pop_pos_callback( GtkMenu * WXUNUSED(menu),
     *y = gs_pop_y;
 }
 
-bool wxWindow::PopupMenu( wxMenu *menu, int x, int y )
+bool wxWindow::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid window") );
 

@@ -629,7 +629,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
       { return m_mainWin ? m_mainWin->GetBackgroundColour() : wxColour(); }
     wxColour GetForegroundColour() const
       { return m_mainWin ? m_mainWin->GetForegroundColour() : wxColour(); }
-    bool PopupMenu( wxMenu *menu, int x, int y )
+    bool DoPopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
     void SetFocus()
       { m_mainWin->SetFocus(); }

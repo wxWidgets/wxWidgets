@@ -66,7 +66,9 @@ functions that take a \helpref{wxCommandEvent}{wxcommandevent} argument.
 \twocolwidtha{7cm}%
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_TEXT(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_UPDATED event,
-generated when the text changes.}
+generated when the text changes. Notice that this event will always be sent
+when the text controls contents changes - whether this is due to user input or
+comes from the program itself (for example, if SetValue() is called)}
 \twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_ENTER event,
 generated when enter is pressed in a single-line text control.}
 \end{twocollist}%

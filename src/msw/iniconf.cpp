@@ -442,9 +442,13 @@ bool wxIniConfig::DeleteAll()
   char szBuf[MAX_PATH];
   size_t nRc = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
   if ( nRc == 0 )
+  {
     wxLogLastError("GetWindowsDirectory");
+  }
   else if ( nRc > WXSIZEOF(szBuf) )
+  {
     wxFAIL_MSG("buffer is too small for Windows directory.");
+  }
 
   wxString strFile = szBuf;
   strFile << '\\' << m_strLocalFilename;

@@ -109,16 +109,34 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     }
 
     wxWindowList::Node *start_node = GetChildren().Find( winFocus );
-    if (!start_node)
+    if ( !start_node )
+        start_node = GetChildren().Find( m_winLastFocused );
+    if ( !start_node )
         start_node = GetChildren().GetFirst();
 
     wxWindowList::Node *node = event.GetDirection() ? start_node->GetNext()
                                                     : start_node->GetPrevious();
 
-    while (node != start_node)
+    while ( node != start_node )
     {
-        if (!node)
+        if ( !node )
         {
+            // check if our (may be grand) parent is another panel: if this is
+            // the case, they will know what to do with this navigation key and
+            // so give them the chance to process it instead of looping inside
+            // this panel (normally, the focus will go to the next/previous
+            // item after this panel in the parent panel)
+            for ( wxWindow *p = GetParent(); p; p = p->GetParent() )
+            {
+                if ( wxDynamicCast(p, wxPanel) )
+                {
+                    event.Skip();
+
+                    return;
+                }
+            }
+
+            // no, we are not inside another panel so process this ourself
             node = event.GetDirection() ? GetChildren().GetFirst()
                                         : GetChildren().GetLast();
 
@@ -127,7 +145,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 
         wxWindow *child = node->GetData();
 
-        if (child->AcceptsFocus())
+        if ( child->AcceptsFocus() )
         {
             // ok, event processed
             child->SetFocus();
