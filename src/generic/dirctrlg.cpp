@@ -1215,7 +1215,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 {
     Clear();
     wxArrayString descriptions, filters;
-    size_t n = (size_t) wxParseCommonDialogsFilter(filter, filters, descriptions);
+    size_t n = (size_t) wxParseCommonDialogsFilter(filter, descriptions, filters);
 
     if (n > 0 && defaultFilter < (int) n)
     {
