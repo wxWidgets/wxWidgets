@@ -259,11 +259,11 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
   size_t nLen = psz ? conv.MB2WC((wchar_t *) NULL, psz, 0) : 0;
 
   // nLength is number of *Unicode* characters here!
-  if (nLen > nLength)
+  if ((nLen != (size_t)-1) && (nLen > nLength))
     nLen = nLength;
 
   // empty?
-  if ( nLen != 0 ) {
+  if ( (nLen != 0) && (nLen != (size_t)-1) ) {
     AllocBuffer(nLen);
     conv.MB2WC(m_pchData, psz, nLen);
   }
@@ -281,7 +281,7 @@ wxString::wxString(const wchar_t *pwz)
   size_t nLen = pwz ? wxWC2MB((char *) NULL, pwz, 0) : 0;
 
   // empty?
-  if ( nLen != 0 ) {
+  if ( (nLen != 0) && (nLen != (size_t)-1) ) {
     AllocBuffer(nLen);
     wxWC2MB(m_pchData, pwz, nLen);
   }
@@ -1801,6 +1801,7 @@ void wxArrayString::DoSort()
 // MBConv
 // ============================================================================
 
+#if wxUSE_WCHAR_T
 WXDLLEXPORT_DATA(wxMBConv *) wxConv_current = &wxConv_libc;
 
 // ----------------------------------------------------------------------------
@@ -1876,6 +1877,16 @@ size_t wxMBConv_gdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 WXDLLEXPORT_DATA(wxMBConv_UTF7) wxConv_UTF7;
 
+#if 0
+static char utf7_setD[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        "abcdefghijklmnopqrstuvwxyz"
+                        "0123456789'(),-./:?";
+static char utf7_setO[]="!\"#$%&*;<=>@[]^_`{|}";
+static char utf7_setB[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        "abcdefghijklmnopqrstuvwxyz"
+                        "0123456789+/";
+#endif
+
 // TODO: write actual implementations of UTF-7 here
 size_t wxMBConv_UTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
@@ -1893,15 +1904,72 @@ size_t wxMBConv_UTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 WXDLLEXPORT_DATA(wxMBConv_UTF8) wxConv_UTF8;
 
-// TODO: write actual implementations of UTF-8 here
+static unsigned long utf8_max[]={0x7f,0x7ff,0xffff,0x1fffff,0x3ffffff,0x7fffffff,0xffffffff};
+
 size_t wxMBConv_UTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-  return wxMB2WC(buf, psz, n);
+  size_t len = 0;
+
+  while (*psz && ((!buf) || (len<n))) {
+    unsigned char cc=*psz++, fc=cc;
+    unsigned cnt;
+    for (cnt=0; fc&0x80; cnt++) fc<<=1;
+    if (!cnt) {
+      // plain ASCII char
+      if (buf) *buf++=cc;
+      len++;
+    } else {
+      cnt--;
+      if (!cnt) {
+	// invalid UTF-8 sequence
+	return (size_t)-1;
+      } else {
+	unsigned ocnt=cnt-1;
+	unsigned long res=cc&(0x3f>>cnt);
+	while (cnt--) {
+	  cc = *psz++;
+	  if ((cc&0xC0)!=0x80) {
+	    // invalid UTF-8 sequence
+	    return (size_t)-1;
+	  }
+	  res=(res<<6)|(cc&0x3f);
+	}
+	if (res<=utf8_max[ocnt]) {
+	  // illegal UTF-8 encoding
+	  return (size_t)-1;
+	}
+	if (buf) *buf++=res;
+	len++;
+      }
+    }
+  }
+  if (buf && (len<n)) *buf = 0;
+  return len;
 }
 
 size_t wxMBConv_UTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
-  return wxWC2MB(buf, psz, n);
+  size_t len = 0;
+
+  while (*psz && ((!buf) || (len<n))) {
+    unsigned long cc=(*psz++)&0x7fffffff;
+    unsigned cnt;
+    for (cnt=0; cc>utf8_max[cnt]; cnt++);
+    if (!cnt) {
+      // plain ASCII char
+      if (buf) *buf++=cc;
+      len++;
+    } else {
+      len+=cnt+1;
+      if (buf) {
+	*buf++=(-128>>cnt)|((cc>>(cnt*6))&(0x3f>>cnt));
+	while (cnt--)
+	  *buf++=0x80|((cc>>(cnt*6))&0x3f);
+      }
+    }
+  }
+  if (buf && (len<n)) *buf = 0;
+  return len;
 }
 
 // ----------------------------------------------------------------------------
@@ -1935,6 +2003,7 @@ static void wxLoadCharacterSets(void)
 
   if (already_loaded) return;
 
+  already_loaded = TRUE;
 #if defined(__UNIX__)
   // search through files in /usr/share/i18n/charmaps
   wxString fname;
@@ -1993,7 +2062,7 @@ static void wxLoadCharacterSets(void)
 	  // skip whitespace again
 	  while (wxIsEmpty(uni) && token.HasMoreTokens()) uni = token.GetNextToken();
 
-	  if ((hex.GetChar(0) == escchar) && (hex.GetChar(1) == _T('x')) &&
+	  if ((hex.Len() > 2) && (hex.GetChar(0) == escchar) && (hex.GetChar(1) == _T('x')) &&
 	      (uni.Left(2) == _T("<U"))) {
 	    hex.MakeUpper(); uni.MakeUpper();
 	    int pos = ::wxHexToDec(hex.Mid(2,2));
@@ -2014,7 +2083,6 @@ static void wxLoadCharacterSets(void)
   }
 #endif
   wxCharsets.Shrink();
-  already_loaded = TRUE;
 }
 
 static wxCharacterSet *wxFindCharacterSet(const wxChar *charset)
@@ -2090,11 +2158,11 @@ size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
   if (buf) {
     if (m_cset) {
       for (size_t c=0; c<n; c++)
-	buf[c] = m_cset->data[psz[c]];
+	buf[c] = m_cset->data[(unsigned char)(psz[c])];
     } else {
       // latin-1 (direct)
       for (size_t c=0; c<n; c++)
-	buf[c] = psz[c];
+	buf[c] = (unsigned char)(psz[c]);
     }
     return n;
   }
@@ -2120,3 +2188,5 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
   }
   return wcslen(psz);
 }
+
+#endif//wxUSE_WCHAR_T
