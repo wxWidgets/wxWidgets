@@ -1340,6 +1340,52 @@ When called with {\it sqlLogON}, all commands sent to the datasource engine are 
 When called with {\it sqlLogOFF}, the logging file is closed, and any calls to \helpref{wxDb::WriteSqlLog}{wxdbwritesqllog} are ignored.
 
 
+\membersection{wxDb::SQLColumnName}\label{wxdbsqlcolumnname}
+
+\func{const wxString}{SQLColumnName}{\param{const char *}{ colName}}
+
+Returns the column name in a form ready for use in SQL statements.  
+In most cases, the column name is returned verbatim.  But some databases
+(e.g. MS Access, SQL Server, MSDE) allow for spaces in column names, which 
+must be specially quoted.  For example, if the datasource allows spaces
+in the column name, the returned string will have the correct enclosing 
+marks around the name to allow it to be properly included in a SQL statement 
+for the DBMS that is currently connected to with this connection.
+
+\wxheading{Parameters}
+
+\docparam{colName}{Native name of the column in the table that is to be 
+evaluated to determine if any special quoting marks needed to be added to it 
+before including the column name in a SQL statement}
+
+\wxheading{See also}
+
+\helpref{wxDb::SQLTableName}{wxdbsqltablename}
+
+
+\membersection{wxDb::SQLTableName}\label{wxdbsqltablename}
+
+\func{const wxString}{SQLTableName}{\param{const char *}{ tableName}}
+
+Returns the table name in a form ready for use in SQL statements.  
+In most cases, the table name is returned verbatim.  But some databases
+(e.g. MS Access, SQL Server, MSDE) allow for spaces in table names, which 
+must be specially quoted.  For example, if the datasource allows spaces
+in the table name, the returned string will have the correct enclosing 
+marks around the name to allow it to be properly included in a SQL statement 
+for the data source that is currently connected to with this connection.
+
+\wxheading{Parameters}
+
+\docparam{tableName}{Native name of the table that is to be evaluated to 
+determine if any special quoting marks needed to be added to it 
+before including the table name in a SQL statement}
+
+\wxheading{See also}
+
+\helpref{wxDb::SQLColumnName}{wxdbsqlcolumnname}
+
+
 \membersection{wxDb::TableExists}\label{wxdbtableexists}
 
 \func{bool}{TableExists}{\param{const wxString &}{tableName}, \param{const wxChar *}{userID=NULL}, \param{const wxString &}{path=""}}
