@@ -1116,8 +1116,11 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
 
 WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
-    // translate the style
-    WXDWORD style = WS_CHILD | WS_VISIBLE;
+    // translate common wxWindows styles to Windows ones
+
+    // most of windows are child ones, those which are not (such as
+    // wxTopLevelWindow) should remove WS_CHILD in their MSWGetStyle()
+    WXDWORD style = WS_CHILD;
 
     if ( flags & wxCLIP_CHILDREN )
         style |= WS_CLIPCHILDREN;
