@@ -16443,9 +16443,11 @@ cat >> $CONFIG_STATUS <<EOF
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 
-            chmod +x wx-config
-            mv wx-config wx${TOOLKIT_NAME}-config
-            ${LN_S} wx${TOOLKIT_NAME}-config wx-config
+                                    if test ! -f wx${TOOLKIT_NAME}-config; then
+                chmod +x wx-config
+                mv wx-config wx${TOOLKIT_NAME}-config
+                ${LN_S} wx${TOOLKIT_NAME}-config wx-config
+            fi
 
                         
             if test ! -d lib; then

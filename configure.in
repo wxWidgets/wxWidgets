@@ -4292,9 +4292,13 @@ AC_OUTPUT([
             Makefile
           ],
           [
-            chmod +x wx-config
-            mv wx-config wx${TOOLKIT_NAME}-config
-            ${LN_S} wx${TOOLKIT_NAME}-config wx-config
+            dnl avoid to move the file again after we had already made it a
+            dnl link (moving the file to itself won't work anyhow)
+            if test ! -f wx${TOOLKIT_NAME}-config; then
+                chmod +x wx-config
+                mv wx-config wx${TOOLKIT_NAME}-config
+                ${LN_S} wx${TOOLKIT_NAME}-config wx-config
+            fi
 
             dnl the debian build process wants setup.h in the lib subdir so we
             dnl can pretend wxWin is already installed, so we *copy* it there
