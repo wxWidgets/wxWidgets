@@ -45,6 +45,8 @@ wxWindowList       wxModelessWindows;
 // wxTopLevelWindowCocoa implementation
 // ============================================================================
 
+wxTopLevelWindowCocoa *wxTopLevelWindowCocoa::sm_cocoaDeactivateWindow = NULL;
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowCocoa creation
 // ----------------------------------------------------------------------------
@@ -135,9 +137,20 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
 
 wxTopLevelWindowCocoa::~wxTopLevelWindowCocoa()
 {
+    wxASSERT(sm_cocoaDeactivateWindow!=this);
     wxAutoNSAutoreleasePool pool;
     DestroyChildren();
     SetNSWindow(NULL);
+}
+
+bool wxTopLevelWindowCocoa::Destroy()
+{
+    if(sm_cocoaDeactivateWindow==this)
+    {
+        sm_cocoaDeactivateWindow = NULL;
+        wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey();
+    }
+    return wxTopLevelWindowBase::Destroy();
 }
 
 // ----------------------------------------------------------------------------
@@ -174,8 +187,16 @@ void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newVie
         [m_cocoaNSWindow setContentView:newView];
 }
 
+/*static*/ void wxTopLevelWindowCocoa::DeactivatePendingWindow()
+{
+    if(sm_cocoaDeactivateWindow)
+        sm_cocoaDeactivateWindow->wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey();
+    sm_cocoaDeactivateWindow = NULL;
+}
+
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeKey(void)
 {
+    DeactivatePendingWindow();
     wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeKey",this);
     wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
     event.SetEventObject(this);

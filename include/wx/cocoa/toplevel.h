@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/08
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_TOPLEVEL_H__
@@ -68,6 +68,7 @@ public:
     virtual void CocoaDelegate_windowDidBecomeMain(void);
     virtual void CocoaDelegate_windowDidResignMain(void);
     virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
+    static void DeactivatePendingWindow();
 protected:
     void SetNSWindow(WX_NSWindow cocoaNSWindow);
     WX_NSWindow m_cocoaNSWindow;
@@ -75,10 +76,12 @@ protected:
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
     static unsigned int NSWindowStyleForWxStyle(long style);
 
+    static wxTopLevelWindowCocoa *sm_cocoaDeactivateWindow;
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
 public:
+    virtual bool Destroy();
     // Pure virtuals
     virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;

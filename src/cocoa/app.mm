@@ -261,6 +261,7 @@ void wxApp::CocoaDelegate_applicationDidBecomeActive()
 
 void wxApp::CocoaDelegate_applicationWillResignActive()
 {
+    wxTopLevelWindowCocoa::DeactivatePendingWindow();
 }
 
 void wxApp::CocoaDelegate_applicationDidResignActive()
