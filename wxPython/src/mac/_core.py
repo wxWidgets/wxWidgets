@@ -5980,9 +5980,8 @@ class Window(EvtHandler):
         """
         return _core_.Window_FitInside(*args, **kwargs)
 
-    def SetSizeHints(*args):
+    def SetSizeHints(*args, **kwargs):
         """
-        SetSizeHints(self, Size minSize, Size maxSize=DefaultSize, Size incSize=DefaultSize)
         SetSizeHints(self, int minW, int minH, int maxW=-1, int maxH=-1, int incW=-1, 
             int incH=-1)
 
@@ -5995,11 +5994,25 @@ class Window(EvtHandler):
 
         The resizing increments are only significant under Motif or Xt.
         """
-        return _core_.Window_SetSizeHints(*args)
+        return _core_.Window_SetSizeHints(*args, **kwargs)
 
-    def SetVirtualSizeHints(*args):
+    def SetSizeHintsSz(*args, **kwargs):
         """
-        SetVirtualSizeHints(self, Size minSize, Size maxSize=DefaultSize)
+        SetSizeHintsSz(self, Size minSize, Size maxSize=DefaultSize, Size incSize=DefaultSize)
+
+        Allows specification of minimum and maximum window sizes, and window
+        size increments. If a pair of values is not set (or set to -1), the
+        default values will be used.  If this function is called, the user
+        will not be able to size the window outside the given bounds (if it is
+        a top-level window.)  Sizers will also inspect the minimum window size
+        and will use that value if set when calculating layout.
+
+        The resizing increments are only significant under Motif or Xt.
+        """
+        return _core_.Window_SetSizeHintsSz(*args, **kwargs)
+
+    def SetVirtualSizeHints(*args, **kwargs):
+        """
         SetVirtualSizeHints(self, int minW, int minH, int maxW=-1, int maxH=-1)
 
         Allows specification of minimum and maximum virtual window sizes. If a
@@ -6007,7 +6020,18 @@ class Window(EvtHandler):
         used.  If this function is called, the user will not be able to size
         the virtual area of the window outside the given bounds.
         """
-        return _core_.Window_SetVirtualSizeHints(*args)
+        return _core_.Window_SetVirtualSizeHints(*args, **kwargs)
+
+    def SetVirtualSizeHintsSz(*args, **kwargs):
+        """
+        SetVirtualSizeHintsSz(self, Size minSize, Size maxSize=DefaultSize)
+
+        Allows specification of minimum and maximum virtual window sizes. If a
+        pair of values is not set (or set to -1), the default values will be
+        used.  If this function is called, the user will not be able to size
+        the virtual area of the window outside the given bounds.
+        """
+        return _core_.Window_SetVirtualSizeHintsSz(*args, **kwargs)
 
     def GetMaxSize(*args, **kwargs):
         """GetMaxSize(self) -> Size"""

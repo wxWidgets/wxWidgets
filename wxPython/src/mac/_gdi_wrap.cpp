@@ -708,10 +708,6 @@ wxCursor *new_wxCursor(wxString const *cursorName,long type,int hotSpotX,int hot
         }
 
 
-wxRegion *new_wxRegion(int points,wxPoint *points_array,int fillStyle){
-            wxPyRaiseNotImplemented();
-            return NULL;
-        }
 void wxRegionIterator_Next(wxRegionIterator *self){
             (*self) ++;
         }
@@ -4745,7 +4741,7 @@ static PyObject *_wrap_new_RegionFromPoints(PyObject *self, PyObject *args, PyOb
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxRegion *)new_wxRegion(arg1,arg2,arg3);
+        result = (wxRegion *)new wxRegion(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
