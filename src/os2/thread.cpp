@@ -409,7 +409,10 @@ void wxThreadInternal::OS2ThreadStart(
     }
     else // do run thread
     {
+        HAB     vHab;
+        vHab = ::WinInitialize(0);
         dwRet = (DWORD)pThread->Entry();
+        ::WinTerminate(vHab);
 
 	// enter m_critsect before changing the thread state
 	pThread->m_critsect.Enter();
