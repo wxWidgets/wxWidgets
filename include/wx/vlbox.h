@@ -14,6 +14,8 @@
 
 #include "wx/vscroll.h"         // base class
 
+class WXDLLEXPORT wxSelectionStore;
+
 #define wxVListBoxNameStr _T("wxVListBox")
 
 // ----------------------------------------------------------------------------
@@ -43,52 +45,29 @@ public:
                wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               size_t countItems = 0,
                long style = 0,
                const wxString& name = wxVListBoxNameStr)
     {
         Init();
 
-        (void)Create(parent, id, pos, size, countItems, style, name);
+        (void)Create(parent, id, pos, size, style, name);
     }
 
     // really creates the control and sets the initial number of items in it
     // (which may be changed later with SetItemCount())
     //
-    // there are no special styles defined for wxVListBox
+    // the only special style which may be specified here is wxLB_MULTIPLE
     //
     // returns true on success or false if the control couldn't be created
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                size_t countItems = 0,
                 long style = 0,
                 const wxString& name = wxVListBoxNameStr);
 
-
-    // operations
-    // ----------
-
-    // set the number of items to be shown in the control
-    //
-    // this is just a synonym for wxVScrolledWindow::SetLineCount()
-    void SetItemCount(size_t count) { SetLineCount(count); }
-
-    // delete all items from the control
-    void Clear() { SetItemCount(0); }
-
-    // set the selection to the specified item, if it is -1 the selection is
-    // unset
-    void SetSelection(int selection) { DoSetSelection(selection, false); }
-
-    // set the margins: horizontal margin is the distance between the window
-    // border and the item contents while vertical margin is half of the
-    // distance between items
-    //
-    // by default both margins are 0
-    void SetMargins(const wxPoint& pt);
-    void SetMargins(wxCoord x, wxCoord y) { SetMargins(wxPoint(x, y)); }
+    // dtor does some internal cleanup (deletes m_selStore if any)
+    virtual ~wxVListBox();
 
 
     // accessors
@@ -97,14 +76,108 @@ public:
     // get the number of items in the control
     size_t GetItemCount() const { return GetLineCount(); }
 
-    // get the currently selected item or -1 if there is no selection
-    int GetSelection() const { return m_selection; }
+    // does this control use multiple selection?
+    bool HasMultipleSelection() const { return m_selStore != NULL; }
+
+    // get the currently selected item or wxNOT_FOUND if there is no selection
+    //
+    // this method is only valid for the single selection listboxes
+    int GetSelection() const
+    {
+        wxASSERT_MSG( !HasMultipleSelection(),
+                        _T("GetSelection() can't be used with wxLB_MULTIPLE") );
+
+        return m_current;
+    }
+
+    // is this item the current one?
+    bool IsCurrent(size_t item) const { return item == (size_t)m_current; }
 
     // is this item selected?
-    bool IsSelected(size_t line) const { return (int)line == m_selection; }
+    bool IsSelected(size_t item) const;
+
+    // get the number of the selected items (maybe 0)
+    //
+    // this method is valid for both single and multi selection listboxes
+    size_t GetSelectedCount() const;
+
+    // get the first selected item, returns wxNOT_FOUND if none
+    //
+    // cookie is an opaque parameter which should be passed to
+    // GetNextSelected() later
+    //
+    // this method is only valid for the multi selection listboxes
+    int GetFirstSelected(unsigned long& cookie) const;
+
+    // get next selection item, return wxNOT_FOUND if no more
+    //
+    // cookie must be the same parameter that was passed to GetFirstSelected()
+    // before
+    //
+    // this method is only valid for the multi selection listboxes
+    int GetNextSelected(unsigned long& cookie) const;
 
     // get the margins around each item
     wxPoint GetMargins() const { return m_ptMargins; }
+
+
+    // operations
+    // ----------
+
+    // set the number of items to be shown in the control
+    //
+    // this is just a synonym for wxVScrolledWindow::SetLineCount()
+    void SetItemCount(size_t count);
+
+    // delete all items from the control
+    void Clear() { SetItemCount(0); }
+
+    // set the selection to the specified item, if it is -1 the selection is
+    // unset
+    //
+    // this function is only valid for the single selection listboxes
+    void SetSelection(int selection);
+
+    // selects or deselects the specified item which must be valid (i.e. not
+    // equal to -1)
+    //
+    // return true if the items selection status has changed or false
+    // otherwise
+    //
+    // this function is only valid for the multiple selection listboxes
+    bool Select(size_t item, bool select = true);
+
+    // selects the items in the specified range whose end points may be given
+    // in any order
+    //
+    // return true if any items selection status has changed, false otherwise
+    //
+    // this function is only valid for the single selection listboxes
+    bool SelectRange(size_t from, size_t to);
+
+    // toggle the selection of the specified item (must be valid)
+    //
+    // this function is only valid for the multiple selection listboxes
+    void Toggle(size_t item) { Select(item, !IsSelected(item)); }
+
+    // select all items in the listbox
+    //
+    // the return code indicates if any items were affected by this operation
+    // (true) or if nothing has changed (false)
+    bool SelectAll() { return DoSelectAll(true); }
+
+    // unselect all items in the listbox
+    //
+    // the return code has the same meaning as for SelectAll()
+    bool DeselectAll() { return DoSelectAll(false); }
+
+    // set the margins: horizontal margin is the distance between the window
+    // border and the item contents while vertical margin is half of the
+    // distance between items
+    //
+    // by default both margins are 0
+    void SetMargins(const wxPoint& pt);
+    void SetMargins(wxCoord x, wxCoord y) { SetMargins(wxPoint(x, y)); }
 
 
 protected:
@@ -141,17 +214,34 @@ protected:
     // common part of all ctors
     void Init();
 
-    // SetSelection() with additional parameter telling it whether to send a
-    // notification event or not
-    void DoSetSelection(int selection, bool sendEvent = true);
+    // send the wxEVT_COMMAND_LISTBOX_SELECTED event
+    void SendSelectedEvent();
+
+    // common implementation of SelectAll() and DeselectAll()
+    bool DoSelectAll(bool select);
+
+    // change the current item (in single selection listbox it also implicitly
+    // changes the selection); current may be -1 in which case there will be
+    // no current item any more
+    //
+    // return true if the current item changed, false otherwise
+    bool DoSetCurrent(int current);
+
+    // common part of keyboard and mouse handling processing code
+    void DoHandleItemClick(int item, bool shiftDown, bool ctrlDown);
 
 private:
-    // the current selection or -1
-    int m_selection;
+    // the current item or -1
+    //
+    // if m_selStore == NULL this is also the selected item, otherwise the
+    // selections are managed by m_selStore
+    int m_current;
+
+    // the object managing our selected items if not NULL
+    wxSelectionStore *m_selStore;
 
     // margins
     wxPoint m_ptMargins;
-
 
     DECLARE_EVENT_TABLE()
 };
