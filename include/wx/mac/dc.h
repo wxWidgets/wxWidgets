@@ -178,6 +178,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 	}
   
     RgnHandle MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
+    static MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
 //
 
 protected:
