@@ -39,6 +39,7 @@ enum wxEventType {
  wxEVT_COMMAND_TEXT_UPDATED,
  wxEVT_COMMAND_TEXT_ENTER,
  wxEVT_COMMAND_MENU_SELECTED,
+ wxEVT_COMMAND_TOOL_CLICKED = wxEVT_COMMAND_MENU_SELECTED,
  wxEVT_COMMAND_SLIDER_UPDATED,
  wxEVT_COMMAND_RADIOBOX_SELECTED,
  wxEVT_COMMAND_RADIOBUTTON_SELECTED,
@@ -46,7 +47,6 @@ enum wxEventType {
  wxEVT_COMMAND_SCROLLBAR_UPDATED,
  wxEVT_COMMAND_VLBOX_SELECTED,
  wxEVT_COMMAND_COMBOBOX_SELECTED,
- wxEVT_COMMAND_TOOL_CLICKED,
  wxEVT_COMMAND_TOOL_RCLICKED,
  wxEVT_COMMAND_TOOL_ENTER,
  wxEVT_SET_FOCUS,
@@ -1186,8 +1186,11 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_VLBOX(id, fn) { wxEVT_COMMAND_VLBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_COMBOBOX(id, fn) { wxEVT_COMMAND_COMBOBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_TOOL(id, fn) { wxEVT_COMMAND_TOOL_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
+#define EVT_TOOL_RANGE(id1, id2, fn) { wxEVT_COMMAND_TOOL_CLICKED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_TOOL_RCLICKED(id, fn) { wxEVT_COMMAND_TOOL_RCLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
+#define EVT_TOOL_RCLICKED_RANGE(id1, id2, fn) { wxEVT_COMMAND_TOOL_RCLICKED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_TOOL_ENTER(id, fn) { wxEVT_COMMAND_TOOL_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
+#define EVT_TOOL_ENTER_RANGE(id1, id2, fn) { wxEVT_COMMAND_TOOL_ENTER, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 #define EVT_CHECKLISTBOX(id, fn) { wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, NULL },
 
 // Generic command events

@@ -46,6 +46,11 @@ public:
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
 
+    // get number of entries/subgroups in the current group, with or without
+    // it's subgroups
+  virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const = 0;
+  virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const = 0;
+
   // read/write
   virtual bool Read(wxString&, const char *, const char * = 0) const;
   virtual bool Read(long&, const char *, long = 0) const;
