@@ -51,8 +51,8 @@ public:
     ~wxBrush();
 
     inline wxBrush& operator = (const wxBrush& rBrush) { if (*this == rBrush) return (*this); Ref(rBrush); return *this; }
-    inline bool operator == (const wxBrush& rBrush) { return m_refData == rBrush.m_refData; }
-    inline bool operator != (const wxBrush& rBrush) { return m_refData != rBrush.m_refData; }
+    inline bool operator == (const wxBrush& rBrush) const { return m_refData == rBrush.m_refData; }
+    inline bool operator != (const wxBrush& rBrush) const { return m_refData != rBrush.m_refData; }
 
     virtual void SetColour(const wxColour& rColour);
     virtual void SetColour( unsigned char cRed
