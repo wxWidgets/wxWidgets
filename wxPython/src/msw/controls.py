@@ -12,6 +12,7 @@ BU_TOP = _controls.BU_TOP
 BU_RIGHT = _controls.BU_RIGHT
 BU_BOTTOM = _controls.BU_BOTTOM
 BU_EXACTFIT = _controls.BU_EXACTFIT
+BU_AUTODRAW = _controls.BU_AUTODRAW
 class Button(core.Control):
     def __init__(self, *args, **kwargs):
         newobj = _controls.new_Button(*args, **kwargs)
