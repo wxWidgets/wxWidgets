@@ -16,13 +16,11 @@
 #include "wx/app.h"
 #include "wx/listbox.h"
 #include "wx/settings.h"
+#include "wx/toplevel.h"
 #include "wx/dynarray.h"
 #include "wx/log.h"
 
 #include "wx/utils.h"
-#ifndef __DARWIN__
-//  #include "extldef.h"
-#endif
 
 #if !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)

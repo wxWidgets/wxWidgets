@@ -31,12 +31,14 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/toplevel.h"
+    #include "wx/frame.h"
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/mac/uma.h"
+#include "wx/mac/aga.h"
 #include "wx/tooltip.h"
 
 // ----------------------------------------------------------------------------

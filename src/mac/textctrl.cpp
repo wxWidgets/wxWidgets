@@ -28,7 +28,7 @@
 #include "wx/app.h"
 #include "wx/dc.h"
 #include "wx/button.h"
-#include "wx/panel.h"
+#include "wx/toplevel.h"
 #include "wx/textctrl.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
