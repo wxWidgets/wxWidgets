@@ -446,11 +446,8 @@ public:
     wxListBase(void *object, ... /* terminate with NULL */);
 
 protected:
-        // copy ctor and assignment operator
-    wxListBase(const wxListBase& list) : wxObject()
-        { Init(); DoCopy(list); }
-    wxListBase& operator=(const wxListBase& list)
-        { Clear(); DoCopy(list); return *this; }
+    void Assign(const wxListBase& list)
+        { Clear(); DoCopy(list); }
 
         // get list head/tail
     wxNodeBase *GetFirst() const { return m_nodeFirst; }
@@ -604,11 +601,13 @@ private:
                                                                             \
         name(wxKeyType keyType = wxKEY_NONE) : wxListBase(keyType)          \
             { }                                                             \
+        name(const name& list) : wxListBase(list.GetKeyType())              \
+            { Assign(list); }                                               \
         name(size_t count, T *elements[])                                   \
             : wxListBase(count, (void **)elements) { }                      \
                                                                             \
         name& operator=(const name& list)                                   \
-            { (void) wxListBase::operator=(list); return *this; }           \
+            { Assign(list); return *this; }                                 \
                                                                             \
         nodetype *GetFirst() const                                          \
             { return (nodetype *)wxListBase::GetFirst(); }                  \
