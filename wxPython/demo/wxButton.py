@@ -16,7 +16,7 @@ class TestPanel(wxPanel):
         b.SetForegroundColour(wxWHITE)
         b.SetDefault()
 
-        b = wxButton(self, 20, "HELLO AGAIN!", wxPoint(20, 60), wxSize(90, 45))
+        b = wxButton(self, 20, "HELLO AGAIN!", wxPoint(20, 60), wxSize(120, 45))
         EVT_BUTTON(self, 20, self.OnClick)
 
         b.SetToolTipString("This is a Hello button...")
@@ -25,7 +25,7 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
 
-        wxBitmapButton(self, 30, bmp, wxPoint(140, 20),
+        wxBitmapButton(self, 30, bmp, wxPoint(160, 20),
                        wxSize(bmp.GetWidth()+10, bmp.GetHeight()+10))
         EVT_BUTTON(self, 30, self.OnClick)
 

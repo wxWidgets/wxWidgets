@@ -450,15 +450,15 @@ class wxPythonDemo(wxFrame):
                     self.SetOverview(itemText + " Overview", module.overview)
                 finally:
                     wxEndBusyCursor()
+                self.tree.Refresh()
 
                 # in case runTest is modal, make sure things look right...
                 self.nb.Refresh();
-                wxYield()
+                wxSafeYield()
 
                 self.window = module.runTest(self, self.nb, self) ###
                 if self.window:
                     self.nb.AddPage(self.window, 'Demo')
-                    #wxYield()  TODO: Is this still needed?
                     self.nb.SetSelection(2)
                     self.nb.Refresh()  # without this wxMac has troubles showing the just added page
 
