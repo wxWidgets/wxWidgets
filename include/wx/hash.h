@@ -348,8 +348,6 @@ public:
 
     const wxHashTable& operator=( const wxHashTable& );
 
-    void Destroy() { Clear(); }
-
     // key and value are the same
     void Put(long value, wxObject *object)
         { DoPut( value, value, object ); }
@@ -518,7 +516,6 @@ private:
                                                                               \
         virtual ~hashclass() { Destroy(); }                                   \
                                                                               \
-        void Destroy() { Clear(); }                                           \
         void Put(long key, eltype *data) { DoPut(key, key, (void*)data); }    \
         void Put(long hash, long key, eltype *data)                           \
             { DoPut(key, hash, (void*)data); }                                \
