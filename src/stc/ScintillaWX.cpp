@@ -321,11 +321,12 @@ void ScintillaWX::Copy() {
     if (currentPos != anchor) {
         SelectionText st;
         CopySelectionRange(&st);
-        wxTheClipboard->Open();
-        wxTheClipboard->UsePrimarySelection();
-        wxString text = stc2wx(st.s, st.len);
-        wxTheClipboard->SetData(new wxTextDataObject(text));
-        wxTheClipboard->Close();
+        if (wxTheClipboard->Open()) {
+            wxTheClipboard->UsePrimarySelection();
+            wxString text = stc2wx(st.s, st.len);
+            wxTheClipboard->SetData(new wxTextDataObject(text));
+            wxTheClipboard->Close();
+        }
     }
 }
 
@@ -335,12 +336,13 @@ void ScintillaWX::Paste() {
     ClearSelection();
 
     wxTextDataObject data;
-    bool gotData;
+    bool gotData = FALSE;
 
-    wxTheClipboard->Open();
-    wxTheClipboard->UsePrimarySelection();
-    gotData = wxTheClipboard->GetData(data);
-    wxTheClipboard->Close();
+    if (wxTheClipboard->Open()) {
+        wxTheClipboard->UsePrimarySelection();
+        gotData = wxTheClipboard->GetData(data);
+        wxTheClipboard->Close();
+    }
     if (gotData) {
         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(data.GetText());
         int        len = strlen(buf);
@@ -356,12 +358,16 @@ void ScintillaWX::Paste() {
 
 bool ScintillaWX::CanPaste() {
     bool canPaste = FALSE;
+    bool didOpen;
 
-    if (! wxTheClipboard->IsOpened()) {
+    if ( (didOpen = !wxTheClipboard->IsOpened()) )
         wxTheClipboard->Open();
+
+    if (wxTheClipboard->IsOpened()) {
         wxTheClipboard->UsePrimarySelection();
         canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
-        wxTheClipboard->Close();
+        if (didOpen)
+            wxTheClipboard->Close();
     }
     return canPaste;
 }
