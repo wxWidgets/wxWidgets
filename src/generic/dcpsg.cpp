@@ -650,9 +650,6 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
         wxCoord xx = XLOG2DEV(points[0].x + xoffset);
         wxCoord yy = YLOG2DEV(points[0].y + yoffset);
         
-        wxCoord xx0 = xx;
-        wxCoord yy0 = yy;
-
         fprintf( m_pstream, "%d %d moveto\n", xx, yy );
 
         CalcBoundingBox( points[0].x + xoffset, points[0].y + yoffset );
@@ -667,7 +664,7 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
             CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset);
         }
 
-        fprintf( m_pstream, "%d %d lineto \n", xx0, yy0 );
+        fprintf( m_pstream, "closepath\n" );
         fprintf( m_pstream, "stroke\n" );
     }
 }
