@@ -201,6 +201,9 @@ echo "Using source tree: $WXDIR"
 
 #----------------------------------------------------------------------
 
+if [ $KIND = panther ]; then 
+    OTHER_CFG_OPTS=--enable-mediactrl
+fi
 
 # Configure wxWidgets
 if [ $skipconfig != yes ]; then
@@ -215,8 +218,7 @@ if [ $skipconfig != yes ]; then
 	--enable-debug_flag \
 	--enable-precomp=no \
 	--enable-optimise \
-	$UNICODEOPT
-
+	$UNICODEOPT $OTHER_CFG_OPTS
 
 fi
 
