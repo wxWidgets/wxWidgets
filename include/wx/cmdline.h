@@ -33,7 +33,7 @@ enum
     wxCMD_LINE_PARAM_OPTIONAL   = 0x02, // the parameter may be omitted
     wxCMD_LINE_PARAM_MULTIPLE   = 0x04, // the parameter may be repeated
     wxCMD_LINE_OPTION_HELP      = 0x08, // this option is a help request
-    wxCMD_LINE_NEEDS_SEPARATOR  = 0x10, // must have sep before the value
+    wxCMD_LINE_NEEDS_SEPARATOR  = 0x10  // must have sep before the value
 };
 
 // an option value or parameter may be a string (the most common case), a
