@@ -528,7 +528,7 @@ wxString wxMsgCatalogFile::GetCharset() const
 // ----------------------------------------------------------------------------
 
 bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName, 
-                        bool bConvertEncoding = FALSE)
+                        bool bConvertEncoding)
 {
     wxMsgCatalogFile file;
     
