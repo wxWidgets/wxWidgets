@@ -141,7 +141,7 @@ protected:
     int          m_border;
     int          m_flag;
 
-    // If TRUE, then this item is considered in the layout
+    // If true, then this item is considered in the layout
     // calculation.  Otherwise, it is skipped over.
     bool         m_show;
 
@@ -233,13 +233,13 @@ public:
     // use Detach instead.
     wxDEPRECATED( virtual bool Remove( wxWindow *window ) );
     virtual bool Remove( wxSizer *sizer );
-    virtual bool Remove( size_t index );
+    virtual bool Remove( int index );
 
     virtual bool Detach( wxWindow *window );
     virtual bool Detach( wxSizer *sizer );
-    virtual bool Detach( size_t index );
+    virtual bool Detach( int index );
 
-    virtual void Clear( bool delete_windows=FALSE );
+    virtual void Clear( bool delete_windows = false );
     virtual void DeleteWindows();
 
     void SetMinSize( int width, int height )
@@ -289,16 +289,16 @@ public:
 
     // Manage whether individual scene items are considered
     // in the layout calculations or not.
-    void Show( wxWindow *window, bool show = TRUE );
-    void Show( wxSizer *sizer, bool show = TRUE );
-    void Show( size_t index, bool show = TRUE );
+    void Show( wxWindow *window, bool show = true );
+    void Show( wxSizer *sizer, bool show = true );
+    void Show( size_t index, bool show = true );
 
     void Hide( wxSizer *sizer )
-        { Show( sizer, FALSE ); }
+        { Show( sizer, false ); }
     void Hide( wxWindow *window )
-        { Show( window, FALSE ); }
+        { Show( window, false ); }
     void Hide( size_t index )
-        { Show( index, FALSE ); }
+        { Show( index, false ); }
 
     bool IsShown( wxWindow *window ) const;
     bool IsShown( wxSizer *sizer ) const;

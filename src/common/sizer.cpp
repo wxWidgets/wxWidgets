@@ -56,7 +56,7 @@ wxSizerItem::wxSizerItem( int width, int height, int proportion, int flag, int b
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_show( TRUE )
+    , m_show( true )
     , m_userData( userData )
 {
     SetRatio( m_size );
@@ -69,7 +69,7 @@ wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_show( TRUE )
+    , m_show( true )
     , m_userData( userData )
 {
     // aspect ratio calculated from initial size
@@ -84,7 +84,7 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, 
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_show( TRUE )
+    , m_show( true )
     , m_ratio( 0.0 )
     , m_userData( userData )
 {
@@ -277,7 +277,7 @@ int wxSizerItem::GetOption() const
 wxSizer::wxSizer()
     : m_minSize( wxSize( 0, 0 ) )
 {
-    m_children.DeleteContents( TRUE );
+    m_children.DeleteContents( true );
 }
 
 wxSizer::~wxSizer()
@@ -396,20 +396,20 @@ bool wxSizer::Remove( wxSizer *sizer )
         node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
-bool wxSizer::Remove( size_t index )
+bool wxSizer::Remove( int index )
 {
-    wxCHECK_MSG( index < m_children.GetCount(),
-                 FALSE,
+    wxCHECK_MSG( index >= 0 && (size_t)index < m_children.GetCount(),
+                 false,
                  _T("Remove index is out of range") );
 
-    wxSizerItemList::Node   *node = m_children.Item( index );
+    wxSizerItemList::Node *node = m_children.Item( index );
 
-    wxCHECK_MSG( node, FALSE, _T("Failed to find child node") );
+    wxCHECK_MSG( node, false, _T("Failed to find child node") );
 
-    wxSizerItem     *item = node->GetData();
+    wxSizerItem *item = node->GetData();
 
     if( item->IsWindow() )
         item->GetWindow()->SetContainingSizer( NULL );
@@ -434,7 +434,7 @@ bool wxSizer::Detach( wxSizer *sizer )
         node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxSizer::Detach( wxWindow *window )
@@ -454,20 +454,20 @@ bool wxSizer::Detach( wxWindow *window )
         node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
-bool wxSizer::Detach( size_t index )
+bool wxSizer::Detach( int index )
 {
-    wxCHECK_MSG( index < m_children.GetCount(),
-                 FALSE,
+    wxCHECK_MSG( index >= 0 && (size_t)index < m_children.GetCount(),
+                 false,
                  _T("Detach index is out of range") );
 
-    wxSizerItemList::Node   *node = m_children.Item( index );
+    wxSizerItemList::Node *node = m_children.Item( index );
 
-    wxCHECK_MSG( node, FALSE, _T("Failed to find child node") );
+    wxCHECK_MSG( node, false, _T("Failed to find child node") );
 
-    wxSizerItem     *item = node->GetData();
+    wxSizerItem *item = node->GetData();
 
     if( item->IsSizer() )
         item->DetachSizer();
@@ -670,7 +670,7 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
         if (item->GetWindow() == window)
         {
             item->SetInitSize( width, height );
-            return TRUE;
+            return true;
         }
         node = node->GetNext();
     }
@@ -686,12 +686,12 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
              item->GetSizer()->DoSetItemMinSize( window, width, height ) )
         {
             // A child sizer found the requested windw, exit.
-            return TRUE;
+            return true;
         }
         node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
@@ -708,7 +708,7 @@ bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
         if (item->GetSizer() == sizer)
         {
             item->GetSizer()->DoSetMinSize( width, height );
-            return TRUE;
+            return true;
         }
         node = node->GetNext();
     }
@@ -724,19 +724,19 @@ bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
              item->GetSizer()->DoSetItemMinSize( sizer, width, height ) )
         {
             // A child found the requested sizer, exit.
-            return TRUE;
+            return true;
         }
         node = node->GetNext();
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
 {
     wxSizerItemList::Node   *node = m_children.Item( index );
 
-    wxCHECK_MSG( node, FALSE, _T("Failed to find child node") );
+    wxCHECK_MSG( node, false, _T("Failed to find child node") );
 
     wxSizerItem     *item = node->GetData();
 
@@ -751,7 +751,7 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
         item->SetInitSize( width, height );
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxSizer::Show( wxWindow *window, bool show )
@@ -824,7 +824,7 @@ bool wxSizer::IsShown( wxWindow *window ) const
 
     wxFAIL_MSG( _T("IsShown failed to find sizer item") );
 
-    return FALSE;
+    return false;
 }
 
 bool wxSizer::IsShown( wxSizer *sizer ) const
@@ -843,13 +843,13 @@ bool wxSizer::IsShown( wxSizer *sizer ) const
 
     wxFAIL_MSG( _T("IsShown failed to find sizer item") );
 
-    return FALSE;
+    return false;
 }
 
 bool wxSizer::IsShown( size_t index ) const
 {
     wxCHECK_MSG( index < m_children.GetCount(),
-                 FALSE,
+                 false,
                  _T("IsShown index is out of range") );
 
     return m_children.Item( index )->GetData()->IsShown();
