@@ -7,7 +7,7 @@ INCLUDE=$(INCDIR)
 include $(WXDIR)\src\makesc.env
 
 $(TARGET).exe: $(OBJECTS) $(TARGET).res
-	link $(LDFLAGS) /DELEXECUTABLE /RC -L/exet:nt/su:windows $(OBJECTS), $@, $*, $(LIBDIR)\ $(LIBS)
+	link $(LDFLAGS) /DELEXECUTABLE /NOI /RC -L/exet:nt/su:windows $(OBJECTS), $@, $*, $(LIBDIR)\ $(LIBS)
     
 
 clean:
