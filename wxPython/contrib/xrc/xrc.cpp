@@ -403,6 +403,54 @@ static PyObject *_wrap_wxXmlResource_LoadMenuBar(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxXmlResource_LoadMenuBarOnFrame(_swigobj,_swigarg0,_swigarg1)  (_swigobj->LoadMenuBar(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxXmlResource_LoadMenuBarOnFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuBar * _result;
+    wxXmlResource * _arg0;
+    wxWindow * _arg1;
+    wxString * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","parent","name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxXmlResource_LoadMenuBarOnFrame",_kwnames,&_argo0,&_argo1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxXmlResource_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlResource_LoadMenuBarOnFrame. Expected _wxXmlResource_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxXmlResource_LoadMenuBarOnFrame. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxMenuBar *)wxXmlResource_LoadMenuBarOnFrame(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
 #define wxXmlResource_LoadToolBar(_swigobj,_swigarg0,_swigarg1)  (_swigobj->LoadToolBar(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxXmlResource_LoadToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1034,6 +1082,7 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlResource_LoadOnDialog", (PyCFunction) _wrap_wxXmlResource_LoadOnDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadDialog", (PyCFunction) _wrap_wxXmlResource_LoadDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadToolBar", (PyCFunction) _wrap_wxXmlResource_LoadToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_LoadMenuBarOnFrame", (PyCFunction) _wrap_wxXmlResource_LoadMenuBarOnFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadMenuBar", (PyCFunction) _wrap_wxXmlResource_LoadMenuBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadMenu", (PyCFunction) _wrap_wxXmlResource_LoadMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_ClearHandlers", (PyCFunction) _wrap_wxXmlResource_ClearHandlers, METH_VARARGS | METH_KEYWORDS },

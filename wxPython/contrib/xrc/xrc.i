@@ -89,6 +89,8 @@ public:
 
     // Loads menubar from resource. Returns NULL on failure.
     wxMenuBar *LoadMenuBar(const wxString& name);
+    %name(LoadMenuBarOnFrame) wxMenuBar *LoadMenuBar(wxWindow *parent, const wxString& name);
+
 
     // Loads toolbar
     wxToolBar *LoadToolBar(wxWindow *parent, const wxString& name);

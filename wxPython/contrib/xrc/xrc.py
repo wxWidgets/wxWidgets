@@ -77,6 +77,9 @@ class wxXmlResourcePtr(wxObjectPtr):
     def LoadMenuBar(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_LoadMenuBar,(self,) + _args, _kwargs)
         return val
+    def LoadMenuBarOnFrame(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlResource_LoadMenuBarOnFrame,(self,) + _args, _kwargs)
+        return val
     def LoadToolBar(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlResource_LoadToolBar,(self,) + _args, _kwargs)
         return val
