@@ -3035,8 +3035,9 @@ static PyObject * TopLevelWindow_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Frame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
-    wxString *arg3 = 0 ;
+    int arg2 = (int) (int)-1 ;
+    wxString const &arg3_defvalue = wxPyEmptyString ;
+    wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -3060,15 +3061,19 @@ static PyObject *_wrap_new_Frame(PyObject *self, PyObject *args, PyObject *kwarg
         (char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_Frame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_Frame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg3 = wxString_in_helper(obj2);
-        if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = wxString_in_helper(obj2);
+            if (arg3 == NULL) SWIG_fail;
+            temp3 = True;
+        }
     }
     if (obj3) {
         {
@@ -3155,8 +3160,9 @@ static PyObject *_wrap_Frame_Create(PyObject *self, PyObject *args, PyObject *kw
     PyObject *resultobj;
     wxFrame *arg1 = (wxFrame *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
-    wxString *arg4 = 0 ;
+    int arg3 = (int) (int)-1 ;
+    wxString const &arg4_defvalue = wxPyEmptyString ;
+    wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     wxSize const &arg6_defvalue = wxDefaultSize ;
@@ -3181,17 +3187,21 @@ static PyObject *_wrap_Frame_Create(PyObject *self, PyObject *args, PyObject *kw
         (char *) "self",(char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:Frame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:Frame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxFrame,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg4 = wxString_in_helper(obj3);
-        if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = wxString_in_helper(obj3);
+            if (arg4 == NULL) SWIG_fail;
+            temp4 = True;
+        }
     }
     if (obj4) {
         {
@@ -3968,8 +3978,9 @@ static PyObject * Frame_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Dialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
-    wxString *arg3 = 0 ;
+    int arg2 = (int) (int)-1 ;
+    wxString const &arg3_defvalue = wxPyEmptyString ;
+    wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -3993,15 +4004,19 @@ static PyObject *_wrap_new_Dialog(PyObject *self, PyObject *args, PyObject *kwar
         (char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_Dialog",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_Dialog",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg3 = wxString_in_helper(obj2);
-        if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = wxString_in_helper(obj2);
+            if (arg3 == NULL) SWIG_fail;
+            temp3 = True;
+        }
     }
     if (obj3) {
         {
@@ -4088,8 +4103,9 @@ static PyObject *_wrap_Dialog_Create(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxDialog *arg1 = (wxDialog *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
-    wxString *arg4 = 0 ;
+    int arg3 = (int) (int)-1 ;
+    wxString const &arg4_defvalue = wxPyEmptyString ;
+    wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     wxSize const &arg6_defvalue = wxDefaultSize ;
@@ -4114,17 +4130,21 @@ static PyObject *_wrap_Dialog_Create(PyObject *self, PyObject *args, PyObject *k
         (char *) "self",(char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:Dialog_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:Dialog_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDialog,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg4 = wxString_in_helper(obj3);
-        if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = wxString_in_helper(obj3);
+            if (arg4 == NULL) SWIG_fail;
+            temp4 = True;
+        }
     }
     if (obj4) {
         {
@@ -4438,8 +4458,9 @@ static PyObject * Dialog_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_MiniFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
-    wxString *arg3 = 0 ;
+    int arg2 = (int) (int)-1 ;
+    wxString const &arg3_defvalue = wxPyEmptyString ;
+    wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -4463,15 +4484,19 @@ static PyObject *_wrap_new_MiniFrame(PyObject *self, PyObject *args, PyObject *k
         (char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_MiniFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_MiniFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg3 = wxString_in_helper(obj2);
-        if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = wxString_in_helper(obj2);
+            if (arg3 == NULL) SWIG_fail;
+            temp3 = True;
+        }
     }
     if (obj3) {
         {
@@ -4554,8 +4579,9 @@ static PyObject *_wrap_MiniFrame_Create(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxMiniFrame *arg1 = (wxMiniFrame *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
-    wxString *arg4 = 0 ;
+    int arg3 = (int) (int)-1 ;
+    wxString const &arg4_defvalue = wxPyEmptyString ;
+    wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     wxSize const &arg6_defvalue = wxDefaultSize ;
@@ -4580,17 +4606,21 @@ static PyObject *_wrap_MiniFrame_Create(PyObject *self, PyObject *args, PyObject
         (char *) "self",(char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:MiniFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:MiniFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMiniFrame,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg4 = wxString_in_helper(obj3);
-        if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = wxString_in_helper(obj3);
+            if (arg4 == NULL) SWIG_fail;
+            temp4 = True;
+        }
     }
     if (obj4) {
         {
@@ -4799,7 +4829,7 @@ static PyObject *_wrap_new_SplashScreen(PyObject *self, PyObject *args, PyObject
     long arg2 ;
     int arg3 ;
     wxWindow *arg4 = (wxWindow *) 0 ;
-    int arg5 ;
+    int arg5 = (int) -1 ;
     wxPoint const &arg6_defvalue = wxDefaultPosition ;
     wxPoint *arg6 = (wxPoint *) &arg6_defvalue ;
     wxSize const &arg7_defvalue = wxDefaultSize ;
@@ -4820,7 +4850,7 @@ static PyObject *_wrap_new_SplashScreen(PyObject *self, PyObject *args, PyObject
         (char *) "bitmap",(char *) "splashStyle",(char *) "milliseconds",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|OOO:new_SplashScreen",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:new_SplashScreen",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
     SWIG_POINTER_EXCEPTION | 0)) == -1)
     SWIG_fail;
@@ -4834,8 +4864,10 @@ static PyObject *_wrap_new_SplashScreen(PyObject *self, PyObject *args, PyObject
     if (PyErr_Occurred()) SWIG_fail;
     if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg5 = (int) SWIG_AsInt(obj4); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj4) {
+        arg5 = (int) SWIG_AsInt(obj4); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj5) {
         {
             arg6 = &temp6;
@@ -5041,7 +5073,7 @@ static PyObject *_wrap_StatusBar_Create(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxStatusBar *arg1 = (wxStatusBar *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) -1 ;
     long arg4 = (long) wxST_SIZEGRIP ;
     wxString const &arg5_defvalue = wxPyStatusLineNameStr ;
     wxString *arg5 = (wxString *) &arg5_defvalue ;
@@ -5056,13 +5088,15 @@ static PyObject *_wrap_StatusBar_Create(PyObject *self, PyObject *args, PyObject
         (char *) "self",(char *) "parent",(char *) "id",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OO:StatusBar_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOO:StatusBar_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStatusBar,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         arg4 = (long) SWIG_AsLong(obj3); 
         if (PyErr_Occurred()) SWIG_fail;
@@ -6672,7 +6706,7 @@ static PyObject *_wrap_SashLayoutNameStr_get() {
 static PyObject *_wrap_new_SashWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -6694,11 +6728,13 @@ static PyObject *_wrap_new_SashWindow(PyObject *self, PyObject *args, PyObject *
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_SashWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_SashWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -6772,7 +6808,7 @@ static PyObject *_wrap_SashWindow_Create(PyObject *self, PyObject *args, PyObjec
     PyObject *resultobj;
     wxSashWindow *arg1 = (wxSashWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -6795,13 +6831,15 @@ static PyObject *_wrap_SashWindow_Create(PyObject *self, PyObject *args, PyObjec
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:SashWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:SashWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSashWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -8096,7 +8134,7 @@ static PyObject * CalculateLayoutEvent_swigregister(PyObject *self, PyObject *ar
 static PyObject *_wrap_new_SashLayoutWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -8118,11 +8156,13 @@ static PyObject *_wrap_new_SashLayoutWindow(PyObject *self, PyObject *args, PyOb
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_SashLayoutWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_SashLayoutWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -8196,7 +8236,7 @@ static PyObject *_wrap_SashLayoutWindow_Create(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxSashLayoutWindow *arg1 = (wxSashLayoutWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -8219,13 +8259,15 @@ static PyObject *_wrap_SashLayoutWindow_Create(PyObject *self, PyObject *args, P
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:SashLayoutWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:SashLayoutWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSashLayoutWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -12464,7 +12506,7 @@ static PyObject *_wrap_new_MultiChoiceDialog(PyObject *self, PyObject *args, PyO
     wxString *arg2 = 0 ;
     wxString *arg3 = 0 ;
     int arg4 = (int) 0 ;
-    wxString *arg5 = (wxString *) 0 ;
+    wxString *arg5 = (wxString *) NULL ;
     long arg6 = (long) wxCHOICEDLG_STYLE ;
     wxPoint const &arg7_defvalue = wxDefaultPosition ;
     wxPoint *arg7 = (wxPoint *) &arg7_defvalue ;
@@ -14493,8 +14535,9 @@ static PyObject * FindReplaceDialog_swigregister(PyObject *self, PyObject *args)
 static PyObject *_wrap_new_MDIParentFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
-    wxString *arg3 = 0 ;
+    int arg2 = (int) (int)-1 ;
+    wxString const &arg3_defvalue = wxPyEmptyString ;
+    wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -14518,15 +14561,19 @@ static PyObject *_wrap_new_MDIParentFrame(PyObject *self, PyObject *args, PyObje
         (char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_MDIParentFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_MDIParentFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg3 = wxString_in_helper(obj2);
-        if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = wxString_in_helper(obj2);
+            if (arg3 == NULL) SWIG_fail;
+            temp3 = True;
+        }
     }
     if (obj3) {
         {
@@ -14609,8 +14656,9 @@ static PyObject *_wrap_MDIParentFrame_Create(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxMDIParentFrame *arg1 = (wxMDIParentFrame *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
-    wxString *arg4 = 0 ;
+    int arg3 = (int) (int)-1 ;
+    wxString const &arg4_defvalue = wxPyEmptyString ;
+    wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     wxSize const &arg6_defvalue = wxDefaultSize ;
@@ -14635,17 +14683,21 @@ static PyObject *_wrap_MDIParentFrame_Create(PyObject *self, PyObject *args, PyO
         (char *) "self",(char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:MDIParentFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:MDIParentFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMDIParentFrame,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg4 = wxString_in_helper(obj3);
-        if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = wxString_in_helper(obj3);
+            if (arg4 == NULL) SWIG_fail;
+            temp4 = True;
+        }
     }
     if (obj4) {
         {
@@ -14921,8 +14973,9 @@ static PyObject * MDIParentFrame_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_MDIChildFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMDIParentFrame *arg1 = (wxMDIParentFrame *) 0 ;
-    int arg2 ;
-    wxString *arg3 = 0 ;
+    int arg2 = (int) (int)-1 ;
+    wxString const &arg3_defvalue = wxPyEmptyString ;
+    wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -14946,15 +14999,19 @@ static PyObject *_wrap_new_MDIChildFrame(PyObject *self, PyObject *args, PyObjec
         (char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:new_MDIChildFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_MDIChildFrame",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMDIParentFrame,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg3 = wxString_in_helper(obj2);
-        if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = wxString_in_helper(obj2);
+            if (arg3 == NULL) SWIG_fail;
+            temp3 = True;
+        }
     }
     if (obj3) {
         {
@@ -15041,8 +15098,9 @@ static PyObject *_wrap_MDIChildFrame_Create(PyObject *self, PyObject *args, PyOb
     PyObject *resultobj;
     wxMDIChildFrame *arg1 = (wxMDIChildFrame *) 0 ;
     wxMDIParentFrame *arg2 = (wxMDIParentFrame *) 0 ;
-    int arg3 ;
-    wxString *arg4 = 0 ;
+    int arg3 = (int) (int)-1 ;
+    wxString const &arg4_defvalue = wxPyEmptyString ;
+    wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxPoint const &arg5_defvalue = wxDefaultPosition ;
     wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
     wxSize const &arg6_defvalue = wxDefaultSize ;
@@ -15067,17 +15125,21 @@ static PyObject *_wrap_MDIChildFrame_Create(PyObject *self, PyObject *args, PyOb
         (char *) "self",(char *) "parent",(char *) "id",(char *) "title",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:MDIChildFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:MDIChildFrame_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMDIChildFrame,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxMDIParentFrame,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg4 = wxString_in_helper(obj3);
-        if (arg4 == NULL) SWIG_fail;
-        temp4 = True;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            arg4 = wxString_in_helper(obj3);
+            if (arg4 == NULL) SWIG_fail;
+            temp4 = True;
+        }
     }
     if (obj4) {
         {
@@ -15328,7 +15390,7 @@ static PyObject * MDIClientWindow_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_PyWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) (int)-1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -15350,11 +15412,13 @@ static PyObject *_wrap_new_PyWindow(PyObject *self, PyObject *args, PyObject *kw
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_PyWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_PyWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -16171,7 +16235,7 @@ static PyObject * PyWindow_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_PyPanel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) (int)-1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -16193,11 +16257,13 @@ static PyObject *_wrap_new_PyPanel(PyObject *self, PyObject *args, PyObject *kwa
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_PyPanel",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_PyPanel",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -17014,7 +17080,7 @@ static PyObject * PyPanel_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_PyScrolledWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) (int)-1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -17036,11 +17102,13 @@ static PyObject *_wrap_new_PyScrolledWindow(PyObject *self, PyObject *args, PyOb
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_PyScrolledWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_PyScrolledWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;

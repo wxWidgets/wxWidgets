@@ -1217,8 +1217,8 @@ class Grid(_windows.ScrolledWindow):
         return "<%s.%s; proxy of C++ wxGrid instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=WANTS_CHARS, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=WANTS_CHARS, 
             String name=PanelNameStr) -> Grid
         """
         newobj = _grid.new_Grid(*args, **kwargs)
@@ -1229,8 +1229,8 @@ class Grid(_windows.ScrolledWindow):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=WANTS_CHARS, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=WANTS_CHARS, 
             String name=PanelNameStr) -> bool
         """
         return _grid.Grid_Create(*args, **kwargs)

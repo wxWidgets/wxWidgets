@@ -8017,7 +8017,7 @@ static PyObject * GridCellCoords_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) -1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -8039,11 +8039,13 @@ static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_Grid",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_Grid",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -8121,7 +8123,7 @@ static PyObject *_wrap_Grid_Create(PyObject *self, PyObject *args, PyObject *kwa
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) -1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -8144,13 +8146,15 @@ static PyObject *_wrap_Grid_Create(PyObject *self, PyObject *args, PyObject *kwa
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:Grid_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:Grid_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGrid,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;

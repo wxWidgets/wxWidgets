@@ -5781,7 +5781,7 @@ class Window(EvtHandler):
         """
         GetBestSize(self) -> Size
 
-        This functions returns the best acceptable minimal size for the
+        This function returns the best acceptable minimal size for the
         window, if applicable. For example, for a static text control, it will
         be the minimal size such that the control label is not truncated. For
         windows containing subwindows (suzh aswx.Panel), the size returned by
@@ -5794,7 +5794,7 @@ class Window(EvtHandler):
         """
         GetBestSizeTuple() -> (width, height)
 
-        This functions returns the best acceptable minimal size for the
+        This function returns the best acceptable minimal size for the
         window, if applicable. For example, for a static text control, it will
         be the minimal size such that the control label is not truncated. For
         windows containing subwindows (suzh aswx.Panel), the size returned by
@@ -8059,8 +8059,8 @@ class Control(Window):
         return "<%s.%s; proxy of C++ wxControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, Validator validator=DefaultValidator, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, Validator validator=DefaultValidator, 
             String name=ControlNameStr) -> Control
 
         Create a Control.  Normally you should only call this from a subclass'
@@ -8074,8 +8074,8 @@ class Control(Window):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, Validator validator=DefaultValidator, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, Validator validator=DefaultValidator, 
             String name=ControlNameStr) -> bool
 
         Do the 2nd phase and create the GUI control.
@@ -8352,36 +8352,85 @@ _core_.ControlWithItems_swigregister(ControlWithItemsPtr)
 #---------------------------------------------------------------------------
 
 class SizerItem(Object):
+    """
+    The wx.SizerItem class is used to track the position, size and other
+    attributes of each item managed by a `wx.Sizer`. In normal usage user
+    code should never need to deal directly with a wx.SizerItem, but
+    custom classes derived from `wx.PySizer` will probably need to use the
+    collection of wx.SizerItems held by wx.Sizer when calculating layout.
+
+    :see: `wx.Sizer`, `wx.GBSizerItem`
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizerItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> SizerItem"""
+        """
+        __init__(self) -> SizerItem
+
+        Constructs an empty wx.SizerItem.  Either a window, sizer or spacer
+        size will need to be set before this item can be used in a Sizer.
+
+        You will probably never need to create a wx.SizerItem directly as they
+        are created automatically when the sizer's Add, Insert or Prepend
+        methods are called.
+
+        :see: `wx.SizerItemSpacer`, `wx.SizerItemWindow`, `wx.SizerItemSizer`
+        """
         newobj = _core_.new_SizerItem(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def DeleteWindows(*args, **kwargs):
-        """DeleteWindows(self)"""
+        """
+        DeleteWindows(self)
+
+        Destroy the window or the windows in a subsizer, depending on the type
+        of item.
+        """
         return _core_.SizerItem_DeleteWindows(*args, **kwargs)
 
     def DetachSizer(*args, **kwargs):
-        """DetachSizer(self)"""
+        """
+        DetachSizer(self)
+
+        Enable deleting the SizerItem without destroying the contained sizer.
+        """
         return _core_.SizerItem_DetachSizer(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize(self) -> Size"""
+        """
+        GetSize(self) -> Size
+
+        Get the current size of the item, as set in the last Layout.
+        """
         return _core_.SizerItem_GetSize(*args, **kwargs)
 
     def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
+        """
+        CalcMin(self) -> Size
+
+        Calculates the minimum desired size for the item, including any space
+        needed by borders.
+        """
         return _core_.SizerItem_CalcMin(*args, **kwargs)
 
     def SetDimension(*args, **kwargs):
-        """SetDimension(self, Point pos, Size size)"""
+        """
+        SetDimension(self, Point pos, Size size)
+
+        Set the position and size of the space allocated for this item by the
+        sizer, and adjust the position and size of the item (window or
+        subsizer) to be within that space taking alignment and borders into
+        account.
+        """
         return _core_.SizerItem_SetDimension(*args, **kwargs)
 
     def GetMinSize(*args, **kwargs):
-        """GetMinSize(self) -> Size"""
+        """
+        GetMinSize(self) -> Size
+
+        Get the minimum size needed for the item.
+        """
         return _core_.SizerItem_GetMinSize(*args, **kwargs)
 
     def SetInitSize(*args, **kwargs):
@@ -8389,97 +8438,192 @@ class SizerItem(Object):
         return _core_.SizerItem_SetInitSize(*args, **kwargs)
 
     def SetRatioWH(*args, **kwargs):
-        """SetRatioWH(self, int width, int height)"""
+        """
+        SetRatioWH(self, int width, int height)
+
+        Set the ratio item attribute.
+        """
         return _core_.SizerItem_SetRatioWH(*args, **kwargs)
 
     def SetRatioSize(*args, **kwargs):
-        """SetRatioSize(self, Size size)"""
+        """
+        SetRatioSize(self, Size size)
+
+        Set the ratio item attribute.
+        """
         return _core_.SizerItem_SetRatioSize(*args, **kwargs)
 
     def SetRatio(*args, **kwargs):
-        """SetRatio(self, float ratio)"""
+        """
+        SetRatio(self, float ratio)
+
+        Set the ratio item attribute.
+        """
         return _core_.SizerItem_SetRatio(*args, **kwargs)
 
     def GetRatio(*args, **kwargs):
-        """GetRatio(self) -> float"""
+        """
+        GetRatio(self) -> float
+
+        Set the ratio item attribute.
+        """
         return _core_.SizerItem_GetRatio(*args, **kwargs)
 
     def IsWindow(*args, **kwargs):
-        """IsWindow(self) -> bool"""
+        """
+        IsWindow(self) -> bool
+
+        Is this sizer item a window?
+        """
         return _core_.SizerItem_IsWindow(*args, **kwargs)
 
     def IsSizer(*args, **kwargs):
-        """IsSizer(self) -> bool"""
+        """
+        IsSizer(self) -> bool
+
+        Is this sizer item a subsizer?
+        """
         return _core_.SizerItem_IsSizer(*args, **kwargs)
 
     def IsSpacer(*args, **kwargs):
-        """IsSpacer(self) -> bool"""
+        """
+        IsSpacer(self) -> bool
+
+        Is this sizer item a spacer?
+        """
         return _core_.SizerItem_IsSpacer(*args, **kwargs)
 
     def SetProportion(*args, **kwargs):
-        """SetProportion(self, int proportion)"""
+        """
+        SetProportion(self, int proportion)
+
+        Set the proportion value for this item.
+        """
         return _core_.SizerItem_SetProportion(*args, **kwargs)
 
     def GetProportion(*args, **kwargs):
-        """GetProportion(self) -> int"""
+        """
+        GetProportion(self) -> int
+
+        Get the proportion value for this item.
+        """
         return _core_.SizerItem_GetProportion(*args, **kwargs)
 
-    SetOption = SetProportion
-    GetOption = GetProportion
+    SetOption = wx._deprecated(SetProportion, "Please use `SetProportion` instead.") 
+    GetOption = wx._deprecated(GetProportion, "Please use `GetProportion` instead.") 
     def SetFlag(*args, **kwargs):
-        """SetFlag(self, int flag)"""
+        """
+        SetFlag(self, int flag)
+
+        Set the flag value for this item.
+        """
         return _core_.SizerItem_SetFlag(*args, **kwargs)
 
     def GetFlag(*args, **kwargs):
-        """GetFlag(self) -> int"""
+        """
+        GetFlag(self) -> int
+
+        Get the flag value for this item.
+        """
         return _core_.SizerItem_GetFlag(*args, **kwargs)
 
     def SetBorder(*args, **kwargs):
-        """SetBorder(self, int border)"""
+        """
+        SetBorder(self, int border)
+
+        Set the border value for this item.
+        """
         return _core_.SizerItem_SetBorder(*args, **kwargs)
 
     def GetBorder(*args, **kwargs):
-        """GetBorder(self) -> int"""
+        """
+        GetBorder(self) -> int
+
+        Get the border value for this item.
+        """
         return _core_.SizerItem_GetBorder(*args, **kwargs)
 
     def GetWindow(*args, **kwargs):
-        """GetWindow(self) -> Window"""
+        """
+        GetWindow(self) -> Window
+
+        Get the window (if any) that is managed by this sizer item.
+        """
         return _core_.SizerItem_GetWindow(*args, **kwargs)
 
     def SetWindow(*args, **kwargs):
-        """SetWindow(self, Window window)"""
+        """
+        SetWindow(self, Window window)
+
+        Set the window to be managed by this sizer item.
+        """
         return _core_.SizerItem_SetWindow(*args, **kwargs)
 
     def GetSizer(*args, **kwargs):
-        """GetSizer(self) -> Sizer"""
+        """
+        GetSizer(self) -> Sizer
+
+        Get the subsizer (if any) that is managed by this sizer item.
+        """
         return _core_.SizerItem_GetSizer(*args, **kwargs)
 
     def SetSizer(*args, **kwargs):
-        """SetSizer(self, Sizer sizer)"""
+        """
+        SetSizer(self, Sizer sizer)
+
+        Set the subsizer to be managed by this sizer item.
+        """
         return _core_.SizerItem_SetSizer(*args, **kwargs)
 
     def GetSpacer(*args, **kwargs):
-        """GetSpacer(self) -> Size"""
+        """
+        GetSpacer(self) -> Size
+
+        Get the size of the spacer managed by this sizer item.
+        """
         return _core_.SizerItem_GetSpacer(*args, **kwargs)
 
     def SetSpacer(*args, **kwargs):
-        """SetSpacer(self, Size size)"""
+        """
+        SetSpacer(self, Size size)
+
+        Set the size of the spacer to be managed by this sizer item.
+        """
         return _core_.SizerItem_SetSpacer(*args, **kwargs)
 
     def Show(*args, **kwargs):
-        """Show(self, bool show)"""
+        """
+        Show(self, bool show)
+
+        Set the show item attribute, which sizers use to determine if the item
+        is to be made part of the layout or not. If the item is tracking a
+        window then it is shown or hidden as needed.
+        """
         return _core_.SizerItem_Show(*args, **kwargs)
 
     def IsShown(*args, **kwargs):
-        """IsShown(self) -> bool"""
+        """
+        IsShown(self) -> bool
+
+        Is the item to be shown in the layout?
+        """
         return _core_.SizerItem_IsShown(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition(self) -> Point"""
+        """
+        GetPosition(self) -> Point
+
+        Returns the current position of the item, as set in the last Layout.
+        """
         return _core_.SizerItem_GetPosition(*args, **kwargs)
 
     def GetUserData(*args, **kwargs):
-        """GetUserData(self) -> PyObject"""
+        """
+        GetUserData(self) -> PyObject
+
+        Returns the userData associated with this sizer item, or None if there
+        isn't any.
+        """
         return _core_.SizerItem_GetUserData(*args, **kwargs)
 
 
@@ -8490,34 +8634,69 @@ class SizerItemPtr(SizerItem):
         self.__class__ = SizerItem
 _core_.SizerItem_swigregister(SizerItemPtr)
 
-def SizerItemSpacer(*args, **kwargs):
-    """
-    SizerItemSpacer(int width, int height, int proportion, int flag, int border, 
-        Object userData) -> SizerItem
-    """
-    val = _core_.new_SizerItemSpacer(*args, **kwargs)
-    val.thisown = 1
-    return val
-
 def SizerItemWindow(*args, **kwargs):
     """
     SizerItemWindow(Window window, int proportion, int flag, int border, 
-        Object userData) -> SizerItem
+        PyObject userData=None) -> SizerItem
+
+    Constructs a `wx.SizerItem` for tracking a window.
     """
     val = _core_.new_SizerItemWindow(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def SizerItemSpacer(*args, **kwargs):
+    """
+    SizerItemSpacer(int width, int height, int proportion, int flag, int border, 
+        PyObject userData=None) -> SizerItem
+
+    Constructs a `wx.SizerItem` for tracking a spacer.
+    """
+    val = _core_.new_SizerItemSpacer(*args, **kwargs)
     val.thisown = 1
     return val
 
 def SizerItemSizer(*args, **kwargs):
     """
     SizerItemSizer(Sizer sizer, int proportion, int flag, int border, 
-        Object userData) -> SizerItem
+        PyObject userData=None) -> SizerItem
+
+    Constructs a `wx.SizerItem` for tracking a subsizer
     """
     val = _core_.new_SizerItemSizer(*args, **kwargs)
     val.thisown = 1
     return val
 
 class Sizer(Object):
+    """
+    wx.Sizer is the abstract base class used for laying out subwindows in
+    a window.  You cannot use wx.Sizer directly; instead, you will have to
+    use one of the sizer classes derived from it such as `wx.BoxSizer`,
+    `wx.StaticBoxSizer`, `wx.NotebookSizer`, `wx.GridSizer`,  `wx.FlexGridSizer`
+    and `wx.GridBagSizer`.
+
+    The concept implemented by sizers in wxWidgets is closely related to
+    layout tools in other GUI toolkits, such as Java's AWT, the GTK
+    toolkit or the Qt toolkit. It is based upon the idea of the individual
+    subwindows reporting their minimal required size and their ability to
+    get stretched if the size of the parent window has changed. This will
+    most often mean that the programmer does not set the original size of
+    a dialog in the beginning, rather the dialog will assigned a sizer and
+    this sizer will be queried about the recommended size. The sizer in
+    turn will query its children, which can be normal windows or contorls,
+    empty space or other sizers, so that a hierarchy of sizers can be
+    constructed. Note that wxSizer does not derive from wxWindow and thus
+    do not interfere with tab ordering and requires very little resources
+    compared to a real window on screen.
+
+    What makes sizers so well fitted for use in wxWidgets is the fact that
+    every control reports its own minimal size and the algorithm can
+    handle differences in font sizes or different window (dialog item)
+    sizes on different platforms without problems. If for example the
+    standard font as well as the overall design of Mac widgets requires
+    more space than on Windows, then the initial size of a dialog using a
+    sizer will automatically be bigger on Mac than on Windows.
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -8527,60 +8706,112 @@ class Sizer(Object):
 
     def Add(*args, **kwargs):
         """
-        Add(self, PyObject item, int proportion=0, int flag=0, int border=0, 
+        Add(self, item, int proportion=0, int flag=0, int border=0,
             PyObject userData=None)
+
+        Appends a child item to the sizer.
         """
         return _core_.Sizer_Add(*args, **kwargs)
 
     def Insert(*args, **kwargs):
         """
-        Insert(self, int before, PyObject item, int proportion=0, int flag=0, 
-            int border=0, PyObject userData=None)
+        Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
+            PyObject userData=None)
+
+        Inserts a new item into the list of items managed by this sizer before
+        the item at index *before*.  See `Add` for a description of the parameters.
         """
         return _core_.Sizer_Insert(*args, **kwargs)
 
     def Prepend(*args, **kwargs):
         """
-        Prepend(self, PyObject item, int proportion=0, int flag=0, int border=0, 
+        Prepend(self, item, int proportion=0, int flag=0, int border=0,
             PyObject userData=None)
+
+        Adds a new item to the begining of the list of sizer items managed by
+        this sizer.  See `Add` for a description of the parameters.
         """
         return _core_.Sizer_Prepend(*args, **kwargs)
 
     def Remove(*args, **kwargs):
-        """Remove(self, PyObject item) -> bool"""
+        """
+        Remove(self, item) -> bool
+
+        Removes an item from the sizer and destroys it.  This method does not
+        cause any layout or resizing to take place, call `Layout` to update
+        the layout on screen after removing a child from the sizer.  The
+        *item* parameter can be either a window, a sizer, or the zero-based
+        index of an item to remove.  Returns True if the child item was found
+        and removed.
+        """
         return _core_.Sizer_Remove(*args, **kwargs)
 
     def Detach(*args, **kwargs):
-        """Detach(self, PyObject item) -> bool"""
+        """
+        Detach(self, item) -> bool
+
+        Detaches an item from the sizer without destroying it.  This method
+        does not cause any layout or resizing to take place, call `Layout` to
+        do so.  The *item* parameter can be either a window, a sizer, or the
+        zero-based index of the item to be detached.  Returns True if the child item
+        was found and detached.
+        """
         return _core_.Sizer_Detach(*args, **kwargs)
 
     def _SetItemMinSize(*args, **kwargs):
         """_SetItemMinSize(self, PyObject item, Size size)"""
         return _core_.Sizer__SetItemMinSize(*args, **kwargs)
 
+    def SetItemMinSize(self, item, *args):
+        """
+        SetItemMinSize(self, item, Size size)
+
+        Sets the minimum size that will be allocated for an item in the sizer.
+        The *item* parameter can be either a window, a sizer, or the
+        zero-based index of the item.  If a window or sizer is given then it
+        will be searched for recursivly in subsizers if neccessary.
+        """
+        if len(args) == 2:
+            # for backward compatibility accept separate width,height args too
+            return self._SetItemMinSize(item, args)
+        else:
+            return self._SetItemMinSize(item, args[0])
+
     def AddItem(*args, **kwargs):
-        """AddItem(self, SizerItem item)"""
+        """
+        AddItem(self, SizerItem item)
+
+        Adds a `wx.SizerItem` to the sizer.
+        """
         return _core_.Sizer_AddItem(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
-        """InsertItem(self, size_t index, SizerItem item)"""
+        """
+        InsertItem(self, int index, SizerItem item)
+
+        Inserts a `wx.SizerItem` to the sizer at the position given by *index*.
+        """
         return _core_.Sizer_InsertItem(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
-        """PrependItem(self, SizerItem item)"""
+        """
+        PrependItem(self, SizerItem item)
+
+        Prepends a `wx.SizerItem` to the sizer.
+        """
         return _core_.Sizer_PrependItem(*args, **kwargs)
 
-    def AddMany(self, widgets):
+    def AddMany(self, items):
         """
         AddMany is a convenience method for adding several items
         to a sizer at one time.  Simply pass it a list of tuples,
         where each tuple consists of the parameters that you
         would normally pass to the `Add` method.
         """
-        for childinfo in widgets:
-            if type(childinfo) != type(()) or (len(childinfo) == 2 and type(childinfo[0]) == type(1)):
-                childinfo = (childinfo, )
-            self.Add(*childinfo)
+        for item in items:
+            if type(item) != type(()) or (len(item) == 2 and type(item[0]) == type(1)):
+                item = (item, )
+            self.Add(*item)
 
     # for backwards compatibility only, please do not use in new code
     AddWindow     = wx._deprecated(Add, "AddWindow is deprecated, use `Add` instead.")
@@ -8597,30 +8828,53 @@ class Sizer(Object):
     RemovePos     = wx._deprecated(Remove, "RemovePos is deprecated, use `Remove` instead.")
 
 
-    def SetItemMinSize(self, item, *args):
-        if len(args) == 2:
-            return self._SetItemMinSize(item, args)
-        else:
-            return self._SetItemMinSize(item, args[0])
-
     def SetDimension(*args, **kwargs):
-        """SetDimension(self, int x, int y, int width, int height)"""
+        """
+        SetDimension(self, int x, int y, int width, int height)
+
+        Call this to force the sizer to take the given dimension and thus
+        force the items owned by the sizer to resize themselves according to
+        the rules defined by the parameter in the `Add`, `Insert` or `Prepend`
+        methods.
+        """
         return _core_.Sizer_SetDimension(*args, **kwargs)
 
     def SetMinSize(*args, **kwargs):
-        """SetMinSize(self, Size size)"""
+        """
+        SetMinSize(self, Size size)
+
+        Call this to give the sizer a minimal size. Normally, the sizer will
+        calculate its minimal size based purely on how much space its children
+        need. After calling this method `GetMinSize` will return either the
+        minimal size as requested by its children or the minimal size set
+        here, depending on which is bigger.
+        """
         return _core_.Sizer_SetMinSize(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize(self) -> Size"""
+        """
+        GetSize(self) -> Size
+
+        Returns the current size of the space managed by the sizer.
+        """
         return _core_.Sizer_GetSize(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition(self) -> Point"""
+        """
+        GetPosition(self) -> Point
+
+        Returns the current position of the sizer's managed space.
+        """
         return _core_.Sizer_GetPosition(*args, **kwargs)
 
     def GetMinSize(*args, **kwargs):
-        """GetMinSize(self) -> Size"""
+        """
+        GetMinSize(self) -> Size
+
+        Returns the minimal size of the sizer. This is either the combined
+        minimal size of all the children and their borders or the minimal size
+        set by SetMinSize, depending on which is bigger.
+        """
         return _core_.Sizer_GetMinSize(*args, **kwargs)
 
     def GetSizeTuple(self):
@@ -8631,59 +8885,150 @@ class Sizer(Object):
         return self.GetMinSize().Get()
 
     def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
+        """
+        RecalcSizes(self)
+
+        Using the sizes calculated by `CalcMin` reposition and resize all the
+        items managed by this sizer.  You should not need to call this directly as
+        it is called by `Layout`.
+        """
         return _core_.Sizer_RecalcSizes(*args, **kwargs)
 
     def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
+        """
+        CalcMin(self) -> Size
+
+        This method is where the sizer will do the actual calculation of its
+        children's minimal sizes.  You should not need to call this directly as
+        it is called by `Layout`.
+        """
         return _core_.Sizer_CalcMin(*args, **kwargs)
 
     def Layout(*args, **kwargs):
-        """Layout(self)"""
+        """
+        Layout(self)
+
+        This method will force the recalculation and layout of the items
+        controlled by the sizer using the current space allocated to the
+        sizer.  Normally this is called automatically from the owning window's
+        EVT_SIZE handler, but it is also useful to call it from user code when
+        one of the items in a sizer change size, or items are added or
+        removed.
+        """
         return _core_.Sizer_Layout(*args, **kwargs)
 
     def Fit(*args, **kwargs):
-        """Fit(self, Window window) -> Size"""
+        """
+        Fit(self, Window window) -> Size
+
+        Tell the sizer to resize the *window* to match the sizer's minimal
+        size. This is commonly done in the constructor of the window itself in
+        order to set its initial size to match the needs of the children as
+        determined by the sizer.  Returns the new size.
+
+        For a top level window this is the total window size, not the client size.
+        """
         return _core_.Sizer_Fit(*args, **kwargs)
 
     def FitInside(*args, **kwargs):
-        """FitInside(self, Window window)"""
+        """
+        FitInside(self, Window window)
+
+        Tell the sizer to resize the *virtual size* of the *window* to match the
+        sizer's minimal size. This will not alter the on screen size of the
+        window, but may cause the addition/removal/alteration of scrollbars
+        required to view the virtual area in windows which manage it.
+
+        :see: `wx.ScrolledWindow.SetScrollbars`, `SetVirtualSizeHints`
+
+        """
         return _core_.Sizer_FitInside(*args, **kwargs)
 
     def SetSizeHints(*args, **kwargs):
-        """SetSizeHints(self, Window window)"""
+        """
+        SetSizeHints(self, Window window)
+
+        Tell the sizer to set (and `Fit`) the minimal size of the *window* to
+        match the sizer's minimal size. This is commonly done in the
+        constructor of the window itself if the window is resizable (as are
+        many dialogs under Unix and frames on probably all platforms) in order
+        to prevent the window from being sized smaller than the minimal size
+        required by the sizer.
+        """
         return _core_.Sizer_SetSizeHints(*args, **kwargs)
 
     def SetVirtualSizeHints(*args, **kwargs):
-        """SetVirtualSizeHints(self, Window window)"""
+        """
+        SetVirtualSizeHints(self, Window window)
+
+        Tell the sizer to set the minimal size of the window virtual area to
+        match the sizer's minimal size. For windows with managed scrollbars
+        this will set them appropriately.
+
+        :see: `wx.ScrolledWindow.SetScrollbars`
+
+        """
         return _core_.Sizer_SetVirtualSizeHints(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear(self, bool delete_windows=False)"""
+        """
+        Clear(self, bool deleteWindows=False)
+
+        Clear all items from the sizer, optionally destroying the window items
+        as well.
+        """
         return _core_.Sizer_Clear(*args, **kwargs)
 
     def DeleteWindows(*args, **kwargs):
-        """DeleteWindows(self)"""
+        """
+        DeleteWindows(self)
+
+        Destroy all windows managed by the sizer.
+        """
         return _core_.Sizer_DeleteWindows(*args, **kwargs)
 
     def GetChildren(*args, **kwargs):
-        """GetChildren(self) -> PyObject"""
+        """
+        GetChildren(sefl) -> list
+
+        Returns a list of all the `wx.SizerItem` objects managed by the sizer.
+        """
         return _core_.Sizer_GetChildren(*args, **kwargs)
 
     def Show(*args, **kwargs):
-        """Show(self, PyObject item, bool show=True)"""
+        """
+        Show(self, item, bool show=True)
+
+        Shows or hides an item managed by the sizer.  To make a sizer item
+        disappear or reappear, use Show followed by `Layout`.  The *item*
+        parameter can be either a window, a sizer, or the zero-based index of
+        the item.
+        """
         return _core_.Sizer_Show(*args, **kwargs)
 
-    def Hide(*args, **kwargs):
-        """Hide(self, PyObject item)"""
-        return _core_.Sizer_Hide(*args, **kwargs)
-
     def IsShown(*args, **kwargs):
-        """IsShown(self, PyObject item) -> bool"""
+        """
+        IsShown(self, item)
+
+        Determines if the item is currently shown. sizer.  To make a sizer
+        item disappear or reappear, use Show followed by `Layout`.  The *item*
+        parameter can be either a window, a sizer, or the zero-based index of
+        the item.
+        """
         return _core_.Sizer_IsShown(*args, **kwargs)
 
+    def Hide(self, item):
+        """
+        A convenience method for Show(item, False).
+        """
+        self.Show(item, False)
+
     def ShowItems(*args, **kwargs):
-        """ShowItems(self, bool show)"""
+        """
+        ShowItems(self, bool show)
+
+        Recursively call `wx.Window.Show` on all sizer items.
+        """
         return _core_.Sizer_ShowItems(*args, **kwargs)
 
 
@@ -8695,10 +9040,56 @@ class SizerPtr(Sizer):
 _core_.Sizer_swigregister(SizerPtr)
 
 class PySizer(Sizer):
+    """
+    wx.PySizer is a special version of `wx.Sizer` that has been
+    instrumented to allow the C++ virtual methods to be overloaded in
+    Python derived classes.  You would derive from this class if you are
+    wanting to implement a custom sizer in Python code.  Simply implement
+    `CalcMin` and `RecalcSizes` in the derived class and you're all set.
+    For example::
+
+        class MySizer(wx.PySizer):
+             def __init__(self):
+                 wx.PySizer.__init__(self)
+
+             def CalcMin(self):
+                 for item in self.GetChildren():
+                      # calculate the total minimum width and height needed
+                      # by all items in the sizer according to this sizer's
+                      # layout algorithm.
+                      ...
+                 return wx.Size(width, height)
+
+              def RecalcSizes(self):
+                  # find the space allotted to this sizer
+                  pos = self.GetPosition()
+                  size = self.GetSize()
+                  for item in self.GetChildren():
+                      # Recalculate (if necessary) the position and size of
+                      # each item and then call item.SetDimension to do the
+                      # actual positioning and sizing of the items within the
+                      # space alloted to this sizer.
+                      ...
+                      item.SetDimension(itemPos, itemSize)
+
+
+    When `Layout` is called it first calls `CalcMin` followed by
+    `RecalcSizes` so you can optimize a bit by saving the results of
+    `CalcMin` and resuing them in `RecalcSizes`.
+
+    :see: `wx.SizerItem`, `wx.Sizer.GetChildren`
+
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPySizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> PySizer"""
+        """
+        __init__(self) -> PySizer
+
+        Creates a wx.PySizer.  Must be called from the __init__ in the derived
+        class.
+        """
         newobj = _core_.new_PySizer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -8720,10 +9111,23 @@ _core_.PySizer_swigregister(PySizerPtr)
 #---------------------------------------------------------------------------
 
 class BoxSizer(Sizer):
+    """
+    The basic idea behind a box sizer is that windows will most often be
+    laid out in rather simple basic geometry, typically in a row or a
+    column or nested hierarchies of either.  A wx.BoxSizer will lay out
+    its items in a simple row or column, depending on the orientation
+    parameter passed to the constructor.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBoxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int orient=HORIZONTAL) -> BoxSizer"""
+        """
+        __init__(self, int orient=HORIZONTAL) -> BoxSizer
+
+        Constructor for a wx.BoxSizer. *orient* may be one of ``wx.VERTICAL``
+        or ``wx.HORIZONTAL`` for creating either a column sizer or a row
+        sizer.
+        """
         newobj = _core_.new_BoxSizer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -8731,20 +9135,20 @@ class BoxSizer(Sizer):
         self._setOORInfo(self)
 
     def GetOrientation(*args, **kwargs):
-        """GetOrientation(self) -> int"""
+        """
+        GetOrientation(self) -> int
+
+        Returns the current orientation of the sizer.
+        """
         return _core_.BoxSizer_GetOrientation(*args, **kwargs)
 
     def SetOrientation(*args, **kwargs):
-        """SetOrientation(self, int orient)"""
+        """
+        SetOrientation(self, int orient)
+
+        Resets the orientation of the sizer.
+        """
         return _core_.BoxSizer_SetOrientation(*args, **kwargs)
-
-    def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
-        return _core_.BoxSizer_RecalcSizes(*args, **kwargs)
-
-    def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
-        return _core_.BoxSizer_CalcMin(*args, **kwargs)
 
 
 class BoxSizerPtr(BoxSizer):
@@ -8757,10 +9161,22 @@ _core_.BoxSizer_swigregister(BoxSizerPtr)
 #---------------------------------------------------------------------------
 
 class StaticBoxSizer(BoxSizer):
+    """
+    wx.StaticBoxSizer derives from and functions identically to the
+    `wx.BoxSizer` and adds a `wx.StaticBox` around the items that the sizer
+    manages.  Note that this static box must be created separately and
+    passed to the sizer constructor.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticBoxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, wxStaticBox box, int orient=HORIZONTAL) -> StaticBoxSizer"""
+        """
+        __init__(self, StaticBox box, int orient=HORIZONTAL) -> StaticBoxSizer
+
+        Constructor. It takes an associated static box and the orientation
+        *orient* as parameters - orient can be either of ``wx.VERTICAL`` or
+        ``wx.HORIZONTAL``.
+        """
         newobj = _core_.new_StaticBoxSizer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -8768,16 +9184,12 @@ class StaticBoxSizer(BoxSizer):
         self._setOORInfo(self)
 
     def GetStaticBox(*args, **kwargs):
-        """GetStaticBox(self) -> wxStaticBox"""
+        """
+        GetStaticBox(self) -> StaticBox
+
+        Returns the static box associated with this sizer.
+        """
         return _core_.StaticBoxSizer_GetStaticBox(*args, **kwargs)
-
-    def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
-        return _core_.StaticBoxSizer_RecalcSizes(*args, **kwargs)
-
-    def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
-        return _core_.StaticBoxSizer_CalcMin(*args, **kwargs)
 
 
 class StaticBoxSizerPtr(StaticBoxSizer):
@@ -8790,54 +9202,102 @@ _core_.StaticBoxSizer_swigregister(StaticBoxSizerPtr)
 #---------------------------------------------------------------------------
 
 class GridSizer(Sizer):
+    """
+    A grid sizer is a sizer which lays out its children in a
+    two-dimensional table with all cells having the same size.  In other
+    words, the width of each cell within the grid is the width of the
+    widest item added to the sizer and the height of each grid cell is the
+    height of the tallest item.  An optional vertical and/or horizontal
+    gap between items can also be specified (in pixels.)
+
+    Items are placed in the cells of the grid in the order they are added,
+    in row-major order.  In other words, the first row is filled first,
+    then the second, and so on until all items have been added. (If
+    neccessary, additional rows will be added as items are added.)  If you
+    need to have greater control over the cells that items are placed in
+    then use the `wx.GridBagSizer`.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int rows=1, int cols=0, int vgap=0, int hgap=0) -> GridSizer"""
+        """
+        __init__(self, int rows=1, int cols=0, int vgap=0, int hgap=0) -> GridSizer
+
+        Constructor for a wx.GridSizer. *rows* and *cols* determine the number
+        of columns and rows in the sizer - if either of the parameters is
+        zero, it will be calculated to from the total number of children in
+        the sizer, thus making the sizer grow dynamically. *vgap* and *hgap*
+        define extra space between all children.
+        """
         newobj = _core_.new_GridSizer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
         self._setOORInfo(self)
 
-    def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
-        return _core_.GridSizer_RecalcSizes(*args, **kwargs)
-
-    def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
-        return _core_.GridSizer_CalcMin(*args, **kwargs)
-
     def SetCols(*args, **kwargs):
-        """SetCols(self, int cols)"""
+        """
+        SetCols(self, int cols)
+
+        Sets the number of columns in the sizer.
+        """
         return _core_.GridSizer_SetCols(*args, **kwargs)
 
     def SetRows(*args, **kwargs):
-        """SetRows(self, int rows)"""
+        """
+        SetRows(self, int rows)
+
+        Sets the number of rows in the sizer.
+        """
         return _core_.GridSizer_SetRows(*args, **kwargs)
 
     def SetVGap(*args, **kwargs):
-        """SetVGap(self, int gap)"""
+        """
+        SetVGap(self, int gap)
+
+        Sets the vertical gap (in pixels) between the cells in the sizer.
+        """
         return _core_.GridSizer_SetVGap(*args, **kwargs)
 
     def SetHGap(*args, **kwargs):
-        """SetHGap(self, int gap)"""
+        """
+        SetHGap(self, int gap)
+
+        Sets the horizontal gap (in pixels) between cells in the sizer
+        """
         return _core_.GridSizer_SetHGap(*args, **kwargs)
 
     def GetCols(*args, **kwargs):
-        """GetCols(self) -> int"""
+        """
+        GetCols(self) -> int
+
+        Returns the number of columns in the sizer.
+        """
         return _core_.GridSizer_GetCols(*args, **kwargs)
 
     def GetRows(*args, **kwargs):
-        """GetRows(self) -> int"""
+        """
+        GetRows(self) -> int
+
+        Returns the number of rows in the sizer.
+        """
         return _core_.GridSizer_GetRows(*args, **kwargs)
 
     def GetVGap(*args, **kwargs):
-        """GetVGap(self) -> int"""
+        """
+        GetVGap(self) -> int
+
+        Returns the vertical gap (in pixels) between the cells in the sizer.
+        """
         return _core_.GridSizer_GetVGap(*args, **kwargs)
 
     def GetHGap(*args, **kwargs):
-        """GetHGap(self) -> int"""
+        """
+        GetHGap(self) -> int
+
+        Returns the horizontal gap (in pixels) between cells in the sizer.
+        """
         return _core_.GridSizer_GetHGap(*args, **kwargs)
 
 
@@ -8854,62 +9314,155 @@ FLEX_GROWMODE_NONE = _core_.FLEX_GROWMODE_NONE
 FLEX_GROWMODE_SPECIFIED = _core_.FLEX_GROWMODE_SPECIFIED
 FLEX_GROWMODE_ALL = _core_.FLEX_GROWMODE_ALL
 class FlexGridSizer(GridSizer):
+    """
+    A flex grid sizer is a sizer which lays out its children in a
+    two-dimensional table with all table cells in one row having the same
+    height and all cells in one column having the same width, but all
+    rows or all columns are not necessarily the same height or width as in
+    the `wx.GridSizer`.
+
+    wx.FlexGridSizer can also size items equally in one direction but
+    unequally ("flexibly") in the other. If the sizer is only flexible
+    in one direction (this can be changed using `SetFlexibleDirection`), it
+    needs to be decided how the sizer should grow in the other ("non
+    flexible") direction in order to fill the available space. The
+    `SetNonFlexibleGrowMode` method serves this purpose.
+
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFlexGridSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int rows=1, int cols=0, int vgap=0, int hgap=0) -> FlexGridSizer"""
+        """
+        __init__(self, int rows=1, int cols=0, int vgap=0, int hgap=0) -> FlexGridSizer
+
+        Constructor for a wx.FlexGridSizer. *rows* and *cols* determine the
+        number of columns and rows in the sizer - if either of the parameters
+        is zero, it will be calculated to from the total number of children in
+        the sizer, thus making the sizer grow dynamically. *vgap* and *hgap*
+        define extra space between all children.
+        """
         newobj = _core_.new_FlexGridSizer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
         self._setOORInfo(self)
 
-    def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
-        return _core_.FlexGridSizer_RecalcSizes(*args, **kwargs)
-
-    def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
-        return _core_.FlexGridSizer_CalcMin(*args, **kwargs)
-
     def AddGrowableRow(*args, **kwargs):
-        """AddGrowableRow(self, size_t idx, int proportion=0)"""
+        """
+        AddGrowableRow(self, size_t idx, int proportion=0)
+
+        Specifies that row *idx* (starting from zero) should be grown if there
+        is extra space available to the sizer.
+
+        The *proportion* parameter has the same meaning as the stretch factor
+        for the box sizers except that if all proportions are 0, then all
+        columns are resized equally (instead of not being resized at all).
+        """
         return _core_.FlexGridSizer_AddGrowableRow(*args, **kwargs)
 
     def RemoveGrowableRow(*args, **kwargs):
-        """RemoveGrowableRow(self, size_t idx)"""
+        """
+        RemoveGrowableRow(self, size_t idx)
+
+        Specifies that row *idx* is no longer growable.
+        """
         return _core_.FlexGridSizer_RemoveGrowableRow(*args, **kwargs)
 
     def AddGrowableCol(*args, **kwargs):
-        """AddGrowableCol(self, size_t idx, int proportion=0)"""
+        """
+        AddGrowableCol(self, size_t idx, int proportion=0)
+
+        Specifies that column *idx* (starting from zero) should be grown if
+        there is extra space available to the sizer.
+
+        The *proportion* parameter has the same meaning as the stretch factor
+        for the box sizers except that if all proportions are 0, then all
+        columns are resized equally (instead of not being resized at all).
+        """
         return _core_.FlexGridSizer_AddGrowableCol(*args, **kwargs)
 
     def RemoveGrowableCol(*args, **kwargs):
-        """RemoveGrowableCol(self, size_t idx)"""
+        """
+        RemoveGrowableCol(self, size_t idx)
+
+        Specifies that column *idx* is no longer growable.
+        """
         return _core_.FlexGridSizer_RemoveGrowableCol(*args, **kwargs)
 
     def SetFlexibleDirection(*args, **kwargs):
-        """SetFlexibleDirection(self, int direction)"""
+        """
+        SetFlexibleDirection(self, int direction)
+
+        Specifies whether the sizer should flexibly resize its columns, rows,
+        or both. Argument *direction* can be one of the following values.  Any
+        other value is ignored.
+
+            ==============    =======================================
+            wx.VERTICAL       Rows are flexibly sized.
+            wx.HORIZONTAL     Columns are flexibly sized.
+            wx.BOTH           Both rows and columns are flexibly sized
+                              (this is the default value).
+            ==============    =======================================
+
+        Note that this method does not trigger relayout.
+
+        """
         return _core_.FlexGridSizer_SetFlexibleDirection(*args, **kwargs)
 
     def GetFlexibleDirection(*args, **kwargs):
-        """GetFlexibleDirection(self) -> int"""
+        """
+        GetFlexibleDirection(self) -> int
+
+        Returns a value that specifies whether the sizer
+        flexibly resizes its columns, rows, or both (default).
+
+        :see: `SetFlexibleDirection`
+        """
         return _core_.FlexGridSizer_GetFlexibleDirection(*args, **kwargs)
 
     def SetNonFlexibleGrowMode(*args, **kwargs):
-        """SetNonFlexibleGrowMode(self, int mode)"""
+        """
+        SetNonFlexibleGrowMode(self, int mode)
+
+        Specifies how the sizer should grow in the non-flexible direction if
+        there is one (so `SetFlexibleDirection` must have been called
+        previously). Argument *mode* can be one of the following values:
+
+            ==========================  =================================================
+            wx.FLEX_GROWMODE_NONE       Sizer doesn't grow in the non flexible direction.
+            wx.FLEX_GROWMODE_SPECIFIED  Sizer honors growable columns/rows set with
+                                        `AddGrowableCol` and `AddGrowableRow`. In this
+                                        case equal sizing applies to minimum sizes of
+                                        columns or rows (this is the default value).
+            wx.FLEX_GROWMODE_ALL        Sizer equally stretches all columns or rows in
+                                        the non flexible direction, whether they are
+                                        growable or not in the flexbile direction.
+            ==========================  =================================================
+
+        Note that this method does not trigger relayout.
+
+
+        """
         return _core_.FlexGridSizer_SetNonFlexibleGrowMode(*args, **kwargs)
 
     def GetNonFlexibleGrowMode(*args, **kwargs):
-        """GetNonFlexibleGrowMode(self) -> int"""
+        """
+        GetNonFlexibleGrowMode(self) -> int
+
+        Returns the value that specifies how the sizer grows in the
+        non-flexible direction if there is one.
+
+        :see: `SetNonFlexibleGrowMode`
+        """
         return _core_.FlexGridSizer_GetNonFlexibleGrowMode(*args, **kwargs)
 
     def GetRowHeights(*args, **kwargs):
-        """GetRowHeights(self) -> wxArrayInt"""
+        """GetRowHeights(self) -> list"""
         return _core_.FlexGridSizer_GetRowHeights(*args, **kwargs)
 
     def GetColWidths(*args, **kwargs):
-        """GetColWidths(self) -> wxArrayInt"""
+        """GetColWidths(self) -> list"""
         return _core_.FlexGridSizer_GetColWidths(*args, **kwargs)
 
 
@@ -8923,10 +9476,25 @@ _core_.FlexGridSizer_swigregister(FlexGridSizerPtr)
 #---------------------------------------------------------------------------
 
 class GBPosition(object):
+    """
+    This class represents the position of an item in a virtual grid of
+    rows and columns managed by a `wx.GridBagSizer`.  wxPython has
+    typemaps that will automatically convert from a 2-element sequence of
+    integers to a wx.GBPosition, so you can use the more pythonic
+    representation of the position nearly transparently in Python code.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGBPosition instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int row=0, int col=0) -> GBPosition"""
+        """
+        __init__(self, int row=0, int col=0) -> GBPosition
+
+        This class represents the position of an item in a virtual grid of
+        rows and columns managed by a `wx.GridBagSizer`.  wxPython has
+        typemaps that will automatically convert from a 2-element sequence of
+        integers to a wx.GBPosition, so you can use the more pythonic
+        representation of the position nearly transparently in Python code.
+        """
         newobj = _core_.new_GBPosition(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -8988,10 +9556,24 @@ class GBPositionPtr(GBPosition):
 _core_.GBPosition_swigregister(GBPositionPtr)
 
 class GBSpan(object):
+    """
+    This class is used to hold the row and column spanning attributes of
+    items in a `wx.GridBagSizer`.  wxPython has typemaps that will
+    automatically convert from a 2-element sequence of integers to a
+    wx.GBSpan, so you can use the more pythonic representation of the span
+    nearly transparently in Python code.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGBSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int rowspan=1, int colspan=1) -> GBSpan"""
+        """
+        __init__(self, int rowspan=1, int colspan=1) -> GBSpan
+
+        Construct a new wxGBSpan, optionally setting the rowspan and
+        colspan. The default is (1,1). (Meaning that the item occupies one
+        cell in each direction.
+        """
         newobj = _core_.new_GBSpan(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -9053,49 +9635,108 @@ class GBSpanPtr(GBSpan):
 _core_.GBSpan_swigregister(GBSpanPtr)
 
 class GBSizerItem(SizerItem):
+    """
+    The wx.GBSizerItem class is used to track the additional data about
+    items in a `wx.GridBagSizer` such as the item's position in the grid
+    and how many rows or columns it spans.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGBSizerItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> GBSizerItem"""
+        """
+        __init__(self) -> GBSizerItem
+
+        Constructs an empty wx.GBSizerItem.  Either a window, sizer or spacer
+        size will need to be set, as well as a position and span before this
+        item can be used in a Sizer.
+
+        You will probably never need to create a wx.GBSizerItem directly as they
+        are created automatically when the sizer's Add method is called.
+        """
         newobj = _core_.new_GBSizerItem(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetPos(*args, **kwargs):
-        """GetPos(self) -> GBPosition"""
+        """
+        GetPos(self) -> GBPosition
+
+        Get the grid position of the item
+        """
         return _core_.GBSizerItem_GetPos(*args, **kwargs)
 
     def GetPosTuple(self): return self.GetPos().Get() 
     def GetSpan(*args, **kwargs):
-        """GetSpan(self) -> GBSpan"""
+        """
+        GetSpan(self) -> GBSpan
+
+        Get the row and column spanning of the item
+        """
         return _core_.GBSizerItem_GetSpan(*args, **kwargs)
 
     def GetSpanTuple(self): return self.GetSpan().Get() 
     def SetPos(*args, **kwargs):
-        """SetPos(self, GBPosition pos) -> bool"""
+        """
+        SetPos(self, GBPosition pos) -> bool
+
+        If the item is already a member of a sizer then first ensure that
+        there is no other item that would intersect with this one at the new
+        position, then set the new position.  Returns True if the change is
+        successful and after the next Layout() the item will be moved.
+        """
         return _core_.GBSizerItem_SetPos(*args, **kwargs)
 
     def SetSpan(*args, **kwargs):
-        """SetSpan(self, GBSpan span) -> bool"""
+        """
+        SetSpan(self, GBSpan span) -> bool
+
+        If the item is already a member of a sizer then first ensure that
+        there is no other item that would intersect with this one with its new
+        spanning size, then set the new spanning.  Returns True if the change
+        is successful and after the next Layout() the item will be resized.
+
+        """
         return _core_.GBSizerItem_SetSpan(*args, **kwargs)
 
-    def Intersects(*args):
+    def Intersects(*args, **kwargs):
         """
         Intersects(self, GBSizerItem other) -> bool
-        Intersects(self, GBPosition pos, GBSpan span) -> bool
+
+        Returns True if this item and the other item instersect.
         """
-        return _core_.GBSizerItem_Intersects(*args)
+        return _core_.GBSizerItem_Intersects(*args, **kwargs)
+
+    def IntersectsPos(*args, **kwargs):
+        """
+        IntersectsPos(self, GBPosition pos, GBSpan span) -> bool
+
+        Returns True if the given pos/span would intersect with this item.
+        """
+        return _core_.GBSizerItem_IntersectsPos(*args, **kwargs)
 
     def GetEndPos(*args, **kwargs):
-        """GetEndPos(self, int row, int col)"""
+        """
+        GetEndPos(self) -> GBPosition
+
+        Get the row and column of the endpoint of this item.
+        """
         return _core_.GBSizerItem_GetEndPos(*args, **kwargs)
 
     def GetGBSizer(*args, **kwargs):
-        """GetGBSizer(self) -> GridBagSizer"""
+        """
+        GetGBSizer(self) -> GridBagSizer
+
+        Get the sizer this item is a member of.
+        """
         return _core_.GBSizerItem_GetGBSizer(*args, **kwargs)
 
     def SetGBSizer(*args, **kwargs):
-        """SetGBSizer(self, GridBagSizer sizer)"""
+        """
+        SetGBSizer(self, GridBagSizer sizer)
+
+        Set the sizer this item is a member of.
+        """
         return _core_.GBSizerItem_SetGBSizer(*args, **kwargs)
 
 
@@ -9110,7 +9751,9 @@ DefaultSpan = cvar.DefaultSpan
 def GBSizerItemWindow(*args, **kwargs):
     """
     GBSizerItemWindow(Window window, GBPosition pos, GBSpan span, int flag, 
-        int border, Object userData) -> GBSizerItem
+        int border, PyObject userData=None) -> GBSizerItem
+
+    Construct a `wx.GBSizerItem` for a window.
     """
     val = _core_.new_GBSizerItemWindow(*args, **kwargs)
     val.thisown = 1
@@ -9119,7 +9762,9 @@ def GBSizerItemWindow(*args, **kwargs):
 def GBSizerItemSizer(*args, **kwargs):
     """
     GBSizerItemSizer(Sizer sizer, GBPosition pos, GBSpan span, int flag, 
-        int border, Object userData) -> GBSizerItem
+        int border, PyObject userData=None) -> GBSizerItem
+
+    Construct a `wx.GBSizerItem` for a sizer
     """
     val = _core_.new_GBSizerItemSizer(*args, **kwargs)
     val.thisown = 1
@@ -9128,105 +9773,174 @@ def GBSizerItemSizer(*args, **kwargs):
 def GBSizerItemSpacer(*args, **kwargs):
     """
     GBSizerItemSpacer(int width, int height, GBPosition pos, GBSpan span, 
-        int flag, int border, Object userData) -> GBSizerItem
+        int flag, int border, PyObject userData=None) -> GBSizerItem
+
+    Construct a `wx.GBSizerItem` for a spacer.
     """
     val = _core_.new_GBSizerItemSpacer(*args, **kwargs)
     val.thisown = 1
     return val
 
 class GridBagSizer(FlexGridSizer):
+    """
+    A `wx.Sizer` that can lay out items in a virtual grid like a
+    `wx.FlexGridSizer` but in this case explicit positioning of the items
+    is allowed using `wx.GBPosition`, and items can optionally span more
+    than one row and/or column using `wx.GBSpan`.  The total size of the
+    virtual grid is determined by the largest row and column that items are
+    positioned at, adjusted for spanning.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridBagSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int vgap=0, int hgap=0) -> GridBagSizer"""
+        """
+        __init__(self, int vgap=0, int hgap=0) -> GridBagSizer
+
+        Constructor, with optional parameters to specify the gap between the
+        rows and columns.
+        """
         newobj = _core_.new_GridBagSizer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def Add(*args, **kwargs):
         """
-        Add(self, PyObject item, GBPosition pos, GBSpan span=DefaultSpan, 
-            int flag=0, int border=0, PyObject userData=None) -> bool
+        Add(self, item, GBPosition pos, GBSpan span=DefaultSpan, int flag=0,
+        int border=0, userData=None)
+
+        Adds an item to the sizer at the grid cell *pos*, optionally spanning
+        more than one row or column as specified with *span*.  The remaining
+        args behave similarly to `wx.Sizer.Add`.
+
+        Returns True if the item was successfully placed at the given cell
+        position, False if something was already there.
+
         """
         return _core_.GridBagSizer_Add(*args, **kwargs)
 
     def AddItem(*args, **kwargs):
-        """AddItem(self, GBSizerItem item) -> bool"""
+        """
+        Add(self, GBSizerItem item) -> bool
+
+        Add an item to the sizer using a `wx.GBSizerItem`.  Returns True if
+        the item was successfully placed at its given cell position, False if
+        something was already there.
+        """
         return _core_.GridBagSizer_AddItem(*args, **kwargs)
 
     def GetEmptyCellSize(*args, **kwargs):
-        """GetEmptyCellSize(self) -> Size"""
+        """
+        GetEmptyCellSize(self) -> Size
+
+        Get the size used for cells in the grid with no item.
+        """
         return _core_.GridBagSizer_GetEmptyCellSize(*args, **kwargs)
 
     def SetEmptyCellSize(*args, **kwargs):
-        """SetEmptyCellSize(self, Size sz)"""
+        """
+        SetEmptyCellSize(self, Size sz)
+
+        Set the size used for cells in the grid with no item.
+        """
         return _core_.GridBagSizer_SetEmptyCellSize(*args, **kwargs)
 
     def GetItemPosition(*args):
         """
-        GetItemPosition(self, Window window) -> GBPosition
-        GetItemPosition(self, Sizer sizer) -> GBPosition
-        GetItemPosition(self, size_t index) -> GBPosition
+        GetItemPosition(self, item) -> GBPosition
+
+        Get the grid position of the specified *item* where *item* is either a
+        window or subsizer that is a member of this sizer, or a zero-based
+        index of an item.
         """
         return _core_.GridBagSizer_GetItemPosition(*args)
 
     def SetItemPosition(*args):
         """
-        SetItemPosition(self, Window window, GBPosition pos) -> bool
-        SetItemPosition(self, Sizer sizer, GBPosition pos) -> bool
-        SetItemPosition(self, size_t index, GBPosition pos) -> bool
+        SetItemPosition(self, item, GBPosition pos) -> bool
+
+        Set the grid position of the specified *item* where *item* is either a
+        window or subsizer that is a member of this sizer, or a zero-based
+        index of an item.  Returns True on success.  If the move is not
+        allowed (because an item is already there) then False is returned.
+
         """
         return _core_.GridBagSizer_SetItemPosition(*args)
 
     def GetItemSpan(*args):
         """
-        GetItemSpan(self, Window window) -> GBSpan
-        GetItemSpan(self, Sizer sizer) -> GBSpan
-        GetItemSpan(self, size_t index) -> GBSpan
+        GetItemSpan(self, item) -> GBSpan
+
+        Get the row/col spanning of the specified *item* where *item* is
+        either a window or subsizer that is a member of this sizer, or a
+        zero-based index of an item.
         """
         return _core_.GridBagSizer_GetItemSpan(*args)
 
     def SetItemSpan(*args):
         """
-        SetItemSpan(self, Window window, GBSpan span) -> bool
-        SetItemSpan(self, Sizer sizer, GBSpan span) -> bool
-        SetItemSpan(self, size_t index, GBSpan span) -> bool
+        SetItemSpan(self, item, GBSpan span) -> bool
+
+        Set the row/col spanning of the specified *item* where *item* is
+        either a window or subsizer that is a member of this sizer, or a
+        zero-based index of an item.  Returns True on success.  If the move is
+        not allowed (because an item is already there) then False is returned.
         """
         return _core_.GridBagSizer_SetItemSpan(*args)
 
     def FindItem(*args):
         """
-        FindItem(self, Window window) -> GBSizerItem
-        FindItem(self, Sizer sizer) -> GBSizerItem
+        FindItem(self, item) -> GBSizerItem
+
+        Find the sizer item for the given window or subsizer, returns None if
+        not found. (non-recursive)
         """
         return _core_.GridBagSizer_FindItem(*args)
 
     def FindItemAtPosition(*args, **kwargs):
-        """FindItemAtPosition(self, GBPosition pos) -> GBSizerItem"""
+        """
+        FindItemAtPosition(self, GBPosition pos) -> GBSizerItem
+
+        Return the sizer item for the given grid cell, or None if there is no
+        item at that position. (non-recursive)
+        """
         return _core_.GridBagSizer_FindItemAtPosition(*args, **kwargs)
 
     def FindItemAtPoint(*args, **kwargs):
-        """FindItemAtPoint(self, Point pt) -> GBSizerItem"""
+        """
+        FindItemAtPoint(self, Point pt) -> GBSizerItem
+
+        Return the sizer item located at the point given in *pt*, or None if
+        there is no item at that point. The (x,y) coordinates in pt correspond
+        to the client coordinates of the window using the sizer for
+        layout. (non-recursive)
+        """
         return _core_.GridBagSizer_FindItemAtPoint(*args, **kwargs)
 
-    def FindItemWithData(*args, **kwargs):
-        """FindItemWithData(self, Object userData) -> GBSizerItem"""
-        return _core_.GridBagSizer_FindItemWithData(*args, **kwargs)
-
-    def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
-        return _core_.GridBagSizer_RecalcSizes(*args, **kwargs)
-
-    def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
-        return _core_.GridBagSizer_CalcMin(*args, **kwargs)
-
-    def CheckForIntersection(*args):
+    def CheckForIntersection(*args, **kwargs):
         """
         CheckForIntersection(self, GBSizerItem item, GBSizerItem excludeItem=None) -> bool
-        CheckForIntersection(self, GBPosition pos, GBSpan span, GBSizerItem excludeItem=None) -> bool
+
+        Look at all items and see if any intersect (or would overlap) the
+        given *item*.  Returns True if so, False if there would be no overlap.
+        If an *excludeItem* is given then it will not be checked for
+        intersection, for example it may be the item we are checking the
+        position of.
+
         """
-        return _core_.GridBagSizer_CheckForIntersection(*args)
+        return _core_.GridBagSizer_CheckForIntersection(*args, **kwargs)
+
+    def CheckForIntersectionPos(*args, **kwargs):
+        """
+        CheckForIntersectionPos(self, GBPosition pos, GBSpan span, GBSizerItem excludeItem=None) -> bool
+
+        Look at all items and see if any intersect (or would overlap) the
+        given position and span.  Returns True if so, False if there would be
+        no overlap.  If an *excludeItem* is given then it will not be checked
+        for intersection, for example it may be the item we are checking the
+        position of.
+        """
+        return _core_.GridBagSizer_CheckForIntersectionPos(*args, **kwargs)
 
 
 class GridBagSizerPtr(GridBagSizer):

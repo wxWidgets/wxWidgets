@@ -900,8 +900,8 @@ class StyledTextCtrl(_core.Control):
         return "<%s.%s; proxy of C++ wxStyledTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=STCNameStr) -> StyledTextCtrl
+        __init__(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=STCNameStr) -> StyledTextCtrl
         """
         newobj = _stc.new_StyledTextCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -911,8 +911,8 @@ class StyledTextCtrl(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=wxSTCNameStr)
+        Create(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=wxSTCNameStr)
         """
         return _stc.StyledTextCtrl_Create(*args, **kwargs)
 
