@@ -121,7 +121,7 @@ void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     for ( const char *pc = text; ; pc++ ) {
         if ( *pc == '\n' || *pc == '\0' ) {
             GetTextExtent(curLine, &widthLine, &heightLine);
-            if ( width > widthTextMax )
+            if ( widthLine > widthTextMax )
                 widthTextMax = widthLine;
             heightTextTotal += heightLine;
 

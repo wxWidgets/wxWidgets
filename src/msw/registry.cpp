@@ -532,6 +532,18 @@ bool wxRegKey::HasValue(const wxChar *szValue) const
   #endif  // WIN16/32
 }
 
+// returns TRUE if this key has any values
+bool wxRegKey::HasValues() const
+{
+  // suppress possible messages from GetFirstValue()
+  wxLogNull nolog;
+  
+  // just call GetFirstValue with dummy parameters
+  wxString str;
+  long     l;
+  return CONST_CAST GetFirstValue(str, l);
+}
+
 // returns TRUE if this key has any subkeys
 bool wxRegKey::HasSubkeys() const
 {
@@ -718,8 +730,7 @@ bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
     wxChar  szValueName[1024];                  // @@ use RegQueryInfoKey...
     DWORD dwValueLen = WXSIZEOF(szValueName);
 
-    lIndex++;
-    m_dwLastError = RegEnumValue((HKEY) m_hKey, lIndex,
+    m_dwLastError = RegEnumValue((HKEY) m_hKey, lIndex++,
                                  szValueName, &dwValueLen,
                                  RESERVED, 
                                  NULL,            // [out] type 

@@ -187,11 +187,15 @@ public:
 
   // query existence of a key/value
     // return true if value exists
-  bool  HasValue(const wxChar *szKey) const;
+  bool HasValue(const wxChar *szKey) const;
     // return true if given subkey exists
-  bool  HasSubKey(const wxChar *szKey) const;
+  bool HasSubKey(const wxChar *szKey) const;
     // return true if any subkeys exist
-  bool  HasSubkeys() const;
+  bool HasSubkeys() const;
+    // return true if any values exist
+  bool HasValues() const;
+    // return true if the key is empty (nothing under this key)
+  bool IsEmpty() const { return !HasSubkeys() && !HasValues(); }
 
   // enumerate values and subkeys
   bool  GetFirstValue(wxString& strValueName, long& lIndex);

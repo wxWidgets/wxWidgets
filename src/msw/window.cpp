@@ -1082,30 +1082,38 @@ void wxWindow::DoGetSize(int *x, int *y) const
 void wxWindow::DoGetPosition(int *x, int *y) const
 {
     HWND hWnd = GetHwnd();
-    HWND hParentWnd = 0;
-    if ( GetParent() )
-        hParentWnd = (HWND) GetParent()->GetHWND();
 
     RECT rect;
     GetWindowRect(hWnd, &rect);
 
-    // Since we now have the absolute screen coords, if there's a parent we
-    // must subtract its top left corner
     POINT point;
     point.x = rect.left;
     point.y = rect.top;
-    if ( hParentWnd )
-    {
-        ::ScreenToClient(hParentWnd, &point);
-    }
 
-    // We may be faking the client origin. So a window that's really at (0,
-    // 30) may appear (to wxWin apps) to be at (0, 0).
-    if ( GetParent() )
+    // we do the adjustments with respect to the parent only for the "real"
+    // children, not for the dialogs/frames
+    if ( !IsTopLevel() )
     {
-        wxPoint pt(GetParent()->GetClientAreaOrigin());
-        point.x -= pt.x;
-        point.y -= pt.y;
+        HWND hParentWnd = 0;
+        wxWindow *parent = GetParent();
+        if ( parent )
+            hParentWnd = GetWinHwnd(parent);
+
+        // Since we now have the absolute screen coords, if there's a parent we
+        // must subtract its top left corner
+        if ( hParentWnd )
+        {
+            ::ScreenToClient(hParentWnd, &point);
+        }
+
+        // We may be faking the client origin. So a window that's really at (0,
+        // 30) may appear (to wxWin apps) to be at (0, 0).
+        if ( parent )
+        {
+            wxPoint pt(parent->GetClientAreaOrigin());
+            point.x -= pt.x;
+            point.y -= pt.y;
+        }
     }
 
     if ( x )
@@ -1240,10 +1248,16 @@ wxPoint wxWindow::GetClientAreaOrigin() const
 // a toolbar that it manages itself).
 void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 {
-    if ( ((sizeFlags & wxSIZE_NO_ADJUSTMENTS) == 0) && GetParent() )
+    // don't do it for the dialogs/frames - they float independently of their
+    // parent
+    if ( !IsTopLevel() )
     {
-        wxPoint pt(GetParent()->GetClientAreaOrigin());
-        x += pt.x; y += pt.y;
+        wxWindow *parent = GetParent();
+        if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
+        {
+            wxPoint pt(parent->GetClientAreaOrigin());
+            x += pt.x; y += pt.y;
+        }
     }
 }
 

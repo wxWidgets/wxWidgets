@@ -531,7 +531,7 @@ bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
   if ( !m_keyLocal.DeleteValue(path.Name()) )
     return FALSE;
 
-  if ( !m_keyLocal.HasSubkeys() ) {
+  if ( m_keyLocal.IsEmpty() ) {
     wxString strKey = GetPath().AfterLast(wxCONFIG_PATH_SEPARATOR);
     SetPath("..");  // changes m_keyLocal
     return m_keyLocal.DeleteKey(strKey);
