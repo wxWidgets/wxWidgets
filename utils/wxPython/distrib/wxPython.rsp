@@ -48,12 +48,9 @@ wxPython/modules/html/*.c
 wxPython/modules/html/*.h
 wxPython/modules/html/*.def
 wxPython/modules/html/*.rc
-wxPython/modules/html/msw/*.cpp
-wxPython/modules/html/msw/*.h
-wxPython/modules/html/msw/*.py
-wxPython/modules/html/gtk/*.cpp
-wxPython/modules/html/gtk/*.h
-wxPython/modules/html/gtk/*.py
+wxPython/modules/html/*.cpp
+wxPython/modules/html/*.h
+wxPython/modules/html/*.py
 
 wxPython/modules/glcanvas/build.cfg
 wxPython/modules/glcanvas/*.i
@@ -93,10 +90,10 @@ wxPython/modules/ogl/*.c
 wxPython/modules/ogl/*.h
 wxPython/modules/ogl/*.def
 wxPython/modules/ogl/*.rc
-wxPython/modules/ogl/msw/*.cpp
-wxPython/modules/ogl/msw/*.h
-wxPython/modules/ogl/msw/*.py
-wxPython/modules/ogl/gtk/*.cpp
-wxPython/modules/ogl/gtk/*.h
-wxPython/modules/ogl/gtk/*.py
+wxPython/modules/ogl/*.cpp
+wxPython/modules/ogl/*.h
+wxPython/modules/ogl/*.py
+
+
+
 
