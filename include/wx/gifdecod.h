@@ -50,8 +50,7 @@ typedef struct _IMAGEN
 #define E_FORMATO       1           /* error in gif header */
 #define E_MEMORIA       2           /* error allocating memory */
 
-
-class wxGIFDecoder
+class WXDLLEXPORT wxGIFDecoder
 {
 private:
     /* logical screen */

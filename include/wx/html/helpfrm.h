@@ -55,6 +55,17 @@ enum {
     wxID_HTML_HELPFRAME // the id of wxHtmlHelpController's helpframe
 };
 
+class WXDLLEXPORT wxHtmlHelpFrameCfg
+{
+public:
+    wxHtmlHelpFrameCfg() {};
+	long x, y, w, h;
+	long sashpos;
+	bool navig_on;
+	int style; // flags given to wxHtmlHelpFrame ctor
+	wxString titleformat;
+};
+
 class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlHelpFrame)
@@ -153,14 +164,7 @@ protected:
     wxListBox *m_SearchList;
     wxChoice *m_SearchChoice;
 
-    struct WXDLLEXPORT _struct_Cfg {
-	long x, y, w, h;
-	long sashpos;
-	bool navig_on;
-	int style; // flags given to wxHtmlHelpFrame ctor
-	wxString titleformat;
-    } m_Cfg;
-    // settings (window size, position, sash pos etc..)
+    wxHtmlHelpFrameCfg m_Cfg;
     wxConfigBase *m_Config;
     wxString m_ConfigRoot;
 
