@@ -55,6 +55,8 @@ struct _GtkMyFixedChild
   GtkWidget *widget;
   gint16 x;
   gint16 y;
+  gint16 width;
+  gint16 height;
 };
 
 guint      gtk_myfixed_get_type        (void);
@@ -66,11 +68,26 @@ void       gtk_myfixed_set_shadow_type (GtkMyFixed     *myfixed,
 void       gtk_myfixed_put             (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
                                         gint16         x,
-                                        gint16         y);
+                                        gint16         y,
+					gint16         width,
+					gint16         height);
+
 void       gtk_myfixed_move            (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
                                         gint16         x,
-                                        gint16         y);
+                                        gint16         y );
+					
+void       gtk_myfixed_resize          (GtkMyFixed     *myfixed,
+                                        GtkWidget      *widget,
+                                        gint16         width,
+                                        gint16         height );
+					
+void       gtk_myfixed_set_size        (GtkMyFixed     *myfixed,
+                                        GtkWidget      *widget,
+                                        gint16         x,
+                                        gint16         y,
+                                        gint16         width,
+                                        gint16         height);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -202,9 +202,11 @@ gtk_myfixed_set_shadow_type (GtkMyFixed   *myfixed,
 
 void
 gtk_myfixed_put (GtkMyFixed   *myfixed,
-               GtkWidget      *widget,
-               gint16         x,
-               gint16         y)
+                 GtkWidget      *widget,
+                 gint16         x,
+                 gint16         y,
+	         gint16         width,
+	         gint16         height)
 {
   GtkMyFixedChild *child_info;
 
@@ -216,6 +218,8 @@ gtk_myfixed_put (GtkMyFixed   *myfixed,
   child_info->widget = widget;
   child_info->x = x;
   child_info->y = y;
+  child_info->width = width;
+  child_info->height = height;
   
   gtk_widget_set_parent (widget, GTK_WIDGET (myfixed));
 
@@ -232,10 +236,10 @@ gtk_myfixed_put (GtkMyFixed   *myfixed,
 }
 
 void
-gtk_myfixed_move (GtkMyFixed       *myfixed,
-                GtkWidget      *widget,
-                gint16         x,
-                gint16         y)
+gtk_myfixed_move (GtkMyFixed     *myfixed,
+                  GtkWidget      *widget,
+                  gint16         x,
+                  gint16         y)
 {
   GtkMyFixedChild *child;
   GList *children;
@@ -249,16 +253,91 @@ gtk_myfixed_move (GtkMyFixed       *myfixed,
     {
       child = children->data;
       children = children->next;
+      
+      if (child->widget == widget)
+        {
+           gtk_myfixed_set_size( myfixed, widget, x, y, child->width, child->height );
+	   break;
+	}
+    }
+}
+
+void
+gtk_myfixed_resize (GtkMyFixed     *myfixed,
+                    GtkWidget      *widget,
+		    gint16         width,
+		    gint16         height)
+{
+  GtkMyFixedChild *child;
+  GList *children;
+
+  g_return_if_fail (myfixed != NULL);
+  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+  g_return_if_fail (widget != NULL);
+
+  children = myfixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+      
+      if (child->widget == widget)
+        {
+           gtk_myfixed_set_size( myfixed, widget, child->x, child->y, width, height );
+	   break;
+	}
+    }
+}
+
+void
+gtk_myfixed_set_size (GtkMyFixed     *myfixed,
+                      GtkWidget      *widget,
+                      gint16         x,
+                      gint16         y,
+		      gint16         width,
+		      gint16         height)
+{
+  GtkMyFixedChild *child;
+  GList *children;
+  GtkAllocation child_allocation;
+
+  g_return_if_fail (myfixed != NULL);
+  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+  g_return_if_fail (widget != NULL);
+
+  children = myfixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
 
       if (child->widget == widget)
         {
-	  if ((child->x == x) && (child->y == y)) return;
+	  if ((child->x == x) && 
+	      (child->y == y) &&
+	      (child->width == width) && 
+	      (child->height == height)) return;
 	  
           child->x = x;
           child->y = y;
+          child->width = width;
+          child->height = height;
 
           if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))
-            gtk_widget_queue_resize (GTK_WIDGET (myfixed));
+	  {
+             if ((child->width > 1) && (child->height > 1) && (GTK_WIDGET_REALIZED(widget)))
+	     {
+                child_allocation.x = child->x;
+                child_allocation.y = child->y;
+                child_allocation.width = child->width;
+                child_allocation.height = child->height;
+                gtk_widget_size_allocate (widget, &child_allocation);
+             } 
+	     else 
+	     {
+                gtk_widget_queue_resize (GTK_WIDGET (myfixed));
+	     }
+	  }
 
           break;
         }
@@ -385,10 +464,6 @@ gtk_myfixed_size_request (GtkWidget      *widget,
 
   myfixed = GTK_MYFIXED (widget);
   
-/*
-  requisition->width = 0;
-  requisition->height = 0;
-*/
   requisition->width = widget->requisition.width;
   requisition->height = widget->requisition.height;
 
@@ -407,7 +482,7 @@ gtk_myfixed_size_request (GtkWidget      *widget,
 
 static void
 gtk_myfixed_size_allocate (GtkWidget     *widget,
-			 GtkAllocation *allocation)
+			   GtkAllocation *allocation)
 {
   GtkMyFixed *myfixed;
   gint border;
@@ -457,8 +532,8 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
 	{
 	  child_allocation.x = child->x;
 	  child_allocation.y = child->y;
-	  child_allocation.width = child->widget->requisition.width;
-	  child_allocation.height = child->widget->requisition.height;
+	  child_allocation.width = child->width;
+	  child_allocation.height = child->height;
 	  gtk_widget_size_allocate (child->widget, &child_allocation);
 	}
     }
@@ -466,7 +541,7 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
 
 static void
 gtk_myfixed_paint (GtkWidget    *widget,
-		 GdkRectangle *area)
+		   GdkRectangle *area)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MYFIXED (widget));
@@ -480,7 +555,7 @@ gtk_myfixed_paint (GtkWidget    *widget,
 
 static void
 gtk_myfixed_draw (GtkWidget    *widget,
-		GdkRectangle *area)
+		  GdkRectangle *area)
 {
   GtkMyFixed *myfixed;
   GtkMyFixedChild *child;
@@ -509,7 +584,7 @@ gtk_myfixed_draw (GtkWidget    *widget,
 
 static gint
 gtk_myfixed_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
+		    GdkEventExpose *event)
 {
   GtkMyFixed *myfixed;
   GtkMyFixedChild *child;
@@ -550,7 +625,7 @@ gtk_myfixed_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_MYFIXED (container));
   g_return_if_fail (widget != NULL);
 
-  gtk_myfixed_put (GTK_MYFIXED (container), widget, 0, 0);
+  gtk_myfixed_put (GTK_MYFIXED (container), widget, 0, 0, 20, 20 );
 }
 
 static void

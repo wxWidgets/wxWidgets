@@ -96,8 +96,9 @@ void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
     menu_bar->m_y = 0;
     menu_bar->m_width = m_width;
     menu_bar->m_height = wxMENU_HEIGHT;
-    gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), menu_bar->m_widget, 0, 0 );
-    gtk_widget_set_usize( menu_bar->m_widget, m_width, wxMENU_HEIGHT );
+    gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
+                          menu_bar->m_widget, 
+			  0, 0, m_width, wxMENU_HEIGHT );
 }
 
 void wxMDIParentFrame::OnInternalIdle()
@@ -297,8 +298,9 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
         gtk_widget_hide( m_menuBar->m_widget );
 
         /* insert the invisible menu bar into the _parent_ mdi frame */
-        gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_mainWidget), m_menuBar->m_widget, 0, 0 );
-        gtk_widget_set_usize( menu_bar->m_widget, mdi_frame->m_width, wxMENU_HEIGHT );
+        gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_mainWidget), 
+	                 m_menuBar->m_widget, 
+			 0, 0,  mdi_frame->m_width, wxMENU_HEIGHT );
     }
 }
 

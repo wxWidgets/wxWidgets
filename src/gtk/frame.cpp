@@ -267,7 +267,9 @@ static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
         gtk_myfixed_put( GTK_MYFIXED(frame->m_mainWidget),
                          GTK_WIDGET(child->m_widget),
                          child->m_x,
-                         child->m_y );
+                         child->m_y,
+			 child->m_width,
+			 child->m_height );
 			 
 	/* we connect to these events for recalculating the client area
 	   space when the toolbar is floating */
@@ -290,12 +292,10 @@ static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
         gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
                          GTK_WIDGET(child->m_widget),
                          child->m_x,
-                         child->m_y );
+                         child->m_y,
+			 child->m_width,
+			 child->m_height );
     }
-
-    gtk_widget_set_usize( GTK_WIDGET(child->m_widget),
-                          child->m_width,
-                          child->m_height );
 
     /* resize on OnInternalIdle */
     parent->m_sizeSet = FALSE;
@@ -665,13 +665,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             m_frameMenuBar->m_y = yy;
             m_frameMenuBar->m_width = ww;
             m_frameMenuBar->m_height = hh;
-
-            gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameMenuBar->m_widget, xx, yy );
-	    
-//	    m_frameMenuBar->m_widget->requisition.width = ww;
-//	    m_frameMenuBar->m_widget->requisition.height = hh;
-            gtk_widget_set_usize( m_frameMenuBar->m_widget, ww, hh );
-	
+            gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
+	                          m_frameMenuBar->m_widget, 
+				  xx, yy, ww, hh );
 	    client_area_y_offset += hh;
         }
     
@@ -693,21 +689,19 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             m_frameToolBar->m_y = yy;
             /* m_frameToolBar->m_height = hh;   don't change the toolbar's height */
             m_frameToolBar->m_width = ww;
-
-            gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameToolBar->m_widget, xx, yy );
-	    
-            gtk_widget_set_usize( m_frameToolBar->m_widget, ww, hh );
-	
+            gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
+	                          m_frameToolBar->m_widget, 
+			          xx, yy, ww, hh );
 	    client_area_y_offset += hh;
         }
     
         int client_x = m_miniEdge;
 	int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
-        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_wxwindow, client_x, client_y );
-
         int client_w = m_width - 2*m_miniEdge;
 	int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
-        gtk_widget_set_usize( m_wxwindow, client_w, client_h );
+        gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
+	                      m_wxwindow, 
+			      client_x, client_y, client_w, client_h );
     }
     else
     {
@@ -721,17 +715,13 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
         int hh = wxSTATUS_HEIGHT;
-
         m_frameStatusBar->m_x = xx;
         m_frameStatusBar->m_y = yy;
         m_frameStatusBar->m_width = ww;
         m_frameStatusBar->m_height = hh;
-
-        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameStatusBar->m_widget, xx, yy );
-	
-//	m_frameStatusBar->m_widget->requisition.width = ww;
-//	m_frameStatusBar->m_widget->requisition.height = hh;
-        gtk_widget_set_usize( m_frameStatusBar->m_widget, ww, hh );
+        gtk_myfixed_set_size( GTK_MYFIXED(m_wxwindow), 
+	                      m_frameStatusBar->m_widget, 
+			      xx, yy, ww, hh );
     }
 
     /* we actually set the size of a frame here and no-where else */
@@ -851,7 +841,11 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
         {
             m_frameMenuBar->m_parent = this;
             gtk_myfixed_put( GTK_MYFIXED(m_mainWidget),
-                m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
+                m_frameMenuBar->m_widget, 
+		m_frameMenuBar->m_x, 
+		m_frameMenuBar->m_y,
+		m_frameMenuBar->m_width,
+		m_frameMenuBar->m_height );
 	
 	    if (menuBar->m_windowStyle & wxMB_DOCKABLE)
 	    {

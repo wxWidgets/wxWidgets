@@ -289,8 +289,9 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     {
         GtkWidget *close_button = gtk_button_new_with_label( "x" );
     
-        gtk_myfixed_put( GTK_MYFIXED(m_mainWidget), close_button, 4, 4 );
-        gtk_widget_set_usize( close_button, 12, 11 );
+        gtk_myfixed_put( GTK_MYFIXED(m_mainWidget), 
+	                 close_button, 
+			 4, 4, 12, 11 );
     
         gtk_widget_show( close_button );
     
