@@ -78,7 +78,10 @@ wxPoint.)
 
 Added wxPostEvent function that allows events to be posted and then
 processed later.  This is a thread-safe way to interact with the GUI
-thread from other threads.
+thread from other threads.  (There is a known bug in wxMSW that
+prevents these events from being processed until a normal event
+happens, so if your GUI is idle nothing will happen until the mouse
+moves or something...  It should be fixed shortly.)
 
 Added Clipboard and Drag-and-Drop classes.
 
