@@ -16,7 +16,6 @@ CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
-DESTDIR = @DESTDIR@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
@@ -77,6 +76,7 @@ DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_treelay.o \
 	deprecatedlib_wxexpr.o \
 	deprecatedlib_dosyacc.o
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 
