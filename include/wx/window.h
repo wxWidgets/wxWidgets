@@ -733,14 +733,12 @@ public:
         if ( SetFont(font) )
             m_hasFont = false;
     }
-    const wxFont& GetFont() const { return DoGetFont(); }
-    wxFont& GetFont() { return DoGetFont(); }
+    wxFont GetFont() const;
 
         // set/retrieve the cursor for this window (SetCursor() returns true
         // if the cursor was really changed)
     virtual bool SetCursor( const wxCursor &cursor );
     const wxCursor& GetCursor() const { return m_cursor; }
-    wxCursor& GetCursor() { return m_cursor; }
 
 #if wxUSE_CARET
         // associate a caret with the window
@@ -1225,10 +1223,6 @@ private:
 
     // the stack of windows which have captured the mouse
     static struct WXDLLEXPORT wxWindowNext *ms_winCaptureNext;
-
-    // implementation of both const and non-const versions of GetFont()
-    wxFont& DoGetFont() const;
-
 
     DECLARE_ABSTRACT_CLASS(wxWindowBase)
     DECLARE_NO_COPY_CLASS(wxWindowBase)
