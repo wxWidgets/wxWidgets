@@ -393,7 +393,7 @@ bool wxMenu::DoInsertOrAppend(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError);
+        wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError.c_str());
         wxLogLastError("Insert or AppendMenu");
         return FALSE;
     }
@@ -828,7 +828,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+                wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
                 return NULLHANDLE;
             }
 
@@ -836,7 +836,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+                wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
                 return NULLHANDLE;
             }
 
@@ -847,7 +847,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError);
+                wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError.c_str());
                 return NULLHANDLE;
             }
         }
