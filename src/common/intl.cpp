@@ -200,7 +200,7 @@ private:
 
   // utility functions
     // calculate the hash value of given string
-  static inline size_t32 GetHash(const char *sz);
+  static size_t32 GetHash(const char *sz);
     // big<->little endian
   inline size_t32 Swap(size_t32 ui) const;
 
@@ -447,19 +447,17 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
 
     size_t32 nIncr = 1 + (nHashVal % (m_nHashSize - 2));
 
-#if defined(__VISAGECPP__)
-// VA just can't stand while(1) or while(TRUE)
-    bool bOs2var = TRUE;
-    while(bOs2var) {
-#else
-    while (1) {
-#endif
+    for ( ;; ) {
       size_t32 nStr = Swap(m_pHashTable[nIndex]);
       if ( nStr == 0 )
         return NULL;
 
-      if ( strcmp(szOrig, StringAtOfs(m_pOrigTable, nStr - 1)) == 0 )
-        return StringAtOfs(m_pTransTable, nStr - 1);
+      if ( strcmp(szOrig, StringAtOfs(m_pOrigTable, nStr - 1)) == 0 ) {
+        // work around for BC++ 5.5 bug: without a temp var, the optimizer
+        // breaks the code and the return value is incorrect
+        const char *tmp = StringAtOfs(m_pTransTable, nStr - 1);
+        return tmp;
+      }
 
       if ( nIndex >= m_nHashSize - nIncr)
         nIndex -= m_nHashSize - nIncr;
@@ -478,8 +476,11 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
         top = current;
       else if ( res > 0 )
         bottom = current + 1;
-      else    // found!
-        return StringAtOfs(m_pTransTable, current);
+      else {   // found!
+        // work around the same BC++ 5.5 bug as above
+        const char *tmp = StringAtOfs(m_pTransTable, current);
+        return tmp;
+      }
     }
   }
 
@@ -500,11 +501,16 @@ void wxMsgCatalog::ConvertEncoding()
 
     // first, find encoding header:
     const char *hdr = StringAtOfs(m_pOrigTable, 0);
-    if (hdr == NULL) return; // not supported by this catalog, does not have non-fuzzy header
-    if (hdr[0] != 0) return; // ditto
+    if ( hdr == NULL || hdr[0] != 0 ) {
+        // not supported by this catalog, does not have non-fuzzy header
+        return;
+    }
 
-    /* we support catalogs with header (msgid "") that is _not_ marked as "#, fuzzy" (otherwise
-       the string would not be included into compiled catalog) */
+    /*
+       we support catalogs with header (msgid "") that is _not_ marked as "#,
+       fuzzy" (otherwise the string would not be included into compiled
+       catalog)
+     */
     wxString header(StringAtOfs(m_pTransTable, 0));
     wxString charset;
     int pos = header.Find(wxT("Content-Type: text/plain; charset="));
@@ -530,7 +536,7 @@ void wxMsgCatalog::ConvertEncoding()
     converter.Init(enc, a[0]);
     for (size_t i = 0; i < m_numStrings; i++)
         converter.Convert((char*)StringAtOfs(m_pTransTable, i));
-#endif
+#endif // wxUSE_GUI
 }
 
 
