@@ -777,15 +777,24 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     // although the thread might be already in the EXITED state it might not
     // have terminated yet and so we are not sure that it has actually
     // terminated if the "if" above hadn't been taken
-    do
+    for ( ;; )
     {
         if ( !::GetExitCodeThread(m_hThread, (LPDWORD)&rc) )
         {
             wxLogLastError(wxT("GetExitCodeThread"));
 
             rc = (wxThread::ExitCode)-1;
+
+            break;
         }
-    } while ( (DWORD)rc == STILL_ACTIVE );
+
+        if ( (DWORD)rc != STILL_ACTIVE )
+            break;
+
+        // give the other thread some time to terminate, otherwise we may be
+        // starving it
+        ::Sleep(1);
+    }
 
     if ( pRc )
         *pRc = rc;
