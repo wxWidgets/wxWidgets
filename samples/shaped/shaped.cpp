@@ -42,6 +42,7 @@
     #include "wx/image.h"
 #endif
 
+#include "wx/image.h"
 #include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
