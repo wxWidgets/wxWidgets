@@ -78,11 +78,11 @@ CFLAGS= $(strip $(MINGW_CCFLAGS) $(addprefix -I,$(ZLIBINC)) \
 
 LIBNAME = libpng12
 PNGMAJ = 0
-PNGDLL = 13
-PNGMIN = 1.2.4
+CYGDLL = 12
+PNGMIN = 1.2.6
 PNGVER = $(PNGMAJ).$(PNGMIN)
 
-SHAREDLIB=cygpng$(PNGDLL).dll
+SHAREDLIB=cygpng$(CYGDLL).dll
 STATLIB=libpng.a
 IMPLIB=libpng.dll.a
 SHAREDDEF=libpng.def
@@ -147,10 +147,9 @@ libpng-config: scripts/libpng-config-head.in scripts/libpng-config-body.in
  installation..'\n' using PREFIX=\"$(prefix)\"'\n'
 	( cat $(S)/scripts/libpng-config-head.in; \
 	echo prefix=\"$(prefix)\"; \
-	echo cppflags=\"-I$(INCPATH)/$(LIBNAME)\"; \
-	echo cflags=\"\"; \
-	echo ldflags=\"-L$(LIBPATH)\"; \
-	echo libs=\"-lpng$(PNGMAJ) -lz\"; \
+	echo I_opts=\"-I$(INCPATH)/$(LIBNAME)\"; \
+	echo L_opts=\"-L$(LIBPATH)\"; \
+	echo libs=\"-lpng$(CYGDLL) -lz\"; \
 	cat $(S)/scripts/libpng-config-body.in ) > libpng-config
 	chmod +x libpng-config
 
@@ -265,9 +264,9 @@ install: install-static install-shared install-man install-config
 
 test-installed:
 	$(CC) $(CFLAGS) \
-	   `$(BINPATH)/libpng12-config --cppflags --cflags` pngtest.c \
+	   `$(BINPATH)/libpng12-config --cflags` pngtest.c \
 	   -L$(ZLIBLIB) \
-	   -o pngtesti$(EXE) `$(BINPATH)/libpng12-config --ldflags --libs`
+	   -o pngtesti$(EXE) `$(BINPATH)/libpng12-config --ldflags`
 	./pngtesti$(EXE) pngtest.png
 
 clean:

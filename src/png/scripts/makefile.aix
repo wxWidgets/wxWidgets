@@ -16,8 +16,9 @@ AR = ar rcs
 RANLIB = ranlib
 RM = rm -f
 
+LIBNAME=libpng12
 PNGMAJ = 0
-PNGMIN = 1.2.4
+PNGMIN = 1.2.6
 PNGVER = $(PNGMAJ).$(PNGMIN)
 
 prefix=/usr/local
@@ -34,15 +35,16 @@ LIBPATH=$(prefix)/lib
 # you execute make install.
 DESTDIR=
 
-DI=$(DESTDIR)/$(INCPATH)
-DL=$(DESTDIR)/$(LIBPATH)
+DI=$(DESTDIR)$(INCPATH)
+DL=$(DESTDIR)$(LIBPATH)
 
 CDEBUG = -g -DPNG_DEBUG=5
 LDDEBUG =
 CRELEASE = -O2
 LDRELEASE = -s
-CFLAGS = -I$(ZLIBINC) -Wall $(CRELEASE)
-LDFLAGS = -L. -L$(ZLIBLIB) -lpng -lz -lm $(LDRELEASE)
+WARNMORE=-Wall
+CFLAGS = -I$(ZLIBINC) $(WARNMORE) $(CRELEASE)
+LDFLAGS = -L. -L$(ZLIBLIB) -lpng12 -lz -lm $(LDRELEASE)
 
 # File extensions
 O=.o
@@ -55,32 +57,40 @@ OBJS = png$(O) pngerror$(O) pngget$(O) pngmem$(O) pngpread$(O) \
 	pngtrans$(O) pngwio$(O) pngwrite$(O) pngwtran$(O) pngwutil$(O)
 
 # Targets
-all: libpng$(A) pngtest$(E)
+all: $(LIBNAME)$(A) pngtest$(E)
 
-libpng$(A): $(OBJS)
+$(LIBNAME)$(A): $(OBJS)
 	$(AR) $@ $(OBJS)
 	$(RANLIB) $@
 
 test: pngtest$(E)
 	./pngtest$(E)
 
-pngtest$(E): pngtest$(O) libpng$(A)
+pngtest$(E): pngtest$(O) $(LIBNAME)$(A)
 	$(LD) -o $@ pngtest$(O) $(LDFLAGS)
 
-install: libpng.a
+install: $(LIBNAME)$(A)
 	-@if [ ! -d $(DI)  ]; then mkdir $(DI); fi
-	-@if [ ! -d $(DI)/libpng  ]; then mkdir $(DI)/libpng; fi
+	-@if [ ! -d $(DI)/$(LIBNAME)  ]; then mkdir $(DI)/$(LIBNAME); fi
 	-@if [ ! -d $(DL) ]; then mkdir $(DL); fi
-	-@rm $(DI)/png.h
-	-@rm $(DI)/pngconf.h
-	cp png.h pngconf.h $(DI)/libpng
-	chmod 644 $(DI)/libpng/png.h \
-	$(DI)/libpng/pngconf.h
-	(cd $(DI); ln -f -s libpng/* .)
-	cp libpng.a $(DL)
+	-@rm -f $(DI)/$(LIBNAME)/png.h
+	-@rm -f $(DI)/$(LIBNAME)/pngconf.h
+	-@rm -f $(DI)/png.h
+	-@rm -f $(DI)/pngconf.h
+	cp png.h pngconf.h $(DI)/$(LIBNAME)
+	chmod 644 $(DI)/$(LIBNAME)/png.h \
+	$(DI)/$(LIBNAME)/pngconf.h
+	-@rm -rf $(DI)/libpng
+	(cd $(DI); ln -f -s $(LIBNAME) libpng; ln -f -s $(LIBNAME)/* .)
+	-@rm -f $(DL)/$(LIBNAME)$(A)
+	-@rm -f $(DL)/libpng$(A)
+	cp $(LIBNAME)$(A) $(DL)/$(LIBNAME)$(A)
+	chmod 644 $(DL)/$(LIBNAME)$(A)
+	(cd $(DL); ln -f -s $(LIBNAME)$(A) libpng$(A))
+	(cd $(DI); ln -f -s libpng/* .;)
 
 clean:
-	/bin/rm -f *.o libpng.a pngtest pngout.png
+	/bin/rm -f *.o $(LIBNAME)$(A) pngtest pngout.png
 
 png$(O): png.h pngconf.h
 pngerror$(O): png.h pngconf.h

@@ -32,13 +32,13 @@ ZLIBLIB=../zlib
 ZLIBINC=../zlib
 
 PNGMAJ = 0
-PNGMIN = 1.2.4
+PNGMIN = 1.2.6
 PNGVER = $(PNGMAJ).$(PNGMIN)
 LIBNAME = libpng12
 
 CC=cc
 CFLAGS=-std -w1 -I$(ZLIBINC) -O # -g -DPNG_DEBUG=1
-LDFLAGS=-L. -L$(ZLIBLIB) -lpng -lz -lm
+LDFLAGS=-L$(ZLIBLIB) -rpath $(ZLIBLIB) libpng.a -lz -lm
 
 #RANLIB=echo
 RANLIB=ranlib
@@ -59,9 +59,9 @@ libpng.pc:
 libpng-config:
 	( cat scripts/libpng-config-head.in; \
 	echo prefix=\"$(prefix)\"; \
-	echo cppflags=\"-I$(INCPATH)/$(LIBNAME)\"; \
-	echo cflags=\"-std\"; \
-	echo ldflags=\"-L$(LIBPATH)\"; \
+	echo I_opts=\"-I$(INCPATH)/$(LIBNAME)\"; \
+	echo ccopts=\"-std\"; \
+	echo L_opts=\"-L$(LIBPATH)\"; \
 	echo libs=\"-lpng12 -lz -lm\"; \
 	cat scripts/libpng-config-body.in ) > libpng-config
 	chmod +x libpng-config
@@ -73,8 +73,12 @@ $(LIBNAME).so.$(PNGMAJ): $(LIBNAME).so.$(PNGVER)
 	ln -f -s $(LIBNAME).so.$(PNGVER) $(LIBNAME).so.$(PNGMAJ)
 
 $(LIBNAME).so.$(PNGVER): $(OBJS)
-	$(CC) -shared -o $@ $(OBJS) -L$(ZLIBLIB)
-	-soname $(LIBNAME).so.$(PNGMAJ) -lz -lm
+	$(CC) -shared -o $@ $(OBJS) -L$(ZLIBLIB) \
+	-soname $(LIBNAME).so.$(PNGMAJ)
+
+libpng.so.3.$(PNGMIN): $(OBJS)
+	$(CC) -shared -o $@ $(OBJS) -L$(ZLIBLIB) \
+	-soname libpng.so.3
 
 pngtest: pngtest.o libpng.a
 	$(CC) -o pngtest $(CFLAGS) pngtest.o $(LDFLAGS)
@@ -98,18 +102,21 @@ install-static: install-headers libpng.a
 	-@/bin/rm -f $(DL)/libpng.a
 	(cd $(DL); ln -sf $(LIBNAME).a libpng.a)
 
-install-shared: install-headers $(LIBNAME).so.$(PNGVER) libpng.pc
+install-shared: install-headers $(LIBNAME).so.$(PNGVER) libpng.pc \
+	libpng.so.3.$(PNGMIN)
 	-@if [ ! -d $(DL) ]; then mkdir $(DL); fi
-	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGMAJ)* $(DL)/$(LIBNAME).so
+	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGVER)* $(DL)/$(LIBNAME).so
+	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGMAJ)
 	-@/bin/rm -f $(DL)/libpng.so
 	-@/bin/rm -f $(DL)/libpng.so.3
-	-@/bin/rm -f $(DL)/libpng.so.3.*
+	-@/bin/rm -f $(DL)/libpng.so.3.$(PNGMIN)*
 	cp $(LIBNAME).so.$(PNGVER) $(DL)
+	cp libpng.so.3.$(PNGMIN) $(DL)
 	chmod 755 $(DL)/$(LIBNAME).so.$(PNGVER)
+	chmod 755 $(DL)/libpng.so.3.$(PNGMIN)
 	(cd $(DL); \
-	ln -sf $(LIBNAME).so.$(PNGVER) libpng.so; \
-	ln -sf $(LIBNAME).so.$(PNGVER) libpng.so.3; \
-	ln -sf $(LIBNAME).so.$(PNGVER) libpng.so.3.$(PNGMIN); \
+	ln -f -s libpng.so.3.$(PNGMIN) libpng.so.3; \
+	ln -f -s libpng.so.3 libpng.so; \
 	ln -sf $(LIBNAME).so.$(PNGVER) $(LIBNAME).so.$(PNGMAJ); \
 	ln -sf $(LIBNAME).so.$(PNGMAJ) $(LIBNAME).so)
 	-@if [ ! -d $(DL)/pkgconfig ]; then mkdir $(DL)/pkgconfig; fi
@@ -146,15 +153,17 @@ install: install-static install-shared install-man install-config
 test-installed:
 	echo
 	echo Testing installed dynamic shared library.
-	$(CC) -std -w1 -I$(ZLIBINC) \
-	   `$(BINPATH)/libpng12-config --cppflags --cflags` pngtest.c \
+	$(CC) -w1 -I$(ZLIBINC) \
+	   `$(BINPATH)/libpng12-config --cflags` pngtest.c \
 	   -L$(ZLIBLIB) -R$(ZLIBLIB) \
-	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags --libs`
+	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags`
 	./pngtesti pngtest.png
 
 clean:
-	/bin/rm -f *.o libpng.a pngtest pngtesti pngout.png libpng.pc \
-	libpng-config $(LIBNAME).so $(LIBNAME).so.$(PNGMAJ)*
+	/bin/rm -f *.o libpng.a pngtest pngtesti pngout.png \
+	libpng-config $(LIBNAME).so $(LIBNAME).so.$(PNGMAJ)* \
+	libpng.so.3.$(PNGMIN) \
+	libpng.pc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 

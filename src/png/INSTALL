@@ -1,5 +1,5 @@
 
-Installing libpng version 1.2.4 - July 8, 2002
+Installing libpng version 1.2.6 - August 15, 2004
 
 Before installing libpng, you must first install zlib.  zlib
 can usually be found wherever you got libpng.  zlib can be
@@ -10,8 +10,8 @@ zlib.h and zconf.h include files that correspond to the
 version of zlib that's installed.
 
 You can rename the directories that you downloaded (they
-might be called "libpng-1.2.4" or "lpng109" and "zlib-1.1.4"
-or "zlib114") so that you have directories called "zlib" and "libpng".
+might be called "libpng-1.2.6" or "lpng109" and "zlib-1.1.3"
+or "zlib113") so that you have directories called "zlib" and "libpng".
 
 Your directory structure should look like this:
 
@@ -35,10 +35,6 @@ Your directory structure should look like this:
              wince.txt
           scripts
              makefile.*
-             libpng*.in
-          mangle
-             makefile.*
-             mangle.in
           pngtest.png
           etc.
       zlib
@@ -68,16 +64,16 @@ The files that are presently available in the scripts directory
 include
 
  makefile.std      =>  Generic UNIX makefile (cc, creates static libpng.a)
- makefile.linux    =>  Linux/ELF makefile (gcc, creates libpng12.so.0.1.2.4)
- makefile.gcmmx    =>  Linux/ELF makefile (gcc, creates libpng12.so.0.1.2.4,
+ makefile.linux    =>  Linux/ELF makefile (gcc, creates libpng12.so.0.1.2.6)
+ makefile.gcmmx    =>  Linux/ELF makefile (gcc, creates libpng12.so.0.1.2.6,
                        uses assembler code tuned for Intel MMX platform)
  makefile.gcc      =>  Generic makefile (gcc, creates static libpng.a)
  makefile.knr      =>  Archaic UNIX Makefile that converts files with
                        ansi2knr (Requires ansi2knr.c from
                        ftp://ftp.cs.wisc.edu/ghost)
- makefile.aix      =>  AIX makefile
+ makefile.aix      =>  AIX/gcc makefile
  makefile.cygwin   =>  Cygwin/gcc makefile
- makefile.darwin   =>  Darwin makefile
+ makefile.darwin   =>  Darwin makefile, can use on MacosX
  makefile.dec      =>  DEC Alpha UNIX makefile
  makefile.hpgcc    =>  FreeBSD makefile
  makefile.hpgcc    =>  HPUX makefile using gcc
@@ -85,15 +81,14 @@ include
  makefile.ibmc     =>  IBM C/C++ version 3.x for Win32 and OS/2 (static)
  makefile.intel    =>  Intel C/C++ version 4.0 and later
  libpng.icc        =>  Project file for IBM VisualAge/C++ version 4.0 or later
- makefile.macosx   =>  MACOS X Makefile
  makefile.netbsd   =>  NetBSD/cc makefile, uses PNGGCCRD, makes libpng.so.
  makefile.ne0bsd  =>  NetBSD/cc makefile, uses PNGGCCRD, makes libpng0.so
  makefile.openbsd  =>  OpenBSD makefile
  makefile.sgi      =>  Silicon Graphics IRIX makefile (cc, creates static lib)
- makefile.sggcc    =>  Silicon Graphics (gcc, creates libpng12.so.0.1.2.4)
+ makefile.sggcc    =>  Silicon Graphics (gcc, creates libpng12.so.0.1.2.6)
  makefile.sunos    =>  Sun makefile
- makefile.solaris  =>  Solaris 2.X makefile (gcc, creates libpng12.so.0.1.2.4)
- makefile.so9      =>  Solaris 9 makefile (gcc, creates libpng12.so.0.1.2.4)
+ makefile.solaris  =>  Solaris 2.X makefile (gcc, creates libpng12.so.0.1.2.6)
+ makefile.so9      =>  Solaris 9 makefile (gcc, creates libpng12.so.0.1.2.6)
  makefile.32sunu   =>  Sun Ultra 32-bit makefile
  makefile.64sunu   =>  Sun Ultra 64-bit makefile
  makefile.sco      =>  For SCO OSr5  ELF and Unixware 7 with Native cc
@@ -147,24 +142,19 @@ Most of the makefiles will allow you to run "make install" to
 put the library in its final resting place (if you want to
 do that, run "make install" in the zlib directory first if necessary).
 Some also allow you to run "make test-installed" after you have
-run "make install".  This will build and run executables called "pngtesti"
-and "mangle/pngtestm".
+run "make install".
 
-The files that are presently available in the mangle directory include the
-following.  The makefiles are automatically run by the corresponding makefiles
-in the scripts directory when you run "make", "make install", or
-"make test-installed".
-
- mangle.in        =>  Function-decoration macros added to png.h by the
-                      makefiles.
- makefile.linux   =>  Linux/ELF makefile
-                      (gcc, creates libpng12m.so.0.1.2.4)
- makefile.gcmmx   =>  Linux/ELF makefile (gcc, creates
-                      libpng12.so.0m.1.2.4, uses assembler code
-                      tuned for Intel MMX platform)
- makefile.sgi     =>  Silicon Graphics (cc, creates libpng12m.so)
- makefile.sggcc   =>  Silicon Graphics (gcc, creates libpng12m.so)
+If you encounter a compiler error message complaining about the
+lines
+      __png.h__ already includes setjmp.h;
+      __dont__ include it again.;
+This means you have compiled another module that includes setjmp.h,
+which is hazardous because the two modules might not include exactly
+the same setjmp.h.  If you are sure that you know what you are doing
+and that they are exactly the same, then you can comment out or
+delete the two lines.  Better yet, use the cexcept interface
+instead, as demonstrated in contrib/visupng of the libpng distribution.
 
 Further information can be found in the README and libpng.txt
-files, in the individual makefiles, in png.h, in the README files in
-subdirectories of the LIB directory, and the manual pages libpng.3 and png.5.
+files, in the individual makefiles, in png.h, and the manual pages
+libpng.3 and png.5.
