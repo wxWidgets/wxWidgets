@@ -617,6 +617,17 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
     Refresh();
 }
 
+bool wxMenuBar::Enable( bool enable)
+{
+    wxCHECK_RET( IsAttached(), wxT("doesn't work with unattached menubars") );
+    size_t i;
+    for (i = 0; i < GetMenuCount(); i++)
+    {
+        EnableTop(i, enable);
+    }
+    return true;
+}
+
 void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 {
     wxCHECK_RET( pos < GetMenuCount(), wxT("invalid menu index") );

@@ -124,6 +124,7 @@ public:
     virtual void EnableTop( size_t pos, bool flag );
     virtual void SetLabelTop( size_t pos, const wxString& label );
     virtual wxString GetLabelTop( size_t pos ) const;
+    virtual bool Enable( bool enable = TRUE );
 
     // implementation from now on
     WXHMENU Create();
