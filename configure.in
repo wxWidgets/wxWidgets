@@ -3173,6 +3173,13 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
                         ])
         ])
 
+    dnl check also for dlerror()
+    if test "$HAVE_DL_FUNCS" = 1; then
+        AC_CHECK_FUNCS(dlerror,
+                       AC_DEFINE(HAVE_DLERROR),
+                       AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR)))
+    fi
+
     if test "$HAVE_DL_FUNCS" = 0; then
         if test "$HAVE_SHL_FUNCS" = 0; then
           if test "$USE_UNIX" = 1; then
