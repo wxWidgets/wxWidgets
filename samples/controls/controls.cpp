@@ -129,7 +129,8 @@ public:
 #if wxUSE_CHOICE
     wxChoice      *m_choice,
                   *m_choiceSorted;
-#endif
+#endif // wxUSE_CHOICE
+
     wxComboBox    *m_combo;
     wxRadioBox    *m_radio;
     wxGauge       *m_gauge,
@@ -308,7 +309,10 @@ private:
 //----------------------------------------------------------------------
 
 static void SetListboxClientData(const wxChar *name, wxListBox *control);
+
+#if wxUSE_CHOICE
 static void SetChoiceClientData(const wxChar *name, wxChoice *control);
+#endif // wxUSE_CHOICE
 
 IMPLEMENT_APP(MyApp)
 
@@ -1715,6 +1719,8 @@ static void SetListboxClientData(const wxChar *name, wxListBox *control)
     }
 }
 
+#if wxUSE_CHOICE
+
 static void SetChoiceClientData(const wxChar *name, wxChoice *control)
 {
     size_t count = control->GetCount();
@@ -1727,3 +1733,5 @@ static void SetChoiceClientData(const wxChar *name, wxChoice *control)
         control->SetClientObject(n, new wxStringClientData(s));
     }
 }
+
+#endif // wxUSE_CHOICE
