@@ -416,7 +416,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     Init();
 
-    long treeStyle = wxTR_HAS_BUTTONS;
+    long treeStyle = wxTR_HAS_BUTTONS ; // | wxTR_EDIT_LABELS;
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
 
@@ -1181,6 +1181,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 
 BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_BUTTON(wxID_OK,  wxGenericDirDialog::OnOK)
+    EVT_BUTTON(wxID_NEW,  wxGenericDirDialog::OnNew)
     EVT_BUTTON               (wxID_NEW,     wxGenericDirDialog::OnNew)
     EVT_CLOSE(wxGenericDirDialog::OnCloseWindow)
     EVT_TREE_KEY_DOWN        (-1,   wxGenericDirDialog::OnTreeKeyDown)
@@ -1222,10 +1223,13 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     wxButton* cancelButton = new wxButton(this, wxID_CANCEL, _("Cancel"));
     buttonsizer->Add( cancelButton, 0, wxLEFT|wxRIGHT, 10 );
 
-/* TODO: new directory button
-    wxButton* newButton = new wxButton( this, ID_NEW, _("New...") );
+    // I'm not convinced we need a New button, and we tend to get annoying
+    // accidental-editing with label editing enabled.
+#if 0
+    wxButton* newButton = new wxButton( this, wxID_NEW, _("New...") );
     buttonsizer->Add( newButton, 0, wxLEFT|wxRIGHT, 10 );
-*/
+#endif
+
     topsizer->Add( buttonsizer, 0, wxALL | wxCENTER, 10 );
 
     okButton->SetDefault();
@@ -1318,10 +1322,9 @@ void wxGenericDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
 
 void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
 {
-#if 0
-    wxTreeItemId id = m_dir->GetSelection();
-    if ((id == m_dir->GetRootItem()) ||
-        (m_dir->GetParent(id) == m_dir->GetRootItem()))
+    wxTreeItemId id = m_dirCtrl->GetTreeCtrl()->GetSelection();
+    if ((id == m_dirCtrl->GetTreeCtrl()->GetRootItem()) ||
+        (m_dirCtrl->GetTreeCtrl()->GetParent(id) == m_dirCtrl->GetTreeCtrl()->GetRootItem()))
     {
         wxMessageDialog msg(this, _("You cannot add a new directory to this section."),
                             _("Create directory"), wxOK | wxICON_INFORMATION );
@@ -1329,13 +1332,14 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
         return;
     }
 
-    wxTreeItemId parent = m_dir->GetParent( id );
-    wxDirItemData *data = (wxDirItemData*)m_dir->GetItemData( parent );
+    wxTreeItemId parent = id ; // m_dirCtrl->GetTreeCtrl()->GetParent( id );
+    wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData( parent );
     wxASSERT( data );
 
     wxString new_name( wxT("NewName") );
     wxString path( data->m_path );
-    path += wxT("/");
+    if (path.Last() != wxFILE_SEP_PATH)
+        path += wxFILE_SEP_PATH;
     path += new_name;
     if (wxFileExists(path))
     {
@@ -1348,7 +1352,8 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
             new_name += num;
 
             path = data->m_path;
-            path += wxT("/");
+            if (path.Last() != wxFILE_SEP_PATH)
+                path += wxFILE_SEP_PATH;
             path += new_name;
             i++;
         } while (wxFileExists(path));
@@ -1362,9 +1367,11 @@ void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
         return;
     }
 
-    wxDirItemData *new_data = new wxDirItemData( path, new_name );
-    wxTreeItemId new_id = m_dir->AppendItem( parent, new_name, 0, 1, new_data );
-    m_dir->EnsureVisible( new_id );
-    m_dir->EditLabel( new_id );
-#endif
+    wxDirItemDataEx *new_data = new wxDirItemDataEx( path, new_name, TRUE );
+
+    // TODO: THIS CODE DOESN'T WORK YET. We need to avoid duplication of the first child
+    // of the parent.
+    wxTreeItemId new_id = m_dirCtrl->GetTreeCtrl()->AppendItem( parent, new_name, 0, 0, new_data );
+    m_dirCtrl->GetTreeCtrl()->EnsureVisible( new_id );
+    m_dirCtrl->GetTreeCtrl()->EditLabel( new_id );
 }
