@@ -861,6 +861,7 @@ paramDict = {
     'flag': ParamFlag,
     'style': ParamStyle, 'exstyle': ParamExStyle,
     'pos': ParamPosSize, 'size': ParamPosSize,
+    'cellpos': ParamPosSize, 'cellspan': ParamPosSize,
     'border': ParamUnit, 'cols': ParamInt, 'rows': ParamInt,
     'vgap': ParamUnit, 'hgap': ParamUnit,
     'checkable': ParamBool, 'checked': ParamBool, 'radio': ParamBool,

@@ -11,7 +11,9 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.2-1'
+version = '0.1.3-1'
+# Can be changed to set other default encoding different
+defaultEncoding = sys.getdefaultencoding()
 
 try:
     True
@@ -30,7 +32,7 @@ class Globals:
     testWin = None
     testWinPos = wxDefaultPosition
     currentXXX = None
-    currentEncoding = sys.getdefaultencoding() # wxLocale_GetSystemEncodingName()
+    currentEncoding = defaultEncoding
 
     def _makeFonts(self):
         self._sysFont = wxSystemSettings_GetFont(wxSYS_SYSTEM_FONT)
@@ -51,6 +53,5 @@ class Globals:
         if not hasattr(self, "_smallerFont"): self._makeFonts()
         return self._smallerFont
     
-        
 
 g = Globals()

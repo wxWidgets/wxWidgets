@@ -49,7 +49,10 @@ class xxxParam(xxxNode):
         def value(self):
             return self.textNode.data.encode(g.currentEncoding)
         def update(self, value):
-            self.textNode.data = unicode(value, g.currentEncoding)
+	    try: # handle exception if encoding is wrong
+                self.textNode.data = unicode(value, g.currentEncoding)
+	    except UnicodeDecodeError:
+                wxLogMessage("Unicode error: set encoding in file\nglobals.py to something appropriate")
 
 # Integer parameter
 class xxxParamInt(xxxParam):

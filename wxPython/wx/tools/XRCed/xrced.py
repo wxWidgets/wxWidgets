@@ -96,11 +96,17 @@ class Frame(wxFrame):
 
         menu = wxMenu()
         menu.Append(wxID_NEW, '&New\tCtrl-N', 'New file')
+        menu.AppendSeparator()
         menu.Append(wxID_OPEN, '&Open...\tCtrl-O', 'Open XRC file')
+        self.recentMenu = wxMenu()
+        self.AppendRecent(self.recentMenu)
+        menu.AppendMenu(-1, 'Open Recent', self.recentMenu, 'Open a recent file')
+        menu.AppendSeparator()
         menu.Append(wxID_SAVE, '&Save\tCtrl-S', 'Save XRC file')
         menu.Append(wxID_SAVEAS, 'Save &As...', 'Save XRC file under different name')
         menu.AppendSeparator()
         menu.Append(wxID_EXIT, '&Quit\tCtrl-Q', 'Exit application')
+
         menuBar.Append(menu, '&File')
 
         menu = wxMenu()
@@ -268,6 +274,27 @@ class Frame(wxFrame):
         EVT_LEFT_DOWN(self, self.OnLeftDown)
         EVT_KEY_DOWN(self, tools.OnKeyDown)
         EVT_KEY_UP(self, tools.OnKeyUp)
+    
+    def AppendRecent(self, menu):
+        # add recently used files to the menu
+        for id,name in conf.recentfiles.iteritems():
+            menu.Append(id,name)
+            EVT_MENU(self,id,self.OnRecentFile)
+        return 
+        
+    def OnRecentFile(self,evt):
+        # open recently used file
+        if not self.AskSave(): return
+        wxBeginBusyCursor()
+        try:
+            path=conf.recentfiles[evt.GetId()]
+            if self.Open(path):
+                self.SetStatusText('Data loaded')
+            else:
+                self.SetStatusText('Failed')
+        except KeyError:
+            self.SetStatusText('No such file')
+        wxEndBusyCursor()
 
     def OnNew(self, evt):
         if not self.AskSave(): return
@@ -286,6 +313,7 @@ class Frame(wxFrame):
                 self.SetStatusText('Data loaded')
             else:
                 self.SetStatusText('Failed')
+            self.SaveRecent(path)
             wxEndBusyCursor()
         dlg.Destroy()
 
@@ -311,9 +339,18 @@ class Frame(wxFrame):
             self.Save(path)
             self.dataFile = path
             self.SetStatusText('Data saved')
+            self.SaveRecent(path)
         except IOError:
             self.SetStatusText('Failed')
-        wxEndBusyCursor()
+        wxEndBusyCursor()        
+
+    def SaveRecent(self,path):
+        # append to recently used files
+        if path not in conf.recentfiles.values():
+            newid = wxNewId()
+            self.recentMenu.Append(newid, path)
+            EVT_MENU(self, newid, self.OnRecentFile)
+            conf.recentfiles[newid] = path
 
     def OnExit(self, evt):
         self.Close()
@@ -513,7 +550,7 @@ class Frame(wxFrame):
             pos = self.GetPosition()
             sizePanel = panel.GetSize()
             panel.Reparent(self.splitter)
-            self.miniFrame.GetSizer().RemoveWindow(panel)
+            self.miniFrame.GetSizer().Remove(panel)
             wxYield()
             # Widen
             self.SetDimensions(pos.x, pos.y, size.width + sizePanel.width, size.height)
@@ -796,6 +833,9 @@ Homepage: http://xrced.sourceforge.net\
         if g.testWin: g.testWin.Destroy()
         if not panel.GetPageCount() == 2:
             panel.page2.Destroy()
+        else:
+            # If we don't do this, page does not get destroyed (a bug?)
+            panel.RemovePage(1)
         if not self.IsIconized():
             conf.x, conf.y = self.GetPosition()
             conf.width, conf.height = self.GetSize()
@@ -958,6 +998,12 @@ class App(wxApp):
         conf.embedPanel = conf.ReadInt('embedPanel', True)
         conf.showTools = conf.ReadInt('showTools', True)
         conf.sashPos = conf.ReadInt('sashPos', 200)
+        # read recently used files
+        recentfiles=conf.Read('recentFiles','')
+        conf.recentfiles={}
+        if recentfiles:
+            for fil in recentfiles.split('|'):
+                conf.recentfiles[wxNewId()]=fil
         if not conf.embedPanel:
             conf.panelX = conf.ReadInt('panelX', -1)
             conf.panelY = conf.ReadInt('panelY', -1)
@@ -1001,6 +1047,7 @@ class App(wxApp):
         wc.WriteInt('panelWidth', conf.panelWidth)
         wc.WriteInt('panelHeight', conf.panelHeight)
         wc.WriteInt('nopanic', True)
+        wc.Write('recentFiles', '|'.join(conf.recentfiles.values()[-5:]))
         wc.Flush()
 
 def main():
