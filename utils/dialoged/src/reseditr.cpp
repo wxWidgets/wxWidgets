@@ -2402,7 +2402,7 @@ void ObjectMenuProc(wxMenu *menu, wxCommandEvent& event)
     if (!data)
         return;
     
-    switch (event.GetInt())
+    switch (event.GetId())
     {
     case OBJECT_MENU_EDIT:
         {
