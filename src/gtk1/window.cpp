@@ -2983,7 +2983,7 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
 
 GtkStyle *wxWindow::GetWidgetStyle()
 {
-    if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
+    if (m_widgetStyle) return m_widgetStyle;
 
     GtkStyle *def = gtk_rc_get_style( m_widget );
 
@@ -2991,7 +2991,6 @@ GtkStyle *wxWindow::GetWidgetStyle()
         def = gtk_widget_get_default_style();
 
     m_widgetStyle = gtk_style_copy( def );
-    m_widgetStyle->engine_data = def->engine_data;
     m_widgetStyle->klass = def->klass;
 
     return m_widgetStyle;
