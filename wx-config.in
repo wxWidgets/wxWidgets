@@ -146,10 +146,10 @@ while test $# -gt 0; do
       cppflags
       ;;
     --cflags)
-      echo `cppflags`
+      echo `cppflags` @CODE_GEN_FLAGS@
       ;;
     --cxxflags)
-      echo `cppflags`
+      echo `cppflags` @CODE_GEN_FLAGS@ @CODE_GEN_FLAGS_CXX@
       ;;
     --ldflags)
       echo @LDFLAGS_EXE@
