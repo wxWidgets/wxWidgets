@@ -235,7 +235,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     wxMenu *option_menu = new wxMenu;
 
     option_menu->Append(MDI_REFRESH, "&Refresh picture");
-    option_menu->Append(MDI_CHANGE_TITLE, "Change &title...");
+    option_menu->Append(MDI_CHANGE_TITLE, "Change &title...\tCtrl-T");
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(MDI_ABOUT, "&About");
@@ -429,7 +429,7 @@ void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
     wxString title = wxGetTextFromUser(_T("Enter the new title for MDI child"),
                                        _T("MDI sample question"),
                                        s_title,
-                                       this);
+                                       GetParent()->GetParent());
     if ( !title )
         return;
 
