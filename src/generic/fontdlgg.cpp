@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_FONTDLG && (!defined(__WXGTK__) || defined(__WXUNIVERSAL__))
+
 #ifndef WX_PRECOMP
 #include <stdio.h>
 #include "wx/utils.h"
@@ -33,8 +35,6 @@
 #include "wx/checkbox.h"
 #include "wx/intl.h"
 #endif
-
-#if wxUSE_FONTDLG
 
 #include <string.h>
 #include <stdlib.h>

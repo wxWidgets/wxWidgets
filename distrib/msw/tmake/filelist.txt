@@ -62,7 +62,7 @@ dcpsg.cpp	Generic	NotMSW
 dirctrlg.cpp	Generic
 dirdlgg.cpp	Generic	NotWin32,NotOS2
 dragimgg.cpp	Generic	NotOS2
-fontdlgg.cpp	Generic	Generic,NotGTK,NotOS2
+fontdlgg.cpp	Generic	Generic,NotOS2
 filedlgg.cpp	Generic	NotMSW,NotX,NotOS2
 grid.cpp	Generic
 gridctrl.cpp	Generic
@@ -375,7 +375,8 @@ brush.cpp	GTK	LowLevel
 button.cpp	GTK
 checkbox.cpp	GTK
 checklst.cpp	GTK
-choice.cpp	GTK
+# FIXME: remove LowLevel from choice!
+choice.cpp	GTK	LowLevel
 clipbrd.cpp	GTK	LowLevel
 colour.cpp	GTK	LowLevel
 combobox.cpp	GTK
