@@ -1,10 +1,10 @@
 Summary: The GTK+ 1.0 port of wxWindows library
 Name: wxGTK
-Version: 1.99.5
+Version: 2.0.1
 Release: 1
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK2b5.tgz
+Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK201.tgz
 URL: http://www.freiburg.linux.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 Requires: gtk+ >= 1.0.4

@@ -319,7 +319,8 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
 
 void wxToolBarSimple::ToggleTool(int index, bool toggle)
 {
-  wxNode *node = m_tools.Find((long)index);
+  wxNode *node = (wxNode*) NULL;
+  node = m_tools.Find((long)index);
   if (node)
   {
     wxToolBarTool *tool = (wxToolBarTool *)node->Data();
@@ -344,7 +345,8 @@ void wxToolBarSimple::ToggleTool(int index, bool toggle)
 //
 void wxToolBarSimple::SpringUpButton(int index)
 {
-  wxNode *node=m_tools.Find((long)index);
+  wxNode *node = (wxNode*) NULL;
+  node=m_tools.Find((long)index);
   if (node) {
     wxToolBarTool *tool = (wxToolBarTool *)node->Data();
     if (tool && !tool->m_isToggle && tool->m_toggleState){

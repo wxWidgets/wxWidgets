@@ -50,7 +50,7 @@ static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
     else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
     else command = wxEVT_SCROLL_THUMBTRACK;
 
-    int value = (int)(win->m_adjust->value+0.5);
+    int value = (int)ceil(win->m_adjust->value);
       
     int orient = wxHORIZONTAL;
     if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxVERTICAL;
@@ -157,12 +157,12 @@ void wxSlider::SetRange( int minValue, int maxValue )
 
 int wxSlider::GetMin(void) const
 {
-    return (int)(m_adjust->lower+0.5);
+    return (int)ceil(m_adjust->lower);
 }
 
 int wxSlider::GetMax(void) const
 {
-    return (int)(m_adjust->upper+0.5);
+    return (int)ceil(m_adjust->upper);
 }
 
 void wxSlider::SetPageSize( int pageSize )
@@ -178,7 +178,7 @@ void wxSlider::SetPageSize( int pageSize )
 
 int wxSlider::GetPageSize(void) const
 {
-    return (int)(m_adjust->page_increment+0.5);
+    return (int)ceil(m_adjust->page_increment);
 }
 
 void wxSlider::SetThumbLength( int len )
@@ -194,7 +194,7 @@ void wxSlider::SetThumbLength( int len )
 
 int wxSlider::GetThumbLength(void) const
 {
-    return (int)(m_adjust->page_size+0.5);
+    return (int)ceil(m_adjust->page_size);
 }
 
 void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
