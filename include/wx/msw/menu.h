@@ -49,14 +49,17 @@ public:
 
     virtual void SetTitle(const wxString& title);
 
-    // MSW-specific
-    bool ProcessCommand(wxCommandEvent& event);
-
+    // deprecated functions
+#if wxUSE_MENU_CALLBACK
     wxMenu(const wxString& title, const wxFunction func)
         : wxMenuBase(title)
     {
         Callback(func);
     }
+#endif // wxUSE_MENU_CALLBACK
+
+    // MSW-specific
+    bool ProcessCommand(wxCommandEvent& event);
 
     // implementation only from now on
     // -------------------------------
