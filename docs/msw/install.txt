@@ -514,16 +514,16 @@ and can be downloaded from http://www.digitalmars.com/
    
 1. You need to download and unzip in turn (later packages will overwrite
    older files)
-    Digital Mars C/C++ Compiler Version 8.33 
-    Basic utilities
-    beta test C++ Compiler Version 8.34
-   from http://www.digitalmars.com/download/freecompiler.html [02 may 03, CE]
+      Digital Mars C/C++ Compiler Version 8.34 
+      Basic utilities
+   from http://www.digitalmars.com/download/freecompiler.html [25 Aug 03, CE]
 
-2. Change directory to build\msw. Type 'make -f makefile.dm' to
+2. Change directory to src\msw. Type 'make -f makefile.sc' to
    make the wxWindows core library.
-3. Change directory to samples\minimal and type 'make -f makefile.dm'
-   to make this sample. The mdi and image sample also work; others may give
-   linker erros due to missing libraries
+3. Change directory to samples\minimal and type 'make -f makefile.sc'
+   to make this sample. Most of the other samples also work.
+4. Note that there is a compiler bug in verson 8.35 of the DM compiler which
+   prevents wxWindows from building.
 
 16-bit compilation is no longer supported.
 
