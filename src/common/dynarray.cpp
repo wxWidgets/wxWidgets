@@ -221,7 +221,11 @@ void name::Shrink()                                                         \
         memcpy(pNew, m_pItems, m_nCount*sizeof(T));                         \
         delete [] m_pItems;                                                 \
         m_pItems = pNew;                                                    \
+                                                                            \
+        /* update the size of the new block */                              \
+        m_nSize = m_nCount;                                                 \
     }                                                                       \
+    /* else: don't do anything, better keep old memory block! */            \
   }                                                                         \
 }                                                                           \
                                                                             \
