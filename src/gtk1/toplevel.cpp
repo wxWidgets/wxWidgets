@@ -480,7 +480,7 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
     if (m_grabbed)
     {
-        wxASSERT_MSG( FALSE, "Window still grabbed");
+        wxASSERT_MSG( FALSE, _T("Window still grabbed"));
         RemoveGrab();
     }
     
