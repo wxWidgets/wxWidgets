@@ -115,6 +115,9 @@ bool wxXmlResource::Load(const wxString& filemask)
                 fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE);
                 fnd = fn.GetFullPath();
             }
+#if wxUSE_FILESYSTEM
+            fnd = wxFileSystem::FileNameToURL(fnd);
+#endif
         }
         
 #if wxUSE_FILESYSTEM
@@ -328,9 +331,9 @@ void wxXmlResource::UpdateResources()
 #if !wxUSE_UNICODE && wxUSE_INTL
     if ( (GetFlags() & wxXRC_USE_LOCALE) == 0 )
     {
-        // In case we are not using wxLocale to translate strings, convert the strings
-        // GUI's charset. This must not be done when wxXRC_USE_LOCALE is on, because
-        // it could break wxGetTranslation lookup.
+        // In case we are not using wxLocale to translate strings, convert the
+        // strings GUI's charset. This must not be done when wxXRC_USE_LOCALE
+        // is on, because it could break wxGetTranslation lookup.
         encoding = wxLocale::GetSystemEncodingName();
     }
 #endif
