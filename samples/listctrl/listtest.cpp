@@ -89,8 +89,10 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_END_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnEndLabelEdit)
     EVT_LIST_DELETE_ITEM(LIST_CTRL, MyListCtrl::OnDeleteItem)
     EVT_LIST_DELETE_ALL_ITEMS(LIST_CTRL, MyListCtrl::OnDeleteAllItems)
+#if WXWIN_COMPATIBILITY_2_4
     EVT_LIST_GET_INFO(LIST_CTRL, MyListCtrl::OnGetInfo)
     EVT_LIST_SET_INFO(LIST_CTRL, MyListCtrl::OnSetInfo)
+#endif
     EVT_LIST_ITEM_SELECTED(LIST_CTRL, MyListCtrl::OnSelected)
     EVT_LIST_ITEM_DESELECTED(LIST_CTRL, MyListCtrl::OnDeselected)
     EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
@@ -771,6 +773,7 @@ void MyListCtrl::OnDeleteAllItems(wxListEvent& event)
     LogEvent(event, _T("OnDeleteAllItems"));
 }
 
+#if WXWIN_COMPATIBILITY_2_4
 void MyListCtrl::OnGetInfo(wxListEvent& event)
 {
     wxString msg;
@@ -803,6 +806,7 @@ void MyListCtrl::OnSetInfo(wxListEvent& event)
 {
     LogEvent(event, _T("OnSetInfo"));
 }
+#endif
 
 void MyListCtrl::OnSelected(wxListEvent& event)
 {
