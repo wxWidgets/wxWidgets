@@ -97,6 +97,7 @@ Source: "wxPython\lib\mixins\*.py";         DestDir: "{app}\wxPython\lib\mixins"
 Source: "wxPython\lib\PyCrust\*.py";        DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 Source: "wxPython\lib\PyCrust\*.txt";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 Source: "wxPython\lib\PyCrust\*.ico";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
+Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourchooser"; Components: core
 
 Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo
@@ -222,6 +223,8 @@ Type: files; Name: "{app}\wxPython\lib\mixins\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\PyCrust\*.pyo";
+Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyc";
+Type: files; Name: "{app}\wxPython\lib\colourchooser\*.pyo";
 Type: files; Name: "{app}\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\wxPython\tools\*.pyo";
 Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyc";

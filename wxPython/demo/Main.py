@@ -26,7 +26,7 @@ _treeList = [
     # new stuff
     ('New since last release', [
         'wxIntCtrl',
-
+        'wxPyColourChooser',
         ]),
 
     # managed windows == things with a caption you can close
@@ -112,6 +112,7 @@ _treeList = [
         'Throbber',
         'wxCalendar',
         'wxCalendarCtrl',
+        'wxPyColourChooser',
         'wxDynamicSashWindow',
         'wxEditableListBox',
         'wxEditor',
