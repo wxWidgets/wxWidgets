@@ -42,7 +42,7 @@
 #ifdef __SUN__
 #   define DEFAULT_XRESOURCE_DIR wxT("/usr/openwin/lib/app-defaults")
 // prototype missing in header files on Solaris 2.5
-extern int gethostname(char *name, size_t len);
+extern "C" { int gethostname(char *name, size_t len); }
 #else
 #   define DEFAULT_XRESOURCE_DIR wxT("/usr/lib/X11/app-defaults")
 #endif
