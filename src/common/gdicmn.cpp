@@ -108,6 +108,16 @@ wxRect wxRect::operator + (const wxRect& rect) const
     return wxRect(x1, y1, x2-x1, y2-y1);
 }
 
+wxRect& wxRect::Inflate(wxCoord dx, wxCoord dy)
+{
+    x -= dx;
+    y -= dy;
+    width += 2*dx;
+    height += 2*dy;
+
+    return *this;
+}
+
 bool wxRect::Inside(int cx, int cy) const
 {
     return ( (cx >= x) && (cy >= y)

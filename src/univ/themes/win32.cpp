@@ -195,6 +195,13 @@ public:
                               int selEnd = -1,
                               int flags = 0);
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
+    virtual void DrawTab(wxDC& dc,
+                         const wxRect& rect,
+                         wxDirection dir,
+                         const wxString& label,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         int flags = 0,
+                         int indexAccel = -1);
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -229,6 +236,8 @@ public:
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
                                      wxCoord *extraSpaceBeyond);
+
+    virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -1755,6 +1764,89 @@ void wxWin32Renderer::DrawTextLine(wxDC& dc,
 void wxWin32Renderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
 {
     // we don't draw them
+}
+
+// ----------------------------------------------------------------------------
+// notebook
+// ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawTab(wxDC& dc,
+                              const wxRect& rectOrig,
+                              wxDirection dir,
+                              const wxString& label,
+                              const wxBitmap& bitmap,
+                              int flags,
+                              int indexAccel)
+{
+    wxRect rect = rectOrig;
+
+    // the current tab is drawn indented (to the top for default case) and
+    // bigger than the other ones
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        const wxSize indent = GetTabIndent();
+
+        switch ( dir )
+        {
+            default:
+                wxFAIL_MSG(_T("invaild notebook tab orientation"));
+                // fall through
+
+            case wxTOP:
+                rect.Inflate(indent.x, indent.y);
+                rect.height--;
+                break;
+
+            case wxBOTTOM:
+            case wxLEFT:
+            case wxRIGHT:
+                wxFAIL_MSG(_T("TODO"));
+                break;
+        }
+    }
+
+    // draw the text, image and the focus around them (if necessary)
+    wxRect rectLabel = rect;
+    rectLabel.Deflate(1, 1);
+    DrawButtonLabel(dc, label, bitmap, rectLabel,
+                    flags, wxALIGN_CENTRE, indexAccel);
+
+    // now draw the tab border itself (maybe use DrawRoundedRectangle()?)
+    static const wxCoord CUTOFF = 2;
+    wxCoord x = rect.x,
+            y = rect.y,
+            x2 = rect.GetRight(),
+            y2 = rect.GetBottom();
+
+    switch ( dir )
+    {
+        default:
+        case wxTOP:
+            dc.SetPen(m_penHighlight);
+            dc.DrawLine(x, y2, x, y + CUTOFF);
+            dc.DrawLine(x, y + CUTOFF, x + CUTOFF, y);
+            dc.DrawLine(x + CUTOFF, y, x2 - CUTOFF + 1, y);
+
+            dc.SetPen(m_penBlack);
+            dc.DrawLine(x2, y2, x2, y + CUTOFF);
+            dc.DrawLine(x2, y + CUTOFF, x2 - CUTOFF, y);
+
+            dc.SetPen(m_penDarkGrey);
+            dc.DrawLine(x2 - 1, y2, x2 - 1, y + CUTOFF - 1);
+
+            if ( flags & wxCONTROL_SELECTED )
+            {
+                // overwrite the part of the border below this tab
+                dc.SetPen(m_penLightGrey);
+                dc.DrawLine(x + 1, y2, x2 - 1, y2);
+            }
+            break;
+
+        case wxBOTTOM:
+        case wxLEFT:
+        case wxRIGHT:
+            wxFAIL_MSG(_T("TODO"));
+    }
 }
 
 // ----------------------------------------------------------------------------

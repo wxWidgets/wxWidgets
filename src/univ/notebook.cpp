@@ -66,7 +66,7 @@ void wxNotebook::Init()
     m_heightTab =
     m_widthMax = 0;
 
-    m_sizePad = wxSize(5, 5); // FIXME: hardcoded
+    m_sizePad = wxSize(6, 5); // FIXME: hardcoded
 
     m_spinbtn = NULL;
 }
@@ -106,7 +106,7 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 
     if ( strText != m_titles[nPage] )
     {
-        m_titles[nPage] = strText;
+        m_accels[nPage] = FindAccelIndex(strText, &m_titles[nPage]);
 
         if ( FixedSizeTabs() )
         {
@@ -219,7 +219,11 @@ bool wxNotebook::InsertPage(int nPage,
 
     // modify the data
     m_pages.Insert(pPage, nPage);
-    m_titles.Insert(strText, nPage);
+
+    wxString label;
+    m_accels.Insert(FindAccelIndex(strText, &label), nPage);
+    m_titles.Insert(label, nPage);
+
     m_images.Insert(imageId, nPage);
 
     // cache the tab geometry here
@@ -275,6 +279,8 @@ wxNotebookPage *wxNotebook::DoRemovePage(int nPage)
 
     wxNotebookPage *page = m_pages[nPage];
     m_pages.RemoveAt(nPage);
+    m_titles.RemoveAt(nPage);
+    m_accels.RemoveAt(nPage);
     m_widths.RemoveAt(nPage);
     m_images.RemoveAt(nPage);
 
@@ -312,39 +318,67 @@ void wxNotebook::RefreshAllTabs()
     Refresh(TRUE, &r);
 }
 
+void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
+{
+    wxBitmap bmp;
+    if ( HasImage(n) )
+    {
+#ifdef __WXMSW__    // FIXME
+        wxMemoryDC dc;
+        dc.SelectObject(bmp);
+        m_imageList->Draw(m_images[n], dc, 0, 0);
+#else
+        bmp = *m_imageList->GetBitmap(m_images[n]);
+#endif
+    }
+
+    GetRenderer()->DrawTab
+                   (
+                     dc,
+                     rect,
+                     GetTabOrientation(),
+                     m_titles[n],
+                     bmp,
+                     n == m_sel ? wxCONTROL_FOCUSED | wxCONTROL_SELECTED : 0,
+                     m_accels[n]
+                   );
+}
+
 void wxNotebook::DoDraw(wxControlRenderer *renderer)
 {
     wxRect rectUpdate = GetUpdateClientRect();
 
-    wxRect rect = GetAllTabsRect();
-    wxDirection dir = GetTabOrientation();
+    wxDC& dc = renderer->GetDC();
+    dc.SetFont(GetFont());
+    dc.SetTextForeground(GetForegroundColour());
+
+    // redraw the border - it's simpler to always do it instead of checking
+    // whether this needs to be done
+    GetRenderer()->DrawBorder(dc, wxBORDER_RAISED, GetPagePart());
+
+    wxRect rect = GetTabsPart();
     bool isVertical = IsVertical();
 
+    wxRect rectSel;
     size_t count = GetPageCount();
     for ( size_t n = 0; n < count; n++ )
     {
         GetTabSize(n, &rect.width, &rect.height);
 
-        if ( rectUpdate.Intersects(rect) )
+        if ( n == m_sel )
         {
-            wxBitmap bmp;
-            if ( HasImage(n) )
-            {
-#ifdef __WXMSW__    // FIXME
-                wxMemoryDC dc;
-                dc.SelectObject(bmp);
-                m_imageList->Draw(m_images[n], dc, 0, 0);
-#else
-                bmp = *m_imageList->GetBitmap(m_images[n]);
-#endif
-            }
-
-            renderer->DrawTab(dir, rect, m_titles[n], bmp,
-                              n == m_sel
-                                ? wxCONTROL_FOCUSED | wxCONTROL_SELECTED
-                                : 0);
+            // don't redraw it now as this tab has to be drawn over the other
+            // ones
+            rectSel = rect;
         }
-        //else: doesn't need to be refreshed
+        else // not selected tab
+        {
+            if ( rectUpdate.Intersects(rect) )
+            {
+                DoDrawTab(dc, rect, n);
+            }
+            //else: doesn't need to be refreshed
+        }
 
         // move the rect to the next tab
         if ( isVertical )
@@ -352,6 +386,8 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
         else
             rect.x += rect.width;
     }
+
+    DoDrawTab(dc, rectSel, m_sel);
 }
 
 // ----------------------------------------------------------------------------
@@ -423,12 +459,13 @@ wxRect wxNotebook::GetAllTabsRect() const
 
     if ( GetPageCount() )
     {
+        const wxSize indent = GetRenderer()->GetTabIndent();
         wxSize size = GetClientSize();
 
         if ( IsVertical() )
         {
             rect.x = GetTabOrientation() == wxLEFT ? 0 : size.x - m_heightTab;
-            rect.width = m_heightTab;
+            rect.width = m_heightTab + indent.x;
             rect.y = 0;
             rect.height = size.y;
         }
@@ -437,10 +474,29 @@ wxRect wxNotebook::GetAllTabsRect() const
             rect.x = 0;
             rect.width = size.x;
             rect.y = GetTabOrientation() == wxTOP ? 0 : size.y - m_heightTab;
-            rect.height = m_heightTab;
+            rect.height = m_heightTab + indent.y;
         }
     }
     //else: no pages
+
+    return rect;
+}
+
+wxRect wxNotebook::GetTabsPart() const
+{
+    wxRect rect = GetAllTabsRect();
+
+    const wxSize indent = GetRenderer()->GetTabIndent();
+    if ( IsVertical() )
+    {
+        rect.x += indent.y;
+        rect.y += indent.x;
+    }
+    else // horz
+    {
+        rect.x += indent.x;
+        rect.y += indent.y;
+    }
 
     return rect;
 }
@@ -562,7 +618,7 @@ void wxNotebook::Relayout()
     }
 }
 
-wxRect wxNotebook::GetPageRect() const
+wxRect wxNotebook::GetPagePart() const
 {
     wxRect rectPage = GetClientRect();
 
@@ -586,6 +642,20 @@ wxRect wxNotebook::GetPageRect() const
     //else: no pages at all
 
     return rectPage;
+}
+
+wxRect wxNotebook::GetPageRect() const
+{
+    wxRect rect = GetPagePart();
+
+    // leave space for the border
+    wxRect rectBorder = GetRenderer()->GetBorderDimensions(wxBORDER_RAISED);
+
+    // FIXME: hardcoded +2!
+    rect.Inflate(-(rectBorder.x + rectBorder.width + 2),
+                 -(rectBorder.y + rectBorder.height + 2));
+
+    return rect;
 }
 
 wxSize wxNotebook::GetSizeForPage(const wxSize& size) const

@@ -103,15 +103,18 @@ public:
 protected:
     virtual wxNotebookPage *DoRemovePage(int nPage);
 
-    // wxUniv implementation
+    // drawing
     virtual void DoDraw(wxControlRenderer *renderer);
+    void DoDrawTab(wxDC& dc, const wxRect& rect, size_t n);
 
+    // resizing
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    // input handling
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0l,
                                const wxString& strArg = wxEmptyString);
@@ -137,6 +140,10 @@ protected:
     // get the rectangle containing all tabs
     wxRect GetAllTabsRect() const;
 
+    // get the part occupied by the tabs - slightly smaller than
+    // GetAllTabsRect() because the tabs may be indented from it
+    wxRect GetTabsPart() const;
+
     // calculate the tab size (without padding)
     wxSize CalcTabSize(int page) const;
 
@@ -146,6 +153,10 @@ protected:
     // return TRUE if the tab has an associated image
     bool HasImage(int page) const
         { return m_imageList && m_images[page] != -1; }
+
+    // get the part of the notebook reserved for the pages (slightly larger
+    // than GetPageRect() as we draw a border and leave marginin between)
+    wxRect GetPagePart() const;
 
     // get the page rect in our client coords
     wxRect GetPageRect() const;
@@ -178,6 +189,9 @@ protected:
 
     // the icon indices
     wxArrayInt m_images;
+
+    // the accel indexes for labels
+    wxArrayInt m_accels;
 
     // the padding
     wxSize m_sizePad;

@@ -154,6 +154,13 @@ public:
                               int selEnd = -1,
                               int flags = 0);
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
+    virtual void DrawTab(wxDC& dc,
+                         const wxRect& rect,
+                         wxDirection dir,
+                         const wxString& label,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         int flags = 0,
+                         int indexAccel = -1);
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -189,6 +196,8 @@ public:
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
                                      wxCoord *extraSpaceBeyond);
+
+    virtual wxSize GetTabIndent() const { return wxSize(1, 2); }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -1437,6 +1446,20 @@ void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
         // restore old colour
         dc.SetTextForeground(colFgOld);
     }
+}
+
+// ----------------------------------------------------------------------------
+// notebook
+// ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawTab(wxDC& dc,
+                            const wxRect& rect,
+                            wxDirection dir,
+                            const wxString& label,
+                            const wxBitmap& bitmap,
+                            int flags,
+                            int indexAccel)
+{
 }
 
 // ----------------------------------------------------------------------------

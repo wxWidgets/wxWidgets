@@ -183,6 +183,15 @@ public:
     // draw a line wrap indicator
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect) = 0;
 
+    // draw a notebook tab
+    virtual void DrawTab(wxDC& dc,
+                         const wxRect& rect,
+                         wxDirection dir,
+                         const wxString& label,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         int flags = 0,
+                         int indexAccel = -1) = 0;
+
     // return the bitmaps to use for combobox button
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -245,6 +254,9 @@ public:
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rectTotal,
                                      wxCoord *extraSpaceBeyond) = 0;
+
+    // get the overhang of a selected tab
+    virtual wxSize GetTabIndent() const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -417,6 +429,15 @@ public:
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect)
         { m_renderer->DrawLineWrapMark(dc, rect); }
 
+    virtual void DrawTab(wxDC& dc,
+                         const wxRect& rect,
+                         wxDirection dir,
+                         const wxString& label,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         int flags = 0,
+                         int accel = -1)
+        { m_renderer->DrawTab(dc, rect, dir, label, bitmap, flags, accel); }
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled)
@@ -462,6 +483,8 @@ public:
                                      wxCoord *extraSpaceBeyond)
         { return m_renderer->GetTextClientArea(text, rect, extraSpaceBeyond); }
 
+    virtual wxSize GetTabIndent() const { return m_renderer->GetTabIndent(); }
+
 protected:
     wxRenderer *m_renderer;
 };
@@ -495,13 +518,6 @@ public:
     void DrawBitmap(const wxBitmap& bitmap);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar, int thumbPosOld);
-#if wxUSE_NOTEBOOK
-    void DrawTab(wxDirection dir,
-                 const wxRect& rect,
-                 const wxString& title,
-                 const wxBitmap& bitmap = wxNullBitmap,
-                 int flags = 0);
-#endif // wxUSE_NOTEBOOK
 
     // accessors
     wxWindow *GetWindow() const { return m_window; }

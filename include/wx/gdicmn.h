@@ -303,15 +303,23 @@ public:
     void SetBottom(int bottom) { height = bottom - y + 1; }
 
     // operations with rect
-    void Inflate(wxCoord dx, wxCoord dy)
+    wxRect& Inflate(wxCoord dx, wxCoord dy);
+    wxRect& Inflate(wxCoord d) { return Inflate(d, d); }
+    wxRect Inflate(wxCoord dx, wxCoord dy) const
     {
-        x -= dx;
-        y -= dy;
-        width += 2*dx;
-        height += 2*dy;
+        wxRect r = *this;
+        r.Inflate(dx, dy);
+        return r;
     }
 
-    void Inflate(wxCoord d) { Inflate(d, d); }
+    wxRect& Deflate(wxCoord dx, wxCoord dy) { return Inflate(-dx, -dy); }
+    wxRect& Deflate(wxCoord d) { return Inflate(-d); }
+    wxRect Deflate(wxCoord dx, wxCoord dy) const
+    {
+        wxRect r = *this;
+        r.Deflate(dx, dy);
+        return r;
+    }
 
     void Offset(wxCoord dx, wxCoord dy) { x += dx; y += dy; }
     void Offset(const wxPoint& pt) { Offset(pt.x, pt.y); }

@@ -86,16 +86,21 @@ bool wxControl::Create(wxWindow *parent,
 // mnemonics handling
 // ----------------------------------------------------------------------------
 
-void wxControl::SetLabel(const wxString& label)
+/* static */
+int wxControl::FindAccelIndex(const wxString& label, wxString *labelOnly)
 {
     // the character following MNEMONIC_PREFIX is the accelerator for this
     // control unless it is MNEMONIC_PREFIX too - this allows to insert
     // literal MNEMONIC_PREFIX chars into the label
     static const wxChar MNEMONIC_PREFIX = _T('&');
 
-    wxString labelOld = m_label;
-    m_indexAccel = -1;
-    m_label.clear();
+    if ( labelOnly )
+    {
+        labelOnly->Empty();
+        labelOnly->Alloc(label.length());
+    }
+
+    int indexAccel = -1;
     for ( const wxChar *pc = label; *pc != wxT('\0'); pc++ )
     {
         if ( *pc == MNEMONIC_PREFIX )
@@ -103,10 +108,10 @@ void wxControl::SetLabel(const wxString& label)
             pc++; // skip it
             if ( *pc != MNEMONIC_PREFIX )
             {
-                if ( m_indexAccel == -1 )
+                if ( indexAccel == -1 )
                 {
                     // remember it (-1 is for MNEMONIC_PREFIX itself
-                    m_indexAccel = pc - label.c_str() - 1;
+                    indexAccel = pc - label.c_str() - 1;
                 }
                 else
                 {
@@ -115,8 +120,19 @@ void wxControl::SetLabel(const wxString& label)
             }
         }
 
-        m_label += *pc;
+        if ( labelOnly )
+        {
+            *labelOnly += *pc;
+        }
     }
+
+    return indexAccel;
+}
+
+void wxControl::SetLabel(const wxString& label)
+{
+    wxString labelOld = m_label;
+    m_indexAccel = FindAccelIndex(label, &m_label);
 
     if ( m_label != labelOld )
     {
