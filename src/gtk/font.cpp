@@ -170,7 +170,7 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
     
-    s.Printf("%d;%s", 
+    s.Printf(_T("%d;%s"),
              0,                         // version
              xFontName.c_str());
              
