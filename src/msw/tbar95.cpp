@@ -94,6 +94,9 @@
 #ifndef TBSTYLE_FLAT
     #define TBSTYLE_LIST            0x1000
     #define TBSTYLE_FLAT            0x0800
+#endif
+
+#ifndef TBSTYLE_TRANSPARENT
     #define TBSTYLE_TRANSPARENT     0x8000
 #endif
 
