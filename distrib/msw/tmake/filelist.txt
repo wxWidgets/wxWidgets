@@ -307,6 +307,7 @@ taskbar.cpp	M	32
 tbar95.cpp	M	32
 tbarmsw.cpp	M	16
 textctrl.cpp	M
+tglbtn.cpp	M
 thread.cpp	M	32,B
 timer.cpp	M
 tooltip.cpp	M	32
@@ -381,6 +382,7 @@ statline.cpp	R
 stattext.cpp	R
 tbargtk.cpp	R
 textctrl.cpp	R
+tglbtn.cpp	R
 timer.cpp	R
 tooltip.cpp	R
 utilsgtk.cpp	R
@@ -720,7 +722,7 @@ tbarsmpl.h	W
 textctrl.h	W
 textdlg.h	W
 textfile.h	W	B
-txtstrm.h	W	B
+tglbtn.h	W
 thread.h	W	B
 time.h	W	B
 timer.h	W	B
@@ -731,6 +733,7 @@ toolbar.h	W
 tooltip.h	W
 treebase.h	W
 treectrl.h	W
+txtstrm.h	W	B
 types.h	W
 url.h	W	B
 utils.h	W	B
@@ -809,6 +812,7 @@ statline.h	K
 stattext.h	K
 tbargtk.h	K
 textctrl.h	K
+tglbtn.h	K
 timer.h	K
 tooltip.h	K
 treectrl.h	K
@@ -961,6 +965,7 @@ taskbar.h	9
 tbar95.h	9
 tbarmsw.h	9
 textctrl.h	9
+tglbtn.h	9
 timer.h	9
 tooltip.h	9
 treectrl.h	9

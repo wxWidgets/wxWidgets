@@ -803,6 +803,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STATLINE=no
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TABDIALOG=no
+  DEFAULT_wxUSE_TOGGLEBTN=no
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
@@ -925,6 +926,7 @@ else
   DEFAULT_wxUSE_STATLINE=yes
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TABDIALOG=no
+  DEFAULT_wxUSE_TOGGLEBTN=yes
   DEFAULT_wxUSE_TOOLBAR=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
@@ -1145,6 +1147,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_STATLINE=yes
   DEFAULT_wxUSE_STATUSBAR=yes
   DEFAULT_wxUSE_TAB_DIALOG=yes
+  DEFAULT_wxUSE_TOGGLEBTN=yes
   DEFAULT_wxUSE_TOOLBAR=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
@@ -1178,6 +1181,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_STATLINE=no
   DEFAULT_wxUSE_STATUSBAR=no
   DEFAULT_wxUSE_TAB_DIALOG=no
+  DEFAULT_wxUSE_TOGGLEBTN=no
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
@@ -1212,6 +1216,7 @@ WX_ARG_ENABLE(statbox,     [  --enable-statbox        use wxStaticBox class], wx
 WX_ARG_ENABLE(statline,    [  --enable-statline       use wxStaticLine class], wxUSE_STATLINE)
 WX_ARG_ENABLE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
 WX_ARG_ENABLE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TABDIALOG)
+WX_ARG_ENABLE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
 WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
 WX_ARG_ENABLE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_ENABLE(tbarsmpl,    [  --enable-tbarsmpl       use wxToolBarSimple class], wxUSE_TOOLBAR_SIMPLE)
@@ -3729,6 +3734,10 @@ fi
 if test "$wxUSE_TABDIALOG" = "yes"; then
     AC_DEFINE(wxUSE_TAB_DIALOG)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
+fi
+
+if test "$wxUSE_TOGGLEBTN" = "yes"; then
+  AC_DEFINE(wxUSE_TOGGLEBTN)
 fi
 
 if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then

@@ -379,6 +379,7 @@
 #define wxUSE_SPINCTRL     1
 #define wxUSE_STATLINE     1
 #define wxUSE_STATUSBAR    1
+#define wxUSE_TOGGLEBTN    1        // requires wxButton
 #define wxUSE_TOOLTIPS     1        // wxToolTip and wxWindow::SetToolTip()
 
 // Two status bar implementations are available under Win32: the generic one

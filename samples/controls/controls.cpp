@@ -26,6 +26,7 @@
 #if !defined( __WXMSW__ ) || defined( __WIN95__ )
 #include "wx/spinbutt.h"
 #endif
+#include "wx/tglbtn.h"
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 
@@ -478,7 +479,7 @@ EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #if wxUSE_SPINCTRL
 EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
-EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
+EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
@@ -780,12 +781,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                  (
                                   panel, -1,
                                   bmp1,
-                                  wxPoint(30, 50)
+                                  wxPoint(30, 70)
                                  );
     bmpBtn->SetBitmapSelected(bmp2);
     bmpBtn->SetBitmapFocus(bmp3);
 
-    (void)new wxButton(panel, ID_BUTTON_LABEL, "&Toggle label", wxPoint(250, 20));
+    (void)new wxToggleButton(panel, ID_BUTTON_LABEL,
+                             "&Toggle label", wxPoint(250, 20));
     m_label = new wxStaticText(panel, -1, "Label with some long text",
                                wxPoint(250, 60), wxDefaultSize,
                                wxALIGN_RIGHT /*| wxST_NO_AUTORESIZE*/);
@@ -1207,12 +1209,10 @@ void MyPanel::OnSetFont( wxCommandEvent &WXUNUSED(event) )
     m_text->SetFont( *wxITALIC_FONT );
 }
 
-void MyPanel::OnUpdateLabel( wxCommandEvent &WXUNUSED(event) )
+void MyPanel::OnUpdateLabel( wxCommandEvent &event )
 {
-    static bool s_long = TRUE;
-
-    s_long = !s_long;
-    m_label->SetLabel(s_long ? "Very very very very very long text." : "Shorter text.");
+    m_label->SetLabel(event.GetInt() ? "Very very very very very long text."
+                                     : "Shorter text.");
 }
 
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
