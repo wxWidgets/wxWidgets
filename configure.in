@@ -972,7 +972,6 @@ fi
 ## FIXME: This is a blatant hack
 if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   wxUSE_PRINTING_ARCHITECTURE=no
-  wxUSE_HELP=no
   wxUSE_CLIPBOARD=no
   wxUSE_DRAG_AND_DROP=no
   wxUSE_DATAOBJ=no
