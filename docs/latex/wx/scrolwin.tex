@@ -205,6 +205,37 @@ parameters and returns a tuple of values for xUnit and yUnit.}
 \perlnote{In wxPerl this method takes no parameters and returns a
 2-element list {\tt ( xUnit, yUnit )}.}
 
+\membersection{wxScrolledWindow::GetViewStart}\label{wxscrolledwindowgetviewstart}
+
+\constfunc{void}{GetViewStart}{\param{int* }{x}, \param{int* }{ y}}
+
+Get the position at which the visible portion of the window starts.
+
+\wxheading{Parameters}
+
+\docparam{x}{Receives the first visible x position in scroll units.}
+
+\docparam{y}{Receives the first visible y position in scroll units.}
+
+\wxheading{Remarks}
+
+If either of the scrollbars is not at the home position, {\it x} and/or
+\rtfsp{\it y} will be greater than zero.  Combined with \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize},
+the application can use this function to efficiently redraw only the
+visible portion of the window.  The positions are in logical scroll
+units, not pixels, so to convert to pixels you will have to multiply
+by the number of pixels per scroll increment.
+
+\wxheading{See also}
+
+\helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
+
+\pythonnote{The wxPython version of this methods accepts no
+parameters and returns a tuple of values for x and y.}
+
+\perlnote{In wxPerl this method takes no parameters and returns a
+2-element list {\tt ( x, y )}.}
+
 \membersection{wxScrolledWindow::GetVirtualSize}\label{wxscrolledwindowgetvirtualsize}
 
 \constfunc{void}{GetVirtualSize}{\param{int* }{x}, \param{int* }{y}}
@@ -375,35 +406,4 @@ parameter in SetScrollbars.
 
 Call this function to tell wxScrolledWindow to perform the actual scrolling on
 a different window (not on itself).
-
-\membersection{wxScrolledWindow::GetViewStart}\label{wxscrolledwindowgetviewstart}
-
-\constfunc{void}{GetViewStart}{\param{int* }{x}, \param{int* }{ y}}
-
-Get the position at which the visible portion of the window starts.
-
-\wxheading{Parameters}
-
-\docparam{x}{Receives the first visible x position in scroll units.}
-
-\docparam{y}{Receives the first visible y position in scroll units.}
-
-\wxheading{Remarks}
-
-If either of the scrollbars is not at the home position, {\it x} and/or
-\rtfsp{\it y} will be greater than zero.  Combined with \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize},
-the application can use this function to efficiently redraw only the
-visible portion of the window.  The positions are in logical scroll
-units, not pixels, so to convert to pixels you will have to multiply
-by the number of pixels per scroll increment.
-
-\wxheading{See also}
-
-\helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
-
-\pythonnote{The wxPython version of this methods accepts no
-parameters and returns a tuple of values for x and y.}
-
-\perlnote{In wxPerl this method takes no parameters and returns a
-2-element list {\tt ( x, y )}.}
 

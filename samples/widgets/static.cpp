@@ -73,6 +73,27 @@ enum
     StaticVAlign_Max
 };
 
+class DerivedStaticText: public wxStaticText
+{
+public:
+    DerivedStaticText(wxWindow* parent, wxWindowID id, const wxString& label,
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+        long style = 0):
+        wxStaticText(parent, id, label, pos, size, style)
+    {
+    }
+    void OnMouseEvent(wxMouseEvent& event)
+    {
+        if (event.LeftDown())
+            wxMessageBox(wxT("Clicked on static text"));
+    }
+DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(DerivedStaticText, wxStaticText)
+    EVT_MOUSE_EVENTS(DerivedStaticText::OnMouseEvent)
+END_EVENT_TABLE()
+
 // ----------------------------------------------------------------------------
 // StaticWidgetsPage
 // ----------------------------------------------------------------------------
@@ -324,7 +345,7 @@ void StaticWidgetsPage::CreateStatic()
     m_sizerStatBox = new wxStaticBoxSizer(box, isVert ? wxHORIZONTAL
                                                       : wxVERTICAL);
 
-    m_statText = new wxStaticText(this, -1, m_textLabel->GetValue(),
+    m_statText = new DerivedStaticText(this, -1, m_textLabel->GetValue(),
                                   wxDefaultPosition, wxDefaultSize,
                                   flagsText);
 
