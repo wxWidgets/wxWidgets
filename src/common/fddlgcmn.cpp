@@ -74,7 +74,9 @@ void wxFindReplaceDialogBase::Send(wxFindDialogEvent& event)
 
     m_FindReplaceData->m_Flags = event.GetFlags();
     m_FindReplaceData->m_FindWhat = event.GetFindString();
-    if ( HasFlag(wxFR_REPLACEDIALOG) )
+    if ( HasFlag(wxFR_REPLACEDIALOG) && 
+         (event.GetEventType() == wxEVT_COMMAND_FIND_REPLACE || 
+          event.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL) )
     {
         m_FindReplaceData->m_ReplaceWith = event.GetReplaceString();
     }
