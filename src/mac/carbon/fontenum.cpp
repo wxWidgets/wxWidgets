@@ -36,6 +36,7 @@
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/fontutil.h"
+#include "wx/encinfo.h"
 
 #include "wx/mac/private.h"
 
