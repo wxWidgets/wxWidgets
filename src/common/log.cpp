@@ -212,7 +212,6 @@ wxLog::wxLog()
   m_bHasMessages = FALSE;
   m_bVerbose     = FALSE;
   m_szTimeFormat = "[%d/%b/%y %H:%M:%S] ";
-  m_ulTraceMask  = (wxTraceMask)0;        // -1 to set all bits
 }
 
 wxLog *wxLog::GetActiveTarget()
@@ -707,6 +706,7 @@ wxLogWindow::~wxLogWindow()
 // ----------------------------------------------------------------------------
 wxLog      *wxLog::ms_pLogger      = NULL;
 bool        wxLog::ms_bInitialized = FALSE;
+wxTraceMask wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 
 // ----------------------------------------------------------------------------
 // stdout error logging helper
