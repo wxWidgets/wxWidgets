@@ -212,9 +212,9 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
         return FALSE;
 
-    // the treectrl with any other background looks ugly because the items
-    // background is white anyhow
-    SetBackgroundColour(*wxWHITE);
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
+
 
     // VZ: this is some experimental code which may be used to get the
     //     TVS_CHECKBOXES style functionality for comctl32.dll < 4.71.

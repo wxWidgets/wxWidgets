@@ -174,8 +174,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
     }
 #endif // ListView_SetExtendedListViewStyle
 
-    wxSystemSettings settings;
-    SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
 
     SubclassWin(m_hWnd);
