@@ -21,7 +21,7 @@
     #endif
 #endif
 
-#if (defined(__WATCOMC__) && __WATCOMC__ >= 1200) || defined(__DIGITALMARS__)
+#if (defined(__WATCOMC__) && __WATCOMC__ >= 1200) 
     #define HAVE_W32API_H
 #endif
 
