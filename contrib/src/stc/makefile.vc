@@ -51,6 +51,10 @@ OBJECTS = \
 	$(D)\LexRuby.obj		\
 	$(D)\LexSQL.obj			\
 	$(D)\LexVB.obj			\
+        $(D)\LexMMIXAL.obj		\
+        $(D)\LexNsis.obj		\
+        $(D)\LexPS.obj			\
+        $(D)\LexScriptol.obj		\
         $(D)\LineMarker.obj	    	\
         $(D)\PropSet.obj	        \
 	$(D)\RESearch.obj		\

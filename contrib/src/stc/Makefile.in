@@ -59,6 +59,10 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
 	LexRuby.o		\
 	LexSQL.o		\
 	LexVB.o			\
+        LexMMIXAL.o		\
+        LexNsis.o		\
+        LexPS.o			\
+        LexScriptol.o		\
         LineMarker.o	    	\
         PropSet.o	        \
 	RESearch.o		\

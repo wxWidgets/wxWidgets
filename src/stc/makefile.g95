@@ -46,6 +46,10 @@ OBJECTS = \
 	$(S)/LexRuby.$(OBJSUFF)		\
 	$(S)/LexSQL.$(OBJSUFF)		\
 	$(S)/LexVB.$(OBJSUFF)		\
+        $(S)/LexMMIXAL.$(OBJSUFF)	\
+        $(S)/LexNsis.$(OBJSUFF)		\
+        $(S)/LexPS.$(OBJSUFF)		\
+        $(S)/LexScriptol.$(OBJSUFF)	\
         $(S)/LineMarker.$(OBJSUFF)	\
         $(S)/PropSet.$(OBJSUFF)	        \
 	$(S)/RESearch.$(OBJSUFF)	\

@@ -5,7 +5,7 @@ S=$(SCINTILLA)\src
 
 EXTRASTCCPPFLAGS = -D__WX__ -DSCI_LEXER -DLINK_LEXERS -I$(SCINTILLA)/include -I$(S)
 EXTRACPPFLAGS=$(EXTRACPPFLAGS) $(EXTRASTCCPPFLAGS)
-STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) 
+STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS)
 
 include $(WXDIR)\src\makesc.env
 LIBTARGET=$(WXDIR)\lib\stc$(SC_SUFFIX).lib
@@ -52,6 +52,10 @@ OBJECTS = \
 	$(S)\LexRuby.obj			\
 	$(S)\LexSQL.obj			\
 	$(S)\LexVB.obj			\
+        $(S)\LexMMIXAL.obj			\
+        $(S)\LexNsis.obj			\
+        $(S)\LexPS.obj			\
+        $(S)\LexScriptol.obj			\
     $(S)\LineMarker.obj	    \
     $(S)\PropSet.obj	        \
 	$(S)\RESearch.obj		\

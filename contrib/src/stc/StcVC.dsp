@@ -370,6 +370,22 @@ SOURCE=.\scintilla\src\LexVB.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\LexMMIXAL.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexNsis.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexPS.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexScriptol.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\LineMarker.cxx
 # End Source File
 # Begin Source File

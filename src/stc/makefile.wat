@@ -55,6 +55,10 @@ OBJECTS = &
 	LexRuby.obj		        &
 	LexSQL.obj		        &
 	LexVB.obj		        &
+        LexMMIXAL.obj		        &
+        LexNsis.obj		        &
+        LexPS.obj		        &
+        LexScriptol.obj		        &
     LineMarker.obj	    	&
     PropSet.obj	            &
 	RESearch.obj		    &

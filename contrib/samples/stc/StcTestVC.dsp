@@ -167,6 +167,14 @@ SOURCE=.\stctest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\edit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\prefs.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\stctest.rc
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809 /i "../../../include" /i "../../../contrib/include"

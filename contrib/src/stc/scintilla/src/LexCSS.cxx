@@ -108,7 +108,8 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_CSS_DEFAULT);
 				break;
 			case ':':
-				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_DEFAULT || lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID)
+				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_DEFAULT ||
+					lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID || lastState == SCE_CSS_UNKNOWN_PSEUDOCLASS)
 					sc.SetState(SCE_CSS_PSEUDOCLASS);
 				else if (lastState == SCE_CSS_IDENTIFIER || lastState == SCE_CSS_UNKNOWN_IDENTIFIER)
 					sc.SetState(SCE_CSS_VALUE);

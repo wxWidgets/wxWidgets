@@ -475,7 +475,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (long)buff);
         delete [] buff;
-
+        
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -858,7 +858,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (long)buff);
         delete [] buff;
-
+     
 }
 
 // Clear all the registered images.
@@ -1802,12 +1802,12 @@ bool wxStyledTextCtrl::GetMouseDownCaptures() {
 }
 
 // Sets the cursor to one of the SC_CURSOR* values.
-void wxStyledTextCtrl::SetCursor(int cursorType) {
+void wxStyledTextCtrl::SetSTCCursor(int cursorType) {
     SendMsg(2386, cursorType, 0);
 }
 
 // Get cursor type.
-int wxStyledTextCtrl::GetCursor() {
+int wxStyledTextCtrl::GetSTCCursor() {
     return SendMsg(2387, 0, 0);
 }
 
@@ -2157,7 +2157,7 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
 //----------------------------------------------------------------------
 // Event handlers
 
-void wxStyledTextCtrl::OnPaint(wxPaintEvent& evt) {
+void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
     wxPaintDC dc(this);
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
@@ -2179,7 +2179,7 @@ void wxStyledTextCtrl::OnScroll(wxScrollEvent& evt) {
     }
 }
 
-void wxStyledTextCtrl::OnSize(wxSizeEvent& evt) {
+void wxStyledTextCtrl::OnSize(wxSizeEvent& WXUNUSED(evt)) {
     wxSize sz = GetClientSize();
     m_swx->DoSize(sz.x, sz.y);
 }
@@ -2257,9 +2257,10 @@ void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
     int key = evt.GetKeyCode();
     bool shift = evt.ShiftDown(),
          ctrl  = evt.ControlDown(),
-         alt   = evt.AltDown();
+         alt   = evt.AltDown(),
+         meta  = evt.MetaDown();
 
-    int processed = m_swx->DoKeyDown(key, shift, ctrl, alt, &m_lastKeyDownConsumed);
+    int processed = m_swx->DoKeyDown(key, shift, ctrl, alt, meta, &m_lastKeyDownConsumed);
 
 //     printf("KeyDn  key:%d  shift:%d  ctrl:%d  alt:%d  processed:%d  consumed:%d\n",
 //            key, shift, ctrl, alt, processed, m_lastKeyDownConsumed);
@@ -2269,22 +2270,22 @@ void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
 }
 
 
-void wxStyledTextCtrl::OnLoseFocus(wxFocusEvent& evt) {
+void wxStyledTextCtrl::OnLoseFocus(wxFocusEvent& WXUNUSED(evt)) {
     m_swx->DoLoseFocus();
 }
 
 
-void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& evt) {
+void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& WXUNUSED(evt)) {
     m_swx->DoGainFocus();
 }
 
 
-void wxStyledTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& evt) {
+void wxStyledTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(evt)) {
     m_swx->DoSysColourChange();
 }
 
 
-void wxStyledTextCtrl::OnEraseBackground(wxEraseEvent& evt) {
+void wxStyledTextCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt)) {
     // do nothing to help avoid flashing
 }
 
@@ -2295,7 +2296,7 @@ void wxStyledTextCtrl::OnMenu(wxCommandEvent& evt) {
 }
 
 
-void wxStyledTextCtrl::OnListBox(wxCommandEvent& evt) {
+void wxStyledTextCtrl::OnListBox(wxCommandEvent& WXUNUSED(evt)) {
     m_swx->DoOnListBox();
 }
 

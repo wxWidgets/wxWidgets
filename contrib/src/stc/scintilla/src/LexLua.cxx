@@ -24,7 +24,7 @@
 #include "SciLexer.h"
 
 static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+	return (ch < 0x80) && (isalnum(ch) || ch == '_' || ch == '.');
 }
 
 inline bool IsAWordStart(const int ch) {
@@ -58,6 +58,8 @@ static void ColouriseLuaDoc(
 	WordList &keywords4 = *keywordlists[3];
 	WordList &keywords5 = *keywordlists[4];
 	WordList &keywords6 = *keywordlists[5];
+	WordList &keywords7 = *keywordlists[6];
+	WordList &keywords8 = *keywordlists[7];
 
 	int currentLine = styler.GetLine(startPos);
 	// Initialize the literal string [[ ... ]] nesting level, if we are inside such a string.
@@ -121,11 +123,15 @@ static void ColouriseLuaDoc(
 		if (sc.state == SCE_LUA_OPERATOR) {
 			sc.SetState(SCE_LUA_DEFAULT);
 		} else if (sc.state == SCE_LUA_NUMBER) {
-			if (!IsAWordChar(sc.ch)) {
-				sc.SetState(SCE_LUA_DEFAULT);
+			// We stop the number definition on non-numerical non-dot non-eE non-sign char
+			if (!(isdigit(sc.ch) || sc.ch == '.' ||
+				  toupper(sc.ch) == 'E' || sc.ch == '-' || sc.ch == '+')) {
+					// Not exactly following number definition (several dots are seen as OK, etc.)
+					// but probably enough in most cases.
+					sc.SetState(SCE_LUA_DEFAULT);
 			}
 		} else if (sc.state == SCE_LUA_IDENTIFIER) {
-			if (!IsAWordChar(sc.ch) || (sc.ch == '.')) {
+			if (!IsAWordChar(sc.ch)) {
 				char s[100];
 				sc.GetCurrent(s, sizeof(s));
 				if (keywords.InList(s)) {
@@ -140,6 +146,12 @@ static void ColouriseLuaDoc(
 					sc.ChangeState(SCE_LUA_WORD5);
 				} else if (keywords6.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD6);
+				} else if (keywords6.InList(s)) {
+					sc.ChangeState(SCE_LUA_WORD6);
+				} else if (keywords7.InList(s)) {
+					sc.ChangeState(SCE_LUA_WORD7);
+				} else if (keywords8.InList(s)) {
+					sc.ChangeState(SCE_LUA_WORD8);
 				}
 				sc.SetState(SCE_LUA_DEFAULT);
 			}
@@ -300,8 +312,8 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 static const char * const luaWordListDesc[] = {
 	"Keywords",
 	"Basic functions",
-	"String & math functions",
-	"I/O & system facilities",
+	"String, (table) & math functions",
+	"(coroutines), I/O & system facilities",
 	"XXX",
 	"XXX",
 	0
