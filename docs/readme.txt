@@ -171,10 +171,24 @@ For licensing information, please see the files:
 Although this may seem complex, it is there to allow authors of
 proprietary/commercial applications to use wxWindows in
 addition to those writing GPL'ed applications. In summary,
-the licence is L-GPL plus a clause allowing unrestricted
+the licence is LGPL plus a clause allowing unrestricted
 distribution of application binaries. To answer a FAQ, you
 don't have to distribute any source if you wish to write
-commercial applications using wxWindows.
+commercial applications using wxWindows. 
+
+However, if you distribute wxGTK or wxMotif (with Lesstif) version
+of your application, don't forget that it is linked against
+GTK+ (or Lesstif) which is covered by LGPL *without* exception
+notice. Under Linux systems your app is probably linked
+against LGPL glibc as well. Please read carefuly LGPL, section 6.
+which describes conditions for distribution of closed source applications
+linked against LGPL library. Basically you should link dynamicaly and
+include source code of LGPL libraries with your product (unless it is
+already present in user's system - like glibc usually is).
+
+If compiled with --enable-odbc (Unix only), wxWindows library will 
+contain iODBC library which is covered by LGPL.
+
 
 Documentation
 -------------
