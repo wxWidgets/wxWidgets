@@ -3819,7 +3819,7 @@ void wxGrid::Init()
     m_batchCount = 0;
 
     m_extraWidth =
-    m_extraHeight = 50;
+    m_extraHeight = 0;
 }
 
 // ----------------------------------------------------------------------------
