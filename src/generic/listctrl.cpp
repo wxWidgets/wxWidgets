@@ -3800,11 +3800,16 @@ wxRect wxListMainWindow::GetViewRect() const
         }
     }
 
-#if 0
-    // account for the scrollbar
-    yMax += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
-    xMax += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
-#endif
+    // some fudge needed to make it look prettier
+    xMax += EXTRA_WIDTH;
+    yMax += EXTRA_HEIGHT;
+
+    // account for the scrollbars if necessary
+    const wxSize sizeAll = GetClientSize();
+    if ( xMax > sizeAll.x )
+        yMax += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+    if ( yMax > sizeAll.y )
+        xMax += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
     return wxRect(0, 0, xMax, yMax);
 }
