@@ -10,7 +10,7 @@
 #define __ZIPSTREAM_H__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "zipstrm.h"
 #endif
 
 #include "wx/defs.h"

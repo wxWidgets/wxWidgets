@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "zipstream.h"
+#pragma implementation "zipstrm.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
