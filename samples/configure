@@ -529,6 +529,8 @@ SAMPLES_SUBDIRS=$wx_cv_path_samplesubdirs
 PATH_IFS=$wx_cv_path_ifs
 PROGRAM_EXT=$wx_cv_program_ext
 WX_TARGET_LIBRARY=$wx_cv_target_library
+WX_TARGET_LIBRARY_GL=$wx_cv_target_library_gl
+
 
 
 
@@ -753,6 +755,7 @@ s%@SAMPLES_SUBDIRS@%$SAMPLES_SUBDIRS%g
 s%@PATH_IFS@%$PATH_IFS%g
 s%@PROGRAM_EXT@%$PROGRAM_EXT%g
 s%@WX_TARGET_LIBRARY@%$WX_TARGET_LIBRARY%g
+s%@WX_TARGET_LIBRARY_GL@%$WX_TARGET_LIBRARY_GL%g
 
 CEOF
 EOF
