@@ -218,6 +218,7 @@ if [ $skipconfig != yes ]; then
 	--enable-debug_flag \
 	--enable-precomp=no \
 	--enable-optimise \
+	--disable-debugreport \
 	$UNICODEOPT $OTHER_CFG_OPTS
 
 fi

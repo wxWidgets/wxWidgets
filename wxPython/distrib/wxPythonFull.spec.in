@@ -201,6 +201,7 @@ cd bld
 %if %{debug_flag}
 	--enable-debug_flag \
 %endif
+	--disable-debugreport \
 %if %{builtin_libs}
 	--with-libjpeg=builtin \
 	--with-libpng=builtin \

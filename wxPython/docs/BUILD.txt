@@ -71,7 +71,7 @@ place, then do the same for wxPython.
    rerun the script without having to remember the options I used
    before::
 
-	 cd $WXDIR
+         cd $WXDIR
          mkdir bld
          cd bld
          ../configure --prefix=/opt/wx/2.5 \
@@ -81,6 +81,7 @@ place, then do the same for wxPython.
                       --enable-geometry \
                       --enable-sound --with-sdl \
                       --enable-display \
+                      --disable-debugreport \
                       
 
    On OS X of course you'll want to use --with-mac instead of
@@ -94,13 +95,13 @@ place, then do the same for wxPython.
    suits you on Linux and etc. but use monolithic on OSX.  To switch
    to the monolithic build of wxWidgets just add this configure flag::
 
-		     --enable-monolithic \
+                     --enable-monolithic \
 
    By default GTK2 will be selected if its development pacakge is
    installed on your build system.  To force the use of GTK 1.2.x
    instead add this flag::
 
-		      --disable-gtk2 \
+                      --disable-gtk2 \
 
    To make the wxWidgets build be unicode enabled (strongly
    recommended if you are building with GTK2) then add the following.
@@ -191,7 +192,7 @@ place, then do the same for wxPython.
    GTK2.  If you built wxWidgets to use GTK 1.2.x then you should add
    this flag to the command-line::
 
-	 WXPORT=gtk 
+         WXPORT=gtk 
 
    If you would like to do a Unicode enabled build (all strings sent
    to or retruned from wx functions are Unicode objects) and your
@@ -291,10 +292,10 @@ differently.
 
 The \*.btm files are for 4NT and the others are for bash.  They are::
 
-   .make/.make.btm	  Builds the main lib and the needed contribs
-   .mymake/.mymake.btm	  Builds just one lib, use by .make
-   .makesetup.mk	  A makefile that will copy and edit setup.h
-			  as needed for the different types of builds
+   .make/.make.btm        Builds the main lib and the needed contribs
+   .mymake/.mymake.btm    Builds just one lib, use by .make
+   .makesetup.mk          A makefile that will copy and edit setup.h
+                          as needed for the different types of builds
 
 Okay.  Here's what you've been waiting for, the instructions!  Adapt
 accordingly if you are using the bash shell.
@@ -320,6 +321,7 @@ accordingly if you are using the bash shell.
          wxUSE_POSTSCRIPT               1
          wxUSE_AFM_FOR_POSTSCRIPT       0
          wxUSE_DISPLAY                  1
+         wxUSE_DEBUGREPORT              0
 
    If you are using my build scripts then a few more settings will be
    changed and then a copy of setup.h is placed in a subdir of
@@ -327,7 +329,7 @@ accordingly if you are using the bash shell.
    UNICODE build, then also change these::
 
          wxUSE_UNICODE                  1
-	 wxUSE_UNICODE_MSLU             1
+         wxUSE_UNICODE_MSLU             1
 
    If you are doing a "hybrid" build (which is the same as the
    binaries that I release) then also change these::
@@ -343,7 +345,7 @@ accordingly if you are using the bash shell.
 
 5. Change to the %WXDIR%\\build\\msw directory 
 
-     	 cd %WXDIR%\\build\\msw
+         cd %WXDIR%\\build\\msw
 
 
 6. If using my scripts then use the .make.btm command to build
@@ -371,7 +373,7 @@ accordingly if you are using the bash shell.
    executing nmake with a bunch of extra command line parameters.
    The base set are::
 
-	-f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
+        -f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
 
    If doing a debug build then add::
 
@@ -390,8 +392,8 @@ accordingly if you are using the bash shell.
    same command from the following directories in order to build the
    contrib libraries::
 
-	%WXDIR%\contrib\build\gizmos
-	%WXDIR%\contrib\build\stc
+        %WXDIR%\contrib\build\gizmos
+        %WXDIR%\contrib\build\stc
 
 
 7.  When that is all done it will have built the main wxWidgets DLLs
@@ -442,7 +444,7 @@ accordingly if you are using the bash shell.
    PYTHONPATH to the wxPython dir in the CVS tree.  For example::
 
         set PYTHONPATH=%WXDIR%\wxPython
-	cd %WXDIR\wxPython\demo
+        cd %WXDIR\wxPython\demo
         python demo.py
 
 
