@@ -615,6 +615,12 @@ void wxWindowBase::SetSizeHints(int minW, int minH,
                                 int maxW, int maxH,
                                 int WXUNUSED(incW), int WXUNUSED(incH))
 {
+    // setting min width greater than max width leads to infinite loops under
+    // X11 and generally doesn't make any sense, so don't allow it
+    wxCHECK_RET( (minW == -1 || maxW == -1 || minW <= maxW) &&
+                    (minH == -1 || maxH == -1 || minH < maxH),
+                 _T("min width/height must be less than max width/height!") );
+
     m_minWidth = minW;
     m_maxWidth = maxW;
     m_minHeight = minH;
