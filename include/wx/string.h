@@ -173,7 +173,7 @@ inline const wxString& wxGetEmptyString() { return *(wxString *)&wxEmptyString; 
 #include "wx/afterstd.h"
 
 #if wxUSE_UNICODE
-    #if HAVE_STD_WSTRING
+    #ifdef HAVE_STD_WSTRING
         typedef std::wstring wxStringBase;
     #else
         typedef std::basic_string<wxChar> wxStringBase;
