@@ -48,8 +48,14 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __WXGTK20__
-    #include "wx/gtk/taskbarpriv.h"
-#else
+    #include <gtk/gtk.h>
+    #if GTK_CHECK_VERSION(2,1,0)
+        #include "wx/gtk/taskbarpriv.h"
+        #define TASKBAR_ICON_AREA_BASE_INCLUDED
+    #endif
+#endif
+
+#ifndef TASKBAR_ICON_AREA_BASE_INCLUDED
     class WXDLLIMPEXP_ADV wxTaskBarIconAreaBase : public wxFrame
     {
     public:
