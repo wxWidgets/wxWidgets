@@ -1257,6 +1257,13 @@ static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
     {
         parent->m_sizeSet = FALSE;
     }
+    
+    if (parent->m_windowStyle & wxTAB_TRAVERSAL)
+    {
+        /* we now allow a window to get the focus as long as it
+	   doesn't have any children. */
+        GTK_WIDGET_UNSET_FLAGS( parent->m_wxwindow, GTK_CAN_FOCUS );  
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1421,9 +1428,11 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
         gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_NONE );
     }
 
-    if ((m_windowStyle & wxTAB_TRAVERSAL) != 0)
+    if (m_windowStyle & wxTAB_TRAVERSAL)
     {
-        GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );  /* changed from UNSET */
+        /* we now allow a window to get the focus as long as it
+	   doesn't have any children. */
+        GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );  
         m_acceptsFocus = FALSE;
     }
     else

@@ -451,6 +451,12 @@ void wxApp::CleanUp(void)
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;
 
+    wxSystemSettings::Done();
+    
+    delete[] wxBuffer;
+
+    wxClassInfo::CleanUpClasses();
+    
     /* check for memory leaks */
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     if (wxDebugContext::CountObjectsLeft() > 0)
@@ -466,12 +472,6 @@ void wxApp::CleanUp(void)
     
     wxLog *oldLog = wxLog::SetActiveTarget( (wxLog*) NULL );
     if (oldLog) delete oldLog;
-
-    wxSystemSettings::Done();
-    
-    wxClassInfo::CleanUpClasses();
-
-    delete[] wxBuffer;
 }
 
 wxLog *wxApp::CreateLogTarget()

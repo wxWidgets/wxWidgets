@@ -57,19 +57,22 @@ extern XrmDatabase wxResourceDatabase;
 
 static char *GetResourcePath(char *buf, char *name, bool create)
 {
-    if (create && FileExists(name)) {
+    if (create && FileExists(name)) 
+    {
         strcpy(buf, name);
         return buf; // Exists so ...
     }
     if (*name == '/')
         strcpy(buf, name);
-    else {
+    else 
+    {
         // Put in standard place for resource files if not absolute
         strcpy(buf, DEFAULT_XRESOURCE_DIR);
         strcat(buf, "/");
         strcat(buf, FileNameFromPath(name));
     }
-    if (create) {
+    if (create) 
+    {
         // Touch the file to create it
         FILE *fd = fopen(buf, "w");
         if (fd) fclose(fd);
@@ -129,9 +132,12 @@ static void wxXMergeDatabases()
     // window when the server initializes and loaded into the display
     // structure on XOpenDisplay;
     // if not defined, use .Xdefaults
-    if (XResourceManagerString(GDK_DISPLAY()) != NULL) {
+    if (XResourceManagerString(GDK_DISPLAY()) != NULL) 
+    {
         serverDB = XrmGetStringDatabase(XResourceManagerString(GDK_DISPLAY()));
-    } else {
+    } 
+    else 
+    {
         (void)GetIniFile(filename, (char *) NULL);
         serverDB = XrmGetFileDatabase(filename);
     }
@@ -141,7 +147,8 @@ static void wxXMergeDatabases()
     // Open XENVIRONMENT file, or if not defined, the .Xdefaults,
     // and merge into existing database
 
-    if ((environment = getenv("XENVIRONMENT")) == NULL) {
+    if ((environment = getenv("XENVIRONMENT")) == NULL) 
+    {
         size_t len;
         environment = GetIniFile(filename, (const char *) NULL);
         len = strlen(environment);
@@ -249,7 +256,8 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
         wxXMergeDatabases();
 
     XrmDatabase database;
-    if ( !file.IsEmpty() ) {
+    if (!file.IsEmpty()) 
+    {
         char buffer[500];
         // Is this right? Trying to get it to look in the user's
         // home directory instead of current directory -- JACS
@@ -279,11 +287,13 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
 
     bool success = XrmGetResource(database, buf, "*", str_type, &xvalue);
     // Try different combinations of upper/lower case, just in case...
-    if (!success) {
+    if (!success) 
+    {
         buf[0] = (isupper(buf[0]) ? tolower(buf[0]) : toupper(buf[0]));
         success = XrmGetResource(database, buf, "*", str_type,        &xvalue);
     }
-    if (success) {
+    if (success) 
+    {
         if (*value)
             delete[] *value;
         *value = new char[xvalue.size + 1];
@@ -297,7 +307,8 @@ bool wxGetResource(const wxString& section, const wxString& entry, float *value,
 {
     char *s = (char *) NULL;
     bool succ = wxGetResource(section, entry, &s, file);
-    if (succ) {
+    if (succ) 
+    {
         *value = (float)strtod(s, (char **) NULL);
         delete[]s;
         return TRUE;
@@ -309,7 +320,8 @@ bool wxGetResource(const wxString& section, const wxString& entry, long *value, 
 {
     char *s = (char *) NULL;
     bool succ = wxGetResource(section, entry, &s, file);
-    if (succ) {
+    if (succ) 
+    {
         *value = strtol(s, (char **) NULL, 10);
         delete[]s;
         return TRUE;
@@ -321,7 +333,8 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
 {
     char *s = (char *) NULL;
     bool succ = wxGetResource(section, entry, &s, file);
-    if (succ) {
+    if (succ) 
+    {
         // Handle True, False here
         // True, Yes, Enables, Set or  Activated
         if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
