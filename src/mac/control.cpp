@@ -203,9 +203,6 @@ void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString l
 	m_y = y ;
 		
 
-	Point localOrigin ;
-	Rect	clipRect ;
-	
 	parent->MacClientToRootWindow( &x , &y ) ;
 	outBounds->top = y + m_macVerticalBorder ;
 	outBounds->left = x + m_macHorizontalBorder ;
