@@ -102,7 +102,8 @@ wxMutex::wxMutex()
 {
     p_internal = new wxMutexInternal;
     
-    pthread_mutex_init( &(p_internal->p_mutex), (const pthread_mutexattr_t*) NULL );
+    pthread_mutex_init(&(p_internal->p_mutex),
+                       (pthread_mutexattr_t*) NULL );
     m_locked = 0;
 }
 
@@ -179,7 +180,8 @@ public:
 wxCondition::wxCondition()
 {
     p_internal = new wxConditionInternal;
-    pthread_cond_init( &(p_internal->p_condition), (const pthread_condattr_t *) NULL );
+    pthread_cond_init( &(p_internal->p_condition),
+                       (pthread_condattr_t *) NULL );
 }
 
 wxCondition::~wxCondition()
