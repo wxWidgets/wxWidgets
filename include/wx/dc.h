@@ -330,6 +330,7 @@ public:
     // ---------
 
         // const...
+    int GetBackgroundMode() const { return m_backgroundMode; }
     const wxBrush&  GetBackground() const { return m_backgroundBrush; }
     const wxBrush&  GetBrush() const { return m_brush; }
     const wxFont&   GetFont() const { return m_font; }

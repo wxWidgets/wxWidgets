@@ -386,11 +386,25 @@ and using a style:
 
 \func{wxBrush\&}{GetBackground}{\void}
 
+\constfunc{const wxBrush\&}{GetBackground}{\void}
+
 Gets the brush used for painting the background (see \helpref{wxDC::SetBackground}{wxdcsetbackground}).
+
+\membersection{wxDC::GetBackgroundMode}\label{wxdcgetbackgroundmode}
+
+\constfunc{int}{GetBackgroundMode}{\void}
+
+Returns the current background mode: {\tt wxSOLID} or {\tt wxTRANSPARENT}.
+
+\wxheading{See also}
+
+\helpref{SetBackgroundMode}{wxdcsetbackgroundmode}
 
 \membersection{wxDC::GetBrush}\label{wxdcgetbrush}
 
 \func{wxBrush\&}{GetBrush}{\void}
+
+\constfunc{const wxBrush\&}{GetBrush}{\void}
 
 Gets the current brush (see \helpref{wxDC::SetBrush}{wxdcsetbrush}).
 
@@ -419,6 +433,8 @@ rectangle are returned as a tuple.}
 
 \func{wxFont\&}{GetFont}{\void}
 
+\constfunc{const wxFont\&}{GetFont}{\void}
+
 Gets the current font (see \helpref{wxDC::SetFont}{wxdcsetfont}).
 
 \membersection{wxDC::GetLogicalFunction}\label{wxdcgetlogicalfunction}
@@ -443,6 +459,8 @@ See \helpref{wxDC::SetOptimization}{wxsetoptimization} for details.
 \membersection{wxDC::GetPen}\label{wxdcgetpen}
 
 \func{wxPen\&}{GetPen}{\void}
+
+\constfunc{const wxPen\&}{GetPen}{\void}
 
 Gets the current pen (see \helpref{wxDC::SetPen}{wxdcsetpen}).
 
@@ -490,6 +508,8 @@ implements the following methods:\par
 
 \func{wxColour\&}{GetTextBackground}{\void}
 
+\constfunc{const wxColour\&}{GetTextBackground}{\void}
+
 Gets the current text background colour (see \helpref{wxDC::SetTextBackground}{wxdcsettextbackground}).
 
 \membersection{wxDC::GetTextExtent}\label{wxdcgettextextent}
@@ -522,6 +542,8 @@ See also \helpref{wxFont}{wxfont}, \helpref{wxDC::SetFont}{wxdcsetfont}.
 \membersection{wxDC::GetTextForeground}\label{wxdcgettextforeground}
 
 \func{wxColour\&}{GetTextForeground}{\void}
+
+\constfunc{const wxColour\&}{GetTextForeground}{\void}
 
 Gets the current text foreground colour (see \helpref{wxDC::SetTextForeground}{wxdcsettextforeground}).
 
