@@ -37,12 +37,12 @@ command_lines = [
     "-a -n DbInc bmp_source/DbInc.bmp images.py",
     "-a -n Inc bmp_source/Inc.bmp images.py",
 
-    "-a -n New  bmp_source/new.bmp images.py",
-    "-a -n Open bmp_source/open.bmp images.py",
-    "-a -n Copy bmp_source/copy.bmp images.py",
-    "-a -n Paste bmp_source/paste.bmp images.py",
-    "-a -n Tog1 bmp_source/tog1.bmp images.py",
-    "-a -n Tog2 bmp_source/tog2.bmp images.py",
+    "-a -n New   -m #C0C0C0 bmp_source/new.bmp images.py",
+    "-a -n Open  -m #C0C0C0 bmp_source/open.bmp images.py",
+    "-a -n Copy  -m #C0C0C0 bmp_source/copy.bmp images.py",
+    "-a -n Paste -m #C0C0C0 bmp_source/paste.bmp images.py",
+    "-a -n Tog1  -m #C0C0C0 bmp_source/tog1.bmp images.py",
+    "-a -n Tog2  -m #C0C0C0 bmp_source/tog2.bmp images.py",
 
     "-a -n Smiles bmp_source/smiles.bmp images.py",
 
