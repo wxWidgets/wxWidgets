@@ -157,6 +157,11 @@ bool wxDirData::Read(wxString *filename)
 #else
 		p2cstr( m_name ) ;
 #endif
+#if TARGET_CARBON
+                // under X thats the way the mounting points look like
+                if ( ( m_CPB.dirInfo.ioDrDirID == 0 ) && ( m_flags & wxDIR_DIRS) )
+                        break ;
+#endif
 		if ( ( m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (m_flags & wxDIR_DIRS) ) //  we have a directory
 			break ;
 			
