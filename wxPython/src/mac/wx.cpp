@@ -2241,6 +2241,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxFRAME_FLOAT_ON_PARENT", PyInt_FromLong((long) wxFRAME_FLOAT_ON_PARENT));
 	 PyDict_SetItemString(d,"wxFRAME_NO_WINDOW_MENU", PyInt_FromLong((long) wxFRAME_NO_WINDOW_MENU));
 	 PyDict_SetItemString(d,"wxFRAME_NO_TASKBAR", PyInt_FromLong((long) wxFRAME_NO_TASKBAR));
+	 PyDict_SetItemString(d,"wxFRAME_SHAPED", PyInt_FromLong((long) wxFRAME_SHAPED));
 	 PyDict_SetItemString(d,"wxED_CLIENT_MARGIN", PyInt_FromLong((long) wxED_CLIENT_MARGIN));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_BOTTOM", PyInt_FromLong((long) wxED_BUTTONS_BOTTOM));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_RIGHT", PyInt_FromLong((long) wxED_BUTTONS_RIGHT));
