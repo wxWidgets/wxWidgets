@@ -72,6 +72,7 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_ISO8859_14,
     wxFONTENCODING_ISO8859_15,
     wxFONTENCODING_KOI8,
+    wxFONTENCODING_KOI8_U,
     wxFONTENCODING_CP932,
     wxFONTENCODING_CP936,
     wxFONTENCODING_CP949,
@@ -115,6 +116,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Celtic (ISO-8859-14)" ),
     wxTRANSLATE( "Western European with Euro (ISO-8859-15)" ),
     wxTRANSLATE( "KOI8-R" ),
+    wxTRANSLATE( "KOI8-U" ),
     wxTRANSLATE( "Windows Japanese (CP 932)" ),
     wxTRANSLATE( "Windows Chinese Simplified (CP 936)" ),
     wxTRANSLATE( "Windows Korean (CP 949)" ),
@@ -158,6 +160,7 @@ static const wxChar* gs_encodingNames[] =
     wxT( "iso-8859-14" ),
     wxT( "iso-8859-15" ),
     wxT( "koi8-r" ),
+    wxT( "koi8-u" ),
     wxT( "windows-932" ),
     wxT( "windows-936" ),
     wxT( "windows-949" ),
@@ -517,13 +520,16 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             encoding = wxFONTENCODING_EUC_JP;
         }
         else if ( cs == wxT("KOI8-R") ||
-                  cs == wxT("KOI8-U") ||
                   cs == wxT("KOI8-RU") )
         {
             // although koi8-ru is not strictly speaking the same as koi8-r,
             // they are similar enough to make mapping it to koi8 better than
-            // not reckognizing it at all
+            // not recognizing it at all
             encoding = wxFONTENCODING_KOI8;
+        }
+        else if ( cs == wxT("KOI8-U") )
+        {
+            encoding = wxFONTENCODING_KOI8_U;
         }
         else if ( cs.Left(3) == wxT("ISO") )
         {

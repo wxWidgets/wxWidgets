@@ -715,6 +715,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             break;
 
         case wxFONTENCODING_KOI8:
+        case wxFONTENCODING_KOI8_U:
             info->xregistry = wxT("koi8");
 
             // we don't make distinction between koi8-r, koi8-u and koi8-ru (so far)

@@ -39,7 +39,8 @@ enum wxFontEncoding
     wxFONTENCODING_ISO8859_MAX,
 
     // Cyrillic charset soup (see http://czyborra.com/charsets/cyrillic.html)
-    wxFONTENCODING_KOI8,            // we don't support any of KOI8 variants
+    wxFONTENCODING_KOI8,            // KOI8 Russian
+    wxFONTENCODING_KOI8_U,          // KOI8 Ukrainian
     wxFONTENCODING_ALTERNATIVE,     // same as MS-DOS CP866
     wxFONTENCODING_BULGARIAN,       // used under Linux in Bulgaria
 

@@ -412,7 +412,7 @@ static wxFontEncoding
 
     // Cyrillic
     {
-        /* unix    */ {wxFONTENCODING_KOI8, wxFONTENCODING_ISO8859_5, STOP},
+        /* unix    */ {wxFONTENCODING_KOI8, wxFONTENCODING_KOI8_U, wxFONTENCODING_ISO8859_5, STOP},
         /* windows */ {wxFONTENCODING_CP1251, STOP},
         /* os2     */ {STOP},
         /* mac     */ {wxFONTENCODING_MACCYRILLIC, STOP}

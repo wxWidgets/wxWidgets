@@ -91,6 +91,7 @@ All (GUI):
   resulting in much better display of scaled images
 - Added UpdateSize to wxSplitterWindow to allow layout while hidden
 - implemented Freeze/Thaw() for wxGenericTreeCtrl (Kevin Hock)
+- support for KOI8-U encoding added (Yuriy Tkachenko)
 
 wxMSW:
 
