@@ -87,11 +87,11 @@ public:
     int GetNextItem(int item, wxDirection dir, long style) const;
 
     // for compatibility only, don't use these methods in new code!
-#ifdef WXWIN_COMPATIBILITY_2
+#ifdef WXWIN_COMPATIBILITY_2_2
     int Number() const { return GetCount(); }
     wxString GetLabel(int n) const { return GetString(n); }
     void SetLabel(int n, const wxString& label) { SetString(n, label); }
-#endif // WXWIN_COMPATIBILITY_2
+#endif // WXWIN_COMPATIBILITY_2_2
 };
 
 #if defined(__WXUNIVERSAL__)

@@ -80,11 +80,11 @@ public:
     bool HasClientUntypedData() const
         { return m_clientDataItemsType == wxClientData_Void; }
 
-#if WXWIN_COMPATIBILITY_2
+#if WXWIN_COMPATIBILITY_2_2
     // compatibility - these functions are deprecated, use the new ones
     // instead
     int Number() const { return GetCount(); }
-#endif // WXWIN_COMPATIBILITY_2
+#endif // WXWIN_COMPATIBILITY_2_2
 
 #ifdef __WXMAC_X__
     virtual ~wxItemContainer() {}  // Added min for Mac X

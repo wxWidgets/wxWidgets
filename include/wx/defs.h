@@ -300,7 +300,10 @@
 // compatibility code
 #if !wxUSE_GUI
     #undef WXWIN_COMPATIBILITY_2
+    #undef WXWIN_COMPATIBILITY_2_2
+
     #define WXWIN_COMPATIBILITY_2 0
+    #define WXWIN_COMPATIBILITY_2_2 0
 #endif // !GUI
 
 // ============================================================================
