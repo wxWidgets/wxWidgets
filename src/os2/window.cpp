@@ -613,55 +613,90 @@ int  wxWindow::GetScrollPage(
 ) const
 {
     if (nOrient == wxHORIZONTAL)
-        return m_xThumbSize;
+        return m_nXThumbSize;
     else
-        return m_yThumbSize;
+        return m_nYThumbSize;
 } // end of wxWindow::GetScrollPage
 #endif // WXWIN_COMPATIBILITY
 
-int  wxWindow::GetScrollPos(int orient) const
+int  wxWindow::GetScrollPos(
+  int                               nOrient
+) const
 {
-    // TODO:
-    return(1);
-}
+    return((int)::WinSendMsg(GetHwnd(), SBM_QUERYPOS, (MPARAM)NULL, (MPARAM)NULL));
+} // end of wxWindow::GetScrollPos
 
-int  wxWindow::GetScrollRange(int orient) const
+int wxWindow::GetScrollRange(
+  int                               nOrient
+) const
 {
-    // TODO:
-    return(1);
-}
+    MRESULT                         mr;
 
-int  wxWindow::GetScrollThumb(int orient) const
-{
-    // TODO:
-    return(1);
-}
+    mr = ::WinSendMsg(GetHwnd(), SBM_QUERYRANGE, (MPARAM)NULL, (MPARAM)NULL);
+    return((int)SHORT2FROMMR(mr));
+} // end of wxWindow::GetScrollRange
 
-void wxWindow::SetScrollPos( int  orient
-                            ,int  pos
-                            ,bool refresh
-                           )
+int wxWindow::GetScrollThumb(
+  int                               nOrient
+) const
 {
-    // TODO:
-}
+    WNDPARAMS                       vWndParams;
+    PSBCDATA                        pSbcd;
 
-void wxWindow::SetScrollbar( int  orient
-                            ,int  pos
-                            ,int  thumbVisible
-                            ,int  range
-                            ,bool refresh
-                           )
-{
-    // TODO:
-}
+    ::WinSendMsg(GetHwnd(), WM_QUERYWINDOWPARAMS, (MPARAM)&vWndParams, (MPARAM)NULL);
+    pSbcd = (PSBCDATA)vWndParams.pCtlData;
+    return((int)pSbcd->posThumb);
+} // end of wxWindow::GetScrollThumb
 
-void wxWindow::ScrollWindow( int           dx
-                            ,int           dy
-                            ,const wxRect* rect
-                           )
+void wxWindow::SetScrollPos(
+  int                               nOrient
+, int                               nPos
+, bool                              bRefresh
+)
 {
-    // TODO:
-}
+    ::WinSendMsg(GetHwnd(), SBM_SETPOS, (MPARAM)nPos, (MPARAM)NULL);
+} // end of wxWindow::SetScrollPos(
+
+void wxWindow::SetScrollbar(
+  int                               nOrient
+, int                               nPos
+, int                               nThumbVisible
+, int                               nRange
+, bool                              bRefresh
+)
+{
+    ::WinSendMsg(GetHwnd(), SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, nRange));
+    if (nOrient == wxHORIZONTAL)
+    {
+        m_nXThumbSize = nThumbVisible;
+    }
+    else
+    {
+        m_nYThumbSize = nThumbVisible;
+    }
+} // end of wxWindow::SetScrollbar
+
+void wxWindow::ScrollWindow(
+  int                               nDx
+, int                               nDy
+, const wxRect*                     pRect
+)
+{
+    RECTL                           vRect2;
+
+    if (pRect)
+    {
+        vRect2.xLeft   = pRect->x;
+        vRect2.yTop    = pRect->y;
+        vRect2.xRight  = pRect->x + pRect->width;
+        vRect2.yBottom = pRect->y + pRect->height;
+    }
+
+    if (pRect)
+        ::WinScrollWindow(GetHwnd(), (LONG)nDx, (LONG)nDy, &vRect2, NULL, NULLHANDLE, NULL, 0L);
+    else
+        ::WinScrollWindow(GetHwnd(), nDx, nDy, NULL, NULL, NULLHANDLE, NULL, 0L);
+} // end of wxWindow::ScrollWindow
 
 // ---------------------------------------------------------------------------
 // subclassing
@@ -669,16 +704,18 @@ void wxWindow::ScrollWindow( int           dx
 
 void wxWindow::SubclassWin(WXHWND hWnd)
 {
+    HAB                             hab;
+    HWND                            hwnd = (HWND)hWnd;
+
     wxASSERT_MSG( !m_fnOldWndProc, wxT("subclassing window twice?") );
 
-    HWND hwnd = (HWND)hWnd;
 /*
 * TODO: implement something like this:
-*   wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in SubclassWin") );
+*   wxCHECK_RET(::WinIsWindow(hab, hwnd), wxT("invalid HWND in SubclassWin") );
 *
 *   wxAssociateWinWithHandle(hwnd, this);
 *
-*   m_oldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
+*   m_fnOldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
 *   SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
 */
 }
@@ -708,29 +745,20 @@ void wxWindow::UnsubclassWin()
 */
 }
 
+//
 // Make a Windows extended style from the given wxWindows window style
-WXDWORD wxWindow::MakeExtendedStyle(long style, bool eliminateBorders)
+//
+WXDWORD wxWindow::MakeExtendedStyle(
+  long                              lStyle
+, bool                              bEliminateBorders
+)
 {
-   // TODO:
-    WXDWORD exStyle = 0;
-/*
-    if ( style & wxTRANSPARENT_WINDOW )
-        exStyle |= WS_EX_TRANSPARENT;
-
-    if ( !eliminateBorders )
-    {
-        if ( style & wxSUNKEN_BORDER )
-            exStyle |= WS_EX_CLIENTEDGE;
-        if ( style & wxDOUBLE_BORDER )
-            exStyle |= WS_EX_DLGMODALFRAME;
-        if ( style & wxRAISED_BORDER )
-            exStyle |= WS_EX_WINDOWEDGE;
-        if ( style & wxSTATIC_BORDER )
-            exStyle |= WS_EX_STATICEDGE;
-    }
-*/
+   //
+   // PM does not support extended style
+   //
+    WXDWORD                         exStyle = 0;
     return exStyle;
-}
+} // end of wxWindow::MakeExtendedStyle
 
 // Determines whether native 3D effects or CTL3D should be used,
 // applying a default border style if required, and returning an extended
