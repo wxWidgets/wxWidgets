@@ -53,22 +53,22 @@ wxMenu::~wxMenu()
     [m_cocoaNSMenu release];
 }
 
-bool wxMenu::DoAppend(wxMenuItem *item)
+wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
     wxAutoNSAutoreleasePool pool;
     if(!wxMenuBase::DoAppend(item))
-        return false;
+        return NULL;
     [m_cocoaNSMenu addItem: item->GetNSMenuItem()];
-    return true;
+    return item;
 }
 
-bool wxMenu::DoInsert(unsigned long pos, wxMenuItem *item)
+wxMenuItem* wxMenu::DoInsert(unsigned long pos, wxMenuItem *item)
 {
     wxAutoNSAutoreleasePool pool;
     if(!wxMenuBase::DoInsert(pos,item))
-        return false;
+        return NULL;
     [m_cocoaNSMenu insertItem:item->GetNSMenuItem() atIndex:pos];
-    return true;
+    return item;
 }
 
 wxMenuItem* wxMenu::DoRemove(wxMenuItem *item)
