@@ -203,11 +203,10 @@ The following priorities are defined:
 
 Returns \true if the thread is alive (i.e. started and not terminating).
 
-Note that this function can only be safely used with joinable threads, not
+Note that this function can only safely be used with joinable threads, not
 detached ones as the latter delete themselves and so when the real thread is
-not alive any longer it is not possible to call this function neither because
-the wxThread object doesn't exist any more as well.
-
+no longer alive, it is not possible to call this function because
+the wxThread object no longer exists.
 
 \membersection{wxThread::IsDetached}\label{wxthreadisdetached}
 

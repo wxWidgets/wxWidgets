@@ -8,15 +8,15 @@ Classes: \helpref{wxStreamBase}{wxstreambase},
 
 \wxheading{Purpose of wxStream}
 
-We had troubles with standard C++ streams on several platforms:
-they react quite well in most cases, but in the multi-threaded case, for example,
-they have many problems. Some Borland Compilers refuse to work at all
-with them and using iostreams on Linux makes writing programs, that are
+Standard C++ streams can cause problems on several platforms:
+they work quite well in most cases, but in the multi-threaded case, for example,
+they have many problems. Some Borland compilers refuse to work at all
+with them and using iostreams on Linux makes writing programs that are
 binary compatible across different Linux distributions, impossible.
 
-Therefore, wxStreams have been added to wxWidgets because an application should 
-compile and run on all supported platforms and we don't want users to depend on release
-X.XX of libg++ or some other compiler to run the program.
+Therefore, wxStreams have been added to wxWidgets so that applications can
+reliably compile and run on all supported platforms without dependence on a
+particular release of libg++.
 
 wxStreams is divided in two main parts:
 
@@ -31,8 +31,8 @@ the API of OnSysRead, OnSysWrite, OnSysSeek and OnSysTell. These functions
 are really implemented by the "IO" classes.
 wxInputStream and wxOutputStream inherit from it.
 
-wxStreamBuffer is a cache manager for wxStreamBase (it manages a stream buffer
-linked to a stream). One stream can have multiple stream buffers  but one stream
+wxStreamBuffer is a cache manager for wxStreamBase: it manages a stream buffer
+linked to a stream. One stream can have multiple stream buffers  but one stream
 have always one autoinitialized stream buffer.
 
 wxInputStream is the base class for read-only streams. It implements Read,
@@ -82,12 +82,6 @@ code:
  // What is my current position ?
  off_t position = in_stream.TellI();
 
- // wxFileInputStream will close the file descriptor on the destruction.
+ // wxFileInputStream will close the file descriptor on destruction.
 \end{verbatim}
-
-\wxheading{Compatibility with C++ streams}
-
-As I said previously, we could add a filter stream so it takes an istream
-argument and builds a wxInputStream from it: I don't think it should 
-be difficult to implement it and it may be available in the fix of wxWidgets 2.0.
 
