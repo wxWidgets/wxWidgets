@@ -302,7 +302,7 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     // note that we can't stop drawing exactly at the window boundary as then
     // even the visible cells part could be not drawn, so always draw the
     // entire cell
-    cell->Draw(dc, rect.x, rect.y, 0, INT_MAX, htmlRendInfo);
+    cell->Draw(dc, rect.x+2, rect.y+2, 0, INT_MAX, htmlRendInfo);
 }
 
 wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
@@ -312,6 +312,6 @@ wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
     wxHtmlCell *cell = m_cache->Get(n);
     wxCHECK_MSG( cell, 0, _T("this cell should be cached!") );
 
-    return cell->GetHeight() + cell->GetDescent();
+    return cell->GetHeight() + cell->GetDescent() + 4;
 }
 
