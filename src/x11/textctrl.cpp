@@ -1071,7 +1071,7 @@ void wxTextCtrl::SearchForBrackets()
     char bracket = ' ';
     
     if (m_cursorX > 0)
-        bracket = current[(size_t) m_cursorX-1];
+        bracket = current[(size_t) (m_cursorX-1)];
         
     if (bracket == ')' || bracket == ']' || bracket == '}')
     {
@@ -1098,7 +1098,7 @@ void wxTextCtrl::SearchForBrackets()
                     {
                         if (current[m] == '\'')
                         {
-                            if (m == 0 || current[m-1] != '\\')
+                            if (m == 0 || current[(size_t) (m-1)] != '\\')
                                 break;
                         }
                         n = m-1;
@@ -1113,7 +1113,7 @@ void wxTextCtrl::SearchForBrackets()
                     {
                         if (current[m] == '\"')
                         {
-                            if (m == 0 || current[m-1] != '\\')
+                            if (m == 0 || current[(size_t) (m-1)] != '\\')
                                 break;
                         }
                         n = m-1;
@@ -1174,7 +1174,7 @@ void wxTextCtrl::SearchForBrackets()
                     {
                         if (current[m] == '\'')
                         {
-                            if (m == 0 || (current[m-1] != '\\') || (m >= 2 && current[m-2] == '\\'))
+                            if (m == 0 || (current[(size_t) (m-1)] != '\\') || (m >= 2 && current[(size_t) (m-2)] == '\\'))
                                 break;
                         }
                         n = m+1;
@@ -1189,7 +1189,7 @@ void wxTextCtrl::SearchForBrackets()
                     {
                         if (current[m] == '\"')
                         {
-                            if (m == 0 || (current[m-1] != '\\') || (m >= 2 && current[m-2] == '\\'))
+                            if (m == 0 || (current[(size_t) (m-1)] != '\\') || (m >= 2 && current[(size_t) (m-2)] == '\\'))
                                 break;
                         }
                         n = m+1;
@@ -1575,7 +1575,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
         }
         else
         {
-            if ((line[p] == '/') && (p+1 < len) && (line[p+1] == '/'))
+            if ((line[p] == '/') && (p+1 < len) && (line[(size_t) (p+1)] == '/'))
             {
                 for (size_t q = p; q < len; q++)
                     ret.Append( line[q] );
@@ -1590,7 +1590,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
             for (size_t q = p+1; q < len; q++)
             {
                 ret.Append( line[q] );
-                if ((line[q] == '"') && ((line[q-1] != '\\') || (q >= 2 && line[q-2] == '\\')))
+                if ((line[q] == '"') && ((line[(size_t) (q-1)] != '\\') || (q >= 2 && line[(size_t) (q-2)] == '\\')))
                    break;
             }
             pos = p;
@@ -1603,7 +1603,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
             for (size_t q = p+1; q < len; q++)
             {
                 ret.Append( line[q] );
-                if ((line[q] == '\'') && ((line[q-1] != '\\') || (q >= 2 && line[q-2] == '\\')))
+                if ((line[q] == '\'') && ((line[(size_t) (q-1)] != '\\') || (q >= 2 && line[(size_t) (q-2)] == '\\')))
                    break;
             }
             pos = p;
