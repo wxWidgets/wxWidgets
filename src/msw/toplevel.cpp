@@ -85,9 +85,6 @@ wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 // globals
 // ----------------------------------------------------------------------------
 
-// list of all frames and modeless dialogs
-wxWindowList wxModelessWindows;
-
 // the name of the default wxWindows class
 #ifdef __WXWINCE__
 extern       wxChar *wxCanvasClassName;
@@ -414,7 +411,9 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     WXDWORD exflags;
     WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
-#if _WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)
+#if (defined(_WIN32_WCE) && _WIN32_WCE < 400) || \
+    defined(WIN32_PLATFORM_PSPC) || \
+    defined(WIN32_PLATFORM_WFSP)
 	// Always expand to fit the screen in PocketPC or SmartPhone
 	wxSize sz(wxDefaultSize);
 #else // other (including normal desktop) Windows
@@ -519,9 +518,6 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
-    if ( wxModelessWindows.Find(this) )
-        wxModelessWindows.DeleteObject(this);
-
     // after destroying an owned window, Windows activates the next top level
     // window in Z order but it may be different from our owner (to reproduce
     // this simply Alt-TAB to another application and back before closing the
