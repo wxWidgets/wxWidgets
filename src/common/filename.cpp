@@ -848,6 +848,18 @@ bool wxFileName::Normalize(int flags,
                            const wxString& cwd,
                            wxPathFormat format)
 {
+    // deal with env vars renaming first as this may seriously change the path
+    if ( flags & wxPATH_NORM_ENV_VARS )
+    {
+        wxString pathOrig = GetFullPath(format);
+        wxString path = wxExpandEnvVars(pathOrig);
+        if ( path != pathOrig )
+        {
+            Assign(path);
+        }
+    }
+
+
     // the existing path components
     wxArrayString dirs = GetDirs();
 
@@ -938,11 +950,6 @@ bool wxFileName::Normalize(int flags,
                 m_dirs.RemoveAt(m_dirs.GetCount() - 1);
                 continue;
             }
-        }
-
-        if ( flags & wxPATH_NORM_ENV_VARS )
-        {
-            dir = wxExpandEnvVars(dir);
         }
 
         if ( (flags & wxPATH_NORM_CASE) && !IsCaseSensitive(format) )
