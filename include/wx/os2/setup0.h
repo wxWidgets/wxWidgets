@@ -326,5 +326,8 @@
 #define wxUSE_GENERIC_DIALOGS_IN_OS2 0
                                 // Define 1 to use generic dialogs in Windows, even though
                                 // they duplicate native common dialog (e.g. wxColourDialog)
+
+#define wxUSE_SNGLINST_CHECKER  1
+
 #endif
     // _WX_SETUP_H_

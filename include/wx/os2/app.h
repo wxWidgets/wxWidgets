@@ -117,6 +117,7 @@ public:
     static void  CleanUp(void);
 
     static bool  RegisterWindowClasses(HAB vHab);
+    virtual void DoMessage(WXMSG *pMsg);
     virtual bool DoMessage(void);
     virtual bool ProcessMessage(WXMSG* pMsg);
     void         DeletePendingObjects(void);
