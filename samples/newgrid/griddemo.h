@@ -62,6 +62,9 @@ class GridFrame : public wxFrame
     void OnRangeSelected( wxGridRangeSelectEvent& );
     void OnCellValueChanged( wxGridEvent& );
 
+    void OnEditorShown(wxGridEvent&);
+    void OnEditorHidden(wxGridEvent&);
+
 public:
     GridFrame();
     ~GridFrame();

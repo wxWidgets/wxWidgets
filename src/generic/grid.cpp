@@ -274,7 +274,6 @@ static const size_t GRID_SCROLL_LINE = 10;
 // implementation
 // ============================================================================
 
-
 // ----------------------------------------------------------------------------
 // wxGridCellEditor
 // ----------------------------------------------------------------------------
@@ -370,9 +369,16 @@ void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 
 void wxGridCellEditor::StartingKey(wxKeyEvent& event)
 {
+    wxASSERT_MSG(m_control,
+                 wxT("The wxGridCellEditor must be Created first!"));
+
+    // pass the event to the control
+    m_control->GetEventHandler()->ProcessEvent(event);
 }
 
-
+// ----------------------------------------------------------------------------
+// wxGridCellTextEditor
+// ----------------------------------------------------------------------------
 
 wxGridCellTextEditor::wxGridCellTextEditor()
 {
@@ -400,9 +406,9 @@ void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
                  wxT("The wxGridCellEditor must be Created first!"));
 
     m_startValue = grid->GetTable()->GetValue(row, col);
-    ((wxTextCtrl*)m_control)->SetValue(m_startValue);
-    ((wxTextCtrl*)m_control)->SetInsertionPointEnd();
-    ((wxTextCtrl*)m_control)->SetFocus();
+    Text()->SetValue(m_startValue);
+    Text()->SetInsertionPointEnd();
+    Text()->SetFocus();
 }
 
 
@@ -414,7 +420,7 @@ bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
                  wxT("The wxGridCellEditor must be Created first!"));
 
     bool changed = FALSE;
-    wxString value = ((wxTextCtrl*)m_control)->GetValue();
+    wxString value = Text()->GetValue();
     if (value != m_startValue)
         changed = TRUE;
 
@@ -422,7 +428,7 @@ bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
         grid->GetTable()->SetValue(row, col, value);
 
     m_startValue = wxEmptyString;
-    ((wxTextCtrl*)m_control)->SetValue(m_startValue);
+    Text()->SetValue(m_startValue);
 
     return changed;
 }
@@ -433,35 +439,43 @@ void wxGridCellTextEditor::Reset()
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
 
-    ((wxTextCtrl*)m_control)->SetValue(m_startValue);
-    ((wxTextCtrl*)m_control)->SetInsertionPointEnd();
+    Text()->SetValue(m_startValue);
+    Text()->SetInsertionPointEnd();
 }
-
 
 void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
 {
-    wxASSERT_MSG(m_control,
-                 wxT("The wxGridCellEditor must be Created first!"));
+    if ( !event.AltDown() && !event.MetaDown() && !event.ControlDown() )
+    {
+        // insert the key in the control
+        long keycode = event.KeyCode();
+        if ( isprint(keycode) )
+        {
+            // FIXME this is not going to work for non letters...
+            if ( !event.ShiftDown() )
+            {
+                keycode = tolower(keycode);
+            }
 
-    int code = event.KeyCode();
-    if (code >= 32 && code < 255) {
-        wxString st((char)code);
-        if (! event.ShiftDown())
-            st.LowerCase();
-        ((wxTextCtrl*)m_control)->AppendText(st);
+            Text()->AppendText((wxChar)keycode);
+
+            return;
+        }
+
     }
-}
 
+    event.Skip();
+}
 
 void wxGridCellTextEditor::HandleReturn(wxKeyEvent& event)
 {
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
     // wxMotif needs a little extra help...
-    int pos = ((wxTextCtrl*)m_control)->GetInsertionPoint();
-    wxString s( ((wxTextCtrl*)m_control)->GetValue() );
+    int pos = Text()->GetInsertionPoint();
+    wxString s( Text()->GetValue() );
     s = s.Left(pos) + "\n" + s.Mid(pos);
-    ((wxTextCtrl*)m_control)->SetValue(s);
-    ((wxTextCtrl*)m_control)->SetInsertionPoint( pos );
+    Text()->SetValue(s);
+    Text()->SetInsertionPoint( pos );
 #else
     // the other ports can handle a Return key press
     //
@@ -476,7 +490,7 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
     {
         case WXK_ESCAPE:
             m_editor->Reset();
-            m_grid->EnableCellEditControl(FALSE);
+            m_grid->DisableCellEditControl();
             break;
 
         case WXK_TAB:
@@ -2476,7 +2490,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         {
             row = YToRow(y);
             if ( row >= 0  &&
-                 !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) )
+                 !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) )
             {
                 SelectRow( row, event.ShiftDown() );
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, m_rowLabelWin);
@@ -2498,7 +2512,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         if ( YToEdgeOfRow(y) < 0 )
         {
             row = YToRow(y);
-            SendEvent(  EVT_GRID_LABEL_LEFT_DCLICK, row, -1, event );
+            SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, row, -1, event );
         }
     }
 
@@ -2514,7 +2528,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             // Note: we are ending the event *after* doing
             // default processing in this case
             //
-            SendEvent( EVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
+            SendEvent( wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
         }
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_rowLabelWin);
@@ -2527,7 +2541,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDown() )
     {
         row = YToRow(y);
-        if ( !SendEvent( EVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
+        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
         {
             // no default action at the moment
         }
@@ -2539,7 +2553,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDClick() )
     {
         row = YToRow(y);
-        if ( !SendEvent( EVT_GRID_LABEL_RIGHT_DCLICK, row, -1, event ) )
+        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, row, -1, event ) )
         {
             // no default action at the moment
         }
@@ -2642,7 +2656,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         {
             col = XToCol(x);
             if ( col >= 0  &&
-                 !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
+                 !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
             {
                 SelectCol( col, event.ShiftDown() );
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, m_colLabelWin);
@@ -2664,7 +2678,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         if ( XToEdgeOfCol(x) < 0 )
         {
             col = XToCol(x);
-            SendEvent(  EVT_GRID_LABEL_LEFT_DCLICK, -1, col, event );
+            SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, col, event );
         }
     }
 
@@ -2680,7 +2694,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             // Note: we are ending the event *after* doing
             // default processing in this case
             //
-            SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
+            SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
         }
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_colLabelWin);
@@ -2693,7 +2707,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDown() )
     {
         col = XToCol(x);
-        if ( !SendEvent( EVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) )
+        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) )
         {
             // no default action at the moment
         }
@@ -2705,7 +2719,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDClick() )
     {
         col = XToCol(x);
-        if ( !SendEvent( EVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) )
+        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) )
         {
             // no default action at the moment
         }
@@ -2740,7 +2754,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
         // indicate corner label by having both row and
         // col args == -1
         //
-        if ( !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, -1, -1, event ) )
+        if ( !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, -1, event ) )
         {
             SelectAll();
         }
@@ -2748,12 +2762,12 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
 
     else if ( event.LeftDClick() )
     {
-        SendEvent( EVT_GRID_LABEL_LEFT_DCLICK, -1, -1, event );
+        SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, -1, event );
     }
 
     else if ( event.RightDown() )
     {
-        if ( !SendEvent( EVT_GRID_LABEL_RIGHT_CLICK, -1, -1, event ) )
+        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, -1, event ) )
         {
             // no default action at the moment
         }
@@ -2761,7 +2775,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
 
     else if ( event.RightDClick() )
     {
-        if ( !SendEvent( EVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, event ) )
+        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, event ) )
         {
             // no default action at the moment
         }
@@ -2953,7 +2967,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         if ( event.LeftDown() )
         {
-            EnableCellEditControl( FALSE );
+            DisableCellEditControl();
             if ( event.ShiftDown() )
             {
                 SelectBlock( m_currentCellCoords, coords );
@@ -2961,7 +2975,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             else if ( XToEdgeOfCol(x) < 0  &&
                       YToEdgeOfRow(y) < 0 )
             {
-                if ( !SendEvent( EVT_GRID_CELL_LEFT_CLICK,
+                if ( !SendEvent( wxEVT_GRID_CELL_LEFT_CLICK,
                                  coords.GetRow(),
                                  coords.GetCol(),
                                  event ) )
@@ -2970,14 +2984,15 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
                     // if this is the second click on this cell then start
                     // the edit control
-                    if (m_waitForSlowClick && coords == m_currentCellCoords) {
-                        EnableCellEditControl(TRUE);
-                        // VZ: this is done by the call above, so why do it
-                        //     again? please remove this line if it's ok
-                        //ShowCellEditControl();
+                    if ( m_waitForSlowClick &&
+                         (coords == m_currentCellCoords) &&
+                         CanEnableCellControl())
+                    {
+                        EnableCellEditControl();
                         m_waitForSlowClick = FALSE;
                     }
-                    else {
+                    else
+                    {
                         SetCurrentCell( coords );
                         m_waitForSlowClick = TRUE;
                     }
@@ -2990,10 +3005,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.LeftDClick() )
         {
-            EnableCellEditControl( FALSE );
+            DisableCellEditControl();
             if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
             {
-                SendEvent( EVT_GRID_CELL_LEFT_DCLICK,
+                SendEvent( wxEVT_GRID_CELL_LEFT_DCLICK,
                            coords.GetRow(),
                            coords.GetCol(),
                            event );
@@ -3013,7 +3028,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                         m_winCapture->ReleaseMouse();
                         m_winCapture = NULL;
                     }
-                    SendEvent( EVT_GRID_RANGE_SELECT, -1, -1, event );
+                    SendEvent( wxEVT_GRID_RANGE_SELECT, -1, -1, event );
                 }
 
                 // Show the edit control, if it has been hidden for
@@ -3028,7 +3043,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 // Note: we are ending the event *after* doing
                 // default processing in this case
                 //
-                SendEvent( EVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
+                SendEvent( wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
             }
             else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
             {
@@ -3038,7 +3053,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 // Note: we are ending the event *after* doing
                 // default processing in this case
                 //
-                SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
+                SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
             }
 
             m_dragLastPos = -1;
@@ -3049,8 +3064,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.RightDown() )
         {
-            EnableCellEditControl( FALSE );
-            if ( !SendEvent( EVT_GRID_CELL_RIGHT_CLICK,
+            DisableCellEditControl();
+            if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_CLICK,
                              coords.GetRow(),
                              coords.GetCol(),
                              event ) )
@@ -3064,8 +3079,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         //
         else if ( event.RightDClick() )
         {
-            EnableCellEditControl( FALSE );
-            if ( !SendEvent( EVT_GRID_CELL_RIGHT_DCLICK,
+            DisableCellEditControl();
+            if ( !SendEvent( wxEVT_GRID_CELL_RIGHT_DCLICK,
                              coords.GetRow(),
                              coords.GetCol(),
                              event ) )
@@ -3259,7 +3274,7 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
     if ( m_table )
     {
         if (IsCellEditControlEnabled())
-            EnableCellEditControl(FALSE);
+            DisableCellEditControl();
 
         bool ok = m_table->InsertRows( pos, numRows );
 
@@ -3346,7 +3361,7 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
     if ( m_table )
     {
         if (IsCellEditControlEnabled())
-            EnableCellEditControl(FALSE);
+            DisableCellEditControl();
 
         if (m_table->DeleteRows( pos, numRows ))
         {
@@ -3376,7 +3391,7 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
     if ( m_table )
     {
         if (IsCellEditControlEnabled())
-            EnableCellEditControl(FALSE);
+            DisableCellEditControl();
 
         bool ok = m_table->InsertCols( pos, numCols );
 
@@ -3454,7 +3469,7 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
     if ( m_table )
     {
         if (IsCellEditControlEnabled())
-            EnableCellEditControl(FALSE);
+            DisableCellEditControl();
 
         if ( m_table->DeleteCols( pos, numCols ) )
         {
@@ -3482,8 +3497,7 @@ bool wxGrid::SendEvent( const wxEventType type,
                         int row, int col,
                         wxMouseEvent& mouseEv )
 {
-    if ( type == EVT_GRID_ROW_SIZE ||
-         type == EVT_GRID_COL_SIZE )
+    if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
     {
         int rowOrCol = (row == -1 ? col : row);
 
@@ -3499,7 +3513,7 @@ bool wxGrid::SendEvent( const wxEventType type,
 
         return GetEventHandler()->ProcessEvent(gridEvt);
     }
-    else if ( type == EVT_GRID_RANGE_SELECT )
+    else if ( type == wxEVT_GRID_RANGE_SELECT )
     {
         wxGridRangeSelectEvent gridEvt( GetId(),
                                         type,
@@ -3536,8 +3550,7 @@ bool wxGrid::SendEvent( const wxEventType type,
 bool wxGrid::SendEvent( const wxEventType type,
                         int row, int col )
 {
-    if ( type == EVT_GRID_ROW_SIZE ||
-         type == EVT_GRID_COL_SIZE )
+    if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
     {
         int rowOrCol = (row == -1 ? col : row);
 
@@ -3729,9 +3742,9 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             default:
                 // now try the cell edit control
                 //
-                if ( !IsCellEditControlEnabled() )
-                    EnableCellEditControl( TRUE );
-                if (IsCellEditControlEnabled()) {
+                if ( !IsCellEditControlEnabled() && CanEnableCellControl() )
+                {
+                    EnableCellEditControl();
                     wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
                     attr->GetEditor()->StartingKey(event);
                     attr->DecRef();
@@ -3752,7 +3765,7 @@ void wxGrid::OnEraseBackground(wxEraseEvent&)
 
 void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
-    if ( SendEvent( EVT_GRID_SELECT_CELL, coords.GetRow(), coords.GetCol() ) )
+    if ( SendEvent( wxEVT_GRID_SELECT_CELL, coords.GetRow(), coords.GetCol() ) )
     {
         // the event has been intercepted - do nothing
         return;
@@ -3763,7 +3776,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     {
         HideCellEditControl();
         SaveEditControlValue();
-        EnableCellEditControl(FALSE);
+        DisableCellEditControl();
 
         // Clear the old current cell highlight
         wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
@@ -4255,6 +4268,9 @@ void wxGrid::EnableEditing( bool edit )
     {
         m_editable = edit;
 
+        // FIXME IMHO this won't disable the edit control if edit == FALSE
+        //       because of the check in the beginning of
+        //       EnableCellEditControl() just below (VZ)
         EnableCellEditControl(m_editable);
     }
 }
@@ -4270,9 +4286,18 @@ void wxGrid::EnableCellEditControl( bool enable )
 
     if ( enable != m_cellEditCtrlEnabled )
     {
+        // TODO allow the app to Veto() this event?
+        SendEvent(enable ? wxEVT_GRID_EDITOR_SHOWN : wxEVT_GRID_EDITOR_HIDDEN);
+
         if ( enable )
         {
+            // this should be checked by the caller!
+            wxASSERT_MSG( CanEnableCellControl(),
+                          _T("can't enable editing for this cell!") );
+
+            // do it before ShowCellEditControl()
             m_cellEditCtrlEnabled = enable;
+
             SetEditControlValue();
             ShowCellEditControl();
         }
@@ -4280,28 +4305,33 @@ void wxGrid::EnableCellEditControl( bool enable )
         {
             HideCellEditControl();
             SaveEditControlValue();
+
+            // do it after HideCellEditControl()
             m_cellEditCtrlEnabled = enable;
         }
     }
 }
 
-
-bool wxGrid::IsCellEditControlEnabled()
+bool wxGrid::IsCurrentCellReadOnly() const
 {
-    bool enabled;
+    // const_cast
+    wxGridCellAttr* attr = ((wxGrid *)this)->GetCellAttr(m_currentCellCoords);
+    bool readonly = attr->IsReadOnly();
+    attr->DecRef();
 
-    if ( m_cellEditCtrlEnabled )
-    {
-        wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
-        enabled = !attr->IsReadOnly();
-        attr->DecRef();
-    }
-    else
-    {
-        enabled = FALSE;
-    }
+    return readonly;
+}
 
-    return enabled;
+bool wxGrid::CanEnableCellControl() const
+{
+    return m_editable && !IsCurrentCellReadOnly();
+}
+
+bool wxGrid::IsCellEditControlEnabled() const
+{
+    // the cell edit control might be disable for all cells or just for the
+    // current one if it's read only
+    return m_cellEditCtrlEnabled ? !IsCurrentCellReadOnly() : FALSE;
 }
 
 void wxGrid::ShowCellEditControl()
@@ -4423,7 +4453,7 @@ void wxGrid::SaveEditControlValue()
 
         if (changed)
         {
-            SendEvent( EVT_GRID_CELL_CHANGE,
+            SendEvent( wxEVT_GRID_CELL_CHANGE,
                        m_currentCellCoords.GetRow(),
                        m_currentCellCoords.GetCol() );
         }
@@ -5797,7 +5827,7 @@ void wxGrid::SelectRow( int row, bool addToSelected )
     }
 
     wxGridRangeSelectEvent gridEvt( GetId(),
-                                    EVT_GRID_RANGE_SELECT,
+                                    wxEVT_GRID_RANGE_SELECT,
                                     this,
                                     m_selectedTopLeft,
                                     m_selectedBottomRight );
@@ -5875,7 +5905,7 @@ void wxGrid::SelectCol( int col, bool addToSelected )
     }
 
     wxGridRangeSelectEvent gridEvt( GetId(),
-                                    EVT_GRID_RANGE_SELECT,
+                                    wxEVT_GRID_RANGE_SELECT,
                                     this,
                                     m_selectedTopLeft,
                                     m_selectedBottomRight );
@@ -6005,7 +6035,7 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
     if ( !m_isDragging )
     {
         wxGridRangeSelectEvent gridEvt( GetId(),
-                                        EVT_GRID_RANGE_SELECT,
+                                        wxEVT_GRID_RANGE_SELECT,
                                         this,
                                         m_selectedTopLeft,
                                         m_selectedBottomRight );

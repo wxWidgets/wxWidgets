@@ -95,6 +95,9 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
+
+    EVT_GRID_EDITOR_SHOWN( GridFrame::OnEditorShown )
+    EVT_GRID_EDITOR_HIDDEN( GridFrame::OnEditorHidden )
 END_EVENT_TABLE()
 
 
@@ -574,6 +577,19 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
     ev.Skip();
 }
 
+void GridFrame::OnEditorShown( wxGridEvent& ev )
+{
+    wxLogMessage( "Cell editor shown." );
+
+    ev.Skip();
+}
+
+void GridFrame::OnEditorHidden( wxGridEvent& ev )
+{
+    wxLogMessage( "Cell editor hidden." );
+
+    ev.Skip();
+}
 
 void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
 {

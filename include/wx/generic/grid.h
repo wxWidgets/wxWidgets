@@ -185,6 +185,8 @@ public:
     virtual void StartingKey(wxKeyEvent& event);
     virtual void HandleReturn(wxKeyEvent& event);
 
+protected:
+    wxTextCtrl *Text() const { return (wxTextCtrl *)m_control; }
 
 private:
     wxString m_startValue;
@@ -675,9 +677,12 @@ public:
     bool IsEditable() { return m_editable; }
     void EnableEditing( bool edit );
 
-    void     EnableCellEditControl( bool enable );
+    void EnableCellEditControl( bool enable = TRUE );
+    void DisableCellEditControl() { EnableCellEditControl(FALSE); }
+    bool CanEnableCellControl() const;
+    bool IsCellEditControlEnabled() const;
 
-    bool     IsCellEditControlEnabled();
+    bool IsCurrentCellReadOnly() const;
 
     void ShowCellEditControl();
     void HideCellEditControl();
@@ -1198,8 +1203,8 @@ protected:
     wxCursor m_rowResizeCursor;
     wxCursor m_colResizeCursor;
 
-    bool       m_editable;  // applies to whole grid
-    bool       m_cellEditCtrlEnabled;
+    bool       m_editable;              // applies to whole grid
+    bool       m_cellEditCtrlEnabled;   // is in-place edit currently shown?
 
 
     void Create();
@@ -1209,13 +1214,14 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    bool SendEvent( const wxEventType,
-                    int row, int col,
-                    wxMouseEvent& );
-
-    bool SendEvent( const wxEventType,
-                    int row, int col );
-
+    bool SendEvent( const wxEventType, int row, int col, wxMouseEvent& );
+    bool SendEvent( const wxEventType, int row, int col );
+    bool SendEvent( const wxEventType type)
+    {
+        return SendEvent(type,
+                         m_currentCellCoords.GetRow(),
+                         m_currentCellCoords.GetCol());
+    }
 
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
@@ -1279,7 +1285,6 @@ protected:
 
     DECLARE_DYNAMIC_CLASS(wxGridEvent)
 };
-
 
 class WXDLLEXPORT wxGridSizeEvent : public wxNotifyEvent
 {
@@ -1356,50 +1361,54 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxGridRangeSelectEvent)
 };
 
-
-const wxEventType EVT_GRID_CELL_LEFT_CLICK    = wxEVT_FIRST + 1580;
-const wxEventType EVT_GRID_CELL_RIGHT_CLICK   = wxEVT_FIRST + 1581;
-const wxEventType EVT_GRID_CELL_LEFT_DCLICK   = wxEVT_FIRST + 1582;
-const wxEventType EVT_GRID_CELL_RIGHT_DCLICK  = wxEVT_FIRST + 1583;
-const wxEventType EVT_GRID_LABEL_LEFT_CLICK   = wxEVT_FIRST + 1584;
-const wxEventType EVT_GRID_LABEL_RIGHT_CLICK  = wxEVT_FIRST + 1585;
-const wxEventType EVT_GRID_LABEL_LEFT_DCLICK  = wxEVT_FIRST + 1586;
-const wxEventType EVT_GRID_LABEL_RIGHT_DCLICK = wxEVT_FIRST + 1587;
-const wxEventType EVT_GRID_ROW_SIZE           = wxEVT_FIRST + 1588;
-const wxEventType EVT_GRID_COL_SIZE           = wxEVT_FIRST + 1589;
-const wxEventType EVT_GRID_RANGE_SELECT       = wxEVT_FIRST + 1590;
-const wxEventType EVT_GRID_CELL_CHANGE        = wxEVT_FIRST + 1591;
-const wxEventType EVT_GRID_SELECT_CELL        = wxEVT_FIRST + 1592;
+// TODO move to wx/event.h
+const wxEventType wxEVT_GRID_CELL_LEFT_CLICK    = wxEVT_FIRST + 1580;
+const wxEventType wxEVT_GRID_CELL_RIGHT_CLICK   = wxEVT_FIRST + 1581;
+const wxEventType wxEVT_GRID_CELL_LEFT_DCLICK   = wxEVT_FIRST + 1582;
+const wxEventType wxEVT_GRID_CELL_RIGHT_DCLICK  = wxEVT_FIRST + 1583;
+const wxEventType wxEVT_GRID_LABEL_LEFT_CLICK   = wxEVT_FIRST + 1584;
+const wxEventType wxEVT_GRID_LABEL_RIGHT_CLICK  = wxEVT_FIRST + 1585;
+const wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK  = wxEVT_FIRST + 1586;
+const wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK = wxEVT_FIRST + 1587;
+const wxEventType wxEVT_GRID_ROW_SIZE           = wxEVT_FIRST + 1588;
+const wxEventType wxEVT_GRID_COL_SIZE           = wxEVT_FIRST + 1589;
+const wxEventType wxEVT_GRID_RANGE_SELECT       = wxEVT_FIRST + 1590;
+const wxEventType wxEVT_GRID_CELL_CHANGE        = wxEVT_FIRST + 1591;
+const wxEventType wxEVT_GRID_SELECT_CELL        = wxEVT_FIRST + 1592;
+const wxEventType wxEVT_GRID_EDITOR_SHOWN       = wxEVT_FIRST + 1593;
+const wxEventType wxEVT_GRID_EDITOR_HIDDEN      = wxEVT_FIRST + 1594;
 
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
 typedef void (wxEvtHandler::*wxGridSizeEventFunction)(wxGridSizeEvent&);
 typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEvent&);
 
-#define EVT_GRID_CELL_LEFT_CLICK(fn)     { EVT_GRID_CELL_LEFT_CLICK,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_CELL_RIGHT_CLICK(fn)    { EVT_GRID_CELL_RIGHT_CLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_CELL_LEFT_DCLICK(fn)    { EVT_GRID_CELL_LEFT_DCLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_CELL_RIGHT_DCLICK(fn)   { EVT_GRID_CELL_RIGHT_DCLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_LABEL_LEFT_CLICK(fn)    { EVT_GRID_LABEL_LEFT_CLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_LABEL_RIGHT_CLICK(fn)   { EVT_GRID_LABEL_RIGHT_CLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_LABEL_LEFT_DCLICK(fn)   { EVT_GRID_LABEL_LEFT_DCLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_LABEL_RIGHT_DCLICK(fn)  { EVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_ROW_SIZE(fn)            { EVT_GRID_ROW_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL },
-#define EVT_GRID_COL_SIZE(fn)            { EVT_GRID_COL_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL },
-#define EVT_GRID_RANGE_SELECT(fn)        { EVT_GRID_RANGE_SELECT,       -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridRangeSelectEventFunction) &fn, NULL },
-#define EVT_GRID_CELL_CHANGE(fn)         { EVT_GRID_CELL_CHANGE,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_SELECT_CELL(fn)         { EVT_GRID_SELECT_CELL,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_LEFT_CLICK(fn)     { wxEVT_GRID_CELL_LEFT_CLICK,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_RIGHT_CLICK(fn)    { wxEVT_GRID_CELL_RIGHT_CLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_LEFT_DCLICK(fn)    { wxEVT_GRID_CELL_LEFT_DCLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_RIGHT_DCLICK(fn)   { wxEVT_GRID_CELL_RIGHT_DCLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_LABEL_LEFT_CLICK(fn)    { wxEVT_GRID_LABEL_LEFT_CLICK,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_LABEL_RIGHT_CLICK(fn)   { wxEVT_GRID_LABEL_RIGHT_CLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_LABEL_LEFT_DCLICK(fn)   { wxEVT_GRID_LABEL_LEFT_DCLICK,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_LABEL_RIGHT_DCLICK(fn)  { wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_ROW_SIZE(fn)            { wxEVT_GRID_ROW_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL },
+#define EVT_GRID_COL_SIZE(fn)            { wxEVT_GRID_COL_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL },
+#define EVT_GRID_RANGE_SELECT(fn)        { wxEVT_GRID_RANGE_SELECT,       -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridRangeSelectEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_CHANGE(fn)         { wxEVT_GRID_CELL_CHANGE,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_SELECT_CELL(fn)         { wxEVT_GRID_SELECT_CELL,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_EDITOR_SHOWN(fn)        { wxEVT_GRID_EDITOR_SHOWN,       -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_EDITOR_HIDDEN(fn)       { wxEVT_GRID_EDITOR_HIDDEN,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 
 
 #if 0  // TODO: implement these ?  others ?
 
-const wxEventType EVT_GRID_CREATE_CELL      = wxEVT_FIRST + 1576;
-const wxEventType EVT_GRID_CHANGE_LABELS    = wxEVT_FIRST + 1577;
-const wxEventType EVT_GRID_CHANGE_SEL_LABEL = wxEVT_FIRST + 1578;
+const wxEventType wxEVT_GRID_CREATE_CELL      = wxEVT_FIRST + 1576;
+const wxEventType wxEVT_GRID_CHANGE_LABELS    = wxEVT_FIRST + 1577;
+const wxEventType wxEVT_GRID_CHANGE_SEL_LABEL = wxEVT_FIRST + 1578;
 
-#define EVT_GRID_CREATE_CELL(fn)      { EVT_GRID_CREATE_CELL,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_CHANGE_LABELS(fn)    { EVT_GRID_CHANGE_LABELS,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
-#define EVT_GRID_CHANGE_SEL_LABEL(fn) { EVT_GRID_CHANGE_SEL_LABEL, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CREATE_CELL(fn)      { wxEVT_GRID_CREATE_CELL,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CHANGE_LABELS(fn)    { wxEVT_GRID_CHANGE_LABELS,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CHANGE_SEL_LABEL(fn) { wxEVT_GRID_CHANGE_SEL_LABEL, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 
 #endif
 
