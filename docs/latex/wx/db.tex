@@ -238,11 +238,11 @@ be created and opened before any database activity can occur.
 
 \wxheading{Example}
 \begin{verbatim}
-   HENV Db;
-   ....Set values for member variables here
+   wxDbConnectInf ConnectInf;
+   ....Set values for member variables of ConnectInf here
 
-   wxDb sampleDB(Db.Henv);
-   if (!sampleDB.Open(Db.Dsn, Db.Uid, Db.AuthStr))
+   wxDb sampleDB(ConnectInf.Henv);
+   if (!sampleDB.Open(ConnectInf.Dsn, ConnectInf.Uid, ConnectInf.AuthStr))
    {
       // Error opening data source
    }
@@ -443,11 +443,26 @@ one in context and displaying the ones you choose.
 \end{verbatim}
 
 
+\membersection{wxDb::DropView}\label{wxdbdropview}
+
+\func{bool}{DropView}{\param{const char *}{viewName}}
+
+Drops the data table view named in 'viewName'.
+
+\wxheading{Parameters}
+
+\docparam{viewName}{Name of the view to be dropped.}
+
+\wxheading{Remarks}
+
+If the view does not exist, this function will return TRUE.  Note that views are not supported with all data soruces.
+
+
 \membersection{wxDb::ExecSql}\label{wxdbexecsql}
 
 \func{bool}{ExecSql}{\param{char *}{pSqlStmt}}
 
-Allows a native SQL command to be executed directly against the datasource.  Use of this command allows a user to (potentially) utilize features specific to the datasource they are connected to that may not be available through ODBC, as the ODBC driver will pass the specified command directly to the datasource.
+Allows a native SQL command to be executed directly against the datasource.  In addition to being able to run any standard SQL command, use of this function allows a user to (potentially) utilize features specific to the datasource they are connected to that may not be available through ODBC.  The ODBC driver will pass the specified command directly to the datasource.
 
 \wxheading{Parameters}
 
@@ -459,6 +474,66 @@ This member extends the wxDb class and allows you to build and execute ANY VALID
 SQL statement against the data source.  This allows you to extend the class 
 library by being able to issue any SQL statement that the data source is capable
 of processing.
+
+\wxheading{See also}
+
+\helpref{wxDb::GetData}{wxdbgetdata}, \helpref{wxDb::GetNext}{wxdbgetnext}
+
+
+\membersection{wxDb::FwdOnlyCursors}\label{wxdbfwdonlycursors}
+
+\func{bool}{FwdOnlyCursors}{\void}
+
+Indicates whether this connection to the datasource only allows forward scrolling cursors or not.  This state is set at connection creation time.
+
+\wxheading{See also}
+
+\helpref{wxDb::wxDb}{wxdbconstruct}, \helpref{wxDbGetConnection}{wxdbgetconnection}
+
+
+\membersection{wxDb::GetCatalog}\label{wxdbgetcatalog}
+
+\func{wxDbInf *}{GetCatalog}{\param{char *}{userID}}
+
+Returns a wxDbInf pointer that points to the catalog(data source) name, schema, number of tables accessible to the current user, and a wxDbTableInf pointer to all data pertaining to all tables in the users catalog.
+
+\wxheading{Parameters}
+
+\docparam{userID}{Owner of the table.  Specify a userID when the datasource you are connected
+to allows multiple unique tables with the same name to be owned by different users.  {\it userID}
+is evaluated as follows:}
+
+\begin{verbatim}
+         userID == NULL  ... UserID is ignored (DEFAULT)
+         userID == ""    ... UserID set equal to 'this->uid'
+         userID != ""    ... UserID set equal to 'userID'
+\end{verbatim}
+
+\wxheading{Remarks}
+
+The returned catalog will only contain catalog entries for tables to which the user specified in 'userID' has sufficient privileges.  If no user is specified (NULL passed in), a catalog pertaining to all tables in the datasource accessible via this connection will be returned.
+
+
+\membersection{wxDb::GetColumnCount}\label{wxdbgetcolumncount}
+
+\func{int}{GetColumnCount}{\param{char *}{tableName}, \param{const char *}{userID}}
+
+\wxheading{Parameters}
+
+\docparam{tableName}{A table name you wish to obtain column information about.}
+\docparam{userID}{Name of the user that owns the table(s).  Required for some datasources for
+situations where there may be multiple tables with the same name in the datasource, but owned
+by different users. {\it userID} is evaluated in the following manner:}
+
+\begin{verbatim}
+         userID == NULL  ... UserID is ignored (DEFAULT)
+         userID == ""    ... UserID set equal to 'this->uid'
+         userID != ""    ... UserID set equal to 'userID'
+\end{verbatim}
+
+\wxheading{Return value}
+
+Returns a count of how many columns are in the specified table.  If an error occurs retrieving the number of columns the function will return a -1.
 
 
 \membersection{wxDb::GetColumns}\label{wxdbgetcolumns}
@@ -515,6 +590,64 @@ to avoid undesired unbinding of columns.}
 \end{verbatim}
 
 
+\membersection{wxDb::GetData}\label{wxdbgetdata}
+
+\func{bool}{GetData}{\param{UWORD}{ colNo}, \param{SWORD}{ cType}, \param{PTR}{ pData}, \param{SDWORD}{ maxLen}, \param{SDWORD FAR *}{ cbReturned} }
+
+Used to retrieve result set data without binding column values to memory variables (i.e. not using a wxDbTable instance to access table data).
+
+\wxheading{Parameters}
+
+\docparam{colNo}{Ordinal number of column in the result set to be returned.}
+\docparam{cType}{The C data type that is to be returned.}
+\docparam{pData}{Memory buffer which will hold the data returned by the call to this function.}
+\docparam{maxLen}{Maximum size of the buffer that will hold the returned value.}
+\docparam{cbReturned}{Pointer to the buffer containing the length of the actual data returned.  If this value comes back as SQL_NULL_DATA, then the GetData() call has failed.}
+
+\wxheading{See also}
+
+\helpref{wxDb::GetNext}{wxdbgetnext}, \helpref{wxDb::ExecSql}{wxdbexecsql}
+
+\wxheading{Example} 
+\begin{verbatim}
+	SDWORD cb;
+	ULONG reqQty;
+	wxString sqlStmt;
+	sqlStmt = "SELECT SUM(REQUIRED_QTY - PICKED_QTY) FROM ORDER_TABLE WHERE PART_RECID = 1450 AND REQUIRED_QTY > PICKED_QTY";
+
+	// Perform the query
+	if (!pDb->ExecSql(sqlStmt.c_str()))
+	{
+		// ERROR
+		return(0);
+	}
+
+	// Request the first row of the result set
+	if (!pDb->GetNext())
+	{
+		// ERROR
+		return(0);
+	}
+
+	Read column #1 of this row of the result set and store the value in 'reqQty'
+	if (!pDb->GetData(1, SQL_C_ULONG, &reqQty, 0, &cb))
+	{
+		// ERROR
+		return(0);
+	}
+
+	// Check for a NULL result
+	if (cb == SQL_NULL_DATA)
+		return(0);
+\end{verbatim}
+
+\wxheading{Remarks}
+
+When requesting multiple columns to be returned from the result set (for example, the SQL query
+requested 3 columns be returned), the calls to GetData must request the columns in ordinal
+sequence (1,2,3 or 1,3 or 2,3).  
+
+
 \membersection{wxDb::GetDatabaseName}\label{wxdbgetdatabasename}
 
 \func{char *}{GetDatabaseName}{\void}
@@ -550,6 +683,40 @@ Returns the ODBC environment handle.
 Returns the ODBC statement handle associated with this database connection.
 
 
+\membersection{wxDb::GetKeyFields}\label{wxdbgetkeyfields}
+
+\func{int}{GetKeyFields}{\param{char *}{tableName}, \param{wxDbColInf *}{colInf}, \param{int}{nocols}}
+
+Used to determine which columns are members of primary or non-primary indexes on the specified table.  If a column is a member of a foreign key for some other table, that information is detected also.
+
+This function is primarily for use by the wxDb::GetColumns() function, but may be called if desired from the client application.
+
+\wxheading{Parameters}
+
+\docparam{tableName}{Name of the table for which the columns will be evaluated as to their inclusion in any indexes.}
+\docparam{colInf}{Data structure containing the column definitions (obtained with wxDb::GetColumns()).  This function populates the PkCol, PkTableName, and FkTableName members of the colInf structure.}
+\docparam{nocols}{Number of columns defined in the instance of colInf.}
+
+\wxheading{Return value}
+
+Currently always returns TRUE.
+
+\wxheading{See also}
+
+\helpref{wxDbColInf}{wxdbcolinf}, \helpref{wxDb::GetColumns}{wxdbgetcolumns}
+
+
+\membersection{wxDb::GetNext}\label{wxdbgetnext}
+
+\func{HSTMT}{GetNext}{\void}
+
+Requests the next row in the result set obtained by issueing a query through a direct request using wxDb::ExecSql().
+
+\wxheading{See also}
+
+\helpref{wxDb::ExecSql}{wxdbexecsql}, \helpref{wxDb::GetData}{wxdbgetdata}
+
+
 \membersection{wxDb::GetNextError}\label{wxdbgetnexterror}
 
 \func{bool}{GetNextError}{\param{HENV}{ aHenv}, \param{HDBC}{ aHdbc = SQL_NULL_HDBC}, \param{HSTMT}{ aHstmt = SQL_NULL_HSTMT}}
@@ -581,6 +748,13 @@ ODBC function call that erred out requires a hstmt argument.}
 \func{char *}{GetPassword}{\void}
 
 Returns the password used to connect to the datasource.
+
+
+\membersection{wxDb::GetTableCount}\label{wxdbgettablecount}
+
+\func{int}{GetTableCount}{\void}
+
+Returns the number of wxDbTable() instances currently using this data source connection.
 
 
 \membersection{wxDb::GetUsername}\label{wxdbgetusername}
