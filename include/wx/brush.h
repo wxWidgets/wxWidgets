@@ -1,6 +1,10 @@
 #ifndef _WX_BRUSH_H_BASE_
 #define _WX_BRUSH_H_BASE_
 
+#include "wx/defs.h"
+#include "wx/object.h"
+#include "wx/gdiobj.h"
+
 // wxBrushBase
 class WXDLLEXPORT wxBrushBase: public wxGDIObject
 {
