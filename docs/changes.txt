@@ -6,12 +6,15 @@ next release (2.1.12 or 2.2?)
 
 wxBase:
 
+- it is now possible to build wxBase under Win32 (using VC++ only so far)
+
 - wxThread class modified to support both detached and joinable threads, also
   added new GetCPUCount() and SetConcurrency() functions (useful under Solaris
   only so far)
+- wxDir class for enumerating files in a directory
 - wxLog functions are now (more) MT-safe
 - wxStopWatch class, timer functions have more chances to return correct
-  results for your platform (use ANSI function where available)
+  results for your platform (use ANSI functions where available)
 - buffer overflows in wxString and wxLog classes fixed (if snprintf() function
   is available)
 - wxArray::RemoveAt() replaces deprectaed wxArray::Remove(index)
@@ -23,8 +26,7 @@ all (GUI):
 - wxTreeCtrl and wxListCtrl allow setting colour/fonts for individual items
 - "file open" dialog allows selecting multiple files at once (contributed by
   John Norris)
-- wxDC::DrawRotatedText() (contributed by Hans-Joachim Baader, limited to
-  +/-90 degrees for now - contributions to improve it are welcome!)
+- wxDC::DrawRotatedText() (based on contribution by Hans-Joachim Baader)
 
 - TIFF support added (libtiff required and included in the distribution)
 
@@ -38,7 +40,7 @@ wxGTK:
 
 - wxFontMapper endless recursion bug (on some systems) fixed
 - wxGTK synthesizes wxActivateEvents
-- you can use UpdateUI handlers with wxTextCtrl
+- UpdateUI handlers may be used with wxTextCtrl
 
 NOTE: for changes after wxWindows 2.1.0 b4, please see the CVS
 change log.
