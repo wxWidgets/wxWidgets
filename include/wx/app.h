@@ -380,13 +380,17 @@ public:
         #define WXAPIENTRY WXFAR wxSTDCALL
     #endif
 
+    #include <windows.h>
+    #include "wx/msw/winundef.h"
+
     #define IMPLEMENT_WXWIN_MAIN \
-        extern "C" int WXAPIENTRY WinMain(WXHINSTANCE hInstance,\
-                                          WXHINSTANCE hPrevInstance,\
-                                          char WXFAR *m_lpCmdLine,\
-                                          int nCmdShow)\
+        extern "C" int WXAPIENTRY WinMain(HINSTANCE hInstance,\
+                                          HINSTANCE hPrevInstance,\
+                                          LPSTR m_lpCmdLine, int nCmdShow)\
         {\
-            return wxEntry(hInstance, hPrevInstance, m_lpCmdLine, nCmdShow);\
+            return wxEntry((WXHINSTANCE) hInstance,\
+                           (WXHINSTANCE) hPrevInstance,\
+                           m_lpCmdLine, nCmdShow);\
         }
 #else
     #define IMPLEMENT_WXWIN_MAIN
