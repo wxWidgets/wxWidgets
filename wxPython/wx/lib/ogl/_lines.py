@@ -297,6 +297,8 @@ class LineShape(Shape):
             point = wx.RealPoint(-999, -999)
             self._lineControlPoints.append(point)
 
+        # pi: added _initialised to keep track of when we have set
+        # the middle points to something other than (-999, -999)
         self._initialised = False
         
     def InsertLineControlPoint(self, dc = None):
@@ -506,7 +508,7 @@ class LineShape(Shape):
         first_point = self._lineControlPoints[0]
         last_point = self._lineControlPoints[-1]
 
-        return (first_point[0], first_point[1]), (last_point[0], last_point[1])
+        return first_point[0], first_point[1], last_point[0], last_point[1]
 
     def SetAttachments(self, from_attach, to_attach):
         """Specify which object attachment points should be used at each end
@@ -913,6 +915,14 @@ class LineShape(Shape):
 
         oldX, oldY = self._xpos, self._ypos
 
+        # pi: The first time we go through FindLineEndPoints we can't
+        # use the middle points (since they don't have sane values),
+        # so we just do what we do for a normal line. Then we call
+        # Initialise to set the middle points, and then FindLineEndPoints
+        # again, but this time (and from now on) we use the middle
+        # points to calculate the end points.
+        # This was buggy in the C++ version too.
+        
         self.SetEnds(end_x, end_y, other_end_x, other_end_y)
 
         if len(self._lineControlPoints) > 2:
@@ -949,7 +959,9 @@ class LineShape(Shape):
         # manually if necessary.
         second_point = self._lineControlPoints[1]
         second_last_point = self._lineControlPoints[-2]
-        
+
+        # pi: If we have a segmented line and this is the first time,
+        # do this as a straight line.
         if len(self._lineControlPoints) > 2 and self._initialised:
             if self._from.GetAttachmentMode() != ATTACHMENT_MODE_NONE:
                 nth, no_arcs = self.FindNth(self._from, False) # Not incoming
