@@ -162,7 +162,7 @@
         wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 230), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
 #endif
 
-        html = new wxHtmlWindow(&dlg, -1, wxPoint(10, 10), wxSize(380, 160));//, "htmlWindow", FALSE);
+        html = new wxHtmlWindow(&dlg, -1, wxPoint(10, 10), wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
         html -> SetBorders(0);
         html -> LoadPage("data/about.htm");
         wxButton *bu1 = new wxButton(&dlg, wxID_OK, "OK", wxPoint(250, 185), wxSize(100, 30));
