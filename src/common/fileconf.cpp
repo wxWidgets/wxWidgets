@@ -623,7 +623,11 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
       SetPath(strGroup);
 
       if ( bLocal )
+      {
+        if ( m_pCurrentGroup->Parent() )
+          m_pCurrentGroup->Parent()->SetLastGroup(m_pCurrentGroup);
         m_pCurrentGroup->SetLine(m_linesTail);
+      }
 
       // check that there is nothing except comments left on this line
       bool bCont = TRUE;
@@ -678,19 +682,6 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
         if ( pEntry == NULL ) {
           // new entry
           pEntry = m_pCurrentGroup->AddEntry(strKey, n);
-
-          // <JACS>
-          // Take the opportunity to set some pointers now
-          // that we know there are items in this group.
-          // Otherwise, items added to a newly read file
-          // can be put in the wrong place.
-          m_pCurrentGroup->SetLastEntry(pEntry);
-          if (m_pCurrentGroup->Parent())
-              m_pCurrentGroup->Parent()->SetLastGroup(m_pCurrentGroup);
-          // </JACS>
-
-          if ( bLocal )
-            pEntry->SetLine(m_linesTail);
         }
         else {
           if ( bLocal && pEntry->IsImmutable() ) {
@@ -708,10 +699,11 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
             wxLogWarning(_("file '%s', line %d: key '%s' was first found at line %d."),
                          buffer.GetName(), n + 1, strKey.c_str(), pEntry->Line());
 
-            if ( bLocal )
-              pEntry->SetLine(m_linesTail);
           }
         }
+
+        if ( bLocal )
+          pEntry->SetLine(m_linesTail);
 
         // skip whitespace
         while ( wxIsspace(*pEnd) )
@@ -1844,8 +1836,6 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
         else // this entry didn't exist in the local file
         {
             // add a new line to the file
-            wxASSERT( m_nLine == wxNOT_FOUND );   // consistency check
-
             wxFileConfigLineList *line = Group()->GetLastEntryLine();
             m_pLine = Group()->Config()->LineListInsert(strLine, line);
 
