@@ -778,54 +778,40 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
   	
   	wxCoord x1, x2 , y1 , y2 ;
   
+    if ( m_brush.GetStyle() == wxTRANSPARENT && m_pen.GetStyle() == wxTRANSPARENT )
+        return ;
+        
+	PolyHandle polygon = OpenPoly();
+	
+	x1 = XLOG2DEVMAC(points[0].x + xoffset);
+	y1 = YLOG2DEVMAC(points[0].y + yoffset);   
+	::MoveTo(x1,y1);
+
+	for (int i = 0; i < n-1; i++)
+	{
+		x2 = XLOG2DEVMAC(points[i+1].x + xoffset);
+		y2 = YLOG2DEVMAC(points[i+1].y + yoffset);
+		::LineTo(x2, y2);
+	}
+
+	ClosePoly();
+
   	if (m_brush.GetStyle() != wxTRANSPARENT)
   	{
-  		PolyHandle polygon = OpenPoly();
-  		
-  		x1 = XLOG2DEVMAC(points[0].x + xoffset);
-  		y1 = YLOG2DEVMAC(points[0].y + yoffset);   
-  		::MoveTo(x1,y1);
-  
-  		for (int i = 0; i < n-1; i++)
-  		{
-    		x2 = XLOG2DEVMAC(points[i+1].x + xoffset);
-    		y2 = YLOG2DEVMAC(points[i+1].y + yoffset);
-    		::LineTo(x2, y2);
-  		}
-
-  		ClosePoly();
 
 		MacInstallBrush();
 		::PaintPoly( polygon );
 		
-		KillPoly( polygon );
 	}
 	
 	if (m_pen.GetStyle() != wxTRANSPARENT) 
 	{
-  		PolyHandle polygon = OpenPoly();
-  		
-  		x1 = XLOG2DEVMAC(points[0].x + xoffset);
-  		y1 = YLOG2DEVMAC(points[0].y + yoffset);   
-  		::MoveTo(x1,y1);
-  
-  		for (int i = 0; i < n-1; i++)
-  		{
-    		x2 = XLOG2DEVMAC(points[i+1].x + xoffset);
-    		y2 = YLOG2DEVMAC(points[i+1].y + yoffset);
-    		::LineTo(x2, y2);
-  		}
-  		
-  		// return to origin to close path
-  		::LineTo(x1,y1);
-
-  		ClosePoly();
 	
 		MacInstallPen() ;
 		::FramePoly( polygon ) ;
 		
-		KillPoly( polygon );
 	}
+	KillPoly( polygon );
 }
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -1445,27 +1431,28 @@ void wxDC::MacInstallFont() const
 
 static void wxMacGetHatchPattern(int hatchStyle, Pattern *pattern)
 {
-	int thePatListID = sysPatListID;
+    // we have our own pattern list now
+	int thePatListID = 128;
 	int theIndex;
 	switch(hatchStyle)
 	{
 		case wxBDIAGONAL_HATCH:
-			theIndex = 34; // WCH: this is not good
+			theIndex = 2; 
 			break;
 		case wxFDIAGONAL_HATCH:
-			theIndex = 26;
+			theIndex = 3;
 			break;
 		case wxCROSS_HATCH:
-			theIndex = 5;
+			theIndex = 4;
 			break;
 		case wxHORIZONTAL_HATCH:
-			theIndex = 25;
+			theIndex = 5;
 			break;
 		case wxVERTICAL_HATCH:
 			theIndex = 6;
 			break;
 		case wxCROSSDIAG_HATCH:
-			theIndex = 4; // WCH: this is not good
+			theIndex = 7; 
 			break;
 		default:
 			theIndex = 1; // solid pattern
