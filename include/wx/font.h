@@ -114,6 +114,8 @@ enum wxFontEncoding
 // wxFontBase represents a font object
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxFontRefData;
+
 class wxFontBase : public wxGDIObject
 {
 public:
@@ -167,7 +169,7 @@ public:
 
 protected:
     // get the internal data
-    class WXDLLEXPORT wxFontRefData *GetFontData() const
+    wxFontRefData *GetFontData() const
         { return (wxFontRefData *)m_refData; }
 
 private:

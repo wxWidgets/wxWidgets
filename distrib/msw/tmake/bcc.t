@@ -273,7 +273,7 @@ $(CFG): makefile.bcc
 -Fs-
 -Vf
 -Ff=4
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
+-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
 -I$(WXDIR)\include\wx\msw\gnuwin32
 -L$(BCCDIR)\lib
 -D__WXWIN__

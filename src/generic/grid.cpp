@@ -9,23 +9,22 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
+    #pragma implementation "grid.h"
+#endif
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"
 
-#if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID) 
-#include "gridg.cpp"
-#else
-
-#ifdef __GNUG__
-    #pragma implementation "grid.h"
-#endif
-
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID) 
+#include "gridg.cpp"
+#else
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

@@ -290,7 +290,7 @@ accel.obj:     $(MSWDIR)\accel.cpp
 app.obj:     $(MSWDIR)\app.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-automtn.obj:     $(MSWDIR)\automtn.cpp
+automtn.obj:     $(MSWDIR)\ole\automtn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 bitmap.obj:     $(MSWDIR)\bitmap.cpp
@@ -341,7 +341,7 @@ cursor.obj:     $(MSWDIR)\cursor.cpp
 data.obj:     $(MSWDIR)\data.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-dataobj.obj:     $(MSWDIR)\dataobj.cpp
+dataobj.obj:     $(MSWDIR)\ole\dataobj.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 dc.obj:     $(MSWDIR)\dc.cpp
@@ -377,10 +377,10 @@ dirdlg.obj:     $(MSWDIR)\dirdlg.cpp
 dragimag.obj:     $(MSWDIR)\dragimag.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-dropsrc.obj:     $(MSWDIR)\dropsrc.cpp
+dropsrc.obj:     $(MSWDIR)\ole\dropsrc.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-droptgt.obj:     $(MSWDIR)\droptgt.cpp
+droptgt.obj:     $(MSWDIR)\ole\droptgt.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 filedlg.obj:     $(MSWDIR)\filedlg.cpp
@@ -404,7 +404,7 @@ gaugemsw.obj:     $(MSWDIR)\gaugemsw.cpp
 gdiobj.obj:     $(MSWDIR)\gdiobj.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-gsocket.obj:     $(MSWDIR)\gsocket.cpp
+gsocket.obj:     $(MSWDIR)\gsocket.c
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 helpwin.obj:     $(MSWDIR)\helpwin.cpp
@@ -545,7 +545,7 @@ utils.obj:     $(MSWDIR)\utils.cpp
 utilsexc.obj:     $(MSWDIR)\utilsexc.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-uuid.obj:     $(MSWDIR)\uuid.cpp
+uuid.obj:     $(MSWDIR)\ole\uuid.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 wave.obj:     $(MSWDIR)\wave.cpp
@@ -619,7 +619,7 @@ dynlib.obj:     $(COMMDIR)\dynlib.cpp
 event.obj:     $(COMMDIR)\event.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-extended.obj:     $(COMMDIR)\extended.cpp
+extended.obj:     $(COMMDIR)\extended.c
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 ffile.obj:     $(COMMDIR)\ffile.cpp
@@ -796,8 +796,8 @@ tokenzr.obj:     $(COMMDIR)\tokenzr.cpp
 txtstrm.obj:     $(COMMDIR)\txtstrm.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-unzip.obj:     $(COMMDIR)\unzip.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+unzip.obj:     $(COMMDIR)\unzip.c
+  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
 
 url.obj:     $(COMMDIR)\url.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<

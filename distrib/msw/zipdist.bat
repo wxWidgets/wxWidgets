@@ -86,6 +86,7 @@ cd %dest\wx
 unzip32 -o ..\wx200msw.zip
 unzip32 -o ..\wx200gen.zip
 unzip32 -o ..\wx200vc.zip
+unzip32 -o ..\wx200bc.zip
 unzip32 -o ..\wx200hlp.zip
 unzip32 -o ..\glcanvas.zip
 unzip32 -o ..\treedraw.zip

@@ -451,11 +451,11 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case CF_OEMTEXT:
                         size = strlen((const char *)pBuf);
                         break;
-
+#ifndef __WATCOMC__
                     case CF_UNICODETEXT:
                         size = wcslen((const wchar_t *)pBuf);
                         break;
-
+#endif
                     case CF_BITMAP:
                     case CF_HDROP:
                         // these formats don't use size at all, anyhow (but
