@@ -152,6 +152,7 @@ COMMONOBJS = \
 		..\common\$D\image.obj \
 		..\common\$D\imaggif.obj \
 		..\common\$D\imagjpeg.obj \
+		..\common\$D\imagpcx.obj \
 		..\common\$D\imagpng.obj \
 		..\common\$D\imagpnm.obj \
 		..\common\$D\intl.obj \

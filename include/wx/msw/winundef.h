@@ -207,6 +207,26 @@
     }
 #endif
 
+// GetPrevSibling
+
+#ifdef GetPrevSibling
+    #undef GetPrevSibling
+    inline HWND GetPrevSibling(HWND hwnd)
+    {
+        return GetWindow(hwnd,GW_HWNDPREV);
+    }
+#endif
+
+// GetNextSibling
+
+#ifdef GetNextSibling
+    #undef GetNextSibling
+    inline HWND GetNextSibling(HWND hwnd)
+    {
+        return GetWindow(hwnd,GW_HWNDNEXT);
+    }
+#endif
+
 // For WINE
 
 #if defined(GetWindowStyle) || defined(__WXWINE__)

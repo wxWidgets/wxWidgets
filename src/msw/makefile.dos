@@ -117,6 +117,7 @@ COMMONOBJS = \
 		$(COMMDIR)\image.obj \
 		$(COMMDIR)\imaggif.obj \
 		$(COMMDIR)\imagjpeg.obj \
+		$(COMMDIR)\imagpcx.obj \
 		$(COMMDIR)\imagpnm.obj \
 		$(COMMDIR)\intl.obj \
 		$(COMMDIR)\ipcbase.obj \
@@ -832,6 +833,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/imagjpeg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/imagpcx.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

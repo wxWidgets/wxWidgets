@@ -516,25 +516,29 @@ $(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
 
 $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
         cd $(DOCDIR)\latex\wx
-        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
         cd $(DOCDIR)\latex\porting
-        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/pdf/porting.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/prop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
         cd $(DOCDIR)\latex\proplist
-        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/pdf/prop.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
         cd $(DOCDIR)\latex\techref
-        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/pdf/techref.rtf -twice -rtf
         cd $(THISDIR)
 
