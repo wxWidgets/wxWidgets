@@ -61,7 +61,17 @@
 #elif defined(__WXGTK__)
     static inline wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
-        return gdk_font_load( wxConvertWX2MB(fontSpec) );
+       wxNativeFont font = gdk_font_load( wxConvertWX2MB(fontSpec) );
+       if(fontSpec == "-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+       {
+          if(font == NULL)
+             font = gdk_font_load (wxConvertWX2MB("-*-*-*-*-*-*-*-*-75-*-*-*-*-*"));
+          if(font == NULL)
+             font = gdk_font_load (wxConvertWX2MB("-*-*-*-*-*-*-*-*-100-*-*-*-*-*"));
+          if(font == NULL)
+             font = gdk_font_load (wxConvertWX2MB("-*-fixed-*-*-*-*-*-*-*-*-*-*-*-*"));
+       }
+       return font;
     }
 
     static inline void wxFreeFont(wxNativeFont font)
