@@ -391,6 +391,7 @@
                                   // DLL loading and function calling
 #define wxUSE_DYNAMIC_LOADER 0
 
+#define wxUSE_WCHAR_T           1
 #define wxUSE_PROTOCOL          1
 #define wxUSE_URL               1
 #define wxUSE_PROTOCOL_HTTP     1
