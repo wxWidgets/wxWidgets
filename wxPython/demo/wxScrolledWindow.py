@@ -92,6 +92,11 @@ class MyCanvas(wxScrolledWindow):
         dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
         dc.DrawText("a bitmap", 200, 85)
 
+##         dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
+##         dc.SetTextForeground("BLACK")
+##         dc.DrawText("TEST this STRING", 10, 200)
+
+
         font = wxFont(20, wxSWISS, wxNORMAL, wxNORMAL)
         dc.SetFont(font)
         dc.SetTextForeground(wxBLACK)

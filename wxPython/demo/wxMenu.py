@@ -75,6 +75,7 @@ check the source for this sample to see how to implement them.
         menu6 = wxMenu()
         menu6.Append(601, "Submenu Item")
         menu5.AppendMenu(504, "submenu", menu6)
+        menu5.Append(505, "remove this menu")
         menuBar.Append(menu5, "&Fun")
 
         self.SetMenuBar(menuBar)
@@ -102,6 +103,7 @@ check the source for this sample to see how to implement them.
         EVT_MENU(self, 501, self.Menu501)
         EVT_MENU(self, 502, self.Menu502)
         EVT_MENU(self, 503, self.TestRemove)
+        EVT_MENU(self, 505, self.TestRemove2)
 
     # Methods
 
@@ -163,6 +165,11 @@ check the source for this sample to see how to implement them.
         #menu.Remove(504)               # works
         menu.RemoveItem(mb.FindItemById(504))  # this also works
         #menu.RemoveItem(submenuItem)   # doesn't work, as expected since submenuItem is not on menu
+
+
+    def TestRemove2(self, evt):
+        mb = self.GetMenuBar()
+        mb.Remove(4)
 
 
 #-------------------------------------------------------------------
