@@ -91,15 +91,15 @@ typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
 /* Global initializers */
 
 /* GSocket_Init() must be called at the beginning */
-bool GSocket_Init();
+bool GSocket_Init(void);
 
 /* GSocket_Cleanup() must be called at the end */
-void GSocket_Cleanup();
+void GSocket_Cleanup(void);
 
 
 /* Constructors / Destructors */
 
-GSocket *GSocket_new();
+GSocket *GSocket_new(void);
 void GSocket_destroy(GSocket *socket);
 
 
@@ -289,7 +289,7 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags);
 
 /* GAddress */
 
-GAddress *GAddress_new();
+GAddress *GAddress_new(void);
 GAddress *GAddress_copy(GAddress *address);
 void GAddress_destroy(GAddress *address);
 

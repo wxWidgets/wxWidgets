@@ -113,18 +113,18 @@ struct sockaddr_un {
 
 /* Global initialisers */
 
-bool GSocket_Init()
+bool GSocket_Init(void)
 {
   return TRUE;
 }
 
-void GSocket_Cleanup()
+void GSocket_Cleanup(void)
 {
 }
 
 /* Constructors / Destructors for GSocket */
 
-GSocket *GSocket_new()
+GSocket *GSocket_new(void)
 {
   int i;
   GSocket *socket;
@@ -151,8 +151,12 @@ GSocket *GSocket_new()
                                 /* 10 minutes * 60 sec * 1000 millisec */
   socket->m_establishing        = FALSE;
 
-  /* We initialize the GUI specific entries here */
-  _GSocket_GUI_Init(socket);
+  /* Per-socket GUI-specific initialization */
+  if (!_GSocket_GUI_Init(socket))
+  {
+    free(socket);
+    return NULL;
+  }
 
   return socket;
 }
@@ -161,12 +165,12 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
+  /* Per-socket GUI-specific cleanup */
+  _GSocket_GUI_Destroy(socket);
+
   /* Check that the socket is really shutdowned */
   if (socket->m_fd != -1)
     GSocket_Shutdown(socket);
-
-  /* We destroy GUI specific variables */
-  _GSocket_GUI_Destroy(socket);
 
   /* Destroy private addresses */
   if (socket->m_local)
@@ -1115,7 +1119,7 @@ void _GSocket_Detected_Write(GSocket *socket)
   }                                                                 \
 }
 
-GAddress *GAddress_new()
+GAddress *GAddress_new(void)
 {
   GAddress *address;
 

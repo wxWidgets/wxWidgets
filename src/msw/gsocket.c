@@ -42,11 +42,6 @@
 #define SOCKLEN_T  int
 #endif
 
-#if defined(__BORLANDC__)
-GAddress *GAddress_new(void);
-GSocket *GSocket_new(void);
-#endif
-
 #ifdef _MSC_VER
     /* using FD_SET results in this warning */
     #pragma warning(disable:4127) /* conditional expression is constant */
@@ -55,7 +50,7 @@ GSocket *GSocket_new(void);
 
 /* Constructors / Destructors for GSocket */
 
-GSocket *GSocket_new()
+GSocket *GSocket_new(void)
 {
   int i;
   GSocket *socket;
@@ -953,7 +948,7 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
   }                                                                 \
 }
 
-GAddress *GAddress_new()
+GAddress *GAddress_new(void)
 {
   GAddress *address;
 
