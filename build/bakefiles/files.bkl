@@ -828,7 +828,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="GTK_SRC" hints="files">
     <!-- Generic implementations used by wxGTK: -->
-    src/generic/datectlg.cpp
     src/generic/accel.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
@@ -879,7 +878,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/utilsres.cpp
 </set>
 <set var="GTK_HDR" hints="files">
-    wx/generic/datectrl.h
     wx/generic/colrdlgg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
@@ -2162,7 +2160,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="UNIV_SRC" hints="files">
     src/generic/accel.cpp
     src/generic/colrdlgg.cpp
-    src/generic/datectlg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
@@ -2263,6 +2260,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/generic/calctrl.cpp
+    src/generic/datectlg.cpp
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
@@ -2279,6 +2277,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dateevt.h
     wx/dcbuffer.h
     wx/generic/calctrl.h
+    wx/generic/datectrl.h
     wx/generic/grid.h
     wx/generic/gridctrl.h
     wx/generic/gridsel.h

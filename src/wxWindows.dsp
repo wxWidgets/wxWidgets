@@ -914,6 +914,10 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\datectlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\dcpsg.cpp
 # End Source File
 # Begin Source File
@@ -3624,6 +3628,10 @@ SOURCE=..\include\wx\generic\choicdgg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\colrdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\datectrl.h
 # End Source File
 # Begin Source File
 

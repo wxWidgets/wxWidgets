@@ -549,6 +549,10 @@ SOURCE=..\..\src\generic\calctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\datectlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\grid.cpp
 # End Source File
 # Begin Source File
@@ -781,6 +785,10 @@ SOURCE=..\..\include\wx\msw\taskbar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\calctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\datectrl.h
 # End Source File
 # Begin Source File
 

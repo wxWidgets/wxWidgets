@@ -1281,7 +1281,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_accel.o \
 	$(OBJS)\monodll_colrdlgg.o \
-	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_dirdlgg.o \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_filedlgg.o \
@@ -1430,6 +1429,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_calctrl.o \
+	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_grid.o \
 	$(OBJS)\monodll_gridctrl.o \
 	$(OBJS)\monodll_gridsel.o \
@@ -1448,6 +1448,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_calctrl.o \
+	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_grid.o \
 	$(OBJS)\monodll_gridctrl.o \
 	$(OBJS)\monodll_gridsel.o \
@@ -1789,7 +1790,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_accel.o \
 	$(OBJS)\monolib_colrdlgg.o \
-	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_dirdlgg.o \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_filedlgg.o \
@@ -1938,6 +1938,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_calctrl.o \
+	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_grid.o \
 	$(OBJS)\monolib_gridctrl.o \
 	$(OBJS)\monolib_gridsel.o \
@@ -1956,6 +1957,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_calctrl.o \
+	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_grid.o \
 	$(OBJS)\monolib_gridctrl.o \
 	$(OBJS)\monolib_gridsel.o \
@@ -2252,7 +2254,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_accel.o \
 	$(OBJS)\coredll_colrdlgg.o \
-	$(OBJS)\coredll_datectlg.o \
 	$(OBJS)\coredll_dirdlgg.o \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_filedlgg.o \
@@ -2656,7 +2657,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_accel.o \
 	$(OBJS)\corelib_colrdlgg.o \
-	$(OBJS)\corelib_datectlg.o \
 	$(OBJS)\corelib_dirdlgg.o \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_filedlgg.o \
@@ -2813,6 +2813,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_calctrl.o \
+	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_grid.o \
 	$(OBJS)\advdll_gridctrl.o \
 	$(OBJS)\advdll_gridsel.o \
@@ -2831,6 +2832,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_calctrl.o \
+	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_grid.o \
 	$(OBJS)\advdll_gridctrl.o \
 	$(OBJS)\advdll_gridsel.o \
@@ -2856,6 +2858,7 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_calctrl.o \
+	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_grid.o \
 	$(OBJS)\advlib_gridctrl.o \
 	$(OBJS)\advlib_gridsel.o \
@@ -2874,6 +2877,7 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_calctrl.o \
+	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_grid.o \
 	$(OBJS)\advlib_gridctrl.o \
 	$(OBJS)\advlib_gridsel.o \
@@ -4140,9 +4144,6 @@ $(OBJS)\monodll_fontdlg.o: ../../src/msw/fontdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_datectlg.o: ../../src/generic/datectlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dirdlgg.o: ../../src/generic/dirdlgg.cpp
@@ -5499,6 +5500,11 @@ $(OBJS)\monodll_calctrl.o: ../../src/generic/calctrl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_datectlg.o: ../../src/generic/datectlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_grid.o: ../../src/generic/grid.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
@@ -5900,9 +5906,6 @@ $(OBJS)\monolib_fontdlg.o: ../../src/msw/fontdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_datectlg.o: ../../src/generic/datectlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dirdlgg.o: ../../src/generic/dirdlgg.cpp
@@ -7259,6 +7262,11 @@ $(OBJS)\monolib_calctrl.o: ../../src/generic/calctrl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_datectlg.o: ../../src/generic/datectlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_grid.o: ../../src/generic/grid.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
@@ -7960,9 +7968,6 @@ $(OBJS)\coredll_fontdlg.o: ../../src/msw/fontdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_datectlg.o: ../../src/generic/datectlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_dirdlgg.o: ../../src/generic/dirdlgg.cpp
@@ -9199,9 +9204,6 @@ $(OBJS)\corelib_fontdlg.o: ../../src/msw/fontdlg.cpp
 $(OBJS)\corelib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_datectlg.o: ../../src/generic/datectlg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_dirdlgg.o: ../../src/generic/dirdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10352,6 +10354,9 @@ $(OBJS)\advdll_datectrl.o: ../../src/msw/datectrl.cpp
 $(OBJS)\advdll_calctrl.o: ../../src/generic/calctrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_datectlg.o: ../../src/generic/datectlg.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_grid.o: ../../src/generic/grid.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
@@ -10398,6 +10403,9 @@ $(OBJS)\advlib_datectrl.o: ../../src/msw/datectrl.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.o: ../../src/generic/calctrl.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_datectlg.o: ../../src/generic/datectlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_grid.o: ../../src/generic/grid.cpp
