@@ -986,8 +986,8 @@ SAMPLES_DIST: ALL_GUI_DIST
 UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
 	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
-	cp $(UTILSDIR)/configure $(DISTDIR)/samples
-	cp $(UTILSDIR)/configure.in $(DISTDIR)/samples
+	cp $(UTILSDIR)/configure $(DISTDIR)/utils
+	cp $(UTILSDIR)/configure.in $(DISTDIR)/utils
 	
 	mkdir $(DISTDIR)/utils/wxMMedia2
 	mkdir $(DISTDIR)/utils/wxMMedia2/lib
