@@ -94,7 +94,7 @@ protected:
     void OnTestCheck(wxCommandEvent& event);
     void OnTestRadio(wxCommandEvent& event);
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__ )
     void OnContextMenu(wxContextMenuEvent& event)
         { ShowContextMenu(ScreenToClient(event.GetPosition())); }
 #else
@@ -244,7 +244,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(Menu_Menu_Check, MyFrame::OnUpdateCheckMenuItemUI)
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__ )
     EVT_CONTEXT_MENU(MyFrame::OnContextMenu)
 #else
     EVT_RIGHT_UP(MyFrame::OnRightUp)
@@ -622,7 +622,7 @@ void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
 {
     wxMenuBar *menubar = GetMenuBar();
 
-    wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
+    wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 2);
 
     menu->Append(Menu_Dummy_Last, _T("&Dummy sub menu"),
                  CreateDummyMenu(NULL), _T("Dummy sub menu help"));
