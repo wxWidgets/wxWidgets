@@ -61,7 +61,13 @@ public:
         // the titlebar background colours for the normal and focused states
         TITLEBAR,
         TITLEBAR_ACTIVE,
+        
+        // the titlebar text colours
         TITLEBAR_TEXT,
+        TITLEBAR_ACTIVE_TEXT,
+        
+        // desktop background colour (only used by framebuffer ports)
+        DESKTOP,
 
         MAX
     };

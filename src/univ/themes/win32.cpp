@@ -1296,7 +1296,10 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case TITLEBAR:          return wxColour(GetSysColor(COLOR_INACTIVECAPTION));
         case TITLEBAR_ACTIVE:   return wxColour(GetSysColor(COLOR_ACTIVECAPTION));
-        case TITLEBAR_TEXT:     return wxColour(GetSysColor(COLOR_CAPTIONTEXT));
+        case TITLEBAR_TEXT:     return wxColour(GetSysColor(COLOR_INACTIVECAPTIONTEXT));
+        case TITLEBAR_ACTIVE_TEXT: return wxColour(GetSysColor(COLOR_CAPTIONTEXT));
+        
+        case DESKTOP:           return wxColour(0x808000);
 #else // !__WXMSW__
         // use the standard Windows colours elsewhere
         case WINDOW:            return *wxWHITE;
@@ -1325,7 +1328,10 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case TITLEBAR:          return wxColour(0xaeaaae);
         case TITLEBAR_ACTIVE:   return wxColour(0x820300);
-        case TITLEBAR_TEXT:     return *wxWHITE;
+        case TITLEBAR_TEXT:     return wxColour(0xc0c0c0);
+        case TITLEBAR_ACTIVE_TEXT:return *wxWHITE;
+
+        case DESKTOP:           return wxColour(0x808000);
 #endif // __WXMSW__
 
         case MAX:
@@ -3358,6 +3364,10 @@ void wxWin32Renderer::DrawFrameTitle(wxDC& dc,
                                      const wxString& title,
                                      int flags)
 {
+    wxColour col = (flags & wxTOPLEVEL_ACTIVE) ?
+                   wxSCHEME_COLOUR(m_scheme, TITLEBAR_ACTIVE_TEXT) :
+                   wxSCHEME_COLOUR(m_scheme, TITLEBAR_TEXT);
+
     wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
     r.height = FRAME_TITLEBAR_HEIGHT;
     if ( flags & wxTOPLEVEL_ICON )
@@ -3366,7 +3376,7 @@ void wxWin32Renderer::DrawFrameTitle(wxDC& dc,
         r.x += 1;
 
     dc.SetFont(m_titlebarFont);
-    dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, TITLEBAR_TEXT));
+    dc.SetTextForeground(col);
     dc.DrawLabel(title, wxNullBitmap, r, wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
 }
 
