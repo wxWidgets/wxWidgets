@@ -629,7 +629,7 @@ public:
     wxAppConsole *wxCreateApp()                                             \
     {                                                                       \
         wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE,         \
-                                        wxT("your program"));               \
+                                        "your program");                    \
         return new appname;                                                 \
     }                                                                       \
     wxAppInitializer                                                        \
