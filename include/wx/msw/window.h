@@ -464,6 +464,12 @@ protected:
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
+
+    // process TTN_NEEDTEXT message properly (i.e. fixing the bugs in
+    // comctl32.dll in our code -- see the function body for more info)
+    bool HandleTooltipNotify(WXUINT code,
+                             WXLPARAM lParam,
+                             const wxString& ttip);
 #endif // wxUSE_TOOLTIPS
 
     // the helper functions used by HandleChar/KeyXXX methods

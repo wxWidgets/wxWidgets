@@ -234,6 +234,7 @@ wxMSW:
   has the capture before release it.
 - fixed bugs in multiple selection wxCheckListBox
 - default button handling is now closer to expected
+- setting tooltips for wxSlider now works
 
 wxGTK:
 

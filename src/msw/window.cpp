@@ -3055,19 +3055,77 @@ bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #endif
 }
 
+#if wxUSE_TOOLTIPS
+
+bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
+                                      WXLPARAM lParam,
+                                      const wxString& ttip)
+{
+    // I don't know why it happens, but the versions of comctl32.dll starting
+    // from 4.70 sometimes send TTN_NEEDTEXTW even to ANSI programs (normally,
+    // this message is supposed to be sent to Unicode programs only) -- hence
+    // we need to handle it as well, otherwise no tooltips will be shown in
+    // this case
+
+    if ( !(code == TTN_NEEDTEXTA || code == TTN_NEEDTEXTW) || ttip.empty() )
+    {
+        // not a tooltip message or no tooltip to show anyhow
+        return FALSE;
+    }
+
+    LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
+
+    if ( code == TTN_NEEDTEXTA )
+    {
+        ttText->lpszText = (wxChar *)ttip.c_str();
+    }
+    else
+    {
+#if wxUSE_UNICODE
+        ttText->lpszText = (wxChar *)ttip.c_str();
+#else // !Unicode
+        size_t lenAnsi = ttip.length();
+
+        // some compilers (MetroWerks and Cygwin) don't like calling mbstowcs
+        // with NULL argument
+        #if defined( __MWERKS__ ) || defined( __CYGWIN__ )
+            size_t lenUnicode = 2*lenAnsi;
+        #else
+            size_t lenUnicode = mbstowcs(NULL, ttip, lenAnsi);
+        #endif
+
+        // using the pointer of right type avoids us doing all sorts of
+        // pointer arithmetics ourselves
+        wchar_t *dst = (wchar_t *)ttText->szText,
+                *pwz = new wchar_t[lenUnicode + 1];
+        mbstowcs(pwz, ttip, lenAnsi + 1);
+        memcpy(dst, pwz, lenUnicode*sizeof(wchar_t));
+
+        // put the terminating wide NUL
+        dst[lenUnicode] = L'\0';
+
+        delete [] pwz;
+#endif // Unicode/!Unicode
+    }
+
+    return TRUE;
+}
+
+#endif // wxUSE_TOOLTIPS
+
 bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
-                           WXLPARAM lParam,
-                           WXLPARAM* WXUNUSED(result))
+                              WXLPARAM lParam,
+                              WXLPARAM* WXUNUSED(result))
 {
 #if wxUSE_TOOLTIPS
-    NMHDR* hdr = (NMHDR *)lParam;
-    if ( (int)hdr->code == TTN_NEEDTEXT && m_tooltip )
+    if ( m_tooltip )
     {
-        TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
-        ttt->lpszText = (wxChar *)m_tooltip->GetTip().c_str();
-
-        // processed
-        return TRUE;
+        NMHDR* hdr = (NMHDR *)lParam;
+        if ( HandleTooltipNotify(hdr->code, lParam, m_tooltip->GetTip()))
+        {
+            // processed
+            return TRUE;
+        }
     }
 #endif // wxUSE_TOOLTIPS
 

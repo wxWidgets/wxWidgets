@@ -863,7 +863,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
     // the tooltips control created by the toolbar is sometimes Unicode, even
     // in an ANSI application - this seems to be a bug in comctl32.dll v5
-    int code = (int)hdr->code;
+    UINT code = hdr->code;
     if ( (code != TTN_NEEDTEXTA) && (code != TTN_NEEDTEXTW) )
         return FALSE;
 
@@ -878,51 +878,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
     if ( !tool )
         return FALSE;
 
-    const wxString& help = tool->GetShortHelp();
-
-    if ( !help.IsEmpty() )
-    {
-        if ( code == TTN_NEEDTEXTA )
-        {
-            ttText->lpszText = (wxChar *)help.c_str();
-        }
-        else
-        {
-#if wxUSE_UNICODE
-            ttText->lpszText = (wxChar *)help.c_str();
-#else
-            // VZ: I don't know why it happens, but the versions of
-            //     comctl32.dll starting from 4.70 sometimes send TTN_NEEDTEXTW
-            //     even to ANSI programs (normally, this message is supposed
-            //     to be sent to Unicode programs only) - hence we need to
-            //     handle it as well, otherwise no tooltips will be shown in
-            //     this case
-
-            size_t lenAnsi = help.Len();
-            #if defined( __MWERKS__ ) || defined( __CYGWIN__ )
-                // MetroWerks doesn't like calling mbstowcs with NULL argument
-                // neither Cygwin does
-                size_t lenUnicode = 2*lenAnsi;
-            #else
-                size_t lenUnicode = mbstowcs(NULL, help, lenAnsi);
-            #endif
-
-            // using the pointer of right type avoids us doing all sorts of
-            // pointer arithmetics ourselves
-            wchar_t *dst = (wchar_t *)ttText->szText,
-                    *pwz = new wchar_t[lenUnicode + 1];
-            mbstowcs(pwz, help, lenAnsi + 1);
-            memcpy(dst, pwz, lenUnicode*sizeof(wchar_t));
-
-            // put the terminating _wide_ NUL
-            dst[lenUnicode] = 0;
-
-            delete [] pwz;
-#endif
-        }
-    }
-
-    return TRUE;
+    return HandleTooltipNotify(code, lParam, tool->GetShortHelp());
 }
 
 // ----------------------------------------------------------------------------
