@@ -38,6 +38,7 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/mdi.h"
+    #include "wx/panel.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -109,6 +110,8 @@ void wxFrame::Init()
 //  m_fsMenu = 0;
     m_fsIsMaximized = FALSE;
     m_fsIsShowing = FALSE;
+
+    m_winLastFocused = (wxWindow *)NULL;
 
     // unlike (almost?) all other windows, frames are created hidden
     m_isShown = FALSE;
@@ -703,37 +706,32 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
 // subwindow found.
 void wxFrame::OnActivate(wxActivateEvent& event)
 {
-    if ( !event.GetActive() )
+    if ( event.GetActive() )
     {
-        event.Skip();
+        // restore focus to the child which was last focused
+        wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
 
-        return;
+        wxSetFocusToChild(this, &m_winLastFocused);
     }
-
-    wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
-
-    for ( wxWindowList::Node *node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
+    else
     {
-        // FIXME all this is totally bogus - we need to do the same as wxPanel,
-        //       but how to do it without duplicating the code?
-
-        // restore focus
-        wxWindow *child = node->GetData();
-
-        if ( !child->IsTopLevel()
-#if wxUSE_TOOLBAR
-             && !wxDynamicCast(child, wxToolBar)
-#endif // wxUSE_TOOLBAR
-#if wxUSE_STATUSBAR
-             && !wxDynamicCast(child, wxStatusBar)
-#endif // wxUSE_STATUSBAR
-           )
+        // remember the last focused child
+        m_winLastFocused = FindFocus();
+        while ( m_winLastFocused )
         {
-            child->SetFocus();
-            break;
+            if ( GetChildren().Find(m_winLastFocused) )
+                break;
+
+            m_winLastFocused = m_winLastFocused->GetParent();
         }
+
+        wxLogTrace(_T("focus"),
+                   _T("wxFrame %08x deactivated, last focused: %08x."),
+                   m_hWnd,
+                   m_winLastFocused ? GetHwndOf(m_winLastFocused)
+                                    : NULL);
+
+        event.Skip();
     }
 }
 

@@ -121,7 +121,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
-    EVT_BUTTON(wxID_OK,     wxLogDialog::OnOk)
+    EVT_BUTTON(wxID_CANCEL, wxLogDialog::OnOk)
     EVT_BUTTON(wxID_MORE,   wxLogDialog::OnDetails)
 #if wxUSE_FILE
     EVT_BUTTON(wxID_SAVE,   wxLogDialog::OnSave)
@@ -727,7 +727,10 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
 
-    wxButton *btnOk = new wxButton(this, wxID_OK, _("OK"));
+    // this "Ok" button has wxID_CANCEL id - not very logical, but this allows
+    // to close the log dialog with <Esc> which wouldn't work otherwise (as it
+    // translates into click on cancel button)
+    wxButton *btnOk = new wxButton(this, wxID_CANCEL, _("OK"));
     sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);

@@ -604,20 +604,72 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
     if ( !event.AltDown() && !event.MetaDown() && !event.ControlDown() )
     {
         // insert the key in the control
+        wxChar ch;
         int keycode = (int)event.KeyCode();
-        if ( isprint(keycode) && keycode < 256 && keycode >= 0 )
+        switch ( keycode )
         {
-            // FIXME this is not going to work for non letters...
-            if ( !event.ShiftDown() )
-            {
-                keycode = tolower(keycode);
-            }
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+                ch = _T('0') + keycode - WXK_NUMPAD0;
+                break;
 
-            Text()->AppendText((wxChar)keycode);
+            case WXK_MULTIPLY:
+            case WXK_NUMPAD_MULTIPLY:
+                ch = _T('*');
+                break;
 
-            return;
+            case WXK_ADD:
+            case WXK_NUMPAD_ADD:
+                ch = _T('+');
+                break;
+
+            case WXK_SUBTRACT:
+            case WXK_NUMPAD_SUBTRACT:
+                ch = _T('-');
+                break;
+
+            case WXK_DECIMAL:
+            case WXK_NUMPAD_DECIMAL:
+                ch = _T('.');
+                break;
+
+            case WXK_DIVIDE:
+            case WXK_NUMPAD_DIVIDE:
+                ch = _T('/');
+                break;
+
+            default:
+                if ( keycode < 256 && keycode >= 0 && isprint(keycode) )
+                {
+                    // FIXME this is not going to work for non letters...
+                    if ( !event.ShiftDown() )
+                    {
+                        keycode = tolower(keycode);
+                    }
+
+                    ch = (wxChar)keycode;
+                }
+                else
+                {
+                    ch = _T('\0');
+                }
         }
 
+        if ( ch )
+        {
+            Text()->AppendText(ch);
+
+            // skip event.Skip() below
+            return;
+        }
     }
 
     event.Skip();
@@ -5284,15 +5336,9 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             default:
                 // alphanumeric keys or F2 (special key just for this) enable
                 // the cell edit control
-                // On just Shift/Control I get values for event.KeyCode()
-                // that are outside the range where isalnum's behaviour is
-                // well defined, so do an additional sanity check.
                 if ( !(event.AltDown() ||
                        event.MetaDown() ||
                        event.ControlDown()) &&
-                     ((isalnum((int)event.KeyCode()) &&
-                       (event.KeyCode() < 256 && event.KeyCode() >= 0)) ||
-                      event.KeyCode() == WXK_F2 || event.KeyCode() == WXK_SPACE) &&
                      !IsCellEditControlEnabled() &&
                      CanEnableCellControl() )
                 {
@@ -6024,19 +6070,28 @@ bool wxGrid::IsCellEditControlEnabled() const
 
 bool wxGrid::IsCellEditControlShown() const
 {
-    if (m_cellEditCtrlEnabled)
+    bool isShown = FALSE;
+
+    if ( m_cellEditCtrlEnabled )
     {
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
         wxGridCellAttr* attr = GetCellAttr(row, col);
         wxGridCellEditor* editor = attr->GetEditor((wxGrid*) this, row, col);
-        if ( editor && editor->IsCreated() )
+        attr->DecRef();
+
+        if ( editor )
         {
-            wxWindow *control = editor->GetControl();
-            return control->IsShown();
+            if ( editor->IsCreated() )
+            {
+                isShown = editor->GetControl()->IsShown();
+            }
+
+            editor->DecRef();
         }
     }
-    return FALSE;
+
+    return isShown;
 }
 
 void wxGrid::ShowCellEditControl()

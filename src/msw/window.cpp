@@ -3543,80 +3543,82 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font)
 // the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
 int wxCharCodeMSWToWX(int keySym)
 {
-    int id = 0;
+    int id;
     switch (keySym)
     {
-    case VK_CANCEL:     id = WXK_CANCEL; break;
-    case VK_BACK:       id = WXK_BACK; break;
-    case VK_TAB:        id = WXK_TAB; break;
-    case VK_CLEAR:      id = WXK_CLEAR; break;
-    case VK_RETURN:     id = WXK_RETURN; break;
-    case VK_SHIFT:      id = WXK_SHIFT; break;
-    case VK_CONTROL:    id = WXK_CONTROL; break;
-    case VK_MENU :      id = WXK_MENU; break;
-    case VK_PAUSE:      id = WXK_PAUSE; break;
-    case VK_SPACE:      id = WXK_SPACE; break;
-    case VK_ESCAPE:     id = WXK_ESCAPE; break;
-    case VK_PRIOR:      id = WXK_PRIOR; break;
-    case VK_NEXT :      id = WXK_NEXT; break;
-    case VK_END:        id = WXK_END; break;
-    case VK_HOME :      id = WXK_HOME; break;
-    case VK_LEFT :      id = WXK_LEFT; break;
-    case VK_UP:         id = WXK_UP; break;
-    case VK_RIGHT:      id = WXK_RIGHT; break;
-    case VK_DOWN :      id = WXK_DOWN; break;
-    case VK_SELECT:     id = WXK_SELECT; break;
-    case VK_PRINT:      id = WXK_PRINT; break;
-    case VK_EXECUTE:    id = WXK_EXECUTE; break;
-    case VK_INSERT:     id = WXK_INSERT; break;
-    case VK_DELETE:     id = WXK_DELETE; break;
-    case VK_HELP :      id = WXK_HELP; break;
-    case VK_NUMPAD0:    id = WXK_NUMPAD0; break;
-    case VK_NUMPAD1:    id = WXK_NUMPAD1; break;
-    case VK_NUMPAD2:    id = WXK_NUMPAD2; break;
-    case VK_NUMPAD3:    id = WXK_NUMPAD3; break;
-    case VK_NUMPAD4:    id = WXK_NUMPAD4; break;
-    case VK_NUMPAD5:    id = WXK_NUMPAD5; break;
-    case VK_NUMPAD6:    id = WXK_NUMPAD6; break;
-    case VK_NUMPAD7:    id = WXK_NUMPAD7; break;
-    case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
-    case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
-    case VK_MULTIPLY:   id = WXK_MULTIPLY; break;
-    case VK_ADD:        id = WXK_ADD; break;
-    case VK_SUBTRACT:   id = WXK_SUBTRACT; break;
-    case VK_DECIMAL:    id = WXK_DECIMAL; break;
-    case VK_DIVIDE:     id = WXK_DIVIDE; break;
-    case VK_F1:         id = WXK_F1; break;
-    case VK_F2:         id = WXK_F2; break;
-    case VK_F3:         id = WXK_F3; break;
-    case VK_F4:         id = WXK_F4; break;
-    case VK_F5:         id = WXK_F5; break;
-    case VK_F6:         id = WXK_F6; break;
-    case VK_F7:         id = WXK_F7; break;
-    case VK_F8:         id = WXK_F8; break;
-    case VK_F9:         id = WXK_F9; break;
-    case VK_F10:        id = WXK_F10; break;
-    case VK_F11:        id = WXK_F11; break;
-    case VK_F12:        id = WXK_F12; break;
-    case VK_F13:        id = WXK_F13; break;
-    case VK_F14:        id = WXK_F14; break;
-    case VK_F15:        id = WXK_F15; break;
-    case VK_F16:        id = WXK_F16; break;
-    case VK_F17:        id = WXK_F17; break;
-    case VK_F18:        id = WXK_F18; break;
-    case VK_F19:        id = WXK_F19; break;
-    case VK_F20:        id = WXK_F20; break;
-    case VK_F21:        id = WXK_F21; break;
-    case VK_F22:        id = WXK_F22; break;
-    case VK_F23:        id = WXK_F23; break;
-    case VK_F24:        id = WXK_F24; break;
-    case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
-    case VK_SCROLL:     id = WXK_SCROLL; break;
-    default:
-        {
-            return 0;
-        }
+        case VK_CANCEL:     id = WXK_CANCEL; break;
+        case VK_BACK:       id = WXK_BACK; break;
+        case VK_TAB:        id = WXK_TAB; break;
+        case VK_CLEAR:      id = WXK_CLEAR; break;
+        case VK_RETURN:     id = WXK_RETURN; break;
+        case VK_SHIFT:      id = WXK_SHIFT; break;
+        case VK_CONTROL:    id = WXK_CONTROL; break;
+        case VK_MENU :      id = WXK_MENU; break;
+        case VK_PAUSE:      id = WXK_PAUSE; break;
+        case VK_SPACE:      id = WXK_SPACE; break;
+        case VK_ESCAPE:     id = WXK_ESCAPE; break;
+        case VK_PRIOR:      id = WXK_PRIOR; break;
+        case VK_NEXT :      id = WXK_NEXT; break;
+        case VK_END:        id = WXK_END; break;
+        case VK_HOME :      id = WXK_HOME; break;
+        case VK_LEFT :      id = WXK_LEFT; break;
+        case VK_UP:         id = WXK_UP; break;
+        case VK_RIGHT:      id = WXK_RIGHT; break;
+        case VK_DOWN :      id = WXK_DOWN; break;
+        case VK_SELECT:     id = WXK_SELECT; break;
+        case VK_PRINT:      id = WXK_PRINT; break;
+        case VK_EXECUTE:    id = WXK_EXECUTE; break;
+        case VK_INSERT:     id = WXK_INSERT; break;
+        case VK_DELETE:     id = WXK_DELETE; break;
+        case VK_HELP :      id = WXK_HELP; break;
+        case VK_NUMPAD0:    id = WXK_NUMPAD0; break;
+        case VK_NUMPAD1:    id = WXK_NUMPAD1; break;
+        case VK_NUMPAD2:    id = WXK_NUMPAD2; break;
+        case VK_NUMPAD3:    id = WXK_NUMPAD3; break;
+        case VK_NUMPAD4:    id = WXK_NUMPAD4; break;
+        case VK_NUMPAD5:    id = WXK_NUMPAD5; break;
+        case VK_NUMPAD6:    id = WXK_NUMPAD6; break;
+        case VK_NUMPAD7:    id = WXK_NUMPAD7; break;
+        case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
+        case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
+        case VK_MULTIPLY:   id = WXK_MULTIPLY; break;
+        case 0xBB: // VK_OEM_PLUS
+        case VK_ADD:        id = WXK_ADD; break;
+        case 0xBD: // VK_OEM_MINUS
+        case VK_SUBTRACT:   id = WXK_SUBTRACT; break;
+        case 0xBE: // VK_OEM_PERIOD
+        case VK_DECIMAL:    id = WXK_DECIMAL; break;
+        case VK_DIVIDE:     id = WXK_DIVIDE; break;
+        case VK_F1:         id = WXK_F1; break;
+        case VK_F2:         id = WXK_F2; break;
+        case VK_F3:         id = WXK_F3; break;
+        case VK_F4:         id = WXK_F4; break;
+        case VK_F5:         id = WXK_F5; break;
+        case VK_F6:         id = WXK_F6; break;
+        case VK_F7:         id = WXK_F7; break;
+        case VK_F8:         id = WXK_F8; break;
+        case VK_F9:         id = WXK_F9; break;
+        case VK_F10:        id = WXK_F10; break;
+        case VK_F11:        id = WXK_F11; break;
+        case VK_F12:        id = WXK_F12; break;
+        case VK_F13:        id = WXK_F13; break;
+        case VK_F14:        id = WXK_F14; break;
+        case VK_F15:        id = WXK_F15; break;
+        case VK_F16:        id = WXK_F16; break;
+        case VK_F17:        id = WXK_F17; break;
+        case VK_F18:        id = WXK_F18; break;
+        case VK_F19:        id = WXK_F19; break;
+        case VK_F20:        id = WXK_F20; break;
+        case VK_F21:        id = WXK_F21; break;
+        case VK_F22:        id = WXK_F22; break;
+        case VK_F23:        id = WXK_F23; break;
+        case VK_F24:        id = WXK_F24; break;
+        case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
+        case VK_SCROLL:     id = WXK_SCROLL; break;
+        default:
+            id = 0;
     }
+
     return id;
 }
 

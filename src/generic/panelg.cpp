@@ -340,39 +340,58 @@ void wxPanel::OnFocus(wxFocusEvent& event)
 
 bool wxPanel::SetFocusToChild()
 {
-    if ( m_winLastFocused )
+    return wxSetFocusToChild(this, &m_winLastFocused);
+}
+
+// ----------------------------------------------------------------------------
+// SetFocusToChild(): this function is used by wxPanel but also by wxFrame in
+// wxMSW, this is why it is outside of wxPanel class
+// ----------------------------------------------------------------------------
+
+bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
+{
+    if ( *childLastFocused )
     {
         // It might happen that the window got reparented or no longer accepts
         // the focus.
-        if ( (m_winLastFocused->GetParent() == this) &&
-             m_winLastFocused->AcceptsFocus() )
+        if ( (*childLastFocused)->GetParent() == win &&
+             (*childLastFocused)->AcceptsFocus() )
         {
             wxLogTrace(_T("focus"),
                        _T("SetFocusToChild() => last child (0x%08x)."),
-                       m_winLastFocused->GetHandle());
+                       (*childLastFocused)->GetHandle());
 
-            m_winLastFocused->SetFocus();
+            (*childLastFocused)->SetFocus();
             return TRUE;
         }
         else
         {
             // it doesn't count as such any more
-            m_winLastFocused = (wxWindow *)NULL;
+            *childLastFocused = (wxWindow *)NULL;
         }
     }
 
     // set the focus to the first child who wants it
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::Node *node = win->GetChildren().GetFirst();
     while ( node )
     {
         wxWindow *child = node->GetData();
-        if ( child->AcceptsFocus() )
+
+        if ( child->AcceptsFocus()
+             && !child->IsTopLevel()
+#if wxUSE_TOOLBAR
+             && !wxDynamicCast(child, wxToolBar)
+#endif // wxUSE_TOOLBAR
+#if wxUSE_STATUSBAR
+             && !wxDynamicCast(child, wxStatusBar)
+#endif // wxUSE_STATUSBAR
+           )
         {
             wxLogTrace(_T("focus"),
                        _T("SetFocusToChild() => first child (0x%08x)."),
                        child->GetHandle());
 
-            m_winLastFocused = child;  // should be redundant, but it is not
+            *childLastFocused = child;  // should be redundant, but it is not
             child->SetFocus();
             return TRUE;
         }
