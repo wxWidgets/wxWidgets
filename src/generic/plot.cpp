@@ -94,6 +94,79 @@ wxPlotCurve::wxPlotCurve( int offsetY, double startY, double endY )
 }
 
 //-----------------------------------------------------------------------------
+// wxPlotOnOffCurve
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPlotOnOffCurve, wxObject)
+
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxArrayPlotOnOff);
+
+wxPlotOnOffCurve::wxPlotOnOffCurve( int offsetY )
+{
+    m_offsetY = offsetY;
+    m_minX = -1;
+    m_maxX = -1;
+}
+
+void wxPlotOnOffCurve::Add( wxInt32 on, wxInt32 off, void *clientData )
+{
+    wxASSERT_MSG( on > 0, wxT("plot index < 0") );
+    wxASSERT( on <= off );
+
+    if (m_minX == -1)
+        m_minX = on;
+    if (off > m_maxX)
+        m_maxX = off;
+    
+    wxPlotOnOff *v = new wxPlotOnOff;
+    v->m_on = on;
+    v->m_off = off;
+    v->m_clientData = clientData;
+    m_marks.Add( v );
+}
+
+size_t wxPlotOnOffCurve::GetCount()
+{
+    return m_marks.GetCount();
+}
+
+wxInt32 wxPlotOnOffCurve::GetOn( size_t index )
+{
+    wxPlotOnOff *v = &m_marks.Item( index );
+    return v->m_on;
+}
+
+wxInt32 wxPlotOnOffCurve::GetOff( size_t index )
+{
+    wxPlotOnOff *v = &m_marks.Item( index );
+    return v->m_off;
+}
+
+void* wxPlotOnOffCurve::GetClientData( size_t index )
+{
+    wxPlotOnOff *v = &m_marks.Item( index );
+    return v->m_clientData;
+}
+
+wxPlotOnOff *wxPlotOnOffCurve::GetAt( size_t index )
+{
+    return &m_marks.Item( index );
+}
+
+void wxPlotOnOffCurve::DrawOnLine( wxDC &dc, wxCoord y, wxCoord start, wxCoord end, void *WXUNUSED(clientData) )
+{
+    dc.DrawLine( start, y, start, y-30 );
+    dc.DrawLine( start, y-30, end, y-30 );
+    dc.DrawLine( end, y-30, end, y );
+}
+
+void wxPlotOnOffCurve::DrawOffLine( wxDC &dc, wxCoord y, wxCoord start, wxCoord end )
+{
+    dc.DrawLine( start, y, end, y );
+}
+
+//-----------------------------------------------------------------------------
 // wxPlotArea
 //-----------------------------------------------------------------------------
 
@@ -224,6 +297,66 @@ void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
     }
 }
 
+void wxPlotArea::DrawOnOffCurve( wxDC *dc, wxPlotOnOffCurve *curve, int from, int to )
+{
+    int view_x;
+    int view_y;
+    m_owner->GetViewStart( &view_x, &view_y );
+    view_x *= wxPLOT_SCROLL_STEP;
+    
+    if (from == -1)
+        from = view_x;
+
+    int client_width;
+    int client_height;
+    GetClientSize( &client_width, &client_height);
+    
+    if (to == -1)
+        to = view_x + client_width;
+        
+    double zoom = m_owner->GetZoom();
+
+    int start_x = wxMax( from, (int)floor(curve->GetStartX()*zoom) );
+    int end_x = wxMin( to, (int)floor(curve->GetEndX()*zoom) );
+
+    start_x = wxMax( view_x, start_x );
+    end_x = wxMin( view_x + client_width, end_x );
+    
+    end_x++;
+
+    wxCoord offset_y = curve->GetOffsetY();
+    wxCoord last_off = -5;
+    
+    if (curve->GetCount() == 0)
+        return;
+    
+    for (size_t index = 0; index < curve->GetCount(); index++)
+    {
+        wxPlotOnOff *p = curve->GetAt( index );
+        
+        wxCoord on = (wxCoord)(p->m_on*zoom);
+        wxCoord off = (wxCoord)(p->m_off*zoom);
+
+        if (end_x < on)
+        {
+            curve->DrawOffLine( *dc, client_height-offset_y, last_off, on );
+            break;
+        }
+        
+        if (off >= start_x)
+        {
+            curve->DrawOffLine( *dc, client_height-offset_y, last_off, on );
+            curve->DrawOnLine( *dc, client_height-offset_y, on, off, p->m_clientData );
+        }
+        last_off = off;
+    }
+    
+    wxPlotOnOff *p = curve->GetAt( curve->GetCount()-1 );
+    wxCoord off = (wxCoord)(p->m_off*zoom);
+    if (off < end_x)
+        curve->DrawOffLine( *dc, client_height-offset_y, off, to );
+}
+
 void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     int view_x;
@@ -258,7 +391,7 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxNode *node = m_owner->m_curves.First();
         while (node)
         {
-            wxPlotCurve *curve = (wxPlotCurve*)node->Data();
+            wxPlotCurve *curve = (wxPlotCurve*) node->Data();
             
             if (curve == m_owner->GetCurrent())
                 dc.SetPen( *wxBLACK_PEN );
@@ -269,6 +402,19 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             node = node->Next();
         }
+        
+        dc.SetPen( *wxRED_PEN );
+        
+        node = m_owner->m_onOffCurves.First();
+        while (node)
+        {
+            wxPlotOnOffCurve *curve = (wxPlotOnOffCurve*) node->Data();
+            
+            DrawOnOffCurve( &dc, curve, update_x-1, update_x+update_width+2 );
+            
+            node = node->Next();
+        }
+        
         upd ++;
     }
 }
@@ -674,6 +820,33 @@ void wxPlotWindow::Delete( wxPlotCurve* curve )
 wxPlotCurve *wxPlotWindow::GetCurrent()
 {
     return m_current;
+}
+
+void wxPlotWindow::Add( wxPlotOnOffCurve *curve )
+{
+    m_onOffCurves.Append( curve );
+}
+
+void wxPlotWindow::Delete( wxPlotOnOffCurve* curve )
+{
+    wxNode *node = m_onOffCurves.Find( curve );
+    if (!node) return;
+    
+    m_onOffCurves.DeleteObject( curve );
+}
+
+size_t wxPlotWindow::GetOnOffCurveCount()
+{
+    return m_onOffCurves.GetCount();
+}
+
+wxPlotOnOffCurve *wxPlotWindow::GetOnOffCurveAt( size_t n )
+{
+    wxNode *node = m_onOffCurves.Nth( n );
+    if (!node)
+        return (wxPlotOnOffCurve*) NULL;
+        
+    return (wxPlotOnOffCurve*) node->Data();
 }
 
 void wxPlotWindow::Move( wxPlotCurve* curve, int pixels_up )

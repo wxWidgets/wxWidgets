@@ -22,6 +22,7 @@
 
 #include "wx/scrolwin.h"
 #include "wx/event.h"
+#include "wx/dynarray.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -29,6 +30,7 @@
 
 class WXDLLEXPORT wxPlotEvent;
 class WXDLLEXPORT wxPlotCurve;
+class WXDLLEXPORT wxPlotValues;
 class WXDLLEXPORT wxPlotArea;
 class WXDLLEXPORT wxPlotXAxisArea;
 class WXDLLEXPORT wxPlotYAxisArea;
@@ -103,13 +105,72 @@ public:
        { m_offsetY = offsetY; }
     int GetOffsetY()
        { return m_offsetY; }
+       
+    void SetPenNormal( const wxPen &pen )
+       { m_penNormal = pen; }
+    void SetPenSelected( const wxPen &pen )
+       { m_penSelected = pen; }
 
 private:
     int     m_offsetY;
     double  m_startY;
     double  m_endY;
+    wxPen   m_penNormal;
+    wxPen   m_penSelected;
 
     DECLARE_ABSTRACT_CLASS(wxPlotCurve)
+};
+
+//-----------------------------------------------------------------------------
+// wxPlotOnOffCurve
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxPlotOnOff
+{
+public:
+    wxPlotOnOff() { }
+
+    wxInt32   m_on;
+    wxInt32   m_off;
+    void     *m_clientData;
+};
+
+WX_DECLARE_EXPORTED_OBJARRAY(wxPlotOnOff, wxArrayPlotOnOff);
+
+class WXDLLEXPORT wxPlotOnOffCurve: public wxObject
+{
+public:
+    wxPlotOnOffCurve( int offsetY );
+
+    wxInt32 GetStartX()
+        { return m_minX; }
+    wxInt32 GetEndX()
+        { return m_maxX; }
+
+    void SetOffsetY( int offsetY )
+       { m_offsetY = offsetY; }
+    int GetOffsetY()
+       { return m_offsetY; }
+       
+    void Add( wxInt32 on, wxInt32 off, void *clientData = NULL );
+    size_t GetCount();
+    
+    wxInt32 GetOn( size_t index );
+    wxInt32 GetOff( size_t index );
+    void* GetClientData( size_t index );
+    wxPlotOnOff *GetAt( size_t index );
+
+    virtual void DrawOnLine( wxDC &dc, wxCoord y, wxCoord start, wxCoord end, void *clientData );
+    virtual void DrawOffLine( wxDC &dc, wxCoord y, wxCoord start, wxCoord end );
+
+private:
+    int               m_offsetY;
+    wxInt32           m_minX;
+    wxInt32           m_maxX;
+    
+    wxArrayPlotOnOff   m_marks;
+
+    DECLARE_CLASS(wxPlotOnOffCurve)
 };
 
 //-----------------------------------------------------------------------------
@@ -126,6 +187,7 @@ public:
     void OnMouse( wxMouseEvent &event );
 
     void DrawCurve( wxDC *dc, wxPlotCurve *curve, int from = -1, int to = -1 );
+    void DrawOnOffCurve( wxDC *dc, wxPlotOnOffCurve *curve, int from = -1, int to = -1 );
     void DeleteCurve( wxPlotCurve *curve, int from = -1, int to = -1 );
 
     virtual void ScrollWindow( int dx, int dy, const wxRect *rect );
@@ -193,13 +255,22 @@ public:
     // ---------------
 
     void Add( wxPlotCurve *curve );
+    void Delete( wxPlotCurve* curve );
+
     size_t GetCount();
     wxPlotCurve *GetAt( size_t n );
 
     void SetCurrent( wxPlotCurve* current );
     wxPlotCurve *GetCurrent();
 
-    void Delete( wxPlotCurve* curve );
+    // mark list accessors
+    // -------------------
+
+    void Add( wxPlotOnOffCurve *curve );
+    void Delete( wxPlotOnOffCurve* curve );
+    
+    size_t GetOnOffCurveCount();
+    wxPlotOnOffCurve *GetOnOffCurveAt( size_t n );
 
     // vertical representation
     // -----------------------
@@ -262,6 +333,8 @@ private:
     double             m_xZoom;
 
     wxList             m_curves;
+    wxList             m_onOffCurves;
+    
     wxPlotArea        *m_area;
     wxPlotXAxisArea   *m_xaxis;
     wxPlotYAxisArea   *m_yaxis;

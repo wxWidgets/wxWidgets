@@ -124,6 +124,12 @@ MyFrame::MyFrame()
 
     m_plot->Add( new MyPlotCurve( 0,  -1.5, 1.5 ) );
     m_plot->Add( new MyPlotCurve( 50, -1.5, 1.5 ) );
+    wxPlotOnOffCurve *oo = new wxPlotOnOffCurve( 10 );
+    oo->Add( 10, 20 );
+    oo->Add( 25, 30 );
+    oo->Add( 100, 400 );
+    oo->Add( 1000, 2000 );
+    m_plot->Add( oo );
   
     m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
