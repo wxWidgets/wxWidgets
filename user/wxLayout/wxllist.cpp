@@ -107,7 +107,7 @@ bool operator <=(wxPoint const &p1, wxPoint const &p2)
 /*
   The following STAY HERE until we have a working wxGTK again!!!
 */
-#ifdef __WXGTK__
+#ifndef wxWANTS_CHARS
 /// allows me to compare to wxPoints
 bool operator ==(wxPoint const &p1, wxPoint const &p2)
 {
@@ -126,7 +126,7 @@ wxPoint & operator += (wxPoint &p1, wxPoint const &p2)
    p1.y += p2.y;
    return p1;
 }
-#endif // wxGTK
+#endif // old wxGTK
 
 /// allows me to compare to wxPoints
 bool operator>(wxPoint const &p1, wxPoint const &p2)
