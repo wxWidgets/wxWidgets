@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/gdicmn.h"
+#include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
@@ -167,7 +168,7 @@ void wxColour::InitFromName( const wxString &colourName )
     {
         m_refData = new wxColourRefData();
         
-        if (!gdk_color_parse( colourName.mb_str(), &M_COLDATA->m_color ))
+        if (!gdk_color_parse( wxGTK_CONV( colourName ), &M_COLDATA->m_color ))
         {
             // VZ: asserts are good in general but this one is triggered by
             //     calling wxColourDatabase::FindColour() with an
