@@ -314,7 +314,7 @@ their documentation.
     // find first n characters of sz
   size_t find(const char* sz, size_t nStart = 0, size_t n = npos) const;
 
-    // find the first occurence of character ch after nStart
+    // find the first occurrence of character ch after nStart
   size_t find(char ch, size_t nStart = 0) const;
 
     // rfind() family is exactly like find() but works right to left
@@ -328,7 +328,7 @@ their documentation.
     // as find, but from the end
   size_t rfind(char ch, size_t nStart = npos) const;
 
-    // find first/last occurence of any character in the set
+    // find first/last occurrence of any character in the set
 
     //
   size_t find_first_of(const wxString& str, size_t nStart = 0) const;
@@ -343,7 +343,7 @@ their documentation.
     // same as rfind(char, size_t)
   size_t find_last_of (char c, size_t nStart = npos) const;
 
-    // find first/last occurence of any character not in the set
+    // find first/last occurrence of any character not in the set
 
     //
   size_t find_first_not_of(const wxString& str, size_t nStart = 0) const;
@@ -478,28 +478,28 @@ to it.
 
 \constfunc{wxString}{AfterFirst}{\param{char}{ ch}}
 
-Gets all the characters after the first occurence of {\it ch}.
+Gets all the characters after the first occurrence of {\it ch}.
 Returns the empty string if {\it ch} is not found.
 
 \membersection{wxString::AfterLast}\label{wxstringafterlast}
 
 \constfunc{wxString}{AfterLast}{\param{char}{ ch}}
 
-Gets all the characters after the last occurence of {\it ch}.
+Gets all the characters after the last occurrence of {\it ch}.
 Returns the whole string if {\it ch} is not found.
 
 \membersection{wxString::BeforeFirst}\label{wxstringbeforefirst}
 
 \constfunc{wxString}{BeforeFirst}{\param{char}{ ch}}
 
-Gets all characters before the first occurence of {\it ch}.
+Gets all characters before the first occurrence of {\it ch}.
 Returns the whole string if {\it ch} is not found.
 
 \membersection{wxString::BeforeLast}\label{wxstringbeforelast}
 
 \constfunc{wxString}{BeforeLast}{\param{char}{ ch}}
 
-Gets all characters before the last occurence of {\it ch}.
+Gets all characters before the last occurrence of {\it ch}.
 Returns the empty string if {\it ch} is not found.
 
 \membersection{wxString::c\_str}\label{wxstringcstr}
@@ -740,7 +740,7 @@ Returns the first {\it count} characters.
 
 \constfunc{wxString}{Left}{\param{char}{ ch}}
 
-Returns all characters before the first occurence of {\it ch}.
+Returns all characters before the first occurrence of {\it ch}.
 Returns the whole string if {\it ch} is not found.
 
 \membersection{wxString::Len}\label{wxstringlen}
@@ -845,9 +845,9 @@ Removes the last character.
 
 \func{size\_t}{Replace}{\param{const char*}{ szOld}, \param{const char*}{ szNew}, \param{bool}{ replaceAll = TRUE}}
 
-Replace first (or all) occurences of substring with another one.
+Replace first (or all) occurrences of substring with another one.
 
-{\it replaceAll}: global replace (default), or only the first occurence.
+{\it replaceAll}: global replace (default), or only the first occurrence.
 
 Returns the number of replacements made.
 
