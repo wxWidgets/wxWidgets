@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
 
-import sys, os, glob, fnmatch, commands
+import sys, os, glob, fnmatch
 from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
@@ -17,7 +17,7 @@ VER_MAJOR        = 2      # The first three must match wxWindows
 VER_MINOR        = 5
 VER_RELEASE      = 1
 VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWindows
-VER_FLAGS        = "p1"   # release flags, such as prerelease num, unicode, etc.
+VER_FLAGS        = "p3"   # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -55,16 +55,16 @@ Topic :: Software Development :: User Interfaces
 
 # Config values below this point can be reset on the setup.py command line.
 
-BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
-BUILD_OGL = 1      # If true, build the contrib/ogl extension module
-BUILD_STC = 1      # If true, build the contrib/stc extension module
-BUILD_XRC = 1      # XML based resource system
-BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
+BUILD_GLCANVAS = 0 # If true, build the contrib/glcanvas extension module
+BUILD_OGL = 0      # If true, build the contrib/ogl extension module
+BUILD_STC = 0      # If true, build the contrib/stc extension module
+BUILD_XRC = 0      # XML based resource system
+BUILD_GIZMOS = 0   # Build a module for the gizmos contrib library
 BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
 
                    # Internet Explorer wrapper (experimental)
-BUILD_IEWIN = (os.name == 'nt')
+BUILD_IEWIN = 0 #(os.name == 'nt')
 
 
 CORE_ONLY = 0      # if true, don't build any of the above
@@ -73,6 +73,8 @@ PREP_ONLY = 0      # Only run the prepatory steps, not the actual build.
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
+
+BUILD_RENAMERS = 1 # Should we build the renamer modules too?
 
 UNICODE = 0        # This will pass the 'wxUSE_UNICODE' flag to SWIG and
                    # will ensure that the right headers are found and the
@@ -158,7 +160,7 @@ def libFlag():
 # Some other globals
 #----------------------------------------------------------------------
 
-PKGDIR = 'wxPython'
+PKGDIR = 'wx'
 wxpExtensions = []
 DATA_FILES = []
 
@@ -182,7 +184,7 @@ if os.name == 'nt':
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
-             'UNDEF_NDEBUG', 'NO_SCRIPTS',
+             'UNDEF_NDEBUG', 'NO_SCRIPTS', 'BUILD_RENAMERS',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
@@ -244,6 +246,7 @@ def Verify_WX_CONFIG():
 
 def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=[]):
     """Run SWIG the way I want it done"""
+
     if not os.path.exists(os.path.join(dir, gendir)):
         os.mkdir(os.path.join(dir, gendir))
 
@@ -253,7 +256,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
         basefile = os.path.splitext(file)[0]
         i_file   = os.path.join(dir, file)
         py_file  = os.path.join(dir, gendir, basefile+'.py')
-        cpp_file = os.path.join(dir, gendir, basefile+'.cpp')
+        cpp_file = os.path.join(dir, gendir, basefile+'_wrap.cpp')
 
         sources.append(cpp_file)
 
@@ -264,13 +267,22 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
                     break
 
             if force or newer(i_file, py_file) or newer(i_file, cpp_file):
-                # we need forward slashes here even on win32
-                cpp_file = '/'.join(cpp_file.split('\\'))
-                i_file = '/'.join(i_file.split('\\'))
+                ## we need forward slashes here even on win32
+                #cpp_file = opj(cpp_file) #'/'.join(cpp_file.split('\\'))
+                #i_file = opj(i_file)     #'/'.join(i_file.split('\\'))
 
-                cmd = ['./wxSWIG/wxswig'] + swig_args + ['-I'+dir, '-c', '-o', cpp_file, i_file]
+                if BUILD_RENAMERS:
+                    # first run build_renamers
+                    cmd = [ sys.executable, './distrib/build_renamers.py',
+                            i_file, '-D'+WXPLAT, ]
+                    msg(' '.join(cmd))
+                    spawn(cmd)
+
+                # Then run swig for real
+                cmd = [ swig_cmd ] + swig_args + ['-I'+dir, '-o', cpp_file, i_file]
                 msg(' '.join(cmd))
                 spawn(cmd)
+
 
         # copy the generated python file to the package directory
         copy_file(py_file, package, update=not force, verbose=0)
@@ -349,7 +361,7 @@ def makeLibName(name):
 
 
 def adjustCFLAGS(cflags, defines, includes):
-    '''Extract the raw -I, -D, and -U flags and put them into
+    '''Extrace the raw -I, -D, and -U flags and put them into
        defines and includes as needed.'''
     newCFLAGS = []
     for flag in cflags:
@@ -370,7 +382,7 @@ def adjustCFLAGS(cflags, defines, includes):
 
 
 def adjustLFLAGS(lfags, libdirs, libs):
-    '''Extract the -L and -l flags and put them in libdirs and libs as needed'''
+    '''Extrace the -L and -l flags and put them in libdirs and libs as needed'''
     newLFLAGS = []
     for flag in lflags:
         if flag[:2] == '-L':
@@ -421,8 +433,8 @@ if os.name == 'nt':
     WXPLAT = '__WXMSW__'
     GENDIR = 'msw'
 
-    includes = ['src',
-                opj(WXDIR, 'lib', 'vc_dll', 'msw' + libFlag()),
+    includes = ['include', 'src',
+                opj(WXDIR, 'lib', 'vc_dll', 'msw'  + libFlag()),
                 opj(WXDIR, 'include'),
                 opj(WXDIR, 'contrib', 'include'),
                 ]
@@ -434,7 +446,6 @@ if os.name == 'nt':
                 ('WXUSINGDLL', '1'),
 
                 ('SWIG_GLOBAL', None),
-                ('HAVE_CONFIG_H', None),
                 ('WXP_USE_THREAD', '1'),
                 ]
 
@@ -481,7 +492,7 @@ if os.name == 'nt':
 
 elif os.name == 'posix':
     WXDIR = '..'              # assumes IN_CVS_TREE
-    includes = ['src']
+    includes = ['include', 'src']
     defines = [('SWIG_GLOBAL', None),
                ('HAVE_CONFIG_H', None),
                ('WXP_USE_THREAD', '1'),
@@ -499,8 +510,6 @@ elif os.name == 'posix':
     if debug:
         cflags.append('-g')
         cflags.append('-O0')
-    else:
-        cflags.append('-O3')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = lflags.split()
@@ -539,12 +548,11 @@ elif os.name == 'posix':
 
         cflags += portcfg.split()
 
-    # If you get unresolved symbol errors on Solaris and are using gcc, then
-    # uncomment this block to add the right flags to the link step and build
-    # again.
-    ## if os.uname()[0] == 'SunOS':
-    ##     libs.append('gcc')
-    ##     libdirs.append(commands.getoutput("gcc -print-search-dirs | grep '^install' | awk '{print $2}'")[:-1])
+        # Some distros (e.g. Mandrake) put libGLU in /usr/X11R6/lib, but
+        # wx-config doesn't output that for some reason.  For now, just
+        # add it unconditionally but we should really check if the lib is
+        # really found there or wx-config should be fixed.
+        libdirs.append("/usr/X11R6/lib")
 
 
     # Move the various -I, -D, etc. flags we got from the *config scripts
@@ -579,16 +587,16 @@ VERSION = "%s.%s.%s.%s%s" % (VER_MAJOR, VER_MINOR, VER_RELEASE,
 open('src/__version__.py', 'w').write("""\
 # This file was generated by setup.py...
 
-wxVERSION_STRING  = '%(VERSION)s'
-wxMAJOR_VERSION   = %(VER_MAJOR)s
-wxMINOR_VERSION   = %(VER_MINOR)s
-wxRELEASE_VERSION = %(VER_RELEASE)s
-wxSUBREL_VERSION  = %(VER_SUBREL)s
+VERSION_STRING  = '%(VERSION)s'
+MAJOR_VERSION   = %(VER_MAJOR)s
+MINOR_VERSION   = %(VER_MINOR)s
+RELEASE_VERSION = %(VER_RELEASE)s
+SUBREL_VERSION  = %(VER_SUBREL)s
 
-wxVERSION = (wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_VERSION,
-             wxSUBREL_VERSION, '%(VER_FLAGS)s')
+VERSION = (MAJOR_VERSION, MINOR_VERSION, RELEASE_VERSION,
+             SUBREL_VERSION, '%(VER_FLAGS)s')
 
-wxRELEASE_NUMBER = wxRELEASE_VERSION  # for compatibility
+RELEASE_NUMBER = RELEASE_VERSION  # for compatibility
 """ % globals())
 
 
@@ -598,17 +606,39 @@ wxRELEASE_NUMBER = wxRELEASE_VERSION  # for compatibility
 # SWIG defaults
 #----------------------------------------------------------------------
 
+swig_cmd = '/opt/swig/bin/swig'  # TODO: fix this...
+if os.name == 'nt':
+    swig_cmd = 'e:/projects/SWIG-cvs/swig.exe'
+
+
 swig_force = force
-swig_args = ['-c++', '-shadow', '-python', '-keyword',
-             '-dnone',
-             #'-dascii',
-             #'-docstring', '-Sbefore',
-             '-I./src', '-D'+WXPLAT,
+swig_args = ['-c++',
+             '-Wall',
+             '-nodefault',
+
+##              '-xml',
+
+             '-python',
+             '-keyword',
+             '-new_repr',
+             '-modern',
+
+             '-I./src',
+             '-D'+WXPLAT,
+             '-c'
              ]
 if UNICODE:
     swig_args.append('-DwxUSE_UNICODE')
 
-swig_deps = ['src/my_typemaps.i']
+swig_deps = [ 'src/my_typemaps.i',
+              'src/common.swg',
+              'src/pyrun.swg',
+              ]
+
+depends = [ #'include/wx/wxPython/wxPython.h',
+            #'include/wx/wxPython/wxPython_int.h',
+            #'src/pyclasses.h',
+            ]
 
 
 #----------------------------------------------------------------------
@@ -616,15 +646,30 @@ swig_deps = ['src/my_typemaps.i']
 #----------------------------------------------------------------------
 
 msg('Preparing CORE...')
-swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
-               'misc.i', 'misc2.i', 'gdi.i', 'mdi.i', 'controls.i',
-               'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
-               'printfw.i', 'sizers.i', 'clip_dnd.i',
-               'filesys.i', 'streams.i', 'utils.i', 'fonts.i'
-               ]
-
-swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,
-                        USE_SWIG, swig_force, swig_args, swig_deps)
+swig_sources = run_swig(['core.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps +
+                        [ 'src/_app.i',
+                          'src/_app_ex.py',
+                          'src/_constraints.i',
+                          'src/_core_api.i',
+                          'src/_core_ex.py',
+                          'src/_core_rename.i',
+                          'src/_core_reverse.txt',
+                          'src/_defs.i',
+                          'src/_event.i',
+                          'src/_event_ex.py',
+                          'src/_evthandler.i',
+                          'src/_filesys.i',
+                          'src/_gdicmn.i',
+                          'src/_image.i',
+                          'src/_intl.i',
+                          'src/_menu.i',
+                          'src/_obj.i',
+                          'src/_sizers.i',
+                          'src/_streams.i',
+                          'src/_validator.i',
+                          'src/_window.i',
+                          ])
 
 copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
 copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
@@ -647,9 +692,8 @@ else:
     rc_file = []
 
 
-ext = Extension('wxc', ['src/helpers.cpp',
-                        'src/drawlist.cpp',
-                        'src/libpy.c',
+ext = Extension('_core', ['src/helpers.cpp',
+                          'src/libpy.c',
                         ] + rc_file + swig_sources,
 
                 include_dirs = includes,
@@ -660,78 +704,190 @@ ext = Extension('wxc', ['src/helpers.cpp',
 
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
+
+                depends = depends
                 )
 wxpExtensions.append(ext)
 
 
-# Extension for the grid module
-swig_sources = run_swig(['grid.i'], 'src', GENDIR, PKGDIR,
-                        USE_SWIG, swig_force, swig_args, swig_deps)
-ext = Extension('gridc', swig_sources,
+
+
+
+# Extension for the GDI module
+swig_sources = run_swig(['gdi.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps +
+                        ['src/_gdi_rename.i',
+                         'src/_bitmap.i',           'src/_brush.i',
+                         'src/_colour.i',           'src/_cursor.i',
+                         'src/_dc.i',               'src/_font.i',
+                         'src/_gdiobj.i',           'src/_icon.i',
+                         'src/_imaglist.i',         'src/_pen.i',
+                         'src/_region.i',           'src/_palette.i',
+                         'src/_stockobjs.i',        'src/_dragimg.i',
+                         'src/_effects.i',
+                          ])
+ext = Extension('_gdi', ['src/drawlist.cpp'] + swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
+                depends = depends
                 )
 wxpExtensions.append(ext)
 
 
-# Extension for the html modules
-swig_sources = run_swig(['html.i', 'htmlhelp.i'], 'src', GENDIR, PKGDIR,
-                        USE_SWIG, swig_force, swig_args, swig_deps)
-ext = Extension('htmlc', swig_sources,
+
+
+
+
+# Extension for the windows module
+swig_sources = run_swig(['windows.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps +
+                        ['src/_windows_rename.i',    'src/_windows_reverse.txt',
+                         'src/_panel.i',
+                         'src/_accel.i',
+                         'src/_toplvl.i',            'src/_statusbar.i',
+                         'src/_splitter.i',          'src/_sashwin.i',
+                         'src/_popupwin.i',          'src/_tipwin.i',
+                         'src/_vscroll.i',           'src/_taskbar.i',
+                         'src/_cmndlgs.i',           'src/_mdi.i',
+                         'src/_pywindows.i',         'src/_printfw.i',
+                          ])
+ext = Extension('_windows', swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
+                depends = depends
                 )
 wxpExtensions.append(ext)
 
 
-# Extension for the calendar module
+
+
+# Extension for the controls module
+swig_sources = run_swig(['controls.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps +
+                        [ 'src/_controls_rename.i',     'src/_controls_reverse.txt',
+                          'src/_control.i',             'src/_toolbar.i',
+                          'src/_button.i',              'src/_checkbox.i',
+                          'src/_choice.i',              'src/_combobox.i',
+                          'src/_gauge.i',               'src/_statctrls.i',
+                          'src/_listbox.i',             'src/_textctrl.i',
+                          'src/_scrolbar.i',            'src/_spin.i',
+                          'src/_radio.i',               'src/_slider.i',
+                          'src/_tglbtn.i',              'src/_notebook.i',
+                          'src/_listctrl.i',            'src/_treectrl.i',
+                          'src/_dirctrl.i',             'src/_pycontrol.i',
+                          'src/_cshelp.i',
+                          ])
+ext = Extension('_controls', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                depends = depends
+                )
+wxpExtensions.append(ext)
+
+
+
+
+# Extension for the misc module
+swig_sources = run_swig(['misc.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps +
+                        [ 'src/_settings.i',      'src/_functions.i',
+                          'src/_misc.i',          'src/_tipdlg.i',
+                          'src/_timer.i',         'src/_log.i',
+                          'src/_process.i',       'src/_joystick.i',
+                          'src/_wave.i',          'src/_mimetype.i',
+                          'src/_artprov.i',       'src/_config.i',
+                          'src/_datetime.i',      'src/_dataobj.i',
+                          'src/_dnd.i',
+                          'src/_clipbrd.i',
+                          ])
+ext = Extension('_misc', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                depends = depends
+                )
+wxpExtensions.append(ext)
+
+
+
+##
+## Core modules that are not in the "core" namespace start here
+##
+
 swig_sources = run_swig(['calendar.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
-ext = Extension('calendarc', swig_sources,
+ext = Extension('_calendar', swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
+                depends = depends
                 )
 wxpExtensions.append(ext)
 
 
-# Extension for the help module
-swig_sources = run_swig(['help.i'], 'src', GENDIR, PKGDIR,
+swig_sources = run_swig(['grid.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
-ext = Extension('helpc', swig_sources,
+ext = Extension('_grid', swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
+                depends = depends
                 )
 wxpExtensions.append(ext)
 
 
-# Extension for the wizard module
+
+swig_sources = run_swig(['html.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('_html', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                depends = depends
+                )
+wxpExtensions.append(ext)
+
+
+
 swig_sources = run_swig(['wizard.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
-ext = Extension('wizardc', swig_sources,
+ext = Extension('_wizard', swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
                 libraries = libs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
+                depends = depends
                 )
 wxpExtensions.append(ext)
+
+
+
 
 
 #----------------------------------------------------------------------
@@ -1011,7 +1167,7 @@ DATA_FILES += find_data_files('wx', '*.txt', '*.css', '*.html')
 
 if __name__ == "__main__":
     if not PREP_ONLY:
-        setup(name             = PKGDIR,
+        setup(name             = 'wxPython',
               version          = VERSION,
               description      = DESCRIPTION,
               long_description = LONG_DESCRIPTION,
@@ -1023,7 +1179,7 @@ if __name__ == "__main__":
               platforms        = PLATFORMS,
               classifiers      = filter(None, CLASSIFIERS.split("\n")),
               keywords         = KEYWORDS,
-              
+
               packages = ['wxPython',
                           'wxPython.lib',
                           'wxPython.lib.colourchooser',

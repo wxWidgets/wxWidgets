@@ -1,0 +1,807 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        _listctrl.i
+// Purpose:     SWIG interface file for wxListCtrl and related classes
+//
+// Author:      Robin Dunn
+//
+// Created:     10-June-1998
+// RCS-ID:      $Id$
+// Copyright:   (c) 2002 by Total Control Software
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
+
+// Not a %module
+
+
+//---------------------------------------------------------------------------
+
+%{
+#include <wx/listctrl.h>
+
+    const wxChar* wxListCtrlNameStr = _T("wxListCtrl");
+    DECLARE_DEF_STRING(ListCtrlNameStr);
+%}
+
+//---------------------------------------------------------------------------
+%newgroup
+
+enum {
+    // style flags
+    wxLC_VRULES,
+    wxLC_HRULES,
+
+    wxLC_ICON,
+    wxLC_SMALL_ICON,
+    wxLC_LIST,
+    wxLC_REPORT,
+
+    wxLC_ALIGN_TOP,
+    wxLC_ALIGN_LEFT,
+    wxLC_AUTOARRANGE,
+    wxLC_VIRTUAL,
+    wxLC_EDIT_LABELS,
+    wxLC_NO_HEADER,
+    wxLC_NO_SORT_HEADER,
+    wxLC_SINGLE_SEL,
+    wxLC_SORT_ASCENDING,
+    wxLC_SORT_DESCENDING,
+
+    wxLC_MASK_TYPE,
+    wxLC_MASK_ALIGN,
+    wxLC_MASK_SORT
+};
+
+
+enum {
+    // Mask flags to tell app/GUI what fields of wxListItem are valid
+    wxLIST_MASK_STATE,
+    wxLIST_MASK_TEXT,
+    wxLIST_MASK_IMAGE,
+    wxLIST_MASK_DATA,
+    wxLIST_SET_ITEM,
+    wxLIST_MASK_WIDTH,
+    wxLIST_MASK_FORMAT,
+
+// State flags for indicating the state of an item
+    wxLIST_STATE_DONTCARE,
+    wxLIST_STATE_DROPHILITED,
+    wxLIST_STATE_FOCUSED,
+    wxLIST_STATE_SELECTED,
+    wxLIST_STATE_CUT,
+    wxLIST_STATE_DISABLED,
+    wxLIST_STATE_FILTERED,
+    wxLIST_STATE_INUSE,
+    wxLIST_STATE_PICKED,
+    wxLIST_STATE_SOURCE,
+
+// Hit test flags, used in HitTest
+    wxLIST_HITTEST_ABOVE,
+    wxLIST_HITTEST_BELOW,
+    wxLIST_HITTEST_NOWHERE,
+    wxLIST_HITTEST_ONITEMICON,
+    wxLIST_HITTEST_ONITEMLABEL,
+    wxLIST_HITTEST_ONITEMRIGHT,
+    wxLIST_HITTEST_ONITEMSTATEICON,
+    wxLIST_HITTEST_TOLEFT,
+    wxLIST_HITTEST_TORIGHT,
+    wxLIST_HITTEST_ONITEM,
+};
+
+
+// Flags for GetNextItem (MSW only except wxLIST_NEXT_ALL)
+enum
+{
+    wxLIST_NEXT_ABOVE,          // Searches for an item above the specified item
+    wxLIST_NEXT_ALL,            // Searches for subsequent item by index
+    wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
+    wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
+    wxLIST_NEXT_RIGHT           // Searches for an item to the right of the specified item
+};
+
+// Alignment flags for Arrange (MSW only except wxLIST_ALIGN_LEFT)
+enum
+{
+    wxLIST_ALIGN_DEFAULT,
+    wxLIST_ALIGN_LEFT,
+    wxLIST_ALIGN_TOP,
+    wxLIST_ALIGN_SNAP_TO_GRID
+};
+
+// Column format (MSW only except wxLIST_FORMAT_LEFT)
+enum wxListColumnFormat
+{
+    wxLIST_FORMAT_LEFT,
+    wxLIST_FORMAT_RIGHT,
+    wxLIST_FORMAT_CENTRE,
+    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
+};
+
+// Autosize values for SetColumnWidth
+enum
+{
+    wxLIST_AUTOSIZE = -1,
+    wxLIST_AUTOSIZE_USEHEADER = -2      // partly supported by generic version
+};
+
+// Flag values for GetItemRect
+enum
+{
+    wxLIST_RECT_BOUNDS,
+    wxLIST_RECT_ICON,
+    wxLIST_RECT_LABEL
+};
+
+// Flag values for FindItem (MSW only)
+enum
+{
+    wxLIST_FIND_UP,
+    wxLIST_FIND_DOWN,
+    wxLIST_FIND_LEFT,
+    wxLIST_FIND_RIGHT
+};
+
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
+// wxListItemAttr: a structure containing the visual attributes of an item
+class wxListItemAttr
+{
+public:
+    // ctors
+    //wxListItemAttr();
+    wxListItemAttr(const wxColour& colText = wxNullColour,
+                   const wxColour& colBack = wxNullColour,
+                   const wxFont& font = wxNullFont);
+
+
+    // setters
+    void SetTextColour(const wxColour& colText);
+    void SetBackgroundColour(const wxColour& colBack);
+    void SetFont(const wxFont& font);
+
+    // accessors
+    bool HasTextColour();
+    bool HasBackgroundColour();
+    bool HasFont();
+
+    wxColour GetTextColour();
+    wxColour GetBackgroundColour();
+    wxFont GetFont();
+
+    %extend { void Destroy() { delete self; } }
+};
+
+
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
+// wxListItem: the item or column info, used to exchange data with wxListCtrl
+class wxListItem : public wxObject {
+public:
+    wxListItem();
+    ~wxListItem();
+
+    // resetting
+    void Clear();
+    void ClearAttributes();
+
+    // setters
+    void SetMask(long mask);
+    void SetId(long id);
+    void SetColumn(int col);
+    void SetState(long state);
+    void SetStateMask(long stateMask);
+    void SetText(const wxString& text);
+    void SetImage(int image);
+    void SetData(long data);
+
+    void SetWidth(int width);
+    void SetAlign(wxListColumnFormat align);
+
+    void SetTextColour(const wxColour& colText);
+    void SetBackgroundColour(const wxColour& colBack);
+    void SetFont(const wxFont& font);
+
+    // accessors
+    long GetMask();
+    long GetId();
+    int GetColumn();
+    long GetState();
+    const wxString& GetText();
+    int GetImage();
+    long GetData();
+
+    int GetWidth();
+    wxListColumnFormat GetAlign();
+
+    wxListItemAttr *GetAttributes();
+    bool HasAttributes();
+
+    wxColour GetTextColour() const;
+    wxColour GetBackgroundColour() const;
+    wxFont GetFont() const;
+
+    // these members are public for compatibility
+    long            m_mask;     // Indicates what fields are valid
+    long            m_itemId;   // The zero-based item position
+    int             m_col;      // Zero-based column, if in report mode
+    long            m_state;    // The state of the item
+    long            m_stateMask;// Which flags of m_state are valid (uses same flags)
+    wxString        m_text;     // The label/header text
+    int             m_image;    // The zero-based index into an image list
+    long            m_data;     // App-defined data
+
+    // For columns only
+    int             m_format;   // left, right, centre
+    int             m_width;    // width of column
+
+};
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
+
+// wxListEvent - the event class for the wxListCtrl notifications
+class wxListEvent: public wxNotifyEvent {
+public:
+    wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+
+    int           m_code;
+    long          m_oldItemIndex;
+    long          m_itemIndex;
+    int           m_col;
+    wxPoint       m_pointDrag;
+    %immutable;
+    wxListItem    m_item;
+    %mutable;
+
+    int GetKeyCode();
+    %pragma(python) addtoclass = "GetCode = GetKeyCode"
+    long GetIndex();
+    int GetColumn();
+    wxPoint GetPoint();
+    const wxString& GetLabel();
+    const wxString& GetText();
+    int GetImage();
+    long GetData();
+    long GetMask();
+    const wxListItem& GetItem();
+
+    long GetCacheFrom();
+    long GetCacheTo();
+
+    // was label editing canceled? (for wxEVT_COMMAND_LIST_END_LABEL_EDIT only)
+    bool IsEditCancelled() const;
+    void SetEditCanceled(bool editCancelled);
+};
+
+enum {
+    /* List control event types */
+    wxEVT_COMMAND_LIST_BEGIN_DRAG,         
+    wxEVT_COMMAND_LIST_BEGIN_RDRAG,
+    wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT,
+    wxEVT_COMMAND_LIST_END_LABEL_EDIT,
+    wxEVT_COMMAND_LIST_DELETE_ITEM,
+    wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS,
+    wxEVT_COMMAND_LIST_GET_INFO,
+    wxEVT_COMMAND_LIST_SET_INFO,
+    wxEVT_COMMAND_LIST_ITEM_SELECTED,
+    wxEVT_COMMAND_LIST_ITEM_DESELECTED,
+    wxEVT_COMMAND_LIST_KEY_DOWN,
+    wxEVT_COMMAND_LIST_INSERT_ITEM,
+    wxEVT_COMMAND_LIST_COL_CLICK,
+    wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
+    wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK,
+    wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
+    wxEVT_COMMAND_LIST_CACHE_HINT,
+    wxEVT_COMMAND_LIST_COL_RIGHT_CLICK,
+    wxEVT_COMMAND_LIST_COL_BEGIN_DRAG,
+    wxEVT_COMMAND_LIST_COL_DRAGGING,
+    wxEVT_COMMAND_LIST_COL_END_DRAG,
+    wxEVT_COMMAND_LIST_ITEM_FOCUSED,
+};
+
+
+%pythoncode {
+
+EVT_LIST_BEGIN_DRAG        = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_DRAG       , 1)
+EVT_LIST_BEGIN_RDRAG       = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_RDRAG      , 1)
+EVT_LIST_BEGIN_LABEL_EDIT  = wx.PyEventBinder(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT , 1)
+EVT_LIST_END_LABEL_EDIT    = wx.PyEventBinder(wxEVT_COMMAND_LIST_END_LABEL_EDIT   , 1)
+EVT_LIST_DELETE_ITEM       = wx.PyEventBinder(wxEVT_COMMAND_LIST_DELETE_ITEM      , 1)
+EVT_LIST_DELETE_ALL_ITEMS  = wx.PyEventBinder(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS , 1)
+EVT_LIST_GET_INFO          = wx.PyEventBinder(wxEVT_COMMAND_LIST_GET_INFO         , 1)
+EVT_LIST_SET_INFO          = wx.PyEventBinder(wxEVT_COMMAND_LIST_SET_INFO         , 1)
+EVT_LIST_ITEM_SELECTED     = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_SELECTED    , 1)
+EVT_LIST_ITEM_DESELECTED   = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_DESELECTED  , 1)
+EVT_LIST_KEY_DOWN          = wx.PyEventBinder(wxEVT_COMMAND_LIST_KEY_DOWN         , 1)
+EVT_LIST_INSERT_ITEM       = wx.PyEventBinder(wxEVT_COMMAND_LIST_INSERT_ITEM      , 1)
+EVT_LIST_COL_CLICK         = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_CLICK        , 1)
+EVT_LIST_ITEM_RIGHT_CLICK  = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK , 1)
+EVT_LIST_ITEM_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, 1)
+EVT_LIST_ITEM_ACTIVATED    = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_ACTIVATED   , 1)
+EVT_LIST_CACHE_HINT        = wx.PyEventBinder(wxEVT_COMMAND_LIST_CACHE_HINT       , 1)
+EVT_LIST_COL_RIGHT_CLICK   = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK  , 1)
+EVT_LIST_COL_BEGIN_DRAG    = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG   , 1)
+EVT_LIST_COL_DRAGGING      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_DRAGGING     , 1)
+EVT_LIST_COL_END_DRAG      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_END_DRAG     , 1)
+EVT_LIST_ITEM_FOCUSED      = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_FOCUSED     , 1)
+}
+
+//---------------------------------------------------------------------------
+%newgroup
+
+
+%{ // Python aware sorting function for wxPyListCtrl
+    static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
+        int retval = 0;
+        PyObject* func = (PyObject*)funcPtr;
+        wxPyBeginBlockThreads();
+
+        PyObject* args = Py_BuildValue("(ii)", item1, item2);
+        PyObject* result = PyEval_CallObject(func, args);
+        Py_DECREF(args);
+        if (result) {
+            retval = PyInt_AsLong(result);
+            Py_DECREF(result);
+        }
+
+        wxPyEndBlockThreads();
+        return retval;
+    }
+%}
+
+
+
+%{  // C++ Version of a Python aware class
+class wxPyListCtrl : public wxListCtrl {
+    DECLARE_ABSTRACT_CLASS(wxPyListCtrl);
+public:
+    wxPyListCtrl() : wxListCtrl() {}
+    wxPyListCtrl(wxWindow* parent, wxWindowID id,
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 long style,
+                 const wxValidator& validator,
+                 const wxString& name) :
+        wxListCtrl(parent, id, pos, size, style, validator, name) {}
+
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxValidator& validator,
+                const wxString& name) {
+        return wxListCtrl::Create(parent, id, pos, size, style, validator, name);
+    }
+
+    DEC_PYCALLBACK_STRING_LONGLONG(OnGetItemText);
+    DEC_PYCALLBACK_INT_LONG(OnGetItemImage);
+    DEC_PYCALLBACK_LISTATTR_LONG(OnGetItemAttr);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyListCtrl, wxListCtrl);
+
+IMP_PYCALLBACK_STRING_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemText);
+IMP_PYCALLBACK_INT_LONG(wxPyListCtrl, wxListCtrl, OnGetItemImage);
+IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
+%}
+
+
+
+
+
+%name(ListCtrl)class wxPyListCtrl : public wxControl {
+public:
+
+    %addtofunc wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
+    %addtofunc wxPyListCtrl()       "val._setOORInfo(self)"
+   
+    wxPyListCtrl(wxWindow* parent, wxWindowID id = -1,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxLC_ICON,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxPyListCtrlNameStr);
+    %name(PreListCtrl)wxPyListCtrl();
+
+    bool Create(wxWindow* parent, wxWindowID id = -1,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxLC_ICON,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxPyListCtrlNameStr);
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+
+    
+    // Set the control colours
+    bool SetForegroundColour(const wxColour& col);
+    bool SetBackgroundColour(const wxColour& col);
+
+    // Gets information about this column
+    %addtofunc GetColumn "if val is not None: val.thisown = 1";  // %newobject doesn't work with OOR typemap
+    %extend {
+        wxListItem* GetColumn(int col) {
+            wxListItem item;
+            item.SetMask(0xFFFF);
+            if (self->GetColumn(col, item))
+                return new wxListItem(item);
+            else
+                return NULL;
+        }
+    }
+
+    // Sets information about this column
+    bool SetColumn(int col, wxListItem& item) ;
+
+    // Gets the column width
+    int GetColumnWidth(int col) const;
+
+    // Sets the column width
+    bool SetColumnWidth(int col, int width) ;
+
+    // Gets the number of items that can fit vertically in the
+    // visible area of the list control (list or report view)
+    // or the total number of items in the list control (icon
+    // or small icon view)
+    int GetCountPerPage() const;
+
+    // return the total area occupied by all the items (icon/small icon only)
+    wxRect GetViewRect() const;
+    
+#ifdef __WXMSW__
+    // Gets the edit control for editing labels.
+    wxTextCtrl* GetEditControl() const;
+#endif
+
+    // Gets information about the item
+    %addtofunc GetItem "if val is not None: val.thisown = 1";  // %newobject doesn't work with OOR typemap
+    %extend {
+        wxListItem* GetItem(long itemId, int col=0) {
+            wxListItem* info = new wxListItem;
+            info->m_itemId = itemId;
+            info->m_col = col;
+            info->m_mask = 0xFFFF;
+            self->GetItem(*info);
+            return info;
+        }
+    }
+
+    // Sets information about the item
+    bool SetItem(wxListItem& info) ;
+
+    // Sets a string field at a particular column
+    %name(SetStringItem)long SetItem(long index, int col, const wxString& label, int imageId = -1);
+
+    // Gets the item state
+    int  GetItemState(long item, long stateMask) const ;
+
+    // Sets the item state
+    bool SetItemState(long item, long state, long stateMask) ;
+
+    // Sets the item image
+    bool SetItemImage(long item, int image, int selImage) ;
+
+    // Gets the item text
+    wxString GetItemText(long item) const ;
+
+    // Sets the item text
+    void SetItemText(long item, const wxString& str) ;
+
+    // Gets the item data
+    long GetItemData(long item) const ;
+
+    // Sets the item data
+    bool SetItemData(long item, long data) ;
+
+
+    //bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
+    //bool GetItemPosition(long item, wxPoint& pos) const ;
+
+    // Gets the item position
+    %extend {
+        wxPoint GetItemPosition(long item) {
+            wxPoint pos;
+            self->GetItemPosition(item, pos);
+            return pos;
+        }
+        // Gets the item rectangle
+        wxRect GetItemRect(long item, int code = wxLIST_RECT_BOUNDS) {
+            wxRect rect;
+            self->GetItemRect(item, rect, code);
+            return rect;
+        }
+    }
+
+
+    // Sets the item position
+    bool SetItemPosition(long item, const wxPoint& pos) ;
+
+    // Gets the number of items in the list control
+    int GetItemCount() const;
+
+    // Gets the number of columns in the list control
+    int GetColumnCount() const;
+
+    // get the horizontal and vertical components of the item spacing
+    wxSize GetItemSpacing() const;
+
+#ifndef __WXMSW__
+    void SetItemSpacing( int spacing, bool isSmall = FALSE );
+#endif
+
+    // Gets the number of selected items in the list control
+    int GetSelectedItemCount() const;
+
+    // Gets the text colour of the listview
+    wxColour GetTextColour() const;
+
+    // Sets the text colour of the listview
+    void SetTextColour(const wxColour& col);
+
+    // Gets the index of the topmost visible item when in
+    // list or report view
+    long GetTopItem() const ;
+
+    // Add or remove a single window style
+    void SetSingleStyle(long style, bool add = TRUE) ;
+
+    // Set the whole window style
+    void SetWindowStyleFlag(long style) ;
+
+    // Searches for an item, starting from 'item'.
+    // item can be -1 to find the first item that matches the
+    // specified flags.
+    // Returns the item or -1 if unsuccessful.
+    long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const ;
+
+    // Gets one of the three image lists
+    wxImageList *GetImageList(int which) const ;
+
+    // Sets the image list
+    void SetImageList(wxImageList *imageList, int which) ;
+    %addtofunc AssignImageList "args[1].thisown = 0";
+    void AssignImageList(wxImageList *imageList, int which) ;
+
+    // returns true if it is a virtual list control
+    bool IsVirtual() const;
+
+    // refresh items selectively (only useful for virtual list controls)
+    void RefreshItem(long item);
+    void RefreshItems(long itemFrom, long itemTo);
+
+    // Arranges the items
+    bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
+
+    // Deletes an item
+    bool DeleteItem(long item);
+
+    // Deletes all items
+    bool DeleteAllItems() ;
+
+    // Deletes a column
+    bool DeleteColumn(int col);
+
+    // Deletes all columns
+    bool DeleteAllColumns();
+
+    // Clears items, and columns if there are any.
+    void ClearAll();
+
+#ifdef __WXMSW__
+    // Edit the label
+    wxTextCtrl* EditLabel(long item /*, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl)*/);
+
+    // End label editing, optionally cancelling the edit
+    bool EndEditLabel(bool cancel);
+#else
+    void EditLabel(long item);
+#endif
+
+    // Ensures this item is visible
+    bool EnsureVisible(long item) ;
+
+    // Find an item whose label matches this string, starting from the item after 'start'
+    // or the beginning if 'start' is -1.
+    long FindItem(long start, const wxString& str, bool partial = FALSE);
+
+    // Find an item whose data matches this data, starting from the item after 'start'
+    // or the beginning if 'start' is -1.
+    %name(FindItemData) long FindItem(long start, long data);
+
+    // Find an item nearest this position in the specified direction, starting from
+    // the item after 'start' or the beginning if 'start' is -1.
+    %name(FindItemAtPos) long FindItem(long start, const wxPoint& pt, int direction);
+
+    // Determines which item (if any) is at the specified point,
+    // giving details in the second return value (see wxLIST_HITTEST_... flags above)
+    long HitTest(const wxPoint& point, int& OUTPUT);
+
+    // Inserts an item, returning the index of the new item if successful,
+    // -1 otherwise.
+    long InsertItem(wxListItem& info);
+
+    // Insert a string item
+    %name(InsertStringItem) long InsertItem(long index, const wxString& label);
+
+    // Insert an image item
+    %name(InsertImageItem) long InsertItem(long index, int imageIndex);
+
+    // Insert an image/string item
+    %name(InsertImageStringItem) long InsertItem(long index, const wxString& label, int imageIndex);
+
+    // For list view mode (only), inserts a column.
+    %name(InsertColumnInfo) long InsertColumn(long col, wxListItem& info);
+
+    long InsertColumn(long col,
+                      const wxString& heading,
+                      int format = wxLIST_FORMAT_LEFT,
+                      int width = -1);
+
+    // set the number of items in a virtual list control
+    void SetItemCount(long count);
+
+    // Scrolls the list control. If in icon, small icon or report view mode,
+    // x specifies the number of pixels to scroll. If in list view mode, x
+    // specifies the number of columns to scroll.
+    // If in icon, small icon or list view mode, y specifies the number of pixels
+    // to scroll. If in report view mode, y specifies the number of lines to scroll.
+    bool ScrollList(int dx, int dy);
+
+    void SetItemTextColour( long item, const wxColour& col);
+    wxColour GetItemTextColour( long item ) const;
+    void SetItemBackgroundColour( long item, const wxColour &col);
+    wxColour GetItemBackgroundColour( long item ) const;
+
+
+    %pythoncode {
+    %#
+    %# Some helpers...
+    def Select(self, idx, on=1):
+        '''[de]select an item'''
+        if on: state = wxLIST_STATE_SELECTED
+        else: state = 0
+        self.SetItemState(idx, state, wxLIST_STATE_SELECTED)
+
+    def Focus(self, idx):
+        '''Focus and show the given item'''
+        self.SetItemState(idx, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+        self.EnsureVisible(idx)
+
+    def GetFocusedItem(self):
+        '''get the currently focused item or -1 if none'''
+        return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
+
+    def GetFirstSelected(self, *args):
+        '''return first selected item, or -1 when none'''
+        return self.GetNextSelected(-1)
+
+    def GetNextSelected(self, item):
+        '''return subsequent selected items, or -1 when no more'''
+        return self.GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)
+
+    def IsSelected(self, idx):
+        '''return TRUE if the item is selected'''
+        return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
+
+    def SetColumnImage(self, col, image):
+        item = wxListItem()
+        item.SetMask(wxLIST_MASK_IMAGE)
+        item.SetImage(image)
+        self.SetColumn(col, item)
+
+    def ClearColumnImage(self, col):
+        self.SetColumnImage(col, -1)
+
+    def Append(self, entry):
+        '''Append an item to the list control.  The entry parameter should be a
+           sequence with an item for each column'''
+        if len(entry):
+            if wx.wxUSE_UNICODE:
+                cvtfunc = unicode
+            else:
+                cvtfunc = str
+            pos = self.GetItemCount()
+            self.InsertStringItem(pos, cvtfunc(entry[0]))
+            for i in range(1, len(entry)):
+                self.SetStringItem(pos, i, cvtfunc(entry[i]))
+            return pos
+    }
+
+
+    // bool SortItems(wxListCtrlCompare fn, long data);
+    %extend {
+        // Sort items.
+        // func is a function which takes 2 long arguments: item1, item2.
+        // item1 is the long data associated with a first item (NOT the index).
+        // item2 is the long data associated with a second item (NOT the index).
+        // The return value is a negative number if the first item should precede the second
+        // item, a positive number of the second item should precede the first,
+        // or zero if the two items are equivalent.
+        bool SortItems(PyObject* func) {
+            if (!PyCallable_Check(func))
+                return FALSE;
+            return self->SortItems((wxListCtrlCompare)wxPyListCtrl_SortItems, (long)func);
+        }
+    }
+
+
+    %extend {
+        wxWindow* GetMainWindow() {
+        #ifdef __WXMSW__
+            return self;
+        #else
+            return (wxWindow*)self->m_mainWin;
+        #endif
+        }
+    }
+};
+
+
+
+//---------------------------------------------------------------------------
+%newgroup
+
+
+// wxListView: a class which provides a little better API for list control
+class wxListView : public wxPyListCtrl
+{
+public:
+    %addtofunc wxListView         "self._setOORInfo(self)"
+    %addtofunc wxListView()       "val._setOORInfo(self)"
+
+    wxListView( wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxLC_REPORT,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyListCtrlNameStr);
+    %name(PreListView)wxListView();
+
+    bool Create( wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxLC_REPORT,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyListCtrlNameStr);
+
+    // [de]select an item
+    void Select(long n, bool on = TRUE);
+
+    // focus and show the given item
+    void Focus(long index);
+
+    // get the currently focused item or -1 if none
+    long GetFocusedItem() const;
+
+    // get first and subsequent selected items, return -1 when no more
+    long GetNextSelected(long item) const;
+    long GetFirstSelected() const;
+
+    // return TRUE if the item is selected
+    bool IsSelected(long index);
+
+    void SetColumnImage(int col, int image);
+    void ClearColumnImage(int col);
+};
+
+
+
+//---------------------------------------------------------------------------
+
+%init %{
+    // Map renamed classes back to their common name for OOR
+    wxPyPtrTypeMap_Add("wxListCtrl", "wxPyListCtrl");
+%}
+
+//---------------------------------------------------------------------------
