@@ -108,7 +108,8 @@ COMMONOBJS = \
   $(COMMDIR)\wxexpr.obj \
   $(COMMDIR)\y_tab.obj \
   $(COMMDIR)\datstrm.obj \
-  $(COMMDIR)\extended.obj
+  $(COMMDIR)\extended.obj \
+  $(COMMDIR)\process.obj
 
 #  $(COMMDIR)\wxstrgnu\wxstrgnu.obj \
 #  $(COMMDIR)\wxstrgnu\wxregex.obj \
@@ -895,6 +896,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 $(COMMDIR)/extended.obj:     $*.c
         cl @<<
 $(CPPFLAGS2) /c /Tp $*.c /Fo$@
+<<
+
+$(COMMDIR)/process.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c

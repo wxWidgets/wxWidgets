@@ -63,10 +63,6 @@
 #endif
 #include <stdarg.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
-IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
-
-
 #define wxEXECUTE_WIN_MESSAGE 10000
 
 struct wxExecuteData {
@@ -206,22 +202,3 @@ p,i
   return(instanceID);
 #endif
 }
-
-// DUMMIES TO SATISFY THE LINKER UNTIL GUILHEM FINISHES THE CODE
-wxProcess::wxProcess(wxEvtHandler *parent, int id)
-{
-}
-
-wxProcess::~wxProcess()
-{
-}
-
-void wxProcess::OnTerminate(int pid)
-{
-}
-
-wxProcessEvent::wxProcessEvent(int id, int pid)
-{
-}
-  
-
