@@ -114,7 +114,7 @@ wxConfigBase::PathChanger::PathChanger(const wxConfigBase *pContainer,
   wxString strPath = strEntry.Before(wxCONFIG_PATH_SEPARATOR);
 
   // special case of "/keyname" when there is nothing before "/"
-  if ( (!strPath.IsEmpty()) && strEntry[0] == wxCONFIG_PATH_SEPARATOR )
+  if ( strPath.IsEmpty() && strEntry[0] == wxCONFIG_PATH_SEPARATOR )
     strPath = wxCONFIG_PATH_SEPARATOR;
 
   if ( !strPath.IsEmpty() ) {
