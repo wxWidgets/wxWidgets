@@ -96,11 +96,11 @@ $(LIBTARGET) : $(OBJECTS)
 
 
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
-    -erase *.obj
+    -erase $(OUTPUTDIR)\*.obj
     -erase $(LIBTARGET)
-    -erase *.pch
-    -erase *.err
-    -erase *.lbc
+    -erase $(OUTPUTDIR)\*.pch
+    -erase $(OUTPUTDIR)\*.err
+    -erase $(OUTPUTDIR)\*.lbc
 
 cleanall:   clean
     -erase $(LBCFILE)

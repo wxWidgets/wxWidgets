@@ -135,7 +135,7 @@ containr.cpp	Common
 cshelp.cpp	Common
 ctrlcmn.cpp	Common
 ctrlsub.cpp	Common
-datacmn.cpp	Common	Base
+datacmn.cpp	Common	
 datetime.cpp	Common	Base
 datstrm.cpp	Common	Base
 db.cpp	Common	Win32Only,Base

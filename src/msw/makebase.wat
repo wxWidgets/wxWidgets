@@ -30,7 +30,6 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\clntdata.obj &
 	$(OUTPUTDIR)\cmdline.obj &
 	$(OUTPUTDIR)\config.obj &
-	$(OUTPUTDIR)\datacmn.obj &
 	$(OUTPUTDIR)\datetime.obj &
 	$(OUTPUTDIR)\datstrm.obj &
 	$(OUTPUTDIR)\db.obj &
@@ -133,11 +132,11 @@ $(LIBTARGET) : $(OBJECTS)
 
 
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
-    -erase *.obj
+    -erase $(OUTPUTDIR)\*.obj
     -erase $(LIBTARGET)
-    -erase *.pch
-    -erase *.err
-    -erase *.lbc
+    -erase $(OUTPUTDIR)\*.pch
+    -erase $(OUTPUTDIR)\*.err
+    -erase $(OUTPUTDIR)\*.lbc
 
 cleanall:   clean
     -erase $(LBCFILE)
@@ -196,9 +195,6 @@ $(OUTPUTDIR)\cmdline.obj:     $(COMMDIR)\cmdline.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\config.obj:     $(COMMDIR)\config.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
-$(OUTPUTDIR)\datacmn.obj:     $(COMMDIR)\datacmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\datetime.obj:     $(COMMDIR)\datetime.cpp
