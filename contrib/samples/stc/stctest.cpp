@@ -32,6 +32,7 @@
 #include <wx/notebook.h> // notebook support
 #include <wx/settings.h> // system settings
 #include <wx/string.h>   // strings support
+#include <wx/image.h>    // images support
 
 //! application headers
 #include "defsext.h"     // Additional definitions
@@ -583,7 +584,7 @@ AppAbout::AppAbout (wxWindow *parent,
                     long style)
         : wxDialog (parent, -1, wxEmptyString,
                     wxDefaultPosition, wxDefaultSize,
-                    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
+                    style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 
     // set timer if any
     m_timer = NULL;
@@ -651,7 +652,7 @@ AppAbout::~AppAbout () {
 
 //----------------------------------------------------------------------------
 // event handlers
-void AppAbout::OnTimerEvent (wxTimerEvent &event) {
+void AppAbout::OnTimerEvent (wxTimerEvent &WXUNUSED(event)) {
     if (m_timer) delete m_timer;
     m_timer = NULL;
     EndModal (wxID_OK);

@@ -132,11 +132,11 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
                  wxSTC_WRAP_WORD: wxSTC_WRAP_NONE);
     wxFont font (10, wxMODERN, wxNORMAL, wxNORMAL);
     StyleSetFont (wxSTC_STYLE_DEFAULT, font);
-    StyleSetForeground (wxSTC_STYLE_DEFAULT, wxColour ("BLACK"));
-    StyleSetBackground (wxSTC_STYLE_DEFAULT, wxColour ("WHITE"));
-    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour ("DARK GREY"));
-    StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour ("WHITE"));
-    StyleSetForeground(wxSTC_STYLE_INDENTGUIDE, wxColour ("DARK GREY"));
+    StyleSetForeground (wxSTC_STYLE_DEFAULT, wxColour (_T("BLACK")));
+    StyleSetBackground (wxSTC_STYLE_DEFAULT, wxColour (_T("WHITE")));
+    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour (_T("DARK GREY")));
+    StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour (_T("WHITE")));
+    StyleSetForeground(wxSTC_STYLE_INDENTGUIDE, wxColour (_T("DARK GREY")));
     InitializePrefs (DEFAULT_LANGUAGE);
 
     // set visibility
@@ -145,13 +145,13 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     SetYCaretPolicy (wxSTC_CARET_EVEN|wxSTC_VISIBLE_STRICT|wxSTC_CARET_SLOP, 1);
 
     // markers
-    MarkerDefine (wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_DOTDOTDOT, "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_DOTDOTDOT, "BLACK", "WHITE");
-    MarkerDefine (wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, "BLACK", "WHITE");
-    MarkerDefine (wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
+    MarkerDefine (wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_DOTDOTDOT, _T("BLACK"), _T("BLACK"));
+    MarkerDefine (wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, _T("BLACK"), _T("BLACK"));
+    MarkerDefine (wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     _T("BLACK"), _T("BLACK"));
+    MarkerDefine (wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_DOTDOTDOT, _T("BLACK"), _T("WHITE"));
+    MarkerDefine (wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, _T("BLACK"), _T("WHITE"));
+    MarkerDefine (wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     _T("BLACK"), _T("BLACK"));
+    MarkerDefine (wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     _T("BLACK"), _T("BLACK"));
 
     // miscelaneous
     m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, _T("_999999"));
@@ -233,11 +233,11 @@ void Edit::OnBraceMatch (wxCommandEvent &WXUNUSED(event)) {
 void Edit::OnGoto (wxCommandEvent &WXUNUSED(event)) {
 }
 
-void Edit::OnEditIndentInc (wxCommandEvent &event) {
+void Edit::OnEditIndentInc (wxCommandEvent &WXUNUSED(event)) {
     CmdKeyExecute (wxSTC_CMD_TAB);
 }
 
-void Edit::OnEditIndentRed (wxCommandEvent &event) {
+void Edit::OnEditIndentRed (wxCommandEvent &WXUNUSED(event)) {
     CmdKeyExecute (wxSTC_CMD_DELETEBACK);
 }
 
@@ -407,8 +407,8 @@ bool Edit::InitializePrefs (const wxString &name) {
 
     // set margin for line numbers
     SetMarginType (m_LineNrID, wxSTC_MARGIN_NUMBER);
-    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour ("DARK GREY"));
-    StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour ("WHITE"));
+    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour (_T("DARK GREY")));
+    StyleSetBackground (wxSTC_STYLE_LINENUMBER, wxColour (_T("WHITE")));
     SetMarginWidth (m_LineNrID,
                     g_CommonPrefs.lineNumberEnable? m_LineNrMargin: 0);
 
@@ -420,8 +420,8 @@ bool Edit::InitializePrefs (const wxString &name) {
     }
 
     // set common styles
-    StyleSetForeground (wxSTC_STYLE_DEFAULT, wxColour ("DARK GREY"));
-    StyleSetForeground (wxSTC_STYLE_INDENTGUIDE, wxColour ("DARK GREY"));
+    StyleSetForeground (wxSTC_STYLE_DEFAULT, wxColour (_T("DARK GREY")));
+    StyleSetForeground (wxSTC_STYLE_INDENTGUIDE, wxColour (_T("DARK GREY")));
 
     // initialize settings
     if (g_CommonPrefs.syntaxEnable) {
@@ -459,7 +459,7 @@ bool Edit::InitializePrefs (const wxString &name) {
     // folding
     SetMarginType (m_FoldingID, wxSTC_MARGIN_SYMBOL);
     SetMarginMask (m_FoldingID, wxSTC_MASK_FOLDERS);
-    StyleSetBackground (m_FoldingID, wxColour ("WHITE"));
+    StyleSetBackground (m_FoldingID, wxColour (_T("WHITE")));
     SetMarginWidth (m_FoldingID, 0);
     SetMarginSensitive (m_FoldingID, false);
     if (g_CommonPrefs.foldEnable) {
@@ -601,7 +601,7 @@ EditProperties::EditProperties (Edit *edit,
                                 long style)
         : wxDialog (edit, -1, wxEmptyString,
                     wxDefaultPosition, wxDefaultSize,
-                    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
+                    style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 
     // sets the application title
     SetTitle (_("Properties"));
@@ -786,7 +786,7 @@ void EditPrint::GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *
     *selPageTo = *maxPage;
 }
 
-bool EditPrint::HasPage (int page) {
+bool EditPrint::HasPage (int WXUNUSED(page)) {
 
     return (m_printed < m_edit->GetLength());
 }

@@ -677,7 +677,11 @@ void ScintillaWX::DoAddChar(int key) {
 }
 
 
+#ifdef __WXMAC__
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool meta, bool* consumed) {
+#else
+int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool WXUNUSED(meta), bool* consumed) {
+#endif
 #if defined(__WXGTK__) || defined(__WXMAC__)
     // Ctrl chars (A-Z) end up with the wrong keycode on wxGTK
     // TODO:  Check this, it shouldn't be true any longer.
