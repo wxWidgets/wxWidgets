@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/univ/spinbutt.h
+// Name:        wx/palmos/spinbutt.h
 // Purpose:     wxSpinButton class
-// Author:      Julian Smart
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
-// Created:     01/02/97
+// Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

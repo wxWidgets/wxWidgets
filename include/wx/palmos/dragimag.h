@@ -2,10 +2,10 @@
 // Name:        wx/palmos/dragimag.h
 // Purpose:     wxDragImage class: a kind of a cursor, that can cope
 //              with more sophisticated images
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/palmos/mslu.h
 // Purpose:     Fixes for bugs in MSLU
-// Author:      Vaclav Slavik
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
-// Created:     2002/02/17
+// Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) 2002 Vaclav Slavik
+// Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/statusbr.h
+// Name:        wx/palmos/statusbr.h
 // Purpose:     Palm OS implementation of wxStatusBar
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ public:
     // get the border size
     virtual int GetBorderX() const;
     virtual int GetBorderY() const;
-    
+
     void DrawStatusBar();
 
 protected:
@@ -70,7 +70,7 @@ protected:
     wxString GetStatusBufferText(int number);
     wxListString *GetOrCreateStatusBuffer(int i);
     wxListString *GetStatusBufferStack(int i) const;
-    void DeleteStatusBuffer();    
+    void DeleteStatusBuffer();
 
     // override base class virtual
     void DoMoveWindow(int x, int y, int width, int height);

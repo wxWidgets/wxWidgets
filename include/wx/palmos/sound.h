@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.h
+// Name:        wx/palmos/sound.h
 // Purpose:     wxSound class
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,12 +35,12 @@ public:
   bool Create(int size, const wxByte* data);
 
   bool  IsOk() const { return (m_waveData ? true : false); };
-    
+
   static void Stop();
 
 protected:
   bool  Free();
-    
+
   bool DoPlay(unsigned flags) const;
 
 private:

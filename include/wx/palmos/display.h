@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        display.h
+// Name:        wx/palmos/display.h
 // Purpose:     wxDisplay class customization for Palm OS
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ private:
     wxArrayVideoModes DoGetModesWindows(const wxVideoMode& modeMatch) const;
     bool DoChangeModeWindows(const wxVideoMode& mode);
 
-    
+
     DECLARE_NO_COPY_CLASS(wxDisplay)
 };
 

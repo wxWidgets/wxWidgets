@@ -1,12 +1,11 @@
 /////////////////////////////////////////////////////////////////////////
 // File:        wx/palmos/taskbar.h
-// Purpose:     Defines wxTaskBarIcon class for manipulating icons on the
-//              task bar.
-// Author:      Julian Smart
-// Modified by: Vaclav Slavik
-// Created:     24/3/98
+// Purpose:     Defines wxTaskBarIcon class.
+// Author:      William Osborne - minimal working wxPalmOS port
+// Modified by:
+// Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 

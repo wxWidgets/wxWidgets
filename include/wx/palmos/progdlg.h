@@ -2,7 +2,7 @@
 // Name:        wx/palmos/progdlg.h
 // Purpose:     wxProgressDialog interface
 // Author:      Wlodzimierz ABX Skiba
-// Modified by:
+// Modified by: 
 // Created:     29.12.2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Wlodzimierz Skiba

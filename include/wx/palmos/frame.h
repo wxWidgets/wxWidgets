@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/palmos/frame.h
 // Purpose:     wxFrame class
-// Author:      William Osborne
+// Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ public:
 
     // event handlers
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    void OnPaint(wxPaintEvent& event);    
+    void OnPaint(wxPaintEvent& event);
 
     // Toolbar
 #if wxUSE_TOOLBAR
@@ -88,7 +88,7 @@ public:
     bool HandleMenuOpen();
     bool HandleMenuSelect(int ItemID);
 #endif // wxUSE_MENUS_NATIVE
- 
+
 protected:
     // common part of all ctors
     void Init();
@@ -135,7 +135,7 @@ private:
 
     // used by IconizeChildFrames(), see comments there
     bool m_wasMinimized;
-    
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame)
 };

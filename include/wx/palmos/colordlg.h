@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/palmos/colordlg.h
 // Purpose:     wxColourDialog class
-// Author:      William Osborne
-// Modified by:
+// Author:      William Osborne - minimal working wxPalmOS port
+// Modified by: Wlodzimierz ABX Skiba - real native implementation
 // Created:     10/13/04
-// RCS-ID:      $Id:
-// Copyright:   (c) William Osborne
+// RCS-ID:      $Id$
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
