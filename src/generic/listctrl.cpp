@@ -3019,6 +3019,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
         SendNotify( current, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
                     event.GetPosition() );
+        // Allow generation of context menu event
+        event.Skip();
     }
     else if (event.MiddleDown())
     {
