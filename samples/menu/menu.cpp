@@ -26,9 +26,10 @@
 
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
-
     #include <wx/log.h>
 #endif
+
+#include "copy.xpm"
 
 // ----------------------------------------------------------------------------
 // classes
@@ -232,6 +233,10 @@ MyFrame::MyFrame()
     // create the menubar
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit toolbar sample" );
+    
+    wxMenuItem *bitmap_menu_item = new wxMenuItem( fileMenu, Menu_File_Quit, "Quit with &bitmap" );
+    bitmap_menu_item->SetBitmap( wxBitmap( copy_xpm ) );
+    fileMenu->Append( bitmap_menu_item ); 
 
     wxMenu *menubarMenu = new wxMenu;
     menubarMenu->Append(Menu_MenuBar_Append, "&Append menu\tCtrl-A",
