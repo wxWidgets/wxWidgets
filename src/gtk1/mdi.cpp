@@ -358,7 +358,9 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 
   gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 
-  gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
   
   PostCreation();
 

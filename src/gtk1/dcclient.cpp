@@ -552,11 +552,11 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
     
             if (useMask && mask) 
             {
-                gdk_gc_set_clip_mask( m_penGC, mask );
-                gdk_gc_set_clip_origin( m_penGC, xx, yy );
+                gdk_gc_set_clip_mask( m_textGC, mask );
+                gdk_gc_set_clip_origin( m_textGC, xx, yy );
             }
   
-            gdk_draw_pixmap( m_window, m_penGC, pmap,
+            gdk_draw_pixmap( m_window, m_textGC, pmap,
                              source->DeviceToLogicalX(xsrc), 
 	                     source->DeviceToLogicalY(ysrc),
                              xx, 
@@ -566,8 +566,8 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
 	  
             if (useMask && mask) 
             {
-                gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-                gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+                gdk_gc_set_clip_mask( m_textGC, (GdkBitmap *) NULL );
+                gdk_gc_set_clip_origin( m_textGC, 0, 0 );
             }
       
             return TRUE;
@@ -584,11 +584,11 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
     
             if (useMask && mask) 
             {
-                gdk_gc_set_clip_mask( m_penGC, mask );
-                gdk_gc_set_clip_origin( m_penGC, xx, yy );
+                gdk_gc_set_clip_mask( m_textGC, mask );
+                gdk_gc_set_clip_origin( m_textGC, xx, yy );
             }
   
-            gdk_draw_bitmap( m_window, m_penGC, bmap,
+            gdk_draw_bitmap( m_window, m_textGC, bmap,
                              source->DeviceToLogicalX(xsrc), 
 	                     source->DeviceToLogicalY(ysrc),
                              xx, 
@@ -598,15 +598,15 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
 	  
             if (useMask && mask) 
             {
-                gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-                gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+                gdk_gc_set_clip_mask( m_textGC, (GdkBitmap *) NULL );
+                gdk_gc_set_clip_origin( m_textGC, 0, 0 );
             }
       
             return TRUE;
         }
     }
 
-    gdk_window_copy_area ( m_window, m_penGC,
+    gdk_window_copy_area ( m_window, m_textGC,
                            XLOG2DEV(xdest), YLOG2DEV(ydest),
                            csrc->GetWindow(),
                            source->DeviceToLogicalX(xsrc), 
@@ -615,7 +615,7 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
 			   source->DeviceToLogicalYRel(height) );
 
 /*    
-    gdk_window_copy_area ( m_window, m_penGC,
+    gdk_window_copy_area ( m_window, m_textGC,
                            XLOG2DEV(xdest), YLOG2DEV(ydest),
                            csrc->GetWindow(),
                            xsrc, ysrc,
