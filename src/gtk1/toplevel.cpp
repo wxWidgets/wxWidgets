@@ -1067,13 +1067,12 @@ bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
     return do_shape_combine_region(window, region);
 }
 
-bool wxTopLevelWindowGTK::HasFocus()
+bool wxTopLevelWindowGTK::IsActive()
 {
 #ifdef __WXGTK20__
     return GTK_WINDOW( m_widget )->has_toplevel_focus;
 #else
-    return ( wxGetTopLevelParent(FindFocus()) = this );
+    return wxTopLevelWindowBase::IsActive();
 #endif
 }
 
-// vi:sts=4:sw=4:et

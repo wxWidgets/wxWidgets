@@ -241,6 +241,7 @@ All (GUI):
 - the XRC contrib library was moved to the core
 - wx(Choice/List/Note)book controls send CHANG(ED/ING) events in SetSelection
 - it is now possible to create a wxFont with given size in pixels (d2walter)
+- added wxTopLevelWindow::IsActive()
 
 Unix:
 

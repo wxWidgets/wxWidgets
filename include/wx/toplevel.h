@@ -176,7 +176,7 @@ public:
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
     
     // Is this the active frame (highlighted in the taskbar)?
-    virtual bool HasFocus()
+    virtual bool IsActive()
         { return (wxGetTopLevelParent(FindFocus()) == this); }
 
     // implementation only from now on
