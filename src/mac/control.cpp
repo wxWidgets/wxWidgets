@@ -771,7 +771,12 @@ void wxControl::DoSetWindowVariant( wxWindowVariant variant )
     // we have a few calculations that we must fix
 
     if ( variant == wxWINDOW_VARIANT_DEFAULT )
-        variant = wxWINDOW_VARIANT_SMALL ;
+    {
+        if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
+            variant  = wxWINDOW_VARIANT_NORMAL ;
+        else
+            variant = wxWINDOW_VARIANT_SMALL ;
+    }
     
     switch ( variant )
     {
