@@ -3467,8 +3467,43 @@ void wxWindowGTK::GtkSendPaintEvents()
         return;
     }
 
+    // widget to draw on
+    GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
+            
+    // Clip to paint region in wxClientDC
     m_clipPaintRegion = TRUE;
     
+    if (GetThemeEnabled())
+    {
+        // find ancestor from which to steal background
+        wxWindow *parent = GetParent();
+        while (parent && !parent->IsTopLevel())
+            parent = parent->GetParent();
+        if (!parent)
+            parent = this;
+    
+        wxRegionIterator upd( m_updateRegion );
+        while (upd)
+        {
+            GdkRectangle rect;
+            rect.x = upd.GetX();
+            rect.y = upd.GetY();
+            rect.width = upd.GetWidth();
+            rect.height = upd.GetHeight();
+                    
+            gtk_paint_flat_box( parent->m_widget->style,
+                        pizza->bin_window,
+                        GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE,
+                        &rect,
+                        parent->m_widget,
+                        (char *)"base",
+                        0, 0, -1, -1 );
+                        
+            upd ++;
+        }
+    }
+    else
     // if (!m_clearRegion.IsEmpty())   // always send an erase event
     {
         wxWindowDC dc( (wxWindow*)this );
@@ -3481,46 +3516,16 @@ void wxWindowGTK::GtkSendPaintEvents()
         {
             if (!g_eraseGC)
             {
-                g_eraseGC = gdk_gc_new( GTK_PIZZA(m_wxwindow)->bin_window );
+                g_eraseGC = gdk_gc_new( pizza->bin_window );
                 gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
             }
             gdk_gc_set_foreground( g_eraseGC, m_backgroundColour.GetColor() );
 
-            // widget to draw on
-            GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
-            
-            // find ancestor from which to steal background
-            wxWindow *parent = GetParent();
-            while (parent && !parent->IsTopLevel())
-                parent = parent->GetParent();
-            if (!parent)
-                parent = this;
-    
             wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
-                if (GetThemeEnabled())
-                { 
-                    GdkRectangle rect;
-                    rect.x = upd.GetX();
-                    rect.y = upd.GetY();
-                    rect.width = upd.GetWidth();
-                    rect.height = upd.GetHeight();
-                    
-                    gtk_paint_flat_box( parent->m_widget->style,
-                        pizza->bin_window,
-                        GTK_STATE_NORMAL,
-                        GTK_SHADOW_NONE,
-                        &rect,
-                        parent->m_widget,
-                        (char *)"base",
-                        0, 0, -1, -1 );
-                }
-                else
-                {
-                    gdk_draw_rectangle( pizza->bin_window, g_eraseGC, 1,
-                                        upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
-                }
+                gdk_draw_rectangle( pizza->bin_window, g_eraseGC, 1,
+                                    upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
         }
@@ -3542,8 +3547,6 @@ void wxWindowGTK::GtkSendPaintEvents()
     // The following code will result in all window-less widgets
     // being redrawn because the wxWindows class is allowed to
     // paint over the window-less widgets.
-
-    GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
 
     GList *children = pizza->children;
     while (children)
@@ -3629,12 +3632,9 @@ void wxWindowGTK::GtkSetBackgroundColour( const wxColour &colour )
     // We need the pixel value e.g. for background clearing.
     m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
     
-    if ((m_wxwindow) &&
-        (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)))
+    if (m_wxwindow)
     {
-        /* wxMSW doesn't clear the window here. I don't do that either to
-          provide compatibility. call Clear() to do the job. */
-
+        // wxMSW doesn't clear the window here, either.
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
     }
 

@@ -1569,9 +1569,7 @@ void wxWindowDC::Clear()
 
     if (m_owner)
     {
-        int width,height;
-        m_owner->GetSize( &width, &height );
-        gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
+        m_owner->Clear();
         return;
     }
 

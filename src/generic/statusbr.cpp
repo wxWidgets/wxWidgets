@@ -85,6 +85,9 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
                                   wxDefaultPosition, wxDefaultSize,
                                   style | wxTAB_TRAVERSAL, name);
 
+  // The status bar should have a themed background
+  SetThemeEnabled( TRUE );
+
   // Don't wish this to be found as a child
 #ifndef __WXMAC__
   parent->GetChildren().DeleteObject(this);
@@ -127,27 +130,10 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 
     m_statusStrings[number] = text;
 
-#ifdef __WXMAC__
-    int major,minor;
-    wxGetOsVersion( &major, &minor );
-
-    if (major >= 10)
-    {
-        Refresh();
-        return;
-    }
-#endif
-
     wxRect rect;
     GetFieldRect(number, rect);
-    wxClientDC dc(this);
-
-    dc.SetBackground( wxBrush(GetBackgroundColour(), wxSOLID) );
-    dc.SetClippingRegion( rect.x+1, rect.y+1, rect.width-1, rect.height-1 );
-    dc.Clear();
-    dc.DestroyClippingRegion();
-    dc.SetFont(GetFont());
-    DrawFieldText( dc, number );
+    
+    Refresh( TRUE, &rect );
 }
 
 wxString wxStatusBarGeneric::GetStatusText(int n) const
