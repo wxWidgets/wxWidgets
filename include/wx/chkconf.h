@@ -880,7 +880,7 @@
 
 /* ODBC and Unicode are now compatible */
 
-#if 0 // wxUSE_ODBC && wxUSE_UNICODE
+#if 0 /* wxUSE_ODBC && wxUSE_UNICODE */
 #   ifdef wxABORT_ON_CONFIG_ERROR
         /* (ODBC classes aren't Unicode-compatible yet) */
 #       error "wxUSE_ODBC can't be used with wxUSE_UNICODE"
@@ -1134,7 +1134,7 @@
 #   endif
 #endif /* wxMGL */
 
-// Hopefully we can emulate these dialogs in due course
+/* Hopefully we can emulate these dialogs in due course */
 #if wxUSE_SMARTPHONE
 #   ifdef wxUSE_COLOURDLG
 #       undef wxUSE_COLOURDLG
