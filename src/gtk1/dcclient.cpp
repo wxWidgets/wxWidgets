@@ -667,6 +667,14 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                 gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
                 gdk_gc_set_stipple( gc, mask );
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
+/*                
+                gdk_gc_set_clip_mask( m_brushGC, NULL );
+                gdk_gc_set_clip_mask( m_textGC, NULL );
+                SetBrush( *wxRED_BRUSH );
+                DrawRectangle( 70, 0, 70, 1000 );
+                gdk_draw_bitmap( m_window, m_textGC, new_mask, 0, 0, 100, 5, ww, hh );
+                gdk_draw_bitmap( m_window, m_textGC, mask, 0, 0, 80, 5, ww, hh );
+*/                
                 gdk_gc_unref( gc );
             }
         

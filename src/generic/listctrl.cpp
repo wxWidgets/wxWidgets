@@ -342,6 +342,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                 if (s.IsNull()) s = "H";
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
+                if (lh < 15) lh = 15;
                 item->SetSize( item->GetWidth(), lh );
                 m_bound_all.width += lw;
                 m_bound_all.height = lh;
@@ -440,6 +441,7 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
         {
             wxCoord lw,lh;
             dc->GetTextExtent( "H", &lw, &lh );
+            if (lh < 15) lh = 15;
             m_bound_all.x = 0;
             m_bound_all.y -= 0;
             m_bound_all.height = lh+3;
@@ -456,6 +458,7 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
                 if (s.IsEmpty()) s = wxT("H");
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
+                if (lh < 15) lh = 15;
                 m_bound_label.width = lw;
                 m_bound_label.height = lh;
                 if (item->HasImage())
@@ -676,7 +679,6 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
         while (node)
         {
             wxListItemData *item = (wxListItemData*)node->Data();
-            dc->SetClippingRegion( item->GetX(), item->GetY(), item->GetWidth()-3, item->GetHeight() );
             int x = item->GetX();
             if (item->HasImage())
             {
@@ -685,9 +687,10 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
                 m_owner->GetImageSize( item->GetImage(), x, y );
                 x += item->GetX() + 5;
             }
+            dc->SetClippingRegion( item->GetX(), item->GetY(), item->GetWidth()-3, item->GetHeight() );
             if (item->HasText())
             {
-                dc->DrawText( item->GetText(), x, item->GetY() );
+                dc->DrawText( item->GetText(), x, item->GetY()+1 );
             }
             dc->DestroyClippingRegion();
             node = node->Next();
@@ -883,9 +886,9 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetPen( *wxWHITE_PEN );
 
         DoDrawRect( &dc, x, y, cw, h-2 );
-//        dc.SetClippingRegion( x, y, cw-5, h-4 );
+        dc.SetClippingRegion( x, y, cw-5, h-4 );
         dc.DrawText( item.m_text, x+4, y+3 );
-//        dc.DestroyClippingRegion();
+        dc.DestroyClippingRegion();
         x += item.m_width;
 #if wxUSE_GENERIC_LIST_EXTENSIONS
         if (dc.LogicalToDeviceX(x) > w+5) break;
