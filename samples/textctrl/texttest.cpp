@@ -188,6 +188,7 @@ protected:
                *m_textRowCur,
                *m_textColCur,
                *m_textPosLast,
+               *m_textLineLast,
                *m_textSelFrom,
                *m_textSelTo;
 
@@ -284,6 +285,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
     m_textRowCur =
     m_textColCur =
     m_textPosLast =
+    m_textLineLast =
     m_textSelFrom =
     m_textSelTo = (wxTextCtrl *)NULL;
     m_sizerText = (wxSizer *)NULL;
@@ -321,7 +323,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
                                       1, wxRA_SPECIFY_COLS);
 
     m_chkPassword = new wxCheckBox(m_panel, TextTest_Password, _T("&Password control"));
-    m_chkWrapLines = new wxCheckBox(m_panel, TextTest_WrapLines, _T("&Horz scrollbar"));
+    m_chkWrapLines = new wxCheckBox(m_panel, TextTest_WrapLines, _T("Line &wrap"));
     m_chkReadonly = new wxCheckBox(m_panel, -1, _T("&Read-only mode"));
 
     sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
@@ -354,6 +356,7 @@ TextTestFrame::TextTestFrame(const wxString& title)
     m_textPosCur = CreateInfoText();
     m_textRowCur = CreateInfoText();
     m_textColCur = CreateInfoText();
+
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
@@ -375,11 +378,14 @@ TextTestFrame::TextTestFrame(const wxString& title)
                   0, wxLEFT | wxGROW, 5);
     sizerMiddleDown->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
+    m_textLineLast = CreateInfoText();
     m_textPosLast = CreateInfoText();
     sizerMiddleDown->Add
                      (
                         CreateTextWithLabelSizer
                         (
+                          _T("Number of lines:"),
+                          m_textLineLast,
                           _T("Last position:"),
                           m_textPosLast
                         ),
@@ -602,6 +608,12 @@ void TextTestFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
 
             m_posLast = posLast;
         }
+    }
+
+    if ( m_textLineLast )
+    {
+        m_textLineLast->SetValue(
+                wxString::Format(_T("%ld"), m_text->GetNumberOfLines()));
     }
 
     if ( m_textSelFrom && m_textSelTo )
