@@ -113,7 +113,7 @@ void wxMenu::Init()
     // Create the menu (to be used as a submenu or a popup)
     //
     if ((m_hMenu =  ::WinCreateWindow( HWND_DESKTOP
-                                      ,(const wxChar*)WC_MENU
+                                      ,WC_MENU
                                       ,"Menu"
                                       ,0L
                                       ,0L
@@ -667,7 +667,6 @@ WXHMENU wxMenuBar::Create()
 {
     MENUITEM                        vItem;
     HWND                            hFrame;
-    HWND                            hMenuBar = NULLHANDLE;
 
     if (m_hMenu != 0 )
         return m_hMenu;
@@ -684,28 +683,27 @@ WXHMENU wxMenuBar::Create()
     //
     // Create an empty menu and then fill it with insertions
     //
-    if (!wxWindow::OS2Create( hFrame
-                             ,WC_MENU
-                             ,"Menu"
-                             ,MS_ACTIONBAR | WS_SYNCPAINT | WS_VISIBLE
-                             ,0L
-                             ,0L
-                             ,0L
-                             ,0L
-                             ,hFrame
-                             ,HWND_TOP
-                             ,FID_MENU
-                             ,(PVOID)NULL
-                             ,(PVOID)NULL
-                            ))
+    if ((m_hMenu =  ::WinCreateWindow( hFrame
+                                      ,WC_MENU
+                                      ,(PSZ)NULL
+                                      ,MS_ACTIONBAR | WS_SYNCPAINT | WS_VISIBLE
+                                      ,0L
+                                      ,0L
+                                      ,0L
+                                      ,0L
+                                      ,hFrame
+                                      ,HWND_TOP
+                                      ,FID_MENU
+                                      ,NULL
+                                      ,NULL
+                                     )) == 0)
     {
-        wxLogLastError("CreateMenu");
+        wxLogLastError("WinLoadMenu");
     }
     else
     {
         size_t                      nCount = GetMenuCount();
 
-        hMenuBar = GetHwnd();
         for (size_t i = 0; i < nCount; i++)
         {
             APIRET                  rc;
@@ -718,7 +716,7 @@ WXHMENU wxMenuBar::Create()
             // Set the parent and owner of the submenues to be the menubar, not the desktop
             //
             hSubMenu = m_menus[i]->m_vMenuData.hwndSubMenu;
-            if (!::WinSetParent(m_menus[i]->m_vMenuData.hwndSubMenu, hMenuBar, FALSE))
+            if (!::WinSetParent(m_menus[i]->m_vMenuData.hwndSubMenu, m_hMenu, FALSE))
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
@@ -726,7 +724,7 @@ WXHMENU wxMenuBar::Create()
                 return NULLHANDLE;
             }
 
-            if (!::WinSetOwner(m_menus[i]->m_vMenuData.hwndSubMenu, hMenuBar))
+            if (!::WinSetOwner(m_menus[i]->m_vMenuData.hwndSubMenu, m_hMenu))
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
@@ -736,7 +734,7 @@ WXHMENU wxMenuBar::Create()
 
             m_menus[i]->m_vMenuData.iPosition = i;
 
-            rc = (APIRET)::WinSendMsg(hMenuBar, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
+            rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
             if (rc == MIT_MEMERROR || rc == MIT_ERROR)
             {
                 vError = ::WinGetLastError(vHabmain);
@@ -746,7 +744,7 @@ WXHMENU wxMenuBar::Create()
             }
         }
     }
-    return hMenuBar;
+    return m_hMenu;
 } // end of wxMenuBar::Create
 
 // ---------------------------------------------------------------------------
