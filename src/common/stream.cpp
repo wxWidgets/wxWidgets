@@ -39,6 +39,7 @@
 #include "wx/stream.h"
 #include "wx/datstrm.h"
 #include "wx/objstrm.h"
+#include "wx/textfile.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -1176,15 +1177,9 @@ void wxBufferedOutputStream::SetOutputStreamBuffer(wxStreamBuffer *buffer)
 
 wxOutputStream& wxEndL(wxOutputStream& stream)
 {
-#ifdef __MSW__
-  return stream.Write("\r\n", 2);
-#else
-#ifdef __WXMAC__
-  return stream.Write("\r", 1);
-#else
-  return stream.Write("\n", 1);
-#endif
-#endif
+    static const wxChar *eol = wxTextFile::GetEOL();
+
+    return stream.Write(eol, wxStrlen(eol));
 }
 
 #endif
