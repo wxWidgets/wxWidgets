@@ -399,7 +399,7 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
         wxWindow *win = node->GetData();
         // Only refresh sub controls when it is visible 
         // and when it is in the update region.
-        if(win->IsShown() && wxRegion(rectWin).Contains(win->GetRect()) != wxOutRegion)
+        if(!win->IsKindOf(CLASSINFO(wxTopLevelWindow)) && win->IsShown() && wxRegion(rectWin).Contains(win->GetRect()) != wxOutRegion)
             win->Refresh(eraseBackground, &rectWin);
             
         node = node->GetNext();
