@@ -10,6 +10,172 @@
 
 #include "Python.h"
 
+#include <limits.h>
+#include <float.h>
+
+#ifdef __cplusplus
+#define SWIG_STATIC_INLINE static inline 
+#else
+#define SWIG_STATIC_INLINE static 
+#endif 
+
+SWIG_STATIC_INLINE long
+SPyObj_AsLong(PyObject * obj)
+{
+  return PyInt_Check(obj) ?  PyInt_AsLong(obj) : PyLong_AsLong(obj);
+}
+
+SWIG_STATIC_INLINE unsigned long
+SPyObj_AsUnsignedLong(PyObject * obj) 
+{
+  if (PyLong_Check(obj)) {
+    return PyLong_AsUnsignedLong(obj);
+  } else {
+    long i = PyInt_AsLong(obj);
+    if ( !PyErr_Occurred() && (i < 0)) {
+      PyErr_SetString(PyExc_TypeError, "negative value for unsigned type");
+    }
+    return i;
+  }
+}
+
+SWIG_STATIC_INLINE PyObject* 
+SPyObj_FromLongLong(long long value)
+{
+  return (value > (long)(LONG_MAX)) ?
+    PyLong_FromLongLong(value) : PyInt_FromLong((long)value); 
+}
+
+SWIG_STATIC_INLINE PyObject* 
+SPyObj_FromUnsignedLong(unsigned long value)
+{
+  return (value > (unsigned long)(LONG_MAX)) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
+}
+
+SWIG_STATIC_INLINE PyObject* 
+SPyObj_FromUnsignedLongLong(unsigned long long value)
+{
+  return (value > (unsigned long long)(LONG_MAX)) ?
+    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong((long)value); 
+}
+
+SWIG_STATIC_INLINE long
+SPyObj_AsLongInRange(PyObject * obj, long min_value, long max_value)
+{
+  long value = SPyObj_AsLong(obj);
+  if (!PyErr_Occurred()) {
+    if (value < min_value) {
+      PyErr_SetString(PyExc_OverflowError,"value is smaller than type minimum");
+    } else if (value > max_value) {
+      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
+    }
+  }
+  return value;
+}
+
+SWIG_STATIC_INLINE unsigned long
+SPyObj_AsUnsignedLongInRange(PyObject *obj, unsigned long max_value) 
+{
+  unsigned long value = SPyObj_AsUnsignedLong(obj);
+  if (!PyErr_Occurred()) {
+    if (value > max_value) {     
+      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
+    }
+  }
+  return value;
+}
+
+SWIG_STATIC_INLINE signed char
+SPyObj_AsSignedChar(PyObject *obj) { 
+  return SPyObj_AsLongInRange(obj, SCHAR_MIN, SCHAR_MAX);
+}
+
+SWIG_STATIC_INLINE short
+SPyObj_AsShort(PyObject *obj) { 
+  return SPyObj_AsLongInRange(obj, SHRT_MIN, SHRT_MAX);
+}
+
+SWIG_STATIC_INLINE int
+SPyObj_AsInt(PyObject *obj) { 
+  return SPyObj_AsLongInRange(obj, INT_MIN, INT_MAX);
+}
+
+SWIG_STATIC_INLINE unsigned char
+SPyObj_AsUnsignedChar(PyObject *obj) { 
+  return SPyObj_AsUnsignedLongInRange(obj, UCHAR_MAX);
+}
+
+SWIG_STATIC_INLINE unsigned short 
+SPyObj_AsUnsignedShort(PyObject *obj) { 
+  return SPyObj_AsUnsignedLongInRange(obj, USHRT_MAX);
+}
+
+SWIG_STATIC_INLINE unsigned int
+SPyObj_AsUnsignedInt(PyObject *obj) { 
+  return SPyObj_AsUnsignedLongInRange(obj, UINT_MAX);
+}
+
+SWIG_STATIC_INLINE long long
+SPyObj_AsLongLong(PyObject *obj) {
+  return PyInt_Check(obj) ?
+    PyInt_AsLong(obj) : PyLong_AsLongLong(obj);
+}
+
+SWIG_STATIC_INLINE unsigned long long
+SPyObj_AsUnsignedLongLong(PyObject *obj) {
+  return PyLong_Check(obj) ?
+    PyLong_AsUnsignedLongLong(obj) : SPyObj_AsUnsignedLong(obj);
+}
+
+SWIG_STATIC_INLINE double
+SPyObj_AsDouble(PyObject *obj) {
+  return (PyFloat_Check(obj)) ? PyFloat_AsDouble(obj) :
+    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj));
+}
+
+SWIG_STATIC_INLINE float
+SPyObj_AsFloat(PyObject *obj) {
+  double value = SPyObj_AsDouble(obj);
+  if (!PyErr_Occurred()) {
+    if (value < FLT_MIN) {
+      PyErr_SetString(PyExc_OverflowError,"float is smaller than flt_min");
+    } else if (value > FLT_MAX) {     
+      PyErr_SetString(PyExc_OverflowError,"float is greater than flt_max");
+    }
+  }
+  return (float) value;
+}
+
+SWIG_STATIC_INLINE char
+SPyObj_AsChar(PyObject *obj) { 
+  char c = (PyString_Check(obj) && PyString_Size(obj) == 1) ?
+    PyString_AsString(obj)[0] 
+    : (char) SPyObj_AsLongInRange(obj, CHAR_MIN, CHAR_MAX);
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    PyErr_SetString(PyExc_TypeError, "a char is required");
+  }
+  return c;
+}
+
+SWIG_STATIC_INLINE PyObject *
+SPyObj_FromChar(char c) { 
+  return PyString_FromStringAndSize(&c,1);
+}
+
+SWIG_STATIC_INLINE PyObject *
+SPyObj_FromCharPtr(const char* cptr) { 
+  return cptr ? PyString_FromString(cptr) : Py_BuildValue((char*)"");
+}
+ 
+SWIG_STATIC_INLINE int
+SPyObj_AsBool(PyObject *obj) {
+  return SPyObj_AsLongLong(obj) ?  1 : 0;
+}
+
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -45,7 +211,7 @@ typedef struct swig_const_info {
   SWIG_Python_NewPointerObj(p, type, flags)
 #define SWIG_MustGetPtr(p, type, argnum, flags) \
   SWIG_Python_MustGetPtr(p, type, argnum, flags)
-
+ 
 /* Python-specific SWIG API */
 #define SWIG_newvarlink() \
   SWIG_Python_newvarlink()
