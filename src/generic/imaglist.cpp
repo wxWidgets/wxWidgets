@@ -117,7 +117,7 @@ const wxBitmap *wxGenericImageList::GetBitmapPtr( int index ) const
 }
 
 // Get the bitmap
-wxBitmap wxImageList::GetBitmap(int index) const
+wxBitmap wxGenericImageList::GetBitmap(int index) const
 {
     const wxBitmap* bmp = GetBitmapPtr(index);
     if (bmp)
@@ -127,7 +127,7 @@ wxBitmap wxImageList::GetBitmap(int index) const
 }
 
 // Get the icon
-wxIcon wxImageList::GetIcon(int index) const
+wxIcon wxGenericImageList::GetIcon(int index) const
 {
     const wxBitmap* bmp = GetBitmapPtr(index);
     if (bmp)

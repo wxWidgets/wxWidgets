@@ -17,6 +17,7 @@
 
 #include "wx/defs.h"
 #include "wx/list.h"
+#include "wx/icon.h"
 
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxBitmap;
