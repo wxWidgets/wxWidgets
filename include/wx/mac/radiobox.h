@@ -21,11 +21,11 @@
 WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;
 
 // List box item
-class WXDLLEXPORT wxBitmap ;
+class  wxBitmap ;
 
-class WXDLLEXPORT wxRadioButton ;
+class  wxRadioButton ;
 
-class WXDLLEXPORT wxRadioBox: public wxControl
+class  wxRadioBox: public wxControl
 {
 	DECLARE_DYNAMIC_CLASS(wxRadioBox)
 public:
@@ -47,7 +47,7 @@ public:
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
 
 // Specific functions (in wxWindows2 reference)
-	void Enable(bool enable);
+	bool Enable(bool enable);
 	void Enable(int item, bool enable);
 	int FindString(const wxString& s) const;
 	wxString GetLabel() const;

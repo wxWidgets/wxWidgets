@@ -123,18 +123,20 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 //-------------------------------------------------------------------------------------
 // Enables or disables the entire radiobox
 
-void wxRadioBox::Enable(bool enable)
+bool wxRadioBox::Enable(bool enable)
 {
    	int i;
     wxRadioButton *current;
     
-    wxControl::Enable(enable);
+    if (!wxControl::Enable(enable))
+    	return (false);
 
     current=m_radioButtonCycle;
    	for (i=0;i<m_noItems;i++) {
     	current->Enable(enable);
     	current=current->NextInCycle();
     	}
+    return (true);
 }
 
 //-------------------------------------------------------------------------------------
@@ -155,7 +157,6 @@ void wxRadioBox::Enable(int item, bool enable)
     	i++;
     	current=current->NextInCycle();
     	}
-    return current->Enable(enable);
 }
 
 
@@ -464,7 +465,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 	totHeight = GetNumVer() * (maxHeight + charHeight/2) + charHeight*3/2;
 	totWidth  = GetNumHor() * (maxWidth + charWidth) + charWidth;
 
-	wxControl::DoSetSize(x_offset,y_offset,totWidth,totHeight);
+	wxControl::DoSetSize(x_offset,y_offset,totWidth,totHeight,wxSIZE_AUTO);
 
 // arrange radiobuttons
 
