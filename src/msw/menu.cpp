@@ -134,7 +134,7 @@ template<> void wxCollectionToVariantArray( wxMenuItemList const &theList, wxxVa
 }
 
 WX_BEGIN_PROPERTIES_TABLE(wxMenu)
-	WX_DELEGATE( OnSelect , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
+	WX_EVENT_PROPERTY( Select , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
     WX_PROPERTY( Title, wxString , SetTitle, GetTitle, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
     WX_READONLY_PROPERTY_FLAGS( MenuStyle , wxMenuStyle , long , GetStyle , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
     WX_PROPERTY_COLLECTION( MenuItems , wxMenuItemList , wxMenuItem* , Append , GetMenuItems , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

@@ -1132,11 +1132,11 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
     static wxPropertyInfo _propertyInfo##pname( first ,class_t::GetClassInfoStatic() ,  wxT(#pname) , typeid(colltype).name() ,typeid(addelemtype).name() ,&_accessor##pname , flags , help , group  ) ;
 
 
-#define WX_DELEGATE( name , eventType , eventClass ) \
+#define WX_EVENT_PROPERTY( name , eventType , eventClass ) \
     static wxDelegateTypeInfo _typeInfo##name( eventType , CLASSINFO( eventClass ) ) ; \
     static wxPropertyInfo _propertyInfo##name( first ,class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
 
-#define WX_DELEGATE_RANGE( name , eventType , lastEventType , eventClass ) \
+#define WX_EVENT_RANGE_PROPERTY( name , eventType , lastEventType , eventClass ) \
     static wxDelegateTypeInfo _typeInfo##name( eventType , lastEventType , CLASSINFO( eventClass ) ) ; \
     static wxPropertyInfo _propertyInfo##name( first , class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
 

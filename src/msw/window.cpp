@@ -287,9 +287,9 @@ WX_BEGIN_FLAGS( wxWindowStyle )
 WX_END_FLAGS( wxWindowStyle )
 
 WX_BEGIN_PROPERTIES_TABLE(wxWindow)
-	WX_DELEGATE( OnClose , wxEVT_CLOSE_WINDOW , wxCloseEvent)
-	WX_DELEGATE( OnCreate , wxEVT_CREATE , wxWindowCreateEvent )
-	WX_DELEGATE( OnDestroy , wxEVT_DESTROY , wxWindowDestroyEvent )
+	WX_EVENT_PROPERTY( Close , wxEVT_CLOSE_WINDOW , wxCloseEvent)
+	WX_EVENT_PROPERTY( Create , wxEVT_CREATE , wxWindowCreateEvent )
+	WX_EVENT_PROPERTY( Destroy , wxEVT_DESTROY , wxWindowDestroyEvent )
     // Always constructor Properties first
 
     WX_READONLY_PROPERTY( Parent,wxWindow*, GetParent,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

@@ -76,7 +76,7 @@ WX_END_FLAGS( wxChoiceStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControl,"wx/choice.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxChoice)
-	WX_DELEGATE( OnSelect , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
+	WX_EVENT_PROPERTY( Select , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
 
     WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

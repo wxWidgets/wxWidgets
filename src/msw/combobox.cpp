@@ -94,8 +94,8 @@ WX_END_FLAGS( wxComboBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl,"wx/combobox.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxComboBox)
-	WX_DELEGATE( OnSelect , wxEVT_COMMAND_COMBOBOX_SELECTED , wxCommandEvent )
-    WX_DELEGATE( OnTextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
+	WX_EVENT_PROPERTY( Select , wxEVT_COMMAND_COMBOBOX_SELECTED , wxCommandEvent )
+    WX_EVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
 
     // TODO DELEGATES
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

@@ -112,7 +112,7 @@ WX_END_FLAGS( wxCheckListBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox,"wx/checklst.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxCheckListBox)
-	WX_DELEGATE( OnToggle , wxEVT_COMMAND_CHECKLISTBOX_TOGGLED , wxCommandEvent )
+	WX_EVENT_PROPERTY( Toggle , wxEVT_COMMAND_CHECKLISTBOX_TOGGLED , wxCommandEvent )
 
     WX_PROPERTY_FLAGS( WindowStyle , wxCheckListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()

@@ -89,7 +89,7 @@ WX_END_FLAGS( wxRadioBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioBox, wxControl,"wx/radiobox.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxRadioBox)
-    WX_DELEGATE( OnSelect , wxEVT_COMMAND_RADIOBOX_SELECTED , wxCommandEvent )
+    WX_EVENT_PROPERTY( Select , wxEVT_COMMAND_RADIOBOX_SELECTED , wxCommandEvent )
     WX_PROPERTY_FLAGS( WindowStyle , wxRadioBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()
 

@@ -521,8 +521,8 @@ WX_END_FLAGS( wxTreeCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxTreeCtrl, wxControl,"wx/treectrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxTreeCtrl)
-    WX_DELEGATE( OnTextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
-    WX_DELEGATE_RANGE( OnTreeEvent , wxEVT_COMMAND_TREE_BEGIN_DRAG , wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK , wxTreeEvent )
+    WX_EVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+    WX_EVENT_RANGE_PROPERTY( TreeEvent , wxEVT_COMMAND_TREE_BEGIN_DRAG , wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK , wxTreeEvent )
     WX_PROPERTY_FLAGS( WindowStyle , wxTreeCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()
 

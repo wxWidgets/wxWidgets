@@ -169,8 +169,8 @@ WX_END_FLAGS( wxTextCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl,"wx/textctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxTextCtrl)
-    WX_DELEGATE( OnTextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
-    WX_DELEGATE( OnTextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
+    WX_EVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+    WX_EVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
 
     WX_PROPERTY( Font , wxFont , SetFont , GetFont  ,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 	WX_PROPERTY( Value , wxString , SetValue, GetValue, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))

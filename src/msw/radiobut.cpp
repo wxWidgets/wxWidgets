@@ -86,7 +86,7 @@ WX_END_FLAGS( wxRadioButtonStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioButton, wxControl,"wx/radiobut.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxRadioButton)
-	WX_DELEGATE( OnClick , wxEVT_COMMAND_RADIOBUTTON_SELECTED , wxCommandEvent )
+	WX_EVENT_PROPERTY( Click , wxEVT_COMMAND_RADIOBUTTON_SELECTED , wxCommandEvent )
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 	WX_PROPERTY( Value ,bool, SetValue, GetValue,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
