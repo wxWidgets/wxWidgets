@@ -36,154 +36,119 @@
     #include "wx/intl.h"
     #include "wx/settings.h"
     #include "wx/stattext.h"
+    #include "wx/sizer.h"
 #endif
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// wxDialogBase
+//--------------------------------------------------------------------------
 
-const long wxDialogBase::LAYOUT_X_MARGIN = 5;
-const long wxDialogBase::LAYOUT_Y_MARGIN = 5;
-
-const long wxDialogBase::MARGIN_BETWEEN_BUTTONS = 3*LAYOUT_X_MARGIN;
-
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// dialog layout functions
-// ----------------------------------------------------------------------------
-
-wxSize wxDialogBase::SplitTextMessage(const wxString& message,
-                                      wxArrayString *lines)
+wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
 {
-    wxClientDC dc(this);
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-
-    wxString curLine;
-    long height, width, heightTextMax = 0, widthTextMax = 0;
-    for ( const wxChar *pc = message; ; pc++ )
+    wxBoxSizer *box = new wxBoxSizer( wxVERTICAL );
+    
+    wxString line;
+    for (size_t pos = 0; pos < message.Len(); pos++)
     {
-        if ( *pc == _T('\n') || !*pc )
+        if (message[pos] == _T('\n'))
         {
-#if defined(__VISAGECPP__)
-// have two versions of this in wxWindowDC tp avoid function hiding
-// since there are two of these in wxDCBase, and in turn in wxDC.
-// VA cannot resolve this so:
-            dc.GetTextExtent(curLine, &width, &height, NULL, NULL, NULL, FALSE);
-#else
-            dc.GetTextExtent(curLine, &width, &height);
-#endif
-            if ( width > widthTextMax )
-                widthTextMax = width;
-            if ( height > heightTextMax )
-                heightTextMax = height;
-
-            lines->Add(curLine);
-
-            if ( !*pc )
+            if (!line.IsEmpty())
             {
-               // the end of string
-               break;
+                wxStaticText *s1 = new wxStaticText( this, -1, line );
+		box->Add( s1 );
+                line = _T("");
             }
-
-            curLine.Empty();
         }
         else
         {
-            curLine += *pc;
+            line += message[pos];
         }
     }
-
-    return wxSize(widthTextMax, heightTextMax);
+    
+    // remaining text behind last '\n'
+    if (!line.IsEmpty())
+    {
+        wxStaticText *s2 = new wxStaticText( this, -1, line );
+	box->Add( s2 );
+    }
+    
+    return box;
 }
-
-long wxDialogBase::CreateTextMessage(const wxArrayString& lines,
-                                     const wxPoint& posText,
-                                     const wxSize& sizeText)
+    
+wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 {
-    wxStaticText *text;
-    int y = posText.y;
-    size_t nLineCount = lines.GetCount();
-    for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
-    {
-        text = new wxStaticText(this, -1, lines[nLine],
-                                wxPoint(posText.x, y),
-                                sizeText);
-        y += sizeText.GetHeight();
-    }
+    wxBoxSizer *box = new wxBoxSizer( wxHORIZONTAL );
 
-    return y;
-}
-
-wxSize wxDialogBase::GetStandardButtonSize(bool hasCancel)
-{
-#if 0
-    int wButton = 0;
-    GetTextExtent(_("OK"), &wButton, NULL);
-
-    if ( hasCancel )
-    {
-        int width;
-        GetTextExtent(_("Cancel"), &width, NULL);
-        if ( width > wButton )
-            wButton = width;
-    }
-
-    if ( wButton < 75 )
-    {
-        // the minimal acceptable width
-        wButton = 75;
-    }
-    else
-    {
-        // the width of the button is not just the width of the label...
-        wButton += 2*LAYOUT_X_MARGIN;
-    }
-
-    // a nice looking proportion
-    int hButton = (wButton * 23) / 75;
-
-    return wxSize(wButton, hButton);
+#if defined(__WXMSW__) || defined(__WXMAC__)
+    int margin = 6;
 #else
-    return wxButton::GetDefaultSize();
+    int margin = 10;
 #endif
-}
 
-void wxDialogBase::CreateStandardButtons(long wDialog,
-                                         long y,
-                                         long wButton,
-                                         long hButton,
-                                         bool hasCancel)
-{
-    // NB: create [Ok] first to get the right tab order
     wxButton *ok = (wxButton *) NULL;
     wxButton *cancel = (wxButton *) NULL;
-
-    long x = wDialog / 2;
-    if ( hasCancel )
-        x -= MARGIN_BETWEEN_BUTTONS / 2 + wButton;
-    else
-        x -= wButton / 2;
-
-    ok = new wxButton( this, wxID_OK, _("OK"),
-                       wxPoint(x, y),
-                       wxSize(wButton, hButton) );
-
-    if ( hasCancel )
+    wxButton *yes = (wxButton *) NULL;
+    wxButton *no = (wxButton *) NULL;
+    
+    if (flags & wxYES_NO) 
     {
-        x += MARGIN_BETWEEN_BUTTONS + wButton;
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel"),
-                               wxPoint(x, y),
-                               wxSize(wButton, hButton) );
+        yes = new wxButton( this, wxID_YES, _("Yes") );
+        box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
+        no = new wxButton( this, wxID_NO, _("No") );
+        box->Add( no, 0, wxLEFT|wxRIGHT, margin );
+    } else 
+    if (flags & wxYES) 
+    {
+        yes = new wxButton( this, wxID_YES, _("Yes") );
+        box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
+    } else 
+    if (flags & wxNO) 
+    {
+        no = new wxButton( this, wxID_NO, _("No") );
+        box->Add( no, 0, wxLEFT|wxRIGHT, margin );
     }
 
-    ok->SetDefault();
-    ok->SetFocus();
+    if (flags & wxOK) 
+    {
+        ok = new wxButton( this, wxID_OK, _("OK") );
+        box->Add( ok, 0, wxLEFT|wxRIGHT, margin );
+    }
+
+    if (flags & wxFORWARD) 
+        box->Add( new wxButton( this, wxID_FORWARD, _("Forward")  ), 0, wxLEFT|wxRIGHT, margin ); 
+
+    if (flags & wxBACKWARD) 
+        box->Add( new wxButton( this, wxID_BACKWARD, _("Backward")  ), 0, wxLEFT|wxRIGHT, margin );
+
+    if (flags & wxSETUP) 
+        box->Add( new wxButton( this, wxID_SETUP, _("Setup")  ), 0, wxLEFT|wxRIGHT, margin );
+
+    if (flags & wxMORE) 
+        box->Add( new wxButton( this, wxID_MORE, _("More...")  ), 0, wxLEFT|wxRIGHT, margin );
+
+    if (flags & wxHELP)
+        box->Add( new wxButton( this, wxID_HELP, _("Help")  ), 0, wxLEFT|wxRIGHT, margin );
+
+    if (flags & wxCANCEL) 
+    {
+        cancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
+        box->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
+    }
+
+    if ((flags & wxNO_DEFAULT) == 0)
+    {
+        if (ok)
+        {
+            ok->SetDefault();
+            ok->SetFocus();
+        }
+        else if (yes)
+        {
+            yes->SetDefault();
+            yes->SetFocus();
+        }
+    }
+    
+    return box;
 }
 
-long wxDialogBase::GetStandardTextHeight()
-{
-    return (3*GetCharHeight()) / 2;
-}

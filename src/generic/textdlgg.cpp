@@ -37,6 +37,7 @@
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
     #include "wx/intl.h"
+    #include "wx/sizer.h"
 #endif
 
 #if wxUSE_STATLINE
@@ -77,55 +78,38 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
                             wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL),
                    m_value(value)
 {
-    // calculate the sizes
-    // -------------------
+    m_dialogStyle = style;
+    m_value = value;
 
-    wxArrayString lines;
-    wxSize sizeText = SplitTextMessage(message, &lines);
+    wxBeginBusyCursor();
+    
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-    wxSize sizeBtn = GetStandardButtonSize();
+    // 1) text message
+    topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
+    
+    // 2) text ctrl
+    m_textctrl = new wxTextCtrl(this, wxID_TEXT, value, wxDefaultPosition, wxSize(300, -1));
+    topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
 
-    long wText = wxMax(4*sizeBtn.GetWidth(), sizeText.GetWidth());
-    long hText = GetStandardTextHeight();
+#if wxUSE_STATLINE
+    // 3) static line
+    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+#endif
 
-    long wDialog = 4*LAYOUT_X_MARGIN + wText;
-    long hDialog = 2*LAYOUT_Y_MARGIN +
-                   sizeText.GetHeight() * lines.GetCount() +
-                   2*LAYOUT_Y_MARGIN +
-                   hText +
-                   2*LAYOUT_Y_MARGIN +
-                   sizeBtn.GetHeight() +
-                   2*LAYOUT_Y_MARGIN;
+    // 4) buttons
+    topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
+    
+    topsizer->SetSizeHints( this );
+    topsizer->Fit( this );
+    SetSizer( topsizer );
+    SetAutoLayout( TRUE );
 
-    // create the controls
-    // -------------------
-
-    // message
-    long x = 2*LAYOUT_X_MARGIN;
-    long y = CreateTextMessage(lines,
-                               wxPoint(x, 2*LAYOUT_Y_MARGIN),
-                               sizeText);
-
-    y += 2*LAYOUT_X_MARGIN;
-
-    // text ctrl
-    m_textctrl = new wxTextCtrl(this, wxID_TEXT, m_value,
-                                wxPoint(x, y),
-                                wxSize(wText, hText));
-    y += hText + 2*LAYOUT_X_MARGIN;
-
-    // and buttons
-    CreateStandardButtons(wDialog, y, sizeBtn.GetWidth(), sizeBtn.GetHeight());
-
-    // set the dialog size and position
-    SetClientSize(wDialog, hDialog);
-    if ( pos == wxDefaultPosition )
-    {
-        // centre the dialog if no explicit position given
-        Centre(wxBOTH | wxCENTER_FRAME);
-    }
+    Centre( wxBOTH );
 
     m_textctrl->SetFocus();
+
+    wxEndBusyCursor();
 }
 
 void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )

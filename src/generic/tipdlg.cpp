@@ -37,10 +37,10 @@
     #include "wx/dialog.h"
     #include "wx/icon.h"
     #include "wx/intl.h"
-    #include "wx/layout.h"
     #include "wx/settings.h"
     #include "wx/textctrl.h"
     #include "wx/statbmp.h"
+    #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
 #include "wx/statline.h"
@@ -164,12 +164,13 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 {
     m_tipProvider = tipProvider;
 
-    wxSize sizeBtn = GetStandardButtonSize();
-    wxLayoutConstraints *c;
-
-    // create the controls in the right order, then set the constraints
+    // 1) create all controls in tab order
+    
     wxButton *btnClose = new wxButton(this, wxID_CANCEL, _("&Close"));
+    
     m_checkbox = new wxCheckBox(this, -1, _("&Show tips at startup"));
+    m_checkbox->SetValue(showAtStartup);
+    
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next"));
 
     wxTextCtrl *text = new wxTextCtrl(this, -1, _("Did you know..."),
@@ -179,7 +180,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     text->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE));
 
     m_text = new wxTextCtrl(this, -1, _T(""),
-                            wxDefaultPosition, wxDefaultSize,
+                            wxDefaultPosition, wxSize(200, 160),
                             wxTE_MULTILINE | wxTE_READONLY | wxSUNKEN_BORDER);
     m_text->SetFont(wxFont(14, wxROMAN, wxNORMAL, wxNORMAL));
 
@@ -189,63 +190,35 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     #include "wx/generic/tip.xpm"
     wxIcon icon(tipIcon);
 #endif
-
     wxStaticBitmap *bmp = new wxStaticBitmap(this, -1, icon);
 
-    const int iconSize = icon.GetWidth();
+    // 2) put them in boxes
 
-    c = new wxLayoutConstraints;
-    c->top.SameAs(this, wxTop, 2*LAYOUT_Y_MARGIN);
-    c->left.RightOf(bmp, 2*LAYOUT_X_MARGIN);
-    c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-    c->height.Absolute(2*text->GetSize().GetHeight());
-    text->SetConstraints(c);
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    
+    wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
+    icon_text->Add( bmp, 0, wxCENTER );
+    icon_text->Add( text, 1, wxCENTER | wxLEFT, 10 );
+    topsizer->Add( icon_text, 0, wxEXPAND | wxALL, 10 );
+    
+    topsizer->Add( m_text, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
-    c = new wxLayoutConstraints;
-    c->centreY.SameAs(text, wxCentreY);
-    c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
-    c->width.Absolute(iconSize);
-    c->height.Absolute(iconSize);
-    bmp->SetConstraints(c);
-
-    c = new wxLayoutConstraints;
-    c->bottom.SameAs(this, wxBottom, 2*LAYOUT_X_MARGIN);
-    c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-    c->width.Absolute(sizeBtn.GetWidth());
-    c->height.Absolute(sizeBtn.GetHeight());
-    btnClose->SetConstraints(c);
-
-    c = new wxLayoutConstraints;
-    c->bottom.SameAs(this, wxBottom, 2*LAYOUT_X_MARGIN);
-    c->right.LeftOf(btnClose, 2*LAYOUT_X_MARGIN);
-    c->width.Absolute(sizeBtn.GetWidth());
-    c->height.Absolute(sizeBtn.GetHeight());
-    btnNext->SetConstraints(c);
-
-    c = new wxLayoutConstraints;
-    c->bottom.SameAs(this, wxBottom, 2*LAYOUT_X_MARGIN);
-    c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
-    c->width.AsIs();
-    c->height.AsIs();
-    m_checkbox->SetConstraints(c);
-    m_checkbox->SetValue(showAtStartup);
-
-    c = new wxLayoutConstraints;
-    c->top.Below(text);
-    c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
-    c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-    c->bottom.Above(btnClose, -2*LAYOUT_Y_MARGIN);
-    m_text->SetConstraints(c);
+    wxBoxSizer *bottom = new wxBoxSizer( wxHORIZONTAL );
+    bottom->Add( m_checkbox, 0, wxCENTER );
+    bottom->Add( btnNext, 0, wxCENTER | wxLEFT, 10 );
+    bottom->Add( btnClose, 0, wxCENTER | wxLEFT, 10 );
+    topsizer->Add( bottom, 0, wxALIGN_RIGHT | wxALL, 10 );
 
     SetTipText();
+    
+    SetAutoLayout(TRUE);
+    SetSizer( topsizer );
+    
+    topsizer->SetSizeHints( this );
+    topsizer->Fit( this );
 
     Centre(wxBOTH | wxCENTER_FRAME);
 
-    wxSize size(5*sizeBtn.GetWidth(), 10*sizeBtn.GetHeight());
-    SetSize(size);
-    SetSizeHints(size.x, size.y);
-
-    SetAutoLayout(TRUE);
 }
 
 // ----------------------------------------------------------------------------

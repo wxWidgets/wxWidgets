@@ -28,7 +28,7 @@
 
 class wxSizerItem;
 class wxSizer;
-class wxBox;
+class wxBoxSizer;
 
 //---------------------------------------------------------------------------
 // wxSizerItem
@@ -115,13 +115,13 @@ protected:
 };
 
 //---------------------------------------------------------------------------
-// wxBox
+// wxBoxSizer
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBox: public wxSizer
+class WXDLLEXPORT wxBoxSizer: public wxSizer
 {
 public:
-   wxBox( int orient );
+   wxBoxSizer( int orient );
    
    void RecalcSizes();
    wxSize CalcMin();

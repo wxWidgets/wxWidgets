@@ -15,7 +15,6 @@ wx_gtk_include_HEADERS = \
  checkbox.h \
  checklst.h \
  choice.h \
- choicdlg.h \
  clipbrd.h \
  colour.h \
  combobox.h \
@@ -39,7 +38,6 @@ wx_gtk_include_HEADERS = \
  mdi.h \
  menu.h \
  menuitem.h \
- msgdlg.h \
  minifram.h \
  notebook.h \
  palette.h \
@@ -57,7 +55,6 @@ wx_gtk_include_HEADERS = \
  stattext.h \
  tbargtk.h \
  textctrl.h \
- textdlg.h \
  timer.h \
  tooltip.h \
  treectrl.h \

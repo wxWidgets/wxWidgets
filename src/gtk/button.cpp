@@ -97,8 +97,17 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     GetTextExtent( m_label, &x, &y, (int*)NULL, (int*)NULL, &new_font );
 
     wxSize newSize = size;
-    if (newSize.x == -1) newSize.x = 12+x;
-    if (newSize.y == -1) newSize.y = 11+y;
+    if (newSize.x == -1)
+    {  
+        newSize.x = 12+x;
+	if (newSize.x < 80) newSize.x = 80;
+    }
+    if (newSize.y == -1)
+    {
+        newSize.y = 11+y;
+	if (newSize.x < 26) newSize.x = 26;
+    }
+	
     SetSize( newSize.x, newSize.y );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",

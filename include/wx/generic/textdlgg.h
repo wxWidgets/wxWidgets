@@ -47,6 +47,7 @@ public:
 protected:
     wxTextCtrl *m_textctrl;
     wxString    m_value;
+    int         m_dialogStyle;
 
 private:
     DECLARE_EVENT_TABLE()

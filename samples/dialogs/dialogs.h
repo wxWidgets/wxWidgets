@@ -39,7 +39,6 @@ public:
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
     void ShowTip(wxCommandEvent& event);
-    void ExtDialog(wxCommandEvent &event);
 
 #if !defined(__WXMSW__) || wxTEST_GENERIC_DIALOGS_IN_MSW
     void ChooseColourGeneric(wxCommandEvent& event);
@@ -74,7 +73,6 @@ public:
 #define DIALOGS_FILE_SAVE                   9
 #define DIALOGS_DIR_CHOOSE                  10
 #define DIALOGS_TIP                         11
-#define DIALOGS_EXT_DIALOG                  12
 #define DIALOGS_NUM_ENTRY                   13
 
 #endif

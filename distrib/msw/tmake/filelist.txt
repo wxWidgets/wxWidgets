@@ -46,17 +46,16 @@
 
 busyinfo.cpp	G
 caret.cpp	G	U
-choicdgg.cpp	G	R
+choicdgg.cpp	G
 colrdlgg.cpp	G	G
 dirdlgg.cpp	G	16
-extdlgg.cpp	G
 fontdlgg.cpp	G	G
 gridg.cpp	G
 helpxlp.cpp	G	G,R
 imaglist.cpp	G	16
 laywin.cpp	G
 listctrl.cpp	G	16
-msgdlgg.cpp	G	G,R
+msgdlgg.cpp	G	G
 notebook.cpp	G	16,R
 panelg.cpp	G
 printps.cpp	G	PS
@@ -71,7 +70,7 @@ splitter.cpp	G
 statusbr.cpp	G
 tabg.cpp	G	R
 numdlgg.cpp	G
-textdlgg.cpp	G	R
+textdlgg.cpp	G
 tipdlg.cpp	G
 treectrl.cpp	G	16
 
@@ -267,7 +266,6 @@ button.cpp	R
 checkbox.cpp	R
 checklst.cpp	R
 choice.cpp	R
-choicdlg.cpp	R
 clipbrd.cpp	R
 colour.cpp	R
 combobox.cpp	R
@@ -292,7 +290,6 @@ main.cpp	R
 mdi.cpp	R
 menu.cpp	R
 minifram.cpp	R
-msgdlg.cpp	R
 notebook.cpp	R
 palette.cpp	R
 pen.cpp	R
@@ -309,7 +306,6 @@ statline.cpp	R
 stattext.cpp	R
 tbargtk.cpp	R
 textctrl.cpp	R
-textdlg.cpp	R
 timer.cpp	R
 tooltip.cpp	R
 utilsgtk.cpp	R
@@ -434,7 +430,6 @@ dynarray.h	I	WX
 dynlib.h	I	WX
 event.h	I	WX
 expr.h	I	WX
-extdlg.h	I	WX
 ffile.h	I	WX
 file.h	I	WX
 fileconf.h	I	WX
@@ -575,7 +570,6 @@ button.h	I	GTK
 checkbox.h	I	GTK
 checklst.h	I	GTK
 choice.h	I	GTK
-choicdlg.h	I	GTK
 clipbrd.h	I	GTK
 colour.h	I	GTK
 combobox.h	I	GTK
@@ -617,7 +611,6 @@ statline.h	I	GTK
 stattext.h	I	GTK
 tbargtk.h	I	GTK
 textctrl.h	I	GTK
-textdlg.h	I	GTK
 timer.h	I	GTK
 tooltip.h	I	GTK
 treectrl.h	I	GTK

@@ -117,10 +117,10 @@ libwx_gtk_la_SOURCES = \
 \
  busyinfo.cpp \
  caret.cpp \
+ choicdgg.cpp \
  colrdlgg.cpp \
  dcpsg.cpp \
  dirdlgg.cpp \
- extdlgg.cpp \
  fontdlgg.cpp \
  gridg.cpp \
  helpext.cpp \
@@ -129,6 +129,7 @@ libwx_gtk_la_SOURCES = \
  imaglist.cpp \
  laywin.cpp \
  listctrl.cpp \
+ msgdlgg.cpp \
  numdlgg.cpp \
  panelg.cpp \
  printps.cpp \
@@ -142,6 +143,7 @@ libwx_gtk_la_SOURCES = \
  splitter.cpp \
  statusbr.cpp \
  tabg.cpp \
+ textdlgg.cpp \
  tipdlg.cpp \
  treectrl.cpp \
 \
@@ -157,7 +159,6 @@ libwx_gtk_la_SOURCES = \
  checkbox.cpp \
  checklst.cpp \
  choice.cpp \
- choicdlg.cpp \
  clipbrd.cpp \
  colour.cpp \
  combobox.cpp \
@@ -182,7 +183,6 @@ libwx_gtk_la_SOURCES = \
  mdi.cpp \
  menu.cpp \
  minifram.cpp \
- msgdlg.cpp \
  notebook.cpp \
  palette.cpp \
  pen.cpp \
@@ -199,7 +199,6 @@ libwx_gtk_la_SOURCES = \
  stattext.cpp \
  tbargtk.cpp \
  textctrl.cpp \
- textdlg.cpp \
  timer.cpp \
  tooltip.cpp \
  utilsgtk.cpp \

@@ -232,15 +232,15 @@ void wxSizer::SetDimension( int x, int y, int width, int height )
 }
 
 //---------------------------------------------------------------------------
-// wxBox
+// wxBoxSizer
 //---------------------------------------------------------------------------
 
-wxBox::wxBox( int orient )
+wxBoxSizer::wxBoxSizer( int orient )
 {
     m_orient = orient;
 }
 
-void wxBox::RecalcSizes()
+void wxBoxSizer::RecalcSizes()
 {
     if (m_children.GetCount() == 0)
     {
@@ -328,7 +328,7 @@ void wxBox::RecalcSizes()
     }
 }
 
-wxSize wxBox::CalcMin()
+wxSize wxBoxSizer::CalcMin()
 {
     if (m_children.GetCount() == 0)
         return wxSize(2,2);

@@ -28,6 +28,7 @@
     #include "wx/listbox.h"
     #include "wx/stattext.h"
     #include "wx/intl.h"
+    #include "wx/sizer.h"
 #endif
 
 #if wxUSE_STATLINE
@@ -164,9 +165,17 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
 #endif
 
+#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \
                                   wxDIALOG_MODAL |         \
                                   wxTAB_TRAVERSAL)
+#else
+#define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \
+                                  wxDIALOG_MODAL |         \
+                                  wxRESIZE_BORDER |        \
+                                  wxTAB_TRAVERSAL)
+#endif
+
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
                                            const wxString& message,
@@ -225,118 +234,46 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
 {
     m_selection = 0;
     m_clientData = NULL;
+    m_stringSelection = _T("");
 
-    // calc the message size
-    // ---------------------
+    m_dialogStyle = style;
 
-    wxArrayString lines;
-    wxSize sizeText = SplitTextMessage(message, &lines);
-    long heightTextMax = sizeText.GetHeight(),
-         widthTextMax = sizeText.GetWidth();
-    size_t nLineCount = lines.Count();
-    long hTotalMsg = heightTextMax*nLineCount;
+    wxBeginBusyCursor();
+    
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-    // calc the button size
-    // --------------------
-
-    // always create the OK button - the code below supposes we do have buttons
-    // and besides the user should have some way to close this dialog
-    wxASSERT_MSG( style & wxOK, _T("this dialog should have OK button") );
-
-    bool hasCancel = (style & wxCANCEL) != 0;
-
-    wxSize sizeButtons = GetStandardButtonSize(hasCancel);
-
-    long wButton = sizeButtons.GetWidth(),
-         hButton = sizeButtons.GetHeight();
-
-    long wTotalButtons = wButton;
-    if ( hasCancel )
-    {
-        wTotalButtons *= 2;                         // second button
-        wTotalButtons += MARGIN_BETWEEN_BUTTONS;    // margin between the 2
-    }
-
-    // listbox and stat line
-    // ---------------------
-
-    // make the listbox at least as tall as the message - otherwise it looks
-    // ugly (the lower limit of 300 for the width is arbitrary OTOH)
-    //
-    // NB: we write "n + 2" because the horiz. scrollbar also takes some place
-    long hListbox = wxMax((n + 2) * heightTextMax, hTotalMsg),
-         wListbox = wxMax(300, wxMax(wTotalButtons, widthTextMax));
-
-#if wxUSE_STATLINE
-    long hStatLine = wxStaticLine::GetDefaultSize();
-#endif
-
-    // now the complete dialog size
-    // ----------------------------
-
-    long hDialog = 2*LAYOUT_Y_MARGIN +  // top margin
-                   hTotalMsg +          // message
-                   2*LAYOUT_Y_MARGIN +  // margin between text and listbox
-                   hListbox +           // listbox
-#if wxUSE_STATLINE
-                   LAYOUT_Y_MARGIN +    // margin
-                   hStatLine +          // separator line
-#endif
-                   2*LAYOUT_Y_MARGIN +  // margin between listbox and buttons
-                   hButton +            // button(s)
-                   LAYOUT_Y_MARGIN;     // bottom margin
-
-    long wDialog = wxMax(wListbox, wxMax(wTotalButtons, widthTextMax)) +
-                   4*LAYOUT_X_MARGIN;   // 2 from each side
-
-    // create the controls
-    // -------------------
-
-    // message
-    wxStaticText *text;
-    int y = 2*LAYOUT_Y_MARGIN;
-    for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
-    {
-        text = new wxStaticText(this, -1, lines[nLine],
-                                wxPoint(2*LAYOUT_X_MARGIN, y),
-                                wxSize(widthTextMax, heightTextMax));
-        y += heightTextMax;
-    }
-
-    y += 2*LAYOUT_X_MARGIN;
-
-    // listbox
-    m_listbox = new wxListBox( this, wxID_LISTBOX,
-                               wxPoint(2*LAYOUT_X_MARGIN, y),
-                               wxSize(wListbox, hListbox),
-                               n, choices,
-                               wxLB_HSCROLL);
-    y += hListbox;
-
-    if ( clientData )
+    // 1) text message
+    topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
+    
+    // 2) list box
+    m_listbox = new wxListBox( this, wxID_LISTBOX, wxDefaultPosition, wxSize(160,100) , 
+                                        n, choices, wxLB_ALWAYS_SB );
+    m_listbox->SetSelection( m_selection );
+    if (clientData)
     {
         for (int i = 0; i < n; i++)
             m_listbox->SetClientData(i, clientData[i]);
     }
+    topsizer->Add( m_listbox, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
 
-    // separator line
 #if wxUSE_STATLINE
-    (void) new wxStaticLine( this, -1,
-                             wxPoint(2*LAYOUT_X_MARGIN, y + LAYOUT_Y_MARGIN),
-                             wxSize(wDialog - 4*LAYOUT_X_MARGIN, hStatLine) );
-
-    y += LAYOUT_Y_MARGIN + hStatLine;
+    // 3) static line
+    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
-    // buttons
+    // 4) buttons
+    topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxCENTRE | wxALL, 10 );
 
-    y += 2*LAYOUT_X_MARGIN;
-
-    CreateStandardButtons(wDialog, y, wButton, hButton, hasCancel);
-
-    SetClientSize( wDialog, hDialog );
+    topsizer->SetSizeHints( this );
+    topsizer->Fit( this );
+    SetSizer( topsizer );
+    SetAutoLayout( TRUE );
 
     Centre( wxBOTH );
+
+    m_listbox->SetFocus();
+
+    wxEndBusyCursor();
 
     return TRUE;
 }

@@ -48,35 +48,6 @@
 // this is where wxGetNumberFromUser() is declared
 #include "wx/generic/textdlgg.h"
 
-static void wxSplitMessage2( const wxString &message, wxWindow *parent, wxSizer* sizer )
-{
-    wxString line;
-    for (size_t pos = 0; pos < message.Len(); pos++)
-    {
-        if (message[pos] == _T('\n'))
-        {
-            if (!line.IsEmpty())
-            {
-                wxStaticText *s1 = new wxStaticText( parent, -1, line );
-		sizer->Add( s1 );
-                line = _T("");
-            }
-        }
-        else
-        {
-            line += message[pos];
-        }
-    }
-    
-    // remaining text behind last '\n'
-    if (!line.IsEmpty())
-    {
-        wxStaticText *s2 = new wxStaticText( parent, -1, line );
-	sizer->Add( s2 );
-    }
-}
-
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -137,15 +108,13 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
     wxBeginBusyCursor();
     
-    wxBox *topsizer = new wxBox( wxVERTICAL );
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
-    wxBox *textsizer = new wxBox( wxVERTICAL );
-    wxSplitMessage2( message, this, textsizer );
-    topsizer->Add( textsizer, 0, wxALL, 10 );
-
+    topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
+    
     // 2) prompt and text ctrl
-    wxBox *inputsizer = new wxBox( wxHORIZONTAL );
+    wxBoxSizer *inputsizer = new wxBoxSizer( wxHORIZONTAL );
     // prompt if any
     if (!prompt.IsEmpty())
         inputsizer->Add( new wxStaticText( this, -1, prompt ), 0, wxCENTER | wxLEFT, 10 );
@@ -162,26 +131,9 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
-
     // 4) buttons
-    wxBox *buttonsizer = new wxBox( wxHORIZONTAL );
-
-    wxButton *ok = (wxButton *) NULL;
-//    if (style & wxOK)
-    {
-        ok = new wxButton( this, wxID_OK, _("OK") );
-	buttonsizer->Add( ok, 0, wxLEFT|wxRIGHT, 10 );
-    }
-
-    wxButton *cancel = (wxButton *) NULL;
-//    if (style & wxCANCEL) 
-    {
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
-	buttonsizer->Add( cancel, 0, wxLEFT|wxRIGHT, 10 );
-    }
+    topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxCENTRE | wxALL, 10 );
     
-    topsizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
-
     SetSizer( topsizer );
     SetAutoLayout( TRUE );
 
@@ -189,9 +141,6 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     topsizer->Fit( this );
 
     Centre( wxBOTH );
-
-    if (ok)
-        ok->SetDefault();
 
     m_spinctrl->SetFocus();
 

@@ -58,7 +58,6 @@ wx_include_HEADERS = \
  dynlib.h \
  event.h \
  expr.h \
- extdlg.h \
  ffile.h \
  file.h \
  fileconf.h \
