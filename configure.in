@@ -1540,7 +1540,7 @@ case "${host}" in
           fi
       fi
       if test "$wxUSE_OMF" = "yes"; then
-        LDFLAGS="$LDFLAGS -Zlinker /PMTYPE:PM -Zlinker /EXEPACK"
+        LDFLAGS="$LDFLAGS -Zomf -Zlinker /PMTYPE:PM -Zlinker /EXEPACK"
       fi
       dnl (end of OS/2-only piece)
   ;;
