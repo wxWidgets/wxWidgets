@@ -433,7 +433,8 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
                 if ( tool->IsRadio() )
                 {
-                    wxToolBarToolsList::compatibility_iterator node;
+                    wxToolBarToolsList::compatibility_iterator node
+                        = wxToolBarToolsList::compatibility_iterator();
                     if ( pos ) node = m_tools.Item(pos - 1);
 
                     while ( node )
