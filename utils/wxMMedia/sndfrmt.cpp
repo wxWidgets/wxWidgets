@@ -114,6 +114,7 @@ void wxSoundDataFormat::CodecChange()
       break;
     }
   default:
+      codec->InitWith(*this);
       break;
   }
 }
@@ -150,19 +151,19 @@ bool wxSoundDataFormat::operator ==(const wxSoundDataFormat& format) const
 // ----------------------------------------------------------------------------
 
 #include "sndpcm.h"
-//#include "sndadpcm.h"
+#include "sndadpcm.h"
 //#include "sndalaw.h"
 #include "sndmulaw.h"
 
 static wxClassInfo *l_sound_formats[] = {
       NULL,
       CLASSINFO(wxSoundPcmCodec),
-      NULL, //  CLASSINFO(wxSoundAdpcmCodec),
+      CLASSINFO(wxSoundAdpcmCodec),
       NULL,
       NULL,
       NULL,
       NULL, // CLASSINFO(wxSoundAlawCodec),
-      NULL  // CLASSINFO(wxSoundMulawCodec)
+      CLASSINFO(wxSoundMulawCodec)
 };
 
 static int l_nb_formats = WXSIZEOF(l_sound_formats);

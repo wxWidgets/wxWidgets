@@ -60,8 +60,9 @@ void wxSndFileCodec::Play(wxSound& snd)
   if (m_fstate != wxSFILE_STOPPED || IsSet(wxSND_BUFLOCKED))
     return;
 
-  if (!(m_fsize = PrepareToPlay()))
-    return;
+  if (m_fstate != wxSFILE_PREPARED_TO_PLAY)
+    if (!(m_fsize = PrepareToPlay()))
+      return;
 
   m_fpos = 0;
   m_fstate = wxSFILE_PLAYING;
@@ -193,7 +194,7 @@ wxMMtime wxSndFileCodec::GetPosition()
 wxMMtime wxSndFileCodec::GetLength()
 {
   if (m_sndtime.hours == -1 && m_istream)
-    PrepareToPlay();
+    m_fsize = PrepareToPlay();
 
   return m_sndtime;
 }
@@ -202,7 +203,6 @@ bool wxSndFileCodec::TranslateBuffer(wxSndBuffer& buf)
 {
 #define TMP_BUFSIZE 10240
 
-  wxUint32 buf_size;
   wxStreamBuffer *tmp_buf;
   wxSoundCodec *codec_in, *codec_out;
   wxSoundDataFormat std_format;

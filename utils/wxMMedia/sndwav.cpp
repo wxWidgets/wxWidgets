@@ -106,6 +106,7 @@ wxUint32 wxSndWavCodec::PrepareToPlay()
   m_sndtime.seconds = sec2 % 60;
 
   wxSndFileCodec::m_mmerror = wxMMFILE_NOERROR;
+  wxSndFileCodec::m_fstate = wxSFILE_PREPARED_TO_PLAY;
 
   return riff_codec.GetChunkLength();
 }

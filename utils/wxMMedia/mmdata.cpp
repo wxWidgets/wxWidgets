@@ -23,6 +23,7 @@
 #include "sndau.h"
 #include "sndpcm.h"
 #include "sndmulaw.h"
+#include "sndadpcm.h"
 #include "vidbase.h"
 #if defined(__X__) || defined(__WXGTK__)
 #include "vidxanm.h"
@@ -50,6 +51,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSndSimpleBuffer, wxSndBuffer)
 IMPLEMENT_ABSTRACT_CLASS(wxSoundCodec, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxSoundPcmCodec, wxSoundCodec)
 IMPLEMENT_DYNAMIC_CLASS(wxSoundMulawCodec, wxSoundCodec)
+IMPLEMENT_DYNAMIC_CLASS(wxSoundAdpcmCodec, wxSoundCodec)
 
 #ifdef __UNIX__
 IMPLEMENT_DYNAMIC_CLASS(wxUssSound, wxSound)
@@ -66,7 +68,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSndAiffCodec, wxSndFileCodec)
 IMPLEMENT_ABSTRACT_CLASS(wxVideoBaseDriver, wxMMediaFile)
 IMPLEMENT_DYNAMIC_CLASS(wxVideoOutput, wxWindow)
 #if defined(__X__) || defined(__WXGTK__)
-// IMPLEMENT_DYNAMIC_CLASS(wxVideoXANIM, wxVideoBaseDriver)
+IMPLEMENT_DYNAMIC_CLASS(wxVideoXANIM, wxVideoBaseDriver)
 #endif
 #ifdef __WINDOWS__
 IMPLEMENT_DYNAMIC_CLASS(wxVideoWindows, wxVideoBaseDriver)
@@ -88,7 +90,7 @@ MMD_REGISTER_FILE("audio/x-wav", "Wav Player", wxSndWavCodec, "wav")
 MMD_REGISTER_FILE("audio/x-aiff", "Aiff Player", wxSndAiffCodec, "aif")
 MMD_REGISTER_FILE("audio/x-au", "Sun Audio File Player", wxSndAuCodec, "au")
 #if defined(__X__) || defined(__WXGTK__)
-// MMD_REGISTER_FILE("video/*", "Video Player", wxVideoXANIM, "mov")
+MMD_REGISTER_FILE("video/*", "Video Player", wxVideoXANIM, "mov")
 #else
 MMD_REGISTER_FILE("video/avi", "AVI Player", wxVideoWindows, "avi")
 #endif

@@ -86,8 +86,6 @@ wxUint32 wxSndAiffCodec::PrepareToPlay()
   char tmp_buf[5];
   wxString chunk_name;
 
-  m_istream->SeekI(0, wxFromStart);
-
   wxSndFileCodec::m_mmerror = wxMMFILE_INVALID;
 
   READ_STRING(chunk_name, 4);
@@ -127,6 +125,8 @@ wxUint32 wxSndAiffCodec::PrepareToPlay()
   wxSndFileCodec::m_mmerror = wxMMFILE_NOERROR;
 
   m_istream->SeekI(m_spos, wxFromStart);
+  wxSndFileCodec::m_fstate = wxSFILE_PREPARED_TO_PLAY;
+
   return m_slen;
 }
 

@@ -27,7 +27,9 @@ public:
   typedef enum {
     wxSFILE_STOPPED,
     wxSFILE_PLAYING,
-    wxSFILE_RECORDING
+    wxSFILE_RECORDING,
+    wxSFILE_PREPARED_TO_PLAY,
+    wxSFILE_PREPARED_TO_RECORD,
   } FileState;
 
 protected:

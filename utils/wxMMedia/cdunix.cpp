@@ -5,6 +5,7 @@
 // Created:    1997
 // Updated:    1998
 // Copyright:  (C) 1997, 1998, Guilhem Lavaux
+// CVS Id: $Id$
 // License:    wxWindows license
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef __GNUG__

@@ -162,6 +162,9 @@ bool wxUssSound::InitBuffer(wxSndBuffer *buf)
     codec->InitIO(m_ussformat);
     codec->InitMode(wxSoundCodec::DECODING);
     break;
+  case wxSND_DUPLEX:
+  case wxSND_OTHER_IO:
+    break; 
   }
   return TRUE;
 }
@@ -202,6 +205,7 @@ void *wxUssSound::Entry()
     }
     buf->HardUnlock();
     continue;
+
   sound_clean_buffer:
     buf->GetCurrentCodec()->ExitMode();
     delete node;

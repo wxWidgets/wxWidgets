@@ -25,6 +25,7 @@
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
 #ifdef __WXGTK__
+#include <gtk/gtkwidget.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
 #endif

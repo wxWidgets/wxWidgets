@@ -85,6 +85,7 @@ class wxSoundCodec : public wxObject, public wxStreamBase {
   size_t Available();
 
   void InitIO(const wxSoundDataFormat& format);
+  virtual void InitWith(const wxSoundDataFormat& format) {}
 
   inline void SetInStream(wxStreamBuffer *s)
           { m_in_sound = s; }

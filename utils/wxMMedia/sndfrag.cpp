@@ -81,8 +81,10 @@ bool wxFragmentBuffer::NotifyOutputBuffer(wxSndBuffer *buf)
     if (ptr == NULL)
       return FALSE;
     
+    // Normally, these three functions could be called only once.
     codec->SetOutStream(ptr->sndbuf);
     codec->InitIO(m_drvformat);
+    codec->InitMode(wxSoundCodec::DECODING);
     
     // Fill it up
     codec->Decode();
@@ -190,8 +192,10 @@ void wxFragmentBuffer::ClearBuffer(wxFragBufPtr *ptr)
     } else {
       codec = buf->GetCurrentCodec();
 
+      // Normally, these three functions could be called only once.
       codec->SetInStream(ptr->sndbuf);
       codec->InitIO(m_drvformat);
+      codec->InitMode(wxSoundCodec::ENCODING);
 
       // As there is an "auto-stopper" in the codec, we don't worry ...
       codec->Encode();
@@ -248,10 +252,18 @@ void wxFragmentBuffer::OnBufferFinished(wxFragBufPtr *ptr)
       buf->Clear(wxSND_BUFSTOP);
       continue;
     }
-    if (buf->GetMode() == wxSND_OUTPUT)
+    switch (buf->GetMode()) {
+    case wxSND_OUTPUT:
       ret = NotifyOutputBuffer(buf);
-    else
+      break;
+    case wxSND_INPUT:
       ret = NotifyInputBuffer(buf);
+      break;
+    case wxSND_DUPLEX:
+    case wxSND_OTHER_IO:
+      // ret = NotifyDuplexBuffer(buf);
+      break;
+    }
 
     buf->HardUnlock();
   }
