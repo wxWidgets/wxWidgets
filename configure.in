@@ -1941,7 +1941,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         fi
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm $xpm_link -lXmu -lXext -lXt -lX11"
-        TOOLKIT_VPATH="\${top_srcdir}/src/${TOOLKIT_DIR}${PATH_IFS}\${top_srcdir}/src/motif/xmcombo"
+        TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
