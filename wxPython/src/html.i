@@ -180,13 +180,13 @@ public:
 
 class wxHtmlWinParser : public wxHtmlParser {
 public:
-    wxHtmlWinParser(wxHtmlWindow *wnd = NULL);
+    wxHtmlWinParser(wxPyHtmlWindow *wnd = NULL);
 
     void SetDC(wxDC *dc);
     wxDC* GetDC();
     int GetCharHeight();
     int GetCharWidth();
-    wxHtmlWindow* GetWindow();
+    wxPyHtmlWindow* GetWindow();
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     %addmethods {
         void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes=NULL) {
