@@ -22,12 +22,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-// Get size of display
-size_t wxDisplayBase::GetCount()
-{
-    return 1;
-}
-
 void wxDisplaySize(int *width, int *height)
 {
     // TODO

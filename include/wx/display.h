@@ -111,6 +111,8 @@ protected:
     #include "wx/unix/displayx11.h"
 #elif defined(__WXX11__)
     #include "wx/unix/displayx11.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/display.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/display.h"
 #elif defined(__WXPM__)
