@@ -142,3 +142,28 @@ PURE;
  #define MoveMemory RtlMoveMemory
  #define CopyMemory RtlCopyMemory
 
+--- i386-mingw32\include\winsock.h Sat Jul 31 17:48:50 1999
++++ winsock.h   Mon Mar 20 13:47:12 2000
+@@ -13,6 +13,10 @@
+ #define _GNU_H_WINDOWS32_SOCKETS
+ #include <windows.h>
+
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+ #ifndef _SYS_TYPES_H
+ typedef unsigned char  u_char;
+ typedef unsigned short u_short;
+@@ -495,4 +499,9 @@
+ typedef struct timeval TIMEVAL;
+ typedef struct timeval *PTIMEVAL;
+ typedef struct timeval *LPTIMEVAL;
++
++#ifdef __cplusplus
++}
+ #endif
++#endif
++
+
+
