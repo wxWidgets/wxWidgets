@@ -439,7 +439,7 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 class WXDLLEXPORT wxStreamToTextRedirector
 {
 private:
-    void Init()
+    void Init(wxTextCtrl *text)
     {
         m_sbufOld = m_ostr.rdbuf();
         m_ostr.rdbuf(text);
@@ -449,13 +449,13 @@ public:
     wxStreamToTextRedirector(wxTextCtrl *text)
         : m_ostr(wxSTD cout)
     {
-        Init();
+        Init(text);
     }
 
     wxStreamToTextRedirector(wxTextCtrl *text, wxSTD ostream *ostr)
         : m_ostr(*ostr)
     {
-        Init();
+        Init(text);
     }
 
     ~wxStreamToTextRedirector()

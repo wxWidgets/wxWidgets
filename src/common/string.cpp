@@ -100,6 +100,8 @@ extern const wxChar WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dummy;
 //
 // ATTN: you can _not_ use both of these in the same program!
 
+#include <iostream>
+
 wxSTD istream& operator>>(wxSTD istream& is, wxString& WXUNUSED(str))
 {
 #if 0
