@@ -1,25 +1,57 @@
 #!/bin/sh
 
-# Generic configuration variables:
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-exec_prefix_set=no
+# -------------------------------------------------------------------------
+#                              Configured settings:
+# -------------------------------------------------------------------------
+
+# Version and build type information:
+
+WX_MAJOR_VERSION_NUMBER="@WX_MAJOR_VERSION_NUMBER@"
+WX_MINOR_VERSION_NUMBER="@WX_MINOR_VERSION_NUMBER@"
+WX_RELEASE_NUMBER="@WX_RELEASE_NUMBER@"
+release="@WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@"
+is_monolithic="@MONOLITHIC@"
+cross_compiling="@cross_compiling@"
+target="@host_alias@"
+static_flag="@STATIC_FLAG@"
+
+
+# Misc configuration variables:
+
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+includedir="@includedir@"
+libdir="@libdir@"
 CC="@CC@"
 GCC="@GCC@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
-srcdir=@top_srcdir@
-builddir=@top_builddir_wxconfig@
-cross_compiling=@cross_compiling@
-target=@host_alias@
-static_flag=@STATIC_FLAG@
-basename_nogui=@WX_LIBRARY_BASENAME_NOGUI@
-basename_gui=@WX_LIBRARY_BASENAME_GUI@
-release=@WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@
-is_monolithic=@MONOLITHIC@
+srcdir="@top_srcdir@"
+builddir="@top_builddir_wxconfig@"
+basename_nogui="@WX_LIBRARY_BASENAME_NOGUI@"
+basename_gui="@WX_LIBRARY_BASENAME_GUI@"
+
+TOOLCHAIN_NAME="@TOOLCHAIN_NAME@"
+LDFLAGS="@LDFLAGS@"
+WXCONFIG_RPATH="@WXCONFIG_RPATH@"
+DMALLOC_LIBS="@DMALLOC_LIBS@"
+WXCONFIG_LIBS="@WXCONFIG_LIBS@"
+WXCONFIG_LIBS_STATIC="@WXCONFIG_LIBS_STATIC@"
+WXDEBUG_DEFINE="@WXDEBUG_DEFINE@"
+TOOLCHAIN_DEFS="@TOOLCHAIN_DEFS@"
+TOOLCHAIN_DLL_DEFS="@TOOLCHAIN_DLL_DEFS@"
+WXCONFIG_INCLUDE="@WXCONFIG_INCLUDE@"
+WX_LARGEFILE_FLAGS="@WX_LARGEFILE_FLAGS@"
+CODE_GEN_FLAGS="@CODE_GEN_FLAGS@"
+CODE_GEN_FLAGS_CXX="@CODE_GEN_FLAGS_CXX@"
+LDFLAGS_EXE="@LDFLAGS_EXE@"
+MACRESWXCONFIG="@MACRESWXCONFIG@"
+EXTRALIBS_GUI="@EXTRALIBS_GUI@"
+LIBS="@LIBS@"
 
 
 # Linker flags for sublibraries:
+
 CORE_BASE_LIBS="xml net base"
 CORE_GUI_LIBS="html core"
 
@@ -30,6 +62,13 @@ ldlibs_xml="@EXTRALIBS_XML@"
 ldflags_gl="@LDFLAGS_GL@"
 ldlibs_gl="@OPENGL_LIBS@"
 
+
+
+# -------------------------------------------------------------------------
+#                                Script code:
+# -------------------------------------------------------------------------
+
+exec_prefix_set=no
 
 # is $1 among the rest of arguments?
 isinlist()
@@ -71,7 +110,7 @@ output_libs()
 
         all_ldflags="$all_ldflags $xflags"
         if test $static_flag = yes ; then
-            wxlibs="$wxlibs @libdir@/lib${libname}-${release}${target_tag}.a"
+            wxlibs="$wxlibs ${libdir}/lib${libname}-${release}${target_tag}.a"
             all_libs="$all_libs $xlibs"
         else
             wxlibs="$wxlibs -l${libname}-${release}${target_tag}"
@@ -153,22 +192,22 @@ cppflags()
     # versa, i.e. this won't work (either for --cflags or --cxxflags) if GNU C
     # compiler and non-GNU C++ compiler are used or vice versa -- we'll fix
     # this when/if anybody complains about it
-    if test "@includedir@" != "/usr/include" \
-            -a "@includedir@" != "/usr/include/c++" \
+    if test "${includedir}" != "/usr/include" \
+            -a "${includedir}" != "/usr/include/c++" \
             -a \( "${GCC}" != "yes" \
-                  -o "@includedir@" != "/usr/local/include" \) \
+                  -o "${includedir}" != "/usr/local/include" \) \
             -a \( "${cross_compiling}" != "yes" \
-                  -o "@includedir@" != "/usr/${target}/include" \) ;
+                  -o "${includedir}" != "/usr/${target}/include" \) ;
     then
-        includes=" -I@includedir@"
+        includes=" -I${includedir}"
     fi
 
-    includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@$includes"
+    includes="-I${libdir}/wx/include/${TOOLCHAIN_NAME}$includes"
 
     if test $static_flag = yes ; then
-        echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@ @WX_LARGEFILE_FLAGS@
+        echo $includes ${WXDEBUG_DEFINE} ${TOOLCHAIN_DEFS} ${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS}
     else
-        echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @TOOLCHAIN_DLL_DEFS@ @WXCONFIG_INCLUDE@ @WX_LARGEFILE_FLAGS@
+        echo $includes ${WXDEBUG_DEFINE} ${TOOLCHAIN_DEFS} ${TOOLCHAIN_DLL_DEFS} ${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS}
     fi
 }
 
@@ -205,7 +244,7 @@ while test $# -gt 0; do
       echo $exec_prefix
       ;;
     --version)
-      echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
+      echo ${WX_MAJOR_VERSION_NUMBER}.${WX_MINOR_VERSION_NUMBER}.${WX_RELEASE_NUMBER}
       ;;
     --release)
       echo $release
@@ -220,16 +259,16 @@ while test $# -gt 0; do
       cppflags
       ;;
     --cflags)
-      echo `cppflags` @CODE_GEN_FLAGS@
+      echo `cppflags` ${CODE_GEN_FLAGS}
       ;;
     --cxxflags)
-      echo `cppflags` @CODE_GEN_FLAGS@ @CODE_GEN_FLAGS_CXX@
+      echo `cppflags` ${CODE_GEN_FLAGS} ${CODE_GEN_FLAGS_CXX}
       ;;
     --ldflags)
-      echo @LDFLAGS_EXE@
+      echo ${LDFLAGS_EXE}
       ;;
     --rezflags)
-      echo @MACRESWXCONFIG@
+      echo ${MACRESWXCONFIG}
       ;;
 
     --libs*)
@@ -246,11 +285,11 @@ while test $# -gt 0; do
       fi
 
       # include install directory only if it is not default:
-      if test "@libdir@" != "/usr/lib" \
+      if test "${libdir}" != "/usr/lib" \
               -a \( "${cross_compiling}" != "yes" \
-                    -o "@libdir@" != "/usr/${target}/lib" \) ;
+                    -o "${libdir}" != "/usr/${target}/lib" \) ;
       then
-          libs="-L@libdir@"
+          libs="-L${libdir}"
       fi
 
       # in monolithic build, link against the main library:
@@ -269,14 +308,14 @@ while test $# -gt 0; do
           # output link flags:
           contrib_libs=`output_libs $libs_list`
           if test $static_flag = yes ; then
-              echo "$libs @LDFLAGS@ @WXCONFIG_RPATH@ $contrib_libs @libdir@/@WXCONFIG_LIBS_STATIC@ @EXTRALIBS_GUI@ @LIBS@ @DMALLOC_LIBS@"
+              echo "$libs ${LDFLAGS} ${WXCONFIG_RPATH} $contrib_libs ${libdir}/${WXCONFIG_LIBS_STATIC} ${EXTRALIBS_GUI} ${LIBS} ${DMALLOC_LIBS}"
           else
-              echo $libs @LDFLAGS@ @WXCONFIG_RPATH@ $contrib_libs @WXCONFIG_LIBS@ @DMALLOC_LIBS@
+              echo $libs ${LDFLAGS} ${WXCONFIG_RPATH} $contrib_libs ${WXCONFIG_LIBS} ${DMALLOC_LIBS}
           fi
       else
           # in multilib mode, link against all sublibraries:
           wxlibs=`output_libs $libs_list`
-          echo $libs @LDFLAGS@ @WXCONFIG_RPATH@ $wxlibs @DMALLOC_LIBS@
+          echo $libs ${LDFLAGS} ${WXCONFIG_RPATH} $wxlibs ${DMALLOC_LIBS}
       fi
 
       ;;
