@@ -375,16 +375,17 @@ escaping for the values of entries stored in the config file: for example
 a {\it foo} key with some backslash characters will be stored as {\tt foo=C:$\backslash$mydir} instead
 of the usual storage of {\tt foo=C:$\backslash\backslash$mydir}.
 
-\docparam{conv}{This parameter is only used by wxFileConfig when compiled
-in Unicode mode. It specifies the encoding in what the configuration file
-is written.}
-
 The wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style can be helpful if your config 
 file must be read or written to by a non-wxWindows program (which might not 
 understand the escape characters). Note, however, that if 
 wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style is used, it is is now 
 your application's responsibility to ensure that there is no newline or 
 other illegal characters in a value, before writing that value to the file.}
+
+\docparam{conv}{This parameter is only used by wxFileConfig when compiled
+in Unicode mode. It specifies the encoding in what the configuration file
+is written.}
+
 
 \wxheading{Remarks}
 
