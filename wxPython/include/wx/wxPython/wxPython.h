@@ -38,21 +38,22 @@ static void wxPyCoreAPI_IMPORT() {
 // via the API pointer retrieved above.
 
 
-#define SWIG_TypeRegister(a)                    (wxPyCoreAPIPtr->p_SWIG_TypeRegister(a))
-#define SWIG_TypeCheck(a,b)                     (wxPyCoreAPIPtr->p_SWIG_TypeCheck(a,b))
-#define SWIG_TypeCast(a,b)                      (wxPyCoreAPIPtr->p_SWIG_TypeCast(a,b))
-#define SWIG_TypeDynamicCast(a,b)               (wxPyCoreAPIPtr->p_SWIG_TypeDynamicCast(a,b))
-#define SWIG_TypeName(a)                        (wxPyCoreAPIPtr->p_SWIG_TypeName(a))
-#define SWIG_TypeQuery(a)                       (wxPyCoreAPIPtr->p_SWIG_TypeQuery(a))
-#define SWIG_TypeClientData(a,b)                (wxPyCoreAPIPtr->p_SWIG_TypeClientData(a,b))
-#define SWIG_addvarlink(a,b,c,d)                (wxPyCoreAPIPtr->p_SWIG_addvarlink(a,b,c,d))
-#define SWIG_ConvertPtr(a,b,c,d)                (wxPyCoreAPIPtr->p_SWIG_ConvertPtr(a,b,c,d))
-#define SWIG_ConvertPacked(a,b,c,d,e)           (wxPyCoreAPIPtr->p_SWIG_ConvertPacked(a,b,c,d,e))
-#define SWIG_PackData(a,b,c)                    (wxPyCoreAPIPtr->p_SWIG_PackData(a,b,c))
-#define SWIG_UnpackData(a,b,c)                  (wxPyCoreAPIPtr->p_SWIG_UnpackData(a,b,c))
-#define SWIG_NewPointerObj(a,b,c)               (wxPyCoreAPIPtr->p_SWIG_NewPointerObj(a,b,c))
-#define SWIG_NewPackedObj(a,b,c)                (wxPyCoreAPIPtr->p_SWIG_NewPackedObj(a,b,c))
-#define SWIG_InstallConstants(a,b)              (wxPyCoreAPIPtr->p_SWIG_InstallConstants(a,b))
+#define SWIG_Python_TypeRegister(a)             (wxPyCoreAPIPtr->p_SWIG_Python_TypeRegister(a))
+#define SWIG_Python_TypeCheck(a,b)              (wxPyCoreAPIPtr->p_SWIG_Python_TypeCheck(a,b))
+#define SWIG_Python_TypeCast(a,b)               (wxPyCoreAPIPtr->p_SWIG_Python_TypeCast(a,b))
+#define SWIG_Python_TypeDynamicCast(a,b)        (wxPyCoreAPIPtr->p_SWIG_Python_TypeDynamicCast(a,b))
+#define SWIG_Python_TypeName(a)                 (wxPyCoreAPIPtr->p_SWIG_Python_TypeName(a))
+#define SWIG_Python_TypeQuery(a)                (wxPyCoreAPIPtr->p_SWIG_Python_TypeQuery(a))
+#define SWIG_Python_TypeClientData(a,b)         (wxPyCoreAPIPtr->p_SWIG_Python_TypeClientData(a,b))
+#define SWIG_Python_addvarlink(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_Python_addvarlink(a,b,c,d))
+#define SWIG_Python_ConvertPtr(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_Python_ConvertPtr(a,b,c,d))
+#define SWIG_Python_ConvertPacked(a,b,c,d,e)    (wxPyCoreAPIPtr->p_SWIG_Python_ConvertPacked(a,b,c,d,e))
+#define SWIG_Python_PackData(a,b,c)             (wxPyCoreAPIPtr->p_SWIG_Python_PackData(a,b,c))
+#define SWIG_Python_UnpackData(a,b,c)           (wxPyCoreAPIPtr->p_SWIG_Python_UnpackData(a,b,c))
+#define SWIG_Python_NewPointerObj(a,b,c)        (wxPyCoreAPIPtr->p_SWIG_Python_NewPointerObj(a,b,c))
+#define SWIG_Python_NewPackedObj(a,b,c)         (wxPyCoreAPIPtr->p_SWIG_Python_NewPackedObj(a,b,c))
+#define SWIG_Python_InstallConstants(a,b)       (wxPyCoreAPIPtr->p_SWIG_Python_InstallConstants(a,b))
+#define SWIG_Python_MustGetPtr(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_Python_MustGetPtr(a,b,c,d))
 
 #define wxPyCheckSwigType(a)                    (wxPyCoreAPIPtr->p_wxPyCheckSwigType(a))
 #define wxPyConstructObject(a,b,c)              (wxPyCoreAPIPtr->p_wxPyConstructObject(a,b,c))
@@ -121,7 +122,7 @@ static void wxPyCoreAPI_IMPORT() {
 
 // This one is special.  It's the first function called in SWIG generated
 // modules, so we'll use it to also import the API.
-#define SWIG_newvarlink()     (wxPyCoreAPI_IMPORT(), wxPyCoreAPIPtr->p_SWIG_newvarlink())
+#define SWIG_Python_newvarlink()     (wxPyCoreAPI_IMPORT(), wxPyCoreAPIPtr->p_SWIG_Python_newvarlink())
 
 
 //----------------------------------------------------------------------
