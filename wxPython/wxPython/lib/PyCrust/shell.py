@@ -25,10 +25,16 @@ if wxPlatform == '__WXMSW__':
               'helv'   : 'Lucida Console',
               'lucida' : 'Lucida Console',
               'other'  : 'Comic Sans MS',
-              'size'   : 8,
-              'lnsize' : 7,
+              'size'   : 10,
+              'lnsize' : 9,
               'backcol': '#FFFFFF',
             }
+    # Versions of wxPython prior to 2.3.2 had a sizing bug on Win platform.
+    # The font was 2 points too large. So we need to reduce the font size.
+    if ((wxMAJOR_VERSION, wxMINOR_VERSION) == (2, 3) and wxRELEASE_NUMBER < 2) \
+    or (wxMAJOR_VERSION <= 2 and wxMINOR_VERSION <= 2):
+        faces['size'] -= 2
+        faces['lnsize'] -= 2
 else:  # GTK
     faces = { 'times'  : 'Times',
               'mono'   : 'Courier',
@@ -40,12 +46,68 @@ else:  # GTK
             }
 
 
+class ShellFacade:
+    """Simplified interface to all shell-related functionality.
+
+    This is a semi-transparent facade, in that all attributes of other are
+    still accessible, even though only some are visible to the user."""
+
+    name = 'PyCrust Shell Interface'
+    revision = __version__
+
+    def __init__(self, other):
+        """Create a ShellFacade instance."""
+        methods = ['ask',
+                   'clear',
+                   'pause',
+                   'prompt',
+                   'quit',
+                   'redirectStderr',
+                   'redirectStdin',
+                   'redirectStdout',
+                   'run',
+                   'runfile',
+                  ]
+        for method in methods:
+            self.__dict__[method] = getattr(other, method)
+        d = self.__dict__
+        d['other'] = other
+        d['help'] = 'There is no help available, yet.'
+
+
+    def __getattr__(self, name):
+        if hasattr(self.other, name):
+            return getattr(self.other, name)
+        else:
+            raise AttributeError, name
+
+    def __setattr__(self, name, value):
+        if self.__dict__.has_key(name):
+            self.__dict__[name] = value
+        elif hasattr(self.other, name):
+            return setattr(self.other, name, value)
+        else:
+            raise AttributeError, name
+
+    def _getAttributeNames(self):
+        """Return list of magic attributes to extend introspection."""
+        list = ['autoCallTip',
+                'autoComplete',
+                'autoCompleteCaseInsensitive',
+                'autoCompleteIncludeDouble',
+                'autoCompleteIncludeMagic',
+                'autoCompleteIncludeSingle',
+               ]
+        list.sort()
+        return list
+
+
 class Shell(wxStyledTextCtrl):
     """PyCrust Shell based on wxStyledTextCtrl."""
-    
+
     name = 'PyCrust Shell'
     revision = __version__
-    
+
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxCLIP_CHILDREN, introText='', \
                  locals=None, InterpClass=None, *args, **kwds):
@@ -63,7 +125,7 @@ class Shell(wxStyledTextCtrl):
         else:
             Interpreter = InterpClass
         # Create default locals so we have something interesting.
-        shellLocals = {'__name__': 'PyShell', 
+        shellLocals = {'__name__': 'PyShell',
                        '__doc__': 'PyShell, The PyCrust Python Shell.',
                        '__version__': VERSION,
                       }
@@ -78,26 +140,18 @@ class Shell(wxStyledTextCtrl):
                                   *args, **kwds)
         # Keep track of the most recent prompt starting and ending positions.
         self.promptPos = [0, 0]
+        # Keep track of the most recent non-continuation prompt.
+        self.prompt1Pos = [0, 0]
         # Keep track of multi-line commands.
         self.more = 0
         # Create the command history.  Commands are added into the front of
-        # the list (ie. at index 0) as they are entered.  self.historyPos is
-        # the current position in the history; it gets incremented as you
-        # retrieve the previous command, decremented as you retrieve the next,
-        # and reset when you hit Enter. self.historyPos == -1 means you're on
-        # the current command, not in the history. self.tempCommand is
-        # storage space for whatever was on the last line when you first hit
-        # "Retrieve-Previous", so that the final "Retrieve-Next" will restore
-        # whatever was originally there.  self.lastCommandRecalled remembers
-        # the index of the last command to be recalled from the history, so
-        # you can repeat a group of commands by going up-up-up-enter to find
-        # the first one in the group then down-enter-down-enter to recall each
-        # subsequent command.  Also useful for multiline commands, in lieu of
-        # a proper implementation of those.
+        # the list (ie. at index 0) as they are entered. self.historyIndex
+        # is the current position in the history; it gets incremented as you
+        # retrieve the previous command, decremented as you retrieve the
+        # next, and reset when you hit Enter. self.historyIndex == -1 means
+        # you're on the current command, not in the history.
         self.history = []
-        self.historyPos = -1
-        self.tempCommand = ''
-        self.lastCommandRecalled = -1
+        self.historyIndex = -1
         # Assign handlers for keyboard events.
         EVT_KEY_DOWN(self, self.OnKeyDown)
         EVT_CHAR(self, self.OnChar)
@@ -119,12 +173,12 @@ class Shell(wxStyledTextCtrl):
 
     def destroy(self):
         del self.interp
-        
+
     def config(self):
         """Configure shell based on user preferences."""
         self.SetMarginType(1, wxSTC_MARGIN_NUMBER)
         self.SetMarginWidth(1, 40)
-        
+
         self.SetLexer(wxSTC_LEX_PYTHON)
         self.SetKeyWords(0, ' '.join(keyword.kwlist))
 
@@ -152,11 +206,11 @@ class Shell(wxStyledTextCtrl):
             self.write(self.interp.introText)
         except AttributeError:
             pass
-    
+
     def setBuiltinKeywords(self):
         """Create pseudo keywords as part of builtins.
-        
-        This is a rather clever hack that sets "close", "exit" and "quit" 
+
+        This is a rather clever hack that sets "close", "exit" and "quit"
         to a PseudoKeyword object so that we can make them do what we want.
         In this case what we want is to call our self.quit() method.
         The user can type "close", "exit" or "quit" without the final parens.
@@ -173,19 +227,19 @@ class Shell(wxStyledTextCtrl):
 
     def quit(self):
         """Quit the application."""
-        
+
         # XXX Good enough for now but later we want to send a close event.
-        
-        # In the close event handler we can prompt to make sure they want to quit.
+
+        # In the close event handler we can make sure they want to quit.
         # Other applications, like PythonCard, may choose to hide rather than
         # quit so we should just post the event and let the surrounding app
         # decide what it wants to do.
         self.write('Click on the close button to leave the application.')
-    
+
     def setLocalShell(self):
-        """Add 'shell' to locals."""
-        self.interp.locals['shell'] = self
-    
+        """Add 'shell' to locals as reference to ShellFacade instance."""
+        self.interp.locals['shell'] = ShellFacade(other=self)
+
     def execStartupScript(self, startupScript):
         """Execute the user's PYTHONSTARTUP script if they have one."""
         if startupScript and os.path.isfile(startupScript):
@@ -194,10 +248,10 @@ class Shell(wxStyledTextCtrl):
                       (`startupText`, `startupScript`))
         else:
             self.push('')
-            
+
     def setStyles(self, faces):
         """Configure font size, typeface and color for lexer."""
-        
+
         # Default style
         self.StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d" % faces)
 
@@ -225,90 +279,57 @@ class Shell(wxStyledTextCtrl):
         self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
         self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
 
+    def OnChar(self, event):
+        """Keypress event handler.
+
+        Prevents modification of previously submitted commands/responses."""
+        key = event.KeyCode()
+        currpos = self.GetCurrentPos()
+        if currpos < self.prompt1Pos[1]:
+            wxBell()
+            return
+        stoppos = self.promptPos[1]
+        if key == ord('.'):
+            # The dot or period key activates auto completion.
+            # Get the command between the prompt and the cursor.
+            # Add a dot to the end of the command.
+            command = self.GetTextRange(stoppos, currpos) + '.'
+            self.write('.')
+            if self.autoComplete: self.autoCompleteShow(command)
+        elif key == ord('('):
+            # The left paren activates a call tip and cancels
+            # an active auto completion.
+            if self.AutoCompActive(): self.AutoCompCancel()
+            # Get the command between the prompt and the cursor.
+            # Add the '(' to the end of the command.
+            command = self.GetTextRange(stoppos, currpos) + '('
+            self.write('(')
+            if self.autoCallTip: self.autoCallTipShow(command)
+        else:
+            # Allow the normal event handling to take place.
+            event.Skip()
+
     def OnKeyDown(self, event):
         """Key down event handler.
-        
-        The main goal here is to not allow modifications to previous 
-        lines of text."""
+
+        Prevents modification of previously submitted commands/responses."""
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
         stoppos = self.promptPos[1]
         # If the auto-complete window is up let it do its thing.
         if self.AutoCompActive():
             event.Skip()
-        # Control+UpArrow steps up through the history.
-        elif key == WXK_UP and event.ControlDown() \
-        and self.historyPos < len(self.history) - 1:
-            # Move to the end of the buffer.
-            endpos = self.GetTextLength()
-            self.SetCurrentPos(endpos)
-            # The first Control+Up stores the current command;
-            # Control+Down brings it back.
-            if self.historyPos == -1:
-                self.tempCommand = self.getCommand()
-            # Now replace the current line with the next one from the history.
-            self.historyPos = self.historyPos + 1
-            self.SetSelection(stoppos, endpos)
-            self.ReplaceSelection(self.history[self.historyPos])
-        # Control+DownArrow steps down through the history.
-        elif key == WXK_DOWN and event.ControlDown():
-            # Move to the end of the buffer.
-            endpos = self.GetTextLength()
-            self.SetCurrentPos(endpos)
-            # Are we at the bottom end of the history?
-            if self.historyPos == -1:
-                # Do we have a lastCommandRecalled stored?
-                if self.lastCommandRecalled >= 0:
-                    # Replace the current line with the command after the
-                    # last-recalled command (you'd think there should be a +1
-                    # here but there isn't because the history was shuffled up
-                    # by 1 after the previous command was recalled).
-                    self.SetSelection(stoppos, endpos)
-                    self.ReplaceSelection(self.history[self.lastCommandRecalled])
-                    # We've now warped into middle of the history.
-                    self.historyPos = self.lastCommandRecalled
-                    self.lastCommandRecalled = -1
-            else:
-                # Fetch either the previous line from the history, or the saved
-                # command if we're back at the start.
-                self.historyPos = self.historyPos - 1
-                if self.historyPos == -1:
-                    newText = self.tempCommand
-                else:
-                    newText = self.history[self.historyPos]
-                # Replace the current line with the new text.
-                self.SetSelection(stoppos, endpos)
-                self.ReplaceSelection(newText)
-        # F8 on the last line does a search up the history for the text in
-        # front of the cursor.
-        elif key == WXK_F8 and self.GetCurrentLine() == self.GetLineCount()-1:
-            tempCommand = self.getCommand()
-            # The first F8 saves the current command, just like Control+Up.
-            if self.historyPos == -1:
-                self.tempCommand = tempCommand
-            # The text up to the cursor is what we search for.
-            searchText = tempCommand
-            numCharsAfterCursor = self.GetTextLength() - self.GetCurrentPos()
-            if numCharsAfterCursor > 0:
-                searchText = searchText[:-numCharsAfterCursor]
-            # Search upwards from the current history position and loop back
-            # to the beginning if we don't find anything.
-            for i in range(self.historyPos+1, len(self.history)) + \
-                     range(self.historyPos):
-                command = self.history[i]
-                if command[:len(searchText)] == searchText:
-                    # Replace the current line with the one we've found.
-                    endpos = self.GetTextLength()
-                    self.SetSelection(stoppos, endpos)
-                    self.ReplaceSelection(command)
-                    # Put the cursor back at the end of the search text.
-                    pos = self.GetTextLength() - len(command) + len(searchText)
-                    self.SetCurrentPos(pos)
-                    self.SetAnchor(pos)
-                    # We've now warped into middle of the history.
-                    self.historyPos = i
-                    self.lastCommandRecalled = -1
-                    break
+        # Retrieve the previous command from the history buffer.
+        elif (event.ControlDown() and key == WXK_UP) \
+        or (event.AltDown() and key in (ord('P'), ord('p'))):
+            self.OnHistoryRetrieve(step=+1)
+        # Retrieve the next command from the history buffer.
+        elif (event.ControlDown() and key == WXK_DOWN) \
+        or (event.AltDown() and key in (ord('N'), ord('n'))):
+            self.OnHistoryRetrieve(step=-1)
+        # Search up the history for the text in front of the cursor.
+        elif key == WXK_F8:
+            self.OnHistorySearch()
         # Return is used to submit a command to the interpreter.
         elif key == WXK_RETURN:
             if self.CallTipActive: self.CallTipCancel()
@@ -316,8 +337,12 @@ class Shell(wxStyledTextCtrl):
         # Home needs to be aware of the prompt.
         elif key == WXK_HOME:
             if currpos >= stoppos:
-                self.SetCurrentPos(stoppos)
-                self.SetAnchor(stoppos)
+                if event.ShiftDown():
+                    # Select text from current position to end of prompt.
+                    self.SetSelection(self.GetCurrentPos(), stoppos)
+                else:
+                    self.SetCurrentPos(stoppos)
+                    self.SetAnchor(stoppos)
             else:
                 event.Skip()
         # Basic navigation keys should work anywhere.
@@ -326,11 +351,11 @@ class Shell(wxStyledTextCtrl):
             event.Skip()
         # Don't backspace over the latest prompt.
         elif key == WXK_BACK:
-            if currpos > stoppos:
+            if currpos > self.prompt1Pos[1]:
                 event.Skip()
         # Only allow these keys after the latest prompt.
         elif key in (WXK_TAB, WXK_DELETE):
-            if currpos >= stoppos:
+            if currpos >= self.prompt1Pos[1]:
                 event.Skip()
         # Don't toggle between insert mode and overwrite mode.
         elif key == WXK_INSERT:
@@ -338,78 +363,104 @@ class Shell(wxStyledTextCtrl):
         else:
             event.Skip()
 
-    def OnChar(self, event):
-        """Keypress event handler.
-        
-        The main goal here is to not allow modifications to previous 
-        lines of text."""
-        key = event.KeyCode()
-        currpos = self.GetCurrentPos()
-        stoppos = self.promptPos[1]
-        if currpos >= stoppos:
-            if key == 46:
-                # "." The dot or period key activates auto completion.
-                # Get the command between the prompt and the cursor.
-                # Add a dot to the end of the command.
-                command = self.GetTextRange(stoppos, currpos) + '.'
-                self.write('.')
-                if self.autoComplete: self.autoCompleteShow(command)
-            elif key == 40:
-                # "(" The left paren activates a call tip and cancels
-                # an active auto completion.
-                if self.AutoCompActive(): self.AutoCompCancel()
-                # Get the command between the prompt and the cursor.
-                # Add the '(' to the end of the command.
-                command = self.GetTextRange(stoppos, currpos) + '('
-                self.write('(')
-                if self.autoCallTip: self.autoCallTipShow(command)
-            else:
-                # Allow the normal event handling to take place.
-                event.Skip()
+    def OnHistoryRetrieve(self, step):
+        """Retrieve the previous/next command from the history buffer."""
+        startpos = self.GetCurrentPos()
+        if startpos < self.prompt1Pos[1]:
+            wxBell()
+            return
+        newindex = self.historyIndex + step
+        if not (-1 <= newindex < len(self.history)):
+            wxBell()
+            return
+        self.historyIndex = newindex
+        if newindex == -1:
+            self.ReplaceSelection('')
         else:
-            pass
+            self.ReplaceSelection('')
+            command = self.history[self.historyIndex]
+            command = command.replace('\n', os.linesep + sys.ps2)
+            self.ReplaceSelection(command)
+        endpos = self.GetCurrentPos()
+        self.SetSelection(endpos, startpos)
+
+    def OnHistorySearch(self):
+        """Search up the history buffer for the text in front of the cursor."""
+        startpos = self.GetCurrentPos()
+        if startpos < self.prompt1Pos[1]:
+            wxBell()
+            return
+        # The text up to the cursor is what we search for.
+        numCharsAfterCursor = self.GetTextLength() - startpos
+        searchText = self.getCommand(rstrip=0)
+        if numCharsAfterCursor > 0:
+            searchText = searchText[:-numCharsAfterCursor]
+        if not searchText:
+            return
+        # Search upwards from the current history position and loop back
+        # to the beginning if we don't find anything.
+        if (self.historyIndex <= -1) \
+        or (self.historyIndex >= len(self.history)-2):
+            searchOrder = range(len(self.history))
+        else:
+            searchOrder = range(self.historyIndex+1, len(self.history)) + \
+                          range(self.historyIndex)
+        for i in searchOrder:
+            command = self.history[i]
+            if command[:len(searchText)] == searchText:
+                # Replace the current selection with the one we've found.
+                self.ReplaceSelection(command[len(searchText):])
+                endpos = self.GetCurrentPos()
+                self.SetSelection(endpos, startpos)
+                # We've now warped into middle of the history.
+                self.historyIndex = i
+                break
 
     def setStatusText(self, text):
         """Display status information."""
-        
+
         # This method will most likely be replaced by the enclosing app
         # to do something more interesting, like write to a status bar.
         print text
 
     def processLine(self):
         """Process the line of text at which the user hit Enter."""
-        
+
         # The user hit ENTER and we need to decide what to do. They could be
         # sitting on any line in the shell.
-        
-        # Grab information about the current line.
+
         thepos = self.GetCurrentPos()
-        theline = self.GetCurrentLine()
-        command = self.getCommand()
-        # Go to the very bottom of the text.
         endpos = self.GetTextLength()
-        self.SetCurrentPos(endpos)
-        endline = self.GetCurrentLine()
-        # If they hit RETURN on the last line, execute the command.
-        if theline == endline:
+        # If they hit RETURN at the very bottom, execute the command.
+        if thepos == endpos:
+            self.interp.more = 0
+            if self.getCommand():
+                command = self.GetTextRange(self.prompt1Pos[1], endpos)
+            else:
+                command = self.GetTextRange(self.prompt1Pos[1], \
+                                            self.promptPos[1])
+            command = command.replace(os.linesep + sys.ps2, '\n')
             self.push(command)
-        # Otherwise, replace the last line with the new line.
-        else:
+        # Otherwise, replace the last command with the new command.
+        elif thepos < self.prompt1Pos[0]:
+            theline = self.GetCurrentLine()
+            command = self.getCommand()
             # If the new line contains a command (even an invalid one).
             if command:
-                startpos = self.PositionFromLine(endline)
+                self.SetCurrentPos(endpos)
+                startpos = self.prompt1Pos[1]
                 self.SetSelection(startpos, endpos)
                 self.ReplaceSelection('')
-                self.prompt()
                 self.write(command)
+                self.more = 0
             # Otherwise, put the cursor back where we started.
             else:
                 self.SetCurrentPos(thepos)
                 self.SetAnchor(thepos)
 
-    def getCommand(self, text=None):
+    def getCommand(self, text=None, rstrip=1):
         """Extract a command from text which may include a shell prompt.
-        
+
         The command may not necessarily be valid Python syntax."""
         if not text:
             text = self.GetCurLine()[0]
@@ -419,7 +470,8 @@ class Shell(wxStyledTextCtrl):
         ps1size = len(ps1)
         ps2 = str(sys.ps2)
         ps2size = len(ps2)
-        text = text.rstrip()
+        if rstrip:
+            text = text.rstrip()
         # Strip the prompt off the front of text leaving just the command.
         if text[:ps1size] == ps1:
             command = text[ps1size:]
@@ -428,12 +480,13 @@ class Shell(wxStyledTextCtrl):
         else:
             command = ''
         return command
-    
+
     def push(self, command):
         """Send command to the interpreter for execution."""
-        self.addHistory(command)
         self.write(os.linesep)
         self.more = self.interp.push(command)
+        if not self.more:
+            self.addHistory(command.rstrip())
         self.prompt()
         # Keep the undo feature from undoing previous responses. The only
         # thing that can be undone is stuff typed after the prompt, before
@@ -442,12 +495,8 @@ class Shell(wxStyledTextCtrl):
 
     def addHistory(self, command):
         """Add command to the command history."""
-        # Store the last-recalled command; see the main comment for
-        # self.lastCommandRecalled.
-        if command != '':
-            self.lastCommandRecalled = self.historyPos
         # Reset the history position.
-        self.historyPos = -1
+        self.historyIndex = -1
         # Insert this command into the history, unless it's a blank
         # line or the same as the last command.
         if command != '' \
@@ -471,7 +520,7 @@ class Shell(wxStyledTextCtrl):
 
     def prompt(self):
         """Display appropriate prompt for the context, either ps1 or ps2.
-        
+
         If this is a continuation line, autoindent as necessary."""
         if self.more:
             prompt = str(sys.ps2)
@@ -480,11 +529,13 @@ class Shell(wxStyledTextCtrl):
         pos = self.GetCurLine()[1]
         if pos > 0: self.write(os.linesep)
         self.promptPos[0] = self.GetCurrentPos()
+        if not self.more: self.prompt1Pos[0] = self.GetCurrentPos()
         self.write(prompt)
         self.promptPos[1] = self.GetCurrentPos()
+        if not self.more: self.prompt1Pos[1] = self.GetCurrentPos()
         # XXX Add some autoindent magic here if more.
         if self.more:
-            self.write('\t')  # Temporary hack indentation.
+            self.write(' '*4)  # Temporary hack indentation.
         self.EnsureCaretVisible()
         self.ScrollToColumn(0)
 
@@ -517,22 +568,25 @@ class Shell(wxStyledTextCtrl):
     def ask(self, prompt='Please enter your response:'):
         """Get response from the user."""
         return raw_input(prompt=prompt)
-        
+
     def pause(self):
         """Halt execution pending a response from the user."""
         self.ask('Press enter to continue:')
-        
+
     def clear(self):
         """Delete all text from the shell."""
         self.ClearAll()
-        
+
     def run(self, command, prompt=1, verbose=1):
         """Execute command within the shell as if it was typed in directly.
         >>> shell.run('print "this"')
         >>> print "this"
         this
-        >>> 
+        >>>
         """
+        # Go to the very bottom of the text.
+        endpos = self.GetTextLength()
+        self.SetCurrentPos(endpos)
         command = command.rstrip()
         if prompt: self.prompt()
         if verbose: self.write(command)
@@ -550,7 +604,7 @@ class Shell(wxStyledTextCtrl):
                     self.run(command, prompt=0, verbose=1)
         finally:
             file.close()
-    
+
     def autoCompleteShow(self, command):
         """Display auto-completion popup list."""
         list = self.interp.getAutoCompleteList(command, \
@@ -573,11 +627,11 @@ class Shell(wxStyledTextCtrl):
     def writeOut(self, text):
         """Replacement for stdout."""
         self.write(text)
-    
+
     def writeErr(self, text):
         """Replacement for stderr."""
         self.write(text)
-    
+
     def redirectStdin(self, redirect=1):
         """If redirect is true then sys.stdin will come from the shell."""
         if redirect:
@@ -602,7 +656,7 @@ class Shell(wxStyledTextCtrl):
     def CanCut(self):
         """Return true if text is selected and can be cut."""
         return self.GetSelectionStart() != self.GetSelectionEnd()
-    
+
     def CanCopy(self):
         """Return true if text is selected and can be copied."""
         return self.GetSelectionStart() != self.GetSelectionEnd()
@@ -620,7 +674,7 @@ ID_CALLTIPS_SHOW = NewId()
 
 class ShellMenu:
     """Mixin class to add standard menu items."""
-    
+
     def createMenus(self):
         m = self.fileMenu = wxMenu()
         m.AppendSeparator()
@@ -785,14 +839,14 @@ class ShellMenu:
             event.Check(self.shell.autoCompleteIncludeDouble)
         elif id == ID_CALLTIPS_SHOW:
             event.Check(self.shell.autoCallTip)
-            
+
 
 class ShellFrame(wxFrame, ShellMenu):
     """Frame containing the PyCrust shell component."""
-    
+
     name = 'PyCrust Shell Frame'
     revision = __version__
-    
+
     def __init__(self, parent=None, id=-1, title='PyShell', \
                  pos=wxDefaultPosition, size=wxDefaultSize, \
                  style=wxDEFAULT_FRAME_STYLE, locals=None, \
@@ -811,5 +865,6 @@ class ShellFrame(wxFrame, ShellMenu):
         # Override the shell so that status messages go to the status bar.
         self.shell.setStatusText = self.SetStatusText
         self.createMenus()
+
 
 

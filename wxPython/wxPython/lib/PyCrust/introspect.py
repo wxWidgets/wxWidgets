@@ -49,11 +49,18 @@ def getAllAttributeNames(object):
     Recursively walk through a class and all base classes.
     """
     attributes = []
+    # Wake up sleepy objects - a hack for ZODB objects in "ghost" state.
+    wakeupcall = dir(object)
+    del wakeupcall
     # Get attributes available through the normal convention.
     attributes += dir(object)
     # For a class instance, get the attributes for the class.
     if hasattr(object, '__class__'):
-        attributes += getAllAttributeNames(object.__class__)
+        # Break a circular reference. This happens with extension classes.
+        if object.__class__ is object:
+            pass
+        else:
+            attributes += getAllAttributeNames(object.__class__)
     # Also get attributes from any and all parent classes.
     if hasattr(object, '__bases__'):
         for base in object.__bases__:
@@ -74,13 +81,13 @@ def getCallTip(command='', locals=None):
     dropSelf = 0
     if hasattr(object, '__name__'):  # Make sure this is a useable object.
         # Switch to the object that has the information we need.
-        if inspect.ismethod(object):
-            # Get the function from the object otherwise inspec.getargspec()
+        if inspect.ismethod(object) or hasattr(object, 'im_func'):
+            # Get the function from the object otherwise inspect.getargspec()
             # complains that the object isn't a Python function.
             object = object.im_func
             dropSelf = 1
         elif inspect.isclass(object):
-            # Get the __init__ method for the class.
+            # Get the __init__ method function for the class.
             try:
                 object = object.__init__.im_func
                 dropSelf = 1
@@ -92,10 +99,11 @@ def getCallTip(command='', locals=None):
                         dropSelf = 1
                         break
         name = object.__name__
+        tip1 = ''
         if inspect.isbuiltin(object):
             # Builtin functions don't have an argspec that we can get.
-            tip1 = ''
-        else:
+            pass
+        elif inspect.isfunction(object):
             # tip1 is a string like: "getCallTip(command='', locals=None)"
             argspec = apply(inspect.formatargspec, inspect.getargspec(object))
             if dropSelf:
@@ -129,7 +137,7 @@ def getRoot(command, terminator=None):
     
     The command would normally terminate with a "(" or ".". Anything after 
     the terminator will be dropped, allowing you to get back to the root.
-    Return only the root portion that can be eval()'d without side effect.
+    Return only the root portion that can be eval()'d without side effects.
     """
     root = ''
     validChars = "._" + string.uppercase + string.lowercase + string.digits
@@ -151,7 +159,7 @@ def getRoot(command, terminator=None):
         # Detect situations where we are in the middle of a string.
         # This code catches the simplest case, but needs to catch others.
         if command[i-1] in ("'", '"'):
-            # Were in the middle of a string so we aren't dealing with an
+            # We're in the middle of a string so we aren't dealing with an
             # object and it would be misleading to return anything here.
             root = ''
         else:
@@ -159,3 +167,4 @@ def getRoot(command, terminator=None):
             root = command[i:]
     return root
 
+     

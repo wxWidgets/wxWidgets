@@ -48,16 +48,17 @@ class Interpreter(InteractiveInterpreter):
         """Send command to the interpreter to be executed.
         
         Because this may be called recursively, we append a new list
-        onto the commandBuffer list and then append commands into
-        that. If the passed in command is part of a multi-line command
-        we keep appending the pieces to the last list in commandBuffer
-        until we have a complete command, then, finally, we delete
-        that last list."""
+        onto the commandBuffer list and then append commands into that. 
+        If the passed in command is part of a multi-line command we keep 
+        appending the pieces to the last list in commandBuffer until we 
+        have a complete command. If not, we delete that last list."""
+        if not self.more:
+            try: del self.commandBuffer[-1]
+            except IndexError: pass
         if not self.more: self.commandBuffer.append([])
         self.commandBuffer[-1].append(command)
         source = '\n'.join(self.commandBuffer[-1])
         self.more = self.runsource(source)
-        if not self.more: del self.commandBuffer[-1]
         return self.more
         
     def runsource(self, source):
@@ -102,3 +103,4 @@ class InterpreterAlaCarte(Interpreter):
         sys.ps1 = ps1
         sys.ps2 = ps2
 
+  

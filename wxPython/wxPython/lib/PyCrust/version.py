@@ -7,4 +7,4 @@ __cvsid__ = "$Id$"
 __date__ = "July 1, 2001"
 __version__ = "$Revision$"[11:-2]
 
-VERSION = '0.6'
+VERSION = '0.7'

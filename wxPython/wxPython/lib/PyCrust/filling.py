@@ -53,7 +53,8 @@ class FillingTree(wxTreeCtrl):
         objtype = type(object)
         if objtype is types.DictType:
             dict = object
-        elif objtype in (types.InstanceType, types.ModuleType):
+        elif (objtype in (types.InstanceType, types.ModuleType)) \
+        or hasattr(object, '__class__'):
             for key in introspect.getAttributeNames(object):
                 # Believe it or not, some attributes can disappear, such as
                 # the exc_traceback attribute of the sys module. So this is
@@ -170,10 +171,16 @@ if wxPlatform == '__WXMSW__':
               'helv'   : 'Lucida Console',
               'lucida' : 'Lucida Console',
               'other'  : 'Comic Sans MS',
-              'size'   : 8,
-              'lnsize' : 7,
+              'size'   : 10,
+              'lnsize' : 9,
               'backcol': '#FFFFFF',
             }
+    # Versions of wxPython prior to 2.3.2 had a sizing bug on Win platform.
+    # The font was 2 points too large. So we need to reduce the font size.
+    if ((wxMAJOR_VERSION, wxMINOR_VERSION) == (2, 3) and wxRELEASE_NUMBER < 2) \
+    or (wxMAJOR_VERSION <= 2 and wxMINOR_VERSION <= 2):
+        faces['size'] -= 2
+        faces['lnsize'] -= 2
 else:  # GTK
     faces = { 'times'  : 'Times',
               'mono'   : 'Courier',
@@ -299,3 +306,4 @@ class App(wxApp):
         return true
 
 
+  
