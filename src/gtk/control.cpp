@@ -13,7 +13,7 @@
 
 #include "wx/control.h"
 
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // wxControl

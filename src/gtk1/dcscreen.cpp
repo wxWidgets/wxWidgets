@@ -14,8 +14,8 @@
 #include "wx/dcscreen.h"
 #include "wx/window.h"
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // global data initialization
@@ -31,9 +31,8 @@ int wxScreenDC::sm_overlayWindowY = 0;
 
 extern "C" {
 
-#include "gdk/gdk.h"
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkx.h"
+#include <gdk/gdkprivate.h>
+#include <gdk/gdkx.h>
 #include <netinet/in.h>
 
 int my_nevent_masks = 17;

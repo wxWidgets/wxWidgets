@@ -16,8 +16,8 @@
 
 #if wxUSE_CHOICE
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -103,7 +103,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     for (int i = 0; i < n; i++)
     {
-        AppendHelper(menu, choices[i]);
+        GtkAppendHelper(menu, choices[i]);
     }
 
     gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
@@ -134,7 +134,7 @@ int wxChoice::DoAppend( const wxString &item )
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
 
-    return AppendHelper(menu, item);
+    return GtkAppendHelper(menu, item);
 }
 
 void wxChoice::DoSetItemClientData( int n, void* clientData )
@@ -318,36 +318,6 @@ void wxChoice::SetSelection( int n )
     gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
 }
 
-void wxChoice::DisableEvents()
-{
-/*
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-    GList *child = menu_shell->children;
-    while (child)
-    {
-        gtk_signal_disconnect_by_func( GTK_OBJECT( child->data ),
-          GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
-
-        child = child->next;
-    }
-*/
-}
-
-void wxChoice::EnableEvents()
-{
-/*
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-    GList *child = menu_shell->children;
-    while (child)
-    {
-        gtk_signal_connect( GTK_OBJECT( child->data ), "activate",
-          GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
-
-        child = child->next;
-    }
-*/
-}
-
 void wxChoice::ApplyWidgetStyle()
 {
     SetWidgetStyle();
@@ -373,7 +343,7 @@ void wxChoice::ApplyWidgetStyle()
     }
 }
 
-size_t wxChoice::AppendHelper(GtkWidget *menu, const wxString& item)
+size_t wxChoice::GtkAppendHelper(GtkWidget *menu, const wxString& item)
 {
     GtkWidget *menu_item = gtk_menu_item_new_with_label( item.mbc_str() );
 

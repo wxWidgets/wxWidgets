@@ -16,7 +16,7 @@
 #include "wx/intl.h"
 #include "wx/generic/msgdlgg.h"
 
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // idle system

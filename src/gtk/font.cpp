@@ -29,7 +29,7 @@
 
 #include <strings.h>
 
-#include "gdk/gdk.h"
+#include <gdk/gdk.h>
 
 // ----------------------------------------------------------------------------
 // wxFontRefData

@@ -15,10 +15,10 @@
 #include "wx/dcmemory.h"
 #include "wx/image.h"
 #include "wx/gtk/win_gtk.h"
-#include <math.h>               // for floating-point functions
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <math.h>               // for floating-point functions
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // local data

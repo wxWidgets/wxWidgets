@@ -19,9 +19,9 @@
 #include "wx/utils.h"
 #include "wx/log.h"
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // thread system

@@ -15,7 +15,7 @@
 #include "wx/cursor.h"
 #include "wx/utils.h"
 
-#include "gdk/gdk.h"
+#include <gdk/gdk.h>
 
 //-----------------------------------------------------------------------------
 // idle system

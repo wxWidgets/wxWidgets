@@ -17,7 +17,7 @@
 #include "wx/mstream.h"
 #include "wx/image.h"
 
-#include "gdk/gdk.h"
+#include <gdk/gdk.h>
 
 //-------------------------------------------------------------------------
 // global data

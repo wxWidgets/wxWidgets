@@ -21,12 +21,12 @@
 #include "wx/intl.h"
 #include "wx/utils.h"
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-#include "gdk/gdkprivate.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkprivate.h>
 
-#include "gtk/gtkdnd.h"
-#include "gtk/gtkselection.h"
+#include <gtk/gtkdnd.h>
+#include <gtk/gtkselection.h>
 
 //-----------------------------------------------------------------------------
 // idle system
