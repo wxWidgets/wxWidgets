@@ -290,21 +290,30 @@ void wxMacToolTip::Draw()
   		ClipRect( &m_rect ) ;
   		BackColor( whiteColor ) ;
   		ForeColor(blackColor ) ;
+                GWorldPtr port ;	        
+                NewGWorld( &port , wxDisplayDepth() , &m_rect , NULL , NULL , 0 ) ;
+                CGrafPtr    origPort ;
+                GDHandle    origDevice ;
+    
+                GetGWorld( &origPort , &origDevice ) ;
+                SetGWorld( port , NULL ) ;
+	    
   		m_backpict = OpenPicture(&m_rect);
 
   		CopyBits(GetPortBitMapForCopyBits(GetWindowPort(m_window)), 
-  				   GetPortBitMapForCopyBits(GetWindowPort(m_window)), 
+  				   GetPortBitMapForCopyBits(port), 
   				   &m_rect, 
   				   &m_rect, 
   				   srcCopy, 
   				   NULL);
-
-  		ClosePicture();
-        PenNormal() ;
+                ClosePicture();
+                SetGWorld( origPort , origDevice ) ;
+  		DisposeGWorld( port ) ;
+                PenNormal() ;
 
   		RGBColor tooltipbackground = { 0xFFFF , 0xFFFF , 0xC000 } ;
   		BackColor( whiteColor ) ;
-        RGBForeColor( &tooltipbackground ) ;
+                RGBForeColor( &tooltipbackground ) ;
 
   		PaintRect( &m_rect ) ;
   		ForeColor(blackColor ) ;
