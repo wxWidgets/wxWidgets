@@ -18,7 +18,7 @@ class TestDialog(wxDialog):
                  style=wxDEFAULT_DIALOG_STYLE):
 
         # Instead of calling wxDialog.__init__ we precreate the dialog
-        # so we can set an extra style that must be set before
+        # object so we can set an extra style that must be set before
         # creation, and then we create the GUI dialog using the Create
         # method.
         pre = wxPreDialog()
@@ -29,6 +29,8 @@ class TestDialog(wxDialog):
         # object into the real wrapper of the dialog (instead of pre)
         # as far as the wxPython extension is concerned.
         self.this = pre.this
+        self.thisown = pre.thisown
+        pre.thisown = 0
 
 
         # Now continue with the normal construction of the dialog
@@ -102,7 +104,7 @@ def runTest(frame, nb, log):
         log.WriteText("You pressed OK\n")
     else:
         log.WriteText("You pressed Cancel\n")
-
+    win.Destroy()
 
 
 #---------------------------------------------------------------------------

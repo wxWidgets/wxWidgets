@@ -24,25 +24,32 @@ class MyFrame(wx.Frame):
 
         panel = wx.Panel(self, -1)
         text = wx.StaticText(panel, -1, "Hello World!")
-        text.SetFont(wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD))
+        text.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.BOLD))
         text.SetSize(text.GetBestSize())
         btn = wx.Button(panel, -1, "Close")
         btn.SetDefault()
 
+        btn2 = wx.Button(panel, -1, "Just for fun...")
+        
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(text, 0, wx.ALL, 10)
         sizer.Add(btn, 0, wx.ALL, 10)
+        sizer.Add(btn2, 0, wx.ALL, 10)
         panel.SetSizer(sizer)
         panel.SetAutoLayout(True)
         panel.Layout()
 
         wx.EVT_BUTTON(self, btn.GetId(), self.OnButton)
-
+        wx.EVT_BUTTON(self, btn2.GetId(), self.OnFunButton)
 
     def OnButton(self, evt):
         """Event handler for the button click."""
         print "OnButton"
         self.Close()
+
+    def OnFunButton(self, evt):
+        """Event handler for the button click."""
+        print "Having fun yet?"
 
 
 app = wx.PySimpleApp()

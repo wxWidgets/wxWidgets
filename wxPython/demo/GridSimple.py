@@ -36,6 +36,8 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
 
         self.SetCellValue(6, 3, "You can veto editing this cell")
 
+        #self.SetRowLabelSize(0)
+        #self.SetColLabelSize(0)
 
         # attribute objects let you keep a set of formatting values
         # in one spot, and reuse them if needed

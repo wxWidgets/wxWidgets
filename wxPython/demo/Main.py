@@ -18,6 +18,7 @@ import wx.html
 
 import images
 
+##wx.Trap()
 
 #---------------------------------------------------------------------------
 
@@ -26,6 +27,7 @@ _treeList = [
     # new stuff
     ('Recent Additions', [
         'wxVListBox',
+        'wxListbook',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -73,6 +75,7 @@ _treeList = [
         'wxGenericDirCtrl',
         'wxGrid',
         'wxGrid_MegaExample',
+        'wxListbook',
         'wxListBox',
         'wxListCtrl',
         'wxListCtrl_virtual',
@@ -328,8 +331,8 @@ class wxPythonDemo(wx.Frame):
         splitter2 = wx.SplitterWindow(splitter, -1)
 
         def EmptyHandler(evt): pass
-        wx.EVT_ERASE_BACKGROUND(splitter, EmptyHandler)
-        wx.EVT_ERASE_BACKGROUND(splitter2, EmptyHandler)
+        #wx.EVT_ERASE_BACKGROUND(splitter, EmptyHandler)
+        #wx.EVT_ERASE_BACKGROUND(splitter2, EmptyHandler)
 
         # Prevent TreeCtrl from displaying all items after destruction when True
         self.dying = False
@@ -460,12 +463,20 @@ class wxPythonDemo(wx.Frame):
 
 
         # add the windows to the splitter and split it.
-        splitter2.SplitHorizontally(self.nb, self.log, 450)
+        splitter2.SplitHorizontally(self.nb, self.log, -120)
         splitter.SplitVertically(self.tree, splitter2, 180)
 
         splitter.SetMinimumPaneSize(20)
         splitter2.SetMinimumPaneSize(20)
 
+
+        # Make the splitter on the right expand the top wind when resized
+        def SplitterOnSize(evt):
+            splitter = evt.GetEventObject()
+            sz = splitter.GetSize()
+            splitter.SetSashPosition(sz.height - 120, False)
+            evt.Skip()
+        wx.EVT_SIZE(splitter2, SplitterOnSize)
 
 
         # select initial items
