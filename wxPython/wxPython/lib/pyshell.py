@@ -143,17 +143,17 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
 
         self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT, p['bracegood'])
         self.StyleSetSpec(wxSTC_STYLE_BRACEBAD, p['bracebad'])
-        self.StyleSetSpec(SCE_P_COMMENTLINE, p['comment'])
-        self.StyleSetSpec(SCE_P_NUMBER, p['number'])
-        self.StyleSetSpec(SCE_P_STRING, p['string'])
-        self.StyleSetSpec(SCE_P_CHARACTER, p['char'])
-        self.StyleSetSpec(SCE_P_WORD, p['keyword'])
-        self.StyleSetSpec(SCE_P_TRIPLE, p['triple'])
-        self.StyleSetSpec(SCE_P_TRIPLEDOUBLE, p['tripledouble'])
-        self.StyleSetSpec(SCE_P_CLASSNAME, p['class'])
-        self.StyleSetSpec(SCE_P_DEFNAME, p['def'])
-        self.StyleSetSpec(SCE_P_OPERATOR, p['operator'])
-        self.StyleSetSpec(SCE_P_COMMENTBLOCK, p['comment'])
+        self.StyleSetSpec(wxSTC_P_COMMENTLINE, p['comment'])
+        self.StyleSetSpec(wxSTC_P_NUMBER, p['number'])
+        self.StyleSetSpec(wxSTC_P_STRING, p['string'])
+        self.StyleSetSpec(wxSTC_P_CHARACTER, p['char'])
+        self.StyleSetSpec(wxSTC_P_WORD, p['keyword'])
+        self.StyleSetSpec(wxSTC_P_TRIPLE, p['triple'])
+        self.StyleSetSpec(wxSTC_P_TRIPLEDOUBLE, p['tripledouble'])
+        self.StyleSetSpec(wxSTC_P_CLASSNAME, p['class'])
+        self.StyleSetSpec(wxSTC_P_DEFNAME, p['def'])
+        self.StyleSetSpec(wxSTC_P_OPERATOR, p['operator'])
+        self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, p['comment'])
 
 
     # used for writing to stdout, etc.
@@ -162,7 +162,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         pos = self.GetCurrentPos()
         self.AddText(text)
         self.StartStyling(pos, 0xFF)
-        self.SetStyleFor(len(text), style)
+        self.SetStyling(len(text), style)
         self.EnsureCaretVisible()
         wxYield()
 
@@ -174,7 +174,7 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
 
     def Prompt(self):
         # is the current line non-empty?
-        text, pos = self.GetCurrentLineText()
+        text, pos = self.GetCurLine()
         if pos != 0:
             self.AddText('\n')
         self.AddText(self.props['ps1'])
@@ -251,14 +251,14 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
             styleBefore = self.GetStyleAt(caretPos - 1)
 
         # check before
-        if charBefore and charBefore in "[]{}()" and ord(styleBefore) == SCE_P_OPERATOR:
+        if charBefore and chr(charBefore) in "[]{}()" and styleBefore == wxSTC_P_OPERATOR:
             braceAtCaret = caretPos - 1
 
         # check after
         if braceAtCaret < 0:
             charAfter = self.GetCharAt(caretPos)
             styleAfter = self.GetStyleAt(caretPos)
-            if charAfter and charAfter in "[]{}()" and ord(styleAfter) == SCE_P_OPERATOR:
+            if charAfter and chr(charAfter) in "[]{}()" and styleAfter == wxSTC_P_OPERATOR:
                 braceAtCaret = caretPos
 
         if braceAtCaret >= 0:
