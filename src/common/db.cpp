@@ -1892,9 +1892,16 @@ bool wxDb::DropView(const wxString &viewName)
 /********** wxDb::ExecSql()  **********/
 bool wxDb::ExecSql(const wxString &pSqlStmt)
 {
+    RETCODE retcode;
+
     SQLFreeStmt(hstmt, SQL_CLOSE);
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS) == SQL_SUCCESS)
+
+    retcode = SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
+    if (retcode == SQL_SUCCESS || 
+        (Dbms() == dbmsDB2 && (retcode == SQL_SUCCESS_WITH_INFO || retcode == SQL_NO_DATA_FOUND)))
+    {
         return(TRUE);
+    }
     else
     {
         DispAllErrors(henv, hdbc, hstmt);
@@ -3123,7 +3130,9 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
     if (!UserID.IsEmpty() &&
         Dbms() != dbmsMY_SQL &&
         Dbms() != dbmsACCESS &&
-        Dbms() != dbmsMS_SQL_SERVER)
+        Dbms() != dbmsMS_SQL_SERVER &&
+        Dbms() != dbmsDB2 &&
+        Dbms() != dbmsPERVASIVE_SQL)
     {
         retcode = SQLTables(hstmt,
                             NULL, 0,                                  // All qualifiers
@@ -3373,6 +3382,11 @@ wxDBMS wxDb::Dbms(void)
  *
  * DB2
  *        - Primary keys must be declared as NOT NULL
+ *        - Table and index names must not be longer than 13 characters in length (technically
+ *          table names can be up to 18 characters, but the primary index is created using the
+ *          base table name plus "_PIDX", so the limit if the table has a primary index is 13.
+ *
+ * PERVASIVE SQL
  *
  */
 {
@@ -3417,6 +3431,10 @@ wxDBMS wxDb::Dbms(void)
         return((wxDBMS)(dbmsType = dbmsMY_SQL));
     if (!wxStricmp(dbInf.dbmsName,wxT("PostgreSQL")))  // v6.5.0
         return((wxDBMS)(dbmsType = dbmsPOSTGRES));
+
+    baseName[9] = 0;
+	if (!wxStricmp(dbInf.dbmsName,wxT("Pervasive")))
+		return((wxDBMS)(dbmsType = dbmsPERVASIVE_SQL));
 
     baseName[8] = 0;
     if (!wxStricmp(baseName,wxT("Informix")))

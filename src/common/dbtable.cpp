@@ -417,7 +417,7 @@ ODBC 3.0 says to use this form
 /***************************** PRIVATE FUNCTIONS *****************************/
 
 
-/********** wxDbTable::bindUpdateParams() **********/
+/********** wxDbTable::bindParams() **********/
 bool wxDbTable::bindParams(bool forUpdate)
 {
     wxASSERT(!queryOnly);
@@ -431,17 +431,18 @@ bool wxDbTable::bindParams(bool forUpdate)
     // Bind each column of the table that should be bound
     // to a parameter marker
     int i;
-	 UWORD colNo;
-    for (i = 0, colNo = 1; i < noCols; i++)
+    UWORD colNo;
+
+    for (i=0, colNo=1; i < noCols; i++)
     {
         if (forUpdate)
         {
-            if (! colDefs[i].Updateable)
+            if (!colDefs[i].Updateable)
                 continue;
         }
         else
         {
-            if (! colDefs[i].InsertAllowed)
+            if (!colDefs[i].InsertAllowed)
                 continue;
         }
 
@@ -541,8 +542,6 @@ bool wxDbTable::bindUpdateParams(void)
 /********** wxDbTable::bindCols() **********/
 bool wxDbTable::bindCols(HSTMT cursor)
 {
-//RG-NULL    static SDWORD  cb;
-    
     // Bind each column of the table to a memory address for fetching data
     UWORD i;
     for (i = 0; i < noCols; i++)
@@ -618,12 +617,21 @@ bool wxDbTable::getRec(UWORD fetchType)
 /********** wxDbTable::execDelete() **********/
 bool wxDbTable::execDelete(const wxString &pSqlStmt)
 {
-    // Execute the DELETE statement
-    if (SQLExecDirect(hstmtDelete, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
-        return(pDb->DispAllErrors(henv, hdbc, hstmtDelete));
+    RETCODE retcode;
 
-    // Record deleted successfully
-    return(TRUE);
+    // Execute the DELETE statement
+    retcode = SQLExecDirect(hstmtDelete, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
+
+    if (retcode == SQL_SUCCESS ||
+        retcode == SQL_NO_DATA_FOUND ||
+        retcode == SQL_SUCCESS_WITH_INFO)
+    {
+        // Record deleted successfully
+        return(TRUE);
+    }
+
+    // Problem deleting record
+    return(pDb->DispAllErrors(henv, hdbc, hstmtDelete));
 
 }  // wxDbTable::execDelete()
 
@@ -631,12 +639,21 @@ bool wxDbTable::execDelete(const wxString &pSqlStmt)
 /********** wxDbTable::execUpdate() **********/
 bool wxDbTable::execUpdate(const wxString &pSqlStmt)
 {
-    // Execute the UPDATE statement
-    if (SQLExecDirect(hstmtUpdate, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
-        return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
+    RETCODE retcode;
 
-    // Record deleted successfully
-    return(TRUE);
+    // Execute the UPDATE statement
+    retcode = SQLExecDirect(hstmtUpdate, (UCHAR FAR *) pSqlStmt.c_str(), SQL_NTS);
+
+    if (retcode == SQL_SUCCESS ||
+        retcode == SQL_NO_DATA_FOUND ||
+        retcode == SQL_SUCCESS_WITH_INFO)
+    {
+        // Record updated successfully
+        return(TRUE);
+    }
+
+    // Problem updating record
+    return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
 
 }  // wxDbTable::execUpdate()
 
@@ -1001,7 +1018,7 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
     for (i = 0; i < noCols; i++)
     {
         // If joining tables, the base table column names must be qualified to avoid ambiguity
-        if (appendFromClause)
+        if (appendFromClause || pDb->Dbms() == dbmsACCESS)
         {
             pSqlStmt += queryTableName;
             pSqlStmt += wxT(".");
@@ -1016,7 +1033,7 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
     if (!distinct && CanUpdByROWID())
     {
         // If joining tables, the base table column names must be qualified to avoid ambiguity
-        if (appendFromClause)
+        if (appendFromClause || pDb->Dbms() == dbmsACCESS)
         {
             pSqlStmt += wxT(",");
             pSqlStmt += queryTableName;
@@ -1115,7 +1132,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
 
     bool firstColumn = TRUE;
 
-    pSqlStmt.Printf(wxT("UPDATE %s SET "), tableName.c_str());
+    pSqlStmt.Printf(wxT("UPDATE %s SET "), tableName.Upper().c_str());
 
     // Append a list of columns to be updated
     int i;
@@ -1405,14 +1422,22 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             case dbmsSYBASE_ASE:
             case dbmsMY_SQL:
             {
-                /* MySQL goes out on this one. We also declare the relevant key NON NULL above */
+                // MySQL goes out on this one. We also declare the relevant key NON NULL above
                 sqlStmt += wxT(",PRIMARY KEY (");
                 break;
             }
             default:
             {
                 sqlStmt += wxT(",CONSTRAINT ");
-                sqlStmt += tableName;
+                //  DB2 is limited to 18 characters for index names
+                if (pDb->Dbms() == dbmsDB2)
+                {
+                    wxASSERT_MSG((tableName && wxStrlen(tableName) <= 13), wxT("DB2 table/index names must be no longer than 13 characters in length.\n\nTruncating table name to 13 characters."));
+                    sqlStmt += tableName.substr(0, 13);
+                }
+                else
+                    sqlStmt += tableName;
+
                 sqlStmt += wxT("_PIDX PRIMARY KEY (");
                 break;
             }
@@ -1428,15 +1453,15 @@ bool wxDbTable::CreateTable(bool attemptDrop)
                 sqlStmt += colDefs[i].ColName;
             }
         }
-       sqlStmt += wxT(")");
+        sqlStmt += wxT(")");
 
-       if (pDb->Dbms() == dbmsSYBASE_ASA ||
-           pDb->Dbms() == dbmsSYBASE_ASE)
-       {
-        sqlStmt += wxT(" CONSTRAINT ");
-        sqlStmt += tableName;
-        sqlStmt += wxT("_PIDX");
-       }
+        if (pDb->Dbms() == dbmsSYBASE_ASA ||
+            pDb->Dbms() == dbmsSYBASE_ASE)
+        {
+            sqlStmt += wxT(" CONSTRAINT ");
+            sqlStmt += tableName;
+            sqlStmt += wxT("_PIDX");
+        }
     }
     // Append the closing parentheses for the create table statement
     sqlStmt += wxT(")");
@@ -1487,17 +1512,19 @@ bool wxDbTable::DropTable()
     cout << endl << sqlStmt.c_str() << endl;
 #endif
 
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+     RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS);
+    if (retcode != SQL_SUCCESS)
     {
         // Check for "Base table not found" error and ignore
         pDb->GetNextError(henv, hdbc, hstmt);   
-        if (wxStrcmp(pDb->sqlState, wxT("S0002")) &&
-            wxStrcmp(pDb->sqlState, wxT("S1000")))  // "Base table not found" 
-        {    
+        if (wxStrcmp(pDb->sqlState, wxT("S0002")) /*&&
+            wxStrcmp(pDb->sqlState, wxT("S1000"))*/)  // "Base table not found" 
+        {
             // Check for product specific error codes
-            if (!((pDb->Dbms() == dbmsSYBASE_ASA  && !wxStrcmp(pDb->sqlState,wxT("42000")))   ||  // 5.x (and lower?)
-                (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("37000")))   ||   
-                (pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,wxT("08S01")))))     
+            if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,wxT("42000")))   ||  // 5.x (and lower?)
+                  (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("37000")))   ||   
+                  (pDb->Dbms() == dbmsPERVASIVE_SQL && !wxStrcmp(pDb->sqlState,wxT("S1000")))   ||  // Returns an S1000 then an S0002
+                  (pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,wxT("08S01")))))     
             {
                 pDb->DispNextError();
                 pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -1520,7 +1547,7 @@ bool wxDbTable::DropTable()
 
 /********** wxDbTable::CreateIndex() **********/
 bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCols,
-									 wxDbIdxDef *pIdxDefs, bool attemptDrop)
+                                     wxDbIdxDef *pIdxDefs, bool attemptDrop)
 {
     wxString sqlStmt;
 
@@ -1704,7 +1731,7 @@ bool wxDbTable::DropIndex(const wxString &idxName)
 /********** wxDbTable::SetOrderByColNums() **********/
 bool wxDbTable::SetOrderByColNums(UWORD first, ... )
 {
-    int	       colNo = first;  // using 'int' to be able to look for wxDB_NO_MORE_COLUN_NUMBERS
+    int        colNo = first;  // using 'int' to be able to look for wxDB_NO_MORE_COLUN_NUMBERS
     va_list     argptr;
 
     bool        abort = FALSE;
@@ -2152,7 +2179,7 @@ wxDbColDataPtr* wxDbTable::SetColDefs(wxDbColInf *pColInfs, UWORD numCols)
                     pColDataPtrs[index].SqlCtype   = SQL_C_TIMESTAMP;
                     break;
                 case DB_DATA_TYPE_BLOB:
-						  int notSupportedYet = 0;
+                    int notSupportedYet = 0;
                     wxASSERT_MSG(notSupportedYet, wxT("This form of ::SetColDefs() cannot be used with BLOB columns"));
                     pColDataPtrs[index].PtrDataObj = /*BLOB ADDITION NEEDED*/NULL;
                     pColDataPtrs[index].SzDataObj  = /*BLOB ADDITION NEEDED*/sizeof(void *);
