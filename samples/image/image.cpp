@@ -260,7 +260,7 @@ public:
     {
         SetClientSize(SIZE, SIZE);
 
-        wxRawBitmapData data(m_bitmap);
+        wxAlphaPixelData data(m_bitmap);
         if ( !data )
         {
             wxLogError(_T("Failed to gain raw access to bitmap data"));
@@ -269,13 +269,13 @@ public:
 
         data.UseAlpha();
 
-        wxRawBitmapIterator p(data);
+        wxAlphaPixelData::Iterator p(data);
 
-        p.Offset(BORDER, BORDER);
+        p.Offset(data, BORDER, BORDER);
 
         for ( int y = 0; y < REAL_SIZE; ++y )
         {
-            wxRawBitmapIterator rowStart = p;
+            wxAlphaPixelData::Iterator rowStart = p;
 
             int r = y < REAL_SIZE/3 ? 255 : 0,
                 g = (REAL_SIZE/3 <= y) && (y < 2*(REAL_SIZE/3)) ? 255 : 0,
@@ -292,7 +292,7 @@ public:
             }
 
             p = rowStart;
-            p.OffsetY(1);
+            p.OffsetY(data, 1);
         }
     }
 
