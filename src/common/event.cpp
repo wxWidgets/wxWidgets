@@ -88,6 +88,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxWindowDestroyEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxHelpEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxContextMenuEvent, wxCommandEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent)
 #endif // wxUSE_GUI
 
 const wxEventTable *wxEvtHandler::GetEventTable() const

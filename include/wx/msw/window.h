@@ -341,7 +341,7 @@ public:
     bool HandleQueryNewPalette();
     bool HandleSysColorChange();
     bool HandleDisplayChange();
-
+    bool HandleCaptureChanged(WXHWND gainedCapture);
 
     bool HandleQueryEndSession(long logOff, bool *mayEnd);
     bool HandleEndSession(bool endSession, long logOff);

@@ -1398,6 +1398,27 @@ private:
 };
 
 /*
+ wxEVT_MOUSE_CAPTURE_CHANGED
+ The window losing the capture receives this message
+ (even if it released the capture itself).
+ */
+
+class WXDLLEXPORT wxMouseCaptureChangedEvent : public wxEvent
+{
+public:
+    wxMouseCaptureChangedEvent(wxWindowID id = 0, wxWindow* gainedCapture = NULL): wxEvent(id)
+        { m_eventType = wxEVT_MOUSE_CAPTURE_CHANGED; m_gainedCapture = gainedCapture; }
+
+    virtual wxEvent *Clone() const { return new wxMouseCaptureChangedEvent(*this); }
+
+    wxWindow* GetCapturedWindow() const { return m_gainedCapture; };
+
+private:
+    wxWindow* m_gainedCapture;
+    DECLARE_DYNAMIC_CLASS(wxMouseCaptureChangedEvent)
+};
+
+/*
  wxEVT_DISPLAY_CHANGED
  */
 class WXDLLEXPORT wxDisplayChangedEvent : public wxEvent
@@ -1947,6 +1968,7 @@ typedef void (wxEvtHandler::*wxSetCursorEventFunction)(wxSetCursorEvent&);
 typedef void (wxEvtHandler::*wxNotifyEventFunction)(wxNotifyEvent&);
 typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
 typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
+typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureChangedEvent&);
 #endif // wxUSE_GUI
 
 // N.B. In GNU-WIN32, you *have* to take the address of a member function
@@ -2013,6 +2035,7 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 #define EVT_WINDOW_CREATE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_CREATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowCreateEventFunction) & func, (wxObject *) NULL ),
 #define EVT_WINDOW_DESTROY(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_DESTROY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowDestroyEventFunction) & func, (wxObject *) NULL ),
 #define EVT_SET_CURSOR(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SET_CURSOR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSetCursorEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MOUSE_CAPTURE_CHANGED(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOUSE_CAPTURE_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseCaptureChangedEventFunction) & func, (wxObject *) NULL ),
 
 // Mouse events
 #define EVT_LEFT_DOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),

@@ -509,6 +509,19 @@ same as the size the window would have had after calling
 
 Returns the \helpref{caret}{wxcaret} associated with the window.
 
+\membersection{wxWindow::GetCapture}\label{wxwindowgetcapture}
+
+\func{static wxWindow *}{GetCapture}{\void}
+
+Returns the currently captured window.
+
+\wxheading{See also}
+
+\helpref{wxWindow::HasCapture}{wxwindowhascapture}, 
+\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
+\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
+\helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
+
 \membersection{wxWindow::GetCharHeight}
 
 \constfunc{virtual int}{GetCharHeight}{\void}
@@ -895,6 +908,18 @@ Returns a pointer to the current validator for the window, or NULL if there is n
 
 Gets the window style that was passed to the constructor or {\bf Create}
 method. {\bf GetWindowStyle()} is another name for the same function.
+
+\membersection{wxWindow::HasCapture}\label{wxwindowhascapture}
+
+\constfunc{virtual bool}{HasCapture}{\void}
+
+Returns TRUE if this window has the current mouse capture.
+
+\wxheading{See also}
+
+\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
+\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
+\helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 \membersection{wxWindow::Hide}\label{wxwindowhide}
 
@@ -1665,7 +1690,10 @@ Releases mouse input captured with \helpref{wxWindow::CaptureMouse}{wxwindowcapt
 
 \wxheading{See also}
 
-\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}
+\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
+\helpref{wxWindow::HasCapture}{wxwindowhascapture}, 
+\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
+\helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 \membersection{wxWindow::RemoveChild}\label{wxwindowremovechild}
 

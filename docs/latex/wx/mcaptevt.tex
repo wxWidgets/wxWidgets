@@ -1,0 +1,50 @@
+\section{\class{wxMouseCaptureChangedEvent}}\label{wxmousecapturechangedevent}
+
+An mouse capture changed event is sent to a window that loses its
+mouse capture. This is called even if wxWindow::ReleaseCapture
+was called by the application code. Handling this event allows
+an application to cater for unexpected capture releases which
+might otherwise confuse mouse handling code.
+
+This event is implemented under Windows only.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process this event, use the following event handler macro to direct input to a member
+function that takes a wxMouseCaptureChangedEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_MOUSE\_CAPTURE\_CHANGED(func)}}{Process a wxEVT\_MOUSE\_CAPTURE\_CHANGED event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview}, 
+\helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse}, 
+\helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}, 
+\helpref{wxWindow::GetCapture}{wxwindowgetcapture}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMouseCaptureChangedEvent::wxMouseCaptureChangedEvent}
+
+\func{}{wxMouseCaptureChangedEvent}{\param{wxWindowID }{windowId = 0}, \param{wxWindow*}{ gainedCapture = NULL}}
+
+Constructor.
+
+\membersection{wxActivateEvent::GetCapturedWindow}\label{wxmousecapturechangedeventgetcapturedwindow}
+
+\constfunc{wxWindow*}{GetCapturedWindow}{\void}
+
+Returns the window that gained the capture, or NULL if it was a non-wxWindows window.
+

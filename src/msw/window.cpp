@@ -2647,6 +2647,10 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             processed = HandlePaletteChanged((WXHWND) (HWND) wParam);
             break;
 
+        case WM_CAPTURECHANGED:
+            processed = HandleCaptureChanged((WXHWND) (HWND) lParam);
+            break;
+
         case WM_QUERYNEWPALETTE:
             processed = HandleQueryNewPalette();
             break;
@@ -3507,6 +3511,14 @@ bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
     wxPaletteChangedEvent event(GetId());
     event.SetEventObject(this);
     event.SetChangedWindow(wxFindWinFromHandle(hWndPalChange));
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
+{
+    wxMouseCaptureChangedEvent event(GetId(), wxFindWinFromHandle(hWndGainedCapture));
+    event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
 }

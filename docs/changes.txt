@@ -157,6 +157,7 @@ All (GUI):
   for GTK+, Mac, MGL, X11, Motif ports (Chris Elliott)
 - added (platform-dependent) scan code to wxKeyEvent (Bryce Denney)
 - added wxTextCtrl::EmulateKeyPress()
+- Added wxMouseCaptureChangedEvent
 
 wxMSW:
 
@@ -180,6 +181,8 @@ wxMSW:
 - wxWindowDC and wxClientDC::GetSize() works correctly now
 - Added wxTB_NODIVIDER and wxTB_NOALIGN so native toolbar can be used in FL
 - Multiline labels in buttons are now supoprted (simply use "\n" in the label)
+- Implemented wxMouseCaptureChangedEvent and made wxGenericDragImage check it
+  has the capture before release it.
 
 wxGTK:
 

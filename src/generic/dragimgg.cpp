@@ -295,7 +295,13 @@ bool wxGenericDragImage::EndDrag()
 {
     if (m_window)
     {
-        m_window->ReleaseMouse();
+#ifdef __WXMSW__
+        // Under Windows we can be pretty sure this test will give
+        // the correct results
+        if (wxWindow::GetCapture() == m_window)
+#endif
+            m_window->ReleaseMouse();
+
         if (m_cursor.Ok() && m_oldCursor.Ok())
         {
             m_window->SetCursor(m_oldCursor);
