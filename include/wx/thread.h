@@ -134,10 +134,12 @@ private:
 
 // in order to avoid any overhead under !MSW make all wxCriticalSection class
 // functions inline - but this can't be done under MSW
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
     class WXDLLEXPORT wxCriticalSectionInternal;
     #define WXCRITICAL_INLINE
-#else // !MSW
+#elif defined(__WXPM__)
+    #define WXCRITICAL_INLINE
+#else // !MSW && !PM
     #define WXCRITICAL_INLINE   inline
 #endif // MSW/!MSW
 
@@ -160,7 +162,7 @@ private:
     wxCriticalSection(const wxCriticalSection&);
     wxCriticalSection& operator=(const wxCriticalSection&);
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
     wxCriticalSectionInternal *m_critsect;
 #else // !MSW
     wxMutex m_mutex;
@@ -384,7 +386,7 @@ public:
 // implementation only until the end of file
 // -----------------------------------------------------------------------------
 #if wxUSE_THREADS
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
     // thread
@@ -399,7 +401,18 @@ public:
     // return TRUE if the main thread is waiting for some other to terminate:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLEXPORT wxIsWaitingForThread();
-#else // !MSW
+#elif defined(__WXPM__)
+    // unlock GUI if there are threads waiting for and lock it back when
+    // there are no more of them - should be called periodically by the main
+    // thread
+    extern void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
+
+    // returns TRUE if the main thread has GUI lock
+    extern bool WXDLLEXPORT wxGuiOwnedByMainThread();
+
+    inline wxCriticalSection::wxCriticalSection() { }
+    inline wxCriticalSection::~wxCriticalSection() { }
+#else // !MSW && !PM
     // implement wxCriticalSection using mutexes
     inline wxCriticalSection::wxCriticalSection() { }
     inline wxCriticalSection::~wxCriticalSection() { }
