@@ -8,7 +8,7 @@ import  wx.lib.plot
 # wx.lib.plot.py came with its own excellent demo built in,     |
 # for testing purposes, but it serves quite well to demonstrate |
 # the code and classes within, so we are simply borrowing that  |
-# code for the demo. Please load up wx.py.plot.py for a review  |
+# code for the demo. Please load up wx.lib.plot.py for a review |
 # of the code itself. The demo/test is at the bottom of         |
 # the file, as expected.                                        |
 ################################################################/
@@ -49,22 +49,22 @@ come with the class itself.
     <ul>
     <li>Page Setup
 
-        This allows you to set up how the plot will be printed. This
+        <p>This allows you to set up how the plot will be printed. This
         is built into the library itself.
        
     <li>Print Preview
 
-        As you might expect, this allows you to preview how the plot
+        <p>As you might expect, this allows you to preview how the plot
         will look when printed, in light of the page setup you may
         have selected above.
         
     <li>Print
     
-        Suprise! It prints the current plot to your printer! :-)
+        <p>Suprise! It prints the current plot to your printer! :-)
         
     <li>Save Plot
     
-        That's right, the library even provides you with the means
+        <p>That's right, the library even provides you with the means
         to export the plotted data out to a graphics file. Several
         formats are allowed for, basically any image class that
         supports saving.
@@ -75,24 +75,24 @@ come with the class itself.
     <ul>
     <li>Plot 1 ... Plot 5
      
-        Different data with different plot formats, including one empty
+        <p>Different data with different plot formats, including one empty
         plot.
          
     <li>Enable Zoom
     
-        If Zoom is enabled, you can rubber-band select an area of the
+        <p>If Zoom is enabled, you can rubber-band select an area of the
         plot to examine it in detail using the left mouse button. Right
         mouse button zooms back out. This is automatically supported
         by the library, all you have to do is turn it on.
         
     <li>Enable Grid
     
-        Plots can have different styles of grids, and and these grids can
+        <p>Plots can have different styles of grids, and and these grids can
         be turned on or off as needed.
         
     <li>Enable Legend
     
-        Plot can have legends or not, the contents which are definable 
+        <p>Plot can have legends or not, the contents which are definable 
         by you.
     </ul>
 </ul>

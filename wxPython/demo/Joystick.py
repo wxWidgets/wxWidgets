@@ -17,8 +17,8 @@ import  wx
 
 #----------------------------------------------------------------------------
 
-# For convenience
-spacer = (10, 10)
+# Once all supported versions of Python support 32-bit integers on all
+# platforms, this can go up to 32.
 MAX_BUTTONS = 16
 
 #----------------------------------------------------------------------------
@@ -1002,8 +1002,8 @@ general, this data can be read once and stored to speed computation up.
 Analog input (the axes) is delivered as a whole, positive number. If you need to know 
 if the axis is at zero (centered) or not, you will first have to calculate that center
 based on the max and min values. The demo shows a bar graph for each axis expressed
-in native numerical format, plus a 'centered' X-Y axis compas showing the relationship
-of that input to the calculcated stick position.
+in native numerical format, plus a 'centered' X-Y axis compass showing the relationship
+of that input to the calculated stick position.
 
 Analog input may be jumpy and spurious, so the control has a means of 'smoothing' the
 analog data by setting a movement threshold. This demo sets the threshold to 10, but
@@ -1034,8 +1034,8 @@ values over 30. For that reason, this demo is limited to 16 buttons.
 POV hats come in two flavors: four-way, and continuous. four-way POVs are restricted to
 the cardinal points of the compass; continuous, or CTS POV hats can deliver input in
 .01 degree increments, theoreticaly. The data is returned as a whole number; the last
-two digits are to the right of the decimal point, so in order to use this information,
-you need to divide by 100 right off the bat. 
+two digits are considered to be to the right of the decimal point, so in order to 
+use this information, you need to divide by 100 right off the bat. 
 
 <p>Different methods are provided to retrieve the POV data for a CTS hat 
 versus a four-way hat.
