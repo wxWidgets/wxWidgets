@@ -50,6 +50,8 @@ typedef struct _IMAGEN
 #define E_FORMATO       1           /* error in gif header */
 #define E_MEMORIA       2           /* error allocating memory */
 
+#define MAX_BLOCK_SIZE  256         /* max. block size */
+
 class WXDLLEXPORT wxGIFDecoder
 {
 private:
@@ -70,6 +72,8 @@ private:
     int           m_restbits;       /* remaining valid bits */
     unsigned int  m_restbyte;       /* remaining bytes in this block */
     unsigned int  m_lastbyte;       /* last byte read */
+    unsigned char m_buffer[MAX_BLOCK_SIZE];     /* buffer for reading */
+    unsigned char *m_bufp;          /* pointer to next byte in buffer */
 
     wxInputStream *m_f;             /* input file */
 
