@@ -589,7 +589,13 @@ public:
     // ODBC Error Inf.
     SWORD  cbErrorMsg;
     int    DB_STATUS;
+#ifdef __VMS
+   // The DECC compiler chokes when in db.cpp the array is accessed outside
+   // its bounds. Maybe this change should also applied for other platforms.
+    wxChar errorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN+1];
+#else
     wxChar errorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+#endif
     wxChar errorMsg[SQL_MAX_MESSAGE_LENGTH];
     SDWORD nativeError;
     wxChar sqlState[20];

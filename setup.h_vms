@@ -1060,6 +1060,9 @@
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #define SOCKLEN_T size_t
 
+/* The type of 5th argument to getsockopt() - usually size_t or int */
+#define SOCKOPTLEN_T size_t
+
 /* The type of statvfs(2) argument */
 #undef WX_STATFS_T
 
