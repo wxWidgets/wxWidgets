@@ -1740,13 +1740,18 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         // the width of the rect to draw: make it smaller to fit entirely
         // inside the column rect
+#ifdef __WXMAC__
+        int cw = wCol ;
+        int ch = h ;
+#else
         int cw = wCol - 2;
-
+        int ch = h-2 ;
+#endif
         wxRendererNative::Get().DrawHeaderButton
                                 (
                                     this,
                                     dc,
-                                    wxRect(x, HEADER_OFFSET_Y, cw, h - 2),
+                                    wxRect(x, HEADER_OFFSET_Y, cw, ch),
                                     m_parent->IsEnabled() ? 0
                                                           : (int)wxCONTROL_DISABLED
                                 );
@@ -4752,7 +4757,15 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     if ( InReportView() )
     {
         CreateHeaderWindow();
-
+#ifdef  __WXMAC_CARBON__
+        if (m_headerWin)
+        {
+            wxFont font ;
+            font.MacCreateThemeFont( kThemeSmallSystemFont ) ;
+            m_headerWin->SetFont( font );
+            CalculateAndSetHeaderHeight();
+        }
+#endif
         if ( HasFlag(wxLC_NO_HEADER) )
         {
             // VZ: why do we create it at all then?
