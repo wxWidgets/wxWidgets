@@ -55,6 +55,32 @@ static const int wxPRINT_WINDOWS = 1;
 static const int wxPRINT_POSTSCRIPT = 2;
 
 // ----------------------------------------------------------------------------
+// support for framebuffer ports
+// ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
+// VS: Fullscreen/framebuffer application needs to choose display mode prior
+//     to wxWindows initialization. This class holds information about display
+//     mode. An instance of it is returned by virtual wxApp::GetDisplayMode.
+class WXDLLEXPORT wxDisplayModeInfo
+{
+public:
+    wxDisplayModeInfo() : m_ok(FALSE) {}
+    wxDisplayModeInfo(const wxSize& size, unsigned depth) 
+        : m_size(size), m_depth(depth), m_ok(TRUE) {}
+    
+    const wxSize& GetScreenSize() const { return m_size; }
+    unsigned GetDepth() const { return m_depth; }
+    bool IsOk() const { return m_ok; }
+
+private:
+    wxSize   m_size;
+    unsigned m_depth;
+    bool     m_ok;
+};
+#endif
+
+// ----------------------------------------------------------------------------
 // the common part of wxApp implementations for all platforms
 // ----------------------------------------------------------------------------
 
@@ -252,6 +278,11 @@ public:
         // to customize the standard dialogs. The 'which' parameter is one of
         // wxICON_XXX values
     virtual wxIcon GetStdIcon(int which) const = 0;
+
+        // get display mode to use. This is only used in framebuffer wxWin ports
+        // (such as wxMGL). This method is called early in wxWin initialization
+        // process and is supposed to be overriden in derived classes.
+    virtual wxDisplayModeInfo GetDisplayMode() const { return wxDisplayModeInfo(); }
 
         // VZ: what does this do exactly?
     void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
