@@ -1520,10 +1520,14 @@ wxStrftime(wxChar *s, size_t maxsize, const wxChar *fmt, const struct tm *tm)
 #ifndef wxCtime
 WXDLLEXPORT wxChar *wxCtime(const time_t *timep)
 {
-    static wxChar   buf[128];
+    // normally the string is 26 chars but give one more in case some broken
+    // DOS compiler decides to use "\r\n" instead of "\n" at the end
+    static wxChar buf[27];
 
-    wxStrncpy( buf, wxConvertMB2WX( ctime( timep ) ), sizeof( buf ) );
-    buf[ sizeof( buf ) - 1 ] = _T('\0');
+    // ctime() is guaranteed to return a string containing only ASCII
+    // characters, as its format is always the same for any locale
+    wxStrncpy(buf, wxString::FromAscii(ctime(timep)), WXSIZEOF(buf));
+    buf[WXSIZEOF(buf) - 1] = _T('\0');
 
     return buf;
 }
