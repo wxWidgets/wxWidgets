@@ -107,11 +107,11 @@ bool MyApp::OnInit(void)
 
   frame->Centre(wxBOTH);
 #ifndef __WXMAC__
-  frame->Show(TRUE);
+  frame->Show(true);
 #endif //ndef __WXMAC__
 
   SetTopWindow(frame);
-  return TRUE;
+  return true;
 }
 
 int MyApp::OnExit(void)
@@ -129,7 +129,7 @@ wxMDIChildFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isC
 {
   //// Make a child frame
   wxDocMDIChildFrame *subframe =
-      new wxDocMDIChildFrame(doc, view, GetMainFrame(), -1, _T("Child Frame"),
+      new wxDocMDIChildFrame(doc, view, GetMainFrame(), wxID_ANY, _T("Child Frame"),
                              wxPoint(10, 10), wxSize(300, 300),
                              wxDEFAULT_FRAME_STYLE |
                              wxNO_FULL_REPAINT_ON_RESIZE);
@@ -201,7 +201,7 @@ END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
     const wxPoint& pos, const wxSize& size, long type):
-  wxDocMDIParentFrame(manager, frame, -1, title, pos, size, type, _T("myFrame"))
+  wxDocMDIParentFrame(manager, frame, wxID_ANY, title, pos, size, type, _T("myFrame"))
 {
   editMenu = (wxMenu *) NULL;
 }

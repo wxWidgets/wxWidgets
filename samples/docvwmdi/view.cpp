@@ -46,7 +46,7 @@ END_EVENT_TABLE()
 // windows for displaying the view.
 bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
-    frame = wxGetApp().CreateChildFrame(doc, this, TRUE);
+    frame = wxGetApp().CreateChildFrame(doc, this, true);
     frame->SetTitle(_T("DrawingView"));
 
     canvas = GetMainFrame()->CreateCanvas(this, frame);
@@ -54,12 +54,12 @@ bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
     // X seems to require a forced resize
     int x, y;
     frame->GetSize(&x, &y);
-    frame->SetSize(-1, -1, x, y);
+    frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, x, y);
 #endif
-    frame->Show(TRUE);
-    Activate(TRUE);
+    frame->Show(true);
+    Activate(true);
 
-    return TRUE;
+    return true;
 }
 
 // Sneakily gets used for default print/preview
@@ -102,7 +102,7 @@ void DrawingView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 bool DrawingView::OnClose(bool deleteWindow)
 {
   if (!GetDocument()->Close())
-    return FALSE;
+    return false;
 
   // Clear the canvas in  case we're in single-window mode,
   // and the canvas stays.
@@ -116,14 +116,14 @@ bool DrawingView::OnClose(bool deleteWindow)
 
   SetFrame((wxFrame*)NULL);
 
-  Activate(FALSE);
+  Activate(false);
 
   if (deleteWindow)
   {
     delete frame;
-    return TRUE;
+    return true;
   }
-  return TRUE;
+  return true;
 }
 
 void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
@@ -136,7 +136,7 @@ IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
 
 bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
-  frame = wxGetApp().CreateChildFrame(doc, this, FALSE);
+  frame = wxGetApp().CreateChildFrame(doc, this, false);
 
   int width, height;
   frame->GetClientSize(&width, &height);
@@ -147,13 +147,13 @@ bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
   // X seems to require a forced resize
   int x, y;
   frame->GetSize(&x, &y);
-  frame->SetSize(-1, -1, x, y);
+  frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, x, y);
 #endif
 
-  frame->Show(TRUE);
-  Activate(TRUE);
+  frame->Show(true);
+  Activate(true);
 
-  return TRUE;
+  return true;
 }
 
 // Handled by wxTextWindow
@@ -168,16 +168,16 @@ void TextEditView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint) )
 bool TextEditView::OnClose(bool deleteWindow)
 {
   if (!GetDocument()->Close())
-    return FALSE;
+    return false;
 
-  Activate(FALSE);
+  Activate(false);
 
   if (deleteWindow)
   {
     delete frame;
-    return TRUE;
+    return true;
   }
-  return TRUE;
+  return true;
 }
 
 /*
@@ -190,7 +190,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxView *v, wxMDIChildFrame *frame, const wxPoint& pos, const wxSize& size, long style):
- wxScrolledWindow(frame, -1, pos, size, style)
+ wxScrolledWindow(frame, wxID_ANY, pos, size, style)
 {
   view = v;
 }
@@ -232,7 +232,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
       doc->GetCommandProcessor()->Submit(new DrawingCommand(_T("Add Segment"), DOODLE_ADD, doc, currentSegment));
 
-      view->GetDocument()->Modify(TRUE);
+      view->GetDocument()->Modify(true);
       currentSegment = (DoodleSegment *) NULL;
     }
   }
@@ -257,7 +257,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
 // Define a constructor for my text subwindow
 MyTextWindow::MyTextWindow(wxView *v, wxMDIChildFrame *frame, const wxPoint& pos, const wxSize& size, long style):
- wxTextCtrl(frame, -1, _T(""), pos, size, style)
+ wxTextCtrl(frame, wxID_ANY, _T(""), pos, size, style)
 {
   view = v;
 }

@@ -248,7 +248,7 @@ void DoodleSegment::Draw(wxDC *dc)
  */
 
 DrawingCommand::DrawingCommand(const wxString& name, int command, DrawingDocument *ddoc, DoodleSegment *seg):
-  wxCommand(TRUE, name)
+  wxCommand(true, name)
 {
   doc = ddoc;
   segment = seg;
@@ -277,7 +277,7 @@ bool DrawingCommand::Do(void)
         segment = (DoodleSegment *)node->GetData();
         doc->GetDoodleSegments().Erase(node);
 
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
       }
       break;
@@ -285,12 +285,12 @@ bool DrawingCommand::Do(void)
     case DOODLE_ADD:
     {
       doc->GetDoodleSegments().Append(new DoodleSegment(*segment));
-      doc->Modify(TRUE);
+      doc->Modify(true);
       doc->UpdateAllViews();
       break;
     }
   }
-  return TRUE;
+  return true;
 }
 
 bool DrawingCommand::Undo(void)
@@ -303,11 +303,11 @@ bool DrawingCommand::Undo(void)
       if (segment)
       {
         doc->GetDoodleSegments().Append(segment);
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
         segment = (DoodleSegment *) NULL;
       }
-      doc->Modify(TRUE);
+      doc->Modify(true);
       doc->UpdateAllViews();
       break;
     }
@@ -321,12 +321,12 @@ bool DrawingCommand::Undo(void)
         delete seg;
         doc->GetDoodleSegments().Erase(node);
 
-        doc->Modify(TRUE);
+        doc->Modify(true);
         doc->UpdateAllViews();
       }
     }
   }
-  return TRUE;
+  return true;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
@@ -338,21 +338,21 @@ bool TextEditDocument::OnSaveDocument(const wxString& filename)
     TextEditView *view = (TextEditView *)GetFirstView();
 
     if (!view->textsw->SaveFile(filename))
-        return FALSE;
-    Modify(FALSE);
-    return TRUE;
+        return false;
+    Modify(false);
+    return true;
 }
 
 bool TextEditDocument::OnOpenDocument(const wxString& filename)
 {
     TextEditView *view = (TextEditView *)GetFirstView();
     if (!view->textsw->LoadFile(filename))
-        return FALSE;
+        return false;
 
-    SetFilename(filename, TRUE);
-    Modify(FALSE);
+    SetFilename(filename, true);
+    Modify(false);
     UpdateAllViews();
-    return TRUE;
+    return true;
 }
 
 bool TextEditDocument::IsModified(void) const
