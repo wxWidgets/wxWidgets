@@ -5086,9 +5086,10 @@ static PyObject *_wrap_wxDateTime___sub__DS(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-static int  wxDateTime___cmp__(wxDateTime *self,const wxDateTime & other) {
-            if (*self <  other) return -1;
-            if (*self == other) return 0;
+static int  wxDateTime___cmp__(wxDateTime *self,const wxDateTime * other) {
+            if (! other) return -1;
+            if (*self <  *other) return -1;
+            if (*self == *other) return 0;
             return 1;
         }
 static PyObject *_wrap_wxDateTime___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -5119,7 +5120,7 @@ static PyObject *_wrap_wxDateTime___cmp__(PyObject *self, PyObject *args, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxDateTime___cmp__(_arg0,*_arg1);
+    _result = (int )wxDateTime___cmp__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6220,9 +6221,10 @@ static PyObject *_wrap_wxTimeSpan___neg__(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-static int  wxTimeSpan___cmp__(wxTimeSpan *self,const wxTimeSpan & other) {
-            if (*self <  other) return -1;
-            if (*self == other) return 0;
+static int  wxTimeSpan___cmp__(wxTimeSpan *self,const wxTimeSpan * other) {
+            if (! other) return -1;
+            if (*self <  *other) return -1;
+            if (*self == *other) return 0;
             return 1;
         }
 static PyObject *_wrap_wxTimeSpan___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -6253,7 +6255,7 @@ static PyObject *_wrap_wxTimeSpan___cmp__(PyObject *self, PyObject *args, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxTimeSpan___cmp__(_arg0,*_arg1);
+    _result = (int )wxTimeSpan___cmp__(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

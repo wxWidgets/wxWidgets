@@ -748,9 +748,10 @@ public:
         wxDateTime __sub__TS(const wxTimeSpan& other) { return *self - other; }
         wxDateTime __sub__DS(const wxDateSpan& other) { return *self - other; }
 
-        int __cmp__(const wxDateTime& other) {
-            if (*self <  other) return -1;
-            if (*self == other) return 0;
+        int __cmp__(const wxDateTime* other) {
+            if (! other) return -1;
+            if (*self <  *other) return -1;
+            if (*self == *other) return 0;
             return 1;
         }
     }
@@ -895,9 +896,10 @@ public:
         wxTimeSpan __mul__(int n)                   { return *self * n; }
         wxTimeSpan __rmul__(int n)                  { return n * *self; }
         wxTimeSpan __neg__()                        { return self->Negate(); }
-        int __cmp__(const wxTimeSpan& other) {
-            if (*self <  other) return -1;
-            if (*self == other) return 0;
+        int __cmp__(const wxTimeSpan* other) {
+            if (! other) return -1;
+            if (*self <  *other) return -1;
+            if (*self == *other) return 0;
             return 1;
         }
     }

@@ -4936,29 +4936,19 @@ static PyObject *_wrap_wxLog_Resume(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
-#define wxLog_SetVerbose(_swigobj,_swigarg0)  (_swigobj->SetVerbose(_swigarg0))
 static PyObject *_wrap_wxLog_SetVerbose(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxLog * _arg0;
-    bool  _arg1 = (bool ) TRUE;
-    PyObject * _argo0 = 0;
-    int tempbool1 = (int) TRUE;
-    char *_kwnames[] = { "self","bVerbose", NULL };
+    bool  _arg0 = (bool ) TRUE;
+    int tempbool0 = (int) TRUE;
+    char *_kwnames[] = { "bVerbose", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxLog_SetVerbose",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:wxLog_SetVerbose",_kwnames,&tempbool0)) 
         return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLog_SetVerbose. Expected _wxLog_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
+    _arg0 = (bool ) tempbool0;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxLog_SetVerbose(_arg0,_arg1);
+    wxLog::SetVerbose(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10561,6 +10551,7 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxEXEC_ASYNC", PyInt_FromLong((long) wxEXEC_ASYNC));
 	 PyDict_SetItemString(d,"wxEXEC_SYNC", PyInt_FromLong((long) wxEXEC_SYNC));
 	 PyDict_SetItemString(d,"wxEXEC_NOHIDE", PyInt_FromLong((long) wxEXEC_NOHIDE));
+	 PyDict_SetItemString(d,"wxEXEC_MAKE_GROUP_LEADER", PyInt_FromLong((long) wxEXEC_MAKE_GROUP_LEADER));
 	 PyDict_SetItemString(d,"wxMAILCAP_STANDARD", PyInt_FromLong((long) wxMAILCAP_STANDARD));
 	 PyDict_SetItemString(d,"wxMAILCAP_NETSCAPE", PyInt_FromLong((long) wxMAILCAP_NETSCAPE));
 	 PyDict_SetItemString(d,"wxMAILCAP_KDE", PyInt_FromLong((long) wxMAILCAP_KDE));

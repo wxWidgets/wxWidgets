@@ -367,9 +367,6 @@ class wxLogPtr :
     def HasPendingMessages(self, *_args, **_kwargs):
         val = apply(misc2c.wxLog_HasPendingMessages,(self,) + _args, _kwargs)
         return val
-    def SetVerbose(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLog_SetVerbose,(self,) + _args, _kwargs)
-        return val
     def GetVerbose(self, *_args, **_kwargs):
         val = apply(misc2c.wxLog_GetVerbose,(self,) + _args, _kwargs)
         return val
@@ -1184,6 +1181,8 @@ wxLog_Suspend = misc2c.wxLog_Suspend
 
 wxLog_Resume = misc2c.wxLog_Resume
 
+wxLog_SetVerbose = misc2c.wxLog_SetVerbose
+
 wxLog_DontCreateOnDemand = misc2c.wxLog_DontCreateOnDemand
 
 wxLog_SetTraceMask = misc2c.wxLog_SetTraceMask
@@ -1309,6 +1308,7 @@ wxEVT_END_PROCESS = misc2c.wxEVT_END_PROCESS
 wxEXEC_ASYNC = misc2c.wxEXEC_ASYNC
 wxEXEC_SYNC = misc2c.wxEXEC_SYNC
 wxEXEC_NOHIDE = misc2c.wxEXEC_NOHIDE
+wxEXEC_MAKE_GROUP_LEADER = misc2c.wxEXEC_MAKE_GROUP_LEADER
 wxMAILCAP_STANDARD = misc2c.wxMAILCAP_STANDARD
 wxMAILCAP_NETSCAPE = misc2c.wxMAILCAP_NETSCAPE
 wxMAILCAP_KDE = misc2c.wxMAILCAP_KDE
