@@ -32,7 +32,7 @@
 // TODO for wxWin: wxToolBar95 cannot be moved to a non-0,0 position!
 // Needs to have a parent window...
 // So use a simple toolbar at present.
-#ifdef __WXGTK__
+#if 0 // def __WXGTK__
 #define TOOLPALETTECLASS    wxToolBar
 #else
 #define TOOLPALETTECLASS    wxToolBarSimple

@@ -447,7 +447,7 @@ void wxMDIChildFrame::OnLower()
 
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWindows)
-void wxMDIChildFrame::SetClientSize(int width, int height)
+void wxMDIChildFrame::DoSetClientSize(int width, int height)
 {
     wxWindow::DoSetClientSize(width, height);
 }

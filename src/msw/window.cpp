@@ -1264,6 +1264,12 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             // because both usually pop up a context menu
             case VK_APPS:
                 {
+
+#ifndef GET_X_LPARAM
+#define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
+#define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
+#endif
+
                     // construct the key mask
                     WPARAM fwKeys = MK_RBUTTON;
                     if ( (::GetKeyState(VK_CONTROL) & 0x100) != 0 )

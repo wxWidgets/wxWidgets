@@ -135,18 +135,6 @@ protected:
   double            m_underlineThickness;
 };
 
-// A module to allow initialization/cleanup of PostScript-related
-// things without calling these functions from app.cpp.
-
-class WXDLLEXPORT wxPostScriptModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
-public:
-    wxPostScriptModule() {}
-    bool OnInit();
-    void OnExit();
-};
-
 // TODO Needed? Should perhaps use wxGenericPrintDialog instead.
 #if 1
 #define wxID_PRINTER_COMMAND        1

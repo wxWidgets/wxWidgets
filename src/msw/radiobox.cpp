@@ -780,7 +780,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
     }
 
     if ( !processed )
-        return ::CallWindowProc(s_wndprocRadioBtn, hwnd, msg, wParam, lParam);
+        return ::CallWindowProc((WNDPROC) s_wndprocRadioBtn, hwnd, msg, wParam, lParam);
     else
         return 0;
 }

@@ -40,6 +40,10 @@
 
 #include "wx/msw/private.h"
 
+#ifdef __GNUWIN32__
+#include "wx/msw/gnuwin32/extra.h"
+#endif
+
 #if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__)
     #include <commctrl.h>
 #endif

@@ -1,8 +1,30 @@
 wxWindows 2 Change Log
 ----------------------
 
-Beta 5, February 18  1999
--------------------------
+Beta 6 (release), February 28th 1999
+------------------------------------
+
+wxGTK:
+
+- wxGLCanvas fixes.
+- Slider/spinbutton fixes.
+
+wxMSW:
+
+- Fixed problems with <return> in dialogs/panels.
+- Fixed window cursor setting.
+
+wxMotif:
+
+
+General:
+
+- Added wxUSE_SOCKETS.
+- More topic overviews.
+
+
+Beta 5, February 18th 1999
+--------------------------
 
 wxGTK:
 

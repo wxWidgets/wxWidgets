@@ -132,6 +132,8 @@
 
 #define wxUSE_DYNLIB_CLASS  0
                                   // Use wxLibrary
+#define wxUSE_SOCKETS       1
+                                  // Set to 1 to use socket classes
 /*
  * Finer detail
  *

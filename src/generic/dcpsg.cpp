@@ -41,6 +41,7 @@
 #include "wx/stattext.h"
 #include "wx/radiobox.h"
 #include "wx/textctrl.h"
+#include "wx/prntbase.h"
 
 #include <math.h>
 

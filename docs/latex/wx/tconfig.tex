@@ -12,14 +12,15 @@ The config classes provide a way to store some application configuration
 information. They were especially designed for this usage and, although may
 probably be used for many other things as well, should be limited to it. It
 means that this information should be:
-\begin{itemize}
-\item{1.} Typed, i.e. strings or numbers for the moment. You can not store
+
+\begin{enumerate}
+\item Typed, i.e. strings or numbers for the moment. You can not store
 binary data, for example.
-\item{2.} Small. For instance, it is not recommended to use the Windows
+\item Small. For instance, it is not recommended to use the Windows
 registry for amounts of data more than a couple of kilobytes.
-\item{3.} Not performance critical, neither from speed nor from a memory
+\item Not performance critical, neither from speed nor from a memory
 consumption point of view.
-\end{itemize}
+\end{enumerate}
 
 On the other hand, the features provided make them very useful for storing all
 kinds of small to medium volumes of hierarchically-organized, heterogenous
@@ -31,7 +32,7 @@ particular, these classes were designed to be as easy to use as possible.
 From another point of view, they provide an interface which hides the
 differences between the Windows registry and the standard Unix text format
 configuration files. Other (future) implementations of wxConfigBase might also
-understand GTK ressource files or their analogues on the KDE side.
+understand GTK resource files or their analogues on the KDE side.
 
 In any case, each implementation of wxConfigBase does its best to
 make the data look the same way everywhere. Due

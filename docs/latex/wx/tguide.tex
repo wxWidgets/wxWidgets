@@ -3,11 +3,11 @@
 To set a wxWindows application going, you'll need to derive a \helpref{wxApp}{wxapp} class and
 override \helpref{wxApp::OnInit}{wxapponinit}.
 
-An application must have a top-level \helpref{wxFrame}{wxframe} window (returned by \helpref{wxApp::OnInit}{wxapponinit}),
-each frame containing one or more instances of \helpref{wxPanel}{wxpanel}, \helpref{wxSplitterWindow}{wxsplitterwindow}\rtfsp
+An application must have a top-level \helpref{wxFrame}{wxframe} or \helpref{wxDialog}{wxdialog} window.
+Each frame may contain one or more instances of classes such as \helpref{wxPanel}{wxpanel}, \helpref{wxSplitterWindow}{wxsplitterwindow}\rtfsp
 or other windows and controls.
 
-A frame can have a \helpref{wxMenuBar}{wxmenubar}, a status line, and a \helpref{wxIcon}{wxicon} for
+A frame can have a \helpref{wxMenuBar}{wxmenubar}, a \helpref{wxToolBar}{wxtoolbar}, a status line, and a \helpref{wxIcon}{wxicon} for
 when the frame is iconized.
 
 A \helpref{wxPanel}{wxpanel} is used to place controls (classes derived from \helpref{wxControl}{wxcontrol})
@@ -15,14 +15,14 @@ which are used for user interaction. Examples of controls are \helpref{wxButton}
 \rtfsp\helpref{wxCheckBox}{wxcheckbox}, \helpref{wxChoice}{wxchoice}, \helpref{wxListBox}{wxlistbox},
 \rtfsp\helpref{wxRadioBox}{wxradiobox}, \helpref{wxSlider}{wxslider}.
 
-Instances of \helpref{wxDialog}{wxdialog} can also be used for panels, items and they have
+Instances of \helpref{wxDialog}{wxdialog} can also be used for controls and they have
 the advantage of not requiring a separate frame.
 
 Instead of creating a dialog box and populating it with items, it is possible to choose
 one of the convenient common dialog classes, such as \helpref{wxMessageDialog}{wxmessagedialog}\rtfsp
 and \helpref{wxFileDialog}{wxfiledialog}.
 
-You never draw directly onto a window --- you use a {\it device context} (DC). \helpref{wxDC}{wxdc} is
+You never draw directly onto a window - you use a {\it device context} (DC). \helpref{wxDC}{wxdc} is
 the base for \helpref{wxClientDC}{wxclientdc}, \helpref{wxPaintDC}{wxpaintdc}, \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxPostScriptDC}{wxpostscriptdc},
 \rtfsp\helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxMetafileDC}{wxmetafiledc} and \helpref{wxPrinterDC}{wxprinterdc}.
 If your drawing functions have {\bf wxDC} as a parameter, you can pass any of these DCs
@@ -39,8 +39,7 @@ These might override predefined event handlers such as \helpref{wxWindow::OnChar
 
 Most modern applications will have an on-line, hypertext help system; for this, you
 need wxHelp and the \helpref{wxHelpController}{wxhelpcontroller} class to control
-wxHelp. To add sparkle, you might use the wxToolBar class
-which makes heavy use of the \helpref{wxBitmap}{wxbitmap}.
+wxHelp.
 
 GUI applications aren't all graphical wizardry. List and hash table needs are
 catered for by \helpref{wxList}{wxlist}, \helpref{wxStringList}{wxstringlist} and \helpref{wxHashTable}{wxhashtable}.
@@ -48,9 +47,5 @@ You will undoubtedly need some platform-independent \helpref{file functions}{fil
 and you may find it handy to maintain and search a list of paths using \helpref{wxPathList}{wxpathlist}.
 There's a \helpref{miscellany}{miscellany} of operating system and other functions.
 
-If you have several communicating applications, you can try out the DDE-like functions, by
-using the three classes \helpref{wxDDEClient}{wxddeclient}, \helpref{wxDDEServer}{wxddeserver} and
-\rtfsp\helpref{wxDDEConnection}{wxddeconnection}. These use DDE under Windows, and a simulation using
-sockets under UNIX.
-
+See also \helpref{Classes by Category}{classesbycat} for a list of classes.
 

@@ -25,9 +25,9 @@ LIB_MINOR=1
 
 LIB_CPP_SRC= \
 \
- basic.cpp basic2.cpp bmpshape.cpp canvas.cpp \
+ basic.cpp basic2.cpp bmpshape.cpp canvas.cpp constrnt.cpp \
  composit.cpp divided.cpp drawn.cpp lines.cpp \
- mfutils.cpp misc.cpp ogldiag.cpp 
+ mfutils.cpp misc.cpp ogldiag.cpp
 
 #define library objects
 LIB_OBJ= \

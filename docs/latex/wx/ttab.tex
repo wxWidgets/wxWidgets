@@ -165,39 +165,6 @@ void MyDialog::Init(void)
 \end{verbatim}
 }
 
-\subsection{wxTab change log}
-
-June 3rd 1997, Version 1.2
-
-\begin{itemize}\itemsep=0pt
-\item Fixed bug which drew some tabs incorrectly.
-\item Altered sample to put buttons below tabs, as per standard
-Windows conventions.
-\item Added improvements from Hitachi Europe Limited: draws correctly
-on Motif and Windows, and tabs are now rounded - much nicer.
-\end{itemize}
-
-April 29th 1996, Version 1.1
-
-\begin{itemize}\itemsep=0pt
-\item Added SetHorizontalTabOffset, SetHorizontalTabSpacing.
-\item Corrected bug in colouring tabs (1 pixel out).
-\item Corrected bug in adding tabs: last tab on first row could overlap right-hand
-edge.
-\item Added Layout function to allow resizing of the view rectangle and subsequent redrawing
-of the tabs.
-\item Added WXTAB\_VERSION symbol.
-\item Fixed bug in SetTabSelection which did not move the selected tab to the first row.
-\item Added argument in SetTabSelection to optionally avoid calling activation code.
-\item Changed wxPanelTabView API to allow use of any window, not just a panel, in a tab.
-\end{itemize}
-
-April 24th 1996, Version 1.0
-
-\begin{itemize}\itemsep=0pt
-\item First release.
-\end{itemize}
-
 \section{wxTabView overview}\label{wxtabviewoverview}
 
 Classes: \helpref{wxTabView}{wxtabview}, \helpref{wxPanelTabView}{wxpaneltabview}

@@ -151,7 +151,6 @@ public:
     void SetMenuBar(wxMenuBar *menu_bar);
     void SetTitle(const wxString& title);
 
-    void SetClientSize(int width, int height);
     void GetClientSize(int *width, int *height) const;
     void GetSize(int *width, int *height) const;
     void GetPosition(int *x, int *y) const ;

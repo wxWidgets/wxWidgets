@@ -74,19 +74,6 @@ needing to call GetProperty several times using several temporary objects. For e
 \end{verbatim}
 }
 
-\membersection{wxAutomationObject::ConvertOleToVariant}\label{wxautomationobjectconvertoletovariant}
-
-\constfunc{bool}{ConvertOleToVariant}{\param{const VARIANTARG\&}{ oleVariant}, \param{const wxVariant\&}{ variant}}
-
-Converts the given VARIANTARG object to a wxVariant. IDispatch pointers are converted to the ``void*" type.
-
-\membersection{wxAutomationObject::ConvertVariantToOle}\label{wxautomationobjectconvertvarianttoole}
-
-\constfunc{bool}{ConvertVariantToOle}{\param{const wxVariant\&}{ variant}, \param{VARIANTARG\&}{ oleVariant}}
-
-Converts the given wxVariant object to a VARIANTARG. The ``void*" type is assumed to be an
-IDispatch pointer.
-
 \membersection{wxAutomationObject::CreateInstance}\label{wxautomationobjectcreateinstance}
 
 \constfunc{bool}{CreateInstance}{\param{const wxString\&}{ classId}}
