@@ -681,11 +681,7 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                 sizer2 -> Add(new wxStaticText(this, -1, _("Normal font:")), 
                               0, wxLEFT | wxTOP, 10);
                 sizer2 -> Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, 
-//#ifdef __WXMSW__
                               wxSize(200, 200), 
-//#else 
-//                              wxSize(200, -1), 
-//#endif // FIXME: temporarily commented by VS to demonstrate the problem
                               0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
@@ -702,11 +698,7 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                 sizer2 -> Add(new wxStaticText(this, -1, _("Fixed font:")), 
                               0, wxLEFT | wxTOP, 10);
                 sizer2 -> Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, 
-//#ifdef __WXMSW__
                               wxSize(200, 200), 
-//#else 
-//                              wxSize(200, -1), 
-//#endif // FIXME: temporarily commented by VS to demonstrate the problem
                               0, NULL, wxCB_DROPDOWN | wxCB_READONLY), 
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
