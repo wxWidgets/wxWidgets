@@ -14,36 +14,21 @@ set -o errexit
 # to remote hosts
 STAGING_DIR=./BUILD
 
+
 # host name of the machine to use for windows builds
-WIN_HOST=cyclops
-
-# local dir (from the poerspecitve of the master machine) of the shared 
-# build dir on the windows machine, plus how to mount it there.  If the 
-# [u]mount commands are empty then WIN_SHARED will be used directly.
-WIN_SHARED=./tmp/mnt
-WIN_MOUNT="smbmount //$WIN_HOST/BUILD $WIN_SHARED -o credentials=/etc/samba/auth.cyclops.robind,dmask=755,fmask=644"
-WIN_UMOUNT="smbumount $WIN_SHARED"
-
-# Where is that dir from the remote machine's perspective?
-WIN_SHARED_REMOTE=/c/BUILD
+WIN_HOST=beast
+# Where is the build dir from the remote machine's perspective?
+WIN_BUILD=/c/BUILD
 
 
-
-# Same as the above
+# Just like the above
 OSX_HOST=bigmac
-OSX_SHARED=./tmp/mnt/BUILD
-OSX_MOUNT="smbmount //$OSX_HOST/robind ./tmp/mnt -o credentials=/etc/samba/auth.bigmac.robind,dmask=755,fmask=644"
-OSX_UMOUNT="smbumount ./tmp/mnt"
-OSX_SHARED_REMOTE=/Users/robind/BUILD
-
+OSX_BUILD=/tmp/BUILD
 
 
 # Alsmost the same...  See below
 LINUX_HOST=rh9
-LINUX_SHARED=/stuff/temp/BUILD
-LINUX_MOUNT=
-LINUX_UMOUNT=
-LINUX_SHARED_REMOTE=/stuff/temp/BUILD
+LINUX_BUILD=/tmp/BUILD
 
 
 # Upload server locations
@@ -204,34 +189,19 @@ fi
 if [ $skipwin != yes ]; then
     echo "-=-=- Starting Windows build..."
 
-    # mount the shared folder?
-    if [ -n "$WIN_MOUNT" ]; then 
-	echo "Mounting shared folder..."
-	$WIN_MOUNT
-    fi
-
-    # Copy the src file 
-    echo "Copying source file..."
-    cp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz $WIN_SHARED
-
-    # Untar it on the remote machine, and then run the build script
-    echo "Unarchiving source file on $WIN_HOST..."
-    ssh $WIN_HOST "cd $WIN_SHARED_REMOTE && tar xzf wxPythonSrc-$VERSION.tar.gz && rm wxPythonSrc-$VERSION.tar.gz"
-
-    echo "Running build script on $WIN_HOST..."
-    wxdir=$WIN_SHARED_REMOTE/wxPythonSrc-$VERSION
-    cmd=$wxdir/wxPython/distrib/all/build-windows
-    ssh $WIN_HOST "cd $wxdir && $cmd $wxdir $WIN_SHARED_REMOTE $skipclean $VERSION $PYVER"
+    echo "Copying source file and build script..."
+    scp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz \
+	distrib/all/build-windows \
+	$WIN_HOST:$WIN_BUILD
     
-    echo "Fetching the results..."
-    cp $WIN_SHARED/wxPythonWIN32*  $STAGING_DIR
-    ssh $WIN_HOST "cd $WIN_SHARED_REMOTE && rm wxPythonWIN32*"
+     echo "Running build script on $WIN_HOST..."
+     wxdir=$WIN_BUILD/wxPythonSrc-$VERSION
+     cmd=./build-windows
+     ssh $WIN_HOST "cd $WIN_BUILD && $cmd $wxdir $WIN_BUILD $skipclean $VERSION $PYVER && rm $cmd"
 
-    # unmount?
-    if [ -n "$WIN_UMOUNT" ]; then 
-	echo "Unmounting shared folder..."
-	$WIN_UMOUNT
-    fi
+     echo "Fetching the results..."
+     scp $WIN_HOST:$WIN_BUILD/wxPythonWIN32*  $STAGING_DIR
+     ssh $WIN_HOST "rm $WIN_BUILD/wxPythonWIN32*"
 fi
 
 
@@ -241,36 +211,22 @@ fi
 if [ $skiposx != yes ]; then
     echo "-=-=- Starting OSX build..."
 
-    # mount the shared folder?
-    if [ -n "$OSX_MOUNT" ]; then 
-	echo "Mounting shared folder..."
-	$OSX_MOUNT
-    fi
+    echo "Copying source files and build script..."
+    ssh $OSX_HOST "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/*"
+    scp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz \
+	$STAGING_DIR/wxPythonDocs-$VERSION.tar.gz \
+	$STAGING_DIR/wxPythonDemo-$VERSION.tar.gz \
+	distrib/all/build-osx \
+	$OSX_HOST:$OSX_BUILD
 
-    # Copy the src file 
-    echo "Copying source files..."
-    cp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz $OSX_SHARED
-    cp $STAGING_DIR/wxPythonDocs-$VERSION.tar.gz $OSX_SHARED
-    cp $STAGING_DIR/wxPythonDemo-$VERSION.tar.gz $OSX_SHARED
+     echo "Running build script on $OSX_HOST..."
+     wxdir=$OSX_BUILD/wxPythonSrc-$VERSION
+     cmd=./build-osx
+     ssh root@$OSX_HOST "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $PYVER && rm $cmd"
 
-    # Untar it on the remote machine, and then run the build script
-    echo "Unarchiving source file on $OSX_HOST..."
-    ssh root@$OSX_HOST "cd $OSX_SHARED_REMOTE && tar xzf wxPythonSrc-$VERSION.tar.gz && rm wxPythonSrc-$VERSION.tar.gz"
-
-    echo "Running build script on $OSX_HOST..."
-    wxdir=$OSX_SHARED_REMOTE/wxPythonSrc-$VERSION
-    cmd=$wxdir/wxPython/distrib/all/build-osx
-    ssh root@$OSX_HOST "cd $wxdir && $cmd $wxdir $OSX_SHARED_REMOTE $skipclean $VERSION $PYVER"
-    
-    echo "Fetching the results..."
-    cp $OSX_SHARED/wxPythonOSX*  $STAGING_DIR
-    ssh root@$OSX_HOST "cd $OSX_SHARED_REMOTE && rm wxPythonOSX*"
-
-    # unmount?
-    if [ -n "$OSX_UMOUNT" ]; then 
-	echo "Unmounting shared folder..."
-	$OSX_UMOUNT
-    fi
+     echo "Fetching the results..."
+     scp "$OSX_HOST:$OSX_BUILD/wxPythonOSX*"  $STAGING_DIR
+     ssh $OSX_HOST "rm $OSX_BUILD/wxPythonOSX*"
 fi
 
 
@@ -304,16 +260,19 @@ if [ $skiplinux != yes ]; then
     # unpack the tarball and most of the  other steps...
 
     
-    echo "Copying source files..."
-    mkdir -p $LINUX_SHARED
-    cp $STAGING_DIR/wxPython*.src.rpm $LINUX_SHARED
-    
-    scp distrib/all/build-linux root@$LINUX_HOST:/tmp > /dev/null
-    ssh root@$LINUX_HOST "cd /tmp && ./build-linux /tmp/wx $LINUX_SHARED_REMOTE $skipclean $VERSION $PYVER"
+    echo "Copying source filesa nd build script..."
+    ssh root@$LINUX_HOST "mkdir -p $LINUX_BUILD && rm -rf $LINUX_BUILD/*"
+    scp $STAGING_DIR/wxPython*.src.rpm \
+	distrib/all/build-linux \
+	root@$LINUX_HOST:$LINUX_BUILD
+
+    echo "Running build script on $LINUX_HOST..."
+    cmd=./build-linux
+    ssh root@$LINUX_HOST "cd $LINUX_BUILD && $cmd $LINUX_BUILD $skipclean $VERSION $PYVER"
     
     echo "Fetching the results..."
-    cp $LINUX_SHARED/wxPythonGTK*.i[0-9]86.rpm  $STAGING_DIR
-    rm -r $LINUX_SHARED
+    scp root@$LINUX_HOST:$LINUX_BUILD/wxPythonGTK*.i[0-9]86.rpm  $STAGING_DIR
+    ssh root@$LINUX_HOST "$LINUX_BUILD/wxPythonGTK*.i[0-9]86.rpm"
 fi
 
 

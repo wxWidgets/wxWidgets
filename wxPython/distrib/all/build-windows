@@ -30,22 +30,45 @@ VERSION=$4
 shift;shift;shift;shift
 PYVER=$@
 
+
 # WXDIR is the cygwin path, WXWIN is the DOS path
 WXWIN_OLD=$WXWIN
-WXWIN=`cygpath -w $WXDIR`
+WXWIN=`cygpath -m $WXDIR`
 export WXWIN
 
-# Fix the PATH.  (Why is this needed??)
-PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/home/robind/bin:.:$WXDIR/lib/vc_dll:$PATH
-export PATH
 
-# change to the right spot and copy our build scripts
+# # Fix the PATH.  (Why is this needed??)
+# PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/home/robind/bin:.:$WXDIR/lib/vc_dll:$PATH
+# export PATH
+# echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+# echo $PATH
+# echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+# exit 0
+
+
+# untar the source 
+echo "Unarchiving wxPythonSrc-$VERSION.tar.gz"
+cd $DESTDIR
+tar xzf wxPythonSrc-$VERSION.tar.gz 
+rm wxPythonSrc-$VERSION.tar.gz
+
+
+# Fix line endings
+echo "Converting wxPython line endings to CRLF..."
+cd $WXDIR
+names=`find wxPython -name "*.py" -o -name "*.txt" -o -name "*.htm*" -o -name "*.css" -o -name "*.h" -o -name "*.cpp" -o -name "*.c" -o -name "*.xml" `
+unix2dos -D $names
+
+
+# change to the right spot in the source tree and copy our build scripts
+echo "Setting up for the build..."
 cd $WXDIR/build/msw
 cp $WXDIR/wxPython/distrib/msw/.m* .
 
+
 # replace some settings in setup0.h and write to setup.h
 cat > .my.sedexpr  <<EOF
-# s/wxDIALOG_UNIT_COMPATIBILITY *1/wxDIALOG_UNIT_COMPATIBILITY 0/g
+s/wxDIALOG_UNIT_COMPATIBILITY *1/wxDIALOG_UNIT_COMPATIBILITY 0/g
 s/wxUSE_DEBUG_CONTEXT *0/wxUSE_DEBUG_CONTEXT 1/g
 s/wxUSE_MEMORY_TRACING *0/wxUSE_MEMORY_TRACING 1/g
 s/wxUSE_DIALUP_MANAGER *1/wxUSE_DIALUP_MANAGER 0/g
@@ -62,10 +85,12 @@ echo "Building the wx DLLs..."
 .make hybrid
 .make hybrid-uni
 
+
 echo "Building the wx tools..."
 .make_tools
 
 # cheat and just copy the .CHM files from the regular project dir
+# TODO:  Copy over the wxPythonDocs fle and run hhc on the contents of that.
 mkdir -p $WXDIR/docs/htmlhelp
 cp `cygpath $WXWIN_OLD/docs/htmlhelp`/*.chm $WXDIR/docs/htmlhelp
 
@@ -85,6 +110,8 @@ for ver in $PYVER; do
 done
 
 echo "Building the developer package..."
+WXWIN=`cygpath -w $WXDIR`
+export WXWIN
 4nt /c distrib/makedev.bat $VERSION
 
 
