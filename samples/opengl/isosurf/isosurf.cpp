@@ -25,6 +25,10 @@
 #include "wx/wx.h"
 #endif
 
+#if !wxUSE_GLCANVAS
+    #error "OpenGL required: set wxUSE_GLCANVAS to 1 and rebuild the library"
+#endif
+
 #include "wx/timer.h"
 #include "wx/glcanvas.h"
 
@@ -288,8 +292,6 @@ bool MyApp::OnInit()
         doubleBuffer = GL_FALSE;
     }
 
-#if wxUSE_GLCANVAS
-
     frame->m_canvas = new TestGLCanvas(frame, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, 0, _T("TestGLCanvas"), gl_attrib );
 
@@ -302,13 +304,6 @@ bool MyApp::OnInit()
     Init();
 
     return true;
-
-#else
-
-    wxMessageBox( _T("This sample has to be compiled with wxUSE_GLCANVAS"), _T("Building error"), wxOK);
-
-    return false;
-#endif
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -320,19 +315,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, long style)
     : wxFrame(frame, wxID_ANY, title, pos, size, style)
 {
-#if wxUSE_GLCANVAS
     m_canvas = NULL;
-#endif
 }
 
 MyFrame::~MyFrame()
 {
-#if wxUSE_GLCANVAS
-    if (m_canvas)
-    {
-        delete m_canvas; m_canvas = NULL;
-    }
-#endif
+    delete m_canvas;
 }
 
 // Intercept menu commands
@@ -345,8 +333,6 @@ void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
 /*
  * TestGLCanvas implementation
  */
-
-#if wxUSE_GLCANVAS
 
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
@@ -492,6 +478,4 @@ void TestGLCanvas::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 {
     // Do nothing, to avoid flashing.
 }
-
-#endif // #if wxUSE_GLCANVAS
 

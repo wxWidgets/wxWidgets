@@ -25,6 +25,10 @@
 #include "wx/wx.h"
 #endif
 
+#if !wxUSE_GLCANVAS
+    #error "OpenGL required: set wxUSE_GLCANVAS to 1 and rebuild the library"
+#endif
+
 #include "cube.h"
 
 #ifndef __WXMSW__     // for wxStopWatch, see remark below
@@ -161,8 +165,6 @@ unsigned long wxStopWatch( unsigned long *sec_base )
 /*----------------------------------------------------------------
   Implementation of Test-GLCanvas
 -----------------------------------------------------------------*/
-
-#if wxUSE_GLCANVAS
 
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
@@ -421,8 +423,6 @@ void TestGLCanvas::Rotate( GLfloat deg )
 }
 
 
-#endif // wxUSE_GLCANVAS
-
 /* -----------------------------------------------------------------------
   Main Window
 -------------------------------------------------------------------------*/
@@ -477,7 +477,6 @@ void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
 
     frame->SetMenuBar(menuBar);
 
-#if wxUSE_GLCANVAS
     if (parentFrame)
     {
         frame->m_canvas = new TestGLCanvas( frame, parentFrame->m_canvas,
@@ -488,7 +487,6 @@ void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
         frame->m_canvas = new TestGLCanvas(frame, wxID_ANY,
             wxDefaultPosition, wxDefaultSize);
     }
-#endif
 
     // Show the frame
     frame->Show(true);
@@ -503,7 +501,6 @@ void MyFrame::OnNewWindow( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnDefRotateLeftKey( wxCommandEvent& WXUNUSED(event) )
 {
-#if wxUSE_GLCANVAS
     ScanCodeDialog dial( this, wxID_ANY, m_canvas->m_rleft,
         wxString(_T("Left")), _T("Define key") );
 
@@ -511,12 +508,10 @@ void MyFrame::OnDefRotateLeftKey( wxCommandEvent& WXUNUSED(event) )
 
     if( result == wxID_OK )
         m_canvas->m_rleft = dial.GetValue();
-#endif
 }
 
 void MyFrame::OnDefRotateRightKey( wxCommandEvent& WXUNUSED(event) )
 {
-#if wxUSE_GLCANVAS
     ScanCodeDialog dial( this, wxID_ANY, m_canvas->m_rright,
         wxString(_T("Right")), _T("Define key") );
 
@@ -524,7 +519,6 @@ void MyFrame::OnDefRotateRightKey( wxCommandEvent& WXUNUSED(event) )
 
     if( result == wxID_OK )
         m_canvas->m_rright = dial.GetValue();
-#endif
 }
 
 /*------------------------------------------------------------------
@@ -535,24 +529,8 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-#if wxUSE_LOG
-    wxLog::SetTraceMask(wxTraceMessages);
-#endif
-
     // Create the main frame window
     (void) MyFrame::Create(NULL);
 
-#if wxUSE_GLCANVAS
-
     return true;
-
-#else
-
-    wxMessageBox( _T("This sample has to be compiled with wxUSE_GLCANVAS"),
-        _T("Building error"), wxOK);
-
-    return false;
-
-#endif
-
 }
