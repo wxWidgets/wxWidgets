@@ -238,8 +238,8 @@ if [ -z "$skipinstall" ]; then
 
 
     # TODO for $INSTALLROOT and $INSTALLDEVEL ?
-    #chown -R root:admin $INSTALLROOT
-    #chmod -R g+w        $INSTALLROOT
+    chown -R root:admin $INSTALLROOT
+    chmod -R g+w        $INSTALLROOT
 fi
 
 popd
