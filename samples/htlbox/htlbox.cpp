@@ -127,7 +127,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() { (new MyFrame())->Show(); return TRUE; }
+    virtual bool OnInit() { (new MyFrame())->Show(); return true; }
 };
 
 // ----------------------------------------------------------------------------
@@ -192,7 +192,7 @@ IMPLEMENT_APP(MyApp)
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, -1, _T("HtmlLbox wxWidgets Sample"),
+       : wxFrame(NULL, wxID_ANY, _T("HtmlLbox wxWidgets Sample"),
                  wxDefaultPosition, wxSize(400, 500))
 {
     // set the frame icon
@@ -248,7 +248,7 @@ MyFrame::MyFrame()
 
     // create the child controls
     m_hlbox = new MyHtmlListBox(this);
-    wxTextCtrl *text = new wxTextCtrl(this, -1, _T(""),
+    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, _T(""),
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_MULTILINE);
     delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
@@ -272,8 +272,8 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -398,7 +398,7 @@ void MyFrame::OnLboxSelect(wxCommandEvent& event)
 // ============================================================================
 
 MyHtmlListBox::MyHtmlListBox(wxWindow *parent, bool multi)
-             : wxHtmlListBox(parent, -1, wxDefaultPosition, wxDefaultSize,
+             : wxHtmlListBox(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                              multi ? wxLB_MULTIPLE : 0)
 {
     m_change = true;

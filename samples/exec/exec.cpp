@@ -338,18 +338,18 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_IDLE(MyFrame::OnIdle)
 
-    EVT_TIMER(-1, MyFrame::OnTimer)
+    EVT_TIMER(wxID_ANY, MyFrame::OnTimer)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_BUTTON(Exec_Btn_Send, MyPipeFrame::OnBtnSend)
     EVT_BUTTON(Exec_Btn_Get, MyPipeFrame::OnBtnGet)
 
-    EVT_TEXT_ENTER(-1, MyPipeFrame::OnTextEnter)
+    EVT_TEXT_ENTER(wxID_ANY, MyPipeFrame::OnTextEnter)
 
     EVT_CLOSE(MyPipeFrame::OnClose)
 
-    EVT_END_PROCESS(-1, MyPipeFrame::OnProcessTerm)
+    EVT_END_PROCESS(wxID_ANY, MyPipeFrame::OnProcessTerm)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -375,13 +375,13 @@ bool MyApp::OnInit()
                                  wxDefaultPosition, wxSize(500, 140));
 
     // Show it and tell the application that it's our main window
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -394,7 +394,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size),
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size),
          m_timerIdleWakeUp(this)
 {
     m_pidLast = 0;
@@ -452,7 +452,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetMenuBar(menuBar);
 
     // create the listbox in which we will show misc messages as they come
-    m_lbox = new wxListBox(this, -1);
+    m_lbox = new wxListBox(this, wxID_ANY);
     wxFont font(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL,
                 wxFONTWEIGHT_NORMAL);
     if ( font.Ok() )
@@ -471,8 +471,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
@@ -669,11 +669,11 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
                           wxYES_NO | wxCANCEL | wxICON_QUESTION, this) )
     {
         case wxYES:
-            sync = TRUE;
+            sync = true;
             break;
 
         case wxNO:
-            sync = FALSE;
+            sync = false;
             break;
 
         default:
@@ -823,23 +823,23 @@ bool MyFrame::GetDDEServer()
     wxString server = wxGetTextFromUser(_T("Server to connect to:"),
                                         DIALOG_TITLE, m_server);
     if ( !server )
-        return FALSE;
+        return false;
 
     m_server = server;
 
     wxString topic = wxGetTextFromUser(_T("DDE topic:"), DIALOG_TITLE, m_topic);
     if ( !topic )
-        return FALSE;
+        return false;
 
     m_topic = topic;
 
     wxString cmd = wxGetTextFromUser(_T("DDE command:"), DIALOG_TITLE, m_cmdDde);
     if ( !cmd )
-        return FALSE;
+        return false;
 
     m_cmdDde = cmd;
 
-    return TRUE;
+    return true;
 }
 
 void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
@@ -963,7 +963,7 @@ void MyProcess::OnTerminate(int pid, int status)
 
 bool MyPipedProcess::HasInput()
 {
-    bool hasInput = FALSE;
+    bool hasInput = false;
 
     if ( IsInputAvailable() )
     {
@@ -975,7 +975,7 @@ bool MyPipedProcess::HasInput()
 
         m_parent->GetLogListBox()->Append(msg);
 
-        hasInput = TRUE;
+        hasInput = true;
     }
 
     if ( IsErrorAvailable() )
@@ -988,7 +988,7 @@ bool MyPipedProcess::HasInput()
 
         m_parent->GetLogListBox()->Append(msg);
 
-        hasInput = TRUE;
+        hasInput = true;
     }
 
     return hasInput;
@@ -1020,7 +1020,7 @@ bool MyPipedProcess2::HasInput()
         m_input.clear();
 
         // call us once again - may be we'll have output
-        return TRUE;
+        return true;
     }
 
     return MyPipedProcess::HasInput();
@@ -1033,7 +1033,7 @@ bool MyPipedProcess2::HasInput()
 MyPipeFrame::MyPipeFrame(wxFrame *parent,
                          const wxString& cmd,
                          wxProcess *process)
-           : wxFrame(parent, -1, cmd),
+           : wxFrame(parent, wxID_ANY, cmd),
              m_process(process),
              // in a real program we'd check that the streams are !NULL here
              m_in(*process->GetInputStream()),
@@ -1041,13 +1041,13 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
 {
     m_process->SetNextHandler(this);
 
-    wxPanel *panel = new wxPanel(this, -1);
+    wxPanel *panel = new wxPanel(this, wxID_ANY);
 
-    m_textIn = new wxTextCtrl(panel, -1, _T(""),
+    m_textIn = new wxTextCtrl(panel, wxID_ANY, _T(""),
                               wxDefaultPosition, wxDefaultSize,
                               wxTE_PROCESS_ENTER);
-    m_textOut = new wxTextCtrl(panel, -1, _T(""));
-    m_textOut->SetEditable(FALSE);
+    m_textOut = new wxTextCtrl(panel, wxID_ANY, _T(""));
+    m_textOut->SetEditable(false);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(m_textIn, 0, wxGROW | wxALL, 5);

@@ -143,7 +143,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
         {
             m_currentlyHighlighted->Draw(dc);
         }
-        m_draggedShape->SetShow(TRUE);
+        m_draggedShape->SetShow(true);
         m_draggedShape->Draw(dc);
 
         m_currentlyHighlighted = (DragShape*) NULL;
@@ -169,7 +169,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
                 delete m_dragImage;
 
             // Erase the dragged shape from the canvas
-            m_draggedShape->SetShow(FALSE);
+            m_draggedShape->SetShow(false);
             wxClientDC dc(this);
             EraseShape(m_draggedShape, dc);
             DrawShapes(dc);
@@ -229,17 +229,17 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
             // We're currently dragging. See if we're over another shape.
             DragShape* onShape = FindShape(event.GetPosition());
 
-            bool mustUnhighlightOld = FALSE;
-            bool mustHighlightNew = FALSE;
+            bool mustUnhighlightOld = false;
+            bool mustHighlightNew = false;
 
             if (m_currentlyHighlighted)
             {
                 if ((onShape == (DragShape*) NULL) || (m_currentlyHighlighted != onShape))
-                    mustUnhighlightOld = TRUE;
+                    mustUnhighlightOld = true;
             }
 
             if (onShape && (onShape != m_currentlyHighlighted) && onShape->IsShown())
-                mustHighlightNew = TRUE;
+                mustHighlightNew = true;
 
             if (mustUnhighlightOld || mustHighlightNew)
                 m_dragImage->Hide();
@@ -327,12 +327,12 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-: wxFrame( (wxFrame *)NULL, -1, _T("wxDragImage sample"),
+: wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxDragImage sample"),
           wxPoint(20,20), wxSize(470,360) )
 {
     wxMenu *file_menu = new wxMenu();
     file_menu->Append( wxID_ABOUT, _T("&About..."));
-    file_menu->Append( TEST_USE_SCREEN, _T("&Use whole screen for dragging"), _T("Use whole screen"), TRUE);
+    file_menu->Append( TEST_USE_SCREEN, _T("&Use whole screen for dragging"), _T("Use whole screen"), true);
     file_menu->Append( wxID_EXIT, _T("E&xit"));
     
     wxMenuBar *menu_bar = new wxMenuBar();
@@ -345,12 +345,12 @@ MyFrame::MyFrame()
     int widths[] = { -1, 100 };
     SetStatusWidths( 2, widths );
     
-    m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
+    m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
-    Close( TRUE );
+    Close( true );
 }
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
@@ -372,7 +372,7 @@ END_EVENT_TABLE()
 MyApp::MyApp()
 {
     // Drag across whole screen
-    m_useScreen = FALSE;
+    m_useScreen = false;
 }
 
 bool MyApp::OnInit()
@@ -431,9 +431,9 @@ bool MyApp::OnInit()
     m_background = bitmap;
 #endif
 
-    frame->Show( TRUE );
+    frame->Show( true );
 
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
@@ -452,7 +452,7 @@ bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
         for (j = rect.y; j < rect.y + rect.height; j+= h)
             dc.DrawBitmap(bitmap, i, j);
     }
-    return TRUE;
+    return true;
 }
 
 void MyApp::OnUseScreen(wxCommandEvent& WXUNUSED(event))
@@ -468,7 +468,7 @@ DragShape::DragShape(const wxBitmap& bitmap)
     m_pos.x = 0;
     m_pos.y = 0;
     m_dragMethod = SHAPE_DRAG_BITMAP;
-    m_show = TRUE;
+    m_show = true;
 }
 
 DragShape::~DragShape()
@@ -489,11 +489,11 @@ bool DragShape::Draw(wxDC& dc, int op)
         memDC.SelectObject(m_bitmap);
     
         dc.Blit(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight(),
-            & memDC, 0, 0, op, TRUE);
+            & memDC, 0, 0, op, true);
 
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 

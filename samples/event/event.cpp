@@ -59,7 +59,7 @@ DEFINE_EVENT_TYPE(wxEVT_MY_CUSTOM_COMMAND)
 // it may also be convenient to define an event table macro for this event type
 #define EVT_MY_CUSTOM_COMMAND(id, fn) \
     DECLARE_EVENT_TABLE_ENTRY( \
-        wxEVT_MY_CUSTOM_COMMAND, id, -1, \
+        wxEVT_MY_CUSTOM_COMMAND, id, wxID_ANY, \
         (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxCommandEventFunction, &fn ), \
         (wxObject *) NULL \
     ),
@@ -178,10 +178,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
 
-    EVT_MY_CUSTOM_COMMAND(-1, MyFrame::OnProcessCustom)
+    EVT_MY_CUSTOM_COMMAND(wxID_ANY, MyFrame::OnProcessCustom)
 
     // this would also work:
-    //EVT_CUSTOM(wxEVT_MY_CUSTOM_COMMAND, -1, MyFrame::OnProcessCustom)
+    //EVT_CUSTOM(wxEVT_MY_CUSTOM_COMMAND, wxID_ANY, MyFrame::OnProcessCustom)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
@@ -212,12 +212,12 @@ bool MyApp::OnInit()
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
-    frame->Show(TRUE);
+    frame->Show(true);
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     // init members
     m_nPush = 0;
@@ -241,7 +241,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuEvent = new wxMenu;
     menuEvent->Append(Event_Connect, _T("&Connect\tCtrl-C"),
                      _T("Connect or disconnect the dynamic event handler"),
-                     TRUE /* checkable */);
+                     true /* checkable */);
     menuEvent->Append(Event_Dynamic, _T("&Dynamic event\tCtrl-D"),
                       _T("Dynamic event sample - only works after Connect"));
     menuEvent->AppendSeparator();
@@ -277,7 +277,7 @@ MyFrame::~MyFrame()
     // crashes!
     while ( m_nPush-- != 0 )
     {
-        PopEventHandler(TRUE /* delete handler */);
+        PopEventHandler(true /* delete handler */);
     }
 }
 
@@ -287,8 +287,8 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -317,7 +317,7 @@ void MyFrame::OnConnect(wxCommandEvent& event)
     if ( event.IsChecked() )
     {
         // disconnect
-        Connect(Event_Dynamic, -1, wxEVT_COMMAND_MENU_SELECTED,
+        Connect(Event_Dynamic, wxID_ANY, wxEVT_COMMAND_MENU_SELECTED,
                 (wxObjectEventFunction)
                 (wxEventFunction)
                 (wxCommandEventFunction)&MyFrame::OnDynamic);
@@ -327,7 +327,7 @@ void MyFrame::OnConnect(wxCommandEvent& event)
     }
     else // connect
     {
-        Disconnect(Event_Dynamic, -1, wxEVT_COMMAND_MENU_SELECTED);
+        Disconnect(Event_Dynamic, wxID_ANY, wxEVT_COMMAND_MENU_SELECTED);
 
         SetStatusText(_T("You can no more use \"Dynamic\" item in the menu"));
         SetStatusText(_T("Dynamic: off"), Status_Dynamic);
@@ -349,7 +349,7 @@ void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
 {
     wxCHECK_RET( m_nPush, _T("this command should be disabled!") );
 
-    PopEventHandler(TRUE /* delete handler */);
+    PopEventHandler(true /* delete handler */);
     m_nPush--;
 
     SetStatusText(wxString::Format(_T("Push count: %u"), m_nPush), Status_Push);

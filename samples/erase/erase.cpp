@@ -105,9 +105,9 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(_T("Erase sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
-    frame->Show(TRUE);
+    frame->Show(true);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ END_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     SetIcon(wxICON(mondrian));
 
@@ -150,7 +150,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -167,7 +167,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( MyFrame *parent )
-        : wxScrolledWindow( parent, -1, wxDefaultPosition, wxDefaultSize,
+        : wxScrolledWindow( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                             wxScrolledWindowStyle |
                             wxNO_FULL_REPAINT_ON_RESIZE|
                             wxSUNKEN_BORDER )
@@ -176,7 +176,7 @@ MyCanvas::MyCanvas( MyFrame *parent )
 
     m_bitmap = wxBitmap( wxICON(mondrian) );
 
-    new wxStaticBitmap( this, -1, m_bitmap, wxPoint(80,20) );
+    new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
 }
 
 void MyCanvas::OnChar( wxKeyEvent &event )
@@ -211,7 +211,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetBrush( *wxBLACK_BRUSH );
     dc.DrawRectangle( 0,0,200,50 );
 
-    dc.DrawBitmap( m_bitmap, 10, 20, TRUE );
+    dc.DrawBitmap( m_bitmap, 10, 20, true );
 
     dc.SetTextForeground(*wxBLUE);
     dc.DrawText(_T("This text is drawn from OnPaint"), 65, 65);
