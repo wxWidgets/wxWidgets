@@ -135,11 +135,12 @@ check the source for this sample to see how to implement them.
     # Methods
 
     def OnMenuHighlight(self, event):
-        # Show how to get menu item imfo from this event handler
+        # Show how to get menu item info from this event handler
         id = event.GetMenuId()
         item = self.GetMenuBar().FindItemById(id)
-        text = item.GetText()
-        help = item.GetHelp()
+        if item:
+            text = item.GetText()
+            help = item.GetHelp()
 
         # but in this case just call Skip so the default is done
         event.Skip() 
