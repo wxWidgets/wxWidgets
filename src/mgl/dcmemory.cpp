@@ -44,11 +44,11 @@ wxMemoryDC::~wxMemoryDC()
 
 void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
 {
-    SetMGLDC(NULL, TRUE);
-    m_selected = bitmap;
-
     if ( bitmap.Ok() )
+    {
+        m_selected = bitmap;
         SetMGLDC(m_selected.CreateTmpDC(), TRUE);
+    }
 }
 
 void wxMemoryDC::SetPen(const wxPen &pen)
