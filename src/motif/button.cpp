@@ -20,8 +20,6 @@
 #include "wx/defs.h"
 
 #include "wx/button.h"
-#include "wx/utils.h"
-#include "wx/panel.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -68,6 +66,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         parentWidget,
         wxFont::GetFontTag(), m_font.GetFontType(XtDisplay(parentWidget)),
         XmNlabelString, text(),
+        XmNrecomputeSize, False,
         // See comment for wxButton::SetDefault
         // XmNdefaultButtonShadowThickness, 1, 
         NULL);
@@ -104,12 +103,16 @@ void wxButton::SetDefaultShadowThicknessAndResize()
     if( managed )
         XtManageChild( buttonWidget );
 
+    // this can't currently be done, because user code that calls SetDefault
+    // will break otherwise
+#if 0
     wxSize best = GetBestSize(), actual = GetSize();
     if( best.x < actual.x ) best.x = actual.x;
     if( best.y < actual.y ) best.y = actual.y;
 
     if( best != actual )
         SetSize( best );
+#endif
 }
 
 
@@ -144,8 +147,8 @@ void wxButton::SetDefault()
 wxSize wxButton::GetDefaultSize()
 {
     // TODO: check font size as in wxMSW ?  MB
-    // Note: this is only the button size (text + margin + shadow)
-    return wxSize(70,25);
+    // Note: this is the button size (text + margin + shadow + defaultBorder)
+    return wxSize(78,30);
 }
 
 wxSize wxButton::DoGetBestSize() const

@@ -101,9 +101,9 @@ wxMotif:
   xmcombo; xmcombo is still used for Motif 1.x and Lesstif when compiled
   with Motif 1.x compatibility
 - implemented wxToggleButton
-- made wxButton a bit smaller by default
 - wxRadioBox and wxStaticBox now use the default shadow (border) style
   instead of 
+
 wxUniv:
 
 - Controls in toolbars now supported.
