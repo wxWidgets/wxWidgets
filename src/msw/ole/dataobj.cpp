@@ -55,6 +55,11 @@
 
 #include "wx/msw/dib.h"
 
+#ifndef CFSTR_SHELLURL
+#define CFSTR_SHELLURL _T("UniformResourceLocator")
+#endif
+
+
 // ----------------------------------------------------------------------------
 // functions
 // ----------------------------------------------------------------------------
