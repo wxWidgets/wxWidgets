@@ -13,6 +13,7 @@ all: $(MSW_MAKEFILES_DIR)/makefile.vc \
      $(MSW_MAKEFILES_DIR)/makefile.sc \
      $(MSW_MAKEFILES_DIR)/makefile.wat \
      $(MSW_MAKEFILES_DIR)/makefile.g95 \
+     $(MSW_MAKEFILES_DIR)/makefile.g295 \
      $(WXDIR)/Makefile.in
 
 $(MSW_MAKEFILES_DIR)/makefile.vc: filelist.txt wxwin.pro
@@ -35,6 +36,9 @@ $(MSW_MAKEFILES_DIR)/makefile.wat: filelist.txt wxwin.pro
 
 $(MSW_MAKEFILES_DIR)/makefile.g95: filelist.txt wxwin.pro
 	$(TMAKE) -t g95 wxwin.pro -o $@
+
+$(MSW_MAKEFILES_DIR)/makefile.g295: filelist.txt wxwin.pro g295.t
+	$(TMAKE) -t g295 wxwin.pro -o $@
 
 $(WXDIR)/Makefile.in: filelist.txt wxwin.pro
 	$(TMAKE) -t unx wxwin.pro -o $@
