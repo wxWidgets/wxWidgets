@@ -1179,7 +1179,7 @@ bool wxPathExists(const wxChar *pszPathName)
     while ( wxEndsWithPathSeparator(strPath) )
     {
         size_t len = strPath.length();
-        if ( len == 1 || strPath[len - 1] == _T(':') )
+        if ( len == 1 || (len == 3 && strPath[len - 2] == _T(':')) )
             break;
 
         strPath.Truncate(len - 1);
