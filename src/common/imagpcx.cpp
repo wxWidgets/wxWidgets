@@ -2,7 +2,7 @@
 // Name:        imagpcx.cpp
 // Purpose:     wxImage PCX handler
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
-// Version:     1.00
+// Version:     1.1
 // CVS-ID:      $Id$
 // Copyright:   (c) 1999 Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
@@ -56,8 +56,8 @@ void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
     {
         data = (unsigned char) *(p++);
 
-        // Up to 63 bytes with the same value can be stored using a
-        // single { cont, value } pair.
+        // Up to 63 bytes with the same value can be stored using
+        // a single { cont, value } pair.
         //
         if ((data == last) && (cont < 63))
         {
@@ -65,8 +65,7 @@ void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
         }
         else
         {
-            // Need to write a 'counter' byte?
-            //
+            // need to write a 'counter' byte?
             if ((cont > 1) || ((last & 0xC0) == 0xC0))
                 s.PutC((char) (cont | 0xC0));
 
@@ -76,8 +75,7 @@ void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
         }
     }
 
-    // Write the last one and return;
-    //
+    // write the last one and return;
     if ((cont > 1) || ((last & 0xC0) == 0xC0))
         s.PutC((char) (cont | 0xC0));
 
@@ -93,7 +91,7 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
     // end of each plane inside a scanline). Only use this function
     // to read one or more _complete_ scanlines. Else, more than
     // 'size' bytes might be read and the buffer might overflow.
-    //
+
     while (size > 0)
     {
         data = (unsigned char)s.GetC();
@@ -101,7 +99,7 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
         // If ((data & 0xC0) != 0xC0), then the value read is a data
         // byte. Else, it is a counter (cont = val & 0x3F) and the
         // next byte is the data byte.
-        //
+		  //
         if ((data & 0xC0) != 0xC0)
         {
             *(p++) = data;
@@ -172,13 +170,13 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
     // Read PCX header and check the version number (it must
     // be at least 5 or higher for 8 bit and 24 bit images).
-    //
+
     stream.Read(hdr, 128);
 
     if (hdr[HDR_VERSION] < 5) return wxPCX_VERERR;
 
     // Extract all image info from the PCX header.
-    //
+
     encoding     = hdr[HDR_ENCODING];
     nplanes      = hdr[HDR_NPLANES];
     bitsperpixel = hdr[HDR_BITSPERPIXEL];
@@ -190,7 +188,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
     // Check image format. Currently supported formats are
     // 8 bits (8 bpp, 1 plane) and 24 bits (8 bpp, 3 planes).
-    //
+
     if ((nplanes == 3) && (bitsperpixel == 8))
         format = wxPCX_24BIT;
     else if ((nplanes == 1) && (bitsperpixel == 8))
@@ -209,9 +207,8 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     // and another to replace 'colour indexes' with RGB
     // values.
 
-
     // Resize the image and allocate memory for a scanline.
-    //
+
     image->Create(width, height);
 
     if (!image->Ok())
@@ -222,7 +219,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
     // Now start reading the file, line by line, and store
     // the data in the format required by wxImage.
-    //
+
     dst = image->GetData();
 
     for (j = height; j; j--)
@@ -261,7 +258,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
     // For 8 bit images, we read the palette, and then do a second
     // pass replacing indexes with their RGB values;
-    //
+
     if (format == wxPCX_8BIT)
     {
         unsigned char index;
@@ -287,8 +284,9 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 // SavePCX:
 //  Saves a PCX file into the wxImage object pointed by image.
 //  Returns wxPCX_OK on success, or an error code otherwise
-//  (see above for error codes). Currently, always saves images
-//  in 24 bit format. XXX
+//  (see above for error codes). Will try to save as 8-bit
+//  PCX if possible, and then fall back to 24-bit if there
+//  are more than 256 different colours.
 //
 int SavePCX(wxImage *image, wxOutputStream& stream)
 {
@@ -305,7 +303,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     unsigned int i;
 
     // See if we can save as 8 bit.
-    //
+
     if (image->CountColours(256) <= 256)
     {
         image->ComputeHistogram(h);
@@ -316,7 +314,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     // Get image dimensions, calculate bytesperline (must be even,
     // according to PCX specs) and allocate space for one complete
     // scanline.
-    //
+
     if (!image->Ok())
         return wxPCX_INVFORMAT;
 
@@ -331,7 +329,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
 
     // Build header data and write it to the stream. Initially,
     // set all bytes to zero (most values default to zero).
-    //
+
     memset(hdr, 0, sizeof(hdr));
 
     hdr[HDR_MANUFACTURER]     = 10;
@@ -350,7 +348,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     stream.Write(hdr, 128);
 
     // Encode image data line by line and write it to the stream
-    //
+
     src = image->GetData();
 
     for (; height; height--)
@@ -392,7 +390,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     free(p);
 
     // For 8 bit images, build the palette and write it to the stream
-    //
+
     if (format == wxPCX_8BIT)
     {
         wxNode *node;
