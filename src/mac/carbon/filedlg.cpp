@@ -419,6 +419,10 @@ int wxFileDialog::ShowModal()
     }
     else
     {
+    
+        //let people select bundles/programs in dialogs
+        dialogCreateOptions.optionFlags |= kNavSupportPackages;
+    
         navFilterUPP = NewNavObjectFilterUPP(CrossPlatformFilterCallback);
         err = ::NavCreateGetFileDialog(&dialogCreateOptions,
                                        NULL, // NavTypeListHandle
