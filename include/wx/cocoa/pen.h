@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pen.h
+// Name:        wx/cocoa/pen.h
 // Purpose:     wxPen class
-// Author:      AUTHOR
+// Author:      David Elliott
 // Modified by:
-// Created:     ??/??/98
+// Created:     22.03.2003
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) 2003 David Elliott
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ class WXDLLEXPORT wxPen: public wxGDIObject
   DECLARE_DYNAMIC_CLASS(wxPen)
 public:
   wxPen();
-  wxPen(const wxColour& col, int width, int style);
+  wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
   wxPen(const wxBitmap& stipple, int width);
   wxPen(const wxPen& pen)
       : wxGDIObject()

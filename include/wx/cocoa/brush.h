@@ -29,7 +29,7 @@ class WXDLLEXPORT wxBrush: public wxGDIObject
 // ------------------------------------------------------------------------
 public:
     wxBrush();
-    wxBrush(const wxColour& col, int style);
+    wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
     wxBrush(const wxBrush& brush)
     :   wxGDIObject()
