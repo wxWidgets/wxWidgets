@@ -185,7 +185,7 @@ public:
 
     // Unofficial API, don't use
     virtual void SetNoAntiAliasing( bool WXUNUSED(no) = TRUE ) {  }
-    virtual bool GetNoAntiAliasing() { return FALSE; }
+    virtual bool GetNoAntiAliasing() const { return FALSE; }
 
     // the default encoding is used for creating all fonts with default
     // encoding parameter

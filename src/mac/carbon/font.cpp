@@ -95,7 +95,7 @@ public:
 
     virtual ~wxFontRefData();
     void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
-    bool GetNoAntiAliasing() { return m_noAA; }
+    bool GetNoAntiAliasing() const { return m_noAA; }
     
 protected:
     // common part of all ctors
@@ -477,7 +477,7 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->m_encoding;
 }
 
-bool wxFont::GetNoAntiAliasing()
+bool wxFont::GetNoAntiAliasing() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
     return M_FONTDATA->m_noAA;

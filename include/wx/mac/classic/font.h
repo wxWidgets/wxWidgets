@@ -94,7 +94,7 @@ public:
 
     // Unofficial API, don't use
     virtual void SetNoAntiAliasing( bool noAA = TRUE ) ;
-    virtual bool GetNoAntiAliasing() ;
+    virtual bool GetNoAntiAliasing() const ;
 
     // Mac-specific, risks to change, don't use in portable code
     short GetMacFontNum() const;

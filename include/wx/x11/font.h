@@ -84,7 +84,7 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
 
     virtual void SetNoAntiAliasing( bool no = TRUE );
-    virtual bool GetNoAntiAliasing();
+    virtual bool GetNoAntiAliasing() const ;
 
     // Implementation
 
