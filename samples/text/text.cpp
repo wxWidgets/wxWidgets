@@ -140,6 +140,30 @@ public:
     void OnMoveToEndOfEntry( wxCommandEvent &event )
         { m_panel->DoMoveToEndOfEntry(); }
 
+    void OnScrollLineDown(wxCommandEvent& event)
+    {
+        if ( !m_panel->m_textrich->LineDown() )
+            wxLogMessage(_T("Already at the bottom"));
+    }
+
+    void OnScrollLineUp(wxCommandEvent& event)
+    {
+        if ( !m_panel->m_textrich->LineUp() )
+            wxLogMessage(_T("Already at the top"));
+    }
+
+    void OnScrollPageDown(wxCommandEvent& event)
+    {
+        if ( !m_panel->m_textrich->PageDown() )
+            wxLogMessage(_T("Already at the bottom"));
+    }
+
+    void OnScrollPageUp(wxCommandEvent& event)
+    {
+        if ( !m_panel->m_textrich->PageUp() )
+            wxLogMessage(_T("Already at the top"));
+    }
+
     void OnLogClear(wxCommandEvent& event);
     void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
@@ -202,7 +226,11 @@ enum
     TEXT_MOVE_ENDTEXT,
     TEXT_MOVE_ENDENTRY,
     TEXT_SET_EDITABLE,
-    TEXT_SET_ENABLED
+    TEXT_SET_ENABLED,
+    TEXT_LINE_DOWN,
+    TEXT_LINE_UP,
+    TEXT_PAGE_DOWN,
+    TEXT_PAGE_UP,
 };
 
 bool MyApp::OnInit()
@@ -255,6 +283,11 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_SET_ENABLED, "Toggle e&nabled state", "", TRUE);
     menuText->Check(TEXT_SET_EDITABLE, TRUE);
     menuText->Check(TEXT_SET_ENABLED, TRUE);
+    menuText->AppendSeparator();
+    menuText->Append(TEXT_LINE_DOWN, "Scroll text one line down");
+    menuText->Append(TEXT_LINE_UP, "Scroll text one line up");
+    menuText->Append(TEXT_PAGE_DOWN, "Scroll text one page down");
+    menuText->Append(TEXT_PAGE_DOWN, "Scroll text one page up");
     menu_bar->Append(menuText, "&Text");
 
     frame->SetMenuBar(menu_bar);
@@ -687,7 +720,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich = new MyTextCtrl(this, -1, "Allows more than 30Kb of text\n"
                                 "(even under broken Win9x)\n"
                                 "and a very very very very very "
-                                "very very very long line to test"
+                                "very very very long line to test "
                                 "wxHSCROLL style",
                                 wxPoint(450, 10), wxSize(230, 230),
                                 wxTE_RICH |
@@ -695,6 +728,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 wxTE_AUTO_URL |
                                 wxHSCROLL);
 
+#if 0
+    m_textrich->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE,
+                               wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
@@ -709,6 +745,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetDefaultStyle(*wxBLUE);
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
+#else
+    m_textrich->SetDefaultStyle(wxTextAttr(*wxRED));
+    m_textrich->AppendText(_T("Red text\n"));
+    m_textrich->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
+    m_textrich->AppendText(_T("Red on grey text\n"));
+    m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE));
+    m_textrich->AppendText(_T("Blue on grey text\n"));
+#endif
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
@@ -847,6 +891,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(TEXT_SET_EDITABLE,       MyFrame::OnSetEditable)
     EVT_MENU(TEXT_SET_ENABLED,        MyFrame::OnSetEnabled)
+
+    EVT_MENU(TEXT_LINE_DOWN,          MyFrame::OnScrollLineDown)
+    EVT_MENU(TEXT_LINE_UP,            MyFrame::OnScrollLineUp)
+    EVT_MENU(TEXT_PAGE_DOWN,          MyFrame::OnScrollPageDown)
+    EVT_MENU(TEXT_PAGE_UP,            MyFrame::OnScrollPageUp)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
