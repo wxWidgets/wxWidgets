@@ -301,7 +301,11 @@ IMPLEMENT_CLASS(wxGLApp, wxApp)
 bool wxGLApp::InitGLVisual(int *attribList)
 {
     AGLPixelFormat fmt = ChoosePixelFormat(attribList);
-    return (fmt != NULL);
+    if (fmt != NULL) {
+        aglDestroyPixelFormat(fmt);
+        return true;
+    } else
+        return false;
 }
 
 wxGLApp::~wxGLApp(void)
