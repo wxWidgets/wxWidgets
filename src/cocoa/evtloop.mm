@@ -17,6 +17,8 @@
 #include "wx/evtloop.h"
 
 #import <AppKit/NSApplication.h>
+#import <AppKit/NSEvent.h>
+#import <Foundation/NSRunLoop.h>
 
 // ========================================================================
 // wxEventLoopImpl
@@ -95,12 +97,30 @@ void wxEventLoop::Exit(int rc)
 
 bool wxEventLoop::Pending() const
 {
-    return 0;
+    // a pointer to the event is returned if there is one, or nil if not
+    return [[NSApplication sharedApplication]
+            nextEventMatchingMask: NSAnyEventMask
+            untilDate: nil /* Equivalent to [NSDate distantPast] */
+            inMode: NSDefaultRunLoopMode
+            dequeue: NO];
 }
 
 bool wxEventLoop::Dispatch()
 {
+    // This check is required by wxGTK but probably not really for wxCocoa
+    // Keep it here to encourage developers to write cross-platform code
     wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
+    NSApplication *cocoaApp = [NSApplication sharedApplication];
+    // Block to retrieve an event then send it
+    if(NSEvent *event = [cocoaApp
+                nextEventMatchingMask:NSAnyEventMask
+                untilDate:[NSDate distantFuture]
+                inMode:NSDefaultRunLoopMode
+                dequeue: YES])
+    {
+        [cocoaApp sendEvent: event];
+        return true;
+    }
     return false;
 }
 
