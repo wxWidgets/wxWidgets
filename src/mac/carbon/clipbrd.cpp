@@ -220,9 +220,9 @@ bool wxClipboard::AddData( wxDataObject *data )
                     array[i].GetId().c_str() );
 
 #if !TARGET_CARBON
-          OSErr err = noErr ;
+        OSErr err = noErr ;
 #else
-          OSStatus err = noErr ;
+        OSStatus err = noErr ;
 #endif
 
        switch ( array[i].GetType() )

@@ -52,8 +52,6 @@ const double RAD2DEG  = 180.0 / M_PI;
 const short kEmulatedMode = -1 ;
 const short kUnsupportedMode = -2 ;
 
-#define wxMAC_EXPERIMENTAL_PATTERN 0
-
 wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
 	m_ph( (GrafPtr) dc->m_macPort ) 
 {

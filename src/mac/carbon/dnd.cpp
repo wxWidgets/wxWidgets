@@ -86,7 +86,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
       
       if ( data )
       {
-        int formatcount = data->GetFormatCount() ;
+        size_t formatcount = data->GetFormatCount() ;
         wxDataFormat *array = new wxDataFormat[ formatcount  ];
         data->GetAllFormats( array );
         for (size_t i = 0; !supported && i < formatcount ; i++)
@@ -142,7 +142,7 @@ bool wxDropTarget::GetData()
       
       if ( data )
       {
-        int formatcount = data->GetFormatCount() ;
+        size_t formatcount = data->GetFormatCount() ;
         wxDataFormat *array = new wxDataFormat[ formatcount  ];
         data->GetAllFormats( array );
         for (size_t i = 0; !transferred && i < formatcount ; i++)
@@ -272,7 +272,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     OSErr result;
     DragReference theDrag;
     RgnHandle dragRegion;
-    if (result = NewDrag(&theDrag)) 
+    if ((result = NewDrag(&theDrag)))
     {
         return wxDragNone ;
     }
@@ -281,7 +281,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     wxDataFormat *formats = new wxDataFormat[formatCount] ;
     m_data->GetAllFormats( formats ) ;
     ItemReference theItem = 1 ;
-    for ( int i = 0 ; i < formatCount ; ++i )
+    for ( size_t i = 0 ; i < formatCount ; ++i )
     {
         size_t dataSize = m_data->GetDataSize( formats[i] ) ;
         Ptr dataPtr = new char[dataSize] ;
@@ -396,7 +396,6 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
     MacTrackingGlobals* trackingGlobals = (MacTrackingGlobals*) handlerRefCon;
     Point mouse, localMouse;
     DragAttributes attributes;
-    RgnHandle hiliteRgn;
     GetDragAttributes(theDrag, &attributes);
     wxTopLevelWindowMac* toplevel = wxFindWinFromMacWindow( theWindow ) ; 
     switch(theMessage) 

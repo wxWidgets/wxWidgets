@@ -473,7 +473,7 @@ void  wxControl::DoSetSize(int x, int y,
         return ;
     }
 
-     Rect oldbounds, newbounds;
+     Rect oldbounds;
      int new_x, new_y, new_width, new_height;
      int mac_x, mac_y;
  
