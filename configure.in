@@ -417,6 +417,7 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
   DEFAULT_wxUSE_STACKWALKER=no
+  DEFAULT_wxUSE_DEBUGREPORT=no
   DEFAULT_wxUSE_SNGLINST_CHECKER=no
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=no
@@ -611,6 +612,7 @@ else
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
   DEFAULT_wxUSE_STACKWALKER=yes
+  DEFAULT_wxUSE_DEBUGREPORT=yes
   DEFAULT_wxUSE_SNGLINST_CHECKER=yes
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
@@ -888,10 +890,11 @@ WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communi
 dnl please keep the settings below in alphabetical order
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(arcstream,     [  --enable-arcstream      use wxArchive streams], wxUSE_ARCHIVE_STREAMS)
-WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
 WX_ARG_ENABLE(backtrace,     [  --enable-backtrace      use wxStackWalker class for getting backtraces], wxUSE_STACKWALKER)
+WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
 WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
 WX_ARG_ENABLE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
+WX_ARG_ENABLE(debugreport,   [  --enable-debugreport    use wxDebugReport class], wxUSE_DEBUGREPORT)
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading], wxUSE_DYNLIB_CLASS)
 WX_ARG_ENABLE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibrary class], wxUSE_DYNAMIC_LOADER)
@@ -4838,6 +4841,10 @@ fi
 
 if test "$wxUSE_STACKWALKER" = "yes"; then
     AC_DEFINE(wxUSE_STACKWALKER)
+fi
+
+if test "$wxUSE_DEBUGREPORT" = "yes"; then
+    AC_DEFINE(wxUSE_DEBUGREPORT)
 fi
 
 if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then

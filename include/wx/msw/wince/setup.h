@@ -132,6 +132,16 @@
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_STACKWALKER 1
 
+// Set this to 1 to compile in wxDebugReport class which allows you to create
+// and optionally upload to your web site a debug report consisting of back
+// trace of the crash (if wxUSE_STACKWALKER == 1) and other information.
+//
+// Default is 1 if supported by the compiler.
+//
+// Recommended setting: 1 under Win32, it is not especially useful elsewhere
+//                      currently
+#define wxUSE_DEBUGREPORT 1
+
 // ----------------------------------------------------------------------------
 // Unicode support
 // ----------------------------------------------------------------------------
