@@ -188,21 +188,37 @@ private:
     // all data is stored here, NULL if no data loaded
     size_t8 *m_pData;
 
+    // amount of memory pointed to by m_pData.
+    size_t32 m_nSize;
+
     // data description
     size_t32          m_numStrings;   // number of strings in this domain
     wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
                      *m_pTransTable;  //            translated
 
-    const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 index) const
-      { return (const char *)(m_pData + Swap(pTable[index].ofsString)); }
+    // swap the 2 halves of 32 bit integer if needed
+    size_t32 Swap(size_t32 ui) const
+    {
+          return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) |
+                              ((ui >> 8) & 0xff00) | (ui >> 24)
+                            : ui;
+    }
+
+    const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 n) const
+    {
+        const wxMsgTableEntry * const ent = pTable + n;
+
+        // this check could fail for a corrupt message catalog
+        size_t32 ofsString = Swap(ent->ofsString);
+        if ( ofsString + Swap(ent->nLen) > m_nSize)
+            return NULL;
+
+        return (const char *)(m_pData + ofsString);
+    }
 
     wxString GetCharset() const;
 
-    // utility functions
-      // big<->little endian
-    inline size_t32 Swap(size_t32 ui) const;
-
-    bool          m_bSwapped;   // wrong endianness?
+    bool m_bSwapped;   // wrong endianness?
 
     DECLARE_NO_COPY_CLASS(wxMsgCatalogFile)
 };
@@ -250,22 +266,15 @@ static wxArrayString s_searchPrefixes;
 // wxMsgCatalogFile class
 // ----------------------------------------------------------------------------
 
-// swap the 2 halves of 32 bit integer if needed
-size_t32 wxMsgCatalogFile::Swap(size_t32 ui) const
-{
-  return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) |
-                      ((ui >> 8) & 0xff00) | (ui >> 24)
-                    : ui;
-}
-
 wxMsgCatalogFile::wxMsgCatalogFile()
 {
-  m_pData = NULL;
+    m_pData = NULL;
+    m_nSize = 0;
 }
 
 wxMsgCatalogFile::~wxMsgCatalogFile()
 {
-  wxDELETEA(m_pData);
+    wxDELETEA(m_pData);
 }
 
 // return all directories to search for given prefix
@@ -414,6 +423,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0)
                    Swap(pHeader->ofsOrigTable));
   m_pTransTable = (wxMsgTableEntry *)(m_pData +
                    Swap(pHeader->ofsTransTable));
+  m_nSize = nSize;
 
   // everything is fine
   return TRUE;
