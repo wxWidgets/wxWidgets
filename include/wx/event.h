@@ -1763,9 +1763,11 @@ public:
     wxWindow* GetCurrentFocus() const { return m_focus; }
     void SetCurrentFocus(wxWindow *win) { m_focus = win; }
 
+    // Set flags
+    void SetFlags(long flags) { m_flags = flags; }
+
     virtual wxEvent *Clone() const { return new wxNavigationKeyEvent(*this); }
 
-private:
     enum
     {
         IsForward = 0x0001,
