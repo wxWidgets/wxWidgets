@@ -31,13 +31,16 @@ OBJECTS = &
     KeyWords.obj	        &
 	LexAVE.obj		        &
 	LexAda.obj		        &
+	LexAsm.obj		        &
 	LexBaan.obj		        &
 	LexBullant.obj		    &
 	LexMatlab.obj	    	&
 	LexCPP.obj		        &
 	LexConf.obj		        &
 	LexCrontab.obj		    &
+	LexCSS.obj		    &
 	LexEiffel.obj		    &
+	LexFortran.obj  	    &
 	LexHTML.obj		        &
 	LexLisp.obj		        &
 	LexLua.obj		        &
@@ -57,9 +60,10 @@ OBJECTS = &
 	UniConversion.obj	    &
     ViewStyle.obj		    &
 	WindowAccessor.obj	    &
+	XPM.obj			    &
 	PlatWX.obj              &
 	ScintillaWX.obj         &
-	stc.obj     
+	stc.obj
 
 all: $(STCLIB) .SYMBOLIC
 
@@ -67,17 +71,17 @@ $(STCLIB): $(OBJECTS)
 	*wlib /b /c /n /P=256 $(STCLIB) $(OBJECTS)
 
 clean:   .SYMBOLIC
-    -erase *.obj 
-    -erase *.bak 
-    -erase *.err 
-    -erase *.pch 
-    -erase $(STCLIB) 
+    -erase *.obj
+    -erase *.bak
+    -erase *.err
+    -erase *.pch
+    -erase $(STCLIB)
     -erase *.lbc
 
 .EXTENSIONS: .cxx
 .cxx: $(S)
 
 .cxx.obj:
-    $(CXX) $[*.cxx $(CXXFLAGS) $(STCEXTRACPPFLAGS) 
+    $(CXX) $[*.cxx $(CXXFLAGS) $(STCEXTRACPPFLAGS)
 
 

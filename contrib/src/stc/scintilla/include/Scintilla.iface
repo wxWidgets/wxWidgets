@@ -221,6 +221,9 @@ get int GetTabWidth=2121(,)
 # This is the same value as CP_UTF8 in Windows
 val SC_CP_UTF8=65001
 
+# The SC_CP_DBCS value can be used to indicate a DBCS mode for GTK+.
+val SC_CP_DBCS=1
+
 # Set the code page used to interpret the bytes of the document as characters.
 # The SC_CP_UTF8 value can be used to enter Unicode mode.
 set void SetCodePage=2037(int codePage,)
@@ -260,6 +263,7 @@ val SC_MARK_CIRCLEMINUSCONNECTED=21
 val SC_MARK_BACKGROUND=22
 val SC_MARK_DOTDOTDOT=23
 val SC_MARK_ARROWS=24
+val SC_MARK_PIXMAP=25
 
 val SC_MARK_CHARACTER=10000
 
@@ -301,6 +305,9 @@ fun int MarkerNext=2047(int lineStart, int markerMask)
 
 # Find the previous line before lineStart that includes a marker in mask.
 fun int MarkerPrevious=2048(int lineStart, int markerMask)
+
+# Define a marker from a pixmap.
+fun void MarkerDefinePixmap=2049(int markerNumber, string pixmap)
 
 enu MarginType=SC_MARGIN_
 val SC_MARGIN_SYMBOL=0
@@ -578,6 +585,19 @@ set void AutoCSetDropRestOfWord=2270(bool dropRestOfWord,)
 # after the inserted text upon completion.
 get bool AutoCGetDropRestOfWord=2271(,)
 
+# Register an XPM image for use in autocompletion lists.
+fun void RegisterImage=2405(int type, string xpmData)
+
+# Clear all the registered XPM images.
+fun void ClearRegisteredImages=2408(,)
+
+# Retrieve the auto-completion list type-separator character.
+get int AutoCGetTypeSeparator=2285(,)
+
+# Change the type-separator character in the string setting up an auto-completion list.
+# Default is '?' but can be changed if items contain '?'.
+set void AutoCSetTypeSeparator=2286(int separatorCharacter,)
+
 # Set the number of spaces used for one level of indentation.
 set void SetIndent=2122(int indentSize,)
 
@@ -688,7 +708,7 @@ fun position FindText=2150(int flags, findtext ft)
 # On Windows, will draw the document into a display context such as a printer.
 fun void FormatRange=2151(bool draw, formatrange fr)
 
-# Retrieve the line at the top of the display.
+# Retrieve the display line at the top of the display.
 get int GetFirstVisibleLine=2152(,)
 
 # Retrieve the contents of a line.
@@ -873,6 +893,10 @@ enu FoldLevel=SC_FOLDLEVEL
 val SC_FOLDLEVELBASE=0x400
 val SC_FOLDLEVELWHITEFLAG=0x1000
 val SC_FOLDLEVELHEADERFLAG=0x2000
+val SC_FOLDLEVELBOXHEADERFLAG=0x4000
+val SC_FOLDLEVELBOXFOOTERFLAG=0x8000
+val SC_FOLDLEVELCONTRACTED=0x10000
+val SC_FOLDLEVELUNINDENT=0x20000
 val SC_FOLDLEVELNUMBERMASK=0x0FFF
 
 # Set the fold level of a line.
@@ -910,7 +934,15 @@ fun void ToggleFold=2231(int line,)
 # Ensure a particular line is visible by expanding any header line hiding it.
 fun void EnsureVisible=2232(int line,)
 
-# Set some debugging options for folding.
+enu FoldFlag=SC_FOLDFLAG_
+val SC_FOLDFLAG_LINEBEFORE_EXPANDED=0x0002
+val SC_FOLDFLAG_LINEBEFORE_CONTRACTED=0x0004
+val SC_FOLDFLAG_LINEAFTER_EXPANDED=0x0008
+val SC_FOLDFLAG_LINEAFTER_CONTRACTED=0x0010
+val SC_FOLDFLAG_LEVELNUMBERS=0x0040
+val SC_FOLDFLAG_BOX=0x0001
+
+# Set some style options for folding.
 fun void SetFoldFlags=2233(int flags,)
 
 # Ensure a particular line is visible by expanding any header line hiding it.
@@ -987,6 +1019,39 @@ get int GetEndAtLastLine=2278(,)
 
 # Retrieve the height of a particular line of text in pixels.
 fun int TextHeight=2279(int line,)
+
+# Show or hide the vertical scroll bar.
+set void SetVScrollBar=2280(bool show,)
+
+# Is the vertical scroll bar visible?
+get bool GetVScrollBar=2281(,)
+
+# Append a string to the end of the document without changing the selection.
+fun void AppendText=2282(int length, string text)
+
+# Is drawing done in two phases with backgrounds drawn before foregrounds?
+get bool GetTwoPhaseDraw=2283(,)
+
+# In twoPhaseDraw mode, drawing is performed in two phases, first the background
+# and then the foreground. This avoids chopping off characters that overlap the next run.
+set void SetTwoPhaseDraw=2284(bool twoPhase,)
+
+# Make the target range start and end be the same as the selection range start and end.
+fun void TargetFromSelection=2287(,)
+
+# Join the lines in the target.
+# This is an experimental feature and may be changed or removed.
+fun void LinesJoin=2288(,)
+
+# Split the lines in the target into lines that are less wide than pixelWidth
+# where possible.
+fun void LinesSplit=2289(int pixelWidth,)
+
+# Set the colours used as a chequerboard pattern in the fold margin
+fun void SetFoldMarginColour=2290(bool useSetting, colour back)
+fun void SetFoldMarginHiColour=2291(bool useSetting, colour fore)
+
+## New messages go here
 
 ## Start of key messages
 # Move caret down one line.
@@ -1110,6 +1175,9 @@ fun void LineDelete=2338(,)
 
 # Switch the current line with the previous.
 fun void LineTranspose=2339(,)
+
+# Duplicate the current line.
+fun void LineDuplicate=2404(,)
 
 # Transform the selection to lower case.
 fun void LowerCase=2340(,)
@@ -1251,7 +1319,7 @@ get bool GetMouseDownCaptures=2385(,)
 
 enu CursorShape=SC_CURSOR
 val SC_CURSORNORMAL=-1
-val SC_CURSORWAIT=3
+val SC_CURSORWAIT=4
 # Sets the cursor to one of the SC_CURSOR* values.
 set void SetCursor=2386(int cursorType,)
 # Get cursor type.
@@ -1291,6 +1359,9 @@ fun void DelLineRight=2396(,)
 set void SetXOffset=2397(int newOffset,)
 get int GetXOffset=2398(,)
 
+# Set the last x chosen value to be the caret x position
+fun void ChooseCaretX=2399(,)
+
 # Set the focus to this Scintilla widget.
 # GTK+ Specific.
 fun void GrabFocus=2400(,)
@@ -1326,6 +1397,12 @@ fun void SetXCaretPolicy=2402(int caretPolicy, int caretSlop)
 # Set the way the line the caret is on is kept visible.
 # The exclusion zone is given in lines.
 fun void SetYCaretPolicy=2403(int caretPolicy, int caretSlop)
+
+# Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
+set void SetPrintWrapMode=2406(int mode,)
+
+# Is printing line wrapped.
+get int GetPrintWrapMode=2407(,)
 
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
@@ -1442,6 +1519,11 @@ val SCLEX_PHP=30
 val SCLEX_BAAN=31
 val SCLEX_MATLAB=32
 val SCLEX_SCRIPTOL=33
+val SCLEX_ASM=34
+val SCLEX_CPPNOCASE=35
+val SCLEX_FORTRAN=36
+val SCLEX_F77=37
+val SCLEX_CSS=38
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1708,6 +1790,7 @@ val SCE_ERR_DIFF_CHANGED=10
 val SCE_ERR_DIFF_ADDITION=11
 val SCE_ERR_DIFF_DELETION=12
 val SCE_ERR_DIFF_MESSAGE=13
+val SCE_ERR_PHP=14
 # Lexical states for SCLEX_BATCH
 lex Batch=SCLEX_BATCH SCE_BAT_
 val SCE_BAT_DEFAULT=0
@@ -1754,24 +1837,31 @@ val SCE_AVE_DEFAULT=0
 val SCE_AVE_COMMENT=1
 val SCE_AVE_NUMBER=2
 val SCE_AVE_WORD=3
-val SCE_AVE_KEYWORD=4
-val SCE_AVE_STATEMENT=5
 val SCE_AVE_STRING=6
 val SCE_AVE_ENUM=7
 val SCE_AVE_STRINGEOL=8
 val SCE_AVE_IDENTIFIER=9
 val SCE_AVE_OPERATOR=10
+val SCE_AVE_WORD1=11
+val SCE_AVE_WORD2=12
+val SCE_AVE_WORD3=13
+val SCE_AVE_WORD4=14
+val SCE_AVE_WORD5=15
+val SCE_AVE_WORD6=16
 # Lexical states for SCLEX_ADA
 lex Ada=SCLEX_ADA SCE_ADA_
 val SCE_ADA_DEFAULT=0
-val SCE_ADA_COMMENT=1
-val SCE_ADA_NUMBER=2
-val SCE_ADA_WORD=3
-val SCE_ADA_STRING=4
+val SCE_ADA_WORD=1
+val SCE_ADA_IDENTIFIER=2
+val SCE_ADA_NUMBER=3
+val SCE_ADA_DELIMITER=4
 val SCE_ADA_CHARACTER=5
-val SCE_ADA_OPERATOR=6
-val SCE_ADA_IDENTIFIER=7
+val SCE_ADA_CHARACTEREOL=6
+val SCE_ADA_STRING=7
 val SCE_ADA_STRINGEOL=8
+val SCE_ADA_LABEL=9
+val SCE_ADA_COMMENTLINE=10
+val SCE_ADA_ILLEGAL=11
 # Lexical states for SCLEX_BAAN
 lex Baan=SCLEX_BAAN SCE_BAAN_
 val SCE_BAAN_DEFAULT=0
@@ -1852,6 +1942,52 @@ val SCE_SCRIPTOL_WORD2=16
 val SCE_SCRIPTOL_COMMENTDOCKEYWORD=17
 val SCE_SCRIPTOL_COMMENTDOCKEYWORDERROR=18
 val SCE_SCRIPTOL_COMMENTBASIC=19
+# Lexical states for SCLEX_ASM
+lex Asm=SCLEX_ASM SCE_ASM_
+val SCE_ASM_DEFAULT=0
+val SCE_ASM_COMMENT=1
+val SCE_ASM_NUMBER=2
+val SCE_ASM_STRING=3
+val SCE_ASM_OPERATOR=4
+val SCE_ASM_IDENTIFIER=5
+val SCE_ASM_CPUINSTRUCTION=6
+val SCE_ASM_MATHINSTRUCTION=7
+val SCE_ASM_REGISTER=8
+val SCE_ASM_DIRECTIVE=9
+val SCE_ASM_DIRECTIVEOPERAND=10
+# Lexical states for SCLEX_FORTRAN
+lex Fortran=SCLEX_FORTRAN SCE_F_
+lex F77=SCLEX_F77 SCE_F_
+val SCE_F_DEFAULT=0
+val SCE_F_COMMENT=1
+val SCE_F_NUMBER=2
+val SCE_F_STRING1=3
+val SCE_F_STRING2=4
+val SCE_F_STRINGEOL=5
+val SCE_F_OPERATOR=6
+val SCE_F_IDENTIFIER=7
+val SCE_F_WORD=8
+val SCE_F_WORD2=9
+val SCE_F_WORD3=10
+val SCE_F_PREPROCESSOR=11
+val SCE_F_OPERATOR2=12
+val SCE_F_LABEL=13
+val SCE_F_CONTINUATION=14
+# Lexical states for SCLEX_CSS
+lex CSS=SCLEX_CSS SCE_CSS_
+val SCE_CSS_DEFAULT=0
+val SCE_CSS_TAG=1
+val SCE_CSS_CLASS=2
+val SCE_CSS_PSEUDOCLASS=3
+val SCE_CSS_UNKNOWN_PSEUDOCLASS=4
+val SCE_CSS_OPERATOR=5
+val SCE_CSS_IDENTIFIER=6
+val SCE_CSS_UNKNOWN_IDENTIFIER=7
+val SCE_CSS_VALUE=8
+val SCE_CSS_COMMENT=9
+val SCE_CSS_ID=10
+val SCE_CSS_IMPORTANT=11
+val SCE_CSS_DIRECTIVE=12
 
 # Events
 

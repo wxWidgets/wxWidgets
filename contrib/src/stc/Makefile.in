@@ -34,14 +34,17 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
         KeyMap.o		\
         KeyWords.o	        \
 	LexAVE.o		\
+	LexAda.o		\
+	LexAsm.o		\
 	LexBaan.o		\
 	LexBullant.o		\
 	LexMatlab.o		\
-	LexAda.o		\
 	LexCPP.o		\
 	LexConf.o		\
 	LexCrontab.o		\
+	LexCSS.o		\
 	LexEiffel.o		\
+	LexFortran.o		\
 	LexHTML.o		\
 	LexLisp.o		\
 	LexLua.o		\
@@ -61,6 +64,8 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
 	UniConversion.o		\
         ViewStyle.o		\
 	WindowAccessor.o	\
+	XPM.o			\
+
 
 DEPFILES=$(OBJECTS:.o=.d)
 

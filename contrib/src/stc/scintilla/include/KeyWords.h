@@ -7,7 +7,7 @@
 
 typedef void (*LexerFunction)(unsigned int startPos, int lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler);
-                  
+
 /**
  * A LexerModule is responsible for lexing and folding a particular language.
  * The class maintains a list of LexerModules which can be searched to find a
@@ -26,7 +26,7 @@ protected:
 
 public:
 	const char *languageName;
-	LexerModule(int language_, LexerFunction fnLexer_, 
+	LexerModule(int language_, LexerFunction fnLexer_,
 		const char *languageName_=0, LexerFunction fnFolder_=0,
 		const char * const wordListDescriptions_[] = NULL);
 	int GetLanguage() const { return language; }

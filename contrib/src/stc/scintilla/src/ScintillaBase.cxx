@@ -2,7 +2,7 @@
 /** @file ScintillaBase.cxx
  ** An enhanced subclass of Editor with calltips, autocomplete and context menu.
  **/
-// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -26,6 +26,7 @@
 #include "CallTip.h"
 #include "KeyMap.h"
 #include "Indicator.h"
+#include "XPM.h"
 #include "LineMarker.h"
 #include "Style.h"
 #include "ViewStyle.h"
@@ -211,7 +212,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 			return;
 		}
 	}
-	ac.Start(wMain, idAutoComplete, currentPos, lenEntered);
+	ac.Start(wMain, idAutoComplete, currentPos, lenEntered, vs.lineHeight, IsUnicodeMode());
 
 	PRectangle rcClient = GetClientRectangle();
 	Point pt = LocationFromPosition(currentPos - lenEntered);
@@ -224,7 +225,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 		pt = LocationFromPosition(currentPos);
 	}
 	PRectangle rcac;
-	rcac.left = pt.x - 5;
+	rcac.left = pt.x - ac.lb->CaretFromEdge();
 	if (pt.y >= rcClient.bottom - heightLB &&  // Wont fit below.
 	        pt.y >= (rcClient.bottom + rcClient.top) / 2) { // and there is more room above.
 		rcac.top = pt.y - heightLB;
@@ -237,19 +238,19 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	}
 	rcac.right = rcac.left + widthLB;
 	rcac.bottom = Platform::Minimum(rcac.top + heightLB, rcClient.bottom);
-	ac.lb.SetPositionRelative(rcac, wMain);
-	ac.lb.SetFont(vs.styles[STYLE_DEFAULT].font);
-	ac.lb.SetAverageCharWidth(vs.styles[STYLE_DEFAULT].aveCharWidth);
-	ac.lb.SetDoubleClickAction(AutoCompleteDoubleClick, this);
+	ac.lb->SetPositionRelative(rcac, wMain);
+	ac.lb->SetFont(vs.styles[STYLE_DEFAULT].font);
+	ac.lb->SetAverageCharWidth(vs.styles[STYLE_DEFAULT].aveCharWidth);
+	ac.lb->SetDoubleClickAction(AutoCompleteDoubleClick, this);
 
 	ac.SetList(list);
 
 	// Fiddle the position of the list so it is right next to the target and wide enough for all its strings
-	PRectangle rcList = ac.lb.GetDesiredRect();
+	PRectangle rcList = ac.lb->GetDesiredRect();
 	int heightAlloced = rcList.bottom - rcList.top;
 	widthLB = Platform::Maximum(widthLB, rcList.right - rcList.left);
 	// Make an allowance for large strings in list
-	rcList.left = pt.x - 5;
+	rcList.left = pt.x - ac.lb->CaretFromEdge();
 	rcList.right = rcList.left + widthLB;
 	if (((pt.y + vs.lineHeight) >= (rcClient.bottom - heightAlloced)) &&  // Wont fit below.
 	        ((pt.y + vs.lineHeight / 2) >= (rcClient.bottom + rcClient.top) / 2)) { // and there is more room above.
@@ -258,7 +259,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 		rcList.top = pt.y + vs.lineHeight;
 	}
 	rcList.bottom = rcList.top + heightAlloced;
-	ac.lb.SetPositionRelative(rcList, wMain);
+	ac.lb->SetPositionRelative(rcList, wMain);
 	ac.Show();
 	if (lenEntered != 0) {
 		AutoCompleteMoveToCurrentWord();
@@ -304,10 +305,10 @@ void ScintillaBase::AutoCompleteCharacterDeleted() {
 }
 
 void ScintillaBase::AutoCompleteCompleted() {
-	int item = ac.lb.GetSelection();
+	int item = ac.lb->GetSelection();
 	char selected[1000];
 	if (item != -1) {
-		ac.lb.GetValue(item, selected, sizeof(selected));
+		ac.lb->GetValue(item, selected, sizeof(selected));
 	}
 	ac.Cancel();
 
@@ -508,6 +509,21 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_AUTOCGETDROPRESTOFWORD:
 		return ac.dropRestOfWord;
+
+	case SCI_REGISTERIMAGE:
+		ac.lb->RegisterImage(wParam, reinterpret_cast<const char *>(lParam));
+		break;
+
+	case SCI_CLEARREGISTEREDIMAGES:
+		ac.lb->ClearRegisteredImages();
+		break;
+
+	case SCI_AUTOCSETTYPESEPARATOR:
+		ac.SetTypesep(static_cast<char>(wParam));
+		break;
+
+	case SCI_AUTOCGETTYPESEPARATOR:
+		return ac.GetTypesep();
 
 	case SCI_CALLTIPSHOW: {
 			AutoCompleteCancel();

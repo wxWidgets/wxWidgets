@@ -2,21 +2,35 @@
 /** @file StyleContext.cxx
  ** Lexer infrastructure.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // This file is in the public domain.
 
 // All languages handled so far can treat all characters >= 0x80 as one class
 // which just continues the current token or starts an identifier if in default.
-// DBCS treated specially as the second character can be < 0x80 and hence 
+// DBCS treated specially as the second character can be < 0x80 and hence
 // syntactically significant. UTF-8 avoids this as all trail bytes are >= 0x80
 class StyleContext {
 	Accessor &styler;
-	int endPos;
+	unsigned int endPos;
 	StyleContext& operator=(const StyleContext&) {
 		return *this;
 	}
+	void GetNextChar(unsigned int pos) {
+		chNext = static_cast<unsigned char>(styler.SafeGetCharAt(pos+1));
+		if (styler.IsLeadByte(static_cast<char>(chNext))) {
+			chNext = chNext << 8;
+			chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(pos+2));
+		}
+		// End of line?
+		// Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win)
+		// or on LF alone (Unix). Avoid triggering two times on Dos/Win.
+		atLineEnd = (ch == '\r' && chNext != '\n') ||
+					(ch == '\n') ||
+					(currentPos >= endPos);
+	}
+
 public:
-	int currentPos;
+	unsigned int currentPos;
 	bool atLineStart;
 	bool atLineEnd;
 	int state;
@@ -24,32 +38,27 @@ public:
 	int ch;
 	int chNext;
 
-	StyleContext(unsigned int startPos, int length,
-                        int initStyle, Accessor &styler_, char chMask=31) : 
+	StyleContext(unsigned int startPos, unsigned int length,
+                        int initStyle, Accessor &styler_, char chMask=31) :
 		styler(styler_),
 		endPos(startPos + length),
-		currentPos(startPos), 
+		currentPos(startPos),
 		atLineStart(true),
 		atLineEnd(false),
-		state(initStyle), 
+		state(initStyle),
 		chPrev(0),
-		ch(0), 
+		ch(0),
 		chNext(0) {
 		styler.StartAt(startPos, chMask);
 		styler.StartSegment(startPos);
-		int pos = currentPos;
+		unsigned int pos = currentPos;
 		ch = static_cast<unsigned char>(styler.SafeGetCharAt(pos));
 		if (styler.IsLeadByte(static_cast<char>(ch))) {
 			pos++;
 			ch = ch << 8;
 			ch |= static_cast<unsigned char>(styler.SafeGetCharAt(pos));
 		}
-		chNext = static_cast<unsigned char>(styler.SafeGetCharAt(pos+1));
-		if (styler.IsLeadByte(static_cast<char>(chNext))) {
-			chNext = chNext << 8;
-			chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(pos+2));
-		}
-		atLineEnd = (ch == '\r' && chNext != '\n') || (ch == '\n') || (currentPos >= endPos);
+		GetNextChar(pos);
 	}
 	void Complete() {
 		styler.ColourTo(currentPos - 1, state);
@@ -60,27 +69,23 @@ public:
 	void Forward() {
 		if (currentPos < endPos) {
 			atLineStart = atLineEnd;
-			// A lot of this is repeated from the constructor - TODO: merge code
 			chPrev = ch;
 			currentPos++;
 			if (ch >= 0x100)
 				currentPos++;
 			ch = chNext;
-			chNext = static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+1));
-			if (styler.IsLeadByte(static_cast<char>(chNext))) {
-				chNext = chNext << 8;
-				chNext |= static_cast<unsigned char>(styler.SafeGetCharAt(currentPos + 2));
-			}
-			// Trigger on CR only (Mac style) or either on LF from CR+LF (Dos/Win) or on LF alone (Unix)
-			// Avoid triggering two times on Dos/Win
-			// End of line
-			atLineEnd = (ch == '\r' && chNext != '\n') || (ch == '\n') || (currentPos >= endPos);
+			GetNextChar(currentPos);
 		} else {
 			atLineStart = false;
 			chPrev = ' ';
 			ch = ' ';
 			chNext = ' ';
 			atLineEnd = true;
+		}
+	}
+	void Forward(int nb) {
+		for (int i = 0; i < nb; i++) {
+			Forward();
 		}
 	}
 	void ChangeState(int state_) {
@@ -136,8 +141,8 @@ public:
 		return true;
 	}
 	// Non-inline
-	void GetCurrent(char *s, int len);
-	void GetCurrentLowered(char *s, int len);
+	void GetCurrent(char *s, unsigned int len);
+	void GetCurrentLowered(char *s, unsigned int len);
 };
 
 inline bool IsASpace(unsigned int ch) {

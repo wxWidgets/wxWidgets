@@ -42,6 +42,7 @@ cmdValues = [ (2300, 2349),
               (2176, 2180),
               (2390, 2393),
               (2395, 2396),
+              2404,
             ]
 
 
@@ -88,90 +89,113 @@ methodOverrideMap = {
     'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0, 0),
     'SetViewWS' : ( 'SetViewWhiteSpace', 0, 0, 0),
 
-    'GetCharAt' : ( 0, 0,
-                    '''int %s(int pos) {
-                       return (unsigned char)SendMsg(%s, pos, 0);''',
-                    0),
+    'GetCharAt' :
+    ( 0, 0,
+      '''int %s(int pos) {
+         return (unsigned char)SendMsg(%s, pos, 0);''',
+      0),
 
-    'GetStyleAt' : ( 0, 0,
-                    '''int %s(int pos) {
-                       return (unsigned char)SendMsg(%s, pos, 0);''',
-                    0),
+    'GetStyleAt' :
+    ( 0, 0,
+      '''int %s(int pos) {
+         return (unsigned char)SendMsg(%s, pos, 0);''',
+      0),
 
-    'GetStyledText' : (0,
-                       'wxMemoryBuffer %s(int startPos, int endPos);',
+    'GetStyledText' :
+    (0,
+     'wxMemoryBuffer %s(int startPos, int endPos);',
 
-                       '''wxMemoryBuffer %s(int startPos, int endPos) {
-                          wxMemoryBuffer buf;
-                          if (endPos < startPos) {
-                              int temp = startPos;
-                              startPos = endPos;
-                              endPos = temp;
-                          }
-                          int len = endPos - startPos;
-                          if (!len) return buf;
-                          TextRange tr;
-                          tr.lpstrText = (char*)buf.GetWriteBuf(len*2+1);
-                          tr.chrg.cpMin = startPos;
-                          tr.chrg.cpMax = endPos;
-                          len = SendMsg(%s, 0, (long)&tr);
-                          buf.UngetWriteBuf(len);
-                          return buf;''',
+     '''wxMemoryBuffer %s(int startPos, int endPos) {
+        wxMemoryBuffer buf;
+        if (endPos < startPos) {
+            int temp = startPos;
+            startPos = endPos;
+            endPos = temp;
+        }
+        int len = endPos - startPos;
+        if (!len) return buf;
+        TextRange tr;
+        tr.lpstrText = (char*)buf.GetWriteBuf(len*2+1);
+        tr.chrg.cpMin = startPos;
+        tr.chrg.cpMax = endPos;
+        len = SendMsg(%s, 0, (long)&tr);
+        buf.UngetWriteBuf(len);
+        return buf;''',
 
-                       ('Retrieve a buffer of cells.',)),
+     ('Retrieve a buffer of cells.',)),
 
 
-    'PositionFromPoint' : (0,
-                           'int %s(wxPoint pt);',
+    'PositionFromPoint' :
+    (0,
+     'int %s(wxPoint pt);',
 
-                           '''int %s(wxPoint pt) {
-                              return SendMsg(%s, pt.x, pt.y);''',
+     '''int %s(wxPoint pt) {
+        return SendMsg(%s, pt.x, pt.y);''',
+     0),
 
-                           0),
+    'GetCurLine' :
+    (0,
+     '#ifdef SWIG\n    wxString %s(int* OUTPUT);\n#else\n    wxString GetCurLine(int* linePos=NULL);\n#endif',
 
-    'GetCurLine' : (0,
-                    '#ifdef SWIG\n    wxString %s(int* OUTPUT);\n#else\n    wxString GetCurLine(int* linePos=NULL);\n#endif',
+        '''wxString %s(int* linePos) {
+        int len = LineLength(GetCurrentLine());
+        if (!len) {
+            if (linePos)  *linePos = 0;
+            return wxEmptyString;
+        }
 
-                    '''wxString %s(int* linePos) {
-                       int len = LineLength(GetCurrentLine());
-                       if (!len) {
-                           if (linePos)  *linePos = 0;
-                           return wxEmptyString;
-                       }
+        wxMemoryBuffer mbuf(len+1);
+        char* buf = (char*)mbuf.GetWriteBuf(len+1);
 
-                       wxMemoryBuffer mbuf(len+1);
-                       char* buf = (char*)mbuf.GetWriteBuf(len+1);
+        int pos = SendMsg(%s, len+1, (long)buf);
+        mbuf.UngetWriteBuf(len);
+        mbuf.AppendByte(0);
+        if (linePos)  *linePos = pos;
+        return stc2wx(buf);''',
 
-                       int pos = SendMsg(%s, len+1, (long)buf);
-                       mbuf.UngetWriteBuf(len);
-                       mbuf.AppendByte(0);
-                       if (linePos)  *linePos = pos;
-                       return stc2wx(buf);''',
-
-                    0),
+     0),
 
     'SetUsePalette' : (None, 0,0,0),
 
     'MarkerSetFore' : ('MarkerSetForeground', 0, 0, 0),
     'MarkerSetBack' : ('MarkerSetBackground', 0, 0, 0),
 
-    'MarkerDefine' : (0,
-                      '''void %s(int markerNumber, int markerSymbol,
-                         const wxColour& foreground = wxNullColour,
-                         const wxColour& background = wxNullColour);''',
+    'MarkerDefine' :
+    (0,
+     '''void %s(int markerNumber, int markerSymbol,
+                const wxColour& foreground = wxNullColour,
+                const wxColour& background = wxNullColour);''',
 
-                      '''void %s(int markerNumber, int markerSymbol,
-                            const wxColour& foreground,
-                            const wxColour& background) {
+     '''void %s(int markerNumber, int markerSymbol,
+                const wxColour& foreground,
+                const wxColour& background) {
 
-                            SendMsg(%s, markerNumber, markerSymbol);
-                            if (foreground.Ok())
-                                MarkerSetForeground(markerNumber, foreground);
-                            if (background.Ok())
-                                MarkerSetBackground(markerNumber, background);''',
+                SendMsg(%s, markerNumber, markerSymbol);
+                if (foreground.Ok())
+                    MarkerSetForeground(markerNumber, foreground);
+                if (background.Ok())
+                    MarkerSetBackground(markerNumber, background);''',
 
-                      ('Set the symbol used for a particular marker number,',
-                       'and optionally the fore and background colours.')),
+     ('Set the symbol used for a particular marker number,',
+      'and optionally the fore and background colours.')),
+
+
+    'MarkerDefinePixmap' :
+    ('MarkerDefineBitmap',
+     '''void %s(int markerNumber, const wxBitmap& bmp);''',
+     '''void %s(int markerNumber, const wxBitmap& bmp) {
+        // convert bmp to a xpm in a string
+        wxMemoryOutputStream strm;
+        wxImage(bmp).SaveFile(strm, wxBITMAP_TYPE_XPM);
+        size_t len = strm.GetSize();
+        char* buff = new char[len+1];
+        strm.CopyTo(buff, len);
+        buff[len+1] = 0;
+        SendMsg(%s, markerNumber, (long)buff);
+        delete [] buff;
+        ''',
+     ('Define a marker from a bitmap',)),
+
 
     'SetMarginTypeN' : ('SetMarginType', 0, 0, 0),
     'GetMarginTypeN' : ('GetMarginType', 0, 0, 0),
@@ -189,32 +213,33 @@ methodOverrideMap = {
     'SetCaretFore' : ('SetCaretForeground', 0, 0, 0),
     'StyleSetFont' : ('StyleSetFaceName', 0, 0, 0),
 
-    'AssignCmdKey' : ('CmdKeyAssign',
-                      'void %s(int key, int modifiers, int cmd);',
+    'AssignCmdKey' :
+    ('CmdKeyAssign',
+     'void %s(int key, int modifiers, int cmd);',
 
-                      '''void %s(int key, int modifiers, int cmd) {
-                          SendMsg(%s, MAKELONG(key, modifiers), cmd);''',
+     '''void %s(int key, int modifiers, int cmd) {
+         SendMsg(%s, MAKELONG(key, modifiers), cmd);''',
+     0),
 
-                      0),
 
-    'ClearCmdKey' : ('CmdKeyClear',
-                      'void %s(int key, int modifiers);',
+    'ClearCmdKey' :
+    ('CmdKeyClear',
+     'void %s(int key, int modifiers);',
 
-                      '''void %s(int key, int modifiers) {
-                          SendMsg(%s, MAKELONG(key, modifiers));''',
-
-                      0),
+     '''void %s(int key, int modifiers) {
+         SendMsg(%s, MAKELONG(key, modifiers));''',
+     0),
 
     'ClearAllCmdKeys' : ('CmdKeyClearAll', 0, 0, 0),
 
 
-    'SetStylingEx' : ('SetStyleBytes',
-                      'void %s(int length, char* styleBytes);',
+    'SetStylingEx' :
+    ('SetStyleBytes',
+     'void %s(int length, char* styleBytes);',
 
-                      '''void %s(int length, char* styleBytes) {
-                          SendMsg(%s, length, (long)styleBytes);''',
-
-                      0),
+     '''void %s(int length, char* styleBytes) {
+        SendMsg(%s, length, (long)styleBytes);''',
+     0),
 
 
     'IndicSetStyle' : ('IndicatorSetStyle', 0, 0, 0),
@@ -245,129 +270,161 @@ methodOverrideMap = {
     'AutoCGetAutoHide' : ('AutoCompGetAutoHide', 0, 0, 0),
     'AutoCSetDropRestOfWord' : ('AutoCompSetDropRestOfWord', 0,0,0),
     'AutoCGetDropRestOfWord' : ('AutoCompGetDropRestOfWord', 0,0,0),
+    'AutoCGetTypeSeparator' : ('AutoCompGetTypeSeparator', 0, 0, 0),
+    'AutoCSetTypeSeparator' : ('AutoCompSetTypeSeparator', 0, 0, 0),
+
+    'RegisterImage' :
+    (0,
+     '''void %s(int type, const wxBitmap& bmp);''',
+     '''void %s(int type, const wxBitmap& bmp) {
+        // convert bmp to a xpm in a string
+        wxMemoryOutputStream strm;
+        wxImage(bmp).SaveFile(strm, wxBITMAP_TYPE_XPM);
+        size_t len = strm.GetSize();
+        char* buff = new char[len+1];
+        strm.CopyTo(buff, len);
+        buff[len+1] = 0;
+        SendMsg(%s, type, (long)buff);
+        delete [] buff;
+     ''',
+     ('Register an image for use in autocompletion lists.',)),
+
+
+    'ClearRegisteredImages' : (0, 0, 0,
+                               ('Clear all the registered images.',)),
 
 
     'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0, 0),
     'GetHScrollBar' : ('GetUseHorizontalScrollBar', 0, 0, 0),
 
+    'SetVScrollBar' : ('SetUseVerticalScrollBar', 0, 0, 0),
+    'GetVScrollBar' : ('GetUseVerticalScrollBar', 0, 0, 0),
+
     'GetCaretFore' : ('GetCaretForeground', 0, 0, 0),
 
     'GetUsePalette' : (None, 0, 0, 0),
 
-    'FindText' : (0,
-                  '''int %s(int minPos, int maxPos, const wxString& text, int flags=0);''',
+    'FindText' :
+    (0,
+     '''int %s(int minPos, int maxPos, const wxString& text, int flags=0);''',
 
-                  '''int %s(int minPos, int maxPos,
-                            const wxString& text,
-                            int flags) {
-                     TextToFind  ft;
-                     ft.chrg.cpMin = minPos;
-                     ft.chrg.cpMax = maxPos;
-                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                     ft.lpstrText = (char*)(const char*)buf;
+     '''int %s(int minPos, int maxPos,
+               const wxString& text,
+               int flags) {
+            TextToFind  ft;
+            ft.chrg.cpMin = minPos;
+            ft.chrg.cpMax = maxPos;
+            wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+            ft.lpstrText = (char*)(const char*)buf;
 
-                     return SendMsg(%s, flags, (long)&ft);''',
-                  0),
+            return SendMsg(%s, flags, (long)&ft);''',
+     0),
 
-    'FormatRange' : (0,
-                     '''int %s(bool   doDraw,
-                               int    startPos,
-                               int    endPos,
-                               wxDC*  draw,
-                               wxDC*  target,  // Why does it use two? Can they be the same?
-                               wxRect renderRect,
-                               wxRect pageRect);''',
-                     ''' int %s(bool   doDraw,
-                                int    startPos,
-                                int    endPos,
-                                wxDC*  draw,
-                                wxDC*  target,  // Why does it use two? Can they be the same?
-                                wxRect renderRect,
-                                wxRect pageRect) {
-                            RangeToFormat fr;
+    'FormatRange' :
+    (0,
+     '''int %s(bool   doDraw,
+               int    startPos,
+               int    endPos,
+               wxDC*  draw,
+               wxDC*  target,  // Why does it use two? Can they be the same?
+               wxRect renderRect,
+               wxRect pageRect);''',
+     ''' int %s(bool   doDraw,
+                int    startPos,
+                int    endPos,
+                wxDC*  draw,
+                wxDC*  target,  // Why does it use two? Can they be the same?
+                wxRect renderRect,
+                wxRect pageRect) {
+             RangeToFormat fr;
 
-                            if (endPos < startPos) {
-                                int temp = startPos;
-                                startPos = endPos;
-                                endPos = temp;
-                            }
-                            fr.hdc = draw;
-                            fr.hdcTarget = target;
-                            fr.rc.top = renderRect.GetTop();
-                            fr.rc.left = renderRect.GetLeft();
-                            fr.rc.right = renderRect.GetRight();
-                            fr.rc.bottom = renderRect.GetBottom();
-                            fr.rcPage.top = pageRect.GetTop();
-                            fr.rcPage.left = pageRect.GetLeft();
-                            fr.rcPage.right = pageRect.GetRight();
-                            fr.rcPage.bottom = pageRect.GetBottom();
-                            fr.chrg.cpMin = startPos;
-                            fr.chrg.cpMax = endPos;
+             if (endPos < startPos) {
+                 int temp = startPos;
+                 startPos = endPos;
+                 endPos = temp;
+             }
+             fr.hdc = draw;
+             fr.hdcTarget = target;
+             fr.rc.top = renderRect.GetTop();
+             fr.rc.left = renderRect.GetLeft();
+             fr.rc.right = renderRect.GetRight();
+             fr.rc.bottom = renderRect.GetBottom();
+             fr.rcPage.top = pageRect.GetTop();
+             fr.rcPage.left = pageRect.GetLeft();
+             fr.rcPage.right = pageRect.GetRight();
+             fr.rcPage.bottom = pageRect.GetBottom();
+             fr.chrg.cpMin = startPos;
+             fr.chrg.cpMax = endPos;
 
-                            return SendMsg(%s, doDraw, (long)&fr);''',
-                     0),
+             return SendMsg(%s, doDraw, (long)&fr);''',
+     0),
 
 
-    'GetLine' : (0,
-                    'wxString %s(int line);',
+    'GetLine' :
+    (0,
+     'wxString %s(int line);',
 
-                    '''wxString %s(int line) {
-                       int len = LineLength(line);
-                       if (!len) return wxEmptyString;
+     '''wxString %s(int line) {
+         int len = LineLength(line);
+         if (!len) return wxEmptyString;
 
-                       wxMemoryBuffer mbuf(len+1);
-                       char* buf = (char*)mbuf.GetWriteBuf(len+1);
-                       SendMsg(%s, line, (long)buf);
-                       mbuf.UngetWriteBuf(len);
-                       mbuf.AppendByte(0);
-                       return stc2wx(buf);''',
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(%s, line, (long)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
 
-                    ('Retrieve the contents of a line.',)),
+     ('Retrieve the contents of a line.',)),
 
     'SetSel' : ('SetSelection', 0, 0, 0),
-    'GetSelText' : ('GetSelectedText',
-                    'wxString %s();',
 
-                    '''wxString %s() {
-                            int   start;
-                            int   end;
+    'GetSelText' :
+    ('GetSelectedText',
+     'wxString %s();',
 
-                            GetSelection(&start, &end);
-                            int   len  = end - start;
-                            if (!len) return wxEmptyString;
+     '''wxString %s() {
+         int   start;
+         int   end;
 
-                            wxMemoryBuffer mbuf(len+1);
-                            char* buf = (char*)mbuf.GetWriteBuf(len+1);
-                            SendMsg(%s, 0, (long)buf);
-                            mbuf.UngetWriteBuf(len);
-                            mbuf.AppendByte(0);
-                            return stc2wx(buf);''',
+         GetSelection(&start, &end);
+         int   len  = end - start;
+         if (!len) return wxEmptyString;
 
-                    ('Retrieve the selected text.',)),
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(%s, 0, (long)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
 
-    'GetTextRange' : (0,
-                      'wxString %s(int startPos, int endPos);',
+     ('Retrieve the selected text.',)),
 
-                      '''wxString %s(int startPos, int endPos) {
-                            if (endPos < startPos) {
-                                int temp = startPos;
-                                startPos = endPos;
-                                endPos = temp;
-                            }
-                            int   len  = endPos - startPos;
-                            if (!len) return wxEmptyString;
-                            wxMemoryBuffer mbuf(len+1);
-                            char* buf = (char*)mbuf.GetWriteBuf(len);
-                            TextRange tr;
-                            tr.lpstrText = buf;
-                            tr.chrg.cpMin = startPos;
-                            tr.chrg.cpMax = endPos;
-                            SendMsg(%s, 0, (long)&tr);
-                            mbuf.UngetWriteBuf(len);
-                            mbuf.AppendByte(0);
-                            return stc2wx(buf);''',
 
-                       ('Retrieve a range of text.',)),
+    'GetTextRange' :
+    (0,
+     'wxString %s(int startPos, int endPos);',
+
+     '''wxString %s(int startPos, int endPos) {
+         if (endPos < startPos) {
+             int temp = startPos;
+             startPos = endPos;
+             endPos = temp;
+         }
+         int   len  = endPos - startPos;
+         if (!len) return wxEmptyString;
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len);
+         TextRange tr;
+         tr.lpstrText = buf;
+         tr.chrg.cpMin = startPos;
+         tr.chrg.cpMax = endPos;
+         SendMsg(%s, 0, (long)&tr);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+
+     ('Retrieve a range of text.',)),
 
     'PointXFromPosition' : (None, 0, 0, 0),
     'PointYFromPosition' : (None, 0, 0, 0),
@@ -376,19 +433,20 @@ methodOverrideMap = {
     'ReplaceSel' : ('ReplaceSelection', 0, 0, 0),
     'Null' : (None, 0, 0, 0),
 
-    'GetText' : (0,
-                 'wxString %s();',
+    'GetText' :
+    (0,
+     'wxString %s();',
 
-                 '''wxString %s() {
-                        int len  = GetTextLength();
-                        wxMemoryBuffer mbuf(len+1);   // leave room for the null...
-                        char* buf = (char*)mbuf.GetWriteBuf(len+1);
-                        SendMsg(%s, len+1, (long)buf);
-                        mbuf.UngetWriteBuf(len);
-                        mbuf.AppendByte(0);
-                        return stc2wx(buf);''',
+     '''wxString %s() {
+         int len  = GetTextLength();
+         wxMemoryBuffer mbuf(len+1);   // leave room for the null...
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(%s, len+1, (long)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
 
-                 ('Retrieve all the text in the document.', )),
+     ('Retrieve all the text in the document.', )),
 
     'GetDirectFunction' : (None, 0, 0, 0),
     'GetDirectPointer' : (None, 0, 0, 0),
@@ -398,66 +456,76 @@ methodOverrideMap = {
     'CallTipSetBack' : ('CallTipSetBackground', 0, 0, 0),
 
 
-    'ReplaceTarget' : (0,
-                       'int %s(const wxString& text);',
+    'ReplaceTarget' :
+    (0,
+     'int %s(const wxString& text);',
 
-                       '''
-                       int %s(const wxString& text) {
-                           wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                           return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
-                       0),
+     '''
+     int %s(const wxString& text) {
+         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+         return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+     0),
 
-    'ReplaceTargetRE' : (0,
-                       'int %s(const wxString& text);',
+    'ReplaceTargetRE' :
+    (0,
+     'int %s(const wxString& text);',
 
-                       '''
-                       int %s(const wxString& text) {
-                           wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                           return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
-                       0),
+     '''
+     int %s(const wxString& text) {
+         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+         return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+     0),
 
-    'SearchInTarget' : (0,
-                       'int %s(const wxString& text);',
+    'SearchInTarget' :
+    (0,
+     'int %s(const wxString& text);',
 
-                       '''
-                       int %s(const wxString& text) {
-                           wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                           return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
-                       0),
+     '''
+     int %s(const wxString& text) {
+         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+         return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+     0),
 
 
-    'GetDocPointer' : (0,
-                       'void* %s();',
-                       '''void* %s() {
-                           return (void*)SendMsg(%s);''',
-                       0),
+    'GetDocPointer' :
+    (0,
+     'void* %s();',
+     '''void* %s() {
+         return (void*)SendMsg(%s);''',
+     0),
 
-    'SetDocPointer' : (0,
-                       'void %s(void* docPointer);',
-                       '''void %s(void* docPointer) {
-                           SendMsg(%s, 0, (long)docPointer);''',
-                       0),
+    'SetDocPointer' :
+    (0,
+     'void %s(void* docPointer);',
+     '''void %s(void* docPointer) {
+         SendMsg(%s, 0, (long)docPointer);''',
+     0),
 
-    'CreateDocument' : (0,
-                       'void* %s();',
-                       '''void* %s() {
-                           return (void*)SendMsg(%s);''',
-                        0),
+    'CreateDocument' :
+    (0,
+     'void* %s();',
+     '''void* %s() {
+         return (void*)SendMsg(%s);''',
+     0),
 
-    'AddRefDocument' : (0,
-                       'void %s(void* docPointer);',
-                       '''void %s(void* docPointer) {
-                           SendMsg(%s, 0, (long)docPointer);''',
-                        0),
+    'AddRefDocument' :
+    (0,
+     'void %s(void* docPointer);',
+     '''void %s(void* docPointer) {
+         SendMsg(%s, 0, (long)docPointer);''',
+     0),
 
-    'ReleaseDocument' : (0,
-                       'void %s(void* docPointer);',
-                       '''void %s(void* docPointer) {
-                           SendMsg(%s, 0, (long)docPointer);''',
-                         0),
-    'SetCodePage' : (0,
-                     0,
-                     '''void %s(int codePage) {
+    'ReleaseDocument' :
+    (0,
+     'void %s(void* docPointer);',
+     '''void %s(void* docPointer) {
+         SendMsg(%s, 0, (long)docPointer);''',
+     0),
+
+    'SetCodePage' :
+    (0,
+     0,
+     '''void %s(int codePage) {
 #if wxUSE_UNICODE
     wxASSERT_MSG(codePage == wxSTC_CP_UTF8,
                  wxT("Only wxSTC_CP_UTF8 may be used when wxUSE_UNICODE is on."));
@@ -465,8 +533,8 @@ methodOverrideMap = {
     wxASSERT_MSG(codePage != wxSTC_CP_UTF8,
                  wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
 #endif
-                 SendMsg(%s, codePage);''',
-                         ("Set the code page used to interpret the bytes of the document as characters.",) ),
+    SendMsg(%s, codePage);''',
+     ("Set the code page used to interpret the bytes of the document as characters.",) ),
 
 
     'GrabFocus' : (None, 0, 0, 0),

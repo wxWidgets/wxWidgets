@@ -21,6 +21,7 @@
 #include "ScintillaWX.h"
 
 #include <wx/tokenzr.h>
+#include <wx/mstream.h>
 
 
 //----------------------------------------------------------------------
@@ -306,9 +307,7 @@ void wxStyledTextCtrl::ScrollToColumn(int column) {
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& evt) {
     wxPaintDC dc(this);
-    wxRegion  region = GetUpdateRegion();
-
-    m_swx->DoPaint(&dc, region.GetBox());
+    m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
 void wxStyledTextCtrl::OnScrollWin(wxScrollWinEvent& evt) {
