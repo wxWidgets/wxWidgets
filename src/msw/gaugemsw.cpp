@@ -228,7 +228,7 @@ bool wxGaugeMSW::SetForegroundColour(const wxColour& col)
     return TRUE;
 }
 
-void wxGaugeMSW::SetBackgroundColour(const wxColour& col)
+bool wxGaugeMSW::SetBackgroundColour(const wxColour& col)
 {
     if ( !wxControl::SetBackgroundColour(col) )
         return FALSE;
