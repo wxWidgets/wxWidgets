@@ -57,6 +57,9 @@
 
 #ifdef __DARWIN__
 #  include <CoreServices/CoreServices.h>
+#  if defined(WXMAKINGDLL)
+#    include <mach-o/dyld.h>
+#  endif
 #else
 #  include <Sound.h>
 #  include <Threads.h>
@@ -373,11 +376,10 @@ void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding
       CopyCStringToPascal( from , to ) ;
     }
 }
-#ifdef WXMAKINGDLL
-#ifndef __DARWIN__
+
+#if defined(WXMAKINGDLL) && !defined(__DARWIN__)
 // we know it's there ;-)
 WXIMPORT char std::__throws_bad_alloc ;
-#endif
 #endif
 
 bool wxApp::Initialize()
@@ -471,21 +473,16 @@ bool wxApp::Initialize()
   #endif
 #endif
 
-  // now avoid exceptions thrown for new (bad_alloc)
-
 #ifndef __DARWIN__
-  std::__throws_bad_alloc = FALSE ;
+    // now avoid exceptions thrown for new (bad_alloc)
+    std::__throws_bad_alloc = FALSE ;
 #endif
 
     s_macCursorRgn = ::NewRgn() ;
 
-#ifdef __WXMSW__
-  wxBuffer = new char[1500];
-#else
-  wxBuffer = new char[BUFSIZ + 512];
-#endif
-
-  wxClassInfo::InitializeClasses();
+    wxBuffer = new char[BUFSIZ + 512];
+  
+    wxClassInfo::InitializeClasses();
 
 #if wxUSE_RESOURCES
 //    wxGetResource(wxT("wxWindows"), wxT("OsVersion"), &wxOsVersion);
@@ -494,8 +491,9 @@ bool wxApp::Initialize()
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;
 #endif
-  wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-  wxTheColourDatabase->Initialize();
+    
+    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
+    wxTheColourDatabase->Initialize();
 
 #ifdef __WXDEBUG__
 #if wxUSE_LOG
@@ -629,9 +627,90 @@ void wxApp::CleanUp()
 //----------------------------------------------------------------------
 
 short gCurrentResource = -1 ;
+#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+CFBundleRef gDylibBundle = NULL;
+#endif /* WXMAKINGDLL && __DARWIN__ */
 
 wxStAppResource::wxStAppResource()
 {
+#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+    // Open the shared library resource file if it is not yet open
+    if (gCurrentResource == -1) {
+        NSSymbol    theSymbol;
+        NSModule    theModule;
+        const char *theLibPath;
+        
+        gDylibBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.wxwindows.wxWindows"));
+        if (gDylibBundle != NULL) {
+            // wxWindows has been bundled into a framework
+            //   load the framework resources
+            
+            gCurrentResource = CFBundleOpenBundleResourceMap(gDylibBundle);
+        }
+        else {
+            // wxWindows is a simple dynamic shared library
+            //   load the resources from the data fork of a separate resource file
+            char  *theResPath;
+            char  *theName;
+            char  *theExt;
+            FSRef  theResRef;
+            OSErr  theErr = noErr;
+            
+            // get the library path
+            theSymbol = NSLookupAndBindSymbol("_gCurrentResource");
+            theModule = NSModuleForSymbol(theSymbol);
+            theLibPath = NSLibraryNameForModule(theModule);
+            
+            wxLogDebug( theLibPath );
+
+            // allocate copy to replace .dylib.* extension with .rsrc
+            theResPath = strdup(theLibPath);
+            if (theResPath != NULL) {
+                theName = strrchr(theResPath, '/');
+                if (theName == NULL) {
+                    // no directory elements in path
+                    theName = theResPath;
+                }
+                // find ".dylib" shared library extension
+                theExt = strstr(theName, ".dylib");
+                // overwrite extension with ".rsrc"
+                strcpy(theExt, ".rsrc");
+                
+                wxLogDebug( theResPath );
+
+                theErr = FSPathMakeRef((UInt8 *) theResPath, &theResRef, false);
+                if (theErr != noErr) {
+                    // try in current directory (using name only)
+                    theErr = FSPathMakeRef((UInt8 *) theName, &theResRef, false);
+                }
+                
+                // free duplicated resource file path
+                free(theResPath);
+
+                // open the resource file
+                if (theErr == noErr) {
+                    theErr = FSOpenResourceFile( &theResRef, 0, NULL, fsRdPerm,
+                                                 &gCurrentResource);
+                }
+            }
+        }
+        
+        /*
+          char *path;
+          int i, len;
+          
+          if( i++ > 0 ) {
+          len = i + strlen(rPath);
+          path = (char*) malloc(len+1);
+          }
+          else {
+          // try current directory
+          myerr = FSPathMakeRef((UInt8 *) rPath, &myref, false);
+          }
+        */
+    }
+#endif /* WXMAKINGDLL && __DARWIN__ */
+    
     m_currentRefNum = CurResFile() ;
     if ( gCurrentResource != -1 )
     {
@@ -645,13 +724,27 @@ wxStAppResource::~wxStAppResource()
     {
         UseResFile( m_currentRefNum ) ;
     }
+    
+#if defined(WXMAKINGDLL) && defined(__DARWIN__)
+    // Close the shared library resource file
+    if (gCurrentResource != -1) {
+        if (gDylibBundle != NULL) {
+            CFBundleCloseBundleResourceMap(gDylibBundle, gCurrentResource);
+            gDylibBundle = NULL;
+        }
+        else {
+            CloseResFile(gCurrentResource);
+        }
+        gCurrentResource = -1;
+    }
+#endif /* WXMAKINGDLL && __DARWIN__ */
 }
 
-#ifdef WXMAKINGDLL
+#if defined(WXMAKINGDLL) && !defined(__DARWIN__)
 
-// for shared libraries we have to manually get the correct resource ref num upon
-// initializing and releasing when terminating, therefore the __wxinitialize and __wxterminate
-// must be used
+// for shared libraries we have to manually get the correct resource
+// ref num upon initializing and releasing when terminating, therefore
+// the __wxinitialize and __wxterminate must be used
 
 #ifdef __cplusplus
 extern "C" {
@@ -683,7 +776,8 @@ pascal void __wxterminate(void)
       CloseResFile(gCurrentResource);
     __terminate() ;
 }
-#endif
+
+#endif /* WXMAKINGDLL && !__DARWIN__ */
 
 int WXDLLEXPORT wxEntryStart( int argc, char *argv[] )
 {
@@ -702,7 +796,10 @@ void WXDLLEXPORT wxEntryCleanup()
 
 int wxEntry( int argc, char *argv[] , bool enterLoop )
 {
+#if !(defined(WXMAKINGDLL) && defined(__DARWIN__))
     gCurrentResource = CurResFile() ;
+#endif
+    
 #ifdef __MWERKS__
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     // This seems to be necessary since there are 'rogue'
@@ -738,10 +835,10 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     // application (otherwise applications would need to handle it)
 
     if (argc > 1) {
-        char buf[6] = "";
-        strncpy(buf, argv[1], 5);
+        char theArg[6] = "";
+        strncpy(theArg, argv[1], 5);
         
-        if (strcmp(buf, "-psn_") == 0) {
+        if (strcmp(theArg, "-psn_") == 0) {
             // assume the argument is always the only one and remove it
             --argc;
         }
