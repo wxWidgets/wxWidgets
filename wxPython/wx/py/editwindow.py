@@ -19,7 +19,7 @@ from version import VERSION
 if 'wxMSW' in wx.PlatformInfo:
     FACES = { 'times'     : 'Times New Roman',
               'mono'      : 'Courier New',
-              'helv'      : 'Lucida Console',
+              'helv'      : 'Arial',
               'lucida'    : 'Lucida Console',
               'other'     : 'Comic Sans MS',
               'size'      : 10,
@@ -41,7 +41,19 @@ elif 'wxGTK' in wx.PlatformInfo and 'gtk2' in wx.PlatformInfo:
               'calltipfg' : '#404040',
             }
 
-else: # GTK1, OSX, etc.
+elif 'wxMac' in wx.PlatformInfo:
+    FACES = { 'times'     : 'Lucida Grande',
+              'mono'      : 'Courier New',
+              'helv'      : 'Geneva',
+              'other'     : 'new century schoolbook',
+              'size'      : 13,
+              'lnsize'    : 10,
+              'backcol'   : '#FFFFFF',
+              'calltipbg' : '#FFFFB8',
+              'calltipfg' : '#404040',
+            }
+
+else: # GTK1, etc.
     FACES = { 'times'     : 'Times',
               'mono'      : 'Courier',
               'helv'      : 'Helvetica',
