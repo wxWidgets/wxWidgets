@@ -11,6 +11,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/wx.h"
 #include "wx/strconv.h"
 #include "wx/string.h"
 
@@ -32,9 +33,13 @@ private:
 
     void WC2CP1250();
 
-    NO_COPY_CLASS(MBConvTestCase);
+    DECLARE_NO_COPY_CLASS(MBConvTestCase);
 };
 
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( MBConvTestCase );
+
+// also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MBConvTestCase, "MBConvTestCase" );
 
 void MBConvTestCase::WC2CP1250()
@@ -46,26 +51,20 @@ void MBConvTestCase::WC2CP1250()
     } data[] =
     {
         { L"hello", "hello" },  // test that it works in simplest case
-        { L"½ of ½ is ¼", "" }, // this should fail as cp1250 doesn't have 1/2
+        { L"½ of ½ is ¼", NULL }, // this should fail as cp1250 doesn't have 1/2
     };
 
     wxCSConv cs1250(wxFONTENCODING_CP1250);
     for ( size_t n = 0; n < WXSIZEOF(data); n++ )
     {
         const Data& d = data[n];
-        CPPUNIT_ASSERT( wxString(d.wc, cs1250) == d.cp1250 );
+        if (d.cp1250)
+        {
+            CPPUNIT_ASSERT( strcmp(cs1250.cWC2MB(d.wc), d.cp1250) == 0 );
+        }
+        else
+        {
+            CPPUNIT_ASSERT( cs1250.cWC2MB(d.wc) == NULL );
+        }
     }
 }
-
-// ----------------------------------------------------------------------------
-// program entry point
-// ----------------------------------------------------------------------------
-
-int main()
-{
-  CppUnit::TextUi::TestRunner runner;
-  runner.addTest(MBConvTestCase::suite());
-
-  return runner.run("") ? 0 : 1;
-}
-
