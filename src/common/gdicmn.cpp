@@ -456,7 +456,6 @@ void wxInitializeStockObjects ()
 #if defined(__WXMAC__)
     int sizeFont = 12;
 
-    FontFamilyID fontId ;
     Str255 fontName ;
     SInt16 fontSize ;
     Style fontStyle ;

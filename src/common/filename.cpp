@@ -1766,7 +1766,7 @@ static void MacEnsureDefaultExtensionsLoaded()
     } ;
     // we could load the pc exchange prefs here too
 
-    for ( int i = 0 ; i < WXSIZEOF( defaults ) ; ++i )
+    for ( size_t i = 0 ; i < WXSIZEOF( defaults ) ; ++i )
     {
       gMacDefaultExtensions.Add( defaults[i] ) ;
     }

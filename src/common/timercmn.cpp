@@ -337,7 +337,6 @@ wxLongLong wxGetLocalTimeMillis()
     return (val + tp.millitm);
 #elif defined(__WXMAC__)
     
-    unsigned long secs ;
     UInt64 gMilliAtStart = 0 ;
     Nanoseconds upTime = AbsoluteToNanoseconds( UpTime() ) ;
     if ( gMilliAtStart == 0 )
@@ -350,7 +349,7 @@ wxLongLong wxGetLocalTimeMillis()
     UInt64 millival = gMilliAtStart ;
     millival += upTime.lo / 1000 ;
     millival += ( ( (UInt64) upTime.hi ) << 32 ) / 1000 ;
-    return millival ;
+    val = millival ;
 #else // no gettimeofday() nor ftime()
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available
