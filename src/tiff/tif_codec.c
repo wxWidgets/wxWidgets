@@ -31,7 +31,7 @@
  */
 #include "tiffiop.h"
 
-static	int _Optlink NotConfigured(TIFF*, int);
+static	int LINKAGEMODE NotConfigured(TIFF*, int);
 
 #ifndef	LZW_SUPPORT
 #define	TIFFInitLZW		NotConfigured
@@ -107,7 +107,7 @@ _notConfigured(TIFF* tif)
 	return (0);
 }
 
-static int _Optlink
+static int LINKAGEMODE
 NotConfigured(TIFF* tif, int scheme)
 {
 	tif->tif_setupdecode = _notConfigured;
