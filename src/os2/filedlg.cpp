@@ -9,11 +9,32 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
-#include "wx/utils.h"
-#include "wx/dialog.h"
-#include "wx/filedlg.h"
-#include "wx/intl.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include <stdio.h>
+    #include "wx/defs.h"
+    #include "wx/utils.h"
+    #include "wx/msgdlg.h"
+    #include "wx/dialog.h"
+    #include "wx/filedlg.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif
+
+#define INCL_PM
+#include <os2.h>
+
+#include "wx/os2/private.h"
+
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
@@ -60,6 +81,22 @@ wxString wxFileSelector( const char* title
     else
         return wxEmptyString;
 }
+
+# ifndef MAXPATH
+# define MAXPATH   400
+# endif
+
+# ifndef MAXDRIVE
+# define MAXDRIVE  3
+# endif
+
+# ifndef MAXFILE
+# define MAXFILE   9
+# endif
+
+# ifndef MAXEXT
+# define MAXEXT    5
+# endif
 
 wxString wxFileSelectorEx( const char* title
                           ,const char* defaultDir

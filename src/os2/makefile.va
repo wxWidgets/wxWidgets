@@ -299,7 +299,6 @@ OS2OBJS = \
   ..\os2\$D\checklst.obj \
   ..\os2\$D\choice.obj \
   ..\os2\$D\clipbrd.obj \
-  ..\os2\$D\colordlg.obj \
   ..\os2\$D\colour.obj \
   ..\os2\$D\combobox.obj \
   ..\os2\$D\control.obj \
@@ -339,7 +338,7 @@ OS2OBJS = \
   ..\os2\$D\ownerdrw.obj \
   ..\os2\$D\palette.obj \
   ..\os2\$D\pen.obj \
-  ..\os2\$D\pngread.obj \
+  ..\os2\$D\pnghand.obj \
   ..\os2\$D\print.obj \
   ..\os2\$D\radiobox.obj \
   ..\os2\$D\radiobut.obj \
@@ -356,7 +355,6 @@ OS2LIBOBJS = \
   checklst.obj \
   choice.obj \
   clipbrd.obj \
-  colordlg.obj \
   colour.obj \
   combobox.obj \
   control.obj \
@@ -396,7 +394,7 @@ OS2LIBOBJS = \
   ownerdrw.obj \
   palette.obj \
   pen.obj \
-  pngread.obj \
+  pnghand.obj \
   print.obj \
   radiobox.obj \
   radiobut.obj \
@@ -557,7 +555,6 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\checklst.obj
   copy ..\os2\$D\choice.obj
   copy ..\os2\$D\clipbrd.obj
-  copy ..\os2\$D\colordlg.obj
   copy ..\os2\$D\colour.obj
   copy ..\os2\$D\combobox.obj
   copy ..\os2\$D\control.obj
@@ -597,7 +594,7 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\ownerdrw.obj
   copy ..\os2\$D\pallet.obj
   copy ..\os2\$D\pen.obj
-  copy ..\os2\$D\pngread.obj
+  copy ..\os2\$D\pnghand.obj
   copy ..\os2\$D\print.obj
   copy ..\os2\$D\radiobox.obj
   copy ..\os2\$D\radiobut.obj

@@ -12,10 +12,6 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
-#ifdef __GNUG__
-#pragma interface "frame.h"
-#endif
-
 #include "wx/window.h"
 #include "wx/toolbar.h"
 #include "wx/os2/accel.h"
@@ -62,9 +58,6 @@ public:
     virtual void ClientToScreen(int *x, int *y) const;
     virtual void ScreenToClient(int *x, int *y) const;
 
-    void SetClientSize(int width, int height);
-    void GetClientSize(int *width, int *height) const;
-
     void OnSize(wxSizeEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
     void OnActivate(wxActivateEvent& event);
@@ -74,7 +67,6 @@ public:
     bool Show(bool show);
 
     void DetachMenuBar();
-
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
     virtual wxMenuBar *GetMenuBar() const ;

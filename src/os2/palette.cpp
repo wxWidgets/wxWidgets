@@ -91,6 +91,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
   M_PALETTEDATA->m_hPalette = (WXHPALETTE) CreatePalette((LPLOGPALETTE)npPal);
   LocalFree((HANDLE)npPal);
 */
+  return FALSE;
 }
 
 int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const

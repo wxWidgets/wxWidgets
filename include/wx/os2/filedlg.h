@@ -12,10 +12,6 @@
 #ifndef _WX_FILEDLG_H_
 #define _WX_FILEDLG_H_
 
-#ifdef __GNUG__
-#pragma interface "filedlg.h"
-#endif
-
 #include "wx/dialog.h"
 
 /*

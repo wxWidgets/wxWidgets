@@ -46,7 +46,7 @@ protected:
 
   long EfeWidth;                    // Efective Width
 
-  LPBITMAPINFOHEADER lpbi;
+  BITMAPINFOHEADER2* lpbi;
   int bgindex;
   wxPalette* Palette;
   bool imageOK;
@@ -270,7 +270,7 @@ inline bool wxPNGReaderIter::PrevStep()
   Itx -= Stepx;
   if (Itx >= 0)
      return 1;
-  else {       
+  else {
      Ity -= Stepy;
      if (Ity >= 0 && Ity < ima->Height)
      {

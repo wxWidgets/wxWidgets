@@ -12,13 +12,9 @@
 #ifndef _WX_DCMEMORY_H_
 #define _WX_DCMEMORY_H_
 
-#ifdef __GNUG__
-#pragma interface "dcmemory.h"
-#endif
-
 #include "wx/dcclient.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxPaintDC
+class WXDLLEXPORT wxMemoryDC: public wxDC
 {
   DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 
@@ -28,11 +24,7 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
 
     ~wxMemoryDC(void);
     virtual void SelectObject( const wxBitmap& bitmap );
-    void GetSize( int *width, int *height ) const;
-
-  private:
-    friend wxPaintDC;
-    wxBitmap  m_selected;
+    virtual void DoGetSize( int *width, int *height ) const;
 };
 
 #endif

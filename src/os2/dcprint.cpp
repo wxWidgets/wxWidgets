@@ -1,20 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcprint.cpp
 // Purpose:     wxPrinterDC class
-// Author:      Julian Smart
+// Author:      David Webster
 // Modified by:
-// Created:     01/02/97
+// Created:     10/14/99
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-#ifdef __GNUG__
-#pragma implementation "dcprint.h"
-#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#define INCL_DEV
+#define INCL_GPI
+#define INCL_PM
+#include<os2.h>
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -29,10 +31,6 @@
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 #endif
 
-#define INCL_DEV
-#define INCL_GPI
-#define INCL_PM
-#include<os2.h>
 
 // This form is deprecated
 wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, bool interactive, int orientation)

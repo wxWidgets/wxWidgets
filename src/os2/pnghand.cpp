@@ -29,8 +29,7 @@
 #include "wx/palette.h"
 #include "wx/bitmap.h"
 #include "wx/utils.h"
-#include "wx/msw/pngread.h"
-#include "wx/msw/dibutils.h"
+#include "wx/os2/pngread.h"
 
 extern "C" {
 #include "../png/png.h"
@@ -116,18 +115,14 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
   ColorType = (colortype>=0) ? colortype: ((Depth>8) ? COLORTYPE_COLOR: 0);
 
   if (lpbi)  {
-#ifdef __WIN16__
-   GlobalFreePtr((unsigned int) lpbi);
-#else
-   GlobalFreePtr(lpbi);
-#endif
+//   GlobalFreePtr(lpbi);
 //   delete Palette;
   }
   RawImage = 0;
   Palette = 0;
-  lpbi = wxDibCreate(Depth, Width, Height);
+  lpbi = 0; // TODO: wxDibCreate(Depth, Width, Height);
   if (lpbi)  {
-    RawImage = (ImagePointerType)wxDibPtr(lpbi);
+    RawImage = 0; //TODO: (ImagePointerType)wxDibPtr(lpbi);
     EfeWidth = (long)(((long)Width*Depth + 31) / 32) * 4;
         imageOK = TRUE;
   }
@@ -136,11 +131,7 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
 wxPNGReader::~wxPNGReader ( )
 {
   if (lpbi)  {
-#ifdef __WIN16__
-   GlobalFreePtr((unsigned int) lpbi);
-#else
-   GlobalFreePtr(lpbi);
-#endif
+// TODO:   GlobalFreePtr(lpbi);
    delete Palette;
   }
 }
@@ -211,7 +202,8 @@ bool wxPNGReader::SetPalette(wxPalette* colourmap)
    return FALSE;
   ColorType |= (COLORTYPE_PALETTE | COLORTYPE_COLOR);
   Palette = colourmap;
-  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+// TODO:  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+  return FALSE;
 }
 
 bool
@@ -225,7 +217,8 @@ wxPNGReader::SetPalette(int n, byte *r, byte *g, byte *b)
   if (!b) b = g;
   Palette->Create(n, r, g, b);
   ColorType |= (COLORTYPE_PALETTE | COLORTYPE_COLOR);
-  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+// TODO:  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+  return FALSE;
 }
 
 bool
@@ -251,7 +244,8 @@ wxPNGReader::SetPalette(int n, rgb_color_struct *rgb_struct)
 
   Palette->Create(n, r, g, b);
   ColorType |= (COLORTYPE_PALETTE | COLORTYPE_COLOR);
-  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+// TODO:  return (wxDibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
+  return FALSE;
 }
 
 void wxPNGReader::NullData()
@@ -274,6 +268,8 @@ wxBitmap* wxPNGReader::GetBitmap()
 
 bool wxPNGReader::InstantiateBitmap(wxBitmap *bitmap)
 {
+// TODO:
+/*
   HDC dc = ::CreateCompatibleDC(NULL);
 
   if (dc)
@@ -327,14 +323,17 @@ bool wxPNGReader::InstantiateBitmap(wxBitmap *bitmap)
     {
     return FALSE;
     }
+*/
+  return FALSE;
 }
 
 wxPalette *wxCopyPalette(const wxPalette *cmap)
 {
   // To get number of entries...
   WORD count = 0;
-  ::GetObject((HPALETTE) cmap->GetHPALETTE(), sizeof(WORD), &count);
-
+// TODO:  ::GetObject((HPALETTE) cmap->GetHPALETTE(), sizeof(WORD), &count);
+// TODO:
+/*
   LOGPALETTE* logPal = (LOGPALETTE*)
      new BYTE[sizeof(LOGPALETTE) + count*sizeof(PALETTEENTRY)];
   logPal->palVersion = 0x300;
@@ -343,14 +342,16 @@ wxPalette *wxCopyPalette(const wxPalette *cmap)
 
   HPALETTE hPalette = ::CreatePalette(logPal);
   delete[] logPal;
-
+*/
   wxPalette *newCmap = new wxPalette;
-  newCmap->SetHPALETTE((WXHPALETTE) hPalette);
+// TODO:  newCmap->SetHPALETTE((WXHPALETTE) hPalette);
   return newCmap;
 }
 
 wxMask *wxPNGReader::CreateMask()
 {
+// TODO:
+/*
     HBITMAP hBitmap = ::CreateBitmap(GetWidth(), GetHeight(), 1, 1, NULL);
 
   HDC dc = ::CreateCompatibleDC(NULL);
@@ -373,8 +374,9 @@ wxMask *wxPNGReader::CreateMask()
       }
     }
     ::SelectObject(dc, oldBitmap);
+*/
     wxMask *mask = new wxMask;
-    mask->SetMaskBitmap((WXHBITMAP) hBitmap);
+// TODO:    mask->SetMaskBitmap((WXHBITMAP) hBitmap);
     return mask;
 }
 

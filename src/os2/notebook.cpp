@@ -2,7 +2,7 @@
 // Name:        notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      David Webster
-// Modified by: 
+// Modified by:
 // Created:     10/12/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
@@ -115,7 +115,7 @@ bool wxNotebook::Create(wxWindow *parent,
       return FALSE;
 
   // colors and font
-  m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
+// TODO:  m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
   m_foregroundColour = *wxBLACK ;
 
     // TODO:
@@ -139,7 +139,7 @@ bool wxNotebook::Create(wxWindow *parent,
     tabStyle |= TCS_VERTICAL;
   if (m_windowStyle & wxNB_RIGHT)
     tabStyle |= TCS_VERTICAL|TCS_RIGHT;
-        
+
 
   if ( !MSWCreate(GetId(), GetParent(), WC_TABCONTROL,
                   this, NULL, pos.x, pos.y, size.x, size.y,
@@ -233,7 +233,7 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
 }
 
 void wxNotebook::SetImageList(wxImageList* imageList)
-{ 
+{
     m_pImageList = imageList;
     // TODO
 }
@@ -309,7 +309,7 @@ bool wxNotebook::InsertPage(int nPage,
     // save the pointer to the page
     m_aPages.Insert(pPage, nPage);
 
-    // some page must be selected: either this one or the first one if there is 
+    // some page must be selected: either this one or the first one if there is
     // still no selection
     if ( bSelect )
         m_nSelection = nPage;
@@ -365,7 +365,7 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
         int sel = event.GetOldSelection();
         if ( sel != -1 )
             m_aPages[sel]->Show(FALSE);
-      
+
         sel = event.GetSelection();
         if ( sel != -1 )
         {
@@ -373,7 +373,7 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
             pPage->Show(TRUE);
             pPage->SetFocus();
         }
-      
+
         m_nSelection = sel;
   }
     // we want to give others a chance to process this message as well
@@ -440,13 +440,13 @@ bool wxNotebook::OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
       return wxControl::MSWOnNotify(idCtrl, lParam, result);
   }
 */
-    event.SetSelection(TabCtrl_GetCurSel(m_hwnd));
+// TODO:    event.SetSelection(TabCtrl_GetCurSel(m_hwnd));
     event.SetOldSelection(m_nSelection);
     event.SetEventObject(this);
     event.SetInt(idCtrl);
 
     bool processed = GetEventHandler()->ProcessEvent(event);
-    *result = !event.IsAllowed();
+// TODO:   *result = !event.IsAllowed();
     return processed;
 }
 

@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialog.h
 // Purpose:     wxDialog class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/14/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DIALOG_H_
 #define _WX_DIALOG_H_
-
-#ifdef __GNUG__
-#pragma interface "dialog.h"
-#endif
 
 #include "wx/panel.h"
 
@@ -69,17 +65,19 @@ public:
 
     ~wxDialog();
 
-// ---------------------------------------------------------------------------
-//  Virtuals
-// ---------------------------------------------------------------------------
-
     virtual bool Destroy();
+
     virtual void DoSetClientSize(int width, int height);
+
     virtual void GetPosition(int *x, int *y) const;
 
     bool Show(bool show);
     bool IsShown() const;
     void Iconize(bool iconize);
+
+#if WXWIN_COMPATIBILITY
+    bool Iconized() const { return IsIconized(); };
+#endif
 
     virtual bool IsIconized() const;
     void         Fit();

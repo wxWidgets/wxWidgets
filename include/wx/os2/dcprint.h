@@ -12,10 +12,6 @@
 #ifndef _WX_DCPRINT_H_
 #define _WX_DCPRINT_H_
 
-#ifdef __GNUG__
-#pragma interface "dcprint.h"
-#endif
-
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/dc.h"

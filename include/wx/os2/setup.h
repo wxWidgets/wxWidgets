@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        setup.h
 // Purpose:     Configuration for the library
-// Author:      David Webster
+// Author:      Julian Smart
 // Modified by:
-// Created:     04/02/99
+// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) David Webster
+// Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -110,8 +110,13 @@
 
 #define wxUSE_CARET       1
                                     // Define 1 to use wxCaret class
-#define wxUSE_XPM_IN_MSW  1
+#define wxUSE_XPM_IN_OS2  1
                                     // Define 1 to support the XPM package in wxBitmap.
+#define wxUSE_IMAGE_LOADING_IN_OS2        1
+                                    // Use dynamic DIB loading/saving code in utils/dib under OS2.
+#define wxUSE_RESOURCE_LOADING_IN_OS2     1
+                                    // Use dynamic icon/cursor loading/saving code
+                                    // under OS2.
 #define wxUSE_WX_RESOURCES        1
                                   // Use .wxr resource mechanism (requires PrologIO library)
 
@@ -124,6 +129,9 @@
                                   // Set to 0 to disable MDI document/view architecture
 #define wxUSE_PRINTING_ARCHITECTURE  1
                                     // Set to 0 to disable print/preview architecture code
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_OS2 1
+                                // Set to 0 to disable PostScript print/preview architecture code
+                                // under OS/2 PM (just use PM printing).
 #define wxUSE_DYNAMIC_CLASSES     1
                                   // If 1, enables provision of run-time type information.
                                   // NOW MANDATORY: don't change.
@@ -270,5 +278,12 @@
 
 #define wxUSE_DRAG_AND_DROP 1
 
+#define wxUSE_PORTABLE_FONTS_IN_OS2  0
+                                // Define 1 to use new portable font scheme in Windows
+                                // (used by default under X)
+
+#define wxUSE_GENERIC_DIALOGS_IN_OS2 0
+                                // Define 1 to use generic dialogs in Windows, even though
+                                // they duplicate native common dialog (e.g. wxColourDialog)
 #endif
     // _WX_SETUP_H_

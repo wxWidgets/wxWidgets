@@ -133,7 +133,7 @@ bool wxPen::FreeResource(bool force)
 {
     if (M_PENDATA && (M_PENDATA->m_hPen != 0))
     {
-        DeleteObject((HPEN) M_PENDATA->m_hPen);
+// TODO:        DeleteObject((HPEN) M_PENDATA->m_hPen);
         M_PENDATA->m_hPen = 0;
         return TRUE;
     }
@@ -160,7 +160,7 @@ void wxPen::SetColour(const wxColour& col)
     Unshare();
 
     M_PENDATA->m_colour = col;
-  
+
     RealizeResource();
 }
 
@@ -169,7 +169,7 @@ void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
     Unshare();
 
     M_PENDATA->m_colour.Set(r, g, b);
-  
+
     RealizeResource();
 }
 
@@ -197,7 +197,7 @@ void wxPen::SetStipple(const wxBitmap& Stipple)
 
     M_PENDATA->m_stipple = Stipple;
     M_PENDATA->m_style = wxSTIPPLE;
-  
+
     RealizeResource();
 }
 
@@ -207,7 +207,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
 
     M_PENDATA->m_nbDash = nb_dashes;
     M_PENDATA->m_dash = (wxDash *)Dash;
-  
+
     RealizeResource();
 }
 
@@ -229,22 +229,13 @@ void wxPen::SetCap(int Cap)
     RealizeResource();
 }
 
-void wxPen::SetCap(int Cap)
-{
-    Unshare();
-
-    M_PENDATA->m_cap = Cap;
-
-    RealizeResource();
-}
-
 int wx2os2PenStyle(int wx_style)
 {
     int cstyle;
 // TODO:
 /*
     switch (wx_style)
-    { 
+    {
        case wxDOT:
            cstyle = PS_DOT;
        break;

@@ -2,7 +2,7 @@
 // Name:        msw/ownerdrw.cpp
 // Purpose:     implementation of wxOwnerDrawn class
 // Author:      David Webster
-// Modified by: 
+// Modified by:
 // Created:     10/12/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
@@ -32,7 +32,7 @@
 
 // ctor
 // ----
-wxOwnerDrawn::wxOwnerDrawn(const wxString& str, 
+wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
                            bool bCheckable, bool bMenuItem)
             : m_strName(str)
 {
@@ -100,6 +100,8 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
   // set the colors
   // --------------
   DWORD colBack, colText;
+// TODO:
+/*
   if ( st & wxODSelected ) {
     colBack = GetSysColor(COLOR_HIGHLIGHT);
     colText = GetSysColor(COLOR_HIGHLIGHTTEXT);
@@ -109,14 +111,14 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
     colBack = m_colBack.Ok() ? ToRGB(m_colBack) : GetSysColor(COLOR_WINDOW);
     colText = m_colText.Ok() ? ToRGB(m_colText) : GetSysColor(COLOR_WINDOWTEXT);
   }
-        
-    dc.SetTextForeground(wxColor(UnRGB(colText)));
-    dc.SetTextBackground(wxColor(UnRGB(colBack)));
+*/
+//    dc.SetTextForeground(wxColor(UnRGB(colText)));
+//    dc.SetTextBackground(wxColor(UnRGB(colBack)));
 
   // select the font and draw the text
   // ---------------------------------
 
-  // determine where to draw and leave space for a check-mark. 
+  // determine where to draw and leave space for a check-mark.
   int x = rc.x + GetMarginWidth();
 
     dc.SetFont(GetFont());
@@ -136,14 +138,10 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
       RECT rect = { 0, 0, GetMarginWidth(), m_nHeight };
 
         // finally copy it to screen DC and clean up
-      BitBlt(hdc, rc.x, rc.y, GetMarginWidth(), m_nHeight, 
+      BitBlt(hdc, rc.x, rc.y, GetMarginWidth(), m_nHeight,
              hdcMem, 0, 0, SRCCOPY);
       DeleteDC(hdcMem);
 */
-#else
-        // #### to do: perhaps using Marlett font (create equiv. font under X)
-//        wxFAIL("not implemented");
-#endif  //O_DRAW_NATIVE_API
     }
   }
   else {
@@ -161,22 +159,22 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
       wxASSERT((nBmpWidth <= rc.GetWidth()) && (nBmpHeight <= rc.GetHeight()));
 
       //MT: blit with mask enabled.
-      dc.Blit(rc.x + (GetMarginWidth() - nBmpWidth) / 2, 
-              rc.y + (m_nHeight - nBmpHeight) /2, 
-              nBmpWidth, nBmpHeight, 
+// TODO:
+/*
+      dc.Blit(rc.x + (GetMarginWidth() - nBmpWidth) / 2,
+              rc.y + (m_nHeight - nBmpHeight) /2,
+              nBmpWidth, nBmpHeight,
               &dcMem, 0, 0, wxCOPY,true);
 
       if ( st & wxODSelected ) {
-// TODO:
-/*
         #ifdef  O_DRAW_NATIVE_API
-          RECT rectBmp = { rc.GetLeft(), rc.GetTop(), 
-                           rc.GetLeft() + GetMarginWidth(), 
+          RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
+                           rc.GetLeft() + GetMarginWidth(),
                            rc.GetTop() + m_nHeight };
           SetBkColor(hdc, colBack);
           DrawEdge(hdc, &rectBmp, EDGE_RAISED, BF_SOFT | BF_RECT);
-*/
       }
+*/
     }
   }
 /*

@@ -12,7 +12,7 @@
 #elif defined(__WXMAC__)
 #include "wx/generic/colrdlgg.h"
 #elif defined(__WXPM__)
-#include "wx/os2/colordlg.h"
+#include "wx/generic/colrdlgg.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/colrdlgg.h"
 #endif

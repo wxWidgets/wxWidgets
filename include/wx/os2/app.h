@@ -101,14 +101,6 @@ protected:
     DECLARE_EVENT_TABLE()
 };
 
-#if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
-int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance, WXHINSTANCE hPrevInstance, char *lpszCmdLine,
-                    int nCmdShow, bool enterLoop = TRUE);
-#else
-int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance);
-#endif
-
-
 #endif
     // _WX_APP_H_
 

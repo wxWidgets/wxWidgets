@@ -1,17 +1,28 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcscreen.cpp
 // Purpose:     wxScreenDC class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/14/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "dcscreen.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#define INCL_DEV
+#define INCL_GPI
+#define INCL_PM
+#include<os2.h>
+
+#ifndef WX_PRECOMP
+   #include "wx/string.h"
+   #include "wx/window.h"
 #endif
+
+#include "wx/os2/private.h"
 
 #include "wx/dcscreen.h"
 

@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
+int wxEntry(int argc, char *argv[]);
 
 int main(int argc, char* argv[])
 {
