@@ -252,6 +252,8 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 
 wxWindow* g_MacLastWindow = NULL ;
 
+static EventMouseButton lastButton = 0 ;
+
 static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
 {
     UInt32 modifiers = cEvent.GetParameter<UInt32>(kEventParamKeyModifiers, typeUInt32) ;
@@ -275,6 +277,14 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     {
         button = kEventMouseButtonSecondary ;
     }
+    
+    // we must make sure that our synthetic 'right' button corresponds in
+    // mouse down, moved and mouse up, and does not deliver a right down and left up
+    
+    if ( cEvent.GetKind() == kEventMouseDown )
+        lastButton = button ;
+    else if ( lastButton )
+        button = lastButton ;
 
     // determinate the correct down state, wx does not want a 'down' for a mouseUp event, while mac delivers
     // this button
@@ -328,6 +338,8 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
         else
             wxevent.SetEventType(wxEVT_MOTION ) ;
     }
+    if ( cEvent.GetKind() == kEventMouseUp )
+        lastButton = 0 ;
 }
 
 ControlRef wxMacFindSubControl( Point location , ControlRef superControl , ControlPartCode *outPart )
