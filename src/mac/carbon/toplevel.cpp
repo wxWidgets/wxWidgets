@@ -1003,6 +1003,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
+    WindowGroupRef group = NULL ;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW) )
     {
@@ -1073,8 +1074,10 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         attr |= kWindowLiveResizeAttribute;
     }
 
-    if (HasFlag(wxSTAY_ON_TOP))
-        wclass = kUtilityWindowClass;
+    if ( HasFlag(wxSTAY_ON_TOP) )
+    {
+        group = GetWindowGroupOfClass(kUtilityWindowClass) ;
+    }
 
 #if TARGET_API_MAC_OSX 
     attr |= kWindowCompositingAttribute;
@@ -1094,6 +1097,9 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     {
         err = ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
     }
+
+    if ( err == noErr && m_macWindow != NULL && group != NULL )
+        SetWindowGroup( (WindowRef) m_macWindow , group ) ;
 
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
 
