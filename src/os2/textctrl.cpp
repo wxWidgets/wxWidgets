@@ -121,14 +121,14 @@ bool wxTextCtrl::Create(
         //
         // OS2 uses normal coordinates, no bassackwards Windows ones
         //
-        vPos.y = pParent->GetSize().y - (vPos.y + rSize.y);
+//        vPos.y = pParent->GetSize().y - (vPos.y + rSize.y);
     }
     else
     {
         RECTL                   vRect;
 
         ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
-        vPos.y = vRect.yTop - (vPos.y + rSize.y);
+//        vPos.y = vRect.yTop - (vPos.y + rSize.y);
     }
 
     m_windowStyle = lStyle;
@@ -167,10 +167,10 @@ bool wxTextCtrl::Create(
                                            ,WC_MLE                   // Window class
                                            ,(PSZ)rsValue.c_str()     // Initial Text
                                            ,(ULONG)lSstyle           // Style flags
-                                           ,(LONG)vPos.x             // X pos of origin
-                                           ,(LONG)vPos.y             // Y pos of origin
-                                           ,(LONG)rSize.x            // field width
-                                           ,(LONG)rSize.y            // field height
+                                           ,(LONG)0                  // X pos of origin
+                                           ,(LONG)0                  // Y pos of origin
+                                           ,(LONG)0                  // field width
+                                           ,(LONG)0                  // field height
                                            ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
                                            ,HWND_TOP                 // initial z position
                                            ,(ULONG)vId               // Window identifier
@@ -184,10 +184,10 @@ bool wxTextCtrl::Create(
                                            ,WC_ENTRYFIELD            // Window class
                                            ,(PSZ)rsValue.c_str()     // Initial Text
                                            ,(ULONG)lSstyle           // Style flags
-                                           ,(LONG)vPos.x             // X pos of origin
-                                           ,(LONG)vPos.y             // Y pos of origin
-                                           ,(LONG)rSize.x            // field width
-                                           ,(LONG)rSize.y            // field height
+                                           ,(LONG)0                  // X pos of origin
+                                           ,(LONG)0                  // Y pos of origin
+                                           ,(LONG)0                  // field width
+                                           ,(LONG)0                  // field height
                                            ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
                                            ,HWND_TOP                 // initial z position
                                            ,(ULONG)vId               // Window identifier
