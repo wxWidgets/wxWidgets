@@ -44,11 +44,14 @@
   #include "wx/slider.h"
 #endif
 
-#ifndef __WIN16__
-  #include "wx/spinbutt.h"
-#if wxUSE_CHECKLISTBOX
-  #include "wx/checklst.h"
+#if wxUSE_SPINCTRL && !defined(__WIN16__)
+  #include "wx/spinctrl.h"
 #endif
+#if wxUSE_SPINBTN && !defined(__WIN16__)
+  #include "wx/spinbutt.h"
+#endif
+#if wxUSE_CHECKLISTBOX && !defined(__WIN16__)
+  #include "wx/checklst.h"
 #endif
 
 #include "wx/valgen.h"
@@ -162,8 +165,18 @@ bool wxGenericValidator::TransferToWindow(void)
 	}
     } else
 #endif
-#if wxUSE_SPINBTN
-#ifndef __WIN16__
+#if wxUSE_SPINCTRL && !defined(__WIN16__)
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinCtrl)) )
+    {
+        wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
+        if (m_pInt)
+        {
+            pControl->SetValue(*m_pInt);
+            return TRUE;
+        }
+    } else
+#endif
+#if wxUSE_SPINBTN && !defined(__WIN16__)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinButton)) )
     {
         wxSpinButton* pControl = (wxSpinButton*) m_validatorWindow;
@@ -173,7 +186,6 @@ bool wxGenericValidator::TransferToWindow(void)
 	    return TRUE;
 	}
     } else
-#endif
 #endif
 #if wxUSE_SLIDER
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxSlider)) )
@@ -188,7 +200,6 @@ bool wxGenericValidator::TransferToWindow(void)
 #endif
 
   // string controls
-#if 1
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxButton)) )
     {
         wxButton* pControl = (wxButton*) m_validatorWindow;
@@ -198,16 +209,23 @@ bool wxGenericValidator::TransferToWindow(void)
 	    return TRUE;
 	}
     } else
-#endif
 #if wxUSE_COMBOBOX
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
     {
         wxComboBox* pControl = (wxComboBox*) m_validatorWindow;
-	if (m_pString)
-	{
-	    pControl->SetValue(*m_pString) ;
-	    return TRUE;
-	}
+        if (m_pInt)
+        {
+            pControl->SetSelection(*m_pInt) ;
+            return TRUE;
+        }
+        else if (m_pString)
+        {
+            if (pControl->FindString(* m_pString) > -1)
+            {
+                pControl->SetStringSelection(* m_pString);
+            }
+            return TRUE;
+        }
     } else
 #endif
 #if wxUSE_CHOICE
@@ -229,23 +247,6 @@ bool wxGenericValidator::TransferToWindow(void)
         }
     } else
 #endif
-    if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
-    {
-        wxComboBox* pControl = (wxComboBox*) m_validatorWindow;
-        if (m_pInt)
-        {
-            pControl->SetSelection(*m_pInt) ;
-            return TRUE;
-        }
-        else if (m_pString)
-        {
-            if (pControl->FindString(* m_pString) > -1)
-            {
-                pControl->SetStringSelection(* m_pString);
-            }
-            return TRUE;
-        }
-    } else
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
     {
         wxStaticText* pControl = (wxStaticText*) m_validatorWindow;
@@ -383,8 +384,18 @@ bool wxGenericValidator::TransferFromWindow(void)
     }
   } else
 #endif
-#if wxUSE_SPINBTN
-#ifndef __WIN16__
+#if wxUSE_SPINCTRL && !defined(__WIN16__)
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinCtrl)) )
+    {
+        wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
+        if (m_pInt)
+        {
+            *m_pInt=pControl->GetValue();
+            return TRUE;
+        }
+    } else
+#endif
+#if wxUSE_SPINBTN && !defined(__WIN16__)
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinButton)) )
   {
     wxSpinButton* pControl = (wxSpinButton*) m_validatorWindow;
@@ -394,7 +405,6 @@ bool wxGenericValidator::TransferFromWindow(void)
       return TRUE;
     }
   } else
-#endif
 #endif
 #if wxUSE_SLIDER
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxSlider)) )
@@ -450,20 +460,6 @@ bool wxGenericValidator::TransferFromWindow(void)
     }
   } else
 #endif
- if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
-  {
-    wxComboBox* pControl = (wxComboBox*) m_validatorWindow;
-	if (m_pInt)
-    {
-      *m_pInt = pControl->GetSelection() ;
-      return TRUE;
-    }
-    else if (m_pString)
-    {
-        *m_pString = pControl->GetStringSelection();
-        return TRUE;
-    }
-  } else
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
   {
     wxStaticText* pControl = (wxStaticText*) m_validatorWindow;
@@ -536,6 +532,7 @@ bool wxGenericValidator::TransferFromWindow(void)
 
 /*
   Called by constructors to initialize ALL data members
+	Last change:  JAC  21 Jul 100    5:00 pm
 */
 void wxGenericValidator::Initialize()
 {
