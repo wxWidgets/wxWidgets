@@ -106,7 +106,7 @@ clean:
 
 data: 
 	@mkdir -p .
-	@for f in julian.png dnd.wxr; do \
+	@for f in dnd.wxr; do \
 	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
 	cp -pRf $(srcdir)/$$f . ; \
 	fi; \

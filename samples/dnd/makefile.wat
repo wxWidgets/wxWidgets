@@ -195,7 +195,7 @@ clean : .SYMBOLIC
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (julian.png dnd.wxr) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (dnd.wxr) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\dnd.exe :  $(DND_OBJECTS) $(OBJS)\dnd_dnd.res
 	@%create $(OBJS)\dnd.lbc
