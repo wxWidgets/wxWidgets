@@ -183,6 +183,13 @@ class wxGridCellEditorPtr :
     def IsCreated(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_IsCreated,(self,) + _args, _kwargs)
         return val
+    def GetControl(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_GetControl,(self,) + _args, _kwargs)
+        if val: val = wxControlPtr(val) 
+        return val
+    def SetControl(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_SetControl,(self,) + _args, _kwargs)
+        return val
     def SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_SetParameters,(self,) + _args, _kwargs)
         return val
@@ -890,6 +897,9 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def IsCellEditControlEnabled(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsCellEditControlEnabled,(self,) + _args, _kwargs)
+        return val
+    def IsCellEditControlShown(self, *_args, **_kwargs):
+        val = apply(gridc.wxGrid_IsCellEditControlShown,(self,) + _args, _kwargs)
         return val
     def IsCurrentCellReadOnly(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_IsCurrentCellReadOnly,(self,) + _args, _kwargs)

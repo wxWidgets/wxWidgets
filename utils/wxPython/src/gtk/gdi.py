@@ -53,6 +53,14 @@ class wxBitmapPtr :
         return val
     def __repr__(self):
         return "<C wxBitmap instance at %s>" % (self.this,)
+    
+    def __del__(self,gdic=gdic):
+        try:
+            if self.thisown == 1 :
+                gdic.delete_wxBitmap(self)
+        except:
+            pass
+
 class wxBitmap(wxBitmapPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxBitmap,_args,_kwargs)
@@ -108,6 +116,14 @@ class wxIconPtr :
         return val
     def __repr__(self):
         return "<C wxIcon instance at %s>" % (self.this,)
+    
+    def __del__(self,gdic=gdic):
+        try:
+            if self.thisown == 1 :
+                gdic.delete_wxIcon(self)
+        except:
+            pass
+
 class wxIcon(wxIconPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxIcon,_args,_kwargs)
