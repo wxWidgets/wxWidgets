@@ -32,6 +32,9 @@ Author:  VZ
 Version: $Id$
 
 $Log$
+Revision 1.1  2000/03/02 04:18:53  GRG
+Renamed tech notes to tnxxxx.txt
+
 Revision 1.2  2000/03/01 19:24:07  VZ
 added a note about where to find makegen
 
