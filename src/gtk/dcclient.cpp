@@ -304,6 +304,7 @@ void wxWindowDC::DoDrawLines( int n, wxPoint points[], long xoffset, long yoffse
         long x2 = XLOG2DEV(points[i+1].x + xoffset);
         long y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
         long y2 = YLOG2DEV(points[i+1].y + yoffset);
+	
 	if (m_window)
             gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
         
@@ -327,7 +328,7 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], long xoffset, long yoff
         CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
     
-    if (m_brush.GetStyle() != wxTRANSPARENT)
+    if ((m_brush.GetStyle() != wxTRANSPARENT) && m_window)
         gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
      
     // To do: Fillstyle
@@ -1039,29 +1040,26 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
     gdk_gc_set_background( m_penGC, m_backgroundBrush.GetColour().GetColor() );
     gdk_gc_set_background( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
     gdk_gc_set_foreground( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
-  
-    GdkFill fillStyle = GDK_SOLID;
-    switch (m_backgroundBrush.GetStyle())
-    {
-        case wxSOLID:
-        case wxTRANSPARENT:
-            break;
-        default:
-            fillStyle = GDK_STIPPLED;
-    }
- 
-    gdk_gc_set_fill( m_bgGC, fillStyle );
+
+    gdk_gc_set_fill( m_bgGC, GDK_SOLID );
   
     if ((m_backgroundBrush.GetStyle() == wxSTIPPLE) && (m_backgroundBrush.GetStipple()->Ok()))
     {
         if (m_backgroundBrush.GetStipple()->GetPixmap())
+	{
+            gdk_gc_set_fill( m_bgGC, GDK_TILED );
             gdk_gc_set_tile( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
+	}
         else
+	{
+            gdk_gc_set_fill( m_bgGC, GDK_STIPPLED );
             gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetBitmap() );
+	}
     }
   
     if (IS_HATCH(m_backgroundBrush.GetStyle()))
     {
+        gdk_gc_set_fill( m_bgGC, GDK_STIPPLED );
         int num = m_backgroundBrush.GetStyle() - wxBDIAGONAL_HATCH;
         gdk_gc_set_stipple( m_bgGC, hatches[num] );
     }

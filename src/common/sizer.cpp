@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sizer.cpp
-// Purpose:     provide wxNewSizer class for layounting
+// Purpose:     provide new wxSizer class for layounting
 // Author:      Robert Roebling and Robin Dunn
 // Modified by:
 // Created:     
@@ -24,13 +24,13 @@
 #include "wx/utils.h"
 
 //---------------------------------------------------------------------------
-// wxNewSizerItem
+// wxSizerItem
 //---------------------------------------------------------------------------
 
-wxNewSizerItem::wxNewSizerItem( int width, int height, int option, int flag, int border )
+wxSizerItem::wxSizerItem( int width, int height, int option, int flag, int border )
 {
     m_window = (wxWindow *) NULL;
-    m_sizer = (wxNewSizer *) NULL;
+    m_sizer = (wxSizer *) NULL;
     m_option = option;
     m_border = border;
     m_flag = flag;
@@ -43,10 +43,10 @@ wxNewSizerItem::wxNewSizerItem( int width, int height, int option, int flag, int
     m_size = m_minSize;
 }
 
-wxNewSizerItem::wxNewSizerItem( wxWindow *window, int option, int flag, int border )
+wxSizerItem::wxSizerItem( wxWindow *window, int option, int flag, int border )
 {
     m_window = window;
-    m_sizer = (wxNewSizer *) NULL;
+    m_sizer = (wxSizer *) NULL;
     m_option = option;
     m_border = border;
     m_flag = flag;
@@ -58,7 +58,7 @@ wxNewSizerItem::wxNewSizerItem( wxWindow *window, int option, int flag, int bord
     // m_size = ...
 }
 
-wxNewSizerItem::wxNewSizerItem( wxNewSizer *sizer, int option, int flag, int border )
+wxSizerItem::wxSizerItem( wxSizer *sizer, int option, int flag, int border )
 {
     m_window = (wxWindow *) NULL;
     m_sizer = sizer;
@@ -73,10 +73,10 @@ wxNewSizerItem::wxNewSizerItem( wxNewSizer *sizer, int option, int flag, int bor
     // m_size = ...
 }
 
-wxSize wxNewSizerItem::GetSize()
+wxSize wxSizerItem::GetSize()
 {
     wxSize ret;
-    if (IsNewSizer())
+    if (IsSizer())
         ret = m_sizer->GetSize();
     else
     if (IsWindow())
@@ -95,10 +95,10 @@ wxSize wxNewSizerItem::GetSize()
     return ret;
 }
 
-wxSize wxNewSizerItem::CalcMin()
+wxSize wxSizerItem::CalcMin()
 {
     wxSize ret;
-    if (IsNewSizer())
+    if (IsSizer())
         ret = m_sizer->CalcMin();
 /*  
     The minimum size of a window should be the
@@ -123,7 +123,7 @@ wxSize wxNewSizerItem::CalcMin()
     return ret;
 }
 
-void wxNewSizerItem::SetDimension( wxPoint pos, wxSize size )
+void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
 {
     if (m_flag & wxWEST)
     {
@@ -144,7 +144,7 @@ void wxNewSizerItem::SetDimension( wxPoint pos, wxSize size )
         size.y -= m_border;
     }
 	
-    if (IsNewSizer())
+    if (IsSizer())
         m_sizer->SetDimension( pos.x, pos.y, size.x, size.y );
 	
     if (IsWindow())
@@ -153,67 +153,67 @@ void wxNewSizerItem::SetDimension( wxPoint pos, wxSize size )
     m_size = size;
 }
 
-bool wxNewSizerItem::IsWindow()
+bool wxSizerItem::IsWindow()
 {
     return (m_window != NULL);
 }
 
-bool wxNewSizerItem::IsNewSizer()
+bool wxSizerItem::IsSizer()
 {
     return (m_sizer != NULL);
 }
 
-bool wxNewSizerItem::IsSpacer()
+bool wxSizerItem::IsSpacer()
 {
     return (m_window == NULL) && (m_sizer == NULL);
 }
 
 //---------------------------------------------------------------------------
-// wxNewSizer
+// wxSizer
 //---------------------------------------------------------------------------
 
-wxNewSizer::wxNewSizer()
+wxSizer::wxSizer()
 {
     m_children.DeleteContents( TRUE );
 }
 
-wxNewSizer::~wxNewSizer()
+wxSizer::~wxSizer()
 {
 }
    
-void wxNewSizer::Add( wxWindow *window, int option, int flag, int border )
+void wxSizer::Add( wxWindow *window, int option, int flag, int border )
 {
-    m_children.Append( new wxNewSizerItem( window, option, flag, border ) );
+    m_children.Append( new wxSizerItem( window, option, flag, border ) );
 }
 
-void wxNewSizer::Add( wxNewSizer *sizer, int option, int flag, int border )
+void wxSizer::Add( wxSizer *sizer, int option, int flag, int border )
 {
-    m_children.Append( new wxNewSizerItem( sizer, option, flag, border ) );
+    m_children.Append( new wxSizerItem( sizer, option, flag, border ) );
 }
 
-void wxNewSizer::Add( int width, int height, int option, int flag, int border )
+void wxSizer::Add( int width, int height, int option, int flag, int border )
 {
-    m_children.Append( new wxNewSizerItem( width, height, option, flag, border ) );
+    m_children.Append( new wxSizerItem( width, height, option, flag, border ) );
 }
 
-void wxNewSizer::Fit( wxWindow *window )
+void wxSizer::Fit( wxWindow *window )
 {
     window->SetSize( GetMinWindowSize( window ) );
 }
 
-void wxNewSizer::Layout()
+void wxSizer::Layout()
 {
     m_size = CalcMin();
     RecalcSizes();
 }
 
-void wxNewSizer::SetSizeHints( wxWindow *window )
+void wxSizer::SetSizeHints( wxWindow *window )
 {
     wxSize size( GetMinWindowSize( window ) );
     window->SetSizeHints( size.x, size.y );
 }
 
-wxSize wxNewSizer::GetMinWindowSize( wxWindow *window )
+wxSize wxSizer::GetMinWindowSize( wxWindow *window )
 {
     wxSize minSize( GetMinSize() );
     wxSize size( window->GetSize() );
@@ -222,7 +222,7 @@ wxSize wxNewSizer::GetMinWindowSize( wxWindow *window )
                    minSize.y+size.y-client_size.y ); 
 }
 
-void wxNewSizer::SetDimension( int x, int y, int width, int height )
+void wxSizer::SetDimension( int x, int y, int width, int height )
 {
     m_position.x = x;
     m_position.y = y;
@@ -269,7 +269,7 @@ void wxBox::RecalcSizes()
     wxNode *node = m_children.GetFirst();
     while (node)
     {
-        wxNewSizerItem *item = (wxNewSizerItem*) node->Data();
+        wxSizerItem *item = (wxSizerItem*) node->Data();
 
 	int weight = 1;
 	if (item->GetOption())
@@ -342,7 +342,7 @@ wxSize wxBox::CalcMin()
     wxNode *node = m_children.GetFirst();
     while (node)
     {
-        wxNewSizerItem *item = (wxNewSizerItem*) node->Data();
+        wxSizerItem *item = (wxSizerItem*) node->Data();
 	
 	int weight = 1;
 	if (item->GetOption())

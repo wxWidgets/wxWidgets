@@ -92,9 +92,13 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     SetLabel(label);
 
+    int x = 0;  int y = 0;
+    wxFont new_font( parent->GetFont() );
+    GetTextExtent( m_label, &x, &y, (int*)NULL, (int*)NULL, &new_font );
+
     wxSize newSize = size;
-    if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label.mbc_str() );
-    if (newSize.y == -1) newSize.y = 26;
+    if (newSize.x == -1) newSize.x = 12+x;
+    if (newSize.y == -1) newSize.y = 11+y;
     SetSize( newSize.x, newSize.y );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",

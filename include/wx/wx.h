@@ -56,6 +56,7 @@
 #include "wx/gauge.h"
 #include "wx/combobox.h"
 #include "wx/layout.h"
+#include "wx/sizer.h"
 #include "wx/memory.h"
 #include "wx/mdi.h"
 #include "wx/scrolwin.h"

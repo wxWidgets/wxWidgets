@@ -28,6 +28,7 @@
   #include "wx/listbox.h"
   #include "wx/stattext.h"
   #include "wx/intl.h"
+  #include "wx/sizer.h"
 #endif
 
 #if wxUSE_STATLINE
@@ -36,24 +37,19 @@
 
 #include "wx/gtk/choicdlg.h"
 
-/* Split message, using constraints to position controls */
-static wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
+static void wxSplitMessage2( const wxString &message, wxWindow *parent, wxSizer* sizer )
 {
-    int y = 10;
-    int w = 50;
-    wxString line( _T("") );
+    wxString line;
     for (size_t pos = 0; pos < message.Len(); pos++)
     {
         if (message[pos] == _T('\n'))
         {
             if (!line.IsEmpty())
             {
-                wxStaticText *s1 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-                wxSize size1( s1->GetSize() );
-                if (size1.x > w) w = size1.x;
+                wxStaticText *s1 = new wxStaticText( parent, -1, line );
+		sizer->Add( s1 );
                 line = _T("");
             }
-            y += 18;
         }
         else
         {
@@ -61,16 +57,12 @@ static wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
         }
     }
     
+    // remaining text behind last '\n'
     if (!line.IsEmpty())
     {
-        wxStaticText *s2 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-        wxSize size2( s2->GetSize() );
-        if (size2.x > w) w = size2.x;
+        wxStaticText *s2 = new wxStaticText( parent, -1, line );
+	sizer->Add( s2 );
     }
-        
-    y += 18;
-    
-    return wxSize(w+30,y);
 }
 
 
@@ -202,7 +194,7 @@ IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
 
 wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
         int n, const wxString *choices, char **clientData, long style, const wxPoint& pos):
-      wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
+      wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
 {
         Create(parent, message, caption, n, choices, clientData, style);
 }
@@ -240,17 +232,15 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
 
     wxBeginBusyCursor();
     
-    wxSize message_size( wxSplitMessage2( message, this ) );
+    wxBox *topsizer = new wxBox( wxVERTICAL );
 
-    wxButton *ok = (wxButton *) NULL;
-    wxButton *cancel = (wxButton *) NULL;
-    wxList m_buttons;
-    
-    int y = message_size.y + 15;
-    
-    int listbox_height = 150;
-    
-    wxListBox *listBox = new wxListBox( this, wxID_LISTBOX, wxPoint(10, y), wxSize(360, listbox_height), 
+    // 1) text message
+    wxBox *textsizer = new wxBox( wxVERTICAL );
+    wxSplitMessage2( message, this, textsizer );
+    topsizer->Add( textsizer, 0, wxALL, 10 );
+
+    // 2) list box
+    wxListBox *listBox = new wxListBox( this, wxID_LISTBOX, wxDefaultPosition, wxSize(160,100) , 
                                         n, choices, wxLB_ALWAYS_SB );
     listBox->SetSelection( m_selection );
     if (clientData)
@@ -258,52 +248,45 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
         for (int i = 0; i < n; i++)
             listBox->SetClientData(i, clientData[i]);
     }
-    
-    y += listbox_height + 35;
+    topsizer->Add( listBox, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
 
-    if (style & wxOK) 
+
+#if wxUSE_STATLINE
+    // 3) static line
+    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 3 );
+#endif
+
+
+    // 4) buttons
+    wxBox *buttonsizer = new wxBox( wxHORIZONTAL );
+
+    wxButton *ok = (wxButton *) NULL;
+    if (style & wxOK)
     {
-        ok = new wxButton( this, wxID_OK, _("OK"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( ok );
+        ok = new wxButton( this, wxID_OK, _("OK") );
+	buttonsizer->Add( ok, 0, wxLEFT|wxRIGHT, 10 );
     }
 
+    wxButton *cancel = (wxButton *) NULL;
     if (style & wxCANCEL) 
     {
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( cancel );
+        cancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
+	buttonsizer->Add( cancel, 0, wxLEFT|wxRIGHT, 10 );
     }
+    
+    topsizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
 
-    if (ok)
-    {
-        ok->SetDefault();
-        ok->SetFocus();
-    }
-
-    int w = m_buttons.GetCount() * 100;
-    if (message_size.x > w) w = message_size.x;
-    int space = w / (m_buttons.GetCount()*2);
-    
-    listBox->SetSize( 20, -1, w-10, listbox_height );
-    
-    int m = 0;
-    wxNode *node = m_buttons.First();
-    while (node)
-    {
-        wxWindow *win = (wxWindow*)node->Data();
-        int x = (m*2+1)*space - 40 + 15;
-        win->Move( x, -1 );
-        node = node->Next();
-        m++;
-    }
-    
-#if wxUSE_STATLINE
-    int edge_margin = 7;
-    (void) new wxStaticLine( this, -1, wxPoint(edge_margin,y-20), wxSize(w+30-2*edge_margin, 5) );
-#endif
-    
-    SetSize( w+30, y+40 );
+    topsizer->SetSizeHints( this );
+    topsizer->Fit( this );
+    SetSizer( topsizer );
+    SetAutoLayout( TRUE );
 
     Centre( wxBOTH );
+
+    if (ok)
+        ok->SetDefault();
+
+    listBox->SetFocus();
 
     wxEndBusyCursor();
 

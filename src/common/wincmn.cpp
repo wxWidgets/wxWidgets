@@ -43,6 +43,7 @@
 
 #if wxUSE_CONSTRAINTS
     #include "wx/layout.h"
+    #include "wx/sizer.h"
 #endif // wxUSE_CONSTRAINTS
 
 #if wxUSE_DRAG_AND_DROP
@@ -131,7 +132,6 @@ void wxWindowBase::InitBase()
     m_constraints = (wxLayoutConstraints *) NULL;
     m_constraintsInvolvedIn = (wxWindowList *) NULL;
     m_windowSizer = (wxSizer *) NULL;
-    m_sizerParent = (wxWindowBase *) NULL;
     m_autoLayout = FALSE;
 #endif // wxUSE_CONSTRAINTS
 
@@ -234,9 +234,6 @@ wxWindowBase::~wxWindowBase()
     if ( m_windowSizer )
         delete m_windowSizer;
 
-    // If this is a child of a sizer, remove self from parent
-    if ( m_sizerParent )
-        m_sizerParent->RemoveChild(this);
 #endif // wxUSE_CONSTRAINTS
 
 #if wxUSE_DRAG_AND_DROP
@@ -889,39 +886,35 @@ void wxWindowBase::DeleteRelatedConstraints()
 
 void wxWindowBase::SetSizer(wxSizer *sizer)
 {
+    if (m_windowSizer) delete m_windowSizer;
+
     m_windowSizer = sizer;
-    if ( sizer )
-        sizer->SetSizerParent(this);
 }
 
 bool wxWindowBase::Layout()
 {
+    int w, h;
+    GetClientSize(&w, &h);
+    
+    // If there is a sizer, use it instead of the constraints
+    if ( GetSizer() )
+    {
+        GetSizer()->SetDimension( 0, 0, w, h );
+        return TRUE;
+    }
+    
     if ( GetConstraints() )
     {
-        int w, h;
-        GetClientSize(&w, &h);
         GetConstraints()->width.SetValue(w);
         GetConstraints()->height.SetValue(h);
     }
-
-    // If top level (one sizer), evaluate the sizer's constraints.
-    if ( GetSizer() )
-    {
-        int noChanges;
-        GetSizer()->ResetConstraints();   // Mark all constraints as unevaluated
-        GetSizer()->LayoutPhase1(&noChanges);
-        GetSizer()->LayoutPhase2(&noChanges);
-        GetSizer()->SetConstraintSizes(); // Recursively set the real window sizes
-        return TRUE;
-    }
-    else
-    {
-        // Otherwise, evaluate child constraints
-        ResetConstraints();   // Mark all constraints as unevaluated
-        DoPhase(1);           // Just one phase need if no sizers involved
-        DoPhase(2);
-        SetConstraintSizes(); // Recursively set the real window sizes
-    }
+	
+    // Evaluate child constraints
+    ResetConstraints();   // Mark all constraints as unevaluated
+    DoPhase(1);           // Just one phase need if no sizers involved
+    DoPhase(2);
+    SetConstraintSizes(); // Recursively set the real window sizes
+    
     return TRUE;
 }
 
@@ -1029,17 +1022,15 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
         int w = constr->width.GetValue();
         int h = constr->height.GetValue();
 
-        // If we don't want to resize this window, just move it...
         if ( (constr->width.GetRelationship() != wxAsIs ) ||
-                (constr->height.GetRelationship() != wxAsIs))
+             (constr->height.GetRelationship() != wxAsIs) )
         {
-            // Calls Layout() recursively. AAAGH. How can we stop that.
-            // Simply take Layout() out of non-top level OnSizes.
-            SizerSetSize(x, y, w, h);
+            SetSize(x, y, w, h);
         }
         else
         {
-            SizerMove(x, y);
+            // If we don't want to resize this window, just move it...
+            Move(x, y);
         }
     }
     else if ( constr )
@@ -1072,36 +1063,6 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
             node = node->GetNext();
         }
     }
-}
-
-// This assumes that all sizers are 'on' the same window, i.e. the parent of
-// this window.
-void wxWindowBase::TransformSizerToActual(int *x, int *y) const
-{
-    if ( !m_sizerParent || m_sizerParent->IsTopLevel() )
-        return;
-
-    int xp, yp;
-    m_sizerParent->GetPosition(&xp, &yp);
-    m_sizerParent->TransformSizerToActual(&xp, &yp);
-    *x += xp;
-    *y += yp;
-}
-
-void wxWindowBase::SizerSetSize(int x, int y, int w, int h)
-{
-    int xx = x;
-    int yy = y;
-    TransformSizerToActual(&xx, &yy);
-    SetSize(xx, yy, w, h);
-}
-
-void wxWindowBase::SizerMove(int x, int y)
-{
-    int xx = x;
-    int yy = y;
-    TransformSizerToActual(&xx, &yy);
-    Move(xx, yy);
 }
 
 // Only set the size/position of the constraint (if any)

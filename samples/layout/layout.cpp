@@ -54,7 +54,6 @@ bool MyApp::OnInit(void)
   wxMenu *file_menu = new wxMenu;
 
   file_menu->Append(LAYOUT_LOAD_FILE, "&Load file",      "Load a text file");
-  file_menu->Append(LAYOUT_TEST, "&Test sizers",      "Test sizer code");
   file_menu->Append(LAYOUT_TEST_NEW, "&Test new sizers",      "Test new sizer code");
 
   file_menu->AppendSeparator();
@@ -172,7 +171,6 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_LOAD_FILE, MyFrame::LoadFile)
   EVT_MENU(LAYOUT_QUIT, MyFrame::Quit)
-  EVT_MENU(LAYOUT_TEST, MyFrame::TestSizers)
   EVT_MENU(LAYOUT_TEST_NEW, MyFrame::TestNewSizers)
   EVT_MENU(LAYOUT_ABOUT, MyFrame::About)
   EVT_SIZE(MyFrame::OnSize)
@@ -193,12 +191,6 @@ void MyFrame::LoadFile(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 {
       this->Close(TRUE);
-}
-
-void MyFrame::TestSizers(wxCommandEvent& WXUNUSED(event) )
-{
-  SizerFrame *newFrame = new SizerFrame((MyFrame *) NULL, "Sizer Test Frame", 50, 50, 500, 500);
-  newFrame->Show(TRUE);
 }
 
 void MyFrame::TestNewSizers(wxCommandEvent& WXUNUSED(event) )
@@ -265,103 +257,6 @@ void MyWindow::OnPaint(wxPaintEvent& WXUNUSED(event) )
 }
 
 //-----------------------------------------------------------------
-//  SizerFrame
-//-----------------------------------------------------------------
-
-SizerFrame::SizerFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
-  wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
-{
-  panel = new wxPanel(this, -1, wxPoint(0, 0), wxSize(-1, -1), wxTAB_TRAVERSAL);
-  panel->SetBackgroundColour(wxColour(192, 192, 192));
-
-  // A sizer to fit the whole panel, plus two sizers, one
-  // above the other. A button is centred on the lower
-  // sizer; a rowcol containing 3 buttons is centred on the upper
-  // sizer.
-  wxSizer *expandSizer = new wxSizer(panel, wxSizerExpand);
-  expandSizer->SetName("expandSizer");
-
-  wxLayoutConstraints *c;
-
-  /////// TOP OF PANEL
-  ///////
-  wxSizer *topSizer = new wxSizer(expandSizer);
-  topSizer->SetName("topSizer");
-
-  // Specify constraints for the top sizer
-  c = new wxLayoutConstraints;
-  c->left.SameAs       (expandSizer, wxLeft);
-  c->top.SameAs        (expandSizer, wxTop);
-  c->right.SameAs      (expandSizer, wxRight);
-  c->height.PercentOf  (expandSizer, wxHeight, 50);
-
-  topSizer->SetConstraints(c);
-
- /*
-  * Add a row-col sizer and some buttons
-  */
-
-  // Default is layout by rows, 20 columns per row, shrink to fit.
-  wxRowColSizer *rowCol = new wxRowColSizer(topSizer);
-  rowCol->SetName("rowCol");
-  
-  wxButton *button = new wxButton(panel, -1, "Button 1");
-  rowCol->AddSizerChild(button);
-
-  button = new wxButton(panel, -1, "Button 2");
-  rowCol->AddSizerChild(button);
-
-  button = new wxButton(panel, -1, "Button 3");
-  rowCol->AddSizerChild(button);
-
-  // Centre the rowcol in the middle of the upper sizer
-  c = new wxLayoutConstraints;
-  c->centreX.SameAs    (topSizer, wxCentreX);
-  c->centreY.SameAs    (topSizer, wxCentreY);
-  c->width.AsIs();
-  c->height.AsIs();
-  rowCol->SetConstraints(c);
-
-  /////// BOTTOM OF PANEL
-  ///////
-  wxSizer *bottomSizer = new wxSizer(expandSizer);
-
-  // Specify constraints for the bottom sizer
-  c = new wxLayoutConstraints;
-  c->left.SameAs       (expandSizer, wxLeft);
-  c->top.PercentOf     (expandSizer, wxHeight, 50);
-  c->right.SameAs      (expandSizer, wxRight);
-  c->height.PercentOf  (expandSizer, wxHeight, 50);
-
-  bottomSizer->SetConstraints(c);
-
-  wxButton *button2 = new wxButton(panel, -1, "Test button");
-
-  // The button should be a child of the bottom sizer
-  bottomSizer->AddSizerChild(button2);
-
-  // Centre the button on the sizer
-  c = new wxLayoutConstraints;
-  c->centreX.SameAs    (bottomSizer, wxCentreX);
-  c->centreY.SameAs    (bottomSizer, wxCentreY);
-  c->width.PercentOf   (bottomSizer, wxWidth, 20);
-  c->height.PercentOf  (bottomSizer, wxHeight, 20);
-  button2->SetConstraints(c);
-}
-
-BEGIN_EVENT_TABLE(SizerFrame, wxFrame)
-  EVT_SIZE(SizerFrame::OnSize)
-END_EVENT_TABLE()
-
-
-// Size the subwindows when the frame is resized
-void SizerFrame::OnSize(wxSizeEvent& event)
-{
-  wxFrame::OnSize(event);
-  panel->Layout();
-}
-
-//-----------------------------------------------------------------
 //  NewSizerFrame
 //-----------------------------------------------------------------
 
@@ -372,7 +267,7 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
   // has a text ctrl in the middle. at the bottom, we have
   // two buttons which.
 
-  topsizer = new wxBox( wxVERTICAL );
+  wxBox *topsizer = new wxBox( wxVERTICAL );
   
   // 1) top: create wxStaticText with minimum size equal to its default size
   topsizer->Add( 
@@ -425,24 +320,10 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
   // don't allow frame to get smaller than what the sizers tell ye
   topsizer->SetSizeHints( this );  
   
-  // layout widgets
-  topsizer->Layout();
+  SetSizer( topsizer );
+  
+  SetAutoLayout( TRUE );
 }
 
-// This can later be removed if we integrate wxNewSizers
-// into wxWindows
-
-BEGIN_EVENT_TABLE(NewSizerFrame, wxFrame)
-  EVT_SIZE(NewSizerFrame::OnSize)
-END_EVENT_TABLE()
-
-void NewSizerFrame::OnSize(wxSizeEvent& event)
-{
-  wxFrame::OnSize(event);
-
-  wxSize client_size( GetClientSize() );
-   
-  topsizer->SetDimension( 0, 0, client_size.x, client_size.y );
-}
 
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sizer.h
-// Purpose:     provide wxNewSizer class for layounting
+// Purpose:     provide wxSizer class for layounting
 // Author:      Robert Roebling and Robin Dunn
 // Modified by:
 // Created:     
@@ -26,38 +26,37 @@
 // classes
 //---------------------------------------------------------------------------
 
-class wxNewSizerItem;
-class wxNewSizer;
-class wxBorderNewSizer;
-class wxBoxNewSizer;
+class wxSizerItem;
+class wxSizer;
+class wxBox;
 
 //---------------------------------------------------------------------------
-// wxNewSizerItem
+// wxSizerItem
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNewSizerItem: public wxObject
+class WXDLLEXPORT wxSizerItem: public wxObject
 {
 public:
   // spacer
-  wxNewSizerItem( int width, int height, int option, int flag, int border );
+  wxSizerItem( int width, int height, int option, int flag, int border );
 
   // window
-  wxNewSizerItem( wxWindow *window, int option, int flag, int border );
+  wxSizerItem( wxWindow *window, int option, int flag, int border );
 
   // subsizer
-  wxNewSizerItem( wxNewSizer *sizer, int option, int flag, int border );
+  wxSizerItem( wxSizer *sizer, int option, int flag, int border );
 
   virtual wxSize GetSize();
   virtual wxSize CalcMin();
   virtual void SetDimension( wxPoint pos, wxSize size );
   
   bool IsWindow();
-  bool IsNewSizer();
+  bool IsSizer();
   bool IsSpacer();
   
   wxWindow *GetWindow() const  
     { return m_window; }
-  wxNewSizer *GetNewSizer() const    
+  wxSizer *GetSizer() const    
     { return m_sizer; }
   int GetOption() const
     { return m_option; }
@@ -68,7 +67,7 @@ public:
   
 protected:
   wxWindow    *m_window;
-  wxNewSizer     *m_sizer;
+  wxSizer     *m_sizer;
   wxSize       m_size;
   wxSize       m_minSize;
   int          m_option;
@@ -77,17 +76,17 @@ protected:
 };
 
 //---------------------------------------------------------------------------
-// wxNewSizer
+// wxSizer
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNewSizer: public wxObject
+class WXDLLEXPORT wxSizer: public wxObject
 {
 public:
-   wxNewSizer();
-   ~wxNewSizer();
+   wxSizer();
+   ~wxSizer();
    
    virtual void Add( wxWindow *window, int option = 0, int flag = 0, int border = 0 );
-   virtual void Add( wxNewSizer *sizer, int option = 0, int flag = 0, int border = 0 );
+   virtual void Add( wxSizer *sizer, int option = 0, int flag = 0, int border = 0 );
    virtual void Add( int width, int height, int option = 0, int flag = 0, int border = 0  );
   
    void SetDimension( int x, int y, int width, int height );
@@ -119,7 +118,7 @@ protected:
 // wxBox
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBox: public wxNewSizer
+class WXDLLEXPORT wxBox: public wxSizer
 {
 public:
    wxBox( int orient );

@@ -606,7 +606,6 @@ public:
     virtual bool DoPhase(int);
 
         // these methods are virtual but normally won't be overridden
-    virtual void TransformSizerToActual(int *x, int *y) const ;
     virtual void SetSizeConstraint(int x, int y, int w, int h);
     virtual void MoveConstraint(int x, int y);
     virtual void GetSizeConstraint(int *w, int *h) const ;
@@ -617,12 +616,6 @@ public:
         // TODO: what are they and how do they work??
     void SetSizer( wxSizer *sizer );
     wxSizer *GetSizer() const { return m_windowSizer; }
-
-    void SetSizerParent( wxWindowBase *win ) { m_sizerParent = win; }
-    wxWindowBase *GetSizerParent() const { return m_sizerParent; }
-
-    virtual void SizerSetSize(int x, int y, int w, int h);
-    virtual void SizerMove(int x, int y);
 #endif // wxUSE_CONSTRAINTS
 
     // backward compatibility

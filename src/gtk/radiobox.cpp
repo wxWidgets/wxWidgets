@@ -271,7 +271,7 @@ wxSize wxRadioBox::LayoutItems()
             node = node->Next();
         }
         res.x = x+4;
-        res.y = 42;
+        res.y = 40;
     }
 
     return res;
