@@ -1277,6 +1277,10 @@ wxImage::wxImage( const wxBitmap &bitmap )
 #include "gdk/gdk.h"
 #include "gdk/gdkx.h"
 
+#if (GTK_MINOR_VERSION > 0)
+#include "gdk/gdkrgb.h"
+#endif
+
 wxBitmap wxImage::ConvertToBitmap() const
 {
     wxBitmap bitmap;
@@ -1289,14 +1293,54 @@ wxBitmap wxImage::ConvertToBitmap() const
     bitmap.SetHeight( height );
     bitmap.SetWidth( width );
     
-    // Create picture
+    bitmap.SetPixmap( gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, -1 ) );
+
+     // Retrieve depth
+    
+    GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
+    if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
+    int bpp = visual->depth;
+    
+    bitmap.SetDepth( bpp );
+    
+    if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
+    if (bpp < 8) bpp = 8;
+    
+#if (GTK_MINOR_VERSION > 0)
+
+    if (!HasMask() && (bpp > 8))
+    {
+        static bool s_hasInitialized = FALSE;
+	
+	if (!s_hasInitialized)
+	{
+	    gdk_rgb_init();
+	    s_hasInitialized = TRUE;
+	}
+	
+        GdkGC *gc = gdk_gc_new( bitmap.GetPixmap() );
+	
+	gdk_draw_rgb_image( bitmap.GetPixmap(),
+	                    gc,
+			    0, 0,
+			    width, height,
+			    GDK_RGB_DITHER_NONE,
+			    GetData(),
+			    width*3 );
+			    
+        gdk_gc_unref( gc );
+	                    
+	return bitmap;
+    }
+    
+#endif
+    
+    // Create picture image
     
     GdkImage *data_image =
         gdk_image_new( GDK_IMAGE_FASTEST, gdk_visual_get_system(), width, height );
     
-    bitmap.SetPixmap( gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, -1 ) );
-    
-    // Create mask
+    // Create mask image
     
     GdkImage *mask_image = (GdkImage*) NULL;
     
@@ -1311,17 +1355,6 @@ wxBitmap wxImage::ConvertToBitmap() const
         
         bitmap.SetMask( mask );
     }
-    
-    // Retrieve depth
-    
-    GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
-    if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
-    int bpp = visual->depth;
-    
-    bitmap.SetDepth( bpp );
-    
-    if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
-    if (bpp < 8) bpp = 8;
     
     // Render
     

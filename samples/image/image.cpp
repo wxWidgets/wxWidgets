@@ -114,8 +114,6 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   image.LoadFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG );
   my_square = new wxBitmap( image.ConvertToBitmap() );
   
-  (void)new wxTextCtrl( this, -1, "", wxPoint(10,200), wxSize(120,-1) );
-
   CreateAntiAliasedBitmap();
 }
 

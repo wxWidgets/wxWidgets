@@ -182,7 +182,7 @@ bool MyApp::OnInit()
     file_menu->Append(MINIMAL_ABOUT, "&About");
     file_menu->Append(MINIMAL_QUIT, "E&xit");
 
-    wxMenuBar *menu_bar = new wxMenuBar;
+    wxMenuBar *menu_bar = new wxMenuBar( wxMB_DOCKABLE );
     menu_bar->Append(file_menu, "&File");
 
 #if wxUSE_TOOLTIPS
