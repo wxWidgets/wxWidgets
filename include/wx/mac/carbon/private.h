@@ -564,5 +564,11 @@ void wxMacWakeUp() ;
 
 ControlRef wxMacFindControlUnderMouse( Point location , WindowRef window , ControlPartCode *outPart ) ;
 
+#ifdef TARGET_API_MAC_OSX
+#define kDefaultPathStyle kCFURLPOSIXPathStyle
+#else
+#define kDefaultPathStyle kCFURLHFSPathStyle
+#endif
+
 #endif
     // _WX_PRIVATE_H_
