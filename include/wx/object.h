@@ -411,7 +411,7 @@ public:
     // Turn on the correct set of new and delete operators
 
 #ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
-    void *operator new ( size_t size, wxChar *fileName = NULL, int lineNum = 0 );
+    void *operator new ( size_t size, const wxChar *fileName = NULL, int lineNum = 0 );
 #endif
 
 #ifdef _WX_WANT_DELETE_VOID
@@ -423,11 +423,11 @@ public:
 #endif
 
 #ifdef _WX_WANT_DELETE_VOID_WXCHAR_INT
-    void operator delete ( void *buf, wxChar*, int );
+    void operator delete ( void *buf, const wxChar*, int );
 #endif
 
 #ifdef _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
-    void *operator new[] ( size_t size, wxChar *fileName = NULL, int lineNum = 0 );
+    void *operator new[] ( size_t size, const wxChar *fileName = NULL, int lineNum = 0 );
 #endif
 
 #ifdef _WX_WANT_ARRAY_DELETE_VOID
@@ -435,7 +435,7 @@ public:
 #endif
 
 #ifdef _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
-    void operator delete[] (void* buf, wxChar*, int );
+    void operator delete[] (void* buf, const wxChar*, int );
 #endif
 
 

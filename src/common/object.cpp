@@ -77,11 +77,16 @@ void wxObject::Dump(wxSTD ostream& str)
 #endif
 
 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING && defined( new )
+	#undef new
+#endif
+
+
 
 #ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
-void *wxObject::operator new ( size_t size, wxChar *fileName, int lineNum )
+void *wxObject::operator new ( size_t size, const wxChar *fileName, int lineNum )
 {
-    return wxDebugAlloc(size, fileName, lineNum, TRUE);
+    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, TRUE);
 }
 #endif
 
@@ -100,16 +105,16 @@ void wxObject::operator delete ( void *buf, const char *_fname, size_t _line )
 #endif
 
 #ifdef _WX_WANT_DELETE_VOID_WXCHAR_INT
-void wxObject::operator delete ( void *buf, wxChar *WXUNUSED(fileName), int WXUNUSED(lineNum) )
+void wxObject::operator delete ( void *buf, const wxChar *WXUNUSED(fileName), int WXUNUSED(lineNum) )
 {
      wxDebugFree(buf);
 }
 #endif
 
 #ifdef _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
-void *wxObject::operator new[] ( size_t size, wxChar* WXUNUSED(fileName), int WXUNUSED(lineNum) )
+void *wxObject::operator new[] ( size_t size, const wxChar* fileName, int lineNum )
 {
-    return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);
+    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, TRUE, TRUE);
 }
 #endif
 
@@ -121,7 +126,7 @@ void wxObject::operator delete[] ( void *buf )
 #endif
 
 #ifdef _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
-void wxObject::operator delete[] (void * buf, wxChar*  WXUNUSED(fileName), int WXUNUSED(lineNum) )
+void wxObject::operator delete[] (void * buf, const wxChar*  WXUNUSED(fileName), int WXUNUSED(lineNum) )
 {
     wxDebugFree(buf, TRUE);
 }
