@@ -25,6 +25,31 @@ from wxBookCtrl.
 Added Gordon Williams' PyPlot module to the library, available as the
 wx.lib.plot module.
 
+I made a small but important change in the code that aquires the
+Python Global Interpreter Lock to try and prevent deadlocks that can
+happen when there are nested attempts to aquire the GIL.
+
+The RPMs will now install menu items on Mandrake in
+Applications/Development/Tools for PyCrust, XRCed, etc.  They are also
+installing icons and *.desktop items in the generic KDE and GNOME
+locations, but I don't know yet if they are resulting in menu items on
+non-Mandrake systems.  (It didn't automatically do it on my RH-9 build
+box but I didn't chase it very far...)  If you have ideas for how to
+improve the .spec file to work better and/or on more distros please
+send me a patch.
+
+The RPMs are now built on a RH-9 box, and I have tested installing
+them also on my main Mandrake 9.2 box.
+
+There are some big changes in the OS X disk image.  The actual
+Installer package now *only* installs the wxMac dynlibs, wxPython
+extension modules and pacakges, and also the command-line tool
+scripts. The remaining items (demo, samples, and application bundles
+for the Demo, PyCrust and XRCed) are now top-level items in the disk
+image (.dmg file) that users can just drag and drop to wherever they
+want to put them.
+
+
 
 
 2.4.2.4
