@@ -143,10 +143,11 @@ build_arch: control-files-stamp $(build_arch_stamps)
 build_all: control-files-stamp $(build_stamps)
 
 # Really we should probably do nothing here until we know which
-# binary target is called, but alpha builds were exploding
+# binary target is being called, but alpha builds were exploding
 # (compiler segfaults) in random places when building under fakeroot
-# fom the binary-arch target.  Build all -arch files here then, and
+# from the binary-arch target.  Build all -arch files here then, and
 # let the -indep stuff fend for itself later.
+
 build: build_arch
 
 
