@@ -621,12 +621,12 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     stream.Read( &bbuf, 2 );
     stream.Read( dbuf, 4 * 4 );
 
-    wxInt32 size = wxINT32_SWAP_FROM_LE( dbuf[0] );
-    wxInt32 offset = wxINT32_SWAP_FROM_LE( dbuf[2] );
+    wxInt32 size = wxINT32_SWAP_ON_BE( dbuf[0] );
+    wxInt32 offset = wxINT32_SWAP_ON_BE( dbuf[2] );
 
     stream.Read(dbuf, 4 * 2);
-    int width = (int)wxINT32_SWAP_FROM_LE( dbuf[0] );
-    int height = (int)wxINT32_SWAP_FROM_LE( dbuf[1] );
+    int width = (int)wxINT32_SWAP_ON_BE( dbuf[0] );
+    int height = (int)wxINT32_SWAP_ON_BE( dbuf[1] );
     if (width > 32767)
     {
         wxLogError( _T("Image width > 32767 pixels for file.") );
@@ -641,10 +641,10 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     stream.Read( &aWord, 2 );
 /*
     TODO
-    int planes = (int)wxUINT16_SWAP_FROM_LE( aWord );
+    int planes = (int)wxUINT16_SWAP_ON_BE( aWord );
 */
     stream.Read( &aWord, 2 );
-    int bpp = (int)wxUINT16_SWAP_FROM_LE( aWord );
+    int bpp = (int)wxUINT16_SWAP_ON_BE( aWord );
     if (bpp != 1 && bpp != 4 && bpp != 8 && bpp != 16 && bpp != 24 && bpp != 32)
     {
         wxLogError( _T("unknown bitdepth in file.") );
@@ -652,7 +652,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     }
     
     stream.Read( dbuf, 4 * 4 );
-    int comp = (int)wxINT32_SWAP_FROM_LE( dbuf[0] );
+    int comp = (int)wxINT32_SWAP_ON_BE( dbuf[0] );
     if (comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && comp != BI_BITFIELDS)
     {
         wxLogError( _T("unknown encoding in Windows BMP file.") );
@@ -660,7 +660,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     }
     
     stream.Read( dbuf, 4 * 2 );
-    int ncolors = (int)wxINT32_SWAP_FROM_LE( dbuf[0] );
+    int ncolors = (int)wxINT32_SWAP_ON_BE( dbuf[0] );
     if (ncolors == 0)
         ncolors = 1 << bpp;
     /* some more sanity checks */
@@ -712,9 +712,9 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         {
             int bit = 0;
             stream.Read( dbuf, 4 * 3 );
-            bmask = wxINT32_SWAP_FROM_LE( dbuf[0] );
-            gmask = wxINT32_SWAP_FROM_LE( dbuf[1] );
-            rmask = wxINT32_SWAP_FROM_LE( dbuf[2] );
+            bmask = wxINT32_SWAP_ON_BE( dbuf[0] );
+            gmask = wxINT32_SWAP_ON_BE( dbuf[1] );
+            rmask = wxINT32_SWAP_ON_BE( dbuf[2] );
             /* find shift amount.. ugly, but i can't think of a better way */
             for (bit = 0; bit < bpp; bit++)
             {
@@ -892,7 +892,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                {
                    unsigned char temp;
                    stream.Read( &aWord, 2 );
-		   aWord = wxUINT16_SWAP_FROM_LE( aWord );
+		   aWord = wxUINT16_SWAP_ON_BE( aWord );
                    linepos += 2;
                    temp = (aWord & rmask) >> rshift;
                    ptr[poffset] = temp;
@@ -906,7 +906,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                {
                    unsigned char temp;
                    stream.Read( &aDword, 4 );
-		   aDword = wxINT32_SWAP_FROM_LE( aDword );
+		   aDword = wxINT32_SWAP_ON_BE( aDword );
                    linepos += 4;
                    temp = (aDword & rmask) >> rshift;
                    ptr[poffset] = temp;

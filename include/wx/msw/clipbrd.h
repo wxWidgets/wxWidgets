@@ -83,6 +83,10 @@ public:
 
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
+    
+    /// X11 has two clipboards which get selected by this call. Empty on MSW.
+    inline void UsePrimarySelection( bool WXUNUSED(primary) ) { }
+    
 };
 
 // The global clipboard object

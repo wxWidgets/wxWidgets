@@ -25,6 +25,7 @@ public:
     void DoDateDemo(wxCommandEvent& event);
     void DoTimeDemo(wxCommandEvent& event);
     void DoVariantDemo(wxCommandEvent& event);
+    void DoByteOrderDemo(wxCommandEvent& event);
 
     wxTextCtrl*     GetTextCtrl() const { return m_textCtrl; }
 
@@ -60,6 +61,7 @@ public:
 #define TYPES_DATE      103
 #define TYPES_TIME      104
 #define TYPES_VARIANT   105
+#define TYPES_BYTEORDER 106
 
 #endif
     // _WX_TYPETEST_H_

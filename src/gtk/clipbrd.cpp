@@ -91,7 +91,7 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
     for (unsigned int i=0; i<selection_data->length/sizeof(GdkAtom); i++)
     {
-/*      char *name = gdk_atom_name (atoms[i]);
+/*        char *name = gdk_atom_name (atoms[i]);
         if (name) printf( "Format available: %s.\n", name ); */
       
         if (atoms[i] == clipboard->m_targetRequested)
@@ -370,6 +370,8 @@ wxClipboard::wxClipboard()
   
     m_formatSupported = FALSE;
     m_targetRequested = 0;
+    
+    m_usePrimary = FALSE;
 }
 
 wxClipboard::~wxClipboard()
@@ -422,7 +424,6 @@ bool wxClipboard::Open()
     wxCHECK_MSG( !m_open, FALSE, _T("clipboard already open") );
   
     m_open = TRUE;
-    UsePrimarySelection(FALSE);
     
     return TRUE;
 }
@@ -493,7 +494,6 @@ bool wxClipboard::AddData( wxDataObject *data )
 			       (gpointer) NULL );
 #endif
 
-//    printf( "vorher.\n" );			       
     /* Tell the world we offer clipboard data */
     if (!gtk_selection_owner_set( m_clipboardWidget, 
                                   g_clipboardAtom,
@@ -502,10 +502,6 @@ bool wxClipboard::AddData( wxDataObject *data )
         return FALSE;
     }
     m_ownsClipboard = TRUE;
-    
-//    printf( "nachher.\n" );			       
-    
-    return TRUE;
     
     if (!gtk_selection_owner_set( m_clipboardWidget, 
                                   GDK_SELECTION_PRIMARY,

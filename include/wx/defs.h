@@ -441,8 +441,8 @@ typedef  wxUint16        wxWord;
     
 #define wxINT16_SWAP_ALWAYS(val) \
    ((wxInt16) ( \
-    (((wxInt16) (val) & (wxInt16) 0x00ffU) << 8) | \
-    (((wxInt16) (val) & (wxInt16) 0xff00U) >> 8)))
+    (((wxUint16) (val) & (wxUint16) 0x00ffU) << 8) | \
+    (((wxUint16) (val) & (wxUint16) 0xff00U) >> 8)))
     
 #define wxUINT32_SWAP_ALWAYS(val) \
    ((wxUint32) ( \
@@ -453,31 +453,31 @@ typedef  wxUint16        wxWord;
 
 #define wxINT32_SWAP_ALWAYS(val) \
    ((wxInt32) ( \
-    (((wxInt32) (val) & (wxInt32) 0x000000ffU) << 24) | \
-    (((wxInt32) (val) & (wxInt32) 0x0000ff00U) <<  8) | \
-    (((wxInt32) (val) & (wxInt32) 0x00ff0000U) >>  8) | \
-    (((wxInt32) (val) & (wxInt32) 0xff000000U) >> 24)))
+    (((wxUint32) (val) & (wxUint32) 0x000000ffU) << 24) | \
+    (((wxUint32) (val) & (wxUint32) 0x0000ff00U) <<  8) | \
+    (((wxUint32) (val) & (wxUint32) 0x00ff0000U) >>  8) | \
+    (((wxUint32) (val) & (wxUint32) 0xff000000U) >> 24)))
 
 // machine specific byte swapping
 
 #ifdef WORDS_BIGENDIAN
-  #define wxUINT16_SWAP_FROM_LE(val)  wxUINT16_SWAP_ALWAYS(val)
-  #define wxINT16_SWAP_FROM_LE(val)   wxINT16_SWAP_ALWAYS(val)
-  #define wxUINT16_SWAP_FROM_BE(val)  (val)
-  #define wxINT16_SWAP_FROM_BE(val)   (val)
-  #define wxUINT32_SWAP_FROM_LE(val)  wxUINT32_SWAP_ALWAYS(val)
-  #define wxINT32_SWAP_FROM_LE(val)   wxINT32_SWAP_ALWAYS(val)
-  #define wxUINT32_SWAP_FROM_BE(val)  (val)
-  #define wxINT32_SWAP_FROM_BE(val)   (val)
+  #define wxUINT16_SWAP_ON_BE(val)  wxUINT16_SWAP_ALWAYS(val)
+  #define wxINT16_SWAP_ON_BE(val)   wxINT16_SWAP_ALWAYS(val)
+  #define wxUINT16_SWAP_ON_LE(val)  (val)
+  #define wxINT16_SWAP_ON_LE(val)   (val)
+  #define wxUINT32_SWAP_ON_BE(val)  wxUINT32_SWAP_ALWAYS(val)
+  #define wxINT32_SWAP_ON_BE(val)   wxINT32_SWAP_ALWAYS(val)
+  #define wxUINT32_SWAP_ON_LE(val)  (val)
+  #define wxINT32_SWAP_ON_LE(val)   (val)
 #else
-  #define wxUINT16_SWAP_FROM_BE(val)  wxUINT16_SWAP_ALWAYS(val)
-  #define wxINT16_SWAP_FROM_BE(val)   wxINT16_SWAP_ALWAYS(val)
-  #define wxUINT16_SWAP_FROM_LE(val)  (val)
-  #define wxINT16_SWAP_FROM_LE(val)   (val)
-  #define wxUINT32_SWAP_FROM_BE(val)  wxUINT32_SWAP_ALWAYS(val)
-  #define wxINT32_SWAP_FROM_BE(val)   wxINT32_SWAP_ALWAYS(val)
-  #define wxUINT32_SWAP_FROM_LE(val)  (val)
-  #define wxINT32_SWAP_FROM_LE(val)   (val)
+  #define wxUINT16_SWAP_ON_LE(val)  wxUINT16_SWAP_ALWAYS(val)
+  #define wxINT16_SWAP_ON_LE(val)   wxINT16_SWAP_ALWAYS(val)
+  #define wxUINT16_SWAP_ON_BE(val)  (val)
+  #define wxINT16_SWAP_ON_BE(val)   (val)
+  #define wxUINT32_SWAP_ON_LE(val)  wxUINT32_SWAP_ALWAYS(val)
+  #define wxINT32_SWAP_ON_LE(val)   wxINT32_SWAP_ALWAYS(val)
+  #define wxUINT32_SWAP_ON_BE(val)  (val)
+  #define wxINT32_SWAP_ON_BE(val)   (val)
 #endif
 
 // ----------------------------------------------------------------------------

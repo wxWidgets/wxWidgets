@@ -450,10 +450,15 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
     // parts in wxUSE_DRAG_AND_DROP.
 
 #if wxUSE_CLIPBOARD && wxUSE_DRAG_AND_DROP
+
+    // On X11, we want to get the data from the primary selection instead
+    // of the normal clipboard (which isn't normal under X11 at all). This
+    // call has no effect under MSW.
+    wxTheClipboard->UsePrimarySelection();
+
     if (!wxTheClipboard->Open())
     {
         *m_log << "Error opening the clipboard.\n";
-
         return;
     }
     else

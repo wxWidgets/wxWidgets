@@ -43,6 +43,7 @@ BEGIN_EVENT_TABLE(MyApp, wxApp)
 	EVT_MENU(TYPES_DATE, MyApp::DoDateDemo)
 	EVT_MENU(TYPES_TIME, MyApp::DoTimeDemo)
 	EVT_MENU(TYPES_VARIANT, MyApp::DoVariantDemo)
+	EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
 END_EVENT_TABLE()
 
 bool MyApp::OnInit(void)
@@ -62,6 +63,7 @@ bool MyApp::OnInit(void)
   file_menu->Append(TYPES_DATE, "&Date test");
   file_menu->Append(TYPES_TIME, "&Time test");
   file_menu->Append(TYPES_VARIANT, "&Variant test");
+  file_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
   file_menu->AppendSeparator();
   file_menu->Append(TYPES_QUIT, "E&xit");
   wxMenuBar *menu_bar = new wxMenuBar;
@@ -78,12 +80,44 @@ bool MyApp::OnInit(void)
   return TRUE;
 }
 
+void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextCtrl& textCtrl = * GetTextCtrl();
+
+    textCtrl.Clear();
+    textCtrl << "\nTest byte order macros:\n\n";
+    
+    if (wxBYTE_ORDER == wxLITTLE_ENDIAN)
+        textCtrl << "This is a little endian system.\n\n";
+    else    
+        textCtrl << "This is a big endian system.\n\n";
+	
+    wxString text;
+    
+    wxInt32 var = 0xF1F2F3F4;
+    text = "";
+    text.Printf( "Value of wxInt32 is now: %#x.\n\n", var );
+    textCtrl.WriteText( text );
+    
+    text = "";
+    text.Printf( "Value of swapped wxInt32 is: %#x.\n\n", wxINT32_SWAP_ALWAYS( var ) );
+    textCtrl.WriteText( text );
+    
+    text = "";
+    text.Printf( "Value of wxInt32 swapped on little endian is: %#x.\n\n", wxINT32_SWAP_ON_LE( var ) );
+    textCtrl.WriteText( text );
+    
+    text = "";
+    text.Printf( "Value of wxInt32 swapped on big endian is: %#x.\n\n", wxINT32_SWAP_ON_BE( var ) );
+    textCtrl.WriteText( text );
+}
+
 void MyApp::DoTimeDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
 
     textCtrl.Clear();
-    cout << "\nTest class wxTime" << endl;
+    textCtrl << "\nTest class wxTime:\n";
     wxTime now;
     textCtrl << "It is now " << (wxString) now << "\n";
 }
