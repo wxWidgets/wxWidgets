@@ -278,8 +278,11 @@ protected: \
                 return node; \
             node = node->m_next(); \
         } \
- \
-        node = new Node( value ); \
+ 	return CreateNode( value  , bucket); \
+    }\
+    Node * CreateNode( const value_type& value, size_t bucket ) \
+    {\
+        Node* node = new Node( value ); \
         node->m_nxt = m_table[bucket]; \
         m_table[bucket] = node; \
  \
@@ -290,6 +293,10 @@ protected: \
  \
         return node; \
     } \
+    void CreateNode( const value_type& value ) \
+    {\
+        CreateNode(value, m_hasher( m_getKey(value) ) % m_tableBuckets ); \
+    }\
  \
     /* returns NULL if not found */ \
     Node** GetNodePtr( const const_key_type& key ) const \
