@@ -1659,7 +1659,7 @@ test -n "$target_alias" &&
 wx_major_version_number=2
 wx_minor_version_number=5
 wx_release_number=4
-wx_subrelease_number=0
+wx_subrelease_number=1
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
@@ -13364,9 +13364,10 @@ echo "${ECHO_T}$wx_cv_gccversion" >&6
         { echo "$as_me:$LINENO: WARNING: Building DLLs requires OMF mode, enabled" >&5
 echo "$as_me: WARNING: Building DLLs requires OMF mode, enabled" >&2;}
         wxUSE_OMF=yes
+	enable_omf=yes
       fi
       if test "$wxUSE_OMF" = "yes"; then
-        LDFLAGS="$LDFLAGS -Zomf -Zlinker /PMTYPE:PM -Zlinker /EXEPACK"
+        LDFLAGS="$LDFLAGS -Zlinker /EXEPACK -Zlinker /PMTYPE:PM"
       fi
         ;;
   *)
@@ -28207,23 +28208,24 @@ echo "$as_me: WARNING: system ODBC library not found, will use built-in instead"
                         wxUSE_ODBC=sys
         fi
     fi
-    if test "$wxUSE_ODBC" != "no" ; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxUSE_ODBC 1
-_ACEOF
 
-        if test "$wxUSE_ODBC" = "builtin" ; then
-            cat >>confdefs.h <<\_ACEOF
+    if test "$wxUSE_ODBC" = "builtin" ; then
+        cat >>confdefs.h <<\_ACEOF
 #define wxUSE_BUILTIN_IODBC 1
 _ACEOF
 
-        fi
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
-
-                WXODBCFLAG="-D_IODBC_"
     fi
 fi
 
+if test "$wxUSE_ODBC" != "no" ; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ODBC 1
+_ACEOF
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
+
+        WXODBCFLAG="-D_IODBC_"
+fi
 
 
 if test "$wxUSE_DISPLAY" = "yes"; then

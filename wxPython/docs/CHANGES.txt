@@ -2,7 +2,7 @@ Recent Changes for wxPython
 =====================================================================
 
 
-2.5.4.0
+2.5.4.1
 -------
 
 wx.Sizer Add, Insert, and Prepend functions now return a reference to the
@@ -225,6 +225,14 @@ wx.html.HtmlWindow now supports background images.
 
 Added wx.lib.gestures module from Daniel Pozmanter which supports
 using Mouse Gestures in an application.
+
+wxGTK2: ENTER and LEAVE mouse events are now sent for multi-line text
+controls.
+
+wxMSW:  "Alt" key (VK_MENU) now results in WXK_ALT keyboard event, not
+WXK_MENU
+
+
 
 
 
