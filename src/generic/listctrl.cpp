@@ -3096,6 +3096,10 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
 
 void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 {
+    // wxMSW seems not to notify the program about
+    // cancelled label edits.
+    return;
+
     // let owner know that the edit was cancelled
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
     
