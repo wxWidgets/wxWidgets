@@ -631,8 +631,6 @@ install-headers: install-gtk-lib
 	cd $(objdir_gtk_univ) \
 		&& $(MAKE) install prefix=`pwd`/../$(objdir_univ_install)/usr
 
-	rm -f $(objdir_univ_install)/usr/include/wx/univ/setup.h
-
 	dh_movefiles --sourcedir=$(objdir_univ_install)
 	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
 
