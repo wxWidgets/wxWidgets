@@ -15,65 +15,61 @@
 FL_DEMO1_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_8) /Fd$(OBJS)\fl_demo1.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_WINDOWS /I..\..\..\samples /I.\..\..\include \
-	/DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\..\samples /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
+	$(CXXFLAGS)
 FL_DEMO1_OBJECTS =  \
 	$(OBJS)\fl_demo1_fl_demo1.obj \
 	$(OBJS)\fl_demo1_fl_demo1.res
 FL_DEMO2_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_13) \
 	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_demo2.pdb $(____DEBUGRUNTIME_12_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_WINDOWS /I..\..\..\samples /I.\..\..\include \
-	/DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\..\samples /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
+	$(CXXFLAGS)
 FL_DEMO2_OBJECTS =  \
 	$(OBJS)\fl_demo2_fl_demo2.obj \
 	$(OBJS)\fl_demo2_fl_demo2.res
 FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_23) \
 	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample1.pdb $(____DEBUGRUNTIME_22_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_WINDOWS /I..\..\..\samples /I.\..\..\include \
-	/DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\..\samples /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
+	$(CXXFLAGS)
 FL_SAMPLE1_OBJECTS =  \
 	$(OBJS)\fl_sample1_fl_sample1.obj \
 	$(OBJS)\fl_sample1_fl_sample1.res
 FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_33) \
 	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample2.pdb $(____DEBUGRUNTIME_32_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_WINDOWS /I..\..\..\samples /I.\..\..\include \
-	/DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\..\samples /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
+	$(CXXFLAGS)
 FL_SAMPLE2_OBJECTS =  \
 	$(OBJS)\fl_sample2_fl_sample2.obj \
 	$(OBJS)\fl_sample2_fl_sample2.res
 FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_43) \
 	/DWIN32 $(__DEBUGINFO_8) /Fd$(OBJS)\fl_sample3.pdb $(____DEBUGRUNTIME_42_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_WINDOWS /I..\..\..\samples /I.\..\..\include \
-	/DBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\..\samples /I.\..\..\include /DBMP_DIR=\"bitmaps/\" \
+	$(CXXFLAGS)
 FL_SAMPLE3_OBJECTS =  \
 	$(OBJS)\fl_sample3_fl_sample3.obj \
 	$(OBJS)\fl_sample3_fl_sample3.res
-LIBDIRNAME = \
-	.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -369,31 +365,31 @@ $(OBJS)\fl_demo1_fl_demo1.obj: .\fl_demo1.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_DEMO1_CXXFLAGS) $**
 
 $(OBJS)\fl_demo1_fl_demo1.res: .\fl_demo1.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(LIBDIRNAME) /i .\..\..\..\src\tiff /i .\..\..\..\src\jpeg /i .\..\..\..\src\png /i .\..\..\..\src\zlib  /i .\..\..\..\src\regex /i .\..\..\..\src\expat\lib /i . $(__DLLFLAG_p_11) /d _WINDOWS /i ..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_11) /d _WINDOWS /i .\..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_demo2_fl_demo2.obj: .\fl_demo2.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_DEMO2_CXXFLAGS) $**
 
 $(OBJS)\fl_demo2_fl_demo2.res: .\fl_demo2.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_12_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(LIBDIRNAME) /i .\..\..\..\src\tiff /i .\..\..\..\src\jpeg /i .\..\..\..\src\png /i .\..\..\..\src\zlib  /i .\..\..\..\src\regex /i .\..\..\..\src\expat\lib /i . $(__DLLFLAG_p_11) /d _WINDOWS /i ..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_12_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_11) /d _WINDOWS /i .\..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample1_fl_sample1.obj: .\fl_sample1.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE1_CXXFLAGS) $**
 
 $(OBJS)\fl_sample1_fl_sample1.res: .\fl_sample1.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_22_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(LIBDIRNAME) /i .\..\..\..\src\tiff /i .\..\..\..\src\jpeg /i .\..\..\..\src\png /i .\..\..\..\src\zlib  /i .\..\..\..\src\regex /i .\..\..\..\src\expat\lib /i . $(__DLLFLAG_p_11) /d _WINDOWS /i ..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_22_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_11) /d _WINDOWS /i .\..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample2_fl_sample2.obj: .\fl_sample2.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE2_CXXFLAGS) $**
 
 $(OBJS)\fl_sample2_fl_sample2.res: .\fl_sample2.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_32_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(LIBDIRNAME) /i .\..\..\..\src\tiff /i .\..\..\..\src\jpeg /i .\..\..\..\src\png /i .\..\..\..\src\zlib  /i .\..\..\..\src\regex /i .\..\..\..\src\expat\lib /i . $(__DLLFLAG_p_11) /d _WINDOWS /i ..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_32_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_11) /d _WINDOWS /i .\..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample3_fl_sample3.obj: .\fl_sample3.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE3_CXXFLAGS) $**
 
 $(OBJS)\fl_sample3_fl_sample3.res: .\fl_sample3.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_42_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(LIBDIRNAME) /i .\..\..\..\src\tiff /i .\..\..\..\src\jpeg /i .\..\..\..\src\png /i .\..\..\..\src\zlib  /i .\..\..\..\src\regex /i .\..\..\..\src\expat\lib /i . $(__DLLFLAG_p_11) /d _WINDOWS /i ..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_42_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_11) /d _WINDOWS /i .\..\..\..\samples /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -405,26 +401,26 @@ clean:
 	-if exist $(OBJS)\fl_sample3.exe del $(OBJS)\fl_sample3.exe
 
 $(OBJS)\fl_demo1.exe: $(FL_DEMO1_OBJECTS) $(OBJS)\fl_demo1_fl_demo1.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_DEMO1_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
 
 $(OBJS)\fl_demo2.exe: $(FL_DEMO2_OBJECTS) $(OBJS)\fl_demo2_fl_demo2.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_DEMO2_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
 
 $(OBJS)\fl_sample1.exe: $(FL_SAMPLE1_OBJECTS) $(OBJS)\fl_sample1_fl_sample1.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_SAMPLE1_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
 
 $(OBJS)\fl_sample2.exe: $(FL_SAMPLE2_OBJECTS) $(OBJS)\fl_sample2_fl_sample2.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_SAMPLE2_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
 
 $(OBJS)\fl_sample3.exe: $(FL_SAMPLE3_OBJECTS) $(OBJS)\fl_sample3_fl_sample3.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_SAMPLE3_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<

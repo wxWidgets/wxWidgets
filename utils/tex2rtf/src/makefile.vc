@@ -12,24 +12,20 @@
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEX2RTF_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\tex2rtf.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_CONSOLE /DNO_GUI $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_CONSOLE /DNO_GUI $(CXXFLAGS)
 TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_13) \
 	/DWIN32 $(__DEBUGINFO) /Fd$(OBJS)\tex2rtf_gui.pdb $(____DEBUGRUNTIME_12_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS)
 TEX2RTF_GUI_OBJECTS =  \
 	$(OBJS)\tex2rtf_gui_sample.res \
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj \
@@ -52,6 +48,12 @@ TEX2RTF_OBJECTS =  \
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -267,7 +269,7 @@ $(OBJS)\tex2rtf_gui_rtfutils.obj: .\rtfutils.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEX2RTF_GUI_CXXFLAGS) $**
 
 $(OBJS)\tex2rtf_gui_sample.res: .\..\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_12_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) /i .\..\..\..\include /i $(LIBDIRNAME) /i .\..\..\..\src\tiff /i .\..\..\..\src\jpeg /i .\..\..\..\src\png /i .\..\..\..\src\zlib  /i .\..\..\..\src\regex /i .\..\..\..\src\expat\lib /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\..\samples $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_12_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\..\samples $**
 
 $(OBJS)\tex2rtf_gui_table.obj: .\table.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEX2RTF_GUI_CXXFLAGS) $**

@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\deprecated\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\deprecated\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -169,25 +176,14 @@ __deprecatedlib___depname = &
 DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\deprecated\..\..\..\src\tiff &
-	-i=..\..\src\deprecated\..\..\..\src\jpeg &
-	-i=..\..\src\deprecated\..\..\..\src\png &
-	-i=..\..\src\deprecated\..\..\..\src\zlib &
-	-i=..\..\src\deprecated\..\..\..\src\regex &
-	-i=..\..\src\deprecated\..\..\..\src\expat\lib &
-	-i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
-	-dWXMAKINGDLL_DEPRECATED $(CFLAGS)
+	-i=$(SETUPHDIR) -i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
+	-dWXMAKINGDLL_DEPRECATED -i=..\..\src\deprecated $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\deprecated\..\..\..\src\tiff &
-	-i=..\..\src\deprecated\..\..\..\src\jpeg &
-	-i=..\..\src\deprecated\..\..\..\src\png &
-	-i=..\..\src\deprecated\..\..\..\src\zlib &
-	-i=..\..\src\deprecated\..\..\..\src\regex &
-	-i=..\..\src\deprecated\..\..\..\src\expat\lib &
-	-i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
-	-dWXMAKINGDLL_DEPRECATED $(CXXFLAGS) /fh=$(OBJS)\wxprec_deprecateddll.pch
+	-i=$(SETUPHDIR) -i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
+	-dWXMAKINGDLL_DEPRECATED -i=..\..\src\deprecated $(CXXFLAGS) &
+	/fh=$(OBJS)\wxprec_deprecateddll.pch
 DEPRECATEDDLL_OBJECTS =  &
 	$(OBJS)\deprecateddll_dummy.obj &
 	$(OBJS)\deprecateddll_prop.obj &
@@ -200,24 +196,13 @@ DEPRECATEDDLL_OBJECTS =  &
 DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\deprecated\..\..\..\src\tiff &
-	-i=..\..\src\deprecated\..\..\..\src\jpeg &
-	-i=..\..\src\deprecated\..\..\..\src\png &
-	-i=..\..\src\deprecated\..\..\..\src\zlib &
-	-i=..\..\src\deprecated\..\..\..\src\regex &
-	-i=..\..\src\deprecated\..\..\..\src\expat\lib &
-	-i=..\..\src\deprecated\..\..\include $(CFLAGS)
+	-i=$(SETUPHDIR) -i=..\..\src\deprecated\..\..\include &
+	-i=..\..\src\deprecated $(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\deprecated\..\..\..\src\tiff &
-	-i=..\..\src\deprecated\..\..\..\src\jpeg &
-	-i=..\..\src\deprecated\..\..\..\src\png &
-	-i=..\..\src\deprecated\..\..\..\src\zlib &
-	-i=..\..\src\deprecated\..\..\..\src\regex &
-	-i=..\..\src\deprecated\..\..\..\src\expat\lib &
-	-i=..\..\src\deprecated\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_deprecatedlib.pch
+	-i=$(SETUPHDIR) -i=..\..\src\deprecated\..\..\include &
+	-i=..\..\src\deprecated $(CXXFLAGS) /fh=$(OBJS)\wxprec_deprecatedlib.pch
 DEPRECATEDLIB_OBJECTS =  &
 	$(OBJS)\deprecatedlib_dummy.obj &
 	$(OBJS)\deprecatedlib_prop.obj &
@@ -227,10 +212,10 @@ DEPRECATEDLIB_OBJECTS =  &
 	$(OBJS)\deprecatedlib_treelay.obj &
 	$(OBJS)\deprecatedlib_wxexpr.obj &
 	$(OBJS)\deprecatedlib_dosyacc.obj
-LIBDIRNAME = &
-	..\..\src\deprecated\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -303,7 +288,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprec
 	@%create $(OBJS)\deprecateddll.lbc
 	@%append $(OBJS)\deprecateddll.lbc option quiet
 	@%append $(OBJS)\deprecateddll.lbc name $^@
-	@%append $(OBJS)\deprecateddll.lbc option incremental
+	@%append $(OBJS)\deprecateddll.lbc option caseexact
 	@%append $(OBJS)\deprecateddll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(DEPRECATEDDLL_OBJECTS)) do @%append $(OBJS)\deprecateddll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\deprecateddll.lbc library %i

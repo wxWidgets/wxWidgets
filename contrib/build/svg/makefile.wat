@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\svg\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\svg\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -166,29 +173,22 @@ __svglib___depname = &
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	..\..\src\svg\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 SVGDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\svg\..\..\..\src\tiff -i=..\..\src\svg\..\..\..\src\jpeg &
-	-i=..\..\src\svg\..\..\..\src\png -i=..\..\src\svg\..\..\..\src\zlib &
-	-i=..\..\src\svg\..\..\..\src\regex &
-	-i=..\..\src\svg\..\..\..\src\expat\lib -i=..\..\src\svg\..\..\include &
-	-dWXUSINGDLL -dWXMAKINGDLL_SVG $(CXXFLAGS) /fh=$(OBJS)\wxprec_svgdll.pch
+	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\svg\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_SVG $(CXXFLAGS) &
+	/fh=$(OBJS)\wxprec_svgdll.pch
 SVGDLL_OBJECTS =  &
 	$(OBJS)\svgdll_dummy.obj &
 	$(OBJS)\svgdll_dcsvg.obj
 SVGLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\svg\..\..\..\src\tiff -i=..\..\src\svg\..\..\..\src\jpeg &
-	-i=..\..\src\svg\..\..\..\src\png -i=..\..\src\svg\..\..\..\src\zlib &
-	-i=..\..\src\svg\..\..\..\src\regex &
-	-i=..\..\src\svg\..\..\..\src\expat\lib -i=..\..\src\svg\..\..\include &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_svglib.pch
+	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\svg\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_svglib.pch
 SVGLIB_OBJECTS =  &
 	$(OBJS)\svglib_dummy.obj &
 	$(OBJS)\svglib_dcsvg.obj
@@ -228,7 +228,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg_wa
 	@%create $(OBJS)\svgdll.lbc
 	@%append $(OBJS)\svgdll.lbc option quiet
 	@%append $(OBJS)\svgdll.lbc name $^@
-	@%append $(OBJS)\svgdll.lbc option incremental
+	@%append $(OBJS)\svgdll.lbc option caseexact
 	@%append $(OBJS)\svgdll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(SVGDLL_OBJECTS)) do @%append $(OBJS)\svgdll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\svgdll.lbc library %i

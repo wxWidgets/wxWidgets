@@ -12,16 +12,11 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\ogl\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OGLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\ogl\..\..\..\src\tiff -I..\..\src\ogl\..\..\..\src\jpeg \
-	-I..\..\src\ogl\..\..\..\src\png -I..\..\src\ogl\..\..\..\src\zlib \
-	-I..\..\src\ogl\..\..\..\src\regex -I..\..\src\ogl\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\ogl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_OGL $(CXXFLAGS)
 OGLDLL_OBJECTS =  \
 	$(OBJS)\ogldll_dummy.o \
@@ -39,10 +34,7 @@ OGLDLL_OBJECTS =  \
 	$(OBJS)\ogldll_ogldiag.o
 OGLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\ogl\..\..\..\src\tiff -I..\..\src\ogl\..\..\..\src\jpeg \
-	-I..\..\src\ogl\..\..\..\src\png -I..\..\src\ogl\..\..\..\src\zlib \
-	-I..\..\src\ogl\..\..\..\src\regex -I..\..\src\ogl\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\ogl\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\ogl\..\..\include $(CXXFLAGS)
 OGLLIB_OBJECTS =  \
 	$(OBJS)\ogllib_dummy.o \
@@ -58,11 +50,19 @@ OGLLIB_OBJECTS =  \
 	$(OBJS)\ogllib_constrnt.o \
 	$(OBJS)\ogllib_lines.o \
 	$(OBJS)\ogllib_ogldiag.o
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\ogl\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\ogl\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

@@ -20,16 +20,13 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\xrc\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 XRCDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg \
-	-I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib \
-	-I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\xrc\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS) -Hu \
 	-H=$(OBJS)\wxprec_xrcdll.csm
 XRCDLL_OBJECTS =  \
@@ -73,10 +70,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xmlrsall.obj
 XRCLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg \
-	-I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib \
-	-I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\xrc\..\..\include -I..\..\src\xrc\expat\xmlparse \
 	-I..\..\src\xrc\expat\xmltok $(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_xrclib.csm
 XRCLIB_OBJECTS =  \
@@ -121,6 +115,12 @@ XRCLIB_OBJECTS =  \
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\xrc\..\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\xrc\..\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -478,7 +478,7 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib
 
 !if "$(SHARED)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_bcc$(VENDORTAG).dll: $(XRCDLL_OBJECTS) $(OBJS)\xrcdll_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_bcc$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj  $(XRCDLL_OBJECTS)
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(XRCDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  $(__WXLIB_HTML_p) $(__WXLIB_ADV_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
@@ -486,7 +486,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_bc
 !endif
 
 !if "$(SHARED)" == "0"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib: $(XRCLIB_OBJECTS) $(OBJS)\xrclib_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib: $(OBJS)\xrclib_dummy.obj  $(XRCLIB_OBJECTS)
 	if exist $@ del $@
 	tlib /a /p2048 $@ @&&|
 	$(XRCLIB_OBJECTS)

@@ -12,15 +12,14 @@ include ../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXPOEM_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
-	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
-	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples $(CXXFLAGS)
 WXPOEM_OBJECTS =  \
 	$(OBJS)\wxpoem_wxpoem.o \
 	$(OBJS)\wxpoem_wxpoem_rc.o
@@ -29,6 +28,12 @@ WXPOEM_OBJECTS =  \
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = .\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = .\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
@@ -150,7 +155,7 @@ $(OBJS)\wxpoem_wxpoem.o: .\wxpoem.cpp
 	$(CXX) -c -o $@ $(WXPOEM_CXXFLAGS) $<
 
 $(OBJS)\wxpoem_wxpoem_rc.o: .\wxpoem.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(LIBDIRNAME) --include-dir ./../../src/tiff --include-dir ./../../src/jpeg --include-dir ./../../src/png --include-dir ./../../src/zlib  --include-dir ./../../src/regex --include-dir ./../../src/expat/lib --include-dir . $(__DLLFLAG_p_1) --include-dir ../../samples
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -161,6 +166,6 @@ data:
 	for %%f in (wxpoem.txt wxpoem.dat) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\wxpoem.exe: $(WXPOEM_OBJECTS) $(OBJS)\wxpoem_wxpoem_rc.o
-	$(CXX) -o $@ $(WXPOEM_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@ $(WXPOEM_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 .PHONY: all clean data

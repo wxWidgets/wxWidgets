@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\fl\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\fl\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -168,10 +175,7 @@ __fllib___depname = &
 
 FLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\fl\..\..\..\src\tiff -i=..\..\src\fl\..\..\..\src\jpeg &
-	-i=..\..\src\fl\..\..\..\src\png -i=..\..\src\fl\..\..\..\src\zlib &
-	-i=..\..\src\fl\..\..\..\src\regex -i=..\..\src\fl\..\..\..\src\expat\lib &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\fl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_FL $(CXXFLAGS) &
 	/fh=$(OBJS)\wxprec_fldll.pch
 FLDLL_OBJECTS =  &
@@ -195,10 +199,7 @@ FLDLL_OBJECTS =  &
 	$(OBJS)\fldll_updatesmgr.obj
 FLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\fl\..\..\..\src\tiff -i=..\..\src\fl\..\..\..\src\jpeg &
-	-i=..\..\src\fl\..\..\..\src\png -i=..\..\src\fl\..\..\..\src\zlib &
-	-i=..\..\src\fl\..\..\..\src\regex -i=..\..\src\fl\..\..\..\src\expat\lib &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\fl\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_fllib.pch
 FLLIB_OBJECTS =  &
 	$(OBJS)\fllib_dummy.obj &
@@ -219,10 +220,10 @@ FLLIB_OBJECTS =  &
 	$(OBJS)\fllib_rowlayoutpl.obj &
 	$(OBJS)\fllib_toolwnd.obj &
 	$(OBJS)\fllib_updatesmgr.obj
-LIBDIRNAME = &
-	..\..\src\fl\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -355,7 +356,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl_wat
 	@%create $(OBJS)\fldll.lbc
 	@%append $(OBJS)\fldll.lbc option quiet
 	@%append $(OBJS)\fldll.lbc name $^@
-	@%append $(OBJS)\fldll.lbc option incremental
+	@%append $(OBJS)\fldll.lbc option caseexact
 	@%append $(OBJS)\fldll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(FLDLL_OBJECTS)) do @%append $(OBJS)\fldll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\fldll.lbc library %i

@@ -20,16 +20,13 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\stc\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 STCDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg \
-	-I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib \
-	-I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
 	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
 	-DWXUSINGDLL -DWXMAKINGDLL_STC $(CXXFLAGS)
@@ -85,10 +82,7 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_XPM.obj
 STCLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg \
-	-I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib \
-	-I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
 	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS $(CXXFLAGS)
 STCLIB_OBJECTS =  \
@@ -144,6 +138,12 @@ STCLIB_OBJECTS =  \
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif

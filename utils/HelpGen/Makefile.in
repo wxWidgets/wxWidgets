@@ -28,9 +28,7 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 HELPGEN_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	HelpGen_HelpGen.o \
 	HelpGen_cjparser.o \
@@ -39,8 +37,7 @@ HELPGEN_OBJECTS =  \
 	HelpGen_markup.o \
 	HelpGen_scriptbinder.o \
 	HelpGen_sourcepainter.o \
-	HelpGen_srcparser.o \
-	HelpGen_wx_extra_imps.o
+	HelpGen_srcparser.o
 LIBDIRNAME = $(top_builddir)lib
 
 ### Conditionally set variables: ###
@@ -57,13 +54,6 @@ LIBDIRNAME = $(top_builddir)lib
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 @COND_PLATFORM_MAC_1@__HelpGen___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL HelpGen$(EXEEXT)
-@COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
-@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
 @COND_WXUSE_EXPAT_BUILTIN@__LIB_EXPAT_p = \
 @COND_WXUSE_EXPAT_BUILTIN@	-lwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p \
@@ -119,9 +109,6 @@ HelpGen_sourcepainter.o: $(srcdir)/src/sourcepainter.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
 HelpGen_srcparser.o: $(srcdir)/src/srcparser.cpp
-	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
-
-HelpGen_wx_extra_imps.o: $(srcdir)/src/wx_extra_imps.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
 clean: 

@@ -12,16 +12,14 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXRC_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(LIBDIRNAME) \
-	-I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png \
-	-I.\..\..\..\src\zlib -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. \
-	$(__DLLFLAG_p) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	$(CXXFLAGS)
 WXRC_OBJECTS =  \
 	$(OBJS)\wxrc_wxrc.o
 
@@ -29,6 +27,12 @@ WXRC_OBJECTS =  \
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = .\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = .\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

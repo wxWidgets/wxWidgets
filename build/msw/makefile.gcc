@@ -14,7 +14,7 @@ include config.gcc
 
 ADVDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_ADV $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
@@ -36,7 +36,7 @@ ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_wave.o
 ADVLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib $(CXXFLAGS)
 ADVLIB_OBJECTS =  \
@@ -58,13 +58,13 @@ ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_wave.o
 BASEDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 \
 	$(CFLAGS)
 BASEDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 \
 	$(CXXFLAGS)
@@ -140,12 +140,12 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_volume.o
 BASELIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CFLAGS)
 BASELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CXXFLAGS)
 BASELIB_OBJECTS =  \
@@ -220,13 +220,13 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_volume.o
 COREDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_CORE -DwxUSE_BASE=0 \
 	$(CFLAGS)
 COREDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_CORE -DwxUSE_BASE=0 \
 	$(CXXFLAGS)
@@ -242,12 +242,12 @@ COREDLL_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_2_OBJECTS)
 CORELIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_BASE=0 $(CFLAGS)
 CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_BASE=0 $(CXXFLAGS)
 CORELIB_OBJECTS =  \
@@ -262,7 +262,7 @@ CORELIB_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_3_OBJECTS)
 DBGRIDDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_DBGRID $(CXXFLAGS)
 DBGRIDDLL_OBJECTS =  \
@@ -270,7 +270,7 @@ DBGRIDDLL_OBJECTS =  \
 	$(OBJS)\dbgriddll_dbgrid.o
 DBGRIDLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib $(CXXFLAGS)
 DBGRIDLIB_OBJECTS =  \
@@ -278,7 +278,7 @@ DBGRIDLIB_OBJECTS =  \
 	$(OBJS)\dbgridlib_dbgrid.o
 GLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_GL $(CXXFLAGS)
 GLDLL_OBJECTS =  \
@@ -286,7 +286,7 @@ GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_glcanvas.o
 GLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib $(CXXFLAGS)
 GLLIB_OBJECTS =  \
@@ -294,7 +294,7 @@ GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_glcanvas.o
 HTMLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_HTML $(CXXFLAGS)
 HTMLDLL_OBJECTS =  \
@@ -323,7 +323,7 @@ HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_htmllbox.o
 HTMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib $(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
@@ -350,23 +350,22 @@ HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_m_tables.o \
 	$(OBJS)\htmllib_winpars.o \
 	$(OBJS)\htmllib_htmllbox.o
-LIBDIRNAME = \
-	..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MAKEARGS = CPPFLAGS=$(CPPFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) LDFLAGS=$(LDFLAGS) \
-	CC=$(CC) USE_GUI=$(USE_GUI) MONOLITHIC=$(MONOLITHIC) CXXFLAGS=$(CXXFLAGS) \
-	GCC_VERSION=$(GCC_VERSION) USE_HTML=$(USE_HTML) BUILD=$(BUILD) \
-	DEBUG_INFO=$(DEBUG_INFO) VENDOR=$(VENDOR) UNICODE=$(UNICODE) \
-	OFFICIAL_BUILD=$(OFFICIAL_BUILD) MSLU=$(MSLU) WXUNIV=$(WXUNIV) \
-	RUNTIME_LIBS=$(RUNTIME_LIBS) CXX=$(CXX) CFG=$(CFG) CFLAGS=$(CFLAGS) \
-	SHARED=$(SHARED) USE_ODBC=$(USE_ODBC) USE_OPENGL=$(USE_OPENGL)
+MAKEARGS = CPPFLAGS="$(CPPFLAGS)" DEBUG_FLAG="$(DEBUG_FLAG)" \
+	LDFLAGS="$(LDFLAGS)" CC="$(CC)" USE_GUI="$(USE_GUI)" \
+	MONOLITHIC="$(MONOLITHIC)" CXXFLAGS="$(CXXFLAGS)" \
+	GCC_VERSION="$(GCC_VERSION)" USE_HTML="$(USE_HTML)" BUILD="$(BUILD)" \
+	DEBUG_INFO="$(DEBUG_INFO)" VENDOR="$(VENDOR)" UNICODE="$(UNICODE)" \
+	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" MSLU="$(MSLU)" WXUNIV="$(WXUNIV)" \
+	RUNTIME_LIBS="$(RUNTIME_LIBS)" CXX="$(CXX)" CFG="$(CFG)" CFLAGS="$(CFLAGS)" \
+	SHARED="$(SHARED)" USE_ODBC="$(USE_ODBC)" USE_OPENGL="$(USE_OPENGL)"
 MONODLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_BASE=1 -DWXMAKINGDLL $(CFLAGS)
 MONODLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_BASE=1 -DWXMAKINGDLL $(CXXFLAGS)
 MONODLL_OBJECTS =  \
@@ -454,12 +453,12 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_xml.o
 MONOLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_BASE=1 $(CFLAGS)
 MONOLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_BASE=1 $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
@@ -547,12 +546,12 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_xml.o
 NETDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_NET $(CFLAGS)
 NETDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_NET \
 	$(CXXFLAGS)
@@ -571,12 +570,12 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_gsocket.o
 NETLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 $(CFLAGS)
 NETLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 $(CXXFLAGS)
 NETLIB_OBJECTS =  \
@@ -596,7 +595,7 @@ OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 ODBCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_ODBC \
 	$(CXXFLAGS)
@@ -606,21 +605,24 @@ ODBCDLL_OBJECTS =  \
 	$(OBJS)\odbcdll_dbtable.o
 ODBCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 $(CXXFLAGS)
 ODBCLIB_OBJECTS =  \
 	$(OBJS)\odbclib_dummy.o \
 	$(OBJS)\odbclib_db.o \
 	$(OBJS)\odbclib_dbtable.o
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXEXPAT_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -I$(LIBDIRNAME) -DCOMPILED_FROM_DSP $(CFLAGS)
+	-DHAVE_W32API_H $(____LIBDIRNAME_FILENAMES_6_p) -DCOMPILED_FROM_DSP \
+	$(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.o \
 	$(OBJS)\wxexpat_xmlrole.o \
 	$(OBJS)\wxexpat_xmltok.o
 WXJPEG_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -I$(LIBDIRNAME) $(CFLAGS)
+	-DHAVE_W32API_H -I$(SETUPHDIR) $(CFLAGS)
 WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jcomapi.o \
 	$(OBJS)\wxjpeg_jutils.o \
@@ -750,7 +752,7 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_inffast.o
 XMLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_XML \
 	$(CXXFLAGS)
@@ -759,7 +761,7 @@ XMLDLL_OBJECTS =  \
 	$(OBJS)\xmldll_xml.o
 XMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\include -I$(LIBDIRNAME) -I..\..\src\tiff \
+	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DwxUSE_GUI=0 $(CXXFLAGS)
 XMLLIB_OBJECTS =  \
@@ -770,6 +772,12 @@ XMLLIB_OBJECTS =  \
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
@@ -840,10 +848,10 @@ ifeq ($(BUILD),release)
 __OPTIMIZEFLAG = -O2
 endif
 ifeq ($(WXUNIV),0)
-__SETUP_H_DIR_FILENAMES = msw
+__SETUP_H_SUBDIR_FILENAMES = msw
 endif
 ifeq ($(WXUNIV),1)
-__SETUP_H_DIR_FILENAMES = univ
+__SETUP_H_SUBDIR_FILENAMES = univ
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
@@ -906,6 +914,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_palette.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
+	$(OBJS)\monolib_printdlg.o \
+	$(OBJS)\monolib_printwin.o \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
@@ -945,8 +955,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notebook.o \
 	$(OBJS)\monolib_access.o \
 	$(OBJS)\monolib_ownerdrw.o \
-	$(OBJS)\monolib_printdlg.o \
-	$(OBJS)\monolib_printwin.o \
 	$(OBJS)\monolib_radiobox.o \
 	$(OBJS)\monolib_radiobut.o \
 	$(OBJS)\monolib_scrolbar.o \
@@ -1043,6 +1051,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
+	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
@@ -1097,6 +1106,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_palette.o \
 	$(OBJS)\monolib_pen.o \
 	$(OBJS)\monolib_popupwin.o \
+	$(OBJS)\monolib_printdlg.o \
+	$(OBJS)\monolib_printwin.o \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
@@ -1235,6 +1246,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_numdlgg.o \
 	$(OBJS)\monolib_panelg.o \
 	$(OBJS)\monolib_progdlgg.o \
+	$(OBJS)\monolib_printps.o \
 	$(OBJS)\monolib_renderg.o \
 	$(OBJS)\monolib_scrlwing.o \
 	$(OBJS)\monolib_selstore.o \
@@ -1289,6 +1301,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_palette.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
+	$(OBJS)\coredll_printdlg.o \
+	$(OBJS)\coredll_printwin.o \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
@@ -1328,8 +1342,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_notebook.o \
 	$(OBJS)\coredll_access.o \
 	$(OBJS)\coredll_ownerdrw.o \
-	$(OBJS)\coredll_printdlg.o \
-	$(OBJS)\coredll_printwin.o \
 	$(OBJS)\coredll_radiobox.o \
 	$(OBJS)\coredll_radiobut.o \
 	$(OBJS)\coredll_scrolbar.o \
@@ -1426,6 +1438,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
+	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
@@ -1480,6 +1493,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_palette.o \
 	$(OBJS)\coredll_pen.o \
 	$(OBJS)\coredll_popupwin.o \
+	$(OBJS)\coredll_printdlg.o \
+	$(OBJS)\coredll_printwin.o \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
@@ -1618,6 +1633,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_numdlgg.o \
 	$(OBJS)\coredll_panelg.o \
 	$(OBJS)\coredll_progdlgg.o \
+	$(OBJS)\coredll_printps.o \
 	$(OBJS)\coredll_renderg.o \
 	$(OBJS)\coredll_scrlwing.o \
 	$(OBJS)\coredll_selstore.o \
@@ -1672,6 +1688,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_palette.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
+	$(OBJS)\corelib_printdlg.o \
+	$(OBJS)\corelib_printwin.o \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
@@ -1711,8 +1729,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_notebook.o \
 	$(OBJS)\corelib_access.o \
 	$(OBJS)\corelib_ownerdrw.o \
-	$(OBJS)\corelib_printdlg.o \
-	$(OBJS)\corelib_printwin.o \
 	$(OBJS)\corelib_radiobox.o \
 	$(OBJS)\corelib_radiobut.o \
 	$(OBJS)\corelib_scrolbar.o \
@@ -1809,6 +1825,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
+	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
@@ -1863,6 +1880,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_palette.o \
 	$(OBJS)\corelib_pen.o \
 	$(OBJS)\corelib_popupwin.o \
+	$(OBJS)\corelib_printdlg.o \
+	$(OBJS)\corelib_printwin.o \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
@@ -2001,6 +2020,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_numdlgg.o \
 	$(OBJS)\corelib_panelg.o \
 	$(OBJS)\corelib_progdlgg.o \
+	$(OBJS)\corelib_printps.o \
 	$(OBJS)\corelib_renderg.o \
 	$(OBJS)\corelib_scrlwing.o \
 	$(OBJS)\corelib_selstore.o \
@@ -2055,6 +2075,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_palette.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
+	$(OBJS)\monodll_printdlg.o \
+	$(OBJS)\monodll_printwin.o \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
@@ -2094,8 +2116,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notebook.o \
 	$(OBJS)\monodll_access.o \
 	$(OBJS)\monodll_ownerdrw.o \
-	$(OBJS)\monodll_printdlg.o \
-	$(OBJS)\monodll_printwin.o \
 	$(OBJS)\monodll_radiobox.o \
 	$(OBJS)\monodll_radiobut.o \
 	$(OBJS)\monodll_scrolbar.o \
@@ -2192,6 +2212,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
+	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
@@ -2246,6 +2267,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_palette.o \
 	$(OBJS)\monodll_pen.o \
 	$(OBJS)\monodll_popupwin.o \
+	$(OBJS)\monodll_printdlg.o \
+	$(OBJS)\monodll_printwin.o \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
@@ -2384,6 +2407,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_numdlgg.o \
 	$(OBJS)\monodll_panelg.o \
 	$(OBJS)\monodll_progdlgg.o \
+	$(OBJS)\monodll_printps.o \
 	$(OBJS)\monodll_renderg.o \
 	$(OBJS)\monodll_scrlwing.o \
 	$(OBJS)\monodll_selstore.o \
@@ -2396,6 +2420,12 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_vlbox.o \
 	$(OBJS)\monodll_vscroll.o
 endif
+endif
+ifeq ($(SHARED),0)
+____LIBDIRNAME_FILENAMES_6_p = -I..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+____LIBDIRNAME_FILENAMES_6_p = -I..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),1)
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
@@ -3968,11 +3998,20 @@ $(OBJS)\coredll_popupwin.o: ..\..\src\msw\popupwin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_printdlg.o: ..\..\src\msw\printdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_printps.o: ..\..\src\generic\printps.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_printwin.o: ..\..\src\msw\printwin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_prntbase.o: ..\..\src\common\prntbase.cpp
@@ -5173,11 +5212,20 @@ $(OBJS)\corelib_popupwin.o: ..\..\src\msw\popupwin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_printdlg.o: ..\..\src\msw\printdlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_printps.o: ..\..\src\generic\printps.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_printwin.o: ..\..\src\msw\printwin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_prntbase.o: ..\..\src\common\prntbase.cpp
@@ -6762,11 +6810,20 @@ $(OBJS)\monodll_popupwin.o: ..\..\src\msw\popupwin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_printdlg.o: ..\..\src\msw\printdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_printps.o: ..\..\src\generic\printps.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_printwin.o: ..\..\src\msw\printwin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_prntbase.o: ..\..\src\common\prntbase.cpp
@@ -8306,11 +8363,20 @@ $(OBJS)\monolib_popupwin.o: ..\..\src\msw\popupwin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_printdlg.o: ..\..\src\msw\printdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_printps.o: ..\..\src\generic\printps.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_printwin.o: ..\..\src\msw\printwin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_prntbase.o: ..\..\src\common\prntbase.cpp
@@ -9441,11 +9507,14 @@ endif
 $(LIBDIRNAME): 
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
 
-$(LIBDIRNAME)\wx: $(LIBDIRNAME)
-	if not exist $(LIBDIRNAME)\wx mkdir $(LIBDIRNAME)\wx
+$(SETUPHDIR): $(LIBDIRNAME)
+	if not exist $(SETUPHDIR) mkdir $(SETUPHDIR)
 
-..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h: 
-	if not exist ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h copy ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h
+$(SETUPHDIR)\wx: $(SETUPHDIR)
+	if not exist $(SETUPHDIR)\wx mkdir $(SETUPHDIR)\wx
+
+..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h: 
+	if not exist ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h
 
 ifeq ($(MONOLITHIC),1)
 ifeq ($(SHARED),1)
@@ -9506,10 +9575,10 @@ endif
 samples: 
 	$(MAKE) -C ..\..\samples -f makefile.gcc $(MAKEARGS) all
 
-$(LIBDIRNAME)\wx\setup.h: 
-	if not exist $(LIBDIRNAME)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h $(LIBDIRNAME)\wx\setup.h
+$(SETUPHDIR)\wx\setup.h: 
+	if not exist $(SETUPHDIR)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h
 
-setup_h: $(LIBDIRNAME)\wx ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h $(LIBDIRNAME)\wx\setup.h
+setup_h: $(SETUPHDIR)\wx ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h
 
 $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a: $(WXEXPAT_OBJECTS)
 	if exist $@ del $@

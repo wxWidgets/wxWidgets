@@ -12,8 +12,6 @@
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\plot\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 PLOTDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
@@ -21,13 +19,9 @@ PLOTDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	/I..\..\src\plot\..\..\..\include /I$(LIBDIRNAME) \
-	/I..\..\src\plot\..\..\..\src\tiff /I..\..\src\plot\..\..\..\src\jpeg \
-	/I..\..\src\plot\..\..\..\src\png /I..\..\src\plot\..\..\..\src\zlib \
-	/I..\..\src\plot\..\..\..\src\regex \
-	/I..\..\src\plot\..\..\..\src\expat\lib /I..\..\src\plot\..\..\include \
-	/DWXUSINGDLL /DWXMAKINGDLL_PLOT $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_plotdll.pch"
+	/I..\..\src\plot\..\..\..\include /I$(SETUPHDIR) \
+	/I..\..\src\plot\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_PLOT $(CXXFLAGS) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_plotdll.pch"
 PLOTDLL_OBJECTS =  \
 	$(OBJS)\plotdll_dummy.obj \
 	$(OBJS)\plotdll_plot.obj
@@ -36,18 +30,23 @@ PLOTLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	/I..\..\src\plot\..\..\..\include /I$(LIBDIRNAME) \
-	/I..\..\src\plot\..\..\..\src\tiff /I..\..\src\plot\..\..\..\src\jpeg \
-	/I..\..\src\plot\..\..\..\src\png /I..\..\src\plot\..\..\..\src\zlib \
-	/I..\..\src\plot\..\..\..\src\regex \
-	/I..\..\src\plot\..\..\..\src\expat\lib /I..\..\src\plot\..\..\include \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_plotlib.pch"
+	/I..\..\src\plot\..\..\..\include /I$(SETUPHDIR) \
+	/I..\..\src\plot\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_plotlib.pch"
 PLOTLIB_OBJECTS =  \
 	$(OBJS)\plotlib_dummy.obj \
 	$(OBJS)\plotlib_plot.obj
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\plot\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\plot\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -244,14 +243,14 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.lib
 
 !if "$(SHARED)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot_vc$(VENDORTAG).dll: $(PLOTDLL_OBJECTS) $(OBJS)\plotdll_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot_vc$(VENDORTAG).dll: $(OBJS)\plotdll_dummy.obj  $(PLOTDLL_OBJECTS)
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) @<<
 	$(PLOTDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.lib
 <<
 !endif
 
 !if "$(SHARED)" == "0"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.lib: $(PLOTLIB_OBJECTS) $(OBJS)\plotlib_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot.lib: $(OBJS)\plotlib_dummy.obj  $(PLOTLIB_OBJECTS)
 	if exist $@ del $@
 	lib /NOLOGO /OUT:$@ @<<
 	$(PLOTLIB_OBJECTS)

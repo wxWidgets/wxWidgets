@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = .\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = .\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -159,24 +166,20 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 CLIENT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
-	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
+	-i=.\..\..\samples $(CXXFLAGS)
 CLIENT_OBJECTS =  &
 	$(OBJS)\client_client.obj
-LIBDIRNAME = &
-	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SERVER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
-	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
+	-i=.\..\..\samples $(CXXFLAGS)
 SERVER_OBJECTS =  &
 	$(OBJS)\server_server.obj
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -191,13 +194,13 @@ $(OBJS)\client_client.obj :  .AUTODEPEND .\client.cpp
 	$(CXX) -zq -fo=$^@ $(CLIENT_CXXFLAGS) $<
 
 $(OBJS)\client_client.res :  .AUTODEPEND .\client.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 $(OBJS)\server_server.obj :  .AUTODEPEND .\server.cpp
 	$(CXX) -zq -fo=$^@ $(SERVER_CXXFLAGS) $<
 
 $(OBJS)\server_server.res :  .AUTODEPEND .\server.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -211,7 +214,7 @@ $(OBJS)\client.exe :  $(CLIENT_OBJECTS) $(OBJS)\client_client.res
 	@%create $(OBJS)\client.lbc
 	@%append $(OBJS)\client.lbc option quiet
 	@%append $(OBJS)\client.lbc name $^@
-	@%append $(OBJS)\client.lbc option incremental
+	@%append $(OBJS)\client.lbc option caseexact
 	@%append $(OBJS)\client.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(CLIENT_OBJECTS)) do @%append $(OBJS)\client.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\client.lbc library %i
@@ -222,7 +225,7 @@ $(OBJS)\server.exe :  $(SERVER_OBJECTS) $(OBJS)\server_server.res
 	@%create $(OBJS)\server.lbc
 	@%append $(OBJS)\server.lbc option quiet
 	@%append $(OBJS)\server.lbc name $^@
-	@%append $(OBJS)\server.lbc option incremental
+	@%append $(OBJS)\server.lbc option caseexact
 	@%append $(OBJS)\server.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(SERVER_OBJECTS)) do @%append $(OBJS)\server.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\server.lbc library %i

@@ -42,11 +42,10 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 LIBDIRNAME = $(top_builddir)lib
+WX_VERSION = 2.5.0
 XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include -DWXUSINGDLL \
-	-DWXMAKINGDLL_XRC $(CXXFLAGS) $(PIC_FLAG)
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
+	-DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS) $(PIC_FLAG)
 XRCDLL_OBJECTS =  \
 	xrcdll_xmlres.o \
 	xrcdll_xh_bmp.o \
@@ -86,9 +85,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_wizrd.o \
 	xrcdll_xmlrsall.o
 XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
 	-I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	xrclib_xmlres.o \
@@ -149,13 +146,6 @@ XRCLIB_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
-@COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
-@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
 @COND_WXUSE_EXPAT_BUILTIN@__LIB_EXPAT_p = \
 @COND_WXUSE_EXPAT_BUILTIN@	-lwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p \
@@ -204,7 +194,8 @@ COND_PLATFORM_MACOSX_1___xrcdll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__xrcdll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___xrcdll___macinstnamecmd)
 @COND_PLATFORM_MACOSX_1@__xrcdll___macver = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 2.5 -current_version 2.5.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version $(WX_VERSION) \
+@COND_PLATFORM_MACOSX_1@	-current_version $(WX_VERSION)
 COND_USE_SOSYMLINKS_1___xrcdll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
 	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf2); \

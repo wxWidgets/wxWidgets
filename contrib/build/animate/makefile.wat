@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\animate\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\animate\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -169,35 +176,23 @@ __animatelib___depname = &
 ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\animate\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\animate\..\..\..\src\tiff &
-	-i=..\..\src\animate\..\..\..\src\jpeg &
-	-i=..\..\src\animate\..\..\..\src\png &
-	-i=..\..\src\animate\..\..\..\src\zlib &
-	-i=..\..\src\animate\..\..\..\src\regex &
-	-i=..\..\src\animate\..\..\..\src\expat\lib &
-	-i=..\..\src\animate\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_ANIMATE &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_animatedll.pch
+	-i=$(SETUPHDIR) -i=..\..\src\animate\..\..\include -dWXUSINGDLL &
+	-dWXMAKINGDLL_ANIMATE $(CXXFLAGS) /fh=$(OBJS)\wxprec_animatedll.pch
 ANIMATEDLL_OBJECTS =  &
 	$(OBJS)\animatedll_dummy.obj &
 	$(OBJS)\animatedll_animate.obj
 ANIMATELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\animate\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\animate\..\..\..\src\tiff &
-	-i=..\..\src\animate\..\..\..\src\jpeg &
-	-i=..\..\src\animate\..\..\..\src\png &
-	-i=..\..\src\animate\..\..\..\src\zlib &
-	-i=..\..\src\animate\..\..\..\src\regex &
-	-i=..\..\src\animate\..\..\..\src\expat\lib &
-	-i=..\..\src\animate\..\..\include $(CXXFLAGS) &
+	-i=$(SETUPHDIR) -i=..\..\src\animate\..\..\include $(CXXFLAGS) &
 	/fh=$(OBJS)\wxprec_animatelib.pch
 ANIMATELIB_OBJECTS =  &
 	$(OBJS)\animatelib_dummy.obj &
 	$(OBJS)\animatelib_animate.obj
-LIBDIRNAME = &
-	..\..\src\animate\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -225,7 +220,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animat
 	@%create $(OBJS)\animatedll.lbc
 	@%append $(OBJS)\animatedll.lbc option quiet
 	@%append $(OBJS)\animatedll.lbc name $^@
-	@%append $(OBJS)\animatedll.lbc option incremental
+	@%append $(OBJS)\animatedll.lbc option caseexact
 	@%append $(OBJS)\animatedll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(ANIMATEDLL_OBJECTS)) do @%append $(OBJS)\animatedll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\animatedll.lbc library %i

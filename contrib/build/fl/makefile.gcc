@@ -14,10 +14,7 @@ include ../../../build/msw/config.gcc
 
 FLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\fl\..\..\..\src\tiff -I..\..\src\fl\..\..\..\src\jpeg \
-	-I..\..\src\fl\..\..\..\src\png -I..\..\src\fl\..\..\..\src\zlib \
-	-I..\..\src\fl\..\..\..\src\regex -I..\..\src\fl\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\fl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS)
 FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_dummy.o \
@@ -40,10 +37,7 @@ FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_updatesmgr.o
 FLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\fl\..\..\..\src\tiff -I..\..\src\fl\..\..\..\src\jpeg \
-	-I..\..\src\fl\..\..\..\src\png -I..\..\src\fl\..\..\..\src\zlib \
-	-I..\..\src\fl\..\..\..\src\regex -I..\..\src\fl\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\fl\..\..\include $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_dummy.o \
@@ -64,15 +58,21 @@ FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_rowlayoutpl.o \
 	$(OBJS)\fllib_toolwnd.o \
 	$(OBJS)\fllib_updatesmgr.o
-LIBDIRNAME = \
-	..\..\src\fl\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\fl\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\fl\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

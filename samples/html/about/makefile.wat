@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = .\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = .\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -160,16 +167,14 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ABOUT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
-	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=..\..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
+	$(__DLLFLAG_p) -i=.\..\..\..\samples $(CXXFLAGS)
 ABOUT_OBJECTS =  &
 	$(OBJS)\about_about.obj
-LIBDIRNAME = &
-	.\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -178,19 +183,19 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\about.exe data
+all : .SYMBOLIC $(OBJS)\about.exe data_files
 
 $(OBJS)\about_about.obj :  .AUTODEPEND .\about.cpp
 	$(CXX) -zq -fo=$^@ $(ABOUT_CXXFLAGS) $<
 
 $(OBJS)\about_about.res :  .AUTODEPEND .\about.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
 
 $(OBJS)\about.exe :  $(ABOUT_OBJECTS) $(OBJS)\about_about.res
 	@%create $(OBJS)\about.lbc
 	@%append $(OBJS)\about.lbc option quiet
 	@%append $(OBJS)\about.lbc name $^@
-	@%append $(OBJS)\about.lbc option incremental
+	@%append $(OBJS)\about.lbc option caseexact
 	@%append $(OBJS)\about.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(ABOUT_OBJECTS)) do @%append $(OBJS)\about.lbc file %i
 	@for %i in ( $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\about.lbc library %i
@@ -204,6 +209,6 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\about.exe del $(OBJS)\about.exe
 
-data : .SYMBOLIC 
+data_files : .SYMBOLIC 
 	if not exist $(OBJS)\data mkdir $(OBJS)\data
 	for %f in (about.htm logo.png) do if not exist $(OBJS)\data\%f copy .\data\%f $(OBJS)\data

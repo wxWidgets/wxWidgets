@@ -12,16 +12,13 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\stc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 STCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg \
-	-I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib \
-	-I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
 	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
 	-DWXUSINGDLL -DWXMAKINGDLL_STC $(CXXFLAGS)
@@ -77,10 +74,7 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_XPM.o
 STCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\stc\..\..\..\src\tiff -I..\..\src\stc\..\..\..\src\jpeg \
-	-I..\..\src\stc\..\..\..\src\png -I..\..\src\stc\..\..\..\src\zlib \
-	-I..\..\src\stc\..\..\..\src\regex -I..\..\src\stc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\stc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\stc\..\..\include -I..\..\src\stc\scintilla\include \
 	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS $(CXXFLAGS)
 STCLIB_OBJECTS =  \
@@ -138,6 +132,12 @@ STCLIB_OBJECTS =  \
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

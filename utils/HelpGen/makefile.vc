@@ -15,9 +15,8 @@
 HELPGEN_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\HelpGen.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(LIBDIRNAME) /I.\..\..\src\tiff \
-	/I.\..\..\src\jpeg /I.\..\..\src\png /I.\..\..\src\zlib /I.\..\..\src\regex \
-	/I.\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_CONSOLE $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_CONSOLE $(CXXFLAGS)
 HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_HelpGen.obj \
 	$(OBJS)\HelpGen_cjparser.obj \
@@ -26,15 +25,20 @@ HELPGEN_OBJECTS =  \
 	$(OBJS)\HelpGen_markup.obj \
 	$(OBJS)\HelpGen_scriptbinder.obj \
 	$(OBJS)\HelpGen_sourcepainter.obj \
-	$(OBJS)\HelpGen_srcparser.obj \
-	$(OBJS)\HelpGen_wx_extra_imps.obj
-LIBDIRNAME = \
-	.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+	$(OBJS)\HelpGen_srcparser.obj
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -200,9 +204,6 @@ $(OBJS)\HelpGen_sourcepainter.obj: .\src\sourcepainter.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HELPGEN_CXXFLAGS) $**
 
 $(OBJS)\HelpGen_srcparser.obj: .\src\srcparser.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(HELPGEN_CXXFLAGS) $**
-
-$(OBJS)\HelpGen_wx_extra_imps.obj: .\src\wx_extra_imps.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HELPGEN_CXXFLAGS) $**
 
 $(OBJS)\HelpGen.exe: $(HELPGEN_OBJECTS)

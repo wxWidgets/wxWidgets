@@ -15,26 +15,14 @@ include ../../../build/msw/config.gcc
 DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(LIBDIRNAME) -I..\..\src\deprecated\..\..\..\src\tiff \
-	-I..\..\src\deprecated\..\..\..\src\jpeg \
-	-I..\..\src\deprecated\..\..\..\src\png \
-	-I..\..\src\deprecated\..\..\..\src\zlib \
-	-I..\..\src\deprecated\..\..\..\src\regex \
-	-I..\..\src\deprecated\..\..\..\src\expat\lib \
-	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
-	$(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
+	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	-I..\..\src\deprecated\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\deprecated\..\..\..\src\tiff \
-	-I..\..\src\deprecated\..\..\..\src\jpeg \
-	-I..\..\src\deprecated\..\..\..\src\png \
-	-I..\..\src\deprecated\..\..\..\src\zlib \
-	-I..\..\src\deprecated\..\..\..\src\regex \
-	-I..\..\src\deprecated\..\..\..\src\expat\lib \
+	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
-	$(CXXFLAGS)
+	-I..\..\src\deprecated $(CXXFLAGS)
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.o \
 	$(OBJS)\deprecateddll_prop.o \
@@ -47,24 +35,13 @@ DEPRECATEDDLL_OBJECTS =  \
 DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(LIBDIRNAME) -I..\..\src\deprecated\..\..\..\src\tiff \
-	-I..\..\src\deprecated\..\..\..\src\jpeg \
-	-I..\..\src\deprecated\..\..\..\src\png \
-	-I..\..\src\deprecated\..\..\..\src\zlib \
-	-I..\..\src\deprecated\..\..\..\src\regex \
-	-I..\..\src\deprecated\..\..\..\src\expat\lib \
-	-I..\..\src\deprecated\..\..\include $(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -I..\..\src\deprecated \
+	$(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	-I..\..\src\deprecated\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\deprecated\..\..\..\src\tiff \
-	-I..\..\src\deprecated\..\..\..\src\jpeg \
-	-I..\..\src\deprecated\..\..\..\src\png \
-	-I..\..\src\deprecated\..\..\..\src\zlib \
-	-I..\..\src\deprecated\..\..\..\src\regex \
-	-I..\..\src\deprecated\..\..\..\src\expat\lib \
-	-I..\..\src\deprecated\..\..\include $(CXXFLAGS)
+	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\deprecated\..\..\include -I..\..\src\deprecated $(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.o \
 	$(OBJS)\deprecatedlib_prop.o \
@@ -74,15 +51,21 @@ DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_treelay.o \
 	$(OBJS)\deprecatedlib_wxexpr.o \
 	$(OBJS)\deprecatedlib_dosyacc.o
-LIBDIRNAME = \
-	..\..\src\deprecated\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\deprecated\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\deprecated\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

@@ -20,22 +20,18 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEX2RTF_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(LIBDIRNAME) \
-	-I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png \
-	-I.\..\..\..\src\zlib -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. \
-	$(__DLLFLAG_p) -DNO_GUI $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	-DNO_GUI $(CXXFLAGS)
 TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(LIBDIRNAME) \
-	-I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png \
-	-I.\..\..\..\src\zlib -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. \
-	$(__DLLFLAG_p) -I.\..\..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	-I.\..\..\..\samples $(CXXFLAGS)
 TEX2RTF_GUI_OBJECTS =  \
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj \
 	$(OBJS)\tex2rtf_gui_tex2any.obj \
@@ -57,6 +53,12 @@ TEX2RTF_OBJECTS =  \
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -185,7 +187,7 @@ $(OBJS)\tex2rtf_gui_rtfutils.obj: .\rtfutils.cpp
 	$(CXX) -q -c -P -o$@ $(TEX2RTF_GUI_CXXFLAGS) $**
 
 $(OBJS)\tex2rtf_gui_sample.res: .\..\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_3) -i.\..\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_3) -i.\..\..\..\samples $**
 
 $(OBJS)\tex2rtf_gui_table.obj: .\table.cpp
 	$(CXX) -q -c -P -o$@ $(TEX2RTF_GUI_CXXFLAGS) $**

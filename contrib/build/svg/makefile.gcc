@@ -12,26 +12,20 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\svg\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 SVGDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\svg\..\..\..\src\tiff -I..\..\src\svg\..\..\..\src\jpeg \
-	-I..\..\src\svg\..\..\..\src\png -I..\..\src\svg\..\..\..\src\zlib \
-	-I..\..\src\svg\..\..\..\src\regex -I..\..\src\svg\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\svg\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_SVG $(CXXFLAGS)
 SVGDLL_OBJECTS =  \
 	$(OBJS)\svgdll_dummy.o \
 	$(OBJS)\svgdll_dcsvg.o
 SVGLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\svg\..\..\..\src\tiff -I..\..\src\svg\..\..\..\src\jpeg \
-	-I..\..\src\svg\..\..\..\src\png -I..\..\src\svg\..\..\..\src\zlib \
-	-I..\..\src\svg\..\..\..\src\regex -I..\..\src\svg\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\svg\..\..\include $(CXXFLAGS)
 SVGLIB_OBJECTS =  \
 	$(OBJS)\svglib_dummy.o \
@@ -41,6 +35,12 @@ SVGLIB_OBJECTS =  \
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\svg\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\svg\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

@@ -12,21 +12,17 @@
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 XRCDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include \
-	/I$(LIBDIRNAME) /I..\..\src\xrc\..\..\..\src\tiff \
-	/I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png \
-	/I..\..\src\xrc\..\..\..\src\zlib /I..\..\src\xrc\..\..\..\src\regex \
-	/I..\..\src\xrc\..\..\..\src\expat\lib /I..\..\src\xrc\..\..\include \
-	/DWXUSINGDLL /DWXMAKINGDLL_XRC $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_xrcdll.pch"
+	/I$(SETUPHDIR) /I..\..\src\xrc\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_XRC \
+	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrcdll.pch"
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.obj \
 	$(OBJS)\xrcdll_xmlres.obj \
@@ -71,10 +67,7 @@ XRCLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include \
-	/I$(LIBDIRNAME) /I..\..\src\xrc\..\..\..\src\tiff \
-	/I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png \
-	/I..\..\src\xrc\..\..\..\src\zlib /I..\..\src\xrc\..\..\..\src\regex \
-	/I..\..\src\xrc\..\..\..\src\expat\lib /I..\..\src\xrc\..\..\include \
+	/I$(SETUPHDIR) /I..\..\src\xrc\..\..\include \
 	/I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CXXFLAGS) \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrclib.pch"
 XRCLIB_OBJECTS =  \
@@ -119,6 +112,12 @@ XRCLIB_OBJECTS =  \
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\xrc\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\xrc\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -542,14 +541,14 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib
 
 !if "$(SHARED)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).dll: $(XRCDLL_OBJECTS) $(OBJS)\xrcdll_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj  $(XRCDLL_OBJECTS)
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) @<<
 	$(XRCDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_HTML_p) $(__WXLIB_ADV_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib
 <<
 !endif
 
 !if "$(SHARED)" == "0"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib: $(XRCLIB_OBJECTS) $(OBJS)\xrclib_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib: $(OBJS)\xrclib_dummy.obj  $(XRCLIB_OBJECTS)
 	if exist $@ del $@
 	lib /NOLOGO /OUT:$@ @<<
 	$(XRCLIB_OBJECTS)

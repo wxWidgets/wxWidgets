@@ -12,18 +12,12 @@
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\mmedia\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 MMEDIADLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	/I..\..\src\mmedia\..\..\..\include /I$(LIBDIRNAME) \
-	/I..\..\src\mmedia\..\..\..\src\tiff /I..\..\src\mmedia\..\..\..\src\jpeg \
-	/I..\..\src\mmedia\..\..\..\src\png /I..\..\src\mmedia\..\..\..\src\zlib \
-	/I..\..\src\mmedia\..\..\..\src\regex \
-	/I..\..\src\mmedia\..\..\..\src\expat\lib \
+	/I..\..\src\mmedia\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\mmedia\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_MMEDIA \
 	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_mmediadll.pch"
 MMEDIADLL_OBJECTS =  \
@@ -53,11 +47,7 @@ MMEDIALIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	/I..\..\src\mmedia\..\..\..\include /I$(LIBDIRNAME) \
-	/I..\..\src\mmedia\..\..\..\src\tiff /I..\..\src\mmedia\..\..\..\src\jpeg \
-	/I..\..\src\mmedia\..\..\..\src\png /I..\..\src\mmedia\..\..\..\src\zlib \
-	/I..\..\src\mmedia\..\..\..\src\regex \
-	/I..\..\src\mmedia\..\..\..\src\expat\lib \
+	/I..\..\src\mmedia\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\mmedia\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_mmedialib.pch"
 MMEDIALIB_OBJECTS =  \
@@ -84,9 +74,17 @@ MMEDIALIB_OBJECTS =  \
 	$(OBJS)\mmedialib_vidbase.obj
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -397,14 +395,14 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.lib
 
 !if "$(SHARED)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia_vc$(VENDORTAG).dll: $(MMEDIADLL_OBJECTS) $(OBJS)\mmediadll_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia_vc$(VENDORTAG).dll: $(OBJS)\mmediadll_dummy.obj  $(MMEDIADLL_OBJECTS)
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) @<<
 	$(MMEDIADLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.lib
 <<
 !endif
 
 !if "$(SHARED)" == "0"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.lib: $(MMEDIALIB_OBJECTS) $(OBJS)\mmedialib_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia.lib: $(OBJS)\mmedialib_dummy.obj  $(MMEDIALIB_OBJECTS)
 	if exist $@ del $@
 	lib /NOLOGO /OUT:$@ @<<
 	$(MMEDIALIB_OBJECTS)

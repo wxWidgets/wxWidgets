@@ -12,16 +12,13 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\xrc\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 XRCDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg \
-	-I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib \
-	-I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\xrc\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.o \
@@ -64,10 +61,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xmlrsall.o
 XRCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\xrc\..\..\..\src\tiff -I..\..\src\xrc\..\..\..\src\jpeg \
-	-I..\..\src\xrc\..\..\..\src\png -I..\..\src\xrc\..\..\..\src\zlib \
-	-I..\..\src\xrc\..\..\..\src\regex -I..\..\src\xrc\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\xrc\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\xrc\..\..\include -I..\..\src\xrc\expat\xmlparse \
 	-I..\..\src\xrc\expat\xmltok $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
@@ -114,6 +108,12 @@ XRCLIB_OBJECTS =  \
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\xrc\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\xrc\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

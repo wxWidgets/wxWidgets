@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = .\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = .\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -160,16 +167,14 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 CALENDAR_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
-	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
+	-i=.\..\..\samples $(CXXFLAGS)
 CALENDAR_OBJECTS =  &
 	$(OBJS)\calendar_calendar.obj
-LIBDIRNAME = &
-	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -184,13 +189,13 @@ $(OBJS)\calendar_calendar.obj :  .AUTODEPEND .\calendar.cpp
 	$(CXX) -zq -fo=$^@ $(CALENDAR_CXXFLAGS) $<
 
 $(OBJS)\calendar_calendar.res :  .AUTODEPEND .\calendar.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 $(OBJS)\calendar.exe :  $(CALENDAR_OBJECTS) $(OBJS)\calendar_calendar.res
 	@%create $(OBJS)\calendar.lbc
 	@%append $(OBJS)\calendar.lbc option quiet
 	@%append $(OBJS)\calendar.lbc name $^@
-	@%append $(OBJS)\calendar.lbc option incremental
+	@%append $(OBJS)\calendar.lbc option caseexact
 	@%append $(OBJS)\calendar.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(CALENDAR_OBJECTS)) do @%append $(OBJS)\calendar.lbc file %i
 	@for %i in ( $(__WXLIB_ADV_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\calendar.lbc library %i

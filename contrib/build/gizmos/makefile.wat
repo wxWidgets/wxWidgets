@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\gizmos\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\gizmos\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -168,13 +175,7 @@ __gizmoslib___depname = &
 
 GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\gizmos\..\..\..\src\tiff &
-	-i=..\..\src\gizmos\..\..\..\src\jpeg &
-	-i=..\..\src\gizmos\..\..\..\src\png &
-	-i=..\..\src\gizmos\..\..\..\src\zlib &
-	-i=..\..\src\gizmos\..\..\..\src\regex &
-	-i=..\..\src\gizmos\..\..\..\src\expat\lib &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\gizmos\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_GIZMOS &
 	$(CXXFLAGS) /fh=$(OBJS)\wxprec_gizmosdll.pch
 GIZMOSDLL_OBJECTS =  &
@@ -187,13 +188,7 @@ GIZMOSDLL_OBJECTS =  &
 	$(OBJS)\gizmosdll_statpict.obj
 GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\gizmos\..\..\..\src\tiff &
-	-i=..\..\src\gizmos\..\..\..\src\jpeg &
-	-i=..\..\src\gizmos\..\..\..\src\png &
-	-i=..\..\src\gizmos\..\..\..\src\zlib &
-	-i=..\..\src\gizmos\..\..\..\src\regex &
-	-i=..\..\src\gizmos\..\..\..\src\expat\lib &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\gizmos\..\..\include $(CXXFLAGS) &
 	/fh=$(OBJS)\wxprec_gizmoslib.pch
 GIZMOSLIB_OBJECTS =  &
@@ -204,10 +199,10 @@ GIZMOSLIB_OBJECTS =  &
 	$(OBJS)\gizmoslib_multicell.obj &
 	$(OBJS)\gizmoslib_splittree.obj &
 	$(OBJS)\gizmoslib_statpict.obj
-LIBDIRNAME = &
-	..\..\src\gizmos\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -274,7 +269,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos
 	@%create $(OBJS)\gizmosdll.lbc
 	@%append $(OBJS)\gizmosdll.lbc option quiet
 	@%append $(OBJS)\gizmosdll.lbc name $^@
-	@%append $(OBJS)\gizmosdll.lbc option incremental
+	@%append $(OBJS)\gizmosdll.lbc option caseexact
 	@%append $(OBJS)\gizmosdll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(GIZMOSDLL_OBJECTS)) do @%append $(OBJS)\gizmosdll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_BASE_p) $(__WXLIB_CORE_p)) do @%append $(OBJS)\gizmosdll.lbc library %i

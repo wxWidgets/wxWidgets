@@ -20,22 +20,26 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 RESOURCE_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\..\include \
-	-I$(LIBDIRNAME) -I.\..\..\..\..\src\tiff -I.\..\..\..\..\src\jpeg \
-	-I.\..\..\..\..\src\png -I.\..\..\..\..\src\zlib -I.\..\..\..\..\src\regex \
-	-I.\..\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I..\..\..\..\samples \
+	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\..\..\..\samples \
 	-I.\..\..\..\include $(CXXFLAGS)
 RESOURCE_OBJECTS =  \
 	$(OBJS)\resource_resource.obj
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -154,7 +158,7 @@ $(OBJS)\resource_resource.obj: .\resource.cpp
 	$(CXX) -q -c -P -o$@ $(RESOURCE_CXXFLAGS) $**
 
 $(OBJS)\resource_resource.res: .\resource.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\..\src\tiff -i.\..\..\..\..\src\jpeg -i.\..\..\..\..\src\png -i.\..\..\..\..\src\zlib  -i.\..\..\..\..\src\regex -i.\..\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_1) -i..\..\..\..\samples -i.\..\..\..\include $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\..\..\samples -i.\..\..\..\include $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -162,6 +166,6 @@ clean:
 	-if exist $(OBJS)\resource.exe del $(OBJS)\resource.exe
 
 $(OBJS)\resource.exe: $(RESOURCE_OBJECTS)  $(OBJS)\resource_resource.res
-	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
+	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
 	c0w32.obj $(RESOURCE_OBJECTS),$@,, wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\resource_resource.res
 |

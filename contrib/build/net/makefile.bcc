@@ -20,14 +20,9 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\net\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\net\..\..\..\src\tiff -I..\..\src\net\..\..\..\src\jpeg \
-	-I..\..\src\net\..\..\..\src\png -I..\..\src\net\..\..\..\src\zlib \
-	-I..\..\src\net\..\..\..\src\regex -I..\..\src\net\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\net\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_NETUTILS \
 	$(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_netutilsdll.csm
 NETUTILSDLL_OBJECTS =  \
@@ -37,10 +32,7 @@ NETUTILSDLL_OBJECTS =  \
 	$(OBJS)\netutilsdll_web.obj
 NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\net\..\..\..\src\tiff -I..\..\src\net\..\..\..\src\jpeg \
-	-I..\..\src\net\..\..\..\src\png -I..\..\src\net\..\..\..\src\zlib \
-	-I..\..\src\net\..\..\..\src\regex -I..\..\src\net\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\net\..\..\include $(CXXFLAGS) -Hu \
 	-H=$(OBJS)\wxprec_netutilslib.csm
 NETUTILSLIB_OBJECTS =  \
@@ -50,9 +42,17 @@ NETUTILSLIB_OBJECTS =  \
 	$(OBJS)\netutilslib_web.obj
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\net\..\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\net\..\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -195,7 +195,7 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils.lib
 
 !if "$(SHARED)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils_bcc$(VENDORTAG).dll: $(NETUTILSDLL_OBJECTS) $(OBJS)\netutilsdll_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils_bcc$(VENDORTAG).dll: $(OBJS)\netutilsdll_dummy.obj  $(NETUTILSDLL_OBJECTS)
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(NETUTILSDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
@@ -203,7 +203,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netuti
 !endif
 
 !if "$(SHARED)" == "0"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils.lib: $(NETUTILSLIB_OBJECTS) $(OBJS)\netutilslib_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils.lib: $(OBJS)\netutilslib_dummy.obj  $(NETUTILSLIB_OBJECTS)
 	if exist $@ del $@
 	tlib /a /p2048 $@ @&&|
 	$(NETUTILSLIB_OBJECTS)

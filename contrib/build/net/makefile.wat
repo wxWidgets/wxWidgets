@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\net\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\net\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -166,17 +173,11 @@ __netutilslib___depname = &
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	..\..\src\net\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\net\..\..\..\src\tiff -i=..\..\src\net\..\..\..\src\jpeg &
-	-i=..\..\src\net\..\..\..\src\png -i=..\..\src\net\..\..\..\src\zlib &
-	-i=..\..\src\net\..\..\..\src\regex &
-	-i=..\..\src\net\..\..\..\src\expat\lib -i=..\..\src\net\..\..\include &
-	-dWXUSINGDLL -dWXMAKINGDLL_NETUTILS $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_netutilsdll.pch
+	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\net\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_NETUTILS &
+	$(CXXFLAGS) /fh=$(OBJS)\wxprec_netutilsdll.pch
 NETUTILSDLL_OBJECTS =  &
 	$(OBJS)\netutilsdll_dummy.obj &
 	$(OBJS)\netutilsdll_email.obj &
@@ -184,12 +185,9 @@ NETUTILSDLL_OBJECTS =  &
 	$(OBJS)\netutilsdll_web.obj
 NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\net\..\..\..\src\tiff -i=..\..\src\net\..\..\..\src\jpeg &
-	-i=..\..\src\net\..\..\..\src\png -i=..\..\src\net\..\..\..\src\zlib &
-	-i=..\..\src\net\..\..\..\src\regex &
-	-i=..\..\src\net\..\..\..\src\expat\lib -i=..\..\src\net\..\..\include &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_netutilslib.pch
+	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\net\..\..\include $(CXXFLAGS) &
+	/fh=$(OBJS)\wxprec_netutilslib.pch
 NETUTILSLIB_OBJECTS =  &
 	$(OBJS)\netutilslib_dummy.obj &
 	$(OBJS)\netutilslib_email.obj &
@@ -197,6 +195,8 @@ NETUTILSLIB_OBJECTS =  &
 	$(OBJS)\netutilslib_web.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -245,7 +245,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netuti
 	@%create $(OBJS)\netutilsdll.lbc
 	@%append $(OBJS)\netutilsdll.lbc option quiet
 	@%append $(OBJS)\netutilsdll.lbc name $^@
-	@%append $(OBJS)\netutilsdll.lbc option incremental
+	@%append $(OBJS)\netutilsdll.lbc option caseexact
 	@%append $(OBJS)\netutilsdll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(NETUTILSDLL_OBJECTS)) do @%append $(OBJS)\netutilsdll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\netutilsdll.lbc library %i

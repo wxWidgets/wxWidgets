@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = .\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = .\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -158,26 +165,22 @@ __renddll___depname = &
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 RENDDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
-	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib &
-	-dWXUSINGDLL $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -dWXUSINGDLL &
+	$(CXXFLAGS)
 RENDDLL_OBJECTS =  &
 	$(OBJS)\renddll_renddll.obj
 RENDER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
-	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
+	-i=.\..\..\samples $(CXXFLAGS)
 RENDER_OBJECTS =  &
 	$(OBJS)\render_render.obj
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -195,7 +198,7 @@ $(OBJS)\render_render.obj :  .AUTODEPEND .\render.cpp
 	$(CXX) -zq -fo=$^@ $(RENDER_CXXFLAGS) $<
 
 $(OBJS)\render_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -210,7 +213,7 @@ $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250_wat.dl
 	@%create $(OBJS)\renddll.lbc
 	@%append $(OBJS)\renddll.lbc option quiet
 	@%append $(OBJS)\renddll.lbc name $^@
-	@%append $(OBJS)\renddll.lbc option incremental
+	@%append $(OBJS)\renddll.lbc option caseexact
 	@%append $(OBJS)\renddll.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME)
 	@for %i in ($(RENDDLL_OBJECTS)) do @%append $(OBJS)\renddll.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\renddll.lbc library %i
@@ -223,7 +226,7 @@ $(OBJS)\render.exe :  $(RENDER_OBJECTS) $(OBJS)\render_sample.res
 	@%create $(OBJS)\render.lbc
 	@%append $(OBJS)\render.lbc option quiet
 	@%append $(OBJS)\render.lbc name $^@
-	@%append $(OBJS)\render.lbc option incremental
+	@%append $(OBJS)\render.lbc option caseexact
 	@%append $(OBJS)\render.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(RENDER_OBJECTS)) do @%append $(OBJS)\render.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\render.lbc library %i

@@ -45,14 +45,12 @@ top_srcdir = @top_srcdir@
 
 DEPRECATEDDLL_CFLAGS = $(__deprecateddll_PCH_INC) $(CPPFLAGS) \
 	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
-	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED $(CFLAGS) $(PIC_FLAG)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) \
+	$(CFLAGS) $(PIC_FLAG)
 DEPRECATEDDLL_CXXFLAGS = $(__deprecateddll_PCH_INC) $(CPPFLAGS) \
 	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
-	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include \
-	-DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED $(CXXFLAGS) $(PIC_FLAG)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED -I$(srcdir) \
+	$(CXXFLAGS) $(PIC_FLAG)
 DEPRECATEDDLL_OBJECTS =  \
 	deprecateddll_prop.o \
 	deprecateddll_propform.o \
@@ -63,14 +61,10 @@ DEPRECATEDDLL_OBJECTS =  \
 	deprecateddll_dosyacc.o
 DEPRECATEDLIB_CFLAGS = $(__deprecatedlib_PCH_INC) $(CPPFLAGS) \
 	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
-	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include \
-	$(CFLAGS)
+	-I$(srcdir)/../../include -I$(srcdir) $(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(__deprecatedlib_PCH_INC) $(CPPFLAGS) \
 	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include \
-	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
-	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include \
-	$(CXXFLAGS)
+	-I$(srcdir)/../../include -I$(srcdir) $(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_prop.o \
 	deprecatedlib_propform.o \
@@ -80,6 +74,7 @@ DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_wxexpr.o \
 	deprecatedlib_dosyacc.o
 LIBDIRNAME = $(top_builddir)lib
+WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
@@ -103,13 +98,6 @@ LIBDIRNAME = $(top_builddir)lib
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
-@COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
-@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
 @COND_WXUSE_EXPAT_BUILTIN@__LIB_EXPAT_p = \
 @COND_WXUSE_EXPAT_BUILTIN@	-lwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p \
@@ -149,7 +137,8 @@ COND_PLATFORM_MACOSX_1___deprecateddll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__deprecateddll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__deprecateddll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___deprecateddll___macinstnamecmd)
 @COND_PLATFORM_MACOSX_1@__deprecateddll___macver = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 2.5 -current_version 2.5.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version $(WX_VERSION) \
+@COND_PLATFORM_MACOSX_1@	-current_version $(WX_VERSION)
 COND_USE_SOSYMLINKS_1___deprecateddll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; \
 	rm -f \
 	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \

@@ -12,14 +12,9 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\net\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\net\..\..\..\src\tiff -I..\..\src\net\..\..\..\src\jpeg \
-	-I..\..\src\net\..\..\..\src\png -I..\..\src\net\..\..\..\src\zlib \
-	-I..\..\src\net\..\..\..\src\regex -I..\..\src\net\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\net\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_NETUTILS \
 	$(CXXFLAGS)
 NETUTILSDLL_OBJECTS =  \
@@ -29,10 +24,7 @@ NETUTILSDLL_OBJECTS =  \
 	$(OBJS)\netutilsdll_web.o
 NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\net\..\..\..\src\tiff -I..\..\src\net\..\..\..\src\jpeg \
-	-I..\..\src\net\..\..\..\src\png -I..\..\src\net\..\..\..\src\zlib \
-	-I..\..\src\net\..\..\..\src\regex -I..\..\src\net\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\net\..\..\include $(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  \
 	$(OBJS)\netutilslib_dummy.o \
@@ -41,11 +33,19 @@ NETUTILSLIB_OBJECTS =  \
 	$(OBJS)\netutilslib_web.o
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\net\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\net\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

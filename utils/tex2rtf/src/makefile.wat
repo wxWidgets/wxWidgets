@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = .\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = .\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -158,22 +165,18 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	.\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEX2RTF_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
-	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -dNO_GUI $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
+	$(__DLLFLAG_p) -dNO_GUI $(CXXFLAGS)
 TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
-	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
+	$(__DLLFLAG_p) -i=.\..\..\..\samples $(CXXFLAGS)
 TEX2RTF_GUI_OBJECTS =  &
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj &
 	$(OBJS)\tex2rtf_gui_tex2any.obj &
@@ -212,7 +215,7 @@ $(OBJS)\tex2rtf_gui_rtfutils.obj :  .AUTODEPEND .\rtfutils.cpp
 	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_sample.res :  .AUTODEPEND .\..\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
 
 $(OBJS)\tex2rtf_gui_table.obj :  .AUTODEPEND .\table.cpp
 	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
@@ -265,7 +268,7 @@ $(OBJS)\tex2rtf.exe :  $(TEX2RTF_OBJECTS)
 	@%create $(OBJS)\tex2rtf.lbc
 	@%append $(OBJS)\tex2rtf.lbc option quiet
 	@%append $(OBJS)\tex2rtf.lbc name $^@
-	@%append $(OBJS)\tex2rtf.lbc option incremental
+	@%append $(OBJS)\tex2rtf.lbc option caseexact
 	@%append $(OBJS)\tex2rtf.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt ref 'main_'
 	@for %i in ($(TEX2RTF_OBJECTS)) do @%append $(OBJS)\tex2rtf.lbc file %i
 	@for %i in ( $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\tex2rtf.lbc library %i
@@ -276,7 +279,7 @@ $(OBJS)\tex2rtf_gui.exe :  $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample.res
 	@%create $(OBJS)\tex2rtf_gui.lbc
 	@%append $(OBJS)\tex2rtf_gui.lbc option quiet
 	@%append $(OBJS)\tex2rtf_gui.lbc name $^@
-	@%append $(OBJS)\tex2rtf_gui.lbc option incremental
+	@%append $(OBJS)\tex2rtf_gui.lbc option caseexact
 	@%append $(OBJS)\tex2rtf_gui.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(TEX2RTF_GUI_OBJECTS)) do @%append $(OBJS)\tex2rtf_gui.lbc file %i
 	@for %i in ( $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\tex2rtf_gui.lbc library %i

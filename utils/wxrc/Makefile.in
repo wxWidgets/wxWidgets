@@ -17,11 +17,15 @@ EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
+INSTALL_DIR = @INSTALL_DIR@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 LDFLAGS = @LDFLAGS@
 SETFILE = @SETFILE@
+STRIP = @STRIP@
 TOOLKIT = @TOOLKIT@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
+bindir = @bindir@
 srcdir = @srcdir@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
@@ -30,9 +34,7 @@ top_srcdir = @top_srcdir@
 
 LIBDIRNAME = $(top_builddir)lib
 WXRC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
+	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 WXRC_OBJECTS =  \
 	wxrc_wxrc.o
 
@@ -48,13 +50,6 @@ WXRC_OBJECTS =  \
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
-@COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
-@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
 @COND_WXUSE_EXPAT_BUILTIN@__LIB_EXPAT_p = \
 @COND_WXUSE_EXPAT_BUILTIN@	-lwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p \
@@ -95,9 +90,14 @@ clean:
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-install: all
+install: all install_wxrc
 
 install-strip: install
+	$(STRIP) $(bindir)/wxrc$(EXEEXT)
+
+install_wxrc: 
+	$(INSTALL_DIR) $(bindir)
+	$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(bindir)
 
 uninstall: 
 
@@ -113,4 +113,4 @@ wxrc_wxrc.o: $(srcdir)/wxrc.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install uninstall
+.PHONY: all clean distclean install install_wxrc uninstall

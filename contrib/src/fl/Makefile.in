@@ -42,10 +42,8 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 FLDLL_CXXFLAGS = $(__fldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include -DWXUSINGDLL \
-	-DWXMAKINGDLL_FL $(CXXFLAGS) $(PIC_FLAG)
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
+	-DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS) $(PIC_FLAG)
 FLDLL_OBJECTS =  \
 	fldll_antiflickpl.o \
 	fldll_bardragpl.o \
@@ -65,9 +63,8 @@ FLDLL_OBJECTS =  \
 	fldll_toolwnd.o \
 	fldll_updatesmgr.o
 FLLIB_CXXFLAGS = $(__fllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
-	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include -I$(srcdir)/../../include \
+	$(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	fllib_antiflickpl.o \
 	fllib_bardragpl.o \
@@ -87,6 +84,7 @@ FLLIB_OBJECTS =  \
 	fllib_toolwnd.o \
 	fllib_updatesmgr.o
 LIBDIRNAME = $(top_builddir)lib
+WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
@@ -108,13 +106,6 @@ LIBDIRNAME = $(top_builddir)lib
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
-@COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
-@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
-@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
-@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
-@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
-@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
 @COND_WXUSE_EXPAT_BUILTIN@__LIB_EXPAT_p = \
 @COND_WXUSE_EXPAT_BUILTIN@	-lwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p \
@@ -153,7 +144,8 @@ COND_PLATFORM_MACOSX_1___fldll___macinstnamecmd = -install_name \
 	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__fldll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___fldll___macinstnamecmd)
 @COND_PLATFORM_MACOSX_1@__fldll___macver = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 2.5 -current_version 2.5.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version $(WX_VERSION) \
+@COND_PLATFORM_MACOSX_1@	-current_version $(WX_VERSION)
 COND_USE_SOSYMLINKS_1___fldll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
 	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf2); \

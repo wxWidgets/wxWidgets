@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -166,17 +173,9 @@ __mmedialib___depname = &
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	..\..\src\mmedia\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 MMEDIADLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\mmedia\..\..\..\src\tiff &
-	-i=..\..\src\mmedia\..\..\..\src\jpeg &
-	-i=..\..\src\mmedia\..\..\..\src\png &
-	-i=..\..\src\mmedia\..\..\..\src\zlib &
-	-i=..\..\src\mmedia\..\..\..\src\regex &
-	-i=..\..\src\mmedia\..\..\..\src\expat\lib &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\mmedia\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_MMEDIA &
 	$(CXXFLAGS) /fh=$(OBJS)\wxprec_mmediadll.pch
 MMEDIADLL_OBJECTS =  &
@@ -203,13 +202,7 @@ MMEDIADLL_OBJECTS =  &
 	$(OBJS)\mmediadll_vidbase.obj
 MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include &
-	-i=$(LIBDIRNAME) -i=..\..\src\mmedia\..\..\..\src\tiff &
-	-i=..\..\src\mmedia\..\..\..\src\jpeg &
-	-i=..\..\src\mmedia\..\..\..\src\png &
-	-i=..\..\src\mmedia\..\..\..\src\zlib &
-	-i=..\..\src\mmedia\..\..\..\src\regex &
-	-i=..\..\src\mmedia\..\..\..\src\expat\lib &
+	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\mmedia\..\..\include $(CXXFLAGS) &
 	/fh=$(OBJS)\wxprec_mmedialib.pch
 MMEDIALIB_OBJECTS =  &
@@ -236,6 +229,8 @@ MMEDIALIB_OBJECTS =  &
 	$(OBJS)\mmedialib_vidbase.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -386,7 +381,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia
 	@%create $(OBJS)\mmediadll.lbc
 	@%append $(OBJS)\mmediadll.lbc option quiet
 	@%append $(OBJS)\mmediadll.lbc name $^@
-	@%append $(OBJS)\mmediadll.lbc option incremental
+	@%append $(OBJS)\mmediadll.lbc option caseexact
 	@%append $(OBJS)\mmediadll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(MMEDIADLL_OBJECTS)) do @%append $(OBJS)\mmediadll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\mmediadll.lbc library %i

@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = .\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = .\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -152,16 +159,14 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	.\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXRC_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
-	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
+	$(__DLLFLAG_p) $(CXXFLAGS)
 WXRC_OBJECTS =  &
 	$(OBJS)\wxrc_wxrc.obj
 
@@ -188,7 +193,7 @@ $(OBJS)\wxrc.exe :  $(WXRC_OBJECTS)
 	@%create $(OBJS)\wxrc.lbc
 	@%append $(OBJS)\wxrc.lbc option quiet
 	@%append $(OBJS)\wxrc.lbc name $^@
-	@%append $(OBJS)\wxrc.lbc option incremental
+	@%append $(OBJS)\wxrc.lbc option caseexact
 	@%append $(OBJS)\wxrc.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_'
 	@for %i in ($(WXRC_OBJECTS)) do @%append $(OBJS)\wxrc.lbc file %i
 	@for %i in ( $(__WXLIB_XML_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\wxrc.lbc library %i

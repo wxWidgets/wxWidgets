@@ -20,21 +20,25 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXRC_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(LIBDIRNAME) -I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg \
-	-I.\..\..\..\src\png -I.\..\..\..\src\zlib -I.\..\..\..\src\regex \
-	-I.\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) $(CXXFLAGS)
 WXRC_OBJECTS =  \
 	$(OBJS)\wxrc_wxrc.obj
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif

@@ -12,19 +12,16 @@
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\stc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 STCDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\stc\..\..\..\include \
-	/I$(LIBDIRNAME) /I..\..\src\stc\..\..\..\src\tiff \
-	/I..\..\src\stc\..\..\..\src\jpeg /I..\..\src\stc\..\..\..\src\png \
-	/I..\..\src\stc\..\..\..\src\zlib /I..\..\src\stc\..\..\..\src\regex \
-	/I..\..\src\stc\..\..\..\src\expat\lib /I..\..\src\stc\..\..\include \
+	/I$(SETUPHDIR) /I..\..\src\stc\..\..\include \
 	/I..\..\src\stc\scintilla\include /I..\..\src\stc\scintilla\src /D__WX__ \
 	/DSCI_LEXER /DLINK_LEXERS /DWXUSINGDLL /DWXMAKINGDLL_STC $(CXXFLAGS)
 STCDLL_OBJECTS =  \
@@ -82,10 +79,7 @@ STCLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_11) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc.pdb \
 	$(____DEBUGRUNTIME_10_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\stc\..\..\..\include \
-	/I$(LIBDIRNAME) /I..\..\src\stc\..\..\..\src\tiff \
-	/I..\..\src\stc\..\..\..\src\jpeg /I..\..\src\stc\..\..\..\src\png \
-	/I..\..\src\stc\..\..\..\src\zlib /I..\..\src\stc\..\..\..\src\regex \
-	/I..\..\src\stc\..\..\..\src\expat\lib /I..\..\src\stc\..\..\include \
+	/I$(SETUPHDIR) /I..\..\src\stc\..\..\include \
 	/I..\..\src\stc\scintilla\include /I..\..\src\stc\scintilla\src /D__WX__ \
 	/DSCI_LEXER /DLINK_LEXERS $(CXXFLAGS)
 STCLIB_OBJECTS =  \
@@ -141,6 +135,12 @@ STCLIB_OBJECTS =  \
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif

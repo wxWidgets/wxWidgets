@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\plot\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\plot\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -166,32 +173,25 @@ __plotlib___depname = &
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	..\..\src\plot\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 PLOTDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\plot\..\..\..\src\tiff -i=..\..\src\plot\..\..\..\src\jpeg &
-	-i=..\..\src\plot\..\..\..\src\png -i=..\..\src\plot\..\..\..\src\zlib &
-	-i=..\..\src\plot\..\..\..\src\regex &
-	-i=..\..\src\plot\..\..\..\src\expat\lib -i=..\..\src\plot\..\..\include &
-	-dWXUSINGDLL -dWXMAKINGDLL_PLOT $(CXXFLAGS) /fh=$(OBJS)\wxprec_plotdll.pch
+	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\plot\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_PLOT $(CXXFLAGS) &
+	/fh=$(OBJS)\wxprec_plotdll.pch
 PLOTDLL_OBJECTS =  &
 	$(OBJS)\plotdll_dummy.obj &
 	$(OBJS)\plotdll_plot.obj
 PLOTLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\plot\..\..\..\src\tiff -i=..\..\src\plot\..\..\..\src\jpeg &
-	-i=..\..\src\plot\..\..\..\src\png -i=..\..\src\plot\..\..\..\src\zlib &
-	-i=..\..\src\plot\..\..\..\src\regex &
-	-i=..\..\src\plot\..\..\..\src\expat\lib -i=..\..\src\plot\..\..\include &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_plotlib.pch
+	$(__UNICODE_DEFINE_p) -i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\plot\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_plotlib.pch
 PLOTLIB_OBJECTS =  &
 	$(OBJS)\plotlib_dummy.obj &
 	$(OBJS)\plotlib_plot.obj
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -228,7 +228,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_plot_w
 	@%create $(OBJS)\plotdll.lbc
 	@%append $(OBJS)\plotdll.lbc option quiet
 	@%append $(OBJS)\plotdll.lbc name $^@
-	@%append $(OBJS)\plotdll.lbc option incremental
+	@%append $(OBJS)\plotdll.lbc option caseexact
 	@%append $(OBJS)\plotdll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(PLOTDLL_OBJECTS)) do @%append $(OBJS)\plotdll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\plotdll.lbc library %i

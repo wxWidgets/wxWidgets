@@ -12,22 +12,26 @@
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXRC_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\wxrc.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(LIBDIRNAME) \
-	/I.\..\..\..\src\tiff /I.\..\..\..\src\jpeg /I.\..\..\..\src\png \
-	/I.\..\..\..\src\zlib /I.\..\..\..\src\regex /I.\..\..\..\src\expat\lib /I. \
-	$(__DLLFLAG_p) /D_CONSOLE $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
+	/D_CONSOLE $(CXXFLAGS)
 WXRC_OBJECTS =  \
 	$(OBJS)\wxrc_wxrc.obj
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif

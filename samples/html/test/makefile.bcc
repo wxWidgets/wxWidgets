@@ -20,21 +20,25 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEST_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(LIBDIRNAME) -I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg \
-	-I.\..\..\..\src\png -I.\..\..\..\src\zlib -I.\..\..\..\src\regex \
-	-I.\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I..\..\..\samples $(CXXFLAGS)
+	-I$(SETUPHDIR) -I. $(__DLLFLAG_p) -I.\..\..\..\samples $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_test.obj
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -160,7 +164,7 @@ $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_test.res: .\test.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_1) -i..\..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -172,6 +176,6 @@ data:
 	for %f in (f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp tables.htm test.htm i18n.gif 8859_2.htm cp1250.htm regres.htm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\test.exe: $(TEST_OBJECTS)  $(OBJS)\test_test.res
-	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
+	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
 	c0w32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\test_test.res
 |

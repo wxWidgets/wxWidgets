@@ -12,16 +12,14 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 XRCDEMO_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(LIBDIRNAME) \
-	-I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg -I.\..\..\..\src\png \
-	-I.\..\..\..\src\zlib -I.\..\..\..\src\regex -I.\..\..\..\src\expat\lib -I. \
-	$(__DLLFLAG_p) -I..\..\..\samples -I.\..\..\include $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	-I.\..\..\..\samples -I.\..\..\include $(CXXFLAGS)
 XRCDEMO_OBJECTS =  \
 	$(OBJS)\xrcdemo_xrcdemo.o \
 	$(OBJS)\xrcdemo_myframe.o \
@@ -33,6 +31,12 @@ XRCDEMO_OBJECTS =  \
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = .\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = .\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
@@ -166,7 +170,7 @@ $(OBJS)\xrcdemo_xrcdemo.o: .\xrcdemo.cpp
 	$(CXX) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
 
 $(OBJS)\xrcdemo_xrcdemo_rc.o: .\xrcdemo.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_1) --include-dir ../../../samples --include-dir ./../../include
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --include-dir ./../../include
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -177,6 +181,6 @@ data:
 	for %%f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc scanning.gif sppicon.ico toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc) do if not exist $(OBJS)\rc\%%f copy .\rc\%%f $(OBJS)\rc
 
 $(OBJS)\xrcdemo.exe: $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_xrcdemo_rc.o
-	$(CXX) -o $@ $(XRCDEMO_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@ $(XRCDEMO_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 .PHONY: all clean data

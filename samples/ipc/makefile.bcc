@@ -22,25 +22,29 @@ BCCDIR = $(MAKEDIR)\..
 
 CLIENT_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
-	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
-	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_client.obj
-LIBDIRNAME = \
-	.\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SERVER_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
-	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
-	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_server.obj
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\lib\bcc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\lib\bcc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -162,10 +166,10 @@ $(OBJS)\client_client.obj: .\client.cpp
 	$(CXX) -q -c -P -o$@ $(CLIENT_CXXFLAGS) $**
 
 $(OBJS)\client_sample.res: .\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_0) -i..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples $**
 
 $(OBJS)\server_sample.res: .\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_0) -i..\..\samples $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i.\..\..\include -i$(SETUPHDIR) -i. $(__DLLFLAG_p_0) -i.\..\..\samples $**
 
 $(OBJS)\server_server.obj: .\server.cpp
 	$(CXX) -q -c -P -o$@ $(SERVER_CXXFLAGS) $**
@@ -177,11 +181,11 @@ clean:
 	-if exist $(OBJS)\server.exe del $(OBJS)\server.exe
 
 $(OBJS)\client.exe: $(CLIENT_OBJECTS)  $(OBJS)\client_sample.res
-	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
+	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
 	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\client_sample.res
 |
 
 $(OBJS)\server.exe: $(SERVER_OBJECTS)  $(OBJS)\server_sample.res
-	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
+	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
 	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\server_sample.res
 |

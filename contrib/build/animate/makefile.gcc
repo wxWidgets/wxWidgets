@@ -14,13 +14,7 @@ include ../../../build/msw/config.gcc
 
 ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\animate\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\animate\..\..\..\src\tiff \
-	-I..\..\src\animate\..\..\..\src\jpeg \
-	-I..\..\src\animate\..\..\..\src\png \
-	-I..\..\src\animate\..\..\..\src\zlib \
-	-I..\..\src\animate\..\..\..\src\regex \
-	-I..\..\src\animate\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\animate\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\animate\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_ANIMATE \
 	$(CXXFLAGS)
 ANIMATEDLL_OBJECTS =  \
@@ -28,26 +22,26 @@ ANIMATEDLL_OBJECTS =  \
 	$(OBJS)\animatedll_animate.o
 ANIMATELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\animate\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\animate\..\..\..\src\tiff \
-	-I..\..\src\animate\..\..\..\src\jpeg \
-	-I..\..\src\animate\..\..\..\src\png \
-	-I..\..\src\animate\..\..\..\src\zlib \
-	-I..\..\src\animate\..\..\..\src\regex \
-	-I..\..\src\animate\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\animate\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\animate\..\..\include $(CXXFLAGS)
 ANIMATELIB_OBJECTS =  \
 	$(OBJS)\animatelib_dummy.o \
 	$(OBJS)\animatelib_animate.o
-LIBDIRNAME = \
-	..\..\src\animate\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\animate\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\animate\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

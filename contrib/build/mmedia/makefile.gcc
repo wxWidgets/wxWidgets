@@ -12,15 +12,9 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\mmedia\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 MMEDIADLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\mmedia\..\..\..\src\tiff -I..\..\src\mmedia\..\..\..\src\jpeg \
-	-I..\..\src\mmedia\..\..\..\src\png -I..\..\src\mmedia\..\..\..\src\zlib \
-	-I..\..\src\mmedia\..\..\..\src\regex \
-	-I..\..\src\mmedia\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\mmedia\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA \
 	$(CXXFLAGS)
 MMEDIADLL_OBJECTS =  \
@@ -47,11 +41,7 @@ MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_vidbase.o
 MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\mmedia\..\..\..\src\tiff -I..\..\src\mmedia\..\..\..\src\jpeg \
-	-I..\..\src\mmedia\..\..\..\src\png -I..\..\src\mmedia\..\..\..\src\zlib \
-	-I..\..\src\mmedia\..\..\..\src\regex \
-	-I..\..\src\mmedia\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\mmedia\..\..\include $(CXXFLAGS)
 MMEDIALIB_OBJECTS =  \
 	$(OBJS)\mmedialib_dummy.o \
@@ -77,11 +67,19 @@ MMEDIALIB_OBJECTS =  \
 	$(OBJS)\mmedialib_vidbase.o
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\mmedia\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

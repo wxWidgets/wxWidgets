@@ -17,12 +17,8 @@ FLDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\fl\..\..\..\include \
-	/I$(LIBDIRNAME) /I..\..\src\fl\..\..\..\src\tiff \
-	/I..\..\src\fl\..\..\..\src\jpeg /I..\..\src\fl\..\..\..\src\png \
-	/I..\..\src\fl\..\..\..\src\zlib /I..\..\src\fl\..\..\..\src\regex \
-	/I..\..\src\fl\..\..\..\src\expat\lib /I..\..\src\fl\..\..\include \
-	/DWXUSINGDLL /DWXMAKINGDLL_FL $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_fldll.pch"
+	/I$(SETUPHDIR) /I..\..\src\fl\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_FL \
+	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_fldll.pch"
 FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_dummy.obj \
 	$(OBJS)\fldll_antiflickpl.obj \
@@ -47,11 +43,8 @@ FLLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\fl\..\..\..\include \
-	/I$(LIBDIRNAME) /I..\..\src\fl\..\..\..\src\tiff \
-	/I..\..\src\fl\..\..\..\src\jpeg /I..\..\src\fl\..\..\..\src\png \
-	/I..\..\src\fl\..\..\..\src\zlib /I..\..\src\fl\..\..\..\src\regex \
-	/I..\..\src\fl\..\..\..\src\expat\lib /I..\..\src\fl\..\..\include \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_fllib.pch"
+	/I$(SETUPHDIR) /I..\..\src\fl\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_fllib.pch"
 FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_dummy.obj \
 	$(OBJS)\fllib_antiflickpl.obj \
@@ -71,13 +64,19 @@ FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_rowlayoutpl.obj \
 	$(OBJS)\fllib_toolwnd.obj \
 	$(OBJS)\fllib_updatesmgr.obj
-LIBDIRNAME = \
-	..\..\src\fl\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = ..\..\src\fl\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = ..\..\src\fl\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -370,14 +369,14 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib
 
 !if "$(SHARED)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl_vc$(VENDORTAG).dll: $(FLDLL_OBJECTS) $(OBJS)\fldll_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl_vc$(VENDORTAG).dll: $(OBJS)\fldll_dummy.obj  $(FLDLL_OBJECTS)
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) @<<
 	$(FLDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib
 <<
 !endif
 
 !if "$(SHARED)" == "0"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib: $(FLLIB_OBJECTS) $(OBJS)\fllib_dummy.obj
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib: $(OBJS)\fllib_dummy.obj  $(FLLIB_OBJECTS)
 	if exist $@ del $@
 	lib /NOLOGO /OUT:$@ @<<
 	$(FLLIB_OBJECTS)

@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = ..\..\src\stc\..\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -166,19 +173,16 @@ __stclib___depname = &
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	..\..\src\stc\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 STCDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\stc\..\..\..\src\tiff -i=..\..\src\stc\..\..\..\src\jpeg &
-	-i=..\..\src\stc\..\..\..\src\png -i=..\..\src\stc\..\..\..\src\zlib &
-	-i=..\..\src\stc\..\..\..\src\regex &
-	-i=..\..\src\stc\..\..\..\src\expat\lib -i=..\..\src\stc\..\..\include &
-	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
-	-dSCI_LEXER -dLINK_LEXERS -dWXUSINGDLL -dWXMAKINGDLL_STC $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
+	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
+	-dWXUSINGDLL -dWXMAKINGDLL_STC $(CXXFLAGS)
 STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_PlatWX.obj &
 	$(OBJS)\stcdll_ScintillaWX.obj &
@@ -231,13 +235,10 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_XPM.obj
 STCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(LIBDIRNAME) &
-	-i=..\..\src\stc\..\..\..\src\tiff -i=..\..\src\stc\..\..\..\src\jpeg &
-	-i=..\..\src\stc\..\..\..\src\png -i=..\..\src\stc\..\..\..\src\zlib &
-	-i=..\..\src\stc\..\..\..\src\regex &
-	-i=..\..\src\stc\..\..\..\src\expat\lib -i=..\..\src\stc\..\..\include &
-	-i=..\..\src\stc\scintilla\include -i=..\..\src\stc\scintilla\src -d__WX__ &
-	-dSCI_LEXER -dLINK_LEXERS $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
+	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
+	$(CXXFLAGS)
 STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_PlatWX.obj &
 	$(OBJS)\stclib_ScintillaWX.obj &
@@ -606,7 +607,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc_wa
 	@%create $(OBJS)\stcdll.lbc
 	@%append $(OBJS)\stcdll.lbc option quiet
 	@%append $(OBJS)\stcdll.lbc name $^@
-	@%append $(OBJS)\stcdll.lbc option incremental
+	@%append $(OBJS)\stcdll.lbc option caseexact
 	@%append $(OBJS)\stcdll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME)
 	@for %i in ($(STCDLL_OBJECTS)) do @%append $(OBJS)\stcdll.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)) do @%append $(OBJS)\stcdll.lbc library %i

@@ -27,6 +27,13 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
+LIBDIRNAME =
+!ifeq SHARED 0
+LIBDIRNAME = .\..\..\lib\wat_lib$(CFG)
+!endif
+!ifeq SHARED 1
+LIBDIRNAME = .\..\..\lib\wat_dll$(CFG)
+!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
@@ -153,18 +160,16 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-LIBDIRNAME = &
-	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 NOTEBOOK_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
-	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
-	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
+	-i=.\..\..\samples $(CXXFLAGS)
 NOTEBOOK_OBJECTS =  &
 	$(OBJS)\notebook_notebook.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = &
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 
 all : $(OBJS)
@@ -179,7 +184,7 @@ $(OBJS)\notebook_notebook.obj :  .AUTODEPEND .\notebook.cpp
 	$(CXX) -zq -fo=$^@ $(NOTEBOOK_CXXFLAGS) $<
 
 $(OBJS)\notebook_notebook.res :  .AUTODEPEND .\notebook.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -192,7 +197,7 @@ $(OBJS)\notebook.exe :  $(NOTEBOOK_OBJECTS) $(OBJS)\notebook_notebook.res
 	@%create $(OBJS)\notebook.lbc
 	@%append $(OBJS)\notebook.lbc option quiet
 	@%append $(OBJS)\notebook.lbc name $^@
-	@%append $(OBJS)\notebook.lbc option incremental
+	@%append $(OBJS)\notebook.lbc option caseexact
 	@%append $(OBJS)\notebook.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(NOTEBOOK_OBJECTS)) do @%append $(OBJS)\notebook.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\notebook.lbc library %i

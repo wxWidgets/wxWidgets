@@ -12,37 +12,35 @@ include ../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	..\..\src\plot\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 PLOTDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\plot\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\plot\..\..\..\src\tiff -I..\..\src\plot\..\..\..\src\jpeg \
-	-I..\..\src\plot\..\..\..\src\png -I..\..\src\plot\..\..\..\src\zlib \
-	-I..\..\src\plot\..\..\..\src\regex \
-	-I..\..\src\plot\..\..\..\src\expat\lib -I..\..\src\plot\..\..\include \
-	-DWXUSINGDLL -DWXMAKINGDLL_PLOT $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I..\..\src\plot\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\plot\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_PLOT $(CXXFLAGS)
 PLOTDLL_OBJECTS =  \
 	$(OBJS)\plotdll_dummy.o \
 	$(OBJS)\plotdll_plot.o
 PLOTLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\plot\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\plot\..\..\..\src\tiff -I..\..\src\plot\..\..\..\src\jpeg \
-	-I..\..\src\plot\..\..\..\src\png -I..\..\src\plot\..\..\..\src\zlib \
-	-I..\..\src\plot\..\..\..\src\regex \
-	-I..\..\src\plot\..\..\..\src\expat\lib -I..\..\src\plot\..\..\include \
-	$(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I..\..\src\plot\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\plot\..\..\include $(CXXFLAGS)
 PLOTLIB_OBJECTS =  \
 	$(OBJS)\plotlib_dummy.o \
 	$(OBJS)\plotlib_plot.o
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\plot\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\plot\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base

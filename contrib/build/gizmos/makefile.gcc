@@ -14,11 +14,7 @@ include ../../../build/msw/config.gcc
 
 GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\gizmos\..\..\..\src\tiff -I..\..\src\gizmos\..\..\..\src\jpeg \
-	-I..\..\src\gizmos\..\..\..\src\png -I..\..\src\gizmos\..\..\..\src\zlib \
-	-I..\..\src\gizmos\..\..\..\src\regex \
-	-I..\..\src\gizmos\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\gizmos\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_GIZMOS \
 	$(CXXFLAGS)
 GIZMOSDLL_OBJECTS =  \
@@ -31,11 +27,7 @@ GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_statpict.o
 GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(LIBDIRNAME) \
-	-I..\..\src\gizmos\..\..\..\src\tiff -I..\..\src\gizmos\..\..\..\src\jpeg \
-	-I..\..\src\gizmos\..\..\..\src\png -I..\..\src\gizmos\..\..\..\src\zlib \
-	-I..\..\src\gizmos\..\..\..\src\regex \
-	-I..\..\src\gizmos\..\..\..\src\expat\lib \
+	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\gizmos\..\..\include $(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_dummy.o \
@@ -45,15 +37,21 @@ GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_multicell.o \
 	$(OBJS)\gizmoslib_splittree.o \
 	$(OBJS)\gizmoslib_statpict.o
-LIBDIRNAME = \
-	..\..\src\gizmos\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = ..\..\src\gizmos\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = ..\..\src\gizmos\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
