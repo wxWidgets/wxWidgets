@@ -1287,10 +1287,15 @@ int wxApp::GetComCtl32Version()
 
 void wxExit()
 {
-    wxLogError(_("Fatal error: exiting"));
-
-    wxApp::CleanUp();
-    exit(0);
+    if ( wxTheApp )
+    {
+        wxTheApp->ExitMainLoop();
+    }
+    else
+    {
+        // what else can we do?
+        exit(-1);
+    }
 }
 
 // Yield to incoming messages
