@@ -50,8 +50,9 @@ $(CLIENT_TARGET).exe:   $(CLIENT_OBJECTS) $(CLIENT_TARGET).res
   $(CLIENT_TARGET)
   nul
   $(LIBS)
+  $(CLIENT_TARGET).def
+  $(CLIENT_TARGET).res
 !
-          brc32 -K $(CLIENT_TARGET).res
 
 client.obj:     client.cpp
 
@@ -64,8 +65,9 @@ $(SERVER_TARGET).exe:   $(SERVER_OBJECTS) $(SERVER_TARGET).res
   $(SERVER_TARGET)
   nul
   $(LIBS)
+  $(SERVER_TARGET).def
+  $(SERVER_TARGET).res
 !
-        brc32 -K $(SERVER_TARGET).res
 
 server.obj:     server.cpp
 

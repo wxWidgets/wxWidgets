@@ -51,6 +51,15 @@ Notes:
   I'd prefer you to fix the problem and send the fix to me :-) or at
   least let me know about it.
 
+- If you run into problems with a missing X11/Xpm.h header, you
+  need to install the XPM package. It can be obtained from:
+
+  ftp://ftp.x.org/contrib/libraries/xpm-3.4k.tar.gz
+
+  Alternatively, edit include/motif/setup.h, set wxUSE_XPM
+  to 0, and recompile. You will not be able to load any XPMs,
+  though (currently the only supported colour bitmap format).
+
 - Please send bug reports with a description of your environment,
   compiler and the error message(s) to the wxwin-users mailing list at:
 

@@ -40,8 +40,8 @@ $(TARGET)
 nul
 $(LIBS)
 $(TARGET).def
+$(TARGET).res
 !
-        brc32 -K $(TARGET).res
 
 .$(SRCSUFF).obj:
 	bcc32 $(CPPFLAGS) -c {$< }

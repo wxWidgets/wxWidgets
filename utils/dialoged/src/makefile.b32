@@ -47,8 +47,8 @@ $(TARGET)
 nul
 $(LIBS)
 $(TARGET).def
+$(TARGET).res
 !
-        brc32 -K $(TARGET).res
 
 $(INCFILE):	$(MAKEFILENAME)
 	copy &&!

@@ -48,15 +48,12 @@ wxSashLayoutWindow::wxSashLayoutWindow(wxWindow *parent, wxWindowID id, const wx
     m_alignment = wxLAYOUT_TOP;
 }
 
-// These are the functions that wxWin will call to ascertain the window
+// This is the function that wxLayoutAlgorithm calls to ascertain the window
 // dimensions.
 void wxSashLayoutWindow::OnQueryLayoutInfo(wxQueryLayoutInfoEvent& event)
 {
   //    int flags = event.GetFlags();
     int requestedLength = event.GetRequestedLength();
-
-    // This code won't be in the final thing, it's just so we don't have to give it
-    // real windows: mock up some dimensions.
 
     event.SetOrientation(m_orientation);
     event.SetAlignment(m_alignment);
@@ -69,7 +66,6 @@ void wxSashLayoutWindow::OnQueryLayoutInfo(wxQueryLayoutInfoEvent& event)
 
 // Called by parent to allow window to take a bit out of the
 // client rectangle, and size itself if not in wxLAYOUT_QUERY mode.
-// Will eventually be an event.
 
 void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
 {
@@ -168,12 +164,14 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
 
 // Lays out windows for an MDI frame. The MDI client area gets what's left
 // over.
-bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame)
+bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
 {
     int cw, ch;
     frame->GetClientSize(& cw, & ch);
 
     wxRect rect(0, 0, cw, ch);
+    if (r)
+        rect = * r;
 
     wxCalculateLayoutEvent event;
     event.SetRect(rect);

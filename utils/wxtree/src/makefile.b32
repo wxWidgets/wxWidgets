@@ -59,8 +59,8 @@ $(TARGET)
 nul
 $(LIBS) $(LIBTARGET)
 $(TARGET).def
+$(TARGET).res
 !
-        brc32 -K $(TARGET).res
 
 test.obj:	test.$(SRCSUFF) test.h
 

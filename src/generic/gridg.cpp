@@ -2321,7 +2321,12 @@ void wxGenericGrid::SetGridCursor(int row, int col)
   
   m_wCursorRow = row;
   m_wCursorColumn = col;
-  SetCurrentRect(row, col);
+
+  int cw, ch;
+  GetClientSize(&cw, &ch);
+
+  SetCurrentRect(row, col, cw, ch);
+
   if (m_currentRectVisible)
     HighlightCell(& dc);
 

@@ -171,7 +171,7 @@ public:
     wxLayoutAlgorithm() {}
 
     // The MDI client window is sized to whatever's left over.
-    bool LayoutMDIFrame(wxMDIParentFrame* frame);
+    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = (wxRect*) NULL);
 
     // mainWindow is sized to whatever's left over.
     bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow);

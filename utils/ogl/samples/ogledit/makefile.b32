@@ -63,8 +63,8 @@ ogledit
 nul
 $(LIBS)
 ogledit.def
+ogledit.res
 !
-        brc32 -K ogledit.res
 
 .$(SRCSUFF).obj:
 	bcc32 $(CPPFLAGS) $(INC) -c {$< }

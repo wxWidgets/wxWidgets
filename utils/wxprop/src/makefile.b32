@@ -62,8 +62,8 @@ $(TARGET)
 nul
 $(LIBS) $(LIBTARGET)
 $(TARGET).def
+$(TARGET).res
 !
-        brc32 -K $(TARGET).res
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
     brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)

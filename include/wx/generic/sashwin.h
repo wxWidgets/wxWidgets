@@ -74,23 +74,23 @@ public:
 
     // Normal constructor
     wxSashWindow(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "splitter");
+        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "sashWindow");
     ~wxSashWindow();
 
     // Set whether there's a sash in this position
     void SetSashVisible(wxSashEdgePosition edge, bool sash);
 
     // Get whether there's a sash in this position
-    inline bool GetSashVisible(wxSashEdgePosition edge) { return m_sashes[edge].m_show; }
+    inline bool GetSashVisible(wxSashEdgePosition edge) const { return m_sashes[edge].m_show; }
 
     // Set whether there's a border in this position
     inline void SetSashBorder(wxSashEdgePosition edge, bool border) { m_sashes[edge].m_border = border; }
 
     // Get whether there's a border in this position
-    inline bool HasBorder(wxSashEdgePosition edge) { return m_sashes[edge].m_border; }
+    inline bool HasBorder(wxSashEdgePosition edge) const { return m_sashes[edge].m_border; }
 
     // Get border size
-    inline int GetEdgeMargin(wxSashEdgePosition edge) { return m_sashes[edge].m_margin; }
+    inline int GetEdgeMargin(wxSashEdgePosition edge) const { return m_sashes[edge].m_margin; }
 
     // Sets the default sash border size
     inline void SetDefaultBorderSize(int width) { m_borderSize = width; }
