@@ -130,9 +130,9 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 
   char buf[100];
   if (event.ButtonDown())
-    sprintf(buf, "Joystick (%ld, %ld) Fire!", pt.x, pt.y);
+    sprintf(buf, "Joystick (%d, %d) Fire!", pt.x, pt.y);
   else
-    sprintf(buf, "Joystick (%ld, %ld)", pt.x, pt.y);
+    sprintf(buf, "Joystick (%d, %d)", pt.x, pt.y);
   frame->SetStatusText(buf);
 
 #if wxUSE_WAVE
