@@ -25,14 +25,14 @@
 
 %{
 
-extern byte* byte_LIST_helper(PyObject* source);
-extern int* int_LIST_helper(PyObject* source);
-extern long* long_LIST_helper(PyObject* source);
-extern char** string_LIST_helper(PyObject* source);
-extern wxPoint* wxPoint_LIST_helper(PyObject* source);
-extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
-extern wxString* wxString_LIST_helper(PyObject* source);
-extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
+HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
+HELPEREXPORT int* int_LIST_helper(PyObject* source);
+HELPEREXPORT long* long_LIST_helper(PyObject* source);
+HELPEREXPORT char** string_LIST_helper(PyObject* source);
+HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source);
+HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source);
+HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source);
+HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 %}
 
@@ -212,7 +212,13 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1999/09/10 06:05:32  RD
+// Lots more support for event-less callbacks
+// Exported some symbols for the other modules to use
+// etc.
+//
 // Revision 1.5  1999/04/30 03:29:19  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

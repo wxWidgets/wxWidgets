@@ -154,7 +154,6 @@ void __wxPreStart()
 
 #ifdef WXP_WITH_THREAD
 PyThreadState*  wxPyEventThreadState = NULL;
-bool            wxPyInEvent = false;
 #endif
 static char* __nullArgv[1] = { 0 };
 
@@ -252,8 +251,7 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 
 //---------------------------------------------------------------------------
 
-PyObject* wxPyConstructObject(void* ptr, char* className)
-{
+PyObject* wxPyConstructObject(void* ptr, char* className) {
     char    buff[64];               // should always be big enough...
     char    swigptr[64];
 
@@ -274,6 +272,55 @@ PyObject* wxPyConstructObject(void* ptr, char* className)
     return obj;
 }
 
+//---------------------------------------------------------------------------
+
+//static bool _wxPyInEvent = false;
+static unsigned int _wxPyNestCount = 0;
+
+HELPEREXPORT bool wxPyRestoreThread() {
+//  #ifdef WXP_WITH_THREAD
+//      //if (wxPyEventThreadState != PyThreadState_Get()) {
+//      if (! _wxPyInEvent) {
+//          PyEval_RestoreThread(wxPyEventThreadState);
+//          _wxPyInEvent = true;
+//          return TRUE;
+//      } else
+//  #endif
+//          return FALSE;
+
+    // NOTE: The Python API docs state that if a thread already has the
+    // interpreter lock and calls PyEval_RestoreThread again a deadlock
+    // occurs, so I put in the above code as a guard condition since there are
+    // many possibilites for nested events and callbacks in wxPython.
+    //
+    // Unfortunately, it seems like somebody was lying (or I'm not
+    // understanding...) because each of the nested calls to this function
+    // MUST call PyEval_RestoreThread or Python pukes with a thread error (at
+    // least on Win32.)
+    //
+    // until I know better, this is how I am doing it instead:
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(wxPyEventThreadState);
+    _wxPyNestCount += 1;
+    if (_wxPyNestCount == 1)
+        return TRUE;
+    else
+#endif
+        return FALSE;
+}
+
+
+HELPEREXPORT void wxPySaveThread(bool doSave) {
+#ifdef WXP_WITH_THREAD
+    if (doSave) {
+        PyEval_SaveThread();
+        //_wxPyInEvent = false;
+    }
+    _wxPyNestCount -= 1;
+#endif
+}
+
+//---------------------------------------------------------------------------
 
 
 wxPyCallback::wxPyCallback(PyObject* func) {
@@ -282,17 +329,9 @@ wxPyCallback::wxPyCallback(PyObject* func) {
 }
 
 wxPyCallback::~wxPyCallback() {
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_RestoreThread(wxPyEventThreadState);
-#endif
-
+    bool doSave = wxPyRestoreThread();
     Py_DECREF(m_func);
-
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_SaveThread();
-#endif
+    wxPySaveThread(doSave);
 }
 
 
@@ -307,10 +346,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyObject*       tuple;
 
 
-#ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(wxPyEventThreadState);
-    wxPyInEvent = true;
-#endif
+    bool doSave = wxPyRestoreThread();
     arg = wxPyConstructObject((void*)&event, event.GetClassInfo()->GetClassName());
 
     tuple = PyTuple_New(1);
@@ -323,76 +359,70 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     } else {
         PyErr_Print();
     }
-#ifdef WXP_WITH_THREAD
-    PyEval_SaveThread();
-    wxPyInEvent = false;
-#endif
+    wxPySaveThread(doSave);
 }
 
 
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
-//  wxPyMenu::wxPyMenu(const wxString& title, PyObject* _func)
-//      : wxMenu(title, (wxFunction)(func ? MenuCallback : NULL)), func(0) {
-
-//      if (_func) {
-//          func = _func;
-//          Py_INCREF(func);
-//      }
-//  }
-
-//  wxPyMenu::~wxPyMenu() {
-//  #ifdef WXP_WITH_THREAD
-//      //if (! wxPyInEvent)
-//          PyEval_RestoreThread(wxPyEventThreadState);
-//  #endif
-
-//      if (func)
-//          Py_DECREF(func);
-
-//  #ifdef WXP_WITH_THREAD
-//      //if (! wxPyInEvent)
-//          PyEval_SaveThread();
-//  #endif
-//  }
+wxPyCallbackHelper::wxPyCallbackHelper() {
+    m_self = NULL;
+    m_lastFound = NULL;
+}
 
 
-//  void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
-//      PyObject* evtobj;
-//      PyObject* menuobj;
-//      PyObject* func;
-//      PyObject* args;
-//      PyObject* res;
+wxPyCallbackHelper::~wxPyCallbackHelper() {
+    bool doSave = wxPyRestoreThread();
+    Py_XDECREF(m_self);
+    wxPySaveThread(doSave);
+}
 
-//  #ifdef WXP_WITH_THREAD
-//      PyEval_RestoreThread(wxPyEventThreadState);
-//      wxPyInEvent = true;
-//  #endif
-//      evtobj  = wxPyConstructObject((void*)&evt, "wxCommandEvent");
-//      menuobj = wxPyConstructObject((void*)&menu, "wxMenu");
-//      if (PyErr_Occurred()) {
-//          // bail out if a problem
-//          PyErr_Print();
-//          goto done;
-//      }
-//      // Now call the callback...
-//      func = ((wxPyMenu*)&menu)->func;
-//      args = PyTuple_New(2);
-//      PyTuple_SET_ITEM(args, 0, menuobj);
-//      PyTuple_SET_ITEM(args, 1, evtobj);
-//      res  = PyEval_CallObject(func, args);
-//      Py_DECREF(args);
-//      Py_XDECREF(res); /* In case res is a NULL pointer */
-//   done:
-//  #ifdef WXP_WITH_THREAD
-//      PyEval_SaveThread();
-//      wxPyInEvent = false;
-//  #endif
-//      return;
-//  }
+void wxPyCallbackHelper::setSelf(PyObject* self) {
+    m_self = self;
+    Py_INCREF(m_self);
+}
+
+
+bool wxPyCallbackHelper::findCallback(const wxString& name) {
+    m_lastFound = NULL;
+    if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str()))
+        m_lastFound = PyObject_GetAttrString(m_self, (char*)name.c_str());
+
+    return m_lastFound != NULL;
+}
+
+
+int wxPyCallbackHelper::callCallback(PyObject* argTuple) {
+    PyObject*   result;
+    int         retval = FALSE;
+
+    result = callCallbackObj(argTuple);
+    if (result) {                       // Assumes an integer return type...
+        retval = PyInt_AsLong(result);
+        Py_DECREF(result);
+        PyErr_Clear();                  // forget about it if it's not...
+    }
+    return retval;
+}
+
+// Invoke the Python callable object, returning the raw PyObject return
+// value.  Caller should DECREF the return value and also call PyEval_SaveThread.
+PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) {
+    PyObject*   result;
+
+    result = PyEval_CallObject(m_lastFound, argTuple);
+    Py_DECREF(argTuple);
+    if (!result) {
+        PyErr_Print();
+    }
+    return result;
+}
+
 
 
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
 
 wxPyTimer::wxPyTimer(PyObject* callback) {
     func = callback;
@@ -400,24 +430,14 @@ wxPyTimer::wxPyTimer(PyObject* callback) {
 }
 
 wxPyTimer::~wxPyTimer() {
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_RestoreThread(wxPyEventThreadState);
-#endif
-
+    bool doSave = wxPyRestoreThread();
     Py_DECREF(func);
-
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_SaveThread();
-#endif
+    wxPySaveThread(doSave);
 }
 
 void wxPyTimer::Notify() {
-#ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(wxPyEventThreadState);
-    wxPyInEvent = true;
-#endif
+    bool doSave = wxPyRestoreThread();
+
     PyObject*   result;
     PyObject*   args = Py_BuildValue("()");
 
@@ -429,10 +449,7 @@ void wxPyTimer::Notify() {
     } else {
         PyErr_Print();
     }
-#ifdef WXP_WITH_THREAD
-    PyEval_SaveThread();
-    wxPyInEvent = false;
-#endif
+    wxPySaveThread(doSave);
 }
 
 
@@ -451,18 +468,12 @@ wxPyEvent::wxPyEvent(wxEventType commandType, PyObject* userData)
 
 
 wxPyEvent::~wxPyEvent() {
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_RestoreThread(wxPyEventThreadState);
-#endif
+    bool doSave = wxPyRestoreThread();
     if (m_userData != Py_None) {
         Py_DECREF(m_userData);
         m_userData = Py_None;
     }
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_SaveThread();
-#endif
+    wxPySaveThread(doSave);
 }
 
 
@@ -488,7 +499,7 @@ PyObject* wxPyEvent::GetUserData() {
 // imcluded in every file...
 
 
-byte* byte_LIST_helper(PyObject* source) {
+HELPEREXPORT byte* byte_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -511,7 +522,7 @@ byte* byte_LIST_helper(PyObject* source) {
 }
 
 
-int* int_LIST_helper(PyObject* source) {
+HELPEREXPORT int* int_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -534,7 +545,7 @@ int* int_LIST_helper(PyObject* source) {
 }
 
 
-long* long_LIST_helper(PyObject* source) {
+HELPEREXPORT long* long_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -557,7 +568,7 @@ long* long_LIST_helper(PyObject* source) {
 }
 
 
-char** string_LIST_helper(PyObject* source) {
+HELPEREXPORT char** string_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -581,7 +592,7 @@ char** string_LIST_helper(PyObject* source) {
 
 
 
-wxPoint* wxPoint_LIST_helper(PyObject* source) {
+HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -594,21 +605,20 @@ wxPoint* wxPoint_LIST_helper(PyObject* source) {
     }
     for (int x=0; x<count; x++) {
         PyObject* o = PyList_GetItem(source, x);
-        if (PyString_Check(o)) {
-            char*       st = PyString_AsString(o);
-            wxPoint*    pt;
-            if (SWIG_GetPtr(st,(void **) &pt,"_wxPoint_p")) {
-                PyErr_SetString(PyExc_TypeError,"Expected _wxPoint_p.");
-                return NULL;
-            }
-            temp[x] = *pt;
-        }
-        else if (PyTuple_Check(o)) {
+        if (PyTuple_Check(o)) {
             PyObject* o1 = PyTuple_GetItem(o, 0);
             PyObject* o2 = PyTuple_GetItem(o, 1);
 
             temp[x].x = PyInt_AsLong(o1);
             temp[x].y = PyInt_AsLong(o2);
+        }
+        else if (PyInstance_Check(o)) {
+            wxPoint* pt;
+            if (SWIG_GetPtrObj(o,(void **) &pt,"_wxPoint_p")) {
+                PyErr_SetString(PyExc_TypeError,"Expected _wxPoint_p.");
+                return NULL;
+            }
+            temp[x] = *pt;
         }
         else {
             PyErr_SetString(PyExc_TypeError, "Expected a list of 2-tuples or wxPoints.");
@@ -619,7 +629,7 @@ wxPoint* wxPoint_LIST_helper(PyObject* source) {
 }
 
 
-wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
+HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -651,7 +661,7 @@ wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
 
 
 
-wxString* wxString_LIST_helper(PyObject* source) {
+HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -674,7 +684,7 @@ wxString* wxString_LIST_helper(PyObject* source) {
 }
 
 
-wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
+HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -716,76 +726,6 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 
 
 //----------------------------------------------------------------------
-//----------------------------------------------------------------------
-
-wxPyCallbackHelper::wxPyCallbackHelper() {
-    m_self = NULL;
-    m_lastFound = NULL;
-}
-
-
-wxPyCallbackHelper::~wxPyCallbackHelper() {
-#ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(wxPyEventThreadState);
-#endif
-
-    Py_XDECREF(m_self);
-
-#ifdef WXP_WITH_THREAD
-    PyEval_SaveThread();
-#endif
-}
-
-void wxPyCallbackHelper::setSelf(PyObject* self) {
-    m_self = self;
-    Py_INCREF(m_self);
-}
-
-
-
-bool wxPyCallbackHelper::findCallback(const wxString& name) {
-    m_lastFound = NULL;
-    if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str()))
-        m_lastFound = PyObject_GetAttrString(m_self, (char*)name.c_str());
-
-    return m_lastFound != NULL;
-}
-
-
-int wxPyCallbackHelper::callCallback(PyObject* argTuple) {
-    PyObject*   result;
-    int         retval = FALSE;
-
-    result = callCallbackObj(argTuple);
-    if (result) {                       // Assumes an integer return type...
-        retval = PyInt_AsLong(result);
-        Py_DECREF(result);
-        PyErr_Clear();                  // forget about it if it's not...
-    }
-#ifdef WXP_WITH_THREAD
-    PyEval_SaveThread();
-#endif
-    return retval;
-}
-
-// Invoke the Python callable object, returning the raw PyObject return
-// value.  Caller should DECREF the return value and also call PyEval_SaveThread.
-PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) {
-#ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(wxPyEventThreadState);
-#endif
-    PyObject*   result;
-
-    result = PyEval_CallObject(m_lastFound, argTuple);
-    Py_DECREF(argTuple);
-    if (!result) {
-        PyErr_Print();
-    }
-    return result;
-}
-
-
-
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
