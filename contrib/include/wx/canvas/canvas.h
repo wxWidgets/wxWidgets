@@ -19,6 +19,8 @@
 
 #include "wx/image.h"
 #include "wx/txtstrm.h"
+#include "wx/geometry.h"
+
 
 //----------------------------------------------------------------------------
 // decls
@@ -110,7 +112,7 @@ public:
     virtual bool IsHit( int x, int y, int margin );
     virtual wxCanvasObject* IsHitObject( int x, int y, int margin );
 
-    void ExtendArea(int x, int y);
+    void ExtendArea(double x, double y);
 
     inline int  GetXMin()     { return m_minx; }
     inline int  GetYMin()     { return m_miny; }
@@ -152,7 +154,7 @@ public:
     inline int  GetPosX()          { return m_x; }
     inline int  GetPosY()          { return m_y; }
 
-    void ExtendArea(int x, int y);
+    void ExtendArea(double x, double y);
     virtual wxCanvasObject* IsHitObject( int x, int y, int margin );
 
 protected:
@@ -171,6 +173,76 @@ protected:
     bool          m_validbounds;
 
 };
+
+//----------------------------------------------------------------------------
+// wxCanvasPolygon
+//----------------------------------------------------------------------------
+
+class wxCanvasPolygon: public wxCanvasObject
+{
+public:
+    wxCanvasPolygon(int n, wxPoint2DDouble points[]);
+    ~wxCanvasPolygon();
+    SetBrush(wxBrush& brush){m_brush = brush;};
+    SetPen(wxPen& pen){m_pen = pen;};
+
+    virtual void Recreate();
+
+    virtual void Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void WriteSVG( wxTextOutputStream &stream );
+
+private:
+    void ExtendArea(double x, double y);
+
+    wxBrush       m_brush;
+    wxPen         m_pen;
+
+    int           m_n;
+    wxPoint2DDouble* m_points;
+
+    //bounding box
+    double        m_minx;
+    double        m_miny;
+    double        m_maxx;
+    double        m_maxy;
+    bool          m_validbounds;
+
+};
+
+//----------------------------------------------------------------------------
+// wxCanvasPolyline
+//----------------------------------------------------------------------------
+
+class wxCanvasPolyline: public wxCanvasObject
+{
+public:
+    wxCanvasPolyline(int n, wxPoint2DDouble points[]);
+    ~wxCanvasPolyline();
+    SetPen(wxPen& pen){m_pen = pen;};
+
+    virtual void Recreate();
+
+    virtual void Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void WriteSVG( wxTextOutputStream &stream );
+
+private:
+    void ExtendArea(double x, double y);
+
+    wxPen         m_pen;
+
+    int           m_n;
+    wxPoint2DDouble* m_points;
+
+    //bounding box
+    double        m_minx;
+    double        m_miny;
+    double        m_maxx;
+    double        m_maxy;
+    bool          m_validbounds;
+
+};
+
+
 
 //----------------------------------------------------------------------------
 // wxCanvasRect

@@ -77,7 +77,7 @@ void wxCanvasObject::Move( int x, int y )
 {
     int old_x = m_area.x;
     int old_y = m_area.y;
-    
+
     m_area.x = x;
     m_area.y = y;
 
@@ -153,7 +153,7 @@ void wxCanvasObjectGroup::SetOwner(wxCanvas* canvas)
     }
 }
 
-void wxCanvasObjectGroup::ExtendArea(int x, int y)
+void wxCanvasObjectGroup::ExtendArea(double x, double y)
 {
     if (m_validbounds)
     {
@@ -309,7 +309,7 @@ wxCanvasObject* wxCanvasObjectGroup::IsHitObject( int x, int y, int margin )
         }
         node = node->Previous();
     }
-    
+
     return (wxCanvasObject*) NULL;
 }
 
@@ -332,7 +332,7 @@ void wxCanvasObjectGroupRef::SetOwner(wxCanvas* canvas)
     m_group->SetOwner(canvas);
 }
 
-void wxCanvasObjectGroupRef::ExtendArea(int x, int y)
+void wxCanvasObjectGroupRef::ExtendArea(double x, double y)
 {
     if (m_validbounds)
     {
@@ -368,8 +368,8 @@ void wxCanvasObjectGroupRef::Recreate()
 
 void wxCanvasObjectGroupRef::Render(int xabs, int yabs, int x, int y, int width, int height )
 {
-    xabs += m_owner->GetDeviceX(GetPosX());
-    yabs += m_owner->GetDeviceY(GetPosY());
+    xabs += m_owner->GetDeviceX(m_x);
+    yabs += m_owner->GetDeviceY(m_y);
 
     int clip_x = xabs + m_group->GetXMin();
     int clip_width = m_group->GetXMax()-m_group->GetXMin();
@@ -423,19 +423,216 @@ void wxCanvasObjectGroupRef::Move( int x, int y )
     m_x = x;
     m_y = y;
 
-    if (!m_isControl)
+    int old_area_x = m_area.x;
+    int old_area_y = m_area.y;
+
+    m_area.x=m_owner->GetDeviceX(  m_x + m_minx );
+    m_area.y=m_owner->GetDeviceY(  m_y + m_miny );
+
+  	int leftu,rightu,bottomu,topu ;
+	leftu   = wxMin (m_area.x, old_area_x ) ;
+	rightu  = wxMax (old_area_x + m_area.width, m_area.x + m_area.width) ;
+	topu    = wxMin (m_area.y,old_area_y) ;
+	bottomu = wxMax (old_area_y + m_area.height, m_area.y + m_area.height) ;
+
+    if ( rightu - leftu < 2*m_area.width && bottomu - topu < 2*m_area.height )
     {
-        // TODO: sometimes faster to merge into 1 Update or
-        // to break up into four
-        m_owner->Update(m_area.x, m_area.y, m_area.width, m_area.height );
-        //calculate the new area in pixels relative to the parent
-        SetArea( m_owner->GetDeviceX(  m_x + m_minx ),
-                 m_owner->GetDeviceY(  m_y + m_miny ),
-                 m_owner->GetDeviceWidth( m_maxx-m_minx ),
-                 m_owner->GetDeviceHeight( m_maxy-m_miny ) );
+        m_owner->Update(leftu,topu,rightu - leftu,bottomu - topu);
+    }
+    else
+    {
+        m_owner->Update(old_area_x, old_area_y, m_area.width, m_area.height );
         m_owner->Update( m_area.x, m_area.y, m_area.width, m_area.height );
     }
 }
+
+//----------------------------------------------------------------------------
+// wxCanvasPolyline
+//----------------------------------------------------------------------------
+
+wxCanvasPolyline::wxCanvasPolyline( int n,  wxPoint2DDouble points[])
+   : wxCanvasObject()
+{
+    m_n = n;
+    m_points = points;
+    m_pen   = wxPen(wxColour(0,0,0),1,wxSOLID);
+}
+
+wxCanvasPolyline::~wxCanvasPolyline()
+{
+    delete m_points;
+}
+
+void wxCanvasPolyline::ExtendArea(double x, double y)
+{
+    if (m_validbounds)
+    {
+        if (x < m_minx) m_minx = x;
+        if (y < m_miny) m_miny = y;
+        if (x > m_maxx) m_maxx = x;
+        if (y > m_maxy) m_maxy = y;
+    }
+    else
+    {
+        m_validbounds = TRUE;
+
+        m_minx = x;
+        m_miny = y;
+        m_maxx = x;
+        m_maxy = y;
+    }
+}
+
+void wxCanvasPolyline::Recreate()
+{
+
+    m_validbounds=FALSE;
+    int i;
+    for (i=0; i < m_n;i++)
+    {
+        ExtendArea(m_points[i].m_x,m_points[i].m_y);
+    }
+
+    //include the pen width also
+    ExtendArea(m_minx -m_pen.GetWidth(),m_miny-m_pen.GetWidth());
+    ExtendArea(m_maxx+m_pen.GetWidth()*2,m_maxy+m_pen.GetWidth()*2);
+
+    //set the area in pixels relative to the parent
+    SetArea( m_owner->GetDeviceX(m_minx ),
+             m_owner->GetDeviceY(m_miny ),
+             m_owner->GetDeviceWidth( m_maxx-m_minx ),
+             m_owner->GetDeviceHeight( m_maxy-m_miny ) );
+}
+
+void wxCanvasPolyline::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height )
+{
+    int buffer_x = m_owner->GetBufferX();
+    int buffer_y = m_owner->GetBufferY();
+
+    int start_y = clip_y - buffer_y;
+    int end_y = clip_y+clip_height - buffer_y;
+
+    int start_x = clip_x - buffer_x;
+    int end_x = clip_x+clip_width - buffer_x;
+
+#if IMAGE_CANVAS
+#else
+    wxPoint *cpoints = new wxPoint[m_n];
+    int i;
+    for (i = 0; i < m_n; i++)
+    {
+        cpoints[i].x = m_owner->GetDeviceX(m_points[i].m_x+xabs);
+        cpoints[i].y = m_owner->GetDeviceY(m_points[i].m_y+yabs);
+    }
+    wxMemoryDC *dc = m_owner->GetDC();
+    dc->SetClippingRegion(start_x,start_y,end_x-start_x,end_y-start_y);
+    dc->SetPen(m_pen);
+    dc->DrawLines(m_n, cpoints, 0,0);
+    delete [] cpoints;
+    dc->SetPen(wxNullPen);
+    dc->DestroyClippingRegion();
+#endif
+}
+
+void wxCanvasPolyline::WriteSVG( wxTextOutputStream &stream )
+{
+}
+
+//----------------------------------------------------------------------------
+// wxCanvasPolygon
+//----------------------------------------------------------------------------
+
+wxCanvasPolygon::wxCanvasPolygon( int n, wxPoint2DDouble points[])
+   : wxCanvasObject()
+{
+    m_n = n;
+    m_points = points;
+    m_brush = wxBrush(wxColour(0,0,0),wxSOLID);
+    m_pen   = wxPen(wxColour(0,0,0),1,wxSOLID);
+}
+
+wxCanvasPolygon::~wxCanvasPolygon()
+{
+    delete m_points;
+}
+
+void wxCanvasPolygon::ExtendArea(double x, double y)
+{
+    if (m_validbounds)
+    {
+        if (x < m_minx) m_minx = x;
+        if (y < m_miny) m_miny = y;
+        if (x > m_maxx) m_maxx = x;
+        if (y > m_maxy) m_maxy = y;
+    }
+    else
+    {
+        m_validbounds = TRUE;
+
+        m_minx = x;
+        m_miny = y;
+        m_maxx = x;
+        m_maxy = y;
+    }
+}
+
+void wxCanvasPolygon::Recreate()
+{
+
+    m_validbounds=FALSE;
+    int i;
+    for (i=0; i < m_n;i++)
+    {
+        ExtendArea(m_points[i].m_x,m_points[i].m_y);
+    }
+
+    //include the pen width also
+    ExtendArea(m_minx -m_pen.GetWidth(),m_miny-m_pen.GetWidth());
+    ExtendArea(m_maxx+m_pen.GetWidth()*2,m_maxy+m_pen.GetWidth()*2);
+
+    //set the area in pixels relative to the parent
+    SetArea( m_owner->GetDeviceX( m_minx ),
+             m_owner->GetDeviceY( m_miny ),
+             m_owner->GetDeviceWidth( m_maxx-m_minx ),
+             m_owner->GetDeviceHeight( m_maxy-m_miny ) );
+}
+
+void wxCanvasPolygon::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_width, int clip_height )
+{
+    int buffer_x = m_owner->GetBufferX();
+    int buffer_y = m_owner->GetBufferY();
+
+    int start_y = clip_y - buffer_y;
+    int end_y = clip_y+clip_height - buffer_y;
+
+    int start_x = clip_x - buffer_x;
+    int end_x = clip_x+clip_width - buffer_x;
+
+#if IMAGE_CANVAS
+#else
+    wxPoint *cpoints = new wxPoint[m_n];
+    int i;
+    for (i = 0; i < m_n; i++)
+    {
+        cpoints[i].x = m_owner->GetDeviceX(m_points[i].m_x+xabs);
+        cpoints[i].y = m_owner->GetDeviceY(m_points[i].m_y+yabs);
+    }
+    wxMemoryDC *dc = m_owner->GetDC();
+    dc->SetClippingRegion(start_x,start_y,end_x-start_x,end_y-start_y);
+    dc->SetBrush(m_brush);
+    dc->SetPen(m_pen);
+    dc->DrawPolygon(m_n, cpoints, 0,0,wxWINDING_RULE);
+    delete [] cpoints;
+    dc->SetBrush(wxNullBrush);
+    dc->SetPen(wxNullPen);
+    dc->DestroyClippingRegion();
+#endif
+}
+
+void wxCanvasPolygon::WriteSVG( wxTextOutputStream &stream )
+{
+}
+
 
 
 //----------------------------------------------------------------------------
@@ -487,7 +684,7 @@ void wxCanvasRect::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
     dc->SetPen( *wxTRANSPARENT_PEN );
     wxBrush brush( wxColour( m_red,m_green,m_blue), wxSOLID );
     dc->SetBrush( brush );
-    
+
     dc->DrawRectangle( clip_x-buffer_x, clip_y-buffer_y, clip_width, clip_height );
 #endif
 }
@@ -544,7 +741,7 @@ void wxCanvasLine::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
     int y1 = yabs + m_owner->GetDeviceY( m_y1 );
     int x2 = xabs + m_owner->GetDeviceX( m_x2 );
     int y2 = yabs + m_owner->GetDeviceY( m_y2 );
-    
+
 #if IMAGE_CANVAS
     wxImage *image = m_owner->GetBuffer();
     if ((m_area.width == 0) && (m_area.height == 0))
@@ -610,11 +807,11 @@ void wxCanvasLine::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_w
 #else
     wxMemoryDC *dc = m_owner->GetDC();
     dc->SetClippingRegion( clip_x-buffer_x, clip_y-buffer_y, clip_width, clip_height );
-    
+
     wxPen pen( wxColour(m_red,m_green,m_blue), 0, wxSOLID );
     dc->SetPen( pen );
     dc->DrawLine( x1-buffer_x, y1-buffer_y, x2-buffer_x, y2-buffer_y );
-    
+
     dc->DestroyClippingRegion();
 #endif
 }
@@ -696,7 +893,7 @@ void wxCanvasImage::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_
     }
 #else
     wxMemoryDC *dc = m_owner->GetDC();
-    
+
     if ((clip_x == xabs + m_area.x) &&
         (clip_y == yabs + m_area.y) &&
         (clip_width == m_area.width) &&
@@ -709,7 +906,7 @@ void wxCanvasImage::Render(int xabs, int yabs, int clip_x, int clip_y, int clip_
         // local coordinates
         int start_x = clip_x - (xabs + m_area.x);
         int start_y = clip_y - (yabs + m_area.y);
-        
+
         // Clipping region faster ?
         wxRect rect( start_x, start_y, clip_width, clip_height );
         wxBitmap sub_bitmap( m_tmp.GetSubBitmap( rect ) );
@@ -788,7 +985,7 @@ wxCanvasText::wxCanvasText( const wxString &text, double x, double y, const wxSt
                              m_fontFileName,
                              0,
                              &(data->m_face) );
-                             
+
     error = FT_Set_Char_Size( data->m_face,
                               0,
                               m_size*64,
@@ -1090,7 +1287,7 @@ void wxCanvas::Update( int x, int y, int width, int height, bool blit )
     for (int yy = start_y; yy < end_y; yy++)
         for (int xx = start_x; xx < end_x; xx++)
             m_buffer.SetRGB( xx, yy, m_red, m_green, m_blue );
-            
+
     m_root->Render(0,0, x, y, width, height );
 #else
     wxMemoryDC dc;
@@ -1102,7 +1299,7 @@ void wxCanvas::Update( int x, int y, int width, int height, bool blit )
 
     m_renderDC = &dc;
     m_root->Render(0,0, x, y, width, height );
-    
+
     dc.SelectObject( wxNullBitmap );
 #endif
 }
@@ -1158,7 +1355,7 @@ void wxCanvas::BlitBuffer( wxDC &dc )
         // getting the subrect first and drawing it then?
         wxBitmap sub_bitmap( m_buffer.GetSubBitmap( sub_rect ) );
         dc.DrawBitmap( sub_bitmap, rect->x, rect->y );
-        
+
 #endif
         delete rect;
         m_updateRects.DeleteNode( node );
