@@ -35454,10 +35454,13 @@ else
         powerpc-*-darwin* )
                                     CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
             ;;
-        *)
-            ;;
     esac
 fi
+case "${host}" in
+    powerpc-*-darwin* )
+                        CODE_GEN_FLAGS_CXX="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS_CXX"
+        ;;
+esac
 
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"

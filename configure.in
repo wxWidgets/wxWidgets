@@ -5661,10 +5661,16 @@ else
             dnl pragmas:
             CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
             ;;
-        *)
-            ;;
     esac
 fi
+dnl We have to output NO_GCC_PRAGMA with wx-config on Apple, too:
+case "${host}" in
+    powerpc-*-darwin* )
+        dnl Some Apple's GCC version are broken and can't handle the
+        dnl pragmas:
+        CODE_GEN_FLAGS_CXX="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS_CXX"
+        ;;
+esac
 
 
 dnl for convenience, sort the samples in alphabetical order
