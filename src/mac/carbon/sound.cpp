@@ -88,6 +88,14 @@ public:
         DisposeMovie(m_movie);
         m_movie = NULL ;
         Stop();
+
+        //Note that ExitMovies() is not neccessary, but
+        //the docs are fuzzy on whether or not TerminateQTML is
+        ExitMovies();
+
+     #ifndef __WXMAC__
+        TerminateQTML();
+     #endif
     }
 
     void Notify()
@@ -173,7 +181,7 @@ Boolean wxIsQuickTime4Installed (void)
     long result;
 
     error = Gestalt (gestaltQuickTime, &result);
-    return (error == noErr) && (result >= 4);  //result >= 4 correct?
+    return (error == noErr) && (((result >> 16) & 0xffff) >= 0x0400);
 #else
     return true;
 #endif
@@ -219,7 +227,6 @@ wxSound::wxSound(int size, const wxByte* data)
 
 wxSound::~wxSound()
 {
-    FreeData();
 }
 
 bool wxSound::Create(const wxString& fileName, bool isResource)
@@ -302,6 +309,8 @@ bool wxSound::DoPlay(unsigned flags) const
 
             SetMovieVolume(movie, kFullVolume);
             GoToBeginningOfMovie(movie);
+
+            DisposeHandle(myHandle);
         }
         break;
     case wxSound_RESOURCE:
@@ -420,13 +429,9 @@ bool wxSound::FreeData()
         m_pTimer = NULL;
     }
 
-    //Note that ExitMovies() is not neccessary, but
-    //the docs are fuzzy on whether or not TerminateQTML is
-    ExitMovies();
-
-#ifndef __WXMAC__
-    TerminateQTML();
-#endif
     return true;
 }
 #endif //wxUSE_SOUND
+
+
+
