@@ -788,7 +788,14 @@ def EVT_WINDOW_CREATE(win, func):
     """"""
     pass
 
+def EVT_WINDOW_CREATE_ID(win, id, func):
+    """"""
+    pass
+
 def EVT_WINDOW_DESTROY(win, func):
     """"""
     pass
 
+def EVT_WINDOW_DESTROY_ID(win, id, func):
+    """"""
+    pass
