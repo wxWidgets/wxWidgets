@@ -14,15 +14,7 @@
 
     #! find all our sources
     #! MoreFiles sources
-    $project{"GUIOBJS"} .= "DirectoryCopy.o ";
-    $project{"GUIOBJS"} .= "FSpCompat.o ";
-    $project{"GUIOBJS"} .= "FileCopy.o ";
-    $project{"GUIOBJS"} .= "FullPath.o ";
-    $project{"GUIOBJS"} .= "IterateDirectory.o ";
-    $project{"GUIOBJS"} .= "MoreDesktopMgr.o ";
-    $project{"GUIOBJS"} .= "MoreFiles.o ";
-    $project{"GUIOBJS"} .= "MoreFilesExtras.o ";
-    $project{"GUIOBJS"} .= "Search.o ";
+    $project{"GUIOBJS"} .= "MoreFilesX.o ";
 
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bNotMac\b/;
