@@ -20,7 +20,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_COLOURDLG
+#if wxUSE_COLOURDLG && !defined(__WXGTK20__)
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -312,7 +312,11 @@ void wxGenericColourDialog::InitializeColours(void)
 
     for (i = 0; i < WXSIZEOF(customColours); i++)
     {
-        customColours[i] = colourData.GetCustomColour(i);
+        wxColour c = colourData.GetCustomColour(i);
+        if (c.Ok())
+            customColours[i] = colourData.GetCustomColour(i);
+        else
+            customColours[i] = wxColour(255, 255, 255);
     }
 
     wxColour curr = colourData.GetColour();
@@ -564,5 +568,5 @@ void wxGenericColourDialog::OnBlueSlider(wxCommandEvent& WXUNUSED(event))
   PaintCustomColour(dc);
 }
 
-#endif // wxUSE_COLOURDLG
+#endif // wxUSE_COLOURDLG && !defined(__WXGTK20__)
 
