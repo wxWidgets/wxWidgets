@@ -42,9 +42,9 @@
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
 //#define TEST_EXECUTE
-//#define TEST_FILE
+#define TEST_FILE
 //#define TEST_FILECONF
-#define TEST_FTP
+//#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
@@ -396,6 +396,7 @@ static void TestExecute()
 #ifdef TEST_FILE
 
 #include <wx/file.h>
+#include <wx/ffile.h>
 #include <wx/textfile.h>
 
 static void TestFileRead()
@@ -467,6 +468,55 @@ static void TestTextFileRead()
     else
     {
         printf("ERROR: can't open '%s'\n", file.GetName());
+    }
+
+    puts("");
+}
+
+static void TestFileCopy()
+{
+    puts("*** Testing wxCopyFile ***");
+
+    static const wxChar *filename1 = _T("testdata.fc");
+    static const wxChar *filename2 = _T("test2");
+    if ( !wxCopyFile(filename1, filename2) )
+    {
+        puts("ERROR: failed to copy file");
+    }
+    else
+    {
+        wxFFile f1(filename1, "rb"),
+                f2(filename2, "rb");
+
+        if ( !f1.IsOpened() || !f2.IsOpened() )
+        {
+            puts("ERROR: failed to open file(s)");
+        }
+        else
+        {
+            wxString s1, s2;
+            if ( !f1.ReadAll(&s1) || !f2.ReadAll(&s2) )
+            {
+                puts("ERROR: failed to read file(s)");
+            }
+            else
+            {
+                if ( (s1.length() != s2.length()) ||
+                     (memcmp(s1.c_str(), s2.c_str(), s1.length()) != 0) )
+                {
+                    puts("ERROR: copy error!");
+                }
+                else
+                {
+                    puts("File was copied ok.");
+                }
+            }
+        }
+    }
+
+    if ( !wxRemoveFile(filename2) )
+    {
+        puts("ERROR: failed to remove the file");
     }
 
     puts("");
@@ -3849,8 +3899,11 @@ int main(int argc, char **argv)
 
 #ifdef TEST_FILE
     if ( 0 )
+    {
         TestFileRead();
-    TestTextFileRead();
+        TestTextFileRead();
+    }
+    TestFileCopy();
 #endif // TEST_FILE
 
 #ifdef TEST_THREADS
