@@ -17,7 +17,7 @@
 // If 1, use real DDE. If 0, use TCP/IP
 
 #ifdef __WXMSW__
-#define wxUSE_DDE_FOR_SAMPLE 1
+#define wxUSE_DDE_FOR_SAMPLE 0
 #else
 #define wxUSE_DDE_FOR_SAMPLE 0
 #endif
