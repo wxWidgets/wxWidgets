@@ -104,6 +104,7 @@ LIB_CPP_SRC=\
  gtk/scrolbar.cpp \
  gtk/settings.cpp \
  gtk/slider.cpp \
+ gtk/spinbutt.cpp \
  gtk/statbox.cpp \
  gtk/statbmp.cpp \
  gtk/stattext.cpp \

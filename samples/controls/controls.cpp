@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/spinbutt.h"
 #endif
 
 #include "wx/notebook.h"
@@ -65,17 +66,20 @@ class MyPanel: public wxPanel
     void OnSetFont( wxCommandEvent &event );
     void OnPageChanged( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
+    void OnSpinUpdate( wxSpinEvent &event );
     
-    wxListBox   *m_listbox;
-    wxChoice    *m_choice;
-    wxComboBox  *m_combo;
-    wxRadioBox  *m_radio;
-    wxGauge     *m_gauge;
-    wxSlider    *m_slider;
-    wxButton    *m_fontButton;
+    wxListBox     *m_listbox;
+    wxChoice      *m_choice;
+    wxComboBox    *m_combo;
+    wxRadioBox    *m_radio;
+    wxGauge       *m_gauge;
+    wxSlider      *m_slider;
+    wxButton      *m_fontButton;
+    wxSpinButton  *m_spinbutton;
+    wxTextCtrl    *m_spintext;
     
-    wxTextCtrl  *m_text;
-    wxNotebook  *m_notebook;    
+    wxTextCtrl    *m_text;
+    wxNotebook    *m_notebook;    
   
   DECLARE_EVENT_TABLE() 
 };
@@ -182,6 +186,8 @@ const  ID_SET_FONT          = 170;
 const  ID_GAUGE             = 180;
 const  ID_SLIDER            = 181;
 
+const  ID_SPIN              = 182;
+
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                         MyPanel::OnSize)
@@ -217,6 +223,7 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
   EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
   EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
+  EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
@@ -368,6 +375,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "This is also supposed to demonstrate how\n"
     "to use static controls.\n",
     wxPoint(208,25) );
+  m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
+  m_spintext->SetBackgroundColour("wheat");
+  m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
+  m_spinbutton->SetBackgroundColour("wheat");
+  m_spinbutton->SetRange(0,100); 
+    
   m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
 }
 
@@ -579,6 +592,13 @@ void MyPanel::OnSetFont( wxCommandEvent &WXUNUSED(event) )
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 {
   m_gauge->SetValue( m_slider->GetValue() );
+}
+
+void MyPanel::OnSpinUpdate( wxSpinEvent &event )
+{
+  wxString value;
+  value.sprintf( "%d", (int)event.GetPosition() );
+  m_spintext->SetValue( value );
 }
 
 MyPanel::~MyPanel()

@@ -522,10 +522,13 @@ void wxListBox::ApplyWidgetStyle()
 {
     SetWidgetStyle();
   
-    GdkWindow *window = GTK_WIDGET(m_list)->window;
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
-    gdk_window_set_background( window, m_backgroundColour.GetColor() );
-    gdk_window_clear( window );
+    if (m_backgroundColour.Ok())
+    {
+        GdkWindow *window = GTK_WIDGET(m_list)->window;
+        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+        gdk_window_set_background( window, m_backgroundColour.GetColor() );
+        gdk_window_clear( window );
+    }
       
     GList *child = m_list->children;
     while (child)
