@@ -361,7 +361,13 @@ DocDeclAStr(
     void , wxSetDefaultPyEncoding(const char* encoding),
     "SetDefaultPyEncoding(string encoding)",
     "Sets the encoding that wxPython will use when it needs to convert a
-Python string or unicode object to or from a wxString.", "");
+Python string or unicode object to or from a wxString.
+
+The default encoding is the value of ``locale.getdefaultlocale()[1]``
+but please be aware that the default encoding within the same locale
+may be slightly different on different platforms.  For example, please
+see http://www.alanwood.net/demos/charsetdiffs.html for differences
+between the common latin/roman encodings.", "");
 
 DocDeclAStr(
     const char* , wxGetDefaultPyEncoding(),

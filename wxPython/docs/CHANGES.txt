@@ -133,6 +133,18 @@ morbidly curious, here are a few more details:
       value using str() or to the long integer value of the pointer
       using long().
 
+Added SetDefaultPyEncoding and GetDefaultPyEncoding functions which
+will set/get the encoding used by wxPython to convert string or
+unicode objects to/from wxString objects.  Previously the default
+Python encoding was always used, but unless the user had tweaked their
+sitecustomize.py file it is always "ascii", which would result in
+errors if the strings contained character codes >= 128.
+SetDefaultPyEncoding will now allow you to control which encoding will
+be used to do those conversions.  The default encoding is set to the
+value of `locale.getdefaultlocale()[1]` when wxPython is first
+imported.  Please see http://www.alanwood.net/demos/charsetdiffs.html
+for subtle differences between the common latin/roman encodings.
+
 
 
 
