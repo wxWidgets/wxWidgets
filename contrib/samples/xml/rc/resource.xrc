@@ -116,4 +116,39 @@
       <orient>wxVERTICAL</orient>
     </object>
   </object>
+  <object class="wxDialog" name="dlg2">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem" name="dfgdfg">
+        <object class="wxTextCtrl">
+          <size>200,200d</size>
+          <style>wxTE_MULTILINE|wxSUNKEN_BORDER</style>
+          <value>Hello, this is an ordinary multiline\n         textctrl....</value>
+        </object>
+        <option>1</option>
+        <flag>wxEXPAND|wxALL</flag>
+        <border>10</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <object class="sizeritem">
+            <object class="wxButton" name="wxID_OK">
+              <label>Ok</label>
+              <default>1</default>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="wxID_CANCEL">
+              <label>Cancel</label>
+            </object>
+            <border>10</border>
+            <flag>wxLEFT</flag>
+          </object>
+        </object>
+        <flag>wxLEFT|wxRIGHT|wxBOTTOM|wxALIGN_RIGHT</flag>
+        <border>10</border>
+      </object>
+    </object>
+    <title>Second testing dialog</title>
+  </object>
 </resource>
