@@ -582,7 +582,7 @@ if [ -n "$output_option_list" ]; then
 
         echo "  Specification best match: $_best_delegate"
 
-    elif [ -n "_delegates" ]; then
+    elif [ -z "$_delegates" ]; then
 
         cat <<-EOF
 	  No config found to match: $config_spec
@@ -593,11 +593,13 @@ if [ -n "$output_option_list" ]; then
 	  you may call its wx-config directly by specifying its full path.
 
 	EOF
-        exit 1
 
+    else
+        echo " Specification was ambiguous.  Use additional feature options"
+        echo " to choose between alternate matches."
     fi
 
-    _delegates=$(remove_field $_best_delegate $_delegates)
+    [ -z "$_best_delegate" ] || _delegates=$(remove_field $_best_delegate $_delegates)
 
     if [ -n "$_delegates" ]; then
         echo
