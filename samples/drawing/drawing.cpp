@@ -115,6 +115,7 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnClip(wxCommandEvent& event);
     void OnShow(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
 
@@ -151,6 +152,9 @@ public:
 
     void Show(ScreenToShow show) { m_show = show; Refresh(); }
 
+    // set or remove the clipping region
+    void Clip(bool clip) { m_clip = clip; Refresh(); }
+
 protected:
     void DrawTestLines( int x, int y, int width, wxDC &dc );
     void DrawTestPoly(wxDC& dc);
@@ -170,6 +174,7 @@ private:
     ScreenToShow m_show;
     wxBitmap     m_smile_bmp;
     wxIcon       m_std_icon;
+    bool         m_clip;
 
     DECLARE_EVENT_TABLE()
 };
@@ -196,6 +201,8 @@ enum
     File_ShowRegions,
     File_ShowCircles,
     MenuShow_Last = File_ShowCircles,
+
+    File_Clip,
 
     MenuOption_First,
 
@@ -919,11 +926,15 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         }
     }
 
+    if ( m_clip )
+        dc.SetClippingRegion(100, 100, 100, 100);
+
     dc.Clear();
 
-    if ( m_owner->m_textureBackground) {
+    if ( m_owner->m_textureBackground )
+    {
         dc.SetPen(*wxMEDIUM_GREY_PEN);
-        for (int i=0; i<200; i++)
+        for ( int i = 0; i < 200; i++ )
             dc.DrawLine(0, i*10, i*10, 0);
     }
 
@@ -994,6 +1005,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU      (File_Quit,     MyFrame::OnQuit)
     EVT_MENU      (File_About,    MyFrame::OnAbout)
+    EVT_MENU      (File_Clip,     MyFrame::OnClip)
 
     EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
 
@@ -1018,6 +1030,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowOps, "&ROP screen\tF7");
     menuFile->Append(File_ShowRegions, "Re&gions screen\tF8");
     menuFile->Append(File_ShowCircles, "&Circles screen\tF9");
+    menuFile->AppendSeparator();
+    menuFile->AppendCheckItem(File_Clip, "&Clip\tCtrl-C", "Clip/unclip drawing");
     menuFile->AppendSeparator();
     menuFile->Append(File_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
@@ -1108,6 +1122,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
               );
 
     wxMessageBox(msg, "About Drawing", wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnClip(wxCommandEvent& event)
+{
+    m_canvas->Clip(event.IsChecked());
 }
 
 void MyFrame::OnShow(wxCommandEvent& event)
