@@ -32,8 +32,6 @@
       unsigned short  Data3;
       unsigned char   Data4[8];
     } UUID;                     // UUID = GUID = CLSID = LIBID = IID
-  #else   // WIN16
-    #error "Don't know about UUIDs on this platform"
   #endif  // WIN32
 #endif  // UUID_DEFINED
 

@@ -1306,9 +1306,7 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
     wxWindow *parent = win->GetParent();
     wxCHECK_RET( parent, wxT("MDI client without parent frame? weird...") );
 
-#ifndef __WIN16__
     ::SendMessage(GetWinHwnd(win), WM_MDIREFRESHMENU, 0, 0L);
-#endif
 
     ::DrawMenuBar(GetWinHwnd(parent));
 }
@@ -1396,15 +1394,9 @@ static void RemoveWindowMenu(wxWindow *win, WXHMENU menu)
 static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
                               WXWORD *activate, WXHWND *hwndAct, WXHWND *hwndDeact)
 {
-#ifdef __WIN32__
     *activate = true;
     *hwndAct = (WXHWND)lParam;
     *hwndDeact = (WXHWND)wParam;
-#else // Win16
-    *activate = (WXWORD)wParam;
-    *hwndAct = (WXHWND)LOWORD(lParam);
-    *hwndDeact = (WXHWND)HIWORD(lParam);
-#endif // Win32/Win16
 }
 
 #endif

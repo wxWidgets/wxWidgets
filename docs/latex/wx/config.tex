@@ -11,7 +11,7 @@ the registry under Win32 or text-based config files under Unix (or even
 Windows 3.1 .INI files if you're really unlucky). To make writing the portable
 code even easier, wxWindows provides a typedef wxConfig
 which is mapped onto the native wxConfigBase implementation on the given
-platform: i.e. wxRegConfig under Win32, wxIniConfig under Win16 and
+platform: i.e. wxRegConfig under Win32 (optionally wxIniConfig) and
 wxFileConfig otherwise.
 
 See \helpref{config overview}{wxconfigoverview} for the descriptions of all

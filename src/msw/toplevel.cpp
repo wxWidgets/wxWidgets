@@ -222,7 +222,6 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 
     if ( exflags )
     {
-#if !defined(__WIN16__)
         if ( !(GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) )
         {
             if ( style & wxFRAME_TOOL_WINDOW )
@@ -255,7 +254,6 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 #endif
             //else: nothing to do [here]
         }
-#endif // !Win16
 
         if ( style & wxSTAY_ON_TOP )
             *exflags |= WS_EX_TOPMOST;

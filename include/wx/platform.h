@@ -311,7 +311,7 @@
 
     /* to be changed for Win64! */
 #    ifndef __WIN32__
-#        define __WIN16__
+#        error "__WIN32__ should be defined for Win32 and Win64, Win16 is not supported"
 #    endif
 
     /*

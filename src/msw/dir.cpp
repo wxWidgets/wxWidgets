@@ -28,11 +28,6 @@
     #pragma hdrstop
 #endif
 
-// For _A_SUBDIR, etc.
-#if defined(__BORLANDC__) && defined(__WIN16__)
-#include <dos.h>
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -49,141 +44,55 @@
 // define the types and functions used for file searching
 // ----------------------------------------------------------------------------
 
-// under Win16 use compiler-specific functions
-#ifdef __WIN16__
-    #ifdef __VISUALC__
-        #include <dos.h>
-        #include <errno.h>
+typedef WIN32_FIND_DATA FIND_STRUCT;
+typedef HANDLE FIND_DATA;
+typedef DWORD FIND_ATTR;
 
-        typedef struct _find_t FIND_STRUCT;
-    #elif defined(__BORLANDC__)
-        #include <dir.h>
+static inline FIND_DATA InitFindData() { return INVALID_HANDLE_VALUE; }
 
-        typedef struct ffblk FIND_STRUCT;
-    #else
-        #error "No directory searching functions for this compiler"
-    #endif
-
-    typedef FIND_STRUCT *FIND_DATA;
-    typedef char FIND_ATTR;
-
-    static inline FIND_DATA InitFindData() { return (FIND_DATA)NULL; }
-    static inline bool IsFindDataOk(FIND_DATA fd) { return fd != NULL; }
-    static inline void FreeFindData(FIND_DATA fd) { free(fd); }
-
-    static inline FIND_DATA FindFirst(const wxString& spec,
-                                      FIND_STRUCT * WXUNUSED(finddata))
-    {
-        // attribute to find all files
-        static const FIND_ATTR attr = 0x3F;
-
-        FIND_DATA fd = (FIND_DATA)malloc(sizeof(FIND_STRUCT));
-
-        if (
-        #ifdef __VISUALC__
-            _dos_findfirst(spec, attr, fd) == 0
-        #else // Borland
-            findfirst(spec, fd, attr) == 0
-        #endif
-           )
-        {
-            return fd;
-        }
-        else
-        {
-            free(fd);
-
-            return NULL;
-        }
-    }
-
-    static inline bool FindNext(FIND_DATA fd, FIND_STRUCT * WXUNUSED(finddata))
-    {
-        #ifdef __VISUALC__
-            return _dos_findnext(fd) == 0;
-        #else // Borland
-            return findnext(fd) == 0;
-        #endif
-    }
-
-    static const wxChar *GetNameFromFindData(FIND_STRUCT *finddata)
-    {
-        #ifdef __VISUALC__
-            return finddata->name;
-        #else // Borland
-            return finddata->ff_name;
-        #endif
-    }
-
-    static const FIND_ATTR GetAttrFromFindData(FIND_STRUCT *finddata)
-    {
-        #ifdef __VISUALC__
-            return finddata->attrib;
-        #else // Borland
-            return finddata->ff_attrib;
-        #endif
-    }
-
-    static inline bool IsDir(FIND_ATTR attr)
-    {
-        return (attr & _A_SUBDIR) != 0;
-    }
-
-    static inline bool IsHidden(FIND_ATTR attr)
-    {
-        return (attr & (_A_SYSTEM | _A_HIDDEN)) != 0;
-    }
-#else // Win32
-    typedef WIN32_FIND_DATA FIND_STRUCT;
-    typedef HANDLE FIND_DATA;
-    typedef DWORD FIND_ATTR;
-
-    static inline FIND_DATA InitFindData() { return INVALID_HANDLE_VALUE; }
-
-    static inline bool IsFindDataOk(FIND_DATA fd)
-    {
+static inline bool IsFindDataOk(FIND_DATA fd)
+{
         return fd != INVALID_HANDLE_VALUE;
-    }
+}
 
-    static inline void FreeFindData(FIND_DATA fd)
-    {
+static inline void FreeFindData(FIND_DATA fd)
+{
         if ( !::FindClose(fd) )
         {
             wxLogLastError(_T("FindClose"));
         }
-    }
+}
 
-    static inline FIND_DATA FindFirst(const wxString& spec,
+static inline FIND_DATA FindFirst(const wxString& spec,
                                       FIND_STRUCT *finddata)
-    {
+{
         return ::FindFirstFile(spec, finddata);
-    }
+}
 
-    static inline bool FindNext(FIND_DATA fd, FIND_STRUCT *finddata)
-    {
+static inline bool FindNext(FIND_DATA fd, FIND_STRUCT *finddata)
+{
         return ::FindNextFile(fd, finddata) != 0;
-    }
+}
 
-    static const wxChar *GetNameFromFindData(FIND_STRUCT *finddata)
-    {
+static const wxChar *GetNameFromFindData(FIND_STRUCT *finddata)
+{
         return finddata->cFileName;
-    }
+}
 
-    static const FIND_ATTR GetAttrFromFindData(FIND_STRUCT *finddata)
-    {
+static const FIND_ATTR GetAttrFromFindData(FIND_STRUCT *finddata)
+{
         return finddata->dwFileAttributes;
-    }
+}
 
-    static inline bool IsDir(FIND_ATTR attr)
-    {
+static inline bool IsDir(FIND_ATTR attr)
+{
         return (attr & FILE_ATTRIBUTE_DIRECTORY) != 0;
-    }
+}
 
-    static inline bool IsHidden(FIND_ATTR attr)
-    {
+static inline bool IsHidden(FIND_ATTR attr)
+{
         return (attr & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0;
-    }
-#endif // __WIN16__
+}
 
 // ----------------------------------------------------------------------------
 // constants
@@ -268,12 +177,8 @@ bool wxDirData::Read(wxString *filename)
 {
     bool first = FALSE;
 
-#ifdef __WIN32__
     WIN32_FIND_DATA finddata;
     #define PTR_TO_FINDDATA (&finddata)
-#else // Win16
-    #define PTR_TO_FINDDATA (m_finddata)
-#endif
 
     if ( !IsFindDataOk(m_finddata) )
     {

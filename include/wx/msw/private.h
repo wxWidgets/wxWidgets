@@ -299,14 +299,11 @@ inline bool wxIsCtrlDown()
 inline RECT wxGetWindowRect(HWND hwnd)
 {
     RECT rect;
-#ifdef __WIN16__
-    ::GetWindowRect(hwnd, &rect);
-#else // Win32
+
     if ( !::GetWindowRect(hwnd, &rect) )
     {
         wxLogLastError(_T("GetWindowRect"));
     }
-#endif // Win16/32
 
     return rect;
 }
@@ -314,14 +311,11 @@ inline RECT wxGetWindowRect(HWND hwnd)
 inline RECT wxGetClientRect(HWND hwnd)
 {
     RECT rect;
-#ifdef __WIN16__
-    ::GetClientRect(hwnd, &rect);
-#else // Win32
+
     if ( !::GetClientRect(hwnd, &rect) )
     {
         wxLogLastError(_T("GetClientRect"));
     }
-#endif // Win16/32
 
     return rect;
 }

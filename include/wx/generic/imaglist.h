@@ -86,7 +86,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericImageList)
 };
 
-#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
+#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 /*
  * wxImageList has to be a real class or we have problems with
  * the run-time information.
@@ -104,7 +104,7 @@ public:
     {
     }
 };
-#endif // !__WXMSW__ || __WIN16__ || __WXUNIVERSAL__
+#endif // !__WXMSW__ || __WXUNIVERSAL__
 
 #endif  // __IMAGELISTH_G__
 

@@ -22,9 +22,6 @@
 
 #if wxUSE_MIMETYPE
 
-// Doesn't compile in WIN16 mode
-#ifndef __WIN16__
-
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #if wxUSE_GUI
@@ -821,8 +818,5 @@ bool wxFileTypeImpl::RemoveDescription()
     wxRegKey rkey (wxRegKey::HKCR, m_strFileType );
     return !rkey.Exists() || rkey.DeleteSelf();
 }
-
-#endif
-  // __WIN16__
 
 #endif // wxUSE_MIMETYPE

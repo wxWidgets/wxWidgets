@@ -38,11 +38,7 @@
 #endif
 
 enum {
-#ifdef __WIN16__
-    ZSTREAM_BUFFER_SIZE = 4096
-#else
     ZSTREAM_BUFFER_SIZE = 16384
-#endif
 };
 
 //////////////////////

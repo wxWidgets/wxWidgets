@@ -111,8 +111,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 // note that this function will create a new object every time
 // it is called even if the image needs no conversion
 
-#ifndef __WIN16__
-
 static wxGDIImage* ConvertImage( const wxGDIImage& bitmap )
 {
     bool isIcon = bitmap.IsKindOf( CLASSINFO(wxIcon) );
@@ -139,8 +137,6 @@ static wxGDIImage* ConvertImage( const wxGDIImage& bitmap )
     return new wxIcon( (const wxIcon&)bitmap );
 }
 
-#endif
-
 bool wxStaticBitmap::Create(wxWindow *parent,
                             wxWindowID id,
                             const wxGDIImage& bitmap,
@@ -158,25 +154,14 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     wxGDIImage *image = (wxGDIImage *)NULL;
     m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
 
-#ifdef __WIN16__
-    wxASSERT_MSG( !m_isIcon, "Icons are not supported in wxStaticBitmap under WIN16." );
-    image = &bitmap;
-#else // Win32
     image = ConvertImage( bitmap );
     m_isIcon = image->IsKindOf( CLASSINFO(wxIcon) );
-#endif // Win16/32
 
     // create the native control
-    if ( !MSWCreateControl(
-#ifdef __WIN32__
-                           _T("STATIC"),
-#else // Win16
-                           _T("BUTTON"),
-#endif // Win32/16
-                           wxEmptyString, pos, size) )
+    if ( !MSWCreateControl(_T("STATIC"), wxEmptyString, pos, size) )
     {
         // control creation failed
-        return FALSE;
+        return false;
     }
 
     // no need to delete the new image
@@ -194,16 +179,12 @@ WXDWORD wxStaticBitmap::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-#ifdef __WIN32__
     // what kind of control are we?
     msStyle |= m_isIcon ? SS_ICON : SS_BITMAP;
 
     // we use SS_CENTERIMAGE to prevent the control from resizing the bitmap to
     // fit to its size -- this is unexpected and doesn't happen in other ports
     msStyle |= SS_CENTERIMAGE;
-#else // Win16
-    msStyle |= BS_OWNERDRAW;
-#endif // Win32/16
 
     return msStyle;
 }
@@ -275,45 +256,6 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     rect.bottom = y + h;
     InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
 }
-
-// under Win32 we use the standard static control style for this
-#ifdef __WIN16__
-bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
-{
-    LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT) item;
-
-    wxCHECK_MSG( !m_isIcon, FALSE, _T("icons not supported in wxStaticBitmap") );
-
-    wxBitmap* bitmap = (wxBitmap *)m_image;
-    if ( !bitmap->Ok() )
-        return FALSE;
-
-    HDC hDC = lpDIS->hDC;
-    HDC memDC = ::CreateCompatibleDC(hDC);
-
-    HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
-
-    if (!old)
-        return FALSE;
-
-    int x = lpDIS->rcItem.left;
-    int y = lpDIS->rcItem.top;
-    int width = lpDIS->rcItem.right - x;
-    int height = lpDIS->rcItem.bottom - y;
-
-    // Centre the bitmap in the control area
-    int x1 = (int) (x + ((width - bitmap->GetWidth()) / 2));
-    int y1 = (int) (y + ((height - bitmap->GetHeight()) / 2));
-
-    ::BitBlt(hDC, x1, y1, bitmap->GetWidth(), bitmap->GetHeight(), memDC, 0, 0, SRCCOPY);
-
-    ::SelectObject(memDC, old);
-
-    ::DeleteDC(memDC);
-
-    return TRUE;
-}
-#endif // Win16
 
 // We need this or the control can never be moved e.g. in Dialog Editor.
 WXLRESULT wxStaticBitmap::MSWWindowProc(WXUINT nMsg,

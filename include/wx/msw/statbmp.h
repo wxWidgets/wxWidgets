@@ -74,9 +74,6 @@ public:
     // -------------------------------
 
     // implement base class virtuals
-#ifdef __WIN16__
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-#endif // __WIN16__
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:

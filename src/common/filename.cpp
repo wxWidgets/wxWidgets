@@ -585,7 +585,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     }
 
 #elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-#ifdef __WIN32__
+
     if ( dir.empty() )
     {
         if ( !::GetTempPath(MAX_PATH, wxStringBuffer(dir, MAX_PATH + 1)) )
@@ -612,12 +612,6 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 
         path.clear();
     }
-#else // Win16
-    if ( !::GetTempFileName(NULL, prefix, 0, wxStringBuffer(path, 1025)) )
-    {
-        path.clear();
-    }
-#endif // Win32/16
 
 #else // !Windows
     if ( dir.empty() )

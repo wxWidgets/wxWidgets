@@ -681,7 +681,7 @@ BEGIN_EVENT_TABLE(wxGenericTreeCtrl,wxScrolledWindow)
     EVT_TREE_ITEM_GETTOOLTIP(-1, wxGenericTreeCtrl::OnGetToolTip)
 END_EVENT_TABLE()
 
-#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
+#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 /*
  * wxTreeCtrl has to be a real class or we have problems with
  * the run-time information.

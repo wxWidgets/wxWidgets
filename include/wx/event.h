@@ -754,7 +754,6 @@ public:
             *ypos = m_y;
     }
 
-#ifndef __WIN16__
     void GetPosition(long *xpos, long *ypos) const
     {
         if (xpos)
@@ -762,7 +761,6 @@ public:
         if (ypos)
             *ypos = (long)m_y;
     }
-#endif
 
     // Find the position of the event
     wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
@@ -905,13 +903,11 @@ public:
         if (ypos) *ypos = m_y;
     }
 
-#ifndef __WIN16__
     void GetPosition(long *xpos, long *ypos) const
     {
         if (xpos) *xpos = (long)m_x;
         if (ypos) *ypos = (long)m_y;
     }
-#endif
 
     wxPoint GetPosition() const
         { return wxPoint(m_x, m_y); }

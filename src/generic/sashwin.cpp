@@ -670,19 +670,11 @@ void wxSashWindow::SizeWindows()
 void wxSashWindow::InitColours()
 {
     // Shadow colours
-#ifndef __WIN16__
     m_faceColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_mediumShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW);
     m_darkShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW);
     m_lightShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
     m_hilightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT);
-#else
-    m_faceColour = wxTheColourDatabase->Find("LIGHT GREY");
-    m_mediumShadowColour = wxTheColourDatabase->Find("GREY");
-    m_darkShadowColour = wxTheColourDatabase->Find("BLACK");
-    m_lightShadowColour = wxTheColourDatabase->Find("LIGHT GREY");
-    m_hilightColour = wxTheColourDatabase->Find("WHITE");
-#endif
 }
 
 void wxSashWindow::SetSashVisible(wxSashEdgePosition edge, bool sash)

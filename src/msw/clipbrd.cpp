@@ -161,7 +161,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
         case CF_BITMAP:
             return ::IsClipboardFormatAvailable(CF_DIB) != 0;
 
-#if wxUSE_ENH_METAFILE && !defined(__WIN16__) && !defined(__WXWINCE__)
+#if wxUSE_ENH_METAFILE && !defined(__WXWINCE__)
         case CF_METAFILEPICT:
             return ::IsClipboardFormatAvailable(CF_ENHMETAFILE) != 0;
 #endif // wxUSE_ENH_METAFILE
@@ -252,7 +252,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
             }
 #endif // wxUSE_METAFILE
 
-#if wxUSE_ENH_METAFILE && !defined(__WIN16__) && !defined(__WXWINCE__)
+#if wxUSE_ENH_METAFILE && !defined(__WXWINCE__)
         case wxDF_ENHMETAFILE:
             {
                 wxEnhMetaFile *emf = (wxEnhMetaFile *)data;

@@ -55,7 +55,7 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/spinctlg.h"
-#elif defined(__WXMSW__) && defined(__WIN32__)
+#elif defined(__WXMSW__)
     #include "wx/msw/spinctrl.h"
 #elif defined(__WXPM__)
     #include "wx/os2/spinctrl.h"
@@ -65,8 +65,6 @@ protected:
     #include "wx/generic/spinctlg.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/spinctrl.h"
-#else // Win16 || !Win
-    #include "wx/generic/spinctlg.h"
 #endif // platform
 
 #define EVT_SPINCTRL(id, fn) \

@@ -44,11 +44,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 
-#ifdef __WIN16__
-#define wxUSE_IMAGE_IN_DRAGIMAGE 0
-#else
 #define wxUSE_IMAGE_IN_DRAGIMAGE 1
-#endif
 
 #if wxUSE_IMAGE_IN_DRAGIMAGE
 #include "wx/image.h"

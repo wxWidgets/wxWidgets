@@ -171,14 +171,6 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
   SetMarginWidth(GetDefaultMarginWidth());
 }
 
-/*
- * JACS - I've got the owner-draw stuff partially working with WIN16,
- * with a really horrible-looking cross for wxCheckListBox instead of a
- * check - could use a bitmap check-mark instead, defined in wx.rc.
- * Also there's a refresh problem whereby it doesn't always draw the
- * check until you click to the right of it, which is OK for WIN32.
- */
-
 bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                                     wxODAction act, wxODStatus stat)
 {
@@ -285,7 +277,6 @@ void wxCheckListBoxItem::Check(bool check)
 
     HWND hwndListbox = (HWND)m_pParent->GetHWND();
 
-    #ifdef __WIN32__
         RECT rcUpdate;
 
         if ( ::SendMessage(hwndListbox, LB_GETITEMRECT,
@@ -293,16 +284,6 @@ void wxCheckListBoxItem::Check(bool check)
         {
             wxLogDebug(wxT("LB_GETITEMRECT failed"));
         }
-    #else // Win16
-        // FIXME this doesn't work if the listbox is scrolled!
-        size_t nHeight = m_pParent->GetItemHeight();
-        size_t y = m_nIndex * nHeight;
-        RECT rcUpdate ;
-        rcUpdate.left   = 0 ;
-        rcUpdate.top    = y ;
-        rcUpdate.right  = GetDefaultMarginWidth() ;
-        rcUpdate.bottom = y + nHeight ;
-    #endif  // Win32/16
 
     InvalidateRect(hwndListbox, &rcUpdate, FALSE);
 }
@@ -555,7 +536,6 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 
 int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
 {
-  #ifdef __WIN32__
     int nItem = (int)::SendMessage
                              (
                               (HWND)GetHWND(),
@@ -563,10 +543,6 @@ int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
                               0,
                               MAKELPARAM(x, y)
                              );
-  #else // Win16
-    // FIXME this doesn't work when the listbox is scrolled!
-    int nItem = y / m_nItemHeight;
-  #endif // Win32/16
 
   return nItem >= m_noItems ? wxNOT_FOUND : nItem;
 }

@@ -199,9 +199,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
     EVT_UPDATE_UI(wxID_CLEAR, wxTextCtrl::OnUpdateDelete)
     EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
-#ifdef __WIN16__
-    EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
-#endif
 
     EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
 END_EVENT_TABLE()
@@ -1194,7 +1191,6 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 {
     HWND hWnd = GetHwnd();
 
-#ifdef __WIN32__
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
@@ -1250,10 +1246,6 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
         }
 #endif // wxUSE_RICHEDIT
     }
-#else // Win16
-    // WPARAM is 0: selection is scrolled into view
-    SendMessage(hWnd, EM_SETSEL, (WPARAM)0, (LPARAM)MAKELONG(from, to));
-#endif // Win32/16
 }
 
 // ----------------------------------------------------------------------------
@@ -1867,40 +1859,8 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSE
     return (WXHBRUSH)brush->GetResourceHandle();
 }
 
-// In WIN16, need to override normal erasing because
-// Ctl3D doesn't use the wxWindows background colour.
-#ifdef __WIN16__
-void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
-{
-    wxColour col(m_backgroundColour);
-
-#if wxUSE_CTL3D
-    if (m_useCtl3D)
-        col = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#endif
-
-    RECT rect;
-    ::GetClientRect(GetHwnd(), &rect);
-
-    COLORREF ref = wxColourToRGB(col);
-    HBRUSH hBrush = ::CreateSolidBrush(ref);
-    if ( !hBrush )
-        wxLogLastError(wxT("CreateSolidBrush"));
-
-    HDC hdc = (HDC)event.GetDC()->GetHDC();
-
-    int mode = ::SetMapMode(hdc, MM_TEXT);
-
-    ::FillRect(hdc, &rect, hBrush);
-    ::DeleteObject(hBrush);
-    ::SetMapMode(hdc, mode);
-
-}
-#endif // Win16
-
 bool wxTextCtrl::AdjustSpaceLimit()
 {
-#ifndef __WIN16__
     unsigned int limit = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
 
     // HACK: we try to automatically extend the limit for the amount of text
@@ -1942,7 +1902,6 @@ bool wxTextCtrl::AdjustSpaceLimit()
             ::SendMessage(GetHwnd(), EM_LIMITTEXT, limit, 0);
         }
     }
-#endif // !Win16
 
     // we changed the limit
     return TRUE;

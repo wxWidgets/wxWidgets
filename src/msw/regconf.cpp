@@ -33,8 +33,6 @@
 
 #include "wx/config.h"
 
-#ifndef __WIN16__
-
 #include "wx/msw/registry.h"
 #include "wx/msw/regconf.h"
 
@@ -728,9 +726,6 @@ bool wxRegConfig::DeleteAll()
 
   return bOk;
 }
-
-#endif
-  // __WIN16__
 
 #endif
   // wxUSE_CONFIG

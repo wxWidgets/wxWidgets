@@ -24,12 +24,6 @@
     #pragma hdrstop
 #endif
 
-// these functions require Win32
-#if defined(__WIN16__) && wxUSE_DIALUP_MANAGER
-    #undef wxUSE_DIALUP_MANAGER
-    #define wxUSE_DIALUP_MANAGER 0
-#endif // wxUSE_DIALUP_MANAGER && Win16
-
 #if wxUSE_DIALUP_MANAGER
 
 #ifndef WX_PRECOMP

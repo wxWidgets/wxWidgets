@@ -20,7 +20,7 @@
 #define wxMakeMetaFilePlaceable wxMakeMetafilePlaceable
 
 #if defined(__WXMSW__)
-    #if defined(__WIN32__) && wxUSE_ENH_METAFILE
+    #if wxUSE_ENH_METAFILE
         #include "wx/msw/enhmeta.h"
 
         // map all metafile classes to enh metafile
@@ -33,7 +33,7 @@
             // this flag will be set if wxMetafile class is wxEnhMetaFile
             #define wxMETAFILE_IS_ENH
         #endif // wxUSE_WIN_METAFILES_ALWAYS
-    #else // Win16
+    #else // !wxUSE_ENH_METAFILE
         #include "wx/msw/metafile.h"
     #endif
 #elif defined(__WXPM__)

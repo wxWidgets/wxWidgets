@@ -596,7 +596,6 @@ public:
     // ------------------
 
     // for compatibility with the old code when wxCoord was long everywhere
-#ifndef __WIN16__
     void GetTextExtent(const wxString& string,
                        long *x, long *y,
                        long *descent = NULL,
@@ -645,7 +644,6 @@ public:
         if (w) *w = ww;
         if (h) *h = hh;
     }
-#endif // !Win16
 
 protected:
     // the pure virtual functions which should be implemented by wxDC

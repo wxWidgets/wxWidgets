@@ -39,8 +39,6 @@
 
 #if defined(__VISUALC__) || ( defined(__MWERKS__) && defined( __INTEL__) )
     typedef _off_t off_t;
-#elif defined(__BORLANDC__) && defined(__WIN16__)
-    typedef long off_t;
 #elif defined(__SYMANTEC__)
     typedef long off_t;
 #elif defined(__MWERKS__) && !defined(__INTEL__) && !defined(__MACH__)

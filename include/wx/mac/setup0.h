@@ -226,7 +226,7 @@
 // library without it if you have no use for it - this will result in a
 // somewhat smaller and faster operation.
 //
-// This is ignored under Win16, threads are only supported under Win32.
+// Threads are only supported under Win32.
 //
 // Default is 1
 //

@@ -49,8 +49,7 @@ class WXDLLIMPEXP_BASE wxArrayString;
 
 /// should we use registry instead of configuration files under Windows?
 // (i.e. whether wxConfigBase::Create() will create a wxFileConfig (if it's
-//  FALSE) or wxRegConfig (if it's true and we're under Win32) or wxIniConfig
-//  (under Win16))
+//  FALSE) or wxRegConfig (if it's true and we're under Win32))
 #ifndef   wxUSE_CONFIG_NATIVE
   #define wxUSE_CONFIG_NATIVE 1
 #endif
@@ -320,12 +319,9 @@ private:
 // ----------------------------------------------------------------------------
 
 // under Windows we prefer to use the native implementation
+// wxIniConfig isn't native anywhere after droping win16 in wxWidgets 2.6
 #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
-  #ifdef __WIN32__
     #define wxConfig  wxRegConfig
-  #else  //WIN16
-    #define wxConfig  wxIniConfig
-  #endif
 #else // either we're under Unix or wish to use files even under Windows
   #define wxConfig  wxFileConfig
 #endif

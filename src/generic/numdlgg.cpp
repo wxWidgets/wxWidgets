@@ -46,7 +46,7 @@
   #include "wx/statline.h"
 #endif
 
-#if !defined(__WIN16__) && wxUSE_SPINCTRL
+#if wxUSE_SPINCTRL
 #include "wx/spinctrl.h"
 #endif
 
@@ -105,7 +105,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     wxString valStr;
     valStr.Printf(wxT("%ld"), m_value);
     m_spinctrl = new wxSpinCtrl(this, -1, valStr, wxDefaultPosition, wxSize( 140, -1 ) );
-#if !defined(__WIN16__) && wxUSE_SPINCTRL
+#if wxUSE_SPINCTRL
     m_spinctrl->SetRange((int)m_min, (int)m_max);
 #endif
     inputsizer->Add( m_spinctrl, 1, wxCENTER | wxLEFT | wxRIGHT, 10 );

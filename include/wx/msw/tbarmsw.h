@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/tbarmsw.h
-// Purpose:     wxToolBar for Win16
+// Purpose:     wxToolBar for older Windowses
 // Author:      Julian Smart
 // Modified by: 13.12.99 by VZ during toolbar classes reorganization
 // Created:     01/02/97
@@ -25,7 +25,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxButtonBarNameStr;
 class WXDLLEXPORT wxMemoryDC;
 
 // ----------------------------------------------------------------------------
-// wxToolBar for Win16
+// wxToolBar for older Windowses
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxToolBar : public wxToolBarBase

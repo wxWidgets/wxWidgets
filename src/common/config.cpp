@@ -88,11 +88,7 @@ wxConfigBase *wxConfigBase::Create()
   if ( ms_bAutoCreate && ms_pConfig == NULL ) {
     ms_pConfig =
     #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
-      #ifdef __WIN32__
         new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-      #else  //WIN16
-        new wxIniConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-      #endif
     #else // either we're under Unix or wish to use files even under Windows
       new wxFileConfig(wxTheApp->GetAppName());
     #endif

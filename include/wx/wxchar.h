@@ -22,10 +22,7 @@
 
 /* check whether we have wchar_t and which size it is if we do */
 #if !defined(wxUSE_WCHAR_T)
-    #if defined(__WIN16__)
-        /* no wchar_t under Win16 regadrless of compiler used */
-        #define wxUSE_WCHAR_T 0
-    #elif defined(__UNIX__)
+    #if defined(__UNIX__)
         #if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__) || defined(__DARWIN__)
             #define wxUSE_WCHAR_T 1
         #else

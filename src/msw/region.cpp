@@ -421,7 +421,6 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_numRects = 0;
     else
     {
-#if defined(__WIN32__)
         DWORD noBytes = ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, 0, NULL);
         RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
         ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, noBytes, rgnData);
@@ -442,17 +441,6 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_numRects = header->nCount;
 
         delete[] (char*) rgnData;
-#else // Win16
-        RECT rect;
-        ::GetRgnBox(((wxRegionRefData*)region.m_refData)->m_region, &rect);
-        m_rects = new wxRect[1];
-        m_rects[0].x = rect.left;
-        m_rects[0].y = rect.top;
-        m_rects[0].width = rect.right - rect.left;
-        m_rects[0].height = rect.bottom - rect.top;
-
-        m_numRects = 1;
-#endif // Win32/16
     }
 }
 

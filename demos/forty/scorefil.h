@@ -15,13 +15,6 @@
 
 #include <wx/config.h>
 
-#ifdef __WIN16__
-#include <wx/fileconf.h>
-
-#undef wxConfig
-#define wxConfig wxFileConfig
-#endif
-
 class ScoreFile {
 public:
 	ScoreFile(const wxString& appName);

@@ -74,12 +74,6 @@ PgmCtrl::PgmCtrl(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const
     // Make an image list containing small icons
     p_imageListNormal = new wxImageList(image_size, image_size, TRUE);
     // should correspond to TreeIc_xxx enum
-#if defined(__WXMSW__) && defined(__WIN16__)
-    // This is required in 16-bit Windows mode only because we can't load a specific (16x16)
-    // icon image, so it comes out stretched
-    p_imageListNormal->Add(wxBitmap(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE).ConvertToImage().Rescale(image_size, image_size)));
-    p_imageListNormal->Add(wxBitmap(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE).ConvertToImage().Rescale(image_size, image_size)));
-#else
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(aLogo)).ConvertToImage().Rescale(image_size, image_size)));
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(DsnClosed)).ConvertToImage().Rescale(image_size, image_size)));
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(DsnOpen)).ConvertToImage().Rescale(image_size, image_size)));
@@ -87,7 +81,6 @@ PgmCtrl::PgmCtrl(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(DocOpen)).ConvertToImage().Rescale(image_size, image_size)));
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(FolderClosed)).ConvertToImage().Rescale(image_size, image_size)));
     p_imageListNormal->Add(wxBitmap(wxBitmap(wxICON(FolderOpen)).ConvertToImage().Rescale(image_size, image_size)));
-#endif
     SetImageList(p_imageListNormal);
 }
 

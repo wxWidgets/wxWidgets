@@ -389,7 +389,7 @@ void wxDC::SetClippingHrgn(WXHRGN hrgn)
     // note that we combine the new clipping region with the existing one: this
     // is compatible with what the other ports do and is the documented
     // behaviour now (starting with 2.3.3)
-#if defined(__WIN16__) || defined(__WXWINCE__)
+#if defined(__WXWINCE__)
     RECT rectClip;
     if ( !::GetClipBox(GetHdc(), &rectClip) )
         return;
@@ -405,14 +405,14 @@ void wxDC::SetClippingHrgn(WXHRGN hrgn)
 
     ::DeleteObject(hrgnClipOld);
     ::DeleteObject(hrgnDest);
-#else // Win32
+#else // !WinCE
     if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)hrgn, RGN_AND) == ERROR )
     {
         wxLogLastError(_T("ExtSelectClipRgn"));
 
         return;
     }
-#endif // Win16/32
+#endif // WinCE/!WinCE
 
     m_clipping = true;
 
@@ -699,8 +699,8 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
 #else
     DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
 #endif
-#else // Win16
-    // In WIN16, draw a cross
+#else // Symantec-MicroWin
+    // draw a cross
     HPEN blackPen = ::CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     HPEN whiteBrush = (HPEN)::GetStockObject(WHITE_BRUSH);
     HPEN hPenOld = (HPEN)::SelectObject(GetHdc(), blackPen);
@@ -714,7 +714,7 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     ::SelectObject(GetHdc(), hPenOld);
     ::SelectObject(GetHdc(), hBrushOld);
     ::DeleteObject(blackPen);
-#endif // Win32/16
+#endif // Win32/Symantec-MicroWin
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);

@@ -390,10 +390,8 @@ void wxPrintData::ConvertToNative()
 
         //// Collation
 
-#ifndef __WIN16__
         devMode->dmCollate = (m_printCollate ? DMCOLLATE_TRUE : DMCOLLATE_FALSE);
         devMode->dmFields |= DM_COLLATE;
-#endif
 
         //// Number of copies
 
@@ -516,7 +514,6 @@ void wxPrintData::ConvertFromNative()
 
         //// Collation
 
-#ifndef __WIN16__
         if (devMode->dmFields & DM_COLLATE)
         {
             if (devMode->dmCollate == DMCOLLATE_TRUE)
@@ -524,7 +521,6 @@ void wxPrintData::ConvertFromNative()
             else
                 m_printCollate = FALSE;
         }
-#endif
 
         //// Number of copies
 

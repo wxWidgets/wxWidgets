@@ -321,12 +321,6 @@ void wxMenuItem::Check(bool check)
                 node->GetData()->m_isChecked = FALSE;
             }
 
-            // we also have to do it in the menu for Win16 (under Win32
-            // CheckMenuRadioItem() does it for us)
-#ifndef __WIN32__
-            ::CheckMenuItem(hmenu, n, n == pos ? MF_CHECKED : MF_UNCHECKED);
-#endif // Win16
-
             node = node->GetNext();
         }
     }

@@ -26,14 +26,7 @@
 #ifndef _ISQL_H
 #define _ISQL_H
 
-#if defined(__WIN16__)
-
-#define SQL_API EXPORT CALLBACK
-#ifndef EXPORT
-#define EXPORT _export
-#endif
-
-#elif defined(WIN32)
+#if defined(WIN32)
 #define SQL_API				__stdcall
 
 #ifndef FAR

@@ -334,7 +334,7 @@ void wxDisplaySizeMM(int *width, int *height)
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-#if defined(__WIN16__) || defined(__WXMICROWIN__)
+#if defined(__WXMICROWIN__)
     *x = 0; *y = 0;
     wxDisplaySize(width, height);
 #else
@@ -400,11 +400,7 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
 
 WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
 {
-#ifndef __WIN32__
-    return (WXWORD)GetWindowWord((HWND)hWnd, GWW_ID);
-#else // Win32
     return (WXWORD)GetWindowLong((HWND)hWnd, GWL_ID);
-#endif // Win16/32
 }
 
 // ----------------------------------------------------------------------------

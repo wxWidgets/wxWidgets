@@ -163,22 +163,14 @@ void wxFontEnumeratorHelper::DoEnumerate()
 #ifdef __WXWINCE__
     ::EnumFontFamilies(hDC, m_facename, (wxFONTENUMPROC)wxFontEnumeratorProc,
                          (LPARAM)this) ;
-#elif defined(__WIN32__)
+#else // __WIN32__
     LOGFONT lf;
     lf.lfCharSet = m_charset;
     wxStrncpy(lf.lfFaceName, m_facename, WXSIZEOF(lf.lfFaceName));
     lf.lfPitchAndFamily = 0;
     ::EnumFontFamiliesEx(hDC, &lf, (wxFONTENUMPROC)wxFontEnumeratorProc,
                          (LPARAM)this, 0 /* reserved */) ;
-#else // Win16
-    ::EnumFonts(hDC, (LPTSTR)NULL, (FONTENUMPROC)wxFontEnumeratorProc,
-    #ifdef STRICT
-               (LPARAM)
-    #else
-               (LPSTR)
-    #endif
-               this);
-#endif // Win32/16
+#endif // Win32/CE
 
     ::ReleaseDC(NULL, hDC);
 #endif

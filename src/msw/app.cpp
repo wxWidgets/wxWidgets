@@ -276,13 +276,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 #if wxUSE_OLE || wxUSE_DRAG_AND_DROP
 
-#ifdef __WIN16__
-    // for OLE, enlarge message queue to be as large as possible
-    int iMsg = 96;
-    while (!SetMessageQueue(iMsg) && (iMsg -= 8))
-        ;
-#endif // Win16
-
 #if wxUSE_OLE
     // we need to initialize OLE library
 #ifdef __WXWINCE__
@@ -325,13 +318,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #endif
 
     wxWinHandleHash = new wxWinHashTable(wxKEY_INTEGER, 100);
-
-    // This is to foil optimizations in Visual C++ that throw out dummy.obj.
-    // PLEASE DO NOT ALTER THIS.
-#if defined(__VISUALC__) && defined(__WIN16__) && !defined(WXMAKINGDLL)
-    extern char wxDummyChar;
-    if (wxDummyChar) wxDummyChar++;
-#endif
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxSetKeyboardHook(TRUE);

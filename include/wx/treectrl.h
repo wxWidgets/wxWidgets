@@ -10,11 +10,7 @@
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXMSW__)
-    #ifdef __WIN16__
-        #include "wx/generic/treectlg.h"
-    #else
         #include "wx/msw/treectrl.h"
-    #endif
 #elif defined(__WXMOTIF__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXGTK__)

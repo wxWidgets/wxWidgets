@@ -754,7 +754,6 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + EXPAND_SUFFIX);
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE | wxTOP, MARGIN/2 - 1);
 
-#ifndef __WIN16__
     wxBitmap bitmap;
     switch ( style & wxICON_MASK )
     {
@@ -783,7 +782,6 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
             wxFAIL_MSG(_T("incorrect log style"));
     }
     sizerAll->Add(new wxStaticBitmap(this, -1, bitmap), 0);
-#endif // !Win16
 
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 1,
@@ -862,7 +860,6 @@ void wxLogDialog::CreateDetailsControls()
 
     bool loadedIcons = TRUE;
 
-#ifndef __WIN16__
     for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
     {
         wxBitmap bmp = wxArtProvider::GetBitmap(icons[icon], wxART_MESSAGE_BOX,
@@ -881,7 +878,6 @@ void wxLogDialog::CreateDetailsControls()
     }
 
     m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
-#endif // !Win16
 
     // and fill it
     wxString fmt = wxLog::GetTimestamp();
@@ -896,7 +892,6 @@ void wxLogDialog::CreateDetailsControls()
     {
         int image;
 
-#ifndef __WIN16__
         if ( loadedIcons )
         {
             switch ( m_severity[n] )
@@ -914,7 +909,6 @@ void wxLogDialog::CreateDetailsControls()
             }
         }
         else // failed to load images
-#endif // !Win16
         {
             image = -1;
         }

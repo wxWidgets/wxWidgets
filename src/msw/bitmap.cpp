@@ -275,13 +275,7 @@ bool wxBitmap::CopyFromCursor(const wxCursor& cursor)
     if ( !cursor.Ok() )
         return FALSE;
 
-#ifdef __WIN16__
-    wxFAIL_MSG( _T("don't know how to convert cursor to bitmap") );
-
-    return FALSE;
-#else
     return CopyFromIconOrCursor(cursor);
-#endif // Win16
 }
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
@@ -291,37 +285,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     if ( !icon.Ok() )
         return FALSE;
 
-    // GetIconInfo() doesn't exist under Win16 and I don't know any other way
-    // to create a bitmap from icon there - but using this way we won't have
-    // the mask (FIXME)
-#ifdef __WIN16__
-    int width = icon.GetWidth(),
-        height = icon.GetHeight();
-
-    // copy the icon to the bitmap
-    ScreenHDC hdcScreen;
-    HDC hdc = ::CreateCompatibleDC(hdcScreen);
-    HBITMAP hbitmap = ::CreateCompatibleBitmap(hdcScreen, width, height);
-    HBITMAP hbmpOld = (HBITMAP)::SelectObject(hdc, hbitmap);
-
-    ::DrawIcon(hdc, 0, 0, GetHiconOf(icon));
-
-    ::SelectObject(hdc, hbmpOld);
-    ::DeleteDC(hdc);
-
-    wxBitmapRefData *refData = new wxBitmapRefData;
-    m_refData = refData;
-
-    refData->m_width = width;
-    refData->m_height = height;
-    refData->m_depth = wxDisplayDepth();
-
-    refData->m_hBitmap = (WXHBITMAP)hbitmap;
-
-    return TRUE;
-#else // Win32
     return CopyFromIconOrCursor(icon);
-#endif // Win16/Win32
 }
 
 #if wxUSE_WXDIB

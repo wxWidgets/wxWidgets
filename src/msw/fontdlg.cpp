@@ -95,12 +95,8 @@ int wxFontDialog::ShowModal()
     // CF_ANSIONLY flag is obsolete for Win32
     if ( !m_fontData.GetAllowSymbols() )
     {
-#ifdef __WIN16__
-      flags |= CF_ANSIONLY;
-#else // Win32
       flags |= CF_SELECTSCRIPT;
       logFont.lfCharSet = ANSI_CHARSET;
-#endif // Win16/32
     }
 
     if ( m_fontData.GetEnableEffects() )
