@@ -90,6 +90,21 @@ the point is not on any connected display.
 \docparam{pt}{The point to locate.}
 
 
+\membersection{wxDisplay::GetFromWindow}\label{wxdisplaygetfromwindow}
+
+\func{static int}{GetFromWindow}{\param{wxWindow* }{win}}
+
+Returns the index of the display on which the given window lies.
+
+If the window is on more than one display it gets the display that overlaps the window the most.
+
+Returns -1 if the window is not on any connected display.
+
+\wxheading{Parameters}
+
+\docparam{win}{The window to locate.}
+
+
 \membersection{wxDisplay::GetGeometry}\label{wxdisplaygetgeometry}
 
 \constfunc{wxRect }{GetGeometry}{\void}
