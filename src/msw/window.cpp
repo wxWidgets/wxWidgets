@@ -2258,13 +2258,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 wxPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
                 wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), pt);
-                GetEventHandler()->ProcessEvent(evtCtx);
-
-                // set processed to true even if the event is not handled
-                // because if we don't windows will propogate the
-                // WM_CONTEXTMENU up the parent window chain, which we have
-                // already done ourselves.
-                processed = true;
+                processed = GetEventHandler()->ProcessEvent(evtCtx);
             }
             break;
 #endif // __WIN32__
