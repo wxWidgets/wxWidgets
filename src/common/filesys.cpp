@@ -459,8 +459,8 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
     fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
     wxString url = fn.GetFullPath(wxPATH_NATIVE);
 
-#ifdef __WXMSW__
-    // unc notation
+#ifndef __UNIX__
+    // unc notation, wxMSW
     if ( url.Find(wxT("\\\\")) == 0 ) 
     {
         url = url.Mid(2);
