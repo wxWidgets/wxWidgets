@@ -192,7 +192,7 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
 
 void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
 {
-#if !defined(__WXMOTIF__) && !defined(__WXMAC__)
+#if !defined(__WXMOTIF__) && !defined(__WXMAC__) && !defined(__WXPM__)
   wxDialog::OnPaint(event);
 #endif
 
@@ -258,7 +258,7 @@ void wxGenericColourDialog::CreateWidgets()
 
     // 1) space for explicitly layouted controls
     topsizer->Add( sliderX + 3*sliderSpacing, sliderHeight+25 );
-    
+
 #if wxUSE_STATLINE
     // 2) static line
     topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
@@ -271,7 +271,7 @@ void wxGenericColourDialog::CreateWidgets()
 
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
-    
+
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
