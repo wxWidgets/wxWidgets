@@ -131,7 +131,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         w = size.x == -1 ? 0 : size.x,
         h = size.y == -1 ? 0 : size.y;
 
-    // ... and adjust it to account for ap ossible parent frames toolbar
+    // ... and adjust it to account for a possible parent frames toolbar
     AdjustForParentClientOrigin(x, y);
 
     m_hWnd = (WXHWND)::CreateWindowEx
