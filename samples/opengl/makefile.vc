@@ -19,7 +19,7 @@
 
 ### Targets: ###
 
-all: cube
+all: cube isosurf penguin
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -27,5 +27,15 @@ clean:
 
 cube: 
 	cd cube
+	$(MAKE) /$(MAKEFLAGS) all
+	cd $(MAKEDIR)
+
+isosurf: 
+	cd isosurf
+	$(MAKE) /$(MAKEFLAGS) all
+	cd $(MAKEDIR)
+
+penguin: 
+	cd penguin
 	$(MAKE) /$(MAKEFLAGS) all
 	cd $(MAKEDIR)

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="penguin" template="wx_sample" template_append="wx_append">
+        <sources>
+            penguin.cpp
+            lw.cpp
+            trackball.c
+        </sources>
+        <wx-lib>gl</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>penguin.rc</win32-res>
+    </exe>
+    
+    <wx-data id="data">
+        <files>
+            penguin.lwo
+        </files>
+    </wx-data>
+
+</makefile>

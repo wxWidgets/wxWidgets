@@ -35,7 +35,7 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Targets: ###
 
-all : .SYMBOLIC cube
+all : .SYMBOLIC cube isosurf penguin
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -45,5 +45,15 @@ clean : .SYMBOLIC
 
 cube : .SYMBOLIC 
 	cd cube
+	wmake $(__MAKEOPTS__) all
+	cd $(WATCOM_CWD)
+
+isosurf : .SYMBOLIC 
+	cd isosurf
+	wmake $(__MAKEOPTS__) all
+	cd $(WATCOM_CWD)
+
+penguin : .SYMBOLIC 
+	cd penguin
 	wmake $(__MAKEOPTS__) all
 	cd $(WATCOM_CWD)

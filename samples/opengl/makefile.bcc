@@ -27,7 +27,7 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Targets: ###
 
-all: cube
+all: cube isosurf penguin
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -35,3 +35,9 @@ clean:
 
 cube: 
 	(cd cube && $(MAKE) all)
+
+isosurf: 
+	(cd isosurf && $(MAKE) all)
+
+penguin: 
+	(cd penguin && $(MAKE) all)

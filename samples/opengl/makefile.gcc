@@ -19,7 +19,7 @@ include ../../build/config.gcc
 
 ### Targets: ###
 
-all: cube
+all: cube isosurf penguin
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -27,4 +27,10 @@ clean:
 cube: 
 	(cd cube && $(MAKE) all)
 
-.PHONY: all clean cube
+isosurf: 
+	(cd isosurf && $(MAKE) all)
+
+penguin: 
+	(cd penguin && $(MAKE) all)
+
+.PHONY: all clean cube isosurf penguin

@@ -19,12 +19,14 @@ INSTALL = @INSTALL@
 
 ### Targets: ###
 
-all: cube
+all: cube isosurf penguin
 
 clean: 
 	rm -rf ./.deps
 	rm -f ./*.o
 	(cd cube && $(MAKE) clean)
+	(cd isosurf && $(MAKE) clean)
+	(cd penguin && $(MAKE) clean)
 
 cube: 
 	(cd cube && $(MAKE) all)
@@ -35,9 +37,19 @@ distclean: clean
 
 install: all
 	(cd cube && $(MAKE) install)
+	(cd isosurf && $(MAKE) install)
+	(cd penguin && $(MAKE) install)
 
 install-strip: install
 	(cd cube && $(MAKE) install-strip)
+	(cd isosurf && $(MAKE) install-strip)
+	(cd penguin && $(MAKE) install-strip)
+
+isosurf: 
+	(cd isosurf && $(MAKE) all)
+
+penguin: 
+	(cd penguin && $(MAKE) all)
 
 uninstall: 
 
@@ -45,4 +57,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean cube distclean install uninstall
+.PHONY: all clean cube distclean install isosurf penguin uninstall
