@@ -51,7 +51,7 @@ struct _wxSoundInfoHeader {
   wxSoundStreamWin *m_driver;
 };
 
-#define WXSOUND_MAX_QUEUE 128
+#define WXSOUND_MAX_QUEUE 10
 
 wxSoundStreamWin::wxSoundStreamWin()
 {
@@ -84,10 +84,12 @@ LRESULT APIENTRY _EXPORT _wxSoundHandlerWndProc(HWND hWnd, UINT message,
                  WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
-  case MM_WOM_DONE: {
-    wxFindSoundFromHandle((WXHWND)hWnd)->NotifyDoneBuffer(wParam);
+  case MM_WOM_DONE:
+    wxFindSoundFromHandle((WXHWND)hWnd)->NotifyDoneBuffer(wParam, wxSOUND_OUTPUT);
     break;
-  }
+  case MM_WIM_DATA:
+    wxFindSoundFromHandle((WXHWND)hWnd)->NotifyDoneBuffer(wParam, wxSOUND_INPUT);
+    break;
   default:
     break;
   }
@@ -155,9 +157,9 @@ bool wxSoundStreamWin::OpenDevice(int mode)
 
   wformat.wFormatTag      = WAVE_FORMAT_PCM;
   wformat.nChannels       = pcm->GetChannels();
-  wformat.nBlockAlign     = pcm->GetBPS() / 8 * wformat.nChannels;
-  wformat.nAvgBytesPerSec = pcm->GetBytesFromTime(1);
+  wformat.nBlockAlign     = wformat.nChannels * pcm->GetBPS() / 8;
   wformat.nSamplesPerSec  = pcm->GetSampleRate();
+  wformat.nAvgBytesPerSec = wformat.nSamplesPerSec * wformat.nBlockAlign;
   wformat.wBitsPerSample  = pcm->GetBPS();
   wformat.cbSize          = 0;
 
@@ -198,16 +200,25 @@ bool wxSoundStreamWin::OpenDevice(int mode)
       return FALSE;
     }
 
-    m_input_frag_in   = WXSOUND_MAX_QUEUE-1;
-    m_current_frag_in = 0;
+    m_current_frag_in   = WXSOUND_MAX_QUEUE-1;
+    m_input_frag_in = 0;
 
     m_internal->m_input_enabled = TRUE;
   }
 
-  if (!AllocHeaders(mode)) {
-    CloseDevice();
-    return FALSE;
+  if (mode & wxSOUND_OUTPUT) {
+    if (!AllocHeaders(wxSOUND_OUTPUT)) {
+      CloseDevice();
+      return FALSE;
+    }
   }
+  if (mode & wxSOUND_INPUT) {
+    if (!AllocHeaders(wxSOUND_INPUT)) {
+      CloseDevice();
+      return FALSE;
+    }
+  }
+
   return TRUE;
 }
 
@@ -217,20 +228,20 @@ bool wxSoundStreamWin::OpenDevice(int mode)
 // -------------------------------------------------------------------------
 void wxSoundStreamWin::CloseDevice()
 {
+  m_internal->m_output_enabled = FALSE;
+  m_internal->m_input_enabled  = FALSE;
+
   if (m_internal->m_output_enabled) {
-    FreeHeaders(wxSOUND_OUTPUT);
     waveOutReset(m_internal->m_devout);
+    FreeHeaders(wxSOUND_OUTPUT);
     waveOutClose(m_internal->m_devout);
   }
 
   if (m_internal->m_input_enabled) {
-    FreeHeaders(wxSOUND_INPUT);
     waveInReset(m_internal->m_devin);
+    FreeHeaders(wxSOUND_INPUT);
     waveInClose(m_internal->m_devin);
   }
-
-  m_internal->m_output_enabled = FALSE;
-  m_internal->m_input_enabled  = FALSE;
 }
 
 // -------------------------------------------------------------------------
@@ -412,15 +423,17 @@ void wxSoundStreamWin::FreeHeaders(int mode)
 // -------------------------------------------------------------------------
 void wxSoundStreamWin::WaitFor(wxSoundInfoHeader *info)
 {
-  // We begun filling it: we must send it to the Windows queue
-  if (info->m_position != 0) {
-    memset(info->m_data + info->m_position, 0, info->m_size-info->m_position);
-    AddToQueue(info);
-  }
-
   // If the buffer is finished, we return immediately
-  if (!info->m_playing && !info->m_recording)
+  if (!info->m_playing) {
+
+    // We begun filling it: we must send it to the Windows queue
+    if (info->m_position != 0) {
+      memset(info->m_data + info->m_position, 0, info->m_size);
+      AddToQueue(info);
+    }
+
     return;
+  }
 
   // Else, we wait for its termination
   while (info->m_playing || info->m_recording)
@@ -443,7 +456,6 @@ bool wxSoundStreamWin::AddToQueue(wxSoundInfoHeader *info)
 
   if (info->m_mode == wxSOUND_INPUT) {
     // Increment the input fragment pointer
-    m_current_frag_in = (m_current_frag_in + 1) % WXSOUND_MAX_QUEUE;
     result = waveInAddBuffer(m_internal->m_devin,
                              info->m_header, sizeof(WAVEHDR));
     if (result == MMSYSERR_NOERROR)
@@ -537,9 +549,11 @@ wxSoundInfoHeader *wxSoundStreamWin::NextFragmentInput()
 {
   wxSoundInfoHeader *header;
 
-  // TODO //
   header = m_headers_rec[m_current_frag_in];
-  WaitFor(header);
+  if (header->m_recording)
+    WaitFor(header);
+
+  m_current_frag_in = (m_current_frag_in + 1) % WXSOUND_MAX_QUEUE;
 
   if (m_current_frag_in == m_input_frag_in)
     m_queue_filled = TRUE;
@@ -589,18 +603,25 @@ wxSoundStream& wxSoundStreamWin::Read(void *buffer, wxUint32 len)
 // fragment finished. It reinitializes the parameters of the fragment and
 // sends an event to the clients.
 // -------------------------------------------------------------------------
-void wxSoundStreamWin::NotifyDoneBuffer(wxUint32 dev_handle)
+void wxSoundStreamWin::NotifyDoneBuffer(wxUint32 dev_handle, int flag)
 {
   wxSoundInfoHeader *info;
 
-  if (dev_handle == (wxUint32)m_internal->m_devout) {
+  if (flag == wxSOUND_OUTPUT) {
+    if (!m_internal->m_output_enabled)
+      return;
+
     m_output_frag_out = (m_output_frag_out + 1) % WXSOUND_MAX_QUEUE;
     info = m_headers_play[m_output_frag_out];
     ClearHeader(info);
     m_queue_filled = FALSE;
     OnSoundEvent(wxSOUND_OUTPUT);
   } else {
+    if (!m_internal->m_input_enabled)
+      return;
+
     m_input_frag_in = (m_input_frag_in + 1) % WXSOUND_MAX_QUEUE;
+    m_headers_rec[m_input_frag_in]->m_recording = FALSE;
     OnSoundEvent(wxSOUND_INPUT);
     m_queue_filled = FALSE;
   }
@@ -634,6 +655,8 @@ bool wxSoundStreamWin::StartProduction(int evt)
     int i;
     for (i=0;i<WXSOUND_MAX_QUEUE;i++)
       AddToQueue(m_headers_rec[i]);
+
+    waveInStart(m_internal->m_devin);
   }
 
   return TRUE;
@@ -643,6 +666,9 @@ bool wxSoundStreamWin::StartProduction(int evt)
 // -------------------------------------------------------------------------
 bool wxSoundStreamWin::StopProduction()
 {
+  if (m_internal->m_input_enabled)
+    waveInStop(m_internal->m_devin);
+
   m_production_started = FALSE;
   CloseDevice();
   return TRUE;

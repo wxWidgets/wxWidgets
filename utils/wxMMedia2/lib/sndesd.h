@@ -37,11 +37,14 @@ class wxSoundStreamESD : public wxSoundStream {
 
   // You should not call this.
   void WakeUpEvt(int evt);
+
+  bool QueueFilled() const { return m_q_filled; }
  protected:
   int m_fd;
   int m_tag;
   bool m_esd_stop;
   wxString m_hostname;
+  bool m_q_filled;
 
  private:
   void DetectBest(wxSoundFormatPcm *pcm);

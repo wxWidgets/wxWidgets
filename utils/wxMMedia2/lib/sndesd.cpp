@@ -28,8 +28,9 @@ wxSoundStreamESD::wxSoundStreamESD(const wxString& hostname)
 {
   wxSoundFormatPcm pcm_default;
 
-  m_fd = esd_monitor_stream(ESD_MONO | ESD_BITS8 | ESD_RECORD, 22050, 
-                            hostname.mb_str(), MY_ESD_NAME);
+  m_fd = esd_play_stream(ESD_PLAY | ESD_STREAM | ESD_MONO | ESD_BITS8, 22050, 
+//                            hostname.mb_str(), MY_ESD_NAME);
+                            NULL, MY_ESD_NAME);
 
   if (m_fd == -1) {
     m_snderror = wxSOUND_INVDEV;
@@ -44,6 +45,7 @@ wxSoundStreamESD::wxSoundStreamESD(const wxString& hostname)
 
   m_snderror = wxSOUND_NOERR;
   m_esd_stop = TRUE;
+  m_q_filled = TRUE;
 }
 
 wxSoundStreamESD::~wxSoundStreamESD()
@@ -76,6 +78,8 @@ wxSoundStream& wxSoundStreamESD::Write(const void *buffer, wxUint32 len)
     m_snderror = wxSOUND_IOERR;
   else
     m_snderror = wxSOUND_NOERR;
+
+  m_q_filled = TRUE;
 
   return *this;
 }
@@ -136,6 +140,7 @@ static void _wxSound_OSS_CBack(gpointer data, int source,
 
 void wxSoundStreamESD::WakeUpEvt(int evt)
 {
+  m_q_filled = FALSE;
   OnSoundEvent(evt);
 }
 
@@ -154,11 +159,11 @@ bool wxSoundStreamESD::StartProduction(int evt)
 
   if (evt == wxSOUND_OUTPUT) {
     flag |= ESD_PLAY | ESD_STREAM;
-    m_fd = esd_play_stream(flag, pcm->GetSampleRate(), m_hostname.mb_str(),
+    m_fd = esd_play_stream(flag, pcm->GetSampleRate(), NULL,
 			   MY_ESD_NAME);
   } else {
     flag |= ESD_RECORD | ESD_STREAM;
-    m_fd = esd_record_stream(flag, pcm->GetSampleRate(), m_hostname.mb_str(),
+    m_fd = esd_record_stream(flag, pcm->GetSampleRate(), NULL,
                              MY_ESD_NAME);
   }
 
@@ -170,6 +175,7 @@ bool wxSoundStreamESD::StartProduction(int evt)
 #endif
 
   m_esd_stop = FALSE;
+  m_q_filled = FALSE;
 
   return TRUE;
 }
@@ -182,6 +188,7 @@ bool wxSoundStreamESD::StopProduction()
   gdk_input_remove(m_tag);
   esd_close(m_fd);
   m_esd_stop = TRUE;
+  m_q_filled = TRUE;
   return TRUE;
 }
 

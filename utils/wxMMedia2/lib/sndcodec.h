@@ -23,6 +23,7 @@ class wxSoundStreamCodec: public wxSoundStream {
   bool StopProduction();
 
   void SetDuplexMode(bool duplex);
+  wxUint32 GetBestSize() const;
 
  protected:
   wxSoundStream *m_sndio;

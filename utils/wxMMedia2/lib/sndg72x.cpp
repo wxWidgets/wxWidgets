@@ -123,6 +123,33 @@ wxSoundStreamG72X::~wxSoundStreamG72X()
 
 wxSoundStream& wxSoundStreamG72X::Read(void *buffer, wxUint32 len)
 {
+  wxUint16 *old_linear;
+  register wxUint16 *linear_buffer;
+  register wxUint32 real_len;
+  register wxUint32 countdown = len;
+
+  real_len = (len * 8 / m_n_bits);
+
+  old_linear = linear_buffer = new wxUint16[real_len];
+
+  m_router->Read(linear_buffer, real_len);
+
+  real_len = (wxUint32)(m_router->GetLastAccess() * ((float)m_n_bits / 8));
+  if (!real_len)
+    return *m_router;
+
+  m_io_buffer = (wxUint8 *)buffer; 
+  m_current_b_pos = 0;
+
+  while (countdown != 0) {
+    PutBits(m_coder(*linear_buffer++, AUDIO_ENCODING_LINEAR, m_state));
+    countdown--;
+  }
+  m_lastcount = real_len;
+  m_snderror = m_router->GetError();
+
+  delete[] old_linear;
+
   return *this;
 }
 
@@ -133,22 +160,27 @@ wxSoundStream& wxSoundStreamG72X::Write(const void *buffer, wxUint32 len)
   register wxUint32 countdown = len;
   register wxUint32 real_len;
 
-  real_len = (wxUint32)(len * ((float)m_n_bits / 8));
+  // Compute the real length (PCM format) to sendt to the sound card
+  real_len = (len * m_n_bits / 8);
 
+  // Allocate a temporary buffer
   old_linear = linear_buffer = new wxUint16[real_len];
 
   // Bad, we override the const
   m_io_buffer = (wxUint8 *)buffer;
   m_current_b_pos = 0;
 
+  // Decode the datas
   while (countdown != 0) {
     *linear_buffer++ = m_decoder(GetBits(), AUDIO_ENCODING_LINEAR, m_state);
     countdown--;
   }
   m_lastcount = len;
 
+  // Send them to the sound card
   m_router->Write(old_linear, real_len);
 
+  // Destroy the temporary buffer
   delete[] old_linear;
 
   return *m_router;
@@ -168,12 +200,14 @@ bool wxSoundStreamG72X::SetSoundFormat(const wxSoundFormatBase& format)
 
   g72x = (wxSoundFormatG72X *)m_sndformat;
 
+  // Set PCM as the output format of the codec
   pcm.SetSampleRate(g72x->GetSampleRate());
   pcm.SetBPS(16);
   pcm.SetChannels(1);
   pcm.Signed(TRUE);
   pcm.SetOrder(wxBYTE_ORDER);
 
+  // Look for the correct codec to use and set its bit width
   switch (g72x->GetG72XType()) {
   case wxSOUND_G721:
     m_n_bits  = 4;
@@ -192,6 +226,7 @@ bool wxSoundStreamG72X::SetSoundFormat(const wxSoundFormatBase& format)
     break;
   }
 
+  // Let the router finish the work
   m_router->SetSoundFormat(pcm);
 
   return TRUE;

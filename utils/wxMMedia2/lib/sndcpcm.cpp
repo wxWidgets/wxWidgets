@@ -59,6 +59,12 @@ wxSoundStreamPcm::ConverterType s_convert_out_8[] = {
   Convert_U2S_8,
   Convert_U2S_8,
   NULL
+/*,
+  Convert_U2S_S2M_8,
+  Convert_U2S_S2M_8,
+  Convert_U2S_S2M_8,
+  Convert_U2S_S2M_8,
+  Convert_S2M_8 */
 };
 
 wxSoundStreamPcm::ConverterType s_convert_in_8_to_16[] = {
@@ -80,6 +86,17 @@ wxSoundStreamPcm::ConverterType *s_convert_in_8 = s_convert_out_8;
 #define CONVERTER_SWAP_SIGN_SWAP 3
 #define CONVERTER_SWAP_SIGN 4
 #define CONVERTER_SWAP 5
+#define CONVERTER_SIGN_STEREO_MONO 6
+#define CONVERTER_SIGN_SWAP_STEREO_MONO 7
+#define CONVERTER_SWAP_SIGN_SWAP_STEREO_MONO 8
+#define CONVERTER_SWAP_SIGN_STEREO_MONO 9
+#define CONVERTER_SWAP_STEREO_MONO 10
+#define CONVERTER_STEREO_MONO 11
+
+//
+// TODO: Read() and Write() aren't really safe. If you give it a buffer which
+// is not aligned on 8, you may crash (See converter.def).
+//
 
 wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
 {

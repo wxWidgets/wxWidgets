@@ -77,7 +77,8 @@ wxMemoryOutputStream::wxMemoryOutputStream(char *data, size_t len)
   m_o_streambuf = new wxStreamBuffer(wxStreamBuffer::write);
   if (data)
     m_o_streambuf->SetBufferIO(data, data+len);
-  m_o_streambuf->Fixed(TRUE);
+  m_o_streambuf->Fixed(FALSE);
+  m_o_streambuf->Flushable(FALSE);
 }
 
 wxMemoryOutputStream::~wxMemoryOutputStream()

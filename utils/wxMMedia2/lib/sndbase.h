@@ -119,9 +119,6 @@ class wxSoundStream {
   char *m_cdata[2];
 
  protected:
-  // Do the async stuff.
-  void DoAsyncStuff(int evt);
-
   // Handles event
   virtual void OnSoundEvent(int evt);
 };

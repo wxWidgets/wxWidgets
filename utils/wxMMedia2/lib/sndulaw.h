@@ -54,6 +54,8 @@ class WXDLLEXPORT wxSoundStreamUlaw: public wxSoundStreamCodec {
 
   bool SetSoundFormat(const wxSoundFormatBase& format);
 
+  wxUint32 GetBestSize() const;
+
  protected:
   wxSoundRouterStream *m_router;
 };

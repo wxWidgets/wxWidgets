@@ -31,7 +31,7 @@ class WXDLLEXPORT wxSoundStreamWin : public wxSoundStream {
   bool QueueFilled() const;
 
   // Internal but defined as public
-  void NotifyDoneBuffer(wxUint32 dev_handle);
+  void NotifyDoneBuffer(wxUint32 dev_handle, int flag);
 
  protected:
   wxSoundInternal *m_internal;

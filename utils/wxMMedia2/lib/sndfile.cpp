@@ -92,6 +92,14 @@ bool wxSoundRouterStream::SetSoundFormat(const wxSoundFormatBase& format)
   return TRUE;
 }
 
+wxUint32 wxSoundRouterStream::GetBestSize() const
+{
+  if (m_router)
+    return m_router->GetBestSize();
+  else
+    return m_sndio->GetBestSize();
+}
+
 bool wxSoundRouterStream::StartProduction(int evt)
 {
   if (!m_router) {
@@ -268,7 +276,7 @@ bool wxSoundFileStream::StopProduction()
 
 void wxSoundFileStream::OnSoundEvent(int evt)
 {
-  wxUint32 len = m_sndio->GetBestSize();
+  wxUint32 len = m_codec.GetBestSize();
   char *buffer;
 
   buffer = new char[len];
@@ -285,6 +293,7 @@ void wxSoundFileStream::OnSoundEvent(int evt)
       m_len -= len;
       if (m_len == 0) {
         Stop();
+        delete[] buffer;
         return;
       }
       break;
@@ -292,6 +301,7 @@ void wxSoundFileStream::OnSoundEvent(int evt)
       len = GetData(buffer, len);
       if (len == 0) {
         Stop();
+        delete[] buffer;
         return;
       }
       m_codec.Write(buffer, len);

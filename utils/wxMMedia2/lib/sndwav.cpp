@@ -14,6 +14,7 @@
 #include <wx/stream.h>
 #include <wx/datstrm.h>
 #include <wx/filefn.h>
+#include <wx/mstream.h>
 
 #include "sndbase.h"
 #include "sndcodec.h"
@@ -51,28 +52,26 @@ wxSoundWave::~wxSoundWave()
 
 bool wxSoundWave::CanRead()
 {
-  wxUint32 len, signature;
+  wxUint32 len, signature1, signature2;
   m_snderror = wxSOUND_NOERR;
 
-  FAIL_WITH(m_input->Read(&signature, 4).LastRead() != 4, wxSOUND_INVSTRM);
+  FAIL_WITH(m_input->Read(&signature1, 4).LastRead() != 4, wxSOUND_INVSTRM);
 
-  if (wxUINT32_SWAP_ON_BE(signature) != RIFF_SIGNATURE) {
-    m_input->Ungetch(&signature, 4);
+  if (wxUINT32_SWAP_ON_BE(signature1) != RIFF_SIGNATURE) {
+    m_input->Ungetch(&signature1, 4);
     return FALSE;
   }
 
   m_input->Read(&len, 4);
   FAIL_WITH(m_input->LastRead() != 4, wxSOUND_INVSTRM);
 
-  FAIL_WITH(m_input->Read(&signature, 4).LastRead() != 4, wxSOUND_INVSTRM);
-  if (wxUINT32_SWAP_ON_BE(signature) != WAVE_SIGNATURE) {
-    m_input->Ungetch(&signature, 4);
-    return FALSE;
-  }
-
-  m_input->Ungetch("RIFF", 4);
+  FAIL_WITH(m_input->Read(&signature2, 4).LastRead() != 4, wxSOUND_INVSTRM);
+  m_input->Ungetch(&signature2, 4);
   m_input->Ungetch(&len, 4);
-  m_input->Ungetch("WAVE", 4);
+  m_input->Ungetch(&signature1, 4);
+
+  if (wxUINT32_SWAP_ON_BE(signature2) != WAVE_SIGNATURE)
+    return FALSE;
 
   return TRUE;
 }
@@ -234,12 +233,13 @@ wxSoundFormatBase *wxSoundWave::HandleInputG72X(wxDataOutputStream& data)
 
 bool wxSoundWave::PrepareToRecord(unsigned long time)
 {
-#define WRITE_SIGNATURE(sig) \
+#define WRITE_SIGNATURE(s,sig) \
 signature = sig; \
 signature = wxUINT32_SWAP_ON_BE(signature); \
-FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
+FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
 
-  wxUint32 signature, len;
+  wxUint32 signature;
+  wxMemoryOutputStream fmt_data;
 
   if (!m_output) {
     m_snderror = wxSOUND_INVSTRM;
@@ -247,30 +247,28 @@ FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
   }
 
   wxDataOutputStream data(*m_output);
+  wxDataOutputStream fmt_d_data(fmt_data);
+
   data.BigEndianOrdered(FALSE);
+  fmt_d_data.BigEndianOrdered(FALSE);
 
-  len = m_sndformat->GetBytesFromTime(time);
+  WRITE_SIGNATURE(m_output, RIFF_SIGNATURE);
 
-  len += HEADER_SIZE;
-
-  WRITE_SIGNATURE(RIFF_SIGNATURE);
-
-  data << len;
   FAIL_WITH(m_output->LastWrite() != 4, wxSOUND_INVSTRM);
 
-  WRITE_SIGNATURE(WAVE_SIGNATURE);
+  WRITE_SIGNATURE((&fmt_data), WAVE_SIGNATURE);
 
   {
     wxSoundFormatBase *frmt;
 
-    WRITE_SIGNATURE(FMT_SIGNATURE);
+    WRITE_SIGNATURE((&fmt_data), FMT_SIGNATURE);
 
     switch (m_sndformat->GetType()) {
     case wxSOUND_PCM:
-      frmt = HandleInputPCM(data);
+      frmt = HandleInputPCM(fmt_d_data);
       break;
     case wxSOUND_G72X:
-      frmt = HandleInputG72X(data);
+      frmt = HandleInputG72X(fmt_d_data);
       break;
     default:
       m_snderror = wxSOUND_NOCODEC;
@@ -287,7 +285,19 @@ FAIL_WITH(m_output->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
     delete frmt;
   }
 
-  WRITE_SIGNATURE(DATA_SIGNATURE);
+  data << (fmt_data.GetSize() + 8 + m_sndformat->GetBytesFromTime(time));
+
+  {
+    char *out_buf;
+    out_buf = new char[fmt_data.GetSize()];
+
+    fmt_data.CopyTo(out_buf, fmt_data.GetSize());
+    m_output->Write(out_buf, fmt_data.GetSize());
+
+    delete[] out_buf;
+  }
+
+  WRITE_SIGNATURE(m_output, DATA_SIGNATURE);
   data.Write32(m_sndformat->GetBytesFromTime(time));
   return TRUE;
 }

@@ -27,6 +27,8 @@ class wxSoundAiff: public wxSoundFileStream {
   wxSoundAiff(wxOutputStream& stream, wxSoundStream& io_sound);
   ~wxSoundAiff();
 
+  bool CanRead();
+
  protected:
   bool PrepareToPlay(); 
   bool PrepareToRecord(unsigned long time);

@@ -36,3 +36,8 @@ void wxSoundStreamCodec::SetDuplexMode(bool duplex)
 {
   m_sndio->SetDuplexMode(duplex);
 }
+
+wxUint32 wxSoundStreamCodec::GetBestSize() const
+{
+  return m_sndio->GetBestSize();
+}

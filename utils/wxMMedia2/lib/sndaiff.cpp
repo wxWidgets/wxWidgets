@@ -42,6 +42,44 @@ wxSoundAiff::~wxSoundAiff()
 {
 }
 
+bool wxSoundAiff::CanRead()
+{
+  wxUint32 signature1, signature2, len;
+
+  if (m_input->Read(&signature1, 4).LastRead() != 4)
+    return FALSE;
+
+  if (wxUINT32_SWAP_ON_BE(signature1) != FORM_SIGNATURE) {
+    m_input->Ungetch(&signature1, 4);
+    return FALSE;
+  }
+
+  m_input->Read(&len, 4);
+  if (m_input->LastRead() != 4) {
+    m_input->Ungetch(&len, m_input->LastRead());
+    m_input->Ungetch(&signature1, 4);
+    return FALSE;
+  }
+
+  if (m_input->Read(&signature2, 4).LastRead() != 4) {
+    m_input->Ungetch(&signature2, m_input->LastRead());
+    m_input->Ungetch(&len, 4);
+    m_input->Ungetch(&signature1, 4);
+    return FALSE;
+  }
+
+  m_input->Ungetch(&signature2, 4);
+  m_input->Ungetch(&len, 4);
+  m_input->Ungetch(&signature1, 4);
+
+  if (
+         wxUINT32_SWAP_ON_BE(signature2) != AIFF_SIGNATURE &&
+         wxUINT32_SWAP_ON_BE(signature2) != AIFC_SIGNATURE)
+    return FALSE;
+
+  return TRUE;
+}
+
 #define FAIL_WITH(condition, err) if (condition) { m_snderror = err; return FALSE; }
 
 bool wxSoundAiff::PrepareToPlay()

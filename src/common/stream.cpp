@@ -165,10 +165,17 @@ void wxStreamBuffer::PutToBuffer(const void *buffer, size_t size)
   size_t s_toput = m_buffer_end-m_buffer_pos;
 
   if (s_toput < size && !m_fixed) {
-    m_buffer_start = (char *)realloc(m_buffer_start, m_buffer_size+size);
-    // I round a bit
-    m_buffer_size += size;
-    m_buffer_end = m_buffer_start+m_buffer_size;
+    if (!m_buffer_start)
+      SetBufferIO(size);
+    else {
+      size_t delta = m_buffer_pos-m_buffer_start;
+
+      m_buffer_start = (char *)realloc(m_buffer_start, m_buffer_size+size);
+      m_buffer_pos   = m_buffer_start + delta;
+      // I round a bit
+      m_buffer_size += size;
+      m_buffer_end   = m_buffer_start+m_buffer_size;
+    }
     s_toput = size;
   }
   if (s_toput > size)
@@ -306,7 +313,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
   // ------------------
 
   m_stream->m_lasterror = wxStream_NOERROR;
-  if (!m_buffer_size)
+  if (!m_buffer_size && m_fixed)
     return (m_stream->m_lastcount = m_stream->OnSysWrite(buffer, size));
 
   // ------------------
@@ -320,7 +327,9 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
 
     // First case: the buffer to write is larger than the stream buffer,
     //             we split it
-    if (size > buf_left) {
+    // NB: If stream buffer isn't fixed (as for wxMemoryOutputStream),
+    // we always go to the second case.
+    if (size > buf_left && m_fixed) {
       PutToBuffer(buffer, buf_left);
       size -= buf_left;
       buffer = (char *)buffer + buf_left; // ANSI C++ violation.
@@ -493,7 +502,6 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
   if (!temp_b)
     return NULL;
   m_wback = temp_b;
-  m_wbackcur += needed_size;
 
   memmove(m_wback+needed_size, m_wback, old_size);
   
@@ -502,7 +510,7 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
 
 size_t wxInputStream::GetWBack(char *buf, size_t bsize)
 {
-  size_t s_toget = m_wbackcur;
+  size_t s_toget = m_wbacksize-m_wbackcur;
 
   if (!m_wback)
     return 0;
@@ -510,10 +518,10 @@ size_t wxInputStream::GetWBack(char *buf, size_t bsize)
   if (bsize < s_toget)
     s_toget = bsize;
 
-  memcpy(buf, (m_wback+m_wbackcur-bsize), s_toget);
+  memcpy(buf, (m_wback+m_wbackcur), s_toget);
 
-  m_wbackcur -= s_toget;
-  if (m_wbackcur == 0) {
+  m_wbackcur += s_toget;
+  if (m_wbackcur == m_wbacksize) {
     free(m_wback);
     m_wback = (char *)NULL;
     m_wbacksize = 0;

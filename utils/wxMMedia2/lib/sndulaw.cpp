@@ -109,6 +109,11 @@ wxSoundStream& wxSoundStreamUlaw::Write(const void *buffer, wxUint32 len)
   return *m_router;
 }
 
+wxUint32 wxSoundStreamUlaw::GetBestSize() const
+{
+  return m_sndio->GetBestSize() / 2;
+}
+
 bool wxSoundStreamUlaw::SetSoundFormat(const wxSoundFormatBase& format)
 {
   if (format.GetType() != wxSOUND_ULAW) {

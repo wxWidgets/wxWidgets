@@ -33,6 +33,8 @@ class WXDLLEXPORT wxSoundRouterStream: public wxSoundStreamCodec {
   bool StartProduction(int evt);
   bool StopProduction();
 
+  wxUint32 GetBestSize() const;
+
  protected:
   wxSoundStream *m_router;
 };
@@ -74,7 +76,7 @@ class wxSoundFileStream: public wxSoundStream {
 
   bool SetSoundFormat(const wxSoundFormatBase& format);
 
-  virtual bool CanRead() { return TRUE; }
+  virtual bool CanRead() { return FALSE; }
 
  protected:
   wxSoundRouterStream m_codec; 
