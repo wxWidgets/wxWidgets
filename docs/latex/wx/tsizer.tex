@@ -3,7 +3,8 @@
 Classes: \helpref{wxSizer}{wxsizer}, \helpref{wxGridSizer}{wxgridsizer}, 
 \helpref{wxFlexGridSizer}{wxflexgridsizer}, \helpref{wxBoxSizer}{wxboxsizer}, 
 \helpref{wxStaticBoxSizer}{wxstaticboxsizer}, 
-\helpref{wxNotebookSizer}{wxnotebooksizer}
+\helpref{wxNotebookSizer}{wxnotebooksizer},
+\helpref{CreateButtonSizer}{createbuttonsizer}
 
 Sizers, as represented by the wxSizer class and its descendants in
 the wxWindows class hierarchy, have become the method of choice to
@@ -312,3 +313,25 @@ aware of:
 box around the sizer. Note that this static box has to be created 
 separately.
 
+\subsection{CreateButtonSizer}\label{createbuttonsizer}
+
+As a convenience, CreateButtonSizer ( long flags ) can be used to create a standard button sizer
+in which standard buttons are displayed. The following flags can be passed to this function:
+
+
+\begin{verbatim}
+    wxYES_NO // Add Yes/No subpanel
+    wxYES    // return wxID_YES
+    wxNO     // return wxID_NO
+    wxNO_DEFAULT // make the wxNO button the default, otherwise wxYES or wxOK button will be default
+    
+    wxOK     // return wxID_OK
+    wxCANCEL // return wxID_CANCEL
+    wxHELP   // return wxID_HELP
+    
+    wxFORWARD   // return wxID_FORWARD  
+    wxBACKWARD  // return wxID_BACKWARD 
+    wxSETUP     // return wxID_SETUP    
+    wxMORE      // return wxID_MORE     
+
+\end{verbatim}
