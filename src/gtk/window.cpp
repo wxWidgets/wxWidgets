@@ -1831,10 +1831,14 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     wxMouseEvent event( wxEVT_MOTION );
     InitMouseEvent(win, event, gdk_event);
 
-    if ( !g_captureWindow )
+    if ( g_captureWindow )
     {
         // synthetize a mouse enter or leave event if needed
         GdkWindow *winUnderMouse = gdk_window_at_pointer(NULL, NULL);
+        // This seems to be necessary and actually been added to 
+        // GDK itself in version 2.0.X
+        gdk_flush();
+        
         bool hasMouse = winUnderMouse == gdk_event->window;
         if ( hasMouse != g_captureWindowHasMouse )
         {
