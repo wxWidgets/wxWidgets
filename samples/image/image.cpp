@@ -261,9 +261,11 @@ public:
     {
         SetClientSize(SIZE, SIZE);
 
-        wxAlphaPixelData data(m_bitmap,
-                              wxPoint(BORDER, BORDER),
-                              wxSize(REAL_SIZE, REAL_SIZE));
+        // another possibility: wxNativePixelData (don't forget to remove code
+        // setting alpha in the loop below then)
+        typedef wxAlphaPixelData Data;
+
+        Data data(m_bitmap, wxPoint(BORDER, BORDER), wxSize(REAL_SIZE, REAL_SIZE));
         if ( !data )
         {
             wxLogError(_T("Failed to gain raw access to bitmap data"));
@@ -272,11 +274,11 @@ public:
 
         data.UseAlpha();
 
-        wxAlphaPixelData::Iterator p(data);
+        Data::Iterator p(data);
 
         for ( int y = 0; y < REAL_SIZE; ++y )
         {
-            wxAlphaPixelData::Iterator rowStart = p;
+            Data::Iterator rowStart = p;
 
             int r = y < REAL_SIZE/3 ? 255 : 0,
                 g = (REAL_SIZE/3 <= y) && (y < 2*(REAL_SIZE/3)) ? 255 : 0,
@@ -287,8 +289,7 @@ public:
                 p.Red() = r;
                 p.Green() = g;
                 p.Blue() = b;
-                p.Alpha() =
-                    (wxAlphaPixelFormat::ChannelType)((x*255.)/REAL_SIZE);
+                p.Alpha() = (Data::Iterator::ChannelType)((x*255.)/REAL_SIZE);
 
                 ++p; // same as p.OffsetX(1)
             }
