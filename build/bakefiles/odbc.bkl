@@ -11,7 +11,7 @@
         </set>
     </if>
     <set var="LIB_ODBC">
-        <if cond="wxUSE_ODBC=='builtin'">wxodbc$(WXDEBUGFLAG)</if>
+        <if cond="wxUSE_ODBC=='builtin'">wxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX)</if>
     </set>
     <set var="INC_ODBC">
         <if cond="wxUSE_ODBC=='builtin'">$(TOP_SRCDIR)src/odbc</if>

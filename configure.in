@@ -2896,6 +2896,7 @@ TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_su
 if test "$cross_compiling" = "yes"; then
     TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${host_alias}"
     TOOLCHAIN_NAME_GL="${TOOLCHAIN_NAME_GL}-${host_alias}"
+    HOST_SUFFIX="-${host_alias}"
 fi
 
 dnl library link name
@@ -5435,6 +5436,7 @@ TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr [[A-Z]] [[a-z]]`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
+AC_SUBST(HOST_SUFFIX)
 
 AC_BAKEFILE
 

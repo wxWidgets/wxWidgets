@@ -102,6 +102,7 @@
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="SAMPLES_RPATH_FLAG"/>
+        <option name="HOST_SUFFIX"/>
         
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
         <set var="RUNTIME_LIBS">dynamic</set>
@@ -129,6 +130,7 @@
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
         <set var="TOOLKIT_VERSION"/>
         <set var="SAMPLES_RPATH_FLAG"/>
+        <set var="HOST_SUFFIX"/>
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRACFLAGS"/>

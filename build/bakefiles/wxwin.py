@@ -39,12 +39,12 @@ def mkLibName(wxid):
        suffixes, prefixes, version tags etc. This must be kept in sync
        with variables defined in common.bkl!"""
     if wxid == 'mono':
-        return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)$(WXVERSIONTAG)'
+        return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)$(WXVERSIONTAG)$(HOST_SUFFIX)'
     if wxid == 'base':
-        return '$(WXNAMEPREFIX)$(WXNAMESUFFIX)$(WXVERSIONTAG)'
+        return '$(WXNAMEPREFIX)$(WXNAMESUFFIX)$(WXVERSIONTAG)$(HOST_SUFFIX)'
     if wxid in LIBS_NOGUI:
-        return '$(WXNAMEPREFIX)$(WXNAMESUFFIX)_%s$(WXVERSIONTAG)' % wxid
-    return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)_%s$(WXVERSIONTAG)' % wxid
+        return '$(WXNAMEPREFIX)$(WXNAMESUFFIX)_%s$(WXVERSIONTAG)$(HOST_SUFFIX)' % wxid
+    return '$(WXNAMEPREFIXGUI)$(WXNAMESUFFIX)_%s$(WXVERSIONTAG)$(HOST_SUFFIX)' % wxid
 
 def mkDllName(wxid):
     """Returns string that can be used as DLL name, including name

@@ -21,6 +21,7 @@ DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
+HOST_SUFFIX = @HOST_SUFFIX@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_DIR = @INSTALL_DIR@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -308,18 +309,18 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_GTK@	wx/gtk/dcscreen.h wx/gtk/dialog.h wx/gtk/dnd.h \
 @COND_TOOLKIT_GTK@	wx/gtk/filedlg.h wx/gtk/font.h wx/gtk/fontdlg.h \
 @COND_TOOLKIT_GTK@	wx/gtk/frame.h wx/gtk/toplevel.h wx/gtk/gauge.h \
-@COND_TOOLKIT_GTK@	wx/gtk/gdiobj.h wx/gtk/glcanvas.h wx/gtk/icon.h \
-@COND_TOOLKIT_GTK@	wx/gtk/joystick.h wx/gtk/listbox.h wx/gtk/mdi.h \
-@COND_TOOLKIT_GTK@	wx/gtk/menu.h wx/gtk/menuitem.h wx/gtk/minifram.h \
-@COND_TOOLKIT_GTK@	wx/gtk/msgdlg.h wx/gtk/notebook.h wx/gtk/pen.h \
-@COND_TOOLKIT_GTK@	wx/gtk/popupwin.h wx/gtk/radiobox.h wx/gtk/radiobut.h \
-@COND_TOOLKIT_GTK@	wx/gtk/region.h wx/gtk/scrolbar.h wx/gtk/scrolwin.h \
-@COND_TOOLKIT_GTK@	wx/gtk/slider.h wx/gtk/spinbutt.h wx/gtk/spinctrl.h \
-@COND_TOOLKIT_GTK@	wx/gtk/statbmp.h wx/gtk/statbox.h wx/gtk/statline.h \
-@COND_TOOLKIT_GTK@	wx/gtk/stattext.h wx/gtk/tbargtk.h wx/gtk/textctrl.h \
-@COND_TOOLKIT_GTK@	wx/gtk/tglbtn.h wx/gtk/timer.h wx/gtk/tooltip.h \
-@COND_TOOLKIT_GTK@	wx/gtk/treectrl.h wx/gtk/wave.h wx/gtk/win_gtk.h \
-@COND_TOOLKIT_GTK@	wx/gtk/window.h wx/generic/fdrepdlg.h wx/generic/tabg.h \
+@COND_TOOLKIT_GTK@	wx/gtk/gdiobj.h wx/gtk/icon.h wx/gtk/joystick.h \
+@COND_TOOLKIT_GTK@	wx/gtk/listbox.h wx/gtk/mdi.h wx/gtk/menu.h \
+@COND_TOOLKIT_GTK@	wx/gtk/menuitem.h wx/gtk/minifram.h wx/gtk/msgdlg.h \
+@COND_TOOLKIT_GTK@	wx/gtk/notebook.h wx/gtk/pen.h wx/gtk/popupwin.h \
+@COND_TOOLKIT_GTK@	wx/gtk/radiobox.h wx/gtk/radiobut.h wx/gtk/region.h \
+@COND_TOOLKIT_GTK@	wx/gtk/scrolbar.h wx/gtk/scrolwin.h wx/gtk/slider.h \
+@COND_TOOLKIT_GTK@	wx/gtk/spinbutt.h wx/gtk/spinctrl.h wx/gtk/statbmp.h \
+@COND_TOOLKIT_GTK@	wx/gtk/statbox.h wx/gtk/statline.h wx/gtk/stattext.h \
+@COND_TOOLKIT_GTK@	wx/gtk/tbargtk.h wx/gtk/textctrl.h wx/gtk/tglbtn.h \
+@COND_TOOLKIT_GTK@	wx/gtk/timer.h wx/gtk/tooltip.h wx/gtk/treectrl.h \
+@COND_TOOLKIT_GTK@	wx/gtk/wave.h wx/gtk/win_gtk.h wx/gtk/window.h \
+@COND_TOOLKIT_GTK@	wx/generic/fdrepdlg.h wx/generic/tabg.h \
 @COND_TOOLKIT_GTK@	wx/generic/dirdlgg.h wx/generic/statusbr.h \
 @COND_TOOLKIT_GTK@	wx/generic/listctrl.h
 @COND_TOOLKIT_MAC@GUI_HDR = wx/mac/chkconf.h wx/mac/accel.h \
@@ -333,26 +334,26 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MAC@	wx/mac/dcprint.h wx/mac/dcscreen.h wx/mac/dialog.h \
 @COND_TOOLKIT_MAC@	wx/mac/dirdlg.h wx/mac/dnd.h wx/mac/filedlg.h \
 @COND_TOOLKIT_MAC@	wx/mac/font.h wx/mac/fontdlg.h wx/mac/frame.h \
-@COND_TOOLKIT_MAC@	wx/mac/gauge.h wx/mac/gdiobj.h wx/mac/glcanvas.h \
-@COND_TOOLKIT_MAC@	wx/mac/gsockmac.h wx/mac/helpxxxx.h wx/mac/icon.h \
-@COND_TOOLKIT_MAC@	wx/mac/imaglist.h wx/mac/joystick.h wx/mac/listbox.h \
-@COND_TOOLKIT_MAC@	wx/mac/listctrl.h wx/mac/macnotfy.h wx/mac/macsock.h \
-@COND_TOOLKIT_MAC@	wx/mac/mdi.h wx/mac/menu.h wx/mac/menuitem.h \
-@COND_TOOLKIT_MAC@	wx/mac/metafile.h wx/mac/mimetype.h wx/mac/minifram.h \
-@COND_TOOLKIT_MAC@	wx/mac/msgdlg.h wx/mac/notebook.h wx/mac/palette.h \
-@COND_TOOLKIT_MAC@	wx/mac/pen.h wx/mac/pnghand.h wx/mac/pngread.h \
-@COND_TOOLKIT_MAC@	wx/mac/printdlg.h wx/mac/printmac.h wx/mac/private.h \
-@COND_TOOLKIT_MAC@	wx/mac/radiobox.h wx/mac/radiobut.h wx/mac/region.h \
-@COND_TOOLKIT_MAC@	wx/mac/scrolbar.h wx/mac/slider.h wx/mac/spinbutt.h \
-@COND_TOOLKIT_MAC@	wx/mac/spinctrl.h wx/mac/statbmp.h wx/mac/statbox.h \
-@COND_TOOLKIT_MAC@	wx/mac/statline.h wx/mac/stattext.h wx/mac/statusbr.h \
-@COND_TOOLKIT_MAC@	wx/mac/tabctrl.h wx/mac/textctrl.h wx/mac/timer.h \
-@COND_TOOLKIT_MAC@	wx/mac/toolbar.h wx/mac/tooltip.h wx/mac/toplevel.h \
-@COND_TOOLKIT_MAC@	wx/mac/treectrl.h wx/mac/uma.h wx/mac/wave.h \
-@COND_TOOLKIT_MAC@	wx/mac/window.h wx/generic/statusbr.h \
-@COND_TOOLKIT_MAC@	wx/generic/fontdlgg.h wx/generic/imaglist.h \
-@COND_TOOLKIT_MAC@	wx/generic/listctrl.h wx/generic/fdrepdlg.h \
-@COND_TOOLKIT_MAC@	wx/generic/tabg.h wx/generic/caret.h
+@COND_TOOLKIT_MAC@	wx/mac/gauge.h wx/mac/gdiobj.h wx/mac/gsockmac.h \
+@COND_TOOLKIT_MAC@	wx/mac/helpxxxx.h wx/mac/icon.h wx/mac/imaglist.h \
+@COND_TOOLKIT_MAC@	wx/mac/joystick.h wx/mac/listbox.h wx/mac/listctrl.h \
+@COND_TOOLKIT_MAC@	wx/mac/macnotfy.h wx/mac/macsock.h wx/mac/mdi.h \
+@COND_TOOLKIT_MAC@	wx/mac/menu.h wx/mac/menuitem.h wx/mac/metafile.h \
+@COND_TOOLKIT_MAC@	wx/mac/mimetype.h wx/mac/minifram.h wx/mac/msgdlg.h \
+@COND_TOOLKIT_MAC@	wx/mac/notebook.h wx/mac/palette.h wx/mac/pen.h \
+@COND_TOOLKIT_MAC@	wx/mac/pnghand.h wx/mac/pngread.h wx/mac/printdlg.h \
+@COND_TOOLKIT_MAC@	wx/mac/printmac.h wx/mac/private.h wx/mac/radiobox.h \
+@COND_TOOLKIT_MAC@	wx/mac/radiobut.h wx/mac/region.h wx/mac/scrolbar.h \
+@COND_TOOLKIT_MAC@	wx/mac/slider.h wx/mac/spinbutt.h wx/mac/spinctrl.h \
+@COND_TOOLKIT_MAC@	wx/mac/statbmp.h wx/mac/statbox.h wx/mac/statline.h \
+@COND_TOOLKIT_MAC@	wx/mac/stattext.h wx/mac/statusbr.h wx/mac/tabctrl.h \
+@COND_TOOLKIT_MAC@	wx/mac/textctrl.h wx/mac/timer.h wx/mac/toolbar.h \
+@COND_TOOLKIT_MAC@	wx/mac/tooltip.h wx/mac/toplevel.h wx/mac/treectrl.h \
+@COND_TOOLKIT_MAC@	wx/mac/uma.h wx/mac/wave.h wx/mac/window.h \
+@COND_TOOLKIT_MAC@	wx/generic/statusbr.h wx/generic/fontdlgg.h \
+@COND_TOOLKIT_MAC@	wx/generic/imaglist.h wx/generic/listctrl.h \
+@COND_TOOLKIT_MAC@	wx/generic/fdrepdlg.h wx/generic/tabg.h \
+@COND_TOOLKIT_MAC@	wx/generic/caret.h
 @COND_TOOLKIT_MOTIF@GUI_HDR = wx/motif/accel.h \
 @COND_TOOLKIT_MOTIF@	wx/motif/app.h wx/motif/bmpbuttn.h wx/motif/bmpmotif.h \
 @COND_TOOLKIT_MOTIF@	wx/motif/button.h wx/motif/checkbox.h \
@@ -364,24 +365,24 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MOTIF@	wx/motif/dcmemory.h wx/motif/dcprint.h \
 @COND_TOOLKIT_MOTIF@	wx/motif/dcscreen.h wx/motif/dialog.h wx/motif/dnd.h \
 @COND_TOOLKIT_MOTIF@	wx/motif/filedlg.h wx/motif/font.h wx/motif/frame.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/gauge.h wx/motif/gdiobj.h wx/motif/glcanvas.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/icon.h wx/motif/listbox.h wx/motif/mdi.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/menu.h wx/motif/menuitem.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/minifram.h wx/motif/msgdlg.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/palette.h wx/motif/print.h wx/motif/private.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/radiobox.h wx/motif/radiobut.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/region.h wx/motif/scrolbar.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/settings.h wx/motif/slider.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/spinbutt.h wx/motif/statbmp.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/statbox.h wx/motif/stattext.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/textctrl.h wx/motif/tglbtn.h wx/motif/timer.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/toolbar.h wx/motif/toplevel.h \
-@COND_TOOLKIT_MOTIF@	wx/motif/window.h wx/generic/fdrepdlg.h \
-@COND_TOOLKIT_MOTIF@	wx/generic/listctrl.h wx/generic/imaglist.h \
-@COND_TOOLKIT_MOTIF@	wx/generic/notebook.h wx/generic/fontdlgg.h \
-@COND_TOOLKIT_MOTIF@	wx/generic/colrdlgg.h wx/generic/statline.h \
-@COND_TOOLKIT_MOTIF@	wx/generic/tabg.h wx/generic/dirdlgg.h \
-@COND_TOOLKIT_MOTIF@	wx/generic/prntdlgg.h wx/generic/statusbr.h
+@COND_TOOLKIT_MOTIF@	wx/motif/gauge.h wx/motif/gdiobj.h wx/motif/icon.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/listbox.h wx/motif/mdi.h wx/motif/menu.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/menuitem.h wx/motif/minifram.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/msgdlg.h wx/motif/palette.h wx/motif/print.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/private.h wx/motif/radiobox.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/radiobut.h wx/motif/region.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/scrolbar.h wx/motif/settings.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/slider.h wx/motif/spinbutt.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/statbmp.h wx/motif/statbox.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/stattext.h wx/motif/textctrl.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/tglbtn.h wx/motif/timer.h wx/motif/toolbar.h \
+@COND_TOOLKIT_MOTIF@	wx/motif/toplevel.h wx/motif/window.h \
+@COND_TOOLKIT_MOTIF@	wx/generic/fdrepdlg.h wx/generic/listctrl.h \
+@COND_TOOLKIT_MOTIF@	wx/generic/imaglist.h wx/generic/notebook.h \
+@COND_TOOLKIT_MOTIF@	wx/generic/fontdlgg.h wx/generic/colrdlgg.h \
+@COND_TOOLKIT_MOTIF@	wx/generic/statline.h wx/generic/tabg.h \
+@COND_TOOLKIT_MOTIF@	wx/generic/dirdlgg.h wx/generic/prntdlgg.h \
+@COND_TOOLKIT_MOTIF@	wx/generic/statusbr.h
 @COND_TOOLKIT_MSW@GUI_HDR = wx/msw/accel.h wx/msw/app.h \
 @COND_TOOLKIT_MSW@	wx/msw/bitmap.h wx/msw/bmpbuttn.h wx/msw/brush.h \
 @COND_TOOLKIT_MSW@	wx/msw/button.h wx/msw/caret.h wx/msw/checkbox.h \
@@ -393,29 +394,29 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MSW@	wx/msw/dirdlg.h wx/msw/dragimag.h wx/msw/enhmeta.h \
 @COND_TOOLKIT_MSW@	wx/msw/fdrepdlg.h wx/msw/filedlg.h wx/msw/font.h \
 @COND_TOOLKIT_MSW@	wx/msw/fontdlg.h wx/msw/frame.h wx/msw/gauge95.h \
-@COND_TOOLKIT_MSW@	wx/msw/gdiimage.h wx/msw/gdiobj.h wx/msw/glcanvas.h \
-@COND_TOOLKIT_MSW@	wx/msw/helpchm.h wx/msw/helpwin.h wx/msw/icon.h \
-@COND_TOOLKIT_MSW@	wx/msw/imaglist.h wx/msw/iniconf.h wx/msw/joystick.h \
-@COND_TOOLKIT_MSW@	wx/msw/listbox.h wx/msw/listctrl.h wx/msw/mdi.h \
-@COND_TOOLKIT_MSW@	wx/msw/menu.h wx/msw/menuitem.h wx/msw/metafile.h \
-@COND_TOOLKIT_MSW@	wx/msw/minifram.h wx/msw/missing.h wx/msw/msgdlg.h \
-@COND_TOOLKIT_MSW@	wx/msw/mslu.h wx/msw/msvcrt.h wx/msw/notebook.h \
-@COND_TOOLKIT_MSW@	wx/msw/palette.h wx/msw/pen.h wx/msw/printdlg.h \
-@COND_TOOLKIT_MSW@	wx/msw/printwin.h wx/msw/private.h wx/msw/radiobox.h \
-@COND_TOOLKIT_MSW@	wx/msw/radiobut.h wx/msw/regconf.h wx/msw/region.h \
-@COND_TOOLKIT_MSW@	wx/msw/registry.h wx/msw/scrolbar.h wx/msw/setup0.h \
-@COND_TOOLKIT_MSW@	wx/msw/slider95.h wx/msw/slidrmsw.h wx/msw/spinctrl.h \
-@COND_TOOLKIT_MSW@	wx/msw/spinbutt.h wx/msw/statbmp.h wx/msw/statbox.h \
-@COND_TOOLKIT_MSW@	wx/msw/statbr95.h wx/msw/statline.h wx/msw/stattext.h \
-@COND_TOOLKIT_MSW@	wx/msw/tabctrl.h wx/msw/taskbar.h wx/msw/tbar95.h \
-@COND_TOOLKIT_MSW@	wx/msw/tbarmsw.h wx/msw/textctrl.h wx/msw/tglbtn.h \
-@COND_TOOLKIT_MSW@	wx/msw/timer.h wx/msw/tooltip.h wx/msw/toplevel.h \
-@COND_TOOLKIT_MSW@	wx/msw/treectrl.h wx/msw/wave.h wx/msw/window.h \
-@COND_TOOLKIT_MSW@	wx/msw/ole/access.h wx/msw/ole/automtn.h \
-@COND_TOOLKIT_MSW@	wx/msw/ole/dataform.h wx/msw/ole/dataobj.h \
-@COND_TOOLKIT_MSW@	wx/msw/ole/dataobj2.h wx/msw/ole/dropsrc.h \
-@COND_TOOLKIT_MSW@	wx/msw/ole/droptgt.h wx/msw/ole/oleutils.h \
-@COND_TOOLKIT_MSW@	wx/msw/ole/uuid.h wx/msw/helpbest.h
+@COND_TOOLKIT_MSW@	wx/msw/gdiimage.h wx/msw/gdiobj.h wx/msw/helpchm.h \
+@COND_TOOLKIT_MSW@	wx/msw/helpwin.h wx/msw/icon.h wx/msw/imaglist.h \
+@COND_TOOLKIT_MSW@	wx/msw/iniconf.h wx/msw/joystick.h wx/msw/listbox.h \
+@COND_TOOLKIT_MSW@	wx/msw/listctrl.h wx/msw/mdi.h wx/msw/menu.h \
+@COND_TOOLKIT_MSW@	wx/msw/menuitem.h wx/msw/metafile.h wx/msw/minifram.h \
+@COND_TOOLKIT_MSW@	wx/msw/missing.h wx/msw/msgdlg.h wx/msw/mslu.h \
+@COND_TOOLKIT_MSW@	wx/msw/msvcrt.h wx/msw/notebook.h wx/msw/palette.h \
+@COND_TOOLKIT_MSW@	wx/msw/pen.h wx/msw/printdlg.h wx/msw/printwin.h \
+@COND_TOOLKIT_MSW@	wx/msw/private.h wx/msw/radiobox.h wx/msw/radiobut.h \
+@COND_TOOLKIT_MSW@	wx/msw/regconf.h wx/msw/region.h wx/msw/registry.h \
+@COND_TOOLKIT_MSW@	wx/msw/scrolbar.h wx/msw/setup0.h wx/msw/slider95.h \
+@COND_TOOLKIT_MSW@	wx/msw/slidrmsw.h wx/msw/spinctrl.h wx/msw/spinbutt.h \
+@COND_TOOLKIT_MSW@	wx/msw/statbmp.h wx/msw/statbox.h wx/msw/statbr95.h \
+@COND_TOOLKIT_MSW@	wx/msw/statline.h wx/msw/stattext.h wx/msw/tabctrl.h \
+@COND_TOOLKIT_MSW@	wx/msw/taskbar.h wx/msw/tbar95.h wx/msw/tbarmsw.h \
+@COND_TOOLKIT_MSW@	wx/msw/textctrl.h wx/msw/tglbtn.h wx/msw/timer.h \
+@COND_TOOLKIT_MSW@	wx/msw/tooltip.h wx/msw/toplevel.h wx/msw/treectrl.h \
+@COND_TOOLKIT_MSW@	wx/msw/wave.h wx/msw/window.h wx/msw/ole/access.h \
+@COND_TOOLKIT_MSW@	wx/msw/ole/automtn.h wx/msw/ole/dataform.h \
+@COND_TOOLKIT_MSW@	wx/msw/ole/dataobj.h wx/msw/ole/dataobj2.h \
+@COND_TOOLKIT_MSW@	wx/msw/ole/dropsrc.h wx/msw/ole/droptgt.h \
+@COND_TOOLKIT_MSW@	wx/msw/ole/oleutils.h wx/msw/ole/uuid.h \
+@COND_TOOLKIT_MSW@	wx/msw/helpbest.h
 @COND_TOOLKIT_OS2@GUI_HDR = wx/os2/accel.h wx/os2/dataobj.h \
 @COND_TOOLKIT_OS2@	wx/os2/helpwin.h wx/os2/pngread.h wx/os2/statline.h \
 @COND_TOOLKIT_OS2@	wx/os2/app.h wx/os2/dataobj2.h wx/os2/icon.h \
@@ -468,12 +469,16 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_X11@	wx/x11/dataobj.h wx/x11/dataobj2.h wx/x11/dc.h \
 @COND_TOOLKIT_X11@	wx/x11/dcclient.h wx/x11/dcmemory.h wx/x11/dcprint.h \
 @COND_TOOLKIT_X11@	wx/x11/dcscreen.h wx/x11/dnd.h wx/x11/font.h \
-@COND_TOOLKIT_X11@	wx/x11/gdiobj.h wx/x11/glcanvas.h wx/x11/icon.h \
-@COND_TOOLKIT_X11@	wx/x11/joystick.h wx/x11/minifram.h wx/x11/palette.h \
-@COND_TOOLKIT_X11@	wx/x11/pen.h wx/x11/print.h wx/x11/private.h \
-@COND_TOOLKIT_X11@	wx/x11/privx.h wx/x11/region.h wx/x11/reparent.h \
-@COND_TOOLKIT_X11@	wx/x11/textctrl.h wx/x11/toplevel.h wx/x11/window.h \
-@COND_TOOLKIT_X11@	src/generic/timer.h
+@COND_TOOLKIT_X11@	wx/x11/gdiobj.h wx/x11/icon.h wx/x11/joystick.h \
+@COND_TOOLKIT_X11@	wx/x11/minifram.h wx/x11/palette.h wx/x11/pen.h \
+@COND_TOOLKIT_X11@	wx/x11/print.h wx/x11/private.h wx/x11/privx.h \
+@COND_TOOLKIT_X11@	wx/x11/region.h wx/x11/reparent.h wx/x11/textctrl.h \
+@COND_TOOLKIT_X11@	wx/x11/toplevel.h wx/x11/window.h src/generic/timer.h
+@COND_TOOLKIT_GTK@OPENGL_HDR = wx/gtk/glcanvas.h
+@COND_TOOLKIT_MAC@OPENGL_HDR = wx/mac/glcanvas.h
+@COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/motif/glcanvas.h
+@COND_TOOLKIT_MSW@OPENGL_HDR = wx/msw/glcanvas.h
+@COND_TOOLKIT_X11@OPENGL_HDR = wx/x11/glcanvas.h
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1@VENDORTAG = _$(VENDOR)
@@ -1197,21 +1202,20 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MOTIF@	monodll_dc.o monodll_dcclient.o monodll_dcmemory.o \
 @COND_TOOLKIT_MOTIF@	monodll_dcscreen.o monodll_dialog.o monodll_evtloop.o \
 @COND_TOOLKIT_MOTIF@	monodll_filedlg.o monodll_font.o monodll_frame.o \
-@COND_TOOLKIT_MOTIF@	monodll_gauge.o monodll_gdiobj.o monodll_glcanvas.o \
-@COND_TOOLKIT_MOTIF@	monodll_icon.o monodll_listbox.o monodll_main.o \
-@COND_TOOLKIT_MOTIF@	monodll_mdi.o monodll_menu.o monodll_menuitem.o \
-@COND_TOOLKIT_MOTIF@	monodll_minifram.o monodll_msgdlg.o monodll_palette.o \
-@COND_TOOLKIT_MOTIF@	monodll_radiobox.o monodll_radiobut.o \
-@COND_TOOLKIT_MOTIF@	monodll_scrolbar.o monodll_settings.o monodll_slider.o \
-@COND_TOOLKIT_MOTIF@	monodll_spinbutt.o monodll_statbmp.o monodll_statbox.o \
-@COND_TOOLKIT_MOTIF@	monodll_stattext.o monodll_toolbar.o \
-@COND_TOOLKIT_MOTIF@	monodll_textctrl.o monodll_timer.o monodll_toplevel.o \
-@COND_TOOLKIT_MOTIF@	monodll_utils.o monodll_window.o monodll_fdrepdlg.o \
-@COND_TOOLKIT_MOTIF@	monodll_listctrl.o monodll_imaglist.o \
-@COND_TOOLKIT_MOTIF@	monodll_notebook.o monodll_fontdlgg.o \
-@COND_TOOLKIT_MOTIF@	monodll_colrdlgg.o monodll_statline.o monodll_tabg.o \
-@COND_TOOLKIT_MOTIF@	monodll_dirdlgg.o monodll_prntdlgg.o \
-@COND_TOOLKIT_MOTIF@	monodll_statusbr.o
+@COND_TOOLKIT_MOTIF@	monodll_gauge.o monodll_gdiobj.o monodll_icon.o \
+@COND_TOOLKIT_MOTIF@	monodll_listbox.o monodll_main.o monodll_mdi.o \
+@COND_TOOLKIT_MOTIF@	monodll_menu.o monodll_menuitem.o monodll_minifram.o \
+@COND_TOOLKIT_MOTIF@	monodll_msgdlg.o monodll_palette.o monodll_radiobox.o \
+@COND_TOOLKIT_MOTIF@	monodll_radiobut.o monodll_scrolbar.o \
+@COND_TOOLKIT_MOTIF@	monodll_settings.o monodll_slider.o monodll_spinbutt.o \
+@COND_TOOLKIT_MOTIF@	monodll_statbmp.o monodll_statbox.o monodll_stattext.o \
+@COND_TOOLKIT_MOTIF@	monodll_toolbar.o monodll_textctrl.o monodll_timer.o \
+@COND_TOOLKIT_MOTIF@	monodll_toplevel.o monodll_utils.o monodll_window.o \
+@COND_TOOLKIT_MOTIF@	monodll_fdrepdlg.o monodll_listctrl.o \
+@COND_TOOLKIT_MOTIF@	monodll_imaglist.o monodll_notebook.o \
+@COND_TOOLKIT_MOTIF@	monodll_fontdlgg.o monodll_colrdlgg.o \
+@COND_TOOLKIT_MOTIF@	monodll_statline.o monodll_tabg.o monodll_dirdlgg.o \
+@COND_TOOLKIT_MOTIF@	monodll_prntdlgg.o monodll_statusbr.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS = monodll_statusbr.o \
 @COND_TOOLKIT_MSW@	monodll_uxtheme.o monodll_access.o monodll_accel.o \
 @COND_TOOLKIT_MSW@	monodll_bmpbuttn.o monodll_button.o monodll_checkbox.o \
@@ -1335,21 +1339,20 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MOTIF@	monolib_dc.o monolib_dcclient.o monolib_dcmemory.o \
 @COND_TOOLKIT_MOTIF@	monolib_dcscreen.o monolib_dialog.o monolib_evtloop.o \
 @COND_TOOLKIT_MOTIF@	monolib_filedlg.o monolib_font.o monolib_frame.o \
-@COND_TOOLKIT_MOTIF@	monolib_gauge.o monolib_gdiobj.o monolib_glcanvas.o \
-@COND_TOOLKIT_MOTIF@	monolib_icon.o monolib_listbox.o monolib_main.o \
-@COND_TOOLKIT_MOTIF@	monolib_mdi.o monolib_menu.o monolib_menuitem.o \
-@COND_TOOLKIT_MOTIF@	monolib_minifram.o monolib_msgdlg.o monolib_palette.o \
-@COND_TOOLKIT_MOTIF@	monolib_radiobox.o monolib_radiobut.o \
-@COND_TOOLKIT_MOTIF@	monolib_scrolbar.o monolib_settings.o monolib_slider.o \
-@COND_TOOLKIT_MOTIF@	monolib_spinbutt.o monolib_statbmp.o monolib_statbox.o \
-@COND_TOOLKIT_MOTIF@	monolib_stattext.o monolib_toolbar.o \
-@COND_TOOLKIT_MOTIF@	monolib_textctrl.o monolib_timer.o monolib_toplevel.o \
-@COND_TOOLKIT_MOTIF@	monolib_utils.o monolib_window.o monolib_fdrepdlg.o \
-@COND_TOOLKIT_MOTIF@	monolib_listctrl.o monolib_imaglist.o \
-@COND_TOOLKIT_MOTIF@	monolib_notebook.o monolib_fontdlgg.o \
-@COND_TOOLKIT_MOTIF@	monolib_colrdlgg.o monolib_statline.o monolib_tabg.o \
-@COND_TOOLKIT_MOTIF@	monolib_dirdlgg.o monolib_prntdlgg.o \
-@COND_TOOLKIT_MOTIF@	monolib_statusbr.o
+@COND_TOOLKIT_MOTIF@	monolib_gauge.o monolib_gdiobj.o monolib_icon.o \
+@COND_TOOLKIT_MOTIF@	monolib_listbox.o monolib_main.o monolib_mdi.o \
+@COND_TOOLKIT_MOTIF@	monolib_menu.o monolib_menuitem.o monolib_minifram.o \
+@COND_TOOLKIT_MOTIF@	monolib_msgdlg.o monolib_palette.o monolib_radiobox.o \
+@COND_TOOLKIT_MOTIF@	monolib_radiobut.o monolib_scrolbar.o \
+@COND_TOOLKIT_MOTIF@	monolib_settings.o monolib_slider.o monolib_spinbutt.o \
+@COND_TOOLKIT_MOTIF@	monolib_statbmp.o monolib_statbox.o monolib_stattext.o \
+@COND_TOOLKIT_MOTIF@	monolib_toolbar.o monolib_textctrl.o monolib_timer.o \
+@COND_TOOLKIT_MOTIF@	monolib_toplevel.o monolib_utils.o monolib_window.o \
+@COND_TOOLKIT_MOTIF@	monolib_fdrepdlg.o monolib_listctrl.o \
+@COND_TOOLKIT_MOTIF@	monolib_imaglist.o monolib_notebook.o \
+@COND_TOOLKIT_MOTIF@	monolib_fontdlgg.o monolib_colrdlgg.o \
+@COND_TOOLKIT_MOTIF@	monolib_statline.o monolib_tabg.o monolib_dirdlgg.o \
+@COND_TOOLKIT_MOTIF@	monolib_prntdlgg.o monolib_statusbr.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_1 = monolib_statusbr.o \
 @COND_TOOLKIT_MSW@	monolib_uxtheme.o monolib_access.o monolib_accel.o \
 @COND_TOOLKIT_MSW@	monolib_bmpbuttn.o monolib_button.o monolib_checkbox.o \
@@ -1473,21 +1476,20 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MOTIF@	coredll_dc.o coredll_dcclient.o coredll_dcmemory.o \
 @COND_TOOLKIT_MOTIF@	coredll_dcscreen.o coredll_dialog.o coredll_evtloop.o \
 @COND_TOOLKIT_MOTIF@	coredll_filedlg.o coredll_font.o coredll_frame.o \
-@COND_TOOLKIT_MOTIF@	coredll_gauge.o coredll_gdiobj.o coredll_glcanvas.o \
-@COND_TOOLKIT_MOTIF@	coredll_icon.o coredll_listbox.o coredll_main.o \
-@COND_TOOLKIT_MOTIF@	coredll_mdi.o coredll_menu.o coredll_menuitem.o \
-@COND_TOOLKIT_MOTIF@	coredll_minifram.o coredll_msgdlg.o coredll_palette.o \
-@COND_TOOLKIT_MOTIF@	coredll_radiobox.o coredll_radiobut.o \
-@COND_TOOLKIT_MOTIF@	coredll_scrolbar.o coredll_settings.o coredll_slider.o \
-@COND_TOOLKIT_MOTIF@	coredll_spinbutt.o coredll_statbmp.o coredll_statbox.o \
-@COND_TOOLKIT_MOTIF@	coredll_stattext.o coredll_toolbar.o \
-@COND_TOOLKIT_MOTIF@	coredll_textctrl.o coredll_timer.o coredll_toplevel.o \
-@COND_TOOLKIT_MOTIF@	coredll_utils.o coredll_window.o coredll_fdrepdlg.o \
-@COND_TOOLKIT_MOTIF@	coredll_listctrl.o coredll_imaglist.o \
-@COND_TOOLKIT_MOTIF@	coredll_notebook.o coredll_fontdlgg.o \
-@COND_TOOLKIT_MOTIF@	coredll_colrdlgg.o coredll_statline.o coredll_tabg.o \
-@COND_TOOLKIT_MOTIF@	coredll_dirdlgg.o coredll_prntdlgg.o \
-@COND_TOOLKIT_MOTIF@	coredll_statusbr.o
+@COND_TOOLKIT_MOTIF@	coredll_gauge.o coredll_gdiobj.o coredll_icon.o \
+@COND_TOOLKIT_MOTIF@	coredll_listbox.o coredll_main.o coredll_mdi.o \
+@COND_TOOLKIT_MOTIF@	coredll_menu.o coredll_menuitem.o coredll_minifram.o \
+@COND_TOOLKIT_MOTIF@	coredll_msgdlg.o coredll_palette.o coredll_radiobox.o \
+@COND_TOOLKIT_MOTIF@	coredll_radiobut.o coredll_scrolbar.o \
+@COND_TOOLKIT_MOTIF@	coredll_settings.o coredll_slider.o coredll_spinbutt.o \
+@COND_TOOLKIT_MOTIF@	coredll_statbmp.o coredll_statbox.o coredll_stattext.o \
+@COND_TOOLKIT_MOTIF@	coredll_toolbar.o coredll_textctrl.o coredll_timer.o \
+@COND_TOOLKIT_MOTIF@	coredll_toplevel.o coredll_utils.o coredll_window.o \
+@COND_TOOLKIT_MOTIF@	coredll_fdrepdlg.o coredll_listctrl.o \
+@COND_TOOLKIT_MOTIF@	coredll_imaglist.o coredll_notebook.o \
+@COND_TOOLKIT_MOTIF@	coredll_fontdlgg.o coredll_colrdlgg.o \
+@COND_TOOLKIT_MOTIF@	coredll_statline.o coredll_tabg.o coredll_dirdlgg.o \
+@COND_TOOLKIT_MOTIF@	coredll_prntdlgg.o coredll_statusbr.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_2 = coredll_statusbr.o \
 @COND_TOOLKIT_MSW@	coredll_uxtheme.o coredll_access.o coredll_accel.o \
 @COND_TOOLKIT_MSW@	coredll_bmpbuttn.o coredll_button.o coredll_checkbox.o \
@@ -1611,21 +1613,20 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MOTIF@	corelib_dc.o corelib_dcclient.o corelib_dcmemory.o \
 @COND_TOOLKIT_MOTIF@	corelib_dcscreen.o corelib_dialog.o corelib_evtloop.o \
 @COND_TOOLKIT_MOTIF@	corelib_filedlg.o corelib_font.o corelib_frame.o \
-@COND_TOOLKIT_MOTIF@	corelib_gauge.o corelib_gdiobj.o corelib_glcanvas.o \
-@COND_TOOLKIT_MOTIF@	corelib_icon.o corelib_listbox.o corelib_main.o \
-@COND_TOOLKIT_MOTIF@	corelib_mdi.o corelib_menu.o corelib_menuitem.o \
-@COND_TOOLKIT_MOTIF@	corelib_minifram.o corelib_msgdlg.o corelib_palette.o \
-@COND_TOOLKIT_MOTIF@	corelib_radiobox.o corelib_radiobut.o \
-@COND_TOOLKIT_MOTIF@	corelib_scrolbar.o corelib_settings.o corelib_slider.o \
-@COND_TOOLKIT_MOTIF@	corelib_spinbutt.o corelib_statbmp.o corelib_statbox.o \
-@COND_TOOLKIT_MOTIF@	corelib_stattext.o corelib_toolbar.o \
-@COND_TOOLKIT_MOTIF@	corelib_textctrl.o corelib_timer.o corelib_toplevel.o \
-@COND_TOOLKIT_MOTIF@	corelib_utils.o corelib_window.o corelib_fdrepdlg.o \
-@COND_TOOLKIT_MOTIF@	corelib_listctrl.o corelib_imaglist.o \
-@COND_TOOLKIT_MOTIF@	corelib_notebook.o corelib_fontdlgg.o \
-@COND_TOOLKIT_MOTIF@	corelib_colrdlgg.o corelib_statline.o corelib_tabg.o \
-@COND_TOOLKIT_MOTIF@	corelib_dirdlgg.o corelib_prntdlgg.o \
-@COND_TOOLKIT_MOTIF@	corelib_statusbr.o
+@COND_TOOLKIT_MOTIF@	corelib_gauge.o corelib_gdiobj.o corelib_icon.o \
+@COND_TOOLKIT_MOTIF@	corelib_listbox.o corelib_main.o corelib_mdi.o \
+@COND_TOOLKIT_MOTIF@	corelib_menu.o corelib_menuitem.o corelib_minifram.o \
+@COND_TOOLKIT_MOTIF@	corelib_msgdlg.o corelib_palette.o corelib_radiobox.o \
+@COND_TOOLKIT_MOTIF@	corelib_radiobut.o corelib_scrolbar.o \
+@COND_TOOLKIT_MOTIF@	corelib_settings.o corelib_slider.o corelib_spinbutt.o \
+@COND_TOOLKIT_MOTIF@	corelib_statbmp.o corelib_statbox.o corelib_stattext.o \
+@COND_TOOLKIT_MOTIF@	corelib_toolbar.o corelib_textctrl.o corelib_timer.o \
+@COND_TOOLKIT_MOTIF@	corelib_toplevel.o corelib_utils.o corelib_window.o \
+@COND_TOOLKIT_MOTIF@	corelib_fdrepdlg.o corelib_listctrl.o \
+@COND_TOOLKIT_MOTIF@	corelib_imaglist.o corelib_notebook.o \
+@COND_TOOLKIT_MOTIF@	corelib_fontdlgg.o corelib_colrdlgg.o \
+@COND_TOOLKIT_MOTIF@	corelib_statline.o corelib_tabg.o corelib_dirdlgg.o \
+@COND_TOOLKIT_MOTIF@	corelib_prntdlgg.o corelib_statusbr.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_3 = corelib_statusbr.o \
 @COND_TOOLKIT_MSW@	corelib_uxtheme.o corelib_access.o corelib_accel.o \
 @COND_TOOLKIT_MSW@	corelib_bmpbuttn.o corelib_button.o corelib_checkbox.o \
@@ -1679,12 +1680,18 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
 @COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
 @COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
-@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
-@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = -lwxodbc$(WXDEBUGFLAG)
-@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
-@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex$(WXDEBUGFLAG)
-@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
-@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = -lwxzlib$(WXDEBUGFLAG)
+@COND_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p = \
+@COND_WXUSE_LIBJPEG_BUILTIN@	-lwxjpeg$(WXDEBUGFLAG)$(HOST_SUFFIX)
+@COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p = \
+@COND_WXUSE_ODBC_BUILTIN@	-lwxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX)
+@COND_WXUSE_LIBPNG_BUILTIN@__LIB_PNG_p = \
+@COND_WXUSE_LIBPNG_BUILTIN@	-lwxpng$(WXDEBUGFLAG)$(HOST_SUFFIX)
+@COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = \
+@COND_WXUSE_REGEX_BUILTIN@	-lwxregex$(WXDEBUGFLAG)$(HOST_SUFFIX)
+@COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p = \
+@COND_WXUSE_LIBTIFF_BUILTIN@	-lwxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX)
+@COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = \
+@COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = 
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_GTK@	monodll_fontenum.o monodll_fontutil.o monodll_utilsx11.o \
@@ -1725,16 +1732,15 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MSW@	monodll_dialup.o monodll_dib.o monodll_dirdlg.o \
 @COND_TOOLKIT_MSW@	monodll_display.o monodll_enhmeta.o monodll_evtloop.o \
 @COND_TOOLKIT_MSW@	monodll_font.o monodll_fontenum.o monodll_fontutil.o \
-@COND_TOOLKIT_MSW@	monodll_gdiimage.o monodll_gdiobj.o monodll_glcanvas.o \
-@COND_TOOLKIT_MSW@	monodll_helpchm.o monodll_helpwin.o monodll_icon.o \
-@COND_TOOLKIT_MSW@	monodll_joystick.o monodll_minifram.o monodll_palette.o \
-@COND_TOOLKIT_MSW@	monodll_pen.o monodll_popupwin.o monodll_region.o \
-@COND_TOOLKIT_MSW@	monodll_settings.o monodll_taskbarcmn.o \
-@COND_TOOLKIT_MSW@	monodll_taskbar.o monodll_timer.o monodll_tooltip.o \
-@COND_TOOLKIT_MSW@	monodll_toplevel.o monodll_utilsgui.o monodll_wave.o \
-@COND_TOOLKIT_MSW@	monodll_window.o monodll_automtn.o monodll_dataobj.o \
-@COND_TOOLKIT_MSW@	monodll_dropsrc.o monodll_droptgt.o monodll_oleutils.o \
-@COND_TOOLKIT_MSW@	monodll_uuid.o
+@COND_TOOLKIT_MSW@	monodll_gdiimage.o monodll_gdiobj.o monodll_helpchm.o \
+@COND_TOOLKIT_MSW@	monodll_helpwin.o monodll_icon.o monodll_joystick.o \
+@COND_TOOLKIT_MSW@	monodll_minifram.o monodll_palette.o monodll_pen.o \
+@COND_TOOLKIT_MSW@	monodll_popupwin.o monodll_region.o monodll_settings.o \
+@COND_TOOLKIT_MSW@	monodll_taskbarcmn.o monodll_taskbar.o monodll_timer.o \
+@COND_TOOLKIT_MSW@	monodll_tooltip.o monodll_toplevel.o monodll_utilsgui.o \
+@COND_TOOLKIT_MSW@	monodll_wave.o monodll_window.o monodll_automtn.o \
+@COND_TOOLKIT_MSW@	monodll_dataobj.o monodll_dropsrc.o monodll_droptgt.o \
+@COND_TOOLKIT_MSW@	monodll_oleutils.o monodll_uuid.o
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_X11@	monodll_fontenum.o monodll_fontutil.o monodll_utilsx11.o \
@@ -1745,12 +1751,12 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_X11@	monodll_colour.o monodll_cursor.o monodll_data.o \
 @COND_TOOLKIT_X11@	monodll_dataobj.o monodll_dc.o monodll_dcclient.o \
 @COND_TOOLKIT_X11@	monodll_dcmemory.o monodll_dcscreen.o monodll_evtloop.o \
-@COND_TOOLKIT_X11@	monodll_font.o monodll_gdiobj.o monodll_glcanvas.o \
-@COND_TOOLKIT_X11@	monodll_icon.o monodll_joystick.o monodll_main.o \
-@COND_TOOLKIT_X11@	monodll_minifram.o monodll_palette.o monodll_pen.o \
-@COND_TOOLKIT_X11@	monodll_popupwin.o monodll_region.o monodll_reparent.o \
-@COND_TOOLKIT_X11@	monodll_settings.o monodll_toplevel.o monodll_utils.o \
-@COND_TOOLKIT_X11@	monodll_utilsx.o monodll_window.o monodll_timer.o
+@COND_TOOLKIT_X11@	monodll_font.o monodll_gdiobj.o monodll_icon.o \
+@COND_TOOLKIT_X11@	monodll_joystick.o monodll_main.o monodll_minifram.o \
+@COND_TOOLKIT_X11@	monodll_palette.o monodll_pen.o monodll_popupwin.o \
+@COND_TOOLKIT_X11@	monodll_region.o monodll_reparent.o monodll_settings.o \
+@COND_TOOLKIT_X11@	monodll_toplevel.o monodll_utils.o monodll_utilsx.o \
+@COND_TOOLKIT_X11@	monodll_window.o monodll_timer.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_0 = 
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_0 = \
 @COND_TOOLKIT_GTK@	coredll_fontenum.o coredll_fontutil.o coredll_utilsx11.o \
@@ -1791,16 +1797,15 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MSW@	coredll_dialup.o coredll_dib.o coredll_dirdlg.o \
 @COND_TOOLKIT_MSW@	coredll_display.o coredll_enhmeta.o coredll_evtloop.o \
 @COND_TOOLKIT_MSW@	coredll_font.o coredll_fontenum.o coredll_fontutil.o \
-@COND_TOOLKIT_MSW@	coredll_gdiimage.o coredll_gdiobj.o coredll_glcanvas.o \
-@COND_TOOLKIT_MSW@	coredll_helpchm.o coredll_helpwin.o coredll_icon.o \
-@COND_TOOLKIT_MSW@	coredll_joystick.o coredll_minifram.o coredll_palette.o \
-@COND_TOOLKIT_MSW@	coredll_pen.o coredll_popupwin.o coredll_region.o \
-@COND_TOOLKIT_MSW@	coredll_settings.o coredll_taskbarcmn.o \
-@COND_TOOLKIT_MSW@	coredll_taskbar.o coredll_timer.o coredll_tooltip.o \
-@COND_TOOLKIT_MSW@	coredll_toplevel.o coredll_utilsgui.o coredll_wave.o \
-@COND_TOOLKIT_MSW@	coredll_window.o coredll_automtn.o coredll_dataobj.o \
-@COND_TOOLKIT_MSW@	coredll_dropsrc.o coredll_droptgt.o coredll_oleutils.o \
-@COND_TOOLKIT_MSW@	coredll_uuid.o
+@COND_TOOLKIT_MSW@	coredll_gdiimage.o coredll_gdiobj.o coredll_helpchm.o \
+@COND_TOOLKIT_MSW@	coredll_helpwin.o coredll_icon.o coredll_joystick.o \
+@COND_TOOLKIT_MSW@	coredll_minifram.o coredll_palette.o coredll_pen.o \
+@COND_TOOLKIT_MSW@	coredll_popupwin.o coredll_region.o coredll_settings.o \
+@COND_TOOLKIT_MSW@	coredll_taskbarcmn.o coredll_taskbar.o coredll_timer.o \
+@COND_TOOLKIT_MSW@	coredll_tooltip.o coredll_toplevel.o coredll_utilsgui.o \
+@COND_TOOLKIT_MSW@	coredll_wave.o coredll_window.o coredll_automtn.o \
+@COND_TOOLKIT_MSW@	coredll_dataobj.o coredll_dropsrc.o coredll_droptgt.o \
+@COND_TOOLKIT_MSW@	coredll_oleutils.o coredll_uuid.o
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_0 = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_0 = \
 @COND_TOOLKIT_X11@	coredll_fontenum.o coredll_fontutil.o coredll_utilsx11.o \
@@ -1811,12 +1816,12 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_X11@	coredll_colour.o coredll_cursor.o coredll_data.o \
 @COND_TOOLKIT_X11@	coredll_dataobj.o coredll_dc.o coredll_dcclient.o \
 @COND_TOOLKIT_X11@	coredll_dcmemory.o coredll_dcscreen.o coredll_evtloop.o \
-@COND_TOOLKIT_X11@	coredll_font.o coredll_gdiobj.o coredll_glcanvas.o \
-@COND_TOOLKIT_X11@	coredll_icon.o coredll_joystick.o coredll_main.o \
-@COND_TOOLKIT_X11@	coredll_minifram.o coredll_palette.o coredll_pen.o \
-@COND_TOOLKIT_X11@	coredll_popupwin.o coredll_region.o coredll_reparent.o \
-@COND_TOOLKIT_X11@	coredll_settings.o coredll_toplevel.o coredll_utils.o \
-@COND_TOOLKIT_X11@	coredll_utilsx.o coredll_window.o coredll_timer.o
+@COND_TOOLKIT_X11@	coredll_font.o coredll_gdiobj.o coredll_icon.o \
+@COND_TOOLKIT_X11@	coredll_joystick.o coredll_main.o coredll_minifram.o \
+@COND_TOOLKIT_X11@	coredll_palette.o coredll_pen.o coredll_popupwin.o \
+@COND_TOOLKIT_X11@	coredll_region.o coredll_reparent.o coredll_settings.o \
+@COND_TOOLKIT_X11@	coredll_toplevel.o coredll_utils.o coredll_utilsx.o \
+@COND_TOOLKIT_X11@	coredll_window.o coredll_timer.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_8 = 
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_8 = \
 @COND_TOOLKIT_GTK@	corelib_fontenum.o corelib_fontutil.o corelib_utilsx11.o \
@@ -1857,16 +1862,15 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MSW@	corelib_dialup.o corelib_dib.o corelib_dirdlg.o \
 @COND_TOOLKIT_MSW@	corelib_display.o corelib_enhmeta.o corelib_evtloop.o \
 @COND_TOOLKIT_MSW@	corelib_font.o corelib_fontenum.o corelib_fontutil.o \
-@COND_TOOLKIT_MSW@	corelib_gdiimage.o corelib_gdiobj.o corelib_glcanvas.o \
-@COND_TOOLKIT_MSW@	corelib_helpchm.o corelib_helpwin.o corelib_icon.o \
-@COND_TOOLKIT_MSW@	corelib_joystick.o corelib_minifram.o corelib_palette.o \
-@COND_TOOLKIT_MSW@	corelib_pen.o corelib_popupwin.o corelib_region.o \
-@COND_TOOLKIT_MSW@	corelib_settings.o corelib_taskbarcmn.o \
-@COND_TOOLKIT_MSW@	corelib_taskbar.o corelib_timer.o corelib_tooltip.o \
-@COND_TOOLKIT_MSW@	corelib_toplevel.o corelib_utilsgui.o corelib_wave.o \
-@COND_TOOLKIT_MSW@	corelib_window.o corelib_automtn.o corelib_dataobj.o \
-@COND_TOOLKIT_MSW@	corelib_dropsrc.o corelib_droptgt.o corelib_oleutils.o \
-@COND_TOOLKIT_MSW@	corelib_uuid.o
+@COND_TOOLKIT_MSW@	corelib_gdiimage.o corelib_gdiobj.o corelib_helpchm.o \
+@COND_TOOLKIT_MSW@	corelib_helpwin.o corelib_icon.o corelib_joystick.o \
+@COND_TOOLKIT_MSW@	corelib_minifram.o corelib_palette.o corelib_pen.o \
+@COND_TOOLKIT_MSW@	corelib_popupwin.o corelib_region.o corelib_settings.o \
+@COND_TOOLKIT_MSW@	corelib_taskbarcmn.o corelib_taskbar.o corelib_timer.o \
+@COND_TOOLKIT_MSW@	corelib_tooltip.o corelib_toplevel.o corelib_utilsgui.o \
+@COND_TOOLKIT_MSW@	corelib_wave.o corelib_window.o corelib_automtn.o \
+@COND_TOOLKIT_MSW@	corelib_dataobj.o corelib_dropsrc.o corelib_droptgt.o \
+@COND_TOOLKIT_MSW@	corelib_oleutils.o corelib_uuid.o
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_8 = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_8 = \
 @COND_TOOLKIT_X11@	corelib_fontenum.o corelib_fontutil.o corelib_utilsx11.o \
@@ -1877,12 +1881,12 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_X11@	corelib_colour.o corelib_cursor.o corelib_data.o \
 @COND_TOOLKIT_X11@	corelib_dataobj.o corelib_dc.o corelib_dcclient.o \
 @COND_TOOLKIT_X11@	corelib_dcmemory.o corelib_dcscreen.o corelib_evtloop.o \
-@COND_TOOLKIT_X11@	corelib_font.o corelib_gdiobj.o corelib_glcanvas.o \
-@COND_TOOLKIT_X11@	corelib_icon.o corelib_joystick.o corelib_main.o \
-@COND_TOOLKIT_X11@	corelib_minifram.o corelib_palette.o corelib_pen.o \
-@COND_TOOLKIT_X11@	corelib_popupwin.o corelib_region.o corelib_reparent.o \
-@COND_TOOLKIT_X11@	corelib_settings.o corelib_toplevel.o corelib_utils.o \
-@COND_TOOLKIT_X11@	corelib_utilsx.o corelib_window.o corelib_timer.o
+@COND_TOOLKIT_X11@	corelib_font.o corelib_gdiobj.o corelib_icon.o \
+@COND_TOOLKIT_X11@	corelib_joystick.o corelib_main.o corelib_minifram.o \
+@COND_TOOLKIT_X11@	corelib_palette.o corelib_pen.o corelib_popupwin.o \
+@COND_TOOLKIT_X11@	corelib_region.o corelib_reparent.o corelib_settings.o \
+@COND_TOOLKIT_X11@	corelib_toplevel.o corelib_utils.o corelib_utilsx.o \
+@COND_TOOLKIT_X11@	corelib_window.o corelib_timer.o
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_9 = 
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_9 = \
 @COND_TOOLKIT_GTK@	monolib_fontenum.o monolib_fontutil.o monolib_utilsx11.o \
@@ -1923,16 +1927,15 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MSW@	monolib_dialup.o monolib_dib.o monolib_dirdlg.o \
 @COND_TOOLKIT_MSW@	monolib_display.o monolib_enhmeta.o monolib_evtloop.o \
 @COND_TOOLKIT_MSW@	monolib_font.o monolib_fontenum.o monolib_fontutil.o \
-@COND_TOOLKIT_MSW@	monolib_gdiimage.o monolib_gdiobj.o monolib_glcanvas.o \
-@COND_TOOLKIT_MSW@	monolib_helpchm.o monolib_helpwin.o monolib_icon.o \
-@COND_TOOLKIT_MSW@	monolib_joystick.o monolib_minifram.o monolib_palette.o \
-@COND_TOOLKIT_MSW@	monolib_pen.o monolib_popupwin.o monolib_region.o \
-@COND_TOOLKIT_MSW@	monolib_settings.o monolib_taskbarcmn.o \
-@COND_TOOLKIT_MSW@	monolib_taskbar.o monolib_timer.o monolib_tooltip.o \
-@COND_TOOLKIT_MSW@	monolib_toplevel.o monolib_utilsgui.o monolib_wave.o \
-@COND_TOOLKIT_MSW@	monolib_window.o monolib_automtn.o monolib_dataobj.o \
-@COND_TOOLKIT_MSW@	monolib_dropsrc.o monolib_droptgt.o monolib_oleutils.o \
-@COND_TOOLKIT_MSW@	monolib_uuid.o
+@COND_TOOLKIT_MSW@	monolib_gdiimage.o monolib_gdiobj.o monolib_helpchm.o \
+@COND_TOOLKIT_MSW@	monolib_helpwin.o monolib_icon.o monolib_joystick.o \
+@COND_TOOLKIT_MSW@	monolib_minifram.o monolib_palette.o monolib_pen.o \
+@COND_TOOLKIT_MSW@	monolib_popupwin.o monolib_region.o monolib_settings.o \
+@COND_TOOLKIT_MSW@	monolib_taskbarcmn.o monolib_taskbar.o monolib_timer.o \
+@COND_TOOLKIT_MSW@	monolib_tooltip.o monolib_toplevel.o monolib_utilsgui.o \
+@COND_TOOLKIT_MSW@	monolib_wave.o monolib_window.o monolib_automtn.o \
+@COND_TOOLKIT_MSW@	monolib_dataobj.o monolib_dropsrc.o monolib_droptgt.o \
+@COND_TOOLKIT_MSW@	monolib_oleutils.o monolib_uuid.o
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_9 = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_9 = \
 @COND_TOOLKIT_X11@	monolib_fontenum.o monolib_fontutil.o monolib_utilsx11.o \
@@ -1943,12 +1946,12 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_X11@	monolib_colour.o monolib_cursor.o monolib_data.o \
 @COND_TOOLKIT_X11@	monolib_dataobj.o monolib_dc.o monolib_dcclient.o \
 @COND_TOOLKIT_X11@	monolib_dcmemory.o monolib_dcscreen.o monolib_evtloop.o \
-@COND_TOOLKIT_X11@	monolib_font.o monolib_gdiobj.o monolib_glcanvas.o \
-@COND_TOOLKIT_X11@	monolib_icon.o monolib_joystick.o monolib_main.o \
-@COND_TOOLKIT_X11@	monolib_minifram.o monolib_palette.o monolib_pen.o \
-@COND_TOOLKIT_X11@	monolib_popupwin.o monolib_region.o monolib_reparent.o \
-@COND_TOOLKIT_X11@	monolib_settings.o monolib_toplevel.o monolib_utils.o \
-@COND_TOOLKIT_X11@	monolib_utilsx.o monolib_window.o monolib_timer.o
+@COND_TOOLKIT_X11@	monolib_font.o monolib_gdiobj.o monolib_icon.o \
+@COND_TOOLKIT_X11@	monolib_joystick.o monolib_main.o monolib_minifram.o \
+@COND_TOOLKIT_X11@	monolib_palette.o monolib_pen.o monolib_popupwin.o \
+@COND_TOOLKIT_X11@	monolib_region.o monolib_reparent.o monolib_settings.o \
+@COND_TOOLKIT_X11@	monolib_toplevel.o monolib_utils.o monolib_utilsx.o \
+@COND_TOOLKIT_X11@	monolib_window.o monolib_timer.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS = \
 @COND_USE_GUI_1@	$(__CORE_SRC_OBJECTS) $(__HTML_SRC_PLATFORM_OBJECTS) \
 @COND_USE_GUI_1@	monodll_helpdata.o monodll_helpfrm.o monodll_helpctrl.o \
@@ -1997,42 +2000,42 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_TOOLKIT_MSW@__UNIV_TEXTCTRL_OBJECTS_3 = corelib_textctrl.o
 @COND_TOOLKIT_X11@__UNIV_TEXTCTRL_OBJECTS_3 = corelib_textctrl.o
 @COND_MONOLITHIC_0@__WXLIBGLDEP_BASE_p = \
-@COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIBGLDEP_CORE_p = \
-@COND_MONOLITHIC_0@	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
+@COND_MONOLITHIC_0@	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = \
-@COND_MONOLITHIC_1@	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
+@COND_MONOLITHIC_1@	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_MONOLITHIC_0_SHARED_1@__basedll___depname \
 @COND_MONOLITHIC_0_SHARED_1@	= \
 @COND_MONOLITHIC_0_SHARED_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_PLATFORM_WIN32_1@__basedll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__basedll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_MACOSX_1@__basedll___macinstnamecmd \
 @COND_PLATFORM_MACOSX_1@	= -install_name \
 @COND_PLATFORM_MACOSX_1@	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOSYMLINKS_1@__basedll___so_symlinks_cmd = \
 @COND_USE_SOSYMLINKS_1@	rm -f \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__basedll___so_symlinks_inst_cmd \
 @COND_USE_SOSYMLINKS_1@	= rm -f \
-@COND_USE_SOSYMLINKS_1@	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOVERLINUX_1@__basedll___soname_flags = \
 @COND_USE_SOVERLINUX_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__basedll___soname_flags \
@@ -2040,37 +2043,37 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_SOVERSOLARIS_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_0@__baselib___depname \
 @COND_MONOLITHIC_0_SHARED_0@	= \
-@COND_MONOLITHIC_0_SHARED_0@	$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
+@COND_MONOLITHIC_0_SHARED_0@	$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@__coredll___depname \
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	= \
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_PLATFORM_WIN32_1@__coredll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__coredll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_MACOSX_1@__coredll___macinstnamecmd \
 @COND_PLATFORM_MACOSX_1@	= -install_name \
 @COND_PLATFORM_MACOSX_1@	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOSYMLINKS_1@__coredll___so_symlinks_cmd = \
 @COND_USE_SOSYMLINKS_1@	rm -f \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__coredll___so_symlinks_inst_cmd \
 @COND_USE_SOSYMLINKS_1@	= rm -f \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOVERLINUX_1@__coredll___soname_flags = \
 @COND_USE_SOVERLINUX_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__coredll___soname_flags \
@@ -2078,74 +2081,74 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_SOVERSOLARIS_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__corelib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	= \
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5.a
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@__gldll___depname \
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	= \
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_PLATFORM_WIN32_1@__gldll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__gldll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_MACOSX_1@__gldll___macinstnamecmd = \
 @COND_PLATFORM_MACOSX_1@	-install_name \
 @COND_PLATFORM_MACOSX_1@	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOSYMLINKS_1@__gldll___so_symlinks_cmd = rm \
 @COND_USE_SOSYMLINKS_1@	-f \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__gldll___so_symlinks_inst_cmd \
 @COND_USE_SOSYMLINKS_1@	= rm -f \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOVERLINUX_1@__gldll___soname_flags = \
 @COND_USE_SOVERLINUX_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__gldll___soname_flags = \
 @COND_USE_SOVERSOLARIS_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@__gllib___depname \
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	= \
-@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5.a
+@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@__htmldll___depname \
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	= \
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_PLATFORM_WIN32_1@__htmldll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__htmldll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_MACOSX_1@__htmldll___macinstnamecmd \
 @COND_PLATFORM_MACOSX_1@	= -install_name \
 @COND_PLATFORM_MACOSX_1@	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOSYMLINKS_1@__htmldll___so_symlinks_cmd = \
 @COND_USE_SOSYMLINKS_1@	rm -f \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__htmldll___so_symlinks_inst_cmd \
 @COND_USE_SOSYMLINKS_1@	= rm -f \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOVERLINUX_1@__htmldll___soname_flags = \
 @COND_USE_SOVERLINUX_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__htmldll___soname_flags \
@@ -2153,7 +2156,7 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_SOVERSOLARIS_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@__htmllib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	= \
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5.a
+@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a
 @COND_USE_GUI_1@__install_afm___depname = install-afm
 @COND_MONOLITHIC_0_SHARED_1@__install_basedll___depname = install_basedll
 @COND_MONOLITHIC_0_SHARED_0@__install_baselib___depname = install_baselib
@@ -2184,32 +2187,32 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_MONOLITHIC_1_SHARED_1@	= \
 @COND_MONOLITHIC_1_SHARED_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_PLATFORM_WIN32_1@__monodll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__monodll___importlib = \
-@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@	-Wl,--out-implib,$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_MACOSX_1@__monodll___macinstnamecmd \
 @COND_PLATFORM_MACOSX_1@	= -install_name \
 @COND_PLATFORM_MACOSX_1@	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOSYMLINKS_1@__monodll___so_symlinks_cmd = \
 @COND_USE_SOSYMLINKS_1@	rm -f \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__monodll___so_symlinks_inst_cmd \
 @COND_USE_SOSYMLINKS_1@	= rm -f \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) \
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 @COND_USE_SOSYMLINKS_1@	$(LN_S) \
 @COND_USE_SOSYMLINKS_1@	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOVERLINUX_1@__monodll___soname_flags = \
 @COND_USE_SOVERLINUX_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERSOLARIS_1@__monodll___soname_flags \
@@ -2217,21 +2220,21 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_SOVERSOLARIS_1@	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_1_SHARED_0@__monolib___depname \
 @COND_MONOLITHIC_1_SHARED_0@	= \
-@COND_MONOLITHIC_1_SHARED_0@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
+@COND_MONOLITHIC_1_SHARED_0@	$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
 @COND_WXUSE_LIBJPEG_BUILTIN@__wxjpeg___depname \
 @COND_WXUSE_LIBJPEG_BUILTIN@	= \
-@COND_WXUSE_LIBJPEG_BUILTIN@	$(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a
+@COND_WXUSE_LIBJPEG_BUILTIN@	$(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_WXUSE_ODBC_BUILTIN@__wxodbc___depname = \
-@COND_WXUSE_ODBC_BUILTIN@	$(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a
+@COND_WXUSE_ODBC_BUILTIN@	$(top_builddir)lib/libwxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_WXUSE_LIBPNG_BUILTIN@__wxpng___depname = \
-@COND_WXUSE_LIBPNG_BUILTIN@	$(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a
+@COND_WXUSE_LIBPNG_BUILTIN@	$(top_builddir)lib/libwxpng$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_WXUSE_REGEX_BUILTIN@__wxregex___depname = \
-@COND_WXUSE_REGEX_BUILTIN@	$(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a
+@COND_WXUSE_REGEX_BUILTIN@	$(top_builddir)lib/libwxregex$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_WXUSE_LIBTIFF_BUILTIN@__wxtiff___depname \
 @COND_WXUSE_LIBTIFF_BUILTIN@	= \
-@COND_WXUSE_LIBTIFF_BUILTIN@	$(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a
+@COND_WXUSE_LIBTIFF_BUILTIN@	$(top_builddir)lib/libwxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_WXUSE_ZLIB_BUILTIN@__wxzlib___depname = \
-@COND_WXUSE_ZLIB_BUILTIN@	$(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a
+@COND_WXUSE_ZLIB_BUILTIN@	$(top_builddir)lib/libwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_PLATFORM_MACOSX_1@dll___macver = \
 @COND_PLATFORM_MACOSX_1@	-compatibility_version 2.5 -current_version 2.5.0
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).0
@@ -2572,7 +2575,7 @@ basedll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 basedll_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a: baselib_appbase.o baselib_clntdata.o baselib_cmdline.o baselib_config.o baselib_datetime.o baselib_datstrm.o baselib_db.o baselib_dbtable.o baselib_dircmn.o baselib_dynarray.o baselib_dynlib.o baselib_dynload.o baselib_encconv.o baselib_extended.o baselib_ffile.o baselib_file.o baselib_fileconf.o baselib_filefn.o baselib_filename.o baselib_filesys.o baselib_fmapbase.o baselib_fs_inet.o baselib_fs_zip.o baselib_ftp.o baselib_hash.o baselib_hashmap.o baselib_http.o baselib_init.o baselib_intl.o baselib_ipcbase.o baselib_list.o baselib_log.o baselib_longlong.o baselib_memory.o baselib_mimecmn.o baselib_module.o baselib_mstream.o baselib_object.o baselib_process.o baselib_protocol.o baselib_regex.o baselib_sckaddr.o baselib_sckfile.o baselib_sckipc.o baselib_sckstrm.o baselib_socket.o baselib_stopwatch.o baselib_strconv.o baselib_stream.o baselib_string.o baselib_sysopt.o baselib_textbuf.o baselib_textfile.o baselib_tokenzr.o baselib_txtstrm.o baselib_unzip.o baselib_url.o baselib_variant.o baselib_wfstream.o baselib_wxchar.o baselib_zipstrm.o baselib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_3) baselib_event.o baselib_fs_mem.o baselib_msgout.o baselib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3)
+@COND_MONOLITHIC_0_SHARED_0@$(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: baselib_appbase.o baselib_clntdata.o baselib_cmdline.o baselib_config.o baselib_datetime.o baselib_datstrm.o baselib_db.o baselib_dbtable.o baselib_dircmn.o baselib_dynarray.o baselib_dynlib.o baselib_dynload.o baselib_encconv.o baselib_extended.o baselib_ffile.o baselib_file.o baselib_fileconf.o baselib_filefn.o baselib_filename.o baselib_filesys.o baselib_fmapbase.o baselib_fs_inet.o baselib_fs_zip.o baselib_ftp.o baselib_hash.o baselib_hashmap.o baselib_http.o baselib_init.o baselib_intl.o baselib_ipcbase.o baselib_list.o baselib_log.o baselib_longlong.o baselib_memory.o baselib_mimecmn.o baselib_module.o baselib_mstream.o baselib_object.o baselib_process.o baselib_protocol.o baselib_regex.o baselib_sckaddr.o baselib_sckfile.o baselib_sckipc.o baselib_sckstrm.o baselib_socket.o baselib_stopwatch.o baselib_strconv.o baselib_stream.o baselib_string.o baselib_sysopt.o baselib_textbuf.o baselib_textfile.o baselib_tokenzr.o baselib_txtstrm.o baselib_unzip.o baselib_url.o baselib_variant.o baselib_wfstream.o baselib_wxchar.o baselib_zipstrm.o baselib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_3) baselib_event.o baselib_fs_mem.o baselib_msgout.o baselib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@  baselib_appbase.o baselib_clntdata.o baselib_cmdline.o baselib_config.o baselib_datetime.o baselib_datstrm.o baselib_db.o baselib_dbtable.o baselib_dircmn.o baselib_dynarray.o baselib_dynlib.o baselib_dynload.o baselib_encconv.o baselib_extended.o baselib_ffile.o baselib_file.o baselib_fileconf.o baselib_filefn.o baselib_filename.o baselib_filesys.o baselib_fmapbase.o baselib_fs_inet.o baselib_fs_zip.o baselib_ftp.o baselib_hash.o baselib_hashmap.o baselib_http.o baselib_init.o baselib_intl.o baselib_ipcbase.o baselib_list.o baselib_log.o baselib_longlong.o baselib_memory.o baselib_mimecmn.o baselib_module.o baselib_mstream.o baselib_object.o baselib_process.o baselib_protocol.o baselib_regex.o baselib_sckaddr.o baselib_sckfile.o baselib_sckipc.o baselib_sckstrm.o baselib_socket.o baselib_stopwatch.o baselib_strconv.o baselib_stream.o baselib_string.o baselib_sysopt.o baselib_textbuf.o baselib_textfile.o baselib_tokenzr.o baselib_txtstrm.o baselib_unzip.o baselib_url.o baselib_variant.o baselib_wfstream.o baselib_wxchar.o baselib_zipstrm.o baselib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_3) baselib_event.o baselib_fs_mem.o baselib_msgout.o baselib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
@@ -2901,36 +2904,36 @@ baselib_zstream.o: $(srcdir)/src/common/zstream.cpp
 clean: 
 	rm -rf ./.deps
 	rm -f -f ./*.o
-	rm -f $(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a
-	rm -f $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a
-	rm -f $(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a
-	rm -f $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a
-	rm -f $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a
-	rm -f $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a
+	rm -f $(top_builddir)lib/libwxregex$(WXDEBUGFLAG)$(HOST_SUFFIX).a
+	rm -f $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX).a
+	rm -f $(top_builddir)lib/libwxpng$(WXDEBUGFLAG)$(HOST_SUFFIX).a
+	rm -f $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG)$(HOST_SUFFIX).a
+	rm -f $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX).a
+	rm -f $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
 	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
+	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
 	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5.a
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a
 	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5.a
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a
 	rm -f $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5.a
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).0.rsrc lib/libwx_$(TOOLCHAIN_NAME).0.r
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) coredll_event.o coredll_fs_mem.o coredll_msgout.o coredll_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4) $(__CORE_SRC_OBJECTS_2) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@  coredll_event.o coredll_fs_mem.o coredll_msgout.o coredll_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4) $(__CORE_SRC_OBJECTS_2) $(LDFLAGS) $(__coredll___importlib)   -L$(top_builddir)lib $(__coredll___macinstnamecmd) $(__coredll___importlib) $(__coredll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@  coredll_event.o coredll_fs_mem.o coredll_msgout.o coredll_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4) $(__CORE_SRC_OBJECTS_2) $(LDFLAGS) $(__coredll___importlib)   -L$(top_builddir)lib $(__coredll___macinstnamecmd) $(__coredll___importlib) $(__coredll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(__coredll___so_symlinks_cmd)
 
 coredll_MoreFilesX.o: $(srcdir)/src/mac/morefilex/MoreFilesX.c
@@ -3898,15 +3901,6 @@ coredll_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 
 @COND_USE_GUI_1@coredll_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_glcanvas.o: $(srcdir)/src/motif/glcanvas.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1@coredll_grid.o: $(srcdir)/src/generic/grid.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -5060,7 +5054,7 @@ coredll_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 @COND_USE_GUI_1@coredll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5.a: corelib_event.o corelib_fs_mem.o corelib_msgout.o corelib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5) $(__CORE_SRC_OBJECTS_3)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a: corelib_event.o corelib_fs_mem.o corelib_msgout.o corelib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5) $(__CORE_SRC_OBJECTS_3)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(AR) rcu $@  corelib_event.o corelib_fs_mem.o corelib_msgout.o corelib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5) $(__CORE_SRC_OBJECTS_3)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(RANLIB) $@
@@ -6030,15 +6024,6 @@ corelib_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 
 @COND_USE_GUI_1@corelib_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_glcanvas.o: $(srcdir)/src/motif/glcanvas.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@corelib_grid.o: $(srcdir)/src/generic/grid.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -7215,7 +7200,7 @@ distclean: clean
 @COND_TOOLKIT_MSW@gldll_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
-@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5.a: $(__OPENGL_SRC_OBJECTS_1)
+@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a: $(__OPENGL_SRC_OBJECTS_1)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	rm -f $@
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(AR) rcu $@  $(__OPENGL_SRC_OBJECTS_1)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(RANLIB) $@
@@ -7236,7 +7221,7 @@ distclean: clean
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
 
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@$(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__HTML_SRC_PLATFORM_OBJECTS_2) htmldll_helpdata.o htmldll_helpfrm.o htmldll_helpctrl.o htmldll_htmlcell.o htmldll_htmlfilt.o htmldll_htmlpars.o htmldll_htmltag.o htmldll_htmlwin.o htmldll_winpars.o htmldll_m_fonts.o htmldll_m_hline.o htmldll_m_image.o htmldll_m_layout.o htmldll_m_links.o htmldll_m_list.o htmldll_m_dflist.o htmldll_m_pre.o htmldll_m_tables.o htmldll_m_style.o htmldll_htmprint.o htmldll_htmllbox.o $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(SHARED_LD_CXX) $@  $(__HTML_SRC_PLATFORM_OBJECTS_2) htmldll_helpdata.o htmldll_helpfrm.o htmldll_helpctrl.o htmldll_htmlcell.o htmldll_htmlfilt.o htmldll_htmlpars.o htmldll_htmltag.o htmldll_htmlwin.o htmldll_winpars.o htmldll_m_fonts.o htmldll_m_hline.o htmldll_m_image.o htmldll_m_layout.o htmldll_m_links.o htmldll_m_list.o htmldll_m_dflist.o htmldll_m_pre.o htmldll_m_tables.o htmldll_m_style.o htmldll_htmprint.o htmldll_htmllbox.o $(LDFLAGS) $(__htmldll___importlib)   -L$(top_builddir)lib $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(SHARED_LD_CXX) $@  $(__HTML_SRC_PLATFORM_OBJECTS_2) htmldll_helpdata.o htmldll_helpfrm.o htmldll_helpctrl.o htmldll_htmlcell.o htmldll_htmlfilt.o htmldll_htmlpars.o htmldll_htmltag.o htmldll_htmlwin.o htmldll_winpars.o htmldll_m_fonts.o htmldll_m_hline.o htmldll_m_image.o htmldll_m_layout.o htmldll_m_links.o htmldll_m_list.o htmldll_m_dflist.o htmldll_m_pre.o htmldll_m_tables.o htmldll_m_style.o htmldll_htmprint.o htmldll_htmllbox.o $(LDFLAGS) $(__htmldll___importlib)   -L$(top_builddir)lib $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(__htmldll___so_symlinks_cmd)
 
 htmldll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp
@@ -7305,7 +7290,7 @@ htmldll_m_tables.o: $(srcdir)/src/html/m_tables.cpp
 htmldll_winpars.o: $(srcdir)/src/html/winpars.cpp
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5.a: $(__HTML_SRC_PLATFORM_OBJECTS_3) htmllib_helpdata.o htmllib_helpfrm.o htmllib_helpctrl.o htmllib_htmlcell.o htmllib_htmlfilt.o htmllib_htmlpars.o htmllib_htmltag.o htmllib_htmlwin.o htmllib_winpars.o htmllib_m_fonts.o htmllib_m_hline.o htmllib_m_image.o htmllib_m_layout.o htmllib_m_links.o htmllib_m_list.o htmllib_m_dflist.o htmllib_m_pre.o htmllib_m_tables.o htmllib_m_style.o htmllib_htmprint.o htmllib_htmllbox.o
+@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a: $(__HTML_SRC_PLATFORM_OBJECTS_3) htmllib_helpdata.o htmllib_helpfrm.o htmllib_helpctrl.o htmllib_htmlcell.o htmllib_htmlfilt.o htmllib_htmlpars.o htmllib_htmltag.o htmllib_htmlwin.o htmllib_winpars.o htmllib_m_fonts.o htmllib_m_hline.o htmllib_m_image.o htmllib_m_layout.o htmllib_m_links.o htmllib_m_list.o htmllib_m_dflist.o htmllib_m_pre.o htmllib_m_tables.o htmllib_m_style.o htmllib_htmprint.o htmllib_htmllbox.o
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(AR) rcu $@  $(__HTML_SRC_PLATFORM_OBJECTS_3) htmllib_helpdata.o htmllib_helpfrm.o htmllib_helpctrl.o htmllib_htmlcell.o htmllib_htmlfilt.o htmllib_htmlpars.o htmllib_htmltag.o htmllib_htmlwin.o htmllib_winpars.o htmllib_m_fonts.o htmllib_m_hline.o htmllib_m_image.o htmllib_m_layout.o htmllib_m_links.o htmllib_m_list.o htmllib_m_dflist.o htmllib_m_pre.o htmllib_m_tables.o htmllib_m_style.o htmllib_htmprint.o htmllib_htmllbox.o
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(RANLIB) $@
@@ -7382,7 +7367,7 @@ install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__in
 	$(INSTALL_DIR) $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
 	(cd ./ ; $(INSTALL_DATA)  lib/wx/include/$(TOOLCHAIN_NAME)/wx/setup.h $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx)
 	$(INSTALL_DIR) $(includedir)
-	for f in wx/apptrait.h wx/beforestd.h wx/containr.h wx/msgout.h wx/types.h wx/init.h wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbkeyg.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/arrstr.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_inet.h wx/fs_zip.h wx/fs_mem.h wx/gsocket.h wx/hash.h wx/hashmap.h wx/iconloc.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h wx/snglinst.h wx/stopwatch.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/tokenzr.h wx/txtstrm.h wx/url.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h wx/protocol/protocol.h wx/protocol/http.h $(BASE_PLATFORM_HDR) $(ALL_GUI_HEADERS) wx/wxhtml.h wx/html/forcelnk.h wx/html/helpctrl.h wx/html/helpdata.h wx/html/helpfrm.h wx/html/htmlcell.h wx/html/htmldefs.h wx/html/htmlfilt.h wx/html/htmlpars.h wx/html/htmlproc.h wx/html/htmltag.h wx/html/htmlwin.h wx/html/htmprint.h wx/html/m_templ.h wx/html/winpars.h wx/htmllbox.h; do \
+	for f in wx/apptrait.h wx/beforestd.h wx/containr.h wx/msgout.h wx/types.h wx/init.h wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbkeyg.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/arrstr.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_inet.h wx/fs_zip.h wx/fs_mem.h wx/gsocket.h wx/hash.h wx/hashmap.h wx/iconloc.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h wx/snglinst.h wx/stopwatch.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/tokenzr.h wx/txtstrm.h wx/url.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h wx/protocol/protocol.h wx/protocol/http.h $(BASE_PLATFORM_HDR) $(ALL_GUI_HEADERS) wx/wxhtml.h wx/html/forcelnk.h wx/html/helpctrl.h wx/html/helpdata.h wx/html/helpfrm.h wx/html/htmlcell.h wx/html/htmldefs.h wx/html/htmlfilt.h wx/html/htmlpars.h wx/html/htmlproc.h wx/html/htmltag.h wx/html/htmlwin.h wx/html/htmprint.h wx/html/m_templ.h wx/html/winpars.h wx/htmllbox.h $(OPENGL_HDR); do \
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
@@ -7411,77 +7396,77 @@ install-wxconfig:
 
 @COND_MONOLITHIC_0_SHARED_1@install_basedll: 
 @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1@	(cd $(libdir) ; $(__basedll___so_symlinks_inst_cmd))
 
 @COND_MONOLITHIC_0_SHARED_0@install_baselib: 
 @COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a $(libdir)
+@COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@install_coredll: 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	(cd $(libdir) ; $(__coredll___so_symlinks_inst_cmd))
 
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@install_corelib: 
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5.a $(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@install_gldll: 
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(DLLIMPEXT) $(libdir)
+@COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	(cd $(libdir) ; $(__gldll___so_symlinks_inst_cmd))
 
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@install_gllib: 
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DIR) $(libdir)
-@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5.a $(libdir)
+@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@install_htmldll: 
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	(cd $(libdir) ; $(__htmldll___so_symlinks_inst_cmd))
 
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@install_htmllib: 
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5.a $(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_MONOLITHIC_1_SHARED_1@install_monodll: 
 @COND_MONOLITHIC_1_SHARED_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_1_SHARED_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_1_SHARED_1@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
 @COND_MONOLITHIC_1_SHARED_1@	$(INSTALL_PROGRAM) $(top_builddir)lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
 @COND_MONOLITHIC_1_SHARED_1@	(cd $(libdir) ; $(__monodll___so_symlinks_inst_cmd))
 
 @COND_MONOLITHIC_1_SHARED_0@install_monolib: 
 @COND_MONOLITHIC_1_SHARED_0@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_1_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a $(libdir)
+@COND_MONOLITHIC_1_SHARED_0@	$(INSTALL_DATA) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_LIBJPEG_BUILTIN@install_wxjpeg: 
 @COND_WXUSE_LIBJPEG_BUILTIN@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_LIBJPEG_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_LIBJPEG_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG)$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_ODBC_BUILTIN@install_wxodbc: 
 @COND_WXUSE_ODBC_BUILTIN@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_ODBC_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_ODBC_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_LIBPNG_BUILTIN@install_wxpng: 
 @COND_WXUSE_LIBPNG_BUILTIN@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_LIBPNG_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_LIBPNG_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxpng$(WXDEBUGFLAG)$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_REGEX_BUILTIN@install_wxregex: 
 @COND_WXUSE_REGEX_BUILTIN@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_REGEX_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_REGEX_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxregex$(WXDEBUGFLAG)$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_LIBTIFF_BUILTIN@install_wxtiff: 
 @COND_WXUSE_LIBTIFF_BUILTIN@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_LIBTIFF_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_LIBTIFF_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_ZLIB_BUILTIN@install_wxzlib: 
 @COND_WXUSE_ZLIB_BUILTIN@	$(INSTALL_DIR) $(libdir)
-@COND_WXUSE_ZLIB_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a $(libdir)
+@COND_WXUSE_ZLIB_BUILTIN@	$(INSTALL_DATA) $(top_builddir)lib/libwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX).a $(libdir)
 
 @COND_TOOLKIT_MAC@lib/libwx_$(TOOLCHAIN_NAME).0.r: 
 @COND_TOOLKIT_MAC@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r $(top_srcdir)/src/mac/corersrc.r -o lib/libwx_$(TOOLCHAIN_NAME).0.rsrc
@@ -8565,15 +8550,6 @@ monodll_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 
 @COND_USE_GUI_1@monodll_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_glcanvas.o: $(srcdir)/src/motif/glcanvas.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monodll_grid.o: $(srcdir)/src/generic/grid.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -9982,7 +9958,7 @@ monodll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 monodll_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_1_SHARED_0@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a: monolib_appbase.o monolib_clntdata.o monolib_cmdline.o monolib_config.o monolib_datetime.o monolib_datstrm.o monolib_db.o monolib_dbtable.o monolib_dircmn.o monolib_dynarray.o monolib_dynlib.o monolib_dynload.o monolib_encconv.o monolib_extended.o monolib_ffile.o monolib_file.o monolib_fileconf.o monolib_filefn.o monolib_filename.o monolib_filesys.o monolib_fmapbase.o monolib_fs_inet.o monolib_fs_zip.o monolib_ftp.o monolib_hash.o monolib_hashmap.o monolib_http.o monolib_init.o monolib_intl.o monolib_ipcbase.o monolib_list.o monolib_log.o monolib_longlong.o monolib_memory.o monolib_mimecmn.o monolib_module.o monolib_mstream.o monolib_object.o monolib_process.o monolib_protocol.o monolib_regex.o monolib_sckaddr.o monolib_sckfile.o monolib_sckipc.o monolib_sckstrm.o monolib_socket.o monolib_stopwatch.o monolib_strconv.o monolib_stream.o monolib_string.o monolib_sysopt.o monolib_textbuf.o monolib_textfile.o monolib_tokenzr.o monolib_txtstrm.o monolib_unzip.o monolib_url.o monolib_variant.o monolib_wfstream.o monolib_wxchar.o monolib_zipstrm.o monolib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_1) monolib_event.o monolib_fs_mem.o monolib_msgout.o monolib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1) $(__MONOLIB_GUI_SRC_OBJECTS_1)
+@COND_MONOLITHIC_1_SHARED_0@$(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: monolib_appbase.o monolib_clntdata.o monolib_cmdline.o monolib_config.o monolib_datetime.o monolib_datstrm.o monolib_db.o monolib_dbtable.o monolib_dircmn.o monolib_dynarray.o monolib_dynlib.o monolib_dynload.o monolib_encconv.o monolib_extended.o monolib_ffile.o monolib_file.o monolib_fileconf.o monolib_filefn.o monolib_filename.o monolib_filesys.o monolib_fmapbase.o monolib_fs_inet.o monolib_fs_zip.o monolib_ftp.o monolib_hash.o monolib_hashmap.o monolib_http.o monolib_init.o monolib_intl.o monolib_ipcbase.o monolib_list.o monolib_log.o monolib_longlong.o monolib_memory.o monolib_mimecmn.o monolib_module.o monolib_mstream.o monolib_object.o monolib_process.o monolib_protocol.o monolib_regex.o monolib_sckaddr.o monolib_sckfile.o monolib_sckipc.o monolib_sckstrm.o monolib_socket.o monolib_stopwatch.o monolib_strconv.o monolib_stream.o monolib_string.o monolib_sysopt.o monolib_textbuf.o monolib_textfile.o monolib_tokenzr.o monolib_txtstrm.o monolib_unzip.o monolib_url.o monolib_variant.o monolib_wfstream.o monolib_wxchar.o monolib_zipstrm.o monolib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_1) monolib_event.o monolib_fs_mem.o monolib_msgout.o monolib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1) $(__MONOLIB_GUI_SRC_OBJECTS_1)
 @COND_MONOLITHIC_1_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_1_SHARED_0@	$(AR) rcu $@  monolib_appbase.o monolib_clntdata.o monolib_cmdline.o monolib_config.o monolib_datetime.o monolib_datstrm.o monolib_db.o monolib_dbtable.o monolib_dircmn.o monolib_dynarray.o monolib_dynlib.o monolib_dynload.o monolib_encconv.o monolib_extended.o monolib_ffile.o monolib_file.o monolib_fileconf.o monolib_filefn.o monolib_filename.o monolib_filesys.o monolib_fmapbase.o monolib_fs_inet.o monolib_fs_zip.o monolib_ftp.o monolib_hash.o monolib_hashmap.o monolib_http.o monolib_init.o monolib_intl.o monolib_ipcbase.o monolib_list.o monolib_log.o monolib_longlong.o monolib_memory.o monolib_mimecmn.o monolib_module.o monolib_mstream.o monolib_object.o monolib_process.o monolib_protocol.o monolib_regex.o monolib_sckaddr.o monolib_sckfile.o monolib_sckipc.o monolib_sckstrm.o monolib_socket.o monolib_stopwatch.o monolib_strconv.o monolib_stream.o monolib_string.o monolib_sysopt.o monolib_textbuf.o monolib_textfile.o monolib_tokenzr.o monolib_txtstrm.o monolib_unzip.o monolib_url.o monolib_variant.o monolib_wfstream.o monolib_wxchar.o monolib_zipstrm.o monolib_zstream.o $(__BASE_PLATFORM_SRC_OBJECTS_1) monolib_event.o monolib_fs_mem.o monolib_msgout.o monolib_utilscmn.o $(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1) $(__MONOLIB_GUI_SRC_OBJECTS_1)
 @COND_MONOLITHIC_1_SHARED_0@	$(RANLIB) $@
@@ -11057,15 +11033,6 @@ monolib_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 
 @COND_USE_GUI_1@monolib_gifdecod.o: $(srcdir)/src/common/gifdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_glcanvas.o: $(srcdir)/src/motif/glcanvas.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monolib_grid.o: $(srcdir)/src/generic/grid.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -12476,7 +12443,7 @@ monolib_zstream.o: $(srcdir)/src/common/zstream.cpp
 
 uninstall: 
 
-@COND_WXUSE_LIBJPEG_BUILTIN@$(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG).a: wxjpeg_jcomapi.o wxjpeg_jutils.o wxjpeg_jerror.o wxjpeg_jmemmgr.o wxjpeg_jmemnobs.o wxjpeg_jcapimin.o wxjpeg_jcapistd.o wxjpeg_jctrans.o wxjpeg_jcparam.o wxjpeg_jdatadst.o wxjpeg_jcinit.o wxjpeg_jcmaster.o wxjpeg_jcmarker.o wxjpeg_jcmainct.o wxjpeg_jcprepct.o wxjpeg_jccoefct.o wxjpeg_jccolor.o wxjpeg_jcsample.o wxjpeg_jchuff.o wxjpeg_jcphuff.o wxjpeg_jcdctmgr.o wxjpeg_jfdctfst.o wxjpeg_jfdctflt.o wxjpeg_jfdctint.o wxjpeg_jdapimin.o wxjpeg_jdapistd.o wxjpeg_jdtrans.o wxjpeg_jdatasrc.o wxjpeg_jdmaster.o wxjpeg_jdinput.o wxjpeg_jdmarker.o wxjpeg_jdhuff.o wxjpeg_jdphuff.o wxjpeg_jdmainct.o wxjpeg_jdcoefct.o wxjpeg_jdpostct.o wxjpeg_jddctmgr.o wxjpeg_jidctfst.o wxjpeg_jidctflt.o wxjpeg_jidctint.o wxjpeg_jidctred.o wxjpeg_jdsample.o wxjpeg_jdcolor.o wxjpeg_jquant1.o wxjpeg_jquant2.o wxjpeg_jdmerge.o
+@COND_WXUSE_LIBJPEG_BUILTIN@$(top_builddir)lib/libwxjpeg$(WXDEBUGFLAG)$(HOST_SUFFIX).a: wxjpeg_jcomapi.o wxjpeg_jutils.o wxjpeg_jerror.o wxjpeg_jmemmgr.o wxjpeg_jmemnobs.o wxjpeg_jcapimin.o wxjpeg_jcapistd.o wxjpeg_jctrans.o wxjpeg_jcparam.o wxjpeg_jdatadst.o wxjpeg_jcinit.o wxjpeg_jcmaster.o wxjpeg_jcmarker.o wxjpeg_jcmainct.o wxjpeg_jcprepct.o wxjpeg_jccoefct.o wxjpeg_jccolor.o wxjpeg_jcsample.o wxjpeg_jchuff.o wxjpeg_jcphuff.o wxjpeg_jcdctmgr.o wxjpeg_jfdctfst.o wxjpeg_jfdctflt.o wxjpeg_jfdctint.o wxjpeg_jdapimin.o wxjpeg_jdapistd.o wxjpeg_jdtrans.o wxjpeg_jdatasrc.o wxjpeg_jdmaster.o wxjpeg_jdinput.o wxjpeg_jdmarker.o wxjpeg_jdhuff.o wxjpeg_jdphuff.o wxjpeg_jdmainct.o wxjpeg_jdcoefct.o wxjpeg_jdpostct.o wxjpeg_jddctmgr.o wxjpeg_jidctfst.o wxjpeg_jidctflt.o wxjpeg_jidctint.o wxjpeg_jidctred.o wxjpeg_jdsample.o wxjpeg_jdcolor.o wxjpeg_jquant1.o wxjpeg_jquant2.o wxjpeg_jdmerge.o
 @COND_WXUSE_LIBJPEG_BUILTIN@	rm -f $@
 @COND_WXUSE_LIBJPEG_BUILTIN@	$(AR) rcu $@  wxjpeg_jcomapi.o wxjpeg_jutils.o wxjpeg_jerror.o wxjpeg_jmemmgr.o wxjpeg_jmemnobs.o wxjpeg_jcapimin.o wxjpeg_jcapistd.o wxjpeg_jctrans.o wxjpeg_jcparam.o wxjpeg_jdatadst.o wxjpeg_jcinit.o wxjpeg_jcmaster.o wxjpeg_jcmarker.o wxjpeg_jcmainct.o wxjpeg_jcprepct.o wxjpeg_jccoefct.o wxjpeg_jccolor.o wxjpeg_jcsample.o wxjpeg_jchuff.o wxjpeg_jcphuff.o wxjpeg_jcdctmgr.o wxjpeg_jfdctfst.o wxjpeg_jfdctflt.o wxjpeg_jfdctint.o wxjpeg_jdapimin.o wxjpeg_jdapistd.o wxjpeg_jdtrans.o wxjpeg_jdatasrc.o wxjpeg_jdmaster.o wxjpeg_jdinput.o wxjpeg_jdmarker.o wxjpeg_jdhuff.o wxjpeg_jdphuff.o wxjpeg_jdmainct.o wxjpeg_jdcoefct.o wxjpeg_jdpostct.o wxjpeg_jddctmgr.o wxjpeg_jidctfst.o wxjpeg_jidctflt.o wxjpeg_jidctint.o wxjpeg_jidctred.o wxjpeg_jdsample.o wxjpeg_jdcolor.o wxjpeg_jquant1.o wxjpeg_jquant2.o wxjpeg_jdmerge.o
 @COND_WXUSE_LIBJPEG_BUILTIN@	$(RANLIB) $@
@@ -12619,7 +12586,7 @@ wxjpeg_jquant2.o: $(srcdir)/src/jpeg/jquant2.c
 wxjpeg_jutils.o: $(srcdir)/src/jpeg/jutils.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $<
 
-@COND_WXUSE_ODBC_BUILTIN@$(top_builddir)lib/libwxodbc$(WXDEBUGFLAG).a: wxodbc_catalog.o wxodbc_connect.o wxodbc_dlf.o wxodbc_dlproc.o wxodbc_execute.o wxodbc_fetch.o wxodbc_hdbc.o wxodbc_henv.o wxodbc_herr.o wxodbc_hstmt.o wxodbc_info.o wxodbc_itrace.o wxodbc_misc.o wxodbc_prepare.o wxodbc_result.o
+@COND_WXUSE_ODBC_BUILTIN@$(top_builddir)lib/libwxodbc$(WXDEBUGFLAG)$(HOST_SUFFIX).a: wxodbc_catalog.o wxodbc_connect.o wxodbc_dlf.o wxodbc_dlproc.o wxodbc_execute.o wxodbc_fetch.o wxodbc_hdbc.o wxodbc_henv.o wxodbc_herr.o wxodbc_hstmt.o wxodbc_info.o wxodbc_itrace.o wxodbc_misc.o wxodbc_prepare.o wxodbc_result.o
 @COND_WXUSE_ODBC_BUILTIN@	rm -f $@
 @COND_WXUSE_ODBC_BUILTIN@	$(AR) rcu $@  wxodbc_catalog.o wxodbc_connect.o wxodbc_dlf.o wxodbc_dlproc.o wxodbc_execute.o wxodbc_fetch.o wxodbc_hdbc.o wxodbc_henv.o wxodbc_herr.o wxodbc_hstmt.o wxodbc_info.o wxodbc_itrace.o wxodbc_misc.o wxodbc_prepare.o wxodbc_result.o
 @COND_WXUSE_ODBC_BUILTIN@	$(RANLIB) $@
@@ -12669,7 +12636,7 @@ wxodbc_prepare.o: $(srcdir)/src/iodbc/prepare.c
 wxodbc_result.o: $(srcdir)/src/iodbc/result.c
 	$(CCC) -c -o $@ $(WXODBC_CFLAGS) $<
 
-@COND_WXUSE_LIBPNG_BUILTIN@$(top_builddir)lib/libwxpng$(WXDEBUGFLAG).a: wxpng_png.o wxpng_pngerror.o wxpng_pnggccrd.o wxpng_pngget.o wxpng_pngmem.o wxpng_pngpread.o wxpng_pngread.o wxpng_pngrio.o wxpng_pngrtran.o wxpng_pngrutil.o wxpng_pngset.o wxpng_pngtrans.o wxpng_pngvcrd.o wxpng_pngwio.o wxpng_pngwrite.o wxpng_pngwtran.o wxpng_pngwutil.o
+@COND_WXUSE_LIBPNG_BUILTIN@$(top_builddir)lib/libwxpng$(WXDEBUGFLAG)$(HOST_SUFFIX).a: wxpng_png.o wxpng_pngerror.o wxpng_pnggccrd.o wxpng_pngget.o wxpng_pngmem.o wxpng_pngpread.o wxpng_pngread.o wxpng_pngrio.o wxpng_pngrtran.o wxpng_pngrutil.o wxpng_pngset.o wxpng_pngtrans.o wxpng_pngvcrd.o wxpng_pngwio.o wxpng_pngwrite.o wxpng_pngwtran.o wxpng_pngwutil.o
 @COND_WXUSE_LIBPNG_BUILTIN@	rm -f $@
 @COND_WXUSE_LIBPNG_BUILTIN@	$(AR) rcu $@  wxpng_png.o wxpng_pngerror.o wxpng_pnggccrd.o wxpng_pngget.o wxpng_pngmem.o wxpng_pngpread.o wxpng_pngread.o wxpng_pngrio.o wxpng_pngrtran.o wxpng_pngrutil.o wxpng_pngset.o wxpng_pngtrans.o wxpng_pngvcrd.o wxpng_pngwio.o wxpng_pngwrite.o wxpng_pngwtran.o wxpng_pngwutil.o
 @COND_WXUSE_LIBPNG_BUILTIN@	$(RANLIB) $@
@@ -12725,7 +12692,7 @@ wxpng_pngwtran.o: $(srcdir)/src/png/pngwtran.c
 wxpng_pngwutil.o: $(srcdir)/src/png/pngwutil.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $<
 
-@COND_WXUSE_REGEX_BUILTIN@$(top_builddir)lib/libwxregex$(WXDEBUGFLAG).a: wxregex_regcomp.o wxregex_regexec.o wxregex_regerror.o wxregex_regfree.o
+@COND_WXUSE_REGEX_BUILTIN@$(top_builddir)lib/libwxregex$(WXDEBUGFLAG)$(HOST_SUFFIX).a: wxregex_regcomp.o wxregex_regexec.o wxregex_regerror.o wxregex_regfree.o
 @COND_WXUSE_REGEX_BUILTIN@	rm -f $@
 @COND_WXUSE_REGEX_BUILTIN@	$(AR) rcu $@  wxregex_regcomp.o wxregex_regexec.o wxregex_regerror.o wxregex_regfree.o
 @COND_WXUSE_REGEX_BUILTIN@	$(RANLIB) $@
@@ -12742,7 +12709,7 @@ wxregex_regexec.o: $(srcdir)/src/regex/regexec.c
 wxregex_regfree.o: $(srcdir)/src/regex/regfree.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $<
 
-@COND_WXUSE_LIBTIFF_BUILTIN@$(top_builddir)lib/libwxtiff$(WXDEBUGFLAG).a: $(__TIFF_PLATFORM_SRC_OBJECTS) wxtiff_tif_aux.o wxtiff_tif_close.o wxtiff_tif_codec.o wxtiff_tif_compress.o wxtiff_tif_dir.o wxtiff_tif_dirinfo.o wxtiff_tif_dirread.o wxtiff_tif_dirwrite.o wxtiff_tif_dumpmode.o wxtiff_tif_error.o wxtiff_tif_fax3.o wxtiff_tif_fax3sm.o wxtiff_tif_getimage.o wxtiff_tif_jpeg.o wxtiff_tif_flush.o wxtiff_tif_lzw.o wxtiff_tif_luv.o wxtiff_tif_next.o wxtiff_tif_open.o wxtiff_tif_packbits.o wxtiff_tif_pixarlog.o wxtiff_tif_predict.o wxtiff_tif_print.o wxtiff_tif_read.o wxtiff_tif_swab.o wxtiff_tif_strip.o wxtiff_tif_thunder.o wxtiff_tif_tile.o wxtiff_tif_version.o wxtiff_tif_warning.o wxtiff_tif_write.o wxtiff_tif_zip.o
+@COND_WXUSE_LIBTIFF_BUILTIN@$(top_builddir)lib/libwxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX).a: $(__TIFF_PLATFORM_SRC_OBJECTS) wxtiff_tif_aux.o wxtiff_tif_close.o wxtiff_tif_codec.o wxtiff_tif_compress.o wxtiff_tif_dir.o wxtiff_tif_dirinfo.o wxtiff_tif_dirread.o wxtiff_tif_dirwrite.o wxtiff_tif_dumpmode.o wxtiff_tif_error.o wxtiff_tif_fax3.o wxtiff_tif_fax3sm.o wxtiff_tif_getimage.o wxtiff_tif_jpeg.o wxtiff_tif_flush.o wxtiff_tif_lzw.o wxtiff_tif_luv.o wxtiff_tif_next.o wxtiff_tif_open.o wxtiff_tif_packbits.o wxtiff_tif_pixarlog.o wxtiff_tif_predict.o wxtiff_tif_print.o wxtiff_tif_read.o wxtiff_tif_swab.o wxtiff_tif_strip.o wxtiff_tif_thunder.o wxtiff_tif_tile.o wxtiff_tif_version.o wxtiff_tif_warning.o wxtiff_tif_write.o wxtiff_tif_zip.o
 @COND_WXUSE_LIBTIFF_BUILTIN@	rm -f $@
 @COND_WXUSE_LIBTIFF_BUILTIN@	$(AR) rcu $@  $(__TIFF_PLATFORM_SRC_OBJECTS) wxtiff_tif_aux.o wxtiff_tif_close.o wxtiff_tif_codec.o wxtiff_tif_compress.o wxtiff_tif_dir.o wxtiff_tif_dirinfo.o wxtiff_tif_dirread.o wxtiff_tif_dirwrite.o wxtiff_tif_dumpmode.o wxtiff_tif_error.o wxtiff_tif_fax3.o wxtiff_tif_fax3sm.o wxtiff_tif_getimage.o wxtiff_tif_jpeg.o wxtiff_tif_flush.o wxtiff_tif_lzw.o wxtiff_tif_luv.o wxtiff_tif_next.o wxtiff_tif_open.o wxtiff_tif_packbits.o wxtiff_tif_pixarlog.o wxtiff_tif_predict.o wxtiff_tif_print.o wxtiff_tif_read.o wxtiff_tif_swab.o wxtiff_tif_strip.o wxtiff_tif_thunder.o wxtiff_tif_tile.o wxtiff_tif_version.o wxtiff_tif_warning.o wxtiff_tif_write.o wxtiff_tif_zip.o
 @COND_WXUSE_LIBTIFF_BUILTIN@	$(RANLIB) $@
@@ -12852,7 +12819,7 @@ wxtiff_tif_write.o: $(srcdir)/src/tiff/tif_write.c
 wxtiff_tif_zip.o: $(srcdir)/src/tiff/tif_zip.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $<
 
-@COND_WXUSE_ZLIB_BUILTIN@$(top_builddir)lib/libwxzlib$(WXDEBUGFLAG).a: wxzlib_adler32.o wxzlib_compress.o wxzlib_crc32.o wxzlib_gzio.o wxzlib_uncompr.o wxzlib_deflate.o wxzlib_trees.o wxzlib_zutil.o wxzlib_inflate.o wxzlib_infblock.o wxzlib_inftrees.o wxzlib_infcodes.o wxzlib_infutil.o wxzlib_inffast.o
+@COND_WXUSE_ZLIB_BUILTIN@$(top_builddir)lib/libwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX).a: wxzlib_adler32.o wxzlib_compress.o wxzlib_crc32.o wxzlib_gzio.o wxzlib_uncompr.o wxzlib_deflate.o wxzlib_trees.o wxzlib_zutil.o wxzlib_inflate.o wxzlib_infblock.o wxzlib_inftrees.o wxzlib_infcodes.o wxzlib_infutil.o wxzlib_inffast.o
 @COND_WXUSE_ZLIB_BUILTIN@	rm -f $@
 @COND_WXUSE_ZLIB_BUILTIN@	$(AR) rcu $@  wxzlib_adler32.o wxzlib_compress.o wxzlib_crc32.o wxzlib_gzio.o wxzlib_uncompr.o wxzlib_deflate.o wxzlib_trees.o wxzlib_zutil.o wxzlib_inflate.o wxzlib_infblock.o wxzlib_inftrees.o wxzlib_infcodes.o wxzlib_infutil.o wxzlib_inffast.o
 @COND_WXUSE_ZLIB_BUILTIN@	$(RANLIB) $@
