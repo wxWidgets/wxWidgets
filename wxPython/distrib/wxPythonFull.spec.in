@@ -7,7 +7,7 @@
 %define tarname @TARNAME@
 %define version @VERSION@
 %define ver2    @VER2@
-%define release 2
+%define release 1
 %define wxpref  %{pref}/lib/wxPython
 %define name    wxPython%{port}-py%{pyver}
 
@@ -115,8 +115,7 @@ $WXDIR/configure --with-%{lcport} \
 
 # Build wxWindows
 $MAKE
-cd $WXDIR/locale
-make allmo
+
 
 # Now build wxPython
 cd $WXDIR/wxPython
@@ -125,8 +124,34 @@ cd $WXDIR/wxPython
 	NO_SCRIPTS=1 \
 	WXPORT=%{lcport} \
 	UNICODE=%{unicode} \
-	WX_CONFIG="$WXDIR/build/wx-config --inplace --prefix=$RPM_BUILD_ROOT%{wxpref}" \
+	WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build" \
 	build
+
+##	WX_CONFIG="$WXDIR/build/wx-config --inplace --prefix=$RPM_BUILD_ROOT%{wxpref}" \
+
+
+
+# Build wxrc (XRC resource tool) but don't use the makefiles since they expect
+# a shared version of the xrc lib to have been built...
+cd $WXDIR/contrib/utils/wxrc
+WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build"
+wCC=`$WX_CONFIG --cc`
+wCXX=`$WX_CONFIG --cxx`
+
+for f in wxrc.cpp ../../src/xrc/*.cpp; do
+    echo $f
+    $wCXX `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
+done
+for f in ../../src/xrc/expat/xmlparse/xmlparse.c ../../src/xrc/expat/xmltok/xmlrole.c ../../src/xrc/expat/xmltok/xmltok.c; do
+    echo $f
+    $wCC `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
+done
+
+# the handlers are not needed
+rm xh_*.o xmlrsall.o
+
+$wCXX `$WX_CONFIG --libs` *.o -o wxrc
+strip wxrc
 
 
 #----------------------------------------------------------------
@@ -154,7 +179,9 @@ cd $WXDIR/wxPython
 # the real python pathname.  Since some distros install python 2.2 as
 # python2 and others as python, then I can't let distutils do that
 # otherwise the dependencies will be fouled up.  Copy them manually
-# instead, leaving the #!/bin/env line intact:
+# instead, leaving the #!/bin/env line intact.
+#
+# TODO:  Should this be dependent on %{builtin_libs} or something like it?
 
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 for s in \
@@ -165,8 +192,12 @@ for s in \
 	pycrust \
 	pyshell \
 	xrced; do
-    cp scripts/$s $RPM_BUILD_ROOT/usr/bin
+    cp scripts/$s $RPM_BUILD_ROOT/%{pref}/bin
 done
+
+
+# Install wxrc
+cp $WXDIR/contrib/utils/wxrc/wxrc $RPM_BUILD_ROOT/%{pref}/bin
 
 
 # Generate the filelists.  For some reason the %defattr below is still
