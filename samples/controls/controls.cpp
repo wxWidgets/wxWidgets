@@ -164,7 +164,7 @@ bool MyApp::OnInit()
 
     frame->SetIcon( wxICON(mondrian) );
 
-    wxMenu *file_menu = new wxMenu;
+    wxMenu *file_menu = new wxMenu( wxMENU_TEAROFF );
     file_menu->Append(MINIMAL_ABOUT, "&About\tF1");
     file_menu->Append(MINIMAL_QUIT, "E&xit\tAlt-X", "Quit controls sample");
 

@@ -2191,19 +2191,34 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
 void wxWindow::OnInternalIdle()
 {
-        GdkWindow *window = GetConnectWidget()->window;
-        if (window)
-        {
-            wxCursor cursor = m_cursor;
-            if (g_globalCursor.Ok()) cursor = g_globalCursor;
+    wxCursor cursor = m_cursor;
+    if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-            if (cursor.Ok() && m_currentGdkCursor != cursor)
-            {
+    if (cursor.Ok() && m_currentGdkCursor != cursor)
+    {
+        if (m_wxwindow)
+	{
+            GdkWindow *window = m_wxwindow->window;
+	    if (window)
                 gdk_window_set_cursor( window, cursor.GetCursor() );
-                m_currentGdkCursor = cursor;
-            }
-        }
-
+		
+	    if (!g_globalCursor.Ok())
+	        cursor = *wxSTANDARD_CURSOR;
+		
+	    window = m_widget->window;
+	    if (window)
+                gdk_window_set_cursor( window, cursor.GetCursor() );
+	}
+	else
+	{
+            GdkWindow *window = m_widget->window;
+	    if (window)
+               gdk_window_set_cursor( window, cursor.GetCursor() );
+	}
+	
+        m_currentGdkCursor = cursor;
+    }
+	
     UpdateWindowUI();
 }
 
