@@ -505,8 +505,9 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     } // if ( windowPart == inMenuBar )
     else if ( currentMouseWindow )
     {
-        currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
         wxWindow *currentMouseWindowParent = currentMouseWindow->GetParent();
+
+        currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
         
         wxevent.SetEventObject( currentMouseWindow ) ;
 
@@ -519,7 +520,13 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             wxToolTip::RelayEvent( currentMouseWindow , wxevent);
     #endif // wxUSE_TOOLTIPS                
         if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
+        {
+            if ((currentMouseWindowParent != NULL) && 
+                (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
+                currentMouseWindow = NULL;
+                
             result = noErr;
+        }
         else
         {
             // if the user code did _not_ handle the event, then perform the
@@ -549,11 +556,8 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                     HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
                         modifiers , (ControlActionUPP ) -1 ) ;
                         
-                    // We need to handle the rare case that the control to
-                    // which the currentMouseWindow points gets deleted as
-                    // a reaction to HandleControlClick. This would lead to
-                    // a crash in the update cursor code below.
-                    if (!currentMouseWindowParent->GetChildren().Find( currentMouseWindow ))
+                    if ((currentMouseWindowParent != NULL) && 
+                        (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
                         currentMouseWindow = NULL;
                 }
                 result = noErr ;
