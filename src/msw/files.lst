@@ -353,6 +353,7 @@ ALL_HEADERS = \
 		event.h \
 		expr.h \
 		fdrepdlg.h \
+		features.h \
 		ffile.h \
 		file.h \
 		fileconf.h \

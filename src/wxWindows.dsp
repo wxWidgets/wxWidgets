@@ -1762,6 +1762,10 @@ SOURCE=..\include\wx\fdrepdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\features.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\ffile.h
 # End Source File
 # Begin Source File

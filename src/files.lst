@@ -110,6 +110,7 @@ ALL_HEADERS = \
 		dynload.h \
 		encconv.h \
 		event.h \
+		features.h \
 		ffile.h \
 		file.h \
 		fileconf.h \
