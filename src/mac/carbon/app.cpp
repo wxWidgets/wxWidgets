@@ -303,10 +303,7 @@ void wxApp::MacNewFile()
 
 static pascal OSStatus MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
-    OSStatus result = eventNotHandledErr ;
-    UInt32 kind = GetEventKind( event ) ;
-
-    return result ;
+    return eventNotHandledErr ;
 }
 
 // due to the rather low-level event API of wxWindows, we cannot use RunApplicationEventLoop
