@@ -1,5 +1,19 @@
 This is Aleksandras Gluchovas' framelayout library.
 
+THIS VERSION OF THE LIBRARY IS NOW REPLACED BY THE CODE IN 
+
+    wxWindows/contrib/src/fl
+
+AND IS PART OF THE CONTRIB HIERARCHY STARTING WITH wxWindows v2.3.2
+
+ALL OTHER INFORMATION BELOW THIS MAY OR MAY NOT APPLY TO THE LATEST
+VERSION.  PLEASE REFER TO THE DOCUMENTS INCLUDED IN THE NEW DIRECTORY
+STRUCTURE FOR THE LATEST INFO.
+
+
+
+
+
 Please read this file for information on compiling and reporting bugs.
 
 -----------------------------------------------------------------------------
