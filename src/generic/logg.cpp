@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        logg.cpp
+// Name:        src/generic/logg.cpp
 // Purpose:     wxLog-derived classes which need GUI support (the rest is in
 //              src/common/log.cpp)
 // Author:      Vadim Zeitlin
@@ -66,6 +66,9 @@
 #else // !wxUSE_LOG_DIALOG
     #include "wx/msgdlg.h"
 #endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
+
+// the suffix we add to the button to show that the dialog can be expanded
+#define EXPAND_SUFFIX _T(" >>")
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -731,7 +734,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     // translates into click on cancel button)
     wxButton *btnOk = new wxButton(this, wxID_CANCEL, _("OK"));
     sizerButtons->Add(btnOk, 0, wxCENTRE | wxBOTTOM, MARGIN/2);
-    m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
+    m_btnDetails = new wxButton(this, wxID_MORE, ms_details + EXPAND_SUFFIX);
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE | wxTOP, MARGIN/2 - 1);
 
 #ifndef __WIN16__
@@ -961,7 +964,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 
     if ( m_showingDetails )
     {
-        m_btnDetails->SetLabel(ms_details + _T(">>"));
+        m_btnDetails->SetLabel(ms_details + EXPAND_SUFFIX);
 
         sizer->Remove(m_listctrl);
 
