@@ -208,7 +208,7 @@ public:
     bool            Open(bool checkPrivileges=FALSE, bool checkTableExists=TRUE);
     bool            CreateTable(bool attemptDrop=TRUE);
     bool            DropTable(void);
-    bool            CreateIndex(const wxString &idxName, bool unique, int noIdxCols, 
+    bool            CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCols, 
                                 wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
     bool            DropIndex(const wxString &idxName);
 
@@ -301,11 +301,11 @@ public:
     bool            SetQueryTimeout(UDWORD nSeconds);
 
     wxDbColDef     *GetColDefs() { return colDefs; }
-    void            SetColDefs(int index, const wxString &fieldName, int dataType, 
+    void            SetColDefs(UWORD index, const wxString &fieldName, int dataType, 
                                void *pData, SWORD cType,
                                int size, bool keyField = FALSE, bool upd = TRUE,
                                bool insAllow = TRUE, bool derivedCol = FALSE);
-    wxDbColDataPtr *SetColDefs(wxDbColInf *colInfs, ULONG numCols);
+    wxDbColDataPtr *SetColDefs(wxDbColInf *colInfs, UWORD numCols);
 
     bool            CloseCursor(HSTMT cursor);
     bool            DeleteCursor(HSTMT *hstmtDel);
