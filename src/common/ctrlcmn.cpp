@@ -101,15 +101,6 @@ void wxControlBase::InheritAttributes()
         SetBackgroundColour(parent->GetBackgroundColour());
         SetForegroundColour(parent->GetForegroundColour());
     }
-
-#ifdef __WXPM__
-    //
-    // All OS/2 ctrls use the small font
-    //
-    SetFont(*wxSMALL_FONT);
-#else
-    SetFont(GetParent()->GetFont());
-#endif
 }
 
 void wxControlBase::Command(wxCommandEvent& event)
