@@ -218,6 +218,8 @@
 %rename(PD_ELAPSED_TIME)                    wxPD_ELAPSED_TIME;
 %rename(PD_ESTIMATED_TIME)                  wxPD_ESTIMATED_TIME;
 %rename(PD_REMAINING_TIME)                  wxPD_REMAINING_TIME;
+%rename(PD_SMOOTH)                          wxPD_SMOOTH;
+%rename(PD_CAN_SKIP)                        wxPD_CAN_SKIP;
 %rename(DD_NEW_DIR_BUTTON)                  wxDD_NEW_DIR_BUTTON;
 %rename(DD_DEFAULT_STYLE)                   wxDD_DEFAULT_STYLE;
 %rename(MENU_TEAROFF)                       wxMENU_TEAROFF;
@@ -638,6 +640,7 @@
 %rename(FLEX_GROWMODE_SPECIFIED)            wxFLEX_GROWMODE_SPECIFIED;
 %rename(FLEX_GROWMODE_ALL)                  wxFLEX_GROWMODE_ALL;
 %rename(FlexGridSizer)                      wxFlexGridSizer;
+%rename(StdDialogButtonSizer)               wxStdDialogButtonSizer;
 %rename(GBPosition)                         wxGBPosition;
 %rename(GBSpan)                             wxGBSpan;
 %rename(DefaultSpan)                        wxDefaultSpan;
