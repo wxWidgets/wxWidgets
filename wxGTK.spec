@@ -84,6 +84,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %find_lang wxstd
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %post
 /sbin/ldconfig
 
