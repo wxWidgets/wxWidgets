@@ -39,6 +39,8 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/log.h"
+    #include "wx/textctrl.h"
+    #include "wx/checkbox.h"
 #endif
 
 // this include needs to be outside precomp for BCC
@@ -289,10 +291,18 @@ wxGridCellEditor::~wxGridCellEditor()
     Destroy();
 }
 
+void wxGridCellEditor::Create(wxWindow* WXUNUSED(parent),
+                              wxWindowID WXUNUSED(id),
+                              wxEvtHandler* evtHandler)
+{
+    if (evtHandler)
+        m_control->PushEventHandler(evtHandler);
+}
 
 void wxGridCellEditor::Destroy()
 {
-    if (m_control) {
+    if (m_control)
+    {
         m_control->Destroy();
         m_control = NULL;
     }
@@ -388,15 +398,14 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
                                   wxWindowID id,
                                   wxEvtHandler* evtHandler)
 {
-    m_control = new wxTextCtrl(parent, -1, "",
+    m_control = new wxTextCtrl(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize
 #if defined(__WXMSW__)
                                , wxTE_MULTILINE | wxTE_NO_VSCROLL // necessary ???
 #endif
-        );
+                              );
 
-    if (evtHandler)
-        m_control->PushEventHandler(evtHandler);
+    wxGridCellEditor::Create(parent, id, evtHandler);
 }
 
 
@@ -410,7 +419,6 @@ void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
     Text()->SetInsertionPointEnd();
     Text()->SetFocus();
 }
-
 
 
 bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
@@ -483,6 +491,107 @@ void wxGridCellTextEditor::HandleReturn(wxKeyEvent& event)
 #endif
 }
 
+// ----------------------------------------------------------------------------
+// wxGridCellBoolEditor
+// ----------------------------------------------------------------------------
+
+void wxGridCellBoolEditor::Create(wxWindow* parent,
+                                  wxWindowID id,
+                                  wxEvtHandler* evtHandler)
+{
+    m_control = new wxCheckBox(parent, id, wxEmptyString,
+                               wxDefaultPosition, wxDefaultSize,
+                               wxNO_BORDER);
+
+    wxGridCellEditor::Create(parent, id, evtHandler);
+}
+
+void wxGridCellBoolEditor::SetSize(const wxRect& r)
+{
+    m_rectCell = r;
+    // position it in the centre of the rectangle (TODO: support alignment?)
+    wxCoord w, h;
+    m_control->GetSize(&w, &h);
+
+    // the checkbox without label still has some space to the right in wxGTK,
+    // so shift it to the right
+#ifdef __WXGTK__
+    w += 8;
+#endif // GTK
+
+    m_control->Move(r.x + r.width/2 - w/2, r.y + r.height/2 - h/2);
+}
+
+void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
+{
+    wxGridCellEditor::Show(show, attr);
+    if ( !show )
+        return;
+
+    // get the bg colour to use
+    wxColour colBg = attr ? attr->GetBackgroundColour() : *wxLIGHT_GREY;
+
+    // erase the background because we don't fill the cell
+    if ( m_rectCell.width > 0 )
+    {
+        wxClientDC dc(m_control->GetParent());
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(colBg, wxSOLID));
+        dc.DrawRectangle(m_rectCell);
+
+        m_rectCell.width = 0;
+    }
+
+    CBox()->SetBackgroundColour(colBg);
+}
+
+void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
+{
+    wxASSERT_MSG(m_control,
+                 wxT("The wxGridCellEditor must be Created first!"));
+
+    m_startValue = !!grid->GetTable()->GetValue(row, col); // FIXME-DATA
+    CBox()->SetValue(m_startValue);
+    CBox()->SetFocus();
+}
+
+bool wxGridCellBoolEditor::EndEdit(int row, int col,
+                                   bool saveValue,
+                                   wxGrid* grid)
+{
+    wxASSERT_MSG(m_control,
+                 wxT("The wxGridCellEditor must be Created first!"));
+
+    bool changed = FALSE;
+    bool value = CBox()->GetValue();
+    if ( value != m_startValue )
+        changed = TRUE;
+
+    if ( changed )
+    {
+        // FIXME-DATA
+        grid->GetTable()->SetValue(row, col, value ? _T("1") : wxEmptyString);
+    }
+
+    return changed;
+}
+
+void wxGridCellBoolEditor::Reset()
+{
+    wxASSERT_MSG(m_control,
+                 wxT("The wxGridCellEditor must be Created first!"));
+
+    CBox()->SetValue(m_startValue);
+}
+
+void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
+{
+    event.Skip();
+}
+
+// ----------------------------------------------------------------------------
+// wxGridCellEditorEvtHandler
+// ----------------------------------------------------------------------------
 
 void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
 {
@@ -522,6 +631,10 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
     }
 }
 
+// ============================================================================
+// renderer classes
+// ============================================================================
+
 // ----------------------------------------------------------------------------
 // wxGridCellRenderer
 // ----------------------------------------------------------------------------
@@ -547,6 +660,10 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.DrawRectangle(rect);
 }
+
+// ----------------------------------------------------------------------------
+// wxGridCellStringRenderer
+// ----------------------------------------------------------------------------
 
 void wxGridCellStringRenderer::Draw(wxGrid& grid,
                                     wxGridCellAttr& attr,
@@ -588,16 +705,55 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
 }
 
 // ----------------------------------------------------------------------------
+// wxGridCellBoolRenderer
+// ----------------------------------------------------------------------------
+
+void wxGridCellBoolRenderer::Draw(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int row, int col,
+                                  bool isSelected)
+{
+    wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
+
+    // position it in the centre (ignoring alignment - TODO)
+    static const wxCoord checkSize = 16;
+
+    wxRect rectMark;
+    rectMark.x = rect.x + rect.width/2 - checkSize/2;
+    rectMark.y = rect.y + rect.height/2 - checkSize/2;
+    rectMark.width = rectMark.height = checkSize;
+
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    dc.SetPen(wxPen(attr.GetTextColour(), 1, wxSOLID));
+    dc.DrawRectangle(rectMark);
+
+    rectMark.Inflate(-4);
+
+    if ( !!grid.GetTable()->GetValue(row, col) ) // FIXME-DATA
+    {
+        dc.SetTextForeground(attr.GetTextColour());
+        dc.DrawCheckMark(rectMark);
+    }
+}
+
+// ----------------------------------------------------------------------------
 // wxGridCellAttr
 // ----------------------------------------------------------------------------
 
 const wxColour& wxGridCellAttr::GetTextColour() const
 {
     if (HasTextColour())
+    {
         return m_colText;
+    }
     else if (m_defGridAttr != this)
+    {
         return m_defGridAttr->GetTextColour();
-    else {
+    }
+    else
+    {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
         return wxNullColour;
     }
@@ -610,7 +766,8 @@ const wxColour& wxGridCellAttr::GetBackgroundColour() const
         return m_colBack;
     else if (m_defGridAttr != this)
         return m_defGridAttr->GetBackgroundColour();
-    else {
+    else
+    {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
         return wxNullColour;
     }
@@ -623,7 +780,8 @@ const wxFont& wxGridCellAttr::GetFont() const
         return m_font;
     else if (m_defGridAttr != this)
         return m_defGridAttr->GetFont();
-    else {
+    else
+    {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
         return wxNullFont;
     }
@@ -632,13 +790,15 @@ const wxFont& wxGridCellAttr::GetFont() const
 
 void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
 {
-    if (HasAlignment()) {
+    if (HasAlignment())
+    {
         if ( hAlign ) *hAlign = m_hAlign;
         if ( vAlign ) *vAlign = m_vAlign;
     }
     else if (m_defGridAttr != this)
         m_defGridAttr->GetAlignment(hAlign, vAlign);
-    else {
+    else
+    {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
     }
 }
@@ -650,7 +810,8 @@ wxGridCellRenderer* wxGridCellAttr::GetRenderer() const
         return m_renderer;
     else if (m_defGridAttr != this)
         return m_defGridAttr->GetRenderer();
-    else {
+    else
+    {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
         return NULL;
     }
@@ -662,7 +823,8 @@ wxGridCellEditor* wxGridCellAttr::GetEditor() const
         return m_editor;
     else if (m_defGridAttr != this)
         return m_defGridAttr->GetEditor();
-    else {
+    else
+    {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
         return NULL;
     }
@@ -2861,8 +3023,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
         // Don't start doing anything until the mouse has been drug at
         // least 3 pixels in any direction...
-        if (! m_isDragging) {
-            if (m_startDragPos == wxDefaultPosition) {
+        if (! m_isDragging)
+        {
+            if (m_startDragPos == wxDefaultPosition)
+            {
                 m_startDragPos = pos;
                 return;
             }
@@ -2879,7 +3043,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 HideCellEditControl();
 
             // Have we captured the mouse yet?
-            if (! m_winCapture) {
+            if (! m_winCapture)
+            {
                 m_winCapture = m_gridWin;
                 m_winCapture->CaptureMouse();
             }
@@ -2895,7 +3060,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     SelectBlock( m_currentCellCoords, coords );
                 }
 
-                if (! IsVisible(coords)) {
+                if (! IsVisible(coords))
+                {
                     MakeCellVisible(coords);
                     // TODO: need to introduce a delay or something here.  The
                     // scrolling is way to fast, at least on MSW.
@@ -3024,7 +3190,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             {
                 if ( IsSelection() )
                 {
-                    if (m_winCapture) {
+                    if (m_winCapture)
+                    {
                         m_winCapture->ReleaseMouse();
                         m_winCapture = NULL;
                     }
@@ -3758,10 +3925,8 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
 
 void wxGrid::OnEraseBackground(wxEraseEvent&)
-{ }
-
-
-
+{
+}
 
 void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
@@ -3882,6 +4047,10 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
         DrawCellBorder( dc, coords );
 #endif
 
+    // don't draw the cell over the active edit control!
+    if ( (coords == m_currentCellCoords) && IsCellEditControlEnabled() )
+        return;
+
     // but all the rest is drawn by the cell renderer and hence may be
     // customized
     wxRect rect;
@@ -3986,7 +4155,8 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
 
     int top, bottom, left, right;
 
-    if (reg.IsEmpty()){
+    if (reg.IsEmpty())
+    {
       int cw, ch;
       m_gridWin->GetClientSize(&cw, &ch);
 
@@ -3995,7 +4165,8 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
       CalcUnscrolledPosition( 0, 0, &left, &top );
       CalcUnscrolledPosition( cw, ch, &right, &bottom );
     }
-    else{
+    else
+    {
       wxCoord x, y, w, h;
       reg.GetBox(x, y, w, h);
       CalcUnscrolledPosition( x, y, &left, &top );
@@ -4334,6 +4505,11 @@ bool wxGrid::IsCellEditControlEnabled() const
     return m_cellEditCtrlEnabled ? !IsCurrentCellReadOnly() : FALSE;
 }
 
+wxWindow *wxGrid::GetGridWindow() const
+{
+    return m_gridWin;
+}
+
 void wxGrid::ShowCellEditControl()
 {
     if ( IsCellEditControlEnabled() )
@@ -4353,9 +4529,12 @@ void wxGrid::ShowCellEditControl()
             int left, top, right, bottom;
             CalcScrolledPosition( rect.GetLeft(), rect.GetTop(), &left, &top );
             CalcScrolledPosition( rect.GetRight(), rect.GetBottom(), &right, &bottom );
-            left--; top--; right--; bottom--;   // cell is shifted by one pixel
-            int cw, ch;
-            m_gridWin->GetClientSize( &cw, &ch );
+
+            // cell is shifted by one pixel
+            left--;
+            top--;
+            right--;
+            bottom--;
 
             // Make the edit control large enough to allow for internal
             // margins
@@ -4400,7 +4579,7 @@ void wxGrid::ShowCellEditControl()
             rect.SetBottom( rect.GetBottom() + 2*extra );
 #endif
 
-            wxGridCellAttr*   attr = GetCellAttr(row, col);
+            wxGridCellAttr* attr = GetCellAttr(row, col);
             wxGridCellEditor* editor = attr->GetEditor();
             if ( !editor->IsCreated() )
             {
@@ -5515,9 +5694,12 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
         attr = m_table ? m_table->GetAttr(row, col) : (wxGridCellAttr *)NULL;
         CacheAttr(row, col, attr);
     }
-    if (attr) {
+    if (attr)
+    {
         attr->SetDefAttr(m_defaultCellAttr);
-    } else {
+    }
+    else
+    {
         attr = m_defaultCellAttr;
         attr->IncRef();
     }

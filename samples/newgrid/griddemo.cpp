@@ -208,6 +208,10 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(4, 4, wxCENTRE, wxCENTRE);
     grid->SetCellRenderer(4, 4, new MyGridCellRenderer);
 
+    grid->SetCellValue(3, 0, "1");
+    grid->SetCellRenderer(3, 0, new wxGridCellBoolRenderer);
+    grid->SetCellEditor(3, 0, new wxGridCellBoolEditor);
+
     wxGridCellAttr *attr;
     attr = new wxGridCellAttr;
     attr->SetTextColour(*wxBLUE);

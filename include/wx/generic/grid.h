@@ -28,7 +28,6 @@
 #include "wx/string.h"
 #include "wx/scrolbar.h"
 #include "wx/event.h"
-#include "wx/textctrl.h"
 #include "wx/combobox.h"
 #include "wx/dynarray.h"
 #include "wx/timer.h"
@@ -62,6 +61,9 @@ class WXDLLEXPORT wxGridCornerLabelWindow;
 class WXDLLEXPORT wxGridRowLabelWindow;
 class WXDLLEXPORT wxGridTableBase;
 class WXDLLEXPORT wxGridWindow;
+
+class WXDLLEXPORT wxCheckBox;
+class WXDLLEXPORT wxTextCtrl;
 
 // ----------------------------------------------------------------------------
 // wxGridCellRenderer: this class is responsible for actually drawing the cell
@@ -102,6 +104,19 @@ public:
                       bool isSelected);
 };
 
+// renderer for boolean fields
+class WXDLLEXPORT wxGridCellBoolRenderer : public wxGridCellRenderer
+{
+public:
+
+    // draw a check mark or nothing
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+};
 
 // ----------------------------------------------------------------------------
 // wxGridCellEditor:  This class is responsible for providing and manipulating
@@ -168,7 +183,7 @@ protected:
     wxFont m_fontOld;
 };
 
-
+// the editor for string/text data
 class WXDLLEXPORT wxGridCellTextEditor : public wxGridCellEditor
 {
 public:
@@ -190,6 +205,32 @@ protected:
 
 private:
     wxString m_startValue;
+};
+
+// the editor for boolean data
+class WXDLLEXPORT wxGridCellBoolEditor : public wxGridCellEditor
+{
+public:
+    virtual void Create(wxWindow* parent,
+                        wxWindowID id,
+                        wxEvtHandler* evtHandler);
+
+    virtual void SetSize(const wxRect& rect);
+    virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+
+    virtual void Reset();
+    virtual void StartingKey(wxKeyEvent& event);
+
+protected:
+    wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
+
+private:
+    bool m_startValue;
+
+    wxRect m_rectCell;  // the total size of the cell
 };
 
 // ----------------------------------------------------------------------------
@@ -541,17 +582,17 @@ public:
         return *this;
     }
 
-    bool operator==( const wxGridCellCoords& other )
+    bool operator==( const wxGridCellCoords& other ) const
     {
         return (m_row == other.m_row  &&  m_col == other.m_col);
     }
 
-    bool operator!=( const wxGridCellCoords& other )
+    bool operator!=( const wxGridCellCoords& other ) const
     {
         return (m_row != other.m_row  ||  m_col != other.m_col);
     }
 
-    bool operator!()
+    bool operator!() const
     {
         return (m_row == -1 && m_col == -1 );
     }
@@ -1070,6 +1111,9 @@ public:
            wxGRID_CHECKBOX,
            wxGRID_CHOICE,
            wxGRID_COMBOBOX };
+
+    // for wxGridCellBoolEditor
+    wxWindow *GetGridWindow() const;
 
 protected:
     bool m_created;
