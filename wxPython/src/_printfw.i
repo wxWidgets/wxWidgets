@@ -178,15 +178,19 @@ public:
 
 
 
+// NOTE: Contrary to it's name, this class doesn't derive from wxDialog.  It
+// is a facade in front of a platform-specific (native dialog) provided by the
+// wxPrintFactory.
+
 MustHaveApp(wxPageSetupDialog);
 
-class wxPageSetupDialog : public wxDialog {
+class wxPageSetupDialog : public wxObject
+{
 public:
-    %pythonAppend wxPageSetupDialog         "self._setOORInfo(self)"
-
     wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = NULL);
 
     wxPageSetupDialogData& GetPageSetupData();
+    wxPageSetupDialogData& GetPageSetupDialogData();
     int ShowModal();
 };
 
