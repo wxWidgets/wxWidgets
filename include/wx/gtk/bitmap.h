@@ -96,8 +96,10 @@ public:
     bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM );
 
     wxPalette *GetPalette() const;
-    wxPalette *GetColourMap() const
-    { return GetPalette(); };
+    wxPalette *GetColourMap() const { return GetPalette(); };
+
+    static void InitStandardHandlers() { }
+    static void CleanUpHandlers() { }
 
     // implementation
     // --------------
