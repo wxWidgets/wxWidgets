@@ -3644,9 +3644,12 @@ PRINT_MODE_STREAM = _windows_.PRINT_MODE_STREAM
 class PrintData(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(self) -> PrintData"""
-        newobj = _windows_.new_PrintData(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(self) -> PrintData
+        __init__(self, PrintData data) -> PrintData
+        """
+        newobj = _windows_.new_PrintData(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
@@ -3842,9 +3845,12 @@ PreviewCanvasNameStr = cvar.PreviewCanvasNameStr
 class PageSetupDialogData(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPageSetupDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(self) -> PageSetupDialogData"""
-        newobj = _windows_.new_PageSetupDialogData(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(self) -> PageSetupDialogData
+        __init__(self, PageSetupDialogData data) -> PageSetupDialogData
+        """
+        newobj = _windows_.new_PageSetupDialogData(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
