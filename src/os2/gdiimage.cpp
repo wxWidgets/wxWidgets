@@ -227,12 +227,6 @@ private:
     IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxObject)
 #endif
 
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-static wxSize GetHiconSize(WXHICON hicon);
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -298,13 +292,15 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
   const wxString&                   rName
 )
 {
-    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
-    while ( node )
+    wxGDIImageHandlerList::compatibility_iterator   pNode = ms_handlers.GetFirst();
+
+    while ( pNode )
     {
-        wxGDIImageHandler *handler = node->GetData();
-        if ( handler->GetName() == name )
-            return handler;
-        node = node->GetNext();
+        wxGDIImageHandler*          pHandler = pNode->GetData();
+
+        if ( pHandler->GetName() == rName )
+            return pHandler;
+        pNode = pNode->GetNext();
     }
     return((wxGDIImageHandler*)NULL);
 }
@@ -314,17 +310,17 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
 , long                              lType
 )
 {
-    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
-    while ( node )
+    wxGDIImageHandlerList::compatibility_iterator   pNode = ms_handlers.GetFirst();
+    while ( pNode )
     {
-        wxGDIImageHandler *handler = node->GetData();
-        if ( (handler->GetExtension() = extension) &&
-             (type == -1 || handler->GetType() == type) )
-        {
-            return handler;
-        }
+        wxGDIImageHandler*          pHandler = pNode->GetData();
 
-        node = node->GetNext();
+        if ( (pHandler->GetExtension() = rExtension) &&
+             (lType == -1 || pHandler->GetType() == lType) )
+        {
+            return pHandler;
+        }
+        pNode = pNode->GetNext();
     }
     return((wxGDIImageHandler*)NULL);
 }
@@ -333,29 +329,31 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
   long                              lType
 )
 {
-    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
-    while ( node )
+    wxGDIImageHandlerList::compatibility_iterator   pNode = ms_handlers.GetFirst();
+
+    while ( pNode )
     {
-        wxGDIImageHandler *handler = node->GetData();
-        if ( handler->GetType() == type )
-            return handler;
+        wxGDIImageHandler*          pHandler = pNode->GetData();
 
-        node = node->GetNext();
+        if ( pHandler->GetType() == lType )
+            return pHandler;
+        pNode = pNode->GetNext();
     }
-
     return((wxGDIImageHandler*)NULL);
 }
 
 void wxGDIImage::CleanUpHandlers()
 {
-    wxGDIImageHandlerList::compatibility_iterator node = ms_handlers.GetFirst();
-    while ( node )
+    wxGDIImageHandlerList::compatibility_iterator   pNode = ms_handlers.GetFirst();
+
+    while ( pNode )
     {
-        wxGDIImageHandler *handler = node->GetData();
-        wxGDIImageHandlerList::compatibility_iterator next = node->GetNext();
-        delete handler;
-        ms_handlers.Erase( node );
-        node = next;
+        wxGDIImageHandler*                              pHandler = pNode->GetData();
+        wxGDIImageHandlerList::compatibility_iterator   pNext = pNode->GetNext();
+
+        delete pHandler;
+        ms_handlers.Erase( pNode );
+        pNode = pNext;
     }
 }
 
@@ -506,18 +504,4 @@ bool wxICOResourceHandler::LoadIcon(
 
     return pIcon->Ok();
 } // end of wxICOResourceHandler::LoadIcon
-
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-static wxSize GetHiconSize(
-  WXHICON                           hicon
-)
-{
-    wxSize                          vSize(32, 32);    // default
-
-    // all OS/2 icons are 32x32
-    return(vSize);
-}
 
