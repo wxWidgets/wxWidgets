@@ -135,11 +135,6 @@ bool wxWindow::Create(wxWindow *parent,
         PositionScrollbars();
     }
 
-    // the colours/fonts are default
-    m_hasBgCol =
-    m_hasFgCol =
-    m_hasFont = FALSE;
-
     return TRUE;
 }
 

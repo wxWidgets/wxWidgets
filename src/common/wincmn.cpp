@@ -134,6 +134,11 @@ void wxWindowBase::InitBase()
     m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 #endif // __WXMSW__
 
+    // the colours/fonts are default for now
+    m_hasBgCol =
+    m_hasFgCol =
+    m_hasFont = FALSE;
+
     // no style bits
     m_exStyle =
     m_windowStyle = 0;
