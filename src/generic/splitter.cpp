@@ -716,7 +716,7 @@ void wxSplitterWindow::Initialize(wxWindow *window)
     wxASSERT_MSG( (!window || (window && window->GetParent() == this)),
                   _T("windows in the splitter should have it as parent!") );
 
-    if (! window->IsShown())
+    if (window && !window->IsShown())
         window->Show();
 
     m_windowOne = window;
