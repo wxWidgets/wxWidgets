@@ -86,6 +86,10 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
+    // Make the an option depending on a flag?
+    wxCheckBox* check = new wxCheckBox( this, ID_SHOW_HIDDEN, _("Show hidden directories") );
+    topsizer->Add( check, 0, wxLEFT|wxTOP | wxALIGN_RIGHT, 5 );
+
     // 2) text ctrl
     m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
     topsizer->Add( m_input, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
@@ -98,10 +102,6 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     // 4) Buttons
     wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
     
-    // Make the an option depending on a flag?
-    wxCheckBox* check = new wxCheckBox( this, ID_SHOW_HIDDEN, _("Show hidden directories") );
-    buttonsizer->Add( check, 0, wxLEFT|wxRIGHT, 10 );
-
     // I'm not convinced we need a New button, and we tend to get annoying
     // accidental-editing with label editing enabled.
     wxButton* newButton = new wxButton( this, ID_NEW, _("New...") );
