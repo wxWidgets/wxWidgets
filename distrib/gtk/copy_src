@@ -182,6 +182,11 @@ mkdir ~/wxgtk_dist/wxGTK/src/png
 cp * ~/wxgtk_dist/wxGTK/src/png
 cd ..
 
+cd jpeg
+mkdir ~/wxgtk_dist/wxGTK/src/jpeg
+cp * ~/wxgtk_dist/wxGTK/src/jpeg
+cd ..
+
 cd ..
 
 echo Utils dir..
@@ -450,6 +455,8 @@ cp Makefile ~/wxgtk_dist/wxGTK/samples/image
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/image
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/image
 cp horse.png ~/wxgtk_dist/wxGTK/samples/image
+cp horse.gif ~/wxgtk_dist/wxGTK/samples/image
+cp horse.jpg ~/wxgtk_dist/wxGTK/samples/image
 cd ..
 
 echo Internat sample..
