@@ -1171,7 +1171,7 @@ void wxThreadInternal::Wait()
             			 kDurationForever);
             if ( err)
             {
-                wxLogSysError( _( "Cannot wait on thread to exit."));
+                wxLogSysError( _( "Cannot wait for thread termination."));
                 rc = (void*) -1;
             }
 
