@@ -31,6 +31,11 @@
 
 
 //----------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+//----------------------------------------------------------------------
 
 enum {
     wxWIZARD_EX_HELPBUTTON,
@@ -97,9 +102,17 @@ public:
 //                  const char* resource = NULL);
 //     %name(wxPreWizardPage)wxWizardPage();
 
-    bool Create(wxWizard *parent,
-                const wxBitmap& bitmap = wxNullBitmap,
-                const char* resource = NULL);
+    %addmethods {
+        bool Create(wxWizard *parent,
+                    const wxBitmap& bitmap = wxNullBitmap,
+                    const wxString& resource = wxPyEmptyString) {
+            wxChar* res = NULL;
+            if (resource.Length())
+                res = (wxChar*)resource.c_str();
+            return self->Create(parent, bitmap, res);
+        }
+    }
+
 
     // these functions are used by the wizard to show another page when the
     // user chooses "Back" or "Next" button
@@ -197,14 +210,29 @@ public:
     // of the default one for this wizard (should be of the same size). Notice
     // that no other parameters are needed because the wizard will resize and
     // reposition the page anyhow
-    wxPyWizardPage(wxWizard *parent,
-                 const wxBitmap& bitmap = wxNullBitmap,
-                 const char* resource = NULL);
+    %addmethods {
+        wxPyWizardPage(wxWizard *parent,
+                       const wxBitmap* bitmap = &wxNullBitmap,
+                       const wxString* resource = &wxPyEmptyString) {
+            wxChar* res = NULL;
+            if (resource->Length())
+                res = (wxChar*)resource->c_str();
+            return new wxPyWizardPage(parent, *bitmap, res);
+        }
+    }
+
     %name(wxPrePyWizardPage)wxPyWizardPage();
 
-    bool Create(wxWizard *parent,
-                const wxBitmap& bitmap = wxNullBitmap,
-                const char* resource = NULL);
+    %addmethods {
+        bool Create(wxWizard *parent,
+                    const wxBitmap& bitmap = wxNullBitmap,
+                    const wxString& resource = wxPyEmptyString) {
+            wxChar* res = NULL;
+            if (resource.Length())
+                res = (wxChar*)resource.c_str();
+            return self->Create(parent, bitmap, res);
+        }
+    }
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyWizardPage)"

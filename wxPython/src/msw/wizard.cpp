@@ -84,6 +84,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
   // C++ Version of a Python aware class
 class wxPyWizardPage : public wxWizardPage {
     DECLARE_ABSTRACT_CLASS(wxPyWizardPage);
@@ -319,21 +322,27 @@ static void *SwigwxWizardPageTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define wxWizardPage_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2))
+static bool  wxWizardPage_Create(wxWizardPage *self,wxWizard * parent,const wxBitmap & bitmap,const wxString & resource) {
+            wxChar* res = NULL;
+            if (resource.Length())
+                res = (wxChar*)resource.c_str();
+            return self->Create(parent, bitmap, res);
+        }
 static PyObject *_wrap_wxWizardPage_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxWizardPage * _arg0;
     wxWizard * _arg1;
     wxBitmap * _arg2 = (wxBitmap *) &wxNullBitmap;
-    char * _arg3 = (char *) NULL;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "self","parent","bitmap","resource", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|Os:wxWizardPage_Create",_kwnames,&_argo0,&_argo1,&_argo2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OO:wxWizardPage_Create",_kwnames,&_argo0,&_argo1,&_argo2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -356,13 +365,23 @@ static PyObject *_wrap_wxWizardPage_Create(PyObject *self, PyObject *args, PyObj
         return NULL;
         }
     }
+    if (_obj3)
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxWizardPage_Create(_arg0,_arg1,*_arg2,_arg3);
+    _result = (bool )wxWizardPage_Create(_arg0,_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj3)
+        delete _arg3;
+}
     return _resultobj;
 }
 
@@ -492,20 +511,27 @@ static void *SwigwxPyWizardPageTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxPyWizardPage(_swigarg0,_swigarg1,_swigarg2) (new wxPyWizardPage(_swigarg0,_swigarg1,_swigarg2))
+static wxPyWizardPage *new_wxPyWizardPage(wxWizard *parent,const wxBitmap *bitmap,const wxString *resource) {
+            wxChar* res = NULL;
+            if (resource->Length())
+                res = (wxChar*)resource->c_str();
+            return new wxPyWizardPage(parent, *bitmap, res);
+        }
+
 static PyObject *_wrap_new_wxPyWizardPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyWizardPage * _result;
     wxWizard * _arg0;
     wxBitmap * _arg1 = (wxBitmap *) &wxNullBitmap;
-    char * _arg2 = (char *) NULL;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "parent","bitmap","resource", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|Os:new_wxPyWizardPage",_kwnames,&_argo0,&_argo1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OO:new_wxPyWizardPage",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -521,9 +547,15 @@ static PyObject *_wrap_new_wxPyWizardPage(PyObject *self, PyObject *args, PyObje
         return NULL;
         }
     }
+    if (_obj2)
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPyWizardPage *)new_wxPyWizardPage(_arg0,*_arg1,_arg2);
+    _result = (wxPyWizardPage *)new_wxPyWizardPage(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -534,6 +566,10 @@ static PyObject *_wrap_new_wxPyWizardPage(PyObject *self, PyObject *args, PyObje
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj2)
+        delete _arg2;
+}
     return _resultobj;
 }
 
@@ -563,21 +599,27 @@ static PyObject *_wrap_new_wxPrePyWizardPage(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxPyWizardPage_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2))
+static bool  wxPyWizardPage_Create(wxPyWizardPage *self,wxWizard * parent,const wxBitmap & bitmap,const wxString & resource) {
+            wxChar* res = NULL;
+            if (resource.Length())
+                res = (wxChar*)resource.c_str();
+            return self->Create(parent, bitmap, res);
+        }
 static PyObject *_wrap_wxPyWizardPage_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPyWizardPage * _arg0;
     wxWizard * _arg1;
     wxBitmap * _arg2 = (wxBitmap *) &wxNullBitmap;
-    char * _arg3 = (char *) NULL;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "self","parent","bitmap","resource", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|Os:wxPyWizardPage_Create",_kwnames,&_argo0,&_argo1,&_argo2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OO:wxPyWizardPage_Create",_kwnames,&_argo0,&_argo1,&_argo2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -600,13 +642,23 @@ static PyObject *_wrap_wxPyWizardPage_Create(PyObject *self, PyObject *args, PyO
         return NULL;
         }
     }
+    if (_obj3)
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPyWizardPage_Create(_arg0,_arg1,*_arg2,_arg3);
+    _result = (bool )wxPyWizardPage_Create(_arg0,_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj3)
+        delete _arg3;
+}
     return _resultobj;
 }
 
