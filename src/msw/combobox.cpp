@@ -162,11 +162,6 @@ WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSE
     )
 {
     HDC hdc = (HDC)pDC;
-    if (GetParent()->GetTransparentBackground())
-        SetBkMode(hdc, TRANSPARENT);
-    else
-        SetBkMode(hdc, OPAQUE);
-
     wxColour colBack = GetBackgroundColour();
 
     if (!IsEnabled())

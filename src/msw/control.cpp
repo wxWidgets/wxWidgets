@@ -276,11 +276,6 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED
 #endif // wxUSE_CTL3D
 
     HDC hdc = (HDC)pDC;
-    if (GetParent()->GetTransparentBackground() /* || (GetParent()->GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND) */ )
-        SetBkMode(hdc, TRANSPARENT);
-    else
-        SetBkMode(hdc, OPAQUE);
-
     wxColour colBack = GetBackgroundColour();
 
     ::SetBkColor(hdc, wxColourToRGB(colBack));

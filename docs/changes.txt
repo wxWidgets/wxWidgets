@@ -29,6 +29,8 @@ versions, please update your code to not use them.
 - wxHashTableLong: use wxHashMap instead
 - wxArrayString::GetStringArray: no replacement
 - wxArrayString::Remove(index, count): use RemoveAt instead
+- [MSW only] wxWindow::GetUseCtl3D(), GetTransparentBackground() and
+             SetTransparent() as well as wxNO_3D and wxUSER_COLOURS styles
 
 
 OTHER CHANGES

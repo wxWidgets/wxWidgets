@@ -330,7 +330,6 @@ void wxWindowMSW::Init()
     // MSW specific
     m_isBeingDeleted = FALSE;
     m_oldWndProc = NULL;
-    m_useCtl3D = FALSE;
     m_mouseInWindow = FALSE;
     m_lastKeydownProcessed = FALSE;
 
@@ -343,7 +342,6 @@ void wxWindowMSW::Init()
 
     m_xThumbSize = 0;
     m_yThumbSize = 0;
-    m_backgroundTransparent = FALSE;
 
     // as all windows are created with WS_VISIBLE style...
     m_isShown = TRUE;
