@@ -69,6 +69,7 @@
     <subproject id="scrollsub" template="sub"/>
     <subproject id="shaped" template="sub"/>
     <subproject id="sockets" template="sub"/>
+    <subproject id="sound" template="sub"/>
     <subproject id="splitter" template="sub"/>
     <subproject id="statbar" template="sub"/>
     <subproject id="tab" template="sub"/>
