@@ -929,6 +929,9 @@ void wxGenericTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *da
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
+    if (data)
+        data->SetId( item );
+        
     ((wxGenericTreeItem*) item.m_pItem)->SetData(data);
 }
 
