@@ -128,14 +128,14 @@ wxAppConsole::~wxAppConsole()
 
 bool wxAppConsole::Initialize(int& argc, wxChar **argv)
 {
-#if wxUSE_LOG 
+#if wxUSE_LOG
     // If some code logged something before wxApp instance was created,
     // wxLogStderr was set as the target. Undo it here by destroying the
     // current target. It will be re-created next time logging is needed, but
     // this time wxAppTraits will be used:
     delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
-    
+
     // remember the command line arguments
     this->argc = argc;
     this->argv = argv;
@@ -165,7 +165,7 @@ bool wxAppConsole::OnInit()
     OnInitCmdLine(parser);
 
     bool cont;
-    switch ( parser.Parse(FALSE /* don't show usage */) )
+    switch ( parser.Parse(false /* don't show usage */) )
     {
         case -1:
             cont = OnCmdLineHelp(parser);
@@ -181,10 +181,10 @@ bool wxAppConsole::OnInit()
     }
 
     if ( !cont )
-        return FALSE;
+        return false;
 #endif // wxUSE_CMDLINE_PARSER
 
-    return TRUE;
+    return true;
 }
 
 int wxAppConsole::OnExit()
@@ -383,14 +383,14 @@ bool wxAppConsole::OnCmdLineHelp(wxCmdLineParser& parser)
 {
     parser.Usage();
 
-    return FALSE;
+    return false;
 }
 
 bool wxAppConsole::OnCmdLineError(wxCmdLineParser& parser)
 {
     parser.Usage();
 
-    return FALSE;
+    return false;
 }
 
 #endif // wxUSE_CMDLINE_PARSER
@@ -421,11 +421,11 @@ bool wxAppConsole::CheckBuildOptions(const char *optionsSignature,
         wxLogFatalError(msg.c_str());
 
         // normally wxLogFatalError doesn't return
-        return FALSE;
+        return false;
     }
 #undef wxCMP
 
-    return TRUE;
+    return true;
 }
 
 #ifdef __WXDEBUG__
@@ -589,19 +589,19 @@ void wxOnAssert(const wxChar *szFile,
                 const wxChar *szMsg)
 {
     // FIXME MT-unsafe
-    static bool s_bInAssert = FALSE;
+    static bool s_bInAssert = false;
 
     if ( s_bInAssert )
     {
         // He-e-e-e-elp!! we're trapped in endless loop
         wxTrap();
 
-        s_bInAssert = FALSE;
+        s_bInAssert = false;
 
         return;
     }
 
-    s_bInAssert = TRUE;
+    s_bInAssert = true;
 
     if ( !wxTheApp )
     {
@@ -615,7 +615,7 @@ void wxOnAssert(const wxChar *szFile,
         wxTheApp->OnAssert(szFile, nLine, szCond, szMsg);
     }
 
-    s_bInAssert = FALSE;
+    s_bInAssert = false;
 }
 
 #endif // __WXDEBUG__
@@ -685,7 +685,7 @@ void ShowAssertDialog(const wxChar *szFile,
                       wxAppTraits *traits)
 {
     // this variable can be set to true to suppress "assert failure" messages
-    static bool s_bNoAsserts = FALSE;
+    static bool s_bNoAsserts = false;
 
     wxString msg;
     msg.reserve(2048);

@@ -51,7 +51,7 @@ typedef enum
 
 // Role constants
 
-typedef enum {  
+typedef enum {
     wxROLE_NONE,
     wxROLE_SYSTEM_ALERT,
     wxROLE_SYSTEM_ANIMATION,

@@ -62,7 +62,7 @@ public:
         Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
         return *this;
     }
-    
+
     void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
     {
         m_flags = flags;
@@ -94,7 +94,7 @@ public:
     // Implementation use only
     bool MatchesEvent(const wxKeyEvent& event) const;
 #endif
-    
+
 private:
     int m_flags;    // combination of wxACCEL_XXX constants
     int m_keyCode;  // ASCII or virtual keycode

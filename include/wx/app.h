@@ -173,17 +173,17 @@ public:
     // override it!)
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
-    // called after successfully parsing the command line, return TRUE
-    // to continue and FALSE to exit (don't forget to call the base class
+    // called after successfully parsing the command line, return true
+    // to continue and false to exit (don't forget to call the base class
     // version if you override it!)
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
 
-    // called if "--help" option was specified, return TRUE to continue
-    // and FALSE to exit
+    // called if "--help" option was specified, return true to continue
+    // and false to exit
     virtual bool OnCmdLineHelp(wxCmdLineParser& parser);
 
     // called if incorrect command line options were given, return
-    // FALSE to abort and TRUE to continue
+    // false to abort and true to continue
     virtual bool OnCmdLineError(wxCmdLineParser& parser);
 #endif // wxUSE_CMDLINE_PARSER
 
@@ -386,7 +386,7 @@ public:
         // stop the program immediately!)
     virtual void ExitMainLoop();
 
-        // returns TRUE if there are unprocessed events in the event queue
+        // returns true if there are unprocessed events in the event queue
     virtual bool Pending();
 
         // process the first event in the event queue (blocks until an event
@@ -398,23 +398,23 @@ public:
         // process all currently pending events right now
         //
         // it is an error to call Yield() recursively unless the value of
-        // onlyIfNeeded is TRUE
+        // onlyIfNeeded is true
         //
         // WARNING: this function is dangerous as it can lead to unexpected
         //          reentrancies (i.e. when called from an event handler it
         //          may result in calling the same event handler again), use
         //          with _extreme_ care or, better, don't use at all!
-    virtual bool Yield(bool onlyIfNeeded = FALSE) = 0;
+    virtual bool Yield(bool onlyIfNeeded = false) = 0;
 
         // this virtual function is called in the GUI mode when the application
         // becomes idle and normally just sends wxIdleEvent to all interested
         // parties
         //
-        // it should return TRUE if more idle events are needed, FALSE if not
+        // it should return true if more idle events are needed, false if not
     virtual bool ProcessIdle();
 
         // Send idle event to window and all subwindows
-        // Returns TRUE if more idle time is requested.
+        // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
 
         // Perform standard OnIdle behaviour: call from port's OnIdle
@@ -424,7 +424,7 @@ public:
     // top level window functions
     // --------------------------
 
-        // return TRUE if our app has focus
+        // return true if our app has focus
     virtual bool IsActive() const { return m_isActive; }
 
         // set the "main" top level window
@@ -446,7 +446,7 @@ public:
         // control the exit behaviour: by default, the program will exit the
         // main loop (and so, usually, terminate) when the last top-level
         // program window is deleted. Beware that if you disable this behaviour
-        // (with SetExitOnFrameDelete(FALSE)), you'll have to call
+        // (with SetExitOnFrameDelete(false)), you'll have to call
         // ExitMainLoop() explicitly from somewhere.
     void SetExitOnFrameDelete(bool flag)
         { m_exitOnFrameDelete = flag ? Yes : No; }
@@ -463,7 +463,7 @@ public:
         // Set display mode to use. This is only used in framebuffer wxWin
         // ports (such as wxMGL). This method should be called from
         // wxApp::OnInitGui
-    virtual bool SetDisplayMode(const wxVideoMode& WXUNUSED(info)) { return TRUE; }
+    virtual bool SetDisplayMode(const wxVideoMode& WXUNUSED(info)) { return true; }
 
         // set use of best visual flag (see below)
     void SetUseBestVisual( bool flag ) { m_useBestVisual = flag; }
@@ -527,7 +527,7 @@ protected:
         Yes
     } m_exitOnFrameDelete;
 
-    // TRUE if the apps whats to use the best visual on systems where
+    // true if the apps whats to use the best visual on systems where
     // more than one are available (Sun, SGI, XFree86 4.0 ?)
     bool m_useBestVisual;
 

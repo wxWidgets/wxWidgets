@@ -72,12 +72,12 @@ bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
     wxArtProviderBitmapsHash::iterator entry = m_bitmapsHash.find(full_id);
     if ( entry == m_bitmapsHash.end() )
     {
-        return FALSE;
+        return false;
     }
     else
     {
         *bmp = entry->second;
-        return TRUE;
+        return true;
     }
 }
 
@@ -119,27 +119,27 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 
 /*static*/ bool wxArtProvider::PopProvider()
 {
-    wxCHECK_MSG( sm_providers, FALSE, _T("no wxArtProvider exists") );
-    wxCHECK_MSG( sm_providers->GetCount() > 0, FALSE, _T("wxArtProviders stack is empty") );
+    wxCHECK_MSG( sm_providers, false, _T("no wxArtProvider exists") );
+    wxCHECK_MSG( sm_providers->GetCount() > 0, false, _T("wxArtProviders stack is empty") );
 
     delete sm_providers->GetFirst()->GetData();
     sm_providers->Erase(sm_providers->GetFirst());
     sm_cache->Clear();
-    return TRUE;
+    return true;
 }
 
 /*static*/ bool wxArtProvider::RemoveProvider(wxArtProvider *provider)
 {
-    wxCHECK_MSG( sm_providers, FALSE, _T("no wxArtProvider exists") );
+    wxCHECK_MSG( sm_providers, false, _T("no wxArtProvider exists") );
 
     if ( sm_providers->DeleteObject(provider) )
     {
         delete provider;
         sm_cache->Clear();
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*static*/ void wxArtProvider::CleanUpProviders()
@@ -177,7 +177,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
                     img.Rescale(size.x, size.y);
                     bmp = wxBitmap(img);
                 }
-#endif                
+#endif
                 break;
             }
         }
@@ -211,7 +211,7 @@ public:
     {
         wxArtProvider::InitStdProvider();
         wxArtProvider::InitNativeProvider();
-        return TRUE;
+        return true;
     }
     void OnExit()
     {

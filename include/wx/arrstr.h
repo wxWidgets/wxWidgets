@@ -27,9 +27,9 @@ typedef wxString _wxArraywxBaseArrayStringBase;
 _WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
                         wxArray_SortFunction<wxString>,
                         class WXDLLIMPEXP_BASE);
-WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase, 
+WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase,
                                   wxBaseArrayStringBase, WXDLLIMPEXP_BASE);
-_WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase, 
+_WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase,
                               wxBaseArrayStringBase, = wxStringSortAscending,
                               class WXDLLIMPEXP_BASE, CMPFUNCwxString);
 
