@@ -43,6 +43,7 @@ AC_OUTPUT([
             listctrl/Makefile
             mdi/Makefile
             menu/Makefile
+            memcheck/Makefile
             minifram/Makefile
             minimal/Makefile
             newgrid/Makefile
