@@ -1238,9 +1238,22 @@ wxImage::wxImage( const wxBitmap &bitmap )
 {
     wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
 
-    GdkImage *gdk_image = gdk_image_get( bitmap.GetPixmap(),
-        0, 0,
-        bitmap.GetWidth(), bitmap.GetHeight() );
+    GdkImage *gdk_image = (GdkImage*) NULL;
+    if (bitmap.GetPixmap())
+    {
+        gdk_image = gdk_image_get( bitmap.GetPixmap(),
+            0, 0,
+            bitmap.GetWidth(), bitmap.GetHeight() );
+    } else
+    if (bitmap.GetBitmap())
+    {
+        gdk_image = gdk_image_get( bitmap.GetBitmap(),
+            0, 0,
+            bitmap.GetWidth(), bitmap.GetHeight() );
+    } else
+    {
+        wxFAIL_MSG( wxT("Ill-formed bitmap") );
+    }
 
     wxCHECK_RET( gdk_image, wxT("couldn't create image") );
 
@@ -1264,7 +1277,12 @@ wxImage::wxImage( const wxBitmap &bitmap )
         SetMaskColour( 16, 16, 16 );  // anything unlikely and dividable
     }
 
-    GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
+    GdkVisual *visual = (GdkVisual*) NULL;
+    if (bitmap.GetPixmap())
+        visual = gdk_window_get_visual( bitmap.GetPixmap() );
+    else
+        visual = gdk_window_get_visual( bitmap.GetBitmap() );
+
     if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
     int bpp = visual->depth;
     if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
@@ -1277,7 +1295,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
         for (int i = 0; i < bitmap.GetWidth(); i++)
         {
             wxInt32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-            pixel = wxINT32_SWAP_ON_BE( pixel );
+            // pixel = wxINT32_SWAP_ON_BE( pixel );
             if (bpp <= 8)
             {
                 data[pos] = cmap->colors[pixel].red >> 8;

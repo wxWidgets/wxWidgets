@@ -59,9 +59,7 @@ public:
     static void CleanUp();
 
     bool ProcessIdle();
-#if wxUSE_THREADS
     void ProcessPendingEvents();
-#endif
     void DeletePendingObjects();
 
     // This can be used to suppress the generation of Idle events.
