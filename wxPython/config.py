@@ -606,7 +606,7 @@ if debug:
 if FINAL:
     HYBRID = 0
 
-if UNICODE and WXPORT not in ['msw', 'gtk2']:
+if UNICODE and WXPORT not in ['msw', 'gtk2', 'mac']:
     raise SystemExit, "UNICODE mode not currently supported on this WXPORT: "+WXPORT
 
 

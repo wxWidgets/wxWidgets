@@ -189,6 +189,10 @@ Added (thanks to Kevin Ollivier!) wrappers for wx.WebKitCtrl for the
 OSX build.  Other platforms will raise an exception if you try to use
 it. 
 
+wxPython on OSX can now be built in Unicode mode, can support multiple
+version installs, and comes with an uninstaller script.
+
+
 
 
 
