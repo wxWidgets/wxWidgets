@@ -10,31 +10,25 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "tokenzr.h"
+    #pragma implementation "tokenzr.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif
-
-#include "wx/object.h"
-#include "wx/string.h"
 #include "wx/tokenzr.h"
 
 wxStringTokenizer::wxStringTokenizer(const wxString& to_tokenize,
                                      const wxString& delims,
-				     bool ret_delims)
-  : wxObject()
+                                     bool ret_delims)
 {
-  m_string = to_tokenize;
-  m_delims = delims;
-  m_retdelims = ret_delims;
+    m_string = to_tokenize;
+    m_delims = delims;
+    m_retdelims = ret_delims;
 }
 
 wxStringTokenizer::~wxStringTokenizer()
@@ -43,86 +37,102 @@ wxStringTokenizer::~wxStringTokenizer()
 
 off_t wxStringTokenizer::FindDelims(const wxString& str, const wxString& delims)
 {
-  int i, j;
-  register int s_len = str.Length(),
-               len = delims.Length();
+    for ( int i = 0; i < str.Length(); i++ )
+    {
+        char c = str[i];
 
-  for (i=0;i<s_len;i++) {
-    register char c = str[i];
+        for ( int j = 0; j < delims.Length() ; j++ )
+        {
+            if ( delims[j] == c )
+                return i;
+        }
+    }
 
-    for (j=0;j<len;j++)
-      if (delims[j] == c)
-        return i;
-  }
-  return -1;
+    return -1;
 }
 
-int wxStringTokenizer::CountTokens()
+int wxStringTokenizer::CountTokens() const
 {
-  wxString p_string = m_string;
-  bool found = TRUE;
-  int pos, count = 1; 
+    wxString p_string = m_string;
+    bool found = TRUE;
+    int pos, count = 1; 
 
-  if (p_string.Length() == 0)
-    return 0;
+    if (p_string.Length() == 0)
+        return 0;
 
-  while (found) {
-    pos = FindDelims(p_string, m_delims);
-    if (pos != -1) {
-      count++;
-      p_string = p_string(0, pos);
-    } else
-      found = FALSE;
-  }
-  return count;
+    while (found)
+    {
+        pos = FindDelims(p_string, m_delims);
+        if (pos != -1)
+        {
+            count++;
+            p_string = p_string(0, pos);
+        }
+        else
+        {
+            found = FALSE;
+        }
+    }
+
+    return count;
 }
 
 bool wxStringTokenizer::HasMoreToken()
 {
-  return (m_string.Length() != 0);
+    return !m_string.IsEmpty();
 }
 
-// AVS - added to fix leading whitespace / mult. delims bugs
+// needed to fix leading whitespace / mult. delims bugs
 void wxStringTokenizer::EatLeadingDelims() 
 {
-  int pos;
+    int pos;
 
-  while ((pos=FindDelims(m_string, m_delims))==0) { // while leading delims
-     m_string = m_string.Mid((size_t)1);     // trim 'em from the left
-  }
+    // while leading delims trim 'em from the left
+    while ( ( pos = FindDelims(m_string, m_delims)) == 0 )
+    {
+        m_string = m_string.Mid((size_t)1);
+    }
 }
 
 wxString wxStringTokenizer::NextToken()
 {
-  register off_t pos, pos2;
-  wxString r_string;
+    off_t pos, pos2;
+    wxString r_string;
 
-  if (m_string.IsNull())
-    return m_string;
+    if ( m_string.IsEmpty() )
+        return m_string;
 
-  if (!m_retdelims)
-    EatLeadingDelims(); // AVS - added to fix leading whitespace /
-                        // mult. delims bugs
+    if ( !m_retdelims )
+        EatLeadingDelims();
 
-  pos = FindDelims(m_string, m_delims);
-  if (pos == -1) {
-    r_string = m_string;
-    m_string = wxEmptyString;
-    
+    pos = FindDelims(m_string, m_delims);
+    if (pos == -1)
+    {
+        r_string = m_string;
+        m_string = wxEmptyString;
+
+        return r_string;
+    }
+
+    if (m_retdelims)
+    {
+        if (!pos)
+        {
+            pos++;
+            pos2 = 1;
+        }
+        else
+        {
+            pos2 = pos;
+        }
+    }
+    else
+    {
+        pos2 = pos + 1;
+    }
+
+    r_string = m_string.Left((size_t)pos);
+    m_string = m_string.Mid((size_t)pos2);
+
     return r_string;
-  }
-
-  if (m_retdelims) {
-    if (!pos) {
-      pos++;
-      pos2 = 1;
-    } else
-      pos2 = pos;
-  } else
-      pos2 = pos + 1;
-  
-  r_string = m_string.Left((size_t)pos);
-  m_string = m_string.Mid((size_t)pos2);
-
-  return r_string;
 }

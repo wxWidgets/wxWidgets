@@ -20,38 +20,38 @@
 #include "wx/string.h"
 #include "wx/filefn.h"
 
-class wxStringTokenizer : public wxObject {
+class WXDLLEXPORT wxStringTokenizer : public wxObject
+{
 public:
-  wxStringTokenizer(const wxString& to_tokenize,
-                    const wxString& delims = " \t\r\n",
-                    bool ret_delim = FALSE);
-  wxStringTokenizer() {  m_string = "";  m_delims = "";  m_retdelims = FALSE;}
-  ~wxStringTokenizer();
+    wxStringTokenizer(const wxString& to_tokenize,
+                      const wxString& delims = " \t\r\n",
+                      bool ret_delim = FALSE);
+    wxStringTokenizer() { m_retdelims = FALSE;}
+    virtual ~wxStringTokenizer();
 
-  int CountTokens();
-  bool HasMoreToken();
-  inline bool HasMoreTokens() { return HasMoreToken(); };
-  wxString NextToken();
-  // A better name!
-  inline wxString GetNextToken() { return NextToken(); };
-  wxString GetString() { return m_string; }
+    int CountTokens() count;
+    bool HasMoreTokens();
 
-  void SetString(const wxString& to_tokenize,
-                    const wxString& delims = " \t\r\n",
-                    bool ret_delim = FALSE)
-  {
-    m_string = to_tokenize;
-    m_delims = delims;
-    m_retdelims = ret_delim;
-  }
+    wxString NextToken();
+    wxString GetNextToken() { return NextToken(); };
+
+    wxString GetString() const { return m_string; }
+
+    void SetString(const wxString& to_tokenize,
+                   const wxString& delims = " \t\r\n",
+                   bool ret_delim = FALSE)
+    {
+        m_string = to_tokenize;
+        m_delims = delims;
+        m_retdelims = ret_delim;
+    }
 
 protected:
-  off_t FindDelims(const wxString& str, const wxString& delims);
-  void EatLeadingDelims(); // AVS - added to fix leading whitespace /
-                           // mult. delims bugs
-protected:
-  wxString m_string, m_delims;
-  bool m_retdelims;
+    off_t FindDelims(const wxString& str, const wxString& delims);
+    void EatLeadingDelims();
+
+    wxString m_string, m_delims;
+    bool m_retdelims;
 };
 
-#endif
+#endif // _WX_TOKENZRH

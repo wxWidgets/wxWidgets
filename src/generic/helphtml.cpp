@@ -34,21 +34,21 @@ public:
 };
 
 IMPLEMENT_ABSTRACT_CLASS(wxHTMLHelpControllerBase, wxHelpControllerBase)
-   
+
 /**
    This class implements help via an external browser.
    It requires the name of a directory containing the documentation
    and a file mapping numerical Section numbers to relative URLS.
 */
 
-wxHTMLHelpControllerBase::wxHTMLHelpControllerBase(void)
+wxHTMLHelpControllerBase::wxHTMLHelpControllerBase()
 {
    m_MapList = (wxList*) NULL;
    m_NumOfEntries = 0;
 }
 
 void
-wxHTMLHelpControllerBase::DeleteList(void)
+wxHTMLHelpControllerBase::DeleteList()
 {
    if(m_MapList)
    {
@@ -64,7 +64,7 @@ wxHTMLHelpControllerBase::DeleteList(void)
    }
 }
 
-wxHTMLHelpControllerBase::~wxHTMLHelpControllerBase(void)
+wxHTMLHelpControllerBase::~wxHTMLHelpControllerBase()
 {
    DeleteList();
 }
@@ -88,7 +88,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
    wxString mapFile, file, url, doc;
    int id,i,len;
    char buffer[WXEXTHELP_BUFLEN];
-   
+
    wxBusyCursor b; // display a busy cursor
 
    if(! ifile.IsEmpty())
@@ -125,10 +125,10 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
                file = newfile;
          }
       }
-      
+
       if(! wxDirExists(file))
          return FALSE;
-      
+
       mapFile << file << WXEXTHELP_SEPARATOR << WXEXTHELP_MAPFILE;
    }
    else // try to reload old file
@@ -140,7 +140,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
    DeleteList();
    m_MapList = new wxList;
    m_NumOfEntries = 0;
-   
+
    FILE *input = fopen(mapFile.fn_str(),"rt");
    if(! input)
       return FALSE;
@@ -169,21 +169,21 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
       }
    }while(! feof(input));
    fclose(input);
-   
+
    m_MapFile = file; // now it's valid
    return TRUE;
 }
 
 
 bool
-wxHTMLHelpControllerBase::DisplayContents(void)
+wxHTMLHelpControllerBase::DisplayContents()
 {
    if(! m_NumOfEntries)
       return FALSE;
    wxBusyCursor b; // display a busy cursor
    return KeywordSearch("");
 }
-      
+
 bool
 wxHTMLHelpControllerBase::DisplaySection(int sectionNo)
 {
@@ -219,19 +219,19 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
    wxString     *choices = new wxString[m_NumOfEntries];
    wxString     *urls = new wxString[m_NumOfEntries];
    wxString compA, compB;
-   
+
    int          idx = 0, j;
    bool         rc;
    bool         showAll = k.IsEmpty();
    wxNode       *node = m_MapList->First();
    wxExtHelpMapEntry *entry;
-   
+
    compA = k; compA.LowerCase(); // we compare case insensitive
    while(node)
    {
       entry = (wxExtHelpMapEntry *)node->Data();
       compB = entry->doc; compB.LowerCase();
-      if((showAll || compB.Contains(k)) && ! compB.IsEmpty()) 
+      if((showAll || compB.Contains(k)) && ! compB.IsEmpty())
       {
          urls[idx] = entry->url;
          // doesn't work:
@@ -266,19 +266,19 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
    }
    delete[] urls;
    delete[] choices;
-   
+
    return rc;
 }
 
 
 bool
-wxHTMLHelpControllerBase::Quit(void)
+wxHTMLHelpControllerBase::Quit()
 {
    return TRUE;
 }
 
 void
-wxHTMLHelpControllerBase::OnQuit(void)
+wxHTMLHelpControllerBase::OnQuit()
 {
 }
 
