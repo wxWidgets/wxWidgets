@@ -336,7 +336,7 @@ wxAMMediaBackend::~wxAMMediaBackend()
 // wxAMMediaBackend::CreateControl
 //
 // ActiveMovie does not really have any native control to speak of,
-// so we just create a normal control with a black background.
+// so we just create a normal control.
 //
 // We also check to see if ActiveMovie is installed
 //---------------------------------------------------------------------------
@@ -371,11 +371,6 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                             (style & ~wxBORDER_MASK) | wxBORDER_NONE | wxCLIP_CHILDREN,
                             validator, name) )
         return false;
-
-    //
-    //Set our background color to black by default
-    //
-    ctrl->SetBackgroundColour(*wxBLACK);
 
     m_ctrl = ctrl;
     return true;
@@ -886,11 +881,6 @@ bool wxMCIMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                             validator, name) )
         return false;
 
-    //
-    //Set our background color to black by default
-    //
-    ctrl->SetBackgroundColour(*wxBLACK);
-
     m_ctrl = ctrl;
     return true;
 }
@@ -982,6 +972,8 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
                        (LONG) this);
 
+    m_ctrl->Show(false);
+
     //
     //Here, if the parent of the control has a sizer - we
     //tell it to recalculate the size of this control since
@@ -1021,6 +1013,8 @@ bool wxMCIMediaBackend::Play()
 {
     MCI_PLAY_PARMS playParms;
     playParms.dwCallback = (DWORD)m_hNotifyWnd;
+
+    m_ctrl->Show(m_bVideo);
 
     return ( mciSendCommand(m_hDev, MCI_PLAY, MCI_NOTIFY,
                             (DWORD)(LPVOID)&playParms) == 0 );
@@ -1388,11 +1382,6 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                             validator, name) )
         return false;
 
-    //
-    //Set our background color to black by default
-    //
-    ctrl->SetBackgroundColour(*wxBLACK);
-
     m_ctrl = ctrl;
     return true;
 }
@@ -1618,9 +1607,10 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
 }
 
 //---------------------------------------------------------------------------
-// wxQTMediaBackend::Move
+// wxQTMediaBackend::GetPosition
 //
-// TODO
+// 1) Calls GetMovieTime to get the position we are in in the movie
+// in milliseconds (we called 
 //---------------------------------------------------------------------------
 wxLongLong wxQTMediaBackend::GetPosition()
 {
