@@ -1648,6 +1648,9 @@ wxString wxTextCtrl::GetLineText(wxTextCoord line) const
     }
     else // multiline
     {
+        //this is called during DoGetBestSize
+        if (line == 0 && GetLineCount() == 0) return wxEmptyString ;
+       
         wxCHECK_MSG( (size_t)line < GetLineCount(), _T(""),
                      _T("line index out of range") );
 
