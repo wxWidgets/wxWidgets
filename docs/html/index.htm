@@ -11,11 +11,11 @@
 
 <a name="top"></a>
 
-<IMG src="logo.gif" align=left hspace=10 vspace=0>
+<IMG src="logo.gif" align=right hspace=10 vspace=0>
 
 Welcome to wxWindows 2, the premi&egrave;re cross-platform GUI C++ framework. This is an index of
 the plain text, HTML, Windows Help and Acrobat documentation: availability depends on what you've
-downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P>
+downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<br clear=all><P>
 
 <CENTER>
 <FONT size=-1>
@@ -28,20 +28,38 @@ downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P
 </FONT>
 </CENTER>
 
-<h3 align=center><a name="install"><hr>Installation and release notes<hr></a></h3>
+<P>
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b><a name="install">Installation and release notes</a></b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
 
 <ul>
 <li>ReadMe: <a href="../readme.txt"><b>General ReadMe</b></a>,
 <a href="../gtk/readme.txt">wxGTK</a>,
 <a href="../motif/readme.txt">wxMotif</a>,
 <a href="../x11/readme.txt">wxX11</a>,
-<a href="../msw/readme.txt">wxMSW</a>
+<a href="../x11/readme-nanox.txt">wxNanoX</a>,
+<a href="../msw/readme.txt">wxMSW</a>,
+<a href="../mac/readme.txt">wxMac</a>,
+<a href="../mgl/readme.txt">wxMGL</a>,
+<a href="../univ/readme.txt">Univ</a>
 <li>Installation: <a href="../gtk/install.txt">wxGTK</a>,
 <a href="../motif/install.txt">wxMotif</a>,
 <a href="../x11/install.txt">wxX11</a>,
-<a href="../msw/install.txt">wxMSW</a>
-<li><a href="../changes.txt"><b>Change log</b></a>
-<li><a href="../bugs.txt"><b>Buglist</b></a>
+<a href="../msw/install.txt">wxMSW</a>,
+<a href="../mac/install.txt">wxMac</a>,
+<a href="../mgl/install.txt">wxMGL</a>,
+<a href="../os2/install.txt">wxOS2</a>
+<li><a href="../changes.txt"><b>General change log</b></a>, <a href="../gtk/changes.txt">wxGTK change log</a>
 <li>Licence: <a href="../preamble.txt">Preamble</a>,
 <a href="../licence.txt">Licence</a>,
 <a href="../licendoc.txt">Documentation Licence</a>,
@@ -63,120 +81,221 @@ downloaded from the <a href="http://www.wxwindows.org">wxWindows Web site</a>.<P
 <li>List of <a href="../symbols.txt">preprocessor symbols</a> used in wxWindows
 </ul>
 
-<h3 align=center><a name="manuals"><hr>wxWindows manuals<hr></a></h3>
+Further platform-specific notes:
 
-<table border=1 align=center>
+<ul>
+<li> wxMSW: <a href="../msw/winxp.txt">Windows XP</a>
+</ul>
+
+<P>
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b><a name="manuals">wxWindows manuals</a></b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+To use manuals in wxHTML Help form (extension htb), you can use the <b>HelpView</b>
+application, either compiling it from utils/helpview in the distribution,
+or downloading a binary, for example from <a href="http://www.storylinescentral.com/helpview.htm">here</a>.<P>
+
+See also the <a href="../pdf/wxTutorial.pdf">wxWindows Tutorial</a>
+by Franky Braem, in PDF format.<P>
+
+<P>
+
+<table border=0 cellpadding=5 cellspacing=0>
 
 <tr>
-<td align=center bgcolor="#C4ECF9">
+<td align=center bgcolor="#E0E0E0">
 <B>HTML</B>
 </td>
-<td align=center bgcolor="#C4ECF9">
+<td align=center bgcolor="#E0E0E0">
 <B>WinHelp</B>
 </td>
-<td align=center bgcolor="#C4ECF9">
+<td align=center bgcolor="#E0E0E0">
 <B>MS HTML Help</B>
 </td>
-<td align=center bgcolor="#C4ECF9">
+<td align=center bgcolor="#E0E0E0">
+<B>wxHTML Help</B>
+</td>
+<td align=center bgcolor="#E0E0E0">
 <B>PDF</B>
 </td>
 </tr>
 
 <tr>
 <td align=center>
-<a href="wx/wx.htm">Reference Manual</a>
+<a href="wx/wx.htm">wxWindows Reference</a>
 </td>
 
 <td align=center>
-<a href="../winhelp/wx.hlp">Reference Manual</a>
+<a href="../winhelp/wx.hlp">wxWindows Reference</a>
 </td>
 
 <td align=center>
-<a href="../htmlhelp/wx.chm">Reference Manual</a>
+<a href="../htmlhelp/wx.chm">wxWindows Reference</a>
 </td>
 
 <td align=center>
-<a href="../pdf/wx.pdf">Reference Manual</a>
-</td>
-</tr>
-
-<tr>
-<td align=center>
-<a href="dialoged/dlged.htm">Dialog Editor Manual</a>
+<a href="../htb/wx.htb">wxWindows Reference</a>
 </td>
 
 <td align=center>
-<a href="../winhelp/dialoged.hlp">Dialog Editor Manual</a>
-</td>
-
-<td align=center>
-<a href="../htmlhelp/dialoged.chm">Dialog Editor Manual</a>
-</td>
-
-<td align=center>
-<a href="../pdf/dialoged.pdf">Dialog Editor Manual</a>
+<a href="../pdf/wx.pdf">wxWindows Reference</a>
 </td>
 </tr>
 
 <tr>
 <td align=center>
-<a href="tex2rtf/t2rtf.htm">Tex2RTF Manual</a>
+<a href="dialoged/dlged.htm">Dialog Editor</a>
 </td>
 
 <td align=center>
-<a href="../winhelp/tex2rtf.hlp">Tex2RTF Manual</a>
+<a href="../winhelp/dialoged.hlp">Dialog Editor</a>
 </td>
 
 <td align=center>
-<a href="../htmlhelp/tex2rtf.chm">Tex2RTF Manual</a>
+<a href="../htmlhelp/dialoged.chm">Dialog Editor</a>
 </td>
 
 <td align=center>
-<a href="../pdf/tex2rtf.pdf">Tex2RTF Manual</a>
+<a href="../htb/dialoged.htb">Dialog Editor</a>
+</td>
+
+<td align=center>
+<a href="../pdf/dialoged.pdf">Dialog Editor</a>
 </td>
 </tr>
 
 <tr>
 <td align=center>
-<a href="odbc/odbc.htm">Remstar ODBC Classes</a>
+<a href="tex2rtf/t2rtf.htm">Tex2RTF</a>
 </td>
 
 <td align=center>
-<BR><BR>
+<a href="../winhelp/tex2rtf.hlp">Tex2RTF</a>
 </td>
 
 <td align=center>
-<BR><BR>
+<a href="../htmlhelp/tex2rtf.chm">Tex2RTF</a>
 </td>
 
 <td align=center>
-<a href="../pdf/odbc.pdf">Remstar ODBC Classes</a>
+<a href="../htb/tex2rtf.htb">Tex2RTF</a>
+</td>
+
+<td align=center>
+<a href="../pdf/tex2rtf.pdf">Tex2RTF</a>
+</td>
+</tr>
+
+<tr>
+<td align=center>
+<a href="fl/fl.htm">FL Library</a>
+</td>
+
+<td align=center>
+<a href="../winhelp/fl.hlp">FL Library</a>
+
+</td>
+
+<td align=center>
+<a href="../htmlhelp/fl.chm">FL Library</a>
+</td>
+
+<td align=center>
+<a href="../htb/fl.htb">FL Library</a>
+</td>
+
+<td align=center>
+<a href="../pdf/fl.pdf">FL Library</a>
+</td>
+</tr>
+
+<tr>
+<td align=center>
+<a href="ogl/ogl.htm">OGL Library</a>
+</td>
+
+<td align=center>
+<a href="../winhelp/ogl.hlp">OGL Library</a>
+
+</td>
+
+<td align=center>
+<a href="../htmlhelp/ogl.chm">OGL Library</a>
+</td>
+
+<td align=center>
+<a href="../htb/ogl.htb">OGL Library</a>
+</td>
+
+<td align=center>
+<a href="../pdf/ogl.pdf">OGL Library</a>
 </td>
 </tr>
 
 </table>
 
-<h3 align=center><a name="technotes"><hr>Technical notes<hr></a></h3>
+<P>
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b><a name="technotes">Technical notes</a></b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
 
 <ul>
 <li><a href="../tech/index.txt">Index of technical notes</a>
-<li><a href="../tech/">Technical notes</a> in text form
-<li>Other documents:
-  <ul>
-  <li><a href="platform.htm">Platforms supported</a>
-  <li><a href="i18n.htm">Languages supported by wxWindows</a>
-  <li><a href="standard.htm">wxWindows programmer style guide</a>
-  <li><a href="news.htm">wxWindows news</a>
-  </ul>
+<li><a href="../tech/">Technical notes</a>
+<li><a href="platform.htm">Platforms supported</a>
+<li><a href="i18n.htm">Languages supported by wxWindows</a>
 </ul>
 
-<h3 align=center><a name="thirdparty"><hr>Third-party tools<hr></a></h3>
+<P>
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b><a name="thirdparty">Thirty-party tools</a></b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
 
 <ul>
 <li><a href="gettext/index.html">gettext Manual</a>
 </ul>
 
-<h3 align=center><a name="samples"><hr>Samples<hr></a></h3>
+<P>
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b><a name="samples">Samples</a></b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
 
 Each of the following demonstrates one or more aspect of wxWindows.<P>
 
@@ -232,6 +351,7 @@ applications and also as a help facility.
 <li><a href="../../samples/image">image</a>: shows off the cross-platform wxImage class.
 <li><a href="../../samples/internat">internat</a>: use of wxWindows' internationalization support.
 <li><a href="../../samples/joytest">joytest</a>: tests the wxJoystick class (currently Windows and GTK only).
+<li><a href="../../samples/keyboard">keyboard</a>: tests keyboard support.
 <li><a href="../../samples/layout">layout</a>: shows the constraint layout system in action.
 <li><a href="../../samples/listctrl">listctrl</a>: demonstrates the wxListCtrl (implemented natively on
 WIN32, and using a generic version on other platforms).
@@ -246,6 +366,7 @@ To compile this, you must edit include/wx/wxprec.h, comment out the windows.h in
 platforms that don't support it, a normal-sized title bar is displayed.
 <li><a href="../../samples/minimal">minimal</a>: just shows a frame, a menubar, and a statusbar. About as
 small a wxWindows application as you can get.
+<li><a href="../../samples/mobile">mobile</a>: mini applications for embedded platforms.
 <li><a href="../../samples/nativdlg">nativdlg</a>: shows how wxWindows can load a standard Windows
 dialog resource, translating the controls into wxWindows controls (Windows only).
 <li><a href="../../samples/newgrid">newgrid</a>: demonstrates the new wxGrid implementation, by Michael Bedward and others.
@@ -259,8 +380,9 @@ Excel to be present).
 <li><a href="../../samples/propsize">propsize</a>: demonstrates proportional sizer classes.
 <li><a href="../../samples/regtest">regtest</a>: tests the low-level Windows registry functions (Windows only).
 <li><a href="../../samples/resource">resource</a>: shows how to use wxWindows resources (.wxr files).
-<li><a href="../../samples/richedit">richedit</a>: a work-in-progress rich text editor with plain text and HTML export
+<!-- <li><a href="../../samples/richedit">richedit</a>: a work-in-progress rich text editor with plain text and HTML export
 facilities.
+-->
 <li><a href="../../samples/rotate">rotate</a>: demonstrates interpolated and non-interpolated
 rotation of a wxImage.
 <li><a href="../../samples/sashtest">sashtest</a>: demonstrates use of the wxSashWindow class to allow
@@ -286,7 +408,19 @@ wxTime, wxDate and wxVariant.
 <li><a href="../../samples/wizard">wizard</a>: demonstrates the wxWizard class.
 </ul>
 
-<h3 align=center><a name="demos"><hr>Demos<hr></a></h3>
+<P>
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b><a name="demos">Demos</a></b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
 
 The following are fully-fledged applications.<P>
 
@@ -298,8 +432,6 @@ The following are fully-fledged applications.<P>
 <li><a href="../../demos/life">life</a>: the game of Life by J. H. Conway, implemented in wxWindows by Guillermo Rodriguez Garcia.
 <li><a href="../../demos/poem">poem</a>: a little poetry display program.
 </ul>
-
-<hr>
 
 </font>
 

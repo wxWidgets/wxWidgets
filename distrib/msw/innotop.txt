@@ -41,6 +41,6 @@
     DiskClusterSize=512
     ReserveBytes=0
     UseSetupLdr=1
-    SourceDir=c:\wx2dev\wxWindows\deliver\wx
+    SourceDir=c:\wx2dev\wxWindows\deliver\wxWindows-2.3.3
     OutputDir=c:\wx2dev\wxWindows\deliver
 

@@ -30,6 +30,7 @@ THISDIR = $(WXDIR)\contrib\src\fl
 DOCSOURCES=$(DOCSOURCEDIR)\fl.tex \
  $(DOCSOURCEDIR)\classes.tex $(DOCSOURCEDIR)\topics.tex
 
+alldocs: mkdirs html htmlhelp htb hlp pdfrtf
 html: $(DOCDIR)\html\fl\fl.htm
 htmlhelp: $(DOCDIR)\htmlhelp\fl.chm
 htb:	$(DOCDIR)\htb\fl.htb

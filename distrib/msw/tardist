@@ -170,52 +170,52 @@ gzip $2/wxMac-${WXVER}.tar
 cd $1
 cat $1/distrib/msw/wx_html.rsp > /tmp/html_in.txt
 expandlines /tmp/html_in.txt /tmp/html.txt
-$TAR cf $2/wxWindows-${WXVER}-html.tar -T /tmp/html.txt
+$TAR cf $2/wxWindows-${WXVER}-HTML.tar -T /tmp/html.txt
 
 echo Re-tarring HTML in a subdirectory...
 cd $2
 mkdir wxWindows-${WXVER}
 cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-html.tar
+$TAR xf ../wxWindows-${WXVER}-HTML.tar
 cd ..
-rm -f wxWindows-${WXVER}-html.tar
-$TAR cf $2/wxWindows-${WXVER}-html.tar wxWindows-${WXVER}/*
+rm -f wxWindows-${WXVER}-HTML.tar
+$TAR cf $2/wxWindows-${WXVER}-HTML.tar wxWindows-${WXVER}/*
 rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-html.tar
+gzip $2/wxWindows-${WXVER}-HTML.tar
 
 ### HTB docs
 cd $1
 cat $1/distrib/msw/wx_htb.rsp > /tmp/htb_in.txt
 expandlines /tmp/htb_in.txt /tmp/htb.txt
-$TAR cf $2/wxWindows-${WXVER}-htb.tar -T /tmp/htb.txt
+$TAR cf $2/wxWindows-${WXVER}-HTB.tar -T /tmp/htb.txt
 
 echo Re-tarring HTB in a subdirectory...
 cd $2
 mkdir wxWindows-${WXVER}
 cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-htb.tar
+$TAR xf ../wxWindows-${WXVER}-HTB.tar
 cd ..
-rm -f wxWindows-${WXVER}-htb.tar
-$TAR cf $2/wxWindows-${WXVER}-htb.tar wxWindows-${WXVER}/*
+rm -f wxWindows-${WXVER}-HTB.tar
+$TAR cf $2/wxWindows-${WXVER}-HTB.tar wxWindows-${WXVER}/*
 rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-htb.tar
+gzip $2/wxWindows-${WXVER}-HTB.tar
 
 ### PDF docs
 cd $1
 cat $1/distrib/msw/wx_pdf.rsp > /tmp/pdf_in.txt
 expandlines /tmp/pdf_in.txt /tmp/pdf.txt
-$TAR cf $2/wxWindows-${WXVER}-pdf.tar -T /tmp/pdf.txt
+$TAR cf $2/wxWindows-${WXVER}-PDF.tar -T /tmp/pdf.txt
 
 echo Re-tarring PDF in a subdirectory...
 cd $2
 mkdir wxWindows-${WXVER}
 cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-pdf.tar
+$TAR xf ../wxWindows-${WXVER}-PDF.tar
 cd ..
-rm -f wxWindows-${WXVER}-pdf.tar
-$TAR cf $2/wxWindows-${WXVER}-pdf.tar wxWindows-${WXVER}/*
+rm -f wxWindows-${WXVER}-PDF.tar
+$TAR cf $2/wxWindows-${WXVER}-PDF.tar wxWindows-${WXVER}/*
 rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-pdf.tar
+gzip $2/wxWindows-${WXVER}-PDF.tar
 
 ### Tex2RTF
 #cd $1

@@ -1,6 +1,6 @@
 \section{\class{wxHashMap}}\label{wxhashmap}
 
-This is a simple, type safe, and reasonably efficient hash map class,
+This is a simple, type-safe, and reasonably efficient hash map class,
 whose interface is a subset of the interface of STL containers. 
 
 \wxheading{Example}
@@ -135,8 +135,8 @@ Copy constructor.
 
 \func{iterator}{begin}{}
 
-Returns an iterator pointing at the first element of the hash map
-( please remember that hash maps do not guarantee ordering ).
+Returns an iterator pointing at the first element of the hash map.
+Please remember that hash maps do not guarantee ordering.
 
 \membersection{wxHashMap::clear}
 
@@ -155,7 +155,7 @@ This function can actually return 0 or 1.
 
 \constfunc{bool}{empty}{}
 
-TRUE if the hash map does not contain any element, FALSE otherwise.
+Returns TRUE if the hash map does not contain any element, FALSE otherwise.
 
 \membersection{wxHashMap::end}
 
@@ -163,15 +163,15 @@ TRUE if the hash map does not contain any element, FALSE otherwise.
 
 \func{iterator}{end}{}
 
-Returns an iterator pointing at the one-after-the-last element of the hash map
-( please remember that hash maps do not guarantee ordering ).
+Returns an iterator pointing at the one-after-the-last element of the hash map.
+Please remember that hash maps do not guarantee ordering.
 
 \membersection{wxHashMap::erase}
 
 \func{size\_type}{erase}{\param{const key\_type\&}{ key}}
 
 Erases the element with the given key, and returns the number of element
-erased ( either 0 or 1 ).
+erased (either 0 or 1).
 
 \func{void}{erase}{\param{iterator}{ it}}
 
@@ -188,7 +188,7 @@ the iterator is no longer valid and must not be used.
 
 If an element with the given key is present, the functions returns
 an iterator pointing at that element, otherwise an invalid iterator
-is returned ( i.e. hashmap.find( non\_existent\_key ) == hashmap.end() ).
+is returned (i.e. hashmap.find( non\_existent\_key ) == hashmap.end()).
 
 \membersection{wxHashMap::insert}
 

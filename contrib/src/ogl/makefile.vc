@@ -18,7 +18,7 @@ OGLDIR = $(WXDIR)\contrib\src\ogl
 OGLINC = $(WXDIR)\contrib\include\wx\ogl
 THISDIR = $(WXDIR)\contrib\src\ogl
 EXTRAFLAGS=/DPROLOGIO=1
-DOCDIR=$(WXDIR)\contrib\docs
+DOCDIR=$(WXDIR)\docs
 DOCSOURCEDIR=$(WXDIR)\contrib\docs\latex\ogl
 
 !include $(WXDIR)\src\makevc.env
@@ -131,12 +131,17 @@ DOCSOURCES=$(DOCSOURCEDIR)\ogl.tex \
  $(DOCSOURCEDIR)\classes.tex $(DOCSOURCEDIR)\intro.tex\
  $(DOCSOURCEDIR)\topics.tex $(DOCSOURCEDIR)\sample.tex
 
+alldocs: mkdirs html htmlhelp htb hlp pdfrtf
+
 html: $(DOCDIR)\html\ogl\ogl.htm
 htmlhelp: $(DOCDIR)\htmlhelp\ogl.chm
 htb:	$(DOCDIR)\htb\ogl.htb
 hlp: $(DOCDIR)\winhelp\ogl.hlp
 pdfrtf: $(DOCDIR)\pdf\ogl.rtf
 ps: $(DOCDIR)\ps\ogl.ps
+
+mkdirs:
+    -mkdir $(DOCDIR)\html $(DOCDIR)\html\ogl $(DOCDIR)\htb $(DOCDIR)\htmlhelp $(DOCDIR)\winhelp $(DOCDIR)\pdf
 
 touchmanual:
 	touch $(DOCSOURCEDIR)\ogl.tex
@@ -145,8 +150,7 @@ $(DOCDIR)\winhelp\ogl.hlp:         $(DOCSOURCEDIR)\ogl.rtf $(DOCSOURCEDIR)\ogl.h
         cd $(DOCSOURCEDIR)
         -erase ogl.ph
         hc ogl
-        move ogl.hlp $(DOCDIR)\winhelp\ogl.hlp
-        move ogl.cnt $(DOCDIR)\winhelp\ogl.cnt
+        move ogl.hlp ogl.cnt $(DOCDIR)\winhelp
         cd $(THISDIR)
 
 $(DOCSOURCEDIR)\ogl.rtf: $(DOCSOURCES)

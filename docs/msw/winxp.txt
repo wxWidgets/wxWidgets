@@ -1,5 +1,5 @@
-Microsoft Windows XP Support in wxWindows 2.3.2
------------------------------------------------
+Microsoft Windows XP Support from wxWindows 2.3.2
+-------------------------------------------------
 
 Windows XP introduces the themes (called "visual styles" in the Microsoft
 documentation) in Windows world. As wxWindows uses the standard Windows
