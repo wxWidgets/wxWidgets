@@ -177,6 +177,15 @@ public:
     // get the size available for the page: the wizards are not resizeable, so
     // this size doesn't change
     virtual wxSize GetPageSize() const = 0;
+
+    // set the best size for the wizard, i.e. make it big enough to contain all
+    // of the pages starting from the given one
+    //
+    // this function may be called several times and possible with different
+    // pages in which case it will only increase the page size if needed (this
+    // may be useful if not all pages are accessible from the first one by
+    // default)
+    virtual void Fit(const wxWizardPage *firstPage) = 0;
 };
 
 // include the real class declaration

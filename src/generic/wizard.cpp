@@ -280,6 +280,32 @@ void wxWizard::SetPageSize(const wxSize& size)
     m_sizePage = size;
 }
 
+void wxWizard::Fit(const wxWizardPage *page)
+{
+    // otherwise it will have no effect now as it's too late...
+    wxASSERT_MSG( !WasCreated(), _T("should be called before RunWizard()!") );
+
+    wxSize sizeMax;
+    while ( page )
+    {
+        wxSize size = page->GetBestSize();
+
+        if ( size.x > sizeMax.x )
+            sizeMax.x = size.x;
+
+        if ( size.y > sizeMax.y )
+            sizeMax.y = size.y;
+
+        page = page->GetNext();
+    }
+
+    if ( sizeMax.x > m_sizePage.x )
+        m_sizePage.x = sizeMax.x;
+
+    if ( sizeMax.y > m_sizePage.y )
+        m_sizePage.y = sizeMax.y;
+}
+
 bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 {
     wxASSERT_MSG( page != m_page, wxT("this is useless") );

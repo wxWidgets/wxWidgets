@@ -137,13 +137,18 @@ also \helpref{GetBitmap}{wxwizardpagegetbitmap}.}
 \docparam{pos}{The position of the dialog, it will be centered on the screen
 by default.}
 
-\membersection{wxWizard::RunWizard}\label{wxwizardrunwizard}
+\membersection{wxWizard::Fit}\label{wxwizardfit}
 
-\func{bool}{RunWizard}{\param{wxWizardPage* }{firstPage}}
+\func{void}{Fit}{\param{const wxWizardPage* }{firstPage}}
 
-Executes the wizard starting from the given page, returns {\tt TRUE} if it was
-successfully finished or {\tt FALSE} if user cancelled it. The {\it firstPage} 
-can not be {\tt NULL}.
+Sets the page size to be big enough for all the pages accessible via the
+given {\it firstPage}, i.e. this page, its next page and so on.
+
+This method may be called more than once and it will only change the page size
+if the size required by the new page is bigger than the previously set one.
+This is useful if the decision about which pages to show is taken during the
+run-time as in this case, the wizard won't be able to get to all pages starting
+from a single one and you should call {\it Fit} separately for the others.
 
 \membersection{wxWizard::GetCurrentPage}\label{wxwizardgetcurrentpage}
 
@@ -157,6 +162,14 @@ Get the current page while the wizard is running. {\tt NULL} is returned if
 \constfunc{wxSize}{GetPageSize}{\void}
 
 Returns the size available for the pages.
+
+\membersection{wxWizard::RunWizard}\label{wxwizardrunwizard}
+
+\func{bool}{RunWizard}{\param{wxWizardPage* }{firstPage}}
+
+Executes the wizard starting from the given page, returns {\tt TRUE} if it was
+successfully finished or {\tt FALSE} if user cancelled it. The {\it firstPage} 
+can not be {\tt NULL}.
 
 \membersection{wxWizard::SetPageSize}\label{wxwizardsetpagesize}
 
