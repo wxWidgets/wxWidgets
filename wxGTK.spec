@@ -9,7 +9,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: wxGTK-%{ver}.tgz
+Source: wxGTK-%{ver}.tar.gz
 URL: http://wxwindows.org
 Packager: Robert Roebling <robert@roebling.de>
 

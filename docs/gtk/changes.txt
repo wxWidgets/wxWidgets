@@ -1,7 +1,26 @@
 
-22nd July 2000: wxWindows 2.2.1 released
+XXth September: wxWindows 2.2.2 released
+
+Fixed wxSizer bug that made items with option
+flags greater than 1 report a wrongn size.
+
+20th August 2000: wxWindows 2.2.1 released
 
 Minor build fixes.
+
+Use the wxCommmandEvent::IsChecked() function for checkable
+menu items. This mean that the m_int parameter no longer
+contains the ID of the menu!
+
+Fixed major problems in ODBC logging code. This change is
+binary backward incompatible.
+
+Fixed reentry problems in DnD code.
+
+Changed PostScript code so that it can handle a higher
+resolution (720dpi).
+
+Minor improvements to wxGrid code.
 
 Corrected guffow-scrolling so that no surplus expose
 events are generated.
@@ -12,12 +31,11 @@ Minor correction to wxDC::DrawRoundedRectangle.
 
 Added support for <INSERT> and <DELETE> menu accelerators.
 
-Use the wxCommmandEvent::IsChecked() function for checkable
-menu items.
-
 Made wxComboBox case-sensitive.
 
 Minor correction to doc-view architecture.
+
+Minor wxCommandLineParser changes.
 
 10th July 2000: wxWindows 2.2.0 released
 
