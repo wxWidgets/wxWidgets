@@ -11,7 +11,8 @@
 #----------------------------------------------------------------------------
 
 from wxPython.wx           import *
-from wxPython.lib.calendar import Calendar, Month, using_mxDateTime
+from wxPython.lib.calendar import wxCalendar, Month
+
 
 import os
 dir_path = os.getcwd()
@@ -49,12 +50,7 @@ class TestPanel(wxPanel):
 
         self.log = log
 
-        if using_mxDateTime is true:
-            self.log.WriteText('Using mxDateTime module\n')
-        else:
-            self.log.WriteText('Using Built in CDate module\n')
-
-        self.calend = Calendar(self, -1, wxPoint(100, 50), wxSize(200, 180))
+        self.calend = wxCalendar(self, -1, wxPoint(100, 50), wxSize(200, 180))
 
         start_month = 11
         start_year = 1999
@@ -104,16 +100,16 @@ class TestPanel(wxPanel):
 
         wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50)).SetBackgroundColour(wxNamedColour('Red'))
 
-        bmp = wxBitmap('CalBmp/Calend.bmp', wxBITMAP_TYPE_BMP)
-        self.but = wxBitmapButton(self, 60, bmp, wxPoint(380, 80), wxSize(30, 30))
+        bmp = wxBitmap('Calbmp/Calend.bmp', wxBITMAP_TYPE_BMP)
+        self.but = wxBitmapButton(self, 60, bmp, wxPoint(380, 80))#, wxSize(30, 30))
         EVT_BUTTON(self, 60, self.TestDlg)
 
 # button for calendar window test
 
         wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150)).SetBackgroundColour(wxNamedColour('Blue'))
 
-        bmp = wxBitmap('CalBmp/Calend.bmp', wxBITMAP_TYPE_BMP)
-        self.but = wxBitmapButton(self, 160, bmp, wxPoint(380, 180), wxSize(30, 30))
+        bmp = wxBitmap('Calbmp/Calend.bmp', wxBITMAP_TYPE_BMP)
+        self.but = wxBitmapButton(self, 160, bmp, wxPoint(380, 180))#, wxSize(30, 30))
         EVT_BUTTON(self, 160, self.TestFrame)
 
 # calendar dialog
@@ -127,9 +123,8 @@ class TestPanel(wxPanel):
 # calendar window test
 
     def TestFrame(self, event):
-        frame = CalendFrame(NULL, -1, "Test Calendar", self.log)
+        frame = CalendFrame(self, -1, "Test Calendar", self.log)
         frame.Show(true)
-        self.SetTopWindow(frame)
         return true
 
 # month and year control events
@@ -243,7 +238,7 @@ class CalenDlg(wxDialog):
 
 # set the calendar and attributes
 
-        self.calend = Calendar(self, -1, wxPoint(20, 60), wxSize(240, 200))
+        self.calend = wxCalendar(self, -1, wxPoint(20, 60), wxSize(240, 200))
         self.calend.SetMonth(start_month)
         self.calend.SetYear(start_year)
 
@@ -313,7 +308,7 @@ class CalendFrame(wxFrame):
         self.MakeToolMenu()             # toolbar
 
         self.SetMenuBar(self.mainmenu)
-        self.calend = Calendar(self, -1)
+        self.calend = wxCalendar(self, -1)
         self.calend.SetCurrentDay()
         self.calend.grid_color = 'BLUE'
         self.ResetDisplay()
@@ -379,7 +374,7 @@ class CalendFrame(wxFrame):
     def MakeToolMenu(self):
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
 
-        bmp_path = 'CalBmp/'
+        bmp_path = 'Calbmp/'
         SetToolPath(self, tb, 10, bmp_path + 'DbDec.bmp', 'Dec Year')
         EVT_TOOL(self, 10, self.OnDecYear)
 
@@ -400,6 +395,7 @@ class CalendFrame(wxFrame):
 def SetToolPath(self, tb, id, bmp, title):
     global dir_path
     tb.AddTool(id, wxBitmap(os.path.join(dir_path, bmp), wxBITMAP_TYPE_BMP), wxNullBitmap, false, -1, -1, title, title)
+
 
 class MyApp(wxApp):
     def OnInit(self):

@@ -44,7 +44,7 @@ _treeList = [
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
                         'wxImage', 'PrintFramework', 'wxOGL', 'PythonEvents']),
 
-    ('wxPython Library', ['OldSizers', 'Layoutf', 'wxScrolledMessageDialog',
+    ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
                           'PyShell', 'wxCalendar']),
 
@@ -161,6 +161,7 @@ class wxPythonDemo(wxFrame):
         (w, self.charHeight) = self.log.GetTextExtent('X')
         self.WriteText('wxPython Demo Log:\n')
 
+        self.Show(true)
 
         # add the windows to the splitter and split it.
         if _useSplitter:

@@ -1,6 +1,6 @@
 #! /usr/local/bin/python
 #----------------------------------------------------------------------------
-# Name:         wxCalend.py
+# Name:         calendar.py
 # Purpose:      Calendar display control
 #
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
@@ -12,17 +12,13 @@
 
 from wxPython.wx import *
 
-try:
-    from DateTime import *
-    using_mxDateTime = true
-except ImportError:
-    from CDate import *
-    using_mxDateTime = false
-
+from CDate import *
 import string, time
+
 
 CalDays = [6, 0, 1, 2, 3, 4, 5]
 AbrWeekday = {6:"Sun", 0:"Mon", 1:"Tue", 2:"Wed", 3:"Thu", 4:"Fri", 5:"Sat"}
+_MIDSIZE = 100
 
 
 # calendar drawing routing
@@ -109,10 +105,10 @@ class CalDraw:
         month = Month[self.month]
 
         sizef = 12
-        if self.sizeh < 200:
-            sizef = 8
+        if self.sizeh < _MIDSIZE:
+            sizef = 10
 
-        f = wxFont(sizef, self.font, wxNORMAL, wxNORMAL)
+        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
         self.DC.SetFont(f)
 
         tw,th = self.DC.GetTextExtent(month)
@@ -125,18 +121,18 @@ class CalDraw:
 
         self.y_st = th * 3
 
-        f = wxFont(sizef, self.font, wxNORMAL, wxNORMAL)
+        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
         self.DC.SetFont(f)
         self.DC.DrawText(year, adjust, 10)
 
 # draw the week days
 
     def DrawWeek(self):
-        sizef = 8
-        if self.sizeh < 300:
-            sizef = 6
+        sizef = 10
+        if self.sizeh < _MIDSIZE:
+            sizef = 8
 
-        f = wxFont(sizef, self.font, wxNORMAL, wxNORMAL)
+        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
         self.DC.SetFont(f)
 
         cnt_x = 0
@@ -160,10 +156,10 @@ class CalDraw:
 # draw the day numbers
 
     def DrawNum(self):
-        sizef = 9
-        if self.sizeh < 260:
-            sizef = 6
-        f = wxFont(sizef, self.font, wxNORMAL, wxNORMAL)
+        sizef = 10
+        if self.sizeh < _MIDSIZE:
+            sizef = 8
+        f = wxFont(sizef, self.font, wxNORMAL, self.bold)
         self.DC.SetFont(f)
 
         cnt_x = 0
@@ -238,7 +234,7 @@ class CalDraw:
                 y1 = y1 + self.dl_h
 
 
-class Calendar(wxWindow):
+class wxCalendar(wxWindow):
     def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize):
         wxWindow.__init__(self, parent, id, pos, size)
 
@@ -249,6 +245,7 @@ class Calendar(wxWindow):
         self.sel_color = 'RED'
         self.high_color = 'LIGHT BLUE'
         self.font = wxSWISS
+        self.bold = wxNORMAL
 
         self.SetBackgroundColour(wxNamedColor(self.back_color))
         self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftEvent)
@@ -426,6 +423,7 @@ class Calendar(wxWindow):
         cal.high_color = self.high_color
         cal.back_color = self.back_color
         cal.font = self.font
+        cal.bold = self.bold
 
         cal.SetSize(size)
         cal.SetCal(self.year, self.month)
