@@ -1701,7 +1701,7 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
     GdkEventMask mask;
     GdkColormap *colormap;
     GdkICAttr *attr = win->m_icattr;
-    GdkICAttributesType attrmask = GDK_IC_ALL_REQ;
+    unsigned attrmask = GDK_IC_ALL_REQ;
     GdkIMStyle style;
     GdkIMStyle supported_style = (GdkIMStyle)
                                   (GDK_IM_PREEDIT_NONE |
@@ -1751,7 +1751,7 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
 	  break;
     }
 	
-      win->m_ic = gdk_ic_new (attr, attrmask);
+      win->m_ic = gdk_ic_new (attr, (GdkICAttributesType)attrmask);
      
       if (win->m_ic == NULL)
 	g_warning ("Can't create input context.");
