@@ -294,11 +294,14 @@ protected:
     void OnSize(wxSizeEvent& event);
 
 private:
-    // the value (may be only part of it for the multiline controls)
-    wxString m_value;
-
     // the initially specified control size
     wxSize m_sizeInitial;
+
+    // the entire control (only used for single line controls)
+    wxString m_value;
+
+    // the lines of text (only used for multiline controls)
+    wxArrayString m_lines;
 
     // current position
     long m_curPos,

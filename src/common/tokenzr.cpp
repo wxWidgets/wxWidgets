@@ -196,3 +196,21 @@ wxString wxStringTokenizer::GetNextToken()
 
     return token;
 }
+
+// ----------------------------------------------------------------------------
+// public functions
+// ----------------------------------------------------------------------------
+
+wxArrayString wxStringTokenize(const wxString& str,
+                               const wxString& delims,
+                               wxStringTokenizerMode mode)
+{
+    wxArrayString tokens;
+    wxStringTokenizer tk(str, delimes, mode);
+    while ( tk.HasMoreTokens() )
+    {
+        tokens.Add(GetNextToken());
+    }
+
+    return tokens;
+}

@@ -154,15 +154,35 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    if ( m_value == value )
+    if ( IsSingleLine() && (m_value == value) )
+    {
+        // nothing changed
         return;
+    }
 
     Replace(0, GetLastPosition(), value);
 }
 
 wxString wxTextCtrl::GetValue() const
 {
-    return m_value;
+    wxString value;
+    if ( IsSingleLine() )
+    {
+        value = m_value;
+    }
+    else // multiline
+    {
+        size_t count = m_lines.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( n )
+                value += _T('\n');
+
+            value += m_lines[n];
+        }
+    }
+
+    return value;
 }
 
 void wxTextCtrl::Clear()
@@ -170,11 +190,120 @@ void wxTextCtrl::Clear()
     SetValue(_T(""));
 }
 
+/*
+   Replace() works line by line: in the range [from, to] we have the starting
+   line in which we replace the text in [from, last one ? to : end of line],
+   the last one (which may be the same as the first one) and some number
+   (possibly 0) of intermediate ones).
+ */
 void wxTextCtrl::Replace(long from, long to, const wxString& text)
 {
-    wxCHECK_RET( from >= 0 && to >= 0 && from <= to && to <= GetLastPosition(),
-                 _T("invalid range in wxTextCtrl::Replace") );
+    long colStart, colEnd,
+         lineStart, lineEnd;
 
+    if ( (from > to) ||
+         !PositionToXY(from, &colStart, &lineStart) ||
+         !PositionToXY(to, &colEnd, &lineEnd) )
+    {
+        wxFAIL_MSG(_T("invalid range in wxTextCtrl::Replace"));
+
+        return;
+    }
+
+    // break the replacement text into lines
+    wxArrayString lines = wxStringTokenize(text, _T("\n"),
+                                           wxTOKEN_RET_EMPTY_ALL);
+
+    // first deal with the starting line: (1) take the part before the text
+    // being replaced
+    wxString lineFirstOrig = GetLineText(lineStart);
+    wxString lineFirst(lineFirstOrig, colStart);
+
+    // (2) add the text which replaces this part
+    if ( !lines.IsEmpty() )
+    {
+        lineFirst += lines[0u];
+    }
+
+    // (3) and add the text which is left if we replace text only in this line
+    if ( lineEnd == lineStart )
+    {
+        wxASSERT_MSG((size_t)colEnd < lineFirstOrig.length(), _T("logic bug"));
+
+        lineFirst += lineFirstOrig.c_str() + (size_t)colEnd;
+    }
+
+    // (4) modify the line and refresh the part of the window which changed
+    if ( IsSingleLine() )
+    {
+        m_value = lineFirst;
+
+        // consistency check: when replacing text in a single line control, we
+        // shouldn't have more than one line
+        wxASSERT_MSG(lines.GetCount() <= 1,
+                     _T("can't have more than one line in this wxTextCtrl"));
+
+        // nothing more can happen to us
+    }
+    else // multiline
+    {
+        m_lines[lineStart] = lineFirst;
+    }
+
+    // now replace all intermediate lines entirely and refresh
+    size_t nReplaceLine = 1,
+           nReplaceCount = lines.GetCount();
+    for ( long line = lineStart + 1; line < lineEnd; line++ )
+    {
+        if ( nReplaceLine < nReplaceCount )
+        {
+            // replace line
+            m_lines[line] = lines[nReplaceLine++];
+        }
+        else // no more replacement text - remove line
+        {
+            // optimization: remove not only this line but all the next ones as
+            // well
+
+            // adjust the index by the number of lines removed
+            lineEnd -= lineEnd - line;
+
+            // and remove them
+            while ( line < lineEnd )
+            {
+                m_lines.RemoveAt(line++);
+            }
+        }
+    }
+
+    // if there are still lines left in the replacement text, insert them
+    // before modifying the last line
+    while ( nReplaceLine < nReplaceCount - 1 ) // OPT: insert all at once?
+    {
+        // insert line and adjust for index change by incrementing lineEnd
+        m_lines.Insert(lines[nReplaceLine++], lineEnd++);
+    }
+
+    // now deal with the last line: (1) replace its beginning with the end of
+    // the replacement text
+    wxString lineLast;
+    if ( nReplaceLine < nReplaceCount )
+    {
+        wxASSERT_MSG(nReplaceCount == nReplaceCount - 1, _T("logic error"));
+
+        lineLast = lines[nReplaceLine];
+    }
+
+    // (2) add the tail of the old last line if anything is left
+    wxString lineLastOrig = GetLineText(lineEnd);
+    if ( (size_t)colEnd < lineLastOrig.length() )
+    {
+        lineLast += lineLastOrig.c_str() + (size_t)colEnd;
+    }
+
+    m_lines[lineEnd] = lineLast;
+
+#if 0 // single line only
     // replace the part of the text with the new value
     wxString valueNew(m_value, (size_t)from);
 
@@ -221,6 +350,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     RefreshPixelRange(0, startNewText, widthNewText);
 
     // TODO: and the affected parts of the next line(s)
+#endif // 0
 }
 
 void wxTextCtrl::Remove(long from, long to)
