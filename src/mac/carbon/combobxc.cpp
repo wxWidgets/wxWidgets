@@ -17,6 +17,9 @@
 #include "wx/button.h"
 #include "wx/menu.h"
 #include "wx/mac/uma.h"
+#ifndef __HIVIEW__
+	#include <HIToolbox/HIView.h>
+#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
@@ -24,6 +27,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 // composite combobox implementation by Dan "Bud" Keith bud@otsys.com
 
+#define USE_HICOMBOBOX 1 //use hi combobox define
 
 static int nextPopUpMenuId = 1000 ;
 MenuHandle NewUniqueMenu() 
@@ -46,7 +50,6 @@ static const int    POPUPWIDTH = 24;
 static const int    POPUPWIDTH = 18;
 #endif
 static const int    POPUPHEIGHT = 23;
-
 
 // ----------------------------------------------------------------------------
 // wxComboBoxText: text control forwards events to combobox
@@ -121,7 +124,6 @@ protected:
         
         event.Skip();
     }
-
 private:
     wxComboBox *m_cb;
 
@@ -195,6 +197,9 @@ wxComboBox::~wxComboBox()
 
 wxSize wxComboBox::DoGetBestSize() const
 {
+#if USE_HICOMBOBOX
+	return wxControl::DoGetBestSize();
+#else
     wxSize size = m_choice->GetBestSize();
     
     if ( m_text != NULL )
@@ -205,9 +210,13 @@ wxSize wxComboBox::DoGetBestSize() const
     }
 
     return size;
+#endif
 }
 
 void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
+#if USE_HICOMBOBOX
+	wxControl::DoMoveWindow(x, y, width, height);
+#else
     height = POPUPHEIGHT;
     
     wxControl::DoMoveWindow(x, y, width, height);
@@ -223,7 +232,8 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
         wxCoord wText = width - POPUPWIDTH - MARGIN;
         m_text->SetSize(0, 0, wText, height);
         m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, -1);
-    }    
+    }
+#endif    
 }
 
 
@@ -250,9 +260,13 @@ bool wxComboBox::Show(bool show)
 
 void wxComboBox::SetFocus()
 {
+#if USE_HICOMBOBOX
+	wxControl::SetFocus();
+#else
     if ( m_text != NULL) {
         m_text->SetFocus();
     }
+#endif
 }
 
 
@@ -293,14 +307,54 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    m_text = NULL;
+    m_choice = NULL;
+#if USE_HICOMBOBOX
+    m_macIsUserPane = FALSE ;
+#endif
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
                             wxDefaultValidator, name) )
     {
         return FALSE;
     }
+#if USE_HICOMBOBOX
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    HIRect hiRect;
+    
+    hiRect.origin.x = 20; //bounds.left;
+    hiRect.origin.y = 25; //bounds.top;
+    hiRect.size.width = 120;// bounds.right - bounds.left;
+    hiRect.size.height = 24; 
+	
+    //For some reason, this code causes the combo box not to be displayed at all.
+    //hiRect.origin.x = bounds.left;
+    //hiRect.origin.y = bounds.top;
+    //hiRect.size.width = bounds.right - bounds.left;
+    //hiRect.size.height = bounds.bottom - bounds.top;
+    //printf("left = %d, right = %d, top = %d, bottom = %d\n", bounds.left, bounds.right, bounds.top, bounds.bottom);
+	//printf("x = %d, y = %d, width = %d, height = %d\n", hibounds.origin.x, hibounds.origin.y, hibounds.size.width, hibounds.size.height);
+    verify_noerr( HIComboBoxCreate( &hiRect, CFSTR(""), NULL, NULL, kHIComboBoxStandardAttributes, (HIViewRef*) &m_macControl) );
+
+    SetControl32BitMinimum( (ControlRef) m_macControl , 0 ) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , 100) ;
+    if ( n > 0 )
+        SetControl32BitValue( (ControlRef) m_macControl , 1 ) ;
+    
+    MacPostControlCreate(pos,size) ;
+    
+    for ( int i = 0 ; i < n ; i++ )
+    {
+        DoAppend( choices[ i ] );
+    }
+    
+    HIViewSetVisible( (HIViewRef) m_macControl, true );
+    SetSelection(0);
+#else
+    m_choice = new wxComboBoxChoice(this, style );
 
     m_choice = new wxComboBoxChoice(this, style );
     m_choice->SetSizeHints( wxSize( POPUPWIDTH , POPUPHEIGHT ) ) ;
+    
     wxSize csize = size;
     if ( style & wxCB_READONLY )
     {
@@ -320,14 +374,19 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     {
         m_choice->DoAppend( choices[ i ] );
     }
-
     SetBestSize(csize);   // Needed because it is a wxControlWithItems
+#endif
 
     return TRUE;
 }
 
 wxString wxComboBox::GetValue() const
 {
+#if USE_HICOMBOBOX
+    CFStringRef myString;
+    HIComboBoxCopyTextItemAtIndex( (HIViewRef) m_macControl, (CFIndex)GetSelection(), &myString );
+    return wxMacCFStringHolder( myString, m_font.GetEncoding() ).AsString();
+#else
     wxString        result;
     
     if ( m_text == NULL )
@@ -338,23 +397,23 @@ wxString wxComboBox::GetValue() const
     {
         result = m_text->GetValue();
     }
-
+    
     return result;
-}
-
-int wxComboBox::GetCount() const
-{ 
-    return m_choice->GetCount() ; 
+#endif
 }
 
 void wxComboBox::SetValue(const wxString& value)
 {
+#if USE_HICOMBOBOX
+    
+#else
     int s = FindString (value);
     if (s == wxNOT_FOUND && !HasFlag(wxCB_READONLY) )
     {
         m_choice->Append(value) ;
     }
     SetStringSelection( value ) ;
+#endif
 }
 
 // Clipboard operations
@@ -442,32 +501,63 @@ void wxComboBox::SetSelection(long from, long to)
 
 int wxComboBox::DoAppend(const wxString& item) 
 {
+#if USE_HICOMBOBOX
+    CFIndex outIndex;
+    HIComboBoxAppendTextItem( (HIViewRef) m_macControl, wxMacCFStringHolder( item, m_font.GetEncoding() ), &outIndex );
+    //SetControl32BitMaximum( (HIViewRef) m_macControl, GetCount() );
+    return (int) outIndex;
+#else
     return m_choice->DoAppend( item ) ;
+#endif
 }
 
 int wxComboBox::DoInsert(const wxString& item, int pos) 
 {
+#if USE_HICOMBOBOX
+    HIComboBoxInsertTextItemAtIndex( (HIViewRef) m_macControl, (CFIndex)pos, wxMacCFStringHolder(item, m_font.GetEncoding()) );
+    
+    //SetControl32BitMaximum( (HIViewRef) m_macControl, GetCount() );
+    
+    return pos;
+#else
     return m_choice->DoInsert( item , pos ) ;
+#endif
 }
 
 void wxComboBox::DoSetItemClientData(int n, void* clientData) 
 {
+#if USE_HICOMBOBOX
+    return; //TODO
+#else
     return m_choice->DoSetItemClientData( n , clientData ) ;
+#endif
 }
 
 void* wxComboBox::DoGetItemClientData(int n) const
 {
+#if USE_HICOMBOBOX
+    return NULL; //TODO
+#else
     return m_choice->DoGetItemClientData( n ) ;
+#endif
 }
 
 void wxComboBox::DoSetItemClientObject(int n, wxClientData* clientData)
 {
+#if USE_HICOMBOBOX
+    return; //TODO
+#else
     return m_choice->DoSetItemClientObject( n , clientData ) ;
+#endif
 }
 
 wxClientData* wxComboBox::DoGetItemClientObject(int n) const 
 {
+#if USE_HICOMBOBOX
+    return NULL;
+#else
     return m_choice->DoGetItemClientObject( n ) ;
+#endif
 }
 
 void wxComboBox::FreeData()
@@ -482,43 +572,83 @@ void wxComboBox::FreeData()
     }
 }
 
+int wxComboBox::GetCount() const {
+#if USE_HICOMBOBOX
+	return (int) HIComboBoxGetItemCount( (HIViewRef) m_macControl );
+#else
+	return m_choice->GetCount() ; 
+#endif
+}
+
 void wxComboBox::Delete(int n)
 {
+#if USE_HICOMBOBOX
+    HIComboBoxRemoveItemAtIndex( (HIViewRef) m_macControl, (CFIndex)n );
+#else
     // force client object deletion
     if( HasClientObjectData() )
         SetClientObject( n, NULL );
     m_choice->Delete( n );
+#endif
 }
 
 void wxComboBox::Clear()
 {
+#if USE_HICOMBOBOX
+    //TODO
+#else
     FreeData();
     m_choice->Clear();
+#endif
 }
 
 int wxComboBox::GetSelection() const
 {
+#if USE_HICOMBOBOX
+    int result =  GetControl32BitValue( (HIViewRef) m_macControl ) -1;
+    return result;
+#else
     return m_choice->GetSelection();
+#endif
 }
 
 void wxComboBox::SetSelection(int n)
 {
+#if USE_HICOMBOBOX
+    SetControl32BitValue( (ControlRef) m_macControl , n + 1 ) ;
+#else
     m_choice->SetSelection( n );
     
     if ( m_text != NULL )
     {
         m_text->SetValue( GetString( n ) );
     }
+#endif
 }
 
 int wxComboBox::FindString(const wxString& s) const
 {
+#if USE_HICOMBOBOX
+    for( int i = 0 ; i < GetCount() ; i++ )
+    {
+        if ( GetString( i ).IsSameAs(s, FALSE) )
+            return i ;
+    }
+    return wxNOT_FOUND ;
+#else
     return m_choice->FindString( s );
+#endif
 }
 
 wxString wxComboBox::GetString(int n) const
 {
+#if USE_HICOMBOBOX
+    CFStringRef itemText;
+    HIComboBoxCopyTextItemAtIndex( (HIViewRef) m_macControl, (CFIndex)n, &itemText );
+    return wxMacCFStringHolder(itemText).AsString();
+#else
     return m_choice->GetString( n );
+#endif
 }
 
 wxString wxComboBox::GetStringSelection() const
@@ -544,17 +674,24 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
 
 void wxComboBox::SetString(int n, const wxString& s) 
 {
+#if USE_HICOMBOBOX
+
+#else
     m_choice->SetString( n , s ) ;
+#endif
 }
 
 
 wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
+/*
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
     ProcessCommand(event);
     return noErr ;
+*/
+    return eventNotHandledErr ;
 }
 
