@@ -247,9 +247,9 @@ CFG=#$ Substitute('$$TARGET - Win32 Debug');
 #$ Project('WXCONFIGS') =~ '\bDebugUnicodeDll\b' || DisableOutput()
 !MESSAGE #$ Substitute('"$$TARGET - Win32 Debug Unicode DLL" (based on "$$VC_PROJ_TYPE")');
 #$ Project('WXCONFIGS') =~ '\bDebugUnicodeDll\b' || EnableOutput()
-#$ Project('WXCONFIGS') =~ '\bUnicodeDll\b' || DisableOutput()
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicode\b' || DisableOutput()
 !MESSAGE #$ Substitute('"$$TARGET - Win32 Release Unicode" (based on "$$VC_PROJ_TYPE")');
-#$ Project('WXCONFIGS') =~ '\bUnicodeDll\b' || EnableOutput()
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicode\b' || EnableOutput()
 #$ Project('WXCONFIGS') =~ '\bDebugUnicode\b' || DisableOutput()
 !MESSAGE #$ Substitute('"$$TARGET - Win32 Debug Unicode" (based on "$$VC_PROJ_TYPE")');
 #$ Project('WXCONFIGS') =~ '\bDebugUnicode\b' || EnableOutput()
@@ -274,8 +274,9 @@ CPP=cl.exe
 #$ Config("windows") && ($text='MTL=midl.exe');
 RSC=rc.exe
 
-#$ if ( Project('WXCONFIGS') !~ '\bReleaseUnicodeDll\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicodeDll\b' || DisableOutput()
 #$ Substitute('$$__IF "$(CFG)" == "$$TARGET - Win32 Release Unicode DLL"');
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicodeDll\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -304,8 +305,9 @@ LINK32=link.exe
 # ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE_UNICODE_DLL'}";
 
 #$ Project('WXCONFIGS') =~ '\bReleaseUnicodeDll\b' || EnableOutput()
-#$ if ( Project('WXCONFIGS') !~ '\bDebugUnicodeDll\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bDebugUnicodeDll\b' || DisableOutput()
 #$ Substitute(' $$__IF "$(CFG)" == "$$TARGET - Win32 Debug Unicode DLL"');
+#$ Project('WXCONFIGS') =~ '\bDebugUnicodeDll\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -334,8 +336,9 @@ LINK32=link.exe
 # ADD LINK32 #$ $text = "$project{'VC_LINK_DEBUG'} $project{'WX_LINK_DEBUG_UNICODE_DLL'}";
 
 #$ Project('WXCONFIGS') =~ '\bDebugUnicodeDll\b' || EnableOutput()
-#$ if ( Project('WXCONFIGS') !~ '\bReleaseUnicode\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicode\b' || DisableOutput()
 #$ Substitute(' $$__IF "$(CFG)" == "$$TARGET - Win32 Release Unicode"');
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicode\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -364,8 +367,9 @@ LINK32=link.exe
 # ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE_UNICODE'}";
 
 #$ Project('WXCONFIGS') =~ '\bReleaseUnicode\b' || EnableOutput()
-#$ if ( Project('WXCONFIGS') !~ '\bDebugUnicode\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bDebugUnicode\b' || DisableOutput()
 #$ Substitute(' $$__IF "$(CFG)" == "$$TARGET - Win32 Debug Unicode"');
+#$ Project('WXCONFIGS') =~ '\bDebugUnicode\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -394,8 +398,9 @@ LINK32=link.exe
 # ADD LINK32 #$ $text = "$project{'VC_LINK_DEBUG'} $project{'WX_LINK_DEBUG_UNICODE'}";
 
 #$ Project('WXCONFIGS') =~ '\bDebugUnicode\b' || EnableOutput()
-#$ if ( Project('WXCONFIGS') !~ '\bReleaseDll\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bReleaseDll\b' || DisableOutput()
 #$ Substitute(' $$__IF "$(CFG)" == "$$TARGET - Win32 Release DLL"');
+#$ Project('WXCONFIGS') =~ '\bReleaseDll\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -424,8 +429,9 @@ LINK32=link.exe
 # ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE_DLL'}";
 
 #$ Project('WXCONFIGS') =~ '\bReleaseDll\b' || EnableOutput()
-#$ if ( Project('WXCONFIGS') !~ '\bDebugDll\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bDebugDll\b' || DisableOutput()
 #$ Substitute(' $$__IF "$(CFG)" == "$$TARGET - Win32 Debug DLL"');
+#$ Project('WXCONFIGS') =~ '\bDebugDll\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -454,8 +460,9 @@ LINK32=link.exe
 # ADD LINK32 #$ $text = "$project{'VC_LINK_DEBUG'} $project{'WX_LINK_DEBUG_DLL'}";
 
 #$ Project('WXCONFIGS') =~ '\bDebugDll\b' || EnableOutput()
-#$ if ( Project('WXCONFIGS') !~ '\bRelease\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bRelease\b' || DisableOutput()
 #$ Substitute(' $$__IF "$(CFG)" == "$$TARGET - Win32 Release"');
+#$ Project('WXCONFIGS') =~ '\bRelease\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -484,8 +491,9 @@ LINK32=link.exe
 # ADD LINK32 #$ $text = "$project{'VC_LINK_RELEASE'} $project{'WX_LINK_RELEASE'}";
 
 #$ Project('WXCONFIGS') =~ '\bRelease\b' || EnableOutput()
-#$ if ( Project('WXCONFIGS') !~ '\bDebug\b' ) { Project('__IF = !ELSEIF'); DisableOutput() };
+#$ Project('WXCONFIGS') =~ '\bDebug\b' || DisableOutput()
 #$ Substitute(' $$__IF "$(CFG)" == "$$TARGET - Win32 Debug"');
+#$ Project('WXCONFIGS') =~ '\bDebug\b' && Project('__IF = !ELSEIF')
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -524,9 +532,9 @@ LINK32=link.exe
 #$ Project('WXCONFIGS') =~ '\bDebugUnicodeDll\b' || DisableOutput()
 # Name #$ Substitute('"$$TARGET - Win32 Debug Unicode DLL"');
 #$ Project('WXCONFIGS') =~ '\bDebugUnicodeDll\b' || EnableOutput()
-#$ Project('WXCONFIGS') =~ '\bUnicodeDll\b' || DisableOutput()
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicode\b' || DisableOutput()
 # Name #$ Substitute('"$$TARGET - Win32 Release Unicode"');
-#$ Project('WXCONFIGS') =~ '\bUnicodeDll\b' || EnableOutput()
+#$ Project('WXCONFIGS') =~ '\bReleaseUnicode\b' || EnableOutput()
 #$ Project('WXCONFIGS') =~ '\bDebugUnicode\b' || DisableOutput()
 # Name #$ Substitute('"$$TARGET - Win32 Debug Unicode"');
 #$ Project('WXCONFIGS') =~ '\bDebugUnicode\b' || EnableOutput()
