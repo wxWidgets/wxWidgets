@@ -12,10 +12,10 @@ class TestView(wxStyledTextCtrl):
         wxStyledTextCtrl.__init__(self, parent, ID, style=wxNO_BORDER)
         self.dyn_sash = parent
         self.log = log
+        self.SetupScrollBars()
         self.SetMarginWidth(1,0)
         self.StyleSetFont(wxSTC_STYLE_DEFAULT,
                           wxFont(10, wxMODERN, wxNORMAL, wxNORMAL))
-        self.SetupScrollBars()
         EVT_DYNAMIC_SASH_SPLIT(self, -1, self.OnSplit)
         EVT_DYNAMIC_SASH_UNIFY(self, -1, self.OnUnify)
 

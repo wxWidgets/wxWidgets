@@ -933,6 +933,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def SendMsg(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SendMsg,(self,) + _args, _kwargs)
         return val
+    def SetVScrollBar(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetVScrollBar,(self,) + _args, _kwargs)
+        return val
+    def SetHScrollBar(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetHScrollBar,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxStyledTextCtrl instance at %s>" % (self.this,)
 class wxStyledTextCtrl(wxStyledTextCtrlPtr):
@@ -1080,8 +1086,9 @@ class wxStyledTextEventPtr(wxCommandEventPtr):
     def GetAlt(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextEvent_GetAlt,(self,) + _args, _kwargs)
         return val
-    def CopyObject(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_CopyObject,(self,) + _args, _kwargs)
+    def Clone(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextEvent_Clone,(self,) + _args, _kwargs)
+        if val: val = wxEventPtr(val) 
         return val
     def __repr__(self):
         return "<C wxStyledTextEvent instance at %s>" % (self.this,)

@@ -8222,6 +8222,34 @@ static PyObject *_wrap_wxScrollBar_GetThumbSize(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxScrollBar_IsVertical(_swigobj)  (_swigobj->IsVertical())
+static PyObject *_wrap_wxScrollBar_IsVertical(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxScrollBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrollBar_IsVertical",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrollBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrollBar_IsVertical. Expected _wxScrollBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxScrollBar_IsVertical(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxScrollBar_SetThumbPosition(_swigobj,_swigarg0)  (_swigobj->SetThumbPosition(_swigarg0))
 static PyObject *_wrap_wxScrollBar_SetThumbPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11442,6 +11470,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxSpinButton", (PyCFunction) _wrap_new_wxSpinButton, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_SetScrollbar", (PyCFunction) _wrap_wxScrollBar_SetScrollbar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_SetThumbPosition", (PyCFunction) _wrap_wxScrollBar_SetThumbPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrollBar_IsVertical", (PyCFunction) _wrap_wxScrollBar_IsVertical, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbLength", (PyCFunction) _wrap_wxScrollBar_GetThumbSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbSize", (PyCFunction) _wrap_wxScrollBar_GetThumbSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbPosition", (PyCFunction) _wrap_wxScrollBar_GetThumbPosition, METH_VARARGS | METH_KEYWORDS },

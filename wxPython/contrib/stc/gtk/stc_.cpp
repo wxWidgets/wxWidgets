@@ -8661,6 +8661,78 @@ static PyObject *_wrap_wxStyledTextCtrl_SendMsg(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_SetVScrollBar(_swigobj,_swigarg0)  (_swigobj->SetVScrollBar(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetVScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    wxScrollBar * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bar", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetVScrollBar",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetVScrollBar. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxScrollBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetVScrollBar. Expected _wxScrollBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetVScrollBar(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxStyledTextCtrl_SetHScrollBar(_swigobj,_swigarg0)  (_swigobj->SetHScrollBar(_swigarg0))
+static PyObject *_wrap_wxStyledTextCtrl_SetHScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    wxScrollBar * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bar", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetHScrollBar",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetHScrollBar. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxScrollBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetHScrollBar. Expected _wxScrollBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetHScrollBar(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxStyledTextEventTowxCommandEvent(void *ptr) {
     wxStyledTextEvent *src;
     wxCommandEvent *dest;
@@ -8685,21 +8757,28 @@ static void *SwigwxStyledTextEventTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxStyledTextEvent(_swigarg0,_swigarg1) (new wxStyledTextEvent(_swigarg0,_swigarg1))
+#define new_wxStyledTextEvent(_swigarg0) (new wxStyledTextEvent(_swigarg0))
 static PyObject *_wrap_new_wxStyledTextEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextEvent * _result;
-    wxEventType  _arg0 = (wxEventType ) 0;
-    int  _arg1 = (int ) 0;
-    char *_kwnames[] = { "commandType","id", NULL };
+    wxStyledTextEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "event", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxStyledTextEvent",_kwnames,&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxStyledTextEvent",_kwnames,&_argo0)) 
         return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxStyledTextEvent. Expected _wxStyledTextEvent_p.");
+        return NULL;
+        }
+    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxStyledTextEvent *)new_wxStyledTextEvent(_arg0,_arg1);
+        _result = (wxStyledTextEvent *)new_wxStyledTextEvent(*_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -9955,44 +10034,42 @@ static PyObject *_wrap_wxStyledTextEvent_GetAlt(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxStyledTextEvent_CopyObject(_swigobj,_swigarg0)  (_swigobj->CopyObject(_swigarg0))
-static PyObject *_wrap_wxStyledTextEvent_CopyObject(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxStyledTextEvent_Clone(_swigobj)  (_swigobj->Clone())
+static PyObject *_wrap_wxStyledTextEvent_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    wxEvent * _result;
     wxStyledTextEvent * _arg0;
-    wxObject * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","obj", NULL };
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextEvent_CopyObject",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextEvent_Clone",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextEvent_CopyObject. Expected _wxStyledTextEvent_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxObject_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextEvent_CopyObject. Expected _wxObject_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextEvent_Clone. Expected _wxStyledTextEvent_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxStyledTextEvent_CopyObject(_arg0,*_arg1);
+        _result = (wxEvent *)wxStyledTextEvent_Clone(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
 static PyMethodDef stc_cMethods[] = {
-	 { "wxStyledTextEvent_CopyObject", (PyCFunction) _wrap_wxStyledTextEvent_CopyObject, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextEvent_Clone", (PyCFunction) _wrap_wxStyledTextEvent_Clone, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextEvent_GetAlt", (PyCFunction) _wrap_wxStyledTextEvent_GetAlt, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextEvent_GetControl", (PyCFunction) _wrap_wxStyledTextEvent_GetControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextEvent_GetShift", (PyCFunction) _wrap_wxStyledTextEvent_GetShift, METH_VARARGS | METH_KEYWORDS },
@@ -10038,6 +10115,8 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextEvent_SetPosition", (PyCFunction) _wrap_wxStyledTextEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxStyledTextEvent", (PyCFunction) _wrap_delete_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxStyledTextEvent", (PyCFunction) _wrap_new_wxStyledTextEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetHScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_SetHScrollBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetVScrollBar", (PyCFunction) _wrap_wxStyledTextCtrl_SetVScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SendMsg", (PyCFunction) _wrap_wxStyledTextCtrl_SendMsg, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_ScrollToColumn", (PyCFunction) _wrap_wxStyledTextCtrl_ScrollToColumn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_ScrollToLine", (PyCFunction) _wrap_wxStyledTextCtrl_ScrollToLine, METH_VARARGS | METH_KEYWORDS },
