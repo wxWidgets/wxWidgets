@@ -167,7 +167,7 @@ bool wxRadioBox::Create(wxWindow *parent,
         rb->Create(
               this,
               wxID_ANY,
-              choices[n],
+              choices[i],
               pos,
               size,
               ( n == 0 ? wxRB_GROUP : 0 ) |
