@@ -252,7 +252,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
-    topsizer->Add( CreateTextSizer( message ), 0, wxEXPAND, wxLARGESMALL(10,0) );
+    topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
 
     // 2) list box
     m_listbox = new wxListBox( this, wxID_LISTBOX,
@@ -262,7 +262,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     if ( n > 0 )
         m_listbox->SetSelection(0);
 
-    topsizer->Add( m_listbox, 1, wxEXPAND, wxLARGESMALL(15,0) );
+    topsizer->Add( m_listbox, 1, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(15,0) );
 
 #ifdef __SMARTPHONE__
 
