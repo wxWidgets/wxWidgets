@@ -1,4 +1,4 @@
-wxWindows 2.2.5
+wxWindows 2.2.6
 ---------------
 
 README

@@ -26,6 +26,7 @@ All (GUI):
 
 - Spanish translations added (Luis Paúl Tomillo)
 - bug in wxDocMDIParentFrame::OnMRUFile() fixed
+- wxYieldIfNeeded added, to ignore yield recursion.
 
 wxMSW:
 
