@@ -128,7 +128,7 @@ event$(EXEEXT): $(EVENT_OBJECTS) $(__event___win32rc)
 	$(__event___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-event.app/Contents/PkgInfo: event$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+event.app/Contents/PkgInfo: event$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p event.app/Contents
 	mkdir -p event.app/Contents/MacOS
 	mkdir -p event.app/Contents/Resources
@@ -137,7 +137,7 @@ event.app/Contents/PkgInfo: event$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/event/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >event.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >event.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >event.app/Contents/PkgInfo

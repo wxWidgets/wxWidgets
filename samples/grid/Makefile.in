@@ -133,7 +133,7 @@ grid$(EXEEXT): $(GRID_OBJECTS) $(__grid___win32rc)
 	$(__grid___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-grid.app/Contents/PkgInfo: grid$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+grid.app/Contents/PkgInfo: grid$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p grid.app/Contents
 	mkdir -p grid.app/Contents/MacOS
 	mkdir -p grid.app/Contents/Resources
@@ -142,7 +142,7 @@ grid.app/Contents/PkgInfo: grid$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/grid/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >grid.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >grid.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >grid.app/Contents/PkgInfo

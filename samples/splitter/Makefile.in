@@ -128,7 +128,7 @@ splitter$(EXEEXT): $(SPLITTER_OBJECTS) $(__splitter___win32rc)
 	$(__splitter___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-splitter.app/Contents/PkgInfo: splitter$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+splitter.app/Contents/PkgInfo: splitter$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p splitter.app/Contents
 	mkdir -p splitter.app/Contents/MacOS
 	mkdir -p splitter.app/Contents/Resources
@@ -137,7 +137,7 @@ splitter.app/Contents/PkgInfo: splitter$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/splitter/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >splitter.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >splitter.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >splitter.app/Contents/PkgInfo

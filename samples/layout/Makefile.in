@@ -128,7 +128,7 @@ layout$(EXEEXT): $(LAYOUT_OBJECTS) $(__layout___win32rc)
 	$(__layout___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-layout.app/Contents/PkgInfo: layout$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+layout.app/Contents/PkgInfo: layout$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p layout.app/Contents
 	mkdir -p layout.app/Contents/MacOS
 	mkdir -p layout.app/Contents/Resources
@@ -137,7 +137,7 @@ layout.app/Contents/PkgInfo: layout$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/layout/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >layout.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >layout.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >layout.app/Contents/PkgInfo

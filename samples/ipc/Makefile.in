@@ -150,7 +150,7 @@ client$(EXEEXT): $(CLIENT_OBJECTS) $(__client___win32rc)
 	$(__client___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-client.app/Contents/PkgInfo: client$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+client.app/Contents/PkgInfo: client$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p client.app/Contents
 	mkdir -p client.app/Contents/MacOS
 	mkdir -p client.app/Contents/Resources
@@ -159,7 +159,7 @@ client.app/Contents/PkgInfo: client$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/client/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >client.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >client.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >client.app/Contents/PkgInfo
@@ -180,7 +180,7 @@ server$(EXEEXT): $(SERVER_OBJECTS) $(__server___win32rc)
 	$(__server___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-server.app/Contents/PkgInfo: server$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+server.app/Contents/PkgInfo: server$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p server.app/Contents
 	mkdir -p server.app/Contents/MacOS
 	mkdir -p server.app/Contents/Resources
@@ -189,7 +189,7 @@ server.app/Contents/PkgInfo: server$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/server/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >server.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >server.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >server.app/Contents/PkgInfo

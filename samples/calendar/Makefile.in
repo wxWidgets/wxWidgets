@@ -133,7 +133,7 @@ calendar$(EXEEXT): $(CALENDAR_OBJECTS) $(__calendar___win32rc)
 	$(__calendar___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-calendar.app/Contents/PkgInfo: calendar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+calendar.app/Contents/PkgInfo: calendar$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p calendar.app/Contents
 	mkdir -p calendar.app/Contents/MacOS
 	mkdir -p calendar.app/Contents/Resources
@@ -142,7 +142,7 @@ calendar.app/Contents/PkgInfo: calendar$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/calendar/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >calendar.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >calendar.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >calendar.app/Contents/PkgInfo

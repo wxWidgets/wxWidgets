@@ -132,7 +132,7 @@ helpview$(EXEEXT): $(HELPVIEW_OBJECTS) $(__helpview___win32rc)
 	$(__helpview___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-helpview.app/Contents/PkgInfo: helpview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+helpview.app/Contents/PkgInfo: helpview$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p helpview.app/Contents
 	mkdir -p helpview.app/Contents/MacOS
 	mkdir -p helpview.app/Contents/Resources
@@ -141,7 +141,7 @@ helpview.app/Contents/PkgInfo: helpview$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/helpview/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >helpview.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >helpview.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >helpview.app/Contents/PkgInfo

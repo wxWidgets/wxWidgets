@@ -128,7 +128,7 @@ toolbar$(EXEEXT): $(TOOLBAR_OBJECTS) $(__toolbar___win32rc)
 	$(__toolbar___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-toolbar.app/Contents/PkgInfo: toolbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+toolbar.app/Contents/PkgInfo: toolbar$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p toolbar.app/Contents
 	mkdir -p toolbar.app/Contents/MacOS
 	mkdir -p toolbar.app/Contents/Resources
@@ -137,7 +137,7 @@ toolbar.app/Contents/PkgInfo: toolbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/toolbar/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >toolbar.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >toolbar.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >toolbar.app/Contents/PkgInfo

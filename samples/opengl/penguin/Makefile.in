@@ -137,7 +137,7 @@ penguin$(EXEEXT): $(PENGUIN_OBJECTS) $(__penguin___win32rc)
 	$(__penguin___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-penguin.app/Contents/PkgInfo: penguin$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+penguin.app/Contents/PkgInfo: penguin$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p penguin.app/Contents
 	mkdir -p penguin.app/Contents/MacOS
 	mkdir -p penguin.app/Contents/Resources
@@ -146,7 +146,7 @@ penguin.app/Contents/PkgInfo: penguin$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/penguin/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >penguin.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >penguin.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >penguin.app/Contents/PkgInfo

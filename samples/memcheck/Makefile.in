@@ -128,7 +128,7 @@ memcheck$(EXEEXT): $(MEMCHECK_OBJECTS) $(__memcheck___win32rc)
 	$(__memcheck___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-memcheck.app/Contents/PkgInfo: memcheck$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+memcheck.app/Contents/PkgInfo: memcheck$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p memcheck.app/Contents
 	mkdir -p memcheck.app/Contents/MacOS
 	mkdir -p memcheck.app/Contents/Resources
@@ -137,7 +137,7 @@ memcheck.app/Contents/PkgInfo: memcheck$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/memcheck/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >memcheck.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >memcheck.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >memcheck.app/Contents/PkgInfo

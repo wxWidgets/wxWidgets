@@ -133,7 +133,7 @@ dialogs$(EXEEXT): $(DIALOGS_OBJECTS) $(__dialogs___win32rc)
 	$(__dialogs___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dialogs.app/Contents/PkgInfo: dialogs$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dialogs.app/Contents/PkgInfo: dialogs$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dialogs.app/Contents
 	mkdir -p dialogs.app/Contents/MacOS
 	mkdir -p dialogs.app/Contents/Resources
@@ -142,7 +142,7 @@ dialogs.app/Contents/PkgInfo: dialogs$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/dialogs/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >dialogs.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >dialogs.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >dialogs.app/Contents/PkgInfo

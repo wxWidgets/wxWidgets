@@ -127,7 +127,7 @@ png$(EXEEXT): $(PNG_OBJECTS) $(__png___win32rc)
 	$(__png___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-png.app/Contents/PkgInfo: png$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+png.app/Contents/PkgInfo: png$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p png.app/Contents
 	mkdir -p png.app/Contents/MacOS
 	mkdir -p png.app/Contents/Resources
@@ -136,7 +136,7 @@ png.app/Contents/PkgInfo: png$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/png/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >png.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >png.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >png.app/Contents/PkgInfo

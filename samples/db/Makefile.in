@@ -134,7 +134,7 @@ distclean: clean
 @COND_USE_ODBC_1@	$(__dbtest___os2_emxbindcmd)
 @COND_USE_ODBC_1@	$(SAMPLES_RPATH_POSTLINK)
 
-dbtest.app/Contents/PkgInfo: $(__dbtest___depname) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dbtest.app/Contents/PkgInfo: $(__dbtest___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dbtest.app/Contents
 	mkdir -p dbtest.app/Contents/MacOS
 	mkdir -p dbtest.app/Contents/Resources
@@ -143,7 +143,7 @@ dbtest.app/Contents/PkgInfo: $(__dbtest___depname) $(top_srcdir)/src/mac/Info.pl
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/dbtest/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >dbtest.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >dbtest.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >dbtest.app/Contents/PkgInfo

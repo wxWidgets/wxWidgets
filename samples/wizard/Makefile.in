@@ -133,7 +133,7 @@ wizard$(EXEEXT): $(WIZARD_OBJECTS) $(__wizard___win32rc)
 	$(__wizard___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-wizard.app/Contents/PkgInfo: wizard$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+wizard.app/Contents/PkgInfo: wizard$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p wizard.app/Contents
 	mkdir -p wizard.app/Contents/MacOS
 	mkdir -p wizard.app/Contents/Resources
@@ -142,7 +142,7 @@ wizard.app/Contents/PkgInfo: wizard$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/wizard/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >wizard.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >wizard.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >wizard.app/Contents/PkgInfo

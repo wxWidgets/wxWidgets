@@ -128,7 +128,7 @@ listbox$(EXEEXT): $(LISTBOX_OBJECTS) $(__listbox___win32rc)
 	$(__listbox___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-listbox.app/Contents/PkgInfo: listbox$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+listbox.app/Contents/PkgInfo: listbox$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p listbox.app/Contents
 	mkdir -p listbox.app/Contents/MacOS
 	mkdir -p listbox.app/Contents/Resources
@@ -137,7 +137,7 @@ listbox.app/Contents/PkgInfo: listbox$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/listbox/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >listbox.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >listbox.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >listbox.app/Contents/PkgInfo

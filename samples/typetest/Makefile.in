@@ -128,7 +128,7 @@ typetest$(EXEEXT): $(TYPETEST_OBJECTS) $(__typetest___win32rc)
 	$(__typetest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-typetest.app/Contents/PkgInfo: typetest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+typetest.app/Contents/PkgInfo: typetest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p typetest.app/Contents
 	mkdir -p typetest.app/Contents/MacOS
 	mkdir -p typetest.app/Contents/Resources
@@ -137,7 +137,7 @@ typetest.app/Contents/PkgInfo: typetest$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/typetest/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >typetest.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >typetest.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >typetest.app/Contents/PkgInfo

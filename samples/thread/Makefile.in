@@ -128,7 +128,7 @@ thread$(EXEEXT): $(THREAD_OBJECTS) $(__thread___win32rc)
 	$(__thread___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-thread.app/Contents/PkgInfo: thread$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+thread.app/Contents/PkgInfo: thread$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p thread.app/Contents
 	mkdir -p thread.app/Contents/MacOS
 	mkdir -p thread.app/Contents/Resources
@@ -137,7 +137,7 @@ thread.app/Contents/PkgInfo: thread$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/thread/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >thread.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >thread.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >thread.app/Contents/PkgInfo

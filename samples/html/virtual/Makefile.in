@@ -132,7 +132,7 @@ virtual$(EXEEXT): $(VIRTUAL_OBJECTS) $(__virtual___win32rc)
 	$(__virtual___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-virtual.app/Contents/PkgInfo: virtual$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+virtual.app/Contents/PkgInfo: virtual$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p virtual.app/Contents
 	mkdir -p virtual.app/Contents/MacOS
 	mkdir -p virtual.app/Contents/Resources
@@ -141,7 +141,7 @@ virtual.app/Contents/PkgInfo: virtual$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/virtual/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >virtual.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >virtual.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >virtual.app/Contents/PkgInfo

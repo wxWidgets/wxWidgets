@@ -133,7 +133,7 @@ joytest$(EXEEXT): $(JOYTEST_OBJECTS) $(__joytest___win32rc)
 	$(__joytest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-joytest.app/Contents/PkgInfo: joytest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+joytest.app/Contents/PkgInfo: joytest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p joytest.app/Contents
 	mkdir -p joytest.app/Contents/MacOS
 	mkdir -p joytest.app/Contents/Resources
@@ -142,7 +142,7 @@ joytest.app/Contents/PkgInfo: joytest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/joytest/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >joytest.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >joytest.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >joytest.app/Contents/PkgInfo

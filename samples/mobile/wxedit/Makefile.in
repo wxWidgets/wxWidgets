@@ -128,7 +128,7 @@ wxedit$(EXEEXT): $(WXEDIT_OBJECTS) $(__wxedit___win32rc)
 	$(__wxedit___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-wxedit.app/Contents/PkgInfo: wxedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+wxedit.app/Contents/PkgInfo: wxedit$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p wxedit.app/Contents
 	mkdir -p wxedit.app/Contents/MacOS
 	mkdir -p wxedit.app/Contents/Resources
@@ -137,7 +137,7 @@ wxedit.app/Contents/PkgInfo: wxedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/wxedit/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >wxedit.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >wxedit.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >wxedit.app/Contents/PkgInfo

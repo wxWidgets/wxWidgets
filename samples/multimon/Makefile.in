@@ -132,7 +132,7 @@ multimon_test$(EXEEXT): $(MULTIMON_TEST_OBJECTS) $(__multimon_test___win32rc)
 	$(__multimon_test___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-multimon_test.app/Contents/PkgInfo: multimon_test$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+multimon_test.app/Contents/PkgInfo: multimon_test$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p multimon_test.app/Contents
 	mkdir -p multimon_test.app/Contents/MacOS
 	mkdir -p multimon_test.app/Contents/Resources
@@ -141,7 +141,7 @@ multimon_test.app/Contents/PkgInfo: multimon_test$(EXEEXT) $(top_srcdir)/src/mac
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/multimon_test/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >multimon_test.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >multimon_test.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >multimon_test.app/Contents/PkgInfo

@@ -128,7 +128,7 @@ rotate$(EXEEXT): $(ROTATE_OBJECTS) $(__rotate___win32rc)
 	$(__rotate___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-rotate.app/Contents/PkgInfo: rotate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+rotate.app/Contents/PkgInfo: rotate$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p rotate.app/Contents
 	mkdir -p rotate.app/Contents/MacOS
 	mkdir -p rotate.app/Contents/Resources
@@ -137,7 +137,7 @@ rotate.app/Contents/PkgInfo: rotate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/rotate/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >rotate.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >rotate.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >rotate.app/Contents/PkgInfo

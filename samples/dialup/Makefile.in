@@ -128,7 +128,7 @@ nettest$(EXEEXT): $(NETTEST_OBJECTS) $(__nettest___win32rc)
 	$(__nettest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-nettest.app/Contents/PkgInfo: nettest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+nettest.app/Contents/PkgInfo: nettest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p nettest.app/Contents
 	mkdir -p nettest.app/Contents/MacOS
 	mkdir -p nettest.app/Contents/Resources
@@ -137,7 +137,7 @@ nettest.app/Contents/PkgInfo: nettest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/nettest/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >nettest.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >nettest.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >nettest.app/Contents/PkgInfo

@@ -131,7 +131,7 @@ docview$(EXEEXT): $(DOCVIEW_OBJECTS) $(__docview___win32rc)
 	$(__docview___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-docview.app/Contents/PkgInfo: docview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+docview.app/Contents/PkgInfo: docview$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p docview.app/Contents
 	mkdir -p docview.app/Contents/MacOS
 	mkdir -p docview.app/Contents/Resources
@@ -140,7 +140,7 @@ docview.app/Contents/PkgInfo: docview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/docview/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >docview.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >docview.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >docview.app/Contents/PkgInfo

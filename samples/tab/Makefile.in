@@ -127,7 +127,7 @@ tab$(EXEEXT): $(TAB_OBJECTS) $(__tab___win32rc)
 	$(__tab___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-tab.app/Contents/PkgInfo: tab$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+tab.app/Contents/PkgInfo: tab$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p tab.app/Contents
 	mkdir -p tab.app/Contents/MacOS
 	mkdir -p tab.app/Contents/Resources
@@ -136,7 +136,7 @@ tab.app/Contents/PkgInfo: tab$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/tab/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >tab.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >tab.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >tab.app/Contents/PkgInfo

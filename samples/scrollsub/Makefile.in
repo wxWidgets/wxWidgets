@@ -128,7 +128,7 @@ scrollsub$(EXEEXT): $(SCROLLSUB_OBJECTS) $(__scrollsub___win32rc)
 	$(__scrollsub___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-scrollsub.app/Contents/PkgInfo: scrollsub$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+scrollsub.app/Contents/PkgInfo: scrollsub$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p scrollsub.app/Contents
 	mkdir -p scrollsub.app/Contents/MacOS
 	mkdir -p scrollsub.app/Contents/Resources
@@ -137,7 +137,7 @@ scrollsub.app/Contents/PkgInfo: scrollsub$(EXEEXT) $(top_srcdir)/src/mac/Info.pl
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/scrollsub/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >scrollsub.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >scrollsub.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >scrollsub.app/Contents/PkgInfo

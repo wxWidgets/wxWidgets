@@ -128,7 +128,7 @@ printing$(EXEEXT): $(PRINTING_OBJECTS) $(__printing___win32rc)
 	$(__printing___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-printing.app/Contents/PkgInfo: printing$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+printing.app/Contents/PkgInfo: printing$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p printing.app/Contents
 	mkdir -p printing.app/Contents/MacOS
 	mkdir -p printing.app/Contents/Resources
@@ -137,7 +137,7 @@ printing.app/Contents/PkgInfo: printing$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/printing/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >printing.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >printing.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >printing.app/Contents/PkgInfo

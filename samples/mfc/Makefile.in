@@ -128,7 +128,7 @@ mfctest$(EXEEXT): $(MFCTEST_OBJECTS) $(__mfctest___win32rc)
 	$(__mfctest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-mfctest.app/Contents/PkgInfo: mfctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+mfctest.app/Contents/PkgInfo: mfctest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p mfctest.app/Contents
 	mkdir -p mfctest.app/Contents/MacOS
 	mkdir -p mfctest.app/Contents/Resources
@@ -137,7 +137,7 @@ mfctest.app/Contents/PkgInfo: mfctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/mfctest/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >mfctest.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >mfctest.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >mfctest.app/Contents/PkgInfo

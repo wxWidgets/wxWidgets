@@ -128,7 +128,7 @@ notebook$(EXEEXT): $(NOTEBOOK_OBJECTS) $(__notebook___win32rc)
 	$(__notebook___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-notebook.app/Contents/PkgInfo: notebook$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+notebook.app/Contents/PkgInfo: notebook$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p notebook.app/Contents
 	mkdir -p notebook.app/Contents/MacOS
 	mkdir -p notebook.app/Contents/Resources
@@ -137,7 +137,7 @@ notebook.app/Contents/PkgInfo: notebook$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/notebook/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >notebook.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >notebook.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >notebook.app/Contents/PkgInfo

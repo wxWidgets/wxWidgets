@@ -128,7 +128,7 @@ exec$(EXEEXT): $(EXEC_OBJECTS) $(__exec___win32rc)
 	$(__exec___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-exec.app/Contents/PkgInfo: exec$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+exec.app/Contents/PkgInfo: exec$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p exec.app/Contents
 	mkdir -p exec.app/Contents/MacOS
 	mkdir -p exec.app/Contents/Resources
@@ -137,7 +137,7 @@ exec.app/Contents/PkgInfo: exec$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/exec/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >exec.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >exec.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >exec.app/Contents/PkgInfo

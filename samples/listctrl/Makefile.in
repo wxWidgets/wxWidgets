@@ -128,7 +128,7 @@ listctrl$(EXEEXT): $(LISTCTRL_OBJECTS) $(__listctrl___win32rc)
 	$(__listctrl___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-listctrl.app/Contents/PkgInfo: listctrl$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+listctrl.app/Contents/PkgInfo: listctrl$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p listctrl.app/Contents
 	mkdir -p listctrl.app/Contents/MacOS
 	mkdir -p listctrl.app/Contents/Resources
@@ -137,7 +137,7 @@ listctrl.app/Contents/PkgInfo: listctrl$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/listctrl/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >listctrl.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >listctrl.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >listctrl.app/Contents/PkgInfo

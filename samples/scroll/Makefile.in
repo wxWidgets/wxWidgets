@@ -128,7 +128,7 @@ scroll$(EXEEXT): $(SCROLL_OBJECTS) $(__scroll___win32rc)
 	$(__scroll___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-scroll.app/Contents/PkgInfo: scroll$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+scroll.app/Contents/PkgInfo: scroll$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p scroll.app/Contents
 	mkdir -p scroll.app/Contents/MacOS
 	mkdir -p scroll.app/Contents/Resources
@@ -137,7 +137,7 @@ scroll.app/Contents/PkgInfo: scroll$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/scroll/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >scroll.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >scroll.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >scroll.app/Contents/PkgInfo

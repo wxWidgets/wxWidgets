@@ -132,7 +132,7 @@ widget$(EXEEXT): $(WIDGET_OBJECTS) $(__widget___win32rc)
 	$(__widget___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-widget.app/Contents/PkgInfo: widget$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+widget.app/Contents/PkgInfo: widget$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p widget.app/Contents
 	mkdir -p widget.app/Contents/MacOS
 	mkdir -p widget.app/Contents/Resources
@@ -141,7 +141,7 @@ widget.app/Contents/PkgInfo: widget$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/widget/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >widget.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >widget.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >widget.app/Contents/PkgInfo

@@ -128,7 +128,7 @@ dragimag$(EXEEXT): $(DRAGIMAG_OBJECTS) $(__dragimag___win32rc)
 	$(__dragimag___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dragimag.app/Contents/PkgInfo: dragimag$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dragimag.app/Contents/PkgInfo: dragimag$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dragimag.app/Contents
 	mkdir -p dragimag.app/Contents/MacOS
 	mkdir -p dragimag.app/Contents/Resources
@@ -137,7 +137,7 @@ dragimag.app/Contents/PkgInfo: dragimag$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/dragimag/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >dragimag.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >dragimag.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >dragimag.app/Contents/PkgInfo

@@ -128,7 +128,7 @@ drawing$(EXEEXT): $(DRAWING_OBJECTS) $(__drawing___win32rc)
 	$(__drawing___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-drawing.app/Contents/PkgInfo: drawing$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+drawing.app/Contents/PkgInfo: drawing$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p drawing.app/Contents
 	mkdir -p drawing.app/Contents/MacOS
 	mkdir -p drawing.app/Contents/Resources
@@ -137,7 +137,7 @@ drawing.app/Contents/PkgInfo: drawing$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/drawing/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >drawing.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >drawing.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >drawing.app/Contents/PkgInfo

@@ -132,7 +132,7 @@ richedit$(EXEEXT): $(RICHEDIT_OBJECTS) $(__richedit___win32rc)
 	$(__richedit___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-richedit.app/Contents/PkgInfo: richedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+richedit.app/Contents/PkgInfo: richedit$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p richedit.app/Contents
 	mkdir -p richedit.app/Contents/MacOS
 	mkdir -p richedit.app/Contents/Resources
@@ -141,7 +141,7 @@ richedit.app/Contents/PkgInfo: richedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/richedit/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >richedit.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >richedit.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >richedit.app/Contents/PkgInfo

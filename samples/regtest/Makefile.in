@@ -128,7 +128,7 @@ regtest$(EXEEXT): $(REGTEST_OBJECTS) $(__regtest___win32rc)
 	$(__regtest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-regtest.app/Contents/PkgInfo: regtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+regtest.app/Contents/PkgInfo: regtest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p regtest.app/Contents
 	mkdir -p regtest.app/Contents/MacOS
 	mkdir -p regtest.app/Contents/Resources
@@ -137,7 +137,7 @@ regtest.app/Contents/PkgInfo: regtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/regtest/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >regtest.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >regtest.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >regtest.app/Contents/PkgInfo

@@ -128,7 +128,7 @@ statbar$(EXEEXT): $(STATBAR_OBJECTS) $(__statbar___win32rc)
 	$(__statbar___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-statbar.app/Contents/PkgInfo: statbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+statbar.app/Contents/PkgInfo: statbar$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p statbar.app/Contents
 	mkdir -p statbar.app/Contents/MacOS
 	mkdir -p statbar.app/Contents/Resources
@@ -137,7 +137,7 @@ statbar.app/Contents/PkgInfo: statbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/statbar/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >statbar.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >statbar.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >statbar.app/Contents/PkgInfo

@@ -128,7 +128,7 @@ checklst$(EXEEXT): $(CHECKLST_OBJECTS) $(__checklst___win32rc)
 	$(__checklst___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-checklst.app/Contents/PkgInfo: checklst$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+checklst.app/Contents/PkgInfo: checklst$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p checklst.app/Contents
 	mkdir -p checklst.app/Contents/MacOS
 	mkdir -p checklst.app/Contents/Resources
@@ -137,7 +137,7 @@ checklst.app/Contents/PkgInfo: checklst$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/checklst/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >checklst.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >checklst.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >checklst.app/Contents/PkgInfo

@@ -128,7 +128,7 @@ keyboard$(EXEEXT): $(KEYBOARD_OBJECTS) $(__keyboard___win32rc)
 	$(__keyboard___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-keyboard.app/Contents/PkgInfo: keyboard$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
+keyboard.app/Contents/PkgInfo: keyboard$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p keyboard.app/Contents
 	mkdir -p keyboard.app/Contents/MacOS
 	mkdir -p keyboard.app/Contents/Resources
@@ -137,7 +137,7 @@ keyboard.app/Contents/PkgInfo: keyboard$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/keyboard/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/Info.plist.in >keyboard.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >keyboard.app/Contents/Info.plist
 	
 	
 	echo -n "APPL????" >keyboard.app/Contents/PkgInfo
