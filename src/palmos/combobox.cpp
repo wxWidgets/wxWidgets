@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -65,7 +65,7 @@ wxBEGIN_FLAGS( wxComboBoxStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -260,6 +260,49 @@ void wxComboBox::Remove(long from, long to)
 void wxComboBox::SetSelection(long from, long to)
 {
 }
+
+bool wxComboBox::IsEditable() const
+{
+	return false;
+}
+
+void wxComboBox::Undo()
+{
+}
+
+void wxComboBox::Redo()
+{
+}
+
+void wxComboBox::SelectAll()
+{
+}
+
+bool wxComboBox::CanCopy() const
+{
+	return false;
+}
+
+bool wxComboBox::CanCut() const
+{
+	return false;
+}
+
+bool wxComboBox::CanPaste() const
+{
+	return false;
+}
+
+bool wxComboBox::CanUndo() const
+{
+	return false;
+}
+
+bool wxComboBox::CanRedo() const
+{
+	return false;
+}
+
 
 #endif // wxUSE_COMBOBOX
 

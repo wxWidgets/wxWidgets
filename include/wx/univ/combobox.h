@@ -282,6 +282,17 @@ public:
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
+    virtual bool IsEditable() const;
+
+    virtual void Undo();
+    virtual void Redo();
+    virtual void SelectAll();
+
+    virtual bool CanCopy() const;
+    virtual bool CanCut() const;
+    virtual bool CanPaste() const;
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
 
     // wxControlWithItems methods
     virtual void Clear();

@@ -105,6 +105,9 @@ public:
     void Copy();
     void Cut();
     void Paste();
+    bool CanCopy() const;
+    bool CanCut() const;
+    bool CanPaste() const;
     void SetInsertionPoint( long pos );
     void SetInsertionPointEnd() { SetInsertionPoint( -1 ); }
     long GetInsertionPoint() const;
@@ -112,7 +115,15 @@ public:
     void Remove(long from, long to) { Replace(from, to, wxEmptyString); }
     void Replace( long from, long to, const wxString& value );
     void SetSelection( long from, long to );
+    void GetSelection( long* from, long* to ) const;
     void SetEditable( bool editable );
+    void Undo() ;
+    void Redo() ;
+    bool CanUndo() const;
+    bool CanRedo() const;
+    void SelectAll();
+    bool IsEditable() const { return !HasFlag(wxCB_READONLY); }
+    bool HasSelection() const ;
 
     // implementation
 
@@ -120,6 +131,23 @@ public:
 
     void OnSize( wxSizeEvent &event );
     void OnChar( wxKeyEvent &event );
+
+    // Standard event handling
+    void OnCut(wxCommandEvent& event);
+    void OnCopy(wxCommandEvent& event);
+    void OnPaste(wxCommandEvent& event);
+    void OnUndo(wxCommandEvent& event);
+    void OnRedo(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
+    void OnSelectAll(wxCommandEvent& event);
+
+    void OnUpdateCut(wxUpdateUIEvent& event);
+    void OnUpdateCopy(wxUpdateUIEvent& event);
+    void OnUpdatePaste(wxUpdateUIEvent& event);
+    void OnUpdateUndo(wxUpdateUIEvent& event);
+    void OnUpdateRedo(wxUpdateUIEvent& event);
+    void OnUpdateDelete(wxUpdateUIEvent& event);
+    void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
     bool     m_ignoreNextUpdate:1;
     wxList   m_clientDataList;
@@ -136,7 +164,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
 protected:
     virtual int DoAppend(const wxString& item);
     virtual int DoInsert(const wxString& item, int pos);

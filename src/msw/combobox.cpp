@@ -111,6 +111,25 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_5( wxComboBox , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+
+BEGIN_EVENT_TABLE(wxComboBox, wxControl)
+    EVT_MENU(wxID_CUT, wxComboBox::OnCut)
+    EVT_MENU(wxID_COPY, wxComboBox::OnCopy)
+    EVT_MENU(wxID_PASTE, wxComboBox::OnPaste)
+    EVT_MENU(wxID_UNDO, wxComboBox::OnUndo)
+    EVT_MENU(wxID_REDO, wxComboBox::OnRedo)
+    EVT_MENU(wxID_CLEAR, wxComboBox::OnDelete)
+    EVT_MENU(wxID_SELECTALL, wxComboBox::OnSelectAll)
+
+    EVT_UPDATE_UI(wxID_CUT, wxComboBox::OnUpdateCut)
+    EVT_UPDATE_UI(wxID_COPY, wxComboBox::OnUpdateCopy)
+    EVT_UPDATE_UI(wxID_PASTE, wxComboBox::OnUpdatePaste)
+    EVT_UPDATE_UI(wxID_UNDO, wxComboBox::OnUpdateUndo)
+    EVT_UPDATE_UI(wxID_REDO, wxComboBox::OnUpdateRedo)
+    EVT_UPDATE_UI(wxID_CLEAR, wxComboBox::OnUpdateDelete)
+    EVT_UPDATE_UI(wxID_SELECTALL, wxComboBox::OnUpdateSelectAll)
+END_EVENT_TABLE()
+
 #endif
 
 // ----------------------------------------------------------------------------
@@ -464,17 +483,99 @@ void wxComboBox::SetValue(const wxString& value)
 // Clipboard operations
 void wxComboBox::Copy()
 {
-  SendMessage(GetHwnd(), WM_COPY, 0, 0L);
+    SendMessage(GetHwnd(), WM_COPY, 0, 0L);
 }
 
 void wxComboBox::Cut()
 {
-  SendMessage(GetHwnd(), WM_CUT, 0, 0L);
+    SendMessage(GetHwnd(), WM_CUT, 0, 0L);
 }
 
 void wxComboBox::Paste()
 {
-  SendMessage(GetHwnd(), WM_PASTE, 0, 0L);
+    SendMessage(GetHwnd(), WM_PASTE, 0, 0L);
+}
+
+void wxComboBox::Undo()
+{
+    if (CanUndo())
+    {
+        HWND hEditWnd = (HWND) GetEditHWND() ;
+        if ( hEditWnd )
+            ::SendMessage(hEditWnd, EM_UNDO, 0, 0);
+    }
+}
+
+void wxComboBox::Redo()
+{
+    if (CanUndo())
+    {
+        // Same as Undo, since Undo undoes the undo, i.e. a redo.
+        HWND hEditWnd = (HWND) GetEditHWND() ;
+        if ( hEditWnd )
+            ::SendMessage(hEditWnd, EM_UNDO, 0, 0);
+    }
+}
+
+void wxComboBox::SelectAll()
+{
+    SetSelection(0, GetLastPosition());
+}
+
+bool wxComboBox::CanUndo() const
+{
+    HWND hEditWnd = (HWND) GetEditHWND() ;
+    if ( hEditWnd )
+        return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
+    else
+        return false;
+}
+
+bool wxComboBox::CanRedo() const
+{
+    HWND hEditWnd = (HWND) GetEditHWND() ;
+    if ( hEditWnd )
+        return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
+    else
+        return false;
+}
+
+bool wxComboBox::HasSelection() const
+{
+    long from, to;
+    GetSelection(&from, &to);
+    return from != to;
+}
+
+bool wxComboBox::CanCopy() const
+{
+    // Can copy if there's a selection
+    return HasSelection();
+}
+
+bool wxComboBox::CanCut() const
+{
+    return CanCopy() && IsEditable();
+}
+
+bool wxComboBox::CanPaste() const
+{
+    if ( !IsEditable() )
+        return false;
+
+    // Standard edit control: check for straight text on clipboard
+    if ( !::OpenClipboard(GetHwndOf(wxTheApp->GetTopWindow())) )
+        return false;
+
+    bool isTextAvailable = ::IsClipboardFormatAvailable(CF_TEXT) != 0;
+    ::CloseClipboard();
+
+    return isTextAvailable;
+}
+
+bool wxComboBox::IsEditable() const
+{
+    return !HasFlag(wxCB_READONLY);
 }
 
 void wxComboBox::SetEditable(bool WXUNUSED(editable))
@@ -586,6 +687,83 @@ void wxComboBox::GetSelection(long* from, long* to) const
 int wxComboBox::GetSelection() const
 {   
     return wxChoice::GetSelection();    
+}
+
+// ----------------------------------------------------------------------------
+// standard event handling
+// ----------------------------------------------------------------------------
+
+void wxComboBox::OnCut(wxCommandEvent& WXUNUSED(event))
+{
+    Cut();
+}
+
+void wxComboBox::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+    Copy();
+}
+
+void wxComboBox::OnPaste(wxCommandEvent& WXUNUSED(event))
+{
+    Paste();
+}
+
+void wxComboBox::OnUndo(wxCommandEvent& WXUNUSED(event))
+{
+    Undo();
+}
+
+void wxComboBox::OnRedo(wxCommandEvent& WXUNUSED(event))
+{
+    Redo();
+}
+
+void wxComboBox::OnDelete(wxCommandEvent& WXUNUSED(event))
+{
+    long from, to;
+    GetSelection(& from, & to);
+    if (from != -1 && to != -1)
+        Remove(from, to);
+}
+
+void wxComboBox::OnSelectAll(wxCommandEvent& WXUNUSED(event))
+{
+    SetSelection(-1, -1);
+}
+
+void wxComboBox::OnUpdateCut(wxUpdateUIEvent& event)
+{
+    event.Enable( CanCut() );
+}
+
+void wxComboBox::OnUpdateCopy(wxUpdateUIEvent& event)
+{
+    event.Enable( CanCopy() );
+}
+
+void wxComboBox::OnUpdatePaste(wxUpdateUIEvent& event)
+{
+    event.Enable( CanPaste() );
+}
+
+void wxComboBox::OnUpdateUndo(wxUpdateUIEvent& event)
+{
+    event.Enable( CanUndo() );
+}
+
+void wxComboBox::OnUpdateRedo(wxUpdateUIEvent& event)
+{
+    event.Enable( CanRedo() );
+}
+
+void wxComboBox::OnUpdateDelete(wxUpdateUIEvent& event)
+{
+    event.Enable(HasSelection() && IsEditable()) ;
+}
+
+void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
+{
+    event.Enable(GetLastPosition() > 0);
 }
 
 #endif // wxUSE_COMBOBOX

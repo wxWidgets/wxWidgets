@@ -122,6 +122,24 @@ public:
     {   wxTextCtrl::SetSelection(from,to); }
     virtual void SetEditable(bool editable)
     {   wxTextCtrl::SetEditable(editable); }
+    virtual bool IsEditable() const
+    {   return !HasFlag(wxCB_READONLY); }
+    virtual void Undo()
+    {   wxTextCtrl::Undo(); }
+    virtual void Redo()
+    {   wxTextCtrl::Redo(); }
+    virtual void SelectAll()
+    {   wxTextCtrl::SelectAll(); }
+    virtual bool CanCopy() const
+    {   return wxTextCtrl::CanCopy(); }
+    virtual bool CanCut() const = 0
+    {   return wxTextCtrl::CanCut(); }
+    virtual bool CanPaste() const
+    {   return wxTextCtrl::CanPaste(); }
+    virtual bool CanUndo() const
+    {   return wxTextCtrl::CanUndo(); }
+    virtual bool CanRedo() const
+    {   return wxTextCtrl::CanRedo(); }
 };
 
 #endif // __WX_COCOA_COMBOBOX_H__

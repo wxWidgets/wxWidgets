@@ -310,7 +310,7 @@ wxSize wxComboControl::DoGetBestClientSize() const
         widthPopup = m_popup->GetBestWidth();
     }
 
-    return wxSize(wxMax(sizeText.x + g_comboMargin + sizeBtn.x, widthPopup), 
+    return wxSize(wxMax(sizeText.x + g_comboMargin + sizeBtn.x, widthPopup),
                   wxMax(sizeBtn.y, sizeText.y));
 }
 
@@ -365,7 +365,7 @@ bool wxComboControl::Show(bool show)
 #if wxUSE_TOOLTIPS
 void wxComboControl::DoSetToolTip(wxToolTip *tooltip)
 {
-    wxControl::DoSetToolTip(tooltip);    
+    wxControl::DoSetToolTip(tooltip);
 
     // Set tool tip for button and text box
     if (m_text && m_btn)
@@ -845,9 +845,9 @@ int wxComboBox::GetSelection() const
 #if 1 // FIXME:: What is the correct behavior?
     // if the current value isn't one of the listbox strings, return -1
     return GetLBox()->GetSelection();
-#else    
-    // Why oh why is this done this way? 
-    // It is not because the value displayed in the text can be found 
+#else
+    // Why oh why is this done this way?
+    // It is not because the value displayed in the text can be found
     // in the list that it is the item that is selected!
     return FindString(GetText()->GetValue());
 #endif
@@ -889,6 +889,69 @@ wxClientData* wxComboBox::DoGetItemClientObject(int n) const
 {
     return GetLBox()->GetClientObject(n);
 }
+
+bool wxComboBox::IsEditable() const
+{
+	return GetText() != NULL && (!HasFlag(wxCB_READONLY) || GetText()->IsEditable());
+}
+
+void wxComboBox::Undo()
+{
+    if (IsEditable())
+        GetText()->Undo();
+}
+
+void wxComboBox::Redo()
+{
+    if (IsEditable())
+        GetText()->Redo();
+}
+
+void wxComboBox::SelectAll()
+{
+    GetText()->SelectAll();
+}
+
+bool wxComboBox::CanCopy() const
+{
+    if (GetText() != NULL)
+        return GetText()->CanCopy();
+    else
+        return false;
+}
+
+bool wxComboBox::CanCut() const
+{
+    if (GetText() != NULL)
+        return GetText()->CanCut();
+    else
+        return false;
+}
+
+bool wxComboBox::CanPaste() const
+{
+    if (IsEditable())
+        return GetText()->CanPaste();
+    else
+        return false;
+}
+
+bool wxComboBox::CanUndo() const
+{
+    if (IsEditable())
+        return GetText()->CanUndo();
+    else
+        return false;
+}
+
+bool wxComboBox::CanRedo() const
+{
+    if (IsEditable())
+        return GetText()->CanRedo();
+    else
+        return false;
+}
+
 
 // ----------------------------------------------------------------------------
 // input handling

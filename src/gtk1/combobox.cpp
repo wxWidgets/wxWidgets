@@ -50,7 +50,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (combo->m_ignoreNextUpdate)
-    { 
+    {
         combo->m_ignoreNextUpdate = FALSE;
         return;
     }
@@ -87,7 +87,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 
     GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
     gtk_list_unselect_item( GTK_LIST(list), combo->m_prevSelection );
-    
+
     combo->m_prevSelection = curSelection;
 
     // Quickly set the value of the combo box
@@ -103,10 +103,10 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     event.SetInt( curSelection );
     event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
-    
+
     combo->GetEventHandler()->ProcessEvent( event );
 
-    // Now send the event ourselves    
+    // Now send the event ourselves
     wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event2.SetString( combo->GetValue() );
     event2.SetEventObject( combo );
@@ -122,6 +122,22 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_SIZE(wxComboBox::OnSize)
     EVT_CHAR(wxComboBox::OnChar)
+
+    EVT_MENU(wxID_CUT, wxComboBox::OnCut)
+    EVT_MENU(wxID_COPY, wxComboBox::OnCopy)
+    EVT_MENU(wxID_PASTE, wxComboBox::OnPaste)
+    EVT_MENU(wxID_UNDO, wxComboBox::OnUndo)
+    EVT_MENU(wxID_REDO, wxComboBox::OnRedo)
+    EVT_MENU(wxID_CLEAR, wxComboBox::OnDelete)
+    EVT_MENU(wxID_SELECTALL, wxComboBox::OnSelectAll)
+
+    EVT_UPDATE_UI(wxID_CUT, wxComboBox::OnUpdateCut)
+    EVT_UPDATE_UI(wxID_COPY, wxComboBox::OnUpdateCopy)
+    EVT_UPDATE_UI(wxID_PASTE, wxComboBox::OnUpdatePaste)
+    EVT_UPDATE_UI(wxID_UNDO, wxComboBox::OnUpdateUndo)
+    EVT_UPDATE_UI(wxID_REDO, wxComboBox::OnUpdateRedo)
+    EVT_UPDATE_UI(wxID_CLEAR, wxComboBox::OnUpdateDelete)
+    EVT_UPDATE_UI(wxID_SELECTALL, wxComboBox::OnUpdateSelectAll)
 END_EVENT_TABLE()
 
 bool wxComboBox::Create( wxWindow *parent, wxWindowID id,
@@ -214,7 +230,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     // This is required for tool bar support
     wxSize setsize = GetSize();
     gtk_widget_set_usize( m_widget, setsize.x, setsize.y );
-    
+
     return TRUE;
 }
 
@@ -329,7 +345,7 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
     m_clientObjectList.Insert( pos, (wxObject*) NULL );
 
     EnableEvents();
-    
+
     InvalidateBestSize();
 
     return pos;
@@ -431,9 +447,9 @@ void wxComboBox::Delete( int n )
     node = m_clientDataList.Item( n );
     if (node)
         m_clientDataList.Erase( node );
-    
+
     EnableEvents();
-    
+
     InvalidateBestSize();
 }
 
@@ -454,7 +470,7 @@ void wxComboBox::SetString(int n, const wxString &text)
     {
         wxFAIL_MSG( wxT("wxComboBox: wrong index") );
     }
-    
+
     InvalidateBestSize();
 }
 
@@ -618,7 +634,7 @@ void wxComboBox::SetValue( const wxString& value )
     wxString tmp = wxT("");
     if (!value.IsNull()) tmp = value;
     gtk_entry_set_text( GTK_ENTRY(entry), wxGTK_CONV( tmp ) );
-    
+
     InvalidateBestSize();
 }
 
@@ -645,6 +661,63 @@ void wxComboBox::Paste()
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_editable_paste_clipboard( GTK_EDITABLE(entry) DUMMY_CLIPBOARD_ARG);
 }
+
+void wxComboBox::Undo()
+{
+    // TODO
+}
+
+void wxComboBox::Redo()
+{
+    // TODO
+}
+
+void wxComboBox::SelectAll()
+{
+    Select(0, GetLastPosition());
+}
+
+bool wxComboBox::CanUndo() const
+{
+    // TODO
+    return false;
+}
+
+bool wxComboBox::CanRedo() const
+{
+    // TODO
+    return false;
+}
+
+bool wxComboBox::HasSelection() const
+{
+    long from, to;
+    GetSelection(&from, &to);
+    return from != to;
+}
+
+bool wxComboBox::CanCopy() const
+{
+    // Can copy if there's a selection
+    return HasSelection();
+}
+
+bool wxComboBox::CanCut() const
+{
+    return CanCopy() && IsEditable();
+}
+
+bool wxComboBox::CanPaste() const
+{
+    // TODO: check for text on the clipboard
+    return IsEditable() ;
+}
+
+bool wxComboBox::IsEditable() const
+{
+    return !HasFlag(wxCB_READONLY);
+}
+
 
 void wxComboBox::SetInsertionPoint( long pos )
 {
@@ -692,6 +765,16 @@ void wxComboBox::SetSelection( long from, long to )
     gtk_editable_select_region( GTK_EDITABLE(entry), (gint)from, (gint)to );
 }
 
+void wxComboBox::GetSelection( long* from, long* to ) const
+{
+    if (IsEditable())
+    {
+        GtkEditable *editable = GTK_EDITABLE(GTK_COMBO(m_widget)->entry);
+        *from = (long) editable->selection_start_pos;
+        *to = (long) editable->selection_end_pos;
+    }
+}
+
 void wxComboBox::SetEditable( bool editable )
 {
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
@@ -722,7 +805,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                 GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
 
                 if (window->default_widget)
-                    gtk_widget_activate (window->default_widget);
+                        gtk_widget_activate (window->default_widget);
             }
         }
 
@@ -828,4 +911,82 @@ wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_combo_new, true);
 }
 
+// ----------------------------------------------------------------------------
+// standard event handling
+// ----------------------------------------------------------------------------
+
+void wxComboBox::OnCut(wxCommandEvent& WXUNUSED(event))
+{
+    Cut();
+}
+
+void wxComboBox::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+    Copy();
+}
+
+void wxComboBox::OnPaste(wxCommandEvent& WXUNUSED(event))
+{
+    Paste();
+}
+
+void wxComboBox::OnUndo(wxCommandEvent& WXUNUSED(event))
+{
+    Undo();
+}
+
+void wxComboBox::OnRedo(wxCommandEvent& WXUNUSED(event))
+{
+    Redo();
+}
+
+void wxComboBox::OnDelete(wxCommandEvent& WXUNUSED(event))
+{
+    long from, to;
+    GetSelection(& from, & to);
+    if (from != -1 && to != -1)
+        Remove(from, to);
+}
+
+void wxComboBox::OnSelectAll(wxCommandEvent& WXUNUSED(event))
+{
+    SetSelection(-1, -1);
+}
+
+void wxComboBox::OnUpdateCut(wxUpdateUIEvent& event)
+{
+    event.Enable( CanCut() );
+}
+
+void wxComboBox::OnUpdateCopy(wxUpdateUIEvent& event)
+{
+    event.Enable( CanCopy() );
+}
+
+void wxComboBox::OnUpdatePaste(wxUpdateUIEvent& event)
+{
+    event.Enable( CanPaste() );
+}
+
+void wxComboBox::OnUpdateUndo(wxUpdateUIEvent& event)
+{
+    event.Enable( CanUndo() );
+}
+
+void wxComboBox::OnUpdateRedo(wxUpdateUIEvent& event)
+{
+    event.Enable( CanRedo() );
+}
+
+void wxComboBox::OnUpdateDelete(wxUpdateUIEvent& event)
+{
+    event.Enable(HasSelection() && IsEditable()) ;
+}
+
+void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
+{
+    event.Enable(GetLastPosition() > 0);
+}
+
 #endif
+

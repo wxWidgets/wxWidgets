@@ -45,6 +45,19 @@ public:
         { SetInsertionPoint(GetLastPosition()); }
     virtual void Remove(long from, long to)
         { Replace(from, to, wxEmptyString); }
+
+    virtual bool IsEditable() const = 0;
+
+    virtual void Undo() = 0;
+    virtual void Redo() = 0;
+    virtual void SelectAll() = 0;
+
+    virtual bool CanCopy() const = 0;
+    virtual bool CanCut() const = 0;
+    virtual bool CanPaste() const = 0;
+    virtual bool CanUndo() const = 0;
+    virtual bool CanRedo() const = 0;
+
 };
 
 // ----------------------------------------------------------------------------

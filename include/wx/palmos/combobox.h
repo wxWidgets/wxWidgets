@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -91,6 +91,17 @@ public:
     virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
+    virtual bool IsEditable() const;
+
+    virtual void Undo();
+    virtual void Redo();
+    virtual void SelectAll();
+
+    virtual bool CanCopy() const;
+    virtual bool CanCut() const;
+    virtual bool CanPaste() const;
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
 
     // implementation only from now on
     virtual bool MSWCommand(WXUINT param, WXWORD id);

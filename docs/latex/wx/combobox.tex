@@ -123,6 +123,41 @@ Creates the combobox for two-step construction. Derived classes
 should call or replace this function. See \helpref{wxComboBox::wxComboBox}{wxcomboboxctor}\rtfsp
 for further details.
 
+\membersection{wxComboBox::CanCopy}\label{wxcomboboxcancopy}
+
+\constfunc{bool}{CanCopy}{\void}
+
+Returns true if the combobox is editable and there is a text selection to copy to the clipboard.
+Only available on Windows.
+
+\membersection{wxComboBox::CanCut}\label{wxcomboboxcancut}
+
+\constfunc{bool}{CanCut}{\void}
+
+Returns true if the combobox is editable and there is a text selection to copy to the clipboard.
+Only available on Windows.
+
+\membersection{wxComboBox::CanPaste}\label{wxcomboboxcanpaste}
+
+\constfunc{bool}{CanPaste}{\void}
+
+Returns true if the combobox is editable and there is text on the clipboard that can be pasted into the
+text field. Only available on Windows.
+
+\membersection{wxComboBox::CanRedo}\label{wxcomboboxcanredo}
+
+\constfunc{bool}{CanRedo}{\void}
+
+Returns true if the combobox is editable and the last undo can be redone.
+Only available on Windows.
+ 
+\membersection{wxComboBox::CanUndo}\label{wxcomboboxcanundo}
+
+\constfunc{bool}{CanUndo}{\void}
+
+Returns true if the combobox is editable and the last edit can be undone.
+Only available on Windows.
+ 
 \membersection{wxComboBox::Copy}\label{wxcomboboxcopy}
 
 \func{void}{Copy}{\void}
@@ -158,6 +193,12 @@ Returns the current value in the combobox text field.
 \func{void}{Paste}{\void}
 
 Pastes text from the clipboard to the text field.
+
+\membersection{wxComboBox::Redo}\label{wxcomboboxredo}
+
+\func{void}{Redo}{\void}
+
+Redoes the last undo in the text field. Windows only.
 
 \membersection{wxComboBox::Replace}\label{wxcomboboxreplace}
 
@@ -230,4 +271,9 @@ the combobox choices list, otherwise the call to SetValue() is ignored.
 
 \docparam{text}{The text to set.}
 
+\membersection{wxComboBox::Undo}\label{wxcomboboxundo}
+
+\func{void}{Undo}{\void}
+
+Undoes the last edit in the text field. Windows only.
 

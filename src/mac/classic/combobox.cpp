@@ -26,7 +26,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 
 static int nextPopUpMenuId = 1000 ;
-MenuHandle NewUniqueMenu() 
+MenuHandle NewUniqueMenu()
 {
   MenuHandle handle = NewMenu( nextPopUpMenuId , "\pMenu" ) ;
   nextPopUpMenuId++ ;
@@ -114,7 +114,7 @@ protected:
                 return;
             }
         }
-        
+
         event.Skip();
     }
 
@@ -186,11 +186,11 @@ wxComboBox::~wxComboBox()
 wxSize wxComboBox::DoGetBestSize() const
 {
     wxSize size = m_choice->GetBestSize();
-    
+
     if ( m_text != NULL )
     {
         wxSize  sizeText = m_text->GetBestSize();
-        
+
         size.x = POPUPWIDTH + sizeText.x + MARGIN;
     }
 
@@ -199,7 +199,7 @@ wxSize wxComboBox::DoGetBestSize() const
 
 void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     height = POPUPHEIGHT;
-    
+
     wxControl::DoMoveWindow(x, y, width, height);
 
     if ( m_text == NULL )
@@ -211,7 +211,7 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
         wxCoord wText = width - POPUPWIDTH - MARGIN;
         m_text->SetSize(0, 0, wText, height);
         m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, -1);
-    }    
+    }
 }
 
 
@@ -301,9 +301,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
           csize.y = m_text->GetSize().y ;
         }
     }
-    
+
     DoSetSize(pos.x, pos.y, csize.x, csize.y);
-    
+
     for ( int i = 0 ; i < n ; i++ )
     {
         m_choice->DoAppend( choices[ i ] );
@@ -315,7 +315,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 wxString wxComboBox::GetValue() const
 {
     wxString        result;
-    
+
     if ( m_text == NULL )
     {
         result = m_choice->GetString( m_choice->GetSelection() );
@@ -377,7 +377,7 @@ void wxComboBox::SetEditable(bool editable)
 
     int currentX, currentY;
     GetPosition( &currentX, &currentY );
-    
+
     int currentW, currentH;
     GetSize( &currentW, &currentH );
 
@@ -421,17 +421,17 @@ void wxComboBox::SetSelection(long from, long to)
     // TODO
 }
 
-int wxComboBox::DoAppend(const wxString& item) 
+int wxComboBox::DoAppend(const wxString& item)
 {
     return m_choice->DoAppend( item ) ;
 }
 
-int wxComboBox::DoInsert(const wxString& item, int pos) 
+int wxComboBox::DoInsert(const wxString& item, int pos)
 {
     return m_choice->DoInsert( item , pos ) ;
 }
 
-void wxComboBox::DoSetItemClientData(int n, void* clientData) 
+void wxComboBox::DoSetItemClientData(int n, void* clientData)
 {
     return m_choice->DoSetItemClientData( n , clientData ) ;
 }
@@ -446,7 +446,7 @@ void wxComboBox::DoSetItemClientObject(int n, wxClientData* clientData)
     return m_choice->DoSetItemClientObject( n , clientData ) ;
 }
 
-wxClientData* wxComboBox::DoGetItemClientObject(int n) const 
+wxClientData* wxComboBox::DoGetItemClientObject(int n) const
 {
     return m_choice->DoGetItemClientObject( n ) ;
 }
@@ -485,7 +485,7 @@ int wxComboBox::GetSelection() const
 void wxComboBox::SetSelection(int n)
 {
     m_choice->SetSelection( n );
-    
+
     if ( m_text != NULL )
     {
         m_text->SetValue( GetString( n ) );
@@ -523,13 +523,76 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
         return FALSE;
 }
 
-void wxComboBox::SetString(int n, const wxString& s) 
+void wxComboBox::SetString(int n, const wxString& s)
 {
     m_choice->SetString( n , s ) ;
 }
 
+bool wxComboBox::IsEditable() const
+{
 
-void wxComboBox::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 WXUNUSED(controlpart) , bool WXUNUSED(mouseStillDown)) 
+	return m_text != NULL && !HasFlag(wxCB_READONLY);
+}
+
+void wxComboBox::Undo()
+{
+    if (m_text != NULL)
+        m_text->Undo();
+}
+
+void wxComboBox::Redo()
+{
+    if (m_text != NULL)
+        m_text->Redo();
+}
+
+void wxComboBox::SelectAll()
+{
+    if (m_text != NULL)
+        m_text->SelectAll();
+}
+
+bool wxComboBox::CanCopy() const
+{
+    if (m_text != NULL)
+        return m_text->CanCopy();
+    else
+        return false;
+}
+
+bool wxComboBox::CanCut() const
+{
+    if (m_text != NULL)
+        return m_text->CanCut();
+    else
+        return false;
+}
+
+bool wxComboBox::CanPaste() const
+{
+    if (m_text != NULL)
+        return m_text->CanPaste();
+    else
+        return false;
+}
+
+bool wxComboBox::CanUndo() const
+{
+    if (m_text != NULL)
+        return m_text->CanUndo();
+    else
+        return false;
+}
+
+bool wxComboBox::CanRedo() const
+{
+    if (m_text != NULL)
+        return m_text->CanRedo();
+    else
+        return false;
+}
+
+void wxComboBox::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 WXUNUSED(controlpart) , bool WXUNUSED(mouseStillDown))
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());

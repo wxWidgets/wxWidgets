@@ -26,7 +26,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 
 static int nextPopUpMenuId = 1000 ;
-MenuHandle NewUniqueMenu() 
+MenuHandle NewUniqueMenu()
 {
   MenuHandle handle = NewMenu( nextPopUpMenuId , "\pMenu" ) ;
   nextPopUpMenuId++ ;
@@ -75,7 +75,7 @@ protected:
  		NavEvent.SetEventObject(this);
  		NavEvent.SetDirection(true);
  		NavEvent.SetWindowChange(false);
- 		
+
                 // Get the parent of the combo and have it process the navigation?
  		if (m_cb->GetParent()->GetEventHandler()->ProcessEvent(NavEvent))
                     return;
@@ -111,7 +111,7 @@ protected:
                 return;
             }
         }
-        
+
         event.Skip();
     }
 
@@ -124,7 +124,7 @@ protected:
             wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_cb->GetId());
             event.SetString( GetValue() );
             event.SetEventObject( m_cb );
-            m_cb->GetEventHandler()->ProcessEvent(event);            
+            m_cb->GetEventHandler()->ProcessEvent(event);
         }
     }
 private:
@@ -183,7 +183,7 @@ protected:
         if (! m_cb->HasFlag(wxCB_READONLY) )
             sz.x = GetPopupWidth() ;
         return sz ;
-    }  
+    }
 
 private:
     wxComboBox *m_cb;
@@ -223,7 +223,7 @@ wxSize wxComboBox::DoGetBestSize() const
     if (!m_choice && !m_text)
         return GetSize();
     wxSize size = m_choice->GetBestSize();
-    
+
     if ( m_text != NULL )
     {
         wxSize  sizeText = m_text->GetBestSize();
@@ -241,10 +241,10 @@ wxSize wxComboBox::DoGetBestSize() const
     return size;
 }
 
-void wxComboBox::DoMoveWindow(int x, int y, int width, int height) 
+void wxComboBox::DoMoveWindow(int x, int y, int width, int height)
 {
     wxControl::DoMoveWindow(x, y, width , height );
-    
+
     if ( m_text == NULL )
     {
         // we might not be fully constructed yet, therefore watch out...
@@ -257,7 +257,7 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height)
         m_text->SetSize(TEXTFOCUSBORDER, TEXTFOCUSBORDER, wText, -1 );
         // put it at an inset of 1 to have outer area shadows drawn as well
         m_choice->SetSize(TEXTFOCUSBORDER + wText + MARGIN - 1 , TEXTFOCUSBORDER, m_choice->GetPopupWidth() , -1);
-    }    
+    }
 }
 
 
@@ -342,15 +342,15 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     else
     {
         m_text = new wxComboBoxText(this);
-        if ( size.y == -1 ) 
+        if ( size.y == -1 )
         {
             csize.y = m_text->GetSize().y ;
             csize.y += 2 * TEXTFOCUSBORDER ;
         }
     }
-    
+
     DoSetSize(pos.x, pos.y, csize.x, csize.y);
-    
+
     for ( int i = 0 ; i < n ; i++ )
     {
         m_choice->DoAppend( choices[ i ] );
@@ -364,7 +364,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 wxString wxComboBox::GetValue() const
 {
     wxString        result;
-    
+
     if ( m_text == NULL )
     {
         result = m_choice->GetString( m_choice->GetSelection() );
@@ -378,8 +378,8 @@ wxString wxComboBox::GetValue() const
 }
 
 int wxComboBox::GetCount() const
-{ 
-    return m_choice->GetCount() ; 
+{
+    return m_choice->GetCount() ;
 }
 
 void wxComboBox::SetValue(const wxString& value)
@@ -429,7 +429,7 @@ void wxComboBox::SetEditable(bool editable)
 
     int currentX, currentY;
     GetPosition( &currentX, &currentY );
-    
+
     int currentW, currentH;
     GetSize( &currentW, &currentH );
 
@@ -473,17 +473,17 @@ void wxComboBox::SetSelection(long from, long to)
     // TODO
 }
 
-int wxComboBox::DoAppend(const wxString& item) 
+int wxComboBox::DoAppend(const wxString& item)
 {
     return m_choice->DoAppend( item ) ;
 }
 
-int wxComboBox::DoInsert(const wxString& item, int pos) 
+int wxComboBox::DoInsert(const wxString& item, int pos)
 {
     return m_choice->DoInsert( item , pos ) ;
 }
 
-void wxComboBox::DoSetItemClientData(int n, void* clientData) 
+void wxComboBox::DoSetItemClientData(int n, void* clientData)
 {
     return m_choice->DoSetItemClientData( n , clientData ) ;
 }
@@ -498,7 +498,7 @@ void wxComboBox::DoSetItemClientObject(int n, wxClientData* clientData)
     return m_choice->DoSetItemClientObject( n , clientData ) ;
 }
 
-wxClientData* wxComboBox::DoGetItemClientObject(int n) const 
+wxClientData* wxComboBox::DoGetItemClientObject(int n) const
 {
     return m_choice->DoGetItemClientObject( n ) ;
 }
@@ -537,7 +537,7 @@ int wxComboBox::GetSelection() const
 void wxComboBox::SetSelection(int n)
 {
     m_choice->SetSelection( n );
-    
+
     if ( m_text != NULL )
     {
         m_text->SetValue( GetString( n ) );
@@ -575,13 +575,75 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
         return FALSE;
 }
 
-void wxComboBox::SetString(int n, const wxString& s) 
+void wxComboBox::SetString(int n, const wxString& s)
 {
     m_choice->SetString( n , s ) ;
 }
 
+bool wxComboBox::IsEditable() const
+{
+	return m_text != NULL && !HasFlag(wxCB_READONLY);
+}
 
-wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
+void wxComboBox::Undo()
+{
+    if (m_text != NULL)
+        m_text->Undo();
+}
+
+void wxComboBox::Redo()
+{
+    if (m_text != NULL)
+        m_text->Redo();
+}
+
+void wxComboBox::SelectAll()
+{
+    if (m_text != NULL)
+        m_text->SelectAll();
+}
+
+bool wxComboBox::CanCopy() const
+{
+    if (m_text != NULL)
+        return m_text->CanCopy();
+    else
+        return false;
+}
+
+bool wxComboBox::CanCut() const
+{
+    if (m_text != NULL)
+        return m_text->CanCut();
+    else
+        return false;
+}
+
+bool wxComboBox::CanPaste() const
+{
+    if (m_text != NULL)
+        return m_text->CanPaste();
+    else
+        return false;
+}
+
+bool wxComboBox::CanUndo() const
+{
+    if (m_text != NULL)
+        return m_text->CanUndo();
+    else
+        return false;
+}
+
+bool wxComboBox::CanRedo() const
+{
+    if (m_text != NULL)
+        return m_text->CanRedo();
+    else
+        return false;
+}
+
+wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
 {
     /* For consistency with other platforms, clicking in the text area does not constitute a selection
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
