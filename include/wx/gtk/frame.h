@@ -102,6 +102,8 @@ public:
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
   void OnCloseWindow( wxCloseEvent& event );
+  
+  void OnMenuHighlight( wxMenuEvent& event );
 
   // implementation
   

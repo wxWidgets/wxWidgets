@@ -105,6 +105,7 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
     EVT_SIZE(wxFrame::OnSize)
     EVT_CLOSE(wxFrame::OnCloseWindow)
+    EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
@@ -562,6 +563,29 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 wxMenuBar *wxFrame::GetMenuBar() const
 {
     return m_frameMenuBar;
+}
+
+void wxFrame::OnMenuHighlight(wxMenuEvent& event)
+{
+    if (GetStatusBar())
+    {
+        if (event.GetMenuId() == -1)
+	{
+            SetStatusText("");
+	}
+        else
+        {
+            wxMenuBar *menuBar = GetMenuBar();
+            if (menuBar)
+            {
+                int menuId = event.GetMenuId();
+                wxString helpString;
+                helpString = menuBar->GetHelpString(menuId);
+                if (helpString != "")
+                    SetStatusText(helpString);
+            }
+        }
+    }
 }
 
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)

@@ -64,11 +64,6 @@
 
 #endif
 
-#ifdef __WXGTK__
-#include "gtk/gtk.h"
-#include "gdk/gdk.h"
-#endif
-
 //-----------------------------------------------------------------------------
 // start and end of document/page
 //-----------------------------------------------------------------------------
@@ -1480,28 +1475,13 @@ bool wxPostScriptDC::Blit( long xdest, long ydest,
     
     wxCHECK_MSG( source, FALSE, "invalid source dc" );
     
-    wxClientDC *srcDC = (wxClientDC*)source;
+    /* blit into a bitmap */
   
     wxBitmap bitmap( fwidth, fheight );
-
-#ifdef __WXGTK__
-    /* just take any GC so we don't have to create our own. */
-
-    GtkStyle *style = gtk_widget_get_default_style ();
-    GdkGC *gc = style->white_gc;	
-
-    /* copy from either window or bitmap */
-
-    gdk_window_copy_area( bitmap.GetPixmap(), gc, 0, 0, 
-                          srcDC->GetWindow(),
-	                  xsrc, ysrc, fwidth, fheight );
-#else
     wxMemoryDC memDC;
     memDC.SelectObject(bitmap);
-    // TODO: Do we want to blit transparently?
-    memDC.Blit(0, 0, fwidth, fheight, source, xsrc, ysrc, rop);
+    memDC.Blit(0, 0, fwidth, fheight, source, xsrc, ysrc, rop); /* TODO: Blit transparently? */
     memDC.SelectObject(wxNullBitmap);
-#endif
 
     /* draw bitmap. scaling and positioning is done there */
 
@@ -1518,9 +1498,9 @@ long wxPostScriptDC::GetCharHeight()
         return 12;
 }
 
-void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
-           long *descent, long *externalLeading, wxFont *theFont,
-                    bool WXUNUSED(use16))
+void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
+                                    long *descent, long *externalLeading, wxFont *theFont,
+                                    bool WXUNUSED(use16) )
 {
     wxFont *fontToUse = theFont;
   

@@ -56,10 +56,10 @@ bool MyApp::OnInit(void)
 
   // Make a menubar
   wxMenu *fileMenu = new wxMenu;
-  fileMenu->Append(wxID_EXIT, "E&xit");
+  fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
 
   wxMenu *helpMenu = new wxMenu;
-  helpMenu->Append(wxID_HELP, "&About");
+  helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
 
   wxMenuBar* menuBar = new wxMenuBar;
 

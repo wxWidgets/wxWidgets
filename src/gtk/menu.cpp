@@ -152,6 +152,7 @@ bool wxMenuBar::Enabled( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
     if (item) return item->IsEnabled();
+    
     return FALSE;
 }
 
@@ -161,7 +162,7 @@ wxString wxMenuBar::GetLabel( int id ) const
     
     if (item) return item->GetText();
     
-    return "";
+    return wxString("");
 }
 
 void wxMenuBar::SetLabel( int id, const wxString &label )
@@ -202,6 +203,23 @@ void wxMenuBar::SetLabelTop( int pos, const wxString& label )
     wxMenu* menu = (wxMenu*)node->Data();
   
     menu->SetTitle( label );
+}
+
+void wxMenuBar::SetHelpString( int id, const wxString& helpString )
+{
+    wxMenuItem* item = FindMenuItemById( id );
+    
+    if (item) item->SetHelp( helpString );
+}
+
+wxString wxMenuBar::GetHelpString( int id ) const
+{
+    wxMenuItem* item = FindMenuItemById( id );
+    
+    if (item) 
+        return item->GetHelp();
+    else
+        return wxString("");
 }
 
 //-----------------------------------------------------------------------------
@@ -262,9 +280,8 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 
     if (!menu->IsEnabled(id)) return;
 
-    wxCommandEvent event( wxEVT_MENU_HIGHLIGHT, id );
+    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id );
     event.SetEventObject( menu );
-    event.SetInt(id );
 
 /*   wxMSW doesn't call callback here either
 

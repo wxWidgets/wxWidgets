@@ -49,15 +49,14 @@ public:
 
   int FindMenuItem( const wxString &menuString, const wxString &itemString ) const;
   wxMenuItem* FindMenuItemById( int id ) const;
-  inline wxMenuItem* FindItemForId( int id ) const
-    { return FindMenuItemById( id ); }
+  inline wxMenuItem* FindItemForId( int id ) const { return FindMenuItemById( id ); }
   
   void Check( int id, bool check );
   bool Checked( int id ) const;
   void Enable( int id, bool enable );
   bool Enabled( int id ) const;
-  inline bool IsEnabled(int Id) const { return Enabled(Id); }
-  inline bool IsChecked(int Id) const { return Checked(Id); }
+  inline bool IsEnabled( int id ) const { return Enabled(id); }
+  inline bool IsChecked( int id ) const { return Checked(id); }
   
   wxString GetLabel( int id ) const;
   void SetLabel( int id, const wxString &label );
@@ -66,8 +65,11 @@ public:
   void SetLabelTop( int pos, const wxString& label );
   wxString GetLabelTop( int pos ) const;
 
-  int     GetMenuCount() const { return m_menus.Number(); }
-  wxMenu *GetMenu(int n) const { return (wxMenu *)m_menus.Nth(n)->Data(); }
+  virtual void SetHelpString( int id, const wxString& helpString );
+  virtual wxString GetHelpString( int id ) const;
+  
+  inline int GetMenuCount() const { return m_menus.Number(); }
+  inline wxMenu *GetMenu( int n ) const { return (wxMenu *)m_menus.Nth(n)->Data(); }
 
   wxList       m_menus;
   GtkWidget   *m_menubar;
