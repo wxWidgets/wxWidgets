@@ -171,13 +171,13 @@ public:
     static void DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
     static void DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
 
-protected:
-    // event handlers (not virtual by design)
-    void OnIdle(wxIdleEvent& event);
-
     // For implementation purposes - sometimes decorations make the client area
     // smaller
     virtual wxPoint GetClientAreaOrigin() const;
+
+protected:
+    // event handlers (not virtual by design)
+    void OnIdle(wxIdleEvent& event);
 
     // Makes an adjustment to the window position (for example, a frame that has
     // a toolbar that it manages itself).
