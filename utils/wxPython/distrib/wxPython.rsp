@@ -11,8 +11,11 @@ wxPython/demo/*.xml
 wxPython/demo/data/*.png
 wxPython/demo/data/*.htm
 wxPython/demo/data/*.bmp
+wxPython/demo/data/*.i
+wxPython/demo/data/*.h
 
 wxPython/distrib/build.py
+wxPython/distrib/wxPython.spec
 
 wxPython/lib/*.py
 wxPython/lib/*.txt
@@ -88,6 +91,7 @@ wxPython/modules/utils/gtk/*.h
 wxPython/modules/utils/gtk/*.py
 
 wxPython/modules/ogl/build.cfg
+wxPython/modules/ogl/*.txt
 wxPython/modules/ogl/*.i
 wxPython/modules/ogl/*.py
 wxPython/modules/ogl/*.cpp
@@ -98,7 +102,28 @@ wxPython/modules/ogl/*.rc
 wxPython/modules/ogl/*.cpp
 wxPython/modules/ogl/*.h
 wxPython/modules/ogl/*.py
+wxPython/modules/ogl/contrib/include/wx/ogl/*.h
+wxPython/modules/ogl/contrib/src/ogl/*.cpp
 
+
+wxPython/modules/stc/build.cfg
+wxPython/modules/stc/*.txt
+wxPython/modules/stc/*.i
+wxPython/modules/stc/*.py
+wxPython/modules/stc/*.cpp
+wxPython/modules/stc/*.c
+wxPython/modules/stc/*.h
+wxPython/modules/stc/*.def
+wxPython/modules/stc/*.rc
+wxPython/modules/stc/*.cpp
+wxPython/modules/stc/*.h
+wxPython/modules/stc/*.py
+wxPython/modules/stc/contrib/include/wx/stc/*.h
+wxPython/modules/stc/contrib/src/stc/*.h
+wxPython/modules/stc/contrib/src/stc/*.cpp
+wxPython/modules/stc/contrib/src/stc/scintilla/include/*.h
+wxPython/modules/stc/contrib/src/stc/scintilla/src/*.h
+wxPython/modules/stc/contrib/src/stc/scintilla/src/*.cxx
 
 
 
