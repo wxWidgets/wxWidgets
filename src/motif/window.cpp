@@ -172,10 +172,18 @@ bool wxWindow::MapOrUnmap(WXWidget widget, bool domap)
     if ( !w )
         return FALSE;
 
+    // if the widget is not unmanaged, it still intercepts
+    // mouse events, even if it is not mapped (and hence invisible)
     if ( domap )
+    {
+        XtManageChild(w);
         XtMapWidget(w);
+    }
     else
+    {
         XtUnmapWidget(w);
+        XtUnmanageChild(w);
+    }
 
     //   Rationale: a lot of common operations (including but not
     // limited to moving, resizing and appending items to a listbox)
