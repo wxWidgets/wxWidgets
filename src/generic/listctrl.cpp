@@ -4365,6 +4365,14 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
     m_dirty = TRUE;
 
+    // If an item is selected at or below the point of insertion, we need to
+    // increment the member variables because the current row's index has gone
+    // up by one
+    if ( HasCurrent() && m_current >= id )
+    {
+        m_current++;
+    }
+
     SendNotify(id, wxEVT_COMMAND_LIST_INSERT_ITEM);
 
     RefreshLines(id, GetItemCount() - 1);
