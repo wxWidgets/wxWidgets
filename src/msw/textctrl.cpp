@@ -45,7 +45,11 @@
 #endif
 
 #include <sys/types.h>
+#ifndef __MWERKS__
 #include <sys/stat.h>
+#else
+#include <stat.h>
+#endif
 #if defined(__BORLANDC__) && !defined(__WIN32__)
 #include <alloc.h>
 #else

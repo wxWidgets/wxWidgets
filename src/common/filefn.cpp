@@ -88,6 +88,11 @@
 #define _MAXPATHLEN 500
 
 extern char *wxBuffer;
+#ifdef __WXMAC__
+extern char gwxMacFileName[] ;
+extern char gwxMacFileName2[] ;
+extern char gwxMacFileName3[] ;
+#endif
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
@@ -147,7 +152,7 @@ bool wxPathList::Member (const wxString& path)
   {
       wxString path2((char *) node->Data ());
       if (
-#if defined(__WINDOWS__) || defined(__VMS__)
+#if defined(__WINDOWS__) || defined(__VMS__) || defined (__WXMAC__)
       // Case INDEPENDENT
 	  path.CompareTo (path2, wxString::ignoreCase) == 0
 #else
@@ -225,6 +230,13 @@ wxFileExists (const wxString& filename)
     return FALSE;
   else
     return TRUE;
+#elif defined(__WXMAC__)
+  	struct stat stbuf;
+	strcpy( gwxMacFileName , filename ) ;
+	wxUnix2MacFilename( gwxMacFileName ) ;
+  	if (gwxMacFileName && stat ((char *)(const char *)gwxMacFileName, &stbuf) == 0)
+    	return TRUE;
+    return FALSE ;
 #else
   struct stat stbuf;
 
@@ -738,6 +750,58 @@ wxString wxPathOnly (const wxString& path)
 // and back again - or we get nasty problems with delimiters.
 // Also, convert to lower case, since case is significant in UNIX.
 
+#ifdef __WXMAC__
+void 
+wxMac2UnixFilename (char *s)
+{
+	if (s)
+	{
+		memmove( s+1 , s ,strlen( s ) + 1) ;
+		if ( *s == ':' )
+			*s = '.' ;
+		else
+			*s = '/' ;
+			
+		while (*s)
+		{
+			if (*s == ':')
+			  *s = '/';
+			else
+			  *s = wxToLower (*s);	// Case INDEPENDENT
+			s++;
+		}
+	}
+}
+
+void 
+wxUnix2MacFilename (char *s)
+{
+	if (s)
+	{
+		if ( *s == '.' )
+		{
+			// relative path , since it goes on with slash which is translated to a : 
+			memmove( s , s+1 ,strlen( s ) ) ;
+		}
+		else if ( *s == '/' )
+		{
+			// absolute path -> on mac just start with the drive name
+			memmove( s , s+1 ,strlen( s ) ) ;
+		}
+		else
+		{
+			wxASSERT_MSG( 1 , "unkown path beginning" ) ;
+		}
+		while (*s)
+		{
+			if (*s == '/' || *s == '\\')
+		  		*s = ':';
+
+			s++ ;
+		}
+	}
+}
+#endif
 void 
 wxDos2UnixFilename (char *s)
 {
@@ -783,9 +847,22 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
   FILE *fp2 = (FILE *) NULL;
   FILE *fp3 = (FILE *) NULL;
   // Open the inputs and outputs
+#ifdef __WXMAC__
+	strcpy( gwxMacFileName , file1 ) ;
+	wxUnix2MacFilename( gwxMacFileName ) ;
+	strcpy( gwxMacFileName2 , file2) ;
+	wxUnix2MacFilename( gwxMacFileName2 ) ;
+	strcpy( gwxMacFileName3 , outfile) ;
+	wxUnix2MacFilename( gwxMacFileName3 ) ;
+
+  if ((fp1 = fopen (gwxMacFileName, "rb")) == NULL ||
+      (fp2 = fopen (gwxMacFileName2, "rb")) == NULL ||
+      (fp3 = fopen (gwxMacFileName3, "wb")) == NULL)
+#else
   if ((fp1 = fopen (WXSTRINGCAST file1, "rb")) == NULL ||
       (fp2 = fopen (WXSTRINGCAST file2, "rb")) == NULL ||
       (fp3 = fopen (outfile, "wb")) == NULL)
+#endif
     {
       if (fp1)
 	fclose (fp1);
@@ -819,9 +896,20 @@ wxCopyFile (const wxString& file1, const wxString& file2)
   FILE *fd2;
   int ch;
 
+#ifdef __WXMAC__
+	strcpy( gwxMacFileName , file1 ) ;
+	wxUnix2MacFilename( gwxMacFileName ) ;
+	strcpy( gwxMacFileName2 , file2) ;
+	wxUnix2MacFilename( gwxMacFileName2 ) ;
+
+  if ((fd1 = fopen (gwxMacFileName, "rb")) == NULL)
+    return FALSE;
+  if ((fd2 = fopen (gwxMacFileName2, "wb")) == NULL)
+#else
   if ((fd1 = fopen (WXSTRINGCAST file1, "rb")) == NULL)
     return FALSE;
   if ((fd2 = fopen (WXSTRINGCAST file2, "wb")) == NULL)
+#endif
     {
       fclose (fd1);
       return FALSE;
@@ -838,9 +926,19 @@ wxCopyFile (const wxString& file1, const wxString& file2)
 bool 
 wxRenameFile (const wxString& file1, const wxString& file2)
 {
+#ifdef __WXMAC__
+	strcpy( gwxMacFileName , file1 ) ;
+	wxUnix2MacFilename( gwxMacFileName ) ;
+	strcpy( gwxMacFileName2 , file2) ;
+	wxUnix2MacFilename( gwxMacFileName2 ) ;
+
+  if (0 == rename (gwxMacFileName, gwxMacFileName2))
+    return TRUE;
+#else
   // Normal system call
   if (0 == rename (WXSTRINGCAST file1, WXSTRINGCAST file2))
     return TRUE;
+#endif
   // Try to copy
   if (wxCopyFile(file1, file2)) {
     wxRemoveFile(file1);
@@ -854,6 +952,10 @@ bool wxRemoveFile(const wxString& file)
 {
 #if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__WATCOMC__)
   int flag = remove(WXSTRINGCAST file);
+#elif defined( __WXMAC__ )
+	strcpy( gwxMacFileName , file ) ;
+	wxUnix2MacFilename( gwxMacFileName ) ;
+  int flag = unlink(gwxMacFileName);
 #else
   int flag = unlink(WXSTRINGCAST file);
 #endif
@@ -866,6 +968,10 @@ bool wxMkdir(const wxString& dir)
   return FALSE;
 #elif defined(__VMS__)
 	return FALSE;
+#elif defined( __WXMAC__ )
+  strcpy( gwxMacFileName , dir ) ;
+  wxUnix2MacFilename( gwxMacFileName ) ;
+  return (mkdir(gwxMacFileName , 0 ) == 0);
 #elif (defined(__GNUWIN32__) && !defined(__MINGW32__)) || !defined(__WXMSW__)
   return (mkdir (WXSTRINGCAST dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0);
 #else
@@ -877,6 +983,10 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
 #ifdef __VMS__
   return FALSE;
+#elif defined( __WXMAC__ )
+	strcpy( gwxMacFileName , dir ) ;
+	wxUnix2MacFilename( gwxMacFileName ) ;
+  return (rmdir(WXSTRINGCAST gwxMacFileName) == 0);
 #else
   return (rmdir(WXSTRINGCAST dir) == 0);
 #endif
@@ -1278,7 +1388,7 @@ char *wxGetWorkingDirectory(char *buf, int sz)
 
 bool wxSetWorkingDirectory(const wxString& d)
 {
-#ifdef __UNIX__
+#if defined( __UNIX__ ) || defined( __WXMAC__ )
   return (chdir(d) == 0);
 #elif defined(__WINDOWS__)
 

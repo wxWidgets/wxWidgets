@@ -30,7 +30,9 @@
 #include "malloc.h"
 #endif
 
+#ifndef __MWERKS__
 #include <memory.h>
+#endif
 #include <stdlib.h>
 
 #include "wx/tbarmsw.h"

@@ -944,6 +944,12 @@ void Trap()
     DebugBreak();
   #elif defined(__WXSTUBS__)
     // TODO
+  #elif defined(__WXMAC__)
+  #if __powerc
+    Debugger();
+  #else
+    SysBreak();
+  #endif
   #else // Unix
     raise(SIGTRAP);
   #endif // Win/Unix

@@ -33,6 +33,10 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 
+#if defined(__WXMAC__)
+#include "/wx/mac/macsock.h"
+#endif
+
 #if defined(__WINDOWS__)
 #include <winsock.h>
 #endif // __WINDOWS__
@@ -121,7 +125,11 @@ bool wxIPV4address::Hostname(const wxString& name)
       return FALSE;
     }
   } else {
+#ifdef __WXMAC__
+    long len_addr = inet_addr(name.GetData()).s_addr ;
+#else
     long len_addr = inet_addr(name.GetData());
+#endif
     if (len_addr == -1)
       return FALSE;
     m_addr->sin_addr.s_addr = len_addr;

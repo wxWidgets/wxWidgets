@@ -34,7 +34,9 @@
 
 #ifndef __GNUWIN32__
 #include <direct.h>
+#ifndef __MWERKS__
 #include <dos.h>
+#endif
 #endif
 
 #ifdef __GNUWIN32__

@@ -33,7 +33,9 @@
 #endif
 
 #include <time.h>
+#ifndef __WXMAC__
 #include <sys/types.h>
+#endif
 
 #if (!defined(__SC__) && !defined(__SGI__) && !defined(__GNUWIN32__) && !defined(__MWERKS__)) || defined(__MINGW32__)
 #include <sys/timeb.h>

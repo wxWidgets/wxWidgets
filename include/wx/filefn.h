@@ -23,7 +23,11 @@
 // ----------------------------------------------------------------------------
 
 // define off_t
+#ifndef __WXMAC__
 #include  <sys/types.h>
+#else
+typedef long off_t;
+#endif
 
 #ifdef    _MSC_VER
   #define   off_t       _off_t
@@ -77,6 +81,11 @@ WXDLLEXPORT void wxDos2UnixFilename(char *s);
 WXDLLEXPORT void wxUnix2DosFilename(char *s);
 #define Unix2DosFilename wxUnix2DosFilename
 
+#ifdef __WXMAC__
+  WXDLLEXPORT void wxMacPathToFSSpec( const char *path , FSSpec *spec ) ;
+  WXDLLEXPORT void wxMac2UnixFilename(char *s);
+  WXDLLEXPORT void wxUnix2MacFilename(char *s);
+#endif
 // Strip the extension, in situ
 WXDLLEXPORT void wxStripExtension(char *buffer);
 WXDLLEXPORT void wxStripExtension(wxString& buffer);

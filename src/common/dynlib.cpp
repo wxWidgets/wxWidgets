@@ -117,9 +117,20 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 {
 #if defined(__UNIX__)
   return dlsym(m_handle, WXSTRINGCAST symbname);
-#endif
-#ifdef __WINDOWS__
+#elif defined( __WINDOWS__ )
   return GetProcAddress((HINSTANCE) m_handle, WXSTRINGCAST symbname);
+#elif defined( __WXMAC__ )
+  Ptr symAddress ;
+  CFragSymbolClass symClass ;
+  Str255	symName ;
+	
+  strcpy( (char*) symName , symbname ) ;
+  c2pstr( (char*) symName ) ;
+	
+  if ( FindSymbol( (CFragConnectionID) m_handle , symName , &symAddress , &symClass ) == noErr )
+  {
+    return symAddress ; 
+  }
 #endif
   return NULL;
 }
@@ -184,6 +195,20 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 #endif
   if (!handle)
     return NULL;
+#elif defined(__WXMAC__)
+  FSSpec myFSSpec ;
+  CFragConnectionID handle ;
+  Ptr	myMainAddr ;
+  Str255	myErrName ;
+	
+  wxMacPathToFSSpec( lib_name , &myFSSpec ) ;
+  if (GetDiskFragment( &myFSSpec , 0 , kCFragGoesToEOF , "\p" , kPrivateCFragCopy , &handle , &myMainAddr ,
+    myErrName ) != noErr )
+  {
+    p2cstr( myErrName ) ;
+    wxASSERT_MSG( 1 , (char*)myErrName ) ;
+	return NULL ;
+  }
 #else
   return NULL;
 #endif

@@ -80,6 +80,9 @@ class WXDLLEXPORT wxSocketHandler;
 class WXDLLEXPORT wxSocketBase : public wxEvtHandler
 {
   DECLARE_CLASS(wxSocketBase)
+#ifdef __WXMAC__
+friend void wxMacSocketOnRequestProc(void *refcon , short event) ;
+#endif
 public:
 
   enum wxSockFlags { NONE=0, NOWAIT=1, WAITALL=2, SPEED=4 };
@@ -328,6 +331,8 @@ public:
 };
 
 typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
+
+#define wxEVT_SOCKET wxEVT_FIRST+301
 
 #define EVT_SOCKET(id, func) { wxEVT_SOCKET, id, 0, \
   (wxObjectEventFunction) (wxEventFunction) (wxSocketEventFunction) & func, \

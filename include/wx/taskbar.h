@@ -8,6 +8,7 @@
 #elif defined(__WXGTK__)
 #elif defined(__WXQT__)
 #elif defined(__WXMAC__)
+#include "wx/mac/taskbar.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/taskbar.h"
 #endif

@@ -56,6 +56,13 @@
 #elif (defined(__WXSTUBS__))
   // Have to ifdef this for different environments
   #include <io.h>
+#elif (defined(__WXMAC__))
+  int access( const char *path, int mode ) { return 0 ; }
+  char* mktemp( char * path ) { return path ;}
+  #include  <unistd.h>
+  #include  <unix.h>
+  #define   W_OK        2
+  #define   R_OK        4
 #else
   #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
@@ -443,7 +450,7 @@ bool wxTempFile::Open(const wxString& strName)
   // otherwise rename() in Commit() might not work (if the files are on
   // different partitions for example). Unfortunately, the only standard
   // (POSIX) temp file creation function tmpnam() can't do it.
-  #if defined(__UNIX__) || defined(__WXSTUBS__)
+  #if defined(__UNIX__) || defined(__WXSTUBS__)|| defined( __WXMAC__ )
     static const char *szMktempSuffix = "XXXXXX";
     m_strTemp << strName << szMktempSuffix;
     mktemp((char *)m_strTemp.c_str()); // will do because length doesn't change

@@ -40,7 +40,7 @@ public:
 DECLARE_EVENT_TABLE()
 };
 
-#ifndef __WXMSW__
+#if !defined( __WXMSW__ ) && !defined( __WXMAC__)
 #define wxMessageDialog wxGenericMessageDialog
 
 int wxMessageBox(const wxString& message, const wxString& caption = wxMessageBoxCaptionStr, 

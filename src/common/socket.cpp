@@ -15,6 +15,10 @@
 // #pragma implementation "socket.cpp"
 #endif
 
+#ifdef __MWERKS__
+typedef int socklen_t ;
+#endif
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -41,6 +45,33 @@
 /////////////////////////////////////////////////////////////////////////////
 // System specific headers
 /////////////////////////////////////////////////////////////////////////////
+#ifdef __WXMAC__
+// in order to avoid problems with our c library and double definitions
+#define close closesocket
+#define ioctl ioctlsocket
+
+#include <wx/mac/macsock.h>
+extern GUSISpinFn GUSISpin;
+#define PROCESS_EVENTS() wxMacProcessEvents()
+const short kwxMacNetEventsMax = 1000 ;
+short wxMacNetEventsTop = 0 ;
+short wxMacNetEventsBottom = 0 ;
+short wxMacNetEventsEvents[kwxMacNetEventsMax] ;
+void *wxMacNetEventsReferences[kwxMacNetEventsMax] ;
+
+#define FD_READ 1
+#define FD_WRITE 2
+#define FD_CLOSE 4
+#define FD_ACCEPT 8
+#define FD_CONNECT 16
+#define FD_READY 32
+
+extern "C" void wxMacSocketHandlerProc( void *refcon , short event ) ; // adds events
+extern "C" void wxMacSocketOnRequestProc( void *refcon , short event ) ; // consumes them
+extern "C" void GUSISetReference( short sock , short eventmask , void * data ) ;
+void wxMacProcessEvents() ;
+#endif
+
 #if defined(__WINDOWS__)
 #include <winsock.h>
 #endif // __WINDOWS__
@@ -129,15 +160,15 @@
 #if defined( NEED_WSAFDIsSet ) || defined( _MSC_VER )
 int PASCAL FAR __WSAFDIsSet(SOCKET fd, fd_set FAR *set)
 {
-	int i = set->fd_count;
+  int i = set->fd_count;
 
-	while (i--)
-	{
-		if (set->fd_array[i] == fd)
-			return 1;
-	}
+  while (i--)
+  {
+    if (set->fd_array[i] == fd)
+      return 1;
+  }
 
-	return 0;
+  return 0;
 }
 #endif
 #endif
@@ -218,7 +249,7 @@ public:
 // --------- wxSocketBase CONSTRUCTOR ---------------------------
 // --------------------------------------------------------------
 wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
-			   wxSocketBase::wxSockType _type) :
+         wxSocketBase::wxSockType _type) :
   wxEvtHandler(),
   m_flags(_flags), m_type(_type), m_connected(FALSE), m_connecting(FALSE),
   m_fd(INVALID_SOCKET), m_waitflags(0), m_cbk(0), m_cdata(0), m_id(-1),
@@ -624,7 +655,7 @@ bool wxSocketBase::WaitForLost(long seconds, long microseconds)
 #if defined(__WXMOTIF__) || defined(__WXXT__) || defined(__WXGTK__)
 #if defined(__WXMOTIF__) || defined(__WXXT__)
 static void wx_socket_read(XtPointer client, int *fid,
-			   XtInputId *WXUNUSED(id))
+         XtInputId *WXUNUSED(id))
 #define fd *fid
 #else
 static void wx_socket_read(gpointer client, gint fd,
@@ -668,10 +699,10 @@ static void wx_socket_read(gpointer client, gint fd,
 
 #if defined(__WXMOTIF__) || defined(__WXXT__)
 static void wx_socket_write(XtPointer client, int *WXUNUSED(fid),
-			    XtInputId *WXUNUSED(id))
+          XtInputId *WXUNUSED(id))
 #else
 static void wx_socket_write(gpointer client, gint WXUNUSED(fd),
-			    GdkInputCondition WXUNUSED(cond))
+          GdkInputCondition WXUNUSED(cond))
 #endif
 {
   wxSocketBase *sock = (wxSocketBase *)client;
@@ -795,7 +826,6 @@ void wxSocketBase::SetupCallbacks()
   if (m_fd == INVALID_SOCKET || !m_handler || (m_flags & SPEED))
     return;
 
-
 #if defined(__WXMOTIF__) || defined(__WXXT__)
   if (m_neededreq & (REQ_ACCEPT | REQ_READ | REQ_LOST)) 
   {
@@ -895,6 +925,24 @@ void wxSocketBase::SetupCallbacks()
     m_internal->my_msg = m_handler->NewMessage(this);
   WSAAsyncSelect(m_fd, m_handler->GetHWND(), m_internal->my_msg, mask);
 #endif
+#ifdef __WXMAC__
+  short mask = 0;
+
+  if (m_neededreq & REQ_READ)
+    mask |= FD_READ;
+  if (m_neededreq & REQ_WRITE)
+    mask |= FD_WRITE;
+  if (m_neededreq & REQ_LOST)
+    mask |= FD_CLOSE;
+  if (m_neededreq & REQ_ACCEPT)
+    mask |= FD_ACCEPT;
+  if (m_neededreq & REQ_CONNECT)
+    mask |= FD_CONNECT;
+
+  GUSISetReference( m_fd ,mask, this ) ;
+  unsigned long flag = 1;
+  ioctl(m_fd, FIONBIO, &flag);
+#endif
   m_cbkon = TRUE;
   m_processing = FALSE;
 }
@@ -924,6 +972,20 @@ void wxSocketBase::DestroyCallbacks()
 #endif
 #ifdef __WINDOWS__
   WSAAsyncSelect(m_fd, m_handler->GetHWND(), 0, 0);
+#endif
+#ifdef __WXMAC__
+  GUSISetReference( m_fd , 0 , 0 ) ;
+  int bottom = wxMacNetEventsBottom ;
+  while ( wxMacNetEventsTop != bottom )
+  {
+    // set all events that reference this socket to nil
+    if ( wxMacNetEventsReferences[bottom] == (void*) this )
+      wxMacNetEventsReferences[bottom] = NULL ;
+    bottom++ ;
+    if ( bottom == kwxMacNetEventsMax )
+      bottom = 0 ;
+  }
+  SetFlags( m_flags ) ;
 #endif
 }
 
@@ -1173,7 +1235,7 @@ void wxSocketBase::WantSpeedBuffer(char *buffer, size_t nbytes,
 }
 
 void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,
-			      wxRequestEvent evt)
+            wxRequestEvent evt)
 {
   bool buf_timed_out;
 
@@ -1230,7 +1292,7 @@ void wxSocketBase::WantBuffer(char *buffer, size_t nbytes,
 // --------------------------------------------------------------
 
 wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
-			       wxSockFlags flags) :
+             wxSockFlags flags) :
   wxSocketBase(flags, SOCK_SERVER)
 {
   m_fd = socket(addr_man.GetFamily(), SOCK_STREAM, 0);
@@ -1321,7 +1383,7 @@ void wxSocketServer::OnRequest(wxRequestEvent evt)
 // --------- wxSocketClient CONSTRUCTOR -------------------------
 // --------------------------------------------------------------
 wxSocketClient::wxSocketClient(wxSockFlags _flags) :
-	wxSocketBase(_flags, SOCK_CLIENT)
+  wxSocketBase(_flags, SOCK_CLIENT)
 {
 }
 
@@ -1430,6 +1492,64 @@ static int win_initialized = 0;
 // --------------------------------------------------------------
 // --------- wxSocketHandler CONSTRUCTOR ------------------------
 // --------------------------------------------------------------
+#ifdef __WXMAC__
+
+extern "C" int updatestatus(int s) ;
+
+void wxMacSocketOnRequestProc( void *refcon , short event )
+{
+  if ( refcon )
+  {
+    wxSocketBase *sock = (wxSocketBase *) refcon ;  
+    
+    wxSocketBase::wxRequestEvent sk_req;
+    
+    int canRead ;
+    int canWrite ;
+    int exception ;
+    
+    switch (event) {
+    case FD_READ:
+      sk_req = wxSocketBase::EVT_READ;
+     sock->OnRequest(sk_req);
+      break;
+    case FD_WRITE:
+      sk_req = wxSocketBase::EVT_WRITE;
+      sock->OnRequest(sk_req);
+      break;
+    case FD_CLOSE:
+      sk_req = wxSocketBase::EVT_LOST;
+     sock->OnRequest(sk_req);
+      break;
+    case FD_ACCEPT:
+      sk_req = wxSocketBase::EVT_ACCEPT;
+      sock->OnRequest(sk_req);
+      break;
+    case FD_CONNECT:
+      sk_req = wxSocketBase::EVT_CONNECT;
+      sock->OnRequest(sk_req);
+      break;
+    case FD_READY :
+      break ;
+    }
+    updatestatus ( sock->m_fd ) ;
+  }
+}
+
+void wxMacSocketHandlerProc( void *refcon , short event )
+{
+  wxMacNetEventsReferences[wxMacNetEventsTop] = refcon ;
+  wxMacNetEventsEvents[wxMacNetEventsTop] = event ;
+
+  // clumsy construct in order to never have a incorrect wxMacNetEventsTop (above limits)
+
+  if ( wxMacNetEventsTop + 1 == kwxMacNetEventsMax )
+    wxMacNetEventsTop = 0 ;
+  else
+    wxMacNetEventsTop++ ;
+}
+
+#endif
 #ifdef __WINDOWS__
 
 extern char wxPanelClassName[];
@@ -1439,8 +1559,8 @@ LRESULT APIENTRY _EXPORT wxSocketHandlerWndProc(HWND hWnd, UINT message,
 {
   if(message==WM_DESTROY)
   {
-	  ::SetWindowLong(hWnd, GWL_WNDPROC, (LONG) DefWindowProc);
-	  return DefWindowProc(hWnd, message, wParam, lParam);
+    ::SetWindowLong(hWnd, GWL_WNDPROC, (LONG) DefWindowProc);
+    return DefWindowProc(hWnd, message, wParam, lParam);
   }
   wxSocketHandler *h_sock = (wxSocketHandler *)GetWindowLong(hWnd, GWL_USERDATA);
   wxNode *node = h_sock->smsg_list->Find(message);
@@ -1491,8 +1611,8 @@ wxSocketHandler::wxSocketHandler()
   }
   internal = new wxSockHandlerInternal;
   internal->sockWin = ::CreateWindow(wxPanelClassName, NULL, 0,
-		0, 0, 0, 0, NULL, (HMENU) NULL,
-		wxhInstance, 0);
+    0, 0, 0, 0, NULL, (HMENU) NULL,
+    wxhInstance, 0);
 
   // Subclass the window
   if (!wxSocketSubClassProc)
@@ -1592,8 +1712,8 @@ unsigned long wxSocketHandler::Count() const
 // --------- wxSocketHandler "big" wait functions ---------------
 // --------------------------------------------------------------
 void handler_cbk(wxSocketBase& sock,
-		 wxSocketBase::wxRequestEvent WXUNUSED(flags),
-		 char *cdata)
+     wxSocketBase::wxRequestEvent WXUNUSED(flags),
+     char *cdata)
 {
   int *a_wait = (int *)cdata;
 
@@ -1662,7 +1782,7 @@ void wxSocketHandler::YieldSock()
 // --------- wxSocketHandler: create and register the socket ----
 // --------------------------------------------------------------
 wxSocketServer *wxSocketHandler::CreateServer(wxSockAddress& addr,
-					      wxSocketBase::wxSockFlags flags)
+                wxSocketBase::wxSockFlags flags)
 {
   wxSocketServer *serv = new wxSocketServer(addr, flags);
 
@@ -1714,6 +1834,27 @@ void wxSocketModule::OnExit()
   delete wxSocketHandler::master;
   wxSocketHandler::master = NULL;
 }
+
+#ifdef __WXMAC__
+void wxMacProcessSocketEvents() ;
+void wxMacProcessEvents()
+{
+  wxMacProcessSocketEvents() ;
+   (*GUSISpin)(SP_MISC, 0) ;
+}
+
+void wxMacProcessSocketEvents()
+{
+  while ( wxMacNetEventsTop != wxMacNetEventsBottom )
+  {
+    // consume event at wxMacNetEventsBottom
+    wxMacSocketOnRequestProc(wxMacNetEventsReferences[wxMacNetEventsBottom] , wxMacNetEventsEvents[wxMacNetEventsBottom]  ) ;
+    wxMacNetEventsBottom++ ;
+    if ( wxMacNetEventsBottom == kwxMacNetEventsMax )
+      wxMacNetEventsBottom = 0 ;
+  }
+}
+#endif
 
 #endif
   // __WXSTUBS__

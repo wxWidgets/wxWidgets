@@ -306,6 +306,11 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 #undef except
 #undef finally
 #define except(x) catch(...)
+#elif defined(__MWERKS__)
+#undef try
+#undef except
+#undef finally
+#define except(x) catch(...)
 #endif
 
 // where should i put this? we need to make sure of this as it breaks

@@ -22,6 +22,9 @@
  *         stdarg.h
  *         limits.h
  */
+#ifdef __WXMAC__
+#include <ctype.h>
+#endif
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -93,6 +96,14 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
   return stricmp(psz1, psz2);
 #elif   defined(__UNIX__) || defined(__GNUWIN32__)
   return strcasecmp(psz1, psz2);
+#elif defined(__MWERKS__) && !defined(_MSC_VER)
+  register char c1, c2;
+  do {
+    c1 = tolower(*psz1++);
+    c2 = tolower(*psz2++);
+  } while ( c1 && (c1 == c2) );
+
+  return c1 - c2;
 #else
   // almost all compilers/libraries provide this function (unfortunately under
   // different names), that's why we don't implement our own which will surely

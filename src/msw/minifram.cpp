@@ -88,7 +88,7 @@ wxMiniFrame::~wxMiniFrame(void)
 
 #include <string.h>
 
-#ifndef __WATCOMC__
+#if !defined( __WATCOMC__ ) && !defined( __MWERKS__ )
 #include <memory.h>
 #endif
 

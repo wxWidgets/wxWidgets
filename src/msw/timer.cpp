@@ -35,7 +35,7 @@
 #include <time.h>
 #include <sys/types.h>
 
-#if !defined(__SC__) && !defined(__GNUWIN32__)
+#if !defined(__SC__) && !defined(__GNUWIN32__) && !defined(__MWERKS__)
     #include <sys/timeb.h>
 #endif
 

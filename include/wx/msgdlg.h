@@ -10,7 +10,7 @@
 #elif defined(__WXQT__)
 #include "wx/generic/msgdlgg.h"
 #elif defined(__WXMAC__)
-#include "wx/generic/msgdlgg.h"
+#include "wx/mac/msgdlg.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/msgdlgg.h"
 #endif

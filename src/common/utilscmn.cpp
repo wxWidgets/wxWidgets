@@ -72,6 +72,36 @@
 
 extern char *wxBuffer;
 
+#ifdef __WXMAC__
+int strcasecmp(const char *str_1, const char *str_2)
+{
+  register char c1, c2;
+  do {
+    c1 = tolower(*str_1++);
+    c2 = tolower(*str_2++);
+  } while ( c1 && (c1 == c2) );
+
+  return c1 - c2;
+}
+
+int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
+{
+
+  register char c1, c2;
+  while( maxchar--) 
+  {
+    c1 = tolower(*str_1++);
+    c2 = tolower(*str_2++);
+    
+    if ( !c1 || c1!=c2 )
+  		return c1 - c2;
+  		    
+  } ;
+
+  return 0 ;
+
+}
+#endif
 #ifdef __VMS__
 // we have no strI functions under VMS, therefore I have implemented
 // an inefficient but portable version: convert copies of strings to lowercase

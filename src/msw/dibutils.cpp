@@ -32,7 +32,9 @@
 #include <wx/msw/dibutils.h>
 
 #if defined(__WIN32__)
+#ifndef __MWERKS__
     #include <memory.h>             // for _fmemcpy()
+#endif
 	 #define _huge
 #ifndef hmemcpy
     #define hmemcpy memcpy

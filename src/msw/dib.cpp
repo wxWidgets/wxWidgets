@@ -40,7 +40,9 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifndef __MWERKS__
 #include <memory.h>
+#endif
 
 #include "wx/msw/dib.h"
 

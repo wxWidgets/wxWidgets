@@ -23,6 +23,10 @@
 #ifndef __MWERKS__
 #include <memory.h>
 #endif
+#if defined(__WXMAC__)
+#include "/wx/mac/macsock.h"
+#endif
+
 #include <stdlib.h>
 #include "wx/string.h"
 #include "wx/utils.h"

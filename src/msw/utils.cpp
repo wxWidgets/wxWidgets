@@ -36,7 +36,9 @@
 
 #ifndef __GNUWIN32__
 #include <direct.h>
+#ifndef __MWERKS__
 #include <dos.h>
+#endif
 #endif  //GNUWIN32
 
 #ifdef __GNUWIN32__
@@ -979,7 +981,9 @@ To download dbwin32, see e.g.:
 http://ftp.digital.com/pub/micro/NT/WinSite/programr/dbwin32.zip
 */
 
+#ifndef __MWERKS__
 #include <process.h>
+#endif
 
 void OutputDebugStringW95(const char* lpOutputString, ...)
 {
@@ -1056,7 +1060,7 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
     WaitForSingleObject(heventDBWIN, INFINITE);
 
     /* write it to the shared memory */
-#ifdef __BORLANDC__
+#if defined( __BORLANDC__ ) || defined( __MWERKS__ )
     *((LPDWORD)lpszSharedMem) = getpid();
 #else
     *((LPDWORD)lpszSharedMem) = _getpid();
