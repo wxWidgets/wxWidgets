@@ -1166,6 +1166,8 @@ char *RegisterSetting(char *settingName, char *settingValue, bool interactive)
     winHelpContents = StringTobool(settingValue);
   else if (StringMatch(settingName, "htmlIndex", FALSE, TRUE))
     htmlIndex = StringTobool(settingValue);
+  else if (StringMatch(settingName, "htmlWorkshopFiles", FALSE, TRUE))
+    htmlWorkshopFiles = StringTobool(settingValue);
   else if (StringMatch(settingName, "htmlFrameContents", FALSE, TRUE))
     htmlFrameContents = StringTobool(settingValue);
   else if (StringMatch(settingName, "upperCaseNames", FALSE, TRUE))

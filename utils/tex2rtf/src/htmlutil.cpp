@@ -30,6 +30,12 @@
 
 extern void DecToHex(int, char *);
 void GenerateHTMLIndexFile(char *fname);
+
+void GenerateHTMLWorkshopFiles(char *fname);
+void HTMLWorkshopAddToContents(int level, char *s, char *file);
+void HTMLWorkshopStartContents();
+void HTMLWorkshopEndContents();
+
 void OutputContentsFrame(void);
 
 #include "readshg.h" // Segmented hypergraphics parsing
@@ -650,6 +656,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       AddTexRef(topicName, ChaptersName, ChapterNameString);
 
       SetCurrentChapterName(topicName, ChaptersName);
+      if (htmlWorkshopFiles) HTMLWorkshopAddToContents(0, topicName, ChaptersName);
 
       SetCurrentOutput(Chapters);
 
@@ -719,6 +726,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       AddTexRef(topicName, SectionsName, SectionNameString);
 
       SetCurrentSectionName(topicName, SectionsName);
+      if (htmlWorkshopFiles) HTMLWorkshopAddToContents(1, topicName, SectionsName);
 
       SetCurrentOutput(Sections);
       TexOutput("<head><title>");
@@ -811,6 +819,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             ReopenFile(&Subsections, &SubsectionsName);
             AddTexRef(topicName, SubsectionsName, SubsectionNameString);
             SetCurrentSubsectionName(topicName, SubsectionsName);
+            if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SubsectionsName);
             SetCurrentOutput(Subsections);
 
             TexOutput("<head><title>");
@@ -837,6 +846,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
           {
             AddTexRef(topicName, SectionsName, SubsectionNameString);
             SetCurrentSubsectionName(topicName, SectionsName);
+
 //            if ( subsectionNo != 0 )
             fprintf(Sections, "\n<HR>\n");
 
@@ -851,6 +861,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             OutputCurrentSection();
             TexOutput("</A><BR>\n");
 
+            if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SectionsName);
             SetCurrentOutput(Sections);
           }
           // Add this section title to the list of keywords
@@ -888,6 +899,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             ReopenFile(&Subsubsections, &SubsubsectionsName);
             AddTexRef(topicName, SubsubsectionsName, SubsubsectionNameString);
             SetCurrentSubsubsectionName(topicName, SubsubsectionsName);
+            if (htmlWorkshopFiles) HTMLWorkshopAddToContents(3, topicName, SubsubsectionsName);
 
             SetCurrentOutput(Subsubsections);
             TexOutput("<head><title>");
@@ -926,6 +938,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
             OutputCurrentSection();
             TexOutput("</A><BR>");
 */
+            if (htmlWorkshopFiles) HTMLWorkshopAddToContents(2, topicName, SectionsName);             
             SetCurrentOutput(Sections);
         }
 
@@ -1920,6 +1933,23 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           strcat(buf, ".gif");
           f = TexPathList.FindValidPath(buf);
         }
+
+        if (f == "") // Try for a JPEG instead
+        {
+          strcpy(buf, filename);
+          StripExtension(buf);
+          strcat(buf, ".jpg");
+          f = TexPathList.FindValidPath(buf);
+        }
+
+        if (f == "") // Try for a PNG instead
+        {
+          strcpy(buf, filename);
+          StripExtension(buf);
+          strcat(buf, ".png");
+          f = TexPathList.FindValidPath(buf);
+        }
+
         if (f != "")
         {
           char *inlineFilename = copystring(f);
@@ -2800,6 +2830,7 @@ bool HTMLGo(void)
     fprintf(Contents, "<UL>\n");
 
     SetCurrentOutput(Titlepage);
+    if (htmlWorkshopFiles) HTMLWorkshopStartContents();
     OnInform("Converting...");
 
     TraverseDocument();
@@ -2949,8 +2980,17 @@ bool HTMLGo(void)
       GenerateHTMLIndexFile(htmlIndexName);
     }
 
+    // Generate HTML Help Workshop files if requested
+    if (htmlWorkshopFiles)
+    {
+      HTMLWorkshopEndContents();
+      GenerateHTMLWorkshopFiles(FileRoot);
+    }
+
+
     return TRUE;
   }
+
   return FALSE;
 }
 
@@ -2979,4 +3019,153 @@ void GenerateHTMLIndexFile(char *fname)
     }
   }
   fclose(fd);
+}
+
+
+
+
+
+
+
+// output .hpp, .hhc and .hhk files:
+
+
+void GenerateHTMLWorkshopFiles(char *fname)
+{
+  FILE *f;
+  char buf[300];
+
+  /* Generate project file : */
+
+  sprintf(buf, "%s.hhp", fname);
+  f = fopen(buf, "wt");
+  fprintf(f, 
+      "[OPTIONS]\n"
+      "Compatibility=1.1 or later\n"
+      "Contents file=%s.hhc\n"
+      "Default topic=%s\n"
+      "Index file=%s.hhk\n"
+      "Title=",
+      FileNameFromPath(fname),
+      FileNameFromPath(TitlepageName),
+      FileNameFromPath(fname)
+      );
+      
+  if (DocumentTitle) {
+    SetCurrentOutput(f);
+    TraverseChildrenFromChunk(DocumentTitle);
+  }
+  else fprintf(f, "(unknown)");
+  
+  fprintf(f, "\n\n[FILES]\n");
+  fprintf(f, "%s\n", FileNameFromPath(TitlepageName));
+  for (int i = 1; i <= fileId; i++) { 
+    if (truncateFilenames)
+      sprintf(buf, "%s%d.htm", FileNameFromPath(FileRoot), i);
+    else
+      sprintf(buf, "%s%d.html", FileNameFromPath(FileRoot), i);
+    fprintf(f, "%s\n", buf);
+  }
+  fclose(f);
+
+  /* Generate index file : */
+
+  sprintf(buf, "%s.hhk", fname);
+  f = fopen(buf, "wt");
+
+  fprintf(f,
+      "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">\n"
+      "<HTML>\n"
+      "<HEAD>\n"
+      "<meta name=\"GENERATOR\" content=\"tex2rtf\">\n"
+      "<!-- Sitemap 1.0 -->\n"
+      "</HEAD><BODY>\n"
+      "<OBJECT type=\"text/site properties\">\n"
+      " <param name=\"ImageType\" value=\"Folder\">\n"
+      "</OBJECT>\n"
+      "<UL>\n");
+
+  TopicTable.BeginFind();
+  wxNode *node = NULL;
+  while ((node = TopicTable.Next()))
+  {
+    TexTopic *texTopic = (TexTopic *)node->Data();
+    const char *topicName = node->GetKeyString();
+    if (texTopic->filename && texTopic->keywords)
+    {
+      wxNode *node1 = texTopic->keywords->First();
+      while (node1)
+      {
+        char *s = (char *)node1->Data();
+        fprintf(f, 
+            " <LI> <OBJECT type=\"text/sitemap\">\n"
+            "  <param name=\"Local\" value=\"%s#%s\">\n"
+            "  <param name=\"Name\" value=\"%s\">\n"
+            "  </OBJECT>\n",
+	    texTopic->filename, topicName, s);
+        node1 = node1->Next();
+      }
+    }
+  }
+    
+  fprintf(f, "</UL>\n");
+  fclose(f);
+}
+
+
+
+static FILE *HTMLWorkshopContents = NULL;
+static int HTMLWorkshopLastLevel = 0;
+
+void HTMLWorkshopAddToContents(int level, char *s, char *file)
+{
+  int i;
+
+  if (level > HTMLWorkshopLastLevel)
+    for (i = HTMLWorkshopLastLevel; i < level; i++)
+      fprintf(HTMLWorkshopContents, "<UL>"); 
+  if (level < HTMLWorkshopLastLevel)
+    for (i = level; i < HTMLWorkshopLastLevel; i++)
+      fprintf(HTMLWorkshopContents, "</UL>"); 
+  
+  SetCurrentOutput(HTMLWorkshopContents);
+  fprintf(HTMLWorkshopContents, 
+            " <LI> <OBJECT type=\"text/sitemap\">\n"
+            "  <param name=\"Local\" value=\"%s#%s\">\n"
+            "  <param name=\"Name\" value=\"",
+	    file, s);
+  OutputCurrentSection();
+  fprintf(HTMLWorkshopContents,	    	    
+	    "\">\n"
+            "  </OBJECT>\n");
+  HTMLWorkshopLastLevel = level;
+}
+
+
+void HTMLWorkshopStartContents()
+{
+  char buf[300];
+  sprintf(buf, "%s.hhc", FileRoot);
+  HTMLWorkshopContents = fopen(buf, "wt");  
+  HTMLWorkshopLastLevel = 0;
+
+  fprintf(HTMLWorkshopContents, 
+      "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">\n"
+      "<HTML>\n"
+      "<HEAD>\n"
+      "<meta name=\"GENERATOR\" content=\"tex2rtf\">\n"
+      "<!-- Sitemap 1.0 -->\n"
+      "</HEAD><BODY>\n"
+      "<OBJECT type=\"text/site properties\">\n"
+      " <param name=\"ImageType\" value=\"Folder\">\n"
+      "</OBJECT>\n"
+      "<UL>\n");
+}
+
+
+void HTMLWorkshopEndContents()
+{
+  for (int i = HTMLWorkshopLastLevel; i >= 0; i--)
+    fprintf(HTMLWorkshopContents, "</UL>\n");
+  fclose(HTMLWorkshopContents);
 }

@@ -238,6 +238,7 @@ extern char *textColourString; // HTML text colour
 extern char *linkColourString; // HTML link colour
 extern char *followedLinkColourString; // HTML followed link colour
 extern bool combineSubSections; // Stop splitting files below section
+extern bool htmlWorkshopFiles;  // generate HTML Help Workshop project files
 
 // Names to help with internationalisation
 extern char *ContentsNameString;

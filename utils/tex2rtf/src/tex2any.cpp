@@ -121,6 +121,7 @@ char            *textColourString = NULL;
 char            *linkColourString = NULL;
 char            *followedLinkColourString = NULL;
 bool            combineSubSections = FALSE;
+bool            htmlWorkshopFiles = FALSE;
 
 /*
  * International support
