@@ -687,12 +687,21 @@ public:
         // sets the date to the given day of the given week in the year,
         // returns true on success and false if given date doesn't exist (e.g.
         // numWeek is > 53)
-    bool SetToTheWeek(wxDateTime_t numWeek,
-                      WeekDay weekday = Mon,
-                      WeekFlags flags = Monday_First);
-    inline wxDateTime GetWeek(wxDateTime_t numWeek,
-                              WeekDay weekday = Mon,
-                              WeekFlags flags = Monday_First) const;
+        //
+        // these functions are badly defined as they're not the reverse of
+        // GetWeekOfYear(), use SetToTheWeekOfYear() instead
+    wxDEPRECATED( bool SetToTheWeek(wxDateTime_t numWeek,
+                                    WeekDay weekday = Mon,
+                                    WeekFlags flags = Monday_First) );
+    wxDEPRECATED( wxDateTime GetWeek(wxDateTime_t numWeek,
+                                     WeekDay weekday = Mon,
+                                     WeekFlags flags = Monday_First) const );
+
+        // returns the date corresponding to the given week day of the given
+        // week (in ISO notation) of the specified year
+    static wxDateTime SetToWeekOfYear(int year,
+                                      wxDateTime_t numWeek,
+                                      WeekDay weekday = Mon);
 
         // sets the date to the last day of the given (or current) month or the
         // given (or current) year
@@ -1524,15 +1533,6 @@ inline wxDateTime wxDateTime::GetLastWeekDay(WeekDay weekday,
     wxDateTime dt(*this);
 
     return dt.SetToLastWeekDay(weekday, month, year) ? dt : wxInvalidDateTime;
-}
-
-inline wxDateTime wxDateTime::GetWeek(wxDateTime_t numWeek,
-                                      WeekDay weekday,
-                                      WeekFlags flags) const
-{
-    wxDateTime dt(*this);
-
-    return dt.SetToTheWeek(numWeek, weekday, flags) ? dt : wxInvalidDateTime;
 }
 
 inline wxDateTime wxDateTime::GetLastMonthDay(Month month, int year) const

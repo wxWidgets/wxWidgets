@@ -1646,19 +1646,49 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
 // Weekday and monthday stuff
 // ----------------------------------------------------------------------------
 
-bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek,
-                              WeekDay weekday,
-                              WeekFlags flags)
+// convert Sun, Mon, ..., Sat into 6, 0, ..., 5
+static inline int ConvertWeekDayToMondayBase(int wd)
+{
+    return wd == wxDateTime::Sun ? 6 : wd - 1;
+}
+
+/* static */
+wxDateTime
+wxDateTime::SetToWeekOfYear(int year, wxDateTime_t numWeek, WeekDay wd)
 {
     wxASSERT_MSG( numWeek > 0,
                   _T("invalid week number: weeks are counted from 1") );
 
-    int year = GetYear();
-
     // Jan 4 always lies in the 1st week of the year
-    Set(4, Jan, year);
-    SetToWeekDayInSameWeek(weekday, flags) += wxDateSpan::Weeks(numWeek - 1);
+    wxDateTime dt(4, Jan, year);
+    dt.SetToWeekDayInSameWeek(wd);
+    dt += wxDateSpan::Weeks(numWeek - 1);
 
+    return dt;
+}
+
+// use a separate function to avoid warnings about using deprecated
+// SetToTheWeek in GetWeek below
+static wxDateTime
+SetToTheWeek(int year,
+             wxDateTime::wxDateTime_t numWeek,
+             wxDateTime::WeekDay weekday,
+             wxDateTime::WeekFlags flags)
+{
+    // Jan 4 always lies in the 1st week of the year
+    wxDateTime dt(4, wxDateTime::Jan, year);
+    dt.SetToWeekDayInSameWeek(weekday, flags);
+    dt += wxDateSpan::Weeks(numWeek - 1);
+
+    return dt;
+}
+
+bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek,
+                              WeekDay weekday,
+                              WeekFlags flags)
+{
+    int year = GetYear();
+    *this = ::SetToTheWeek(year, numWeek, weekday, flags);
     if ( GetYear() != year )
     {
         // oops... numWeek was too big
@@ -1666,6 +1696,13 @@ bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek,
     }
 
     return true;
+}
+
+wxDateTime wxDateTime::GetWeek(wxDateTime_t numWeek,
+                               WeekDay weekday,
+                               WeekFlags flags) const
+{
+    return ::SetToTheWeek(GetYear(), numWeek, weekday, flags);
 }
 
 wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
@@ -1842,12 +1879,6 @@ wxDateTime::wxDateTime_t GetDayOfYearFromTm(const wxDateTime::Tm& tm)
 wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
 {
     return GetDayOfYearFromTm(GetTm(tz));
-}
-
-// convert Sun, Mon, ..., Sat into 6, 0, ..., 5
-static inline int ConvertWeekDayToMondayBase(int wd)
-{
-    return wd == wxDateTime::Sun ? 6 : wd - 1;
 }
 
 wxDateTime::wxDateTime_t

@@ -448,8 +448,15 @@ for n in range(20):
         CPPUNIT_ASSERT( wmon2 == wn.wmon2 );
         CPPUNIT_ASSERT( week == wn.week );
 
-        wxDateTime dt2(1, wxDateTime::Jan, d.year);
-        dt2.SetToTheWeek(wn.week, dt.GetWeekDay());
+        int year = d.year;
+        if ( week == 1 && d.month != wxDateTime::Jan )
+        {
+            // this means we're in the first week of the next year
+            year++;
+        }
+
+        wxDateTime
+            dt2 = wxDateTime::SetToWeekOfYear(year, week, dt.GetWeekDay());
         CPPUNIT_ASSERT( dt2 == dt );
     }
 }
