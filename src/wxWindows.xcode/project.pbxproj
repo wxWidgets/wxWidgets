@@ -16029,6 +16029,15 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
+		F5A8604C01FA022C0175ACA7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = stockitem.cpp;
+			path = common/stockitem.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
 		F5A8604D01FA022C0175ACA7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -17555,6 +17564,14 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		F5A861C101FA022C0175ACA7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = hid.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		F5A861C501FA022C0175ACA7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -17881,6 +17898,14 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.cpp;
 			path = tabctrl.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5A861C101FA022C0175ACA7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = taskbar.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
