@@ -181,17 +181,21 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     // remember it for later use
     wxCoord startNewText = GetTextWidth(valueNew);
 
-    // if we really replace something, refresh till the end of line as all
-    // remaining text in it is affected, but if we just added some text to the
-    // end of line, we only need to refresh the area occupied by this text
-    // refresh to the end of the line
-    wxCoord widthNewText;
-
     valueNew += text;
     if ( (size_t)to < m_value.length() )
     {
         valueNew += m_value.c_str() + (size_t)to;
+    }
 
+    // OPT: is the following really ok? not sure any more now at 2 am...
+
+    // we usually refresh till the end of line except of the most common case
+    // when some text is appended to the end of the string in which case we
+    // refresh just it
+    wxCoord widthNewText;
+
+    if ( (size_t)from < m_value.length() )
+    {
         // refresh till the end of line
         widthNewText = 0;
     }
@@ -1711,6 +1715,9 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         InitCommandEvent(event);
         event.SetString(GetValue());
         GetEventHandler()->ProcessEvent(event);
+
+        // as the text changed...
+        m_isModified = TRUE;
     }
 
     return TRUE;

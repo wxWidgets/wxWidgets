@@ -5,6 +5,8 @@ TODO
 wxTextCtrl
 
 *   display corrupted when typing text in quickly
+*   text ctrl display pb when text is truncated
+*   listbox: horz scrollbar doesn't appear
 
 All
 

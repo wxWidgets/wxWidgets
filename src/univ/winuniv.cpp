@@ -302,6 +302,21 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
 // state flags
 // ----------------------------------------------------------------------------
 
+bool wxWindow::Enable(bool enable)
+{
+    if ( !wxWindowBase::Enable(enable) )
+        return FALSE;
+
+    if ( m_renderer )
+    {
+        // a window with renderer is drawn by ourselves and it has to be
+        // refreshed to reflect its new status
+        Refresh();
+    }
+
+    return TRUE;
+}
+
 bool wxWindow::IsFocused() const
 {
     wxWindow *self = wxConstCast(this, wxWindow);
@@ -423,7 +438,7 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
 
         // if we don't have scrollbar or if it is outside the border (and not
         // blended into it), take account of the right border as well
-        if ( !m_scrollbarVert || !inside )
+        if ( !m_scrollbarVert || inside )
             w -= rectBorder.width;
 
         // and always account for the left border
@@ -435,7 +450,7 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
         if ( m_scrollbarHorz )
             h -= m_scrollbarHorz->GetSize().y;
 
-        if ( !m_scrollbarHorz || !inside )
+        if ( !m_scrollbarHorz || inside )
             h -= rectBorder.height;
 
         *height = h - rectBorder.y;
@@ -456,12 +471,12 @@ void wxWindow::DoSetClientSize(int width, int height)
     wxSize size = GetSize();
     if ( m_scrollbarVert )
         width += size.x - m_scrollbarVert->GetPosition().x;
-    if ( !m_scrollbarVert || !inside )
+    if ( !m_scrollbarVert || inside )
         width += rectBorder.width;
 
     if ( m_scrollbarHorz )
         height += size.y - m_scrollbarHorz->GetPosition().y;
-    if ( !m_scrollbarHorz || !inside )
+    if ( !m_scrollbarHorz || inside )
         height += rectBorder.height;
 
     wxWindowNative::DoSetClientSize(width, height);

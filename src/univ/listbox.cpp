@@ -142,7 +142,7 @@ int wxListBox::DoAppend(const wxString& item)
         }
     }
 
-    RefreshItem(m_strings.GetCount() - 1);
+    RefreshFromItemToEnd(index);
 
     return index;
 }
@@ -171,7 +171,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
     // note that we have to refresh all the items after the ones we inserted,
     // not just these items
-    RefreshItems(pos, GetCount() - pos);
+    RefreshFromItemToEnd(pos);
 }
 
 void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
@@ -263,6 +263,10 @@ void wxListBox::Delete(int n)
 {
     wxCHECK_RET( n < GetCount(), _T("invalid index in wxListBox::Delete") );
 
+    // do it before removing the index as otherwise the last item will not be
+    // refreshed (as GetCount() will be decremented)
+    RefreshFromItemToEnd(n);
+
     m_strings.RemoveAt(n);
 
     if ( HasClientObjectData() )
@@ -273,8 +277,6 @@ void wxListBox::Delete(int n)
     m_itemsClientData.RemoveAt(n);
 
     m_updateScrollbarY = TRUE;
-
-    RefreshItems(n, GetCount() - n);
 }
 
 // ----------------------------------------------------------------------------
@@ -361,6 +363,11 @@ void wxListBox::Refresh(bool eraseBackground, const wxRect *rect)
         wxLogTrace(_T("listbox"), _T("Refreshing all"));
 
     wxControl::Refresh(eraseBackground, rect);
+}
+
+void wxListBox::RefreshFromItemToEnd(int from)
+{
+    RefreshItems(from, GetCount() - from);
 }
 
 void wxListBox::RefreshItems(int from, int count)

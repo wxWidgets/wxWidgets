@@ -184,6 +184,7 @@ protected:
     // refresh the given item(s) or everything
     void RefreshItems(int from, int count);
     void RefreshItem(int n);
+    void RefreshFromItemToEnd(int n);
     void RefreshAll();
 
     // send an event of the given type

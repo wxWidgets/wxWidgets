@@ -62,6 +62,8 @@ public:
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
 
+    virtual ~wxRadioBox();
+
     // implement wxRadioBox interface
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
@@ -80,7 +82,12 @@ public:
     virtual void SetLabel(const wxString& label);
 
     // wxUniversal-only methods
+
+    // another Append() version
     void Append(int n, const wxString *choices);
+
+    // implementation only: called by wxRadioHookHandler
+    void OnRadioButton(wxEvent& event);
 
 protected:
     // override the base class methods dealing with window positioning/sizing
@@ -114,6 +121,10 @@ protected:
 
     // all radio buttons
     wxArrayRadioButtons m_buttons;
+
+    // the event handler which is used to translate radiobutton events into
+    // radiobox one
+    wxEvtHandler *m_evtRadioHook;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioBox)

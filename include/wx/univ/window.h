@@ -163,6 +163,9 @@ public:
     virtual void Refresh(bool eraseBackground = TRUE,
                          const wxRect *rect = (const wxRect *) NULL);
 
+    // we refresh the window when it is dis/enabled
+    virtual bool Enable(bool enable = TRUE);
+
     // remember that the font/colour was changed
     virtual bool SetBackgroundColour(const wxColour& colour);
     virtual bool SetForegroundColour(const wxColour& colour);

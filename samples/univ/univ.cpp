@@ -53,7 +53,7 @@
 
 #include "wx/univ/theme.h"
 
-#define TEST_TEXT_ONLY
+//#define TEST_TEXT_ONLY
 
 //#define DEBUG_SCROLL
 //#define DEBUG_LISTBOX

@@ -55,6 +55,11 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+    #include "wx/univ/colschem.h"
+#endif // __WXUNIVERSAL__
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -142,7 +147,11 @@ bool wxFrame::Create(wxWindow *parent,
   m_frameStatusBar = NULL;
 #endif // wxUSE_STATUSBAR
 
+#ifdef __WXUNIVERSAL__
+  SetBackgroundColour(wxTHEME_COLOUR(CONTROL));
+#else // !__WXUNIVERSAL__
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+#endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 
   if ( id > -1 )
     m_windowId = id;

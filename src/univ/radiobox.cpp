@@ -51,6 +51,31 @@ static const int BUTTON_BORDER_Y = 0;
 static const int BOX_BORDER_X = 0;
 static const int BOX_BORDER_Y = 0;
 
+// ----------------------------------------------------------------------------
+// wxRadioBox event handler
+// ----------------------------------------------------------------------------
+
+class wxRadioHookHandler : public wxEvtHandler
+{
+public:
+    wxRadioHookHandler(wxRadioBox *radio) { m_radio = radio; }
+
+    virtual bool ProcessEvent(wxEvent& event)
+    {
+        // we intercept the command events from radio buttons
+        if ( event.GetEventType() == wxEVT_COMMAND_RADIOBUTTON_SELECTED )
+        {
+            m_radio->OnRadioButton(event);
+        }
+
+        // just pass it on
+        return GetNextHandler()->ProcessEvent(event);
+    }
+
+private:
+    wxRadioBox *m_radio;
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -98,6 +123,20 @@ bool wxRadioBox::Create(wxWindow *parent,
     return TRUE;
 }
 
+wxRadioBox::~wxRadioBox()
+{
+    // remove the event handlers we pushed on them from all buttons
+    size_t count = m_buttons.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_buttons[n]->PopEventHandler(TRUE /* delete it */);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxRadioBox init
+// ----------------------------------------------------------------------------
+
 void wxRadioBox::SetMajorDim(int majorDim)
 {
     m_majorDim = majorDim;
@@ -125,10 +164,16 @@ void wxRadioBox::Append(int count, const wxString *choices)
     m_buttons.Alloc(count);
     for ( int n = 0; n < count; n++ )
     {
-        // make the first button in the box the start of new group
-        m_buttons.Add(new wxRadioButton(parent, -1, choices[n],
-                                        wxDefaultPosition, wxDefaultSize,
-                                        n == 0 ? wxRB_GROUP : 0));
+        // make the first button in the box the start of new group by giving it
+        // wxRB_GROUP style
+        wxRadioButton *btn = new wxRadioButton(parent, -1, choices[n],
+                                               wxDefaultPosition,
+                                               wxDefaultSize,
+                                               n == 0 ? wxRB_GROUP : 0);
+
+        // we want to get the events from the buttons to translate it into
+        btn->PushEventHandler(new wxRadioHookHandler(this));
+        m_buttons.Add(btn);
     }
 }
 
@@ -149,6 +194,20 @@ void wxRadioBox::SetSelection(int n)
 int wxRadioBox::GetSelection() const
 {
     return m_selection;
+}
+
+void wxRadioBox::OnRadioButton(wxEvent& event)
+{
+    int n = m_buttons.Index((wxRadioButton *)event.GetEventObject());
+    wxCHECK_RET( n != wxNOT_FOUND, _T("click from alien radio button") );
+
+    m_selection = n;
+
+    wxCommandEvent event2(wxEVT_COMMAND_RADIOBOX_SELECTED, GetId());
+    InitCommandEvent(event2);
+    event2.SetInt(n);
+    event2.SetString(GetString(n));
+    Command(event2);
 }
 
 // ----------------------------------------------------------------------------
@@ -279,10 +338,10 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
 
         if ( GetWindowStyle() & wxRA_SPECIFY_COLS )
         {
-            // from to to bottom
-            if ( (n == 0) || (n % m_numRows) )
+            // from top to bottom
+            if ( (n + 1) % m_numRows )
             {
-                // continue (or start if n == 0) in this column
+                // continue in this column
                 y += sizeBtn.y;
             }
             else
@@ -295,7 +354,7 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
         else // wxRA_SPECIFY_ROWS: mirror the code above
         {
             // from left to right
-            if ( (n == 0) || (n % m_numCols) )
+            if ( (n + 1) % m_numCols )
             {
                 // continue in this row
                 x += sizeBtn.x;

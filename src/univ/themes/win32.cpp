@@ -45,7 +45,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-static const int BORDER_THICKNESS = 20;
+static const int BORDER_THICKNESS = 2;
 
 // ----------------------------------------------------------------------------
 // wxWin32Renderer: draw the GUI elements in Win32 style
@@ -175,11 +175,9 @@ public:
         { return 0; }
 
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rect)
-        { wxRect rectTotal = rect; rectTotal.Inflate(10); return rectTotal; }
+                                    const wxRect& rect);
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
-                                     const wxRect& rect)
-        { wxRect rectText = rect; rectText.Inflate(-10); return rectText; }
+                                     const wxRect& rect);
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -1718,6 +1716,32 @@ int wxWin32Renderer::PixelToScrollbar(const wxScrollBar *scrollbar,
                                       wxCoord coord)
 {
     return StandardPixelToScrollbar(scrollbar, coord, m_sizeScrollbarArrow);
+}
+
+// ----------------------------------------------------------------------------
+// text control geometry
+// ----------------------------------------------------------------------------
+
+wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
+                                         const wxRect& rect)
+{
+    // this is what Windows does
+    wxRect rectTotal = rect;
+    rectTotal.Inflate(1);
+    rectTotal.height++;
+
+    return rectTotal;
+}
+
+wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
+                                          const wxRect& rect)
+{
+    // undo GetTextTotalArea()
+    wxRect rectText = rect;
+    rectText.height--;
+    rectText.Inflate(-1);
+
+    return rectText;
 }
 
 // ----------------------------------------------------------------------------
