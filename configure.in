@@ -6058,17 +6058,16 @@ AC_SUBST(CPPUNIT_LIBS)
 AC_BAKEFILE
 
 
+GCC_PRAGMA_FLAGS=""
 dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
 if test $GCC_PCH = 1 ; then
-    CODE_GEN_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA $CODE_GEN_FLAGS"
-    CPPFLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA $CPPFLAGS"
+    GCC_PRAGMA_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA"
 else
     case "${host}" in
         powerpc-*-darwin* )
             dnl Some Apple's GCC version are broken and can't handle the
             dnl pragmas:
-            CODE_GEN_FLAGS="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS"
-            CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
+            GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
             ;;
         *-*-mingw32* )
             dnl MinGW GCC versions >= 3.2 have problems with
@@ -6086,14 +6085,14 @@ else
                                #error "Not GCC 3.2 or greater"
                                #endif
                                ],
-                              [CODE_GEN_FLAGS="-DNO_GCC_PRAGMA $CODE_GEN_FLAGS"
-                               CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
+                              [GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
                                AC_MSG_RESULT([yes])],
                               [AC_MSG_RESULT([no])])
             fi
             ;;
     esac
 fi
+CPPFLAGS="$GCC_PRAGMA_FLAGS $CPPFLAGS"
 
 
 dnl for convenience, sort the samples in alphabetical order
@@ -6168,6 +6167,7 @@ AC_SUBST(WXCONFIG_INCLUDE)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
 AC_SUBST(WX_LARGEFILE_FLAGS)
+AC_SUBST(GCC_PRAGMA_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS_CXX)
 
