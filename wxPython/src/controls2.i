@@ -627,6 +627,8 @@ public:
 
     // End label editing, optionally cancelling the edit
     bool EndEditLabel(bool cancel);
+#else
+    void EditLabel(long item);
 #endif
 
     // Ensures this item is visible
