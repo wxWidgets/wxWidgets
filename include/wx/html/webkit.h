@@ -16,6 +16,8 @@
 #pragma interface "webkit.h"
 #endif
 
+#if wxUSE_WEBKIT
+
 #if !defined(__WXMAC__) && !defined(__WXCOCOA__)
 #error "wxWebKitCtrl not implemented for this platform"
 #endif
@@ -126,5 +128,7 @@ END_DECLARE_EVENT_TYPES()
                             (wxObjectEventFunction)   \
                             (wxWebKitStateChangedEventFunction) & func, \
                             (wxObject *) NULL ),
+
+#endif // wxUSE_WEBKIT
 
 #endif // _WX_WEBKIT_H_

@@ -13,6 +13,8 @@
     #pragma implementation "webkit.h"
 #endif
 
+#if wxUSE_WEBKIT
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -31,7 +33,6 @@
 
 #include "wx/html/webkit.h"
 #include "wx/notebook.h"
-//#include "wx/html/wklisten.h"
 
 
 // ----------------------------------------------------------------------------
@@ -150,8 +151,8 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     
     m_webView = (WebView*) HIWebViewGetWebView( (HIViewRef) m_macControl );
     MacPostControlCreate(pos, size);
-    
     HIViewSetVisible( (HIViewRef) m_macControl, true );           
+    [m_webView setHidden:false];
 #endif
 
     // Register event listener interfaces
@@ -255,17 +256,27 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
+    // This is a nasty hack because WebKit does not seem to recognize a Tabs control as its parent. 
+    // Therefore, coordinates must be relative to the left-hand side of the screen, rather than
+    // relative to the Tabs control.
     wxWindow* parent = GetParent();
     bool inNotebook = false;
     int x = 0;
     int y = 18; 
     while(parent != NULL)
     {
-        x += parent->GetPosition().x;
-        y += parent->GetPosition().y;
+        // keep adding the position until we hit the notebook
+        if (!inNotebook){
+            x += parent->GetPosition().x;
+            y += parent->GetPosition().y;
+        }
+        
+        if ( parent->GetClassInfo()->GetClassName() == wxT("wxSplitterWindow") ){
+            x += 3;
+        }
+        
         if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ){
             inNotebook = true;
-            break;
             }
         parent = parent->GetParent();
     }
@@ -361,3 +372,5 @@ void wxWebKitCtrl::MacVisibilityChanged(){
     }
 }
 @end
+
+#endif //wxUSE_WEBKIT

@@ -768,6 +768,11 @@
 // smaller library.
 #define wxUSE_HTML          1
 
+// wxWebKit is a wrapper for Apple's WebKit framework, use it if you want to embed
+// the Safari browser control
+// 0 by default because of Jaguar compatibility problems
+#define wxUSE_WEBKIT	0
+
 // OpenGL canvas
 #define wxUSE_GLCANVAS       0
 
