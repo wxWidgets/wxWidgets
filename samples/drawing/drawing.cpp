@@ -59,7 +59,8 @@ enum ScreenToShow
     Show_Text,
     Show_Lines,
     Show_Polygons,
-    Show_Mask
+    Show_Mask,
+    Show_Ops
 };
 
 // ----------------------------------------------------------------------------
@@ -145,6 +146,7 @@ protected:
     void DrawTestLines( int x, int y, int width, wxDC &dc );
     void DrawText(wxDC& dc);
     void DrawImages(wxDC& dc);
+    void DrawWithLogicalOps(wxDC& dc);
     void DrawDefault(wxDC& dc);
 
 private:
@@ -172,7 +174,8 @@ enum
     File_ShowLines,
     File_ShowPolygons,
     File_ShowMask,
-    MenuShow_Last = File_ShowMask,
+    File_ShowOps,
+    MenuShow_Last = File_ShowOps,
 
     MenuOption_First,
 
@@ -556,7 +559,6 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dash1[0] = 0xFF;
     ud.SetDashes( 1, dash1 );
     dc.DrawLine( x+20, y+170, 100, y+170 );
-
 }
 
 void MyCanvas::DrawDefault(wxDC& dc)
@@ -583,7 +585,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc.SetPen( *wxWHITE_PEN );
     memdc.DrawRectangle(0,0,20,70);
     memdc.DrawLine( 10,0,10,70 );
-    
+
     // to the right
     wxPen pen = *wxRED_PEN;
     pen.SetWidth(2);
@@ -592,7 +594,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc.DrawLine( 10,10,11,10 );
     memdc.DrawLine( 10,15,12,15 );
     memdc.DrawLine( 10,20,13,20 );
-    
+
 /*
     memdc.SetPen(*wxRED_PEN);
     memdc.DrawLine( 12, 5,12, 5 );
@@ -600,7 +602,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc.DrawLine( 12,15,14,15 );
     memdc.DrawLine( 12,20,15,20 );
 */
-    
+
     // same to the left
     memdc.DrawLine( 10,25,10,25 );
     memdc.DrawLine( 10,30, 9,30 );
@@ -615,20 +617,19 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc.DrawLine( 10,55,11,55 );
     memdc.DrawLine( 10,60,12,60 );
     memdc.DrawLine( 10,65,13,65 );
-    
+
     memdc.DrawLine( 12,50,12,50 );
     memdc.DrawLine( 12,55,13,55 );
     memdc.DrawLine( 12,60,14,60 );
     memdc.DrawLine( 12,65,15,65 );
-    
+
     memdc.SelectObject( wxNullBitmap );
     dc.DrawBitmap( bitmap, 10, 170 );
     wxImage image( bitmap );
     image.Rescale( 60,210 );
     bitmap = image.ConvertToBitmap();
     dc.DrawBitmap( bitmap, 50, 170 );
-    
-    
+
     // test the rectangle outline drawing - there should be one pixel between
     // the rect and the lines
     dc.SetPen(*wxWHITE_PEN);
@@ -715,31 +716,31 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.DrawRectangle( 100, 40, 4, height );
 }
 
+static const struct
+{
+    const wxChar *name;
+    int           rop;
+} rasterOperations[] =
+{
+    { "wxAND",          wxAND           },
+    { "wxAND_INVERT",   wxAND_INVERT    },
+    { "wxAND_REVERSE",  wxAND_REVERSE   },
+    { "wxCLEAR",        wxCLEAR         },
+    { "wxCOPY",         wxCOPY          },
+    { "wxEQUIV",        wxEQUIV         },
+    { "wxINVERT",       wxINVERT        },
+    { "wxNAND",         wxNAND          },
+    { "wxNO_OP",        wxNO_OP         },
+    { "wxOR",           wxOR            },
+    { "wxOR_INVERT",    wxOR_INVERT     },
+    { "wxOR_REVERSE",   wxOR_REVERSE    },
+    { "wxSET",          wxSET           },
+    { "wxSRC_INVERT",   wxSRC_INVERT    },
+    { "wxXOR",          wxXOR           },
+};
+
 void MyCanvas::DrawImages(wxDC& dc)
 {
-    static const struct
-    {
-        const wxChar *name;
-        int           rop;
-    } rasterOperations[] =
-    {
-        { "wxAND",          wxAND           },
-        { "wxAND_INVERT",   wxAND_INVERT    },
-        { "wxAND_REVERSE",  wxAND_REVERSE   },
-        { "wxCLEAR",        wxCLEAR         },
-        { "wxCOPY",         wxCOPY          },
-        { "wxEQUIV",        wxEQUIV         },
-        { "wxINVERT",       wxINVERT        },
-        { "wxNAND",         wxNAND          },
-        { "wxNO_OP",        wxNO_OP         },
-        { "wxOR",           wxOR            },
-        { "wxOR_INVERT",    wxOR_INVERT     },
-        { "wxOR_REVERSE",   wxOR_REVERSE    },
-        { "wxSET",          wxSET           },
-        { "wxSRC_INVERT",   wxSRC_INVERT    },
-        { "wxXOR",          wxXOR           },
-    };
-
     dc.DrawText("original image", 0, 0);
     dc.DrawBitmap(gs_bmpNoMask, 0, 20, 0);
     dc.DrawText("with colour mask", 0, 100);
@@ -761,6 +762,27 @@ void MyCanvas::DrawImages(wxDC& dc)
         dc.DrawText(rasterOperations[n].name, x, y - 20);
         memDC.SelectObject(gs_bmpWithColMask);
         dc.Blit(x, y, cx, cy, &memDC, 0, 0, rasterOperations[n].rop, TRUE);
+    }
+}
+
+void MyCanvas::DrawWithLogicalOps(wxDC& dc)
+{
+    static const wxCoord w = 60;
+    static const wxCoord h = 60;
+
+    // reuse the text colour here
+    dc.SetPen(wxPen(m_owner->m_colourForeground, 1, wxSOLID));
+
+    for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
+    {
+        wxCoord x = 20 + 150*(n%4),
+                y = 20 + 100*(n/4);
+
+        dc.DrawText(rasterOperations[n].name, x, y - 20);
+        dc.SetLogicalFunction(rasterOperations[n].rop);
+        //dc.DrawRectangle(x, y, w, h);
+        dc.DrawLine(x, y, x + w, y + h);
+        dc.DrawLine(x + w, y, x, y + h);
     }
 }
 
@@ -803,6 +825,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
         case Show_Mask:
             DrawImages(dc);
+            break;
+
+        case Show_Ops:
+            DrawWithLogicalOps(dc);
             break;
     }
 }
@@ -850,6 +876,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowLines, "&Lines screen\tF3");
     menuFile->Append(File_ShowPolygons, "&Polygons screen\tF4");
     menuFile->Append(File_ShowMask, "wx&Mask screen\tF5");
+    menuFile->Append(File_ShowOps, "&ROP screen\tF6");
     menuFile->AppendSeparator();
     menuFile->Append(File_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();

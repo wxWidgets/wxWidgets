@@ -100,9 +100,11 @@ END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
-        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ),
-          m_bmpSmileXpm((const char **) smile_xpm),
-          m_iconSmileXpm((const char **) smile_xpm)
+        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
+#if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
+          , m_bmpSmileXpm((const char **) smile_xpm)
+          , m_iconSmileXpm((const char **) smile_xpm)
+#endif
 {
     my_horse_png = (wxBitmap*) NULL;
     my_horse_jpeg = (wxBitmap*) NULL;
@@ -131,7 +133,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     // try to find the directory with our images
     wxString dir;
     if ( wxFile::Exists("./horse.png") )
-        dir = "./";          
+        dir = "./";
     else if ( wxFile::Exists("../horse.png") )
         dir = "../";
     else
@@ -168,6 +170,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         wxLogError("Can't load PCX image");
     else
         my_horse_pcx = new wxBitmap( image.ConvertToBitmap() );
+
+    image.LoadFile( dir + wxString("test.pcx") );
+    my_square = new wxBitmap( image.ConvertToBitmap() );
 #endif
 
     if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
@@ -189,17 +194,16 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         my_horse_tiff = new wxBitmap( image.ConvertToBitmap() );
 #endif
 
-    image.LoadFile( dir + wxString("test.pcx") );
-    my_square = new wxBitmap( image.ConvertToBitmap() );
-
     CreateAntiAliasedBitmap();
 
     my_smile_xbm = new wxBitmap( (const char*)smile_bits, smile_width,
                                  smile_height, 1 );
 
+#if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
     // demonstrates XPM automatically using the mask when saving
     if ( m_bmpSmileXpm.Ok() )
         m_bmpSmileXpm.SaveFile("saved.xpm", wxBITMAP_TYPE_XPM);
+#endif
 }
 
 MyCanvas::~MyCanvas()
@@ -398,7 +402,7 @@ MyFrame::MyFrame()
                   wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu();
-  file_menu->Append( ID_ABOUT, "&About..");
+  file_menu->Append( ID_ABOUT, "&About...");
   file_menu->Append( ID_QUIT, "E&xit");
 
   wxMenuBar *menu_bar = new wxMenuBar();

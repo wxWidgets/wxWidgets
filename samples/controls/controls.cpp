@@ -632,11 +632,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(100, 20));
 
-#if 0
+#if 1
     // test for masked bitmap display
     bitmap = wxBitmap("test2.bmp", wxBITMAP_TYPE_BMP);
     bitmap.SetMask(new wxMask(bitmap, *wxBLUE));
-    (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(300, 120));
+    (void)new wxStaticBitmap /* wxBitmapButton */ (panel, -1, bitmap, wxPoint(300, 120));
 #endif
 
     wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),

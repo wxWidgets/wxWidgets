@@ -30,6 +30,7 @@
 #endif
 
 #include "wx/listctrl.h"
+#include "wx/timer.h"           // for wxStopWatch
 #include "listtest.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -132,12 +133,12 @@ bool MyApp::OnInit(void)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(LIST_LIST_VIEW,         "&List view");
-  file_menu->Append(LIST_REPORT_VIEW,         "&Report view");
-  file_menu->Append(LIST_ICON_VIEW,         "&Icon view");
-  file_menu->Append(LIST_ICON_TEXT_VIEW,     "Icon view with &text");
-  file_menu->Append(LIST_SMALL_ICON_VIEW,     "&Small icon view");
-  file_menu->Append(LIST_SMALL_ICON_TEXT_VIEW,     "Small icon &view with text");
+  file_menu->Append(LIST_LIST_VIEW,         "&List view\tF1");
+  file_menu->Append(LIST_REPORT_VIEW,         "&Report view\tF2");
+  file_menu->Append(LIST_ICON_VIEW,         "&Icon view\tF3");
+  file_menu->Append(LIST_ICON_TEXT_VIEW,     "Icon view with &text\tF4");
+  file_menu->Append(LIST_SMALL_ICON_VIEW,     "&Small icon view\tF5");
+  file_menu->Append(LIST_SMALL_ICON_TEXT_VIEW,     "Small icon &view with text\tF6");
   file_menu->Append(LIST_DESELECT_ALL, "&Deselect All");
   file_menu->Append(LIST_SELECT_ALL, "S&elect All");
   file_menu->AppendSeparator();
@@ -149,7 +150,7 @@ bool MyApp::OnInit(void)
   file_menu->Append(BUSY_OFF,         "&Busy cursor off");
   file_menu->AppendSeparator();
   file_menu->Append(LIST_ABOUT, "&About");
-  file_menu->Append(LIST_QUIT, "E&xit");
+  file_menu->Append(LIST_QUIT, "E&xit\tAlt-X");
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
   frame->SetMenuBar(menu_bar);
@@ -274,19 +275,29 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
     m_listCtrl->InsertColumn(1, "Column 2"); // , wxLIST_FORMAT_LEFT, 140);
     m_listCtrl->InsertColumn(2, "One More Column (2)"); // , wxLIST_FORMAT_LEFT, 140);
 
-    for ( int i = 0; i < 300; i++ )
+    // to speed up inserting we hide the control temporarily
+    m_listCtrl->Hide();
+
+    wxStopWatch sw;
+
+    wxString buf;
+    static const int NUM_ITEMS = 3000;
+    for ( int i = 0; i < NUM_ITEMS; i++ )
     {
-        wxChar buf[50];
-        wxSprintf(buf, _T("This is item %d"), i);
+        buf.Printf(_T("This is item %d"), i);
         long tmp = m_listCtrl->InsertItem(i, buf, 0);
         m_listCtrl->SetItemData(tmp, i);
 
-        wxSprintf(buf, _T("Col 1, item %d"), i);
+        buf.Printf(_T("Col 1, item %d"), i);
         tmp = m_listCtrl->SetItem(i, 1, buf);
 
-        wxSprintf(buf, _T("Item %d in column 2"), i);
+        buf.Printf(_T("Item %d in column 2"), i);
         tmp = m_listCtrl->SetItem(i, 2, buf);
     }
+
+    m_logWindow->WriteText(wxString::Format(_T("%d items inserted in %ldms\n"),
+                                            NUM_ITEMS, sw.Time()));
+    m_listCtrl->Show();
 
     // we leave all mask fields to 0 and only change the colour
     wxListItem item;
@@ -371,18 +382,24 @@ void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
 {
+    wxStopWatch sw;
+
     m_listCtrl->SortItems(MyCompareFunction, 0);
+
+    m_logWindow->WriteText(wxString::Format(_T("Sorting %d items took %ld ms\n"),
+                                            m_listCtrl->GetItemCount(),
+                                            sw.Time()));
 }
 
 void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxGetElapsedTime(TRUE);
+    wxStopWatch sw;
 
-    int nItems = m_listCtrl->GetItemCount();
     m_listCtrl->DeleteAllItems();
 
-    wxLogMessage("Deleting %d items took %ld ms",
-                 nItems, wxGetElapsedTime());
+    m_logWindow->WriteText(wxString::Format(_T("Deleting %d items took %ld ms\n"),
+                                            m_listCtrl->GetItemCount(),
+                                            sw.Time()));
 }
 
 // MyListCtrl
