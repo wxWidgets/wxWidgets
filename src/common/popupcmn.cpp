@@ -89,7 +89,7 @@ public:
 protected:
     // event handlers
     void OnKillFocus(wxFocusEvent& event);
-    void OnKeyUp(wxKeyEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
 
 private:
     wxPopupTransientWindow *m_popup;
@@ -113,7 +113,7 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
     EVT_KILL_FOCUS(wxPopupFocusHandler::OnKillFocus)
-    EVT_KEY_UP(wxPopupFocusHandler::OnKeyUp)
+    EVT_KEY_DOWN(wxPopupFocusHandler::OnKeyDown)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -178,6 +178,9 @@ void wxPopupTransientWindow::Init()
 {
     m_child =
     m_focus = (wxWindow *)NULL;
+
+    m_handlerFocus = NULL;
+    m_handlerPopup = NULL;
 }
 
 wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent, int style)
@@ -190,20 +193,34 @@ wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent, int style)
 wxPopupTransientWindow::~wxPopupTransientWindow()
 {
     PopHandlers();
+
+    delete m_handlerFocus;
+    delete m_handlerPopup;
 }
 
 void wxPopupTransientWindow::PopHandlers()
 {
     if ( m_child )
     {
-        m_child->PopEventHandler(TRUE /* delete it */);
+        if ( !m_child->RemoveEventHandler(m_handlerPopup) )
+        {
+            // something is very wrong and someone else probably deleted our
+            // handler - so don't risk deleting it second time
+            m_handlerPopup = NULL;
+        }
+
         m_child->ReleaseMouse();
         m_child = NULL;
     }
 
     if ( m_focus )
     {
-        m_focus->PopEventHandler(TRUE /* delete it */);
+        if ( !m_focus->RemoveEventHandler(m_handlerFocus) )
+        {
+            // see above
+            m_handlerFocus = NULL;
+        }
+
         m_focus = NULL;
     }
 }
@@ -224,25 +241,27 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     // first
     Show();
 
+    delete m_handlerPopup;
+    m_handlerPopup = new wxPopupWindowHandler(this);
+
     m_child->CaptureMouse();
-    m_child->PushEventHandler(new wxPopupWindowHandler(this));
+    m_child->PushEventHandler(m_handlerPopup);
 
     m_focus = winFocus ? winFocus : this;
     m_focus->SetFocus();
 
 #ifdef __WXMSW__
-    // FIXME: I don't know why does this happen but sometimes SetFocus() simply
-    //        refuses to work under MSW - no error happens but the focus is not
-    //        given to the window, i.e. the assert below is triggered
-    //
-    //        Try work around this as we can...
-
-    //wxASSERT_MSG( FindFocus() == m_focus, _T("setting focus failed") );
+    // MSW doesn't allow to set focus to the popup window, but we need to
+    // subclass the window which has the focus, and not winFocus passed in or
+    // otherwise everything else breaks down
     m_focus = FindFocus();
     if ( m_focus )
 #endif // __WXMSW__
     {
-        m_focus->PushEventHandler(new wxPopupFocusHandler(this));
+        delete m_handlerFocus;
+        m_handlerFocus = new wxPopupFocusHandler(this);
+
+        m_focus->PushEventHandler(m_handlerFocus);
     }
 }
 
@@ -403,7 +422,7 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
         m_popup->DismissAndNotify();
 }
 
-void wxPopupFocusHandler::OnKeyUp(wxKeyEvent& event)
+void wxPopupFocusHandler::OnKeyDown(wxKeyEvent& event)
 {
     // let the window have it first, it might process the keys
     if ( !m_popup->ProcessEvent(event) )

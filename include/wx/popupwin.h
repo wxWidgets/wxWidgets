@@ -107,8 +107,13 @@ protected:
     // the window which has the focus while we're shown
     wxWindow *m_focus;
 
+    // these classes may call our DismissAndNotify()
     friend class wxPopupWindowHandler;
     friend class wxPopupFocusHandler;
+
+    // the handlers we created, may be NULL (if not, must be deleted)
+    wxPopupWindowHandler *m_handlerPopup;
+    wxPopupFocusHandler  *m_handlerFocus;
 
     DECLARE_DYNAMIC_CLASS(wxPopupTransientWindow)
 };
