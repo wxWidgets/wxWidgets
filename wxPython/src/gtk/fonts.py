@@ -379,6 +379,11 @@ wxLocale_GetSystemEncodingName = fontsc.wxLocale_GetSystemEncodingName
 
 wxLocale_AddCatalogLookupPathPrefix = fontsc.wxLocale_AddCatalogLookupPathPrefix
 
+def wxLocale_GetLanguageInfo(*_args, **_kwargs):
+    val = apply(fontsc.wxLocale_GetLanguageInfo,_args,_kwargs)
+    if val: val = wxLanguageInfoPtr(val)
+    return val
+
 wxLocale_AddLanguage = fontsc.wxLocale_AddLanguage
 
 wxEncodingConverter_GetPlatformEquivalents = fontsc.wxEncodingConverter_GetPlatformEquivalents
