@@ -47,12 +47,12 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
     NSRect contentRect = [[GetNSBox() contentView] frame];
     NSRect thisRect = [m_cocoaNSView frame];
-    *borderTop = thisRect.size.height - (contentRect.origin.y+contentRect.size.height);
-    *borderOther = thisRect.size.width - (contentRect.origin.x+contentRect.size.width);
-    int nextBorder = contentRect.origin.y;
+    *borderTop = (int)(thisRect.size.height - (contentRect.origin.y+contentRect.size.height));
+    *borderOther = (int)(thisRect.size.width - (contentRect.origin.x+contentRect.size.width));
+    int nextBorder = (int)contentRect.origin.y;
     if(nextBorder > *borderOther)
         *borderOther = nextBorder;
-    nextBorder = contentRect.origin.x;
+    nextBorder = (int)contentRect.origin.x;
     if(nextBorder > *borderOther)
         *borderOther = nextBorder;
 }

@@ -88,9 +88,9 @@ void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord
     NSRange glyphRange = [sm_cocoaNSLayoutManager glyphRangeForTextContainer:sm_cocoaNSTextContainer];
     NSRect usedRect = [sm_cocoaNSLayoutManager usedRectForTextContainer:sm_cocoaNSTextContainer];
     if(x)
-        *x=usedRect.size.width;
+        *x=(int)usedRect.size.width;
     if(y)
-        *y=usedRect.size.height;
+        *y=(int)usedRect.size.height;
     if(descent)
         *descent=0;
     if(externalLeading)
