@@ -5988,7 +5988,8 @@ INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_FULLNAME} \
 dnl C/C++ compiler options used to compile wxWidgets
 if test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
-    CXXWARNINGS="-Wall"
+    CWARNINGS="-Wall" 
+    CXXWARNINGS="$CWARNINGS -Wno-ctor-dtor-privacy" 
     dnl should enable this one day...
     dnl CXXWARNINGS="-Wall -Werror"
 fi
@@ -5997,7 +5998,7 @@ EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
 
 dnl remove the extra white space from the cc/c++/ld options
 CPPFLAGS=`echo $WXDEBUG_DEFINE $INCLUDES $CPPFLAGS`
-CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CXXWARNINGS`
+CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CWARNINGS`
 CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS`
     
 
