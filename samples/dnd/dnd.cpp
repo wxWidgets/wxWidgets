@@ -931,17 +931,17 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     help_menu->Append(Menu_About, "&About");
 
     wxMenu *clip_menu = new wxMenu;
-    clip_menu->Append(Menu_Copy, "&Copy text\tCtrl+C");
-    clip_menu->Append(Menu_Paste, "&Paste text\tCtrl+V");
+    clip_menu->Append(Menu_Copy, "&Copy text\tCtrl-C");
+    clip_menu->Append(Menu_Paste, "&Paste text\tCtrl-V");
     clip_menu->AppendSeparator();
-    clip_menu->Append(Menu_CopyBitmap, "Copy &bitmap\tAlt+C");
-    clip_menu->Append(Menu_PasteBitmap, "Paste b&itmap\tAlt+V");
+    clip_menu->Append(Menu_CopyBitmap, "Copy &bitmap\tCtrl-Shift-C");
+    clip_menu->Append(Menu_PasteBitmap, "Paste b&itmap\tCtrl-Shift-V");
 #ifdef USE_METAFILES
     clip_menu->AppendSeparator();
     clip_menu->Append(Menu_PasteMFile, "Paste &metafile\tCtrl-M");
 #endif // USE_METAFILES
     clip_menu->AppendSeparator();
-    clip_menu->Append(Menu_CopyFiles, "Copy &files\tCtrl+F");
+    clip_menu->Append(Menu_CopyFiles, "Copy &files\tCtrl-F");
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
