@@ -60,6 +60,32 @@ pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCod
     }
 }
 
+ControlColorUPP wxMacSetupControlBackgroundUPP = NULL ;
+
+pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessage , SInt16 iDepth , Boolean iIsColor )
+{
+	OSStatus status = noErr ;
+	switch( iMessage )
+	{
+		case kControlMsgSetUpBackground :
+        	wxControl*  wx = (wxControl*) GetControlReference( iControl ) ;
+        	if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
+        	{
+        		wxDC::MacSetupBackgroundForCurrentPort( wx->MacGetBackgroundBrush() ) ;
+//				SetThemeBackground( iDepth , iIsColor ) ;
+			}
+			else
+			{
+				status = paramErr ;
+			}
+			break ;
+		default :
+			status = paramErr ;
+			break ;
+	}
+	return status ;
+}
+ 
 wxControl::wxControl()
 {
     m_macControl = NULL ;
@@ -315,6 +341,11 @@ void wxControl::MacPostControlCreate()
 
     wxAssociateControlWithMacControl( (ControlHandle) m_macControl , this ) ;
 
+	if ( wxMacSetupControlBackgroundUPP == NULL )
+	{
+		wxMacSetupControlBackgroundUPP = NewControlColorUPP( wxMacSetupControlBackground ) ;
+	}
+	SetControlColorProc( (ControlHandle) m_macControl , wxMacSetupControlBackgroundUPP ) ;
  
      // Adjust the controls size and position
      wxPoint pos(m_x, m_y);
