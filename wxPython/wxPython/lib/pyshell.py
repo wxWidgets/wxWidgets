@@ -17,8 +17,8 @@ inside a wxStyledTextCtrl, similar to the Python shell windows found in
 IDLE and PythonWin.
 
 There is still much to be done to improve this class, such as line
-buffering/recall, colourizing the python code, autoindent, etc. but it's
-a good start.
+buffering/recall, autoindent, calltips, autocomplete, etc...  But
+it's a good start.
 
 """
 
@@ -32,6 +32,12 @@ from code import InteractiveInterpreter
 #----------------------------------------------------------------------
 # default styles, etc. to use for the STC
 
+if wxPlatform == '__WXMSW__':
+    _defaultSize = 8
+else:
+    _defaultSize = 10
+
+
 _default_properties = {
     'selMargin'   : 0,
     'marginWidth' : 1,
@@ -40,12 +46,26 @@ _default_properties = {
     'stderr'      : 'fore:#007f00',
     'trace'       : 'fore:#FF0000',
 
-    # TODO:  Add properties for the various Python lexer styles
+    'default'     : 'size:%d' % _defaultSize,
+    'bracegood'   : 'fore:#FFFFFF,back:#0000FF,bold',
+    'bracebad'    : 'fore:#000000,back:#FF0000,bold',
+
+    # properties for the various Python lexer styles
+    'comment'     : 'fore:#007F00',
+    'number'      : 'fore:#007F7F',
+    'string'      : 'fore:#7F007F,italic',
+    'char'        : 'fore:#7F007F,italic',
+    'keyword'     : 'fore:#00007F,bold',
+    'triple'      : 'fore:#7F0000',
+    'tripledouble': 'fore:#7F0000',
+    'class'       : 'fore:#0000FF,bold,underline',
+    'def'         : 'fore:#007F7F,bold',
+    'operator'    : 'bold',
 
     }
 
 
-# style numbers
+# new style numbers
 _stdout_style = 15
 _stderr_style = 16
 _trace_style = 17
@@ -59,6 +79,8 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
                  locals=None, properties=None, banner=None):
         wxStyledTextCtrl.__init__(self, parent, ID, pos, size, style)
         InteractiveInterpreter.__init__(self, locals)
+
+        self.lastPromptPos = 0
 
         # the line cache is used to cycle through previous commands
         self.lines = []
@@ -84,7 +106,8 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
 
         # Event handlers
         EVT_KEY_DOWN(self, self.OnKey)
-
+        EVT_STC_UPDATEUI(self, ID, self.OnUpdateUI)
+        EVT_STC_STYLENEEDED(self, ID, self.OnStyle)
 
 
     def GetLocals(self): return self.locals
@@ -103,22 +126,39 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
         """
         p = self.props
 
-        #self.SetLexer(wxSTC_LEX_PYTHON)
-        #self.SetKeywords(0, string.join(keyword.kwlist))
+        self.SetEdgeMode(wxSTC_EDGE_LINE)
+        self.SetEdgeColumn(80)
+
 
         # set the selection margin and window margin
         self.SetMarginWidth(1, p['selMargin'])
         self.SetMargins(p['marginWidth'], p['marginWidth'])
 
         # styles
+        self.StyleSetSpec(wxSTC_STYLE_DEFAULT, p['default'])
+        self.StyleClearAll()
         self.StyleSetSpec(_stdout_style, p['stdout'])
         self.StyleSetSpec(_stderr_style, p['stderr'])
         self.StyleSetSpec(_trace_style, p['trace'])
 
+        self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT, p['bracegood'])
+        self.StyleSetSpec(wxSTC_STYLE_BRACEBAD, p['bracebad'])
+        self.StyleSetSpec(SCE_P_COMMENTLINE, p['comment'])
+        self.StyleSetSpec(SCE_P_NUMBER, p['number'])
+        self.StyleSetSpec(SCE_P_STRING, p['string'])
+        self.StyleSetSpec(SCE_P_CHARACTER, p['char'])
+        self.StyleSetSpec(SCE_P_WORD, p['keyword'])
+        self.StyleSetSpec(SCE_P_TRIPLE, p['triple'])
+        self.StyleSetSpec(SCE_P_TRIPLEDOUBLE, p['tripledouble'])
+        self.StyleSetSpec(SCE_P_CLASSNAME, p['class'])
+        self.StyleSetSpec(SCE_P_DEFNAME, p['def'])
+        self.StyleSetSpec(SCE_P_OPERATOR, p['operator'])
+        self.StyleSetSpec(SCE_P_COMMENTBLOCK, p['comment'])
 
 
     # used for writing to stdout, etc.
     def _write(self, text, style=_stdout_style):
+        self.lastPromptPos = 0
         pos = self.GetCurrentPos()
         self.AddText(text)
         self.StartStyling(pos, 0xFF)
@@ -188,6 +228,50 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
             evt.Skip()
 
 
+    def OnStyle(self, evt):
+        # Only style from the prompt pos to the end
+        lastPos = self.GetTextLength()
+        if self.lastPromptPos and self.lastPromptPos != lastPos:
+            self.SetLexer(wxSTC_LEX_PYTHON)
+            self.SetKeywords(0, string.join(keyword.kwlist))
+
+            self.Colourise(self.lastPromptPos, lastPos)
+
+            self.SetLexer(0)
+
+
+    def OnUpdateUI(self, evt):
+        # check for matching braces
+        braceAtCaret = -1
+	braceOpposite = -1
+        charBefore = None
+        caretPos = self.GetCurrentPos()
+        if caretPos > 0:
+            charBefore = self.GetCharAt(caretPos - 1)
+            styleBefore = self.GetStyleAt(caretPos - 1)
+
+        # check before
+        if charBefore and charBefore in "[]{}()" and ord(styleBefore) == SCE_P_OPERATOR:
+            braceAtCaret = caretPos - 1
+
+        # check after
+        if braceAtCaret < 0:
+            charAfter = self.GetCharAt(caretPos)
+            styleAfter = self.GetStyleAt(caretPos)
+            if charAfter and charAfter in "[]{}()" and ord(styleAfter) == SCE_P_OPERATOR:
+                braceAtCaret = caretPos
+
+        if braceAtCaret >= 0:
+            braceOpposite = self.BraceMatch(braceAtCaret)
+
+        if braceAtCaret != -1  and braceOpposite == -1:
+            self.BraceBadlight(braceAtCaret)
+        else:
+            self.BraceHighlight(braceAtCaret, braceOpposite)
+
+
+
+    #----------------------------------------------
     # overloaded methods from InteractiveInterpreter
     def runsource(self, source):
         stdout, stderr = sys.stdout, sys.stderr
