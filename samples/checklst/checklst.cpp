@@ -156,8 +156,8 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
 
     delete [] astrChoices;
 
-    // not implemented in wxGTK yet
-#ifndef __WXGTK__
+    // not implemented in other ports yet
+#ifdef __WXMSW__
     // set grey background for every second entry
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
         m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
