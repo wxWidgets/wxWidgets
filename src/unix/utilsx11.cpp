@@ -768,6 +768,8 @@ bool wxGetKeyState(wxKeyCode key)
     Display *pDisplay = wxApp::GetDisplay();
 #elif defined(__WXGTK__)
     Display *pDisplay = GDK_DISPLAY();
+#elif defined(__WXMOTIF__)
+    Display *pDisplay = (Display*) (wxTheApp ? wxTheApp->GetInitialDisplay() : NULL);
 #else
 #error  Add code to get the DISPLAY for this platform
 #endif

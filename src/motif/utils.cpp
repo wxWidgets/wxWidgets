@@ -634,6 +634,9 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     return wxGenericFindWindowAtPoint(pt);
 }
 
+// Now in utilsx11.cpp
+#if 0
+
 // ----------------------------------------------------------------------------
 // keycode translations
 // ----------------------------------------------------------------------------
@@ -876,6 +879,7 @@ KeySym wxCharCodeWXToX(int id)
 
     return keySym;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // Some colour manipulation routines
