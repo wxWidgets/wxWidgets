@@ -25,7 +25,9 @@
 #include "wx/process.h"
 #include "wx/thread.h"
 
-#include "wx/unix/execute.h"
+#if wxUSE_GUI
+    #include "wx/unix/execute.h"
+#endif
 
 #include <stdarg.h>
 #include <dirent.h>
@@ -212,6 +214,8 @@ bool wxShell(const wxString& command)
     return wxExecute(cmd) != 0;
 }
 
+#if wxUSE_GUI
+
 void wxHandleProcessTermination(wxEndProcessData *proc_data)
 {
     int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
@@ -262,7 +266,17 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     }
 }
 
-long wxExecute( wxChar **argv, bool sync, wxProcess *process )
+#endif // wxUSE_GUI
+
+#if wxUSE_GUI
+    #define WXUNUSED_UNLESS_GUI(p)  p
+#else
+    #define WXUNUSED_UNLESS_GUI(p)
+#endif
+
+long wxExecute(wxChar **argv,
+               bool sync,
+               wxProcess * WXUNUSED_UNLESS_GUI(process))
 {
     wxCHECK_MSG( *argv, 0, wxT("can't exec empty command") );
 
@@ -363,7 +377,6 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
     {
 #if wxUSE_GUI
         wxEndProcessData *data = new wxEndProcessData;
-
 
         ARGS_CLEANUP;
 

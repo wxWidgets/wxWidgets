@@ -1641,20 +1641,15 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
 {
     Tm tm = GetTm(tz);
     wxDateTime dtMonthStart = wxDateTime(1, tm.mon, tm.year);
-    size_t nWeek = GetWeekOfYear(flags) - dtMonthStart.GetWeekOfYear(flags) + 1;
-#ifdef __VMS__ // nWeek is unsigned so avoid the warning
-   int nweek2 = (int) nWeek;
-   if ( nweek2 < 0 )
-#else
+    int nWeek = GetWeekOfYear(flags) - dtMonthStart.GetWeekOfYear(flags) + 1;
     if ( nWeek < 0 )
-#endif
     {
         // this may happen for January when Jan, 1 is the last week of the
         // previous year
         nWeek += IsLeapYear(tm.year - 1) ? 53 : 52;
     }
 
-    return nWeek;
+    return (wxDateTime::wxDateTime_t)nWeek;
 }
 
 wxDateTime& wxDateTime::SetToYearDay(wxDateTime::wxDateTime_t yday)
@@ -3486,9 +3481,9 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
     holidays.Empty();
 
     size_t count = ms_authorities.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( size_t nAuth = 0; nAuth < count; nAuth++ )
     {
-        ms_authorities[n]->DoGetHolidaysInRange(dtStart, dtEnd, hol);
+        ms_authorities[nAuth]->DoGetHolidaysInRange(dtStart, dtEnd, hol);
 
         WX_APPEND_ARRAY(holidays, hol);
     }

@@ -8,8 +8,9 @@
 // Copyright:   (c) 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
 #ifdef __GNUG__
-#pragma implementation "objstrm.h"
+    #pragma implementation "objstrm.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -321,5 +322,5 @@ wxObject *wxObjectInputStream::LoadObject()
   return object;
 }
 
-#endif
+#endif // wxUSE_SERIAL && wxUSE_STREAMS
 

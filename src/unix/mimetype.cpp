@@ -560,8 +560,14 @@ void wxGNOMEIconHandler::GetMimeInfoRecords(wxMimeTypesManagerImpl *manager)
     }
 }
 
+#if wxUSE_GUI
+    #define WXUNUSED_UNLESS_GUI(p)  p
+#else
+    #define WXUNUSED_UNLESS_GUI(p)
+#endif
 
-bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
+bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype,
+                                 wxIcon * WXUNUSED_UNLESS_GUI(icon))
 {
     if ( !m_inited )
     {
@@ -581,8 +587,11 @@ bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
         icn = wxIcon(iconname);
     else
         icn = wxIcon(iconname, wxBITMAP_TYPE_ANY);
-    if (icn.Ok()) *icon = icn;
-    else return FALSE;
+    if ( !icn.Ok() )
+        return FALSE;
+
+    if ( icon )
+        *icon = icn;
 #else
     // helpful for testing in console mode
     wxLogDebug(_T("Found GNOME icon for '%s': '%s'\n"),
@@ -801,7 +810,8 @@ void wxKDEIconHandler::Init()
     m_inited = TRUE;
 }
 
-bool wxKDEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
+bool wxKDEIconHandler::GetIcon(const wxString& mimetype,
+                               wxIcon * WXUNUSED_UNLESS_GUI(icon))
 {
     if ( !m_inited )
     {
@@ -821,8 +831,12 @@ bool wxKDEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
         icn = wxIcon(iconname);
     else
         icn = wxIcon(iconname, wxBITMAP_TYPE_ANY);
-    if (icn.Ok()) *icon = icn;
-    else return FALSE;
+
+    if ( !icn.Ok() )
+        return FALSE;
+
+    if ( icon )
+        *icon = icn;
 #else
     // helpful for testing in console mode
     wxLogDebug(_T("Found KDE icon for '%s': '%s'\n"),
