@@ -4251,7 +4251,7 @@ class NavigationKeyEvent(Event):
         return _core_.NavigationKeyEvent_GetDirection(*args, **kwargs)
 
     def SetDirection(*args, **kwargs):
-        """SetDirection(self, bool bForward)"""
+        """SetDirection(self, bool forward)"""
         return _core_.NavigationKeyEvent_SetDirection(*args, **kwargs)
 
     def IsWindowChange(*args, **kwargs):
@@ -4259,8 +4259,12 @@ class NavigationKeyEvent(Event):
         return _core_.NavigationKeyEvent_IsWindowChange(*args, **kwargs)
 
     def SetWindowChange(*args, **kwargs):
-        """SetWindowChange(self, bool bIs)"""
+        """SetWindowChange(self, bool ischange)"""
         return _core_.NavigationKeyEvent_SetWindowChange(*args, **kwargs)
+
+    def SetFlags(*args, **kwargs):
+        """SetFlags(self, long flags)"""
+        return _core_.NavigationKeyEvent_SetFlags(*args, **kwargs)
 
     def GetCurrentFocus(*args, **kwargs):
         """GetCurrentFocus(self) -> Window"""
@@ -4270,6 +4274,8 @@ class NavigationKeyEvent(Event):
         """SetCurrentFocus(self, Window win)"""
         return _core_.NavigationKeyEvent_SetCurrentFocus(*args, **kwargs)
 
+    IsForward = _core_.NavigationKeyEvent_IsForward
+    WinChange = _core_.NavigationKeyEvent_WinChange
 
 class NavigationKeyEventPtr(NavigationKeyEvent):
     def __init__(self, this):
@@ -5876,22 +5882,25 @@ class Window(EvtHandler):
 
     def SetSizeHints(*args):
         """
+        SetSizeHints(self, Size minSize, Size maxSize=DefaultSize, Size incSize=DefaultSize)
         SetSizeHints(self, int minW, int minH, int maxW=-1, int maxH=-1, int incW=-1, 
             int incH=-1)
-        SetSizeHints(self, Size minSize, Size maxSize=DefaultSize, Size incSize=DefaultSize)
 
         Allows specification of minimum and maximum window sizes, and window
         size increments. If a pair of values is not set (or set to -1), the
         default values will be used.  If this function is called, the user
-        will not be able to size the window outside the given bounds. The
-        resizing increments are only significant under Motif or Xt.
+        will not be able to size the window outside the given bounds (if it is
+        a top-level window.)  Sizers will also inspect the minimum window size
+        and will use that value if set when calculating layout.
+
+        The resizing increments are only significant under Motif or Xt.
         """
         return _core_.Window_SetSizeHints(*args)
 
     def SetVirtualSizeHints(*args):
         """
-        SetVirtualSizeHints(self, int minW, int minH, int maxW=-1, int maxH=-1)
         SetVirtualSizeHints(self, Size minSize, Size maxSize=DefaultSize)
+        SetVirtualSizeHints(self, int minW, int minH, int maxW=-1, int maxH=-1)
 
         Allows specification of minimum and maximum virtual window sizes. If a
         pair of values is not set (or set to -1), the default values will be
@@ -5899,6 +5908,32 @@ class Window(EvtHandler):
         the virtual area of the window outside the given bounds.
         """
         return _core_.Window_SetVirtualSizeHints(*args)
+
+    def GetMaxSize(*args, **kwargs):
+        """GetMaxSize(self) -> Size"""
+        return _core_.Window_GetMaxSize(*args, **kwargs)
+
+    def GetMinSize(*args, **kwargs):
+        """GetMinSize(self) -> Size"""
+        return _core_.Window_GetMinSize(*args, **kwargs)
+
+    def SetMinSize(*args, **kwargs):
+        """
+        SetMinSize(self, Size minSize)
+
+        A more convenient method than `SetSizeHints` for setting just the
+        min size.
+        """
+        return _core_.Window_SetMinSize(*args, **kwargs)
+
+    def SetMaxSize(*args, **kwargs):
+        """
+        SetMaxSize(self, Size maxSize)
+
+        A more convenient method than `SetSizeHints` for setting just the
+        max size.
+        """
+        return _core_.Window_SetMaxSize(*args, **kwargs)
 
     def GetMinWidth(*args, **kwargs):
         """GetMinWidth(self) -> int"""
@@ -5915,14 +5950,6 @@ class Window(EvtHandler):
     def GetMaxHeight(*args, **kwargs):
         """GetMaxHeight(self) -> int"""
         return _core_.Window_GetMaxHeight(*args, **kwargs)
-
-    def GetMaxSize(*args, **kwargs):
-        """GetMaxSize(self) -> Size"""
-        return _core_.Window_GetMaxSize(*args, **kwargs)
-
-    def GetMinSize(*args, **kwargs):
-        """GetMinSize(self) -> Size"""
-        return _core_.Window_GetMinSize(*args, **kwargs)
 
     def SetVirtualSize(*args, **kwargs):
         """
@@ -6188,6 +6215,28 @@ class Window(EvtHandler):
         Set this child as temporary default
         """
         return _core_.Window_SetTmpDefaultItem(*args, **kwargs)
+
+    def Navigate(*args, **kwargs):
+        """
+        Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool
+
+        :param flags: A combination of the ``IsForward`` and ``WinChange``
+                      values in the `wx.NavigationKeyEvent` class, which
+                      determine if the navigation should be in forward or
+                      reverse order, and if it should be able to cross
+                      parent window boundaries, such as between notebook
+                      pages or MDI child frames.  Typically the status of
+                      the Shift key (for forward or reverse) or the
+                      Control key (for WinChange) would be used to
+                      determine how to set the flags.
+
+        situation in which you may wish to call this method is from a text
+        rol custom keypress handler to do the default navigation behaviour
+        the tab key, since the standard default behaviour for a multiline
+         control with the wx.TE_PROCESS_TAB style is to insert a tab and
+        navigate to the next control.
+        """
+        return _core_.Window_Navigate(*args, **kwargs)
 
     def GetChildren(*args, **kwargs):
         """

@@ -7012,28 +7012,10 @@ static PyObject *_wrap_TextCtrlNameStr_get() {
 }
 
 
-static PyObject *_wrap_new_TextAttr__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_TextAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxTextAttr *result;
-    
-    if(!PyArg_ParseTuple(args,(char *)":new_TextAttr")) goto fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxTextAttr *)new wxTextAttr();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxTextAttr, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_TextAttr__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    wxColour *arg1 = 0 ;
+    wxColour const &arg1_defvalue = wxNullColour ;
+    wxColour *arg1 = (wxColour *) &arg1_defvalue ;
     wxColour const &arg2_defvalue = wxNullColour ;
     wxColour *arg2 = (wxColour *) &arg2_defvalue ;
     wxFont const &arg3_defvalue = wxNullFont ;
@@ -7046,11 +7028,16 @@ static PyObject *_wrap_new_TextAttr__SWIG_1(PyObject *self, PyObject *args) {
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "colText",(char *) "colBack",(char *) "font",(char *) "alignment", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"O|OOO:new_TextAttr",&obj0,&obj1,&obj2,&obj3)) goto fail;
-    {
-        arg1 = &temp1;
-        if ( ! wxColour_helper(obj0, &arg1)) SWIG_fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_TextAttr",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if (obj0) {
+        {
+            arg1 = &temp1;
+            if ( ! wxColour_helper(obj0, &arg1)) SWIG_fail;
+        }
     }
     if (obj1) {
         {
@@ -7081,61 +7068,6 @@ static PyObject *_wrap_new_TextAttr__SWIG_1(PyObject *self, PyObject *args) {
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxTextAttr, 1);
     return resultobj;
     fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_TextAttr(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[5];
-    int ii;
-    
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 4); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
-    }
-    if (argc == 0) {
-        return _wrap_new_TextAttr__SWIG_0(self,args);
-    }
-    if ((argc >= 1) && (argc <= 4)) {
-        int _v;
-        {
-            _v = wxColour_typecheck(argv[0]);
-        }
-        if (_v) {
-            if (argc <= 1) {
-                return _wrap_new_TextAttr__SWIG_1(self,args);
-            }
-            {
-                _v = wxColour_typecheck(argv[1]);
-            }
-            if (_v) {
-                if (argc <= 2) {
-                    return _wrap_new_TextAttr__SWIG_1(self,args);
-                }
-                {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_wxFont, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
-                }
-                if (_v) {
-                    if (argc <= 3) {
-                        return _wrap_new_TextAttr__SWIG_1(self,args);
-                    }
-                    _v = SWIG_CheckInt(argv[3]);
-                    if (_v) {
-                        return _wrap_new_TextAttr__SWIG_1(self,args);
-                    }
-                }
-            }
-        }
-    }
-    
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_TextAttr'");
     return NULL;
 }
 
@@ -31414,7 +31346,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CheckListBox_HitTest", (PyCFunction) _wrap_CheckListBox_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckListBox_HitTestXY", (PyCFunction) _wrap_CheckListBox_HitTestXY, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckListBox_swigregister", CheckListBox_swigregister, METH_VARARGS },
-	 { (char *)"new_TextAttr", _wrap_new_TextAttr, METH_VARARGS },
+	 { (char *)"new_TextAttr", (PyCFunction) _wrap_new_TextAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_TextAttr", (PyCFunction) _wrap_delete_TextAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextAttr_Init", (PyCFunction) _wrap_TextAttr_Init, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextAttr_SetTextColour", (PyCFunction) _wrap_TextAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS },

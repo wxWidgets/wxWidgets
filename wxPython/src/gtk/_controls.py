@@ -1459,13 +1459,12 @@ TE_HT_BEYOND = _controls_.TE_HT_BEYOND
 class TextAttr(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """
-        __init__(self) -> TextAttr
-        __init__(self, Colour colText, Colour colBack=wxNullColour, Font font=wxNullFont, 
-            int alignment=TEXT_ALIGNMENT_DEFAULT) -> TextAttr
+        __init__(self, Colour colText=wxNullColour, Colour colBack=wxNullColour, 
+            Font font=wxNullFont, int alignment=TEXT_ALIGNMENT_DEFAULT) -> TextAttr
         """
-        newobj = _controls_.new_TextAttr(*args)
+        newobj = _controls_.new_TextAttr(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
