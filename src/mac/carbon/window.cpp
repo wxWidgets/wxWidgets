@@ -1709,15 +1709,12 @@ void wxWindowMac::WarpPointer (int x_pos, int y_pos)
 
 void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
 {
-    event.Skip() ;
-/*
     if ( m_macBackgroundBrush.Ok() == false || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT )
     {
         event.Skip() ;
     }
     else
         event.GetDC()->Clear() ;
-*/
 }
 
 void wxWindowMac::OnNcPaint( wxNcPaintEvent& event )
