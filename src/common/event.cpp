@@ -389,6 +389,8 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
 
 void wxMouseEvent::Assign(const wxMouseEvent& event)
 {
+    m_eventType = event.m_eventType;
+    
     m_x = event.m_x;
     m_y = event.m_y;
 
