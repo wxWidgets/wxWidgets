@@ -1139,11 +1139,6 @@ SOURCE=.\msw\wave.cpp
 
 SOURCE=.\msw\window.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=.\msw\xpmhand.cpp
-# ADD CPP /I "../src/xpm"
-# End Source File
 # End Group
 # Begin Group "OLE Files"
 

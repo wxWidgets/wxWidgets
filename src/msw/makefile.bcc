@@ -279,8 +279,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
 		$(MSWDIR)\wave.obj \
-		$(MSWDIR)\window.obj \
-		$(MSWDIR)\xpmhand.obj
+		$(MSWDIR)\window.obj
 
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 

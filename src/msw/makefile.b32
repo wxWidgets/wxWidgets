@@ -327,8 +327,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\utilsexc.obj \
 		$(MSWDIR)\uuid.obj \
 		$(MSWDIR)\wave.obj \
-		$(MSWDIR)\window.obj \
-		$(MSWDIR)\xpmhand.obj
+		$(MSWDIR)\window.obj
 
 HTMLOBJS = $(MSWDIR)\helpctrl.obj \
 		$(MSWDIR)\helpdata.obj \

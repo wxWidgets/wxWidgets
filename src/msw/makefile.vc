@@ -343,8 +343,7 @@ MSWOBJS = ..\msw\$D\accel.obj \
 		..\msw\$D\utilsexc.obj \
 		..\msw\ole\$D\uuid.obj \
 		..\msw\$D\wave.obj \
-		..\msw\$D\window.obj \
-		..\msw\$D\xpmhand.obj
+		..\msw\$D\window.obj
 
 HTMLOBJS = ..\html\$D\helpctrl.obj \
 		..\html\$D\helpdata.obj \

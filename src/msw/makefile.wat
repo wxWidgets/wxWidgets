@@ -305,8 +305,7 @@ MSWOBJS = accel.obj &
 	utilsexc.obj &
 	uuid.obj &
 	wave.obj &
-	window.obj &
-	xpmhand.obj
+	window.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
@@ -648,8 +647,8 @@ wave.obj:     $(MSWDIR)\wave.cpp
 window.obj:     $(MSWDIR)\window.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-xpmhand.obj:     $(MSWDIR)\xpmhand.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+#xpmhand.obj:     $(MSWDIR)\xpmhand.cpp
+#  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 
 

@@ -322,8 +322,7 @@ MSWOBJS     = \
 		$(MSWDIR)/utils.$(OBJSUFF) \
 		$(MSWDIR)/utilsexc.$(OBJSUFF) \
 		$(MSWDIR)/wave.$(OBJSUFF) \
-		$(MSWDIR)/window.$(OBJSUFF) \
-		$(MSWDIR)/xpmhand.$(OBJSUFF)
+		$(MSWDIR)/window.$(OBJSUFF)
 
 ADVANCEDOBJS     = \
 		$(COMMDIR)/odbc.$(OBJSUFF) \

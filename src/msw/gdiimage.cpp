@@ -42,7 +42,7 @@
 #include "wx/msw/gdiimage.h"
 #include "wx/bitmap.h"
 
-#if wxUSE_XPM_IN_MSW
+#if 0 // wxUSE_XPM_IN_MSW
 #   include "wx/xpmhand.h"
 #endif // wxUSE_XPM_IN_MSW
 
@@ -304,7 +304,7 @@ void wxGDIImage::InitStandardHandlers()
 
     // GRG: Add these handlers by default if XPM support is enabled
 
-#if wxUSE_XPM_IN_MSW
+#if 0 // wxUSE_XPM_IN_MSW
     AddHandler(new wxXPMFileHandler);
     AddHandler(new wxXPMDataHandler);
 #endif // wxUSE_XPM_IN_MSW
