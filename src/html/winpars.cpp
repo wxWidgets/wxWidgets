@@ -450,6 +450,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
     wxFontEncoding altfix, altnorm;
     bool availfix, availnorm;
 
+#ifndef __WXMAC__
     // exact match?
     availnorm = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceNormal);
     availfix = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceFixed);
@@ -471,6 +472,10 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
     // okay, let convert to ISO_8859-1, available always
     else
         m_OutputEnc = wxFONTENCODING_DEFAULT;
+#else
+    // we only have the current system encoding
+    m_OutputEnc = wxFONTENCODING_MACROMAN;
+#endif
 
     m_InputEnc = enc;
     if (m_OutputEnc == wxFONTENCODING_DEFAULT)
