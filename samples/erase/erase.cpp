@@ -198,6 +198,8 @@ MyCanvas::MyCanvas( wxFrame *parent )
     m_bitmap = wxBitmap( wxICON(mondrian) );
 
     new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
+    
+    SetFocusIgnoringChildren();
 }
 
 void MyCanvas::OnChar( wxKeyEvent &event )
@@ -226,7 +228,7 @@ void MyCanvas::OnChar( wxKeyEvent &event )
 void MyCanvas::DoPaint(wxDC& dc)
 {
     dc.SetBrush( *wxBLACK_BRUSH );
-    dc.DrawRectangle( 0,0,200,50 );
+    dc.DrawRectangle( 10,10,200,50 );
 
     dc.DrawBitmap( m_bitmap, 10, 20, true );
 
@@ -317,21 +319,23 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     wxDC& dc = *event.GetDC();
     dc.SetPen(*wxGREEN_PEN);
 
+    PrepareDC( dc );
+    
     // clear any junk currently displayed
     dc.Clear();
 
     const wxSize size = GetClientSize();
-    for ( int x = 0; x < size.x; x += 10 )
+    for ( int x = 0; x < size.x; x += 15 )
     {
         dc.DrawLine(x, 0, x, size.y);
     }
 
-    for ( int y = 0; y < size.y; y += 10 )
+    for ( int y = 0; y < size.y; y += 15 )
     {
         dc.DrawLine(0, y, size.x, y);
     }
 
     dc.SetTextForeground(*wxRED);
-    dc.DrawText(_T("This text is drawn from OnEraseBackground"), 60, 60);
+    dc.DrawText(_T("This text is drawn from OnEraseBackground"), 60, 160);
 }
 
