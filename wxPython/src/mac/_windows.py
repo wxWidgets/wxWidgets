@@ -27,6 +27,8 @@ class Panel(_core.Window):
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows_.Panel_Create(*args, **kwargs)
 
@@ -110,6 +112,8 @@ class ScrolledWindow(Panel):
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows_.ScrolledWindow_Create(*args, **kwargs)
 
@@ -1762,7 +1766,14 @@ class VScrolledWindow(Panel):
         return _windows_.VScrolledWindow_ScrollToLine(*args, **kwargs)
 
     def ScrollLines(*args, **kwargs):
-        """ScrollLines(self, int lines) -> bool"""
+        """
+        ScrollLines(self, int lines) -> bool
+
+        If the platform and window class supports it, scrolls the window by
+        the given number of lines down, if lines is positive, or up if lines
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _windows_.VScrolledWindow_ScrollLines(*args, **kwargs)
 
     def ScrollPages(*args, **kwargs):

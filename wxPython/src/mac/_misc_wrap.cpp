@@ -422,6 +422,9 @@ SWIG_CheckInt(PyObject* obj)
   }
 }
 
+
+#include <wx/stockitem.h>
+
  static const wxString wxPyFileSelectorPromptStr(wxFileSelectorPromptStr); 
  static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
  static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 
@@ -2159,6 +2162,110 @@ static PyObject *_wrap_GetCurrentId(PyObject *self, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_wxIsStockID(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "id", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:wxIsStockID",kwnames,&obj0)) goto fail;
+    arg1 = (int) SWIG_AsInt(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxIsStockID(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_wxIsStockLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    wxString *arg2 = 0 ;
+    bool result;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "id",(char *) "label", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:wxIsStockLabel",kwnames,&obj0,&obj1)) goto fail;
+    arg1 = (int) SWIG_AsInt(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxIsStockLabel(arg1,(wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_wxGetStockLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "id", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:wxGetStockLabel",kwnames,&obj0)) goto fail;
+    arg1 = (int) SWIG_AsInt(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxGetStockLabel(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -28312,6 +28419,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NewId", (PyCFunction) _wrap_NewId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RegisterId", (PyCFunction) _wrap_RegisterId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetCurrentId", (PyCFunction) _wrap_GetCurrentId, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"wxIsStockID", (PyCFunction) _wrap_wxIsStockID, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"wxIsStockLabel", (PyCFunction) _wrap_wxIsStockLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"wxGetStockLabel", (PyCFunction) _wrap_wxGetStockLabel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Bell", (PyCFunction) _wrap_Bell, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"EndBusyCursor", (PyCFunction) _wrap_EndBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetElapsedTime", (PyCFunction) _wrap_GetElapsedTime, METH_VARARGS | METH_KEYWORDS },

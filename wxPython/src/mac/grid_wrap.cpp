@@ -11438,6 +11438,42 @@ static PyObject *_wrap_Grid_SetColAttr(PyObject *self, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_Grid_GetOrCreateCellAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGrid *arg1 = (wxGrid *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    wxGridCellAttr *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "row",(char *) "col", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Grid_GetOrCreateCellAttr",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGrid,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg3 = (int) SWIG_AsInt(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxGridCellAttr *)((wxGrid const *)arg1)->GetOrCreateCellAttr(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxGridCellAttr(result, 0); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Grid_SetColFormatBool(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
@@ -16043,6 +16079,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Grid_SetAttr", (PyCFunction) _wrap_Grid_SetAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetRowAttr", (PyCFunction) _wrap_Grid_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetColAttr", (PyCFunction) _wrap_Grid_SetColAttr, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_GetOrCreateCellAttr", (PyCFunction) _wrap_Grid_GetOrCreateCellAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetColFormatBool", (PyCFunction) _wrap_Grid_SetColFormatBool, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetColFormatNumber", (PyCFunction) _wrap_Grid_SetColFormatNumber, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetColFormatFloat", (PyCFunction) _wrap_Grid_SetColFormatFloat, METH_VARARGS | METH_KEYWORDS },
