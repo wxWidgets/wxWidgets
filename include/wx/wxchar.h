@@ -467,7 +467,9 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #    define  wxStrcoll   strcoll
 #    define  wxStrcpy    strcpy
 #    define  wxStrcspn   strcspn
+#if !defined(__MWERKS__) || !defined(__WXMAC__)
 #    define  wxStrdup    strdup
+#endif
 #    define  wxStrlen_   strlen // used in wxStrlen inline function
 #    define  wxStrncat   strncat
 #    define  wxStrncmp   strncmp
