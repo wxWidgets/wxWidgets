@@ -360,6 +360,8 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return wxWC2MB(buf, psz, n);
 }
 
+#ifdef __WXGTK20__
+
 // ----------------------------------------------------------------------------
 // wxConvBrokenFileNames is made for GTK2 in Unicode mode when
 // files are accidentally written in an encoding which is not
@@ -367,37 +369,67 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // UTF8 but there might be files stored in ISO8859-1 on disk.
 // ----------------------------------------------------------------------------
 
-class wxConvBrokenFileNames: public wxMBConvLibc
+class wxConvBrokenFileNames : public wxMBConv
 {
 public:
-    wxConvBrokenFileNames() : m_utf8conv(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL) { }
+    wxConvBrokenFileNames();
+    virtual ~wxConvBrokenFileNames() { delete m_conv; }
+
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
-    inline bool UseUTF8() const;
+
 private:
-    wxMBConvUTF8 m_utf8conv;
+    // the conversion object we forward to
+    wxMBConv *m_conv;
 };
 
-bool wxConvBrokenFileNames::UseUTF8() const
+wxConvBrokenFileNames::wxConvBrokenFileNames()
 {
-    return wxLocale::GetSystemEncoding() == wxFONTENCODING_UTF8;
+    // decide which conversion to use for the file names
+
+    // (1) this variable exists for the sole purpose of specifying the encoding
+    //     of the filenames for GTK+ programs, so use it if it is set
+    const wxChar *encName = wxGetenv(_T("G_FILENAME_ENCODING"));
+    if ( encName )
+    {
+        m_conv = new wxCSConv(encName);
+    }
+    else // no G_FILENAME_ENCODING
+    {
+        // (2) if a non default locale is set, assume that the user wants his
+        //     filenames in this locale too
+        switch ( wxLocale::GetSystemEncoding() )
+        {
+            default:
+                m_conv = new wxMBConvLibc;
+                break;
+
+            // (3) finally use UTF-8 by default
+            case wxFONTENCODING_SYSTEM:
+            case wxFONTENCODING_UTF8:
+                m_conv = new wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
+                break;
+        }
+    }
 }
 
-size_t wxConvBrokenFileNames::MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const
+size_t
+wxConvBrokenFileNames::MB2WC(wchar_t *outputBuf,
+                             const char *psz,
+                             size_t outputSize) const
 {
-    if (UseUTF8())
-        return m_utf8conv.MB2WC( outputBuf, psz, outputSize );
-    else
-        return wxMBConvLibc::MB2WC( outputBuf, psz, outputSize );
+    return m_conv->MB2WC( outputBuf, psz, outputSize );
 }
 
-size_t wxConvBrokenFileNames::WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const
+size_t
+wxConvBrokenFileNames::WC2MB(char *outputBuf,
+                             const wchar_t *psz,
+                             size_t outputSize) const
 {
-    if (UseUTF8())
-        return m_utf8conv.WC2MB( outputBuf, psz, outputSize );
-    else
-        return wxMBConvLibc::WC2MB( outputBuf, psz, outputSize );
+    return m_conv->WC2MB( outputBuf, psz, outputSize );
 }
+
+#endif // __WXGTK20__
 
 // ----------------------------------------------------------------------------
 // UTF-7
@@ -2731,7 +2763,10 @@ static wxCSConv wxConvLocalObj(wxFONTENCODING_SYSTEM);
 static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
 static wxMBConvUTF7 wxConvUTF7Obj;
 static wxMBConvUTF8 wxConvUTF8Obj;
-static wxConvBrokenFileNames wxConvBrokenFileNamesObj;
+
+#ifdef __WXGTK20__
+    static wxConvBrokenFileNames wxConvBrokenFileNamesObj;
+#endif
 
 WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal = wxConvLocalObj;
