@@ -2230,6 +2230,14 @@ bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) {
 #endif
 
 
+void wxStyledTextCtrl::SetUseAntiAliasing(bool useAA) {
+    m_swx->SetUseAntiAliasing(useAA);
+}
+
+bool wxStyledTextCtrl::GetUseAntiAliasing() {
+    return m_swx->GetUseAntiAliasing();
+}
+
 //----------------------------------------------------------------------
 // Event handlers
 

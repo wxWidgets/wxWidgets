@@ -160,6 +160,7 @@ void ScintillaWX::Initialise() {
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
 #endif
+    vs.extraFontFlag = true;
 }
 
 
@@ -907,5 +908,15 @@ void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect)) {
 }
 #endif
 
+
+void ScintillaWX::SetUseAntiAliasing(bool useAA) {
+    vs.extraFontFlag = useAA;
+    InvalidateStyleRedraw();
+}
+
+bool ScintillaWX::GetUseAntiAliasing() {
+    return vs.extraFontFlag;
+}
+ 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
