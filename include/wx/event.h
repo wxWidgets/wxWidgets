@@ -1281,6 +1281,10 @@ protected:
  wxEVT_COMPARE_ITEM
 */
 
+// ============================================================================
+// event handler and related classes
+// ============================================================================
+
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
 struct WXDLLEXPORT wxEventTableEntry
@@ -1314,8 +1318,44 @@ public:
     void SetNextHandler(wxEvtHandler *handler) { m_nextHandler = handler; }
     void SetPreviousHandler(wxEvtHandler *handler) { m_previousHandler = handler; }
 
-    void SetEvtHandlerEnabled(bool en) { m_enabled = en; }
+    void SetEvtHandlerEnabled(bool enabled) { m_enabled = enabled; }
     bool GetEvtHandlerEnabled() const { return m_enabled; }
+
+    // process an event right now
+    virtual bool ProcessEvent(wxEvent& event);
+
+    // add an event to be processed later
+    void AddPendingEvent(wxEvent& event);
+
+    // process all pending events
+    void ProcessPendingEvents();
+
+    // add a 
+#if wxUSE_THREADS
+    bool ProcessThreadEvent(wxEvent& event);
+#endif
+
+    // Dynamic association of a member function handler with the event handler,
+    // id and event type
+    void Connect( int id, int lastId, wxEventType eventType,
+                  wxObjectEventFunction func,
+                  wxObject *userData = (wxObject *) NULL );
+
+    // Convenience function: take just one id
+    void Connect( int id, wxEventType eventType,
+                  wxObjectEventFunction func,
+                  wxObject *userData = (wxObject *) NULL )
+        { Connect(id, -1, eventType, func, userData); }
+
+    // implementation from now on
+    virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
+    bool SearchDynamicEventTable( wxEvent& event );
+
+#if wxUSE_THREADS
+    void ClearEventLocker() { delete m_eventsLocker; m_eventsLocker = NULL; };
+#endif
+
+    // old stuff
 
 #if WXWIN_COMPATIBILITY_2
     virtual void OnCommand(wxWindow& WXUNUSED(win),
@@ -1333,33 +1373,8 @@ public:
     virtual bool OnClose();
 #endif
 
-#if wxUSE_THREADS
-    bool ProcessThreadEvent(wxEvent& event);
-    void ProcessPendingEvents();
-#endif
-    virtual bool ProcessEvent(wxEvent& event);
-    virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
-
-    // Dynamic association of a member function handler with the event handler,
-    // id and event type
-    void Connect( int id, int lastId, wxEventType eventType,
-                  wxObjectEventFunction func,
-                  wxObject *userData = (wxObject *) NULL );
-
-    // Convenience function: take just one id
-    void Connect( int id, wxEventType eventType,
-                  wxObjectEventFunction func,
-                  wxObject *userData = (wxObject *) NULL )
-        { Connect(id, -1, eventType, func, userData); }
-
-    bool SearchDynamicEventTable( wxEvent& event );
-
-#if wxUSE_THREADS
-    void ClearEventLocker() { delete m_eventsLocker; m_eventsLocker = NULL; };
-#endif
-
 private:
-    static const wxEventTableEntry         sm_eventTableEntries[];
+    static const wxEventTableEntry sm_eventTableEntries[];
 
 protected:
     static const wxEventTable sm_eventTable;
@@ -1369,7 +1384,6 @@ protected:
 protected:
     wxEvtHandler*       m_nextHandler;
     wxEvtHandler*       m_previousHandler;
-    bool                m_enabled;           // Is event handler enabled?
     wxList*             m_dynamicEvents;
     wxList*             m_pendingEvents;
 #if wxUSE_THREADS
@@ -1379,6 +1393,9 @@ protected:
     // optimization: instead of using costly IsKindOf() to decide whether we're
     // a window (which is true in 99% of cases), use this flag
     bool                m_isWindow;
+
+    // Is event handler enabled?
+    bool                m_enabled;
 };
 
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
@@ -1613,6 +1630,17 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 // Update UI event
 #define EVT_UPDATE_UI(id, func) \
  { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },\
+
+// ----------------------------------------------------------------------------
+// Global data
+// ----------------------------------------------------------------------------
+
+// for pending event processing - notice that there is intentionally no
+// WXDLLEXPORT here
+extern wxList *wxPendingEvents;
+#if wxUSE_THREADS
+    extern wxCriticalSection *wxPendingEventsLocker;
+#endif
 
 // ----------------------------------------------------------------------------
 // Helper functions

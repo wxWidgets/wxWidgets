@@ -98,10 +98,6 @@ extern wxChar *wxBuffer;
 extern wxChar *wxOsVersion;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
-#if wxUSE_THREADS
-extern wxList *wxPendingEvents;
-extern wxCriticalSection *wxPendingEventsLocker;
-#endif
 extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor *g_globalCursor;
 
@@ -179,11 +175,8 @@ bool wxApp::Initialize()
     wxGetResource(wxT("wxWindows"), wxT("OsVersion"), &wxOsVersion);
 #endif
 
-    // I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
 #if wxUSE_THREADS
-    wxPendingEvents = new wxList();
-    wxPendingEventsLocker = new wxCriticalSection();
+    wxPendingEventsLocker = new wxCriticalSection;
 #endif
 
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
@@ -565,8 +558,8 @@ void wxApp::CleanUp()
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to 
     // create a module for that as it's part of the core.
-#if wxUSE_THREADS
     delete wxPendingEvents;
+#if wxUSE_THREADS
     delete wxPendingEventsLocker;
     // If we don't do the following, we get an apparent memory leak.
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
@@ -931,12 +924,17 @@ bool wxApp::ProcessIdle()
     return event.MoreRequested();
 }
 
-#if wxUSE_THREADS
 void wxApp::ProcessPendingEvents()
 {
-    wxNode *node = wxPendingEvents->First();
+#if wxUSE_THREADS
+    // ensure that we're the only thread to modify the pending events list
     wxCriticalSectionLocker locker(*wxPendingEventsLocker);
+#endif
 
+    if ( !wxPendingEvents )
+        return;
+
+    wxNode *node = wxPendingEvents->First();
     while (node)
     {
         wxEvtHandler *handler = (wxEvtHandler *)node->Data();
@@ -947,8 +945,6 @@ void wxApp::ProcessPendingEvents()
         node = wxPendingEvents->First();
     }
 }
-#endif
-
 
 void wxApp::ExitMainLoop()
 {
@@ -1032,10 +1028,11 @@ void wxApp::OnIdle(wxIdleEvent& event)
         event.RequestMore(TRUE);
     }
 
-    // If they are pending events, we must process them.
-#if wxUSE_THREADS
+    // If they are pending events, we must process them: pending events are
+    // either events to the threads other than main or events posted with
+    // wxPostEvent() functions
     ProcessPendingEvents();
-#endif
+
     s_inOnIdle = FALSE;
 }
 
@@ -1168,22 +1165,19 @@ void wxExit()
 // Yield to incoming messages
 bool wxYield()
 {
+    // we don't want to process WM_QUIT from here - it should be processed in
+    // the main event loop in order to stop it
+
     MSG msg;
-    // We want to go back to the main message loop
-    // if we see a WM_QUIT. (?)
-#ifdef __WXWINE__
-    while (PeekMessage(&msg, (HWND)NULL, 0, 0, PM_NOREMOVE) && msg.message != WM_QUIT)
-#else
-    while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE) && msg.message != WM_QUIT)
-#endif
+    while ( PeekMessage(&msg, (HWND)0, 0, 0, PM_NOREMOVE) &&
+            msg.message != WM_QUIT )
     {
         if ( !wxTheApp->DoMessage() )
             break;
     }
+
     // If they are pending events, we must process them.
-#if wxUSE_THREADS
     wxTheApp->ProcessPendingEvents();
-#endif
 
     return TRUE;
 }

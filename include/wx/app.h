@@ -307,6 +307,15 @@ extern void WXDLLEXPORT wxExit();
 // Yield to other apps/messages
 extern bool WXDLLEXPORT wxYield();
 
+// Post a message to the given eventhandler which will be processed during the
+// next event loop iteration
+inline void WXDLLEXPORT wxPostEvent(wxEvtHandler *dest, wxEvent& event)
+{
+    wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
+
+    dest->AddPendingEvent(event);
+}
+
 #endif // wxUSE_GUI
 
 // console applications may avoid using DECLARE_APP and IMPLEMENT_APP macros

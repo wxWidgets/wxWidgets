@@ -83,9 +83,7 @@ public:
     virtual bool ProcessMessage(WXMSG* pMsg);
     void DeletePendingObjects();
     bool ProcessIdle();
-#if wxUSE_THREADS
     void ProcessPendingEvents();
-#endif
     int GetComCtl32Version() const;
 
 public:

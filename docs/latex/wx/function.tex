@@ -1058,6 +1058,17 @@ Gets the physical size of the display in pixels.
 
 <wx/gdicmn.h>
 
+\membersection{::wxEnableTopLevelWindows}\label{wxenabletoplevelwindows}
+
+\func{void}{wxEnableTopLevelWindow}{\param{bool}{ enable = TRUE}}
+
+This function enables or disables all top level windows. It is used by
+\helpref{::wxSafeYield}{wxsafeyield}.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
 \membersection{::wxEntry}\label{wxentry}
 
 This initializes wxWindows in a platform-dependent way. Use this if you
@@ -1101,18 +1112,6 @@ int CTheApp::ExitInstance()
 
 <wx/app.h>
 
-\membersection{::wxError}\label{wxerror}
-
-\func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
-
-Displays {\it msg} and continues. This writes to standard error under
-Unix, and pops up a message box under Windows. Used for internal
-wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
 \membersection{::wxEndBusyCursor}\label{wxendbusycursor}
 
 \func{void}{wxEndBusyCursor}{\void}
@@ -1121,6 +1120,18 @@ Changes the cursor back to the original cursor, for all windows in the applicati
 Use with \helpref{wxBeginBusyCursor}{wxbeginbusycursor}.
 
 See also \helpref{wxIsBusy}{wxisbusy}, \helpref{wxBusyCursor}{wxbusycursor}.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{::wxError}\label{wxerror}
+
+\func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
+
+Displays {\it msg} and continues. This writes to standard error under
+Unix, and pops up a message box under Windows. Used for internal
+wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \wxheading{Include files}
 
@@ -1465,6 +1476,25 @@ Now obsolete: use \helpref{wxWindow::Close}{wxwindowclose} instead.
 
 <wx/utils.h>
 
+\membersection{::wxPostEvent}\label{wxpostevent}
+
+\func{void}{wxPostEvent}{\param{wxEvtHandler *}{dest}, \param{wxEvent\& }{event}}
+
+This function posts the event to the specified {\it dest} object. The
+difference between sending an event and posting it is that in the first case
+the event is processed before the function returns (in wxWindows, event sending
+is done with \helpref{ProcessEvent}{wxevthandlerprocessevent} function), but in
+the second, the function returns immediately and the event will be processed
+sometime later - usually during the next even loop iteration.
+
+Note that a copy of the {\it event} is made by the function, so the original
+copy can be deleted as soon as function returns. This function can also be used
+to send events between different threads safely.
+
+\wxheading{Include files}
+
+<wx/app.h>
+
 \membersection{::wxSafeYield}\label{wxsafeyield}
 
 \func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}}
@@ -1479,18 +1509,6 @@ Returns the result of the call to \helpref{::wxYield}{wxyield}.
 \wxheading{Include files}
 
 <wx/utils.h>
-
-\membersection{::wxEnableTopLevelWindows}\label{wxenabletoplevelwindows}
-
-\func{void}{wxEnableTopLevelWindow}{\param{bool}{ enable = TRUE}}
-
-This function enables or disables all top level windows. It is used by
-\helpref{::wxSafeYield}{wxsafeyield}.
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
 
 \membersection{::wxSetDisplayName}\label{wxsetdisplayname}
 
@@ -1667,7 +1685,7 @@ function.
 
 \wxheading{Include files}
 
-<wx/utils.h>
+<wx/app.h> or <wx/utils.h>
 
 \section{Macros}\label{macros}
 

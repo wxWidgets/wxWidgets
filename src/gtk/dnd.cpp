@@ -651,7 +651,7 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
                 /* disable GUI threads */
                 wxapp_uninstall_thread_wakeup();
 #endif
-    
+
                 gtk_selection_data_set( selection_data,
                                         selection_data->target,
                                         8,   // 8-bit
@@ -745,7 +745,8 @@ wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop 
     if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
 }
 
-wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go, const wxIcon &stop )
+wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win,
+                            const wxIcon &go, const wxIcon &stop )
 {
     m_waiting = TRUE;
 
@@ -754,15 +755,8 @@ wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go,
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
     m_retValue = wxDragCancel;
 
-    if (data)
-    {
-        m_data = new wxDataBroker();
-        m_data->Add( data );
-    }
-    else
-    {
-        m_data = (wxDataBroker*) NULL;
-    }
+    m_data = new wxDataBroker;
+    m_data->Add(&data);
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
@@ -784,6 +778,15 @@ wxDropSource::wxDropSource( wxDataBroker *data, wxWindow *win )
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+}
+
+void wxDropSource::SetData( wxDataObject& data )
+{
+    if ( m_data )
+        delete m_data;
+
+    m_data = new wxDataBroker;
+    m_data->Add(&data);
 }
 
 void wxDropSource::SetData( wxDataObject *data )
@@ -808,7 +811,7 @@ void wxDropSource::SetData( wxDataBroker *data )
     m_data = data;
 }
 
-wxDropSource::~wxDropSource(void)
+wxDropSource::~wxDropSource()
 {
     if (m_data) delete m_data;
 
@@ -854,7 +857,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     /* disable GUI threads */
     wxapp_uninstall_thread_wakeup();
 #endif
-    
+
     /* don't start dragging if no button is down */
     if (button_number)
     {
@@ -883,7 +886,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     /* re-enable GUI threads */
     wxapp_install_thread_wakeup();
 #endif
-    
+
     g_blockEventsOnDrag = FALSE;
 
     UnregisterWindow();

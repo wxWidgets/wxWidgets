@@ -160,13 +160,18 @@ void wxDropSource::Init()
   m_pIDropSource->AddRef();
 }
 
-wxDropSource::wxDropSource(wxWindow* WXUNUSED(win))
+wxDropSource::wxDropSource(wxWindow* WXUNUSED(win),
+                           const wxIcon & WXUNUSED(go),
+                           const wxIcon & WXUNUSED(stop))
 {
   Init();
   m_pData = NULL;
 }
 
-wxDropSource::wxDropSource(wxDataObject& data, wxWindow* WXUNUSED(win))
+wxDropSource::wxDropSource(wxDataObject& data,
+                           wxWindow* WXUNUSED(win),
+                           const wxIcon & WXUNUSED(go),
+                           const wxIcon & WXUNUSED(stop))
 {
   Init();
   SetData(data);

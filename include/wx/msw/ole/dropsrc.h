@@ -13,9 +13,9 @@
 #define   _WX_OLEDROPSRC_H
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface
 #endif
-#include "wx/window.h"
+
 #if !wxUSE_DRAG_AND_DROP
   #error  "You should #define wxUSE_DRAG_AND_DROP to 1 to compile this file!"
 #endif  //WX_DRAG_DROP
@@ -23,30 +23,42 @@
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
+
 class wxIDropSource;
-class wxDataObject;
+class WXDLLEXPORT wxDataObject;
+class WXDLLEXPORT wxWindow;
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
 enum wxDragResult
-  {
+{
     wxDragError,    // error prevented the d&d operation from completing
     wxDragNone,     // drag target didn't accept the data
     wxDragCopy,     // the data was successfully copied
     wxDragMove,     // the data was successfully moved
     wxDragCancel    // the operation was cancelled by user (not an error)
-  };
+};
 
 // ----------------------------------------------------------------------------
 // wxDropSource is used to start the drag-&-drop operation on associated
 // wxDataObject object. It's responsible for giving UI feedback while dragging.
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxDropSource
 {
 public:
   // ctors: if you use default ctor you must call SetData() later!
   // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
-  //     compatibility
-  wxDropSource(wxWindow *win = NULL);
-  wxDropSource(wxDataObject& data, wxWindow *win = NULL);
+  //     compatibility, as well as both icon parameters
+  wxDropSource(wxWindow *win = NULL,
+               const wxIcon &go = wxNullIcon,
+               const wxIcon &stop = wxNullIcon );
+  wxDropSource(wxDataObject& data,
+               wxWindow *win = NULL,
+               const wxIcon &go = wxNullIcon,
+               const wxIcon &stop = wxNullIcon );
 
   void SetData(wxDataObject& data);
 

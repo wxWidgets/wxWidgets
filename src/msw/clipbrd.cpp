@@ -142,7 +142,8 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 #if wxUSE_DRAG_AND_DROP
 static bool wxSetClipboardData(wxDataObject *data)
 {
-    size_t size = data->GetDataSize();
+    wxDataFormat format = data->GetPreferredFormat();
+    size_t size = data->GetDataSize(format);
     HANDLE hGlobal = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, size);
     if ( !hGlobal )
     {
@@ -154,11 +155,10 @@ static bool wxSetClipboardData(wxDataObject *data)
 
     LPVOID lpGlobalMemory = ::GlobalLock(hGlobal);
 
-    data->GetDataHere(lpGlobalMemory);
+    data->GetDataHere(format, lpGlobalMemory);
 
     GlobalUnlock(hGlobal);
 
-    wxDataFormat format = data->GetPreferredFormat();
     if ( !::SetClipboardData(format, hGlobal) )
     {
         wxLogSysError(_("Failed to set clipboard data in format %s"),

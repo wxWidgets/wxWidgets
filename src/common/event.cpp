@@ -9,6 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "event.h"
 #endif
@@ -37,6 +45,10 @@
 #if wxUSE_GUI
     #include "wx/validate.h"
 #endif // wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
@@ -84,11 +96,25 @@
 
 #endif // !USE_SHARED_LIBRARY
 
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+// To put pending event handlers
+wxList *wxPendingEvents = (wxList *)NULL;
+
 #if wxUSE_THREADS
-/* To put pending event handlers */
-extern wxList *wxPendingEvents;
-extern wxCriticalSection *wxPendingEventsLocker;
+    // protects wxPendingEvents list
+    wxCriticalSection *wxPendingEventsLocker = (wxCriticalSection *)NULL;
 #endif
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxEvent
+// ----------------------------------------------------------------------------
 
 /*
  * General wxWindows events, covering
@@ -514,10 +540,10 @@ wxEvtHandler::wxEvtHandler()
     m_enabled = TRUE;
     m_dynamicEvents = (wxList *) NULL;
     m_isWindow = FALSE;
-#if wxUSE_THREADS
-    m_eventsLocker = new wxCriticalSection();
-#endif
     m_pendingEvents = (wxList *) NULL;
+#if wxUSE_THREADS
+    m_eventsLocker = new wxCriticalSection;
+#endif
 }
 
 wxEvtHandler::~wxEvtHandler()
@@ -542,63 +568,76 @@ wxEvtHandler::~wxEvtHandler()
         delete m_dynamicEvents;
     };
 
-#if wxUSE_THREADS
-    if (m_pendingEvents)
-      delete m_pendingEvents;
+    delete m_pendingEvents;
 
+#if wxUSE_THREADS
     delete m_eventsLocker;
 #endif
 }
 
 #if wxUSE_THREADS
 
-#ifdef __WXGTK__
-extern bool g_isIdle;
-extern void wxapp_install_idle_handler();
-#endif
-
 bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 {
-    wxEvent *event_main;
     wxCriticalSectionLocker locker(*m_eventsLocker);
 
     // check that we are really in a child thread
-    wxASSERT( !wxThread::IsMain() );
+    wxASSERT_MSG( !wxThread::IsMain(),
+                  wxT("use ProcessEvent() in main thread") );
 
-    if (m_pendingEvents == NULL)
-      m_pendingEvents = new wxList();
+    AddPendingEvent(event);
 
-    event_main = (wxEvent *)event.Clone();
+    return TRUE;
+}
 
-    m_pendingEvents->Append(event_main);
+#endif // wxUSE_THREADS
+
+void wxEvtHandler::AddPendingEvent(wxEvent& event)
+{
+    if ( !m_pendingEvents )
+      m_pendingEvents = new wxList;
+
+    wxEvent *event2 = (wxEvent *)event.Clone();
+
+    m_pendingEvents->Append(event2);
 
     wxPendingEventsLocker->Enter();
+    if ( !wxPendingEvents )
+        wxPendingEvents = new wxList;
     wxPendingEvents->Append(this);
     wxPendingEventsLocker->Leave();
 
     // TODO: Wake up idle handler for the other platforms.
 #ifdef __WXGTK__
-    if (g_isIdle)
+    extern bool g_isIdle;
+    extern void wxapp_install_idle_handler();
+    if ( g_isIdle )
         wxapp_install_idle_handler();
-#endif
-
-    return TRUE;
+#else // this works for wxMSW, but may be for others too?
+    // might also send a dummy message to the top level window, this would
+    // probably be cleaner?
+    wxIdleEvent eventIdle;
+    wxTheApp->OnIdle(eventIdle);
+#endif // platform
 }
 
 void wxEvtHandler::ProcessPendingEvents()
 {
+#if wxUSE_THREADS
     wxCriticalSectionLocker locker(*m_eventsLocker);
+#endif
+
     wxNode *node = m_pendingEvents->First();
     wxEvent *event;
 
-    while (node != NULL) {
-      event = (wxEvent *)node->Data();
-      ProcessEvent(*event);
-      delete node;
-      node = m_pendingEvents->First();
+    while ( node )
+    {
+        event = (wxEvent *)node->Data();
+        ProcessEvent(*event);
+        delete node;
+        node = m_pendingEvents->First();
     }
 }
-#endif
 
 /*
  * Event table stuff
@@ -607,25 +646,24 @@ void wxEvtHandler::ProcessPendingEvents()
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
 #if wxUSE_GUI
-    /* check that our flag corresponds to reality */
+    // check that our flag corresponds to reality
     wxASSERT( m_isWindow == IsKindOf(CLASSINFO(wxWindow)) );
 #endif // wxUSE_GUI
 
-    /* An event handler can be enabled or disabled */
+    // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
 #if wxUSE_THREADS
-        /* Check whether we are in a child thread. */
-        if (!wxThread::IsMain())
+        // Check whether we are in a child thread.
+        if ( !wxThread::IsMain() )
           return ProcessThreadEvent(event);
-#endif
-        /* Handle per-instance dynamic event tables first */
+#endif // wxUSE_THREADS
 
+        // Handle per-instance dynamic event tables first
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )
             return TRUE;
 
-        /* Then static per-class event tables */
-
+        // Then static per-class event tables
         const wxEventTable *table = GetEventTable();
 
 #if wxUSE_GUI && wxUSE_VALIDATORS

@@ -48,10 +48,6 @@
 wxApp *wxTheApp = (wxApp *)  NULL;
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
-#if wxUSE_THREADS
-extern wxList *wxPendingEvents;
-extern wxCriticalSection *wxPendingEventsLocker;
-#endif
 extern wxResourceCache *wxTheResourceCache;
 extern bool g_isIdle;
 
@@ -127,7 +123,7 @@ unsigned char g_palette[64*3] =
 // local functions
 //-----------------------------------------------------------------------------
 
-extern void wxFlushResources(void);
+extern void wxFlushResources();
 
 //-----------------------------------------------------------------------------
 // global functions
@@ -265,6 +261,7 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 
     return TRUE;
 }
+
 #endif // wxUSE_THREADS
 
 //-----------------------------------------------------------------------------
@@ -427,11 +424,9 @@ void wxApp::OnIdle( wxIdleEvent &event )
 
     s_inOnIdle = TRUE;
 
-#if wxUSE_THREADS
     /* Resend in the main thread events which have been prepared in other
        threads */
     ProcessPendingEvents();
-#endif
 
     /* 'Garbage' collection of windows deleted with Close(). */
     DeletePendingObjects();
@@ -520,12 +515,16 @@ void wxApp::Dispatch()
     gtk_main_iteration();
 }
 
-#if wxUSE_THREADS
 void wxApp::ProcessPendingEvents()
 {
-    wxNode *node = wxPendingEvents->First();
+#if wxUSE_THREADS
     wxCriticalSectionLocker locker(*wxPendingEventsLocker);
+#endif // wxUSE_THREADS
 
+    if ( !wxPendingEvents )
+        return;
+
+    wxNode *node = wxPendingEvents->First();
     while (node)
     {
         wxEvtHandler *handler = (wxEvtHandler *)node->Data();
@@ -537,7 +536,6 @@ void wxApp::ProcessPendingEvents()
         node = wxPendingEvents->First();
     }
 }
-#endif // wxUSE_THREADS
 
 void wxApp::DeletePendingObjects()
 {

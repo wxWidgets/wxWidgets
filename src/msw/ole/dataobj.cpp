@@ -54,52 +54,58 @@
 // functions
 // ----------------------------------------------------------------------------
 
-static const char *GetTymedName(DWORD tymed);
+#ifdef __WXDEBUG__
+    static const char *GetTymedName(DWORD tymed);
+#endif // Debug
 
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
 // ----------------------------------------------------------------------------
+
 class wxIEnumFORMATETC : public IEnumFORMATETC
 {
 public:
-  wxIEnumFORMATETC(CLIPFORMAT cf);
+    wxIEnumFORMATETC(const wxDataFormat* formats, ULONG nCount);
+    ~wxIEnumFORMATETC() { delete [] m_formats; }
 
-  DECLARE_IUNKNOWN_METHODS;
+    DECLARE_IUNKNOWN_METHODS;
 
-  // IEnumFORMATETC
-  STDMETHODIMP Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFetched);
-  STDMETHODIMP Skip(ULONG celt);
-  STDMETHODIMP Reset();
-  STDMETHODIMP Clone(IEnumFORMATETC **ppenum);
+    // IEnumFORMATETC
+    STDMETHODIMP Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFetched);
+    STDMETHODIMP Skip(ULONG celt);
+    STDMETHODIMP Reset();
+    STDMETHODIMP Clone(IEnumFORMATETC **ppenum);
 
 private:
-  FORMATETC   m_format;   // (unique @@@) format we can provide data in
-  ULONG       m_nCurrent; // current enum position (currently either 0 or 1)
+    CLIPFORMAT *m_formats;  // formats we can provide data in
+    ULONG       m_nCount,   // number of formats we support
+                m_nCurrent; // current enum position
 };
 
 // ----------------------------------------------------------------------------
 // wxIDataObject implementation of IDataObject interface
 // ----------------------------------------------------------------------------
+
 class wxIDataObject : public IDataObject
 {
 public:
-  wxIDataObject(wxDataObject *pDataObject);
+    wxIDataObject(wxDataObject *pDataObject);
 
-  DECLARE_IUNKNOWN_METHODS;
+    DECLARE_IUNKNOWN_METHODS;
 
-  // IDataObject
-  STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
-  STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium);
-  STDMETHODIMP QueryGetData(FORMATETC *pformatetc);
-  STDMETHODIMP GetCanonicalFormatEtc(FORMATETC *In, FORMATETC *pOut);
-  STDMETHODIMP SetData(FORMATETC *pfetc, STGMEDIUM *pmedium, BOOL fRelease);
-  STDMETHODIMP EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppenumFEtc);
-  STDMETHODIMP DAdvise(FORMATETC *pfetc, DWORD ad, IAdviseSink *p, DWORD *pdw);
-  STDMETHODIMP DUnadvise(DWORD dwConnection);
-  STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppenumAdvise);
+    // IDataObject
+    STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
+    STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium);
+    STDMETHODIMP QueryGetData(FORMATETC *pformatetc);
+    STDMETHODIMP GetCanonicalFormatEtc(FORMATETC *In, FORMATETC *pOut);
+    STDMETHODIMP SetData(FORMATETC *pfetc, STGMEDIUM *pmedium, BOOL fRelease);
+    STDMETHODIMP EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppenumFEtc);
+    STDMETHODIMP DAdvise(FORMATETC *pfetc, DWORD ad, IAdviseSink *p, DWORD *pdw);
+    STDMETHODIMP DUnadvise(DWORD dwConnection);
+    STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppenumAdvise);
 
 private:
-  wxDataObject *m_pDataObject;      // pointer to C++ class we belong to
+    wxDataObject *m_pDataObject;      // pointer to C++ class we belong to
 };
 
 // ============================================================================
@@ -144,70 +150,90 @@ wxString wxDataFormat::GetId() const
 // ----------------------------------------------------------------------------
 
 BEGIN_IID_TABLE(wxIEnumFORMATETC)
-  ADD_IID(Unknown)
-  ADD_IID(EnumFORMATETC)
+    ADD_IID(Unknown)
+    ADD_IID(EnumFORMATETC)
 END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(wxIEnumFORMATETC)
 
-wxIEnumFORMATETC::wxIEnumFORMATETC(CLIPFORMAT cf)
+wxIEnumFORMATETC::wxIEnumFORMATETC(const wxDataFormat *formats, ULONG nCount)
 {
-  m_format.cfFormat = cf;
-  m_format.ptd      = NULL;
-  m_format.dwAspect = DVASPECT_CONTENT;
-  m_format.lindex   = -1;
-  m_format.tymed    = TYMED_HGLOBAL;
-  m_cRef = 0;
-  m_nCurrent = 0;
+    m_cRef = 0;
+    m_nCurrent = 0;
+    m_nCount = nCount;
+    m_formats = new CLIPFORMAT[nCount];
+    for ( ULONG n = 0; n < nCount; n++ ) {
+        m_formats[n] = formats[n].GetFormatId();
+    }
 }
 
 STDMETHODIMP wxIEnumFORMATETC::Next(ULONG      celt,
                                     FORMATETC *rgelt,
                                     ULONG     *pceltFetched)
 {
-  wxLogTrace(wxT("wxIEnumFORMATETC::Next"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIEnumFORMATETC::Next"));
 
-  if ( celt > 1 )
-    return S_FALSE;
+    if ( celt > 1 ) {
+        // we only return 1 element at a time - mainly because I'm too lazy to
+        // implement something which you're never asked for anyhow
+        return S_FALSE;
+    }
 
-  if ( m_nCurrent == 0 ) {
-    *rgelt = m_format;
-    m_nCurrent++;
+    if ( m_nCurrent < m_nCount ) {
+        FORMATETC format;
+        format.cfFormat = m_formats[m_nCurrent++];
+        format.ptd      = NULL;
+        format.dwAspect = DVASPECT_CONTENT;
+        format.lindex   = -1;
+        format.tymed    = TYMED_HGLOBAL;
+        *rgelt = format;
 
-    return S_OK;
-  }
-  else
-    return S_FALSE;
+        return S_OK;
+    }
+    else {
+        // bad index
+        return S_FALSE;
+    }
 }
 
 STDMETHODIMP wxIEnumFORMATETC::Skip(ULONG celt)
 {
-  wxLogTrace(wxT("wxIEnumFORMATETC::Skip"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIEnumFORMATETC::Skip"));
 
-  if ( m_nCurrent == 0 )
-    m_nCurrent++;
+    m_nCurrent += celt;
+    if ( m_nCurrent < m_nCount )
+        return S_OK;
 
-  return S_FALSE;
+    // no, can't skip this many elements
+    m_nCurrent -= celt;
+
+    return S_FALSE;
 }
 
 STDMETHODIMP wxIEnumFORMATETC::Reset()
 {
-  wxLogTrace(wxT("wxIEnumFORMATETC::Reset"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIEnumFORMATETC::Reset"));
 
-  m_nCurrent = 0;
+    m_nCurrent = 0;
 
-  return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP wxIEnumFORMATETC::Clone(IEnumFORMATETC **ppenum)
 {
-  wxLogTrace(wxT("wxIEnumFORMATETC::Clone"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIEnumFORMATETC::Clone"));
 
-  wxIEnumFORMATETC *pNew = new wxIEnumFORMATETC(m_format.cfFormat);
-  pNew->AddRef();
-  *ppenum = pNew;
+    // unfortunately, we can't reuse the code in ctor - types are different
+    wxIEnumFORMATETC *pNew = new wxIEnumFORMATETC(NULL, 0);
+    pNew->m_nCount = m_nCount;
+    pNew->m_formats = new CLIPFORMAT[m_nCount];
+    for ( ULONG n = 0; n < m_nCount; n++ ) {
+        pNew->m_formats[n] = m_formats[n];
+    }
+    pNew->AddRef();
+    *ppenum = pNew;
 
-  return S_OK;
+    return S_OK;
 }
 
 // ----------------------------------------------------------------------------
@@ -215,71 +241,118 @@ STDMETHODIMP wxIEnumFORMATETC::Clone(IEnumFORMATETC **ppenum)
 // ----------------------------------------------------------------------------
 
 BEGIN_IID_TABLE(wxIDataObject)
-  ADD_IID(Unknown)
-  ADD_IID(DataObject)
+    ADD_IID(Unknown)
+    ADD_IID(DataObject)
 END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(wxIDataObject)
 
 wxIDataObject::wxIDataObject(wxDataObject *pDataObject)
 {
-  m_cRef = 0;
-  m_pDataObject = pDataObject;
+    m_cRef = 0;
+    m_pDataObject = pDataObject;
 }
 
 // get data functions
 STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
-  wxLogTrace(wxT("wxIDataObject::GetData"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::GetData"));
 
-  // is data is in our format?
-  HRESULT hr = QueryGetData(pformatetcIn);
-  if ( FAILED(hr) )
-    return hr;
+    // is data is in our format?
+    HRESULT hr = QueryGetData(pformatetcIn);
+    if ( FAILED(hr) )
+        return hr;
 
-  // alloc memory
-  HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
-                                m_pDataObject->GetDataSize());
-  if ( hGlobal == NULL ) {
-    wxLogLastError("GlobalAlloc");
-    return E_OUTOFMEMORY;
-  }
+    // for the bitmaps and metafiles we use the handles instead of global memory
+    // to pass the data
+    wxDataFormat format = (wxDataFormatId)pformatetcIn->cfFormat;
 
-  // copy data
-  pmedium->tymed          = TYMED_HGLOBAL;
-  pmedium->hGlobal        = hGlobal;
-  pmedium->pUnkForRelease = NULL;
+    switch ( format )
+    {
+        case wxDF_BITMAP:
+            pmedium->tymed = TYMED_GDI;
+            break;
 
-  hr = GetDataHere(pformatetcIn, pmedium);
-  if ( FAILED(hr) ) {
-    GlobalFree(hGlobal);
-    return hr;
-  }
+        case wxDF_METAFILE:
+            pmedium->tymed = TYMED_MFPICT;
+            break;
 
-  return S_OK;
+        default:
+            // alloc memory
+            size_t size = m_pDataObject->GetDataSize(format);
+            if ( !size ) {
+                // it probably means that the method is just not implemented
+                wxLogDebug(wxT("Invalid data size - can't be 0"));
+
+                return DV_E_FORMATETC;
+            }
+
+            HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, size);
+            if ( hGlobal == NULL ) {
+                wxLogLastError("GlobalAlloc");
+                return E_OUTOFMEMORY;
+            }
+
+            // copy data
+            pmedium->tymed   = TYMED_HGLOBAL;
+            pmedium->hGlobal = hGlobal;
+    }
+
+    pmedium->pUnkForRelease = NULL;
+
+    // do copy the data
+    hr = GetDataHere(pformatetcIn, pmedium);
+    if ( FAILED(hr) ) {
+        // free resources we allocated
+        if ( pmedium->tymed == TYMED_HGLOBAL ) {
+            GlobalFree(pmedium->hGlobal);
+        }
+
+        return hr;
+    }
+
+    return S_OK;
 }
 
 STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
                                         STGMEDIUM *pmedium)
 {
-  wxLogTrace(wxT("wxIDataObject::GetDataHere"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::GetDataHere"));
 
-  // put data in caller provided medium
-  if ( pmedium->tymed != TYMED_HGLOBAL )
-    return DV_E_TYMED;
+    // put data in caller provided medium
+    switch ( pmedium->tymed )
+    {
+        case TYMED_GDI:
+            m_pDataObject->GetDataHere(wxDF_BITMAP, &pmedium->hBitmap);
+            break;
 
-  // copy data
-  void *pBuf = GlobalLock(pmedium->hGlobal);
-  if ( pBuf == NULL ) {
-    wxLogLastError(wxT("GlobalLock"));
-    return E_OUTOFMEMORY;
-  }
+        case TYMED_MFPICT:
+            // this should be copied on bitmaps - but I don't have time for
+            // this now
+            wxFAIL_MSG(wxT("TODO - no support for metafiles in wxDataObject"));
+            break;
 
-  m_pDataObject->GetDataHere(pBuf);
+        case TYMED_HGLOBAL:
+            {
+                // copy data
+                void *pBuf = GlobalLock(pmedium->hGlobal);
+                if ( pBuf == NULL ) {
+                    wxLogLastError(wxT("GlobalLock"));
+                    return E_OUTOFMEMORY;
+                }
 
-  GlobalUnlock(pmedium->hGlobal);
+                wxDataFormat format = (wxDataFormatId)pformatetc->cfFormat;
+                m_pDataObject->GetDataHere(format, pBuf);
 
-  return S_OK;
+                GlobalUnlock(pmedium->hGlobal);
+            }
+            break;
+
+        default:
+            return DV_E_TYMED;
+    }
+
+    return S_OK;
 }
 
 // set data functions (not implemented)
@@ -287,7 +360,8 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                                     STGMEDIUM *pmedium,
                                     BOOL       fRelease)
 {
-  wxLogTrace(wxT("wxIDataObject::SetData"));
+  wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::SetData"));
+
   return E_NOTIMPL;
 }
 
@@ -296,39 +370,53 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
 {
   // do we accept data in this format?
   if ( pformatetc == NULL ) {
-    wxLogTrace(wxT("wxIDataObject::QueryGetData: invalid ptr."));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::QueryGetData: invalid ptr."));
+
     return E_INVALIDARG;
   }
 
   // the only one allowed by current COM implementation
   if ( pformatetc->lindex != -1 ) {
-    wxLogTrace(wxT("wxIDataObject::QueryGetData: bad lindex %d"),
+    wxLogTrace(wxTRACE_OleCalls,
+               wxT("wxIDataObject::QueryGetData: bad lindex %d"),
                pformatetc->lindex);
     return DV_E_LINDEX;
   }
 
   // we don't support anything other (THUMBNAIL, ICON, DOCPRINT...)
   if ( pformatetc->dwAspect != DVASPECT_CONTENT ) {
-    wxLogTrace(wxT("wxIDataObject::QueryGetData: bad dwAspect %d"),
+    wxLogTrace(wxTRACE_OleCalls,
+               wxT("wxIDataObject::QueryGetData: bad dwAspect %d"),
                pformatetc->dwAspect);
     return DV_E_DVASPECT;
   }
 
-  // @@ we only transfer data by global memory (bad for large amounts of it!)
-  if ( !(pformatetc->tymed & TYMED_HGLOBAL) ) {
-    wxLogTrace(wxT("wxIDataObject::QueryGetData: %s != TYMED_HGLOBAL."),
-               GetTymedName(pformatetc->tymed));
+  // we only transfer data by global memory, except for some particular cases
+  wxDataFormat format = (wxDataFormatId)pformatetc->cfFormat;
+  DWORD tymed = pformatetc->tymed;
+  if ( (format == wxDF_BITMAP && !(tymed & TYMED_GDI)) ||
+       !(tymed & TYMED_HGLOBAL) ) {
+    // it's not what we're waiting for
+#ifdef __WXDEBUG__
+    wxLogTrace(wxTRACE_OleCalls,
+               wxT("wxIDataObject::QueryGetData: %s & %s == 0."),
+               GetTymedName(tymed),
+               GetTymedName(format == wxDF_BITMAP ? TYMED_GDI : TYMED_HGLOBAL));
+#endif // Debug
     return DV_E_TYMED;
   }
 
   // and now check the type of data requested
-  if ( m_pDataObject->IsSupportedFormat((wxDataFormatId)pformatetc->cfFormat) ) {
-    wxLogTrace(wxT("wxIDataObject::QueryGetData: %s ok"),
-               wxDataObject::GetFormatName((wxDataFormatId)pformatetc->cfFormat));
+  if ( m_pDataObject->IsSupportedFormat(format) ) {
+#ifdef __WXDEBUG__
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::QueryGetData: %s ok"),
+               wxDataObject::GetFormatName(format));
+#endif // Debug
     return S_OK;
   }
   else {
-    wxLogTrace(wxT("wxIDataObject::QueryGetData: %s unsupported"),
+    wxLogTrace(wxTRACE_OleCalls,
+               wxT("wxIDataObject::QueryGetData: %s unsupported"),
                wxDataObject::GetFormatName((wxDataFormatId)pformatetc->cfFormat));
     return DV_E_FORMATETC;
   }
@@ -337,30 +425,47 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
 STDMETHODIMP wxIDataObject::GetCanonicalFormatEtc(FORMATETC *pFormatetcIn,
                                                   FORMATETC *pFormatetcOut)
 {
-  wxLogTrace(wxT("wxIDataObject::GetCanonicalFormatEtc"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::GetCanonicalFormatEtc"));
 
-  // @@ implementation is trivial, we might want something better here
-  if ( pFormatetcOut != NULL )
-    pFormatetcOut->ptd = NULL;
-  return DATA_S_SAMEFORMATETC;
+    // TODO we might want something better than this trivial implementation here
+    if ( pFormatetcOut != NULL )
+        pFormatetcOut->ptd = NULL;
+
+    return DATA_S_SAMEFORMATETC;
 }
 
 STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDirection,
                                           IEnumFORMATETC **ppenumFormatEtc)
 {
-  wxLogTrace(wxT("wxIDataObject::EnumFormatEtc"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::EnumFormatEtc"));
 
-  if ( dwDirection == DATADIR_SET ) {
-    // we don't allow setting of data anyhow
-    return E_NOTIMPL;
-  }
+    if ( dwDirection == DATADIR_SET ) {
+        // we don't allow setting of data anyhow
+        return E_NOTIMPL;
+    }
 
-  wxIEnumFORMATETC *pEnum =
-    new wxIEnumFORMATETC(m_pDataObject->GetPreferredFormat());
-  pEnum->AddRef();
-  *ppenumFormatEtc = pEnum;
+    size_t nFormatCount = m_pDataObject->GetFormatCount();
+    wxDataFormat format, *formats;
+    if ( nFormatCount == 1 ) {
+        // this is the most common case, this is why we consider it separately
+        formats = &format;
+        format = m_pDataObject->GetPreferredFormat();
+    }
+    else {
+        // bad luck, build the array with all formats
+        formats = new wxDataFormat[nFormatCount];
+        m_pDataObject->GetAllFormats(formats);
+    }
 
-  return S_OK;
+    wxIEnumFORMATETC *pEnum = new wxIEnumFORMATETC(formats, nFormatCount);
+    pEnum->AddRef();
+    *ppenumFormatEtc = pEnum;
+
+    if ( formats != &format ) {
+        delete [] formats;
+    }
+
+    return S_OK;
 }
 
 // advise sink functions (not implemented)
@@ -397,9 +502,32 @@ wxDataObject::~wxDataObject()
   m_pIDataObject->Release();
 }
 
+bool wxDataObject::IsSupportedFormat(const wxDataFormat& format) const
+{
+    size_t nFormatCount = GetFormatCount();
+    if ( nFormatCount == 1 ) {
+        return format == GetPreferredFormat();
+    }
+    else {
+        wxDataFormat *formats = new wxDataFormat[nFormatCount];
+        GetAllFormats(formats);
+
+        size_t n;
+        for ( n = 0; n < nFormatCount; n++ ) {
+            if ( formats[n] == format )
+                break;
+        }
+
+        delete [] formats;
+
+        // found?
+        return n < nFormatCount;
+    }
+}
+
+#ifdef __WXDEBUG__
 const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
-#ifdef __WXDEBUG__
   // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
   #ifdef __VISUALC__
     #pragma warning(disable:4063)
@@ -431,11 +559,8 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
   #ifdef __VISUALC__
     #pragma warning(default:4063)
   #endif // VC++
-
-#else // !Debug
-  return "";
-#endif // Debug
 }
+#endif // Debug
 
 // ----------------------------------------------------------------------------
 // wxPrivateDataObject
@@ -479,8 +604,33 @@ void wxPrivateDataObject::WriteData( const void *data, void *dest ) const
 }
 
 // ----------------------------------------------------------------------------
+// wxBitmapDataObject
+// ----------------------------------------------------------------------------
+
+// the bitmaps aren't passed by value as other types of data (i.e. by copyign
+// the data into a global memory chunk and passing it to the clipboard or
+// another application or whatever), but by handle, so these generic functions
+// don't make much sense to them.
+
+size_t wxBitmapDataObject::GetDataSize(const wxDataFormat& format) const
+{
+    // no data to copy anyhow
+    return 0;
+}
+
+void wxBitmapDataObject::GetDataHere(const wxDataFormat& format,
+                                     void *pBuf) const
+{
+    // we put a bitmap handle into pBuf
+    *(WXHBITMAP *)pBuf = m_bitmap.GetHBITMAP();
+}
+
+// ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
+
+#ifdef __WXDEBUG__
+
 static const char *GetTymedName(DWORD tymed)
 {
   static char s_szBuf[128];
@@ -498,7 +648,7 @@ static const char *GetTymedName(DWORD tymed)
   }
 }
 
-// TODO: OLE parts of wxBitmap/File/MetafileDataObject
+#endif // Debug
 
 #endif
 

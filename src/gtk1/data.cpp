@@ -39,12 +39,6 @@ wxWindowList wxTopLevelWindows;
 /* List of windows pending deletion */
 wxList wxPendingDelete;
 
-#if wxUSE_THREADS
-/* List of events pending processing */
-wxList *wxPendingEvents = NULL;
-wxCriticalSection *wxPendingEventsLocker = NULL;
-#endif
-
 /* Current cursor, in order to hang on to
  * cursor handle when setting the cursor globally */
 wxCursor g_globalCursor;

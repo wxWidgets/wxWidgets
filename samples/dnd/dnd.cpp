@@ -19,8 +19,8 @@
 #include "wx/wx.h"
 #endif
 
-#ifdef __WXMOTIF__
-    #error Sorry, drag and drop is not yet implemented on wxMotif.
+#if !wxUSE_DRAG_AND_DROP
+    #error This sample requires drag and drop support in the library
 #endif
 
 #include "wx/intl.h"
@@ -31,6 +31,8 @@
 #include "wx/filedlg.h"
 #include "wx/image.h"
 #include "wx/clipbrd.h"
+#include "wx/colordlg.h"
+#include "wx/resource.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
     #include "mondrian.xpm"
@@ -74,14 +76,15 @@ private:
 class DnDApp : public wxApp
 {
 public:
-    bool OnInit();
+    virtual bool OnInit();
 };
 
 IMPLEMENT_APP(DnDApp);
 
 // ----------------------------------------------------------------------------
-// Define a new frame type
+// Define a new frame type for the main frame
 // ----------------------------------------------------------------------------
+
 class DnDFrame : public wxFrame
 {
 public:
@@ -92,6 +95,7 @@ public:
     void OnQuit (wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnDrag (wxCommandEvent& event);
+    void OnNewFrame(wxCommandEvent& event);
     void OnHelp (wxCommandEvent& event);
     void OnLogClear(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
@@ -118,6 +122,355 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// A shape is an example of application-specific data which may be transported
+// via drag-and-drop or clipboard: in our case, we have different geometric
+// shapes, each one with its own colour and position
+// ----------------------------------------------------------------------------
+
+class DnDShape
+{
+public:
+    enum Kind
+    {
+        None,
+        Triangle,
+        Rectangle,
+        Ellipse
+    };
+
+    DnDShape(const wxPoint& pos,
+             const wxSize& size,
+             const wxColour& col)
+        : m_pos(pos), m_size(size), m_col(col)
+    {
+    }
+
+    // the functions used for drag-and-drop: they dump and restore a shape into
+    // some bitwise-copiable data
+    //
+    // NB: here we profit from the fact that wxPoint, wxSize and wxColour are
+    //     POD (plain old data) and so can be copied directly - but it wouldn't
+    //     work for other types!
+    // ------------------------------------------------------------------------
+
+    // restore from buffer
+    static DnDShape *New(const void *buf);
+
+    virtual size_t GetDataSize() const
+    {
+        return sizeof(ShapeDump);
+    }
+
+    virtual void GetDataHere(void *buf) const
+    {
+        ShapeDump& dump = *(ShapeDump *)buf;
+        dump.x = m_pos.x;
+        dump.y = m_pos.y;
+        dump.w = m_size.x;
+        dump.h = m_size.y;
+        dump.r = m_col.Red();
+        dump.g = m_col.Green();
+        dump.b = m_col.Blue();
+        dump.k = GetKind();
+    }
+
+    // accessors
+    const wxPoint& GetPosition() const { return m_pos; }
+    const wxColour& GetColour() const { return m_col; }
+    const wxSize& GetSize() const { return m_size; }
+
+    // to implement in derived classes
+    virtual Kind GetKind() const = 0;
+
+    virtual void Draw(wxDC& dc) = 0
+    {
+        dc.SetPen(wxPen(m_col, 1, wxSOLID));
+    }
+
+protected:
+    wxPoint GetCentre() const
+        { return wxPoint(m_pos.x + m_size.x / 2, m_pos.y + m_size.y / 2); }
+
+    struct ShapeDump
+    {
+        int x, y,       // position
+            w, h,       // size
+            r, g, b,    // colour
+            k;          // kind
+    };
+
+    wxPoint  m_pos;
+    wxSize   m_size;
+    wxColour m_col;
+};
+
+class DnDTriangularShape : public DnDShape
+{
+public:
+    DnDTriangularShape(const wxPoint& pos,
+                       const wxSize& size,
+                       const wxColour& col)
+        : DnDShape(pos, size, col)
+    {
+    }
+
+    virtual Kind GetKind() const { return Triangle; }
+    virtual void Draw(wxDC& dc)
+    {
+        DnDShape::Draw(dc);
+
+        // well, it's a bit difficult to describe a triangle by position and
+        // size, but we're not doing geometry here, do we? ;-)
+        wxPoint p1(m_pos);
+        wxPoint p2(m_pos.x + m_size.x, m_pos.y);
+        wxPoint p3(m_pos.x, m_pos.y + m_size.y);
+
+        dc.DrawLine(p1, p2);
+        dc.DrawLine(p2, p3);
+        dc.DrawLine(p3, p1);
+
+        dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+    }
+};
+
+class DnDRectangularShape : public DnDShape
+{
+public:
+    DnDRectangularShape(const wxPoint& pos,
+                        const wxSize& size,
+                        const wxColour& col)
+        : DnDShape(pos, size, col)
+    {
+    }
+
+    virtual Kind GetKind() const { return Rectangle; }
+    virtual void Draw(wxDC& dc)
+    {
+        DnDShape::Draw(dc);
+
+        wxPoint p1(m_pos);
+        wxPoint p2(p1.x + m_size.x, p1.y);
+        wxPoint p3(p2.x, p2.y + m_size.y);
+        wxPoint p4(p1.x, p3.y);
+
+        dc.DrawLine(p1, p2);
+        dc.DrawLine(p2, p3);
+        dc.DrawLine(p3, p4);
+        dc.DrawLine(p4, p1);
+
+        dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+    }
+};
+
+class DnDEllipticShape : public DnDShape
+{
+public:
+    DnDEllipticShape(const wxPoint& pos,
+                     const wxSize& size,
+                     const wxColour& col)
+        : DnDShape(pos, size, col)
+    {
+    }
+
+    virtual Kind GetKind() const { return Ellipse; }
+    virtual void Draw(wxDC& dc)
+    {
+        DnDShape::Draw(dc);
+
+        dc.DrawEllipse(m_pos, m_size);
+
+        dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+    }
+};
+
+// ----------------------------------------------------------------------------
+// A wxDataObject specialisation for the application-specific data
+// ----------------------------------------------------------------------------
+
+static const char *shapeFormatId = "wxShape";
+
+class DnDShapeDataObject : public wxDataObject
+{
+public:
+    // ctor doesn't copy the pointer, so it shouldn't go away while this object
+    // is alive
+    DnDShapeDataObject(DnDShape *shape)
+    {
+        m_shape = shape;
+
+        // this string should uniquely identify our format, but is otherwise
+        // arbitrary
+        m_formatShape.SetId(shapeFormatId);
+
+        // we don't draw the shape to a bitmap until it's really needed (i.e.
+        // we're asked to do so)
+        m_hasBitmap = FALSE;
+    }
+
+    // implement base class pure virtuals
+    // ----------------------------------
+
+    virtual wxDataFormat GetPreferredFormat() const
+    {
+        return m_formatShape;
+    }
+
+    virtual size_t GetFormatCount() const
+    {
+        // +1 for our custom format
+        return m_dataobj.GetFormatCount() + 1;
+    }
+
+    virtual void GetAllFormats(wxDataFormat *formats) const
+    {
+        formats[0] = m_formatShape;
+        m_dataobj.GetAllFormats(&formats[1]);
+    }
+
+    virtual size_t GetDataSize(const wxDataFormat& format) const
+    {
+        if ( format == m_formatShape )
+        {
+            return m_shape->GetDataSize();
+        }
+        else
+        {
+            wxASSERT_MSG( format == wxDF_BITMAP, "unsupported format" );
+
+            if ( !m_hasBitmap )
+                CreateBitmap();
+
+            return m_dataobj.GetDataSize(format);
+        }
+    }
+
+    virtual void GetDataHere(const wxDataFormat& format, void *pBuf) const
+    {
+        if ( format == m_formatShape )
+        {
+            m_shape->GetDataHere(pBuf);
+        }
+        else
+        {
+            wxASSERT_MSG( format == wxDF_BITMAP, "unsupported format" );
+
+            if ( !m_hasBitmap )
+                CreateBitmap();
+
+            m_dataobj.GetDataHere(format, pBuf);
+        }
+    }
+
+private:
+    // creates a bitmap and assigns it to m_dataobj (also sets m_hasBitmap)
+    void CreateBitmap() const;
+
+    wxDataFormat        m_formatShape;  // our custom format
+
+    wxBitmapDataObject  m_dataobj;      // it handles bitmaps
+    bool                m_hasBitmap;    // true if m_dataobj has valid bitmap
+
+    DnDShape           *m_shape;        // our data
+};
+
+// ----------------------------------------------------------------------------
+// A dialog to edit shape properties
+// ----------------------------------------------------------------------------
+
+class DnDShapeDialog : public wxDialog
+{
+public:
+    DnDShapeDialog(wxFrame *parent, DnDShape *shape);
+
+    DnDShape *GetShape() const;
+
+    virtual bool TransferDataToWindow();
+    virtual bool TransferDataFromWindow();
+
+    void OnColour(wxCommandEvent& event);
+
+private:
+    // input
+    DnDShape *m_shape;
+
+    // output
+    DnDShape::Kind m_shapeKind;
+    wxPoint  m_pos;
+    wxSize   m_size;
+    wxColour m_col;
+
+    // controls
+    wxRadioBox *m_radio;
+    wxTextCtrl *m_textX,
+               *m_textY,
+               *m_textW,
+               *m_textH;
+
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
+// A frame for the shapes which can be drag-and-dropped between frames
+// ----------------------------------------------------------------------------
+
+class DnDShapeFrame : public wxFrame
+{
+public:
+    DnDShapeFrame(wxFrame *parent);
+    ~DnDShapeFrame();
+
+    void SetShape(DnDShape *shape);
+
+    // callbacks
+    void OnDrag(wxMouseEvent& event);
+    void OnEdit(wxMouseEvent& event);
+    void OnPaint(wxPaintEvent& event);
+    void OnDrop(long x, long y, DnDShape *shape);
+
+private:
+    DnDShape *m_shape;
+
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
+// wxDropTarget derivation for DnDShapes
+// ----------------------------------------------------------------------------
+
+class DnDShapeDropTarget : public wxDropTarget
+{
+public:
+    DnDShapeDropTarget(DnDShapeFrame *frame)
+    {
+        m_frame = frame;
+
+        // the same as used by DnDShapeDataObject
+        m_formatShape.SetId(shapeFormatId);
+    }
+
+    // override base class (pure) virtuals
+    virtual void OnEnter()
+        { m_frame->SetStatusText("Mouse entered the frame"); }
+    virtual void OnLeave()
+        { m_frame->SetStatusText("Mouse left the frame"); }
+    virtual bool OnDrop(long x, long y, const void *pData)
+    {
+        m_frame->OnDrop(x, y, DnDShape::New(pData));
+
+        return TRUE;
+    }
+
+protected:
+    virtual size_t GetFormatCount() const { return 1; }
+    virtual wxDataFormat GetFormat(size_t WXUNUSED(n)) const
+        { return m_formatShape; }
+
+private:
+    DnDShapeFrame *m_frame;
+    wxDataFormat m_formatShape;
+};
+
+// ----------------------------------------------------------------------------
 // IDs for the menu commands
 // ----------------------------------------------------------------------------
 
@@ -125,6 +478,7 @@ enum
 {
     Menu_Quit = 1,
     Menu_Drag,
+    Menu_NewFrame,
     Menu_About = 101,
     Menu_Help,
     Menu_Clear,
@@ -135,13 +489,15 @@ enum
     Menu_HasText,
     Menu_HasBitmap,
     Menu_ToBeGreyed,   /* for testing */
-    Menu_ToBeDeleted   /* for testing */
+    Menu_ToBeDeleted,  /* for testing */
+    Button_Colour = 1001
 };
 
 BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_Quit,       DnDFrame::OnQuit)
     EVT_MENU(Menu_About,      DnDFrame::OnAbout)
     EVT_MENU(Menu_Drag,       DnDFrame::OnDrag)
+    EVT_MENU(Menu_NewFrame,   DnDFrame::OnNewFrame)
     EVT_MENU(Menu_Help,       DnDFrame::OnHelp)
     EVT_MENU(Menu_Clear,      DnDFrame::OnLogClear)
     EVT_MENU(Menu_Copy,       DnDFrame::OnCopy)
@@ -156,7 +512,21 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_PAINT(                DnDFrame::OnPaint)
 END_EVENT_TABLE()
 
-    // `Main program' equivalent, creating windows and returning main app frame
+BEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
+    EVT_RIGHT_DOWN(DnDShapeFrame::OnDrag)
+    EVT_LEFT_DCLICK(DnDShapeFrame::OnEdit)
+    EVT_PAINT(DnDShapeFrame::OnPaint)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(DnDShapeDialog, wxDialog)
+    EVT_BUTTON(Button_Colour, OnColour)
+END_EVENT_TABLE()
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// `Main program' equivalent, creating windows and returning main app frame
 bool DnDApp::OnInit()
 {
 #if wxUSE_LIBPNG
@@ -173,6 +543,8 @@ bool DnDApp::OnInit()
 
     SetTopWindow(frame);
 
+    wxDefaultResourceTable->ParseResourceFile("dnd.wxr");
+
     return TRUE;
 }
 
@@ -186,19 +558,13 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
     CreateStatusBar();
 
-    // construct sub menu for testing
-    wxMenu *sub_menu = new wxMenu;
-    sub_menu->Append(Menu_Quit, "E&xit");
-    sub_menu->Append(Menu_Quit, "E&xit");
-    sub_menu->Append(Menu_Quit, "E&xit");
-
     // construct menu
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(Menu_Drag, "&Test drag...");
     file_menu->AppendSeparator();
-    file_menu->Append(Menu_Quit, "E&xit");
+    file_menu->Append(Menu_NewFrame, "&New frame\tCtrl-N");
     file_menu->AppendSeparator();
-    file_menu->Append( 0, "More exit menus", sub_menu);
+    file_menu->Append(Menu_Quit, "E&xit");
 
     wxMenu *log_menu = new wxMenu;
     log_menu->Append(Menu_Clear, "Clear");
@@ -217,7 +583,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     clip_menu->AppendSeparator();
     clip_menu->Append(Menu_HasText, "Clipboard has &text\tCtrl+T");
     clip_menu->Append(Menu_HasBitmap, "Clipboard has a &bitmap\tCtrl+B");
-    
+
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
     menu_bar->Append(log_menu,  "&Log");
@@ -238,7 +604,10 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
                                wxTE_MULTILINE | wxTE_READONLY |
                                wxSUNKEN_BORDER );
-    // redirect log messages to the text window (don't forget to delete it!)
+
+    // redirect log messages to the text window and switch on OLE messages
+    // logging
+    wxLog::AddTraceMask(wxTRACE_OleCalls);
     m_pLog = new wxLogTextCtrl(m_ctrlLog);
     m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
@@ -289,7 +658,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
     dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
     dc.DrawText( "Drag text from here!", 20, h-50 );
-    
+
     if (m_bitmap.Ok())
         dc.DrawBitmap( m_bitmap, 280, h-120, TRUE );
 }
@@ -334,6 +703,13 @@ void DnDFrame::OnClipboardHasBitmap(wxCommandEvent& WXUNUSED(event))
     }
 
     wxTheClipboard->Close();
+}
+
+void DnDFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
+{
+    (new DnDShapeFrame(this))->Show(TRUE);
+
+    wxLogStatus(this, "Double click the new frame to select a shape for it");
 }
 
 void DnDFrame::OnDrag(wxCommandEvent& WXUNUSED(event))
@@ -395,18 +771,15 @@ void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
-    if ( !m_strText.IsEmpty() ) 
+    if ( !m_strText.IsEmpty() )
     {
         // start drag operation
-#ifdef __WXMSW__
         wxTextDataObject textData(m_strText);
-        wxDropSource dragSource( textData, this );
-#else
-        wxDropSource dragSource( new wxTextDataObject (m_strText), this, wxIcon(mondrian_xpm) );
-#endif
+        wxDropSource source(textData, this, wxICON(mondrian));
+
         const char *pc;
 
-        switch ( dragSource.DoDragDrop(TRUE) ) 
+        switch ( source.DoDragDrop(TRUE) )
         {
             case wxDragError:   pc = "Error!";    break;
             case wxDragNone:    pc = "Nothing";   break;
@@ -429,7 +802,7 @@ void DnDFrame::OnRightDown(wxMouseEvent &event )
     menu->Append(Menu_Quit, "E&xit");
     menu->Append(Menu_ToBeDeleted, "To be deleted");
     menu->Append(Menu_ToBeGreyed, "To be greyed");
-    
+
     menu->Delete( Menu_ToBeDeleted );
     menu->Enable( Menu_ToBeGreyed, FALSE );
 
@@ -458,25 +831,25 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
 #endif
 
     if (dialog.ShowModal() != wxID_OK)
-    { 
+    {
         wxLogMessage( _T("Aborted file open") );
         return;
     }
-    
+
     if (dialog.GetPath().IsEmpty())
-    { 
+    {
         wxLogMessage( _T("Returned empty string.") );
         return;
     }
-    
+
     if (!wxFileExists(dialog.GetPath()))
     {
         wxLogMessage( _T("File doesn't exist.") );
         return;
     }
-    
+
     wxImage image;
-    image.LoadFile( dialog.GetPath(), 
+    image.LoadFile( dialog.GetPath(),
 #ifdef __WXMSW__
                     wxBITMAP_TYPE_BMP
 #else
@@ -485,13 +858,13 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
                   );
     if (!image.Ok())
     {
-        wxLogMessage( _T("Invalid image file...") );
+        wxLogError( _T("Invalid image file...") );
         return;
     }
-    
-    wxLogMessage( _T("Decoding image file...") );
+
+    wxLogStatus( _T("Decoding image file...") );
     wxYield();
-    
+
     wxBitmap bitmap( image.ConvertToBitmap() );
 
     if ( !wxTheClipboard->Open() )
@@ -503,7 +876,7 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
 
     wxLogMessage( _T("Creating wxBitmapDataObject...") );
     wxYield();
-    
+
     if ( !wxTheClipboard->AddData(new wxBitmapDataObject(bitmap)) )
     {
         wxLogError(_T("Can't copy image to the clipboard."));
@@ -542,8 +915,8 @@ void DnDFrame::OnPasteBitmap(wxCommandEvent& WXUNUSED(event))
     else
     {
         wxLogMessage(_T("Bitmap pasted from the clipboard") );
-	m_bitmap = data.GetBitmap();
-	Refresh();
+        m_bitmap = data.GetBitmap();
+        Refresh();
     }
 
     wxTheClipboard->Close();
@@ -628,3 +1001,251 @@ bool DnDFile::OnDropFiles( wxDropPointCoord, wxDropPointCoord, size_t nFiles,
 
     return TRUE;
 }
+
+// ----------------------------------------------------------------------------
+// DnDShapeDialog
+// ----------------------------------------------------------------------------
+
+DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
+{
+    m_shape = shape;
+
+    LoadFromResource(parent, "dialogShape");
+
+    m_textX = (wxTextCtrl *)wxFindWindowByName("textX", this);
+    m_textY = (wxTextCtrl *)wxFindWindowByName("textY", this);
+    m_textW = (wxTextCtrl *)wxFindWindowByName("textW", this);
+    m_textH = (wxTextCtrl *)wxFindWindowByName("textH", this);
+
+    m_radio = (wxRadioBox *)wxFindWindowByName("radio", this);
+}
+
+DnDShape *DnDShapeDialog::GetShape() const
+{
+    switch ( m_shapeKind )
+    {
+        default:
+        case DnDShape::None:      return NULL;
+        case DnDShape::Triangle:  return new DnDTriangularShape(m_pos, m_size, m_col);
+        case DnDShape::Rectangle: return new DnDRectangularShape(m_pos, m_size, m_col);
+        case DnDShape::Ellipse:   return new DnDEllipticShape(m_pos, m_size, m_col);
+    }
+}
+
+bool DnDShapeDialog::TransferDataToWindow()
+{
+    if ( m_shape )
+    {
+        m_radio->SetSelection(m_shape->GetKind());
+        m_pos = m_shape->GetPosition();
+        m_size = m_shape->GetSize();
+        m_col = m_shape->GetColour();
+    }
+    else
+    {
+        m_radio->SetSelection(DnDShape::None);
+        m_pos = wxPoint(1, 1);
+        m_size = wxSize(100, 100);
+    }
+
+    m_textX->SetValue(wxString() << m_pos.x);
+    m_textY->SetValue(wxString() << m_pos.y);
+    m_textW->SetValue(wxString() << m_size.x);
+    m_textH->SetValue(wxString() << m_size.y);
+
+    return TRUE;
+}
+
+bool DnDShapeDialog::TransferDataFromWindow()
+{
+    m_shapeKind = (DnDShape::Kind)m_radio->GetSelection();
+
+    m_pos.x = atoi(m_textX->GetValue());
+    m_pos.y = atoi(m_textY->GetValue());
+    m_size.x = atoi(m_textW->GetValue());
+    m_size.y = atoi(m_textH->GetValue());
+
+    if ( !m_pos.x || !m_pos.y || !m_size.x || !m_size.y )
+    {
+        wxMessageBox("All sizes and positions should be non null!",
+                     "Invalid shape", wxICON_HAND | wxOK, this);
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColourData data;
+    data.SetChooseFull(TRUE);
+    for (int i = 0; i < 16; i++)
+    {
+        wxColour colour(i*16, i*16, i*16);
+        data.SetCustomColour(i, colour);
+    }
+
+    wxColourDialog dialog(this, &data);
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        m_col = dialog.GetColourData().GetColour();
+    }
+}
+
+// ----------------------------------------------------------------------------
+// DnDShapeFrame
+// ----------------------------------------------------------------------------
+
+DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
+             : wxFrame(parent, -1, "Shape Frame",
+                       wxDefaultPosition, wxSize(250, 150))
+{
+    SetBackgroundColour(*wxWHITE);
+
+    CreateStatusBar();
+
+    SetStatusText("Double click the frame to create a shape");
+
+    SetDropTarget(new DnDShapeDropTarget(this));
+
+    m_shape = NULL;
+}
+
+DnDShapeFrame::~DnDShapeFrame()
+{
+    delete m_shape;
+}
+
+void DnDShapeFrame::SetShape(DnDShape *shape)
+{
+    delete m_shape;
+    m_shape = shape;
+    Refresh();
+}
+
+// callbacks
+void DnDShapeFrame::OnDrag(wxMouseEvent& event)
+{
+    if ( !m_shape )
+    {
+        event.Skip();
+
+        return;
+    }
+
+    // start drag operation
+    DnDShapeDataObject shapeData(m_shape);
+    wxDropSource source(shapeData, this, wxICON(mondrian));
+
+    const char *pc = NULL;
+    switch ( source.DoDragDrop(TRUE) )
+    {
+        default:
+        case wxDragError:
+            wxLogError("An error occured during drag and drop operation");
+            break;
+
+        case wxDragNone:
+            SetStatusText("Nothing happened");
+            break;
+
+        case wxDragCopy:
+            pc = "copied";
+            break;
+
+        case wxDragMove:
+            pc = "moved";
+            SetShape(NULL);
+            break;
+
+        case wxDragCancel:
+            SetStatusText("Drag and drop operation cancelled");
+            break;
+    }
+
+    if ( pc )
+    {
+        SetStatusText(wxString("Shape successfully ") + pc);
+    }
+    //else: status text already set
+}
+
+void DnDShapeFrame::OnEdit(wxMouseEvent& event)
+{
+    DnDShapeDialog dlg(this, m_shape);
+    if ( dlg.ShowModal() == wxID_OK )
+    {
+        SetShape(dlg.GetShape());
+
+        if ( m_shape )
+        {
+            SetStatusText("Right click now drag the shape to another frame");
+        }
+    }
+}
+
+void DnDShapeFrame::OnPaint(wxPaintEvent& event)
+{
+    if ( m_shape )
+        m_shape->Draw(wxPaintDC(this));
+    else
+        event.Skip();
+}
+
+void DnDShapeFrame::OnDrop(long x, long y, DnDShape *shape)
+{
+    wxString s;
+    s.Printf("Drop occured at (%ld, %ld)", x, y);
+    SetStatusText(s);
+
+    SetShape(shape);
+}
+
+// ----------------------------------------------------------------------------
+// DnDShape
+// ----------------------------------------------------------------------------
+
+DnDShape *DnDShape::New(const void *buf)
+{
+    const ShapeDump& dump = *(const ShapeDump *)buf;
+    switch ( dump.k )
+    {
+        case Triangle:
+            return new DnDTriangularShape(wxPoint(dump.x, dump.y),
+                                          wxSize(dump.w, dump.h),
+                                          wxColour(dump.r, dump.g, dump.b));
+
+        case Rectangle:
+            return new DnDRectangularShape(wxPoint(dump.x, dump.y),
+                                           wxSize(dump.w, dump.h),
+                                           wxColour(dump.r, dump.g, dump.b));
+
+        case Ellipse:
+            return new DnDEllipticShape(wxPoint(dump.x, dump.y),
+                                        wxSize(dump.w, dump.h),
+                                        wxColour(dump.r, dump.g, dump.b));
+
+        default:
+            wxFAIL_MSG("invalid shape!");
+            return NULL;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// DnDShapeDataObject
+// ----------------------------------------------------------------------------
+
+void DnDShapeDataObject::CreateBitmap() const
+{
+    wxBitmap bitmap;
+    wxMemoryDC dc;
+    dc.SelectObject(bitmap);
+    m_shape->Draw(dc);
+    dc.SelectObject(wxNullBitmap);
+
+    DnDShapeDataObject *self = (DnDShapeDataObject *)this; // const_cast
+    self->m_dataobj.SetBitmap(bitmap);
+    self->m_hasBitmap = TRUE;
+}
+
