@@ -46,7 +46,7 @@
 // ID for the menu commands
 enum
 {
-    SPLIT_QUIT,
+    SPLIT_QUIT = 1,
     SPLIT_HORIZONTAL,
     SPLIT_VERTICAL,
     SPLIT_UNSPLIT,
