@@ -1514,7 +1514,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
         return TVI_ROOT;
     }
 
-    return DoInsertItem(wxTreeItemId((WXHTREEITEM) 0), (WXHTREEITEM) 0,
+    return DoInsertItem(wxTreeItemId((long)(WXHTREEITEM) 0), (long)(WXHTREEITEM) 0,
                         text, image, selectedImage, data);
 }
 
