@@ -32,8 +32,18 @@
 #include "wx/timer.h"
 #include "wx/glcanvas.h"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#ifdef __WXMAC__
+#  ifdef __DARWIN__
+#    include <OpenGL/gl.h>
+#    include <OpenGL/glu.h>
+#  else
+#    include <gl.h>
+#    include <glu.h>
+#  endif
+#else
+#  include <GL/gl.h>
+#  include <GL/glu.h>
+#endif
 
 #include "isosurf.h"
 
@@ -255,7 +265,12 @@ bool MyApp::OnInit(void)
 #else
   int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
 			WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
-			WX_GL_DOUBLEBUFFER, None };
+			WX_GL_DOUBLEBUFFER,
+#  ifdef __WXMAC__
+			GL_NONE };
+#  else
+			None };
+#  endif
 #endif
 
   if(!doubleBuffer)

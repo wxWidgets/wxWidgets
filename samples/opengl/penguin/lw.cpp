@@ -25,8 +25,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifndef __WXMAC__
-// does this not give redefine errors on other platforms ?
+#if !defined(__WXMAC__) || defined(__DARWIN__)
+// these must be defined in the precompiled headers under CodeWarrior
 #define wxInt32 int
 #define wxUint32 unsigned int
 #endif

@@ -21,9 +21,13 @@
 #define LW_H
 
 #ifdef __WXMAC__
-#include <glu.h>
+#  ifdef __DARWIN__
+#    include <OpenGL/glu.h>
+#  else
+#    include <glu.h>
+#  endif
 #else
-#include <GL/glu.h>
+#  include <GL/glu.h>
 #endif
 
 #define LW_MAX_POINTS   200

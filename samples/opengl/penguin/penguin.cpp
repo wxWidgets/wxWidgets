@@ -31,9 +31,13 @@
 
 #include "penguin.h"
 #ifdef __WXMAC__
-#include <glu.h>
+#  ifdef __DARWIN__
+#    include <OpenGL/glu.h>
+#  else
+#    include <glu.h>
+#  endif
 #else
-#include <GL/glu.h>
+#  include <GL/glu.h>
 #endif
 
 #define VIEW_ASPECT 1.3
