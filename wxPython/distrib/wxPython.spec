@@ -1,6 +1,6 @@
 %define pref /usr
-%define ver 2.1.16
-%define rpmver 1
+%define ver 2.2.0
+%define rpmver 0
 
 Summary: Cross platform GUI toolkit for use with the Python language.
 Name: wxPython
