@@ -200,7 +200,11 @@ wxGTK:
 wxMSW:
 
 - no longer take ampersand into account in wxStaticText::GetBestSize
-- set orientation for scrolbar events
+- set orientation for scrollbar events
+
+wxMotif:
+
+- don't use stipples in DoDrawText
 
 2.4.0
 -----
