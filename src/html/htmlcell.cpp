@@ -68,6 +68,14 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
 
 
 
+// wx 2.5 will use this signature:
+//   bool wxHtmlCell::AdjustPagebreak(int *pagebreak, int* WXUNUSED(known_pagebreaks), int WXUNUSED(number_of_pages)) const
+//
+// Workaround to backport html pagebreaks to 2.4.0:
+// Actually, we're passing a pointer to struct wxHtmlKludge, casting
+// that pointer to an int* . We don't need to do anything special
+// here because that struct's first element is an int* to 'pagebreak'.
+// Other struct members can be ignored because they'd be unused anyway.
 bool wxHtmlCell::AdjustPagebreak(int *pagebreak) const
 {
     if ((!m_CanLiveOnPagebreak) &&
@@ -215,9 +223,19 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 
 
 
+// wx 2.5 will use this signature:
+//   bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int* known_pagebreaks, int number_of_pages) const
+//
+// Workaround to backport html pagebreaks to 2.4.0:
+// Actually, we're passing a pointer to struct wxHtmlKludge, casting
+// that pointer to an int* . We don't need to do anything special
+// here because that struct's first element is an int* to 'pagebreak'.
+// Other struct members aren't used here and can be ignored.
 bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
 {
     if (!m_CanLiveOnPagebreak)
+// wx 2.5 will use this call:
+//        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, number_of_pages);
         return wxHtmlCell::AdjustPagebreak(pagebreak);
 
     else
@@ -226,14 +244,24 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
         bool rt = FALSE;
         int pbrk = *pagebreak - m_PosY;
 
+        // Temporary kludge for backporting html pagebreaks to 2.4.0;
+        // remove in 2.4.1 .
+        wxHtmlKludge kludge = *(wxHtmlKludge*)pagebreak;
+        kludge.pbreak = pbrk;
+
         while (c)
         {
-            if (c->AdjustPagebreak(&pbrk))
+// wx 2.5 will use this call:
+//            if (c->AdjustPagebreak(&pbrk, known_pagebreaks, number_of_pages))
+            if (c->AdjustPagebreak((int*)&kludge))
                 rt = TRUE;
             c = c->GetNext();
         }
         if (rt)
+            {
+            pbrk = kludge.pbreak;
             *pagebreak = pbrk + m_PosY;
+            }
         return rt;
     }
 }

@@ -253,6 +253,8 @@ wxHTML:
 - added SetFonts methods to wxHtmlDCRenderer and wxHtmlPrintout classes
 - 'sizes' argument to SetFonts can now be NULL to use default font sizes
   (both by Adrian Philip Look)
+- it is now possible to force page break when printing by inserting
+  <div style="page-break-before:always"> into the markup (Greg Chicares)
 
 wxXRC:
 

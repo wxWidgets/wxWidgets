@@ -31,6 +31,118 @@
 FORCE_LINK_ME(m_layout)
 
 
+#include <stdlib.h> // bsearch()
+
+//-----------------------------------------------------------------------------
+// wxHtmlPageBreakCell
+//-----------------------------------------------------------------------------
+
+// Since html isn't a page-layout language, it doesn't support page
+// page breaks directly--that requires CSS2 support. But a page-break
+// facility is handy, and has been requested more than once on the
+// mailing lists. This wxHtml tag handler implements just enough of
+// CSS2 to support a page break by recognizing only
+//   <div style="page-break-before:always">
+//
+// wxHtml maintains page breaks in wxHtmlPrintout::m_PageBreaks. The
+// tag handler below adds appropriate offsets to that array member.
+// wxHtmlDCRenderer::Render() accesses that array and makes a new page
+// begin after each page-break tag.
+
+// The page-break handler does all its work in AdjustPagebreak(). For
+// all tag handlers, that function adjusts the page-break position.
+// For other tags, it determines whether the html element can fit on
+// the remainder of the page; if it cannot fit, but must not be split,
+// then the function moves the page break provided in the argument up,
+// and returns 'true' to inform the caller that the argument was
+// modified.
+//
+// Due to its special purpose, the page-break facility differs from
+// other tags. It takes up no space, but it behaves as though there is
+// never enough room to fit it on the remainder of the page--it always
+// forces a page break. Therefore, unlike other elements that trigger
+// a page break, it would never 'fit' on the following page either.
+// Therefore it's necessary to compare each pagebreak candidate to the
+// array wxHtmlPrintout::m_PageBreaks of pagebreaks already set, and
+// set a new one only if it's not in that array.
+
+class WXDLLEXPORT wxHtmlPageBreakCell : public wxHtmlCell
+{
+  public:
+    wxHtmlPageBreakCell() {}
+
+// wx 2.5 will use this signature:
+//    bool AdjustPagebreak(int* pagebreak, int* known_pagebreaks = NULL, int number_of_pages = 0) const;
+    bool AdjustPagebreak(int* pagebreak) const;
+
+  private:
+    DECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell)
+};
+
+// Comparison routine for bsearch into an int* array of pagebreaks.
+static int integer_compare(void const* i0, void const* i1)
+{
+    return *(int*)i0 - *(int*)i1;
+}
+
+// wx 2.5 will use this signature:
+//   bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int* known_pagebreaks, int number_of_pages) const
+//
+// Workaround to backport html pagebreaks to 2.4.0:
+// Actually, we're passing a pointer to struct wxHtmlKludge, casting
+// that pointer to an int* . We don't need to do anything special
+// here because that struct's first element is an int* to 'pagebreak'.
+// Other struct members are addressed by casting that int* back to
+// wxHtmlKludge*; they don't get modified, so we don't have to pass
+// them back to the caller.
+bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak) const
+{
+    // Workaround to backport html pagebreaks to 2.4.0:
+    wxHtmlKludge* kludge = (wxHtmlKludge*)pagebreak;
+    int* known_pagebreaks = kludge->known_pagebreaks;
+    int number_of_pages = kludge->number_of_pages;
+
+    // When we are counting pages, 'known_pagebreaks' is non-NULL.
+    // That's the only time we change 'pagebreak'. Otherwise, pages
+    // were already counted, 'known_pagebreaks' is NULL, and we don't
+    // do anything except return FALSE.
+    //
+    // We also simply return FALSE if the 'pagebreak' argument is
+    // less than (vertically above) or the same as the current
+    // vertical position. Otherwise we'd be setting a pagebreak above
+    // the current cell, which is incorrect, or duplicating a
+    // pagebreak that has already been set.
+    if(NULL == known_pagebreaks || *pagebreak <= m_PosY)
+        {
+        return FALSE;
+        }
+
+    // m_PosY is only the vertical offset from the parent. The pagebreak
+    // required here is the total page offset, so m_PosY must be added
+    // to the parent's offset and height.
+    int total_height = m_PosY + GetParent()->GetPosY() + GetParent()->GetHeight();
+
+    // Search the array of pagebreaks to see whether we've already set
+    // a pagebreak here. The standard bsearch() function is appropriate
+    // because the array of pagebreaks through known_pagebreaks[number_of_pages]
+    // is known to be sorted in strictly increasing order. '1 + number_of_pages'
+    // is used as a bsearch() argument because the array contains a leading
+    // zero plus one element for each page.
+    int* where = (int*) bsearch(&total_height, known_pagebreaks,
+                                1 + number_of_pages, sizeof(int),
+                                integer_compare);
+    // Add a pagebreak only if there isn't one already set here.
+    if(NULL != where)
+        {
+        return FALSE;
+        }
+    else
+        {
+        *pagebreak = m_PosY;
+        return TRUE;
+        }
+}
+
 TAG_HANDLER_BEGIN(P, "P")
 
     TAG_HANDLER_PROC(tag)
@@ -110,34 +222,57 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
 
     TAG_HANDLER_PROC(tag)
     {
-        int old = m_WParser->GetAlign();
-        wxHtmlContainerCell *c = m_WParser->GetContainer();
-        if (c->GetFirstCell() != NULL)
+        if(tag.HasParam("STYLE"))
         {
-            m_WParser->CloseContainer();
-            m_WParser->OpenContainer();
-            c = m_WParser->GetContainer();
-            c->SetAlign(tag);
-            m_WParser->SetAlign(c->GetAlignHor());
+            if(tag.GetParam("STYLE").IsSameAs(wxString("PAGE-BREAK-BEFORE:ALWAYS"), FALSE))
+            {
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer()->InsertCell(new wxHtmlPageBreakCell);
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer();
+                return FALSE;
+            }
+            else
+            {
+                // Treat other STYLE parameters here when they're supported.
+                return FALSE;
+            }
+        }
+        else if(tag.HasParam("ALIGN"))
+        {
+            int old = m_WParser->GetAlign();
+            wxHtmlContainerCell *c = m_WParser->GetContainer();
+            if (c->GetFirstCell() != NULL)
+            {
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer();
+                c = m_WParser->GetContainer();
+                c->SetAlign(tag);
+                m_WParser->SetAlign(c->GetAlignHor());
+            }
+            else
+            {
+                c->SetAlign(tag);
+                m_WParser->SetAlign(c->GetAlignHor());
+            }
+
+            ParseInner(tag);
+
+            m_WParser->SetAlign(old);
+            if (c->GetFirstCell() != NULL)
+            {
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer();
+            }
+            else
+                c->SetAlignHor(old);
+
+            return TRUE;
         }
         else
         {
-            c->SetAlign(tag);
-            m_WParser->SetAlign(c->GetAlignHor());
+            return FALSE;
         }
-
-        ParseInner(tag);
-
-        m_WParser->SetAlign(old);
-        if (c->GetFirstCell() != NULL)
-        {
-            m_WParser->CloseContainer();
-            m_WParser->OpenContainer();
-        }
-        else
-            c->SetAlignHor(old);
-
-        return TRUE;
     }
 
 TAG_HANDLER_END(DIV)
