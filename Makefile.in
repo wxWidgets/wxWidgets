@@ -11,8 +11,10 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 INSTALL = @INSTALL@
 SHARED_LD_CXX = @SHARED_LD_CXX@
+SHARED_LD_MODULE_CXX = @SHARED_LD_MODULE_CXX@
 LIBPREFIX = @LIBPREFIX@
 SO_SUFFIX = @SO_SUFFIX@
+SO_SUFFIX_MODULE = @SO_SUFFIX_MODULE@
 LN_S = @LN_S@
 RESCOMP = @RESCOMP@
 PIC_FLAG = @PIC_FLAG@
@@ -29,6 +31,7 @@ libdir = @libdir@
 datadir = @datadir@
 includedir = @includedir@
 DLLPREFIX = @DLLPREFIX@
+DLLPREFIX_MODULE = @DLLPREFIX_MODULE@
 AR = @AR@
 RANLIB = @RANLIB@
 CC = @CC@
@@ -49,6 +52,7 @@ EXTRALIBS_HTML = @EXTRALIBS_HTML@
 EXTRALIBS_ODBC = @EXTRALIBS_ODBC@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
+EXTRALIBS_SDL = @EXTRALIBS_SDL@
 HOST_SUFFIX = @HOST_SUFFIX@
 
 ### Variables: ###
@@ -202,6 +206,7 @@ WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
 	wxexpat_xmltok.o
+PLUGINS_INST_DIR = $(libdir)/wx/$(PLUGIN_VERSION0)
 ALL_BASE_HEADERS =  \
 	wx/afterstd.h \
 	wx/app.h \
@@ -519,7 +524,8 @@ MONODLL_OBJECTS =  \
 	$(__NET_PLATFORM_SRC_OBJECTS) \
 	$(__MONOLIB_GUI_SRC_OBJECTS) \
 	monodll_xml.o \
-	monodll_xtixml.o
+	monodll_xtixml.o \
+	$(__PLUGIN_ADV_SRC_OBJECTS)
 MONODLL_ODEP =  $(___pch_wxprec_monodll_wx_wxprec_h_gch___depname)
 MONOLIB_CFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
@@ -603,7 +609,8 @@ MONOLIB_OBJECTS =  \
 	$(__NET_PLATFORM_SRC_OBJECTS_1) \
 	$(__MONOLIB_GUI_SRC_OBJECTS_1) \
 	monolib_xml.o \
-	monolib_xtixml.o
+	monolib_xtixml.o \
+	$(__PLUGIN_ADV_SRC_OBJECTS_1)
 MONOLIB_ODEP =  $(___pch_wxprec_monolib_wx_wxprec_h_gch___depname)
 BASEDLL_CFLAGS = $(__basedll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
@@ -839,7 +846,8 @@ ADVDLL_OBJECTS =  \
 	advdll_splash.o \
 	advdll_tipdlg.o \
 	advdll_wizard.o \
-	$(__ADVANCED_PLATFORM_SRC_OBJECTS_2)
+	$(__ADVANCED_PLATFORM_SRC_OBJECTS_2) \
+	$(__PLUGIN_ADV_SRC_OBJECTS_2)
 ADVDLL_ODEP =  $(___pch_wxprec_advdll_wx_wxprec_h_gch___depname)
 ADVLIB_CXXFLAGS = $(__advlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
@@ -856,7 +864,8 @@ ADVLIB_OBJECTS =  \
 	advlib_splash.o \
 	advlib_tipdlg.o \
 	advlib_wizard.o \
-	$(__ADVANCED_PLATFORM_SRC_OBJECTS_3)
+	$(__ADVANCED_PLATFORM_SRC_OBJECTS_3) \
+	$(__PLUGIN_ADV_SRC_OBJECTS_3)
 ADVLIB_ODEP =  $(___pch_wxprec_advlib_wx_wxprec_h_gch___depname)
 ODBCDLL_CXXFLAGS = $(__odbcdll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
@@ -974,6 +983,10 @@ GLLIB_CXXFLAGS = $(__gllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 GLLIB_OBJECTS =  \
 	$(__OPENGL_SRC_OBJECTS_1)
 GLLIB_ODEP =  $(___pch_wxprec_gllib_wx_wxprec_h_gch___depname)
+SOUND_SDL_CXXFLAGS = -DWXUSINGDLL -DwxUSE_GUI=0 $(PIC_FLAG) $(CPPFLAGS) \
+	$(CXXFLAGS)
+SOUND_SDL_OBJECTS =  \
+	sound_sdl_sound_sdl.o
 LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_CN zh_TW
 
 ### Conditionally set variables: ###
@@ -984,6 +997,7 @@ LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_
 @COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -1035,6 +1049,14 @@ LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_
 @COND_WXUSE_EXPAT_BUILTIN@	$(LIBDIRNAME)/$(LIBPREFIX)wxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@__install_wxexpat___depname \
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@	= install_wxexpat
+@COND_PLATFORM_UNIX_0@PLUGIN_VERSION0 = 251
+@COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = 2.5.1
+@COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
+@COND_PLATFORM_UNIX_1@PLUGVERDELIM = -
+@COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = _d
+@COND_BUILD_DEBUG_UNICODE_1@PLUGINSUFFIX = _ud
+@COND_BUILD_RELEASE_UNICODE_0@PLUGINSUFFIX = 
+@COND_BUILD_RELEASE_UNICODE_1@PLUGINSUFFIX = _u
 @COND_TOOLKIT_GTK@OPENGL_HDR = wx/gtk/glcanvas.h
 @COND_TOOLKIT_MAC@OPENGL_HDR = wx/mac/glcanvas.h
 @COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/x11/glcanvas.h
@@ -1644,17 +1666,18 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/window.h
 @COND_TOOLKIT_PM@GUI_HDR = $(COND_TOOLKIT_PM_GUI_HDR)
 @COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/taskbarx11.h wx/unix/wave.h
+@COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 @COND_TOOLKIT_MAC@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_MAC@	wx/mac/joystick.h wx/mac/wave.h
 @COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_MOTIF@	wx/unix/joystick.h wx/unix/taskbarx11.h wx/unix/wave.h
+@COND_TOOLKIT_MOTIF@	wx/unix/joystick.h wx/unix/sound.h \
+@COND_TOOLKIT_MOTIF@	wx/unix/taskbarx11.h
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_MSW@	wx/msw/joystick.h wx/msw/taskbar.h wx/msw/wave.h
 @COND_TOOLKIT_PM@ADVANCED_PLATFORM_HDR = wx/os2/joystick.h \
 @COND_TOOLKIT_PM@	wx/os2/wave.h
 @COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/taskbarx11.h wx/unix/wave.h
+@COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 @COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
 COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/generic/accel.h \
@@ -1887,6 +1910,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/joystick.h \
 	wx/laywin.h \
 	wx/sashwin.h \
+	wx/sound.h \
 	wx/splash.h \
 	wx/taskbar.h \
 	wx/tipdlg.h \
@@ -2701,16 +2725,16 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
-	monodll_taskbarx11.o \
-	monodll_wave.o
+	monodll_sound.o \
+	monodll_taskbarx11.o
 @COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MAC@	monodll_joystick.o monodll_wave.o
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
-	monodll_taskbarx11.o \
-	monodll_wave.o
+	monodll_sound.o \
+	monodll_taskbarx11.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_taskbarcmn.o monodll_joystick.o \
@@ -2720,12 +2744,14 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
-	monodll_taskbarx11.o \
-	monodll_wave.o
+	monodll_sound.o \
+	monodll_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS \
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o
 COND_MONOLITHIC_1_SHARED_0___monolib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_1_SHARED_0@__monolib___depname = $(COND_MONOLITHIC_1_SHARED_0___monolib___depname)
@@ -3483,16 +3509,16 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
-	monolib_taskbarx11.o \
-	monolib_wave.o
+	monolib_sound.o \
+	monolib_taskbarx11.o
 @COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MAC@	monolib_joystick.o monolib_wave.o
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
-	monolib_taskbarx11.o \
-	monolib_wave.o
+	monolib_sound.o \
+	monolib_taskbarx11.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_taskbarcmn.o monolib_joystick.o \
@@ -3502,12 +3528,14 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
-	monolib_taskbarx11.o \
-	monolib_wave.o
+	monolib_sound.o \
+	monolib_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_helpbest.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_1 \
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1___basedll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_1@__basedll___depname = $(COND_MONOLITHIC_0_SHARED_1___basedll___depname)
@@ -5119,21 +5147,23 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__advdll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd)
 @COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_GTK@	advdll_taskbarcmn.o advdll_joystick.o \
-@COND_TOOLKIT_GTK@	advdll_taskbarx11.o advdll_wave.o
+@COND_TOOLKIT_GTK@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
+@COND_TOOLKIT_GTK@	advdll_taskbarx11.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MAC@	advdll_joystick.o advdll_wave.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_MOTIF@	advdll_taskbarcmn.o advdll_joystick.o \
-@COND_TOOLKIT_MOTIF@	advdll_taskbarx11.o advdll_wave.o
+@COND_TOOLKIT_MOTIF@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
+@COND_TOOLKIT_MOTIF@	advdll_taskbarx11.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MSW@	advdll_taskbarcmn.o advdll_joystick.o advdll_taskbar.o \
 @COND_TOOLKIT_MSW@	advdll_wave.o
 @COND_TOOLKIT_PM@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_PM@	advdll_joystick.o advdll_wave.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_X11@	advdll_taskbarcmn.o advdll_joystick.o \
-@COND_TOOLKIT_X11@	advdll_taskbarx11.o advdll_wave.o
+@COND_TOOLKIT_X11@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
+@COND_TOOLKIT_X11@	advdll_taskbarx11.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_2 \
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advdll_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__advlib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname)
@@ -5143,21 +5173,23 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_GCC_PCH_1@___pch_wxprec_advlib_wx_wxprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/wxprec_advlib/wx/wxprec.h.gch
 @COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_GTK@	advlib_taskbarcmn.o advlib_joystick.o \
-@COND_TOOLKIT_GTK@	advlib_taskbarx11.o advlib_wave.o
+@COND_TOOLKIT_GTK@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
+@COND_TOOLKIT_GTK@	advlib_taskbarx11.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MAC@	advlib_joystick.o advlib_wave.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_MOTIF@	advlib_taskbarcmn.o advlib_joystick.o \
-@COND_TOOLKIT_MOTIF@	advlib_taskbarx11.o advlib_wave.o
+@COND_TOOLKIT_MOTIF@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
+@COND_TOOLKIT_MOTIF@	advlib_taskbarx11.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MSW@	advlib_taskbarcmn.o advlib_joystick.o advlib_taskbar.o \
 @COND_TOOLKIT_MSW@	advlib_wave.o
 @COND_TOOLKIT_PM@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_PM@	advlib_joystick.o advlib_wave.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_X11@	advlib_taskbarcmn.o advlib_joystick.o \
-@COND_TOOLKIT_X11@	advlib_taskbarx11.o advlib_wave.o
+@COND_TOOLKIT_X11@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
+@COND_TOOLKIT_X11@	advlib_taskbarx11.o
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_3 \
+@COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advlib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1___odbcdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@__odbcdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1___odbcdll___depname)
@@ -5422,6 +5454,10 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_TOOLKIT_MSW@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_PM@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
+COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
+	$(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
+@COND_WITH_PLUGIN_SDL_1@__sound_sdl___depname = $(COND_WITH_PLUGIN_SDL_1___sound_sdl___depname)
+@COND_WITH_PLUGIN_SDL_1@__install_sound_sdl___depname = install_sound_sdl
 @COND_USE_GUI_1@__install_afm___depname = install-afm
 @COND_USE_GUI_1@__install_gsafm___depname = install-gsafm
 @COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(TOOLCHAIN_NAME).1.r
@@ -6167,9 +6203,9 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 
 ### Targets: ###
 
-all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__macos_res___depname) $(__cocoa_res___depname)
+all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__sound_sdl___depname) $(__macos_res___depname) $(__cocoa_res___depname)
 
-install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig locale_install $(__macos_res_install___depname) $(__cocoa_res_install___depname)
+install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_sound_sdl___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig locale_install $(__macos_res_install___depname) $(__cocoa_res_install___depname)
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/aclocal
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(DESTDIR)$(datadir)/aclocal)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
@@ -6210,6 +6246,7 @@ install-strip: install
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(DESTDIR)$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(STRIP) $(DESTDIR)$(PLUGINS_INST_DIR)/$(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 
 clean: 
 	rm -rf ./.deps ./.pch
@@ -6261,6 +6298,7 @@ clean:
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a
+	rm -f $(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 	(cd samples && $(MAKE) clean)
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).1.rsrc lib/libwx_$(TOOLCHAIN_NAME).1.r
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).1.rsrc lib/libwx_$(TOOLCHAIN_NAME).1.r
@@ -6332,7 +6370,7 @@ distclean: clean
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX).a $(DESTDIR)$(libdir)
 
 @COND_MONOLITHIC_1_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
-@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_ODBC)
+@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_ODBC) $(PLUGIN_ADV_EXTRALIBS)
 @COND_MONOLITHIC_1_SHARED_1@	
 @COND_MONOLITHIC_1_SHARED_1@	$(__monodll___so_symlinks_cmd)
 
@@ -6436,7 +6474,7 @@ distclean: clean
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_corelib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(CORELIB_CXXFLAGS)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(ADVDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@ $(ADVDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__advdll___macinstnamecmd) $(__advdll___importlib) $(__advdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@ $(ADVDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__advdll___macinstnamecmd) $(__advdll___importlib) $(__advdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(PLUGIN_ADV_EXTRALIBS)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(__advdll___so_symlinks_cmd)
 
@@ -6590,6 +6628,13 @@ distclean: clean
 
 @COND_GCC_PCH_1@.pch/wxprec_gllib/wx/wxprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_gllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(GLLIB_CXXFLAGS)
+
+@COND_WITH_PLUGIN_SDL_1@$(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE): $(SOUND_SDL_OBJECTS)
+@COND_WITH_PLUGIN_SDL_1@	$(SHARED_LD_MODULE_CXX) $@ $(SOUND_SDL_OBJECTS) $(LDFLAGS)  $(EXTRALIBS_SDL)
+
+@COND_WITH_PLUGIN_SDL_1@install_sound_sdl: 
+@COND_WITH_PLUGIN_SDL_1@	$(INSTALL_DIR) $(DESTDIR)$(PLUGINS_INST_DIR)
+@COND_WITH_PLUGIN_SDL_1@	$(INSTALL_PROGRAM) $(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE) $(DESTDIR)$(PLUGINS_INST_DIR)
 
 samples: 
 	(cd samples && $(MAKE) all)
@@ -7528,6 +7573,9 @@ monodll_xml.o: $(srcdir)/src/xml/xml.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
@@ -9615,17 +9663,17 @@ monodll_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@monodll_wave.o: $(srcdir)/src/mac/wave.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_wave.o: $(srcdir)/src/unix/wave.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@monodll_wave.o: $(srcdir)/src/unix/wave.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_wave.o: $(srcdir)/src/unix/wave.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_wave.o: $(srcdir)/src/os2/wave.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -10132,6 +10180,9 @@ monolib_xml.o: $(srcdir)/src/xml/xml.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
@@ -12219,17 +12270,17 @@ monolib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@monolib_wave.o: $(srcdir)/src/mac/wave.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_wave.o: $(srcdir)/src/unix/wave.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@monolib_wave.o: $(srcdir)/src/unix/wave.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_wave.o: $(srcdir)/src/unix/wave.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_wave.o: $(srcdir)/src/os2/wave.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -17196,6 +17247,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 advdll_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
+advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
@@ -17232,17 +17286,17 @@ advdll_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@advdll_wave.o: $(srcdir)/src/mac/wave.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF@advdll_wave.o: $(srcdir)/src/unix/wave.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK@advdll_wave.o: $(srcdir)/src/unix/wave.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11@advdll_wave.o: $(srcdir)/src/unix/wave.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_PM@advdll_wave.o: $(srcdir)/src/os2/wave.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advdll_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advdll_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advdll_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
@@ -17289,6 +17343,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 advlib_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
+advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
@@ -17325,17 +17382,17 @@ advlib_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@advlib_wave.o: $(srcdir)/src/mac/wave.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MOTIF@advlib_wave.o: $(srcdir)/src/unix/wave.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK@advlib_wave.o: $(srcdir)/src/unix/wave.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11@advlib_wave.o: $(srcdir)/src/unix/wave.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_PM@advlib_wave.o: $(srcdir)/src/os2/wave.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advlib_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advlib_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advlib_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
@@ -17555,6 +17612,9 @@ xmllib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(XMLLIB_ODEP)
 
 @COND_TOOLKIT_PM@gllib_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
+
+sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
+	$(CXXC) -c -o $@ $(SOUND_SDL_CXXFLAGS) $<
 
 
 #
@@ -18700,4 +18760,4 @@ rpm: bzip-dist
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean install_wxregex install_wxzlib install_wxpng install_wxjpeg install_wxtiff install_wxodbc install_wxexpat install_monodll install_monolib install_basedll install_baselib install_netdll install_netlib install_coredll install_corelib install_advdll install_advlib install_odbcdll install_odbclib install_dbgriddll install_dbgridlib install_htmldll install_htmllib install_xmldll install_xmllib install_gldll install_gllib samples
+.PHONY: all install uninstall clean distclean install_wxregex install_wxzlib install_wxpng install_wxjpeg install_wxtiff install_wxodbc install_wxexpat install_monodll install_monolib install_basedll install_baselib install_netdll install_netlib install_coredll install_corelib install_advdll install_advlib install_odbcdll install_odbclib install_dbgriddll install_dbgridlib install_htmldll install_htmllib install_xmldll install_xmllib install_gldll install_gllib install_sound_sdl samples

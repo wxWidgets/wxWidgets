@@ -198,6 +198,10 @@
  */
 #define wxUSE_LIBTIFF 0
 /*
+ * Use SDL for audio (Unix)
+ */
+#define wxUSE_LIBSDL 0
+/*
  * Use iODBC
  */
 #define wxUSE_ODBC 0
@@ -922,6 +926,11 @@
  */
 #define wxUSE_ICO_CUR 0
 
+/* 
+ * Set to 1 if for dynamically loadable plugins support 
+ */
+#define wxUSE_PLUGINS 0
+
 /*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
@@ -1166,6 +1175,9 @@
 
 /* Define if you have the <esd.h> header file.  */
 #undef HAVE_ESD_H
+
+/* Define if you have the <sys/soundcard.h> header file. */
+#undef HAVE_SYS_SOUNDCARD_H
 
 /* Define if you have a CD-ROM interface known to mmedia.  */
 #undef HAVE_KNOWN_CDROM_INTERFACE

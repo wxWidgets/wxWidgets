@@ -397,6 +397,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_LIBTIFF=no
   DEFAULT_wxUSE_LIBXPM=no
+  DEFAULT_wxUSE_LIBMSPACK=no
+  DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -537,6 +539,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ACCESSIBILITY=no
   
   DEFAULT_wxUSE_MONOLITHIC=no
+  DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
 else
   DEFAULT_wxUSE_UNIVERSAL=no
@@ -578,6 +581,7 @@ else
   DEFAULT_wxUSE_LIBTIFF=yes
   DEFAULT_wxUSE_LIBXPM=yes
   DEFAULT_wxUSE_LIBMSPACK=yes
+  DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -592,7 +596,7 @@ else
   DEFAULT_wxUSE_FFILE=yes
   DEFAULT_wxUSE_TEXTBUFFER=yes
   DEFAULT_wxUSE_TEXTFILE=yes
-  DEFAULT_wxUSE_WAVE=no
+  DEFAULT_wxUSE_WAVE=yes
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_FONTMAP=yes
@@ -718,6 +722,7 @@ else
   DEFAULT_wxUSE_ACCESSIBILITY=no
   
   DEFAULT_wxUSE_MONOLITHIC=no
+  DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
 fi
 
@@ -749,7 +754,8 @@ dnl     doing
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
-WX_ARG_ENABLE(monolithic,  [  --disable-monolithic    don't build wxWindows as single library], wxUSE_MONOLITHIC)
+WX_ARG_ENABLE(monolithic,  [  --enable-monolithic     build wxWindows as single library], wxUSE_MONOLITHIC)
+WX_ARG_ENABLE(plugins,     [  --enable-plugins        build parts of wxWindows as loadable components], wxUSE_PLUGINS)
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -773,6 +779,7 @@ WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file for
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
+WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -3338,6 +3345,7 @@ else
     fi
 fi
 
+
 dnl ---------------------------------------------------------------------------
 dnl Checks for typedefs
 dnl ---------------------------------------------------------------------------
@@ -4331,6 +4339,106 @@ if test "$wxUSE_UNIX" = "yes"; then
   AC_DEFINE(wxUSE_UNIX)
 fi
 
+dnl ------------------------------------------------------------------------
+dnl DLL support
+dnl ------------------------------------------------------------------------
+
+dnl under MSW we always have LoadLibrary/GetProcAddress
+if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
+
+    HAVE_DL_FUNCS=0
+    HAVE_SHL_FUNCS=0
+    if test "$wxUSE_DYNAMIC_LOADER" = "yes" -o "$wxUSE_DYNLIB_CLASS" = "yes" ; then
+        if test "$USE_DARWIN" = 1; then
+            dnl dlopen/dlerror is implemented in dynlib.cpp for Darwin/Mac OS X
+            HAVE_DL_FUNCS=1
+        else
+            dnl the test is a bit complicated because we check for dlopen() both with
+            dnl and without -ldl and we also try to find shl_load() if there is no
+            dnl dlopen() on this system
+            AC_CHECK_FUNCS(dlopen,
+            [
+                AC_DEFINE(HAVE_DLOPEN)
+                HAVE_DL_FUNCS=1
+            ],
+            [
+                AC_CHECK_LIB(dl, dlopen,
+                            [
+                                AC_DEFINE(HAVE_DLOPEN)
+                                HAVE_DL_FUNCS=1
+                                DL_LINK=" -ldl$DL_LINK"
+                            ],
+                            [
+                                AC_CHECK_FUNCS(shl_load,
+                                              [
+                                                AC_DEFINE(HAVE_SHL_LOAD)
+                                                HAVE_SHL_FUNCS=1
+                                              ],
+                                              [
+                                                AC_CHECK_LIB(shl_load, dld,
+                                                             [
+                                                                HAVE_SHL_FUNCS=1
+                                                                DL_LINK=" -ldld$DL_LINK"
+                                                             ])
+                                              ])
+                            ])
+            ])
+
+        dnl check also for dlerror()
+        if test "$HAVE_DL_FUNCS" = 1; then
+            AC_CHECK_FUNCS(dlerror,
+                AC_DEFINE(HAVE_DLERROR),
+                [
+                    AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR))
+                ]
+            )
+        fi
+        fi
+
+        if test "$HAVE_DL_FUNCS" = 0; then
+            if test "$HAVE_SHL_FUNCS" = 0; then
+              if test "$USE_UNIX" = 1; then
+                  AC_MSG_WARN([Missing dynamic loading support, several features will be disabled])
+                  wxUSE_DYNAMIC_LOADER=no
+                  wxUSE_DYNLIB_CLASS=no
+              else
+                  AC_MSG_WARN([Assuming wxLibrary class works on this platform])
+              fi
+            fi
+        fi
+    fi
+fi
+
+if test "$wxUSE_DYNAMIC_LOADER" = "yes" ; then
+    AC_DEFINE(wxUSE_DYNAMIC_LOADER)
+fi
+if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
+    AC_DEFINE(wxUSE_DYNLIB_CLASS)
+fi
+
+
+dnl ---------------------------------------------------------------------------
+dnl Verify consistency of plugins/monolithic/shared settings:
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_PLUGINS" = "yes" ; then
+    if test "$wxUSE_SHARED" = "no" ; then
+        AC_MSG_WARN([plugins supported only in shared build, disabling])
+        wxUSE_PLUGINS=no
+    fi
+    if test "$wxUSE_MONOLITHIC" = "yes" ; then
+        AC_MSG_WARN([plugins not supported monolithic build, disabling])
+        wxUSE_PLUGINS=no
+    fi
+    if test "$wxUSE_DYNLIB_CLASS" = "no" ; then
+        AC_MSG_WARN([plugins require wxDynamicLibrary, disabling])
+        wxUSE_PLUGINS=no
+    fi
+    if test "$wxUSE_PLUGINS" = "yes" ; then
+        AC_DEFINE(wxUSE_PLUGINS)
+    fi
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Register non-GUI class options for makefiles and setup.h
 dnl ---------------------------------------------------------------------------
@@ -4347,8 +4455,29 @@ if test "$wxUSE_TIMER" = "yes"; then
   AC_DEFINE(wxUSE_TIMER)
 fi
 
+WITH_PLUGIN_SDL=0
 if test "$wxUSE_WAVE" = "yes"; then
+  dnl Unix implementation needs additional checks because audio support
+  dnl comes in many favours:
+  if test "$USE_UNIX" = "1" ; then
+    AC_CHECK_HEADERS([sys/soundcard.h])
+
+    if test "$wxUSE_LIBSDL" != "no"; then
+      AM_PATH_SDL([1.2.0],
+                  [
+                    EXTRALIBS_SDL="$SDL_LIBS"
+                    CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+                    AC_DEFINE(wxUSE_LIBSDL)
+                  ],
+                  [wxUSE_LIBSDL="no"])
+      if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
+        WITH_PLUGIN_SDL=1
+      fi
+    fi
+  fi
+ 
   AC_DEFINE(wxUSE_WAVE)
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sound"
 fi
 
 if test "$wxUSE_CMDLINE_PARSER" = "yes"; then
@@ -4784,82 +4913,7 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 fi
 
-dnl ------------------------------------------------------------------------
-dnl DLL support
-dnl ------------------------------------------------------------------------
 
-dnl under MSW we always have LoadLibrary/GetProcAddress
-if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
-
-    HAVE_DL_FUNCS=0
-    HAVE_SHL_FUNCS=0
-    if test "$wxUSE_DYNAMIC_LOADER" = "yes" -o "$wxUSE_DYNLIB_CLASS" = "yes" ; then
-        if test "$USE_DARWIN" = 1; then
-            dnl dlopen/dlerror is implemented in dynlib.cpp for Darwin/Mac OS X
-            HAVE_DL_FUNCS=1
-        else
-            dnl the test is a bit complicated because we check for dlopen() both with
-            dnl and without -ldl and we also try to find shl_load() if there is no
-            dnl dlopen() on this system
-            AC_CHECK_FUNCS(dlopen,
-            [
-                AC_DEFINE(HAVE_DLOPEN)
-                HAVE_DL_FUNCS=1
-            ],
-            [
-                AC_CHECK_LIB(dl, dlopen,
-                            [
-                                AC_DEFINE(HAVE_DLOPEN)
-                                HAVE_DL_FUNCS=1
-                                DL_LINK=" -ldl$DL_LINK"
-                            ],
-                            [
-                                AC_CHECK_FUNCS(shl_load,
-                                              [
-                                                AC_DEFINE(HAVE_SHL_LOAD)
-                                                HAVE_SHL_FUNCS=1
-                                              ],
-                                              [
-                                                AC_CHECK_LIB(shl_load, dld,
-                                                             [
-                                                                HAVE_SHL_FUNCS=1
-                                                                DL_LINK=" -ldld$DL_LINK"
-                                                             ])
-                                              ])
-                            ])
-            ])
-
-        dnl check also for dlerror()
-        if test "$HAVE_DL_FUNCS" = 1; then
-            AC_CHECK_FUNCS(dlerror,
-                AC_DEFINE(HAVE_DLERROR),
-                [
-                    AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR))
-                ]
-            )
-        fi
-        fi
-
-        if test "$HAVE_DL_FUNCS" = 0; then
-            if test "$HAVE_SHL_FUNCS" = 0; then
-              if test "$USE_UNIX" = 1; then
-                  AC_MSG_WARN([Missing dynamic loading support, several features will be disabled])
-                  wxUSE_DYNAMIC_LOADER=no
-                  wxUSE_DYNLIB_CLASS=no
-              else
-                  AC_MSG_WARN([Assuming wxLibrary class works on this platform])
-              fi
-            fi
-        fi
-    fi
-fi
-
-if test "$wxUSE_DYNAMIC_LOADER" = "yes" ; then
-    AC_DEFINE(wxUSE_DYNAMIC_LOADER)
-fi
-if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
-    AC_DEFINE(wxUSE_DYNLIB_CLASS)
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl String stuff
@@ -5750,6 +5804,12 @@ else
     MONOLITHIC=0
 fi
 
+if test $wxUSE_PLUGINS = "yes" ; then
+    USE_PLUGINS=1
+else
+    USE_PLUGINS=0
+fi
+
 if test $wxUSE_ODBC != "no" ; then
     USE_ODBC=1
 else
@@ -5767,6 +5827,7 @@ AC_SUBST(OFFICIAL_BUILD)
 
 AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
+AC_SUBST(USE_PLUGINS)
 AC_SUBST(LIBS)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_XML)
@@ -5774,6 +5835,8 @@ AC_SUBST(EXTRALIBS_HTML)
 AC_SUBST(EXTRALIBS_ODBC)
 AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
+AC_SUBST(EXTRALIBS_SDL)
+AC_SUBST(WITH_PLUGIN_SDL)
 AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
@@ -6062,6 +6125,7 @@ echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
+echo "                                       sdl                ${wxUSE_LIBSDL}"
 
 echo ""
 
