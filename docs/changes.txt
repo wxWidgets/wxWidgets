@@ -215,6 +215,7 @@ wxMSW:
 - use ES_DISABLENOSCROLL to work around the vertical scrollbar bug in
   wxTE_RICH2 text control
 - fixes for wxLocale::Init and Borland C++
+- Fix for bug whereby owner-drawn buttons didn't draw multiline labels correctly
 
 wxMotif:
 
