@@ -6,7 +6,9 @@ next release (2.1.12 or 2.2?)
 
 wxBase:
 
-- wxThread class modified to support both detached and joinable threads
+- wxThread class modified to support both detached and joinable threads, also
+  added new GetCPUCount() and SetConcurrency() functions (useful under Solaris
+  only so far)
 - wxLog functions are now (more) MT-safe
 - wxStopWatch class, timer functions have more chances to return correct
   results for your platform (use ANSI function where available)

@@ -527,6 +527,17 @@ void wxThread::Sleep(unsigned long milliseconds)
     ::Sleep(milliseconds);
 }
 
+int wxThread::GetCPUCount()
+{
+    return -1;
+}
+
+bool wxThread::SetConcurrency(size_t level)
+{
+    // ok only for the default one
+    return level == 0;
+}
+
 // ctor and dtor
 // -------------
 

@@ -45,6 +45,15 @@
     #include <sched.h>
 #endif
 
+#ifdef HAVE_THR_SETCONCURRENCY
+    #include <thread.h>
+#endif
+
+// we use wxFFile under Linux in GetCPUCount()
+#ifdef __LINUX__
+    #include "wx/ffile.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -832,6 +841,63 @@ void wxThread::Yield()
 void wxThread::Sleep(unsigned long milliseconds)
 {
     wxUsleep(milliseconds);
+}
+
+int wxThread::GetCPUCount()
+{
+#if defined(__LINUX__)
+    // read from proc (can't use wxTextFile here because it's a special file:
+    // it has 0 size but still can be read from)
+    wxLogNull nolog;
+
+    wxFFile file(_T("/proc/cpuinfo"));
+    if ( file.IsOpened() )
+    {
+        // slurp the whole file
+        wxString s;
+        if ( file.ReadAll(&s) )
+        {
+            // (ab)use Replace() to find the number of "processor" strings
+            size_t count = s.Replace(_T("processor"), _T(""));
+            if ( count > 0 )
+            {
+                return count;
+            }
+
+            wxLogDebug(_T("failed to parse /proc/cpuinfo"));
+        }
+        else
+        {
+            wxLogDebug(_T("failed to read /proc/cpuinfo"));
+        }
+    }
+#elif defined(_SC_NPROCESSORS_ONLN)
+    // this works for Solaris
+    int rc = sysconf(_SC_NPROCESSORS_ONLN);
+    if ( rc != -1 )
+    {
+        return rc;
+    }
+#endif // different ways to get number of CPUs
+
+    // unknown
+    return -1;
+}
+
+bool wxThread::SetConcurrency(size_t level)
+{
+#ifdef HAVE_THR_SETCONCURRENCY
+    int rc = thr_setconcurrency(level);
+    if ( rc != 0 )
+    {
+        wxLogSysError(rc, _T("thr_setconcurrency() failed"));
+    }
+
+    return rc == 0;
+#else // !HAVE_THR_SETCONCURRENCY
+    // ok only for the default value
+    return level == 0;
+#endif // HAVE_THR_SETCONCURRENCY/!HAVE_THR_SETCONCURRENCY
 }
 
 // -----------------------------------------------------------------------------

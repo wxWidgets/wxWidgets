@@ -32,8 +32,8 @@
 //#define TEST_ARRAYS
 //#define TEST_LOG
 //#define TEST_STRINGS
-//#define TEST_THREADS
-#define TEST_TIME
+#define TEST_THREADS
+//#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -647,6 +647,8 @@ int main(int argc, char **argv)
 #endif // TEST_LOG
 
 #ifdef TEST_THREADS
+    printf("This system has %d CPUs\n", wxThread::GetCPUCount());
+
     if ( argc > 1 && argv[1][0] == 't' )
         wxLog::AddTraceMask("thread");
 

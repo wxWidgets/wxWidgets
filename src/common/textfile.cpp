@@ -145,6 +145,11 @@ wxTextFile::~wxTextFile()
 // file operations
 // ----------------------------------------------------------------------------
 
+bool wxTextFile::Exists() const
+{
+    return wxFile::Exists(m_strFile);
+}
+
 bool wxTextFile::Open(const wxString& strFile)
 {
   m_strFile = strFile;

@@ -280,6 +280,21 @@ public:
         // NB: at least under MSW worker threads can not call ::wxSleep()!
     static void Sleep(unsigned long milliseconds);
 
+        // get the number of system CPUs - useful with SetConcurrency()
+        // (the "best" value for it is usually number of CPUs + 1)
+        //
+        // Returns -1 if unknown, number of CPUs otherwise
+    static int GetCPUCount();
+
+        // sets the concurrency level: this is, roughly, the number of threads
+        // the system tries to schedule to run in parallel. 0 means the
+        // default value (usually acceptable, but may not yield the best
+        // performance for this process)
+        //
+        // Returns TRUE on success, FALSE otherwise (if not implemented, for
+        // example)
+    static bool SetConcurrency(size_t level);
+
     // constructor only creates the C++ thread object and doesn't create (or
     // start) the real thread
     wxThread(wxThreadKind kind = wxTHREAD_DETACHED);

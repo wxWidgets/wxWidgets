@@ -127,6 +127,16 @@ joinable threads and is the value returned by \helpref{Wait}{wxthreadwait}.
 This function is called by wxWindows itself and should never be called
 directly.
 
+\membersection{wxThread::GetCPUCount}\label{wxthreadgetcpucount}
+
+\func{static int}{GetCPUCount}{\void}
+
+Returns the number of system CPUs or -1 if the value is unknown.
+
+\wxheading{See also}
+
+\helpref{SetConcurrency}{wxthreadsetconcurrency}
+
 \membersection{wxThread::GetId}\label{wxthreadgetid}
 
 \constfunc{unsigned long}{GetId}{\void}
@@ -252,6 +262,17 @@ This function should be used instead of \helpref{wxSleep}{wxsleep} by all worker
 Resumes a thread suspended by the call to \helpref{Pause}{wxthreadpause}.
 
 This function can only be called from another thread context.
+
+\membersection{wxThread::SetConcurrency}\label{wxthreadsetconcurrency}
+
+\func{static bool}{SetConcurrency}{\param{size\_t }{level}}
+
+Sets the thread concurrency level for this process. This is, roughly, the
+number of threads that the system tries to schedule to run in parallel.
+The value of $0$ for {\it level} may be used to set the default one.
+
+Returns TRUE on success or FALSE otherwise (for example, if this function is
+not implemented for this platform (currently everything except Solaris)).
 
 \membersection{wxThread::TestDestroy}\label{wxthreadtestdestroy}
 
