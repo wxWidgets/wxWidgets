@@ -29,16 +29,23 @@
 #include "wx/scrolbar.h"
 #include "wx/msw/private.h"
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxScrollBar, wxControl,"wx/scrolbar.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxScrollBar)
+	WX_PROPERTY( ThumbPosition , int , SetThumbPosition, GetThumbPosition, 0 )
+	WX_PROPERTY( Range , int , SetRange, GetRange, 0 )
+	WX_PROPERTY( ThumbSize , int , SetThumbSize, GetThumbSize, 0 )
+	WX_PROPERTY( PageSize , int , SetPageSize, GetPageSize, 0 )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxScrollBar)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxScrollBar , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
-
-/*
-	TODO PROPERTIES
-		value (long,0)
-		thumbsize(long,1)
-		range( long , 10 )
-		pagesize( long , 1)
-*/
-
+#endif
 
 // Scrollbar
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
@@ -273,7 +280,7 @@ int wxScrollBar::GetThumbPosition(void) const
     wxZeroMemory(scrollInfo);
     scrollInfo.cbSize = sizeof(SCROLLINFO);
     scrollInfo.fMask = SIF_POS;
-    
+
     if ( !::GetScrollInfo(GetHwnd(), SB_CTL, &scrollInfo) )
     {
         wxLogLastError(_T("GetScrollInfo"));

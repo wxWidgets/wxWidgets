@@ -251,9 +251,9 @@ WX_BEGIN_PROPERTIES_TABLE(wxWindow)
 
     WX_READONLY_PROPERTY( Parent,wxWindow*, GetParent,  )
 	WX_PROPERTY( Id,wxWindowID, SetId, GetId, -1 )
-	WX_PROPERTY( Position,wxPoint, SetWindowPosition , GetWindowPosition, wxPoint(-1,-1) ) // pos
-	WX_PROPERTY( Size,wxSize, SetWindowSize, GetWindowSize, wxSize(-1,-1) ) // size
-    WX_PROPERTY( WindowStyle , long , SetWindowStyle , GetWindowStyle , ) // style
+	WX_PROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) ) // pos
+	WX_PROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) ) // size
+    WX_PROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , ) // style
 
     // Then all relations of the object graph
 

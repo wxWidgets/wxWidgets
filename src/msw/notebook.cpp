@@ -127,6 +127,11 @@ template<> const wxTypeInfo* wxGetTypeInfo( wxNotebookPageInfoList * )
     return &s_typeInfo ;
 }
 
+template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList, wxxVariantArray &value)
+{
+    wxListCollectionToVariantArray( theList , value ) ;
+}
+
 WX_BEGIN_PROPERTIES_TABLE(wxNotebook)
     WX_PROPERTY_COLLECTION( PageInfos , wxNotebookPageInfoList , wxNotebookPageInfo* , AddPageInfo , GetPageInfos )
 /*
@@ -157,11 +162,6 @@ WX_BEGIN_HANDLERS_TABLE(wxNotebookPageInfo)
 WX_END_HANDLERS_TABLE()
 
 WX_CONSTRUCTOR_4( wxNotebookPageInfo , wxNotebookPage* , Page , wxString , Text , bool , Selected , int , ImageId ) 
-
-template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList, wxxVariantArray &value)
-{
-    wxListCollectionToVariantArray( theList , value ) ;
-}
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)

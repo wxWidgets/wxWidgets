@@ -58,7 +58,7 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl,"wx/combobox.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxComboBox)
     // TODO DELEGATES
-	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
     WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings )
 	WX_PROPERTY( Value ,wxString, SetValue, GetValue, )
 	WX_PROPERTY( Selection ,int, SetSelectionLine, GetSelection, )

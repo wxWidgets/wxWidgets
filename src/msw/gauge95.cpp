@@ -67,7 +67,7 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_EXTENDED_RTTI
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge95, wxControl,"wx/gauge.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl,"wx/gauge.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxGauge95)
 	WX_PROPERTY( Value , int , SetValue, GetValue, 0 )

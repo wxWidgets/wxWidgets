@@ -37,20 +37,26 @@
     #include <commctrl.h>
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider95, wxControl,"wx/scrolbar.h")
 
-/*
-	TODO PROPERTIES
-		value wxSL_DEFAULT_VALUE
-		min wxSL_DEFAULT_MIN
-		max wxSL_DEFAULT_MAX
-		tickfreq (long , 0 )
-		pagesize ( long )
-		linesize (long)
-		thumg (long)
-		tick (long)
-		selmin / selmax (long)
-*/
+WX_BEGIN_PROPERTIES_TABLE(wxSlider95)
+	WX_PROPERTY( Value , int , SetValue, GetValue , 0)
+	WX_PROPERTY( Minimum , int , SetMin, GetMin, 0 )
+	WX_PROPERTY( Maximum , int , SetMax, GetMax, 0 )
+	WX_PROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 )
+	WX_PROPERTY( LineSize , int , SetLineSize, GetLineSize, 1 )
+	WX_PROPERTY( ThumbLength , int , SetThumbLength, GetThumbLength, 1 )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxSlider95)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_8( wxSlider95 , wxWindow* , Parent , wxWindowID , Id , int , Value , int , Minimum , int , Maximum , wxPoint , Position , wxSize , Size , long , WindowStyle )
+#else
+IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
+#endif
+
 // Slider
 wxSlider95::wxSlider95()
 {

@@ -52,7 +52,7 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl,"wx/button.h")
 WX_BEGIN_PROPERTIES_TABLE(wxButton)
 	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent )
 
-	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
 	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
 WX_END_PROPERTIES_TABLE()
 

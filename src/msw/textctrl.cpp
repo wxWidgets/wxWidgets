@@ -120,7 +120,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl,"wx/textctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxTextCtrl)
-	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
 	WX_PROPERTY( Value , wxString , SetValue, GetValue, wxEmptyString )
 WX_END_PROPERTIES_TABLE()
 

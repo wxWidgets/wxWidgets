@@ -52,7 +52,7 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControl,"wx/listbox.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxListBox)
     // TODO DELEGATES
-	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
     WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings )
 	WX_PROPERTY( Selection ,int, SetSelectionLine, GetSelection, )
 WX_END_PROPERTIES_TABLE()

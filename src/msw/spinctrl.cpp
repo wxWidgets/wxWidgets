@@ -50,10 +50,11 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#if 0 // wxUSE_EXTENDED_RTTI
+#if wxUSE_EXTENDED_RTTI
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl,"wx/spinbut.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSpinCtrl)
+    WX_PROPERTY( ValueString , wxString , SetValue , GetValue , ) ;
 	WX_PROPERTY( Value , int , SetValue, GetValue, 0 )
 	WX_PROPERTY( Min , int , SetMin, GetMin, 0 )
 	WX_PROPERTY( Max , int , SetMax, GetMax, 0 )
@@ -66,7 +67,7 @@ WX_END_PROPERTIES_TABLE()
 WX_BEGIN_HANDLERS_TABLE(wxSpinCtrl)
 WX_END_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_5( wxSpinCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+WX_CONSTRUCTOR_6( wxSpinCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , ValueString , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 #endif
