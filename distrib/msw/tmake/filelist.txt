@@ -278,7 +278,6 @@ colordlg.cpp	MSW
 colour.cpp	MSW	LowLevel
 combobox.cpp	MSW
 control.cpp	MSW
-curico.cpp	MSW
 cursor.cpp	MSW	LowLevel
 data.cpp	MSW	LowLevel
 dataobj.cpp	MSW	OLE,LowLevel
@@ -1380,8 +1379,6 @@ colordlg.h	MSWH
 colour.h	MSWH
 combobox.h	MSWH
 control.h	MSWH
-curico.h	MSWH
-curicop.h	MSWH
 cursor.h	MSWH
 dc.h	MSWH
 dcclient.h	MSWH
