@@ -77,9 +77,6 @@ wxBEGIN_FLAGS( wxDialogStyle )
     wxFLAGS_MEMBER(wxCLIP_CHILDREN)
 
     // dialog styles
-    wxFLAGS_MEMBER(wxDIALOG_MODAL)
-    wxFLAGS_MEMBER(wxDIALOG_MODELESS)
-    wxFLAGS_MEMBER(wxNO_3D)
     wxFLAGS_MEMBER(wxWS_EX_VALIDATE_RECURSIVELY)
     wxFLAGS_MEMBER(wxSTAY_ON_TOP)
     wxFLAGS_MEMBER(wxCAPTION)
@@ -192,14 +189,10 @@ void wxDialog::SetModal(bool flag)
 {
     if ( flag )
     {
-        m_windowStyle |= wxDIALOG_MODAL;
-
         wxModelessWindows.DeleteObject(this);
     }
     else
     {
-        m_windowStyle &= ~wxDIALOG_MODAL;
-
         wxModelessWindows.Append(this);
     }
 }
@@ -218,7 +211,7 @@ wxDialog::~wxDialog()
 
 bool wxDialog::IsModal() const
 {
-    return (GetWindowStyleFlag() & wxDIALOG_MODAL) != 0;
+    return !wxModelessWindows.Member(this);
 }
 
 bool wxDialog::IsModalShowing() const
