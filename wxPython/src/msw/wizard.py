@@ -19,12 +19,13 @@ EVT_WIZARD_HELP          = wx.PyEventBinder( wxEVT_WIZARD_HELP, 1)
 EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
 
 class WizardEvent(core.NotifyEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType type=wxEVT_NULL, int id=-1, bool direction=True, 
-    WizardPage page=None) -> WizardEvent"""
+        """
+        __init__(wxEventType type=wxEVT_NULL, int id=-1, bool direction=True, 
+            WizardPage page=None) -> WizardEvent
+        """
         newobj = _wizard.new_WizardEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -46,7 +47,6 @@ class WizardEventPtr(WizardEvent):
 _wizard.WizardEvent_swigregister(WizardEventPtr)
 
 class WizardPage(windows.Panel):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -75,7 +75,6 @@ class WizardPagePtr(WizardPage):
 _wizard.WizardPage_swigregister(WizardPagePtr)
 
 class PyWizardPage(WizardPage):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -181,12 +180,13 @@ def PrePyWizardPage(*args, **kwargs):
     return val
 
 class WizardPageSimple(WizardPage):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardPageSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Wizard parent, WizardPage prev=None, WizardPage next=None, 
-    wxBitmap bitmap=wxNullBitmap, wxChar resource=None) -> WizardPageSimple"""
+        """
+        __init__(Wizard parent, WizardPage prev=None, WizardPage next=None, 
+            wxBitmap bitmap=wxNullBitmap, wxChar resource=None) -> WizardPageSimple
+        """
         newobj = _wizard.new_WizardPageSimple(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -194,8 +194,10 @@ class WizardPageSimple(WizardPage):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Wizard parent=None, WizardPage prev=None, WizardPage next=None, 
-    wxBitmap bitmap=wxNullBitmap, wxChar resource=None) -> bool"""
+        """
+        Create(Wizard parent=None, WizardPage prev=None, WizardPage next=None, 
+            wxBitmap bitmap=wxNullBitmap, wxChar resource=None) -> bool
+        """
         return _wizard.WizardPageSimple_Create(*args, **kwargs)
 
     def SetPrev(*args, **kwargs):
@@ -230,13 +232,14 @@ def WizardPageSimple_Chain(*args, **kwargs):
     return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
 class Wizard(windows.Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, wxString title=wxEmptyString, 
-    wxBitmap bitmap=wxNullBitmap, Point pos=DefaultPosition, 
-    long style=DEFAULT_DIALOG_STYLE) -> Wizard"""
+        """
+        __init__(Window parent, int id=-1, wxString title=wxEmptyString, 
+            wxBitmap bitmap=wxNullBitmap, Point pos=DefaultPosition, 
+            long style=DEFAULT_DIALOG_STYLE) -> Wizard
+        """
         newobj = _wizard.new_Wizard(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -244,8 +247,10 @@ class Wizard(windows.Dialog):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, wxString title=wxEmptyString, 
-    wxBitmap bitmap=wxNullBitmap, Point pos=DefaultPosition) -> bool"""
+        """
+        Create(Window parent, int id=-1, wxString title=wxEmptyString, 
+            wxBitmap bitmap=wxNullBitmap, Point pos=DefaultPosition) -> bool
+        """
         return _wizard.Wizard_Create(*args, **kwargs)
 
     def Init(*args, **kwargs):

@@ -12,7 +12,6 @@ wxEVT_DYNAMIC_SASH_UNIFY = _gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 DS_MANAGE_SCROLLBARS = _gizmos.DS_MANAGE_SCROLLBARS
 DS_DRAG_CORNER = _gizmos.DS_DRAG_CORNER
 class DynamicSashSplitEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDynamicSashSplitEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -30,7 +29,6 @@ class DynamicSashSplitEventPtr(DynamicSashSplitEvent):
 _gizmos.DynamicSashSplitEvent_swigregister(DynamicSashSplitEventPtr)
 
 class DynamicSashUnifyEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDynamicSashUnifyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -48,13 +46,14 @@ class DynamicSashUnifyEventPtr(DynamicSashUnifyEvent):
 _gizmos.DynamicSashUnifyEvent_swigregister(DynamicSashUnifyEventPtr)
 
 class DynamicSashWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDynamicSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
-    wxString name=wxPyDynamicSashNameStr) -> DynamicSashWindow"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
+            wxString name=wxPyDynamicSashNameStr) -> DynamicSashWindow
+        """
         newobj = _gizmos.new_DynamicSashWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -62,9 +61,11 @@ class DynamicSashWindow(core.Window):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
-    wxString name=wxPyDynamicSashNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
+            wxString name=wxPyDynamicSashNameStr) -> bool
+        """
         return _gizmos.DynamicSashWindow_Create(*args, **kwargs)
 
     def GetHScrollBar(*args, **kwargs):
@@ -96,13 +97,14 @@ EL_ALLOW_NEW = _gizmos.EL_ALLOW_NEW
 EL_ALLOW_EDIT = _gizmos.EL_ALLOW_EDIT
 EL_ALLOW_DELETE = _gizmos.EL_ALLOW_DELETE
 class EditableListBox(windows.Panel):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEditableListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, 
-    wxString name=wxPyEditableListBoxNameStr) -> EditableListBox"""
+        """
+        __init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, 
+            wxString name=wxPyEditableListBoxNameStr) -> EditableListBox
+        """
         newobj = _gizmos.new_EditableListBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -150,12 +152,13 @@ class EditableListBoxPtr(EditableListBox):
 _gizmos.EditableListBox_swigregister(EditableListBoxPtr)
 
 class RemotelyScrolledTreeCtrl(controls.TreeCtrl):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRemotelyScrolledTreeCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=TR_HAS_BUTTONS) -> RemotelyScrolledTreeCtrl"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=TR_HAS_BUTTONS) -> RemotelyScrolledTreeCtrl
+        """
         newobj = _gizmos.new_RemotelyScrolledTreeCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -195,12 +198,13 @@ class RemotelyScrolledTreeCtrlPtr(RemotelyScrolledTreeCtrl):
 _gizmos.RemotelyScrolledTreeCtrl_swigregister(RemotelyScrolledTreeCtrlPtr)
 
 class TreeCompanionWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeCompanionWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0) -> TreeCompanionWindow"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0) -> TreeCompanionWindow
+        """
         newobj = _gizmos.new_TreeCompanionWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -228,12 +232,13 @@ class TreeCompanionWindowPtr(TreeCompanionWindow):
 _gizmos.TreeCompanionWindow_swigregister(TreeCompanionWindowPtr)
 
 class ThinSplitterWindow(windows.SplitterWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxThinSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxSP_3D|wxCLIP_CHILDREN) -> ThinSplitterWindow"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxSP_3D|wxCLIP_CHILDREN) -> ThinSplitterWindow
+        """
         newobj = _gizmos.new_ThinSplitterWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -249,12 +254,13 @@ class ThinSplitterWindowPtr(ThinSplitterWindow):
 _gizmos.ThinSplitterWindow_swigregister(ThinSplitterWindowPtr)
 
 class SplitterScrolledWindow(windows.ScrolledWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplitterScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0) -> SplitterScrolledWindow"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0) -> SplitterScrolledWindow
+        """
         newobj = _gizmos.new_SplitterScrolledWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -275,12 +281,13 @@ LED_ALIGN_CENTER = _gizmos.LED_ALIGN_CENTER
 LED_ALIGN_MASK = _gizmos.LED_ALIGN_MASK
 LED_DRAW_FADED = _gizmos.LED_DRAW_FADED
 class LEDNumberCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLEDNumberCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxLED_ALIGN_LEFT|wxLED_DRAW_FADED) -> LEDNumberCtrl"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxLED_ALIGN_LEFT|wxLED_DRAW_FADED) -> LEDNumberCtrl
+        """
         newobj = _gizmos.new_LEDNumberCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -288,8 +295,10 @@ class LEDNumberCtrl(core.Control):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxLED_ALIGN_LEFT|wxLED_DRAW_FADED) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxLED_ALIGN_LEFT|wxLED_DRAW_FADED) -> bool
+        """
         return _gizmos.LEDNumberCtrl_Create(*args, **kwargs)
 
     def GetAlignment(*args, **kwargs):
@@ -335,12 +344,13 @@ TL_ALIGN_RIGHT = _gizmos.TL_ALIGN_RIGHT
 TL_ALIGN_CENTER = _gizmos.TL_ALIGN_CENTER
 TREE_HITTEST_ONITEMCOLUMN = _gizmos.TREE_HITTEST_ONITEMCOLUMN
 class TreeListColumnInfo(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeListColumnInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString text=wxPyEmptyString, int image=-1, size_t width=100, 
-    wxTreeListColumnAlign alignment=TL_ALIGN_LEFT) -> TreeListColumnInfo"""
+        """
+        __init__(wxString text=wxPyEmptyString, int image=-1, size_t width=100, 
+            wxTreeListColumnAlign alignment=TL_ALIGN_LEFT) -> TreeListColumnInfo
+        """
         newobj = _gizmos.new_TreeListColumnInfo(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -394,14 +404,15 @@ class TreeListColumnInfoPtr(TreeListColumnInfo):
 _gizmos.TreeListColumnInfo_swigregister(TreeListColumnInfoPtr)
 
 class TreeListCtrl(core.Control):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyTreeListCtrlNameStr) -> TreeListCtrl"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyTreeListCtrlNameStr) -> TreeListCtrl
+        """
         newobj = _gizmos.new_TreeListCtrl(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -409,10 +420,12 @@ class TreeListCtrl(core.Control):
         self._setOORInfo(self);self._setCallbackInfo(self, TreeListCtrl)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
-    Validator validator=DefaultValidator, 
-    wxString name=wxPyTreeListCtrlNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            wxString name=wxPyTreeListCtrlNameStr) -> bool
+        """
         return _gizmos.TreeListCtrl_Create(*args, **kwargs)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -706,28 +719,38 @@ class TreeListCtrl(core.Control):
         return _gizmos.TreeListCtrl_GetNext(*args, **kwargs)
 
     def AddRoot(*args, **kwargs):
-        """AddRoot(wxString text, int image=-1, int selectedImage=-1, 
-    TreeItemData data=None) -> TreeItemId"""
+        """
+        AddRoot(wxString text, int image=-1, int selectedImage=-1, 
+            TreeItemData data=None) -> TreeItemId
+        """
         return _gizmos.TreeListCtrl_AddRoot(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
-        """PrependItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
-    TreeItemData data=None) -> TreeItemId"""
+        """
+        PrependItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
+            TreeItemData data=None) -> TreeItemId
+        """
         return _gizmos.TreeListCtrl_PrependItem(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
-        """InsertItem(TreeItemId parent, TreeItemId idPrevious, wxString text, 
-    int image=-1, int selectedImage=-1, TreeItemData data=None) -> TreeItemId"""
+        """
+        InsertItem(TreeItemId parent, TreeItemId idPrevious, wxString text, 
+            int image=-1, int selectedImage=-1, TreeItemData data=None) -> TreeItemId
+        """
         return _gizmos.TreeListCtrl_InsertItem(*args, **kwargs)
 
     def InsertItemBefore(*args, **kwargs):
-        """InsertItemBefore(TreeItemId parent, size_t index, wxString text, int image=-1, 
-    int selectedImage=-1, TreeItemData data=None) -> TreeItemId"""
+        """
+        InsertItemBefore(TreeItemId parent, size_t index, wxString text, int image=-1, 
+            int selectedImage=-1, TreeItemData data=None) -> TreeItemId
+        """
         return _gizmos.TreeListCtrl_InsertItemBefore(*args, **kwargs)
 
     def AppendItem(*args, **kwargs):
-        """AppendItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
-    TreeItemData data=None) -> TreeItemId"""
+        """
+        AppendItem(TreeItemId parent, wxString text, int image=-1, int selectedImage=-1, 
+            TreeItemData data=None) -> TreeItemId
+        """
         return _gizmos.TreeListCtrl_AppendItem(*args, **kwargs)
 
     def Delete(*args, **kwargs):

@@ -99,7 +99,6 @@ SYS_SCREEN_PDA = _misc.SYS_SCREEN_PDA
 SYS_SCREEN_SMALL = _misc.SYS_SCREEN_SMALL
 SYS_SCREEN_DESKTOP = _misc.SYS_SCREEN_DESKTOP
 class SystemSettings(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSystemSettings instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -166,7 +165,6 @@ def SystemSettings_SetScreenType(*args, **kwargs):
     return _misc.SystemSettings_SetScreenType(*args, **kwargs)
 
 class SystemOptions(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSystemOptions instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -346,65 +344,85 @@ def Trap(*args, **kwargs):
     return _misc.Trap(*args, **kwargs)
 
 def FileSelector(*args, **kwargs):
-    """FileSelector(wxString message=wxPyFileSelectorPromptStr, wxString default_path=wxPyEmptyString, 
-    wxString default_filename=wxPyEmptyString, 
-    wxString default_extension=wxPyEmptyString, 
-    wxString wildcard=wxPyFileSelectorDefaultWildcardStr, 
-    int flags=0, 
-    Window parent=None, int x=-1, int y=-1) -> wxString"""
+    """
+    FileSelector(wxString message=wxPyFileSelectorPromptStr, wxString default_path=wxPyEmptyString, 
+        wxString default_filename=wxPyEmptyString, 
+        wxString default_extension=wxPyEmptyString, 
+        wxString wildcard=wxPyFileSelectorDefaultWildcardStr, 
+        int flags=0, 
+        Window parent=None, int x=-1, int y=-1) -> wxString
+    """
     return _misc.FileSelector(*args, **kwargs)
 
 def LoadFileSelector(*args, **kwargs):
-    """LoadFileSelector(wxString what, wxString extension, wxString default_name=wxPyEmptyString, 
-    Window parent=None) -> wxString"""
+    """
+    LoadFileSelector(wxString what, wxString extension, wxString default_name=wxPyEmptyString, 
+        Window parent=None) -> wxString
+    """
     return _misc.LoadFileSelector(*args, **kwargs)
 
 def SaveFileSelector(*args, **kwargs):
-    """SaveFileSelector(wxString what, wxString extension, wxString default_name=wxPyEmptyString, 
-    Window parent=None) -> wxString"""
+    """
+    SaveFileSelector(wxString what, wxString extension, wxString default_name=wxPyEmptyString, 
+        Window parent=None) -> wxString
+    """
     return _misc.SaveFileSelector(*args, **kwargs)
 
 def DirSelector(*args, **kwargs):
-    """DirSelector(wxString message=wxPyDirSelectorPromptStr, wxString defaultPath=wxPyEmptyString, 
-    long style=DD_DEFAULT_STYLE, 
-    Point pos=DefaultPosition, Window parent=None) -> wxString"""
+    """
+    DirSelector(wxString message=wxPyDirSelectorPromptStr, wxString defaultPath=wxPyEmptyString, 
+        long style=DD_DEFAULT_STYLE, 
+        Point pos=DefaultPosition, Window parent=None) -> wxString
+    """
     return _misc.DirSelector(*args, **kwargs)
 
 def GetTextFromUser(*args, **kwargs):
-    """GetTextFromUser(wxString message, wxString caption=wxPyEmptyString, 
-    wxString default_value=wxPyEmptyString, Window parent=None, 
-    int x=-1, int y=-1, bool centre=True) -> wxString"""
+    """
+    GetTextFromUser(wxString message, wxString caption=wxPyEmptyString, 
+        wxString default_value=wxPyEmptyString, Window parent=None, 
+        int x=-1, int y=-1, bool centre=True) -> wxString
+    """
     return _misc.GetTextFromUser(*args, **kwargs)
 
 def GetPasswordFromUser(*args, **kwargs):
-    """GetPasswordFromUser(wxString message, wxString caption=wxPyEmptyString, 
-    wxString default_value=wxPyEmptyString, Window parent=None) -> wxString"""
+    """
+    GetPasswordFromUser(wxString message, wxString caption=wxPyEmptyString, 
+        wxString default_value=wxPyEmptyString, Window parent=None) -> wxString
+    """
     return _misc.GetPasswordFromUser(*args, **kwargs)
 
 def GetSingleChoice(*args, **kwargs):
-    """GetSingleChoice(wxString message, wxString caption, int choices, wxString choices_array, 
-    Window parent=None, int x=-1, 
-    int y=-1, bool centre=True, int width=150, 
-    int height=200) -> wxString"""
+    """
+    GetSingleChoice(wxString message, wxString caption, int choices, wxString choices_array, 
+        Window parent=None, int x=-1, 
+        int y=-1, bool centre=True, int width=150, 
+        int height=200) -> wxString
+    """
     return _misc.GetSingleChoice(*args, **kwargs)
 
 def GetSingleChoiceIndex(*args, **kwargs):
-    """GetSingleChoiceIndex(wxString message, wxString caption, int choices, wxString choices_array, 
-    Window parent=None, int x=-1, 
-    int y=-1, bool centre=True, int width=150, 
-    int height=200) -> int"""
+    """
+    GetSingleChoiceIndex(wxString message, wxString caption, int choices, wxString choices_array, 
+        Window parent=None, int x=-1, 
+        int y=-1, bool centre=True, int width=150, 
+        int height=200) -> int
+    """
     return _misc.GetSingleChoiceIndex(*args, **kwargs)
 
 def MessageBox(*args, **kwargs):
-    """MessageBox(wxString message, wxString caption=wxPyEmptyString, 
-    int style=wxOK|wxCENTRE, Window parent=None, 
-    int x=-1, int y=-1) -> int"""
+    """
+    MessageBox(wxString message, wxString caption=wxPyEmptyString, 
+        int style=wxOK|wxCENTRE, Window parent=None, 
+        int x=-1, int y=-1) -> int
+    """
     return _misc.MessageBox(*args, **kwargs)
 
 def GetNumberFromUser(*args, **kwargs):
-    """GetNumberFromUser(wxString message, wxString prompt, wxString caption, 
-    long value, long min=0, long max=100, Window parent=None, 
-    Point pos=DefaultPosition) -> long"""
+    """
+    GetNumberFromUser(wxString message, wxString prompt, wxString caption, 
+        long value, long min=0, long max=100, Window parent=None, 
+        Point pos=DefaultPosition) -> long
+    """
     return _misc.GetNumberFromUser(*args, **kwargs)
 
 def ColourDisplay(*args, **kwargs):
@@ -479,7 +497,6 @@ def MutexGuiLeave(*args, **kwargs):
     """MutexGuiLeave()"""
     return _misc.MutexGuiLeave(*args, **kwargs)
 class MutexGuiLocker(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMutexGuiLocker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -509,7 +526,6 @@ def Thread_IsMain(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ToolTip(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToolTip instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -557,7 +573,6 @@ def ToolTip_SetDelay(*args, **kwargs):
     return _misc.ToolTip_SetDelay(*args, **kwargs)
 
 class Caret(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCaret instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -642,7 +657,6 @@ def Caret_SetBlinkTime(*args, **kwargs):
     """Caret_SetBlinkTime(int milliseconds)"""
     return _misc.Caret_SetBlinkTime(*args, **kwargs)
 class BusyCursor(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBusyCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -666,7 +680,6 @@ class BusyCursorPtr(BusyCursor):
 _misc.BusyCursor_swigregister(BusyCursorPtr)
 
 class WindowDisabler(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDisabler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -690,7 +703,6 @@ class WindowDisablerPtr(WindowDisabler):
 _misc.WindowDisabler_swigregister(WindowDisablerPtr)
 
 class BusyInfo(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBusyInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -714,7 +726,6 @@ class BusyInfoPtr(BusyInfo):
 _misc.BusyInfo_swigregister(BusyInfoPtr)
 
 class StopWatch(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStopWatch instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -748,7 +759,6 @@ class StopWatchPtr(StopWatch):
 _misc.StopWatch_swigregister(StopWatchPtr)
 
 class FileHistory(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileHistory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -816,7 +826,6 @@ class FileHistoryPtr(FileHistory):
 _misc.FileHistory_swigregister(FileHistoryPtr)
 
 class SingleInstanceChecker(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSingleInstanceChecker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -860,7 +869,6 @@ def DrawWindowOnDC(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class TipProvider(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTipProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -891,7 +899,6 @@ class TipProviderPtr(TipProvider):
 _misc.TipProvider_swigregister(TipProviderPtr)
 
 class PyTipProvider(TipProvider):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTipProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -926,7 +933,6 @@ TIMER_CONTINUOUS = _misc.TIMER_CONTINUOUS
 TIMER_ONE_SHOT = _misc.TIMER_ONE_SHOT
 wxEVT_TIMER = _misc.wxEVT_TIMER
 class Timer(core.EvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTimer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -994,7 +1000,6 @@ EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
                    
 
 class TimerEvent(core.Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTimerEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1016,12 +1021,13 @@ class TimerEventPtr(TimerEvent):
 _misc.TimerEvent_swigregister(TimerEventPtr)
 
 class TimerRunner(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTimerRunner instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
-        """__init__(wxTimer timer) -> TimerRunner
-__init__(wxTimer timer, int milli, bool oneShot=False) -> TimerRunner"""
+        """
+        __init__(wxTimer timer) -> TimerRunner
+        __init__(wxTimer timer, int milli, bool oneShot=False) -> TimerRunner
+        """
         newobj = _misc.new_TimerRunner(*args)
         self.this = newobj.this
         self.thisown = 1
@@ -1068,7 +1074,6 @@ TraceResAlloc = _misc.TraceResAlloc
 TraceRefCount = _misc.TraceRefCount
 TraceOleCalls = _misc.TraceOleCalls
 class Log(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1301,7 +1306,6 @@ def Log_TimeStamp(*args, **kwargs):
     return _misc.Log_TimeStamp(*args, **kwargs)
 
 class LogStderr(Log):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLogStderr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1319,7 +1323,6 @@ class LogStderrPtr(LogStderr):
 _misc.LogStderr_swigregister(LogStderrPtr)
 
 class LogTextCtrl(Log):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLogTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1337,7 +1340,6 @@ class LogTextCtrlPtr(LogTextCtrl):
 _misc.LogTextCtrl_swigregister(LogTextCtrlPtr)
 
 class LogGui(Log):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLogGui instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1355,12 +1357,13 @@ class LogGuiPtr(LogGui):
 _misc.LogGui_swigregister(LogGuiPtr)
 
 class LogWindow(Log):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLogWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxFrame pParent, wxString szTitle, bool bShow=True, 
-    bool bPassToOld=True) -> LogWindow"""
+        """
+        __init__(wxFrame pParent, wxString szTitle, bool bShow=True, 
+            bool bPassToOld=True) -> LogWindow
+        """
         newobj = _misc.new_LogWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1394,7 +1397,6 @@ class LogWindowPtr(LogWindow):
 _misc.LogWindow_swigregister(LogWindowPtr)
 
 class LogChain(Log):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLogChain instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1492,7 +1494,6 @@ def SafeShowMessage(*args, **kwargs):
     """SafeShowMessage(wxString title, wxString text)"""
     return _misc.SafeShowMessage(*args, **kwargs)
 class LogNull(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLogNull instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1516,7 +1517,6 @@ class LogNullPtr(LogNull):
 _misc.LogNull_swigregister(LogNullPtr)
 
 class PyLog(Log):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyLog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1566,7 +1566,6 @@ SIGPIPE = _misc.SIGPIPE
 SIGALRM = _misc.SIGALRM
 SIGTERM = _misc.SIGTERM
 class Process(core.EvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyProcess instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Kill(*args, **kwargs):
@@ -1661,7 +1660,6 @@ def Process_Open(*args, **kwargs):
     return _misc.Process_Open(*args, **kwargs)
 
 class ProcessEvent(core.Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxProcessEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1709,7 +1707,6 @@ JOY_BUTTON2 = _misc.JOY_BUTTON2
 JOY_BUTTON3 = _misc.JOY_BUTTON3
 JOY_BUTTON4 = _misc.JOY_BUTTON4
 class Joystick(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxJoystick instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1906,7 +1903,6 @@ wxEVT_JOY_BUTTON_UP = _misc.wxEVT_JOY_BUTTON_UP
 wxEVT_JOY_MOVE = _misc.wxEVT_JOY_MOVE
 wxEVT_JOY_ZMOVE = _misc.wxEVT_JOY_ZMOVE
 class JoystickEvent(core.Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxJoystickEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     m_pos = property(_misc.JoystickEvent_m_pos_get, _misc.JoystickEvent_m_pos_set)
@@ -1915,8 +1911,10 @@ class JoystickEvent(core.Event):
     m_buttonState = property(_misc.JoystickEvent_m_buttonState_get, _misc.JoystickEvent_m_buttonState_set)
     m_joyStick = property(_misc.JoystickEvent_m_joyStick_get, _misc.JoystickEvent_m_joyStick_set)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
-    int change=0) -> JoystickEvent"""
+        """
+        __init__(wxEventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
+            int change=0) -> JoystickEvent
+        """
         newobj = _misc.new_JoystickEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2008,7 +2006,6 @@ EVT_JOYSTICK_EVENTS = wx.PyEventBinder([ wxEVT_JOY_BUTTON_DOWN,
 #---------------------------------------------------------------------------
 
 class Wave(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWave instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2054,12 +2051,13 @@ MAILCAP_KDE = _misc.MAILCAP_KDE
 MAILCAP_GNOME = _misc.MAILCAP_GNOME
 MAILCAP_ALL = _misc.MAILCAP_ALL
 class FileTypeInfo(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileTypeInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString mimeType, wxString openCmd, wxString printCmd, 
-    wxString desc) -> FileTypeInfo"""
+        """
+        __init__(wxString mimeType, wxString openCmd, wxString printCmd, 
+            wxString desc) -> FileTypeInfo
+        """
         newobj = _misc.new_FileTypeInfo(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2133,7 +2131,6 @@ def NullFileTypeInfo(*args, **kwargs):
     return val
 
 class FileType(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileType instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2214,7 +2211,6 @@ def FileType_ExpandCommand(*args, **kwargs):
     return _misc.FileType_ExpandCommand(*args, **kwargs)
 
 class MimeTypesManager(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMimeTypesManager instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def IsOfType(*args, **kwargs):
@@ -2291,7 +2287,6 @@ def MimeTypesManager_IsOfType(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ArtProvider(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyArtProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2307,30 +2302,57 @@ class ArtProvider(object):
         return _misc.ArtProvider__setCallbackInfo(*args, **kwargs)
 
     def PushProvider(*args, **kwargs):
-        """ArtProvider.PushProvider(ArtProvider provider)"""
+        """
+        ArtProvider.PushProvider(ArtProvider provider)
+
+        Add new provider to the top of providers stack.
+        """
         return _misc.ArtProvider_PushProvider(*args, **kwargs)
 
     PushProvider = staticmethod(PushProvider)
     def PopProvider(*args, **kwargs):
-        """ArtProvider.PopProvider() -> bool"""
+        """
+        ArtProvider.PopProvider() -> bool
+
+        Remove latest added provider and delete it.
+        """
         return _misc.ArtProvider_PopProvider(*args, **kwargs)
 
     PopProvider = staticmethod(PopProvider)
     def RemoveProvider(*args, **kwargs):
-        """ArtProvider.RemoveProvider(ArtProvider provider) -> bool"""
+        """
+        ArtProvider.RemoveProvider(ArtProvider provider) -> bool
+
+        Remove provider. The provider must have been added previously!
+        The provider is _not_ deleted.
+        """
         return _misc.ArtProvider_RemoveProvider(*args, **kwargs)
 
     RemoveProvider = staticmethod(RemoveProvider)
     def GetBitmap(*args, **kwargs):
-        """ArtProvider.GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap"""
+        """
+        ArtProvider.GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap
+
+        Query the providers for bitmap with given ID and return it. Return
+        wx.NullBitmap if no provider provides it.
+        """
         return _misc.ArtProvider_GetBitmap(*args, **kwargs)
 
     GetBitmap = staticmethod(GetBitmap)
     def GetIcon(*args, **kwargs):
-        """ArtProvider.GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon"""
+        """
+        ArtProvider.GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon
+
+        Query the providers for icon with given ID and return it. Return
+        wx.NullIcon if no provider provides it.
+        """
         return _misc.ArtProvider_GetIcon(*args, **kwargs)
 
     GetIcon = staticmethod(GetIcon)
+    def Destroy(*args, **kwargs):
+        """Destroy()"""
+        return _misc.ArtProvider_Destroy(*args, **kwargs)
+
 
 class ArtProviderPtr(ArtProvider):
     def __init__(self, this):
@@ -2378,23 +2400,46 @@ ART_INFORMATION = cvar.ART_INFORMATION
 ART_MISSING_IMAGE = cvar.ART_MISSING_IMAGE
 
 def ArtProvider_PushProvider(*args, **kwargs):
-    """ArtProvider_PushProvider(ArtProvider provider)"""
+    """
+    ArtProvider_PushProvider(ArtProvider provider)
+
+    Add new provider to the top of providers stack.
+    """
     return _misc.ArtProvider_PushProvider(*args, **kwargs)
 
 def ArtProvider_PopProvider(*args, **kwargs):
-    """ArtProvider_PopProvider() -> bool"""
+    """
+    ArtProvider_PopProvider() -> bool
+
+    Remove latest added provider and delete it.
+    """
     return _misc.ArtProvider_PopProvider(*args, **kwargs)
 
 def ArtProvider_RemoveProvider(*args, **kwargs):
-    """ArtProvider_RemoveProvider(ArtProvider provider) -> bool"""
+    """
+    ArtProvider_RemoveProvider(ArtProvider provider) -> bool
+
+    Remove provider. The provider must have been added previously!
+    The provider is _not_ deleted.
+    """
     return _misc.ArtProvider_RemoveProvider(*args, **kwargs)
 
 def ArtProvider_GetBitmap(*args, **kwargs):
-    """ArtProvider_GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap"""
+    """
+    ArtProvider_GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap
+
+    Query the providers for bitmap with given ID and return it. Return
+    wx.NullBitmap if no provider provides it.
+    """
     return _misc.ArtProvider_GetBitmap(*args, **kwargs)
 
 def ArtProvider_GetIcon(*args, **kwargs):
-    """ArtProvider_GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon"""
+    """
+    ArtProvider_GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon
+
+    Query the providers for icon with given ID and return it. Return
+    wx.NullIcon if no provider provides it.
+    """
     return _misc.ArtProvider_GetIcon(*args, **kwargs)
 
 #---------------------------------------------------------------------------
@@ -2404,7 +2449,6 @@ CONFIG_USE_GLOBAL_FILE = _misc.CONFIG_USE_GLOBAL_FILE
 CONFIG_USE_RELATIVE_PATH = _misc.CONFIG_USE_RELATIVE_PATH
 CONFIG_USE_NO_ESCAPE_CHARACTERS = _misc.CONFIG_USE_NO_ESCAPE_CHARACTERS
 class ConfigBase(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxConfigBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2612,7 +2656,6 @@ def ConfigBase_DontCreateOnDemand(*args, **kwargs):
     return _misc.ConfigBase_DontCreateOnDemand(*args, **kwargs)
 
 class ConfigPathChanger(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxConfigPathChanger instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2640,14 +2683,15 @@ class ConfigPathChangerPtr(ConfigPathChanger):
 _misc.ConfigPathChanger_swigregister(ConfigPathChangerPtr)
 
 class Config(ConfigBase):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxConfig instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString appName=wxPyEmptyString, wxString vendorName=wxPyEmptyString, 
-    wxString localFilename=wxPyEmptyString, 
-    wxString globalFilename=wxPyEmptyString, 
-    long style=0) -> Config"""
+        """
+        __init__(wxString appName=wxPyEmptyString, wxString vendorName=wxPyEmptyString, 
+            wxString localFilename=wxPyEmptyString, 
+            wxString globalFilename=wxPyEmptyString, 
+            long style=0) -> Config
+        """
         newobj = _misc.new_Config(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2667,14 +2711,15 @@ class ConfigPtr(Config):
 _misc.Config_swigregister(ConfigPtr)
 
 class FileConfig(ConfigBase):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileConfig instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString appName=wxPyEmptyString, wxString vendorName=wxPyEmptyString, 
-    wxString localFilename=wxPyEmptyString, 
-    wxString globalFilename=wxPyEmptyString, 
-    long style=0) -> FileConfig"""
+        """
+        __init__(wxString appName=wxPyEmptyString, wxString vendorName=wxPyEmptyString, 
+            wxString localFilename=wxPyEmptyString, 
+            wxString globalFilename=wxPyEmptyString, 
+            long style=0) -> FileConfig
+        """
         newobj = _misc.new_FileConfig(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2700,7 +2745,6 @@ def ExpandEnvVars(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class DateTime(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDateTime instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     Local = _misc.DateTime_Local
@@ -2919,9 +2963,11 @@ class DateTime(object):
 
     GetWeekDayName = staticmethod(GetWeekDayName)
     def GetAmPmStrings(*args, **kwargs):
-        """GetAmPmStrings() -> (am, pm)
+        """
+        GetAmPmStrings() -> (am, pm)
 
-Get the AM and PM strings in the current locale (may be empty)"""
+        Get the AM and PM strings in the current locale (may be empty)
+        """
         return _misc.DateTime_GetAmPmStrings(*args, **kwargs)
 
     GetAmPmStrings = staticmethod(GetAmPmStrings)
@@ -2984,9 +3030,11 @@ Get the AM and PM strings in the current locale (may be empty)"""
         return _misc.DateTime_SetHMS(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(int day, wxDateTime::Month month=Inv_Month, int year=Inv_Year, 
-    int hour=0, int minute=0, int second=0, 
-    int millisec=0) -> DateTime"""
+        """
+        Set(int day, wxDateTime::Month month=Inv_Month, int year=Inv_Year, 
+            int hour=0, int minute=0, int second=0, 
+            int millisec=0) -> DateTime
+        """
         return _misc.DateTime_Set(*args, **kwargs)
 
     def ResetTime(*args, **kwargs):
@@ -3046,18 +3094,24 @@ Get the AM and PM strings in the current locale (may be empty)"""
         return _misc.DateTime_GetPrevWeekDay(*args, **kwargs)
 
     def SetToWeekDay(*args, **kwargs):
-        """SetToWeekDay(wxDateTime::WeekDay weekday, int n=1, wxDateTime::Month month=Inv_Month, 
-    int year=Inv_Year) -> bool"""
+        """
+        SetToWeekDay(wxDateTime::WeekDay weekday, int n=1, wxDateTime::Month month=Inv_Month, 
+            int year=Inv_Year) -> bool
+        """
         return _misc.DateTime_SetToWeekDay(*args, **kwargs)
 
     def SetToLastWeekDay(*args, **kwargs):
-        """SetToLastWeekDay(wxDateTime::WeekDay weekday, wxDateTime::Month month=Inv_Month, 
-    int year=Inv_Year) -> bool"""
+        """
+        SetToLastWeekDay(wxDateTime::WeekDay weekday, wxDateTime::Month month=Inv_Month, 
+            int year=Inv_Year) -> bool
+        """
         return _misc.DateTime_SetToLastWeekDay(*args, **kwargs)
 
     def GetLastWeekDay(*args, **kwargs):
-        """GetLastWeekDay(wxDateTime::WeekDay weekday, wxDateTime::Month month=Inv_Month, 
-    int year=Inv_Year) -> DateTime"""
+        """
+        GetLastWeekDay(wxDateTime::WeekDay weekday, wxDateTime::Month month=Inv_Month, 
+            int year=Inv_Year) -> DateTime
+        """
         return _misc.DateTime_GetLastWeekDay(*args, **kwargs)
 
     def SetToTheWeek(*args, **kwargs):
@@ -3233,24 +3287,32 @@ Get the AM and PM strings in the current locale (may be empty)"""
         return _misc.DateTime_Subtract(*args, **kwargs)
 
     def __iadd__(*args):
-        """__iadd__(TimeSpan diff) -> DateTime
-__iadd__(DateSpan diff) -> DateTime"""
+        """
+        __iadd__(TimeSpan diff) -> DateTime
+        __iadd__(DateSpan diff) -> DateTime
+        """
         return _misc.DateTime___iadd__(*args)
 
     def __isub__(*args):
-        """__isub__(TimeSpan diff) -> DateTime
-__isub__(DateSpan diff) -> DateTime"""
+        """
+        __isub__(TimeSpan diff) -> DateTime
+        __isub__(DateSpan diff) -> DateTime
+        """
         return _misc.DateTime___isub__(*args)
 
     def __add__(*args):
-        """__add__(TimeSpan other) -> DateTime
-__add__(DateSpan other) -> DateTime"""
+        """
+        __add__(TimeSpan other) -> DateTime
+        __add__(DateSpan other) -> DateTime
+        """
         return _misc.DateTime___add__(*args)
 
     def __sub__(*args):
-        """__sub__(DateTime other) -> TimeSpan
-__sub__(TimeSpan other) -> DateTime
-__sub__(DateSpan other) -> DateTime"""
+        """
+        __sub__(DateTime other) -> TimeSpan
+        __sub__(TimeSpan other) -> DateTime
+        __sub__(DateSpan other) -> DateTime
+        """
         return _misc.DateTime___sub__(*args)
 
     def __lt__(*args):
@@ -3379,9 +3441,11 @@ def DateTime_GetWeekDayName(*args, **kwargs):
     return _misc.DateTime_GetWeekDayName(*args, **kwargs)
 
 def DateTime_GetAmPmStrings(*args, **kwargs):
-    """GetAmPmStrings() -> (am, pm)
+    """
+    GetAmPmStrings() -> (am, pm)
 
-Get the AM and PM strings in the current locale (may be empty)"""
+    Get the AM and PM strings in the current locale (may be empty)
+    """
     return _misc.DateTime_GetAmPmStrings(*args, **kwargs)
 
 def DateTime_IsDSTApplicable(*args, **kwargs):
@@ -3427,15 +3491,16 @@ def DateTimeFromHMS(*args, **kwargs):
     return val
 
 def DateTimeFromDMY(*args, **kwargs):
-    """DateTimeFromDMY(int day, wxDateTime::Month month=Inv_Month, int year=Inv_Year, 
-    int hour=0, int minute=0, int second=0, 
-    int millisec=0) -> DateTime"""
+    """
+    DateTimeFromDMY(int day, wxDateTime::Month month=Inv_Month, int year=Inv_Year, 
+        int hour=0, int minute=0, int second=0, 
+        int millisec=0) -> DateTime
+    """
     val = _misc.new_DateTimeFromDMY(*args, **kwargs)
     val.thisown = 1
     return val
 
 class TimeSpan(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTimeSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Seconds(*args, **kwargs):
@@ -3682,7 +3747,6 @@ def TimeSpan_Week(*args, **kwargs):
     return _misc.TimeSpan_Week(*args, **kwargs)
 
 class DateSpan(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDateSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3908,7 +3972,6 @@ DF_PRIVATE = _misc.DF_PRIVATE
 DF_HTML = _misc.DF_HTML
 DF_MAX = _misc.DF_MAX
 class DataFormat(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataFormat instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3924,13 +3987,17 @@ class DataFormat(object):
         except: pass
 
     def __eq__(*args):
-        """__eq__(wxDataFormatId format) -> bool
-__eq__(DataFormat format) -> bool"""
+        """
+        __eq__(wxDataFormatId format) -> bool
+        __eq__(DataFormat format) -> bool
+        """
         return _misc.DataFormat___eq__(*args)
 
     def __ne__(*args):
-        """__ne__(wxDataFormatId format) -> bool
-__ne__(DataFormat format) -> bool"""
+        """
+        __ne__(wxDataFormatId format) -> bool
+        __ne__(DataFormat format) -> bool
+        """
         return _misc.DataFormat___ne__(*args)
 
     def SetType(*args, **kwargs):
@@ -3964,7 +4031,6 @@ def CustomDataFormat(*args, **kwargs):
     return val
 
 class DataObject(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4015,7 +4081,6 @@ _misc.DataObject_swigregister(DataObjectPtr)
 FormatInvalid = cvar.FormatInvalid
 
 class DataObjectSimple(DataObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4041,7 +4106,6 @@ class DataObjectSimplePtr(DataObjectSimple):
 _misc.DataObjectSimple_swigregister(DataObjectSimplePtr)
 
 class PyDataObjectSimple(DataObjectSimple):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4065,7 +4129,6 @@ class PyDataObjectSimplePtr(PyDataObjectSimple):
 _misc.PyDataObjectSimple_swigregister(PyDataObjectSimplePtr)
 
 class DataObjectComposite(DataObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataObjectComposite instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4089,7 +4152,6 @@ class DataObjectCompositePtr(DataObjectComposite):
 _misc.DataObjectComposite_swigregister(DataObjectCompositePtr)
 
 class TextDataObject(DataObjectSimple):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4119,7 +4181,6 @@ class TextDataObjectPtr(TextDataObject):
 _misc.TextDataObject_swigregister(TextDataObjectPtr)
 
 class PyTextDataObject(TextDataObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4143,7 +4204,6 @@ class PyTextDataObjectPtr(PyTextDataObject):
 _misc.PyTextDataObject_swigregister(PyTextDataObjectPtr)
 
 class BitmapDataObject(DataObjectSimple):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4169,7 +4229,6 @@ class BitmapDataObjectPtr(BitmapDataObject):
 _misc.BitmapDataObject_swigregister(BitmapDataObjectPtr)
 
 class PyBitmapDataObject(BitmapDataObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4193,7 +4252,6 @@ class PyBitmapDataObjectPtr(PyBitmapDataObject):
 _misc.PyBitmapDataObject_swigregister(PyBitmapDataObjectPtr)
 
 class FileDataObject(DataObjectSimple):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4215,7 +4273,6 @@ class FileDataObjectPtr(FileDataObject):
 _misc.FileDataObject_swigregister(FileDataObjectPtr)
 
 class CustomDataObject(DataObjectSimple):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCustomDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4249,7 +4306,6 @@ class CustomDataObjectPtr(CustomDataObject):
 _misc.CustomDataObject_swigregister(CustomDataObjectPtr)
 
 class URLDataObject(DataObjectComposite):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxURLDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4275,7 +4331,6 @@ class URLDataObjectPtr(URLDataObject):
 _misc.URLDataObject_swigregister(URLDataObjectPtr)
 
 class MetafileDataObject(DataObjectSimple):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMetafileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4316,12 +4371,13 @@ def IsDragResultOk(*args, **kwargs):
     """IsDragResultOk(wxDragResult res) -> bool"""
     return _misc.IsDragResultOk(*args, **kwargs)
 class DropSource(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDropSource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window win=None, wxCursor copy=wxNullCursor, wxCursor move=wxNullCursor, 
-    wxCursor none=wxNullCursor) -> DropSource"""
+        """
+        __init__(Window win=None, wxCursor copy=wxNullCursor, wxCursor move=wxNullCursor, 
+            wxCursor none=wxNullCursor) -> DropSource
+        """
         newobj = _misc.new_DropSource(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4365,7 +4421,6 @@ class DropSourcePtr(DropSource):
 _misc.DropSource_swigregister(DropSourcePtr)
 
 class DropTarget(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4427,7 +4482,6 @@ _misc.DropTarget_swigregister(DropTargetPtr)
 
 PyDropTarget = DropTarget 
 class TextDropTarget(DropTarget):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTextDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4471,7 +4525,6 @@ class TextDropTargetPtr(TextDropTarget):
 _misc.TextDropTarget_swigregister(TextDropTargetPtr)
 
 class FileDropTarget(DropTarget):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyFileDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4517,7 +4570,6 @@ _misc.FileDropTarget_swigregister(FileDropTargetPtr)
 #---------------------------------------------------------------------------
 
 class Clipboard(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClipboard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4581,7 +4633,6 @@ class ClipboardPtr(Clipboard):
 _misc.Clipboard_swigregister(ClipboardPtr)
 
 class ClipboardLocker(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClipboardLocker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

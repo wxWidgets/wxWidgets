@@ -8,13 +8,14 @@ wx = core
 #---------------------------------------------------------------------------
 
 class Panel(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPanel instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
-    wxString name=PanelNameStr) -> Panel"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+            wxString name=PanelNameStr) -> Panel
+        """
         newobj = _windows.new_Panel(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -22,9 +23,11 @@ class Panel(core.Window):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
-    wxString name=PanelNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+            wxString name=PanelNameStr) -> bool
+        """
         return _windows.Panel_Create(*args, **kwargs)
 
     def InitDialog(*args, **kwargs):
@@ -48,13 +51,14 @@ def PrePanel(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ScrolledWindow(Panel):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
-    wxString name=PanelNameStr) -> ScrolledWindow"""
+        """
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
+            wxString name=PanelNameStr) -> ScrolledWindow
+        """
         newobj = _windows.new_ScrolledWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -62,14 +66,18 @@ class ScrolledWindow(Panel):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=-1, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
-    wxString name=PanelNameStr) -> bool"""
+        """
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
+            wxString name=PanelNameStr) -> bool
+        """
         return _windows.ScrolledWindow_Create(*args, **kwargs)
 
     def SetScrollbars(*args, **kwargs):
-        """SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY, int noUnitsX, 
-    int noUnitsY, int xPos=0, int yPos=0, bool noRefresh=False)"""
+        """
+        SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY, int noUnitsX, 
+            int noUnitsY, int xPos=0, int yPos=0, bool noRefresh=False)
+        """
         return _windows.ScrolledWindow_SetScrollbars(*args, **kwargs)
 
     def Scroll(*args, **kwargs):
@@ -89,9 +97,11 @@ class ScrolledWindow(Panel):
         return _windows.ScrolledWindow_SetScrollRate(*args, **kwargs)
 
     def GetScrollPixelsPerUnit(*args, **kwargs):
-        """GetScrollPixelsPerUnit() -> (xUnit, yUnit)
+        """
+        GetScrollPixelsPerUnit() -> (xUnit, yUnit)
 
-Get the size of one logical unit in physical units."""
+        Get the size of one logical unit in physical units.
+        """
         return _windows.ScrolledWindow_GetScrollPixelsPerUnit(*args, **kwargs)
 
     def EnableScrolling(*args, **kwargs):
@@ -99,9 +109,11 @@ Get the size of one logical unit in physical units."""
         return _windows.ScrolledWindow_EnableScrolling(*args, **kwargs)
 
     def GetViewStart(*args, **kwargs):
-        """GetViewStart() -> (x,y)
+        """
+        GetViewStart() -> (x,y)
 
-Get the view start"""
+        Get the view start
+        """
         return _windows.ScrolledWindow_GetViewStart(*args, **kwargs)
 
     def SetScale(*args, **kwargs):
@@ -117,17 +129,21 @@ Get the view start"""
         return _windows.ScrolledWindow_GetScaleY(*args, **kwargs)
 
     def CalcScrolledPosition(*args):
-        """CalcScrolledPosition(Point pt) -> Point
-CalcScrolledPosition(int x, int y) -> (sx, sy)
+        """
+        CalcScrolledPosition(Point pt) -> Point
+        CalcScrolledPosition(int x, int y) -> (sx, sy)
 
-Translate between scrolled and unscrolled coordinates."""
+        Translate between scrolled and unscrolled coordinates.
+        """
         return _windows.ScrolledWindow_CalcScrolledPosition(*args)
 
     def CalcUnscrolledPosition(*args):
-        """CalcUnscrolledPosition(Point pt) -> Point
-CalcUnscrolledPosition(int x, int y) -> (ux, uy)
+        """
+        CalcUnscrolledPosition(Point pt) -> Point
+        CalcUnscrolledPosition(int x, int y) -> (ux, uy)
 
-Translate between scrolled and unscrolled coordinates."""
+        Translate between scrolled and unscrolled coordinates.
+        """
         return _windows.ScrolledWindow_CalcUnscrolledPosition(*args)
 
     def AdjustScrollbars(*args, **kwargs):
@@ -170,88 +186,6 @@ def PreScrolledWindow(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-class AcceleratorEntry(object):
-    """"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxAcceleratorEntry instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(int flags=0, int keyCode=0, int cmd=0, MenuItem item=None) -> AcceleratorEntry"""
-        newobj = _windows.new_AcceleratorEntry(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_windows.delete_AcceleratorEntry):
-        """__del__()"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def Set(*args, **kwargs):
-        """Set(int flags, int keyCode, int cmd, MenuItem item=None)"""
-        return _windows.AcceleratorEntry_Set(*args, **kwargs)
-
-    def SetMenuItem(*args, **kwargs):
-        """SetMenuItem(MenuItem item)"""
-        return _windows.AcceleratorEntry_SetMenuItem(*args, **kwargs)
-
-    def GetMenuItem(*args, **kwargs):
-        """GetMenuItem() -> MenuItem"""
-        return _windows.AcceleratorEntry_GetMenuItem(*args, **kwargs)
-
-    def GetFlags(*args, **kwargs):
-        """GetFlags() -> int"""
-        return _windows.AcceleratorEntry_GetFlags(*args, **kwargs)
-
-    def GetKeyCode(*args, **kwargs):
-        """GetKeyCode() -> int"""
-        return _windows.AcceleratorEntry_GetKeyCode(*args, **kwargs)
-
-    def GetCommand(*args, **kwargs):
-        """GetCommand() -> int"""
-        return _windows.AcceleratorEntry_GetCommand(*args, **kwargs)
-
-
-class AcceleratorEntryPtr(AcceleratorEntry):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = AcceleratorEntry
-_windows.AcceleratorEntry_swigregister(AcceleratorEntryPtr)
-
-class AcceleratorTable(core.Object):
-    """"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxAcceleratorTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(int n, AcceleratorEntry entries) -> AcceleratorTable"""
-        newobj = _windows.new_AcceleratorTable(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_windows.delete_AcceleratorTable):
-        """__del__()"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def Ok(*args, **kwargs):
-        """Ok() -> bool"""
-        return _windows.AcceleratorTable_Ok(*args, **kwargs)
-
-
-class AcceleratorTablePtr(AcceleratorTable):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = AcceleratorTable
-_windows.AcceleratorTable_swigregister(AcceleratorTablePtr)
-
-
-def GetAccelFromString(*args, **kwargs):
-    """GetAccelFromString(wxString label) -> AcceleratorEntry"""
-    return _windows.GetAccelFromString(*args, **kwargs)
-#---------------------------------------------------------------------------
-
 FULLSCREEN_NOMENUBAR = _windows.FULLSCREEN_NOMENUBAR
 FULLSCREEN_NOTOOLBAR = _windows.FULLSCREEN_NOTOOLBAR
 FULLSCREEN_NOSTATUSBAR = _windows.FULLSCREEN_NOSTATUSBAR
@@ -260,7 +194,6 @@ FULLSCREEN_NOCAPTION = _windows.FULLSCREEN_NOCAPTION
 FULLSCREEN_ALL = _windows.FULLSCREEN_ALL
 TOPLEVEL_EX_DIALOG = _windows.TOPLEVEL_EX_DIALOG
 class TopLevelWindow(core.Window):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTopLevelWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -323,19 +256,18 @@ class TopLevelWindowPtr(TopLevelWindow):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TopLevelWindow
 _windows.TopLevelWindow_swigregister(TopLevelWindowPtr)
-cvar = _windows.cvar
-NullAcceleratorTable = cvar.NullAcceleratorTable
 
 #---------------------------------------------------------------------------
 
 class Frame(TopLevelWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-    wxString name=wxPyFrameNameStr) -> Frame"""
+        """
+        __init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
+            wxString name=wxPyFrameNameStr) -> Frame
+        """
         newobj = _windows.new_Frame(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -343,9 +275,11 @@ class Frame(TopLevelWindow):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-    wxString name=wxPyFrameNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
+            wxString name=wxPyFrameNameStr) -> bool
+        """
         return _windows.Frame_Create(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
@@ -370,8 +304,10 @@ class Frame(TopLevelWindow):
 
     Command = ProcessCommand 
     def CreateStatusBar(*args, **kwargs):
-        """CreateStatusBar(int number=1, long style=ST_SIZEGRIP, int winid=0, 
-    wxString name=wxPyStatusLineNameStr) -> StatusBar"""
+        """
+        CreateStatusBar(int number=1, long style=ST_SIZEGRIP, int winid=0, 
+            wxString name=wxPyStatusLineNameStr) -> StatusBar
+        """
         return _windows.Frame_CreateStatusBar(*args, **kwargs)
 
     def GetStatusBar(*args, **kwargs):
@@ -443,13 +379,14 @@ def PreFrame(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Dialog(TopLevelWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
-    wxString name=wxPyDialogNameStr) -> Dialog"""
+        """
+        __init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
+            wxString name=wxPyDialogNameStr) -> Dialog
+        """
         newobj = _windows.new_Dialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -457,9 +394,11 @@ class Dialog(TopLevelWindow):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
-    wxString name=wxPyDialogNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
+            wxString name=wxPyDialogNameStr) -> bool
+        """
         return _windows.Dialog_Create(*args, **kwargs)
 
     def SetReturnCode(*args, **kwargs):
@@ -515,13 +454,14 @@ def PreDialog(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class MiniFrame(Frame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMiniFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-    wxString name=wxPyFrameNameStr) -> MiniFrame"""
+        """
+        __init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
+            wxString name=wxPyFrameNameStr) -> MiniFrame
+        """
         newobj = _windows.new_MiniFrame(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -529,9 +469,11 @@ class MiniFrame(Frame):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-    wxString name=wxPyFrameNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
+            wxString name=wxPyFrameNameStr) -> bool
+        """
         return _windows.MiniFrame_Create(*args, **kwargs)
 
 
@@ -556,12 +498,13 @@ SPLASH_NO_CENTRE = _windows.SPLASH_NO_CENTRE
 SPLASH_TIMEOUT = _windows.SPLASH_TIMEOUT
 SPLASH_NO_TIMEOUT = _windows.SPLASH_NO_TIMEOUT
 class SplashScreenWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplashScreenWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxBitmap bitmap, Window parent, int id, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=NO_BORDER) -> SplashScreenWindow"""
+        """
+        __init__(wxBitmap bitmap, Window parent, int id, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=NO_BORDER) -> SplashScreenWindow
+        """
         newobj = _windows.new_SplashScreenWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -585,13 +528,14 @@ class SplashScreenWindowPtr(SplashScreenWindow):
 _windows.SplashScreenWindow_swigregister(SplashScreenWindowPtr)
 
 class SplashScreen(Frame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplashScreen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxBitmap bitmap, long splashStyle, int milliseconds, 
-    Window parent, int id, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP) -> SplashScreen"""
+        """
+        __init__(wxBitmap bitmap, long splashStyle, int milliseconds, 
+            Window parent, int id, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP) -> SplashScreen
+        """
         newobj = _windows.new_SplashScreen(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -621,7 +565,6 @@ _windows.SplashScreen_swigregister(SplashScreenPtr)
 #---------------------------------------------------------------------------
 
 class StatusBar(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStatusBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -710,12 +653,13 @@ SPLIT_DRAG_NONE = _windows.SPLIT_DRAG_NONE
 SPLIT_DRAG_DRAGGING = _windows.SPLIT_DRAG_DRAGGING
 SPLIT_DRAG_LEFT_DOWN = _windows.SPLIT_DRAG_LEFT_DOWN
 class SplitterWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point point=DefaultPosition, 
-    Size size=DefaultSize, long style=SP_3D, wxString name=wxPySplitterNameStr) -> SplitterWindow"""
+        """
+        __init__(Window parent, int id, Point point=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_3D, wxString name=wxPySplitterNameStr) -> SplitterWindow
+        """
         newobj = _windows.new_SplitterWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -723,8 +667,10 @@ class SplitterWindow(core.Window):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point point=DefaultPosition, 
-    Size size=DefaultSize, long style=SP_3D, wxString name=wxPySplitterNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point point=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_3D, wxString name=wxPySplitterNameStr) -> bool
+        """
         return _windows.SplitterWindow_Create(*args, **kwargs)
 
     def GetWindow1(*args, **kwargs):
@@ -830,7 +776,6 @@ def PreSplitterWindow(*args, **kwargs):
     return val
 
 class SplitterEvent(core.NotifyEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplitterEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -892,13 +837,14 @@ SASH_BOTTOM = _windows.SASH_BOTTOM
 SASH_LEFT = _windows.SASH_LEFT
 SASH_NONE = _windows.SASH_NONE
 class SashWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCLIP_CHILDREN|wxSW_3D, 
-    wxString name=wxPySashNameStr) -> SashWindow"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCLIP_CHILDREN|wxSW_3D, 
+            wxString name=wxPySashNameStr) -> SashWindow
+        """
         newobj = _windows.new_SashWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -906,9 +852,11 @@ class SashWindow(core.Window):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCLIP_CHILDREN|wxSW_3D, 
-    wxString name=wxPySashNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCLIP_CHILDREN|wxSW_3D, 
+            wxString name=wxPySashNameStr) -> bool
+        """
         return _windows.SashWindow_Create(*args, **kwargs)
 
     def SetSashVisible(*args, **kwargs):
@@ -1004,7 +952,6 @@ def PreSashWindow(*args, **kwargs):
 SASH_STATUS_OK = _windows.SASH_STATUS_OK
 SASH_STATUS_OUT_OF_RANGE = _windows.SASH_STATUS_OUT_OF_RANGE
 class SashEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSashEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1065,7 +1012,6 @@ LAYOUT_QUERY = _windows.LAYOUT_QUERY
 wxEVT_QUERY_LAYOUT_INFO = _windows.wxEVT_QUERY_LAYOUT_INFO
 wxEVT_CALCULATE_LAYOUT = _windows.wxEVT_CALCULATE_LAYOUT
 class QueryLayoutInfoEvent(core.Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxQueryLayoutInfoEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1123,7 +1069,6 @@ class QueryLayoutInfoEventPtr(QueryLayoutInfoEvent):
 _windows.QueryLayoutInfoEvent_swigregister(QueryLayoutInfoEventPtr)
 
 class CalculateLayoutEvent(core.Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalculateLayoutEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1160,13 +1105,14 @@ EVT_QUERY_LAYOUT_INFO = wx.PyEventBinder( wxEVT_QUERY_LAYOUT_INFO )
 EVT_CALCULATE_LAYOUT = wx.PyEventBinder( wxEVT_CALCULATE_LAYOUT )
 
 class SashLayoutWindow(SashWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSashLayoutWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCLIP_CHILDREN|wxSW_3D, 
-    wxString name=wxPySashLayoutNameStr) -> SashLayoutWindow"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCLIP_CHILDREN|wxSW_3D, 
+            wxString name=wxPySashLayoutNameStr) -> SashLayoutWindow
+        """
         newobj = _windows.new_SashLayoutWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1174,9 +1120,11 @@ class SashLayoutWindow(SashWindow):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=wxCLIP_CHILDREN|wxSW_3D, 
-    wxString name=wxPySashLayoutNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxCLIP_CHILDREN|wxSW_3D, 
+            wxString name=wxPySashLayoutNameStr) -> bool
+        """
         return _windows.SashLayoutWindow_Create(*args, **kwargs)
 
     def GetAlignment(*args, **kwargs):
@@ -1214,7 +1162,6 @@ def PreSashLayoutWindow(*args, **kwargs):
     return val
 
 class LayoutAlgorithm(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLayoutAlgorithm instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1250,7 +1197,6 @@ class LayoutAlgorithmPtr(LayoutAlgorithm):
 _windows.LayoutAlgorithm_swigregister(LayoutAlgorithmPtr)
 
 class PopupWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPopupWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1274,7 +1220,6 @@ def PrePopupWindow(*args, **kwargs):
     return val
 
 class PopupTransientWindow(PopupWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPopupTransientWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1300,7 +1245,6 @@ def PrePopupTransientWindow(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class TipWindow(Frame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTipWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1330,12 +1274,13 @@ _windows.TipWindow_swigregister(TipWindowPtr)
 #---------------------------------------------------------------------------
 
 class VScrolledWindow(Panel):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyVScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, wxString name=PanelNameStr) -> VScrolledWindow"""
+        """
+        __init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, wxString name=PanelNameStr) -> VScrolledWindow
+        """
         newobj = _windows.new_VScrolledWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1347,8 +1292,10 @@ class VScrolledWindow(Panel):
         return _windows.VScrolledWindow__setCallbackInfo(*args, **kwargs)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, wxString name=PanelNameStr) -> bool"""
+        """
+        Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, wxString name=PanelNameStr) -> bool
+        """
         return _windows.VScrolledWindow_Create(*args, **kwargs)
 
     def SetLineCount(*args, **kwargs):
@@ -1418,12 +1365,13 @@ def PreVScrolledWindow(*args, **kwargs):
     return val
 
 class VListBox(VScrolledWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyVListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> VListBox"""
+        """
+        __init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> VListBox
+        """
         newobj = _windows.new_VListBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1435,8 +1383,10 @@ class VListBox(VScrolledWindow):
         return _windows.VListBox__setCallbackInfo(*args, **kwargs)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> bool
+        """
         return _windows.VListBox_Create(*args, **kwargs)
 
     def GetItemCount(*args, **kwargs):
@@ -1538,12 +1488,13 @@ def PreVListBox(*args, **kwargs):
     return val
 
 class HtmlListBox(VListBox):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> HtmlListBox"""
+        """
+        __init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> HtmlListBox
+        """
         newobj = _windows.new_HtmlListBox(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1555,8 +1506,10 @@ class HtmlListBox(VListBox):
         return _windows.HtmlListBox__setCallbackInfo(*args, **kwargs)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> bool"""
+        """
+        Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, wxString name=wxPyVListBoxNameStr) -> bool
+        """
         return _windows.HtmlListBox_Create(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):
@@ -1584,7 +1537,6 @@ def PreHtmlListBox(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class TaskBarIcon(core.EvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTaskBarIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1608,7 +1560,6 @@ class TaskBarIconPtr(TaskBarIcon):
 _windows.TaskBarIcon_swigregister(TaskBarIconPtr)
 
 class TaskBarIconEvent(core.Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTaskBarIconEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1643,7 +1594,6 @@ EVT_TASKBAR_RIGHT_DCLICK = wx.PyEventBinder ( wxEVT_TASKBAR_RIGHT_DCLICK )
 #---------------------------------------------------------------------------
 
 class ColourData(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1691,7 +1641,6 @@ class ColourDataPtr(ColourData):
 _windows.ColourData_swigregister(ColourDataPtr)
 
 class ColourDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1719,14 +1668,15 @@ class ColourDialogPtr(ColourDialog):
 _windows.ColourDialog_swigregister(ColourDialogPtr)
 
 class DirDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDirDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, wxString message=wxPyDirSelectorPromptStr, 
-    wxString defaultPath=wxPyEmptyString, 
-    long style=0, Point pos=DefaultPosition, Size size=DefaultSize, 
-    wxString name=wxPyDirDialogNameStr) -> DirDialog"""
+        """
+        __init__(Window parent, wxString message=wxPyDirSelectorPromptStr, 
+            wxString defaultPath=wxPyEmptyString, 
+            long style=0, Point pos=DefaultPosition, Size size=DefaultSize, 
+            wxString name=wxPyDirDialogNameStr) -> DirDialog
+        """
         newobj = _windows.new_DirDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1766,15 +1716,16 @@ class DirDialogPtr(DirDialog):
 _windows.DirDialog_swigregister(DirDialogPtr)
 
 class FileDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, wxString message=wxPyFileSelectorPromptStr, 
-    wxString defaultDir=wxPyEmptyString, 
-    wxString defaultFile=wxPyEmptyString, wxString wildcard=wxPyFileSelectorDefaultWildcardStr, 
-    long style=0, 
-    Point pos=DefaultPosition) -> FileDialog"""
+        """
+        __init__(Window parent, wxString message=wxPyFileSelectorPromptStr, 
+            wxString defaultDir=wxPyEmptyString, 
+            wxString defaultFile=wxPyEmptyString, wxString wildcard=wxPyFileSelectorDefaultWildcardStr, 
+            long style=0, 
+            Point pos=DefaultPosition) -> FileDialog
+        """
         newobj = _windows.new_FileDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1855,13 +1806,14 @@ _windows.FileDialog_swigregister(FileDialogPtr)
 
 CHOICEDLG_STYLE = _windows.CHOICEDLG_STYLE
 class MultiChoiceDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMultiChoiceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, wxString message, wxString caption, 
-    int LCOUNT, wxString choices, long style=CHOICEDLG_STYLE, 
-    Point pos=DefaultPosition) -> MultiChoiceDialog"""
+        """
+        __init__(Window parent, wxString message, wxString caption, 
+            int LCOUNT, wxString choices, long style=CHOICEDLG_STYLE, 
+            Point pos=DefaultPosition) -> MultiChoiceDialog
+        """
         newobj = _windows.new_MultiChoiceDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1885,13 +1837,14 @@ class MultiChoiceDialogPtr(MultiChoiceDialog):
 _windows.MultiChoiceDialog_swigregister(MultiChoiceDialogPtr)
 
 class SingleChoiceDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSingleChoiceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, wxString message, wxString caption, 
-    int choices, wxString choices_array, long style=CHOICEDLG_STYLE, 
-    Point pos=DefaultPosition) -> SingleChoiceDialog"""
+        """
+        __init__(Window parent, wxString message, wxString caption, 
+            int choices, wxString choices_array, long style=CHOICEDLG_STYLE, 
+            Point pos=DefaultPosition) -> SingleChoiceDialog
+        """
         newobj = _windows.new_SingleChoiceDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1923,14 +1876,15 @@ class SingleChoiceDialogPtr(SingleChoiceDialog):
 _windows.SingleChoiceDialog_swigregister(SingleChoiceDialogPtr)
 
 class TextEntryDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, wxString message, wxString caption=wxPyGetTextFromUserPromptStr, 
-    wxString defaultValue=wxPyEmptyString, 
-    long style=wxOK|wxCANCEL|wxCENTRE, 
-    Point pos=DefaultPosition) -> TextEntryDialog"""
+        """
+        __init__(Window parent, wxString message, wxString caption=wxPyGetTextFromUserPromptStr, 
+            wxString defaultValue=wxPyEmptyString, 
+            long style=wxOK|wxCANCEL|wxCENTRE, 
+            Point pos=DefaultPosition) -> TextEntryDialog
+        """
         newobj = _windows.new_TextEntryDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1958,7 +1912,6 @@ class TextEntryDialogPtr(TextEntryDialog):
 _windows.TextEntryDialog_swigregister(TextEntryDialogPtr)
 
 class FontData(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2034,7 +1987,6 @@ class FontDataPtr(FontData):
 _windows.FontData_swigregister(FontDataPtr)
 
 class FontDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2062,13 +2014,14 @@ class FontDialogPtr(FontDialog):
 _windows.FontDialog_swigregister(FontDialogPtr)
 
 class MessageDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMessageDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, wxString message, wxString caption=wxPyMessageBoxCaptionStr, 
-    long style=wxOK|wxCANCEL|wxCENTRE, 
-    Point pos=DefaultPosition) -> MessageDialog"""
+        """
+        __init__(Window parent, wxString message, wxString caption=wxPyMessageBoxCaptionStr, 
+            long style=wxOK|wxCANCEL|wxCENTRE, 
+            Point pos=DefaultPosition) -> MessageDialog
+        """
         newobj = _windows.new_MessageDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2088,12 +2041,13 @@ class MessageDialogPtr(MessageDialog):
 _windows.MessageDialog_swigregister(MessageDialogPtr)
 
 class ProgressDialog(Frame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxProgressDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString title, wxString message, int maximum=100, 
-    Window parent=None, int style=wxPD_AUTO_HIDE|wxPD_APP_MODAL) -> ProgressDialog"""
+        """
+        __init__(wxString title, wxString message, int maximum=100, 
+            Window parent=None, int style=wxPD_AUTO_HIDE|wxPD_APP_MODAL) -> ProgressDialog
+        """
         newobj = _windows.new_ProgressDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2142,7 +2096,6 @@ EVT_COMMAND_FIND_REPLACE_ALL = EVT_FIND_REPLACE_ALL
 EVT_COMMAND_FIND_CLOSE       = EVT_FIND_CLOSE        
 
 class FindDialogEvent(core.CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindDialogEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2188,7 +2141,6 @@ class FindDialogEventPtr(FindDialogEvent):
 _windows.FindDialogEvent_swigregister(FindDialogEventPtr)
 
 class FindReplaceData(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindReplaceData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2236,12 +2188,13 @@ class FindReplaceDataPtr(FindReplaceData):
 _windows.FindReplaceData_swigregister(FindReplaceDataPtr)
 
 class FindReplaceDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindReplaceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, FindReplaceData data, wxString title, 
-    int style=0) -> FindReplaceDialog"""
+        """
+        __init__(Window parent, FindReplaceData data, wxString title, 
+            int style=0) -> FindReplaceDialog
+        """
         newobj = _windows.new_FindReplaceDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2249,8 +2202,10 @@ class FindReplaceDialog(Dialog):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, FindReplaceData data, wxString title, 
-    int style=0) -> bool"""
+        """
+        Create(Window parent, FindReplaceData data, wxString title, 
+            int style=0) -> bool
+        """
         return _windows.FindReplaceDialog_Create(*args, **kwargs)
 
     def GetData(*args, **kwargs):
@@ -2286,13 +2241,14 @@ IDM_WINDOWTILEVERT = _windows.IDM_WINDOWTILEVERT
 FIRST_MDI_CHILD = _windows.FIRST_MDI_CHILD
 LAST_MDI_CHILD = _windows.LAST_MDI_CHILD
 class MDIParentFrame(Frame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMDIParentFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
-    wxString name=wxPyFrameNameStr) -> MDIParentFrame"""
+        """
+        __init__(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
+            wxString name=wxPyFrameNameStr) -> MDIParentFrame
+        """
         newobj = _windows.new_MDIParentFrame(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2300,9 +2256,11 @@ class MDIParentFrame(Frame):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
-    wxString name=wxPyFrameNameStr) -> bool"""
+        """
+        Create(Window parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
+            wxString name=wxPyFrameNameStr) -> bool
+        """
         return _windows.MDIParentFrame_Create(*args, **kwargs)
 
     def ActivateNext(*args, **kwargs):
@@ -2352,13 +2310,14 @@ def PreMDIParentFrame(*args, **kwargs):
     return val
 
 class MDIChildFrame(Frame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMDIChildFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(MDIParentFrame parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, 
-    long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> MDIChildFrame"""
+        """
+        __init__(MDIParentFrame parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> MDIChildFrame
+        """
         newobj = _windows.new_MDIChildFrame(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2366,9 +2325,11 @@ class MDIChildFrame(Frame):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(MDIParentFrame parent, int id, wxString title, Point pos=DefaultPosition, 
-    Size size=DefaultSize, 
-    long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> bool"""
+        """
+        Create(MDIParentFrame parent, int id, wxString title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> bool
+        """
         return _windows.MDIChildFrame_Create(*args, **kwargs)
 
     def Activate(*args, **kwargs):
@@ -2398,7 +2359,6 @@ def PreMDIChildFrame(*args, **kwargs):
     return val
 
 class MDIClientWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMDIClientWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2430,12 +2390,13 @@ def PreMDIClientWindow(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class PyWindow(core.Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=PanelNameStr) -> PyWindow"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=PanelNameStr) -> PyWindow
+        """
         newobj = _windows.new_PyWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2527,12 +2488,13 @@ class PyWindowPtr(PyWindow):
 _windows.PyWindow_swigregister(PyWindowPtr)
 
 class PyPanel(Panel):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPanel instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=PanelNameStr) -> PyPanel"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=PanelNameStr) -> PyPanel
+        """
         newobj = _windows.new_PyPanel(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2630,7 +2592,6 @@ PRINT_MODE_PREVIEW = _windows.PRINT_MODE_PREVIEW
 PRINT_MODE_FILE = _windows.PRINT_MODE_FILE
 PRINT_MODE_PRINTER = _windows.PRINT_MODE_PRINTER
 class PrintData(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2819,7 +2780,6 @@ class PrintDataPtr(PrintData):
 _windows.PrintData_swigregister(PrintDataPtr)
 
 class PageSetupDialogData(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPageSetupDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2960,7 +2920,6 @@ class PageSetupDialogDataPtr(PageSetupDialogData):
 _windows.PageSetupDialogData_swigregister(PageSetupDialogDataPtr)
 
 class PageSetupDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPageSetupDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2988,7 +2947,6 @@ class PageSetupDialogPtr(PageSetupDialog):
 _windows.PageSetupDialog_swigregister(PageSetupDialogPtr)
 
 class PrintDialogData(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3137,7 +3095,6 @@ class PrintDialogDataPtr(PrintDialogData):
 _windows.PrintDialogData_swigregister(PrintDialogDataPtr)
 
 class PrintDialog(Dialog):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3172,7 +3129,6 @@ PRINTER_NO_ERROR = _windows.PRINTER_NO_ERROR
 PRINTER_CANCELLED = _windows.PRINTER_CANCELLED
 PRINTER_ERROR = _windows.PRINTER_ERROR
 class Printer(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrinter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3233,7 +3189,6 @@ def Printer_GetLastError(*args, **kwargs):
     return _windows.Printer_GetLastError(*args, **kwargs)
 
 class Printout(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3337,13 +3292,14 @@ class PrintoutPtr(Printout):
 _windows.Printout_swigregister(PrintoutPtr)
 
 class PreviewCanvas(ScrolledWindow):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPreviewCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(PrintPreview preview, Window parent, Point pos=DefaultPosition, 
-    Size size=DefaultSize, long style=0, 
-    wxString name=wxPyPreviewCanvasNameStr) -> PreviewCanvas"""
+        """
+        __init__(PrintPreview preview, Window parent, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            wxString name=wxPyPreviewCanvasNameStr) -> PreviewCanvas
+        """
         newobj = _windows.new_PreviewCanvas(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3359,13 +3315,14 @@ class PreviewCanvasPtr(PreviewCanvas):
 _windows.PreviewCanvas_swigregister(PreviewCanvasPtr)
 
 class PreviewFrame(Frame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPreviewFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(PrintPreview preview, Frame parent, wxString title, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> PreviewFrame"""
+        """
+        __init__(PrintPreview preview, Frame parent, wxString title, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> PreviewFrame
+        """
         newobj = _windows.new_PreviewFrame(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3413,13 +3370,14 @@ ID_PREVIEW_FIRST = _windows.ID_PREVIEW_FIRST
 ID_PREVIEW_LAST = _windows.ID_PREVIEW_LAST
 ID_PREVIEW_GOTO = _windows.ID_PREVIEW_GOTO
 class PreviewControlBar(Panel):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPreviewControlBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(PrintPreview preview, long buttons, Window parent, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=TAB_TRAVERSAL, wxString name=PanelNameStr) -> PreviewControlBar"""
+        """
+        __init__(PrintPreview preview, long buttons, Window parent, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=TAB_TRAVERSAL, wxString name=PanelNameStr) -> PreviewControlBar
+        """
         newobj = _windows.new_PreviewControlBar(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3467,7 +3425,6 @@ class PreviewControlBarPtr(PreviewControlBar):
 _windows.PreviewControlBar_swigregister(PreviewControlBarPtr)
 
 class PrintPreview(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3574,7 +3531,6 @@ class PrintPreviewPtr(PrintPreview):
 _windows.PrintPreview_swigregister(PrintPreviewPtr)
 
 class PyPrintPreview(PrintPreview):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3626,13 +3582,14 @@ class PyPrintPreviewPtr(PyPrintPreview):
 _windows.PyPrintPreview_swigregister(PyPrintPreviewPtr)
 
 class PyPreviewFrame(PreviewFrame):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPreviewFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(PrintPreview preview, Frame parent, wxString title, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> PyPreviewFrame"""
+        """
+        __init__(PrintPreview preview, Frame parent, wxString title, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, wxString name=wxPyFrameNameStr) -> PyPreviewFrame
+        """
         newobj = _windows.new_PyPreviewFrame(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3672,13 +3629,14 @@ class PyPreviewFramePtr(PyPreviewFrame):
 _windows.PyPreviewFrame_swigregister(PyPreviewFramePtr)
 
 class PyPreviewControlBar(PreviewControlBar):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPreviewControlBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(PrintPreview preview, long buttons, Window parent, 
-    Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=PanelNameStr) -> PyPreviewControlBar"""
+        """
+        __init__(PrintPreview preview, long buttons, Window parent, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=PanelNameStr) -> PyPreviewControlBar
+        """
         newobj = _windows.new_PyPreviewControlBar(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

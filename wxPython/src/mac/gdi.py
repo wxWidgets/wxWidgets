@@ -8,7 +8,6 @@ wx = core
 #---------------------------------------------------------------------------
 
 class GDIObject(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGDIObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -46,7 +45,6 @@ _gdi.GDIObject_swigregister(GDIObjectPtr)
 #---------------------------------------------------------------------------
 
 class Colour(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColour instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -126,7 +124,6 @@ def ColourRGB(*args, **kwargs):
     return val
 
 class Palette(GDIObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPalette instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -165,7 +162,6 @@ _gdi.Palette_swigregister(PalettePtr)
 #---------------------------------------------------------------------------
 
 class Pen(GDIObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -242,7 +238,6 @@ class PenPtr(Pen):
 _gdi.Pen_swigregister(PenPtr)
 
 class PyPen(Pen):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -273,11 +268,18 @@ Pen = PyPen
 #---------------------------------------------------------------------------
 
 class Brush(GDIObject):
-    """"""
+    """
+    A brush is a drawing tool for filling in areas. It is used for painting the
+    background of rectangles, ellipses, etc. It has a colour and a style.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBrush instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Colour colour, int style=SOLID) -> Brush"""
+        """
+        __init__(Colour colour, int style=SOLID) -> Brush
+
+        Constructs a brush from a colour object and style.
+        """
         newobj = _gdi.new_Brush(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -334,11 +336,14 @@ class BrushPtr(Brush):
 _gdi.Brush_swigregister(BrushPtr)
 
 class Bitmap(GDIObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString name, wxBitmapType type=BITMAP_TYPE_ANY) -> Bitmap"""
+        """
+        __init__(wxString name, wxBitmapType type=BITMAP_TYPE_ANY) -> Bitmap
+
+        Loads a bitmap from a file.
+        """
         newobj = _gdi.new_Bitmap(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -354,43 +359,88 @@ class Bitmap(GDIObject):
         return _gdi.Bitmap_Ok(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """
+        GetWidth() -> int
+
+        Gets the width of the bitmap in pixels.
+        """
         return _gdi.Bitmap_GetWidth(*args, **kwargs)
 
     def GetHeight(*args, **kwargs):
-        """GetHeight() -> int"""
+        """
+        GetHeight() -> int
+
+        Gets the height of the bitmap in pixels.
+        """
         return _gdi.Bitmap_GetHeight(*args, **kwargs)
 
     def GetDepth(*args, **kwargs):
-        """GetDepth() -> int"""
+        """
+        GetDepth() -> int
+
+        Gets the colour depth of the bitmap. A value of 1 indicates a
+        monochrome bitmap.
+        """
         return _gdi.Bitmap_GetDepth(*args, **kwargs)
 
     def ConvertToImage(*args, **kwargs):
-        """ConvertToImage() -> Image"""
+        """
+        ConvertToImage() -> Image
+
+        Creates a platform-independent image from a platform-dependent bitmap. This
+        preserves mask information so that bitmaps and images can be converted back
+        and forth without loss in that respect.
+        """
         return _gdi.Bitmap_ConvertToImage(*args, **kwargs)
 
     def GetMask(*args, **kwargs):
-        """GetMask() -> Mask"""
+        """
+        GetMask() -> Mask
+
+        Gets the associated mask (if any) which may have been loaded from a file
+        or explpicitly set for the bitmap.
+        """
         return _gdi.Bitmap_GetMask(*args, **kwargs)
 
     def SetMask(*args, **kwargs):
-        """SetMask(Mask mask)"""
+        """
+        SetMask(Mask mask)
+
+        Sets the mask for this bitmap.
+        """
         return _gdi.Bitmap_SetMask(*args, **kwargs)
 
     def SetMaskColour(*args, **kwargs):
-        """SetMaskColour(Colour colour)"""
+        """
+        SetMaskColour(Colour colour)
+
+        Create a Mask based on a specified colour in the Bitmap.
+        """
         return _gdi.Bitmap_SetMaskColour(*args, **kwargs)
 
     def GetSubBitmap(*args, **kwargs):
-        """GetSubBitmap(Rect rect) -> Bitmap"""
+        """
+        GetSubBitmap(Rect rect) -> Bitmap
+
+        Returns a sub bitmap of the current one as long as the rect belongs entirely
+        to the bitmap. This function preserves bit depth and mask information.
+        """
         return _gdi.Bitmap_GetSubBitmap(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(wxString name, wxBitmapType type, Palette palette=(wxPalette *) NULL) -> bool"""
+        """
+        SaveFile(wxString name, wxBitmapType type, Palette palette=(wxPalette *) NULL) -> bool
+
+        Saves a bitmap in the named file.
+        """
         return _gdi.Bitmap_SaveFile(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(wxString name, wxBitmapType type) -> bool"""
+        """
+        LoadFile(wxString name, wxBitmapType type) -> bool
+
+        Loads a bitmap from a file
+        """
         return _gdi.Bitmap_LoadFile(*args, **kwargs)
 
     def CopyFromIcon(*args, **kwargs):
@@ -398,15 +448,27 @@ class Bitmap(GDIObject):
         return _gdi.Bitmap_CopyFromIcon(*args, **kwargs)
 
     def SetHeight(*args, **kwargs):
-        """SetHeight(int height)"""
+        """
+        SetHeight(int height)
+
+        Set the height property (does not affect the bitmap data).
+        """
         return _gdi.Bitmap_SetHeight(*args, **kwargs)
 
     def SetWidth(*args, **kwargs):
-        """SetWidth(int width)"""
+        """
+        SetWidth(int width)
+
+        Set the width property (does not affect the bitmap data).
+        """
         return _gdi.Bitmap_SetWidth(*args, **kwargs)
 
     def SetDepth(*args, **kwargs):
-        """SetDepth(int depth)"""
+        """
+        SetDepth(int depth)
+
+        Set the depth property (does not affect the bitmap data).
+        """
         return _gdi.Bitmap_SetDepth(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -419,41 +481,78 @@ class BitmapPtr(Bitmap):
 _gdi.Bitmap_swigregister(BitmapPtr)
 
 def EmptyBitmap(*args, **kwargs):
-    """EmptyBitmap(int width, int height, int depth=-1) -> Bitmap"""
+    """
+    EmptyBitmap(int width, int height, int depth=-1) -> Bitmap
+
+    Creates a new bitmap of the given size.  A depth of -1 indicates the depth of
+    the current screen or visual. Some platforms only support 1 for monochrome and
+    -1 for the current colour setting.
+    """
     val = _gdi.new_EmptyBitmap(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromIcon(*args, **kwargs):
-    """BitmapFromIcon(Icon icon) -> Bitmap"""
+    """
+    BitmapFromIcon(Icon icon) -> Bitmap
+
+    Create a new bitmap from an Icon object.
+    """
     val = _gdi.new_BitmapFromIcon(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromImage(*args, **kwargs):
-    """BitmapFromImage(Image image, int depth=-1) -> Bitmap"""
+    """
+    BitmapFromImage(Image image, int depth=-1) -> Bitmap
+
+    Creates bitmap object from the image. This has to be done to actually display
+    an image as you cannot draw an image directly on a window. The resulting
+    bitmap will use the provided colour depth (or that of the current system if
+    depth is -1) which entails that a colour reduction has to take place.
+    """
     val = _gdi.new_BitmapFromImage(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromXPMData(*args, **kwargs):
-    """BitmapFromXPMData(PyObject listOfStrings) -> Bitmap"""
+    """
+    BitmapFromXPMData(PyObject listOfStrings) -> Bitmap
+
+    Construct a Bitmap from a list of strings formatted as XPM data.
+    """
     val = _gdi.new_BitmapFromXPMData(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromBits(*args, **kwargs):
-    """BitmapFromBits(PyObject bits, int width, int height, int depth=1) -> Bitmap"""
+    """
+    BitmapFromBits(PyObject bits, int width, int height, int depth=1) -> Bitmap
+
+    Creates a bitmap from an array of bits.  You should only use this function for
+    monochrome bitmaps (depth 1) in portable programs: in this case the bits
+    parameter should contain an XBM image.  For other bit depths, the behaviour is
+    platform dependent.
+    """
     val = _gdi.new_BitmapFromBits(*args, **kwargs)
     val.thisown = 1
     return val
 
 class Mask(core.Object):
-    """"""
+    """
+    This class encapsulates a monochrome mask bitmap, where the masked area is
+    black and the unmasked area is white. When associated with a bitmap and drawn
+    in a device context, the unmasked area of the bitmap will be drawn, and the
+    masked area will not be drawn.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMask instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Bitmap bitmap) -> Mask"""
+        """
+        __init__(Bitmap bitmap) -> Mask
+
+        Constructs a mask from a monochrome bitmap.
+        """
         newobj = _gdi.new_Mask(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -467,13 +566,17 @@ class MaskPtr(Mask):
 _gdi.Mask_swigregister(MaskPtr)
 
 def MaskColour(*args, **kwargs):
-    """MaskColour(Bitmap bitmap, Colour colour) -> Mask"""
+    """
+    MaskColour(Bitmap bitmap, Colour colour) -> Mask
+
+    Constructs a mask from a bitmap and a colour in that bitmap that indicates the
+    background.
+    """
     val = _gdi.new_MaskColour(*args, **kwargs)
     val.thisown = 1
     return val
 
 class Icon(GDIObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -554,7 +657,6 @@ def IconFromXPMData(*args, **kwargs):
     return val
 
 class IconLocation(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconLocation instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -599,7 +701,6 @@ class IconLocationPtr(IconLocation):
 _gdi.IconLocation_swigregister(IconLocationPtr)
 
 class IconBundle(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconBundle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -647,7 +748,6 @@ def IconBundleFromIcon(*args, **kwargs):
     return val
 
 class Cursor(GDIObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -688,8 +788,10 @@ def CursorFromImage(*args, **kwargs):
     return val
 
 def CursorFromBits(*args, **kwargs):
-    """CursorFromBits(PyObject bits, int width, int height, int hotSpotX=-1, 
-    int hotSpotY=-1, PyObject maskBits=0) -> Cursor"""
+    """
+    CursorFromBits(PyObject bits, int width, int height, int hotSpotX=-1, 
+        int hotSpotY=-1, PyObject maskBits=0) -> Cursor
+    """
     val = _gdi.new_CursorFromBits(*args, **kwargs)
     val.thisown = 1
     return val
@@ -700,7 +802,6 @@ OutRegion = _gdi.OutRegion
 PartRegion = _gdi.PartRegion
 InRegion = _gdi.InRegion
 class Region(GDIObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRegion instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -820,7 +921,6 @@ def RegionFromPoints(*args, **kwargs):
     return val
 
 class RegionIterator(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRegionIterator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -973,7 +1073,6 @@ FONTENCODING_SHIFT_JIS = _gdi.FONTENCODING_SHIFT_JIS
 #---------------------------------------------------------------------------
 
 class NativeFontInfo(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNativeFontInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1081,7 +1180,6 @@ class NativeFontInfoPtr(NativeFontInfo):
 _gdi.NativeFontInfo_swigregister(NativeFontInfoPtr)
 
 class NativeEncodingInfo(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNativeEncodingInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     facename = property(_gdi.NativeEncodingInfo_facename_get, _gdi.NativeEncodingInfo_facename_set)
@@ -1125,7 +1223,6 @@ def TestFontEncoding(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class FontMapper(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontMapper instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1188,8 +1285,10 @@ class FontMapper(object):
 
     GetDefaultConfigPath = staticmethod(GetDefaultConfigPath)
     def GetAltForEncoding(*args, **kwargs):
-        """GetAltForEncoding(wxFontEncoding encoding, wxString facename=wxPyEmptyString, 
-    bool interactive=True) -> PyObject"""
+        """
+        GetAltForEncoding(wxFontEncoding encoding, wxString facename=wxPyEmptyString, 
+            bool interactive=True) -> PyObject
+        """
         return _gdi.FontMapper_GetAltForEncoding(*args, **kwargs)
 
     def IsEncodingAvailable(*args, **kwargs):
@@ -1243,13 +1342,14 @@ def FontMapper_GetDefaultConfigPath(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Font(GDIObject):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFont instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int pointSize, int family, int style, int weight, bool underline=False, 
-    wxString face=wxPyEmptyString, 
-    wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font"""
+        """
+        __init__(int pointSize, int family, int style, int weight, bool underline=False, 
+            wxString face=wxPyEmptyString, 
+            wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font
+        """
         newobj = _gdi.new_Font(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1408,8 +1508,10 @@ def FontFromNativeInfoString(*args, **kwargs):
     return val
 
 def Font2(*args, **kwargs):
-    """Font2(int pointSize, wxFontFamily family, int flags=FONTFLAG_DEFAULT, 
-    wxString face=wxPyEmptyString, wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font"""
+    """
+    Font2(int pointSize, wxFontFamily family, int flags=FONTFLAG_DEFAULT, 
+        wxString face=wxPyEmptyString, wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font
+    """
     val = _gdi.new_Font2(*args, **kwargs)
     val.thisown = 1
     return val
@@ -1425,7 +1527,6 @@ def Font_SetDefaultEncoding(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class FontEnumerator(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyFontEnumerator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1704,7 +1805,6 @@ LANGUAGE_ZHUANG = _gdi.LANGUAGE_ZHUANG
 LANGUAGE_ZULU = _gdi.LANGUAGE_ZULU
 LANGUAGE_USER_DEFINED = _gdi.LANGUAGE_USER_DEFINED
 class LanguageInfo(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLanguageInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1728,7 +1828,6 @@ LOCALE_DECIMAL_POINT = _gdi.LOCALE_DECIMAL_POINT
 LOCALE_LOAD_DEFAULT = _gdi.LOCALE_LOAD_DEFAULT
 LOCALE_CONV_ENCODING = _gdi.LOCALE_CONV_ENCODING
 class Locale(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLocale instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1744,9 +1843,11 @@ class Locale(object):
         except: pass
 
     def Init1(*args, **kwargs):
-        """Init1(wxString szName, wxString szShort=wxPyEmptyString, 
-    wxString szLocale=wxPyEmptyString, bool bLoadDefault=True, 
-    bool bConvertEncoding=False) -> bool"""
+        """
+        Init1(wxString szName, wxString szShort=wxPyEmptyString, 
+            wxString szLocale=wxPyEmptyString, bool bLoadDefault=True, 
+            bool bConvertEncoding=False) -> bool
+        """
         return _gdi.Locale_Init1(*args, **kwargs)
 
     def Init2(*args, **kwargs):
@@ -1891,7 +1992,6 @@ PLATFORM_WINDOWS = _gdi.PLATFORM_WINDOWS
 PLATFORM_OS2 = _gdi.PLATFORM_OS2
 PLATFORM_MAC = _gdi.PLATFORM_MAC
 class EncodingConverter(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEncodingConverter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1907,8 +2007,10 @@ class EncodingConverter(core.Object):
         except: pass
 
     def Init(*args, **kwargs):
-        """Init(wxFontEncoding input_enc, wxFontEncoding output_enc, 
-    int method=CONVERT_STRICT) -> bool"""
+        """
+        Init(wxFontEncoding input_enc, wxFontEncoding output_enc, 
+            int method=CONVERT_STRICT) -> bool
+        """
         return _gdi.EncodingConverter_Init(*args, **kwargs)
 
     def Convert(*args, **kwargs):
@@ -1940,8 +2042,10 @@ class EncodingConverterPtr(EncodingConverter):
 _gdi.EncodingConverter_swigregister(EncodingConverterPtr)
 
 def GetTranslation(*args):
-    """GetTranslation(wxString sz) -> wxString
-GetTranslation(wxString sz1, wxString sz2, size_t n) -> wxString"""
+    """
+    GetTranslation(wxString sz) -> wxString
+    GetTranslation(wxString sz1, wxString sz2, size_t n) -> wxString
+    """
     return _gdi.GetTranslation(*args)
 
 def EncodingConverter_GetPlatformEquivalents(*args, **kwargs):
@@ -1979,7 +2083,6 @@ if wx.Platform == "__WXMSW__":
 #---------------------------------------------------------------------------
 
 class DC(core.Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2138,14 +2241,18 @@ class DC(core.Object):
         return _gdi.DC_DrawRotatedText(*args, **kwargs)
 
     def BlitXY(*args, **kwargs):
-        """BlitXY(int xdest, int ydest, int width, int height, DC source, 
-    int xsrc, int ysrc, int rop=COPY, bool useMask=False, 
-    int xsrcMask=-1, int ysrcMask=-1) -> bool"""
+        """
+        BlitXY(int xdest, int ydest, int width, int height, DC source, 
+            int xsrc, int ysrc, int rop=COPY, bool useMask=False, 
+            int xsrcMask=-1, int ysrcMask=-1) -> bool
+        """
         return _gdi.DC_BlitXY(*args, **kwargs)
 
     def Blit(*args, **kwargs):
-        """Blit(Point destPt, Size sz, DC source, Point srcPt, int rop=COPY, 
-    bool useMask=False, Point srcPtMask=DefaultPosition) -> bool"""
+        """
+        Blit(Point destPt, Size sz, DC source, Point srcPt, int rop=COPY, 
+            bool useMask=False, Point srcPtMask=DefaultPosition) -> bool
+        """
         return _gdi.DC_Blit(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
@@ -2153,18 +2260,24 @@ class DC(core.Object):
         return _gdi.DC_DrawLines(*args, **kwargs)
 
     def DrawPolygon(*args, **kwargs):
-        """DrawPolygon(int points, Point points_array, int xoffset=0, int yoffset=0, 
-    int fillStyle=ODDEVEN_RULE)"""
+        """
+        DrawPolygon(int points, Point points_array, int xoffset=0, int yoffset=0, 
+            int fillStyle=ODDEVEN_RULE)
+        """
         return _gdi.DC_DrawPolygon(*args, **kwargs)
 
     def DrawLabel(*args, **kwargs):
-        """DrawLabel(wxString text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
-    int indexAccel=-1)"""
+        """
+        DrawLabel(wxString text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+            int indexAccel=-1)
+        """
         return _gdi.DC_DrawLabel(*args, **kwargs)
 
     def DrawImageLabel(*args, **kwargs):
-        """DrawImageLabel(wxString text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
-    int indexAccel=-1) -> Rect"""
+        """
+        DrawImageLabel(wxString text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+            int indexAccel=-1) -> Rect
+        """
         return _gdi.DC_DrawImageLabel(*args, **kwargs)
 
     def DrawSpline(*args, **kwargs):
@@ -2248,50 +2361,64 @@ class DC(core.Object):
         return _gdi.DC_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """GetTextExtent(wxString string) -> (width, height)
+        """
+        GetTextExtent(wxString string) -> (width, height)
 
-Get the width and height of the text using the current font.
-Only works for single line strings."""
+        Get the width and height of the text using the current font.
+        Only works for single line strings.
+        """
         return _gdi.DC_GetTextExtent(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
-        """GetFullTextExtent(wxString string, Font font=None) ->
-   (width, height, descent, externalLeading)
+        """
+        GetFullTextExtent(wxString string, Font font=None) ->
+           (width, height, descent, externalLeading)
 
-Get the width, height, decent and leading of the text using the current or specified font.
-Only works for single line strings."""
+        Get the width, height, decent and leading of the text using the current or specified font.
+        Only works for single line strings.
+        """
         return _gdi.DC_GetFullTextExtent(*args, **kwargs)
 
     def GetMultiLineTextExtent(*args, **kwargs):
-        """GetMultiLineTextExtent(wxString string, Font font=None) ->
-   (width, height, descent, externalLeading)
+        """
+        GetMultiLineTextExtent(wxString string, Font font=None) ->
+           (width, height, descent, externalLeading)
 
-Get the width, height, decent and leading of the text using the current or specified font.
-Works for single as well as multi-line strings."""
+        Get the width, height, decent and leading of the text using the current or specified font.
+        Works for single as well as multi-line strings.
+        """
         return _gdi.DC_GetMultiLineTextExtent(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize() -> Size
+        """
+        GetSize() -> Size
 
-Get the DC size in device units."""
+        Get the DC size in device units.
+        """
         return _gdi.DC_GetSize(*args, **kwargs)
 
     def GetSizeTuple(*args, **kwargs):
-        """GetSizeTuple() -> (width, height)
+        """
+        GetSizeTuple() -> (width, height)
 
-Get the DC size in device units."""
+        Get the DC size in device units.
+        """
         return _gdi.DC_GetSizeTuple(*args, **kwargs)
 
     def GetSizeMM(*args, **kwargs):
-        """GetSizeMM() -> Size
+        """
+        GetSizeMM() -> Size
 
-Get the DC size in milimeters."""
+        Get the DC size in milimeters.
+        """
         return _gdi.DC_GetSizeMM(*args, **kwargs)
 
     def GetSizeMMTuple(*args, **kwargs):
-        """GetSizeMMTuple() -> (width, height)
+        """
+        GetSizeMMTuple() -> (width, height)
 
-Get the DC size in milimeters."""
+        Get the DC size in milimeters.
+        """
         return _gdi.DC_GetSizeMMTuple(*args, **kwargs)
 
     def DeviceToLogicalX(*args, **kwargs):
@@ -2500,8 +2627,10 @@ Get the DC size in milimeters."""
         return _gdi.DC__DrawPolygonList(*args, **kwargs)
 
     def _DrawTextList(*args, **kwargs):
-        """_DrawTextList(PyObject textList, PyObject pyPoints, PyObject foregroundList, 
-    PyObject backgroundList) -> PyObject"""
+        """
+        _DrawTextList(PyObject textList, PyObject pyPoints, PyObject foregroundList, 
+            PyObject backgroundList) -> PyObject
+        """
         return _gdi.DC__DrawTextList(*args, **kwargs)
 
     def DrawPointList(self, points, pens=None):
@@ -2607,7 +2736,6 @@ _gdi.DC_swigregister(DCPtr)
 #---------------------------------------------------------------------------
 
 class MemoryDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMemoryDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2637,7 +2765,6 @@ def MemoryDCFromDC(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class BufferedDC(MemoryDC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2668,7 +2795,6 @@ def BufferedDCInternalBuffer(*args, **kwargs):
     return val
 
 class BufferedPaintDC(BufferedDC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2688,7 +2814,6 @@ _gdi.BufferedPaintDC_swigregister(BufferedPaintDCPtr)
 #---------------------------------------------------------------------------
 
 class ScreenDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScreenDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2720,7 +2845,6 @@ _gdi.ScreenDC_swigregister(ScreenDCPtr)
 #---------------------------------------------------------------------------
 
 class ClientDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClientDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2740,7 +2864,6 @@ _gdi.ClientDC_swigregister(ClientDCPtr)
 #---------------------------------------------------------------------------
 
 class PaintDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2760,7 +2883,6 @@ _gdi.PaintDC_swigregister(PaintDCPtr)
 #---------------------------------------------------------------------------
 
 class WindowDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2780,7 +2902,6 @@ _gdi.WindowDC_swigregister(WindowDCPtr)
 #---------------------------------------------------------------------------
 
 class MirrorDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMirrorDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2800,7 +2921,6 @@ _gdi.MirrorDC_swigregister(MirrorDCPtr)
 #---------------------------------------------------------------------------
 
 class PostScriptDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPostScriptDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2846,7 +2966,6 @@ def PostScriptDC_GetResolution(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class MetaFile(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMetaFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2864,12 +2983,13 @@ class MetaFilePtr(MetaFile):
 _gdi.MetaFile_swigregister(MetaFilePtr)
 
 class MetaFileDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMetaFileDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString filename=wxPyEmptyString, int width=0, int height=0, 
-    wxString description=wxPyEmptyString) -> MetaFileDC"""
+        """
+        __init__(wxString filename=wxPyEmptyString, int width=0, int height=0, 
+            wxString description=wxPyEmptyString) -> MetaFileDC
+        """
         newobj = _gdi.new_MetaFileDC(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2883,7 +3003,6 @@ class MetaFileDCPtr(MetaFileDC):
 _gdi.MetaFileDC_swigregister(MetaFileDCPtr)
 
 class PrinterDC(DC):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrinterDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2910,7 +3029,6 @@ IMAGE_LIST_NORMAL = _gdi.IMAGE_LIST_NORMAL
 IMAGE_LIST_SMALL = _gdi.IMAGE_LIST_SMALL
 IMAGE_LIST_STATE = _gdi.IMAGE_LIST_STATE
 class ImageList(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2942,8 +3060,10 @@ class ImageList(core.Object):
         return _gdi.ImageList_Replace(*args, **kwargs)
 
     def Draw(*args, **kwargs):
-        """Draw(int index, DC dc, int x, int x, int flags=IMAGELIST_DRAW_NORMAL, 
-    bool solidBackground=False) -> bool"""
+        """
+        Draw(int index, DC dc, int x, int x, int flags=IMAGELIST_DRAW_NORMAL, 
+            bool solidBackground=False) -> bool
+        """
         return _gdi.ImageList_Draw(*args, **kwargs)
 
     def GetImageCount(*args, **kwargs):
@@ -2973,7 +3093,6 @@ _gdi.ImageList_swigregister(ImageListPtr)
 #---------------------------------------------------------------------------
 
 class PenList(core.Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPenList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3002,7 +3121,6 @@ class PenListPtr(PenList):
 _gdi.PenList_swigregister(PenListPtr)
 
 class BrushList(core.Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBrushList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3031,7 +3149,6 @@ class BrushListPtr(BrushList):
 _gdi.BrushList_swigregister(BrushListPtr)
 
 class ColourDatabase(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourDatabase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3072,7 +3189,6 @@ class ColourDatabasePtr(ColourDatabase):
 _gdi.ColourDatabase_swigregister(ColourDatabasePtr)
 
 class FontList(core.Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3081,9 +3197,11 @@ class FontList(core.Object):
         return _gdi.FontList_AddFont(*args, **kwargs)
 
     def FindOrCreateFont(*args, **kwargs):
-        """FindOrCreateFont(int point_size, int family, int style, int weight, 
-    bool underline=False, wxString facename=wxPyEmptyString, 
-    wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font"""
+        """
+        FindOrCreateFont(int point_size, int family, int style, int weight, 
+            bool underline=False, wxString facename=wxPyEmptyString, 
+            wxFontEncoding encoding=FONTENCODING_DEFAULT) -> Font
+        """
         return _gdi.FontList_FindOrCreateFont(*args, **kwargs)
 
     def RemoveFont(*args, **kwargs):
@@ -3107,7 +3225,6 @@ _gdi.FontList_swigregister(FontListPtr)
 #---------------------------------------------------------------------------
 
 class Effects(core.Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEffects instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3157,8 +3274,10 @@ class Effects(core.Object):
         return _gdi.Effects_SetDarkShadow(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(Colour highlightColour, Colour lightShadow, Colour faceColour, 
-    Colour mediumShadow, Colour darkShadow)"""
+        """
+        Set(Colour highlightColour, Colour lightShadow, Colour faceColour, 
+            Colour mediumShadow, Colour darkShadow)
+        """
         return _gdi.Effects_Set(*args, **kwargs)
 
     def DrawSunkenEdge(*args, **kwargs):

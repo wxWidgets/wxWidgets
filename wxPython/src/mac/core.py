@@ -552,21 +552,27 @@ UPDATE_UI_FROMIDLE = _core.UPDATE_UI_FROMIDLE
 #---------------------------------------------------------------------------
 
 class Object(object):
-    """The base class for most wx objects, although in wxPython not
-much functionality is needed nor exposed."""
+    """
+    The base class for most wx objects, although in wxPython not
+    much functionality is needed nor exposed.
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetClassName(*args, **kwargs):
-        """GetClassName() -> wxString
+        """
+        GetClassName() -> wxString
 
-Returns the class name of the C++ object using wxRTTI."""
+        Returns the class name of the C++ object using wxRTTI.
+        """
         return _core.Object_GetClassName(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
-        """Destroy()
+        """
+        Destroy()
 
-Deletes the C++ object this Python object is a proxy for."""
+        Deletes the C++ object this Python object is a proxy for.
+        """
         return _core.Object_Destroy(*args, **kwargs)
 
 
@@ -648,18 +654,22 @@ CURSOR_MAX = _core.CURSOR_MAX
 #---------------------------------------------------------------------------
 
 class Size(object):
-    """wx.Size is a useful data structure used to represent the size of something.
-It simply contians integer width and height proprtites.  In most places in
-wxPython where a wx.Size is expected a (width,height) tuple can be used
-instead."""
+    """
+    wx.Size is a useful data structure used to represent the size of something.
+    It simply contians integer width and height proprtites.  In most places in
+    wxPython where a wx.Size is expected a (width,height) tuple can be used
+    instead.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSize instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     width = property(_core.Size_width_get, _core.Size_width_set)
     height = property(_core.Size_height_get, _core.Size_height_set)
     def __init__(self, *args, **kwargs):
-        """__init__(int w=0, int h=0) -> Size
+        """
+        __init__(int w=0, int h=0) -> Size
 
-Creates a size object."""
+        Creates a size object.
+        """
         newobj = _core.new_Size(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -671,47 +681,61 @@ Creates a size object."""
         except: pass
 
     def __eq__(*args, **kwargs):
-        """__eq__(Size sz) -> bool
+        """
+        __eq__(Size sz) -> bool
 
-Test for equality of wx.Size objects."""
+        Test for equality of wx.Size objects.
+        """
         return _core.Size___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Size sz) -> bool
+        """
+        __ne__(Size sz) -> bool
 
-Test for inequality."""
+        Test for inequality.
+        """
         return _core.Size___ne__(*args, **kwargs)
 
     def __add__(*args, **kwargs):
-        """__add__(Size sz) -> Size
+        """
+        __add__(Size sz) -> Size
 
-Add sz's proprties to this and return the result."""
+        Add sz's proprties to this and return the result.
+        """
         return _core.Size___add__(*args, **kwargs)
 
     def __sub__(*args, **kwargs):
-        """__sub__(Size sz) -> Size
+        """
+        __sub__(Size sz) -> Size
 
-Subtract sz's properties from this and return the result."""
+        Subtract sz's properties from this and return the result.
+        """
         return _core.Size___sub__(*args, **kwargs)
 
     def IncTo(*args, **kwargs):
-        """IncTo(Size sz)
+        """
+        IncTo(Size sz)
 
-Increments this object so that both of its dimensions are not less
-than the corresponding dimensions of the size."""
+        Increments this object so that both of its dimensions are not less
+        than the corresponding dimensions of the size.
+        """
         return _core.Size_IncTo(*args, **kwargs)
 
     def DecTo(*args, **kwargs):
-        """DecTo(Size sz)
+        """
+        DecTo(Size sz)
 
-Decrements this object so that both of its dimensions are not greater
-than the corresponding dimensions of the size."""
+        Decrements this object so that both of its dimensions are not greater
+        than the corresponding dimensions of the size.
+        """
         return _core.Size_DecTo(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(int w, int h)
+        """
+        Set(int w, int h)
 
-Set both width and height."""
+        Set both width and height.
+        """
         return _core.Size_Set(*args, **kwargs)
 
     def SetWidth(*args, **kwargs):
@@ -731,9 +755,11 @@ Set both width and height."""
         return _core.Size_GetHeight(*args, **kwargs)
 
     def Get(*args, **kwargs):
-        """Get() -> (width,height)
+        """
+        Get() -> (width,height)
 
-Returns the width and height properties as a tuple."""
+        Returns the width and height properties as a tuple.
+        """
         return _core.Size_Get(*args, **kwargs)
 
     asTuple = Get
@@ -761,17 +787,21 @@ _core.Size_swigregister(SizePtr)
 #---------------------------------------------------------------------------
 
 class RealPoint(object):
-    """A data structure for representing a point or position with floating point x
-and y properties.  In wxPython most places that expect a wx.RealPoint can also
-accept a (x,y) tuple."""
+    """
+    A data structure for representing a point or position with floating point x
+    and y properties.  In wxPython most places that expect a wx.RealPoint can also
+    accept a (x,y) tuple.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRealPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     x = property(_core.RealPoint_x_get, _core.RealPoint_x_set)
     y = property(_core.RealPoint_y_get, _core.RealPoint_y_set)
     def __init__(self, *args, **kwargs):
-        """__init__(double x=0.0, double y=0.0) -> RealPoint
+        """
+        __init__(double x=0.0, double y=0.0) -> RealPoint
 
-Create a wx.RealPoint object"""
+        Create a wx.RealPoint object
+        """
         newobj = _core.new_RealPoint(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -783,39 +813,51 @@ Create a wx.RealPoint object"""
         except: pass
 
     def __eq__(*args, **kwargs):
-        """__eq__(RealPoint pt) -> bool
+        """
+        __eq__(RealPoint pt) -> bool
 
-Test for equality of wx.RealPoint objects."""
+        Test for equality of wx.RealPoint objects.
+        """
         return _core.RealPoint___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(RealPoint pt) -> bool
+        """
+        __ne__(RealPoint pt) -> bool
 
-Test for inequality of wx.RealPoint objects."""
+        Test for inequality of wx.RealPoint objects.
+        """
         return _core.RealPoint___ne__(*args, **kwargs)
 
     def __add__(*args, **kwargs):
-        """__add__(RealPoint pt) -> RealPoint
+        """
+        __add__(RealPoint pt) -> RealPoint
 
-Add pt's proprties to this and return the result."""
+        Add pt's proprties to this and return the result.
+        """
         return _core.RealPoint___add__(*args, **kwargs)
 
     def __sub__(*args, **kwargs):
-        """__sub__(RealPoint pt) -> RealPoint
+        """
+        __sub__(RealPoint pt) -> RealPoint
 
-Subtract pt's proprties from this and return the result"""
+        Subtract pt's proprties from this and return the result
+        """
         return _core.RealPoint___sub__(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(double x, double y)
+        """
+        Set(double x, double y)
 
-Set both the x and y properties"""
+        Set both the x and y properties
+        """
         return _core.RealPoint_Set(*args, **kwargs)
 
     def Get(*args, **kwargs):
-        """Get() -> (x,y)
+        """
+        Get() -> (x,y)
 
-Return the x and y properties as a tuple. """
+        Return the x and y properties as a tuple. 
+        """
         return _core.RealPoint_Get(*args, **kwargs)
 
     asTuple = Get
@@ -843,17 +885,21 @@ _core.RealPoint_swigregister(RealPointPtr)
 #---------------------------------------------------------------------------
 
 class Point(object):
-    """A data structure for representing a point or position with integer x and y
-properties.  Most places in wxPython that expect a wx.Point can also accept a
-(x,y) tuple."""
+    """
+    A data structure for representing a point or position with integer x and y
+    properties.  Most places in wxPython that expect a wx.Point can also accept a
+    (x,y) tuple.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     x = property(_core.Point_x_get, _core.Point_x_set)
     y = property(_core.Point_y_get, _core.Point_y_set)
     def __init__(self, *args, **kwargs):
-        """__init__(int x=0, int y=0) -> Point
+        """
+        __init__(int x=0, int y=0) -> Point
 
-Create a wx.Point object"""
+        Create a wx.Point object
+        """
         newobj = _core.new_Point(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -865,51 +911,67 @@ Create a wx.Point object"""
         except: pass
 
     def __eq__(*args, **kwargs):
-        """__eq__(Point pt) -> bool
+        """
+        __eq__(Point pt) -> bool
 
-Test for equality of wx.Point objects."""
+        Test for equality of wx.Point objects.
+        """
         return _core.Point___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Point pt) -> bool
+        """
+        __ne__(Point pt) -> bool
 
-Test for inequality of wx.Point objects."""
+        Test for inequality of wx.Point objects.
+        """
         return _core.Point___ne__(*args, **kwargs)
 
     def __add__(*args, **kwargs):
-        """__add__(Point pt) -> Point
+        """
+        __add__(Point pt) -> Point
 
-Add pt's proprties to this and return the result."""
+        Add pt's proprties to this and return the result.
+        """
         return _core.Point___add__(*args, **kwargs)
 
     def __sub__(*args, **kwargs):
-        """__sub__(Point pt) -> Point
+        """
+        __sub__(Point pt) -> Point
 
-Subtract pt's proprties from this and return the result"""
+        Subtract pt's proprties from this and return the result
+        """
         return _core.Point___sub__(*args, **kwargs)
 
     def __iadd__(*args, **kwargs):
-        """__iadd__(Point pt) -> Point
+        """
+        __iadd__(Point pt) -> Point
 
-Add pt to this object."""
+        Add pt to this object.
+        """
         return _core.Point___iadd__(*args, **kwargs)
 
     def __isub__(*args, **kwargs):
-        """__isub__(Point pt) -> Point
+        """
+        __isub__(Point pt) -> Point
 
-Subtract pt from this object."""
+        Subtract pt from this object.
+        """
         return _core.Point___isub__(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(long x, long y)
+        """
+        Set(long x, long y)
 
-Set both the x and y properties"""
+        Set both the x and y properties
+        """
         return _core.Point_Set(*args, **kwargs)
 
     def Get(*args, **kwargs):
-        """Get() -> (x,y)
+        """
+        Get() -> (x,y)
 
-Return the x and y properties as a tuple. """
+        Return the x and y properties as a tuple. 
+        """
         return _core.Point_Get(*args, **kwargs)
 
     asTuple = Get
@@ -937,15 +999,19 @@ _core.Point_swigregister(PointPtr)
 #---------------------------------------------------------------------------
 
 class Rect(object):
-    """A class for representing and manipulating rectangles.  It has x, y, width and
-height properties.  In wxPython most palces that expect a wx.Rect can also
-accept a (x,y,width,height) tuple."""
+    """
+    A class for representing and manipulating rectangles.  It has x, y, width and
+    height properties.  In wxPython most palces that expect a wx.Rect can also
+    accept a (x,y,width,height) tuple.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRect instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int x=0, int y=0, int width=0, int height=0) -> Rect
+        """
+        __init__(int x=0, int y=0, int width=0, int height=0) -> Rect
 
-Create a new Rect object."""
+        Create a new Rect object.
+        """
         newobj = _core.new_Rect(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1044,80 +1110,104 @@ Create a new Rect object."""
     bottom = property(GetBottom, SetBottom)
 
     def Inflate(*args, **kwargs):
-        """Inflate(int dx, int dy) -> Rect
+        """
+        Inflate(int dx, int dy) -> Rect
 
-Increase the rectangle size by dx in x direction and dy in y direction. Both
-(or one of) parameters may be negative to decrease the rectangle size."""
+        Increase the rectangle size by dx in x direction and dy in y direction. Both
+        (or one of) parameters may be negative to decrease the rectangle size.
+        """
         return _core.Rect_Inflate(*args, **kwargs)
 
     def Deflate(*args, **kwargs):
-        """Deflate(int dx, int dy) -> Rect
+        """
+        Deflate(int dx, int dy) -> Rect
 
-Decrease the rectangle size by dx in x direction and dy in y direction. Both
-(or one of) parameters may be negative to increase the rectngle size. This
-method is the opposite of Inflate."""
+        Decrease the rectangle size by dx in x direction and dy in y direction. Both
+        (or one of) parameters may be negative to increase the rectngle size. This
+        method is the opposite of Inflate.
+        """
         return _core.Rect_Deflate(*args, **kwargs)
 
     def OffsetXY(*args, **kwargs):
-        """OffsetXY(int dx, int dy)
+        """
+        OffsetXY(int dx, int dy)
 
-Moves the rectangle by the specified offset. If dx is positive, the rectangle
-is moved to the right, if dy is positive, it is moved to the bottom, otherwise
-it is moved to the left or top respectively."""
+        Moves the rectangle by the specified offset. If dx is positive, the rectangle
+        is moved to the right, if dy is positive, it is moved to the bottom, otherwise
+        it is moved to the left or top respectively.
+        """
         return _core.Rect_OffsetXY(*args, **kwargs)
 
     def Offset(*args, **kwargs):
-        """Offset(Point pt)
+        """
+        Offset(Point pt)
 
-Same as OffsetXY but uses dx,dy from Point"""
+        Same as OffsetXY but uses dx,dy from Point
+        """
         return _core.Rect_Offset(*args, **kwargs)
 
     def Intersect(*args, **kwargs):
-        """Intersect(Rect rect) -> Rect
+        """
+        Intersect(Rect rect) -> Rect
 
-Return the intersectsion of this rectangle and rect."""
+        Return the intersectsion of this rectangle and rect.
+        """
         return _core.Rect_Intersect(*args, **kwargs)
 
     def __add__(*args, **kwargs):
-        """__add__(Rect rect) -> Rect
+        """
+        __add__(Rect rect) -> Rect
 
-Add the properties of rect to this rectangle and return the result."""
+        Add the properties of rect to this rectangle and return the result.
+        """
         return _core.Rect___add__(*args, **kwargs)
 
     def __iadd__(*args, **kwargs):
-        """__iadd__(Rect rect) -> Rect
+        """
+        __iadd__(Rect rect) -> Rect
 
-Add the properties of rect to this rectangle, updating this rectangle."""
+        Add the properties of rect to this rectangle, updating this rectangle.
+        """
         return _core.Rect___iadd__(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(Rect rect) -> bool
+        """
+        __eq__(Rect rect) -> bool
 
-Test for equality."""
+        Test for equality.
+        """
         return _core.Rect___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Rect rect) -> bool
+        """
+        __ne__(Rect rect) -> bool
 
-Test for inequality."""
+        Test for inequality.
+        """
         return _core.Rect___ne__(*args, **kwargs)
 
     def InsideXY(*args, **kwargs):
-        """InsideXY(int x, int y) -> bool
+        """
+        InsideXY(int x, int y) -> bool
 
-Return True if the point is (not strcitly) inside the rect."""
+        Return True if the point is (not strcitly) inside the rect.
+        """
         return _core.Rect_InsideXY(*args, **kwargs)
 
     def Inside(*args, **kwargs):
-        """Inside(Point pt) -> bool
+        """
+        Inside(Point pt) -> bool
 
-Return True if the point is (not strcitly) inside the rect."""
+        Return True if the point is (not strcitly) inside the rect.
+        """
         return _core.Rect_Inside(*args, **kwargs)
 
     def Intersects(*args, **kwargs):
-        """Intersects(Rect rect) -> bool
+        """
+        Intersects(Rect rect) -> bool
 
-Returns True if the rectangles have a non empty intersection."""
+        Returns True if the rectangles have a non empty intersection.
+        """
         return _core.Rect_Intersects(*args, **kwargs)
 
     x = property(_core.Rect_x_get, _core.Rect_x_set)
@@ -1125,15 +1215,19 @@ Returns True if the rectangles have a non empty intersection."""
     width = property(_core.Rect_width_get, _core.Rect_width_set)
     height = property(_core.Rect_height_get, _core.Rect_height_set)
     def Set(*args, **kwargs):
-        """Set(int x=0, int y=0, int width=0, int height=0)
+        """
+        Set(int x=0, int y=0, int width=0, int height=0)
 
-Set all rectangle properties."""
+        Set all rectangle properties.
+        """
         return _core.Rect_Set(*args, **kwargs)
 
     def Get(*args, **kwargs):
-        """Get() -> (x,y,width,height)
+        """
+        Get() -> (x,y,width,height)
 
-Return the rectangle properties as a tuple."""
+        Return the rectangle properties as a tuple.
+        """
         return _core.Rect_Get(*args, **kwargs)
 
     asTuple = Get
@@ -1161,26 +1255,32 @@ class RectPtr(Rect):
 _core.Rect_swigregister(RectPtr)
 
 def RectPP(*args, **kwargs):
-    """RectPP(Point topLeft, Point bottomRight) -> Rect
+    """
+    RectPP(Point topLeft, Point bottomRight) -> Rect
 
-Create a new Rect object from Points representing two corners."""
+    Create a new Rect object from Points representing two corners.
+    """
     val = _core.new_RectPP(*args, **kwargs)
     val.thisown = 1
     return val
 
 def RectPS(*args, **kwargs):
-    """RectPS(Point pos, Size size) -> Rect
+    """
+    RectPS(Point pos, Size size) -> Rect
 
-Create a new Rect from a position and size."""
+    Create a new Rect from a position and size.
+    """
     val = _core.new_RectPS(*args, **kwargs)
     val.thisown = 1
     return val
 
 
 def IntersectRect(*args, **kwargs):
-    """IntersectRect(Rect r1, Rect r2) -> Rect
+    """
+    IntersectRect(Rect r1, Rect r2) -> Rect
 
-Calculate and return the intersection of r1 and r2."""
+    Calculate and return the intersection of r1 and r2.
+    """
     return _core.IntersectRect(*args, **kwargs)
 #---------------------------------------------------------------------------
 
@@ -1189,23 +1289,29 @@ class Point2D(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPoint2D instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(double x=0.0, double y=0.0) -> Point2D
+        """
+        __init__(double x=0.0, double y=0.0) -> Point2D
 
-Create a w.Point2D object."""
+        Create a w.Point2D object.
+        """
         newobj = _core.new_Point2D(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetFloor(*args, **kwargs):
-        """GetFloor() -> (x,y)
+        """
+        GetFloor() -> (x,y)
 
-Convert to integer"""
+        Convert to integer
+        """
         return _core.Point2D_GetFloor(*args, **kwargs)
 
     def GetRounded(*args, **kwargs):
-        """GetRounded() -> (x,y)
+        """
+        GetRounded() -> (x,y)
 
-Convert to integer"""
+        Convert to integer
+        """
         return _core.Point2D_GetRounded(*args, **kwargs)
 
     def GetVectorLength(*args, **kwargs):
@@ -1247,9 +1353,11 @@ Convert to integer"""
         return _core.Point2D_GetCrossProduct(*args, **kwargs)
 
     def __neg__(*args, **kwargs):
-        """__neg__() -> Point2D
+        """
+        __neg__() -> Point2D
 
-the reflection of this point"""
+        the reflection of this point
+        """
         return _core.Point2D___neg__(*args, **kwargs)
 
     def __iadd__(*args, **kwargs):
@@ -1269,15 +1377,19 @@ the reflection of this point"""
         return _core.Point2D___idiv__(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(Point2D pt) -> bool
+        """
+        __eq__(Point2D pt) -> bool
 
-Test for equality"""
+        Test for equality
+        """
         return _core.Point2D___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Point2D pt) -> bool
+        """
+        __ne__(Point2D pt) -> bool
 
-Test for inequality"""
+        Test for inequality
+        """
         return _core.Point2D___ne__(*args, **kwargs)
 
     x = property(_core.Point2D_x_get, _core.Point2D_x_set)
@@ -1287,9 +1399,11 @@ Test for inequality"""
         return _core.Point2D_Set(*args, **kwargs)
 
     def Get(*args, **kwargs):
-        """Get() -> (x,y)
+        """
+        Get() -> (x,y)
 
-Return x and y properties as a tuple."""
+        Return x and y properties as a tuple.
+        """
         return _core.Point2D_Get(*args, **kwargs)
 
     asTuple = Get
@@ -1316,17 +1430,21 @@ class Point2DPtr(Point2D):
 _core.Point2D_swigregister(Point2DPtr)
 
 def Point2DCopy(*args, **kwargs):
-    """Point2DCopy(Point2D pt) -> Point2D
+    """
+    Point2DCopy(Point2D pt) -> Point2D
 
-Create a w.Point2D object."""
+    Create a w.Point2D object.
+    """
     val = _core.new_Point2DCopy(*args, **kwargs)
     val.thisown = 1
     return val
 
 def Point2DFromPoint(*args, **kwargs):
-    """Point2DFromPoint(Point pt) -> Point2D
+    """
+    Point2DFromPoint(Point pt) -> Point2D
 
-Create a w.Point2D object."""
+    Create a w.Point2D object.
+    """
     val = _core.new_Point2DFromPoint(*args, **kwargs)
     val.thisown = 1
     return val
@@ -1337,7 +1455,6 @@ FromStart = _core.FromStart
 FromCurrent = _core.FromCurrent
 FromEnd = _core.FromEnd
 class InputStream(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyInputStream instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1422,7 +1539,6 @@ DefaultPosition = cvar.DefaultPosition
 DefaultSize = cvar.DefaultSize
 
 class OutputStream(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxOutputStream instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1441,12 +1557,13 @@ _core.OutputStream_swigregister(OutputStreamPtr)
 #---------------------------------------------------------------------------
 
 class FSFile(Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFSFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxInputStream stream, wxString loc, wxString mimetype, 
-    wxString anchor, wxDateTime modif) -> FSFile"""
+        """
+        __init__(wxInputStream stream, wxString loc, wxString mimetype, 
+            wxString anchor, wxDateTime modif) -> FSFile
+        """
         newobj = _core.new_FSFile(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1486,7 +1603,6 @@ class FSFilePtr(FSFile):
 _core.FSFile_swigregister(FSFilePtr)
 
 class CPPFileSystemHandler(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileSystemHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1499,7 +1615,6 @@ class CPPFileSystemHandlerPtr(CPPFileSystemHandler):
 _core.CPPFileSystemHandler_swigregister(CPPFileSystemHandlerPtr)
 
 class FileSystemHandler(CPPFileSystemHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyFileSystemHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1559,7 +1674,6 @@ class FileSystemHandlerPtr(FileSystemHandler):
 _core.FileSystemHandler_swigregister(FileSystemHandlerPtr)
 
 class FileSystem(Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileSystem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1634,7 +1748,6 @@ def FileSystem_URLToFileName(*args, **kwargs):
     """FileSystem_URLToFileName(wxString url) -> wxString"""
     return _core.FileSystem_URLToFileName(*args, **kwargs)
 class InternetFSHandler(CPPFileSystemHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxInternetFSHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1660,7 +1773,6 @@ class InternetFSHandlerPtr(InternetFSHandler):
 _core.InternetFSHandler_swigregister(InternetFSHandlerPtr)
 
 class ZipFSHandler(CPPFileSystemHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxZipFSHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1715,7 +1827,6 @@ def MemoryFSHandler_AddFile(filename, a, b=''):
     else: raise TypeError, 'wx.Image, wx.Bitmap or string expected'
 
 class MemoryFSHandler(CPPFileSystemHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMemoryFSHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1761,7 +1872,6 @@ def MemoryFSHandler_RemoveFile(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ImageHandler(Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1810,7 +1920,6 @@ class ImageHandlerPtr(ImageHandler):
 _core.ImageHandler_swigregister(ImageHandlerPtr)
 
 class ImageHistogram(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageHistogram instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1820,18 +1929,22 @@ class ImageHistogram(object):
         self.thisown = 1
         del newobj.thisown
     def MakeKey(*args, **kwargs):
-        """ImageHistogram.MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+        """
+        ImageHistogram.MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
 
-Get the key in the histogram for the given RGB values"""
+        Get the key in the histogram for the given RGB values
+        """
         return _core.ImageHistogram_MakeKey(*args, **kwargs)
 
     MakeKey = staticmethod(MakeKey)
     def FindFirstUnusedColour(*args, **kwargs):
-        """FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
+        """
+        FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
 
-Find first colour that is not used in the image and has higher RGB values than
-startR, startG, startB.  Returns a tuple consisting of a success flag and rgb
-values."""
+        Find first colour that is not used in the image and has higher RGB values than
+        startR, startG, startB.  Returns a tuple consisting of a success flag and rgb
+        values.
+        """
         return _core.ImageHistogram_FindFirstUnusedColour(*args, **kwargs)
 
 
@@ -1843,13 +1956,14 @@ class ImageHistogramPtr(ImageHistogram):
 _core.ImageHistogram_swigregister(ImageHistogramPtr)
 
 def ImageHistogram_MakeKey(*args, **kwargs):
-    """ImageHistogram_MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+    """
+    ImageHistogram_MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
 
-Get the key in the histogram for the given RGB values"""
+    Get the key in the histogram for the given RGB values
+    """
     return _core.ImageHistogram_MakeKey(*args, **kwargs)
 
 class Image(Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1869,9 +1983,11 @@ class Image(Object):
         return _core.Image_Create(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
-        """Destroy()
+        """
+        Destroy()
 
-Deletes the C++ object this Python object is a proxy for."""
+        Deletes the C++ object this Python object is a proxy for.
+        """
         return _core.Image_Destroy(*args, **kwargs)
 
     def Scale(*args, **kwargs):
@@ -1915,11 +2031,13 @@ Deletes the C++ object this Python object is a proxy for."""
         return _core.Image_HasAlpha(*args, **kwargs)
 
     def FindFirstUnusedColour(*args, **kwargs):
-        """FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
+        """
+        FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
 
-Find first colour that is not used in the image and has higher RGB values than
-startR, startG, startB.  Returns a tuple consisting of a success flag and rgb
-values."""
+        Find first colour that is not used in the image and has higher RGB values than
+        startR, startG, startB.  Returns a tuple consisting of a success flag and rgb
+        values.
+        """
         return _core.Image_FindFirstUnusedColour(*args, **kwargs)
 
     def SetMaskFromImage(*args, **kwargs):
@@ -2046,8 +2164,10 @@ values."""
         return _core.Image_HasMask(*args, **kwargs)
 
     def Rotate(*args, **kwargs):
-        """Rotate(double angle, Point centre_of_rotation, bool interpolating=True, 
-    Point offset_after_rotation=None) -> Image"""
+        """
+        Rotate(double angle, Point centre_of_rotation, bool interpolating=True, 
+            Point offset_after_rotation=None) -> Image
+        """
         return _core.Image_Rotate(*args, **kwargs)
 
     def Rotate90(*args, **kwargs):
@@ -2059,8 +2179,10 @@ values."""
         return _core.Image_Mirror(*args, **kwargs)
 
     def Replace(*args, **kwargs):
-        """Replace(unsigned char r1, unsigned char g1, unsigned char b1, 
-    unsigned char r2, unsigned char g2, unsigned char b2)"""
+        """
+        Replace(unsigned char r1, unsigned char g1, unsigned char b1, 
+            unsigned char r2, unsigned char g2, unsigned char b2)
+        """
         return _core.Image_Replace(*args, **kwargs)
 
     def ConvertToMono(*args, **kwargs):
@@ -2212,7 +2334,6 @@ BMP_4BPP = _core.BMP_4BPP
 BMP_1BPP = _core.BMP_1BPP
 BMP_1BPP_BW = _core.BMP_1BPP_BW
 class BMPHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBMPHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2236,7 +2357,6 @@ IMAGE_OPTION_RESOLUTION = cvar.IMAGE_OPTION_RESOLUTION
 IMAGE_OPTION_RESOLUTIONUNIT = cvar.IMAGE_OPTION_RESOLUTIONUNIT
 
 class ICOHandler(BMPHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxICOHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2254,7 +2374,6 @@ class ICOHandlerPtr(ICOHandler):
 _core.ICOHandler_swigregister(ICOHandlerPtr)
 
 class CURHandler(ICOHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCURHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2272,7 +2391,6 @@ class CURHandlerPtr(CURHandler):
 _core.CURHandler_swigregister(CURHandlerPtr)
 
 class ANIHandler(CURHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxANIHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2290,7 +2408,6 @@ class ANIHandlerPtr(ANIHandler):
 _core.ANIHandler_swigregister(ANIHandlerPtr)
 
 class PNGHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPNGHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2308,7 +2425,6 @@ class PNGHandlerPtr(PNGHandler):
 _core.PNGHandler_swigregister(PNGHandlerPtr)
 
 class GIFHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGIFHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2326,7 +2442,6 @@ class GIFHandlerPtr(GIFHandler):
 _core.GIFHandler_swigregister(GIFHandlerPtr)
 
 class PCXHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPCXHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2344,7 +2459,6 @@ class PCXHandlerPtr(PCXHandler):
 _core.PCXHandler_swigregister(PCXHandlerPtr)
 
 class JPEGHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxJPEGHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2362,7 +2476,6 @@ class JPEGHandlerPtr(JPEGHandler):
 _core.JPEGHandler_swigregister(JPEGHandlerPtr)
 
 class PNMHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPNMHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2380,7 +2493,6 @@ class PNMHandlerPtr(PNMHandler):
 _core.PNMHandler_swigregister(PNMHandlerPtr)
 
 class XPMHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXPMHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2398,7 +2510,6 @@ class XPMHandlerPtr(XPMHandler):
 _core.XPMHandler_swigregister(XPMHandlerPtr)
 
 class TIFFHandler(ImageHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTIFFHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2418,7 +2529,6 @@ _core.TIFFHandler_swigregister(TIFFHandlerPtr)
 #---------------------------------------------------------------------------
 
 class EvtHandler(Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEvtHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2873,7 +2983,6 @@ EVT_CONTEXT_MENU = wx.PyEventBinder( wxEVT_CONTEXT_MENU )
 #---------------------------------------------------------------------------
 
 class Event(Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2954,7 +3063,6 @@ _core.Event_swigregister(EventPtr)
 #---------------------------------------------------------------------------
 
 class PropagationDisabler(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPropagationDisabler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2978,7 +3086,6 @@ class PropagationDisablerPtr(PropagationDisabler):
 _core.PropagationDisabler_swigregister(PropagationDisablerPtr)
 
 class PropagateOnce(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPropagateOnce instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3004,7 +3111,6 @@ _core.PropagateOnce_swigregister(PropagateOncePtr)
 #---------------------------------------------------------------------------
 
 class CommandEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCommandEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3064,7 +3170,6 @@ _core.CommandEvent_swigregister(CommandEventPtr)
 #---------------------------------------------------------------------------
 
 class NotifyEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotifyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3096,12 +3201,13 @@ _core.NotifyEvent_swigregister(NotifyEventPtr)
 #---------------------------------------------------------------------------
 
 class ScrollEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrollEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxEventType commandType=wxEVT_NULL, int winid=0, int pos=0, 
-    int orient=0) -> ScrollEvent"""
+        """
+        __init__(wxEventType commandType=wxEVT_NULL, int winid=0, int pos=0, 
+            int orient=0) -> ScrollEvent
+        """
         newobj = _core.new_ScrollEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3133,7 +3239,6 @@ _core.ScrollEvent_swigregister(ScrollEventPtr)
 #---------------------------------------------------------------------------
 
 class ScrollWinEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrollWinEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3174,7 +3279,6 @@ MOUSE_BTN_LEFT = _core.MOUSE_BTN_LEFT
 MOUSE_BTN_MIDDLE = _core.MOUSE_BTN_MIDDLE
 MOUSE_BTN_RIGHT = _core.MOUSE_BTN_RIGHT
 class MouseEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMouseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3292,15 +3396,19 @@ class MouseEvent(Event):
         return _core.MouseEvent_Leaving(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition() -> Point
+        """
+        GetPosition() -> Point
 
-Returns the position of the mouse in window coordinates when the event happened."""
+        Returns the position of the mouse in window coordinates when the event happened.
+        """
         return _core.MouseEvent_GetPosition(*args, **kwargs)
 
     def GetPositionTuple(*args, **kwargs):
-        """GetPositionTuple() -> (x,y)
+        """
+        GetPositionTuple() -> (x,y)
 
-Returns the position of the mouse in window coordinates when the event happened."""
+        Returns the position of the mouse in window coordinates when the event happened.
+        """
         return _core.MouseEvent_GetPositionTuple(*args, **kwargs)
 
     def GetLogicalPosition(*args, **kwargs):
@@ -3354,7 +3462,6 @@ _core.MouseEvent_swigregister(MouseEventPtr)
 #---------------------------------------------------------------------------
 
 class SetCursorEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSetCursorEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3394,7 +3501,6 @@ _core.SetCursorEvent_swigregister(SetCursorEventPtr)
 #---------------------------------------------------------------------------
 
 class KeyEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxKeyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3441,15 +3547,19 @@ class KeyEvent(Event):
         return _core.KeyEvent_GetRawKeyFlags(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition() -> Point
+        """
+        GetPosition() -> Point
 
-Find the position of the event."""
+        Find the position of the event.
+        """
         return _core.KeyEvent_GetPosition(*args, **kwargs)
 
     def GetPositionTuple(*args, **kwargs):
-        """GetPositionTuple() -> (x,y)
+        """
+        GetPositionTuple() -> (x,y)
 
-Find the position of the event."""
+        Find the position of the event.
+        """
         return _core.KeyEvent_GetPositionTuple(*args, **kwargs)
 
     def GetX(*args, **kwargs):
@@ -3481,7 +3591,6 @@ _core.KeyEvent_swigregister(KeyEventPtr)
 #---------------------------------------------------------------------------
 
 class SizeEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3519,7 +3628,6 @@ _core.SizeEvent_swigregister(SizeEventPtr)
 #---------------------------------------------------------------------------
 
 class MoveEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMoveEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3557,7 +3665,6 @@ _core.MoveEvent_swigregister(MoveEventPtr)
 #---------------------------------------------------------------------------
 
 class PaintEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPaintEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3575,7 +3682,6 @@ class PaintEventPtr(PaintEvent):
 _core.PaintEvent_swigregister(PaintEventPtr)
 
 class NcPaintEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNcPaintEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3595,7 +3701,6 @@ _core.NcPaintEvent_swigregister(NcPaintEventPtr)
 #---------------------------------------------------------------------------
 
 class EraseEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEraseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3619,7 +3724,6 @@ _core.EraseEvent_swigregister(EraseEventPtr)
 #---------------------------------------------------------------------------
 
 class FocusEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFocusEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3647,7 +3751,6 @@ _core.FocusEvent_swigregister(FocusEventPtr)
 #---------------------------------------------------------------------------
 
 class ChildFocusEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChildFocusEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3671,7 +3774,6 @@ _core.ChildFocusEvent_swigregister(ChildFocusEventPtr)
 #---------------------------------------------------------------------------
 
 class ActivateEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxActivateEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3695,7 +3797,6 @@ _core.ActivateEvent_swigregister(ActivateEventPtr)
 #---------------------------------------------------------------------------
 
 class InitDialogEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxInitDialogEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3715,7 +3816,6 @@ _core.InitDialogEvent_swigregister(InitDialogEventPtr)
 #---------------------------------------------------------------------------
 
 class MenuEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenuEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3747,7 +3847,6 @@ _core.MenuEvent_swigregister(MenuEventPtr)
 #---------------------------------------------------------------------------
 
 class CloseEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCloseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3791,7 +3890,6 @@ _core.CloseEvent_swigregister(CloseEventPtr)
 #---------------------------------------------------------------------------
 
 class ShowEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxShowEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3819,7 +3917,6 @@ _core.ShowEvent_swigregister(ShowEventPtr)
 #---------------------------------------------------------------------------
 
 class IconizeEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3843,7 +3940,6 @@ _core.IconizeEvent_swigregister(IconizeEventPtr)
 #---------------------------------------------------------------------------
 
 class MaximizeEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMaximizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3863,7 +3959,6 @@ _core.MaximizeEvent_swigregister(MaximizeEventPtr)
 #---------------------------------------------------------------------------
 
 class DropFilesEvent(Event):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDropFilesEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3892,7 +3987,6 @@ _core.DropFilesEvent_swigregister(DropFilesEventPtr)
 UPDATE_UI_PROCESS_ALL = _core.UPDATE_UI_PROCESS_ALL
 UPDATE_UI_PROCESS_SPECIFIED = _core.UPDATE_UI_PROCESS_SPECIFIED
 class UpdateUIEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxUpdateUIEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4002,7 +4096,6 @@ def UpdateUIEvent_GetMode(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class SysColourChangedEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSysColourChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4022,7 +4115,6 @@ _core.SysColourChangedEvent_swigregister(SysColourChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class MouseCaptureChangedEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMouseCaptureChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4046,7 +4138,6 @@ _core.MouseCaptureChangedEvent_swigregister(MouseCaptureChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class DisplayChangedEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDisplayChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4066,7 +4157,6 @@ _core.DisplayChangedEvent_swigregister(DisplayChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class PaletteChangedEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPaletteChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4094,7 +4184,6 @@ _core.PaletteChangedEvent_swigregister(PaletteChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class QueryNewPaletteEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxQueryNewPaletteEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4122,7 +4211,6 @@ _core.QueryNewPaletteEvent_swigregister(QueryNewPaletteEventPtr)
 #---------------------------------------------------------------------------
 
 class NavigationKeyEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNavigationKeyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4166,7 +4254,6 @@ _core.NavigationKeyEvent_swigregister(NavigationKeyEventPtr)
 #---------------------------------------------------------------------------
 
 class WindowCreateEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowCreateEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4188,7 +4275,6 @@ class WindowCreateEventPtr(WindowCreateEvent):
 _core.WindowCreateEvent_swigregister(WindowCreateEventPtr)
 
 class WindowDestroyEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDestroyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4212,7 +4298,6 @@ _core.WindowDestroyEvent_swigregister(WindowDestroyEventPtr)
 #---------------------------------------------------------------------------
 
 class ContextMenuEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxContextMenuEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4242,7 +4327,6 @@ _core.ContextMenuEvent_swigregister(ContextMenuEventPtr)
 IDLE_PROCESS_ALL = _core.IDLE_PROCESS_ALL
 IDLE_PROCESS_SPECIFIED = _core.IDLE_PROCESS_SPECIFIED
 class IdleEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIdleEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4297,7 +4381,6 @@ def IdleEvent_CanSend(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class PyEvent(Event):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4331,7 +4414,6 @@ class PyEventPtr(PyEvent):
 _core.PyEvent_swigregister(PyEventPtr)
 
 class PyCommandEvent(CommandEvent):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyCommandEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4373,7 +4455,6 @@ PYAPP_ASSERT_LOG = _core.PYAPP_ASSERT_LOG
 PRINT_WINDOWS = _core.PRINT_WINDOWS
 PRINT_POSTSCRIPT = _core.PRINT_POSTSCRIPT
 class PyApp(EvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyApp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4396,177 +4477,225 @@ class PyApp(EvtHandler):
         return _core.PyApp__setCallbackInfo(*args, **kwargs)
 
     def GetAppName(*args, **kwargs):
-        """GetAppName() -> wxString
+        """
+        GetAppName() -> wxString
 
-Get the application name."""
+        Get the application name.
+        """
         return _core.PyApp_GetAppName(*args, **kwargs)
 
     def SetAppName(*args, **kwargs):
-        """SetAppName(wxString name)
+        """
+        SetAppName(wxString name)
 
-Set the application name. This value may be used automatically
-by wxConfig and such."""
+        Set the application name. This value may be used automatically
+        by wxConfig and such.
+        """
         return _core.PyApp_SetAppName(*args, **kwargs)
 
     def GetClassName(*args, **kwargs):
-        """GetClassName() -> wxString
+        """
+        GetClassName() -> wxString
 
-Get the application's class name."""
+        Get the application's class name.
+        """
         return _core.PyApp_GetClassName(*args, **kwargs)
 
     def SetClassName(*args, **kwargs):
-        """SetClassName(wxString name)
+        """
+        SetClassName(wxString name)
 
-Set the application's class name. This value may be used for X-resources if
-applicable for the platform"""
+        Set the application's class name. This value may be used for X-resources if
+        applicable for the platform
+        """
         return _core.PyApp_SetClassName(*args, **kwargs)
 
     def GetVendorName(*args, **kwargs):
-        """GetVendorName() -> wxString
+        """
+        GetVendorName() -> wxString
 
-Get the application's vendor name."""
+        Get the application's vendor name.
+        """
         return _core.PyApp_GetVendorName(*args, **kwargs)
 
     def SetVendorName(*args, **kwargs):
-        """SetVendorName(wxString name)
+        """
+        SetVendorName(wxString name)
 
-Set the application's vendor name. This value may be used automatically
-by wxConfig and such."""
+        Set the application's vendor name. This value may be used automatically
+        by wxConfig and such.
+        """
         return _core.PyApp_SetVendorName(*args, **kwargs)
 
     def GetTraits(*args, **kwargs):
-        """GetTraits() -> wxAppTraits
+        """
+        GetTraits() -> wxAppTraits
 
-Create the app traits object to which we delegate for everything which either
-should be configurable by the user (then he can change the default behaviour
-simply by overriding CreateTraits() and returning his own traits object) or
-which is GUI/console dependent as then wxAppTraits allows us to abstract the
-differences behind the common facade"""
+        Create the app traits object to which we delegate for everything which either
+        should be configurable by the user (then he can change the default behaviour
+        simply by overriding CreateTraits() and returning his own traits object) or
+        which is GUI/console dependent as then wxAppTraits allows us to abstract the
+        differences behind the common facade
+        """
         return _core.PyApp_GetTraits(*args, **kwargs)
 
     def ProcessPendingEvents(*args, **kwargs):
-        """ProcessPendingEvents()
+        """
+        ProcessPendingEvents()
 
-Process all events in the wxPendingEvents list -- it is necessary to call this
-function to process posted events. This happens during each event loop
-iteration."""
+        Process all events in the wxPendingEvents list -- it is necessary to call this
+        function to process posted events. This happens during each event loop
+        iteration.
+        """
         return _core.PyApp_ProcessPendingEvents(*args, **kwargs)
 
     def Yield(*args, **kwargs):
-        """Yield(bool onlyIfNeeded=False) -> bool
+        """
+        Yield(bool onlyIfNeeded=False) -> bool
 
-Process all currently pending events right now, instead of waiting until
-return to the event loop.  It is an error to call Yield() recursively unless
-the value of onlyIfNeeded is True.
+        Process all currently pending events right now, instead of waiting until
+        return to the event loop.  It is an error to call Yield() recursively unless
+        the value of onlyIfNeeded is True.
 
-WARNING: This function is dangerous as it can lead to unexpected
-         reentrancies (i.e. when called from an event handler it
-         may result in calling the same event handler again), use
-         with _extreme_ care or, better, don't use at all!
-"""
+        WARNING: This function is dangerous as it can lead to unexpected
+                 reentrancies (i.e. when called from an event handler it
+                 may result in calling the same event handler again), use
+                 with _extreme_ care or, better, don't use at all!
+
+        """
         return _core.PyApp_Yield(*args, **kwargs)
 
     def WakeUpIdle(*args, **kwargs):
-        """WakeUpIdle()
+        """
+        WakeUpIdle()
 
-Make sure that idle events are sent again"""
+        Make sure that idle events are sent again
+        """
         return _core.PyApp_WakeUpIdle(*args, **kwargs)
 
     def MainLoop(*args, **kwargs):
-        """MainLoop() -> int
+        """
+        MainLoop() -> int
 
-Execute the main GUI loop, the function returns when the loop ends."""
+        Execute the main GUI loop, the function returns when the loop ends.
+        """
         return _core.PyApp_MainLoop(*args, **kwargs)
 
     def Exit(*args, **kwargs):
-        """Exit()
+        """
+        Exit()
 
-Exit the main loop thus terminating the application."""
+        Exit the main loop thus terminating the application.
+        """
         return _core.PyApp_Exit(*args, **kwargs)
 
     def ExitMainLoop(*args, **kwargs):
-        """ExitMainLoop()
+        """
+        ExitMainLoop()
 
-Exit the main GUI loop during the next iteration (i.e. it does not
-stop the program immediately!)"""
+        Exit the main GUI loop during the next iteration (i.e. it does not
+        stop the program immediately!)
+        """
         return _core.PyApp_ExitMainLoop(*args, **kwargs)
 
     def Pending(*args, **kwargs):
-        """Pending() -> bool
+        """
+        Pending() -> bool
 
-Returns True if there are unprocessed events in the event queue."""
+        Returns True if there are unprocessed events in the event queue.
+        """
         return _core.PyApp_Pending(*args, **kwargs)
 
     def Dispatch(*args, **kwargs):
-        """Dispatch() -> bool
+        """
+        Dispatch() -> bool
 
-Process the first event in the event queue (blocks until an event
-appears if there are none currently)"""
+        Process the first event in the event queue (blocks until an event
+        appears if there are none currently)
+        """
         return _core.PyApp_Dispatch(*args, **kwargs)
 
     def ProcessIdle(*args, **kwargs):
-        """ProcessIdle() -> bool
+        """
+        ProcessIdle() -> bool
 
-Called from the MainLoop when the application becomes idle and sends an
-IdleEvent to all interested parties.  Returns True is more idle events are
-needed, False if not."""
+        Called from the MainLoop when the application becomes idle and sends an
+        IdleEvent to all interested parties.  Returns True is more idle events are
+        needed, False if not.
+        """
         return _core.PyApp_ProcessIdle(*args, **kwargs)
 
     def SendIdleEvents(*args, **kwargs):
-        """SendIdleEvents(Window win, IdleEvent event) -> bool
+        """
+        SendIdleEvents(Window win, IdleEvent event) -> bool
 
-Send idle event to window and all subwindows.  Returns True if more idle time
-is requested."""
+        Send idle event to window and all subwindows.  Returns True if more idle time
+        is requested.
+        """
         return _core.PyApp_SendIdleEvents(*args, **kwargs)
 
     def IsActive(*args, **kwargs):
-        """IsActive() -> bool
+        """
+        IsActive() -> bool
 
-Return True if our app has focus."""
+        Return True if our app has focus.
+        """
         return _core.PyApp_IsActive(*args, **kwargs)
 
     def SetTopWindow(*args, **kwargs):
-        """SetTopWindow(Window win)
+        """
+        SetTopWindow(Window win)
 
-Set the "main" top level window"""
+        Set the "main" top level window
+        """
         return _core.PyApp_SetTopWindow(*args, **kwargs)
 
     def GetTopWindow(*args, **kwargs):
-        """GetTopWindow() -> Window
+        """
+        GetTopWindow() -> Window
 
-Return the "main" top level window (if it hadn't been set previously with
-SetTopWindow(), will return just some top level window and, if there not any,
-will return None)"""
+        Return the "main" top level window (if it hadn't been set previously with
+        SetTopWindow(), will return just some top level window and, if there not any,
+        will return None)
+        """
         return _core.PyApp_GetTopWindow(*args, **kwargs)
 
     def SetExitOnFrameDelete(*args, **kwargs):
-        """SetExitOnFrameDelete(bool flag)
+        """
+        SetExitOnFrameDelete(bool flag)
 
-Control the exit behaviour: by default, the program will exit the main loop
-(and so, usually, terminate) when the last top-level program window is
-deleted.  Beware that if you disable this behaviour (with
-SetExitOnFrameDelete(False)), you'll have to call ExitMainLoop() explicitly
-from somewhere.
-"""
+        Control the exit behaviour: by default, the program will exit the main loop
+        (and so, usually, terminate) when the last top-level program window is
+        deleted.  Beware that if you disable this behaviour (with
+        SetExitOnFrameDelete(False)), you'll have to call ExitMainLoop() explicitly
+        from somewhere.
+
+        """
         return _core.PyApp_SetExitOnFrameDelete(*args, **kwargs)
 
     def GetExitOnFrameDelete(*args, **kwargs):
-        """GetExitOnFrameDelete() -> bool
+        """
+        GetExitOnFrameDelete() -> bool
 
-Get the current exit behaviour setting."""
+        Get the current exit behaviour setting.
+        """
         return _core.PyApp_GetExitOnFrameDelete(*args, **kwargs)
 
     def SetUseBestVisual(*args, **kwargs):
-        """SetUseBestVisual(bool flag)
+        """
+        SetUseBestVisual(bool flag)
 
-Set whether the app should try to use the best available visual on systems
-where more than one is available, (Sun, SGI, XFree86 4, etc.)"""
+        Set whether the app should try to use the best available visual on systems
+        where more than one is available, (Sun, SGI, XFree86 4, etc.)
+        """
         return _core.PyApp_SetUseBestVisual(*args, **kwargs)
 
     def GetUseBestVisual(*args, **kwargs):
-        """GetUseBestVisual() -> bool
+        """
+        GetUseBestVisual() -> bool
 
-Get current UseBestVisual setting."""
+        Get current UseBestVisual setting.
+        """
         return _core.PyApp_GetUseBestVisual(*args, **kwargs)
 
     def SetPrintMode(*args, **kwargs):
@@ -4578,22 +4707,26 @@ Get current UseBestVisual setting."""
         return _core.PyApp_GetPrintMode(*args, **kwargs)
 
     def SetAssertMode(*args, **kwargs):
-        """SetAssertMode(int mode)
+        """
+        SetAssertMode(int mode)
 
-Set the OnAssert behaviour for debug and hybrid builds.  The following flags
-may be or'd together:
+        Set the OnAssert behaviour for debug and hybrid builds.  The following flags
+        may be or'd together:
 
- wxPYAPP_ASSERT_SUPPRESS         Don't do anything
- wxPYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)
- wxPYAPP_ASSERT_DIALOG           Display a message dialog
- wxPYAPP_ASSERT_LOG              Write the assertion info to the wxLog
-"""
+         wxPYAPP_ASSERT_SUPPRESS         Don't do anything
+         wxPYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)
+         wxPYAPP_ASSERT_DIALOG           Display a message dialog
+         wxPYAPP_ASSERT_LOG              Write the assertion info to the wxLog
+
+        """
         return _core.PyApp_SetAssertMode(*args, **kwargs)
 
     def GetAssertMode(*args, **kwargs):
-        """GetAssertMode() -> int
+        """
+        GetAssertMode() -> int
 
-Get the current OnAssert behaviour setting."""
+        Get the current OnAssert behaviour setting.
+        """
         return _core.PyApp_GetAssertMode(*args, **kwargs)
 
     def GetMacSupportPCMenuShortcuts(*args, **kwargs):
@@ -4647,16 +4780,20 @@ Get the current OnAssert behaviour setting."""
 
     SetMacHelpMenuTitleName = staticmethod(SetMacHelpMenuTitleName)
     def _BootstrapApp(*args, **kwargs):
-        """_BootstrapApp()
+        """
+        _BootstrapApp()
 
-For internal use only"""
+        For internal use only
+        """
         return _core.PyApp__BootstrapApp(*args, **kwargs)
 
     def GetComCtl32Version(*args, **kwargs):
-        """PyApp.GetComCtl32Version() -> int
+        """
+        PyApp.GetComCtl32Version() -> int
 
-Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
-wasn't found at all.  Raises an exception on non-Windows platforms."""
+        Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
+        wasn't found at all.  Raises an exception on non-Windows platforms.
+        """
         return _core.PyApp_GetComCtl32Version(*args, **kwargs)
 
     GetComCtl32Version = staticmethod(GetComCtl32Version)
@@ -4709,66 +4846,84 @@ def PyApp_SetMacHelpMenuTitleName(*args, **kwargs):
     return _core.PyApp_SetMacHelpMenuTitleName(*args, **kwargs)
 
 def PyApp_GetComCtl32Version(*args, **kwargs):
-    """PyApp_GetComCtl32Version() -> int
+    """
+    PyApp_GetComCtl32Version() -> int
 
-Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
-wasn't found at all.  Raises an exception on non-Windows platforms."""
+    Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
+    wasn't found at all.  Raises an exception on non-Windows platforms.
+    """
     return _core.PyApp_GetComCtl32Version(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
 
 def Exit(*args, **kwargs):
-    """Exit()
+    """
+    Exit()
 
-Force an exit of the application.  Convenience for wx.GetApp().Exit()"""
+    Force an exit of the application.  Convenience for wx.GetApp().Exit()
+    """
     return _core.Exit(*args, **kwargs)
 
 def Yield(*args, **kwargs):
-    """Yield() -> bool
+    """
+    Yield() -> bool
 
-Yield to other apps/messages.  Convenience for wx.GetApp().Yield()"""
+    Yield to other apps/messages.  Convenience for wx.GetApp().Yield()
+    """
     return _core.Yield(*args, **kwargs)
 
 def YieldIfNeeded(*args, **kwargs):
-    """YieldIfNeeded() -> bool
+    """
+    YieldIfNeeded() -> bool
 
-Yield to other apps/messages.  Convenience for wx.GetApp().Yield(True)"""
+    Yield to other apps/messages.  Convenience for wx.GetApp().Yield(True)
+    """
     return _core.YieldIfNeeded(*args, **kwargs)
 
 def SafeYield(*args, **kwargs):
-    """SafeYield(Window win=None, bool onlyIfNeeded=False) -> bool
+    """
+    SafeYield(Window win=None, bool onlyIfNeeded=False) -> bool
 
-This function is similar to wx.Yield, except that it disables the user input
-to all program windows before calling wx.Yield and re-enables it again
-afterwards. If win is not None, this window will remain enabled, allowing the
-implementation of some limited user interaction.
+    This function is similar to wx.Yield, except that it disables the user input
+    to all program windows before calling wx.Yield and re-enables it again
+    afterwards. If win is not None, this window will remain enabled, allowing the
+    implementation of some limited user interaction.
 
-Returns the result of the call to wx.Yield."""
+    Returns the result of the call to wx.Yield.
+    """
     return _core.SafeYield(*args, **kwargs)
 
 def WakeUpIdle(*args, **kwargs):
-    """WakeUpIdle()
+    """
+    WakeUpIdle()
 
-Cause the message queue to become empty again, so idle events will be sent."""
+    Cause the message queue to become empty again, so idle events will be sent.
+    """
     return _core.WakeUpIdle(*args, **kwargs)
 
 def PostEvent(*args, **kwargs):
-    """PostEvent(EvtHandler dest, Event event)
+    """
+    PostEvent(EvtHandler dest, Event event)
 
-Send an event to a window or other wx.EvtHandler to be processed later."""
+    Send an event to a window or other wx.EvtHandler to be processed later.
+    """
     return _core.PostEvent(*args, **kwargs)
 
 def App_CleanUp(*args, **kwargs):
-    """App_CleanUp()
+    """
+    App_CleanUp()
 
-For internal use only, it is used to cleanup after wxWindows when Python shuts down."""
+    For internal use only, it is used to cleanup after wxWindows when Python shuts down.
+    """
     return _core.App_CleanUp(*args, **kwargs)
 
 def GetApp(*args, **kwargs):
-    """GetApp() -> PyApp
+    """
+    GetApp() -> PyApp
 
-Return a reference to the current wxApp object."""
+    Return a reference to the current wxApp object.
+    """
     return _core.GetApp(*args, **kwargs)
 #----------------------------------------------------------------------
 
@@ -4889,17 +5044,20 @@ your Mac."""
 
 
     def SetTopWindow(self, frame):
+        """Set the \"main\" top level window"""
         if self.stdioWin:
             self.stdioWin.SetParent(frame)
         wx.PyApp.SetTopWindow(self, frame)
 
 
     def MainLoop(self):
+        """Execute the main GUI event loop"""
         wx.PyApp.MainLoop(self)
         self.RestoreStdio()
 
 
     def RedirectStdio(self, filename):
+        """Redirect sys.stdout and sys.stderr to a file or a popup window."""
         if filename:
             _sys.stdout = _sys.stderr = open(filename, 'a')
         else:
@@ -4982,13 +5140,99 @@ _sys.__wxPythonCleanup = __wxPyCleanup()
 
 #---------------------------------------------------------------------------
 
+class AcceleratorEntry(object):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxAcceleratorEntry instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(int flags=0, int keyCode=0, int cmd=0, MenuItem item=None) -> AcceleratorEntry"""
+        newobj = _core.new_AcceleratorEntry(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core.delete_AcceleratorEntry):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Set(*args, **kwargs):
+        """Set(int flags, int keyCode, int cmd, MenuItem item=None)"""
+        return _core.AcceleratorEntry_Set(*args, **kwargs)
+
+    def SetMenuItem(*args, **kwargs):
+        """SetMenuItem(MenuItem item)"""
+        return _core.AcceleratorEntry_SetMenuItem(*args, **kwargs)
+
+    def GetMenuItem(*args, **kwargs):
+        """GetMenuItem() -> MenuItem"""
+        return _core.AcceleratorEntry_GetMenuItem(*args, **kwargs)
+
+    def GetFlags(*args, **kwargs):
+        """GetFlags() -> int"""
+        return _core.AcceleratorEntry_GetFlags(*args, **kwargs)
+
+    def GetKeyCode(*args, **kwargs):
+        """GetKeyCode() -> int"""
+        return _core.AcceleratorEntry_GetKeyCode(*args, **kwargs)
+
+    def GetCommand(*args, **kwargs):
+        """GetCommand() -> int"""
+        return _core.AcceleratorEntry_GetCommand(*args, **kwargs)
+
+
+class AcceleratorEntryPtr(AcceleratorEntry):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = AcceleratorEntry
+_core.AcceleratorEntry_swigregister(AcceleratorEntryPtr)
+
+class AcceleratorTable(Object):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxAcceleratorTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(entries) -> AcceleratorTable
+
+        Construct an AcceleratorTable from a list of AcceleratorEntry items or
+        3-tuples (flags, keyCode, cmdID)
+        """
+        newobj = _core.new_AcceleratorTable(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core.delete_AcceleratorTable):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Ok(*args, **kwargs):
+        """Ok() -> bool"""
+        return _core.AcceleratorTable_Ok(*args, **kwargs)
+
+
+class AcceleratorTablePtr(AcceleratorTable):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = AcceleratorTable
+_core.AcceleratorTable_swigregister(AcceleratorTablePtr)
+
+
+def GetAccelFromString(*args, **kwargs):
+    """GetAccelFromString(wxString label) -> AcceleratorEntry"""
+    return _core.GetAccelFromString(*args, **kwargs)
+#---------------------------------------------------------------------------
+
 class Window(EvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=PanelNameStr) -> Window"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=PanelNameStr) -> Window
+        """
         newobj = _core.new_Window(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4996,8 +5240,10 @@ class Window(EvtHandler):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, wxString name=PanelNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, wxString name=PanelNameStr) -> bool
+        """
         return _core.Window_Create(*args, **kwargs)
 
     def Close(*args, **kwargs):
@@ -5005,9 +5251,11 @@ class Window(EvtHandler):
         return _core.Window_Close(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
-        """Destroy() -> bool
+        """
+        Destroy() -> bool
 
-Deletes the C++ object this Python object is a proxy for."""
+        Deletes the C++ object this Python object is a proxy for.
+        """
         return _core.Window_Destroy(*args, **kwargs)
 
     def DestroyChildren(*args, **kwargs):
@@ -5111,27 +5359,35 @@ Deletes the C++ object this Python object is a proxy for."""
         return _core.Window_SetClientRect(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition() -> Point
+        """
+        GetPosition() -> Point
 
-Get the window's position."""
+        Get the window's position.
+        """
         return _core.Window_GetPosition(*args, **kwargs)
 
     def GetPositionTuple(*args, **kwargs):
-        """GetPositionTuple() -> (x,y)
+        """
+        GetPositionTuple() -> (x,y)
 
-Get the window's position."""
+        Get the window's position.
+        """
         return _core.Window_GetPositionTuple(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize() -> Size
+        """
+        GetSize() -> Size
 
-Get the window size."""
+        Get the window size.
+        """
         return _core.Window_GetSize(*args, **kwargs)
 
     def GetSizeTuple(*args, **kwargs):
-        """GetSizeTuple() -> (width, height)
+        """
+        GetSizeTuple() -> (width, height)
 
-Get the window size."""
+        Get the window size.
+        """
         return _core.Window_GetSizeTuple(*args, **kwargs)
 
     def GetRect(*args, **kwargs):
@@ -5139,15 +5395,19 @@ Get the window size."""
         return _core.Window_GetRect(*args, **kwargs)
 
     def GetClientSize(*args, **kwargs):
-        """GetClientSize() -> Size
+        """
+        GetClientSize() -> Size
 
-Get the window's client size."""
+        Get the window's client size.
+        """
         return _core.Window_GetClientSize(*args, **kwargs)
 
     def GetClientSizeTuple(*args, **kwargs):
-        """GetClientSizeTuple() -> (width, height)
+        """
+        GetClientSizeTuple() -> (width, height)
 
-Get the window's client size."""
+        Get the window's client size.
+        """
         return _core.Window_GetClientSizeTuple(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
@@ -5159,17 +5419,21 @@ Get the window's client size."""
         return _core.Window_GetClientRect(*args, **kwargs)
 
     def GetBestSize(*args, **kwargs):
-        """GetBestSize() -> Size
+        """
+        GetBestSize() -> Size
 
-Get the size best suited for the window (in fact, minimal acceptable size
-using which it will still look "nice")"""
+        Get the size best suited for the window (in fact, minimal acceptable size
+        using which it will still look "nice")
+        """
         return _core.Window_GetBestSize(*args, **kwargs)
 
     def GetBestSizeTuple(*args, **kwargs):
-        """GetBestSizeTuple() -> (width, height)
+        """
+        GetBestSizeTuple() -> (width, height)
 
-Get the size best suited for the window (in fact, minimal acceptable size
-using which it will still look "nice")"""
+        Get the size best suited for the window (in fact, minimal acceptable size
+        using which it will still look "nice")
+        """
         return _core.Window_GetBestSizeTuple(*args, **kwargs)
 
     def GetAdjustedBestSize(*args, **kwargs):
@@ -5200,8 +5464,10 @@ using which it will still look "nice")"""
         return _core.Window_FitInside(*args, **kwargs)
 
     def SetSizeHints(*args, **kwargs):
-        """SetSizeHints(int minW, int minH, int maxW=-1, int maxH=-1, int incW=-1, 
-    int incH=-1)"""
+        """
+        SetSizeHints(int minW, int minH, int maxW=-1, int maxH=-1, int incW=-1, 
+            int incH=-1)
+        """
         return _core.Window_SetSizeHints(*args, **kwargs)
 
     def SetVirtualSizeHints(*args, **kwargs):
@@ -5229,35 +5495,43 @@ using which it will still look "nice")"""
         return _core.Window_GetMaxSize(*args, **kwargs)
 
     def SetVirtualSize(*args, **kwargs):
-        """SetVirtualSize(Size size)
+        """
+        SetVirtualSize(Size size)
 
-Set the the virtual size of a window.  For most windows this is just the
-client area of the window, but for some like scrolled windows it is more or
-less independent of the screen window size."""
+        Set the the virtual size of a window.  For most windows this is just the
+        client area of the window, but for some like scrolled windows it is more or
+        less independent of the screen window size.
+        """
         return _core.Window_SetVirtualSize(*args, **kwargs)
 
     def SetVirtualSizeWH(*args, **kwargs):
-        """SetVirtualSizeWH(int w, int h)
+        """
+        SetVirtualSizeWH(int w, int h)
 
-Set the the virtual size of a window.  For most windows this is just the
-client area of the window, but for some like scrolled windows it is more or
-less independent of the screen window size."""
+        Set the the virtual size of a window.  For most windows this is just the
+        client area of the window, but for some like scrolled windows it is more or
+        less independent of the screen window size.
+        """
         return _core.Window_SetVirtualSizeWH(*args, **kwargs)
 
     def GetVirtualSize(*args, **kwargs):
-        """GetVirtualSize() -> Size
+        """
+        GetVirtualSize() -> Size
 
-Get the the virtual size of the window.  For most windows this is just
-the client area of the window, but for some like scrolled windows it is
-more or less independent of the screen window size."""
+        Get the the virtual size of the window.  For most windows this is just
+        the client area of the window, but for some like scrolled windows it is
+        more or less independent of the screen window size.
+        """
         return _core.Window_GetVirtualSize(*args, **kwargs)
 
     def GetVirtualSizeTuple(*args, **kwargs):
-        """GetVirtualSizeTuple() -> (width, height)
+        """
+        GetVirtualSizeTuple() -> (width, height)
 
-Get the the virtual size of the window.  For most windows this is just
-the client area of the window, but for some like scrolled windows it is
-more or less independent of the screen window size."""
+        Get the the virtual size of the window.  For most windows this is just
+        the client area of the window, but for some like scrolled windows it is
+        more or less independent of the screen window size.
+        """
         return _core.Window_GetVirtualSizeTuple(*args, **kwargs)
 
     def GetBestVirtualSize(*args, **kwargs):
@@ -5434,11 +5708,11 @@ more or less independent of the screen window size."""
         return _core.Window_GetValidator(*args, **kwargs)
 
     def SetAcceleratorTable(*args, **kwargs):
-        """SetAcceleratorTable(wxAcceleratorTable accel)"""
+        """SetAcceleratorTable(AcceleratorTable accel)"""
         return _core.Window_SetAcceleratorTable(*args, **kwargs)
 
     def GetAcceleratorTable(*args, **kwargs):
-        """GetAcceleratorTable() -> wxAcceleratorTable"""
+        """GetAcceleratorTable() -> AcceleratorTable"""
         return _core.Window_GetAcceleratorTable(*args, **kwargs)
 
     def RegisterHotKey(*args, **kwargs):
@@ -5591,16 +5865,20 @@ more or less independent of the screen window size."""
         return _core.Window_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """GetTextExtent(wxString string) -> (width, height)
+        """
+        GetTextExtent(wxString string) -> (width, height)
 
-Get the width and height of the text using the current font."""
+        Get the width and height of the text using the current font.
+        """
         return _core.Window_GetTextExtent(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
-        """GetFullTextExtent(wxString string, Font font=None) ->
-   (width, height, descent, externalLeading)
+        """
+        GetFullTextExtent(wxString string, Font font=None) ->
+           (width, height, descent, externalLeading)
 
-Get the width, height, decent and leading of the text using the current or specified font."""
+        Get the width, height, decent and leading of the text using the current or specified font.
+        """
         return _core.Window_GetFullTextExtent(*args, **kwargs)
 
     def ClientToScreenXY(*args, **kwargs):
@@ -5795,6 +6073,7 @@ class WindowPtr(Window):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Window
 _core.Window_swigregister(WindowPtr)
+NullAcceleratorTable = cvar.NullAcceleratorTable
 PanelNameStr = cvar.PanelNameStr
 
 def PreWindow(*args, **kwargs):
@@ -5854,7 +6133,6 @@ def Window_FromHWND(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Validator(EvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxValidator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5916,7 +6194,6 @@ def Validator_SetBellOnError(*args, **kwargs):
     return _core.Validator_SetBellOnError(*args, **kwargs)
 
 class PyValidator(Validator):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyValidator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5944,7 +6221,6 @@ _core.PyValidator_swigregister(PyValidatorPtr)
 #---------------------------------------------------------------------------
 
 class Menu(EvtHandler):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenu instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5956,8 +6232,10 @@ class Menu(EvtHandler):
         self._setOORInfo(self)
 
     def Append(*args, **kwargs):
-        """Append(int itemid, wxString text, wxString help=wxPyEmptyString, 
-    wxItemKind kind=ITEM_NORMAL)"""
+        """
+        Append(int itemid, wxString text, wxString help=wxPyEmptyString, 
+            wxItemKind kind=ITEM_NORMAL)
+        """
         return _core.Menu_Append(*args, **kwargs)
 
     def AppendSeparator(*args, **kwargs):
@@ -5989,8 +6267,10 @@ class Menu(EvtHandler):
         return _core.Menu_InsertItem(*args, **kwargs)
 
     def Insert(*args, **kwargs):
-        """Insert(size_t pos, int itemid, wxString text, wxString help=wxPyEmptyString, 
-    wxItemKind kind=ITEM_NORMAL)"""
+        """
+        Insert(size_t pos, int itemid, wxString text, wxString help=wxPyEmptyString, 
+            wxItemKind kind=ITEM_NORMAL)
+        """
         return _core.Menu_Insert(*args, **kwargs)
 
     def InsertSeparator(*args, **kwargs):
@@ -6006,8 +6286,10 @@ class Menu(EvtHandler):
         return _core.Menu_InsertRadioItem(*args, **kwargs)
 
     def InsertMenu(*args, **kwargs):
-        """InsertMenu(size_t pos, int itemid, wxString text, Menu submenu, 
-    wxString help=wxPyEmptyString)"""
+        """
+        InsertMenu(size_t pos, int itemid, wxString text, Menu submenu, 
+            wxString help=wxPyEmptyString)
+        """
         return _core.Menu_InsertMenu(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
@@ -6015,8 +6297,10 @@ class Menu(EvtHandler):
         return _core.Menu_PrependItem(*args, **kwargs)
 
     def Prepend(*args, **kwargs):
-        """Prepend(int itemid, wxString text, wxString help=wxPyEmptyString, 
-    wxItemKind kind=ITEM_NORMAL)"""
+        """
+        Prepend(int itemid, wxString text, wxString help=wxPyEmptyString, 
+            wxItemKind kind=ITEM_NORMAL)
+        """
         return _core.Menu_Prepend(*args, **kwargs)
 
     def PrependSeparator(*args, **kwargs):
@@ -6052,21 +6336,27 @@ class Menu(EvtHandler):
         return _core.Menu_DeleteItem(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
-        """Destroy()
+        """
+        Destroy()
 
-Deletes the C++ object this Python object is a proxy for."""
+        Deletes the C++ object this Python object is a proxy for.
+        """
         return _core.Menu_Destroy(*args, **kwargs)
 
     def DestroyId(*args, **kwargs):
-        """DestroyId(int itemid) -> bool
+        """
+        DestroyId(int itemid) -> bool
 
-Deletes the C++ object this Python object is a proxy for."""
+        Deletes the C++ object this Python object is a proxy for.
+        """
         return _core.Menu_DestroyId(*args, **kwargs)
 
     def DestroyItem(*args, **kwargs):
-        """DestroyItem(MenuItem item) -> bool
+        """
+        DestroyItem(MenuItem item) -> bool
 
-Deletes the C++ object this Python object is a proxy for."""
+        Deletes the C++ object this Python object is a proxy for.
+        """
         return _core.Menu_DestroyItem(*args, **kwargs)
 
     def GetMenuItemCount(*args, **kwargs):
@@ -6189,7 +6479,6 @@ DefaultValidator = cvar.DefaultValidator
 #---------------------------------------------------------------------------
 
 class MenuBar(Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenuBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -6311,13 +6600,14 @@ _core.MenuBar_swigregister(MenuBarPtr)
 #---------------------------------------------------------------------------
 
 class MenuItem(Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenuItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Menu parentMenu=None, int id=ID_SEPARATOR, wxString text=wxPyEmptyString, 
-    wxString help=wxPyEmptyString, 
-    wxItemKind kind=ITEM_NORMAL, Menu subMenu=None) -> MenuItem"""
+        """
+        __init__(Menu parentMenu=None, int id=ID_SEPARATOR, wxString text=wxPyEmptyString, 
+            wxString help=wxPyEmptyString, 
+            wxItemKind kind=ITEM_NORMAL, Menu subMenu=None) -> MenuItem
+        """
         newobj = _core.new_MenuItem(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -6412,11 +6702,11 @@ class MenuItem(Object):
         return _core.MenuItem_GetHelp(*args, **kwargs)
 
     def GetAccel(*args, **kwargs):
-        """GetAccel() -> wxAcceleratorEntry"""
+        """GetAccel() -> AcceleratorEntry"""
         return _core.MenuItem_GetAccel(*args, **kwargs)
 
     def SetAccel(*args, **kwargs):
-        """SetAccel(wxAcceleratorEntry accel)"""
+        """SetAccel(AcceleratorEntry accel)"""
         return _core.MenuItem_SetAccel(*args, **kwargs)
 
     def GetDefaultMarginWidth(*args, **kwargs):
@@ -6451,13 +6741,14 @@ def MenuItem_GetDefaultMarginWidth(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Control(Window):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyControlNameStr) -> Control"""
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyControlNameStr) -> Control
+        """
         newobj = _core.new_Control(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -6465,9 +6756,11 @@ class Control(Window):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-    long style=0, Validator validator=DefaultValidator, 
-    wxString name=wxPyControlNameStr) -> bool"""
+        """
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            wxString name=wxPyControlNameStr) -> bool
+        """
         return _core.Control_Create(*args, **kwargs)
 
     def Command(*args, **kwargs):
@@ -6499,7 +6792,6 @@ def PreControl(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ItemContainer(object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxItemContainer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -6578,7 +6870,6 @@ _core.ItemContainer_swigregister(ItemContainerPtr)
 #---------------------------------------------------------------------------
 
 class ControlWithItems(Control,ItemContainer):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxControlWithItems instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -6593,7 +6884,6 @@ _core.ControlWithItems_swigregister(ControlWithItemsPtr)
 #---------------------------------------------------------------------------
 
 class SizerItem(Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizerItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -6731,28 +7021,33 @@ class SizerItemPtr(SizerItem):
 _core.SizerItem_swigregister(SizerItemPtr)
 
 def SizerItemSpacer(*args, **kwargs):
-    """SizerItemSpacer(int width, int height, int proportion, int flag, int border, 
-    Object userData) -> SizerItem"""
+    """
+    SizerItemSpacer(int width, int height, int proportion, int flag, int border, 
+        Object userData) -> SizerItem
+    """
     val = _core.new_SizerItemSpacer(*args, **kwargs)
     val.thisown = 1
     return val
 
 def SizerItemWindow(*args, **kwargs):
-    """SizerItemWindow(Window window, int proportion, int flag, int border, 
-    Object userData) -> SizerItem"""
+    """
+    SizerItemWindow(Window window, int proportion, int flag, int border, 
+        Object userData) -> SizerItem
+    """
     val = _core.new_SizerItemWindow(*args, **kwargs)
     val.thisown = 1
     return val
 
 def SizerItemSizer(*args, **kwargs):
-    """SizerItemSizer(Sizer sizer, int proportion, int flag, int border, 
-    Object userData) -> SizerItem"""
+    """
+    SizerItemSizer(Sizer sizer, int proportion, int flag, int border, 
+        Object userData) -> SizerItem
+    """
     val = _core.new_SizerItemSizer(*args, **kwargs)
     val.thisown = 1
     return val
 
 class Sizer(Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -6761,18 +7056,24 @@ class Sizer(Object):
         return _core.Sizer__setOORInfo(*args, **kwargs)
 
     def Add(*args, **kwargs):
-        """Add(PyObject item, int proportion=0, int flag=0, int border=0, 
-    PyObject userData=None)"""
+        """
+        Add(PyObject item, int proportion=0, int flag=0, int border=0, 
+            PyObject userData=None)
+        """
         return _core.Sizer_Add(*args, **kwargs)
 
     def Insert(*args, **kwargs):
-        """Insert(int before, PyObject item, int proportion=0, int flag=0, 
-    int border=0, PyObject userData=None)"""
+        """
+        Insert(int before, PyObject item, int proportion=0, int flag=0, 
+            int border=0, PyObject userData=None)
+        """
         return _core.Sizer_Insert(*args, **kwargs)
 
     def Prepend(*args, **kwargs):
-        """Prepend(PyObject item, int proportion=0, int flag=0, int border=0, 
-    PyObject userData=None)"""
+        """
+        Prepend(PyObject item, int proportion=0, int flag=0, int border=0, 
+            PyObject userData=None)
+        """
         return _core.Sizer_Prepend(*args, **kwargs)
 
     def Remove(*args, **kwargs):
@@ -6906,7 +7207,6 @@ class SizerPtr(Sizer):
 _core.Sizer_swigregister(SizerPtr)
 
 class PySizer(Sizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPySizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -6932,7 +7232,6 @@ _core.PySizer_swigregister(PySizerPtr)
 #---------------------------------------------------------------------------
 
 class BoxSizer(Sizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBoxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -6970,7 +7269,6 @@ _core.BoxSizer_swigregister(BoxSizerPtr)
 #---------------------------------------------------------------------------
 
 class StaticBoxSizer(BoxSizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticBoxSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7004,7 +7302,6 @@ _core.StaticBoxSizer_swigregister(StaticBoxSizerPtr)
 #---------------------------------------------------------------------------
 
 class GridSizer(Sizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7069,7 +7366,6 @@ FLEX_GROWMODE_NONE = _core.FLEX_GROWMODE_NONE
 FLEX_GROWMODE_SPECIFIED = _core.FLEX_GROWMODE_SPECIFIED
 FLEX_GROWMODE_ALL = _core.FLEX_GROWMODE_ALL
 class FlexGridSizer(GridSizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFlexGridSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7139,7 +7435,6 @@ _core.FlexGridSizer_swigregister(FlexGridSizerPtr)
 #---------------------------------------------------------------------------
 
 class GBPosition(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGBPosition instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7206,7 +7501,6 @@ class GBPositionPtr(GBPosition):
 _core.GBPosition_swigregister(GBPositionPtr)
 
 class GBSpan(object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGBSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7273,7 +7567,6 @@ class GBSpanPtr(GBSpan):
 _core.GBSpan_swigregister(GBSpanPtr)
 
 class GBSizerItem(SizerItem):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGBSizerItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7301,8 +7594,10 @@ class GBSizerItem(SizerItem):
         return _core.GBSizerItem_SetSpan(*args, **kwargs)
 
     def Intersects(*args):
-        """Intersects(GBSizerItem other) -> bool
-Intersects(GBPosition pos, GBSpan span) -> bool"""
+        """
+        Intersects(GBSizerItem other) -> bool
+        Intersects(GBPosition pos, GBSpan span) -> bool
+        """
         return _core.GBSizerItem_Intersects(*args)
 
     def GetEndPos(*args, **kwargs):
@@ -7327,28 +7622,33 @@ _core.GBSizerItem_swigregister(GBSizerItemPtr)
 DefaultSpan = cvar.DefaultSpan
 
 def GBSizerItemWindow(*args, **kwargs):
-    """GBSizerItemWindow(Window window, GBPosition pos, GBSpan span, int flag, 
-    int border, Object userData) -> GBSizerItem"""
+    """
+    GBSizerItemWindow(Window window, GBPosition pos, GBSpan span, int flag, 
+        int border, Object userData) -> GBSizerItem
+    """
     val = _core.new_GBSizerItemWindow(*args, **kwargs)
     val.thisown = 1
     return val
 
 def GBSizerItemSizer(*args, **kwargs):
-    """GBSizerItemSizer(Sizer sizer, GBPosition pos, GBSpan span, int flag, 
-    int border, Object userData) -> GBSizerItem"""
+    """
+    GBSizerItemSizer(Sizer sizer, GBPosition pos, GBSpan span, int flag, 
+        int border, Object userData) -> GBSizerItem
+    """
     val = _core.new_GBSizerItemSizer(*args, **kwargs)
     val.thisown = 1
     return val
 
 def GBSizerItemSpacer(*args, **kwargs):
-    """GBSizerItemSpacer(int width, int height, GBPosition pos, GBSpan span, 
-    int flag, int border, Object userData) -> GBSizerItem"""
+    """
+    GBSizerItemSpacer(int width, int height, GBPosition pos, GBSpan span, 
+        int flag, int border, Object userData) -> GBSizerItem
+    """
     val = _core.new_GBSizerItemSpacer(*args, **kwargs)
     val.thisown = 1
     return val
 
 class GridBagSizer(FlexGridSizer):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridBagSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7358,8 +7658,10 @@ class GridBagSizer(FlexGridSizer):
         self.thisown = 1
         del newobj.thisown
     def Add(*args, **kwargs):
-        """Add(PyObject item, GBPosition pos, GBSpan span=DefaultSpan, 
-    int flag=0, int border=0, PyObject userData=None) -> bool"""
+        """
+        Add(PyObject item, GBPosition pos, GBSpan span=DefaultSpan, 
+            int flag=0, int border=0, PyObject userData=None) -> bool
+        """
         return _core.GridBagSizer_Add(*args, **kwargs)
 
     def AddItem(*args, **kwargs):
@@ -7375,32 +7677,42 @@ class GridBagSizer(FlexGridSizer):
         return _core.GridBagSizer_SetEmptyCellSize(*args, **kwargs)
 
     def GetItemPosition(*args):
-        """GetItemPosition(Window window) -> GBPosition
-GetItemPosition(Sizer sizer) -> GBPosition
-GetItemPosition(size_t index) -> GBPosition"""
+        """
+        GetItemPosition(Window window) -> GBPosition
+        GetItemPosition(Sizer sizer) -> GBPosition
+        GetItemPosition(size_t index) -> GBPosition
+        """
         return _core.GridBagSizer_GetItemPosition(*args)
 
     def SetItemPosition(*args):
-        """SetItemPosition(Window window, GBPosition pos) -> bool
-SetItemPosition(Sizer sizer, GBPosition pos) -> bool
-SetItemPosition(size_t index, GBPosition pos) -> bool"""
+        """
+        SetItemPosition(Window window, GBPosition pos) -> bool
+        SetItemPosition(Sizer sizer, GBPosition pos) -> bool
+        SetItemPosition(size_t index, GBPosition pos) -> bool
+        """
         return _core.GridBagSizer_SetItemPosition(*args)
 
     def GetItemSpan(*args):
-        """GetItemSpan(Window window) -> GBSpan
-GetItemSpan(Sizer sizer) -> GBSpan
-GetItemSpan(size_t index) -> GBSpan"""
+        """
+        GetItemSpan(Window window) -> GBSpan
+        GetItemSpan(Sizer sizer) -> GBSpan
+        GetItemSpan(size_t index) -> GBSpan
+        """
         return _core.GridBagSizer_GetItemSpan(*args)
 
     def SetItemSpan(*args):
-        """SetItemSpan(Window window, GBSpan span) -> bool
-SetItemSpan(Sizer sizer, GBSpan span) -> bool
-SetItemSpan(size_t index, GBSpan span) -> bool"""
+        """
+        SetItemSpan(Window window, GBSpan span) -> bool
+        SetItemSpan(Sizer sizer, GBSpan span) -> bool
+        SetItemSpan(size_t index, GBSpan span) -> bool
+        """
         return _core.GridBagSizer_SetItemSpan(*args)
 
     def FindItem(*args):
-        """FindItem(Window window) -> GBSizerItem
-FindItem(Sizer sizer) -> GBSizerItem"""
+        """
+        FindItem(Window window) -> GBSizerItem
+        FindItem(Sizer sizer) -> GBSizerItem
+        """
         return _core.GridBagSizer_FindItem(*args)
 
     def FindItemAtPosition(*args, **kwargs):
@@ -7424,8 +7736,10 @@ FindItem(Sizer sizer) -> GBSizerItem"""
         return _core.GridBagSizer_CalcMin(*args, **kwargs)
 
     def CheckForIntersection(*args):
-        """CheckForIntersection(GBSizerItem item, GBSizerItem excludeItem=None) -> bool
-CheckForIntersection(GBPosition pos, GBSpan span, GBSizerItem excludeItem=None) -> bool"""
+        """
+        CheckForIntersection(GBSizerItem item, GBSizerItem excludeItem=None) -> bool
+        CheckForIntersection(GBPosition pos, GBSpan span, GBSizerItem excludeItem=None) -> bool
+        """
         return _core.GridBagSizer_CheckForIntersection(*args)
 
 
@@ -7458,13 +7772,14 @@ RightOf = _core.RightOf
 SameAs = _core.SameAs
 Absolute = _core.Absolute
 class IndividualLayoutConstraint(Object):
-    """"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIndividualLayoutConstraint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Set(*args, **kwargs):
-        """Set(wxRelationship rel, Window otherW, wxEdge otherE, int val=0, 
-    int marg=wxLAYOUT_DEFAULT_MARGIN)"""
+        """
+        Set(wxRelationship rel, Window otherW, wxEdge otherE, int val=0, 
+            int marg=wxLAYOUT_DEFAULT_MARGIN)
+        """
         return _core.IndividualLayoutConstraint_Set(*args, **kwargs)
 
     def LeftOf(*args, **kwargs):
@@ -7576,7 +7891,6 @@ class IndividualLayoutConstraintPtr(IndividualLayoutConstraint):
 _core.IndividualLayoutConstraint_swigregister(IndividualLayoutConstraintPtr)
 
 class LayoutConstraints(Object):
-    """"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLayoutConstraints instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     left = property(_core.LayoutConstraints_left_get)
