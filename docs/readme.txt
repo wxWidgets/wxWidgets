@@ -1,4 +1,4 @@
-wxWindows 2.1.13
+wxWindows 2.1.14
 ----------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
@@ -22,6 +22,16 @@ Changes in this release
 -----------------------
 
 Please see changes.txt for details.
+
+Note that there is a new contrib hierarchy for contributions,
+which mirrors the regular wxWindows hierarchy. The Object
+Graphics Library and MMedia library have been moved under
+contrib, so you may need to change your makefiles or project
+files, together with your source files. E.g. change #include "ogl.h"
+to #include <wx/ogl/ogl>.
+
+Also VC++ project files and makefiles have been made more
+consistent, so some paths and library names have changed.
 
 Platforms supported
 -------------------
@@ -71,6 +81,7 @@ jpeg.zip                   Optional JPEG library
 tiff.zip                   Optional TIFF library
 ogl3.zip                   Optional Object Graphics Library
 mmedia.zip                 Optional MMedia class library (Motif, GTK, MSW)
+stc.zip                    Optional wxStyledTextCtrl library (Motif, GTK, MSW)
 tex2rtf2.zip               Tex2RTF documentation tool
 
 wxWindows for GTK distribution
@@ -90,6 +101,7 @@ wxMotif-2.x.y.tgz          wxMotif source distribution. You will
 wx2_x_y_gen.zip
 wx2_x_y_mot.zip
 jpeg.zip
+tiff.zip
 
 wxWindows for Windows distribution
 ----------------------------------
@@ -165,8 +177,9 @@ See docs/bugs.txt for a bug list: this file is new and will initially
 
 See docs/html/index.htm for an HTML index of the major documents.
 
-See docs/changes.txt for a detailed history of changes to wxWindows 2
-  (not up-to-date).
+See docs/changes.txt for a summary of changes to wxWindows 2.
+
+See docs/tech for an archive of technical notes.
 
 The Windows help files are located in docs/winhelp.
 The PDF help files are located in docs/pdf.
@@ -194,5 +207,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, February 2000
+The wxWindows Team, March 2000
 

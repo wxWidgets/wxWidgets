@@ -6,6 +6,6 @@
 # if you're feeling brave, you may wish to compile with threads.
 # -- Julian Smart
 rm -f *.cache
-chmod a+x configure config.sub config.guess
+chmod a+x configure config.sub config.guess samples/configure contrib/configure
 ./configure --disable-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --enable-debug --without-sockets --without-odbc --without-threads --enable-newgrid
 make

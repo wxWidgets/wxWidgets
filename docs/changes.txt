@@ -47,6 +47,10 @@ all (GUI):
 - added wxEncodingConverter and improved wxFontMapper
   for dealing with convertions between different encodings,
   charsets support in wxLocale and wxHTML
+- wxDragImage class added
+- samples/help improved to show standard and advanced HTML help
+  controllers, as well as native help
+- contrib hierarchy started, and OGL/Mmedia moved to it
 
 wxMSW:
 
@@ -62,6 +66,8 @@ wxMSW:
 - wxBitmap/wxIcon may be constructed from XPM included into a program, as in
   Unix ports
 - returning FALSE from OnPrintPage() aborts printing
+- VC++ makefiles and project files made (mostly) consistent
+- wxSetCursorEvent added
 
 wxGTK:
 
@@ -72,6 +78,8 @@ wxGTK:
 wxMotif:
 
 - wxMenu::Enable works
+- wxToolBar bugs fixed
+- OGL samples made to work again
 
 wxHTML:
 
