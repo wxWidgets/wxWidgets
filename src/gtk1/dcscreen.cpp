@@ -41,6 +41,12 @@ wxScreenDC::wxScreenDC()
     m_cmap = gdk_colormap_get_system();
     m_window = GDK_ROOT_PARENT();
 
+#ifdef __WXGTK20__
+    m_context = gdk_pango_context_get();
+    m_layout = pango_layout_new( m_context );
+//    m_fontdesc = pango_font_description_copy( widget->style->font_desc );
+#endif
+
     m_isScreenDC = TRUE;
 
     SetUpDC();
