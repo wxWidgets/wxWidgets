@@ -184,7 +184,22 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
         }
     }
 
-    tbar->OnLeftClick( tool->GetId(), tool->IsToggled() );
+    if( !tbar->OnLeftClick( tool->GetId(), tool->IsToggled() ) && tool->CanBeToggled() )
+    {
+        // revert back
+        tool->Toggle();
+
+        wxBitmap bitmap = tool->GetBitmap();
+        if ( bitmap.Ok() )
+        {
+            GtkPixmap *pixmap = GTK_PIXMAP( tool->m_pixmap );
+
+            GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
+                                               : (GdkBitmap *)NULL;
+
+            gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------

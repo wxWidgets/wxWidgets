@@ -575,6 +575,9 @@ protected:
     // find the tool by id
     wxToolBarToolBase *FindById(int toolid) const;
 
+    // un-toggle all buttons in the same radio group
+    void UnToggleRadioGroup(wxToolBarToolBase *tool);
+
     // the list of all our tools
     wxToolBarToolsList m_tools;
 

@@ -69,6 +69,7 @@ All (GUI):
 - added some support for C++ exceptions in the library (do read the manual!)
 - added wxListCtrl::GetViewRect()
 - added wxTextCtrl::MarkDirty()
+- wxToolBar::ToggleTool() now works for radio buttons (Dag Ågren)
 
 wxMSW:
 
