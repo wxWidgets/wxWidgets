@@ -4930,7 +4930,7 @@ long wxGenericListCtrl::InsertColumn( long col, wxListItem &item )
 
     // if we hadn't had header before and have it now we need to relayout the
     // window
-    if ( GetColumnCount() == 1 )
+    if ( GetColumnCount() == 1 && m_mainWin->HasHeader() )
     {
         ResizeReportView(TRUE /* have header */);
     }
