@@ -15,11 +15,13 @@ fi
 
 function usage {
     echo ""
-    echo "Usage: $0  wx_version  py_version  [command flags...]"
-    echo "   wx_version     String to use for version in filenames, etc."
-    echo "   py_version     String to append to python (which python version to use.)"
+    echo "Usage: $0  [apple|local]  [command flags...]"
     echo ""
-    echo "command flags:"
+    echo "   apple          Build for Apple's python in /usr/bin"
+    echo "   local          Build for a locally installed python in /usr/local/bin"
+    echo "                  (for example Jaguar's MacPython)"
+    echo ""
+    echo "optional command flags:"
     echo "   skiptar        Don't unpack the tarball"
     echo "   use_cvs        Use the CVS workspace instead of a tarfile"
     echo "   skipconfig     Don't run configure"
@@ -27,17 +29,23 @@ function usage {
     echo "   skipinstall    Don't do the installation step"
     echo "   skipdmg        Don't make the package or diskimage"
     echo "   skipclean      Don't do the cleanup at the end"
+    echo ""
 }
 
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 1 ]; then
     usage
     exit 1
 fi
 
-VERSION=$1
-PYVER=$2
-shift;shift
+KIND=$1
+case $KIND in
+    apple)    PYTHON=/usr/bin/python ;;
+    local)    PYTHON=/usr/local/bin/python ;;
+    *)        usage; exit 1 ;;
+esac
+PYTHONW=${PYTHON}w
+shift
 
 
 for flag in $*; do
@@ -57,13 +65,18 @@ for flag in $*; do
 done
 
 
-SRCDIR=/Volumes/Gate.Stuff/Development/wxPython/dist/$VERSION
+VERSION=`$PYTHON -c "import setup;print setup.VERSION"`
+PYVER=`$PYTHON -c "import sys; print sys.version[:3]"`
+PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
+SITEPACKAGES=$PYPREFIX/lib/python$PYVER/site-packages
+
+SRCDIR=/stuff/Development/wxPython/dist/$VERSION
 TARBALL=$SRCDIR/wxPythonSrc-$VERSION.tar.gz
-SITEPACKAGES=/Library/Frameworks/Python.framework/Versions/$PYVER/lib/python$PYVER/site-packages
 
-# TODO:  Should I change the prefix to /usr?
-PREFIX=/usr/local
+PREFIX=/usr/lib/wxPython-$VERSION
+BINPREFIX=/usr/bin
 
+WXROOT=`dirname $PWD`
 PROGDIR="`dirname \"$0\"`"
 TMPDIR=$PWD/_build_dmg
 
@@ -81,7 +94,7 @@ DESTDIR=$PWD/dist
 
 mkdir -p $BUILDROOT
 mkdir -p $INSTALLROOT
-mkdir -p $INSTALLDEVEL
+#mkdir -p $INSTALLDEVEL
 rm -rf $DMGDIR
 mkdir -p $DMGDIR/root
 
@@ -92,7 +105,8 @@ pushd $BUILDROOT
 # Unpack the tarball
 
 if [ -z "$skiptar" ]; then
-    tar xzvf $TARBALL
+    echo Unarchiving tarball...
+    tar xzf $TARBALL
 fi
 
 if [ "$use_cvs" = 1 ]; then
@@ -104,19 +118,21 @@ if [ "$use_cvs" = 1 ]; then
     if [ -e .last_copy ]; then
 	FEXPR="-cnewer .last_copy"
     fi
-    find /projects/wx $FEXPR -print \
-	| grep -v wx/build \
+    MEASURE=$WXROOT//
+    find $WXROOT $FEXPR -print \
+	| grep -v $WXROOT/bld \
 	| grep -v wxPython/build \
 	| grep -v wxPython/_build \
 	| grep -v CVS \
-	| cut -b 14- > filelist
+	| grep -v .pyc \
+	| cut -b ${#MEASURE}- > filelist
 
     for x in `cat filelist`; do
-	if [ -d "/projects/wx/$x" ]; then
+	if [ -d "$WXROOT/$x" ]; then
 	    mkdir -p "wxPythonSrc-$VERSION/$x"
 	else
 	    echo $x
-	    cp -p "/projects/wx/$x" "wxPythonSrc-$VERSION/$x"
+	    cp -p "$WXROOT/$x" "wxPythonSrc-$VERSION/$x"
 	fi
     done
 
@@ -126,60 +142,60 @@ fi
 
 cd wxPythonSrc-$VERSION
 WXDIR=`pwd`
-mkdir -p $WXDIR/build
-cd $WXDIR/build
+mkdir -p $WXDIR/bld
+cd $WXDIR/bld
 
 #----------------------------------------------------------------------
 
 
 # Configure wxWindows
 if [ -z "$skipconfig" ]; then
-    ../configure --with-mac --prefix=$PREFIX \
+    ../configure \
+	--prefix=$PREFIX \
+	--with-mac \
+	--disable-monolithic \
 	--with-opengl \
-	--enable-precomp=no \
 	--enable-geometry \
 	--enable-optimise \
+	--enable-precomp=no \
+	\
 	--with-libjpeg=builtin \
 	--with-libpng=builtin \
 	--with-libtiff=builtin \
-
-
-#	--with-zlib=builtin
-#	--enable-debug_flag
+	--with-zlib=builtin \
+	\
+	--enable-debug_flag
 
 fi
 
 # Build wxWindows and wxPython
 if [ -z "$skipbuild" ]; then
-    make
 
+    # Make wxWindows and some contribs
+    make 
+    make -C contrib/src/gizmos 
+    make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
+    make -C contrib/src/stc
+    make -C contrib/src/xrc
+
+    if [ ! -e $WXDIR/include/wx/gizmos ]; then
+	# Make some links so the wxPython build can find all the headers it needs
+	pushd $WXDIR/include/wx
+	ln -s ../../contrib/include/wx/* .
+	popd
+    fi
+
+    # Build wxPython
     cd $WXDIR/wxPython
-    python$PYVER setup.py \
-	IN_CVS_TREE=1 \
-	WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build" \
+    $PYTHON setup.py \
+	NO_SCRIPTS=1 \
+	WX_CONFIG="$WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" \
 	build
 
 
-    # Build wxrc (XRC resource tool) but don't use the makefiles since they expect
-    # a shared version of the xrc lib to have been built...
-    cd $WXDIR/contrib/utils/wxrc
-    WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build"
-    wCC=`$WX_CONFIG --cc`
-    wCXX=`$WX_CONFIG --cxx`
-
-    for f in wxrc.cpp ../../src/xrc/*.cpp; do
-	echo $f
-	$wCXX `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
-    done
-    for f in ../../src/xrc/expat/xmlparse/xmlparse.c ../../src/xrc/expat/xmltok/xmlrole.c ../../src/xrc/expat/xmltok/xmltok.c; do
-	echo $f
-	$wCC `$WX_CONFIG --cxxflags` -I ../../include -I ../../src/xrc/expat/xmlparse -I ../../src/xrc/expat/xmltok -c $f
-    done
-
-    # the handlers are not needed
-    rm xh_*.o xmlrsall.o
-
-    $wCXX `$WX_CONFIG --libs` *.o -o wxrc
+    # Build wxrc (XRC resource tool) 
+    cd $WXDIR/bld/contrib/utils/wxrc
+    make 
     strip wxrc
 
 fi
@@ -188,37 +204,42 @@ fi
 # Install wxWindows
 
 if [ -z "$skipinstall" ]; then
-    cd $WXDIR/build
-    make prefix=$INSTALLROOT/$PREFIX install
+    cd $WXDIR/bld
+    make prefix=$INSTALLROOT$PREFIX install
+    make -C contrib/src/gizmos prefix=$INSTALLROOT$PREFIX install
+    make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$INSTALLROOT/$PREFIX install
+    make -C contrib/src/stc prefix=$INSTALLROOT$PREFIX install
+    make -C contrib/src/xrc prefix=$INSTALLROOT$PREFIX install
 
 
     # and wxPython
     cd $WXDIR/wxPython
-    python$PYVER setup.py \
-	IN_CVS_TREE=1 \
-	WX_CONFIG="$WXDIR/build/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/build" \
+    $PYTHON setup.py \
+	NO_SCRIPTS=1 \
+	WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT/$PREFIX" \
 	install \
 	--root=$INSTALLROOT
 
+
     # install wxPython's tool scripts
+    mkdir -p $INSTALLROOT$BINPREFIX
     cd $WXDIR/wxPython/scripts
-    python$PYVER CreateMacScripts.py $INSTALLROOT $PREFIX/bin
+    python$PYVER CreateMacScripts.py $INSTALLROOT $BINPREFIX
 
     # Install wxrc
-    cp $WXDIR/contrib/utils/wxrc/wxrc $INSTALLROOT$PREFIX/bin
+    cp $WXDIR/bld/contrib/utils/wxrc/wxrc $INSTALLROOT$BINPREFIX
 
 
-    # Move wxWindows devel files and save for a separate installer package
-    mkdir -p $INSTALLDEVEL$PREFIX
-    mkdir -p $INSTALLDEVEL$PREFIX/bin
-    mkdir -p $INSTALLDEVEL$PREFIX/lib
-    mv -f $INSTALLROOT$PREFIX/include $INSTALLDEVEL$PREFIX
-    mv -f $INSTALLROOT$PREFIX/lib/wx  $INSTALLDEVEL$PREFIX/lib
-    mv -f $INSTALLROOT$PREFIX/bin/wx* $INSTALLDEVEL$PREFIX/bin
+    # install the wxPython headers
+    cd $WXDIR/wxPython
+    cp -R include $INSTALLROOT$PREFIX
+    mkdir -p      $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
+    cp src/*.i    $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
+
 
     # TODO for $INSTALLROOT and $INSTALLDEVEL ?
-    # chown -R root:admin
-    # chmod -R g+w
+    #chown -R root:admin $INSTALLROOT
+    #chmod -R g+w        $INSTALLROOT
 fi
 
 popd
@@ -230,63 +251,18 @@ if [ -z "$skipdmg" ]; then
 
     # Remove the .pyc/.pyo files they just take up space and can be recreated
     # during the install.
-    python $PROGDIR/../zappycfiles.py $INSTALLROOT/Library/Frameworks/Python.framework
-
-    # Copy the demo, samples, and such to the Applications dir
-    APPDIR=$INSTALLROOT/Applications/wxPythonOSX-$VERSION
-    mkdir -p $APPDIR
-    cp -pR $WXDIR/wxPython/demo $APPDIR
-    cp -pR $WXDIR/wxPython/samples $APPDIR
-
-    # Move sample launchers to .pyw files.
-    # TODO:  A better, more automated way to do this!!!
-    pushd $APPDIR/samples
-    for x in StyleEditor/STCStyleEditor \
-  	    doodle/superdoodle \
-	    frogedit/FrogEdit \
-	    pySketch/pySketch \
-	    wxProject/wxProject; do
-        mv $x.py $x.pyw
-    done
-    popd
-
-    # Make an app to launch the demo
-    cat > $APPDIR/demo/RunDemo.pyw <<EOF
-import sys, os
-sys.path.insert(0, "/Applications/wxPythonOSX-$VERSION/demo")
-os.chdir("/Applications/wxPythonOSX-$VERSION/demo")
-import Main
-Main.main()
-EOF
-    pythonw $PROGDIR/../buildapp.py \
-	--builddir=$APPDIR \
-	--name=RunDemo \
-	--mainprogram=$APPDIR/demo/RunDemo.pyw \
-	--iconfile=$PROGDIR/RunDemo.icns \
-	build
-
-    # Make an app to launch PyShell
-    pythonw $PROGDIR/../buildapp.py \
-	--builddir=$APPDIR \
-	--name=PyShell \
-	--mainprogram=$INSTALLROOT$PREFIX/bin/pyshell.py \
-	--iconfile=$PROGDIR/PieShell.icns \
-	build
-
-     # Make an app to launch XRCed
-     pythonw $PROGDIR/../buildapp.py \
- 	--builddir=$APPDIR \
- 	--name=XRCed \
- 	--mainprogram=$INSTALLROOT$PREFIX/bin/xrced.py \
- 	--iconfile=$PROGDIR/XRCed.icns \
- 	build
+    $PYTHON $PROGDIR/../zappycfiles.py $INSTALLROOT
 
 
     # Make the welcome message
+    case $KIND in
+	apple)  W_MSG="an Apple installed (Panther) version of" ;;
+	local)  W_MSG="a locally built version (or Jaguar version) of" ;;
+    esac
     cat > $RESOURCEDIR/Welcome.txt <<EOF
 Welcome!
 
-This program will install wxPython $VERSION for MacPython-OSX $PYVER.
+This program will install wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.
 
 Build date:   `date`
 EOF
@@ -296,6 +272,7 @@ EOF
 #!/bin/sh
 # Cleanup any old install of the wxPython package
 rm -rf \$2$SITEPACKAGES/wxPython
+rm -rf \$2$SITEPACKAGES/wx
 exit 0
 EOF
     chmod +x $RESOURCEDIR/preflight
@@ -304,20 +281,17 @@ EOF
     cat > $RESOURCEDIR/postflight <<EOF
 #!/bin/sh -e
 # Compile the .py files in the wxPython pacakge
-/usr/local/bin/python \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wxPython
-/usr/local/bin/python -O \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wxPython
+$PYTHON \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wxPython
+$PYTHON \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wx
+$PYTHON -O \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wxPython
+$PYTHON -O \$2$SITEPACKAGES/../compileall.py \$2$SITEPACKAGES/wx
 
-# and in the demo
-/usr/local/bin/python \$2$SITEPACKAGES/../compileall.py /Applications/wxPythonOSX-$VERSION/demo
-
-# Make the demo/data dir writable
-chmod a+w /Applications/wxPythonOSX-$VERSION/demo/data
 
 # and the wxPython pacakge should be group writable
 chgrp -R admin \$2$SITEPACKAGES/wxPython
-chgrp -R admin /Applications/wxPythonOSX-$VERSION
 chmod -R g+w \$2$SITEPACKAGES/wxPython
-chmod -R g+w /Applications/wxPythonOSX-$VERSION
+chgrp -R admin \$2$SITEPACKAGES/wx
+chmod -R g+w \$2$SITEPACKAGES/wx
 
 exit 0
 EOF
@@ -325,63 +299,106 @@ EOF
 
 
 
-    # Finally, build the main package...
-    rm -rf wxPythonOSX.pkg
+    # Finally, build the main Installer Package...
+    rm -rf wxPythonOSX-$KIND.pkg
     python $PROGDIR/../buildpkg.py \
-	--Title=wxPythonOSX \
+	--Title=wxPythonOSX-$KIND \
 	--Version=$VERSION \
-	--Description="wxPython $VERSION for MacPython-OSX $PYVER" \
+	--Description="wxPython $VERSION for $W_MSG MacPython-OSX $PYVER" \
 	--NeedsAuthorization="YES" \
 	--Relocatable="NO" \
 	--InstallOnly="YES" \
 	$INSTALLROOT \
 	$RESOURCEDIR
 
-    mv wxPythonOSX.pkg $DMGDIR/root
+    mv wxPythonOSX-$KIND.pkg $DMGDIR/root
 
 
-    # and the devel package
-    rm -rf wxPythonOSX-devel.pkg
-    python $PROGDIR/../buildpkg.py \
-	--Title=wxPythonOSX-devel \
-	--Version=$VERSION \
-	--Description="Headers and such that allow you to link with the same wxMac that wxPython does" \
-	--NeedsAuthorization="YES" \
-	--Relocatable="NO" \
-	--InstallOnly="YES" \
-	$INSTALLROOT
+#     # and the devel package
+#     rm -rf wxPythonOSX-devel.pkg
+#     python $PROGDIR/../buildpkg.py \
+# 	--Title=wxPythonOSX-devel \
+# 	--Version=$VERSION \
+# 	--Description="Headers and such that allow you to link with the same wxMac that wxPython does" \
+# 	--NeedsAuthorization="YES" \
+# 	--Relocatable="NO" \
+# 	--InstallOnly="YES" \
+# 	$INSTALLDEVEL
 
-    mv wxPythonOSX-devel.pkg $DMGDIR/root
+#     mv wxPythonOSX-devel.pkg $DMGDIR/root
 
 
     # Make a README.txt to go on the disk image
     cat > $DMGDIR/root/README.txt <<EOF
-The files on this disk image are Installer packages for wxPythonOSX
-$VERSION for MacPython-OSX $PVER.  You must already have MacPython-OSX
-installed.
+Welcome to wxPython!
 
-The wxPython extension modules, library, demo and samples are
-contained in the wxPythonOSX package. You should install at least this
-package to use wxPython.
+On this disk image you will find the installer for the wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.  You must already have MacPython-OSX installed.  
 
-If you have any need to create applicaitons or extension modules that
-link with the same wxMac that wxPython does, then you can also install
-the wxPythonOSX-devel package to get the necessary header files and
-such.  Otherwise you don't need it.
+   wxPython-$KIND.pkg   The installer package.  It contains the wxPython 
+                        extension modules, wxMac dynamic libraries and
+                        headers, and some scripts for the command-line 
+                        tools.  
+
+Everything else here is optional and you can drag them out of the disk 
+image and drop them where ever you want.
+
+   docs/                A few readmes, change log, etc.  The full 
+                        documentation is downloadable separately. 
+
+   licence/             License docs.
+
+   demo/                A copy of the wxPython demo.
+
+   samples/             Several small sample applications that 
+                        demonstrate how to use wxPython.
 
 Happy Hacking!
 EOF
 
 
-    # license files, etc.
+    # license files, docs, etc.
     cp -pR $WXDIR/wxPython/licence $DMGDIR/root
-    cp $WXDIR/wxPython/CHANGES.txt $DMGDIR/root
+    rm -rf $WXDIR/wxPython/docs/xml-raw
+    cp -pR $WXDIR/wxPython/docs $DMGDIR/root
+    rm -rf $DMGDIR/root/docs/bin
+
+    # Copy the demo and samples to the disk image
+    cp -pR $WXDIR/wxPython/demo $DMGDIR/root
+    cp -pR $WXDIR/wxPython/samples $DMGDIR/root
+    rm $DMGDIR/root/demo/b
+
+    
+    # Make an app bundle to launch PyCrust
+    $PYTHONW $PROGDIR/../buildapp.py \
+	--builddir=$DMGDIR/root \
+	--name=PyCrust \
+	--mainprogram=$INSTALLROOT$BINPREFIX/pycrust.py \
+	--iconfile=$PROGDIR/PieShell.icns \
+	build
+
+    # Make an app to launch XRCed
+    $PYTHONW $PROGDIR/../buildapp.py \
+ 	--builddir=$DMGDIR/root \
+ 	--name=XRCed \
+ 	--mainprogram=$INSTALLROOT$BINPREFIX/xrced.py \
+ 	--iconfile=$PROGDIR/XRCed.icns \
+ 	build
+
+    # Make an app bundle to run the demo
+    $PYTHONW $PROGDIR/../buildapp.py \
+ 	--builddir=$DMGDIR/root \
+ 	--name="wxPython Demo" \
+ 	--mainprogram=$DMGDIR/root/demo/demo.py \
+ 	--iconfile=$PROGDIR/RunDemo.icns \
+ 	build
+    cp -pR $DMGDIR/root/demo/* "$DMGDIR/root/wxPython Demo.app/Contents/Resources"
+    
 
     # and then finally make a disk image containing the packages and etc.
-    $PROGDIR/../makedmg $DMGDIR/root $DMGDIR wxPythonOSX-$VERSION-py$PYVER
+    $PROGDIR/../makedmg $DMGDIR/root $DMGDIR wxPythonOSX-$VERSION-$KIND-Py$PYVER
 
-    echo Moving $DMGDIR/wxPythonOSX-$VERSION-py$PYVER.dmg to $DESTDIR
-    mv $DMGDIR/wxPythonOSX-$VERSION-py$PYVER.dmg $DESTDIR
+    echo Moving $DMGDIR/wxPythonOSX-$VERSION-$KIND-Py$PYVER.dmg to $DESTDIR
+    mv $DMGDIR/wxPythonOSX-$VERSION-$KIND-Py$PYVER.dmg  $DESTDIR
 fi
 
 

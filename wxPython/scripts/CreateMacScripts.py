@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------
 # Name:         CreateMacScripts.py
-# Purpose:      Massages the scripts to be usable with MachoPython
+# Purpose:      Massages the scripts to be usable with MacPython-OSX
 #
 # Author:       Robin Dunn
 #
