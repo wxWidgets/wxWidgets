@@ -6851,6 +6851,10 @@ int wxGrid::GetColMinimalWidth(int col) const
     return obj ? (int)obj : WXGRID_MIN_COL_WIDTH;
 }
 
+// ----------------------------------------------------------------------------
+// auto sizing
+// ----------------------------------------------------------------------------
+
 void wxGrid::AutoSizeColumn( int col, bool setAsMin )
 {
     wxClientDC dc(m_gridWin);
@@ -6901,15 +6905,42 @@ void wxGrid::AutoSizeColumn( int col, bool setAsMin )
 
 void wxGrid::AutoSizeColumns( bool setAsMin )
 {
+    int width = m_rowLabelWidth;
+
     for ( int col = 0; col < m_numCols; col++ )
     {
         AutoSizeColumn(col, setAsMin);
+
+        width += GetColWidth(col);
     }
+
+    // also set the grid size to just fit the columns
+    SetSize(width, -1);
 }
 
-//
-// ------ cell value accessor functions
-//
+void wxGrid::AutoSizeRows(bool WXUNUSED(setAsMin))
+{
+    int height = m_colLabelHeight;
+
+    for ( int row = 0; row < m_numRows; row++ )
+    {
+        // AutoSizeRow(row, setAsMin) -- TODO
+
+        height += GetRowHeight(row);
+    }
+
+    SetSize(-1, height);
+}
+
+void wxGrid::AutoSize()
+{
+    AutoSizeColumns();
+    AutoSizeRows();
+}
+
+// ----------------------------------------------------------------------------
+// cell value accessor functions
+// ----------------------------------------------------------------------------
 
 void wxGrid::SetCellValue( int row, int col, const wxString& s )
 {

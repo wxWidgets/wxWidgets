@@ -1003,12 +1003,7 @@ BugsGridFrame::BugsGridFrame()
     grid->SetColAttr(Col_Priority, attrRangeEditor);
     grid->SetColAttr(Col_Severity, attrCombo);
 
-    grid->AutoSizeColumns();
+    grid->AutoSize();
 
-#if defined __WXMOTIF__
-    // MB: the grid isn't getting a sensible default size under wxMotif
-    int cw, ch;
-    GetClientSize( &cw, &ch );
-    grid->SetSize( cw, ch );
-#endif
+    Fit();
 }

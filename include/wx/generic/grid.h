@@ -1080,6 +1080,12 @@ public:
     // auto size all columns (very ineffective for big grids!)
     void     AutoSizeColumns( bool setAsMin = TRUE );
 
+    void     AutoSizeRows( bool setAsMin = TRUE );
+
+    // auto size the grid, that is make the columns/rows of the "right" size
+    // and also set the grid size to just fit its contents
+    void     AutoSize();
+
     // column won't be resized to be lesser width - this must be called during
     // the grid creation because it won't resize the column if it's already
     // narrower than the minimal width
