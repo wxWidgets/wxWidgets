@@ -709,7 +709,7 @@ int   WXDLLEXPORT  wxDbConnectionsInUse(void);
 
 // Writes a message to the wxLog window (stdout usually) when an internal error
 // situation occurs.  This function only works in DEBUG builds
-const wxChar* WXDLLEXPORT wxDbLogExtendedErrorMsg(const wxChar *userText,
+const wxChar WXDLLEXPORT *wxDbLogExtendedErrorMsg(const wxChar *userText,
                                                   wxDb *pDb,
                                                   const wxChar *ErrFile,
                                                   int ErrLine);
