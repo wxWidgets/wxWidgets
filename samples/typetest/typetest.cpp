@@ -178,9 +178,12 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
 
+    // This doesn't compile (at least with VC++ 4)
+#if 0
     std_file_input >> str;
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
+#endif
 
     textCtrl.WriteText( "\nReading from wxFileInputStream:\n" );
 

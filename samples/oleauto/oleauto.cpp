@@ -211,10 +211,12 @@ void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 		wxMessageBox("Could not set active cell value.");
 		return;
 	}
-	if (!excelObject.PutProperty("ActiveCell.Font.Bold", (bool) TRUE))
+#ifdef HAVE_BOOL
+	if (!excelObject.PutProperty("ActiveCell.Font.Bold", wxVariant((bool) TRUE)) )
 	{
 		wxMessageBox("Could not put Bold property to active cell.");
 		return;
 	}
+#endif
 }
 

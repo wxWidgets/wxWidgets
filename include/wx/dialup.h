@@ -177,7 +177,7 @@ public:
 };
 
 // the type of dialup event handler function
-typedef void (wxObject::*wxDialUpEventFunction)(wxDialUpEvent&);
+typedef void (wxEvtHandler::*wxDialUpEventFunction)(wxDialUpEvent&);
 
 // macros to catch dialup events
 #define EVT_DIALUP_CONNECTED(func) { wxEVT_DIALUP_CONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL},

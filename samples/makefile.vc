@@ -102,8 +102,10 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\nativdlg
         nmake -f makefile.vc FINAL=$(FINAL)
+!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\dialup
         nmake -f makefile.vc FINAL=$(FINAL)
+!endif
         cd $(WXDIR)\samples\notebook
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\oleauto
@@ -134,8 +136,10 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\splitter
         nmake -f makefile.vc FINAL=$(FINAL)
+!if "$(COMPIL)"==""
         cd $(WXDIR)\samples\tab
         nmake -f makefile.vc FINAL=$(FINAL)
+!endif
         cd $(WXDIR)\samples\taskbar
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\text
