@@ -1638,7 +1638,7 @@ bool wxThreadModule::OnInit()
 	
 	verify_noerr( MPAllocateTaskStorageIndex( &gs_tlsForWXThread ) ) ;
 	// main thread's This() is NULL
-	verify_noerr( MPSetTaskStorageValue( gs_tlsForWXThread , NULL ) ) ;
+	verify_noerr( MPSetTaskStorageValue( gs_tlsForWXThread , 0 ) ) ;
 
 	gs_idMainThread = wxThread::GetCurrentId() ;
 	

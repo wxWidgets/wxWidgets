@@ -509,31 +509,31 @@ void wxFont::SetNoAntiAliasing( bool no )
 
 int wxFont::GetPointSize() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_pointSize;
 }
 
 int wxFont::GetFamily() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_family;
 }
 
 int wxFont::GetStyle() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_style;
 }
 
 int wxFont::GetWeight() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_weight;
 }
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , false, wxT("invalid font") );
     return M_FONTDATA->m_underlined;
 }
 
@@ -551,31 +551,31 @@ wxFontEncoding wxFont::GetEncoding() const
 
 bool wxFont::GetNoAntiAliasing() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , false, wxT("invalid font") );
     return M_FONTDATA->m_noAA;
 }
 
 short wxFont::MacGetFontNum() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_macFontNum;
 }
 
 short wxFont::MacGetFontSize() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_macFontSize;
 }
 
 wxByte wxFont::MacGetFontStyle() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_macFontStyle;
 }
 
 wxUint32 wxFont::MacGetATSUFontID() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_macATSUFontID;
 }
 
@@ -587,13 +587,13 @@ void* wxFont::MacGetATSUStyle() const
 
 wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_macATSUAdditionalQDStyles;
 }
 
 wxUint16 wxFont::MacGetThemeFontID() const 
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
     return M_FONTDATA->m_macThemeFontID;
 }
 

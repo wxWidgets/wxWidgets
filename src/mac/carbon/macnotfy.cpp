@@ -40,7 +40,7 @@ void wxMacCreateNotifierTable()
     for ( int i = 0 ; i < kMaxEvents ; ++i )
     {
         gMacNotificationEvents.proc[i] = NULL ;
-        gMacNotificationEvents.events[i] = NULL ;
+        gMacNotificationEvents.events[i] = 0 ;
         gMacNotificationEvents.data[i] = NULL ;
     }
 }
@@ -119,7 +119,7 @@ void wxMacProcessNotifierEvents()
             wxMacNotificationProcPtr handler =  gMacNotificationEvents.proc[index] ;
             
             gMacNotificationEvents.data[index] = NULL ;
-            gMacNotificationEvents.events[index] = NULL ;
+            gMacNotificationEvents.events[index] = 0 ;
             gMacNotificationEvents.proc[index]  = NULL ;
             
             if ( handler )

@@ -265,7 +265,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-    m_peer->SetReference( NULL ) ;
+    m_peer->SetReference( 0 ) ;
     FreeData() ;
     // avoid access during destruction
     if ( m_macList )

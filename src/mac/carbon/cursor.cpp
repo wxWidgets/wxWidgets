@@ -318,7 +318,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
 
     (**ch).crsrHotSpot.h = hotSpotX ;
     (**ch).crsrHotSpot.v = hotSpotY ;
-    (**ch).crsrXTable = NULL ; 
+    (**ch).crsrXTable = 0 ; 
     (**ch).crsrID = GetCTSeed() ;
     
     memset( (**ch).crsr1Data  , 0 , sizeof( Bits16 ) ) ;

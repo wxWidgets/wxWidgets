@@ -194,7 +194,7 @@ long UMAGetProcessMode()
     ProcessInfoRec processinfo;
     ProcessSerialNumber procno ;
 
-    procno.highLongOfPSN = NULL ;
+    procno.highLongOfPSN = 0 ;
     procno.lowLongOfPSN = kCurrentProcess ;
     processinfo.processInfoLength = sizeof(ProcessInfoRec);
     processinfo.processName = NULL;
