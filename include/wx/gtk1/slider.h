@@ -61,10 +61,10 @@ public:
     virtual int GetThumbLength() const;
 
     // implementation
-    // --------------
-
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
+    void GtkDisableEvents();
+    void GtkEnableEvents();
 
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
