@@ -44,6 +44,26 @@
 #include <imagehlp.h>
 #include "wx/msw/private.h"
 
+// we need to determine whether we have the declarations for the function in
+// debughlp.dll version 5.81 (at least) and we check for DBHLPAPI to test this
+//
+// reasons:
+//  - VC6 version of imagehlp.h doesn't define it
+//  - VC7 one does
+//  - testing for compiler version doesn't work as you can install and use
+//    the new SDK headers with VC6
+//
+// in any case, the user may override by defining wxUSE_DBGHELP himself
+#ifndef wxUSE_DBGHELP
+    #ifdef DBHLPAPI  
+        #define wxUSE_DBGHELP 1
+    #else
+        #define wxUSE_DBGHELP 0
+    #endif
+#endif
+
+#if wxUSE_DBGHELP
+
 // ----------------------------------------------------------------------------
 // types of imagehlp.h functions
 // ----------------------------------------------------------------------------
@@ -111,6 +131,8 @@ enum SymbolTag
     SYMBOL_TAG_BASECLASS
 };
 
+#endif // wxUSE_DBGHELP
+
 // ----------------------------------------------------------------------------
 // classes
 // ----------------------------------------------------------------------------
@@ -138,6 +160,7 @@ private:
     // output end of line
     void OutputEndl() { Output(_T("\r\n")); }
 
+#if wxUSE_DBGHELP
     // translate exception code to its symbolic name
     static wxString GetExceptionString(DWORD dwCode);
 
@@ -223,6 +246,7 @@ private:
     DECLARE_SYM_FUNCTION(SymSetContext);
     DECLARE_SYM_FUNCTION(SymEnumSymbols);
     DECLARE_SYM_FUNCTION(SymGetTypeInfo);
+#endif // wxUSE_DBGHELP
 };
 
 // ----------------------------------------------------------------------------
@@ -243,6 +267,8 @@ static wxChar gs_reportFilename[MAX_PATH];
 // implementation
 // ============================================================================
 
+#if wxUSE_DBGHELP
+
 #define DEFINE_SYM_FUNCTION(func) func ## _t wxCrashReportImpl::func = 0
 
 DEFINE_SYM_FUNCTION(SymSetOptions);
@@ -258,13 +284,17 @@ DEFINE_SYM_FUNCTION(SymGetTypeInfo);
 
 #undef DEFINE_SYM_FUNCTION
 
+#endif // wxUSE_DBGHELP
+
 // ----------------------------------------------------------------------------
 // wxCrashReportImpl
 // ----------------------------------------------------------------------------
 
 wxCrashReportImpl::wxCrashReportImpl(const wxChar *filename)
 {
+#if wxUSE_DBGHELP
     m_sfCurrent = NULL;
+#endif // wxUSE_DBGHELP
 
     m_hFile = ::CreateFile
                 (
@@ -290,6 +320,8 @@ void wxCrashReportImpl::Output(const wxChar *format, ...)
 
     va_end(argptr);
 }
+
+#if wxUSE_DBGHELP
 
 bool
 wxCrashReportImpl::GetLogicalAddress(PVOID addr,
@@ -908,61 +940,6 @@ bool wxCrashReportImpl::ResolveSymFunctions(const wxDynamicLibrary& dllDbgHelp)
     return true;
 }
 
-bool wxCrashReportImpl::Generate(int flags)
-{
-    if ( m_hFile == INVALID_HANDLE_VALUE )
-        return false;
-
-    if ( !wxGlobalSEInformation )
-        return false;
-
-    PEXCEPTION_RECORD pExceptionRecord = wxGlobalSEInformation->ExceptionRecord;
-    PCONTEXT pCtx = wxGlobalSEInformation->ContextRecord;
-
-    if ( !pExceptionRecord || !pCtx )
-        return false;
-
-    HANDLE hModuleCrash = OutputBasicContext(pExceptionRecord, pCtx);
-
-    // for everything else we need dbghelp.dll
-    wxDynamicLibrary dllDbgHelp(_T("dbghelp.dll"), wxDL_VERBATIM);
-    if ( dllDbgHelp.IsLoaded() )
-    {
-        if ( ResolveSymFunctions(dllDbgHelp) )
-        {
-            SymSetOptions(SYMOPT_DEFERRED_LOADS);
-
-            // Initialize DbgHelp
-            if ( SymInitialize(GetCurrentProcess(), NULL, TRUE /* invade */) )
-            {
-                OutputStack(pCtx, flags);
-
-                if ( hModuleCrash && (flags & wxCRASH_REPORT_GLOBALS) )
-                {
-                    OutputGlobals(hModuleCrash);
-                }
-
-                return true;
-            }
-        }
-        else
-        {
-            Output(_T("Please update your dbghelp.dll version, "
-                      "at least version 5.1 is needed!\r\n"));
-        }
-    }
-    else
-    {
-        Output(_T("Please install dbghelp.dll available free of charge ")
-               _T("from Microsoft to get more detailed crash information!"));
-    }
-
-    Output(_T("\r\nLatest dbghelp.dll is available at "
-              "http://www.microsoft.com/whdc/ddk/debugging/\r\n"));
-
-    return true;
-}
-
 /* static */
 wxString wxCrashReportImpl::GetExceptionString(DWORD dwCode)
 {
@@ -1016,6 +993,69 @@ wxString wxCrashReportImpl::GetExceptionString(DWORD dwCode)
     #undef CASE_EXCEPTION
 
     return s;
+}
+
+#endif // wxUSE_DBGHELP
+
+bool wxCrashReportImpl::Generate(int flags)
+{
+    if ( m_hFile == INVALID_HANDLE_VALUE )
+        return false;
+
+#if wxUSE_DBGHELP
+    if ( !wxGlobalSEInformation )
+        return false;
+
+    PEXCEPTION_RECORD pExceptionRecord = wxGlobalSEInformation->ExceptionRecord;
+    PCONTEXT pCtx = wxGlobalSEInformation->ContextRecord;
+
+    if ( !pExceptionRecord || !pCtx )
+        return false;
+
+    HANDLE hModuleCrash = OutputBasicContext(pExceptionRecord, pCtx);
+
+    // for everything else we need dbghelp.dll
+    wxDynamicLibrary dllDbgHelp(_T("dbghelp.dll"), wxDL_VERBATIM);
+    if ( dllDbgHelp.IsLoaded() )
+    {
+        if ( ResolveSymFunctions(dllDbgHelp) )
+        {
+            SymSetOptions(SYMOPT_DEFERRED_LOADS);
+
+            // Initialize DbgHelp
+            if ( SymInitialize(GetCurrentProcess(), NULL, TRUE /* invade */) )
+            {
+                OutputStack(pCtx, flags);
+
+                if ( hModuleCrash && (flags & wxCRASH_REPORT_GLOBALS) )
+                {
+                    OutputGlobals(hModuleCrash);
+                }
+
+                return true;
+            }
+        }
+        else
+        {
+            Output(_T("Please update your dbghelp.dll version, "
+                      "at least version 5.1 is needed!\r\n"));
+        }
+    }
+    else
+    {
+        Output(_T("Please install dbghelp.dll available free of charge ")
+               _T("from Microsoft to get more detailed crash information!"));
+    }
+
+    Output(_T("\r\nLatest dbghelp.dll is available at "
+              "http://www.microsoft.com/whdc/ddk/debugging/\r\n"));
+
+#else // !wxUSE_DBGHELP
+    Output(_T("Support for crash report generation was not included ")
+           _T("in this wxWindows version."));
+#endif // wxUSE_DBGHELP/!wxUSE_DBGHELP
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
