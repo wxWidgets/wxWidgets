@@ -16,27 +16,9 @@
     #pragma interface "control.h"
 #endif
 
-#include "wx/bitmap.h"      // for m_bitmapBg
-
 class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxRenderer;
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// control state flags used in wxRenderer and wxColourScheme
-enum
-{
-    wxCONTROL_DISABLED   = 0x00000001,  // control is disabled
-    wxCONTROL_FOCUSED    = 0x00000002,  // currently has keyboard focus
-    wxCONTROL_PRESSED    = 0x00000004,  // (button) is pressed
-    wxCONTROL_ISDEFAULT  = 0x00000008,  // only applies to the buttons
-    wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
-
-    wxCONTROL_FLAGS_MASK = 0x0000001f
-};
 
 // ----------------------------------------------------------------------------
 // wxControlAction: the action is currently just a string which identifies it,
@@ -105,26 +87,6 @@ public:
     virtual void SetLabel(const wxString &label);
     virtual wxString GetLabel() const;
 
-    // set/query the bg image
-    virtual void SetBackground(const wxBitmap& bitmap,
-                               int alignment = wxALIGN_CENTRE,
-                               wxStretch stretch = wxSTRETCH_NOT);
-
-    const wxBitmap& GetBackgroundBitmap(int *alignment = NULL,
-                                        wxStretch *stretch = NULL) const;
-
-    // get the state information
-    virtual bool IsFocused() const;
-    virtual bool IsCurrent() const;
-    virtual bool IsPressed() const;
-    virtual bool IsDefault() const;
-
-    // return all state flags at once (combination of wxCONTROL_XXX values)
-    int GetStateFlags() const;
-
-    // operations
-    virtual void SetCurrent(bool doit = TRUE);
-
     // implementation only from now on
 
     // return the index of the accel char in the label or -1 if none
@@ -143,30 +105,15 @@ public:
                                const wxEvent& event);
 
 protected:
-    // returns the (low level) renderer to use for drawing the control by
-    // querying the current theme
-    wxRenderer *GetRenderer() const;
-
     // create the event translator object for this control: the base class
     // action creates the default one which doesn't do anything
     virtual wxInputHandler *CreateInputHandler() const;
-
-    // draw the control background, return TRUE if done
-    virtual bool DoDrawBackground(wxControlRenderer *renderer);
-
-    // draw the controls contents
-    virtual void DoDraw(wxControlRenderer *renderer);
-
-    // adjust the size of the control to take into account its borders
-    wxSize AdjustSize(const wxSize& size) const;
 
     // event handlers
     void OnMouse(wxMouseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
     void OnFocus(wxFocusEvent& event);
-    void OnPaint(wxPaintEvent& event);
-    void OnErase(wxEraseEvent& event);
 
 private:
     // common part of all ctors
@@ -181,14 +128,6 @@ private:
     // label and accel info
     wxString   m_label;
     int        m_indexAccel;
-
-    // background bitmap info
-    wxBitmap  m_bitmapBg;
-    int       m_alignBgBitmap;
-    wxStretch m_stretchBgBitmap;
-
-    // state
-    bool m_isCurrent;
 
     DECLARE_DYNAMIC_CLASS(wxControl)
     DECLARE_EVENT_TABLE()

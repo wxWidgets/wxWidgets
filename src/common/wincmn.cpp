@@ -1473,3 +1473,23 @@ void wxWindowListNode::DeleteData()
     delete (wxWindow *)GetData();
 }
 
+// ----------------------------------------------------------------------------
+// borders
+// ----------------------------------------------------------------------------
+
+wxBorder wxWindowBase::GetBorder() const
+{
+    wxBorder border = (wxBorder)(m_windowStyle & wxBORDER_MASK);
+    if ( border == wxBORDER_DEFAULT )
+    {
+        border = GetDefaultBorder();
+    }
+
+    return border;
+}
+
+wxBorder wxWindowBase::GetDefaultBorder() const
+{
+    return wxBORDER_NONE;
+}
+

@@ -120,32 +120,6 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 }
 
 // ----------------------------------------------------------------------------
-// other stuff
-// ----------------------------------------------------------------------------
-
-void wxControlBase::SetBackground(const wxBitmap& bitmap,
-                                  int alignment,
-                                  wxStretch stretch)
-{
-}
-
-wxBorder wxControlBase::GetBorder() const
-{
-    wxBorder border = (wxBorder)(m_windowStyle & wxBORDER_MASK);
-    if ( border == wxBORDER_DEFAULT )
-    {
-        border = GetDefaultBorder();
-    }
-
-    return border;
-}
-
-wxBorder wxControlBase::GetDefaultBorder() const
-{
-    return wxBORDER_NONE;
-}
-
-// ----------------------------------------------------------------------------
 // wxStaticBitmap
 // ----------------------------------------------------------------------------
 

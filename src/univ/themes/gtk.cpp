@@ -520,11 +520,11 @@ void wxGTKRenderer::DrawVerticalLine(wxDC& dc,
 }
 
 void wxGTKRenderer::DrawFrame(wxDC& dc,
-                                const wxString& label,
-                                const wxRect& rect,
-                                int flags,
-                                int alignment,
-                                int indexAccel)
+                              const wxString& label,
+                              const wxRect& rect,
+                              int flags,
+                              int alignment,
+                              int indexAccel)
 {
     wxCoord height = 0; // of the label
     wxRect rectFrame = rect;
@@ -535,32 +535,33 @@ void wxGTKRenderer::DrawFrame(wxDC& dc,
         dc.GetTextExtent(label, NULL, &height);
         rectFrame.y += height / 2;
         rectFrame.height -= height / 2;
-    }
 
-    // draw the frame
-    DrawShadedRect(dc, &rectFrame, m_penDarkGrey, m_penHighlight);
-    DrawShadedRect(dc, &rectFrame, m_penHighlight, m_penDarkGrey);
-
-    // and overwrite it with label (if any)
-    if ( !label.empty() )
-    {
-        // TODO: the +2 should be customizable
+        // TODO: the +4 should be customizable
 
         wxRect rectText;
-        rectText.x = rectFrame.x + 2;
+        rectText.x = rectFrame.x + 4;
         rectText.y = rect.y;
-        rectText.width = rectFrame.width - 4; // +2 border width
+        rectText.width = rectFrame.width - 8;
         rectText.height = height;
 
-        dc.SetBackgroundMode(wxSOLID);
-        DrawLabel(dc, label, wxNullBitmap, rectText,
-                  flags, alignment, indexAccel);
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        wxRect rectLabel;
+        DrawLabel(dc, label, wxNullBitmap,
+                  rectText, flags, alignment, indexAccel, &rectLabel);
+        rectLabel.x -= 1;
+        rectLabel.width += 2;
 
-        // GTK+ does this - don't know if this is intentional or not
+        StandardDrawFrame(dc, rectFrame, rectLabel);
+
+        // GTK+ does it like this
         dc.SetPen(m_penHighlight);
-        dc.DrawPoint(rectFrame.GetPosition());
-        dc.DrawPoint(rectFrame.x + rectText.width, rectFrame.y);
+        dc.DrawPoint(rectText.x, rectFrame.y);
+        dc.DrawPoint(rectText.x + rectLabel.width - 3, rectFrame.y);
+    }
+    else
+    {
+        // just draw the complete frame
+        DrawShadedRect(dc, &rectFrame, m_penDarkGrey, m_penHighlight);
+        DrawShadedRect(dc, &rectFrame, m_penHighlight, m_penDarkGrey);
     }
 }
 

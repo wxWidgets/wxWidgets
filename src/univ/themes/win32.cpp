@@ -803,19 +803,7 @@ void wxWin32Renderer::DrawFrame(wxDC& dc,
         DrawLabel(dc, label2, wxNullBitmap,
                   rectText, flags, alignment, indexAccel, &rectLabel);
 
-        // draw left, bottom and right lines entirely
-        DrawVerticalLine(dc, rectFrame.GetLeft(),
-                         rectFrame.GetTop(), rectFrame.GetBottom() - 2);
-        DrawHorizontalLine(dc, rectFrame.GetBottom() - 1,
-                           rectFrame.GetLeft(), rectFrame.GetRight());
-        DrawVerticalLine(dc, rectFrame.GetRight() - 1,
-                         rectFrame.GetTop(), rectFrame.GetBottom() - 1);
-
-        // and 2 parts of the top line
-        DrawHorizontalLine(dc, rectFrame.GetTop(),
-                           rectFrame.GetLeft() + 1, rectLabel.GetLeft());
-        DrawHorizontalLine(dc, rectFrame.GetTop(),
-                           rectLabel.GetRight(), rectFrame.GetRight() - 2);
+        StandardDrawFrame(dc, rectFrame, rectLabel);
     }
     else
     {

@@ -12,7 +12,8 @@ UNIVOBJS = \
            stattext.o \
            theme.o \
            gtk.o \
-           win32.o
+           win32.o \
+           winuniv.o
 
 UNIVDEPS = \
            bmpbuttn.d \
@@ -28,4 +29,5 @@ UNIVDEPS = \
            stattext.d \
            theme.d \
            gtk.d \
-           win32.d
+           win32.d \
+           winuniv.d

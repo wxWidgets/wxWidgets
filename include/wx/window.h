@@ -554,6 +554,10 @@ public:
     // misc
     // ----
 
+    // get the window border style: uses the current style and falls back to
+    // the default style for this class otherwise (see GetDefaultBorder())
+    wxBorder GetBorder() const;
+
     void UpdateWindowUI();
 
 #if wxUSE_MENUS
@@ -569,10 +573,10 @@ public:
         // configure the window scrollbars
     virtual void SetScrollbar( int orient,
                                int pos,
-                               int thumbVisible,
+                               int thumbvisible,
                                int range,
-                               bool refresh = TRUE ) = 0;
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE ) = 0;
+                               bool refresh = true ) = 0;
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true ) = 0;
     virtual int GetScrollPos( int orient ) const = 0;
     virtual int GetScrollThumb( int orient ) const = 0;
     virtual int GetScrollRange( int orient ) const = 0;
@@ -762,6 +766,10 @@ protected:
     // ctor
     void InitBase();
 
+    // override this to change the default (i.e. used when no style is
+    // specified) border for the window class
+    virtual wxBorder GetDefaultBorder() const;
+
     // get the default size for the new window if no explicit size given
     // FIXME why 20 and not 30, 10 or ...?
     static int WidthDefault(int w) { return w == -1 ? 20 : w; }
@@ -861,18 +869,29 @@ private:
 // now include the declaration of wxWindow class
 // ----------------------------------------------------------------------------
 
+// include the declaration of the platform-specific class
 #if defined(__WXMSW__)
     #include "wx/msw/window.h"
+    #define wxWindowNative wxWindowMSW
 #elif defined(__WXMOTIF__)
     #include "wx/motif/window.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/window.h"
+    #define wxWindowNative wxWindowGTK
 #elif defined(__WXQT__)
     #include "wx/qt/window.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/window.h"
 #elif defined(__WXPM__)
     #include "wx/os2/window.h"
+#endif
+
+// for wxUniversal, we now derive the real wxWindow from wxWindow<platform>,
+// for the native ports we just rename wxWindow<platform> into wxWindows
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/window.h"
+#else
+    #define wxWindow wxWindowNative
 #endif
 
 // ----------------------------------------------------------------------------
@@ -889,7 +908,7 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 // global function
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT extern wxWindow* wxGetActiveWindow();
+WXDLLEXPORT extern wxWindow *wxGetActiveWindow();
 
 // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
 inline WXDLLEXPORT int NewControlId() { return wxWindowBase::NewControlId(); }

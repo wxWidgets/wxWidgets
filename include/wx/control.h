@@ -41,21 +41,12 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxControlNameStr);
 
-    // set the background image
-    virtual void SetBackground(const wxBitmap& bitmap,
-                               int alignment = wxALIGN_CENTRE,
-                               wxStretch stretch = wxSTRETCH_NOT);
-
     // simulates the event of given type (i.e. wxButton::Command() is just as
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);
 
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
-
-    // get the control border style: uses the current style and falls back to
-    // the default style for this class otherwise
-    wxBorder GetBorder() const;
 
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
@@ -73,10 +64,6 @@ protected:
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
-
-    // override this to change the default (i.e. used when no style is
-    // specified) border for the control
-    virtual wxBorder GetDefaultBorder() const;
 };
 
 // ----------------------------------------------------------------------------

@@ -131,7 +131,11 @@ END_EVENT_TABLE()
 
 bool MyUnivApp::OnInitGui()
 {
+#ifdef __WXMSW__
     m_colourBg = *wxLIGHT_GREY;
+#else
+    m_colourBg = wxColour(0xd6d6d6);
+#endif
 
     if ( argc > 1 )
     {
@@ -143,6 +147,8 @@ bool MyUnivApp::OnInitGui()
             //       manually use the right colours
             if ( themeName == _T("gtk") )
                 m_colourBg = wxColour(0xd6d6d6);
+            else if ( themeName == _T("win32") )
+                m_colourBg = *wxLIGHT_GREY;
 
             wxTheme::Set(theme);
         }

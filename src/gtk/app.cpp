@@ -620,11 +620,11 @@ int wxEntryInitGui()
 {
     int retValue = 0;
 
-    if ( !wxTheApp->OnInitGui() )
-        retValue = -1;
-
     wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     gtk_widget_realize( wxRootWindow );
+
+    if ( !wxTheApp->OnInitGui() )
+        retValue = -1;
 
     return retValue;
 }

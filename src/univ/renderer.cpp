@@ -44,6 +44,29 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wxRenderer: drawing helpers
+// ----------------------------------------------------------------------------
+
+void wxRenderer::StandardDrawFrame(wxDC& dc,
+                                   const wxRect& rectFrame,
+                                   const wxRect& rectLabel)
+{
+    // draw left, bottom and right lines entirely
+    DrawVerticalLine(dc, rectFrame.GetLeft(),
+                     rectFrame.GetTop(), rectFrame.GetBottom() - 2);
+    DrawHorizontalLine(dc, rectFrame.GetBottom() - 1,
+                       rectFrame.GetLeft(), rectFrame.GetRight());
+    DrawVerticalLine(dc, rectFrame.GetRight() - 1,
+                     rectFrame.GetTop(), rectFrame.GetBottom() - 1);
+
+    // and 2 parts of the top line
+    DrawHorizontalLine(dc, rectFrame.GetTop(),
+                       rectFrame.GetLeft() + 1, rectLabel.GetLeft());
+    DrawHorizontalLine(dc, rectFrame.GetTop(),
+                       rectLabel.GetRight(), rectFrame.GetRight() - 2);
+}
+
+// ----------------------------------------------------------------------------
 // wxRenderer: scrollbar geometry
 // ----------------------------------------------------------------------------
 
@@ -173,15 +196,15 @@ wxRenderer::~wxRenderer()
 // wxControlRenderer
 // ----------------------------------------------------------------------------
 
-wxControlRenderer::wxControlRenderer(wxControl *control,
+wxControlRenderer::wxControlRenderer(wxWindow *window,
                                    wxDC& dc,
                                    wxRenderer *renderer)
                 : m_dc(dc)
 {
-    m_ctrl = control;
+    m_window = window;
     m_renderer = renderer;
 
-    wxSize size = m_ctrl->GetSize();
+    wxSize size = m_window->GetSize();
     m_rect.x =
     m_rect.y = 0;
     m_rect.width = size.x;
@@ -190,10 +213,10 @@ wxControlRenderer::wxControlRenderer(wxControl *control,
 
 void wxControlRenderer::DrawBorder()
 {
-    int flags = m_ctrl->GetStateFlags();
+    int flags = m_window->GetStateFlags();
 
     // draw outline
-    m_renderer->DrawBorder(m_dc, m_ctrl->GetBorder(),
+    m_renderer->DrawBorder(m_dc, m_window->GetBorder(),
                            m_rect, flags, &m_rect);
 
     // fill the inside (TODO: query the theme for bg bitmap)
@@ -203,10 +226,10 @@ void wxControlRenderer::DrawBorder()
 void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
                                   wxCoord marginX, wxCoord marginY)
 {
-    m_dc.SetFont(m_ctrl->GetFont());
-    m_dc.SetTextForeground(m_ctrl->GetForegroundColour());
+    m_dc.SetFont(m_window->GetFont());
+    m_dc.SetTextForeground(m_window->GetForegroundColour());
 
-    wxString label = m_ctrl->GetLabel();
+    wxString label = m_window->GetLabel();
     if ( !label.empty() || bitmap.Ok() )
     {
         wxRect rectLabel = m_rect;
@@ -215,33 +238,37 @@ void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
             rectLabel.Inflate(-marginX, -marginY);
         }
 
+        wxControl *ctrl = wxStaticCast(m_window, wxControl);
+
         m_renderer->DrawLabel(m_dc,
                               label,
                               bitmap,
                               rectLabel,
-                              m_ctrl->GetStateFlags(),
-                              m_ctrl->GetAlignment(),
-                              m_ctrl->GetAccelIndex());
+                              m_window->GetStateFlags(),
+                              ctrl->GetAlignment(),
+                              ctrl->GetAccelIndex());
     }
 }
 
 void wxControlRenderer::DrawFrame()
 {
-    m_dc.SetFont(m_ctrl->GetFont());
-    m_dc.SetTextForeground(m_ctrl->GetForegroundColour());
-    m_dc.SetTextBackground(m_ctrl->GetBackgroundColour());
+    m_dc.SetFont(m_window->GetFont());
+    m_dc.SetTextForeground(m_window->GetForegroundColour());
+    m_dc.SetTextBackground(m_window->GetBackgroundColour());
+
+    wxControl *ctrl = wxStaticCast(m_window, wxControl);
 
     m_renderer->DrawFrame(m_dc,
-                          m_ctrl->GetLabel(),
+                          m_window->GetLabel(),
                           m_rect,
-                          m_ctrl->GetStateFlags(),
-                          m_ctrl->GetAlignment(),
-                          m_ctrl->GetAccelIndex());
+                          m_window->GetStateFlags(),
+                          ctrl->GetAlignment(),
+                          ctrl->GetAccelIndex());
 }
 
 void wxControlRenderer::DrawButtonBorder()
 {
-    int flags = m_ctrl->GetStateFlags();
+    int flags = m_window->GetStateFlags();
 
     m_renderer->DrawButtonBorder(m_dc, m_rect, flags, &m_rect);
 
@@ -250,7 +277,7 @@ void wxControlRenderer::DrawButtonBorder()
 
 void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)
 {
-    int style = m_ctrl->GetWindowStyle();
+    int style = m_window->GetWindowStyle();
     DrawBitmap(bitmap, m_rect,
                style & wxALIGN_MASK,
                style & wxBI_EXPAND ? wxEXPAND : wxSTRETCH_NOT);
@@ -261,7 +288,7 @@ void wxControlRenderer::DrawBackgroundBitmap()
     // get the bitmap and the flags
     int alignment;
     wxStretch stretch;
-    wxBitmap bmp = m_ctrl->GetBackgroundBitmap(&alignment, &stretch);
+    wxBitmap bmp = m_window->GetBackgroundBitmap(&alignment, &stretch);
 
     DrawBitmap(bmp, m_rect, alignment, stretch);
 }
@@ -355,7 +382,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar)
     }
 
     m_renderer->DrawScrollbar(m_dc,
-                              m_ctrl->GetWindowStyle() & wxVERTICAL
+                              m_window->GetWindowStyle() & wxVERTICAL
                                 ? wxVERTICAL
                                 : wxHORIZONTAL,
                               thumbStart, thumbEnd, m_rect,

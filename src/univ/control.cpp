@@ -53,9 +53,6 @@ BEGIN_EVENT_TABLE(wxControl, wxControlBase)
 
     EVT_SET_FOCUS(wxControl::OnFocus)
     EVT_KILL_FOCUS(wxControl::OnFocus)
-
-    EVT_PAINT(wxControl::OnPaint)
-    EVT_ERASE_BACKGROUND(wxControl::OnErase)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -65,7 +62,6 @@ END_EVENT_TABLE()
 void wxControl::Init()
 {
     m_indexAccel = -1;
-    m_isCurrent = FALSE;
 }
 
 bool wxControl::Create(wxWindow *parent,
@@ -84,70 +80,6 @@ bool wxControl::Create(wxWindow *parent,
     m_handler = CreateInputHandler();
 
     return TRUE;
-}
-
-// ----------------------------------------------------------------------------
-// state flags
-// ----------------------------------------------------------------------------
-
-bool wxControl::IsFocused() const
-{
-    wxControl *self = wxConstCast(this, wxControl);
-    return self->FindFocus() == self;
-}
-
-bool wxControl::IsPressed() const
-{
-    return FALSE;
-}
-
-bool wxControl::IsDefault() const
-{
-    return FALSE;
-}
-
-bool wxControl::IsCurrent() const
-{
-    return m_isCurrent;
-}
-
-void wxControl::SetCurrent(bool doit)
-{
-    m_isCurrent = doit;
-}
-
-int wxControl::GetStateFlags() const
-{
-    int flags = 0;
-    if ( !IsEnabled() )
-        flags |= wxCONTROL_DISABLED;
-
-    // the following states are only possible if our application is active - if
-    // it is not, even our default/focused controls shouldn't appear as such
-    if ( wxTheApp->IsActive() )
-    {
-        if ( IsCurrent() )
-            flags |= wxCONTROL_CURRENT;
-        if ( IsFocused() )
-            flags |= wxCONTROL_FOCUSED;
-        if ( IsPressed() )
-            flags |= wxCONTROL_PRESSED;
-        if ( IsDefault() )
-            flags |= wxCONTROL_ISDEFAULT;
-    }
-
-    return flags;
-}
-
-// ----------------------------------------------------------------------------
-// size
-// ----------------------------------------------------------------------------
-
-wxSize wxControl::AdjustSize(const wxSize& size) const
-{
-    wxSize sz = size;
-    wxTheme::Get()->GetRenderer()->AdjustSize(&sz, this);
-    return sz;
 }
 
 // ----------------------------------------------------------------------------
@@ -195,81 +127,6 @@ void wxControl::SetLabel(const wxString& label)
 wxString wxControl::GetLabel() const
 {
     return m_label;
-}
-
-// ----------------------------------------------------------------------------
-// background pixmap
-// ----------------------------------------------------------------------------
-
-void wxControl::SetBackground(const wxBitmap& bitmap,
-                              int alignment,
-                              wxStretch stretch)
-{
-    m_bitmapBg = bitmap;
-    m_alignBgBitmap = alignment;
-    m_stretchBgBitmap = stretch;
-}
-
-const wxBitmap& wxControl::GetBackgroundBitmap(int *alignment,
-                                               wxStretch *stretch) const
-{
-    if ( m_bitmapBg.Ok() )
-    {
-        if ( alignment )
-            *alignment = m_alignBgBitmap;
-        if ( stretch )
-            *stretch = m_stretchBgBitmap;
-    }
-
-    return m_bitmapBg;
-}
-
-// ----------------------------------------------------------------------------
-// painting
-// ----------------------------------------------------------------------------
-
-wxRenderer *wxControl::GetRenderer() const
-{
-    return wxTheme::Get()->GetRenderer();
-}
-
-// the event handler executed when the window background must be painted
-void wxControl::OnErase(wxEraseEvent& event)
-{
-    wxControlRenderer renderer(this, *event.GetDC(),
-                               wxTheme::Get()->GetRenderer());
-
-    if ( !DoDrawBackground(&renderer) )
-    {
-        // not processed
-        event.Skip();
-    }
-}
-
-// the event handler executed when the window must be repainted
-void wxControl::OnPaint(wxPaintEvent& event)
-{
-    // get the DC to use and create renderer on it
-    wxPaintDC dc(this);
-    wxControlRenderer renderer(this, dc, GetRenderer());
-
-    // do draw the control!
-    DoDraw(&renderer);
-}
-
-bool wxControl::DoDrawBackground(wxControlRenderer *renderer)
-{
-    if ( !m_bitmapBg.Ok() )
-        return FALSE;
-
-    renderer->DrawBackgroundBitmap();
-
-    return TRUE;
-}
-
-void wxControl::DoDraw(wxControlRenderer *renderer)
-{
-    renderer->DrawBorder();
 }
 
 // ----------------------------------------------------------------------------

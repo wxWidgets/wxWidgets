@@ -28,7 +28,6 @@
 #ifndef _WX_UNIV_RENDERER_H_
 #define _WX_UNIV_RENDERER_H_
 
-class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxWindow;
@@ -157,6 +156,12 @@ public:
     virtual ~wxRenderer();
 
 protected:
+    // draw a frame around rectFrame rectangle but not touching the rectLabel
+    // one: this is used by DrawFrame()
+    void StandardDrawFrame(wxDC& dc,
+                           const wxRect& rectFrame,
+                           const wxRect& rectLabel);
+
     // standard scrollbar hit testing: this assumes that it only has 2 arrows
     // and a thumb, so the themes which have more complicated scrollbars (e.g.
     // BeOS) can't use this method
@@ -261,7 +266,7 @@ class WXDLLEXPORT wxControlRenderer
 {
 public:
     // create a renderer for this dc with this "fundamental" renderer
-    wxControlRenderer(wxControl *control, wxDC& dc, wxRenderer *renderer);
+    wxControlRenderer(wxWindow *control, wxDC& dc, wxRenderer *renderer);
 
     // operations
     void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
@@ -280,6 +285,7 @@ public:
     void DrawScrollbar(const wxScrollBar *scrollbar);
 
     // accessors
+    wxWindow *GetWindow() const { return m_window; }
     wxRenderer *GetRenderer() const { return m_renderer; }
 
     wxDC& GetDC() { return m_dc; }
@@ -288,7 +294,7 @@ public:
     wxRect& GetRect() { return m_rect; }
 
 private:
-    wxControl *m_ctrl;
+    wxWindow *m_window;
     wxRenderer *m_renderer;
     wxDC& m_dc;
     wxRect m_rect;
