@@ -83,8 +83,9 @@ public:
 
    /** Draws an object.
        @param dc the wxDC to draw on
+       @param translation to be added to coordinates
    */
-   virtual void Draw(wxDC & dc) {}
+   virtual void Draw(wxDC & dc, wxPoint const &translate) {}
 
    /** Calculates and returns the size of the object. 
        @param baseLine pointer where to store the baseline position of 
@@ -140,8 +141,10 @@ public:
    wxLayoutObjectText(const String &txt);
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_TEXT; }
-   virtual void Layout(wxDC &dc, wxPoint position, CoordType baseLine);
-   virtual void Draw(wxDC &dc);
+   virtual void Layout(wxDC &dc, wxPoint position, CoordType
+                       baseLine);
+   
+   virtual void Draw(wxDC &dc, wxPoint const &translate);
    /** This returns the height and in baseLine the position of the
        text's baseline within it's box. This is needed to properly
        align text objects.
@@ -180,7 +183,7 @@ public:
 
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_ICON; }
    virtual void Layout(wxDC &dc, wxPoint position, CoordType baseLine);
-   virtual void Draw(wxDC &dc);
+   virtual void Draw(wxDC &dc, wxPoint const &translate);
 
    virtual wxPoint GetSize(CoordType *baseLine = NULL) const;
    virtual bool IsDirty(void) const { return m_IsDirty; }  
@@ -205,7 +208,7 @@ class wxLayoutObjectCmd : public wxLayoutObjectBase
 {
 public:
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_CMD; }
-   virtual void Draw(wxDC &dc);
+   virtual void Draw(wxDC &dc, wxPoint const &translate);
    virtual void Layout(wxDC &dc, wxPoint position, CoordType baseLine);
    wxLayoutObjectCmd(int size, int family, int style, int weight,
                 bool underline,
@@ -233,6 +236,16 @@ public:
 
 
 class wxLayoutPrintout;
+
+class wxLayoutMargins
+{
+public:
+   wxLayoutMargins() { top = left = 0; bottom = right = -1; }
+   int top;
+   int left;
+   int bottom;
+   int right;
+};
 
 /**
    This class provides a high level abstraction to the wxFText
@@ -280,26 +293,22 @@ public:
       
    
    /** Re-layouts the list on a DC.
-       @param findObject if true, return the object occupying the
-       position specified by coords
-       @param coords position where to find the object
-       @param pageNo if > 0, print only that page of a document (for
-       printing)
-       @param reallyDraw set this to false if you don't want to draw but
-       just calculate the coordinates
-       @param hasDrawn set to true if a page has been printed
-       @return if findObject == true, the object or NULL
+       @param dc the dc to layout for
+       @param margins if not NULL, use these top and left margins
    */
-   void Layout(wxDC &dc);
+   void Layout(wxDC &dc, wxLayoutMargins *margins = NULL);
                             
   /** Draw the list on a given DC.
-      @param pageNo if > 0, print only that page of a document (for
-      printing)
+      @param dc the dc to layout for
+      @param fromLine the first graphics line from where to draw
+      @param toLine the last line at which to draw
+      @param start if != iterator(NULL) start drawing from here
    */
    void Draw(wxDC &dc,
              CoordType fromLine = -1,
              CoordType toLine = -1,
-             iterator start = iterator(NULL));
+             iterator start = iterator(NULL),
+             wxPoint const &translate = wxPoint(0,0));
 
    /** Deletes at least to the end of line and redraws */
    void EraseAndDraw(wxDC &dc, iterator start = iterator(NULL));
@@ -349,7 +358,7 @@ public:
    void Clear(int family = wxROMAN, int size=12, int style=wxNORMAL, int weight=wxNORMAL,
                     int underline=0, char const *fg="black", char const *bg="white");
 
-   /// return a pointer to the default settings:
+   /// return a pointer to the default settings (dangerous, why?) FIXME:
    wxLayoutObjectCmd const *GetDefaults(void) const { return m_DefaultSetting ; }
 
    wxLayoutObjectList::iterator FindCurrentObject(CoordType *offset = NULL);
@@ -425,7 +434,7 @@ class wxLayoutPrintout: public wxPrintout
  public:
    wxLayoutPrintout(wxLayoutList &llist, wxString const & title = "My printout")
       :wxPrintout(title)
-      { m_llist = &llist; m_maxPage = 0; }
+      { m_llist = &llist; }
    bool OnPrintPage(int page);
    bool HasPage(int page);
    bool OnBeginDocument(int startPage, int endPage);
@@ -434,7 +443,9 @@ class wxLayoutPrintout: public wxPrintout
    void OnPreparePrinting(void);
 private:
    wxLayoutList *m_llist;
-   int           m_maxPage;
+   int           m_PageHeight, m_PageWidth;
+   wxLayoutMargins m_Margins;
+   int           m_NumOfPages;
 };
 
 #endif // WXLLIST_H

@@ -97,9 +97,9 @@ wxLayoutObjectText::GetSize(CoordType *baseLine) const
 }
 
 void
-wxLayoutObjectText::Draw(wxDC &dc)
+wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &translate)
 {
-   dc.DrawText(Str(m_Text), m_Position.x, m_Position.y);
+   dc.DrawText(Str(m_Text), m_Position.x + translate.x, m_Position.y+translate.y);
    m_IsDirty = false;
 }
 
@@ -142,9 +142,9 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxIcon *icon)
 }
 
 void
-wxLayoutObjectIcon::Draw(wxDC &dc)
+wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &translate)
 {
-   dc.DrawIcon(m_Icon,m_Position.x, m_Position.y);
+   dc.DrawIcon(m_Icon,m_Position.x+translate.x, m_Position.y+translate.y);
 }
 
 void
@@ -203,7 +203,7 @@ wxLayoutObjectCmd::GetStyle(void) const
 }
 
 void
-wxLayoutObjectCmd::Draw(wxDC &dc)
+wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const &translate)
 {
    wxASSERT(m_font);
    dc.SetFont(m_font);
@@ -217,7 +217,7 @@ wxLayoutObjectCmd::Layout(wxDC &dc, wxPoint p, CoordType baseline)
 {
    m_Position = p; // required so we can find the right object for cursor
    // this get called, so that recalculation uses right font sizes
-   Draw(dc);
+   Draw(dc,wxPoint(0,0));
 }
 
 //-------------------------- wxLayoutList
@@ -299,11 +299,11 @@ wxLayoutList::ResetSettings(wxDC &dc)
    dc.SetBackgroundMode( wxSOLID ); // to enable setting of text background
    dc.SetFont( *wxNORMAL_FONT );
    if(m_DefaultSetting)
-      m_DefaultSetting->Draw(dc);
+      m_DefaultSetting->Draw(dc,wxPoint(0,0));
 }
 
 void
-wxLayoutList::Layout(wxDC &dc)
+wxLayoutList::Layout(wxDC &dc, wxLayoutMargins *margins)
 {
    iterator i;
 
@@ -323,18 +323,17 @@ wxLayoutList::Layout(wxDC &dc)
    
    wxLayoutObjectBase *cursorObject = NULL; // let's find it again
    
-   struct
+   if(margins)
    {
-      int top, bottom, left, right;
-   } margins;
-
-   margins.top = 0; margins.left = 0;
-   margins.right = -1;
-   margins.bottom = -1;
+      position.y = margins->top;
+      position.x = margins->left;
+   }
+   else
+   {
+      position.y = 0;
+      position.x = 0;
+   }
    
-   position.y = margins.top;
-   position.x = margins.left;
-
    ResetSettings(dc);
    
    i = begin();
@@ -380,7 +379,7 @@ wxLayoutList::Layout(wxDC &dc)
       // now check whether we have finished handling this line:
       if(type == WXLO_TYPE_LINEBREAK && i != tail()) 
       {
-         position.x = margins.left;
+         position.x = margins ? margins->left : 0;
          position.y += baseLineSkip;
          baseLine = m_FontPtSize;
          objBaseLine = baseLine; // not all objects set it
@@ -407,22 +406,34 @@ wxLayoutList::Layout(wxDC &dc)
 void
 wxLayoutList::Draw(wxDC &dc,
                    CoordType fromLine, CoordType toLine,
-                   iterator start)
+                   iterator start,
+                   wxPoint const &translate)
 {
    Layout(dc); // FIXME just for now
 
    ResetSettings(dc);
 
    wxLayoutObjectList::iterator i;
+   
    if(start == iterator(NULL))
       start = begin();
-
-   while( i != end() && (**i).GetPosition().y < fromLine)
-      i++;
+   else // we need to restore font settings
+   {
+      for( i = begin() ; i != start; i++)
+         if((**i).GetType() == WXLO_TYPE_CMD)
+            (**i).Draw(dc,translate);  // apply font settings
+   }
+      
+   while( start != end() && (**start).GetPosition().y < fromLine)
+   {
+      if((**start).GetType() == WXLO_TYPE_CMD)
+         (**start).Draw(dc,translate);  // apply font settings
+      start++;
+   }
    for( i = start ;
         i != end() && (toLine == -1 || (**i).GetPosition().y < toLine) ;
         i++ )
-      (*i)->Draw(dc);
+      (*i)->Draw(dc,translate);
 }
 
 /** Erase at least to end of line */
@@ -446,7 +457,7 @@ wxLayoutList::EraseAndDraw(wxDC &dc, iterator start)
    dc.SetBrush(*wxWHITE_BRUSH);
    dc.SetPen(wxPen(*wxWHITE,0,wxTRANSPARENT));
    dc.DrawRectangle(p.x,p.y,2000,2000); //dc.MaxX(),dc.MaxY());
-   Draw(dc,-1,-1,start);
+   Draw(dc,-1,-1,start,wxPoint(0,0));
    //dc.DrawRectangle(p.x,p.y,2000,2000); //dc.MaxX(),dc.MaxY());
 }
 
@@ -1096,17 +1107,15 @@ wxLayoutList::Find(wxPoint coords) const
 bool wxLayoutPrintout::OnPrintPage(int page)
 {
    wxDC *dc = GetDC();
-   int top, bottom,width,height;
    if (dc)
    {
-      dc->GetSize(&width, &height);
-      
-      top = (page - 1) * (9*height)/10;
-      bottom = top + (9*height)/10;
-
-      if( top >= m_llist->GetSize().y)
-         return false;
-      m_llist->Draw(*dc,top,bottom);
+      int top, bottom;
+      top = (page - 1)*m_PageHeight;
+      bottom = top + m_PageHeight;
+      // SetDeviceOrigin() doesn't work here, so we need to manually
+      // translate all coordinates.
+      wxPoint translate(0,-top);
+      m_llist->Draw(*dc,top,bottom,wxLayoutObjectList::iterator(NULL),translate);
       return true;
    }
    else
@@ -1115,7 +1124,7 @@ bool wxLayoutPrintout::OnPrintPage(int page)
 
 bool wxLayoutPrintout::OnBeginDocument(int startPage, int endPage)
 {
-  if (!wxPrintout::OnBeginDocument(startPage, endPage))
+   if (!wxPrintout::OnBeginDocument(startPage, endPage))
     return false;
 
   return true;
@@ -1132,28 +1141,28 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
 {
    // ugly hack to get number of pages
    wxPostScriptDC psdc("tmp.ps",false);
-   int width,height;
-   psdc.GetSize(&width, &height); // that's all we need it for
-      
-   
-   // This code doesn't work, because we don't have a DC yet.
-   // How on earth are we supposed to calculate the number of pages then?
+   psdc.GetSize(&m_PageWidth, &m_PageHeight); // that's all we need it for
 
-   *minPage = 0;
-   *maxPage = (int)( m_llist->GetSize().y / (float)(0.9*height) + 0.5);
+   m_Margins.top = m_PageHeight / 10;      // 10%
+   m_Margins.bottom = m_PageHeight - m_PageHeight / 10;   // 90%
+   m_Margins.left = m_PageWidth / 10;
+   m_Margins.right = m_PageWidth - m_PageWidth / 10;
+
+   m_PageHeight = m_Margins.bottom - m_Margins.top - m_Margins.bottom;
+   m_PageWidth = m_Margins.right - m_Margins.left - m_Margins.right;
+
+   m_NumOfPages = (int)( m_llist->GetSize().y / (float)(m_PageHeight) + 0.5);
+   *minPage = 1;
+   *maxPage = m_NumOfPages-1;
 
    *selPageFrom = 1;
-   *selPageTo = *maxPage;
-
-   m_maxPage = *maxPage;
+   *selPageTo = m_NumOfPages-1;
    
 }
 
 bool wxLayoutPrintout::HasPage(int pageNum)
 {
-   if(m_maxPage != -1)
-      return pageNum <= m_maxPage;
-   return true;
+   return pageNum < m_NumOfPages;
 }
 
 
