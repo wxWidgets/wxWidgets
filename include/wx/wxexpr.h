@@ -80,7 +80,7 @@ class WXDLLEXPORT wxExpr
     long integer;
     char *word;
     char *string;
-    float real;
+    double real;
     wxExpr *first;  // If is a list expr, points to the first node
     } value;
 
@@ -91,7 +91,7 @@ class WXDLLEXPORT wxExpr
   wxExpr(const wxString& functor);      // Assume this is a new clause - pass functor
   wxExpr(wxExprType the_type, const wxString& word_or_string = "");
   wxExpr(long the_integer);
-  wxExpr(float the_real);
+  wxExpr(double the_real);
   wxExpr(wxList *the_list);
   ~wxExpr(void);
 
@@ -105,12 +105,12 @@ class WXDLLEXPORT wxExpr
     else return 0;
   }
 
-  inline float RealValue(void) const {
+  inline double RealValue(void) const {
     if (type == wxExprReal)
       return value.real;
     else if (type == wxExprInteger)
-      return (float)value.integer;
-    else return (float)0.0;
+      return (double)value.integer;
+    else return (double)0.0;
   }
 
   inline wxString WordValue(void) const {
@@ -166,7 +166,7 @@ class WXDLLEXPORT wxExpr
   // This should really be called SetAttributeValue since any existing
   // attribute-value is deleted first.
   void AddAttributeValue(const wxString& attribute, long value);
-  void AddAttributeValue(const wxString& attribute, float value);
+  void AddAttributeValue(const wxString& attribute, double value);
   void AddAttributeValueWord(const wxString& attribute, const wxString& value);
   void AddAttributeValueString(const wxString& attribute, const wxString& value);
   void AddAttributeValue(const wxString& attribute, wxList *value);
@@ -178,6 +178,7 @@ class WXDLLEXPORT wxExpr
   bool GetAttributeValue(const wxString& att, int& var) const;
   bool GetAttributeValue(const wxString& att, long& var) const;
   bool GetAttributeValue(const wxString& att, float& var) const;
+  bool GetAttributeValue(const wxString& att, double& var) const;
   bool GetAttributeValue(const wxString& att, wxString& var) const;  // Word OR string -> string
   bool GetAttributeValue(const wxString& att, wxExpr **var) const;
 
@@ -185,6 +186,7 @@ class WXDLLEXPORT wxExpr
   inline void AssignAttributeValue(char *att, int *var) const { GetAttributeValue(att, *var); }
   inline void AssignAttributeValue(char *att, long *var) const { GetAttributeValue(att, *var); }
   inline void AssignAttributeValue(char *att, float *var) const { GetAttributeValue(att, *var); }
+  inline void AssignAttributeValue(char *att, double *var) const { GetAttributeValue(att, *var); }
   inline void AssignAttributeValue(char *att, wxExpr **var) const { GetAttributeValue(att, var); }
   void AssignAttributeValue(char *att, char **var) const ;  // Word OR string -> string
 
@@ -234,7 +236,7 @@ class WXDLLEXPORT wxExprDatabase: public wxList
   // This doesn't use hashing; it's a linear search.
   wxExpr *FindClause(const wxString& word, const wxString& value);
   wxExpr *FindClause(const wxString& word, long value);
-  wxExpr *FindClause(const wxString& word, float value);
+  wxExpr *FindClause(const wxString& word, double value);
   wxExpr *FindClauseByFunctor(const wxString& functor);
 
   wxExpr *HashFind(const wxString& functor, const wxString& value) const;
@@ -261,7 +263,7 @@ class WXDLLEXPORT wxExprDatabase: public wxList
 wxExpr* WXDLLEXPORT wxExprMakeCall(const wxString& functor ...);
 
 #define wxExprMakeInteger(x) (new wxExpr((long)x))
-#define wxExprMakeReal(x) (new wxExpr((float)x))
+#define wxExprMakeReal(x) (new wxExpr((double)x))
 #define wxExprMakeString(x) (new wxExpr(wxExprString, x))
 #define wxExprMakeWord(x)   (new wxExpr(wxExprWord, x))
 #define wxExprMake(x)       (new wxExpr(x))
