@@ -596,6 +596,9 @@
 // text entry dialog and wxGetTextFromUser function
 #define wxUSE_TEXTDLG 1
 
+// number entry dialog
+#define wxUSE_NUMBERDLG 1
+
 // ----------------------------------------------------------------------------
 // Metafiles support
 // ----------------------------------------------------------------------------

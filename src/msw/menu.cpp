@@ -682,7 +682,8 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Append(menu, title) )
         return FALSE;
 
-    menu->Attach(this);
+    // Already done in Append above
+    //menu->Attach(this);
 
     m_titles.Add(title);
 

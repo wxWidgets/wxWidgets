@@ -400,6 +400,10 @@ SOURCE=.\common\quantize.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\radiocmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\resource.cpp
 # End Source File
 # Begin Source File

@@ -131,7 +131,7 @@ wxHelpFrame::OnButton(wxCommandEvent &ev)
    else if(id == m_IdSearch)
    {
       wxString str = m_combo->GetValue();
-      if(m_combo->FindString(str) == -1 && m_combo->Number() < MAX_COMBO_ENTRIES)
+      if(m_combo->FindString(str) == -1 && m_combo->GetCount() < MAX_COMBO_ENTRIES)
          m_combo->Append(str);
       m_controller->KeywordSearch(str);
    }

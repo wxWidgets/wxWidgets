@@ -62,6 +62,10 @@ public:
     void SetLineSize(int lineSize);
     int GetLineSize() const;
 
+    // these methods get/set the length of the slider pointer in pixels
+    virtual void SetThumbLength(int lenPixels);
+    virtual int GetThumbLength() const ;
+
     // IMPLEMENTATION
     WXHWND GetStaticMin() const { return m_staticMin; }
     WXHWND GetStaticMax() const { return m_staticMax; }

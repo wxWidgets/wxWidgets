@@ -509,6 +509,17 @@ int wxSliderMSW::GetLineSize() const
   return m_lineSize;
 }
 
+// Not yet implemented
+void wxSliderMSW::SetThumbLength(int WXUNUSED(lenPixels))
+{
+}
+
+// Not yet implemented
+int wxSliderMSW::GetThumbLength() const
+{
+    return 0;
+}
+
 bool wxSliderMSW::ContainsHWND(WXHWND hWnd) const
 {
     return ( hWnd == GetStaticMin() || hWnd == GetStaticMax() || hWnd == GetEditValue() );

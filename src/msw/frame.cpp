@@ -507,7 +507,8 @@ void wxFrameMSW::SetMenuBar(wxMenuBar *menubar)
         }
         else
         {
-            menubar->Detach();
+            if (menubar->IsAttached())
+                menubar->Detach();
 
             m_hMenu = menubar->Create();
 
