@@ -353,7 +353,7 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 
 // MyListCtrl
 
-void MyListCtrl::OnBeginDrag(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnBeginDrag(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -362,10 +362,12 @@ void MyListCtrl::OnBeginDrag(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-        text->WriteText("OnBeginDrag\n");
+    wxString msg;
+    msg.Printf( "OnBeginDrag at %d,%d.\n", event.m_pointDrag.x, event.m_pointDrag.y );
+    text->WriteText(msg);
 }
 
-void MyListCtrl::OnBeginRDrag(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnBeginRDrag(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -373,10 +375,13 @@ void MyListCtrl::OnBeginRDrag(wxListEvent& WXUNUSED(event))
     wxTextCtrl *text = ((MyFrame *)wxGetApp().GetTopWindow())->m_logWindow;
     if ( !text )
         return;
-        text->WriteText("OnBeginRDrag\n");
+
+    wxString msg;
+    msg.Printf( "OnBeginRDrag at %d,%d.\n", event.m_pointDrag.x, event.m_pointDrag.y );
+    text->WriteText(msg);
 }
 
-void MyListCtrl::OnBeginLabelEdit(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnBeginLabelEdit(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -385,10 +390,12 @@ void MyListCtrl::OnBeginLabelEdit(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-        text->WriteText("OnBeginLabelEdit\n");
+    text->WriteText("OnBeginLabelEdit: ");
+    text->WriteText(event.m_item.m_text);
+    text->WriteText("\n");
 }
 
-void MyListCtrl::OnEndLabelEdit(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -397,7 +404,12 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& WXUNUSED(event))
     if ( !text )
         return;
 
-        text->WriteText("OnEndLabelEdit\n");
+    text->WriteText("OnEndLabelEdit: ");
+    text->WriteText(event.m_item.m_text);
+    if (event.m_cancelled)
+        text->WriteText(" cancelled by user\n");
+    else
+        text->WriteText(" accepted by user\n");
 }
 
 void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
@@ -412,7 +424,7 @@ void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
         text->WriteText("OnDeleteItem\n");
 }
 
-void MyListCtrl::OnGetInfo(wxListEvent& /*event*/)
+void MyListCtrl::OnGetInfo(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -421,34 +433,29 @@ void MyListCtrl::OnGetInfo(wxListEvent& /*event*/)
     if ( !text )
         return;
 
-        text->WriteText("OnGetInfo\n");
+    text->WriteText("OnGetInfo\n");
 
-/*
-    ostream str(text);
-
-    str << "OnGetInfo (" << event.m_item.m_itemId << ", " << event.m_item.m_col << ")";
+    (*text) << "OnGetInfo (" << event.m_item.m_itemId << ", " << event.m_item.m_col << ")";
     if ( event.m_item.m_mask & wxLIST_MASK_STATE )
-        str << " wxLIST_MASK_STATE";
+        (*text) << " wxLIST_MASK_STATE";
     if ( event.m_item.m_mask & wxLIST_MASK_TEXT )
-        str << " wxLIST_MASK_TEXT";
+        (*text) << " wxLIST_MASK_TEXT";
     if ( event.m_item.m_mask & wxLIST_MASK_IMAGE )
-        str << " wxLIST_MASK_IMAGE";
+        (*text) << " wxLIST_MASK_IMAGE";
     if ( event.m_item.m_mask & wxLIST_MASK_DATA )
-        str << " wxLIST_MASK_DATA";
+        (*text) << " wxLIST_MASK_DATA";
     if ( event.m_item.m_mask & wxLIST_SET_ITEM )
-        str << " wxLIST_SET_ITEM";
+        (*text) << " wxLIST_SET_ITEM";
     if ( event.m_item.m_mask & wxLIST_MASK_WIDTH )
-        str << " wxLIST_MASK_WIDTH";
+        (*text) << " wxLIST_MASK_WIDTH";
     if ( event.m_item.m_mask & wxLIST_MASK_FORMAT )
-        str << " wxLIST_MASK_WIDTH";
+        (*text) << " wxLIST_MASK_WIDTH";
 
     if ( event.m_item.m_mask & wxLIST_MASK_TEXT )
     {
         event.m_item.m_text = "My callback text";
     }
-    str << "\n";
-    str.flush();
-*/
+    (*text) << "\n";
 }
 
 void MyListCtrl::OnSetInfo(wxListEvent& WXUNUSED(event))

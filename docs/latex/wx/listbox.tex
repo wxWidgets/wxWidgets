@@ -214,14 +214,13 @@ Applicable to single selection list boxes only.
 
 \membersection{wxListBox::GetSelections}\label{wxlistboxgetselections}
 
-\constfunc{int}{GetSelections}{\param{int **}{selections}}
+\constfunc{int}{GetSelections}{\param{wxArrayInt&}{selections}}
 
-Gets an array containing the positions of the selected strings.
+Fill an array of ints with the positions of the currently selected items.
 
 \wxheading{Parameters}
 
-\docparam{selections}{A pointer to an integer array, which will be allocated by the function if
-selects are present. Do not deallocate the returned array - it will be deallocated by the listbox.}
+\docparam{selections}{A reference to an wxArrayInt instance that is used to store the result of the query.}
 
 \wxheading{Return value}
 

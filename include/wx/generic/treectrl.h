@@ -466,6 +466,7 @@ protected:
     wxImageList         *m_imageListNormal,
                         *m_imageListState;
     int                  m_dragCount;
+    wxPoint              m_dragStart;
     wxTimer             *m_renameTimer;
     bool                 m_renameAccept;
     wxString             m_renameRes;

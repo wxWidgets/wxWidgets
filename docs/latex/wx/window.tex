@@ -780,7 +780,7 @@ Returns TRUE if the window is enabled for input, FALSE otherwise.
 
 \constfunc{bool}{IsExposed}{\param{int }{x}, \param{int }{y}, \param{int }{w}, \param{int }{h}}
 
-\constfunc{bool}{IsExposed}{\param{wxRectangle }{&rect}}
+\constfunc{bool}{IsExposed}{\param{wxRect }{&rect}}
 
 Returns TRUE if the given point or rectange area has been exposed since the
 last repaint. Call this in an paint event handler to optimize redrawing by

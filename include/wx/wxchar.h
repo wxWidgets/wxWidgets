@@ -339,7 +339,7 @@ typedef unsigned char   wxUChar;
 
 // define wxStricmp for various compilers without Unicode possibilities
 #if !defined(wxStricmp) && !wxUSE_UNICODE
-#  if defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__SALFORDC__) || defined(__VISAGECPP__)
+#  if defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__SALFORDC__) || defined(__VISAGECPP__) || defined(__EMX__)
 #    define wxStricmp stricmp
 #  elif defined(__SC__) || defined(__VISUALC__) || (defined(__MWERKS) && defined(__INTEL__))
 #    define wxStricmp _stricmp

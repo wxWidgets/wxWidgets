@@ -732,6 +732,7 @@ void wxMenu::AppendSeparator()
     m_items.Append( mitem );
 }
 
+#if (GTK_MINOR_VERSION > 0)
 static char* GetHotKey( const wxString &hotkey, char *hotbuf )
 {
     if (hotkey.IsEmpty()) return (char*) NULL;
@@ -769,6 +770,7 @@ static char* GetHotKey( const wxString &hotkey, char *hotbuf )
     }
     return (char*) NULL;
 }
+#endif
 
 void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool checkable )
 {

@@ -89,6 +89,7 @@ public:
 #endif
 
 #ifdef __UNIX__
+#include <sys/socket.h>
 #include <sys/un.h>
 
 class WXDLLEXPORT wxUNIXaddress : public wxSockAddress {

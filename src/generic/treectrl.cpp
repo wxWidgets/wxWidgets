@@ -1875,8 +1875,6 @@ void wxTreeCtrl::OnRenameAccept()
 
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 {
-    if (!event.LeftIsDown()) m_dragCount = 0;
-
     if ( !(event.LeftUp() || event.LeftDClick() || event.Dragging()) ) return;
 
     if ( !m_anchor ) return;
@@ -1890,25 +1888,30 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y), this, flags);
     bool onButton = flags & wxTREE_HITTEST_ONITEMBUTTON;
 
-    if (item == NULL) return;  /* we hit the blank area */
-
     if (event.Dragging())
     {
-        if (m_dragCount == 2)  /* small drag latency (3?) */
-        {
-            m_dragCount = 0;
-
-            wxTreeEvent nevent(wxEVT_COMMAND_TREE_BEGIN_DRAG, GetId());
-            nevent.m_item = m_current;
-            nevent.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(nevent);
-        }
-        else
-        {
-            m_dragCount++;
-        }
-        return;
+        if (m_dragCount == 0)
+	    m_dragStart = wxPoint(x,y);
+	
+        m_dragCount++;
+	
+	if (m_dragCount != 3) return;
+	
+	int command = wxEVT_COMMAND_TREE_BEGIN_DRAG;
+	if (event.RightIsDown()) command = wxEVT_COMMAND_TREE_BEGIN_RDRAG;
+	
+        wxTreeEvent nevent( command, GetId() );
+        nevent.m_item = m_current;
+        nevent.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(nevent);
+	return;
     }
+    else
+    {
+        m_dragCount = 0;
+    }
+
+    if (item == NULL) return;  /* we hit the blank area */
 
     if (event.LeftUp() && (item == m_current) &&
         (flags & wxTREE_HITTEST_ONITEMLABEL) &&

@@ -90,10 +90,10 @@ public:
 
     void Deselect( int n );
     int FindString( const wxString &item ) const;
-    int GetSelection(void) const;
+    int GetSelection() const;
     int GetSelections( class wxArrayInt &) const;
     wxString GetString( int n ) const;
-    wxString GetStringSelection(void) const;
+    wxString GetStringSelection() const;
     int Number();
     bool Selected( int n );
     void Set( int n, const wxString *choices );

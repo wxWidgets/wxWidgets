@@ -1415,7 +1415,7 @@ if test "$wxUSE_GTK" = 1; then
     fi
 
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
-    GUI_TK_LIBRARY="$GTK_LIBS"
+    GUI_TK_LIBRARY="$GTK_LIBS -ldl"
     TOOLKIT=GTK
   
     GUIOBJS=GTK_GUIOBJS
@@ -2346,7 +2346,7 @@ fi
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     if test "$wxUSE_GTK" = 1; then
         if test "$WXGTK12" != 1; then
-            AC_MSG_WARN([Drag and drop is only supported under wxGTK 2.1])
+            AC_MSG_WARN([Drag and drop is only supported under GTK+ 1.2])
 	    wxUSE_DRAG_AND_DROP=no
         fi
     fi

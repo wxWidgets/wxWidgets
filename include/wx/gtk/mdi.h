@@ -50,7 +50,7 @@ class wxMDIParentFrame: public wxFrame
   
 public:
 
-    wxMDIParentFrame(void);
+    wxMDIParentFrame();
     wxMDIParentFrame( wxWindow *parent,
       wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -105,7 +105,7 @@ class wxMDIChildFrame: public wxFrame
       wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
       long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr );
-    ~wxMDIChildFrame(void);
+    ~wxMDIChildFrame();
     bool Create( wxMDIParentFrame *parent,
       wxWindowID id, const wxString& title,
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -172,9 +172,9 @@ class wxMDIClientWindow: public wxWindow
   
 public:
   
-    wxMDIClientWindow(void);
+    wxMDIClientWindow();
     wxMDIClientWindow( wxMDIParentFrame *parent, long style = 0 );
-    ~wxMDIClientWindow(void);
+    ~wxMDIClientWindow();
     virtual bool CreateClient( wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
 };
 

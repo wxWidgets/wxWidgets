@@ -187,7 +187,7 @@ class WXDLLEXPORT wxListItem: public wxObject
     int             m_format;   // left, right, centre
     int             m_width;    // width of column
 
-    wxListItem(void);
+    wxListItem();
 };
 
 //-----------------------------------------------------------------------------
@@ -196,9 +196,7 @@ class WXDLLEXPORT wxListItem: public wxObject
 
 class WXDLLEXPORT wxListItemData : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxListItemData);
-
-  public:
+public:
     wxString   m_text;
     int        m_image;
     long       m_data;
@@ -206,8 +204,8 @@ class WXDLLEXPORT wxListItemData : public wxObject
     int        m_width,m_height;
     wxColour   *m_colour;
 
-  public:
-    wxListItemData(void);
+public:
+    wxListItemData();
     wxListItemData( const wxListItem &info );
     void SetItem( const wxListItem &info );
     void SetText( const wxString &s );
@@ -216,17 +214,20 @@ class WXDLLEXPORT wxListItemData : public wxObject
     void SetPosition( int x, int y );
     void SetSize( int width, int height );
     void SetColour( wxColour *col );
-    bool HasImage(void) const;
-    bool HasText(void) const;
+    bool HasImage() const;
+    bool HasText() const;
     bool IsHit( int x, int y ) const;
     void GetText( wxString &s );
     int GetX( void ) const;
     int GetY( void ) const;
-    int GetWidth(void) const;
-    int GetHeight(void) const;
-    int GetImage(void) const;
+    int GetWidth() const;
+    int GetHeight() const;
+    int GetImage() const;
     void GetItem( wxListItem &info );
-    wxColour *GetColour(void);
+    wxColour *GetColour();
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxListItemData);
 };
 
 //-----------------------------------------------------------------------------
@@ -247,21 +248,21 @@ class WXDLLEXPORT wxListHeaderData : public wxObject
     int       m_height;
 
   public:
-    wxListHeaderData(void);
+    wxListHeaderData();
     wxListHeaderData( const wxListItem &info );
     void SetItem( const wxListItem &item );
     void SetPosition( int x, int y );
     void SetWidth( int w );
     void SetFormat( int format );
     void SetHeight( int h );
-    bool HasImage(void) const;
-    bool HasText(void) const;
+    bool HasImage() const;
+    bool HasText() const;
     bool IsHit( int x, int y ) const;
     void GetItem( wxListItem &item );
     void GetText( wxString &s );
-    int GetImage(void) const;
-    int GetWidth(void) const;
-    int GetFormat(void) const;
+    int GetImage() const;
+    int GetWidth() const;
+    int GetFormat() const;
 };
 
 //-----------------------------------------------------------------------------
@@ -274,10 +275,10 @@ class WXDLLEXPORT wxListLineData : public wxObject
 
   public:
     wxList              m_items;
-    wxRect         m_bound_all;
-    wxRect         m_bound_label;
-    wxRect         m_bound_icon;
-    wxRect         m_bound_hilight;
+    wxRect              m_bound_all;
+    wxRect              m_bound_label;
+    wxRect              m_bound_icon;
+    wxRect              m_bound_hilight;
     int                 m_mode;
     bool                m_hilighted;
     wxBrush            *m_hilightBrush;
@@ -287,7 +288,7 @@ class WXDLLEXPORT wxListLineData : public wxObject
     void DoDraw( wxDC *dc, bool hilight, bool paintBG );
 
   public:
-    wxListLineData( void ) {};
+    wxListLineData() {};
     wxListLineData( wxListMainWindow *owner, int mode, wxBrush *hilightBrush );
     void CalculateSize( wxDC *dc, int spacing );
     void SetPosition( wxDC *dc, int x, int y,  int window_width );
@@ -304,11 +305,11 @@ class WXDLLEXPORT wxListLineData : public wxObject
     int GetImage( int index );
     void GetRect( wxRect &rect );
     void Hilight( bool on );
-    void ReverseHilight( void );
+    void ReverseHilight();
     void DrawRubberBand( wxDC *dc, bool on );
     void Draw( wxDC *dc );
     bool IsInRect( int x, int y, const wxRect &rect );
-    bool IsHilighted( void );
+    bool IsHilighted();
     void AssignRect( wxRect &dest, int x, int y, int width, int height );
     void AssignRect( wxRect &dest, const wxRect &source );
 };
@@ -331,8 +332,8 @@ class WXDLLEXPORT wxListHeaderWindow : public wxWindow
     int                m_currentX;
 
   public:
-    wxListHeaderWindow( void );
-    ~wxListHeaderWindow( void );
+    wxListHeaderWindow();
+    ~wxListHeaderWindow();
     wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "columntitles" );
@@ -374,7 +375,7 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
     wxString            m_startValue;
 
   public:
-    wxListTextCtrl(void) {};
+    wxListTextCtrl() {};
     wxListTextCtrl( wxWindow *parent, const wxWindowID id, 
                     bool *accept, wxString *res, wxListMainWindow *owner,
                     const wxString &value = "",
@@ -418,6 +419,7 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     wxString             m_renameRes;
     bool                 m_isCreated;
     int                  m_dragCount;
+    wxPoint              m_dragStart;
 
   public:
     wxListMainWindow();

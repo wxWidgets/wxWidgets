@@ -29,7 +29,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxListItemData,wxObject);
 
-wxListItemData::wxListItemData(void)
+wxListItemData::wxListItemData()
 {
     m_image = -1;
     m_data = 0;
@@ -92,12 +92,12 @@ void wxListItemData::SetColour( wxColour *col )
     m_colour = col;
 }
 
-bool wxListItemData::HasImage(void) const
+bool wxListItemData::HasImage() const
 {
     return (m_image >= 0);
 }
 
-bool wxListItemData::HasText(void) const
+bool wxListItemData::HasText() const
 {
     return (!m_text.IsNull());
 }
@@ -112,27 +112,27 @@ void wxListItemData::GetText( wxString &s )
     s = m_text;
 }
 
-int wxListItemData::GetX( void ) const
+int wxListItemData::GetX() const
 {
     return m_xpos;
 }
 
-int wxListItemData::GetY( void ) const
+int wxListItemData::GetY() const
 {
     return m_ypos;
 }
 
-int wxListItemData::GetWidth(void) const
+int wxListItemData::GetWidth() const
 {
     return m_width;
 }
 
-int wxListItemData::GetHeight(void) const
+int wxListItemData::GetHeight() const
 {
     return m_height;
 }
 
-int wxListItemData::GetImage(void) const
+int wxListItemData::GetImage() const
 {
     return m_image;
 }
@@ -144,7 +144,7 @@ void wxListItemData::GetItem( wxListItem &info )
     info.m_data = m_data;
 }
 
-wxColour *wxListItemData::GetColour(void)
+wxColour *wxListItemData::GetColour()
 {
     return m_colour;
 }
@@ -155,7 +155,7 @@ wxColour *wxListItemData::GetColour(void)
 
 IMPLEMENT_DYNAMIC_CLASS(wxListHeaderData,wxObject);
 
-wxListHeaderData::wxListHeaderData(void)
+wxListHeaderData::wxListHeaderData()
 {
     m_mask = 0;
     m_image = 0;
@@ -208,12 +208,12 @@ void wxListHeaderData::SetFormat( int format )
     m_format = format;
 }
 
-bool wxListHeaderData::HasImage(void) const
+bool wxListHeaderData::HasImage() const
 {
     return (m_image != 0);
 }
 
-bool wxListHeaderData::HasText(void) const
+bool wxListHeaderData::HasText() const
 {
     return (m_text.Length() > 0);
 }
@@ -237,17 +237,17 @@ void wxListHeaderData::GetText( wxString &s )
     s =  m_text;
 }
 
-int wxListHeaderData::GetImage(void) const
+int wxListHeaderData::GetImage() const
 {
     return m_image;
 }
 
-int wxListHeaderData::GetWidth(void) const
+int wxListHeaderData::GetWidth() const
 {
     return m_width;
 }
 
-int wxListHeaderData::GetFormat(void) const
+int wxListHeaderData::GetFormat() const
 {
     return m_format;
 }
@@ -949,7 +949,7 @@ BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
 END_EVENT_TABLE()
 
-wxListMainWindow::wxListMainWindow( void )
+wxListMainWindow::wxListMainWindow()
 {
     m_mode = 0;
     m_lines.DeleteContents( TRUE );
@@ -1014,7 +1014,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
     SetBackgroundColour( *wxWHITE );
 }
 
-wxListMainWindow::~wxListMainWindow( void )
+wxListMainWindow::~wxListMainWindow()
 {
     if (m_hilightBrush) delete m_hilightBrush;
     
@@ -1150,7 +1150,7 @@ void wxListMainWindow::EditLabel( long item )
     
     m_currentEdit = (wxListLineData*) node->Data();
 
-    wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
+    wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
     le.m_itemIndex = GetIndexOfLine( m_currentEdit );
     m_currentEdit->GetItem( 0, le.m_item );
@@ -1213,6 +1213,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if (!m_current) return;
     if (m_dirty) return;
+    if ( !(event.Dragging() || event.ButtonDown() || event.LeftUp()) ) return;
 
     wxClientDC dc(this);
     PrepareDC(dc);
@@ -1232,22 +1233,28 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         node = node->Next();
     }
 
-    if (!event.Dragging())
-        m_dragCount = 0;
-    else
-        m_dragCount++;
-
-    if (event.Dragging() && (m_dragCount > 3))
+    if (event.Dragging())
     {
-        m_dragCount = 0;
+        if (m_dragCount == 0)
+	    m_dragStart = wxPoint(x,y);
 	
-        wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_DRAG, GetParent()->GetId() );
+        m_dragCount++;
+	
+	if (m_dragCount != 3) return;
+	
+	int command = wxEVT_COMMAND_LIST_BEGIN_DRAG;
+	if (event.RightIsDown()) command = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+	
+        wxListEvent le( command, GetParent()->GetId() );
         le.SetEventObject( GetParent() );
-	le.m_pointDrag.x = x;
-	le.m_pointDrag.y = y;
+	le.m_pointDrag = m_dragStart;
 	GetParent()->GetEventHandler()->ProcessEvent( le );
 	
 	return;
+    }
+    else
+    {
+        m_dragCount = 0;
     }
 
     if (!line) return;
@@ -2343,7 +2350,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 
-wxListItem::wxListItem(void)
+wxListItem::wxListItem()
 {
     m_mask = 0;
     m_itemId = 0;
@@ -2386,7 +2393,7 @@ BEGIN_EVENT_TABLE(wxListCtrl,wxControl)
   EVT_IDLE          (wxListCtrl::OnIdle)
 END_EVENT_TABLE()
 
-wxListCtrl::wxListCtrl(void)
+wxListCtrl::wxListCtrl()
 {
     m_imageListNormal = (wxImageList *) NULL;
     m_imageListSmall = (wxImageList *) NULL;
@@ -2395,7 +2402,7 @@ wxListCtrl::wxListCtrl(void)
     m_headerWin = (wxListHeaderWindow*) NULL;
 }
 
-wxListCtrl::~wxListCtrl(void)
+wxListCtrl::~wxListCtrl()
 {
 }
 
@@ -2531,7 +2538,7 @@ bool wxListCtrl::SetColumnWidth( int col, int width )
     return TRUE;
 }
 
-int wxListCtrl::GetCountPerPage(void) const
+int wxListCtrl::GetCountPerPage() const
 {
   return m_mainWin->GetCountPerPage();  // different from Windows ?
 }
@@ -2637,12 +2644,12 @@ bool wxListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(p
     return 0;
 }
 
-int wxListCtrl::GetItemCount(void) const
+int wxListCtrl::GetItemCount() const
 {
     return m_mainWin->GetItemCount();
 }
 
-int wxListCtrl::GetColumnCount(void) const
+int wxListCtrl::GetColumnCount() const
 {
     return m_mainWin->GetColumnCount();
 }
@@ -2657,13 +2664,13 @@ int wxListCtrl::GetItemSpacing( bool isSmall ) const
     return m_mainWin->GetItemSpacing( isSmall );
 }
 
-int wxListCtrl::GetSelectedItemCount(void) const
+int wxListCtrl::GetSelectedItemCount() const
 {
     return m_mainWin->GetSelectedItemCount();
 }
 
 /*
-wxColour wxListCtrl::GetTextColour(void) const
+wxColour wxListCtrl::GetTextColour() const
 {
 }
 
@@ -2672,7 +2679,7 @@ void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
 }
 */
 
-long wxListCtrl::GetTopItem(void) const
+long wxListCtrl::GetTopItem() const
 {
     return 0;
 }
@@ -2715,7 +2722,7 @@ bool wxListCtrl::DeleteItem( long item )
     return TRUE;
 }
 
-bool wxListCtrl::DeleteAllItems(void)
+bool wxListCtrl::DeleteAllItems()
 {
     m_mainWin->DeleteAllItems();
     return TRUE;
