@@ -1102,10 +1102,16 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 #endif
     buttonsizer->Add( butNewDir, 0, wxALL, 5 );
 
+#ifdef __WXX11__
+    mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 0 );
+#else
     mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
+#endif
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
+#ifndef __WXX11__
     staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
+#endif
     m_static = new wxStaticText( this, -1, m_dir );
     staticsizer->Add( m_static, 1 );
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
