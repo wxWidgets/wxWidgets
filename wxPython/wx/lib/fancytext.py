@@ -401,7 +401,7 @@ renderToDC = RenderToDC
 # Test Driver
 
 def test():
-    testText = 
+    testText = \
 """<font weight="bold" size="16">FancyText</font> -- <font style="italic" size="16">methods for rendering XML specified text</font>
 <font family="swiss" size="12">
 This module exports four main methods::
