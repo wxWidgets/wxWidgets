@@ -1,11 +1,104 @@
+dnl aclocal.m4 generated automatically by aclocal 1.4
+
+dnl Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+dnl even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+dnl PARTICULAR PURPOSE.
+
 # Configure paths for GTK+
 # Owen Taylor     97-11-3
+
+dnl AM_PATH_GTK([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
+dnl Test for GTK, and define GTK_CFLAGS and GTK_LIBS. Uses variables
+dnl gtk_config_prefix and/or gtk_config_exec_prefix if defined.
+AC_DEFUN(AM_PATH_GTK,
+[
+  if test x$gtk_config_exec_prefix != x ; then
+     gtk_config_args="$gtk_config_args --exec-prefix=$gtk_config_exec_prefix"
+     if test x${GTK_CONFIG+set} != xset ; then
+        GTK_CONFIG=$gtk_config_exec_prefix/bin/gtk-config
+     fi
+  fi
+  if test x$gtk_config_prefix != x ; then
+     gtk_config_args="$gtk_config_args --prefix=$gtk_config_prefix"
+     if test x${GTK_CONFIG+set} != xset ; then
+        GTK_CONFIG=$gtk_config_prefix/bin/gtk-config
+     fi
+  fi
+
+  AC_PATH_PROG(GTK_CONFIG, gtk-config, no)
+  min_gtk_version=ifelse([$1], ,0.99.7,$1)
+  AC_MSG_CHECKING(for GTK - version >= $min_gtk_version)
+  no_gtk=""
+  if test "$GTK_CONFIG" != "no" ; then
+    GTK_CFLAGS=`$GTK_CONFIG --cflags`
+    GTK_LIBS=`$GTK_CONFIG --libs gthread`
+    ac_save_CFLAGS="$CFLAGS"
+    ac_save_LIBS="$LIBS"
+    CFLAGS="$CFLAGS $GTK_CFLAGS"
+    LIBS="$LIBS $GTK_LIBS"
+dnl
+dnl Now check if the installed GTK is sufficiently new. (Also sanity
+dnl checks the results of gtk-config to some extent)
+dnl
+    AC_TRY_RUN([
+#include <gtk/gtk.h>
+#include <gtk/gtkfeatures.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int
+main ()
+{
+  int major, minor, micro;
+
+  if (sscanf("$min_gtk_version", "%d.%d.%d", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string\n", "$min_gtk_version");
+     exit(1);
+   }
+
+   if ((GTK_MAJOR_VERSION != gtk_major_version) ||
+       (GTK_MINOR_VERSION != gtk_minor_version) ||
+       (GTK_MICRO_VERSION != gtk_micro_version)) {
+     printf("Headers vs. library version mismatch!\n");
+     exit(1);
+   }
+
+   if (gtk_minor_version == 1) return FALSE;
+
+   return !((gtk_major_version > major) ||
+    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
+    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
+}
+],, no_gtk=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
+     CFLAGS="$ac_save_CFLAGS"
+     LIBS="$ac_save_LIBS"
+  else
+     no_gtk=yes
+  fi
+  if test "x$no_gtk" = x ; then
+     AC_MSG_RESULT(yes)
+     ifelse([$2], , :, [$2])
+  else
+     AC_MSG_RESULT(no)
+     GTK_CFLAGS=""
+     GTK_LIBS=""
+     ifelse([$3], , :, [$3])
+  fi
+  AC_SUBST(GTK_CFLAGS)
+  AC_SUBST(GTK_LIBS)
+])
 
 dnl AM_PATH_GTK_2_0([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [, MODULES]]]])
 dnl Test for GTK, and define GTK_CFLAGS and GTK_LIBS
 dnl
 AC_DEFUN(AM_PATH_GTK_2_0,
-[dnl 
+[dnl
 dnl Get the cflags and libraries from the gtk-config-2.0 script
 dnl
 AC_ARG_WITH(gtk-prefix,[  --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)],
@@ -13,12 +106,12 @@ AC_ARG_WITH(gtk-prefix,[  --with-gtk-prefix=PFX   Prefix where GTK is installed 
 AC_ARG_WITH(gtk-exec-prefix,[  --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)],
             gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 AC_ARG_ENABLE(gtktest, [  --disable-gtktest       Do not try to compile and run a test GTK program],
-		    , enable_gtktest=yes)
+                    , enable_gtktest=yes)
 
   for module in . $4
   do
       case "$module" in
-         gthread) 
+         gthread)
              gtk_config_args="$gtk_config_args gthread"
          ;;
       esac
@@ -67,7 +160,7 @@ dnl
 #include <stdio.h>
 #include <stdlib.h>
 
-int 
+int
 main ()
 {
   int major, minor, micro;
@@ -86,7 +179,7 @@ main ()
       (gtk_minor_version != $gtk_config_minor_version) ||
       (gtk_micro_version != $gtk_config_micro_version))
     {
-      printf("\n*** 'gtk-config-2.0 --version' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n", 
+      printf("\n*** 'gtk-config-2.0 --version' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n",
              $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
              gtk_major_version, gtk_minor_version, gtk_micro_version);
       printf ("*** was found! If gtk-config-2.0 was correct, then it is best\n");
@@ -97,16 +190,16 @@ main ()
       printf("*** If gtk-config-2.0 was wrong, set the environment variable GTK_CONFIG_2_0\n");
       printf("*** to point to the correct copy of gtk-config-2.0, and remove the file config.cache\n");
       printf("*** before re-running configure\n");
-    } 
+    }
 #if defined (GTK_MAJOR_VERSION) && defined (GTK_MINOR_VERSION) && defined (GTK_MICRO_VERSION)
   else if ((gtk_major_version != GTK_MAJOR_VERSION) ||
-	   (gtk_minor_version != GTK_MINOR_VERSION) ||
+           (gtk_minor_version != GTK_MINOR_VERSION) ||
            (gtk_micro_version != GTK_MICRO_VERSION))
     {
       printf("*** GTK+ header files (version %d.%d.%d) do not match\n",
-	     GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+             GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
       printf("*** library (version %d.%d.%d)\n",
-	     gtk_major_version, gtk_minor_version, gtk_micro_version);
+             gtk_major_version, gtk_minor_version, gtk_micro_version);
     }
 #endif /* defined (GTK_MAJOR_VERSION) ... */
   else
@@ -122,7 +215,7 @@ main ()
         printf("\n*** An old version of GTK+ (%d.%d.%d) was found.\n",
                gtk_major_version, gtk_minor_version, gtk_micro_version);
         printf("*** You need a version of GTK+ newer than %d.%d.%d. The latest version of\n",
-	       major, minor, micro);
+               major, minor, micro);
         printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
         printf("***\n");
         printf("*** If you have already installed a sufficiently new version, this error\n");
@@ -143,7 +236,7 @@ main ()
   fi
   if test "x$no_gtk" = x ; then
      AC_MSG_RESULT(yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version))
-     ifelse([$2], , :, [$2])     
+     ifelse([$2], , :, [$2])
   else
      AC_MSG_RESULT(no)
      if test "$GTK_CONFIG_2_0" = "no" ; then
@@ -168,7 +261,7 @@ main ()
           echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
           echo "*** to the installed location  Also, make sure you have run ldconfig if that"
           echo "*** is required on your system"
-	  echo "***"
+          echo "***"
           echo "*** If you have an old version installed, it is best to remove it, although"
           echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
           echo "***"
@@ -192,3 +285,5 @@ main ()
   AC_SUBST(GTK_LIBS)
   rm -f conf.gtktest
 ])
+
+
