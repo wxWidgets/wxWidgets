@@ -32,6 +32,7 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
+class WXDLLEXPORT wxEventLoop;
 
 // ----------------------------------------------------------------------------
 // the wxApp class for Motif - see wxAppBase for more details
@@ -78,12 +79,6 @@ public:
     // Returns TRUE if an accelerator has been processed
     virtual bool CheckForAccelerator(WXEvent* event);
     
-    // Returns TRUE if a key down event has been processed
-    virtual bool CheckForKeyDown(WXEvent* event);
-    
-    // Returns TRUE if a key up event has been processed
-    virtual bool CheckForKeyUp(WXEvent* event);
-    
 protected:
     bool                  m_showOnInit;
     
@@ -114,6 +109,7 @@ protected:
     WXColormap            m_mainColormap;
     WXDisplay*            m_initialDisplay;
     long                  m_maxRequestSize;
+    wxEventLoop*          m_mainLoop;
     
     DECLARE_EVENT_TABLE()
 };

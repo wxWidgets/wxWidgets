@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        private.h
-// Purpose:     Private declarations for wxMotif port
+// Purpose:     Private declarations for X11 port
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
@@ -17,27 +17,26 @@
 class wxMouseEvent;
 class wxKeyEvent;
 
-// Put any private declarations here: native Motif types may be used because
-// this header is included after Xm/Xm.h
-
 // ----------------------------------------------------------------------------
 // common callbacks
 // ----------------------------------------------------------------------------
 
+#if 0
 // All widgets should have this as their resize proc.
 extern void wxWidgetResizeProc(Widget w, XConfigureEvent *event, String args[], int *num_args);
 
 // For repainting arbitrary windows
 void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *);
+#endif
 
 // ----------------------------------------------------------------------------
 // we maintain a hash table which contains the mapping from Widget to wxWindow
 // corresponding to the window for this widget
 // ----------------------------------------------------------------------------
 
-extern void wxDeleteWindowFromTable(Widget w);
-extern wxWindow *wxGetWindowFromTable(Widget w);
-extern bool wxAddWindowToTable(Widget w, wxWindow *win);
+extern void wxDeleteWindowFromTable(Window w);
+extern wxWindow *wxGetWindowFromTable(Window w);
+extern bool wxAddWindowToTable(Window w, wxWindow *win);
 
 // ----------------------------------------------------------------------------
 // key events related functions
@@ -46,7 +45,7 @@ extern bool wxAddWindowToTable(Widget w, wxWindow *win);
 extern char wxFindMnemonic(const char* s);
 
 extern char * wxFindAccelerator (const char *s);
-extern XmString wxFindAcceleratorText (const char *s);
+//extern XmString wxFindAcceleratorText (const char *s);
 
 extern int wxCharCodeXToWX(KeySym keySym);
 extern KeySym wxCharCodeWXToX(int id);
@@ -54,8 +53,8 @@ extern KeySym wxCharCodeWXToX(int id);
 // ----------------------------------------------------------------------------
 // TranslateXXXEvent() functions - translate Motif event to wxWindow one
 // ----------------------------------------------------------------------------
-extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
-extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
+extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, XEvent *xevent);
+extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window window, XEvent *xevent);
 
 int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
@@ -79,42 +78,10 @@ extern XColor itemColors[5] ;
 #define wxBOTS_INDEX 4
 
 // ----------------------------------------------------------------------------
-// utility classes
-// ----------------------------------------------------------------------------
-
-// XmString made easy to use in wxWindows (and has an added benefit of
-// cleaning up automatically)
-class wxXmString
-{
-public:
-    wxXmString(const wxString& str)
-    {
-        m_string = XmStringCreateLtoR((char *)str.c_str(),
-            XmSTRING_DEFAULT_CHARSET);
-    }
-    
-    ~wxXmString() { XmStringFree(m_string); }
-    
-    // semi-implicit conversion to XmString (shouldn't rely on implicit
-    // conversion because many of Motif functions are macros)
-    XmString operator()() const { return m_string; }
-    
-private:
-    XmString m_string;
-};
-
-// ----------------------------------------------------------------------------
-// macros to avoid casting WXFOO to Foo all the time
-// ----------------------------------------------------------------------------
-
-// argument is of type "wxWindow *"
-#define GetWidget(w)    ((Widget)(w)->GetHandle())
-
-// ----------------------------------------------------------------------------
 // accessors for C modules
 // ----------------------------------------------------------------------------
 
-extern "C" XtAppContext wxGetAppContext();
+// extern "C" XtAppContext wxGetAppContext();
 
 #endif
 // _WX_PRIVATE_H_

@@ -1,134 +1,101 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        wx/motif/frame.h
-// Purpose:     wxFrame class
+///////////////////////////////////////////////////////////////////////////////
+// Name:        wx/x11/toplevel.h
+// Purpose:     wxTopLevelWindowX11 is the X11 implementation of wxTLW
 // Author:      Julian Smart
 // Modified by:
-// Created:     17/09/98
+// Created:     20.09.01
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 2002 Julian Smart
 // Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_FRAME_H_
-#define _WX_MOTIF_FRAME_H_
+#ifndef _WX_X11_TOPLEVEL_H_
+#define _WX_X11_TOPLEVEL_H_
 
 #ifdef __GNUG__
-#pragma interface "frame.h"
+    #pragma interface "toplevel.h"
 #endif
 
-class WXDLLEXPORT wxFrame : public wxFrameBase
+// ----------------------------------------------------------------------------
+// wxTopLevelWindowX11
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTopLevelWindowX11 : public wxTopLevelWindowBase
 {
 public:
-    wxFrame() { Init(); }
-    wxFrame(wxWindow *parent,
-        wxWindowID id,
-        const wxString& title,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = wxDEFAULT_FRAME_STYLE,
-        const wxString& name = wxFrameNameStr)
+    // constructors and such
+    wxTopLevelWindowX11() { Init(); }
+
+    wxTopLevelWindowX11(wxWindow *parent,
+                        wxWindowID id,
+                        const wxString& title,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxDEFAULT_FRAME_STYLE,
+                        const wxString& name = wxFrameNameStr)
     {
         Init();
-        
-        Create(parent, id, title, pos, size, style, name);
+
+        (void)Create(parent, id, title, pos, size, style, name);
     }
-    
+
     bool Create(wxWindow *parent,
-        wxWindowID id,
-        const wxString& title,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = wxDEFAULT_FRAME_STYLE,
-        const wxString& name = wxFrameNameStr);
-    
-    virtual ~wxFrame();
-    
-    virtual bool Show(bool show = TRUE);
-    
-    // Set menu bar
-    void SetMenuBar(wxMenuBar *menu_bar);
-    
-    // Set title
-    void SetTitle(const wxString& title);
-    wxString GetTitle() const { return m_title; }
-    
-    // Set icon
-    virtual void SetIcon(const wxIcon& icon);
-    
-#if wxUSE_STATUSBAR
-    virtual void PositionStatusBar();
-#endif // wxUSE_STATUSBAR
-    
-    // Create toolbar
-#if wxUSE_TOOLBAR
-    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr);
-    virtual void PositionToolBar();
-#endif // wxUSE_TOOLBAR
-    
-    // Iconize
-    virtual void Iconize(bool iconize);
-    
-    virtual bool IsIconized() const;
-    
-    // Is the frame maximized? Returns FALSE under Motif (but TRUE for
-    // wxMDIChildFrame due to the tabbed implementation).
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
+
+    virtual ~wxTopLevelWindowX11();
+
+    // implement base class pure virtuals
+    virtual void Maximize(bool maximize = TRUE);
     virtual bool IsMaximized() const;
-    
-    virtual void Maximize(bool maximize);
-    
-    virtual void Raise();
-    virtual void Lower();
-    
+    virtual void Iconize(bool iconize = TRUE);
+    virtual bool IsIconized() const;
+    virtual void SetIcon(const wxIcon& icon);
     virtual void Restore();
-    
-    // Implementation only from now on
-    // -------------------------------
-    
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-    void OnActivate(wxActivateEvent& event);
-    
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
-    virtual void ChangeBackgroundColour();
-    virtual void ChangeForegroundColour();
-    WXWidget GetMenuBarWidget() const;
-    WXWidget GetShellWidget() const { return m_frameShell; }
-    WXWidget GetWorkAreaWidget() const { return m_workArea; }
-    WXWidget GetClientAreaWidget() const { return m_clientArea; }
-    WXWidget GetTopWidget() const { return m_frameShell; }
-    
-    virtual WXWidget GetMainWidget() const { return m_frameWidget; }
-    
-    // The widget that can have children on it
-    WXWidget GetClientWidget() const;
-    bool GetVisibleStatus() const { return m_visibleStatus; }
-    
-    bool PreResize();
-    
+
+    virtual bool Show(bool show = TRUE);
+
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+    virtual bool IsFullScreen() const { return m_fsIsShowing; }
+
+    // implementation from now on
+    // --------------------------
+
 protected:
     // common part of all ctors
     void Init();
-    
-    //// Motif-specific
-    WXWidget              m_frameShell;
-    WXWidget              m_frameWidget;
-    WXWidget              m_workArea;
-    WXWidget              m_clientArea;
-    wxString              m_title;
-    bool                  m_visibleStatus;
-    bool                  m_iconized;
-    
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetPosition(int *x, int *y) const;
-    virtual void DoSetSize(int x, int y,
-        int width, int height,
-        int sizeFlags = wxSIZE_AUTO);
-    virtual void DoSetClientSize(int width, int height);
-    
-private:
-    DECLARE_EVENT_TABLE()
-        DECLARE_DYNAMIC_CLASS(wxFrame)
+
+    // create a new frame, return FALSE if it couldn't be created
+    bool CreateFrame(const wxString& title,
+                     const wxPoint& pos,
+                     const wxSize& size);
+
+    // create a new dialog using the given dialog template from resources,
+    // return FALSE if it couldn't be created
+    bool CreateDialog(const wxString& title,
+                      const wxPoint& pos,
+                      const wxSize& size);
+
+    // is the frame currently iconized?
+    bool m_iconized;
+
+    // should the frame be maximized when it will be shown? set by Maximize()
+    // when it is called while the frame is hidden
+    bool m_maximizeOnShow;
+
+    // Data to save/restore when calling ShowFullScreen
+    long                  m_fsStyle; // Passed to ShowFullScreen
+    wxRect                m_fsOldSize;
+    bool                  m_fsIsMaximized;
+    bool                  m_fsIsShowing;
 };
 
-#endif
-// _WX_MOTIF_FRAME_H_
+// list of all frames and modeless dialogs
+;; extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
+
+#endif // _WX_X11_TOPLEVEL_H_
+
