@@ -47,14 +47,14 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
     int l = loc.Length(), l2;
 
     l2 = l;
-    for (int i = l-1; i >= 0; i--) 
+    for (int i = l-1; i >= 0; i--)
     {
         c = loc[(unsigned int) i];
         if ( c == wxT('#') )
             l2 = i + 1;
         if ( c == wxT('.') )
         {
-            ext = loc.Right(l2-i-1); 
+            ext = loc.Right(l2-i-1);
             break;
         }
         if ( (c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':')) )
@@ -174,10 +174,10 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     // location has Unix path separators
     wxString right = ms_root + GetRightLocation(location);
     wxFileName fn(right, wxPATH_UNIX);
-    
+
     if (!wxFileExists(fn.GetFullPath()))
         return (wxFSFile*) NULL;
-        
+
     return new wxFSFile(new wxFileInputStream(fn.GetFullPath()),
                         right,
                         GetMimeTypeFromExt(location),
@@ -204,6 +204,7 @@ wxString wxLocalFSHandler::FindNext()
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileSystem, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxFSFile, wxObject)
 
 
 wxList wxFileSystem::m_Handlers;

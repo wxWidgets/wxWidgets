@@ -44,7 +44,7 @@ class wxFileSystem;
 class WXDLLEXPORT wxFSFile : public wxObject
 {
 public:
-    wxFSFile(wxInputStream *stream, const wxString& loc, 
+    wxFSFile(wxInputStream *stream, const wxString& loc,
              const wxString& mimetype, const wxString& anchor,
              wxDateTime modif)
     {
@@ -76,6 +76,8 @@ private:
     wxString m_MimeType;
     wxString m_Anchor;
     wxDateTime m_Modif;
+
+    DECLARE_ABSTRACT_CLASS(wxFSFile)
 };
 
 
@@ -226,13 +228,13 @@ public:
     virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
     virtual wxString FindFirst(const wxString& spec, int flags = 0);
     virtual wxString FindNext();
-    
+
     // wxLocalFSHandler will prefix all filenames with 'root' before accessing
     // files on disk. This effectively makes 'root' the top-level directory
-    // and prevents access to files outside this directory.  
+    // and prevents access to files outside this directory.
     // (This is similar to Unix command 'chroot'.)
     static void Chroot(const wxString& root) { ms_root = root; }
-    
+
 protected:
     static wxString ms_root;
 };
