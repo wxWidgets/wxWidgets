@@ -30,11 +30,27 @@
 #include <stdarg.h>
 
 
-
-
 //-----------------------------------------------------------------------------
 // wxHtmlTagsCache
 //-----------------------------------------------------------------------------
+
+struct wxHtmlCacheItem
+{
+    // this is "pos" value passed to wxHtmlTag's constructor.
+    // it is position of '<' character of the tag
+    int Key;
+
+    // end positions for the tag:
+    // end1 is '<' of ending tag,
+    // end2 is '>' or both are
+    // -1 if there is no ending tag for this one...
+    // or -2 if this is ending tag  </...>
+    int End1, End2;
+
+    // name of this tag
+    wxChar *Name;
+};
+
 
 IMPLEMENT_CLASS(wxHtmlTagsCache,wxObject)
 
@@ -57,7 +73,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
         if (src[pos] == wxT('<'))   // tag found:
 	    {
             if (m_CacheSize % CACHE_INCREMENT == 0)
-                m_Cache = (sCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(sCacheItem));
+                m_Cache = (wxHtmlCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(wxHtmlCacheItem));
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
             dummy[0] = 0; i = 0;
