@@ -468,17 +468,43 @@ enum
 #define wxInt8    char    signed
 #define wxUint8   char  unsigned
 
-#if defined(__WIN16__) || (defined(SIZEOF_INT) && (SIZEOF_INT == 2))
-#define wxInt16    int    signed
-#define wxUint16   int  unsigned
-#define wxInt32   long    signed
-#define wxUint32  long  unsigned
-#else
-#define wxInt16  short    signed
-#define wxUint16 short  unsigned
-#define wxInt32    int    signed
-#define wxUint32   int  unsigned
-#endif
+#ifdef __WINDOWS__
+    #if defined(__WIN16__)
+        #define wxInt16    int    signed
+        #define wxUint16   int  unsigned
+        #define wxInt32   long    signed
+        #define wxUint32  long  unsigned
+    #elif defined(__WIN32__)
+        #define wxInt16  short    signed
+        #define wxUint16 short  unsigned
+        #define wxInt32    int    signed
+        #define wxUint32   int  unsigned
+    #else
+        // Win64 will have different type sizes
+        #error "Please define a 32 bit type"
+    #endif
+#else // !Windows
+    // SIZEOF_XXX are defined by configure
+    #if defined(SIZEOF_INT) && (SIZEOF_INT == 4)
+        #define wxInt16  short    signed
+        #define wxUint16 short  unsigned
+        #define wxInt32    int    signed
+        #define wxUint32   int  unsigned
+    #elif defined(SIZEOF_INT) && (SIZEOF_INT == 2)
+        #define wxInt16    int    signed
+        #define wxUint16   int  unsigned
+        #define wxInt32   long    signed
+        #define wxUint32  long  unsigned
+    #else
+        // assume sizeof(int) == 4 - what else can we do
+        wxCOMPILE_TIME_ASSERT( sizeof(int) == 4, IntMustBeExactly4Bytes);
+
+        #define wxInt16  short    signed
+        #define wxUint16 short  unsigned
+        #define wxInt32    int    signed
+        #define wxUint32   int  unsigned
+    #endif
+#endif // Win/!Win
 
 #if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
 #define wxInt64   long    signed
