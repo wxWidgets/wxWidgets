@@ -214,6 +214,7 @@ public:
 
 public :
 	static bool							MacGetWindowFromPoint( const wxPoint &point , wxWindowMac** outWin ) ;
+	virtual bool						MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) ;
 	virtual	void						MacRedraw( RgnHandle updatergn , long time , bool erase) ;
 	virtual bool						MacCanFocus() const { return true ; }
 
@@ -248,7 +249,6 @@ public :
 	bool								MacIsWindowScrollbar( const wxScrollBar* sb ) { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
 	static wxWindowMac*					s_lastMouseWindow ;
 private:
-	virtual bool						MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) ;
 protected:
 //	RgnHandle					m_macUpdateRgn ;
 //	bool						m_macEraseOnRedraw ;
