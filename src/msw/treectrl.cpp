@@ -891,6 +891,20 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
     wxTreeViewItem tvItem(item, TVIF_TEXT);
     tvItem.pszText = (wxChar *)text.c_str();  // conversion is ok
     DoSetItem(&tvItem);
+
+    // when setting the text of the item being edited, the text control should
+    // be updated to reflect the new text as well, otherwise calling
+    // SetItemText() in the OnBeginLabelEdit() handler doesn't have any effect
+    //
+    // don't use GetEditControl() here because m_textCtrl is not set yet
+    HWND hwndEdit = TreeView_GetEditControl(GetHwnd());
+    if ( hwndEdit )
+    {
+        if ( item == GetSelection() )
+        {
+            ::SetWindowText(hwndEdit, text);
+        }
+    }
 }
 
 int wxTreeCtrl::DoGetItemImageFromData(const wxTreeItemId& item,
@@ -1761,7 +1775,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
     }
 }
 
-wxTextCtrl* wxTreeCtrl::GetEditControl() const
+wxTextCtrl *wxTreeCtrl::GetEditControl() const
 {
     return m_textCtrl;
 }
