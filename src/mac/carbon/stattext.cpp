@@ -128,44 +128,20 @@ void wxStaticText::OnDraw( wxDC &dc )
     if (m_width <= 0 || m_height <= 0)
         return;
 
-    wxString paragraph;
-    int i = 0 ;
-    wxString text = m_label;
-    
-    PrepareDC(dc);
-    
-    bool doClear = true ;
-    WindowRef window = GetMacRootWindow() ;
-    if ( window )
-    {
-        wxWindow* win = wxFindWinFromMacWindow( window ) ;
-        if ( win )
-        {
-            wxWindow* parent = GetParent() ;
-            while ( parent )
-            {
-                if( parent->MacGetWindowData() )
-                {
-                    break ;
-                }
-                
-                parent = parent->GetParent() ;
-            } 
-        }
-    }
-    
-    while (i < text.Length())
-    {
-        paragraph += text[i];
-      
-        if (text[i] == 13 || text[i] == 10)
-            DrawParagraph(dc, paragraph);
-        
-        ++i;
-    }
-    
-    if (paragraph.Length() > 0)
-        DrawParagraph(dc, paragraph);
+  wxString paragraph;
+  int i = 0 ;
+  wxString text = m_label;
+	while (i < text.Length())
+	{
+	  paragraph += text[i];
+	  
+  	if (text[i] == 13 || text[i] == 10)
+	    DrawParagraph(dc, paragraph);
+	    
+    ++i;
+  }
+  if (paragraph.Length() > 0)
+	  DrawParagraph(dc, paragraph);
 }
 
 void wxStaticText::OnPaint( wxPaintEvent &event ) 
@@ -227,13 +203,11 @@ wxSize wxStaticText::DoGetBestSize() const
 
 void wxStaticText::SetLabel(const wxString& st )
 {
-    SetTitle( st ) ;
-    m_label = st ;
-    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-        SetSize( GetBestSize() ) ;
+	SetTitle( st ) ;
+	m_label = st ;
+	if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+		SetSize( GetBestSize() ) ;
 
-    Refresh() ; 
-    MacUpdateImmediately() ;
-//    wxClientDC dc(this);
-//    OnDraw( dc ) ;
+	Refresh() ;	
+	Update() ;
 }
