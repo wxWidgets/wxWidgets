@@ -715,8 +715,8 @@ WX_ARG_ENABLE(soname,      [  --enable-soname         set the DT_SONAME field in
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 
-dnl allow the precompiled header option to be disabled under Mac OS X
-WX_ARG_ENABLE(precomp,     [  --enable-precomp        enable use of precompiled headers (Mac OS X)], wxUSE_PRECOMP)
+dnl allow the precompiled header option to be disabled under Mac OS X/Darwin
+WX_ARG_ENABLE(precomp,     [  --enable-precomp        enable use of precompiled headers (Mac OS X/Darwin)], wxUSE_PRECOMP)
 
 if test "$wxUSE_DEBUG" = "yes"; then
   DEFAULT_wxUSE_DEBUG_FLAG=yes
@@ -1907,6 +1907,16 @@ if test "$USE_WIN32" = 1 ; then
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 fi
 
+if test "$USE_DARWIN" = 1; then
+    // Mac OS X/Darwin GCC uses precompiled headers by default
+    // this can cause problems both when compiling wxMac and wxBase
+    if test "$wxUSE_PRECOMP" = "yes"; then
+        CPPFLAGS="$CPPFLAGS -cpp-precomp"
+    else
+        CPPFLAGS="$CPPFLAGS -no-cpp-precomp"
+    fi
+fi
+
 if test "$wxUSE_GUI" = "yes"; then
     USE_GUI=1
 
@@ -2372,14 +2382,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
 
     if test "$wxUSE_MAC" = 1; then
-        if test "$wxUSE_PRECOMP" = "yes"; then
-            CPPFLAGS="$CPPFLAGS -cpp-precomp"
-        else
-            CPPFLAGS="$CPPFLAGS -no-cpp-precomp"
-        fi
-        CPPFLAGS="$CPPFLAGS -I/Developer/Headers/FlatCarbon -I\${top_srcdir}/src/mac/morefile"
-        CFLAGS="$CFLAGS -fpascal-strings"
-        CXXFLAGS="$CXXFLAGS -fpascal-strings"
+        CPPFLAGS="$CPPFLAGS -fpascal-strings -I\${top_srcdir}/src/mac/morefile -I/Developer/Headers/FlatCarbon"
 
         TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefile"
         TOOLKIT=MAC
@@ -2731,8 +2734,9 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-darwin* )
         dnl For Unix to MacOS X porting instructions, see:
         dnl http://fink.sourceforge.net/doc/porting/porting.html
-        CFLAGS="$CFLAGS -fno-common -DWXMAKINGDLL"
-        CXXFLAGS="$CXXFLAGS -fno-common -DWXMAKINGDLL"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXMAKINGDLL"
+        CFLAGS="$CFLAGS -fno-common"
+        CXXFLAGS="$CXXFLAGS -fno-common"
         dnl wxWindows must be fully binded (lazy binding breaks RTTI classinfo)
         dnl this can be done either with the exe linker flag -Wl,-bind_at_load
         dnl or with a double stage link in order to create a single module
@@ -3130,7 +3134,7 @@ if test "$USE_BEOS" = 1; then
 fi
 
 if test "$USE_DARWIN" = 1; then
-    dnl Mac OS X has both nanosleep and usleep
+    dnl Mac OS X/Darwin has both nanosleep and usleep
     dnl but only usleep is defined in unistd.h
     AC_DEFINE(HAVE_USLEEP)
     HAVE_SOME_SLEEP_FUNC=1
@@ -4976,9 +4980,10 @@ if test "$GXX" = yes ; then
     fi
 fi
 
-EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
+EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
 
 dnl remove the extra white space from the cc/c++/ld options
+CPPFLAGS=`echo $INCLUDES $CPPFLAGS | sed 's/ \\+/ /g'`
 CFLAGS=`echo $EXTRA_CFLAGS $CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
 CXXFLAGS=`echo $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
 LIBS=`echo $LIBS | sed 's/ \+/ /g'`
