@@ -284,7 +284,8 @@ cd ..
 rm -f wxAll-${WXVER}.tar
 $TAR cf $WXDEST/wxAll-${WXVER}.tar wxWidgets-${WXVER}/*
 rm -f -r wxWidgets-${WXVER}
-gzip $WXDEST/wxAll-${WXVER}.tar
+gzip -c $WXDEST/wxAll-${WXVER}.tar > $WXDEST/wxAll-${WXVER}.tar.gz
+bzip2 $WXDEST/wxAll-${WXVER}.tar
 }
 
 dospinwxdocs()

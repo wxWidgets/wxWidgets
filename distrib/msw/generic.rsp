@@ -135,6 +135,19 @@ src/regex/tests
 src/regex/regex.3
 src/regex/regex.7
 
+src/iodbc/AUTHORS
+src/iodbc/COPYING
+src/iodbc/autoconfig
+src/iodbc/Changes.log
+src/iodbc/IAFA-PACKAGE
+src/iodbc/INSTALL
+src/iodbc/NEWS
+src/iodbc/README
+src/iodbc/*.c
+src/iodbc/*.h
+src/iodbc/*.ci
+src/iodbc/*.exp
+
 include/wx/*.h
 include/wx/*.inl
 include/wx/*.cpp

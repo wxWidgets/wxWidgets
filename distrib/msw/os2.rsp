@@ -22,6 +22,7 @@ src/os2/makefile.va
 src/os2/*.def
 src/os2/*.lst
 src/os2/*.sh
+src/*.icc
 
 include/wx/os2/*.h
 include/wx/os2/*.rc
@@ -29,4 +30,6 @@ include/wx/os2/*.res
 include/wx/msw/*.cur
 include/wx/msw/*.ico
 include/wx/msw/*.bmp
+
+samples/minimal/Minimal.icc
 
