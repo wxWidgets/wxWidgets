@@ -24,9 +24,10 @@ See the example application in {\tt samples/docview}.
 
 \membersection{wxDocMDIParentFrame::wxDocMDIParentFrame}
 
-\func{}{wxDocMDIParentFrame}{\param{wxFrame *}{parent}, \param{wxWindowID}{ id},
- \param{const wxString\& }{title}, \param{int}{ x}, \param{int}{ y}, \param{int}{ width}, \param{int}{ height},
- \param{long}{ style}, \param{const wxString\& }{name}}
+\func{}{wxDocParentFrame}{\param{wxDocManager*}{ manager}, \param{wxFrame *}{parent}, \param{wxWindowID}{ id},
+ \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style = wxDEFAULT\_FRAME\_STYLE}, \param{const wxString\& }{name = "frame"}}
 
 Constructor.
 
@@ -36,44 +37,25 @@ Constructor.
 
 Destructor.
 
-\membersection{wxDocMDIParentFrame::OnClose}
+\membersection{wxDocMDIParentFrame::OnCloseWindow}
 
-\func{bool}{OnClose}{\void}
+\func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
 
 Deletes all views and documents. If no user input cancelled the
-operation, the function returns TRUE and the application will exit.
+operation, the frame will be destroyed and the application will exit.
 
 Since understanding how document/view clean-up takes place can be difficult,
 the implementation of this function is shown below.
 
 \begin{verbatim}
-bool wxDocMDIParentFrame::OnClose(void)
+void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
 {
-  // Delete all views and documents
-  wxNode *node = docManager->GetDocuments().First();
-  while (node)
+  if (m_docManager->Clear(!event.CanVeto()))
   {
-    wxDocument *doc = (wxDocument *)node->Data();
-    wxNode *next = node->Next();
-
-    if (!doc->Close())
-      return FALSE;
-
-    // Implicitly deletes the document when the last
-    // view is removed (deleted)
-    doc->DeleteAllViews();
-
-    // Check document is deleted
-    if (docManager->GetDocuments().Member(doc))
-      delete doc;
-
-    // This assumes that documents are not connected in
-    // any way, i.e. deleting one document does NOT
-    // delete another.
-    node = next;
+    this->Destroy();
   }
-  return TRUE;
+  else
+    event.Veto();
 }
 \end{verbatim}
-
 

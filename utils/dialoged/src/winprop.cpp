@@ -1829,12 +1829,16 @@ bool wxScrollBarPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     scrollBar->SetWindowStyleFlag(windowStyle);
     
     // If the window style has changed, we swap the width and height parameters.
-    int w, h;
-    scrollBar->GetSize(&w, &h);
-    
+//    int w, h;
+//    scrollBar->GetSize(&w, &h);
+    wxItemResource	*item = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(scrollBar);
+ 	if ( item ) {
+ 		item->SetSize(item->GetX(), item->GetY(), item->GetHeight(), item->GetWidth());
+ 		item->SetStyle(windowStyle);
+ 	} /* IF */
+
     scrollBar = (wxScrollBar *)wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(scrollBar, this);
-    scrollBar->SetSize(-1, -1, h, w);
-    
+
     return TRUE;
   }
   else if (name == "pageSize")

@@ -62,15 +62,15 @@ Returns the view associated with this frame.
 
 \membersection{wxDocMDIChildFrame::OnActivate}
 
-\func{void}{OnActivate}{\param{bool}{ active}}
+\func{void}{OnActivate}{\param{wxActivateEvent}{ event}}
 
 Sets the currently active view to be the frame's view. You may need
 to override (but still call) this function in order to set the keyboard
 focus for your subwindow.
 
-\membersection{wxDocMDIChildFrame::OnClose}
+\membersection{wxDocMDIChildFrame::OnCloseWindow}
 
-\func{virtual bool}{OnClose}{\void}
+\func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
 
 Closes and deletes the current view and document.
 

@@ -324,7 +324,7 @@ wxSashEdgePosition wxSashWindow::SashHitTest(int x, int y, int WXUNUSED(toleranc
                 }
                 case wxSASH_LEFT:
                 {
-                    if ((x >= GetEdgeMargin(position)) && (x >= 0))
+                    if ((x <= GetEdgeMargin(position)) && (x >= 0))
                         return wxSASH_LEFT;
                     break;
                 }
