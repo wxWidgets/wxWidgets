@@ -1144,27 +1144,40 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
     }
 
     // the leading character
-    if ( format == wxPATH_MAC )
+    switch ( format )
     {
-        if ( m_relative )
-            fullpath += wxFILE_SEP_PATH_MAC;
-    }
-    else if ( format == wxPATH_DOS )
-    {
-        if (!m_relative)
-            fullpath += wxFILE_SEP_PATH_DOS;
-    }
-    else if ( format == wxPATH_UNIX )
-    {
-        if ( !m_relative )
-        {
-            // normally the absolute file names starts with a slash with one
-            // exception: file names like "~/foo.bar" don't have it
-            if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
+        case wxPATH_MAC:
+            if ( m_relative )
+                fullpath += wxFILE_SEP_PATH_MAC;
+            break;
+
+        case wxPATH_DOS:
+            if (!m_relative)
+                fullpath += wxFILE_SEP_PATH_DOS;
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown path format") );
+            // fall through
+
+        case wxPATH_UNIX:
+            if ( !m_relative )
             {
-                fullpath += wxFILE_SEP_PATH_UNIX;
+                // normally the absolute file names starts with a slash with
+                // one exception: file names like "~/foo.bar" don't have it
+                if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
+                {
+                    fullpath += wxFILE_SEP_PATH_UNIX;
+                }
             }
-        }
+            break;
+
+        case wxPATH_VMS:
+            // no leading character here but use this place to unset
+            // wxPATH_GET_SEPARATOR flag: under VMS it doesn't make sense as,
+            // if I understand correctly, there should never be a dot before
+            // the closing bracket
+            flags &= ~wxPATH_GET_SEPARATOR;
     }
 
     // then concatenate all the path components using the path separator
@@ -1204,13 +1217,14 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
 
                 case wxPATH_VMS:
                     // TODO: What to do with ".." under VMS
+
                     // convert back from ".." to nothing
                     if ( m_dirs[i] != wxT("..") )
                         fullpath += m_dirs[i];
                     break;
             }
 
-            if ( i != dirCount - 1 )
+            if ( (flags & wxPATH_GET_SEPARATOR) || (i != dirCount - 1) )
                 fullpath += GetPathSeparator(format);
         }
 
@@ -1218,11 +1232,6 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         {
             fullpath += wxT(']');
         }
-    }
-
-    if ( (flags & wxPATH_GET_SEPARATOR) && !fullpath.empty() && fullpath.Last() != GetPathSeparator(format))
-    {
-        fullpath += GetPathSeparator(format);
     }
 
     return fullpath;
@@ -1283,6 +1292,9 @@ wxString wxFileName::GetLongPath() const
 
     if ( !s_triedToLoad )
     {
+        // suppress the errors about missing GetLongPathName[AW]
+        wxLogNull noLog;
+
         s_triedToLoad = TRUE;
         wxDynamicLibrary dllKernel(_T("kernel32"));
         if ( dllKernel.IsLoaded() )
@@ -1320,6 +1332,7 @@ wxString wxFileName::GetLongPath() const
             }
         }
     }
+
     if (success)
         return pathOut;
 #endif // wxUSE_DYNAMIC_LOADER
