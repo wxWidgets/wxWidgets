@@ -2340,6 +2340,51 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     // GTK 2.0
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+void wxInitializePrintSetupData(bool init)
+{
+    if (init)
+    {
+        // gets initialized in the constructor
+        wxThePrintSetupData = new wxPrintSetupData;
+    }
+    else
+    {
+        if (wxThePrintSetupData)
+            delete wxThePrintSetupData;
+            
+        wxThePrintSetupData = (wxPrintSetupData *) NULL;
+    }
+}
+
+// A module to allow initialization/cleanup of PostScript-related
+// things without calling these functions from app.cpp.
+
+class WXDLLEXPORT wxPostScriptModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxPostScriptModule)
+public:
+    wxPostScriptModule() {}
+    bool OnInit();
+    void OnExit();
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
+
+bool wxPostScriptModule::OnInit()
+{
+    wxInitializePrintSetupData();
+
+    return TRUE;
+}
+
+void wxPostScriptModule::OnExit()
+{
+    wxInitializePrintSetupData(FALSE);
+}
+#endif
+  // WXWIN_COMPATIBILITY_2_2
+
 #endif
   // wxUSE_POSTSCRIPT
 
