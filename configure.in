@@ -689,7 +689,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_IPC=no
   DEFAULT_wxUSE_HELP=no
   DEFAULT_wxUSE_MS_HTML_HELP=no
-
   DEFAULT_wxUSE_WXHTML_HELP=no
   DEFAULT_wxUSE_WXTREE=no
   DEFAULT_wxUSE_METAFILE=no
@@ -1601,7 +1600,7 @@ if test "$wxUSE_GUI" = "yes"; then
         INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
         dnl --- Quick & Dirty ; link against most/all libraries
         dnl --- This will bloat the executable, but it'll work for now...
-        LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
+        LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32"
 
         dnl add extra odbc libs if we have compiled in odbc
         if test "$wxUSE_ODBC" = "yes" ; then
@@ -3914,8 +3913,8 @@ if test "$wxUSE_HELP" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
 
     if test "$USE_WIN32" = 1; then
-      if test "$wxUSE_WXHTML_HELP" = "yes"; then
-        AC_DEFINE(wxUSE_WXHTML_HELP)
+      if test "$wxUSE_MS_HTML_HELP" = "yes"; then
+        AC_DEFINE(wxUSE_MS_HTML_HELP)
         AC_CHECK_HEADER(htmlhelp.h, 
             [
                 AC_DEFINE(wxUSE_MS_HTML_HELP)
@@ -3924,6 +3923,15 @@ if test "$wxUSE_HELP" = "yes"; then
                 AC_MSG_WARN(MS HTML Help cannot be used without htmlhelp.h so it won't be compiled without it)
                 wxUSE_MS_HTML_HELP=no
             ])
+      fi
+    fi
+
+    if test "$wxUSE_WXHTML_HELP" = "yes"; then
+      if test "$wxUSE_HTML" = "yes"; then
+        AC_DEFINE(wxUSE_WXHTML_HELP)
+      else
+        AC_MSG_WARN(Cannot use wxHTML-based help without wxHTML so it won't be compiled)
+        wxUSE_WXHTML_HELP=no
       fi
     fi
 fi
