@@ -21,6 +21,9 @@
 
 #if wxUSE_GUI
     #include "wx/mac/uma.h"
+	#include "wx/font.h"
+#else
+	#include "wx/intl.h"
 #endif
 
 #include <ctype.h>
@@ -751,6 +754,14 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from )
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
 {    	
 	TextEncodingBase enc = 0 ;
+	if ( encoding == wxFONTENCODING_DEFAULT )
+	{
+#if wxUSE_GUI
+		encoding = wxFont::GetDefaultEncoding() ;
+#else
+		encoding = wxLocale::GetSystemEncoding() ;
+#endif
+	}
 
 	switch( encoding)
 	{
@@ -1061,7 +1072,7 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
     		enc = wxFONTENCODING_BULGARIAN;
     		break ;
 */	    		
-		casekTextEncodingDOSLatinUS : 
+		case kTextEncodingDOSLatinUS : 
     		enc = wxFONTENCODING_CP437;
     		break ;
 		case kTextEncodingDOSLatin1 :
@@ -1291,8 +1302,8 @@ wxMacUnicodeConverters guard ;
 wxMacUnicodeConverters::wxMacUnicodeConverters()
 {
     OSStatus status = noErr ;
-	TextEncoding kUnicode32 = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-	TextEncoding kUnicode16 = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+	TextEncoding kUnicode32 = CreateTextEncoding(kTextEncodingUnicodeDefault,kTextEncodingDefaultVariant,kUnicode32BitFormat) ;
+	TextEncoding kUnicode16 = CreateTextEncoding(kTextEncodingUnicodeDefault,kTextEncodingDefaultVariant,kUnicode16BitFormat) ;
 	
 	status = TECCreateConverter(&s_TECUnicode16To32,
 								kUnicode16,
@@ -1310,12 +1321,13 @@ wxMacUnicodeConverters::~wxMacUnicodeConverters()
 }
 #endif
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
-void wxMacCFStringHolder::Assign( const wxString &st )
+void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 {
+	Release() ;
 	wxString str = st ;
     wxMacConvertNewlines13To10( &str ) ;
-	size_t len = str.Len() ;
 #if wxUSE_UNICODE
+	size_t len = str.Len() ;
 	UniChar *unibuf ;
 #if SIZEOF_WCHAR_T == 2
 	unibuf = (UniChar*)str.wc_str() ;
@@ -1325,8 +1337,12 @@ void wxMacCFStringHolder::Assign( const wxString &st )
     ByteCount byteInLen = len * SIZEOF_WCHAR_T ;
     ByteCount byteBufferLen = len * sizeof( UniChar ) ;
 	unibuf = (UniChar*) malloc(byteBufferLen) ;
+	for( int i = 0 ; i < len ; ++ i )
+		unibuf[i] = (UniChar) str[i] ;
+	/*	
     status = TECConvertText( s_TECUnicode32To16 , (ConstTextPtr)str.wc_str() , byteInLen, &byteInLen,
         (TextPtr)unibuf, byteBufferLen, &byteOutLen);
+	 */
 #endif
   	m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
 	 unibuf , len );
@@ -1338,20 +1354,33 @@ void wxMacCFStringHolder::Assign( const wxString &st )
 
 #else // not wxUSE_UNICODE
     m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
-        CFStringGetSystemEncoding() ) ;
+        wxMacGetSystemEncFromFontEnc( encoding ) ) ;
 #endif
     m_release = true ;
 }
 
-wxString wxMacCFStringHolder::AsString()
+wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
 {
     wxString result ;
     Size len = CFStringGetLength( m_cfs )  ;
     wxChar* buf = result.GetWriteBuf( len ) ;
 #if wxUSE_UNICODE
-    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , len ) , (UniChar*) buf ) ;
+	UniChar *unibuf ;
+#if SIZEOF_WCHAR_T == 2
+	unibuf = (UniChar*) buf ;
 #else
-    CFStringGetCString( m_cfs , buf , len+1 , CFStringGetSystemEncoding() ) ;
+	unibuf = malloc( len * sizeof( UniChar ) ) ;
+#endif
+    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , len ) , (UniChar*) unibuf ) ;
+#if SIZEOF_WCHAR_T == 2
+	// as long as UniChar is the same as wchar_t nothing to do here
+#else
+	for( int i = 0 ; i < len ; ++ i )
+		buf[i] = (wchar_t) unibuf[i] ;
+	free( unibuf ) ;
+#endif	
+#else
+    CFStringGetCString( m_cfs , buf , len+1 , wxMacGetSystemEncFromFontEnc( encoding ) ) ;
 #endif
     buf[len] = 0 ;
     wxMacConvertNewlines10To13( buf ) ;
