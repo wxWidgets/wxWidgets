@@ -161,6 +161,13 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+#ifdef __WXMSW__
+    if ( argc == 2 && !wxStricmp(argv[1],  _T("/dx")) )
+    {
+        wxDisplay::UseDirectX(true);
+    }
+#endif // __WXMSW__
+
     // create the main application window
     MyFrame *frame = new MyFrame(_("Display wxWindows Sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
@@ -306,13 +313,6 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxDisplay dpy(1);
-    if ( !dpy.ChangeMode(wxVideoMode(800, 600)) )
-    {
-        wxLogError("Failed!");
-        return;
-    }
-
     wxMessageBox(_T("Demo program for wxDisplay class.\n\n(c) 2003 Vadim Zeitlin"),
                  _T("About Display Sample"),
                  wxOK | wxICON_INFORMATION,
