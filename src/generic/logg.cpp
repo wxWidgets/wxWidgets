@@ -620,8 +620,6 @@ void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                 wxLog::DoLog(level, szString, t);
         }
     }
-
-    m_bHasMessages = TRUE;
 }
 
 void wxLogWindow::DoLogString(const wxChar *szString, time_t WXUNUSED(t))

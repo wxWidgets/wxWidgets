@@ -72,15 +72,12 @@ night in the current time zone).
 There also functions to support message buffering. Why are they needed?
 Some of wxLog implementations, most notably the standard wxLogGui class,
 buffer the messages (for example, to avoid showing the user a zillion of modal
-message boxes one after another - which would be really annoying).
+message boxes one after another -- which would be really annoying).
 \helpref{Flush()}{wxlogflush} shows them all and clears the buffer contents.
-Although this function doesn't do anything if the buffer is already empty,
-\helpref{HasPendingMessages()}{wxloghaspendingmessages} is also provided which
-allows to explicitly verify it.
+This function doesn't do anything if the buffer is already empty.
 
 \helpref{Flush}{wxlogflush}\\
-\helpref{FlushActive}{wxlogflushactive}\\
-\helpref{HasPendingMessages}{wxloghaspendingmessages}
+\helpref{FlushActive}{wxlogflushactive}
 
 \membersection{Customization}\label{wxlogcustomization}
 
@@ -293,13 +290,6 @@ Flushes the current log target if any, does nothing if there is none.
 See also:
 
 \helpref{Flush}{wxlogflush}
-
-\membersection{wxLog::HasPendingMessages}\label{wxloghaspendingmessages}
-
-\constfunc{bool}{HasPendingMessages}{\void}
-
-Returns true if there are any messages in the buffer (not yet shown to the
-user). (Almost) for internal use only.
 
 \membersection{wxLog::SetVerbose}\label{wxlogsetverbose}
 

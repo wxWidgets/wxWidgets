@@ -143,22 +143,19 @@ public:
         // and iostream logs don't need it, but wxGuiLog does to avoid showing
         // 17 modal dialogs one after another)
     virtual void Flush();
-        // call to Flush() may be optimized: call it only if this function
-        // returns true (although Flush() also returns immediately if there is
-        // no messages, this functions is more efficient because inline)
-    bool HasPendingMessages() const { return m_bHasMessages; }
 
-    // only one sink is active at each moment
         // flush the active target if any
     static void FlushActive()
     {
         if ( !ms_suspendCount )
         {
             wxLog *log = GetActiveTarget();
-            if ( log && log->HasPendingMessages() )
+            if ( log )
                 log->Flush();
         }
     }
+
+    // only one sink is active at each moment
         // get current log target, will call wxApp::CreateLogTarget() to
         // create one if none exists
     static wxLog *GetActiveTarget();
@@ -224,9 +221,11 @@ public:
     // make dtor virtual for all derived classes
     virtual ~wxLog() { }
 
-protected:
-    bool m_bHasMessages; // any messages in the queue?
 
+    // this method exists for backwards compatibility only, don't use
+    bool HasPendingMessages() const { return true; }
+
+protected:
     // the logging functions that can be overriden
         // default DoLog() prepends the time stamp and a prefix corresponding
         // to the message to szString and then passes it to DoLogString()
@@ -433,7 +432,9 @@ protected:
     wxArrayInt    m_aSeverity;      // one of wxLOG_XXX values
     wxArrayLong   m_aTimes;         // the time of each message
     bool          m_bErrors,        // do we have any errors?
-                  m_bWarnings;      // any warnings?
+                  m_bWarnings,      // any warnings?
+                  m_bHasMessages;   // any messages at all?
+
 };
 
 #endif // wxUSE_LOGGUI
