@@ -563,54 +563,6 @@ wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& i
 }
 
 /*
- * wxDebugStreamBuf
- */
-#if !defined(_WINDLL)
- 
-wxDebugStreamBuf::wxDebugStreamBuf(void)
-{
-	// <iostream> usage doesn't need this, and i have no idea how to simulate it.
-#if wxUSE_IOSTREAMH
-	if (allocate())
-	  setp(base(),ebuf());
-#endif
-}
-
-int wxDebugStreamBuf::overflow(int WXUNUSED(i))
-{
-  int len = pptr() - pbase();
-  char *txt = new char[len+1];
-  strncpy(txt, pbase(), len);
-  txt[len] = '\0';
-#ifdef __WXMSW__
-  OutputDebugString((LPCSTR)txt);
-#else
-  fprintf(stderr, txt);
-#endif
-  setp(pbase(), epptr());
-  delete[] txt;
-  return EOF;
-}
-
-int wxDebugStreamBuf::sync(void)
-{
-  int len = pptr() - pbase();
-  char *txt = new char[len+1];
-  strncpy(txt, pbase(), len);
-  txt[len] = '\0';
-#ifdef __WXMSW__
-  OutputDebugString((LPCSTR)txt);
-#else
-  fprintf(stderr, txt);
-#endif
-  setp(pbase(), epptr());
-  delete[] txt;
-  return 0;
-}
-
-#endif
-
-/*
 On Fri, 21 Jul 1995, Paul Craven wrote:
 
 > Is there a way to find the path of running program's executable? I can get

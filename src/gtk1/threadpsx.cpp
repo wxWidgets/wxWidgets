@@ -43,7 +43,7 @@ enum thread_state
 
 static pthread_t p_mainid;
 
-wxMutex *wxMainMutex; // controls access to all GUI functions
+wxMutex *wxMainMutex; /* controls access to all GUI functions */
 
 //--------------------------------------------------------------------
 // common GUI thread code
@@ -182,7 +182,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
 {
     wxThread *thread = (wxThread *)ptr;
 
-    // Call the main entry
+    /* Call the main entry */
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
     void* status = thread->Entry();
 
@@ -200,7 +200,7 @@ wxThreadError wxThread::Create()
     if (p_internal->state != STATE_IDLE)
         return wxTHREAD_RUNNING;
 
-    // Change thread priority
+    /* Change thread priority */
     pthread_attr_init(&a);
     pthread_attr_getschedpolicy(&a, &p);
 
@@ -365,7 +365,7 @@ wxThread::~wxThread()
     delete p_internal;
 }
 
-// The default callback just joins the thread and throws away the result.
+/* The default callback just joins the thread and throws away the result. */
 void wxThread::OnExit()
 {
     Join();
@@ -375,28 +375,22 @@ void wxThread::OnExit()
 // wxThreadModule 
 //--------------------------------------------------------------------
 
-class wxThreadModule : public wxModule 
-{
-  DECLARE_DYNAMIC_CLASS(wxThreadModule)
-  
-public:
-  virtual bool OnInit() 
-    {
-        wxMainMutex = new wxMutex();
-        wxThreadGuiInit();
-        p_mainid = pthread_self();
-	wxMainMutex->Lock();
-
-       return TRUE;
-    }
-
-  virtual void OnExit() 
-  {
-      wxMainMutex->Unlock();
-      wxThreadGuiExit();
-      delete wxMainMutex;
-  }
-};
-
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+
+bool wxThreadModule::OnInit() 
+{
+    wxMainMutex = new wxMutex();
+    wxThreadGuiInit();
+    p_mainid = (int)getpid();
+    wxMainMutex->Lock();
+    return TRUE;
+}
+
+void wxThreadModule::OnExit()
+{
+    wxMainMutex->Unlock();
+    wxThreadGuiExit();
+    delete wxMainMutex;
+}
+
 

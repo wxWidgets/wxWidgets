@@ -104,10 +104,6 @@ $(GUI_TK_INCLUDE) \
 $(OPENGL_INCLUDE) \
 $(X_CFLAGS)
 
-# -I$(WXBASEDIR)/src/png \
-# -I$(WXBASEDIR)/src/zlib \
-# -I$(WXBASEDIR)/src/gdk_imlib \
-
 WX_LIBS = -L$(GLOBAL_LIB_DIR) $(WX_LINK)
 
 OPENGL_LIBS = $(OPENGL_LIBRARY) $(OPENGL_LINK)

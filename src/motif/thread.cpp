@@ -414,30 +414,24 @@ void wxThread::OnExit()
 // wxThreadModule 
 //--------------------------------------------------------------------
 
-class wxThreadModule : public wxModule 
-{
-  DECLARE_DYNAMIC_CLASS(wxThreadModule)
-  
-public:
-  virtual bool OnInit() 
-    {
-        wxMainMutex = new wxMutex();
-        wxThreadGuiInit();
-        p_mainid = pthread_self();
-	wxMainMutex->Lock();
-
-       return TRUE;
-    }
-
-  virtual void OnExit() 
-  {
-      wxMainMutex->Unlock();
-      wxThreadGuiExit();
-      delete wxMainMutex;
-  }
-};
-
 IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+
+bool wxThreadModule::OnInit() 
+{
+    wxMainMutex = new wxMutex();
+    wxThreadGuiInit();
+    p_mainid = pthread_self();
+    wxMainMutex->Lock();
+
+    return TRUE;
+}
+
+void wxThreadModule::OnExit()
+{
+    wxMainMutex->Unlock();
+    wxThreadGuiExit();
+    delete wxMainMutex;
+};
 
 #endif
   // wxUSE_THREADS

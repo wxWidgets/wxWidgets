@@ -17,7 +17,7 @@ BIN_OBJ=\
 test.o
 
 # additional things needed to link
-BIN_LINK= $(THREADS_LINK)
+BIN_LINK=
 
 # additional things needed to compile
 ADD_COMPILE=

@@ -160,15 +160,10 @@ void wxThread::OnExit()
 }
 
 
-// Automatic initialization
-class wxThreadModule : public wxModule {
-  DECLARE_DYNAMIC_CLASS(wxThreadModule)
-public:
-  bool OnInit();
-  void OnExit();
-};
+IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
-bool wxThreadModule::OnInit() {
+bool wxThreadModule::OnInit() 
+{
   wxMainMutex = new wxMutex();
   wxMainMutex->Lock();
   return TRUE;
@@ -180,7 +175,7 @@ void wxThreadModule::OnExit()
   delete wxMainMutex;
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+
 
 void wxMutexGuiEnter()
 {

@@ -157,46 +157,6 @@ WXDLLEXPORT wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent 
 // Returns menu item id or -1 if none.
 WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
 
-// A debugging stream buffer.
-// Under Windows, this writes to the Windows debug output.
-// Under other platforms, it writes to cerr.
-
-// ALl this horrible gubbins required for Borland, because the calling
-// convention needs to be the same as for streambuf.
-// Thanks to Gerhard.Vogt@embl-heidelberg.de for this solution.
-
-#if defined(__BORLANDC__) && defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po-
-#endif
-
-// Can't export a class derived from a non-export class
-#if !defined(_WINDLL) && !defined(WXUSINGDLL)
-
-// #ifdef new
-// #undef new
-// #endif
-
-class WXDLLEXPORT wxDebugStreamBuf: public streambuf
-{
-  public:
-    wxDebugStreamBuf(void);
-    ~wxDebugStreamBuf(void) {}
-
-    int overflow(int i);
-    inline int underflow(void) { return EOF; }
-    int sync(void);
-};
-
-// #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS
-// #define new WXDEBUG_NEW
-// #endif
-
-#endif
-
-#if defined(__BORLANDC__) && defined(__BCOPT__) && !defined(_RTL_ALLOW_po) && !defined(__FLAT__)
-#pragma option -po.
-#endif
-
 /*
 #if (!defined(__MINMAX_DEFINED) && !defined(max))
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
@@ -204,6 +164,7 @@ class WXDLLEXPORT wxDebugStreamBuf: public streambuf
 #define __MINMAX_DEFINED 1
 #endif
 */
+
 #define wxMax(a,b)            (((a) > (b)) ? (a) : (b))
 #define wxMin(a,b)            (((a) < (b)) ? (a) : (b))
 

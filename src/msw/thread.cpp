@@ -366,25 +366,7 @@ void wxThread::OnExit()
   Join();
 }
 
-// Automatic initialization
-class wxThreadModule : public wxModule {
-  DECLARE_DYNAMIC_CLASS(wxThreadModule)
-public:
-  virtual bool OnInit() {
-    wxMainMutex = new wxMutex();
-    p_mainid = GetCurrentThread();
-    wxMainMutex->Lock();
-    return TRUE;
-  }
-
-  // Global cleanup
-  virtual void OnExit() {
-    wxMainMutex->Unlock();
-    delete wxMainMutex;
-  }
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+// GUI mutex functions
 
 void WXDLLEXPORT wxMutexGuiEnter()
 {
@@ -395,3 +377,22 @@ void WXDLLEXPORT wxMutexGuiLeave()
 {
   wxFAIL_MSG("not implemented");
 }
+
+// Automatic initialization
+
+IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+
+bool wxThreadModule::OnInit() 
+{
+    wxMainMutex = new wxMutex();
+    p_mainid = GetCurrentThread();
+    wxMainMutex->Lock();
+    return TRUE;
+}
+
+void wxThreadModule::OnExit() 
+{
+    wxMainMutex->Unlock();
+    delete wxMainMutex;
+};
+

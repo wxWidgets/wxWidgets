@@ -238,21 +238,22 @@ void wxThread::OnExit()
 }
 
 // Global initialization
-class wxThreadModule : public wxModule {
-  DECLARE_DYNAMIC_CLASS(wxThreadModule)
-public:
-  virtual bool OnInit() {
+
+IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
+
+bool wxThreadModule::OnInit() 
+{
     wxMainMutex = new wxMutex();
     wxThreadGuiInit();
     p_mainid = (int)getpid();
     wxMainMutex->Lock();
-  }
+    return TRUE;
+}
 
-  virtual void OnExit() {
+void wxThreadModule::OnExit()
+{
     wxMainMutex->Unlock();
     wxThreadGuiExit();
     delete wxMainMutex;
-  }
-};
+}
 
-IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)

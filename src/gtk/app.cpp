@@ -191,21 +191,21 @@ void wxApp::OnIdle( wxIdleEvent &event )
 {
     static bool inOnIdle = FALSE;
 
-    // Avoid recursion (via ProcessEvent default case)
+    /* Avoid recursion (via ProcessEvent default case) */
     if (inOnIdle)
         return;
 
     inOnIdle = TRUE;
 
-    // 'Garbage' collection of windows deleted with Close().
+    /* 'Garbage' collection of windows deleted with Close(). */
     DeletePendingObjects();
 
-    // flush the logged messages if any
-    wxLog *pLog = wxLog::GetActiveTarget();
-    if (pLog != NULL && pLog->HasPendingMessages())
-        pLog->Flush();
+    /* flush the logged messages if any */
+    wxLog *log = wxLog::GetActiveTarget();
+    if (log != NULL && log->HasPendingMessages())
+        log->Flush();
 
-    // Send OnIdle events to all windows
+    /* Send OnIdle events to all windows */
     bool needMore = SendIdleEvents();
 
     if (needMore)
@@ -372,14 +372,6 @@ int wxEntry( int argc, char *argv[] )
 
     wxClassInfo::InitializeClasses();
 
-  /* Debug stream no longer used
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-
-  streambuf* sBuf = new wxDebugStreamBuf;
-  ostream* oStr = new ostream(sBuf) ;
-  wxDebugContext::SetStream(oStr, sBuf);
-#endif
-*/
 
     if (!wxTheApp)
     {
@@ -474,7 +466,6 @@ int wxEntry( int argc, char *argv[] )
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }
-//  wxDebugContext::SetStream(NULL, NULL);
 
 #endif
 

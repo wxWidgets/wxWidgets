@@ -16,17 +16,16 @@
 #pragma interface "thread.h"
 #endif
 
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
 #include "wx/object.h"
 #include "wx/setup.h"
+#include "wx/module.h"
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-typedef enum {
+typedef enum 
+{
   wxMUTEX_NO_ERROR = 0,
   wxMUTEX_DEAD_LOCK,      // Mutex has been already locked by THE CALLING thread 
   wxMUTEX_BUSY,           // Mutex has been already locked by ONE thread
@@ -34,7 +33,8 @@ typedef enum {
   wxMUTEX_MISC_ERROR
 } wxMutexError;
 
-typedef enum {
+typedef enum 
+{
   wxTHREAD_NO_ERROR = 0,      // No error
   wxTHREAD_NO_RESOURCE,       // No resource left to create a new thread
   wxTHREAD_RUNNING,           // The thread is already running
@@ -42,16 +42,25 @@ typedef enum {
   wxTHREAD_MISC_ERROR         // Some other error
 } wxThreadError;
 
-// defines the interval of priority.
+/* defines the interval of priority. */
 #define WXTHREAD_MIN_PRIORITY     0
 #define WXTHREAD_DEFAULT_PRIORITY 50
 #define WXTHREAD_MAX_PRIORITY     100
 
 // ----------------------------------------------------------------------------
+// GUI mutex handling.
+// ----------------------------------------------------------------------------
+
+void WXDLLEXPORT wxMutexGuiEnter();
+void WXDLLEXPORT wxMutexGuiLeave();
+
+// ----------------------------------------------------------------------------
 // Mutex handler
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxMutexInternal;
-class WXDLLEXPORT wxMutex {
+class WXDLLEXPORT wxMutex 
+{
 public:
   // constructor & destructor 
   wxMutex();
@@ -77,8 +86,10 @@ protected:
 // ----------------------------------------------------------------------------
 // Condition handler.
 // ----------------------------------------------------------------------------
+
 class wxConditionInternal;
-class WXDLLEXPORT wxCondition {
+class WXDLLEXPORT wxCondition 
+{
 public:
   // constructor & destructor
   wxCondition();
@@ -100,8 +111,10 @@ private:
 // ----------------------------------------------------------------------------
 // Thread management class
 // ----------------------------------------------------------------------------
+
 class wxThreadInternal;
-class WXDLLEXPORT wxThread {
+class WXDLLEXPORT wxThread 
+{
 public:
   // constructor & destructor.
   wxThread();
@@ -165,11 +178,20 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// Global functions and variables
+// Automatic initialization
 // ----------------------------------------------------------------------------
 
-// GUI mutex handling.
-void WXDLLEXPORT wxMutexGuiEnter();
-void WXDLLEXPORT wxMutexGuiLeave();
+class wxThreadModule : public wxModule 
+{
+  DECLARE_DYNAMIC_CLASS(wxThreadModule)
+  
+public:
+  wxThreadModule() {}
+
+  virtual bool OnInit();
+  virtual void OnExit();
+};
+
+
 
 #endif // __THREADH__
