@@ -134,9 +134,9 @@ wxPalette wxGLContext::CreateDefaultPalette()
 
 static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
 {
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
 
-    win->m_updateRegion.Union( gdk_event->area.x,
+    win->GetUpdateRegion().Union( gdk_event->area.x,
                                gdk_event->area.y,
                                gdk_event->area.width,
                                gdk_event->area.height );
@@ -154,7 +154,7 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 
-    win->m_updateRegion.Clear();
+    win->GetUpdateRegion().Clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -163,15 +163,15 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 
 static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxWindow *win )
 {
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
 
-    win->m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
+    win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
 
     wxPaintEvent event( win->GetId() );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 
-    win->m_updateRegion.Clear();
+    win->GetUpdateRegion().Clear();
 }
 
 //---------------------------------------------------------------------------
