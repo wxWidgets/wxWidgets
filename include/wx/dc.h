@@ -30,6 +30,7 @@
 #include "wx/palette.h"
 #include "wx/list.h"            // we use wxList in inline functions
 
+class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxDCBase;
 
 class WXDLLEXPORT wxDrawObject
@@ -768,6 +769,8 @@ private:
     #include "wx/mgl/dc.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dc.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/dc.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dc.h"
 #endif
