@@ -168,7 +168,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     wxBeginBusyCursor();
 
     int
-       pagesPerCopy = maxPage-minPage+1,
+       pagesPerCopy = m_printDialogData.GetToPage()-m_printDialogData.GetFromPage()+1,
        totalPages = pagesPerCopy * m_printDialogData.GetNoCopies(),
        printedPages = 0;
     // Open the progress bar dialog
