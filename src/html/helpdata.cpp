@@ -32,6 +32,8 @@
 #include "wx/tokenzr.h"
 #include "wx/wfstream.h"
 #include "wx/busyinfo.h"
+#include "wx/encconv.h"
+#include "wx/fontmap.h"
 #include "wx/html/htmlpars.h"
 #include "wx/html/htmldefs.h"
 
@@ -384,6 +386,7 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
 
 
 bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
+                                  wxFontEncoding encoding,
                                   const wxString& title, const wxString& contfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
@@ -391,6 +394,9 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     wxFileSystem fsys;
     wxFSFile *fi;
     wxHtmlBookRecord *bookr;
+    
+    int IndexOld = m_IndexCnt,
+        ContentsOld = m_ContentsCnt;
 
     if (! path.IsEmpty())
         fsys.ChangePathTo(path, TRUE);
@@ -442,6 +448,23 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
 
     // Now store the contents range
     bookr->SetContentsRange(cont_start, m_ContentsCnt);
+    
+    // Convert encoding, if neccessary:
+    if (encoding != wxFONTENCODING_SYSTEM)
+    {
+        wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(encoding);
+        if (a.GetCount() != 0 && a[0] != encoding)
+        {
+            int i;
+            wxEncodingConverter conv;
+            conv.Init(encoding, a[0]);
+            
+            for (i = IndexOld; i < m_IndexCnt; i++)
+                conv.Convert(m_Index[i].m_Name);
+            for (i = ContentsOld; i < m_ContentsCnt; i++)
+                conv.Convert(m_Contents[i].m_Name);
+        }
+    }
 
     m_BookRecords.Add(bookr);
     if (m_IndexCnt > 0)
@@ -484,9 +507,11 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         char linebuf[300];
 
         wxString title = _("noname"),
-                         safetitle,
-                         start = wxEmptyString,
-                                 contents = wxEmptyString, index = wxEmptyString;
+                 safetitle,
+                 start = wxEmptyString,
+                 contents = wxEmptyString, 
+                 index = wxEmptyString,
+                 charset = wxEmptyString;
 
         if (wxIsAbsolutePath(book)) bookFull = book;
         else bookFull = wxGetCwd() + "/" + book;
@@ -512,10 +537,16 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
                 index = linebuf + strlen("Index file=");
             if (strstr(linebuf, "Contents file=") == linebuf)
                 contents = linebuf + strlen("Contents file=");
+            if (strstr(linebuf, "Charset=") == linebuf)
+                charset = linebuf + strlen("Charset=");
         } while (lineptr != NULL);
         delete[] buff;
-
-        bool rtval = AddBookParam(*fi, title, contents, index, start, fsys.GetPath());
+    
+        wxFontEncoding enc;
+        if (charset == wxEmptyString) enc = wxFONTENCODING_SYSTEM;
+        else enc = wxTheFontMapper -> CharsetToEncoding(charset);
+        bool rtval = AddBookParam(*fi, enc, 
+                                  title, contents, index, start, fsys.GetPath());
         delete fi;
         return rtval;
     }

@@ -24,6 +24,7 @@
 #include "wx/string.h"
 #include "wx/filesys.h"
 #include "wx/dynarray.h"
+#include "wx/font.h"
 
 //--------------------------------------------------------------------------------
 // helper classes & structs
@@ -153,6 +154,7 @@ class WXDLLEXPORT wxHtmlHelpData : public wxObject
         // See documentation for details on its format.
         // Returns success.
         bool AddBookParam(const wxFSFile& bookfile,
+                          wxFontEncoding encoding,
                           const wxString& title, const wxString& contfile,
                           const wxString& indexfile = wxEmptyString,
                           const wxString& deftopic = wxEmptyString,
