@@ -346,7 +346,8 @@ END_EVENT_TABLE()
 
 #include "../image/smile.xpm"
 
-MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
+MyCanvas::MyCanvas( MyFrame *parent ) : 
+   wxScrolledWindow( parent, -1, wxDefaultPosition, wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE )
 {
     m_owner = parent;
     m_show = Show_Default;
