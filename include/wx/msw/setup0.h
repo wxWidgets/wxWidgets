@@ -566,11 +566,11 @@
 
 // For backward compatibility reasons, this parameter now only controls the
 // default scrolling method used by cursors.  This default behavior can be
-// overriden by setting the second param of wxDB::wxDbGetConnection() to indicate
-// whether the connection (and any wxTable()s that use the connection) should
-// support forward only scrolling of cursors, or both forward and backward
-// Support for backward scrolling cursors is dependent on the data source as
-// well as the ODBC driver being used.
+// overriden by setting the second param of wxDB::wxDbGetConnection() or 
+// wxDb() constructor to indicate whether the connection (and any wxDbTable()s
+// that use the connection) should support forward only scrolling of cursors, 
+// or both forward and backward support for backward scrolling cursors is 
+// dependent on the data source as well as the ODBC driver being used.
 #define wxODBC_FWD_ONLY_CURSORS	 1
 
 // Default is 0.  Set to 1 to use the deprecated classes, enum types, function,
