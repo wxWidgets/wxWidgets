@@ -35,7 +35,7 @@
 // ----------------------------------------------------------------------------
 
 // we put our data in HKLM\SOFTWARE_KEY\appname
-#define SOFTWARE_KEY    wxString("Software\\")
+#define SOFTWARE_KEY    wxString("Software\\wxWindows\\")
 
 // ----------------------------------------------------------------------------
 // global functions
