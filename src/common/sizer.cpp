@@ -132,7 +132,7 @@ wxSize wxSizerItem::CalcMin()
     wxSize ret;
     if (IsSizer())
     {
-        ret = m_sizer->CalcMin();
+        ret = m_sizer->GetMinSize();
         // if we have to preserve aspect ratio _AND_ this is
         // the first-time calculation, consider ret to be initial size
         if ((m_flag & wxSHAPED) && !m_ratio) SetRatio(ret);
