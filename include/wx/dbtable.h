@@ -3,6 +3,8 @@
 // Purpose:     Declaration of the wxDbTable class.
 // Author:      Doug Card
 // Modified by: George Tasker
+//              Bart Jourquin
+//              Mark Johnson
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
