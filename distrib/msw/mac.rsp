@@ -7,6 +7,12 @@ docs/mac/*.sh
 docs/mac/*.applescript
 docs/mac/*.diff
 
+docs/metrowerks/*.txt
+docs/metrowerks/*.sh
+docs/metrowerks/mwar
+docs/metrowerks/mwpefar
+docs/metrowerks/wchar_t_panther_fix/machine/ansi.h
+
 distrib/mac/*-sh
 
 src/html/htmlctrl/webkit/*.mm

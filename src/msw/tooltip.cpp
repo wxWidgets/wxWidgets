@@ -289,7 +289,7 @@ void wxToolTip::Add(WXHWND hWnd)
         if ( index != wxNOT_FOUND )
         {
 #ifdef TTM_SETMAXTIPWIDTH
-            if ( wxTheApp->GetComCtl32Version() >= 470 )
+            if ( wxApp::GetComCtl32Version() >= 470 )
             {
                 // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
                 // extent of its first line as max value

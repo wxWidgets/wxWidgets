@@ -104,7 +104,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
     static bool s_initDone = false; // MT-ok: used from GUI thread only
     if ( !s_initDone )
     {
-        if ( wxTheApp->GetComCtl32Version() < 470 )
+        if ( wxApp::GetComCtl32Version() < 470 )
         {
             wxLogError(_("This system doesn't support date picker control, please upgrade your version of comctl32.dll"));
 
@@ -153,7 +153,7 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     // although MSDN doesn't mention it, DTS_UPDOWN doesn't work with
     // comctl32.dll 4.72
-    if ( wxTheApp->GetComCtl32Version() > 472 && (style & wxDP_SPIN) )
+    if ( wxApp::GetComCtl32Version() > 472 && (style & wxDP_SPIN) )
         styleMSW |= DTS_UPDOWN;
     //else: drop down by default
 

@@ -242,31 +242,31 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 event.SetTimestamp(when);
                 event.SetEventObject(focus);
 
-                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & controlKey )
+                if ( focus && (modifiers ^ wxApp::s_lastModifiers ) & controlKey )
                 {
                     event.m_keyCode = WXK_CONTROL ;
                     event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
-                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & shiftKey )
+                if ( focus && (modifiers ^ wxApp::s_lastModifiers ) & shiftKey )
                 {
                     event.m_keyCode = WXK_SHIFT ;
                     event.SetEventType( ( modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
-                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & optionKey )
+                if ( focus && (modifiers ^ wxApp::s_lastModifiers ) & optionKey )
                 {
                     event.m_keyCode = WXK_ALT ;
                     event.SetEventType( ( modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
-                if ( focus && (modifiers ^ wxTheApp->s_lastModifiers ) & cmdKey )
+                if ( focus && (modifiers ^ wxApp::s_lastModifiers ) & cmdKey )
                 {
                     event.m_keyCode = WXK_COMMAND ;
                     event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
-                wxTheApp->s_lastModifiers = modifiers ;
+                wxApp::s_lastModifiers = modifiers ;
             }
              break ;
     }
@@ -464,9 +464,9 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     {
         QDGlobalToLocalPoint( UMAGetWindowPort(window ) ,  &windowMouseLocation ) ;
 
-        if ( wxTheApp->s_captureWindow && wxTheApp->s_captureWindow->MacGetTopLevelWindowRef() == (WXWindow) window && windowPart == inContent )
+        if ( wxApp::s_captureWindow && wxApp::s_captureWindow->MacGetTopLevelWindowRef() == (WXWindow) window && windowPart == inContent )
         {
-            currentMouseWindow = wxTheApp->s_captureWindow ;
+            currentMouseWindow = wxApp::s_captureWindow ;
         }
         else if ( (IsWindowActive(window) && windowPart == inContent) )
         {
@@ -601,9 +601,9 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 result = noErr ;
             }
         }
-        if ( cEvent.GetKind() == kEventMouseUp && wxTheApp->s_captureWindow )
+        if ( cEvent.GetKind() == kEventMouseUp && wxApp::s_captureWindow )
         {
-            wxTheApp->s_captureWindow = NULL ;
+            wxApp::s_captureWindow = NULL ;
             // update cursor ?
          }
 

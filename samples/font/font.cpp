@@ -741,7 +741,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     fontInfo.Printf(wxT("Font size is %d points, family: %s, encoding: %s"),
                     m_font.GetPointSize(),
                     m_font.GetFamilyString().c_str(),
-                    wxFontMapper::Get()->
+                    wxFontMapper::
                         GetEncodingDescription(m_font.GetEncoding()).c_str());
 
     dc.DrawText(fontInfo, x, y);

@@ -397,7 +397,7 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & (wxTB_FLAT | wxTB_HORZ_LAYOUT) )
     {
         // static as it doesn't change during the program lifetime
-        static int s_verComCtl = wxTheApp->GetComCtl32Version();
+        static int s_verComCtl = wxApp::GetComCtl32Version();
 
         // comctl32.dll 4.00 doesn't support the flat toolbars and using this
         // style with 6.00 (part of Windows XP) leads to the toolbar with
@@ -731,7 +731,7 @@ bool wxToolBar::Realize()
         if ( oldToolBarBitmap )
         {
 #ifdef TB_REPLACEBITMAP
-            if ( wxTheApp->GetComCtl32Version() >= 400 )
+            if ( wxApp::GetComCtl32Version() >= 400 )
             {
                 TBREPLACEBITMAP replaceBitmap;
                 replaceBitmap.hInstOld = NULL;
@@ -813,7 +813,7 @@ bool wxToolBar::Realize()
         // don't add separators to the vertical toolbar with old comctl32.dll
         // versions as they didn't handle this properly
         if ( isVertical && tool->IsSeparator() &&
-                wxTheApp->GetComCtl32Version() <= 472 )
+                wxApp::GetComCtl32Version() <= 472 )
         {
             continue;
         }
@@ -946,7 +946,7 @@ bool wxToolBar::Realize()
 #ifdef TB_SETBUTTONINFO
         // available in headers, now check whether it is available now
         // (during run-time)
-        if ( wxTheApp->GetComCtl32Version() >= 471 )
+        if ( wxApp::GetComCtl32Version() >= 471 )
         {
             // set the (underlying) separators width to be that of the
             // control
@@ -1160,7 +1160,7 @@ wxSize wxToolBar::GetToolSize() const
 #if defined(_WIN32_IE) && (_WIN32_IE >= 0x300 ) \
     && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) ) \
     && !defined (__DIGITALMARS__)
-    if ( wxTheApp->GetComCtl32Version() >= 470 )
+    if ( wxApp::GetComCtl32Version() >= 470 )
     {
         DWORD dw = ::SendMessage(GetHwnd(), TB_GETBUTTONSIZE, 0, 0);
 
@@ -1213,7 +1213,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
     // if comctl32 version < 4.71 wxToolBar95 adds dummy spacers
 #if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
-    if ( wxTheApp->GetComCtl32Version() >= 471 )
+    if ( wxApp::GetComCtl32Version() >= 471 )
     {
         return m_tools.Item((size_t)index)->GetData();
     }

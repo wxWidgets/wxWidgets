@@ -602,7 +602,7 @@ wxString wxNativeFontInfo::ToUserString() const
     wxFontEncoding enc = GetEncoding();
     if ( enc != wxFONTENCODING_DEFAULT && enc != wxFONTENCODING_SYSTEM )
     {
-        desc << _T(' ') << wxFontMapper::Get()->GetEncodingName(enc);
+        desc << _T(' ') << wxFontMapper::GetEncodingName(enc);
     }
 #endif // wxUSE_FONTMAP
 

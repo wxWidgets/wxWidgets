@@ -1115,17 +1115,17 @@ void wxWindowMac::SetFocus()
 
 void wxWindowMac::DoCaptureMouse()
 {
-    wxTheApp->s_captureWindow = this ;
+    wxApp::s_captureWindow = this ;
 }
 
 wxWindow* wxWindowBase::GetCapture()
 {
-    return wxTheApp->s_captureWindow ;
+    return wxApp::s_captureWindow ;
 }
 
 void wxWindowMac::DoReleaseMouse()
 {
-    wxTheApp->s_captureWindow = NULL ;
+    wxApp::s_captureWindow = NULL ;
 }
 
 #if    wxUSE_DRAG_AND_DROP

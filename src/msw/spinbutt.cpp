@@ -257,7 +257,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     wxSpinButtonBase::SetRange(minVal, maxVal);
 
 #ifdef UDM_SETRANGE32
-    if ( wxTheApp->GetComCtl32Version() >= 471 )
+    if ( wxApp::GetComCtl32Version() >= 471 )
     {
         // use the full 32 bit range if available
         ::SendMessage(GetHwnd(), UDM_SETRANGE32, minVal, maxVal);

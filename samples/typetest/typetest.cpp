@@ -189,7 +189,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     char std_buf[200];
     std_file_input >> std_buf;
-    str.FromAscii(std_buf);
+    str = wxString::FromAscii(std_buf);
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
 

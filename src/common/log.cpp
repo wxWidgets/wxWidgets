@@ -209,8 +209,7 @@ void wxLogFatalError(const wxChar *szFormat, ...)
 void wxVLogVerbose(const wxChar *szFormat, va_list argptr)
 {
     if ( IsLoggingEnabled() ) {
-        wxLog *pLog = wxLog::GetActiveTarget();
-        if ( pLog != NULL && pLog->GetVerbose() ) {
+        if ( wxLog::GetActiveTarget() != NULL && wxLog::GetVerbose() ) {
             wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
             wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);

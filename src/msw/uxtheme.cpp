@@ -108,7 +108,7 @@ wxUxThemeEngine* wxUxThemeEngine::Get()
 
 bool wxUxThemeEngine::Initialize()
 {
-    if ( wxTheApp->GetComCtl32Version() < 600 )
+    if ( wxApp::GetComCtl32Version() < 600 )
     {
         // not using theme-aware comctl32.dll anyhow, don't even try to use
         // themes

@@ -659,7 +659,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
     if ( m_windowStyle & wxTR_FULL_ROW_HIGHLIGHT )
     {
-        if ( wxTheApp->GetComCtl32Version() >= 471 )
+        if ( wxApp::GetComCtl32Version() >= 471 )
             wstyle |= TVS_FULLROWSELECT;
     }
 

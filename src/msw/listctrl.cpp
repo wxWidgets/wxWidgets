@@ -359,7 +359,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     // for comctl32.dll v 4.70+ we want to have this attribute because it's
     // prettier (and also because wxGTK does it like this)
-    if ( InReportView() && wxTheApp->GetComCtl32Version() >= 470 )
+    if ( InReportView() && wxApp::GetComCtl32Version() >= 470 )
     {
         ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
                       0, LVS_EX_FULLROWSELECT);
@@ -428,7 +428,7 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 #if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( style & wxLC_VIRTUAL )
     {
-        int ver = wxTheApp->GetComCtl32Version();
+        int ver = wxApp::GetComCtl32Version();
         if ( ver < 470 )
         {
             wxLogWarning(_("Please install a newer version of comctl32.dll\n(at least version 4.70 is required but you have %d.%02d)\nor this program won't operate correctly."),

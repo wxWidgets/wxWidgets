@@ -1285,7 +1285,7 @@ static void WINAPI wxRasDialFunc(UINT WXUNUSED(unMsg),
 
     wxCHECK_RET( dialUpManager, wxT("who started to dial then?") );
 
-    SendMessage(dialUpManager->GetRasWindow(), wxWM_RAS_DIALING_PROGRESS,
+    SendMessage(wxDialUpManagerMSW::GetRasWindow(), wxWM_RAS_DIALING_PROGRESS,
                 rasconnstate, dwError);
 }
 
