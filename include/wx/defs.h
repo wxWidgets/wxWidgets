@@ -976,7 +976,8 @@ enum wxBorder
 #define wxICONIZE               0x4000
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
-                                        // free flag value: 0x1000
+#define wxCLOSE                 0x1000
+
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
@@ -1010,16 +1011,10 @@ enum wxBorder
 
 #define wxDEFAULT_FRAME_STYLE \
   (wxSYSTEM_MENU | wxRESIZE_BORDER | \
-   wxMINIMIZE_BOX | wxMAXIMIZE_BOX | \
+   wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCLOSE | \
    wxCAPTION | wxCLIP_CHILDREN)
 
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMGL__)
-#   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION)
-#else
-//  Under Unix, the dialogs don't have a system menu. Specifying wxSYSTEM_MENU
-//  here will make a close button appear.
-#   define wxDEFAULT_DIALOG_STYLE  wxCAPTION
-#endif
+#define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION | wxCLOSE)
 
 /*
  * wxExtDialog style flags
