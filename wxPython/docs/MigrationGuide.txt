@@ -350,8 +350,12 @@ The wxPython.help module no longer exists and the classes therein are
 now part of the core module imported with wxPython.wx or the wx
 package.
 
+wxPyDefaultPosition and wxPyDefaultSize are gone.  Use the
+wxDefaultPosition and wxDefaultSize objects instead.
 
-
+Similarly, the wxSystemSettings backwards compatibiility aliases for
+GetSystemColour, GetSystemFont and GetSystemMetric Have also gone into
+the bit-bucket.  Use GetColour, GetFont and GetMetric instead.
 
 
 
