@@ -969,8 +969,100 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------------
 
 overview = """\
+<html>
+<body>
+<h1>wx.Joystick</h1>
+This demo illustrates the use of the wx.Joystick class, which is an interface to
+one or more joysticks attached to your system.
 
+<p>The data that can be retrieved from the joystick comes in four basic flavors.
+All of these are illustrated in the demo. In fact, this demo illustrates everything
+you <b>can</b> get from the wx.Joystick control.
 
+<ul>
+<li>Static information such as Manufacturer ID and model name,
+<li>Analog input from up to six axes, including X and Y for the actual stick,
+<li>Button input from the fire button and any other buttons that the stick has,
+<li>and the POV control (a kind of mini-joystick on top of the joystick) that many sticks come with.
+</ul>
+
+<p>Getting data from the joystick can be event-driven thanks to four event types associated
+with wx.JoystickEvent, or the joystick can be polled programatically to get data on
+a regular basis.
+
+<h2>Data types</h2>
+
+Data from the joystick comes in two flavors: that which defines the boundaries, and that
+which defines the current state of the stick. Thus, we have Get*Max() and Get*Min() 
+methods for all axes, the max number of axes, the max number of buttons, and so on. In
+general, this data can be read once and stored to speed computation up.
+
+<h3>Analog Input</h3>
+
+Analog input (the axes) is delivered as a whole, positive number. If you need to know 
+if the axis is at zero (centered) or not, you will first have to calculate that center
+based on the max and min values. The demo shows a bar graph for each axis expressed
+in native numerical format, plus a 'centered' X-Y axis compas showing the relationship
+of that input to the calculcated stick position.
+
+Analog input may be jumpy and spurious, so the control has a means of 'smoothing' the
+analog data by setting a movement threshold. This demo sets the threshold to 10, but
+you can set it at any valid value between the min and max.
+
+<h3>Button Input</h3>
+
+Button state is retrieved as one int that contains each button state mapped to a bit.
+You get the state of a button by AND-ing its bit against the returned value, in the form
+
+<pre>
+     # assume buttonState is what the stick returned, and buttonBit 
+     # is the bit you want to examine
+     
+     if (buttonState & ( 1 &lt;&lt; buttonBit )) :
+         # button pressed, do something with it
+</pre>
+
+<p>The problem here is that some OSs return a 32-bit value for up to 32 buttons 
+(imagine <i>that</i> stick!). Python V2.3 will generate an exception for bit 
+values over 30. For that reason, this demo is limited to 16 buttons.
+
+<p>Note that more than one button can be pressed at a time, so be sure to check all of them!
+     
+
+<h3>POV Input</h3>
+
+POV hats come in two flavors: four-way, and continuous. four-way POVs are restricted to
+the cardinal points of the compass; continuous, or CTS POV hats can deliver input in
+.01 degree increments, theoreticaly. The data is returned as a whole number; the last
+two digits are to the right of the decimal point, so in order to use this information,
+you need to divide by 100 right off the bat. 
+
+<p>Different methods are provided to retrieve the POV data for a CTS hat 
+versus a four-way hat.
+
+<h2>Caveats</h2>
+
+The wx.Joystick control is in many ways incomplete at the C++ library level, but it is
+not insurmountable.  In short, while the joystick interface <i>can</i> be event-driven,
+the wx.JoystickEvent class lacks event binders for all event types. Thus, you cannot
+rely on wx.JoystickEvents to tell you when something has changed, necessarilly.
+
+<ul>
+<li>There are no events associated with the POV control.
+<li>There are no events associated with the Rudder
+<li>There are no events associated with the U and V axes.
+</ul>
+
+<p>Fortunately, there is an easy workaround. In the top level frame, create a wx.Timer
+that will poll the stick at a set interval. Of course, if you do this, you might as
+well forgo catching wxEVT_JOYSTICK_* events at all and rely on the timer to do the
+polling. 
+
+<p>Ideally, the timer should be a one-shot; after it fires, collect and process data as 
+needed, then re-start the timer, possibly using wx.CallAfter().
+
+</body>
+</html>
 """
 
 #----------------------------------------------------------------------------
