@@ -128,7 +128,7 @@ wxMSW:
   (for MinGW and Cygwin)
 - When using DLL, wxLocalFSHandler was not being exported - added
   WXEXPORTDLL
-- A wxEvtHandler object was not removed from wxPendingEvents on deletion. 
+- A wxEvtHandler object was not removed from wxPendingEvents on deletion.
   wxPendingEventsLocker was being deleted in App before all wxEvtHandler
   objects have been destroyed resulting in stale handler/lock
   ptrs; fixed
@@ -144,6 +144,7 @@ wxMSW:
   Proper XP theme support is planned for 2.6
 - disable wxNB_RIGHT, wxNB_LEFT, wxNB_BOTTOM notebook styles
   if the version of CommCtl doesn't support it (XP)
+- fixed release mode build with VC 7.x (Martin Ecker)
 
 wxMotif:
 

@@ -43,10 +43,21 @@
     #endif
 #endif // __WXDEBUG__ || wxUSE_DEBUG_CONTEXT
 
+// we must disable optimizations for VC.NET because otherwise its too eager
+// linker discards wxClassInfo objects in release build thus breaking many,
+// many things
+#if defined _MSC_VER && _MSC_VER >= 1300
+    #pragma optimize("", off)
+#endif
 
 wxClassInfo wxObject::sm_classwxObject( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),
                                         (wxObjectConstructorFn) 0 );
+
+// restore optimizations
+#if defined _MSC_VER && _MSC_VER >= 1300
+    #pragma optimize("", on)
+#endif
 
 wxClassInfo* wxClassInfo::sm_first = NULL;
 wxHashTable* wxClassInfo::sm_classTable = NULL;
