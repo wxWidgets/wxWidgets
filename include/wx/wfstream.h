@@ -18,13 +18,15 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STREAMS && wxUSE_FILE
+#if wxUSE_STREAMS
 
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/stream.h"
 #include "wx/file.h"
 #include "wx/ffile.h"
+
+#if wxUSE_FILE
 
 // ----------------------------------------------------------------------------
 // wxFileStream using wxFile
@@ -96,6 +98,10 @@ private:
     DECLARE_NO_COPY_CLASS(wxFileStream)
 };
 
+#endif //wxUSE_FILE
+
+#if wxUSE_FFILE
+
 // ----------------------------------------------------------------------------
 // wxFFileStream using wxFFile
 // ----------------------------------------------------------------------------
@@ -166,6 +172,8 @@ private:
     DECLARE_NO_COPY_CLASS(wxFFileStream)
 };
 
-#endif // wxUSE_STREAMS && wxUSE_FILE
+#endif //wxUSE_FFILE
+
+#endif // wxUSE_STREAMS
 
 #endif // _WX_WXFSTREAM_H__

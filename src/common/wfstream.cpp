@@ -20,11 +20,13 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_STREAMS && wxUSE_FILE
+#if wxUSE_STREAMS
 
 #include <stdio.h>
 #include "wx/stream.h"
 #include "wx/wfstream.h"
+
+#if wxUSE_FILE
 
 // ----------------------------------------------------------------------------
 // wxFileInputStream
@@ -191,6 +193,10 @@ wxFileStream::wxFileStream(const wxString& fileName)
     wxFileOutputStream::m_file = wxFileInputStream::m_file;
 }
 
+#endif //wxUSE_FILE
+
+#if wxUSE_FFILE
+
 // ----------------------------------------------------------------------------
 // wxFFileInputStream
 // ----------------------------------------------------------------------------
@@ -350,5 +356,7 @@ wxFFileStream::wxFFileStream(const wxString& fileName)
     wxFFileOutputStream::m_file = wxFFileInputStream::m_file;
 }
 
-#endif // wxUSE_STREAMS && wxUSE_FILE
+#endif //wxUSE_FFILE
+
+#endif // wxUSE_STREAMS
 
