@@ -104,17 +104,26 @@ void wxTopLevelWindowMSW::Init()
 long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
 {
     long style = GetWindowStyle();
-    long msflags = 0;
 
     // first select the kind of window being created
-    if ( style & wxCAPTION )
-    {
-        if ( style & wxFRAME_TOOL_WINDOW )
-            msflags |= WS_POPUPWINDOW;
-        else
-            msflags |= WS_OVERLAPPED;
-    }
+    long msflags;
+    if ( style & wxFRAME_TOOL_WINDOW )
+        msflags = WS_POPUP;
     else
+        msflags = WS_OVERLAPPED;
+
+    // border and caption styles
+    if ( style & wxRESIZE_BORDER )
+        msflags |= WS_THICKFRAME;
+    else if ( !(style & wxBORDER_NONE) )
+        msflags |= WS_BORDER;
+
+    if ( style & wxCAPTION )
+        msflags |= WS_CAPTION;
+
+    // if we don't set WS_POPUP, Windows assumes WS_OVERLAPPED and creates a
+    // window with both caption and border
+    if ( msflags & (WS_CAPTION | WS_BORDER) != WS_CAPTION | WS_BORDER )
     {
         msflags |= WS_POPUP;
     }
@@ -124,16 +133,13 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
         msflags |= WS_MINIMIZEBOX;
     if ( style & wxMAXIMIZE_BOX )
         msflags |= WS_MAXIMIZEBOX;
-    if ( style & wxTHICK_FRAME )
-        msflags |= WS_THICKFRAME;
     if ( style & wxSYSTEM_MENU )
         msflags |= WS_SYSMENU;
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
     if ( style & wxMAXIMIZE )
         msflags |= WS_MAXIMIZE;
-    if ( style & wxCAPTION )
-        msflags |= WS_CAPTION;
+
     if ( style & wxCLIP_CHILDREN )
         msflags |= WS_CLIPCHILDREN;
 
