@@ -210,6 +210,106 @@ wxImage wxImage::Copy() const
     return image;
 }
 
+wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
+{
+    if( xFactor == 1 && yFactor == 1 )
+        return Copy() ;
+        
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+
+    // can't scale to/from 0 size
+    wxCHECK_MSG( (xFactor > 0) && (yFactor > 0), image,
+                 wxT("invalid new image size") );
+
+    long old_height = M_IMGDATA->m_height,
+         old_width  = M_IMGDATA->m_width;
+         
+    wxCHECK_MSG( (old_height > 0) && (old_width > 0), image,
+                 wxT("invalid old image size") );
+
+    long width = old_width / xFactor ;
+    long height = old_height / yFactor ;
+
+    image.Create( width , height );
+
+    char unsigned *data = image.GetData();
+
+    wxCHECK_MSG( data, image, wxT("unable to create image") );
+
+    bool hasMask = false ;
+    unsigned char maskRed = 0;
+    unsigned char maskGreen = 0;
+    unsigned char maskBlue =0 ;
+    if (M_IMGDATA->m_hasMask)
+    {
+        hasMask = true ;
+        maskRed = M_IMGDATA->m_maskRed;
+        maskGreen = M_IMGDATA->m_maskGreen;
+        maskBlue =M_IMGDATA->m_maskBlue ;
+      
+        image.SetMaskColour( M_IMGDATA->m_maskRed,
+                             M_IMGDATA->m_maskGreen,
+                             M_IMGDATA->m_maskBlue );
+    }
+    char unsigned *source_data = M_IMGDATA->m_data;
+    char unsigned *target_data = data;
+    
+    for (long y = 0; y < height; y++)
+    {
+ 
+        for (long x = 0; x < width; x++)
+        {
+            unsigned long avgRed = 0 ;
+            unsigned long avgGreen = 0;
+            unsigned long avgBlue = 0;
+            unsigned long counter = 0 ;
+            // determine average
+            for ( int y1 = 0 ; y1 < yFactor ; ++y1 )
+            {
+                long y_offset = (y * yFactor + y1) * old_width;
+                for ( int x1 = 0 ; x1 < xFactor ; ++x1 )
+                {
+                    unsigned char *pixel = source_data + 3 * ( y_offset + x * xFactor + x1 ) ;
+                    unsigned char red = pixel[0] ;
+                    unsigned char green = pixel[1] ;
+                    unsigned char blue = pixel[2] ;
+                    if ( !hasMask || red != maskRed || green != maskGreen || blue != maskBlue )
+                    {
+                        avgRed += red ;
+                        avgGreen += green ;
+                        avgBlue += blue ;
+                        counter++ ;
+                    }
+                }
+            }
+            if ( counter == 0 )
+            {
+                *(target_data++) = M_IMGDATA->m_maskRed ;
+                *(target_data++) = M_IMGDATA->m_maskGreen ;
+                *(target_data++) = M_IMGDATA->m_maskBlue ;
+            }
+            else
+            {
+                *(target_data++) = avgRed / counter ;
+                *(target_data++) = avgGreen / counter ;
+                *(target_data++) = avgBlue / counter ;
+            }
+        }
+    }
+
+    // In case this is a cursor, make sure the hotspot is scalled accordingly:
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,
+                (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X))/xFactor);
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) )
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y,
+                (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y))/yFactor);
+
+    return image;
+}
+
 wxImage wxImage::Scale( int width, int height ) const
 {
     wxImage image;
@@ -225,6 +325,11 @@ wxImage wxImage::Scale( int width, int height ) const
     wxCHECK_MSG( (old_height > 0) && (old_width > 0), image,
                  wxT("invalid old image size") );
 
+    if ( old_width % width == 0 && old_width >= width &&
+        old_height % height == 0 && old_height >= height )
+    {
+        return ShrinkBy( old_width / width , old_height / height ) ;
+    }
     image.Create( width, height );
 
     char unsigned *data = image.GetData();
