@@ -6,7 +6,7 @@
 // Created:     10/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_VARIANT_H_
@@ -22,18 +22,11 @@
 #include "wx/list.h"
 
 #if wxUSE_TIMEDATE
-#include "wx/time.h"
-#include "wx/date.h"
-#endif
+    #include "wx/time.h"
+    #include "wx/date.h"
+#endif // time/date
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-#endif
+#include "wx/ioswrap.h"
 
 /*
  * wxVariantData stores the actual data in a wxVariant object,

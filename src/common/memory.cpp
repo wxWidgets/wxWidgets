@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -38,15 +38,12 @@
 #include <wx/log.h>
 #include <stdlib.h>
 
+#include "wx/ioswrap.h"
+
 #if wxUSE_IOSTREAMH
-#include <iostream.h>
-#include <fstream.h>
+    #include <fstream.h>
 #else
-#include <iostream>
-#include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+    #include <fstream>
 #endif
 
 #if !defined(__WATCOMC__) && !defined(__VMS__) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
@@ -78,8 +75,8 @@
 // wxDebugContext wxTheDebugContext;
 /*
   Redefine new and delete so that we can pick up situations where:
-	- we overwrite or underwrite areas of malloc'd memory.
-	- we use uninitialise variables
+        - we overwrite or underwrite areas of malloc'd memory.
+        - we use uninitialise variables
   Only do this in debug mode.
 
   We change new to get enough memory to allocate a struct, followed
@@ -116,7 +113,7 @@ void wxMemStruct::ErrorMsg (const char * mesg)
   wxLogDebug("wxWindows memory checking error: %s", mesg);
   PrintNode ();
 
-//	 << m_fileName << ' ' << m_lineNum << endl;
+//         << m_fileName << ' ' << m_lineNum << endl;
 }
 
 /*
@@ -126,7 +123,7 @@ void wxMemStruct::ErrorMsg ()
 {
   wxLogDebug("wxWindows over/underwrite memory error:");
   PrintNode ();
-    
+
 //    cerr << m_fileName << ' ' << m_lineNum << endl;
 }
 
@@ -141,9 +138,9 @@ void wxMemStruct::ErrorMsg ()
 int wxMemStruct::AssertList ()
 {
     if (wxDebugContext::GetHead () != 0 && ! (wxDebugContext::GetHead ())->AssertIt () ||
-	wxDebugContext::GetTail () != 0 && ! wxDebugContext::GetTail ()->AssertIt ()) {
-	ErrorMsg ("Head or tail pointers trashed");
-	return 0;
+        wxDebugContext::GetTail () != 0 && ! wxDebugContext::GetTail ()->AssertIt ()) {
+        ErrorMsg ("Head or tail pointers trashed");
+        return 0;
     }
     return 1;
 }
@@ -163,8 +160,8 @@ int wxMemStruct::AssertList ()
 int wxMemStruct::AssertIt ()
 {
     return (m_id == MemStructId &&
-	    (m_prev == 0 || m_prev->m_id == MemStructId) &&
-	    (m_next == 0 || m_next->m_id == MemStructId));
+            (m_prev == 0 || m_prev->m_id == MemStructId) &&
+            (m_next == 0 || m_next->m_id == MemStructId));
 }
 
 
@@ -175,19 +172,19 @@ int wxMemStruct::AssertIt ()
 int wxMemStruct::Append ()
 {
     if (! AssertList ())
-	return 0;
+        return 0;
 
     if (wxDebugContext::GetHead () == 0) {
-	if (wxDebugContext::GetTail () != 0) {
-	    ErrorMsg ("Null list should have a null tail pointer");
-	    return 0;
-	}
-	(void) wxDebugContext::SetHead (this);
-	(void) wxDebugContext::SetTail (this);
+        if (wxDebugContext::GetTail () != 0) {
+            ErrorMsg ("Null list should have a null tail pointer");
+            return 0;
+        }
+        (void) wxDebugContext::SetHead (this);
+        (void) wxDebugContext::SetTail (this);
     } else {
-	wxDebugContext::GetTail ()->m_next = this;
-	this->m_prev = wxDebugContext::GetTail ();
-	(void) wxDebugContext::SetTail (this);
+        wxDebugContext::GetTail ()->m_next = this;
+        this->m_prev = wxDebugContext::GetTail ();
+        (void) wxDebugContext::SetTail (this);
     }
     return 1;
 }
@@ -201,51 +198,51 @@ int wxMemStruct::Append ()
 int wxMemStruct::Unlink ()
 {
     if (! AssertList ())
-	return 0;
+        return 0;
 
     if (wxDebugContext::GetHead () == 0 || wxDebugContext::GetTail () == 0) {
-	ErrorMsg ("Trying to remove node from empty list");
-	return 0;
+        ErrorMsg ("Trying to remove node from empty list");
+        return 0;
     }
 
     // Handle the part of the list before this node.
     if (m_prev == 0) {
-	if (this != wxDebugContext::GetHead ()) {
-	    ErrorMsg ("No previous node for non-head node");
-	    return 0;
-	}
-	(void) wxDebugContext::SetHead (m_next);
+        if (this != wxDebugContext::GetHead ()) {
+            ErrorMsg ("No previous node for non-head node");
+            return 0;
+        }
+        (void) wxDebugContext::SetHead (m_next);
     } else {
-	if (! m_prev->AssertIt ()) {
-	    ErrorMsg ("Trashed previous pointer");
-	    return 0;
-	}
-	
-	if (m_prev->m_next != this) {
-	    ErrorMsg ("List is inconsistent");
-	    return 0;
-	}
-	m_prev->m_next = m_next;
+        if (! m_prev->AssertIt ()) {
+            ErrorMsg ("Trashed previous pointer");
+            return 0;
+        }
+
+        if (m_prev->m_next != this) {
+            ErrorMsg ("List is inconsistent");
+            return 0;
+        }
+        m_prev->m_next = m_next;
     }
 
     // Handle the part of the list after this node.
     if (m_next == 0) {
-	if (this != wxDebugContext::GetTail ()) {
-	    ErrorMsg ("No next node for non-tail node");
-	    return 0;
-	}
-	(void) wxDebugContext::SetTail (m_prev);
+        if (this != wxDebugContext::GetTail ()) {
+            ErrorMsg ("No next node for non-tail node");
+            return 0;
+        }
+        (void) wxDebugContext::SetTail (m_prev);
     } else {
-	if (! m_next->AssertIt ()) {
-	    ErrorMsg ("Trashed next pointer");
-	    return 0;
-	}
+        if (! m_next->AssertIt ()) {
+            ErrorMsg ("Trashed next pointer");
+            return 0;
+        }
 
-	if (m_next->m_prev != this) {
-	    ErrorMsg ("List is inconsistent");
-	    return 0;
-	}
-	m_next->m_prev = m_prev;
+        if (m_next->m_prev != this) {
+            ErrorMsg ("List is inconsistent");
+            return 0;
+        }
+        m_next->m_prev = m_prev;
     }
 
     return 1;
@@ -262,22 +259,22 @@ int wxMemStruct::CheckBlock ()
     int nFailures = 0;
 
     if (m_firstMarker != MemStartCheck) {
-	nFailures++;
-	ErrorMsg ();
+        nFailures++;
+        ErrorMsg ();
     }
-    
+
     char * pointer = wxDebugContext::MidMarkerPos ((char *) this);
     if (* (wxMarkerType *) pointer != MemMidCheck) {
-	nFailures++;
-	ErrorMsg ();
+        nFailures++;
+        ErrorMsg ();
     }
-    
+
     pointer = wxDebugContext::EndMarkerPos ((char *) this, RequestSize ());
     if (* (wxMarkerType *) pointer != MemEndCheck) {
-	nFailures++;
-	ErrorMsg ();
+        nFailures++;
+        ErrorMsg ();
     }
-    
+
     return nFailures;
 }
 
@@ -288,12 +285,12 @@ int wxMemStruct::CheckBlock ()
 int wxMemStruct::CheckAllPrevious ()
 {
     int nFailures = 0;
-    
+
     for (wxMemStruct * st = this->m_prev; st != 0; st = st->m_prev) {
-	if (st->AssertIt ())
-	    nFailures += st->CheckBlock ();
-	else
-	    return -1;
+        if (st->AssertIt ())
+            nFailures += st->CheckBlock ();
+        else
+            return -1;
     }
 
     return nFailures;
@@ -366,7 +363,7 @@ void wxMemStruct::PrintNode ()
 void wxMemStruct::Dump ()
 {
   if (!ValidateNode()) return;
-  
+
   if (m_isObject)
   {
     wxObject *obj = (wxObject *)m_actualData;
@@ -416,15 +413,15 @@ int wxMemStruct::ValidateNode ()
 {
     char * startPointer = (char *) this;
     if (!AssertIt ()) {
-	if (IsDeleted ())
-	    ErrorMsg ("Object already deleted");
-	else {
-	    // Can't use the error routines as we have no recognisable object.
+        if (IsDeleted ())
+            ErrorMsg ("Object already deleted");
+        else {
+            // Can't use the error routines as we have no recognisable object.
 #ifndef __WXGTK__
-	     wxLogDebug("Can't verify memory struct - all bets are off!");
+             wxLogDebug("Can't verify memory struct - all bets are off!");
 #endif
-	}
-	return 0;
+        }
+        return 0;
     }
 
 /*
@@ -438,20 +435,20 @@ int wxMemStruct::ValidateNode ()
     if (* (wxMarkerType *) wxDebugContext::MidMarkerPos (startPointer) != MemMidCheck)
       ErrorMsg ();
     if (* (wxMarkerType *) wxDebugContext::EndMarkerPos (startPointer,
-					      RequestSize ()) !=
-	MemEndCheck)
+                                              RequestSize ()) !=
+        MemEndCheck)
       ErrorMsg ();
 
     // Back to before the extra buffer and check that
     // we can still read what we originally wrote.
     if (Marker () != MemStartCheck ||
-	* (wxMarkerType *) wxDebugContext::MidMarkerPos (startPointer)
-	                 != MemMidCheck ||
-	* (wxMarkerType *) wxDebugContext::EndMarkerPos (startPointer,
-					      RequestSize ()) != MemEndCheck)
+        * (wxMarkerType *) wxDebugContext::MidMarkerPos (startPointer)
+                         != MemMidCheck ||
+        * (wxMarkerType *) wxDebugContext::EndMarkerPos (startPointer,
+                                              RequestSize ()) != MemEndCheck)
     {
-	ErrorMsg ();
-	return 0;
+        ErrorMsg ();
+        return 0;
     }
 
     return 1;
@@ -588,7 +585,7 @@ char * wxDebugContext::EndMarkerPos (const char * buf, const size_t size)
 char * wxDebugContext::StartPos (const char * caller)
 {
     return ((char *) (caller - wxDebugContext::PaddedSize (sizeof(wxMarkerType)) -
-	    wxDebugContext::PaddedSize (sizeof (wxMemStruct))));
+            wxDebugContext::PaddedSize (sizeof (wxMemStruct))));
 }
 
 /*
@@ -620,7 +617,7 @@ size_t wxDebugContext::PaddedSize (const size_t size)
 size_t wxDebugContext::TotSize (const size_t reqSize)
 {
     return (PaddedSize (sizeof (wxMemStruct)) + PaddedSize (reqSize) +
-	    2 * sizeof(wxMarkerType));
+            2 * sizeof(wxMarkerType));
 }
 
 
@@ -631,7 +628,7 @@ void wxDebugContext::TraverseList (PmSFV func, wxMemStruct *from)
 {
   if (!from)
     from = wxDebugContext::GetHead ();
-    
+
   for (wxMemStruct * st = from; st != 0; st = st->m_next)
   {
       void* data = st->GetActualData();
@@ -683,7 +680,7 @@ bool wxDebugContext::Dump(void)
     }
   }
   TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
-  
+
   wxLogDebug( "" );
   wxLogDebug( "" );
 
@@ -739,10 +736,10 @@ bool wxDebugContext::PrintStatistics(bool detailed)
       wxLogDebug( "----- Memory statistics -----" );
     }
   }
-  
+
   bool currentMode = GetDebugMode();
   SetDebugMode(FALSE);
-  
+
   long noNonObjectNodes = 0;
   long noObjectNodes = 0;
   long totalSize = 0;
@@ -753,7 +750,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   if (!from)
     from = wxDebugContext::GetHead ();
 
-  wxMemStruct *st;    
+  wxMemStruct *st;
   for (st = from; st != 0; st = st->m_next)
   {
     void* data = st->GetActualData();
@@ -803,7 +800,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
     }
     wxLogDebug("");
   }
-  
+
   SetDebugMode(currentMode);
 
   wxLogDebug("Number of object items: %ld", noObjectNodes);
@@ -816,7 +813,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 #else
   return FALSE;
 #endif
-}    
+}
 
 bool wxDebugContext::PrintClasses(void)
 {
@@ -874,7 +871,7 @@ bool wxDebugContext::PrintClasses(void)
   wxLogDebug("");
   wxLogDebug("");
   return TRUE;
-}    
+}
 
 void wxDebugContext::SetCheckpoint(bool all)
 {
@@ -888,7 +885,7 @@ void wxDebugContext::SetCheckpoint(bool all)
 int wxDebugContext::Check(bool checkAll)
 {
   int nFailures = 0;
-    
+
   wxMemStruct *from = (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL );
   if (!from || checkAll)
     from = wxDebugContext::GetHead ();
@@ -942,7 +939,7 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
 #endif
 
 // Seems OK all of a sudden. Maybe to do with linking with multithreaded library?
-#if 0 // def _MSC_VER
+#if 0 // def __VISUALC__
 #define NO_DEBUG_ALLOCATION
 #endif
 
@@ -1001,7 +998,7 @@ void operator delete (void * buf)
 }
 
 // VC++ 6.0
-#if _MSC_VER >= 1200
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
 void operator delete(void* pData, char* /* fileName */, int /* lineNum */)
 {
 // ::operator delete(pData);
@@ -1039,12 +1036,12 @@ void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bo
   {
     return (void *)malloc(size);
   }
-  
+
     int totSize = wxDebugContext::TotSize (size);
     char * buf = (char *) malloc(totSize);
     if (!buf) {
-	wxLogDebug("Call to malloc (%ld) failed.", (long)size);
-	return 0;
+        wxLogDebug("Call to malloc (%ld) failed.", (long)size);
+        return 0;
     }
     wxMemStruct * st = (wxMemStruct *)buf;
     st->m_firstMarker = MemStartCheck;
@@ -1058,15 +1055,15 @@ void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bo
 
     // Errors from Append() shouldn't really happen - but just in case!
     if (st->Append () == 0) {
-	st->ErrorMsg ("Trying to append new node");
+        st->ErrorMsg ("Trying to append new node");
     }
-    
+
     if (wxDebugContext::GetCheckPrevious ()) {
-	if (st->CheckAllPrevious () < 0) {
-	    st->ErrorMsg ("Checking previous nodes");
-	}
+        if (st->CheckAllPrevious () < 0) {
+            st->ErrorMsg ("Checking previous nodes");
+        }
     }
-    
+
     // Set up the extra markers at the middle and end.
     char * ptr = wxDebugContext::MidMarkerPos (buf);
     * (wxMarkerType *) ptr = MemMidCheck;
@@ -1086,7 +1083,7 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 {
   if (!buf)
     return;
-    
+
   // If not in debugging allocation mode, do the normal thing
   // so we don't leave any trace of ourselves in the node list.
   if (!wxDebugContext::GetDebugMode())
@@ -1101,7 +1098,7 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
     wxMemStruct * st = (wxMemStruct *) wxDebugContext::StructPos (startPointer);
 
     if (! st->ValidateNode ())
-	return;
+        return;
 
     // If this is the current checkpoint, we need to
     // move the checkpoint back so it points to a valid
@@ -1113,12 +1110,12 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
     {
       st->ErrorMsg ("Unlinking deleted node");
     }
-    
+
     // Now put in the fill char into the id slot and the caller requested
     // memory locations.
     st->SetDeleted ();
     (void) memset (wxDebugContext::CallerMemPos (startPointer), MemFillChar,
-		   st->RequestSize ());
+                   st->RequestSize ());
 
     // Don't allow delayed freeing of memory in this version
 //    if (!wxDebugContext::GetDelayFree())
@@ -1160,7 +1157,7 @@ void wxTraceLevel(int level, const char *fmt ...)
 {
   if (wxDebugContext::GetLevel() < level)
     return;
-    
+
   va_list ap;
   static char buffer[512];
 

@@ -6,19 +6,19 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // check if to use precompiled headers
-#if (defined(__BORLANDC__) || defined(_MSC_VER) || defined(__WATCOMC__)) && defined(__WXMSW__)
-#if !NOPCH
-#define WX_PRECOMP
-#endif
+#if (defined(__BORLANDC__) || defined(__VISUALC__) || defined(__WATCOMC__)) && defined(__WXMSW__)
+    #if !NOPCH
+        #define WX_PRECOMP
+    #endif
 #endif
 
 // For some reason, this must be defined for common dialogs to work.
 #ifdef __WATCOMC__
-#define INCLUDE_COMMDLG_H	1
+#define INCLUDE_COMMDLG_H  1
 #endif
 
 // include the wx definitions

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DEFS_H_
@@ -21,27 +21,54 @@
 #include "wx/setup.h"
 #include "wx/version.h"
 
-// Helps SGI compilation, apparently
-#if defined(__SGI__)
-#if defined(__GNUG__)
-#define __need_wchar_t
-#else
-/* Note I use the term __SGI_CC__ for both cc and CC, its not a good idea to
- * mix gcc and cc/CC, the name mangling is different */
-#define __SGI_CC__
-#endif
-#endif
+// ----------------------------------------------------------------------------
+// compiler and OS identification
+// ----------------------------------------------------------------------------
 
-#if defined(sun) || defined(__SUN__)
-# if !defined(__GNUG__)
-#  ifndef __SUNCC__
-#   define __SUNCC__
-#  endif
-# endif
-#endif
+// OS
+#if defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi ) || defined(__unix__)
+    #ifndef __UNIX__
+        #define __UNIX__
+    #endif // Unix
+
+    // Helps SGI compilation, apparently
+    #ifdef __SGI__
+        #ifdef __GNUG__
+            #define __need_wchar_t
+        #else // !gcc
+            // Note I use the term __SGI_CC__ for both cc and CC, its not a good
+            // idea to mix gcc and cc/CC, the name mangling is different
+            #define __SGI_CC__
+        #endif // gcc/!gcc
+    #endif  // SGI
+
+    #if defined(sun) || defined(__SUN__)
+        #ifndef __GNUG__
+            #ifndef __SUNCC__
+                #define __SUNCC__
+            #endif // Sun CC
+        #endif
+    #endif // Sun
+#else   // Windows
+    #ifndef __WINDOWS__
+        #define __WINDOWS__
+    #endif  // Windows
+
+    // define another standard symbol for Microsoft Visual C++: the standard one
+    // (_MSC_VER) is also defined by Metrowerks compiler
+    #if defined(_MSC_VER) && !defined(__MWERKS__)
+        #define __VISUALC__
+    #elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
+        #define __BORLANDC__
+      #elif defined(__WATCOMC__)
+    //#define __WATCOMC__
+    #elif defined(__SC__)
+        #define __SYMANTECC__
+    #endif  // compiler
+#endif  // OS
 
 // suppress some Visual C++ warnings
-#ifdef _MSC_VER
+#ifdef __VISUALC__
 #   pragma warning(disable:4244)    // cobversion from double to float
 #   pragma warning(disable:4100)    // unreferenced formal parameter
 #endif
@@ -124,9 +151,9 @@
     typedef unsigned int bool;
 #elif defined(__SALFORDC__)
     typedef unsigned int bool;
-#elif defined(_MSC_VER) && (_MSC_VER <= 1000)
+#elif defined(__VISUALC__) && (__VISUALC__ <= 1000)
     typedef unsigned int bool;
-#elif defined(_MSC_VER) && (_MSC_VER == 1020)
+#elif defined(__VISUALC__) && (__VISUALC__ == 1020)
     #define bool unsigned int
 #elif defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
     typedef unsigned int bool;
@@ -144,7 +171,7 @@
     #endif // Sun CC
 #endif
 
-#if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__)) || defined(__SC__) || defined(__SALFORDC__)
+#if ( defined(__VISUALC__) && (__VISUALC__ <= 800) ) || defined(__GNUWIN32__) || (defined(__BORLANDC__) && defined(__WIN16__)) || defined(__SC__) || defined(__SALFORDC__)
 // Not a good idea, because later system files (e.g. windows.h)
 // may try to define it. Use wxByte instead.
 // #define byte unsigned char
@@ -282,30 +309,6 @@ WXDLLEXPORT_DATA(extern const bool) wxTrue;
 WXDLLEXPORT_DATA(extern const bool) wxFalse;
 
 // ----------------------------------------------------------------------------
-// compiler and OS identification
-// ----------------------------------------------------------------------------
-
-// OS
-#if     defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi ) || defined(__unix__)
-  #ifndef __UNIX__
-    #define __UNIX__
-  #endif
-#endif
-
-#ifndef __UNIX__                     // Windows
-  #if   defined(_MSC_VER)
-    #define __VISUALC__
-  #elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
-    #define __BORLANDC__
-  #elif defined(__WATCOMC__)
-    //#define __WATCOMC__
-  #elif defined(__SC__)
-    #define __SYMANTECC__
-  #endif  // compiler
-
-#endif  // OS
-
-// ----------------------------------------------------------------------------
 // compiler specific settings
 // ----------------------------------------------------------------------------
 
@@ -315,25 +318,18 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
   #pragma warning(disable: 4514) // unreferenced inline func has been removed
 /*
   you might be tempted to disable this one also: triggered by CHECK and FAIL
-  macros in debug.h, but it's, overall, is a rather useful one, so I leave it
-  and will try to find some way to disable this warning just for CHECK/FAIL.
-  Anyone?
+  macros in debug.h, but it's, overall, a rather useful one, so I leave it and
+  will try to find some way to disable this warning just for CHECK/FAIL. Anyone?
 */
   #pragma warning(disable: 4127) // conditional expression is constant
-
 #endif  // VC++
 
-#if _MSC_VER > 1010
-#undef try
-#undef except
-#undef finally
-#define except(x) catch(...)
-#elif defined(__MWERKS__)
-#undef try
-#undef except
-#undef finally
-#define except(x) catch(...)
-#endif
+#if defined(__MWERKS__)
+    #undef try
+    #undef except
+    #undef finally
+    #define except(x) catch(...)
+#endif // Metrowerks
 
 // where should i put this? we need to make sure of this as it breaks
 // the <iostream> code.
@@ -402,20 +398,20 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * Frame/dialog style flags
  */
-#define wxSTAY_ON_TOP       0x8000
-#define wxICONIZE           0x4000
-#define wxMINIMIZE          wxICONIZE
-#define wxMAXIMIZE          0x2000
-#define wxTHICK_FRAME       0x1000
-#define wxSYSTEM_MENU       0x0800
-#define wxMINIMIZE_BOX      0x0400
-#define wxMAXIMIZE_BOX      0x0200
-#define wxTINY_CAPTION_HORIZ 0x0100
-#define wxTINY_CAPTION_VERT 0x0080
-#define wxRESIZE_BOX        wxMAXIMIZE_BOX
-#define wxRESIZE_BORDER	    0x0040
-#define wxDIALOG_MODAL      0x0020
-#define wxDIALOG_MODELESS   0x0000
+#define wxSTAY_ON_TOP           0x8000
+#define wxICONIZE               0x4000
+#define wxMINIMIZE              wxICONIZE
+#define wxMAXIMIZE              0x2000
+#define wxTHICK_FRAME           0x1000
+#define wxSYSTEM_MENU           0x0800
+#define wxMINIMIZE_BOX          0x0400
+#define wxMAXIMIZE_BOX          0x0200
+#define wxTINY_CAPTION_HORIZ    0x0100
+#define wxTINY_CAPTION_VERT     0x0080
+#define wxRESIZE_BOX            wxMAXIMIZE_BOX
+#define wxRESIZE_BORDER         0x0040
+#define wxDIALOG_MODAL          0x0020
+#define wxDIALOG_MODELESS       0x0000
 
 #define wxDEFAULT_FRAME_STYLE    (wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 
@@ -423,7 +419,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxDEFAULT_FRAME wxDEFAULT_FRAME_STYLE
 #endif
 
-#define wxDEFAULT_DIALOG_STYLE	(wxSYSTEM_MENU|wxCAPTION|wxTHICK_FRAME)
+#define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU|wxCAPTION|wxTHICK_FRAME)
 
 /*
  * Subwindow style flags
@@ -671,7 +667,7 @@ enum {
   wxCROSS_HATCH,
   wxHORIZONTAL_HATCH,
   wxVERTICAL_HATCH,
-#define IS_HATCH(s)	((s)>=wxBDIAGONAL_HATCH && (s)<=wxVERTICAL_HATCH)
+#define IS_HATCH(s)    ((s)>=wxBDIAGONAL_HATCH && (s)<=wxVERTICAL_HATCH)
 
   wxJOIN_BEVEL =     120,
   wxJOIN_MITER,
@@ -684,7 +680,7 @@ enum {
 
 
 // Logical ops
-typedef enum 
+typedef enum
 {
   wxCLEAR,      // 0
   wxXOR,        // src XOR dst
@@ -715,10 +711,10 @@ typedef enum
 #define  wxWINDING_RULE    2
 
 // ToolPanel in wxFrame
-#define	wxTOOL_TOP	   1
-#define	wxTOOL_BOTTOM	   2
-#define	wxTOOL_LEFT	   3
-#define	wxTOOL_RIGHT	   4
+#define    wxTOOL_TOP       1
+#define    wxTOOL_BOTTOM       2
+#define    wxTOOL_LEFT       3
+#define    wxTOOL_RIGHT       4
 
 // Dialog specifiers/return values
 
@@ -784,13 +780,13 @@ enum wxDataFormat
 
 /* Virtual keycodes */
 
-enum wxKeyCode 
+enum wxKeyCode
 {
  WXK_BACK    =   8,
  WXK_TAB     =   9,
- WXK_RETURN  =	13,
- WXK_ESCAPE  =	27,
- WXK_SPACE   =	32,
+ WXK_RETURN  =    13,
+ WXK_ESCAPE  =    27,
+ WXK_SPACE   =    32,
  WXK_DELETE  = 127,
 
  WXK_START   = 300,
@@ -866,25 +862,25 @@ enum wxKeyCode
 
 /* OS mnemonics -- Identify the running OS (useful for Windows)
  * [Not all platforms are currently available or supported] */
-enum 
+enum
 {
   wxUNKNOWN_PLATFORM,
-  wxCURSES,     /* Text-only CURSES */
-  wxXVIEW_X,	/* Sun's XView OpenLOOK toolkit */
-  wxMOTIF_X,	/* OSF Motif 1.x.x */
-  wxCOSE_X,	/* OSF Common Desktop Environment */
-  wxNEXTSTEP,	/* NeXTStep */
-  wxMACINTOSH,	/* Apple System 7 */
-  wxGTK,	/* GTK */
-  wxQT,	        /* Qt */
-  wxGEOS,	/* GEOS */
-  wxOS2_PM,	/* OS/2 Workplace */
-  wxWINDOWS,	/* Windows or WfW */
-  wxPENWINDOWS,	/* Windows for Pen Computing */
-  wxWINDOWS_NT,	/* Windows NT */
-  wxWIN32S,	/* Windows 32S API */
-  wxWIN95,	/* Windows 95 */
-  wxWIN386	/* Watcom 32-bit supervisor modus */
+  wxCURSES,                 // Text-only CURSES
+  wxXVIEW_X,                // Sun's XView OpenLOOK toolkit
+  wxMOTIF_X,                // OSF Motif 1.x.x
+  wxCOSE_X,                 // OSF Common Desktop Environment
+  wxNEXTSTEP,               // NeXTStep
+  wxMACINTOSH,              // Apple System 7
+  wxGTK,                    // GTK
+  wxQT,                     // Qt
+  wxGEOS,                   // GEOS
+  wxOS2_PM,                 // OS/2 Workplace
+  wxWINDOWS,                // Windows or WfW
+  wxPENWINDOWS,             // Windows for Pen Computing
+  wxWINDOWS_NT,             // Windows NT
+  wxWIN32S,                 // Windows 32S API
+  wxWIN95,                  // Windows 95
+  wxWIN386                  // Watcom 32-bit supervisor modus
 };
 
 /* Printing */

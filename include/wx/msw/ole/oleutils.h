@@ -2,7 +2,7 @@
 // Name:        oleutils.h
 // Purpose:     OLE helper routines, OLE debugging support &c
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     19.02.1998
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -44,7 +44,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 // ============================================================================
 
 /*
-   The most dumb implementation of IUnknown methods. We don't support 
+   The most dumb implementation of IUnknown methods. We don't support
    aggregation nor containment, but for 99% of cases this simple
    implementation is quite enough.
 
@@ -121,11 +121,10 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 // Debugging support
 // ============================================================================
 
-#if defined(__WXDEBUG__) && defined(_MSC_VER) && (_MSC_VER > 1000)
-// ----------------------------------------------------------------------------
-// 
-// ----------------------------------------------------------------------------
-
+// VZ: I don't know it's not done for compilers other than VC++ but I leave it
+//     as is. Please note, though, that tracing OLE interface calls may be
+//     incredibly useful when debugging OLE programs.
+#if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ >= 1000)
 // ----------------------------------------------------------------------------
 // All OLE specific log functions have DebugTrace level (as LogTrace)
 // ----------------------------------------------------------------------------
@@ -144,3 +143,4 @@ void wxLogRelease(const char *szInterface, ULONG cRef);
 #endif  //WXDEBUG
 
 #endif  //_WX_OLEUTILS_H
+

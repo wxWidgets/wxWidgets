@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -51,15 +51,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "wx/ioswrap.h"
+
 #if wxUSE_IOSTREAMH
-#include <iostream.h>
-#include <fstream.h>
+    #include <fstream.h>
 #else
-#include <iostream>
-#include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+    #include <fstream>
 #endif
 
 #if !USE_SHARED_LIBRARY

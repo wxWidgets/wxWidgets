@@ -22,7 +22,7 @@
 
 #if wxUSE_WX_RESOURCES
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(disable:4706)   // assignment within conditional expression
 #endif // VC++
 
@@ -1568,7 +1568,7 @@ wxControl *wxWindow::CreateItem(const wxItemResource *resource, const wxItemReso
   return table->CreateItem((wxWindow *)this, resource, parentResource);
 }
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(default:4706)   // assignment within conditional expression
 #endif // VC++
 

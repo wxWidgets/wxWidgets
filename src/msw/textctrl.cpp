@@ -39,12 +39,9 @@
 #include <stdlib.h>
 
 #if wxUSE_IOSTREAMH
-#include <fstream.h>
+#   include <fstream.h>
 #else
-#include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+#   include <fstream>
 #endif
 
 #include <sys/types.h>

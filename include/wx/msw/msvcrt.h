@@ -19,12 +19,14 @@
 #ifndef _MSW_MSVCRT_H_
 #define _MSW_MSVCRT_H_
 
-// use debug CRT functions for memory leak detections in VC++ if we're not
-// using wxWindows own methods
-#if defined(__WXDEBUG__) && defined(_MSC_VER) && !wxUSE_GLOBAL_MEMORY_OPERATORS && !defined(__NO_VC_CRTDBG__)
-    #define wxUSE_VC_CRTDBG
-#else
-    #undef wxUSE_VC_CRTDBG
+// use debug CRT functions for memory leak detections in VC++ 5.0+ in debug
+// builds
+#undef wxUSE_VC_CRTDBG
+#if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ >= 1000)
+    // it doesn't combine well with wxWin own memory debugging methods
+    #if !wxUSE_GLOBAL_MEMORY_OPERATORS && !defined(__NO_VC_CRTDBG__)
+        #define wxUSE_VC_CRTDBG
+    #endif
 #endif
 
 #ifdef wxUSE_VC_CRTDBG
@@ -47,3 +49,4 @@
 #endif // wxUSE_VC_CRTDBG
 
 #endif // _MSW_MSVCRT_H_
+

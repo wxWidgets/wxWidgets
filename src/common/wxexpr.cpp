@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -21,12 +21,9 @@
 #endif
 
 #if wxUSE_IOSTREAMH
-#include <fstream.h>
+    #include <fstream.h>
 #else
-#include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+    #include <fstream>
 #endif
 
 #include <stdarg.h>

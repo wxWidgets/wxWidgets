@@ -6,7 +6,7 @@
 // Created:     10/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -17,16 +17,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_IOSTREAMH
 #   include <fstream.h>
 #else
 #   include <fstream>
-#   ifdef _MSC_VER
-        using namespace std;
-#   endif
 #endif
 
 #include "wx/stream.h"

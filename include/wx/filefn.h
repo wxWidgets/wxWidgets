@@ -29,16 +29,12 @@
 typedef long off_t;
 #endif
 
-#ifdef    _MSC_VER
-  #define   off_t       _off_t
-#endif
-
-#if defined(__BORLANDC__) && defined(__WIN16__)
-typedef long off_t;
-#endif
-
-#if defined(__SC__)
-typedef long off_t;
+#if defined(__VISUALC__) || defined(__MWERKS__)
+    typedef _off_t off_t;
+#elif defined(__BORLANDC__) && defined(__WIN16__)
+    typedef long off_t;
+#elif defined(__SC__)
+    typedef long off_t;
 #endif
 
 const off_t wxInvalidOffset = (off_t)-1;

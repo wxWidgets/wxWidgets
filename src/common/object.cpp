@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -40,15 +40,8 @@
 #endif
 
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
-  // for wxObject::Dump
-#if wxUSE_IOSTREAMH
-#  include <iostream.h>
-#else
-#  include <iostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-#endif
+    // for wxObject::Dump
+    #include "wx/ioswrap.h"
 #endif
 
 #if !USE_SHARED_LIBRARY
@@ -121,7 +114,7 @@ void wxObject::operator delete (void * buf)
 }
 
 // VC++ 6.0
-#if _MSC_VER >= 1200
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
 void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum */)
 {
  ::operator delete(pData);
@@ -129,7 +122,7 @@ void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum
 #endif
 
 // Cause problems for VC++ - crashes
-#if !defined(_MSC_VER) && wxUSE_ARRAY_MEMORY_OPERATORS
+#if !defined(__VISUALC__) && wxUSE_ARRAY_MEMORY_OPERATORS
 void * wxObject::operator new[] (size_t size, char * fileName, int lineNum)
 {
   return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Microsoft, Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -29,13 +29,14 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <stdio.h>
-#include <wx/msw/dibutils.h>
+
+#include "wx/msw/dibutils.h"
 
 #if defined(__WIN32__)
 #if !defined(__MWERKS__) && !defined(__SALFORDC__)
     #include <memory.h>             // for _fmemcpy()
 #endif
-	 #define _huge
+   #define _huge
 #ifndef hmemcpy
     #define hmemcpy memcpy
 #endif
@@ -81,7 +82,7 @@ void ClearSystemPalette(void)
   for(Counter = 0; Counter < 256; Counter++)
   {
     Palette.aEntries[Counter].peRed = 0;
-	 Palette.aEntries[Counter].peGreen = 0;
+   Palette.aEntries[Counter].peGreen = 0;
     Palette.aEntries[Counter].peBlue = 0;
     Palette.aEntries[Counter].peFlags = PC_NOCOLLAPSE;
   }
@@ -92,8 +93,8 @@ void ClearSystemPalette(void)
 
   if (ScreenPalette)
   {
-	 ScreenPalette = SelectPalette(ScreenDC,ScreenPalette,FALSE);
-	 nMapped = RealizePalette(ScreenDC);
+   ScreenPalette = SelectPalette(ScreenDC,ScreenPalette,FALSE);
+   nMapped = RealizePalette(ScreenDC);
     ScreenPalette = SelectPalette(ScreenDC,ScreenPalette,FALSE);
     bOK = DeleteObject(ScreenPalette);
   }
@@ -114,14 +115,14 @@ void ClearSystemPalette(void)
 
 int DibWriteFile(LPSTR szFile, LPBITMAPINFOHEADER lpbi)
 {
-	 HFILE               fh;
-	 OFSTRUCT            of;
+   HFILE               fh;
+   OFSTRUCT            of;
 
-	 fh = OpenFile(szFile, &of, OF_WRITE | OF_CREATE);
+   fh = OpenFile(szFile, &of, OF_WRITE | OF_CREATE);
 
   if (!fh) {
-//	 printf("la regamos0");
-	 return 0;
+//   printf("la regamos0");
+   return 0;
   }
 
   long size = DibSize(lpbi);
@@ -133,19 +134,19 @@ int DibWriteFile(LPSTR szFile, LPBITMAPINFOHEADER lpbi)
   bmf.bfReserved1 = 0;
   bmf.bfReserved2 = 0;
   bmf.bfOffBits = sizeof(bmf) + (char far*)(DibPtr(lpbi)) - (char far*)lpbi;
-#if defined( __WATCOMC__) || defined(_MSC_VER) || defined(__SC__) || defined(__SALFORDC__)
+#if defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__)
   if (_hwrite(fh, (LPCSTR)(&bmf), sizeof(bmf))<0 ||
-	_hwrite(fh, (LPCSTR)lpbi, size)<0) {
-	  _lclose(fh);
-//	 printf("la regamos1");
-	  return 0;
+  _hwrite(fh, (LPCSTR)lpbi, size)<0) {
+    _lclose(fh);
+//   printf("la regamos1");
+    return 0;
   }
 #else
   if (_hwrite(fh, (LPBYTE)(&bmf), sizeof(bmf))<0 ||
-	_hwrite(fh, (LPBYTE)lpbi, size)<0) {
-	  _lclose(fh);
-//	 printf("la regamos1");
-	  return 0;
+  _hwrite(fh, (LPBYTE)lpbi, size)<0) {
+    _lclose(fh);
+//   printf("la regamos1");
+    return 0;
   }
 #endif
 
@@ -155,50 +156,50 @@ int DibWriteFile(LPSTR szFile, LPBITMAPINFOHEADER lpbi)
 
 PDIB DibOpenFile(LPSTR szFile)
 {
-	 HFILE               fh;
-	 DWORD               dwLen;
-	 DWORD               dwBits;
-	 PDIB                pdib;
-	 LPVOID              p;
-	 OFSTRUCT            of;
+   HFILE               fh;
+   DWORD               dwLen;
+   DWORD               dwBits;
+   PDIB                pdib;
+   LPVOID              p;
+   OFSTRUCT            of;
 
 #if defined(WIN32) || defined(_WIN32)
-	 #define GetCurrentInstance()    GetModuleHandle(NULL)
+   #define GetCurrentInstance()    GetModuleHandle(NULL)
 #else
-	 #define GetCurrentInstance()    (HINSTANCE)SELECTOROF((LPVOID)&of)
+   #define GetCurrentInstance()    (HINSTANCE)SELECTOROF((LPVOID)&of)
 #endif
 
-	 fh = OpenFile(szFile, &of, OF_READ);
+   fh = OpenFile(szFile, &of, OF_READ);
 
-	 if (fh == -1)
-	 {
-		  HRSRC h;
+   if (fh == -1)
+   {
+      HRSRC h;
 
           // TODO: Unicode version
 #ifdef __WIN16__
-		  h = FindResource(GetCurrentInstance(), szFile, RT_BITMAP);
+      h = FindResource(GetCurrentInstance(), szFile, RT_BITMAP);
 #else
-		  h = FindResourceA(GetCurrentInstance(), szFile, RT_BITMAP);
+      h = FindResourceA(GetCurrentInstance(), szFile, RT_BITMAP);
 #endif
 
 #if defined(__WIN32__)
-		  //!!! can we call GlobalFree() on this? is it the right format.
-		  //!!! can we write to this resource?
-		  if (h)
-				return (PDIB)LockResource(LoadResource(GetCurrentInstance(), h));
+      //!!! can we call GlobalFree() on this? is it the right format.
+      //!!! can we write to this resource?
+      if (h)
+        return (PDIB)LockResource(LoadResource(GetCurrentInstance(), h));
 #else
-		  if (h)
-				fh = AccessResource(GetCurrentInstance(), h);
+      if (h)
+        fh = AccessResource(GetCurrentInstance(), h);
 #endif
-	 }
+   }
 
-	 if (fh == -1)
-		  return NULL;
+   if (fh == -1)
+      return NULL;
 
-	 pdib = DibReadBitmapInfo(fh);
+   pdib = DibReadBitmapInfo(fh);
 
-	 if (!pdib)
-		  return NULL;
+   if (!pdib)
+      return NULL;
 
     /* How much memory do we need to hold the DIB */
 
@@ -207,11 +208,11 @@ PDIB DibOpenFile(LPSTR szFile)
 
     /* Can we get more memory? */
 
-	 p = GlobalReAllocPtr(pdib,dwLen,0);
+   p = GlobalReAllocPtr(pdib,dwLen,0);
 
     if (!p)
     {
-		  GlobalFreePtr(pdib);
+      GlobalFreePtr(pdib);
         pdib = NULL;
     }
     else
@@ -221,8 +222,8 @@ PDIB DibOpenFile(LPSTR szFile)
 
     if (pdib)
     {
-		  /* read in the bits */
-		  _hread(fh, (LPBYTE)pdib + (UINT)pdib->biSize + DibPaletteSize(pdib), dwBits);
+      /* read in the bits */
+      _hread(fh, (LPBYTE)pdib + (UINT)pdib->biSize + DibPaletteSize(pdib), dwBits);
     }
 
     _lclose(fh);
@@ -468,7 +469,7 @@ PDIB DibCreate(int bits, int dx, int dy)
         *pdw++ = 0x00000000;    // 0000  black
         *pdw++ = 0x00800000;    // 0001  dark red
         *pdw++ = 0x00008000;    // 0010  dark green
-		  *pdw++ = 0x00808000;    // 0011  mustard
+      *pdw++ = 0x00808000;    // 0011  mustard
         *pdw++ = 0x00000080;    // 0100  dark blue
         *pdw++ = 0x00800080;    // 0101  purple
         *pdw++ = 0x00008080;    // 0110  dark turquoise
@@ -476,7 +477,7 @@ PDIB DibCreate(int bits, int dx, int dy)
         *pdw++ = 0x00808080;    // 0111  dark gray
         *pdw++ = 0x00FF0000;    // 1001  red
         *pdw++ = 0x0000FF00;    // 1010  green
-		  *pdw++ = 0x00FFFF00;    // 1011  yellow
+      *pdw++ = 0x00FFFF00;    // 1011  yellow
         *pdw++ = 0x000000FF;    // 1100  blue
         *pdw++ = 0x00FF00FF;    // 1101  pink (magenta)
         *pdw++ = 0x0000FFFF;    // 1110  cyan
@@ -583,69 +584,69 @@ static void hmemmove(BYTE _huge *d, BYTE _huge *s, LONG len)
 
 BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
 {
-	 LPBITMAPINFOHEADER  lpbi;
-	 PALETTEENTRY        pe;
-	 int                 n;
-	 int                 nDibColors;
-	 int                 nPalColors=0;
-	 BYTE FAR *          lpBits;
-	 RGBQUAD FAR *       lpRgb;
-	 BYTE                xlat[256];
-	 DWORD               SizeImage;
+   LPBITMAPINFOHEADER  lpbi;
+   PALETTEENTRY        pe;
+   int                 n;
+   int                 nDibColors;
+   int                 nPalColors=0;
+   BYTE FAR *          lpBits;
+   RGBQUAD FAR *       lpRgb;
+   BYTE                xlat[256];
+   DWORD               SizeImage;
 
-	 if (!hpal || !pdib)
-		  return FALSE;
+   if (!hpal || !pdib)
+      return FALSE;
 
-	 lpbi   = (LPBITMAPINFOHEADER)pdib;
-	 lpRgb  = DibColors(pdib);
+   lpbi   = (LPBITMAPINFOHEADER)pdib;
+   lpRgb  = DibColors(pdib);
 
-	 GetObject(hpal,sizeof(int),(LPSTR)&nPalColors);
-	 nDibColors = DibNumColors(pdib);
+   GetObject(hpal,sizeof(int),(LPSTR)&nPalColors);
+   nDibColors = DibNumColors(pdib);
 
-	 if ((SizeImage = lpbi->biSizeImage) == 0)
-		  SizeImage = DibSizeImage(lpbi);
+   if ((SizeImage = lpbi->biSizeImage) == 0)
+      SizeImage = DibSizeImage(lpbi);
 
-	 //
-	 //  build a xlat table. from the current DIB colors to the given
-	 //  palette.
-	 //
-	 for (n=0; n<nDibColors; n++)
-		  xlat[n] = (BYTE)GetNearestPaletteIndex(hpal,RGB(lpRgb[n].rgbRed,lpRgb[n].rgbGreen,lpRgb[n].rgbBlue));
+   //
+   //  build a xlat table. from the current DIB colors to the given
+   //  palette.
+   //
+   for (n=0; n<nDibColors; n++)
+      xlat[n] = (BYTE)GetNearestPaletteIndex(hpal,RGB(lpRgb[n].rgbRed,lpRgb[n].rgbGreen,lpRgb[n].rgbBlue));
 
-	 lpBits = (LPBYTE)DibPtr(lpbi);
-	 lpbi->biClrUsed = nPalColors;
+   lpBits = (LPBYTE)DibPtr(lpbi);
+   lpbi->biClrUsed = nPalColors;
 
-	 //
-	 // re-size the DIB
-	 //
-	 if (nPalColors > nDibColors)
-	 {
-		  GlobalReAllocPtr(lpbi, lpbi->biSize + nPalColors*sizeof(RGBQUAD) + SizeImage, 0);
-		  hmemmove((BYTE _huge *)DibPtr(lpbi), (BYTE _huge *)lpBits, SizeImage);
-		  lpBits = (LPBYTE)DibPtr(lpbi);
-	 }
-	 else if (nPalColors < nDibColors)
-	 {
-		  hmemcpy(DibPtr(lpbi), lpBits, SizeImage);
-		  GlobalReAllocPtr(lpbi, lpbi->biSize + nPalColors*sizeof(RGBQUAD) + SizeImage, 0);
-		  lpBits = (LPBYTE)DibPtr(lpbi);
-	 }
+   //
+   // re-size the DIB
+   //
+   if (nPalColors > nDibColors)
+   {
+      GlobalReAllocPtr(lpbi, lpbi->biSize + nPalColors*sizeof(RGBQUAD) + SizeImage, 0);
+      hmemmove((BYTE _huge *)DibPtr(lpbi), (BYTE _huge *)lpBits, SizeImage);
+      lpBits = (LPBYTE)DibPtr(lpbi);
+   }
+   else if (nPalColors < nDibColors)
+   {
+      hmemcpy(DibPtr(lpbi), lpBits, SizeImage);
+      GlobalReAllocPtr(lpbi, lpbi->biSize + nPalColors*sizeof(RGBQUAD) + SizeImage, 0);
+      lpBits = (LPBYTE)DibPtr(lpbi);
+   }
 
-	 //
-	 // translate the DIB bits
-	 //
-	 switch (lpbi->biCompression)
-	 {
-		  case BI_RLE8:
-				xlatRle8(lpBits, SizeImage, xlat);
-				break;
+   //
+   // translate the DIB bits
+   //
+   switch (lpbi->biCompression)
+   {
+      case BI_RLE8:
+        xlatRle8(lpBits, SizeImage, xlat);
+        break;
 
-		  case BI_RLE4:
-				xlatRle4(lpBits, SizeImage, xlat);
-				break;
+      case BI_RLE4:
+        xlatRle4(lpBits, SizeImage, xlat);
+        break;
 
         case BI_RGB:
-				if (lpbi->biBitCount == 8)
+        if (lpbi->biBitCount == 8)
                 xlatClut8(lpBits, SizeImage, xlat);
             else
                 xlatClut4(lpBits, SizeImage, xlat);
@@ -660,12 +661,12 @@ BOOL DibMapToPalette(PDIB pdib, HPALETTE hpal)
         GetPaletteEntries(hpal,n,1,&pe);
 
         lpRgb[n].rgbRed      = pe.peRed;
-		  lpRgb[n].rgbGreen    = pe.peGreen;
-		  lpRgb[n].rgbBlue     = pe.peBlue;
-		  lpRgb[n].rgbReserved = (BYTE)0;
-	 }
+      lpRgb[n].rgbGreen    = pe.peGreen;
+      lpRgb[n].rgbBlue     = pe.peBlue;
+      lpRgb[n].rgbReserved = (BYTE)0;
+   }
 
-	 return TRUE;
+   return TRUE;
 }
 
 
@@ -676,21 +677,21 @@ HPALETTE MakePalette(const BITMAPINFO FAR* Info, UINT flags)
 
   WORD nColors = Info->bmiHeader.biClrUsed;
   if (nColors) {
-	 LOGPALETTE* logPal = (LOGPALETTE*)
-		 new BYTE[sizeof(LOGPALETTE) + (nColors-1)*sizeof(PALETTEENTRY)];
+   LOGPALETTE* logPal = (LOGPALETTE*)
+     new BYTE[sizeof(LOGPALETTE) + (nColors-1)*sizeof(PALETTEENTRY)];
 
-	 logPal->palVersion  = 0x300; // Windows 3.0 version
-	 logPal->palNumEntries = nColors;
-	 for (short n = 0; n < nColors; n++) {
-		logPal->palPalEntry[n].peRed   = rgb[n].rgbRed;
-		logPal->palPalEntry[n].peGreen = rgb[n].rgbGreen;
-		logPal->palPalEntry[n].peBlue  = rgb[n].rgbBlue;
-		logPal->palPalEntry[n].peFlags = (BYTE)flags;
-	 }
-	 hPalette = ::CreatePalette(logPal);
-	 delete logPal;
+   logPal->palVersion  = 0x300; // Windows 3.0 version
+   logPal->palNumEntries = nColors;
+   for (short n = 0; n < nColors; n++) {
+    logPal->palPalEntry[n].peRed   = rgb[n].rgbRed;
+    logPal->palPalEntry[n].peGreen = rgb[n].rgbGreen;
+    logPal->palPalEntry[n].peBlue  = rgb[n].rgbBlue;
+    logPal->palPalEntry[n].peFlags = (BYTE)flags;
+   }
+   hPalette = ::CreatePalette(logPal);
+   delete logPal;
   } else
-	 hPalette = 0;
+   hPalette = 0;
 
   return hPalette;
 }

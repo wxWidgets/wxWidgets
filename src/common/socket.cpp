@@ -97,7 +97,7 @@ void wxMacProcessEvents() ;
 #include <signal.h>
 #include <errno.h>
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
 #include <io.h>
 #endif
 
@@ -157,7 +157,7 @@ void wxMacProcessEvents() ;
 // implementations (such as PC-NFS) will require you to include this
 // or a similar routine (see appendix in WinSock doc or help file).
 
-#if defined( NEED_WSAFDIsSet ) || defined( _MSC_VER )
+#if defined( NEED_WSAFDIsSet ) || defined( __VISUALC__ )
 int PASCAL FAR __WSAFDIsSet(SOCKET fd, fd_set FAR *set)
 {
   int i = set->fd_count;
@@ -440,9 +440,9 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
   SockMsg msg;
 
   // warning about 'cast truncates constant value'
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(disable: 4310)
-#endif // _MSC_VER
+#endif // __VISUALC__
 
   msg.sig[0] = (char) 0xad;
   msg.sig[1] = (char) 0xde;
@@ -468,9 +468,9 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
 
   return *this;
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(default: 4310)
-#endif // _MSC_VER
+#endif // __VISUALC__
 }
 
 wxSocketBase& wxSocketBase::Unread(const char *buffer, size_t nbytes)

@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UTILSH__
@@ -23,14 +23,7 @@
 #include "wx/filefn.h"
 #include "wx/process.h"
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-#endif
+#include "wx/ioswrap.h"
 
 #ifdef __X__
 #ifndef __VMS__

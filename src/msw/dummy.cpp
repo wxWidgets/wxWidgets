@@ -1,9 +1,9 @@
 /*
- * File:	dummy.cc
- * Purpose:	See below
- * Author:	Julian Smart
- * Created:	1993
- * Updated:	
+ * File:  dummy.cc
+ * Purpose:  See below
+ * Author:  Julian Smart
+ * Created:  1993
+ * Updated:
  * Copyright:   (c) 1993, AIAI, University of Edinburgh
  */
 
@@ -40,7 +40,7 @@
 
 // Foils optimizations in Visual C++ (see also app.cpp). Without it,
 // dummy.obj isn't linked and we get a linker error.
-#if defined(_MSC_VER)
+#if defined(__VISUALC__)
     char wxDummyChar = 0;
 #endif
 
@@ -51,7 +51,7 @@
 #if !defined(APIENTRY)
     #define APIENTRY FAR PASCAL
 #endif
- 
+
 int
 #ifdef __WATCOMC__
     PASCAL

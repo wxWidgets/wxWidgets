@@ -986,7 +986,7 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
 
   // make life easier for people using VC++ IDE: clicking on the message will
   // take us immediately to the place of the failed assert
-#ifdef _MSC_VER
+#ifdef __VISUALC__
   sprintf(szBuf, _("%s(%d): assert failed"), szFile, nLine);
 #else  // !VC++
   // make the error message more clear for all the others

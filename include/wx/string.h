@@ -16,15 +16,10 @@
 #pragma interface "string.h"
 #endif
 
-/* Dependencies (should be included before this header):
- *         string.h
- *         stdio.h
- *         stdarg.h
- *         limits.h
- */
 #ifdef __WXMAC__
-#include <ctype.h>
+    #include <ctype.h>
 #endif
+
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -32,11 +27,12 @@
 #include <stdlib.h>
 
 #ifndef  WX_PRECOMP
-  #include "wx/defs.h"     // Robert Roebling
+  #include "wx/defs.h"
+
   #ifdef    WXSTRING_IS_WXOBJECT
     #include "wx/object.h"
   #endif
-#endif
+#endif // !PCH
 
 #include "wx/debug.h"
 
@@ -83,7 +79,7 @@ inline size_t WXDLLEXPORT Strlen(const char *psz)
 // portable strcasecmp/_stricmp
 inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
 {
-#if     defined(_MSC_VER)
+#if     defined(__VISUALC__) || defined(__MWERKS__)
   return _stricmp(psz1, psz2);
 #elif     defined(__SC__)
   return _stricmp(psz1, psz2);
@@ -645,7 +641,7 @@ public:
   size_t find(const wxString& str, size_t nStart = 0) const;
 
   // VC++ 1.5 can't cope with this syntax.
-#if !(defined(_MSC_VER) && !defined(__WIN32__))
+#if !defined(__VISUALC__) || defined(__WIN32__)
     // find first n characters of sz
   size_t find(const char* sz, size_t nStart = 0, size_t n = npos) const;
 #endif
@@ -661,7 +657,7 @@ public:
   size_t rfind(const wxString& str, size_t nStart = npos) const;
 
   // VC++ 1.5 can't cope with this syntax.
-#if ! (defined(_MSC_VER) && !defined(__WIN32__))
+#if !defined(__VISUALC__) || defined(__WIN32__)
     // as find, but from the end
   size_t rfind(const char* sz, size_t nStart = npos,
           size_t n = npos) const;
@@ -854,19 +850,7 @@ wxString WXDLLEXPORT operator+(const char *psz, const wxString& string);
 
 #ifdef wxSTD_STRING_COMPATIBILITY
 
-// forward declare iostream
-// Known not to work with wxUSE_IOSTREAMH set to 0, so
-// replacing with includes (on advice of ungod@pasdex.com.au)
-// class WXDLLEXPORT istream;
-#if wxUSE_IOSTREAMH
-// N.B. BC++ doesn't have istream.h, ostream.h
-#include <iostream.h>
-#else
-#include <istream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-#endif
+#include "wx/ioswrap.h"
 
 WXDLLEXPORT istream& operator>>(istream& is, wxString& str);
 

@@ -57,13 +57,13 @@ class WXDLLEXPORT wxLogFrame;
 class WXDLLEXPORT wxFrame;
 
 #if wxUSE_IOSTREAMH
-// N.B. BC++ doesn't have istream.h, ostream.h
-#  include <iostream.h>
+    // N.B. BC++ doesn't have istream.h, ostream.h
+#   include <iostream.h>
 #else
-#  include <ostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+#   include <ostream>
+#   if defined(__VISUALC__) || defined(__MWERKS__)
+        using namespace std;
+#   endif
 #endif
 
 // ----------------------------------------------------------------------------

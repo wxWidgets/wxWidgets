@@ -15,7 +15,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-#pragma implementation "file.h"
+    #pragma implementation "file.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -23,7 +23,7 @@
 #include "wx/defs.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 // standard
@@ -55,37 +55,34 @@
 
   #include  <windows.h>     // for GetTempFileName
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
-  #include  <unistd.h>
-#ifdef __GNUWIN32__
-  #include <windows.h>
-#endif
+    #include  <unistd.h>
+    #ifdef __GNUWIN32__
+        #include <windows.h>
+    #endif
 #elif (defined(__WXSTUBS__))
-  // Have to ifdef this for different environments
-  #include <io.h>
+    // Have to ifdef this for different environments
+    #include <io.h>
 #elif (defined(__WXMAC__))
-  int access( const char *path, int mode ) { return 0 ; }
-  char* mktemp( char * path ) { return path ;}
-  #include  <unistd.h>
-  #include  <unix.h>
-  #define   W_OK        2
-  #define   R_OK        4
+    int access( const char *path, int mode ) { return 0 ; }
+    char* mktemp( char * path ) { return path ;}
+    #include  <unistd.h>
+    #include  <unix.h>
+    #define   W_OK        2
+    #define   R_OK        4
 #else
-  #error  "Please specify the header with file functions declarations."
+    #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
 
 #include  <stdio.h>       // SEEK_xxx constants
 #include  <fcntl.h>       // O_RDONLY &c
 
 #ifndef __MWERKS__
-#include  <sys/types.h>   // needed for stat
-#include  <sys/stat.h>    // stat
+    #include  <sys/types.h>   // needed for stat
+    #include  <sys/stat.h>    // stat
 #endif
 
 // Microsoft compiler loves underscores, feed them to it
-#ifdef    _MSC_VER
-
-  #ifndef __MWERKS__
-
+#ifdef  __VISUALC__
   // functions
   #define   open        _open
   #define   close       _close
@@ -100,7 +97,7 @@
   #define   stat        _stat
 
   // constants
-  
+
   #define   O_RDONLY    _O_RDONLY
   #define   O_WRONLY    _O_WRONLY
   #define   O_RDWR      _O_RDWR
@@ -110,16 +107,11 @@
 
   #define   S_IFDIR     _S_IFDIR
   #define   S_IFREG     _S_IFREG
-  
-  #endif
-
-  #define   W_OK        2
-  #define   R_OK        4
 #else
   #define   tell(fd)    lseek(fd, 0, SEEK_CUR)
-#endif  //_MSC_VER
+#endif  // VC++
 
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) || defined(_MSC_VER)
   #define   W_OK        2
   #define   R_OK        4
 #endif
@@ -129,9 +121,8 @@
   #define   O_BINARY    (0)
 #endif  //__UNIX__
 
-
 #ifdef __SALFORDC__
-#include <unix.h>
+    #include <unix.h>
 #endif
 
 // wxWindows
@@ -141,13 +132,13 @@
 #include  <wx/log.h>
 
 #ifndef MAX_PATH
-#define MAX_PATH 512
+    #define MAX_PATH 512
 #endif
 
 #ifdef __WXMAC__
-char gwxMacFileName[ MAX_PATH ] ;
-char gwxMacFileName2[ MAX_PATH ] ;
-char gwxMacFileName3[ MAX_PATH ] ;
+    char gwxMacFileName[ MAX_PATH ] ;
+    char gwxMacFileName2[ MAX_PATH ] ;
+    char gwxMacFileName3[ MAX_PATH ] ;
 #endif
 
 // ============================================================================
@@ -213,7 +204,7 @@ bool wxFile::Create(const char *szFileName, bool bOverwrite, int accessMode)
   // if bOverwrite we create a new file or truncate the existing one,
   // otherwise we only create the new file and fail if it already exists
 #ifdef __SALFORDC__
-  int fd = open(szFileName, O_WRONLY | O_CREAT | 
+  int fd = open(szFileName, O_WRONLY | O_CREAT |
                 (bOverwrite ? O_TRUNC : O_EXCL));
 #else
   int fd = open(szFileName, O_WRONLY | O_CREAT |
@@ -330,7 +321,7 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 bool wxFile::Flush()
 {
   if ( IsOpened() ) {
-    #if (defined(_MSC_VER) && !defined(__MWERKS__)) || wxHAVE_FSYNC
+    #if defined(__VISUALC__) || wxHAVE_FSYNC
         if ( fsync(m_fd) == -1 )
         {
             wxLogSysError(_("can't flush file descriptor %d"), m_fd);
@@ -399,9 +390,9 @@ off_t wxFile::Length() const
 {
   wxASSERT( IsOpened() );
 
-  #if defined(  _MSC_VER ) && !defined( __MWERKS__ )
+  #ifdef __VISUALC__
     int iRc = _filelength(m_fd);
-  #else
+  #else // !VC++
     int iRc = tell(m_fd);
     if ( iRc != -1 ) {
       // @ have to use const_cast :-(
@@ -416,8 +407,7 @@ off_t wxFile::Length() const
 
       iRc = iLen;
     }
-
-  #endif  //_MSC_VER
+  #endif  // VC++
 
   if ( iRc == -1 ) {
     wxLogSysError(_("can't find length of file on file descriptor %d"), m_fd);

@@ -2,7 +2,7 @@
 // Name:        msw/ole/dataobj.cpp
 // Purpose:     implementation of wx[I]DataObject class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     10.05.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -313,7 +313,7 @@ STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDirection,
     return E_NOTIMPL;
   }
 
-  wxIEnumFORMATETC *pEnum = 
+  wxIEnumFORMATETC *pEnum =
     new wxIEnumFORMATETC(m_pDataObject->GetPreferredFormat());
   pEnum->AddRef();
   *ppenumFormatEtc = pEnum;
@@ -359,7 +359,7 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
 #ifdef __WXDEBUG__
   // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
-  #ifdef _MSC_VER
+  #ifdef __VISUALC__
     #pragma warning(disable:4063)
   #endif // VC++
 
@@ -386,7 +386,7 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
       return s_szBuf;
   }
 
-  #ifdef _MSC_VER
+  #ifdef __VISUALC__
     #pragma warning(default:4063)
   #endif // VC++
 

@@ -227,7 +227,7 @@ bool wxApp::Initialize()
 
     // This is to foil optimizations in Visual C++ that throw out dummy.obj.
     // PLEASE DO NOT ALTER THIS.
-#if defined(_MSC_VER) && !defined(WXMAKINGDLL)
+#if defined(__VISUALC__) && !defined(WXMAKINGDLL)
     extern char wxDummyChar;
     if (wxDummyChar) wxDummyChar++;
 #endif
@@ -545,7 +545,7 @@ void wxApp::CleanUp()
 #if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
 
 // temporarily disable this warning
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(disable: 4715) // not all control paths return a value
 #endif // Visual C++
 
@@ -565,10 +565,10 @@ int wxEntry(WXHINSTANCE hInstance,
   // FIXME other compilers must support Win32 SEH (structured exception
   //       handling) too, just find the appropriate keyword in their docs!
   //       Please note that it's _not_ the same as C++ exceptions!
-#if !defined(__WXDEBUG__) && defined(_MSC_VER) && !defined(__MWERKS__)
+#if !defined(__WXDEBUG__) && defined(__VISUALC__)
     #define CATCH_PROGRAM_EXCEPTIONS
 
-  __try {
+    __try {
 #else
     #undef  CATCH_PROGRAM_EXCEPTIONS
 #endif
@@ -656,7 +656,7 @@ int wxEntry(WXHINSTANCE hInstance,
 }
 
 // restore warning state
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(default: 4715) // not all control paths return a value
 #endif // Visual C++
 
@@ -1123,6 +1123,6 @@ HINSTANCE wxGetInstance()
 
 // For some reason, with MSVC++ 1.5, WinMain isn't linked in properly
 // if in a separate file. So include it here to ensure it's linked.
-#if (defined(_MSC_VER) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__TWIN32__))
+#if (defined(__VISUALC__) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !defined(__TWIN32__))
   #include "main.cpp"
 #endif

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -59,9 +59,9 @@
 #include <stdlib.h>
 #include <string.h>
 #ifndef __WATCOMC__
-#if !(defined(_MSC_VER) && (_MSC_VER > 800))
-#include <errno.h>
-#endif
+    #if !(defined(_MSC_VER) && (_MSC_VER > 800))
+        #include <errno.h>
+    #endif
 #endif
 #include <stdarg.h>
 

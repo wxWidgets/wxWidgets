@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -67,8 +67,8 @@ IMPLEMENT_CLASS(wxXLPHelpController, wxHelpControllerBase)
 #endif
 
 // suppress annoying warning "'this' used in base member init list" (so what?)
-#ifdef _MSC_VER
-#pragma warning(disable: 4355)
+#ifdef __VISUALC__
+    #pragma warning(disable: 4355)
 #endif // Visual C++
 
 wxXLPHelpController::wxXLPHelpController(void)
@@ -78,8 +78,8 @@ wxXLPHelpController::wxXLPHelpController(void)
   helpRunning = FALSE; helpConnection = NULL;
 }
 
-#ifdef _MSC_VER
-#pragma warning(default: 4355)
+#ifdef __VISUALC__
+    #pragma warning(default: 4355)
 #endif // Visual C++
 
 wxXLPHelpController::~wxXLPHelpController(void)
@@ -118,21 +118,21 @@ bool wxXLPHelpController::LoadFile(const wxString& file)
 
 bool wxXLPHelpController::DisplayContents(void)
 {
-	if (!helpRunning)
-	{
+  if (!helpRunning)
+  {
       if (!Run())
         return FALSE;
     }
     if (helpConnection)
-      	return helpConnection->Execute("s -1");
+        return helpConnection->Execute("s -1");
     else
-	    return FALSE;
+      return FALSE;
 }
 
 bool wxXLPHelpController::DisplaySection(int section)
 {
     if (!helpRunning)
-	{
+  {
       if (!Run())
         return FALSE;
     }
@@ -146,7 +146,7 @@ bool wxXLPHelpController::DisplaySection(int section)
 bool wxXLPHelpController::DisplayBlock(long block)
 {
     if (!helpRunning)
-	{
+  {
       if (!Run())
         return FALSE;
     }
@@ -160,7 +160,7 @@ bool wxXLPHelpController::DisplayBlock(long block)
 bool wxXLPHelpController::KeywordSearch(const wxString& k)
 {
     if (!helpRunning)
-	{
+  {
       if (!Run())
         return FALSE;
     }

@@ -2,12 +2,12 @@
 // Name:        odbc.cpp
 // Purpose:     ODBC implementation
 // Author:      Julian Smart, Olaf Klein (oklein@smallo.ruhr.de),
-//               Patrick Halke (patrick@zaphod.ruhr.de)
-// Modified by:	
+//              Patrick Halke (patrick@zaphod.ruhr.de)
+// Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -25,7 +25,7 @@
 
 #if wxUSE_ODBC
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(disable:4706)   // assignment within conditional expression
 #endif // VC++
 
@@ -1831,7 +1831,7 @@ bool wxQueryField::IsDirty(void) {
   return dirty;
 }
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
     #pragma warning(default:4706)   // assignment within conditional expression
 #endif // VC++
 

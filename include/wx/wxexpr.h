@@ -21,14 +21,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-#endif
+#include "wx/ioswrap.h"
 
 #include "wx/list.h"
 #include "wx/hash.h"

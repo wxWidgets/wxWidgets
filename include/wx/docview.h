@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DOCH__
@@ -44,7 +44,7 @@ class WXDLLEXPORT wxConfigBase;
 #else
 #  include <istream>
 #  include <ostream>
-#  ifdef _MSC_VER
+#  ifdef __VISUALC__
       using namespace std;
 #  endif
 #endif

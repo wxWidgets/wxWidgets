@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_OBJECTH__
@@ -40,13 +40,13 @@ class WXDLLEXPORT wxHashTable;
 class WXDLLEXPORT wxObject_Serialize;
 
 #if wxUSE_IOSTREAMH
-// N.B. BC++ doesn't have istream.h, ostream.h
-#  include <iostream.h>
+    // N.B. BC++ doesn't have istream.h, ostream.h
+#   include <iostream.h>
 #else
-#  include <ostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+#   include <ostream>
+#   if defined(__VISUALC__) || defined(__MWERKS__)
+        using namespace std;
+#   endif
 #endif
 
 /*
@@ -61,7 +61,7 @@ class WXDLLEXPORT wxClassInfo
    wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn fn);
 
    wxObject *CreateObject(void);
-   
+
    inline char *GetClassName(void) const { return m_className; }
    inline char *GetBaseClassName1(void) const { return m_baseClassName1; }
    inline char *GetBaseClassName2(void) const { return m_baseClassName2; }
@@ -87,7 +87,7 @@ public:
    char*                    m_baseClassName2;
    int                      m_objectSize;
    wxObjectConstructorFn    m_objectConstructor;
-   
+
    // Pointers to base wxClassInfos: set in InitializeClasses
    // called from wx_main.cc
    wxClassInfo*             m_baseInfo1;
@@ -198,13 +198,12 @@ class WXDLLEXPORT wxObject
   void operator delete (void * buf);
 
 // VC++ 6.0
-#if _MSC_VER >= 1200
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
   void operator delete(void *buf, char*, int);
 #endif
 
-  // Cause problems for VC++
-// #ifndef _MSC_VER
-#if !defined(_MSC_VER) && wxUSE_ARRAY_MEMORY_OPERATORS
+    // Causes problems for VC++
+#if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__)
   void * operator new[] (size_t size, char * fileName = NULL, int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
@@ -216,7 +215,7 @@ class WXDLLEXPORT wxObject
 #endif
 */
 
-#endif
+#endif // Debug & memory tracing
 
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
   virtual void Dump(ostream& str);

@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MEMORYH__
@@ -29,13 +29,13 @@
 #include <stddef.h>
 
 #if wxUSE_IOSTREAMH
-// N.B. BC++ doesn't have istream.h, ostream.h
-#  include <iostream.h>
+    // N.B. BC++ doesn't have istream.h, ostream.h
+#   include <iostream.h>
 #else
-#  include <ostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+#   include <ostream>
+#   if defined(__VISUALC__) || defined(__MWERKS__)
+        using namespace std;
+#   endif
 #endif
 
 #ifdef __WXDEBUG__
@@ -49,15 +49,15 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 // Undefine temporarily (new is #defined in object.h) because we want to
 // declare some new operators.
 #ifdef new
-#undef new
+    #undef new
 #endif
 
 #if defined(__SUNCC__)
-#define wxUSE_ARRAY_MEMORY_OPERATORS 0
-#elif !( defined (_MSC_VER) && (_MSC_VER <= 1020) ) || defined( __MWERKS__)
-#define wxUSE_ARRAY_MEMORY_OPERATORS 1
+    #define wxUSE_ARRAY_MEMORY_OPERATORS 0
+#elif !( defined (__VISUALC__) && (__VISUALC__ <= 1020) ) || defined( __MWERKS__)
+    #define wxUSE_ARRAY_MEMORY_OPERATORS 1
 #else
-#define wxUSE_ARRAY_MEMORY_OPERATORS 0
+    #define wxUSE_ARRAY_MEMORY_OPERATORS 0
 #endif
 
 // Added JACS 25/11/98: needed for some compilers
@@ -76,9 +76,9 @@ void operator delete[] (void * buf);
 #endif
 
 // VC++ 6.0
-#if _MSC_VER >= 1200
-void operator delete(void *buf, char*, int);
-void operator delete[](void *buf, char*, int);
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+    void operator delete(void *buf, char*, int);
+    void operator delete[](void *buf, char*, int);
 #endif
 
 #endif

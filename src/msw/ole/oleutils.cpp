@@ -2,7 +2,7 @@
 // Name:        ole/oleutils.cpp
 // Purpose:     implementation of OLE helper functions
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     19.02.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -37,8 +37,8 @@
 #include  <wx/msw/ole/uuid.h>
 #include  <wx/msw/ole/oleutils.h>
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
-#include  <docobj.h>
+#if defined(__VISUALC__) && (__VISUALC__ > 1000)
+    #include  <docobj.h>
 #endif
 
 // ============================================================================
@@ -62,7 +62,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 // Debug support
 // ----------------------------------------------------------------------------
 
-#if defined(__WXDEBUG__) && defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ > 1000)
 const char *GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID

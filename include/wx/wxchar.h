@@ -22,11 +22,11 @@
 #endif
 
 // only do Unicode for Windows (VC++), for now
-#if defined(_MSC_VER) && defined(__WIN32__)
+#if defined(__VISUALC__) && defined(__WIN32__)
 
 #include <tchar.h>
 typedef  _TCHAR      wxChar;
-typedef  _TSCHAR	 wxSChar;
+typedef  _TSCHAR     wxSChar;
 typedef  _TUCHAR     wxUChar;
 
    // ctype.h functions
@@ -120,11 +120,11 @@ typedef  _TUCHAR     wxUChar;
 #error   "Please define your compiler's Unicode conventions in wxChar.h"
 #endif
 
-typedef char         	wxChar;
-typedef signed char	 	wxSChar;
-typedef unsigned char	wxUChar;
+typedef char            wxChar;
+typedef signed char     wxSChar;
+typedef unsigned char   wxUChar;
 
-#define _T(x)        	x
+#define _T(x)           x
 
    // ctype.h functions
 #define  wxIsalnum   isalnum
@@ -212,7 +212,7 @@ inline bool WXDLLEXPORT wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
 /// safe version of strlen() (returns 0 if passed NULL pointer)
 inline size_t  WXDLLEXPORT wxStrlen(const wxChar *psz)
-#if defined(_MSC_VER)
+#if defined(__VISUALC__)
    { return psz ? _tcslen(psz) : 0; }
 #else
    { return psz ? strlen(psz) : 0; }
@@ -220,7 +220,7 @@ inline size_t  WXDLLEXPORT wxStrlen(const wxChar *psz)
 
 /// portable strcasecmp/_stricmp
 inline int WXDLLEXPORT wxStricmp(const wxChar *, const wxChar *)
-#if defined(_MSC_VER)
+#if defined(__VISUALC__)
    { return _tcsicmp(psz1, psz2); }
 #elif defined(__BORLANDC__)
    { return stricmp(psz1, psz2); }
@@ -239,7 +239,7 @@ inline int WXDLLEXPORT wxStricmp(const wxChar *, const wxChar *)
 
     return c1 - c2;
   */
-  
+
   #error  "Please define string case-insensitive compare for your OS/compiler"
 #endif  // OS/compiler
 

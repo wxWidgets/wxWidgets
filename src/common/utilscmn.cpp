@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -30,15 +30,12 @@
 #include "wx/textdlg.h"
 #endif
 
+#include "wx/ioswrap.h"
+
 #if wxUSE_IOSTREAMH
-#include <iostream.h>
-#include <fstream.h>
+    #include <fstream.h>
 #else
-#include <iostream>
-#include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+    #include <fstream>
 #endif
 
 #include <ctype.h>
@@ -46,9 +43,9 @@
 #include <stdlib.h>
 #include <string.h>
 #if !defined(__WATCOMC__)
-#if !(defined(_MSC_VER) && (_MSC_VER > 800))
-#include <errno.h>
-#endif
+    #if !(defined(_MSC_VER) && (_MSC_VER > 800))
+        #include <errno.h>
+    #endif
 #endif
 #include <time.h>
 #ifndef __MWERKS__
@@ -92,14 +89,14 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 {
 
   register char c1, c2;
-  while( maxchar--) 
+  while( maxchar--)
   {
     c1 = tolower(*str_1++);
     c2 = tolower(*str_2++);
-    
+
     if ( !c1 || c1!=c2 )
-  		return c1 - c2;
-  		    
+                  return c1 - c2;
+
   } ;
 
   return 0 ;
@@ -163,14 +160,6 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 #endif
 #endif
 
-#ifdef _MSC_VER
-#pragma warning (disable : 4245)
-#endif
-
-#ifdef _MSC_VER
-#pragma warning (default : 4245)
-#endif
-
 #else
 // This declaration is missing in SunOS!
 // (Yes, I know it is NOT ANSI-C but its in BSD libc)
@@ -181,7 +170,7 @@ extern "C"
   int strncasecmp (const char *, const char *, size_t);
 }
 #endif
-#endif				/* __WXMSW__ */
+#endif  /* __WXMSW__ */
 
 
 char *
@@ -191,7 +180,7 @@ copystring (const char *s)
   size_t len = strlen (s) + 1;
 
   char *news = new char[len];
-  memcpy (news, s, len);	// Should be the fastest
+  memcpy (news, s, len);    // Should be the fastest
 
   return news;
 }
@@ -199,7 +188,7 @@ copystring (const char *s)
 // Id generation
 static long wxCurrentId = 100;
 
-long 
+long
 wxNewId (void)
 {
   return wxCurrentId++;
@@ -208,21 +197,21 @@ wxNewId (void)
 long
 wxGetCurrentId(void) { return wxCurrentId; }
 
-void 
+void
 wxRegisterId (long id)
 {
   if (id >= wxCurrentId)
     wxCurrentId = id + 1;
 }
 
-void 
+void
 StringToFloat (char *s, float *number)
 {
   if (s && *s && number)
     *number = (float) strtod (s, (char **) NULL);
 }
 
-void 
+void
 StringToDouble (char *s, double *number)
 {
   if (s && *s && number)
@@ -248,14 +237,14 @@ DoubleToString (double number, const char *fmt)
   return buf;
 }
 
-void 
+void
 StringToInt (char *s, int *number)
 {
   if (s && *s && number)
     *number = (int) strtol (s, (char **) NULL, 10);
 }
 
-void 
+void
 StringToLong (char *s, long *number)
 {
   if (s && *s && number)
@@ -288,7 +277,7 @@ static char hexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A'
 int wxHexToDec(const wxString& buf)
 {
   int firstDigit, secondDigit;
-  
+
   if (buf.GetChar(0) >= 'A')
     firstDigit = buf.GetChar(0) - 'A' + 10;
   else
@@ -298,7 +287,7 @@ int wxHexToDec(const wxString& buf)
     secondDigit = buf.GetChar(1) - 'A' + 10;
   else
     secondDigit = buf.GetChar(1) - '0';
-    
+
   return firstDigit * 16 + secondDigit;
 }
 
@@ -321,7 +310,7 @@ wxString wxDecToHex(int dec)
 }
 
 // Match a string INDEPENDENT OF CASE
-bool 
+bool
 StringMatch (char *str1, char *str2, bool subString, bool exact)
 {
   if (str1 == NULL || str2 == NULL)
@@ -338,15 +327,15 @@ StringMatch (char *str1, char *str2, bool subString, bool exact)
       // Search for str1 in str2
       // Slow .... but acceptable for short strings
       for (i = 0; i <= len2 - len1; i++)
-	{
-	  if (strncasecmp (str1, str2 + i, len1) == 0)
-	    return TRUE;
-	}
+        {
+          if (strncasecmp (str1, str2 + i, len1) == 0)
+            return TRUE;
+        }
     }
   else if (exact)
     {
       if (strcasecmp (str1, str2) == 0)
-	return TRUE;
+        return TRUE;
     }
   else
     {
@@ -354,7 +343,7 @@ StringMatch (char *str1, char *str2, bool subString, bool exact)
       int len2 = strlen (str2);
 
       if (strncasecmp (str1, str2, wxMin (len1, len2)) == 0)
-	return TRUE;
+        return TRUE;
     }
 
   return FALSE;
@@ -365,7 +354,7 @@ StringMatch (char *str1, char *str2, bool subString, bool exact)
 wxString wxNow( void )
 {
   time_t now = time((time_t *) NULL);
-  char *date = ctime(&now); 
+  char *date = ctime(&now);
   date[24] = '\0';
   return wxString(date);
 }
@@ -400,31 +389,31 @@ char *wxStripMenuCodes (char *in, char *out)
 {
   if (!in)
     return (char *) NULL;
-    
+
   if (!out)
     out = copystring(in);
 
   char *tmpOut = out;
-  
+
   while (*in)
     {
       if (*in == '&')
-	{
-	  // Check && -> &, &x -> x
-	  if (*++in == '&')
-	    *out++ = *in++;
-	}
+        {
+          // Check && -> &, &x -> x
+          if (*++in == '&')
+            *out++ = *in++;
+        }
       else if (*in == '\t')
-	{
+        {
           // Remove all stuff after \t in X mode, and let the stuff as is
           // in Windows mode.
           // Accelerators are handled in wx_item.cc for Motif, and are not
           // YET supported in XView
-	  break;
-	}
+          break;
+        }
       else
-	*out++ = *in++;
-    }				// while
+        *out++ = *in++;
+    }                                // while
 
   *out = '\0';
 
@@ -463,12 +452,12 @@ wxFindWindowByLabel (const wxString& title, wxWindow * parent)
   else
     {
       for (wxNode * node = wxTopLevelWindows.First (); node; node = node->Next ())
-	{
-	  wxWindow *win = (wxWindow *) node->Data ();
-	  wxWindow *retwin = wxFindWindowByLabel1 (title, win);
-	  if (retwin)
-	    return retwin;
-	}			// for()
+        {
+          wxWindow *win = (wxWindow *) node->Data ();
+          wxWindow *retwin = wxFindWindowByLabel1 (title, win);
+          if (retwin)
+            return retwin;
+        }                        // for()
 
     }
   return (wxWindow *) NULL;
@@ -481,22 +470,22 @@ wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
   if (parent)
     {
       if (parent->GetLabel() == title)
-		return parent;
+                return parent;
     }
 
   if (parent)
     {
       for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
-	{
-	  wxWindow *win = (wxWindow *) node->Data ();
-	  wxWindow *retwin = wxFindWindowByLabel1 (title, win);
-	  if (retwin)
-	    return retwin;
-	}			// for()
+        {
+          wxWindow *win = (wxWindow *) node->Data ();
+          wxWindow *retwin = wxFindWindowByLabel1 (title, win);
+          if (retwin)
+            return retwin;
+        }                        // for()
 
     }
 
-  return (wxWindow *) NULL;			// Not found
+  return (wxWindow *) NULL;                        // Not found
 
 }
 
@@ -518,12 +507,12 @@ wxFindWindowByName (const wxString& title, wxWindow * parent)
   else
     {
       for (wxNode * node = wxTopLevelWindows.First (); node; node = node->Next ())
-	{
-	  wxWindow *win = (wxWindow *) node->Data ();
-	  wxWindow *retwin = wxFindWindowByName1 (title, win);
-	  if (retwin)
-	    return retwin;
-	}			// for()
+        {
+          wxWindow *win = (wxWindow *) node->Data ();
+          wxWindow *retwin = wxFindWindowByName1 (title, win);
+          if (retwin)
+            return retwin;
+        }                        // for()
 
     }
   // Failed? Try by label instead.
@@ -536,28 +525,28 @@ wxFindWindowByName1 (const wxString& title, wxWindow * parent)
 {
   if (parent)
     {
-    	if ( parent->GetName() == title )
-			return parent;
+            if ( parent->GetName() == title )
+                        return parent;
     }
 
   if (parent)
     {
       for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
-	{
-	  wxWindow *win = (wxWindow *) node->Data ();
-	  wxWindow *retwin = wxFindWindowByName1 (title, win);
-	  if (retwin)
-	    return retwin;
-	}			// for()
+        {
+          wxWindow *win = (wxWindow *) node->Data ();
+          wxWindow *retwin = wxFindWindowByName1 (title, win);
+          if (retwin)
+            return retwin;
+        }                        // for()
 
     }
 
-  return (wxWindow *) NULL;			// Not found
+  return (wxWindow *) NULL;                        // Not found
 
 }
 
 // Returns menu item id or -1 if none.
-int 
+int
 wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& itemString)
 {
   wxMenuBar *menuBar = frame->GetMenuBar ();
@@ -572,12 +561,12 @@ On Fri, 21 Jul 1995, Paul Craven wrote:
 > Is there a way to find the path of running program's executable? I can get
 > my home directory, and the current directory, but I don't know how to get the
 > executable directory.
-> 
+>
 
 The code below (warty as it is), does what you want on most Unix,
 DOS, and Mac platforms (it's from the ALS Prolog main).
 
-|| Ken Bowen      Applied Logic Systems, Inc.         PO Box 180,     
+|| Ken Bowen      Applied Logic Systems, Inc.         PO Box 180,
 ||====            Voice:  +1 (617)965-9191            Newton Centre,
 ||                FAX:    +1 (617)965-1636            MA  02159  USA
                   Email:  ken@als.com        WWW: http://www.als.com
@@ -590,8 +579,8 @@ DOS, and Mac platforms (it's from the ALS Prolog main).
 
 /*--------------------------------------------------------------------*
  | whereami is given a filename f in the form:  whereami(argv[0])
- | It returns the directory in which the executable file (containing 
- | this code [main.c] ) may be found.  A dot will be returned to indicate 
+ | It returns the directory in which the executable file (containing
+ | this code [main.c] ) may be found.  A dot will be returned to indicate
  | the current directory.
  *--------------------------------------------------------------------*/
 
@@ -599,7 +588,7 @@ static void
 whereami(name)
     char *name;
 {
-    register char *cutoff = NULL;	/* stifle -Wall */
+    register char *cutoff = NULL;        /* stifle -Wall */
     register char *s;
     register char *t;
     int   cc;
@@ -612,117 +601,117 @@ whereami(name)
 
     if (access(name, R_OK) == 0) {
 
-	/*-------------------------------------------------------------*
-	 * The file was accessible without any other work.  But the current
-	 * working directory might change on us, so if it was accessible
-	 * through the cwd, then we should get it for later accesses.
-	 *-------------------------------------------------------------*/
+        /*-------------------------------------------------------------*
+         * The file was accessible without any other work.  But the current
+         * working directory might change on us, so if it was accessible
+         * through the cwd, then we should get it for later accesses.
+         *-------------------------------------------------------------*/
 
-	t = imagedir;
-	if (!absolute_pathname(name)) {
+        t = imagedir;
+        if (!absolute_pathname(name)) {
 #if defined(DOS) || defined(__WIN32__)
-	    int   drive;
-	    char *newrbuf;
+            int   drive;
+            char *newrbuf;
 
-	    newrbuf = imagedir;
+            newrbuf = imagedir;
 #ifndef __DJGPP__
-	    if (*(name + 1) == ':') {
-		if (*name >= 'a' && *name <= 'z')
-		    drive = (int) (*name - 'a' + 1);
-		else
-		    drive = (int) (*name - 'A' + 1);
-		*newrbuf++ = *name;
-		*newrbuf++ = *(name + 1);
-		*newrbuf++ = DIR_SEPARATOR;
-	    }
-	    else {
-		drive = 0;
-		*newrbuf++ = DIR_SEPARATOR;
-	    }
-	    if (getcwd(newrbuf, drive) == 0) {	/* } */
+            if (*(name + 1) == ':') {
+                if (*name >= 'a' && *name <= 'z')
+                    drive = (int) (*name - 'a' + 1);
+                else
+                    drive = (int) (*name - 'A' + 1);
+                *newrbuf++ = *name;
+                *newrbuf++ = *(name + 1);
+                *newrbuf++ = DIR_SEPARATOR;
+            }
+            else {
+                drive = 0;
+                *newrbuf++ = DIR_SEPARATOR;
+            }
+            if (getcwd(newrbuf, drive) == 0) {        /* } */
 #else
-	    if (getcwd(newrbuf, 1024) == 0) {	/* } */
+            if (getcwd(newrbuf, 1024) == 0) {        /* } */
 #endif
 #else  /* DOS */
 #ifdef HAVE_GETWD
-	    if (getwd(imagedir) == 0) {		/* } */
+            if (getwd(imagedir) == 0) {                /* } */
 #else  /* !HAVE_GETWD */
-	    if (getcwd(imagedir, 1024) == 0) {
+            if (getcwd(imagedir, 1024) == 0) {
 #endif /* !HAVE_GETWD */
 #endif /* DOS */
-		fatal_error(FE_GETCWD, 0);
-	    }
-	    for (; *t; t++)	/* Set t to end of buffer */
-		;
-	    if (*(t - 1) == DIR_SEPARATOR)	/* leave slash if already
-						 * last char
-						 */
-		cutoff = t - 1;
-	    else {
-		cutoff = t;	/* otherwise put one in */
-		*t++ = DIR_SEPARATOR;
-	    }
-	}
+                fatal_error(FE_GETCWD, 0);
+            }
+            for (; *t; t++)        /* Set t to end of buffer */
+                ;
+            if (*(t - 1) == DIR_SEPARATOR)        /* leave slash if already
+                                                 * last char
+                                                 */
+                cutoff = t - 1;
+            else {
+                cutoff = t;        /* otherwise put one in */
+                *t++ = DIR_SEPARATOR;
+            }
+        }
 #if (!defined(__MAC__) && !defined(__DJGPP__) && !defined(__GO32__) && !defined(__WIN32__))
-	else
-		(*t++ = DIR_SEPARATOR);
+        else
+                (*t++ = DIR_SEPARATOR);
 #endif
 
-	/*-------------------------------------------------------------*
-	 * Copy the rest of the string and set the cutoff if it was not
-	 * already set.  If the first character of name is a slash, cutoff
-	 * is not presently set but will be on the first iteration of the
-	 * loop below.
-	 *-------------------------------------------------------------*/
+        /*-------------------------------------------------------------*
+         * Copy the rest of the string and set the cutoff if it was not
+         * already set.  If the first character of name is a slash, cutoff
+         * is not presently set but will be on the first iteration of the
+         * loop below.
+         *-------------------------------------------------------------*/
 
-	for ((*name == DIR_SEPARATOR ? (s = name+1) : (s = name));;) {
-	    if (*s == DIR_SEPARATOR)
-			cutoff = t;
-	    if (!(*t++ = *s++))
-			break;
-	}
+        for ((*name == DIR_SEPARATOR ? (s = name+1) : (s = name));;) {
+            if (*s == DIR_SEPARATOR)
+                        cutoff = t;
+            if (!(*t++ = *s++))
+                        break;
+        }
 
     }
     else {
 
-	/*-------------------------------------------------------------*
-	 * Get the path list from the environment.  If the path list is
-	 * inaccessible for any reason, leave with fatal error.
-	 *-------------------------------------------------------------*/
+        /*-------------------------------------------------------------*
+         * Get the path list from the environment.  If the path list is
+         * inaccessible for any reason, leave with fatal error.
+         *-------------------------------------------------------------*/
 
 #ifdef __MAC__
-	if ((s = getenv("Commands")) == (char *) 0)
+        if ((s = getenv("Commands")) == (char *) 0)
 #else
-	if ((s = getenv("PATH")) == (char *) 0)
+        if ((s = getenv("PATH")) == (char *) 0)
 #endif
-	    fatal_error(FE_PATH, 0);
+            fatal_error(FE_PATH, 0);
 
-	/*
-	 * Copy path list into ebuf and set the source pointer to the
-	 * beginning of this buffer.
-	 */
+        /*
+         * Copy path list into ebuf and set the source pointer to the
+         * beginning of this buffer.
+         */
 
-	strcpy(ebuf, s);
-	s = ebuf;
+        strcpy(ebuf, s);
+        s = ebuf;
 
-	for (;;) {
-	    t = imagedir;
-	    while (*s && *s != PATH_SEPARATOR)
-		*t++ = *s++;
-	    if (t > imagedir && *(t - 1) == DIR_SEPARATOR) 
-		;		/* do nothing -- slash already is in place */
-	    else
-		*t++ = DIR_SEPARATOR;	/* put in the slash */
-	    cutoff = t - 1;	/* set cutoff */
-	    strcpy(t, name);
-	    if (access(imagedir, R_OK) == 0)
-		break;
+        for (;;) {
+            t = imagedir;
+            while (*s && *s != PATH_SEPARATOR)
+                *t++ = *s++;
+            if (t > imagedir && *(t - 1) == DIR_SEPARATOR)
+                ;                /* do nothing -- slash already is in place */
+            else
+                *t++ = DIR_SEPARATOR;        /* put in the slash */
+            cutoff = t - 1;        /* set cutoff */
+            strcpy(t, name);
+            if (access(imagedir, R_OK) == 0)
+                break;
 
-	    if (*s)
-		s++;		/* advance source pointer */
-	    else
-		fatal_error(FE_INFND, 0);
-	}
+            if (*s)
+                s++;                /* advance source pointer */
+            else
+                fatal_error(FE_INFND, 0);
+        }
 
     }
 
@@ -735,26 +724,26 @@ whereami(name)
 
 #ifdef HAVE_SYMLINK
     while ((cc = readlink(imagedir, ebuf, 512)) != -1) {
-	ebuf[cc] = 0;
-	s = ebuf;
-	if (*s == DIR_SEPARATOR) {
-	    t = imagedir;
-	}
-	else {
-	    t = cutoff + 1;
-	}
-	for (;;) {
-	    if (*s == DIR_SEPARATOR)
-		cutoff = t;	/* mark the last slash seen */
-	    if (!(*t++ = *s++))	/* copy the character */
-		break;
-	}
+        ebuf[cc] = 0;
+        s = ebuf;
+        if (*s == DIR_SEPARATOR) {
+            t = imagedir;
+        }
+        else {
+            t = cutoff + 1;
+        }
+        for (;;) {
+            if (*s == DIR_SEPARATOR)
+                cutoff = t;        /* mark the last slash seen */
+            if (!(*t++ = *s++))        /* copy the character */
+                break;
+        }
     }
 
 #endif /* HAVE_SYMLINK */
 
-    strcpy(imagename, cutoff + 1);	/* keep the image name */
-    *(cutoff + 1) = 0;		/* chop off the filename part */
+    strcpy(imagename, cutoff + 1);        /* keep the image name */
+    *(cutoff + 1) = 0;                /* chop off the filename part */
 }
 
 #endif
@@ -801,14 +790,14 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
 }
 
 #ifdef __MWERKS__
-char *strdup(const char *s) 
+char *strdup(const char *s)
 {
-	return strcpy( (char*) malloc( strlen( s ) + 1 ) , s ) ;
+        return strcpy( (char*) malloc( strlen( s ) + 1 ) , s ) ;
 }
 
-int	isascii( int c ) 
+int isascii( int c )
 {
-	return ( c >= 0 && c < 128 ) ;
+        return ( c >= 0 && c < 128 ) ;
 }
 #endif
 

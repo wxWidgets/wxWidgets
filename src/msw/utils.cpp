@@ -68,41 +68,26 @@
 #include <stdlib.h>
 #include <string.h>
 #ifndef __WATCOMC__
-#if !(defined(_MSC_VER) && (_MSC_VER > 800))
-#include <errno.h>
-#endif
+    #if !(defined(_MSC_VER) && (_MSC_VER > 800))
+        #include <errno.h>
+    #endif
 #endif
 #include <stdarg.h>
 
 //// BEGIN for console support: VC++ only
 
-#if defined(__WXDEBUG__) && !defined(__WIN16__) && defined(_MSC_VER) && !defined(__NO_VC_CRTDBG__)
-    #define wxUSE_VC_CRTDBG
-#else
-    #undef wxUSE_VC_CRTDBG
-#endif
+#include "wx/msw/msvcrt.h"
 
-#ifdef wxUSE_VC_CRTDBG
-  // VC++ uses this macro as debug/release mode indicator
-  #ifndef _DEBUG
-    #define _DEBUG
-  #endif
+#include <fcntl.h>
 
-  #include <fcntl.h>
+#include "wx/ioswrap.h"
 
 #if wxUSE_IOSTREAMH
 // N.B. BC++ doesn't have istream.h, ostream.h
-#  include <iostream.h>
 #  include <io.h>
 #  include <fstream.h>
-
 #else
-#  include <istream>
-#  include <ostream>
 #  include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
 #endif
 
 /* Need to undef new if including crtdbg.h */
@@ -117,8 +102,6 @@
 #  if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
 #  define new new(__FILE__,__LINE__)
 #  endif
-
-#endif
 
 /// END for console support
 
@@ -766,14 +749,14 @@ bool wxDirExists(const wxString& dir)
 #endif
 
 #if defined(__WIN32__)
-	HANDLE h = FindFirstFile((LPTSTR) WXSTRINGCAST dir,(LPWIN32_FIND_DATA)&fileInfo);
+  HANDLE h = FindFirstFile((LPTSTR) WXSTRINGCAST dir,(LPWIN32_FIND_DATA)&fileInfo);
 
-	if (h==INVALID_HANDLE_VALUE)
-	 return FALSE;
-	else {
-	 FindClose(h);
-	 return ((fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY);
-	}
+  if (h==INVALID_HANDLE_VALUE)
+   return FALSE;
+  else {
+   FindClose(h);
+   return ((fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY);
+  }
 #else
   // In Borland findfirst has a different argument
   // ordering from _dos_findfirst. But _dos_findfirst
@@ -806,13 +789,13 @@ bool wxIsWild( const wxString& pattern )
   wxString tmp = pattern;
   char *pat = WXSTRINGCAST(tmp);
     while (*pat) {
-	switch (*pat++) {
-	case '?': case '*': case '[': case '{':
-	    return TRUE;
-	case '\\':
-	    if (!*pat++)
-		return FALSE;
-	}
+  switch (*pat++) {
+  case '?': case '*': case '[': case '{':
+      return TRUE;
+  case '\\':
+      if (!*pat++)
+    return FALSE;
+  }
     }
     return FALSE;
 };
@@ -832,124 +815,124 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 
     // dot_special means '.' only matches '.'
     if (dot_special && *str == '.' && *pattern != *str)
-	return FALSE;
+  return FALSE;
 
     while ((*pattern != '\0') && (!done)
     && (((*str=='\0')&&((*pattern==OB)||(*pattern=='*')))||(*str!='\0'))) {
-	switch (*pattern) {
-	case '\\':
-	    pattern++;
-	    if (*pattern != '\0')
-		pattern++;
-	    break;
-	case '*':
-	    pattern++;
-	    ret_code = FALSE;
-	    while ((*str!='\0')
-	    && (!(ret_code=wxMatchWild(pattern, str++, FALSE))))
-		/*loop*/;
-	    if (ret_code) {
-		while (*str != '\0')
-		    str++;
-		while (*pattern != '\0')
-		    pattern++;
-	    }
-	    break;
-	case '[':
-	    pattern++;
-	  repeat:
-	    if ((*pattern == '\0') || (*pattern == ']')) {
-		done = TRUE;
-		break;
-	    }
-	    if (*pattern == '\\') {
-		pattern++;
-		if (*pattern == '\0') {
-		    done = TRUE;
-		    break;
-		}
-	    }
-	    if (*(pattern + 1) == '-') {
-		c = *pattern;
-		pattern += 2;
-		if (*pattern == ']') {
-		    done = TRUE;
-		    break;
-		}
-		if (*pattern == '\\') {
-		    pattern++;
-		    if (*pattern == '\0') {
-			done = TRUE;
-			break;
-		    }
-		}
-		if ((*str < c) || (*str > *pattern)) {
-		    pattern++;
-		    goto repeat;
-		}
-	    } else if (*pattern != *str) {
-		pattern++;
-		goto repeat;
-	    }
-	    pattern++;
-	    while ((*pattern != ']') && (*pattern != '\0')) {
-		if ((*pattern == '\\') && (*(pattern + 1) != '\0'))
-		    pattern++;
-		pattern++;
-	    }
-	    if (*pattern != '\0') {
-		pattern++, str++;
-	    }
-	    break;
-	case '?':
-	    pattern++;
-	    str++;
-	    break;
-	case OB:
-	    pattern++;
-	    while ((*pattern != CB) && (*pattern != '\0')) {
-		cp = str;
-		ok = TRUE;
-		while (ok && (*cp != '\0') && (*pattern != '\0')
-		&&  (*pattern != ',') && (*pattern != CB)) {
-		    if (*pattern == '\\')
-			pattern++;
-		    ok = (*pattern++ == *cp++);
-		}
-		if (*pattern == '\0') {
-		    ok = FALSE;
-		    done = TRUE;
-		    break;
-		} else if (ok) {
-		    str = cp;
-		    while ((*pattern != CB) && (*pattern != '\0')) {
-			if (*++pattern == '\\') {
-			    if (*++pattern == CB)
-				pattern++;
-			}
-		    }
-		} else {
-		    while (*pattern!=CB && *pattern!=',' && *pattern!='\0') {
-			if (*++pattern == '\\') {
+  switch (*pattern) {
+  case '\\':
+      pattern++;
+      if (*pattern != '\0')
+    pattern++;
+      break;
+  case '*':
+      pattern++;
+      ret_code = FALSE;
+      while ((*str!='\0')
+      && (!(ret_code=wxMatchWild(pattern, str++, FALSE))))
+    /*loop*/;
+      if (ret_code) {
+    while (*str != '\0')
+        str++;
+    while (*pattern != '\0')
+        pattern++;
+      }
+      break;
+  case '[':
+      pattern++;
+    repeat:
+      if ((*pattern == '\0') || (*pattern == ']')) {
+    done = TRUE;
+    break;
+      }
+      if (*pattern == '\\') {
+    pattern++;
+    if (*pattern == '\0') {
+        done = TRUE;
+        break;
+    }
+      }
+      if (*(pattern + 1) == '-') {
+    c = *pattern;
+    pattern += 2;
+    if (*pattern == ']') {
+        done = TRUE;
+        break;
+    }
+    if (*pattern == '\\') {
+        pattern++;
+        if (*pattern == '\0') {
+      done = TRUE;
+      break;
+        }
+    }
+    if ((*str < c) || (*str > *pattern)) {
+        pattern++;
+        goto repeat;
+    }
+      } else if (*pattern != *str) {
+    pattern++;
+    goto repeat;
+      }
+      pattern++;
+      while ((*pattern != ']') && (*pattern != '\0')) {
+    if ((*pattern == '\\') && (*(pattern + 1) != '\0'))
+        pattern++;
+    pattern++;
+      }
+      if (*pattern != '\0') {
+    pattern++, str++;
+      }
+      break;
+  case '?':
+      pattern++;
+      str++;
+      break;
+  case OB:
+      pattern++;
+      while ((*pattern != CB) && (*pattern != '\0')) {
+    cp = str;
+    ok = TRUE;
+    while (ok && (*cp != '\0') && (*pattern != '\0')
+    &&  (*pattern != ',') && (*pattern != CB)) {
+        if (*pattern == '\\')
+      pattern++;
+        ok = (*pattern++ == *cp++);
+    }
+    if (*pattern == '\0') {
+        ok = FALSE;
+        done = TRUE;
+        break;
+    } else if (ok) {
+        str = cp;
+        while ((*pattern != CB) && (*pattern != '\0')) {
+      if (*++pattern == '\\') {
+          if (*++pattern == CB)
+        pattern++;
+      }
+        }
+    } else {
+        while (*pattern!=CB && *pattern!=',' && *pattern!='\0') {
+      if (*++pattern == '\\') {
                             if (*++pattern == CB || *pattern == ',')
-				pattern++;
-			}
-		    }
-		}
-		if (*pattern != '\0')
-		    pattern++;
-	    }
-	    break;
-	default:
-	    if (*str == *pattern) {
-		str++, pattern++;
-	    } else {
-		done = TRUE;
-	    }
-	}
+        pattern++;
+      }
+        }
+    }
+    if (*pattern != '\0')
+        pattern++;
+      }
+      break;
+  default:
+      if (*str == *pattern) {
+    str++, pattern++;
+      } else {
+    done = TRUE;
+      }
+  }
     }
     while (*pattern == '*')
-	pattern++;
+  pattern++;
     return ((*str == '\0') && (*pattern == '\0'));
 };
 
@@ -1089,14 +1072,14 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
 #endif
 
 
-#ifdef wxUSE_VC_CRTDBG
+#ifdef 0
 
 // maximum mumber of lines the output console should have
 static const WORD MAX_CONSOLE_LINES = 500;
 
 BOOL WINAPI MyConsoleHandler( DWORD dwCtrlType ) {   //  control signal type
-	FreeConsole();
-	return TRUE;
+  FreeConsole();
+  return TRUE;
 }
 
 void wxRedirectIOToConsole()
@@ -1110,10 +1093,10 @@ void wxRedirectIOToConsole()
     AllocConsole();
 
     // set the screen buffer to be big enough to let us scroll text
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), 
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE),
                                &coninfo);
     coninfo.dwSize.Y = MAX_CONSOLE_LINES;
-    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), 
+    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE),
                                coninfo.dwSize);
 
     // redirect unbuffered STDOUT to the console
@@ -1139,13 +1122,12 @@ void wxRedirectIOToConsole()
     fp = _fdopen( hConHandle, "w" );
     *stderr = *fp;
     setvbuf( stderr, NULL, _IONBF, 0 );
-    
-    // make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog 
+
+    // make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog
     // point to console as well
     ios::sync_with_stdio();
 
-	SetConsoleCtrlHandler(MyConsoleHandler, TRUE);
-
+    SetConsoleCtrlHandler(MyConsoleHandler, TRUE);
 }
 #else
 // Not supported

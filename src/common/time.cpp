@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -32,17 +32,14 @@ seconds since January 1, 1901, GMT.
 #include "wx/time.h"
 #include "wx/date.h"
 #include "wx/utils.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
+
+#include "wx/ioswrap.h"
 
 #if wxUSE_IOSTREAMH
-#include <iostream.h>
-#include <iomanip.h>
+    #include <iomanip.h>
 #else
-#include <iostream>
-#include <iomanip>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
+    #include <iomanip>
 #endif
 
 #include <string.h>
@@ -60,8 +57,8 @@ static int DST_OBSERVED;        /* flags U.S. daylight saving time observed */
 
 static bool wxTimeInitialized = FALSE;
 
-wxTime::tFormat		wxTime::Format		= wxTime::wx12h;
-wxTime::tPrecision	wxTime::Precision	= wxTime::wxStdMinSec;
+wxTime::tFormat    wxTime::Format    = wxTime::wx12h;
+wxTime::tPrecision  wxTime::Precision  = wxTime::wxStdMinSec;
 
 static const unsigned long seconds_in_day = 24*60*60L;
 static const wxDate refDate(1,1,1901);
@@ -69,19 +66,19 @@ static const wxDate refDate(1,1,1901);
 
 wxTime wxTime::GetLocalTime(const wxDate& date, hourTy h, minuteTy m, secondTy s)
 /*
-		  Return a local wxTime for the specified Standard Time date, hour, minute,
-		  and second.
+      Return a local wxTime for the specified Standard Time date, hour, minute,
+      and second.
 */
 {
   if (!wxTimeInitialized)
   {
-	 wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
-	 wxTimeInitialized = TRUE;
+   wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
+   wxTimeInitialized = TRUE;
   }
 /*
-		  if (!date.IsBetween(refDate,maxDate))
-					 setError(NIHCL_DATERANGE,DEFAULT,
-								date.dayOfMonth(),date.nameOfMonth(),date.year());
+      if (!date.IsBetween(refDate,maxDate))
+           setError(NIHCL_DATERANGE,DEFAULT,
+                date.dayOfMonth(),date.nameOfMonth(),date.year());
 */
   // The following line causes an error in GCC 2.1
 //   long daysBetween = date-refDate;
@@ -95,13 +92,13 @@ wxTime wxTime::GetLocalTime(const wxDate& date, hourTy h, minuteTy m, secondTy s
 
 wxTime::wxTime()
 /*
-		  Construct a wxTime for this instant.
+      Construct a wxTime for this instant.
 */
 {
   if (!wxTimeInitialized)
   {
-	 wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
-	 wxTimeInitialized = TRUE;
+   wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
+   wxTimeInitialized = TRUE;
   }
   sec = wxGetCurrentTime();
 #ifdef __SALFORDC__
@@ -113,14 +110,14 @@ wxTime::wxTime()
 
 wxTime::wxTime(hourTy h, minuteTy m, secondTy s, bool dst)
 /*
-		  Construct a wxTime for today at the specified (local) hour, minute, and
-		  second.
+      Construct a wxTime for today at the specified (local) hour, minute, and
+      second.
 */
 {
   if (!wxTimeInitialized)
   {
-	 wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
-	 wxTimeInitialized = TRUE;
+   wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
+   wxTimeInitialized = TRUE;
   }
 
   sec = wxTime(wxDate(),h,m,s,dst).sec;
@@ -136,7 +133,7 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
   if (!wxTimeInitialized)
   {
     wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
-	 wxTimeInitialized = TRUE;
+   wxTimeInitialized = TRUE;
   }
   sec = GetLocalTime(date,h,m,s).sec-3600;
   if (IsDST())
@@ -149,8 +146,8 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
     sec += 3600;
 /*
                 if (IsDST()) setError(NIHCL_BADTIME,DEFAULT,
-								date.dayOfMonth(),date.nameOfMonth(),date.year(),
-								h,m,s,(dst?_("DST"):""));
+                date.dayOfMonth(),date.nameOfMonth(),date.year(),
+                h,m,s,(dst?_("DST"):""));
 */
   }
   sec += TIME_ZONE;                               // adjust to GMT
@@ -159,11 +156,11 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
 #ifndef __SALFORDC__
 wxTime::operator wxDate() const
 /*
-		  Convert a wxTime to a local wxDate
+      Convert a wxTime to a local wxDate
 */
 {
 //      return wxDate((int)(GetLocalTime().sec/seconds_in_day));     4.2 cc bug
-		  long daycount = (long)(GetLocalTime().sec/seconds_in_day);
+      long daycount = (long)(GetLocalTime().sec/seconds_in_day);
 
         wxDate date(1,1,1901);
         date += daycount;
@@ -178,11 +175,11 @@ bool wxTime::IsBetween(const wxTime& a, const wxTime& b) const
 
 hourTy wxTime::GetHour() const
 /*
-		  Return the hour of this wxTime in local time; i.e., adjust for
+      Return the hour of this wxTime in local time; i.e., adjust for
         time zone and Daylight Savings Time.
 */
 {
-		  return GetLocalTime().GetHourGMT();
+      return GetLocalTime().GetHourGMT();
 }
 
 hourTy wxTime::GetHourGMT() const
@@ -190,12 +187,12 @@ hourTy wxTime::GetHourGMT() const
         Return the hour of this Time in GMT.
 */
 {
-		  return (hourTy)((sec % 86400) / 3600);
+      return (hourTy)((sec % 86400) / 3600);
 }
 
 wxTime wxTime::GetBeginDST(unsigned year)
 /*
-		  Return the local Standard Time at which Daylight Savings Time
+      Return the local Standard Time at which Daylight Savings Time
         begins in the specified year.
 */
 {
@@ -203,8 +200,8 @@ wxTime wxTime::GetBeginDST(unsigned year)
         wxTime DSTtime(GetLocalTime(wxDate(3,31,year).Previous(1)+7,2));
         if (year<=1986) {
                 // Previous Sunday
-					 DSTtime = GetLocalTime(wxDate(4,30,year).Previous(1),2);
-					 if (year==1974) DSTtime = GetLocalTime(wxDate(1,6,1974),2);
+           DSTtime = GetLocalTime(wxDate(4,30,year).Previous(1),2);
+           if (year==1974) DSTtime = GetLocalTime(wxDate(1,6,1974),2);
                 if (year==1975) DSTtime = GetLocalTime(wxDate(2,23,1975),2);
         }
         return DSTtime;
@@ -216,8 +213,8 @@ wxTime wxTime::GetEndDST(unsigned year)
         ends in the specified year.
 */
 {
-		  wxTime STDtime(GetLocalTime(wxDate(10,31,year).Previous(1),2-1));
-		  return STDtime;
+      wxTime STDtime(GetLocalTime(wxDate(10,31,year).Previous(1),2-1));
+      return STDtime;
 }
 
 bool wxTime::IsDST() const
@@ -229,12 +226,12 @@ bool wxTime::IsDST() const
         long daycount = (long)(sec/seconds_in_day);
 
         // At this point, daycount is the number of days from 1/1/1901.
-		  // Need to convert to julian date (which starts at 1/1/4713 B.C.)
-		  wxDate date(1,1,1901);
+      // Need to convert to julian date (which starts at 1/1/4713 B.C.)
+      wxDate date(1,1,1901);
         date += daycount;
 
         unsigned year = date.GetYear();
-		  if (DST_OBSERVED)
+      if (DST_OBSERVED)
         {
                 if (*this >= GetBeginDST(year))
                         if (*this < GetEndDST(year)) return TRUE;
@@ -247,7 +244,7 @@ wxTime wxTime::GetLocalTime() const
         Adjusts this GM Time for local time zone and Daylight Savings Time.
 */
 {
-		  wxTime local_time(sec-TIME_ZONE);
+      wxTime local_time(sec-TIME_ZONE);
         if (local_time.IsDST()) local_time.sec += 3600;
         return local_time;
 }
@@ -255,7 +252,7 @@ wxTime wxTime::GetLocalTime() const
 minuteTy wxTime::GetMinute() const
 /*
         Return the minute of this wxTime in local time; i.e., adjust
-		  for time zone and Daylight Savings Time.
+      for time zone and Daylight Savings Time.
 */
 {
         return GetLocalTime().GetMinuteGMT();
@@ -266,7 +263,7 @@ minuteTy wxTime::GetMinuteGMT() const
         Return the minute of this wxTime in GMT.
 */
 {
-		  return (minuteTy)(((sec % 86400) % 3600) / 60);
+      return (minuteTy)(((sec % 86400) % 3600) / 60);
 }
 
 secondTy wxTime::GetSecond() const
@@ -274,7 +271,7 @@ secondTy wxTime::GetSecond() const
         Return the second of this wxTime.
 */
 {
-		  return (secondTy)(((sec % 86400) % 3600) % 60);
+      return (secondTy)(((sec % 86400) % 3600) % 60);
 }
 
 secondTy wxTime::GetSecondGMT() const
@@ -318,7 +315,7 @@ wxTime wxTime::Max(const wxTime& t) const
 wxTime wxTime::Min(const wxTime& t) const
 {
         if (t > *this) return *this;
-		  return t;
+      return t;
 }
 
 #ifndef __SALFORDC__
@@ -329,46 +326,46 @@ wxTime::operator char *(void)
 #endif
 
 void wxTime::SetFormat(const wxTime::tFormat lFormat,
-							  const wxTime::tPrecision lPrecision) {
+                const wxTime::tPrecision lPrecision) {
 
-	wxTime::Format		= lFormat;
-	wxTime::Precision	= lPrecision;
+  wxTime::Format    = lFormat;
+  wxTime::Precision  = lPrecision;
 }
 
 char *wxTime::FormatTime() const {
-	static char	timeBuf[30];
-	unsigned		hh(GetHour());
+  static char  timeBuf[30];
+  unsigned    hh(GetHour());
 
-	switch (Format) {
-	case wx12h:
-		hh	-= 12;
-		break;
-	case wx24h:
-		break;
-	}
+  switch (Format) {
+  case wx12h:
+    hh  -= 12;
+    break;
+  case wx24h:
+    break;
+  }
 
-	switch (Precision) {
-	case wxStdMinSec:
-		sprintf(timeBuf,"%2d:%02d:%02d",hh,GetMinute(),GetSecond());
-		break;
-	case wxStdMin:
-		sprintf(timeBuf,"%2d:%02d",hh,GetMinute());
-		break;
-	}
+  switch (Precision) {
+  case wxStdMinSec:
+    sprintf(timeBuf,"%2d:%02d:%02d",hh,GetMinute(),GetSecond());
+    break;
+  case wxStdMin:
+    sprintf(timeBuf,"%2d:%02d",hh,GetMinute());
+    break;
+  }
 
-	if (Format == wx12h)
-		if (GetHour() <= 12)
-			strcat(timeBuf,_("am"));
-		else
-			strcat(timeBuf,_("pm"));
+  if (Format == wx12h)
+    if (GetHour() <= 12)
+      strcat(timeBuf,_("am"));
+    else
+      strcat(timeBuf,_("pm"));
 
-	return timeBuf;
+  return timeBuf;
 }
 
 /*
 int wxTime::compare(const Object& ob) const
 {
-		  assertArgSpecies(ob,classDesc,"compare");
+      assertArgSpecies(ob,classDesc,"compare");
         register clockTy t = castdown(ob).sec;
         if (sec < t) return -1;
         if (sec > t) return 1;
@@ -392,16 +389,16 @@ void wxTime::printOn(ostream& strm) const
         wxDate(*this).printOn(strm);
         strm << ' ' << ((hh <= 12) ? hh : hh-12) << ':'
              << setfill('0') << setw(2) << GetMinute() << ':'
-				 << setfill('0') << setw(2) << GetSecond() << ' ';
+         << setfill('0') << setw(2) << GetSecond() << ' ';
         if (hh < 12) strm << _("am");
         else strm << _("pm");
 }
 
 wxTime::wxTime(OIOin& strm)
-		  : BASE(strm)
+      : BASE(strm)
 {
-		  unsigned long usec;
-		  strm >> sec >> usec;
+      unsigned long usec;
+      strm >> sec >> usec;
 }
 
 void wxTime::storer(OIOout& strm) const
@@ -412,16 +409,16 @@ void wxTime::storer(OIOout& strm) const
 
 
 wxTime::wxTime(OIOifd& fd)
-		  : BASE(fd)
+      : BASE(fd)
 {
-		  unsigned long usec;
-		  fd >> sec >> usec;
+      unsigned long usec;
+      fd >> sec >> usec;
 }
 
 void wxTime::storer(OIOofd& fd) const
 {
-		  BASE::storer(fd);
-		  fd << sec << 0l;
+      BASE::storer(fd);
+      fd << sec << 0l;
 }
 */
 

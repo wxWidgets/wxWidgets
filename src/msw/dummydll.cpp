@@ -1,13 +1,13 @@
 /*
- * File:	dummydll.cc
- * Purpose:	
- * Author:	Julian Smart
- * Created:	1993
- * Updated:	
+ * File:  dummydll.cc
+ * Purpose:
+ * Author:  Julian Smart
+ * Created:  1993
+ * Updated:
  * Copyright:   (c) 1993, AIAI, University of Edinburgh
  */
 
-/* static const char sccsid[] = "@(#)dummydll.cc	1.2 5/9/94"; */
+/* static const char sccsid[] = "@(#)dummydll.cc  1.2 5/9/94"; */
 
 /*
  * A dummy file to include wx.h. If precompiling wx.h, I
@@ -19,7 +19,7 @@
 
 // Foils optimizations in Visual C++ (see also app.cpp). Without it,
 // dummy.obj isn't linked and we get a linker error.
-#if defined(_MSC_VER) && defined(__WIN16__)
-char wxDummyChar=0;
+#if defined(__VISUALC__) && defined(__WIN16__)
+    char wxDummyChar=0;
 #endif
 

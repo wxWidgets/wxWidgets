@@ -90,7 +90,7 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
 // function: for Unix this is done with configure, for Windows we test the
 // compiler explicitly.
 #ifdef __WXMSW__
-    #ifdef _MSC_VER
+    #ifdef __VISUALC__
         #define wxVsprintf     _vsnprintf
     #endif
 #else   // !Windows
@@ -107,7 +107,7 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
 #ifndef __SC__
     #pragma message("Using sprintf() because no snprintf()-like function defined")
 #endif
-#endif
+#endif // no vsnprintf
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -119,46 +119,18 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
 // iostream ones.
 //
 // ATTN: you can _not_ use both of these in the same program!
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#define   NAMESPACE
-#else
-#include <iostream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-// for msvc (bcc50+ also) you don't need these NAMESPACE defines,
-// using namespace std; takes care of that.
-#define   NAMESPACE   std::
-#endif
 
-#ifdef __WXMSW__
-    #ifdef _MSC_VER
-        #define wxVsprintf     _vsnprintf
-    #endif
-#else
-    #if defined ( HAVE_VSNPRINTF )
-        #define wxVsprintf       vsnprintf
-    #endif
-#endif
-
-#ifndef wxVsprintf
-    // vsprintf() is ANSI so we can always use it, but it's unsafe!
-    #define wxVsprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
-    #pragma message("Using sprintf() because no snprintf()-like function defined")
-#endif
-
-NAMESPACE istream& operator>>(NAMESPACE istream& is, wxString& WXUNUSED(str))
+istream& operator>>(istream& is, wxString& WXUNUSED(str))
 {
 #if 0
   int w = is.width(0);
   if ( is.ipfx(0) ) {
-    NAMESPACE streambuf *sb = is.rdbuf();
+    streambuf *sb = is.rdbuf();
     str.erase();
     while ( true ) {
       int ch = sb->sbumpc ();
       if ( ch == EOF ) {
-        is.setstate(NAMESPACE ios::eofbit);
+        is.setstate(ios::eofbit);
         break;
       }
       else if ( isspace(ch) ) {
@@ -174,7 +146,7 @@ NAMESPACE istream& operator>>(NAMESPACE istream& is, wxString& WXUNUSED(str))
 
   is.isfx();
   if ( str.length() == 0 )
-    is.setstate(NAMESPACE ios::failbit);
+    is.setstate(ios::failbit);
 #endif
   return is;
 }
@@ -1142,12 +1114,12 @@ size_t wxString::find(const wxString& str, size_t nStart) const
 }
 
 // VC++ 1.5 can't cope with the default argument in the header.
-#if ! (defined(_MSC_VER) && !defined(__WIN32__))
+#if !defined(__VISUALC__) || defined(__WIN32__)
 size_t wxString::find(const char* sz, size_t nStart, size_t n) const
 {
   return find(wxString(sz, n == npos ? 0 : n), nStart);
 }
-#endif
+#endif // VC++ 1.5
 
 // Gives a duplicate symbol (presumably a case-insensitivity problem)
 #if !defined(__BORLANDC__)
@@ -1178,7 +1150,7 @@ size_t wxString::rfind(const wxString& str, size_t nStart) const
 }
 
 // VC++ 1.5 can't cope with the default argument in the header.
-#if ! (defined(_MSC_VER) && !defined(__WIN32__))
+#if !defined(__VISUALC__) || defined(__WIN32__)
 size_t wxString::rfind(const char* sz, size_t nStart, size_t n) const
 {
   return rfind(wxString(sz, n == npos ? 0 : n), nStart);
@@ -1192,7 +1164,7 @@ size_t wxString::rfind(char ch, size_t nStart) const
 
   return p == NULL ? npos : p - c_str();
 }
-#endif
+#endif // VC++ 1.5
 
 wxString wxString::substr(size_t nStart, size_t nLen) const
 {
